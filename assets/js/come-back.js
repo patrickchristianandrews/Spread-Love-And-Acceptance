@@ -97,7 +97,7 @@
     '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
       next: ['/check-ins.html', 'Check-ins', 'how to raise it once, calmly, at a good time'], result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
     '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
-      next: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)', 'so nothing falls between you'], result: function () { var r = doc.getElementById('balance-line'); return r && r.textContent.trim() && !/^(Add some hours|Waiting for)/i.test(r.textContent.trim()) && !/\bWaiting for\b/.test(r.textContent) ? (doc.querySelector('.ls-tools') || r) : null; } },
+      next: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)', 'so nothing falls between you'], result: function () { var r = doc.getElementById('balance-line'); return r && (r.hasAttribute('data-ls-result') || (r.textContent.trim() && !/^(Add some hours|Waiting for)/i.test(r.textContent.trim()) && !/\bWaiting for\b/.test(r.textContent))) && !/\bWaiting for\b/.test(r.textContent) ? (doc.querySelector('.ls-tools') || r) : null; } },
     '/quick-checks.html': { t: 'Today’s Weather', gain: 'You just checked in with yourself first. Knowing your weather makes the rest of the day easier to plan.',
       next: ['/quick-checks.html#today', 'Check again tomorrow', 'a few days in, your own pattern starts to show'], result: function () {
         var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1]; return e && e.d === today() ? doc.getElementById('today') : null; } },

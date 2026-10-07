@@ -76,6 +76,7 @@
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calc01-core.js"></script>
+<script src="/assets/js/household.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
@@ -371,6 +372,24 @@
   try { if (sessionStorage.getItem("tol-calc-nums") === "1"){ $("show-nums").checked = true; $("main").classList.add("show-nums"); } } catch (err) {}
   render(); recalc();
   if (C.suiteDraft && C.suiteDraft()) $("load-suite").hidden = false;
+
+  // The household kept on this device (household.js, only if someone ticked "Use these names in the other
+  // tools" elsewhere): offer its names, one tap, so nobody types them again. Never fills in by itself.
+  var HH = window.TOLHousehold, hh = HH && HH.get ? HH.get() : null;
+  if (hh && hh.people.length && names.every(function(x){ return !String(x || "").trim(); })){
+    var offer = HH.offer({
+      names: hh.people, question: "Use your household from before?",
+      status: $("suite-status"),
+      onUse: function(){
+        n = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, hh.people.length));
+        names = hh.people.slice(0, n); while (names.length < n) names.push("");
+        render(); recalc();
+        return HH.addedLine(Math.min(hh.people.length, n), 0);
+      },
+      focus: function(){ return $("nm-0"); }
+    });
+    $("names").parentNode.insertBefore(offer, $("names"));
+  }
 })();
 </script>
 </body>

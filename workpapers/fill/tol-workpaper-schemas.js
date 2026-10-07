@@ -295,6 +295,8 @@
     title: 'One owner per job',
     plain: 'One owner per job',
     slug: 'One-owner-per-job',
+    // "Share this list" / "Open a shared list" (tol-workpaper.js): jobs are matched by their name
+    share: { what: 'list', after: 'treaty', keys: { treaty: 'task' } },
     purpose: 'A living agreement that gives every regular household job one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
     people: true,
     meta: [
@@ -617,6 +619,8 @@
     title: 'The 90-second daily check-in',
     plain: 'The 90-second daily check-in',
     slug: 'The-90-second-daily-check-in',
+    // "Share this week" / "Open a shared week": each person's rows are matched by day and name
+    share: { what: 'week', after: 'daily', keys: { resync: 'item' } },
     purpose: 'A 90-second daily check-in that keeps everyone in step with small, steady corrections instead of occasional big ones. Each person answers each prompt in one sentence, about their own day. No debating, no solving, no arguing back.',
     people: true,
     meta: [

@@ -629,3 +629,17 @@ html.ws-locked .tol-breathe-btn, html.ws-locked .tol-wx{ visibility: hidden; }
 .ws-drop .ws-link, .ws-save-row .ws-link{ position: relative; }
 .ws-drop .ws-link::after, .ws-save-row .ws-link::after{ content: ""; position: absolute; inset: -12px -6px; }
 .ws #ws-name-add{ min-height: 44px; }
+
+/* ---------- "Share this list" / "Open a shared list" (One owner per job, the daily check-in) ---------- */
+.wpf-share, .wpf-share-in{ margin: 1.4em 0 0; padding: .8em 1em; border: 1px solid var(--line, #D9CBA3); border-radius: 12px; background: #FFFDF6; }
+.wpf-share-in{ margin: 0 0 1.4em; border-color: var(--credit, #3E6B4C); background: var(--credit-soft, #E4EDE3); }
+.wpf-share-in:focus{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.wpf-share-h{ margin: 0 0 .2em; font-weight: 600; }
+.wpf-share-in p{ margin: 0 0 .5em; }
+.wpf-share-btns{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: .5em; }
+.wpf-share-btns .wpf-add{ min-height: 44px; }
+.wpf-share-panel{ margin-top: .8em; }
+.wpf-share-l{ display: block; font-weight: 600; font-size: .92em; margin-bottom: 4px; }
+.wpf-share-code{ width: 100%; max-width: 100%; box-sizing: border-box; font: inherit; font-size: .85rem; overflow-wrap: anywhere; word-break: break-all; }
+.wpf-share-msg{ margin: 0; padding: .5em .8em; border-radius: 8px; background: #FFF6EC; }
+@media print{ .wpf-share, .wpf-share-in{ display: none !important; } }

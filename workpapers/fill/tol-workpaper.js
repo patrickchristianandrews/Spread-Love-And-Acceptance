@@ -687,7 +687,13 @@
       }
     }
 
-    s.sections.forEach(function (sec) { self.root.appendChild(self.renderSection(sec)); });
+    // "Someone shared a list with you": the choice comes first, before anything else on the sheet
+    var inEl = this.shareInEl();
+    if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
+    s.sections.forEach(function (sec) {
+      self.root.appendChild(self.renderSection(sec));
+      if (self.opts.canShare && s.share && sec.id === s.share.after) self.root.appendChild(self.shareEl());
+    });
     this.refresh();
   };
 
@@ -1005,6 +1011,7 @@
   A.hhOfferEl = function () {
     var HH = HHmod(), hh = HH && !this.hhNo ? HH.get() : null;
     if (!hh) return null;
+    if (!this.schema.people) return this.hhNameOfferEl(hh);
     var self = this, sec = this.hhJobTable();
     var canNames = !!this.schema.people && !this.opts.fixedPeople && hh.people.length > 0 && this.hhNamesEmpty();
     var canJobs = !!sec && hh.jobs.length > 0 && !this.hhOwnRows(sec).length;
@@ -1018,6 +1025,21 @@
       onNo: function () { self.hhNo = true; },
       focus: function () { return self.root.querySelector(canNames ? '[data-key="partnerA"]' : '[data-col="task"]'); }
     });
+  };
+  // A sheet about one person ("Your name"): offer the household's names, one tap each, so nobody retypes
+  // their name on every device. Only while the box is empty, and never in the Workpaper Suite (it names its sheets).
+  A.hhNameOfferEl = function (hh) {
+    var f = (this.schema.meta || []).filter(function (m) { return m.id === 'name'; })[0];
+    if (!f || !hh.people.length || !isBlank(this.state.values.name) || this.opts.onChange) return null;
+    if (global.document && !document.getElementById('tol-hh-css')) {
+      var l = document.createElement('link'); l.id = 'tol-hh-css'; l.rel = 'stylesheet'; l.href = '/assets/css/household.css';
+      (document.head || document.documentElement).appendChild(l);
+    }
+    var row = h('div', { className: 'tol-hh-btns' });
+    hh.people.forEach(function (nm) { row.appendChild(h('button', { type: 'button', className: 'tol-hh-btn is-main', 'data-action': 'hh-name', 'data-name': nm, text: 'I\u2019m ' + nm })); });
+    row.appendChild(h('button', { type: 'button', className: 'tol-hh-btn', 'data-action': 'hh-name', 'data-name': '', text: 'No thanks' }));
+    return h('div', { className: 'tol-hh no-print no-bubble' }, [h('div', { className: 'tol-hh-offer', role: 'group', 'aria-label': 'Your name from your household' }, [
+      h('p', { className: 'tol-hh-text' }, [h('strong', { text: 'Fill in your name? ' }), 'From the household kept on this device.']), row])]);
   };
   // Fill in the household: names only into empty places, never over a typed name; jobs at the top of
   // the job list, with their owner when that person is on this sheet. Starter examples stay below.
@@ -1055,6 +1077,265 @@
     this.changed();
     this.render();
     return HH.addedLine(names, jobs);
+  };
+
+
+  /* ---------- "Share this list": a link or code with the sheet inside it, after the # ---------- */
+  // For a sheet two people keep together (One owner per job, the daily check-in): one phone shares its
+  // list, the other opens it and chooses to combine it with what is there or to replace it. People are
+  // matched by name. The list travels inside the link, after the "#", and a browser never sends that part
+  // to any website, so nothing reaches a server: people pass the link or code between them themselves.
+  var SHARE_CODE = 'TOLLIST1:', SHARE_HASH = '#list=';
+  function b64urlEnc(str) {
+    var bin = '';
+    try { var b = new TextEncoder().encode(str); for (var i = 0; i < b.length; i++) bin += String.fromCharCode(b[i]); } catch (e) { bin = unescape(encodeURIComponent(str)); }
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function b64urlDec(str) {
+    var t = String(str || '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    while (t.length % 4) t += '=';
+    var bin = atob(t);
+    try { var a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new TextDecoder().decode(a); }
+    catch (e) { return decodeURIComponent(escape(bin)); }
+  }
+  function fold(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().toLowerCase(); }
+  // Read a shared list out of a link or a code (any text around it is fine). null if there isn't one.
+  function readShared(text) {
+    var s = String(text == null ? '' : text), m = /TOLLIST1:\s*([A-Za-z0-9_-]+)/.exec(s) || /#list=([A-Za-z0-9_-]+)/.exec(s), d = null;
+    if (!m || m[1].length > 200000) return null;
+    try { d = JSON.parse(b64urlDec(m[1])); } catch (e) { return null; }
+    if (!d || d.t !== 'tol-list' || typeof d.wp !== 'string' || !Array.isArray(d.p)) return null;
+    d.p = d.p.slice(0, MAX_PEOPLE).map(function (x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, 40); });
+    d.m = d.m && typeof d.m === 'object' ? d.m : {};
+    d.tb = d.tb && typeof d.tb === 'object' ? d.tb : {};
+    return d;
+  }
+  A.shareWhat = function () { return (this.schema.share && this.schema.share.what) || 'list'; };
+  // This sheet as a small object: names, the boxes at the top, and the rows someone wrote (never the
+  // untouched examples, never the closing tick, never a private answer).
+  A.shareData = function () {
+    var st = this.state, v = st.values, n = peopleCount(v), names = CODES.slice(0, n).map(function (c) { return String(v['partner' + c] || '').trim(); });
+    if (names.some(function (x) { return !x; })) return { error: 'Give everyone a name at the top first, so the other phone knows who is who.' };
+    var d = { t: 'tol-list', v: 1, wp: this.schema.code, p: names, m: {}, tb: {} }, rows = 0;
+    (this.schema.meta || []).forEach(function (f) { if (!isBlank(v[f.id]) && typeof v[f.id] !== 'object') d.m[f.id] = v[f.id]; });
+    this.schema.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      var out = [];
+      (st.tables[s.id] || []).forEach(function (r) {
+        if (!r || rowIsEmpty(s, r) || isExampleRow(s, r)) return;
+        var o = {};
+        s.columns.forEach(function (c) {
+          var x = r[c.id];
+          if (c.type === 'computed' || isBlank(x)) return;
+          if (c.type === 'person') { var i = CODES.indexOf(x); x = x === 'Both' ? '*' : i >= 0 ? names[i] || '' : ''; if (!x) return; }
+          o[c.id] = x;
+        });
+        out.push(o); rows++;
+      });
+      if (out.length) d.tb[s.id] = out;
+    });
+    if (!rows) return { error: this.shareWhat() === 'week' ? 'Write something on the sheet first, then share it.' : 'Add a job (or give an example job an owner) first, then share the list.' };
+    return d;
+  };
+  A.shareLink = function (d) {
+    var loc = global.location, enc = b64urlEnc(JSON.stringify(d));
+    return { link: loc.origin + loc.pathname + loc.search + SHARE_HASH + enc, code: SHARE_CODE + enc };
+  };
+  // How many rows a shared list holds, for the offer ("12 jobs")
+  A.sharedCount = function (d) {
+    var self = this, n = 0;
+    Object.keys(d.tb).forEach(function (k) { var s = self.schema.sections.filter(function (x) { return x.id === k; })[0]; if (s && Array.isArray(d.tb[k])) n += d.tb[k].length; });
+    return n;
+  };
+  A.shareEl = function () {
+    var what = this.shareWhat(), open = this.shareOpen || '';
+    var box = h('div', { className: 'wpf-share no-print tol-plain', role: 'group', 'aria-label': 'Share this ' + what });
+    box.appendChild(h('p', { className: 'wpf-share-h', text: what === 'week' ? 'Keeping this week together?' : 'Keeping this list together?' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
+    box.appendChild(h('div', { className: 'wpf-share-btns' }, [
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-make', 'aria-expanded': open === 'make' ? 'true' : 'false', text: 'Share this ' + what }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-open', 'aria-expanded': open === 'open' ? 'true' : 'false', text: 'Open a shared ' + what })
+    ]));
+    if (open === 'make') {
+      var p = h('div', { className: 'wpf-share-panel', id: 'wpf-share-make' });
+      var made = this.shareMade;
+      if (made && made.error) p.appendChild(h('p', { className: 'wpf-share-msg', role: 'note', text: made.error }));
+      else if (made) {
+        p.appendChild(h('p', { className: 'wpf-help', text: 'The ' + what + ' travels inside this link, after the # sign. Browsers never send that part to a website, so it doesn’t reach this site or any server. Anyone with the link can read it, so send it only to the people on it.' }));
+        var lid = 'f' + (++this.uid);
+        p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'The link' }));
+        var ta = h('textarea', { id: lid, rows: '3', readonly: 'readonly', className: 'wpf-share-code', 'data-share-out': 'link', spellcheck: 'false' });
+        ta.value = made.link;
+        p.appendChild(ta);
+        var btns = h('div', { className: 'wpf-share-btns' }, [
+          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-link', text: 'Copy the link' }),
+          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-code', text: 'Copy it as a code instead' })
+        ]);
+        if (global.navigator && navigator.share) btns.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-send', text: 'Send…' }));
+        p.appendChild(btns);
+      }
+      box.appendChild(p);
+    }
+    if (open === 'open') {
+      var q = h('div', { className: 'wpf-share-panel', id: 'wpf-share-open' }), iid = 'f' + (++this.uid);
+      q.appendChild(h('label', { for: iid, className: 'wpf-share-l', text: 'Paste the link or code you were sent' }));
+      var inp = h('textarea', { id: iid, rows: '3', className: 'wpf-share-code', 'data-share-in': '1', autocomplete: 'off', spellcheck: 'false' });
+      inp.value = this.sharePaste || '';
+      q.appendChild(inp);
+      q.appendChild(h('div', { className: 'wpf-share-btns' }, [
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-combine', text: 'Combine with what’s here' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-replace', text: 'Replace what’s here' })
+      ]));
+      box.appendChild(q);
+    }
+    return box;
+  };
+  // A list that came in through a link: say whose and what, and let the person choose.
+  A.shareInEl = function () {
+    var d = this.sharedIn;
+    if (!d) return null;
+    var what = this.shareWhat(), n = this.sharedCount(d), names = d.p.filter(Boolean);
+    var empty = answered(this.schema, this.state) === 0;
+    var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
+    box.appendChild(h('p', {}, [h('strong', { text: 'Someone shared ' + (what === 'week' ? 'a week' : 'a list') + ' with you. ' }),
+      (names.length ? 'Names: ' + names.join(', ') + '. ' : '') + n + (what === 'week' ? (n === 1 ? ' row.' : ' rows.') : (n === 1 ? ' job.' : ' jobs.'))]));
+    box.appendChild(h('p', { className: 'wpf-help', text: empty ? 'Nothing is on this page yet, so either choice simply opens it.' : 'Combine keeps everything here and adds what is new, matching people by name. Where both have something different, this page keeps its own and tells you. Replace swaps this page for the shared ' + what + '.' }));
+    box.appendChild(h('div', { className: 'wpf-share-btns' }, [
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Combine with what’s here' }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-replace', text: 'Replace what’s here' }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-no', text: 'Not now' })
+    ]));
+    return box;
+  };
+  A.onShare = function (act) {
+    var self = this, what = this.shareWhat();
+    function copyIt(text, ok) {
+      function done(worked) {
+        if (worked) self.status(ok);
+        else { var ta = self.root.querySelector('[data-share-out]'); if (ta) { ta.focus(); ta.select(); } self.status('Couldn’t copy here. The link is selected: copy it by hand.'); }
+      }
+      try {
+        if (global.navigator && navigator.clipboard && navigator.clipboard.writeText && global.isSecureContext) { navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); }); return; }
+      } catch (e) {}
+      done(false);
+    }
+    var paste = this.root.querySelector('[data-share-in]');
+    if (paste) this.sharePaste = paste.value;
+    if (act === 'share-make' || act === 'share-open') {
+      var which = act === 'share-make' ? 'make' : 'open';
+      this.shareOpen = this.shareOpen === which ? '' : which;
+      if (this.shareOpen === 'make') { var d = this.shareData(); this.shareMade = d.error ? d : this.shareLink(d); }
+      this.render();
+      var focus = this.root.querySelector(this.shareOpen === 'open' ? '[data-share-in]' : this.shareOpen === 'make' ? (this.shareMade && this.shareMade.error ? '[data-action="share-make"]' : '[data-share-out]') : '[data-action="' + act + '"]');
+      if (focus) focus.focus();
+      if (this.shareOpen === 'make' && this.shareMade && this.shareMade.error) this.status(this.shareMade.error);
+      return;
+    }
+    if (act === 'share-copy-link' && this.shareMade) { copyIt(this.shareMade.link, 'Link copied. Send it any way you like (a text, an email). Whoever opens it chooses to combine or replace.'); return; }
+    if (act === 'share-copy-code' && this.shareMade) { copyIt(this.shareMade.code, 'Code copied. On the other device, open this page and paste it under “Open a shared ' + what + '”.'); return; }
+    if (act === 'share-send' && this.shareMade) {
+      try { navigator.share({ title: this.schema.plain || this.schema.title, text: 'Our ' + (this.schema.plain || this.schema.title) + ': ' + this.shareMade.link }).catch(function () {}); } catch (e) {}
+      return;
+    }
+    if (act === 'share-combine' || act === 'share-replace') {
+      var got = readShared(this.sharePaste);
+      if (!got) { this.status('That doesn’t look like a shared ' + what + '. Copy the whole link, or the code starting with TOLLIST1:'); if (paste) paste.focus(); return; }
+      if (got.wp !== this.schema.code) { this.status('That is a shared ' + got.wp + '. Open it on the ' + got.wp + ' page.'); return; }
+      var msg = this.takeShared(got, act === 'share-replace');
+      if (msg) { this.sharePaste = ''; this.shareOpen = ''; this.render(); this.status(msg); var t0 = this.root.querySelector('[data-action="share-open"]'); if (t0) t0.focus(); }
+      return;
+    }
+    if (act === 'share-in-combine' || act === 'share-in-replace') {
+      var m = this.takeShared(this.sharedIn, act === 'share-in-replace');
+      if (!m) return;
+      this.sharedIn = null; this.render(); this.status(m);
+      var first = this.root.querySelector('[data-key="partnerA"]'); if (first) first.focus();
+      return;
+    }
+    if (act === 'share-in-no') {
+      this.sharedIn = null; this.render();
+      this.status('Left as it was. To open it later, tap the link again, or paste it under “Open a shared ' + what + '”.');
+    }
+  };
+  // Take in a shared sheet. replace: the shared one instead of this page. Otherwise combine: add what is
+  // new, fill in what is empty here, and keep this page's own answer wherever both have something different.
+  A.takeShared = function (d, replace) {
+    var self = this, sc = this.schema, what = this.shareWhat();
+    if (replace && answered(sc, this.state) > 0 && !global.confirm('Replace what is on this page with the shared ' + what + '?')) return '';
+    var st = replace ? blankState(sc) : this.state, v = st.values, added = { people: [], rows: 0, filled: 0 }, differ = [], dropped = [];
+    if (replace) {
+      sc.sections.forEach(function (s) { if (s.type === 'table' && s.examples) st.tables[s.id] = []; });
+      v.peopleCount = 0;
+      CODES.forEach(function (c) { delete v['partner' + c]; });
+    }
+    // people, matched by name; someone new goes into an empty place, or is added to the sheet
+    var map = {}, taken = {};
+    function placeholder(x) { x = String(x || '').trim(); return !x || /^(me|them|you|person [a-h1-8])$/i.test(x); }
+    d.p.forEach(function (nm) {
+      if (!nm) return;
+      var n = peopleCount(v), k = fold(nm), hit = -1, i;
+      for (i = 0; i < n && hit < 0; i++) if (!taken[i] && fold(v['partner' + CODES[i]]) === k) hit = i;
+      for (i = 0; i < n && hit < 0; i++) if (!taken[i] && placeholder(v['partner' + CODES[i]])) hit = i;
+      if (hit < 0) { if (!addPerson(sc, st)) { dropped.push(nm); return; } hit = peopleCount(v) - 1; }
+      if (placeholder(v['partner' + CODES[hit]])) { v['partner' + CODES[hit]] = nm; if (!replace) added.people.push(nm); }
+      taken[hit] = 1; map[k] = CODES[hit];
+    });
+    if (replace) v.peopleCount = Math.max(minPeople, d.p.filter(Boolean).length);
+    syncPeople(sc, st);
+    // the boxes at the top
+    (sc.meta || []).forEach(function (f) { var x = d.m[f.id]; if (x != null && typeof x !== 'object' && isBlank(v[f.id])) v[f.id] = x; });
+    function personVal(x) { return x === '*' ? 'Both' : map[fold(x)] || ''; }
+    function show(c, x) { return c.type === 'person' ? (x === 'Both' ? 'Both' : makeCtx(sc, st).name(x)) : String(x); }
+    sc.sections.forEach(function (s) {
+      var inc = Array.isArray(d.tb[s.id]) ? d.tb[s.id] : null;
+      if (s.type !== 'table' || !inc) return;
+      var rows = st.tables[s.id] || (st.tables[s.id] = []), key = sc.share && sc.share.keys ? sc.share.keys[s.id] : null;
+      inc.slice(0, 400).forEach(function (raw) {
+        if (!raw || typeof raw !== 'object') return;
+        var r = {};
+        s.columns.forEach(function (c) {
+          var x = raw[c.id];
+          if (c.type === 'computed' || x == null || typeof x === 'object' || x === '') return;
+          if (c.type === 'person') { x = personVal(x); if (!x) return; }
+          if (c.type === 'select' && c.options.indexOf(x) < 0) return;
+          r[c.id] = x;
+        });
+        if (rowIsEmpty(s, r) && !(s.personDays && r.day && r.who)) return;
+        var hit = null;
+        if (s.personDays) { if (!r.who || !r.day) return; hit = rows.filter(function (x) { return x && x.day === r.day && x.who === r.who; })[0] || null; }
+        else if (key) hit = rows.filter(function (x) { return x && !isBlank(x[key]) && fold(x[key]) === fold(r[key]); })[0] || null;
+        else hit = rows.filter(function (x) { return x && s.columns.every(function (c) { return c.type === 'computed' || fold(x[c.id]) === fold(r[c.id]); }); })[0] || null;
+        if (hit && isExampleRow(s, hit)) { Object.keys(hit).forEach(function (k) { delete hit[k]; }); Object.keys(r).forEach(function (k) { hit[k] = r[k]; }); added.rows++; return; }
+        if (hit) {
+          var took = false;
+          s.columns.forEach(function (c) {
+            if (c.type === 'computed' || c.prefill || isBlank(r[c.id])) return;
+            if (isBlank(hit[c.id])) { hit[c.id] = r[c.id]; took = true; }
+            else if (fold(hit[c.id]) !== fold(r[c.id])) differ.push((s.personDays ? r.day + ', ' + show({ type: 'person' }, r.who) : String(hit[key] || r[key] || '')) + ': ' + c.label.replace(/\s*\(optional\)$/i, '').toLowerCase() + ' is ' + show(c, r[c.id]) + ' there, ' + show(c, hit[c.id]) + ' here');
+          });
+          if (took) added.filled++;
+          return;
+        }
+        var slot = rows.filter(function (x) { return x && rowIsEmpty(s, x) && !isExampleRow(s, x); })[0];
+        if (slot && !s.personDays) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else rows.push(r);
+        added.rows++;
+      });
+      if (!rows.length) rows.push({});
+    });
+    this.state = sanitize(sc, st);
+    syncPeople(sc, this.state);
+    this.changed();
+    if (this.hhWrite) this.hhWrite.soon();
+    var unit = what === 'week' ? ['row', 'rows'] : ['job', 'jobs'];
+    if (replace) return 'Opened the shared ' + what + ': ' + d.p.filter(Boolean).join(', ') + '. ' + (dropped.length ? 'There was no room for ' + dropped.join(', ') + ' (eight people at most). ' : '') + 'Nothing was sent anywhere.';
+    var bits = [];
+    if (added.rows) bits.push(added.rows + ' ' + (added.rows === 1 ? unit[0] : unit[1]) + ' added');
+    if (added.filled) bits.push(added.filled + ' filled in where this page was empty');
+    if (added.people.length) bits.push(added.people.join(', ') + ' added to the names');
+    var msg = 'Combined with the shared ' + what + (bits.length ? ': ' + bits.join('; ') + '.' : ': everything in it was already here.');
+    if (differ.length) msg += ' ' + (differ.length === 1 ? 'One thing is' : differ.length + ' things are') + ' different on the shared ' + what + ', so this page kept its own: ' + differ.slice(0, 4).join('; ') + (differ.length > 4 ? '; and ' + (differ.length - 4) + ' more' : '') + '. Change ' + (differ.length === 1 ? 'it' : 'them') + ' here if you agree.';
+    if (dropped.length) msg += ' There was no room for ' + dropped.join(', ') + ' (eight people at most).';
+    return msg;
   };
 
   /* ---------- a draft for this tab only (sessionStorage): on by default, gone when the tab closes ---------- */
@@ -1126,6 +1407,15 @@
     var b = e.target.closest('button[data-action]');
     if (!b) return;
     var act = b.getAttribute('data-action');
+    if (act.indexOf('share-') === 0) { this.onShare(act); return; }
+    if (act === 'hh-name') {
+      var nm0 = b.getAttribute('data-name');
+      if (nm0) { this.state.values.name = nm0; this.changed(); } else this.hhNo = true;
+      this.render();
+      var nb = this.root.querySelector('[data-key="name"]'); if (nb) nb.focus();
+      this.status(nm0 ? 'Filled in your name: ' + nm0 + '. Change it any time.' : 'No problem. Type your name in the box if you like.');
+      return;
+    }
     if (act === 'chip') {
       var key = b.getAttribute('data-key'), word = b.getAttribute('data-word'), cur = String(this.state.values[key] || '').replace(/\s+$/, '');
       if (new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(cur)) { this.status('“' + word + '” is already there.'); return; }
@@ -1344,7 +1634,16 @@
     // ?road=coworkers (or roommates, caregivers) shows a worksheet worded for that road
     var road = (global.location && (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1]) || '';
     if (road && global.TOL_WORKPAPER_VARIANT) schema = global.TOL_WORKPAPER_VARIANT(wp, road) || schema;
-    var app = new App(root, schema, { road: road });
+    var app = new App(root, schema, { road: road, canShare: !!schema.share });
+    // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied
+    // straight away so it doesn't stay in the address bar or the history. Nothing is opened until the person chooses.
+    var sharedMsg = '';
+    if (schema.share && /^#list=/.test(global.location.hash || '')) {
+      var got = readShared(global.location.hash);
+      if (got && got.wp === schema.code) app.sharedIn = got;
+      else sharedMsg = got ? 'That link is for ' + got.wp + '. Open it on the ' + got.wp + ' page.' : 'That shared link looks incomplete. Ask for it again, or paste it under “Open a shared ' + app.shareWhat() + '”.';
+      try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
+    }
 
     // "Keep a draft on this device": off unless the person turns it on
     var keepBox = document.getElementById('wpf-keep'), eraseBtn = document.getElementById('wpf-erase');
@@ -1377,7 +1676,9 @@
     }
     app.render();
     if (app.hhWrite) app.hhWrite.baseline();
-    if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
+    if (app.sharedIn) { var si = document.getElementById('wpf-share-in'); if (si) { si.scrollIntoView({ block: 'center' }); si.focus(); } app.status('Someone shared ' + (app.shareWhat() === 'week' ? 'a week' : 'a list') + ' with you. Choose what to do with it, at the top of the sheet.'); }
+    else if (sharedMsg) app.status(sharedMsg);
+    else if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });
     if (keepBox) keepBox.addEventListener('change', function () { app.setKeep(keepBox.checked); });
@@ -1428,7 +1729,7 @@
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels,
     setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
-    labelFor: function (i) { return labelFor(i); }
+    labelFor: function (i) { return labelFor(i); }, readShared: readShared
   };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

@@ -17,13 +17,18 @@
   remembering) in minutes and who notices first.
   Money tab (optional, group only): one line per cost, what each person paid, in the currency picked
   ($, £, € or another symbol). Each cost is shared (split evenly, by half shares, or by the split you
-  agreed), one person's own (left out of the settle-up), or an agreed amount that is listed but not split.
+  agreed), one person's own (left out of the settle-up), an agreed amount like family support (listed,
+  not split), a savings goal (kept, never owed), or money coming in (optional: shows what's left). The
+  summary leads with each person's total, then the settle-up.
 
   Two phones: "Send my side to my partner" makes a short code ("LEMON1:" and a base64 JSON) or a .json
   file with the names, jobs, times and bills (never the example). "Add my partner's side" reads one back
   and merges it: people are matched by name, new jobs and bills are added, blanks are filled in, and
   where both phones have different numbers for the same job, the person chooses: keep mine, use theirs,
-  or keep both. Nothing is uploaded; people pass the code between them themselves.
+  or keep both. Nothing is uploaded; people pass the code between them themselves. "Share it as a link"
+  sends one line and …/lemonade-stand.html#side=… (the side, deflated, after the "#", which never reaches a
+  server); opening it goes straight to the preview and clears the "#" part. A "my" in a line's name from the
+  other phone becomes that person's name ("Call my mum" → "Call Amara’s mum").
 
   Descriptive, not evaluative: it reports what was entered and states the split as a plain fact, never
   a verdict on anyone. Each person fills in only their own side.
@@ -190,9 +195,13 @@
   // Before the other side comes in: someone with nothing on their side yet, while another person has
   // entries. No verdict, score or hand-over hours until their side arrives (or "Show the split anyway").
   // With three or more, only while just one person has filled anything in (a child may rightly have none).
-  function waitingFor() {
+  // (kind 'bills' asks about the Money tab; otherwise it's the hours)
+  function waitingFor(kind) {
     if (solo() || state.noWait) return [];
-    var have = state.people.map(function (_, i) { return hasData(i); }), withData = have.filter(Boolean).length;
+    var have = state.people.map(function (_, i) {
+      return kind === 'bills' ? state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; })
+        : state.jobs.some(function (j) { return !j.ex && (num(j.v[i]) > 0 || num((j.t || [])[i]) > 0); });
+    }), withData = have.filter(Boolean).length;
     if (!withData || (state.people.length > 2 && withData > 1)) return [];
     return state.people.map(function (_, i) { return i; }).filter(function (i) { return !have[i]; });
   }
@@ -1091,7 +1100,7 @@
     var shared = byKind('shared'), own = byKind('own'), set = byKind('agreed'), saving = byKind('savings'), inc = byKind('income');
     var costs = real.filter(function (b) { return b.kind !== 'income'; });
     var used = COST_KINDS.filter(function (k) { return byKind(k).length; });
-    var out = [], wait = waitingFor();
+    var out = [], wait = waitingFor('bills');
     // 1. each person's total, family support and savings included
     if (costs.length) {
       out.push('Each person’s total: ' + state.people.map(function (_, i) {
@@ -2276,11 +2285,11 @@
       sideStatus('send-msg', 'Saved as ' + name + '. Send the file to your partner; on their phone they tap “Add my partner’s side”, then “Open their file”.');
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
-  function review(text) {
+  function review(text, note) {
     // a link (or a message with one) carries the side after "#side=": unpack it first
     if (/#side=[zj]/.test(String(text || ''))) {
       unpackSide(text).then(function (json) {
-        if (json) review(json);
+        if (json) review(json, note);
         else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (“Copy the code instead”), and paste it here.'); }
       });
       return;
@@ -2316,7 +2325,8 @@
     html += '<div class="ls-tools"><button type="button" id="add-go">Add to my stand</button><button type="button" id="add-cancel">Not now</button></div>';
     box.innerHTML = html;
     box._conf = conf;
-    var go = $('add-go'); if (go && !conf.length) go.focus();
+    var go = $('add-go'); if (go && !conf.length) go.focus({ preventScroll: !!note });
+    if (note) sideStatus('add-msg', note);
   }
   $('add-check').addEventListener('click', function () { review($('add-code').value); });
   $('add-file').addEventListener('change', function () {
@@ -2497,8 +2507,7 @@
         settle(sides);
       }
       if (h === '#add-side') { $('add-code').focus({ preventScroll: true }); return; }
-      review(h);
-      sideStatus('add-msg', 'Your partner’s side is here. Look it over below, then tap “Add to my stand”.');
+      review(h, 'Your partner’s side is here. Look it over below, then tap “Add to my stand”.');
       return;
     }
     if (h === '#money' || h === '#hours') {
