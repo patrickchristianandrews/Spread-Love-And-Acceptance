@@ -224,34 +224,92 @@
   // ---------- The 7-day starter ----------
   var list = $('tt-week');
   if (list) {
-    var ticks = {};
+    // One set of ticks by default (as before, 'tol-tt-7day'). Two people on one device can switch to a
+    // column each, with their own names ('tol-tt-7day-pair'); the single set is kept as it was.
+    var ticks = {}, pair = { names: ['', ''], t: [{}, {}] }, mode = get('tol-tt-7day-mode') === 'pair' ? 'pair' : 'one';
     try { ticks = JSON.parse(get('tol-tt-7day') || '{}') || {}; } catch (e) { ticks = {}; }
-    DAYS.forEach(function (d, i) {
-      var li = document.createElement('li');
-      li.innerHTML = '<label><input type="checkbox" data-day="' + i + '"' + (ticks[i] ? ' checked' : '') + '>' +
-        '<span class="tt-day">Day ' + (i + 1) + '</span><span class="tt-task">' + esc(d[1]) + '</span></label>' +
-        '<a href="/turning-toward-in-depth.html#' + d[0] + '" class="tt-how">How</a>';
-      list.appendChild(li);
-    });
+    try {
+      var pr = JSON.parse(get('tol-tt-7day-pair') || 'null');
+      if (pr && Array.isArray(pr.names) && Array.isArray(pr.t)) pair = { names: [String(pr.names[0] || '').slice(0, 30), String(pr.names[1] || '').slice(0, 30)], t: [pr.t[0] || {}, pr.t[1] || {}] };
+    } catch (e) { /* start fresh */ }
+    function savePair() { set('tol-tt-7day-pair', JSON.stringify(pair)); }
+    function pname(k) { return String(pair.names[k] || '').trim() || (k ? 'Person 2' : 'Person 1'); }
+    // the switch and the two names, above the list
+    var tools = document.createElement('div');
+    tools.className = 'tt-pair';
+    tools.innerHTML = '<button type="button" class="tt-btn is-quiet" id="tt-pair-toggle" aria-pressed="false"></button>' +
+      '<div class="tt-pair-names" id="tt-pair-names" hidden>' +
+      '<label>First name <input type="text" id="tt-pn-0" maxlength="30" autocomplete="off"></label>' +
+      '<label>Second name <input type="text" id="tt-pn-1" maxlength="30" autocomplete="off"></label>' +
+      '<p class="tt-note" style="margin:0!important;">Each of you ticks only your own column, so you can both see whose day is done.</p></div>';
+    list.parentNode.insertBefore(tools, list);
+    $('tt-pn-0').value = pair.names[0]; $('tt-pn-1').value = pair.names[1];
+    function draw() {
+      list.innerHTML = '';
+      list.classList.toggle('is-pair', mode === 'pair');
+      DAYS.forEach(function (d, i) {
+        var li = document.createElement('li');
+        if (mode === 'pair') {
+          li.innerHTML = '<span class="tt-day">Day ' + (i + 1) + '</span><span class="tt-task">' + esc(d[1]) + '</span>' +
+            '<span class="tt-ticks">' + [0, 1].map(function (k) {
+              return '<label class="tt-tick"><input type="checkbox" data-day="' + i + '" data-p="' + k + '"' + (pair.t[k][i] ? ' checked' : '') + '><span>' + esc(pname(k)) + '</span></label>';
+            }).join('') + '</span>' +
+            '<a href="/turning-toward-in-depth.html#' + d[0] + '" class="tt-how">How</a>';
+        } else {
+          li.innerHTML = '<label><input type="checkbox" data-day="' + i + '"' + (ticks[i] ? ' checked' : '') + '>' +
+            '<span class="tt-day">Day ' + (i + 1) + '</span><span class="tt-task">' + esc(d[1]) + '</span></label>' +
+            '<a href="/turning-toward-in-depth.html#' + d[0] + '" class="tt-how">How</a>';
+        }
+        list.appendChild(li);
+      });
+      var tg = $('tt-pair-toggle');
+      tg.textContent = mode === 'pair' ? 'Back to one set of ticks' : 'Two of you on one device? Tick your own days';
+      tg.setAttribute('aria-pressed', mode === 'pair' ? 'true' : 'false');
+      $('tt-pair-names').hidden = mode !== 'pair';
+      progress();
+    }
     list.addEventListener('change', function (e) {
       if (!e.target.matches('input[data-day]')) return;
-      ticks[e.target.getAttribute('data-day')] = e.target.checked;
-      set('tol-tt-7day', JSON.stringify(ticks));
+      var day = e.target.getAttribute('data-day'), p = e.target.getAttribute('data-p');
+      if (p != null) { pair.t[+p][day] = e.target.checked; savePair(); }
+      else { ticks[day] = e.target.checked; set('tol-tt-7day', JSON.stringify(ticks)); }
       if (e.target.checked && window.TOLGarden) window.TOLGarden.gift('kindness');
       progress();
     });
+    $('tt-pair-toggle').addEventListener('click', function () {
+      mode = mode === 'pair' ? 'one' : 'pair';
+      set('tol-tt-7day-mode', mode);
+      draw();
+      var f = mode === 'pair' ? $('tt-pn-0') : $('tt-pair-toggle'); if (f) f.focus();
+    });
+    [0, 1].forEach(function (k) {
+      $('tt-pn-' + k).addEventListener('input', function () {
+        pair.names[k] = this.value.slice(0, 30); savePair();
+        list.querySelectorAll('input[data-p="' + k + '"] + span').forEach(function (s) { s.textContent = pname(k); });
+        progress();
+      });
+    });
     $('tt-reset').addEventListener('click', function () {
-      ticks = {}; set('tol-tt-7day', '{}');
+      if (mode === 'pair') { pair.t = [{}, {}]; savePair(); }
+      else { ticks = {}; set('tol-tt-7day', '{}'); }
       list.querySelectorAll('input[data-day]').forEach(function (c) { c.checked = false; });
       progress();
     });
+    function countOf(t) { return Object.keys(t).filter(function (k) { return t[k]; }).length; }
     function progress() {
+      if (mode === 'pair') {
+        var a = countOf(pair.t[0]), b = countOf(pair.t[1]);
+        $('tt-bar').style.width = Math.round((a + b) / 14 * 100) + '%';
+        $('tt-count').textContent = pname(0) + ' ' + a + ' of 7 · ' + pname(1) + ' ' + b + ' of 7';
+        $('tt-done').hidden = !(a === 7 && b === 7);
+        return;
+      }
       var n = list.querySelectorAll('input[data-day]:checked').length;
       $('tt-bar').style.width = Math.round(n / 7 * 100) + '%';
       $('tt-count').textContent = n === 7 ? 'All seven. That’s a habit starting.' : n + ' of 7';
       $('tt-done').hidden = n !== 7;
     }
-    progress();
+    draw();
 
     // A gentle welcome back to the 7-day start, only on a later day and never with a "you missed"
     var n = Object.keys(ticks).filter(function (k) { return ticks[k]; }).length;

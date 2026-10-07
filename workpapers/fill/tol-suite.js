@@ -173,10 +173,53 @@
     return st;
   }
 
+  // A sheet made on someone else's device may list the same people in another order (there, A = Jordan
+  // and B = Maya; here, A = Maya). Match people by name, so Jordan's answers stay Jordan's. map[i] = the
+  // place on this road for the sheet's person i.
+  function nameMap(sc, st) {
+    if (!sc.people) return null;
+    var here = S.names.map(function (x) { return SP.fold(x); }), n = WPK.peopleCount(st.values);
+    if (!here.some(Boolean)) return null;
+    var there = WPK.CODES.slice(0, n).map(function (c) { return SP.fold(st.values['partner' + c]); });
+    if (!there.some(Boolean)) return null;
+    var map = [], used = {}, unknown = [];
+    there.forEach(function (nm, i) { var j = nm ? here.indexOf(nm) : -1; if (j >= 0 && !used[j]) { map[i] = j; used[j] = 1; } else if (nm) unknown.push(i); });
+    // the rest keep their own place when it is free, or take the next free one
+    there.forEach(function (nm, i) { if (map[i] != null) return; var j = !used[i] ? i : -1; for (var k = 0; j < 0 && k < WPK.MAX_PEOPLE; k++) if (!used[k]) j = k; map[i] = j; used[j] = 1; });
+    var moved = map.some(function (j, i) { return j !== i; });
+    // names that don't match anyone here, sitting where someone else's name is: worth asking
+    var clash = unknown.filter(function (i) { return here[i] && here[i] !== there[i]; });
+    return { map: map, moved: moved, clash: clash, there: WPK.CODES.slice(0, n).map(function (c) { return String(st.values['partner' + c] || '').trim(); }) };
+  }
+  // Move every person's answers on a sheet to their new place (names, person boxes, per-person rows).
+  function remapSheet(sc, st, map) {
+    var n = WPK.peopleCount(st.values), most = Math.max(n, Math.max.apply(null, map.concat([0])) + 1);
+    var names = {}; WPK.CODES.slice(0, n).forEach(function (c, i) { names[WPK.CODES[map[i]]] = st.values['partner' + c] || ''; });
+    WPK.CODES.slice(0, most).forEach(function (c) { st.values['partner' + c] = names[c] || ''; });
+    st.values.peopleCount = most;
+    function code(v) { var i = WPK.CODES.indexOf(v); return i >= 0 && i < map.length && map[i] != null ? WPK.CODES[map[i]] : v; }
+    sc.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      var rows = st.tables[s.id] || [];
+      var cols = s.columns.filter(function (c) { return c.type === 'person'; });
+      rows.forEach(function (r) { if (r) cols.forEach(function (c) { if (r[c.id]) r[c.id] = code(r[c.id]); }); });
+      if (s.fixedRows && s.fixedRows[0] === '@A' && s.fixedRows[1] === '@B') {
+        var out = []; rows.forEach(function (r, i) { if (i < map.length) out[map[i]] = r; });
+        for (var k = 0; k < out.length; k++) if (!out[k]) out[k] = {};
+        st.tables[s.id] = out;
+      }
+    });
+    WPK.syncPeople(sc, st);
+  }
+  var nameAsks = [];
+
   // Put a sheet that came from a file onto the road. Returns false when that exact sheet is already there.
   function place(en) {
     var s0 = sig(en);
     if (S.stops.some(function (st) { return st.entries.some(function (x) { return sig(x) === s0; }); })) return false;
+    var sc0 = schema(en.workpaper), nm0 = nameMap(sc0, en.state);
+    if (nm0 && nm0.clash.length) nameAsks.push({ en: en, info: nm0 });
+    else if (nm0 && nm0.moved) { remapSheet(sc0, en.state, nm0.map); en.matched = true; }
     var stops = S.stops.filter(function (st) { return st.wp === en.workpaper; });
     if (!stops.length) stops = [extraStop(en.workpaper)];
     var target = null;
@@ -244,6 +287,22 @@
     box.appendChild(row);
     var cur = choices.filter(function (c) { return (S.variant || '') === c[0]; })[0];
     if (cur && cur[1].note) box.appendChild(h('p', { className: 'ws-focus-note', text: cur[1].note }));
+    // Two or more people may not answer this the same way: one answer each, if you like.
+    if (isSolo() || S.names.length < 2) return;
+    var each = Array.isArray(S.focusEach) ? S.focusEach : null;
+    if (!each) { box.appendChild(h('p', { className: 'ws-focus-more' }, [h('button', { type: 'button', className: 'ws-link', 'data-focus-each': 'on', text: 'We\u2019d answer this differently' })])); return; }
+    var grid = h('div', { className: 'ws-focus-each', role: 'group', 'aria-label': 'One answer each' });
+    S.names.forEach(function (nm, i) {
+      var id = 'ws-focus-p' + i, sel = h('select', { id: id, 'data-focus-person': String(i) });
+      sel.appendChild(h('option', { value: '', text: '\u2014', selected: each[i] == null ? 'selected' : null }));
+      choices.forEach(function (c) { sel.appendChild(h('option', { value: c[0] || 'main', text: c[1].label, selected: each[i] === (c[0] || 'main') ? 'selected' : null })); });
+      grid.appendChild(h('label', { className: 'ws-focus-p', for: id }, [h('span', { text: whoLabel(i) }), sel]));
+    });
+    box.appendChild(grid);
+    var picked = each.filter(function (x) { return x; });
+    var differ = picked.length >= 2 && picked.some(function (x) { return x !== picked[0]; });
+    box.appendChild(h('p', { className: 'ws-focus-note', text: differ ? 'You answered differently, and that is useful to know. Your road follows the main order so it fits everyone; start by talking about why each of you picked your answer.' : 'Each of you can pick your own answer. When you agree, your road follows it.' }));
+    box.appendChild(h('p', { className: 'ws-focus-more' }, [h('button', { type: 'button', className: 'ws-link', 'data-focus-each': 'off', text: 'Back to one answer for us both' })]));
   }
 
   var namesQ = null, namesNote = null, reportAbout = null; // the page's own words, for the roads with more people
@@ -444,6 +503,7 @@
     S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, state: en.state }); }); });
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
     if (S.variant) out.variant = S.variant;
+    if (Array.isArray(S.focusEach)) out.focusEach = S.focusEach.slice(0, MAX_PEOPLE);
     return out;
   }
   function changed() {
@@ -811,7 +871,8 @@
     // the plain name is the title; the technical name sits in the small line above it
     $('ws-sheet-code').textContent = st.wp + (sc.title !== SP.nameOf(st.wp) ? ' · ' + sc.title : '') + ' · ' + st.group;
     $('ws-sheet-title').textContent = SP.nameOf(st.wp) + (perPerson(st.wp) && p != null ? ' · ' + whoLabel(p) : '');
-    $('ws-sheet-why').textContent = st.why + (perPerson(st.wp) ? ' Everyone fills in their own, about themselves.' : '');
+    $('ws-sheet-why').textContent = st.why + (perPerson(st.wp) ? ' Everyone fills in their own, about themselves.' : '') +
+      (perPerson(st.wp) && p != null && S.names.length > 1 ? ' This one is ' + whoLabel(p) + '\u2019s to fill in. On a shared device? Hand it over to ' + whoLabel(p) + ' now.' + (st.wp === 'WP-02' ? ' Everyone on your road will see it if you share the file.' : '') : '');
     $('ws-sheet-label').value = en.label || '';
     var root = $('ws-sheet-root');
     // People come from "Who's on this road?", and are named the way this road does.
@@ -915,6 +976,7 @@
     files = Array.prototype.slice.call(files || []);
     if (!files.length) return;
     var loaded = [], problems = [], dupes = 0, hold = [];
+    nameAsks = [];
     function put(en, road, names) {
       if (differentRoad(road)) { hold.push({ en: en, road: road, names: names }); return; }
       if (road && pathById(road) && !S.path) setPath(road);
@@ -974,11 +1036,39 @@
         var first = document.querySelector('.ws-stop.is-done');
         if (first && first.scrollIntoView && !hold.length) first.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
       }
+      var matched = loaded.filter(function (en) { return en.matched; }).length;
+      if (matched) twice += ' People were matched by name, so everyone\u2019s answers stayed theirs' + (matched > 1 ? ' on ' + matched + ' sheets' : '') + '.';
       $('ws-drop-note').textContent = (msg + twice).trim();
+      if (nameAsks.length && !hold.length) { askAboutNames(); return; }
       if (hold.length) askAboutRoad(hold);
       else if (msg || twice) say((msg + twice).trim() + (problems.length ? ' ' + problems.join('; ') + '.' : ''));
       else say(problems.length ? problems.join('; ') + '.' : 'Nothing to bring in from those files.');
     });
+  }
+
+  // A sheet whose names don't match the names here: show both, and let the person choose.
+  function askAboutNames() {
+    var a = nameAsks[0], note = $('ws-drop-note');
+    if (!a) return;
+    var here = S.names.map(function (x, i) { return WPK.CODES[i] + ' is ' + (String(x || '').trim() || roleLabel(i)); });
+    var there = a.info.there.map(function (x, i) { return WPK.CODES[i] + ' = ' + (x || roleLabel(i)); });
+    note.appendChild(h('span', { className: 'ws-hold-msg', text: ' The ' + a.en.workpaper + ' sheet says ' + there.join(', ') + '; here ' + here.join(', ') + '. Is that the same people in another order?' }));
+    var two = a.info.there.length === 2 && S.names.length === 2;
+    var row = h('span', { className: 'ws-hold-actions' }, [
+      two ? h('button', { type: 'button', className: 'wpf-add', 'data-names': 'swap', text: 'Swap them (A \u2194 B)' }) : null,
+      h('button', { type: 'button', className: 'wpf-add', 'data-names': 'keep', text: two ? 'Keep it as it is' : 'Keep the order as it is' })
+    ]);
+    note.appendChild(row);
+    say('The names on that sheet don\u2019t match the names here. Choose what to do, just under "Drop files here".');
+    var b = note.querySelector('[data-names]'); if (b) b.focus();
+  }
+  function resolveNames(how) {
+    var a = nameAsks.shift(), note = $('ws-drop-note');
+    if (!a) return;
+    if (how === 'swap') { var sc = schema(a.en.workpaper); remapSheet(sc, a.en.state, [1, 0]); applyNames(sc, a.en.state); changed(); renderRoad(); }
+    note.textContent = how === 'swap' ? 'Swapped: the answers on that ' + a.en.workpaper + ' sheet now sit with the right names.' : 'Kept as it is.';
+    say(note.textContent);
+    if (nameAsks.length) askAboutNames();
   }
 
   // Sheets from another road: say so, and let the person choose.
@@ -1127,6 +1217,7 @@
       if ($('ws-keep')) $('ws-keep').checked = true;
       if (kept.path && pathById(kept.path)) setPath(kept.path, typeof kept.variant === 'string' ? kept.variant : null);
       if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); fitNames(); }
+      if (Array.isArray(kept.focusEach)) { S.focusEach = kept.focusEach.slice(0, MAX_PEOPLE).map(function (x) { return typeof x === 'string' && /^[a-z]{1,20}$/.test(x) ? x : null; }); renderFocus(); }
       kept.entries.forEach(function (x) {
         var sc = x && schema(x.workpaper);
         if (!sc) return;
@@ -1178,7 +1269,19 @@
     // "What brings you here?": the same road, in the order that fits
     var focusBox = $('ws-focus');
     if (focusBox) {
+      focusBox.addEventListener('change', function (e) {
+        var i = e.target.getAttribute('data-focus-person');
+        if (i == null || !S.path) return;
+        S.focusEach = (S.focusEach || []).slice(); S.focusEach[+i] = e.target.value || null;
+        var picked = S.focusEach.filter(function (x) { return x; });
+        var key = picked.length && picked.every(function (x) { return x === picked[0]; }) ? (picked[0] === 'main' ? null : picked[0]) : null;
+        if ((S.variant || null) !== key) setPath(S.path.id, key); else renderFocus();
+        changed();
+        var again = $('ws-focus-p' + i); if (again) again.focus();
+      });
       focusBox.addEventListener('click', function (e) {
+        var fe = e.target.closest('[data-focus-each]');
+        if (fe) { S.focusEach = fe.getAttribute('data-focus-each') === 'on' ? S.names.map(function () { return S.variant || null; }) : null; renderFocus(); changed(); var f0 = $('ws-focus-p0') || $('ws-focus').querySelector('[data-focus-each]'); if (f0) f0.focus(); return; }
         var b = e.target.closest('[data-focus]');
         if (!b || !S.path) return;
         var key = b.getAttribute('data-focus') || null;
@@ -1222,7 +1325,7 @@
     $('ws-sheet-done').addEventListener('click', closeSheet);
     $('ws-sheet-x').addEventListener('click', closeSheet);
     if ($('ws-sheet-draft')) $('ws-sheet-draft').addEventListener('click', function () { if (app) app.saveDraft(); });
-    $('ws-drop').addEventListener('click', function (e) { var hb = e.target.closest('[data-hold]'); if (hb) resolveHeld(hb.getAttribute('data-hold')); });
+    $('ws-drop').addEventListener('click', function (e) { var hb = e.target.closest('[data-hold]'); if (hb) resolveHeld(hb.getAttribute('data-hold')); var nb = e.target.closest('[data-names]'); if (nb) resolveNames(nb.getAttribute('data-names')); });
     document.addEventListener('keydown', function (e) {
       if (!editing) return;
       if (e.key === 'Escape') closeSheet();

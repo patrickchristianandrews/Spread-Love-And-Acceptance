@@ -195,6 +195,30 @@
 .wpf-list a{ font-weight: 600; font-size: 1.08em; }
 .wpf-list p{ margin: 0.2em 0 0; color: var(--ink-soft, #524B3E); font-size: 0.95em; }
 
+/* ---------- narrow boxes or large text: table rows become cards ----------
+   A container query in rem, so it follows the box's real width and the reader's text size: a table
+   that fits at normal text becomes one card per row at "Larger" text on a tablet. */
+.wpf-table-box{ container: wpftable / inline-size; }
+.wpf-table tr[hidden]{ display: none !important; }
+.wpf-rows-for{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 .6em; font-size: .92em; font-weight: 600; }
+.wpf-rows-for select{ flex: 1 1 12em; max-width: 100%; min-height: 40px; font: inherit; font-weight: 400; }
+.wpf-turn{ margin: 0 0 .7em; padding: .5em .8em; border-radius: 6px; background: #EEF4FA; border: 1px solid #CFDDEE; font-size: .92em; }
+@container wpftable (max-width: 40rem){
+  .wpf-table thead{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .wpf-table, .wpf-table tbody, .wpf-table tr, .wpf-table td, .wpf-table th.wpf-rowlabel{ display: block; width: 100%; box-sizing: border-box; height: auto; }
+  .wpf-table tr{ border: 1px solid var(--line, #D9CBA3); border-radius: 3px; padding: 8px 40px 8px 10px; margin-bottom: 10px; background: #FFFDF7; position: relative; }
+  .wpf-table td{ border: 0; padding: 4px 0; }
+  .wpf-table td[data-label]::before{
+    content: attr(data-label); display: block;
+    font-family: inherit; font-size: 0.85rem; font-weight: 600;
+    color: var(--ink-soft, #524B3E); margin-bottom: 2px;
+  }
+  .wpf-table td input:not([type="checkbox"]):not([type="radio"]), .wpf-table td select, .wpf-table td textarea{ width: 100%; min-width: 0; }
+  .wpf-table th.wpf-rowlabel{ border: 0; padding: 0 0 4px; }
+  .wpf-table td.wpf-remove{ position: absolute; top: 4px; right: 4px; width: auto; padding: 0; }
+  .wpf-table tr.wpf-row-mine{ border-color: var(--brass, #A8792F); }
+}
+
 /* ---------- small screens: table rows become cards ---------- */
 @media (max-width: 720px){
   .wpf-table-box{ width: 100%; margin-left: 0; transform: none; }
@@ -215,7 +239,8 @@
   .wpf-bar-actions button{ flex: 1 1 auto; }
   /* one row on a phone: Download PDF and More; the rest open under More */
   .wpf-bar{ padding-top: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
-  .wpf-bar-actions.has-more .wpf-btn-quiet:not(.wpf-bar-more){ display: none; }
+  .wpf-bar-actions.has-more .wpf-btn-quiet:not(.wpf-bar-more):not(#wpf-save){ display: none; }
+  .wpf-bar-actions.has-more #wpf-save{ display: inline-block; order: 1; flex: 1 1 auto; }
   .wpf-bar-actions.has-more.is-open .wpf-btn-quiet:not(.wpf-bar-more){ display: inline-block; flex: 1 1 30%; }
   .wpf-bar-actions.has-more .wpf-bar-more{ display: inline-block; flex: 0 0 auto; order: 2; }
   .wpf-bar-actions.has-more .wpf-btn{ order: 1; flex: 1 1 auto; }
@@ -264,6 +289,10 @@
 .ws-focus-b.is-on::before{ content: "\2713"; margin-right: 6px; }
 .ws-focus-b:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
 .ws-focus-note{ margin: .6em 0 0; font-size: .92em; color: var(--ink-soft, #524B3E); }
+.ws-focus-more{ margin: .5em 0 0; font-size: .92em; }
+.ws-focus-each{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 8px 12px; margin-top: .7em; }
+.ws-focus-p{ display: flex; flex-direction: column; gap: 3px; font-size: .9em; font-weight: 600; min-width: 0; }
+.ws-focus-p select{ width: 100%; max-width: 100%; font: inherit; font-weight: 400; min-height: 42px; padding: 6px 10px; border-radius: 12px; border: 1px solid #E5CDB0; background: #fff; }
 
 .ws-names{ margin-top: 1.2em; padding: 1em 1.1em; border-radius: 18px; background: #F6EEF8; }
 .ws-names-q{ margin: 0 0 .6em; font-weight: 600; }

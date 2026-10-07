@@ -241,7 +241,8 @@
     var defs = [];
     if (schema.people) ctx.people().forEach(function (c, i) {
       var role = opts.people ? roleOf(opts.people, i) : WPK.labelFor(i);
-      defs.push({ id: 'partner' + c, label: solo() && role === 'You' ? 'Your name' : role + ' (name)', type: 'text' });
+      var given = String(entry.state.values['partner' + c] || '').trim();
+      defs.push({ id: 'partner' + c, label: solo() && role === 'You' ? 'Your name' : given ? 'Name' : role + ' (name)', type: 'text' });
     });
     defs = defs.concat(schema.meta || []);
     var colW = (W - 16) / 2;
@@ -893,15 +894,36 @@
     found[t] = val;
   }
 
-  function isoDate(v) {
-    v = String(v || '').trim();
+  // A typed date to YYYY-MM-DD. "10/7/26", "Oct 7, 2026", and also "Oct 7", "7 October" or "10/7"
+  // with no year: those are read as this year, or last year when this year's would still be ahead
+  // (a check-in date is never in the future). Date.parse alone reads "Oct 7" as 2001.
+  var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+  function ymd(y, m, d) { return y + '-' + ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2); }
+  function nearestPast(m, d, now) {
+    now = now || new Date();
+    var y = now.getFullYear(), t = new Date(y, m - 1, d), lim = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    if (t > lim) y--;
+    return ymd(y, m, d);
+  }
+  function isoDate(v, now) {
+    v = String(v == null ? '' : v).trim();
     if (!v || /^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-    var m = v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);
-    if (m) { var y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return y + '-' + ('0' + m[1]).slice(-2) + '-' + ('0' + m[2]).slice(-2); }
+    var m = v.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/);
+    if (m) { var y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return ymd(y, m[1], m[2]); }
+    if (!/\b\d{4}\b/.test(v)) {
+      var s = v.toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, '$1').replace(/[,.]/g, ' ').replace(/\s+/g, ' ').trim();
+      var md = /^(?:[a-z]+day )?([a-z]{3,})\s+(\d{1,2})$/.exec(s) || null, dm = /^(?:[a-z]+day )?(\d{1,2})\s+(?:of )?([a-z]{3,})$/.exec(s);
+      var mon = md ? MONTHS.indexOf(md[1].slice(0, 3)) : dm ? MONTHS.indexOf(dm[2].slice(0, 3)) : -1, day = md ? +md[2] : dm ? +dm[1] : 0;
+      if (mon >= 0 && day >= 1 && day <= 31) return nearestPast(mon + 1, day, now);
+      var sl = /^(\d{1,2})[\/.\-](\d{1,2})$/.exec(s.replace(/ /g, ''));
+      if (sl && +sl[1] >= 1 && +sl[1] <= 12 && +sl[2] >= 1 && +sl[2] <= 31) return nearestPast(+sl[1], +sl[2], now);
+      return v;
+    }
     var t = Date.parse(v);
-    if (!isNaN(t)) { var d = new Date(t); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+    if (!isNaN(t)) { var d = new Date(t); return ymd(d.getFullYear(), d.getMonth() + 1, d.getDate()); }
     return v;
   }
+
 
   function rebuild(found) {
     var byE = {}, path = null, roadNames = null;

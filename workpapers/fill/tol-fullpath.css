@@ -213,3 +213,19 @@
 @media print{
   .fp-three, .fp-form, .fp-actions, .fp-steps{ display: none !important; }
 }
+
+/* privacy, whose turn, and combining two copies */
+.fp-private-note{ padding: .55em .8em; border-radius: 12px; background: #FFF6D9; border: 1px solid #EBD898; font-size: .92em; color: var(--ink, #211D17); font-style: normal; }
+.fp-private-note::before{ content: "Private · "; font-weight: 700; }
+.fp-turn{ margin: .8em 0 .4em; padding: .5em .8em; border-radius: 12px; background: #EEF4FA; border: 1px solid #CFDDEE; font-size: .92em; }
+.fp-turn-dot{ margin-right: .1em; }
+.fp-rows-for{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: .2em 0 .6em; font-size: .92em; font-weight: 600; }
+.fp-rows-for select{ width: auto; max-width: 100%; flex: 1 1 12em; }
+.fp-share{ margin: .9em 0; display: grid; gap: .45em; }
+.fp-share .fp-private-note{ margin: 0; }
+.fp-merge{ margin: 1em 0; padding: .8em .9em; border-radius: 16px; background: #F6F1FB; border: 1px solid #DCCDEB; }
+.fp-merge .fp-h4{ margin-top: 0; }
+.fp-conflicts{ list-style: none; padding: 0; margin: .6em 0 0; display: grid; gap: 8px; }
+.fp-conflict{ display: flex; flex-wrap: wrap; gap: 6px; padding: .55em .7em; border-radius: 12px; background: #fff; border: 1px solid #E5DAEF; }
+.fp-conflict-w{ flex: 1 1 100%; margin: 0; font-weight: 600; font-size: .9em; overflow-wrap: anywhere; }
+.fp-conflict .fp-opt{ max-width: 100%; overflow-wrap: anywhere; border-radius: 14px; }

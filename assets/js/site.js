@@ -1108,7 +1108,7 @@
     screenshots: 'screenshot', screensot: 'screenshot', screnshot: 'screenshot', sreenshot: 'screenshot', childhod: 'childhood', chilhood: 'childhood', childood: 'childhood',
     forgetfull: 'forgetful', forgot: 'forgot', rember: 'remember', remeber: 'remember', focuss: 'focus', foccus: 'focus', concentrait: 'concentrate', meltdowns: 'meltdown', meltown: 'meltdown' };
   // two words people often split that the site writes as one ("screen shot" → screenshot)
-  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot' };
+  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot', 'mother in law': 'mother-in-law', 'mothers in law': 'mother-in-law', 'father in law': 'father-in-law', 'sister in law': 'sister-in-law', 'brother in law': 'brother-in-law', 'in laws': 'in-laws', 'in law': 'in-law', 'long distance': 'longdistance', 'time zone': 'timezone', 'time zones': 'timezone', 'money home': 'remittance', 'send money': 'remittance', 'sending money': 'remittance', 'sends money': 'remittance', 'need space': 'space', 'needs space': 'space', 'time out': 'timeout' };
   // words that mean the same here: each term also matches these
   var SAME = { complacent: ['complacency', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drifted'], complacency: ['complacent', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drift'], granted: ['complacency', 'taking for granted', 'unthanked', 'appreciation'],
     autism: ['autistic', 'neurodivergent', 'wired differently', 'wiring', 'neurotype'], autistic: ['autism', 'neurodivergent', 'wired differently', 'wiring'],
@@ -1149,7 +1149,7 @@
     teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
-    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
+    grief: ['/grief.html', '/library/emotions.html', '/grandparents.html', '/self-path.html'], retirement: ['/retired-together.html', '/grief.html'], retired: 'retirement', retiring: 'retirement', reconnect: ['/grief.html'], reconnecting: 'reconnect', estranged: 'reconnect',
     yelling: ['/parents.html', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', screaming: 'yelling',
     dementia: ['/caregivers.html', '/library/stress.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], alzheimers: 'dementia', alzheimer: 'dementia', respite: 'dementia', carer: 'dementia', carers: 'dementia', caregiver: 'dementia', caregivers: 'dementia', caregiving: 'dementia',
     pronouns: ['/teens.html', '/safety.html'], lgbtq: 'pronouns', lgbt: 'pronouns', gay: 'pronouns', lesbian: 'pronouns', bisexual: 'pronouns', trans: 'pronouns', transgender: 'pronouns', nonbinary: 'pronouns', queer: 'pronouns',
@@ -1160,7 +1160,10 @@
     lonely: ['/library/connection.html', '/grief.html', '/turning-toward.html'], loneliness: 'lonely', alone: 'lonely', isolated: 'lonely',
     grown: ['/grief.html', '/grandparents.html'], adult: 'grown',
     work: ['/work.html', '/appreciation-at-work.html', '/relationships.html'], workplace: 'work', job: 'work', office: 'work', coworker: 'work', coworkers: 'work', colleague: 'work', colleagues: 'work', team: 'work', teams: 'work', manager: 'work', boss: 'work', employee: 'work', employees: 'work', staff: 'work', grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
-    stonewalling: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling',
+    stonewalling: ['/pursue-withdraw.html', '/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling', withdraw: 'stonewalling', withdraws: 'stonewalling', pursue: 'stonewalling', pursuer: 'stonewalling', pursues: 'stonewalling', space: 'stonewalling', pause: 'stonewalling', timeout: 'stonewalling',
+    'in-laws': ['/library/conflict.html', '/library/life.html', '/family-obligations.html'], 'in-law': 'in-laws', inlaws: 'in-laws', inlaw: 'in-laws', 'mother-in-law': 'in-laws', 'father-in-law': 'in-laws', 'sister-in-law': 'in-laws', 'brother-in-law': 'in-laws', motherinlaw: 'in-laws', fatherinlaw: 'in-laws', 'mothers-in-law': 'in-laws', extended: 'in-laws', culture: 'in-laws', cultures: 'in-laws', cultural: 'in-laws',
+    remittance: ['/family-obligations.html', '/lemonade-stand.html', '/library/life.html'], remittances: 'remittance', remit: 'remittance', money: ['/lemonade-stand.html', '/family-obligations.html'], savings: 'money', saving: 'money', finances: 'money',
+    longdistance: ['/long-distance.html', '/turning-toward.html', '/signal-translator.html', '/check-ins.html'], ldr: 'longdistance', timezone: 'longdistance', timezones: 'longdistance', apart: 'longdistance',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
     minutes: ['/start-in-10-minutes.html', '/quick-checks.html'], start: ['/start-here.html', '/start-in-10-minutes.html'],
@@ -1958,7 +1961,7 @@
     quiet: { key: QUIET_KEY, keys: [STILL_KEY, HELP_KEY, SOUND_KEY].concat(SOUND_KEYS),
       on: function () { lsSet(HELP_KEY, '1'); setSounds(true); lsSet(STILL_KEY, '1'); } },
     easy: { key: EASY_KEY, keys: [FONT_KEY, SPACE_KEY, TINT_KEY, STILL_KEY, HELP_KEY],
-      on: function () { lsSet(FONT_KEY, 'easy'); lsSet(SPACE_KEY, 'wide'); if (!lsGet(TINT_KEY)) lsSet(TINT_KEY, 'cream'); lsSet(STILL_KEY, '1'); lsSet(HELP_KEY, '1'); } }
+      on: function () { lsSet(FONT_KEY, 'easy'); lsSet(SPACE_KEY, 'wide'); if (!lsGet(TINT_KEY)) lsSet(TINT_KEY, 'cream'); lsSet(STILL_KEY, '1'); } }  // Easy reading leaves the helpers alone; Hide the helpers is its own switch
   };
   function prevOf(name) { try { return JSON.parse(lsGet(PREV_KEY + '-' + name) || 'null'); } catch (e) { return null; } }
   function setPreset(name, on) {
@@ -2057,6 +2060,7 @@
       sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
       sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
       '<h3 class="tol-set-k">Reading</h3>' +
+      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">Listen to this page</button> <small>Your device reads the page aloud, with a speed control and “Read from where I am”.</small></p>' +
       '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
       '<fieldset><legend>Font</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">Easy to read</span>') + '</fieldset>' +
       '<fieldset><legend>Spacing</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
@@ -2104,6 +2108,7 @@
       var p = e.target.closest('[data-preset]');
       if (p) { var n = p.getAttribute('data-preset'); setPreset(n, lsGet(PRESETS[n].key) !== '1'); }
       if (e.target.closest('.tol-set-close') || e.target === box) closeSettings();
+      if (e.target.closest('.tol-set-listen-go')) { var lg = document.querySelector('.tol-listen-go'); closeSettings(); if (lg) { lg.scrollIntoView({ block: 'center' }); lg.click(); } }
       if (e.target.closest('.tol-set-reset')) {
         [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY].forEach(lsDel);
         setSounds(false); refreshStill(); after(); quietEvent(); announce('Everything is back to the usual.');
@@ -2128,6 +2133,7 @@
     if (!setBox) setBox = buildSettings();
     setLast = from || document.activeElement;
     syncSettings(setBox);
+    var sl = setBox.querySelector('.tol-set-listen'); if (sl) sl.hidden = !document.querySelector('.tol-listen-go');
     setBox.hidden = false;
     setInerted = Array.prototype.filter.call(document.body.children, function (n) { return n !== setBox && !n.hasAttribute('inert') && !/^(SCRIPT|STYLE|LINK)$/.test(n.tagName); });
     setInerted.forEach(function (n) { n.setAttribute('inert', ''); });
@@ -2162,7 +2168,7 @@
   // ---- a gentle offer on the first visit: Quiet mode or Easy reading, one tap each ----
   function comfortOffer(body) {
     if (lsGet('tol-comfort-offer') || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
-        document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device)\.html$/.test(current)) return;
+        document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     lsSet('tol-comfort-offer', 'shown'); // offered once; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
@@ -2179,7 +2185,10 @@
       if (tgt) { if (!tgt.hasAttribute('tabindex')) tgt.setAttribute('tabindex', '-1'); tgt.focus({ preventScroll: true }); } else if (m) m.focus({ preventScroll: true });
     });
     var intro = main.querySelector('[data-home-intro]'), head = main.querySelector('.read-head');
-    if (intro) homeSlot(intro).after(box);                   // home: after the approved opening, so its order stays as it is
+    // someone arriving from a link (a partner sent it, a search) sees the page first, and the offer after its opening part
+    var fromOutside = !intro && document.referrer.indexOf(location.origin) !== 0, firstPart = fromOutside && main.querySelector('main > section, .read-head ~ section');
+    if (intro) homeSlot(intro).after(box);
+    else if (firstPart) firstPart.after(box);                   // home: after the approved opening, so its order stays as it is
     else if (head && head.parentNode === main) head.after(box);
     else main.insertBefore(box, main.firstChild);
   }
@@ -2981,7 +2990,14 @@
     [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
     [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
-    [/^\/(invisible-labor-mental-load|how-to-stop-fighting-with-your-partner|neurodivergent-relationships|communication-style-quiz)\.html$/, 'Share this guide', 'A free, kind guide to sharing the mental load at home.'],
+    [/^\/(how-to-stop-fighting-with-your-partner|pursue-withdraw|upset-right-now)\.html$/, 'Share this page', 'A free, calm guide for when we keep ending up in the same fight. It doesn’t blame either of us.'],
+    [/^\/check-ins\.html$/, 'Share this guide', 'A free guide to talking about something tender, kindly, at a time that suits us both.'],
+    [/^\/turning-toward\.html$/, 'Share this page', 'Small daily ways to turn toward each other. Free, no account.'],
+    [/^\/long-distance\.html$/, 'Share this guide', 'A free guide for couples living apart: calls, time zones and short texts.'],
+    [/^\/retired-together\.html$/, 'Share this guide', 'A free guide for when you’re both retired and home all day.'],
+    [/^\/family-obligations\.html$/, 'Share this guide', 'A free guide to supporting family and sending money home, planned together.'],
+    [/^\/neurodivergent-relationships\.html$/, 'Share this guide', 'A free, kind guide for couples who are wired differently. Neither way is wrong.'],
+    [/^\/(invisible-labor-mental-load|communication-style-quiz)\.html$/, 'Share this guide', 'A free, kind guide to sharing the mental load at home.'],
     [/^\/library\.html$|^\/library\/[a-z-]+\.html$/, 'Share this page', 'Plain-language reading on how people think, feel and get along. Free.'],
     [/^\/learn\/index\.html$/, 'Share these stories', 'Short stories from philosophy, in plain words. Free.'],
     [/^\/whats-new\.html$/, 'Share this page', 'What’s new on Spread Love & Acceptance, a free site about sharing the load kindly.'],

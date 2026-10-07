@@ -645,6 +645,32 @@ t('wavelength', 'what chapters are in wavelength', { id: 'wl-chapters', text: /s
 t('wavelength', 'how do I compare wave codes with my partner', { id: 'wl-compare', text: /Compare with someone/ });
 t('wavelength', 'does wavelength save what I type', { id: /^wl-|^wavelength$/, text: /on this device|sent anywhere/ });
 
+// ---------------------------------------------------------------- couples (round six: eight couples, sixteen people)
+t('couples', "she won't let anything go, I need space", { kind: 'care', id: 'pursuewithdraw', not: /heads-up before visits|work hours/ });
+t('couples', 'one of us wants to talk it out now and the other needs space. who is right?', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'he walks away every time I try to talk', { kind: 'care', id: 'pursuewithdraw', text: /return time/ });
+t('couples', 'we have the same fight every week, she pursues and I withdraw', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'how long should a break be?', { kind: 'care', id: 'pursuewithdraw', not: /respite/ });
+t('couples', 'how do I get him to stay and finish the conversation?', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'he never lets me talk about anything', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
+t('couples', 'she follows me from room to room when I need space', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
+t('couples', "he won't let me talk to my friends", { kind: 'safety' });
+t('couples', 'he follows me to work', { kind: 'safety' });
+t('couples', 'he punched a hole in the wall', { kind: 'safety' });
+t('couples', "he punched the wall last night when I wouldn't drop it", { kind: 'safety' });
+t('couples', "he smashes things when he's angry", { kind: 'safety' });
+t('couples', "she stands in the doorway so I can't get out", { kind: 'safety' });
+t('couples', 'she threw my phone across the room', { kind: 'safety' });
+t('couples', "my husband doesn't understand that I have to support my family", { kind: 'care', id: 'familyduty', not: /dementia/ });
+t('couples', 'my husband no understand i must help my family back home', { kind: 'care', id: 'familyduty' });
+t('couples', "my wife sends a lot of money to her family and I feel we can't save", { kind: 'care', id: 'familyduty', not: /visits/ });
+t('couples', 'my mother-in-law visits too often', { kind: 'sit', not: /motherinlaw/ });
+t('couples', "my wife says I'm under her feet since I retired", { kind: 'care', id: 'retired' });
+t('couples', 'I just retired and feel useless at home', { kind: 'care', id: 'retired' });
+t('couples', 'retirement', { kind: 'care', id: 'retired', not: /widow|living alone/ });
+t('couples', "we're long distance and always fighting about who calls", { kind: 'care', id: 'longdistance' });
+t('couples', 'My stepdaughter says I am not her real mom and my husband is stuck in the middle', { not: /signs of control/ });
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

@@ -18,7 +18,7 @@
   var X0 = 80, PX = 8.4;   // the SVG field: the goal line is x = 80, one yard is 8.4 units
 
   var WHO = [
-    ['self', 'Myself'], ['partner', 'A partner'], ['relative', 'A parent or relative'], ['young', 'A child or teen'],
+    ['self', 'Myself'], ['us', 'Us, together'], ['partner', 'A partner'], ['relative', 'A parent or relative'], ['young', 'A child or teen'],
     ['friend', 'A friend'], ['housemate', 'A housemate'], ['coworker', 'A coworker']
   ];
 
@@ -34,6 +34,7 @@
       say: 'Name it, to yourself', lines: {
         self: '“I’m fine” has become the whole answer I give myself.',
         partner: '“Fine” has become the whole conversation.',
+        us: '“Fine” has become the whole conversation, for both of us.',
         relative: 'Our calls have become all logistics.',
         young: 'I’m picturing them as they were a year ago.',
         friend: '“We’ll catch up soon” has replaced an actual plan.',
@@ -45,6 +46,7 @@
       say: 'Try asking', lines: {
         self: 'What do I want more of this month, and what have I been putting up with?',
         partner: 'What’s on your mind this week that I don’t know about?',
+        us: 'Take turns: what’s on your mind this week that the other one doesn’t know about?',
         relative: 'What’s something about your life now that I don’t know much about?',
         young: 'What’s something about your life right now that I should know?',
         friend: 'What’s been the best and the hardest part of your year so far?',
@@ -56,6 +58,7 @@
       say: 'Try saying', lines: {
         self: 'Thank you for keeping going with the things nobody sees.',
         partner: 'Thank you for handling the school forms. I know that took real effort.',
+        us: 'Take turns: one specific thank-you each, for something from this week.',
         relative: 'Thank you for always remembering everyone’s birthday. I notice it.',
         young: 'I saw how patient you were today. Thank you.',
         friend: 'Thank you for always being the one who plans things. I don’t say it enough.',
@@ -67,6 +70,7 @@
       say: 'Try saying', lines: {
         self: 'Here’s what’s actually been going on for me, in one honest sentence: ___.',
         partner: 'I’ve been heads-down at work and I let our evenings slide. That’s on me, and it isn’t because I stopped caring.',
+        us: 'Take turns: one honest thing each about how this month has been, including your own part in the quiet.',
         relative: 'I’ve been busy and I let our calls get shorter. I’d like to do better, and I’ll tell you more about what’s going on with me.',
         young: 'I’ve been caught up in my own stuff and I haven’t asked enough. I’d like to catch up.',
         friend: 'Life got busy and I let us slide, and that’s on me. I’ve missed you.',
@@ -78,6 +82,7 @@
       say: 'Try asking', lines: {
         self: 'Ask someone who knows you well: what have you noticed in me lately that I might not see?',
         partner: 'What’s it been like for you lately? I want to hear it properly.',
+        us: 'Take turns asking “What’s it been like for you lately?” The other one just listens, all the way through.',
         relative: 'How have things really been for you? I’d like to hear more than the short version.',
         young: 'What’s been going on for you lately? You can tell me as little or as much as you like.',
         friend: 'What’s been going on with you? I want to hear all of it.',
@@ -95,6 +100,7 @@
       say: 'Try opening with', lines: {
         self: 'I’ve noticed I’ve stopped checking on ___. I’d like to take a kind look at it this month.',
         partner: 'Nothing’s wrong. I’ve noticed we haven’t asked each other much lately, and part of that is me. What’s it been like for you?',
+        us: 'Nothing’s wrong. We’ve both stopped asking each other much lately. What has each of us noticed?',
         relative: 'I realized we mostly talk about logistics. I’d like to hear how you’re really doing.',
         young: 'I might be picturing you as you were a year ago. I’d like to catch up.',
         friend: 'It’s been a while, and I’ve let it slide. I’d love to catch up.',
@@ -106,6 +112,7 @@
       say: 'Try this', lines: {
         self: 'Pick one phrase, song or place that reminds you who you want to be, and use it today.',
         partner: 'Remember when we ___? That still makes me laugh.',
+        us: 'Remember when we ___? Let’s bring that back this month.',
         relative: 'Tell me again the story about ___. I love hearing it.',
         young: 'Use the silly phrase or inside joke only the two of you share, and see if it lands.',
         friend: 'Send them the inside joke, or the song that always reminds you of them.',
@@ -117,6 +124,7 @@
       say: 'Try this', lines: {
         self: 'The first Sunday of the month: What am I assuming is fine? When did I last actually check?',
         partner: 'The first Sunday of the month: one real question each, one thank-you each, and “what have we stopped mentioning?”',
+        us: 'The first Sunday of the month: one real question each, one thank-you each, and “what have we stopped mentioning?”',
         relative: 'A standing ten-minute call, the same day each week.',
         young: 'A regular walk, drive or snack with no agenda.',
         friend: 'A standing monthly call or walk.',
@@ -272,6 +280,14 @@
     }
     S.hand = shuffle(pool).slice(0, 3);
   }
+  // How far along the drive is, without football words: about how many small plays are left to score.
+  function plainWords(y) {
+    if (y >= KICK) return 'In plain words: you’ve done enough small, kind things to score. Press “Kick the field goal”, or keep going.';
+    var part = (y - START) / (KICK - START), left = Math.max(1, Math.ceil((KICK - y) / 7));
+    var where = part < 0.15 ? 'you’re just getting started' : part < 0.4 ? 'you’re about a third of the way' : part < 0.6 ? 'you’re about halfway' : 'you’re most of the way there';
+    var words = ['', 'one', 'two', 'three', 'four', 'five', 'six'];
+    return 'In plain words: ' + where + '; about ' + (words[left] || left) + ' more small ' + (left === 1 ? 'play' : 'plays') + ' to score.';
+  }
   function renderStatus() {
     var y = S.yards, nf = nextFirst(y);
     $('rd-us').textContent = S.kicked ? '3' : '0';
@@ -280,6 +296,9 @@
     $('rd-sub').textContent = S.kicked ? '' : (y >= KICK
       ? 'You’re in field-goal range. Kick now, or call another play for extra yards.'
       : 'First down at ' + lineLabel(nf) + '. Field-goal range starts at ' + lineLabel(KICK) + '.');
+    // the same thing in plain words, for anyone who doesn't follow football
+    var plain = $('rd-plain');
+    if (plain) plain.textContent = S.kicked ? '' : plainWords(y);
     var mine = $('rd-b-mine'), theirs = $('rd-b-theirs');
     mine.className = 'rd-badge' + (S.flags.mine ? ' is-on' : ''); mine.textContent = (S.flags.mine ? '●' : '○') + ' Your context shared';
     theirs.className = 'rd-badge' + (S.flags.theirs ? ' is-on' : ''); theirs.textContent = (S.flags.theirs ? '●' : '○') + ' Their context asked for';
@@ -405,7 +424,7 @@
   }
 
   function driveText() {
-    var lines = ['My Re-check Drive, for ' + whoName(S.who).toLowerCase() + ':'];
+    var lines = [S.who === 'us' ? 'Our Re-check Drive, together:' : 'My Re-check Drive, for ' + whoName(S.who).toLowerCase() + ':'];
     S.done.forEach(function (id) { lines.push('✓ ' + byId[id].title); });
     lines.push(S.kicked ? 'Field goal: good.' : 'Ball on ' + lineLabel(S.yards) + '.');
     lines.push('From spreadloveandacceptance.com/recheck-drive.html');

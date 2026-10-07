@@ -2578,6 +2578,8 @@ html.tol-work :is(.tol-wash b, .tol-garden-bg, .tol-garden-veil, [data-palcam-ro
 .tol-work-note{ margin:.4rem auto .8rem; max-width:46rem; padding:.45rem .9rem; border:1px solid var(--rule, #d8cfb8); border-radius:10px;
   font-size:.92rem; background:var(--paper, #fffaf0); color:var(--ink, #2a2530); }
 .tol-work-note a{ margin-left:.3rem; }
+/* with the cartoon hidden, Professor Puddles' button still needs something to show: a plain question mark */
+html.tol-work .tol-pud-fab::before{ content:"?"; font:700 1.15rem/1 system-ui, sans-serif; color:#2F4A6B; margin:auto; }
 html.tol-work .tol-simple .read-head::after, html.tol-work .tol-deep .read-head::after{ display:none !important; }
 html.tol-work .tol-wash i{ opacity:.35; }
 /* plain mode also drops the tip of the day, reading and cartoon suggestions, promos, garden levels, and the Calm & play menu */

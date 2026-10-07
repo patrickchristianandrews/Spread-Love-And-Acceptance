@@ -185,7 +185,12 @@
   main .wl-app .wl-tune, main .wl-app .wl-lbody p.wl-tune { background: var(--wl-deep); }
   main .wl-app .wl-wordgroup h4 { display: inline-block; margin: 12px 0 2px; font-size: 1rem; }
   .wl-app .wl-pairbox { display: flex; gap: 10px; flex-wrap: wrap; }
-  .wl-app .wl-pairbox input { flex: 1; min-width: 140px; text-transform: uppercase; letter-spacing: .15em; font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+  .wl-app .wl-pairbox input { flex: 1; min-width: 140px; }
+  .wl-app input.wl-codein { text-transform: uppercase; letter-spacing: .15em; font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+  .wl-app input.wl-codein::placeholder { text-transform: none; letter-spacing: normal; font-family: "Lora", Georgia, serif; font-weight: 400; }
+  .wl-app .wl-pairrow .wl-actions { margin-top: 6px; }
+  @media print { html.wl-printing-cmp body * { visibility: hidden; } html.wl-printing-cmp .wl-cmpout, html.wl-printing-cmp .wl-cmpout * { visibility: visible; }
+    html.wl-printing-cmp .wl-cmpout { position: absolute; left: 0; top: 0; width: 100%; } html.wl-printing-cmp .wl-cmpout .wl-actions, html.wl-printing-cmp .wl-cmpout .wl-toast { display: none; } }
   .wl-app .wl-pairrow { padding: 10px 14px; margin: 8px 0; background: var(--wl-card); border: 1.5px solid var(--wl-line); border-radius: 18px 18px 18px 6px; }
   .wl-app .wl-pairrow strong { font-family: "Fraunces", Georgia, serif; }
   .wl-app .wl-chlist { display: grid; gap: 10px; }
@@ -266,7 +271,7 @@
 <p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through seven short parts (the last one is optional), and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
 <div class="try-this" data-in-short>
   <p><strong>How it works:</strong> Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime. Wavelength replaces Your Heartprint: the personal statement and its “Things you might not have noticed” are now Part 7.</p>
-  <p>Nothing you type or choose is sent anywhere. Your answers and journal stay on this device only if you tick the box, and “Erase everything” removes them.</p>
+  <p>Nothing you type or choose is sent anywhere. Your answers stay in this tab until you close it, so a reload won’t lose them. They stay on this device after that only if you tick the box (you can also do it from your results), and “Erase everything” removes them.</p>
 </div>
 <div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and archetype.</p></noscript></div>
 
@@ -313,7 +318,8 @@
 <h2 id="sharing">Sharing your Wavelength</h2>
 <ul>
   <li><strong>Pick a calm moment.</strong> Share your Wave Code or your statement as information, not a list of rules: “I wrote this so you don’t have to guess. Would you read it?”</li>
-  <li><strong>Invite theirs.</strong> Two Wave Codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong. Enter their code under “Compare with someone.”</li>
+  <li><strong>Invite theirs.</strong> Two Wave Codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong. “Share my Wave Code” sends a link that opens a ready-made comparison on their side, or you can enter (or paste) their code under “Compare with someone.”</li>
+  <li><strong>Sharing one device?</strong> Tap “Someone else’s turn” on your results. Your results stay under your name, and when the next person finishes you can compare the two of you right there.</li>
   <li><strong>Update it.</strong> Seasons change, and so does what you need. Come back when life shifts.</li>
 </ul>
 <p>Want more? The <a href="/wiring-card.html">Wiring Card</a> turns how you receive words into one page, <a href="/wired-differently.html">Wired Differently</a> shows how differently wired people hear the same words, the <a href="/perspective-shifter.html">Perspective Shifter</a> helps you see a moment from their side, and <a href="/quick-checks.html#today">Today’s Weather</a> checks how full your stress tank is right now. You can also ask <a href="/ask.html">Professor Puddles</a> anything about Wavelength.</p>
