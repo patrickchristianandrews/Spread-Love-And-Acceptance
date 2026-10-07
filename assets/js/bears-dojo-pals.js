@@ -85,8 +85,34 @@
     ['a sleepy catfish', '#8C7B6A'], ['a silver dace', '#D7DEE3'], ['a koi as white as a cloud', '#F6F2EA'], ['a tiny perch with stripes', '#C9B45A'], ['a very proud goldfish', '#F59A2E']];
   var FISH_SAY = ['Tidbit says hello, then lets it swim home.', 'Tidbit gives it a gentle look and a gentle splash back into the water.', '“Thank you for visiting,” Tidbit seems to say. Off it goes.',
     'Tidbit wags so hard the dock wobbles. Then back it goes.', 'It wiggles. Tidbit wiggles. Back into the pond it goes.'];
+  // every fish brings a little helpful fact from the program, with a link to read more; a shuffled bag, so none repeats
+  // until all of them have come up
+  var FISH_FACTS = [
+    ['A slow breath out, a little longer than the breath in, helps your body settle.', '/night-garden.html', 'Breathe in the Night Garden'],
+    ['Naming a feeling in a word or two, like “I’m frustrated”, can make it feel a little smaller.', '/know-yourself.html', 'Know your own wiring'],
+    ['Small moments count. Answering someone’s “Look at this!” builds closeness over time.', '/turning-toward.html', 'Turning toward'],
+    ['When your battery is low, the same words land harder. Check it before a hard talk.', '/workpapers/wp-02-battery-stress-meter.html', 'Check your battery'],
+    ['Saying back what you heard, before you answer, helps people feel listened to.', '/check-ins.html', 'Weekly check-ins'],
+    ['A pause with a return time, like “Can we pick this up at eight?”, isn’t running away.', '/upset-right-now.html', 'Upset right now?'],
+    ['Work nobody sees still counts. Writing it down is the first step to sharing it.', '/book/preface.html', 'The work nobody sees'],
+    ['You control your words and your effort, not how someone else responds.', '/book/self-2-now-in-depth.html#control', 'Your circle of control'],
+    ['Love languages are a menu, not a label. Most people like more than one.', '/love-languages.html', 'Love languages'],
+    ['A good apology names what happened, owns your part and offers to help fix it.', '/apology-languages.html', 'Apology languages'],
+    ['A fight that keeps coming back usually points to a gap in the setup, not a bad person.', '/book/chapter-2.html', 'Is the split working?'],
+    ['Text loses tone. If a message could be read two ways, test it first or call instead.', '/signal-translator.html', 'The Signal Translator'],
+    ['Matching energy means matching care and effort, never volume or meanness.', '/book/self-2-now-in-depth.html#control', 'Matching energy'],
+    ['A kind no can be fair: say why, say what you have left, and offer something else.', '/self-path.html#no', 'Kind ways to say no'],
+    ['Different brains take in the same words differently, and that’s nobody’s fault.', '/wired-differently.html', 'Wired differently'],
+    ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second check-in'],
+    ['Thank-yous land best when they’re specific: “thanks for remembering the dentist.”', '/turning-toward.html#thanks', 'Saying thanks'],
+    ['Some of how you react was learned growing up, and you get to choose which old rules to keep.', '/growing-up.html', 'Where your lens came from'],
+    ['Rest isn’t a reward for finishing. It’s what makes the next thing possible.', '/wp-11.html', 'The Calm-Down Kit']
+  ];
+  var factBag = [];
+  function nextFact() { if (!factBag.length) factBag = shuffleFacts(FISH_FACTS.slice()); return factBag.pop(); }
+  function shuffleFacts(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
   BD.offer({ id: 'fish', kind: 'Fish', title: 'Fishing with Tidbit', mount: function (host, api) {
-    host.innerHTML = '<p class="od-note">Tidbit has her little rod and a spot on the dock. Cast the line and watch the red bobber. A little twitch is only a nibble; when it really dips, a Reel in! button appears. Take your time, there is plenty of it. Every fish is said hello to and let go.</p>';
+    host.innerHTML = '<p class="od-note">Tidbit has her little rod and a spot on the dock. Cast the line and watch the red bobber. A little twitch is only a nibble; when it really dips, a Reel in! button appears. Take your time, there is plenty of it. Every fish you catch leaves a little helpful fact behind. Every fish is said hello to and let go.</p>';
     var C = canvas(host, 480, 300, 'A small wooden dock over a pond. Tidbit sits at the end with a fishing rod.');
     var row = document.createElement('div'); row.className = 'od-row'; row.innerHTML = '<button type="button" class="bd-go" id="od-fish">Cast the line</button><button type="button" class="bd-go" id="od-reel" hidden>Reel in!</button>'; host.appendChild(row);
     var say = document.createElement('p'); say.className = 'od-note od-say'; say.setAttribute('aria-live', 'polite'); host.appendChild(say);
@@ -114,7 +140,10 @@
     function reel() {
       if (st !== 'bite') { if (st === 'wait' || st === 'fly') notYet(); return; }
       var f = pick(FISH); caught = { name: f[0], col: f[1] }; count++; st = 'catch'; stT = 0; api.audio.plop(); showReel(false);
-      say.textContent = 'Tidbit reels in ' + f[0] + '! ' + pick(FISH_SAY); setBtn('Cast again', false); if (api.audio.on) api.audio.tone(api.audio.note(5), 0.5, 0.04);
+      var fact = nextFact();
+      say.textContent = 'Tidbit reels in ' + f[0] + '! ' + pick(FISH_SAY) + ' It left a little fact on the dock: ' + fact[0] + ' ';
+      var more = document.createElement('a'); more.href = fact[1]; more.textContent = fact[2] + ' →'; say.appendChild(more);
+      setBtn('Cast again', false); if (api.audio.on) api.audio.tone(api.audio.note(5), 0.5, 0.04);
     }
     btn.addEventListener('click', function () { if (st === 'idle' || st === 'catch' || st === 'gone') cast(); else if (st === 'bite') reel(); else notYet(); });
     rbtn.addEventListener('click', reel);
