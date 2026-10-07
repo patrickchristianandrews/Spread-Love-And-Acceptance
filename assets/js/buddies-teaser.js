@@ -336,7 +336,7 @@
     pup(g, 'sugarfoot', sx2 - 30, 228 + Math.sin(u * 2 + 1.5) * 6, 1.25, { pose: 'run', face: 1, t: u, ph: u * 7 + 2, over: HAT.helmet, noShadow: true, rot: -0.05 });
     for (var b = 0; b < 26; b++) { var bx = rnd(b + 71) * VW, by = 360 - ((u * (30 + rnd(b + 72) * 40) + rnd(b + 73) * 360) % 380), br = 1.5 + rnd(b + 74) * 3.5; g.strokeStyle = 'rgba(220,250,255,.55)'; g.lineWidth = 1; g.beginPath(); g.arc(bx + Math.sin(u * 2 + b) * 3, by, br, 0, TAU); g.stroke(); }
     for (var p = 0; p < 24; p++) circ(g, rnd(p + 81) * VW, rnd(p + 82) * 300, 1.1, 'rgba(180,255,230,' + (calm ? 0.5 : 0.3 + 0.3 * Math.sin(u * 2 + p)) + ')');
-    if (!zoom) say(g, tid, 'And it’s glowing!', u, 0.5, 1.95);
+    if (!zoom) say(g, tid, 'Ooh, it’s glowing!', u, 0.5, 1.95);
   }
   function rooftop(g, u, d, calm) {
     sky(g, [[0, '#0A0F2E'], [0.7, '#262A63'], [1, '#463E7A']]);
@@ -604,7 +604,7 @@
     say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Nice night for a swim.', u, 0.3, 1.7);
     say(g, { x: tx, y: by - 38, who: 'tidbit' }, 'Um… hello?', u, 2.0, 2.9);
     say(g, sug, 'Gotcha! Just me!', u, 3.0, 4.2, { big: true });
-    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'We need a bigger bone!', u, 4.4, 6.0);
+    say(g, { x: tx, y: WL - 20, who: 'tidbit' }, 'You owe me a bigger bone!', u, 4.4, 6.0);
   }
   // 3. slow motion (The Matrix): Tidbit dodges a pie, and the pie finds Sugarfoot
   function matrix(g, u, d, calm) {
