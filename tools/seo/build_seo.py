@@ -309,6 +309,10 @@ SEARCH.update({
  'en-espanol.html': ('En español: ayuda para tu familia', 'Una página corta y gratuita en español: cuando los hijos pelean, cuando gritas, cuando estás muy enojado, y si no estás a salvo en casa.'),
  'work.html': ('At Work: Fair Workloads and Kind Messages for Teams', 'Free, plain tools for teams: one owner per job, messages that land, appreciation that fits, and a 45-minute team session. No sign-up, no cartoons.'),
  'grief.html': ('Grief and Later Life: Loss, Family and a New Chapter', 'Gentle, free help after a loss: grieving differently in one family, reconnecting with grown children, starting a new chapter, and where to get support.'),
+ 'retired-together.html': ('Retired and Both Home Now: Sharing the House Again', 'Free, practical help when retirement puts you both at home all day: territory and routines, re-dividing whole jobs, handing over kindly, and finding purpose.'),
+ 'family-obligations.html': ('Supporting Family: Parents, Money Home and Duty', 'Free, even-handed help for couples who support parents and family: agree a monthly family-support amount, lead with your own family, and save alongside it.'),
+ 'long-distance.html': ('Long-Distance and Apart: Staying Close Across the Miles', 'Free, practical help for couples living apart: time zones, check-ins on video, a call rhythm you agree, small bids, short texts, and visits and goodbyes.'),
+ 'pursue-withdraw.html': ('One of You Wants to Talk Now, the Other Needs Space', 'Free, even-handed help when one partner wants to talk now and the other needs space: why it hurts on both sides, and a pause plan you can fill in and share.'),
 })
 
 # Titles past about 60 characters and descriptions past about 160 are cut off in search results

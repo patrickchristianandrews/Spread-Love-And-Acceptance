@@ -517,7 +517,7 @@
       "first": true,
       "newTopic": true,
       "name": "long-distance and apart",
-      "pat": "\\blong ?distance\\b|\\bldr\\b|\\bdifferent (time ?zones?|cities|countries|states)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\blive (apart|in different)\\b|\\b(apart|away) for (weeks|months)\\b",
+      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -1701,7 +1701,7 @@
       "first": true,
       "newTopic": true,
       "name": "agreeing holidays and schedules with an ex",
-      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|christmas|thanksgiving|easter|birthdays?|summer|vacation|schedule|custody|visitation|weekends?|parenting plan)\\b",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b",
       "keys": [],
       "what": [
         "Holiday schedules are one of the most common sore spots between separated parents. Your court order or parenting plan comes first; if it covers holidays, that’s the answer, and you can point to it calmly."
@@ -5040,23 +5040,32 @@
         "use it together"
       ],
       "what": [
-        "Yes. The Carrier Wave Decoder has a Together tab made for this. Each of you marks where you were during a moment that went sideways (pace, tone and timing), and your guess about the other person. Then you reveal both at once and see where you really differed, and where you just misread each other.",
-        "You can pass one phone back and forth, or use two phones: one of you starts and gets a short code, and sends it to the other however you like (a text works). The site never sends anything itself, and your answers stay on your own devices."
+        "Yes. Each of you can fill in your own side on your own phone, then send it to the other. The site never sends anything itself: you pass a short code or a file however you like (a text works), and everything stays on your own devices."
       ],
       "how": [
-        "Open the Carrier Wave Decoder and choose the Together tab.",
-        "Pick “One device” to pass the phone back and forth, or “Two devices: start it” to get a code.",
-        "The other person picks “Two devices: I got a code” and enters it, then you reveal together.",
-        "For a daily habit together, try the 90-second daily check-in (WP-13)."
+        "Lemonade Stand: under the names, “On two phones?” has “Send my side to my partner” (a code or a file) and “Add my partner’s side”, which merges by name and asks before replacing anything.",
+        "Wavelength: “Share my Wave Code” sends a link that opens the comparison with your code already filled in.",
+        "Wiring Card: “Copy the card” includes a card code; your partner taps “Paste my partner’s card” to compare.",
+        "Worksheets: each of you saves your own draft or PDF and sends it; loading the second one offers to combine them instead of replacing.",
+        "Carrier Wave Decoder: the Together tab gives a short code so you can each mark a moment that went sideways and reveal both at once.",
+        "Household names: the Lemonade Stand can send your household list as a code, so names don’t have to be typed twice."
       ],
       "links": [
         [
-          "The Carrier Wave Decoder: Together",
-          "/carrier-wave-decoder.html#together"
+          "The Lemonade Stand: send and add a side",
+          "/lemonade-stand.html"
         ],
         [
-          "The 90-second daily check-in (WP-13)",
-          "/workpapers/wp-13-daily-check-in.html"
+          "Wavelength: compare your codes",
+          "/wavelength.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "The Carrier Wave Decoder: Together",
+          "/carrier-wave-decoder.html#together"
         ]
       ]
     },

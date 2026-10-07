@@ -516,6 +516,8 @@
 
     // a new task from the library starts with no one's time: tap who does it to fill in the typical time
     var pickBox = null;
+    // once someone's time is in, the prompt stays until the list is redrawn, then steps aside
+    if (item.pick != null && item.v.some(function (x) { return num(x) > 0; })) delete item.pick;
     if (item.pick != null && !solo() && !item.ex) {
       pickBox = document.createElement('div'); pickBox.className = 'row-pick';
       var pl = document.createElement('p'); pl.className = 'ls-mini'; pl.id = 'pk-' + idx;

@@ -60,8 +60,8 @@
 .fp-intro{ margin: .2em 0 .7em; font-size: .92em; color: var(--ink-soft, #524B3E); }
 .fp-fields{ display: flex; flex-wrap: wrap; gap: 10px 14px; }
 .fp-field{ flex: 1 1 100%; min-width: 0; }
-.fp-field.is-half{ flex: 1 1 calc(50% - 14px); min-width: 200px; }
-.fp-field.is-third{ flex: 1 1 calc(33% - 14px); min-width: 160px; }
+.fp-field.is-half{ flex: 1 1 calc(50% - 14px); min-width: min(100%, 200px); }
+.fp-field.is-third{ flex: 1 1 calc(33% - 14px); min-width: min(100%, 160px); }
 .fp-label{ display: block; margin-bottom: 3px; font-size: .86em; font-weight: 600; }
 .fp-radio{ flex: 1 1 100%; min-width: 0; margin: 0; padding: .4em 0 .2em; border: 0; }
 .fp-radio legend, .fp-row legend, .fp-person legend, .fp-chips legend{ padding: 0; font-size: .86em; font-weight: 600; }
@@ -219,8 +219,9 @@
 .fp-private-note::before{ content: "Private · "; font-weight: 700; }
 .fp-turn{ margin: .8em 0 .4em; padding: .5em .8em; border-radius: 12px; background: #EEF4FA; border: 1px solid #CFDDEE; font-size: .92em; }
 .fp-turn-dot{ margin-right: .1em; }
-.fp-rows-for{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: .2em 0 .6em; font-size: .92em; font-weight: 600; }
-.fp-rows-for select{ width: auto; max-width: 100%; flex: 1 1 12em; }
+.fp-rows-for{ width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: .2em 0 .6em; font-size: .92em; font-weight: 600; }
+.fp-rows-for select{ width: auto; max-width: 100%; min-width: 0; flex: 1 1 10rem; }
+.fp input[type="date"]{ min-width: 0; }
 .fp-share{ margin: .9em 0; display: grid; gap: .45em; }
 .fp-share .fp-private-note{ margin: 0; }
 .fp-merge{ margin: 1em 0; padding: .8em .9em; border-radius: 16px; background: #F6F1FB; border: 1px solid #DCCDEB; }
@@ -229,3 +230,5 @@
 .fp-conflict{ display: flex; flex-wrap: wrap; gap: 6px; padding: .55em .7em; border-radius: 12px; background: #fff; border: 1px solid #E5DAEF; }
 .fp-conflict-w{ flex: 1 1 100%; margin: 0; font-weight: 600; font-size: .9em; overflow-wrap: anywhere; }
 .fp-conflict .fp-opt{ max-width: 100%; overflow-wrap: anywhere; border-radius: 14px; }
+.fp-fields > .fp-fields, .fp-block > *{ min-width: 0; max-width: 100%; }
+.fp-fields > .fp-fields{ flex: 1 1 100%; }

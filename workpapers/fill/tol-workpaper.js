@@ -780,7 +780,7 @@
       var pid = 'f' + (++this.uid), sel = h('select', { id: pid, 'data-rows-for': sec.id });
       sel.appendChild(h('option', { value: '', text: 'Everyone\u2019s rows', selected: !only ? 'selected' : null }));
       ctx.people().forEach(function (c) { sel.appendChild(h('option', { value: c, text: 'Only ' + ctx.name(c) + '\u2019s rows', selected: only === c ? 'selected' : null })); });
-      box.appendChild(h('p', { className: 'wpf-rows-for' }, [h('label', { for: pid, text: 'Filling in your own rows? Show ' }), sel]));
+      box.appendChild(h('div', { className: 'wpf-rows-for' }, [h('label', { for: pid, text: 'Filling in your own rows? Show ' }), sel]));
       if (only) box.appendChild(h('p', { className: 'wpf-turn', role: 'note', text: 'These are ' + ctx.name(only) + '\u2019s rows. Only ' + ctx.name(only) + ' fills them in, about their own day. On a shared device? Hand it over here.' }));
     }
     var table = h('table', { className: 'wpf-table' + (sec.fixedRows ? ' wpf-fixed' : '') });

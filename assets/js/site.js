@@ -41,6 +41,10 @@
     { id: 'new', title: 'What’s new', blurb: 'Newly added and newly expanded, newest first.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/safety.html', code: 'New', title: 'Not safe at home?', note: 'Free hotlines, a quick way to leave this site, and how to clear what it keeps' },
+      { href: '/pursue-withdraw.html', code: 'New', title: 'One wants to talk now, one needs space', note: 'The same fight, from both sides, with a pause plan you can fill in and share' },
+      { href: '/retired-together.html', code: 'New', title: 'Retired and both home now', note: 'Sharing the house all day: routines, whole jobs, handing over kindly, and finding purpose' },
+      { href: '/family-obligations.html', code: 'New', title: 'Supporting family and money home', note: 'When supporting parents is a duty: agree an amount together, and save alongside it' },
+      { href: '/long-distance.html', code: 'New', title: 'Long-distance and apart', note: 'Time zones, check-ins on video, a call rhythm you agree, and reading short texts' },
       { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams: one owner per job, messages that land, appreciation, and a 45-minute team session' },
       { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help' },
       { href: '/caregivers.html', code: 'New', title: 'Caring for someone you love', note: 'When they can’t share the load back, who else can help, and where to find respite' },
@@ -104,6 +108,7 @@
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
+      { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'Both sides of the same fight, and a pause plan with a return time' },
       { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and ideas like them' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
@@ -272,6 +277,9 @@
       { href: '/grief.html', code: 'New', title: 'Grief and later life', note: 'Loss, family after a loss, and a new chapter' },
       { href: '/caregivers.html', code: 'New', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
       { href: '/en-espanol.html', code: 'New', title: 'En español', note: 'Una página corta en español' },
+      { href: '/retired-together.html', code: 'New', title: 'Retired and both home now', note: 'Sharing the house all day, kindly' },
+      { href: '/long-distance.html', code: 'New', title: 'Long-distance and apart', note: 'Calls, time zones and short texts' },
+      { href: '/family-obligations.html', code: 'New', title: 'Supporting family, money home', note: 'A duty you plan around together' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
     { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
@@ -294,6 +302,7 @@
     { id: 'talk', name: 'Talk it through', title: 'Talk it through', blurb: 'Say it kindly, hear it fully, and keep small things small. What you type stays on your device.', items: [
       { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
+      { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'A pause plan you agree' },
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
       { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages', note: 'What’s healthy and unhealthy about each, how to practice them, and ideas like them' },

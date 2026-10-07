@@ -355,7 +355,7 @@
     var P = FP.people(S.data), sel = h('select', { id: 'fp-rows-for' });
     sel.appendChild(h('option', { value: '', text: 'Everyone\u2019s rows', selected: S.rowsFor == null || S.rowsFor === '' ? 'selected' : null }));
     P.list.forEach(function (p) { sel.appendChild(h('option', { value: String(p.i), text: 'Only ' + p.label + '\u2019s rows', selected: String(S.rowsFor) === String(p.i) ? 'selected' : null })); });
-    return h('p', { className: 'fp-rows-for' }, [h('label', { for: 'fp-rows-for', text: 'Filling in your own rows? Show ' }), sel]);
+    return h('div', { className: 'fp-rows-for' }, [h('label', { for: 'fp-rows-for', text: 'Filling in your own rows? Show ' }), sel]);
   }
   function turnCue(i, rows) {
     var nm = FP.people(S.data).label(i);
@@ -481,7 +481,7 @@
   function shareChoice(id) {
     return h('div', { className: 'fp-share' }, [
       h('p', { className: 'fp-private-note', text: (S.data && S.data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see every page if you share the file, including each person\u2019s load score answers, self-notes, raw reaction and calm-down triggers.' }),
-      h('label', { className: 'fp-check', for: id }, [h('input', { type: 'checkbox', id: id, 'data-share': '1', checked: S.shareOnly ? 'checked' : null }), h('span', { text: 'Leave the private parts out of what I download (a copy to share)' })])
+      h('label', { className: 'fp-check', for: id }, [h('input', { type: 'checkbox', id: id, 'data-fp-share': '1', checked: S.shareOnly ? 'checked' : null }), h('span', { text: 'Leave the private parts out of what I download (a copy to share)' })])
     ]);
   }
   // "Use your household from before?" on the names page, like the other tools: only when no name is
@@ -842,14 +842,14 @@
     });
     $('fp-preview').addEventListener('change', function (e) { var c = e.target.getAttribute('data-conflict'); if (c != null && e.target.checked) pickConflict(+c, e.target.value); });
     root.addEventListener('change', function (e) {
-      if (e.target.getAttribute('data-share')) { S.shareOnly = e.target.checked; Array.prototype.forEach.call(root.querySelectorAll('[data-share]'), function (x) { x.checked = S.shareOnly; }); }
+      if (e.target.getAttribute('data-fp-share')) { S.shareOnly = e.target.checked; Array.prototype.forEach.call(root.querySelectorAll('[data-fp-share]'), function (x) { x.checked = S.shareOnly; }); }
     });
     var form = $('fp-form');
     form.addEventListener('input', onFormInput);
     form.addEventListener('change', function (e) {
       if (e.target.id === 'fp-form-road') { S.data.road = e.target.value; S.data.people = FP.clampPeople(S.data.road, S.data.people); FP.migrateSelf(S.data.values, FP.ROADS[S.data.road].solo); S.step = 0; changed(); renderForm(); return; }
       if (e.target.id === 'fp-rows-for') { S.rowsFor = e.target.value; var y0 = global.scrollY; renderForm(); global.scrollTo(0, y0); var rf = $('fp-rows-for'); if (rf) rf.focus(); return; }
-      if (e.target.getAttribute('data-share')) return;
+      if (e.target.getAttribute('data-fp-share')) return;
       if (e.target.id === 'fp-form-count') { S.data.people = FP.clampPeople(S.data.road, e.target.value); changed(); renderForm(); return; }
       onFormInput(e);
     });

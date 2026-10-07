@@ -113,7 +113,7 @@ const WRITTEN = ["text","chat","email","group"];
 const VERBS = ("take|put|get|go|come|clean|wash|stop|give|bring|call|text|send|pick|grab|move|do|make|fix|tell|help|listen|turn|shut|close|open|sit|stand|wait|answer|finish|start|pay|buy|check|remember|leave|keep|hurry|eat|drink|try|write|read|say|show|empty|fold|feed|walk|change|hang|throw|sweep|vacuum|mop|wipe|tidy|clear|load|unload|set|book|email|reply|respond|quit|cut|knock|focus|drive|park|lock|charge|ask|deal|be|speak|talk|watch|apologize|apologise|explain|admit|think|remind|return|share|use|water|cook|prepare|plan|schedule|fill|sign|submit|print|file|sort|organize|organise|pack|unpack|mow|rake|shovel|feed|bathe|dress|brush|drop|lower|raise|quiet|hold|follow|come|run|look|put|let|stay|mind|pull|push|lift|carry|fetch|find|search|study|practice|practise|pay|return|cancel|confirm|update|finish|respond|join|meet|move|hand|sweep|scrub|dust|iron|replace|refill|restock|recycle|sit|go|hang|pour|wake|sleep|get|answer").split("|");
 const VERBSET = new Set(VERBS);
 /* Openers that start with a verb but are not commands */
-const NOT_CMD = /^(?:do what(?:ever)? you (?:want|like|think)\b|go ahead[.!]*$|go for it\b|let's|let us|thank|thanks|take care|have (?:a|an|fun|a good|a great|a nice)|feel free|enjoy|sleep well|get well|drive safe|see you|love you|miss you|hope|welcome|congrats|good|sorry|excuse|pardon|bless|trust me|imagine|guess what|say hi|come on in|keep up the good|keep it up|don't worry|don't mind|no worries|mind you|look forward|go team|go you|be well|be safe|be kind to yourself|take your time|call me when|text me when|talk soon|talk later)/i;
+const NOT_CMD = /^(?:do what(?:ever)? you (?:want|like|think)\b|go ahead\b|go for it\b|let's|let us|thank|thanks|take care|have (?:a|an|fun|a good|a great|a nice)|feel free|enjoy|sleep well|get well|drive safe|see you|love you|miss you|hope|welcome|congrats|good|sorry|excuse|pardon|bless|trust me|imagine|guess what|say hi|come on in|keep up the good|keep it up|don't worry|don't mind|no worries|mind you|look forward|go team|go you|be well|be safe|be kind to yourself|take your time|call me when|text me when|talk soon|talk later)/i;
 
 /* Irregular and common past forms back to the base verb */
 const PAST = {took:"take",did:"do",made:"make",put:"put",went:"go",got:"get",brought:"bring",fed:"feed",gave:"give",bought:"buy",paid:"pay",told:"tell",said:"say",left:"leave",ran:"run",wrote:"write",threw:"throw",swept:"sweep",hung:"hang",shut:"shut",used:"use",moved:"move",shared:"share",closed:"close",changed:"change",organized:"organize",replaced:"replace",placed:"place",taken:"take",done:"do",gotten:"get",emptied:"empty",tidied:"tidy",folded:"fold",loaded:"load",unloaded:"unload",vacuumed:"vacuum",cleaned:"clean",mopped:"mop",stopped:"stop",planned:"plan",texted:"text",called:"call",answered:"answer",listened:"listen",remembered:"remember",noticed:"notice",asked:"ask",offered:"offer",checked:"check",helped:"help",walked:"walk",washed:"wash",picked:"pick",watered:"water",started:"start",finished:"finish",fixed:"fix",returned:"return",showed:"show",shown:"show",handled:"handle",scheduled:"schedule",booked:"book",wiped:"wipe",written:"write",given:"give",seen:"see",saw:"see",known:"know",knew:"know",been:"be",was:"be",were:"be",gone:"go",come:"come",came:"come",sent:"send",spent:"spend",kept:"keep",let:"let",set:"set",read:"read",hid:"hide",hidden:"hide",broke:"break",broken:"break",forgot:"forget",forgotten:"forget",ate:"eat",eaten:"eat",drove:"drive",driven:"drive",held:"hold",found:"find",thought:"think",taught:"teach",caught:"catch",sold:"sell",stood:"stand",sat:"sit",woke:"wake",woken:"wake",lost:"lose",meant:"mean",met:"meet",heard:"hear",slept:"sleep",tried:"try",replied:"reply",cried:"cry",worried:"worry",dried:"dry",fried:"fry",carried:"carry",hurried:"hurry",copied:"copy",apologized:"apologize",mentioned:"mention",locked:"lock",turned:"turn",poured:"pour",filled:"fill",signed:"sign",printed:"print",submitted:"submit",dropped:"drop",planned:"plan",emailed:"email",shopped:"shop",mowed:"mow",fed:"feed",ironed:"iron",dusted:"dust",scrubbed:"scrub",packed:"pack",unpacked:"unpack",watched:"watch",cooked:"cook",prepared:"prepare",confirmed:"confirm",cancelled:"cancel",canceled:"cancel",updated:"update",joined:"join",refilled:"refill",recycled:"recycle",hung:"hang",included:"include",invited:"invite",warned:"warn",reminded:"remind",looked:"look",stayed:"stay",showered:"shower",charged:"charge",parked:"park"};
@@ -144,8 +144,8 @@ const WHEN_RE = /\[a time\]|\[a day\]|\[by when\]|\b(?:on (?:your|my|the|our) wa
 /* a real time in the words, not a blank: "by Friday", "6pm", "tomorrow" */
 const WHEN_REAL = new RegExp(WHEN_RE.source.replace("\\[a time\\]|\\[a day\\]|\\[by when\\]|",""), "i");
 /* Court, custody and the children as leverage: very likely to escalate between co-parents */
-const LEGAL_RE = /\b(?:(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) (?:take you to court|see you in court|take (?:this|it|you) to (?:court|a judge)|go to court|call (?:my|a) (?:lawyer|attorney|solicitor)|get (?:a|my) (?:lawyer|attorney|solicitor)|talk to (?:my|a) (?:lawyer|attorney|solicitor)|(?:go for|fight for|file for|apply for|sue for|get) (?:full |sole |primary )?custody|take (?:the kids|the children|them|the baby|my kids|our kids)(?: away)?(?: from you)?|make sure you never see (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)))|see you in court|take you to court|(?:my|our) (?:lawyer|attorney|solicitor)(?:'s| is| will| says| said|\b)|you(?:'ll| will) (?:never|not) (?:see|get) (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)|custody)(?: again)?|you(?:'ll| will) lose (?:the kids|the children|custody|them)|(?:i'm|i am) (?:getting|calling) (?:a|my) (?:lawyer|attorney|solicitor)|(?:full|sole) custody)\b/i;
-const KIDS_RE = /\bi (?:already |just |have |'ve )?(?:told|explained to) (?:the kids|the children|our (?:kids|children|son|daughter)|the boys|the girls|them)\b,?\s*(?:that\s+)?(?:you(?:'re|'ll| are| will| were| don't| didn't| never| can't| won't)?|your|about (?:you|us|the divorce|the separation|what you|this)|what you|why you)\b[^.!?]*|\b(?:i'm going to|i'll|i will|i'm gonna) tell (?:the kids|the children|our (?:kids|children|son|daughter)|them) (?:that you|what you|why you|about you|you)\b[^.!?]*/i;
+const LEGAL_RE = /\b(?:(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) (?:take you to court|see you in court|take (?:this|it|you) to (?:court|a judge)|go to court|call (?:my|a) (?:lawyer|attorney|solicitor)|get (?:a|my) (?:lawyer|attorney|solicitor)|talk to (?:my|a) (?:lawyer|attorney|solicitor)|(?:go for|fight for|file for|apply for|sue for|get) (?:full |sole |primary )?custody|take (?:the kids|the children|them|the baby|my kids|our kids) (?:away|from you)|make sure you never see (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)))|see you in court|take you to court|(?:my|our) (?:lawyer|attorney|solicitor) (?:will|'ll|is going to|says|said|is (?:drawing|filing|sending))\b|(?:talk to|hear from|call|calling) (?:my|our) (?:lawyer|attorney|solicitor)|you(?:'ll| will) (?:never|not) (?:see|get) (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)|custody)(?: again)?|you(?:'ll| will) lose (?:the kids|the children|custody|them)|(?:i'm|i am) (?:getting|calling) (?:a|my) (?:lawyer|attorney|solicitor)|(?:full|sole) custody)\b/i;
+const KIDS_RE = /\bi (?:already |just |have |'ve )?(?:told|explained to) (?:the kids|the children|our (?:kids|children|son|daughter)|the boys|the girls|them)\b,?\s*(?:that\s+)?(?:you(?:'re| are)? (?:not|never)\b|you (?:aren't|won't|will not|don't|didn't|can't|left|lied|cheated|forgot|chose|never)\b|you'll never\b|you don't care\b|what you did\b|why you\b|about (?:you|us|the divorce|the separation|what you)\b)[^.!?]*|\b(?:i'm going to|i'll|i will|i'm gonna) tell (?:the kids|the children|our (?:kids|children|son|daughter)|them) (?:what you did|why you|about you|that you (?:aren't|won't|don't|didn't|never|left|lied|cheated))\b[^.!?]*/i;
 /* A safety worry: something left on, open, unlocked or within reach */
 const SAFE_THING = "stove|oven|hob|burners?|gas|iron|curling iron|(?:hair )?straighteners?|candles?|space heater|heater|fireplace|grill|bbq|(?:front |back |side |garage |patio |kitchen )?door|(?:pool |baby |stair |back |front )?gate|garage|car seat|booster seat|seat ?belt|medicines?|medications?|meds|pills|bleach|knives|knife|lighter|matches|bath|tap|water|car";
 const SAFE_RE = new RegExp("\\b(?:(?:left|leave|leaving|forgot to (?:turn off|lock|close|shut|blow out|unplug|buckle|put away))\\s+(?:the |your |my |our |her |his )?("+SAFE_THING+")\\b(?: \\w+)?\\s+(?:on|open|unlocked|running|lit|burning|plugged in|unbuckled|out|within reach|where (?:the kids|the baby|she|he|they) (?:can|could) (?:reach|get)|on the (?:counter|table))\\b|(?:the |your |my |our )("+SAFE_THING+") (?:was|were|is|are|got|has been|had been) (?:left )?(?:on|open|unlocked|running|lit|burning|plugged in|unbuckled|not buckled|within reach)\\b|(?:didn't|did not|forgot to) (?:buckle|strap) (?:her|him|them|the baby|the kids) (?:in|into)(?: (?:the|her|his|their) (car seat|booster seat|seat))?|(?:didn't|did not|forgot to) (lock|turn off|blow out|unplug) (?:the |your )?("+SAFE_THING+"))", "i");
@@ -219,7 +219,7 @@ const F = [
    what:"An \"if you don't… then I'll…\" sentence is an ultimatum. The listener stops thinking about the task and starts thinking about the threat: fight, freeze or give in.",
    fix:"Make the ask on its own. If there is a real limit, say it once, calmly, at a calm time, as your own plan, not as leverage."},
   {id:"guilt", name:"Guilt framing", kind:"static",
-   re:/\bafter (?:all|everything) (?:i(?:'ve)? (?:do|did|done|have done)|i've done|that i do|i've given)(?: for you)?|\bi do everything\b|\bthe least you (?:could|can) do\b|\byou owe me\b|\bi gave up [^.!?]{0,30}for you\b|\bi(?:'ve| have) sacrificed\b|\bdo you (?:know|have any idea) how (?:hard|much|long) i\b|\bi guess i (?:just )?don't matter\b|\bi work (?:all day|so hard)\b[^.!?]{0,40}?\b(?:and|but) you\b|\bdon't worry about me\b|\bi'll just (?:sit here|wait here|do everything)\b|\bafter all i've done\b|\bi guess i'll just (?:be|stay|sit)\b/gi,
+   re:/\bafter (?:all|everything) (?:i(?:'ve)? (?:do|did|done|have done)|i've done|that i do|i've given)(?: for you)?|\bi do everything\b|\bthe least you (?:could|can) do\b|\byou owe me\b|\bi gave up [^.!?]{0,30}for you\b|\bi(?:'ve| have) sacrificed\b|\bdo you (?:know|have any idea) how (?:hard|much|long) i\b|\bi guess i (?:just )?don't matter\b|\bi work (?:all day|so hard)\b[^.!?]{0,40}?\b(?:and|but) you\b|\bdon't worry about me\b|\bi'll just (?:sit|wait) here(?=(?:,? then)?\s*[.!…🙄😒🙃]*\s*$)|\bi'll just do everything\b|\bafter all i've done\b|\bi guess i'll just (?:be|stay|sit)\b/gi,
    what:"Guilt framing asks for payment for past effort. The task may get done, but it leaves resentment, and the real ask is buried under the account of what you have given.",
    fix:"Say the load plainly and ask for one thing: \"I'm stretched thin. Could you take…?\""},
   {id:"passive", name:"Blame with no name (passive voice)", kind:"static",
@@ -354,7 +354,7 @@ const F = [
   {id:"hedge", name:"Hedged answer", kind:"static", re:/\b(?:i think|probably|pretty sure|should be|might have|not sure|i guess|i believe|possibly)\b/gi,
    what:"A hedge keeps the question open. For some listeners that is fine. For others, an open question keeps looping.",
    fix:"If you know, say it plainly. If you don't, say what you'll do to find out."},
-  {id:"softno", name:"Soft no", kind:"static", re:/\b(?:we'll see|maybe|i'll think about it|perhaps|we can talk about it)\b/gi,
+  {id:"softno", name:"Soft no", kind:"static", re:/\b(?:we'll see(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)|maybe|i'll think about it|perhaps|we can talk about it)\b/gi,
    what:"\"We'll see\" can mean no, or a real maybe. The listener picks one, and may pick wrong.",
    fix:"If it's a no, say no kindly. If it's a real maybe, say when you'll decide."},
   {id:"stopask", name:"\"Stop asking\"", kind:"static", re:/\b(?:stop asking(?: me)?|you already asked(?: me)?|i already answered|not this again)\b/gi,
@@ -1137,7 +1137,9 @@ function analyze(textIn, opts){
       if(f.id==="absolute"){
         if(/^never$/.test(mm) && /^\s*mind\b/.test(after)) continue;
         if(/^(?:always|forever)$/.test(mm) && /^\s*(?:love|be (?:here|there)|have your back|grateful|appreciate|welcome|remember how)/.test(after)) continue;
+        if(/^always$/.test(mm) && /^\s*(?:so |such an? |really )?(?:thoughtful|kind|sweet|generous|helpful|patient|supportive|caring|lovely|wonderful|amazing|great|good to me|there for me|on time|fun|the best|so good)\b/.test(after)) continue;
       }
+      if(f.id==="minim" && /^just$/.test(mm) && /\b(?:i'll|i will|i'm|i|we'll|we)\s+$/.test(before)) continue;
       if(f.id==="label" && /^how (?:difficult|hard)/.test(mm) && /^\s*(?:is|was|can)\b/.test(after)) continue;
       if(f.id==="hedge" && /\bi think\b/.test(mm) && /^\s*(?:we|you) (?:could|should|might)\b/.test(after)) {/* still a hedge, keep */}
       push(f.id, s, e);
@@ -1224,7 +1226,7 @@ function analyze(textIn, opts){
   // a safety worry: the repeat ("again") is part of the fact, not a jab. Valid, and it needs a habit, not a deadline
   let safety = null;
   { const sm = low.match(SAFE_RE);
-    if(sm){
+    if(sm && !/\b(?:i|we)\s+$/i.test(low.slice(Math.max(0, sm.index-4), sm.index))){
       const thing = (sm[1]||sm[2]||sm[3]||sm[5]||(sm[4] && /lock/i.test(sm[4]) ? "door" : "")||"car seat").toLowerCase();
       safety = {thing, text: sm[0]};
       push("safety", sm.index, sm.index+sm[0].length);
@@ -1529,6 +1531,7 @@ const BROKEN_RX = [
   /\b(?:you|they|he|she|we)(?:'ll| will| would|'d) (?:often|rarely)\b/i,
   /\b(?:could|can|would) you (?:could|can|would|will|should|must)\b/i,
   /\bnot not\b/i,
+  /\bso \w+ a lot\b/i,
   /\b(?:could|can|would|will) you [^?.!]*\b(?:and|but) (?:it|that|this)(?:'s| is| was)\b[^?.!]*\?/i,
   /\b(?!(?:that|had|is|very|so|really|bye|no|ha|ok)\b)([a-z]{2,}) \1\b/i
 ];
@@ -1923,7 +1926,7 @@ function rewriteSentence(s, ctx, note, an, W){
   t = t.replace(/,?\s*(?:it )?only takes a (?:second|minute|sec)\b[.!]?/i, mm=>{ note("minim", mm.replace(/^[,\s]+/,"").replace(/[.!]$/,""), ""); return "."; });
   t = t.replace(/\b(simply|obviously|clearly|literally)\b,?\s*/gi, (mm,w)=>{ note("minim", w.toLowerCase(), ""); return ""; });
   t = t.replace(/^seriously,?\s+(?=\w)/i, mm=>{ note("minim","seriously",""); return ""; });
-  t = t.replace(/\bjust\s+(?=(?:do|go|get|put|ask|tell|say|stop|clean|pick|take|call|be|try|make|use|let|leave|finish|fix|wash|text|send|listen|give|bring|move|pay|answer|grow|relax|calm|deal|remember|read|check|look|throw|hang|reply|help|sit|turn|shut|close|open|wait|need|have)\b)/gi, ()=>{ note("minim","just",""); return ""; });
+  t = t.replace(/\bjust\s+(?=(?:do|go|get|put|ask|tell|say|stop|clean|pick|take|call|be|try|make|use|let|leave|finish|fix|wash|text|send|listen|give|bring|move|pay|answer|grow|relax|calm|deal|remember|read|check|look|throw|hang|reply|help|sit|turn|shut|close|open|wait|need|have)\b)/gi, (mm, off, str)=>{ if(/\b(?:i'll|i will|i'm|i|we'll|we)\s+$/i.test(str.slice(Math.max(0,off-8), off))) return mm; note("minim","just",""); return ""; });
   t = t.replace(/\b(you|it's|that's|you're)\s+just\b/gi, (mm,a)=>{ note("minim","just",""); return a; });
 
   // --- again / still / even
@@ -2003,7 +2006,7 @@ function rewriteSentence(s, ctx, note, an, W){
   if(/^(?:i do everything|do i have to do everything)/i.test(t)){ note("guilt",t,"I'm carrying a lot right now. Could you take [one task]?"); t="I'm carrying a lot right now. Could you take [one task]?"; }
   if(/^do you (?:know|have any idea) how (?:hard|much|long) i/i.test(t)){ note("guilt",t,"I'm working really hard right now, and I'm tired."); t="I'm working really hard right now, and I'm tired."; }
   if(/^don't worry about me\b/i.test(t)){ note("guilt",t,"I could use some support."); t="I could use some support."; }
-  if(/^i'll just (?:sit here|wait here|do everything)\b/i.test(t) || /^i guess i'll just (?:be|stay|sit)\b/i.test(t)){ note("guilt",t,"I could use a hand."); t="I could use a hand."; }
+  if(/^i'll just (?:(?:sit|wait) here(?:,? then)?[.!…]*$|do everything\b)/i.test(t) || /^i guess i'll just (?:be|stay|sit)\b/i.test(t)){ note("guilt",t,"I could use a hand."); t="I could use a hand."; }
 
   // --- threats
   m = t.match(/^(.*?)\bif you (?:don't|do not|won't|refuse to) (.+?),\s*(?:then\s+)?(?:i'm|i'll|i will|i am|we're|we'll|we will|you'll|you will|i swear)\b.*$/i);
@@ -2109,7 +2112,7 @@ function rewriteSentence(s, ctx, note, an, W){
     ["feelingq",/\bhow do you feel(?: about (?:it|that|this))?\?*/gi, "Are you more tired, annoyed or hurt right now? Or would you rather not say yet?"],
     ["feelingq",/\bwhat's wrong\?+/gi, "Would space or company help more right now?"],
     ["feellike",/^i feel (?:like|that) you (.+?)[.!?]*$/gi, "I've been feeling [your feeling]. When [what happened], it seemed to me like you $1."],
-    ["softno",/\bwe'll see\b[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
+    ["softno",/\bwe'll see\b(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
     ["softno",/\bi'll think about it\b/gi, "I'll think about it and tell you by [a time]"],
     ["urgent",/\bhurry(?: up)?\b[.!]*/gi, "Could we leave by [a time]?"]
   ];
@@ -2494,6 +2497,35 @@ const MORE_READ = {
      dxlabel:[3,"I'm being attacked.","A put-down can register as threat."],
      violent:[3,"Danger.","Even as an exaggeration, violent words can go straight to the alarm."]}
 };
+/* Court and custody threats, the children told first, and safety worries */
+const ESC_READ = {
+ nt:{legal:[3,"This is a fight now, and they want to win it.","A threat of court or custody is heard as a threat, whatever was meant. Most people stop listening to the point and start protecting themselves."],
+     kidsfirst:[3,"They've put the kids in the middle.","Being told the children already know feels like being overruled through them. The other parent usually pushes back hard."],
+     safeask:[1,"They're blaming me for what happened.","A safety worry with no plan can sound like a charge about the past, even when it's really fear."],
+     safety:[0,"That's a fair worry.","A plain safety concern is usually understood as care."]},
+ anxiety:{legal:[3,"I could lose my children.","A court or custody threat goes straight to the biggest fear there is."],
+     kidsfirst:[3,"What have they told the kids about me?","Not knowing what the children heard is very hard to sit with."],
+     safeask:[2,"I'm a danger. I've failed them.","A safety mistake can feel like proof of being a bad parent or partner."]},
+ adhd:{legal:[3,"This is out of control.","The threat lands fast and loud, and the point gets lost."],
+     kidsfirst:[3,"They went around me.","It can feel like a decision was made without them."],
+     safeask:[2,"I forgot again, and now I'm dangerous.","Forgetting is not the same as not caring. A habit or a cue helps more than blame."]},
+ autistic:{legal:[3,"Are they really going to court?","A threat may be taken literally, as a plan, and answered as one."],
+     kidsfirst:[3,"The kids now believe something that isn't agreed.","It changes the facts the children are working from, without a shared plan."],
+     safeask:[1,"What exactly should I do differently?","A clear habit (\"check the stove before leaving the kitchen\") is easier to follow than a complaint."]}
+};
+Object.keys(ESC_READ).forEach(w=>{ if(NT[w]) Object.keys(ESC_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=ESC_READ[w][f]; }); });
+Object.assign(CHECK, {
+  legal:"\"That sounded like a threat about the kids. Can we talk about what's really worrying you?\"",
+  kidsfirst:"\"What did you tell the kids? Can we agree together on what they hear?\"",
+  safeask:"\"You're right, that wasn't safe. What would help it get checked every time?\""
+});
+Object.assign(CHANGE_WHY, {
+  legal:{g:"A threat of court or custody turns a parenting problem into a fight to win, and messages like this are often saved and shown later. The worry underneath can be said on its own. If there is a real legal step, it goes through the proper channel, not a message.", anxiety:"A threat about the children goes straight to the biggest fear a parent has."},
+  kidsfirst:{g:"Telling the children first puts them in the middle. Agreeing together on what they hear protects them, and keeps the adults on the same side of it."},
+  safety:{g:"The worry is real and worth saying. A habit (\"every time\") keeps everyone safe going forward. A deadline or a blame word would only cover this one time.", adhd:"A cue in the right place (a note by the door) works better than trying harder to remember."},
+  sarcasm:{g:"Sarcasm carries the real message in the tone, which a text doesn't have. Said plainly, the hurt underneath can actually be answered."},
+  plain:{g:"The automatic rewrite of this part didn't come out as clear English, so it's left as a blank for your own words. Short and plain is best."}
+});
 Object.keys(MORE_READ).forEach(w=>{ if(NT[w]) Object.keys(MORE_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=MORE_READ[w][f]; }); });
 Object.assign(CHECK, {
   brushoff:"\"Do you mean either is fine, or are you upset? It's okay if it's the second one.\"",
@@ -2568,6 +2600,9 @@ Object.assign(CHECK, CHECK_ADD);
    receive(analysis) -> {crossed, meanings:[..], literal:[{text, means}], replies:[{label, text}], found:[names]}
    ============================================================ */
 const RECEIVE_MEANS = [
+  [["legal"], "It talks about court, a lawyer or custody. That's a big step to raise in a message, and it often comes from fear. You don't have to answer it on the spot, and it's okay to get advice before you reply."],
+  [["kidsfirst"], "They say they've already told the children something about you. That's hard to read. You can answer the practical part, and ask to agree together on what the kids hear."],
+  [["safety"], "There's a real safety worry in it. It's fair to take that seriously, even if the wording stings."],
   [["threat"], "It's worded as an ultimatum. It shows how much this matters to them right now. You don't have to answer it on the spot."],
   [["violent"], "\"Kill you\" is almost always an exaggeration. It usually means they'd be very annoyed. If it doesn't feel like a joke to you, it's okay to say so."],
   [["hostile","swear"], "They're very angry or fed up right now. The heat in the words says more about how they feel in this moment than about you."],
@@ -2590,7 +2625,7 @@ const RECEIVE_MEANS = [
   [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
 ];
 const RECEIVE_GOOD = {repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
-const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat"];
+const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
 function turnAround(t){ const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",you:"me",myself:"yourself",yourself:"myself"}; return String(t).replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, w=>SW[w.toLowerCase()]); }
 function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
@@ -2606,11 +2641,20 @@ function receive(an){
   const literal = SHARED && SHARED.idioms ? SHARED.idioms(an.text).map(x=>({text:x.text, means:x.means})) : [];
   const replies = [];
   const push = (label, text)=>{ if(text && !replies.some(r=>r.text===text)) replies.push({label, text}); };
-  if(crossed){
+  if(crossed && has("legal") && !["label","dxlabel","contempt","hostile","swear","violent"].some(has)){
+    push("Answer calmly, without the threat", "I've read this. I'd like us to sort out [the specific thing] between us first. Can we talk about it at [a time]?");
+    push("Take time before you answer", "I've read this. I'm going to take some time before I reply.");
+  }
+  else if(crossed){
     push("Set a limit, calmly", "I want to sort this out, and I'm not okay being spoken to like that. Let's talk when we can both be calmer.");
     push("Take time before you answer", "I've read this. I'm going to take some time before I reply.");
   }
   literal.filter(x=>!/kill|murder|strangle/i.test(x.text)).slice(0,1).forEach(x=>push("Check the figure of speech", "When you said \u201c"+x.text.replace(/^./, c=>c.toLowerCase())+"\u201d, did you mean "+x.means.replace(/\s*\(.*\)$/,"")+"?"));
+  if(an.safety){
+    const th = an.safety.thing;
+    push("Agree on a habit", "You're right, that wasn't safe. Can we find a way to make sure the "+th+" gets checked every time? Maybe a note by the door?");
+  }
+  if(has("kidsfirst")) push("Keep the kids out of it", "I'd like us to agree together on what we tell the kids. Can we talk about that at [a time]?");
   if(ask){
     const hasWhen = an.found.when || /\b(?:by|at|on|before|after)\s+\S/i.test(ask);
     push("Check the ask", "Just to check: you'd like me to "+turnAround(ask).replace(/[.?!]+$/,"")+(hasWhen ? "?" : ". By when?"));

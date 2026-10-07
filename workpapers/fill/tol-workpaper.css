@@ -200,8 +200,8 @@
    that fits at normal text becomes one card per row at "Larger" text on a tablet. */
 .wpf-table-box{ container: wpftable / inline-size; }
 .wpf-table tr[hidden]{ display: none !important; }
-.wpf-rows-for{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 .6em; font-size: .92em; font-weight: 600; }
-.wpf-rows-for select{ flex: 1 1 12em; max-width: 100%; min-height: 40px; font: inherit; font-weight: 400; }
+.wpf-rows-for{ width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 .6em; font-size: .92em; font-weight: 600; }
+.wpf-rows-for select{ flex: 1 1 10rem; min-width: 0; max-width: 100%; min-height: 40px; font: inherit; font-weight: 400; }
 .wpf-turn{ margin: 0 0 .7em; padding: .5em .8em; border-radius: 6px; background: #EEF4FA; border: 1px solid #CFDDEE; font-size: .92em; }
 @container wpftable (max-width: 40rem){
   .wpf-table thead{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
@@ -217,6 +217,11 @@
   .wpf-table th.wpf-rowlabel{ border: 0; padding: 0 0 4px; }
   .wpf-table td.wpf-remove{ position: absolute; top: 4px; right: 4px; width: auto; padding: 0; }
   .wpf-table tr.wpf-row-mine{ border-color: var(--brass, #A8792F); }
+}
+/* the folded filled-in example: wrap its words rather than scroll sideways */
+@container wpftable (max-width: 40rem){
+  .wpf-example-table{ table-layout: fixed; width: 100%; }
+  .wpf-example-table th, .wpf-example-table td{ overflow-wrap: anywhere; hyphens: auto; }
 }
 
 /* ---------- small screens: table rows become cards ---------- */
