@@ -364,7 +364,7 @@ t('tester', 'my roommates never do their chores', { kind: 'sit', id: 'roommate+f
 t('tester', "what if my partner won't do the program", { kind: 'sit', id: 'partner+wontjoin', not: /worry/ });
 t('tester', 'my wife and i never have time for each other', { kind: 'sit', id: 'partner+notime', not: /caregiv|surgery/i });
 t('tester', 'is there an app', { kind: 'card', id: 'app', text: /home screen/i });
-t('tester', 'can we use this together on two phones', { kind: 'card', id: 'twophones', link: '/carrier-wave-decoder.html#together' });
+t('tester', 'can we use this together on two phones', { kind: 'card', id: 'twophones', link: '/lemonade-stand.html', text: /Together tab/ });
 t('tester', 'my battery score of 3', { kind: 'calc', text: /3 ÷ 20 = 0\.15/ });
 t('tester', 'My partner sent me this link. Is this going to be used against me?', { kind: 'card', id: 'usedagainst', text: /setup, never a person/ });
 t('tester', 'my boss keeps dumping work on me', { kind: 'sit', id: 'coworker+manager' });

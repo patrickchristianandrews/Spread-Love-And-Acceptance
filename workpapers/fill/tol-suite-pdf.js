@@ -148,7 +148,7 @@
       doc.line(L, 750, R, 750, C.line, 0.5);
       doc.text(L, 761, enc(opts.fillable
         ? 'Tap any box to type, in any PDF app. Or print it and write by hand. Made on your device ' + made + '; nothing was sent anywhere.'
-        : 'Made on your device ' + made + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 6.8, C.soft);
+        : 'Made on your device ' + made + '. Nothing entered was sent to or stored by the website. Anyone you share this file with can read every page in it.'), 'Helvetica', 6.8, C.soft);
       doc.text(L, 770, enc('A self-reflection worksheet, not a clinical tool. ' + lens), 'Helvetica', 6.8, C.soft);
       var pg = enc('Page ' + (i + 1) + ' of ' + n);
       doc.text(R - PDF.textWidth(pg, 'Helvetica', 6.8), 770, pg, 'Helvetica', 6.8, C.soft);
