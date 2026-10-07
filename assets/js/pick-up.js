@@ -52,12 +52,50 @@
   }
   function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r : []; }
 
+  // ---------- coming back: your next step, and what's new since your last visit ----------
+  // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).
+  var NEWS = [
+    ['2026-10-07', 'For teens', '/teens.html'],
+    ['2026-10-07', 'The book: an “On your own” part in every chapter', '/book/chapter-1.html#on-your-own'],
+    ['2026-10-07', 'A weekly reminder in your own calendar', '/self-path.html#steps'],
+    ['2026-10-06', 'Not safe at home?', '/safety.html'],
+    ['2026-10-06', 'For parents', '/parents.html'],
+    ['2026-10-06', 'Leading a group', '/groups.html'],
+    ['2026-10-04', 'Tidbit and Sugarfoot’s Arcade', '/frequency-journey.html']
+  ];
+  var SELF_STEPS = [['battery', 'Check your battery'], ['wiring', 'Get to know your wiring'], ['lens', 'See where your lens came from'],
+    ['settle', 'Plan what settles you'], ['words', 'Find words for what you feel'], ['no', 'Practice kind ways to say no']];
+  var BOOK_ORDER = [['/book/self-1-then.html', 'Part One: where you came from'], ['/book/self-2-now.html', 'Part One: who you are today'], ['/book/self-3-next.html', 'Part One: who you are becoming'],
+    ['/book/preface.html', 'The Preface: the work nobody sees'], ['/book/chapter-1.html', 'Chapter I: why we get out of tune'], ['/book/chapter-2.html', 'Chapter II: is the split working?'],
+    ['/book/chapter-3.html', 'Chapter III: full tanks'], ['/book/chapter-4.html', 'Chapter IV: two kinds of fair'], ['/book/chapter-5.html', 'Chapter V: the monthly look-back']];
+  function lastVisitDay() {
+    var days = json('tol-visit-days'), t = today(), prev = '';
+    (Array.isArray(days) ? days : []).forEach(function (d) { if (typeof d === 'string' && d < t && d > prev) prev = d; });
+    return prev;
+  }
+  function daysSince(d) { if (!d) return 0; return Math.round((new Date(today() + 'T12:00:00') - new Date(d + 'T12:00:00')) / 864e5); }
+  function nextStep() {
+    var sp = json('tol-selfpath-v1'), done = (sp && Array.isArray(sp.done)) ? sp.done : [];
+    if (done.length && done.length < SELF_STEPS.length) {
+      for (var i = 0; i < SELF_STEPS.length; i++) if (done.indexOf(SELF_STEPS[i][0]) === -1)
+        return { t: 'Your self path, Step ' + (i + 1) + ': ' + SELF_STEPS[i][1], u: '/self-path.html#' + SELF_STEPS[i][0], note: done.length + ' of 6 done' };
+    }
+    var cb = json('tol-come-back-v1'), read = (cb && cb.read) || {};
+    var started = BOOK_ORDER.some(function (b) { return read[b[0]]; });
+    if (started) for (var j = 0; j < BOOK_ORDER.length; j++) if (!read[BOOK_ORDER[j][0]]) return { t: 'The book, next: ' + BOOK_ORDER[j][1], u: BOOK_ORDER[j][0] };
+    return null;
+  }
+
   function card(where) {
     var here = location.pathname.replace(/\/$/, '/index.html');
     var rec = recent().filter(function (r) { return r && r.u && r.u !== here; }), last = rec[0];
-    var d = drafts(), six = sixWeeks(), wx = weather();
-    if (!last && !d.length && !six) return null;
+    var d = drafts(), six = sixWeeks(), wx = weather(), prev = lastVisitDay(), gap = daysSince(prev), nx = nextStep();
+    var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev; }).slice(0, 3) : [];
+    if (!last && !d.length && !six && !nx && !fresh.length) return null;
     var rows = '';
+    if (where !== 'menu' && gap >= 1) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128075;</span><span>Welcome back' + (gap === 1 ? '. You were here yesterday.' : gap < 60 ? '. It’s been ' + gap + ' days, and that’s fine: pick up anywhere.' : '. It’s been a while, and that’s fine: pick up anywhere.') + '</span></li>';
+    if (nx) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10145;</span><span>Your next step: <a href="' + esc(nx.u) + '">' + esc(nx.t) + '</a>' + (nx.note ? ' <small>(' + esc(nx.note) + ')</small>' : '') + '</span></li>';
+    if (fresh.length) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10024;</span><span>New since your last visit: ' + fresh.map(function (n) { return '<a href="' + esc(n[2]) + '">' + esc(n[1]) + '</a>'; }).join(', ') + '</span></li>';
     if (last) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128278;</span><span>You were last on <a href="' + esc(last.u) + '">' + esc(last.t) + '</a> <small>' + esc(ago(last.at)) + '</small>' +
       (rec[1] ? '. Before that: <a href="' + esc(rec[1].u) + '">' + esc(rec[1].t) + '</a>' : '') + '</span></li>';
     if (six) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128197;</span><span><a href="/prog-01.html">Six gentle weeks</a>: ' + esc(six) + '</span></li>';

@@ -190,6 +190,7 @@ Key facts:
 - [Not safe at home?](https://spreadloveandacceptance.com/safety.html): If someone is hurting, threatening, watching or controlling you: free hotlines, how to leave this site quickly, and how to clear what this site keeps on your.
 - [Share the load, step by step](https://spreadloveandacceptance.com/share-the-load.html): The tools for splitting the load at home, in the order to use them: name every job, see the split in plain numbers, give each job one owner, and review it each.
 - [Surprise me](https://spreadloveandacceptance.com/surprise.html): Can’t decide where to go? One button picks a game, a guide or something calm for you.
+- [For Teens: When Home, Friends and Feelings Get Loud](https://spreadloveandacceptance.com/teens.html): Free, private help for teens: getting along with your parents, friend drama and group chats, big feelings, healthy dating, and where to get help fast.
 - [Rollout Status](https://spreadloveandacceptance.com/telemetry.html): Component-by-component build status for The Objective Ledger, stated as real fractions of the promised whole.
 - [Are Your Rhythms in Step? Frequency Calibration](https://spreadloveandacceptance.com/tools/frequency-calibration.html): A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.
 - [Frequency Sync Visualizer](https://spreadloveandacceptance.com/tools/frequency-sync-visualizer.html): A calm picture of two rhythms drifting into step: the idea behind the 90-second check-in (WP-13).

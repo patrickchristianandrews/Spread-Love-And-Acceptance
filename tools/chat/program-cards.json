@@ -1234,6 +1234,44 @@
       ]
     },
     {
+      "id": "teens",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "being a teen when home feels hard",
+      "pat": "\\bi m (a teen|a teenager|1[3-8]|1[3-8] years old|in (middle|high) school)\\b|\\bmy (parents?|mom|mum|dad) (don t|dont|never|won t|wont) (understand|listen to|get|trust|let) me\\b|\\bmy (parents?|mom|mum|dad) (are|is) so (strict|annoying|controlling)\\b|\\b(grounded|curfew)\\b",
+      "keys": [],
+      "what": [
+        "That sounds frustrating. Growing up means you and the adults around you are both working out new rules at the same time, and that gets loud. There’s a page written for you, not about you: For teens."
+      ],
+      "how": [
+        "Pick the moment: ask when nobody’s rushed or already annoyed.",
+        "Say what you want and why, then offer something in return: “Can I stay till 11? I’ll text when I leave and be home by 11:15.”",
+        "If it blows up, step away and come back later. That isn’t losing; it’s how you get a better answer."
+      ],
+      "script": "Can we talk about this later tonight, when we’re both calmer?",
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "Test a message before you send it",
+          "/signal-translator.html"
+        ],
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ]
+      ],
+      "chips": [
+        [
+          "How do I ask my parents for more freedom?",
+          "How do I ask my parents for more freedom?"
+        ]
+      ]
+    },
+    {
       "id": "screenshot",
       "kind": "intent",
       "first": true,
