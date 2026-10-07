@@ -756,7 +756,9 @@
     // brought in from two files is one week: read every sheet for it, never just the last one.
     function weekOf(en) { return trim(en.state.values.weekOf); }
     function sameWeek(list, base) { return list.filter(function (e) { return e !== base && written(e) && (!weekOf(e) || !weekOf(base) || weekOf(e) === weekOf(base)); }); }
-    function rowKey(r) { return JSON.stringify(r); }
+    // a row's identity is what is written in it (blank boxes and key order don't make a new row), so the
+    // same row brought in from two files is counted once
+    function rowKey(r) { var o = {}; Object.keys(r).sort().forEach(function (k) { if (r[k] !== '' && r[k] != null && r[k] !== false) o[k] = typeof r[k] === 'string' ? trim(r[k]).toLowerCase() : r[k]; }); return JSON.stringify(o); }
     var e1 = latest(by['WP-01'] || []);
     if (e1) {
       var also1 = sameWeek(by['WP-01'] || [], e1);
@@ -764,7 +766,7 @@
         // one week: every sheet's rows, each keeping who did it (the same row twice counts once)
         var st1 = JSON.parse(JSON.stringify(e1.state)), have1 = {};
         st1.tables.audit = rowsOfT(st1, 'audit');
-        st1.tables.audit.forEach(function (r) { have1[rowKey(r)] = 1; });
+        st1.tables.audit = st1.tables.audit.filter(function (r) { if (have1[rowKey(r)]) return false; have1[rowKey(r)] = 1; return true; });
         also1.forEach(function (e) { rowsOfT(e.state, 'audit').forEach(function (r) { if (!have1[rowKey(r)]) { have1[rowKey(r)] = 1; st1.tables.audit.push(r); } }); });
         e1 = { workpaper: e1.workpaper, person: e1.person, state: st1 };
       }
@@ -791,7 +793,11 @@
     if (e3) {
       got.push('WP-03');
       set('wp03.reviewDate', e3.state.values.reviewDate);
-      var t3 = rowsOfT(e3.state, 'treaty').filter(function (r) { return trim(r.task); });
+      // the sheet's own rule: a starter job nobody touched is an example, and isn't counted until it is given an owner or changed
+      var exRows = [];
+      [schemaFor('WP-03', snap.variant), schemaFor('WP-03', roadId), schemaFor('WP-03')].forEach(function (sc3) { var tr = section(sc3, 'treaty'); if (tr && tr.examples) exRows = exRows.concat(tr.defaultRows || []); });
+      function example3(r) { return exRows.some(function (d) { return d.task === r.task && trim(r.freq) === trim(d.freq) && ['r', 'a', 'c', 'i', 'notes'].every(function (k) { return blank(r[k]) || r[k] === d[k]; }); }); }
+      var t3 = rowsOfT(e3.state, 'treaty').filter(function (r) { return trim(r.task) && !example3(r); });
       t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', whoName(r.r)); set(p + 'a', whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
       sizes.treaty = t3.length;
       var am = rowsOfT(e3.state, 'amendments');
@@ -892,6 +898,10 @@
     if (keep && keep.road === roadId && keep.values) Object.keys(keep.values).forEach(function (k) { if (/^tol\.v1\.(calc|self|ready)\.|^tol\.v1\.who\.(started|context|others)$/.test(k)) data.values[k] = keep.values[k]; });
     Object.keys(V).forEach(function (k) { data.values[NS + k] = V[k]; });
     if (typeof snap.variant === 'string') data.focus = snap.variant;
+    if (snap.split && typeof snap.split === 'object' && !R.solo) {
+      var byNm = function (o) { return names.map(function (nm) { var hit = null; Object.keys(o || {}).forEach(function (k) { if (nm && fold(k) === fold(nm)) hit = o[k]; }); return hit; }); };
+      data.split = { nights: byNm(snap.split.nights), agreed: byNm(snap.split.agreed) };
+    }
     var r = fromJSON(data);
     if (r) {
       r.fromSuite = got.filter(function (x, k, a) { return a.indexOf(x) === k; });
@@ -916,7 +926,18 @@
     var r = fromFields(found);
     // the Suite's "what brings you here" choice (a road variant), when there is one
     if (r && typeof obj.focus === 'string' && /^[a-z]{1,20}$/.test(obj.focus) && r.data.road === obj.road) r.data.focus = obj.focus;
+    if (r && obj.split) { var sc0 = splitClean(obj.split, r.data.people); if (sc0) r.data.split = sc0; }
     return r;
+  }
+  // The split a week is read against, from the Lemonade Stand (through the Suite): the share each person
+  // agreed, or the nights (out of 14) each person is here. One entry per place on the road; null = not said.
+  function splitClean(x, n) {
+    if (!x || typeof x !== 'object') return null;
+    function arr(a, hi) { return Array.isArray(a) ? a.slice(0, n).map(function (v) { var f = parseFloat(v); return isFinite(f) && f > 0 && f <= hi ? f : null; }) : []; }
+    var out = { nights: arr(x.nights, 14), agreed: arr(x.agreed, 100) };
+    while (out.nights.length < n) out.nights.push(null);
+    while (out.agreed.length < n) out.agreed.push(null);
+    return out.nights.some(function (v) { return v != null; }) || out.agreed.some(function (v) { return v != null; }) ? out : null;
   }
 
   /* ------------------------------------------------------------ two copies into one */
@@ -1157,6 +1178,9 @@
     out.wp02 = { filled: out.battery.some(function (b) { return b.answered > 0 || b.source; }), scored: scored.length };
 
     // WP-01: minutes by person, and the balance score
+    var kidAt = P.list.map(function (p) { return !!(KID_ROADS[data.road] && V(data, 'who.p' + (p.i + 1) + '.child')); });
+    out.kids = kidAt;
+    out.target = targetOf(data, P);
     if (on['WP-01'] && !R.refusalsOnly) {
       var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), seen = {}, rowsUsed = 0, unmatched = [], logged = 0, tasks = [], sharedRows = [];
       rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
@@ -1172,12 +1196,16 @@
         Object.keys(ow.list).forEach(function (j) { var k = ow.list[j], s = m / ow.list.length; mins[k] += s; if (r.how === 'Noticed and handled') noticed[k] += s; });
       });
       // balance for 2 to 8 people against an even split: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n)
-      var bal = C1().balance(mins), total = bal.total, wb = bal.value, shares = bal.shares ? bal.shares.map(function (x) { return x * 100; }) : null;
+      // read against the split agreed on the Lemonade Stand (or each person's nights here), when there is one,
+      // the same way the stand reads it, so the two never give opposite answers about the same week
+      var bal = C1().balance(mins, out.target ? out.target.t.map(function (x) { return x * 100; }) : null);
+      if (bal.error && out.target) bal = C1().balance(mins);
+      var total = bal.total, wb = bal.value, shares = bal.shares ? bal.shares.map(function (x) { return x * 100; }) : null;
       // Someone on the road with no rows at all hasn't added their side yet. Their week is missing, not
       // zero (as with a load score nobody has filled in), so the split, the balance and any hand-over wait.
       var oneSided = null;
       if (n >= 2 && rowsUsed > 0) {
-        var none = P.list.filter(function (p) { return !seen[p.i]; });
+        var none = P.list.filter(function (p) { return !seen[p.i] && !kidAt[p.i]; }); // a child is never waited for
         if (none.length) oneSided = { have: P.list.filter(function (p) { return seen[p.i]; }).map(function (p) { return p.label; }), missing: none.map(function (p) { return p.label; }) };
       }
       if (oneSided) { wb = null; shares = null; }
@@ -1297,7 +1325,7 @@
     // person holding every job, so this is what keeps a high score honest.
     out.conc = { owned: out.wp03 && out.wp03.filled ? out.wp03.conc : null,
       // a log with someone's week still missing says nothing about who carries more
-      minutes: out.wp01 && out.wp01.minutes && !out.wp01.oneSided && n >= 2 ? C1().concentration(out.wp01.minutes, 60) : null,
+      minutes: out.wp01 && out.wp01.minutes && !out.wp01.oneSided && n >= 2 && !out.target ? C1().concentration(out.wp01.minutes, 60) : null,
       noticed: out.wp01 && out.wp01.noticed && !out.wp01.oneSided && n >= 2 ? C1().concentration(out.wp01.noticed, 60) : null };
     out.conc.flag = !!((out.conc.owned && out.conc.owned.flag) || (out.conc.minutes && out.conc.minutes.flag));
     out.conc.lines = [];
@@ -1308,7 +1336,7 @@
       out.conc.lines.push(P.label(out.conc.owned.top) + ' owns ' + out.conc.owned.count + ' of the ' + out.conc.owned.total + ' ' + R.tasks + ' with one named owner (' + pct(out.conc.owned.share) + wline + ')');
     }
     if (out.conc.minutes && out.conc.minutes.flag) out.conc.lines.push(P.label(out.conc.minutes.top) + ' logged ' + pct(out.conc.minutes.share) + ' of the minutes this week' + (out.conc.owned && out.conc.owned.flag && out.conc.owned.top !== out.conc.minutes.top ? ' (owning a job and the time it took this week are counted separately, so they can point at different people)' : ''));
-    if (out.conc.noticed && out.conc.noticed.flag && !(out.conc.minutes && out.conc.minutes.flag && out.conc.minutes.top === out.conc.noticed.top)) out.conc.lines.push(P.label(out.conc.noticed.top) + ' did ' + pct(out.conc.noticed.share) + ' of the work nobody asked for');
+    // (who marked work as noticed first is each person's own view of their rows: it is said once, in the WP-01 read, never as who "carries more")
 
     // CALC-01
     var wbSrc = null, ocSrc = null, asSrc = null, wb = null, oc = null, as = null;
