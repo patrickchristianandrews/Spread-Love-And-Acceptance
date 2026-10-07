@@ -82,6 +82,13 @@
         ['/turning-toward.html','Turning toward','Small, everyday ways to stay connected.'],
         ['/workpapers/wp-13-pll-protocol.html','WP-13: the 90-second check-in','A tiny daily habit that keeps the door open.']
       ]},
+    { id:'teen', ico:'\uD83C\uDFA7', label:'I\u2019m a teen and home feels hard',
+      say:'Fair enough. Growing up means you and the adults around you are both figuring out the new rules at the same time, and that gets loud. Here is stuff written for you, not about you.',
+      picks:[
+        ['/teens.html','For teens','Parents, friends, feelings and dating, with places to get help.'],
+        ['/signal-translator.html','The Signal Translator','Test a message before you send it.'],
+        ['/frequency-journey.html','The arcade','When you just need a break.']
+      ]},
     { id:'not-safe', ico:'\uD83D\uDEE1', label:'I don\u2019t feel safe with someone',
       say:'If someone hurts, threatens, watches or controls you, that is not a communication problem and it is not your fault. Please skip the tools here and talk to people who help with this every day.',
       picks:[

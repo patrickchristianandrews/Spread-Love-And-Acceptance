@@ -39,6 +39,7 @@
       { href: '/safety.html', code: 'New', title: 'Not safe at home?', note: 'Free hotlines, a quick way to leave this site, and how to clear what it keeps' },
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'A free six-session guide with discussion questions and one-page handouts' },
       { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, calm-down routines, teens, and watching the pups together' },
+      { href: '/teens.html', code: 'New', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you, with places to get help' },
       { href: '/soundscapes.html#brain-breakers', code: 'New', title: 'Brain Breakers', note: 'The Soundscapes page is now all Brain Breakers: four instrumental pieces, with a music visualizer and vibration' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and similar ideas like apology languages and bids' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
@@ -145,6 +146,7 @@
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' },
       { href: '/parents.html', code: '', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
+      { href: '/teens.html', code: '', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you' },
       { href: '/groups.html', code: '', title: 'Leading a group', note: 'A six-session guide with discussion questions and handouts' },
     ]},
     { id: 'book', title: 'The book', blurb: 'Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use.', items: [
@@ -245,6 +247,7 @@
       { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: 'New', title: 'Separated co-parents', note: 'Calmer handoffs, a tone check, and a route for a co-parent who won’t cooperate' },
       { href: '/parents.html', code: 'New', title: 'For parents', note: 'Big feelings, siblings who fight, teens, and watching the pups together' },
+      { href: '/teens.html', code: 'New', title: 'For teens', note: 'Parents, friends, feelings and dating, written for you' },
       { href: '/groups.html', code: 'New', title: 'Leading a group', note: 'Six sessions with discussion questions and handouts, no sign-up' },
       { href: '/share-the-load.html#roommates', title: 'Roommates and housemates', note: 'Chores, bills and a ten-minute house meeting' },
       { href: '/grandparents.html', title: 'For grandparents', note: 'Help with the grandkids without taking over' },
@@ -811,6 +814,9 @@
       fpMain.appendChild(fpBox);
     }
 
+    // "Come back gently": a weekly reminder in the visitor's own calendar, wherever a page asks for one (remind.js)
+    if (document.querySelector('[data-tol-remind]')) { var rmj = document.createElement('script'); rmj.src = '/assets/js/remind.js'; document.head.appendChild(rmj); }
+
     // "Something to read": one hand-picked article that fits this reading page, near the end (reading-suggest.js)
     var readMain = document.querySelector('main.read');
     if (readMain && !body.hasAttribute('data-no-reading') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') && !/^\/(index|reading|library|whats-new|contents|contents-in-depth|roadmap|telemetry|404|offline|safety|groups|frequency-buddies[a-z0-9-]*|pal-cam-tv|frequency-journey(-play)?|bears-dojo|pause-and-play)\.html$|^\/legal\//.test(current)) {   // kids' pages and the safety page get no grown-up articles
@@ -1038,7 +1044,8 @@
     hotline: 'safe', helpline: 'safe', danger: 'safe', dangerous: 'safe', scared: 'safe', afraid: 'safe', threat: 'safe', threatened: 'safe', threatens: 'safe', controlling: 'safe', coercive: 'safe', hide: 'safe', escape: 'safe', dv: 'safe', hurts: 'safe', hit: 'safe', hits: 'safe', stalking: 'safe',
     boundaries: ['/book/self-2-now-in-depth.html', '/self-path.html', '/workpapers/wp-01.html', '/library/connection.html'], boundary: 'boundaries', overgiving: 'boundaries', 'over-giving': 'boundaries', giving: 'boundaries', control: 'boundaries', pleaser: 'boundaries', pleasing: 'boundaries', energy: 'boundaries', resentment: 'boundaries',
     kids: ['/parents.html', '/frequency-buddies.html', '/library/life.html', '/growing-up.html'], kid: 'kids', child: 'kids', children: 'kids', parenting: 'kids', siblings: 'kids', sibling: 'kids', brothers: 'kids', sisters: 'kids', tantrum: 'kids', tantrums: 'kids',
-    teen: ['/parents.html', '/library/life.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html'], teens: 'teen', teenager: 'teen', teenagers: 'teen', teenage: 'teen', son: 'teen', daughter: 'teen', adolescent: 'teen',
+    teen: ['/parents.html', '/teens.html', '/library/life.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html'], teenager: 'teen', teenagers: 'teen', teenage: 'teen', son: 'teen', daughter: 'teen', adolescent: 'teen',
+    teens: ['/teens.html', '/library/life.html'], crush: 'teens', dating: 'teens', bullied: 'teens', bullying: 'teens', school: 'teens', grounded: 'teens', curfew: 'teens',
     group: ['/groups.html', '/check-ins.html'], groups: 'group', leader: 'group', facilitator: 'group', church: 'group', class: 'group', discussion: 'group', curriculum: 'group', course: 'group',
     unheard: ['/check-ins.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html'], ignored: 'unheard', dismissed: 'unheard',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],

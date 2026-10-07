@@ -396,6 +396,7 @@ t('care', 'how do I set boundaries', { kind: 'care', id: 'overgive' });
 t('care', 'I just got divorced and feel lost', { kind: 'care', id: 'onmyown', link: '/self-path.html' });
 t('care', 'Is there a leader guide for a church small group?', { kind: 'care', id: 'group', link: '/groups.html' });
 t('care', 'how do I raise emotionally healthy kids', { kind: 'care', id: 'raisekids', link: '/parents.html' });
+t('care', "I'm 15 and my parents don't understand me", { kind: 'care', id: 'teens', link: '/teens.html' });
 c('care', ['my partner snapped at me', 'is it my fault?'], { kind: 'care', id: 'fault', text: /theirs to own/, not: /\bYes\b/ });
 c('care', ['my partner snapped at me', 'Tell me more'], { kind: 'care', id: 'fault' });
 c('care', ['my partner snapped at me', 'is it my fault?', 'What can I do tonight?'], { kind: 'sit-more', text: /calming thing/ });

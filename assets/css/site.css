@@ -2539,3 +2539,17 @@ html.tol-still .tol-share-card{ animation:none; }
   .tol-keys-hint, .tol-toast, .tol-offer, .tol-msg, .tol-pillars, .tol-panel, .tol-scrim, .tol-cw, .tol-cw-card, .tol-pud-end,
   .appad, .bkb, .tpv, .tsc-svg, .lp-spark, .tol-read-host, .tol-skip, iframe{ display:none !important; }
 }
+
+/* "Come back gently": the weekly calendar reminder (remind.js) */
+.tol-remind{ position:relative; z-index:2; box-sizing:border-box; margin:1.4rem 0; padding:1rem 1.1rem; border-radius:18px; background:rgba(255,253,247,.95); border:1.5px solid #D9C8F0; }
+.read .tol-remind .tol-rm-h{ margin:0 0 .3rem; font-size:1.2rem; }
+.tol-remind .tol-rm-p{ margin:0 0 .6rem !important; max-width:60ch; }
+.tol-rm-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .7rem; margin:.4rem 0; }
+.tol-rm-row label{ font-weight:600; font-size:.95rem; }
+.tol-rm-row select{ min-height:44px; padding:.3rem .6rem; border-radius:10px; border:1.5px solid #D9C8F0; background:#FFFDF7; color:#2B2620; font:inherit; }
+.tol-rm-b{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; border:1.5px solid #3C3350; background:#3C3350; color:#fff !important; font:600 .95rem/1.2 "Lora", Georgia, serif; cursor:pointer; text-decoration:none; }
+.tol-rm-b.is-soft{ background:#FFFDF7; color:#2B2620 !important; border-color:#B9A8D6; }
+.tol-rm-b:focus-visible, .tol-rm-row select:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.tol-rm-msg{ min-height:1.3rem; margin:.3rem 0 0 !important; font-weight:600; color:#2F5A3C; }
+@media print{ .tol-remind{ display:none !important; } }
+.read .tol-remind p, .read .tol-remind label{ background:none !important; box-shadow:none !important; border:0 !important; padding:0 !important; border-radius:0 !important; }
