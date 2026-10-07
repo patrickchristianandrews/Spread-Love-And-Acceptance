@@ -1539,7 +1539,7 @@
       sug('For anything about health or medicines, follow the care team’s instructions. These pages are about who owns each task.');
       sug('At each handoff, say what the next person needs to know, in one or two lines.');
     }
-    out.links = [['The Five Pillars', '/five-pillars.html'], ['Check-ins', '/check-ins.html'], ['The Signal Translator', '/signal-translator.html'], ['CALC-01', '/calc01-solvency.html']];
+    out.links = [['The Five Pillars', '/five-pillars.html'], ['Check-ins', '/check-ins.html'], ['The Signal Translator', '/signal-translator.html'], ['CALC-01', '/is-the-setup-working.html']];
     return out;
   }
 
@@ -1644,7 +1644,7 @@
     'WP-09': ['WP-09 Say it so it lands', '/workpapers/fill/wp-09.html'],
     'WP-11': ['WP-11 The Calm-Down Kit', '/workpapers/fill/wp-11.html'],
     'WP-13': ['WP-13 The 90-second daily check-in', '/workpapers/fill/wp-13.html'],
-    'CALC-01': ['CALC-01, Is the setup working for everyone?', '/calc01-solvency.html'],
+    'CALC-01': ['CALC-01, Is the setup working for everyone?', '/is-the-setup-working.html'],
     NOTES: ['Make a Wiring Card', '/wiring-card.html'],
     wiring: ['Make a Wiring Card', '/wiring-card.html'],
     weather: ['Today’s Weather', '/quick-checks.html#today'],

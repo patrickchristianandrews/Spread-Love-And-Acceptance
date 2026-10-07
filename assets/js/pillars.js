@@ -101,19 +101,19 @@
     '/workpapers/wp-01.html': { p: [1, 4], n: {
       1: ['Log a week of what you do.', 'Compare two logs as facts, not a fight.'],
       4: ['Practice a kind, neutral no.', 'Say no in a way that lands without a fight.'] } },
-    '/workpapers/wp-02-battery-stress-meter.html': { p: [3], n: {
+    '/workpapers/wp-02-how-much-are-you-carrying.html': { p: [3], n: {
       3: ['Five questions: how full is your battery?', 'Know when to talk and when to wait.'] } },
-    '/workpapers/wp-03-raci-treaty.html': { p: [2, 5], n: {
+    '/workpapers/wp-03-one-owner-per-job.html': { p: [2, 5], n: {
       2: ['See which jobs you hold without saying so.', 'One owner per job, so nobody keeps asking.'],
       5: ['Notice what you pick up because nobody else does.', 'Name owners before a job drifts to one person.'] } },
-    '/workpapers/wp-04-deficit-audit.html': { p: [2, 5], n: {
+    '/workpapers/wp-04-what-keeps-coming-back.html': { p: [2, 5], n: {
       2: ['Find what in the setup lets things slip.', 'Fix the setup behind the repeat, together.'],
       5: ['Spot the default that let it slide.', 'Keep the agreement from drifting.'] } },
-    '/workpapers/wp-09-tone-filter.html': { p: [4], n: {
+    '/workpapers/wp-09-say-it-so-it-lands.html': { p: [4], n: {
       4: ['Turn a big feeling into a fact, a feeling and an ask.', 'Say it so it lands.'] } },
     '/wp-11.html': { p: [3], n: {
       3: ['Plan what settles you while you are calm.', 'Pause, settle, and come back to the talk.'] } },
-    '/workpapers/wp-13-pll-protocol.html': { p: [4, 5], n: {
+    '/workpapers/wp-13-daily-check-in.html': { p: [4, 5], n: {
       4: ['Say where you are today.', 'Ninety seconds a day keeps you in step.'],
       5: ['Make the small check-in the easy default.', 'Catch slips before they turn into resentment.'] } },
     '/workpapers/report-01.html': { p: [1, 2], n: {
@@ -124,7 +124,7 @@
     '/do/workpaper-playground.html': OVERVIEW,
 
     // Tools
-    '/workpapers/calculators/calc01-solvency.html': { p: [1, 2], n: {
+    '/workpapers/calculators/is-the-setup-working-quick.html': { p: [1, 2], n: {
       1: ['Add up your worksheet numbers.', 'See the split as one shared number.'],
       2: ['Ask if the setup can last.', 'It reads the arrangement, never a person.'] } },
     '/lemonade-stand.html': { p: [1, 5], n: {
@@ -141,7 +141,7 @@
     '/carrier-wave-decoder.html': { p: [3, 4], n: {
       3: ['Check your state when a talk goes sideways.', 'Pause together before it grows.'],
       4: ['Find where the signal crossed.', 'Get back in tune and close the books.'] } },
-    '/tools/mood-arbitrage-free.html': { p: [3, 4], n: {
+    '/tools/soften-a-tense-moment.html': { p: [3, 4], n: {
       3: ['Name your mood state and shift it gently.', 'Meet each other where you are.'],
       4: ['Know the frequency you are on.', 'Adjust to theirs without blame.'] } },
     '/tools/frequency-calibration.html': { p: [4, 3], n: {
@@ -167,13 +167,13 @@
   };
   // other addresses for the same thing
   var SAME = {
-    '/workpapers/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/workpapers/wp-11.html': '/wp-11.html', '/wp-11-sound-toolkit.html': '/wp-11.html',
-    '/wp-01.html': '/workpapers/wp-01.html', '/wp-02.html': '/workpapers/wp-02-battery-stress-meter.html',
-    '/wp-03.html': '/workpapers/wp-03-raci-treaty.html', '/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/wp-09.html': '/workpapers/wp-09-tone-filter.html', '/wp-13.html': '/workpapers/wp-13-pll-protocol.html',
-    '/calc01-solvency.html': '/workpapers/calculators/calc01-solvency.html',
-    '/tools/mood-arbitrage-full.html': '/tools/mood-arbitrage-free.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/wp-11.html': '/wp-11.html', '/wp-11-sound-toolkit.html': '/wp-11.html',
+    '/workpapers/wp-01.html': '/workpapers/wp-01.html', '/workpapers/wp-02-how-much-are-you-carrying.html': '/workpapers/wp-02-how-much-are-you-carrying.html',
+    '/workpapers/wp-03-one-owner-per-job.html': '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/workpapers/wp-09-say-it-so-it-lands.html': '/workpapers/wp-09-say-it-so-it-lands.html', '/workpapers/wp-13-daily-check-in.html': '/workpapers/wp-13-daily-check-in.html',
+    '/is-the-setup-working.html': '/workpapers/calculators/is-the-setup-working-quick.html',
+    '/tools/soften-a-tense-moment-full.html': '/tools/soften-a-tense-moment.html',
     '/snapshot/snapshot-diagnostic-snapshot-interactive.html': '/snapshot/index.html'
   };
 
@@ -196,6 +196,7 @@
   css.textContent =
     '.tol-pillars{position:relative;z-index:2;box-sizing:border-box;max-width:100%;margin:0 0 1.6rem;padding:.7rem .8rem .6rem;background:#F5EFDE;border:1px solid #D9CBA3;border-radius:3px;font:500 .9rem/1.4 "IBM Plex Mono",ui-monospace,monospace;color:#2B2620}' +
     '.tol-pillars-label{display:block;margin:0 0 .45rem;font-size:.875rem;letter-spacing:.04em;color:#5A5346}' +
+    '.tol-pillars-label .tp-kicker{display:inline-block;margin:0 .45rem .15rem 0;padding:.05rem .45rem;border:1px solid #A8792F;border-radius:999px;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#5A5346;white-space:nowrap}' +
     '.tol-pillars-label a{color:#2B2620;text-decoration:underline;text-decoration-color:#A8792F;text-underline-offset:3px}' +
     '.tol-pillars ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}' +
     '.tol-pillars li{margin:0;max-width:none}' +
@@ -219,7 +220,7 @@
   var chips = '', how = '';
   for (var i = 1; i <= 5; i++) {
     var P = PILLARS[i], lines = (entry.n && entry.n[i]) || [P.you, P.us];
-    var tip = on[i] ? 'For you: ' + lines[0] + ' With others: ' + lines[1] : P.name + ' (' + P.field + ')';
+    var tip = on[i] ? 'For you: ' + lines[0] + ' With others: ' + lines[1] : P.name + ' (borrowed from ' + P.field.toLowerCase() + ')';
     chips += '<li><a class="tp-chip' + (on[i] ? ' is-on' : '') + '" href="/five-pillars.html#' + P.id + '" title="' + esc(tip) + '">' +
       '<b>' + P.roman + '</b>' + esc(P.short) + (on[i] ? '<span class="sr"> (used on this page)</span>' : '') + '</a></li>';
   }
@@ -230,8 +231,8 @@
 
   var nav = document.createElement('nav');
   nav.className = 'tol-pillars';
-  nav.setAttribute('aria-label', 'Pillars in this page');
-  nav.innerHTML = '<span class="tol-pillars-label">Pillars in this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
+  nav.setAttribute('aria-label', 'Pillars in this page, this site’s own framework');
+  nav.innerHTML = '<span class="tol-pillars-label"><span class="tp-kicker">This site’s framework</span> Pillars in this page · <a href="/five-pillars.html">the Five Pillars</a></span>' +
     '<ul>' + chips + '</ul>' +
     '<details><summary>How this page uses ' + (entry.p.length === 1 ? 'it' : 'them') + '</summary><dl>' + how + '</dl></details>';
 

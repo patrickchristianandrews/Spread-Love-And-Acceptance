@@ -26,17 +26,17 @@
 
   // where to read about each workpaper
   var READ = {
-    'WP-01': '/workpapers/wp-01.html', 'WP-02': '/workpapers/wp-02-battery-stress-meter.html', 'WP-03': '/workpapers/wp-03-raci-treaty.html',
-    'WP-04': '/workpapers/wp-04-deficit-audit.html', 'WP-09': '/workpapers/wp-09-tone-filter.html', 'WP-11': '/wp-11.html', 'WP-13': '/workpapers/wp-13-pll-protocol.html'
+    'WP-01': '/workpapers/wp-01.html', 'WP-02': '/workpapers/wp-02-how-much-are-you-carrying.html', 'WP-03': '/workpapers/wp-03-one-owner-per-job.html',
+    'WP-04': '/workpapers/wp-04-what-keeps-coming-back.html', 'WP-09': '/workpapers/wp-09-say-it-so-it-lands.html', 'WP-11': '/wp-11.html', 'WP-13': '/workpapers/wp-13-daily-check-in.html'
   };
   // the chapters, tools and guides to read and try alongside each step: [label, link]
   var L = {
     weather: ['Today\u2019s Weather', '/quick-checks.html#today'], preface: ['Preface: The work nobody sees', '/book/preface.html'],
     ch1: ['Ch. I: Why we get out of tune', '/book/chapter-1.html'], ch2: ['Ch. II: Is the split working?', '/book/chapter-2.html'], ch3: ['Ch. III: Full tanks and different angles', '/book/chapter-3.html'],
     ch4: ['Ch. IV: Two kinds of fair', '/book/chapter-4.html'], ch5: ['Ch. V: The monthly look-back', '/book/chapter-5.html'],
-    lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'],
+    lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'], freq: ['Frequency Calibration', '/tools/frequency-calibration.html'],
-    mood: ['Soften a tense moment', '/tools/mood-arbitrage-free.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
+    mood: ['Soften a tense moment', '/tools/soften-a-tense-moment.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
     signal: ['The Signal Translator', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],
     prog: ['PROG-01: 6-week program', '/prog-01.html'], report: ['REPORT-01: The Full Read', '/workpapers/report-01.html'], garden: ['The Night Garden', '/night-garden.html'],
     toward: ['Turning Toward', '/turning-toward.html']

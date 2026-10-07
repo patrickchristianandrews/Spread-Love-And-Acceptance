@@ -254,7 +254,7 @@ research:
 Fiese and colleagues published a review of family routines and rituals in 2002, finding associations with family functioning and children’s wellbeing. Gottman’s rituals of connection come from clinical observation. Research on rituals more broadly, for example by Michael Norton and Francesca Gino, suggests rituals can reduce anxiety and increase enjoyment.
 links:
 /turning-toward.html#rituals | Turning Toward: rituals
-/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The 90-second daily check-in (WP-13)
 talk:
 - What rituals do we already have, even small ones?
 - How do we greet each other at the end of the day?
@@ -279,7 +279,7 @@ Brickman and Campbell’s 1971 chapter introduced the hedonic treadmill. Lyubomi
 links:
 /complacency.html | Complacency: when “it’s fine” stops being checked
 /turning-toward-in-depth.html#their-world | Turning Toward: ten questions to ask
-/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The 90-second daily check-in (WP-13)
 talk:
 - What are we assuming is fine that we haven’t looked at lately?
 - When did we last ask each other something we didn’t already know the answer to?
@@ -342,7 +342,7 @@ research:
 Klimecki, Singer and colleagues published a series of studies from around 2013 onward; Singer and Klimecki’s 2014 review summarises them. The term “compassion fatigue” came from healthcare research, including Charles Figley’s work in the 1990s. The research on compassion training is promising but based on relatively small samples.
 links:
 /relationships.html#caregivers | How it fits: caregivers
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - When has caring about someone left you drained?
 - What helps you care without being overwhelmed?

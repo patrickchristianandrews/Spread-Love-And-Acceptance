@@ -4,7 +4,7 @@
 (function () {
   'use strict';
   if (window.TOLClockWx || window.top !== window.self) return;
-  var KEY = 'tol-pc-wx', OFF = 'tol-clockwx-off', el, card, WX = null, busy = false;
+  var KEY = 'tol-pc-wx', OFF = 'tol-clockwx-off', ON = 'tol-clockwx-on', el, card, WX = null, busy = false;
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function kind(c) { return c === 0 ? ['Clear', '☀️'] : c <= 2 ? ['Partly cloudy', '⛅'] : c === 3 ? ['Cloudy', '☁️'] : c <= 48 ? ['Foggy', '🌫️'] : c <= 57 ? ['Drizzle', '🌦️'] : c <= 67 ? ['Rain', '🌧️'] : c <= 77 ? ['Snow', '❄️'] : c <= 82 ? ['Showers', '🌦️'] : c <= 86 ? ['Snow showers', '🌨️'] : ['Thunderstorm', '⛈️']; }
@@ -79,10 +79,10 @@
   }
   function offWx() { try { localStorage.removeItem(KEY); } catch (e) {} WX = null; render(); }
   function showNote(on) {
-    if (on) { try { localStorage.removeItem(OFF); } catch (e) {} if (!el) { if (document.body) build(); } else el.hidden = false; }
-    else { lsSet(OFF, '1'); if (el) { el.hidden = true; card.hidden = true; } }
+    if (on) { try { localStorage.removeItem(OFF); } catch (e) {} lsSet(ON, '1'); if (!el) { if (document.body) build(); } else el.hidden = false; }
+    else { lsSet(OFF, '1'); try { localStorage.removeItem(ON); } catch (e) {} if (el) { el.hidden = true; card.hidden = true; } }
   }
-  window.TOLClockWx = { ask: function () { if (!el && document.body) { try { localStorage.removeItem(OFF); } catch (e) {} build(); } return start(true).then(function (r) { render(); return r; }); }, off: offWx, show: showNote };
-  if (lsGet(OFF) === '1') return;
+  window.TOLClockWx = { ask: function () { if (!el && document.body) { try { localStorage.removeItem(OFF); } catch (e) {} lsSet(ON, '1'); build(); } return start(true).then(function (r) { render(); return r; }); }, off: offWx, show: showNote };
+  if (lsGet(OFF) === '1' || !(lsGet(ON) === '1' || lsGet(KEY))) return;
   if (document.body) build(); else document.addEventListener('DOMContentLoaded', build);
 })();

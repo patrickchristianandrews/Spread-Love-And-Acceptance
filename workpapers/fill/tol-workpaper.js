@@ -9,6 +9,12 @@
   - Nothing is stored in the browser unless the person ticks "Keep a draft on
     this device". Then one draft per worksheet is kept in localStorage, on this
     device only, until they press "Erase". No cookies, no IndexedDB.
+  - The one exception is a tick the person makes themselves: "Use these names in
+    the other tools" keeps just the names (and, on One owner per job, the jobs
+    and their owners) in localStorage ('tol-household-v1', see
+    /assets/js/household.js), so the other tools can offer them. Unticking it
+    forgets them. A sheet that starts with no names offers that household
+    ("Use your household from before?"), and never overwrites a typed name.
   - Inputs have autocomplete off, so the browser doesn't remember entries.
   - The other copies are the files the person chooses to download: the PDF,
     and an optional draft file (.json) they can reopen later to keep working.
@@ -651,6 +657,9 @@
       });
     }
     metaDefs = metaDefs.concat(s.meta || []);
+    // "Use your household from before?" when this sheet has no names (or no jobs) yet
+    var hhEl = this.hhOfferEl();
+    if (hhEl) this.root.appendChild(hhEl);
     if (metaDefs.length) {
       var grid = h('div', { className: 'wpf-meta' });
       var canEdit = s.people && !this.opts.fixedPeople;
@@ -669,6 +678,7 @@
         if (peopleCount(st.values) < MAX_PEOPLE) more.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'add-person', text: '+ Add a person' }));
         more.appendChild(h('span', { className: 'wpf-help', text: 'Two to eight people. Every name shows up in the drop-downs below.' }));
         this.root.appendChild(more);
+        if (this.hhWrite && global.TOLHousehold) this.root.appendChild(global.TOLHousehold.remember({ tool: this.hhTool(), write: this.hhWrite }));
       }
     }
 
@@ -804,6 +814,9 @@
     }
     // The task library: common jobs for this road, including the invisible ones, one tap to add
     var lib = sec.library && global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY(this.road(), sec.library) : null;
+    // with the household's own jobs first, once this sheet is using the household's names
+    var hhg = this.hhLibGroup(sec);
+    if (hhg) lib = { intro: lib && lib.intro, count: (lib ? lib.count : 0) + hhg.items.length, groups: [hhg].concat(lib && lib.groups ? lib.groups : []) };
     if (lib && lib.groups && lib.groups.length) {
       var have = {};
       rows.forEach(function (r) { if (r && r.task) have[String(r.task).trim().toLowerCase()] = true; });
@@ -918,8 +931,101 @@
   A.changed = function () {
     this.dirty = true;
     if (this.opts.onChange) this.opts.onChange(this.state);
+    if (this.hhWrite) this.hhWrite.soon();
     if (this.keep) this.keepSoon();
     this.tabSoon();
+  };
+
+  /* ---------- the household: names and jobs typed once, offered in every tool (/assets/js/household.js) ---------- */
+  function HHmod() { return global.TOLHousehold || null; }
+  A.hhTool = function () { return String(this.schema.code || '').toLowerCase(); };
+  // The job list a household's jobs go into: One owner per job's table (on any road)
+  A.hhJobTable = function () { return this.schema.sections.filter(function (s) { return s.type === 'table' && s.library === 'owner'; })[0] || null; };
+  A.hhNames = function () {
+    var v = this.state.values;
+    return this.schema.people ? CODES.slice(0, peopleCount(v)).map(function (c) { return String(v['partner' + c] || '').trim(); }) : [];
+  };
+  A.hhNamesEmpty = function () { var HH = HHmod(); return this.hhNames().every(function (n) { return !n || (HH && HH.isPlaceholder(n)); }); };
+  // Rows someone wrote in (not empty, not an untouched starter example)
+  A.hhOwnRows = function (sec) { return (this.state.tables[sec.id] || []).filter(function (r) { return r && !rowIsEmpty(sec, r) && !isExampleRow(sec, r); }); };
+  // What this sheet gives the household: its names, and on One owner per job its jobs and owners
+  A.hhCollect = function () {
+    var v = this.state.values, sec = this.hhJobTable(), out = { people: this.hhNames() };
+    if (sec) {
+      var jobs = this.hhOwnRows(sec).filter(function (r) { return r.task && String(r.task).trim(); }).map(function (r) {
+        return { name: String(r.task).trim(), owner: r.r && CODES.indexOf(r.r) >= 0 ? String(v['partner' + r.r] || '').trim() : '' };
+      });
+      if (jobs.length) out.jobs = jobs; // none written here yet: the household keeps its own
+    }
+    return out;
+  };
+  A.hhCode = function (name) {
+    var names = this.hhNames(), k = String(name || '').toLowerCase();
+    for (var i = 0; i < names.length; i++) if (k && names[i].toLowerCase() === k) return CODES[i];
+    return '';
+  };
+  // The household's jobs in the task library, once this sheet is using the household's names
+  A.hhLibGroup = function (sec) {
+    var HH = HHmod(), hh = HH && sec.library ? HH.get() : null;
+    if (!hh || !hh.jobs.length) return null;
+    var names = this.hhNames().map(function (n) { return n.toLowerCase(); });
+    var using = this.hhUsed || (hh.people.length > 0 && hh.people.every(function (p) { return names.indexOf(p.toLowerCase()) >= 0; }));
+    if (!using) return null;
+    return { name: 'Your household\u2019s jobs', items: hh.jobs.map(function (j) { return [j.name, '']; }) };
+  };
+  A.hhOfferEl = function () {
+    var HH = HHmod(), hh = HH && !this.hhNo ? HH.get() : null;
+    if (!hh) return null;
+    var self = this, sec = this.hhJobTable();
+    var canNames = !!this.schema.people && !this.opts.fixedPeople && hh.people.length > 0 && this.hhNamesEmpty();
+    var canJobs = !!sec && hh.jobs.length > 0 && !this.hhOwnRows(sec).length;
+    if (!canNames && !canJobs) return null;
+    return HH.offer({
+      question: canNames ? 'Use your household from before?' : 'Use your household\u2019s jobs?',
+      names: canNames ? hh.people : [],
+      jobs: canJobs ? hh.jobs.map(function (j) { return j.name; }) : [],
+      status: this.opts.statusEl || document.getElementById('wpf-status'),
+      onUse: function () { return self.hhUse(canNames, canJobs); },
+      onNo: function () { self.hhNo = true; },
+      focus: function () { return self.root.querySelector(canNames ? '[data-key="partnerA"]' : '[data-col="task"]'); }
+    });
+  };
+  // Fill in the household: names only into empty places, never over a typed name; jobs at the top of
+  // the job list, with their owner when that person is on this sheet. Starter examples stay below.
+  A.hhUse = function (doNames, doJobs) {
+    var HH = HHmod(), hh = HH && HH.get(), self = this, v = this.state.values, names = 0, jobs = 0;
+    if (!hh) return '';
+    if (doNames) {
+      hh.people.forEach(function (nm) {
+        var now = self.hhNames(), slot = -1;
+        if (now.some(function (n) { return n.toLowerCase() === nm.toLowerCase(); })) return;
+        now.forEach(function (n, i) { if (slot < 0 && (!n || HH.isPlaceholder(n))) slot = i; });
+        if (slot < 0) { if (!addPerson(self.schema, self.state)) return; slot = peopleCount(v) - 1; }
+        v['partner' + CODES[slot]] = nm;
+        names++;
+      });
+      syncPeople(this.schema, this.state);
+    }
+    var sec = doJobs ? this.hhJobTable() : null;
+    if (sec) {
+      var rows = this.state.tables[sec.id] || [], have = {}, fresh = [];
+      this.hhOwnRows(sec).forEach(function (r) { if (r.task) have[String(r.task).trim().toLowerCase()] = 1; });
+      hh.jobs.forEach(function (j) {
+        var k = j.name.toLowerCase();
+        if (have[k]) return;
+        have[k] = 1;
+        var r = { task: j.name }, c = j.owner ? self.hhCode(j.owner) : '';
+        if (c) r.r = c;
+        fresh.push(r); jobs++;
+      });
+      var rest = rows.filter(function (r) { return r && !rowIsEmpty(sec, r) && !(isExampleRow(sec, r) && have[String(r.task).trim().toLowerCase()]); });
+      this.state.tables[sec.id] = fresh.concat(rest);
+      if (!this.state.tables[sec.id].length) this.state.tables[sec.id].push({});
+    }
+    this.hhUsed = true;
+    this.changed();
+    this.render();
+    return HH.addedLine(names, jobs);
   };
 
   /* ---------- a draft for this tab only (sessionStorage): on by default, gone when the tab closes ---------- */
@@ -1220,7 +1326,14 @@
       keepP.parentNode.insertBefore(tn, keepP);
       cb.addEventListener('click', function () { app.clear(); });
     }
+    // "Use these names in the other tools": keeps the household up to date from here, only while ticked
+    var HH = global.TOLHousehold;
+    if (HH && schema.people) {
+      app.hhWrite = HH.writer(app.hhTool(), function () { return app.hhCollect(); });
+      HH.onChange(function () { var k = root.querySelector('.tol-hh-keep'); if (k && k.sync) k.sync(); });
+    }
     app.render();
+    if (app.hhWrite) app.hhWrite.baseline();
     if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });

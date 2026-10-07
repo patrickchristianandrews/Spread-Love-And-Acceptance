@@ -25,6 +25,11 @@
   removes it. If the visitor ticks "Keep this on my device", the stand (and any saved weeks) is kept in
   localStorage (this browser only) until they press "Erase".
 
+  The household (assets/js/household.js): a stand that starts with no names offers the names and jobs
+  kept from another tool ("Use your household from before?"). Ticking "Use these names in the other
+  tools" keeps the names and home jobs (never the hours) in this browser for the other tools to offer,
+  and keeps them up to date from here; unticking forgets them.
+
   "Chores with one owner each": the no-project path. Pick up to five jobs (straight from the rows, or
   typed in), give each one owner with one tap, then copy or print a fridge list.
 */
@@ -149,8 +154,10 @@
   function loadSaved() {
     try { var raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
   }
+  var hhWrite = null; // keeps the household up to date, only while "Use these names in the other tools" is ticked
   function save() {
     try { sessionStorage.setItem(DRAFT, JSON.stringify(state)); } catch (e) { /* no tab storage: the page still works */ }
+    if (hhWrite) hhWrite.soon();
     if (!keep) return;
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: stay in-tab only */ }
   }
@@ -264,6 +271,7 @@
       peopleEl.appendChild(wrap);
     });
     $('add-person').hidden = state.people.length >= MAX;
+    hhRefresh();
   }
   function addPerson() {
     if (state.people.length >= MAX) return;
@@ -1282,6 +1290,83 @@
     else { try { localStorage.removeItem(KEY); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now.'); }
   });
   $('erase-device').addEventListener('click', erase);
+
+  /* ---------- the household, typed once for the other tools (assets/js/household.js) ---------- */
+  var HH = window.TOLHousehold, hhHost = null, hhOffer = null, hhNo = false;
+  function hhNamesEmpty() { return state.people.every(function (p) { return !String(p || '').trim() || HH.isPlaceholder(p); }); }
+  // The names, and the home jobs with their owner when the fridge list gives one (never the hours)
+  function hhCollect() {
+    var jobs = [], seen = {};
+    function add(name, owner) {
+      name = String(name || '').trim(); var k = name.toLowerCase();
+      if (!name || seen[k]) return;
+      seen[k] = jobs.length;
+      var j = { name: name }; if (owner) j.owner = owner;
+      jobs.push(j);
+    }
+    ownersList().forEach(function (o) { add(o.name, o.who >= 0 && o.who < state.people.length ? nameOf(o.who) : ''); });
+    state.jobs.forEach(function (j) { if (!j.ex && kindOf(j) === 'home') add(j.name); });
+    return { people: state.people.slice(), jobs: jobs };
+  }
+  function hhUse() {
+    var h = HH.get(); if (!h) return '';
+    var names = 0, jobs = 0, n;
+    h.people.forEach(function (nm) {
+      if (state.people.some(function (p) { return String(p || '').trim().toLowerCase() === nm.toLowerCase(); })) return;
+      var slot = -1;
+      state.people.forEach(function (p, i) { if (slot < 0 && (!String(p || '').trim() || HH.isPlaceholder(p))) slot = i; });
+      if (slot >= 0) state.people[slot] = nm;
+      else if (state.people.length < MAX) state.people.push(nm);
+      else return;
+      names++;
+    });
+    normalize();
+    n = state.people.length;
+    if (h.jobs.length) {
+      // like the task library: the grey example makes way for real jobs
+      state.jobs = state.jobs.filter(function (j) { return !j.ex; });
+      state.bills = state.bills.filter(function (b) { return !b.ex; });
+      h.jobs.forEach(function (hj) {
+        if (state.jobs.some(function (j) { return j.name.trim().toLowerCase() === hj.name.toLowerCase(); })) return;
+        var m = libMatch(hj.name), zero = function () { var a = []; for (var i = 0; i < n; i++) a.push(0); return a; };
+        state.jobs.push({ name: hj.name, v: zero(), t: zero(), cat: guessCat(hj.name), freq: m ? m.t[2] : 'week', unit: m && m.t[3] ? m.t[3] : 'm', nf: -1 });
+        jobs++;
+      });
+      // the fridge list, when it is empty: jobs that already have an owner in the household
+      if (!ownersList().length) {
+        h.jobs.filter(function (hj) { return hj.owner; }).slice(0, MAX_OWN).forEach(function (hj) {
+          var who = -1;
+          state.people.forEach(function (p, i) { if (String(p || '').trim().toLowerCase() === hj.owner.toLowerCase()) who = i; });
+          state.owners.push({ name: hj.name, who: who });
+        });
+      }
+    }
+    state.example = false;
+    renderAll();
+    return HH.addedLine(names, jobs);
+  }
+  // A stand with no names yet offers the household kept from another tool (only in "Me and others")
+  function hhRefresh() {
+    if (!HH || !hhHost) return;
+    var h = HH.get(), want = !hhNo && !!h && h.people.length > 0 && hhNamesEmpty();
+    if (want && !hhOffer) {
+      hhOffer = HH.offer({ names: h.people, jobs: h.jobs.map(function (j) { return j.name; }), onUse: hhUse, onNo: function () { hhNo = true; }, focus: function () { return peopleEl.querySelector('input'); } });
+      hhHost.appendChild(hhOffer);
+    } else if (!want && hhOffer && !hhOffer.querySelector('.tol-hh-offer').hidden) {
+      hhOffer.remove(); hhOffer = null;
+    }
+  }
+  if (HH) {
+    var peopleBox = peopleEl.parentNode;
+    hhHost = document.createElement('div');
+    peopleBox.insertBefore(hhHost, peopleBox.firstChild);
+    hhWrite = HH.writer('lemonade', hhCollect);
+    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite });
+    peopleBox.appendChild(hhKeep);
+    hhRefresh();
+    hhWrite.baseline();
+    HH.onChange(function () { hhKeep.sync(); });
+  }
 
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, fridgeText: fridgeText, hoursSentence: hoursSentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS };
 })();

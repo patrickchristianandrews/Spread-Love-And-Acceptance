@@ -55,7 +55,7 @@ Program: Frequency Calibration does something similar for rhythms: it shows the 
 ## Trading across issues
 aka: logrolling; trading; package deals; swaps
 see: The zone of possible agreement; If-then packages
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Research on integrative negotiation shows that trading on issues people value differently often creates better outcomes for both sides than splitting each issue down the middle.
 try: “I really hate cleaning the bathroom but don’t mind cooking. You hate cooking. Want to swap?”
 
@@ -146,7 +146,7 @@ Program: WP-02’s advice for a high battery score is to put off anything that d
 ## Negotiating household jobs by preference
 aka: chore preferences; who minds it least; dread ranking
 see: Trading across issues; Chore charts that work
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A practical application of integrative negotiation to housework. There’s no strong research on this specific method, but preference-based trades generally improve satisfaction.
 try: Each of you ranks the jobs from “don’t mind” to “really dread”, then start by giving each person their “don’t mind” jobs.
 

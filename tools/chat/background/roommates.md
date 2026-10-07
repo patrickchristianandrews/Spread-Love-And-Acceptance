@@ -70,7 +70,7 @@ Program: The Lemonade Stand’s money side can track shared grocery costs.
 ## Cleaning rota for shared spaces
 aka: cleaning rota; cleaning schedule roommates; bathroom cleaning
 see: Chore charts that work; Rotation or specialization
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Rotas are common in shared housing. Clear ownership and definitions of “clean” reduce disputes.
 try: Kitchen, bathroom and living room rotate weekly; each space has a short “done” checklist.
 
@@ -148,7 +148,7 @@ Program: This is a boundary about things. The boundaries notes cover saying it k
 ## Pets in shared homes
 aka: roommate pets; pets and roommates; pet rules
 see: Pet care load; Roommate agreement
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Practical guidance. Allergies, costs and care responsibilities are common points of friction.
 try: The pet’s owner owns all pet jobs, with an agreed backup plan for travel.
 

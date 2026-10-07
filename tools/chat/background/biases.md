@@ -174,7 +174,7 @@ Program: WP-03 can include a short “what done looks like” note for jobs that
 ## Ladder of inference
 aka: ladder of inference; jumping to conclusions; the story I’m telling myself
 see: Clarifying questions; Assume positive intent
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A thinking model developed by Chris Argyris and popularized by Peter Senge in The Fifth Discipline (1990). It’s a teaching tool rather than a research finding.
 try: “The story I’m telling myself is that you don’t care about the plans. Is that fair?”
 
@@ -213,7 +213,7 @@ Program: The Library’s win-win entry and the negotiation notes on trading expl
 ## Scarcity mindset
 aka: scarcity; tunneling; bandwidth
 see: Overwhelm as a feeling; Energy audit
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Sendhil Mullainathan and Eldar Shafir described how scarcity of time or money narrows attention in Scarcity (2013). Some specific findings have been debated in replication work.
 try: “We’re both stretched this month, so let’s not make any big decisions until it eases.”
 

@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is the Setup Working for Everyone? A Fair-Split Calculator</title>
+<meta name="description" content="A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  /*
+    CALC-01, the full Solvency Read.
+    Design rule: nothing is entered as an abstract 0-1 score. Every input is
+    worked out from the same raw entries the worksheets ask for, and every
+    step is shown on screen. The arithmetic lives in /assets/js/calc01-core.js,
+    shared with the quick read and the playground.
+  */
+  :root{
+    --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E;
+    --line:#D9CBA3; --credit:#3E6B4C; --credit-soft:#E4EDE3; --debit:#96412B; --debit-soft:#F2E2DB;
+    --brass:#A8792F; --brass-ink:#7A5720; --focus:#2B5B8C; --radius:3px;
+  }
+  *{ box-sizing:border-box; }
+  @page{ size:letter portrait; margin:0.5in; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ transition-duration:0.001ms !important; animation-duration:0.001ms !important; } }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Lora", Georgia, serif; font-size:16px; line-height:1.6; }
+  h1,h2,h3,h4{ font-family:"Fraunces","Lora",serif; font-weight:600; line-height:1.2; margin:0 0 0.5em 0; }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  code,.mono{ font-family:"IBM Plex Mono", monospace; }
+  code{ font-size:0.84em; background:var(--paper-deep); padding:1px 5px; border-radius:var(--radius); }
+  a{ color:var(--focus); }
+  p{ max-width:74ch; }
+  .sr-only{ position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  .print-bar{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; max-width:9in; margin:20px auto; padding:12px 18px;
+    background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--ink-soft); }
+  .sheet{ max-width:9in; margin:0 auto 60px auto; padding:0.5in 0.6in; background:var(--paper); border:1px solid var(--line); }
+  .sheet-header{ text-align:center; border-bottom:2px solid var(--brass); padding-bottom:16px; margin-bottom:26px; }
+  .wp-num{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--brass-ink); letter-spacing:0.08em; margin:0 0 4px 0; }
+  .sheet-mark{ font-size:1.6rem; margin:0; }
+  .sheet-mark small{ display:block; font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; letter-spacing:0.08em; color:var(--brass-ink); margin-top:6px; }
+  .sheet-tagline{ font-size:0.92rem; color:var(--ink-soft); margin:10px auto 0 auto; max-width:68ch; }
+  .toc{ display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; font-family:"IBM Plex Mono", monospace; font-size:0.76rem; margin-top:14px; }
+  .toc a{ color:var(--brass-ink); display:inline-block; padding:10px 4px; }
+
+  .intro-note{ border-left:4px solid var(--focus); background:#E7EEF4; border-radius:var(--radius); padding:16px 20px; margin:22px 0; }
+  .intro-note p{ margin:0 0 10px 0; font-size:0.93rem; } .intro-note p:last-child{ margin-bottom:0; }
+  .section-head{ margin:46px 0 22px 0; padding-top:24px; border-top:3px double var(--brass); }
+  .section-head .part-label{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--brass-ink); margin:0 0 4px 0; }
+  .section-head h2{ font-size:1.35rem; margin:0; }
+  .section-head .code-note{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--ink-soft); letter-spacing:0.02em; margin:4px 0 0 0; }
+  .section-head h2 small{ font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; color:var(--ink-soft); letter-spacing:0.04em; margin-left:6px; }
+
+  /* controls: 44px targets */
+  input[type="text"], input[type="number"], input[type="date"], select{
+    font-family:inherit; font-size:0.9rem; color:var(--ink); background:#FFFDF6; border:1px solid #8F8468;
+    border-radius:var(--radius); padding:6px 8px; width:100%; min-height:44px; }
+  input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; }
+  input[type="checkbox"], input[type="radio"]{ width:22px; height:22px; accent-color:var(--credit); margin:0; flex:none; }
+  .check{ display:flex; align-items:center; gap:10px; min-height:44px; font-size:0.9rem; cursor:pointer; }
+  .btn{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:var(--radius); background:transparent; color:var(--ink); cursor:pointer; }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn-solid{ background:var(--ink); color:var(--paper); }
+  .btn-solid:hover{ background:var(--ink-soft); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; align-items:center; }
+  .remove{ font-family:inherit; font-size:1.1rem; background:transparent; border:1px solid var(--line); border-radius:var(--radius); color:var(--ink-soft); cursor:pointer; width:44px; height:44px; line-height:1; padding:0; }
+  .remove:hover{ border-color:var(--debit); color:var(--debit); }
+
+  .ladder{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:18px 0 14px 0; }
+  .rung{ text-align:left; padding:14px 16px; cursor:pointer; background:var(--paper-deep); border:1px solid var(--line); border-left:4px solid var(--line); border-radius:var(--radius); font-family:inherit; color:var(--ink); font-size:0.9rem; line-height:1.35; min-height:44px; }
+  .rung b{ display:block; font-family:"Fraunces", serif; font-size:1rem; }
+  .rung span{ font-size:0.8rem; color:var(--ink-soft); }
+  .rung[aria-pressed="true"]{ background:#FFFDF6; border-left-color:var(--brass); box-shadow:inset 0 0 0 1px var(--brass); }
+  .state-readout{ border-left:4px solid var(--brass); background:var(--paper-deep); border-radius:var(--radius); padding:14px 18px; font-size:0.92rem; }
+  .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--brass-ink); display:block; margin-bottom:4px; }
+
+  .people-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; margin-top:12px; }
+  .people-grid label{ font-size:0.8rem; color:var(--ink-soft); display:block; }
+  .examples{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+
+  .pipeline{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:20px 0 8px 0; }
+  .pipe-cell{ background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; font-size:0.84rem; line-height:1.4; }
+  .pipe-cell .src{ font-family:"IBM Plex Mono", monospace; font-size:0.68rem; color:var(--brass-ink); display:block; margin-bottom:4px; }
+  .pipe-cell b{ display:block; margin-top:6px; }
+
+  .panel{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-deep); padding:20px 22px; margin:22px 0; }
+  .panel-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:16px; }
+  .panel-head h3{ margin:0; font-size:1.08rem; }
+  .panel-head .src-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--brass-ink); }
+  .panel-head .src-tag a{ color:var(--brass-ink); }
+  .panel-note{ font-size:0.88rem; color:var(--ink-soft); margin:0 0 14px 0; }
+
+  .scroll-x{ overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%; position:relative; }
+  .scroll-hint{ font-size:0.78rem; color:var(--ink-soft); margin:4px 0 0; display:none; }
+  table{ width:100%; border-collapse:collapse; font-size:0.86rem; }
+  th{ text-align:left; font-family:"IBM Plex Mono", monospace; font-size:0.68rem; letter-spacing:0.04em; text-transform:uppercase; color:var(--brass-ink); border-bottom:2px solid var(--line); padding:4px 8px 8px 0; vertical-align:bottom; }
+  td{ border-bottom:1px solid var(--line); padding:6px 8px 6px 0; vertical-align:middle; }
+  td.num, th.num{ text-align:right; }
+  .ledger td.hrs, .ledger th.hrs{ min-width:76px; width:84px; }
+  .ledger td.item{ min-width:150px; }
+  .raci td.task{ min-width:150px; }
+  .raci td.who{ min-width:120px; }
+  tfoot td{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; border-bottom:none; padding-top:10px; }
+
+  .err-note{ color:var(--debit); font-family:"Lora", Georgia, serif; font-size:0.86rem; line-height:1.45; margin:4px 0 8px; }
+  input[aria-invalid="true"]{ border-color:var(--debit) !important; background:#FFF4F1 !important; }
+  .derive{ margin-top:16px; padding:12px 16px; background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); font-family:"IBM Plex Mono", monospace; font-size:0.78rem; line-height:1.7; overflow-wrap:anywhere; }
+  .derive ol{ margin:6px 0 6px 18px; padding:0; }
+  .derive .formula{ color:var(--ink-soft); }
+  .derive .out{ font-size:1.05rem; color:var(--credit); font-weight:500; }
+  .derive .out.warn{ color:var(--debit); }
+  .derive .out.na{ color:var(--ink-soft); }
+
+  .split-bar{ display:flex; height:18px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; margin-top:14px; background:#FFFDF6; }
+  .split-bar span{ display:block; height:100%; }
+  .split-legend{ display:flex; flex-wrap:wrap; gap:4px 14px; font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--ink-soft); margin-top:6px; }
+  .split-legend i{ display:inline-block; width:10px; height:10px; margin-right:5px; border-radius:2px; vertical-align:baseline; }
+  .target-row{ display:none; margin-top:12px; }
+  .target-row.on{ display:block; }
+  .target-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:10px; margin-top:8px; }
+  .target-grid label{ font-size:0.8rem; color:var(--ink-soft); }
+  fieldset{ border:0; padding:0; margin:14px 0 0; }
+  legend{ font-weight:600; font-size:0.92rem; padding:0; margin-bottom:4px; }
+
+  .bat-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:14px; }
+  .bat-card{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; }
+  .bat-card h4{ font-size:0.98rem; margin:0 0 6px 0; }
+  .bat-row{ display:grid; grid-template-columns:1fr 76px; gap:8px; align-items:center; font-size:0.82rem; margin:6px 0; }
+  .bat-out{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; margin-top:8px; border-top:1px solid var(--line); padding-top:8px; }
+
+  .read-card{ border:2px solid var(--brass); border-radius:var(--radius); background:#FFFDF6; padding:24px 26px; margin:22px 0; }
+  .read-card:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+  .scores{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:16px; }
+  .score-box{ border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; background:var(--paper-deep); }
+  /* Words first, in soft colors: the read is a conversation starter, never a warning light */
+  .score-box .val{ font-family:"Fraunces", serif; font-weight:600; font-size:1.45rem; line-height:1.2; color:var(--ink); display:inline-block; padding:4px 14px; border-radius:99px; background:#D6EBDA; margin-top:4px; }
+  .score-box .val.mid{ background:#F6E8C4; }
+  .score-box .val.low{ background:#E4DDF2; }
+  .score-box .val.na{ background:transparent; padding:0; color:var(--ink-soft); font-size:1.3rem; }
+  .score-box .num{ display:block; font-family:"IBM Plex Mono", monospace; font-size:0.85rem; color:var(--ink-soft); margin-top:4px; }
+  .num-toggle{ display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:0.9rem; cursor:pointer; margin:0 0 8px; }
+  .num-toggle input{ width:20px; height:20px; }
+  body:not(.show-nums) .nums-only{ display:none !important; }
+  .score-box .band{ font-size:0.88rem; color:var(--ink); margin-top:4px; }
+  .live-summary{ font-size:0.95rem; margin:0 0 14px 0; }
+
+  .math{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; line-height:1.8; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; overflow-x:auto; white-space:pre; }
+  .contrib-row{ display:grid; grid-template-columns:150px 1fr 110px; gap:10px; align-items:center; margin-bottom:7px; font-size:0.84rem; }
+  .contrib-row .name{ font-size:0.82rem; }
+  .contrib-track{ height:14px; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .contrib-fill{ height:100%; background:var(--credit); }
+  .contrib-fill.short{ background:var(--brass); }
+  .contrib-fill.bad{ background:#B7A6DA; }
+  .contrib-row .pts{ font-family:"IBM Plex Mono", monospace; font-size:0.76rem; text-align:right; color:var(--ink-soft); }
+  .moves{ margin:8px 0 0 0; padding-left:20px; font-size:0.92rem; }
+  .moves li{ margin-bottom:8px; }
+  .moves .gain{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--credit); font-weight:500; }
+
+  .next-box{ border-left:4px solid var(--credit); background:var(--credit-soft); border-radius:var(--radius); padding:16px 20px; margin-top:18px; }
+  .next-box.hold{ border-left-color:var(--brass); background:var(--paper-deep); }
+  .next-box.stop{ border-left-color:#9C8BC9; background:#EEEAF6; }
+  .next-box p{ margin:0 0 8px 0; font-size:0.93rem; } .next-box p:last-child{ margin-bottom:0; }
+  .completeness{ font-family:"IBM Plex Mono", monospace; font-size:0.76rem; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:12px; margin-top:16px; }
+  .completeness b{ color:var(--debit); font-weight:500; }
+  .copy-out{ width:100%; min-height:180px; font-family:"IBM Plex Mono", monospace; font-size:0.78rem; margin-top:10px; padding:10px; border:1px solid #8F8468; border-radius:var(--radius); background:#FFFDF6; }
+  .status{ font-size:0.85rem; color:var(--credit); min-height:1.4em; margin:6px 0 0; }
+
+  .spec-block{ margin-bottom:30px; }
+  .spec-block h3{ font-size:1.08rem; border-bottom:1px solid var(--brass); padding-bottom:7px; margin-bottom:14px; }
+  pre{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; line-height:1.7; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; overflow-x:auto; margin:0 0 14px 0; }
+  details{ border:1px solid var(--line); border-radius:var(--radius); padding:4px 16px; background:var(--paper-deep); margin:16px 0; }
+  summary{ cursor:pointer; font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--brass-ink); min-height:44px; display:flex; align-items:center; }
+  details[open] summary{ margin-bottom:8px; }
+  .warn-box{ border-left:4px solid var(--debit); background:var(--debit-soft); border-radius:var(--radius); padding:16px 20px; margin:18px 0; }
+  .warn-box p{ margin:0 0 10px 0; font-size:0.9rem; } .warn-box p:last-child{ margin-bottom:0; }
+  ul.plain{ padding-left:20px; max-width:74ch; font-size:0.93rem; } ul.plain li{ margin-bottom:7px; }
+  .sheet-footer{ margin-top:34px; border-top:1px solid var(--line); padding-top:14px; text-align:center; font-family:"IBM Plex Mono", monospace; font-size:0.7rem; color:var(--ink-soft); }
+  .keep{ border:1px dashed var(--line); border-radius:var(--radius); padding:10px 14px; margin-top:14px; background:#FFFDF6; }
+
+  @media (max-width:760px){
+    .sheet{ padding:20px 16px; border-left:0; border-right:0; }
+    .print-bar{ margin:12px 16px; }
+    .ladder{ grid-template-columns:1fr; }
+    .pipeline{ grid-template-columns:1fr 1fr; }
+    .scores{ grid-template-columns:1fr; }
+    .contrib-row{ grid-template-columns:100px 1fr 92px; }
+    .panel{ padding:16px 12px; }
+    .read-card{ padding:18px 14px; }
+    .scroll-hint{ display:block; }
+    table{ font-size:0.8rem; }
+  }
+  @media print{
+    .print-bar, .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; }
+    body{ background:#fff; font-size:11pt; }
+    .sheet{ margin:0; padding:0; max-width:100%; border:none; }
+    .panel, .read-card, .spec-block, .bat-card{ break-inside:avoid; }
+    #spec{ break-before:page; }
+    input, select{ border:none; background:none; min-height:0; padding:0; }
+    .scroll-x{ overflow:visible; }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calc01-core.js"></script>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Is the Setup Working for Everyone? A Fair-Split Calculator">
+<meta property="og:description" content="A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Is the Setup Working for Everyone? A Fair-Split Calculator">
+<meta name="twitter:description" content="A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html#page","name":"Is the Setup Working for Everyone? A Fair-Split Calculator","headline":"Is the Setup Working for Everyone? A Fair-Split Calculator","description":"A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.","url":"https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-07","dateModified":"2026-10-07","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Is the Setup Working for Everyone? A Fair-Split Calculator","item":"https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span>Runs in your browser. Nothing is sent, and nothing is saved unless you choose to keep it.</span>
+  <button type="button" class="btn" id="print-top">Print or save as PDF</button>
+</div>
+
+<main class="sheet" id="main">
+
+  <header class="sheet-header">
+    <p class="wp-num">CALC-01 &middot; THE FULL CALCULATOR</p>
+    <h1 class="sheet-mark">Is the setup working for everyone?
+      <small>For 2 to 8 people</small>
+    </h1>
+    <p class="sheet-tagline">This tells you, in plain words, whether the way you share the work right now can keep going for everyone. It never scores a person or the relationship.</p>
+    <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> A low score doesn't blame anyone, and a high score doesn't mean anyone should stop speaking up. Only have totals? Try the <a href="/workpapers/calculators/is-the-setup-working-quick.html">quick read</a>.</p>
+    <details class="no-print">
+      <summary>More about this calculator</summary>
+      <p class="sheet-tagline">It works for any group that shares a load: partners, families, roommates, co-carers, a small team at work. The idea is borrowed from accounting: can the setup carry its own weight?</p>
+      <p class="sheet-tagline pillar-note"><small>CALC-01 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work. Step Zero uses <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a>, and the retuning count uses <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. In you: you see the whole load you carry, and check your state before you read the number. Between you and others: you get one fair read of the setup, never a score on anyone.</small></p>
+      <p class="sheet-tagline">The math comes from <a href="/book/chapter-2-in-depth.html">Chapter II</a>. To follow it week by week, use <a href="/workpapers/report-01.html">REPORT-01</a>.</p>
+    </details>
+    <nav class="toc no-print" aria-label="On this page">
+      <a href="#state">Check your state</a>
+      <a href="#people">Who's sharing</a>
+      <a href="#wb">Balance</a>
+      <a href="#oc">Ownership</a>
+      <a href="#as">Stress</a>
+      <a href="#rf">Repair</a>
+      <a href="#read">The read</a>
+      <a href="#trend">Trend</a>
+      <a href="#spec">How it's scored</a>
+    </nav>
+  </header>
+
+  <!-- ================= STATE ================= -->
+  <section id="state" aria-labelledby="state-h">
+    <div class="section-head"><p class="part-label">Step zero</p><h2 id="state-h">Check your state</h2></div>
+    <p>Before you read a number about how you share the load, notice how you feel right now. The same number lands differently when you're calm than when you're tired or wound up. This is a check on yourself only. It never changes the score; it changes whether today is the day to act on it.</p>
+    <div class="ladder" role="group" aria-label="How do you feel right now?">
+      <button type="button" class="rung" data-state="calm" aria-pressed="false"><b>Calm and connected</b><span>Clear skies. I can hear feedback without bracing.</span></button>
+      <button type="button" class="rung" data-state="revved" aria-pressed="false"><b>Revved up</b><span>Gusty. Tense, quick to argue, on edge.</span></button>
+      <button type="button" class="rung" data-state="shut" aria-pressed="false"><b>Running on empty</b><span>Fogged in. Flat, far away, words are hard to find.</span></button>
+    </div>
+    <div class="state-readout" aria-live="polite">
+      <span class="lbl">Right now</span>
+      <span id="state-text">Pick the one closest to how you feel. It's optional, and you can change it any time.</span>
+    </div>
+  </section>
+
+  <!-- ================= PEOPLE ================= -->
+  <section id="people" aria-labelledby="people-h">
+    <div class="section-head"><p class="part-label">Set up</p><h2 id="people-h">Who's sharing the load?</h2></div>
+    <p>List the people who share this set of jobs and can each fill in their own WP-02 (How much are you carrying?). Two to eight people. Names stay on this page.</p>
+    <div class="panel">
+      <label for="people-count" style="font-weight:600;">How many people?</label>
+      <select id="people-count" style="max-width:120px;display:block;margin-top:6px;"></select>
+      <div class="people-grid" id="people-names"></div>
+      <p class="panel-note" style="margin-top:16px;margin-bottom:4px;">Or load a worked example to see how it works:</p>
+      <div class="examples no-print">
+        <button type="button" class="btn" data-example="book">Sam and Alex (the book's example)</button>
+        <button type="button" class="btn" data-example="roommates">Three roommates</button>
+        <button type="button" class="btn" data-example="family">A family of five</button>
+        <button type="button" class="btn" data-example="blank">Start blank</button>
+      </div>
+      <div id="suite-load" class="no-print" hidden>
+        <p class="panel-note" style="margin-top:14px;margin-bottom:4px;">You keep a Workpaper Suite draft on this device:</p>
+        <button type="button" class="btn btn-solid" id="load-suite">Load from my suite</button>
+        <span class="panel-note" id="suite-found" style="margin-left:6px;"></span>
+      </div>
+      <p class="status" id="example-status" role="status"></p>
+    </div>
+
+    <div class="pipeline" aria-label="Where each input comes from">
+      <div class="pipe-cell"><span class="src">WP-01 &middot; Who did what</span>Hours each person logged<b>&rarr; Balance</b></div>
+      <div class="pipe-cell"><span class="src">WP-03 &middot; One owner per job</span>Jobs with an owner<b>&rarr; Ownership</b></div>
+      <div class="pipe-cell"><span class="src">WP-02 &middot; How much are you carrying?</span>Five things each person rates about themselves<b>&rarr; Stress</b></div>
+      <div class="pipe-cell"><span class="src">WP-09 &middot; Say it so it lands</span>Rough moments you retuned (talked through calmly before answering)<b>&rarr; Retuning (overall score only)</b></div>
+    </div>
+    <div class="intro-note">
+      <p><strong>Two scores, two questions.</strong> The <em>setup score</em> uses balance, ownership and stress, and asks: can this week's load last as it's set up? The <em>overall score</em> adds retuning and asks a wider question: is the whole system working, including repair after rough moments? They can disagree, and the gap is useful.</p>
+    </div>
+  </section>
+
+  <!-- ================= WB ================= -->
+  <section id="wb" aria-labelledby="wb-h">
+    <div class="section-head"><p class="part-label">Input 1 of 4 &middot; Balance</p><h2 id="wb-h">How the hours split</h2><p class="code-note">Workload balance</p></div>
+    <div class="panel">
+      <div class="panel-head"><h3>The week's hours</h3><span class="src-tag">From <a href="/workpapers/fill/wp-01.html">WP-01, Who did what</a></span></div>
+      <p class="panel-note">Enter this week's rough hours for each job, for each person. Rough is fine: the split is what matters. Count the invisible work too (planning, remembering, keeping track).</p>
+      <div class="scroll-x" tabindex="0" role="region" aria-label="Hours table, scrolls sideways">
+        <table class="ledger"><thead id="ledger-head"></thead><tbody id="ledger-rows"></tbody><tfoot id="ledger-foot"></tfoot></table>
+      </div>
+      <p class="scroll-hint" id="ledger-hint">Swipe the table sideways to see everyone.</p>
+      <div class="btn-row no-print">
+        <button type="button" class="btn" id="add-ledger-row">Add a job</button>
+      </div>
+
+      <fieldset>
+        <legend>Compare the split with&hellip;</legend>
+        <label class="check"><input type="radio" name="target-mode" value="even" checked> An even share for everyone (the book's standard read)</label>
+        <label class="check"><input type="radio" name="target-mode" value="agreed"> A split we agreed on (for example, when someone works longer hours outside the home)</label>
+      </fieldset>
+      <div class="target-row" id="target-row">
+        <p class="panel-note" style="margin:0;">Each person's agreed share of the home load, in percent. They must add up to 100. A read against an agreed split can't be compared with a standard read, so the summary says which one you used.</p>
+        <div class="target-grid" id="target-grid"></div>
+      </div>
+
+      <div class="split-bar" id="split-bar" aria-hidden="true"></div>
+      <div class="split-legend" id="split-legend"></div>
+
+      <div class="derive" id="wb-derive" aria-live="polite"></div>
+    </div>
+    <p style="font-size:0.9rem;color:var(--ink-soft);"><strong>In plain words:</strong> balance asks how many of the week's hours would have to change hands to reach an even split (or your agreed split), compared with the most that could ever need to move, which is when one person does it all. None to move scores 1.00. One person doing everything scores 0.00. With two people this is exactly the book's <code>1 &minus; |pctA &minus; pctB| &divide; 100</code>. It doesn't matter who is carrying more, only that the load isn't shared the way you meant it to be.</p>
+  </section>
+
+  <!-- ================= OC ================= -->
+  <section id="oc" aria-labelledby="oc-h">
+    <div class="section-head"><p class="part-label">Input 2 of 4 &middot; Ownership</p><h2 id="oc-h">Does each job have a name?</h2><p class="code-note">Ownership clarity</p></div>
+    <div class="panel">
+      <div class="panel-head"><h3>The job list</h3><span class="src-tag">From <a href="/workpapers/fill/wp-03.html">WP-03, One owner per job</a></span></div>
+      <p class="panel-note">For each regular job, pick its <strong>owner</strong>: the one person who does it and sees it through. A <strong>helper</strong> (someone who pitches in or notices if it slips) is optional. A job counts as owned when it has an owner.</p>
+      <div class="scroll-x" tabindex="0" role="region" aria-label="Job list table, scrolls sideways">
+        <table class="raci">
+          <thead><tr><th>Job</th><th>Owner</th><th>Helper (optional)</th><th>Owned?</th><th><span class="sr-only">Remove</span></th></tr></thead>
+          <tbody id="raci-rows"></tbody>
+        </table>
+      </div>
+      <div class="btn-row no-print"><button type="button" class="btn" id="add-raci-row">Add a job</button></div>
+      <div class="derive" id="oc-derive" aria-live="polite"></div>
+    </div>
+    <div class="warn-box">
+      <p><strong>Don't raise this one by shortening the list.</strong> Deleting the jobs nobody owns raises the number and changes nothing at home. A real job with no owner stays on the list. Bringing that row to light is the whole point of this score.</p>
+      <p>"Everyone together" counts as a name, as the book allows. But a job that everyone is accountable for is often a job nobody notices (<a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>). The read flags those.</p>
+    </div>
+  </section>
+
+  <!-- ================= AS ================= -->
+  <section id="as" aria-labelledby="as-h">
+    <div class="section-head"><p class="part-label">Input 3 of 4 &middot; Stress</p><h2 id="as-h">How much each person is carrying</h2><p class="code-note">Average load (AS in the formulas)</p></div>
+    <div class="panel">
+      <div class="panel-head"><h3>Everyone's load score</h3><span class="src-tag">From <a href="/workpapers/fill/wp-02.html">WP-02, How much are you carrying?</a> (higher = heavier)</span></div>
+      <p class="panel-note">Each person fills in their own card, about themselves, for the last 24 to 48 hours. 0 = not at all, 4 = very true. Guessing for someone else turns a reflection tool into a way of watching them, so the read waits until every card is complete.</p>
+      <div class="bat-grid" id="bat-grid"></div>
+      <div class="derive" id="as-derive" aria-live="polite"></div>
+    </div>
+    <p style="font-size:0.9rem;color:var(--ink-soft);">Stress is the only input that counts against the score, as <code>1 &minus; stress</code>. A way of sharing the work that only holds up when everyone is rested isn't one that can last. This is a self-check, not a health measure.</p>
+  </section>
+
+  <!-- ================= RF ================= -->
+  <section id="rf" aria-labelledby="rf-h">
+    <div class="section-head"><p class="part-label">Input 4 of 4 &middot; Retuning &middot; overall score only</p><h2 id="rf-h">Repair after rough moments</h2><p class="code-note">Retuning (RF in the formulas)</p></div>
+    <div class="panel">
+      <div class="panel-head"><h3>Counting repairs</h3><span class="src-tag">From <a href="/workpapers/fill/wp-09.html">WP-09, Say it so it lands</a></span></div>
+      <p class="panel-note">Count the week's rough moments (when something landed badly enough to notice). Then count how many you <strong>retuned</strong>: talked it through calmly before answering, using the WP-09 steps (fact, feeling, ask). This measures what you did about friction, not how much there was.</p>
+      <div style="display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;max-width:520px;">
+        <label for="friction">Rough moments this week</label><input type="number" id="friction" min="0" step="1" inputmode="numeric">
+        <label for="retunes">Of those, how many you retuned (talked through calmly first)</label><input type="number" id="retunes" min="0" step="1" inputmode="numeric">
+      </div>
+      <div class="derive" id="rf-derive" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ================= THE READ ================= -->
+  <section id="read" aria-labelledby="read-h">
+    <div class="section-head"><p class="part-label">Output</p><h2 id="read-h">The read</h2></div>
+    <div class="read-card" id="read-card" tabindex="-1">
+      <p class="live-summary" id="live-summary">Fill in the inputs above to see a read.</p>
+      <label class="num-toggle no-print"><input type="checkbox" id="show-nums"> Show the numbers</label>
+      <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+      <div class="scores">
+        <div class="score-box"><span class="lbl">How the setup is working &middot; balance + ownership + stress</span><div class="val na" id="solvency-val">&mdash;</div><span class="num nums-only" id="solvency-num"></span><div class="band" id="solvency-band">Waiting on inputs.</div></div>
+        <div class="score-box"><span class="lbl">With repairs counted &middot; adds retuning (the overall score)</span><div class="val na" id="apex-val">&mdash;</div><span class="num nums-only" id="apex-num"></span><div class="band" id="apex-band">Waiting on inputs.</div></div>
+      </div>
+
+      <div class="nums-only">
+      <h3 style="font-size:1rem;">The math, step by step</h3>
+      <div class="math" id="math" tabindex="0" role="region" aria-label="The math, step by step">No read yet.</div>
+      </div>
+
+      <h3 style="font-size:1rem;margin-top:18px;">Where it is strong, and where it is short</h3>
+      <div id="contrib-rows"></div>
+      <p style="font-size:0.84rem;color:var(--ink-soft);max-width:none;">Each bar shows how much of that part is working. The biggest gap, not the total, is the place to start.</p>
+
+      <h3 style="font-size:1rem;margin-top:18px;">What would help most</h3>
+      <ul class="moves" id="moves"><li>Available once there's a read.</li></ul>
+
+      <div id="divergence" hidden></div>
+      <div class="next-box" id="next-box"><span class="lbl">What to do next</span><div id="next-text"><p>Fill in the inputs above to see a read.</p></div></div>
+      <div class="completeness" id="completeness">Inputs worked out: 0 of 4.</div>
+
+      <div class="btn-row no-print">
+        <button type="button" class="btn btn-solid" id="copy-summary">Copy a summary</button>
+        <button type="button" class="btn" id="print-read">Print or save as PDF</button>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+      <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
+    </div>
+
+    <details class="no-print">
+      <summary>Optional: push scores toward the ends of the scale</summary>
+      <p style="font-size:0.9rem;">This runs the same total through an S-shaped curve centered at 0.5: <code>1 / (1 + e^(&minus;6 &times; (raw &minus; 0.5)))</code>. Middling reads move further from the middle. It doesn't make the score more accurate, and reads taken with it can't be compared with reads taken without it. It's off by default.</p>
+      <label class="check"><input type="checkbox" id="sigmoid"> Use the S-curve</label>
+    </details>
+
+    <details class="no-print">
+      <summary>Advanced: change the weights</summary>
+      <p style="font-size:0.9rem;">These weights are a judgment, not a research finding. They say an uneven load matters a little more than unclear ownership, and both matter more than everyday stress. If you change them, new reads can't be compared with old ones.</p>
+      <div class="scroll-x">
+      <table>
+        <thead><tr><th>Part</th><th class="num">Setup score</th><th class="num">Overall score</th></tr></thead>
+        <tbody>
+          <tr><td>Balance</td><td class="num"><input type="number" class="w-in" id="w-sol-wb" min="0" max="1" step="0.05" aria-label="Setup score weight for balance"></td><td class="num"><input type="number" class="w-in" id="w-apex-wb" min="0" max="1" step="0.05" aria-label="Overall score weight for balance"></td></tr>
+          <tr><td>Ownership</td><td class="num"><input type="number" class="w-in" id="w-sol-oc" min="0" max="1" step="0.05" aria-label="Setup score weight for ownership"></td><td class="num"><input type="number" class="w-in" id="w-apex-oc" min="0" max="1" step="0.05" aria-label="Overall score weight for ownership"></td></tr>
+          <tr><td>1 &minus; stress</td><td class="num"><input type="number" class="w-in" id="w-sol-as" min="0" max="1" step="0.05" aria-label="Setup score weight for stress"></td><td class="num"><input type="number" class="w-in" id="w-apex-as" min="0" max="1" step="0.05" aria-label="Overall score weight for stress"></td></tr>
+          <tr><td>Retuning</td><td class="num" style="color:var(--ink-soft);">n/a</td><td class="num"><input type="number" class="w-in" id="w-apex-rf" min="0" max="1" step="0.05" aria-label="Overall score weight for retuning"></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p id="weight-warn" role="alert" style="font-size:0.86rem;color:var(--debit);margin-top:10px;"></p>
+      <div class="btn-row"><button type="button" class="btn" id="reset-weights">Restore the book's weights</button></div>
+    </details>
+  </section>
+
+  <!-- ================= TREND ================= -->
+  <section id="trend" aria-labelledby="trend-h">
+    <div class="section-head"><p class="part-label">Over time</p><h2 id="trend-h">Trend log</h2></div>
+    <p>One read tells you about one week. The trend tells you whether anything is changing. Log each week's read here.</p>
+    <div class="panel">
+      <div class="scroll-x" tabindex="0" role="region" aria-label="Trend log">
+      <table>
+        <thead><tr><th>Week of</th><th class="num">Balance</th><th class="num">Owner&shy;ship</th><th class="num">Stress</th><th class="num">Retune</th><th class="num">Setup</th><th class="num">Change</th><th class="num">Overall</th><th><span class="sr-only">Remove</span></th></tr></thead>
+        <tbody id="trend-rows"></tbody>
+      </table>
+      </div>
+      <div class="btn-row no-print">
+        <label style="font-size:0.85rem;display:flex;align-items:center;gap:8px;" for="trend-date">Week of</label>
+        <input type="date" id="trend-date" style="width:auto;">
+        <button type="button" class="btn btn-solid" id="add-trend">Log this read</button>
+      </div>
+      <p class="status" id="trend-status" role="status"></p>
+      <div id="drift-alert" hidden></div>
+
+      <div class="keep no-print">
+        <label class="check"><input type="checkbox" id="keep"> Keep my entries and trend log on this device</label>
+        <p style="font-size:0.84rem;color:var(--ink-soft);margin:4px 0 8px;">Off by default. When it's on, your entries are stored in this browser only, never sent anywhere. On a shared computer, everyone who uses this browser could see them. Turning it off, or pressing Erase, deletes them.</p>
+        <button type="button" class="btn" id="erase">Erase what's kept on this device</button>
+        <p class="status" id="keep-status" role="status"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SPEC ================= -->
+  <section id="spec" aria-labelledby="spec-h">
+    <div class="section-head"><p class="part-label">Reference</p><h2 id="spec-h">How it's scored</h2></div>
+
+    <div class="spec-block">
+      <h3>The two formulas</h3>
+<pre>setup   = (balance &times; 0.40) + (ownership &times; 0.35) + ((1 &minus; stress) &times; 0.25)
+overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress) &times; 0.20) + (retuning &times; 0.15)</pre>
+      <p>Both are simple weighted totals, not fitted models. Each set of weights adds up to 1.00 and every input runs from 0 to 1, so each score runs from 0 to 1 too. No weight was estimated from real-world data. The first is the setup score and the second the overall score. Neither is a probability, and neither predicts anything.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>The four inputs</h3>
+      <div class="scroll-x">
+      <table>
+        <thead><tr><th>Input</th><th>How it's worked out</th><th>From</th></tr></thead>
+        <tbody>
+          <tr><td>Balance</td><td><code>1 &minus; moved &divide; most</code>, where <code>moved = &frac12; &times; &Sigma; |share &minus; target share|</code> and <code>most = 1 &minus; the smallest target share</code>. The target is an even share (1 &divide; people) unless you choose an agreed split. With two people and an even target, it equals <code>1 &minus; |pctA &minus; pctB| &divide; 100</code>.</td><td><a href="/workpapers/fill/wp-01.html">WP-01</a></td></tr>
+          <tr><td>Ownership</td><td><code>jobs with an owner &divide; all jobs listed</code>. Measures how clear ownership is, not how fair it is.</td><td><a href="/workpapers/fill/wp-03.html">WP-03</a></td></tr>
+          <tr><td>Stress</td><td>Each person: <code>their five 0&ndash;4 answers added up &divide; 20</code>. Then the average across everyone. Counted as <code>1 &minus; stress</code>.</td><td><a href="/workpapers/fill/wp-02.html">WP-02</a></td></tr>
+          <tr><td>Retuning</td><td><code>moments retuned &divide; rough moments</code>, capped at 1.00. No value when there were no rough moments. Overall score only.</td><td><a href="/workpapers/fill/wp-09.html">WP-09</a></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="spec-block" id="multi">
+      <h3>Balance for more than two people, worked through</h3>
+      <p><strong>Three roommates</strong> log 12, 6 and 2 hours: 20 hours in all. An even share is a third each, about 6.67 hours. Jordan is 5.33 hours over, Priya is 0.67 hours under, Lee is 4.67 hours under. So 5.33 hours would have to change hands to make it even: that's <code>moved = 5.33 &divide; 20 = 0.267</code>. The most that could ever need to move, if one person did all 20 hours, is 13.33 hours, or <code>most = 1 &minus; 1/3 = 0.667</code>. Balance = <code>1 &minus; 0.267 &divide; 0.667 = 1 &minus; 0.40 = 0.60</code>.</p>
+      <p>With 6 of 8 jobs owned (0.75) and batteries of 8, 12 and 4 points (0.40, 0.60 and 0.20, average 0.40):</p>
+<pre>(0.60 &times; 0.40) + (0.75 &times; 0.35) + ((1 &minus; 0.40) &times; 0.25)
+=    0.24      +     0.2625     +        0.15
+=    0.6525  &rarr;  0.65, needs a look</pre>
+      <p><strong>A family of five</strong> logs 10, 8, 6, 4 and 2 hours (30 in all; an even share is 6 each). The gaps are +4, +2, 0, &minus;2 and &minus;4 hours, so 6 hours would have to move: <code>moved = 0.20</code>. <code>most = 1 &minus; 1/5 = 0.80</code>. Balance = <code>1 &minus; 0.20 &divide; 0.80 = 0.75</code>. With 9 of 12 jobs owned (0.75) and an average load of 0.40, the read is 0.30 + 0.2625 + 0.15 = 0.7125 &rarr; <strong>0.71, holding</strong>.</p>
+      <p><strong>An agreed split.</strong> If two people agree on 60/40 (say one works longer hours outside the home) and log 6 and 4 hours, nothing needs to move, so balance is 1.00. Against an even split the same week would score 0.80. Use the agreed split only if everyone really agreed to it, and say so when you share the read.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>Why these weights</h3>
+      <div class="scroll-x">
+      <table>
+        <thead><tr><th>Part</th><th class="num">Setup score</th><th class="num">Overall score</th><th>Reasoning</th></tr></thead>
+        <tbody>
+          <tr><td>Balance</td><td class="num">0.40</td><td class="num">0.35</td><td>Highest, because an unshared load keeps building up whether anyone notices or not.</td></tr>
+          <tr><td>Ownership</td><td class="num">0.35</td><td class="num">0.30</td><td>Close behind, because work with no owner falls to whoever notices first, every time. That turns a fixable imbalance into a repeating one.</td></tr>
+          <tr><td>1 &minus; stress</td><td class="num">0.25</td><td class="num">0.20</td><td>Lowest of the three, because it changes most from week to week. One week of bad sleep shouldn't dominate the read.</td></tr>
+          <tr><td>Retuning</td><td class="num">&mdash;</td><td class="num">0.15</td><td>Overall score only, and small, because it's a simple self-count that's easy to overstate.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="spec-block">
+      <h3>The bands</h3>
+      <div class="scroll-x">
+      <table>
+        <thead><tr><th>Score</th><th>Reading</th><th>First move</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">0.70 or more</td><td>Working well: the setup is carrying its own weight.</td><td>Don't change the setup. Keep the same rhythm of <a href="/check-ins.html">check-ins</a>.</td></tr>
+          <tr><td class="mono">0.40 up to 0.70</td><td>Needs a look.</td><td>Start with the biggest shortfall. It's often ownership, but check rather than assume.</td></tr>
+          <tr><td class="mono">below 0.40</td><td>Needs a rethink, together.</td><td>Rework the whole <a href="/workpapers/fill/wp-03.html">job list</a> together, not another one-off patch. This is about the setup, not about anyone.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>The band is read from the score as shown, rounded to two decimals, so the number and the band always agree. The edges are round numbers chosen to be easy to read: a 0.69 and a 0.70 are really the same week.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>Reading the two scores together</h3>
+      <ul class="plain">
+        <li><strong>Both high:</strong> the load is shared and owned, and rough moments get repaired. Keep going.</li>
+        <li><strong>Setup score high, overall score lower (by 0.08 or more):</strong> the setup is fine, but repair isn't happening. Work on <a href="/workpapers/fill/wp-09.html">WP-09</a>, not the job list.</li>
+        <li><strong>Overall score high, setup score lower (by 0.08 or more):</strong> you repair well, but the setup keeps creating the friction. Work on the <a href="/workpapers/fill/wp-03.html">job list</a>.</li>
+        <li><strong>Both below 0.40:</strong> the setup and the repair are both struggling. Another worksheet may not be what helps most; outside support, like a counselor or a trusted mediator, is worth considering.</li>
+      </ul>
+    </div>
+
+    <div class="spec-block">
+      <h3>Edge cases, defined</h3>
+      <ul class="plain">
+        <li><strong>No hours logged:</strong> balance has no value, rather than 1.00. An empty week isn't an even week.</li>
+        <li><strong>No jobs listed:</strong> ownership has no value, rather than 0.00.</li>
+        <li><strong>Anyone's battery incomplete:</strong> no read at all. A score is never worked out from some people's answers standing in for everyone's.</li>
+        <li><strong>No rough moments:</strong> retuning has no value. The overall score uses the other three weights divided by 0.85, so they still add up to 1.00, and the read says so.</li>
+        <li><strong>More retunes than rough moments:</strong> retuning stops at 1.00.</li>
+        <li><strong>Agreed shares that don't add up to 100%:</strong> no balance until they do.</li>
+      </ul>
+    </div>
+
+    <div class="spec-block">
+      <h3>Drift rule</h3>
+      <p>If the overall score drops by more than 0.10 three weeks in a row, it's time for a planned review of the job list, not an emergency conversation. The trend log watches for this.</p>
+    </div>
+
+    <div class="warn-box">
+      <p><strong>What this calculator will never use.</strong> Tone of voice, recordings, the mood of messages, how fast someone replies, or anything about a person that they didn't help enter themselves.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>What the number is not</h3>
+      <ul class="plain">
+        <li>Not a compatibility score, and not a verdict on who's the better partner, parent, roommate or coworker.</li>
+        <li>Not a tested clinical or statistical tool. It predicts nothing.</li>
+        <li>Not a reason to decide a relationship's future. It looks at how the load is set up, one week at a time.</li>
+        <li>Not an argument-ender. "Well, the number says&hellip;" is a misuse. Its only job is to give people a calm place to start.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sheet-footer">
+    Spread Love &amp; Acceptance &middot; CALC-01 &middot; A rule-of-thumb worksheet, not a tested tool &middot; Runs in your browser
+  </footer>
+</main>
+
+<script src="/assets/js/household.js"></script>
+<script>
+(function(){
+  "use strict";
+  var C = window.TOLCalc01;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  function each(list, fn){ Array.prototype.forEach.call(list, fn); }
+  var f2 = C.f2, fg = C.fg, f1 = C.f1;
+
+  var FACTORS = [
+    "Sleep: less rested than usual",
+    "Workload elsewhere (job, school, caregiving)",
+    "An unsettled disagreement (with anyone)",
+    "Body: hungry, unwell or sore",
+    "Time pressure today"
+  ];
+  var COLORS = ["#3E6B4C", "#A8792F", "#2B5B8C", "#96412B", "#6B5B95", "#4F7F8C", "#8C6D4F", "#5E6B3E"];
+  var STORE = "tol-calc01-full-v2";
+
+  var EXAMPLES = {
+    book: {
+      people: ["Sam", "Alex"],
+      ledger: [["Groceries and meal planning", [3, 1]], ["Cooking", [4, 2]], ["Dishes", [2, 2]], ["Laundry", [3, 0]], ["Bills and scheduling", [2, 1]]],
+      raci: [["Groceries", "0", "0"], ["Cooking", "0", "1"], ["Dishes", "1", "1"], ["Laundry", "0", "0"], ["Bills and scheduling", "0", "0"], ["Cleaning", "1", "0"], ["Plants and yard", "1", "1"], ["Car upkeep", "1", "1"], ["Family calendar", "", ""], ["Birthday and holiday planning", "", ""]],
+      bat: [[3, 3, 1, 0, 4], [1, 2, 0, 0, 2]],
+      friction: 4, retunes: 3
+    },
+    roommates: {
+      people: ["Jordan", "Priya", "Lee"],
+      ledger: [["Kitchen and dishes", [5, 2, 1]], ["Shared groceries", [3, 1, 0]], ["Bathroom", [2, 2, 0]], ["Trash and recycling", [1, 1, 1]], ["Bills and landlord", [1, 0, 0]]],
+      raci: [["Kitchen", "0", "0"], ["Groceries", "0", "1"], ["Bathroom", "1", "1"], ["Trash", "2", "2"], ["Rent and bills", "0", "0"], ["Landlord messages", "1", "0"], ["Living room", "", ""], ["Supplies (soap, paper)", "", ""]],
+      bat: [[2, 2, 1, 1, 2], [3, 3, 2, 1, 3], [1, 1, 0, 0, 2]],
+      friction: 5, retunes: 2
+    },
+    family: {
+      people: ["Dana", "Chris", "Nana Rose", "Riley", "Theo"],
+      ledger: [["Meals", [4, 3, 3, 1, 0]], ["Rides and school runs", [3, 3, 0, 0, 0]], ["Cleaning", [2, 1, 2, 2, 1]], ["Laundry", [1, 1, 1, 1, 1]]],
+      raci: [["Meals", "0", "0"], ["Rides", "1", "1"], ["School forms", "0", "0"], ["Cleaning", "2", "0"], ["Laundry", "all", "0"], ["Dishes", "3", "3"], ["Pet care", "4", "0"], ["Bills", "1", "1"], ["Groceries", "0", "1"], ["Medical appointments", "", ""], ["Birthday planning", "", ""], ["Yard", "", ""]],
+      bat: [[1, 2, 1, 0, 2], [2, 3, 1, 1, 3], [3, 3, 2, 3, 3], [0, 1, 0, 0, 1], [2, 2, 1, 1, 2]],
+      friction: 0, retunes: 0
+    },
+    blank: { people: ["", ""], ledger: [["", [0, 0]]], raci: [["", "", ""]], bat: [[], []], friction: "", retunes: "" }
+  };
+  var DEFAULT = {
+    people: ["", ""],
+    ledger: [["Groceries and meal planning", [0, 0]], ["Cooking", [0, 0]], ["Dishes", [0, 0]], ["Laundry", [0, 0]], ["Bills and scheduling", [0, 0]], ["Cleaning", [0, 0]], ["Planning and remembering", [0, 0]]],
+    raci: [["Groceries", "", ""], ["Cooking", "", ""], ["Dishes", "", ""], ["Laundry", "", ""], ["Bills and scheduling", "", ""], ["Cleaning", "", ""], ["Social and family calendar", "", ""], ["Check-ins", "", ""]],
+    bat: [[], []], friction: "", retunes: ""
+  };
+
+  /* ---------- state in, state out ---------- */
+  var S = null;           // the current entries
+  var currentState = null, lastRead = null, trend = [];
+
+  function nPeople(){ return S.people.length; }
+  function nameOf(i){ var v = (S.people[i] || "").trim(); return v || ("Person " + (i + 1)); }
+
+  function fromExample(ex){
+    return {
+      people: ex.people.slice(),
+      ledger: ex.ledger.map(function(r){ return { name: r[0], hours: r[1].slice() }; }),
+      targetMode: "even", targets: ex.people.map(function(){ return ""; }),
+      raci: ex.raci.map(function(r){ return { name: r[0], r: r[1], a: r[2] }; }),
+      bat: ex.people.map(function(_, i){ var b = ex.bat[i] || []; return [0,1,2,3,4].map(function(k){ return b[k] === undefined ? "" : String(b[k]); }); }),
+      friction: ex.friction === "" ? "" : String(ex.friction), retunes: ex.retunes === "" ? "" : String(ex.retunes)
+    };
+  }
+
+  function resize(n){
+    n = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, n));
+    while (S.people.length < n){ S.people.push(""); S.targets.push(""); S.bat.push(["","","","",""]); S.ledger.forEach(function(r){ r.hours.push(0); }); }
+    while (S.people.length > n){ S.people.pop(); S.targets.pop(); S.bat.pop(); S.ledger.forEach(function(r){ r.hours.pop(); }); }
+    S.raci.forEach(function(r){
+      if (r.r !== "" && r.r !== "all" && +r.r >= n) r.r = "";
+      if (r.a !== "" && r.a !== "all" && +r.a >= n) r.a = "";
+    });
+  }
+
+  /* ---------- rendering the entry tables ---------- */
+  function renderAll(){
+    var cnt = $("people-count");
+    cnt.innerHTML = "";
+    for (var i = C.MIN_PEOPLE; i <= C.MAX_PEOPLE; i++) cnt.insertAdjacentHTML("beforeend", '<option value="' + i + '">' + i + ' people</option>');
+    cnt.value = String(nPeople());
+
+    $("people-names").innerHTML = S.people.map(function(p, i){
+      return '<div><label for="pname-' + i + '">Person ' + (i + 1) + '</label><input type="text" id="pname-' + i + '" data-person="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(p) + '"></div>';
+    }).join("");
+
+    renderLedger(); renderTargets(); renderRaci(); renderBatteries();
+    $("friction").value = S.friction; $("retunes").value = S.retunes;
+    each(document.querySelectorAll('input[name="target-mode"]'), function(r){ r.checked = r.value === S.targetMode; });
+    $("target-row").classList.toggle("on", S.targetMode === "agreed");
+    $("ledger-hint").style.visibility = nPeople() > 2 ? "visible" : "hidden";
+    hhRefresh();
+  }
+
+  function renderLedger(){
+    var n = nPeople();
+    var head = '<tr><th>Job</th>';
+    for (var i = 0; i < n; i++) head += '<th class="num hrs" data-name-col="' + i + '">' + esc(nameOf(i)) + '</th>';
+    head += '<th><span class="sr-only">Remove</span></th></tr>';
+    $("ledger-head").innerHTML = head;
+    $("ledger-rows").innerHTML = S.ledger.map(function(row, r){
+      var h = '<tr><td class="item"><input type="text" data-l-name="' + r + '" autocomplete="off" aria-label="Job ' + (r + 1) + ' name" value="' + esc(row.name) + '"></td>';
+      for (var i = 0; i < n; i++){
+        h += '<td class="num hrs"><input type="number" min="0" step="0.5" inputmode="decimal" data-l-row="' + r + '" data-l-p="' + i + '" aria-label="' + esc((row.name || "Job " + (r + 1)) + ", hours for " + nameOf(i)) + '" value="' + esc(row.hours[i] === 0 ? "0" : row.hours[i]) + '"></td>';
+      }
+      return h + '<td><button type="button" class="remove no-print" data-l-del="' + r + '" aria-label="Remove ' + esc(row.name || "job " + (r + 1)) + '">&times;</button></td></tr>';
+    }).join("");
+  }
+
+  function renderTargets(){
+    $("target-grid").innerHTML = S.people.map(function(_, i){
+      return '<div><label for="target-' + i + '">' + esc(nameOf(i)) + ' (%)</label><input type="number" id="target-' + i + '" data-target="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(S.targets[i]) + '"></div>';
+    }).join("");
+  }
+
+  function whoOptions(sel){
+    var o = '<option value="">— nobody yet</option>';
+    for (var i = 0; i < nPeople(); i++) o += '<option value="' + i + '"' + (String(sel) === String(i) ? " selected" : "") + '>' + esc(nameOf(i)) + '</option>';
+    o += '<option value="all"' + (sel === "all" ? " selected" : "") + '>Everyone together</option>';
+    return o;
+  }
+  function renderRaci(){
+    $("raci-rows").innerHTML = S.raci.map(function(row, r){
+      var label = row.name || ("job " + (r + 1));
+      return '<tr><td class="task"><input type="text" data-r-name="' + r + '" autocomplete="off" aria-label="Job ' + (r + 1) + ' name" value="' + esc(row.name) + '"></td>' +
+        '<td class="who"><select data-r-r="' + r + '" aria-label="' + esc("Owner of " + label) + '">' + whoOptions(row.r) + '</select></td>' +
+        '<td class="who"><select data-r-a="' + r + '" aria-label="' + esc("Helper for " + label + ", optional") + '">' + whoOptions(row.a) + '</select></td>' +
+        '<td class="mono" data-r-flag="' + r + '" style="font-size:0.78rem;"></td>' +
+        '<td><button type="button" class="remove no-print" data-r-del="' + r + '" aria-label="Remove ' + esc(label) + '">&times;</button></td></tr>';
+    }).join("");
+  }
+
+  function renderBatteries(){
+    $("bat-grid").innerHTML = S.people.map(function(_, p){
+      var h = '<div class="bat-card" role="group" aria-labelledby="bat-h-' + p + '"><h4 id="bat-h-' + p + '" data-name-card="' + p + '">' + esc(nameOf(p)) + '</h4>';
+      FACTORS.forEach(function(f, k){
+        var v = S.bat[p][k];
+        var opts = '<option value="">—</option>';
+        for (var x = 0; x <= 4; x++) opts += '<option value="' + x + '"' + (String(v) === String(x) ? " selected" : "") + '>' + x + '</option>';
+        h += '<div class="bat-row"><label for="bat-' + p + '-' + k + '">' + f + '</label><select id="bat-' + p + '-' + k + '" data-b-p="' + p + '" data-b-k="' + k + '">' + opts + '</select></div>';
+      });
+      return h + '<div class="bat-out" id="bat-out-' + p + '">—</div></div>';
+    }).join("");
+  }
+
+  /* ---------- the read ---------- */
+  function readWeights(){
+    function v(id){ var x = parseFloat($(id).value); return isFinite(x) ? x : 0; }
+    return { sol: { wb: v("w-sol-wb"), oc: v("w-sol-oc"), as: v("w-sol-as") },
+             apex: { wb: v("w-apex-wb"), oc: v("w-apex-oc"), as: v("w-apex-as"), rf: v("w-apex-rf") } };
+  }
+  function setWeights(w){
+    $("w-sol-wb").value = w.sol.wb.toFixed(2); $("w-sol-oc").value = w.sol.oc.toFixed(2); $("w-sol-as").value = w.sol.as.toFixed(2);
+    $("w-apex-wb").value = w.apex.wb.toFixed(2); $("w-apex-oc").value = w.apex.oc.toFixed(2); $("w-apex-as").value = w.apex.as.toFixed(2); $("w-apex-rf").value = w.apex.rf.toFixed(2);
+  }
+  function sigmoid(x){ return 1 / (1 + Math.exp(-6 * (x - 0.5))); }
+
+  var STATE_COPY = {
+    calm: { mode: "go", text: "Good conditions for reading a number. Go ahead, and bring what you find to the others kindly." },
+    revved: { mode: "hold", text: "A number read while wound up tends to get argued with instead of used. Write it down and hold the conversation until you've settled. The Calm-Down Kit (WP-11) can help." },
+    shut: { mode: "stop", text: "Running on empty, a low read can feel like a verdict on you. It isn't. Write the number down if you like, and stop there for today. Nothing here needs deciding now." }
+  };
+
+  function computeWB(){
+    var n = nPeople(), bad = [];
+    var hours = S.ledger.reduce(function(acc, row, r){ row.hours.forEach(function(h, i){
+      var msg = C.hoursProblem(h), cell = document.querySelector('[data-l-row="' + r + '"][data-l-p="' + i + '"]');
+      if (cell){ if (msg) cell.setAttribute("aria-invalid", "true"); else cell.removeAttribute("aria-invalid"); }
+      if (msg){ bad.push((row.name || "Job " + (r + 1)) + ", " + nameOf(i) + ": " + msg); return; }
+      var v = parseFloat(h); acc[i] += isFinite(v) && v > 0 ? v : 0; }); return acc; }, S.people.map(function(){ return 0; }));
+    var b = C.balance(hours, S.targetMode === "agreed" ? S.targets : null);
+    var badHtml = bad.length ? '<div class="err-note">' + bad.slice(0, 4).map(esc).join("<br>") + (bad.length > 4 ? "<br>and " + (bad.length - 4) + " more." : "") + '</div>' : "";
+    // column totals
+    var foot = '<tr><td>Total hours</td>' + hours.map(function(h){ return '<td class="num">' + f1(h) + '</td>'; }).join("") + '<td></td></tr>';
+    $("ledger-foot").innerHTML = foot;
+    // bar + legend
+    var bar = "", leg = "";
+    hours.forEach(function(h, i){
+      var share = b.total > 0 ? h / b.total : 1 / n;
+      bar += '<span style="width:' + (share * 100).toFixed(2) + '%;background:' + COLORS[i] + '"></span>';
+      leg += '<span><i style="background:' + COLORS[i] + '"></i>' + esc(nameOf(i)) + ' · ' + f1(h) + 'h' + (b.total > 0 ? ' · ' + C.pct(share) : '') + '</span>';
+    });
+    $("split-bar").innerHTML = bar; $("split-legend").innerHTML = leg;
+
+    var d = $("wb-derive");
+    if (b.value === null){
+      d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + badHtml + '<div>' + esc(b.error) + '</div><div><span class="out na">—</span></div>';
+      return b;
+    }
+    var steps = badHtml + "<ol>";
+    steps += "<li>Everyone's hours: " + hours.map(function(h, i){ return esc(nameOf(i)) + " " + f1(h); }).join(", ") + " = " + f1(b.total) + " hours.</li>";
+    steps += "<li>Shares: " + b.shares.map(function(s, i){ return esc(nameOf(i)) + " " + C.pct(s); }).join(", ") + ".</li>";
+    steps += "<li>Target (" + (b.mode === "agreed" ? "agreed split" : "even share") + "): " + b.target.map(function(t, i){ return esc(nameOf(i)) + " " + C.pct(t); }).join(", ") + ".</li>";
+    steps += "<li>Hours that would have to change hands: " + f1(b.movedHours) + " of " + f1(b.total) + ", so moved = " + b.moved.toFixed(3) + ".</li>";
+    steps += "<li>Most that could ever need to move (one person doing it all): most = 1 − " + C.pct(Math.min.apply(null, b.target)) + " = " + b.most.toFixed(3) + ".</li>";
+    steps += "<li>Balance = 1 − " + b.moved.toFixed(3) + " ÷ " + b.most.toFixed(3) + " = <b>" + f2(b.value) + "</b>" + (n === 2 && b.mode === "even" ? " (same as 1 − |" + C.pct(b.shares[0]) + " − " + C.pct(b.shares[1]) + "| ÷ 100)" : "") + ".</li>";
+    steps += "</ol>";
+    var cw = C.concentration(hours, 1);
+    var cwHtml = cw.flag ? '<div class="err-note" style="color:var(--ink);">Busiest person: ' + esc(nameOf(cw.top)) + ' has ' + C.pct(cw.share) + ' of the hours (an even share is ' + C.pct(1 / n) + '). A fact about this week, not about effort.</div>' : "";
+    d.innerHTML = '<div class="formula">Balance = 1 − moved ÷ most</div>' + steps + cwHtml + '<div><span class="out' + (b.value < 0.5 ? " warn" : "") + '">' + f2(b.value) + '</span> <span class="formula">balance</span></div>';
+    b.conc = cw;
+    return b;
+  }
+
+  function computeOC(){
+    var owned = 0, total = S.raci.length, everyoneA = [];
+    var anyOwner = S.raci.some(function(row){ return row.r !== "" || row.a !== ""; });
+    var byR = S.people.map(function(){ return 0; });
+    S.raci.forEach(function(row){ if (row.r !== "" && row.r !== "all" && +row.r < byR.length) byR[+row.r]++; });
+    S.raci.forEach(function(row, r){
+      var ok = row.r !== ""; // one owner per job; the helper is optional
+      if (ok) owned++;
+      if (row.a === "all") everyoneA.push(row.name || ("job " + (r + 1)));
+      var flag = document.querySelector('[data-r-flag="' + r + '"]');
+      if (flag){ flag.textContent = ok ? "yes" : "no"; flag.style.color = ok ? "var(--credit)" : "var(--debit)"; }
+    });
+    var o = anyOwner ? C.ownership(owned, total) : { value: null, error: "No owners picked yet, so ownership isn’t worked out (a list with no names at all is not started, not 0.00)." };
+    o.everyoneA = everyoneA;
+    o.conc = C.concentration(byR, 3);
+    var d = $("oc-derive");
+    if (o.value === null){
+      d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + esc(o.error) + '</div><div><span class="out na">—</span></div>';
+      return o;
+    }
+    d.innerHTML = '<div class="formula">Ownership = jobs with an owner ÷ all jobs</div><div>' + owned + ' ÷ ' + total + ' jobs' + (total - owned ? ' (' + (total - owned) + ' still without an owner)' : '') + '</div>' +
+      (everyoneA.length ? '<div>The helper is "everyone together" for: ' + esc(everyoneA.join(", ")) + '. That’s fine; the owner is the one who sees it through.</div>' : '') +
+      (o.conc.flag ? '<div class="err-note" style="color:var(--ink);">Who’s carrying more right now: ' + esc(nameOf(o.conc.top)) + ' owns ' + o.conc.count + ' of the ' + o.conc.total + ' jobs with a named person (' + C.pct(o.conc.share) + '). Ownership reads whether jobs have names, not how they are spread, so read the two together.</div>' : '') +
+      '<div><span class="out' + (o.value < 0.5 ? " warn" : "") + '">' + f2(o.value) + '</span> <span class="formula">ownership</span></div>';
+    return o;
+  }
+
+  function computeAS(){
+    var scores = S.bat.map(function(pts, p){
+      var b = C.battery(pts);
+      var out = $("bat-out-" + p);
+      if (!b){
+        var filled = pts.filter(function(x){ return x !== ""; }).length;
+        if (out) out.textContent = "— (" + filled + " of 5 answered)";
+        return null;
+      }
+      if (out) out.textContent = b.points + " ÷ 20 = " + f2(b.value) + " · " + C.wp02Band(b.value).label;
+      return b.value;
+    });
+    var s = C.stress(scores);
+    var d = $("as-derive");
+    if (s.value === null){
+      var who = s.missing.map(nameOf);
+      d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>Waiting on ' + esc(who.join(", ")) + '. Each person fills in their own card.</div><div><span class="out na">—</span></div>';
+      return s;
+    }
+    d.innerHTML = '<div class="formula">Stress = the average of everyone’s load score</div><div>(' + scores.map(f2).join(" + ") + ') ÷ ' + scores.length + ' = ' + (C.sum(scores) / scores.length).toFixed(3) + '</div>' +
+      '<div><span class="out' + (s.value > 0.6 ? " warn" : "") + '">' + f2(s.value) + '</span> <span class="formula">stress (counted as 1 − ' + f2(s.value) + ' = ' + f2(1 - s.value) + ')</span></div>';
+    return s;
+  }
+
+  function countProblem(v, label){
+    if (v === "" || v == null) return "";
+    var x = C.num(v);
+    if (x === null) return label + ": “" + v + "” isn’t a number, so it is left out.";
+    if (x < 0) return label + " can’t be negative, so " + v + " is left out.";
+    if (Math.floor(x) !== x) return label + " is a count, so use a whole number.";
+    return "";
+  }
+  function computeRF(){
+    var pf = countProblem(S.friction, "Rough moments"), pr = countProblem(S.retunes, "Retunes");
+    [["friction", pf], ["retunes", pr]].forEach(function(x){ if (x[1]) $(x[0]).setAttribute("aria-invalid", "true"); else $(x[0]).removeAttribute("aria-invalid"); });
+    var r = C.retuning(pr ? "" : S.retunes, pf ? "" : S.friction);
+    var d = $("rf-derive"), notes = [pf, pr].filter(Boolean);
+    if (r.value !== null && r.capped) notes.push("You counted " + r.retunes + " retunes but only " + r.friction + " rough moments. You can’t retune more moments than there were, so retuning is capped at 1.00. Worth checking the two numbers.");
+    var nh = notes.length ? '<div class="err-note">' + notes.map(esc).join("<br>") + '</div>' : "";
+    if (r.value === null){
+      d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + esc(r.note) + '</div><div><span class="out na">n/a</span></div>';
+      return r;
+    }
+    d.innerHTML = '<div class="formula">Retuning = moments retuned ÷ rough moments</div>' + nh + '<div>' + r.retunes + ' ÷ ' + r.friction + (r.capped ? " (capped at 1.00)" : "") + '</div><div><span class="out' + (r.value < 0.5 ? " warn" : "") + '">' + f2(r.value) + '</span> <span class="formula">retuning</span></div>';
+    return r;
+  }
+
+  function renderContrib(terms){
+    $("contrib-rows").innerHTML = terms.map(function(t){
+      var pc = t.value === null || !t.could ? 0 : (t.earned / t.could) * 100;
+      var cls = pc >= 70 ? "" : (pc >= 40 ? "short" : "bad");
+      var bar = t.value === null ? '<div class="contrib-track"></div>' : '<div class="contrib-track"><div class="contrib-fill ' + cls + '" style="width:' + pc.toFixed(0) + '%"></div></div>';
+      var pts = t.value === null ? "n/a" : fg(t.earned) + " of " + fg(t.could);
+      return '<div class="contrib-row"><div class="name">' + t.name + '</div>' + bar + '<div class="pts nums-only">' + pts + '</div></div>';
+    }).join("");
+  }
+
+  var announced = "";
+  function recalc(){
+    var b = computeWB(), o = computeOC(), s = computeAS(), r = computeRF();
+    var wb = b.value, oc = o.value, as = s.value, rf = r.value;
+    var w = readWeights(), useSig = $("sigmoid").checked;
+
+    var ws = w.sol.wb + w.sol.oc + w.sol.as, wa = w.apex.wb + w.apex.oc + w.apex.as + w.apex.rf, warn = [];
+    if (Math.abs(ws - 1) > 0.001) warn.push("The setup score weights add up to " + ws.toFixed(2) + ", not 1.00.");
+    if (Math.abs(wa - 1) > 0.001) warn.push("The overall score weights add up to " + wa.toFixed(2) + ", not 1.00.");
+    $("weight-warn").textContent = warn.join(" ");
+    var custom = ["wb","oc","as"].some(function(k){ return Math.abs(w.sol[k] - C.W.sol[k]) > 1e-9; }) || ["wb","oc","as","rf"].some(function(k){ return Math.abs(w.apex[k] - C.W.apex[k]) > 1e-9; });
+
+    var missing = [];
+    if (wb === null) missing.push("hours for balance");
+    if (oc === null) missing.push("a job list");
+    if (as === null) missing.push("everyone's load score");
+    var derived = [wb, oc, as, rf].filter(function(v){ return v !== null; }).length;
+    $("completeness").innerHTML = "Inputs worked out: " + derived + " of 4" + (derived ? " (" + [wb !== null && "balance", oc !== null && "ownership", as !== null && "stress", rf !== null && "retuning"].filter(Boolean).join(", ") + ")." : ".") + (missing.length ? " Still needed: <b>" + esc(missing.join(", ")) + "</b>." : "") +
+      (rf === null ? " Retuning has no value (no rough moments logged)." : "") + (b.mode === "agreed" && wb !== null ? " Balance is read against your agreed split." : "") + (custom ? " Custom weights in use." : "");
+
+    var solEl = $("solvency-val"), apexEl = $("apex-val");
+    if (missing.length || warn.length){
+      solEl.textContent = "—"; solEl.className = "val na"; apexEl.textContent = "—"; apexEl.className = "val na"; $("solvency-num").textContent = ""; $("apex-num").textContent = "";
+      $("solvency-band").textContent = warn.length ? "The weights don't add up to 1.00." : "Waiting on inputs.";
+      $("apex-band").textContent = $("solvency-band").textContent;
+      renderContrib([{ name: "Balance", value: wb, earned: wb === null ? 0 : wb * w.sol.wb, could: w.sol.wb }, { name: "Ownership", value: oc, earned: oc === null ? 0 : oc * w.sol.oc, could: w.sol.oc }, { name: "1 − stress", value: as, earned: as === null ? 0 : (1 - as) * w.sol.as, could: w.sol.as }, { name: "Retuning (overall score only)", value: rf, earned: rf === null ? 0 : rf * w.apex.rf, could: w.apex.rf }]);
+      $("math").textContent = "No read yet. Still needed: " + (missing.length ? missing.join(", ") : "weights that add up to 1.00") + ".";
+      $("moves").innerHTML = "<li>Available once there's a read.</li>";
+      $("divergence").hidden = true;
+      $("next-box").className = "next-box hold";
+      $("next-text").innerHTML = "<p>" + (warn.length ? "Restore the book's weights, or make them add up to 1.00, before reading anything from this." : "No read yet. Still needed: " + esc(missing.join(", ")) + ".") + "</p>";
+      setSummary(warn.length ? "No read yet: the weights don't add up to 1.00." : "No read yet. Still needed: " + missing.join(", ") + ".");
+      lastRead = null;
+      save();
+      return;
+    }
+
+    var sol = C.solvency(wb, oc, as, w.sol), ap = C.apex(wb, oc, as, rf, w.apex);
+    var solV = useSig ? sigmoid(sol.value) : sol.value, apV = useSig ? sigmoid(ap.value) : ap.value;
+    var sb = C.band(solV), ab = C.band(apV);
+    solEl.textContent = sb.word; solEl.className = "val " + sb.cls; $("solvency-num").textContent = f2(solV) + " of 1 (higher = working better)";
+    apexEl.textContent = ab.word; apexEl.className = "val " + ab.cls; $("apex-num").textContent = f2(apV) + " of 1";
+    $("solvency-band").textContent = sb.label;
+    $("apex-band").textContent = ab.label + (ap.rebalanced ? " Worked out from three inputs, because there were no rough moments to repair." : "");
+
+    // step-by-step math
+    var m = "SETUP SCORE\n";
+    m += "  balance    " + fg(wb) + " × " + w.sol.wb.toFixed(2) + " = " + fg(sol.parts.wb) + "\n";
+    m += "  ownership  " + fg(oc) + " × " + w.sol.oc.toFixed(2) + " = " + fg(sol.parts.oc) + "\n";
+    m += "  1 − stress (1 − " + fg(as) + ") × " + w.sol.as.toFixed(2) + " = " + fg(sol.parts.as) + "\n";
+    m += "  total      " + fg(sol.parts.wb) + " + " + fg(sol.parts.oc) + " + " + fg(sol.parts.as) + " = " + sol.value.toFixed(4) + "\n";
+    if (useSig) m += "  S-curve    1 / (1 + e^(−6 × (" + sol.value.toFixed(4) + " − 0.5))) = " + solV.toFixed(4) + "\n";
+    m += "  shown as   " + f2(solV) + "  → " + sb.short + "\n  (inputs are shown to three decimals, so each line adds up; the cards above round to two)\n\nOVERALL SCORE\n";
+    if (ap.rebalanced){
+      m += "  no rough moments, so retuning is left out and the rest is divided by " + ap.divisor.toFixed(2) + "\n";
+      m += "  (" + fg(ap.parts.wb) + " + " + fg(ap.parts.oc) + " + " + fg(ap.parts.as) + ") ÷ " + ap.divisor.toFixed(2) + " = " + ap.value.toFixed(4) + "\n";
+    } else {
+      m += "  " + fg(wb) + "×" + w.apex.wb.toFixed(2) + " + " + fg(oc) + "×" + w.apex.oc.toFixed(2) + " + (1−" + fg(as) + ")×" + w.apex.as.toFixed(2) + " + " + fg(rf) + "×" + w.apex.rf.toFixed(2) + "\n";
+      m += "  = " + fg(ap.parts.wb) + " + " + fg(ap.parts.oc) + " + " + fg(ap.parts.as) + " + " + fg(ap.parts.rf) + " = " + ap.value.toFixed(4) + "\n";
+    }
+    if (useSig) m += "  S-curve    " + apV.toFixed(4) + "\n";
+    m += "  shown as   " + f2(apV) + "  → " + ab.short;
+    $("math").textContent = m;
+
+    var sf = C.shortfalls(wb, oc, as, w.sol);
+    renderContrib([
+      { name: "Balance", value: wb, earned: sf[0].earned, could: sf[0].could },
+      { name: "Ownership", value: oc, earned: sf[1].earned, could: sf[1].could },
+      { name: "1 − stress", value: as, earned: sf[2].earned, could: sf[2].could },
+      { name: "Retuning (overall score only)", value: rf, earned: rf === null ? 0 : rf * w.apex.rf, could: w.apex.rf }
+    ]);
+    var worst = sf.slice().sort(function(x, y){ return y.short - x.short; })[0];
+
+    var moves = C.suggestions({ wb: wb, oc: oc, as: as, balance: b, ownership: o, names: S.people.map(function(_, i){ return nameOf(i); }), weights: w.sol });
+    if (rf !== null && rf < 1) moves.push({ key: "rf", gain: 0, apexOnly: true, text: "Retune one more rough moment next week (fact, feeling, ask). The overall score would rise by about " + fg(w.apex.rf / r.friction) + ".", link: ["Say it so it lands (WP-09)", "/workpapers/fill/wp-09.html"] });
+    $("moves").innerHTML = moves.length ? moves.map(function(mv){
+      return "<li>" + esc(mv.text) + (mv.gain > 0 && !mv.full ? ' <span class="gain">+' + fg(mv.gain) + ' setup score</span>' : "") +
+        (mv.link ? ' <a href="' + mv.link[1] + '">' + esc(mv.link[0]) + '</a>' : "") + "</li>";
+    }).join("") : "<li>Nothing left to move: every part is at its best. Keep the rhythm.</li>";
+
+    // gap between the two scores
+    var gap = solV - apV, dv = $("divergence");
+    if (rf !== null && Math.abs(gap) >= 0.08){
+      dv.hidden = false; dv.className = "intro-note";
+      dv.innerHTML = gap > 0
+        ? "<p><strong>The setup score is " + f2(gap) + " above the overall score.</strong> The setup is holding, but repair after rough moments isn't happening much. That holds for a while, then stops holding. Work on <a href=\"/workpapers/fill/wp-09.html\">Say it so it lands</a>, not the job list.</p>"
+        : "<p><strong>The overall score is " + f2(-gap) + " above the setup score.</strong> You repair well, but the setup keeps creating the friction you repair. Work on the <a href=\"/workpapers/fill/wp-03.html\">job list</a>, not the scripts.</p>";
+    } else dv.hidden = true;
+
+    // what to do next, gated by state (never scored by it)
+    var base;
+    var lean = (o.conc && o.conc.flag) ? esc(nameOf(o.conc.top)) + " holds " + o.conc.count + " of the " + o.conc.total + " named jobs" : (b.conc && b.conc.flag) ? esc(nameOf(b.conc.top)) + " has " + C.pct(b.conc.share) + " of the hours" : "";
+    if (sb.key === "high" && lean) base = "The numbers hold, but " + lean + ". A high score can hide a setup that leans on one reliable person. Ask which job they would hand over first, before calling it settled.";
+    else if (sb.key === "high") base = "The setup is carrying its own weight. Nothing needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a> and log the read.";
+    else if (sb.key === "mid") base = "It needs a look: something in the setup is slipping. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>, costing " + fg(worst.short) + " of the points. Start there, not with whatever happened most recently. The first item under “What would move the score” is a good first step to bring to the others.";
+    else base = "It needs a rethink, together: the setup is asking too much as it is. That's about the setup, not anyone's effort or worth. The biggest shortfall is <strong>" + esc(worst.name.toLowerCase()) + "</strong>. Plan a calm session to rework the <a href=\"/workpapers/fill/wp-03.html\">job list</a> together, rather than another one-off patch.";
+    var extra = "";
+    if (o.everyoneA && o.everyoneA.length) extra += "<p>Jobs where everyone is accountable often drift to whoever notices first. Consider naming one person to notice each of them.</p>";
+    if (sb.key === "low" && ab.key === "low") extra += "<p>Both scores are low at once. Another worksheet may not be what helps most; it may be worth asking someone neutral that everyone trusts to help you rework the setup together.</p>";
+    extra += "<p>Keep going: <a href=\"/workpapers/fill/suite.html\">build your Workpaper Suite</a> or track the weeks in <a href=\"/workpapers/report-01.html\">Your progress, week by week</a>.</p>";
+
+    var mode = currentState ? STATE_COPY[currentState].mode : "go";
+    var nb = $("next-box"), nt = $("next-text");
+    if (mode === "go"){ nb.className = "next-box"; nt.innerHTML = "<p>" + base + "</p>" + extra; }
+    else if (mode === "hold"){ nb.className = "next-box hold"; nt.innerHTML = "<p><strong>Read it, but don't act on it yet.</strong> You said you're revved up. Write the number down and bring it to your next calm check-in.</p><p>" + base + "</p>" + extra; }
+    else { nb.className = "next-box stop"; nt.innerHTML = "<p><strong>Stop here for today.</strong> You said you're running on empty, and on a day like that a read can sound like a verdict on you. It isn't. It will still be true tomorrow.</p>" + extra; }
+
+    lastRead = { wb: wb, oc: oc, as: as, rf: rf, sol: solV, apex: apV };
+    var sn = document.body.classList.contains("show-nums");
+    setSummary("The setup: " + sb.short + (sn ? " (" + f2(solV) + ")" : "") + ". With repairs counted: " + ab.short + (sn ? " (" + f2(apV) + ")" : "") + ". Biggest shortfall: " + worst.name.toLowerCase() + "." + (lean ? " Note: " + lean.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&") + "." : ""));
+    buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom);
+    save();
+  }
+
+  // Announce only when the headline changes, so screen readers aren't flooded while typing.
+  var sumTimer = null;
+  function setSummary(t){
+    $("live-summary").textContent = t;
+    clearTimeout(sumTimer);
+    // read the line again when the timer fires, so a fast change is never announced one step behind
+    sumTimer = setTimeout(function(){ var now = $("live-summary").textContent; if (now === announced) return; announced = now; $("announce").textContent = now; }, 600);
+  }
+
+  var copyText = "";
+  function buildCopyText(b, o, s, r, sol, ap, solV, apV, sb, ab, moves, useSig, custom){
+    var L = [];
+    L.push("Is the setup working for everyone? (CALC-01, Spread Love & Acceptance)");
+    L.push("People: " + S.people.map(function(_, i){ return nameOf(i); }).join(", "));
+    L.push("");
+    L.push("How the setup is working: " + sb.short + " (" + f2(solV) + " of 1; 0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together)");
+    L.push("Overall score: " + f2(apV) + " (" + ab.short + ")" + (ap.rebalanced ? ", from three inputs (no rough moments logged)" : ""));
+    L.push("");
+    L.push("Balance: " + f2(b.value) + " (" + (b.mode === "agreed" ? "against our agreed split" : "against an even share") + "). Hours: " + b.hours.map(function(h, i){ return nameOf(i) + " " + f1(h); }).join(", ") + ". About " + f1(b.movedHours) + " hours would have to change hands.");
+    L.push("Ownership: " + f2(o.value) + " (" + o.owned + " of " + o.total + " jobs have an owner).");
+    L.push("Stress: " + f2(s.value) + " (average load of " + s.scores.length + " people). Counted as 1 - stress.");
+    L.push("Retuning: " + (r.value === null ? "no value (no rough moments)" : f2(r.value) + " (" + r.retunes + " of " + r.friction + ")"));
+    L.push("");
+    L.push("Math: " + f2(b.value) + " x " + sol.weights.wb.toFixed(2) + " + " + f2(o.value) + " x " + sol.weights.oc.toFixed(2) + " + (1 - " + f2(s.value) + ") x " + sol.weights.as.toFixed(2) + " = " + sol.value.toFixed(4) + (useSig ? " (S-curve on)" : "") + (custom ? " (custom weights)" : ""));
+    if (moves.length){
+      L.push("");
+      L.push("What would move the score:");
+      moves.forEach(function(mv){ L.push("- " + mv.text); });
+    }
+    L.push("");
+    L.push("This reads the setup, not any person. It's a place to start a conversation, not a verdict.");
+    copyText = L.join("\n");
+  }
+
+  /* ---------- trend ---------- */
+  function niceDate(iso){
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    return m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }) : String(iso || "");
+  }
+  function renderTrend(){
+    var tb = $("trend-rows");
+    if (!trend.length){ tb.innerHTML = '<tr><td colspan="9" style="color:var(--ink-soft);">No reads logged yet.</td></tr>'; $("drift-alert").hidden = true; return; }
+    tb.innerHTML = trend.map(function(row, i){
+      var prev = i ? trend[i - 1] : null, d = prev ? row.sol - prev.sol : null;
+      var dt = d === null ? "—" : (d >= 0 ? "+" : "−") + f2(Math.abs(d));
+      return '<tr><td class="mono">' + esc(niceDate(row.date)) + '</td><td class="num mono">' + f2(row.wb) + '</td><td class="num mono">' + f2(row.oc) + '</td><td class="num mono">' + f2(row.as) + '</td><td class="num mono">' + (row.rf === null ? "n/a" : f2(row.rf)) + '</td><td class="num mono"><b>' + f2(row.sol) + '</b></td><td class="num mono" style="color:' + (d === null ? "var(--ink-soft)" : d >= 0 ? "var(--credit)" : "var(--debit)") + '">' + dt + '</td><td class="num mono">' + f2(row.apex) + '</td><td><button type="button" class="remove no-print" data-t-del="' + i + '" aria-label="Remove the read for ' + esc(niceDate(row.date)) + '">&times;</button></td></tr>';
+    }).join("");
+    var drops = 0;
+    for (var i = trend.length - 1; i > 0 && drops < 3; i--){ if (trend[i - 1].apex - trend[i].apex > 0.10) drops++; else break; }
+    var al = $("drift-alert");
+    if (drops >= 3){ al.hidden = false; al.className = "warn-box"; al.innerHTML = "<p><strong>The drift rule is showing.</strong> The overall score has dropped by more than 0.10 three weeks in a row. That calls for a planned review of the <a href=\"/workpapers/fill/wp-03.html\">job list</a>, not an emergency conversation. The setup is the kind of thing you can fix.</p>"; }
+    else al.hidden = true;
+  }
+
+  /* ---------- opt-in keeping ---------- */
+  var keepOn = false;
+  function save(){
+    if (!keepOn) return;
+    try { localStorage.setItem(STORE, JSON.stringify({ v: 2, entries: S, trend: trend, state: currentState })); } catch (e) {}
+  }
+  function erase(){
+    try { localStorage.removeItem(STORE); } catch (e) {}
+  }
+
+  /* ---------- events (delegated) ---------- */
+  document.addEventListener("input", function(e){
+    var t = e.target, d = t.dataset;
+    if (d.person !== undefined){
+      S.people[+d.person] = t.value;
+      var i = +d.person, nm = esc(nameOf(i));
+      var th = document.querySelector('[data-name-col="' + i + '"]'); if (th) th.innerHTML = nm;
+      var h4 = document.querySelector('[data-name-card="' + i + '"]'); if (h4) h4.innerHTML = nm;
+      var tl = document.querySelector('label[for="target-' + i + '"]'); if (tl) tl.innerHTML = nm + " (%)";
+      each(document.querySelectorAll('.raci option[value="' + i + '"]'), function(op){ op.textContent = nameOf(i); });
+    }
+    else if (d.lName !== undefined) S.ledger[+d.lName].name = t.value;
+    else if (d.lRow !== undefined) S.ledger[+d.lRow].hours[+d.lP] = t.value;
+    else if (d.target !== undefined) S.targets[+d.target] = t.value;
+    else if (d.rName !== undefined) S.raci[+d.rName].name = t.value;
+    else if (d.rR !== undefined) S.raci[+d.rR].r = t.value;
+    else if (d.rA !== undefined) S.raci[+d.rA].a = t.value;
+    else if (d.bP !== undefined) S.bat[+d.bP][+d.bK] = t.value;
+    else if (t.id === "friction") S.friction = t.value;
+    else if (t.id === "retunes") S.retunes = t.value;
+    else if (t.name === "target-mode"){ S.targetMode = t.value; $("target-row").classList.toggle("on", t.value === "agreed"); if (t.value === "agreed" && S.targets.every(function(x){ return x === ""; })){ var even = Math.floor(100 / nPeople()); S.targets = S.people.map(function(_, i){ return String(i === 0 ? 100 - even * (nPeople() - 1) : even); }); renderTargets(); } }
+    else if (!t.classList.contains("w-in") && t.id !== "sigmoid") return;
+    recalc();
+  });
+  document.addEventListener("change", function(e){
+    var t = e.target;
+    if (t.tagName === "SELECT" && (t.dataset.rR !== undefined || t.dataset.rA !== undefined || t.dataset.bP !== undefined)) return; // handled by input
+    if (t.id === "people-count"){ resize(+t.value); renderAll(); recalc(); $("people-names").querySelector("input").focus(); }
+    else if (t.id === "sigmoid") recalc();
+    else if (t.id === "show-nums"){ document.body.classList.toggle("show-nums", t.checked); try { if (t.checked) sessionStorage.setItem("tol-calc-nums", "1"); else sessionStorage.removeItem("tol-calc-nums"); } catch (err) {} recalc(); }
+    else if (t.id === "keep"){
+      keepOn = t.checked;
+      if (keepOn){ save(); $("keep-status").textContent = "Kept on this device. Untick or press Erase to delete it."; }
+      else { erase(); $("keep-status").textContent = "Nothing is kept on this device now."; }
+    }
+  });
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("button"); if (!t) return;
+    var d = t.dataset;
+    if (d.lDel !== undefined){ S.ledger.splice(+d.lDel, 1); renderLedger(); recalc(); focusAfterRemove("ledger-rows", +d.lDel, "add-ledger-row"); }
+    else if (d.rDel !== undefined){ S.raci.splice(+d.rDel, 1); renderRaci(); recalc(); focusAfterRemove("raci-rows", +d.rDel, "add-raci-row"); }
+    else if (d.tDel !== undefined){ trend.splice(+d.tDel, 1); renderTrend(); save(); $("trend-status").textContent = "Removed."; $("add-trend").focus(); }
+    else if (d.example){
+      S = fromExample(EXAMPLES[d.example] || DEFAULT);
+      renderAll(); recalc();
+      $("example-status").textContent = d.example === "blank" ? "Cleared. Start typing your own entries." : "Loaded. Scroll down to see each step, or jump to the read.";
+      if (d.example !== "blank") $("read-card").focus();
+    }
+    else if (t.dataset.state){
+      var st = t.dataset.state;
+      currentState = currentState === st ? null : st;
+      each(document.querySelectorAll(".rung"), function(bn){ bn.setAttribute("aria-pressed", String(bn.dataset.state === currentState)); });
+      $("state-text").textContent = currentState ? STATE_COPY[currentState].text : "Pick the one closest to how you feel. It's optional, and you can change it any time.";
+      recalc();
+    }
+    else if (t.id === "load-suite"){
+      var sd = C.suiteDraft();
+      if (!sd){ $("example-status").textContent = "There’s no Workpaper Suite draft kept on this device to load."; return; }
+      S = { people: sd.names.slice(), ledger: sd.ledger.length ? sd.ledger.map(function(r){ return { name: r.name, hours: r.hours.map(String) }; }) : [{ name: "", hours: sd.names.map(function(){ return 0; }) }],
+        targetMode: "even", targets: sd.names.map(function(){ return ""; }), raci: sd.raci.length ? sd.raci : [{ name: "", r: "", a: "" }], bat: sd.bat, friction: S.friction, retunes: S.retunes };
+      renderAll(); recalc();
+      $("example-status").textContent = "Loaded from your suite: " + sd.found.join(", ") + ". Hours come from the minutes in Who did what. Retuning isn’t in the suite, so it stays as it was.";
+      $("read-card").focus();
+    }
+    else if (t.id === "add-ledger-row"){ S.ledger.push({ name: "", hours: S.people.map(function(){ return 0; }) }); renderLedger(); recalc(); document.querySelector('[data-l-name="' + (S.ledger.length - 1) + '"]').focus(); }
+    else if (t.id === "add-raci-row"){ S.raci.push({ name: "", r: "", a: "" }); renderRaci(); recalc(); document.querySelector('[data-r-name="' + (S.raci.length - 1) + '"]').focus(); }
+    else if (t.id === "reset-weights"){ setWeights(C.W); recalc(); }
+    else if (t.id === "print-top" || t.id === "print-read") window.print();
+    else if (t.id === "copy-summary"){
+      if (!lastRead){ $("copy-status").textContent = "There's no complete read to copy yet."; return; }
+      var ta = $("copy-out");
+      var done = function(){ $("copy-status").textContent = "Copied. Paste it into a message or your notes."; ta.hidden = true; };
+      var fallback = function(){ ta.value = copyText; ta.hidden = false; ta.focus(); ta.select(); $("copy-status").textContent = "Your browser blocked copying. The summary is selected below: copy it from there."; };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(copyText).then(done, fallback);
+        else fallback();
+      } catch (err){ fallback(); }
+    }
+    else if (t.id === "add-trend"){
+      if (!lastRead){ $("trend-status").textContent = "There's no complete read to log yet. Fill in the missing inputs first."; return; }
+      var today = new Date(), dte = $("trend-date").value || (today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ("0" + today.getDate()).slice(-2));
+      var had = trend.filter(function(x){ return x.date === dte; }).length;
+      trend = trend.filter(function(x){ return x.date !== dte; });
+      trend.push({ date: dte, wb: lastRead.wb, oc: lastRead.oc, as: lastRead.as, rf: lastRead.rf, sol: lastRead.sol, apex: lastRead.apex });
+      trend.sort(function(x, y){ return x.date < y.date ? -1 : x.date > y.date ? 1 : 0; });
+      renderTrend(); save();
+      $("trend-status").textContent = (had ? "Replaced the read for the week of " : "Logged the read for the week of ") + niceDate(dte) + (had ? ". One read per week keeps the trend honest." : ".");
+    }
+    else if (t.id === "erase"){
+      erase(); keepOn = false; $("keep").checked = false;
+      $("keep-status").textContent = "Erased. Nothing from this calculator is kept on this device.";
+    }
+  });
+  function focusAfterRemove(tbodyId, idx, fallbackId){
+    var rows = $(tbodyId).querySelectorAll("tr");
+    var row = rows[Math.min(idx, rows.length - 1)];
+    (row ? row.querySelector("input,select") : $(fallbackId)).focus();
+  }
+
+  /* ---------- the household, typed once in another tool (/assets/js/household.js) ---------- */
+  // Only offered, when no one has typed a name here yet. "Use them" fills empty places, never a typed name.
+  var HH = window.TOLHousehold, hhHost = null, hhOffer = null, hhNo = false;
+  function hhEmpty(){ return S.people.every(function(p){ return !String(p || "").trim() || HH.isPlaceholder(p); }); }
+  function hhNoHours(){ return S.ledger.every(function(r){ return r.hours.every(function(x){ return !(+x > 0); }); }); }
+  function hhNoOwners(){ return S.raci.every(function(r){ return r.r === "" && r.a === ""; }); }
+  function hhUse(){
+    var hh = HH.get(), names = 0, jobs = 0;
+    if (!hh) return "";
+    hh.people.forEach(function(nm){
+      if (S.people.some(function(p){ return String(p || "").trim().toLowerCase() === nm.toLowerCase(); })) return;
+      var slot = -1;
+      S.people.forEach(function(p, i){ if (slot < 0 && (!String(p || "").trim() || HH.isPlaceholder(p))) slot = i; });
+      if (slot < 0){ if (S.people.length >= C.MAX_PEOPLE) return; resize(S.people.length + 1); slot = S.people.length - 1; }
+      S.people[slot] = nm; names++;
+    });
+    if (hh.jobs.length){
+      var owner = function(nm){ var k = String(nm || "").toLowerCase(), at = ""; S.people.forEach(function(p, i){ if (k && String(p || "").trim().toLowerCase() === k) at = String(i); }); return at; };
+      // the starter job names make way for the household's, while nothing is filled in against them
+      if (hhNoHours()){ S.ledger = hh.jobs.map(function(j){ return { name: j.name, hours: S.people.map(function(){ return 0; }) }; }); jobs = hh.jobs.length; }
+      if (hhNoOwners()){ S.raci = hh.jobs.map(function(j){ return { name: j.name, r: owner(j.owner), a: "" }; }); jobs = hh.jobs.length; }
+    }
+    renderAll(); recalc();
+    return HH.addedLine(names, jobs);
+  }
+  function hhRefresh(){
+    if (!HH || !hhHost) return;
+    var hh = HH.get(), want = !hhNo && !!hh && hh.people.length > 0 && hhEmpty();
+    if (want && !hhOffer){
+      hhOffer = HH.offer({ names: hh.people, jobs: hh.jobs.map(function(j){ return j.name; }), onUse: hhUse, onNo: function(){ hhNo = true; }, focus: function(){ return $("pname-0"); } });
+      hhHost.appendChild(hhOffer);
+    } else if (!want && hhOffer && !hhOffer.querySelector(".tol-hh-offer").hidden){ hhOffer.remove(); hhOffer = null; }
+  }
+  if (HH){
+    var hhPanel = $("people-count").parentNode;
+    hhHost = document.createElement("div");
+    hhHost.className = "no-print";
+    hhPanel.insertBefore(hhHost, hhPanel.firstChild);
+  }
+
+  /* ---------- start ---------- */
+  setWeights(C.W);
+  S = fromExample(DEFAULT);
+  try {
+    var raw = localStorage.getItem(STORE);
+    if (raw){
+      var saved = JSON.parse(raw);
+      if (saved && saved.v === 2 && saved.entries && saved.entries.people && saved.entries.people.length >= 2){
+        S = saved.entries; trend = saved.trend || []; currentState = saved.state || null;
+        keepOn = true; $("keep").checked = true;
+        $("keep-status").textContent = "Your kept entries were loaded from this device.";
+      }
+    }
+  } catch (e) {}
+  each(document.querySelectorAll(".rung"), function(bn){ bn.setAttribute("aria-pressed", String(bn.dataset.state === currentState)); });
+  if (currentState) $("state-text").textContent = STATE_COPY[currentState].text;
+  try { if (sessionStorage.getItem("tol-calc-nums") === "1"){ $("show-nums").checked = true; document.body.classList.add("show-nums"); } } catch (e) {}
+  renderAll(); renderTrend(); recalc();
+  var sdFound = C.suiteDraft && C.suiteDraft();
+  if (sdFound){ $("suite-load").hidden = false; $("suite-found").textContent = "(" + sdFound.found.join(", ") + ")"; }
+})();
+</script>
+</body>
+</html>

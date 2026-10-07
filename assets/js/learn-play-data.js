@@ -232,7 +232,7 @@ window.TOLLearnPlayData = {
     },
 
     '/turning-toward.html': {
-      t: 'Turning Toward', g: 'p5', n: '/workpapers/wp-13-pll-protocol.html',
+      t: 'Turning Toward', g: 'p5', n: '/workpapers/wp-13-daily-check-in.html',
       m: [
         { at: 'reach for you', k: 'quiz', q: 'You really can’t look up right now. What still counts as turning toward?',
           o: [['“Give me two minutes, then I want to hear.”', true, 'Yes! A short turn toward still counts, as long as you come back.'],
@@ -256,7 +256,7 @@ window.TOLLearnPlayData = {
     },
 
     '/turning-toward-in-depth.html': {
-      t: 'Turning Toward (full)', g: 'p5', n: '/workpapers/wp-13-pll-protocol.html',
+      t: 'Turning Toward (full)', g: 'p5', n: '/workpapers/wp-13-daily-check-in.html',
       m: [
         { at: 'Notice bids', k: 'sort', q: 'Toward, away or against?', bins: ['Turning toward', 'Turning away', 'Turning against'],
           items: [['Looking up and asking one question', 0], ['Staying on the phone', 1], ['“Can’t you see I’m busy?”', 2], ['A small “oh nice”', 0], ['Changing the subject', 1]] },
@@ -589,7 +589,7 @@ window.TOLLearnPlayData = {
     },
 
     '/book/chapter-5-in-depth.html': {
-      t: 'Chapter V (full): The monthly look-back', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
+      t: 'Chapter V (full): The monthly look-back', g: 'p2', n: '/workpapers/wp-04-what-keeps-coming-back.html',
       m: [
         { at: 'Why a monthly look', k: 'flip', q: 'Three rhythms keep things running. Tap each one.',
           cards: [['Daily', 'The 90-second daily check-in (WP-13).', 'Tonight, one sentence each.'],
@@ -617,7 +617,7 @@ window.TOLLearnPlayData = {
 
     /* ------------------------------------------------------------ workpapers */
     '/workpapers/wp-01.html': {
-      t: 'Who did what (WP-01)', g: 'p1', n: '/workpapers/wp-02-battery-stress-meter.html',
+      t: 'Who did what (WP-01)', g: 'p1', n: '/workpapers/wp-02-how-much-are-you-carrying.html',
       m: [
         { at: 'Write down the week', k: 'quiz', q: 'Who fills in each side of the log?',
           o: [['Each of you writes only your own side', true, 'Yes! You’re the only expert on your own week.'],
@@ -637,7 +637,7 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/workpapers/wp-02-battery-stress-meter.html': {
+    '/workpapers/wp-02-how-much-are-you-carrying.html': {
       t: 'How much are you carrying? (WP-02)', g: 'p3', n: '/wp-11.html',
       m: [
         { at: 'before a hard conversation', k: 'quiz', q: 'This check is…',
@@ -660,7 +660,7 @@ window.TOLLearnPlayData = {
     },
 
     '/wp-11.html': {
-      t: 'The Calm-Down Kit (WP-11)', g: 'p3', n: '/workpapers/wp-03-raci-treaty.html',
+      t: 'The Calm-Down Kit (WP-11)', g: 'p3', n: '/workpapers/wp-03-one-owner-per-job.html',
       m: [
         { at: 'never for them', k: 'quiz', q: 'Who is the Calm-Down Kit for?',
           o: [['You, about yourself', true, 'Yes! It’s never something to hand to the other person.'],
@@ -680,8 +680,8 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/workpapers/wp-03-raci-treaty.html': {
-      t: 'One owner per job (WP-03)', g: 'p2', n: '/workpapers/wp-04-deficit-audit.html',
+    '/workpapers/wp-03-one-owner-per-job.html': {
+      t: 'One owner per job (WP-03)', g: 'p2', n: '/workpapers/wp-04-what-keeps-coming-back.html',
       m: [
         { at: 'Every job gets one owner', k: 'match', q: 'Match each name to its job.',
           pairs: [['Owner', 'Does the job and sees it through'], ['Helper', 'Optional: pitches in, or notices if it slips'], ['Agreeing', 'You both know who owns what, as written']] },
@@ -699,8 +699,8 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/workpapers/wp-04-deficit-audit.html': {
-      t: 'What keeps coming back? (WP-04)', g: 'p2', n: '/workpapers/wp-09-tone-filter.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': {
+      t: 'What keeps coming back? (WP-04)', g: 'p2', n: '/workpapers/wp-09-say-it-so-it-lands.html',
       m: [
         { at: 'monthly, not weekly', k: 'quiz', q: 'What do you bring to the monthly look-back?',
           o: [['Four weekly logs from Who did what and your job list', true, 'Yes! That’s all you need.'],
@@ -717,8 +717,8 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/workpapers/wp-09-tone-filter.html': {
-      t: 'Say it so it lands (WP-09)', g: 'p4', n: '/workpapers/wp-13-pll-protocol.html',
+    '/workpapers/wp-09-say-it-so-it-lands.html': {
+      t: 'Say it so it lands (WP-09)', g: 'p4', n: '/workpapers/wp-13-daily-check-in.html',
       m: [
         { at: 'own next message', k: 'quiz', q: 'Whose messages does Say it so it lands check?',
           o: [['Your own next message', true, 'Yes! Each of you uses it on yourself.'],
@@ -734,7 +734,7 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/workpapers/wp-13-pll-protocol.html': {
+    '/workpapers/wp-13-daily-check-in.html': {
       t: 'The 90-second daily check-in (WP-13)', g: 'p5', n: '/turning-toward.html',
       m: [
         { at: 'Small and often', k: 'quiz', q: 'In electronics, what does the small circuit behind this check-in do?',
@@ -1060,8 +1060,8 @@ window.TOLLearnPlayData = {
 
   // The order new explorers are nudged through when a page has no "next" of its own
   order: ['/five-pillars.html', '/start-here.html', '/how-it-works.html', '/book/preface.html', '/book/chapter-1.html', '/know-yourself.html',
-    '/workpapers/wp-01.html', '/book/chapter-2.html', '/book/chapter-3.html', '/workpapers/wp-02-battery-stress-meter.html', '/wp-11.html',
-    '/check-ins.html', '/book/chapter-4.html', '/workpapers/wp-03-raci-treaty.html', '/wired-differently.html', '/frequency-framework.html',
-    '/workpapers/wp-09-tone-filter.html', '/turning-toward.html', '/workpapers/wp-13-pll-protocol.html', '/book/chapter-5.html',
-    '/workpapers/wp-04-deficit-audit.html', '/relationships.html']
+    '/workpapers/wp-01.html', '/book/chapter-2.html', '/book/chapter-3.html', '/workpapers/wp-02-how-much-are-you-carrying.html', '/wp-11.html',
+    '/check-ins.html', '/book/chapter-4.html', '/workpapers/wp-03-one-owner-per-job.html', '/wired-differently.html', '/frequency-framework.html',
+    '/workpapers/wp-09-say-it-so-it-lands.html', '/turning-toward.html', '/workpapers/wp-13-daily-check-in.html', '/book/chapter-5.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html', '/relationships.html']
 };

@@ -4,7 +4,7 @@
 
 **Scope note:** this is a heuristic scoring worksheet. It is not a validated statistical model, was not trained on any dataset, and does not output a judgment about either person or about the relationship's worth. It scores exactly one thing: whether the current shared-workload arrangement, as logged, looks sustainable. Treat everything below as a spec for a transparent, editable formula — not a black box.
 
-**Deployed at:** `/workpapers/calculators/calc01-solvency.html`
+**Deployed at:** `/workpapers/calculators/is-the-setup-working-quick.html`
 
 ## Design rule
 

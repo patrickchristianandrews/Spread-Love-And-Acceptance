@@ -655,7 +655,7 @@
     moves.push({ key: 'ffa', title: moves.length ? 'Then: one fact, one feeling, one ask' : 'Make your point in three short parts: one fact, one feeling, one ask',
       say: 'When you’re ready to make your point, keep it to one topic and three short parts.',
       script: 'When [what happened, one specific time], I felt [one feeling]. Could you [one specific thing, by when]?',
-      dig: ['/workpapers/wp-09-tone-filter-in-depth.html', 'Say it so it lands (WP-09): turning a reaction into fact, feeling and ask'] });
+      dig: ['/workpapers/wp-09-say-it-so-it-lands-in-depth.html', 'Say it so it lands (WP-09): turning a reaction into fact, feeling and ask'] });
     return moves;
   }
 

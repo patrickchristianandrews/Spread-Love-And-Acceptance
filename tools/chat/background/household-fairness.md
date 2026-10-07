@@ -5,7 +5,7 @@ These add practical detail to the Library’s fairness entries.
 ## Chore charts that work
 aka: chore chart; chore rota; chore schedule; cleaning schedule
 see: Rotation or specialization; Negotiating household jobs by preference
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Practical advice drawn from household and parenting guidance. There’s little formal research on specific chart designs; clear ownership and visibility are the common threads.
 try: One sheet on the fridge: each job, how often, who owns it, and what “done” looks like.
 
@@ -18,7 +18,7 @@ Program: WP-03 is a chore chart with two names per job: who does it and who keep
 ## Rotation or specialization
 aka: rotate chores; take turns; specialize; fixed jobs
 see: Chore charts that work; Negotiating household jobs by preference
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Both approaches are common. Specialization lets people get good at a job and avoids re-deciding; rotation spreads dreaded jobs. No single approach is best for every household.
 try: Fixed owners for most jobs, and a rotation just for the two jobs everyone dislikes.
 
@@ -44,7 +44,7 @@ Program: WP-03 asks for a Responsible and an Accountable name; for jobs like thi
 ## The Fair Play card idea
 aka: Fair Play; Fair Play cards; Eve Rodsky
 see: Planning, doing and following through; Chore charts that work
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Fair Play is a popular book and card system by Eve Rodsky (2019). It’s practical guidance, not a research study. Many households find the ideas useful; others find the system too detailed.
 try: Write each household job on a card, deal them out based on preference and capacity, and revisit the deal every few months.
 
@@ -83,7 +83,7 @@ Program: A holiday list works just like WP-03. The Library’s holidays entry co
 ## School and kid admin
 aka: school admin; permission slips; kid logistics; school emails
 see: Planning, doing and following through; Co-parenting calendar
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Research on the mental load of parenting highlights children’s admin (forms, appointments, activities) as a large, often invisible category.
 try: Split by child or by category: one person owns school emails and forms, the other owns activities and appointments.
 

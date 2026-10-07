@@ -2,8 +2,8 @@
   calc01-core.js — The Objective Ledger, CALC-01 "Is the setup working for everyone?"
   (also called the solvency read)
   The one place the CALC-01 arithmetic lives. Loaded by:
-    /calc01-solvency.html                       (the full calculator)
-    /workpapers/calculators/calc01-solvency.html (the quick read)
+    /is-the-setup-working.html                       (the full calculator)
+    /workpapers/calculators/is-the-setup-working-quick.html (the quick read)
     /do/workpaper-playground.html                (the practice examples)
   so every page gives the same number for the same entries.
 

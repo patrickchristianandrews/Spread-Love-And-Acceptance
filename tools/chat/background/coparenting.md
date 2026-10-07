@@ -18,7 +18,7 @@ Program: The co-parent road keeps messages short and factual, with one owner per
 ## BIFF responses
 aka: BIFF; brief informative friendly firm; replying to a hostile message
 see: Parallel parenting; Don’t fight by text
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: BIFF (Brief, Informative, Friendly, Firm) was developed by Bill Eddy of the High Conflict Institute. It’s a practical method widely used in family law settings; formal research is limited.
 try: “Thanks for letting me know. I’ll have Sam ready at 5 on Friday. Have a good week.”
 
@@ -31,7 +31,7 @@ Program: WP-09 turns a raw reaction into fact, feeling and ask. For co-parents, 
 ## Co-parenting calendar
 aka: shared calendar; custody calendar; parenting schedule
 see: Transition bags; Schedule change protocol
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Shared calendars are widely recommended by family mediators to reduce conflict over schedules. Evidence is practical.
 try: One shared calendar with the kids’ schedule, activities, appointments and who has them each day.
 
@@ -70,7 +70,7 @@ Program: This is the program’s co-parent advice: keep handoffs short and calm,
 ## Schedule change protocol
 aka: changing the schedule; swapping weekends; last minute changes
 see: Co-parenting calendar; BIFF responses
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Practical guidance from family mediation. Agreed notice periods reduce conflict over changes. Always check any court order first.
 try: “Changes need 48 hours’ notice by text, except emergencies. Confirm in writing.”
 
@@ -109,7 +109,7 @@ Program: Pillar IV, Tune how you send and receive: children pick up tone even mo
 ## Co-parenting check-in agenda
 aka: co-parent meeting; co-parenting meeting; monthly co-parent review
 see: Co-parenting calendar; A simple agenda for a hard talk
-go: /workpapers/wp-04-deficit-audit.html | WP-04: What keeps coming back?
+go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
 evidence: Structured, business-like co-parenting meetings are recommended by many family practitioners. Evidence is practical.
 try: Monthly: school updates, health and appointments, activities and costs, upcoming schedule changes, one thing that’s going well.
 

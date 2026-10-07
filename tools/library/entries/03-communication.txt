@@ -19,7 +19,7 @@ research:
 Rogers and Richard Farson’s 1957 essay *Active Listening* popularised the term. Studies of active listening, such as a 2014 experiment by Harry Weger and colleagues, have found that people whose listeners used active listening responses felt more understood, though effects on other outcomes were smaller. In couples, Gottman’s 1998 research found that formal paraphrasing was rare in real conflicts and did not predict outcomes, which suggests listening skills matter most as a general attitude of interest rather than a rigid technique.
 links:
 /check-ins-in-depth.html#acknowledge | Check-ins: acknowledge first
-/workpapers/wp-13-pll-protocol.html | The daily check-in: just listen (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in: just listen (WP-13)
 talk:
 - What makes you feel really listened to?
 - Which listening habit is hardest for you to break: fixing, advising or relating it to yourself?
@@ -38,7 +38,7 @@ They can also feel stiff at first. Many people find their own natural version, s
 research:
 Thomas Gordon introduced “I-messages” in his *Parent Effectiveness Training* (1970). Research on I-statements is mixed: some studies found they were received as less hostile than you-statements, while others found that listeners respond more to tone, content and context than to pronouns. They are best seen as one useful tool for a gentler start, not a guarantee.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /conversation-reader.html | The Conversation Reader
 talk:
 - What is your natural version of an I-statement?
@@ -60,7 +60,7 @@ Critics point out that when used rigidly, NVC can sound scripted or even manipul
 research:
 Rosenberg developed NVC from the 1960s and described it in *Nonviolent Communication: A Language of Life* (first published 1999). It is widely used in mediation, schools and workplaces. Reviews of the research have found few rigorous studies: many evaluations are small, uncontrolled or qualitative, although results are generally positive. So it is best described as a promising, widely used practice with a thin evidence base.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator
 talk:
 - What is a common judgement you make that might be hiding a need?
@@ -162,7 +162,7 @@ research:
 Justin Kruger, Nicholas Epley, Jason Parker and Zhi-Wen Ng (2005) found that people sending emails were overconfident about how well recipients would detect their tone, such as sarcasm or seriousness. Media richness theory (Richard Daft and Robert Lengel, 1986) suggests that richer channels, with voice and face, are better for ambiguous or emotional messages. Research on emojis is newer and suggests they can help convey tone but are also read differently by different people.
 links:
 /conversation-reader.html | The Conversation Reader
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - Has a message between us ever been misread? What happened?
 - Which topics should we agree never to handle by text?
@@ -182,7 +182,7 @@ research:
 Assertiveness training grew from behaviour therapy in the 1950s and 1960s, including the work of Joseph Wolpe, and was popularised by Robert Alberti and Michael Emmons’ *Your Perfect Right* (1970). Studies of assertiveness training have generally found improvements in self-reported assertiveness and related outcomes, though many are older and small. Cultural norms affect what is seen as appropriately assertive.
 links:
 /workpapers/wp-01.html | Kind ways to say no (WP-01)
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - Do you lean more passive or more direct when something bothers you?
 - What made speaking up feel safe or unsafe when you were growing up?
@@ -202,7 +202,7 @@ research:
 Research on saying no is spread across topics like assertiveness, boundary-setting and self-control. Studies by Vanessa Patrick and Henrik Hagtvedt (2012) found that saying “I don’t” (framed as a personal rule) was more effective at resisting temptation than “I can’t,” an interesting finding about framing, though replication is limited. Research on overcommitment and burnout supports the practical value of protecting capacity.
 links:
 /workpapers/wp-01.html | Kind ways to say no (WP-01)
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - Which kind of “no” do you find hardest to say?
 - What does overcommitting cost you, and who notices?
@@ -241,7 +241,7 @@ Receiving feedback well is a skill too. Douglas Stone and Sheila Heen describe c
 research:
 Avraham Kluger and Angelo DeNisi’s 1996 meta-analysis found that feedback improved performance on average, but in more than a third of cases it actually made performance worse, especially when it drew attention to the self rather than the task. SBI was developed at the Center for Creative Leadership. Stone and Heen’s *Thanks for the Feedback* (2014) is a practitioner book. Evidence specifically comparing the feedback sandwich with alternatives is limited.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /relationships.html#coworkers | How it fits: coworkers
 talk:
 - What kind of feedback do you find easiest to hear?
@@ -261,7 +261,7 @@ It is important to say that complaints are not a problem. Relationships where pe
 research:
 The distinction is central to Gottman’s work; criticism is the first of his four horsemen. Research on attributions in couples, for example by Frank Fincham and Thomas Bradbury, shows that seeing a partner’s negative behaviour as a stable trait of the partner (rather than a situation) goes along with lower satisfaction.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /check-ins.html#ground | Check-ins: ground rules
 talk:
 - Can we rephrase a recent criticism as a complaint?
@@ -323,7 +323,7 @@ research:
 Mehrabian’s studies (1967) are often misquoted; he himself cautioned against generalising them. Research on facial expressions, including debates between Paul Ekman and Lisa Feldman Barrett, shows that expressions are less universal and less reliably linked to specific emotions than once thought. Research on autistic communication supports the idea that nonverbal norms differ across neurotypes.
 links:
 /wired-differently-in-depth.html#channels | Wired Differently in depth: channels
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - Is there a tone or expression of yours that people often misread?
 - What does eye contact mean to each of us?
@@ -343,7 +343,7 @@ research:
 Niall Bolger and colleagues (2000) studied “invisible support” and found that support recipients weren’t aware of sometimes had better effects on mood than visible support. Later work suggests the effect depends on how the support is given. Research on support matching (for example by Carolyn Cutrona) supports the idea that support works best when it fits what the person needs.
 links:
 /turning-toward.html#stress-talk | Turning Toward: talking about stress
-/workpapers/wp-13-pll-protocol.html | The daily check-in: just listen (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in: just listen (WP-13)
 talk:
 - When you share a problem, do you usually want advice or listening?
 - How could we signal which one we want?
@@ -362,7 +362,7 @@ Closing the loop, confirming what was agreed and who is doing what, is an underr
 research:
 Research on role ambiguity (from Kahn and colleagues, 1964, onward) links unclear expectations with stress. Daft and Lengel’s media richness theory (1986) has been influential, although later research found people adapt to leaner media over time. Psychological safety research (Amy Edmondson) shows that teams where people feel safe to speak up learn more effectively.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#coworkers | How it fits: coworkers
 talk:
 - What is the most common miscommunication at your work?

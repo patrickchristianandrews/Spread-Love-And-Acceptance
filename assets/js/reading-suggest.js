@@ -50,15 +50,15 @@
   /* ---------- where are we? ---------- */
   // a few pages exist in two places; point them at the one the list uses
   var ALIAS = {
-    '/wp-01.html': '/workpapers/wp-01.html',
-    '/wp-02.html': '/workpapers/wp-02-battery-stress-meter.html',
-    '/wp-03.html': '/workpapers/wp-03-raci-treaty.html',
-    '/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/workpapers/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/wp-09.html': '/workpapers/wp-09-tone-filter.html',
-    '/workpapers/wp-11.html': '/wp-11.html',
+    '/workpapers/wp-01.html': '/workpapers/wp-01.html',
+    '/workpapers/wp-02-how-much-are-you-carrying.html': '/workpapers/wp-02-how-much-are-you-carrying.html',
+    '/workpapers/wp-03-one-owner-per-job.html': '/workpapers/wp-03-one-owner-per-job.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/workpapers/wp-09-say-it-so-it-lands.html': '/workpapers/wp-09-say-it-so-it-lands.html',
+    '/wp-11.html': '/wp-11.html',
     '/wp-11-sound-toolkit.html': '/wp-11.html',
-    '/wp-13.html': '/workpapers/wp-13-pll-protocol.html'
+    '/workpapers/wp-13-daily-check-in.html': '/workpapers/wp-13-daily-check-in.html'
   };
   function normPath(p) {
     p = String(p || '/').split('#')[0].split('?')[0].toLowerCase();

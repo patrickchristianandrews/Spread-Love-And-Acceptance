@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soften a Tense Moment, Level 2: The Full Toolkit</title>
+<meta name="description" content="Level 2 of “Soften a tense moment”: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5EFDE;
+    --paper-deep: #ECE2C4;
+    --ink: #211D17;
+    --ink-soft: #524B3E;
+    --line: #D9CBA3;
+    --credit: #3E6B4C;
+    --brass: #A8792F;
+    --focus: #2B5B8C;
+    --warning: #8B6F47;
+    --radius: 3px;
+    --sympathetic: #d97a4a;
+    --dorsal: #4a6a8b;
+    --anxious: #b8792f;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Lora", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: "Fraunces", "Lora", serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+  h4 { font-size: 1.05rem; }
+
+  p { margin: 0.75rem 0; }
+
+  /* ===== PAYWALL SYSTEM CSS ===== */
+  .locked-section { display: none; }
+  body.unlocked .locked-section { display: block; }
+  
+  .locked-section {
+    position: relative;
+    border: 2px dashed var(--brass);
+    padding: 2rem;
+    margin: 2rem 0;
+    background: rgba(168, 121, 47, 0.04);
+    border-radius: var(--radius);
+  }
+  
+  .locked-section::before {
+    content: "🔒 Membership Content";
+    display: block;
+    color: var(--brass-ink, #7A5620);
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .paywall-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  .paywall-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    max-width: 550px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  .paywall-content h2 { margin-top: 0; }
+  
+  .paywall-tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    border-bottom: 2px solid var(--line);
+  }
+  
+  .paywall-tabs button {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-tabs button.active {
+    color: var(--brass-ink, #7A5620);
+    border-bottom-color: var(--brass);
+  }
+  
+  .paywall-tab-content { display: none; }
+  .paywall-tab-content.active { display: block; }
+  
+  .paywall-content input {
+    display: block;
+    width: 100%;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: "Lora", Georgia, serif;
+  }
+  
+  .paywall-content button {
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--brass);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content button:hover { background: var(--focus); }
+  
+  .paywall-content a.gumroad-link {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    background: var(--focus);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    margin: 1rem 0;
+    transition: all 0.2s;
+  }
+  
+  .paywall-content a.gumroad-link:hover { background: var(--brass); }
+  
+  .error-message, .success-message {
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+    display: none;
+    font-weight: 500;
+  }
+  
+  .error-message {
+    color: #d97a4a;
+    background: rgba(217, 122, 74, 0.1);
+    border: 1px solid rgba(217, 122, 74, 0.3);
+  }
+  
+  .error-message.show { display: block; }
+  
+  .success-message {
+    color: var(--credit);
+    background: rgba(62, 107, 76, 0.1);
+    border: 1px solid rgba(62, 107, 76, 0.3);
+  }
+  
+  .success-message.show { display: block; }
+  
+  .paywall-features {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  
+  .feature-item {
+    padding: 0.75rem;
+    background: rgba(168, 121, 47, 0.08);
+    border-left: 3px solid var(--brass);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+  
+  .feature-item strong {
+    display: block;
+    color: var(--brass-ink, #7A5620);
+    margin-bottom: 0.25rem;
+  }
+  
+  @media (max-width: 600px) {
+    .paywall-content { width: 90%; padding: 2rem 1.5rem; }
+    .paywall-tabs { flex-direction: column; }
+    .paywall-tabs button { padding: 0.75rem; border-bottom: none; border-left: 3px solid transparent; }
+    .paywall-tabs button.active { border-left-color: var(--brass); border-bottom: none; }
+  }
+
+  .container {
+    max-width: 8in;
+    margin: 0 auto;
+    padding: 2rem 0.6in;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    border-bottom: 2px solid var(--brass);
+    padding-bottom: 2rem;
+  }
+
+  .hero h1 { margin-top: 0; }
+
+  .hero-tagline {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    max-width: 700px;
+    margin: 0.75rem auto 0;
+  }
+
+  .section {
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .section h2 {
+    margin-top: 0;
+  }
+
+  .section > h2 {
+    border-bottom: 1px solid var(--brass);
+    padding-bottom: 0.75rem;
+  }
+
+  .frequency-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+
+  .frequency-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .frequency-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-sympathetic { background: var(--sympathetic); }
+  .dot-dorsal { background: var(--dorsal); }
+  .dot-anxious { background: var(--anxious); }
+
+  .markers {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0.5rem 0 0 0;
+    line-height: 1.5;
+  }
+
+  .step-box {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .step-box h3 {
+    margin-top: 0;
+  }
+
+  .step-label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--brass-ink, #7A5620);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .option-button {
+    padding: 1rem;
+    border: 2px solid var(--line);
+    background: white;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-family: "Lora", serif;
+    font-size: 1rem;
+  }
+
+  .option-button:hover {
+    border-color: var(--brass);
+    background: var(--paper-deep);
+  }
+
+  .option-button.active {
+    background: var(--paper-deep);
+    border-color: var(--brass);
+    box-shadow: 0 0 0 3px rgba(168, 121, 47, 0.1);
+  }
+
+  .result-box {
+    background: white;
+    border: 2px solid var(--brass);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    display: none;
+  }
+
+  .result-box.active {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .result-header .frequency-dot {
+    width: 24px;
+    height: 24px;
+  }
+
+  .result-header h3 {
+    margin: 0;
+  }
+
+  .result-header p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  .mood-move {
+    background: var(--paper-deep);
+    border-left: 4px solid var(--brass);
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: var(--radius);
+  }
+
+  .mood-move h4 {
+    margin-top: 0;
+    color: var(--brass-ink, #7A5620);
+  }
+
+  .mood-move p {
+    margin: 0.75rem 0 0 0;
+  }
+
+  .embody-section {
+    background: rgba(43, 91, 140, 0.08);
+    border-left: 3px solid var(--focus);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+  }
+
+  .embody-section strong {
+    color: var(--focus);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .neuroscience-note {
+    background: rgba(168, 121, 47, 0.08);
+    border-left: 3px solid var(--brass);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+
+  .neuroscience-note strong {
+    color: var(--brass-ink, #7A5620);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .failure-warning {
+    background: rgba(217, 122, 74, 0.08);
+    border-left: 3px solid var(--sympathetic);
+    padding: 1rem;
+    margin: 1rem 0 0 0;
+    border-radius: var(--radius);
+    display: none;
+  }
+
+  .failure-warning.show {
+    display: block;
+  }
+
+  .failure-warning strong {
+    color: var(--sympathetic);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .checklist {
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    margin: 1rem 0;
+  }
+
+  .checklist strong {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .checklist-item input {
+    margin-top: 0.3rem;
+    cursor: pointer;
+  }
+
+  .checklist-item label {
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    flex: 1;
+  }
+
+  .btn-primary {
+    background: var(--brass);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--focus);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--brass);
+  }
+
+  .divider {
+    border-top: 1px solid var(--line);
+    margin: 3rem 0;
+    padding-top: 3rem;
+  }
+
+  .scenario {
+    background: white;
+    border-left: 4px solid var(--brass);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+  }
+
+  .scenario h4 {
+    margin-top: 0;
+    color: var(--brass-ink, #7A5620);
+  }
+
+  .scenario .setup {
+    font-style: italic;
+    color: var(--ink-soft);
+    margin: 0.75rem 0;
+    padding: 0.75rem;
+    background: var(--paper-deep);
+    border-radius: var(--radius);
+  }
+
+  .scenario .label {
+    font-weight: 600;
+    color: var(--brass-ink, #7A5620);
+    margin-top: 1rem;
+  }
+
+  .failure-mode {
+    background: white;
+    border-left: 3px solid var(--sympathetic);
+    padding: 1.25rem;
+    margin: 1rem 0;
+    border-radius: var(--radius);
+  }
+
+  .failure-mode strong {
+    color: var(--sympathetic);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .note-box {
+    background: rgba(43, 91, 140, 0.08);
+    border-left: 3px solid var(--focus);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    margin: 1.5rem 0;
+  }
+
+  .note-box strong {
+    color: var(--focus);
+  }
+
+  .table-scroll{ overflow-x: auto; max-width: 100%; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  table th {
+    background: var(--paper-deep);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+    color: var(--brass-ink, #7A5620);
+  }
+
+  table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  ul, ol {
+    color: var(--ink-soft);
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin: 0.5rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .container {
+      padding: 1.5rem 1rem;
+    }
+
+    .button-group {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Loaded after site.css so these win. */
+  .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  .step-label, .scenario h4, .scenario .label, .mood-move h4, table th{ color:#7A5620; }
+  .failure-mode strong{ color:#96412B; }
+  a{ color:#7A5620; }
+  .ma-steps{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.5rem; margin:.4rem 0 1.4rem; }
+  .ma-steps a{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem .95rem; border-radius:999px; text-decoration:none; color:#3C3350;
+    background:rgba(255,253,249,.9); border:1px solid #D9C8F0; font:600 .92rem "Lora", Georgia, serif; }
+  .ma-steps a[aria-current="page"]{ background:#3C3350; color:#FFF8EE; border-color:#3C3350; }
+  .ma-steps a span{ display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F9E1EA; color:#7A3355; font:600 .75rem "IBM Plex Mono", monospace; }
+  .ma-steps a small{ font-weight:400; }
+  .ma-arrow{ color:#6E5A73; }
+  .builder fieldset{ border:1px solid var(--line); border-radius:var(--radius); padding:1rem; margin:0 0 1rem; background:#fff; min-width:0; }
+  .builder legend{ font-family:"Fraunces","Lora",serif; font-weight:600; font-size:1.05rem; padding:0 .3rem; }
+  .builder .opt-hint{ font-size:.88rem; color:var(--ink-soft); margin:0 0 .5rem; }
+  .builder .opts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.5rem; }
+  .builder label{ display:flex; align-items:flex-start; gap:.6rem; min-height:44px; padding:.55rem .7rem; border:2px solid var(--line); border-radius:var(--radius); cursor:pointer; background:#fff; line-height:1.4; }
+  .builder label:hover{ border-color:var(--brass); }
+  .builder label:has(input:checked){ border-color:var(--ink); background:var(--paper-deep); }
+  .builder label small{ display:block; color:var(--ink-soft); font-size:.84rem; }
+  .builder input[type=radio]{ width:1.1rem; height:1.1rem; margin-top:.2rem; flex:none; accent-color:var(--ink); }
+  .builder .btn, .plan-actions .btn{ min-height:44px; }
+  .btn:focus-visible, .builder label:has(input:focus-visible){ outline:3px solid var(--focus); outline-offset:2px; }
+  .req{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--ink-soft); font-weight:400; }
+  .form-msg{ color:#96412B; min-height:1.3em; margin:.5rem 0 0; }
+  #plan{ background:#fff; border:2px solid var(--brass); border-radius:var(--radius); padding:1.5rem; margin:1.5rem 0 0; }
+  #plan h3{ margin:0; } #plan h3:focus{ outline:none; } #plan h3:focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  #plan .plan-sub{ color:var(--ink-soft); font-size:.92rem; margin:.25rem 0 1rem; }
+  #plan h4{ margin:1.1rem 0 .3rem; color:#7A5620; font-size:1rem; }
+  #plan p, #plan ul{ margin:.2rem 0; color:var(--ink); }
+  .ma-practice{ list-style:none; padding:0; }
+  .ma-practice li{ display:flex; gap:.6rem; align-items:flex-start; }
+  .ma-box{ flex:none; width:1rem; height:1rem; border:1.5px solid var(--ink); border-radius:2px; margin-top:.35rem; }
+  .plan-actions{ display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.25rem; }
+  .plan-actions .btn{ flex:0 1 auto; }
+  .plan-msg{ color:var(--credit); min-height:1.3em; margin:.5rem 0 0; }
+  .plan-fine{ font-size:.8rem; color:var(--ink-soft); margin-top:1rem !important; }
+  @media (max-width:600px){ .container{ padding:1rem .75rem; } .section, .locked-section{ padding:1rem; } #plan{ padding:1rem; } th, td{ padding:.5rem; } }
+  @media print{
+    body.printing-plan .container > :not(.locked-section),
+    body.printing-plan .locked-section > :not(#builder),
+    body.printing-plan #builder > :not(#plan),
+    body.printing-plan .plan-actions, body.printing-plan .plan-msg{ display:none !important; }
+    body.printing-plan .locked-section{ border:0; padding:0; background:none; margin:0; }
+    body.printing-plan .locked-section::before{ display:none; }
+    body.printing-plan #builder{ border:0; padding:0; background:none; margin:0; }
+    body.printing-plan #plan{ border:0; padding:0; }
+  }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Soften a Tense Moment, Level 2: The Full Toolkit">
+<meta property="og:description" content="Level 2 of “Soften a tense moment”: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Soften a Tense Moment, Level 2: The Full Toolkit">
+<meta name="twitter:description" content="Level 2 of “Soften a tense moment”: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html#page","name":"Soften a Tense Moment, Level 2: The Full Toolkit","headline":"Soften a Tense Moment, Level 2: The Full Toolkit","description":"Level 2 of “Soften a tense moment”: a plan builder that turns your state, their state, the situation and the relationship into a printable plan, plus five.","url":"https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-07","dateModified":"2026-10-07","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Soften a Tense Moment, Level 2: The Full Toolkit","item":"https://spreadloveandacceptance.com/tools/soften-a-tense-moment-full.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+
+<div class="container" role="main">
+
+  <div class="hero">
+    <div class="step-label">Level 2 &middot; The full toolkit</div>
+    <h1>Soften a tense moment</h1>
+    <nav class="ma-steps" aria-label="Soften a tense moment, two levels of one tool">
+      <a href="/tools/soften-a-tense-moment.html"><span>1</span> The introduction <small>free</small></a>
+      <span class="ma-arrow" aria-hidden="true">&rarr;</span>
+      <a href="/tools/soften-a-tense-moment-full.html" aria-current="page"><span>2</span> The full toolkit <small>free</small></a>
+    </nav>
+    <p class="hero-tagline">Settle yourself first, read the state someone else is in, and choose one small move that helps the moment soften. Then build a plan you can print and keep.</p>
+    <p class="hero-tagline pillar-note"><small>This toolkit puts <a href="/five-pillars.html#read-your-state">Pillar III (“Read your state first”)</a> and <a href="/five-pillars.html#tune-signals">Pillar IV (“Tune how you send and receive”)</a> to work, part of <a href="/five-pillars.html">the Five Pillars</a>. <strong>In you:</strong> you notice and settle your own state before you act. <strong>Between you and others:</strong> you read the other person&#39;s state and choose a move that helps it settle.</small></p>
+  </div>
+
+  <div class="section">
+    <h2>A quick recap from level 1</h2>
+    <p>Turning a tense moment into a better one isn&#39;t forced cheerfulness, and it isn&#39;t brushing aside how someone feels. You <strong>settle your own state first</strong>, then offer one small thing that matches the state they&#39;re in. The real topic waits until you&#39;re both steadier, and then you take it to a <a href="/check-ins.html">check-in</a>.</p>
+    <div class="table-scroll" role="region" aria-label="The three states and their moves" tabindex="0"><table>
+      <tr><th scope="col">Their state</th><th scope="col">Signs you might see</th><th scope="col">The move</th></tr>
+      <tr><td><span class="frequency-dot dot-sympathetic" style="display:inline-block" aria-hidden="true"></span> <strong>Wound up</strong></td><td>Tight jaw, fast or sharp words, everything urgent</td><td><strong>Lower the temperature</strong>: slow down, stand beside them, leave the problem for later</td></tr>
+      <tr><td><span class="frequency-dot dot-dorsal" style="display:inline-block" aria-hidden="true"></span> <strong>Shut down</strong></td><td>Blank face, few words, looking away</td><td><strong>Steady company</strong>: quiet presence, no demands, a warm drink</td></tr>
+      <tr><td><span class="frequency-dot dot-anxious" style="display:inline-block" aria-hidden="true"></span> <strong>Scattered</strong></td><td>Worries tumbling out, can&#39;t settle on one thing</td><td><strong>One thread at a time</strong>: find the single next step, offer to take one thing</td></tr>
+      <tr><td><strong>Not sure</strong></td><td>Something&#39;s off, but you can&#39;t tell which way</td><td><strong>Ask first</strong>: &ldquo;Company, quiet, or help with one thing?&rdquo;</td></tr>
+    </table></div>
+    <p style="font-size:.88rem;color:var(--ink-soft);">The four steps: <strong>1.</strong> settle yourself first, <strong>2.</strong> read their state, <strong>3.</strong> choose one move that matches, <strong>4.</strong> stay with it for a few minutes and come back to the topic later. &ldquo;Wound up&rdquo; and &ldquo;shut down&rdquo; are loosely borrowed from polyvagal theory, a popular but debated idea about the nervous system; here they&#39;re plain labels for what you notice, not measurements or diagnoses.</p>
+  </div>
+
+  <div class="locked-section">
+
+  <div class="section builder" id="builder" style="background: linear-gradient(135deg, rgba(168, 121, 47, 0.08) 0%, rgba(43, 91, 140, 0.08) 100%); border: 2px solid var(--brass);">
+    <div class="step-label">Plan builder</div>
+    <h2>Build your plan</h2>
+    <p style="color: var(--ink-soft);">For a moment happening now, or one you want to be ready for. Only the second question is required. Nothing you choose is saved or sent; print or copy the plan to keep it.</p>
+
+    <form id="build" novalidate>
+      <fieldset>
+        <legend>1. First, you: how are you right now? <span class="req">optional</span></legend>
+        <div class="opts">
+          <label><input type="radio" name="you" value="steady"><span>Steady<small>Calm enough to help</small></span></label>
+          <label><input type="radio" name="you" value="up"><span>Wound up too<small>Keyed up, quick to react</small></span></label>
+          <label><input type="radio" name="you" value="low"><span>Running low<small>Tired, flat or stretched</small></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset id="fs-them" aria-describedby="them-err">
+        <legend>2. Which state are they in? <span class="req">required</span></legend>
+        <div class="opts">
+          <label><input type="radio" name="them" value="up"><span>Wound up<small>Tight jaw, sharp or fast, urgent</small></span></label>
+          <label><input type="radio" name="them" value="down"><span>Shut down<small>Blank, quiet, far away</small></span></label>
+          <label><input type="radio" name="them" value="scattered"><span>Scattered<small>Worries tumbling out, can&#39;t settle</small></span></label>
+          <label><input type="radio" name="them" value="unsure"><span>Not sure<small>Something&#39;s off, can&#39;t tell which way</small></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3. What&#39;s going on around it? <span class="req">optional</span></legend>
+        <div class="opts">
+          <label><input type="radio" name="sit" value="disagree"><span>A disagreement between us</span></label>
+          <label><input type="radio" name="sit" value="elsewhere"><span>A hard day from somewhere else<small>Work, family, news, anything outside the two of you</small></span></label>
+          <label><input type="radio" name="sit" value="load"><span>Too much on their plate<small>Carrying the list, the reminders, the planning</small></span></label>
+          <label><input type="radio" name="sit" value="sensory"><span>Too much noise, people or light</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>4. Who is it? <span class="req">optional</span></legend>
+        <div class="opts">
+          <label><input type="radio" name="rel" value="partner"><span>A partner</span></label>
+          <label><input type="radio" name="rel" value="family"><span>Family</span></label>
+          <label><input type="radio" name="rel" value="coparent"><span>A co-parent</span></label>
+          <label><input type="radio" name="rel" value="roommate"><span>A roommate</span></label>
+          <label><input type="radio" name="rel" value="coworker"><span>A coworker</span></label>
+          <label><input type="radio" name="rel" value="care"><span>Someone I care for</span></label>
+          <label><input type="radio" name="rel" value="friend"><span>A friend</span></label>
+        </div>
+      </fieldset>
+
+      <p class="form-msg" id="them-err" role="alert"></p>
+      <div class="button-group">
+        <button class="btn btn-primary" type="submit">Build my plan</button>
+        <button class="btn btn-secondary" type="button" id="startover">Start over</button>
+      </div>
+    </form>
+
+    <div id="plan" hidden>
+      <h3 id="plan-title" tabindex="-1"></h3>
+      <p class="plan-sub" id="plan-sub"></p>
+      <div id="plan-body"></div>
+      <p class="plan-fine">A rule of thumb for everyday friction between people who feel safe with each other. Not a clinical tool.</p>
+      <div class="plan-actions">
+        <button class="btn btn-primary" type="button" id="print-plan">Print my plan</button>
+        <button class="btn btn-secondary" type="button" id="copy-plan">Copy my plan</button>
+      </div>
+      <p class="plan-msg" id="plan-msg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Five worked scenarios</h2>
+    <p style="color: var(--ink-soft);">The scenarios move between a roommate, a partner, a sister, a parent and a friend on purpose: the same four steps work in any close relationship. With coworkers, use a lighter touch: skip touch, keep humor gentle, and offer practical help or a later time.</p>
+
+    <div class="scenario">
+      <h4>1. The kitchen (a roommate, wound up)</h4>
+      <p class="setup">You walk in. The sink is full. Your roommate is standing there, jaw clenched, not saying anything, clearly bracing for a lecture.</p>
+      <p class="label">Step 1, you:</p><p>You&#39;re annoyed too. Take one slow breath before you say anything.</p>
+      <p class="label">What not to do:</p>
+      <ul><li>Defend or accuse (&ldquo;I was going to do them&rdquo; / &ldquo;Again?&rdquo;)</li><li>Jump to a schedule while they&#39;re braced</li><li>Match their energy</li></ul>
+      <p class="label">The move: lower the temperature</p>
+      <p>Stand beside them, not across. If humor is normal between you, one warm, silly line about the situation: &ldquo;I think the dishes have unionized. Want to negotiate with them together?&rdquo; Then pick up a towel.</p>
+      <p class="label">Why it tends to help:</p>
+      <p>You&#39;ve shown you&#39;re on the same side. Doing the job together for five minutes turns a standoff into teamwork.</p>
+      <p class="label">Later:</p>
+      <p>At a calm time, agree who owns dishes on busy days (<a href="/workpapers/wp-03-one-owner-per-job.html">WP-03</a>).</p>
+    </div>
+
+    <div class="scenario">
+      <h4>2. The late-night quiet (a partner, shut down)</h4>
+      <p class="setup">Your partner comes to bed and just lies there, staring at the ceiling. You ask how their day was and get one word back.</p>
+      <p class="label">What not to do:</p>
+      <ul><li>A string of questions (&ldquo;What&#39;s wrong? Talk to me.&rdquo;)</li><li>Quick fixes (&ldquo;Tomorrow will be better&rdquo;)</li><li>Making it about you (&ldquo;You&#39;re shutting me out&rdquo;)</li></ul>
+      <p class="label">The move: steady company</p>
+      <p>Lie down beside them. After a minute, quietly: &ldquo;Sounds like a real day. You don&#39;t have to tell me anything. I&#39;m right here.&rdquo; Then actually stay quiet. A hand on their shoulder only if you know it&#39;s welcome.</p>
+      <p class="label">Why it tends to help:</p>
+      <p>Questions feel like demands when someone has nothing left. Quiet company without pressure says they&#39;re not in trouble and not alone.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>3. The work spiral (a sister, scattered)</h4>
+      <p class="setup">Your sister gets a message about a mistake at work. Suddenly she&#39;s pacing and talking fast: &ldquo;I should have caught this. Now they think I can&#39;t do the job. Should I just quit? What if they let me go?&rdquo;</p>
+      <p class="label">What not to do:</p>
+      <ul><li>Blanket reassurance (&ldquo;It&#39;s going to be fine&rdquo;)</li><li>Minimizing (&ldquo;It&#39;s not that bad&rdquo;)</li><li>Adding your own list of what-ifs</li></ul>
+      <p class="label">The move: one thread at a time</p>
+      <p>Calm and simple: &ldquo;That&#39;s a lot at once. What&#39;s the one thing that needs doing tonight? The reply to your manager?&rdquo; Offer help with just that: &ldquo;Want to draft it together? I&#39;ll get us some water first.&rdquo;</p>
+      <p class="label">Why it tends to help:</p>
+      <p>You&#39;re not dismissing the worry; you&#39;re giving it an order. One finished step makes the rest feel more manageable.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>4. The quiet build-up (a parent, too much on her plate)</h4>
+      <p class="setup">Your mom has been carrying all the remembering for weeks: appointments, the budget, deadlines. She isn&#39;t angry yet, but she&#39;s sighing a lot and getting short over small things.</p>
+      <p class="label">What not to do:</p>
+      <ul><li>Wait for it to boil over</li><li>&ldquo;Just tell me what to do&rdquo; (that&#39;s one more job for her)</li></ul>
+      <p class="label">The move: lower the temperature, then share the load</p>
+      <p>&ldquo;I&#39;ve noticed you&#39;re holding all of it. I&#39;d like to take the appointments and reminders from now on. I&#39;ll send you what I&#39;m picking up so you can let go of it. Tell me if I&#39;ve picked the wrong things.&rdquo; Then do it, without being reminded.</p>
+      <p class="label">Why it tends to help:</p>
+      <p>Seeing the invisible work, and actually moving some of it, takes pressure off in a way that thanks alone doesn&#39;t. <a href="/workpapers/wp-01.html">WP-01</a> makes the load visible.</p>
+    </div>
+
+    <div class="scenario">
+      <h4>5. The crowded store (a friend, shut down)</h4>
+      <p class="setup">You&#39;re in a busy store: bright lights, loud music, crowds. Your friend&#39;s face goes blank and they&#39;re moving slower and slower.</p>
+      <p class="label">What not to do:</p>
+      <ul><li>Keep shopping as if nothing&#39;s happening</li><li>Make a big deal of it in the aisle</li><li>&ldquo;Just relax&rdquo;</li></ul>
+      <p class="label">The move: change the place, then steady company</p>
+      <p>Move close and keep it quiet: &ldquo;This place is a lot. Let&#39;s head out. No rush.&rdquo; Walk out together at their pace. Outside, find somewhere calmer to sit, and let them set how much they want to talk.</p>
+      <p class="label">Why it tends to help:</p>
+      <p>The setting is the problem, so fixing the setting comes first. Calm, simple words and an easy pace help someone come back to themselves. Save any lightness for once they&#39;re back.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>When a move doesn&#39;t land</h2>
+    <p style="color: var(--ink-soft);">Moves are guesses. When one misses, the repair is usually quick.</p>
+    <div class="failure-mode"><strong>Lightness when they needed to be heard</strong><p>Stop and own it: &ldquo;I made a joke when you said something real. Tell me again. I&#39;m listening.&rdquo; Next time, lead with &ldquo;I hear you&rdquo; before anything light.</p></div>
+    <div class="failure-mode"><strong>Quiet company when they wanted help</strong><p>Ask directly: &ldquo;Do you want me to just be here, or help you handle this?&rdquo; Sometimes it&#39;s both.</p></div>
+    <div class="failure-mode"><strong>Staying close when they needed space</strong><p>If they&#39;re moving away, let them: &ldquo;I&#39;ll give you some room. I&#39;m in the next room when you want me.&rdquo;</p></div>
+    <div class="failure-mode"><strong>Taking over when they wanted to stay in charge</strong><p>Hand it back: &ldquo;Sorry, I jumped in. What part would actually help?&rdquo;</p></div>
+    <div class="failure-mode"><strong>You got pulled into the storm yourself</strong><p>That&#39;s normal. Name it and pause: &ldquo;I&#39;m getting wound up too. Let me take ten minutes, and I&#39;ll come back.&rdquo; Then come back when you said you would.</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Why these moves tend to help</h2>
+    <p>No one needs a theory to use this, but here are the everyday reasons, without overclaiming:</p>
+    <ul>
+      <li><strong>Moods are catching.</strong> A slower voice, slower movements and an easy pace give the other person something steady to match.</li>
+      <li><strong>Arguments don&#39;t land on a braced listener.</strong> When someone feels criticized, they defend rather than hear. Taking the heat out first makes the real conversation possible later.</li>
+      <li><strong>Company without demands feels safe.</strong> When someone has run out of steam, questions feel like work. Quiet presence doesn&#39;t.</li>
+      <li><strong>One step beats ten worries.</strong> A single finished task makes a pile feel smaller.</li>
+      <li><strong>Timing matters.</strong> The same sentence lands differently an hour later. That&#39;s why the topic waits for a <a href="/check-ins.html">check-in</a>.</li>
+    </ul>
+    <p style="font-size:.88rem;color:var(--ink-soft);">About polyvagal theory: it&#39;s a popular way of describing how the body shifts between feeling safe, on guard and shut down, and some of its claims about the nervous system are debated by researchers. This toolkit only borrows its everyday labels. It measures nothing and diagnoses nothing.</p>
+  </div>
+
+  <div class="section">
+    <h2>Adapting to the person in front of you</h2>
+    <p style="color: var(--ink-soft);">People differ more than any list of states can capture. The best information comes from asking them, at a calm time.</p>
+    <h3>Questions worth asking once</h3>
+    <ul>
+      <li>&ldquo;When you&#39;re stressed, does humor help or grate?&rdquo;</li>
+      <li>&ldquo;Do you want company, or time alone first?&rdquo;</li>
+      <li>&ldquo;Is touch comforting, or too much, when you&#39;re upset?&rdquo;</li>
+      <li>&ldquo;Do you want me to listen, or to help fix it?&rdquo;</li>
+      <li>&ldquo;What&#39;s one thing I could say that would help?&rdquo;</li>
+    </ul>
+    <p>Write the answers down, or put them on a <a href="/wiring-card.html">Wiring Card</a>. <a href="/wired-differently.html">Wired Differently</a> explains why the same move can feel great to one person and grating to another.</p>
+    <h3>By relationship</h3>
+    <ul>
+      <li><strong>Partners:</strong> you probably know what comforts them. Use it, and check you&#39;re not working from an old pattern.</li>
+      <li><strong>Family:</strong> old roles come back fast. Speak to the person in front of you today, not the argument from years ago.</li>
+      <li><strong>Co-parents:</strong> keep it calm, brief and about the kids and the logistics. Save anything bigger for a planned message.</li>
+      <li><strong>Roommates:</strong> offer, don&#39;t assume. Some want company; others want their door closed.</li>
+      <li><strong>Coworkers:</strong> keep it light and professional. No touch, gentle humor at most, and practical help or a later time to talk.</li>
+      <li><strong>Caring for someone:</strong> a slow, predictable routine is often the most calming move. Look after your own state too.</li>
+      <li><strong>Friends:</strong> &ldquo;Do you want to vent, or do you want ideas?&rdquo; is a friend&#39;s best question.</li>
+    </ul>
+  </div>
+
+  <div class="section" id="practice">
+    <h2>Building the skill: a four-week practice plan</h2>
+    <p style="color: var(--ink-soft);">This is a skill, and it grows with practice. The plan builder above adds this checklist to your printed plan.</p>
+    <h3>Week 1: Notice</h3>
+    <p>Once a day, name your own state and the other person&#39;s, just to yourself. Wound up, shut down, scattered, or steady? No moves yet.</p>
+    <h3>Week 2: Ask</h3>
+    <p>At a calm time, share the three states and ask which move helps them most. &ldquo;When you&#39;re overwhelmed, would you rather I stay close, give you space, or help with one thing?&rdquo; Write the answer down.</p>
+    <h3>Week 3: Try one move</h3>
+    <p>Use one move in a small, low-stakes moment, not in the middle of a big disagreement. Notice what lands and what doesn&#39;t, and adjust.</p>
+    <h3>Week 4: Review together</h3>
+    <p>Talk about what helped and what didn&#39;t, and keep one agreement for the next month. The goal isn&#39;t perfection. It&#39;s showing each other: &ldquo;When things get hard, we have a way back.&rdquo;</p>
+  </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>Soften a tense moment</strong> is one tool in two levels: <a href="/tools/soften-a-tense-moment.html">level 1, the introduction</a>, and this full toolkit.</p>
+    <p>Use it with:</p>
+    <ul style="color: var(--ink-soft); margin: 0.5rem 0; padding-left: 1.5rem; text-align:left; display:inline-block;">
+      <li><strong><a href="/wp-11.html">WP-11, the Calm-Down Kit</a></strong>: settle yourself first, with a plan made on a calm day</li>
+      <li><strong><a href="/workpapers/wp-13-daily-check-in.html">WP-13, the 90-second daily check-in</a></strong>: a short daily loop that keeps small things small</li>
+      <li><strong><a href="/tools/frequency-calibration.html">Frequency Calibration</a></strong>: compare your everyday rhythms</li>
+      <li><strong><a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a></strong>: work out where a conversation slipped</li>
+    </ul>
+    <p style="margin-top: 1rem; color: var(--ink-soft); font-size: 0.8rem;">&copy; The Objective Ledger. A rule of thumb for everyday friction between people who feel safe with each other. Not a clinical tool. Nothing you choose on this page is saved or sent.</p>
+  </div>
+
+</div>
+
+<script src="/assets/js/mood-arbitrage.js"></script>
+<script>
+(function(){
+  var M=window.TOLMood, form=document.getElementById('build'), planEl=document.getElementById('plan'), current=null;
+  function $(id){ return document.getElementById(id); }
+  function picked(n){ var r=form.querySelector('input[name="'+n+'"]:checked'); return r?r.value:null; }
+  function build(){
+    var c={you:picked('you'), them:picked('them'), sit:picked('sit'), rel:picked('rel')};
+    if(!c.them){ planEl.hidden=true; current=null; return false; }
+    var p=M.plan(c); current=p;
+    $('plan-title').textContent=p.title; $('plan-sub').textContent=p.sub;
+    $('plan-body').innerHTML=M.planHTML(p,true);
+    planEl.hidden=false; $('plan-msg').textContent='';
+    return true;
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!build()){
+      $('them-err').textContent='Pick which state they seem to be in (question 2). “Not sure” is fine.';
+      var first=form.querySelector('input[name="them"]'); if(first) first.focus();
+      return;
+    }
+    $('them-err').textContent='';
+    var h=$('plan-title'); h.focus({preventScroll:true});
+    planEl.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
+  // Once a plan is showing, keep it in step with any change.
+  form.addEventListener('change', function(){ if(picked('them')) $('them-err').textContent=''; if(!planEl.hidden) build(); });
+  $('startover').addEventListener('click', function(){
+    form.reset(); planEl.hidden=true; current=null; $('them-err').textContent='';
+    var first=form.querySelector('input[name="you"]'); if(first) first.focus();
+  });
+  $('print-plan').addEventListener('click', function(){
+    document.body.classList.add('printing-plan');
+    try{ window.print(); }catch(e){}
+    setTimeout(function(){ document.body.classList.remove('printing-plan'); },500);
+  });
+  window.addEventListener('afterprint', function(){ document.body.classList.remove('printing-plan'); });
+  $('copy-plan').addEventListener('click', function(){
+    if(!current) return;
+    M.copy(M.planText(current,true), function(ok){ $('plan-msg').textContent=ok?'Plan copied.':'Copying isn’t available here. Use Print instead.'; });
+  });
+})();
+</script>
+</body>
+</html>

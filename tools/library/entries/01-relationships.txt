@@ -21,7 +21,7 @@ research:
 The best-known work is Gottman’s observational research, including a study of newlywed couples by Janice Driver and John Gottman (2004) that looked closely at bids during everyday interaction. Couples who were still together years later had turned toward each other’s bids much more often than couples who later separated. This is a pattern seen in observational data, not an experiment, so it shows an association rather than proving that turning toward causes lasting relationships. The samples were mostly married, American, heterosexual couples, so it is fair to wonder how well it generalises, though the idea fits well with broader research on responsiveness.
 links:
 /turning-toward.html#bids | Turning Toward: noticing small bids
-/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The 90-second daily check-in (WP-13)
 talk:
 - What are some of the ways each of us makes bids? Are any of them easy to miss?
 - When was the last time a small moment of attention made your day better?
@@ -44,7 +44,7 @@ A kind way to hold this list: nearly everyone does all four sometimes. The point
 research:
 The four horsemen come from Gottman and Robert Levenson’s longitudinal studies of couples in the 1980s and 1990s, summarised in Gottman’s 1994 book *What Predicts Divorce?*. In those samples, the four behaviours, contempt especially, were associated with later unhappiness and separation. Gottman has reported very high prediction accuracy from these observations; other researchers have pointed out that some of those figures came from fitting models to the same data they were tested on, which tends to overstate accuracy. The behaviours themselves are well recognised in couples research, and the antidotes are widely taught, but the antidotes have been studied mostly as part of whole therapy programmes rather than one at a time.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /check-ins.html#ground | Check-ins: ground rules
 /wp-11.html | The Calm-Down Kit (WP-11)
 talk:
@@ -109,7 +109,7 @@ research:
 Gottman and Levenson measured heart rate, skin conductance and other signals while couples talked, and found that high physiological arousal went along with worse conversations and worse long-term outcomes. The idea that the body needs time to settle is consistent with what is known about the stress response in general. The specific twenty-minute figure is a practical guideline from that work rather than a precisely tested cut-off, and it will vary from person to person.
 links:
 /wp-11.html | The Calm-Down Kit (WP-11)
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#ladder | The nervous-system self-check
 talk:
 - What are your own early signs of getting flooded?
@@ -129,7 +129,7 @@ A practical sign of accepting influence is saying “that’s a good point” an
 research:
 A 1998 study by Gottman, Coan, Carrère and Swanson of newlywed couples found that husbands who accepted influence from their wives were more likely to have stable, happy marriages. The study was about heterosexual couples and focused on husbands because that was where the variation lay in their sample. The general principle, that shared power and mutual respect go with better relationships, is supported more broadly, including in research on same-sex couples.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /check-ins.html#leverage | Check-ins: finding the part you can agree with
 talk:
 - When did the other person’s idea change your mind for the better?
@@ -149,7 +149,7 @@ Gottman suggests that behind gridlock there are often deeper hopes or values (he
 research:
 Gottman has estimated that roughly two-thirds of couples’ recurring conflicts are perpetual in this sense. That figure is his estimate from clinical and research observation, not a precise measured statistic. The broader point, that acceptance of differences matters alongside change, is supported by other research, including trials of integrative behavioural couple therapy, which combines acceptance with behaviour change.
 links:
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /book/chapter-5.html | The monthly look-back (Chapter V)
 /frequency-framework.html | The Frequency Framework
 talk:
@@ -171,7 +171,7 @@ research:
 The concept comes from Gottman’s *The Seven Principles for Making Marriage Work* (1999, with Nan Silver). It draws on his research but is a framework for practice rather than a separately tested measure. Related research supports the value of question-asking: a 2017 set of studies by Karen Huang and colleagues found that people who asked more follow-up questions in conversation were liked more by their conversation partners.
 links:
 /turning-toward.html#their-world | Turning Toward: knowing their world
-/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The 90-second daily check-in (WP-13)
 talk:
 - What is one thing on the other person’s mind this week that you don’t know much about?
 - Which questions feel good to be asked, and which feel like an interview?
@@ -336,7 +336,7 @@ When trust has been dented, people often want a big gesture. Research and experi
 research:
 The three-part model comes from Rempel, Holmes and Zanna’s 1985 paper. Holmes and colleagues have since studied how trust shapes people’s willingness to depend on each other. Gottman’s 2011 book *The Science of Trust* offers a broader account based on his lab work. Trust is well established as central to relationship quality, though it is measured in many different ways.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-01.html | Who did what, and kind ways to say no (WP-01)
 talk:
 - What small promises do we make each other most often? How reliably are they kept?
@@ -357,7 +357,7 @@ research:
 Jealousy has been studied from several angles: attachment researchers link it to attachment anxiety; evolutionary psychologists such as David Buss have proposed sex differences in what triggers it, though those claims are debated, partly because results depend heavily on how questions are asked. Across approaches, researchers agree that how jealousy is expressed and responded to matters a lot for the relationship.
 links:
 /check-ins.html#room | Check-ins: a safe room to talk
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - What does jealousy feel like for you, and what is it usually asking for?
 - What kind of reassurance helps, and what kind doesn’t?
@@ -376,7 +376,7 @@ This doesn’t mean ignoring real problems. It means that giving the benefit of 
 research:
 Murray, Holmes and Griffin published their key studies in 1996. Weiss described sentiment override in 1980. The findings are well cited, but the benefits have limits: some later research, for example by James McNulty, suggests that overly positive assumptions can backfire when there are serious problems that need addressing, so a generous lens works best alongside honest conversation.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands: weigh what you heard (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands: weigh what you heard (WP-09)
 /book/chapter-1.html | Why we get out of tune (Chapter I)
 talk:
 - In what ways do you see the best in each other?
@@ -416,7 +416,7 @@ Support for growth can also show up in how chores and time are shared. When the 
 research:
 Stephen Drigotas, Caryl Rusbult and colleagues described the Michelangelo phenomenon in 1999. Their studies found that partner affirmation of the ideal self was associated with movement toward that ideal and with better relationship wellbeing. The research is correlational and longitudinal rather than experimental.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#partners | How it fits: partners
 talk:
 - What is each of us trying to grow into at the moment?

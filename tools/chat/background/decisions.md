@@ -44,7 +44,7 @@ Program: Pillar III, Read your state first: strong feelings in the moment can di
 ## Pre-mortem
 aka: premortem; imagine it failed; what could go wrong
 see: Reversible and irreversible decisions; Retrospective for households
-go: /workpapers/wp-04-deficit-audit.html | WP-04: What keeps coming back?
+go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
 evidence: Gary Klein described the pre-mortem (Harvard Business Review, 2007). It’s widely used in project planning; evidence is mostly practical.
 try: “Imagine it’s a month from now and the new chore plan has failed. What went wrong?”
 
@@ -57,7 +57,7 @@ Program: The monthly look-back (WP-04) is the after version; a pre-mortem is the
 ## Sleep on it
 aka: sleep on it; wait before deciding; decide tomorrow
 see: The 10-10-10 question; Negotiating with deadlines
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Common advice. Research on emotion and decision-making suggests strong emotions and tiredness can affect choices; claims about “unconscious thought” helping decisions are debated.
 try: “This is a big one. Can we both sleep on it and decide tomorrow evening?”
 

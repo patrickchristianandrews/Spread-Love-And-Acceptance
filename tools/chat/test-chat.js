@@ -36,7 +36,7 @@ t('tools', 'What is the 2 minute snapshot?', { kind: 'card', id: 'snapshot', lin
 t('tools', 'What do the Snapshot results mean?', { kind: 'card', id: 'snapshot', text: /Steady.*Stretched thin|Stretched thin/ });
 t('tools', 'How does Frequency Calibration work?', { kind: 'card', id: 'freqcal', link: '/tools/frequency-calibration.html' });
 t('tools', 'what is the frequency sync visualizer', { kind: 'card', id: 'syncviz' });
-t('tools', 'What is Mood Arbitrage?', { kind: 'card', id: 'mood', link: '/tools/mood-arbitrage-free.html' });
+t('tools', 'What is Mood Arbitrage?', { kind: 'card', id: 'mood', link: '/tools/soften-a-tense-moment.html' });
 t('tools', 'What is Drift?', { kind: 'card', id: 'drift', link: '/calm-visualizer.html' });
 t('tools', 'Do I need headphones for the calm visualizer?', { kind: 'card', id: 'drift', text: /headphones/i });
 t('tools', 'How do I play the Night Garden?', { kind: 'card', id: 'garden', link: '/night-garden.html' });
@@ -98,23 +98,23 @@ t('tools', 'What does the one page infographic cover?', { kind: 'card', id: 'inf
 // ---------------------------------------------------------------- every workpaper
 t('workpapers', 'What is WP-01?', { kind: 'card', id: 'wp01', link: '/workpapers/wp-01.html' });
 t('workpapers', 'How do I fill in the field audit?', { kind: 'card', id: 'wp01', steps: true });
-t('workpapers', 'What is WP-02?', { kind: 'card', id: 'wp02', link: '/workpapers/wp-02-battery-stress-meter.html' });
+t('workpapers', 'What is WP-02?', { kind: 'card', id: 'wp02', link: '/workpapers/wp-02-how-much-are-you-carrying.html' });
 t('workpapers', 'What does my battery score mean?', { kind: 'card', id: 'wp02', text: /0\.3.*0\.6/ });
 t('workpapers', 'Show me the math for WP-02', { kind: 'card', id: 'wp02', text: /divide by 20|÷ 20/ });
-t('workpapers', 'What is the RACI treaty?', { kind: 'card', id: 'wp03', link: '/workpapers/wp-03-raci-treaty.html' });
+t('workpapers', 'What is the RACI treaty?', { kind: 'card', id: 'wp03', link: '/workpapers/wp-03-one-owner-per-job.html' });
 t('workpapers', 'How is ownership clarity worked out?', { kind: 'card', id: 'wp03', text: /divide|÷/ });
-t('workpapers', 'What is WP-04?', { kind: 'card', id: 'wp04', link: '/workpapers/wp-04-deficit-audit.html' });
+t('workpapers', 'What is WP-04?', { kind: 'card', id: 'wp04', link: '/workpapers/wp-04-what-keeps-coming-back.html' });
 t('workpapers', 'How do I do the monthly look-back?', { kind: 'card', id: 'wp04', steps: true });
-t('workpapers', 'What is the tone filter?', { kind: 'card', id: 'wp09', link: '/workpapers/wp-09-tone-filter.html' });
+t('workpapers', 'What is the tone filter?', { kind: 'card', id: 'wp09', link: '/workpapers/wp-09-say-it-so-it-lands.html' });
 t('workpapers', 'Give me an example of fact feeling and ask', { kind: 'card', id: 'wp09' });
 t('workpapers', 'What is WP-11?', { kind: 'card', id: 'wp11', link: '/wp-11.html' });
 t('workpapers', 'When do I go back after using the calm-down kit?', { kind: 'card', id: 'wp11' });
-t('workpapers', 'What is WP-13?', { kind: 'card', id: 'wp13', link: '/workpapers/wp-13-pll-protocol.html' });
+t('workpapers', 'What is WP-13?', { kind: 'card', id: 'wp13', link: '/workpapers/wp-13-daily-check-in.html' });
 t('workpapers', 'How does the 90 second check-in work?', { kind: 'card', id: 'wp13', steps: true });
 t('workpapers', 'In what order should I use the workpapers?', { kind: 'card', id: 'order' });
 
 // ---------------------------------------------------------------- calculators: explained, and worked out in chat (numbers checked by hand)
-t('calc', 'How does CALC-01 work?', { kind: 'card', id: 'calc01', link: '/workpapers/calculators/calc01-solvency.html' });
+t('calc', 'How does CALC-01 work?', { kind: 'card', id: 'calc01', link: '/workpapers/calculators/is-the-setup-working-quick.html' });
 t('calc', 'Show me the math for CALC-01', { kind: 'card', id: 'calc01', text: /0\.40 × workload balance.*0\.35.*0\.25/ });
 t('calc', 'What does my CALC-01 score mean?', { kind: 'card', id: 'calc01', text: /0\.70 or more.*0\.40 to 0\.69.*Under 0\.40/ });
 t('calc', 'Does CALC-01 work for more than two people?', { text: /two to eight|2 to 8|2–8/ });
@@ -129,7 +129,7 @@ t('calc', 'my battery: 1,1,1,2,1', { kind: 'calc', text: /0\.30.*Between 0\.3 an
 t('calc', 'my battery answers are 5, 2, 1, 0, 0', { kind: 'calc', text: /0 \(not at all\) to 4/ });
 t('calc', 'my battery score is 0.45, what does it mean', { kind: 'calc', text: /0\.45.*Between 0\.3 and 0\.6/s });
 // 0.40×0.6 + 0.35×0.5 + 0.25×(1−0.4) = 0.24 + 0.175 + 0.15 = 0.565 → 0.57, drifting; biggest gap ownership (0.175 missing)
-t('calc', 'CALC-01: balance 0.6, ownership 0.5, battery 0.4', { kind: 'calc', text: /= 0\.57\..*0\.40 to 0\.69.*ownership clarity/s, link: '/workpapers/calculators/calc01-solvency.html' });
+t('calc', 'CALC-01: balance 0.6, ownership 0.5, battery 0.4', { kind: 'calc', text: /= 0\.57\..*0\.40 to 0\.69.*ownership clarity/s, link: '/workpapers/calculators/is-the-setup-working-quick.html' });
 // 0.32 + 0.28 + 0.2 = 0.80 → carrying its own weight
 t('calc', 'solvency with workload balance 80%, ownership clarity 80%, stress 20%', { kind: 'calc', text: /= 0\.80\..*0\.70 or more/s });
 // 0.12 + 0.07 + 0.05 = 0.24 → under 0.40
@@ -220,8 +220,8 @@ s("My husband and I are just roommates now", 'partner+distance', { link: '/turni
 
 // ---------------------------------------------------------------- situation routing: a short path for a kind of relationship
 t('routing', 'Which tools should roommates start with?', { kind: 'road', id: 'roommate', link: '/lemonade-stand.html' });
-t('routing', 'What path should co-parents follow?', { kind: 'road', id: 'coparent', link: '/workpapers/wp-03-raci-treaty.html' });
-t('routing', 'Which tools should caregivers start with?', { kind: 'road', id: 'caregiving', link: '/workpapers/wp-02-battery-stress-meter.html' });
+t('routing', 'What path should co-parents follow?', { kind: 'road', id: 'coparent', link: '/workpapers/wp-03-one-owner-per-job.html' });
+t('routing', 'Which tools should caregivers start with?', { kind: 'road', id: 'caregiving', link: '/workpapers/wp-02-how-much-are-you-carrying.html' });
 t('routing', 'Which tools should coworkers and teams start with?', { kind: 'road', id: 'coworker' });
 
 // ---------------------------------------------------------------- earlier review failures

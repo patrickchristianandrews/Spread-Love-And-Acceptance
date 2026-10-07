@@ -98,7 +98,7 @@ Program: Check-ins are for one topic, heard both ways, with one ask at the end. 
 ## Using “and” instead of “but”
 aka: and not but; the word but; yes but
 see: Owning your part; Tentative language
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A common tip in communication and negotiation training. It’s practical rather than research-tested, and the tone behind the words still matters more than the word itself.
 try: “I appreciate you cooking, and I’d love it if the pans got soaked before bed.”
 
@@ -111,7 +111,7 @@ Program: WP-09’s fact, feeling and ask pairs naturally with “and”: “The 
 ## Owning your part
 aka: taking responsibility; my part in it; accountability in conflict
 see: Using “and” instead of “but”; Anatomy of an apology; Self-serving bias
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: Taking responsibility for your own contribution is a common theme in conflict-resolution and couples research. It tends to lower defensiveness in the other person, though it works best when it’s genuine, not a bargaining chip.
 try: “I think my part in this was waiting until I was fed up before saying anything.”
 
@@ -189,7 +189,7 @@ Program: Wired Differently notes that some people feel plenty but can’t find t
 ## Speaking for yourself
 aka: speak for yourself; I language; not speaking for others
 see: I-messages that aren’t blame in disguise; Owning your part
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A standard ground rule in facilitation, mediation and family meetings. It’s practical guidance rather than a research finding.
 try: Instead of “Everyone thinks you’re always late,” try “I’ve been feeling anxious when we’re late.”
 
@@ -215,7 +215,7 @@ Program: WP-09’s three parts (fact, feeling and ask) are a practical way to bu
 ## Feelings versus thoughts
 aka: I feel that; thoughts dressed as feelings; feelings or judgments
 see: I-messages that aren’t blame in disguise; The emotion wheel
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: The distinction is central to nonviolent communication training and to cognitive approaches. It’s a teaching tool, not a strict scientific line: thoughts and feelings are tangled together in real life.
 try: “I feel ignored” includes a guess about what they did. “I feel lonely” is the feeling underneath it.
 

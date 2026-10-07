@@ -5,7 +5,7 @@ Practical, non-medical notes. For health questions, talk with a qualified profes
 ## Care calendar
 aka: care calendar; caregiving schedule; shared care schedule
 see: Care notebook; Asking for specific help
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Shared care calendars are widely recommended by caregiver organizations. Evidence is practical.
 try: One shared calendar with appointments, visits, meals and who is covering each one.
 
@@ -44,7 +44,7 @@ Program: The caregiver road suggests asking for one specific kind of help, with 
 ## Sibling care meetings
 aka: siblings caring for parents; family care meeting; sharing care between siblings
 see: Sibling rivalry in adulthood; Care calendar
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Research on family caregiving finds care often falls unevenly among siblings, frequently on one person. Regular family meetings are commonly recommended.
 try: A monthly call: what’s changed, what’s needed, who owns what next month.
 
@@ -57,7 +57,7 @@ Program: WP-03 gives every care job one owner; the Lemonade Stand can show how t
 ## Respite and breaks for caregivers
 aka: respite; caregiver break; time off from caring
 see: Asking for specific help; Recovery after a hard day
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Caregiver research links regular breaks with lower strain. Availability of formal respite varies by place.
 try: Book one regular break each week, even a few hours, with a named person covering.
 
@@ -135,7 +135,7 @@ Program: Know your own wiring and the self road in the Workpaper Suite are about
 ## Care handoff notes
 aka: care handover; notes for the next helper; caregiver handover
 see: Care notebook; Handoff notes at work
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Structured handoffs are used widely in professional care to reduce errors. The same idea helps family caregivers.
 try: “Today: ate well, walked to the garden. Tomorrow: appointment at 2. Watch out for: tired after lunch.”
 

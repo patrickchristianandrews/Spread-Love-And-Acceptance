@@ -94,7 +94,7 @@ Program: REPORT-01 keeps your progress week by week, so it builds instead of sta
 ## Never miss twice
 aka: never miss twice; getting back on track; missed a day
 see: Streaks and tracking; Restarting after a break
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: A popular guideline from habit writers. Research on habit formation (for example, Lally and colleagues, 2010) found that missing a single day didn’t significantly harm habit building.
 try: Missed the check-in yesterday? No problem. Just do it tonight.
 
@@ -133,7 +133,7 @@ Program: The Library’s fresh start entry goes deeper. The monthly look-back (W
 ## Keystone habits
 aka: keystone habit; one habit that changes others
 see: Habit stacking; Tiny habits
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: Popularized by Charles Duhigg in The Power of Habit (2012). The idea is intuitive, but evidence that specific habits reliably trigger wider change is limited.
 try: For some couples, a daily check-in becomes a keystone: it catches small problems early and makes other routines easier.
 
@@ -185,7 +185,7 @@ Program: Frequency Calibration helps two people see where their natural rhythms 
 ## Shared habits for households
 aka: household habits; family routines; couple habits
 see: Habit stacking; Weekly planning together
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: Research on family routines links regular shared routines with family wellbeing. Specific routines are a matter of fit.
 try: One shared habit to start: a five-minute tidy together before bed, with music.
 

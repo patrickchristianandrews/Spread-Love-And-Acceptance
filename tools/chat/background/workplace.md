@@ -70,7 +70,7 @@ Program: The Signal Translator helps you test how your “let me finish” line 
 ## One-on-ones
 aka: one on one meetings; 1:1s; check ins with manager
 see: Asking for feedback; Managing up
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: Regular one-on-ones are widely recommended in management practice. Research links good manager relationships with engagement, though one-on-ones themselves are less studied.
 try: Bring three things: what’s going well, what’s stuck, and one thing you need.
 
@@ -122,7 +122,7 @@ Program: Pillar IV, Tune how you send and receive, works at work too. A Wiring C
 ## Handoff notes at work
 aka: handoff notes; handover notes; shift handover; project handoff
 see: Written recaps after a talk; Team working agreements
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Structured handoffs are widely used in healthcare, aviation and other fields to reduce errors. Their principles apply to any work handover.
 try: “Done: X. In progress: Y (next step Z). Watch out for: the client prefers phone calls.”
 
@@ -187,7 +187,7 @@ Program: The Signal Translator helps with messages that might be misread. Turnin
 ## Workload conversations at work
 aka: too much work; workload talk; at capacity at work
 see: Boundaries at work; Decision rights at work
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Research on burnout links chronic workload imbalance with exhaustion. Raising workload early, with facts, is widely recommended.
 try: “Here’s what’s on my plate this sprint. If this new project is a priority, which of these should move?”
 

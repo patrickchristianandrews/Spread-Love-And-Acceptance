@@ -178,7 +178,7 @@ Protecting some recovery time for each person, and making sure it is shared fair
 research:
 Sonnentag and Charlotte Fritz published a recovery experience questionnaire in 2007. A 2022 meta-analysis by Patricia Albulescu and colleagues found that micro-breaks had small positive effects on vigour and reduced fatigue. Research on recovery is extensive and generally consistent.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /pause-and-play.html | Pause and play
 talk:
 - When does each of us get real downtime?
@@ -199,7 +199,7 @@ research:
 Joshua Rubinstein, David Meyer and Jeffrey Evans published on task-switching costs in 2001. Eyal Ophir, Clifford Nass and Anthony Wagner (2009) found that heavy media multitaskers performed worse on some attention tasks, though later studies found mixed results. Research by Gloria Mark on workplace interruptions found people often take a long time to return to an interrupted task.
 links:
 /book/preface.html | Unseen work quietly adds up (Preface)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - Who gets interrupted most in our home?
 - Could we batch questions or use a shared list instead?
@@ -219,7 +219,7 @@ research:
 McDaniel and Coyne published on technoference in 2016; Roberts and David published on partner phubbing in 2016. Andrew Przybylski and Netta Weinstein (2013) reported that the mere presence of a phone reduced closeness in conversations, but later replication attempts had mixed results. Most phubbing research is correlational.
 links:
 /turning-toward.html#bids | Turning Toward: bids
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Do phones get in the way of our time together?
 - What phone agreements might suit us?
@@ -298,7 +298,7 @@ Agreeing on some calm spaces, even just one room or corner that stays tidy, can 
 research:
 Saxbe and Repetti published their study in 2010, based on a small sample of dual-earner couples. Research on environmental psychology more broadly shows that surroundings can influence mood and stress, but effects vary. It is best seen as a helpful observation rather than a strong general rule.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/chapter-4-in-depth.html#gating | Chapter IV in depth: sensory gating
 talk:
 - Does clutter affect how you feel?

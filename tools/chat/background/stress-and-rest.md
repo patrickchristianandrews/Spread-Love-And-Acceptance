@@ -5,7 +5,7 @@ General, everyday information only. Not health or medical advice.
 ## Stress versus pressure
 aka: stress and pressure; good stress; helpful stress
 see: Everyday stress spillover; Recovery after a hard day
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Research on stress (including the older Yerkes-Dodson idea) suggests moderate arousal can help performance while too much hurts it. The details are debated, but the general shape is widely accepted.
 try: “A deadline this week is fine pressure. A deadline plus a sick kid plus no sleep is too much.”
 

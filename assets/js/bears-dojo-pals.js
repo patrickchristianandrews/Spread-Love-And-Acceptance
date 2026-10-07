@@ -91,7 +91,7 @@
     ['A slow breath out, a little longer than the breath in, helps your body settle.', '/night-garden.html', 'Breathe in the Night Garden'],
     ['Naming a feeling in a word or two, like “I’m frustrated”, can make it feel a little smaller.', '/know-yourself.html', 'Know your own wiring'],
     ['Small moments count. Answering someone’s “Look at this!” builds closeness over time.', '/turning-toward.html', 'Turning toward'],
-    ['When your battery is low, the same words land harder. Check it before a hard talk.', '/workpapers/wp-02-battery-stress-meter.html', 'Check your battery'],
+    ['When your battery is low, the same words land harder. Check it before a hard talk.', '/workpapers/wp-02-how-much-are-you-carrying.html', 'Check your battery'],
     ['Saying back what you heard, before you answer, helps people feel listened to.', '/check-ins.html', 'Weekly check-ins'],
     ['A pause with a return time, like “Can we pick this up at eight?”, isn’t running away.', '/upset-right-now.html', 'Upset right now?'],
     ['Work nobody sees still counts. Writing it down is the first step to sharing it.', '/book/preface.html', 'The work nobody sees'],
@@ -103,7 +103,7 @@
     ['Matching energy means matching care and effort, never volume or meanness.', '/book/self-2-now-in-depth.html#control', 'Matching energy'],
     ['A kind no can be fair: say why, say what you have left, and offer something else.', '/self-path.html#no', 'Kind ways to say no'],
     ['Different brains take in the same words differently, and that’s nobody’s fault.', '/wired-differently.html', 'Wired differently'],
-    ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
+    ['A tiny daily check-in keeps small things small.', '/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in'],
     ['Thank-yous land best when they’re specific: “thanks for remembering the dentist.”', '/turning-toward.html#thanks', 'Saying thanks'],
     ['Some of how you react was learned growing up, and you get to choose which old rules to keep.', '/growing-up.html', 'Where your lens came from'],
     ['Rest isn’t a reward for finishing. It’s what makes the next thing possible.', '/wp-11.html', 'The Calm-Down Kit']

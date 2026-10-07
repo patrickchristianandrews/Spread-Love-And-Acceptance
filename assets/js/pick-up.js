@@ -36,7 +36,7 @@
     if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push({ t: 'Wavelength', u: '/wavelength.html' });
     var lem = json('tol-lemonade-stand-v2'); if (lem && lem.jobs && lem.jobs.some(function (j) { return j && j.name; }) && !lem.example) out.push({ t: 'The Lemonade Stand', u: '/lemonade-stand.html' });
     var cw = json('cwd-v1'); if (cw && ((cw.log && cw.log.length) || Object.keys(cw.done || {}).length)) out.push({ t: 'The Carrier Wave Decoder', u: '/carrier-wave-decoder.html', note: Object.keys(cw.done || {}).length ? Object.keys(cw.done).length + ' practice' + (Object.keys(cw.done).length === 1 ? '' : 's') + ' done' : '' });
-    if (lsGet('tol-calc01-full-v2')) out.push({ t: 'Is the setup working for everyone? (the long form)', u: '/calc01-solvency.html' });
+    if (lsGet('tol-calc01-full-v2')) out.push({ t: 'Is the setup working for everyone? (the long form)', u: '/is-the-setup-working.html' });
     return out;
   }
   function sixWeeks() {
@@ -139,7 +139,7 @@
     5: [['We just had a fight', 'Paste it into the Conversation Reader', '/conversation-reader.html'], ['Chores piling up', 'List them in the Lemonade Stand', '/lemonade-stand.html'],
         ['Wound up', 'Three minutes of Breathe', '#breathe'], ['Understand myself', 'Start your Wiring Card', '/wiring-card.html']],
     15: [['New here', 'Start in 10 minutes', '/start-in-10-minutes.html'], ['After a hard talk', 'The Carrier Wave Decoder, step by step', '/carrier-wave-decoder.html'],
-        ['Chores piling up', 'Give every job one owner (WP-03)', '/workpapers/wp-03-raci-treaty.html'], ['Need to settle', 'A soundscape, eyes closed', '/soundscapes.html']]
+        ['Chores piling up', 'Give every job one owner (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'], ['Need to settle', 'A soundscape, eyes closed', '/soundscapes.html']]
   };
   function launcher(where) {
     var box = document.createElement('section');

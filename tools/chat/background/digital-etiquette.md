@@ -146,7 +146,7 @@ Program: Pillar IV: tune how you send so the other person can receive.
 ## The pause before sending
 aka: pause before sending; send delay; draft first
 see: Cooling off before replying; Don’t fight by text
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: Practical advice. Emotion typically fades with time, and rereading a draft often reveals a harsher tone than intended.
 try: Write it, wait five minutes, reread it as if you were receiving it, then decide.
 

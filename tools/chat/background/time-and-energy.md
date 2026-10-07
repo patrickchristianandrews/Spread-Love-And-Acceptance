@@ -16,7 +16,7 @@ Program: Today’s Weather tells you what today is good for; the matrix helps yo
 ## Time blocking
 aka: time blocking; calendar blocking; blocking time
 see: Eisenhower matrix; Buffers between tasks
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A popular productivity technique. Research on planning suggests specific plans (when and where) help follow-through.
 try: Block Sunday 10 to 11 for household admin, and put it in the shared calendar.
 
@@ -42,7 +42,7 @@ Program: The Library’s planning fallacy entry explains why we underestimate ti
 ## Weekly planning together
 aka: weekly planning; Sunday planning; family planning meeting
 see: Family meetings; Co-parenting calendar
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: Practical guidance used by many families and couples. Shared planning reduces surprise conflicts.
 try: Sunday, 15 minutes: look at the week’s calendar, meals, who’s doing what, and one fun thing.
 
@@ -81,7 +81,7 @@ Program: WP-01 is a kind of shared done list: who did what, including the invisi
 ## Batching errands
 aka: batching; batch tasks; grouping errands
 see: Time blocking; Energy audit
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A common productivity tip. Research on task switching suggests grouping similar tasks reduces switching costs.
 try: One trip on Saturday for groceries, pharmacy and post office.
 
@@ -120,7 +120,7 @@ Program: This is Pillar II: change the setup of the task, not your willpower.
 ## Shared to-do lists
 aka: shared list; family to-do list; shared task list
 see: Weekly planning together; Planning, doing and following through
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Practical guidance. Shared lists reduce reliance on one person’s memory, a key part of the mental load.
 try: One shared list for the household, with each item tagged with an owner.
 

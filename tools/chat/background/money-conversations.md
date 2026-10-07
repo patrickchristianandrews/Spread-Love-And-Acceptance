@@ -135,7 +135,7 @@ Program: Frequency Calibration maps money as one of your natural rhythms and sug
 ## No-blame money review
 aka: money review; reviewing spending together; budget review
 see: Money dates; Retrospective for households
-go: /workpapers/wp-04-deficit-audit.html | WP-04: What keeps coming back?
+go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
 evidence: A practical application of blameless review ideas to household finances.
 try: “Where did the money go this month, and what would we like to change? No blame, just the facts.”
 

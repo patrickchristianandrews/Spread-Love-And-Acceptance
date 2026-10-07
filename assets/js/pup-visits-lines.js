@@ -138,7 +138,7 @@ window.TOL_PUP_LINES = {
     ['Need a calm little break? We love the Night Garden.', '/night-garden.html', 'The Night Garden'],
     ['We have our own arcade! Pick one of us and play a maze chase or cross the road.', '/frequency-journey.html', 'The Frequency Journey'],
     ['Soft sounds for a slow evening.', '/soundscapes.html', 'Soundscapes'],
-    ['A 90-second daily check-in, for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
+    ['A 90-second daily check-in, for busy days.', '/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in'],
     ['Curious how it all fits together?', '/how-it-works.html', 'How it works']
   ],
 
@@ -159,7 +159,7 @@ window.TOL_PUP_LINES = {
       'Low-battery days are allowed. Plan a gentle one.',
       'Knowing what drains you helps you plan kinder days.',
       ['Make a little card about how you’re built, to share with your people.', '/wiring-card.html', 'Wiring Card'],
-      ['How much are you carrying? Check before a hard talk.', '/workpapers/wp-02-battery-stress-meter.html', 'Battery check'],
+      ['How much are you carrying? Check before a hard talk.', '/workpapers/wp-02-how-much-are-you-carrying.html', 'Battery check'],
       ['Build your own calm-down kit for rough moments.', '/wp-11.html', 'The Calm-Down Kit'],
       ['Every brain is wired a bit differently. That’s okay!', '/wired-differently.html', 'Wired Differently']
     ],
@@ -189,17 +189,17 @@ window.TOL_PUP_LINES = {
       'A worksheet starts a talk. It isn’t a scorecard.',
       'Blank spots are okay. Come back to them later.',
       ['Start by listing the quiet jobs nobody sees.', '/workpapers/wp-01.html', 'Who did what (WP-01)'],
-      ['Every job gets one owner. Try it with just one chore!', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
+      ['Every job gets one owner. Try it with just one chore!', '/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)'],
       ['Fill them in on your phone, or print them.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
-      ['Can the way you share the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'Is the setup working for everyone? (CALC-01)']
+      ['Can the way you share the load last? The calculator can help.', '/workpapers/calculators/is-the-setup-working-quick.html', 'Is the setup working for everyone? (CALC-01)']
     ],
     program: [
       'One week, one small change. That’s the whole trick.',
       'Skipped a day? Just pick it back up. No catching up needed.',
       'Do the week together if you can. Two heads, one plan.',
       ['The whole six weeks, step by step.', '/prog-01.html', 'The guided program'],
-      ['Week 2 is all about giving every job one owner.', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
-      ['A 90-second daily check-in fits the busiest days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
+      ['Week 2 is all about giving every job one owner.', '/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)'],
+      ['A 90-second daily check-in fits the busiest days.', '/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in'],
       ['Start by noticing the work that’s already happening.', '/workpapers/wp-01.html', 'Who did what (WP-01)']
     ],
     tools: [
@@ -240,11 +240,11 @@ window.TOL_PUP_LINES = {
   keys: [
     ['\\bown(s|er|ers|ership)?\\b|\\bjobs?\\b|chores?|who does|raci|treaty', [
       'Psst… this part is about owning one job each. Try it with just one chore!',
-      ['One job, one owner. Everyone knows who to look to.', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)']
+      ['One job, one owner. Everyone knows who to look to.', '/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)']
     ]],
     ['batter(y|ies)|stress|tank|drain|energy', [
       'This bit is about how full your battery is. Check yours before a hard talk!',
-      ['Low battery? Pick a gentler day for big talks.', '/workpapers/wp-02-battery-stress-meter.html', 'The battery check']
+      ['Low battery? Pick a gentler day for big talks.', '/workpapers/wp-02-how-much-are-you-carrying.html', 'The battery check']
     ]],
     ['thank|gratitude|appreciat', [
       'This part is about thank-yous. Make one specific, like “thanks for the warm towel!”',
@@ -268,7 +268,7 @@ window.TOL_PUP_LINES = {
     ]],
     ['check-?ins?|small and (often|frequent)|daily|weekly|catch-up', [
       'Small and often beats big and rare. Five minutes is plenty!',
-      ['A 90-second daily check-in for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in']
+      ['A 90-second daily check-in for busy days.', '/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in']
     ]],
     ['say no|refus|not now|neutral refusal', [
       'This part is about saying no kindly. A clear “not now” is kind too.',
@@ -316,7 +316,7 @@ window.TOL_PUP_LINES = {
     ]],
     ['talk|conversation|words|listen|tone', [
       'Try asking one curious question before you answer.',
-      ['Same words can land differently. Try a softer tone.', '/workpapers/wp-09-tone-filter.html', 'Say it so it lands (WP-09)']
+      ['Same words can land differently. Try a softer tone.', '/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands (WP-09)']
     ]]
   ],
 

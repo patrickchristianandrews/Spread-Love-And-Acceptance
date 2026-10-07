@@ -151,7 +151,7 @@
 
 <section class="wk-tool tol-plain" id="owner-list" aria-labelledby="owner-list-h">
   <h3 id="owner-list-h">Team one-owner list</h3>
-  <p>List the jobs that come round again and again. Give each one an owner, a backup and how often it happens. This is the team version of the site’s <a href="/workpapers/wp-03-raci-treaty.html">One owner per job</a> worksheet.</p>
+  <p>List the jobs that come round again and again. Give each one an owner, a backup and how often it happens. This is the team version of the site’s <a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job</a> worksheet.</p>
 
   <div class="wk-field">
     <label for="wk-team">Team members</label>
@@ -281,6 +281,7 @@
 </div>
 <p>This page shares general ideas about how teams work. It is not legal, HR or medical advice, and it is not a tool for evaluating anyone’s performance.</p>
 </main>
+<script src="/assets/js/household.js"></script>
 <script>
 (function () {
   'use strict';
@@ -455,6 +456,28 @@
   team.value = state.team;
   if (!state.rows.length && !state.team) state.rows.push({ task: '', owner: '', backup: '', often: '' });
   render();
+
+  // Names typed once in another tool (the household, /assets/js/household.js) are only offered here,
+  // while the team field is empty. Using them fills the field; nothing else is copied.
+  var HH = window.TOLHousehold, hh = HH && HH.get();
+  if (hh && hh.people.length && !state.team.trim()) {
+    var field = team.closest('.wk-field');
+    var offer = HH.offer({
+      question: 'Use the names you saved before?',
+      names: hh.people,
+      onUse: function () {
+        if (state.team.trim()) return 'You’ve already typed names here, so they were left as they are.';
+        state.team = hh.people.join(', ');
+        team.value = state.team;
+        save(); render();
+        return HH.addedLine(hh.people.length, 0);
+      },
+      noMessage: 'No problem. Type your team’s names here.',
+      focus: function () { return team; }
+    });
+    field.parentNode.insertBefore(offer, field);
+    team.addEventListener('input', function () { var b = offer.querySelector('.tol-hh-offer'); if (b && state.team.trim()) b.hidden = true; });
+  }
 })();
 </script>
 </body>

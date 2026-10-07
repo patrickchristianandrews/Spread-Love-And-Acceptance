@@ -44,7 +44,7 @@ Program: The Wiring Card can say what silence means for you: for many, it means 
 ## Written follow-ups
 aka: follow up in writing; put it in writing; send a text summary
 see: Processing time; Written recaps after a talk
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A common accommodation in workplaces and a frequent request from neurodivergent people. Written notes help memory for everyone.
 try: After a talk: “Just to confirm: I’ll book the dentist, you’ll do Thursday pickup.”
 

@@ -18,7 +18,7 @@ Autonomy also matters between partners. Research suggests that supporting each o
 research:
 Deci and Ryan developed self-determination theory from the 1970s, with a major statement in 1985 and an influential 2000 review. It is one of the best-supported theories of motivation, tested across education, work, health and relationships, including many cross-cultural studies. C. Raymond Knee and colleagues have applied it to romantic relationships.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/chapter-4.html | Two kinds of fair (Chapter IV)
 talk:
 - Which of our household jobs do we each feel real ownership of?
@@ -59,7 +59,7 @@ research:
 Peter Gollwitzer introduced the concept in 1999. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behaviour change research, though effects vary by task and setting.
 links:
 /wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Is there a vague goal we could turn into an if–then plan?
 - What cues in our day could trigger helpful habits?
@@ -78,8 +78,8 @@ Simpler behaviours became automatic faster. Complex habits, like regular exercis
 research:
 The study by Lally, Cornelia van Jaarsveld, Henry Potts and Jane Wardle was published in the *European Journal of Social Psychology* (online in 2009, in print in 2010). It had 96 participants, so its numbers should be taken as illustrative rather than precise. The “21 days” idea seems to come from a 1960 book by plastic surgeon Maxwell Maltz about adjusting to changes in appearance, not from habit research. Wendy Wood’s research supports the importance of stable cues.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in: small and often (WP-13)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-13-daily-check-in.html | The daily check-in: small and often (WP-13)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - What habit would we most like to build together?
 - What cue could it be tied to?
@@ -98,7 +98,7 @@ Small amounts of friction make a big difference. Putting the laundry basket wher
 research:
 Wood, Jeffrey Quinn and Deborah Kashy (2002) used diaries to estimate that a large proportion of daily behaviours were habitual. Wood and Dennis Rünger reviewed the psychology of habit in 2016. “Habit stacking” is a popular term, notably from James Clear’s *Atomic Habits* (2018), rather than a research term, but it fits research on cues and implementation intentions.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 /lemonade-stand.html | The Lemonade Stand
 talk:
 - What small changes to our home would make good habits easier?
@@ -119,7 +119,7 @@ research:
 Amabile and Kramer published *The Progress Principle* in 2011, based on diary data from 238 knowledge workers. Weick’s article on small wins appeared in 1984. The diary research is observational, and the sample was of professional workers, but the finding fits other research on goal progress and motivation.
 links:
 /book/chapter-5.html | The monthly look-back (Chapter V)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? Wrap it up and keep count (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Wrap it up and keep count (WP-04)
 talk:
 - What small win could we aim for this week?
 - How could we make progress more visible?
@@ -159,7 +159,7 @@ research:
 Locke and Latham’s goal-setting theory was summarised in their 1990 book and a 2002 review. It is one of the most replicated theories in organisational psychology. The SMART acronym (specific, measurable, achievable, relevant, time-bound) comes from management writing, notably George Doran in 1981, rather than directly from the research. Lisa Ordóñez and colleagues (2009) discussed the side effects of goal setting.
 links:
 /book/chapter-2.html | Is the split working? (Chapter II)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - Which of our shared goals could be more specific?
 - What would we want to review each month?
@@ -180,7 +180,7 @@ Procrastination is also more common with ADHD and depression, where it may refle
 research:
 Piers Steel’s 2007 meta-analysis reviewed procrastination research and linked it to task aversiveness, impulsiveness and low self-efficacy. Sirois and Pychyl published on mood repair in 2013. Michael Wohl, Pychyl and Shannon Bennett published the self-forgiveness study in 2010. The research is substantial, mostly with student samples.
 links:
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
 talk:
 - Which tasks do you put off, and what feeling do they bring up?
@@ -200,7 +200,7 @@ At home, perfectionism often shows up as difficulty handing over tasks, redoing 
 research:
 Hewitt and Flett published their multidimensional model in 1991; Randy Frost and colleagues published another in 1990. Joachim Stoeber and Kathleen Otto (2006) reviewed the strivings–concerns distinction. Thomas Curran and Andrew Hill (2019) found that perfectionism scores among college students rose between 1989 and 2016. Research on perfectionism is extensive, with some debate about whether strivings are ever fully healthy.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: agreeing means clear, not perfect (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job: agreeing means clear, not perfect (WP-03)
 /book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
 talk:
 - Where does each of us hold perfectionist standards?
@@ -220,7 +220,7 @@ In couples, a person with low self-efficacy in a domain (say, planning meals) ma
 research:
 Bandura introduced self-efficacy in 1977 and developed it in *Self-Efficacy: The Exercise of Control* (1997). It is among the most studied concepts in psychology, with strong evidence linking it to motivation and performance across many domains. Some researchers debate its causal role versus simply reflecting past performance.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#yourself | How it fits: yourself
 talk:
 - In which household areas do each of us feel most and least confident?
@@ -299,8 +299,8 @@ What does seem true is that people feel tired after demanding days and are more 
 research:
 Baumeister, Ellen Bratslavsky, Mark Muraven and Dianne Tice published the original study in 1998. Martin Hagger and colleagues’ 2016 multi-lab registered replication found a very small effect, not reliably different from zero. Veronika Job, Carol Dweck and Gregory Walton (2010) studied beliefs about willpower. The topic remains debated.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Do you notice being less patient at the end of the day?
 - Which of our routines rely on willpower rather than habit?
@@ -319,7 +319,7 @@ Whatever the precise mechanism, many people carrying the mental load describe ex
 research:
 Shai Danziger, Jonathan Levav and Liora Avnaim-Pesso published the parole study in 2011; Keren Weinshall-Margel and John Shapard challenged it. Iyengar and Lepper published the jam study in 2000. Benjamin Scheibehenne, Rainer Greifeneder and Peter Todd’s 2010 meta-analysis found a mean effect near zero; Alexander Chernev and colleagues (2015) identified conditions that make choice overload more likely.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/preface.html | Unseen work quietly adds up (Preface)
 talk:
 - Who makes most of the small decisions in our home?
@@ -380,7 +380,7 @@ research:
 Prochaska and DiClemente published the model in 1983. Robert West (2005) and others have criticised the stages as arbitrary. Miller and Rollnick’s *Motivational Interviewing* was first published in 1991; meta-analyses show modest positive effects across many behaviours, particularly in health settings.
 links:
 /check-ins.html#leverage | Check-ins: leverage
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Is there a change one of us is ambivalent about?
 - What questions help you explore your own reasons for change?

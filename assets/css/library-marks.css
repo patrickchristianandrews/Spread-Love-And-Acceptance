@@ -1,0 +1,32 @@
+/* library-marks.css: marks the site's own ideas on the Professor's Library pages, so readers can tell
+   published research apart from this site's way of putting it into practice. Uses the site's colour
+   variables, so the whole-page dark mode in site.css applies to it too. */
+
+/* The small "This site’s idea" tag */
+.lib-own-k{
+  display:inline-block; margin:0 .45rem .1rem 0; padding:.08rem .5rem;
+  font:500 .7rem/1.4 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-soft); background:var(--paper-deep); border:1px solid var(--brass); border-radius:999px;
+  white-space:nowrap; vertical-align:.08em; font-style:normal;
+}
+.read p.lib-own-k{ margin:0 0 .35rem !important; max-width:none; }
+
+/* A whole block that is the site's own (an entry's "How it connects" part, the pillar notes) */
+.lib-own:not(p){
+  margin:1.6rem 0 1.4rem; padding:.75rem 1rem .4rem;
+  border:1px dashed var(--line); border-radius:12px; background:transparent;
+  box-sizing:border-box; max-width:100%;
+}
+.lib-entry .lib-own:not(p) h3{ margin-top:.2rem !important; }
+.lib-own:not(p) > :last-child{ margin-bottom:.4rem; }
+
+/* A single paragraph that is the site's own, inside a research entry */
+p.lib-own{ border-left:2px dashed var(--brass); padding-left:.75rem; }
+
+/* The "How to read this page" legend */
+.lib-legend{ font-size:.95rem; color:var(--ink-soft); margin:0 0 1.6rem !important; }
+.lib-legend .lib-own-k{ margin:0 .15rem; }
+
+@media print{
+  .lib-own-k{ border-color:#999; background:none; }
+}

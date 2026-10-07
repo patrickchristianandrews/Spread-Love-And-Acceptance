@@ -154,7 +154,7 @@ SEARCH = {
  'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple plan for heated moments: your signs, a pause signal, what helps you settle, and how to come back to the talk kindly.'),
  'wp-13.html': ('90-Second Daily Check-In for Couples (WP-13)', 'A 90-second daily check-in for couples and housemates: how you’re doing, what’s coming up, and one small way to help.'),
  'lemonade-stand.html': ('Who Did What This Week? A Simple Chore Tracker', 'A friendly chore tracker for the week: note who did what, see the balance at a glance, and talk about it without blame.'),
- 'calc01-solvency.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
+ 'is-the-setup-working.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
  'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
  'wired-differently.html': ('Wired Differently: Neurodiversity in Relationships', 'How different minds can hear the same words differently, and simple ways to share plans, chores and feedback so they land for everyone.'),
  'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
@@ -220,14 +220,14 @@ SEARCH.update({
  # chores and the mental load
  'lemonade-stand.html': ('Who Did What This Week? A Free Chore Tracker', 'A free chore and mental load tracker for one person or a whole home: log who did what this week, see the split or your own load, and talk without blame.'),
  'workpapers/wp-01.html': ('Who Did What: A One-Week Chore Log and Kind Ways to Say No', 'A one-week log of who did what at home, plus three calm ways to say no or “not right now” without starting a fight. A free worksheet for couples and roommates.'),
- 'workpapers/wp-02-battery-stress-meter.html': ('Stress Check: How Much Are You Carrying? (WP-02)', 'A five-question stress check that separates how much you are already carrying from how upset you are about one thing. A reflection tool, not a test.'),
- 'workpapers/wp-03-raci-treaty.html': ('One Owner per Job: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
- 'workpapers/wp-04-deficit-audit.html': ('What Keeps Coming Back? Find the Chores That Keep Slipping', 'Once a month, look back at four weeks of chore logs together, find the jobs and arguments that keep coming back, and fix the setup instead of blaming a person.'),
- 'workpapers/wp-09-tone-filter.html': ('Say It So It Lands: Kinder Words Before You Reply', 'A quick self-check before you answer something that landed hard, so what you say next is calm, clear and something the other person can actually hear.'),
- 'workpapers/wp-13-pll-protocol.html': ('90-Second Daily Check-In for Couples and Housemates', 'A 90-second daily check-in: one sentence each about how you are doing and what is coming up, so small things do not pile up into a weekend argument. Free.'),
+ 'workpapers/wp-02-how-much-are-you-carrying.html': ('Stress Check: How Much Are You Carrying? (WP-02)', 'A five-question stress check that separates how much you are already carrying from how upset you are about one thing. A reflection tool, not a test.'),
+ 'workpapers/wp-03-one-owner-per-job.html': ('One Owner per Job: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
+ 'workpapers/wp-04-what-keeps-coming-back.html': ('What Keeps Coming Back? Find the Chores That Keep Slipping', 'Once a month, look back at four weeks of chore logs together, find the jobs and arguments that keep coming back, and fix the setup instead of blaming a person.'),
+ 'workpapers/wp-09-say-it-so-it-lands.html': ('Say It So It Lands: Kinder Words Before You Reply', 'A quick self-check before you answer something that landed hard, so what you say next is calm, clear and something the other person can actually hear.'),
+ 'workpapers/wp-13-daily-check-in.html': ('90-Second Daily Check-In for Couples and Housemates', 'A 90-second daily check-in: one sentence each about how you are doing and what is coming up, so small things do not pile up into a weekend argument. Free.'),
  'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple calm-down plan before you need it: your early signs, a pause signal, what helps you settle, and how to come back to the talk kindly and on time.'),
  'wp-11-sound-toolkit.html': ('Calm-Down Sounds: Brown Noise, a Low Hum and More', 'Three simple background sounds to try as part of your calm-down plan: a low hum, a soft flutter and brown noise. Free in your browser, and a matter of taste.'),
- 'workpapers/calculators/calc01-solvency.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the household load is working for everyone.'),
+ 'workpapers/calculators/is-the-setup-working-quick.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the household load is working for everyone.'),
  'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.'),
  'tools/frequency-calibration.html': ('Are Your Rhythms in Step? Frequency Calibration', 'A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.'),
  'snapshot/index.html': ('A 2-Minute Snapshot of How Your Household Shares the Load', 'A gentle two-minute look at how the shared load is set up at home and how it bends, for couples, families, roommates and teams. Not a test or a diagnosis.'),
@@ -290,10 +290,10 @@ SEARCH.update({
  'learn/index-in-depth.html': (None, 'Twelve real stories from philosophy on knowing yourself and living well with others, retold in plain language and linked to the chapters and worksheets.'),
  'wired-differently-in-depth.html': (None, 'How autistic, ADHD, dyslexic, anxious, highly sensitive and neurotypical people can hear the same sentence in very different ways, with examples and research.'),
  'growing-up-in-depth.html': (None, 'A plain-language guide to the stages of growing up and the lens each one leaves: the big question at each stage, why timing matters, and family and culture.'),
- 'workpapers/wp-03-raci-treaty-in-depth.html': (None, 'The full household chore agreement: give every regular job one owner, with an optional helper, so nothing slips and nobody has to keep asking who does what.'),
- 'workpapers/wp-04-deficit-audit-in-depth.html': (None, 'The full monthly look-back: a monthly review of four weeks of chore logs and owners, to find the tasks that keep slipping and fix the setup together.'),
- 'workpapers/wp-09-tone-filter-in-depth.html': (None, 'The full checklist for getting back in tune before you reply: put the radio-tuning idea from Chapter I into everyday words that are calm, clear and kind.'),
- 'workpapers/wp-13-pll-protocol-in-depth.html': (None, 'The full 90-second daily check-in for couples and housemates: a short, easy daily talk that keeps two people in step with small, steady corrections.'),
+ 'workpapers/wp-03-one-owner-per-job-in-depth.html': (None, 'The full household chore agreement: give every regular job one owner, with an optional helper, so nothing slips and nobody has to keep asking who does what.'),
+ 'workpapers/wp-04-what-keeps-coming-back-in-depth.html': (None, 'The full monthly look-back: a monthly review of four weeks of chore logs and owners, to find the tasks that keep slipping and fix the setup together.'),
+ 'workpapers/wp-09-say-it-so-it-lands-in-depth.html': (None, 'The full checklist for getting back in tune before you reply: put the radio-tuning idea from Chapter I into everyday words that are calm, clear and kind.'),
+ 'workpapers/wp-13-daily-check-in-in-depth.html': (None, 'The full 90-second daily check-in for couples and housemates: a short, easy daily talk that keeps two people in step with small, steady corrections.'),
  'infographic.html': ('The Whole Idea on One Printable Page', 'The whole idea on one printable page: the Five Pillars, how an unowned chore turns into resentment, the Lemonade Stand chore tracker, and three kind phrases.'),
  'frequency-framework.html': ('The Frequency Framework: Getting Back in Step', 'Two people can each run on their own rhythm for money, rest, decisions, talking and values. Why kind people fall out of step, and how to find the beat again.'),
  'suite-index-in-depth.html': (None, 'An honest index of everything that is live today in The Objective Ledger Workpaper Suite: each chapter, worksheet and calculator you can use right now.'),
@@ -351,14 +351,14 @@ VIDEO_PAGES = ('frequency-buddies.html', 'frequency-buddies-shuffle.html')
 # engines at the linked page (rel=canonical) and stays out of the sitemap; nothing is deleted or unlinked.
 CANONICAL_TO = {
     'wp-01.html': 'workpapers/wp-01.html',
-    'wp-02.html': 'workpapers/wp-02-battery-stress-meter.html',
-    'wp-03.html': 'workpapers/wp-03-raci-treaty.html',
-    'wp-04.html': 'workpapers/wp-04-deficit-audit.html',
-    'wp-09.html': 'workpapers/wp-09-tone-filter.html',
-    'wp-13.html': 'workpapers/wp-13-pll-protocol.html',
-    'workpapers/wp-04.html': 'workpapers/wp-04-deficit-audit.html',
-    'workpapers/wp-11.html': 'wp-11.html',
-    'calc01-solvency.html': 'workpapers/calculators/calc01-solvency.html',
+    'wp-02.html': 'workpapers/wp-02-how-much-are-you-carrying.html',
+    'wp-03.html': 'workpapers/wp-03-one-owner-per-job.html',
+    'wp-04.html': 'workpapers/wp-04-what-keeps-coming-back.html',
+    'wp-09.html': 'workpapers/wp-09-say-it-so-it-lands.html',
+    'wp-13.html': 'workpapers/wp-13-daily-check-in.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': 'workpapers/wp-04-what-keeps-coming-back.html',
+    '/wp-11.html': 'wp-11.html',
+    'is-the-setup-working.html': 'workpapers/calculators/is-the-setup-working-quick.html',
 }
 
 # Sharing images: size and a plain description for each one used in og:image
@@ -407,7 +407,7 @@ def series_ld(publisher):
                                'episode': [{'@type': 'TVEpisode', 'episodeNumber': i + 1, 'name': t, 'url': SITE + '/frequency-buddies.html?ep=' + e} for i, (e, t) in enumerate(eps)]}}
 
 
-TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
+TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|is-the-setup-working|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
 GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
 ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
 
