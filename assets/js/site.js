@@ -161,6 +161,12 @@
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from', paid: true },
       { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react', paid: true },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss', paid: true },
+      { sub: 'The book by topic' },
+      { href: '/book/topic-start-here.html', code: 'Topic', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
+      { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
+      { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
+      { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
+      { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology, behavioral science and conflict resolution in plain words: 235 short entries, each tied to the Five Pillars and the program' },
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
@@ -232,6 +238,7 @@
   // the Contents page (/contents.html, linked in every footer as "All pages").
   var MENU = [
     { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? A gentle first step, and a way in for your own situation.', items: [
+      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
@@ -254,6 +261,7 @@
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
     { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
+      { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
       { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
@@ -270,6 +278,7 @@
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
     ]},
     { id: 'talk', name: 'Talk it through', title: 'Talk it through', blurb: 'Say it kindly, hear it fully, and keep small things small. What you type stays on your device.', items: [
+      { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
       { href: '/turning-toward.html', deep: true, title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
@@ -289,6 +298,7 @@
       { href: '/tools/mood-arbitrage-free.html', code: 'Tool', title: 'Mood Arbitrage', note: 'Small, kind ways to shift a heavy mood' }
     ]},
     { id: 'self', name: 'Know yourself', title: 'Know yourself', blurb: 'Everything you can use on your own: understand your wiring, load and patterns, settle yourself, get ready for a hard talk, and read up, at your pace. Nothing here needs anyone else.', items: [
+      { href: '/book/topic-know-yourself.html', code: 'Book', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
       { sub: 'Start here, on your own' },
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/wavelength.html', code: 'New', title: 'Find your Wavelength', note: 'How you think, talk and listen: your Wave Code' },
@@ -328,6 +338,12 @@
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library and the stories, in one place. Each page has a short version and a deeper one.', items: [
+      { sub: 'The book by topic' },
+      { href: '/book/topic-start-here.html', code: 'Topic', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
+      { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
+      { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
+      { href: '/book/topic-know-yourself.html', code: 'Topic', title: 'The book on knowing yourself', note: 'Every chapter’s part about you, plus the self tools and workpapers' },
+      { href: '/book/topic-calm.html', code: 'Topic', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { sub: 'The book' },
       { sub: 'Part One: The most important, yourself' },
       { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
@@ -353,6 +369,7 @@
       { href: '/polymath.html', title: 'The polymath way', note: 'How nine fields of study became one program' }
     ]},
     { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
+      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
@@ -815,6 +832,7 @@
     }
 
     // "Come back gently": a weekly reminder in the visitor's own calendar, wherever a page asks for one (remind.js)
+    if (document.querySelector('.bt-switch')) { var btj = document.createElement('script'); btj.src = '/assets/js/book-topic.js'; document.head.appendChild(btj); }
     if (document.querySelector('[data-tol-remind]')) { var rmj = document.createElement('script'); rmj.src = '/assets/js/remind.js'; document.head.appendChild(rmj); }
 
     // "Something to read": one hand-picked article that fits this reading page, near the end (reading-suggest.js)
