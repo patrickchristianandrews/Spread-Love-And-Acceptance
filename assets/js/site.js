@@ -633,7 +633,7 @@
   }
   // the last few pages opened here, for "Pick up where you left off" (this browser only; it can be switched off or erased)
   function rememberPage(body) {
-    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
+    if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
     var t = (here && here.title) || (h1 && h1.textContent.replace(/\s+/g, ' ').trim()) || document.title.replace(/\s*[·|–—-]\s*(Spread Love|The Objective Ledger).*$/, '');
     if (!t) return;
@@ -1306,7 +1306,8 @@
   var runSearch = function () {};
   // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
   // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
-  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
+  // it also forgets the chat and the pages remembered for "Pick up where you left off", so nothing shows on a shared device afterwards
+  function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); localStorage.removeItem('tol-recent'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
   document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tol-exit]'); if (b) { e.preventDefault(); quickExit(); } });
   (function () {
     var last = 0, GAME = /^\/(frequency-journey(-play)?|bears-dojo|night-garden|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|re-check-drive|calm-visualizer|soundscapes)\.html$/;

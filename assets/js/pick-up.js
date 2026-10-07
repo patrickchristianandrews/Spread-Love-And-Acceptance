@@ -51,7 +51,7 @@
     return 'Your weather today: ' + (SKY[e.sky] || 'logged');
   }
   // the safety page and the chat are never shown back, so nobody picking up a shared phone sees them
-  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r.filter(function (x) { return x && !/^\/(safety|ask)\.html/.test(x.u || ''); }) : []; }
+  function recent() { var r = json('tol-recent'); return Array.isArray(r) ? r.filter(function (x) { return x && !/^\/(safety|ask|teens|upset-right-now)\.html/.test(x.u || ''); }) : []; }
 
   // ---------- coming back: your next step, and what's new since your last visit ----------
   // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).

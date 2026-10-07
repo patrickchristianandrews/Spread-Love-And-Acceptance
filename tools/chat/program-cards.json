@@ -1547,6 +1547,109 @@
       ]
     },
     {
+      "id": "lgbtq",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "identity, pronouns and coming out",
+      "pat": "\\b(my )?pronouns?\\b|\\bnon ?binary\\b|\\benby\\b|\\btrans(gender)?\\b|\\bgay\\b|\\blesbian\\b|\\bbisexual\\b|\\bbi\\b(?= and| scared| teen)|\\bqueer\\b|\\blgbt\\w*\\b|\\bcoming out\\b|\\bcome out\\b|\\bdeadnam\\w*\\b|\\bmisgender\\w*\\b",
+      "keys": [],
+      "what": [
+        "You belong here, exactly as you are. Being misgendered, mocked or pushed to hide who you are by family is painful, and it isn’t your fault or something you have to earn your way out of."
+      ],
+      "how": [
+        "You get to decide who you come out to, when, and how. There’s no deadline, and it’s okay to wait until you feel safe.",
+        "If a parent mocks your pronouns or identity, one calm line can help, if you feel safe saying it: “I’m not asking you to understand everything today. I’m asking you not to make fun of me.” If it isn’t safe, you don’t have to say anything.",
+        "Find your people: a friend, a school counselor, a GSA club, or an online community you trust. One accepting adult makes a real difference.",
+        "Free, confidential help just for LGBTQ+ young people: The Trevor Project (call 1-866-488-7386, or text START to 678-678), Trans Lifeline (877-565-8860), and the LGBT National Youth Talkline (1-800-246-7743). If you’re thinking about hurting yourself, call or text 988."
+      ],
+      "links": [
+        [
+          "For teens: being yourself at home",
+          "/teens.html#lgbtq"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ],
+        [
+          "For teens",
+          "/teens.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My parents fight all the time",
+          "My parents fight all the time"
+        ]
+      ]
+    },
+    {
+      "id": "parentphone",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a parent and your phone",
+      "pat": "\\b(is|are) (my )?(mom|mum|dad|parents?) allowed to (read|check|look at|go through|take|track)\\b|\\b(mom|mum|dad|parents?)\\b.{0,30}\\b(reads?|checks?|goes through|looks through|tracks?|takes?|took)\\b.{0,20}\\bmy (texts|messages|phone|location|dms|chats?)\\b",
+      "keys": [],
+      "what": [
+        "It’s really common for parents of teens to check phones or share locations, and it’s also normal to want privacy. Both things can be true. A parent checking for safety isn’t the same as a partner controlling you."
+      ],
+      "how": [
+        "Ask what they’re worried about. Often there’s one specific fear (strangers, bullying, safety), and you can agree on something that covers it without reading everything.",
+        "Offer a deal: “Can we agree on what you’ll check and when, instead of reading everything? I’ll keep location on when I’m out.”",
+        "Keep your passwords to yourself, and be careful what you put in writing anywhere.",
+        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different. Talk to a school counselor or another trusted adult, or see the Not safe at home? page."
+      ],
+      "script": [
+        "I get that you worry about me. Could we agree on what you check and when, so I can have some privacy too?"
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "parentsfight",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when your parents fight",
+      "pat": "\\bmy (parents|mom and dad|mum and dad|dad and mom|mom and stepdad|dad and stepmom) (fight|argue|yell|scream|shout)\\w*\\b|\\b(parents|mom and dad) (are always|keep|won t stop|wont stop) (fighting|arguing|yelling)\\b",
+      "keys": [],
+      "what": [
+        "That’s hard to live with, and it isn’t your job to fix it. When parents argue, kids often feel it’s somehow their fault. It isn’t."
+      ],
+      "how": [
+        "Give yourself somewhere to go when it gets loud: headphones, your room, a walk, a friend’s place, or a calm sound on this site.",
+        "If you want to say something, pick a calm moment and keep it about you: “When you two shout, I feel scared and can’t sleep.” You don’t have to take sides.",
+        "Talk to someone outside it: a friend, a relative, a school counselor or coach.",
+        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing. Call 911 in an emergency, and see the Not safe at home? page."
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "Calm sounds",
+          "/soundscapes.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "screenshot",
       "kind": "intent",
       "first": true,
