@@ -247,5 +247,19 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   ok(/need underneath may be fair/i.test(R.KINDS.absolute.need) && /one example and one ask/.test(R.KINDS.absolute.need), 'always/never notes the need may be fair');
 }
 
+// ---------- re-test: one name for a resigned "whatever", and a pattern you've noticed isn't a verdict ----------
+{
+  const r = R.read([{ who: 'Diego', text: 'Can’t tonight, sorry.' }, { who: 'Lena', text: 'Fine. Whatever works for you.' }, { who: 'Diego', text: 'Calm down.' }], 'Lena');
+  ok(r.resignedMe === 1 && r.resignedThem === 0, 'the resigned “whatever” is counted for the table (got ' + r.resignedMe + '/' + r.resignedThem + ')');
+  ok(r.tallyThem.dismiss === 1 && r.resignedThem === 0, '“Calm down” stays “Dismissing”');
+  ok(R.KINDS.dismiss.resigned.label === 'Brush-off, or quiet hurt', 'the gentler label is the card’s');
+  const pat = R.findMarks('I’m always the one who reaches out.').find(m => m.kind === 'absolute');
+  ok(pat && pat.pattern, '“I’m always the one who reaches out” names a pattern');
+  ok(/isn’t the same as a verdict/.test(R.KINDS.absolute.pattern), 'always/never has the pattern note');
+  const not = R.findMarks('You never listen.').find(m => m.kind === 'absolute');
+  ok(not && !not.pattern, '“You never listen” is not marked as a noticed pattern');
+  ok((R.findMarks('I never get a call back.').find(m => m.kind === 'absolute') || {}).pattern, '“I never get a call back” names a pattern');
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

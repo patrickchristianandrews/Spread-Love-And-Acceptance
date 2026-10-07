@@ -523,6 +523,33 @@
   var LEMON_KEEP = 'tol-lemonade-stand-v2';
   var LEMON_FREQ = { day: 7, few: 3, week: 1, eow: 0.5, month: 12 / 52 };
   var LEMON_OFTEN = { day: 'Daily', few: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
+  var LEMON_WORD = { day: 'each day', few: '3 times a week', week: '', eow: 'every other week', month: 'each month' };
+  // The stand counts only home jobs in the split (paid work and rest are shown beside it, never in it).
+  // Its own area for a job wins; otherwise the same guesses the stand makes from the name.
+  var LEMON_AWAY = /^(paid work|commute|school or classes|study & homework \(my own\)|work messages after hours|a side job|time to myself|a walk or moving my body|hobbies|time with friends|quiet time doing nothing|a full day off)$/i;
+  var LEMON_GUESS = [
+    ['baby', /baby|newborn|nappy|nappies|diaper|night feed|bottle|pump|formula|burp/],
+    ['emotional', /emotion|check-?in|peace|listen|support|comfort/], ['money', /bill|budget|money|\btax|\brent\b|bank|\bpay|mortgage|subscription/],
+    ['food', /groc|meal|cook|lunch|dinner|breakfast|food|kitchen/], ['laundry', /laundry|fold|iron|towel/],
+    ['pets', /\bpets?\b|dog|\bcats?\b|litter|\bvet/], ['work', /commute|(?:drive|driving) to work/],
+    ['appts', /appoint|doctor|dentist|pharmac|clinic|prescription|check-?up/],
+    ['kids', /kid|child|baby|bedtime|homework|school run|daycare|caring|care for|pick(?:ing|s)?[ -]?up|drop(?:ping|s)?[ -]?off|hand-?(?:off|over)|custody|co-?parent|\bdriv(?:e|es|ing)\b|\blifts?\b|\brides?\b/],
+    ['admin', /form|paper|mail|email|insurance|admin|document|renew|licen[cs]e|passport/],
+    ['errands', /errand|shop|store|gift|return/], ['car', /car\b|repair|fix|garage|tire/], ['yard', /yard|garden|mow|lawn|snow|leaves|weed/],
+    ['social', /birthday|anniversar|family|friend|call|visit|holiday|in-?laws/], ['mental', /plan|remember|calendar|schedul|list|notic|organi[sz]/],
+    ['home', /dish|clean|tidy|vacuum|bathroom|trash|floor|sheet|dust/], ['work', /work|job|commute|class|study/],
+    ['rest', /\b(?:naps?|napping|rest|resting|relax|relaxing|hobby|hobbies|me[- ]time|time (?:to|for) myself|gym for me|my gym|yoga|meditat\w*|lie[- ]in|sleep(?:ing)? in|day off)\b/]
+  ];
+  var LEMON_NOT_REST = /pick(?:ing|s)?[ -]?up|drop(?:ping|s)?[ -]?off|hand-?(?:off|over)|school run|\bdriv(?:e|es|ing)\b|\blifts?\b|\brides?\b|appoint|custody|co-?parent|collect|ferry|transport|errand/;
+  function lemonHome(name, cat) {
+    if (cat === 'work' || cat === 'rest') return false;
+    if (cat) return true;
+    if (LEMON_AWAY.test(String(name || '').trim())) return false;
+    var l = String(name || '').toLowerCase(), c = 'other';
+    for (var i = 0; i < LEMON_GUESS.length; i++) if (LEMON_GUESS[i][1].test(l)) { c = LEMON_GUESS[i][0]; break; }
+    if (c === 'rest' && LEMON_NOT_REST.test(l)) c = 'other';
+    return c !== 'work' && c !== 'rest';
+  }
   function lemonB64(s) {
     var bin = atob(String(s || '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/'));
     try { var a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new TextDecoder().decode(a); }
@@ -530,20 +557,66 @@
   }
   function lemonNum(x) { var n = parseFloat(x); return isFinite(n) && n > 0 ? n : 0; }
   function lemonReal(n) { n = String(n || '').trim(); return n && !/^(me|them|you|person [a-h1-8])$/i.test(n) ? n : ''; }
-  // { people: [names], jobs: [{ n, f, u, v: { name: amount }, t: { name: minutes } }], own: [{ n, w }], by }
-  function lemonFromCode(text) {
-    var m = /LEMON1:\s*([A-Za-z0-9+\/=_-]+)/i.exec(String(text || '')), raw = null;
-    if (!m) return null;
-    try { raw = JSON.parse(lemonB64(m[1])); } catch (e) { return null; }
+  function lemonClean(x, n) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n || 120); }
+  // How often a job comes up: one "how often" for the job ("day"), or one per person, by name
+  // ({ Maya: 'day', Jordan: 'week' }) or by place ([ 'day', 'week' ]). Each person's own is used for their time.
+  function lemonFreq(f, people) {
+    if (typeof f === 'string') return LEMON_FREQ[f] ? f : 'week';
+    var out = {};
+    if (Array.isArray(f)) f.forEach(function (x, i) { if (people[i] && LEMON_FREQ[x]) out[people[i]] = x; });
+    else if (f && typeof f === 'object') Object.keys(f).forEach(function (k) { if (LEMON_FREQ[f[k]]) out[String(k).trim()] = f[k]; });
+    return Object.keys(out).length ? out : 'week';
+  }
+  function freqOf(j, who) {
+    if (typeof j.f === 'string') return j.f;
+    var hit = null; Object.keys(j.f).forEach(function (k) { if (SP.fold(k) === SP.fold(who)) hit = j.f[k]; });
+    return hit || 'week';
+  }
+  // the one "how often" for One owner per job: the job's own, or the most often anyone does it
+  function freqMain(j) {
+    if (typeof j.f === 'string') return j.f;
+    var best = 'week'; Object.keys(j.f).forEach(function (k) { if (LEMON_FREQ[j.f[k]] > LEMON_FREQ[best]) best = j.f[k]; });
+    return best;
+  }
+  // One tidy shape, whatever the stand sent:
+  // { people, by, kids: [names], nights: { name: 1–14 }, agreed: { name: % }, jobs: [{ n, f, u, v, t, nf, home }], own: [{ n, w }] }
+  function lemonShape(raw) {
     if (!raw || raw.app !== 'lemonade' || !Array.isArray(raw.people)) return null;
     var people = raw.people.map(lemonReal).filter(Boolean).slice(0, MAX_PEOPLE);
-    function obj(o) { var out = {}; if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = lemonNum(o[k]); if (v) out[String(k).trim()] = v; }); return out; }
+    function obj(o, cap) { var out = {}; if (o && typeof o === 'object') Object.keys(o).forEach(function (k) { var v = lemonNum(o[k]); if (v && (!cap || v <= cap)) out[String(k).trim()] = v; }); return out; }
     var jobs = (Array.isArray(raw.jobs) ? raw.jobs : []).slice(0, 200).filter(function (j) { return j && typeof j === 'object' && !j.p; }).map(function (j) {
-      return { n: String(j.n || '').replace(/\s+/g, ' ').trim().slice(0, 120), f: LEMON_FREQ[j.f] ? j.f : 'week', u: j.u === 'h' ? 'h' : 'm', v: obj(j.v), t: obj(j.t) };
+      var n = lemonClean(j.n);
+      return { n: n, f: lemonFreq(j.f, people), u: j.u === 'h' ? 'h' : 'm', v: obj(j.v), t: obj(j.t), nf: lemonClean(j.nf, 40), home: lemonHome(n, typeof j.c === 'string' ? j.c : '') };
     }).filter(function (j) { return j.n; });
-    var own = (Array.isArray(raw.own) ? raw.own : []).slice(0, 40).filter(function (o) { return o && o.n; }).map(function (o) { return { n: String(o.n).trim().slice(0, 120), w: String(o.w || '').trim() }; });
-    return people.length ? { people: people, jobs: jobs, own: own, by: lemonReal(raw.by) } : null;
+    var own = (Array.isArray(raw.own) ? raw.own : []).slice(0, 40).filter(function (o) { return o && o.n; }).map(function (o) { return { n: lemonClean(o.n), w: lemonClean(o.w, 40) }; });
+    var nights = {};
+    (Array.isArray(raw.half) ? raw.half : []).forEach(function (nm) { if (lemonReal(nm)) nights[lemonClean(nm, 40)] = 7; });
+    var pn = obj(raw.pn, 14); Object.keys(pn).forEach(function (k) { nights[k] = Math.max(1, Math.min(14, Math.round(pn[k]))); });
+    var agreed = obj(raw.agreed, 100), as = Object.keys(agreed).reduce(function (a, k) { return a + agreed[k]; }, 0);
+    if (Math.abs(as - 100) > 0.5) agreed = {};
+    var kids = (Array.isArray(raw.kids) ? raw.kids : []).map(function (k) { return lemonClean(k, 40); }).filter(lemonReal);
+    return people.length ? { people: people, jobs: jobs, own: own, by: lemonReal(raw.by), kids: kids, nights: nights, agreed: agreed } : null;
   }
+  // A code ("LEMON1:…"), the .json file's text, or a link (…#side=j… plain, #side=z… squeezed). Calls back with the shape or null.
+  function lemonRead(text, done) {
+    var s = String(text || '').trim(), m, raw = null;
+    if (s.charAt(0) === '{') { try { raw = JSON.parse(s); } catch (e) { raw = null; } return done(lemonShape(raw)); }
+    if ((m = /LEMON1:\s*([A-Za-z0-9+\/=_-]+)/i.exec(s))) { try { raw = JSON.parse(lemonB64(m[1])); } catch (e) { raw = null; } return done(lemonShape(raw)); }
+    if ((m = /#side=([zj])([A-Za-z0-9_-]+)/.exec(s))) {
+      var bytes;
+      try { var bin = atob(m[2].replace(/-/g, '+').replace(/_/g, '/')); bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); } catch (e) { return done(null); }
+      if (m[1] === 'j') { try { raw = JSON.parse(new TextDecoder().decode(bytes)); } catch (e) { raw = null; } return done(lemonShape(raw)); }
+      if (typeof DecompressionStream !== 'function') return done(null);
+      try {
+        new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text().then(function (t) {
+          try { done(lemonShape(JSON.parse(t))); } catch (e) { done(null); }
+        }, function () { done(null); });
+      } catch (e) { done(null); }
+      return;
+    }
+    done(null);
+  }
+  function lemonFromCode(text) { var out = null; lemonRead(text, function (d) { out = d; }); return out; }
   function lemonKept() {
     var st = null;
     try { st = JSON.parse(global.localStorage.getItem(LEMON_KEEP) || 'null'); } catch (e) { st = null; }
@@ -553,11 +626,63 @@
     var jobs = (Array.isArray(st.jobs) ? st.jobs : []).filter(function (j) { return j && !j.ex && !j.personal && String(j.name || '').trim(); }).map(function (j) {
       var v = {}, t = {};
       people.forEach(function (p, i) { if (!p) return; var a = lemonNum((j.v || [])[i]), b = lemonNum((j.t || [])[i]); if (a) v[p] = a; if (b) t[p] = b; });
-      return { n: String(j.name).trim().slice(0, 120), f: LEMON_FREQ[j.freq] ? j.freq : 'week', u: j.unit === 'h' ? 'h' : 'm', v: v, t: t };
+      var f = j.freqs || j.freq;
+      return { n: lemonClean(j.name), f: lemonFreq(f, people), u: j.unit === 'h' ? 'h' : 'm', v: v, t: t, nf: typeof j.nf === 'number' && j.nf >= 0 ? people[j.nf] || '' : '', home: lemonHome(j.name, typeof j.cat === 'string' ? j.cat : '') };
     });
-    var own = (Array.isArray(st.owners) ? st.owners : []).filter(function (o) { return o && String(o.name || '').trim(); }).map(function (o) { return { n: String(o.name).trim(), w: o.who >= 0 ? people[o.who] || '' : '' }; });
-    return { people: people.filter(Boolean), jobs: jobs, own: own, by: '' };
+    var own = (Array.isArray(st.owners) ? st.owners : []).filter(function (o) { return o && String(o.name || '').trim(); }).map(function (o) { return { n: lemonClean(o.name), w: o.who >= 0 ? people[o.who] || '' : '' }; });
+    var kids = [], nights = {}, agreed = {};
+    people.forEach(function (p, i) {
+      if (!p) return;
+      if (Array.isArray(st.kid) && st.kid[i] === true) kids.push(p);
+      var x = Array.isArray(st.part) ? +st.part[i] : 1;
+      if (isFinite(x) && x > 0 && x < 1) nights[p] = Math.max(1, Math.round(x * 14));
+    });
+    if (st.agreed && st.agreed.on && Array.isArray(st.agreed.p)) {
+      var sum0 = 0; people.forEach(function (p, i) { var v = parseFloat(st.agreed.p[i]); if (p && isFinite(v) && v > 0) { agreed[p] = v; sum0 += v; } });
+      if (Math.abs(sum0 - 100) > 0.5) agreed = {};
+    }
+    return { people: people.filter(Boolean), jobs: jobs, own: own, by: '', kids: kids, nights: nights, agreed: agreed };
   }
+
+  /* the split a week is compared with: from the stand (the split you agreed, or the nights each person is
+     here), kept by name so it follows people whatever order they are in. Shown under the names. */
+  function splitOf() {
+    var sp = S.split; if (!sp) return null;
+    var n = S.names.length, names = S.names.map(function (x) { return SP.fold(x); });
+    function byName(o) { var out = names.map(function () { return null; }); Object.keys(o || {}).forEach(function (k) { var i = names.indexOf(SP.fold(k)); if (i >= 0) out[i] = o[k]; }); return out; }
+    var ag = byName(sp.agreed), ni = byName(sp.nights);
+    var agOk = ag.every(function (x) { return x != null; }) && Math.abs(ag.reduce(function (a, b) { return a + b; }, 0) - 100) <= 0.5;
+    if (agOk) return { t: ag.map(function (x) { return x / 100; }), mode: 'agreed', label: 'the split you agreed (' + S.names.map(function (nm, i) { return whoLabel(i) + ' ' + Math.round(ag[i]) + '%'; }).join(', ') + ')' };
+    var w = ni.map(function (x) { return x == null ? 1 : x / 14; });
+    if (n < 2 || w.every(function (x) { return x === 1; })) return null;
+    var ws = w.reduce(function (a, b) { return a + b; }, 0), t = w.map(function (x) { return x / ws; });
+    var part = S.names.map(function (nm, i) { return w[i] < 1 ? whoLabel(i) + ' (' + (ni[i] === 7 ? 'half the time' : ni[i] + ' of 14 nights') + ')' : ''; }).filter(Boolean);
+    return { t: t, mode: 'part', label: 'a fair share with ' + andList(part) + ' counted for the nights they’re here (' + S.names.map(function (nm, i) { return whoLabel(i) + ' ' + Math.round(t[i] * 100) + '%'; }).join(', ') + ')' };
+  }
+  WPK.setHousehold && WPK.setHousehold(function () { kidsFit(); return { kids: S.names.map(function (_, i) { return isChild(i); }), target: isSolo() ? null : splitOf() }; });
+  function renderSplit() {
+    var host = $('ws-split');
+    if (!host) { var care = $('ws-care'); if (!care) return; host = h('div', { className: 'ws-split', id: 'ws-split' }); care.parentNode.insertBefore(host, care); }
+    host.innerHTML = '';
+    var tg = !isSolo() && S.split ? splitOf() : null, sp = S.split;
+    var nights = sp ? Object.keys(sp.nights || {}).filter(function (k) { return S.names.some(function (x) { return SP.fold(x) === SP.fold(k); }); }) : [];
+    if (!tg && !nights.length) { host.hidden = true; return; }
+    host.hidden = false;
+    var bits = [];
+    if (nights.length) bits.push(andList(nights.map(function (k) { return k + ' is here ' + (sp.nights[k] === 7 ? 'half the time' : sp.nights[k] + ' of 14 nights'); })));
+    if (tg) bits.push('each week is read against ' + tg.label);
+    host.appendChild(h('p', { className: 'ws-split-t', text: 'From your Lemonade Stand: ' + bits.join('; ') + '.' }));
+    host.appendChild(h('button', { type: 'button', className: 'ws-link', 'data-split-forget': '1', text: 'Use an even split instead' }));
+  }
+
+  // The sheets the stand fills in carry from.lemon, so bringing the stand in again updates them in place.
+  function lemonEntry(code) {
+    var hit = null;
+    S.stops.forEach(function (st) { if (st.wp === code) st.entries.forEach(function (en) { if (!hit && en.from && en.from.lemon) hit = { st: st, en: en }; }); });
+    return hit;
+  }
+  function sheetName(hit) { var i = hit.st.entries.indexOf(hit.en); return hit.en.label || 'Sheet ' + (i + 1); }
+  function baseTask(t) { return SP.fold(String(t || '').replace(/\s*\((?:each day|3 times a week|every other week|each month|noticing and planning)\)\s*$/i, '').replace(/\s*\((?:each day|3 times a week|every other week|each month|noticing and planning)\)\s*$/i, '')); }
   function lemonBring(d, from) {
     if (!S.path) return 'Choose your road first, then bring in your stand.';
     var here = function () { return S.names.map(function (x) { return SP.fold(x); }); }, added = [];
@@ -571,39 +696,98 @@
       added.push(p);
     });
     function codeOf(name) { var i = here().indexOf(SP.fold(name)); return i >= 0 ? WPK.CODES[i] : ''; }
-    var made = [];
-    // a week of Who did what, from each person's hours
-    var rows = [];
+    var made = [], extra = [];
+    // who is a child, the nights each person is here, the split you agreed: carried over by name
+    var kidsNow = [];
+    if (kidsOn()) { kidsFit(); d.kids.forEach(function (k) { var i = here().indexOf(SP.fold(k)); if (i >= 0 && !S.kids[i]) { S.kids[i] = true; kidsNow.push(k); } }); }
+    if (kidsNow.length) extra.push(andList(kidsNow) + ' marked as ' + (kidsNow.length === 1 ? 'a child' : 'children'));
+    var hadSplit = JSON.stringify(S.split || null);
+    if (Object.keys(d.nights).length || Object.keys(d.agreed).length) {
+      S.split = { nights: {}, agreed: {} };
+      Object.keys(d.nights).forEach(function (k) { S.split.nights[k] = d.nights[k]; });
+      Object.keys(d.agreed).forEach(function (k) { S.split.agreed[k] = d.agreed[k]; });
+    }
+    if (JSON.stringify(S.split || null) !== hadSplit && S.split) {
+      var tg0 = splitOf();
+      if (Object.keys(S.split.nights).length) extra.push('nights here (' + Object.keys(S.split.nights).map(function (k) { return k + ' ' + (S.split.nights[k] === 7 ? 'half the time' : S.split.nights[k] + ' of 14'); }).join(', ') + ')');
+      if (tg0 && tg0.mode === 'agreed') extra.push(tg0.label);
+    }
+    // a week of Who did what, from each person's hours on the home jobs (the ones the stand counts in the split)
+    var sides = {}, rows = [];
     d.jobs.forEach(function (j) {
+      if (!j.home) return;
+      var word = '';
+      function push(task, who, mins, how) {
+        // a row holds at most a whole day (1,440 minutes): a bigger week is split over a few rows
+        var parts = Math.max(1, Math.ceil(mins / 1440));
+        for (var k = 0; k < parts; k++) { var r = { task: task, who: who, minutes: String(Math.round(mins / parts)) }; if (how) r.how = how; rows.push(r); }
+      }
       Object.keys(j.v).forEach(function (who) {
         var c = codeOf(who); if (!c) return;
-        var mins = j.v[who] * (j.u === 'h' ? 60 : 1) * LEMON_FREQ[j.f];
-        if (mins >= 1) rows.push({ task: j.n, who: c, minutes: String(Math.round(mins)) });
+        var f = freqOf(j, who); word = LEMON_WORD[f];
+        var mins = j.v[who] * (j.u === 'h' ? 60 : 1) * LEMON_FREQ[f];
+        if (mins >= 1) { sides[c] = 1; push(j.n + (word ? ' (' + word + ')' : ''), c, mins, j.nf && SP.fold(j.nf) === SP.fold(who) ? 'Noticed and handled' : ''); }
       });
       Object.keys(j.t).forEach(function (who) {
         var c = codeOf(who); if (!c) return;
-        var mins = j.t[who] * LEMON_FREQ[j.f];
-        if (mins >= 1) rows.push({ task: j.n + ' (noticing and planning)', who: c, minutes: String(Math.round(mins)), how: 'Noticed and handled' });
+        var mins = j.t[who] * LEMON_FREQ[freqOf(j, who)];
+        if (mins >= 1) { sides[c] = 1; push(j.n + ' (noticing and planning)', c, mins, 'Noticed and handled'); }
       });
     });
-    if (rows.length && S.stops.some(function (st) { return st.wp === 'WP-01'; }) && !isSolo()) {
-      var e1 = newEntry('WP-01'); e1.state.tables.audit = rows; e1.from = from; if (place(e1)) made.push('Who did what (' + rows.length + ' rows for one week)');
+    var sideNames = Object.keys(sides).map(function (c) { return whoLabel(WPK.CODES.indexOf(c)); });
+    var sideWord = d.by && sideNames.length <= 1 ? d.by + '’s side' : sideNames.length ? andList(sideNames.map(function (x) { return x + '’s'; })) + (sideNames.length === 1 ? ' side' : ' sides') : '';
+    var hasWp01 = S.stops.some(function (st) { return st.wp === 'WP-01'; }) && !isSolo();
+    if (rows.length && hasWp01) {
+      var h1 = lemonEntry('WP-01');
+      if (h1) {
+        // in place: each side that came in replaces its own rows from the stand; anything typed here stays
+        var names1 = {}; d.jobs.forEach(function (j) { names1[SP.fold(j.n)] = 1; });
+        var keep1 = (h1.en.state.tables.audit || []).filter(function (r) { return !(r && sides[r.who] && names1[baseTask(r.task)]) && !(r && WPK.rowIsEmpty(schema('WP-01').sections[0], r)); });
+        h1.en.state.tables.audit = keep1.concat(rows);
+        h1.en.from.saved = from.saved;
+        made.push('Updated ' + SP.nameOf('WP-01') + ' (' + sheetName(h1) + ') with ' + sideWord);
+      } else {
+        var e1 = newEntry('WP-01'); e1.state.tables.audit = rows; e1.from = { by: from.by, saved: from.saved, file: from.file, lemon: 1 };
+        if (place(e1)) made.push(SP.nameOf('WP-01') + ' (' + rows.length + ' rows for one week, ' + sideWord + ')');
+      }
     }
-    // One owner per job: every job from the stand, with its owner when the stand has one
-    var owner = {}; d.own.forEach(function (o) { if (o.w) owner[o.n.toLowerCase()] = o.w; });
+    // One owner per job: every job from the stand, with its owner when the stand has one, and how often it comes up
+    var owner = {}; d.own.forEach(function (o) { if (o.w) owner[SP.fold(o.n)] = o.w; });
     var seen = {}, jobs = [];
     d.jobs.concat(d.own.map(function (o) { return { n: o.n, f: 'week' }; })).forEach(function (j) {
-      var k = j.n.toLowerCase(); if (seen[k]) return; seen[k] = 1;
-      var r = { task: j.n, freq: LEMON_OFTEN[j.f] || 'Weekly' }, c = owner[k] ? codeOf(owner[k]) : '';
+      var k = SP.fold(j.n); if (seen[k]) return; seen[k] = 1;
+      var r = { task: j.n, freq: LEMON_OFTEN[freqMain(j)] || 'Weekly' }, c = owner[k] ? codeOf(owner[k]) : '';
       if (c) r.r = c;
       jobs.push(r);
     });
     if (jobs.length && S.stops.some(function (st) { return st.wp === 'WP-03'; })) {
-      var e3 = newEntry('WP-03'); e3.state.tables.treaty = jobs; e3.from = from; if (place(e3)) made.push('One owner per job (' + jobs.length + ' jobs, ' + jobs.filter(function (r) { return r.r; }).length + ' with an owner)');
+      var h3 = lemonEntry('WP-03');
+      if (h3) {
+        var t3 = h3.en.state.tables.treaty || (h3.en.state.tables.treaty = []), sec3 = schema('WP-03').sections.filter(function (x) { return x.id === 'treaty'; })[0], nNew = 0, nSet = 0;
+        jobs.forEach(function (r) {
+          var hit = t3.filter(function (x) { return x && SP.fold(x.task) === SP.fold(r.task); })[0];
+          if (!hit) { var slot = t3.filter(function (x) { return x && WPK.rowIsEmpty(sec3, x); })[0]; if (slot) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else t3.push(r); nNew++; return; }
+          if (r.r && !hit.r) { hit.r = r.r; nSet++; }
+          if (r.freq && !hit.freq) hit.freq = r.freq;
+        });
+        made.push('Updated ' + SP.nameOf('WP-03') + ' (' + sheetName(h3) + ')' + (nNew || nSet ? ': ' + [nNew ? nNew + ' new ' + (nNew === 1 ? 'job' : 'jobs') : '', nSet ? nSet + ' owner' + (nSet === 1 ? '' : 's') + ' filled in' : ''].filter(Boolean).join(', ') : ', nothing new on it'));
+      } else {
+        var e3 = newEntry('WP-03'); e3.state.tables.treaty = jobs; e3.from = { by: from.by, saved: from.saved, file: from.file, lemon: 1 };
+        if (place(e3)) made.push(SP.nameOf('WP-03') + ' (' + jobs.length + ' jobs, ' + jobs.filter(function (r) { return r.r; }).length + ' with an owner)');
+      }
     }
     syncAllNames(); syncRoadPeople(); renderNames(); renderRoad(); changed();
-    if (!made.length && !added.length) return 'Nothing new to bring in: those names and jobs are already on your road.';
-    return 'Brought in from your Lemonade Stand: ' + (added.length ? 'the names ' + andList(added) + (made.length ? '; ' : '.') : '') + (made.length ? made.join('; ') + '.' : '') + ' Check them, then change anything on the sheets.';
+    // who hasn't added their side to the stand yet (children are never waited for)
+    var wait = hasWp01 && rows.length ? S.names.map(function (nm, i) { return i; }).filter(function (i) {
+      if (isChild(i) || !String(S.names[i] || '').trim()) return false;
+      var e = lemonEntry('WP-01'); return e && !(e.en.state.tables.audit || []).some(function (r) { return r && r.who === WPK.CODES[i]; });
+    }).map(whoLabel) : [];
+    var waitLine = wait.length ? ' Waiting for ' + andList(wait.map(function (x) { return x + '’s'; })) + (wait.length === 1 ? ' side' : ' sides') + ': bring in ' + (wait.length === 1 ? wait[0] + '’s' : 'their') + ' Lemonade Stand code here too, and this sheet is updated.' : '';
+    if (!made.length && !added.length && !extra.length) return 'Nothing new to bring in: those names and jobs are already on your road.' + waitLine;
+    var parts = [];
+    if (added.length) parts.push('the names ' + andList(added));
+    parts = parts.concat(extra, made);
+    return 'Brought in from your Lemonade Stand: ' + parts.join('; ') + '.' + waitLine + ' Check them, then change anything on the sheets.';
   }
   function lemonRender() {
     var host = $('ws-lemon'); if (!host) return;

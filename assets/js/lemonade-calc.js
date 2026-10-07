@@ -1010,8 +1010,8 @@
       state.jobs.push(j); added.push(nm);
     });
     markEdited(); renderRows(); renderLibTasks(); renderOwners(); recalc();
-    status(added.length ? 'Added ' + added.length + ' baby job' + (added.length === 1 ? '' : 's') + (me >= 0 ? ' with typical times for ' + (solo() ? 'you' : nameOf(me)) + '. Change them to fit your week.' : '. Tap who does each one to fill in the typical time.') + (hadEx ? ' The grey example is cleared.' : '')
-      : 'The baby starter pack is already on your list.');
+    status((added.length ? 'Added ' + added.length + ' baby job' + (added.length === 1 ? '' : 's') + (me >= 0 ? ' with typical times for ' + (solo() ? 'you' : nameOf(me)) + '. Change them to fit your week.' : '. Tap who does each one to fill in the typical time.') + (hadEx ? ' The grey example is cleared.' : '')
+      : 'The baby starter pack is already on your list.') + (!solo() && !state.compact ? ' On a phone? “Just the 3 steps” keeps it short.' : ''));
   }
   // "Split the nights": two night shifts, each with one owner, on the fridge list
   var NIGHT_SHIFTS = ['Night shift, 9pm–2am', 'Night shift, 2am–7am'];
@@ -1820,7 +1820,7 @@
       box.innerHTML = '';
       state.people.forEach(function (_, i) {
         var l = document.createElement('label'); l.style.setProperty('--pc', COLORS[i]);
-        var s = document.createElement('span'); s.textContent = nameOf(i) + ', agreed %';
+        var s = document.createElement('span'); s.textContent = nameOf(i) + ', share %';
         var inp = document.createElement('input'); inp.type = 'number'; inp.min = '0'; inp.max = '100'; inp.step = '1'; inp.inputMode = 'decimal'; inp.setAttribute('data-fk', 'ag' + i);
         inp.value = state.agreed.p[i];
         inp.addEventListener('input', function () {
@@ -1959,15 +1959,32 @@
 
   /* ---------- who is this for ---------- */
   var tabs = [$('tab-hours'), $('tab-money')], panels = [$('panel-hours'), $('panel-money')];
-  function showTab(i) { tabs.forEach(function (t, j) { t.setAttribute('aria-selected', String(i === j)); panels[j].hidden = i !== j; }); panels[i].querySelectorAll('textarea').forEach(autoGrow); }
+  // The Money tab: the blocks that only read hours (the glasses, "Add some hours above", nights here) step aside
+  function showTab(i) {
+    tabs.forEach(function (t, j) { t.setAttribute('aria-selected', String(i === j)); panels[j].hidden = i !== j; });
+    panels[i].querySelectorAll('textarea').forEach(autoGrow);
+    document.body.setAttribute('data-ls-tab', i ? 'money' : 'hours');
+    if (state) { if (i) state.tab = 'money'; else delete state.tab; save(); }
+    outlineSync();
+  }
+  // "Just the 3 steps" for a new baby: the starter pack, your minutes, Send my side
+  function setCompact(on) {
+    state.compact = !!on && !solo();
+    if (state.compact) document.body.setAttribute('data-ls-compact', ''); else document.body.removeAttribute('data-ls-compact');
+    var bs = $('baby-steps'); if (bs) bs.hidden = !state.compact;
+    if (state.compact) showTab(0);
+    outlineSync();
+  }
   function setMode(m, announce) {
     mode = m; state.mode = m;
     document.body.setAttribute('data-ls-mode', m);
     $('ls-body').hidden = false;
     document.querySelectorAll('.mode-card').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
     if (m === 'solo') showTab(0);
+    else if (state.tab === 'money') showTab(1);
     $('copy-result').textContent = m === 'solo' ? 'Copy my summary' : 'Copy the result';
     renderAll();
+    setCompact(state.compact);
     var ln = $('last-names'); if (ln) ln.hidden = true;
     if (announce) $('mode-msg').textContent = m === 'solo' ? 'Set up for just you. Your own week, with no comparison. Your entries are all still here.' : 'Set up for you and the people you share a home with. Each person fills in only their own side.';
   }
@@ -2109,6 +2126,47 @@
     var bl = $('balance-line'); bl.setAttribute('tabindex', '-1'); bl.focus();
   });
   if ($('baby-pack')) $('baby-pack').addEventListener('click', addBabyPack);
+  if ($('agreed-offer-use')) $('agreed-offer-use').addEventListener('click', function () {
+    var o = state.agreedOffer; if (!o) return;
+    state.agreed.on = true; state.agreed.p = o.p.map(String); delete state.agreedOffer;
+    renderAgreed(); recalc();
+    status('Using ' + splitShort(o.p.map(function (x) { return (parseFloat(x) || 0) / 100; })) + '. Once you’ve both looked it over, tick “We’ve both looked these over”, and it reads as the split you agreed.');
+    var a = $('agreed-on'); if (a) a.focus();
+  });
+  if ($('agreed-offer-no')) $('agreed-offer-no').addEventListener('click', function () {
+    delete state.agreedOffer; recalc();
+    status('Okay. Nothing changed. You can set a split under “Compare with a split you choose” any time.');
+    var a = $('agreed-on'); if (a) a.focus();
+  });
+  if ($('income-split')) $('income-split').addEventListener('click', function () {
+    var sg = incomeSplit(); if (!sg) return;
+    state.agreed.on = true; state.agreed.p = sg.p.map(String);
+    renderAgreed(); recalc();
+    var t = sg.p.map(function (x) { return x / 100; });
+    var w = $('income-why');
+    if (w) { w.textContent = 'Shared bills are split by what each of you brings in now: ' + pctList(t) + '. The same split is used for the hours under “Hours”; change it under the result any time.'; w.hidden = false; }
+    status('Shared bills are split by income now (' + splitShort(t) + ').');
+  });
+  if ($('baby-steps-on')) $('baby-steps-on').addEventListener('click', function () {
+    setCompact(true); save();
+    var bs = $('baby-steps'); if (bs) { bs.scrollIntoView({ block: 'start', behavior: 'smooth' }); var h = $('baby-steps-h'); if (h) h.focus({ preventScroll: true }); }
+    status('Just the three steps now: the starter pack, your minutes, and Send my side. “Show the full stand” brings the rest back.');
+  });
+  if ($('baby-steps-off')) $('baby-steps-off').addEventListener('click', function () {
+    setCompact(false); save();
+    status('The full stand is back.');
+    var b = $('baby-steps-on'); if (b && b.offsetParent) b.focus(); else { var r = $('rows'); if (r) r.scrollIntoView({ block: 'start' }); }
+  });
+  if ($('baby-step-1')) $('baby-step-1').addEventListener('click', function () {
+    addBabyPack();
+    var me = addAs(), f = rowsEl.querySelector(me >= 0 ? '.row-amts input[data-fk^="' + me + '-"]' : '.row-pick .ls-chip, .row-amts input');
+    if (f) { f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }); }
+  });
+  if ($('baby-step-3')) $('baby-step-3').addEventListener('click', function () {
+    if ($('send-box').hidden) $('send-side').click();
+    var sd = $('sides'); if (sd) sd.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    var b = $('send-share'); if (b && !$('send-acts').hidden) b.focus({ preventScroll: true });
+  });
   if ($('split-nights')) $('split-nights').addEventListener('click', splitNights);
   $('r-plan').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-plan]'); if (!b) return;
@@ -2497,7 +2555,7 @@
     return open;
   }
   $('send-side').addEventListener('click', function () {
-    if (toggleBox($('send-side'), $('send-box'), $('add-box'), $('add-side'))) { renderSend(); var c = $('send-code'); if (!c.hidden) { c.focus(); c.select(); } }
+    if (toggleBox($('send-side'), $('send-box'), $('add-box'), $('add-side'))) { renderSend(); var c = $('send-share'); if (c && !$('send-acts').hidden) c.focus(); }
   });
   $('add-side').addEventListener('click', function () {
     if (toggleBox($('add-side'), $('add-box'), $('send-box'), $('send-side'))) $('add-code').focus();
@@ -2516,7 +2574,7 @@
     var line = 'Tap to add ' + (sendLink.who ? sendLink.who + '’s' : 'my') + ' side to your Lemonade Stand';
     if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
     else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
-    else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Sharing isn’t available here, so the link is copied. Paste it into a message.' : 'Couldn’t share here. Copy the code instead.'); });
+    else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Sharing isn’t available here, so the link is copied. Paste it into a message.' : 'Couldn’t share here. Open “Other ways” and copy the code.'); });
   });
   $('send-file').addEventListener('click', function () {
     var d = sideData(); if (d.error) { sideStatus('send-msg', d.error); return; }
@@ -2535,7 +2593,7 @@
     if (/#side=[zj]/.test(String(text || ''))) {
       unpackSide(text).then(function (json) {
         if (json) review(json, note);
-        else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (“Copy the code instead”), and paste it here.'); }
+        else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (under “Other ways” on their phone), and paste it here.'); }
       });
       return;
     }
