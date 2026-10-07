@@ -18,7 +18,7 @@ A useful habit is to ask “what situation would make a reasonable person do thi
 research:
 Edward Jones and Victor Harris’s 1967 study, in which people judged essay writers’ opinions even when told the writers had been assigned a side, is a classic demonstration. Lee Ross named the “fundamental attribution error” in 1977. The effect is robust in many studies, though researchers have found it is weaker in some cultures that emphasise context, and that people can correct for it when they have time and motivation.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands: weigh what you heard (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands: weigh what you heard (WP-09)
 /book/chapter-2.html | It judges the setup, never a person (Chapter II)
 /how-it-works.html#situation | How It Works: your situation
 talk:
@@ -39,7 +39,7 @@ So it is fair to say that people sometimes judge themselves more kindly than oth
 research:
 Jones and Nisbett proposed the asymmetry in 1971. Malle’s 2006 meta-analysis of 173 studies found little overall support for the classic hypothesis, with effects depending on factors like whether events were positive or negative. Related findings, such as the self-serving bias (taking credit for good outcomes and blaming circumstances for bad ones), are better supported.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /book/chapter-3-in-depth.html#vectors | Chapter III in depth: seven angles
 talk:
 - Do you tend to go easier on yourself or on others?
@@ -80,7 +80,7 @@ research:
 Peter Wason’s experiments in the 1960s (including the 2-4-6 task) showed people test hypotheses in ways that confirm rather than challenge them. Raymond Nickerson’s 1998 review described confirmation bias as ubiquitous. It is one of the most robust findings in cognitive psychology, though researchers debate how much is about reasoning and how much about motivation.
 links:
 /workpapers/wp-01.html | Who did what: write it down before it becomes a story (WP-01)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - What story might each of us have about the other that collects evidence too easily?
 - What would you expect to see if that story were wrong?
@@ -99,7 +99,7 @@ The CBT approach is not to force positive thoughts but to check thoughts against
 research:
 Beck described cognitive distortions in the 1960s and 1970s, and Burns’ *Feeling Good* was published in 1980. Cognitive behavioural therapy has a large evidence base for several conditions. The specific list of distortions is a clinical teaching tool; research supports the general idea that certain thinking patterns are linked with low mood and anxiety, though the categories overlap and are not precise scientific constructs.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator
 talk:
 - Which thinking trap do you fall into most when you’re stressed?
@@ -119,7 +119,7 @@ How to stop mind-reading: first, notice the guess as a guess (“I’m telling m
 research:
 Mind-reading is one of the jumping-to-conclusions distortions in Beck’s and Burns’ work. Research on empathic accuracy by William Ickes and colleagues found that people are only moderately accurate at inferring what others are thinking, and that close partners are not always as accurate as they assume. Research on the illusion of transparency (below) shows the other side: people overestimate how clear their own feelings are to others.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in: one sentence each (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in: one sentence each (WP-13)
 /check-ins.html | Check-ins
 /wired-differently.html#double-empathy | Wired Differently: double empathy
 talk:
@@ -141,7 +141,7 @@ research:
 Catastrophising and dichotomous thinking are standard distortions in cognitive therapy. Catastrophising has been studied especially in pain research, where it is linked to greater distress. Research on relationships links global, stable negative attributions (“you always”) with lower satisfaction.
 links:
 /book/chapter-2.html | Look at the month, not last night (Chapter II)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - What words signal all-or-nothing thinking in our conversations?
 - When did a worst-case prediction of yours not come true?
@@ -160,7 +160,7 @@ Turning a should into a preference or a request helps: “I’d really like help
 research:
 Should statements are one of the distortions in Burns’ list. Ellis developed rational emotive behaviour therapy from the 1950s; it has supportive evidence, though less than mainstream CBT. Research on unspoken expectations in relationships (for example, studies of relationship beliefs by Roy Eidelson and Norman Epstein in 1982) links rigid beliefs such as “partners should read each other’s minds” with lower satisfaction.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: expectations written down (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job: expectations written down (WP-03)
 /check-ins.html#ground | Check-ins: ground rules
 talk:
 - What shoulds do you carry about being a good partner, parent or friend?
@@ -181,7 +181,7 @@ research:
 Personalisation is one of Beck’s original distortions. Research on attributions in relationships, particularly by Thomas Bradbury and Frank Fincham, consistently finds that blaming attributions for a partner’s behaviour predict lower satisfaction and more conflict over time, with some evidence that the effect runs in both directions.
 links:
 /book/chapter-5.html | It’s not a review of either person (Chapter V)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? Nobody owes anything (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Nobody owes anything (WP-04)
 talk:
 - Do you lean more toward blaming yourself or blaming others?
 - What recent problem had several causes and no villain?
@@ -201,7 +201,7 @@ research:
 Emotional reasoning is one of the distortions described by Beck and Burns. Research on affect-as-information (Norbert Schwarz and Gerald Clore, 1983) showed that people use their mood as information when making judgements, for example rating life satisfaction lower on rainy days, unless the mood is attributed to its real cause. Some later replications of the weather finding were weaker, but the broader principle is well supported.
 links:
 /workpapers/wp-01.html | Who did what (WP-01)
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - When has a strong feeling turned out to have a different cause than you thought?
 - How can we honour feelings while still checking the facts?
@@ -220,7 +220,7 @@ The practical implication is simple: say it. What feels obvious inside you is us
 research:
 Gilovich, Victoria Medvec and Kenneth Savitsky published the spotlight effect studies in 2000, and Gilovich, Savitsky and Medvec published on the illusion of transparency in 1998. Both findings have been replicated and extended. The effects are moderate and vary with context.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 /wired-differently.html#double-empathy | Wired Differently: double empathy
 talk:
 - Have you ever been sure someone could see how you felt, when they couldn’t?
@@ -280,7 +280,7 @@ Checking before reacting (“I heard that as a criticism; did you mean it that w
 research:
 Kenneth Dodge studied hostile attribution bias in children from 1980, and a large body of research links it to aggression. Research in adults, including couples, shows similar patterns. Stress and negative mood increase the tendency.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /conversation-reader.html | The Conversation Reader
 talk:
 - What neutral comments do you sometimes hear as criticism?
@@ -341,7 +341,7 @@ research:
 Kahneman, Barbara Fredrickson, Charles Schreiber and Donald Redelmeier published the cold-water study in 1993. Redelmeier and Kahneman found a similar pattern in medical procedures in 1996. The effect is well replicated in lab settings, though some studies find the “end” matters less for more complex or longer experiences.
 links:
 /check-ins.html#regroup | Check-ins: regrouping
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - How do our conversations usually end?
 - Is there a peak moment that dominates your memory of a good day?
@@ -380,7 +380,7 @@ Writing down the full steps of a job when handing it over, as the program’s ow
 research:
 Colin Camerer, George Loewenstein and Martin Weber named the curse of knowledge in 1989. Elizabeth Newton’s 1990 dissertation study with song tapping is the famous illustration. Related research on hindsight bias and perspective-taking supports the general effect.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-01.html | Who did what (WP-01)
 talk:
 - Which of your jobs has hidden steps the other person might not know?
@@ -421,7 +421,7 @@ research:
 Thorndike described the halo effect in 1920. Richard Nisbett and Timothy Wilson (1977) showed that people are often unaware of halo effects in their own judgements. The effect is well documented, though its size varies across contexts.
 links:
 /book/chapter-1.html | Why we get out of tune (Chapter I)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - Is there a habit of the other person that used to charm you and now irritates you?
 - When everything feels irritating, what might be underneath?

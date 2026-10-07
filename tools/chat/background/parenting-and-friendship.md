@@ -44,7 +44,7 @@ Program: Giving kids real jobs they own (WP-03) pairs with calm consequences ins
 ## Age-sized jobs for kids
 aka: chores for kids; age appropriate chores; kids helping at home
 see: Chore charts that work; Natural and logical consequences
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Parenting research suggests helping at home builds children’s competence and sense of belonging. Specific ages vary by child.
 try: Young kids: set the table, feed the pet. Older kids: pack lunches, laundry. Teens: cook a meal a week.
 

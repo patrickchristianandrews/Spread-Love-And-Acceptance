@@ -22,7 +22,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 
 | Path | What's there |
 |---|---|
-| root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `calc01-solvency.html`) that also make up the member bundle |
+| root `*.html` | Public pages, plus the standalone workpaper files (`wp-01.html`, `wp-02.html`, …, `is-the-setup-working.html`) that also make up the member bundle |
 | `book/` | The manuscript chapters (Preface, I–V) |
 | `workpapers/` | Workpaper pages linked from the menu, plus their `.md` sources |
 | `workpapers/fill/` | Fill-in versions that save as PDFs and fillable PDFs, plus the Workpaper Suite (`suite.html`) |
@@ -60,7 +60,7 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 - **The Professor's Library** (`library.html`, `library/*.html`, built by `tools/library/build_library.py`): short, plain-language entries tied to the Five Pillars. The chat's **background notes** (`tools/chat/background/*.md` → `assets/js/chat-kb-bg.js`) are fetched only when the pages don't answer, and are always labelled.
 - **Professor Puddles' situation advice** (`tools/chat/situations/*.json`, see `tools/chat/README.md`): describe what's going on and get a reflection, a few steps, words to try and a short path. Tests: `node tools/chat/test-chat.js`.
 - **The Signal Translator** (`signal-translator.html`, `assets/js/signal-engine.js`): simple drop-downs for the wiring and the room, the sentence first, and smarter rewrites. Tests in `tools/signal/`.
-- **Tools for 2–8 people**: the Lemonade Stand (`assets/js/lemonade-calc.js`) and the full Solvency Read (`calc01-solvency.html`, sharing `assets/js/calc01-core.js` with the menu's CALC-01) take two to eight people, with the math step by step.
+- **Tools for 2–8 people**: the Lemonade Stand (`assets/js/lemonade-calc.js`) and the full Solvency Read (`is-the-setup-working.html`, sharing `assets/js/calc01-core.js` with the menu's CALC-01) take two to eight people, with the math step by step.
 - **The full-path package** (`workpapers/fill/tol-fullpath-*.js`, `tol-fullpath.css`): one fillable PDF per road in the Workpaper Suite, and a report read back from it.
 - **Drift** (`calm-visualizer.html`, `assets/js/calm-visualizer.js`): slow, deep 3D colors and binaural tones matched to how you feel.
 - **The pal cam** (`assets/js/pals-cam*.js`): a full-screen check-in on the Frequency Journey's two pups, with 268 activities in 27 scenes lit by the visitor's clock, opened from any `[data-palcam-open]` element and an occasional invitation (`pals-cam-invite.js`).
@@ -83,15 +83,15 @@ Source for The Objective Ledger (TOL-OS) site. The repo root is the site root: G
 ## Rules to keep
 
 
-- **Don't move `workpapers/calculators/calc01-solvency.html`.** That URL is printed in the member bundle.
+- **Don't move `workpapers/calculators/is-the-setup-working-quick.html`.** That URL is printed in the member bundle.
 - **Shipping anything means updating all three status pages:** `telemetry.html` (the counts), `suite-index.html` (every component named) and `roadmap.html` (what's next). Where they disagree, `suite-index.html` wins. Denominators never shrink to raise a percentage; if the plan changes, say so on the page.
 - **One copy per page.** Before uploading a new version, check where the current one lives (search the repo) and replace it there instead of adding a second copy under another name.
 - **Use root-relative links** (`/book/chapter-1.html`) so pages work from any folder.
 
 ## Open decisions
 
-- WP-03, WP-04, WP-09 and CALC-01 each have a longer standalone version at the root (`wp-03.html`, `wp-04.html`, `wp-09.html`, `calc01-solvency.html`) and a shorter version linked from the menu under `workpapers/`. Decide which is current and keep one.
-- `workpapers/wp-11.html` is a standalone copy of the Calm-Down Kit; the menu links the root `wp-11.html`.
+- WP-03, WP-04, WP-09 and CALC-01 each have a longer standalone version at the root (`wp-03.html`, `wp-04.html`, `wp-09.html`, `is-the-setup-working.html`) and a shorter version linked from the menu under `workpapers/`. Decide which is current and keep one.
+- `/wp-11.html` is a standalone copy of the Calm-Down Kit; the menu links the root `wp-11.html`.
 - Several markdown sources still exist in more than one version: `workpapers/wp-01.md` vs `workpapers/workpapers/wp-01.md`, `wp-03.md` and `wp-04.md` (in root, `workpapers/` and `workpapers/workpapers/`), and `workpapers/wp03-raci-treaty.md` vs `workpapers/workpapers/wp03-raci-treaty.md`.
 - `joinUrl` and `formKey` in `assets/js/site.js` are still placeholders.
 - **Get the app ad** (`assets/js/app-ad.js`, `[data-app-ad]` on `index.html`; share image `assets/img/get-the-app.png`): Tidbit and Sugarfoot (from `pups.js`) moonwalk, windmill and flip on a stage that leans sideways and bounces, with a two-way choice at the top (Android: install now; iPhone and iPad: App Store coming soon) linking to `install.html#android` and `#apple`. Hidden inside the installed app and on the install page; still picture with reduced motion; the close button is remembered in `tol-appad-off`. `install.html` now opens with Android / iPhone & iPad / Computer tabs (picked from the device or the hash). There is no App Store build yet, and the page says so.

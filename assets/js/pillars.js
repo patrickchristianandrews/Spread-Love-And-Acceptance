@@ -101,19 +101,19 @@
     '/workpapers/wp-01.html': { p: [1, 4], n: {
       1: ['Log a week of what you do.', 'Compare two logs as facts, not a fight.'],
       4: ['Practice a kind, neutral no.', 'Say no in a way that lands without a fight.'] } },
-    '/workpapers/wp-02-battery-stress-meter.html': { p: [3], n: {
+    '/workpapers/wp-02-how-much-are-you-carrying.html': { p: [3], n: {
       3: ['Five questions: how full is your battery?', 'Know when to talk and when to wait.'] } },
-    '/workpapers/wp-03-raci-treaty.html': { p: [2, 5], n: {
+    '/workpapers/wp-03-one-owner-per-job.html': { p: [2, 5], n: {
       2: ['See which jobs you hold without saying so.', 'One owner per job, so nobody keeps asking.'],
       5: ['Notice what you pick up because nobody else does.', 'Name owners before a job drifts to one person.'] } },
-    '/workpapers/wp-04-deficit-audit.html': { p: [2, 5], n: {
+    '/workpapers/wp-04-what-keeps-coming-back.html': { p: [2, 5], n: {
       2: ['Find what in the setup lets things slip.', 'Fix the setup behind the repeat, together.'],
       5: ['Spot the default that let it slide.', 'Keep the agreement from drifting.'] } },
-    '/workpapers/wp-09-tone-filter.html': { p: [4], n: {
+    '/workpapers/wp-09-say-it-so-it-lands.html': { p: [4], n: {
       4: ['Turn a big feeling into a fact, a feeling and an ask.', 'Say it so it lands.'] } },
     '/wp-11.html': { p: [3], n: {
       3: ['Plan what settles you while you are calm.', 'Pause, settle, and come back to the talk.'] } },
-    '/workpapers/wp-13-pll-protocol.html': { p: [4, 5], n: {
+    '/workpapers/wp-13-daily-check-in.html': { p: [4, 5], n: {
       4: ['Say where you are today.', 'Ninety seconds a day keeps you in step.'],
       5: ['Make the small check-in the easy default.', 'Catch slips before they turn into resentment.'] } },
     '/workpapers/report-01.html': { p: [1, 2], n: {
@@ -124,7 +124,7 @@
     '/do/workpaper-playground.html': OVERVIEW,
 
     // Tools
-    '/workpapers/calculators/calc01-solvency.html': { p: [1, 2], n: {
+    '/workpapers/calculators/is-the-setup-working-quick.html': { p: [1, 2], n: {
       1: ['Add up your worksheet numbers.', 'See the split as one shared number.'],
       2: ['Ask if the setup can last.', 'It reads the arrangement, never a person.'] } },
     '/lemonade-stand.html': { p: [1, 5], n: {
@@ -141,7 +141,7 @@
     '/carrier-wave-decoder.html': { p: [3, 4], n: {
       3: ['Check your state when a talk goes sideways.', 'Pause together before it grows.'],
       4: ['Find where the signal crossed.', 'Get back in tune and close the books.'] } },
-    '/tools/mood-arbitrage-free.html': { p: [3, 4], n: {
+    '/tools/soften-a-tense-moment.html': { p: [3, 4], n: {
       3: ['Name your mood state and shift it gently.', 'Meet each other where you are.'],
       4: ['Know the frequency you are on.', 'Adjust to theirs without blame.'] } },
     '/tools/frequency-calibration.html': { p: [4, 3], n: {
@@ -167,13 +167,13 @@
   };
   // other addresses for the same thing
   var SAME = {
-    '/workpapers/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/workpapers/wp-11.html': '/wp-11.html', '/wp-11-sound-toolkit.html': '/wp-11.html',
-    '/wp-01.html': '/workpapers/wp-01.html', '/wp-02.html': '/workpapers/wp-02-battery-stress-meter.html',
-    '/wp-03.html': '/workpapers/wp-03-raci-treaty.html', '/wp-04.html': '/workpapers/wp-04-deficit-audit.html',
-    '/wp-09.html': '/workpapers/wp-09-tone-filter.html', '/wp-13.html': '/workpapers/wp-13-pll-protocol.html',
-    '/calc01-solvency.html': '/workpapers/calculators/calc01-solvency.html',
-    '/tools/mood-arbitrage-full.html': '/tools/mood-arbitrage-free.html',
+    '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/wp-11.html': '/wp-11.html', '/wp-11-sound-toolkit.html': '/wp-11.html',
+    '/workpapers/wp-01.html': '/workpapers/wp-01.html', '/workpapers/wp-02-how-much-are-you-carrying.html': '/workpapers/wp-02-how-much-are-you-carrying.html',
+    '/workpapers/wp-03-one-owner-per-job.html': '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-04-what-keeps-coming-back.html': '/workpapers/wp-04-what-keeps-coming-back.html',
+    '/workpapers/wp-09-say-it-so-it-lands.html': '/workpapers/wp-09-say-it-so-it-lands.html', '/workpapers/wp-13-daily-check-in.html': '/workpapers/wp-13-daily-check-in.html',
+    '/is-the-setup-working.html': '/workpapers/calculators/is-the-setup-working-quick.html',
+    '/tools/soften-a-tense-moment-full.html': '/tools/soften-a-tense-moment.html',
     '/snapshot/snapshot-diagnostic-snapshot-interactive.html': '/snapshot/index.html'
   };
 

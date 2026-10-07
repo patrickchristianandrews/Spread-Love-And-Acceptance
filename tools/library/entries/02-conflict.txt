@@ -40,7 +40,7 @@ Fisher and Ury’s *Getting to Yes* (1981; later editions with Bruce Patton) cam
 links:
 /check-ins.html#leverage | Check-ins: finding leverage
 /signal-translator.html | The Signal Translator
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - On a recent disagreement, what was each person’s position, and what might the interests have been?
 - Which question helps you most to explain what you really need?
@@ -82,7 +82,7 @@ It can also help to think about the other person’s alternatives. If their fall
 research:
 The term was introduced in *Getting to Yes* (1981). Negotiation research generally finds that parties with better alternatives achieve better outcomes and that thinking about alternatives helps people avoid agreeing to deals worse than no deal. In close relationships, researchers would stress that framing matters: fallbacks framed as threats tend to damage trust.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: changing it on purpose (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job: changing it on purpose (WP-03)
 /wp-11.html | The Calm-Down Kit: deciding while calm (WP-11)
 talk:
 - What is our default when a week gets too busy for the usual plan?
@@ -122,7 +122,7 @@ A useful habit is to ask “What do you care about most, and what do you care ab
 research:
 Richard Walton and Robert McKersie distinguished distributive and integrative bargaining in 1965. Max Bazerman, Leigh Thompson and others documented the fixed-pie perception in negotiation experiments in the 1980s and 1990s. Lee Ross and colleagues described reactive devaluation in the 1990s. These are well-replicated findings in negotiation research, mostly from lab and classroom studies.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /lemonade-stand.html | The Lemonade Stand
 talk:
 - Which chores does each of us mind most, and which least?
@@ -142,9 +142,9 @@ Timing is part of it too. Bringing up a sore topic when someone has just walked 
 research:
 Sybil Carrère and John Gottman’s 1999 study found that how newlywed couples began a conflict discussion (the first three minutes) predicted later divorce in their sample. It is a striking finding from one research group’s observational data. The broader principle that openings set the tone is consistent with research on negative reciprocity: negative behaviour tends to be returned in kind.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /quick-checks.html#today | Today’s Weather: is now a good time?
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - What does a harsh startup sound like from each of us, honestly?
 - What are the worst times of day to raise a hard topic in our home?
@@ -207,7 +207,7 @@ Gottman’s lab measured physiological arousal in conflict, and research on the 
 links:
 /wp-11.html | The Calm-Down Kit (WP-11)
 /quick-checks.html#ladder | The nervous-system self-check
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - What are each of our earliest signs of flooding?
 - Which calming moves could we use right where we are, without leaving?
@@ -267,7 +267,7 @@ research:
 The phrase has been used in couples therapy writing since at least the 1960s, including George Bach and Peter Wyden’s *The Intimate Enemy* (1969). Sticking to one issue is a standard recommendation in couples programmes and mediation. It is a practice principle rather than a separately tested finding, but it is consistent with research linking “overgeneralising” and bringing in unrelated grievances to escalation.
 links:
 /check-ins.html#ground | Check-ins: one topic at a time
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - Do we have a “parking list” for issues that come up mid-argument?
 - Which old issues keep sneaking into new arguments?
@@ -286,7 +286,7 @@ It works in the other direction too: when hurt, it can help to say how it landed
 research:
 The distinction is central to *Difficult Conversations* by Douglas Stone, Bruce Patton and Sheila Heen (1999), from the Harvard Negotiation Project. It is a practitioner framework rather than a single tested theory, but it connects to research on attribution biases, which shows that people judge themselves by intentions and others by actions.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator
 talk:
 - Can you remember a time when your intent and your impact didn’t match?
@@ -327,7 +327,7 @@ research:
 A 2016 study by Roy Lewicki, Beth Polin and Robert Lount tested six apology components and found acknowledgement of responsibility was rated most important, followed by an offer of repair, while a request for forgiveness mattered least. Cynthia Frantz and Courtney Bennigson (2005) found that apologies were more effective when they came later in a conversation, after the hurt person felt heard. These are experimental studies, often using written scenarios, so real-life effects may differ.
 links:
 /check-ins.html#regroup | Check-ins: regrouping
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - What does a real apology sound like to you?
 - Which is harder for you: giving an apology or accepting one?
@@ -347,7 +347,7 @@ research:
 Michael McCullough, Everett Worthington, Robert Enright and others have studied forgiveness since the 1990s. Worthington’s REACH model and Enright’s process model are the best-known structured approaches, and meta-analyses (for example by Nathaniel Wade and colleagues in 2014) found that forgiveness interventions increase forgiveness compared with no intervention. Researchers emphasise that forgiveness should not be pressured and that it is not appropriate to expect in every circumstance.
 links:
 /book/preface.html | Preface: writing it down isn’t keeping score
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? Nobody owes anything (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Nobody owes anything (WP-04)
 talk:
 - What is the difference for you between forgiving and forgetting?
 - Are there small things we could agree to let go more easily?
@@ -366,7 +366,7 @@ This fits the spirit of the program: writing down what happened and sorting prob
 research:
 Howard Zehr’s *Changing Lenses* (1990) is a foundational text on restorative justice, and John Braithwaite’s work on reintegrative shaming (1989) influenced the field. Evaluations of restorative justice programmes, including randomised trials led by Lawrence Sherman and Heather Strang, have found higher victim satisfaction and some reductions in reoffending, with variation across settings. Restorative practice in schools has mixed evaluation results. Its use in families is mostly practice-based.
 links:
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /book/chapter-5.html | It’s not a review of either person (Chapter V)
 talk:
 - After a rough patch, which restorative question would help us most?
@@ -406,7 +406,7 @@ At home, this suggests that how chores or money decisions are made matters as mu
 research:
 John Thibaut and Laurens Walker introduced procedural justice research in 1975. Allan Lind and Tom Tyler developed it further, and Lind’s fairness heuristic theory (2001) suggests people use fair treatment as a shortcut for deciding whether to trust an authority or group. The effect of perceived procedural fairness on acceptance of outcomes is one of the more robust findings in social and organisational psychology.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: agreeing means clear (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job: agreeing means clear (WP-03)
 /book/chapter-4.html | Two kinds of fair (Chapter IV)
 /book/chapter-2-in-depth.html#limits | Chapter II in depth: what the number is not
 talk:
@@ -470,7 +470,7 @@ research:
 Integrative behavioural couple therapy was developed by Jacobson and Christensen in the 1990s. A large randomised trial led by Christensen (reported in 2004, with five-year follow-up in 2010) found that both integrative and traditional behavioural couple therapy helped many couples, with some evidence that gains after integrative therapy were more durable. It is one of the better-tested couples therapies.
 links:
 /frequency-framework.html | The Frequency Framework: agree when you’ll meet
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - Which differences between us are we still trying to change that might be better accepted?
 - Which ones really do need to change?
@@ -489,7 +489,7 @@ Finally, chore conversations go better with the conflict basics: soft startup, o
 research:
 Research on the division of household labour consistently finds that perceived unfairness is associated with lower relationship satisfaction and more conflict, and that the planning and monitoring side of the work is often unevenly shared (see Allison Daminger’s 2019 study of cognitive labour). Studies also suggest that perceived fairness predicts satisfaction better than the exact split of hours.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-01.html | Who did what (WP-01)
 /lemonade-stand.html | The Lemonade Stand
 talk:
@@ -511,7 +511,7 @@ research:
 Lauren Papp, Mark Cummings and Marcie Goeke-Morey (2009) found in diary studies that money conflicts were more pervasive, problematic and recurrent than conflicts about other topics, and were more likely to remain unresolved. Jeffrey Dew and colleagues (2012) found financial disagreements were a relatively strong predictor of later divorce in a US sample. These are correlational findings.
 links:
 /frequency-framework.html | The Frequency Framework
-/workpapers/wp-13-pll-protocol.html | The 90-second daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The 90-second daily check-in (WP-13)
 /relationships.html#partners | How it fits: partners
 talk:
 - What did money mean in each of our families growing up?
@@ -571,7 +571,7 @@ Many of the program’s tools came from workplace practice, like assigning singl
 research:
 Robert Kahn and colleagues’ 1964 research on role conflict and ambiguity, and later meta-analyses, link unclear roles to job stress and lower satisfaction. Research on task versus relationship conflict (for example by Karen Jehn) suggests that conflict about personal matters tends to harm teams more than disagreement about the work itself.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#coworkers | How it fits: coworkers
 talk:
 - Where at work is it unclear who owns what?

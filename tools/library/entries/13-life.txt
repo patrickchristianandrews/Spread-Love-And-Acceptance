@@ -79,7 +79,7 @@ research:
 Feinberg published his framework in 2003 and developed the Family Foundations programme, which in randomised trials improved co-parenting and some child outcomes. Research generally finds that co-parenting quality is linked with children’s adjustment, and that parents’ conflict, particularly hostile conflict that children witness, is associated with more difficulties for children.
 links:
 /relationships.html#co-parents | How it fits: co-parents
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - Where do we agree most as parents, and where least?
 - How can we handle disagreements away from the children?
@@ -119,8 +119,8 @@ research:
 Brian Doss, Galena Rhoades, Scott Stanley and Howard Markman (2009) followed couples over eight years and found declines in satisfaction after the birth of a first child, on average. Jean Twenge, Keith Campbell and Craig Foster’s 2003 meta-analysis found parents reported lower marital satisfaction than non-parents, with larger differences among mothers of infants. Programmes like Gottman’s Bringing Baby Home and Feinberg’s Family Foundations aim to support couples through this transition.
 links:
 /relationships.html#co-parents | How it fits: co-parents
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - If a baby is coming (or came), how did the work shift?
 - What small moments of connection could survive a busy season?
@@ -220,7 +220,7 @@ research:
 Research on family caregiving, including meta-analyses by Martin Pinquart and Silvia Sörensen, finds that caregiving is associated with more stress, and that support from family matters. Research on sibling caregiving (for example by Jill Suitor and Karl Pillemer) finds that unequal division is common and linked to tension.
 links:
 /relationships.html#caregivers | How it fits: caregivers
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - If a parent needs more help, who is doing what?
 - Which caring tasks could be done from a distance?
@@ -239,7 +239,7 @@ Practical steps: list all the holiday tasks and share them; agree on how much ti
 research:
 Research specifically on holiday stress is limited, though surveys often report increased stress around major holidays. Research on the division of household labour, emotional labour and family roles applies. Anthropologist Micaela di Leonardo’s 1987 essay described “kin work”: the cards, calls, gifts and gatherings that keep extended families connected, which she found was done mostly by women in the families she studied.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /lemonade-stand.html | The Lemonade Stand
 talk:
 - What hidden holiday work does each of us do?
@@ -260,7 +260,7 @@ research:
 Research on roommates, often with university students, finds that conflict is common and that communication and clear expectations help. The general research on diffusion of responsibility and procedural fairness applies well to shared homes.
 links:
 /relationships.html#roommates | How it fits: roommates
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - What agreements would a shared home need?
 - Which shared jobs are most likely to slip?
@@ -337,7 +337,7 @@ Transitions between work and home help: a walk, changing clothes, a few minutes 
 research:
 Jeffrey Greenhaus and Nicholas Beutell described work–family conflict in 1985. Repetti’s studies of daily spillover were published from 1989 onward. Meta-analyses link work–family conflict with lower job and life satisfaction. Research on boundary management (Ellen Kossek and colleagues) explores how people separate or blend work and home.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /relationships.html#coworkers | How it fits: coworkers
 /quick-checks.html#today | Today’s Weather
 talk:
@@ -379,7 +379,7 @@ research:
 A 1998 meta-analysis by Brett Laursen, Katherine Coy and W. Andrew Collins found that parent–child conflict tends to become less frequent across adolescence, while conflicts in mid-adolescence can be more intense. Laurence Steinberg’s research describes adolescence as a period of growing autonomy in which warm, firm parenting is linked with better outcomes on average. Research on self-determination theory supports autonomy-supportive parenting. As with all parenting research, families and cultures differ.
 links:
 /relationships.html#family | How it fits: family
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /frequency-framework.html | The Frequency Framework
 talk:
 - Which household jobs could a teenager own completely?

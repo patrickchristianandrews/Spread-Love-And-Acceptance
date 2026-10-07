@@ -18,7 +18,7 @@ Program: The Library’s values entry goes deeper. Know your own wiring helps yo
 ## Needs and wants
 aka: needs versus wants; underlying needs; what I need
 see: Values clarification; Feelings versus thoughts
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A practical distinction used in negotiation and nonviolent communication. It helps separate a specific request from the need behind it.
 try: “I want you home by 6” might come from a need for predictability, which could be met in other ways.
 
@@ -122,7 +122,7 @@ Program: Know your own wiring includes the strengths that come with different wi
 ## Getting to know your stress signature
 aka: stress signature; my stress signs; how I act under stress
 see: Body clues of emotion; Hot buttons
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: A practical self-awareness idea. People show stress in different ways; noticing your own early signs helps.
 try: Finish the sentence: “When I’m stressed, I tend to…” Share it with someone close.
 

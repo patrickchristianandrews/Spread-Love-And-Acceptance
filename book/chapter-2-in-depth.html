@@ -76,7 +76,7 @@
 
 <h2 id="purpose">What the check is for</h2>
 <p>Sooner or later, everyone who shares a home asks some version of “Is this actually working?” Usually the answer comes from whatever happened most recently: last night’s dishes, this morning’s tone. That answers the question at the wrong scale.</p>
-<p>The check asks a narrower, calmer question: <strong>based on what’s actually written down this month, does the way we share the work look like it can last, or is it quietly running down its reserves?</strong> “Written down” means three things: the hours logged in the <a href="/lemonade-stand.html">Lemonade Stand</a> (a free page where each person lists their hours) or in Who did what (<a href="/workpapers/wp-01.html">WP-01</a>), the jobs with named owners in the One owner per job list (<a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>), and each person’s own stress score from How much are you carrying? (<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>). You’ll meet the stress meter and the job list properly in Chapters III and IV; rough numbers are fine for now.</p>
+<p>The check asks a narrower, calmer question: <strong>based on what’s actually written down this month, does the way we share the work look like it can last, or is it quietly running down its reserves?</strong> “Written down” means three things: the hours logged in the <a href="/lemonade-stand.html">Lemonade Stand</a> (a free page where each person lists their hours) or in Who did what (<a href="/workpapers/wp-01.html">WP-01</a>), the jobs with named owners in the One owner per job list (<a href="/workpapers/wp-03-one-owner-per-job.html">WP-03</a>), and each person’s own stress score from How much are you carrying? (<a href="/workpapers/wp-02-how-much-are-you-carrying.html">WP-02</a>). You’ll meet the stress meter and the job list properly in Chapters III and IV; rough numbers are fine for now.</p>
 
 <h2 id="inputs">The three inputs</h2>
 <p>The setup score combines three readings, each one covered elsewhere in the book:</p>
@@ -96,12 +96,12 @@
 </tr>
 <tr>
 <td>Ownership clarity</td>
-<td>An owner and a backstop for each job, One owner per job (<a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>)</td>
+<td>An owner and a backstop for each job, One owner per job (<a href="/workpapers/wp-03-one-owner-per-job.html">WP-03</a>)</td>
 <td>How many regular jobs have both names filled in</td>
 </tr>
 <tr>
 <td>Leftover stress (how full your tank is)</td>
-<td>How much are you carrying? (<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>), explained in <a href="/book/chapter-3-in-depth.html#saturation">Chapter III</a></td>
+<td>How much are you carrying? (<a href="/workpapers/wp-02-how-much-are-you-carrying.html">WP-02</a>), explained in <a href="/book/chapter-3-in-depth.html#saturation">Chapter III</a></td>
 <td>How full each person’s stress tank already is from other things</td>
 </tr>
 </tbody>
@@ -118,13 +118,13 @@
 <p><strong>Three or more of you.</strong> Compare each person’s share with an even share (100 ÷ number of people), or with a split you agreed. The Lemonade Stand does the arithmetic for you.</p>
 
 <h2 id="ownership">Ownership clarity</h2>
-<p>In <a href="/workpapers/wp-03-raci-treaty.html">WP-03</a>, every regular job gets two names. The <strong>owner</strong> is the person who does the job, start to finish. The second name is a backstop who notices if it slipped and gently checks in, never a supervisor. They can be the same person, though a second name gives the job a gentle check: if one person is both names, nobody else will notice a slip. (The idea is borrowed from project work. The doer-and-backstop pairing also borrows the “maker and checker” habit from internal controls, where one person does a task and another looks it over.)</p>
+<p>In <a href="/workpapers/wp-03-one-owner-per-job.html">WP-03</a>, every regular job gets two names. The <strong>owner</strong> is the person who does the job, start to finish. The second name is a backstop who notices if it slipped and gently checks in, never a supervisor. They can be the same person, though a second name gives the job a gentle check: if one person is both names, nobody else will notice a slip. (The idea is borrowed from project work. The doer-and-backstop pairing also borrows the “maker and checker” habit from internal controls, where one person does a task and another looks it over.)</p>
 <pre><code>ownership_clarity = jobs with both names filled in ÷ all jobs on the list</code></pre>
 <p>So if you list 10 jobs and 8 have both names, the score is 0.80.</p>
 <p>One warning: don’t improve this score by shortening the list. Deleting the jobs nobody owns raises the number and changes nothing at home. If a job is real and unowned, it belongs on the list as an unowned row. That’s exactly the row the score is there to show.</p>
 
 <h2 id="stress">Leftover stress (how full your tank is)</h2>
-<p>Each of you fills in your own How much are you carrying? (<a href="/workpapers/wp-02-battery-stress-meter.html">WP-02</a>), about yourself only. It measures how full your stress tank is: a higher score means more stress in the tank. You score five things from 0 to 4: sleep, workload elsewhere, any unresolved conflict, how your body feels, and time pressure today. Add them up and divide by 20. Under 0.30 is low, 0.30 up to 0.60 is moderate, and 0.60 or more is high. Then take the average of your two scores.</p>
+<p>Each of you fills in your own How much are you carrying? (<a href="/workpapers/wp-02-how-much-are-you-carrying.html">WP-02</a>), about yourself only. It measures how full your stress tank is: a higher score means more stress in the tank. You score five things from 0 to 4: sleep, workload elsewhere, any unresolved conflict, how your body feels, and time pressure today. Add them up and divide by 20. Under 0.30 is low, 0.30 up to 0.60 is moderate, and 0.60 or more is high. Then take the average of your two scores.</p>
 <p>Look at each person’s own score too. If either one is 0.60 or more, treat that as the headline, whatever the average says.</p>
 <p>This is the only input that counts <em>against</em> the result. The formula uses <code>1 − stress</code>, so more stress means a lower score. That’s on purpose: a way of sharing work that only holds up when both people are well rested isn’t one that can last.</p>
 <p>Never estimate the other person’s score for them. If one column is missing, the full calculator won’t work it out, and that’s the right answer.</p>
@@ -135,7 +135,7 @@
             + (ownership_clarity_score * 0.35)
             + (1 - average_leftover_stress) * 0.25
 </code></pre>
-<p>The weights add up to 1, so the result is always between 0 and 1. Read it as a <strong>snapshot</strong>, not a sentence. The calculator <a href="/workpapers/calculators/calc01-solvency.html">Is the setup working for everyone? (CALC-01)</a> does the arithmetic for you:</p>
+<p>The weights add up to 1, so the result is always between 0 and 1. Read it as a <strong>snapshot</strong>, not a sentence. The calculator <a href="/workpapers/calculators/is-the-setup-working-quick.html">Is the setup working for everyone? (CALC-01)</a> does the arithmetic for you:</p>
 <ul>
 <li><strong>0.7 or above:</strong> The current setup is holding. Keep the same rhythm of <a href="/check-ins.html">check-ins</a> (short, regular talks about how things are going).</li>
 <li><strong>0.4 up to 0.7:</strong> Something in the three inputs is drifting, often ownership first. Start with the biggest shortfall (see below).</li>
@@ -175,7 +175,7 @@
 <p>Start with the biggest shortfall. In the middle band that is often ownership, which is why the calculator suggests WP-03 first. For Sam and Alex it is balance, and the two are often linked: giving a job a clear owner is often how some of the hours move. Once you’ve both seen it, what you do next is a choice you make together.</p>
 
 <h2 id="apex">The wider view: the overall score</h2>
-<p>The <a href="/calc01-solvency.html">full CALC-01</a> also shows a second number, the <strong>overall score</strong>. It adds a fourth input, <em>retuning frequency</em>: of the moments this week that landed badly, how many did you retune before answering (see <a href="/book/chapter-1-in-depth.html#daily">Chapter I</a>)? Its weights are 0.35 for balance, 0.30 for ownership, 0.20 for stress and 0.15 for retuning. Stress enters as (1 − stress) here too, and the same bands apply. If Sam and Alex retuned 3 of 5 rough moments (0.60), their overall score is 0.21 + 0.24 + 0.12 + 0.09 = <strong>0.66</strong>. If nothing landed badly this week, leave retuning blank; the calculator works the overall score out from the other three. And five moments is a small number, so watch the trend, not one week.</p>
+<p>The <a href="/is-the-setup-working.html">full CALC-01</a> also shows a second number, the <strong>overall score</strong>. It adds a fourth input, <em>retuning frequency</em>: of the moments this week that landed badly, how many did you retune before answering (see <a href="/book/chapter-1-in-depth.html#daily">Chapter I</a>)? Its weights are 0.35 for balance, 0.30 for ownership, 0.20 for stress and 0.15 for retuning. Stress enters as (1 − stress) here too, and the same bands apply. If Sam and Alex retuned 3 of 5 rough moments (0.60), their overall score is 0.21 + 0.24 + 0.12 + 0.09 = <strong>0.66</strong>. If nothing landed badly this week, leave retuning blank; the calculator works the overall score out from the other three. And five moments is a small number, so watch the trend, not one week.</p>
 <p>The two numbers answer different questions. The setup score asks, “Can this workload last as it’s set up?” The overall score asks, “Is the whole system working, including how we repair after friction?” They can disagree, and that difference is useful. A home can share the work well and still be struggling to repair after clashes.</p>
 
 <h2 id="trend">One reading is a snapshot. A month of readings is a trend.</h2>

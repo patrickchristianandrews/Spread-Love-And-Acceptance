@@ -81,7 +81,7 @@ Program: The Library entry on the peak-end rule explains why endings matter. Che
 ## Written recaps after a talk
 aka: recap message; follow-up message; write it down afterward
 see: Summarizing a conversation; Handoff notes at work
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: A common workplace practice. Research on memory shows people remember conversations differently afterward, which is the problem a written note solves.
 try: “Thanks for today. Just so we’re on the same page: I’ll handle school forms, you’ll do Friday pickups, and we’ll review next month.”
 
@@ -107,7 +107,7 @@ Program: Turning Toward is about small everyday moments rather than big sit-down
 ## Stop, start, continue
 aka: stop start continue; three questions review; start stop keep
 see: Rose, bud, thorn; Retrospective for households
-go: /workpapers/wp-04-deficit-audit.html | WP-04: What keeps coming back?
+go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
 evidence: A common review format from workplace teams and teaching. It’s simple and widely used; there’s little formal research on it specifically.
 try: “Stop: leaving laundry in the machine overnight. Start: a Sunday menu plan. Continue: the daily check-in.”
 
@@ -120,7 +120,7 @@ Program: The monthly look-back (WP-04) is a deeper version for households, focus
 ## Rose, bud, thorn
 aka: rose bud thorn; highs and lows; best and hardest part
 see: Stop, start, continue; Open and closed questions
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: A popular reflection game from camps, schools and design teams. It’s a conversation tool, not a researched method.
 try: “Rose: lunch with you. Bud: the trip next month. Thorn: that email from work.”
 
@@ -133,7 +133,7 @@ Program: The 90-second daily check-in (WP-13) has a similar rhythm: how full you
 ## Retrospective for households
 aka: household retro; family retrospective; home review meeting
 see: Stop, start, continue; Family meetings
-go: /workpapers/wp-04-deficit-audit.html | WP-04: What keeps coming back?
+go: /workpapers/wp-04-what-keeps-coming-back.html | WP-04: What keeps coming back?
 evidence: Adapted from team retrospectives in software and project work. Evidence for home use is anecdotal, but the structure (look at the process, not blame) matches the program’s approach.
 try: “What went well this month? What kept slipping? What’s one change, and who owns it?”
 
@@ -159,7 +159,7 @@ Program: The Carrier Wave Decoder looks at pace, tone and timing, which a channe
 ## One ask at a time
 aka: a single request; one clear ask; make one request
 see: One topic at a time; Clear yes or no questions
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A practical guideline from communication and negotiation training. People can only act on so much at once, especially under stress.
 try: “Could you take the recycling out on Tuesdays from now on?” rather than a list of five things.
 

@@ -97,7 +97,7 @@
     '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
       next: ['/check-ins.html', 'Check-ins', 'how to raise it once, calmly, at a good time'], result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
     '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
-      next: ['/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)', 'so nothing falls between you'], result: function () { var r = doc.getElementById('balance-line'); return r && r.textContent.trim() && !/^Add some hours/i.test(r.textContent.trim()) ? (doc.querySelector('.ls-tools') || r) : null; } },
+      next: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)', 'so nothing falls between you'], result: function () { var r = doc.getElementById('balance-line'); return r && r.textContent.trim() && !/^Add some hours/i.test(r.textContent.trim()) ? (doc.querySelector('.ls-tools') || r) : null; } },
     '/quick-checks.html': { t: 'Today’s Weather', gain: 'You just checked in with yourself first. Knowing your weather makes the rest of the day easier to plan.',
       next: ['/quick-checks.html#today', 'Check again tomorrow', 'a few days in, your own pattern starts to show'], result: function () {
         var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1]; return e && e.d === today() ? doc.getElementById('today') : null; } },
@@ -178,7 +178,7 @@
 
   // minutes and tags for the menu launcher's ideas (pick-up.js), so both share one list
   var MIN_FOR = { '#breathe': 1, '/quick-checks.html#today': 1, '/night-garden.html': 1, '/signal-translator.html': 3, '/conversation-reader.html': 5, '/lemonade-stand.html': 5,
-    '/wiring-card.html': 5, '/start-in-10-minutes.html': 10, '/carrier-wave-decoder.html': 10, '/workpapers/wp-03-raci-treaty.html': 10, '/soundscapes.html': 10 };
+    '/wiring-card.html': 5, '/start-in-10-minutes.html': 10, '/carrier-wave-decoder.html': 10, '/workpapers/wp-03-one-owner-per-job.html': 10, '/soundscapes.html': 10 };
   function fromLauncher() {
     var T = window.TOLPickUp && window.TOLPickUp.time, out = { 1: [], 5: [], 15: [] };
     if (!T) return out;
@@ -208,7 +208,7 @@
       10: [
         { t: 'Read the first half of ' + nc.code + ': ' + nc.t, u: nc.u, m: 6, why: nc.n, tag: 'book' },
         { t: 'Plan your early signs in the Calm-Down Kit', u: '/wp-11.html', m: 6, why: 'what you notice first, and what settles you', tag: 'calm' },
-        { t: 'Say one message so it lands', u: '/workpapers/wp-09-tone-filter.html', m: 6, why: 'a fact, a feeling and a kind ask', tag: 'talk' },
+        { t: 'Say one message so it lands', u: '/workpapers/wp-09-say-it-so-it-lands.html', m: 6, why: 'a fact, a feeling and a kind ask', tag: 'talk' },
         { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
       ],
       15: [
@@ -447,7 +447,7 @@
     var i = bookIdx(simplePath); if (i < 0) return;
     var b = BOOK[i], deep = simplePath !== path, nx = BOOK[i + 1];
     var next = nx ? [deep ? nx.u.replace(/\.html$/, '-in-depth.html') : nx.u, nx.code + ': ' + nx.t, '— ' + nx.n]
-      : ['/workpapers/wp-04-deficit-audit.html', 'Put it to work: What keeps coming back? (WP-04)', '— one short page, once a month'];
+      : ['/workpapers/wp-04-what-keeps-coming-back.html', 'Put it to work: What keeps coming back? (WP-04)', '— one short page, once a month'];
     var box = endCard();
     placeAtEnd(main, box);
     function draw() { fillEnd(box, b.gain, next, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters read.</span> '); }

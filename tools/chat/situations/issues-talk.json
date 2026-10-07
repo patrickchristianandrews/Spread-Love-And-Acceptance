@@ -14,7 +14,7 @@
         "coworker": ["I want to make sure I read your message right. Did you mean the report needs changes, or just the summary?", "Rereading my last message, it came across more abruptly than I intended. Happy to talk it through."],
         "self": ["I’m direct when I’m busy. It’s never meant as cold, and I’m happy to slow down if it lands that way.", "Let me try that again, more kindly."]
       },
-      "path": [["The Signal Translator", "/signal-translator.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Wired Differently", "/wired-differently.html"]],
+      "path": [["The Signal Translator", "/signal-translator.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Wired Differently", "/wired-differently.html"]],
       "deeper": ["why tone gets lost", "Tell me about texting and tone"],
       "ex": "Alex texted “Fine.” and meant “Sounds good.” Jamie read the period as a door slamming. When they compared notes, Alex added, “I type short when I’m busy, it’s not a mood.” Jamie now asks “all good?” instead of stewing, and Alex adds an emoji when it matters."
     },
@@ -29,7 +29,7 @@
         "coworker": ["I’d like to give this proper attention. Could we find fifteen minutes tomorrow morning instead of end of day?"],
         "kid": ["I want to hear this properly. Can we talk in the car on the way to practice?"]
       },
-      "path": [["Today’s Weather: a one-minute state check", "/quick-checks.html#today"], ["How much are you carrying? (WP-02)", "/workpapers/wp-02-battery-stress-meter.html"], ["Check-ins: a good time and place", "/check-ins.html#room"]],
+      "path": [["Today’s Weather: a one-minute state check", "/quick-checks.html#today"], ["How much are you carrying? (WP-02)", "/workpapers/wp-02-how-much-are-you-carrying.html"], ["Check-ins: a good time and place", "/check-ins.html#room"]],
       "deeper": ["reading your state", "What are the three states in Today’s Weather?"],
       "ex": "Every evening at 9:30, Chris raised the week’s to-do list and Pat snapped. They agreed on Sunday mornings for planning, with a sticky note on the fridge for anything that came up in between. The same topics, handled at a better time, stopped turning into fights."
     },
@@ -43,7 +43,7 @@
         "default": ["I don’t think either of us is the problem. I think something in how we’ve set things up keeps causing this. Could we look at it together on Sunday?", "This keeps coming up, so it clearly matters to both of us. Can we try one change for a month and see what happens?"],
         "coworker": ["This issue keeps coming back in our retros. Can we find the process gap behind it and give the fix one owner?"]
       },
-      "path": [["What keeps coming back? (WP-04)", "/workpapers/wp-04-deficit-audit.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Chapter V: The monthly look-back", "/book/chapter-5.html"]],
+      "path": [["What keeps coming back? (WP-04)", "/workpapers/wp-04-what-keeps-coming-back.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-one-owner-per-job.html"], ["Chapter V: The monthly look-back", "/book/chapter-5.html"]],
       "deeper": ["problems that keep coming back", "What are perpetual problems?"],
       "ex": "A couple fought about the laundry every Sunday. Their monthly look-back showed it wasn’t really laundry: nobody owned “putting it away”, so it piled up. One owner for that single step, and the Sunday fight went away."
     },
@@ -59,7 +59,7 @@
         "coworker": ["I want to apologize for how I came across in the meeting. I was frustrated with the deadline, not with you, and I should have said it better."],
         "kid": ["I’m sorry I yelled. You didn’t deserve that. I was tired and I got loud, and I’m going to work on it."]
       },
-      "path": [["The Calm-Down Kit (WP-11)", "/wp-11.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["What makes an apology work (Library)", "/library/conflict.html#apology-research"]],
+      "path": [["The Calm-Down Kit (WP-11)", "/wp-11.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["What makes an apology work (Library)", "/library/conflict.html#apology-research"]],
       "deeper": ["what makes an apology work", "What makes a good apology?"],
       "ex": "After snapping at a roommate over the dishes, Robin waited an hour, then said: “I’m sorry I snapped this morning. That wasn’t about you, it was a rough night. Can we sort out the dish thing on Sunday when I’m less fried?” The roommate said thanks, and the Sunday talk went fine."
     },
@@ -110,7 +110,7 @@
         "coworker": ["I’d find specific feedback easier to act on. Could you show me which part of the report needs changing, and what good looks like?"],
         "family": ["I know you care, and I’d like to hear it without the criticism. Could you tell me what you’d like, instead of what I’m doing wrong?"]
       },
-      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Check-ins", "/check-ins.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Check-ins", "/check-ins.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"]],
       "deeper": ["complaints versus criticism", "What is the difference between a complaint and criticism?"],
       "ex": "“You never clean up after yourself” became, after a talk, “The pans were left out last night. Could you soak them before bed?” Same need, no attack, and the pans got soaked."
     },
@@ -142,7 +142,7 @@
         "coworker": ["Could we agree that decisions affecting my workload get a quick check with me first? Even a short message would help me plan."],
         "partner": ["Could we have a rule that any evening or weekend plans for both of us get a quick ‘is this okay?’ first?"]
       },
-      "path": [["Frequency Calibration (decision rhythms)", "/tools/frequency-calibration.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Joint decisions (Library)", "/library/life.html#joint-decisions"]],
+      "path": [["Frequency Calibration (decision rhythms)", "/tools/frequency-calibration.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Joint decisions (Library)", "/library/life.html#joint-decisions"]],
       "deeper": ["deciding together", "Tell me about making decisions together"],
       "ex": "Tara’s sister kept booking family dinners without asking. Tara said, “I love our dinners, and I also need a say in my weekends. Could you text me before you book?” Her sister hadn’t realized. Now there’s a family group text for dates first."
     },
@@ -174,7 +174,7 @@
         "partner": ["I miss us. Could we have one small ritual that’s just ours, like coffee together before work?"],
         "friend": ["I miss you! No pressure, but I’d love to catch up. Walk or coffee sometime next week?"]
       },
-      "path": [["Turning Toward", "/turning-toward.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-pll-protocol.html"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"]],
+      "path": [["Turning Toward", "/turning-toward.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-daily-check-in.html"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"]],
       "deeper": ["bids for connection", "What are bids for connection?"],
       "ex": "A dad’s 15-year-old gave only one-word answers. Instead of more questions, he started offering drives to practice and letting her pick the music. A few weeks in, she began talking in the car, and he mostly just listened."
     },
@@ -188,7 +188,7 @@
         "default": ["I miss having your full attention sometimes. Could we try phones away during dinner this week, both of us?", "Could we have the first ten minutes when we get home without phones? I’d love to hear about your day."],
         "kid": ["Let’s try a phones-in-the-basket dinner this week, mine included. You can pick what we talk about."]
       },
-      "path": [["Turning Toward", "/turning-toward.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-pll-protocol.html"], ["Phones and presence (Library)", "/library/calm.html#phones-and-presence"]],
+      "path": [["Turning Toward", "/turning-toward.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-daily-check-in.html"], ["Phones and presence (Library)", "/library/calm.html#phones-and-presence"]],
       "deeper": ["phones and presence", "Tell me about phones and presence"],
       "ex": "A family tried a phone basket at dinner for one week, parents included. The first two nights were awkward. By Friday the kids were telling stories, and they kept it for weekday dinners."
     },
@@ -427,7 +427,7 @@
         ],
         [
           "The 90-second daily check-in (WP-13)",
-          "/workpapers/wp-13-pll-protocol.html"
+          "/workpapers/wp-13-daily-check-in.html"
         ]
       ],
       "deeper": [

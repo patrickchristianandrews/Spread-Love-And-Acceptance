@@ -31,7 +31,7 @@ Program: The Library’s interests-versus-positions entry explains how to look b
 ## Choosing your battles
 aka: pick your battles; let it go; is it worth it
 see: Conflict avoidance costs; One topic at a time
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Common advice, and consistent with research suggesting relationships do better when small irritations are sometimes let go. It shouldn’t mean ignoring things that matter.
 try: Ask: “Will this matter in a month? Is it a pattern or a one-off? Am I just tired?”
 
@@ -109,7 +109,7 @@ Program: Check-ins suggest a private place, phones down, at an agreed time.
 ## Cooling off before replying
 aka: cool off; wait before responding; sleep on a reply
 see: Don’t fight by text; De-escalation phrases
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: Research on emotion suggests intensity drops with time. Waiting before replying to a charged message is widely recommended.
 try: Write the reply, don’t send it. Read it again in an hour.
 

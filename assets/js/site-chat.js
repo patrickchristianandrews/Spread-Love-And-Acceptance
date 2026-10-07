@@ -435,7 +435,7 @@
       'co-parents calmer handoffs exchange-day script short logistical kids messengers court order parenting plan', ['/relationships-in-depth.html#co-parents', '/relationships.html#co-parents', '/library/life.html#coparenting']],
     // "how do I say / word / text / bring it up without a fight"
     [/\bhow (do|should|can|could|would|shall) (i|we) (say(?! no\b)|word|phrase|put|tell|raise|ask|text|message|bring (it|this|that|something) up)\b|\bhow to (say(?! no\b)|word|phrase|raise|bring (it|this|that|something) up)\b|\bwhat (do|should|can) i say\b(?! no)|\bbring (it|this|that|something|\w+) up\b|\bwithout (starting )?(a|an)? ?(fight|argument|row)\b|^(text|message|email) (my|to)\b|\bword (it|this|a text|a message|an email)\b/,
-      'signal translator testing how a sentence may land before you say it tone filter fact feeling ask one topic same side', ['/signal-translator.html', '/workpapers/wp-09-tone-filter.html', '/check-ins.html#ground', '/check-ins.html']],
+      'signal translator testing how a sentence may land before you say it tone filter fact feeling ask one topic same side', ['/signal-translator.html', '/workpapers/wp-09-say-it-so-it-lands.html', '/check-ins.html#ground', '/check-ins.html']],
     // caregivers, a spouse or partner too
     [/\b(husband|wife|partner|spouse|boyfriend|girlfriend|mom|mum|dad|mother|father|parent|son|daughter)\b.*\b(surgery|operation|illness|ill|sick|injury|injured|hospital|recovering|recovery|diagnosis|disability|disabled)\b|\b(looking after|caring for|care for|taking care of|care of|nursing) (my|our|a|an|his|her) \w+|\bdoing everything for (him|her|them)\b|\b(carer|caregiver|caregiving)\b/,
       'caregivers spouse partner after surgery or illness what to notice one small thing battery check breathe ask for one specific help', ['/relationships-in-depth.html#caregivers', '/relationships.html#caregivers', '/library/stress.html#caregiver-strain']],
@@ -565,14 +565,14 @@
           { k: 'p', x: wp02Band(v) }];
         if (top.length) blocks.push({ k: 'p', x: 'If you answered in the page’s order, the heaviest part right now is ' + top.join(' and ') + '. That’s worth naming, even just to yourself.' });
         blocks.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
-        blocks.push({ k: 'links', x: safeLinks([['WP-02: How much are you carrying?', '/workpapers/wp-02-battery-stress-meter.html'],
+        blocks.push({ k: 'links', x: safeLinks([['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html'],
           v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['Today’s Weather', '/quick-checks.html#today']]) });
         return { blocks: blocks, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How does this feed CALC-01?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'battery score' };
       }
       var one = n.filter(function (x) { return x <= 1; });
       if (n.length === 1 && one.length === 1 && n[0] !== Math.floor(n[0]) || (n.length === 1 && n[0] === 0)) {
         return { blocks: [{ k: 'p', x: 'A battery score of ' + r2(n[0]) + ' reads like this. ' + wp02Band(n[0]) }, { k: 'note', x: NOT_VERDICT },
-          { k: 'links', x: [['WP-02: How much are you carrying?', '/workpapers/wp-02-battery-stress-meter.html']] }],
+          { k: 'links', x: [['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html']] }],
           chips: [{ label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
       }
       // "a battery score of 3": a whole number is most likely the five answers added up (0 to 20)
@@ -581,7 +581,7 @@
         var bl1 = [{ k: 'p', x: 'If ' + n[0] + ' is your total (the five answers added up, out of 20), then ' + n[0] + ' ÷ 20 = ' + r2(v1) + '. ' + wp02Band(v1) }];
         if (n[0] <= 4) bl1.push({ k: 'p', x: 'If you meant a single answer of ' + n[0] + ' (each one runs from 0 to 4), send me all five, like “my battery answers are ' + n[0] + ', 1, 2, 0, 2”, and I’ll add them up with you.' });
         bl1.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
-        bl1.push({ k: 'links', x: [['WP-02: How much are you carrying?', '/workpapers/wp-02-battery-stress-meter.html']] });
+        bl1.push({ k: 'links', x: [['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html']] });
         return { blocks: bl1, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How is it worked out?', q: 'Show me the math for WP-02' }], kind: 'calc', topic: 'battery score' };
       }
       if (n.length === 1 && n[0] > 20) {
@@ -606,7 +606,7 @@
       else if (n3.length === 1 && !hasNamed) {
         var b1 = calcBand(n3[0]);
         return { blocks: [{ k: 'p', x: 'A setup score of ' + r2(n3[0]) + ' falls in this band. ' + b1[0] + ' First move: ' + b1[1] }, { k: 'note', x: 'It reads the setup, never a person. ' + NOT_VERDICT },
-          { k: 'links', x: [['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html']] }],
+          { k: 'links', x: [['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
           chips: [{ label: 'Show me the math', q: 'Show me the math for CALC-01' }], kind: 'calc', topic: 'solvency read' };
       }
     }
@@ -618,7 +618,7 @@
       var bad = [wb, oc, as].concat(rf != null ? [rf] : []).some(function (x) { return isNaN(x) || x < 0 || x > 1; });
       if (bad) return { blocks: [{ k: 'p', x: 'Each CALC-01 input runs from 0 to 1 (or 0% to 100%). Could you check the numbers and send them again?' }], chips: [], kind: 'calc' };
       var tW = 0.4 * wb, tO = 0.35 * oc, tA = 0.25 * (1 - as), sol = tW + tO + tA, band = calcBand(sol);
-      var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-raci-treaty.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the Calm-Down Kit', '/workpapers/wp-02-battery-stress-meter.html']];
+      var gaps = [['workload balance', 0.4 - tW, 'the Lemonade Stand or WP-01', '/lemonade-stand.html'], ['ownership clarity', 0.35 - tO, 'WP-03, One owner per job', '/workpapers/wp-03-one-owner-per-job.html'], ['the batteries (stress)', 0.25 - tA, 'WP-02 and the Calm-Down Kit', '/workpapers/wp-02-how-much-are-you-carrying.html']];
       gaps.sort(function (a, b) { return b[1] - a[1]; });
       var out = [
         { k: 'p', x: 'Here’s the setup score with your numbers: 0.40 × ' + r2(wb) + ' (balance) + 0.35 × ' + r2(oc) + ' (ownership) + 0.25 × (1 − ' + r2(as) + ') (battery, flipped) = ' + r3(tW) + ' + ' + r3(tO) + ' + ' + r3(tA) + ' = ' + r2(sol) + '.' },
@@ -630,7 +630,7 @@
           (sol - apex > 0.1 ? ' The setup score is higher than the overall score, which usually means friction is being swallowed rather than repaired: Say it so it lands (WP-09) is the place to work on.' : '') });
       }
       out.push({ k: 'note', x: 'Pillars I and II: it reads the setup, never a person. The weights are an openly stated judgment call, not a fitted model, and ' + NOT_VERDICT.charAt(0).toLowerCase() + NOT_VERDICT.slice(1) });
-      out.push({ k: 'links', x: safeLinks([['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html'], [gaps[0][2], gaps[0][3]]]) });
+      out.push({ k: 'links', x: safeLinks([['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html'], [gaps[0][2], gaps[0][3]]]) });
       return { blocks: out, chips: [{ label: 'Where do these numbers come from?', q: 'How does CALC-01 work?' }, { label: 'What does the overall score mean?', q: 'What is the apex score in CALC-01?' }], kind: 'calc', topic: 'solvency read' };
     }
     // two people's hours → workload balance
@@ -643,7 +643,7 @@
           { k: 'p', x: 'Out of ' + (a + b) + ' hours, that’s ' + Math.round(pa) + '% and ' + Math.round(pb) + '%. Workload balance is 1 − |' + Math.round(pa) + ' − ' + Math.round(pb) + '| ÷ 100 = ' + r2(wbv) + ' (1.00 means perfectly even, 0.00 means completely one-sided).' },
           { k: 'p', x: 'The math doesn’t care who carries more, only that the load isn’t shared. For three or more people, the Lemonade Stand and CALC-01 work it out from everyone’s hours for you.' },
           { k: 'note', x: 'Pillar I, See the whole load. ' + NOT_VERDICT },
-          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/calc01-solvency.html']] }],
+          { k: 'links', x: [['The Lemonade Stand', '/lemonade-stand.html'], ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html']] }],
           chips: [{ label: 'What do I do with this?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'workload balance' };
       }
     }

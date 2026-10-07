@@ -52,7 +52,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'psychology', k: ['psychology', 'psych', 'tone filter', 'wp-09', 'wp 09', 'intent and impact', 'neutral refusals'],
       a: ['Christian spent years being told their intent and their impact were different things, without anyone able to say where the gap was opening. Psychology gave Christian the vocabulary for masking, for what it costs to perform “normal” on top of an already overloaded system, and for why a clear, well-meant sentence can still land as an attack.', 'It became Say it so it lands (WP-09): the fact, feeling, ask structure exists because Christian needed a way to send what they actually meant. The kind ways to say no in Who did what (WP-01) came from the same place: a way to say no that doesn’t read as rejection.'],
-      l: [['Say it so it lands (WP-09)', '/workpapers/wp-09-tone-filter.html']], f: ['How did philosophy shape the program?'] },
+      l: [['Say it so it lands (WP-09)', '/workpapers/wp-09-say-it-so-it-lands.html']], f: ['How did philosophy shape the program?'] },
 
     { id: 'philosophy', k: ['philosophy', 'epistemology', 'ethics', 'how we know', 'verdict engine', 'deontological', 'chapter iv'],
       a: ['Philosophy is the discipline Christian returns to most, especially epistemology, the study of how we know what we claim to know. In Christian’s words: “In a conflict, almost nothing being asserted is actually knowledge. It’s inference, memory, and pattern-matching, all wearing the costume of fact.” Ethics did the other half: it set what a ledger is not allowed to do.', 'That’s why the program scores an arrangement, never a person, and why each person’s needs carry equal weight as a starting principle (Chapter IV’s fair by the rules).'],
@@ -60,11 +60,11 @@ window.TOL_CREATOR_KB = {
 
     { id: 'behavioral', k: ['behavioral science', 'behavioural science', 'behavior', 'willpower', 'habits', 'discipline', 'check-in', 'check in', 'wp-13', 'phase-locked loop', '90 second', 'ninety second'],
       a: ['Christian’s hardest lesson here: willpower collapses exactly when you need it most. Every resolution evaporated the moment Christian was depleted. What survived wasn’t discipline. It was structure that didn’t need discipline to run.', 'It became the 90-second daily check-in (WP-13): deliberately too small to skip, because small and frequent beats big and rare. In Christian’s words: “A system that only works when both people are at their best isn’t a system.”'],
-      l: [['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html']], f: ['How did neurobiology shape the program?'] },
+      l: [['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html']], f: ['How did neurobiology shape the program?'] },
 
     { id: 'neuro', k: ['neurobiology', 'nervous system', 'neuroscience', 'brain science', 'autonomic', 'battery', 'stress meter', 'wp-02', 'shutting down', 'shut down', 'revved up'],
       a: ['Christian calls this the field that “explained me to myself.” Learning how the autonomic nervous system (the automatic part that runs stress and rest) controls our state ended years of Christian treating their own responses as character defects. Shutting down isn’t a choice, and getting revved up isn’t aggression. It also explained why the same sentence can land three different ways depending on the state someone is in that day.', 'It became the self-check in Today’s Weather and How much are you carrying? (WP-02), and the pillar “read your state first.”'],
-      l: [['Today’s Weather', '/quick-checks.html#today'], ['How much are you carrying? (WP-02)', '/workpapers/wp-02-battery-stress-meter.html']], f: ['How did economics shape the program?'] },
+      l: [['Today’s Weather', '/quick-checks.html#today'], ['How much are you carrying? (WP-02)', '/workpapers/wp-02-how-much-are-you-carrying.html']], f: ['How did economics shape the program?'] },
 
     { id: 'economics', k: ['economics', 'economy', 'capacity', 'unbilled debt', 'deficit audit', 'wp-04', 'safety margin', 'incentives', 'quiet incentives'],
       a: ['Economics is the study of finite capacity and what it costs to allocate it. It gave Christian words for something they could feel but never name: that noticing, remembering and anticipating are real spending, drawn from a real and limited account, adding up whether or not anyone records them.', 'It became the Preface’s idea of unbilled debt, the monthly look-back, What keeps coming back? (WP-04), the idea of a safety margin, and the pillar “notice the quiet incentives.”'],
@@ -72,7 +72,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'business', k: ['business', 'ownership', 'owner per job', 'one owner', 'raci', 'wp-03', 'who owns', 'departments'],
       a: ['Audit work taught Christian that most operational failure isn’t incompetence. It’s unclear ownership. Work that belongs to everyone belongs to no one, and it quietly lands on whoever notices first. Christian watched this happen in departments, and lived it at home.', 'It became “One owner per job” (WP-03), lifted almost directly from internal controls practice: one named person per recurring task, with ownership changed on purpose and in writing, never by silent default.'],
-      l: [['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html']], f: ['How did finance shape the program?'] },
+      l: [['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html']], f: ['How did finance shape the program?'] },
 
     { id: 'finance', k: ['finance', 'bookkeeping', 'double entry', 'double-entry', 'ledger', 'solvency', 'accounting', 'why a ledger', 'objective ledger name', 'why is it called'],
       a: ['Finance is Christian’s professional native language. Double-entry bookkeeping carries a quiet philosophical claim: every entry has two sides, and a book that only balances from one direction isn’t balanced at all.', 'It became the ledger framing of the whole program, and the setup score in Chapter II (Is the split working?). Both carry the caveat that took Christian longest to learn: the number describes the arrangement, never the people inside it.'],
@@ -103,7 +103,7 @@ window.TOL_CREATOR_KB = {
 
     { id: 'audit-cycle', k: ['audit cycle', 'control', 'controls', 'complacency', 'corrective action', 'compliance', 'harmony', 'no news is good news', 'we have always done it this way', 're-test', 'follow up'],
       a: ['From Christian’s audit work: find what’s actually true, then the risks, then the failures, then the real question, which is never “who let this happen” but which control broke, or which was never there. “A control is just an agreement. How a thing gets done, who owns it, and how anyone would notice if it stopped.”', 'Most of the time the cause wasn’t fraud or laziness but complacency, and “no news is not good news.” Then comes a corrective plan and, months later, going back to check that it held. The goal is compliance, which only means things working the way everyone already agreed, and harmony on the other side. Christian looks at a home the same way.'],
-      l: [['The Mandate', '/about.html#the-mandate'], ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html']],
+      l: [['The Mandate', '/about.html#the-mandate'], ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html']],
       f: ['What did Christian do for work?', 'How did audit shape the tools?'] },
 
     { id: 'masking', k: ['masking', 'mask', 'hiding', 'hide', 'pretend', 'pretending', 'exhaustion', 'exhausted', 'invisible cost', 'cost', 'fit in'],

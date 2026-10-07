@@ -6,8 +6,8 @@
     { id:'same-fight', ico:'\uD83D\uDD01', label:'We keep having the same fight',
       say:'Then the argument probably is not about the dishes, the money or the calendar. A thing that comes back every week is usually a gap in the arrangement, and arrangements can be changed without anybody being at fault.',
       picks:[
-        ['/workpapers/wp-03-raci-treaty.html','One owner per job','Most repeat fights live in jobs nobody formally owns.'],
-        ['/workpapers/wp-04-deficit-audit.html','What keeps coming back?','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
+        ['/workpapers/wp-03-one-owner-per-job.html','One owner per job','Most repeat fights live in jobs nobody formally owns.'],
+        ['/workpapers/wp-04-what-keeps-coming-back.html','What keeps coming back?','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
         ['/check-ins.html','Check-ins','How to raise it once, properly, instead of ten times badly.']
       ]},
     { id:'empty', ico:'\uD83E\uDEAB', label:'I am running on empty',
@@ -21,7 +21,7 @@
       say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
       picks:[
         ['/relationships-in-depth.html#caregivers','Caregivers: where to start','What to notice, and how to share the care so it does not all land on you.'],
-        ['/workpapers/wp-02-battery-stress-meter.html','How much are you carrying?','A quick look at how full your battery is today, before you judge the day.'],
+        ['/workpapers/wp-02-how-much-are-you-carrying.html','How much are you carrying?','A quick look at how full your battery is today, before you judge the day.'],
         ['#breathe','Breathe','A one-minute calm break, right here on this page.']
       ]},
     { id:'home-bills', ico:'\uD83C\uDFE0', label:'We share a home and the bills',
@@ -42,14 +42,14 @@
       say:'Before you replay it another forty times: two people can both be reasonable and still end up out of tune. Working out what slipped is more useful than working out who started it.',
       picks:[
         ['/carrier-wave-decoder.html','The Carrier Wave Decoder','A guided walk back through what actually happened.'],
-        ['/workpapers/wp-09-tone-filter.html','Say it so it lands','Turns the thing you want to say into fact, feeling and ask.'],
+        ['/workpapers/wp-09-say-it-so-it-lands.html','Say it so it lands','Turns the thing you want to say into fact, feeling and ask.'],
         ['/check-ins.html','Check-ins','How to reopen it in a room that can hold it.']
       ]},
     { id:'say-hard', ico:'\u2709', label:'I need to say something hard',
       say:'Good. Saying it badly and saying nothing are both worse. It is worth testing the words first, because the same sentence lands very differently depending on who is receiving it.',
       picks:[
         ['/signal-translator.html','The Signal Translator','Type your sentence and see where it might land badly.'],
-        ['/workpapers/wp-09-tone-filter.html','Say it so it lands','Fact, feeling, ask. Same content, far less damage.'],
+        ['/workpapers/wp-09-say-it-so-it-lands.html','Say it so it lands','Fact, feeling, ask. Same content, far less damage.'],
         ['/check-ins.html','Check-ins','Pick the time and the room before you pick the words.']
       ]},
     { id:'past-each-other', ico:'\uD83D\uDCE1', label:'We talk past each other',
@@ -73,14 +73,14 @@
       picks:[
         ['/book/self-2-now-in-depth.html#control','Your circle of control, and matching energy','Signs you are over-giving, and how to match care and effort kindly.'],
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
-        ['/workpapers/wp-02-battery-stress-meter.html','How much are you carrying?','How full your battery really is today.']
+        ['/workpapers/wp-02-how-much-are-you-carrying.html','How much are you carrying?','How full your battery really is today.']
       ]},
     { id:'child-teen', ico:'\uD83E\uDDD2', label:'Things are hard with my child or teen',
       say:'Pulling away and pushing back are a normal part of growing up, and they can still hurt. Side-by-side time, short talks and listening first usually help more than the perfect speech.',
       picks:[
         ['/parents.html','For parents','Big feelings, siblings, teens, and stepfamilies, with words you could use.'],
         ['/library/life.html#teenagers','Talking with teenagers','What the research says about conflict with teens, and where it stops.'],
-        ['/workpapers/wp-13-pll-protocol.html','The 90-second daily check-in','A tiny daily habit that keeps the door open.']
+        ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','A tiny daily habit that keeps the door open.']
       ]},
     { id:'teen', ico:'\uD83C\uDFA7', label:'I\u2019m a teen and home feels hard',
       say:'Fair enough. Growing up means you and the adults around you are both figuring out the new rules at the same time, and that gets loud. Here is stuff written for you, not about you.',
@@ -112,7 +112,7 @@
       say:'The best time to build the habit is now, while nothing is on fire. Almost nobody starts here, and the ones who do have a far easier time of it later.',
       picks:[
         ['/turning-toward.html','Turning toward','Seven small, everyday ways to build connection while things are good.'],
-        ['/workpapers/wp-13-pll-protocol.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
+        ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
         ['/quick-checks.html#today','Today\u2019s Weather','A daily minute that keeps small things small.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',

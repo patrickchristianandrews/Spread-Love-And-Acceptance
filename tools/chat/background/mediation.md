@@ -29,7 +29,7 @@ Program: The program’s ground rules are on the Check-ins page, and the Signal 
 ## Reframing in mediation
 aka: reframing; neutral reframe; restating neutrally
 see: What a mediator does; Paraphrasing
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A core mediator skill described in mediation training. Evidence is mostly from practice, but it maps closely onto research on how blame language raises defensiveness.
 try: “He never lifts a finger” reframed as: “So you’d like more of the daily jobs shared.”
 
@@ -120,7 +120,7 @@ Program: WP-09 asks for the fact “in one sentence with no adjectives”. The C
 ## Family meetings
 aka: family meeting; household meeting; house meeting
 see: Retrospective for households; House meetings for roommates
-go: /workpapers/wp-03-raci-treaty.html | WP-03: One owner per job
+go: /workpapers/wp-03-one-owner-per-job.html | WP-03: One owner per job
 evidence: Family meetings are recommended by many parenting approaches, including Adlerian parenting. Evidence is mostly practical, but they give children a voice and make household agreements visible.
 try: Sunday, 20 minutes: something good from the week, the calendar ahead, one problem to solve together, and a treat.
 

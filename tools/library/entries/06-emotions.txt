@@ -40,7 +40,7 @@ Gross published the process model in 1998 and it has become the dominant framewo
 links:
 /wp-11.html | The Calm-Down Kit (WP-11)
 /quick-checks.html#today | Today’s Weather
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - At which stage do you usually try to manage your feelings: before, during or after?
 - Which situations could we choose or change to make hard talks easier?
@@ -59,7 +59,7 @@ Reappraisal isn’t always appropriate. Some situations call for acting on emoti
 research:
 Gross and Oliver John (2003) found that people who habitually used reappraisal reported more positive emotion and better relationships, while habitual suppressors reported the opposite. Emily Butler and colleagues (2003) found that when one person suppressed emotions during a conversation, their partner’s blood pressure rose and rapport fell. Cultural research suggests suppression has smaller costs in some cultures where emotional restraint is the norm.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /check-ins.html#room | Check-ins: making room
 talk:
 - Do you tend to hide feelings or reinterpret situations?
@@ -79,7 +79,7 @@ This is part of why check-ins start with naming feelings, and why the program en
 research:
 Matthew Lieberman and colleagues published a key brain-imaging study in 2007 (“Putting feelings into words”). Jared Torre and Lieberman reviewed the evidence in 2018. Effects are real but modest, and mostly measured in laboratory tasks. The popular phrase “name it to tame it” is associated with Daniel Siegel.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in: one sentence each (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in: one sentence each (WP-13)
 /check-ins.html | Check-ins
 talk:
 - Is it easy or hard for you to name what you’re feeling?
@@ -99,7 +99,7 @@ Granularity can be learned. Reading, talking about feelings, and tools like feel
 research:
 Lisa Feldman Barrett and colleagues (2001) introduced the concept of emotion differentiation. Todd Kashdan, Barrett and Patrick McKnight reviewed research in 2015 linking higher granularity with better emotion regulation and less use of unhelpful coping, such as heavy drinking under stress. Most studies are correlational.
 links:
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 /wired-differently.html#alexithymia | Wired Differently: alexithymia
 talk:
 - What words do you use most for feeling bad? Could you be more specific?
@@ -140,7 +140,7 @@ research:
 Hatfield, Cacioppo and Rapson published *Emotional Contagion* in 1994, building on earlier papers. Research supports emotional contagion in face-to-face settings. A large 2014 Facebook study suggested small contagion effects online, but was controversial for its ethics and the tiny size of its effects.
 links:
 /quick-checks.html#today | Today’s Weather
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Whose mood tends to set the tone in our home?
 - How could we signal “I’m stressed, but it isn’t about you”?
@@ -159,7 +159,7 @@ It also matters for how people talk to themselves. Harsh self-criticism breeds s
 research:
 Tangney and Ronda Dearing’s *Shame and Guilt* (2002) summarises the research. Studies have linked shame-proneness with anger and defensiveness and guilt-proneness with empathy and repair. Some researchers have questioned whether the measures fully separate the two emotions, and cultural research suggests shame has different meanings in different societies.
 links:
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /book/chapter-2.html | It judges the setup, never a person (Chapter II)
 talk:
 - When you make a mistake, does it feel more like guilt or shame?
@@ -220,7 +220,7 @@ research:
 Pennebaker and Sandra Beall published the first expressive writing study in 1986. A 2006 meta-analysis by Joanne Frattaroli found a small average positive effect across many studies. Some later meta-analyses found smaller or inconsistent effects for specific outcomes. It is best described as a low-cost practice with modest, variable benefits.
 links:
 /workpapers/wp-01.html | Who did what: write it down before it becomes a story (WP-01)
-/workpapers/wp-13-pll-protocol.html | The daily check-in (WP-13)
+/workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)
 talk:
 - Do you find writing helps you sort out your thoughts?
 - Would a short shared note of the week help us remember more accurately?
@@ -240,7 +240,7 @@ research:
 Emotion researchers generally distinguish emotions, moods and traits by duration, intensity and whether they have a clear object, though definitions vary. Research on mood-congruent judgement, including by Joseph Forgas, shows that moods influence how people interpret ambiguous events. Temperament research, from Alexander Thomas and Stella Chess’s studies of infants in the 1950s onward, shows that some emotional tendencies are present early.
 links:
 /quick-checks.html#today | Today’s Weather
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - How can you tell when you are in a mood rather than reacting to something specific?
 - Do you react quickly and recover quickly, or the other way round?
@@ -282,7 +282,7 @@ research:
 Masten published “Ordinary Magic” in 2001. Bonanno’s 2004 paper and later work describe resilience trajectories. Researchers caution against presenting resilience as a personal trait that people should simply have, since it depends so much on circumstances and support.
 links:
 /relationships.html#yourself | How it fits: yourself
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - What has helped you get through hard times in the past?
 - Who are the people who make you more resilient?

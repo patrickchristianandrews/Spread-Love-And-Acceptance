@@ -122,7 +122,7 @@ research:
 ADHD is defined in DSM-5 and ICD-11, and is one of the most studied conditions in psychiatry. Barkley’s theory of ADHD as a disorder of behavioural inhibition and executive function was set out in 1997. Research supports differences in time perception on average, though “time blindness” is a popular description rather than a formal term. Emotional dysregulation is common in ADHD but not part of the formal criteria.
 links:
 /wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - Which kinds of tasks are hardest to start for each of us?
 - What external reminders or systems actually work in our home?
@@ -142,7 +142,7 @@ research:
 Downey and Feldman’s 1996 paper introduced the Rejection Sensitivity Questionnaire, and research since then is substantial. RSD, by contrast, has little direct research; it is best described as a clinical and community term. Research on emotional dysregulation in ADHD, including meta-analyses, supports that intense emotional reactions are more common in ADHD.
 links:
 /wired-differently-in-depth.html#adhd | Wired Differently in depth: ADHD
-/workpapers/wp-09-tone-filter.html | Say it so it lands (WP-09)
+/workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 talk:
 - What kinds of comments hit hardest for each of us?
 - How could feedback be framed so it feels less like rejection?
@@ -265,7 +265,7 @@ research:
 Extraversion is one of the Big Five traits and one of the most studied. Susan Cain’s *Quiet* (2012) popularised introversion. William Fleeson and colleagues’ research (for example 2002) found that acting extraverted was associated with positive feelings for most people. Later work found that sustained extraverted behaviour can be tiring for introverts.
 links:
 /frequency-framework.html | The Frequency Framework
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - Where are each of us on the introvert–extravert scale?
 - How much alone time does each of us need after a busy week?
@@ -324,7 +324,7 @@ The program’s battery meter works in a similar spirit: a quick way of saying �
 research:
 Miserandino published “The Spoon Theory” online in 2003. It is a community metaphor rather than a research model. Research on fatigue in chronic illness and autism supports the underlying experience of limited, variable energy.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather
 talk:
 - What costs you the most spoons in a typical day?

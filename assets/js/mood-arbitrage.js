@@ -1,5 +1,5 @@
 /* Mood Arbitrage: shared content for both levels of the tool
-   (/tools/mood-arbitrage-free.html and /tools/mood-arbitrage-full.html).
+   (/tools/soften-a-tense-moment.html and /tools/soften-a-tense-moment-full.html).
    Everything runs in this browser. Nothing typed or chosen is saved or sent. */
 (function () {
   'use strict';
@@ -59,7 +59,7 @@
     elsewhere: { name: 'A hard day from somewhere else', text: 'This started somewhere else, so it isn’t yours to fix. Your job is company and a little relief, not solutions or advice.',
       agree: 'When one of us has had a hard day, we’ll say so early, and the other will hold new problems until the next day.' },
     load: { name: 'Too much on their plate', text: 'The weight is sitting on one person. Once it settles, share the load for real: one job moves to you, for good, with no reminders needed.',
-      agree: 'Each recurring job gets one named owner, written down, so nobody carries the list alone. (<a href="/workpapers/wp-03-raci-treaty.html">One owner per job (WP-03)</a> helps.)' },
+      agree: 'Each recurring job gets one named owner, written down, so nobody carries the list alone. (<a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job (WP-03)</a> helps.)' },
     sensory: { name: 'Too much noise, people or light', text: 'Change the place before anything else: a quieter room, outside, or leaving early. Keep words to a minimum until you’re out.',
       agree: 'When a place gets too loud or busy for one of us, either can say ‘time to go,’ no explanation needed.' }
   };

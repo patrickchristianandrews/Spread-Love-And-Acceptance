@@ -20,7 +20,7 @@ People also respond with freezing or going quiet, not just fighting or fleeing, 
 research:
 Cannon’s work dates from the 1910s and 1920s; Hans Selye developed the concept of stress and the general adaptation syndrome from the 1930s. The physiology of the sympathetic system and HPA axis is well established. Shelley Taylor and colleagues proposed tend-and-befriend in 2000, suggesting that seeking social connection is also a common stress response. How stress affects a particular person varies widely.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /book/chapter-3-in-depth.html#saturation | Chapter III in depth: saturation
 /quick-checks.html#today | Today’s Weather
 talk:
@@ -41,7 +41,7 @@ It also suggests two ways of reducing stress: changing the situation, or increas
 research:
 Lazarus and Folkman set out the model in *Stress, Appraisal, and Coping* (1984). It remains one of the most influential frameworks in stress research. Later work on “challenge versus threat” appraisals, for example by Jim Blascovich and Jeremy Jamieson, has found that seeing stress as a challenge can change physiological responses, though effects vary.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /book/chapter-3.html | Full tanks and different angles (Chapter III)
 talk:
 - What resources help you feel able to cope: sleep, time, help, information?
@@ -61,7 +61,7 @@ This is one reason the program pays attention to recurring patterns rather than 
 research:
 McEwen published his influential review in 1998 and continued the work for decades. Researchers have measured allostatic load using combinations of biological markers, and studies link higher scores to various outcomes, but there is no single agreed way of measuring it, and it is best treated as a helpful framework rather than a precise test. The concept is used to describe populations, not to diagnose individuals.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /how-it-works.html#situation | How It Works: your life situation
 /book/chapter-5.html | The monthly look-back (Chapter V)
 talk:
@@ -84,7 +84,7 @@ Siegel introduced the concept in *The Developing Mind* (1999). It is widely used
 links:
 /quick-checks.html#ladder | The nervous-system self-check
 /wp-11.html | The Calm-Down Kit (WP-11)
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 talk:
 - What pushes each of us toward the top or bottom of our window?
 - What helps widen your window on a hard week?
@@ -125,7 +125,7 @@ In practice, many couples find the most useful parts are hunger and tiredness, s
 research:
 HALT originates in addiction recovery communities, and its exact origin is unclear. There is no research on HALT as a tool in itself. Related research does support links between hunger and irritability, sleep loss and emotional reactivity, and loneliness and threat sensitivity, so it is a reasonable, if informal, reminder.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather
 talk:
 - Which of the four states affects you most?
@@ -145,7 +145,7 @@ The popular claim that low blood sugar directly reduces willpower (the glucose m
 research:
 Jennifer MacCormack and Kristen Lindquist (2019) found that hungry people rated situations more negatively when they were not paying attention to their own feelings. Viren Swami and colleagues (2022) used an experience-sampling study and found that hunger was associated with greater anger and irritability in daily life. Research on the glucose model of willpower has had replication problems.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather
 talk:
 - Do either of us get “hangry”? What are the signs?
@@ -165,7 +165,7 @@ In couples, sleep can become a shared issue: one person’s restlessness affects
 research:
 Seung-Schik Yoo, Matthew Walker and colleagues (2007) found greater amygdala reactivity to negative images after sleep deprivation. Amie Gordon and Serena Chen (2014) found that poor sleep was associated with more conflict in couples and with less ability to resolve it. These are lab and diary studies; effects vary between people, and occasional short nights are a normal part of life.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /night-garden.html | The Night Garden
 /quick-checks.html#today | Today’s Weather
 talk:
@@ -186,7 +186,7 @@ At home, parental and caregiver burnout can look similar: exhaustion, emotional 
 research:
 Maslach and Susan Jackson published the Maslach Burnout Inventory in 1981. The World Health Organization included burnout in ICD-11 (2019) as an occupational phenomenon, not a medical diagnosis. Research on parental burnout, led by Isabelle Roskam and Moïra Mikolajczak from around 2017, has grown quickly. Burnout overlaps with depression in some measures, and researchers continue to debate the boundary.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /relationships.html#caregivers | How it fits: caregivers
 /book/chapter-3-in-depth.html#saturation | Chapter III in depth: saturation
 talk:
@@ -208,8 +208,8 @@ research:
 A 2003 meta-analysis by Martin Pinquart and Silvia Sörensen found that caregivers reported more stress and lower wellbeing than non-caregivers on average, with larger differences for dementia caregivers. Research also shows positive aspects of caregiving, such as a sense of meaning. Support interventions show modest benefits.
 links:
 /relationships.html#caregivers | How it fits: caregivers
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - Is either of us caring for someone in a way that the other might not fully see?
 - What would a real break look like for the caregiver?
@@ -250,7 +250,7 @@ research:
 Bud Craig’s work (2002) helped define interoception in neuroscience. Sahib Khalsa and colleagues published a consensus review in 2018. Research by Sarah Garfinkel and others has studied interoception in autism, with mixed findings depending on how it is measured. The field is active and still developing reliable measures.
 links:
 /quick-checks.html#ladder | The nervous-system self-check
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /wired-differently.html#alexithymia | Wired Differently: alexithymia
 talk:
 - Which body signals do you notice early, and which do you miss?
@@ -270,7 +270,7 @@ The picture also varies between people. Some people perform well under pressure;
 research:
 Robert Yerkes and John Dodson’s 1908 study was about mice learning to discriminate between boxes under different strengths of electric shock. The generalised “inverted U” for human stress and performance developed later and has been criticised as too simple. Research on arousal and attention does support the idea that high stress impairs complex thinking, which is the part most relevant here.
 links:
-/workpapers/wp-02-battery-stress-meter.html | How full is your battery? (WP-02)
+/workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather
 talk:
 - Do you do better with a bit of pressure, or with none?

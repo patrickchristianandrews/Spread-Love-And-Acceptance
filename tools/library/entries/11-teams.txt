@@ -18,7 +18,7 @@ The program’s version keeps it simple: for each regular job, write down who ow
 research:
 Responsibility assignment matrices have been used in project management since at least the mid-twentieth century; their exact origin is not well documented. RACI and variants (RASCI, DACI) appear in project-management guides. There is little direct research on RACI itself, but research on role ambiguity and diffusion of responsibility supports the underlying principle that clear individual ownership reduces dropped tasks and stress.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
 talk:
 - Which of our jobs currently belong to “whoever notices”?
@@ -38,7 +38,7 @@ Clarifying roles, by writing them down, agreeing them together and reviewing the
 research:
 Kahn, Donald Wolfe, Robert Quinn, J. Diedrick Snoek and Robert Rosenthal published *Organizational Stress* in 1964. John Rizzo, Robert House and Sidney Lirtzman developed widely used measures in 1970. Meta-analyses since then have linked role ambiguity with job stress and lower satisfaction. Research in households is less direct, but related findings on the division of labour are consistent.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#coworkers | How it fits: coworkers
 talk:
 - Where at home are our roles unclear?
@@ -58,7 +58,7 @@ Naming a specific person as responsible counters this. It isn’t about blame; i
 research:
 Darley and Latané published their studies in 1968. The bystander effect has been widely replicated, though a 2011 meta-analysis by Peter Fischer and colleagues found it is weaker in dangerous emergencies. The diffusion of responsibility principle is well supported in group research.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#roommates | How it fits: roommates
 talk:
 - Which of our shared jobs tend to be left for someone else?
@@ -119,8 +119,8 @@ research:
 Kerth published *Project Retrospectives* in 2001. Retrospectives are standard practice in agile teams. Research on team debriefs more generally, including a 2013 meta-analysis by Scott Tannenbaum and Christopher Cerasoli, found that well-structured debriefs improved team performance by a meaningful amount on average.
 links:
 /book/chapter-5.html | The monthly look-back (Chapter V)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
-/workpapers/wp-13-pll-protocol.html | Once a week, look for repeats (WP-13)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
+/workpapers/wp-13-daily-check-in.html | Once a week, look for repeats (WP-13)
 talk:
 - What went well at home this week?
 - What was hard, and what about the situation made it hard?
@@ -140,7 +140,7 @@ research:
 James Reason’s *Human Error* (1990) and *Managing the Risks of Organizational Accidents* (1997) are foundational. Dekker’s *Just Culture* was published in 2007. Blameless postmortems are described in Google’s *Site Reliability Engineering* (2016). Evidence comes largely from case studies and safety outcomes in industries that adopted these practices.
 links:
 /book/chapter-5.html | It’s not a review of either person (Chapter V)
-/workpapers/wp-04-deficit-audit.html | Nobody owes anything (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | Nobody owes anything (WP-04)
 talk:
 - What happens in our home when something goes wrong?
 - What system factors might explain a recent slip?
@@ -159,7 +159,7 @@ The model encourages looking for several small fixes rather than one culprit: a 
 research:
 Reason published the model in 1990. It is widely used in healthcare, aviation and engineering. Some safety researchers argue it is too simple for complex systems, but it remains a helpful teaching model.
 links:
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? Sort each repeat (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? Sort each repeat (WP-04)
 /book/chapter-5-in-depth.html#deficit | Chapter V in depth: what a deficit looks like
 talk:
 - Think of a recent slip: which “layers” had holes?
@@ -179,7 +179,7 @@ At home, checklists can help with recurring routines: getting out the door, week
 research:
 Alex Haynes, Gawande and colleagues published the WHO Surgical Safety Checklist study in the *New England Journal of Medicine* in 2009, finding reduced complications and deaths across eight hospitals. A 2014 study in Ontario by David Urbach and colleagues found no significant improvement after province-wide adoption, suggesting implementation and culture matter as much as the checklist itself.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /workpapers/wp-01.html | Who did what (WP-01)
 talk:
 - Which routine would benefit from a short checklist?
@@ -199,7 +199,7 @@ External systems, like a shared calendar, notes or lists, act as backups, and ma
 research:
 Wegner proposed transactive memory in 1985 and 1987. Andrea Hollingshead (1998) found couples performed better on memory tasks when they could use their established system. Research on teams supports transactive memory as a contributor to performance.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/preface.html | Unseen work quietly adds up (Preface)
 talk:
 - Who remembers what in our home?
@@ -220,7 +220,7 @@ research:
 Risko and Gilbert published their review in 2016. E. J. Masicampo and Roy Baumeister (2011) found that making a specific plan for an unfinished goal reduced intrusive thoughts about it, suggesting that writing a plan down can quiet mental reminders.
 links:
 /workpapers/wp-01.html | Who did what (WP-01)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - What are you holding in your head that could go on a list?
 - Would a shared calendar or list help us?
@@ -239,8 +239,8 @@ For households, this suggests that a long list of unowned, unplanned tasks can c
 research:
 Zeigarnik published in 1927. Later reviews have found inconsistent replication of the memory effect, so it should not be treated as a reliable law of memory. A related finding, that people tend to want to go back and finish interrupted tasks (sometimes called the Ovsiankina effect, after another researcher in the same group), is often discussed alongside it. Masicampo and Baumeister published their planning study in 2011.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - What unfinished tasks are nagging at each of us?
 - Would planning them quiet the nagging?
@@ -280,7 +280,7 @@ research:
 Deming popularised the cycle from the 1950s. PDSA is widely used in healthcare quality improvement. A 2014 systematic review by Michael Taylor and colleagues found that many healthcare projects claiming to use PDSA didn’t follow it fully, suggesting it is easy to name and harder to do well.
 links:
 /book/chapter-5.html | The monthly look-back (Chapter V)
-/workpapers/wp-03-raci-treaty.html | Change it on purpose, not by drift (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | Change it on purpose, not by drift (WP-03)
 talk:
 - What small experiment could we try at home for two weeks?
 - How would we know if it worked?
@@ -299,7 +299,7 @@ Critics point out that real problems often have several causes, and asking “wh
 research:
 The technique is associated with Sakichi Toyoda and Taiichi Ohno at Toyota. It is widely used in lean management and healthcare. Safety researchers have criticised it for encouraging a single root cause where there are several, so it is best used as a conversation starter rather than a full analysis.
 links:
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 /book/chapter-5.html | A problem that keeps coming back usually has no real owner (Chapter V)
 talk:
 - Pick a recurring problem: what do five whys reveal?
@@ -320,7 +320,7 @@ research:
 Tuckman proposed the model in 1965, adding a fifth stage (adjourning) with Mary Ann Jensen in 1977. It is widely taught, but research suggests many teams don’t follow a neat sequence. Connie Gersick’s punctuated equilibrium model (1988) is one alternative. It is best seen as a helpful description rather than a precise theory.
 links:
 /relationships.html#roommates | How it fits: roommates
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 talk:
 - What stage is our household in right now?
 - Which norms did we form without discussing?

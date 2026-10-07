@@ -80,7 +80,7 @@ People carrying the mental load often describe feeling that they can never switc
 research:
 Allison Daminger’s 2019 study (below) gives the concept research grounding. Survey research has also found that many people, particularly mothers in heterosexual couples, report doing most of the planning and organising in their households. The popular term “mental load” overlaps with research concepts like cognitive labour and invisible work, but isn’t itself a formal construct.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job: two names per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job: two names per job (WP-03)
 /workpapers/wp-01.html | Who did what: log the small jobs too (WP-01)
 /book/preface.html | Preface: unseen work quietly adds up
 talk:
@@ -101,8 +101,8 @@ This maps neatly onto the program’s idea of ownership: a job isn’t fully han
 research:
 Daminger’s paper “The Cognitive Dimension of Household Labor” was published in the *American Sociological Review* in 2019. It was based on in-depth interviews with 35 couples, mostly college-educated, so it offers a detailed picture rather than population estimates. Later survey work by Daminger and others has explored the same dimensions in larger samples.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - For our trickiest jobs, who anticipates, who researches, who decides and who checks?
 - Which stage is the most tiring for you?
@@ -184,7 +184,7 @@ research:
 A long line of studies, in the United States and elsewhere, finds associations between perceived fairness in housework and marital satisfaction, conflict and wellbeing. Research by Sanjiv Gupta, Scott Coltrane, Paula England and others has explored how gender, income and time shape the division. A 2016 study by Daniel Carlson and colleagues found that egalitarian arrangements were associated with higher relationship and sexual satisfaction than they had been in older data. Most of this research is correlational.
 links:
 /book/chapter-2.html | Is the split working? (Chapter II)
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /lemonade-stand.html | The Lemonade Stand
 talk:
 - Does our current arrangement feel fair to each of us? Did we ever discuss it on purpose?
@@ -204,7 +204,7 @@ The program’s approach to ownership helps here: once a job has an owner, the o
 research:
 Sarah Allen and Alan Hawkins described maternal gatekeeping in 1999. Later research, including work by Sarah Schoppe-Sullivan and colleagues, has refined the concept to include both gate-closing and gate-opening behaviours and found links with fathers’ involvement. Researchers caution against using the concept to blame mothers; gatekeeping is shaped by expectations on both partners and by wider social norms.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /book/chapter-4.html | Once a job has an owner, look to the owner (Chapter IV)
 talk:
 - Are there jobs where one of us redoes the other’s work?
@@ -224,8 +224,8 @@ A more useful approach is practical: agree on the standard, allow a learning per
 research:
 There is no established research literature on “weaponised incompetence” as such. Related concepts include social loafing (reduced effort in groups), research on gender and housework skills, and gatekeeping. Attribution research warns that assuming bad intentions from others’ behaviour is a common and often mistaken bias.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - Are there jobs one of us has never really learned? What would it take?
 - Have we agreed what “done” means for the jobs that go wrong?
@@ -244,7 +244,7 @@ Changing it takes deliberate steps: giving the other person whole areas to own, 
 research:
 “Default parent” is a popular phrase rather than a research term, but it describes patterns that research on cognitive labour, the mental load and time use has documented, such as one partner doing more planning, monitoring and interruption-absorbing. Studies of work interruptions show that frequent switching carries a cost to focus and energy.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /relationships.html#co-parents | How it fits: co-parents
 talk:
 - Who is the default in our household for which areas?
@@ -264,8 +264,8 @@ This is why assigning ownership often works better than asking someone to “not
 research:
 Differences in standards and noticing are discussed in sociological research on housework, including Daminger’s anticipation stage of cognitive labour. Research on attention shows that people notice what is relevant to their goals, which supports the practical value of ownership. The idea of a personal “mess threshold” is a helpful description rather than a formal measure.
 links:
-/workpapers/wp-03-raci-treaty.html | One owner per job (WP-03)
-/workpapers/wp-04-deficit-audit.html | What keeps coming back? (WP-04)
+/workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
+/workpapers/wp-04-what-keeps-coming-back.html | What keeps coming back? (WP-04)
 talk:
 - Who notices mess first in our home? Does it depend on the room?
 - What things does each of us notice that the other doesn’t?

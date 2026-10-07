@@ -16,7 +16,7 @@ Program: The Library’s entry on emotional granularity explains why precise fee
 ## Primary and secondary emotions
 aka: primary emotions; secondary emotions; the feeling under the feeling
 see: The emotion wheel; Anger as a signal; Hurt
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: A common idea in emotion-focused approaches and everyday counseling. The exact split is debated by researchers, but the practical point (look underneath the first feeling) is widely used.
 try: “I snapped because I was angry, but underneath I think I was scared we’d be late and it’d be my fault.”
 
@@ -68,7 +68,7 @@ Program: The Calm-Down Kit asks where you feel it first. The Library’s entry o
 ## Frustration
 aka: frustrated; fed up; exasperated
 see: Anger as a signal; Impatience; Irritation
-go: /workpapers/wp-09-tone-filter.html | WP-09: Say it so it lands
+go: /workpapers/wp-09-say-it-so-it-lands.html | WP-09: Say it so it lands
 evidence: Psychologists generally describe frustration as a response to a blocked goal. It’s among the most common everyday emotions.
 try: “I’m frustrated because I’ve asked about this three times, and I want us to find a way that works.”
 
@@ -94,7 +94,7 @@ Program: If disappointment keeps coming from the same source (like plans falling
 ## Irritation
 aka: irritated; annoyed; annoyance; grumpy
 see: Frustration; Hungry, tired and snappy
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Everyday irritability is strongly linked with tiredness, hunger and stress in research on mood. Small annoyances land bigger when you’re depleted.
 try: “I’m irritable today, and it’s not about you. Let me get some food and I’ll be better company.”
 
@@ -211,7 +211,7 @@ Program: The Signal Translator lets you test your opening line, which takes a lo
 ## Overwhelm as a feeling
 aka: feeling overwhelmed; overwhelm; swamped
 see: Irritation; Energy audit
-go: /workpapers/wp-02-battery-stress-meter.html | WP-02: How full is your battery?
+go: /workpapers/wp-02-how-much-are-you-carrying.html | WP-02: How full is your battery?
 evidence: Overwhelm isn’t a technical term, but it describes something research on stress calls high demands relative to resources.
 try: “I’m overwhelmed. Can we list what’s on my plate and see what can move?”
 
@@ -276,7 +276,7 @@ Program: The Library’s savoring entry explains how lingering on good moments h
 ## Relief
 aka: relieved; weight off my shoulders
 see: Mixed feelings; Contentment
-go: /workpapers/wp-13-pll-protocol.html | WP-13: The 90-second daily check-in
+go: /workpapers/wp-13-daily-check-in.html | WP-13: The 90-second daily check-in
 evidence: Relief is widely described in emotion research as the feeling after a threat or burden passes.
 try: “I’m so relieved we sorted out the schedule. Thank you.”
 
