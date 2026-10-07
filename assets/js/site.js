@@ -451,6 +451,9 @@
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
   var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this)\.html$/;
+  // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
+  // The soft colour wash stays. Calm and play pages keep their garden.
+  var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|perspective-shifter|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
   function workMode() { return WORK || PLAIN.test(current) || !!(document.body && document.body.hasAttribute('data-work')); }
   if (WORK || PLAIN.test(current)) document.documentElement.classList.add('tol-work');
   // when this visit began (this tab only), so no invitation shows in someone's first minute here
@@ -788,7 +791,9 @@
     addPrivateNote(body);
     addTip(body);
     placeShare(body);
-    if (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html') loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
+    // Kip stays away from careful reading: not with Easy reading, larger text, a still page, hidden helpers or on the working pages
+    var kipOk = !helpersHidden() && !WORKSPACE.test(current) && !/\btol-(easy|still|text-(lg|xl|xxl))\b/.test(document.documentElement.className);
+    if (kipOk && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
     revealOnScroll();
 
     // The Night Garden, softly alive behind every page, under a see-through veil.
@@ -801,7 +806,7 @@
     function gardenOk() {
       var mm = window.matchMedia;
       if (mm && mm('(prefers-reduced-motion: reduce)').matches && lsGet(STILL_KEY) !== '0') return false;
-      return lsGet(STILL_KEY) !== '1' && !workMode();
+      return lsGet(STILL_KEY) !== '1' && !workMode() && !WORKSPACE.test(current);
     }
     function makeGarden() {
       if (gardenParts || !gardenOk()) return;
@@ -849,7 +854,7 @@
     var lmain = document.querySelector('main');
     // "In short" bullets on the long pages, and "Show me only the steps" (in-short.js)
     if (lmain && !busyPage() && current !== '/index.html' && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
-        (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 700) && !/^\/workpapers\//.test(current)) {
+        (inDepth || /^\/library/.test(current) || (lmain.textContent || '').split(/\s+/).length > 400) && !/^\/workpapers\//.test(current)) {
       var isc = document.createElement('script'); isc.src = '/assets/js/in-short.js'; document.head.appendChild(isc);
     }
 
@@ -878,7 +883,7 @@
 
     // Tidbit & Sugarfoot pop by now and then with a tip or a little love (pup-visits.js; the pups and their words load only when a visit is about to happen)
     // (not on the tender pages, and not on Frequency Buddies, where they'd sit over the episode)
-    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !body.hasAttribute('data-no-pupvisits') && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+    if (document.querySelector('main.read') && !helpersHidden() && !busyPage() && !sensitivePage() && !body.hasAttribute('data-no-pupvisits') && !WORKSPACE.test(current) && !body.classList.contains('is-game') && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
         !/^\/(frequency-journey(-play)?|frequency-buddies|calm-visualizer|ask|404|offline|privacy-policy|refund-policy|terms-of-service)\.html$|^\/(legal|workpapers\/fill)\//.test(current)) {
       var pv = document.createElement('script'); pv.src = '/assets/js/pup-visits.js'; document.head.appendChild(pv);
     }
@@ -952,7 +957,7 @@
     if (!body.hasAttribute('data-no-wash')) {
       // plus a few pastel bubbles and hearts drifting slowly upward
       var floaters = '';
-      for (var f = 0; f < 34; f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
+      for (var f = 0; f < (WORKSPACE.test(current) ? 0 : 34); f++) floaters += '<b class="' + (f % 3 === 1 ? 'tol-heart' : 'tol-bub') + '"></b>';
       var wash = el('div', { class: 'tol-wash', 'aria-hidden': 'true' }, '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>' + floaters);
       document.documentElement.appendChild(wash);
     }
@@ -1109,7 +1114,7 @@
     screenshots: 'screenshot', screensot: 'screenshot', screnshot: 'screenshot', sreenshot: 'screenshot', childhod: 'childhood', chilhood: 'childhood', childood: 'childhood',
     forgetfull: 'forgetful', forgot: 'forgot', rember: 'remember', remeber: 'remember', focuss: 'focus', foccus: 'focus', concentrait: 'concentrate', meltdowns: 'meltdown', meltown: 'meltdown' };
   // two words people often split that the site writes as one ("screen shot" → screenshot)
-  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot', 'mother in law': 'mother-in-law', 'mothers in law': 'mother-in-law', 'father in law': 'father-in-law', 'sister in law': 'sister-in-law', 'brother in law': 'brother-in-law', 'in laws': 'in-laws', 'in law': 'in-law', 'long distance': 'longdistance', 'time zone': 'timezone', 'time zones': 'timezone', 'money home': 'remittance', 'send money': 'remittance', 'sending money': 'remittance', 'sends money': 'remittance', 'need space': 'space', 'needs space': 'space', 'time out': 'timeout' };
+  var JOIN = { 'screen shot': 'screenshot', 'screen shots': 'screenshot', 'melt down': 'meltdown', 'shut down': 'shutdown', 'grown up': 'grown-up', 'grew up': 'growing up', 'brought up': 'growing up', 'pet name': 'petname', 'pet names': 'petname', 'inside joke': 'joke', 'inside jokes': 'joke', 'code word': 'codeword', 'code words': 'codeword', 'safe word': 'codeword', 'taken for granted': 'granted', 'take for granted': 'granted', 'taking for granted': 'granted', 'for granted': 'granted', 'gone stale': 'stale', 'in a rut': 'rut', 'on autopilot': 'autopilot', 'sent me this': 'sentthis', 'sent me a link': 'sentthis', 'sent me': 'sentthis', 'sent this': 'sentthis', 'full time': 'fulltime', 'full-time': 'fulltime', 'paid work': 'fulltime', 'night feeds': 'nightfeeds', 'mother in law': 'mother-in-law', 'mothers in law': 'mother-in-law', 'father in law': 'father-in-law', 'sister in law': 'sister-in-law', 'brother in law': 'brother-in-law', 'in laws': 'in-laws', 'in law': 'in-law', 'long distance': 'longdistance', 'time zone': 'timezone', 'time zones': 'timezone', 'money home': 'remittance', 'send money': 'remittance', 'sending money': 'remittance', 'sends money': 'remittance', 'need space': 'space', 'needs space': 'space', 'time out': 'timeout' };
   // words that mean the same here: each term also matches these
   var SAME = { complacent: ['complacency', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drifted'], complacency: ['complacent', 'taking for granted', 'rut', 'stale', 'autopilot', 'coasting', 'drift'], granted: ['complacency', 'taking for granted', 'unthanked', 'appreciation'],
     autism: ['autistic', 'neurodivergent', 'wired differently', 'wiring', 'neurotype'], autistic: ['autism', 'neurodivergent', 'wired differently', 'wiring'],
@@ -1164,6 +1169,7 @@
     stonewalling: ['/pursue-withdraw.html', '/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling', withdraw: 'stonewalling', withdraws: 'stonewalling', pursue: 'stonewalling', pursuer: 'stonewalling', pursues: 'stonewalling', space: 'stonewalling', pause: 'stonewalling', timeout: 'stonewalling',
     'in-laws': ['/library/conflict.html', '/library/life.html', '/family-obligations.html'], 'in-law': 'in-laws', inlaws: 'in-laws', inlaw: 'in-laws', 'mother-in-law': 'in-laws', 'father-in-law': 'in-laws', 'sister-in-law': 'in-laws', 'brother-in-law': 'in-laws', motherinlaw: 'in-laws', fatherinlaw: 'in-laws', 'mothers-in-law': 'in-laws', extended: 'in-laws', culture: 'in-laws', cultures: 'in-laws', cultural: 'in-laws',
     remittance: ['/family-obligations.html', '/library/life.html'], remittances: 'remittance', remit: 'remittance', money: ['/lemonade-stand.html', '/family-obligations.html'], savings: 'money', saving: 'money', finances: 'money',
+    sentthis: ['/sent-this.html'], fulltime: ['/lemonade-stand.html', '/new-parent.html', '/share-the-load.html'], nightfeeds: ['/new-parent.html', '/lemonade-stand.html'],
     longdistance: ['/long-distance.html', '/turning-toward.html', '/check-ins.html'], ldr: 'longdistance', timezone: 'longdistance', timezones: 'longdistance', apart: 'longdistance',
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather',
     erase: ['/on-this-device.html'], delete: ['/on-this-device.html'], stored: ['/on-this-device.html'], privacy: ['/on-this-device.html', '/legal/privacy-policy.html'],
@@ -1292,7 +1298,8 @@
       if (!b && hits < terms.length) return;                  // every word has to be there, unless it's a helpful tool
       if (b && TOOL_URL.test(p.u)) b += 10;
       score += b;
-      if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
+      // the simple page comes before its in-depth twin: most people want the short way in first
+      if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
     });
     Object.keys(EXTRA).forEach(function (u) { if (boost[u]) out.push({ p: EXTRA[u], score: boost[u] + 20 }); });
     return out.sort(function (a, b) { return b.score - a.score; }).slice(0, 25);

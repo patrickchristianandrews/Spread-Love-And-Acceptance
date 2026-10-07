@@ -1,0 +1,37 @@
+/*
+  tol-simple.css — the simple workpaper pages (see tol-simple.js).
+  The "Fill it in on screen" button under the title, the short "What's this?" and the one closed
+  "Practice (optional)" toggle. Loads after /assets/css/site.css; every colour has a fallback.
+*/
+
+/* the first thing under the title: straight to the form */
+.read-head .wps-fill{ margin: .9rem 5.4rem 0 0; }
+.wps-fill-btn{
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 48px; padding: .65rem 1.25rem;
+  border-radius: 999px; background: var(--ink, #211D17); color: var(--paper, #F5EFDE) !important;
+  font-weight: 600; text-decoration: none !important; line-height: 1.25; max-width: 100%;
+}
+.wps-fill-btn:hover{ background: var(--credit, #3E6B4C); }
+.wps-fill-btn:focus-visible{ outline: 3px solid var(--focus, #2B5B8C); outline-offset: 3px; }
+@media (max-width: 560px){ .read-head .wps-fill{ margin-right: 3.9rem; } }
+
+/* "What's this?": the sheet's code and its pillar, for anyone who wants them */
+.wps-what{ margin-top: .9rem; font-size: .92em; color: var(--ink-soft, #524B3E); }
+.wps-what summary{ cursor: pointer; font-weight: 600; color: var(--ink, #211D17); min-height: 44px; display: flex; align-items: center; }
+.wps-what p{ margin: .3rem 0 0 !important; }
+
+/* Practice (optional): closed until someone opens it */
+.wps-practice{
+  margin: 1.6rem 0 0; padding: .2rem 1rem; border: 1px solid var(--line, #D9CBA3); border-radius: 18px;
+  background: var(--paper, #F5EFDE);
+}
+.wps-practice > summary{
+  cursor: pointer; min-height: 48px; display: flex; align-items: center; gap: .5rem;
+  font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.05rem; color: var(--ink, #211D17);
+}
+.wps-practice > summary:focus-visible{ outline: 3px solid var(--focus, #2B5B8C); outline-offset: 3px; border-radius: 8px; }
+.wps-practice-note{ margin: 0 0 1rem !important; font-size: .92em; color: var(--ink-soft, #524B3E); }
+.wps-practice-q > *, .wps-practice-x > *{ max-width: 100%; }
+.wps-practice-x:empty, .wps-practice-q:empty{ display: none; }
+.wps-practice[open]{ padding-bottom: 1rem; }
+@media print{ .wps-practice, .read-head .wps-fill{ display: none !important; } }

@@ -9,8 +9,8 @@
    ('tol-heartprint-v1', and before that 'tol-pawprint-v1') move here so nobody loses their answers. */
 (function () {
   'use strict';
+  // the tool lives in [data-wavelength]; on other pages (the Wiring Card) this file only offers a read-only look at saved results
   const root = document.querySelector('[data-wavelength]');
-  if (!root) return;
   const KEY = 'tol-wavelength-v1', OLD_KEYS = ['tol-heartprint-v1', 'tol-pawprint-v1'];
   // this tab's own copy (so a reload never loses a result), and the other people who took it on this device
   const TAB_KEY = 'tol-wavelength-tab-v1', PEOPLE_KEY = 'tol-wavelength-people-v1', PEOPLE_TAB_KEY = 'tol-wavelength-people-tab-v1', MAX_OTHERS = 3;
@@ -206,6 +206,9 @@
       fit: { adhd: 'Many ADHD folks find it far easier to do what feels meaningful. Linking a dull task to its why can help you start.', sensitive: 'Highly sensitive people often think deeply about meaning and are moved by beauty and big ideas.' } }
   ];
   const IN = {}; INPUTS.forEach(x => { IN[x.id] = x; });
+  // the "Often a fit" tag in Part 5: only the two or three inputs that really stand out for each wiring, so the tag still
+  // means something. (The longer notes in each chapter can say more, since they're about you, not a tag on a card.)
+  const INPUT_TAGS = { adhd: ['body', 'sound', 'meaning'], autistic: ['logic', 'nature', 'self'], dyslexic: ['pictures', 'body'], sensitive: ['self', 'nature', 'meaning'] };
 
   /* ---------- the statement (formerly Your Heartprint) ---------- */
   const STEPS = [
@@ -246,6 +249,31 @@
       o: [['fair', 'Fairness', 'fairness'], ['honest', 'Honesty', 'honesty'], ['kind', 'Kindness', 'kindness'], ['grow', 'Growing', 'growing as a person'], ['calm', 'Calm', 'a calm home'],
         ['fun', 'Fun', 'fun'], ['family', 'Family', 'family'], ['indep', 'Independence', 'independence'], ['faith', 'Faith', 'faith'], ['reliable', 'Being reliable', 'being someone you can count on']] }
   ];
+  // Statement choices that Parts 1 to 4 already asked about. They're filled in from those answers and tucked away,
+  // unless you choose to answer them again here ("Change"), so the statement doesn't ask the same thing twice.
+  const FROM_PARTS = [
+    { key: 'talk', ids: ['thinkloud', 'thinkfirst'], from: st => ({ a: 'thinkloud', b: 'thinkfirst' }[st.answers.pace[0]] || null) },
+    { key: 'speed', ids: ['fast', 'slow'], from: st => st.answers.pace.every(v => v !== null) ? (score(st).code[0] === 'Q' ? 'fast' : 'slow') : null },
+    { key: 'lens', ids: ['bigpic', 'details'], from: st => ({ a: 'bigpic', b: 'details' }[st.answers.lens[2]] || null) },
+    { key: 'send', ids: ['direct', 'hint'], from: st => ({ a: 'direct', b: 'hint' }[st.answers.send[0]] || null) },
+    { key: 'plan', ids: ['plans', 'flow'], from: st => ({ a: 'flow', b: 'plans' }[st.answers.pace[2]] || null) }
+  ];
+  function partsGroup(id) { return FROM_PARTS.find(g => g.ids.indexOf(id) >= 0) || null; }
+  // older saves have no record of this: anything already picked in these groups was picked by hand, so it stays as it is
+  function ensureOwn(st) {
+    if (st.hp.own && typeof st.hp.own === 'object') return;
+    const w = st.hp.pick.wired || [];
+    st.hp.own = {}; FROM_PARTS.forEach(g => { if (g.ids.some(id => w.indexOf(id) >= 0)) st.hp.own[g.key] = true; });
+  }
+  function syncParts(st) {
+    ensureOwn(st);
+    FROM_PARTS.forEach(g => {
+      if (st.hp.own[g.key]) return;
+      const d = g.from(st), list = (st.hp.pick.wired || []).filter(id => g.ids.indexOf(id) < 0);
+      if (d) list.push(d);
+      st.hp.pick.wired = list;
+    });
+  }
   // connections you might not have noticed: every [step, choice] in `when` must be picked ('*' = anything in that step)
   const F = { ps: 'Psychology', ph: 'Philosophy', bs: 'Behavioral science', nb: 'Neurobiology', ec: 'Economics', bu: 'Business', fi: 'Finance', ht: 'Holistic practice', ar: 'The senses' };
   const PIL = { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'],
@@ -427,7 +455,7 @@
   /* ---------- state: on this device only, and only if you turn that on ---------- */
   function fresh() {
     return { v: 1, keep: false, step: 0, name: '', nts: [], otherText: '', answers: { pace: [null, null, null], lens: [null, null, null], send: [null, null, null], recv: [null, null, null] },
-      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0 }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false, their: null };
+      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0, own: {} }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false, their: null };
   }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
@@ -439,6 +467,8 @@
     const s = Object.assign(fresh(), o || {});
     s.answers = Object.assign(fresh().answers, s.answers || {});
     s.hp = Object.assign({ pick: {}, words: {}, at: 0 }, s.hp || {});
+    if (typeof s.hp.pick !== 'object' || !s.hp.pick) s.hp.pick = {};
+    ensureOwn(s);
     ['nts', 'chips', 'inputs', 'done'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
     if (typeof s.journal !== 'object' || !s.journal) s.journal = {};
     if (s.ch !== null && !CHAPTERS[s.ch]) s.ch = null;
@@ -469,6 +499,25 @@
     }
     return fresh();
   }
+  // Read-only, for the Wiring Card's "Fill from my Wavelength answers": the finished results already in this browser
+  // (this tab's copy first, then what's kept on this device), plus anyone else who took it here. Nothing is sent anywhere.
+  function cardSummary(st) {
+    if (!st || !codeDone(st)) return null;
+    const code = score(st).code, chips = {};
+    SECTIONS.forEach(sec => { if (sec.custom) return; chips[sec.id] = wordsOf(st, sec.id); });
+    return { name: cleanName(st.name), code: code, archetype: ARCHETYPES[code][0], nts: st.nts.slice(), answers: JSON.parse(JSON.stringify(st.answers)), chips: chips, statement: JSON.parse(JSON.stringify(st.hp.pick || {})) };
+  }
+  function savedResults() {
+    const out = [], read = raw => { try { const o = JSON.parse(raw || 'null'); return o && typeof o === 'object' ? tidy(o) : null; } catch (e) { return null; } };
+    const me = cardSummary(read(ssGet(TAB_KEY)) || read(lsGet(KEY)));
+    if (me) out.push(Object.assign({ main: true }, me));
+    let raw = ssGet(PEOPLE_TAB_KEY); if (raw == null) raw = lsGet(PEOPLE_KEY);
+    try { const a = JSON.parse(raw || '[]'); if (Array.isArray(a)) a.filter(o => o && typeof o === 'object').slice(0, MAX_OTHERS).forEach(o => { const r = cardSummary(tidy(o)); if (r) out.push(r); }); } catch (e) {}
+    return out;
+  }
+  window.TOLWavelengthData = { results: savedResults, archetype: c => validCode(c) ? ARCHETYPES[c][0] : '' };
+  if (!root) return;
+
   let S = loadState();
   // kept on this device only if ticked; always kept in this tab until it closes, so a reload never loses a result
   function save() { const j = JSON.stringify(S); if (S.keep) lsSet(KEY, j); else lsDel(KEY); ssSet(TAB_KEY, j); }
@@ -544,16 +593,17 @@
   ];
   function twoWays(code, scores) {
     const out = [];
-    TWO_WAYS.forEach(r => { if (code.indexOf(r[0]) >= 0 && hpPicked(r[1], r[2])) out.push('Your Wave Code says <strong>' + r[3] + '</strong>, and in your statement you picked “' + r[4] + '.” ' + r[5]); });
+    TWO_WAYS.forEach(r => { const g = partsGroup(r[2]); if (code.indexOf(r[0]) >= 0 && hpPicked(r[1], r[2]) && (!g || S.hp.own[g.key])) out.push('Your Wave Code says <strong>' + r[3] + '</strong>, and in your statement you picked “' + r[4] + '.” ' + r[5]); });
     scores.forEach((v, i) => { if (Math.abs(v) <= 1) { const a = LETTERS[AXES[i][0]], b = LETTERS[AXES[i][1]]; out.push('On ' + a.axis.toLowerCase() + ' you landed right in the middle, between <strong>' + a.name + '</strong> and <strong>' + b.name + '</strong>. You may switch between them depending on the day or the person.'); } });
     if (!out.length) return '';
     return '<div class="wl-sect wl-twoways"><h3>Where your answers point two ways</h3><p class="wl-small">That’s normal. People aren’t one thing all the time, and a mix often means you adjust to the moment. These are worth a second look, and you can change any answer.</p><ul class="wl-words">' + out.map(x => '<li>' + x + '</li>').join('') + '</ul></div>';
   }
-  function chosenWords(secId) {
+  function wordsOf(st, secId) {
     const sec = SECTIONS.find(s => s.id === secId), out = [];
-    Object.keys(sec.chips).forEach(bank => sec.chips[bank].forEach((c, i) => { if (S.chips.indexOf(secId + ':' + bank + ':' + i) >= 0) out.push(c[0]); }));
+    Object.keys(sec.chips).forEach(bank => sec.chips[bank].forEach((c, i) => { if (st.chips.indexOf(secId + ':' + bank + ':' + i) >= 0) out.push(c[0]); }));
     return out;
   }
+  function chosenWords(secId) { return wordsOf(S, secId); }
   function inputsLabel() { return S.inputs.map(id => IN[id]).filter(Boolean).map(x => x.name).join(', '); }
   function lean(s) { const a = Math.abs(s); return a >= 6 ? 'Strongly' : a >= 3 ? 'Mostly' : a >= 1 ? 'Leans' : 'Close call, leans'; }
 
@@ -606,7 +656,7 @@
     return '<label class="wl-keep"><input type="checkbox" data-keep id="' + id + '"' + (S.keep ? ' checked' : '') + '> Keep my answers and journal on this device, so I can come back to them</label>';
   }
   function render() {
-    save();
+    syncParts(S); save();
     if (S.view === 'incoming' && S.their) return renderIncoming();
     if (S.step === 0) return renderIntro();
     if (S.step === 1) return renderNT();
@@ -724,7 +774,7 @@
   }
 
   function renderInputs(sec) {
-    const fitFor = x => pickedBanks().filter(b => x.fit[b]).map(b => ({ adhd: 'ADHD', autistic: 'Autistic', dyslexic: 'Dyslexic', sensitive: 'highly sensitive' }[b]));
+    const fitFor = x => pickedBanks().filter(b => (INPUT_TAGS[b] || []).indexOf(x.id) >= 0).map(b => ({ adhd: 'ADHD', autistic: 'Autistic', dyslexic: 'Dyslexic', sensitive: 'highly sensitive' }[b]));
     const picked = INPUTS.filter(x => S.inputs.indexOf(x.id) >= 0);
     root.innerHTML =
       '<section class="wl-step">' + progress() + partLabel() +
@@ -758,6 +808,10 @@
   }
   function renderStatement(sec) {
     const at = Math.max(0, Math.min(STEPS.length - 1, S.hp.at || 0)), st = STEPS[at], ins = insights(), lines = sentences();
+    // in "How I'm wired", choices Parts 1 to 4 already answered are tucked away (and filled in) unless you change them
+    const tucked = id => { const g = st.id === 'wired' && partsGroup(id); return !!(g && !S.hp.own[g.key] && g.from(S)); };
+    const filled = st.id === 'wired' ? st.o.filter(o => tucked(o[0]) && hpPicked('wired', o[0])) : [];
+    const redo = st.id === 'wired' ? FROM_PARTS.filter(g => S.hp.own[g.key] && g.from(S)) : [];
     const dots = STEPS.map((x, i) => { const has = (S.hp.pick[x.id] || []).length || (S.hp.words[x.id] || '').trim(); return '<li class="' + (i === at ? 'is-now' : '') + (has ? ' is-done' : '') + '"><button type="button" data-hpgo="' + i + '" aria-label="Statement step ' + (i + 1) + ': ' + esc(x.t) + (i === at ? ' (you’re here)' : '') + '">' + (i + 1) + '</button></li>'; }).join('');
     root.innerHTML =
       '<section class="wl-step">' + progress() + partLabel() +
@@ -769,7 +823,9 @@
           '<p class="wl-steplabel">Statement step ' + (at + 1) + ' of ' + STEPS.length + '</p>' +
           '<h3 id="wl-hp-h">' + esc(st.t) + '</h3>' +
           '<p>' + esc(st.q) + (st.max ? '' : ' Pick as many as you like.') + '</p>' +
-          '<div class="wl-chips" role="group" aria-label="' + esc(st.t) + '">' + st.o.map(o => { const on = hpPicked(st.id, o[0]); return '<button type="button" class="wl-chip" data-hp="' + o[0] + '" aria-pressed="' + on + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+          (filled.length ? '<p class="wl-small wl-already"><strong>Already answered:</strong> ' + filled.map(o => esc(o[1])).join(' · ') + '. These come from your answers in Parts 1 to 4, so you don’t need to pick them again. <button type="button" class="wl-linkbtn" id="wl-hpown">Change</button></p>' : '') +
+          '<div class="wl-chips" role="group" aria-label="' + esc(st.t) + '">' + st.o.filter(o => !tucked(o[0])).map(o => { const on = hpPicked(st.id, o[0]); return '<button type="button" class="wl-chip" data-hp="' + o[0] + '" aria-pressed="' + on + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+          (redo.length ? '<p class="wl-small"><button type="button" class="wl-linkbtn" id="wl-hpauto">Fill these from my answers in Parts 1 to 4 again</button></p>' : '') +
           '<label class="wl-field" for="wl-own">In your own words (optional)</label>' +
           '<textarea id="wl-own" rows="2" maxlength="400" placeholder="Anything to add, in your own words…">' + esc(S.hp.words[st.id] || '') + '</textarea>' +
           '<div class="wl-nav">' + '<button type="button" class="wl-btn ghost" id="wl-hpprev">' + (at ? '← ' + esc(STEPS[at - 1].t) : 'Back') + '</button>' +
@@ -782,11 +838,14 @@
     const goHp = n => { S.hp.at = n; save(); render(); toTop('#wl-hp-h'); };
     $$('[data-hpgo]').forEach(b => { b.onclick = () => goHp(+b.dataset.hpgo); });
     $$('[data-hp]').forEach(b => { b.onclick = () => {
-      const id = b.dataset.hp, list = S.hp.pick[st.id] = S.hp.pick[st.id] || [], i = list.indexOf(id);
+      const id = b.dataset.hp, list = S.hp.pick[st.id] = S.hp.pick[st.id] || [], i = list.indexOf(id), g = st.id === 'wired' && partsGroup(id);
+      if (g) S.hp.own[g.key] = true;   // picked by hand: Parts 1 to 4 no longer fill this one in
       if (i >= 0) list.splice(i, 1); else { if (st.max && list.length >= st.max) list.shift(); list.push(id); }
       save(); redraw(() => renderStatement(sec), '[data-hp="' + id + '"]'); }; });
-    const own = $('#wl-own');
-    own.oninput = () => { S.hp.words[st.id] = own.value; save(); clearTimeout(root._t); root._t = setTimeout(() => { const l = $('#wl-live'); if (l) l.innerHTML = stmtCard(sentences()); }, 300); };
+    const own = $('#wl-hpown'); if (own) own.onclick = () => { FROM_PARTS.forEach(g => { if (g.from(S)) S.hp.own[g.key] = true; }); save(); redraw(() => renderStatement(sec), '#wl-hp-h'); };
+    const auto = $('#wl-hpauto'); if (auto) auto.onclick = () => { redo.forEach(g => { S.hp.own[g.key] = false; }); syncParts(S); save(); redraw(() => renderStatement(sec), '#wl-hp-h'); };
+    const ownWords = $('#wl-own');
+    ownWords.oninput = () => { S.hp.words[st.id] = ownWords.value; save(); clearTimeout(root._t); root._t = setTimeout(() => { const l = $('#wl-live'); if (l) l.innerHTML = stmtCard(sentences()); }, 300); };
     $('#wl-hpprev').onclick = () => { if (at) goHp(at - 1); else go(S.step - 1); };
     const hn = $('#wl-hpnext'); if (hn) hn.onclick = () => goHp(at + 1);
     const nx = $('#wl-next'); if (nx) nx.onclick = () => go(RESULTS);
@@ -815,6 +874,7 @@
 
   /* ---------- comparing two Wave Codes ---------- */
   const COUNT_WORDS = ['none', 'one', 'two', 'three', 'all four'];
+  const CMP_NEXT = 'Each of you makes a one-page card about what helps words reach you (it can start from your Wavelength answers), copies it and sends it to the other. Pasting each other’s shows your two cards side by side, with a bridge to try wherever they differ. It all stays on your own devices.';
   const CMP_FRAME = 'Different letters mean different defaults, not a bad match. Most couples and close pairs differ on at least one or two lines, and knowing where saves a lot of guessing.';
   function countLine(mine, theirs) {
     const same = AXES.filter((ax, i) => mine[i] === theirs[i]).length;
@@ -831,13 +891,15 @@
       '<p><strong>' + esc(n.me) + ': ' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '. <strong>' + esc(n.them) + ': ' + theirs + '</strong>, ' + lower(ARCHETYPES[theirs][0]) + '.</p>' +
       '<p>' + countLine(mine, theirs) + '</p>' +
       AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
+      '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your Wiring Cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
       '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-ccopy">Copy this comparison</button><button type="button" class="wl-btn ghost" id="wl-cdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-cprint">Print</button></div>' +
       '<p class="wl-toast" id="wl-ctoast" role="status"></p></div>';
   }
   function compareText(mine, theirs, myName, theirName) {
     const n = who2(myName, theirName);
     return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
-      .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i))).join('\n');
+      .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i)))
+      .concat(['', 'Next: make your Wiring Cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT]).join('\n');
   }
   function wireCompare(mine, theirs, myName, theirName) {
     const text = () => compareText(mine, theirs, myName, theirName) + '\n\nMade with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html';

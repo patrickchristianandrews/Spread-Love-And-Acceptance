@@ -4,7 +4,9 @@
    chimes, a bridge, a blossom tree... and each one plays along with the animals there. There are
    no streaks and nothing to keep up; "My garden" (/keepsakes.html) lists what has arrived.
    A new arrival is shown on the game's own finish card, or as a soft note, never as a second
-   pop-up on top of another. Everything is kept in this browser only. Nothing is sent anywhere. */
+   pop-up on top of another. On reading pages and tools a level is one small line in the page's own
+   flow (never floating over a result), and with Easy reading, Quiet mode, "Keep the page still" or
+   work mode on, nothing pops up at all. Everything is kept in this browser only. Nothing is sent anywhere. */
 (function () {
   'use strict';
   if (window.TOLRewards) return; // already loaded on this page
@@ -68,13 +70,18 @@
     }
     save();
     var res = { level: level(), unlocked: fresh, next: nextUnlock() };
-    // Quiet mode: progress is still kept, but nothing pops up about it
-    var hush = !!(window.TOLQuiet && window.TOLQuiet.on());
-    if (!opts.quiet && !fresh.length && !hush) toast(res, why);
+    // Quiet mode, Easy reading, "Keep the page still" and work mode: progress is still kept,
+    // but nothing pops up or slides in about it (My garden lists everything that has arrived)
+    var hush = hushed();
+    // A level from a reading page or a tool (come-back, learn-play): never a floating note on top of
+    // the page or a result. It is one small line in the flow, at the end of the "What you got from
+    // this" box or the end of the page. Only the games use the small floating line at the bottom.
+    var soft = source === 'learn-play' || source === 'come-back' || !!opts.soft;
+    if (!opts.quiet && !fresh.length && !hush) { if (soft) inlineNote(levelLine(res, why)); else toast(res, why); }
     if (fresh.length && !opts.noCard && !hush) {
-      // From a "Check yourself" card (learn-play): a small note that doesn't block the page, and
-      // it waits until the reader has finished with the card. The games keep the full card.
-      if (source === 'learn-play' || opts.soft) whenCalm(function () { unlockToast(fresh[0]); });
+      // From a "Check yourself" card (learn-play) or a tool: a small line that doesn't block the page,
+      // and it waits until the reader has finished with the card. The games keep the full card.
+      if (soft) whenCalm(function () { if (!hushed()) inlineNote(unlockLine(fresh[0])); });
       else setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
     }
     renderChips();
@@ -95,12 +102,13 @@
     if (css) return; css = true;
     var s = document.createElement('style');
     s.textContent =
-      '.tr-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;z-index:90;pointer-events:none;' +
-      'display:flex;align-items:center;gap:.55rem;padding:.55rem 1rem .55rem .7rem;border-radius:999px;background:rgba(255,252,246,.96);color:#3C3350;' +
-      'box-shadow:0 10px 30px rgba(60,40,90,.22);font:600 .95rem/1.2 Lora,Georgia,serif;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s;max-width:calc(100vw - 24px)}' +
+      '.tr-toast{position:fixed;left:50%;bottom:calc(6px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);opacity:0;z-index:90;pointer-events:none;' +
+      'display:flex;align-items:center;gap:.45rem;padding:.25rem .8rem .25rem .3rem;border-radius:999px;background:rgba(255,252,246,.94);color:#3C3350;' +
+      'box-shadow:0 4px 14px rgba(60,40,90,.16);font:600 .8rem/1.2 Lora,Georgia,serif;transition:transform .4s ease,opacity .4s;max-width:calc(100vw - 32px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
       '.tr-toast.is-in{transform:translate(-50%,0);opacity:1}' +
-      '.tr-toast b{display:inline-grid;place-items:center;min-width:2.1rem;height:2.1rem;padding:0 .4rem;border-radius:999px;background:linear-gradient(135deg,#F9D3DE,#F4C2D8);color:#7A3355;font:700 .95rem/1 "IBM Plex Mono",monospace}' +
-      '.tr-toast small{display:block;font:400 .78rem/1.3 Lora,Georgia,serif;color:#6A6152}' +
+      '.tr-toast b{display:inline-grid;place-items:center;min-width:1.5rem;height:1.5rem;padding:0 .3rem;border-radius:999px;background:linear-gradient(135deg,#F9D3DE,#F4C2D8);color:#7A3355;font:700 .78rem/1 "IBM Plex Mono",monospace}' +
+      '.tr-toast small{font:400 .75rem/1.2 Lora,Georgia,serif;color:#6A6152}' +
+      '.tr-line{margin:.7rem 0 0;font-size:.88rem;line-height:1.45;opacity:.9}.tr-line a{color:inherit}' +
       '.tr-toast .tr-bar{display:block;width:120px;height:5px;border-radius:5px;background:#EFE6F4;margin-top:4px;overflow:hidden}.tr-toast .tr-bar i{display:block;height:100%;background:linear-gradient(90deg,#F4A6B8,#C9A7E8);border-radius:5px;transition:width .8s}' +
       '.tr-card{position:fixed;inset:0;z-index:95;display:grid;place-items:center;padding:16px;background:rgba(46,38,60,.35);opacity:0;transition:opacity .35s}' +
       '.tr-card.is-in{opacity:1}.tr-card-box{position:relative;max-width:22rem;width:100%;text-align:center;padding:1.6rem 1.3rem 1.2rem;border-radius:26px;background:linear-gradient(160deg,#FFF8EE,#F6EEF8 60%,#EEF4FA);box-shadow:0 20px 60px rgba(40,30,70,.35);transform:scale(.85);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}' +
@@ -117,21 +125,49 @@
       '@media (prefers-reduced-motion:reduce){.tr-toast,.tr-card,.tr-card-box{transition:none}.tr-card-art,.tr-confetti span{animation:none}}';
     document.head.appendChild(s);
   }
+  // Easy reading, Quiet mode, "Keep the page still" or work mode: the page promises to stay still
+  function hushed() {
+    if (typeof document === 'undefined') return true;
+    var h = document.documentElement.classList;
+    if (h.contains('tol-easy') || h.contains('tol-still') || h.contains('tol-work') || h.contains('tol-quiet')) return true;
+    if (window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()) return true;
+    try { if (localStorage.getItem('tol-easy') === '1' || localStorage.getItem('tol-quiet') === '1') return true; } catch (e) {}
+    return false;
+  }
+  function levelLine(res, why) {
+    return '✨ ' + esc(why || 'Level done') + '. ' + (res.next ? 'Level ' + res.level + ': something new is on its way to <a href="/keepsakes.html">your garden</a>.' : 'Everything has arrived in <a href="/keepsakes.html">your garden</a>. Thank you.');
+  }
+  function unlockLine(u) {
+    return '<span aria-hidden="true">' + esc(u.icon || '🌸') + '</span> Something new in <a href="/keepsakes.html">your garden</a>: ' + esc(u.name) + '. Look behind the page to find it.';
+  }
+  // One small line in the page's own flow, so it never covers anything: inside the last
+  // "What you got from this" box if there is one, otherwise at the end of the main content.
+  function inlineNote(html) {
+    if (typeof document === 'undefined' || !document.body) return;
+    style();
+    var ends = document.querySelectorAll('.cb-end');
+    var host = ends.length ? ends[ends.length - 1] : (document.querySelector('main') || document.body);
+    var p = null;
+    for (var i = 0; i < host.children.length; i++) if (host.children[i].classList.contains('tr-line')) p = host.children[i];
+    if (!p) { p = document.createElement('p'); p.className = 'tr-line'; p.setAttribute('role', 'status'); host.appendChild(p); }
+    p.innerHTML = html;
+  }
   var toastEl = null, toastTimer = null;
   function toast(res, why) {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined' || hushed()) return;
     style();
     if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'tr-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
     var pct = Math.round((S.lv - S.lastAt) / Math.max(1, S.nextAt - S.lastAt) * 100);
     toastEl.innerHTML = '<b>' + res.level + '</b><span>✨ ' + esc(why || 'Level done') +
-      '<small>' + (res.next ? 'Something new is on its way to the background' : 'Everything has arrived. Thank you for playing.') + '</small><span class="tr-bar"><i style="width:' + Math.max(6, pct) + '%"></i></span></span>';
+      ' <small>' + (res.next ? 'Something new is on its way to the background' : 'Everything has arrived. Thank you for playing.') + '</small></span>';
+    toastEl.setAttribute('aria-label', 'Level ' + res.level + ', ' + Math.max(0, Math.min(100, pct)) + '% of the way to the next arrival');
     requestAnimationFrame(function () { toastEl.classList.add('is-in'); });
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('is-in'); }, 3200);
   }
   // A quiet unlock note for reading pages: the same soft toast, no dialog, nothing to close.
   function unlockToast(u) {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined' || hushed()) return;
     style();
     if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'tr-toast'; toastEl.setAttribute('role', 'status'); document.body.appendChild(toastEl); }
     toastEl.innerHTML = '<b aria-hidden="true">' + esc(u.icon || '🌸') + '</b><span>Something new in the garden: ' + esc(u.name) +
@@ -169,7 +205,7 @@
     });
   }
   function unlockCard(u) {
-    if (cardOpen || typeof document === 'undefined') return;
+    if (cardOpen || typeof document === 'undefined' || hushed()) return;
     if (otherDialog()) { unlockToast(u); return; }
     style(); cardOpen = true;
     var what = 'Level ' + level() + ' · something new in the background';

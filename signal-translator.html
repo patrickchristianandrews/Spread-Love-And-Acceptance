@@ -328,6 +328,10 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .verdict .vlvl{font-family:var(--display);font-size:1.35rem;font-weight:600;margin:0 0 6px}
 .verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:#3E6B48}
 .verdict .vfound{margin:0 0 10px;font-size:.95rem}
+.verdict .vplain{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.35;margin:0 0 10px;padding:8px 12px;border-radius:8px;border-left:4px solid #3E6B48;background:rgba(62,107,72,.09);overflow-wrap:anywhere}
+.verdict .vplain.v-hurt{border-left-color:#8A6116;background:rgba(138,97,22,.10)}.verdict .vplain.v-fight{border-left-color:#9A3B2E;background:rgba(154,59,46,.09)}
+.gloss{font-weight:400;font-style:normal;color:var(--muted)}
+.verdict .vlvl .gloss{display:block;font-family:inherit;font-size:.9rem;font-weight:400;margin-top:2px}
 .verdict .vwarn{margin:0 0 10px;padding:8px 12px;border-left:4px solid #9A3B2E;background:rgba(154,59,46,.08);border-radius:0 8px 8px 0;font-size:.95rem;overflow-wrap:anywhere}
 .verdict .vbest{font-family:var(--display);font-size:1.12rem;line-height:1.5;margin:4px 0 10px;padding:10px 12px;border-left:4px solid var(--b);background:#fff;border-radius:0 8px 8px 0;overflow-wrap:anywhere}
 .verdict .readas,.verdict .literal{font-size:.9rem;margin:6px 0 0}
@@ -377,7 +381,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 <a class="skip" href="#phrase">Jump to your sentence</a>
 <div class="wrap">
   <div class="sitebar">
-    <a class="mark" href="index.html">The Objective Ledger<small>TOOLS</small></a>
+    <a class="mark" href="index.html">Spread Love &amp; Acceptance</a>
     <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
   </div>
 
@@ -426,7 +430,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 
 
     <details class="fine" id="fine">
-      <summary>Fine-tune (optional): who it's for, the channel, and the listener's wiring if you know it</summary>
+      <summary>Fine-tune (optional): who it's for, the channel, and the listener's wiring (how their brain works, like ADHD or autism) if you know it</summary>
       <div class="fine-b">
     <div class="quick" style="margin-top:6px;padding-top:0;border-top:0">
       <div class="field">
@@ -929,7 +933,7 @@ function fillSelect(id, list, neutral){
    Neurotypical clears the neurodivergent picks, and the other way round. */
 function buildWiring(who){
   const host = document.querySelector('[data-wiring="'+who+'"]');
-  const lab = who==="B" ? "Listener's wiring (only if you know it)" : "Your wiring (the speaker)";
+  const lab = who==="B" ? "Listener's wiring: how their brain works (only if you know it)" : "Your wiring: how your brain works (the speaker)";
   const opts = '<option value="">'+(who==="B" ? "Don't know, or not shared: skip" : "Not sure / skip")+'</option>'+WIRING_IDS.map(id=>'<option value="'+id+'">'+esc(NT[id].name)+'</option>').join("");
   host.innerHTML = [0,1,2].map(i=>'<div class="wrow'+(i?' extra':'')+'"'+(i?' hidden':'')+'><label for="w'+who+i+'">'+(i?'Also':lab)+'</label><select id="w'+who+i+'" data-who="'+who+'">'+opts+'</select></div>').join("")
     +'<button type="button" class="linkbtn" id="add'+who+'">+ Add another</button><p class="picked" id="picked'+who+'" aria-live="polite"></p>'
@@ -1661,6 +1665,19 @@ function quoteWords(list){
   return (list||[]).filter(w=>w && !seen.has(w.toLowerCase()) && seen.add(w.toLowerCase())).slice(0,4).map(w=>'<q class="w">'+esc(String(w).replace(/[.,;:]+$/,""))+'</q>').join(" ");
 }
 const WIRING_SHORT = id=>NT[id] ? NT[id].short : id;
+/* A pattern's heading, in words. A safety worry names its thing in the title ("A safety worry about the stove,
+   with no plan for next time"), so no stray quoted word is tacked on after it. */
+const OWN_TITLE = ["safeask","safety"];
+let lastAn = null;   // the analysis on screen, so a safety title can name its thing
+function fTitle(id, ws){ return E.title ? E.title(id, ws, lastAn) : (FBY[id] ? FBY[id].name : id); }
+/* the label's plain meaning, for a reader in a second language: "Absolute or generalization (words like "always" and "never")" */
+function fGloss(id){ const g = E.gloss ? E.gloss(id) : ""; return g ? ' <span class="gloss">('+esc(g)+')</span>' : ""; }
+function fLabel(id, ws, tag){
+  const t = tag||"b";
+  return '<'+t+(t==="span"?' class="fname"':'')+'>'+esc(fTitle(id, ws))+'</'+t+'>'+(ws && ws.length && !OWN_TITLE.includes(id) && !["multi","long","questions","nowhen"].includes(id) ? ' '+quoteWords(ws) : '')+fGloss(id);
+}
+/* the static level in plain words */
+const LVL_PLAIN = {clear:"It will likely be understood the way you mean it.", some:"\u201cStatic\u201d means parts that may get in the way of what you mean.", heavy:"\u201cStatic\u201d means parts that may get in the way of what you mean. Here, a lot may."};
 
 function run(){
   const text=$("#phrase").value.trim();
@@ -1673,6 +1690,7 @@ function run(){
   const A=nm("A"), B=nm("B");
   const an = E.analyze(text, {channel});
   const found = an.found, spans = an.spans, words = an.words;
+  lastAn = an;
   const fids = Object.keys(found);
   const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
   const general = !sel.B.size;
@@ -1708,7 +1726,7 @@ function run(){
     p1 += '<h3>What may add static</h3><ol class="finds">'+staticIds.map(id=>{
       const f=FBY[id];
       const ws = id==="multi" ? found.multi : (found[id]||[]).filter(Boolean);
-      return '<li><span class="fname">'+esc(f.name)+'</span>'+(ws.length&&!["long","questions","nowhen"].includes(id)?' '+quoteWords(ws):'')+'<p>'+esc(f.what||"")+'</p><p class="small"><b>Try:</b> '+esc(f.fix)+'</p></li>';
+      return '<li>'+fLabel(id, ws, "span")+'<p>'+esc(f.what||"")+'</p><p class="small"><b>Try:</b> '+esc(f.fix)+'</p></li>';
     }).join("")+'</ol>';
   } else {
     p1 += '<p>No known trouble spots in the structure. Tone, timing and history can still add static the words don\'t show.</p>';
@@ -1716,7 +1734,7 @@ function run(){
   if(goodIds.length){
     p1 += '<h3>Worth keeping</h3><ul class="keeps">'+goodIds.map(id=>{
       const f=FBY[id]; const ws=(found[id]||[]).filter(Boolean);
-      return '<li><span class="fname">'+esc(f.name)+'</span> '+quoteWords(ws)+'<span class="small"> '+esc(f.what)+'</span></li>';
+      return '<li><span class="fname">'+esc(fTitle(id, ws))+'</span> '+(OWN_TITLE.includes(id)?'':quoteWords(ws))+'<span class="small"> '+esc(f.what)+'</span></li>';
     }).join("")+'</ul>';
   }
 
@@ -1727,12 +1745,12 @@ function run(){
   if(strongest.length) whyBits.push("Loudest"+(general?"":" for "+WIRING_SHORT(strongest[0].b))+": "+FBY[strongest[0].fid].name.toLowerCase()+".");
   if(bstate!=="v") whyBits.push(B+" is "+STATE_NOTE[bstate][0].toLowerCase()+", which makes everything land harder.");
   let p2 = '<div class="meter"><span class="lvl lvl-'+lvl[0]+'">'+lvl[1]+'</span><div class="track" role="img" aria-label="Static level: '+lvl[1]+'"><div class="fill lvl-'+lvl[0]+'" data-w="'+pct+'"></div></div><p class="why">'+esc(whyBits.join(" "))+'</p></div>';
-  p2 += '<p class="small">Each reading is a <i>may</i>. People vary widely inside every wiring, and only '+esc(B)+' knows how it actually landed.</p>';
+  p2 += '<p class="small">\u201cStatic\u201d means parts that may get in the way of what you mean. Each reading is a <i>may</i>. People vary widely inside every wiring, and only '+esc(B)+' knows how it actually landed.</p>';
   Bids.forEach(b=>{
     const list=perB[b]||[];
     p2+='<div class="receiver"><h4>'+(b==="general" ? 'For most listeners (wiring not chosen)' : 'If '+esc(B)+' is '+esc(WIRING_SHORT(b)))+'</h4>';
     if(list.length){
-      p2+='<ul class="land">'+list.slice(0,7).map(e=>'<li class="w'+e.w+'"><span class="fx">'+esc(e.name.toUpperCase())+(e.words&&e.words.length&&!["multi","long","questions","nowhen"].includes(e.fid)?' &middot; &ldquo;'+esc(e.words[0])+'&rdquo;':'')+(e.w===0?' &middot; LIKELY LANDS AS MEANT':e.w===3?' &middot; HEAVY STATIC':e.w===2?' &middot; SOME STATIC':'')+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
+      p2+='<ul class="land">'+list.slice(0,7).map(e=>'<li class="w'+e.w+'"><span class="fx">'+esc((OWN_TITLE.includes(e.fid)?fTitle(e.fid, e.words):e.name).toUpperCase())+(e.words&&e.words.length&&!["multi","long","questions","nowhen"].includes(e.fid)&&!OWN_TITLE.includes(e.fid)?' &middot; &ldquo;'+esc(e.words[0])+'&rdquo;':'')+(e.w===0?' &middot; LIKELY LANDS AS MEANT':e.w===3?' &middot; HEAVY STATIC':e.w===2?' &middot; SOME STATIC':'')+'</span><span class="heard">&ldquo;'+esc(e.h)+'&rdquo;</span><span class="y">'+esc(e.y)+'</span></li>').join("")+'</ul>';
     } else {
       p2+='<p class="small">Nothing in these words is a known trouble spot for this wiring. '+esc(NT[b].sum)+'</p>';
     }
@@ -1743,8 +1761,8 @@ function run(){
   combos(sel.B,"B").forEach(c=>{ p2+='<div class="receiver"><h4>'+esc(c[0])+'</h4><p class="small">'+esc(c[1])+'</p></div>'; });
   if(channel==="group") p2+='<p class="small"><b>Many listeners:</b> in a group channel, everyone reads it, and each person hears it through their own wiring. A correction or a nudge can land as a public call-out. Keep the group message to the facts and the ask, and send anything about one person to them privately.</p>';
   else if(channel==="chat") p2+='<p class="small"><b>Work chat:</b> short messages get read fast, between other things. Put the topic, the ask and the time in the first line.</p>';
-  if(stateKnown) p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>';
-  else p2+='<p class="small" style="margin-top:12px">This assumes '+esc(B)+' is settled. If they are stressed or worn out, the same words land harder. You can set their state under Fine-tune. <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>.</p>';
+  if(stateKnown) p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Read your state first</a> (Pillar III of the Five Pillars).</p>';
+  else p2+='<p class="small" style="margin-top:12px">This assumes '+esc(B)+' is settled. If they are stressed or worn out, the same words land harder. You can set their state under Fine-tune. <a href="five-pillars.html#read-your-state">Read your state first</a> (Pillar III of the Five Pillars).</p>';
 
   /* ---------- 3. what changed ---------- */
   let p3 = '';
@@ -1765,7 +1783,7 @@ function run(){
   /* ---------- 4. what A may have meant ---------- */
   let p4='';
   if(!Aids.length){
-    p4+='<p class="small">Pick '+esc(poss(A))+' wiring under Fine-tune to see how it might shape what '+(A==="You"?"you":"they")+' meant.</p>';
+    p4+='<p class="small">Pick '+esc(poss(A))+' wiring (how '+(A==="You"?"your":"their")+' brain works, like ADHD or autism) under Fine-tune to see how it might shape what '+(A==="You"?"you":"they")+' meant.</p>';
   } else {
     Aids.forEach(a=>{
       const notes=[]; fids.forEach(fid=>{ const m=NT[a].meant&&NT[a].meant[fid]; if(m && !notes.includes(m)) notes.push(m); });
@@ -1797,7 +1815,7 @@ function run(){
       srcKeys.push("nasDE","crompton","nature25");
     }
   } else {
-    p6+='<p class="small">Pick '+esc(poss(A))+' wiring under Fine-tune too, and this shows how the static runs both ways.</p>';
+    p6+='<p class="small">Pick '+esc(poss(A))+' wiring (how '+(A==="You"?"your":"their")+' brain works) under Fine-tune too, and this shows how misunderstandings can run both ways.</p>';
   }
   Bids.concat(Aids).forEach(id=>srcKeys=srcKeys.concat((NT[id]&&NT[id].src)||[]));
   if(sel.B.has("autistic")&&sel.B.has("adhd")) srcKeys.push("autistica");
@@ -1840,11 +1858,13 @@ function run(){
   // the verdict first: how it may land, what was found (with the words), and the clearest way to say it
   const HOTF = ["swear","hostile","label","contempt","threat"];
   const foundList = staticIds.filter(id=>!["nowhen","long","period"].includes(id)).sort((a,b)=>(HOTF.includes(b)-HOTF.includes(a))).slice(0,4).map(id=>{
-    const ws=(found[id]||[]).filter(Boolean); return '<b>'+esc(FBY[id].name)+'</b>'+(ws.length&&!["multi","questions"].includes(id)?' '+quoteWords(ws.slice(0,2)):'');
+    const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0,2));
   });
-  let vtop='<div class="verdict" id="verdict"><p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
-  vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'</p>';
-  vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(FBY[staticIds[0]].name.toLowerCase())+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
+  // one plain line first, for anyone who just wants to know: is my sentence okay?
+  const plain = E.verdict ? E.verdict(an, sc, rw) : null;
+  let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
+  vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'<span class="gloss">'+esc(/little/i.test(lvl[1]) ? "One small part may get in the way of what you mean." : LVL_PLAIN[lvl[0]]||"")+'</span></p>';
+  vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(fTitle(staticIds[0], found[staticIds[0]]).toLowerCase())+fGloss(staticIds[0])+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
   if(found.legal || found.kidsfirst){
     vtop+='<p class="vwarn"><b>Likely to escalate.</b> '+(found.legal?'A threat about court, a lawyer or custody':'Telling the children first')+(found.legal&&found.kidsfirst?', and telling the children first,':'')+' usually turns a disagreement into a fight about the kids. The versions below leave '+(found.legal&&found.kidsfirst?'them':'it')+' out.'+(relId==="coparent"?' Between co-parents, messages like this are often saved and shown later. If there is a real legal step, take it through the proper channel. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.':'')+'</p>';
   }
@@ -1864,7 +1884,7 @@ function run(){
   sum+='<div class="rhead"><h2 id="rTitle">The takeaway</h2>'+pairLine+'</div>';
   sum+='<div class="tk-heard"><span class="tk-k">HOW IT MAY BE HEARD'+(top?(top.b==="general"?' &middot; BY MOST LISTENERS':' &middot; IF '+esc(B.toUpperCase())+' IS '+esc(WIRING_SHORT(top.b).toUpperCase())):'')+'</span><p class="quote">&ldquo;'+esc(perceived)+'&rdquo;</p><p class="small"><b>Why:</b> '+esc(heardWhy)+'</p>';
   if(heard.length>1) sum+='<p class="small"><b>Also possible:</b> '+heard.slice(1).map(e=>'&ldquo;'+esc(e.h)+'&rdquo; ('+esc(FBY[e.fid].name.toLowerCase())+')').join(" &middot; ")+'</p>';
-  sum+='<p class="small">That uses '+(general?'a general reading':esc(B)+'\'s wiring')+' and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.'+(general?' Pick the listener\'s wiring above to sharpen it.':'')+'</p></div>';
+  sum+='<p class="small">That uses '+(general?'a general reading':esc(B)+'\'s wiring')+' and the conditions you set: '+esc(cond.join(", "))+'. It is a may, not a verdict.'+(general?' If you know how the listener\'s brain works (their wiring, like ADHD or autism), pick it under Fine-tune to sharpen it.':'')+'</p></div>';
   const askBits=[];
   if(an.asks.length) askBits.push('<span><b>The ask:</b> &ldquo;'+esc(an.asks[0].text)+'&rdquo;</span>');
   if(an.asks.length) askBits.push('<span><b>When:</b> '+(an.missing.when?'missing':'given')+'</span>');
@@ -1885,9 +1905,9 @@ function run(){
   h += '<div id="chg"></div>'+drop("What changed in the rewrite, and why", rw.changes.length ? rw.changes.length+" change"+(rw.changes.length>1?"s":"") : "no changes", p3, true, true);
   if($("#facts").value.trim()) h += drop("The facts, kept separate", "", factsHTML($("#facts").value.trim(), found, A, B), false, false);
   if($("#reply").value.trim()) h += drop("What "+esc(B)+" said back", "", replyHTML($("#reply").value.trim(), A, B, found, text), true, false);
-  h += drop("What "+esc(A)+" may have meant", Aids.length?"":"pick "+poss(A)+" wiring", p4, false, false);
+  h += drop("What "+esc(A)+" may have meant", Aids.length?"":"optional", p4, false, false);
   h += drop("In this relationship", relName||"optional", dynHTML(relId, found, A, B, staticIds), false, false);
-  h += drop("The room, and what each of you needs", "Pillar III", settleHTML(A, B), false, false);
+  h += drop("The room, and what each of you needs", "calming down first", settleHTML(A, B), false, false);
   h += drop(general ? "Writing for most listeners, and checking back" : "Speaking to "+esc(B)+"'s wiring, and checking back", "", p5, false, false);
   h += drop("The static runs both ways, and sources", "", p6, false, false);
   h += '<p class="small pillars">This tool is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>: know how you send, and translate across wiring so the message you meant is the one that arrives. Stuck on the wording? <a href="ask.html">Ask Professor Puddles</a>.</p>';
@@ -1979,7 +1999,10 @@ function runReceived(text){
   const an = E.analyze(text, {channel});
   const rv = fitReceived(an, E.receive(an));
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
-  h += '<div class="verdict recv" id="verdict"><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>';
+  const recvPlain = rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
+    : (rv.found && rv.found.length) ? ["hurt","This may sound harsher than they meant. Here are kinder ways to read it."]
+    : ["ok","This looks okay. Nothing here needs decoding."];
+  h += '<div class="verdict recv" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>';
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
   if(rv.crossed) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'

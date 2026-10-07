@@ -109,13 +109,27 @@
         ['/signal-translator.html?use=work','The message checker','Test an email or chat message before you send it.'],
         ['/appreciation-at-work.html','Appreciation at work','Thanks that fits the person, without anything awkward.']
       ]},
-    { id:'grief', ico:'\uD83D\uDD4A', label:'I\u2019m grieving, or life has changed a lot',
-      say:'Loss, a parent who needs more care, a quiet house, retirement, a new chapter: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
+    { id:'grief', ico:'\uD83D\uDD4A', label:'Just retired, a loss, or a big life change',
+      say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
       picks:[
-        ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
         ['/retired-together.html','Retired and both home now','Sharing the house all day, handing over whole jobs, and finding your feet after work.'],
+        ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
+      ]},
+    { id:'family-duty', ico:'\uD83C\uDF0D', label:'Family back home, money and in-laws',
+      say:'Supporting parents, sending money home, long visits from family: in many families these are duties, not habits. They go better when the two of you plan them together, so neither of you feels judged or shut out.',
+      picks:[
+        ['/family-obligations.html','Supporting family: parents, money home and duty','Agree a monthly amount, save alongside it, and each lead with your own family.'],
+        ['/library/conflict.html','Disagreeing about family and in-laws','Even-handed: loyalty to a parent is not disloyalty to a partner.'],
+        ['/lemonade-stand.html#money','Put the money in the Lemonade Stand','Family support as an agreed amount, never a debt between you.']
+      ]},
+    { id:'apart', ico:'\u2708\uFE0F', label:'We live apart or far away',
+      say:'Distance makes small things heavier: a short text reads colder than it was meant, and who calls whom can turn into a scorecard. A few agreements make it lighter.',
+      picks:[
+        ['/long-distance.html','Long-distance and apart','Call rhythm, time zones, video check-ins and reading short texts.'],
+        ['/turning-toward.html','Turning toward','Small moments you can send to their phone in one tap.'],
+        ['/signal-translator.html','The Signal Translator','Check how a short text might land, before you guess.']
       ]},
     { id:'keep-good', ico:'\uD83C\uDF31', label:'We\u2019re okay, but it feels a bit flat',
       say:'Nothing is wrong, and that\u2019s worth protecting. When things feel flat, small regular moments of attention bring the warmth back, without turning it into a problem to solve.',

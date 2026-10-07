@@ -288,10 +288,10 @@
         "Let’s make it easier."
       ],
       "how": [
-        "Most pages have a Simple version. Look for 🌱 Simple version near the top: the main idea in a few short cards.",
-        "Long pages have an 📌 In short box at the top, and a “Show me only the steps” button that hides everything but the steps.",
-        "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines.",
-        "Say “make it shorter”, and I’ll keep my answers short for the rest of this chat."
+        "Say “easy words” or “simple English”, and I’ll answer in short sentences with everyday words for the rest of this chat.",
+        "Many guides have a 🌱 Simple version near the top, and long ones have a 📌 In short box and a “Show me only the steps” button.",
+        "Easy reading, in Settings at the top of the page, uses a clearer font, more space and shorter lines. “Listen to this page” reads it aloud.",
+        "Say “make it shorter”, and I’ll keep my answers short."
       ],
       "links": [
         [
@@ -383,6 +383,235 @@
       ]
     },
     {
+      "id": "longstay",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a parent coming to stay for a long time",
+      "pat": "\\b(mother|mum|mom|father|dad|parents?|in ?laws?|mother in law|father in law|grandma|grandmother|grandpa|auntie|aunt|uncle)\\b.{0,40}\\b(come|coming|stay|staying|visit|visiting|live|living|move in|moving in)\\b.{0,40}\\b(months?|weeks|long time|long stay|a while|half a year|year)\\b",
+      "keys": [],
+      "what": [
+        "In many families, a parent coming to stay for weeks or months is normal and loving. It still changes daily life for both of you, so agree it together before anyone says yes."
+      ],
+      "how": [
+        "Agree the length, the help you’d welcome (childcare, cooking) and what stays the same (your bedroom, a quiet evening each week).",
+        "Each of you speaks to your own family, as “we”.",
+        "Plan a little time to yourselves during the stay, and check in once a week about how it’s going."
+      ],
+      "script": [
+        "My mother would like to come for three months. Before I say yes, can we talk about what that would mean for you?",
+        "I want your mum to feel welcome. Can we agree how long, and how we each get a little time to ourselves?"
+      ],
+      "scriptLabels": [
+        "If it’s your parent",
+        "If it’s your partner’s parent"
+      ],
+      "plain": [
+        "A long visit from a parent can be normal and loving.",
+        "Agree it together before you say yes.",
+        "Agree how long, and what help is welcome.",
+        "Keep some time for the two of you."
+      ],
+      "links": [
+        [
+          "Visits, long stays and elders",
+          "/family-obligations.html#visits"
+        ],
+        [
+          "In-laws and extended family",
+          "/library/life.html#in-laws"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "ndcouple",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a couple who are wired differently",
+      "pat": "\\b(adhd|autistic|autism|audhd|dyslexic|neurodivergent)\\b.{0,60}\\b(gf|bf|girlfriend|boyfriend|partner|wife|husband|spouse)\\b.{0,30}\\b(adhd|autistic|autism|audhd|dyslexic|neurodivergent)\\b|\\b(couples?|relationships?) like (us|ours)\\b.{0,40}\\b(adhd|autis\\w*)\\b|\\b(adhd|autis\\w*)\\b.{0,60}\\bcouples? like us\\b|\\b(one of us|i m|im|i am) (is )?(adhd|autistic)\\b.{0,40}\\b(other|she|he|they|partner)\\b.{0,20}\\b(is )?(adhd|autistic|neurotypical)\\b",
+      "keys": [],
+      "what": [
+        "Yes, there’s a guide for exactly this: couples where one or both of you are ADHD, autistic or wired another way. It gives each of you your own list of what you can adjust, so neither of you is the project."
+      ],
+      "how": [
+        "Read “Neurodivergent relationships” together: there’s a part for the ADHD partner, one for the autistic partner, and a shared setup for the home.",
+        "Each find your Wave Code on Wavelength and compare them with a share link.",
+        "Make Wiring Cards and paste each other’s to see each difference with a bridge to try."
+      ],
+      "plain": [
+        "Your wiring is different. Nobody is broken.",
+        "Each of you can change a few small things.",
+        "Write down your plans and jobs.",
+        "Compare your Wave Codes and Wiring Cards."
+      ],
+      "links": [
+        [
+          "Neurodivergent relationships: ADHD and autistic couples",
+          "/neurodivergent-relationships.html"
+        ],
+        [
+          "Find your Wavelength",
+          "/wavelength.html"
+        ],
+        [
+          "Wiring Card",
+          "/wiring-card.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "sharelist",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "both seeing the same list",
+      "pat": "\\b(both|each of us|me and my \\w+|my \\w+ and i|we both)\\b.{0,30}\\b(see|have|use|get|open)\\b.{0,20}\\b(the )?same (chore |job |jobs |todo |to do )?(list|chart|plan)\\b|\\bshare (the|our|a|this) (chore |job )?(list|chart)\\b|\\b(chore |job )?(list|chart)\\b.{0,30}\\b(on (her|his|their|my|both) phones?|on two (phones|devices))\\b",
+      "keys": [],
+      "what": [
+        "Yes. Make the list once, then send it: each tool has a way to pass it to the other phone, and nothing is stored on a server."
+      ],
+      "how": [
+        "Lemonade Stand: “Send my side to my partner” gives a code or file; they tap “Add my partner’s side”.",
+        "One owner per job (WP-03): “Save draft” and send the file, or download the PDF for the fridge. On their phone, open the same page and choose Open.",
+        "Want it on paper? Print the chore chart and stick it on the fridge."
+      ],
+      "plain": [
+        "Make the list once.",
+        "Send it to your partner as a code or a file.",
+        "They open it on their phone.",
+        "Or print it for the fridge."
+      ],
+      "links": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ],
+        [
+          "A fair chore chart",
+          "/chore-chart-for-couples.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "handover",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "one of you redoes the other's jobs",
+      "pat": "\\b(redoes|re does|redo|redoing|re-does) (everything|what|the|my|it|things)\\b|\\b(does|did) it (all )?again after (me|i)\\b|\\b(criticis\\w*|correct\\w*|complain\\w*) (how|the way) i (do|load|fold|clean|cook|wash)\\b|\\bnever (good enough|right) (when|the way) i\\b|\\b(i|we) (can t|cant) do (anything|it) (right|the way (she|he|they) want\\w*)\\b",
+      "keys": [],
+      "what": [
+        "This is one of the most common snags when a job changes hands. The person who always did it has a way that works for them; the new owner does it differently. Both are trying."
+      ],
+      "how": [
+        "Agree together what “done” means for the job (the dishes are clean and put away by 9), not how to do it.",
+        "Then the new owner does it their way, start to finish. Redoing it quietly hands the job back.",
+        "If something truly matters (a safety thing, a fragile item), say it once, kindly, before, not after."
+      ],
+      "script": [
+        "Can we agree what “done” looks like for this one? Then I’ll do it my way, start to finish.",
+        "You’re right, it’s yours now. I’ll tell you the one thing that really matters to me, then I’ll leave it with you."
+      ],
+      "scriptLabels": [
+        "If you’re taking the job on",
+        "If you used to do it"
+      ],
+      "plain": [
+        "Agree what “done” means.",
+        "Then the new person does it their way.",
+        "Don’t redo it."
+      ],
+      "links": [
+        [
+          "Handing over a job without “you’re doing it wrong”",
+          "/retired-together.html#handover"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "paidwork",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "how paid work counts in the split",
+      "pat": "\\b(work|working|i work) (full ?time|40 hours|long hours|all day)\\b.{0,60}\\b(count|counted|fair|split|share|does everything|do everything)\\b|\\b(she|he|they|my \\w+) (says|thinks) (she|he|they) (does|do) everything\\b.{0,40}\\b(work|job)\\b|\\b(maternity|paternity|parental) leave\\b.{0,60}\\b(fair|split|share)\\b|\\b(fair|split|share)\\b.{0,40}\\b(maternity|paternity|parental) leave\\b|\\bhow (is|does) (paid work|my job|work) (count|counted|fit)\\b|\\bsplit night (feeds|shifts)\\b|\\bnight feeds\\b.{0,40}\\b(fair|split|works? full ?time)\\b",
+      "keys": [],
+      "what": [
+        "Paid work is real work, and so is the work at home. The Lemonade Stand keeps them apart on purpose, so neither cancels the other out, and then lets you agree a split that fits your week."
+      ],
+      "how": [
+        "Each of you lists your own week, including paid work and travel. The stand shows paid hours next to the home split.",
+        "If paid hours differ a lot, agree a split rather than 50/50. The stand can suggest one from your paid hours.",
+        "With a baby, split the nights in blocks (for example 9pm to 2am, 2am to 7am), and count night feeds inside on-call time, not on top of it."
+      ],
+      "script": [
+        "I know your job is real work too. Can we look at the whole week, home and paid, and agree a split we both think is fair?"
+      ],
+      "plain": [
+        "Paid work is real work. Home work is real work too.",
+        "Write down both.",
+        "Agree a fair split together. It does not have to be 50/50.",
+        "With a baby, share the night in blocks."
+      ],
+      "links": [
+        [
+          "The Lemonade Stand: who does what",
+          "/lemonade-stand.html"
+        ],
+        [
+          "New baby, sharing the load",
+          "/new-parent.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "disagreenumbers",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "we disagree about the numbers",
+      "pat": "\\b(disagree|don t agree|dont agree|argue|arguing) (about|on|over) (the |our )?(numbers|hours|split|minutes|results?)\\b|\\b(her|his|their|my \\w+ s) numbers? (are|is) (wrong|different|off|too high|too low)\\b",
+      "keys": [],
+      "what": [
+        "That’s normal: people remember their own work better than the other person’s. The numbers are a starting point for a talk, not a verdict."
+      ],
+      "how": [
+        "Each of you fills in only your own side. When you combine them, the stand shows any job where your numbers differ and asks: keep mine, use theirs, or keep both.",
+        "Pick the two biggest differences and talk about those only.",
+        "Log a normal week together, then compare again."
+      ],
+      "plain": [
+        "People remember their own work best.",
+        "Each of you writes your own side.",
+        "Talk about the two biggest differences only."
+      ],
+      "links": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "Who did what, for a week",
+          "/workpapers/wp-01.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "breaklength",
       "kind": "intent",
       "first": true,
@@ -410,7 +639,12 @@
           "/upset-right-now.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "plain": [
+        "Take at least 20 minutes. 30 is often better.",
+        "Say a time to come back, like “8:30”.",
+        "Come back at that time."
+      ]
     },
     {
       "id": "comeback",
@@ -446,7 +680,12 @@
           "/check-ins.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "plain": [
+        "Come back at the time you said.",
+        "Start soft: “I’m back. I’m not against you.”",
+        "Talk about one thing. Listen first."
+      ]
     },
     {
       "id": "sentlink",
@@ -476,7 +715,12 @@
           "/pursue-withdraw.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "plain": [
+        "Your partner probably wants a calmer way to talk.",
+        "It does not say you are the problem.",
+        "They can’t see what you read here."
+      ]
     },
     {
       "id": "reconnect",
@@ -484,7 +728,7 @@
       "first": true,
       "newTopic": true,
       "name": "something light to reconnect",
-      "pat": "\\breconnect\\w*\\b|\\b(something|anything|ideas?) (light|fun|small|nice) (to do )?(together|for (the )?two of us|for us)\\b|\\b(fun|light) (for|with) (two|2) people\\b|\\b(feel|get) close again\\b|\\bafter a (rough|hard|bad) (week|patch)\\b.{0,40}\\b(fun|light|reconnect|together)\\b",
+      "pat": "\\breconnect\\w*\\b|\\b(something|anything|ideas?) (light|fun|small|nice) (to do )?(together|for (the )?two of us|for us)\\b|\\b(fun|light) (for|with) (two|2) people\\b|\\b(feel|get) close again\\b|\\bafter a (rough|hard|bad) (week|patch)\\b.{0,40}\\b(fun|light|reconnect|together)\\b|\\b(something|anything|ideas?|things?) (fun|light|nice|new)\\b.{0,25}\\btogether\\b|\\bfun (for|with) (the )?two of us\\b",
       "notPat": "\\b(grief|died|passed away|widow\\w*|sister|brother|mom|mum|dad|father|mother|son|daughter|friend|estranged|years|cousin|aunt|uncle)\\b",
       "keys": [],
       "what": [
@@ -508,7 +752,12 @@
           "/recheck-drive.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "plain": [
+        "Small moments help most.",
+        "Ask one kind question each day.",
+        "Plan one easy, fun thing this week."
+      ]
     },
     {
       "id": "pursuewithdraw",
@@ -555,6 +804,12 @@
       "scriptLabels": [
         "If you need space",
         "If you want to talk now"
+      ],
+      "plain": [
+        "One of you wants to talk now. One of you needs space. Nobody is bad.",
+        "If you need space: say when you will come back. Then come back.",
+        "If you want to talk now: ask for a time. Wait for that time.",
+        "Agree a pause word on a calm day."
       ]
     },
     {
@@ -563,7 +818,7 @@
       "first": true,
       "newTopic": true,
       "name": "supporting family, sending money home",
-      "pat": "\\b(send|sends|sending|sent)\\b.{0,25}\\b(money|cash)\\b.{0,25}\\b(home|back home|to (my|his|her|their) (family|parents|mum|mom|mother|father|dad|relatives|people|siblings))\\b|\\bmoney (back )?home\\b|\\bremittance\\w*|\\b(family|people|parents) back home\\b|\\b(support|supporting|help|helping|provide for) (my|his|her|their) (parents|mum|mom|mother|father|dad|relatives|siblings|extended family|people back home)\\b|\\b(husband|wife|partner|boyfriend|girlfriend|spouse)\\b.{0,40}\\b(understand|get|accept|see)\\b.{0,30}\\b(support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(have to|must|need to|got to|duty to) (support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(money|sends?|gives?)\\b.{0,40}\\b(family|parents|relatives)\\b.{0,50}\\b(can.?t|cannot|never|not) (save|saving)\\b|\\b(can.?t|cannot|never) (save|saving)\\b.{0,50}\\b(family|parents|relatives)\\b|\\bextended family\\b",
+      "pat": "\\b(send|sends|sending|sent)\\b.{0,25}\\b(money|cash)\\b.{0,25}\\b(home|back home|to (my|his|her|their) (family|parents|mum|mom|mother|father|dad|relatives|people|siblings))\\b|\\bmoney (back )?home\\b|\\bremittance\\w*|\\b(family|people|parents) back home\\b|\\b(support|supporting|help|helping|provide for) (my|his|her|their) (parents|mum|mom|mother|father|dad|relatives|siblings|extended family|people back home)\\b|\\b(husband|wife|partner|boyfriend|girlfriend|spouse)\\b.{0,40}\\b(understand|get|accept|see)\\b.{0,30}\\b(support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(have to|must|need to|got to|duty to) (support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(money|sends?|gives?)\\b.{0,40}\\b(family|parents|relatives)\\b.{0,50}\\b(can.?t|cannot|never|not) (save|saving)\\b|\\b(can.?t|cannot|never) (save|saving)\\b.{0,50}\\b(family|parents|relatives)\\b|\\bextended family\\b|\\bhow much (is (it )?reasonable|is (ok|okay|normal|fair)|should (i|we|she|he)) (to )?send\\b|\\b(send|sending|sends) money (abroad|overseas|back)\\b|\\b(save|saving) money\\b.{0,40}\\b(abroad|overseas|family|parents)\\b",
       "notPat": "\\b(dementia|alzheimer\\w*|hospice|nursing home|caregiv\\w*|carer)\\b",
       "keys": [],
       "what": [
@@ -602,6 +857,12 @@
       "scriptLabels": [
         "If you support family",
         "If you worry about savings"
+      ],
+      "plain": [
+        "Sending money to your family can be a duty. That is okay.",
+        "Agree one amount each month, together.",
+        "Save money for the two of you too.",
+        "Talk at a calm time, not right after a request comes."
       ]
     },
     {
@@ -610,7 +871,7 @@
       "first": true,
       "newTopic": true,
       "name": "retired and both home now",
-      "pat": "^retire(d|ment|ing)?$|\\b(retired|retirement|retiring)\\b|\\bunder (my|her|his|their|your) feet\\b|\\b(in (her|his|my|their) way|in the way) (all day|at home|around the house)\\b|\\b(feel|feeling|felt) (useless|in the way|like a spare part)\\b.{0,30}\\b(at home|around the house)?|\\b(find|have) (something|anything) useful to do\\b|\\b(both|we re both|we are both) (at )?home all day\\b|\\bhome all day (now|together)\\b",
+      "pat": "^retire(d|ment|ing)?$|\\b(retired|retirement|retiring)\\b|\\bunder (my|her|his|their|your) feet\\b|\\b(in (her|his|my|their) way|in the way) (all day|at home|around the house)\\b|\\b(feel|feeling|felt) (useless|in the way|like a spare part)\\b.{0,30}\\b(at home|around the house)?|\\b(find|have) (something|anything) useful to do\\b|\\b(both|we re both|we are both) (at )?home all day\\b|\\bhome all day (now|together)\\b|\\bi miss (work|my job|working|the office)\\b|\\bwhat (do|should|can) i do all day\\b|\\b(bored|lost|no purpose|aimless) (at home |since|now that)\\b|\\b(always|constantly) in the kitchen\\b|\\bnothing to do (all day|at home|now)\\b",
       "notPat": "\\b(died|passed away|passed|death|widow\\w*|funeral|lost my (husband|wife|partner))\\b",
       "keys": [],
       "what": [
@@ -649,6 +910,12 @@
       "scriptLabels": [
         "If you’ve always run the house",
         "If you’ve just retired"
+      ],
+      "plain": [
+        "Being home all day together is new. It takes time.",
+        "Plan some time apart and some time together each day.",
+        "Give each person whole jobs.",
+        "The person who just retired may need something to do outside the house."
       ]
     },
     {
@@ -692,7 +959,13 @@
           "/check-ins.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "plain": [
+        "Being far apart is hard. It is not your fault.",
+        "Agree which days you call, and who calls.",
+        "Send small messages between calls.",
+        "If a text sounds cold, ask. Don’t guess."
+      ]
     },
     {
       "id": "calmnow",
@@ -1095,7 +1368,7 @@
         "Short on time or focus: “How much time do you have?”, on the home page and in the menu, picks one thing for 2, 5 or 10 minutes.",
         "On long pages, read 📌 In short, or press “Show me only the steps”.",
         "“Pick up where you left off”, on the home page, takes you back to what you were doing.",
-        "Forgot something again? Tell me what happened. The fix usually lives outside your head: a cue, one owner, a finish line you can see.",
+        "If something slipped, tell me what happened, with no judgment. The fix usually lives outside your head: a cue, one owner, a finish line you can see.",
         "The Wiring Card lets you explain what helps you, like reminders in writing or a heads-up before plans change."
       ],
       "script": "My attention wanders sometimes, so if I miss something, it’s not that I don’t care. A quick written reminder really helps me.",
@@ -2969,7 +3242,7 @@
         "wiring card",
         "wiringcard"
       ],
-      "what": "The Wiring Card is a one-page card on how you actually receive words: what silence means for you, what helps, and what to avoid. You give it to people you live or work with before a hard conversation, not during one. It isn’t a diagnosis, a label or a contract, and nothing you type is saved.",
+      "what": "The Wiring Card is a one-page card on how you actually receive words: what silence means for you, what helps, and what to avoid. You give it to people you live or work with before a hard conversation, not during one. It isn’t a diagnosis, a label or a contract, and it stays on your device: nothing is sent anywhere, and it’s kept only if you choose “Keep my card on this device”.",
       "how": [
         "On a calm day, fill in how you take in words, pace and tone. The card updates as you go.",
         "Print or copy it.",

@@ -1515,6 +1515,32 @@ function splitTail(act){
   const m = act.match(/^(.+?),\s*((?:it|that|this|i|we|they|because|so|which|since)\b.+)$/i);
   return m ? [m[1], capFirst(m[2]).replace(/[.!?]*$/,".")] : [act, ""];
 }
+/* Listeners for whom "again" tends to land on the whole history of being told off */
+const CRIT_SENSITIVE = ["adhd","hsp","trauma"];
+/* "I noticed you left the stove on again." -> "The stove was left on today." The fact stays, with no "you" and no "again".
+   Returns null when the sentence carries more than the fact, so nothing the speaker said is lost. */
+function neutralSafety(s, sf, plural){
+  if(!sf || !sf.thing) return null;
+  const lowS = s.toLowerCase();
+  const m = lowS.match(SAFE_RE); if(!m) return null;
+  const pre = lowS.slice(0, m.index).replace(/^\s*(?:i (?:noticed|saw|see)(?: that)?\s*)?(?:you\s*(?:have\s+|'ve\s+|just\s+)?)?(?:the\s+|your\s+|my\s+|our\s+)?/,"");
+  if(pre.trim()) return null;
+  let state = (m[0].match(/\b(on the (?:counter|table)|plugged in|within reach|unlocked|unbuckled|not buckled|running|burning|open|lit|out|on)\b\s*$/)||[])[1];
+  if(/where (?:the kids|the baby|she|he|they) (?:can|could) (?:reach|get)$/.test(m[0])) state = "where the kids could reach "+(plural?"them":"it");
+  if(!state){
+    const v = (m[0].match(/\b(turn off|lock|close|shut|blow out|unplug|put away)\b/)||[])[1];
+    state = {"turn off":"on", lock:"unlocked", close:"open", shut:"open", "blow out":"lit", unplug:"plugged in", "put away":"out"}[v];
+  }
+  if(!state) return null;
+  if(state==="not buckled") state = "unbuckled";
+  let tail = s.slice(m.index + m[0].length).replace(/^\s*,?\s*\b(?:yet again|once again|again)\b/i,"").replace(/[.!?]+\s*$/,"");
+  const tm = (lowS.match(/\b(today|tonight|this morning|this afternoon|this evening|last night|yesterday)\b/)||[])[1];
+  if(tm) tail = tail.replace(new RegExp("\\s*\\b"+tm+"\\b","i"), "");
+  { const om = state==="on" && tail.match(/^\s*(the (?:counter|table|side|floor|stove|bench)|the kitchen counter)\b/i); if(om){ state = "on "+om[1].toLowerCase(); tail = tail.slice(om[0].length); } }
+  if(tail.trim() && !/^[\s,]*$/.test(tail)) tail = " "+tail.trim().replace(/^,\s*/,""); else tail = "";
+  const th = sf.thing.replace(/^(?:hair )/,"");
+  return "The "+th+(plural?" were":" was")+" left "+state+" "+(tm||"today")+tail+".";
+}
 function lowerFirst(s){ return /^I\b/.test(s) ? s : s.replace(/^([A-Z])(?![A-Z])/, c=>c.toLowerCase()); }
 function capFirst(s){ return s.replace(/^(\s*["'(\[]?)([a-z])/, (m,p,c)=>p+c.toUpperCase()); }
 function endQ(s){ return s.replace(/[\s.!?,;:]+$/,"")+"?"; }
@@ -1712,6 +1738,23 @@ function rewrite(an, opts){
       : /medic|meds|pills|bleach|knife|knives|lighter|matches/.test(th) ? ["put away up high", "Maybe a locked box, or one high shelf just for "+(/(?:s|meds|knives|matches|pills)$/.test(th)?"them":"it")+"?"]
       : ["turned off", "Maybe a timer, or a note where we'll see it?"];
     const verb = /seat|belt/.test(th) ? "the "+th+(plural?" get ":" gets ")+kind[0] : "the "+th+(plural?" get ":" gets ")+kind[0];
+    // a listener who is sensitive to criticism (ADHD, highly sensitive, trauma-wired): "again" lands on the whole
+    // history, so the fact is said once, about today, with no "you" and no "again"; the worry stays plain
+    if(opts.critSensitive || CRIT_SENSITIVE.some(w=>W.has(w))){
+      const ss = splitSentences(main).map(x=>x.text);
+      let did = false;
+      for(let i=0;i<ss.length && !did;i++){
+        const nf = neutralSafety(ss[i], an.safety, plural);
+        if(nf){ note("again", (ss[i].match(/\b(?:yet again|once again|again)\b/i)||[""])[0].toLowerCase(), ""); note("safefact", ss[i].replace(/[.!?]+$/,""), nf.replace(/[.!?]+$/,"")); ss[i] = nf; did = true; }
+      }
+      main = ss.join(" ");
+      // "I noticed you…" was replaced by the plain fact: don't list a change the rewrite no longer makes
+      if(did && !/\bI noticed\b/.test(main)) for(let i=log.length-1;i>=0;i--) if(log[i].id==="noticed" || (log[i].id==="passive" && log[i].to.some(x=>/I noticed/.test(x)))) log.splice(i,1);
+      main = main.replace(/,?\s*\b(?:yet again|once again|all over again|again)\b(?=[\s.,!?]|$)/gi, mm=>{ note("again","again",""); return ""; }).replace(/\s+([.,!?])/g,"$1");
+      // no word for the danger in the message: say the feeling in the same breath, as in "and that scares me"
+      if(did && !/\b(?:dangerous|unsafe|not safe|scar(?:y|ed|es)|worr(?:y|ied|ies)|hazard|could have|someone could)\b/i.test(main))
+        main = main.replace(/^((?:[^.!?]*?))\b(was|were) left ([^.!?]+)\./, (mm,a,b,c)=>a+b+" left "+c+", and that scares me.");
+    }
     if(!/\b(?:dangerous|unsafe|not safe|scar(?:y|ed|es)|worr(?:y|ied|ies)|hazard|could have|someone could)\b/i.test(main)) main = endP(main)+" That's a real safety worry for me.";
     else if(!/\bworr/i.test(main)) main = main.replace(/\b(that's|that is|it's|it is) (dangerous|unsafe|not safe)([.!]*)/i, (mm,a,b)=>a+" "+b+", and it worries me.");
     main = endP(main)+" Can we find a way to make sure "+verb+" every time? "+kind[1];
@@ -2522,6 +2565,7 @@ Object.assign(CHECK, {
 Object.assign(CHANGE_WHY, {
   legal:{g:"A threat of court or custody turns a parenting problem into a fight to win, and messages like this are often saved and shown later. The worry underneath can be said on its own. If there is a real legal step, it goes through the proper channel, not a message.", anxiety:"A threat about the children goes straight to the biggest fear a parent has."},
   kidsfirst:{g:"Telling the children first puts them in the middle. Agreeing together on what they hear protects them, and keeps the adults on the same side of it."},
+  safefact:{g:"The fact is said once, about this time, without \"you\" or \"again\". The worry and the ask for a habit stay just as clear.", adhd:"For many ADHD listeners, \"you left it on again\" lands on every time they have been told off. The plain fact is easier to hear, and easier to act on.", hsp:"A highly sensitive listener tends to feel the blame more than the words. The plain fact keeps the focus on keeping everyone safe.", trauma:"Blame about the past can feel like danger. The plain fact keeps it about safety, not about who failed."},
   safety:{g:"The worry is real and worth saying. A habit (\"every time\") keeps everyone safe going forward. A deadline or a blame word would only cover this one time.", adhd:"A cue in the right place (a note by the door) works better than trying harder to remember."},
   sarcasm:{g:"Sarcasm carries the real message in the tone, which a text doesn't have. Said plainly, the hurt underneath can actually be answered."},
   plain:{g:"The automatic rewrite of this part didn't come out as clear English, so it's left as a blank for your own words. Short and plain is best."}
@@ -2667,6 +2711,73 @@ function receive(an){
     found: an.staticIds.filter(id=>FBY[id] && !["period","long","nowhen"].includes(id)).map(id=>FBY[id].name)};
 }
 
-const api = {receive, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+/* ============================================================
+   PLAIN WORDS FOR THE LABELS
+   For a reader in a second language: what each pattern name means, in everyday words.
+   Shown next to the name, never instead of the detail below it.
+   ============================================================ */
+const GLOSS = {
+  oblig:"it sounds like an order", should:"it tells them what to do", shouldhave:"it blames them for the past",
+  impera:"an order with no \"please\" or \"could you\"", cannot:"it sounds annoyed, not like a real question",
+  blameq:"a question that really says \"it's your fault\"", label:"calling the person a name, like \"lazy\"",
+  hostile:"it sounds angry or fed up", absolute:"words like \"always\" and \"never\"",
+  madefeel:"it blames them for how you feel", compare:"saying someone else does it better",
+  past:"bringing back an old problem", again:"words that say \"this keeps happening\"",
+  threat:"\"do this or else\"", guilt:"it tries to make them feel guilty",
+  passive:"it hides who did what", disclaim:"a soft start before a hard hit, like \"no offense, but\"",
+  minim:"small words that can sound dismissive, like \"just\" or \"obviously\"", intens:"strong words that add heat, like \"seriously\"",
+  urgent:"\"now\" or \"ASAP\" with no reason", vtime:"no clear time", vstd:"they can't tell what \"done\" looks like",
+  ominous:"a start that sounds serious but doesn't say what about", hint:"a hint, not a clear question",
+  pointed:"a polite phrase that can sound annoyed", nudge:"a follow-up that doesn't say what it's about",
+  heat:"words that show you're fed up", sarcasm:"it may mean the opposite of the words",
+  idiom:"a saying that doesn't mean what the words say", contempt:"it can sound like you look down on them",
+  passiveag:"anger said in a hidden way", stonewall:"it ends the talk without saying when you'll come back",
+  minimal:"a very short answer that can sound cold", period:"in a text, a full stop on a short reply can sound cold",
+  ellipsis:"\"...\" can sound like something is left unsaid", shout:"capital letters or \"!!!\" read as shouting",
+  calm:"telling someone how to feel", invalid:"saying their feelings are wrong",
+  multi:"many requests at once", long:"a lot to read at once", questions:"many questions at once",
+  critic:"it finds fault with them", reassure:"asking them to say things are okay",
+  vemo:"a feeling without saying what happened", feellike:"an opinion about them, not a feeling",
+  feelingq:"a big feelings question that can be hard to answer", hyper:"an exaggeration",
+  joke:"a joke sign that can hide the real message", tone:"commenting on their face or voice",
+  demand:"asking for an answer right away", butc:"praise, then \"but\"",
+  already:"it says \"I told you before\"", hedge:"an unsure answer", softno:"a \"no\" that sounds like \"maybe\"",
+  stopask:"\"stop asking\"", tic:"commenting on a movement or sound they may not control",
+  nowhen:"a request with no time", brushoff:"it sounds like you don't care",
+  dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
+  selfput:"you put yourself down", legal:"a threat about court or the children",
+  kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost"
+};
+/* The heading for one pattern, in words: never a name with a stray quoted word stuck on the end.
+   A safety worry names the thing it is about: "A safety worry about the stove, with no plan for next time". */
+function title(id, words, an){
+  const f = FBY[id]; if(!f) return String(id||"");
+  if((id==="safety" || id==="safeask") && an && an.safety && an.safety.thing) words = [an.safety.thing].concat(words||[]);
+  const w = (words||[]).filter(Boolean).map(x=>String(x).toLowerCase().replace(/[.,;:!?]+$/,""))[0];
+  if(id==="safeask") return w ? "A safety worry about the "+w.replace(/^(?:the|your|my|our)\s+/,"")+", with no plan for next time" : "A safety worry with no plan for next time";
+  if(id==="safety"){
+    const th = w && (w.match(new RegExp("\\b("+SAFE_THING+")\\b","i"))||[])[1];
+    return th ? "A real safety concern about the "+th.toLowerCase() : f.name;
+  }
+  return f.name;
+}
+/* Plain-word gloss for a pattern, or "" when the name already says it */
+function gloss(id){ return GLOSS[id] || ""; }
+/* One plain sentence at the top of a result. It agrees with the score and the flags:
+   ok = will probably land okay, hurt = might hurt, fight = will likely start a fight. */
+function verdict(an, sc, rw){
+  if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
+  const lvl = sc && sc.level ? sc.level[0] : "clear";
+  const soft = rw && !rw.unchanged;
+  if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
+    return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
+  if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
+    return {id:"hurt", text: (an.safety ? "Your worry is fair, but this might hurt. " : "This might hurt. ")+(soft ? "Here's a softer way to say it." : "The notes below show why.")};
+  if(an.staticIds && an.staticIds.length)
+    return {id:"ok", text: "This will probably land okay."+(soft ? " A small change below could make it even clearer." : "")};
+  return {id:"ok", text:"This will probably land okay."};
+}
+
+const api = {receive, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

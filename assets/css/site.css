@@ -567,15 +567,7 @@ div.tol-gate a.tol-btn, div.tol-gate button.tol-btn, div.tol-gate button{ border
 .tol-wash i{ animation:tol-drift 60s ease-in-out infinite alternate; }
 .tol-wash i:nth-child(even){ animation-duration:75s; animation-direction:alternate-reverse; }
 @keyframes tol-drift{ from{ translate:0 0; } to{ translate:0 -14px; } }
-/* on the home page Professor Puddles sits in the middle at the bottom, as the friendly helper under everything */
-body.is-home-pud .tol-pud-fab{ left:50%; transform:translateX(-50%); }
-@media (max-width:560px){
-  html body.is-home-pud .tol-pud-fab{ left:50% !important; width:auto; height:auto; min-height:48px; padding:.3rem .9rem .3rem .3rem !important; gap:.45rem; justify-content:flex-start;
-    border-radius:999px; border:1px solid #A9CBE8; bottom:max(1rem, env(safe-area-inset-bottom)); }
-  html body.is-home-pud .tol-pud-fab-t{ position:static; width:auto; height:auto; overflow:visible; clip:auto; white-space:nowrap; font-size:.88rem; }
-  html body.is-home-pud .tol-pud-fab-art{ width:40px; height:40px; }
-  html body.is-home-pud .tol-pud-fab-art svg{ width:34px; height:34px; }
-}
+/* Professor Puddles sits in the same corner on the home page as everywhere else, so he never covers the situation buttons */
 @media (prefers-reduced-motion: reduce){ .tol-wash i{ animation:none; } }
 
 /* ---------- "Breathe with me": a one-minute calm break on every page ---------- */
@@ -2267,7 +2259,7 @@ html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 .tol-steps-toggle button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
 .tol-steps-toggle button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
-html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, .tol-depth, .tol-depth *){ display:none !important; }
+html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, [class*="tol-listen"], [class*="tol-listen"] *, .tol-depth, .tol-depth *){ display:none !important; }
 @media print{ .tol-steps-toggle{ display:none !important; } }
 
 /* ---------- Big text on a phone: the title uses the card's full width ---------- */
@@ -2347,7 +2339,7 @@ body.tol-gaming .tol-wx, body.tol-gaming .tol-toast, body.tol-gaming .tol-keys-t
   body.has-pud-fab:not(.is-home-pud) .tol-cw{ bottom:max(6px, env(safe-area-inset-bottom)) !important; }
   body.has-pud-fab:not(.is-home-pud) .tol-cw-card{ bottom:calc(max(6px, env(safe-area-inset-bottom)) + 2.1rem) !important; }
   /* the home page's centred Puddles pill steps right of the time note, so the two sit side by side on the bottom edge */
-  html body.is-home-pud .tol-pud-fab{ left:calc(50% + 46px) !important; }
+  /* (the home page uses the same corner as every page) */
 }
 /* the two choices in every mini dive: wade in deeper, or chat it out with Professor Puddles */
 .tol-dive-wade{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
@@ -2595,7 +2587,7 @@ html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
    scrolling up, the top or end of the page, or keyboard focus brings them back */
 :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .25s ease, transform .25s ease; }
 html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-within){ opacity:0 !important; pointer-events:none !important; transform:translateY(14px); }
-html.tol-reading body.is-home-pud .tol-pud-fab:not(:focus-visible){ transform:translate(-50%, 14px); }
+
 @media (prefers-reduced-motion: reduce){ html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transform:none !important; } :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .15s linear; } }
 /* "Show N more" at the end of a long menu list */
 .tol-more-row{ list-style:none; }

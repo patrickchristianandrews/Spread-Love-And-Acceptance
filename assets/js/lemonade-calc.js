@@ -151,8 +151,12 @@
                    //   part:[1 or 0.5 per person], me:int (who's filling in: -1 not said, -2 together), cur:'$', checked:bool }
   var keep = false, mode = null;
   // How a bill is shared
-  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed amount, not split' };
-  var BILL_ORDER = ['shared', 'own', 'agreed'];
+  // (savings and money coming in are kept and shown, never split and never owed between people)
+  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed amount, like family support', savings: 'Savings goal, kept', income: 'Money coming in (pay)' };
+  var BILL_ORDER = ['shared', 'own', 'agreed', 'savings', 'income'];
+  // the words for each kind of cost in the money summary
+  var KIND_WORD = { shared: 'shared bills', own: 'own costs', agreed: 'family support', savings: 'savings' };
+  var COST_KINDS = ['shared', 'own', 'agreed', 'savings'];
   // The money sign: a calm guess from the browser's language, changeable on the Money tab
   var EURO = /^(AT|BE|CY|DE|EE|ES|FI|FR|GR|HR|IE|IT|LT|LU|LV|MT|NL|PT|SI|SK)$/;
   var OTHER_CUR = { IN: '₹', JP: '¥', CN: '¥', KR: '₩', SE: 'kr', NO: 'kr', DK: 'kr', CH: 'CHF', ZA: 'R', PL: 'zł', BR: 'R$', NG: '₦', PH: '₱' };
@@ -182,6 +186,21 @@
   function hasData(i) {
     return state.jobs.some(function (j) { return !j.ex && (num(j.v[i]) > 0 || num((j.t || [])[i]) > 0); }) ||
       state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; });
+  }
+  // Before the other side comes in: someone with nothing on their side yet, while another person has
+  // entries. No verdict, score or hand-over hours until their side arrives (or "Show the split anyway").
+  // With three or more, only while just one person has filled anything in (a child may rightly have none).
+  function waitingFor() {
+    if (solo() || state.noWait) return [];
+    var have = state.people.map(function (_, i) { return hasData(i); }), withData = have.filter(Boolean).length;
+    if (!withData || (state.people.length > 2 && withData > 1)) return [];
+    return state.people.map(function (_, i) { return i; }).filter(function (i) { return !have[i]; });
+  }
+  function waitNames(w) { return w.filter(function (i) { return !placeholder(state.people[i]); }).map(nameOf); }
+  function waitText(w) {
+    var named = waitNames(w);
+    if (!named.length || named.length < w.length) return 'Waiting for the other side. Send your code (“Send my side to my partner”, above) to see the split.';
+    return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your code to see the split.';
   }
   function status(msg) { var s = $('ls-status'); if (s) { s.textContent = msg; clearTimeout(status.t); status.t = setTimeout(function () { s.textContent = ''; }, 4000); } }
   function solo() { return mode === 'solo'; }
@@ -895,17 +914,22 @@
     // a number that can't be counted (negative, not a number, more than a week) holds the read back,
     // so a typo never turns into "100% done by them"
     if (anyBad(state.jobs)) return 'One of the numbers above isn’t counted yet (it’s marked under its row). Fix it to see how the work is split. Nothing is guessed in the meantime.';
-    if (s === 0) return anyExample() ? 'The grey numbers are only an example, so nothing is counted yet. Type your own hours to see how the work is split.' : 'Add some hours above to see how the work is split.';
+    if (s === 0) return anyExample() ? 'Add some hours of your own to see how the work is split. The grey numbers are only an example, so nothing is counted yet.' : 'Add some hours above to see how the work is split.';
+    var wait = waitingFor();
+    if (wait.length) return waitText(wait);
     var p = pcts(t), n = t.length, even = 100 / n, lean = invLean();
+    // the words agree with the balance score: "holding" there never sits beside "leans one way" here
+    var bv = balance(), held = !!(bv && bv.value != null && bv.value >= 0.70), bd = bv && bv.value != null ? band(bv.value) : '';
     var shares = state.people.map(function (_, i) { return nameOf(i) + ' ' + Math.round(p[i]) + '%'; }).join(', ');
     var keepOn = ' Keep checking in as things change.';
     var tg = target();
     if (!tg.error && tg.mode !== 'even') {
       var gaps = p.map(function (x, i) { return x - tg.t[i] * 100; }), big = 0;
       gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[big])) big = i; });
-      var g = Math.round(Math.abs(gaps[big]));
-      if (g < 10) return lean ? 'Close to ' + targetLabel(tg) + ' in hours (' + shares + '), but ' + lean.t + '. Worth seeing together.' : 'Close to ' + targetLabel(tg) + ' this week: ' + shares + '.' + keepOn;
-      return 'This week the hours sit further from ' + targetLabel(tg) + ': ' + shares + '. ' + nameOf(big) + ' is about ' + g + ' points ' + (gaps[big] > 0 ? 'over' : 'under') + '. That’s not a verdict on anyone, just what’s written down. Worth talking through together.';
+      var g = Math.round(Math.abs(gaps[big])), off = nameOf(big) + ' is about ' + g + ' points ' + (gaps[big] > 0 ? 'over' : 'under');
+      if (g < 5 || (g < 10 && held)) return lean ? 'Close to ' + targetLabel(tg) + ' in hours (' + shares + '), but ' + lean.t + '. Worth seeing together.' : 'Close to ' + targetLabel(tg) + ' this week: ' + shares + '.' + keepOn;
+      if (held) return 'Near ' + targetLabel(tg) + ' this week: ' + shares + '. ' + off + ', and the balance score still reads as holding.' + (lean ? ' But ' + lean.t + '. Worth seeing together.' : keepOn);
+      return 'This week the hours sit ' + (bd === 'drifting' ? 'further from ' : 'well away from ') + targetLabel(tg) + ': ' + shares + '. ' + off + ', which reads as ' + (bd || 'drifting') + '. That’s not a verdict on anyone, just what’s written down. Worth talking through together.';
     }
     var top = 0; p.forEach(function (x, i) { if (x > p[top]) top = i; });
     var topPct = Math.round(p[top]);
@@ -916,24 +940,50 @@
     if (n === 2) {
       if (t[1 - top] === 0) return 'Everything listed here this week was done by ' + who(top) + ' (100%). That’s not a verdict on anyone, and it’s worth a calm talk about sharing some of it out.';
       if (topPct >= 90) return 'Nearly all of what’s listed here was done by ' + who(top) + ' (' + topPct + '%). That’s not a verdict on anyone, and it’s worth a calm talk about sharing it out.';
+      if (topPct >= 60 && held) return 'This week the hours lean a little one way: about ' + topPct + '% of them were done by ' + who(top) + ', and the balance score still reads as holding.' + (lean ? ' But ' + lean.t + '. Worth seeing together.' : keepOn);
       if (topPct >= 60) return 'This week the hours lean one way: about ' + topPct + '% of them were done by ' + who(top) + '. That’s not a verdict on either of you, just what’s written down. Worth talking through together.';
       return lean ? 'Close in hours this week (' + nameOf(top) + ' ' + topPct + '%, ' + nameOf(1 - top) + ' ' + (100 - topPct) + '%)' + but
         : 'Fairly close this week: ' + nameOf(top) + ' ' + topPct + '%, ' + nameOf(1 - top) + ' ' + (100 - topPct) + '%.' + keepOn;
     }
     var evenTxt = 'An even share for ' + n + ' people would be about ' + Math.round(even) + '% each.';
+    if (ratio >= 1.5 && held) return 'This week the hours lean a little one way: about ' + topPct + '% of them were done by ' + who(top) + '. ' + evenTxt + ' The balance score still reads as holding.' + keepOn;
     if (ratio >= 1.5) return 'This week the hours lean one way: about ' + topPct + '% of them were done by ' + who(top) + '. ' + evenTxt + ' That’s not a verdict on anyone, just what’s written down. Worth talking through together.';
     return lean ? 'Fairly even in hours this week (' + shares + ')' + but : 'Fairly even this week: the biggest share, ' + topPct + '%, was done by ' + who(top) + '. ' + evenTxt + keepOn;
   }
   function billTotal(b) { return sum(b.v.map(num)); }
   function billName(b) { return b.name.trim() || 'A cost with no name yet'; }
   function payers(b) { return joinNames(b.v.map(function (x, i) { return num(x) > 0 ? nameOf(i) : ''; }).filter(Boolean)); }
+  // The money side, one line each: what each person put in (every kind of cost), what's left when money
+  // coming in is listed, then the settle-up for shared bills, then the lists. Shown with line breaks.
   function moneySentence() {
     if (anyBad(state.bills)) return 'One of the amounts above isn’t counted yet (it’s marked under its row). Fix it to see the money side.';
     var real = state.bills.filter(function (b) { return !b.ex && billTotal(b) > 0; });
-    var shared = real.filter(function (b) { return b.kind === 'shared'; }), own = real.filter(function (b) { return b.kind === 'own'; }), set = real.filter(function (b) { return b.kind === 'agreed'; });
-    var out = [];
+    function byKind(k) { return real.filter(function (b) { return b.kind === k; }); }
+    var shared = byKind('shared'), own = byKind('own'), set = byKind('agreed'), saving = byKind('savings'), inc = byKind('income');
+    var costs = real.filter(function (b) { return b.kind !== 'income'; });
+    var used = COST_KINDS.filter(function (k) { return byKind(k).length; });
+    var out = [], wait = waitingFor();
+    // 1. each person's total, family support and savings included
+    if (costs.length) {
+      out.push('Each person’s total: ' + state.people.map(function (_, i) {
+        var tot = sum(costs.map(function (b) { return num(b.v[i]); }));
+        var parts = used.map(function (k) { var x = sum(byKind(k).map(function (b) { return num(b.v[i]); })); return x > 0 ? KIND_WORD[k] + ' ' + cash(x) : ''; }).filter(Boolean);
+        return nameOf(i) + ' ' + cash(tot) + (used.length > 1 && parts.length ? ' (' + parts.join(', ') + ')' : '');
+      }).join('; ') + '.');
+    }
+    // 2. what's left, only when money coming in is listed (it's never asked for)
+    var incT = state.people.map(function (_, i) { return sum(inc.map(function (b) { return num(b.v[i]); })); }), incS = sum(incT);
+    if (incS > 0) {
+      var left = incS - sum(costs.map(billTotal));
+      var inLine = 'Coming in: ' + cash(incS) + (incT.filter(function (x) { return x > 0; }).length > 1 ? ' (' + state.people.map(function (_, i) { return incT[i] > 0 ? nameOf(i) + ' ' + cash(incT[i]) : ''; }).filter(Boolean).join(', ') + ')' : '') + '.';
+      if (costs.length) inLine += ' After ' + joinNames(used.map(function (k) { return KIND_WORD[k]; })) + ': ' + (left >= -0.005 ? cash(Math.max(0, left)) + ' left.' : cash(-left) + ' more going out than coming in.');
+      out.push(inLine);
+    }
+    // 3. shared bills: who owes whom, then how it was worked out
     var t = state.people.map(function (_, i) { return sum(shared.map(function (b) { return num(b.v[i]); })); }), s = sum(t);
-    if (s > 0) {
+    if (s > 0 && wait.length) {
+      out.push('Shared bills listed so far: ' + cash(s) + '. ' + waitText(wait).replace(/ to see the split\.$/, ' to see who owes whom.'));
+    } else if (s > 0) {
       var tg = target(), fallback = !!tg.error;
       if (fallback) tg = evenTarget();
       var fair = tg.t.map(function (x) { return x * s; });
@@ -947,18 +997,23 @@
         return nameOf(i) + ' paid ' + cash(x) + ' (' + tail + ')';
       });
       var settle = settleUp(t, fair);
-      out.push('Shared costs listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
-        (settle ? (tg.mode === 'agreed' ? ' To settle up by the split you agreed: ' : tg.mode === 'part' ? ' To settle up: ' : ' To settle up evenly: ') + settle : '') +
+      out.push(settle ? (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you agreed: ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle
+        : 'The shared bills are already settled: nobody owes anybody.');
+      out.push('Shared bills listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
         (fallback ? ' (The split you agreed doesn’t add up to 100% yet, so this uses an even split.)' : '') +
         (tg.mode === 'even' ? ' Even isn’t always the fair answer (incomes and rooms differ), so treat this as a starting point, not a verdict. A split you agree on, under “How to read it”, is used here too.' : ' Treat it as a starting point, not a verdict.'));
     }
+    // 4. the lines that are kept and shown, never owed
     if (own.length) out.push('Each person’s own, not in the settle-up: ' + own.map(function (b) {
       return billName(b) + ' (' + (b.who >= 0 ? nameOf(b.who) + ', ' : '') + cash(billTotal(b)) + ')';
     }).join('; ') + '.');
-    if (set.length) out.push('Agreed amounts, kept on the list but not split or owed: ' + set.map(function (b) {
+    if (set.length) out.push('Family support and other agreed amounts, kept on the list but not split or owed: ' + set.map(function (b) {
       return billName(b) + ' (' + cash(billTotal(b)) + (payers(b) ? ', paid by ' + payers(b) : '') + ')';
     }).join('; ') + '.');
-    return out.join(' ');
+    if (saving.length) out.push('Savings, kept and never owed between you: ' + saving.map(function (b) {
+      return billName(b) + ' (' + cash(billTotal(b)) + (payers(b) ? ', put in by ' + payers(b) : '') + ')';
+    }).join('; ') + '.');
+    return out.join('\n');
   }
   // Money with the sign picked on the Money tab ("$", "£", "€" or your own, like "kr" or "CHF").
   function cash(n) { var c = state.cur || '$'; return (/[A-Za-z]$/.test(c) ? c + ' ' : c) + money(n); }
@@ -1003,7 +1058,7 @@
     var h = totals(state.jobs), total = sum(h), tg = target();
     if (tg.error) return { error: tg.error };
     var t = tg.t;
-    if (total <= 0 || anyBad(state.jobs)) return null;
+    if (total <= 0 || anyBad(state.jobs) || waitingFor().length) return null;
     var s = h.map(function (x) { return x / total; });
     var gaps = s.map(function (x, i) { return x - t[i]; });
     var moved = sum(gaps.map(Math.abs)) / 2, most = 1 - Math.min.apply(null, t);

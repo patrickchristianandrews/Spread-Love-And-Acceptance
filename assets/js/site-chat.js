@@ -803,6 +803,7 @@
     else if (aspect === 'how') { b.push({ k: 'p', x: 'Here’s how to use ' + c.name + ', step by step:' }); b.push({ k: 'list', x: c.how }); }
     else {
       // the same answer twice in a row reads like a machine: the second time, just the words to use and where to read more
+      if (state.easy && c.plain && c.plain.length) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name }; return { blocks: easyBlocks(c), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'card', id: c.id, noBrief: 1 }; }
       var again = c.kind === 'intent' && state.last && state.last.card === c.id;
       if (again) b.push({ k: 'p', x: 'That’s the same thing we just looked at, so here’s the short version. The page below has the rest.' });
       else {
@@ -1062,7 +1063,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1335,6 +1336,23 @@
     if (link) out.push({ k: 'links', x: [link] });
     return out;
   }
+  // "say it in simple English", "my English is not good": short sentences and everyday words from here on.
+  // Cards that have a plain version use it; anything else gets the short version.
+  var EASY_ASK = /\b(simpler|simple|easy|easier|plain|plainer|basic) (english|words|language)\b|\bmy english (is )?(not|isn t|no) (good|great|strong|very good|so good)\b|\benglish is (my )?(second|2nd|not my first) language\b|\bsay (it|that) (simply|more simply|easier|in easy words)\b/;
+  function easyBlocks(c) {
+    var b = [{ k: 'list', x: c.plain }];
+    (Array.isArray(c.script) ? c.script : c.script ? [c.script] : []).slice(0, 1).forEach(function (x) { b.push({ k: 'script', l: 'Words you could say', x: x }); });
+    var links = safeLinks(c.links).slice(0, 1); if (links.length) b.push({ k: 'links', x: links });
+    return b;
+  }
+  function easyWords(state) {
+    state.easy = 1; state.brief = 1;
+    var c = state.last && state.last.card && cardById(state.last.card);
+    if (c && c.plain) return { blocks: [{ k: 'p', x: 'Here it is in easy words.' }].concat(easyBlocks(c)), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' };
+    var R = state.lastReply, out = shortBlocks(R && R.blocks, true);
+    if (out) { state.fullReply = R; return { blocks: [{ k: 'p', x: 'Here it is in fewer words. I’ll keep my words short and simple from now on.' }].concat(out), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'short' }; }
+    return { blocks: [{ k: 'p', x: 'Yes. I’ll use short, simple words. Ask me anything.' }, { k: 'p', x: 'You can also turn on Easy reading and “Listen to this page” in Settings at the top.' }], chips: STARTERS.slice(0, 3), kind: 'short' };
+  }
   function shorter(state) {
     var R = state.lastReply, out = shortBlocks(R && R.blocks);
     state.brief = 1;  // and short from here on, until they ask for more
@@ -1381,6 +1399,7 @@
     if (!f || DANGER.test(f)) return null;
     var ub = unBrief(state, f);
     if (ub) return ub;
+    if (EASY_ASK.test(f)) return easyWords(state);
     if (SHORTER.test(f)) return shorter(state);
     if (LEFT_OFF.test(f)) return leftOff(state);
     var L = state.last, n = f.split(' ').length;

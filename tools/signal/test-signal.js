@@ -314,5 +314,57 @@ TESTER.forEach(c=>{
 { const an=E.analyze("Could you clean up a bit?",{channel:"text"}); const rd=E.readings(an,["alex"],"text").alex||[];
   rd.forEach(e=>ok(!/supportive/i.test(e.h) || /supportive/i.test("Could you clean up a bit?"), `alexithymia reading quotes "supportive": ${e.h}`)); }
 
+// ---------- re-test: safety worries, criticism-sensitive listeners, plain verdicts ----------
+// the heading names the thing, in words, for every safety noun (never "A safety worry with no plan stove")
+[["You left the stove on again. That's dangerous.","stove"],["You left the front door unlocked again.","front door"],["You left the oven on.","oven"],
+ ["You left the knives out where the kids can reach.","knives"],["You forgot to turn off the iron again!","iron"],["The gate was left open again.","gate"],
+ ["You left the meds on the counter again.","meds"],["You left the candles burning.","candles"],["You left the car unlocked last night.","car"],
+ ["You left the bath running again.","bath"],["You left the space heater on.","space heater"],["You forgot to lock the back door.","back door"],
+ ["You didn't buckle her into the car seat.","car seat"]].forEach(([t,th])=>{
+  const an=E.analyze(t,{channel:"text"});
+  ok(an.found.safeask, `"${t}": expected safeask`);
+  const ti=E.title("safeask", an.found.safeask);
+  ok(ti==="A safety worry about the "+th+", with no plan for next time", `"${t}": safety title reads "${ti}"`);
+  ok(/^A real safety concern about the /.test(E.title("safety", an.found.safety, an)), `"${t}": safety-concern title reads "${E.title("safety", an.found.safety, an)}"`);
+  // an ADHD / highly sensitive / trauma-wired listener: "again" goes, the fact and the worry stay
+  [["adhd"],["hsp"],["trauma"],["adhd","autistic"]].forEach(W=>{ const r=E.rewrite(an,{wirings:W, rel:"partner", channel:"text"});
+    all(r).forEach(s=>{ ok(!/\bagain\b/i.test(s), `"${t}" [${W}]: "again" kept in "${s}"`);
+      ok(lowIncl(s,th.replace(/^space /,"")), `"${t}" [${W}]: the fact (${th}) dropped in "${s}"`);
+      ok(/every time/i.test(s), `"${t}" [${W}]: the habit ask dropped in "${s}"`);
+      ok(/scar|worr|danger|safe/i.test(s), `"${t}" [${W}]: the safety worry dropped in "${s}"`);
+      ok(!/\bI noticed you\b/.test(s) || /buckle/.test(t), `"${t}" [${W}]: still "I noticed you…" in "${s}"`); });
+    r.changes.forEach(c=>ok(c.why && c.why.length>20, `"${t}" [${W}]: change ${c.id} has no reason`));
+    ok(!r.changes.some(c=>c.id==="noticed") || /I noticed/.test(r.main), `"${t}" [${W}]: lists an "I noticed" change it no longer makes`); });
+  // other listeners keep the fact as said
+  ok(E.rewrite(an,{wirings:["autistic"]}).main.toLowerCase().includes(th), `"${t}": autistic listener lost the fact`);
+});
+{ const r=E.rewrite(E.analyze("You left the stove on again.",{channel:"text"}),{wirings:["adhd"], rel:"partner"});
+  ok(/^The stove was left on today, and that scares me\. Can we find a way to make sure the stove gets turned off every time\?/.test(r.main), `ADHD stove rewrite: "${r.main}"`); }
+{ const r=E.rewrite(E.analyze("You left the stove on again. That's dangerous.",{channel:"text"}),{wirings:["adhd"]});
+  ok(/^The stove was left on today\. That's dangerous, and it worries me\./.test(r.main), `ADHD stove + danger rewrite: "${r.main}"`); }
+{ const r=E.rewrite(E.analyze("You left the stove on again last night.",{channel:"text"}),{wirings:["adhd"]});
+  ok(/^The stove was left on last night\b/.test(r.main) && !/today/.test(r.main), `a time the speaker gave is kept: "${r.main}"`); }
+{ const r=E.rewrite(E.analyze("You left the stove on again.",{channel:"text"}),{wirings:[]});
+  ok(/again/.test(r.main), `without a criticism-sensitive listener the fact is kept as said: "${r.main}"`); }
+// a one-line plain verdict that agrees with the level
+[["I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?","ok",/probably land okay/],
+ ["Can you grab milk on your way home","ok",/probably land okay/],
+ ["You need to clean your room.","hurt",/might hurt/],
+ ["You left the stove on again. That's dangerous.","hurt",/worry is fair.*might hurt/],
+ ["You're so lazy and you never help.","fight",/start a fight/],
+ ["If you don't clean up, I'm leaving.","fight",/start a fight/],
+ ["I'll take you to court and get full custody.","fight",/start a fight/]].forEach(([t,id,re])=>{
+  const an=E.analyze(t,{channel:"text"}); const sc=E.score(an,["general"],"text","v"); const v=E.verdict(an,sc,E.rewrite(an,{wirings:["general"]}));
+  ok(v.id===id && re.test(v.text), `"${t}": plain verdict ${v.id} "${v.text}"`);
+  ok(!/static|pillar|wiring|generaliz/i.test(v.text), `"${t}": jargon in the plain verdict "${v.text}"`);
+});
+FIX.map(f=>f.t).concat(WORK).forEach(t=>{ const an=E.analyze(t,{channel:"chat"}); const sc=E.score(an,["general"],"chat","v"); const v=E.verdict(an,sc,E.rewrite(an,{wirings:["general"]}));
+  ok(v && v.text && v.text.split(/(?<=\.)\s/).length<=2, `"${t}": plain verdict missing or long: "${v&&v.text}"`);
+  if(sc.level[0]==="heavy") ok(v.id==="fight", `"${t}": heavy static but verdict "${v.text}"`);
+  if(sc.level[0]==="clear" && !an.staticIds.length) ok(v.id==="ok", `"${t}": clear but verdict "${v.text}"`); });
+// jargon labels have a plain gloss
+["absolute","label","passive","minim","vstd","ominous","hint","passiveag","stonewall","idiom","shout","vtime","nowhen","impera","oblig"].forEach(id=>ok(E.gloss(id).length>5 && !/static|wiring/i.test(E.gloss(id)), `${id}: no plain gloss`));
+ok(E.gloss("absolute").includes("always"), "absolute: the gloss should name \"always\" and \"never\"");
+
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

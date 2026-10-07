@@ -153,14 +153,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
 <body>
 <main class="wrap">
   <div class="sitebar">
-    <a class="mark" href="index.html">The Objective Ledger<small>Tools</small></a>
+    <a class="mark" href="index.html">Spread Love &amp; Acceptance<small>Tools</small></a>
     <a class="back" href="wired-differently.html">&larr; Read: Wired Differently</a>
   </div>
   <header>
     <p class="kicker">Tool &middot; Pairs with <a href="wired-differently.html#card">the wiring card</a> in Wired Differently</p>
     <h1>Wiring Card</h1>
     <p class="lede">Fill in how you actually receive words. Your card updates as you go: beside the form on a wide screen, and below it on a phone. Print it, or copy it, and give it to the people you live and work with before a hard conversation, not during one.</p>
-    <p class="privacy">Runs in your browser. Nothing you type is sent anywhere. A draft is kept in this tab only until you close it (Clear removes it sooner), and nothing is kept longer unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
+    <p class="privacy">Runs in your browser. Nothing you type is sent anywhere. A draft is kept in this tab only until you close it (Clear removes it sooner), and nothing is kept longer unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). &ldquo;Fill from my Wavelength answers&rdquo; only reads what Wavelength already keeps in this browser. This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
     <p class="privacy pillar-note">The Wiring Card puts <a href="/five-pillars.html#tune-signals">Pillar IV (“Tune how you send and receive”)</a> to work. In you: you name your own wiring, pace and how you hear things. Between you and others: people learn how to send a request so it lands, and a mismatch becomes tuning, not a moral failing.</p>
     <p class="privacy">See also: <a href="/know-yourself.html">Know your own wiring</a>, which helps you tell lasting wiring from learned patterns and today’s conditions, and <a href="/wavelength.html">Wavelength</a>, which finds your four-letter Wave Code for how you think, talk and listen.</p>
   </header>
@@ -181,6 +181,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     <b>What this is for.</b> A card is a simple note about how you take in words. It is not a label, not permission to criticize, and not proof of bad intent. It tells someone how to send a request so it gets through. It doesn't make them responsible for managing you, and it doesn't mean you have to be available no matter how you feel. Stick to one topic at a time. The <a href="check-ins.html#ground">ground rules</a> explain how to use what you wrote here in a conversation. Pair the card with the <a href="signal-translator.html">Signal Translator</a> when you want to test one sentence, and with <a href="check-ins.html">Check-ins</a> when the topic needs a calm, safe space. <a href="wired-differently.html">Wired Differently</a> explains the ideas behind it.
   </div>
 </main>
+<script src="/assets/js/wavelength.js"></script>
 <script>
 (function(){
   // How words reach me, in everyday words. Descriptions of what helps, never labels or diagnoses.
@@ -210,6 +211,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     {id:"upset", q:"When I'm upset, I need", opts:[["space","Space first, then a return time"],["company","Quiet company"],["talk","To talk it through"],["plan","A written plan"],["hug","A gesture, only if I ask"],["signal","A signal that we are still okay"]]},
     {id:"avoid", q:"Please avoid", opts:[["sarcasm","Sarcasm when it matters"],["calm","\"Calm down\""],["loud","Loud voices"],["long","Long texts or many topics at once"],["hints","Hints instead of the ask"],["always","Always, never, and labels"],["public","Correcting me in public"],["spelling","Correcting my spelling in the moment"],["surprise","A hard topic with no warning"]]},
     {id:"ask", q:"A request lands best as", opts:[["could","\"Could you ___ by ___?\""],["list","One written list, not a stack of hints"],["headline","The ask in the first sentence"],["choice","Two clear options, not an open guess"]]},
+    // an optional group, shown under its own heading in the form; on the card it reads as plain lines, not a label
+    {id:"adhd", q:"Good to know about me", group:"Often shared by ADHD folks", opts:[["remind","Reminders help me; they aren't nagging"],["crit","Criticism hits hard: start with what's okay"],["double","Side by side helps me start (body doubling)"],["time","Time slips for me: give me a heads-up before it matters"],["steps","Big jobs go better in small, visible steps"],["vanish","If I interrupt, it's so the thought doesn't vanish, not because I'm not listening"],["forget","If I forget something, it isn't that I don't care"]]},
     {id:"depleted", q:"When I'm running low, what helps", opts:[["shorter","Shorter messages"],["writing","Writing only"],["volume","Lower volume and fewer people"],["notopic","Don't add a second topic"],["return","Name a return time, then give space"]]},
     {id:"sensory", q:"Sensory needs", opts:[["noise","Quiet, or a lower volume"],["light","Softer light, no glare"],["room","Room to move, not boxed in"],["touch","Ask before touching"],["scent","Strong smells are hard for me"],["breaks","Short breaks in long talks"]]},
     {id:"notice", q:"How much notice I need for a change of plan", one:true, opts:[["same","A heads-up the same day is fine"],["hours","A few hours"],["day","A day ahead"],["days","A few days, when I can"]]},
@@ -256,6 +259,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       "brief|wrong": "If a short text can mean something’s wrong, add a word that says which: “All good, just busy” or “Something’s up, can we talk later?”"},
       any: "Add a quick tag to short texts, like “all good, just brief,” so a short reply isn’t read as a mood."},
     upset: {pairs: {
+      "space|signal": "A quick “we’re okay” first, then space with a time to come back: “We’re okay. I need twenty minutes; let’s talk at eight.”",
       "space|company": "Agree the order ahead of time: space first, with a named time to come back, then company. “I need twenty minutes. Come find me at eight.”",
       "space|talk": "Agree the order ahead of time: space first, with a named time to come back, then talk. “I need twenty minutes. Let’s talk at eight.”"},
       any: "When one of you is upset, ask once: “Space, company or talk?” and go with the answer, even if it isn’t what you’d want."},
@@ -266,13 +270,42 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     notice: {any: "Use the longer notice for anything that changes shared plans, and send a quick heads-up as soon as you know, even if it isn’t final yet."},
     channel: {any: "For each kind of topic, agree one place: plans by text, feelings in person, and so on. Writing it down once saves a lot of guessing."},
     interrupt: {any: "Agree one way to get each other’s attention, and keep “this is urgent” for the times it really is."},
-    quiethelp: {any: "Ask once: “Do you want time, company, or to write it?” Then give that, and trust them to come back."}
+    quiethelp: {any: "Ask once: “Do you want time, company, or to write it?” Then give that, and trust them to come back."},
+    // one bridge for each pick, used for whichever picks only one card has
+    adhd: {each: {
+      remind: "Agree what a reminder looks like (one text, a note on the fridge, a shared list), and take it as help, not nagging.",
+      crit: "Start with what’s okay, then the one thing to change: “Dinner was lovely. Could the pans go in to soak too?”",
+      double: "Offer to be in the room while a dull job gets started. You don’t have to help; being there is the help.",
+      time: "Give a heads-up before it matters: “We leave in twenty minutes,” then “Ten minutes.” A timer you can both see does the reminding.",
+      steps: "Name just the first small step, and write it where you can both see it.",
+      vanish: "Keep a note handy so a thought can be parked, not lost. When it can’t wait, “Sorry, quick thought” and then hand the talk back.",
+      forget: "Treat a slip as a setup problem, not a feelings one: a shared list or a reminder fixes more than a talk does."},
+      any: "Pick one line from this part of the card and try it for a week. Then check in: did it help?"}
   };
   function bridgeFor(id, ia, ib){
     const B = BRIDGES[id]; if(!B) return "";
+    if(B.each){ const only = ia.filter(x=>!ib.includes(x)).concat(ib.filter(x=>!ia.includes(x))).filter(x=>B.each[x]); return only.length ? only.slice(0,2).map(x=>B.each[x]).join(" ") : B.any; }
     const pair = Object.keys(B.pairs||{}).find(k=>{ const [x,y] = k.split("|"); return (ia.includes(x)&&ib.includes(y)) || (ia.includes(y)&&ib.includes(x)); });
     return pair ? B.pairs[pair] : B.any;
   }
+
+  // "You both ...": how a shared pick reads in the line above the comparison
+  const SHARED_SAY = {
+    "words:literal":"take words literally", "words:tone":"read tone as part of the message", "words:both":"take words literally when it matters",
+    "ask:headline":"want the ask stated plainly", "ask:could":"want the ask stated plainly", "avoid:hints":"want the ask stated plainly", "ask:choice":"like two clear options better than an open guess",
+    "ask:list":"like things in one written list", "receive:list":"like things in one written list", "receive:writing":"take things in best in writing", "receive:one":"do best with one thing at a time",
+    "receive:face":"like big things face to face", "receive:voice":"like a voice note you can replay", "receive:call":"find a short call works well", "receive:aloud":"like the important parts read out",
+    "time:sec":"can answer in a few seconds", "time:min":"need a little time before answering", "time:tomorrow":"need time before answering", "time:write":"like questions written down to answer later",
+    "quiet:think":"go quiet when you’re thinking", "quiet:load":"go quiet when you’re overloaded", "quiet:space":"go quiet when you need space", "quiet:upset":"go quiet before you have words for being upset", "quiet:fine":"can be quiet with nothing wrong",
+    "upset:space":"need space first when upset", "upset:signal":"want a signal that you’re still okay", "upset:talk":"want to talk things through", "upset:company":"like quiet company when upset", "upset:plan":"like a written plan when upset",
+    "avoid:sarcasm":"want no sarcasm when it matters", "avoid:loud":"find loud voices hard", "avoid:surprise":"want a warning before a hard topic", "avoid:public":"would rather not be corrected in public",
+    "avoid:calm":"would rather never hear “calm down”", "avoid:long":"find long texts or many topics at once hard", "avoid:always":"want to leave out “always,” “never” and labels",
+    "depleted:shorter":"need shorter messages when running low", "depleted:return":"want a return time, then space, when running low", "sensory:noise":"do better somewhere quiet", "sensory:touch":"want to be asked before touching",
+    "wire:written":"remember written words better", "wire:spoken":"remember spoken words better", "wire:moment":"need a moment to turn words into meaning", "wire:noise":"find background noise hard to talk over",
+    "wire:fast":"get lost in fast talk or many topics at once", "wire:tone":"feel tone strongly", "wire:change":"get thrown by a sudden change of plan", "wire:short":"do best with short, clear messages",
+    "adhd:remind":"find reminders helpful, not nagging", "adhd:crit":"want to hear what’s okay before what to change", "adhd:time":"want a heads-up before time matters", "adhd:double":"start more easily side by side"
+  };
+  function joinAnd(a){ return a.length < 2 ? a.join("") : a.slice(0,-1).join(", ") + (a.length > 2 ? "," : "") + " and " + a[a.length-1]; }
 
   const people = ["A"];
   const state = {A: fresh(), B: fresh()};
@@ -281,7 +314,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   const CORE = ["receive","words","time","quiet","ask"];
   const moreOpen = {A:false, B:false};
 
-  function fresh(){ return {name:"", wiring:new Set(), picks:{}, custom:{}}; }
+  function fresh(){ return {name:"", wiring:new Set(), picks:{}, custom:{}, wave:""}; }
+  function okWave(c){ c = String(c||"").toUpperCase(); return /^[QS][FT][DN][EA]$/.test(c) ? c : ""; }
   function $(s,r){ return (r||document).querySelector(s); }
   function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
 
@@ -311,6 +345,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     h += '<p class="hint">Pick what is usually true for you. Add a few words where the buttons are not enough. Leave a line blank if it does not apply.</p>';
     h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
     h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
+    h += waveBox(who);
     // a quick start first, then the five lines most cards need; the rest wait behind "More lines"
     if(who==="A"){
       h += '<div class="presets"><span class="lab">A quick start, optional <span class="how">(adds picks; you can undo)</span></span><div class="chips" role="group" aria-label="Quick-start picks">';
@@ -330,7 +365,9 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       return s;
     };
     LINES.filter(l=>CORE.includes(l.id)).forEach(line=>{ h += lineHtml(line); });
-    const extra = LINES.filter(l=>!CORE.includes(l.id)), filledExtra = extra.filter(l=>lineText(who, l)).length + (st.wiring.size ? 1 : 0);
+    // optional groups, such as "Often shared by ADHD folks": in view, with their own heading, and fine to leave blank
+    LINES.filter(l=>l.group).forEach(line=>{ h += '<div class="lgroup"><p class="ghead">'+esc(line.group)+' <span class="how">(optional; anyone can pick these, no diagnosis needed)</span></p>'+lineHtml(line)+'</div>'; });
+    const extra = LINES.filter(l=>!CORE.includes(l.id) && !l.group), filledExtra = extra.filter(l=>lineText(who, l)).length + (st.wiring.size ? 1 : 0);
     const open = moreOpen[who] || filledExtra > 0;
     h += '<details class="more" data-more="'+who+'"'+(open?" open":"")+'><summary>More lines, optional <span class="how">('+(extra.length+1)+' more'+(filledExtra?', '+filledExtra+' filled in':'')+')</span></summary>';
     h += '<span class="lab">How words reach me <span class="how">(pick any that fit; opposites replace each other)</span></span>';
@@ -389,8 +426,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
         const t = lineText(who, line);
         return t ? '<dt>'+esc(line.q)+'</dt><dd>'+esc(t)+'</dd>' : '';
       }).join("");
-      const body = rows ? '<dl>'+rows+'</dl>' : (wire ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
-      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
+      const body = rows ? '<dl>'+rows+'</dl>' : (wire || st.wave ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
+      return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(st.wave?'<p class="wavecode">Wave Code '+esc(waveLabel(st.wave))+'</p>':'')+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
     }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
     $("#printwallet").addEventListener("click", printWallet);
     $("#copy").addEventListener("click", copyCard);
@@ -404,7 +441,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const P = window.TOLPDF, msg = t=>{ const m=$("#copymsg"); if(m) m.textContent = t; };
     if(!P){ msg("The PDF maker didn't load. Use Print, then choose Save as PDF."); return; }
     try{
-      const doc = new P.Doc({ title: "Wiring Card", producer: "The Objective Ledger, made on this device" });
+      const doc = new P.Doc({ title: "Wiring Card", producer: "Spread Love & Acceptance, made on this device" });
       const L = 54, W = 504, enc = t=>P.encode(t);
       let y = 60;
       function room(hh){ if(y + hh > 740){ doc.addPage(); y = 60; } }
@@ -417,6 +454,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
         doc.text(L, y + 8, enc("WIRING CARD  ·  NOT A DIAGNOSIS"), "Helvetica-Bold", 7.5, "#8A5E1E"); y += 16;
         doc.text(L, y + 20, enc(name), "Times-Bold", 22, "#211D17"); y += 32;
         const wire = wiringLabel(who);
+        if(st.wave){ para("Wave Code " + waveLabel(st.wave) + ", from Wavelength", "Helvetica-Bold", 9.5, "#2B5B8C"); y += 2; }
         if(wire){ para("How words reach me: " + wire, "Helvetica", 9.5, "#524B3E"); y += 4; }
         LINES.forEach(line=>{
           const t = lineText(who, line);
@@ -437,14 +475,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   }
 
   // "Keep my card on this device": off by default, in this browser only, removed by Erase.
-  function snapshot(){ const o = {people: people.slice()}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom}; }); return o; }
+  function snapshot(){ const o = {people: people.slice()}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom, wave: s.wave||""}; }); return o; }
   function keepNow(){ if(!keep) return; try{ localStorage.setItem(KEEP_KEY, JSON.stringify(snapshot())); }catch(e){} }
   function readKept(){
     try{
       const d = JSON.parse(localStorage.getItem(KEEP_KEY) || "null");
       if(!d || !Array.isArray(d.people)) return false;
       people.length = 0; d.people.filter(w=>w==="A"||w==="B").forEach(w=>people.push(w)); if(!people.length) people.push("A");
-      ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: s.picks||{}, custom: s.custom||{}}; });
+      ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: s.picks||{}, custom: s.custom||{}, wave: okWave(s.wave)}; });
       return true;
     }catch(e){ return false; }
   }
@@ -454,6 +492,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const nm = st.name.trim();
     const lines = [nm ? "Wiring card: "+nm : (who==="A"?"Wiring card":"Second wiring card")];
     const wire = wiringLabel(who);
+    if(st.wave) lines.push("Wave Code: "+waveLabel(st.wave)+" (from Wavelength)");
     if(wire) lines.push("How words reach me: "+wire);
     LINES.forEach(line=>{
       const t = lineText(who, line);
@@ -470,6 +509,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const st = state[who], o = {};
     if(st.name.trim()) o.n = st.name.trim();
     if(st.wiring.size) o.w = [...st.wiring];
+    if(st.wave) o.v = st.wave;
     const p = {}; Object.keys(st.picks).forEach(k=>{ if((st.picks[k]||[]).length) p[k] = st.picks[k].slice(); }); if(Object.keys(p).length) o.p = p;
     const c = {}; Object.keys(st.custom).forEach(k=>{ const v = String(st.custom[k]||"").trim(); if(v) c[k] = v; }); if(Object.keys(c).length) o.c = c;
     let bin = ""; new TextEncoder().encode(JSON.stringify(o)).forEach(b=>{ bin += String.fromCharCode(b); });
@@ -479,6 +519,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   function cleanCard(o){
     const out = fresh();
     out.name = String(o.n||"").slice(0,60);
+    out.wave = okWave(o.v);
     (Array.isArray(o.w)?o.w:[]).forEach(id=>{ if(WIRING.some(w=>w[0]===id)) out.wiring.add(id); });
     LINES.forEach(l=>{
       const ids = (o.p && Array.isArray(o.p[l.id]) ? o.p[l.id] : []).filter((id,i,a)=>l.opts.some(x=>x[0]===id) && a.indexOf(id)===i);
@@ -509,6 +550,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       const head = ln.match(/^(?:Second wiring card|Wiring card)(?::\s*(.*))?$/i);
       if(head){ cur = fresh(); cur.name = (head[1]||"").slice(0,60); cards.push(cur); return; }
       if(!cur) return;
+      const wv = ln.match(/^Wave Code:\s*([QS][FT][DN][EA])\b/i); if(wv){ cur.wave = okWave(wv[1]); return; }
       if(/^How words reach me:/i.test(ln)){ let rest = ln.replace(/^How words reach me:\s*/i,""); WIRING.slice().sort((a,b)=>b[1].length-a[1].length).forEach(w=>{ if(rest.includes(w[1])){ cur.wiring.add(w[0]); rest = rest.replace(w[1],""); } }); return; }
       const line = LINES.find(l=>ln.indexOf(l.q+": ")===0); if(!line) return;
       let rest = ln.slice(line.q.length+2);
@@ -516,10 +558,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       rest = rest.replace(/\s+/g," ").trim();
       if(rest.length > 1) cur.custom[line.id] = rest.slice(0,160);
     });
-    return cards.filter(c=>c.name || c.wiring.size || Object.keys(c.picks).length || Object.keys(c.custom).length);
+    return cards.filter(c=>c.name || c.wave || c.wiring.size || Object.keys(c.picks).length || Object.keys(c.custom).length);
   }
   function sameCard(a, b){
-    const key = s=>JSON.stringify([s.name.trim(), [...s.wiring].sort(), LINES.map(l=>(s.picks[l.id]||[]).slice().sort()), LINES.map(l=>String(s.custom[l.id]||"").trim())]);
+    const key = s=>JSON.stringify([s.name.trim(), s.wave||"", [...s.wiring].sort(), LINES.map(l=>(s.picks[l.id]||[]).slice().sort()), LINES.map(l=>String(s.custom[l.id]||"").trim())]);
     return key(a) === key(b);
   }
   // fill "The other person's card" from a pasted copy; their own card is the first one that isn't yours
@@ -545,6 +587,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const nm = st.name.trim();
     const out = ["### "+(nm ? "Wiring card: "+mdEsc(nm) : (who==="A"?"Wiring card":"Second wiring card"))];
     const wire = wiringLabel(who);
+    if(st.wave) out.push("*Wave Code:* "+mdEsc(waveLabel(st.wave)));
     if(wire) out.push("*How words reach me:* "+mdEsc(wire));
     out.push("");
     let any = false;
@@ -552,7 +595,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       const t = lineText(who, line);
       if(t){ out.push("- **"+mdEsc(line.q)+":** "+mdEsc(t)); any = true; }
     });
-    if(!any && !wire) out.push("- _Nothing on this card yet_");
+    if(!any && !wire && !st.wave) out.push("- _Nothing on this card yet_");
     out.push("");
     out.push("> Not a diagnosis, not a contract, and not a label. Applies more strictly when I am running low. Change it when it stops being true.");
     return out.join("\n");
@@ -586,10 +629,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   function loadSnap(d){
     if(!d || !Array.isArray(d.people)) return false;
     people.length = 0; d.people.filter(w=>w==="A"||w==="B").forEach(w=>people.push(w)); if(!people.length) people.push("A");
-    ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: JSON.parse(JSON.stringify(s.picks||{})), custom: Object.assign({}, s.custom||{})}; });
+    ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: JSON.parse(JSON.stringify(s.picks||{})), custom: Object.assign({}, s.custom||{}), wave: okWave(s.wave)}; });
     return true;
   }
-  function hasContent(who){ const s = state[who]; return !!(s.wiring.size || Object.keys(s.picks).some(k=>(s.picks[k]||[]).length) || Object.keys(s.custom).some(k=>String(s.custom[k]||"").trim())); }
+  function hasContent(who){ const s = state[who]; return !!(s.wave || s.wiring.size || Object.keys(s.picks).some(k=>(s.picks[k]||[]).length) || Object.keys(s.custom).some(k=>String(s.custom[k]||"").trim())); }
 
   // Side by side: where two cards overlap, and where they don't (the best places for a short talk).
   function picksOf(who, line){ const o = (state[who].picks[line.id]||[]).slice(); const c = String(state[who].custom[line.id]||"").trim(); return {ids:o, text:lineText(who, line), custom:c}; }
@@ -626,6 +669,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     $("#wallet").innerHTML = people.map(who=>{
       const st = state[who], nm = st.name.trim() || "My wiring card";
       let bits = [], wire = wiringLabel(who);
+      if(st.wave) bits.push(['Wave Code', waveLabel(st.wave)]);
       if(wire) bits.push(['How words reach me', wire]);
       LINES.forEach(l=>{ const t = lineText(who, l); if(t) bits.push([l.q, t]); });
       bits = bits.slice(0, 7);
@@ -695,14 +739,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       people.length = 0; people.push("A"); state.A = fresh(); state.B = fresh(); pending = null; undoSnap = null; showCmp = false;
       try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}
       paintForms(); paint(); try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}
-      const m = $("#pickmsg"); if(m) m.textContent = "Cleared. Nothing from this card is kept in this tab.";
+      const m = $("#pickmsg"); if(m) m.textContent = keep ? "Cleared. The card kept on this device is blank now too; Erase removes it." : "Cleared. Nothing from this card is kept in this tab.";
       return;
     }
     if(t.dataset.preset){ applyPreset(t.dataset.who, t.dataset.preset); paintForms(); paint(); return; }
     if(t.id==="pasteopen"){ pasteOpen = !pasteOpen; pasteMsg = ""; paintForms(); const ta = $("#pastetext"); if(ta) ta.focus(); else { const b = $("#pasteopen"); if(b) b.focus(); } return; }
     if(t.id==="pastecancel"){ pasteOpen = false; pasteDraft = ""; pasteMsg = ""; paintForms(); const b = $("#pasteopen"); if(b) b.focus(); return; }
     if(t.id==="pastego"){ const ta = $("#pastetext"); pasteIn(ta ? ta.value : ""); return; }
-    if(t.id==="erasecard"){ keep = false; try{ localStorage.removeItem(KEY_OR()); }catch(err){} paintForms(); paint(); const m = $("#keepmsg"); if(m) m.textContent = "Erased. Nothing from your card is kept on this device."; return; }
+    if(t.id==="erasecard"){ keep = false; try{ localStorage.removeItem(KEY_OR()); }catch(err){} paintForms(); paint(); const m = $("#keepmsg"); if(m) m.textContent = "Erased from this device. This tab still holds a draft until you close it; Clear removes that too."; return; }
     if(t.id==="addB"){ people.push("B"); state.B=fresh(); paintForms(); paint(); return; }
     if(t.id==="removeB"){ people.pop(); paintForms(); paint(); return; }
     const who = t.dataset.who;
@@ -731,7 +775,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     keep = e.target.checked;
     const m = $("#keepmsg");
     if(keep){ keepNow(); if(m) m.textContent = "Kept on this device only. Press Erase any time to remove it."; }
-    else { try{ localStorage.removeItem(KEEP_KEY); }catch(err){} if(m) m.textContent = "Not kept any more. Nothing from your card is on this device."; }
+    else { try{ localStorage.removeItem(KEEP_KEY); }catch(err){} if(m) m.textContent = "Not kept on this device any more. This tab still holds a draft until you close it; Clear removes that too."; }
   });
   $("#forms").addEventListener("input", e=>{
     const t = e.target;

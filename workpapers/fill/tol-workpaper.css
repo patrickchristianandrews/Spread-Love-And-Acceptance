@@ -242,14 +242,16 @@
   .wpf-computed dd{ margin-bottom: 10px; }
   .wpf-bar-actions{ width: 100%; }
   .wpf-bar-actions button{ flex: 1 1 auto; }
-  /* one row on a phone: Download PDF and More; the rest open under More */
+  /* one row on a phone: Save draft, Download PDF and More; Open and Fillable PDF open under More.
+     The hiding rule only applies while More is closed (:not(.is-open)), so nothing has to out-rank it
+     to show the buttons again: an earlier version hid them with an id selector and they stayed hidden. */
   .wpf-bar{ padding-top: 8px; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
-  .wpf-bar-actions.has-more .wpf-btn-quiet:not(.wpf-bar-more):not(#wpf-save){ display: none; }
+  .wpf-bar-actions.has-more:not(.is-open) .wpf-btn-quiet:not(.wpf-bar-more):not(#wpf-save){ display: none; }
   .wpf-bar-actions.has-more #wpf-save{ display: inline-block; order: 1; flex: 1 1 auto; }
   .wpf-bar-actions.has-more.is-open .wpf-btn-quiet:not(.wpf-bar-more){ display: inline-block; flex: 1 1 30%; }
   .wpf-bar-actions.has-more .wpf-bar-more{ display: inline-block; flex: 0 0 auto; order: 2; }
   .wpf-bar-actions.has-more .wpf-btn{ order: 1; flex: 1 1 auto; }
-  .wpf-bar-actions.has-more.is-open .wpf-btn-quiet:not(.wpf-bar-more){ order: 3; }
+  .wpf-bar-actions.has-more.is-open .wpf-btn-quiet:not(.wpf-bar-more):not(#wpf-save){ order: 3; }
 }
 
 /* ================= Workpaper Suite (suite.html) ================= */
