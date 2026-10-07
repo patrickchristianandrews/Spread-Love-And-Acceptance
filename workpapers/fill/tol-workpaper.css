@@ -665,3 +665,5 @@ html.ws-locked .tol-planted{ display: none !important; }
 .ws-compare-list li{ margin: 0 0 8px; overflow-wrap: anywhere; }
 .ws-compare-sides{ display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
 .ws-sheet-rm{ margin-left: auto; }
+.ws-split{ margin: 10px 0 0; padding: 8px 12px; border-radius: 12px; background: var(--paper, #FBF6E9); border: 1px dashed var(--line, #D9CBA3); font-size: .95rem; }
+.ws-split-t{ margin: 0 0 4px; overflow-wrap: anywhere; }

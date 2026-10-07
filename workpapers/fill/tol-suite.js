@@ -357,6 +357,7 @@
     $('ws-name-add').hidden = S.names.length >= MAX_PEOPLE;
     $('ws-names-count').textContent = S.names.length + ' people · up to ' + MAX_PEOPLE;
     $('ws-care').textContent = p.care;
+    renderSplit();
     hhRefresh();
     refreshDynamic();
   }
@@ -675,6 +676,18 @@
     host.appendChild(h('button', { type: 'button', className: 'ws-link', 'data-split-forget': '1', text: 'Use an even split instead' }));
   }
 
+  function splitClean(x) {
+    if (!x || typeof x !== 'object') return null;
+    var out = { nights: {}, agreed: {} };
+    ['nights', 'agreed'].forEach(function (k) { var o = x[k]; if (o && typeof o === 'object') Object.keys(o).slice(0, MAX_PEOPLE).forEach(function (nm) { var v = parseFloat(o[nm]); if (isFinite(v) && v > 0 && v <= (k === 'nights' ? 14 : 100)) out[k][String(nm).slice(0, 40)] = v; }); });
+    return Object.keys(out.nights).length || Object.keys(out.agreed).length ? out : null;
+  }
+  function fromClean(f) {
+    var o = {};
+    ['by', 'saved', 'file'].forEach(function (k) { if (typeof f[k] === 'string') o[k] = f[k].slice(0, 80); });
+    if (f.lemon) o.lemon = 1;
+    return o;
+  }
   // The sheets the stand fills in carry from.lemon, so bringing the stand in again updates them in place.
   function lemonEntry(code) {
     var hit = null;
@@ -735,7 +748,7 @@
       });
     });
     var sideNames = Object.keys(sides).map(function (c) { return whoLabel(WPK.CODES.indexOf(c)); });
-    var sideWord = d.by && sideNames.length <= 1 ? d.by + '’s side' : sideNames.length ? andList(sideNames.map(function (x) { return x + '’s'; })) + (sideNames.length === 1 ? ' side' : ' sides') : '';
+    var sideWord = d.by ? d.by + '’s side' : sideNames.length ? andList(sideNames.map(function (x) { return x + '’s'; })) + (sideNames.length === 1 ? ' side' : ' sides') : '';
     var hasWp01 = S.stops.some(function (st) { return st.wp === 'WP-01'; }) && !isSolo();
     if (rows.length && hasWp01) {
       var h1 = lemonEntry('WP-01');
@@ -834,6 +847,7 @@
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
     var by = deviceOwner(); if (by) out.by = by;
     if (kidsOn()) { kidsFit(); if (S.kids.some(Boolean)) out.kids = S.kids.slice(); }
+    if (S.split) out.split = S.split;
     if (S.variant) out.variant = S.variant;
     if (Array.isArray(S.focusEach)) out.focusEach = S.focusEach.slice(0, MAX_PEOPLE);
     return out;
@@ -1494,6 +1508,7 @@
             S.names = d.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); });
             fitNames();
           }
+          if (d.split && !S.split) S.split = splitClean(d.split);
           // who is marked as a child there, matched by name here
           if (Array.isArray(d.kids) && Array.isArray(d.names)) {
             kidsFit();
@@ -1505,6 +1520,7 @@
             var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) };
             if (typeof x.person === 'number') personByName(en, x.person, d.names);
             en.from = fromNote(f, d);
+            if (x.from && x.from.lemon) en.from.lemon = 1;
             put(en, d.path, d.names);
           });
           return;
@@ -1720,12 +1736,14 @@
       if (kept.path && pathById(kept.path)) setPath(kept.path, typeof kept.variant === 'string' ? kept.variant : null);
       if (Array.isArray(kept.names)) { S.names = kept.names.slice(0, MAX_PEOPLE).map(function (x) { return String(x || ''); }); fitNames(); }
       if (Array.isArray(kept.kids)) S.kids = kept.kids.slice(0, MAX_PEOPLE).map(Boolean);
+      S.split = splitClean(kept.split);
       if (Array.isArray(kept.focusEach)) { S.focusEach = kept.focusEach.slice(0, MAX_PEOPLE).map(function (x) { return typeof x === 'string' && /^[a-z]{1,20}$/.test(x) ? x : null; }); renderFocus(); }
       kept.entries.forEach(function (x) {
         var sc = x && schema(x.workpaper);
         if (!sc) return;
         var en = { workpaper: sc.code, label: typeof x.label === 'string' ? x.label.slice(0, 80) : '', state: clean(sc, x.state) };
         if (typeof x.person === 'number') en.person = x.person;
+        if (x.from && typeof x.from === 'object') en.from = fromClean(x.from);
         place(en);
       });
       syncAllNames(); syncRoadPeople();
@@ -1762,16 +1780,18 @@
       if (e.target.getAttribute('data-name') != null) { clearTimeout(nameTimer); roadSoon(); }
     });
     $('ws-names').addEventListener('click', function (e) {
+      if (e.target.closest('[data-split-forget]')) { S.split = null; changed(); renderNames(); renderRoad(); say('Each week is read against an even split now. Bring in your Lemonade Stand again to use its split.'); return; }
       var x = e.target.closest('[data-remove-name]');
       if (x) removeName(+x.getAttribute('data-remove-name'));
       if (e.target.closest('#ws-name-add')) addName();
     });
     var lemonGo = $('ws-lemon-go'), lemonUse = $('ws-lemon-kept'), lemonSay = function (m) { var n = $('ws-lemon-note'); if (n) { n.textContent = ''; setTimeout(function () { n.textContent = m; }, 30); } };
     if (lemonGo) lemonGo.addEventListener('click', function () {
-      var d = lemonFromCode($('ws-lemon-code').value);
-      if (!d) { lemonSay('That doesn’t look like a Lemonade Stand code. Copy the whole thing, starting with LEMON1:'); $('ws-lemon-code').focus(); return; }
-      lemonSay(lemonBring(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand code' }));
-      $('ws-lemon-code').value = '';
+      lemonRead($('ws-lemon-code').value, function (d) {
+        if (!d) { lemonSay('That doesn’t look like a Lemonade Stand code. Copy the whole thing, starting with LEMON1: (or the whole link).'); $('ws-lemon-code').focus(); return; }
+        lemonSay(lemonBring(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand code' }));
+        $('ws-lemon-code').value = '';
+      });
     });
     if (lemonUse) lemonUse.addEventListener('click', function () {
       var d = lemonKept();

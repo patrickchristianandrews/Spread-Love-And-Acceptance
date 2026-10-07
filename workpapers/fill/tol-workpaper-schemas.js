@@ -158,7 +158,9 @@
             var gaps = people.map(function (p, i) { return pct[p] - tgt.t[i] * 100; }), big = 0;
             gaps.forEach(function (g, i) { if (Math.abs(g) > Math.abs(gaps[big])) big = i; });
             var gp = Math.round(Math.abs(gaps[big]));
-            out.push({ label: 'Against ' + tgt.label.replace(/ \(.*\)$/, ''), value: gp < 5 ? 'Close to it this week.' : ctx.name(people[big]) + ' is about ' + gp + ' points ' + (gaps[big] > 0 ? 'over' : 'under') + ' ' + tgt.label + '.', note: 'A fact about how this week fell, not about effort or care.' });
+            // the same words as the Lemonade Stand: within 5 points (or 10 while the balance holds) reads as close
+            var held = balance != null && balance >= 0.70, off = ctx.name(people[big]) + ' is about ' + gp + ' points ' + (gaps[big] > 0 ? 'over' : 'under');
+            out.push({ label: tgt.mode === 'agreed' ? 'Against the split you agreed' : 'Against each person\u2019s share', value: gp < 5 || (gp < 10 && held) ? 'Close to ' + tgt.label + ' this week.' : held ? 'Near ' + tgt.label + ' this week. ' + off + ', and the balance score still reads as holding.' : 'Further from ' + tgt.label + ' this week. ' + off + '.', note: 'A fact about how this week fell, not about effort or care.' });
             if (left) out.push(left);
             return out;
           }

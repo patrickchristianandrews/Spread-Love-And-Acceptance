@@ -42,14 +42,29 @@
 <style>
   /* Homepage additions */
   /* First screen: what this is, who it's for, and where to start */
-  .read .hh{ margin:0 0 1.6rem; padding:0; text-align:left; }
+  .read .hh{ position:relative; isolation:isolate; overflow:hidden; margin:0 0 1.8rem; padding:clamp(1.25rem, .8rem + 2.4vw, 2.3rem); text-align:left;
+    border-radius:28px; background:rgba(255,251,244,.9); border:1px solid rgba(255,255,255,.85);
+    box-shadow:0 24px 60px -28px rgba(78,63,107,.45), 0 2px 8px rgba(78,63,107,.08); }
+  @supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+    .read .hh{ background:rgba(255,251,244,.8); -webkit-backdrop-filter:blur(16px) saturate(1.15); backdrop-filter:blur(16px) saturate(1.15); }
+  }
+  /* Two soft glows in the corners */
+  .read .hh::before, .read .hh::after{ content:""; position:absolute; z-index:-1; border-radius:50%; pointer-events:none; }
+  .read .hh::before{ top:-140px; right:-120px; width:340px; height:340px; background:radial-gradient(closest-side, rgba(244,170,190,.55), rgba(244,170,190,0)); }
+  .read .hh::after{ bottom:-160px; left:-140px; width:380px; height:380px; background:radial-gradient(closest-side, rgba(190,168,232,.5), rgba(190,168,232,0)); }
   .read .hh p, .read .hh h1, .read .hh ul, .read .hh li{ max-width:none; }
-  .read .hh-brand{ margin:0 0 .35rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.05rem; color:var(--brass-ink, #7A5620); }
-  .read .hh-h1{ margin:0 0 .7rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.85rem, 1.2rem + 2.6vw, 2.75rem); line-height:1.12; letter-spacing:-.015em; color:var(--ink, #2B2620); }
-  .read .hh-kick{ display:block; margin:0 0 .4rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--credit, #3E6B4C); }
-  .read .hh-lede{ margin:0 0 .55rem; font-size:1.12rem; line-height:1.55; color:var(--ink, #2B2620); }
-  .read .hh-who{ margin:0 0 1.1rem; font-size:.98rem; color:var(--ink-soft, #5A5346); }
-  .read .hh-who-k{ font-weight:600; color:var(--ink, #2B2620); }
+  .read .hh-brand{ display:flex; align-items:center; gap:.4rem; margin:0 0 .6rem; font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:1.02rem; color:#7A5620; }
+  .read .hh-heart{ display:inline-grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%; font-style:normal; font-size:.95rem; color:#A23E63; background:#FCE4EA; }
+  .read .hh-kick{ display:flex; flex-wrap:wrap; gap:.35rem; margin:0 0 1rem; }
+  .read .hh-kick span{ display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .65rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;
+    color:#2F5E3E; background:rgba(226,242,230,.9); border:1px solid #C6E0CD; }
+  .read .hh-kick span::before{ content:"\2713"; font-weight:700; }
+  .read .hh-h1{ margin:0 0 .8rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(2rem, 1.2rem + 3vw, 2.75rem); line-height:1.1; letter-spacing:-.02em; color:var(--ink, #2B2620); text-wrap:balance; }
+  .read .hh-accent{ display:inline; font-style:italic; font-weight:500; color:#8A3F72;
+    background:linear-gradient(100deg, #B0405F 0%, #7A4A92 55%, #2B5B8C 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .read .hh-nw{ white-space:nowrap; }
+  @media (forced-colors: active){ .read .hh-accent{ background:none; -webkit-text-fill-color:currentColor; } }
+  .read .hh-lede{ margin:0 0 1.3rem; max-width:40em; font-size:1.14rem; line-height:1.6; color:#3F382E; text-wrap:pretty; }
   .read .hh-wxrow{ margin:0 0 1rem; }
   .read a.hh-wx{ display:flex; align-items:center; gap:.8rem; box-sizing:border-box; min-height:64px; padding:.75rem 1rem; border-radius:16px; background:linear-gradient(135deg,#FFF1CF,#FFE0E8); border:2px solid #E3B15C; color:#3C3350; text-decoration:none; }
   .read a.hh-wx:hover{ background:linear-gradient(135deg,#FFEAB8,#FFD3DF); }
@@ -59,31 +74,45 @@
   .read .hh-wx-main{ font-family:"Fraunces", Georgia, serif; font-weight:700; font-size:1.2rem; line-height:1.2; }
   .read .hh-wx-sub{ font-size:.92rem; line-height:1.35; }
   .read .hh-wx-go{ font-size:1.4rem; font-weight:700; }
-  .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.7rem; margin:0 0 .9rem; padding:0; list-style:none; }
+  .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.8rem; margin:0 0 1rem; padding:0; list-style:none; }
   .read .hh .hh-go li{ margin:0; padding:0; width:auto; }
   .read .hh-go li::before, .read .hh-more li::before{ content:none; }
-  .read a.hh-card{ display:flex; flex-direction:column; justify-content:center; gap:.2rem; height:100%; box-sizing:border-box; min-height:64px; padding:.8rem .85rem;
-    border-radius:18px 18px 18px 6px; border:1.5px solid #D9C8F0; background:#FFFBF2; color:var(--ink, #2B2620); text-decoration:none; }
-  .read a.hh-card.is-main{ background:var(--focus, #2B5B8C); border-color:var(--focus, #2B5B8C); color:#FFFDF7; }
-  .read .hh-card-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.06rem; line-height:1.2; }
+  .read a.hh-card{ display:flex; flex-direction:column; align-items:flex-start; gap:.55rem; height:100%; box-sizing:border-box; min-height:64px; padding:1rem 1rem 1.05rem;
+    border-radius:20px; border:1px solid #E6DAF3; background:#FFFFFF; color:var(--ink, #2B2620); text-decoration:none;
+    box-shadow:0 10px 24px -16px rgba(78,63,107,.55), 0 1px 2px rgba(78,63,107,.06); }
+  .read a.hh-card.is-main{ background:linear-gradient(140deg, #5B3F82 0%, #2B5B8C 100%); border-color:transparent; color:#FFFDF7; box-shadow:0 14px 30px -14px rgba(43,91,140,.7); }
+  .read .hh-card-i{ display:grid; place-items:center; flex:0 0 auto; width:2.5rem; height:2.5rem; border-radius:14px; font-size:1.35rem; line-height:1; background:#F4ECFB; }
+  .read .hh-go li:nth-child(2) .hh-card-i{ background:#FFF0D9; }
+  .read .hh-go li:nth-child(3) .hh-card-i{ background:#E3F2E7; }
+  .read a.hh-card.is-main .hh-card-i{ background:rgba(255,255,255,.18); }
+  .read .hh-card-b{ display:flex; flex-direction:column; gap:.2rem; min-width:0; }
+  .read .hh-card-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; line-height:1.2; }
   .read .hh-card-t::after{ content:"\a0\2192"; font-family:"Lora", Georgia, serif; font-weight:400; }
-  .read .hh-card-n{ font-size:.9rem; line-height:1.35; opacity:.88; }
-  .read a.hh-card:hover{ border-color:#9A80C8; background:#FFF7EA; }
-  .read a.hh-card.is-main:hover{ background:#244E78; border-color:#244E78; }
+  .read .hh-card-n{ font-size:.9rem; line-height:1.4; opacity:.9; }
+  .read a.hh-card:hover{ border-color:#B9A2DD; box-shadow:0 16px 30px -16px rgba(78,63,107,.6), 0 1px 2px rgba(78,63,107,.06); }
+  .read a.hh-card.is-main:hover{ background:linear-gradient(140deg, #4E3570 0%, #244E78 100%); }
   .read a.hh-card:focus-visible, .read .hh-more a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
   .read .hh-more{ display:flex; flex-wrap:wrap; gap:.45rem; margin:0; padding:0; list-style:none; }
   .read .hh .hh-more li{ margin:0; padding:0; width:auto; }
-  .read .hh-more a{ display:flex; flex-direction:column; justify-content:center; min-height:44px; height:100%; box-sizing:border-box; padding:.3rem .9rem; border-radius:16px; line-height:1.2;
-    border:1px solid var(--line, #D9CBA3); background:rgba(255,251,242,.7); color:var(--ink, #2B2620); text-decoration:none; font-size:.92rem; font-weight:600; }
-  .read .hh-more a:hover{ border-color:#9A80C8; }
+  .read .hh-more a{ display:flex; flex-direction:column; justify-content:center; min-height:44px; height:100%; box-sizing:border-box; padding:.35rem .9rem; border-radius:14px; line-height:1.2;
+    border:1px solid #E6DAF3; background:rgba(255,255,255,.78); color:var(--ink, #2B2620); text-decoration:none; font-size:.92rem; font-weight:600; }
+  .read .hh-more a:hover{ border-color:#B9A2DD; background:#FFFFFF; }
   .read .hh-more-k{ font-weight:400; font-size:.78rem; color:var(--ink-soft, #5A5346); }
-  @media (prefers-reduced-motion: no-preference){ .read a.hh-card, .read .hh-more a{ transition:background-color .15s ease, border-color .15s ease; } }
+  @media (prefers-reduced-motion: no-preference){
+    .read a.hh-card, .read .hh-more a{ transition:background-color .15s ease, border-color .15s ease, box-shadow .2s ease, transform .2s ease; }
+    .read a.hh-card:hover, .read .hh-more a:hover{ transform:translateY(-2px); }
+  }
+  /* Keep the little icons in their real colours when the page is shown dark */
+  @media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) .read .hh-card-i{ filter:invert(1) hue-rotate(180deg); } }
+  html[data-theme="dark"]:not(.tol-nodark) .read .hh-card-i{ filter:invert(1) hue-rotate(180deg); }
   @media (max-width:640px){
-    .read .hh-go{ grid-template-columns:1fr; gap:.5rem; }
-    .read a.hh-card{ min-height:56px; padding:.6rem .95rem; }
+    .read .hh{ margin-left:-6px; margin-right:-6px; padding:1.2rem .95rem 1.3rem; border-radius:24px; }
+    .read .hh-h1{ font-size:clamp(1.85rem, 1rem + 4.2vw, 2.2rem); }
+    .read .hh-go{ grid-template-columns:1fr; gap:.55rem; }
+    .read a.hh-card{ flex-direction:row; align-items:center; gap:.8rem; min-height:56px; padding:.7rem .9rem; }
+    .read .hh-card-i{ width:2.3rem; height:2.3rem; font-size:1.2rem; border-radius:12px; }
     .read .hh-card-t{ font-size:1.08rem; }
-    .read .hh-lede{ font-size:1.05rem; }
-    .read .hh-who{ margin-bottom:.85rem; }
+    .read .hh-lede{ font-size:1.06rem; margin-bottom:1.1rem; }
     .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
     .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
   }
@@ -111,7 +140,7 @@
     .read .hh-t-x{ display:none; }
     .read .hh-time{ margin-bottom:.75rem; }
     .read .hh-time-opts{ display:grid; grid-template-columns:repeat(5, 1fr); gap:.35rem; }
-    .read .hh-time-opts button{ padding:.3rem .2rem; font-size:.92rem; }
+    .read .hh-time-opts button{ padding:.3rem .1rem; font-size:.88rem; white-space:nowrap; }
     .read .hh .cb-m{ flex-basis:3.6rem; }
     .read .hh .hh-time-plan.is-welcome .cb-step small{ display:none; }
   }
@@ -428,9 +457,9 @@
 <body>
 <main class="read">
 <section class="hh tol-plain no-bubble" data-home-intro aria-labelledby="hero-h">
-  <p class="hh-brand">Spread Love &amp; Acceptance</p>
-  <p class="hh-kick">Free · Private · Start without signing up</p>
-  <h1 id="hero-h" class="hh-h1">Less keeping score. More being on the same side.</h1>
+  <p class="hh-brand"><span class="hh-heart" aria-hidden="true">&#9825;</span> Spread Love &amp; Acceptance</p>
+  <p class="hh-kick"><span>Free</span> <span>Private</span> <span>No sign-up</span></p>
+  <h1 id="hero-h" class="hh-h1">Less keeping score.<br> <span class="hh-accent">More being on the <span class="hh-nw">same side.</span></span></h1>
   <p class="hh-lede">Kind, practical help for couples, families, housemates and coworkers, or just for you. Most tools take a minute or two, and nothing you type ever leaves your device.</p>
   <h2 class="sr-only">Where to start</h2>
   <div class="hh-time" data-cb-time>
@@ -445,9 +474,9 @@
     <div class="hh-time-plan" id="hh-time-plan" data-cb-plan aria-live="polite" hidden></div>
   </div>
   <ul class="hh-go">
-    <li><a class="hh-card is-main" href="/start-in-10-minutes.html"><span class="hh-card-t">Start in 10 minutes</span><span class="hh-card-n">One short, guided path. No sign-up.</span></a></li>
-    <li><a class="hh-card" href="/share-the-load.html"><span class="hh-card-t">Share the load</span><span class="hh-card-n">Chores, bills and the invisible jobs, in order</span></a></li>
-    <li><a class="hh-card" href="/upset-right-now.html"><span class="hh-card-t">Upset right now?</span><span class="hh-card-n">Five minutes to pause, breathe and come back</span></a></li>
+    <li><a class="hh-card is-main" href="/start-in-10-minutes.html"><span class="hh-card-i" aria-hidden="true">&#127793;</span><span class="hh-card-b"><span class="hh-card-t">Start in 10 minutes</span><span class="hh-card-n">One short, guided path. No sign-up.</span></span></a></li>
+    <li><a class="hh-card" href="/share-the-load.html"><span class="hh-card-i" aria-hidden="true">&#129530;</span><span class="hh-card-b"><span class="hh-card-t">Share the load</span><span class="hh-card-n">Chores, bills and the invisible jobs, in order</span></span></a></li>
+    <li><a class="hh-card" href="/upset-right-now.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">Upset right now?</span><span class="hh-card-n">Five minutes to pause, breathe and come back</span></span></a></li>
   </ul>
   <ul class="hh-more" aria-label="More ways in">
     <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>

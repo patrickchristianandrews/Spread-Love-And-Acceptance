@@ -294,11 +294,11 @@
       // who notices first, as each person sees it (j.nm[i] = 1: "I usually notice first"). An older stand
       // kept one name (nf); that becomes that person's mark. Just me: j.nso = "someone else notices first".
       if (!Array.isArray(j.nm)) {
-        j.nm = [];
+        j.nm = state.people.map(function () { return 0; });
         if (typeof j.nf === 'number' && j.nf >= 0 && j.nf < n) j.nm[j.nf] = 1;
         if (j.nf === -2) j.nso = 1;
       }
-      j.nm = fit(j.nm, n, 0).map(function (x) { return x ? 1 : 0; });
+      j.nm = fit(Array.from(j.nm), n, 0).map(function (x) { return x ? 1 : 0; });
       delete j.nf;
     });
     state.bills.forEach(function (b) {
@@ -1845,6 +1845,10 @@
     $('example-note').hidden = !anyExample();
     renderOwners();
     recalc();
+    // "Just the 3 steps" follows the stand (a cleared or blank stand shows everything again)
+    var on = !!state.compact && mode === 'group';
+    if (on) document.body.setAttribute('data-ls-compact', ''); else document.body.removeAttribute('data-ls-compact');
+    var bs = $('baby-steps'); if (bs) bs.hidden = !on;
   }
 
   /* ---------- result text ---------- */
@@ -1986,6 +1990,7 @@
     renderAll();
     setCompact(state.compact);
     var ln = $('last-names'); if (ln) ln.hidden = true;
+    outlineSync();
     if (announce) $('mode-msg').textContent = m === 'solo' ? 'Set up for just you. Your own week, with no comparison. Your entries are all still here.' : 'Set up for you and the people you share a home with. Each person fills in only their own side.';
   }
 
@@ -2046,7 +2051,7 @@
     var b = $('clear-draft');
     if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Tap again to clear'; clearTimeout(b.t); b.t = setTimeout(function () { delete b.dataset.armed; b.textContent = 'Clear'; }, 4000); return; }
     delete b.dataset.armed; b.textContent = 'Clear';
-    try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); } catch (e) {}
+    try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); sessionStorage.removeItem('tol-lemonade-pending'); } catch (e) {}
     if (keep) erase();
     state = clone(EXAMPLE); state.example = true; state.owners = []; state.mode = mode;
     renderAll();
@@ -2304,11 +2309,15 @@
       var o = { n: j.name.trim() };
       if (j.cat !== guessCat(o.n)) o.c = j.cat;
       if (j.freq !== 'week') o.f = j.freq;
+      // each person's own "how often", where it differs from the job's
+      if (j.fq) { var fq = byName(function (i) { return j.fq[i] !== j.freq ? j.fq[i] : ''; }); if (fq) o.fq = fq; }
       if (j.unit !== 'm') o.u = j.unit;
       if (j.inCall) o.ic = 1;
       var v = byName(function (i) { return num(j.v[i]); }), t = byName(function (i) { return num(j.t[i]); });
       if (v) o.v = v; if (t) o.t = t;
-      if (j.nf >= 0 && idx.indexOf(j.nf) >= 0) o.nf = nm(j.nf);
+      // who notices first, as each person marked it (nf as well, for a phone with an older page)
+      var marks = idx.filter(function (i) { return j.nm && j.nm[i]; }).map(nm);
+      if (marks.length) { o.nm = marks; if (marks.length === 1) o.nf = marks[0]; }
       if (j.personal) o.p = 1;
       return o;
     });
@@ -2340,7 +2349,8 @@
       // a household (names and jobs, never hours): from household.js
       var h = HH && HH.fromCode ? HH.fromCode(JSON.stringify(raw)) : null;
       if (!h) return null;
-      raw = { app: 'lemonade', by: '', people: h.people, jobs: h.jobs.map(function (j) { var lm = libMatch(j.name); return { n: j.name, f: lm ? lm.t[2] : 'week', u: lm && lm.t[3] ? lm.t[3] : 'm' }; }),
+      // how often comes with the household code now (f); an older code falls back to the library's, or each week
+      raw = { app: 'lemonade', by: '', people: h.people, jobs: h.jobs.map(function (j) { var lm = libMatch(j.name); return { n: j.name, f: FREQ[j.f] ? j.f : lm ? lm.t[2] : 'week', fx: !!FREQ[j.f], u: lm && lm.t[3] ? lm.t[3] : 'm' }; }),
         own: h.jobs.filter(function (j) { return j.owner; }).map(function (j) { return { n: j.name, w: j.owner }; }), household: true };
     }
     var people = [];
@@ -2355,7 +2365,10 @@
     function list(a, n) { return (Array.isArray(a) ? a : []).filter(function (x) { return x && typeof x === 'object'; }).slice(0, n); }
     var jobs = list(raw.jobs, 200).map(function (j) {
       var name = clean(j.n, 120), f = FREQ[j.f] ? j.f : 'week', u = j.u === 'h' ? 'h' : 'm';
-      return { n: name, c: CAT[j.c] ? j.c : guessCat(name), f: f, u: u, v: vals(j.v, u === 'h' ? 168 : 168 * 60), t: vals(j.t, 168 * 60), nf: low(j.nf), p: !!j.p, ic: !!j.ic };
+      var fq = {};
+      if (j.fq && typeof j.fq === 'object') Object.keys(j.fq).forEach(function (k) { if (low(k) && FREQ[j.fq[k]]) fq[low(k)] = j.fq[k]; });
+      var nmk = (Array.isArray(j.nm) ? j.nm : j.nf ? [j.nf] : []).map(low).filter(Boolean);
+      return { n: name, c: CAT[j.c] ? j.c : guessCat(name), f: f, fx: !!j.fx || !!FREQ[j.f], fq: fq, u: u, v: vals(j.v, u === 'h' ? 168 : 168 * 60), t: vals(j.t, 168 * 60), nm: nmk, p: !!j.p, ic: !!j.ic };
     }).filter(function (j) { return j.n || Object.keys(j.v).length; });
     var bills = list(raw.bills, 100).map(function (b) {
       return { n: clean(b.n, 120), k: BILL_KIND[b.k] ? b.k : 'shared', w: low(b.w), v: vals(b.v, 1e9) };
@@ -2396,10 +2409,12 @@
     return !!a && (a === b || (!!meName && low(yourMy(localName, meName)) === b));
   }
   // the incoming time, in this stand's own unit and "how often" (30 min a day there is 3.5 h a week here)
-  function convTime(ij, lj, val, think) {
-    var wk = think ? val / 60 * FREQ[ij.f] : val * (ij.u === 'm' ? 1 / 60 : 1) * FREQ[ij.f];
-    if (think) return Math.round(wk * 60 / mult(lj));
-    var x = wk / ((lj.unit === 'm' ? 1 / 60 : 1) * mult(lj));
+  // (k: the person on the other phone, li: the same person here; each may have their own "how often")
+  function convTime(ij, lj, val, think, k, li) {
+    var f = FREQ[(ij.fq && ij.fq[k]) || ij.f];
+    var wk = think ? val / 60 * f : val * (ij.u === 'm' ? 1 / 60 : 1) * f;
+    if (think) return Math.round(wk * 60 / mult(lj, li));
+    var x = wk / ((lj.unit === 'm' ? 1 / 60 : 1) * mult(lj, li));
     return lj.unit === 'm' ? Math.round(x) : Math.round(x * 100) / 100;
   }
   function near(a, b) { return Math.abs(a - b) <= Math.max(0.01, Math.abs(a) * 0.005); }
@@ -2426,23 +2441,36 @@
     if (!meName && d.by && state.people.length === 2) state.people.forEach(function (p) { if (low(p) !== low(d.by) && !placeholder(p) && state.people.some(function (q) { return low(q) === low(d.by); })) meName = p.trim(); });
     // a "my" line typed on this phone, sent back from here: keep its own name
     d.jobs.concat(d.bills, d.own).forEach(function (l) { if (l.n0 && meName && low(l.my) === low(meName)) { l.n = l.n0; delete l.n0; } });
-    function unitTxt(j, x, think) { return think ? x + ' min thinking' : x + (j.unit === 'h' ? ' h' : ' min') + ' ' + FREQ_SHORT[j.freq]; }
+    function unitTxt(j, x, think, li) { return think ? x + ' min thinking' : x + (j.unit === 'h' ? ' h' : ' min') + ' ' + FREQ_SHORT[freqOf(j, li)]; }
+    function noTimes(j) { return !j.v.some(function (x) { return num(x) > 0; }) && !j.t.some(function (x) { return num(x) > 0; }); }
     function compare(r, lj, ij, isBill) {
+      // a line with no times here yet takes the other phone's "how often" and unit as they are
+      var view = lj;
+      if (!isBill && noTimes(lj) && !d.household && (ij.f !== lj.freq || ij.u !== lj.unit || Object.keys(ij.fq || {}).length || lj.fq)) {
+        r.adopt = true;
+        view = { unit: ij.u, freq: ij.f, v: lj.v, t: lj.t, fq: Object.keys(ij.fq || {}).length ? state.people.map(function (p) { return ij.fq[low(p)] || ij.f; }) : null };
+      }
       [['v', false], ['t', true]].forEach(function (kk) {
         if (isBill && kk[1]) return;
         var src = ij[kk[0]] || {};
         Object.keys(src).forEach(function (k) {
           var li = map[k]; if (li == null) return;
-          var theirs = isBill ? src[k] : convTime(ij, lj, src[k], kk[1]);
+          var theirs = isBill ? src[k] : convTime(ij, view, src[k], kk[1], k, li);
           var mine = li < state.people.length ? num((kk[1] ? lj.t : lj.v)[li]) : 0;
           if (!theirs) return;
           if (!mine) { r.fill.push({ li: li, k: kk[0], x: theirs }); return; }
           if (near(mine, theirs)) return;
           r.diffs.push({ li: li, k: kk[0], x: theirs, mine: mine,
-            txt: (state.people[li] || '').trim() + ': ' + (isBill ? cash(mine) : unitTxt(lj, mine, kk[1])) + ' here, ' + (isBill ? cash(theirs) : unitTxt(lj, theirs, kk[1])) + ' on ' + fromWord(d) });
+            txt: (state.people[li] || '').trim() + ': ' + (isBill ? cash(mine) : unitTxt(lj, mine, kk[1], li)) + ' here, ' + (isBill ? cash(theirs) : unitTxt(lj, theirs, kk[1], li)) + ' on ' + fromWord(d) });
         });
       });
-      r.status = r.diffs.length ? 'conflict' : r.fill.length ? 'fill' : 'same';
+      if (r.adopt) r.view = view;
+      // a household code has no times, only how often: say so when it differs, never "already the same"
+      if (!isBill && d.household && ij.fx && !lj.fq && ij.f !== lj.freq) {
+        if (noTimes(lj)) r.freqFill = true;
+        else { r.diffs.push({ freq: ij.f, txt: 'How often: ' + FREQ_LABEL[lj.freq].toLowerCase() + ' here, ' + FREQ_LABEL[ij.f].toLowerCase() + ' on ' + fromWord(d) }); r.freqOnly = true; r.choice = 'mine'; }
+      }
+      r.status = r.diffs.length ? 'conflict' : r.fill.length ? 'fill' : r.freqFill ? 'freq' : 'same';
     }
     var jobs = d.jobs.map(function (ij) {
       var lj = ij.n ? state.jobs.filter(function (j) { return !j.ex && sameLine(j.name, ij.n, meName); })[0] : null;
@@ -2472,7 +2500,8 @@
       var j = { name: name, v: zeros(), t: zeros(), cat: ij.c, freq: ij.f, unit: ij.u, nm: zeros() };
       Object.keys(ij.v).forEach(function (k) { if (map[k] != null) j.v[map[k]] = ij.v[k]; });
       Object.keys(ij.t).forEach(function (k) { if (map[k] != null) j.t[map[k]] = ij.t[k]; });
-      if (ij.nf && map[ij.nf] != null) j.nf = map[ij.nf];
+      if (Object.keys(ij.fq || {}).length) { j.fq = zeros().map(function () { return ij.f; }); Object.keys(ij.fq).forEach(function (k) { if (map[k] != null) j.fq[map[k]] = ij.fq[k]; }); }
+      (ij.nm || []).forEach(function (k) { if (map[k] != null) j.nm[map[k]] = 1; });
       if (ij.p) j.personal = true;
       if (ij.ic) j.inCall = true;
       if (!libMatch(name)) { j.custom = true; j.catSet = true; }
@@ -2483,25 +2512,41 @@
       Object.keys(ib.v).forEach(function (k) { if (map[k] != null) b.v[map[k]] = ib.v[k]; });
       return b;
     }
-    function put(row, list) { list.forEach(function (f) { (f.k === 't' ? row.t : row.v)[f.li] = f.x; if (row.raw) delete row.raw[(f.k === 't' ? 't' : '') + f.li]; }); }
+    function put(row, list) {
+      list.forEach(function (f) {
+        if (f.freq) { row.freq = f.freq; delete row.fq; return; }
+        (f.k === 't' ? row.t : row.v)[f.li] = f.x; if (row.raw) delete row.raw[(f.k === 't' ? 't' : '') + f.li];
+      });
+    }
     plan.jobs.concat(plan.bills).forEach(function (r) {
       var isBill = !!r.bill, l = r.local;
       if (!l) {
         if (isBill) { state.bills.push(newBill(r.inc, r.inc.n)); out.newBills++; } else { state.jobs.push(newJob(r.inc, r.inc.n)); out.newJobs++; }
         return;
       }
+      if (r.adopt && r.view) { l.unit = r.view.unit; l.freq = r.view.freq; if (r.view.fq) l.fq = r.view.fq.slice(0, state.people.length); else delete l.fq; }
+      if (r.freqFill) { l.freq = r.inc.f; delete l.fq; out.filled++; }
       if (r.fill.length) { put(l, r.fill); out.filled++; }
-      if (!isBill && l.nf === -1 && r.inc.nf && map[r.inc.nf] != null) l.nf = map[r.inc.nf];
+      if (!isBill) {
+        // each person's own view of who notices first: the sender's from their phone, the others' added
+        var snd = d.by && map[low(d.by)] != null ? map[low(d.by)] : -1;
+        if (!l.nm) l.nm = zeros();
+        if (snd >= 0) l.nm[snd] = (r.inc.nm || []).indexOf(low(d.by)) >= 0 ? 1 : 0;
+        (r.inc.nm || []).forEach(function (k) { if (map[k] != null) l.nm[map[k]] = 1; });
+      }
       if (!r.diffs.length) return;
       if (r.choice === 'theirs') { put(l, r.diffs); out.theirs++; }
+      else if (r.freqOnly) return;
       else if (r.choice === 'both') {
         if (isBill) state.bills.push(newBill(r.inc, r.inc.n + tag)); else state.jobs.push(newJob(r.inc, r.inc.n + tag));
         out.both++;
       }
     });
-    if (d.agreed && !state.agreed.on) {
+    // a split from the other phone is offered ("Ben suggests 71/29. Use it?"), never switched on by itself
+    if (d.agreed) {
       var ag = state.people.map(function (p) { return d.agreed[low(p)] || 0; });
-      if (Math.abs(sum(ag) - 100) <= 0.5) { state.agreed.on = true; state.agreed.p = ag.map(String); out.agreed = true; }
+      var same = state.agreed.on && ag.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.5; });
+      if (Math.abs(sum(ag) - 100) <= 0.5 && !same) { state.agreedOffer = { by: d.by || '', p: ag.map(String) }; out.offer = splitShort(ag.map(function (x) { return x / 100; })); }
     }
     plan.add.forEach(function (a) {
       if (d.half.indexOf(low(a.name)) >= 0) state.part[a.slot] = 0.5;
@@ -2524,13 +2569,41 @@
     if (out.theirs) bits.push('used their numbers on ' + out.theirs);
     if (out.both) bits.push('kept both on ' + out.both + ' (marked “from ' + fromWord(d) + '”)');
     return (bits.length ? 'Done: ' + bits.join(', ') + '.' : 'Everything from ' + fromWord(d) + ' was already here.') +
-      (out.agreed ? ' Their agreed split is switched on too.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their phone.' : '') +
+      (out.offer ? ' ' + (d.by || 'The other phone') + ' suggests a ' + out.offer + ' split: “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their phone.' : '') +
       (plan.skip.length ? ' There was no room for ' + joinNames(plan.skip) + ' (eight people is the most).' : '') +
       (out.both ? ' Both lines count until you remove one, so talk it through and keep the one that’s right.' : '');
   }
 
   // the two boxes: send, and add
-  var pending = null;
+  var pending = null, PENDING = 'tol-lemonade-pending';
+  function dropPending() { try { sessionStorage.removeItem(PENDING); } catch (e) {} }
+  // After "Add to my stand": this phone is the person who didn't send it, and the first box they still
+  // have to fill in is ready (on the Money tab, when the other side held only bills).
+  function afterAdd(plan) {
+    var d = plan.d, snd = -1, said = '';
+    if (d.household) return '';
+    state.people.forEach(function (p, i) { if (d.by && low(p) === low(d.by)) snd = i; });
+    if (snd >= 0 && (state.me < 0 || state.me === snd)) {
+      var cand = state.people.map(function (_, i) { return i; }).filter(function (i) { return i !== snd && !state.kid[i] && !placeholder(state.people[i]); });
+      var mi = -1; state.people.forEach(function (p, i) { if (plan.meName && low(p) === low(plan.meName)) mi = i; });
+      var pick = mi >= 0 && mi !== snd ? mi : cand.length === 1 ? cand[0] : -1;
+      if (pick >= 0) { state.me = pick; cued = {}; firstSide = -1; said = ' This phone is set to ' + nameOf(pick) + '’s side now.'; renderMeRow(); renderAsRow(); renderSend(); renderRows(); recalc(); }
+    }
+    var onlyBills = !d.jobs.length && d.bills.length > 0, me = state.me;
+    showTab(onlyBills ? 1 : 0);
+    var el = null;
+    if (me >= 0) {
+      if (onlyBills) state.bills.forEach(function (b, i) { if (!el && !b.ex && b.kind !== 'income' && !num(b.v[me])) el = moneyEl.querySelector('input[data-fk="b' + me + '-' + i + '"]'); });
+      else state.jobs.forEach(function (j, i) { if (!el && !j.ex && kindOf(j) === 'home' && !num(j.v[me])) el = rowsEl.querySelector('input[data-fk="' + me + '-' + i + '"]'); });
+    }
+    var spot = el || (onlyBills ? $('tab-money') : null);
+    if (spot) {
+      setTimeout(function () { spot.scrollIntoView({ block: 'center' }); try { spot.focus({ preventScroll: true }); } catch (e) {} }, 60);
+      if (el) said += ' Your first empty box is ready' + (onlyBills ? ' on the Money tab.' : ' below.');
+      else if (onlyBills) said += ' Their side was bills only, so the Money tab is open.';
+    }
+    return said;
+  }
   function sideStatus(id, msg) { var el = $(id); if (!el) return; el.textContent = ''; setTimeout(function () { el.textContent = msg; }, 30); }
   function renderSend() {
     var box = $('send-box'); if (!box || box.hidden) return;
@@ -2603,13 +2676,16 @@
     var plan = planSide(d);
     if (plan.error) { box.innerHTML = ''; sideStatus('add-msg', plan.error); return; }
     pending = plan;
+    // kept in this tab until it's added or set aside, so Back from another page brings the preview back
+    try { sessionStorage.setItem(PENDING, String(text)); } catch (e) {}
     $('add-msg').textContent = '';
     var cnt = function (k) { return plan.jobs.concat(plan.bills).filter(function (r) { return r.status === k; }); };
-    var news = cnt('new'), fills = cnt('fill'), same = cnt('same'), conf = cnt('conflict');
+    var news = cnt('new'), fills = cnt('fill'), same = cnt('same'), conf = cnt('conflict'), freqs = cnt('freq');
     var li = [];
     if (plan.add.length) li.push('New at the stand: ' + joinNames(plan.add.map(function (a) { return a.name; })) + '.');
     if (news.length) li.push('New here: ' + news.length + ' (' + news.slice(0, 4).map(function (r) { return r.inc.n || 'a line with no name'; }).join(', ') + (news.length > 4 ? ' and more' : '') + ').');
     if (fills.length) li.push('Fills in what’s blank here on ' + fills.length + ' line' + (fills.length === 1 ? '' : 's') + '.');
+    if (freqs.length) li.push('Takes their “how often” on ' + freqs.length + ' line' + (freqs.length === 1 ? '' : 's') + ' with no times here yet (' + freqs.slice(0, 3).map(function (r) { return r.inc.n + ': ' + FREQ_LABEL[r.inc.f].toLowerCase(); }).join(', ') + (freqs.length > 3 ? ' and more' : '') + ').');
     if (same.length) li.push('Already the same here: ' + same.length + '.');
     if (plan.skip.length) li.push('No room for ' + joinNames(plan.skip) + ' (eight people is the most).');
     if (d.household) li.push('This is a household code: names and jobs only, with no times.');
@@ -2621,7 +2697,7 @@
           var nm = r.inc.n || 'A line with no name';
           return '<li><span class="ls-plan-n">' + esc(nm) + (r.bill ? ' (bill)' : '') + '</span>' + r.diffs.map(function (x) { return '<p class="ls-mini">' + esc(x.txt) + '</p>'; }).join('') +
             '<div class="ls-pick" role="group" aria-label="' + esc(nm) + ': which numbers to keep">' +
-            [['mine', 'Keep mine'], ['theirs', 'Use theirs'], ['both', 'Keep both']].map(function (c) { return '<button type="button" class="ls-chip" data-cf="' + k + '" data-ch="' + c[0] + '" aria-pressed="' + (r.choice === c[0]) + '">' + c[1] + '</button>'; }).join('') +
+            (r.freqOnly ? [['mine', 'Keep mine'], ['theirs', 'Use theirs']] : [['mine', 'Keep mine'], ['theirs', 'Use theirs'], ['both', 'Keep both']]).map(function (c) { return '<button type="button" class="ls-chip" data-cf="' + k + '" data-ch="' + c[0] + '" aria-pressed="' + (r.choice === c[0]) + '">' + c[1] + '</button>'; }).join('') +
             '</div></li>';
         }).join('') + '</ol>';
     }
@@ -2648,11 +2724,11 @@
       c.parentNode.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === c)); });
       return;
     }
-    if (e.target.id === 'add-cancel') { pending = null; box.innerHTML = ''; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
+    if (e.target.id === 'add-cancel') { pending = null; dropPending(); box.innerHTML = ''; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
     if (e.target.id === 'add-go' && pending) {
-      var msg = applySide(pending); pending = null;
+      var plan = pending, msg = applySide(plan); pending = null; dropPending();
       box.innerHTML = ''; $('add-code').value = '';
-      sideStatus('add-msg', msg);
+      sideStatus('add-msg', msg + afterAdd(plan));
     }
   });
 
@@ -2673,11 +2749,15 @@
   // The names, and the home jobs with their owner when the fridge list gives one (never the hours)
   function hhCollect() {
     var jobs = [], seen = {};
+    // how often goes with each job, so the other phone shows "Each day" where this one has it
+    var freqBy = {};
+    state.jobs.forEach(function (j) { if (!j.ex && j.name.trim()) freqBy[j.name.trim().toLowerCase()] = j.freq; });
     function add(name, owner) {
       name = String(name || '').trim(); var k = name.toLowerCase();
       if (!name || seen[k]) return;
       seen[k] = jobs.length;
       var j = { name: name }; if (owner) j.owner = owner;
+      if (freqBy[k]) j.f = freqBy[k];
       jobs.push(j);
     }
     ownersList().forEach(function (o) { add(o.name, o.who >= 0 && o.who < state.people.length ? nameOf(o.who) : ''); });
@@ -2704,9 +2784,11 @@
       state.jobs = state.jobs.filter(function (j) { return !j.ex; });
       state.bills = state.bills.filter(function (b) { return !b.ex; });
       h.jobs.forEach(function (hj) {
-        if (state.jobs.some(function (j) { return j.name.trim().toLowerCase() === hj.name.toLowerCase(); })) return;
+        var have = state.jobs.filter(function (j) { return j.name.trim().toLowerCase() === hj.name.toLowerCase(); })[0];
+        // already here with no times yet: take the household's "how often"
+        if (have) { if (FREQ[hj.f] && !have.fq && !have.v.some(function (x) { return num(x) > 0; })) have.freq = hj.f; return; }
         var m = libMatch(hj.name), zero = function () { var a = []; for (var i = 0; i < n; i++) a.push(0); return a; };
-        state.jobs.push({ name: hj.name, v: zero(), t: zero(), cat: guessCat(hj.name), freq: m ? m.t[2] : 'week', unit: m && m.t[3] ? m.t[3] : 'm', nm: zeros() });
+        state.jobs.push({ name: hj.name, v: zero(), t: zero(), cat: guessCat(hj.name), freq: FREQ[hj.f] ? hj.f : m ? m.t[2] : 'week', unit: m && m.t[3] ? m.t[3] : 'm', nm: zeros() });
         jobs++;
       });
       // the fridge list, when it is empty: jobs that already have an owner in the household
@@ -2816,6 +2898,7 @@
     if (h === '#money' || h === '#hours') {
       if (h === '#money' && mode !== 'group') setMode('group', mode === 'solo');
       else if (!mode) setMode('group', false);
+      if (h === '#money') setCompact(false);
       if (!solo()) showTab(h === '#money' ? 1 : 0);
       var tab = solo() ? $('panel-hours') : $(h === '#money' ? 'tab-money' : 'tab-hours');
       if (!tab) return;
@@ -2826,8 +2909,54 @@
       settle(spot);
     }
   }
+  // a partner's side that was being looked over when this tab went elsewhere: its preview comes back
+  function restorePending() {
+    var t = null; try { t = sessionStorage.getItem(PENDING); } catch (e) {}
+    if (!t || pending || /^#side=/.test(location.hash || '')) return;
+    if (mode !== 'group') { saveMode('group'); setMode('group', false); }
+    var sides = $('sides'), body = $('ls-body');
+    if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
+    $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
+    $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
+    review(t, 'Your partner’s side is still here, not added yet. Look it over below, then tap “Add to my stand”.');
+    if (sides) { sides.scrollIntoView({ block: 'start' }); settle(sides); }
+  }
   fromHash();
+  restorePending();
   window.addEventListener('hashchange', fromHash);
+  window.addEventListener('pageshow', function (e) { if (e.persisted) restorePending(); });
+
+  /* ---------- the "On this page" outline (wide screens, wide-screens.js) ---------- */
+  // A section hidden in this mode or tab (like "My week, as a ledger" in "Me and others") leaves the
+  // outline, and is never the one marked "you are here".
+  var outlineNav;
+  function outlineSync() {
+    var nav = outlineNav || document.querySelector('nav.tol-outline');
+    if (!nav) return;
+    if (!outlineNav) {
+      outlineNav = nav;
+      new MutationObserver(outlineSync).observe(nav, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    }
+    var shown = [];
+    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var t = document.getElementById(a.getAttribute('href').slice(1)), on = !!(t && t.getClientRects().length);
+      var li = a.closest('li') || a;
+      if (li.hidden !== !on) li.hidden = !on;
+      if (on) shown.push({ a: a, t: t });
+    });
+    var cur = nav.querySelector('a.is-here');
+    if (!shown.length || (cur && !cur.closest('li').hidden)) return;
+    var y = innerHeight * 0.3, pick = shown[0];
+    shown.forEach(function (o) { if (o.t.getBoundingClientRect().top <= y) pick = o; });
+    nav.querySelectorAll('a.is-here').forEach(function (a) { a.classList.remove('is-here'); a.removeAttribute('aria-current'); });
+    pick.a.classList.add('is-here'); pick.a.setAttribute('aria-current', 'location');
+  }
+  (function watchOutline() {
+    if (document.querySelector('nav.tol-outline')) { outlineSync(); return; }
+    var mo = new MutationObserver(function () { if (document.querySelector('nav.tol-outline')) { mo.disconnect(); outlineSync(); } });
+    mo.observe(document.body, { childList: true });
+    setTimeout(function () { mo.disconnect(); }, 15000);
+  })();
 
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,

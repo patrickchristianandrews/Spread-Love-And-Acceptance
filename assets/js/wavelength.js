@@ -977,7 +977,7 @@
           ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
             '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
             '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
-          : '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button></div>' +
+          : '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button>' + (inQuiz ? '' : '<button type="button" class="wl-btn ghost" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button>') + '</div>' +
             '<p class="wl-small">When you finish, your comparison shows up with your results.</p>' +
             '<h3>Already know your Wave Code?</h3>' +
             '<p class="wl-small">Type it in, or paste the message you saved, to compare without retaking the quiz.</p>' +
@@ -1006,6 +1006,7 @@
       $('#wl-ic-cmp').onclick = () => show(extractCode(mi.value));
       mi.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); show(extractCode(mi.value)); } };
       $('#wl-ic-quiz').onclick = () => go(inQuiz ? S.step : 0);
+      const iq = $('#wl-ic-quick'); if (iq) iq.onclick = () => { S.quick = true; go(2); };
     }
   }
 
