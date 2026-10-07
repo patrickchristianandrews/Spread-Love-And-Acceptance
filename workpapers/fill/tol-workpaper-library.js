@@ -180,7 +180,7 @@
       note: 'One event, no “always” or “never”, and an ask the other person can say yes to.' };
     if (code === 'WP-11') return { intro: two ? 'One person’s kit, filled in on a calm Sunday. Everyone makes their own.' : 'A kit filled in on a calm Sunday.',
       parts: [{ head: ['What tends to start it', 'Where I feel it first'], rows: [['Being interrupted mid-task', 'Jaw'], ['Plans changed last minute', 'Shoulders']] }, { lines: ['First default: Walking it out. Second: Breathing 4 in, 6 out.', 'Pause line: “I’m at capacity. I need ten minutes. I’ll be back at quarter past.”', 'Coming back: load 0.65 before, 0.45 after, so under 0.50: go back in, starting with one small task.'] }] };
-    if (code === 'WP-13') return { intro: 'Two days of a 90-second check-in. One sentence each, no debating.', parts: [{ head: ['Day', 'Who', 'Load', 'Appreciated', 'Small friction', 'Would help tomorrow'], rows: [['Mon', who(0), 'High', 'Thanks for making dinner', 'Dishes left out', 'Quiet morning'], ['Mon', who(1), 'Low', 'You fixed the printer', '', ''], ['Tue', who(0), 'Medium', 'The note you left', '', 'Early night']] }], note: 'Anything bigger than one sentence waits for the weekly catch-up.' };
+    if (code === 'WP-13') return { intro: 'Two days of a 90-second daily check-in. One sentence each, no debating.', parts: [{ head: ['Day', 'Who', 'Load', 'Appreciated', 'Small friction', 'Would help tomorrow'], rows: [['Mon', who(0), 'High', 'Thanks for making dinner', 'Dishes left out', 'Quiet morning'], ['Mon', who(1), 'Low', 'You fixed the printer', '', ''], ['Tue', who(0), 'Medium', 'The note you left', '', 'Early night']] }], note: 'Anything bigger than one sentence waits for the weekly catch-up.' };
     return null;
   }
 

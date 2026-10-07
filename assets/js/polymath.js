@@ -12,7 +12,7 @@
     loops: { name: 'Feedback loops', ico: '🔁', idea: 'small things repeated, with a check each time, shape the whole system', tool: ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], pillar: 'Pillar V, Notice the quiet incentives' },
     capacity: { name: 'Limited capacity', ico: '🔋', idea: 'everything has a limit, and a system with no spare room breaks on an ordinary bad day', tool: ['Today’s Weather: a one-minute check on yourself', '/quick-checks.html#today'], pillar: 'Pillar III, Read your state first' },
     ownership: { name: 'Ownership and structure', ico: '🗂️', idea: 'work that belongs to everyone belongs to no one', tool: ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html'], pillar: 'Pillar II, Fix the setup, not the person' },
-    incentives: { name: 'Quiet incentives', ico: '🧲', idea: 'things drift toward whatever the setup quietly rewards', tool: ['The Deficit Audit: what keeps coming back (WP-04)', '/workpapers/wp-04-deficit-audit.html'], pillar: 'Pillar V, Notice the quiet incentives' },
+    incentives: { name: 'Quiet incentives', ico: '🧲', idea: 'things drift toward whatever the setup quietly rewards', tool: ['What keeps coming back? (WP-04)', '/workpapers/wp-04-deficit-audit.html'], pillar: 'Pillar V, Notice the quiet incentives' },
     state: { name: 'State and setting', ico: '🌤️', idea: 'the same message lands differently depending on your state and the place you’re in', tool: ['The Night Garden: a calm place to settle first', '/night-garden.html'], pillar: 'Pillar III, Read your state first' }
   };
   // each field: how it sees each root it shares

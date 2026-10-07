@@ -6,8 +6,8 @@
     { id:'same-fight', ico:'\uD83D\uDD01', label:'We keep having the same fight',
       say:'Then the argument probably is not about the dishes, the money or the calendar. A thing that comes back every week is usually a gap in the arrangement, and arrangements can be changed without anybody being at fault.',
       picks:[
-        ['/workpapers/wp-03-raci-treaty.html','WP-03: one owner per job','Most repeat fights live in jobs nobody formally owns.'],
-        ['/workpapers/wp-04-deficit-audit.html','WP-04: the monthly look-back','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
+        ['/workpapers/wp-03-raci-treaty.html','One owner per job','Most repeat fights live in jobs nobody formally owns.'],
+        ['/workpapers/wp-04-deficit-audit.html','What keeps coming back?','Sorts what keeps going wrong into a gap in the setup, too little time or energy, or a one-off.'],
         ['/check-ins.html','Check-ins','How to raise it once, properly, instead of ten times badly.']
       ]},
     { id:'empty', ico:'\uD83E\uDEAB', label:'I am running on empty',
@@ -15,13 +15,13 @@
       picks:[
         ['/night-garden.html','The Night Garden','A calm place to breathe and play for a few minutes. No sign-up, nothing to lose.'],
         ['/quick-checks.html#today','Today\u2019s Weather','One minute, and it tells you what today is actually good for.'],
-        ['/wp-11.html','WP-11: the Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
+        ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
       ]},
     { id:'caring', ico:'\uD83E\uDD1D', label:'I\u2019m looking after someone I love',
       say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
       picks:[
         ['/relationships-in-depth.html#caregivers','Caregivers: where to start','What to notice, and how to share the care so it does not all land on you.'],
-        ['/workpapers/wp-02-battery-stress-meter.html','The battery check (WP-02)','A quick look at how full your battery is today, before you judge the day.'],
+        ['/workpapers/wp-02-battery-stress-meter.html','How much are you carrying?','A quick look at how full your battery is today, before you judge the day.'],
         ['#breathe','Breathe','A one-minute calm break, right here on this page.']
       ]},
     { id:'home-bills', ico:'\uD83C\uDFE0', label:'We share a home and the bills',
@@ -35,21 +35,21 @@
       say:'That is the oldest problem in this program, and the reason it exists. Work that is never seen cannot be shared, and saying "you never help" rarely makes it visible. Writing it down does.',
       picks:[
         ['/book/preface.html','The Preface','Why unseen work builds up like a debt only one person can see.'],
-        ['/workpapers/wp-01.html','WP-01: a week, written down','The record that turns an impression into something you can both read.'],
+        ['/workpapers/wp-01.html','Who did what','The record that turns an impression into something you can both read.'],
         ['/lemonade-stand.html','The Lemonade Stand','Tasks and hours side by side, in about five minutes.']
       ]},
     { id:'went-badly', ico:'\uD83D\uDCA5', label:'A conversation just went badly',
       say:'Before you replay it another forty times: two people can both be reasonable and still end up out of tune. Working out what slipped is more useful than working out who started it.',
       picks:[
         ['/carrier-wave-decoder.html','The Carrier Wave Decoder','A guided walk back through what actually happened.'],
-        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Filter','Turns the thing you want to say into fact, feeling and ask.'],
+        ['/workpapers/wp-09-tone-filter.html','Say it so it lands','Turns the thing you want to say into fact, feeling and ask.'],
         ['/check-ins.html','Check-ins','How to reopen it in a room that can hold it.']
       ]},
     { id:'say-hard', ico:'\u2709', label:'I need to say something hard',
       say:'Good. Saying it badly and saying nothing are both worse. It is worth testing the words first, because the same sentence lands very differently depending on who is receiving it.',
       picks:[
         ['/signal-translator.html','The Signal Translator','Type your sentence and see where it might land badly.'],
-        ['/workpapers/wp-09-tone-filter.html','WP-09: the Tone Filter','Fact, feeling, ask. Same content, far less damage.'],
+        ['/workpapers/wp-09-tone-filter.html','Say it so it lands','Fact, feeling, ask. Same content, far less damage.'],
         ['/check-ins.html','Check-ins','Pick the time and the room before you pick the words.']
       ]},
     { id:'past-each-other', ico:'\uD83D\uDCE1', label:'We talk past each other',
@@ -73,14 +73,14 @@
       picks:[
         ['/book/self-2-now-in-depth.html#control','Your circle of control, and matching energy','Signs you are over-giving, and how to match care and effort kindly.'],
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
-        ['/workpapers/wp-02-battery-stress-meter.html','The battery check (WP-02)','How full your battery really is today.']
+        ['/workpapers/wp-02-battery-stress-meter.html','How much are you carrying?','How full your battery really is today.']
       ]},
     { id:'child-teen', ico:'\uD83E\uDDD2', label:'Things are hard with my child or teen',
       say:'Pulling away and pushing back are a normal part of growing up, and they can still hurt. Side-by-side time, short talks and listening first usually help more than the perfect speech.',
       picks:[
         ['/library/life.html#teenagers','Talking with teenagers','What the research says about conflict with teens, and where it stops.'],
         ['/turning-toward.html','Turning toward','Small, everyday ways to stay connected.'],
-        ['/workpapers/wp-13-pll-protocol.html','WP-13: the 90-second check-in','A tiny daily habit that keeps the door open.']
+        ['/workpapers/wp-13-pll-protocol.html','The 90-second daily check-in','A tiny daily habit that keeps the door open.']
       ]},
     { id:'teen', ico:'\uD83C\uDFA7', label:'I\u2019m a teen and home feels hard',
       say:'Fair enough. Growing up means you and the adults around you are both figuring out the new rules at the same time, and that gets loud. Here is stuff written for you, not about you.',
@@ -94,11 +94,25 @@
       picks:[
         ['/safety.html','Not safe at home?','Free hotlines, how to leave this site quickly, and how to clear what it keeps.']
       ]},
+    { id:'work', ico:'\uD83D\uDCBC', label:'Things are hard at work',
+      say:'Work has its own version of all of this: who owns which job, messages that land badly, and effort nobody sees. You can use the plain, no-cartoons version with your team.',
+      picks:[
+        ['/work.html','At work','One owner per job for a team, messages that land, appreciation that fits, and a 45-minute team session.'],
+        ['/signal-translator.html','The message checker','Test an email or chat message before you send it.'],
+        ['/appreciation-at-work.html','Appreciation at work','Thanks that fits the person, without anything awkward.']
+      ]},
+    { id:'grief', ico:'\uD83D\uDD4A', label:'I\u2019m grieving, or life has changed a lot',
+      say:'Loss, a parent who needs more care, a quiet house, retirement, a new chapter: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
+      picks:[
+        ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
+        ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
+        ['#breathe','Breathe for a minute','A short pause, right here.']
+      ]},
     { id:'keep-good', ico:'\uD83C\uDF31', label:'We are okay, and I want to keep it that way',
       say:'The best time to build the habit is now, while nothing is on fire. Almost nobody starts here, and the ones who do have a far easier time of it later.',
       picks:[
         ['/turning-toward.html','Turning toward','Seven small, everyday ways to build connection while things are good.'],
-        ['/workpapers/wp-13-pll-protocol.html','WP-13: the 90-second check-in','The smallest habit here, and the one that lasts.'],
+        ['/workpapers/wp-13-pll-protocol.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
         ['/quick-checks.html#today','Today\u2019s Weather','A daily minute that keeps small things small.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',
@@ -128,10 +142,17 @@
     var compact = host.hasAttribute('data-compact');
     var wrap = el('div', { class: 'sw' + (compact ? ' is-compact' : '') });
     var opts = el('div', { class: 'sw-opts', role: 'group', 'aria-label': 'What is going on right now' });
-    S.forEach(function (s) {
+    // data-first="id,id,…" shows those few first and tucks the rest behind "More situations"
+    var first = (host.getAttribute('data-first') || '').split(',').filter(Boolean), list = S.slice(), extra = [];
+    if (first.length) {
+      list = first.map(function (id) { return S.filter(function (s) { return s.id === id; })[0]; }).filter(Boolean);
+      S.forEach(function (s) { if (list.indexOf(s) === -1) list.push(s); });
+    }
+    list.forEach(function (s, i) {
       var b = el('button', { type: 'button', class: 'sw-opt', 'aria-pressed': 'false', 'data-id': s.id },
         '<span class="sw-ico" aria-hidden="true">' + s.ico + '</span><span class="sw-label">' + esc(s.label) + '</span>');
       b.addEventListener('click', function () { choose(s, b); });
+      if (first.length && i >= first.length) { b.hidden = true; extra.push(b); }
       opts.appendChild(b);
     });
     var out = el('div', { class: 'sw-out', 'aria-live': 'polite', tabindex: '-1', hidden: '' });
@@ -142,7 +163,16 @@
       var btn = document.querySelector('.tol-breathe-btn');
       if (a && btn) { e.preventDefault(); btn.click(); }
     });
-    wrap.appendChild(opts); wrap.appendChild(out);
+    wrap.appendChild(opts);
+    if (extra.length) {
+      var more = el('button', { type: 'button', class: 'sw-showmore', 'aria-expanded': 'false' }, 'More situations (' + extra.length + ')');
+      more.addEventListener('click', function () {
+        extra.forEach(function (b) { b.hidden = false; });
+        more.remove(); extra[0].focus();
+      });
+      wrap.appendChild(more);
+    }
+    wrap.appendChild(out);
     host.appendChild(wrap);
 
     function choose(s, btn) {

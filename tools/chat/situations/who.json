@@ -12,7 +12,7 @@
           "/quick-checks.html#today"
         ],
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
@@ -51,15 +51,15 @@
       "fit": "With a partner, the unseen work is often the heaviest part. Start by seeing who does what, then give each regular job one owner, then keep small things small with a short daily check-in.",
       "path": [
         [
-          "WP-01: Who did what (a week’s log)",
+          "Who did what (WP-01, a week’s log)",
           "/workpapers/wp-01.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
-          "WP-13: The 90-second daily check-in",
+          "The 90-second daily check-in (WP-13)",
           "/workpapers/wp-13-pll-protocol.html"
         ]
       ],
@@ -70,7 +70,7 @@
       "step": "Pick a calm time you both agree on, not the middle of a busy evening, and keep it to one topic.",
       "steps": {
         "distance": "Try one small ritual that’s just yours: ten minutes after dinner, phones down, to catch up on each other’s day.",
-        "load": "Suggest you each log one ordinary week in WP-01, separately, and only then compare."
+        "load": "Suggest you each log one ordinary week in Who did what (WP-01), separately, and only then compare."
       },
       "chips": [
         [
@@ -98,7 +98,7 @@
       "fit": "Families often clash on tone and urgency more than on the task itself. Agree who owns what, so nobody has to guess, and test tricky messages before you send them.",
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -145,7 +145,7 @@
           "/turning-toward.html"
         ],
         [
-          "WP-03: One owner per job (age-sized jobs)",
+          "One owner per job (WP-03, age-sized jobs)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -191,11 +191,11 @@
       "fit": "A court order or parenting plan always comes first. Inside it, keep handoffs short and calm, keep messages about logistics, give each task one owner, and never use the kids as messengers.",
       "path": [
         [
-          "WP-03: One owner per job (who handles what)",
+          "One owner per job (WP-03, who handles what)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
-          "WP-09: Say it so it lands",
+          "Say it so it lands (WP-09)",
           "/workpapers/wp-09-tone-filter.html"
         ],
         [
@@ -241,7 +241,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -284,7 +284,7 @@
       "fit": "At work, the same ideas fit with lighter words. Give every recurring task one clear owner, test tricky messages before you send them, and keep repair quick and professional. The Lemonade Stand and one-owner-per-job both work for teams of two to eight.",
       "path": [
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -302,7 +302,7 @@
       ],
       "step": "Keep it about the work and the process, and put what you agree in a short written note afterward so nobody has to remember it the same way.",
       "steps": {
-        "group": "For a team, run a short retro: what went well, what slipped, and one owner for each fix. RACI (one owner per job) scales to a team of seven easily."
+        "group": "For a team, run a short retro: what went well, what slipped, and one owner for each fix. One owner per job (WP-03) scales to a team of seven easily."
       },
       "chips": [
         [
@@ -373,11 +373,11 @@
       "fit": "Caregiving is real work, and it’s easy to stop noticing your own battery. Check your own state first, give care tasks named owners (other family, friends, services), and plan what settles you before the hard days.",
       "path": [
         [
-          "WP-02: How full is your battery?",
+          "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-battery-stress-meter.html"
         ],
         [
-          "WP-03: One owner per job (share the care tasks)",
+          "One owner per job (WP-03, share the care tasks)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -423,7 +423,7 @@
           "/lemonade-stand.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [

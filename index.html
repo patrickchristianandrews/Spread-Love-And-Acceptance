@@ -123,6 +123,13 @@
   .home-print{ font-size: .95rem; }
   .home-print span{ color: var(--ink-soft, #524B3E); }
   .home-more{ font-size: .95rem; color: var(--ink-soft, #524B3E); margin-top: 1rem; }
+  .home-explore{ margin-top:2.2rem; }
+  .home-explore-links{ margin:1rem 0; }
+  .home-explore-links li{ margin:.35rem 0; }
+  .home-fold{ margin:.8rem 0; border:1px solid var(--line, #d8cfb8); border-radius:12px; padding:.2rem 1rem; background:var(--paper, #fffaf0); }
+  .home-fold > summary{ cursor:pointer; padding:.7rem 0; font-weight:600; min-height:44px; box-sizing:border-box; }
+  .home-fold[open] > summary{ border-bottom:1px solid var(--line, #d8cfb8); margin-bottom:.6rem; }
+  .home-fold .tol-remind{ margin:.4rem 0 .8rem; }
   .home-new{ font-size: .95rem; margin: 1.1rem 0; display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; }
   .home-new .announce-tag{ margin:0; }
   #contents h2, #directory h2{ margin-top: 0; }
@@ -424,8 +431,7 @@
   <p class="hh-brand">Spread Love &amp; Acceptance</p>
   <p class="hh-kick">Free · Private · Start without signing up</p>
   <h1 id="hero-h" class="hh-h1">Stop keeping score. Start feeling like a team.</h1>
-  <p class="hh-lede">For partners, families, roommates, coworkers, or just you. Short, kind tools that show you how you&rsquo;re wired, make the whole load visible, and help you say the hard thing so it lands. Pick one and be done in a minute. Whatever you type stays on your device.</p>
-  <p class="hh-wxrow"><a class="hh-wx" href="/quick-checks.html#today"><span class="hh-wx-i" aria-hidden="true">&#9925;</span><span class="hh-wx-t"><span class="hh-wx-main">Check today’s weather</span><span class="hh-wx-sub">A one-minute read on your own conditions</span></span><span class="hh-wx-go" aria-hidden="true">&rarr;</span></a></p>
+  <p class="hh-lede">For partners, families, roommates, coworkers, or just you. Short, kind tools you can finish in a minute. Whatever you type stays on your device.</p>
   <h2 class="sr-only">Where to start</h2>
   <div class="hh-time" data-cb-time>
     <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
@@ -444,29 +450,18 @@
   </ul>
   <ul class="hh-more" aria-label="More ways in">
     <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
-    <li><a href="/book/self-1-then.html"><span class="hh-more-k">Read</span> The book</a></li>
     <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
-    <li><a href="/frequency-journey.html"><span class="hh-more-k">Play</span> The arcade</a></li>
-    <li><a href="/surprise.html"><span class="hh-more-k">Not sure?</span> Surprise me</a></li>
-    <li><a href="/sent-this.html"><span class="hh-more-k">Sent a link?</span> What it means</a></li>
+    <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
+    <li><a href="/book/self-1-then.html"><span class="hh-more-k">Read</span> The book</a></li>
     <li><a href="/safety.html"><span class="hh-more-k">Not safe at home?</span> Get help</a></li>
   </ul>
 </section>
-<!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot -->
-<div class="pc-launch-row" data-palcam-row data-palcam-top><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
-<!-- /pal cam hook -->
-<div data-app-ad></div>
-
-
-    <p class="home-new"><span class="announce-tag">New</span> <a href="/complacency.html">Complacency</a> <span aria-hidden="true">&middot;</span> <a href="/new-parent.html">New baby</a> <span aria-hidden="true">&middot;</span> <a href="/co-parenting.html">Co-parents</a> <span aria-hidden="true">&middot;</span> <a href="/install.html">Get the app</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
 
     <section id="start-where" aria-labelledby="sw-h">
       <h2 id="sw-h">Start where you are</h2>
-      <p class="lede">You don&#39;t have to read anything in order. Tap whatever is closest to true right now, and we'll point you to the two or three pages that help most with that.</p>
-      <div data-tol-start></div>
+      <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
+      <div data-tol-start data-first="same-fight,empty,home-bills,invisible,say-hard,know-myself,work,not-safe"></div>
     </section>
-
-    <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
 
     <section id="guides" aria-labelledby="guides-h">
       <h2 id="guides-h">Popular guides</h2>
@@ -474,52 +469,41 @@
         <li><a href="/invisible-labor-mental-load.html">Invisible labor and the mental load</a>: what it is and how to share it</li>
         <li><a href="/chore-chart-for-couples.html">A fair chore chart</a>: free and printable</li>
         <li><a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting with your partner</a>: seven calm steps</li>
-        <li><a href="/new-parent.html">New baby, sharing the load</a>: three steps for tired parents</li>
-        <li><a href="/co-parenting.html">Separated co-parents</a>: calmer handoffs</li>
         <li><a href="/share-the-load.html#roommates">Roommates and housemates</a>: chores, bills and a house meeting</li>
         <li><a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>: tips for ADHD and autistic couples and families</li>
+        <li><a href="/grief.html">Grief and later life</a>: loss, family, and a new chapter</li>
       </ul>
     </section>
-    <header class="hero home-method" id="method" aria-labelledby="method-h">
-      <p class="hero-brand">The idea behind it all</p>
-      <h2 id="method-h">See yourself from the outside, then share the load kindly</h2>
-      <div class="announce-stack">
-      <aside class="announce-bar" aria-label="What the Objective Ledger method is">
-        <div class="announce-line">
-          <strong>The Objective Ledger</strong>, the method behind everything here, is a way of seeing yourself from the outside. It gives you a fair, neutral view of how three things shape the way you think, feel and react: your life situation, your wiring (how your brain and nervous system work), and what you discover when you finally look closely.
-        </div>
-      </aside>
-      </div>
-      <p class="hero-actions"><a href="how-it-works.html">How it works</a></p>
-    </header>
 
-
-    <p class="home-more">More: <a href="is-this-for-you.html">Is this right for you?</a> <span aria-hidden="true">&middot;</span> <a href="how-it-works.html">How it works</a> <span aria-hidden="true">&middot;</span> <a href="relationships.html">How it fits your relationships</a> <span aria-hidden="true">&middot;</span> <a href="infographic.html">The whole idea on one page</a> <span aria-hidden="true">&middot;</span> <a href="contents.html">Every page</a></p>
-
-    <div class="roadmap-callout">
-      <svg class="roadmap-icon" viewBox="0 0 90 70" width="54" height="42" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="45" cy="24" r="11" fill="none" stroke="var(--brass)" stroke-width="2.5"/>
-        <path d="M24 60 C 24 44, 34 38, 45 38 S 66 44, 66 60" fill="none" stroke="var(--brass)" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M14 14 L14 30 M8 14 L20 14" stroke="var(--credit)" stroke-width="2" stroke-linecap="round"/>
-        <path d="M76 14 L76 30 M70 30 L82 30" stroke="var(--credit)" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <div class="roadmap-callout-copy">
-        <strong>Who built this, and why?</strong>
-        <span>A career as a government auditor, and a lifelong audit of something harder to measure. This framework grew out of three things: an autistic nervous system, a career spent finding objective truth inside hard-to-read systems, and the static that came from being misread again and again. The About page tells the story, including how thirteen fields of study became the workpapers.</span>
-      </div>
-      <a class="cta-button" href="about.html">About the creator</a>
-    </div>
-
-    <section id="open-free" class="free-strip" aria-labelledby="free-h">
-      <h2 id="free-h">Open everything free</h2>
-      <p>Everything is free while the program is being built. Enter your email once and every chapter, workpaper and tool opens in this browser. No password, no account. Paid membership is coming later, and nothing is charged now.</p>
-      <p class="free-note" data-tol-if-member hidden><strong>You're signed up.</strong> Everything is open in this browser. <a href="contents.html">Go to the contents</a></p>
-      <form class="contents-join" data-tol-if-guest data-tol-signup action="https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance" method="post">
-        <label for="home-email">Email address</label>
-        <input type="email" name="email" id="home-email" placeholder="name@example.com" autocomplete="email" required>
-        <button type="submit">Open everything free</button>
-      </form>
-      <p class="free-fine">Buttondown, our newsletter service, holds your address and uses it only for program updates. You can unsubscribe from any email. <a href="ways-in.html">What each level shares</a> &middot; <a href="legal/privacy-policy.html">Privacy policy</a></p>
+    <section id="explore" class="home-explore" aria-labelledby="explore-h">
+      <h2 id="explore-h">More to explore</h2>
+      <p class="home-new"><span class="announce-tag">New</span> <a href="/work.html">At work</a> <span aria-hidden="true">&middot;</span> <a href="/grief.html">Grief and later life</a> <span aria-hidden="true">&middot;</span> <a href="/complacency.html">Complacency</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
+<!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot -->
+<div class="pc-launch-row" data-palcam-row><button type="button" class="pc-launch" data-palcam-open><span class="pc-paw"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.6" ry="3.8"/><circle cx="6" cy="10.8" r="2.1"/><circle cx="9.6" cy="6.8" r="2.1"/><circle cx="14.4" cy="6.8" r="2.1"/><circle cx="18" cy="10.8" r="2.1"/></svg></span><span><span class="pc-lt">Check in on Tidbit &amp; Sugarfoot</span><small><i class="pc-dot" aria-hidden="true"></i>See what they&rsquo;re up to</small></span></button></div>
+<!-- /pal cam hook -->
+<div data-app-ad></div>
+      <ul class="home-explore-links">
+        <li><a href="/quick-checks.html#today">Today&rsquo;s weather</a>: a one-minute read on how you&rsquo;re doing</li>
+        <li><a href="/frequency-journey.html">The arcade</a> and <a href="/surprise.html">Surprise me</a>: a short break</li>
+        <li><a href="/sent-this.html">Someone sent you a link?</a> What it means, and what it doesn&rsquo;t</li>
+        <li><a href="/how-it-works.html">The idea behind it all</a>: see yourself from the outside, then share the load kindly</li>
+        <li><a href="/about.html">Who built this, and why</a> <span aria-hidden="true">&middot;</span> <a href="/is-this-for-you.html">Is this right for you?</a> <span aria-hidden="true">&middot;</span> <a href="/contents.html">Every page</a></li>
+      </ul>
+      <details class="home-fold">
+        <summary>Come back gently: a weekly reminder in your own calendar</summary>
+        <div data-tol-remind data-remind-to="/start-in-10-minutes.html"></div>
+      </details>
+      <details class="home-fold" id="open-free">
+        <summary>Get updates by email (optional)</summary>
+        <p>Everything here is open while the site is being built, with no sign-up. If you&rsquo;d like a short note when something new ships, leave your email. No password, no account.</p>
+        <p class="free-note" data-tol-if-member hidden><strong>You&rsquo;re on the list.</strong> We&rsquo;ll send a short note when something new ships.</p>
+        <form class="contents-join" data-tol-if-guest data-tol-signup action="https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance" method="post">
+          <label for="home-email">Email address</label>
+          <input type="email" name="email" id="home-email" placeholder="name@example.com" autocomplete="email" required>
+          <button type="submit">Send me updates</button>
+        </form>
+        <p class="free-fine">Buttondown, our newsletter service, holds your address and uses it only for site updates. You can unsubscribe from any email. <a href="/legal/privacy-policy.html">Privacy policy</a></p>
+      </details>
     </section>
 
 </main>

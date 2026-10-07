@@ -426,7 +426,7 @@
     pct: function (v) { return v + '%'; }, int: function (v) { return String(v); }, none: function () { return ''; },
     dec2: function (v) { return v.toFixed(2); },
     balance: function (v) { return 'You ' + v + '% · them ' + (100 - v) + '% · balance ' + (1 - Math.abs(2 * v - 100) / 100).toFixed(2); },
-    solv: function (v) { return 'Ownership ' + v.toFixed(2) + ' → Solvency Read ≈ ' + (0.39 + 0.35 * v).toFixed(2); },
+    solv: function (v) { return 'Ownership ' + v.toFixed(2) + ' → setup score ≈ ' + (0.39 + 0.35 * v).toFixed(2); },
     over20: function (v) { return v + ' ÷ 20 = ' + (v / 20).toFixed(2); },
     of10: function (v) { return v + ' of 10 · ' + v + ' ÷ 10 = ' + (v / 10).toFixed(2); },
     ratio5: function (v) { return v + ' of 5 · ' + v + ' ÷ 5 = ' + (v / 5).toFixed(2); }

@@ -136,7 +136,7 @@
     wavelength: ['Wavelength', '/wavelength.html'], knowyourself: ['Know your own wiring', '/know-yourself.html'],
     signal: ['The Signal Translator', '/signal-translator.html'], shifter: ['The Perspective Shifter', '/perspective-shifter.html'],
     calm: ['The Calm-Down Kit (WP-11)', '/wp-11.html'], weather: ['Today’s Weather', '/quick-checks.html#today'],
-    sayno: ['WP-01: kind ways to say no', '/workpapers/wp-01.html'], ch3: ['Chapter III: leftover stress', '/book/chapter-3.html'],
+    sayno: ['Kind ways to say no (WP-01)', '/workpapers/wp-01.html'], ch3: ['Chapter III: leftover stress', '/book/chapter-3.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], checkins: ['Swap rulebooks in a check-in', '/check-ins.html'],
     wiringcard: ['The Wiring Card', '/wiring-card.html']
   };
@@ -220,7 +220,7 @@
       protect: 'Saying yes may have kept people happy, kept you close, or kept trouble away.',
       cost: 'Now you may say yes when you mean no, run out of time and energy, and quietly resent it.',
       notice: 'A “yes” comes out before you’ve checked your calendar, or your stomach drops right after you say it.',
-      tryit: ['Use a pause line before you answer: “Let me check and get back to you.”', 'WP-01 has kind ways to say no without starting a fight.'],
+      tryit: ['Use a pause line before you answer: “Let me check and get back to you.”', 'Who did what (WP-01) has kind ways to say no without starting a fight.'],
       say: 'I’d love to help, and I can’t this week.',
       rule: ['Being good means saying yes.', 'My no is what makes my yes mean something.'],
       links: ['sayno', 'signal', 'wavelength'] },

@@ -135,7 +135,7 @@ t('calc', 'solvency with workload balance 80%, ownership clarity 80%, stress 20%
 // 0.12 + 0.07 + 0.05 = 0.24 → under 0.40
 t('calc', 'calc01 0.3 0.2 0.8', { kind: 'calc', text: /= 0\.24\..*Under 0\.40/s });
 // apex: 0.35×0.6 + 0.30×0.5 + 0.20×0.6 + 0.15×0.25 = 0.21 + 0.15 + 0.12 + 0.0375 = 0.5175 → 0.52
-t('calc', 'CALC-01 balance 0.6 ownership 0.5 battery 0.4 retuning 0.25', { kind: 'calc', text: /apex score .*= 0\.52/ });
+t('calc', 'CALC-01 balance 0.6 ownership 0.5 battery 0.4 retuning 0.25', { kind: 'calc', text: /overall score .*= 0\.52/ });
 t('calc', 'my solvency read is 0.72', { kind: 'calc', text: /0\.72.*carrying its own weight/s });
 // 30 and 10 hours: 75% and 25% → 1 − |75 − 25| ÷ 100 = 0.50
 t('calc', 'I do 30 hours and my partner does 10 hours, what is our balance?', { kind: 'calc', text: /75%.*25%.*0\.50/s });
@@ -270,6 +270,19 @@ c('followups', ['What is WP-13?', 'what about for roommates?'], { kind: 'road', 
 c('followups', ['My sister always makes plans without asking me.', 'tell me more'], { link: '/library/' });
 c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|quicker|steadier/ });
 c('followups', ['What is active listening?', 'tell me more'], { not: /couldn’t find/ });
+// conversation turns: keep the topic, plain thanks, red flags, "that didn't help", topic switches
+c('followups', ['My partner never does the dishes', 'ok and then what?'], { kind: 'sit-more', text: /calm conversation/ });
+c('followups', ['My partner never does the dishes', 'ok and then what?', 'and then what'], { kind: 'sit-more', text: /one ordinary week/ });
+c('followups', ['My partner never does the dishes', 'that didn’t help'], { kind: 'nohelp', text: /another side/ });
+c('followups', ['My partner never does the dishes', 'I already tried that'], { kind: 'nohelp', text: /already tried/ });
+c('followups', ['We keep fighting about money', 'is that a red flag?'], { kind: 'redflag', text: /fixable/, link: '/safety.html' });
+c('followups', ['We keep fighting about money', 'is that a red flag?', 'what should I do first?'], { kind: 'sit-more' });
+c('followups', ['I feel lonely since my mom died', 'what about my sister?'], { kind: 'care', text: /your sister/ });
+c('followups', ['My partner never does the dishes', 'different question, how do I calm down fast'], { kind: 'care', link: '/night-garden.html' });
+c('followups', ['My partner never does the dishes', 'start over'], { kind: 'restart' });
+c('followups', ['My partner never does the dishes', 'thanks'], { kind: 'thanks', text: /^You’re welcome/ });
+c('followups', ['thank you so much puddles'], { kind: 'thanks', text: /You’re welcome/ });
+c('followups', ['is this controlling?'], { kind: 'redflag', link: '/safety.html' });
 
 // ---------------------------------------------------------------- friendly clarifying questions
 t('clarify', 'help', { kind: 'clarify' });
@@ -551,6 +564,8 @@ t('parents', 'is there a page for grandparents', { kind: 'card', id: 'grandparen
 t('parents', 'tips for grandparents', { kind: 'card', id: 'grandparents', text: /their house, their rules/ });
 t('parents', 'how do I say no to babysitting my grandkids', { kind: 'sit', id: /\+grandkids$/, script: true });
 t('parents', 'do I have to give my email', { id: 'emailwhy', text: /without giving anything/ });
+t('parents', 'can I use this at work with my team?', { id: 'atwork', link: '/work.html' });
+t('parents', 'my husband died last year', { id: 'grief', link: '/grief.html' });
 t('parents', 'what do you do with my email', { id: 'emailwhy', text: /Buttondown/ });
 t('parents', 'what is frequency buddies', { kind: 'card', id: 'buddies', link: '/frequency-buddies.html' });
 t('parents', 'is there a frequency buddies music video', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });

@@ -395,6 +395,10 @@ details.deeper .deeper-body > :first-child{ margin-top:0; }
 .sw-opt[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
 .sw-opt:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 .sw-ico{ font-size:1.15rem; line-height:1.15; flex:none; }
+.sw-opt[hidden]{ display:none; }
+.sw-showmore{ font:inherit; margin:.6rem 0 0; padding:.5rem .9rem; background:none; color:var(--ink); border:1px dashed var(--brass); border-radius:var(--radius); cursor:pointer; }
+.sw-showmore:hover{ background:var(--paper-deep); }
+.sw-showmore:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
 .sw-out{ margin:1.2rem 0 0; padding:1.1rem 1.25rem 1.2rem; background:var(--paper-deep); border-left:5px solid var(--brass); border-radius:var(--radius); }
 .sw-say{ font-size:1.04rem; line-height:1.65; margin:0 0 .9rem; max-width:64ch; }
 .sw-picks{ list-style:none; margin:0; padding:0; counter-reset:sw; }
@@ -2563,3 +2567,13 @@ html.tol-still .tol-share-card{ animation:none; }
 .bt-tools li.is-dim{ opacity:.55; }
 .bt-tools .bt-for{ display:inline-block; margin-left:.35rem; font-size:.8rem; color:var(--ink-soft); }
 @media print{ .bt-switch{ display:none !important; } .bt-v[hidden]{ display:block !important; } }
+
+/* Work mode (?work=1, or a page marked data-work): the plain version to share at work.
+   No pups, cartoons, garden, games promos, floating hearts or clock; Professor Puddles stays as plain words. */
+html.tol-work :is(.tol-wash b, .tol-garden-bg, .tol-garden-veil, [data-palcam-row], .pc-launch-row, [data-app-ad], .pci, .tol-cheer, .tpv, .tpv-bub,
+  .tol-puddles-hi, .tol-pud-fab-art, .tol-wx, .bkb, .tol-buddies, .lp-trail, .lp-petals, .tr-chip, [data-rewards-chip], .lp-spark, .lp-quest-state, .tol-join-pop, .tol-invite, [data-work-hide]){ display:none !important; }
+.tol-work-note{ margin:.4rem auto .8rem; max-width:46rem; padding:.45rem .9rem; border:1px solid var(--rule, #d8cfb8); border-radius:10px;
+  font-size:.92rem; background:var(--paper, #fffaf0); color:var(--ink, #2a2530); }
+.tol-work-note a{ margin-left:.3rem; }
+html.tol-work .tol-simple .read-head::after, html.tol-work .tol-deep .read-head::after{ display:none !important; }
+html.tol-work .tol-wash i{ opacity:.35; }

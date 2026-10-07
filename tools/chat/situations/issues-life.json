@@ -14,7 +14,7 @@
         "family": ["I’ve organized the last few family get-togethers. Could someone else host or plan the next one? I’ll bring dessert."],
         "coworker": ["I’ve been setting up the team lunches for a while. Could we rotate it, maybe a different person each month?"]
       },
-      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Invisible work (Library)", "/library/fairness.html#invisible-work"]],
+      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Invisible work (Library)", "/library/fairness.html#invisible-work"]],
       "deeper": ["why jobs drift to one person", "What is diffusion of responsibility?"],
       "ex": "Priya organized every birthday dinner for her friends for three years. She finally said, “I love doing this, but I’d love a break. Who wants October?” Jess took it, picked a place Priya would never have chosen, and it was one of their best nights.",
       "tonight": "send one light message naming the job: “I’d love someone else to pick our next get-together. Any takers?”"
@@ -31,8 +31,8 @@
         "family": ["For the reunion, could each household take one piece? We’ll do the booking if someone can sort food and someone does the schedule."],
         "partner": ["Could we split the trip planning? I’ll handle the booking if you take the packing list and the drive."]
       },
-      "path": [["The Lemonade Stand (list the jobs, see the split)", "/lemonade-stand.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Where friends start", "/relationships-in-depth.html#friends"]],
-      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "path": [["The Lemonade Stand (list the jobs, see the split)", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Where friends start", "/relationships-in-depth.html#friends"]],
+      "deeper": ["one owner per job", "What is WP-03?"],
       "ex": "Six friends were planning a cabin weekend, and Marco was doing everything. He posted a list of seven jobs in the group chat and wrote, “Grab one by Friday!” By Thursday every job had a name next to it, and Marco only had the booking.",
       "tonight": "post a short list of the trip jobs in the group chat and ask everyone to claim one by a set day."
     },
@@ -48,7 +48,7 @@
         "family": ["I know we both love hosting. How about you take this year and I take next year, and we write it down so we don’t have to decide again?", "Could each of us bring one dish this year, so nobody’s cooking all day?"],
         "partner": ["Could we plan the holidays together this week? I’d love to agree which family we see when, before anyone asks us.", "Can we split the holiday jobs? I’ll do gifts if you take travel and cards."]
       },
-      "path": [["Holidays (Library)", "/library/life.html#holidays"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Where families start", "/relationships-in-depth.html#family"]],
+      "path": [["Holidays (Library)", "/library/life.html#holidays"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Where families start", "/relationships-in-depth.html#family"]],
       "deeper": ["holidays and family expectations", "What does the Library say about holidays?"],
       "ex": "Every year Ana and her brother argued about who would host Thanksgiving. In September they agreed a simple rotation (odd years her place, even years his) and wrote it in the family chat. The argument simply stopped, because there was nothing left to decide.",
       "tonight": "write down the three holiday questions that cause the most tension (who hosts, which days, who brings what) so you can raise them early, on a calm day."
@@ -63,7 +63,7 @@
       "scripts": {
         "default": ["I don’t want us to keep having the same argument. Could we find a plan we both like, and write it down?", "I think we slip into old roles when we’re together. Can we try doing this one differently?", "I care about us getting along more than about who’s right. What would feel fair to you?"]
       },
-      "path": [["Where families start", "/relationships-in-depth.html#family"], ["Family systems and roles (Library)", "/library/life.html#family-systems"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "path": [["Where families start", "/relationships-in-depth.html#family"], ["Family systems and roles (Library)", "/library/life.html#family-systems"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"]],
       "deeper": ["family roles that come back", "What are family scripts?"],
       "ex": "Jordan and his sister argued every time they planned their dad’s birthday. They agreed that one of them would own the plan each year, and the other would just show up and help. The planning got easier, and so did the birthday.",
       "tonight": "write one sentence about what you’d like to happen next with your sibling, not about the last argument."
@@ -80,7 +80,7 @@
         "family": ["Thank you for all your help with the kids. We’re trying to do bedtime our way for a while, and it would mean a lot if you’d go along with it."]
       },
       "scripts_also": ["For your partner", ["I don’t want to come between you and your family. Could we decide what we want together, and you talk to them?"]],
-      "path": [["In-laws (Library)", "/library/life.html#in-laws"], ["Where partners start", "/relationships-in-depth.html#partners"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "path": [["In-laws (Library)", "/library/life.html#in-laws"], ["Where partners start", "/relationships-in-depth.html#partners"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"]],
       "deeper": ["in-laws and two family cultures", "What does the Library say about in-laws?"],
       "ex": "Mia’s mother-in-law often gave parenting advice at dinner. Mia and her husband agreed together that he would mention it to his mom, kindly: “We love your help, and we’re figuring out bedtime our own way.” It landed far better coming from him.",
       "tonight": "jot down the one thing about the in-laws you’d most like to agree on with your partner, so you can bring it up on a calm day."
@@ -91,11 +91,11 @@
       "match": [["(wont|will not|doesnt want to|does not want to|dont want to|refuses to|refused to|isnt interested in|is not interested in|not interested in|wont even) (do|join|try|use|read|look at|fill in|fill out|open) (the |this |these |any )?(program|tools?|workpapers?|worksheets?|exercises?|site|it|this|stuff|book)|what if (my )?\\w+ (wont|doesnt|refuses)( want to)? (do|join|try|use|read)|(partner|husband|wife|boyfriend|girlfriend|roommates?|family|kids?|coworkers?|boss|team) (thinks|says) (it|this|the program) is (dumb|silly|stupid|pointless|a waste)|(wont|doesnt) (do|join) (it|this) with me", 7]],
       "reflect": "It’s disappointing when you’d like to work on things together and the other person isn’t keen, at least not yet.",
       "going": "This is Pillar II, Fix the setup, not the person. The good news is that the program works from one side. Seeing your own load, reading your own state before you talk, and changing how you send things all change the pattern between you, even if {them} never opens a workpaper. Pushing tends to make people dig in. Small, visible changes on your side often do more than any invitation.",
-      "steps": ["Start on your own: log your week in WP-01 and check your battery before hard talks.", "Change one thing on your side, like the timing or wording of one request, and notice what happens.", "Invite lightly, once, without pressure: offer one small thing, like a two-minute check-in, not the whole program."],
+      "steps": ["Start on your own: log your week in Who did what (WP-01) and check your battery before hard talks.", "Change one thing on your side, like the timing or wording of one request, and notice what happens.", "Invite lightly, once, without pressure: offer one small thing, like a two-minute check-in, not the whole program."],
       "scripts": {
         "default": ["I’ve been trying a little check-in thing that helps me. No pressure, but would you do two minutes of it with me on Sunday?", "You don’t have to read any of it. I’m just trying to say things more clearly, and I’d love to know if it helps.", "I’m not trying to fix you. I’m trying to make our week easier, for both of us."]
       },
-      "path": [["Can I do this on my own?", "/is-this-for-you.html"], ["WP-01: Who did what", "/workpapers/wp-01.html"], ["Know your own wiring", "/know-yourself.html"]],
+      "path": [["Can I do this on my own?", "/is-this-for-you.html"], ["Who did what (WP-01)", "/workpapers/wp-01.html"], ["Know your own wiring", "/know-yourself.html"]],
       "deeper": ["doing it from one side", "Can I do this alone?"],
       "ex": "Chris’s partner rolled their eyes at “workpapers.” So Chris just started checking their own battery before raising anything, and moved hard talks away from right after work. A month later their partner said, “Things feel calmer lately. What are you doing?” That was the moment to share it.",
       "tonight": "do one thing just for you: a one-minute battery check before any conversation that matters."
@@ -110,8 +110,8 @@
       "scripts": {
         "default": ["Before we fall into habits, could we list the house jobs and each pick the ones we’d like to own?", "Can we talk about how we’ll split the bills? I’d love to agree on it before the first one arrives.", "Could we do a quick check-in each Sunday for the first month, just to see what’s working?"]
       },
-      "path": [["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Moving and big changes (Library)", "/library/life.html#moving-and-transitions"]],
-      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "path": [["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-pll-protocol.html"], ["Moving and big changes (Library)", "/library/life.html#moving-and-transitions"]],
+      "deeper": ["one owner per job", "What is WP-03?"],
       "ex": "Before moving in, Dev and Sam spent one evening listing every house job they could think of. They each picked their favorites and split the rest. Six months later, the dishes had never once been an argument.",
       "tonight": "start a shared list of house jobs together, even just five, and each put your name on one."
     },
@@ -125,7 +125,7 @@
       "scripts": {
         "default": ["I’m so tired I can’t think straight. Could you own bath time every night, start to finish, so I get one hour off?", "Can we each take one night feed, so we both get a stretch of sleep?", "I love us, and I miss us. Could we have five minutes tonight, just to talk, no baby talk?"]
       },
-      "path": [["Becoming parents (Library)", "/library/life.html#transition-to-parenthood"], ["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"]],
+      "path": [["Becoming parents (Library)", "/library/life.html#transition-to-parenthood"], ["How much are you carrying? (WP-02)", "/workpapers/wp-02-battery-stress-meter.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"]],
       "deeper": ["becoming parents", "What is the transition to parenthood?"],
       "ex": "Three weeks in, Kim was doing every night feed and quietly resenting it. They agreed Alex would own the 11 p.m. bottle and bath time, fully, noticing included. Kim got one real stretch of sleep a night, and the snapping stopped.",
       "tonight": "pick one baby job for the other person to own fully, starting tonight, like bath time or the late bottle."
@@ -156,7 +156,7 @@
       "scripts": {
         "default": ["I want to do this well. Right now I have the report, the launch and the onboarding. If I take this on, which one should move?", "Could we agree on priorities for this week? I’d rather tell you now than miss something later.", "Would a short update from me every Thursday help? That way you’d always know where things stand without needing to check."]
       },
-      "path": [["The Lemonade Stand (make the load visible)", "/lemonade-stand.html"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Work disagreements (Library)", "/library/conflict.html#work-disagreements"]],
+      "path": [["The Lemonade Stand (make the load visible)", "/lemonade-stand.html"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Work disagreements (Library)", "/library/conflict.html#work-disagreements"]],
       "deeper": ["role clarity at work", "What is role ambiguity?"],
       "ex": "Tasha’s manager kept adding “quick” tasks. She started replying, “Sure. Right now I have A, B and C. Which should move?” Her manager usually picked one to drop, and twice said, “Oh, I didn’t realize you had all that.”",
       "tonight": "write a quick list of everything on your plate, with rough hours, so you have it ready for tomorrow."
@@ -171,7 +171,7 @@
       "scripts": {
         "default": ["I love hearing about your life. Can I tell you about something going on with me too?", "I’ve noticed I usually reach out first. I’d really love it if you texted me sometimes too.", "Could we swap for a bit? I’ve had a lot on my mind and I’d love to talk it through with you."]
       },
-      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "path": [["Where friends start", "/relationships-in-depth.html#friends"], ["Bids for connection (Library)", "/library/relationships.html#bids-for-connection"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"]],
       "deeper": ["bids for connection", "What are bids for connection?"],
       "ex": "Every coffee with Sam turned into an hour about Sam’s job. One day Leah said, “Can I tell you about my week too? It’s been a lot.” Sam looked surprised, then asked three questions in a row. “I didn’t realize I was doing that,” Sam said later.",
       "tonight": "notice one thing you’d like to share with your friend, and plan to bring it up the next time you talk."
@@ -182,7 +182,7 @@
       "match": [["resent*|bitter(ness)?|(feel|feeling|getting) (so )?(bitter|resentful)|(its|it is|things are) building up|keep(ing)? score|keeping (a )?tally|holding (a )?grudge|(cant|can t) let (it|this) go", 5], ["fed up|sick of|tired of", 1]],
       "reflect": "Yes, it’s very normal to feel resentful sometimes. Resentment usually builds when something has gone unnoticed or unspoken for a while. It’s information, not a character flaw.",
       "going": "This is Pillar I, See the whole load, and Pillar V, Notice the quiet incentives. Resentment is often the feeling of an unbalanced ledger: effort that isn’t seen, a request you haven’t made, or a job that quietly drifted to you. It tends to grow in silence, and it shrinks fastest when the facts get put on the table in a calm, specific way. The goal isn’t to prove anyone wrong. It’s to find the unmet need underneath.",
-      "steps": ["Ask yourself what, specifically, the resentment is about: a job, a pattern, not being thanked, or not being asked.", "Write the facts down, without adjectives, so you can see them clearly (WP-01 is good for this).", "Turn it into one specific, kind request, and pick a calm time to make it."],
+      "steps": ["Ask yourself what, specifically, the resentment is about: a job, a pattern, not being thanked, or not being asked.", "Write the facts down, without adjectives, so you can see them clearly (Who did what, WP-01, is good for this).", "Turn it into one specific, kind request, and pick a calm time to make it."],
       "scripts": {
         "default": ["I’ve noticed I’ve been feeling a bit resentful about the evenings, and I don’t want it to build. Could we look at how we split things?", "I don’t want to keep score. I just want to tell you what’s been weighing on me, so we can fix it together.", "Something’s been building up for me, and I’d rather say it kindly now than snap about it later. Is tonight okay?"]
       },
@@ -190,7 +190,7 @@
       "going_other": "This is Pillar I, See the whole load. Resentment usually means someone feels a part of their load isn’t seen or shared. It’s rarely about one incident. Asking with real curiosity, and listening without defending, is usually the fastest way to find out what’s underneath.",
       "steps_other": ["Ask, at a calm time, with real curiosity: “It feels like something’s been building. What’s been hardest?”", "Listen first, and reflect back what you hear before explaining your side.", "Look at the facts together, like one week of who does what, rather than debating impressions."],
       "scripts_other": ["It feels like something’s been building for you. I’d really like to hear it, and I’ll try to just listen first.", "I don’t want you to carry this on your own. What would make things feel fairer?"],
-      "path": [["WP-01: Who did what", "/workpapers/wp-01.html"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Unbilled Debt: the work nobody sees", "/book/preface.html"]],
+      "path": [["Who did what (WP-01)", "/workpapers/wp-01.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Unbilled Debt: the work nobody sees", "/book/preface.html"]],
       "deeper": ["why we each think we do more", "Why do we each think we do more?"],
       "ex": "Nina felt a flash of resentment every time she unloaded the dishwasher. When she wrote down her week, she realized it wasn’t the dishes, it was that nobody ever asked if she needed a hand. She said exactly that, kindly, and it was a much shorter talk than she’d feared.",
       "tonight": "write down, in one sentence, what the resentment is really about. Just for you, no sending."
@@ -222,7 +222,7 @@
         "default": ["Mom needs more help now, and I’m doing most of it. Could you take over the pharmacy and the Thursday call, fully, starting this week?", "I’m not trying to blame you. I just can’t keep doing it all. Can we list what Dad needs and split it?", "Even from far away, you could own the bills and the insurance calls. Would you take those?"]
       },
       "scripts_also": ["For your parent", ["I love helping you, and I want to keep doing it well. Would it be okay if my brother took over the bills?", "We’re sorting out a plan so you always have someone to call. Is there anything you’d like us to know?"]],
-      "path": [["Where caregivers start", "/relationships-in-depth.html#caregivers"], ["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Caring for ageing parents (Library)", "/library/life.html#ageing-parents"]],
+      "path": [["Where caregivers start", "/relationships-in-depth.html#caregivers"], ["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Caring for ageing parents (Library)", "/library/life.html#ageing-parents"]],
       "deeper": ["caregiver strain", "What is caregiver strain?"],
       "ex": "Rosa did all of her mom’s appointments while her brother lived two states away. She listed every care job and asked him to own three he could do from home: the bills, the pharmacy refills and a Sunday video call. He said yes to all three. He had just never known what to offer.",
       "tonight": "write down every care job you did this week, even the tiny ones, so you have the list ready when you talk to your sibling."
@@ -269,7 +269,7 @@
       "scripts": {
         "default": ["Could we agree on a simple guest plan for the house? Like a heads-up text, and a chat if someone’s staying more than a few nights a week.", "I really like Sam. It’s just that with someone here most nights, the bills and the bathroom are getting stretched. Could we talk about it?", "I’d love a heads-up when people are staying over, so I know what to expect at home."]
       },
-      "path": [["Where roommates start", "/relationships-in-depth.html#roommates"], ["Roommates and shared homes (Library)", "/library/life.html#roommates-and-shared-homes"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "path": [["Where roommates start", "/relationships-in-depth.html#roommates"], ["Roommates and shared homes (Library)", "/library/life.html#roommates-and-shared-homes"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"]],
       "deeper": ["shared homes", "How do roommates share a home fairly?"],
       "ex": "Jo’s roommate’s boyfriend was over five nights a week. Instead of complaining about him, Jo suggested a house guest plan: a heads-up text, and anyone staying over more than three nights chips in for utilities. Her roommate agreed on the spot, a bit relieved.",
       "tonight": "write down what you’d actually like (a heads-up, a limit, or help with bills), so you know your ask before you talk."
@@ -285,7 +285,7 @@
         "kid": ["I’m sorry I raised my voice. You didn’t deserve that. Can we talk about the homework after a snack?"],
         "coworker": ["I didn’t handle our conversation well this morning, and I’m sorry. Could we try again this afternoon?"]
       },
-      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["The Carrier Wave Decoder", "/carrier-wave-decoder.html"], ["Repair attempts (Library)", "/library/relationships.html#repair-attempts"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["The Carrier Wave Decoder", "/carrier-wave-decoder.html"], ["Repair attempts (Library)", "/library/relationships.html#repair-attempts"]],
       "deeper": ["what makes an apology work", "What makes a good apology?"],
       "ex": "After another fight about the car, Jess waited until they’d both eaten, then said, “I’m sorry I called you careless. That wasn’t fair.” No “but”. Her partner softened right away, and the actual problem (who books the service) took five minutes the next day.",
       "tonight": "let things settle, then say one short, honest sorry for your part, with no “but” after it."
@@ -303,7 +303,7 @@
       "going_other": "This is Pillar III, Read your state first. Many people need a short buffer after work before they can really listen, and it’s about their energy, not about you. Agreeing a small, predictable transition time, and a proper catch-up after it, usually makes the evening feel warmer for both of you.",
       "steps_other": ["Greet them warmly and save the questions and jobs for twenty minutes or so.", "Agree together, on a calm day, what the buffer looks like and when you’ll catch up.", "Ask for the catch-up you want too: “After your twenty minutes, can we have ten minutes, just us?”"],
       "scripts_other": ["Take your twenty minutes. When you’re ready, I’d love to hear about your day, and tell you about mine.", "I’ve noticed you need a bit of quiet when you get in. Could we plan a proper catch-up after dinner?"],
-      "path": [["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"], ["Today’s Weather", "/quick-checks.html#today"], ["Turning Toward: small rituals", "/turning-toward.html#rituals"]],
+      "path": [["How much are you carrying? (WP-02)", "/workpapers/wp-02-battery-stress-meter.html"], ["Today’s Weather", "/quick-checks.html#today"], ["Turning Toward: small rituals", "/turning-toward.html#rituals"]],
       "deeper": ["reading your state first", "What is Pillar III, Read your state first?"],
       "ex": "Every evening, Ben walked in to a list of questions and snapped. They agreed on a routine: a hello and a hug, then twenty minutes for Ben to change and sit, then a real catch-up over dinner. The snapping mostly stopped within a week.",
       "tonight": "when you get home, say “I just need ten minutes to land, then I’m all yours,” and then come back when you said."
@@ -317,8 +317,8 @@
       "scripts": {
         "default": ["I think we just notice mess differently, and that’s okay. Could we agree what ‘done’ looks like for the kitchen, so neither of us has to guess?", "The living room matters most to me. If we keep that one tidy by bedtime, I can let the rest go.", "Can we pick a standard we can both live with, and each own a few jobs?"]
       },
-      "path": [["WP-03: One owner per job", "/workpapers/wp-03-raci-treaty.html"], ["Chores disagreements (Library)", "/library/conflict.html#chores-disagreements"], ["The Lemonade Stand", "/lemonade-stand.html"]],
-      "deeper": ["one owner per job", "What is the RACI treaty?"],
+      "path": [["One owner per job (WP-03)", "/workpapers/wp-03-raci-treaty.html"], ["Chores disagreements (Library)", "/library/conflict.html#chores-disagreements"], ["The Lemonade Stand", "/lemonade-stand.html"]],
+      "deeper": ["one owner per job", "What is WP-03?"],
       "ex": "Alex saw crumbs everywhere; Jordan honestly didn’t. They agreed on just two rules, counters wiped and dishes in by 10, and Jordan owned the kitchen on weeknights. Alex stopped re-cleaning, Jordan stopped feeling nagged.",
       "tonight": "name the one spot at home that matters most to you, and what ‘done’ looks like there."
     },
@@ -331,7 +331,7 @@
       "scripts": {
         "default": ["You don’t have to agree with me. I’d just like you to hear how it felt for me, before we talk about whether I’m right.", "When I hear “you’re overreacting”, I stop feeling heard. Could you ask me what’s going on instead?", "I might be tired, and it still bothered me. Can I tell you why?"]
       },
-      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Validation (Library)", "/library/communication.html#validation-in-conversation"], ["WP-02: How full is your battery?", "/workpapers/wp-02-battery-stress-meter.html"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Validation (Library)", "/library/communication.html#validation-in-conversation"], ["How much are you carrying? (WP-02)", "/workpapers/wp-02-battery-stress-meter.html"]],
       "deeper": ["validation", "What is validation?"],
       "ex": "Whenever Sara brought something up, her husband said she was overreacting. One calm evening she said, “You don’t have to agree. I just want you to hear me first.” He listened, then said, “Okay, I get why that bugged you.” That was all she’d wanted.",
       "tonight": "write your feeling as fact, feeling and ask, in three short lines, ready for a calm moment."
@@ -346,7 +346,7 @@
       "scripts": {
         "default": ["I miss us. Could we protect ten minutes after dinner, phones down, just to catch up?", "Could we put one evening a week on the calendar for just us? Even a walk would be lovely.", "I know we’re both stretched. What’s one small thing we could do together this week?"]
       },
-      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["WP-13: The 90-second daily check-in", "/workpapers/wp-13-pll-protocol.html"], ["Time disagreements (Library)", "/library/conflict.html#time-disagreements"]],
+      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["The 90-second daily check-in (WP-13)", "/workpapers/wp-13-pll-protocol.html"], ["Time disagreements (Library)", "/library/conflict.html#time-disagreements"]],
       "deeper": ["bids for connection", "What are bids for connection?"],
       "ex": "Nate and Jo kept saying they’d have a date night “when things calm down.” Instead they started a ten-minute tea on the back step after the kids were asleep. It became the best part of their day.",
       "tonight": "suggest ten minutes together after dinner tonight, phones down, with no agenda."
@@ -361,7 +361,7 @@
         "default": ["When it comes out as sarcasm, I get defensive and miss the point. Could you tell me straight what you need?", "I think there’s a real ask under that comment. Can you say it plainly? I’d like to hear it.", "I don’t want us talking to each other like that, me included. Can we try again?"]
       },
       "scripts_self": ["I’ve caught myself being sarcastic lately. I’m sorry. What I actually mean is: I’d love more help on weeknights."],
-      "path": [["The Signal Translator", "/signal-translator.html"], ["The four patterns to watch (Library)", "/library/relationships.html#four-horsemen"], ["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"]],
+      "path": [["The Signal Translator", "/signal-translator.html"], ["The four patterns to watch (Library)", "/library/relationships.html#four-horsemen"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"]],
       "deeper": ["the patterns that hurt most", "What are the four horsemen?"],
       "ex": "Every time Kai came home late, his partner said, “Nice of you to show up.” One calm Sunday Kai said, “I know that’s about something real. What would help?” It turned out to be one thing: a text by six if he’d be late. That was easy.",
       "tonight": "if a jab lands tonight, pause, and later ask gently: “What’s the real ask under that?”"
@@ -376,7 +376,7 @@
         "default": ["When I hear “your sister always…”, I feel measured instead of asked. Could you just tell me what you’d like from me?", "It sounds like you’d love it if I called more. I can do Sundays. Would that work?"],
         "self": ["I compared you to your brother earlier, and that wasn’t fair. What I meant was that I’d love a bit more help with the garden."]
       },
-      "path": [["WP-09: Say it so it lands", "/workpapers/wp-09-tone-filter.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"], ["The Signal Translator", "/signal-translator.html"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-tone-filter.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"], ["The Signal Translator", "/signal-translator.html"]],
       "deeper": ["complaints vs criticism", "What is the difference between a complaint and criticism?"],
       "ex": "Mo’s mom often said, “Your cousin visits every week.” Mo finally said, “It sounds like you’d like to see me more. How about Sunday lunch every other week?” The comparisons mostly stopped, because the real ask had been answered.",
       "tonight": "write the plain ask that’s hiding inside the comparison, so you can answer that instead."
@@ -411,7 +411,7 @@
           "/night-garden.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ]
       ],
@@ -445,7 +445,7 @@
       },
       "path": [
         [
-          "WP-03: One owner per job (age-sized jobs)",
+          "One owner per job (WP-03, age-sized jobs)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [
@@ -492,7 +492,7 @@
           "/grandparents.html"
         ],
         [
-          "WP-03: One owner per job",
+          "One owner per job (WP-03)",
           "/workpapers/wp-03-raci-treaty.html"
         ],
         [

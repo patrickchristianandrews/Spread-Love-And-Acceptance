@@ -22,7 +22,7 @@
 
   // what a tool remembers, in plain words, so the card can say where you were
   var WP_NAMES = { 'WP-01': 'Who did what (WP-01)', 'WP-02': 'How much are you carrying? (WP-02)', 'WP-03': 'One owner per job (WP-03)', 'WP-04': 'What keeps coming back? (WP-04)',
-    'WP-09': 'Say it so it lands (WP-09)', 'WP-11': 'The Calm-Down Kit (WP-11)', 'WP-13': 'The 90-second check-in (WP-13)' };
+    'WP-09': 'Say it so it lands (WP-09)', 'WP-11': 'The Calm-Down Kit (WP-11)', 'WP-13': 'The 90-second daily check-in (WP-13)' };
   function drafts() {
     var out = [];
     keys().forEach(function (k) {
@@ -55,6 +55,9 @@
   // ---------- coming back: your next step, and what's new since your last visit ----------
   // NEWS mirrors the newest sections of whats-new.html (add a line here when that page gets a new date).
   var NEWS = [
+    ['2026-10-07', 'At work: the plain version for teams', '/work.html'],
+    ['2026-10-07', 'Grief and later life', '/grief.html'],
+    ['2026-10-07', 'Everything is open, no sign-up', '/ways-in.html'],
     ['2026-10-07', 'For teens', '/teens.html'],
     ['2026-10-07', 'The book: an “On your own” part in every chapter', '/book/chapter-1.html#on-your-own'],
     ['2026-10-07', 'A weekly reminder in your own calendar', '/self-path.html#steps'],

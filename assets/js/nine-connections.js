@@ -13,12 +13,12 @@ window.TOL_NINE = {
   pillars: { 1: ['Pillar I, See the whole load', 'see-the-load'], 2: ['Pillar II, Fix the setup, not the person', 'fix-the-setup'], 3: ['Pillar III, Read your state first', 'read-your-state'], 4: ['Pillar IV, Tune how you send and receive', 'tune-signals'], 5: ['Pillar V, Notice the quiet incentives', 'quiet-incentives'] },
   // [field a, field b, root, tier, what connects them, [tool, link], pillar]
   pairs: [
-    ['ps', 'bs', 'loops', 'o', 'Habits beat willpower, especially when you’re tired. A routine too small to skip keeps going on the bad days.', ['The 90-second check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
+    ['ps', 'bs', 'loops', 'o', 'Habits beat willpower, especially when you’re tired. A routine too small to skip keeps going on the bad days.', ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
     ['ps', 'nb', 'state', 'o', 'How you feel and how your nervous system is running are the same moment, seen from two sides.', ['Today’s Weather', '/quick-checks.html#today'], 3],
     ['ps', 'ht', 'state', 'o', 'Calm the body before the conversation. Words land better once the body has settled.', ['The Calm-Down Kit (WP-11)', '/wp-11.html'], 3],
     ['ph', 'bu', 'owner', 'o', '“Fair by promises” only works when the promises are written down: one owner per job.', ['Chapter IV: two kinds of fair', '/book/chapter-4.html'], 2],
     ['bs', 'ec', 'incent', 'o', 'People follow what the setup quietly rewards, far more than what they intend.', ['Pillar V', '/five-pillars.html#quiet-incentives'], 5],
-    ['bs', 'bu', 'loops', 'o', 'Small, regular reviews catch problems while they’re small, in a company or a home.', ['The monthly look-back (WP-04)', '/workpapers/wp-04-deficit-audit.html'], 2],
+    ['bs', 'bu', 'loops', 'o', 'Small, regular reviews catch problems while they’re small, in a company or a home.', ['What keeps coming back? (WP-04)', '/workpapers/wp-04-deficit-audit.html'], 2],
     ['nb', 'ht', 'capacity', 'o', 'A system past its limit can’t think its way back. Settle first, then talk.', ['Breathe or the Night Garden', '/night-garden.html'], 3],
     ['nb', 'ar', 'state', 'o', 'What reaches the senses sets the body’s alert level. A noisy room makes every comment arrive louder.', ['Chapter IV: giving a comment time to land', '/book/chapter-4.html'], 3],
     ['ec', 'bu', 'capacity', 'o', 'Time and attention get spent like any budget, and they run out like one too.', ['The Lemonade Stand', '/lemonade-stand.html'], 1],
@@ -33,12 +33,12 @@ window.TOL_NINE = {
     ['ps', 'ar', 'state', 'h', 'The same sentence lands differently in a calm, quiet room. The setting changes what a person can take in.', ['Chapter IV: where and when to talk', '/book/chapter-4-in-depth.html'], 3],
     ['ph', 'ec', 'balance', 'h', 'Efficient and fair aren’t the same thing. “It all got done” can hide who quietly did it.', ['Chapter IV: two kinds of fair', '/book/chapter-4.html'], 5],
     ['ph', 'fi', 'balance', 'h', 'Double-entry bookkeeping is a fairness idea: every entry has two sides, and a book that balances from one side only isn’t balanced.', ['Your side, their side', '/book/preface-in-depth.html'], 2],
-    ['bs', 'nb', 'capacity', 'h', 'A tired body makes good habits harder. That’s why the program’s habits are tiny: they have to survive the worst day of the week.', ['The 90-second check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 3],
+    ['bs', 'nb', 'capacity', 'h', 'A tired body makes good habits harder. That’s why the program’s habits are tiny: they have to survive the worst day of the week.', ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 3],
     ['bs', 'fi', 'incent', 'h', 'A score you can raise by deleting the hard rows is rewarding the wrong thing. Keep the unowned jobs on the list.', ['Chapter II: ownership clarity', '/book/chapter-2-in-depth.html'], 5],
     ['bs', 'ar', 'state', 'h', 'Cues in a room start habits. A cup of tea or a familiar scent can become your signal to slow down.', ['The Calm-Down Kit (WP-11)', '/wp-11.html'], 3],
     ['nb', 'ec', 'capacity', 'h', 'Attention is scarce. Noticing, remembering and planning spend it, even when nobody sees.', ['The mental load', '/book/preface.html'], 1],
     ['nb', 'bu', 'capacity', 'h', 'A team past capacity drops things, and so does a body. Both need a safety margin for the ordinary bad week.', ['Chapter V: a capacity issue', '/book/chapter-5.html'], 2],
-    ['nb', 'fi', 'balance', 'h', 'Your battery works like a balance sheet: leftover stress is a debt, and rest is the reserve.', ['The Battery & Stress Meter (WP-02)', '/workpapers/wp-02-battery-stress-meter.html'], 3],
+    ['nb', 'fi', 'balance', 'h', 'Your battery works like a balance sheet: leftover stress is a debt, and rest is the reserve.', ['How much are you carrying? (WP-02)', '/workpapers/wp-02-battery-stress-meter.html'], 3],
     ['bu', 'ht', 'loops', 'h', 'Maintenance before breakdown. Care for people the way a good team cares for its systems, before the crisis.', ['Check-ins', '/check-ins.html'], 2],
 
     ['ph', 'bs', 'loops', 'a', 'Aristotle thought we become what we repeatedly do. Character, like a habit, is built by small acts, not by one big decision.', ['Small and often', '/book/chapter-1.html'], 4],
@@ -49,13 +49,13 @@ window.TOL_NINE = {
     ['ec', 'ht', 'balance', 'a', 'Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week.', ['Wavelength: what fills you up', '/wavelength.html'], 3],
     ['ec', 'ar', 'incent', 'a', 'A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it.', ['Chapter IV: the setting', '/book/chapter-4-in-depth.html'], 5],
     ['bu', 'ar', 'state', 'a', 'Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice.', ['Check-ins: a good moment', '/check-ins.html'], 2],
-    ['fi', 'ht', 'balance', 'a', 'A solvency read says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well.', ['Chapter II', '/book/chapter-2.html'], 2],
+    ['fi', 'ht', 'balance', 'a', 'A setup score says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well.', ['Chapter II', '/book/chapter-2.html'], 2],
     ['fi', 'ar', 'balance', 'a', 'Changing the setting costs almost nothing and pays back on every conversation held there: the cheapest investment in the whole program.', ['Chapter IV: where and when to talk', '/book/chapter-4-in-depth.html'], 3],
     // the four newest fields: the art of debating (db), politics (po), music (mu) and the healing power of laughter (la)
     ['db', 'ps', 'signal', 'o', 'Winning an argument and being understood are different goals. Debate trains the first; psychology reminds you the second is why you started talking.', ['Say it so it lands (WP-09)', '/workpapers/wp-09-tone-filter.html'], 4],
     ['db', 'ph', 'signal', 'o', 'Debate grew out of philosophy: a claim is only tested when someone who disagrees gets to push on it. Telling what you know from what you assume is the first move of both.', ['The Conversation Reader', '/conversation-reader.html'], 4],
     ['db', 'po', 'owner', 'o', 'Politics is debate with a decision attached: someone has to hear every side, then decide. A home needs a small version, with each voice heard first and one agreement at the end.', ['Check-ins', '/check-ins.html'], 2],
-    ['db', 'bs', 'loops', 'h', 'Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic.', ['The 90-second check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
+    ['db', 'bs', 'loops', 'h', 'Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic.', ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
     ['db', 'ec', 'incent', 'h', 'In a debate the reward goes to whoever wins the room. At home the quiet reward for “winning” is the other person giving up, which costs far more than it saves.', ['Chapter IV: two kinds of fair', '/book/chapter-4.html'], 5],
     ['db', 'fi', 'balance', 'h', 'A good argument keeps honest books: claims on one side, evidence on the other, and no entry without support. “You always…” is a debit with no receipt.', ['The Conversation Reader', '/conversation-reader.html'], 4],
     ['db', 'bu', 'owner', 'h', 'Good meetings have a chair, an agenda and a decision at the end. A good hard talk at home needs the same: one topic, a turn each, and a named next step.', ['Check-ins', '/check-ins.html'], 2],
@@ -80,7 +80,7 @@ window.TOL_NINE = {
     ['mu', 'ps', 'state', 'o', 'Music changes mood faster than words, and people use it on purpose: to pump up, to wind down, or to feel less alone.', ['Drift: calm visualizer', '/calm-visualizer.html'], 3],
     ['mu', 'nb', 'state', 'o', 'Rhythm and sound reach the nervous system directly. Slow tempos tend to settle the body and fast ones lift it.', ['Brain Breakers', '/soundscapes.html'], 3],
     ['mu', 'ph', 'balance', 'a', 'Thinkers since Pythagoras have asked why sound moves us. Harmony is a picture of fairness: different parts, each with room, in one piece.', ['Echoes of Gold', '/echoes-of-gold.html'], 4],
-    ['mu', 'bs', 'loops', 'o', 'A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep.', ['The 90-second check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
+    ['mu', 'bs', 'loops', 'o', 'A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep.', ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-pll-protocol.html'], 4],
     ['mu', 'ec', 'capacity', 'a', 'Attention is what a song and a market both compete for, and it runs out. A noisy setting taxes every conversation held in it.', ['Brain Breakers', '/soundscapes.html'], 5],
     ['mu', 'fi', 'balance', 'a', 'In music a rest is written into the score, and silence counts as much as sound. In a household the quiet work needs writing down too.', ['The Preface: unbilled debt', '/book/preface.html'], 1],
     ['mu', 'bu', 'owner', 'h', 'An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat.', ['One owner per job (WP-03)', '/workpapers/wp-03-raci-treaty.html'], 2],
@@ -151,7 +151,7 @@ window.TOL_NINE = {
       id: 'tired-week', title: 'The tired week',
       fields: ['nb', 'ht', 'bs', 'ec', 'fi', 'bu'], roots: ['capacity', 'balance', 'loops'],
       text: 'A worn-out body has less to give (neurobiology), so rest has to match effort (holistic therapies). Habits have to be small enough to survive that week (behavioral science). A household running at full stretch has no safety margin (economics) and no reserve for a surprise (finance), and a team in the same state drops things (business). One tired week shows that capacity is a single root under six fields.',
-      tool: ['The Battery & Stress Meter (WP-02)', '/workpapers/wp-02-battery-stress-meter.html']
+      tool: ['How much are you carrying? (WP-02)', '/workpapers/wp-02-battery-stress-meter.html']
     },
     {
       id: 'the-room', title: 'The room does some of the talking',

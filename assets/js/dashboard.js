@@ -162,10 +162,10 @@
 
     var missing = [];
     if (wb === null) missing.push('Log some hours in this week\u2019s hours list.');
-    if (oc === null) missing.push('Add at least one task to the ownership treaty.');
+    if (oc === null) missing.push('Add at least one task to the job list.');
     if (!p) missing.push('Invite the other person. The read always needs both of you.');
     else {
-      if (!mine) missing.push('Fill in your battery check (WP-02).');
+      if (!mine) missing.push('Fill in How much are you carrying? (WP-02).');
       if (!theirs) missing.push('Waiting on ' + p.display_name + '\u2019s load check.');
     }
 
@@ -362,8 +362,8 @@
       var notes = [
         'Laundry kept sliding. Moved it to Riley.',
         'Better week. Bills finally have an owner.',
-        'Sick week for Sam. Postponed the treaty review.',
-        'Treaty review done. Three tasks reassigned.',
+        'Sick week for Sam. Postponed the job list review.',
+        'Job list review done. Three tasks reassigned.',
         'Closest split so far.'
       ];
       var ws = weekStartOf(new Date());
@@ -817,7 +817,7 @@
     }
 
     var band = r.solvency !== null ? solvencyBand(r.solvency) : null;
-    var ocNote = S.raci.length ? r.withBoth + ' of ' + S.raci.length + ' tasks fully owned' : 'No treaty tasks yet';
+    var ocNote = S.raci.length ? r.withBoth + ' of ' + S.raci.length + ' tasks fully owned' : 'No jobs on the list yet';
     var asNote = r.as !== null ? 'Average of both check-ins: ' + fix2(r.as) : 'Needs both people\u2019s check-ins';
     var badgeHtml = band ? badge('live', 'Complete') : badge('progress', r.missing.length + (r.missing.length === 1 ? ' input missing' : ' inputs missing'));
     if (weekClosed()) badgeHtml = badge('planned', 'Closed');
@@ -1078,14 +1078,14 @@
 
     el.innerHTML =
       sectionHead('WP-03', 'One owner per job',
-        'One person who does it and one who notices if it didn\u2019t get done, for every regular task. The treaty carries over from week to week. Change it together at the weekly close, never quietly.') +
-      phase('The treaty', '<span id="raci-badge">' + badgeHtml + '</span>',
+        'One person who does it and one who notices if it didn\u2019t get done, for every regular task. The job list carries over from week to week. Change it together at the weekly close, never quietly.') +
+      phase('The job list', '<span id="raci-badge">' + badgeHtml + '</span>',
         (S.raci.length
           ? '<p class="db-raci-score" id="raci-score">' + raciScoreText(r) + '</p>' +
             '<div class="db-scroll"><table class="db-raci">' +
               '<thead><tr><th scope="col">Task</th><th scope="col">Frequency</th><th scope="col">Does it</th><th scope="col">Notices</th><th scope="col"><span class="db-sr">Remove</span></th></tr></thead>' +
               '<tbody>' + rows + '</tbody></table></div>'
-          : '<p class="db-muted">The treaty is empty.</p><div class="db-actions"><button type="button" class="db-btn db-btn--quiet" id="raci-starter">Start from the WP-03 task list</button></div>') +
+          : '<p class="db-muted">The job list is empty.</p><div class="db-actions"><button type="button" class="db-btn db-btn--quiet" id="raci-starter">Start from the starter job list</button></div>') +
         '<button type="button" class="db-link db-add" id="raci-add">+ Add a task</button>');
 
     $('#raci-add').addEventListener('click', function () { addRaci([['', '']], true); });
@@ -1217,7 +1217,7 @@
       thisWeek = phase(esc(fmtWeek(S.weekStart)), badge('live', 'Open'),
         '<div class="db-form">' +
           '<label for="close-note">Closing note</label>' +
-          '<textarea id="close-note" rows="3" maxlength="2000" placeholder="What changed, what you agreed to try, any changes to the treaty"></textarea>' +
+          '<textarea id="close-note" rows="3" maxlength="2000" placeholder="What changed, what you agreed to try, any changes to the job list"></textarea>' +
           '<div class="db-actions">' +
             '<button type="button" class="db-btn" id="week-close">Close the books for this week</button>' +
           '</div>' +
@@ -1243,7 +1243,7 @@
 
     el.innerHTML =
       sectionHead('Weekly', 'Close the Books',
-        'Once a week, together: look over the hours, update the treaty if needed, and close the week.') +
+        'Once a week, together: look over the hours, update the job list if needed, and close the week.') +
       thisWeek +
       phase('Past weeks', hist.length ? badge('live', hist.length + ' closed') : '', histHtml);
 
@@ -1309,7 +1309,7 @@
       phase('Leave or delete', '',
         '<details class="db-danger">' +
           '<summary>Show options</summary>' +
-          '<p><strong>Leaving</strong> removes you and your battery check-ins from the household. The shared hours, the treaty and the closed weeks stay with the household for the other person. Your private state log stays with your account.</p>' +
+          '<p><strong>Leaving</strong> removes you and your battery check-ins from the household. The shared hours, the job list and the closed weeks stay with the household for the other person. Your private state log stays with your account.</p>' +
           '<button type="button" class="db-btn db-btn--danger" id="acct-leave">Leave household</button>' +
           '<p><strong>Deleting your account</strong> does all of that, and also permanently erases your private state log and your sign-in. This can\u2019t be undone. Type DELETE to confirm.</p>' +
           '<div class="db-inline"><label class="db-sr" for="delete-confirm">Type DELETE to confirm</label>' +

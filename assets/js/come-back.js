@@ -392,7 +392,7 @@
     var i = bookIdx(simplePath); if (i < 0) return;
     var b = BOOK[i], deep = simplePath !== path, nx = BOOK[i + 1];
     var next = nx ? [deep ? nx.u.replace(/\.html$/, '-in-depth.html') : nx.u, nx.code + ': ' + nx.t, '— ' + nx.n]
-      : ['/workpapers/wp-04-deficit-audit.html', 'Put it to work: the monthly look-back (WP-04)', '— one short page, once a month'];
+      : ['/workpapers/wp-04-deficit-audit.html', 'Put it to work: What keeps coming back? (WP-04)', '— one short page, once a month'];
     var box = endCard();
     placeAtEnd(main, box);
     function draw() { fillEnd(box, b.gain, next, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters read.</span> '); }

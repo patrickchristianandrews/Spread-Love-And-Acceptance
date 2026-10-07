@@ -138,7 +138,7 @@ window.TOL_PUP_LINES = {
     ['Need a calm little break? We love the Night Garden.', '/night-garden.html', 'The Night Garden'],
     ['We have our own arcade! Pick one of us and play a maze chase or cross the road.', '/frequency-journey.html', 'The Frequency Journey'],
     ['Soft sounds for a slow evening.', '/soundscapes.html', 'Soundscapes'],
-    ['A 90-second check-in, for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The Daily Loop'],
+    ['A 90-second daily check-in, for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
     ['Curious how it all fits together?', '/how-it-works.html', 'How it works']
   ],
 
@@ -188,19 +188,19 @@ window.TOL_PUP_LINES = {
       'Rough numbers are fine. Honest beats perfect.',
       'A worksheet starts a talk. It isn’t a scorecard.',
       'Blank spots are okay. Come back to them later.',
-      ['Start by listing the quiet jobs nobody sees.', '/workpapers/wp-01.html', 'WP-01'],
-      ['Every job gets one owner. Try it with just one chore!', '/workpapers/wp-03-raci-treaty.html', 'WP-03'],
+      ['Start by listing the quiet jobs nobody sees.', '/workpapers/wp-01.html', 'Who did what (WP-01)'],
+      ['Every job gets one owner. Try it with just one chore!', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
       ['Fill them in on your phone, or print them.', '/workpapers/fill/suite.html', 'The Workpaper Suite'],
-      ['Can the way you share the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'CALC-01']
+      ['Can the way you share the load last? The calculator can help.', '/workpapers/calculators/calc01-solvency.html', 'Is the setup working for everyone? (CALC-01)']
     ],
     program: [
       'One week, one small change. That’s the whole trick.',
       'Skipped a day? Just pick it back up. No catching up needed.',
       'Do the week together if you can. Two heads, one plan.',
       ['The whole six weeks, step by step.', '/prog-01.html', 'The guided program'],
-      ['Week 2 is all about giving every job one owner.', '/workpapers/wp-03-raci-treaty.html', 'WP-03'],
-      ['A 90-second daily check-in fits the busiest days.', '/workpapers/wp-13-pll-protocol.html', 'The Daily Loop'],
-      ['Start by noticing the work that’s already happening.', '/workpapers/wp-01.html', 'WP-01']
+      ['Week 2 is all about giving every job one owner.', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)'],
+      ['A 90-second daily check-in fits the busiest days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in'],
+      ['Start by noticing the work that’s already happening.', '/workpapers/wp-01.html', 'Who did what (WP-01)']
     ],
     tools: [
       'A tool is a helper, not a judge. Use what’s useful.',
@@ -240,7 +240,7 @@ window.TOL_PUP_LINES = {
   keys: [
     ['\\bown(s|er|ers|ership)?\\b|\\bjobs?\\b|chores?|who does|raci|treaty', [
       'Psst… this part is about owning one job each. Try it with just one chore!',
-      ['One job, one owner. Everyone knows who to look to.', '/workpapers/wp-03-raci-treaty.html', 'WP-03: every job gets a name']
+      ['One job, one owner. Everyone knows who to look to.', '/workpapers/wp-03-raci-treaty.html', 'One owner per job (WP-03)']
     ]],
     ['batter(y|ies)|stress|tank|drain|energy', [
       'This bit is about how full your battery is. Check yours before a hard talk!',
@@ -259,7 +259,7 @@ window.TOL_PUP_LINES = {
       'Fair doesn’t always mean fifty-fifty. It means it works for both of you.'
     ]],
     ['unseen|invisible|nobody sees|quiet (work|jobs)|hidden', [
-      ['This part is about the work nobody sees. Try listing three quiet jobs!', '/workpapers/wp-01.html', 'WP-01'],
+      ['This part is about the work nobody sees. Try listing three quiet jobs!', '/workpapers/wp-01.html', 'Who did what (WP-01)'],
       'Invisible work gets lighter when someone sees it.'
     ]],
     ['wiring|wired|how you.re built|rhythm', [
@@ -268,7 +268,7 @@ window.TOL_PUP_LINES = {
     ]],
     ['check-?ins?|small and (often|frequent)|daily|weekly|catch-up', [
       'Small and often beats big and rare. Five minutes is plenty!',
-      ['A 90-second check-in for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The Daily Loop']
+      ['A 90-second daily check-in for busy days.', '/workpapers/wp-13-pll-protocol.html', 'The 90-second daily check-in']
     ]],
     ['say no|refus|not now|neutral refusal', [
       'This part is about saying no kindly. A clear “not now” is kind too.',
@@ -316,7 +316,7 @@ window.TOL_PUP_LINES = {
     ]],
     ['talk|conversation|words|listen|tone', [
       'Try asking one curious question before you answer.',
-      ['Same words can land differently. Try a softer tone.', '/workpapers/wp-09-tone-filter.html', 'WP-09: the tone filter']
+      ['Same words can land differently. Try a softer tone.', '/workpapers/wp-09-tone-filter.html', 'Say it so it lands (WP-09)']
     ]]
   ],
 

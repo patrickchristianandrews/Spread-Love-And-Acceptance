@@ -101,7 +101,7 @@ OVERRIDE = {
         'Type a text or message and see how it might land, what the other person may hear, and a kinder, clearer way to '
         'say it. A free tone checker for partners, family, friends and work.'),
     'conversation-reader.html': (None,
-        'Paste a text thread or chat and see where it turned, what each of you may be hearing, and calmer replies built '
+        'Paste a text thread or chat into the Conversation Reader and see where it turned, what each of you may be hearing, and calmer replies built '
         'from your own words. A free, private tool for repair and reconciliation.'),
     'library.html': (None,
         'The Professor’s Library: 235 plain-language entries on relationships, conflict and reconciliation, kindness, '
@@ -125,8 +125,8 @@ SEARCH = {
  'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a gentle six-week path to fairer chores and kinder conversations at home.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole load, fix the setup not the person, read your state first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Family and Roommates', 'Fair ways to share chores, kinder words and calmer check-ins for partners, families, co-parents, friends, roommates, coworkers and caregivers.'),
- 'signal-translator.html': ('Tone Checker: See How Your Text Will Land', 'A free tone checker: type a text or message and see how it may land, what they may hear, and a kinder, clearer way to say it. Private, on your device.'),
- 'conversation-reader.html': ('Text Thread Reader: Calm Replies After a Fight', 'Paste a text thread and see where it turned, what each of you may be hearing, and calmer replies in your own words. Free and private.'),
+ 'signal-translator.html': ('The Signal Translator: a tone checker for texts', 'The Signal Translator, a free tone checker: type a text or message and see how it may land, what they may hear, and a kinder, clearer way to say it. Private, on your device.'),
+ 'conversation-reader.html': ('The Conversation Reader: Calm Replies After a Fight', 'Paste a text thread and see where it turned, what each of you may be hearing, and calmer replies in your own words. Free and private.'),
  'turning-toward.html': ('Turning Toward: 7 Small Habits for Closer Relationships', 'Connection grows in small moments. Seven simple practices: notice when someone reaches for you, give specific thanks, and repair gently after a hard moment.'),
  'check-ins.html': ('Relationship Check-Ins: A Simple, Kind Weekly Ritual', 'A short, kind check-in for couples, families and housemates: what went well, what felt heavy, and one small change to try next.'),
  'quick-checks.html': ('Daily Mood Check-In: How’s Your Weather Today?', 'A 60-second check-in on how you’re doing today, with a gentle forecast for hard talks and a calm pause with something soothing to do.'),
@@ -146,15 +146,15 @@ SEARCH = {
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
  'soundscapes.html': ('Brain Breakers: Instrumental Music with a Visualizer', 'Four instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a media-player-style music visualizer and gentle vibration.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Puppy Cam for Your TV', 'Two cartoon pups play, nap and explore live on your TV, with calm music and soft place sounds. Free to cast or play full screen.'),
- 'wp-01.html': ('Fair Chore Chart: Who Did What (WP-01)', 'A free chore chart worksheet: note who did what this week, see the split clearly, and find kind ways to say no. For couples, families and roommates.'),
+ 'wp-01.html': ('Who Did What: A One-Week Chore Log (WP-01)', 'A free chore chart worksheet: note who did what this week, see the split clearly, and find kind ways to say no. For couples, families and roommates.'),
  'wp-02.html': ('How Much Are You Carrying? A Stress Self-Check (WP-02)', 'A quick self-check of how full your plate feels today, to help you pace a hard talk. A reflection tool, not a test or diagnosis.'),
  'wp-03.html': ('Who Owns Which Chore? One Owner per Job (WP-03)', 'Give every recurring job one owner from start to finish, so nothing slips and nobody nags. A free household planning worksheet.'),
- 'wp-04.html': ('Mental Load Audit: What Keeps Coming Back? (WP-04)', 'Find the jobs and arguments that keep coming back, see the invisible work behind them, and fix the setup instead of blaming a person.'),
+ 'wp-04.html': ('What Keeps Coming Back? A Monthly Look-Back (WP-04)', 'Find the jobs and arguments that keep coming back, see the invisible work behind them, and fix the setup instead of blaming a person.'),
  'wp-09.html': ('Say It So It Lands: Kinder Wording (WP-09)', 'Turn a hard sentence into one that lands: what you mean, what they may hear, and a calmer way to say it. A free communication worksheet.'),
  'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple plan for heated moments: your signs, a pause signal, what helps you settle, and how to come back to the talk kindly.'),
  'wp-13.html': ('90-Second Daily Check-In for Couples (WP-13)', 'A 90-second daily check-in for couples and housemates: how you’re doing, what’s coming up, and one small way to help.'),
  'lemonade-stand.html': ('Who Did What This Week? A Simple Chore Tracker', 'A friendly chore tracker for the week: note who did what, see the balance at a glance, and talk about it without blame.'),
- 'calc01-solvency.html': ('Is the Chore Split Fair? A Free Calculator (CALC-01)', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
+ 'calc01-solvency.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'A free calculator for the household split: time, effort and the invisible jobs, so you can see whether the setup works for everyone.'),
  'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the load, give every job an owner, check your batteries and how you talk, then look at what changed.'),
  'wired-differently.html': ('Wired Differently: Neurodiversity in Relationships', 'How different minds can hear the same words differently, and simple ways to share plans, chores and feedback so they land for everyone.'),
  'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Understand how you take in plans, change and feedback, and how to explain what helps you to the people you live and work with.'),
@@ -162,12 +162,12 @@ SEARCH = {
  'perspective-shifter.html': ('The Perspective Shifter: See It From Their Side', 'A simple tool for seeing a moment from someone else’s side: their state, wiring, surroundings and history, and what each of you could and couldn’t see.'),
  'polymath.html': ('The Polymath Way: How Every Field Connects', 'How psychology, economics, nature, music and more grow from the same few roots, and how a polymath joined thirteen fields into one program you can learn.'),
  'about.html': ('About Spread Love & Acceptance', 'The story behind Spread Love & Acceptance and The Objective Ledger: a free, growing suite of tools for kinder, fairer relationships.'),
- 'book/preface.html': ('The Work Nobody Sees: Invisible Labor at Home', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
- 'book/chapter-1.html': ('Why We Get Out of Tune (Chapter I)', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in what we see and expect add up over time.'),
- 'book/chapter-2.html': ('Is the Chore Split Working? (Chapter II)', 'Chapter II: a fair way to ask whether the household split is working for everyone, counting time, effort and the invisible jobs.'),
- 'book/chapter-3.html': ('Stress, Full Tanks and Different Angles (Chapter III)', 'Chapter III: how a full stress tank changes what we hear and say, and why the same moment looks different from each side.'),
- 'book/chapter-4.html': ('Two Kinds of Fair at Home (Chapter IV)', 'Chapter IV: equal and fair are not the same. How to find a split that fits your real lives, strengths and seasons.'),
- 'book/chapter-5.html': ('The Monthly Relationship Look-Back (Chapter V)', 'Chapter V: a calm monthly look-back to see what changed, celebrate it, and adjust the setup before resentment builds.'),
+ 'book/preface.html': ('Preface: The work nobody sees', 'The preface: the planning, remembering and noticing that keeps a home running, why it goes unseen, and how seeing it changes everything.'),
+ 'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in what we see and expect add up over time.'),
+ 'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the household split is working for everyone, counting time, effort and the invisible jobs.'),
+ 'book/chapter-3.html': ('Chapter III: Full tanks and different angles', 'Chapter III: how a full stress tank changes what we hear and say, and why the same moment looks different from each side.'),
+ 'book/chapter-4.html': ('Chapter IV: Two kinds of fair', 'Chapter IV: equal and fair are not the same. How to find a split that fits your real lives, strengths and seasons.'),
+ 'book/chapter-5.html': ('Chapter V: The monthly look-back', 'Chapter V: a calm monthly look-back to see what changed, celebrate it, and adjust the setup before resentment builds.'),
  'book/self-1-then.html': ('Know Yourself, Then: Where Your Lens Came From', 'Part One, Then: where your lens came from, how growing up shaped what you expect, and which old rules are worth keeping.'),
  'book/self-2-now.html': ('Know Yourself, Now: Your Wiring, Weather and Words', 'Part One, Now: how you are built, what kind of day you are having, and one clear sentence about what helps.'),
  'book/self-3-next.html': ('Know Yourself, Next: Shaping Who You Are Becoming', 'Part One, Next: what matters to you, one small goal, tiny steps for tired days and a kind monthly look at yourself.'),
@@ -200,12 +200,12 @@ SEARCH.update({
  'how-it-works.html': ('How It Works: An Outside Look at Yourself', 'How the program works: a calm, outside view of your life situation, your wiring and what you notice, like an honest auditor with no verdict on your worth.'),
  'contents.html': ('Contents: Every Free Tool, Guide and Chapter', 'Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.'),
  'is-this-for-you.html': ('Is This Right for You? What It Is and Isn’t', 'A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.'),
- 'ways-in.html': ('Ways In: Free While It’s Being Built', 'Everything here is free while it is being built. Most pages need nothing at all, a free email sign-up opens the rest, and paid membership comes later.'),
- 'glossary.html': ('Glossary: The Words, in Plain English', 'Every word this site uses, from battery to talk window, in one plain sentence with an example, plus each tool’s everyday name beside its technical one.'),
+ 'ways-in.html': ('Ways In: Everything Is Free and Open', 'Everything here is free and open to everyone while it is being built, with no sign-up. Email updates are optional.'),
+ 'glossary.html': ('Glossary: The Words, in Plain English', 'Every word this site uses, from battery to talk window, in one plain sentence with an example, plus the older names some tools used to have.'),
  'roadmap.html': ('Content Roadmap: What’s Live and What’s Planned', 'What is live today, what is being written and what is planned: the Preface and Chapters I to V are live now, with Chapters VI to XII still to come.'),
  # relationship tools
- 'signal-translator.html': ('Tone Checker for Texts: See How Your Message Lands', 'A free tone checker for texts: type a message, see how it may land and what they may hear, then get a kinder, clearer way to say it. Private, on your device.'),
- 'conversation-reader.html': ('Text Thread Reader: Calm Replies After a Fight', 'Paste a text thread after a fight and see where it turned, what each of you may be hearing, and calmer replies built from your own words. Free and private.'),
+ 'signal-translator.html': ('The Signal Translator: a tone checker for texts', 'The Signal Translator, a free tone checker for texts: type a message, see how it may land and what they may hear, then get a kinder, clearer way to say it. Private, on your device.'),
+ 'conversation-reader.html': ('The Conversation Reader: Calm Replies After a Fight', 'Paste a text thread after a fight and see where it turned, what each of you may be hearing, and calmer replies built from your own words. Free and private.'),
  'turning-toward.html': ('Turning Toward: 7 Small Habits for Closer Relationships', 'Connection grows in small moments. Seven simple habits for love and appreciation: notice when someone reaches for you, give specific thanks, and repair gently.'),
  'check-ins.html': ('Relationship Check-Ins: A Kind Weekly Ritual for Couples', 'A short, kind weekly relationship check-in for couples, families and housemates: what went well, what felt heavy, and one small change to try next week.'),
  'quick-checks.html': ('Daily Mood Check-In and Stress Check: Today’s Weather', 'A one-minute daily mood check-in and stress check: how you are doing today, a gentle forecast for hard talks, and a calm pause with something soothing to do.'),
@@ -221,13 +221,13 @@ SEARCH.update({
  'lemonade-stand.html': ('Who Did What This Week? A Free Chore Tracker', 'A free chore and mental load tracker for one person or a whole home: log who did what this week, see the split or your own load, and talk without blame.'),
  'workpapers/wp-01.html': ('Who Did What: A One-Week Chore Log and Kind Ways to Say No', 'A one-week log of who did what at home, plus three calm ways to say no or “not right now” without starting a fight. A free worksheet for couples and roommates.'),
  'workpapers/wp-02-battery-stress-meter.html': ('Stress Check: How Much Are You Carrying? (WP-02)', 'A five-question stress check that separates how much you are already carrying from how upset you are about one thing. A reflection tool, not a test.'),
- 'workpapers/wp-03-raci-treaty.html': ('One Owner per Chore: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
- 'workpapers/wp-04-deficit-audit.html': ('Mental Load Audit: Find the Chores That Keep Slipping', 'Once a month, look back at four weeks of chore logs together, find the jobs and arguments that keep coming back, and fix the setup instead of blaming a person.'),
+ 'workpapers/wp-03-raci-treaty.html': ('One Owner per Job: A Free Household Chore Agreement', 'Give every recurring household chore one clear owner from start to finish, so nothing slips, nobody nags and you stop re-deciding who does what each week.'),
+ 'workpapers/wp-04-deficit-audit.html': ('What Keeps Coming Back? Find the Chores That Keep Slipping', 'Once a month, look back at four weeks of chore logs together, find the jobs and arguments that keep coming back, and fix the setup instead of blaming a person.'),
  'workpapers/wp-09-tone-filter.html': ('Say It So It Lands: Kinder Words Before You Reply', 'A quick self-check before you answer something that landed hard, so what you say next is calm, clear and something the other person can actually hear.'),
  'workpapers/wp-13-pll-protocol.html': ('90-Second Daily Check-In for Couples and Housemates', 'A 90-second daily check-in: one sentence each about how you are doing and what is coming up, so small things do not pile up into a weekend argument. Free.'),
  'wp-11.html': ('Calm-Down Kit: A Plan for Heated Moments (WP-11)', 'Make a simple calm-down plan before you need it: your early signs, a pause signal, what helps you settle, and how to come back to the talk kindly and on time.'),
  'wp-11-sound-toolkit.html': ('Calm-Down Sounds: Brown Noise, a Low Hum and More', 'Three simple background sounds to try as part of your calm-down plan: a low hum, a soft flutter and brown noise. Free in your browser, and a matter of taste.'),
- 'workpapers/calculators/calc01-solvency.html': ('Is the Chore Split Fair? A Free Calculator (CALC-01)', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the household load is working for everyone.'),
+ 'workpapers/calculators/calc01-solvency.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the household load is working for everyone.'),
  'prog-01.html': ('A Six-Week Guided Program for Fairer Chores', 'Six gentle weeks, one worksheet a week: see the mental load, give every chore an owner, check your stress and how you talk, then look at what has changed.'),
  'tools/frequency-calibration.html': ('Are Your Rhythms in Step? Frequency Calibration', 'A worksheet for two people to map their rhythms for money, rest, decisions, check-ins and recovery, and see where they match and where they drift apart.'),
  'snapshot/index.html': ('A 2-Minute Snapshot of How Your Household Shares the Load', 'A gentle two-minute look at how the shared load is set up at home and how it bends, for couples, families, roommates and teams. Not a test or a diagnosis.'),
@@ -250,12 +250,12 @@ SEARCH.update({
  'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
- 'book/preface.html': ('Invisible Labor at Home: The Work Nobody Sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
- 'book/chapter-1.html': ('Why We Get Out of Tune: Communication at Home (Ch. I)', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
- 'book/chapter-2.html': ('Is the Chore Split Fair? Division of Labor (Ch. II)', 'Chapter II: a fair way to ask whether the division of labor at home is working for everyone, counting time, effort and the invisible jobs, never blame.'),
- 'book/chapter-3.html': ('Stress and Seeing Things Differently (Chapter III)', 'Chapter III: how a full stress tank changes what we hear and say, why the same moment looks different from each side, and how to pause before you react.'),
- 'book/chapter-4.html': ('Equal vs Fair: Two Kinds of Fair at Home (Ch. IV)', 'Chapter IV: equal and fair are not the same thing. How couples and families find a fair chore split that fits their real lives, strengths and seasons.'),
- 'book/chapter-5.html': ('The Monthly Relationship Look-Back (Chapter V)', 'Chapter V: a calm monthly look-back for couples and households to see what changed, celebrate it, and adjust the setup before resentment builds up.'),
+ 'book/preface.html': ('Preface: The work nobody sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
+ 'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
+ 'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the division of labor at home is working for everyone, counting time, effort and the invisible jobs, never blame.'),
+ 'book/chapter-3.html': ('Chapter III: Full tanks and different angles', 'Chapter III: how a full stress tank changes what we hear and say, why the same moment looks different from each side, and how to pause before you react.'),
+ 'book/chapter-4.html': ('Chapter IV: Two kinds of fair', 'Chapter IV: equal and fair are not the same thing. How couples and families find a fair chore split that fits their real lives, strengths and seasons.'),
+ 'book/chapter-5.html': ('Chapter V: The monthly look-back', 'Chapter V: a calm monthly look-back for couples and households to see what changed, celebrate it, and adjust the setup before resentment builds up.'),
  'book/self-1-then.html': ('Know Yourself, Then: Where Your Lens Came From', 'Part One, Then: where your lens came from, how growing up shaped what you expect, and which old rules are worth keeping.'),
  'book/self-2-now.html': ('Know Yourself, Now: Your Wiring, Weather and Words', 'Part One, Now: how you are built, what kind of day you are having, and one clear sentence about what helps.'),
  'book/self-3-next.html': ('Know Yourself, Next: Shaping Who You Are Becoming', 'Part One, Next: what matters to you, one small goal, tiny steps for tired days and a kind monthly look at yourself.'),
@@ -291,7 +291,7 @@ SEARCH.update({
  'wired-differently-in-depth.html': (None, 'How autistic, ADHD, dyslexic, anxious, highly sensitive and neurotypical people can hear the same sentence in very different ways, with examples and research.'),
  'growing-up-in-depth.html': (None, 'A plain-language guide to the stages of growing up and the lens each one leaves: the big question at each stage, why timing matters, and family and culture.'),
  'workpapers/wp-03-raci-treaty-in-depth.html': (None, 'The full household chore agreement: give every regular job one owner, with an optional helper, so nothing slips and nobody has to keep asking who does what.'),
- 'workpapers/wp-04-deficit-audit-in-depth.html': (None, 'The full mental load audit: a monthly look-back over four weeks of chore logs and owners, to find the tasks that keep slipping and fix the setup together.'),
+ 'workpapers/wp-04-deficit-audit-in-depth.html': (None, 'The full monthly look-back: a monthly review of four weeks of chore logs and owners, to find the tasks that keep slipping and fix the setup together.'),
  'workpapers/wp-09-tone-filter-in-depth.html': (None, 'The full checklist for getting back in tune before you reply: put the radio-tuning idea from Chapter I into everyday words that are calm, clear and kind.'),
  'workpapers/wp-13-pll-protocol-in-depth.html': (None, 'The full 90-second daily check-in for couples and housemates: a short, easy daily talk that keeps two people in step with small, steady corrections.'),
  'infographic.html': ('The Whole Idea on One Printable Page', 'The whole idea on one printable page: the Five Pillars, how an unowned chore turns into resentment, the Lemonade Stand chore tracker, and three kind phrases.'),
@@ -305,6 +305,8 @@ SEARCH.update({
  'neurodivergent-relationships.html': ('Neurodivergent Relationships: ADHD and Autistic Couples', 'Practical tips for ADHD, autistic and AuDHD couples and families: communication differences, sensory overload at home, plans, chores and kind feedback.'),
  'communication-style-quiz.html': ('Communication Style Quiz: Find Your Wave Code (Free)', 'A free communication style quiz: find your four-letter Wave Code and which of 16 archetypes fits, from pace and detail to how you send and receive words.'),
  'grandparents.html': ('For Grandparents: Help Without Taking Over', 'Free, gentle help for grandparents: share childcare fairly, agree on house rules with your adult children, say no kindly, and stay close to your grandkids.'),
+ 'work.html': ('At Work: Fair Workloads and Kind Messages for Teams', 'Free, plain tools for teams: one owner per job, messages that land, appreciation that fits, and a 45-minute team session. No sign-up, no cartoons.'),
+ 'grief.html': ('Grief and Later Life: Loss, Family and a New Chapter', 'Gentle, free help after a loss: grieving differently in one family, reconnecting with grown children, starting a new chapter, and where to get support.'),
 })
 
 # Titles past about 60 characters and descriptions past about 160 are cut off in search results
@@ -501,12 +503,17 @@ def plain(s):
     return re.sub(r'\s+', ' ', text_of(s)).strip()
 
 
+# Everything is open while the site is being built (CONFIG.openAll in assets/js/site.js): no part of any page is
+# behind the sign-up, so nothing is marked as paid. Set to False if the sign-up gate comes back.
+OPEN_ALL = True
+
+
 def faq_of(body):
     """Question-and-answer pairs from a visible FAQ (an element with id="faq": h3 questions, p answers)."""
     i = body.find('id="faq"')
     if i < 0: return []
     lock = body.find('locked-section')
-    if 0 <= lock < i: return []                    # questions hidden behind the sign-up are not marked up
+    if 0 <= lock < i and not OPEN_ALL: return []                    # questions hidden behind the sign-up are not marked up
     j = body.find('</h2>', i)
     if j < 0: return []
     ends = [k for k in (body.find('<h2', j), body.find('</section>', j), body.find('</main>', j)) if k > 0]
@@ -548,7 +555,7 @@ def crumbs(path, title, url):
 def ld_for(path, title, desc, url, kw, modified, published, body, image):
     publisher = PUBLISHER
     website = {'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'url': SITE + '/'}
-    locked = 'locked-section' in body
+    locked = 'locked-section' in body and not OPEN_ALL
     common = {'@id': url + '#page', 'name': title, 'headline': title[:110], 'description': desc, 'url': url, 'inLanguage': 'en-US',
               'isAccessibleForFree': not locked, 'keywords': ', '.join(kw), 'publisher': publisher, 'isPartOf': website,
               'datePublished': published, 'dateModified': modified, 'image': image,
