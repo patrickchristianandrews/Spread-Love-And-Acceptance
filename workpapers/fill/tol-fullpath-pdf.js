@@ -416,7 +416,7 @@
       road.solo ? 'Everything is about you, written by you.' : 'Wherever a page asks "who", write a name from page 3, an initial, or "Everyone". Pages about one person (the load score, the pause line) are filled in by that person, about themselves.',
       'When you’re done, save the PDF and bring it back to the Workpaper Suite on the website. It reads your answers on your own device, shows you what it found, lets you fix anything, and makes your report.'
     ], { size: 9.2 });
-    lay.callout('Private by design', ['Nothing you type in this PDF is sent anywhere. The website reads it in your browser, on your device, and never uploads it. Keep the file somewhere private, like any personal notes.'], C.creditSoft, { size: 9 });
+    lay.callout('Private by design', ['Nothing you type in this PDF is sent anywhere. The website reads it in your browser, on your device, and never uploads it. Keep the file somewhere private, like any personal notes.'].concat(road.solo ? [] : [data.shared ? 'This is a copy to share: the private parts (load score answers, self-notes, raw reaction and calm-down triggers) were left out.' : 'Some pages are personal: each person\u2019s load score, self-notes, raw reaction and calm-down triggers. ' + (data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see them if you share this file. To share without them, make a copy on the website with \u201cLeave the private parts out\u201d ticked.']), C.creditSoft, { size: 9 });
     lay.callout('A fair read, never a verdict', [road.solo ? 'These pages describe your conditions and your setup, never your worth. They are not a diagnosis and not a health tool.' : 'These pages describe the setup between you, never any one person. They are not a diagnosis, not a health tool, and never evidence or a performance record.'], C.lav, { size: 9, titleColor: C.ink });
     // hidden fields: which package this is
     doc.field({ name: reg.meta.version, kind: 'text', value: FP.VERSION, x: 1, y: 1, w: 1, h: 1, hidden: true });
@@ -441,7 +441,8 @@
       if (p.why) lay.para(p.why, { font: 'Times-Italic', size: 10.5, color: C.credit, after: 4 });
       if (p.intro) lay.para(p.intro, { size: 9, color: C.soft, after: 6 });
       p.blocks.forEach(function (b) {
-        if (b.kind === 'note') lay.para(b.text, { font: 'Times-Italic', size: 9.5, color: C.soft, after: 6 });
+        if (b.kind === 'note' && b.private) lay.callout('Private', [b.text], C.butter, { size: 8.8, titleColor: C.ink });
+        else if (b.kind === 'note') lay.para(b.text, { font: 'Times-Italic', size: 9.5, color: C.soft, after: 6 });
         else if (b.kind === 'fields') blockFields(lay, b, data, p);
         else if (b.kind === 'grid') blockGrid(lay, b, data, p);
         else if (b.kind === 'cards') blockCards(lay, b, data, p);
@@ -800,7 +801,7 @@
       section('A page for each person', '6  A page for each person');
       lay.kicker('Each person');
       lay.h1('A page for each person', 'Their load, their load score, what they bring and what might help');
-      lay.para('These are not scorecards and not a ranking. Each one is written to that person about their own week, and it only knows what was entered. Read your own first; share it if you want to.', { size: 9.3, color: C.soft, font: 'Times-Italic' });
+      lay.para('These are not scorecards and not a ranking. Each one is written to that person about their own week, and it only knows what was entered. Read your own first; share it if you want to.' + (persons.some(function (p) { return p.note; }) ? ' A person\u2019s own note from WP-02 shows on their page only; anyone you share this report with will see it.' : ''), { size: 9.3, color: C.soft, font: 'Times-Italic' });
       persons.forEach(function (p, i) {
         if (i) lay.room(260);
         mark(p.label, 1);

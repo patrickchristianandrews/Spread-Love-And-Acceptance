@@ -364,7 +364,7 @@ t('tester', 'my roommates never do their chores', { kind: 'sit', id: 'roommate+f
 t('tester', "what if my partner won't do the program", { kind: 'sit', id: 'partner+wontjoin', not: /worry/ });
 t('tester', 'my wife and i never have time for each other', { kind: 'sit', id: 'partner+notime', not: /caregiv|surgery/i });
 t('tester', 'is there an app', { kind: 'card', id: 'app', text: /home screen/i });
-t('tester', 'can we use this together on two phones', { kind: 'card', id: 'twophones', link: '/carrier-wave-decoder.html#together' });
+t('tester', 'can we use this together on two phones', { kind: 'card', id: 'twophones', link: '/lemonade-stand.html', text: /Together tab/ });
 t('tester', 'my battery score of 3', { kind: 'calc', text: /3 ÷ 20 = 0\.15/ });
 t('tester', 'My partner sent me this link. Is this going to be used against me?', { kind: 'card', id: 'usedagainst', text: /setup, never a person/ });
 t('tester', 'my boss keeps dumping work on me', { kind: 'sit', id: 'coworker+manager' });
@@ -644,6 +644,32 @@ t('wavelength', 'how do the 9 inputs connect', { id: 'wl-inputs', link: '/wavele
 t('wavelength', 'what chapters are in wavelength', { id: 'wl-chapters', text: /sixteen self-discovery chapters/ });
 t('wavelength', 'how do I compare wave codes with my partner', { id: 'wl-compare', text: /Compare with someone/ });
 t('wavelength', 'does wavelength save what I type', { id: /^wl-|^wavelength$/, text: /on this device|sent anywhere/ });
+
+// ---------------------------------------------------------------- couples (round six: eight couples, sixteen people)
+t('couples', "she won't let anything go, I need space", { kind: 'care', id: 'pursuewithdraw', not: /heads-up before visits|work hours/ });
+t('couples', 'one of us wants to talk it out now and the other needs space. who is right?', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'he walks away every time I try to talk', { kind: 'care', id: 'pursuewithdraw', text: /return time/ });
+t('couples', 'we have the same fight every week, she pursues and I withdraw', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'how long should a break be?', { kind: 'care', id: 'pursuewithdraw', not: /respite/ });
+t('couples', 'how do I get him to stay and finish the conversation?', { kind: 'care', id: 'pursuewithdraw' });
+t('couples', 'he never lets me talk about anything', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
+t('couples', 'she follows me from room to room when I need space', { kind: 'care', id: 'pursuewithdraw', not: /signs of control/ });
+t('couples', "he won't let me talk to my friends", { kind: 'safety' });
+t('couples', 'he follows me to work', { kind: 'safety' });
+t('couples', 'he punched a hole in the wall', { kind: 'safety' });
+t('couples', "he punched the wall last night when I wouldn't drop it", { kind: 'safety' });
+t('couples', "he smashes things when he's angry", { kind: 'safety' });
+t('couples', "she stands in the doorway so I can't get out", { kind: 'safety' });
+t('couples', 'she threw my phone across the room', { kind: 'safety' });
+t('couples', "my husband doesn't understand that I have to support my family", { kind: 'care', id: 'familyduty', not: /dementia/ });
+t('couples', 'my husband no understand i must help my family back home', { kind: 'care', id: 'familyduty' });
+t('couples', "my wife sends a lot of money to her family and I feel we can't save", { kind: 'care', id: 'familyduty', not: /visits/ });
+t('couples', 'my mother-in-law visits too often', { kind: 'sit', not: /motherinlaw/ });
+t('couples', "my wife says I'm under her feet since I retired", { kind: 'care', id: 'retired' });
+t('couples', 'I just retired and feel useless at home', { kind: 'care', id: 'retired' });
+t('couples', 'retirement', { kind: 'care', id: 'retired', not: /widow|living alone/ });
+t('couples', "we're long distance and always fighting about who calls", { kind: 'care', id: 'longdistance' });
+t('couples', 'My stepdaughter says I am not her real mom and my husband is stuck in the middle', { not: /signs of control/ });
 
 // ---------------------------------------------------------------- run
 (async () => {

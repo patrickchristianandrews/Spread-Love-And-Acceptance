@@ -217,6 +217,12 @@
     sarcasm:  { label: 'Sarcasm', heat: 2, tone: 'hot',
                 hear: 'Sarcasm reads worse in writing than out loud. With no tone of voice, the other person fills the gap with the worst version.',
                 instead: 'Say the real thing plainly, once.' },
+    defend:   { label: 'Defensive or blaming question', heat: 2, tone: 'hot',
+                hear: 'A question like “why are you being like this?” or “what’s your problem?” turns the other person’s feeling into the problem. They usually hear “you’re too much,” and push harder to be heard.',
+                instead: 'Ask what’s going on instead: “Something’s upsetting you. What is it?” Or name one part you can agree with.' },
+    brushaside: { label: 'Brushing it aside', heat: 1.5, tone: 'tense',
+                hear: '“I said maybe” or “I told you, I’m busy” answers the plan but not the person. The other person can hear “this isn’t important to me,” even when it’s really about a hard week.',
+                instead: 'Answer the person as well as the plan: “I can’t promise tonight, and I do want to talk. How about Thursday at 8?”' },
     demand:   { label: 'Orders or blaming questions', heat: 1.5, tone: 'tense',
                 hear: '“You should,” “you need to” and “why can’t you” land as orders or blame, so they invite pushback.',
                 instead: 'Turn it into a request: “Could you…?”' },
@@ -263,10 +269,12 @@
 
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
   var PATTERNS = {
-    threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them)(?: away| from you)?", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
+    threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them) (?:away|from you)", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
     control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
     demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)", "asap", "immediately", "urgently", "right away"])],
+    defend: [words(["why (?:are|r) (?:you|u) (?:being )?(?:like this|like that|this way|so (?:dramatic|difficult|sensitive|touchy|weird|extra|needy|mean|annoying|crazy|upset|angry|mad|intense))", "why (?:are|r) (?:you|u) being (?:so )?(?:like this|like that|dramatic|difficult|weird|mean|petty|extra|needy|crazy|ridiculous)", "what(?:[’']?s| is) (?:your|ur) (?:problem|deal|issue)", "what did i (?:even )?do(?: (?:now|wrong|this time))?", "i didn[’']?t (?:even )?do anything(?: wrong)?", "it[’']?s not my fault", "that[’']?s not what i said", "i never said that", "why do you always have to", "why is everything (?:a|such a) (?:big )?(?:deal|fight|problem)", "here we go"])],
+    brushaside: [words(["i said maybe", "i said (?:i(?:[’']?d| would) (?:try|see|think about it))", "i (?:already )?told you,? i(?:[’']?m| am) busy", "i said i(?:[’']?m| am) busy", "i(?:[’']?m| am) busy,? ok(?:ay)?", "we(?:[’']?ll| will) see(?! (?:you|them|him|her|the|it|each|y[’']?all|everyone)\\b)", "i don[’']?t know,? maybe"])],
     history: [words(["last time", "remember when", "like (?:the )?(?:last|other) time", "just like when", "you did the same", "same thing (?:as|with)", "and another thing", "while we[’']?re at it", "not to mention", "this is (?:just )?like", "again\\?", "for the (?:hundredth|millionth|thousandth) time", "back when"])],
     vague: [words(["later", "soon", "at some point", "when you get a chance", "when you can", "whenever", "in a bit", "in a minute", "sometime", "one of these days", "eventually"])],
     repair: [words(["sorry", "i apologi[sz]e", "my bad", "my fault", "you[’']?re right", "that[’']?s fair", "fair point", "i hear you", "i get it", "i understand", "i didn[’']?t mean", "i shouldn[’']?t have", "can we (?:start over|talk|pause|take a break|try again)", "let[’']?s (?:pause|take a break|talk later|start over|try again)", "i need a (?:minute|moment|break)", "thanks for (?:telling|saying|listening|understanding)", "i want to (?:fix|sort|work on) this", "we[’']?re on the same (?:side|team)", "i[’']?m not against you", "good point", "i[’']?m not trying to (?:start|fight|argue|blame)", "i[’']?m not (?:mad|angry) at you"]), /🙏/g],
@@ -416,6 +424,13 @@
     if (out.level === 'calm' && out.turns.slice(-3).some(function (t) { return t.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile'].indexOf(m.kind) !== -1; }); })) out.level = 'warm';
     // swearing, a fed-up line or name-calling anywhere near the end: hot
     if (out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return ['swear', 'hostile', 'verdict', 'contempt'].indexOf(m.kind) !== -1; }); }) && out.level !== 'hot' && peak >= 3) out.level = 'hot';
+    // count the lines with an edge in each half: if they rise toward the end, it isn't calm, whatever the average
+    var EDGE = ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'absolute', 'defend', 'brushaside', 'demand', 'hint', 'opener', 'pointed', 'history', 'shouting'];
+    var edged = out.turns.map(function (t) { return t.marks.some(function (m) { return EDGE.indexOf(m.kind) !== -1; }) ? 1 : 0; });
+    var half = Math.floor(n / 2), early = edged.slice(0, half).reduce(function (a, b) { return a + b; }, 0), late = edged.slice(half).reduce(function (a, b) { return a + b; }, 0);
+    out.edgeEarly = early; out.edgeLate = late;
+    out.edgeRise = n >= 4 && late >= 2 && late > early;
+    if (out.edgeRise && out.level === 'calm') out.level = 'warm';
     var lastKinds = n ? out.turns[n - 1].marks.map(function (m) { return m.kind; }) : [];
     var doors = out.turns.filter(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); }).length;
     var lastTwo = out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return m.kind === 'withdraw'; }); });
@@ -424,7 +439,7 @@
     out.trend = !endsPause && (lastKinds.indexOf('withdraw') !== -1 || (doors >= 2 && lastTwo)) ? 'shutdown'
       : n < 3 ? 'short'
       : peak >= 3 && peakAt < n - 1 && heats[n - 1] < peak * 0.4 ? 'cooling'
-      : endHeat > headAvg + 1 || (peakAt === n - 1 && peak >= 3) ? 'rising' : 'steady';
+      : endHeat > headAvg + 1 || (peakAt === n - 1 && peak >= 3) || out.edgeRise ? 'rising' : 'steady';
 
     // Patterns on each side, counted fairly
     function tally(filter) {
@@ -470,7 +485,8 @@
     }
 
     // What it's about, and where new topics came in
-    out.topic = findTopic(out.turns.slice(0, Math.min(4, n)));
+    var tp = findTopic(out.turns);
+    out.topic = tp.topic; out.topicUnsure = tp.unsure;
     out.drift = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'history'; })) out.drift.push(i); });
 
@@ -505,6 +521,7 @@
     out.safety = out.selfHarm || out.threat || out.control;
     out.bids = [];
     out.turns.forEach(function (t, i) { if (t.marks.some(function (m) { return m.kind === 'turnaway'; })) out.bids.push({ at: i - 1, reply: i }); });
+    out.owns = owns(out);
     out.next = nextMove(out);
     out.drafts = out.safety ? [] : drafts(out);
     return out;
@@ -516,20 +533,36 @@
   // least twice; otherwise no topic at all, rather than a guess like "the thoughts" or "the best".
   var TOPICS = ('dishes|sink|kitchen|laundry|trash|garbage|bins|recycling|bathroom|chores|cleaning|groceries|shopping|dinner|lunch|breakfast|cooking|rent|bills?|electric bill|water bill|internet bill|budget|money|venmo|car|school pickups?|pickups?|pick-ups?|school run|drop-off|school|homework|kids|baby|dog|cat|vet|trip|vacation|holiday|holidays|thanksgiving|christmas|party|wedding|birthday|weekend|plans|schedule|calendar|meeting|report|deck|deadline|project|presentation|email|invoice|shift|rota|handoff|custody|visit|guests?|boyfriend|girlfriend|noise|music|thermostat|heating|car park|parking|lease|landlord|deposit|mortgage|phone|bedtime|screen time|game|games|gym|appointment|doctor|dentist|mom|dad|parents|in-laws|family|job|work|promotion|raise|sofa|garage|garden|yard|lawn|snow|fridge|milk|leftovers|toilet|shower|towels|bed|keys').split('|');
   var NOT_TOPIC = /^(?:best|worst|most|least|last|first|next|other|same|whole|thoughts?|feelings?|idea|ideas|point|problem|thing|things|stuff|way|end|fact|time|times|moment|reason|issue|mood|situation|conversation|matter|deal|kind|sort|type|part|bit|lot|one|ones|rest|side|sense|world|life|day|week|night|morning|evening|minute|hour|second|message|messages|text|texts|point|question|answer|help|chance|plan|truth|problem|mistake|fault|attitude|tone|face|heads|head|hand|hands|mind|word|words|talk|call)$/;
+  // Themes that come back in different words ("call", "reaches out", "hung up" are all about staying in touch)
+  var THEMES = [
+    ['staying in touch', /\b(?:call(?:s|ed|ing)?|phone(?:d|s)?|ring(?:s)?|facetime|reach(?:es|ed|ing)? out|text(?:s|ed|ing)?(?! (?:me|you) (?:when|if))|messag(?:e|es|ed|ing)|hung up|hear from|get back to)\b/g],
+    ['time together', /\b(?:date night|time together|spend(?:ing)? time|hang(?:ing)? out|see each other|quality time|weekend together|alone time)\b/g],
+    ['money', /\b(?:money|bills?|rent|budget|spen(?:d|t|ding)|paid|pay(?:ing)?|venmo|owe[sd]?|afford|savings|debt)\b/g],
+    ['the chores', /\b(?:dishes|laundry|trash|garbage|bins|recycling|chores|cleaning|clean(?:ed)?|vacuum(?:ed)?|tidy|mess)\b/g]
+  ];
   function findTopic(turns) {
-    var lex = {}, lexOrder = [];
-    turns.forEach(function (t) {
+    var lex = {}, lexOrder = [], lexTurns = {};
+    turns.forEach(function (t, ti) {
       var low = t.text.toLowerCase().replace(/[’']/g, '');
       TOPICS.forEach(function (w) {
         var m = low.match(new RegExp('\\b' + w + '\\b', 'g'));
-        if (m) { var k = m[0]; if (!lex[k]) { lex[k] = 0; lexOrder.push(k); } lex[k] += m.length; }
+        if (m) { var k = m[0]; if (!lex[k]) { lex[k] = 0; lexOrder.push(k); lexTurns[k] = {}; } lex[k] += m.length; lexTurns[k][ti] = 1; }
+      });
+      THEMES.forEach(function (th) {
+        var m = low.match(th[1]);
+        if (m) { var k = '#' + th[0]; if (!lex[k]) { lex[k] = 0; lexOrder.push(k); lexTurns[k] = {}; } lex[k] += m.length; lexTurns[k][ti] = 1; }
       });
     });
-    if (lexOrder.length) {
-      lexOrder.sort(function (a, b) { return lex[b] - lex[a] || b.length - a.length; });
-      var tw = lexOrder[0];
-      return (/^(?:work|money|dinner|lunch|breakfast|school|homework|rent|laundry|trash|garbage|recycling|cooking|cleaning|groceries|shopping|custody|parking|noise|music|heating|bedtime|screen time|family|parents|kids|christmas|thanksgiving)$/.test(tw) ? '' : 'the ') + tw;
+    // a theme counts when it recurs: in two or more messages, or (in a short thread) twice
+    var spread = function (k) { return Object.keys(lexTurns[k]).length; };
+    var recurring = lexOrder.filter(function (k) { return spread(k) >= 2 || (turns.length <= 4 && lex[k] >= 1); });
+    if (recurring.length) {
+      recurring.sort(function (a, b) { return spread(b) - spread(a) || lex[b] - lex[a] || (b.charAt(0) === '#') - (a.charAt(0) === '#') || b.length - a.length; });
+      var tw = recurring[0];
+      if (tw.charAt(0) === '#') return { topic: tw.slice(1), unsure: false };
+      return { topic: (/^(?:work|money|dinner|lunch|breakfast|school|homework|rent|laundry|trash|garbage|recycling|cooking|cleaning|groceries|shopping|custody|parking|noise|music|heating|bedtime|screen time|family|parents|kids|christmas|thanksgiving)$/.test(tw) ? '' : 'the ') + tw, unsure: false };
     }
+    if (lexOrder.length && turns.length > 4) return { topic: '', unsure: true };
     var freq = {}, order = [];
     turns.forEach(function (t) {
       var rx = /\b(?:the|my|your|our|his|her|their|this|that)\s+([a-z][a-z'’]+)(?:\s+([a-z][a-z'’]+))?/gi, m;
@@ -544,11 +577,11 @@
         freq[key].n++;
       }
     });
-    if (!order.length) return '';
+    if (!order.length) return { topic: '', unsure: turns.length > 4 };
     order.sort(function (x, y) { return freq[y].n - freq[x].n; });
     var top = order[0];
-    if (freq[top].n < 2) return "";
-    return (freq[top].det === 'your' || freq[top].det === 'my' ? 'the' : freq[top].det) + ' ' + top;
+    if (freq[top].n < 2) return { topic: '', unsure: turns.length > 4 };
+    return { topic: (freq[top].det === 'your' || freq[top].det === 'my' ? 'the' : freq[top].det) + ' ' + top, unsure: false };
   }
 
   function toMinutes(time) {
@@ -696,15 +729,43 @@
     if (ask) out.push({ label: 'Say yes to the ask' + (askHasTime ? '' : ', with a time'), text: 'Yes, I can ' + mine(ask.trim()).replace(/[,;]+$/, '') + (askHasTime ? '' : whenTxt ? ' ' + whenTxt : ' by [time]') + '. Thanks for asking me straight.' });
     if (q && !(ask && q.indexOf(ask.trim().slice(0, 20)) !== -1)) out.push({ label: 'Answer their question first', text: 'You asked, “' + q.replace(/\s+/g, ' ').trim() + '” The honest answer is [your answer].' });
     // 2. own the sharpest thing you said
-    var edges = ['contempt', 'sarcasm', 'passive', 'verdict', 'dismiss', 'compare', 'absolute', 'shouting', 'demand'];
-    var sharp = null;
-    mineT.forEach(function (t) { t.marks.forEach(function (m) { if (!m.whole && edges.indexOf(m.kind) !== -1 && (!sharp || edges.indexOf(m.kind) < edges.indexOf(sharp.kind))) sharp = m; }); });
-    if (sharp) out.push({ label: 'Own your part', text: 'I’m sorry I said “' + sharp.text.trim() + '”. That came out sharper than I meant. What I meant was: [the plain version, one sentence].' });
+    var myOwn = (r.owns || []).filter(function (o) { return o.mine && o.kind !== 'withdraw'; })[0];
+    if (myOwn) out.push({ label: 'Own your part', text: myOwn.script });
     // 3. slow it down, or say back how they feel
     if (feel) out.push({ label: 'Say back what you heard', text: 'It sounds like you’re feeling ' + feel.toLowerCase() + ' about ' + topic + '. Did I get that right?' });
     if (hot && out.length < 3) out.push({ label: 'Pause, with a time to come back', text: 'I don’t want to keep going back and forth by text. Can we talk about ' + topic + ' ' + (whenTxt ? whenTxt : 'tonight at [time]') + '?' + (left ? ' I’m stepping away until then.' : ' I’m not going anywhere.') });
     if (out.length < 2) out.push({ label: 'One fact, one feeling, one ask', text: (topic !== 'this' ? 'About ' + topic + ': ' : '') + '[what happened, one specific time]. I felt [one feeling]. Could you [one specific thing] ' + (whenTxt ? (/^(?:on|at|by|tonight|tomorrow|this)\b/i.test(whenTxt) ? whenTxt.replace(/^on /, 'by ') : whenTxt) : 'by [time]') + '?' });
     return out.slice(0, 3);
+  }
+
+  // Each side's part: for every person with a line that may have added heat, the sharpest one, and a way to own it.
+  // Even-handed on purpose: never only for the person who raised the issue.
+  var OWN_ORDER = ['hostile', 'swear', 'contempt', 'verdict', 'sarcasm', 'passive', 'dismiss', 'defend', 'compare', 'absolute', 'brushaside', 'withdraw', 'demand', 'history', 'shouting', 'hint', 'opener', 'pointed'];
+  function sentenceOf(text, m) {
+    var st = text.lastIndexOf('.', m.start - 1), q = text.lastIndexOf('?', m.start - 1), x = text.lastIndexOf('!', m.start - 1), nl = text.lastIndexOf('\n', m.start - 1);
+    var a = Math.max(st, q, x, nl) + 1, e = text.slice(m.end).search(/[.?!\n]/);
+    return trim(text.slice(a, e === -1 ? text.length : m.end + e + 1));
+  }
+  function ownScript(kind, said) {
+    var q = '“' + snippet(said).replace(/[.!?,;:]+$/, '') + '”';
+    if (kind === 'withdraw') return 'When I said ' + q + ', I needed a break, and I didn’t say when I’d come back. Can we pick it up at [a time]?';
+    if (kind === 'dismiss' || kind === 'brushaside') return 'When I said ' + q + ', I brushed it off. It does matter to me. What I meant was: [the plain version, one sentence].';
+    if (kind === 'defend') return 'When I said ' + q + ', I got defensive. I’d like to hear what’s going on for you.';
+    if (kind === 'sarcasm' || kind === 'passive') return 'When I said ' + q + ', I was hurt, and it came out sideways. What I meant was: [the plain version, one sentence].';
+    if (kind === 'absolute') return 'I said ' + q + ', and that isn’t fair: it isn’t every time. What I meant was: [one recent time, and how it felt].';
+    return 'I’m sorry I said ' + q + '. That came out sharper than I meant. What I meant was: [the plain version, one sentence].';
+  }
+  function owns(r) {
+    var by = {}, order = [];
+    r.turns.forEach(function (t) {
+      t.marks.forEach(function (m) {
+        var k = OWN_ORDER.indexOf(m.kind); if (k === -1) return;
+        if (!by[t.who]) { by[t.who] = null; order.push(t.who); }
+        if (!by[t.who] || k < OWN_ORDER.indexOf(by[t.who].kind)) by[t.who] = { kind: m.kind, said: m.whole ? trim(t.text) : sentenceOf(t.text, m), mine: t.mine };
+      });
+    });
+    order.sort(function (a, b) { return (by[b].mine ? 1 : 0) - (by[a].mine ? 1 : 0); });
+    return order.map(function (w) { var b = by[w]; return { who: w, mine: b.mine, kind: b.kind, said: b.said, script: ownScript(b.kind, b.said) }; });
   }
 
   function snippet(t) { t = trim(t).replace(/\s+/g, ' '); return t.length > 70 ? t.slice(0, 67).replace(/\s\S*$/, '') + '…' : t; }

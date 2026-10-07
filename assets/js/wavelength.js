@@ -12,6 +12,8 @@
   const root = document.querySelector('[data-wavelength]');
   if (!root) return;
   const KEY = 'tol-wavelength-v1', OLD_KEYS = ['tol-heartprint-v1', 'tol-pawprint-v1'];
+  // this tab's own copy (so a reload never loses a result), and the other people who took it on this device
+  const TAB_KEY = 'tol-wavelength-tab-v1', PEOPLE_KEY = 'tol-wavelength-people-v1', PEOPLE_TAB_KEY = 'tol-wavelength-people-tab-v1', MAX_OTHERS = 3;
 
   /* ---------- wiring ---------- */
   const NEUROTYPES = [
@@ -425,11 +427,14 @@
   /* ---------- state: on this device only, and only if you turn that on ---------- */
   function fresh() {
     return { v: 1, keep: false, step: 0, name: '', nts: [], otherText: '', answers: { pace: [null, null, null], lens: [null, null, null], send: [null, null, null], recv: [null, null, null] },
-      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0 }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false };
+      chips: [], showAll: {}, inputs: [], topInput: null, hp: { pick: {}, words: {}, at: 0 }, journal: {}, done: [], ch: null, view: null, connLevel: 0, connFocus: null, moved: false, their: null };
   }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  function ssDel(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
   function tidy(o) {
     const s = Object.assign(fresh(), o || {});
     s.answers = Object.assign(fresh().answers, s.answers || {});
@@ -437,9 +442,15 @@
     ['nts', 'chips', 'inputs', 'done'].forEach(k => { if (!Array.isArray(s[k])) s[k] = []; });
     if (typeof s.journal !== 'object' || !s.journal) s.journal = {};
     if (s.ch !== null && !CHAPTERS[s.ch]) s.ch = null;
+    if (typeof s.name !== 'string') s.name = '';
+    s.their = s.their && validCode(s.their.code) ? { code: s.their.code, from: cleanName(s.their.from) } : null;
+    if (s.view === 'incoming' && !s.their) s.view = null;
     return s;
   }
   function loadState() {
+    // this tab's copy is the newest one, kept or not; then what's kept on this device
+    const tab = ssGet(TAB_KEY);
+    if (tab) { try { const o = JSON.parse(tab); if (o && typeof o === 'object') return tidy(o); } catch (e) {} }
     const raw = lsGet(KEY);
     if (raw) { try { const o = JSON.parse(raw); if (o && typeof o === 'object') return tidy(o); } catch (e) {} }
     // an older Heartprint (or Pawprint) draft moves in, so nobody loses their answers
@@ -459,7 +470,39 @@
     return fresh();
   }
   let S = loadState();
-  function save() { if (S.keep) lsSet(KEY, JSON.stringify(S)); else lsDel(KEY); }
+  // kept on this device only if ticked; always kept in this tab until it closes, so a reload never loses a result
+  function save() { const j = JSON.stringify(S); if (S.keep) lsSet(KEY, j); else lsDel(KEY); ssSet(TAB_KEY, j); }
+
+  // Other people who took Wavelength on this device ("Someone else's turn"). Each keeps their own Keep choice:
+  // kept ones live on this device, the rest only in this tab.
+  function loadOthers() {
+    let raw = ssGet(PEOPLE_TAB_KEY); if (raw == null) raw = lsGet(PEOPLE_KEY);
+    try { const a = JSON.parse(raw || '[]'); return Array.isArray(a) ? a.filter(o => o && typeof o === 'object').map(tidy).slice(0, MAX_OTHERS) : []; } catch (e) { return []; }
+  }
+  let OTHERS = loadOthers(), NOTICE = '';
+  function saveOthers() {
+    const kept = OTHERS.filter(o => o.keep);
+    if (kept.length) lsSet(PEOPLE_KEY, JSON.stringify(kept)); else lsDel(PEOPLE_KEY);
+    ssSet(PEOPLE_TAB_KEY, JSON.stringify(OTHERS));
+  }
+  function started(s) { return !!(s.name.trim() || s.nts.length || s.inputs.length || s.chips.length || Object.keys(s.hp.pick).some(k => (s.hp.pick[k] || []).length) || ['pace', 'lens', 'send', 'recv'].some(id => s.answers[id].some(v => v !== null))); }
+
+  /* ---------- Wave Codes from links and pasted messages ---------- */
+  function validCode(c) { return typeof c === 'string' && c.length === 4 && c.split('').every((x, i) => AXES[i].indexOf(x) >= 0); }
+  function cleanName(n) { return String(n == null ? '' : n).replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, 30); }
+  // the first Wave Code in whatever was pasted: a bare code, a share message, or a link (case and spaces don't matter)
+  function extractCode(text) {
+    const t = String(text || '').toUpperCase();
+    let m = t.match(/(?:^|[^A-Z])([QS][FT][DN][EA])(?![A-Z])/) || t.match(/(?:^|[^A-Z])([QS])\s+([FT])\s+([DN])\s+([EA])(?![A-Z])/);
+    if (m) return m.slice(1).join('');
+    const bare = t.replace(/[^A-Z]/g, '');
+    return bare.length === 4 && validCode(bare) ? bare : '';
+  }
+  function extractFrom(text) { const m = String(text || '').match(/[?&]from=([^&\s#]+)/); if (!m) return ''; try { return cleanName(decodeURIComponent(m[1].replace(/\+/g, ' '))); } catch (e) { return ''; } }
+  // "an STDE", "a QFNA": the article follows how the first letter sounds
+  function article(w) { return /^[AEFHILMNORSX]/i.test(w) ? 'an' : 'a'; }
+  function compareLink(code, name) { return '/wavelength.html?compare=' + code + (name ? '&from=' + encodeURIComponent(name) : ''); }
+  function absLink(rel) { try { return /^https?:$/.test(location.protocol) ? new URL(rel, location.href).href : 'https://spreadloveandacceptance.com' + rel; } catch (e) { return 'https://spreadloveandacceptance.com' + rel; } }
 
   /* ---------- helpers ---------- */
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -478,13 +521,14 @@
     if (S.nts.indexOf('other') >= 0) labels.push(S.otherText ? S.otherText : 'something else');
     return labels.join(', ');
   }
-  function codeDone() { return ['pace', 'lens', 'send', 'recv'].every(id => S.answers[id].every(v => v !== null)); }
-  function score() {
+  function codeDone(st) { st = st || S; return ['pace', 'lens', 'send', 'recv'].every(id => st.answers[id].every(v => v !== null)); }
+  function score(st) {
+    st = st || S;
     const scores = [0, 0, 0, 0], first = [0, 0, 0, 0];
     SECTIONS.forEach(sec => {
       if (sec.axis === null) return;
-      S.answers[sec.id].forEach((v, i) => { if (v !== null) { const val = v === 'a' ? 2 : -2; scores[sec.axis] += val; if (i === 0) first[sec.axis] = val; } });
-      Object.keys(sec.chips).forEach(bank => sec.chips[bank].forEach((c, i) => { if (S.chips.indexOf(sec.id + ':' + bank + ':' + i) >= 0) scores[sec.axis] += c[1]; }));
+      st.answers[sec.id].forEach((v, i) => { if (v !== null) { const val = v === 'a' ? 2 : -2; scores[sec.axis] += val; if (i === 0) first[sec.axis] = val; } });
+      Object.keys(sec.chips).forEach(bank => sec.chips[bank].forEach((c, i) => { if (st.chips.indexOf(sec.id + ':' + bank + ':' + i) >= 0) scores[sec.axis] += c[1]; }));
     });
     const code = scores.map((s, i) => { const v = s !== 0 ? s : first[i]; return v >= 0 ? AXES[i][0] : AXES[i][1]; }).join('');
     return { code, scores };
@@ -563,6 +607,7 @@
   }
   function render() {
     save();
+    if (S.view === 'incoming' && S.their) return renderIncoming();
     if (S.step === 0) return renderIntro();
     if (S.step === 1) return renderNT();
     if (S.step <= TOTAL + 1) { const sec = SECTIONS[S.step - 2]; return sec.custom === 'inputs' ? renderInputs(sec) : sec.custom === 'statement' ? renderStatement(sec) : renderSection(sec); }
@@ -593,18 +638,25 @@
         '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
         (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of Wavelength. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
+        (NOTICE ? '<p class="wl-mine" role="status">' + NOTICE + '</p>' : '') +
+        (S.their && !codeDone() ? '<p class="wl-combo">When you finish, you’ll see how your Wave Code compares with ' + (S.their.from ? esc(S.their.from) + '’s' : 'theirs') + ' (' + S.their.code + ', ' + lower(ARCHETYPES[S.their.code][0]) + ').</p>' : '') +
         '<label class="wl-field" for="wl-nm">Your first name (optional)</label>' +
         '<input type="text" id="wl-nm" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
         keepBox('wl-keep-intro') +
         '<div class="wl-nav"><span></span><button type="button" class="wl-btn" id="wl-go">Start</button></div>' +
         (hasHp || codeDone() ? '<div class="wl-nav wl-nav-quiet">' + (hasHp ? '<button type="button" class="wl-linkbtn" id="wl-tostmt">Go to my statement</button>' : '') + (codeDone() ? '<button type="button" class="wl-linkbtn" id="wl-tores">See my results</button>' : '') + '</div>' : '') +
-        '<p class="wl-note">Nothing you type or choose is sent anywhere. It stays in this browser, and it’s kept only if you tick the box.</p>' +
+        (started(S) && OTHERS.length < MAX_OTHERS ? '<div class="wl-nav wl-nav-quiet"><button type="button" class="wl-linkbtn" id="wl-other">' + (S.name ? 'Not ' + esc(S.name) + '? ' : 'Sharing this device? ') + 'Start someone else’s turn</button></div>' : '') +
+        (OTHERS.length ? '<div class="wl-sect"><h3>Also on this device</h3>' + othersList(false) + '</div>' : '') +
+        '<p class="wl-note">Nothing you type or choose is sent anywhere. It stays in this browser: in this tab until you close it, and on this device only if you tick the box.</p>' +
       '</section>';
+    NOTICE = '';
     const nm = $('#wl-nm');
     nm.oninput = () => { S.name = nm.value.trim(); save(); };
     $('#wl-go').onclick = () => { S.name = nm.value.trim(); go(1); };
     const ts = $('#wl-tostmt'); if (ts) ts.onclick = () => go(TOTAL + 1);
     const tr = $('#wl-tores'); if (tr) tr.onclick = () => go(RESULTS);
+    const ot = $('#wl-other'); if (ot) ot.onclick = () => { S.name = nm.value.trim(); if (handOver()) go(0); };
+    wireOthers();
   }
 
   function comboNote() {
@@ -755,9 +807,138 @@
     a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000);
   }
   function eraseAll() {
-    if (!window.confirm('Erase everything? This clears your wiring, your Wave Code answers, your statement and your journal from this device.')) return;
-    S = fresh(); lsDel(KEY); OLD_KEYS.forEach(lsDel); render(); toTop();
-    const n = $('.wl-note'); if (n) n.textContent = 'Everything is erased. Nothing from Wavelength is kept on this device now.';
+    const n = OTHERS.length;
+    if (!window.confirm('Erase everything? This clears your wiring, your Wave Code answers, your statement and your journal from this device' + (n ? ', along with the ' + (n === 1 ? 'other person' : n + ' other people') + ' saved here' : '') + '.')) return;
+    S = fresh(); OTHERS = []; lsDel(KEY); OLD_KEYS.forEach(lsDel); lsDel(PEOPLE_KEY); ssDel(PEOPLE_TAB_KEY); render(); ssDel(TAB_KEY); toTop();
+    const note = $('.wl-note'); if (note) note.textContent = 'Everything is erased. Nothing from Wavelength is kept on this device now.';
+  }
+
+  /* ---------- comparing two Wave Codes ---------- */
+  const COUNT_WORDS = ['none', 'one', 'two', 'three', 'all four'];
+  const CMP_FRAME = 'Different letters mean different defaults, not a bad match. Most couples and close pairs differ on at least one or two lines, and knowing where saves a lot of guessing.';
+  function countLine(mine, theirs) {
+    const same = AXES.filter((ax, i) => mine[i] === theirs[i]).length;
+    if (same === 4) return 'You’re on the same wavelength on all four lines, so a lot will feel easy. Your differences will be smaller ones, in the details.';
+    if (same === 0) return 'You differ on all four lines. That’s more common than it sounds, and it means each of you brings something the other doesn’t. The tips below show where to tune in on purpose.';
+    return 'You line up on ' + COUNT_WORDS[same] + ' of the four lines and differ on ' + COUNT_WORDS[4 - same] + '. The differences are where a little tuning goes a long way.';
+  }
+  function pairTip(mine, theirs, i) { return mine[i] === theirs[i] ? 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[mine[i]].tune : PAIR_TIPS[i]; }
+  function who2(myName, theirName) { return { me: myName ? myName : 'You', them: theirName ? theirName : 'Them' }; }
+  function compareHTML(mine, theirs, myName, theirName) {
+    const n = who2(myName, theirName);
+    return '<div class="wl-cmpout">' +
+      '<p class="wl-mine">' + CMP_FRAME + '</p>' +
+      '<p><strong>' + esc(n.me) + ': ' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '. <strong>' + esc(n.them) + ': ' + theirs + '</strong>, ' + lower(ARCHETYPES[theirs][0]) + '.</p>' +
+      '<p>' + countLine(mine, theirs) + '</p>' +
+      AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
+      '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-ccopy">Copy this comparison</button><button type="button" class="wl-btn ghost" id="wl-cdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-cprint">Print</button></div>' +
+      '<p class="wl-toast" id="wl-ctoast" role="status"></p></div>';
+  }
+  function compareText(mine, theirs, myName, theirName) {
+    const n = who2(myName, theirName);
+    return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
+      .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i))).join('\n');
+  }
+  function wireCompare(mine, theirs, myName, theirName) {
+    const text = () => compareText(mine, theirs, myName, theirName) + '\n\nMade with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html';
+    const c = $('#wl-ccopy'); if (c) c.onclick = () => copyText(text(), '#wl-ctoast', 'Copied. Paste it into a note or a message.');
+    const d = $('#wl-cdl'); if (d) d.onclick = () => { download(text(), 'Wave Codes ' + mine + ' and ' + theirs + '.txt'); const t = $('#wl-ctoast'); if (t) t.textContent = 'Saved to your device.'; };
+    const p = $('#wl-cprint'); if (p) p.onclick = () => { document.documentElement.classList.add('wl-printing-cmp'); window.print(); setTimeout(() => document.documentElement.classList.remove('wl-printing-cmp'), 500); };
+  }
+  // a pasted share message or link becomes just the code (and the sender's name, when the link has one)
+  function codeField(input, onFound) {
+    const tidyUp = () => {
+      const raw = input.value; if (raw.replace(/[^A-Za-z]/g, '').length <= 4 && raw.length <= 6) return;
+      const c = extractCode(raw); if (!c) return;
+      const from = extractFrom(raw); input.value = c; if (onFound) onFound(c, from);
+    };
+    input.addEventListener('input', tidyUp);
+    input.addEventListener('paste', () => setTimeout(tidyUp, 0));
+  }
+
+  /* ---------- someone else's turn on a shared device ---------- */
+  function codeOf(s) { return codeDone(s) ? score(s).code : ''; }
+  function handOver(keepTheir) {
+    if (OTHERS.length >= MAX_OTHERS) return false;
+    const prev = S, prevCode = codeOf(prev);
+    if (!prev.name.trim()) prev.name = 'Person ' + (OTHERS.length + 1);
+    prev.ch = null; prev.view = null;
+    OTHERS.push(prev); saveOthers();
+    S = fresh();
+    S.their = keepTheir || (prevCode ? { code: prevCode, from: prev.name } : null);
+    NOTICE = esc(prev.name) + '’s results are saved ' + (prev.keep ? 'on this device' : 'in this tab') + '. Now it’s your turn.' + (prevCode && !keepTheir ? ' When you finish, you’ll see how your two codes compare.' : '');
+    return true;
+  }
+  function switchTo(i) {
+    const next = OTHERS.splice(i, 1)[0]; if (!next) return;
+    if (started(S)) { if (!S.name.trim()) S.name = 'Person ' + (OTHERS.length + 1); S.ch = null; S.view = null; OTHERS.push(S); }
+    saveOthers();
+    S = next; S.ch = null; S.view = null;
+    if (codeDone()) S.step = RESULTS;
+    NOTICE = 'Switched to ' + esc(S.name) + '.';
+  }
+  function removeOther(i) {
+    const o = OTHERS[i]; if (!o) return false;
+    if (!window.confirm('Remove ' + (o.name || 'this person') + '’s Wavelength results from this device?')) return false;
+    OTHERS.splice(i, 1); saveOthers(); return true;
+  }
+  function othersList(compare) {
+    return OTHERS.map((o, i) => { const c = codeOf(o), nm = esc(o.name || 'Someone');
+      return '<div class="wl-pairrow"><strong>' + nm + '</strong>' + (c ? ': ' + c + ', ' + lower(ARCHETYPES[c][0]) : ': not finished yet') + ' <span class="wl-small">(' + (o.keep ? 'kept on this device' : 'in this tab only') + ')</span>' +
+        '<div class="wl-actions">' + (compare && c ? '<button type="button" class="wl-btn ghost" data-pcmp="' + i + '">Compare with ' + nm + '</button>' : '') +
+        '<button type="button" class="wl-btn ghost" data-pswitch="' + i + '">Switch to ' + nm + '</button><button type="button" class="wl-linkbtn" data-pdel="' + i + '">Remove</button></div></div>'; }).join('');
+  }
+  function wireOthers() {
+    $$('[data-pswitch]').forEach(b => { b.onclick = () => { switchTo(+b.dataset.pswitch); render(); toTop(); }; });
+    $$('[data-pdel]').forEach(b => { b.onclick = () => { if (removeOther(+b.dataset.pdel)) { const y = window.scrollY; render(); window.scrollTo(0, y); } }; });
+    $$('[data-pcmp]').forEach(b => { b.onclick = () => { const o = OTHERS[+b.dataset.pcmp]; if (!o) return; S.their = { code: codeOf(o), from: o.name }; save(); render(); const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } }; });
+  }
+
+  /* ---------- opened from someone's Wave Code link ---------- */
+  function renderIncoming() {
+    const t = S.their, done = codeDone(), mine = done ? score().code : '', them = t.from ? esc(t.from) + '’s' : 'their';
+    const inQuiz = S.step >= 1 && S.step <= TOTAL + 1;
+    root.innerHTML =
+      '<section class="wl-incoming">' +
+        '<h2>Compare with ' + them + ' Wave Code</h2>' +
+        '<p>' + (t.from ? esc(t.from) + ' shared their' : 'Someone shared their') + ' Wave Code with you. Two codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong.</p>' +
+        '<label class="wl-field" for="wl-ic-them">' + cap(them) + ' Wave Code</label>' +
+        '<input type="text" id="wl-ic-them" class="wl-codein" value="' + t.code + '" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
+        '<p class="wl-small" id="wl-ic-arch">' + t.code + ' is ' + lower(ARCHETYPES[t.code][0]) + ': ' + ARCHETYPES[t.code][1] + '</p>' +
+        (done
+          ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
+            '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
+            '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
+          : '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button></div>' +
+            '<p class="wl-small">When you finish, your comparison shows up with your results.</p>' +
+            '<h3>Already know your Wave Code?</h3>' +
+            '<p class="wl-small">Type it in, or paste the message you saved, to compare without retaking the quiz.</p>' +
+            '<div class="wl-pairbox"><label class="wl-sr" for="wl-ic-mine">Your Wave Code</label><input type="text" id="wl-ic-mine" class="wl-codein" placeholder="Your code, e.g. STDE" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="wl-btn ghost" id="wl-ic-cmp">Compare</button></div>' +
+            '<div id="wl-ic-out" aria-live="polite"></div>') +
+        '<p class="wl-note">Nothing you type or choose is sent anywhere. The code came in the link you opened, and it stays in this browser.</p>' +
+      '</section>';
+    const themIn = $('#wl-ic-them'), out = $('#wl-ic-out');
+    const theirCode = () => extractCode(themIn.value);
+    const show = mineCode => {
+      const tc = theirCode();
+      if (!tc) { out.innerHTML = '<p class="wl-needs">Their code needs four letters in order: Q or S, F or T, D or N, E or A.</p>'; return; }
+      if (!mineCode) { out.innerHTML = '<p class="wl-needs">Enter your four letters in order: Q or S, F or T, D or N, E or A.</p>'; return; }
+      S.their = { code: tc, from: S.their.from }; save();
+      out.innerHTML = compareHTML(mineCode, tc, S.name, S.their.from); wireCompare(mineCode, tc, S.name, S.their.from);
+    };
+    codeField(themIn, (c, from) => { if (from) S.their.from = from; });
+    themIn.addEventListener('input', () => { const c = theirCode(), a = $('#wl-ic-arch'); if (a) a.textContent = c ? c + ' is ' + lower(ARCHETYPES[c][0]) + ': ' + ARCHETYPES[c][1] : ''; if (c && done) show(mine); });
+    if (done) {
+      wireCompare(mine, t.code, S.name, t.from);
+      $('#wl-ic-res').onclick = () => go(RESULTS);
+      $('#wl-ic-notme').onclick = () => { if (handOver({ code: theirCode() || t.code, from: S.their.from })) go(0); else { out.insertAdjacentHTML('afterbegin', '<p class="wl-needs">This device already holds four people’s results. Remove one on your results page first.</p>'); } };
+    } else {
+      const mi = $('#wl-ic-mine');
+      codeField(mi);
+      $('#wl-ic-cmp').onclick = () => show(extractCode(mi.value));
+      mi.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); show(extractCode(mi.value)); } };
+      $('#wl-ic-quiz').onclick = () => go(inQuiz ? S.step : 0);
+    }
   }
 
   function renderResult() {
@@ -787,6 +968,8 @@
             '<p class="wl-arch">' + arch + '</p>' +
             '<p class="wl-tagline">' + tag + '</p>' +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div>' : '') +
+            (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
+            (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
           '<div class="wl-wavebox">' + waveSVG(code, true) +
@@ -805,10 +988,17 @@
             : '<p>You skipped the statement. It’s a short, warm note about how you work best, in nine quick steps, and it shows connections between your choices you may not have noticed.</p><div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-sedit">Write my statement</button></div>') +
           '<p class="wl-toast" id="wl-stoast" role="status"></p></div>' +
         (done ?
-          '<div class="wl-sect" id="wl-compare"><h3>Compare with someone</h3>' +
-            '<p class="wl-small">Have them take Wavelength too, then enter their Wave Code to see where you’ll want to tune in on purpose.</p>' +
-            '<div class="wl-pairbox"><label class="wl-sr" for="wl-pc">Their Wave Code</label><input type="text" id="wl-pc" maxlength="4" placeholder="e.g. SFNA" autocomplete="off" autocapitalize="characters"><button type="button" class="wl-btn ghost" id="wl-cmp">Compare</button></div>' +
-            '<div class="wl-pairout" id="wl-pout" aria-live="polite"></div></div>' +
+          '<div class="wl-sect" id="wl-compare"><h3>' + (S.their && S.their.from ? 'Compare with ' + esc(S.their.from) : 'Compare with someone') + '</h3>' +
+            '<p class="wl-small">Have them take Wavelength too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
+            '<div class="wl-pairbox"><label class="wl-sr" for="wl-pc">Their Wave Code</label><input type="text" id="wl-pc" class="wl-codein" placeholder="e.g. SFNA, or paste their message" autocomplete="off" autocapitalize="characters" spellcheck="false" value="' + (S.their ? S.their.code : '') + '"><button type="button" class="wl-btn ghost" id="wl-cmp">Compare</button></div>' +
+            '<div class="wl-pairout" id="wl-pout" aria-live="polite">' + (S.their ? compareHTML(code, S.their.code, S.name, S.their.from) : '') + '</div></div>' : '') +
+        '<div class="wl-sect" id="wl-people"><h3>Sharing this device?</h3>' +
+          '<p class="wl-small">Hand it over for someone else’s turn. ' + (done ? 'Your results stay here under your name, so you can switch back, and when they finish you’ll see how your two codes compare.' : 'Your answers so far stay here under your name, so you can switch back.') + '</p>' +
+          (S.name.trim() ? '' : '<label class="wl-field" for="wl-pname">Your first name, so your results are easy to find</label><input type="text" id="wl-pname" maxlength="30" autocomplete="given-name">') +
+          (S.keep ? '' : '<p class="wl-small">Right now your results stay in this tab only. To keep them on this device after the tab closes, tick “Keep” at the bottom of this page first.</p>') +
+          (OTHERS.length < MAX_OTHERS ? '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-nextperson">Someone else’s turn</button></div>' : '<p class="wl-small">This device holds up to ' + (MAX_OTHERS + 1) + ' people’s results. Remove one below to make room.</p>') +
+          othersList(done) + '</div>' +
+        (done ?
           '<div class="wl-sect" id="wl-chapters"><h3>Self-discovery chapters</h3>' +
             '<p class="wl-chcount">' + S.done.filter(id => CHAPTERS.some(c => c.id === id)).length + ' of ' + CHAPTERS.length + ' explored. Each one has a short reading written for you, a few journal prompts, and one thing to try this week.</p>' + chList +
             '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-copyj">Copy my journal</button></div><p class="wl-toast" id="wl-jtoast" role="status"></p></div>' : '') +
@@ -825,15 +1015,23 @@
     }
     const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
     on('#wl-finish', () => { const i = ['pace', 'lens', 'send', 'recv'].findIndex(id => S.answers[id].some(v => v === null)); go(2 + Math.max(0, i)); });
+    let pastedFrom = null;
     on('#wl-cmp', () => {
-      const other = $('#wl-pc').value.toUpperCase().replace(/[^A-Z]/g, ''), out = $('#wl-pout');
-      const valid = other.length === 4 && other.split('').every((c, i) => AXES[i].indexOf(c) >= 0);
-      if (!valid) { out.innerHTML = '<p class="wl-needs">Enter four letters in order: Q or S, F or T, D or N, E or A.</p>'; return; }
-      const same = AXES.filter((ax, i) => code[i] === other[i]).length;
-      out.innerHTML = '<p><strong>' + code + '</strong> ' + arch + ' and <strong>' + other + '</strong> ' + ARCHETYPES[other][0] + '. You share ' + same + ' of 4 letters.</p>' + AXES.map((ax, i) =>
-        '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + code[i] + ' and ' + other[i] + '</strong><br>' + (code[i] === other[i] ? 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[code[i]].tune : PAIR_TIPS[i]) + '</div>').join('');
+      const other = extractCode($('#wl-pc').value), out = $('#wl-pout');
+      if (!other) { out.innerHTML = '<p class="wl-needs">Enter four letters in order: Q or S, F or T, D or N, E or A. You can also paste the whole message they sent.</p>'; return; }
+      $('#wl-pc').value = other;
+      // a new code is a new person, unless it came with a name or it's the one already here
+      const from = pastedFrom !== null ? pastedFrom : (S.their && S.their.code === other ? S.their.from : '');
+      S.their = { code: other, from: from }; pastedFrom = null; save();
+      out.innerHTML = compareHTML(code, other, S.name, from); wireCompare(code, other, S.name, from);
     });
-    const pc = $('#wl-pc'); if (pc) pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } };
+    const pc = $('#wl-pc');
+    if (pc) { pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } }; codeField(pc, (c, from) => { pastedFrom = from || ''; }); }
+    if (done && S.their) wireCompare(code, S.their.code, S.name, S.their.from);
+    on('#wl-tocmp', () => { const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } });
+    on('#wl-keepnow', () => { S.keep = true; save(); $$('[data-keep]').forEach(x => { x.checked = true; }); const k = $('#wl-keepoffer'); if (k) k.textContent = 'Kept on this device. “Erase everything” at the bottom removes it.'; });
+    on('#wl-nextperson', () => { const pn = $('#wl-pname'); if (pn && pn.value.trim()) S.name = cleanName(pn.value); if (handOver()) go(0); });
+    wireOthers();
     const profileText = () => {
       const L2 = [(S.name ? S.name + '’s ' : 'My ') + 'Wave Code: ' + code + ', ' + arch, tag];
       if (nt) L2.push('Wiring (self-identified): ' + nt);
@@ -842,7 +1040,8 @@
       [['pace', 'How I think and process'], ['lens', 'How I see things'], ['send', 'How I communicate'], ['recv', 'How I take things in'], ['helps', 'What helps me feel understood']].forEach(g => { const w = chosenWords(g[0]); if (w.length) { L2.push('', g[1] + ':'); w.forEach(x => L2.push('- ' + x)); } });
       if (S.inputs.length) { L2.push('', 'The inputs I learn through: ' + inputsLabel() + (S.topInput ? ' (strongest: ' + IN[S.topInput].name + ')' : '')); if (S.topInput) L2.push('To reach me: ' + IN[S.topInput].send); }
       if (lines.length) L2.push('', 'In my own words:', lines.map(x => x.line).join(' '));
-      L2.push('', 'Made with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html');
+      if (S.their) L2.push('', compareText(code, S.their.code, S.name, S.their.from));
+      L2.push('', 'Made with Wavelength from Spread Love & Acceptance. Find your Wave Code and compare it with mine: ' + absLink(compareLink(code, S.name.trim())));
       return L2.join('\n');
     };
     on('#wl-copy', () => copyText(profileText(), '#wl-toast', 'Copied. Paste it into a text or a note to share.'));
@@ -850,7 +1049,8 @@
     const share = o => { if (window.TOLShare) window.TOLShare.share(o); };
     on('#wl-share', () => share({ title: 'My Wavelength', text: profileText(), url: false, result: true }));
     on('#wl-sshare', () => share({ title: 'My Wavelength statement', text: stmtPlain(), url: false, result: true }));
-    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: 'I’m a ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code:', url: '/wavelength.html', result: true }));
+    // every way of sharing carries the code: the link opens a ready-made comparison on their side
+    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine:', url: compareLink(code, S.name.trim()), result: true }));
     if (window.TOLShareClip && window.TOLShareClip.mount) $$('#wl-share, #wl-sshare, #wl-sharecode').forEach(b => { try { window.TOLShareClip.mount(b); } catch (e) {} });
     on('#wl-scopy', () => copyText(stmtPlain(), '#wl-stoast', 'Copied. Paste it into a message, a note or a card.'));
     on('#wl-sdl', () => { download(stmtPlain(), (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Wavelength statement.txt'); const t = $('#wl-stoast'); if (t) t.textContent = 'Saved to your device.'; });
@@ -1012,9 +1212,21 @@
     if (!e.target.hasAttribute('data-keep')) return;
     S.keep = e.target.checked; save();
     $$('[data-keep]').forEach(x => { x.checked = S.keep; });
-    const s = $('#wl-saved'); if (s) s.textContent = S.keep ? 'Saved on this device. “Erase everything” on your results removes it.' : 'Nothing from Wavelength is kept on this device now.';
-    const t = $('#wl-toast'); if (t) t.textContent = S.keep ? 'Your answers and journal are kept on this device. “Erase everything” removes them.' : 'Nothing from Wavelength is kept on this device now.';
+    const s = $('#wl-saved'); if (s) s.textContent = S.keep ? 'Saved on this device. “Erase everything” on your results removes it.' : 'Not kept on this device now. It stays in this tab until you close it.';
+    const t = $('#wl-toast'); if (t) t.textContent = S.keep ? 'Your answers and journal are kept on this device. “Erase everything” removes them.' : 'Not kept on this device now. It stays in this tab until you close it.';
+    const k = $('#wl-keepoffer'); if (k && S.keep) k.textContent = 'Kept on this device. “Erase everything” at the bottom removes it.';
   });
+
+  // Opened from someone's Wave Code link (wavelength.html?compare=SFNA&from=Priya): read it, then take it out of the
+  // address bar so the code and name don't linger in history or get shared on by accident.
+  (function readLink() {
+    let q; try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    if (!q.has('compare') && !q.has('from')) return;
+    const code = extractCode(q.get('compare') || ''), from = cleanName(q.get('from') || '');
+    try { history.replaceState(history.state, '', location.pathname + location.hash); } catch (e) {}
+    if (!code) return;
+    S.their = { code: code, from: from }; S.view = 'incoming'; S.ch = null;
+  })();
 
   render();
   window.TOLWavelength = { code: () => score().code, done: codeDone, insights: () => insights().map(x => x.t), statement: stmtPlain, chapters: () => CHAPTERS.map(c => c.title) };

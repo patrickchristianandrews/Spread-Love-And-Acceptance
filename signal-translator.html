@@ -328,6 +328,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .verdict .vlvl{font-family:var(--display);font-size:1.35rem;font-weight:600;margin:0 0 6px}
 .verdict .vlvl.lvl-heavy{color:#9A3B2E}.verdict .vlvl.lvl-some{color:#8A6116}.verdict .vlvl.lvl-clear{color:#3E6B48}
 .verdict .vfound{margin:0 0 10px;font-size:.95rem}
+.verdict .vwarn{margin:0 0 10px;padding:8px 12px;border-left:4px solid #9A3B2E;background:rgba(154,59,46,.08);border-radius:0 8px 8px 0;font-size:.95rem;overflow-wrap:anywhere}
 .verdict .vbest{font-family:var(--display);font-size:1.12rem;line-height:1.5;margin:4px 0 10px;padding:10px 12px;border-left:4px solid var(--b);background:#fff;border-radius:0 8px 8px 0;overflow-wrap:anywhere}
 .verdict .readas,.verdict .literal{font-size:.9rem;margin:6px 0 0}
 .verdict .literal li{margin:.2rem 0}
@@ -1071,7 +1072,7 @@ const REL = {
     label:"Partners", anchor:"partners",
     what:"Two people sharing a life, whether married, dating, living together or not. Love, money, chores and a future are all in the same conversation.",
     why:"This dynamic exists because two people chose an ongoing bond and then built a shared life on top of it. Most of the work that keeps that life running is invisible, and it is the work least likely to be said out loud. The bond also raises the cost of being direct: a plain ask can feel like a verdict on the relationship, so people hint instead.",
-    fallback:"With no obvious trouble spot in the words, a partner may still hear history. In a shared life, a neutral sentence can land as one more item on a list only one person can see.",
+    fallback:"A partner may hear history in the words, even where nothing is flagged. In a shared life, a neutral sentence can land as one more item on a list only one person can see.",
     say:"Name the task, the time and that you are on the same side. A partnership hears criticism as a threat to the bond unless you separate the task from the person.",
     care:"The tools describe the arrangement, never the person. If either of you starts using a reading to win, stop."
   },
@@ -1134,6 +1135,60 @@ const REL = {
 };
 
 const REL_LAND = {
+  legal:{
+    partner:"A threat of lawyers or court between partners lands as the relationship already being over. The other person stops hearing the point and starts protecting themselves.",
+    family:"In a family, talk of lawyers or court lands as a line crossed that is hard to uncross. The old roles harden fast.",
+    coparent:"Between co-parents, \"I'll take you to court\" or \"you'll never see them\" is the sentence most likely to be saved and shown later. It turns a parenting problem into a fight about the children, and the children feel it.",
+    friend:"Between friends, a legal threat usually ends the friendship before it settles anything.",
+    roommate:"In a shared house, talk of lawyers lands as the house becoming a dispute. Say the problem and the ask, and use the lease or a mediator for anything formal.",
+    coworker:"At work, a legal threat belongs with HR or a formal process, not a message to a colleague. In a message it reads as intimidation.",
+    caregiver:"In shared care, a legal threat between relatives lands as a fight over the person being cared for. Say the worry about their care plainly first."
+  },
+  kidsfirst:{
+    partner:"Telling the children something about the other parent first lands as being overruled through the kids. It is very likely to escalate.",
+    family:"In a family, telling the children first puts them in the middle of an adult disagreement, and they carry it.",
+    coparent:"Between co-parents, \"I already told the kids\" lands as the children being used as a messenger, or a witness. It is one of the fastest ways to escalate, and the children pay for it. Agree together on what they hear.",
+    friend:"If children are involved, keep them out of the adult disagreement, and agree on what they hear.",
+    roommate:"If children are involved, keep them out of the adult disagreement, and agree on what they hear.",
+    coworker:"Keep children, and anyone else, out of a work disagreement.",
+    caregiver:"Telling the person being cared for, or the children, before the adults agree puts them in the middle."
+  },
+  safeask:{
+    partner:"A safety worry between partners is fair to raise. Said as blame for the past, it lands as \"you're careless\"; said as a shared habit, it lands as \"let's keep everyone safe.\"",
+    family:"In a family, a safety worry is often heard as the old \"you never think\" criticism. Make it a household habit instead.",
+    coparent:"Between co-parents, a safety worry about the child is valid and important. Said as a charge it can read as a fitness verdict; said as a habit both homes follow, it protects the child.",
+    friend:"Between friends, a safety worry usually lands as care, especially when it comes with an easy plan.",
+    roommate:"In a shared house, a safety worry is a fair house rule. Write the habit down where you'll both see it.",
+    coworker:"At work, a safety worry is a process, not a person: name the check and where it lives.",
+    caregiver:"In shared care, a safety slip is common and serious. A checklist by the door beats blame."
+  },
+  brushoff:{
+    partner:"\"Whatever works for you\" between partners often lands as \"I've stopped trying,\" even when it means \"either is fine.\" Say which one you mean.",
+    family:"In a family, a brush-off can land as the old silent treatment. Say whether you're really okay with it.",
+    coparent:"Between co-parents, \"whatever works for you\" can be real flexibility, or a tired \"I've stopped arguing.\" Adding the specific plan (\"Either weekend works. Pickup at 5.\") settles it either way.",
+    friend:"Between friends, a brush-off can land as cooling off. If it's really fine, say so warmly.",
+    roommate:"In a shared house, a brush-off leaves the decision open, and someone will be annoyed later. Name what you agree to.",
+    coworker:"At work, \"whatever works\" can read as disengaged, or as handing over the decision. Say which.",
+    caregiver:"In shared care, \"whatever works for you\" can land as \"you're on your own with this.\" Say what you'll do."
+  },
+  again:{
+    partner:"\"Again\" between partners lands as the whole list, not just today. The other person hears a running tally of the relationship.",
+    family:"In a family, \"again\" lands as the old role: the one who always forgets, the one who always has to remind.",
+    coparent:"Between co-parents, \"again\" reads like a record being kept. It is the word most likely to start a defense instead of a plan.",
+    friend:"Between friends, \"again\" lands as keeping score, which friendships don't usually expect.",
+    roommate:"In a shared house, \"again\" lands as a house grievance, not a request.",
+    coworker:"At work, \"again\" reads like a performance note. Stick to this one time and the fix.",
+    caregiver:"In shared care, \"again\" lands on someone who may already be stretched thin. Name the one thing and the plan."
+  },
+  guilt:{
+    partner:"Guilt between partners (\"I'll just sit here\") lands as a test. The other person feels pulled between going and staying, and the real need, time together, goes unsaid.",
+    family:"In a family, guilt lands as the old obligation. People comply, and resent it.",
+    coparent:"Between co-parents, guilt lands as a score being kept. Say the practical need instead.",
+    friend:"Between friends, guilt can make a plan feel like a debt. Say plainly that you'd like to be included.",
+    roommate:"In a shared house, guilt leaves the other person unsure what you want. Say it.",
+    coworker:"At work, guilt reads as passive-aggressive. Name the workload and the ask.",
+    caregiver:"In shared care, guilt often means someone is near empty. That is a signal for more support."
+  },
   hint:{
     partner:"A hint between partners often lands as a test: if you loved me, you would already know. The shared life makes mind-reading feel like care, which is exactly what different wiring cannot do.",
     family:"In a family, a hint often lands as the old criticism in a new outfit. People hear the role, not the request, because this is how needs were signaled for years.",
@@ -1298,7 +1353,7 @@ const REL_LAND = {
   }
 };
 
-const REL_ORDER = ["hint","vtime","vstd","critic","label","blameq","ominous","minimal","vemo","calm","invalid","demand","sarcasm","urgent","multi","absolute","butc","reassure"];
+const REL_ORDER = ["legal","kidsfirst","safeask","brushoff","again","guilt","hint","vtime","vstd","critic","label","blameq","ominous","minimal","vemo","calm","invalid","demand","sarcasm","urgent","multi","absolute","butc","reassure"];
 
 function relHits(id, found){
   const lines=[];
@@ -1449,7 +1504,7 @@ function settleHTML(A, B){
   return h;
 }
 
-function dynHTML(id, found, A, B){
+function dynHTML(id, found, A, B, flagged){
   if(!id || !REL[id]){
     return '<div class="box"><h3>The relationship changes the read<span class="sub">OPTIONAL, PICK A RELATIONSHIP ABOVE</span></h3><p class="small">Wiring says how '+esc(B)+' may take the words in. The relationship says what those words threaten, or protect. The same sentence can be a loose plan between friends and a broken agreement between partners, because the cost of being direct is not the same in every arrangement. People often speak indirectly when they are not sure the other person agrees, to avoid a conflict that could strain the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). Pick a relationship above to see how this phrase may land in that dynamic, what the dynamic is, and why it exists.</p></div>';
   }
@@ -1463,6 +1518,8 @@ function dynHTML(id, found, A, B){
   if(hits.length){
     h+='<ul class="dyn-list">'+hits.map(x=>'<li><span class="who">'+esc(FBY[x.fid].name)+'</span>'+esc(x.text)+'</li>').join("")+'</ul>';
   } else {
+    const named = (flagged||[]).filter(fid=>FBY[fid] && !["period","long","nowhen"].includes(fid)).slice(0,2).map(fid=>FBY[fid].name.toLowerCase());
+    if(named.length) h+='<p>What is flagged above ('+esc(named.join(", "))+') carries into this dynamic too.</p>';
     h+='<p>'+esc(r.fallback)+'</p>';
   }
   h+='<p><b>A clearer way to say it here.</b> '+esc(r.say)+'</p>';
@@ -1564,7 +1621,7 @@ function sayOptions(text, rw){
     push({id:"wait", fit:isWritten()?"Do not send it now":"Do not say it now", why:"This state, or this room, cannot hold the sentence. The care is the pause and the return.", say:pauseLine()});
   }
   rw.variants.forEach(v=>push({id:v.id, fit:v.label, why:v.why, say:cleanSay(v.text)}));
-  if(!rw.unchanged) push({id:"yours", fit:"Keep your own words", why:"Only if the versions above drop something you still mean. The static noted below may still get through.", say:text});
+  if(!rw.unchanged && !rw.escalate) push({id:"yours", fit:"Keep your own words", why:"Only if the versions above drop something you still mean. The static noted below may still get through.", say:text});
   return opts.slice(0,5);
 }
 /* the pause line fits the relationship: "we are okay" only between close people */
@@ -1750,6 +1807,7 @@ function run(){
   p6+='<h3>Where these readings come from</h3><ul class="ul src">'+srcList(srcKeys)+'</ul><p class="small">The full explanations, with more examples, are in <a href="wired-differently.html">Wired Differently</a>. The structure rules (pressure words, absolutes, hints, the fact, feeling and ask) follow the <a href="workpapers/wp-09-say-it-so-it-lands.html">Say it so it lands (WP-09)</a>.</p>';
 
   /* ---------- the takeaway ---------- */
+  rw.escalate = !!(found.legal || found.kidsfirst);
   const opts = sayOptions(text, rw);
   const cue = cueFor(lvl[0]);
   const seenH=new Set(); const heard=strongest.filter(e=>{ if(seenH.has(e.h)) return false; seenH.add(e.h); return true; }).slice(0,3);
@@ -1787,6 +1845,10 @@ function run(){
   let vtop='<div class="verdict" id="verdict"><p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(lvl[1])+'</p>';
   vtop+='<p class="vfound">'+(foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(FBY[staticIds[0]].name.toLowerCase())+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';
+  if(found.legal || found.kidsfirst){
+    vtop+='<p class="vwarn"><b>Likely to escalate.</b> '+(found.legal?'A threat about court, a lawyer or custody':'Telling the children first')+(found.legal&&found.kidsfirst?', and telling the children first,':'')+' usually turns a disagreement into a fight about the kids. The versions below leave '+(found.legal&&found.kidsfirst?'them':'it')+' out.'+(relId==="coparent"?' Between co-parents, messages like this are often saved and shown later. If there is a real legal step, take it through the proper channel. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.':'')+'</p>';
+  }
+  if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   if(!rw.unchanged){
     vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
@@ -1824,7 +1886,7 @@ function run(){
   if($("#facts").value.trim()) h += drop("The facts, kept separate", "", factsHTML($("#facts").value.trim(), found, A, B), false, false);
   if($("#reply").value.trim()) h += drop("What "+esc(B)+" said back", "", replyHTML($("#reply").value.trim(), A, B, found, text), true, false);
   h += drop("What "+esc(A)+" may have meant", Aids.length?"":"pick "+poss(A)+" wiring", p4, false, false);
-  h += drop("In this relationship", relName||"optional", dynHTML(relId, found, A, B), false, false);
+  h += drop("In this relationship", relName||"optional", dynHTML(relId, found, A, B, staticIds), false, false);
   h += drop("The room, and what each of you needs", "Pillar III", settleHTML(A, B), false, false);
   h += drop(general ? "Writing for most listeners, and checking back" : "Speaking to "+esc(B)+"'s wiring, and checking back", "", p5, false, false);
   h += drop("The static runs both ways, and sources", "", p6, false, false);
@@ -1896,16 +1958,21 @@ const COPARENT_REPLIES = [
   {label:"Only the next step", text:"Thanks for letting me know. Next pickup is [the day] at [the time]."}
 ];
 function fitReceived(an, rv){
-  const threat = !!an.found.threat;
+  const threat = !!(an.found.threat || an.found.legal);
   rv.threat = threat || rv.crossed;
   if(threat) rv.meanings = rv.meanings
     .filter(m=>!/^They're unhappy about something that happened/.test(m))
     .map(m=>/^It's worded as an ultimatum/.test(m) ? "It's worded as a threat. Threats aren't okay, whatever was meant. You don't have to answer it on the spot." : m);
   rv.meanings = rv.meanings.map(m=>m.replace(/\s*It shows how much this matters to them right now\./, ""));
   rv.coparent = relId==="coparent";
-  if(rv.coparent) rv.replies = rv.crossed
-    ? COPARENT_REPLIES.slice(1,2).concat([{label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}])
-    : rv.replies.filter(r=>r.label==="Check the ask").concat(COPARENT_REPLIES).slice(0,3);
+  if(rv.coparent){
+    if(an.found.brushoff || an.found.minimal) rv.meanings.push("Between co-parents, \u201cwhatever works for you\u201d can be real flexibility, or a tired \u201cI\u2019ve stopped arguing.\u201d Answering with the specific plan settles it either way.");
+    if(an.found.legal) rv.meanings.push("Between co-parents, keep your reply to the children\u2019s schedule and the facts. You don\u2019t have to answer the threat itself.");
+    const keep = rv.replies.filter(r=>["Check the ask","Agree on a habit","Keep the kids out of it"].includes(r.label));
+    rv.replies = rv.crossed
+      ? COPARENT_REPLIES.slice(1,2).concat([{label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}])
+      : keep.concat(an.found.brushoff ? [{label:"Name the plan", text:"Thanks. Then let's go with [the plan]: [the day] at [the time]. Tell me by [a time] if that doesn't work."}] : []).concat(COPARENT_REPLIES).slice(0,3);
+  }
   return rv;
 }
 function runReceived(text){

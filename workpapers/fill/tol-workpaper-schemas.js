@@ -94,7 +94,7 @@
     sections: [
       {
         id: 'audit', type: 'table', title: 'Part A: Who did what, this week',
-        intro: 'A plain log kept for 5–7 days, written down before anyone decides what it means. Add one row for each task noticed or done, including the invisible ones: remembering, planning, booking, forms. Log what happened, not what should have happened.',
+        intro: 'A plain log kept for 5–7 days, written down before anyone decides what it means. Add one row for each task noticed or done, including the invisible ones: remembering, planning, booking, forms. Log what happened, not what should have happened. "Asked for" only means someone mentioned it first; it doesn\'t make the person who did it a helper, and the job counts just the same.',
         library: 'task',
         addLabel: 'Add a row',
         columns: [
@@ -102,7 +102,7 @@
           { id: 'task', label: 'Task noticed or done', type: 'text', w: 3 },
           { id: 'who', label: 'Who did it', type: 'person', both: true, w: 1.3 },
           { id: 'minutes', label: 'Minutes (rough)', type: 'number', w: 0.9, min: 0, max: 1440, step: '5', rangeNote: 'Minutes run from 0 to 1,440 (a whole day) in one row. Split a longer job into one row per day.' },
-          { id: 'how', label: 'Asked for, or noticed and handled?', type: 'select', options: ['Asked for', 'Noticed and handled'], w: 1.7 }
+          { id: 'how', label: 'How it came up: asked for, or noticed?', type: 'select', options: ['Asked for', 'Noticed and handled'], w: 1.7 }
         ],
         defaultRows: DAYS.map(function (d) { return { day: d }; })
       },
@@ -500,9 +500,9 @@
       var left = bad.length ? [{ label: 'Left out', value: plural(bad.length, 'reading') + ' with a number outside 0 to 1.', note: 'These are WP-02 load scores: the five answers added up and divided by 20, so they run from 0 to 1 (for example 0.45).' }] : [];
       if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }].concat(left);
       var last = rows[rows.length - 1], a = inRange(last.after, 0, 1), b = inRange(last.before, 0, 1);
-      var band = a < 0.5 ? (solo ? 'Under 0.50: pick things back up, at the time you named.' : 'Under 0.50: return to the conversation, at the time you named.')
-        : a < 0.6 ? '0.50 to 0.59: do a second round, with the same calming step or the other one.'
-          : (rows.length >= 2 ? '0.60 or above after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not.' : '0.60 or above: do a second round first.');
+      var band = a < 0.5 ? (solo ? 'Settled enough: pick things back up, at the time you named. (Under 0.50.)' : 'Settled enough: go back to the conversation, at the time you named. (Under 0.50.)')
+        : a < 0.6 ? 'If you still feel hot, take another round, with the same calming step or the other one. (0.50 to 0.59.)'
+          : (rows.length >= 2 ? 'Still hot after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not. (0.60 or above.)' : 'Still hot: take another round first. (0.60 or above.)');
       var out = [{ label: 'Latest reading', value: fmt(a, 2) }];
       // a reading that went up is worth saying out loud, kindly
       if (b !== null && r2(a) > r2(b)) out.push({ label: 'It went up', value: 'Your load went from ' + fmt(b, 2) + ' to ' + fmt(a, 2) + '. That happens, and it is useful to know. Try your other calming step, or put it off to a named time.' });
@@ -515,9 +515,10 @@
     title: 'The Calm-Down Kit',
     plain: 'The Calm-Down Kit',
     slug: 'The-Calm-Down-Kit',
-    purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own kit, about themselves. Fill in Part A on an ordinary day, not a hard one.',
+    purpose: 'A short plan, made ahead of time, for calming your body down enough to have the conversation, or to put it off honestly. Everyone fills in their own kit, about themselves, and keeps it. The pause plan is the one part you agree on together and share. Fill in Part A on an ordinary day, not a hard one.',
     people: false,
     perPerson: true,
+    privateNote: 'Your kit is private; the pause plan is made to share.',
     meta: [
       { id: 'name', label: 'Whose kit is this? (your name)', type: 'text' },
       { id: 'date', label: 'Date', type: 'date' }
@@ -525,7 +526,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: 'This kit is about you. When several people share a road, each person fills in their own; it is never something to fill in for someone else.'
+        text: 'Most of this kit is about you, and it stays yours: each person fills in their own, never someone else\'s, and nobody hands it to the other person. The one part made to agree on and share is "Our pause plan" below: the pause word, the break, and how you come back.'
       },
       {
         id: 'triggers', type: 'table', title: 'Part A: What tends to start it',
@@ -554,12 +555,22 @@
         ]
       },
       {
+        id: 'plan', type: 'fields', title: 'Our pause plan (agree it together, and share it)',
+        intro: 'Unlike the rest of the kit, this part is meant to be agreed together, on a calm day, and shared, so a pause is never mistaken for walking out. A few words in each box is plenty.',
+        fields: [
+          { id: 'planWord', label: 'Our pause word or signal', type: 'text', placeholder: 'e.g. Timeout, or a hand on the table' },
+          { id: 'planMin', label: 'The shortest break we take', type: 'text', placeholder: 'e.g. 20 minutes' },
+          { id: 'planBack', label: 'How we set the time to come back', type: 'text', placeholder: 'e.g. Whoever pauses names a time, within the day' },
+          { id: 'planFirst', label: 'The first sentence when we come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready to listen now.' }
+        ]
+      },
+      {
         type: 'note', pdf: true,
-        text: 'Part B, in the moment: check where you are with WP-02, say your line, then do your first calming step. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
+        text: 'Part B, in the moment: say your pause word or line, then do your first calming step. Nothing in this kit works by cold, pain or shock, and none of it is treatment.'
       },
       {
         id: 'reentry', type: 'table', title: 'Part C: Coming back',
-        intro: 'Take WP-02 before and after. Write down how you feel too; the number is a second opinion that is easy to check. Under 0.50: return to the conversation at the time you named. 0.50 to 0.59: do a second round. Still 0.60 or above after two rounds? Put it off to a named time.',
+        intro: 'After each round, ask yourself one thing: do I still feel hot? If you still feel hot, take another round. If you feel settled enough to listen, go back at the time you named. Still hot after two rounds? Put it off to a named time; that is a plan, not giving up. If you like numbers, the load score (WP-02) is a second opinion: under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off.',
         addLabel: 'Add a reading',
         rangeCols: true,
         columns: [
@@ -607,7 +618,7 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about someone else on your road today. The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today (or someone at home, if there are more of you). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face, and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
         columns: [
@@ -785,13 +796,19 @@
         { id: 'date', label: 'Date', type: 'date' }
       ],
       sections: {
-        note: { text: 'This kit is all about you.' },
+        note: { text: 'This kit is all about you. The pause plan is the one part you might share with someone close.' },
         lines: {
           title: 'Part A: My pause line',
           intro: 'One sentence, ready ahead of time, for when you need a break from a hard moment, so stepping away feels planned instead of like giving up. Say how you are, how long you need, and when you\'ll pick it back up: "I\'m at capacity. I need ten minutes. I\'ll come back to this at quarter past."',
           columns: [{ id: 'line', label: 'Pause line', type: 'textarea', w: 4 }]
         },
-        reentry: { intro: 'Take WP-02 before and after. Write down how you feel too; the number is a second opinion that is easy to check. Under 0.50: pick things back up. 0.50 to 0.59: do a second round. Still 0.60 or above after two rounds? Put it off to a named time.' },
+        plan: { title: 'My pause plan (yours to share, if you like)', fields: [
+          { id: 'planWord', label: 'My pause word or signal', type: 'text', placeholder: 'e.g. Timeout' },
+          { id: 'planMin', label: 'The shortest break I take', type: 'text', placeholder: 'e.g. 20 minutes' },
+          { id: 'planBack', label: 'How I set the time to come back', type: 'text', placeholder: 'e.g. I name a time, within the day' },
+          { id: 'planFirst', label: 'The first sentence when I come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready now.' }
+        ], intro: 'The one part of the kit you might share with someone close: the word you\'ll use, how long a break you take, and how you come back. A few words in each box is plenty.' },
+        reentry: { intro: 'After each round, ask yourself: do I still feel hot? If you still feel hot, take another round. If you feel settled, pick things back up. Still hot after two rounds? Put it off to a named time. If you like numbers, the load score (WP-02) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off.' },
         next: { compute: wp11Next(true) },
         after: {
           fields: [

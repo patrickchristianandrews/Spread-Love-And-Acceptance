@@ -119,12 +119,9 @@
       ? file.text().then(function (t) { var r = FP.fromJSON(JSON.parse(t)); if (!r) throw Object.assign(new Error('not-backup'), { code: 'not-backup' }); return r; })
       : file.arrayBuffer().then(function (buf) { return FPP.readPackage(buf); });
     job.then(function (r) {
-      S.data = r.data; S.read = r.read; S.step = 0;
-      changed();
-      note.textContent = 'Read ' + r.read.total + (r.read.total === 1 ? ' answer' : ' answers') + ' from ' + file.name + '. Nothing was sent anywhere.';
-      renderPreview(file.name, isJson);
-      show('fp-preview');
-      scrollTo($('fp-preview'));
+      // answers already here (typed in, or read from another copy): ask, never replace silently
+      if (hasAnswers()) { note.textContent = 'Read ' + r.read.total + (r.read.total === 1 ? ' answer' : ' answers') + ' from ' + file.name + '. You already have answers here, so nothing has changed yet.'; askMerge(r, file.name, isJson); return; }
+      useRead(r, file.name, isJson);
     }, function (err) {
       var code = err && err.code;
       note.textContent = code === 'protected' ? file.name + ' was saved with a password or protection, so its boxes can’t be read. Save an unprotected copy and try again.'
@@ -136,17 +133,102 @@
     });
   }
 
+  function useRead(r, fileName, isJson) {
+    S.data = r.data; S.read = r.read; S.step = 0; S.conflicts = null; S.mergeInfo = null;
+    changed();
+    $('fp-upload-note').textContent = 'Read ' + r.read.total + (r.read.total === 1 ? ' answer' : ' answers') + ' from ' + fileName + '. Nothing was sent anywhere.';
+    renderPreview(fileName, isJson);
+    show('fp-preview');
+    scrollTo($('fp-preview'));
+  }
+  // Is there anything here worth keeping? Names and starter rows alone don't count.
+  function hasAnswers() {
+    if (!S.data) return false;
+    var reg0 = reg();
+    return Object.keys(S.data.values).some(function (k) {
+      var fl = reg0.byName[k], v = S.data.values[k];
+      if (!fl || v == null || v === '' || v === false) return false;
+      if (/^who\.p\d$/.test(fl.id)) return false;
+      return !(fl.def && v === fl.def);
+    });
+  }
+  // A second copy (each person filled in their own): add it to what is here, or replace what is here.
+  function askMerge(r, fileName, isJson) {
+    var box = $('fp-preview'), sameRoad = r.data.road === S.data.road;
+    box.innerHTML = '';
+    box.appendChild(h('h3', { className: 'fp-h3', tabindex: '-1', id: 'fp-merge-h', text: 'You already have answers here' }));
+    box.appendChild(h('p', { text: fileName + ' has ' + r.read.total + (r.read.total === 1 ? ' answer' : ' answers') + '. If each of you filled in your own copy, add this one to what is here: empty boxes are filled from the new file, matching answers stay, and anything that differs is listed so you can choose. Nothing is replaced without asking.' }));
+    if (!sameRoad) box.appendChild(h('p', { className: 'fp-warn', text: 'This file is for the ' + FP.ROADS[r.data.road].label + ' road, and you are on ' + FP.ROADS[S.data.road].label + ', so it can’t be combined. You can replace what is here, or keep what is here.' }));
+    var row = h('div', { className: 'fp-actions' });
+    if (sameRoad) row.appendChild(h('button', { type: 'button', className: 'ws-go', id: 'fp-merge-add', text: 'Add to what’s here (combine)' }));
+    row.appendChild(h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-merge-replace', text: 'Replace what’s here' }));
+    row.appendChild(h('button', { type: 'button', className: 'ws-link', id: 'fp-merge-cancel', text: 'Keep what’s here, and leave this file out' }));
+    box.appendChild(row);
+    S.pending = { r: r, name: fileName, json: isJson };
+    show('fp-preview');
+    scrollTo(box);
+    $('fp-merge-h').focus();
+    say('You already have answers here. Choose whether to add this file to them or replace them.');
+  }
+  function resolveMerge(how) {
+    var pend = S.pending; S.pending = null;
+    if (!pend) return;
+    if (how === 'cancel') { $('fp-upload-note').textContent = 'Left out. Nothing from ' + pend.name + ' was used, and your answers are as they were.'; say($('fp-upload-note').textContent); show(null); return; }
+    if (how === 'replace') {
+      if (!global.confirm('Replace every answer here with the ones in ' + pend.name + '? Save your progress first if you might want them back.')) { S.pending = pend; return; }
+      useRead(pend.r, pend.name, pend.json); return;
+    }
+    var res = FP.combine(S.data, pend.r.data);
+    if (res.error) { say('These two files can’t be combined.'); return; }
+    var back = FP.fromJSON(res.data) || { data: res.data, read: FP.readReport(res.data) };
+    S.data = back.data; S.read = back.read; S.step = 0;
+    S.conflicts = res.conflicts.map(function (c) { c.pick = 'here'; return c; });
+    S.mergeInfo = { name: pend.name, added: res.added, swapped: res.swapped };
+    changed();
+    $('fp-upload-note').textContent = 'Added ' + pend.name + ' to what was here: ' + res.added + (res.added === 1 ? ' answer' : ' answers') + ' filled in' + (res.conflicts.length ? ', ' + res.conflicts.length + ' to choose between' : '') + '. Nothing was sent anywhere.';
+    renderPreview(pend.name, pend.json);
+    show('fp-preview');
+    scrollTo($('fp-preview'));
+  }
+  function conflictBox() {
+    var cs = S.conflicts || [], mi = S.mergeInfo || {};
+    var wrap = h('div', { className: 'fp-merge', id: 'fp-merge' });
+    wrap.appendChild(h('h4', { className: 'fp-h4', text: 'Combined with ' + (mi.name || 'the new file') }));
+    wrap.appendChild(h('p', { className: 'fp-note', text: (mi.added || 0) + (mi.added === 1 ? ' empty box was' : ' empty boxes were') + ' filled in from it' + (mi.swapped ? ', with people matched by name (so everyone’s answers stayed theirs, whichever box they were in)' : '') + '.' + (cs.length ? ' These answers differ. What is here is kept unless you choose the new one:' : ' No answers disagreed.') }));
+    if (!cs.length) return wrap;
+    var ul = h('ul', { className: 'fp-conflicts' });
+    cs.forEach(function (c, i) {
+      var nm = 'fp-cf-' + i;
+      function show2(v) { return v === true ? 'Ticked' : String(v); }
+      ul.appendChild(h('li', { className: 'fp-conflict' }, [
+        h('p', { className: 'fp-conflict-w', text: c.where }),
+        h('label', { className: 'fp-opt' }, [h('input', { type: 'radio', name: nm, value: 'here', 'data-conflict': String(i), checked: c.pick === 'here' ? 'checked' : null }), h('span', { text: 'Keep: ' + show2(c.here) })]),
+        h('label', { className: 'fp-opt' }, [h('input', { type: 'radio', name: nm, value: 'there', 'data-conflict': String(i), checked: c.pick === 'there' ? 'checked' : null }), h('span', { text: 'Use the new one: ' + show2(c.there) })])
+      ]));
+    });
+    wrap.appendChild(ul);
+    return wrap;
+  }
+  function pickConflict(i, which) {
+    var c = S.conflicts && S.conflicts[i];
+    if (!c) return;
+    c.pick = which;
+    S.data.values[c.name] = which === 'there' ? c.there : c.here;
+    changed();
+  }
+
   function renderPreview(fileName, isJson) {
     var box = $('fp-preview'), rd = S.read, road = FP.ROADS[rd.road];
     box.innerHTML = '';
     box.appendChild(h('h3', { className: 'fp-h3', tabindex: '-1', id: 'fp-preview-h', text: 'What we read' }));
     box.appendChild(h('p', { className: 'fp-read-sum' }, [
       h('strong', { text: rd.total + (rd.total === 1 ? ' answer' : ' answers') }),
-      ' from ' + (isJson ? 'your backup' : 'your filled package') + ': ' + road.label + (road.solo ? '' : ', ' + rd.people + ' people') + (rd.version ? ', package version ' + rd.version : '') + '.'
+      ' from ' + (S.mergeInfo ? 'both copies together' : isJson ? 'your backup' : 'your filled package') + ': ' + road.label + (road.solo ? '' : ', ' + rd.people + ' people') + (rd.version ? ', package version ' + rd.version : '') + '.'
     ]));
     if (!rd.hadMeta) box.appendChild(h('p', { className: 'fp-warn', text: 'This file didn’t say which road it was for, so we guessed ' + road.label + '. You can change the road in the form.' }));
     var names = FP.people(S.data).list.map(function (p) { return p.label; });
     box.appendChild(h('p', { className: 'fp-read-who', text: (road.solo ? 'For: ' : 'On this road: ') + names.join(', ') }));
+    if (S.mergeInfo && S.conflicts) box.appendChild(conflictBox());
     var ul = h('ul', { className: 'fp-read-list' });
     rd.pages.forEach(function (p, i) {
       var missing = p.missing.filter(function (f) { return !/\.(r\d+)\./.test(f.id) || p.filled; }).slice(0, 3).map(function (f) { return f.label; });
@@ -262,6 +344,23 @@
     box.appendChild(grid);
     return box;
   }
+  // Whose row this is (WP-13's daily rows carry a name in their Person box)
+  function whoOf(r) {
+    var who = r.fields.filter(function (f) { return /\.who$/.test(f.id) && f.prefill; })[0];
+    if (!who) return null;
+    var P = FP.people(S.data), x = P.resolve(val(who.name));
+    return typeof x === 'number' ? x : null;
+  }
+  function rowsForPicker() {
+    var P = FP.people(S.data), sel = h('select', { id: 'fp-rows-for' });
+    sel.appendChild(h('option', { value: '', text: 'Everyone\u2019s rows', selected: S.rowsFor == null || S.rowsFor === '' ? 'selected' : null }));
+    P.list.forEach(function (p) { sel.appendChild(h('option', { value: String(p.i), text: 'Only ' + p.label + '\u2019s rows', selected: String(S.rowsFor) === String(p.i) ? 'selected' : null })); });
+    return h('div', { className: 'fp-rows-for' }, [h('label', { for: 'fp-rows-for', text: 'Filling in your own rows? Show ' }), sel]);
+  }
+  function turnCue(i, rows) {
+    var nm = FP.people(S.data).label(i);
+    return h('p', { className: 'fp-turn', role: 'note' }, [h('span', { className: 'fp-turn-dot', 'aria-hidden': 'true', text: '\u270B' }), ' ' + (rows ? 'These are ' + nm + '\u2019s rows. Only ' + nm + ' fills them in, about their own day.' : 'This part is ' + nm + '\u2019s to fill in, about themselves. On a shared device? Hand it over to ' + nm + ' here.')]);
+  }
   function rowName(r, i, b) {
     var day = r.fields.filter(function (f) { return /\.day$/.test(f.id); })[0], who = r.fields.filter(function (f) { return /\.who$/.test(f.id) && f.prefill; })[0];
     if (day && who) return val(day.name) + ' · ' + (FP.people(S.data).label(FP.people(S.data).resolve(val(who.name))) || val(who.name));
@@ -305,7 +404,9 @@
     var hhEl = page.id === 'who' ? householdOffer() : null;
     if (hhEl) sec.appendChild(hhEl);
     page.blocks.forEach(function (b) {
-      if (b.kind === 'note') { sec.appendChild(h('p', { className: 'fp-note', text: b.text })); return; }
+      if (b.kind === 'note') { sec.appendChild(h('p', { className: 'fp-note' + (b.private ? ' fp-private-note' : ''), text: b.text })); return; }
+      // a part that belongs to one person: a gentle cue on a shared device, never a lock
+      if (b.person != null && (b.turn || b.kind === 'checks' || b.kind === 'cards') && S.data.people > 1) sec.appendChild(turnCue(b.person));
       if (b.kind === 'steps') {
         // on the website there is no PDF to bring back: say what the buttons below do instead
         var ol = h('ol', { className: 'fp-howto' });
@@ -336,11 +437,19 @@
           blk.appendChild(fs2);
         });
       } else if (b.kind === 'grid' || b.kind === 'cards') {
-        var rows = b.rows, long = b.kind === 'grid' && rows.length > 12, byDay = long && /\.day$/.test(rows[0].fields[0].id);
+        var rows = b.rows;
+        if (b.perPerson) {
+          // each person fills in only their own rows: show one person's at a time, if you like
+          blk.appendChild(rowsForPicker());
+          var pick = S.rowsFor == null || S.rowsFor === '' ? null : +S.rowsFor;
+          if (pick != null && pick < S.data.people) { blk.appendChild(turnCue(pick, true)); rows = rows.filter(function (r) { return whoOf(r) === pick; }); }
+        }
+        var long = b.kind === 'grid' && rows.length > 12, byDay = long && /\.day$/.test(rows[0].fields[0].id);
         if (long) {
           // day-by-day tables fold by day; other long tables fold in tens ("Rows 11 to 14")
           var groups = [], cur = null;
           rows.forEach(function (r, i) {
+            i = b.rows.indexOf(r);
             var k = byDay ? (val(r.fields[0].name) || 'Other rows') : 'Rows ' + (Math.floor(i / 10) * 10 + 1) + ' to ' + Math.min(rows.length, Math.floor(i / 10) * 10 + 10);
             if (!cur || cur.k !== k) { cur = { k: k, rows: [] }; groups.push(cur); } cur.rows.push([r, i]);
           });
@@ -349,7 +458,7 @@
             gr.rows.forEach(function (x) { det.appendChild(rowBox(x[0], x[1], b)); });
             blk.appendChild(det);
           });
-        } else rows.forEach(function (r, i) { blk.appendChild(rowBox(r, i, b)); });
+        } else rows.forEach(function (r) { blk.appendChild(rowBox(r, b.rows.indexOf(r), b)); });
       }
       sec.appendChild(blk);
     });
@@ -365,6 +474,15 @@
       h('button', { type: 'button', className: 'ws-link', id: 'fp-json', text: 'Save my progress (a small file)' }), ' · ',
       h('button', { type: 'button', className: 'ws-link', id: 'fp-filled-pdf', text: 'Download my answers as a PDF' })
     ]));
+    if (FP.ROADS[S.data.road].solo) return;
+    box.appendChild(shareChoice('fp-share-only'));
+  }
+  // At every download with answers in it: who will see what, and a way to leave the private parts out.
+  function shareChoice(id) {
+    return h('div', { className: 'fp-share' }, [
+      h('p', { className: 'fp-private-note', text: (S.data && S.data.road === 'partners' ? 'Your partner' : 'Everyone you share it with') + ' will see every page if you share the file, including each person\u2019s load score answers, self-notes, raw reaction and calm-down triggers.' }),
+      h('label', { className: 'fp-check', for: id }, [h('input', { type: 'checkbox', id: id, 'data-fp-share': '1', checked: S.shareOnly ? 'checked' : null }), h('span', { text: 'Leave the private parts out of what I download (a copy to share)' })])
+    ]);
   }
   // "Use your household from before?" on the names page, like the other tools: only when no name is
   // typed here yet, and "Use them" fills only empty boxes (never over a typed name).
@@ -482,6 +600,7 @@
       h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-edit', text: 'Change my answers' }),
       h('button', { type: 'button', className: 'fp-btn-quiet', id: 'fp-json2', text: 'Save my progress (a small file)' })
     ]));
+    if (!FP.ROADS[S.data.road].solo) box.appendChild(shareChoice('fp-share-only2'));
     if (S.from) box.appendChild(h('p', { className: 'fp-callout', text: 'Made from your Workpaper Suite: ' + (S.from.length ? S.from.join(', ') : 'your sheets') + '. The CALC-01 page, your Wiring Card and the Ready page aren\u2019t in the Suite; add them with \u201cChange my answers\u201d if you like, and the report updates.' }));
     if (m.stateNote) box.appendChild(h('p', { className: 'fp-callout is-lav', text: m.stateNote }));
 
@@ -571,7 +690,7 @@
           dlOf(p.rows), h('p', { className: 'fp-sub', text: 'What they bring' }), ulOf(p.strengths), h('p', { className: 'fp-sub', text: 'What might help' }), ulOf(p.help),
           h('p', { className: 'fp-callout is-lav fp-quote' }, [h('strong', { text: 'A conversation starter: ' }), '“' + p.starter + '”'])]));
       });
-      all.push(sec('people', 'A page for each person', false, [h('p', { className: 'fp-note', text: 'Not scorecards and not a ranking. Each one is written to that person about their own week. Read your own first; share it if you want to.' }), pb]));
+      all.push(sec('people', 'A page for each person', false, [h('p', { className: 'fp-note', text: 'Not scorecards and not a ranking. Each one is written to that person about their own week. Read your own first; share it if you want to.' + (m.persons.some(function (p) { return p.note; }) ? ' A person\u2019s own note from WP-02 shows on their page only. Anyone you share this report with will see it, so leave the private parts out of a copy you share if you\u2019d rather they didn\u2019t.' : '') }), pb]));
     }
     if (m.self) {
       var sd = m.self, sb = [h('p', { text: sd.intro })];
@@ -654,7 +773,8 @@
 
   function reportPdf() {
     if (!S.data) return;
-    try { download(FPP.reportPdf(S.model || FP.report(S.data)), fileBase(S.data) + '-report.pdf', 'application/pdf'); say('Your report is in your Downloads. Keep it somewhere private.'); }
+    var share = S.shareOnly && !FP.ROADS[S.data.road].solo;
+    try { download(FPP.reportPdf(share ? FP.report(FP.shareCopy(S.data)) : (S.model || FP.report(S.data))), fileBase(S.data) + (share ? '-report-to-share.pdf' : '-report.pdf'), 'application/pdf'); say(share ? 'A copy of your report to share is in your Downloads. It leaves out the load scores, self-notes, raw reaction and calm-down triggers.' : 'Your report is in your Downloads. Keep it somewhere private; ' + (FP.ROADS[S.data.road].solo ? 'it is yours.' : 'anyone you share it with will see every page.')); }
     catch (err) { say('The report PDF could not be made. Save a backup so nothing is lost, then try again.'); if (global.console) console.error(err); }
   }
   function saveJson() {
@@ -668,7 +788,8 @@
   }
   function filledPdf() {
     if (!S.data) return;
-    try { download(FPP.packagePdf(S.data), fileBase(S.data) + '-package-filled.pdf', 'application/pdf'); say('Your answers are in a filled package PDF in your Downloads. You can keep filling it in any PDF app.'); }
+    var share = S.shareOnly && !FP.ROADS[S.data.road].solo;
+    try { download(FPP.packagePdf(share ? FP.shareCopy(S.data) : S.data), fileBase(S.data) + (share ? '-package-to-share.pdf' : '-package-filled.pdf'), 'application/pdf'); say(share ? 'A copy to share is in your Downloads, without the private parts. Keep your full copy too.' : 'Your answers are in a filled package PDF in your Downloads. You can keep filling it in any PDF app.' + (FP.ROADS[S.data.road].solo ? '' : ' If you share it, everyone will see every page.')); }
     catch (err) { say('The PDF could not be made.'); if (global.console) console.error(err); }
   }
 
@@ -709,6 +830,7 @@
       var id = t.id;
       if (t.hasAttribute('data-step')) { var st = +t.getAttribute('data-step'); if (!$('fp-form').hidden) { S.step = st; renderForm(); $('fp-step-title').focus(); } else startForm(st); return; }
       if (t.hasAttribute('data-clear')) { setVal(t.getAttribute('data-clear'), ''); var y = global.scrollY; renderForm(); global.scrollTo(0, y); return; }
+      if (id === 'fp-merge-add' || id === 'fp-merge-replace' || id === 'fp-merge-cancel') { resolveMerge(id.slice(9)); return; }
       if (id === 'fp-next') { S.step++; renderForm(); scrollTo($('fp-form')); $('fp-step-title').focus(); }
       else if (id === 'fp-back') { S.step = Math.max(0, S.step - 1); renderForm(); scrollTo($('fp-form')); $('fp-step-title').focus(); }
       else if (id === 'fp-make' || id === 'fp-make-any' || id === 'fp-make-from-read') makeReport();
@@ -718,10 +840,16 @@
       else if (id === 'fp-report-pdf') reportPdf();
       else if (id === 'fp-open-all' || id === 'fp-close-all') foldAll(id === 'fp-open-all');
     });
+    $('fp-preview').addEventListener('change', function (e) { var c = e.target.getAttribute('data-conflict'); if (c != null && e.target.checked) pickConflict(+c, e.target.value); });
+    root.addEventListener('change', function (e) {
+      if (e.target.getAttribute('data-fp-share')) { S.shareOnly = e.target.checked; Array.prototype.forEach.call(root.querySelectorAll('[data-fp-share]'), function (x) { x.checked = S.shareOnly; }); }
+    });
     var form = $('fp-form');
     form.addEventListener('input', onFormInput);
     form.addEventListener('change', function (e) {
-      if (e.target.id === 'fp-form-road') { S.data.road = e.target.value; S.data.people = FP.clampPeople(S.data.road, S.data.people); S.step = 0; changed(); renderForm(); return; }
+      if (e.target.id === 'fp-form-road') { S.data.road = e.target.value; S.data.people = FP.clampPeople(S.data.road, S.data.people); FP.migrateSelf(S.data.values, FP.ROADS[S.data.road].solo); S.step = 0; changed(); renderForm(); return; }
+      if (e.target.id === 'fp-rows-for') { S.rowsFor = e.target.value; var y0 = global.scrollY; renderForm(); global.scrollTo(0, y0); var rf = $('fp-rows-for'); if (rf) rf.focus(); return; }
+      if (e.target.getAttribute('data-fp-share')) return;
       if (e.target.id === 'fp-form-count') { S.data.people = FP.clampPeople(S.data.road, e.target.value); changed(); renderForm(); return; }
       onFormInput(e);
     });

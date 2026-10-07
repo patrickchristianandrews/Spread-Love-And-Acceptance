@@ -301,9 +301,65 @@ const chk = (c, m) => { if (c) pass++; else { fail++; errs.push(m); } };
   chk(got3.literal.length && got3.replies.some(r => /did you mean notice/.test(r.text)) && !got3.replies.some(r => /By when/.test(r.text)), 'received figure of speech: meaning and a check, no deadline');
   chk(E.receive(E.analyze('Thanks for dinner!')).meanings.length && !E.receive(E.analyze('Thanks for dinner!')).crossed, 'a kind message reads as kind');
 }
+// ---------- couple usability round: brush-offs, sarcasm, grammar, safety, deadlines, co-parent threats ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const rw = (t, rel) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || 'partner' });
+  const sc = t => E.score(an(t), ['general'], 'text').score;
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  const BOLT = /\[one specific thing\] by \[a time\]|by \[a time\]\?/;
+  // 1. curt pieces in a row are a brush-off in both modes, never "plain", and never quieter than "Fine." alone
+  ['Fine. Whatever works for you.', 'Whatever works for you.', 'Fine. Whatever.', 'Sure. Do what you want.', 'Whatever you think is best.', 'k.'].forEach(t => {
+    const a = an(t), g = E.receive(a);
+    chk(a.found.brushoff || a.found.minimal, '“' + t + '” is flagged as a possible brush-off');
+    chk(!g.meanings.some(m => /plain message/.test(m)) && g.replies.some(r => /really okay, or are you upset/.test(r.text)), '“' + t + '” received: a calm check question, not “plain message”');
+    chk(!a.asks.length && !a.found.impera, '“' + t + '” is not an order or an ask');
+  });
+  chk(sc('Fine. Whatever works for you.') >= sc('Fine.'), '“Fine. Whatever works for you.” is at least as loud as “Fine.”');
+  chk(/\[If it's really okay:\]/.test(rw('Fine. Whatever works for you.').main), 'the brush-off rewrite gives both halves: ' + rw('Fine. Whatever works for you.').main);
+  chk(!an('Whatever works for you is fine, I’m free all weekend!').staticIds.length, 'a real “whatever works for you is fine” is not flagged');
+  // 2. sarcasm and guilt: hurt underneath, not a request, and never a deadline
+  ['Sure, go out with your friends, I’ll just sit here.', 'Don’t mind me.', 'I’ll just sit here.'].forEach(t => {
+    const r = rw(t), g = E.receive(an(t));
+    chk(!an(t).asks.length && !an(t).found.impera, '“' + t + '” is not read as an order');
+    chk(all(r).every(x => !BOLT.test(x) && !/could you go out/i.test(x)), '“' + t + '” never gets “[thing] by [a time]”: ' + r.main);
+    chk(/left out/.test(r.main), '“' + t + '” says the hurt plainly: ' + r.main);
+    chk(!g.replies.some(x => /you'd like me to/.test(x.text)), '“' + t + '” received: no “you’d like me to go out…” check');
+  });
+  ['Sure, go ahead and take the car.', 'Go ahead and start without me, I’m running late.', 'I’ll just sit here and read until you’re ready.', 'Don’t mind me, just grabbing my keys.'].forEach(t => chk(!an(t).staticIds.length, 'ordinary “' + t + '” stays clear: ' + an(t).staticIds));
+  // 3 and 7. "always" rewrites are grammatical, or a plain blank; never a fragment before "a lot"
+  const baby = rw('You’re always correcting me with the baby, it is not respectful to me as her mother.').main;
+  chk(/correcting me with the baby a lot\. It doesn't feel respectful/.test(baby) && !/mother a lot/.test(baby), '“always” rewrite is clean English: ' + baby);
+  ['You always leave the lights on, it drives me crazy.', 'You’re always on your phone.', 'You never help with the kids and I’m exhausted.', 'You still haven’t paid the rent and it’s due Friday.', 'You’re always so thoughtful.'].forEach(t => all(rw(t)).forEach(x => chk(!/, it (?:is|was)[^.]*a lot|\bso \w+ a lot\b|you \w+ and it's due/i.test(x), 'broken English from “' + t + '”: ' + x)));
+  chk(!an('You’re always so thoughtful.').found.absolute, '“always so thoughtful” is praise, not an absolute');
+  // 4. safety: valid, the fact kept, a habit not a deadline
+  [['You left the stove on again. That’s dangerous.', /stove gets turned off every time/], ['You left the front door unlocked again.', /door gets locked every time/], ['You didn’t buckle her into the car seat.', /buckled and checked every time/], ['You left the medicine on the counter where she can reach it.', /put away up high every time/]].forEach(([t, habit]) => {
+    const a = an(t), r = rw(t), g = E.receive(a);
+    chk(a.found.safety && !a.found.again, '“' + t + '”: a safety concern, and “again” is part of the fact');
+    chk(habit.test(r.main) && !/\[a time\]/.test(r.main) && /safety worry|dangerous/.test(r.main), '“' + t + '”: habit ask, no deadline: ' + r.main);
+    chk(/real safety worry/.test(g.meanings.join(' ')) && g.replies.some(x => /every time/.test(x.text)), '“' + t + '” received: valid worry, habit reply');
+  });
+  chk(/left the stove on again/.test(rw('You left the stove on again. That’s dangerous.').main), 'the fact (again) is kept for a safety worry');
+  chk(!an('I left the door open for the dog.').found.safety, 'the speaker’s own choice is not a safety complaint');
+  // 5. a time already in the draft is respected
+  ['You forgot the dentist appointment on Friday.', 'Clean your room by 6pm.', 'You need to send the form by 6pm.', 'You still haven’t paid the rent and it’s due Friday.'].forEach(t => chk(!/\[a time\]/.test(rw(t).main), '“' + t + '” keeps its own time: ' + rw(t).main));
+  // 6. court, custody and the children told first: heavy, and never kept in the rewrite
+  ['If you keep this up I’ll take you to court.', 'My lawyer will be in touch.', 'You’ll never see them again.', 'I’m going for full custody.', 'I already told the kids you’re not coming.', 'I told them you don’t care about them.'].forEach(t => {
+    const r = rw(t, 'coparent');
+    chk(E.score(an(t), ['general'], 'text').level[0] === 'heavy', '“' + t + '” is heavy static (likely to escalate)');
+    all(r).forEach(x => chk(!/court|lawyer|custody|never see|told (?:the kids|them)|to recap/i.test(x) && !brokenRx(x), '“' + t + '” rewrite keeps the threat or garbles: ' + x));
+  });
+  chk(/agree together on what we tell the kids/.test(rw('I already told the kids you’re not coming.').main), 'telling the kids first: ask to agree together');
+  chk(/Could you pay child support by Friday\?/.test(rw('If you don’t pay child support by Friday, I’ll take you to court.').main), 'the wish under a court threat stays as a plain ask');
+  chk(E.receive(an('My lawyer will be in touch.')).meanings.some(m => /court, a lawyer or custody/.test(m)), 'received court threat: named plainly');
+  ['Can we talk about the custody schedule for summer?', 'I’ll take the kids to the park on Saturday.', 'I told the kids we’d get pizza Friday.', 'I told them you’d pick them up at 5.', 'My lawyer friend says hi.', 'We’ll see you at 6!'].forEach(t => chk(!an(t).found.legal && !an(t).found.kidsfirst && !an(t).found.softno, 'ordinary co-parent line “' + t + '” is not a threat'));
+  // 7. the self-check never lets a broken sentence through
+  ['You’re always correcting me with the baby, it is not respectful to me as her mother.', 'You always forget.', 'I already told the kids you’re not coming.', 'You’ll never see them again.'].forEach(t => all(rw(t)).forEach(x => chk(!brokenRx(x), 'self-check let through: ' + x)));
+}
+function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:them|the kids)|\byou'll (?:rarely|often)\b|, it (?:is|was)[^.]*a lot\./i.test(x); }
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
-[['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/]].forEach(([t, want]) => {
+[['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/], ['Fine. Whatever works for you.', /dismiss/], ['Sure, go out with your friends, I’ll just sit here.', /sarcasm/], ['Don’t mind me.', /passive/]].forEach(([t, want]) => {
   const kinds = R.read([{ who: 'A', text: t }], 'B').turns[0].marks.map(m => m.kind).join(' ');
   if (want.test(kinds)) pass++; else { fail++; errs.push('Reader disagrees on “' + t + '”: ' + kinds); }
 });

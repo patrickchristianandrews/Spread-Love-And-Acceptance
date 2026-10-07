@@ -173,6 +173,29 @@ ok(room.next.some(m => m.key === 'literal'), 'the advice names the literal misma
 ok(!room.turns[9].marks.some(m => m.kind === 'withdraw') && room.turns[9].marks.some(m => m.kind === 'literal'), '“Ok. I will forget it.” is literal, not flooded');
 ok(!/usually means/.test(R.KINDS.withdraw.hear), 'shutting the door: no overclaiming “usually means”');
 
+// ---------- Couple usability round: both sides read, the topic, and the arc ----------
+const lena = 'Lena: Hey, how was your day?\nDiego: Long. Meetings all afternoon.\nLena: Are we still on for a call tonight?\nDiego: I said maybe. Work is brutal this month.\nLena: I\'m always the one who reaches out.\nDiego: why are you being like this\nLena: Fine. Whatever works for you.\nDiego: I called you twice last week.\nLena: Once. And you hung up after five minutes.\nDiego: I can\'t do this right now.\nLena: Sure, go ahead, I\'ll just sit here.';
+[['Lena', 'Diego'], ['Diego', 'Lena']].forEach(([me, other]) => {
+  const r = readOf(lena, me);
+  ok(r.turns[3].marks.some(m => m.kind === 'brushaside'), '“I said maybe” is brushing it aside');
+  ok(r.turns[5].marks.some(m => m.kind === 'defend'), '“why are you being like this” is a defensive question');
+  ok(r.turns[6].marks.some(m => m.kind === 'dismiss'), '“Fine. Whatever works for you.” is a brush-off');
+  ok(r.turns[10].marks.some(m => m.kind === 'sarcasm'), '“Sure, go ahead, I’ll just sit here.” is sarcasm');
+  const who = r.owns.map(o => o.who).sort().join(',');
+  ok(who === 'Diego,Lena', 'own-your-part for both sides, read as ' + me + ' (got ' + who + ')');
+  ok(r.owns[0].who === me, 'your own part comes first');
+  ok(r.topic === 'staying in touch', 'topic is the recurring theme, not “work” (got ' + r.topic + ')');
+  ok(r.level !== 'calm' && r.trend === 'rising', 'an escalating thread never “stays calm to the end” (got ' + r.level + '/' + r.trend + ')');
+  ok(!r.drafts.some(d => /“always”\./.test(d.text)), 'own-your-part quotes the line, not one word');
+});
+ok(kinds('I’ll take the kids to the park on Saturday.').indexOf('threat') === -1, 'a park trip with the kids is not a threat');
+ok(kinds('We’ll see you at 6!').indexOf('brushaside') === -1, '“We’ll see you at 6” is not a brush-off');
+ok(kinds('Whatever works for you, I’m easy.').indexOf('dismiss') === -1, 'a real “whatever works for you, I’m easy” is not a brush-off');
+const unsure = readOf('A: hey\nB: hi\nA: did you see the thing\nB: which one\nA: never mind, later\nB: ok');
+ok(unsure.topic === '' , 'no recurring theme: no guessed topic (got ' + unsure.topic + ')');
+const calm = readOf('A: Could you grab milk on the way home?\nB: Sure, 2% or whole?\nA: Whole, thanks!\nB: Got it. Home by 6.\nA: Love you\nB: Love you too');
+ok(calm.level === 'calm' && !calm.owns.length, 'an ordinary thread still reads calm, with nothing to own');
+
 // ---------- Screenshot import: OCR lines into bubbles (the browser test is tools/reader/ui-screens.js) ----------
 const O = require(path.join(__dirname, '../../assets/js/conversation-reader-ocr.js'));
 const L = (text, x0, y0, x1, y1, tint) => ({ text, conf: 92, bbox: { x0, y0, x1, y1 }, tint });

@@ -239,10 +239,10 @@
           f(p + 'task', 'Task noticed or done', 'text', { w: 2.6 }),
           f(p + 'who', 'Who did it', 'person', { both: true, w: 1.3 }),
           f(p + 'minutes', 'Minutes', 'number', { w: 0.8, min: 0 }),
-          f(p + 'how', 'Asked for, or noticed?', 'radio', { options: how, w: 1.7 })
+          f(p + 'how', 'How it came up: asked for, or noticed?', 'radio', { options: how, w: 1.7 })
         ] });
       }
-      blocks.push({ kind: 'grid', title: 'Part A: Who did what, this week', intro: audit.intro + ' In "Who did it", write a name, an initial, or "Everyone".', rows: rows });
+      blocks.push({ kind: 'grid', title: 'Part A: Who did what, this week', intro: audit.intro + ' In "Who did it", write a name, an initial, or "Everyone". "Asked for" only means someone mentioned it first; it doesn\u2019t make the person who did it a helper, and the job counts just the same.', rows: rows });
       blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Minutes and share for each person, how much was noticed and handled without being asked, and the workload balance score (1 = an even split). This becomes the balance input to CALC-01.'] });
     }
     var kinds = opts(['Capacity check', 'Delegation pivot', 'Time commitment'], ['Capacity', 'Delegation', 'Time']);
@@ -267,13 +267,14 @@
     blocks.push({ kind: 'note', text: (ctx.road.solo ? 'Answer about yourself, based on the last 24 to 48 hours.' : 'Each person fills in their own, about themselves only, based on the last 24 to 48 hours.') + ' 0 = not at all, 4 = very true. It is a gut-check, not a clinical test.' +
       (ctx.n > 1 ? ' If you’d rather keep your answers private, write just your score in the last box instead (it is the five numbers added up, divided by 20).' : '') +
       (privateRoad ? ' On this road, battery pages stay private unless you choose to share.' : '') });
+    if (ctx.n > 1) blocks.push({ kind: 'note', private: true, text: shareLine(ctx) });
     for (var i = 0; i < ctx.n; i++) {
       var p = 'wp02.p' + (i + 1) + '.';
       var fl = [f(p + 'date', 'Date', 'date', { half: true })];
       items.forEach(function (it, k) { fl.push(f(p + 'q' + (k + 1), it.label, 'radio', { options: scale, scale: true })); });
       if (ctx.n > 1) fl.push(f(p + 'score', 'Or just your score (0 to 1), if you’d rather not share the five answers', 'number', { min: 0, max: 1, optional: true }));
       fl.push(f(p + 'note', ctx.road.solo ? 'Anything else on your mind right now (optional)' : 'Anything you want to name before talking (optional)', 'textarea', { small: true, optional: true }));
-      blocks.push({ kind: 'scale', title: ctx.labels[i] + (ctx.n > 1 ? '’s load score' : ''), person: i, fields: fl });
+      blocks.push({ kind: 'scale', title: ctx.labels[i] + (ctx.n > 1 ? '’s load score' : ''), person: i, turn: ctx.n > 1, fields: fl });
     }
     blocks.push({ kind: 'derived', title: 'Worked out for you', lines: ['Each load score = the five numbers added up, divided by 20. Under 0.30 is a low load, 0.30 to 0.59 is medium, 0.60 and up is high.', ctx.n > 1 ? 'The average across everyone becomes the stress input to CALC-01. It waits until everyone\u2019s load score is in; it is never worked out for someone else.' : 'On this road it is your own reading, week by week.'] });
     return { id: 'wp02', code: 'WP-02', title: sc.title, blocks: blocks };
@@ -365,7 +366,7 @@
 
   function pageWp11(ctx) {
     var sc = schemaFor('WP-11'), blocks = [], i;
-    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This kit is all about you.' : 'Each person’s kit is about themselves.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
+    blocks.push({ kind: 'note', text: (ctx.road.solo ? 'This kit is all about you. The pause plan at the end is the one part you might share with someone close.' : 'Each person\u2019s kit is about themselves, and that part stays theirs. The one part to agree and share is \u201cOur pause plan\u201d: the pause word, the break, and how you come back.') + ' Fill in Part A on an ordinary day, not a hard one. Nothing here works by cold, pain or shock, and none of it is treatment.' });
     blocks.push({ kind: 'fields', fields: [f('wp11.date', 'Date', 'date', { half: true })] });
     var tr = [];
     for (i = 0; i < Math.max(3, ctx.sizes.triggers || 0); i++) tr.push({ fields: [f('wp11.triggers.r' + (i + 1) + '.trigger', 'What tends to start it', 'text', { w: 2.5 }), f('wp11.triggers.r' + (i + 1) + '.body', 'Where my body feels it first', 'text', { w: 2.5 })] });
@@ -380,12 +381,31 @@
       var p = 'wp11.reentry.r' + (i + 1) + '.';
       re.push({ fields: [f(p + 'time', 'Time', 'text', { w: 1 }), f(p + 'tactic', 'What I did (1 to 6 from the list, or its name)', 'text', { w: 2.6 }), f(p + 'before', 'Load score before (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 }), f(p + 'after', 'Load score after (0 to 1)', 'number', { min: 0, max: 1, w: 1.1 })] });
     }
-    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: (ctx.road.solo ? 'Take WP-02 before and after. Under 0.50, go back to what you were doing.' : 'Take WP-02 before and after. Under 0.50, return to the conversation at the time you named.') + ' 0.50 to 0.59, do a second round. Still 0.60 or above after two rounds? Put it off to a named time. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
+    blocks.push({ kind: 'fields', title: ctx.road.solo ? 'My pause plan (yours to share, if you like)' : 'Our pause plan (agree it together, and share it)', intro: (ctx.road.solo ? 'This part is made to be shared with someone close, if you want to.' : 'Unlike the rest of the kit, this part is meant to be agreed together and shared, so a pause is never mistaken for walking out.') + ' A few words in each box is plenty.', fields: [
+      f('wp11.plan.word', ctx.road.solo ? 'My pause word or signal' : 'Our pause word or signal', 'text', { half: true, optional: true, placeholder: 'e.g. Timeout, or a hand on the table' }),
+      f('wp11.plan.min', 'The shortest break we take', 'text', { half: true, optional: true, placeholder: 'e.g. 20 minutes' }),
+      f('wp11.plan.back', 'How we set the time to come back', 'text', { optional: true, placeholder: 'e.g. Whoever pauses names a time, within the day' }),
+      f('wp11.plan.first', 'The first sentence when we come back', 'text', { optional: true, placeholder: 'e.g. Thanks for waiting. I\u2019m ready to listen now.' })
+    ] });
+    blocks.push({ kind: 'grid', title: 'Part C: Coming back', intro: 'After each round, ask yourself one thing: do I still feel hot? If you still feel hot, take another round. If you feel settled enough to listen, ' + (ctx.road.solo ? 'go back to what you were doing.' : 'go back at the time you named.') + ' Still hot after two rounds? Put it off to a named time; that is a plan, not giving up. If you like numbers (WP-02, 0 to 1): under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. The list: 1 breathing, 2 naming the room, 3 weight and pressure, 4 gating, 5 walking it out, 6 low, steady sound.', rows: re });
     blocks.push({ kind: 'fields', fields: [f('wp11.nextAction', 'Next small action', 'text'), f('wp11.resume', ctx.road.solo ? 'If you put it off: when you’ll pick it back up' : 'If you put the conversation off: when you’ll pick it back up', 'text')] });
     blocks.push(closing(ctx, 'wp11', null, true));
     return { id: 'wp11', code: 'WP-11', title: sc.title, blocks: blocks };
   }
 
+  // Who the appreciation is about, in plain words for this road and this many people.
+  function otherOne(ctx) {
+    if (ctx.roadId === 'coworkers') return ctx.n === 2 ? 'your teammate' : 'a teammate';
+    if (ctx.roadId === 'coparents') return ctx.n === 2 ? 'the other parent' : 'someone sharing the parenting';
+    if (ctx.roadId === 'caregivers') return ctx.n === 2 ? 'the other person sharing the care' : 'someone sharing the care';
+    if (ctx.roadId === 'friends') return ctx.n === 2 ? 'your friend' : 'one of your friends';
+    return ctx.n === 2 ? 'the other person' : 'someone at home';
+  }
+  function wp13Intro(ctx) {
+    var who = ctx.n > 1 ? 'Each person fills in only their own rows: yours are the ones with your name in the Person column (' + ctx.labels.join(', ') + '). ' : '';
+    return (ctx.roadId === 'coworkers' ? 'Run it like a short stand-up. ' : '') + who + 'Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about ' + otherOne(ctx) + ' today. The other two are optional. Anything that needs a real discussion waits for the weekly catch-up.' +
+      (ctx.n > 1 ? ' If you can, do the evening one face to face, and kindly.' : '');
+  }
   function pageWp13(ctx) {
     var sc = schemaFor('WP-13'), blocks = [], rows = [], k = 0;
     var load = opts(['Low', 'Medium', 'High'], ['Low', 'Med', 'High']);
@@ -404,9 +424,7 @@
         ] });
       }
     });
-    var intro = section(sc, 'daily').intro;
-    if (ctx.roadId === 'coworkers') intro = 'Run it like a short stand-up. ' + intro.replace('about the other person', 'about a teammate');
-    blocks.push({ kind: 'grid', title: ctx.roadId === 'coworkers' ? 'The daily stand-up' : section(sc, 'daily').title, intro: intro, rows: rows, small: true });
+    blocks.push({ kind: 'grid', title: ctx.roadId === 'coworkers' ? 'The daily stand-up' : section(sc, 'daily').title, intro: wp13Intro(ctx), rows: rows, small: true, perPerson: ctx.n > 1 });
     var to = opts(['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], ['Owners', 'Tone', 'Watch']), rs = [];
     for (var j = 0; j < Math.max(3, ctx.sizes.resync || 0); j++) {
       var q = 'wp13.resync.r' + (j + 1) + '.';
@@ -444,28 +462,43 @@
     return { id: 'calc', code: 'CALC-01', title: R.calc ? 'Is the setup working for everyone?' : 'Your state and your retuning count', blocks: blocks };
   }
 
-  function pageNotes(ctx) {
+  // Self-notes. On "Just me" there is one card (self.wiring.*, self.weather.*). With two or more people
+  // each person has their own card and log (self.p1.wiring.*, self.p2.weather.*), so nobody's answers
+  // mix into someone else's. Files made before that still open: see migrateSelf().
+  var SHARE_LINE = 'Your partner will see this page if you share the file. You can leave the private pages out of a copy you share (choose that when you download).';
+  function shareLine(ctx) { return ctx.road.solo ? '' : ctx.roadId === 'partners' ? SHARE_LINE : SHARE_LINE.replace('Your partner', 'Everyone you share the file with'); }
+  function notesBlocks(ctx, base, who) {
     var blocks = [];
-    blocks.push({ kind: 'note', text: 'Optional, and about you. The Wiring Card says how words reach you best' + (ctx.road.solo ? '. Keep it for yourself, or share it with anyone you choose.' : ', so the people around you can send things in a way that lands.') + ' It is not a label and not a diagnosis. The weather log is four quick weekly check-ins.' });
-    blocks.push({ kind: 'fields', fields: [f('self.wiring.name', 'Name on the card', 'text', { half: true, optional: true })] });
-    blocks.push({ kind: 'checks', title: 'My Wiring Card', intro: 'Tick anything true, and add your own words where the list misses.', groups: WIRING.map(function (line) {
-      return { label: line.q, fields: line.o.map(function (o) { return f('self.wiring.' + line.id + '.' + o[0], o[1], 'check', { optional: true }); }).concat([f('self.wiring.' + line.id + '.own', 'In my own words', 'text', { optional: true })]) };
-    }) });
     var sky = opts(['Clear', 'Gusty', 'Fogged in'], ['Clear', 'Gusty', 'Fogged']), press = opts(['Light', 'Building', 'Heavy']), sleep = opts(['Barely slept', 'Short night', 'About enough', 'Properly rested'], ['Barely', 'Short', 'Enough', 'Rested']);
+    blocks.push({ kind: 'checks', title: who != null ? ctx.labels[who] + '\u2019s Wiring Card' : 'My Wiring Card', person: who, intro: who != null ? 'Only ' + ctx.labels[who] + ' fills in this card, about themselves. Tick anything true, and add your own words where the list misses.' : 'Tick anything true, and add your own words where the list misses.', groups: WIRING.map(function (line) {
+      return { label: line.q, fields: line.o.map(function (o) { return f(base + 'wiring.' + line.id + '.' + o[0], o[1], 'check', { optional: true, person: who }); }).concat([f(base + 'wiring.' + line.id + '.own', 'In my own words', 'text', { optional: true, person: who })]) };
+    }) });
     var cards = [];
     for (var i = 0; i < WEATHER_WEEKS; i++) {
-      var p = 'self.weather.w' + (i + 1) + '.';
+      var p = base + 'weather.w' + (i + 1) + '.';
       cards.push({ label: 'Week ' + (i + 1), fields: [
-        f(p + 'date', 'Date', 'date', { half: true, optional: true }),
-        f(p + 'battery', 'Load score that day (0 to 1, from WP-02)', 'number', { min: 0, max: 1, half: true, optional: true }),
-        f(p + 'sky', 'The sky (Clear = calm and connected, Gusty = revved up, Fogged in = running on empty)', 'radio', { options: sky, optional: true }),
-        f(p + 'pressure', 'The pressure: what you were already carrying', 'radio', { options: press, optional: true }),
-        f(p + 'sleep', 'Last night’s sleep', 'radio', { options: sleep, optional: true }),
-        f(p + 'note', 'One line about the week', 'text', { optional: true })
+        f(p + 'date', 'Date', 'date', { half: true, optional: true, person: who }),
+        f(p + 'battery', 'Load score that day (0 to 1, from WP-02)', 'number', { min: 0, max: 1, half: true, optional: true, person: who }),
+        f(p + 'sky', 'The sky (Clear = calm and connected, Gusty = revved up, Fogged in = running on empty)', 'radio', { options: sky, optional: true, person: who }),
+        f(p + 'pressure', 'The pressure: what you were already carrying', 'radio', { options: press, optional: true, person: who }),
+        f(p + 'sleep', 'Last night\u2019s sleep', 'radio', { options: sleep, optional: true, person: who }),
+        f(p + 'note', 'One line about the week', 'text', { optional: true, person: who })
       ] });
     }
-    blocks.push({ kind: 'cards', title: 'Weather and load log', intro: 'Once a week, the same day if you can. Today’s Weather on the website asks the same questions.', rows: cards });
-    return { id: 'notes', code: 'NOTES', title: 'Self-notes (optional)', blocks: blocks };
+    blocks.push({ kind: 'cards', title: who != null ? ctx.labels[who] + '\u2019s weather and load log' : 'Weather and load log', person: who, intro: 'Once a week, the same day if you can. Today\u2019s Weather on the website asks the same questions.', rows: cards });
+    return blocks;
+  }
+  function pageNotes(ctx) {
+    var blocks = [];
+    blocks.push({ kind: 'note', text: 'Optional, and about you. The Wiring Card says how words reach you best' + (ctx.road.solo ? '. Keep it for yourself, or share it with anyone you choose.' : ', so the people around you can send things in a way that lands. Each person has a card and a log of their own: fill in only your own.') + ' It is not a label and not a diagnosis. The weather log is four quick weekly check-ins.' });
+    if (!ctx.road.solo) blocks.push({ kind: 'note', private: true, text: shareLine(ctx) });
+    if (ctx.road.solo) {
+      blocks.push({ kind: 'fields', fields: [f('self.wiring.name', 'Name on the card', 'text', { half: true, optional: true })] });
+      notesBlocks(ctx, 'self.', null).forEach(function (b) { blocks.push(b); });
+    } else {
+      for (var i = 0; i < ctx.n; i++) notesBlocks(ctx, 'self.p' + (i + 1) + '.', i).forEach(function (b) { blocks.push(b); });
+    }
+    return { id: 'notes', code: 'NOTES', title: 'Self-notes (optional)', private: true, blocks: blocks };
   }
 
   function pageReady(ctx) {
@@ -578,15 +611,36 @@
     return fn ? fn(NS + m[2]) : NS + m[2];
   }
 
-  function isoDate(v) {
-    v = trim(v);
+  // A typed date to YYYY-MM-DD. "10/7/26", "Oct 7, 2026", and also "Oct 7", "7 October" or "10/7"
+  // with no year: those are read as this year, or last year when this year's would still be ahead
+  // (a check-in date is never in the future). Date.parse alone reads "Oct 7" as 2001.
+  var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+  function ymd(y, m, d) { return y + '-' + ('0' + m).slice(-2) + '-' + ('0' + d).slice(-2); }
+  function nearestPast(m, d, now) {
+    now = now || new Date();
+    var y = now.getFullYear(), t = new Date(y, m - 1, d), lim = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    if (t > lim) y--;
+    return ymd(y, m, d);
+  }
+  function isoDate(v, now) {
+    v = String(v == null ? '' : v).trim();
     if (!v || /^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
     var m = v.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/);
-    if (m) { var y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return y + '-' + ('0' + m[1]).slice(-2) + '-' + ('0' + m[2]).slice(-2); }
+    if (m) { var y = +m[3] < 100 ? 2000 + +m[3] : +m[3]; return ymd(y, m[1], m[2]); }
+    if (!/\b\d{4}\b/.test(v)) {
+      var s = v.toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, '$1').replace(/[,.]/g, ' ').replace(/\s+/g, ' ').trim();
+      var md = /^(?:[a-z]+day )?([a-z]{3,})\s+(\d{1,2})$/.exec(s) || null, dm = /^(?:[a-z]+day )?(\d{1,2})\s+(?:of )?([a-z]{3,})$/.exec(s);
+      var mon = md ? MONTHS.indexOf(md[1].slice(0, 3)) : dm ? MONTHS.indexOf(dm[2].slice(0, 3)) : -1, day = md ? +md[2] : dm ? +dm[1] : 0;
+      if (mon >= 0 && day >= 1 && day <= 31) return nearestPast(mon + 1, day, now);
+      var sl = /^(\d{1,2})[\/.\-](\d{1,2})$/.exec(s.replace(/ /g, ''));
+      if (sl && +sl[1] >= 1 && +sl[1] <= 12 && +sl[2] >= 1 && +sl[2] <= 31) return nearestPast(+sl[1], +sl[2], now);
+      return v;
+    }
     var t = Date.parse(v);
-    if (!isNaN(t)) { var d = new Date(t); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+    if (!isNaN(t)) { var d = new Date(t); return ymd(d.getFullYear(), d.getMonth() + 1, d.getDate()); }
     return v;
   }
+
   // A radio answer, from an export value ("Noticed_and_handled"), a label or a short label.
   function radioLabel(fl, v) {
     if (v == null || v === false) return '';
@@ -606,6 +660,7 @@
     var version = trim(canon[NS + 'meta.version']) || '';
     var n = parseInt(canon[NS + 'meta.people'], 10);
     if (!ROADS[roadId]) roadId = guessRoad(canon);
+    migrateSelf(canon, ROADS[roadId].solo);
     if (!(n >= 1)) { n = 0; Object.keys(canon).forEach(function (k) { if (RETIRED.test(k)) return; var m = /\.p(\d)\./.exec(k) || /\.who\.p(\d)$/.exec(k); if (m) n = Math.max(n, +m[1]); }); }
     n = clampPeople(roadId, n);
     var sizes = sizesFromNames(Object.keys(canon)), reg = build(roadId, n, null, sizes), values = {}, unknown = [];
@@ -624,6 +679,30 @@
     var data = { format: FORMAT, version: PKG_VERSION, road: roadId, people: n, values: values };
     if (Object.keys(sizes).length) data.sizes = sizes;
     return { data: data, read: readReport(data, { version: version, unknown: unknown, hadMeta: !!canon[NS + 'meta.road'] }) };
+  }
+  // Self-notes moved from one card for the whole road (self.wiring.*) to one card each (self.p1.wiring.*).
+  // An older file's single card goes to the person named on it ("Name on the card"), or else person 1.
+  // On "Just me" it is the other way round: a card for person 1 is the one card.
+  function migrateSelf(canon, solo) {
+    var OLD = /^tol\.v1\.self\.(wiring|weather)\./, NEW = /^tol\.v1\.self\.p(\d)\.(wiring|weather)\./, nameKey = NS + 'self.wiring.name';
+    if (solo) {
+      Object.keys(canon).forEach(function (k) { var m = NEW.exec(k); if (m && m[1] === '1') { var t = k.replace(/^tol\.v1\.self\.p1\./, NS + 'self.'); if (!(t in canon)) canon[t] = canon[k]; delete canon[k]; } });
+      return;
+    }
+    var keys = Object.keys(canon).filter(function (k) { return OLD.test(k) && k !== nameKey; });
+    var nm = fold(canon[nameKey]);
+    delete canon[nameKey];
+    if (!keys.length) return;
+    var idx = 0;
+    if (nm) {
+      var names = []; for (var i = 1; i <= MAX_PEOPLE; i++) names.push(fold(canon[NS + 'who.p' + i]));
+      var hit = names.indexOf(nm);
+      if (hit < 0) names.forEach(function (x, j) { if (hit < 0 && x && (x.split(/\s+/)[0] === nm.split(/\s+/)[0] || (nm.length === 1 && x.charAt(0) === nm))) hit = j; });
+      if (hit < 0 && nm.length === 1 && CODES.indexOf(nm.toUpperCase()) >= 0) hit = CODES.indexOf(nm.toUpperCase());
+      var d = /^(?:p|person\s*)?([1-8])$/.exec(nm); if (hit < 0 && d) hit = +d[1] - 1;
+      if (hit >= 0) idx = hit;
+    }
+    keys.forEach(function (k) { var t = k.replace(/^tol\.v1\.self\./, NS + 'self.p' + (idx + 1) + '.'); if (!(t in canon)) canon[t] = canon[k]; delete canon[k]; });
   }
   function guessRoad(canon) {
     var keys = Object.keys(canon).join(' ');
@@ -736,6 +815,9 @@
       var main = kits.filter(function (k) { return k && (k.state.values.first || k.state.values.second); })[0] || kits.filter(Boolean)[0];
       set('wp11.date', main.state.values.date); set('wp11.first', main.state.values.first); set('wp11.second', main.state.values.second);
       set('wp11.nextAction', main.state.values.nextAction); set('wp11.resume', main.state.values.resume);
+      // the shared pause plan: from whichever kit has it written
+      var planKit = kits.filter(function (k) { return k && (k.state.values.planWord || k.state.values.planMin || k.state.values.planBack || k.state.values.planFirst); })[0];
+      if (planKit) { var pv0 = planKit.state.values; set('wp11.plan.word', pv0.planWord); set('wp11.plan.min', pv0.planMin); set('wp11.plan.back', pv0.planBack); set('wp11.plan.first', pv0.planFirst); }
       closingFrom(main, 'wp11');
       var tr = rowsOfT(main.state, 'triggers');
       tr.forEach(function (r, i) { set('wp11.triggers.r' + (i + 1) + '.trigger', r.trigger); set('wp11.triggers.r' + (i + 1) + '.body', r.body); });
@@ -785,6 +867,94 @@
     if (r && typeof obj.focus === 'string' && /^[a-z]{1,20}$/.test(obj.focus) && r.data.road === obj.road) r.data.focus = obj.focus;
     return r;
   }
+
+  /* ------------------------------------------------------------ two copies into one */
+
+  // When each person fills in their own copy, the second file is added to the first, never swapped in
+  // silently. People are matched by name first (Lena is Lena whichever box she was in), then:
+  //  - a box that is empty here takes the new file's answer;
+  //  - a box with the same answer stays as it is;
+  //  - a box with a different answer keeps what is here, and is listed in conflicts so the person can choose.
+  // A starter value nobody changed (a printed job, a day, a name in its own row) counts as empty.
+  // Returns { data, added, same, conflicts: [{ name, where, here, there }], matched, swapped } or { error }.
+  var PERSON_KEY = /^(tol\.v1\.(?:who\.p|wp02\.p|wp11\.lines\.p|self\.p))(\d)(\.|$)/;
+  function personNames(data) { var out = []; for (var i = 0; i < data.people; i++) out.push(fold(data.values[NS + 'who.p' + (i + 1)])); return out; }
+  function matchPeople(base, add) {
+    var bn = personNames(base), an = personNames(add), map = [], used = {}, extra = base.people;
+    an.forEach(function (nm, i) { var j = nm ? bn.indexOf(nm) : -1; if (j >= 0 && !used[j]) { map[i] = j; used[j] = 1; } });
+    // initials or first names ("L" or "Lena B" for Lena)
+    an.forEach(function (nm, i) {
+      if (map[i] != null || !nm) return;
+      var j = -1; bn.forEach(function (b, k) { if (j < 0 && !used[k] && b && (b.split(/\s+/)[0] === nm.split(/\s+/)[0] || (nm.length === 1 && b.charAt(0) === nm) || (b.length === 1 && nm.charAt(0) === b))) j = k; });
+      if (j >= 0) { map[i] = j; used[j] = 1; }
+    });
+    // everyone else: their own slot if it is free (an unnamed person stays where they were), or a new place
+    an.forEach(function (nm, i) {
+      if (map[i] != null) return;
+      if (!used[i] && (!nm || !bn[i]) && i < Math.max(base.people, add.people)) { map[i] = i; used[i] = 1; return; }
+      while (used[extra]) extra++;
+      map[i] = extra; used[extra] = 1; extra++;
+    });
+    return map;
+  }
+  function remapPerson(name, map, nFrom, nTo) {
+    var m = PERSON_KEY.exec(name);
+    if (m) { var j = map[+m[2] - 1]; return j == null ? name : m[1] + (j + 1) + name.slice(m[1].length + m[2].length); }
+    var d = /^tol\.v1\.wp13\.daily\.r(\d+)\.(.+)$/.exec(name);
+    if (d) {
+      var k = +d[1] - 1, day = Math.floor(k / nFrom), who = k % nFrom, to = map[who] == null ? who : map[who];
+      if (day > 6) return name;
+      return NS + 'wp13.daily.r' + (day * nTo + to + 1) + '.' + d[2];
+    }
+    return name;
+  }
+  function combine(base, add) {
+    if (!base || !add) return { error: 'missing' };
+    if (base.road !== add.road) return { error: 'road' };
+    var map = matchPeople(base, add), nTo = clampPeople(base.road, Math.max(base.people, add.people, Math.max.apply(null, map.concat([0])) + 1));
+    var swapped = map.some(function (j, i) { return j !== i; });
+    var ident = []; for (var i = 0; i < base.people; i++) ident.push(i);
+    var out = { format: FORMAT, version: PKG_VERSION, road: base.road, people: nTo, values: {} };
+    var sizes = {}; [base.sizes, add.sizes].forEach(function (s) { Object.keys(s || {}).forEach(function (k) { sizes[k] = Math.max(sizes[k] || 0, s[k]); }); });
+    if (Object.keys(sizes).length) out.sizes = sizes;
+    if (base.focus) out.focus = base.focus; else if (add.focus) out.focus = add.focus;
+    Object.keys(base.values).forEach(function (k) { out.values[remapPerson(k, ident, base.people, nTo)] = base.values[k]; });
+    var reg = build(out.road, nTo, null, sizes), res = { added: 0, same: 0, conflicts: [], matched: map, swapped: swapped };
+    function isStarter(fl, v) { return !!(fl && fl.def && v === fl.def && !/^who\./.test(fl.id)); }
+    Object.keys(add.values).forEach(function (k0) {
+      var k = remapPerson(k0, map, add.people, nTo), av = add.values[k0], bv = out.values[k], fl = reg.byName[k];
+      if (blank(av)) return;
+      // a day or a name the package fills in for each row: keep what is here
+      if (fl && fl.prefill) { if (blank(bv)) out.values[k] = av; return; }
+      if (blank(bv) || (isStarter(fl, bv) && !isStarter(fl, av))) { out.values[k] = av; res.added++; return; }
+      if (trim(bv) === trim(av) || (fl && fl.type === 'check' && !!bv === !!av)) { res.same++; return; }
+      if (isStarter(fl, av)) return;
+      var p = fl ? reg.pages.filter(function (x) { return x.id === fl.page; })[0] : null;
+      res.conflicts.push({ name: k, where: fl && p ? fieldPlace(p, fl) : k.replace(NS, ''), here: bv, there: av });
+    });
+    // a starter job the other copy took off (its task box cleared) goes here too, while it is still only a starter
+    var addKeys = {}; Object.keys(add.values).forEach(function (k0) { if (!blank(add.values[k0])) addKeys[remapPerson(k0, map, add.people, nTo)] = 1; });
+    var addHas03 = Object.keys(addKeys).some(function (k) { return k.indexOf(NS + 'wp03.') === 0; });
+    if (addHas03) Object.keys(out.values).forEach(function (k) {
+      var m = /^(tol\.v1\.wp03\.treaty\.r\d+\.)task$/.exec(k), fl = reg.byName[k];
+      if (!m || addKeys[k] || !isStarter(fl, out.values[k])) return;
+      var rowBlankHere = ['r', 'a', 'c', 'i'].every(function (c2) { return blank(out.values[m[1] + c2]); });
+      if (rowBlankHere) ['task', 'freq', 'notes'].forEach(function (c2) { var f2 = reg.byName[m[1] + c2]; if (!f2 || isStarter(f2, out.values[m[1] + c2]) || blank(out.values[m[1] + c2])) delete out.values[m[1] + c2]; });
+    });
+    res.data = out;
+    return res;
+  }
+
+  // A copy to share: the same answers without the private pages, so nobody's load score, self-notes,
+  // raw reaction or calm-down triggers travel further than they meant them to.
+  var PRIVATE_RE = /^tol\.v1\.(wp02\.|self\.|wp09\.raw|wp11\.(triggers|reentry)\.)/;
+  function shareCopy(data) {
+    var out = JSON.parse(JSON.stringify(data));
+    Object.keys(out.values).forEach(function (k) { if (PRIVATE_RE.test(k)) delete out.values[k]; });
+    out.shared = true;
+    return out;
+  }
+  function hasPrivate(data) { return !!data && Object.keys(data.values || {}).some(function (k) { return PRIVATE_RE.test(k) && !blank(data.values[k]); }); }
 
   // What was read, page by page, and what is missing or couldn't be matched.
   function readReport(data, extra) {
@@ -1030,7 +1200,9 @@
       var re = rowsOf(data, 'wp11.reentry', ['time', 'tactic', 'before', 'after'], sizeOf(data, 'reentry')).filter(function (r) { return inRange(r.after, 0, 1) != null; });
       var latest = re.length ? inRange(re[re.length - 1].after, 0, 1) : null, before = re.length ? inRange(re[re.length - 1].before, 0, 1) : null;
       var ret = latest == null ? null : latest < 0.5 ? 'back' : latest < 0.6 ? 'again' : (re.length >= 2 ? 'later' : 'again');
-      out.wp11 = { filled: !!(V(data, 'wp11.first') || V(data, 'wp11.second') || lines.some(Boolean) || trig.length || re.length),
+      var plan11 = { word: trim(V(data, 'wp11.plan.word')), min: trim(V(data, 'wp11.plan.min')), back: trim(V(data, 'wp11.plan.back')), first: trim(V(data, 'wp11.plan.first')) };
+      plan11.any = !!(plan11.word || plan11.min || plan11.back || plan11.first);
+      out.wp11 = { plan: plan11, filled: !!(V(data, 'wp11.first') || V(data, 'wp11.second') || lines.some(Boolean) || trig.length || re.length || plan11.any),
         first: V(data, 'wp11.first'), second: V(data, 'wp11.second'), lines: lines, triggers: trig, readings: re.length, latest: latest, before: before, ret: ret,
         nextAction: trim(V(data, 'wp11.nextAction')), resume: trim(V(data, 'wp11.resume')) };
     }
@@ -1101,24 +1273,35 @@
     }
     out.calc = calc;
 
-    // Self-notes
-    var wiring = WIRING.map(function (line) {
-      var picked = line.o.filter(function (o) { return V(data, 'self.wiring.' + line.id + '.' + o[0]) === true; }).map(function (o) { return o[1]; });
-      var own = trim(V(data, 'self.wiring.' + line.id + '.own'));
-      if (own) picked.push(own);
-      return { id: line.id, q: line.q, picked: picked };
-    });
-    var weather = [];
-    for (var w = 1; w <= WEATHER_WEEKS; w++) {
-      var b = 'self.weather.w' + w + '.';
-      var wk = { w: w, date: V(data, b + 'date'), battery: inRange(V(data, b + 'battery'), 0, 1), sky: V(data, b + 'sky'), pressure: V(data, b + 'pressure'), sleep: V(data, b + 'sleep'), note: trim(V(data, b + 'note')) };
-      if (wk.date || wk.battery != null || wk.sky || wk.pressure || wk.sleep || wk.note) weather.push(wk);
+    // Self-notes: one card on "Just me"; one card each on a shared road. out.notes is the card the
+    // report reads closely (on a shared road, the first person who filled theirs in; out.notes.who says
+    // whose it is), and out.notesBy has everyone's.
+    if (R.solo) { out.notes = notesFor(data, 'self.'); out.notes.who = 0; out.notesBy = [out.notes]; }
+    else {
+      out.notesBy = P.list.map(function (p) { var nb = notesFor(data, 'self.p' + (p.i + 1) + '.'); nb.who = p.i; nb.label = p.label; return nb; });
+      out.notes = out.notesBy.filter(function (nb) { return nb.wiringLines || nb.weather.length; })[0] || out.notesBy[0];
     }
-    out.notes = { name: trim(V(data, 'self.wiring.name')), wiring: wiring, wiringLines: wiring.filter(function (l) { return l.picked.length; }).length, weather: weather };
     out.ready = { going: trim(V(data, 'ready.going')), focus: trim(V(data, 'ready.focus')), when: trim(V(data, 'ready.when')), fair: V(data, 'ready.fair') === true };
     out.who = { started: V(data, 'who.started'), context: trim(V(data, 'who.context')), others: trim(V(data, 'who.others')) };
     out.anything = reg.fields.some(function (fl) { var v = data.values[fl.name]; return !blank(v) && !(fl.def && v === fl.def) && !/^who\.p\d$/.test(fl.id); });
     return out;
+  }
+
+  function notesFor(data, base) {
+    var wiring = WIRING.map(function (line) {
+      var picked = line.o.filter(function (o) { return V(data, base + 'wiring.' + line.id + '.' + o[0]) === true; }).map(function (o) { return o[1]; });
+      var ids = line.o.filter(function (o) { return V(data, base + 'wiring.' + line.id + '.' + o[0]) === true; }).map(function (o) { return o[0]; });
+      var own = trim(V(data, base + 'wiring.' + line.id + '.own'));
+      if (own) picked.push(own);
+      return { id: line.id, q: line.q, picked: picked, ids: ids };
+    });
+    var weather = [];
+    for (var w = 1; w <= WEATHER_WEEKS; w++) {
+      var b = base + 'weather.w' + w + '.';
+      var wk = { w: w, date: V(data, b + 'date'), battery: inRange(V(data, b + 'battery'), 0, 1), sky: V(data, b + 'sky'), pressure: V(data, b + 'pressure'), sleep: V(data, b + 'sleep'), note: trim(V(data, b + 'note')) };
+      if (wk.date || wk.battery != null || wk.sky || wk.pressure || wk.sleep || wk.note) weather.push(wk);
+    }
+    return { base: base, name: base === 'self.' ? trim(V(data, 'self.wiring.name')) : '', wiring: wiring, wiringLines: wiring.filter(function (l) { return l.picked.length; }).length, weather: weather };
   }
 
   /* ------------------------------------------------------------ the report */
@@ -1211,9 +1394,15 @@
     model.sections.forEach(function (s) { extras(s.code, s, F, v); });
     model.extra = [notesDetail(F, v), readyDetail(F, v)];
     var fired = fireRules(F, v), checks = runChecks(F);
+    // "Working well, nothing to fix" only when there really is nothing else to work on: never beside a
+    // Top 3, and never when one person holds most of the planning and remembering.
+    var hasWork = fired.some(function (r) { return !r.strength && r.rec && r.id !== 'state-not-now'; });
+    if (hasWork) fired.forEach(function (r) { if (r.id === 'sol-holding') r.rec = null; });
+    if (hasWork) model.findings = model.findings.map(function (t) { return t.replace(': it is working well. Keep the same rhythm; nothing needs fixing this week.', ': the core numbers are working well. A few smaller things are still worth a look, and they are in the Top 3 below.'); });
     model.insights = fired;
     model.anomalies = checks;
     model.recs = recommend(fired, checks, F, v, model.sections.concat(R.solo ? [model.extra[0]] : []));
+    otherView(model.recs, fired, F, v);
     model.plan = plan2(model.recs, c, v, sp);
     model.persons = personViews(F, v);
     model.self = selfDiscovery(F, v);
@@ -1229,7 +1418,7 @@
       model.calcSection.moves = C1().suggestions({ wb: c.calc.wb, oc: c.calc.oc, as: c.calc.as, weights: C1().W.sol,
         balance: c.calc.wbSrc === 'WP-01' && F.w1 ? F.w1.balance : null,
         ownership: c.calc.ocSrc === 'WP-03' && c.wp03 && c.wp03.tasks ? { total: c.wp03.tasks, owned: c.wp03.owned } : null,
-        names: P.list.map(function (p) { return p.label; }) }).map(function (x) { return x.text; });
+        names: P.list.map(function (p) { return p.label; }) }).filter(function (x) { return !(x.key === 'wb' && !(F.w1 && F.w1.handoff)) && !(x.gain != null && x.gain <= 0); }).map(function (x) { return x.text; });
     } else model.calcSection.moves = [];
     model.calcSection.link = linkOf('CALC-01');
     model.fair.push('Everything stays on your device. The report was made in your browser and nothing was sent anywhere.');
@@ -1424,8 +1613,10 @@
       s.entered.push(['First default', k.first || 'Not chosen']);
       s.entered.push(['Second default', k.second || 'Not chosen']);
       P.list.forEach(function (p) { s.entered.push([R.solo ? 'Your pause line' : 'Pause line: ' + p.label, k.lines[p.i] || 'Not filled in']); });
+      if (k.plan && k.plan.any) s.entered.push([R.solo ? 'Pause plan' : 'Our pause plan (shared)', [k.plan.word && 'pause word: ' + k.plan.word, k.plan.min && 'shortest break: ' + k.plan.min, k.plan.back && 'coming back: ' + k.plan.back, k.plan.first && 'first words back: ' + q(k.plan.first)].filter(Boolean).join('; ')]);
+      if (!R.solo && !(k.plan && k.plan.any)) s.shows.push('Our pause plan isn\u2019t agreed yet: a pause word, the shortest break, and how you come back. It is the one part of the kit made to share.');
       if (k.triggers.length) s.entered.push(['What tends to start it', k.triggers.map(function (t) { return [t.trigger, t.body].filter(Boolean).join(' (felt in: ') + (t.body && t.trigger ? ')' : ''); }).join('; ')]);
-      if (k.latest != null) s.shows.push('Latest reading after settling: ' + fmt(k.latest) + (k.before != null ? ' (from ' + fmt(k.before) + ')' : '') + '. ' + (k.ret === 'back' ? 'Under 0.50: go back in, at the time you named.' : k.ret === 'again' ? '0.50 to 0.60, or one round so far: do a second round first.' : 'Still 0.60 or above after two rounds: put it off to a named time. “Tomorrow after dinner” is a real plan; “later” is not.'));
+      if (k.latest != null) s.shows.push('Latest reading after settling: ' + fmt(k.latest) + (k.before != null ? ' (from ' + fmt(k.before) + ')' : '') + '. ' + (k.ret === 'back' ? 'Settled enough (under 0.50): go back in, at the time you named.' : k.ret === 'again' ? 'Still a bit hot (0.50 to 0.60, or one round so far): take another round first.' : 'Still hot after two rounds (0.60 or above): put it off to a named time. “Tomorrow after dinner” is a real plan; “later” is not.'));
       var missingLines = P.list.filter(function (p) { return !k.lines[p.i]; });
       if (!R.solo && missingLines.length && missingLines.length < c.n) s.shows.push('Pause lines still to write: ' + list(missingLines.map(function (p) { return p.label; })) + '.');
       if (k.first && k.second) s.shows.push('Both defaults are chosen ahead of time, so nobody has to decide in the moment.');
@@ -1775,7 +1966,11 @@
         handoff: null };
       if (c.wp01.wb != null && n >= 2) {
         var bh = C1().balance(c.wp01.minutes.map(function (m) { return m / 60; })), ho = C1().balanceHandoff(bh);
-        if (ho && ho.after != null) F.w1.handoff = { from: P.label(ho.from), to: P.label(ho.to), fromI: ho.from, toI: ho.to, hours: ho.hours, after: ho.after };
+        // Only a handoff that really helps: it must raise the balance, and never move work toward
+        // someone whose load score is higher than the giver's.
+        var bf = ho && c.battery[ho.from], bt = ho && c.battery[ho.to];
+        var heavierTo = !!(bf && bt && bf.score != null && bt.score != null && bt.score > bf.score);
+        if (ho && ho.after != null && ho.after > c.wp01.wb + 0.005 && !heavierTo) F.w1.handoff = { from: P.label(ho.from), to: P.label(ho.to), fromI: ho.from, toI: ho.to, hours: ho.hours, after: ho.after };
         F.w1.balance = bh;
       }
     }
@@ -1886,13 +2081,14 @@
     }
 
     // Self-notes: whose they are, the wiring, the weather
-    var nw = trim(V(data, 'self.wiring.name')), ni = F.solo ? 0 : (nw ? P.resolve(nw) : null);
+    var nw = c.notes.name, ni = F.solo ? 0 : c.notes.who;
+    if (F.solo && nw) ni = 0;
     F.notesWho = typeof ni === 'number' ? ni : null;
     F.notesLabel = F.notesWho != null ? P.label(F.notesWho) : (nw || 'the person who filled in the self-notes');
     var wmap = {}; c.notes.wiring.forEach(function (l) { wmap[l.id] = l.picked; });
     F.wiring = wmap;
     F.wiringIds = {};
-    WIRING.forEach(function (line) { F.wiringIds[line.id] = line.o.filter(function (o) { return V(data, 'self.wiring.' + line.id + '.' + o[0]) === true; }).map(function (o) { return o[0]; }); });
+    c.notes.wiring.forEach(function (l) { F.wiringIds[l.id] = l.ids; });
     var wx = c.notes.weather, wb = wx.filter(function (w) { return w.battery != null; });
     function grp(pred) { return avgOf(wb.filter(pred).map(function (w) { return w.battery; })); }
     F.wx = { weeks: wx, bat: wb, trend: wb.length >= 2 ? wb[wb.length - 1].battery - wb[0].battery : null, first: wb[0] || null, last: wb[wb.length - 1] || null,
@@ -1926,6 +2122,20 @@
   // strength: true marks something to protect rather than fix.
 
   function lbl(list) { return list.map(function (p) { return p.label; }); }
+  // A loose match of a WP-01 job against the WP-03 rows that have an owner: the job's name, or its key
+  // words in a row's task or notes ("Plan the week's meals" matches Groceries, "owns meal planning").
+  var GENERIC = { plan: 1, planning: 1, plans: 1, week: 1, weeks: 1, weekly: 1, daily: 1, day: 1, days: 1, make: 1, take: 1, sort: 1, check: 1, stuff: 1, things: 1, thing: 1, jobs: 1, job: 1, task: 1, tasks: 1, home: 1, house: 1, the: 1, and: 1, for: 1, with: 1, from: 1, each: 1, after: 1, before: 1, some: 1, more: 1, kids: 0 };
+  function keyWords(t) { return fold(t).replace(/[\u2019']s\b/g, '').split(/[^a-z0-9]+/).filter(function (w) { return w.length >= 4 && !GENERIC[w]; }).map(function (w) { return w.replace(/(ings?|es|s)$/, ''); }).filter(function (w) { return w.length >= 3; }); }
+  function ownedOnWp03(F, task) {
+    if (!F.w3) return false;
+    var kw = keyWords(task);
+    return F.w3.rows.some(function (r) {
+      if (!r.rRaw) return false;
+      if (sameTask(r.task, task)) return true;
+      var hay = keyWords(r.task + ' ' + r.notes);
+      return kw.some(function (w) { return hay.indexOf(w) >= 0; });
+    });
+  }
   // Only the coworkers' version of WP-03 has Consulted and Informed columns.
   function hasCI(F) { return F.road === 'coworkers'; }
   function heaviest(F) { var pp = F.pp.filter(function (p) { return p.minutes != null; }); return pp.length ? pp.slice().sort(function (a, b) { return b.minutes - a.minutes; })[0] : null; }
@@ -2086,7 +2296,8 @@
       when: function (F) {
         if (!(F.n >= 2 && F.w1 && F.w3)) return null;
         var loose = F.w3.gaps;
-        var hits = F.w1.rows.filter(function (r) { return typeof r.who === 'number' && r.task && (r.noticed || loose.some(function (g) { return sameTask(g.task, r.task); })); });
+        // a job that already has an owner on WP-03 (by its name, or named in a row's notes) isn't drifting
+        var hits = F.w1.rows.filter(function (r) { return typeof r.who === 'number' && r.task && (r.noticed || loose.some(function (g) { return sameTask(g.task, r.task); })) && !ownedOnWp03(F, r.task); });
         if (hits.length < 2) return null;
         var cnt = F.pp.map(function (p) { return hits.filter(function (r) { return r.who === p.i; }).length; });
         var top = F.pp[cnt.indexOf(Math.max.apply(null, cnt))], share = cnt[top.i] / hits.length;
@@ -2714,22 +2925,32 @@
   function notesDetail(F, v) {
     var c = F.c, n = c.notes, s = { code: 'NOTES', name: 'Your wiring and your weather', title: 'Self-notes: the Wiring Card and the weather log', entered: [], shows: [], doesnt: 'It can’t tell you why a week went the way it did, and the Wiring Card is not a label or a diagnosis. It is a note about how words reach ' + (F.solo ? 'you' : F.notesLabel) + '.', next: '', status: n.wiringLines || n.weather.length ? 'filled' : 'blank', ask: '' };
     extras('NOTES', s, F, v); s.link = linkOf('wiring');
-    n.wiring.filter(function (l) { return l.picked.length; }).forEach(function (l) { s.entered.push([l.q, l.picked.join('; ')]); });
-    if (!F.solo && (n.wiringLines || n.weather.length)) s.entered.unshift(['Whose notes', F.notesLabel]);
+    // on a shared road, everyone's own card and log, each under their own name
+    var mine = F.solo ? [n] : (c.notesBy || [n]).filter(function (nb) { return nb.wiringLines || nb.weather.length; });
+    var whose = F.solo ? 'your' : F.notesLabel + '\u2019s';
+    if (!F.solo && mine.length) s.status = 'filled';
+    if (!F.solo && mine.length) s.entered.push(['Whose notes', list(mine.map(function (nb) { return nb.label; }))]);
+    if (!F.solo && mine.length) s.shows.push('Each card is that person\u2019s own, about themselves. If you share this report, everyone on it will see these notes.');
+    mine.forEach(function (nb) {
+      nb.wiring.filter(function (l) { return l.picked.length; }).forEach(function (l) { s.entered.push([(F.solo ? '' : nb.label + ': ') + l.q, l.picked.join('; ')]); });
+      if (!F.solo && nb !== n && nb.weather.length) s.tables.push(tbl(nb.label + '\u2019s weather log', ['Week', 'Battery', 'Sky', 'Pressure', 'Sleep'], nb.weather.map(function (w) { return ['Week ' + w.w + (w.date ? ' (' + w.date + ')' : ''), w.battery != null ? fmt(w.battery) : '—', w.sky || '—', w.pressure || '—', w.sleep || '—']; }), [1.6, 0.8, 1, 1, 1.2]));
+    });
     if (n.weather.length) {
-      s.tables.push(tbl('The weather log', ['Week', 'Battery', 'Sky', 'Pressure', 'Sleep'], n.weather.map(function (w) { return ['Week ' + w.w + (w.date ? ' (' + w.date + ')' : ''), w.battery != null ? fmt(w.battery) : '—', w.sky || '—', w.pressure || '—', w.sleep || '—']; }), [1.6, 0.8, 1, 1, 1.2]));
-      if (F.wx.bat.length) s.bars.push(bars('Load score, week by week', F.wx.bat.map(function (w) { return { label: 'Week ' + w.w, value: w.battery, max: 1, text: fmt(w.battery) }; })));
-      if (F.wx.trend != null) s.shows.push('Across your weather log, your load went from ' + fmt(F.wx.first.battery) + ' to ' + fmt(F.wx.last.battery) + (Math.abs(F.wx.trend) < 0.05 ? ': holding steady.' : F.wx.trend < 0 ? ': lighter.' : ': heavier.'));
+      s.tables.unshift(tbl(F.solo ? 'The weather log' : F.notesLabel + '\u2019s weather log', ['Week', 'Battery', 'Sky', 'Pressure', 'Sleep'], n.weather.map(function (w) { return ['Week ' + w.w + (w.date ? ' (' + w.date + ')' : ''), w.battery != null ? fmt(w.battery) : '—', w.sky || '—', w.pressure || '—', w.sleep || '—']; }), [1.6, 0.8, 1, 1, 1.2]));
+      if (F.wx.bat.length) s.bars.push(bars(F.solo ? 'Load score, week by week' : F.notesLabel + '\u2019s load score, week by week', F.wx.bat.map(function (w) { return { label: 'Week ' + w.w, value: w.battery, max: 1, text: fmt(w.battery) }; })));
+      if (F.wx.trend != null) s.shows.push('Across ' + whose + ' weather log, the load went from ' + fmt(F.wx.first.battery) + ' to ' + fmt(F.wx.last.battery) + (Math.abs(F.wx.trend) < 0.05 ? ': holding steady.' : F.wx.trend < 0 ? ': lighter.' : ': heavier.'));
       var skies = {}; n.weather.forEach(function (w) { if (w.sky) skies[w.sky] = (skies[w.sky] || 0) + 1; });
       if (Object.keys(skies).length) s.shows.push('Sky: ' + Object.keys(skies).map(function (k) { return lc(k) + ' ' + skies[k]; }).join(', ') + '.');
       if (F.wx.shortAvg != null && F.wx.restAvg != null) s.shows.push('Short-sleep weeks averaged ' + fmt(F.wx.shortAvg) + ', rested weeks ' + fmt(F.wx.restAvg) + '.');
       if (F.wx.heavyAvg != null && F.wx.lightAvg != null) s.shows.push('Heavy-pressure weeks averaged ' + fmt(F.wx.heavyAvg) + ', lighter weeks ' + fmt(F.wx.lightAvg) + '.');
       var notes = n.weather.filter(function (w) { return w.note; });
-      if (notes.length) s.shows.push('In your words: ' + notes.map(function (w) { return 'week ' + w.w + ', ' + q(w.note); }).join('; ') + '.');
+      if (notes.length) s.shows.push((F.solo ? 'In your words: ' : 'In ' + F.notesLabel + '\u2019s words: ') + notes.map(function (w) { return 'week ' + w.w + ', ' + q(w.note); }).join('; ') + '.');
       if (F.notesWho != null && F.c.battery[F.notesWho].score != null && F.wx.last) s.shows.push('The latest weekly reading (' + fmt(F.wx.last.battery) + ') next to the WP-02 score (' + fmt(F.c.battery[F.notesWho].score) + ').');
     }
-    if (n.wiringLines) s.shows.push(n.wiringLines + ' of 9 Wiring Card lines filled in.');
+    mine.forEach(function (nb) { if (nb.wiringLines) s.shows.push((F.solo ? '' : nb.label + ': ') + nb.wiringLines + ' of 9 Wiring Card lines filled in.'); });
     s.card = explainCard(c);
+    if (!F.solo) mine.forEach(function (nb) { if (nb !== n) { var cd = explainCard({ notes: nb }); if (cd) s.shows.push('A note ' + nb.label + ' could share: ' + cd); } });
+    if (!F.solo && s.card) s.card = F.notesLabel + ': ' + s.card;
     s.suggests = [];
     if (F.wx.bat.length >= 2) s.suggests.push(F.wx.trend > 0.05 ? 'The weeks are getting heavier. It suggests looking at what changed, kindly.' : 'The weeks are steady or lighter. Something is helping; worth naming it.');
     if (n.wiringLines) s.suggests.push('The card is enough to share. People can only send things the way you receive them if they know how that is.');
@@ -2783,6 +3004,26 @@
     return out;
   }
 
+  // A report about two or more people shouldn't be mostly about one of them. When the findings name
+  // one person far more than another, add one step about the other person's view and unseen work.
+  function otherView(recs, fired, F, v) {
+    if (F.solo || F.n < 2) return;
+    var text = fired.map(function (r) { return [r.title, r.finding, r.rec ? r.rec.first + ' ' + r.rec.title : ''].join(' '); }).join(' ');
+    function count(lab) { var re = new RegExp('(^|[^A-Za-z\u00C0-\u024F])' + lab.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![A-Za-z\u00C0-\u024F])', 'g'); return (text.match(re) || []).length; }
+    var counts = F.pp.map(function (p) { return { p: p, k: count(p.label) }; }).sort(function (a, b) { return b.k - a.k; });
+    var most = counts[0], least = counts[counts.length - 1];
+    if (most.k < 3 || least.k * 2 > most.k) return;
+    var nm = least.p.label;
+    var rec = { h: 'week', pri: 7.5, pillar: 'I', from: 'other-view', title: 'Hear ' + nm + '\u2019s side of the week',
+      why: 'Most of what this report picks out is about ' + most.p.label + '. ' + nm + '\u2019s view counts just as much: the planning, noticing or worrying they do may simply not be on these pages yet.',
+      first: 'Ask ' + nm + ' one open question, and only listen: what did you carry this week that isn\u2019t written here?',
+      script: '\u201cWhat did this week look like from where you sit? What isn\u2019t on these pages?\u201d', link: linkOf('WP-01'),
+      working: nm + ' adds at least one thing to the next log that wasn\u2019t there before.',
+      plan: { title: 'Hear ' + nm + '\u2019s side', wp: 'Talk, then WP-01', do: 'Ask ' + nm + ' what they carried that the pages don\u2019t show, and add it to next week\u2019s log under their name.', pillar: 'I' } };
+    recs.week.unshift(rec);
+    if (recs.week.length > 5) recs.week.pop();
+  }
+
   function plan2(recs, c, v, sp) {
     var R = c.R, weeks = [], seen = {};
     function push(w) { var k = w.title.toLowerCase(); if (seen[k]) return; seen[k] = 1; weeks.push(w); }
@@ -2821,6 +3062,8 @@
       if (c.on['WP-03']) rows.push([F.road === 'coworkers' ? 'Team roles (WP-03)' : 'Owns (WP-03)', F.w3 ? 'Owns ' + p.r + ', helps with ' + p.a + (p.recurR ? ' (' + p.recurR + ' daily or weekly)' : '') : 'WP-03 not filled in']);
       if (c.on['WP-13']) rows.push(['Check-ins (WP-13)', F.w13 ? p.checkins + ' of 7 days' + (p.checkins ? '; ' + p.loads.High + ' high, ' + p.loads.Medium + ' medium, ' + p.loads.Low + ' low; ' + plural(p.thanks, 'thanks', 'thanks') + ' written' : '') : 'WP-13 not filled in']);
       if (c.on['WP-11']) rows.push(['Pause line (WP-11)', c.wp11 && c.wp11.lines[p.i] ? q(c.wp11.lines[p.i]) : 'Not written yet']);
+      // their own words from WP-02, on their own page only (and only because they wrote it in the file)
+      if (b.note) rows.push(['What ' + p.label + ' wanted to name first (WP-02, their own words)', q(b.note)]);
       // strengths: what this person brings
       if (p.thanks >= 2) strengths.push('Wrote ' + p.thanks + ' appreciations in the check-ins: keeps thanks flowing.');
       if (p.noticed >= 30) strengths.push('Noticed and handled ' + minText(p.noticed) + ' of work nobody asked for.');
@@ -2852,7 +3095,7 @@
       else if (F.w13 && p.checkins < 3) starter = 'What would make a 90-second daily check-in easy for you to keep?';
       else if (p.thanks >= 2) starter = 'What has felt good to notice this week?';
       else starter = 'What is one thing that is working for you right now, and one small thing that would help?';
-      return { i: p.i, label: p.label, rows: rows, strengths: strengths.slice(0, 4), help: help.slice(0, 3), starter: starter };
+      return { i: p.i, label: p.label, rows: rows, strengths: strengths.slice(0, 4), help: help.slice(0, 3), starter: starter, note: b.note || '' };
     });
   }
 
@@ -2927,6 +3170,24 @@
       r.practice = d.practice;
       r.rules = rules.map(function (x) { return x.title; });
     });
+    // Pillar V: when jobs are collecting on one person, the reading says so too, so the number and the
+    // words agree (every job can have an owner on paper while the unasked-for ones settle on one person).
+    var drift = (byP.V || []).filter(function (r) { return r.id === 'drift-to-one' || r.id === 'own-concentrated'; })[0];
+    pv.rows.forEach(function (r) {
+      if (r.n !== 'V') return;
+      if (drift && r.value != null && r.value > 0.6) {
+        r.value = 0.6;
+        r.shows = (r.shows === 'Not filled in yet.' ? '' : r.shows.replace(/\.$/, '') + '; ') + 'but jobs are collecting on one person (' + lc(drift.title) + ').';
+      } else if (!drift && r.value != null && r.value >= 0.7) {
+        r.betweenI = c.wp13 && c.wp13.thanks.length ? 'Keep the thanks going: they are what keeps a fair setup fair.' : D.V.between || pv.rows.filter(function (x) { return x.n === 'V'; })[0].between;
+      }
+    });
+    var scoredP = pv.rows.filter(function (r) { return r.value != null; });
+    if (scoredP.length >= 2) {
+      var sortedP = scoredP.slice().sort(function (a, b) { return b.value - a.value; });
+      pv.strongest = sortedP[0]; pv.care = sortedP[sortedP.length - 1];
+      pv.note = pv.strongest.value - pv.care.value < 0.05 ? 'The pillars you filled in read about the same. None stands out as needing more care than the others.' : '';
+    }
     return pv;
   }
 
@@ -3144,6 +3405,7 @@
   global.TOLFullPath = {
     NS: NS, FORMAT: FORMAT, VERSION: PKG_VERSION, ROADS: ROADS, ROAD_ORDER: ROAD_ORDER, NAMES: NAMES, PILLARS: PILLARS, MAX_PEOPLE: MAX_PEOPLE, MIN_PEOPLE: MIN_PEOPLE,
     build: build, regOf: regOf, blankData: blankData, fold: fold, sentence: sentence, fromSuite: fromSuite, fromFields: fromFields, fromJSON: fromJSON, readReport: readReport, canonical: canonical,
+    combine: combine, migrateSelf: migrateSelf, shareCopy: shareCopy, hasPrivate: hasPrivate, matchPeople: matchPeople, PRIVATE_RE: PRIVATE_RE,
     compute: compute, report: report, RULES: RULES, CHECKS: CHECKS, facts: facts, people: people, roleOf: roleOf, clampPeople: clampPeople, isoDate: isoDate, num: num, fmt: fmt, namesOf: namesOf
   };
 })(typeof window !== 'undefined' ? window : globalThis);

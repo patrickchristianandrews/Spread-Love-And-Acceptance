@@ -75,6 +75,13 @@
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
         ['/workpapers/wp-02-how-much-are-you-carrying.html','How much are you carrying?','How full your battery really is today.']
       ]},
+    { id:'new-baby', ico:'\uD83C\uDF7C', label:'We have a new baby',
+      say:'A new baby brings a lot of new jobs, and one nobody sees: keeping track of it all. When you are both tired, that job lands on whoever notices first. Ten minutes of listing the jobs and giving each one an owner can stop it landing on one of you by accident.',
+      picks:[
+        ['/new-parent.html','New baby, sharing the load','Three small steps: list every job, give each one an owner, and look at it once a week.'],
+        ['/lemonade-stand.html','The Lemonade Stand','Pick jobs from its task library, add your own, and see the split as a plain fact.'],
+        ['/upset-right-now.html','Upset right now?','For the 2 a.m. moments when you are both running on empty.']
+      ]},
     { id:'child-teen', ico:'\uD83E\uDDD2', label:'My kids fight, or I yell at them',
       say:'Kids fighting and parents yelling are both very common, and both can change. Short, calm steps work better than a big talk: stop, breathe, then come back and repair.',
       picks:[
@@ -105,6 +112,7 @@
       say:'Loss, a parent who needs more care, a quiet house, retirement, a new chapter: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
       picks:[
         ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
+        ['/retired-together.html','Retired and both home now','Sharing the house all day, handing over whole jobs, and finding your feet after work.'],
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
       ]},

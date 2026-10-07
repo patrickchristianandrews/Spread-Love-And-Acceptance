@@ -33,6 +33,13 @@
   .sx-exit{ margin-top:.6rem; font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.1rem; border-radius:999px; border:1px solid #8A4B2A; background:#FFFDF7; color:#5A2E16; cursor:pointer; }
   .sx-exit:hover{ background:#FFF1E4; }
   .sx-exit:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .sx-now{ margin:.9rem 0 1.2rem; }
+  .read .sx-now p{ max-width:none; }
+  .read .sx-now .sx-now-k{ margin:0 0 .4rem; }
+  .sx-now .sx-say{ margin:0 0 .7rem; }
+  .sx-now .sx-pace{ margin:0 0 .7rem; padding:.8rem 1rem; }
+  .sx-now .sx-pace output{ font-size:1.3rem; min-height:2.4em; }
+  .read .sx-now .sx-now-more{ margin:0; font-size:.98rem; }
   .sx-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 </style>
 <!-- seo:start -->
@@ -69,10 +76,22 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/upset-right-now.html#page","name":"Upset right now? Calm down together","headline":"Upset right now? Calm down together","description":"A five-minute page for two upset people: a pause line with a return time, a one-minute breathing pacer, and how to come back and say it kindly.","url":"https://spreadloveandacceptance.com/upset-right-now.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-04","dateModified":"2026-10-07","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Upset right now? Calm down together","item":"https://spreadloveandacceptance.com/upset-right-now.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body data-sensitive data-no-breathe>
+<body data-sensitive data-no-breathe data-no-offer data-no-private-note>
 <main class="read">
 <header class="read-head"><p class="read-code">Calm down together</p><h1>Upset right now?</h1>
 <p class="sx-safe-top no-bubble">If you’re afraid of the other person, or it isn’t safe, skip this page: see <a href="/safety.html">Not safe at home?</a> for people to talk to, or <a href="#not-safe">the helplines below</a>.</p></header>
+
+<div class="sx-now no-bubble" role="group" aria-label="Right now">
+<p class="sx-now-k"><strong>Right now:</strong> whoever feels it first says the pause line, and says when.</p>
+<p class="sx-say">“I want to get this right and I’m too worked up. Can we pick this up at eight?”</p>
+<div class="sx-pace">
+<output id="px-out" class="px-out" aria-hidden="true">Press start when you are ready.</output>
+<p id="px-say" class="px-say sx-sr" role="status" aria-live="polite"></p>
+<button type="button" class="sx-btn" id="px-btn">Start the breathing pacer</button>
+<p id="px-buzz-row" hidden style="margin:.8rem 0 0"><label style="display:inline-flex;gap:.5rem;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" id="px-buzz" style="width:1.25rem;height:1.25rem"> Feel it too: buzz with each count (short taps in, longer ones out)</label></p>
+</div>
+<p class="sx-now-more">Then move apart for twenty minutes and come back on time. All five steps are below. For next time, <a href="/pursue-withdraw.html#plan">make a pause plan together</a>.</p>
+</div>
 
 <p class="simple-lede">One phone, two upset people, five minutes. Read a step out loud, or take turns. Nothing here asks you to learn anything. Nothing you do is saved, and there is no sign-up.</p>
 
@@ -81,7 +100,7 @@
 A pause with a return time is not walking away. Whoever feels it first says it, and also says when.
 <p class="sx-say">“I want to get this right and I’m too worked up. Can we pick this up at eight?”</p></li>
 <li><strong>Let your body settle <span class="sx-time">1 minute</span></strong>
-Breathe out longer than you breathe in. The pacer below keeps time: in for 4, out for 6.</li>
+Breathe out longer than you breathe in. The pacer at the top of the page keeps time: in for 4, out for 6.</li>
 <li><strong>Move apart for a while <span class="sx-time">20 minutes or more</span></strong>
 Different rooms is fine. Drink water, walk, wash your face. Don’t rehearse the argument. A racing heart usually takes about twenty minutes to slow, and nothing said before then lands well.</li>
 <li><strong>Come back on time <span class="sx-time">the hard part</span></strong>
@@ -91,13 +110,6 @@ Keeping the return time is what makes the pause safe for the other person.
 First, each of you says what you heard the other say, and checks it: “What I heard is … did I get that right?” Then say yours in three parts: a fact, a feeling and one small ask.
 <p class="sx-say">“When the dishes sat overnight, I felt like I was on my own. Could we pick who does them on weeknights?”</p></li>
 </ol>
-
-<div class="sx-pace no-bubble">
-<output id="px-out" class="px-out" aria-hidden="true">Press start when you are ready.</output>
-<p id="px-say" class="px-say sx-sr" role="status" aria-live="polite"></p>
-<button type="button" class="sx-btn" id="px-btn">Start the breathing pacer</button>
-<p id="px-buzz-row" hidden style="margin:.8rem 0 0"><label style="display:inline-flex;gap:.5rem;align-items:center;min-height:44px;cursor:pointer"><input type="checkbox" id="px-buzz" style="width:1.25rem;height:1.25rem"> Feel it too: buzz with each count (short taps in, longer ones out)</label></p>
-</div>
 
 <div class="sx-safe no-bubble" id="not-safe" role="note" aria-labelledby="not-safe-h">
 <h2 id="not-safe-h">If you are afraid, or it is not safe</h2>
@@ -121,7 +133,7 @@ Lower your voice. If your child is small, kneel down to their eye level, or take
 Naming it out loud helps you, and it shows your child what to do with big feelings.
 <p class="sx-say">“I’m getting too loud. I’m going to take a breath.”</p></li>
 <li><strong>Breathe <span class="sx-time">1 minute</span></strong>
-In for 4, out for 6. The pacer above keeps time. Your child can breathe with you.</li>
+In for 4, out for 6. The pacer at the top of the page keeps time. Your child can breathe with you.</li>
 <li><strong>Make it right <span class="sx-time">1 minute</span></strong>
 Say sorry for the yelling, plainly. You can still keep the rule.
 <p class="sx-say">“I’m sorry I yelled. That wasn’t fair to you. Let’s try again.”</p></li>
@@ -135,11 +147,13 @@ Say sorry for the yelling, plainly. You can still keep the rule.
 <li><a href="/signal-translator.html">The Signal Translator</a></li>
 <li><a href="/night-garden.html">The Night Garden</a></li>
 <li><a href="/check-ins.html">Check-ins</a></li>
+<li><a href="/pursue-withdraw.html">One of you wants to talk now, the other needs space</a></li>
 </ul>
 <div class="try-this">
   <p><strong>Try this:</strong> If the same argument keeps coming back, it is usually the setup and not either of you. Try the weekly review when you are both calm.</p>
   <p><a href="/share-the-load.html">Share the load, step by step &rarr;</a> <a href="/start-here.html">Back to Start here</a></p>
 </div>
+<div class="tol-share-row tol-plain no-bubble"><button type="button" class="tol-share-btn" data-share data-share-title="Upset right now? Calm down together" data-share-text="A free five-minute page for two upset people: pause, breathe and come back. Nothing is saved." data-no-clip><span class="tol-share-ic" aria-hidden="true"></span><span class="tol-share-t">Share this page</span></button></div>
 </main>
 <script>
 (function () {

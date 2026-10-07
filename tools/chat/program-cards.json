@@ -383,6 +383,178 @@
       ]
     },
     {
+      "id": "pursuewithdraw",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "one of you wants to talk now, the other needs space",
+      "pat": "\\b(won.?t|wont|doesn.?t|never) let (anything|it|things) go\\b|\\bneeds? (some )?(space|time to (think|cool off|calm down))\\b.{0,60}\\b(talk|fight|argu\\w*|let it go|follow\\w*|keeps? going)\\b|\\b(talk|fight|argu\\w*|let (it|anything) go|follow\\w*|keeps? going)\\b.{0,60}\\bneeds? (some )?(space|time)\\b|\\b(walks?|walked|storms?|stormed) (away|off|out)\\b.{0,40}\\b(talk|try|trying|bring|argu\\w*|fight\\w*|every time|whenever)\\b|\\bevery time i (try to )?(talk|bring (it|something|anything) up)\\b|\\bpursu\\w*\\b.{0,40}\\bwithdraw\\w*|\\bwithdraw\\w*\\b.{0,40}\\bpursu\\w*|\\bfollows? me (from )?room to room\\b|\\bnever lets? me talk about\\b|\\b(leaves|left) the (house|room)\\b.{0,60}\\b(phone off|for hours|won.?t answer|doesn.?t answer)\\b|\\bturns? (his|her|their|the) phone off\\b|\\bget (him|her|them|my \\w+) to (stay|finish|keep talking)\\b|\\bfinish the (conversation|argument|talk)\\b|\\bhow long should (a|the|our) (break|pause|time ?out|cool ?down) (be|last)\\b|\\bpause (line|word)\\b|\\b(keeps?|kept) following me\\b|\\bwho is right\\b.{0,40}|\\b(wants|want) to talk (it out )?(now|right now)\\b.{0,60}\\b(space|later|time)\\b",
+      "notPat": "\\b(in law|inlaw|mother in law|father in law|parents visit|boss|coworker|teacher)\\b",
+      "keys": [],
+      "what": [
+        "This is one of the most common patterns couples get stuck in, and it belongs to both of you. One of you wants to sort it out now; the other needs time before they can talk well. The more one pushes, the more the other pulls back, and the more one pulls back, the more the other pushes. Neither of you is the problem; the pace mismatch is."
+      ],
+      "how": [
+        "If you’re the one who wants to talk now: being walked away from really hurts, and it can feel like being shut out. Ask for a return time rather than an answer right now. A set time is your guarantee the topic isn’t being dropped.",
+        "If you’re the one who needs space: a pause is fair, but on its own it can feel like abandonment. Always say when you’ll come back, then come back on time. That’s the hard part, and it’s what makes the pause safe for the other person.",
+        "Agree a pause word ahead of time, on a calm day: the word, the shortest break (often 20 minutes or more, until your body has settled), the return time, and the first sentence when you come back.",
+        "During the break, calm down rather than rehearse your case. Don’t follow the other person; let the return time do the work.",
+        "Nobody is “right” about the pace. You’re both protecting the relationship in your own way."
+      ],
+      "script": [
+        "I’m getting flooded and I don’t want to say something unfair. I need a break. I’ll come back at 8:30, and I want to finish this.",
+        "I can wait. Can we agree a time? Knowing when we’ll come back helps me let it go for now."
+      ],
+      "links": [
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html"
+        ],
+        [
+          "Upset right now? A pause with a return time",
+          "/upset-right-now.html"
+        ],
+        [
+          "How to stop fighting: 7 calm steps",
+          "/how-to-stop-fighting-with-your-partner.html"
+        ],
+        [
+          "Check-ins: one topic at a set time",
+          "/check-ins.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "familyduty",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "supporting family, sending money home",
+      "pat": "\\b(send|sends|sending|sent)\\b.{0,25}\\b(money|cash)\\b.{0,25}\\b(home|back home|to (my|his|her|their) (family|parents|mum|mom|mother|father|dad|relatives|people|siblings))\\b|\\bmoney (back )?home\\b|\\bremittance\\w*|\\b(family|people|parents) back home\\b|\\b(support|supporting|help|helping|provide for) (my|his|her|their) (parents|mum|mom|mother|father|dad|relatives|siblings|extended family|people back home)\\b|\\b(husband|wife|partner|boyfriend|girlfriend|spouse)\\b.{0,40}\\b(understand|get|accept|see)\\b.{0,30}\\b(support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(have to|must|need to|got to|duty to) (support|help|send money to|look after) (my|his|her|their) (family|parents|people)\\b|\\b(money|sends?|gives?)\\b.{0,40}\\b(family|parents|relatives)\\b.{0,50}\\b(can.?t|cannot|never|not) (save|saving)\\b|\\b(can.?t|cannot|never) (save|saving)\\b.{0,50}\\b(family|parents|relatives)\\b|\\bextended family\\b",
+      "notPat": "\\b(dementia|alzheimer\\w*|hospice|nursing home|caregiv\\w*|carer)\\b",
+      "keys": [],
+      "what": [
+        "In many families and cultures, supporting parents and relatives is a real duty, not a spending habit: sending money home, helping a sibling with school fees, an elder’s say in big decisions. When one partner grew up with that and the other didn’t, it can feel like a fight about money when it’s really about family and belonging. Both of your worries are fair: one of you is keeping a promise to family, and the other wants to know the two of you are secure too."
+      ],
+      "how": [
+        "Treat family support as its own line in your money plan, not as something to win or lose. Agree a regular amount together, and what happens when an emergency comes up.",
+        "Each of you leads with your own family. You explain your family’s needs and customs; your partner explains their worries about savings. Then decide together.",
+        "Put savings next to it, not against it: a small regular amount for each, so neither duty nor security is the one that always gives way.",
+        "Talk about it at a calm, set time, not right after a request from home arrives.",
+        "In the Lemonade Stand, you can mark a cost like this as an agreed amount rather than a shared bill to split, so it never turns into a debt between you."
+      ],
+      "script": [
+        "Supporting my parents isn’t a choice for me, it’s part of who I am. Can we agree a monthly amount together, so it’s planned and you know where we stand?",
+        "I respect that you look after your family. I worry about our savings. Can we find an amount for both?"
+      ],
+      "links": [
+        [
+          "Supporting family: parents, money home and duty",
+          "/family-obligations.html"
+        ],
+        [
+          "In-laws and extended family",
+          "/library/life.html#in-laws"
+        ],
+        [
+          "Culture, family and conflict styles",
+          "/library/conflict.html"
+        ],
+        [
+          "The Lemonade Stand: who does what, and who pays what",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "retired",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "retired and both home now",
+      "pat": "^retire(d|ment|ing)?$|\\b(retired|retirement|retiring)\\b|\\bunder (my|her|his|their|your) feet\\b|\\b(in (her|his|my|their) way|in the way) (all day|at home|around the house)\\b|\\b(feel|feeling|felt) (useless|in the way|like a spare part)\\b.{0,30}\\b(at home|around the house)?|\\b(find|have) (something|anything) useful to do\\b|\\b(both|we re both|we are both) (at )?home all day\\b|\\bhome all day (now|together)\\b",
+      "notPat": "\\b(died|passed away|passed|death|widow\\w*|funeral|lost my (husband|wife|partner))\\b",
+      "keys": [],
+      "what": [
+        "Retirement changes a home overnight. Two people who had separate days suddenly share the same rooms and hours, and routines that worked for decades can feel invaded. It’s very common for one of you to feel crowded and the other to feel useless or in the way. Neither is a failing; you’re building a new rhythm."
+      ],
+      "how": [
+        "Talk about the day, not just the jobs: when do you each want time alone, time together and time out of the house?",
+        "Re-divide whole jobs rather than “helping”. Owning a job (say, the food shop and meals on Tuesdays) means doing it your way from start to finish, including noticing when it needs doing.",
+        "When a job changes hands, agree what “done” means, then let the new owner do it their way. “You’re doing it wrong” is the fastest way to hand the job back.",
+        "The partner who has newly retired often needs a purpose outside the house too: a project, volunteering, friends, a regular commitment. That isn’t running away; it gives you both room.",
+        "Check in for a few minutes each evening about how sharing the day felt."
+      ],
+      "script": [
+        "I love having you home. I also miss having the house to myself sometimes. Can we plan some time apart each day?",
+        "I don’t want to just help. Which job could be completely mine?"
+      ],
+      "links": [
+        [
+          "Retired and both home now",
+          "/retired-together.html"
+        ],
+        [
+          "The Lemonade Stand: who does what",
+          "/lemonade-stand.html"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ],
+        [
+          "Turning toward: small daily moments",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "longdistance",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "long-distance and apart",
+      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Being apart makes small things heavier: a short text can read colder than it was meant, time zones squeeze the moments you have, and who calls whom can quietly become a scorecard. These are the distance’s problems more than either of yours."
+      ],
+      "how": [
+        "Agree a call rhythm together (which days, roughly when, who starts) so nobody has to keep asking and nobody keeps score.",
+        "Keep up small bids between calls: a photo, a question, “thinking of you”. They matter as much as long talks.",
+        "Read short texts carefully. “Fine.” across a distance can mean many things; ask rather than guess.",
+        "For a harder talk, use a set time on video, one topic, and take turns. Each of you can have the page open on your own screen.",
+        "Plan the next visit before the goodbye, so the gap has an end."
+      ],
+      "script": [
+        "I don’t want to keep score about who calls. Can we pick our call days together, so neither of us has to wonder?",
+        "When you wrote “Fine.” earlier, I wasn’t sure how you meant it. Are you okay?"
+      ],
+      "links": [
+        [
+          "Long-distance and apart",
+          "/long-distance.html"
+        ],
+        [
+          "Turning toward: share a small moment",
+          "/turning-toward.html"
+        ],
+        [
+          "Signal Translator: check a short text",
+          "/signal-translator.html"
+        ],
+        [
+          "Check-ins",
+          "/check-ins.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "calmnow",
       "kind": "intent",
       "first": true,
@@ -1453,6 +1625,107 @@
           "What are the red flags in a relationship?"
         ]
       ]
+    },
+    {
+      "id": "bioparent",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a parent caught between partner and kids",
+      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b",
+      "keys": [],
+      "what": [
+        "Being in the middle is one of the hardest spots in a blended family. You love your kids, you love your partner, and it can feel like every choice lets one of them down. That’s a very common feeling, and it isn’t a sign you’ve chosen wrong."
+      ],
+      "how": [
+        "Meet your partner privately first and agree a few house rules you both stand behind. Then you share them with your kids, so the rules come from their parent.",
+        "Ask your partner to lead with warmth for now and leave most discipline to you. That isn’t sidelining them; it’s how stepfamilies usually settle.",
+        "Give your partner a real role and say it out loud to the kids, like being in charge of Saturday breakfast or homework help.",
+        "Make time just for the two of you, too. A steady couple makes the kids feel safer, not less loved."
+      ],
+      "script": [
+        "Can we agree on bedtime and screen rules together tonight? Then I’ll tell the kids, and I’ll back you up when it comes up."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "For teens (to share with yours)",
+          "/teens.html"
+        ]
+      ],
+      "chips": [
+        [
+          "My partner feels like an outsider",
+          "My husband feels like an outsider in our home"
+        ]
+      ]
+    },
+    {
+      "id": "outsider",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling like an outsider in a blended family",
+      "pat": "\\b(feel|feels|feeling) like (an outsider|a guest|i don t belong|i dont belong|he doesn t belong|she doesn t belong)\\b|\\boutsider in (my|our|his|her) own (home|house|family)\\b|\\bguest in (my|our) own (home|house)\\b",
+      "keys": [],
+      "what": [
+        "Feeling like a guest in your own home is very common for stepparents, and for the partner who moved in. It usually eases with time, a clear role, and small shared routines, not by pushing to be accepted faster."
+      ],
+      "how": [
+        "Ask for one or two things that are clearly yours in the house, like a job, a routine, or a space, so you’re part of how things run.",
+        "Build one regular, low-pressure thing with each stepkid, with no rules attached: a drive, a game, a meal you cook together.",
+        "Tell your partner how it feels, without blame: “Sometimes I feel like a visitor here. Could we find a couple of things that are ours?”",
+        "Keep your own anchors too: your own kids’ time, your friends, your interests. You don’t have to earn your place by giving everything up."
+      ],
+      "script": [
+        "Sometimes I feel like a visitor here. Could we find a couple of things that are ours, and could you back me up on them with the kids?"
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "Turning toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "exschedule",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "agreeing holidays and schedules with an ex",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b",
+      "keys": [],
+      "what": [
+        "Holiday schedules are one of the most common sore spots between separated parents. Your court order or parenting plan comes first; if it covers holidays, that’s the answer, and you can point to it calmly."
+      ],
+      "how": [
+        "Check the parenting plan or court order before you write anything. If it’s silent, propose something simple and fair, like alternating years or splitting the day.",
+        "Write it short and factual, about the kids and the dates only: “Proposal for Christmas: kids with me Dec 24 to noon Dec 25, with you noon Dec 25 to Dec 26. We swap next year. Can you confirm by Nov 15?”",
+        "Don’t tell the kids the plan until both of you have agreed it, so they’re never in the middle.",
+        "If you can’t agree, a family mediator or your lawyer can help. Keep copies of what was sent."
+      ],
+      "script": [
+        "Proposal for Christmas: the kids with me Dec 24 to noon Dec 25, with you noon Dec 25 to Dec 26. We swap next year. Can you confirm by Nov 15?"
+      ],
+      "links": [
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ],
+        [
+          "If this may end up in court",
+          "/co-parenting.html#court"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "exharass",
@@ -4767,23 +5040,32 @@
         "use it together"
       ],
       "what": [
-        "Yes. The Carrier Wave Decoder has a Together tab made for this. Each of you marks where you were during a moment that went sideways (pace, tone and timing), and your guess about the other person. Then you reveal both at once and see where you really differed, and where you just misread each other.",
-        "You can pass one phone back and forth, or use two phones: one of you starts and gets a short code, and sends it to the other however you like (a text works). The site never sends anything itself, and your answers stay on your own devices."
+        "Yes. Each of you can fill in your own side on your own phone, then send it to the other. The site never sends anything itself: you pass a short code or a file however you like (a text works), and everything stays on your own devices."
       ],
       "how": [
-        "Open the Carrier Wave Decoder and choose the Together tab.",
-        "Pick “One device” to pass the phone back and forth, or “Two devices: start it” to get a code.",
-        "The other person picks “Two devices: I got a code” and enters it, then you reveal together.",
-        "For a daily habit together, try the 90-second daily check-in (WP-13)."
+        "Lemonade Stand: under the names, “On two phones?” has “Send my side to my partner” (a code or a file) and “Add my partner’s side”, which merges by name and asks before replacing anything.",
+        "Wavelength: “Share my Wave Code” sends a link that opens the comparison with your code already filled in.",
+        "Wiring Card: “Copy the card” includes a card code; your partner taps “Paste my partner’s card” to compare.",
+        "Worksheets: each of you saves your own draft or PDF and sends it; loading the second one offers to combine them instead of replacing.",
+        "Carrier Wave Decoder: the Together tab gives a short code so you can each mark a moment that went sideways and reveal both at once.",
+        "Household names: the Lemonade Stand can send your household list as a code, so names don’t have to be typed twice."
       ],
       "links": [
         [
-          "The Carrier Wave Decoder: Together",
-          "/carrier-wave-decoder.html#together"
+          "The Lemonade Stand: send and add a side",
+          "/lemonade-stand.html"
         ],
         [
-          "The 90-second daily check-in (WP-13)",
-          "/workpapers/wp-13-daily-check-in.html"
+          "Wavelength: compare your codes",
+          "/wavelength.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "The Carrier Wave Decoder: Together",
+          "/carrier-wave-decoder.html#together"
         ]
       ]
     },

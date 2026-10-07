@@ -477,8 +477,8 @@
     '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b',
     // control and fear: someone watching, limiting or frightening you is a safety matter, not a talking-better one
     '\\b(checks|checked|reads|read|goes through|went through|looks through|searches|tracks|monitors|takes|took|smashed|broke) (my|all my) (phone|texts|messages|emails?|location|social media)\\b',
-    '\\b(tracks|follows|watches) (me|where i (am|go))\\b', '\\b(tracking|spy|spying) (app|apps|on me)\\b',
-    '\\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk|have|work|out|sleep|use)\\b',
+    '\\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\\b', '\\b(tracking|spy|spying) (app|apps|on me)\\b',
+    '\\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \\w+)|have|work|out|sleep|use)\\b',
     '\\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\\b',
     '\\b(scared|afraid|frightened|terrified) (to go home|to leave|to tell (him|her|them)|of what (he|she|they).?(ll| will) do|of (my|his|her) (partner|husband|wife|boyfriend|girlfriend|ex))\\b',
     '\\b(scared|afraid|frightened|terrified) (of|for) (him|her)\\b', '\\bnot safe\\b', '\\bunsafe\\b',
@@ -487,13 +487,16 @@
     '\\b(isolat\\w+) me\\b', '\\bcut me off from (my )?(friends|family)\\b', '\\b(threatens|threatened) to (leave with|take|hurt) (the )?(kids|children|baby|dog|cat|pet)\\b',
     '\\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\\b',
     '\\bgaslight\\w*', '\\bmakes? me feel (crazy|like i m crazy|like im crazy)\\b',
-    '\\bthrows things\\b', '\\bthrew (a|the|my) \\w+ at me\\b', '\\bblocks? the door\\b', '\\bcoercive\\b'
+    '\\bthrows things\\b', '\\bthrew (a|the|my) \\w+ at me\\b', '\\bblocks? the door\\b', '\\bcoercive\\b',
+    // intimidation: violence near you, not at you, is still a safety matter
+    '\\bpunch(es|ed|ing)? (a hole in |holes in )?(the|a) (wall|door|walls|doors)\\b', '\\b(smash|smashes|smashed|smashing|break|breaks|broke|breaking|throw|throws|threw|throwing) (things|stuff|plates|dishes|my \\w+)\\b',
+    '\\bthrew (a|the|my|his|her) \\w+ (across|against|at)\\b', '\\b(stands?|stood|standing) (in|at|across) the (door|doorway)\\b', '\\b(block|blocks|blocked|blocking) (the |my )?(door|doorway|way out|way)\\b', '\\bso i can.?t (get out|leave)\\b'
   ].join('|'));
   // the words people use when they may not want to live: these also get the 988 line
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
   // These get a plainer answer with the difference between agreed sharing and control, the hotline, and a way to keep talking.
-  var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bgaslight\w*|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\bcontrolling\b|\bcoercive\b/;
+  var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bgaslight\w*|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\bcontrolling\b|\bcoercive\b/;
   var HARD = /\b(hit|hits|hitting|slap\w*|punch\w*|chok\w*|kick\w*|strangl\w*|shov\w*|push\w* me|beat\w*|kill\w*|die|dead|suicid\w*|hurt\w*|harm\w*|rape\w*|assault\w*|gun|knife|weapon|threat\w*|scared|afraid|frightened|terrified|stalk\w*|overdos\w*|not safe|unsafe|violen\w*|abus\w*|throws|threw|blocks? the door|grabb?\w*)\b/;
   // a parent reading a teen's phone is a different question from a partner doing it
   var PARENT_PHONE = /\b(mom|mum|dad|parents?|mother|father|stepmom|stepdad|stepmother|stepfather)\b.{0,40}\b(read\w*|check\w*|go(es)? through|look\w* (at|through)|track\w*|take\w*|took)\b.{0,25}\b(my )?(texts|messages|phone|location|dms|chats?)\b|\b(is|are) (my )?(mom|mum|dad|parents?) allowed to\b/;
@@ -916,7 +919,7 @@
   }
   function whoCtx(who, noun) {
     var W = IDX.sit.who[who] || IDX.sit.who.other;
-    var them = noun ? 'your ' + noun.replace(/^(my|our|the|a|an)\s+/, '') : W.them;
+    var them = noun ? 'your ' + noun.replace(/^(my|our|the|a|an)\s+/, '').replace(/\b(mother|father|sister|brother|son|daughter|parent)(s?) ?in ?law(s?)\b/g, function (m, a, b, c) { return a + (b || '') + '-in-law' + (c || ''); }) : W.them;
     return { them: them, they: 'they', their: 'their', who: who, W: W };
   }
   // actor: who does the thing the issue is about ('self', 'other', or '' when it isn't clear)
@@ -1051,7 +1054,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {

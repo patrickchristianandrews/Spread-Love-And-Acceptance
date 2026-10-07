@@ -20,7 +20,7 @@
   ].join('\n');
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
-  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
+  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'defend', 'brushaside', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
   var GOOD = { repair: 1, pause: 1, warmth: 1, feeling: 1, ask: 1 };
   if (window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById('cr-lookfor'));
 
@@ -120,10 +120,17 @@
       mv += '</ol>';
       if (r.drafts && r.drafts.length) {
         mv += '<h3 style="margin-top:1.1rem;">Replies you could send, built from this conversation</h3><ul class="cr-drafts">';
-        r.drafts.forEach(function (d) {
+        r.drafts.filter(function (d) { return !(d.label === 'Own your part' && r.owns && r.owns.length); }).forEach(function (d) {
           mv += '<li><span class="cr-dl">' + esc(d.label) + '</span><div class="cr-script"><q>' + esc(d.text) + '</q><button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(d.text) + '">Copy</button></div></li>';
         });
         mv += '</ul>';
+      }
+      if (r.owns && r.owns.length) {
+        mv += '<h3 style="margin-top:1.1rem;">Each side’s part</h3><p class="cr-hint">' + (r.owns.length > 1 ? 'Both of you said something that may have added heat. Owning your own line first makes it easier for the other person to own theirs.' : 'One line that may have added heat, and a way to own it. The other side may still have their own part that the words don’t show.') + '</p><ul class="cr-drafts">';
+        r.owns.forEach(function (o) {
+          mv += '<li><span class="cr-dl">' + esc(o.mine ? 'Your part' : o.who + '’s part') + ' · ' + esc(R.KINDS[o.kind].label.toLowerCase()) + '</span><div class="cr-script"><q>' + esc(o.script) + '</q>' + (o.mine ? '<button type="button" class="cr-btn is-quiet is-small" data-copy="' + esc(o.script) + '">Copy</button>' : '') + '</div></li>';
+        });
+        mv += '</ul>' + (r.owns.some(function (o) { return !o.mine; }) ? '<p class="cr-note">Their part is theirs to say. It’s here so the read stays fair, not to send to them.</p>' : '');
       }
       mv += '<p class="cr-note">Change anything in [square brackets] to fit. Short beats perfect.</p>';
       html += drop('How to respond', mv, true, '', 'is-key');
@@ -185,7 +192,7 @@
     var endsCalm = r.level === 'calm' && r.trend !== 'shutdown';
     parts.push('<p>' + chip +
       plural(t.length, 'message') + ': ' + r.mine + ' from you, ' + r.theirs + ' from ' + esc(them) + '.' +
-      (r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : '') + '</p>');
+      (r.topic ? ' It seems to be about <strong>' + esc(r.topic) + '</strong>.' : r.topicUnsure ? ' The words don’t make it clear what it’s mostly about, so the Reader won’t guess.' : '') + '</p>');
     var startWarm = t[0].heat >= 1.2;
     var story = 'It starts ' + (startWarm ? 'already tense' : 'calm') + '. ';
     if (r.turned > 0) story += 'It turns at <strong>message ' + (r.turned + 1) + '</strong>, from ' + (t[r.turned].mine ? 'you' : esc(t[r.turned].who)) + ': “' + esc(snip(t[r.turned].text, 70)) + '”. ';
@@ -196,7 +203,7 @@
     // The closing line has to agree with the "Ends …" chip above it
     story += {
       shutdown: 'By the end someone has pulled back. That isn’t the same as calm: it can mean they’re overwhelmed, or hurt.',
-      rising: r.level === 'calm' ? 'It gets a touch warmer at the end, but it still ends calm.' : (r.peak < 3 ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'),
+      rising: r.level === 'calm' ? 'It gets a touch warmer at the end, but it still ends calm.' : r.edgeRise && r.peak < 3 ? 'More of the lines carry an edge toward the end, on both sides, so it gets tenser as it goes.' : (r.peak < 3 ? 'It gets a little tenser toward the end.' : 'By the end it’s still heating up.'),
       cooling: endsCalm ? 'By the end it has cooled down.' : 'It cools a little from its hottest point, but it still ends ' + level + '.',
       steady: endsCalm ? (startWarm ? 'It settles down, and ends calm.' : 'It stays calm to the end.') : (startWarm ? 'It stays about as ' + level + ' to the end.' : 'It stays fairly ' + level + ' to the end.'),
       short: ''

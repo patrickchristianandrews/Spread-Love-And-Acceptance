@@ -436,7 +436,7 @@
     for (var i = 0; i < n; i++) {
       d.setPage(i);
       d.line(self.L, 744, self.R, 744, COLORS.line, 0.5);
-      d.text(self.L, 756, self.enc('Created on this device, ' + created + '. Nothing entered was sent to or stored by the website. Keep this file somewhere private.'), 'Helvetica', 7, COLORS.soft);
+      d.text(self.L, 756, self.enc('Created on this device, ' + created + '. Nothing entered was sent to or stored by the website. ' + (self.schema.privateNote || 'Keep this file somewhere private.')), 'Helvetica', 7, COLORS.soft);
       d.text(self.L, 766, self.enc('A self-reflection worksheet, not a clinical tool. It describes the arrangement, never any one person.'), 'Helvetica', 7, COLORS.soft);
       var pg = self.enc('Page ' + (i + 1) + ' of ' + n);
       d.text(self.R - global.TOLPDF.textWidth(pg, 'Helvetica', 7), 766, pg, 'Helvetica', 7, COLORS.soft);
@@ -456,7 +456,12 @@
     var ctx = R.ctx;
 
     var meta = [];
-    if (schema.people) ctx.people().forEach(function (c, i) { meta.push([labelFor(i), ctx.name(c)]); });
+    // the names themselves when they are given ("Lena and Sam"), not "Person A" and "Person B"
+    if (schema.people) {
+      var named = ctx.people().filter(function (c) { return String(state.values['partner' + c] || '').trim(); });
+      if (named.length) meta.push([ctx.count() > 1 ? 'On this sheet' : 'Name', ctx.people().map(function (c) { return ctx.name(c); }).join(ctx.count() > 2 ? ', ' : ' and ')]);
+      else ctx.people().forEach(function (c, i) { meta.push([labelFor(i), ctx.name(c)]); });
+    }
     (schema.meta || []).forEach(function (f) {
       meta.push([f.label, f.type === 'date' ? formatDate(state.values[f.id]) : (state.values[f.id] || '')]);
     });
@@ -766,6 +771,18 @@
     var self = this, ctx = this.ctx(), fixed = fixedRowsFor(sec, this.state);
     var rows = fixed ? this.state.tables[sec.id].slice(0, fixed.length) : this.state.tables[sec.id];
     var box = h('div', { className: 'wpf-table-box' });
+    // A day-by-day table with a row for each person: each person fills in only their own rows, so it
+    // can show one person's rows at a time (handy on a shared device). Nothing is hidden from the PDF.
+    this.rowsFor = this.rowsFor || {};
+    var only = sec.personDays && ctx.count() > 1 && this.rowsFor[sec.id] ? this.rowsFor[sec.id] : '';
+    if (only && ctx.people().indexOf(only) < 0) only = '';
+    if (sec.personDays && ctx.count() > 1) {
+      var pid = 'f' + (++this.uid), sel = h('select', { id: pid, 'data-rows-for': sec.id });
+      sel.appendChild(h('option', { value: '', text: 'Everyone\u2019s rows', selected: !only ? 'selected' : null }));
+      ctx.people().forEach(function (c) { sel.appendChild(h('option', { value: c, text: 'Only ' + ctx.name(c) + '\u2019s rows', selected: only === c ? 'selected' : null })); });
+      box.appendChild(h('div', { className: 'wpf-rows-for' }, [h('label', { for: pid, text: 'Filling in your own rows? Show ' }), sel]));
+      if (only) box.appendChild(h('p', { className: 'wpf-turn', role: 'note', text: 'These are ' + ctx.name(only) + '\u2019s rows. Only ' + ctx.name(only) + ' fills them in, about their own day. On a shared device? Hand it over here.' }));
+    }
     var table = h('table', { className: 'wpf-table' + (sec.fixedRows ? ' wpf-fixed' : '') });
     var headRow = h('tr');
     if (sec.fixedRows) headRow.appendChild(h('th', { scope: 'col' }, [h('span', { className: 'visually-hidden', text: 'Person' })]));
@@ -781,6 +798,7 @@
     var body = h('tbody');
     rows.forEach(function (r, i) {
       var tr = h('tr', sec.examples ? { 'data-ex-table': sec.id, 'data-ex-row': String(i) } : null);
+      if (only && r && r.who !== only) tr.hidden = true;
       if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
       sec.columns.forEach(function (c, ci) {
         var td = h('td', { 'data-label': c.label });
@@ -915,6 +933,15 @@
 
   A.onInput = function (e) {
     var t = e.target;
+    if (t.getAttribute('data-rows-for')) {
+      if (e.type !== 'change') return;
+      this.rowsFor = this.rowsFor || {}; this.rowsFor[t.getAttribute('data-rows-for')] = t.value;
+      var y = global.scrollY, id = t.getAttribute('data-rows-for');
+      this.render();
+      global.scrollTo(0, y);
+      var again = this.root.querySelector('[data-rows-for="' + id + '"]'); if (again) again.focus();
+      return;
+    }
     var val = t.type === 'checkbox' ? t.checked : t.value;
     var tbl = t.getAttribute('data-table');
     if (tbl && t.getAttribute('data-col')) {
@@ -1222,7 +1249,7 @@
     var draft = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state };
     download(JSON.stringify(draft, null, 2), this.fileBase() + '-draft.json', 'application/json');
     this.dirty = false;
-    this.status('Draft file downloaded. Open it here later to keep working.');
+    this.status('Draft file downloaded. Open it here later to keep working, or send it to someone on your road so they can add their part.');
   };
 
   // A fillable PDF from this site, filled in on a phone or computer, opens back into the form.
@@ -1362,7 +1389,9 @@
 
     var fileInput = document.getElementById('wpf-file');
     document.getElementById('wpf-pdf').addEventListener('click', function () { app.savePdf(); });
-    document.getElementById('wpf-save').addEventListener('click', function () { app.saveDraft(); });
+    var saveBtn = document.getElementById('wpf-save');
+    if (saveBtn && !saveBtn.title) saveBtn.title = 'A small file to keep, or to send to someone on your road so they can add their part';
+    saveBtn.addEventListener('click', function () { app.saveDraft(); });
     document.getElementById('wpf-open').addEventListener('click', function () { fileInput.click(); });
     document.getElementById('wpf-clear').addEventListener('click', function () { app.clear(); });
     var fill = document.getElementById('wpf-fillable');
