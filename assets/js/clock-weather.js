@@ -12,7 +12,8 @@
     if (!el) return;
     var t = ''; try { t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) {}
     var narrow = window.innerWidth <= 560;   // on a phone it stays short so it never sits under the Puddles button
-    el.textContent = narrow ? t.replace(' ', '\u00a0') + ' ' + (WX ? WX.icon + WX.deg + '°' : '📍') : t + ' · ' + (WX ? WX.icon + ' ' + WX.deg + '° ' + WX.text : '📍 allow location for weather');
+    // just the time until someone turns the weather on (the note explains the rest when tapped)
+    el.textContent = narrow ? t.replace(' ', '\u00a0') + (WX ? ' ' + WX.icon + WX.deg + '°' : '') : t + (WX ? ' · ' + WX.icon + ' ' + WX.deg + '° ' + WX.text : '');
     el.classList.toggle('is-set', !!WX);
     el.setAttribute('aria-label', 'Local time ' + t + (WX ? ', ' + WX.deg + ' degrees, ' + WX.text : '. Open to allow your location for the weather'));
   }
@@ -58,9 +59,9 @@
       '.tol-cw.is-set{cursor:pointer}.tol-cw:hover,.tol-cw:focus-visible{opacity:1;background:rgba(255,253,248,.96)}.tol-cw:focus-visible{outline:2px solid #2B5B8C;outline-offset:2px}' +
       '@media (prefers-color-scheme:dark){.tol-cw{color:#E4D7FF;border-color:rgba(228,215,255,.35);background:rgba(20,14,34,.72)}.tol-cw:hover,.tol-cw:focus-visible{background:rgba(20,14,34,.96)}}' +
       '.tol-cw-card{position:fixed;left:max(8px,env(safe-area-inset-left));bottom:calc(max(6px,env(safe-area-inset-bottom)) + 2.1rem);z-index:41;max-width:min(20rem,calc(100vw - 16px));padding:.8rem .95rem;border-radius:16px;background:#FFFDF8;color:#2B2140;box-shadow:0 8px 28px rgba(30,20,60,.3);border:1px solid #D9CFEE;font:500 .95rem/1.4 Lora,Georgia,serif}.tol-cw-card[hidden]{display:none}.tol-cw-t{margin:0 0 .25rem;font:700 1.02rem Fraunces,Georgia,serif}.tol-cw-p{margin:0 0 .6rem}.tol-cw-b{display:flex;flex-wrap:wrap;gap:.4rem}.tol-cw-b button{min-height:44px;padding:.4rem .9rem;border-radius:999px;border:1.5px solid #8C7DB5;background:#fff;color:#2B2140;font:600 .9rem Lora,Georgia,serif;cursor:pointer}.tol-cw-b .is-main{background:#3C3350;color:#fff;border-color:#3C3350}' +
-      'html.pc-lock .tol-cw,html.pc-lock .tol-cw-card,html.tv-quiet .tol-cw,.tol-cw[hidden]{display:none}@media print{.tol-cw{display:none}}';
+      'html.pc-lock .tol-cw,html.pc-lock .tol-cw-card,html.tv-quiet .tol-cw,html.tol-text-xl .tol-cw,html.tol-text-xxl .tol-cw,html.tol-easy .tol-cw,.tol-cw[hidden]{display:none}@media print{.tol-cw{display:none}}';
     document.head.appendChild(st);
-    el = document.createElement('button'); el.type = 'button'; el.className = 'tol-cw'; el.title = 'Local time and weather. Tap for the weather where you are.';
+    el = document.createElement('button'); el.type = 'button'; el.className = 'tol-cw'; el.title = 'Local time. Tap to add the weather where you are.';
     card = document.createElement('div'); card.className = 'tol-cw-card'; card.hidden = true; card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', 'Local weather');
     document.body.appendChild(card);
     el.addEventListener('click', function () { if (!card.hidden) { card.hidden = true; return; } openCard(); });
