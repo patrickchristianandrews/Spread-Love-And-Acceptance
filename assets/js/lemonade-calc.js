@@ -1301,13 +1301,24 @@
 
   function recalc() {
     var t = totals(state.jobs), p = pcts(t), any = t.some(function (x) { return x > 0; }) && !anyBad(state.jobs);
+    var wait = any ? waitingFor() : [];
     var wraps = document.querySelectorAll('#glasses .ls-gwrap');
     wraps.forEach(function (w, i) {
-      w.querySelector('.ls-juice').style.height = (any ? Math.max(4, p[i] * 0.92) : 0) + '%';
-      w.querySelector('.ls-pct').textContent = any ? Math.round(p[i]) + '%' : '—';
-      w.querySelector('.ls-gname').textContent = nameOf(i) + (any ? ' · ' + r1(t[i]) + 'h' : '');
+      // while a side is still to come, no percentages: they would read as a verdict
+      w.querySelector('.ls-juice').style.height = (any && !wait.length ? Math.max(4, p[i] * 0.92) : 0) + '%';
+      w.querySelector('.ls-pct').textContent = any && !wait.length ? Math.round(p[i]) + '%' : '—';
+      w.querySelector('.ls-gname').textContent = nameOf(i) + (wait.indexOf(i) >= 0 ? ' · waiting' : any ? ' · ' + r1(t[i]) + 'h' : '');
     });
-    $('balance-line').textContent = hoursSentence();
+    var bl = $('balance-line');
+    bl.textContent = hoursSentence();
+    // a real result is on the page (the "What you got from this" card waits for it)
+    if (any && !wait.length) bl.setAttribute('data-ls-result', '1'); else bl.removeAttribute('data-ls-result');
+    var ws = $('wait-skip');
+    if (ws) {
+      var wn = waitNames(wait);
+      ws.hidden = !wait.length;
+      ws.textContent = (wn.length === wait.length && wn.length ? joinNames(wn) + (wn.length === 1 ? ' has' : ' have') : 'The other side has') + ' nothing to add this week? Show the split anyway';
+    }
     $('money-line').textContent = moneySentence();
     // per-category hours beside each group heading
     var vp = visiblePeople();
