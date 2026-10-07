@@ -93,6 +93,17 @@ details.more > summary{cursor:pointer;font-weight:600;min-height:44px;display:fl
 textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);background:var(--bg);border-radius:var(--radius);padding:8px 10px;font:inherit;font-size:.95rem;resize:vertical}
 @media (max-width:600px){ .cmp thead{display:none} .cmp tr{display:block;border-bottom:1px solid var(--line);padding:6px 0} .cmp th,.cmp td{display:block;border:0;padding:3px 6px} .cmp td[data-l]::before{content:attr(data-l) ": ";font-family:var(--mono);font-size:.7rem;color:var(--brass-ink,#7A5620)} }
 .wallet{display:none}
+.wlfill{margin:10px 0 0}
+.wlfill .hint{margin:6px 0 0}
+.wlfill .chips button{background:#FFF8E6}
+.linkish{background:none;border:0;padding:0;color:var(--focus);text-decoration:underline;text-underline-offset:3px;font-size:inherit;min-height:0}
+.lgroup{margin:16px 0 0;padding:10px 12px 12px;border:1px dashed var(--line);border-radius:var(--radius);background:var(--bg)}
+.lgroup .ghead{font-family:var(--display);font-weight:600;margin:0}
+.lgroup .ghead .how{font-family:var(--body);font-weight:400;color:var(--muted);font-size:.8rem}
+.lgroup .lab{margin-top:8px}
+.sheet .wavecode{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;color:#2B5B8C;margin:0 0 4px}
+.cmp-shared{margin:6px 0 4px;padding:8px 12px;background:#E4EFE3;border-left:3px solid var(--credit);border-radius:var(--radius);font-size:.95rem}
+.cmp-shared + .cmp-shared{background:#FFF8E6;border-left-color:var(--brass)}
 @media print{
   body.print-wallet .layout, body.print-wallet .note, body.print-wallet #compare{display:none!important}
   body.print-wallet .wallet{display:flex!important;flex-wrap:wrap;gap:12px}
@@ -328,13 +339,97 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const custom = (st.custom[line.id]||"").trim();
     if(custom) chosen.push(custom);
     // each part is its own sentence: a capital letter to start, a full stop to end
-    return chosen.map(t=>{ t = t.trim(); if(!t) return ""; t = t.charAt(0).toUpperCase() + t.slice(1); return /[.!?…"”')]$/.test(t) ? t : t + "."; }).filter(Boolean).join(" ");
+    return chosen.map(t=>{ t = t.trim(); if(!t) return ""; t = t.charAt(0).toUpperCase() + t.slice(1); return /([.!?…"”']|[.!?…]\))$/.test(t) ? t : t + "."; }).filter(Boolean).join(" ");
   }
 
   function wiringLabel(who){
     const ids = [...state[who].wiring];
     if(!ids.length) return "";
     return ids.map(id=>(WIRING.find(w=>w[0]===id)||[,""])[1]).filter(Boolean).join(". ") + ".";
+  }
+
+  // "Fill from my Wavelength answers": reads only the Wavelength results already in this browser (kept on this device,
+  // or in this tab), adds picks that fit, and never takes off what you picked yourself. Undo puts it all back.
+  function wlResults(){ try{ return window.TOLWavelengthData ? window.TOLWavelengthData.results() : []; }catch(e){ return []; } }
+  function waveLabel(code){ let a = ""; try{ a = window.TOLWavelengthData ? window.TOLWavelengthData.archetype(code) : ""; }catch(e){} return code + (a ? ", " + a.replace(/^The /, "the ") : ""); }
+  // what each Wavelength choice adds to the card: [line, option], with "wire" for "How words reach me"
+  const FROM_WL = {
+    // Part 1: pace
+    "I like to sleep on big decisions":[["time","tomorrow"]], "“Five minutes” is a guess for me: time slips away":[["adhd","time"]], "Getting started is the hardest part":[["adhd","steps"]],
+    "I interrupt because the thought will vanish, not because I’m not listening":[["adhd","vanish"]], "I need processing time before I can answer":[["time","min"],["wire","moment"]],
+    "Sudden plan changes cost me a lot of energy":[["wire","change"]], "Transitions go better with a heads-up":[["wire","change"]], "When I’m overloaded, my words can go offline":[["quiet","load"]],
+    "Reading long messages takes extra energy":[["wire","longtext"]], "I’m faster out loud than in writing":[["wire","spoken"]], "Noise or clutter slows my thinking down":[["wire","noise"]],
+    "I notice a lot at once, then need quiet to sort it":[["depleted","volume"]],
+    // Part 2: lens
+    "I like the plan written down":[["receive","list"]], "I need it chunked into small, visible steps":[["adhd","steps"]], "Out of sight really is out of mind":[["adhd","remind"]],
+    "Vague plans make me uneasy":[["ask","could"]], "Long written steps blur together for me":[["wire","longtext"]],
+    // Part 3: sending
+    "I need to calm down before I can talk it through":[["upset","space"]], "I forget to reply, but I do care":[["adhd","forget"]],
+    // Part 4: receiving
+    "Please say it directly. I won’t guess right":[["ask","headline"],["avoid","hints"]], "How you say it matters as much as what you say":[["wire","tone"]], "I need a moment before responding to hard news":[["time","min"]],
+    "Criticism can hit hard and fast":[["adhd","crit"]], "Give me the headline first, then the details":[["ask","headline"]], "Reminders help me. They aren’t nagging":[["adhd","remind"]],
+    "Write it down or I may not remember it":[["receive","writing"],["wire","written"]], "I take words literally":[["words","literal"]], "Hints and implied meaning are hard to catch":[["avoid","hints"]],
+    "Tone of voice can be hard for me to read":[["words","literal"]], "Written follow-ups help me process":[["receive","writing"]], "Too much at once overloads me":[["wire","fast"],["receive","one"]],
+    "Tell me out loud rather than in a long text":[["receive","call"],["avoid","long"]], "Short lists beat paragraphs":[["receive","list"]], "Give me time to read without pressure":[["wire","longtext"]],
+    "I pick up on moods quickly, even unspoken ones":[["wire","tone"]], "A harsh tone can stay with me for days":[["avoid","loud"]],
+    // Part 6: what helps me feel understood
+    "A heads-up before big changes":[["wire","change"],["avoid","surprise"]], "Telling me what you need, plainly":[["ask","headline"],["avoid","hints"]], "Time alone to recharge":[["quiethelp","time"]],
+    "Doing tasks side by side (body doubling)":[["adhd","double"]], "Gentle reminders without blame":[["adhd","remind"]], "Help breaking big tasks into steps":[["adhd","steps"]], "Patience when I lose track of time":[["adhd","time"]],
+    "Plans shared in advance":[["avoid","surprise"],["notice","day"]], "Quiet, low-sensory places to talk":[["sensory","noise"]], "Clear, literal language":[["words","literal"]],
+    "Room to stim or step away":[["sensory","room"],["sensory","breaks"]], "Texting instead of calling":[["receive","writing"]], "Voice notes or calls instead of long texts":[["receive","voice"],["avoid","long"]],
+    "Visuals, lists and examples":[["receive","list"]], "No judgment about spelling or reading pace":[["avoid","spelling"]], "A soft voice during hard talks":[["avoid","loud"]],
+    "Downtime after busy days":[["depleted","volume"]], "Reassurance when things feel tense":[["upset","signal"]]
+  };
+  // Part 7, the statement: [step, choice]
+  const FROM_WL_STMT = { "wired:senses":[["sensory","noise"]], "helps:spacetime":[["upset","space"],["depleted","return"]], "helps:okay":[["upset","signal"]], "helps:written":[["quiethelp","write"]],
+    "helps:headsup":[["wire","change"]], "drains:change":[["wire","change"]], "drains:noise":[["sensory","noise"]], "drains:interrupt":[["interrupt","pause"]] };
+  function picksFromWl(r){
+    const out = [], a = r.answers || {};
+    // the statements you tapped come first, since they're the most specific; when two point opposite ways, the first one stays
+    Object.keys(r.chips||{}).forEach(k=>(r.chips[k]||[]).forEach(t=>{ (FROM_WL[t]||[]).forEach(x=>out.push(x)); }));
+    Object.keys(r.statement||{}).forEach(k=>(r.statement[k]||[]).forEach(id=>{ (FROM_WL_STMT[k+":"+id]||[]).forEach(x=>out.push(x)); }));
+    // then pace and how words land, from the Wave Code and the either/or answers
+    out.push(r.code[0]==="Q" ? ["time","sec"] : ["time","min"]);
+    out.push(r.code[3]==="E" ? ["words","literal"] : ["words","tone"]);
+    if(a.pace && a.pace[0]==="b") out.push(["wire","moment"]);
+    if(a.pace && a.pace[2]==="b") out.push(["wire","change"]);
+    if(a.lens && a.lens[1]==="b") out.push(["receive","list"]);
+    if(a.recv && a.recv[2]==="a") out.push(["avoid","hints"], ["avoid","sarcasm"]);
+    return out;
+  }
+  // add one pick, unless it's there already, the line takes one answer and has it, or it points the other way from a pick on the card
+  function addPick(who, line, opt){
+    const st = state[who], opp = (pairs, has)=>(pairs||[]).some(p=>{ const i = p.indexOf(opt); return i>=0 && has(p[1-i]); });
+    if(line==="wire"){ if(!WIRING.some(w=>w[0]===opt) || st.wiring.has(opt) || opp(CONFLICTS.wire, x=>st.wiring.has(x))) return false; st.wiring.add(opt); return true; }
+    const L = LINES.find(l=>l.id===line); if(!L || !L.opts.some(o=>o[0]===opt)) return false;
+    const arr = st.picks[line] || (st.picks[line] = []);
+    if(arr.includes(opt) || (L.one && arr.length) || opp(CONFLICTS[line], x=>arr.includes(x))) return false;
+    arr.push(opt); return true;
+  }
+  function fillFromWl(who, r){
+    if(!r || !okWave(r.code)) return;
+    undoSnap = Object.assign({who: who}, JSON.parse(JSON.stringify(snapshot())));
+    const st = state[who], named = !st.name.trim() && r.name;
+    if(named) st.name = r.name.slice(0,60);
+    st.wave = okWave(r.code);
+    let added = 0; picksFromWl(r).forEach(x=>{ if(addPick(who, x[0], x[1])) added++; });
+    const whose = r.main ? "your" : (r.name ? r.name + "’s" : "the");
+    undoMsg = "Brought in " + whose + " Wavelength answers: the Wave Code " + st.wave + (named ? ", the name" : "") + (added ? " and " + added + " pick" + (added===1 ? "" : "s") : "") + ". Nothing you picked was taken off. Read it through and change anything that isn’t quite you.";
+    lastSwap = ""; lastSwapAt = "";
+  }
+  function waveBox(who){
+    const st = state[who], res = wlResults();
+    let h = '';
+    if(!res.length){
+      if(who==="A") h += '<a class="ghost" href="/wavelength.html">Fill from my Wavelength answers</a><p class="hint">There’s no Wavelength result in this browser yet. <a href="/wavelength.html">Wavelength</a> takes about ten minutes; come back afterward and this fills in your card from your answers.</p>';
+    } else if(who==="A" || res.length > 1){
+      // one result: it's yours. Several (people taking turns on one device): each is offered by name, on either card
+      const label = r=>res.length===1 ? 'Fill from my Wavelength answers' : r.name ? 'Fill from '+esc(r.name)+'’s Wavelength answers' : (r.main ? 'Fill from my Wavelength answers' : 'Fill from another Wavelength result');
+      h += '<div class="chips" role="group" aria-label="Fill from Wavelength">' + res.map((r,i)=>'<button type="button" data-wlfill="'+i+'" data-who="'+who+'">'+label(r)+' <span class="how">('+esc(r.code)+')</span></button>').join('') + '</div>';
+      h += '<p class="hint">Brings in the name, the Wave Code, pace, how words land, and the &ldquo;what helps me&rdquo; answers from Wavelength in this browser. It only adds picks, and you can undo it.</p>';
+    }
+    if(st.wave) h += '<p class="hint">Wave Code on this card: <strong>'+esc(waveLabel(st.wave))+'</strong>. <button type="button" class="linkish" data-waveoff="'+who+'">Take it off the card</button></p>';
+    return h ? '<div class="wlfill">'+h+'</div>' : '';
   }
 
   function buildForm(who){
@@ -542,7 +637,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     return out;
   }
   // an older copy with no card code: match the printed lines back to the buttons, and keep the rest as their own words
-  function sentenceOf(t){ t = t.trim(); t = t.charAt(0).toUpperCase() + t.slice(1); return /[.!?…"”')]$/.test(t) ? t : t + "."; }
+  function sentenceOf(t){ t = t.trim(); t = t.charAt(0).toUpperCase() + t.slice(1); return /([.!?…"”']|[.!?…]\))$/.test(t) ? t : t + "."; }
   function readCardText(text){
     const cards = []; let cur = null;
     String(text).split(/\r?\n/).forEach(raw=>{
@@ -645,10 +740,11 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     const rows = [["How words reach me", [...state.A.wiring].map(id=>textOf("wire", id)).join(". "), [...state.B.wiring].map(id=>textOf("wire", id)).join(". "), [...state.A.wiring], [...state.B.wiring], "wire"]]
       .concat(LINES.map(l=>{ const a = picksOf("A", l), b = picksOf("B", l); return [l.q, a.text, b.text, a.ids, b.ids, l.id]; }));
     let h = '<table class="cmp"><thead><tr><th scope="col">Line</th><th scope="col">'+esc(nA)+'</th><th scope="col">'+esc(nB)+'</th></tr></thead><tbody>';
-    let blanks = 0;
+    let blanks = 0; const shared = [];
     rows.forEach(r=>{
       const [q, ta, tb, ia, ib, id] = r;
       if(!ta && !tb){ blanks++; return; }
+      ia.filter(x=>ib.includes(x)).forEach(x=>{ const t = SHARED_SAY[id+":"+x] || "picked “"+textOf(id, x)+"”"; if(!shared.includes(t)) shared.push(t); });
       let cls = "", tag = "";
       if(ta && tb){
         const shared = ia.filter(x=>ib.indexOf(x)>=0);
@@ -658,9 +754,16 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
         else if(shared.length){ cls = "same"; tag = "In common"; }
       } else if(ta || tb) tag = "Only one card has this";
       h += '<tr class="'+cls+'"><th scope="row">'+esc(q)+(tag?'<br><span class="tag">'+esc(tag)+'</span>':'')+'</th><td data-l="'+esc(nA)+'">'+(ta?esc(ta):'<em>blank</em>')+'</td><td data-l="'+esc(nB)+'">'+(tb?esc(tb):'<em>blank</em>')+'</td></tr>';
-      if(cls==="diff"){ const br = bridgeFor(id, ia, ib); if(br) h += '<tr class="bridge"><td colspan="3"><strong>A bridge to try:</strong> '+esc(br)+'</td></tr>'; }
+      // a line only one card has usually needs no talk, except the optional groups: they're about what helps one of you
+      if(cls==="diff" || (BRIDGES[id] && BRIDGES[id].each && (ia.length || ib.length) && !cls)){ const br = bridgeFor(id, ia, ib); if(br) h += '<tr class="bridge"><td colspan="3"><strong>A bridge to try:</strong> '+esc(br)+'</td></tr>'; }
     });
-    h += '</tbody></table><p class="hint" style="margin-top:8px">'+(diffs ? (diffs===1 ? '1 line points' : diffs+' lines point')+' different ways. Each has a bridge to try. Pick one to talk about, not all of them.' : 'Nothing points opposite ways yet.')+(blanks ? ' '+blanks+' line'+(blanks===1?' is':'s are')+' blank on both cards, so '+(blanks===1?'it isn’t':'they aren’t')+' shown.' : '')+'</p>';
+    // first what the two cards share, then (if there's a lot) a nudge to start small
+    const said = shared.filter(t=>!/^picked /.test(t)).concat(shared.filter(t=>/^picked /.test(t))).slice(0,3);
+    let top = said.length ? '<p class="cmp-shared"><strong>What you share:</strong> You both '+esc(joinAnd(said))+'.</p>'
+      : '<p class="cmp-shared"><strong>What you share:</strong> Nothing on the two cards lines up exactly yet, and that’s okay. You each wrote down how words reach you so the other one doesn’t have to guess, and wanting that is something you already share.</p>';
+    if(diffs >= 3) top += '<p class="cmp-shared"><strong>Pick one or two to talk about first.</strong> '+diffs+' lines point different ways. That’s normal, and none of them has to be sorted today.</p>';
+    h = top + h;
+    h += '</tbody></table><p class="hint" style="margin-top:8px">'+(diffs ? (diffs===1 ? '1 line points' : diffs+' lines point')+' different ways. Each has a bridge to try.'+(diffs < 3 ? ' Pick one to talk about, not all of them.' : '') : 'Nothing points opposite ways yet.')+(blanks ? ' '+blanks+' line'+(blanks===1?' is':'s are')+' blank on both cards, so '+(blanks===1?'it isn’t':'they aren’t')+' shown.' : '')+'</p>';
     $("#cmp-body").innerHTML = h;
   }
 
@@ -750,6 +853,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(t.id==="addB"){ people.push("B"); state.B=fresh(); paintForms(); paint(); return; }
     if(t.id==="removeB"){ people.pop(); paintForms(); paint(); return; }
     const who = t.dataset.who;
+    if(t.dataset.wlfill!=null){ const r = wlResults()[+t.dataset.wlfill]; if(r){ fillFromWl(who, r); paintForms(); paint(); const u = $("#undo"); if(u) u.focus(); } return; }
+    if(t.dataset.waveoff){ state[t.dataset.waveoff].wave = ""; paintForms(); paint(); const n = $("#name"+t.dataset.waveoff); if(n) n.focus(); return; }
     if(t.dataset.wire){ toggleWire(who, t.dataset.wire); paintForms(); paint(); const again = document.querySelector('[data-who="'+who+'"][data-wire="'+t.dataset.wire+'"]'); if(again) again.focus(); return; }
     if(t.dataset.opt){ toggleOpt(who, t.dataset.line, t.dataset.opt); paintForms(); paint(); const again = document.querySelector('[data-who="'+who+'"][data-line="'+t.dataset.line+'"][data-opt="'+t.dataset.opt+'"]'); if(again) again.focus(); return; }
     if(t.dataset.clear){ state[t.dataset.clear]=fresh(); paintForms(); paint(); return; }

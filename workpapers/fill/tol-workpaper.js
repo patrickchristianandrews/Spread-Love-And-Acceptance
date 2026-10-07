@@ -770,7 +770,7 @@
   A.renderTable = function (sec) {
     var self = this, ctx = this.ctx(), fixed = fixedRowsFor(sec, this.state);
     var rows = fixed ? this.state.tables[sec.id].slice(0, fixed.length) : this.state.tables[sec.id];
-    var box = h('div', { className: 'wpf-table-box' });
+    var box = h('div', { className: 'wpf-table-box tol-plain' }); // tol-plain: no text bubbles on a form's rows (site.css)
     // A day-by-day table with a row for each person: each person fills in only their own rows, so it
     // can show one person's rows at a time (handy on a shared device). Nothing is hidden from the PDF.
     this.rowsFor = this.rowsFor || {};
@@ -783,7 +783,7 @@
       box.appendChild(h('div', { className: 'wpf-rows-for' }, [h('label', { for: pid, text: 'Filling in your own rows? Show ' }), sel]));
       if (only) box.appendChild(h('p', { className: 'wpf-turn', role: 'note', text: 'These are ' + ctx.name(only) + '\u2019s rows. Only ' + ctx.name(only) + ' fills them in, about their own day. On a shared device? Hand it over here.' }));
     }
-    var table = h('table', { className: 'wpf-table' + (sec.fixedRows ? ' wpf-fixed' : '') });
+    var table = h('table', { className: 'wpf-table no-bubble' + (sec.fixedRows ? ' wpf-fixed' : '') });
     var headRow = h('tr');
     if (sec.fixedRows) headRow.appendChild(h('th', { scope: 'col' }, [h('span', { className: 'visually-hidden', text: 'Person' })]));
     var totalW = sec.columns.reduce(function (a, c) { return a + (c.w || 1); }, 0) + (sec.fixedRows ? 1.6 : 0);

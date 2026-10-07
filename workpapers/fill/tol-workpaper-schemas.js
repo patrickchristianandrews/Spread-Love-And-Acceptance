@@ -273,7 +273,9 @@
     var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
     var share = clear.length / rows.length;
     var words = share === 1 ? 'Every job has an owner.' : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
-    var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, note: 'As a number: ' + fmt(share, 2) + ' out of 1.00 (the ownership clarity score). Enter it as the ownership number in CALC-01.' + (c.flag ? ' It only asks whether every job has a name, so read it next to “Who’s carrying more right now” below.' : '') + exNote }];
+    // plain words first; the number, and where it goes, folded under "What's this number?"
+    var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
+      note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
     if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
     if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with an owner (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
     else if (people.length >= 2 && named >= 3) out.push({ label: 'How the jobs are spread', value: people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + ' (jobs owned).' });

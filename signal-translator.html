@@ -1873,7 +1873,8 @@ function run(){
     vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
   } else if(staticIds.length){
-    vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The notes below show what may land hard.</p>';
+    vtop+='<p class="vk">Your words, with the part to look at marked</p><p class="vbest marked">'+markup(an.text, spans)+'</p>';
+    vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The marked part may land hard; the notes below say why.</p>';
   }
   if(an.readAs && an.readAs.length) vtop+='<p class="readas small">Read as: '+an.readAs.slice(0,4).map(f=>'&ldquo;'+esc(f.to)+'&rdquo; (you typed &ldquo;'+esc(f.from)+'&rdquo;)').join(', ')+'. Spelling never changes the reading.</p>';
   const lit = (window.TOLPatterns && TOLPatterns.idioms ? TOLPatterns.idioms(an.text).map(x=>[x.text, x.means]) : []);

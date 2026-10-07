@@ -366,8 +366,8 @@ const F = [
   {id:"nowhen", name:"Ask with no when", kind:"static", re:null,
    what:"The ask is there, but not the time. \"Could you call the dentist?\" can mean today or next month.",
    fix:"Add a time or a cue: \"before Friday\" or \"after dinner.\""},
-  {id:"brushoff", name:"Brush-off (\"whatever,\" \"I don't care\")", kind:"static", re:null,
-   what:"\"Whatever,\" \"fine, whatever\" and \"I don't care\" can mean \"really, either is fine\" or \"I'm upset and done talking.\" In writing, most people hear the second one.",
+  {id:"brushoff", name:"Brush-off, or quiet hurt (\"whatever,\" \"I don't care\")", kind:"static", re:null,
+   what:"\"Whatever,\" \"fine, whatever\" and \"I don't care\" can mean \"really, either is fine\" or \"I'm upset and done talking.\" It can also be resigned hurt: someone who has stopped asking for what they want. In writing, most people hear dismissal. The useful move is to ask which one it is, not to decide.",
    fix:"Say which one you mean: \"Either is fine with me\" or \"I'm upset. Can we talk about it at 8?\""},
   {id:"dxlabel", name:"A diagnosis used as an insult", kind:"static", re:null,
    what:"Using a diagnosis (\"so autistic,\" \"so OCD\") as a put-down turns a real part of some people's lives into an insult. It hurts the listener, and anyone who shares that diagnosis.",
@@ -388,6 +388,10 @@ const F = [
   {id:"safeask", name:"A safety worry with no plan", kind:"static", re:null,
    what:"The worry is real and worth saying. Without a plan for next time, it can land as blame for what already happened instead of a way to keep everyone safe.",
    fix:"Keep the fact, say it worries you, and ask for a habit, not a deadline: \"Can we find a way to make sure the stove gets checked every time? A note by the door?\""},
+  {id:"defend", name:"Defending yourself (\"I said…\")", kind:"static",
+   re:/\bi (?:said|told you|explained)(?: that)?,? (?=(?:work|my (?:job|boss|day|week|shift)|it's|it is|it was|i'm|i am|i was|i've been|i have been|i had|i have|i couldn't|i can't|i didn't|i wasn't|i'm not)\b)/gi,
+   what:"\"I said work is busy\" answers a charge before it's made. It can land as \"stop complaining,\" and what the other person is missing or feeling goes unheard.",
+   fix:"Say what's true for you, and that you hear them: \"Work has been busy, and I miss our calls too. Can we pick a time?\""},
   {id:"overhedge", name:"Too many softeners", kind:"static", re:null,
    what:"A few softeners are kind. A stack of them (\"maybe possibly perhaps, if that's okay\") hides the ask, and the listener can't tell whether you're asking at all.",
    fix:"Keep one softener and say the ask plainly: \"Could you do the dishes tonight, if that works?\""},
@@ -1018,6 +1022,8 @@ const FILLER = /^(?:(?:ok(?:ay)?|hey|so|and|also|now|look|listen|um|uh|well|righ
 function stripVocative(t){ return t.replace(/^[A-Z][a-z]+,\s+(?=[a-z])/, ""); }
 
 /* does this sentence open with a bare command? returns the command text or "" */
+/* a sentence that opens like a question: "do you want…", "are we still…", "can u…" */
+const AUX_Q = /^(?:(?:do|does|did|don't|doesn't|didn't|can|could|will|would|should|shall|may|might|must|can't|couldn't|won't|wouldn't)\s+(?:you|u|ya|we|i|they|he|she|it)|(?:are|is|was|were|aren't|isn't|wasn't|weren't)\s+(?:you|u|ya|we|i|they|he|she|it|this|that|there|the|your|my|our)|(?:have|has|had)\s+(?:you|u|ya|we|i|they|he|she|it))\b/i;
 function commandOf(sentence){
   const t0 = stripVocative(sentence.trim());
   if(/^(?:(?:ok(?:ay)?|hey|hi|so|and|also|now|reminder:?)[\s,]+)*(?:please|pls|plz|kindly)\b/i.test(t0) || /,?\s*\bplease[.!]*$/i.test(t0)) return "";
@@ -1033,8 +1039,8 @@ function commandOf(sentence){
   if(/^(?:look|listen|come on|wait)\s*[,!]/i.test(t)) return "";
   // "Be careful" / "Be safe" are wishes, not commands
   if(/^be (?:careful|safe|well|kind to yourself|good)\b/i.test(t)) return "";
-  // A question is not a command ("Take the car?")
-  if(/\?\s*$/.test(t)) return "";
+  // A question is not a command ("Take the car?"), even typed without a question mark ("do you want to call tonight or not")
+  if(/\?\s*$/.test(t) || AUX_Q.test(t)) return "";
   // needs an object or complement: "Go." is too short to judge
   if(words(t) < 2 && !/^(?:stop|hurry|move|wait|go|come|leave)\b/i.test(t)) return "";
   return t;
@@ -1087,7 +1093,7 @@ function moodOf(fs, sentence){
   if(has("ominous")) return "Opener with no topic";
   if(has("minimal")) return "One-word reply";
   if(has("legal")||has("kidsfirst")) return "Threat or leverage";
-  if(has("brushoff")) return "Brush-off";
+  if(has("brushoff")) return "Brush-off, or quiet hurt";
   if(has("guilt")||has("sarcasm")) return "Hurt, said sideways";
   if(has("oblig")) return "Requirement";
   if(has("should")) return "Advice or judgment (\"should\")";
@@ -1096,7 +1102,7 @@ function moodOf(fs, sentence){
   if(has("hint")) return "Hint";
   if(has("clearask")) return "Request";
   if(has("label")||has("compare")||has("madefeel")||has("absolute")||has("critic")||has("again")||has("guilt")||has("passive")||has("sarcasm")) return "Judgment or complaint";
-  if(/\?\s*$/.test(sentence)) return "Question";
+  if(/\?\s*$/.test(sentence) || AUX_Q.test(String(sentence).replace(FILLER,"").replace(/^(?:(?:ok(?:ay)?|so|hey|well|um|and|but)[\s,]+)+/i,""))) return "Question";
   if(has("istate")||has("feeling")||has("repair")||has("appreciation")) return "I-statement";
   return "Statement";
 }
@@ -1462,6 +1468,7 @@ const CHANGE_WHY = {
   butc:{g:"Keeping the thanks and the request apart lets the thanks count.", adhd:"After \"but,\" the compliment tends to disappear."},
   multi:{g:"Several asks at once compete for the same working memory. A short numbered list, or one at a time, lets each one land.", adhd:"Many ADHD listeners keep the first or last item and lose the middle. A written list helps.", apd:"Spoken multi-step requests are easy to lose. Write them down too."},
   addwhen:{g:"The ask had no time. Adding one (fill in the blank) closes the loop so neither of you has to guess.", adhd:"A time or a cue helps it actually happen.", autistic:"A concrete time is easier to plan around than an open one."},
+  defend:{g:"\"I said…\" defends you before anyone has blamed you. Saying the fact on its own keeps it information, not a counter-argument."},
   brushoff:{g:"\"Whatever\" or \"I don't care\" can mean \"either is fine\" or \"I'm upset.\" Saying which one you mean stops the listener guessing, usually wrong.", anxiety:"A brush-off is often heard as anger or pulling away.", autistic:"A brush-off may be taken at its word."},
   dxlabel:{g:"A diagnosis used as a put-down is an insult, and it lands on everyone who has that diagnosis. The rewrite leaves it out and keeps what you actually want to say."},
   violent:{g:"\"I'll kill you\" is an exaggeration, but in writing it can read as a real threat. The rewrite says the true size of it and keeps what you want.", autistic:"An exaggerated threat may be taken literally.", trauma:"Violent words can set off alarm even when they're clearly not meant."},
@@ -1557,6 +1564,7 @@ const BROKEN_RX = [
   /\b(?:you|they|he|she|we)(?:'ll| will| would|'d) (?:often|rarely)\b/i,
   /\b(?:could|can|would) you (?:could|can|would|will|should|must)\b/i,
   /\bnot not\b/i,
+  /\b(?:could|can|would|will) you (?:do|does|did|are|is|was|were|have|has|had|don't|didn't|can't|won't) (?:you|u|we|i|they)\b/i,
   /\bso \w+ a lot\b/i,
   /\b(?:could|can|would|will) you [^?.!]*\b(?:and|but) (?:it|that|this)(?:'s| is| was)\b[^?.!]*\?/i,
   /\b(?!(?:that|had|is|very|so|really|bye|no|ha|ok)\b)([a-z]{2,}) \1\b/i
@@ -1650,7 +1658,7 @@ function rewrite(an, opts){
   const isApology = /^\W*(?:(?:i'm|i am|so|really|very)\s+)*sorry\b|^\W*(?:i apologi[sz]e|my bad|my fault|my mistake|i messed up)\b/i.test(text);
   if(isApology) text = text.replace(/^\W*(?:(?:i'm |i am )?(?:so |really )?sorry[\s,!.]*){2,}/i, mm=>{ note("apology", mm.trim().replace(/[,.!\s]+$/,""), "I'm sorry"); return "I'm sorry, "; });
   const out = [];
-  const ctx = {converted:false, critical:false, hostile:false, insult:false, noAsk:false, apology:isApology};
+  const ctx = {converted:false, critical:false, hostile:false, insult:false, noAsk:false, apology:isApology, rel:opts.rel||""};
   // swearing, fed-up lines and name-calling come out first; what's left (a fact, an ask) is rewritten as usual
   let sents = splitSentences(text).map(x=>calmSentence(x.text, ctx, note)).filter(Boolean);
   // "Wow. Amazing." after a sarcastic line is more sarcasm: it goes, the point stays
@@ -1662,7 +1670,9 @@ function rewrite(an, opts){
     let r = rewriteSentence(s0, ctx, note, an, W);
     // a quick self-check: a rewrite that a second-language reader could copy as broken English is
     // replaced with a plain blank for their own words, never sent out half-formed
-    if(r && brokenEnglish(r)){ note("plain", s0.replace(/[.!?]+$/,""), "[a plain blank]"); r = ctx.critical || an.staticIds.length ? "[One recent time this happened] was hard for me." : "[Say this part plainly, in your own words.]"; }
+    // a question never gets wrapped in "could you": when that's all the rewrite could do, the question stays as typed
+    if(r && brokenEnglish(r) && (AUX_Q.test(s0.replace(/^(?:(?:ok(?:ay)?|so|hey|well|um|and|but)[\s,]+)+/i,"")) || /\?\s*$/.test(s0))){ r = s0; }
+    else if(r && brokenEnglish(r)){ note("plain", s0.replace(/[.!?]+$/,""), "[a plain blank]"); r = ctx.critical || an.staticIds.length ? "[One recent time this happened] was hard for me." : "[Say this part plainly, in your own words.]"; }
     pairs.push([s0, r]); if(r) out.push(r);
   });
   let main = out.join(" ");
@@ -1670,7 +1680,7 @@ function rewrite(an, opts){
   if(ctx.legal || ctx.kids){
     if(!/[A-Za-z]/.test(main.replace(/\[[^\]]*\]/g,""))) main = ctx.kids ? "[What's changed, plainly.]" : "I'm really worried about [the specific thing].";
     if(ctx.kids) main = endP(main)+" I'd like us to agree together on what we tell the kids, before either of us says more.";
-    if(!/\?/.test(main)) main = endP(main)+" Can we talk about it at [a time]?";
+    if(!/\?/.test(main) && (ctx.kids || !ctx.keptAsk)) main = endP(main)+" Can we talk about "+(ctx.keptAsk && ctx.kids ? "what the kids hear" : "it")+" at [a time]?";
   }
   // say the feeling once, plainly, instead of the heat: "I'm really frustrated right now."
   if(!/[A-Za-z\[]/.test(main)) main = "";  // only punctuation was left
@@ -1873,7 +1883,14 @@ function rewriteSentence(s, ctx, note, an, W){
     const hit = (t.match(LEGAL_RE)||t.match(KIDS_RE))[0];
     let rep = "";
     const cond = t.match(/^(.*?)\bif you (?:don't|do not|won't|refuse to) (.+?),?\s*(?:then\s+)?(?:i'll|i will|i'm going to|i am going to|i'm gonna|my (?:lawyer|attorney)|you'll|you will)\b.*$/i);
-    if(cond && !LEGAL_RE.test(cond[2]) && words(cond[2])>=2) rep = (cond[1] && !FILLER_ONLY.test(cond[1].replace(/[,\s]+$/,"")) ? endP(capFirst(cond[1].replace(/[,\s]+$/,"")))+" " : "")+"Could you "+cond[2].replace(/[,\s]+$/,"")+"? It matters a lot to me.";
+    // "If you're late again, I'll take you to court": the threat goes, the logistics stay as a plain ask
+    const lateM = !cond && t.match(/^(.*?)\bif you(?:'re| are| show up| turn up| come| get here| bring (?:her|him|them|the kids) back| drop (?:her|him|them|the kids) off)?\b[^.!?,]{0,25}?\blate\b/i);
+    const missM = !cond && !lateM && t.match(/^(.*?)\bif you (?:miss|skip|cancel|forget)\b/i);
+    const kidsCtx = ctx.rel==="coparent" || /\b(?:pick ?up|drop ?off|handover|hand-off|the kids|the children|visit|custody|weekend)\b/i.test(an.norm);
+    if(lateM && !LEGAL_RE.test(lateM[1]||"")) rep = (lateM[1] && !FILLER_ONLY.test(lateM[1].replace(/[,\s]+$/,"")) ? endP(capFirst(lateM[1].replace(/[,\s]+$/,"")))+" " : "")+(kidsCtx ? "Pickup is at [the time]. If you'll be late, please text me by [a time]." : "If you'll be late, please text me by [a time].");
+    else if(missM && !LEGAL_RE.test(missM[1]||"")) rep = (kidsCtx ? "The next pickup is [the day and time]. " : "")+"If you can't make it, please tell me by [a time].";
+    if(rep){ ctx.keptAsk = true; }
+    else if(cond && !LEGAL_RE.test(cond[2]) && words(cond[2])>=2) rep = (cond[1] && !FILLER_ONLY.test(cond[1].replace(/[,\s]+$/,"")) ? endP(capFirst(cond[1].replace(/[,\s]+$/,"")))+" " : "")+"Could you "+cond[2].replace(/[,\s]+$/,"")+"? It matters a lot to me.";
     else if(!/^\s*if you\b/i.test(t)){
       // keep the clauses that carry no threat ("Pickup is at 5, or I'll take you to court" keeps "Pickup is at 5")
       const kept = t.replace(/[.!?]+$/,"").split(/\s*(?:,|;|\s[-–—]\s|\.\s)\s*|\s+(?:and|or|so|because)\s+(?=(?:i|you|my|the|we|they)\b)/i)
@@ -2147,6 +2164,7 @@ function rewriteSentence(s, ctx, note, an, W){
     ["stopask",/\bstop asking(?: me)?(?: that)?\b[.!]*/gi, "I answered that one. I'm here with you while the doubt passes."],
     ["stopask",/\bnot this again\b[.!]*/gi, "I answered that one. I'm here with you while the doubt passes."],
     ["tic",/^.*\b(?:stop (?:doing|making) that|quit (?:it|doing that)|can't you (?:just )?stop)\b[^.!?]*[.!?]*$/gi, "Could you stop [the specific thing]? [If it's a tic or a stim, leave this sentence out. It isn't a message.]"],
+    ["defend",/^i (?:said|told you|explained)(?: that)?,?\s+(?=(?:work|my (?:job|boss|day|week|shift)|it's|it is|it was|i'm|i am|i was|i've been|i have been|i had|i have|i couldn't|i can't|i didn't|i wasn't|i'm not)\b)/gi, ""],
     ["already",/\bi (?:already )?told you (?:this |that )?(?:already|before|twice)\b[.!]*/gi, "Let me say this again in a way that sticks:"],
     ["already",/\b(?:i already (?:told|said|asked|explained)(?: you)?(?: this| that)?|as i (?:said|mentioned|wrote|told you)|like i said)\b[,.!]*/gi, "To recap:"],
     ["already",/\bdid you (?:even )?read (?:it|my (?:message|text|email))\?*/gi, "Here's the short version:"],
@@ -2417,7 +2435,8 @@ function safestVersion(base, o){
   t = t.replace(/\b([A-Z]{4,})\b/g, (w)=>w.charAt(0)+w.slice(1).toLowerCase());
   // an apology needs no "I'm not upset with you"; everything else gets the person kept separate from the problem
   const sorry = /^\W*(?:(?:i'm|i am|so|really)\s+)*sorry\b|^\W*i apologi[sz]e\b/i.test(t);
-  const lead = !o.criticism || sorry ? "" : o.work ? "I'd like to sort something out, and I'm not blaming anyone. " : "I'm not upset with you as a person. I'd like us to sort this out together. ";
+  // co-parents: a neutral, businesslike opener (brief, about the plan, nothing about feelings for the person)
+  const lead = !o.criticism || sorry ? "" : o.coparent ? "I'd like to keep this to the plan for the kids. " : o.work ? "I'd like to sort something out, and I'm not blaming anyone. " : "I'm not upset with you as a person. I'd like us to sort this out together. ";
   const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay)\b/i.test(t) ? "" :
     (o.isAsk ? " Is that okay, or would something else work better for you?" : " I'd like to hear how it looks to you, too.");
   return tidy(lead + t + close);
@@ -2448,7 +2467,8 @@ function finish(main, list, log, an, W, opts){
   if(isAsk || criticism){
     // "We're okay" is only offered between people close enough for it to be true
     // and useful, never at work or from a manager.
-    const close = CLOSE_REL.includes(opts.rel) && !WORK_REL.includes(opts.rel) && opts.channel!=="group";
+    // between co-parents, keep it brief and businesslike: no reassurance about the relationship
+    const close = CLOSE_REL.includes(opts.rel) && !WORK_REL.includes(opts.rel) && opts.rel!=="coparent" && opts.channel!=="group";
     const bondy = close && (W.has("anxiety")||W.has("adhd")||W.has("trauma")||W.has("hsp")||opts.bond);
     let opener = criticism ? "I'd like us to sort this out together. " : "";
     if(bondy) opener = "We're okay. "+opener;
@@ -2480,7 +2500,7 @@ function finish(main, list, log, an, W, opts){
   // The safest way to say it: the version least likely to land as an attack, whoever is listening.
   // No blame, the person kept separate from the problem, one plain ask, a choice, and room for their side.
   // Offered whenever the words carry static, an ask or a criticism; it sits right after the first choice.
-  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: WORK_REL.includes(opts.rel)});
+  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: WORK_REL.includes(opts.rel), coparent: opts.rel==="coparent"});
   if(safe && !variants.some(v=>v.text.toLowerCase()===safe.toLowerCase())) variants.splice(Math.min(1, variants.length), 0, {id:"safe", label:"Safest way to say it",
     why:"The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
   return {main: base, primary: variants[0], variants, changes, ask, list, unchanged};
@@ -2743,7 +2763,7 @@ const GLOSS = {
   demand:"asking for an answer right away", butc:"praise, then \"but\"",
   already:"it says \"I told you before\"", hedge:"an unsure answer", softno:"a \"no\" that sounds like \"maybe\"",
   stopask:"\"stop asking\"", tic:"commenting on a movement or sound they may not control",
-  nowhen:"a request with no time", brushoff:"it sounds like you don't care",
+  nowhen:"a request with no time", brushoff:"it can sound like you don't care, or like quiet hurt; ask which",
   dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
   selfput:"you put yourself down", legal:"a threat about court or the children",
   kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost"

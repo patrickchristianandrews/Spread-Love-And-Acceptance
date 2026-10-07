@@ -70,7 +70,7 @@
         ['/quick-checks.html#today','Today\u2019s Weather','Start today. Within two weeks, the almanac shows your patterns.']
       ]},
     { id:'give-too-much', ico:'\u2696', label:'I give more than I get back',
-      say:'Quiet resentment, a silent scorecard and being tired before the day starts are not character flaws. They are a budget running in the red, and the fix starts on your side of the line.',
+      say:'Quiet resentment, a silent scorecard and being tired before the day starts are not character flaws. They are a sign the effort has been uneven for a while. Naming it is fair, and so is asking for things to change; the tools here help you show it plainly, without blame.',
       picks:[
         ['/book/self-2-now-in-depth.html#control','Your circle of control, and matching energy','Signs you are over-giving, and how to match care and effort kindly.'],
         ['/self-path.html','Your self-discovery path','A gentle first week, including kind ways to say no.'],
@@ -116,6 +116,13 @@
         ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
+      ]},
+    { id:'stepfamily', ico:'\uD83E\uDDE9', label:'We\u2019re a stepfamily or blended family',
+      say:'Joining two families takes time, often years, and every person in it is adjusting: the parent in the middle, the stepparent finding a place, and children who may live in two homes. None of that means you chose wrong.',
+      picks:[
+        ['/parents.html#stepfamilies','Stepfamilies and blended families','Who leads on rules, loyalty binds, names, and the stepparent\u2019s own place.'],
+        ['/co-parenting.html','Separated co-parents','Holiday schedules, handoffs, and messages to an ex that stay calm and factual.'],
+        ['/lemonade-stand.html','The Lemonade Stand','Share the jobs fairly, with a smaller share for a child who lives here part of the time.']
       ]},
     { id:'family-duty', ico:'\uD83C\uDF0D', label:'Family back home, money and in-laws',
       say:'Supporting parents, sending money home, long visits from family: in many families these are duties, not habits. They go better when the two of you plan them together, so neither of you feels judged or shut out.',

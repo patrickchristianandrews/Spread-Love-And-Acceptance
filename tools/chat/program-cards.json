@@ -612,6 +612,113 @@
       "chips": []
     },
     {
+      "id": "notrealdad",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a stepchild says you're not their real parent",
+      "pat": "\\bnot (my|her|his|their|your) real (dad|mom|mum|father|mother|parent)\\b|\\b(you re|youre|you are) not my (dad|mom|mum|father|mother|parent)\\b|\\b(step ?(daughter|son|kid|child)|stepkids?)\\b.{0,60}\\b(can t|cant|cannot) tell (me|her|him) what to do\\b",
+      "keys": [],
+      "what": [
+        "That line stings, especially when you’re trying. It’s also very common, and it’s usually about loyalty to their other parent, not a verdict on you."
+      ],
+      "how": [
+        "In the moment: agree it calmly, don’t argue the point, and don’t enforce the rule yourself. Hand the rule back to their parent for now.",
+        "Later, with your partner: agree that your partner leads on discipline at first, and that you back each other up in front of the kids.",
+        "Build the relationship side by side with no rules attached: a drive, a game, a shared job. Small and done beats big and planned."
+      ],
+      "script": [
+        "You’re right, I’m not your dad, and I’m not trying to be. I care about you. Your mom and I agreed on this rule, so let’s talk to her about it.",
+        "She told me I’m not her real dad. I don’t want to be the one enforcing this right now. Can you take the lead on it, and I’ll back you up?"
+      ],
+      "scriptLabels": [
+        "To your stepchild, in the moment",
+        "To your partner, later"
+      ],
+      "plain": [
+        "That hurts. It is common.",
+        "Stay calm. Don’t argue.",
+        "Let their parent lead on rules for now.",
+        "Spend easy time together with no rules."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "parttimechild",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a child who lives with you part of the time",
+      "pat": "\\b(every other|every second|alternate) weekends?\\b.{0,80}\\b(visitor|guest|left out|belong|feel\\w*|fit in|outsider)\\b|\\b(son|daughter|kid|child|stepson|stepdaughter|boy|girl)\\b.{0,60}\\b(feels like|feel like|treated like) a (visitor|guest)\\b|\\b(part time|part of the week) (with us|at ours|here)\\b",
+      "keys": [],
+      "what": [
+        "A child who comes every other weekend can feel like a guest in a home where everyone else lives full time. Small, steady things help them feel it’s their home too."
+      ],
+      "how": [
+        "Give them a space that stays theirs while they’re away: a drawer, a shelf, a bed nobody else uses.",
+        "Keep one standing ritual for their weekends (Saturday pancakes, a walk, a show you watch together).",
+        "Give them one small job that’s theirs, so they belong in the running of the house, not just its guest list.",
+        "Keep in touch between visits in a light way: a photo, a question, a joke."
+      ],
+      "script": [
+        "This is your room even when you’re at your mom’s. Want to pick something for the wall?"
+      ],
+      "plain": [
+        "Give them their own space.",
+        "Do one fun thing every visit.",
+        "Give them one small job.",
+        "Send a message between visits."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "The Lemonade Stand (a smaller share for a part-time child)",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "textmeaning",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "what does this text mean",
+      "pat": "\\bwhat (does|did|do) (she|he|they|my \\w+|it|this|that)? ?(mean|means) (by )?\\b.{0,15}\\b(fine|whatever|ok|okay|k|sure|nevermind|never mind|do what you want)\\b|\\bwhat does \\W?(fine|whatever|ok|okay|k|sure)\\b.{0,40}\\bmean\\b|\\b(she|he|they) (texted|wrote|said|sent) (me )?\\W?(fine|whatever|k|ok)\\b",
+      "keys": [],
+      "what": [
+        "A short text like “Fine.” or “Whatever works for you.” can mean “really, it’s fine” or “I’m hurt and tired of asking”. The words alone can’t tell you, so ask kindly rather than guess."
+      ],
+      "how": [
+        "Paste it into the Signal Translator’s “Someone sent me this” to see the likely readings and a calm reply.",
+        "If it follows something they asked for, answer that first, then check in."
+      ],
+      "script": [
+        "Do you mean it’s really okay, or are you upset? I’d rather know."
+      ],
+      "plain": [
+        "Short texts can mean “okay” or “I’m upset”.",
+        "You can’t tell from the words.",
+        "Ask kindly: “Are you okay, or upset?”"
+      ],
+      "links": [
+        [
+          "The Signal Translator: someone sent me this",
+          "/signal-translator.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "breaklength",
       "kind": "intent",
       "first": true,
@@ -924,7 +1031,7 @@
       "first": true,
       "newTopic": true,
       "name": "long-distance and apart",
-      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b",
+      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b|\\b(says|thinks) i (never|don t|dont|rarely) (call|text|ring)\\b|\\b(never|doesn t|doesnt|rarely) (calls|texts|rings) (me )?(first|back|anymore)?\\b",
       "notPat": "",
       "keys": [],
       "what": [
