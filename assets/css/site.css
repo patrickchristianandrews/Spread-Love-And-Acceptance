@@ -1814,6 +1814,9 @@ html.tol-still .pc-launch .pc-dot{ animation:none; }
 .tol-chbar-k span{ font-weight:400; color:var(--ink-soft); }
 .tol-chbar ol{ display:flex; gap:.3rem; list-style:none; margin:0 !important; padding:0 !important; }
 .tol-chbar li{ margin:0 !important; max-width:none; }
+.tol-chbar ol{ flex-wrap:wrap; }
+.tol-chbar li.is-part1 a{ font-size:.85rem; padding:0 .55rem; }
+.tol-chbar li.is-part2{ margin-left:.5rem !important; padding-left:.6rem; border-left:1px solid var(--line); }
 .tol-chbar ol a{ display:grid; place-items:center; min-width:2.2rem; height:2.2rem; padding:0 .3rem; border-radius:999px; border:1px solid var(--line);
   font:600 .85rem/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink); text-decoration:none; background:var(--paper); box-sizing:border-box; }
 .tol-chbar ol a:hover{ border-color:var(--brass); }

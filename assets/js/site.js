@@ -1276,7 +1276,8 @@
     find: function (q, cb) { loadSearch(function (d) { if (!d) return cb([], q); var R = smartSearch(d, q); cb(R.hits.map(function (x) { return x.p; }), R.used.join(' ')); }); } };
 
   // ---------- "Chapter N of 6": where you are in the book, with every chapter one tap away ----------
-  function isChapter(it) { return /^\/book\/(preface|chapter-\d)\.html$/.test(it.href); }
+  function isChapter(it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d)\.html$/.test(it.href); }
+  function isSelfPart(it) { return /^\/book\/self-/.test(it.href); }
   function buildChapterBar() {
     if (!here || !isChapter(here)) return;
     var main = document.querySelector('main'); if (!main) return;
@@ -1284,14 +1285,14 @@
     var at = book.indexOf(here); if (at < 0) return;
     var nav = el('nav', { class: 'tol-chbar no-bubble', 'aria-label': 'Chapters of the book' });
     var items = book.map(function (it, i) {
-      var name = it.code === 'Preface' ? 'Preface' : 'Chapter ' + it.code;
+      var name = it.code === 'Preface' ? 'Preface' : isSelfPart(it) ? 'Part One, ' + it.code : 'Chapter ' + it.code;
       var href = inDepth && it.deep ? deepHref(it) : it.href;
-      return '<li><a href="' + href + '"' + (i === at ? ' aria-current="page"' : '') + ' title="' + esc(name + ': ' + it.title) + '">' +
+      return '<li' + (it.code === 'Preface' ? ' class="is-part2"' : isSelfPart(it) ? ' class="is-part1"' : '') + '><a href="' + href + '"' + (i === at ? ' aria-current="page"' : '') + ' title="' + esc(name + ': ' + it.title) + '">' +
         '<span aria-hidden="true">' + (it.code === 'Preface' ? 'P' : esc(it.code)) + '</span><span class="sr-only">' + esc(name + ': ' + it.title) + '</span></a></li>';
     }).join('');
-    // one way of counting, the book's own: the Preface, then Chapters I to V
+    // the book's own way of counting: Part One (Then, Now, Next), then the Preface and Chapters I to V
     var last = book[book.length - 1].code;
-    nav.innerHTML = '<p class="tol-chbar-k">' + (here.code === 'Preface' ? 'The Preface<span> · before Chapter I</span>' : 'Chapter ' + esc(here.code) + ' <span>of ' + esc(last) + '</span>') + '</p><ol>' + items + '</ol>' +
+    nav.innerHTML = '<p class="tol-chbar-k">' + (isSelfPart(here) ? 'Part One: ' + esc(here.code) + '<span> · yourself</span>' : here.code === 'Preface' ? 'The Preface<span> · before Chapter I</span>' : 'Chapter ' + esc(here.code) + ' <span>of ' + esc(last) + '</span>') + '</p><ol>' + items + '</ol>' +
       '<p class="tol-chbar-nav">' + (at > 0 ? '<a href="' + (inDepth && book[at - 1].deep ? deepHref(book[at - 1]) : book[at - 1].href) + '" rel="prev">&larr; Previous</a>' : '') +
       (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/prog-01.html">Next: six gentle weeks &rarr;</a>') + '</p>';
     var head = main.querySelector('.read-head');
