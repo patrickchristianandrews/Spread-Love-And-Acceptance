@@ -695,8 +695,8 @@ t('retest', 'a game for two of us', { kind: 'care', id: 'gamefortwo', link: '/re
 c('retest', ['we\'re long distance and always fighting about who calls', 'work is just busy, how do i make her stop being mad'], { text: /call days together/ });
 t('retest3', 'we\'ve had a rough week', { not: /wave had|carrier wave/i });
 t('retest3', 'we’ve been fighting a lot', { not: /wave been|carrier wave|I think you mean/i });
-t('retest3', 'my wife and I each have our own phone, how do we put our two sides together?', { kind: 'care', id: 'twophones' });
-t('retest3', 'how do i send my side to my husband', { kind: 'care', id: 'twophones' });
+t('retest3', 'my wife and I each have our own phone, how do we put our two sides together?', { id: 'twophones' });
+t('retest3', 'how do i send my side to my husband', { id: 'twophones' });
 t('retest3', 'How do I tell my girlfriend she left the stove on without her feeling criticised? She has ADHD.', { kind: 'care', id: 'raisegently', link: '/signal-translator.html' });
 t('retest3', 'she says I am too sensitive when she is just being honest', { kind: 'care', id: 'toosensitive' });
 t('retest3', 'my wife thinks i dont do enough at home but i do a lot of stuff she doesnt see', { kind: 'care', id: 'notenough', not: /teen|dating|password/i });
@@ -704,6 +704,8 @@ t('retest3', 'should I discipline her when Tasha isn\'t home', { kind: 'care', i
 t('retest3', 'the kids are 14 and 16 and want a say', { kind: 'care', id: 'teensay', not: /Children.s Privacy|intended for adults/i });
 t('retest3', 'christmas and thanksgiving, he always wants both', { kind: 'care', id: 'exschedule' });
 t('retest3', 'my mother-in-law visits too often', { kind: 'care', id: 'longstay', link: '/family-obligations.html#visits', not: /bedtime our way/ });
+t('retest3', 'I\'m always the one who arranges our calls', { kind: 'care', id: 'longdistance', text: /real information, not scorekeeping/ });
+c('retest3', ['we live in different countries and fight about who calls', 'what about time zones'], { text: /overlap|whose time/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

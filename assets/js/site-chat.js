@@ -301,7 +301,7 @@
       var d = docs[i];
       if (d.g) s *= opts.define ? 1.7 : 1.25;
       if (d.tip) s *= wantTip ? 1.6 : 0.55;
-      if (!wantLegal && /^\/(privacy|terms|accessibility|cookies?)/.test(d.u || '')) s *= 0.05;
+      if (!wantLegal && /^\/(legal\/|privacy|terms|accessibility|cookies?)/.test(d.u || '')) s *= 0.05;
       if (d.d) s *= 0.95;
       if (opts.prefer && preferRank(opts.prefer, d.u) >= 0) s *= 3 + 0.4 / (1 + preferRank(opts.prefer, d.u));
       // an everyday word whose site word is this passage's heading: a strong sign it's the right one
@@ -1068,7 +1068,7 @@
   var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { selfworry: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { selfworry: 1, ldtimezones: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {

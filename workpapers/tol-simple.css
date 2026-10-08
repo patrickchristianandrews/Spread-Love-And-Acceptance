@@ -35,3 +35,6 @@
 .wps-practice-x:empty, .wps-practice-q:empty{ display: none; }
 .wps-practice[open]{ padding-bottom: 1rem; }
 @media print{ .wps-practice, .read-head .wps-fill{ display: none !important; } }
+
+/* "you're here" next to "Simple version": one line, even at Larger text */
+.tol-depth-name small{ white-space: nowrap; display: inline-block; }

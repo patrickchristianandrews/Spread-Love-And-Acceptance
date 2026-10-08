@@ -405,13 +405,12 @@ header.top .modes{margin:12px 0 4px}
       <label class="mode"><input type="radio" name="stmode" value="send" checked><span>I&rsquo;m about to send this</span></label>
       <label class="mode"><input type="radio" name="stmode" value="got"><span>Someone sent me this</span></label>
     </div>
-    <p class="pillar-note">This is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, one of the <a href="five-pillars.html">Five Pillars</a>.</p>
   </header>
 
   <!-- THE SENTENCE (first) -->
   <section class="panel s4panel" id="sentenceBox" aria-labelledby="s3">
     <h2 id="s3"><label for="phrase" id="phraseLab" class="no-bubble">Type your sentence</label></h2>
-    <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.</p>
+    <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.</p>
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
     <div class="field gotrel" id="gotRelField" hidden>
@@ -428,8 +427,6 @@ header.top .modes{margin:12px 0 4px}
         <option value="caregiver">Someone I care for, or who cares for me</option>
       </select>
     </div>
-    <p class="st-shift"><a href="/perspective-shifter.html">Not sure how they saw it? Try the Perspective Shifter first →</a></p>
-    <p class="st-shift"><a href="/wavelength.html">Want to know how you both send and receive? Find your Wave Codes in Wavelength →</a></p>
     <div class="field presetrow">
       <label for="presetSel">Or try an example</label>
       <select id="presetSel"></select>
@@ -480,7 +477,7 @@ header.top .modes{margin:12px 0 4px}
           <div class="field">
             <label for="stateSel">Listener's state right now</label>
             <select id="stateSel"></select>
-            <p class="hint" style="margin:4px 0 0">This is <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>: the same words land harder on someone who is stressed or worn out. Not sure? The <a href="quick-checks.html#ladder">thirty-second state check</a> helps.</p>
+            <p class="hint" style="margin:4px 0 0">The same words land harder on someone who is stressed or worn out (<a href="five-pillars.html#read-your-state">read your state first</a>). Not sure? The <a href="quick-checks.html#ladder">thirty-second state check</a> helps.</p>
           </div>
           <div class="field">
             <label for="sitSel">Situation</label>
@@ -520,6 +517,16 @@ header.top .modes{margin:12px 0 4px}
 
   <!-- RESULTS -->
   <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
+
+  <!-- other tools and where this fits: tucked away, so the box and the answer stay uncluttered -->
+  <details class="st-more" id="stMore">
+    <summary>More</summary>
+    <ul class="ul">
+      <li><a href="/perspective-shifter.html">Not sure how they saw it?</a> The Perspective Shifter helps you see the moment from their side.</li>
+      <li><a href="/wavelength.html">How do you each send and take in messages?</a> Wavelength gives each of you a four-letter Wave Code to compare.</li>
+      <li>This tool belongs to <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, one of the site&rsquo;s <a href="five-pillars.html">Five Pillars</a>.</li>
+    </ul>
+  </details>
 
   <section class="panel" id="notes" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
@@ -629,7 +636,7 @@ header.top .modes{margin:12px 0 4px}
       <p class="big">Use it anywhere a sentence has to cross from one person to another. Inside the program, or with no program at all.</p>
       <ul class="use-list">
         <li><strong>In the program.</strong> A check-in, a weekly catch-up, a WP-09 message, the line you wish you had used, or the sentence you will say when you come back from a pause. Once you have both checked your state and can listen. Once a wiring card exists, test the sentence, not the person.</li>
-        <li><strong>Outside it.</strong> A text, email or Slack message you have not sent. A note to a coworker, a manager, a teacher, a landlord, a doctor, or a friend. A family dinner, a co-parent handoff, a meeting. Or just learning how you hear, with no conversation planned.</li>
+        <li><strong>Outside it.</strong> A text, email or work chat message you have not sent. A note to a coworker, a manager, a teacher, a landlord, a doctor, or a friend. A family dinner, a co-parent handoff, a meeting. Or just learning how you hear, with no conversation planned.</li>
       </ul>
       <p class="sub">Do not read a score out loud at the other person. You can add more than one sentence to the <a href="#notes">talking notes</a>. How to build them, and when the list is getting heavy, is on <a href="check-ins.html#notes">Check-ins</a>.</p>
       <div class="jobs">
@@ -792,7 +799,7 @@ const PRESET_GROUPS = [
 "Per my last text, the dentist is Friday at 3.",
 "Whatever works for you.",
 "Last time you did this too.",
-"Could you pack their soccer bags before handoff?",
+"Could you pack their sports bags before handoff?",
 "The kids said you let them stay up till midnight.",
 "Thanks for switching weekends with me. It really helped."
 ]
@@ -939,10 +946,10 @@ const USES = [
   {value:"send", label:"Before you send a message"},
   {value:"now", label:"It's already a fight"},
   {value:"learn", label:"To learn how it works"},
-  {value:"work", label:"Work message (Slack, Teams, email)"}
+  {value:"work", label:"Work message (work chat or email)"}
 ].sort(byLabel);
 const CHANNELS = [
-  {value:"chat", label:"Chat (Slack / Teams)"},
+  {value:"chat", label:"Work chat"},
   {value:"email", label:"Email or long note"},
   {value:"group", label:"Group channel (many listeners)"},
   {value:"person", label:"In person"},
@@ -1029,7 +1036,7 @@ const USE_NOTES = {
   checkin:"Write the sentence, translate it, and add it to the talking notes. Add the next one the same way. Take the PDF in. Leave the score here.",
   talk:"Use it the day of, or the day before, not in the doorway. One sentence on the sheet. If either of you is stressed or shut down, postpone.",
   send:"Put the unsent message in the box. If the read is heavy, send the clearer version, or wait. Do not send the score.",
-  work:"Paste the Slack, Teams or email message before you send it. The reading assumes a coworker on a chat channel. Change the relationship if you are their manager.",
+  work:"Paste the work chat or email message before you send it. The reading assumes a coworker on a chat channel. Change the relationship if you are their manager.",
   after:"Put their reply in the optional box (under Fine-tune) before you answer. The way back is where most second blow-ups start. Match their fact before you add yours.",
   learn:"You do not need a meeting. Swap the people and run the same sentence both ways. Each listener is built for a different signal.",
   now:"Do not build a case while it is happening. Close this, or save only the pause card. A score in the middle of a fight is a weapon. Care is the pause, the signal, and the return."
@@ -1822,7 +1829,7 @@ function run(){
   const perB = E.readings(an, Bids, channel);
   const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, bond: needB==="bond"||sitId==="bond"}));
 
-  const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat (Slack or Teams)",group:"in a group channel",email:"by email or long note"}[channel];
+  const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat",group:"in a group channel",email:"by email or long note"}[channel];
   const bWiring = general ? "wiring not chosen, general reading" : listNames(sel.B);
   const relName = relId && REL[relId] ? REL[relId].label.toLowerCase() : "";
   const ctxBits = [relName, sitId&&SIT[sitId]?SIT[sitId].label.toLowerCase():"", envId&&ENV[envId]?ENV[envId].label.toLowerCase():""].filter(Boolean);
@@ -1883,8 +1890,8 @@ function run(){
   combos(sel.B,"B").forEach(c=>{ p2+='<div class="receiver"><h4>'+esc(c[0])+'</h4><p class="small">'+esc(c[1])+'</p></div>'; });
   if(channel==="group") p2+='<p class="small"><b>Many listeners:</b> in a group channel, everyone reads it, and each person hears it through their own wiring. A correction or a nudge can land as a public call-out. Keep the group message to the facts and the ask, and send anything about one person to them privately.</p>';
   else if(channel==="chat") p2+='<p class="small"><b>Work chat:</b> short messages get read fast, between other things. Put the topic, the ask and the time in the first line.</p>';
-  if(stateKnown) p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Read your state first</a> (Pillar III of the Five Pillars).</p>';
-  else p2+='<p class="small" style="margin-top:12px">This assumes '+esc(B)+' is settled. If they are stressed or worn out, the same words land harder. You can set their state under Fine-tune. <a href="five-pillars.html#read-your-state">Read your state first</a> (Pillar III of the Five Pillars).</p>';
+  if(stateKnown) p2+='<p class="small" style="margin-top:12px"><b>'+esc(STATE_NOTE[bstate][0])+':</b> '+esc(STATE_NOTE[bstate][1])+' <a href="five-pillars.html#read-your-state">Read your state first</a>.</p>';
+  else p2+='<p class="small" style="margin-top:12px">This assumes '+esc(B)+' is settled. If they are stressed or worn out, the same words land harder. You can set their state under Fine-tune. <a href="five-pillars.html#read-your-state">Read your state first</a>.</p>';
 
   /* ---------- 3. what changed ---------- */
   let p3 = '';
@@ -2095,7 +2102,7 @@ function run(){
 let stMode = "send";
 let replyCtx = "";   // the message being answered, when "Check my reply" was used
 const MODE_TEXT = {
-  send:{lab:"Type your sentence", hint:"Type it the way it would actually come out. A text, a Slack message, or something you plan to say out loud.", ph:"The exact words, as they would be said or sent.", go:"Translate"},
+  send:{lab:"Type your sentence", hint:"Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.", ph:"The exact words, as they would be said or sent.", go:"Translate"},
   got:{lab:"Paste the message you got", hint:"Paste it exactly as it came. You'll see what it might mean and calm ways to answer. It reads the words only, and it won't guess what they think of you.", ph:"The message someone sent you.", go:"Read it kindly"}
 };
 function setMode(m){

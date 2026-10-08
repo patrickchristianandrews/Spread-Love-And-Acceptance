@@ -671,7 +671,8 @@
         if (part.lines) det.appendChild(h('ul', { className: 'wpf-example-lines' }, part.lines.map(function (x) { return h('li', { text: x }); })));
       });
       if (ex.note) det.appendChild(h('p', { className: 'wpf-help', text: ex.note }));
-      this.root.appendChild(det);
+      // it goes after the first part of the sheet, so the names and the first rows come first
+      var exampleEl = det;
     }
 
     // Names and meta fields
@@ -703,20 +704,70 @@
       if (canEdit) {
         var more = h('div', { className: 'wpf-people-actions' });
         if (peopleCount(st.values) < MAX_PEOPLE) more.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'add-person', text: '+ Add a person' }));
-        more.appendChild(h('span', { className: 'wpf-help', text: 'Two to eight people. Every name shows up in the drop-downs below.' }));
+        more.appendChild(h('span', { className: 'wpf-help wpf-people-help', text: 'Two to eight people. Every name shows up in the drop-downs below.' }));
         this.root.appendChild(more);
         if (this.hhWrite && global.TOLHousehold) this.root.appendChild(global.TOLHousehold.remember({ tool: this.hhTool(), write: this.hhWrite }));
       }
     }
 
+    // A day-by-day check-in (WP-13): "Just tonight's check-in" first, the three questions for each
+    // person. It writes into today's rows of the week's table below, so both always say the same.
+    s.sections.forEach(function (sec) { if (sec.personDays && s.people) { var tn = self.tonightEl(sec); if (tn) self.root.appendChild(tn); } });
     // "Someone shared a list with you": the choice comes first, before anything else on the sheet
-    var inEl = this.shareInEl();
+    // (and, once it is combined, "Send my changes back" in the same place)
+    var inEl = this.shareInEl() || (this.sendBack === 'top' ? this.sendBackEl() : null);
     if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
-    s.sections.forEach(function (sec) {
+    s.sections.forEach(function (sec, k) {
       self.root.appendChild(self.renderSection(sec));
+      if (k === 0 && exampleEl) self.root.appendChild(exampleEl);
       if (self.opts.canShare && s.share && sec.id === s.share.after) self.root.appendChild(self.shareEl());
     });
+    if (exampleEl && !exampleEl.parentNode) this.root.appendChild(exampleEl);
     this.refresh();
+  };
+
+  // Today's name in a day-by-day table ("Thu"), and the Monday of this week (2026-10-05)
+  function todayIn(days) { return days[(new Date().getDay() + 6) % 7]; }
+  function thisMonday() {
+    var d = new Date(); d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  var TONIGHT = [
+    ['thanks', 'Something I appreciated today'],
+    ['friction', 'Something that didn’t feel great'],
+    ['ask', 'Something that would help tomorrow']
+  ];
+  // "Just tonight's check-in": the 90-second ritual itself, for each person, on top of the week's table.
+  A.tonightEl = function (sec) {
+    var self = this, ctx = this.ctx(), day = todayIn(sec.personDays), rows = this.state.tables[sec.id] || (this.state.tables[sec.id] = []);
+    var cols = TONIGHT.filter(function (q) { return sec.columns.some(function (c) { return c.id === q[0]; }); });
+    if (!cols.length) return null;
+    var only = this.rowsFor && this.rowsFor[sec.id] && ctx.people().indexOf(this.rowsFor[sec.id]) >= 0 ? this.rowsFor[sec.id] : '';
+    var hid = 'tonight-' + sec.id;
+    var box = h('section', { className: 'wpf-tonight no-print tol-plain', 'aria-labelledby': hid });
+    box.appendChild(h('h2', { id: hid, text: 'Just tonight’s check-in' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: 'About 90 seconds. Each of you answers in a sentence, about your own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
+    var grid = h('div', { className: 'wpf-tonight-people' });
+    ctx.people().forEach(function (code) {
+      if (only && code !== only) return;
+      var i = -1;
+      rows.forEach(function (r, k) { if (i < 0 && r && r.day === day && r.who === code) i = k; });
+      // a row for today that was removed comes back, empty, in its place in the week
+      if (i < 0) {
+        var at = rows.length;
+        rows.forEach(function (r, k) { if (at === rows.length && r && sec.personDays.indexOf(r.day) > sec.personDays.indexOf(day)) at = k; });
+        rows.splice(at, 0, { day: day, who: code }); i = at;
+      }
+      var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { text: ctx.name(code) })]);
+      cols.forEach(function (q) {
+        var c = self.control({ type: 'text' }, rows[i][q[0]], { table: sec.id, row: String(i), col: q[0] });
+        c.el.setAttribute('data-tonight', '1');
+        fs.appendChild(h('div', { className: 'wpf-field' }, [h('label', { for: c.id, text: q[1] }), c.el]));
+      });
+      grid.appendChild(fs);
+    });
+    box.appendChild(grid);
+    return box;
   };
 
   A.renderSection = function (sec) {
@@ -998,6 +1049,15 @@
     var tbl = t.getAttribute('data-table');
     if (tbl && t.getAttribute('data-col')) {
       this.state.tables[tbl][+t.getAttribute('data-row')][t.getAttribute('data-col')] = val;
+      // the same box can be on the page twice (tonight's check-in and the week's table): keep them in step
+      Array.prototype.forEach.call(this.root.querySelectorAll('[data-table="' + tbl + '"][data-row="' + t.getAttribute('data-row') + '"][data-col="' + t.getAttribute('data-col') + '"]'), function (o) {
+        if (o !== t && o.type !== 'checkbox' && o.value !== val) o.value = val;
+      });
+      // tonight's check-in on a week with no date yet: the week is this one
+      if (t.getAttribute('data-tonight') && val && (this.schema.meta || []).some(function (f) { return f.id === 'weekOf'; }) && isBlank(this.state.values.weekOf)) {
+        this.state.values.weekOf = thisMonday();
+        var wk = this.root.querySelector('[data-key="weekOf"]'); if (wk) wk.value = this.state.values.weekOf;
+      }
     } else if (t.getAttribute('data-key')) {
       if (t.type === 'radio' && !t.checked) return;
       this.state.values[t.getAttribute('data-key')] = val;
@@ -1015,7 +1075,20 @@
     if (this.hhWrite) this.hhWrite.soon();
     if (this.keep) this.keepSoon();
     this.tabSoon();
+    if (this.afterChange) this.afterChange();
   };
+  // "Safe": the page as it is now has been kept on this device, saved as a file, downloaded as a PDF
+  // or sent as a link. Leaving the page then asks nothing; any change after that asks again.
+  A.markSafe = function (sig) {
+    this.safeSig = sig || JSON.stringify(this.state);
+    this.dirty = false;
+    this.tabNow();
+  };
+  A.isDirty = function () {
+    var now = JSON.stringify(this.state);
+    return now !== this.safeSig && now !== JSON.stringify(blankState(this.schema));
+  };
+  A.hasAnything = function () { return JSON.stringify(this.state) !== JSON.stringify(blankState(this.schema)); };
 
   /* ---------- the household: names and jobs typed once, offered in every tool (/assets/js/household.js) ---------- */
   function HHmod() { return global.TOLHousehold || null; }
@@ -1227,18 +1300,18 @@
       var made = this.shareMade;
       if (made && made.error) p.appendChild(h('p', { className: 'wpf-share-msg', role: 'note', text: made.error }));
       else if (made) {
-        p.appendChild(h('p', { className: 'wpf-help', text: 'The ' + what + ' travels inside this link, after the # sign. Browsers never send that part to a website, so it doesn’t reach this site or any server. Anyone with the link can read it, so send it only to the people on it.' }));
+        p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true)]));
+        p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time either of you changes something, send a new link: an old one won\u2019t show the change.' }));
         var lid = 'f' + (++this.uid);
-        p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'The link' }));
+        p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'Or copy the link yourself' }));
         var ta = h('textarea', { id: lid, rows: '3', readonly: 'readonly', className: 'wpf-share-code', 'data-share-out': 'link', spellcheck: 'false' });
         ta.value = made.link;
         p.appendChild(ta);
-        var btns = h('div', { className: 'wpf-share-btns' }, [
+        p.appendChild(h('div', { className: 'wpf-share-btns' }, [
           h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-link', text: 'Copy the link' }),
           h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-code', text: 'Copy it as a code instead' })
-        ]);
-        if (global.navigator && navigator.share) btns.appendChild(h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-send', text: 'Send…' }));
-        p.appendChild(btns);
+        ]));
+        p.appendChild(h('p', { className: 'wpf-help', text: 'The ' + what + ' travels inside the link, after the # sign. Browsers never send that part to a website, so it doesn\u2019t reach this site or any server. Anyone with the link can read it, so send it only to the people on it.' }));
       }
       box.appendChild(p);
     }
@@ -1256,7 +1329,25 @@
       ]));
       box.appendChild(q);
     }
+    if (this.sendBack === 'share') box.appendChild(this.sendBackEl());
     return box;
+  };
+  // A button for the site's share sheet (Text, WhatsApp, Email, …, or the phone's own share menu). The
+  // link is made fresh at the tap, from the sheet as it is then (see onClick, "share-fresh").
+  A.sendBtn = function (label, main) {
+    var what = this.shareWhat(), title = 'Our ' + (this.schema.plain || this.schema.title);
+    var made = this.shareMade && !this.shareMade.error ? this.shareMade.link : '';
+    return h('button', { type: 'button', className: 'wpf-add' + (main ? ' wpf-share-main' : ''), 'data-action': 'share-fresh', 'data-share': '', 'data-share-title': title,
+      'data-share-text': title + ': open this to see ' + (what === 'week' ? 'the week' : 'the ' + what) + ' and add to it.', 'data-share-url': made || 'none', text: label });
+  };
+  // After a shared list or week is combined or opened here: the other phone still has the old one.
+  A.sendBackEl = function () {
+    var what = this.shareWhat();
+    return h('div', { className: 'wpf-share-in wpf-sendback no-print tol-plain', role: 'group', 'aria-label': 'Send your changes back' }, [
+      h('p', {}, [h('strong', { text: 'Send my changes back? ' }), 'The other phone still has the ' + what + ' as it was. Each change needs a new link, so send one now, and again after any change.']),
+      h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send my changes back', true),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-back-no', text: 'Not now' })])
+    ]);
   };
   // A list that came in through a link: say whose and what, and let the person choose.
   A.shareInEl = function () {
@@ -1288,7 +1379,7 @@
     var self = this, what = this.shareWhat();
     function copyIt(text, ok) {
       function done(worked) {
-        if (worked) self.status(ok);
+        if (worked) { self.status(ok); if (self.shareSig) self.markSafe(self.shareSig); }
         else { var ta = self.root.querySelector('[data-share-out]'); if (ta) { ta.focus(); ta.select(); } self.status('Couldn’t copy here. The link is selected: copy it by hand.'); }
       }
       try {
@@ -1301,7 +1392,7 @@
     if (act === 'share-make' || act === 'share-open') {
       var which = act === 'share-make' ? 'make' : 'open';
       this.shareOpen = this.shareOpen === which ? '' : which;
-      if (this.shareOpen === 'make') { var d = this.shareData(); this.shareMade = d.error ? d : this.shareLink(d); }
+      if (this.shareOpen === 'make') { var d = this.shareData(); this.shareMade = d.error ? d : this.shareLink(d); this.shareSig = d.error ? '' : JSON.stringify(this.state); }
       this.render();
       var focus = this.root.querySelector(this.shareOpen === 'open' ? '[data-share-in]' : this.shareOpen === 'make' ? (this.shareMade && this.shareMade.error ? '[data-action="share-make"]' : '[data-share-out]') : '[data-action="' + act + '"]');
       if (focus) focus.focus();
@@ -1310,23 +1401,19 @@
     }
     if (act === 'share-copy-link' && this.shareMade) { copyIt(this.shareMade.link, 'Link copied. Send it any way you like (a text, an email). Whoever opens it chooses to combine or replace.'); return; }
     if (act === 'share-copy-code' && this.shareMade) { copyIt(this.shareMade.code, 'Code copied. On the other device, open this page and paste it under “Open a shared ' + what + '”.'); return; }
-    if (act === 'share-send' && this.shareMade) {
-      try { navigator.share({ title: this.schema.plain || this.schema.title, text: 'Our ' + (this.schema.plain || this.schema.title) + ': ' + this.shareMade.link }).catch(function () {}); } catch (e) {}
-      return;
-    }
     if (act === 'share-combine' || act === 'share-replace') {
       var got = readShared(this.sharePaste);
       if (!got) { this.status('That doesn’t look like a shared ' + what + '. Copy the whole link, or the code starting with TOLLIST1:'); if (paste) paste.focus(); return; }
       if (got.wp !== this.schema.code) { this.status('That is a shared ' + got.wp + '. Open it on the ' + got.wp + ' page.'); return; }
       var msg = this.takeShared(got, act === 'share-replace');
-      if (msg) { this.sharePaste = ''; this.shareOpen = ''; this.render(); this.status(msg); var t0 = this.root.querySelector('[data-action="share-open"]'); if (t0) t0.focus(); }
+      if (msg) { this.sharePaste = ''; this.shareOpen = ''; this.sendBack = this.schema.people ? 'share' : ''; this.render(); this.status(msg); var t0 = this.root.querySelector('.wpf-sendback [data-action="share-fresh"]') || this.root.querySelector('[data-action="share-open"]'); if (t0) t0.focus(); }
       return;
     }
     if (act === 'share-in-combine' || act === 'share-in-replace') {
       var m = this.takeShared(this.sharedIn, act === 'share-in-replace');
       if (!m) return;
-      this.sharedIn = null; this.render(); this.status(m);
-      var first = this.root.querySelector('[data-key="partnerA"]'); if (first) first.focus();
+      this.sharedIn = null; this.sendBack = this.schema.people ? 'top' : ''; this.render(); this.status(m);
+      var first = this.root.querySelector('.wpf-sendback [data-action="share-fresh"]') || this.root.querySelector('[data-key="partnerA"]'); if (first) first.focus();
       return;
     }
     if (act === 'share-in-no') {
@@ -1457,7 +1544,10 @@
     this.tabTimer = setTimeout(function () { self.tabNow(); }, 300);
   };
   A.tabNow = function () {
-    try { global.sessionStorage.setItem(this.tabKey(), JSON.stringify({ format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, state: this.state })); } catch (e) {}
+    var rec = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, state: this.state };
+    // whether this state was already kept, saved, downloaded or sent, so a reload doesn't start asking again
+    if (this.safeSig && JSON.stringify(this.state) === this.safeSig) rec.safe = 1;
+    try { global.sessionStorage.setItem(this.tabKey(), JSON.stringify(rec)); } catch (e) {}
   };
   A.readTab = function () {
     try {
@@ -1478,7 +1568,7 @@
     if (!this.keep) return false;
     try {
       global.localStorage.setItem(this.keepKey(), JSON.stringify({ format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state }));
-      this.dirty = false;
+      this.markSafe();
       return true;
     } catch (e) {
       this.status('This browser won’t keep a draft (storage is off or full). Save a draft file instead.');
@@ -1494,11 +1584,13 @@
   };
   A.setKeep = function (on) {
     this.keep = !!on;
+    if (this.afterChange) this.afterChange();
     if (on) {
       if (this.keepNow()) this.status('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.');
     } else {
       clearTimeout(this.keepTimer);
       try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
+      this.safeSig = null;
       this.dirty = answered(this.schema, this.state) > 0;
       this.status('Not kept any more. Nothing from this worksheet is stored on this device.');
     }
@@ -1507,6 +1599,7 @@
     clearTimeout(this.keepTimer);
     try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
     this.keep = false;
+    this.safeSig = null;
     this.dirty = answered(this.schema, this.state) > 0;
     this.status('Erased. Nothing from this worksheet is stored on this device. What is on the page stays until you close it.');
     var n = document.getElementById('wpf-erase-note');
@@ -1517,6 +1610,18 @@
     var b = e.target.closest('button[data-action]');
     if (!b) return;
     var act = b.getAttribute('data-action');
+    if (act === 'share-fresh') {
+      // the link, made now from what is on the sheet, handed to the site's share sheet (site.js reads
+      // data-share-url when this click reaches the page); a sheet that can't be shared yet says why instead
+      var d0 = this.shareData();
+      if (d0.error) { e.stopPropagation(); e.preventDefault(); this.status(d0.error); return; }
+      this.shareMade = this.shareLink(d0);
+      this.shareSig = JSON.stringify(this.state);
+      b.setAttribute('data-share-url', this.shareMade.link);
+      var out = this.root.querySelector('[data-share-out]'); if (out) out.value = this.shareMade.link;
+      return;
+    }
+    if (act === 'share-back-no') { this.sendBack = ''; this.render(); this.status('No problem. \u201cShare this ' + this.shareWhat() + '\u201d makes a new link whenever you\u2019re ready.'); return; }
     if (act.indexOf('share-') === 0) { this.onShare(act); return; }
     if (act === 'hh-name') {
       var nm0 = b.getAttribute('data-name');
@@ -1665,7 +1770,7 @@
     try {
       var bytes = buildPdf(this.schema, this.state);
       download(bytes, this.fileBase() + '.pdf', 'application/pdf');
-      this.dirty = false;
+      this.markSafe();
       this.status('PDF downloaded to this device. Check your Downloads folder.');
     } catch (err) {
       this.status('The PDF could not be created. Save a draft file so nothing is lost, then try again.');
@@ -1690,7 +1795,7 @@
     var shared = this.shareableState(), left = shared !== this.state;
     var draft = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: shared };
     download(JSON.stringify(draft, null, 2), this.fileBase() + '-draft.json', 'application/json');
-    this.dirty = false;
+    this.markSafe();
     this.status('Draft file downloaded. Open it here later to keep working, or send it to someone on your road so they can add their part.' + (left ? ' Your raw reaction stayed out of it, as it is just for you; tick its box to include it.' : ''));
   };
 
@@ -1710,6 +1815,7 @@
     try {
       var bytes = global.TOLSuitePDF.fillable([{ workpaper: this.schema.code, state: this.state, label: '' }], { single: true });
       download(bytes, this.fileBase() + '-fillable.pdf', 'application/pdf');
+      this.markSafe();
       this.status('Fillable PDF downloaded. Type into it in any PDF app, or print it and write by hand.');
     } catch (err) {
       this.status('The fillable PDF could not be created. Save a draft file so nothing is lost, then try again.');
@@ -1735,8 +1841,8 @@
       if (d.workpaper !== self.schema.code) { self.status('That draft is for ' + d.workpaper + '. Open it on the ' + d.workpaper + ' page.'); return; }
       if (self.dirty && !window.confirm('Replace what is on this page with the draft?')) return;
       self.state = sanitize(self.schema, d.state);
-      self.dirty = false;
       self.render();
+      self.markSafe();
       if (self.keep) self.keepSoon();
       self.status('Draft opened.');
     };
@@ -1748,8 +1854,8 @@
   A.load = function (state, msg) {
     if (this.dirty && !window.confirm('Replace what is on this page with the one you opened?')) return;
     this.state = sanitize(this.schema, state);
-    this.dirty = false;
     this.render();
+    this.markSafe();
     if (this.keep) this.keepSoon();
     this.status(msg || 'Opened.');
   };
@@ -1763,6 +1869,49 @@
     if (this.keep) { this.eraseKept(); var k = document.getElementById('wpf-keep'); if (k) k.checked = false; }
     this.status('Cleared. Nothing from this worksheet remains on the page' + (this.keep ? '.' : ', and nothing is kept on this device.'));
   };
+
+  // The notes about privacy, drafts, PDFs and the ideas behind the sheet, folded under one
+  // "How saving works", so the names and the first rows are on the first screen. Nothing is removed.
+  function foldHow() {
+    var priv = document.querySelector('main .wpf-privacy');
+    if (!priv || priv.closest('.wpf-how')) return;
+    var det = h('details', { className: 'wpf-how no-bubble', id: 'wpf-how' }, [
+      h('summary', null, [h('span', { className: 'wpf-how-t', text: 'How saving works' }), h('span', { className: 'wpf-how-s', text: 'Everything stays on this device' })])]);
+    priv.parentNode.insertBefore(det, priv);
+    det.appendChild(priv);
+    var idea = document.querySelector('main > .pillar-note');
+    if (idea) det.appendChild(idea);
+  }
+  // "Keep this on this device so it's here tomorrow? [Keep it] [Not now]", in the save bar (always in
+  // view, and it never pushes the form about). "Not now" is remembered for this tab only.
+  // o: { key, bar, want(), onKeep() }. Returns { check, hide }.
+  function keepAsk(o) {
+    var el = null, noKey = 'tol-keepask-no:' + o.key;
+    function can() {
+      try { if (global.sessionStorage.getItem(noKey)) return false; global.localStorage.setItem('tol-keepask-test', '1'); global.localStorage.removeItem('tol-keepask-test'); return true; } catch (e) { return false; }
+    }
+    function hide() { if (el) { el.remove(); el = null; } }
+    function check() {
+      if (!o.bar) return;
+      if (!o.want()) { hide(); return; }
+      if (el || !can()) return;
+      el = h('div', { className: 'wpf-keepask no-print', role: 'group', 'aria-label': 'Keep a draft on this device' }, [
+        h('p', { className: 'wpf-keepask-q', text: 'Keep this on this device so it\u2019s here tomorrow?' }),
+        h('div', { className: 'wpf-keepask-btns' }, [
+          h('button', { type: 'button', className: 'wpf-keepask-yes', 'data-keepask': 'yes', text: 'Keep it' }),
+          h('button', { type: 'button', className: 'wpf-keepask-no', 'data-keepask': 'no', text: 'Not now' })])
+      ]);
+      el.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-keepask]'); if (!b) return;
+        var yes = b.getAttribute('data-keepask') === 'yes';
+        if (!yes) { try { global.sessionStorage.setItem(noKey, '1'); } catch (er) {} }
+        hide();
+        if (yes) o.onKeep();
+      });
+      o.bar.insertBefore(el, o.bar.firstChild);
+    }
+    return { check: check, hide: hide };
+  }
 
   function boot() {
     var wp = document.body.getAttribute('data-wp');
@@ -1803,8 +1952,9 @@
       app.keep = true;
       if (keepBox) keepBox.checked = true;
     }
-    // this tab's own copy is the newest, kept or not
-    if (tabbed && JSON.stringify(sanitize(schema, tabbed.state)) !== JSON.stringify(blankState(schema))) { app.state = sanitize(schema, tabbed.state); app.dirty = true; }
+    if (kept) app.safeSig = JSON.stringify(app.state);
+    // this tab's own copy is the newest, kept or not (and it knows whether it was already saved or sent)
+    if (tabbed && JSON.stringify(sanitize(schema, tabbed.state)) !== JSON.stringify(blankState(schema))) { app.state = sanitize(schema, tabbed.state); app.dirty = true; if (tabbed.safe) app.safeSig = JSON.stringify(app.state); }
     if (keepBox) keepBox.checked = app.keep;
     // say plainly what happens by default, with a way to clear it now
     var keepP = keepBox && keepBox.closest('p');
@@ -1822,8 +1972,25 @@
       app.hhWrite = HH.writer(app.hhTool(), function () { return app.hhCollect(); });
       HH.onChange(function () { var k = root.querySelector('.tol-hh-keep'); if (k && k.sync) k.sync(); });
     }
+    foldHow();
     app.render();
     if (app.hhWrite) app.hhWrite.baseline();
+    // "Keep this on this device so it's here tomorrow?": once something is typed, while nothing is kept
+    var ask = keepAsk({
+      key: app.keepKey(),
+      bar: document.querySelector('.wpf-bar-inner'),
+      want: function () { return !app.keep && app.hasAnything(); },
+      onKeep: function () { if (keepBox) keepBox.checked = true; app.setKeep(true); }
+    });
+    app.afterChange = ask.check;
+    ask.check();
+    // a list or week sent from here through the share sheet (or the phone's own share menu)
+    document.addEventListener('tol:shared', function (e) {
+      var u = e.detail && e.detail.url;
+      if (!u || !app.shareMade || u !== app.shareMade.link || !app.shareSig) return;
+      app.markSafe(app.shareSig);
+      if (app.sendBack) { app.sendBack = ''; var sb = root.querySelector('.wpf-sendback'); if (sb) sb.remove(); }
+    });
     if (sharedSay()) { /* said */ }
     else if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
@@ -1862,7 +2029,8 @@
 
     window.addEventListener('beforeunload', function (e) {
       if (app.keep) app.keepNow();
-      if (!app.dirty) return;
+      // nothing to warn about once this exact page was kept, saved, downloaded or sent as a link
+      if (!app.isDirty()) return;
       e.preventDefault();
       e.returnValue = 'You have unsaved entries.';
       return 'You have unsaved entries.';
@@ -1876,7 +2044,7 @@
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels, setHousehold: setHousehold,
     setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
-    labelFor: function (i) { return labelFor(i); }, readShared: readShared
+    labelFor: function (i) { return labelFor(i); }, readShared: readShared, keepAsk: keepAsk
   };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

@@ -667,3 +667,65 @@ html.ws-locked .tol-planted{ display: none !important; }
 .ws-sheet-rm{ margin-left: auto; }
 .ws-split{ margin: 10px 0 0; padding: 8px 12px; border-radius: 12px; background: var(--paper, #FBF6E9); border: 1px dashed var(--line, #D9CBA3); font-size: .95rem; }
 .ws-split-t{ margin: 0 0 4px; overflow-wrap: anywhere; }
+
+/* ---------- the form first: a compact top on the fill-in pages ----------
+   The notes about privacy, drafts, PDFs and the ideas behind the sheet fold under one "How saving works"
+   (tol-workpaper.js, foldHow), so the names and the first rows are on the first screen. */
+body[data-wp] main.read > header.read-head{ margin-bottom: .7rem; padding-top: .7rem; padding-bottom: .75rem; }
+body[data-wp] main.read > header.read-head h1{ margin-top: .1em; }
+body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-bottom: .6rem; }
+.wpf-how{ margin: 0 0 1rem; padding: 0 .9rem; border: 1px solid var(--line, #D9CBA3); border-radius: 14px; background: var(--credit-soft, #E4EDE3); }
+.wpf-how > summary{ cursor: pointer; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 .6em; padding: .35rem 0; font-weight: 600; color: var(--ink, #211D17); }
+.wpf-how > summary:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; border-radius: 8px; }
+.wpf-how-s{ font-weight: 400; font-size: .88em; color: var(--ink-soft, #524B3E); }
+.wpf-how .wpf-privacy{ margin: .2rem 0 .8rem; padding: .7em .9em; }
+.wpf-how .pillar-note{ margin: 0 0 .9rem; padding: 0; background: none; box-shadow: none; border: 0; }
+.wpf-how[open]{ padding-bottom: .1rem; }
+@media (max-width: 560px){
+  body[data-wp] main.read > header.read-head h1{ font-size: 1.55rem; }
+  .wpf-meta{ padding: .8em .9em; gap: .7em .9em; }
+  /* two people's names side by side on a phone; a third (and the date) on the next line */
+  .wpf-meta{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wpf-meta > .wpf-field:not(.wpf-person){ grid-column: 1 / -1; }
+  .wpf-section{ margin-top: 1.6em; }
+}
+/* at "Larger" text the names stack again, so nothing is squeezed */
+:root.tol-text-xl .wpf-meta, :root.tol-text-xxl .wpf-meta{ grid-template-columns: 1fr; }
+@media print{ .wpf-how{ display: none !important; } }
+
+/* "Keep this on this device so it's here tomorrow?", in the save bar */
+.wpf-keepask{ flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 6px 10px; border-radius: 10px; background: #FFFDF6; border: 1px solid var(--credit, #3E6B4C); }
+.wpf-keepask-q{ margin: 0; flex: 1 1 14rem; font-size: .9rem; font-weight: 600; color: var(--ink, #211D17); }
+.wpf-keepask-btns{ display: flex; gap: 8px; }
+.wpf-bar .wpf-keepask button{ min-height: 40px; padding: 6px 14px; font-size: .88rem; border-radius: 999px; }
+.wpf-keepask-yes{ background: var(--credit, #3E6B4C); color: #fff; border: 1px solid var(--credit, #3E6B4C); }
+.wpf-keepask-no{ background: transparent; color: var(--ink, #211D17); border: 1px solid var(--ink-soft, #524B3E); }
+.wpf-keepask button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+
+/* "Just tonight's check-in" (WP-13): the 90-second ritual, above the week */
+.wpf-tonight{ margin: 1.2em 0 0; padding: .9em 1em 1em; border-radius: 16px; background: #FFF8EE; border: 1px solid #EBCB9B; }
+.wpf-tonight > h2{ margin: 0 0 .2em; font-size: 1.2rem; }
+.wpf-tonight > .wpf-help{ margin: 0 0 .7em; }
+.wpf-tonight-people{ display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .8em 1.2em; }
+.wpf-tonight-one{ margin: 0; padding: .4em .8em .8em; border: 1px solid var(--line, #D9CBA3); border-radius: 12px; background: #FFFDF7; min-width: 0; }
+.wpf-tonight-one legend{ font-weight: 700; padding: 0 .3em; }
+.wpf-tonight-one .wpf-field + .wpf-field{ margin-top: .5em; }
+
+/* the "×" that removes a row, on a phone: inside the row, with room for its focus ring */
+@media (max-width: 720px){
+  .wpf-table-box{ overflow-x: visible; }
+  .wpf-table tr{ padding-right: 46px; }
+  .wpf-table td.wpf-remove{ right: 4px; }
+  .wpf-remove button{ width: 36px; height: 36px; }
+}
+@container wpftable (max-width: 40rem){
+  .wpf-table tr{ padding-right: 46px; }
+  .wpf-table td.wpf-remove{ right: 4px; }
+}
+
+/* sharing: the main "Send it" button, and "Send my changes back" */
+.wpf-share-btns .wpf-share-main{ border-style: solid; border-color: var(--credit, #3E6B4C); background: var(--credit, #3E6B4C); color: #fff; font-weight: 600; }
+.wpf-share-btns .wpf-share-main:hover{ background: #2F5A3C; }
+.wpf-share-new{ font-weight: 600; color: var(--ink, #211D17); }
+.wpf-sendback{ margin: 1em 0; }
+@media (max-width: 560px){ .wpf-people-help{ display: none; } .wpf-people-actions{ margin-top: .5em; } }

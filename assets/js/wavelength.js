@@ -652,6 +652,13 @@
   }
 
   /* ---------- screens ---------- */
+  // what "Sharing this device?" says about where results are kept; it changes as soon as Keep does
+  function keepNote() { return S.keep ? 'Your results are kept on this device, under your name. “Erase everything” at the bottom removes them.' : 'Right now your results stay in this tab only. To keep them on this device after the tab closes, tick “Keep” at the bottom of this page first.'; }
+  function keepChanged() {
+    $$('[data-keep]').forEach(x => { x.checked = S.keep; });
+    const kn = $('#wl-keepnote'); if (kn) kn.textContent = keepNote();
+    const k = $('#wl-keepoffer'); if (k && S.keep) k.textContent = 'Kept on this device. “Erase everything” at the bottom removes it.';
+  }
   function keepBox(id) {
     return '<label class="wl-keep"><input type="checkbox" data-keep id="' + id + '"' + (S.keep ? ' checked' : '') + '> Keep my answers and journal on this device, so I can come back to them</label>';
   }
@@ -977,7 +984,10 @@
           ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
             '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
             '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
-          : '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button>' + (inQuiz ? '' : '<button type="button" class="wl-btn ghost" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button>') + '</div>' +
+          : '<label class="wl-field" for="wl-ic-name">Your first name (optional)</label>' +
+            '<input type="text" id="wl-ic-name" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
+            '<p class="wl-small">' + (t.from ? esc(t.from) : 'They') + ' will see it when you share your Wave Code back, so they know it’s you.</p>' +
+            '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button>' + (inQuiz ? '' : '<button type="button" class="wl-btn ghost" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button>') + '</div>' +
             '<p class="wl-small">When you finish, your comparison shows up with your results.</p>' +
             '<h3>Already know your Wave Code?</h3>' +
             '<p class="wl-small">Type it in, or paste the message you saved, to compare without retaking the quiz.</p>' +
@@ -1005,8 +1015,11 @@
       codeField(mi);
       $('#wl-ic-cmp').onclick = () => show(extractCode(mi.value));
       mi.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); show(extractCode(mi.value)); } };
-      $('#wl-ic-quiz').onclick = () => go(inQuiz ? S.step : 0);
-      const iq = $('#wl-ic-quick'); if (iq) iq.onclick = () => { S.quick = true; go(2); };
+      const icn = $('#wl-ic-name');
+      const takeName = () => { if (icn) { S.name = cleanName(icn.value); save(); } };
+      if (icn) icn.oninput = takeName;
+      $('#wl-ic-quiz').onclick = () => { takeName(); go(inQuiz ? S.step : 0); };
+      const iq = $('#wl-ic-quick'); if (iq) iq.onclick = () => { takeName(); S.quick = true; go(2); };
     }
   }
 
@@ -1036,6 +1049,9 @@
             '<h2 class="wl-code" aria-label="' + code.split('').join(' ') + '">' + code.split('').map(c => '<span>' + c + '</span>').join('') + '</h2>' +
             '<p class="wl-arch">' + arch + '</p>' +
             '<p class="wl-tagline">' + tag + '</p>' +
+            (S.name.trim() ? '' : '<div class="wl-rname"><label class="wl-field" for="wl-rname">Your first name (optional)</label>' +
+              '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
+              '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div>' : '') +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
             (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
@@ -1067,7 +1083,7 @@
         '<div class="wl-sect" id="wl-people"><h3>Sharing this device?</h3>' +
           '<p class="wl-small">Hand it over for someone else’s turn. ' + (done ? 'Your results stay here under your name, so you can switch back, and when they finish you’ll see how your two codes compare.' : 'Your answers so far stay here under your name, so you can switch back.') + '</p>' +
           (S.name.trim() ? '' : '<label class="wl-field" for="wl-pname">Your first name, so your results are easy to find</label><input type="text" id="wl-pname" maxlength="30" autocomplete="given-name">') +
-          (S.keep ? '' : '<p class="wl-small">Right now your results stay in this tab only. To keep them on this device after the tab closes, tick “Keep” at the bottom of this page first.</p>') +
+          '<p class="wl-small" id="wl-keepnote">' + keepNote() + '</p>' +
           (OTHERS.length < MAX_OTHERS ? '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-nextperson">Someone else’s turn</button></div>' : '<p class="wl-small">This device holds up to ' + (MAX_OTHERS + 1) + ' people’s results. Remove one below to make room.</p>') +
           othersList(done) + '</div>' +
         (done ?
@@ -1111,7 +1127,13 @@
     if (pc) { pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } }; codeField(pc, (c, from) => { pastedFrom = from || ''; }); }
     if (done && S.their) wireCompare(code, S.their.code, S.name, S.their.from);
     on('#wl-tocmp', () => { const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } });
-    on('#wl-keepnow', () => { S.keep = true; save(); $$('[data-keep]').forEach(x => { x.checked = true; }); const k = $('#wl-keepoffer'); if (k) k.textContent = 'Kept on this device. “Erase everything” at the bottom removes it.'; });
+    on('#wl-keepnow', () => { S.keep = true; save(); keepChanged(); });
+    const rn = $('#wl-rname');
+    if (rn) rn.oninput = () => {
+      S.name = cleanName(rn.value); save();
+      const w = $('.wl-results .wl-who'); if (w && w.firstChild && w.firstChild.nodeType === 3) w.firstChild.textContent = (S.name ? S.name + '’s Wave Code' : 'Your Wave Code') + (w.children.length ? ' ' : '');
+      const pn = $('#wl-pname'); if (pn) pn.value = S.name;
+    };
     on('#wl-nextperson', () => { const pn = $('#wl-pname'); if (pn && pn.value.trim()) S.name = cleanName(pn.value); if (handOver()) go(0); });
     wireOthers();
     const profileText = () => {
@@ -1293,10 +1315,9 @@
   root.addEventListener('change', e => {
     if (!e.target.hasAttribute('data-keep')) return;
     S.keep = e.target.checked; save();
-    $$('[data-keep]').forEach(x => { x.checked = S.keep; });
+    keepChanged();
     const s = $('#wl-saved'); if (s) s.textContent = S.keep ? 'Saved on this device. “Erase everything” on your results removes it.' : 'Not kept on this device now. It stays in this tab until you close it.';
     const t = $('#wl-toast'); if (t) t.textContent = S.keep ? 'Your answers and journal are kept on this device. “Erase everything” removes them.' : 'Not kept on this device now. It stays in this tab until you close it.';
-    const k = $('#wl-keepoffer'); if (k && S.keep) k.textContent = 'Kept on this device. “Erase everything” at the bottom removes it.';
   });
 
   // Opened from someone's Wave Code link (wavelength.html?compare=SFNA&from=Priya): read it, then take it out of the

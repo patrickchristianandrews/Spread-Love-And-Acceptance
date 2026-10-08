@@ -1422,21 +1422,22 @@
       "first": true,
       "newTopic": true,
       "name": "long-distance and apart",
-      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\btime ?zones?\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b|\\b(says|thinks) i (never|don t|dont|rarely) (call|text|ring)\\b|\\b(never|doesn t|doesnt|rarely) (calls|texts|rings) (me )?(first|back|anymore)?\\b",
+      "pat": "\\bdifferent (time ?zones?|countries)\\b|\\bvideo calls?\\b.{0,40}\\b(partner|boyfriend|girlfriend|us|we|relationship)\\b|\\b(always|only) (the one|me) who (calls|reaches out|texts first|initiates|plans the calls)\\b|\\bwho (calls|initiates|reaches out) (first|more)\\b|\\b(fight|fighting|argu\\w*) about who calls\\b|\\b(says|thinks) i (never|don t|dont|rarely) (call|text|ring)\\b|\\b(never|doesn t|doesnt|rarely) (calls|texts|rings) (me )?(first|back|anymore)?\\b|\\b(always|only|usually) (the one|me) (who|that) (arranges|organi[sz]es|plans|sets up|books|schedules) (our |the )?(calls|video calls|facetimes?|visits)\\b",
       "notPat": "",
       "keys": [],
       "what": [
-        "Being apart makes small things heavier: a short text can read colder than it was meant, time zones squeeze the moments you have, and who calls whom can quietly become a scorecard. These are the distance’s problems more than either of yours."
+        "Being apart makes small things heavier: a short text can read colder than it was meant, time zones squeeze the moments you have, and who calls whom can turn into a fight. If one of you is doing most of the reaching out, that’s real information, not scorekeeping. And if one of you calls less, it’s usually about the hours, not the love."
       ],
       "how": [
-        "Agree a call rhythm together (which days, roughly when, who starts) so nobody has to keep asking and nobody keeps score.",
+        "Agree a call rhythm together (which days, roughly when, who starts), so the one who reaches out isn’t carrying it alone and the other isn’t guessing.",
         "Keep up small bids between calls: a photo, a question, “thinking of you”. They matter as much as long talks.",
         "Read short texts carefully. “Fine.” across a distance can mean many things; ask rather than guess.",
         "For a harder talk, use a set time on video, one topic, and take turns. Each of you can have the page open on your own screen.",
         "Plan the next visit before the goodbye, so the gap has an end."
       ],
       "script": [
-        "I don’t want to keep score about who calls. Can we pick our call days together, so neither of us has to wonder?",
+        "If you usually reach out: “I’ve noticed I start most of our calls, and I’d love it if you started some. Can we pick our call days together?”",
+        "If you call less: “It’s the hours, not you. Can we set two call times a week that I can actually keep?”",
         "When you wrote “Fine.” earlier, I wasn’t sure how you meant it. Are you okay?"
       ],
       "links": [
@@ -1464,6 +1465,45 @@
         "Send small messages between calls.",
         "If a text sounds cold, ask. Don’t guess."
       ]
+    },
+    {
+      "id": "ldtimezones",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "name": "time zones when you live apart",
+      "pat": "\\btime ?zones?\\b|\\btime difference\\b|\\b(hours?|\\d+ ?h(ours)?) (ahead|behind)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Time zones squeeze the moments you have, so it helps to find your overlap on purpose and protect it."
+      ],
+      "how": [
+        "Write both days side by side: when each of you wakes, works, eats and sleeps, in your own time. Mark the hours you’re both awake and free.",
+        "Say whose time you mean: “Call at eight, your time.” A second clock on your phone helps.",
+        "Take turns with the awkward hours, or at least say thank you out loud to whoever stays up late or gets up early.",
+        "Keep hard topics away from the tired call: the end of one person’s long day and the start of the other’s."
+      ],
+      "script": [
+        "Can we find the hours we’re both free and keep two of them for us each week? I’ll take the early one this time."
+      ],
+      "plain": [
+        "Find the hours you are both free.",
+        "Say whose time you mean.",
+        "Take turns with late or early calls.",
+        "Don’t start hard talks when one of you is tired."
+      ],
+      "links": [
+        [
+          "Time zones: find your overlap",
+          "/long-distance.html#time-zones"
+        ],
+        [
+          "Who calls, and how often",
+          "/long-distance.html#calls"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "calmnow",

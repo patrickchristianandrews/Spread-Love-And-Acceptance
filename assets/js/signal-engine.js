@@ -1560,29 +1560,16 @@ function splitTail(act){
 }
 /* Listeners for whom "again" tends to land on the whole history of being told off */
 const CRIT_SENSITIVE = ["adhd","hsp","trauma"];
-/* "I noticed you left the stove on again." -> "The stove was left on today." The fact stays, with no "you" and no "again".
-   Returns null when the sentence carries more than the fact, so nothing the speaker said is lost. */
-function neutralSafety(s, sf, plural){
+/* "I noticed you left the stove on again." -> "You left the stove on." The fact stays in the speaker's own words,
+   active and plain, with no "again". Nothing is added: no time, no place, nothing the message didn't say.
+   Returns null when there is no safety fact in the sentence. */
+function neutralSafety(s, sf){
   if(!sf || !sf.thing) return null;
-  const lowS = s.toLowerCase();
-  const m = lowS.match(SAFE_RE); if(!m) return null;
-  const pre = lowS.slice(0, m.index).replace(/^\s*(?:i (?:noticed|saw|see)(?: that)?\s*)?(?:you\s*(?:have\s+|'ve\s+|just\s+)?)?(?:the\s+|your\s+|my\s+|our\s+)?/,"");
-  if(pre.trim()) return null;
-  let state = (m[0].match(/\b(on the (?:counter|table)|plugged in|within reach|unlocked|unbuckled|not buckled|running|burning|open|lit|out|on)\b\s*$/)||[])[1];
-  if(/where (?:the kids|the baby|she|he|they) (?:can|could) (?:reach|get)$/.test(m[0])) state = "where the kids could reach "+(plural?"them":"it");
-  if(!state){
-    const v = (m[0].match(/\b(turn off|lock|close|shut|blow out|unplug|put away)\b/)||[])[1];
-    state = {"turn off":"on", lock:"unlocked", close:"open", shut:"open", "blow out":"lit", unplug:"plugged in", "put away":"out"}[v];
-  }
-  if(!state) return null;
-  if(state==="not buckled") state = "unbuckled";
-  let tail = s.slice(m.index + m[0].length).replace(/^\s*,?\s*\b(?:yet again|once again|again)\b/i,"").replace(/[.!?]+\s*$/,"");
-  const tm = (lowS.match(/\b(today|tonight|this morning|this afternoon|this evening|last night|yesterday)\b/)||[])[1];
-  if(tm) tail = tail.replace(new RegExp("\\s*\\b"+tm+"\\b","i"), "");
-  { const om = state==="on" && tail.match(/^\s*(the (?:counter|table|side|floor|stove|bench)|the kitchen counter)\b/i); if(om){ state = "on "+om[1].toLowerCase(); tail = tail.slice(om[0].length); } }
-  if(tail.trim() && !/^[\s,]*$/.test(tail)) tail = " "+tail.trim().replace(/^,\s*/,""); else tail = "";
-  const th = sf.thing.replace(/^(?:hair )/,"");
-  return "The "+th+(plural?" were":" was")+" left "+state+" "+(tm||"today")+tail+".";
+  if(!SAFE_RE.test(s.toLowerCase())) return null;
+  let t = s.replace(/^\s*i (?:noticed|saw|see)(?: that)?\s+/i, "");
+  t = t.replace(/,?\s*\b(?:yet again|once again|all over again|again)\b(?=[\s.,!?]|$)/gi, "").replace(/\s+([.,!?])/g,"$1").replace(/[\s.!?]+$/,"").replace(/^,\s*/,"");
+  if(!/[a-z]/i.test(t)) return null;
+  return capFirst(t)+".";
 }
 function lowerFirst(s){ return /^I\b/.test(s) ? s : s.replace(/^([A-Z])(?![A-Z])/, c=>c.toLowerCase()); }
 function capFirst(s){ return s.replace(/^(\s*["'(\[]?)([a-z])/, (m,p,c)=>p+c.toUpperCase()); }
@@ -1790,7 +1777,7 @@ function rewrite(an, opts){
   if(an.safety && !SAFE_HABIT_RE.test(an.norm)){
     const th = an.safety.thing.replace(/^(?:hair )/,"");
     const plural = /(?:s|meds|knives|matches|pills)$/.test(th) && !/^(?:gas|glass)$/.test(th);
-    const kind = /stove|oven|hob|burner|gas|iron|straightener|heater|fireplace|grill|bbq/.test(th) ? ["turned off", "Maybe a note by the door, or a quick check before we leave the kitchen?"]
+    const kind = /stove|oven|hob|burner|gas|iron|straightener|heater|fireplace|grill|bbq/.test(th) ? ["turned off", "Maybe a note where we'll see it, or a quick check of the "+th+" before we head out?"]
       : /candle/.test(th) ? ["blown out", "Maybe a quick check before bed?"]
       : /door|garage|car$/.test(th) ? ["locked", "A note by the door?"]
       : /gate/.test(th) ? ["closed", "Maybe a sign on the gate?"]
@@ -1804,8 +1791,8 @@ function rewrite(an, opts){
       const ss = splitSentences(main).map(x=>x.text);
       let did = false;
       for(let i=0;i<ss.length && !did;i++){
-        const nf = neutralSafety(ss[i], an.safety, plural);
-        if(nf){ note("again", (ss[i].match(/\b(?:yet again|once again|again)\b/i)||[""])[0].toLowerCase(), ""); note("safefact", ss[i].replace(/[.!?]+$/,""), nf.replace(/[.!?]+$/,"")); ss[i] = nf; did = true; }
+        const nf = neutralSafety(ss[i], an.safety);
+        if(nf){ const from = ss[i].replace(/^\s*i (?:noticed|saw|see)(?: that)?\s+/i,"").replace(/[.!?]+$/,""); if(from.toLowerCase()!==nf.replace(/[.!?]+$/,"").toLowerCase()) note("safefact", capFirst(from), nf.replace(/[.!?]+$/,"")); ss[i] = nf; did = true; }
       }
       main = ss.join(" ");
       // "I noticed you…" was replaced by the plain fact: don't list a change the rewrite no longer makes
@@ -1813,7 +1800,7 @@ function rewrite(an, opts){
       main = main.replace(/,?\s*\b(?:yet again|once again|all over again|again)\b(?=[\s.,!?]|$)/gi, mm=>{ note("again","again",""); return ""; }).replace(/\s+([.,!?])/g,"$1");
       // no word for the danger in the message: say the feeling in the same breath, as in "and that scares me"
       if(did && !/\b(?:dangerous|unsafe|not safe|scar(?:y|ed|es)|worr(?:y|ied|ies)|hazard|could have|someone could)\b/i.test(main))
-        main = main.replace(/^((?:[^.!?]*?))\b(was|were) left ([^.!?]+)\./, (mm,a,b,c)=>a+b+" left "+c+", and that scares me.");
+        main = main.replace(/^([^.!?]+)[.!?]/, (mm,a)=>a+", and that scares me.");
     }
     if(!/\b(?:dangerous|unsafe|not safe|scar(?:y|ed|es)|worr(?:y|ied|ies)|hazard|could have|someone could)\b/i.test(main)) main = endP(main)+" That's a real safety worry for me.";
     else if(!/\bworr/i.test(main)) main = main.replace(/\b(that's|that is|it's|it is) (dangerous|unsafe|not safe)([.!]*)/i, (mm,a,b)=>a+" "+b+", and it worries me.");
@@ -2082,7 +2069,7 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^(?:wow,?\s*|gee,?\s*)?thanks? (?:a lot )?for nothing[.!]*$/i, "sarcasm", "I was counting on your help with this, and I'm disappointed. Could you [one specific thing] by [a time]?"],
     [/^(?:wow,?\s*)?(?:thanks a lot|gee,? thanks)[.!]*$/i, "sarcasm", "That didn't help me. Could you [one specific thing] by [a time]?"],
     [/^(?:it )?must be nice(?: to (.+?))?[.!]*$/i, "sarcasm", m=>"I'm feeling stretched thin"+(m[1]?" while you "+m[1].replace(/\bjust\b\s*/,""):"")+". Could we find a way for me to get a break too?"],
-    [/^(?:lol,?\s*)?(?:(?:ok(?:ay)?|sure|fine|yeah),?\s*)?(?:whatever you say|sure,? whatever|if you say so)[.!]*$/i, "sarcasm", "I see it differently, and I'd like to talk about it when we're both calm. Could we try tonight at [a time]?"],
+    [/^(?:lol,?\s*)?(?:(?:ok(?:ay)?|sure|fine|yeah),?\s*)?(?:whatever you say|sure,? whatever|if you say so)[.!]*$/i, "sarcasm", "I see it differently, and I'd like to talk about it when we're both calm. Could we talk at [a time]?"],
     [/^(?:lol,?\s*)?ok(?:ay)?,? whatever[.!]*$/i, "sarcasm", "I'm not sure how to answer that. Can we come back to it at [a time]?"],
     [/^some of us (?:actually |still |do |would )?(?:like|want|need|prefer|enjoy) (?:having |to have )?(.+?)[.!]*$/i, "passiveag", m=>"I'd really like "+m[1].replace(/^a /,"a ")+". Could you help with that by [a time]?"],
     [/^some of us (?:actually |still )?(have|had|need|work|clean|cook|pay|do) (.+?)[.!]*$/i, "passiveag", m=>"I've been the one who "+(m[1]==="have"||m[1]==="had"||m[1]==="need"?"has to":m[1]+"s")+" "+m[2]+", and I'd like some help. Could you take [one part] by [a time]?"],
@@ -2359,7 +2346,7 @@ function rewriteSentence(s, ctx, note, an, W){
 
   // --- hints
   const HINTS = [
-    [/^(?:being |a little |some |more )?(supportive|helpful|kind|thoughtful|present|patient|help|support) would be (?:nice|great|good|lovely)[.!]*$/i, m=>"It would really help me if you [one specific "+m[1].toLowerCase().replace(/^help$/,"helpful").replace(/^support$/,"supportive")+" thing, like asking how my day went]. Could you try that this week?"],
+    [/^(?:being |a little |some |more )?(supportive|helpful|kind|thoughtful|present|patient|help|support) would be (?:nice|great|good|lovely)[.!]*$/i, m=>"It would really help me if you [one specific "+m[1].toLowerCase().replace(/^help$/,"helpful").replace(/^support$/,"supportive")+" thing, like asking how my day went]. Could you try that, starting [a day]?"],
     [/^it(?: would|'d) be (?:nice|great|good|helpful|lovely) if (?:someone|somebody|anyone|you) (?:could |would )?(.+?)[.!?]*$/i, m=>"Could you "+baseForm(m[1])+"?"],
     [/^it(?: would|'d) be (?:nice|great|good|helpful|lovely) if (?:the |my |our )?([\w ]+?) (?:got|were|was|could be) (\w+)(.*?)[.!?]*$/i, m=>"Could you "+baseVerb(m[2])+" the "+m[1]+m[3]+"?"],
     [/^(?:someone|somebody|anyone) (?:should|needs to|could|has to|might want to) (?:really |just |actually |probably )?(.+?)[.!?]*$/i, m=>"Could you "+baseForm(m[1])+"?"],
@@ -2654,7 +2641,7 @@ Object.assign(CHECK, {
 Object.assign(CHANGE_WHY, {
   legal:{g:"A threat of court or custody turns a parenting problem into a fight to win, and messages like this are often saved and shown later. The worry underneath can be said on its own. If there is a real legal step, it goes through the proper channel, not a message.", anxiety:"A threat about the children goes straight to the biggest fear a parent has."},
   kidsfirst:{g:"Telling the children first puts them in the middle. Agreeing together on what they hear protects them, and keeps the adults on the same side of it."},
-  safefact:{g:"The fact is said once, about this time, without \"you\" or \"again\". The worry and the ask for a habit stay just as clear.", adhd:"For many ADHD listeners, \"you left it on again\" lands on every time they have been told off. The plain fact is easier to hear, and easier to act on.", hsp:"A highly sensitive listener tends to feel the blame more than the words. The plain fact keeps the focus on keeping everyone safe.", trauma:"Blame about the past can feel like danger. The plain fact keeps it about safety, not about who failed."},
+  safefact:{g:"The fact is said once, in your own words, without \"again\". Nothing is added, so the worry and the ask for a habit stay just as clear and just as direct.", adhd:"For many ADHD listeners, \"again\" lands on every time they have been told off. The plain fact is easier to hear, and easier to act on.", hsp:"A highly sensitive listener tends to feel the blame more than the words. The plain fact keeps the focus on keeping everyone safe.", trauma:"Blame about the past can feel like danger. The plain fact keeps it about safety, not about who failed."},
   safety:{g:"The worry is real and worth saying. A habit (\"every time\") keeps everyone safe going forward. A deadline or a blame word would only cover this one time.", adhd:"A cue in the right place (a note by the door) works better than trying harder to remember."},
   sarcasm:{g:"Sarcasm carries the real message in the tone, which a text doesn't have. Said plainly, the hurt underneath can actually be answered."},
   plain:{g:"The automatic rewrite of this part didn't come out as clear English, so it's left as a blank for your own words. Short and plain is best."}
@@ -2873,7 +2860,46 @@ const PLAIN_TITLE = {again:"Words that point at a pattern", should:"Telling them
 function gloss(id){ return GLOSS[id] || ""; }
 /* One plain sentence at the top of a result. It agrees with the score and the flags:
    ok = will probably land okay, hurt = might hurt, fight = will likely start a fight. */
-function verdict(an, sc, rw){
+/* "Say it in simpler English": the suggested words again, in short sentences with common words, for a reader
+   in a second language. It only re-says what the rewrite says: no new facts, and blanks in [brackets] stay as they are.
+   "Lately it's felt like you're correcting me with the baby a lot. It doesn't feel respectful to me as her mother.
+    Could you let me handle it my way, and tell me later if you disagree?"
+   -> "You correct me with the baby a lot. It does not feel respectful. I am her mother.
+       Please let me do it my way, and talk to me later if you disagree." */
+const SIMPLE_CONTRACT = [[/\bcan't\b/gi,"cannot"],[/\bwon't\b/gi,"will not"],[/\bshan't\b/gi,"shall not"],[/\b(\w+)n't\b/gi,"$1 not"],
+  [/\bI'm\b/g,"I am"],[/\bi'm\b/g,"I am"],[/\b(you|we|they)'re\b/gi,"$1 are"],[/\b(it|that|there|what|here|he|she|this)'s\b(?! (?:been|got))/gi,"$1 is"],
+  [/\b(it|that|there|he|she)'s (been|got)\b/gi,"$1 has $2"],[/\b(I|you|we|they)'ve\b/gi,"$1 have"],[/\b(I|you|we|they|he|she|it|that)'ll\b/gi,"$1 will"],
+  [/\b(I|you|we|they|he|she)'d (like|love|prefer|rather)\b/gi,"$1 would $2"],[/\blet's\b/gi,"let us"]];
+const SIMPLE_SWAP = [[/\bhandle it\b/gi,"do it"],[/\btell me later\b/gi,"talk to me later"],[/\bfigure out\b/gi,"find"],[/\bsort (?:this|it) out\b/gi,"fix this"],
+  [/\bgo over\b/gi,"talk about"],[/\bcheck in\b/gi,"talk"],[/\bat the moment\b/gi,"now"],[/\bso that\b/gi,"so"],[/\bfeel free to\b/gi,"you can"]];
+function simpler(text){
+  let t = String(text||"").replace(/\s+/g," ").trim(); if(!t) return "";
+  const keep = []; t = t.replace(/\[[^\]]*\]/g, m=>{ keep.push(m); return "\u0001"+(keep.length-1)+"\u0002"; });
+  t = t.replace(/[’‘]/g,"'");
+  // "Lately it's felt like you're correcting me…" -> "You correct me…"
+  t = t.replace(/\b(?:lately |recently )?it's (?:felt|seemed) like you're (\w+ing)\b/gi, (m,v)=>"you "+ingBase(v));
+  t = t.replace(/\b(?:lately |recently )?it's (?:felt|seemed) like\s+/gi, "I feel that ");
+  SIMPLE_CONTRACT.forEach(([a,b])=>{ t = t.replace(a,b); });
+  SIMPLE_SWAP.forEach(([a,b])=>{ t = t.replace(a,b); });
+  // "…respectful to me as her mother." -> "…respectful. I am her mother."
+  t = t.replace(/\s+(?:to me\s+)?as (her|his|their|your|our|the kids'|a) (mother|father|mom|mum|dad|parent|partner|wife|husband|friend|sister|brother)\b([^.!?]*)([.!?])/gi,
+    (m,a,b,rest,end)=>(rest.trim() ? " "+rest.trim() : "")+". I am "+a.toLowerCase()+" "+b.toLowerCase()+end);
+  // a request: "Could you X?" -> "Please X."
+  t = t.replace(/(^|[.!?]\s+)(?:could|can|would|will) you (?:please )?([^?]+)\?/gi, (m,p,body)=>p+"Please "+body.trim()+".");
+  // one idea per sentence: split at ", and that…", ", but…", "; "
+  t = t.replace(/,\s+and (that|it|this|I|we|they|he|she) /g, (m,w)=>". "+(w==="I"?"I":w.charAt(0).toUpperCase()+w.slice(1))+" ");
+  t = t.replace(/,\s+but /g, ". But ").replace(/;\s+/g, ". ");
+  t = t.replace(/(^|[.!?]\s+)([a-z])/g, (m,p,c)=>p+c.toUpperCase()).replace(/\bi\b/g,"I").replace(/\s+([.,!?])/g,"$1").replace(/\.\./g,".");
+  t = t.replace(/\u0001(\d+)\u0002/g, (m,i)=>keep[+i]);
+  return t.trim();
+}
+/* Patterns that make a message an attack, not just a fair worry said directly */
+const ATTACK_IDS = ["label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
+/* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
+   A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
+function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
+function verdict(an, sc, rw, opts){
+  const listener = (opts && String(opts.listener||"").trim()) || "them";
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
   const lvl = sc && sc.level ? sc.level[0] : "clear";
   const soft = rw && !rw.unchanged;
@@ -2883,6 +2909,8 @@ function verdict(an, sc, rw){
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
     return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
+  if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && fairConcern(an))
+    return {id:"hurt", fair:true, text: "Your worry is fair and worth saying plainly. "+(soft ? "Here's a version that keeps your words direct and lands easier for "+listener+"." : "The notes below show which words may land hard.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
     return {id:"hurt", text: (an.safety ? "Your worry is fair, but this might hurt. " : "This might hurt. ")+(soft ? "Here's a softer way to say it." : "The notes below show why.")};
   if(an.staticIds && an.staticIds.length)
@@ -2890,6 +2918,6 @@ function verdict(an, sc, rw){
   return {id:"ok", text:"This will probably land okay."};
 }
 
-const api = {receive, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+const api = {receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);
