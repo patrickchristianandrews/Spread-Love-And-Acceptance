@@ -43,7 +43,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
       if(/^(relSel|stateSel|sitSel|envSel|needASel|needBSel)$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
       if(s.id==='presetSel' && s.first) ok(s.opts[0]==='Choose an example…', `${tag}: presets should start with "Choose an example…"`);
     }
-    ok(sels.find(s=>s.id==='chSel').opts.includes('Chat (Slack / Teams)') && sels.find(s=>s.id==='chSel').opts.includes('Group channel (many listeners)'), `${tag}: channel options missing chat/group`);
+    ok(sels.find(s=>s.id==='chSel').opts.includes('Work chat') && sels.find(s=>s.id==='chSel').opts.includes('Group channel (many listeners)'), `${tag}: channel options missing chat/group`);
     ok(await p.$eval('#chSel', s=>s.options[s.selectedIndex].text)==='Text / chat', `${tag}: default channel should be Text / chat`);
     ok(await p.$eval('#wB0', s=>s.value)==='', `${tag}: default wiring should be Not sure`);
     const chipCount = await p.evaluate(()=>document.querySelectorAll('.chip, .seg button, .presets button, .st').length);

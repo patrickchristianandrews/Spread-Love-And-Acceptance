@@ -750,7 +750,7 @@
     function closingFrom(en, base) { var v = en.state.values; if (v.agreed === true) V[base + '.closing.agreed'] = true; set(base + '.closing.lookAgain', v.lookAgain); }
     var by = {};
     snap.entries.forEach(function (e) { if (e && e.state && e.workpaper) (by[e.workpaper] = by[e.workpaper] || []).push(e); });
-    var got = [];
+    var got = [], unpicked3 = [], views3 = null;
 
     // Each person may log their own week, or their own check-ins, on their own device. The same week
     // brought in from two files is one week: read every sheet for it, never just the last one.
@@ -798,6 +798,31 @@
       [schemaFor('WP-03', snap.variant), schemaFor('WP-03', roadId), schemaFor('WP-03')].forEach(function (sc3) { var tr = section(sc3, 'treaty'); if (tr && tr.examples) exRows = exRows.concat(tr.defaultRows || []); });
       function example3(r) { return exRows.some(function (d) { return d.task === r.task && trim(r.freq) === trim(d.freq) && ['r', 'a', 'c', 'i', 'notes'].every(function (k) { return blank(r[k]) || r[k] === d[k]; }); }); }
       var t3 = rowsOfT(e3.state, 'treaty').filter(function (r) { return trim(r.task) && !example3(r); });
+      // A list that came in from the Lemonade Stand: there, people pick owners for up to five jobs, so the
+      // jobs that came in without one were listed, not left unowned. They are kept apart ("11 more listed,
+      // without an owner yet") and never count against the clarity number. Once one is given an owner here,
+      // it counts like any other job.
+      if (e3.from && e3.from.lemon) {
+        var up3 = Array.isArray(e3.from.unpicked) ? e3.from.unpicked.map(fold) : null;
+        t3 = t3.filter(function (r) { if (blank(r.r) && blank(r.a) && (!up3 || up3.indexOf(fold(r.task)) >= 0)) { unpicked3.push(trim(r.task)); return false; } return true; });
+      }
+      // Two people's own lists (each brought in from their own file): each one's view of who owns what,
+      // and the jobs where they differ, so the report can say so rather than read just the newest list.
+      var all3 = (by['WP-03'] || []).filter(written);
+      if (all3.length > 1 && !R.solo) {
+        var lists3 = all3.map(function (e) {
+          var rs = rowsOfT(e.state, 'treaty').filter(function (r) { return trim(r.task) && !example3(r); }), owns = {};
+          rs.forEach(function (r) { var w = whoName(r.r); if (w) owns[w] = (owns[w] || 0) + 1; });
+          return { whose: e.from && e.from.by ? trim(e.from.by) : e.from && e.from.file ? trim(e.from.file) : 'this device', rows: rs, owns: owns, total: rs.length };
+        }).filter(function (L) { return L.total; });
+        var whoseSeen = {}; lists3 = lists3.filter(function (L) { var k = fold(L.whose); if (whoseSeen[k]) return false; whoseSeen[k] = 1; return true; });
+        if (lists3.length > 1) {
+          var byTask = {}, differ3 = [];
+          lists3.forEach(function (L, li) { L.rows.forEach(function (r) { var k = fold(r.task); (byTask[k] = byTask[k] || { task: trim(r.task), by: [] }).by.push({ whose: L.whose, owner: whoName(r.r) || '' }); }); });
+          Object.keys(byTask).forEach(function (k) { var m = byTask[k], ow = {}; m.by.forEach(function (b) { ow[fold(b.owner)] = 1; }); if (m.by.length > 1 && Object.keys(ow).length > 1) differ3.push(m); });
+          if (differ3.length) views3 = { lists: lists3.map(function (L) { return { whose: L.whose, owns: L.owns, total: L.total }; }), differ: differ3.slice(0, 40) };
+        }
+      }
       t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', whoName(r.r)); set(p + 'a', whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
       sizes.treaty = t3.length;
       var am = rowsOfT(e3.state, 'amendments');
@@ -898,6 +923,8 @@
     if (keep && keep.road === roadId && keep.values) Object.keys(keep.values).forEach(function (k) { if (/^tol\.v1\.(calc|self|ready)\.|^tol\.v1\.who\.(started|context|others)$/.test(k)) data.values[k] = keep.values[k]; });
     Object.keys(V).forEach(function (k) { data.values[NS + k] = V[k]; });
     if (typeof snap.variant === 'string') data.focus = snap.variant;
+    if (unpicked3.length) data.unpicked = unpicked3.slice(0, 200);
+    if (views3) data.w3views = views3;
     if (snap.split && typeof snap.split === 'object' && !R.solo) {
       var byNm = function (o) { return names.map(function (nm) { var hit = null; Object.keys(o || {}).forEach(function (k) { if (nm && fold(k) === fold(nm)) hit = o[k]; }); return hit; }); };
       data.split = { nights: byNm(snap.split.nights), agreed: byNm(snap.split.agreed) };
@@ -927,6 +954,9 @@
     // the Suite's "what brings you here" choice (a road variant), when there is one
     if (r && typeof obj.focus === 'string' && /^[a-z]{1,20}$/.test(obj.focus) && r.data.road === obj.road) r.data.focus = obj.focus;
     if (r && obj.split) { var sc0 = splitClean(obj.split, r.data.people); if (sc0) r.data.split = sc0; }
+    // the jobs listed on the Lemonade Stand without an owner yet, and two people's own lists side by side (from the Suite)
+    if (r && Array.isArray(obj.unpicked)) r.data.unpicked = obj.unpicked.slice(0, 200).map(function (x) { return trim(x).slice(0, 120); }).filter(Boolean);
+    if (r && obj.w3views && Array.isArray(obj.w3views.lists) && Array.isArray(obj.w3views.differ)) r.data.w3views = obj.w3views;
     return r;
   }
   // The split a week is read against, from the Lemonade Stand (through the Suite): the share each person
@@ -1276,7 +1306,9 @@
       out.wp03 = { filled: touched, tasks: tasks3.length, owned: owned.length, oc: touched && tasks3.length ? owned.length / tasks3.length : null, conc: n >= 2 ? C1().concentration(byOwner, 3) : null,
         weighted: n >= 2 && wsum > 0 ? { top: wtop, share: byWeight[wtop] / wsum, byWeight: byWeight } : null,
         unowned: unowned.map(function (r) { return trim(r.task); }), half: half.map(function (r) { return trim(r.task); }), byOwner: byOwner, unmatched: unmatched3, starters: starters, starterIdx: starterIdx,
-        amend: rowsOf(data, 'wp03.amend', ['change'], sizeOf(data, 'amend')).filter(function (r) { return trim(r.change); }).length };
+        amend: rowsOf(data, 'wp03.amend', ['change'], sizeOf(data, 'amend')).filter(function (r) { return trim(r.change); }).length,
+        listed: Array.isArray(data.unpicked) ? data.unpicked.slice() : [], views: data.w3views || null };
+      if (out.wp03.listed.length) out.wp03.filled = true;
     }
 
     // WP-04: what keeps slipping

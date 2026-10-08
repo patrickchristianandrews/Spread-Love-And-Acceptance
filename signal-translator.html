@@ -2093,7 +2093,7 @@ function run(){
   const brief = '<div class="verdict st-brief st-brief-keep">'+(rw.unchanged
       ? '<p class="vk">Your words</p><p class="vbest">'+esc(text)+'</p><p class="why1">'+esc(plain ? plain.text : "This will probably land okay.")+'</p>'
       : '<p class="vk">Say it like this</p><p class="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say)+(why1?'<p class="why1"><b>Why:</b> '+esc(why1)+'</p>':'')+'<div class="actions" style="margin:0"><button class="go" type="button" id="copyBrief" data-say="'+esc(opts[0].say)+'">Copy this</button></div>')+'</div>';
-  let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + brief + vtop + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
+  let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + vtop + brief + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
   h += '<p class="drops-h">The full read. Open any part.</p>';
   h += drop("Your sentence, taken apart", staticIds.length+" to look at"+(goodIds.length?" · "+goodIds.length+" worth keeping":""), p1, false, false);
   h += drop("How it may land for "+esc(B), lvl[1], p2, false, false);
