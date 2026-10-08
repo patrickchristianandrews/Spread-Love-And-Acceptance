@@ -13,22 +13,25 @@
     }
     *{ box-sizing: border-box; }
     body { background: var(--paper); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; line-height: 1.5; }
-    .wrap { display: flex; justify-content: center; padding: 30px 16px 60px; }
+    .wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 30px 16px 60px; }
+    /* one column at every text size: the site adds a privacy note, a daily tip and an "ask" card into this page, and they stack under the toolkit instead of squeezing beside it */
+    .wrap > * { width: 100%; max-width: 680px; min-width: 0; margin-left: 0; margin-right: 0; box-sizing: border-box; }
     .stem-rack { max-width: 680px; width: 100%; background: var(--paper-deep); border: 2px solid var(--line); border-radius: 16px; padding: 24px; }
     h1 { margin-top: 0; color: var(--brass-ink); font-size: 1.5rem; }
     a { color: var(--focus); }
     :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
     .note { background: #E7EEF4; border-left: 4px solid var(--focus); border-radius: 6px; padding: 14px 16px; font-size: 0.92rem; margin-bottom: 20px; }
     .note p { margin: 0 0 8px 0; } .note p:last-child { margin-bottom: 0; }
-    .stem-track { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .stem-track { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .track-meta { flex: 1 1 16em; min-width: 0; }
     .track-meta { font-size: 0.92rem; }
     .track-meta strong { display: block; font-size: 1rem; margin-bottom: 2px; }
     .track-meta span { color: var(--ink-soft); }
     button { background: var(--ink); color: #fff; border: none; min-height: 44px; min-width: 80px; padding: 10px 18px; border-radius: 999px; cursor: pointer; font-weight: 600; flex-shrink: 0; }
     button[aria-pressed="true"] { background: #3E6B4C; }
     .master-controls { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
-    .master-controls label { display: flex; align-items: center; gap: 10px; font-size: 0.92rem; flex: 1 1 220px; }
-    .master-controls input[type="range"] { flex: 1; min-height: 44px; accent-color: #3E6B4C; }
+    .master-controls label { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 0.92rem; flex: 1 1 220px; min-width: 0; }
+    .master-controls input[type="range"] { flex: 1 1 8em; min-width: 0; min-height: 44px; accent-color: #3E6B4C; }
     .volume-warning { font-size: 0.86rem; color: var(--ink-soft); margin-top: 16px; text-align: center; }
     @media (max-width: 480px) { .stem-track { flex-direction: column; align-items: stretch; } .stem-rack { padding: 16px; } }
   </style>
