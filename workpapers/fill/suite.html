@@ -108,6 +108,13 @@
         <p class="ws-drop-kinds">Draft files from any fill-in workpaper, a suite file, or a fillable PDF you filled in on your phone or computer. Each one finds its place on your road.</p>
         <p class="ws-drop-note" id="ws-drop-note" aria-live="polite"></p>
       </div>
+      <div class="ws-paste" id="ws-paste">
+        <label class="ws-paste-l" for="ws-paste-in">No file? Paste a link or code someone sent you</label>
+        <p class="ws-paste-sub">From &ldquo;Share this list&rdquo; on One owner per job, a shared week of check-ins, or &ldquo;Send it to my partner&rdquo; here. It is read on this device; nothing is sent anywhere.</p>
+        <textarea id="ws-paste-in" rows="2" autocomplete="off" spellcheck="false"></textarea>
+        <p><button type="button" class="wpf-add" id="ws-paste-go">Bring it in</button></p>
+        <p class="ws-paste-note" id="ws-paste-note" role="status" aria-live="polite"></p>
+      </div>
     </div>
   </section>
 
@@ -138,6 +145,7 @@
       </div>
       <div class="ws-save-row">
         <p><button type="button" class="ws-link" id="ws-save">Save my progress</button> as a small file, to pick everything up next time, even on another device.</p>
+        <p class="ws-send-row"><button type="button" class="wpf-add ws-send" id="ws-send" data-share data-share-result data-share-title="Our Workpaper Suite" data-share-text="Our road so far: open this to see the sheets and add yours." data-share-url="none">Send it to my partner as a link</button> <span class="ws-send-note">The whole road travels inside the link, after the #, so it never reaches a server. Each change needs a new link.</span></p>
         <p class="ws-save-how"><strong>Sharing a file?</strong> Everyone you share it with sees every page in it, including each person&rsquo;s load score and calm-down kit. A raw reaction on Say it so it lands stays out unless its &ldquo;Include my raw reaction&rdquo; box is ticked. The Full path package below can make a copy to share without the private parts.</p>
         <p class="ws-save-how"><strong>Three ways to keep your work, none of them sent anywhere:</strong> tick &ldquo;Keep a draft on this device&rdquo; at the top (this browser only; &ldquo;Erase&rdquo; removes it), save your progress as a small file you can open here on any device, or download a PDF to keep or print.</p>
       </div>
