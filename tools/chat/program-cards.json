@@ -2693,6 +2693,85 @@
       ]
     },
     {
+      "id": "caremarriage",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "caring for a parent and your marriage",
+      "pat": "\\b(husband|wife|partner)\\b.{0,30}\\b(says|thinks|complains|feels)\\b.{0,20}\\b(i m|im|i am)\\b.{0,10}\\b(never|always) (home|there|out|at (my|his|her) (dad|mum|mom|parents?)\\b)|\\b(caring for|looking after|care of)\\b.{0,30}\\b(dad|mum|mom|father|mother|parents?)\\b.{0,60}\\b(marriage|husband|wife|partner)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Caring for a parent takes time and energy that used to go to your marriage, and both of you can feel the loss. It doesn’t mean either of you is wrong."
+      ],
+      "how": [
+        "Tell your partner what a normal week of caring looks like right now; they may not see most of it.",
+        "Protect one small thing that’s just for the two of you each week, even an hour.",
+        "Ask them for one specific kind of support (a meal on visit days, coming along once a month), rather than asking them to just understand.",
+        "Share the care more widely (siblings, respite, services) so it isn’t all on you, or all on your marriage."
+      ],
+      "script": [
+        "I know I’m not home much at the moment, and I miss us too. Can we keep Friday evenings just for us while we sort out more help for Dad?"
+      ],
+      "plain": [
+        "Caring takes time from your marriage.",
+        "Tell your partner what your week looks like.",
+        "Keep one small time just for you two.",
+        "Get more help with the care."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "Check-ins",
+          "/check-ins.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "caresiblings",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "siblings sharing care for a parent",
+      "pat": "\\b(my )?(brothers?|sisters?|siblings?)\\b.{0,40}\\b(won t|wont|don t|dont|doesn t|doesnt|never|refuse\\w*|barely|hardly)\\b.{0,20}\\b(help|do|visit|step up|pitch in|share)\\w*\\b.{0,40}\\b(dad|mum|mom|father|mother|parents?|gran|grandma|grandad)\\b|\\b(share|split|divide)\\b.{0,30}\\b(looking after|caring for|care (of|for))\\b.{0,20}\\b(dad|mum|mom|father|mother|parents?)\\b.{0,40}\\b(brothers?|sisters?|siblings?)\\b|\\b(get|make) my (brothers?|sisters?|siblings?) (to )?(help|share|step up|do more)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "That’s exhausting, and it’s very common: one sibling ends up as the main carer, often because they live closest or noticed first, and the others “help when they can”. The fair split here is between you and your brothers or sisters, not between you and your parent."
+      ],
+      "how": [
+        "Write down what caring for your parent actually involves in a normal week: visits, appointments, medication, paperwork, calls, and the worrying. Seeing it in one place helps the others understand.",
+        "Ask each sibling for one specific, ongoing job with a time, rather than “more help”: “Could you take over the insurance calls and phone Dad every Sunday at 6?”",
+        "Siblings who live far away can still own things: paperwork, bills, booking appointments, researching care, paying for a sitter.",
+        "Talk it through at a planned family call, not in the hallway after an appointment.",
+        "Look after yourself too: respite care and carer helplines exist for exactly this."
+      ],
+      "script": [
+        "I can’t keep doing most of Dad’s care on my own. Could you each take one thing, like Thursday’s appointment or the Sunday call?"
+      ],
+      "plain": [
+        "You should not do it all alone.",
+        "Write down what the care involves.",
+        "Ask each sibling for one clear job.",
+        "Get support for yourself too."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "One owner per job (share it as a link)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "careadultkids",
       "kind": "intent",
       "first": true,
