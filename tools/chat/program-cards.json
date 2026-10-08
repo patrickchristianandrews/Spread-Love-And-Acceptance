@@ -5810,7 +5810,7 @@
       "id": "twophones",
       "kind": "intent",
       "name": "doing it together on two phones",
-      "pat": "\\b(two|2|both|both our|separate|different|our own) (phones|devices|screens)\\b|\\b(together|each) on (our|two|separate|different|both) (phones|devices)\\b|\\b(use|do|try) (it|this|the tools?) together\\b|\\bboth (of us )?(use|do|fill in) (it|this)\\b",
+      "pat": "\\b(two|2|both|both our|separate|different|our own) (phones|devices|screens)\\b|\\b(together|each) on (our|two|separate|different|both) (phones|devices)\\b|\\b(use|do|try) (it|this|the tools?) together\\b|\\bboth (of us )?(use|do|fill in) (it|this)\\b|\\b(each|both) (have|has|got) (our|their|my|his|her) own (phones?|devices?)\\b|\\bon (his|her|their|my husband'?s|my wife'?s|my partner'?s) phone\\b|\\bsend (him|her|them|my partner|my husband|my wife)? ?(my|our) (side|part|answers|bit)\\b|\\bsend my side\\b|\\b(put|bring|merge|combine|join) (our|the) (two )?(sides|answers|phones|lists|halves)\\b|\\badd (his|her|their|my partner'?s|my husband'?s|my wife'?s) side\\b",
       "keys": [
         "two phones",
         "two devices",
@@ -5819,10 +5819,10 @@
         "use it together"
       ],
       "what": [
-        "Yes. Each of you can fill in your own side on your own phone, then send it to the other. The site never sends anything itself: you pass a short code or a file however you like (a text works), and everything stays on your own devices."
+        "Yes. Each of you can fill in your own side on your own phone, then send it to the other. The site never sends anything itself: you send a link (or a code or a file) however you like, a text works, and everything stays on your own devices."
       ],
       "how": [
-        "Lemonade Stand: under the names, “On two phones?” has “Send my side to my partner” (a code or a file) and “Add my partner’s side”, which merges by name and asks before replacing anything.",
+        "Lemonade Stand: under the names, “On two phones?” has “Send my side to my partner” (“Share it as a link” is the main button) and “Add my partner’s side”, which shows a preview, merges by name and asks before replacing anything.",
         "Wavelength: “Share my Wave Code” sends a link that opens the comparison with your code already filled in.",
         "Wiring Card: “Copy the card” includes a card code; your partner taps “Paste my partner’s card” to compare.",
         "Worksheets: each of you saves your own draft or PDF and sends it; loading the second one offers to combine them instead of replacing.",
