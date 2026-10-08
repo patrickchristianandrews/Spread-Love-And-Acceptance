@@ -9,7 +9,7 @@ const S = process.env.SHOTS || require('os').tmpdir()+'/';
 const URL = 'http://localhost:'+(process.env.PORT||8783)+'/signal-translator.html';
 let pass=0, fail=0; const errsOut=[];
 const ok=(c,m)=>{ if(c) pass++; else { fail++; errsOut.push(m); } };
-const NEUTRAL = /^(Not sure \/ skip|Choose an example…)$/;
+const NEUTRAL = /^(Not sure \/ skip|Choose an example…|Don't know, or not shared: skip)$/;
 async function overflow(p){ return p.evaluate(()=>document.documentElement.scrollWidth - document.documentElement.clientWidth); }
 async function fullText(p){ return p.evaluate(()=>{ document.querySelectorAll('#results details').forEach(d=>d.open=true); return document.querySelector('#results').innerText; }); }
 async function translate(p){ await p.click('#go'); await p.waitForSelector('#verdict'); await p.evaluate(()=>document.querySelectorAll('#results details').forEach(d=>d.open=true)); await p.waitForTimeout(120); }
@@ -38,8 +38,10 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
       ok(s.label.length>0, `${tag}: select #${s.id} has no visible label`);
       const body = s.opts.filter((t,i)=>!(i===0 && NEUTRAL.test(t)));
       const sorted = await p.evaluate(list=>list.slice().sort((a,b)=>a.localeCompare(b, undefined, {sensitivity:"base"})), body);
-      ok(JSON.stringify(body)===JSON.stringify(sorted), `${tag}: #${s.id} not alphabetical: ${body.join(' | ')}`);
-      if(/^w[AB]\d$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
+      // "Who sent it?" lists the closest people first (partner, co-parent, family…), on purpose
+      if(s.id!=='gotRelSel') ok(JSON.stringify(body)===JSON.stringify(sorted), `${tag}: #${s.id} not alphabetical: ${body.join(' | ')}`);
+      // the listener's wiring starts with a plainer skip: never guess at someone's diagnosis
+      if(/^w[AB]\d$/.test(s.id)) ok(s.opts[0]===(/^wB/.test(s.id) ? "Don't know, or not shared: skip" : 'Not sure / skip'), `${tag}: #${s.id} should start with its skip option`);
       if(/^(relSel|stateSel|sitSel|envSel|needASel|needBSel)$/.test(s.id)) ok(s.opts[0]==='Not sure / skip', `${tag}: #${s.id} should start with "Not sure / skip"`);
       if(s.id==='presetSel' && s.first) ok(s.opts[0]==='Choose an example…', `${tag}: presets should start with "Choose an example…"`);
     }
