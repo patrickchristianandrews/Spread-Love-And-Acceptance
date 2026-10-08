@@ -113,7 +113,7 @@
   }
   function card(where) {
     var here = location.pathname.replace(/\/$/, '/index.html');
-    var rec = recent().filter(function (r) { return r && r.u && r.u !== here; }), last = rec[0];
+    var seenT = {}, rec = recent().filter(function (r) { if (!r || !r.u || r.u === here || seenT[r.t]) return false; seenT[r.t] = 1; return true; }), last = rec[0];  // one line per page name (the simple page and its fill-in share a name)
     var d = drafts(), six = sixWeeks(), wx = weather(), prev = lastVisitDay(), gap = daysSince(prev), nx = nextStep();
     var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev; }).slice(0, 3) : [];
     var prog = inProgress();

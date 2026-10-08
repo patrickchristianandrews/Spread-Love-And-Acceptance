@@ -977,6 +977,85 @@
       "chips": []
     },
     {
+      "id": "rentlate",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a housemate paying rent late",
+      "pat": "\\b(rent|bills?|share|money)\\b.{0,30}\\b(late|behind|short|not paid|hasn t paid|hasnt paid|owes|owing)\\b.{0,40}\\b(housemate|flatmate|roommate|flat|house|landlord|awkward|bring (it )?up)?|\\b(housemate|flatmate|roommate)s?\\b.{0,40}\\b(late|behind|owes|hasn t paid|hasnt paid|never pays|doesn t pay|doesnt pay)\\b",
+      "notPat": "\\b(husband|wife|partner|boyfriend|girlfriend)\\b",
+      "keys": [],
+      "what": [
+        "Money between housemates gets awkward fast, so it helps to talk about the numbers and the plan, not about who is late."
+      ],
+      "how": [
+        "Bring it up privately first, calmly, and soon: “Hey, rent was due on the 1st and I haven’t seen your share yet. Is everything okay?”",
+        "Assume there may be a reason, and ask for a date: “When do you think you can send it?”",
+        "Agree a simple house rule for everyone: rent and bills go in by a set day, into one place, and anyone who’s going to be late says so before the day.",
+        "Write the shared bills down so everyone sees the same numbers: the Lemonade Stand’s Money tab works for three or more people.",
+        "If it keeps happening, raise it at a short house meeting as a rule, not a call-out."
+      ],
+      "script": [
+        "Hey, rent was due on the 1st and I haven’t seen your share yet. Is everything okay? When do you think you can send it?"
+      ],
+      "plain": [
+        "Talk to them privately and calmly.",
+        "Ask if everything is okay.",
+        "Ask for a date.",
+        "Agree a rule for the whole house."
+      ],
+      "links": [
+        [
+          "Roommates: rent, bills and three or more people",
+          "/share-the-load.html#roommates"
+        ],
+        [
+          "The Lemonade Stand (Money)",
+          "/lemonade-stand.html#money"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "supplies",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "shared supplies like loo roll",
+      "pat": "\\b(who should|who buys|who pays for|how do we split|splitting|sharing)\\b.{0,30}\\b(loo roll|toilet (roll|paper)|washing ?up liquid|dish (soap|liquid)|cleaning (stuff|supplies|products)|bin bags|milk|shared (stuff|supplies|food|things))\\b|\\b(loo roll|toilet roll|toilet paper|washing ?up liquid|shared supplies)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Shared supplies are small, but they’re a classic source of quiet resentment: the same person always notices, buys and never gets paid back."
+      ],
+      "how": [
+        "Pick one of these and agree it together: a small kitty everyone tops up monthly, a rota for who buys this month, or one owner who buys and everyone pays back by a set day.",
+        "Keep a shared list (a note in the group chat) so whoever is at the shop can see what’s low.",
+        "Add the supplies to the Lemonade Stand’s Money tab, so the spend is visible and split fairly.",
+        "Give “noticing what’s running low” an owner on the fridge list, so it isn’t always the same person by default."
+      ],
+      "script": [
+        "Can we sort out loo roll and washing-up liquid? I’d suggest a small kitty we all top up, or we take it in turns by month. Which works for you?"
+      ],
+      "plain": [
+        "Agree a kitty, a rota or one buyer.",
+        "Keep a shared list.",
+        "Track the cost so it is fair.",
+        "Give noticing an owner."
+      ],
+      "links": [
+        [
+          "The Lemonade Stand (Money)",
+          "/lemonade-stand.html#money"
+        ],
+        [
+          "Roommates: rent, bills and three or more people",
+          "/share-the-load.html#roommates"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "evidence",
       "kind": "intent",
       "first": true,
@@ -6520,7 +6599,7 @@
       "id": "twophones",
       "kind": "intent",
       "name": "doing it together on two phones",
-      "pat": "\\b(two|2|both|both our|separate|different|our own) (phones|devices|screens)\\b|\\b(together|each) on (our|two|separate|different|both) (phones|devices)\\b|\\b(use|do|try) (it|this|the tools?) together\\b|\\bboth (of us )?(use|do|fill in) (it|this)\\b|\\b(each|both) (have|has|got) (our|their|my|his|her) own (phones?|devices?)\\b|\\bon (his|her|their|my husband'?s|my wife'?s|my partner'?s) phone\\b|\\bsend (him|her|them|my partner|my husband|my wife)? ?(my|our) (side|part|answers|bit)\\b|\\bsend my side\\b|\\b(put|bring|merge|combine|join) (our|the) (two )?(sides|answers|phones|lists|halves)\\b|\\badd (his|her|their|my partner'?s|my husband'?s|my wife'?s) side\\b",
+      "pat": "\\b(two|2|both|both our|separate|different|our own) (phones|devices|screens)\\b|\\b(together|each) on (our|two|separate|different|both) (phones|devices)\\b|\\b(use|do|try) (it|this|the tools?) together\\b|\\bboth (of us )?(use|do|fill in) (it|this)\\b|\\b(each|both) (have|has|got) (our|their|my|his|her) own (phones?|devices?)\\b|\\bon (his|her|their|my husband'?s|my wife'?s|my partner'?s) phone\\b|\\bsend (him|her|them|my partner|my husband|my wife)? ?(my|our) (side|part|answers|bit)\\b|\\bsend my side\\b|\\b(put|bring|merge|combine|join) (our|the) (two )?(sides|answers|phones|lists|halves)\\b|\\badd (his|her|their|my partner'?s|my husband'?s|my wife'?s) side\\b|\\bshare (this|it|the (list|result|stand)) with (my )?(\\d+|two|three|four|all my|the other) ?(housemates|flatmates|roommates|people|others)\\b|\\b(group chat|group text)\\b.{0,30}\\b(share|send|post)\\b|\\b(share|send|post)\\b.{0,30}\\b(group chat|group text)\\b",
       "keys": [
         "two phones",
         "two devices",

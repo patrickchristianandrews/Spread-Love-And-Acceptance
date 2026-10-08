@@ -741,6 +741,9 @@ t('retest4', 'i cant sleep', { kind: 'care', id: 'cantsleep' });
 t('retest4', 'my husband died and the house is so quiet', { not: /miss her/ });
 t('retest4', 'where do i find volunteering', { id: 'retirepurpose', text: /library/ });
 t('retest4', 'i want something to do outside the house', { id: 'retirepurpose' });
+t('retest4', 'how do i bring up rent being late without it getting awkward', { id: 'rentlate', not: /bigger purchases/ });
+t('retest4', 'who should buy loo roll and washing up liquid', { id: 'supplies' });
+t('retest4', 'how do i share this with my 3 housemates', { id: 'twophones', not: /Kip/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 
