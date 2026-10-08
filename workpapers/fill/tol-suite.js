@@ -182,6 +182,8 @@
     var by = en.from && en.from.by ? String(en.from.by).trim() : '';
     return by ? by + '\u2019s' : 'the new';
   }
+  // a sheet's name in the middle of a sentence: "the 90-second daily check-in"
+  function midName(code) { return String(SP.nameOf(code)).replace(/^The /, 'the '); }
   function andJoin(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
   function filled(en) { return SP.answers(en) > 0; }
   // WP-02 and WP-11 are filled in by each person about themselves: on a shared road, one set per person.
@@ -1899,9 +1901,9 @@
       var msg = '';
       if (loaded.length) {
         changed();
-        var names = loaded.map(function (en) { return SP.nameOf(en.workpaper) + (en.label ? ' (' + en.label + ')' : ''); });
+        var names = loaded.map(function (en) { return midName(en.workpaper) + (en.label ? ' (' + en.label + ')' : ''); });
         msg = 'Brought in ' + loaded.length + (loaded.length === 1 ? ' sheet: ' : ' sheets: ') + andJoin(names.slice(0, 6)) + (names.length > 6 ? ' and ' + (names.length - 6) + ' more' : '');
-        msg = msg.replace(/[.?!]$/, '') + '.';
+        if (!/[.?!]$/.test(msg)) msg += '.';
         celebrate($('ws-drop'), null);
         var first = document.querySelector('.ws-stop.is-done');
         if (first && first.scrollIntoView && !hold.length) first.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
@@ -1912,7 +1914,7 @@
         var byWho = {};
         merged.forEach(function (en) {
           var who = mergedWho(en);
-          (byWho[who] = byWho[who] || []).push(SP.nameOf(en.workpaper) + ' (' + mergeCount(en.mergeInfo) + ')');
+          (byWho[who] = byWho[who] || []).push(midName(en.workpaper) + ' (' + mergeCount(en.mergeInfo) + ')');
         });
         Object.keys(byWho).forEach(function (who) { msg += (msg ? ' ' : '') + 'Added ' + who + ' answers to ' + andJoin(byWho[who]) + '.'; });
       }

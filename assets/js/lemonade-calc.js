@@ -3104,7 +3104,7 @@
       // pasted by hand: the paste box stays (only a link opened straight into this page hides it)
       var opened = kindSaid === 'link';
       unpackSide(text).then(function (json) {
-        if (json) review(json, note, opened ? 'link' : 'pasted-link');
+        if (json) { review(json, note, opened ? 'link' : 'pasted-link'); if (pending) { try { sessionStorage.setItem(PENDING, String(text)); } catch (e) {} } }
         else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (under “Other ways” on their device), and paste it here.'); }
       });
       return;
@@ -3116,7 +3116,7 @@
     if (plan.error) { box.innerHTML = ''; sideStatus('add-msg', plan.error); return; }
     pending = plan;
     // kept in this tab until it's added or set aside, so Back from another page brings the preview back
-    try { sessionStorage.setItem(PENDING, String(text)); } catch (e) {}
+    if (kindSaid !== 'link' && kindSaid !== 'pasted-link') { try { sessionStorage.setItem(PENDING, String(text)); } catch (e) {} }
     $('add-msg').textContent = '';
     var cnt = function (k) { return plan.jobs.concat(plan.bills).filter(function (r) { return r.status === k; }); };
     var news = cnt('new'), fills = cnt('fill'), same = cnt('same'), conf = cnt('conflict'), freqs = cnt('freq');
