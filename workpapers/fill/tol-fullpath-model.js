@@ -1529,7 +1529,7 @@
         : { k: 'Is the setup working?', v: 'Not worked out yet', band: R.focus && R.optional && R.optional['WP-01'] ? 'This read is built on the load sheets (WP-01 and WP-03), which are optional on your road. Fill them in only if the load feels uneven.' : 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
       tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? (c.wp01 && c.wp01.oneSided ? 'Waiting for ' + list(c.wp01.oneSided.missing) + '’s week' : 'WP-01 needs minutes and names') : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
-      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? 'Not filled in' : c.calc.oc >= 0.995 ? 'Every job has one' : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? 'WP-03 needs owners' : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner', tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
+      tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? 'Not picked yet' : 'Not filled in') : c.calc.oc >= 0.995 ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? 'Every job you picked has one' : 'Every job has one') : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? listedLine(c.wp03) : 'WP-03 needs owners') : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner' + (c.wp03.listed && c.wp03.listed.length ? '; ' + c.wp03.listed.length + ' more listed from your Lemonade Stand, without an owner yet' : ''), tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
       var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
       if (co) tiles.push({ k: 'Who’s carrying more right now', v: P.label(co.top), band: c.conc.lines[0], tone: 'drift', note: 'About ' + pct(co.share) + '; an even share would be ' + pct(1 / c.n) + '. Noted at half or more, and 20 points over even.' });
     }
@@ -1636,9 +1636,11 @@
     if (c.wp03 && c.wp03.filled && c.wp03.unowned.concat(c.wp03.half).length) {
       var gaps = c.wp03.unowned.concat(c.wp03.half);
       add(8, plural(gaps.length, v.task, v.tasks) + ' still need' + (gaps.length === 1 ? 's' : '') + ' a clear owner: ' + list(gaps.slice(0, 4)) + (gaps.length > 4 ? ' and more' : '') + '. Work with no owner drifts to whoever notices it first.');
-    } else if (c.wp03 && c.wp03.filled && c.wp03.tasks) {
+    } else if (c.wp03 && c.wp03.filled && c.wp03.tasks && !(c.wp03.listed && c.wp03.listed.length)) {
       add(5, 'Every one of the ' + c.wp03.tasks + ' ' + v.tasks + ' on your list has an owner. That clarity is doing real work.');
     }
+    if (c.wp03 && c.wp03.listed && c.wp03.listed.length) add(4, listedLine(c.wp03));
+    if (c.wp03 && c.wp03.views) add(9, viewsLine(c.wp03, c.P) + ' Neither list is wrong: they show how each of you sees it. Agree on the ones that differ together.');
     if (c.wp01 && c.wp01.shares && c.n >= 2) {
       var sh = c.wp01.shares, mx = Math.max.apply(null, sh), iMax = sh.indexOf(mx);
       if (c.calc.wb != null && c.calc.wb < 0.7) add(7, 'The logged minutes leaned one way this week: ' + c.P.list.map(function (p) { return p.label + ' ' + Math.round(sh[p.i]) + '%'; }).join(', ') + '. That is a fact about how ' + v.work + ' fell this week, not about effort or care.');
@@ -1747,6 +1749,8 @@
       s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list still has no owner.') : 'No tasks listed, so there is no clarity number (not a zero).');
       if (t.conc && t.conc.flag) s.shows.push(P.label(t.conc.top) + ' owns ' + t.conc.count + ' of the ' + t.conc.total + ' ' + v.tasks + ' with one named owner (' + pct(t.conc.share) + '; an even share would be ' + pct(1 / c.n) + '). Clarity reads whether each job has a name, not how the jobs are spread, so read the two together.');
       if (t.unowned.length) s.shows.push('No owner yet: ' + list(t.unowned) + '.');
+      if (t.listed && t.listed.length) s.shows.push(listedLine(t) + ' They came in from your Lemonade Stand, where you pick owners for a few jobs at a time, so they don\u2019t count against the clarity number.');
+      if (t.views) s.shows.push(viewsLine(t, P));
       if (t.half.length) s.shows.push('A helper, but no owner yet: ' + list(t.half) + '.');
       if (t.starters && t.starters.length) s.shows.push('Left out as examples (starter jobs nobody filled in): ' + list(t.starters.slice(0, 6)) + (t.starters.length > 6 ? ' and more' : '') + '.');
       if (t.unmatched.length) s.shows.push('Names that didn’t match anyone on the road: ' + list(t.unmatched.map(function (x) { return '“' + x + '”'; })) + '. They still count as owned.');

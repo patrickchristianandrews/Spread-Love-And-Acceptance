@@ -577,9 +577,9 @@
   // Nothing is sent anywhere; the code is read here, on this page.
   var LEMON_KEEP = 'tol-lemonade-stand-v2';
   var LEMON_DRAFT = 'tol-lemonade-draft'; // the stand's own copy for this tab (sessionStorage), kept or not
-  var LEMON_FREQ = { day: 7, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
-  var LEMON_OFTEN = { day: 'Daily', few: 'Weekly', two: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
-  var LEMON_WORD = { day: 'each day', few: '3 times a week', two: 'twice a week', week: '', eow: 'every other week', month: 'each month' };
+  var LEMON_FREQ = { day: 7, wkd: 5, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
+  var LEMON_OFTEN = { day: 'Daily', wkd: 'Daily', few: 'Weekly', two: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
+  var LEMON_WORD = { day: 'each day', wkd: 'each weekday', few: '3 times a week', two: 'twice a week', week: '', eow: 'every other week', month: 'each month' };
   // The stand counts only home jobs in the split (paid work and rest are shown beside it, never in it).
   // Its own area for a job wins; otherwise the same guesses the stand makes from the name.
   var LEMON_AWAY = /^(paid work|commute|school or classes|study & homework \(my own\)|work messages after hours|a side job|time to myself|a walk or moving my body|hobbies|time with friends|quiet time doing nothing|a full day off)$/i;
@@ -784,7 +784,7 @@
     return hit;
   }
   function sheetName(hit) { var i = hit.st.entries.indexOf(hit.en); return hit.en.label || 'Sheet ' + (i + 1); }
-  function baseTask(t) { return SP.fold(String(t || '').replace(/\s*\((?:each day|3 times a week|every other week|each month|noticing and planning)\)\s*$/i, '').replace(/\s*\((?:each day|3 times a week|every other week|each month|noticing and planning)\)\s*$/i, '')); }
+  function baseTask(t) { return SP.fold(String(t || '').replace(/\s*\((?:each day|each weekday|3 times a week|twice a week|every other week|each month|noticing and planning)\)\s*$/i, '').replace(/\s*\((?:each day|each weekday|3 times a week|twice a week|every other week|each month|noticing and planning)\)\s*$/i, '')); }
   function lemonBring(d, from) {
     if (!S.path) return 'Choose your road first, then bring in your stand.';
     var here = function () { return S.names.map(function (x) { return SP.fold(x); }); }, added = [];
