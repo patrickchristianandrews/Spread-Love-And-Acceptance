@@ -779,6 +779,8 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
   .wpf-bar button{ font-size: .86rem; padding: 6px 10px; min-height: 40px; }
   #wpf-status{ flex: 1 1 100%; font-size: .8rem; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
   .wpf-keepask-q{ font-size: .8rem; }
+  /* while the keep question is showing, the status gets one line, so the bar stays small */
+  .wpf-bar-inner:has(.wpf-keepask) #wpf-status{ -webkit-line-clamp: 1; line-clamp: 1; }
   .wpf-bar .wpf-keepask button{ min-height: 32px; padding: 3px 10px; font-size: .8rem; }
 }
 /* the "Use these names" box under the names: its message gets a line of its own */
@@ -809,3 +811,21 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .wpf-tonight-others[open] > summary::before{ content: "\25BE"; }
 .wpf-tonight-others p{ margin: .3em 0 .5em; }
 .wpf-tonight-one select{ width: 100%; }
+
+/* the Workpaper Suite's save bar on a phone: Save my progress and More (Open a saved file, Fillable PDF) */
+@media (max-width: 560px){
+  .wpf-bar-actions.ws-bar-actions.has-more:not(.is-open) #wpf-pdf{ display: none; }
+  .wpf-bar-actions.ws-bar-actions.has-more.is-open #wpf-pdf{ order: 3; flex: 1 1 30%; }
+}
+/* "Your turn": what was shared, and which sheets are yours */
+.ws-turn-list{ list-style: none; margin: 0 0 .6em !important; padding: 0 !important; display: flex; flex-direction: column; gap: 2px; }
+.ws-turn-list li{ margin: 0 !important; max-width: none !important; }
+.ws-turn-list .ws-link{ text-align: left; min-height: 40px; padding: 4px 0; }
+.ws-turn-list .ws-link::before{ content: "\2192  "; text-decoration: none; display: inline-block; margin-right: .3em; }
+/* someone else's own sheet, read-only here */
+.ws-readonly{ margin: 0 0 1em; padding: .7em 1em; border-radius: 12px; background: #EEF3F8; border: 1px solid #B9CBDD; }
+.ws-readonly p{ margin: 0 0 .5em; }
+.wpf-form.is-readonly input:disabled, .wpf-form.is-readonly select:disabled, .wpf-form.is-readonly textarea:disabled{ opacity: 1; color: var(--ink, #211D17); background: #F6F2E6; }
+.ws-send-private{ margin: .2em 0 0; font-size: .92rem; }
+.ws-send-private label{ display: inline-flex; gap: .5em; align-items: flex-start; cursor: pointer; }
+.ws-send-private input{ margin-top: .3em; flex: none; }

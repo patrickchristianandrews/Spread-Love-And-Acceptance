@@ -200,7 +200,8 @@
   var keep = false, mode = null;
   // How a bill is shared
   // (savings and money coming in are kept and shown, never split and never owed between people)
-  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed amount, not split', savings: 'Savings goal, kept', income: 'Money coming in (pay)' };
+  // short, so the choice is never cut off on a phone with large text; the line under the row says more
+  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed, not split', savings: 'Savings, kept', income: 'Money coming in' };
   var BILL_ORDER = ['shared', 'own', 'agreed', 'savings', 'income'];
   // the words for each kind of cost in the money summary
   var KIND_WORD = { shared: 'shared bills', own: 'own costs', agreed: 'family support', savings: 'savings' };
@@ -1116,9 +1117,9 @@
     var kindNote = document.createElement('p'); kindNote.className = 'ls-mini ls-kind-note';
     function showKind() {
       wLab.hidden = item.kind !== 'own';
-      kindNote.textContent = item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'Kept on the list so it’s seen, but not split and not owed (like money you send to family).'
-        : item.kind === 'savings' ? 'Kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month”.'
-        : item.kind === 'income' ? 'Not a cost. Optional: with money coming in listed, the summary shows what’s left after the costs.' : '';
+      kindNote.textContent = item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'An agreed amount, like family support: kept on the list so it’s seen, but not split and not owed.'
+        : item.kind === 'savings' ? 'A savings goal: kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month”.'
+        : item.kind === 'income' ? 'Pay or other money coming in, not a cost. Optional: with money coming in listed, the summary shows what’s left after the costs.' : '';
       kindNote.hidden = !kindNote.textContent;
       amts.querySelectorAll('.pname[data-k="b"]').forEach(function (sp) { sp.textContent = billWho(item, +sp.dataset.i); });
     }
@@ -3691,7 +3692,7 @@
   function goalText() {
     var g = num(state.goal.a), m = savingsMonthly(), what = state.goal.f.trim();
     if (!g) return '';
-    if (!m) return 'Add a line with “Savings goal, kept” above and what each of you puts in a month, and the time to ' + cash(g) + ' shows here.';
+    if (!m) return 'Add a line shared as “Savings, kept” above, with what each of you puts in a month, and the time to ' + cash(g) + ' shows here.';
     return 'At ' + cash(m) + ' a month, ' + cash(g) + (what ? ' for ' + what.charAt(0).toLowerCase() + what.slice(1) : '') + ' takes about ' + monthsWords(g / m) + '. Rough, before any interest or changes.';
   }
   function renderGoal() {

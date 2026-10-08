@@ -1207,6 +1207,7 @@
     clearTimeout(keepTimer);
     try { global.localStorage.removeItem(KEEP_KEY); } catch (e) {}
     keep = false;
+    if (WPK.keepOff) WPK.keepOff('suite', true);
     var box = $('ws-keep'); if (box) box.checked = false;
     S.dirty = S.stops.some(function (st) { return st.entries.some(filled); });
     say(msg || 'Erased. Nothing from your suite is stored on this device. What is on the page stays until you close it.');
@@ -2178,7 +2179,7 @@
     lemonRender();
     var keepBox = $('ws-keep');
     if (keepBox) keepBox.addEventListener('change', function () {
-      if (keepBox.checked) { keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); if (suiteAsk) suiteAsk(); }
+      if (keepBox.checked) { keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); if (suiteAsk) suiteAsk(); }
       else eraseKept('Not kept any more. Nothing from your suite is stored on this device.');
     });
     var eraseBtn = $('ws-erase');
@@ -2296,7 +2297,8 @@
       var askS = WPK.keepAsk({
         key: 'suite', bar: document.querySelector('.wpf-bar-inner'),
         want: function () { return !keep && !!S.path && (S.stops.some(function (st) { return st.entries.some(filled); }) || S.names.some(function (x) { return String(x || '').trim(); })); },
-        onKeep: function () { var kb2 = $('ws-keep'); if (kb2) kb2.checked = true; keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press \u201cErase\u201d to remove it.'); if (suiteAsk) suiteAsk(); }
+        auto: true,
+        onKeep: function (auto) { var kb2 = $('ws-keep'); if (kb2) kb2.checked = true; keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say(auto ? 'Kept on this device, like your other worksheets. To remove it, press \u201cErase\u201d.' : 'Kept on this device for next time. Press \u201cErase\u201d to remove it.'); if (suiteAsk) suiteAsk(); }
       });
       suiteAsk = askS.check;
       askS.check();
@@ -2340,7 +2342,7 @@
     var barActs = document.querySelector('.wpf-bar-actions');
     if (barActs && !$('wpf-more')) {
       var moreB = h('button', { type: 'button', id: 'wpf-more', className: 'wpf-btn-quiet wpf-bar-more', 'aria-expanded': 'false', text: 'More \u25BE' });
-      barActs.insertBefore(moreB, barActs.firstChild); barActs.classList.add('has-more');
+      barActs.insertBefore(moreB, barActs.firstChild); barActs.classList.add('has-more', 'ws-bar-actions');
       moreB.addEventListener('click', function () {
         var open = !barActs.classList.contains('is-open');
         barActs.classList.toggle('is-open', open);

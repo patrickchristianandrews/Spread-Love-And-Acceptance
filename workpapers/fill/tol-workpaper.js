@@ -2015,7 +2015,7 @@
         return;
       }
       el = h('div', { className: 'wpf-keepask no-print', role: 'group', 'aria-label': 'Keep a draft on this device' }, [
-        h('p', { className: 'wpf-keepask-q', text: 'Keep this on this device for next time?' }),
+        h('p', { className: 'wpf-keepask-q', text: 'Keep this on this device?' }),
         h('button', { type: 'button', className: 'wpf-keepask-yes', 'data-keepask': 'yes', text: 'Keep it' }),
         h('button', { type: 'button', className: 'wpf-keepask-no', 'data-keepask': 'no', text: 'Not now' })
       ]);
@@ -2206,7 +2206,7 @@
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels, setHousehold: setHousehold,
     setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
-    labelFor: function (i) { return labelFor(i); }, readShared: readShared, keepAsk: keepAsk, jobKey: jobKey
+    labelFor: function (i) { return labelFor(i); }, readShared: readShared, keepAsk: keepAsk, keepOff: keepOff, jobKey: jobKey
   };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
