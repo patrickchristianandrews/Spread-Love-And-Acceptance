@@ -195,7 +195,7 @@ const F = [
    what:"A fed-up line (\"you're getting on my last nerve,\" \"shut up,\" \"I'm done with you\") says how angry you are, but not what you need. The listener can only defend themselves or pull away.",
    fix:"Say the feeling and the need, and take a break if you need one: \"I'm really frustrated. I need a few minutes, then can we talk about [the thing]?\""},
   {id:"absolute", name:"Absolute or generalization", kind:"static",
-   re:/\b(?:always|never|every (?:single )?time|every (?:single )?day|constantly|all the time|nothing ever|no one ever|nobody ever|nobody (?:else )?(?:cares|helps|listens|does|thinks|ever)|no one (?:else )?(?:cares|helps|listens|does|thinks)|everyone (?:else )?(?:knows|can|does|thinks|manages|sees)|everybody (?:else )?(?:knows|can|does|thinks|manages|sees)|all you (?:ever )?do|you do nothing|nothing (?:i do|you do|gets done|changes|works)|forever)\b/gi,
+   re:/\b(?:always|never|every (?:single )?time|every (?:single )?day|constantly|all the time|nothing ever|no one ever|nobody ever|nobody (?:else )?(?:cares|helps|listens|does|thinks|ever)|no one (?:else )?(?:cares|helps|listens|does|thinks)|everyone (?:else )?(?:knows|can|does|thinks|manages|sees)|everybody (?:else )?(?:knows|can|does|thinks|manages|sees)|all you (?:ever )?do|(?:you|you two|you both|you all|you guys|you lot|the two of you|both of you|all of you|y'all|they|he|she) (?:just )?(?:do|does|did) (?:absolutely )?(?:nothing|zero|sod all|jack(?: all)?)|(?:it's|it is) always me|always me\b|nothing (?:i do|you do|gets done|changes|works)|forever)\b/gi,
    what:"\"Always,\" \"never\" and \"everyone\" erase every exception. The listener remembers the time it didn't happen and argues that, and the real point gets lost.",
    fix:"Swap the absolute for one specific, recent example."},
   {id:"madefeel", name:"Blame for a feeling (\"you made me…\")", kind:"static",
@@ -214,6 +214,14 @@ const F = [
    re:/\b(?:yet again|once again|again|as usual|like always|still(?= (?:haven't|hasn't|hadn't|didn't|don't|doesn't|won't|can't|isn't|aren't|not|no|there|here|waiting|broken|late|wrong|messy|dirty|full|doing|leaving|forgetting|on (?:your|the) phone)\b)|(?:can't|didn't|don't|won't|couldn't|not|never) even|even bother)\b/gi,
    what:"Small words like \"again,\" \"still\" and \"even\" point to a pattern. They quietly say \"this is who you are,\" so the listener hears the whole history, not today.",
    fix:"Drop them. Talk about this one time."},
+  {id:"count", name:"Keeping count (\"third time\")", kind:"static",
+   re:/\b(?:(?:this|that|it)(?:'s| is| was) (?:now |already |officially )?the|for the) (?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|umpteenth|hundredth|millionth|nth|\d+(?:st|nd|rd|th)) time\b|\b(?:\d+|two|three|four|five|six|several|so many|too many) times (?:now|already|this (?:week|month|sprint|quarter|year)|in a row)\b/gi,
+   what:"Counting the misses (\"third time,\" \"three times now\") reads as a record being kept on someone. People hear blame, and stop reading for the fix.",
+   fix:"Name the days it happened and what it affected, then ask for one change. If it keeps happening with one person, talk to them on their own."},
+  {id:"excuse", name:"Shifts the job onto them", kind:"static",
+   re:/\byou know (?:how i am|how i get|what i'm like|what i am like|me)(?=\s*[.!,…]|\s*$)|\b(?:that's|that is|it's|it is) (?:just )?(?:how|who|the way) i am\b|\bi (?:can't|cannot|can not) help it\b|\b(?:that's|that is) just me\b|\bi'm just like that\b|\bi'm (?:just )?wired (?:that way|like that)\b/gi,
+   what:"\"You know how I am\" or \"I can't help it\" asks the other person to make room for the miss, so the work of fixing it lands on them. Even when it's honest, it can sound like nothing will change.",
+   fix:"Say what you did, that it's on you, and one thing you'll do: \"Sorry I forgot [the thing]. That's on me. I've set a reminder so it doesn't happen next time.\""},
   {id:"threat", name:"Conditional threat (\"if you don't…\")", kind:"static",
    re:/\bif you (?:don't|do not|won't|can't|ever|keep|dare|refuse to)\b(?! mind)[^.!?]{1,80}?,?\s*(?:then )?(?:i'm|i'll|i will|i am|we're|we'll|we will|you'll|you will|i swear)\s+(?:be\s+)?(?:leaving|leave|done|out|gone|going to (?:leave|tell|take|stop|cancel|end|move)|tell (?:your|every)|telling (?:your|every|them|him|her|the)|taking (?:away|your|the)|cancel(?:l)?ing|calling (?:your|the)|take (?:away|your|the)|cancel|stop|never|not (?:going|coming|helping|talking)|throw|sell|ground|regret|lose|be sorry|end|kick|break up|move out|finished|over|through)|\bor else\b|\bdon't make me\b|\byou'll regret\b|\blast chance\b|\bor (?:i'm|i'll be) (?:leaving|done|out|going|gone)\b|\bor we're (?:done|over|finished|through)\b|\bthis is your (?:final|last) (?:warning|chance)\b/gi,
    what:"An \"if you don't… then I'll…\" sentence is an ultimatum. The listener stops thinking about the task and starts thinking about the threat: fight, freeze or give in.",
@@ -794,6 +802,8 @@ const CHECK = {
    ============================================================ */
 const ADD = {
  nt:{
+  count:[2,"They're keeping score on me.","A count of misses reads as a record being kept, so the listener defends the record instead of fixing the next one."],
+  excuse:[2,"So I'm supposed to just live with it.","\"You know how I am\" asks the listener to absorb the miss, so the apology sounds like it comes with no change."],
   swear:[3,"They're furious with me.","Swearing carries the anger ahead of the words, so the point is the last thing heard."],
   hostile:[3,"They can't stand me right now.","A fed-up line says how angry someone is, but not what they need, so the listener can only defend or pull away."],
   intens:[1,"They're exasperated.","\"Literally\" and \"seriously\" carry frustration more than facts."],
@@ -821,6 +831,8 @@ const ADD = {
   repair:[0,"They're owning their part.","Owning your part invites the other person to own theirs."]
  },
  autistic:{
+  count:[2,"Is that number right? And what do they want me to do?","A count may be checked for accuracy, and it still doesn't say what change is wanted."],
+  excuse:[1,"What will be different next time?","Without a plan in the words, the apology may not answer the practical question."],
   swear:[2,"They're very angry. What did I do, and what do they want?","The anger is clear. The request, if there is one, isn't."],
   hostile:[3,"My last nerve? Done with me? What do they want me to do?","Fed-up lines and idioms may be read literally, and they don't contain an ask to act on."],
   intens:[1,"Literally? Is that exactly true?","Intensifiers may be taken at face value and checked for accuracy."],
@@ -857,6 +869,8 @@ const ADD = {
   repair:[0,"Clear ownership.","Plain apology is easy to read."]
  },
  adhd:{
+  count:[3,"Here's my whole record again.","For many ADHD adults, a count lands on years of similar comments, not on this one miss."],
+  excuse:[1,"I get it. But I'm still the one left holding it.","Even a listener who shares the struggle can hear that the fix is now theirs."],
   swear:[3,"I've messed up badly again.","Anger in the words lands on a long history of being told off."],
   hostile:[3,"They're done with me.","A fed-up line can sound like rejection, which many ADHD adults feel very sharply."],
   intens:[1,"They're really annoyed with me.","The intensifier carries the frustration."],
@@ -929,6 +943,8 @@ const ADD = {
   appreciation:[0,"Warm.","Appreciation is noticed and felt."]
  },
  anxiety:{
+  count:[2,"They're building a case against me.","A running count sounds like evidence being collected, and gets replayed."],
+  excuse:[2,"It'll keep happening, and I'm not allowed to mind.","With no plan in the words, an anxious listener may expect the same miss again and feel they can't raise it."],
   swear:[3,"They're furious. Is this the end of something?","Anger in the words confirms the worst fear."],
   hostile:[3,"They want me gone.","A fed-up line is heard as rejection, and replayed."],
   pointed:[2,"I'm in trouble.","The pointed phrase can read as a formal warning, so the worry is louder than the fact."],
@@ -987,6 +1003,8 @@ const CHECK_ADD = {
   impera:"\"Sure. Is there a time you need it by?\"",
   cannot:"\"What would you like me to do instead?\"",
   again:"\"I hear this has happened before. What's the one thing you'd like different today?\"",
+  count:"\"Which days was it, and what did it affect? Then we can sort out who owns it.\"",
+  excuse:"\"Thanks for saying sorry. What will help it not happen next time?\"",
   disclaim:"\"I want to hear it. What's the main thing?\"",
   madefeel:"\"I didn't mean to hurt you. Can you tell me what happened for you?\"",
   compare:"\"I'd rather talk about us. What would you like from me?\"",
@@ -1253,7 +1271,9 @@ function analyze(textIn, opts){
   if(has("critic") && has("again")) drop("critic", h=>/again/i.test(h.match));
   if(has("minim") && has("oblig")) {/* both stay: "you just need to" */}
   if(has("feellike")) drop("istate", h=>inside(h,"feellike"));
-  drop("hyper", h=>inside(h,"selfput"));  // "I'm the worst" is one reading (a put-down), not two
+  drop("hyper", h=>inside(h,"selfput"));
+  drop("minim", h=>inside(h,"excuse"));  // "that's just me" is one reading
+  drop("again", h=>inside(h,"count"));  // "I'm the worst" is one reading (a put-down), not two
   drop("reassure", h=>inside(h,"softener"));  // "is that okay with you?" is a kind check, not a worry
   if(has("label") && has("invalid")) drop("label", h=>inside(h,"invalid"));
   if(has("urgent") && has("vtime")) drop("vtime", h=>inside(h,"urgent"));
@@ -1530,6 +1550,12 @@ const CHANGE_WHY = {
   insult:{g:"Name-calling is a verdict on the person, and a verdict can't be fixed. The rewrite drops it and keeps what happened and what you'd like.", adhd:"Labels echo years of similar comments and can shut the conversation down."},
   idiom:{g:"A figure of speech says one thing and means another. The plain words mean exactly what you mean, for every listener.", autistic:"Figures of speech may be taken literally, especially under stress.", dld:"Figurative language can be hard to decode."},
   intens:{g:"\"Literally\" and \"seriously\" add volume, not information. Without them the sentence says the same thing, calmly.", autistic:"An intensifier may be taken at face value and checked for accuracy."},
+  count:{g:"Counting the misses (\"third time,\" \"again\") reads as a record being kept, so people hear blame and stop reading for the fix. The days and the impact carry the pattern on their own. If it keeps happening with one person, raise it with them on their own, not in the channel.", adhd:"For many ADHD listeners, a count lands on the whole history of being told off, not on the one fix that's needed.", anxiety:"A running count can sound like a case being built, and gets replayed."},
+  guys:{g:"\"Guys\" at the start of a correction can read as a call-out to the whole group, and not everyone hears themselves in it. The message works without it."},
+  workask:{g:"\"Sort it out\" doesn't say who, or what done looks like, so everyone can assume someone else has it. Asking to agree one owner, by a day, gives the group one clear thing to say yes to."},
+  impact:{g:"Saying when it happened and what it affected keeps it about the work, not about a person. People can fix a process they can see."},
+  excuse:{g:"\"You know how I am\" asks them to make room for the miss, so the work of fixing it lands on them. Saying what you did, that it's on you, and one thing you'll do keeps the apology yours.", adhd:"If forgetting is part of how your brain works, that's real. Naming the system you'll use (a reminder, an alarm) says so without asking them to carry it."},
+  doneload:{g:"\"I'm done\" sounds like you're walking away, so people react to the door closing, not the load. Saying you can't keep carrying it on your own keeps you in the conversation and says what's really true."},
   feellike:{g:"\"I feel like you…\" introduces a judgment, not a feeling. Naming the real feeling and the event is clearer and kinder."}
 };
 
@@ -1733,6 +1759,9 @@ function rewrite(an, opts){
     else main = lead+" "+main.replace(/\s*$/,"")+" Can we talk about it at [a time], once I've had a few minutes?";
   }
 
+  // at work: the fact, what it affected, and one request. No "guys", no count of misses, no "sort it out"
+  const work = !!(opts.work || WORK_REL.includes(opts.rel));
+  if(work && main.trim() && !ctx.legal && !ctx.kids) main = workReframe(main, an, note, ctx);
   // several asks: say them as a short list. Nothing is dropped: a sentence
   // around the asks that carries a task or a deadline becomes its own item,
   // and any other sentence stays as a line above the list.
@@ -1768,6 +1797,13 @@ function rewrite(an, opts){
   if(an.found.vtime && /\[a time\]/.test(main) && /\bno rush\b/i.test(main)){
     main = main.replace(/\s*\bno rush\b\s*(?:before then)?[,.!]*\s*(?:but\s+|and\s+)?/i, " ").replace(/^\s+/,"");
     main = main.replace(/(\[a time\][^.!?\]]*[.!?])/, "$1 No rush before then.");
+  }
+  // an apology with an excuse ("You know how I am"), or for a thing forgotten: what I did, that it's on me, and
+  // what I'll do. The plan is a blank to make true, never a promise sent for them.
+  if(ctx.apology && (ctx.excused || /\b(?:forgot|forget)\b/i.test(main)) && !/\[What you'll do/.test(main)){
+    main = main.replace(/^(\W*(?:i'm |i am )?(?:so |really )?sorry),\s+(?=i\b)/i, "$1 ").replace(/\b(I) (forgot|forget)(?=\s*(?:[.!?,]|$))/i, "$1 $2 [the thing]");
+    if(!/\b(?:that's on me|my fault|my bad|my mistake|i messed up|that was on me)\b/i.test(main)) main = endP(main.replace(/\s+$/,""))+" That's on me.";
+    if(!/\b(?:i'll|i will|i've set|i have set|i'm going to|i am going to|next time|from now on|going forward)\b/i.test(main)){ main = main+" [I've set a reminder] so it doesn't happen next time."; note("apology","","[I've set a reminder] so it doesn't happen next time"); }
   }
   // an apology after a miss: a place to say what you'll do about it, never a demand
   if(ctx.apology && log.some(c=>c.id!=="apology") && /\b(?:forgot|forget|missed|late|broke|lost|didn't|messed up|dropped)\b/i.test(main) && !/\[What you'll do/.test(main)){
@@ -1812,6 +1848,16 @@ function rewrite(an, opts){
     ctx.noAsk = true;
   }
   const hadTime = WHEN_REAL.test(an.norm);
+  // "I can't keep doing most of Dad's care on my own": the ask is one share of the load, for each of them
+  const plural = ctx.plural || opts.channel==="group" || /\byou (?:two|both|all|guys|lot|three)\b|\b(?:both|all|the two) of you\b|\beveryone\b|\by'all\b/i.test(an.norm);
+  const careCtx = /\b(?:dad|mom|mum|mother|father|grandma|grandpa|gran|nan|nana|granny|parents|grandparents|care|carer|caring|appointments?|meds|medication)\b/i.test(an.norm);
+  const loadAsk = careCtx ? "Could you"+(plural?" each":"")+" take one thing, like [Thursday's appointment] or [the Sunday call]?" : "Could you"+(plural?" each":"")+" take on [one specific thing] by [a time]?";
+  main = main.replace(/\bmost of the (?:work|care|caring|looking after) for (dad|mom|mum|mother|father|grandma|grandpa|gran|nan|nana|granny|(?:my|our) (?:dad|mom|mum|mother|father|grandma|grandpa|gran|nan|parents|grandparents))\b/gi, (mm,who)=>"most of "+who+(/s$/i.test(who)?"'":"'s")+" care");
+  if((ctx.loadAsk || (plural && careCtx)) && /\bCould you take \[one (?:task|specific thing)\](?: by \[a time\])?\?/.test(main)){ main = main.replace(/\bCould you take \[one (?:task|specific thing)\](?: by \[a time\])?\?/, loadAsk); }
+  else if(ctx.loadAsk && !ctx.noAsk && !ctx.apology && !/\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main)){
+    main = main.replace(/([^.!?…\s])\s*$/,"$1.").replace(/\s*$/," "+loadAsk);
+    note("addask","(no ask)",loadAsk);
+  }
   if(!ctx.noAsk && !ctx.apology && !typedQ && !/\b(?:could you|would you|can you|can we|could we|could someone|would that work|will you|would you be|did you get a chance|did you mean|do you have|want to)\b/i.test(main) && (ctx.critical || an.missing.ask)){
     // a pattern ("always", "never") wants a habit, not a deadline; a time already given stays the only time
     const pattern = log.some(c=>c.id==="absolute");
@@ -1982,6 +2028,43 @@ function rewriteSentence(s, ctx, note, an, W){
   if(m){ const rep="Want to "+m[1].toLowerCase()+m[2].replace(/\s+$/,"")+" on [a day]"+m[3].replace(/\s+$/,"")+"?"; note("vtime", (t.match(/\b(?:sometime|some time|at some point|soon|one of these days)\b/i)||[""])[0], "on [a day]"); ctx.noAsk = true; return rep; }
   PLAIN_WORDS.forEach(([rx, plain])=>{ t = t.replace(rx, mm=>{ note("idiom", mm, plain); return /^[A-Z]/.test(mm) && !/^I\b/.test(plain) ? plain.charAt(0).toUpperCase()+plain.slice(1) : plain; }); });
   const orig = t;
+  // "You know how I am", "I can't help it": the excuse goes. The apology says "That's on me" instead (see rewrite)
+  {
+    const EX = new RegExp(FBY.excuse.re.source, "i");
+    if(EX.test(t)){
+      const hit = (t.match(EX)||[""])[0];
+      const left = t.replace(new RegExp("[,;:–—-]?\\s*(?:and |but |so )?(?:i mean,? |honestly,? )?"+EX.source+"[^.!?]*", "i"), "").replace(/^[\s,;:]+/,"").trim();
+      note("excuse", hit, "That's on me.");
+      ctx.excused = true; ctx.critical = true;
+      if(!/[A-Za-z]/.test(left)) return "";
+      t = /[.!?]$/.test(left) ? left : left+".";
+    }
+  }
+  // "I'm done doing everything for Dad while you two do nothing": the door stays open and the load is said plainly.
+  // "I'm done" (it sounds like walking away) and "you do nothing" (an absolute) never stay in the rewrite.
+  {
+    const DN = /[,;]?\s*\b(?:while|and|but|when|whereas|as)\s+(you(?: two| both| all| guys| lot| three)?|the two of you|both of you|all of you|y'all|everyone else|they|he|she)\s+(?:just\s+)?(?:do|does|did|are doing|sit (?:there|around)(?: and do)?)\s+(?:absolutely\s+)?(?:nothing|zero|sod all|jack(?: all)?)\b(?: (?:to help|at all))?/i;
+    const dn = t.match(DN);
+    if(dn){
+      note("absolute", dn[0].replace(/^[,;\s]+/,"").replace(/^(?:while|and|but|when|whereas|as)\s+/i,""), "on my own");
+      ctx.critical = true; ctx.soloLoad = true;
+      if(/\b(?:two|both|all|guys|lot|three|y'all|everyone)\b/i.test(dn[1]) || /\b(?:both|two|all) of you\b/i.test(dn[0])) ctx.plural = true;
+      t = t.replace(DN, "");
+      if(/^\s*i\b/i.test(t) && !/\b(?:on my own|by myself|alone)\b/i.test(t)) t = t.replace(/\s*([.!?]*)\s*$/, " on my own$1");
+    }
+    const dm = t.match(/^(.*?)\bi(?:'m| am) (?:so |just |honestly |really |completely )?(?:done|finished|through) (doing|being|carrying|handling|covering|picking up|cleaning up after|looking after|taking care of|running|organi[sz]ing|sorting)\s+(.+?)([.!?]*)$/i);
+    if(dm){
+      let obj = dm[3].replace(/\s+(?:alone|by myself|on my own|all by myself)$/i,"");
+      obj = obj.replace(/^(?:everything|it all|all of it|all the work)\b/i, "most of the work").replace(/^all (?:the )?/i,"most of the ");
+      const lead = (dm[1]||"").replace(/[,\s]+$/,"");
+      const rep = "I can't keep "+dm[2].toLowerCase()+" "+obj+" on my own.";
+      note("doneload", (t.match(/\bi(?:'m| am) (?:so |just |honestly |really |completely )?(?:done|finished|through)\b/i)||["I'm done"])[0], "I can't keep … on my own");
+      if(/^(?:everything|it all|all)\b/i.test(dm[3])) note("absolute", dm[3].split(/\s+/)[0].toLowerCase(), "most of the work");
+      ctx.critical = true; ctx.loadAsk = true;
+      return (lead && !FILLER_ONLY.test(lead) ? endP(capFirst(lead))+" " : "")+rep;
+    }
+    if(dn) ctx.loadAsk = true;
+  }
   m = t.match(/^(?:and |honestly,? )?i (?:have to|always|end up|got to|gotta|'m left to) (?:do(?:ing)?|clean(?:ing)?|handle|handling) everything(?: around here| at home| in this house| myself| alone)?[.!]*$/i);
   if(m){ const rep = "I'm feeling stretched thin. Could you take on [one specific thing] by [a time]?"; note("guilt", t.replace(/[.!?]+$/,""), rep); ctx.converted = true; return rep; }
   if(/^(?:of course (?:you|he|she|they) (?:did|didn't|do|don't|would|wouldn't|forgot|are|were|can't|won't)|classic you|typical(?: you)?|yeah,? sure|(?:great|nice|good) (?:job|work),?(?: (?:genius|einstein|really))?)[.!…🙄😒🙃\s]*$/i.test(t)){
@@ -2840,7 +2923,8 @@ defend:"explaining yourself before they've blamed you", stopask:"\"stop asking\"
   nowhen:"a request with no time", brushoff:"it can sound like you don't care, or like quiet hurt; ask which",
   dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
   selfput:"you put yourself down", legal:"a threat about court or the children",
-  kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost"
+  kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost",
+  count:"counting how many times it happened", excuse:"it asks them to accept the miss, so fixing it becomes their job"
 };
 /* The heading for one pattern, in words: never a name with a stray quoted word stuck on the end.
    A safety worry names the thing it is about: "A safety worry about the stove, with no plan for next time". */

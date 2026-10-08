@@ -687,12 +687,9 @@
     clearTimeout(sayTimer); if (ms) sayTimer = setTimeout(function () { sayEl.style.opacity = 0; }, ms);
   }
   var HELP = {
-    breathe: { ico: '&#127800;', h: 'Box breathing in the garden', steps: [
-      'Watch the glowing light. A little star travels around a square, one side for each step.',
-      'Up the left side, <strong>breathe in</strong> for 4. Along the top, <strong>hold</strong> for 4.',
-      'Down the right side, <strong>breathe out</strong> for 4. Along the bottom, <strong>hold</strong> for 4.',
-      'Words drift down from the sky to tell you what the breathing is doing for you. Each full square plants a flower, and the animals by the pond hop along with you.'] },
-    fireflies: { ico: '&#10024;', h: 'How to play Fireflies', steps: [
+    breathe: { ico: '&#127800;', h: 'Breathing in the garden', short: 'Follow the little star around its path and breathe with it. The number in the light counts each part for you.', steps: [
+      'Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.'] },
+    fireflies: { ico: '&#10024;', h: 'How to play Fireflies', short: 'Trace the numbered stars in order, 1, 2, 3…, with your finger or mouse. Each star sings a note, and the finished picture plays its song.', steps: [
       'A faint picture appears in the sky, made of numbered circles.',
       'Drag your finger (or move your mouse) to circle <strong>1</strong> and rest there. A firefly lights it, and it sings a note.',
       'Go to the next number, and the next. Each one joins the line and sings the next note of a little tune.',
@@ -700,7 +697,7 @@
       'Once you have found a few, <strong>wild constellations</strong> appear too: new shapes the sky makes just for you, each with its own name.',
       'Now and then a <strong>shooting star</strong> crosses the sky. Catch it for a wish and a new flower.'],
       keys: 'On a keyboard, the arrow keys move your light.' },
-    pond: { ico: '&#128167;', h: 'How to play the lily pond', steps: [
+    pond: { ico: '&#128167;', h: 'How to play the lily pond', short: 'Slide each lily pad left or right, tap to turn it, and let it settle. Fill a row and it blooms. You can’t lose.', steps: [
       'Lily pads drift slowly down the pond. The faint outline shows where they’ll land.',
       'On a phone, <strong>drag</strong> the pad left or right with your finger, <strong>tap</strong> to turn it, and <strong>flick down</strong> to drop it. Or use the buttons: hold &#9664; &#9654; to slide.',
       'The little box shows which pad is coming <strong>next</strong>. When a pad lands, you have a moment to slide it into place.',
@@ -713,19 +710,30 @@
     var h = HELP[m || mode]; if (!h || !helpCard) return;
     if ((m || mode) === 'breathe') {
       var bp = chooseBreath();
-      h = { ico: HELP.breathe.ico, h: bp.name + ' in the garden', steps: [
-        'Watch the glowing light. A little star travels around ' + bp.shape + ', one part of the path for each part of the breath.',
-        'Tonight’s pattern: <strong>' + breathDesc(bp) + '</strong>. The number in the light counts down each part for you.',
+      // the words always name the shape that is actually drawn (see drawBreath)
+      h = { ico: HELP.breathe.ico, h: bp.name + ' in the garden',
+        short: 'A little star travels around ' + breathShape(bp) + ': <strong>' + breathDesc(bp) + '</strong>. Breathe along with it; the number in the light counts each part for you.',
+        steps: [
+        breathPath(bp),
         'The garden has several calm patterns and brings a different one on most visits. Every one breathes out for at least as long as it breathes in, and any holds are short and easy. If a pattern ever feels like a strain, just breathe your own way and watch the light.',
         'Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.'] };
     }
     document.getElementById('ng-help-ico').innerHTML = h.ico;
     document.getElementById('ng-help-h').textContent = h.h;
+    document.getElementById('ng-help-short').innerHTML = h.short || '';
+    var more = document.getElementById('ng-help-more'); if (more) more.open = false;
     document.getElementById('ng-help-steps').innerHTML = h.steps.map(function (x) { return '<li>' + x.replace('{N}', SHAPE_IDS.length) + '</li>'; }).join('') +
       (h.keys && window.matchMedia && window.matchMedia('(hover: hover)').matches ? '<li>' + h.keys + '</li>' : '');
     helpCard.hidden = false; say('', '', 0);
     if (audio) stopAudio(); // the garden goes quiet while a card is up
-    try { document.getElementById('ng-help-ok').focus({ preventScroll: true }); } catch (e) {}
+    // with big text or a short screen, a start button at the top too, so nobody has to scroll to begin
+    var inner = helpCard.firstElementChild, okBtn = document.getElementById('ng-help-ok'), top = document.getElementById('ng-help-top');
+    if (top) {
+      top.hidden = true;
+      var ob = okBtn.getBoundingClientRect(), ib = inner.getBoundingClientRect();
+      top.hidden = !(inner.scrollHeight > inner.clientHeight + 2 || ob.bottom > Math.min(window.innerHeight, ib.bottom) - 4 || /tol-text-(xl|xxl)/.test(document.documentElement.className));
+    }
+    try { inner.scrollTop = 0; ((top && !top.hidden) ? document.getElementById('ng-help-ok-top') : okBtn).focus({ preventScroll: true }); } catch (e) {}
   }
   function hideHelp() {
     helpCard.hidden = true;
@@ -736,6 +744,7 @@
   }
   if (helpCard) {
     document.getElementById('ng-help-ok').addEventListener('click', hideHelp);
+    var okTop = document.getElementById('ng-help-ok-top'); if (okTop) okTop.addEventListener('click', hideHelp);
     helpCard.addEventListener('keydown', function (e) { if (e.key === 'Escape') hideHelp(); });
     document.getElementById('ng-help-btn').addEventListener('click', function () { showHelp(); });
   }
@@ -746,7 +755,7 @@
     padEl.hidden = m !== 'pond';
     stage.classList.toggle('is-play', m === 'pond' || m === 'fireflies'); // the page doesn't scroll while you play
     flies.forEach(function (f) { f.home = null; });
-    if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bp.name, breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + '. Follow the star around ' + bp.shape + '.', 0); }
+    if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bp.name, breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + '. Follow the star around ' + breathShape(bp) + '.', 0); }
     if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
     if (m === 'pond') { pondReset(); say('Float the lily pads', layout ? 'Old lilies are waiting at the bottom tonight, with gaps to fill. The first pads to drift in fit them.' : 'Drag a pad with your finger, tap to turn it, flick down to drop it. Fill a row and it blooms.', 6000); }
     hud();
@@ -773,6 +782,14 @@
     { id: 'tide', name: 'The tide', shape: 'a triangle', steps: [['in', 5], ['top', 2], ['out', 7]] }
   ];
   var BREATH = null;
+  // The shape drawn follows the number of parts in the breath (drawBreath): two parts go round a circle,
+  // three round a triangle, four round a square. The words use the same rule, so they always match.
+  function breathShape(bp) { var n = bp.steps.length; return n === 2 ? 'a circle' : n === 3 ? 'a triangle' : 'a square'; }
+  function breathPath(bp) {
+    var w = { in: 'breathe in', out: 'breathe out', top: 'hold', bottom: 'rest' }, n = bp.steps.length;
+    var parts = n === 2 ? ['Up the left side of the circle', 'down the right side'] : n === 3 ? ['Up the left side of the triangle', 'down the right side', 'along the bottom'] : ['Up the left side of the square', 'along the top', 'down the right side', 'along the bottom'];
+    return bp.steps.map(function (st, i) { return parts[i] + ', <strong>' + w[st[0]] + '</strong> for ' + st[1]; }).join('; ') + '.';
+  }
   function breathDesc(bp) { return bp.steps.map(function (st) { return (st[0] === 'in' ? 'in ' : st[0] === 'out' ? 'out ' : st[0] === 'top' ? 'hold ' : 'rest ') + st[1]; }).join(' · '); }
   function chooseBreath() {
     if (BREATH) return BREATH;
@@ -2543,16 +2560,21 @@
 
   // Welcome, then into the garden
   var welcome = document.getElementById('ng-welcome');
-  if (returning || plantedLine) {
+  // "Welcome back" only after a real earlier visit: an earlier day, or time already spent in an activity
+  // (opening the page and reloading it on the first visit isn't a return)
+  var cameBefore = save.days.some(function (d) { return d !== todayKey; }) || (save.seen && Object.keys(save.seen).length > 0) || save.breaths > 0 || save.consts.length > 0;
+  if (cameBefore) {
     document.getElementById('ng-welcome-h').textContent = 'Welcome back';
     document.getElementById('ng-welcome-p').textContent = plantedLine + (gifted ? 'While you were away, ' + gifted + (gifted === 1 ? ' new flower' : ' new flowers') + ' opened on their own. ' : '') +
       'Your garden has ' + save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers') + (save.consts.length ? ' and ' + save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations') + ' in its sky' : '') + '. Stay as long as you like.';
   }
+  else if (plantedLine) document.getElementById('ng-welcome-p').textContent = plantedLine + 'Your garden has ' + save.flowers.length + ' flowers to start with. Stay as long as you like.';
   var wp = document.getElementById('ng-welcome-p');
   if (wp && !AMBIENT) wp.textContent += ' ' + TONIGHT.line;
   document.querySelectorAll('[data-enter]').forEach(function (b) {
     b.addEventListener('click', function () {
       welcome.hidden = true;
+      window.scrollTo(0, 0); // the whole garden in view, clear of the header at the top
       if (window.innerWidth <= 560 && fullBtn && !document.documentElement.classList.contains('ng-full')) setFull(true); // more room on a phone
       setMode(b.getAttribute('data-enter'));
       soundIfClear(); // only if sound is on, and not while the how-to card is showing

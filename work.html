@@ -75,7 +75,7 @@
     .wk-tool tr{ grid-template-columns:minmax(0, 1fr); }
   }
   @media print{
-    .wk-btns, .wk-status, .wk-privacy, .wk-tool .wk-del, .wk-tool .wk-hint, .wk-tool tr.wk-none{ display:none !important; }
+    .wk-btns, .wk-status, .wk-privacy, .wk-tool .wk-del, .wk-tool .wk-hint, .wk-tool tr.wk-none, .tol-hh{ display:none !important; }
     .wk-tool table{ display:table; border-collapse:collapse; }
     .wk-tool thead{ display:table-header-group; position:static; width:auto; height:auto; overflow:visible; clip:auto; }
     .wk-tool tbody{ display:table-row-group; }
@@ -86,9 +86,28 @@
     .wk-tool td:first-child{ width:40%; }
     .wk-tool input::placeholder{ color:transparent; }
     .wk-tool select:has(option[value=""]:checked){ color:transparent; }
-    html.wk-printing main > *:not(.wk-tool){ display:none !important; }
+    html.wk-printing main > *:not(.wk-print-this){ display:none !important; }
     html.wk-printing .wk-tool{ border:0; padding:0; margin:0; box-shadow:none; }
+    .wk-tool tr .wk-warn{ display:none !important; }
+    .ci-person{ break-inside:avoid; }
+    .wk-tool textarea, .wk-tool input[type="date"]{ border:0; padding:0; min-height:0; background:transparent; resize:none; }
   }
+  /* who carries what, and the gentle owner-is-also-backup note */
+  .wk-tool tr .wk-warn{ grid-column:1 / -1; margin:0 !important; font-size:.92rem; color:var(--ink); background:var(--paper-deep); border-radius:8px; padding:.35rem .6rem; max-width:none !important; }
+  .wk-tally{ margin:.75rem 0 0; padding:.6rem .85rem; border:1px dashed var(--line); border-radius:var(--radius, 10px); }
+  .wk-tally h4{ margin:0 0 .3rem !important; font-size:1rem !important; }
+  .wk-tally ul{ list-style:none; padding:0 !important; margin:0 !important; display:flex; flex-wrap:wrap; gap:.3rem 1.2rem; }
+  .wk-tally li{ margin:0 !important; max-width:none !important; }
+  .wk-tally-note{ margin:.4rem 0 0 !important; font-size:.95rem; max-width:none !important; }
+  .wk-tally-note:empty{ display:none; }
+  /* the team check-in */
+  .ci-people{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap:.75rem; margin:.25rem 0 1rem; }
+  .ci-person{ margin:0; padding:.55rem .8rem .8rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper); min-width:0; }
+  .ci-person legend{ font-weight:700; padding:0 .3rem; }
+  .ci-person label{ display:block; font-weight:600; font-size:.92rem; margin:.45rem 0 .2rem; }
+  .wk-tool textarea, .wk-tool input[type="date"]{ font:inherit; font-size:1rem; width:100%; box-sizing:border-box; min-height:44px; padding:.4rem .55rem; border:1px solid var(--ink-soft); border-radius:8px; background:var(--paper); color:var(--ink); }
+  .wk-tool textarea:focus-visible, .wk-tool input[type="date"]:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .wk-tool .wk-hint{ display:block; color:var(--ink-soft); font-size:.92rem; }
   main.read > ul.wk-links.wk-links.wk-links, main.read > ul.wk-jump.wk-jump.wk-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
 </style>
 <!-- seo:start -->
@@ -136,7 +155,9 @@
   <li><a href="#messages">Messages that land</a></li>
   <li><a href="#appreciation">Appreciation that counts</a></li>
   <li><a href="#team-session">A 45-minute team session</a></li>
+  <li><a href="#check-in">Team check-in</a></li>
   <li><a href="#one-to-ones">Better one-to-ones</a></li>
+  <li><a href="#neurodiversity">ADHD and neurodiversity</a></li>
   <li><a href="#more">Go deeper</a></li>
 </ul>
 
@@ -176,10 +197,42 @@
   </div>
   <p class="wk-status" id="wk-status" role="status" aria-live="polite"></p>
 
+  <div class="wk-tally" id="wk-tally" aria-live="polite" hidden>
+    <h4>Who carries what</h4>
+    <ul id="wk-tally-list"></ul>
+    <p class="wk-tally-note" id="wk-tally-note"></p>
+  </div>
+
   <p class="wk-privacy" id="wk-privacy">Private: this list is kept only in this browser, on this device. Nothing is sent anywhere, and your team can’t see it unless you print or share it yourself. <button type="button" class="wk-btn wk-small" id="wk-erase">Erase what’s saved</button></p>
 </section>
 
 <p>A few tips. Start with the five jobs that cause the most “I thought you were doing that.” Agree the list together, rather than handing it out. Give the jobs nobody wants a rotation, so they don’t settle on one person. And look at the list again every month or two: owners change as work changes.</p>
+
+<section class="wk-tool tol-plain" id="check-in" aria-labelledby="check-in-h">
+  <h3 id="check-in-h">Team check-in <span class="wk-time">10 minutes</span></h3>
+  <p>Once a week, go round once. Each person says how full their week is, one thank-you, and one thing that slipped. Then name any job that needs a new owner. No debating, and nobody is rated: a full week is useful information, not a complaint. Print it, or keep it on a shared screen.</p>
+
+  <div class="wk-field">
+    <label for="ci-date">Week of</label>
+    <input type="date" id="ci-date" autocomplete="off">
+  </div>
+  <p class="wk-hint" id="ci-none">Type your team’s names in the <a href="#owner-list">one-owner list</a> above, and a line for each person appears here.</p>
+  <div id="ci-people" class="ci-people"></div>
+
+  <div class="wk-field">
+    <label for="ci-jobs">Any job that needs a new owner?</label>
+    <span class="wk-hint" id="ci-jobs-hint">One per line. “Add to the list” puts them on the one-owner list above, ready for an owner.</span>
+    <textarea id="ci-jobs" rows="3" aria-describedby="ci-jobs-hint" autocomplete="off"></textarea>
+  </div>
+
+  <div class="wk-btns">
+    <button type="button" class="wk-btn wk-main" id="ci-add-jobs">Add to the list</button>
+    <button type="button" class="wk-btn" id="ci-print">Print</button>
+    <button type="button" class="wk-btn" id="ci-clear">Start a new week</button>
+  </div>
+  <p class="wk-status" id="ci-status" role="status" aria-live="polite"></p>
+  <p class="wk-privacy">Private: kept only in this browser, on this device, with the one-owner list. Nothing is sent anywhere. “Erase what’s saved” above removes both.</p>
+</section>
 
 <h2 id="messages">Messages that land</h2>
 <p>At work, a short message carries more than its words. Pay, reviews and reputation sit underneath it, so a quick line can read as a criticism, an order or a hidden note about someone’s competence, even when it wasn’t meant that way. A little extra clarity costs a few seconds and saves a lot of second-guessing.</p>
@@ -264,6 +317,19 @@
   <p>“What’s the one thing that would make next week easier?”</p>
   <p>“Let me check I’ve understood: the handover from sales is arriving without the contract details, and you’re losing a day chasing them. Did I get that?”</p>
   <p>“I don’t have an answer yet. I’ll come back to you by Wednesday.”</p>
+</div>
+
+<h2 id="neurodiversity">ADHD and neurodiversity at work</h2>
+<p>People focus and take in asks in different ways. One person catches every word in a meeting; another needs it written down; someone else loses a spoken ask by the time they’re back at their desk, however much they care. That is wiring, not effort, and a few small habits help everyone, not only the people who mention it.</p>
+<ul>
+  <li><strong>Written asks after meetings.</strong> One line per action: what, who owns it, and by when. Send it the same day, so nobody has to rely on memory.</li>
+  <li><strong>One ask per message.</strong> Put the deadline in the first line, and say plainly if something is urgent or can wait.</li>
+  <li><strong>Protect focus time.</strong> Agree blocks with no meetings and no pings, and one clear way for a real emergency to reach someone.</li>
+  <li><strong>Ask how people work best,</strong> not what’s wrong. “Do you prefer asks in writing or out loud?” works for everyone.</li>
+  <li><strong>Share how you’re wired, if you want to.</strong> <a href="/wiring-card.html">The Wiring Card</a> makes a short card about how you focus, take in asks and like feedback. Its team version, “Copy as a team snippet”, drops each person’s card into a team wiki or channel.</li>
+</ul>
+<div class="wk-note">
+  <p><strong>Disclosure is a personal choice.</strong> Nobody has to share a diagnosis, or explain why a habit helps them. Offer the helpful habits to the whole team, so nobody has to ask. If someone does tell you, keep it to yourself unless they say otherwise.</p>
 </div>
 
 <h2 id="more">Go deeper</h2>

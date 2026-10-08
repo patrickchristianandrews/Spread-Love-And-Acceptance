@@ -693,11 +693,10 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 :root.tol-text-xl .wpf-meta, :root.tol-text-xxl .wpf-meta{ grid-template-columns: 1fr; }
 @media print{ .wpf-how{ display: none !important; } }
 
-/* "Keep this on this device so it's here tomorrow?", in the save bar */
-.wpf-keepask{ flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 6px 10px; border-radius: 10px; background: #FFFDF6; border: 1px solid var(--credit, #3E6B4C); }
-.wpf-keepask-q{ margin: 0; flex: 1 1 14rem; font-size: .9rem; font-weight: 600; color: var(--ink, #211D17); }
-.wpf-keepask-btns{ display: flex; gap: 8px; }
-.wpf-bar .wpf-keepask button{ min-height: 40px; padding: 6px 14px; font-size: .88rem; border-radius: 999px; }
+/* "Keep this on this device for next time? Keep it · Not now": one small line in the save bar */
+.wpf-keepask{ flex: 1 1 100%; display: flex; flex-wrap: nowrap; align-items: center; gap: 4px 8px; margin: 0; padding: 0; }
+.wpf-keepask-q{ margin: 0; flex: 1 1 auto; min-width: 0; font-size: .86rem; font-weight: 600; line-height: 1.25; color: var(--ink, #211D17); }
+.wpf-bar .wpf-keepask button{ flex: 0 0 auto; min-height: 34px; padding: 4px 12px; font-size: .84rem; border-radius: 999px; white-space: nowrap; }
 .wpf-keepask-yes{ background: var(--credit, #3E6B4C); color: #fff; border: 1px solid var(--credit, #3E6B4C); }
 .wpf-keepask-no{ background: transparent; color: var(--ink, #211D17); border: 1px solid var(--ink-soft, #524B3E); }
 .wpf-keepask button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
@@ -772,3 +771,36 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .ws-send-row .ws-send{ min-height: 44px; font-weight: 600; border-style: solid; border-color: var(--credit, #3E6B4C); }
 .ws-send-note{ font-size: .88em; color: var(--ink-soft, #524B3E); flex: 1 1 16rem; }
 @media print{ .ws-paste, .ws-send-row{ display: none !important; } }
+
+/* ---------- phones: a compact save bar (one line of buttons, a small status line) ---------- */
+@media (max-width: 560px){
+  .wpf-bar{ margin-top: 2em; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); }
+  .wpf-bar-inner{ gap: 5px 8px; }
+  .wpf-bar button{ font-size: .86rem; padding: 6px 10px; min-height: 40px; }
+  #wpf-status{ flex: 1 1 100%; font-size: .8rem; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+  .wpf-keepask-q{ font-size: .8rem; }
+  .wpf-bar .wpf-keepask button{ min-height: 32px; padding: 3px 10px; font-size: .8rem; }
+}
+/* at Larger text the keep line may wrap its question, never its buttons */
+:root.tol-text-xl .wpf-keepask, :root.tol-text-xxl .wpf-keepask{ flex-wrap: wrap; }
+
+/* "Ready-made no's to copy" (WP-01 Part B): tap a card to copy the words */
+.wpf-ready{ margin: .6em 0 1.1em; padding: .8em 1em 1em; border-radius: 16px; background: #F7F3FF; border: 1px solid #D6CBEF; }
+.wpf-ready-h{ margin: 0 0 .2em; font-weight: 700; font-size: 1.05rem; }
+.wpf-ready > .wpf-help{ margin: 0 0 .6em; }
+.wpf-ready-group{ display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 8px; margin: 0 0 .8em; }
+.wpf-ready-group > .wpf-lib-h{ grid-column: 1 / -1; margin: .2em 0 0; }
+.wpf-ready-chip{ display: flex; flex-direction: column; align-items: flex-start; gap: 3px; text-align: left; font: inherit; font-size: .92rem; line-height: 1.4; color: var(--ink, #211D17); background: #FFFDF7; border: 1px solid #CDBFEA; border-radius: 12px; padding: 9px 12px; cursor: pointer; min-width: 0; overflow-wrap: anywhere; }
+.wpf-ready-chip:hover{ border-color: #8C74C4; }
+.wpf-ready-chip:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.wpf-ready-ask{ font-weight: 700; font-size: .84rem; color: #5B4A86; }
+.wpf-ready-tap{ font-size: .78rem; color: var(--ink-soft, #524B3E); }
+.wpf-ready-chip.is-copied{ border-color: var(--credit, #3E6B4C); background: #EEF6EF; }
+.wpf-ready-chip.is-copied .wpf-ready-tap::before{ content: "Copied \2713  "; color: var(--credit, #3E6B4C); font-weight: 700; }
+.wpf-partb-note{ margin-top: -.3em; }
+
+/* WP-13: the same check-in for a team or housemates */
+.wpf-tonight-others{ margin: 0 0 .8em; }
+.wpf-tonight-others > summary{ cursor: pointer; font-weight: 600; min-height: 40px; display: flex; align-items: center; }
+.wpf-tonight-others p{ margin: .3em 0 .5em; }
+.wpf-tonight-one select{ width: 100%; }

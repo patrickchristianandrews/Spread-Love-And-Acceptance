@@ -2043,9 +2043,10 @@
     // Just Part B, worded for one person, with the ready-made no's on top. It keeps its own draft
     // (road "self"), so it never touches a Who did what draft kept on this device.
     var partB = wp === 'wp-01' && (/[?&]only=b(&|$)/.test(global.location.search || '') || /^#part-b$/i.test(global.location.hash || ''));
-    if (partB && global.TOL_WORKPAPER_SOLO) {
+    // ?road=self: the sheet worded for one person on their own (the Workpaper Suite's "Just me" wording)
+    if ((partB || road === 'self') && global.TOL_WORKPAPER_SOLO) {
       var so = global.TOL_WORKPAPER_SOLO(wp);
-      if (so) { schema = Object.assign({}, so, { road: 'self' }); focusPartB(schema); }
+      if (so) { schema = Object.assign({}, so, { road: 'self' }); if (wp === 'wp-01') focusPartB(schema); }
     }
     var app = new App(root, schema, { road: road, canShare: !!schema.share });
     // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied
