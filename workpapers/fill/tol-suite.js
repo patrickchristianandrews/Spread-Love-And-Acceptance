@@ -576,9 +576,10 @@
   // names, a week of Who did what from the hours, and One owner per job from the jobs and their owners.
   // Nothing is sent anywhere; the code is read here, on this page.
   var LEMON_KEEP = 'tol-lemonade-stand-v2';
-  var LEMON_FREQ = { day: 7, few: 3, week: 1, eow: 0.5, month: 12 / 52 };
-  var LEMON_OFTEN = { day: 'Daily', few: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
-  var LEMON_WORD = { day: 'each day', few: '3 times a week', week: '', eow: 'every other week', month: 'each month' };
+  var LEMON_DRAFT = 'tol-lemonade-draft'; // the stand's own copy for this tab (sessionStorage), kept or not
+  var LEMON_FREQ = { day: 7, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
+  var LEMON_OFTEN = { day: 'Daily', few: 'Weekly', two: 'Weekly', week: 'Weekly', eow: 'Weekly', month: 'Monthly' };
+  var LEMON_WORD = { day: 'each day', few: '3 times a week', two: 'twice a week', week: '', eow: 'every other week', month: 'each month' };
   // The stand counts only home jobs in the split (paid work and rest are shown beside it, never in it).
   // Its own area for a job wins; otherwise the same guesses the stand makes from the name.
   var LEMON_AWAY = /^(paid work|commute|school or classes|study & homework \(my own\)|work messages after hours|a side job|time to myself|a walk or moving my body|hobbies|time with friends|quiet time doing nothing|a full day off)$/i;
@@ -604,6 +605,17 @@
     for (var i = 0; i < LEMON_GUESS.length; i++) if (LEMON_GUESS[i][1].test(l)) { c = LEMON_GUESS[i][0]; break; }
     if (c === 'rest' && LEMON_NOT_REST.test(l)) c = 'other';
     return c !== 'work' && c !== 'rest';
+  }
+  // A household code ("TOLHOME1:", from "Household on another phone?" on the stand and the other tools):
+  // the names, and the jobs with their owners and how often, but never any hours.
+  function lemonHome1(text) {
+    var HH = global.TOLHousehold, d = HH && HH.fromCode ? HH.fromCode(text) : null;
+    if (!d || !d.people.length) return null;
+    var people = d.people.map(lemonReal).filter(Boolean).slice(0, MAX_PEOPLE);
+    if (!people.length) return null;
+    var jobs = d.jobs.map(function (j) { return { n: lemonClean(j.name), f: LEMON_FREQ[j.f] ? j.f : 'week', fq: null, u: 'm', v: {}, t: {}, nf: '', nm: [], home: lemonHome(j.name, '') }; }).filter(function (j) { return j.n; });
+    var own = d.jobs.filter(function (j) { return j.owner; }).map(function (j) { return { n: lemonClean(j.name), w: lemonClean(j.owner, 40) }; });
+    return { people: people, jobs: jobs, own: own, by: '', kids: [], nights: {}, agreed: {}, home1: true };
   }
   function lemonB64(s) {
     var bin = atob(String(s || '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/'));
@@ -660,7 +672,15 @@
   // A code ("LEMON1:…"), the .json file's text, or a link (…#side=j… plain, #side=z… squeezed). Calls back with the shape or null.
   function lemonRead(text, done) {
     var s = String(text || '').trim(), m, raw = null;
-    if (s.charAt(0) === '{') { try { raw = JSON.parse(s); } catch (e) { raw = null; } return done(lemonShape(raw)); }
+    // a link to this page with the stand in it (…/suite.html#stand=LEMON1:…), as the stand's own button makes
+    if ((m = /#stand=(\S+)/.exec(s))) {
+      var inner = m[1]; try { inner = decodeURIComponent(inner); } catch (e) {}
+      var tries = /^(LEMON1:|TOLHOME1:|\{|#side=)/i.test(inner) ? [inner] : ['LEMON1:' + inner, '#side=' + inner];
+      (function next(i) { if (i >= tries.length) return done(null); lemonRead(tries[i], function (d) { if (d) done(d); else next(i + 1); }); })(0);
+      return;
+    }
+    if (/TOLHOME1:/i.test(s)) return done(lemonHome1(s));
+    if (s.charAt(0) === '{') { try { raw = JSON.parse(s); } catch (e) { raw = null; } return done(lemonShape(raw) || (raw && Array.isArray(raw.people) && !raw.app ? lemonHome1(s) : null)); }
     if ((m = /LEMON1:\s*([A-Za-z0-9+\/=_-]+)/i.exec(s))) { try { raw = JSON.parse(lemonB64(m[1])); } catch (e) { raw = null; } return done(lemonShape(raw)); }
     if ((m = /#side=([zj])([A-Za-z0-9_-]+)/.exec(s))) {
       var bytes;
@@ -677,10 +697,19 @@
     done(null);
   }
   function lemonFromCode(text) { var out = null; lemonRead(text, function (d) { out = d; }); return out; }
+  // The stand on this device: the copy kept with "Keep this on my device" (localStorage), or, when that
+  // box was never ticked, the stand's own copy for this tab (sessionStorage). "Save this week" on the stand
+  // only writes the tab's copy unless the box is ticked, so both are read; the tab's copy is the newer one.
+  function lemonStore() {
+    var tab = null, kept = null;
+    try { tab = JSON.parse(global.sessionStorage.getItem(LEMON_DRAFT) || 'null'); } catch (e) { tab = null; }
+    try { kept = JSON.parse(global.localStorage.getItem(LEMON_KEEP) || 'null'); } catch (e) { kept = null; }
+    function real(st) { return st && !st.example && Array.isArray(st.people) && st.people.some(lemonReal) && Array.isArray(st.jobs) && st.jobs.some(function (j) { return j && !j.ex && String(j.name || '').trim(); }) ? st : null; }
+    return real(tab) || real(kept);
+  }
   function lemonKept() {
-    var st = null;
-    try { st = JSON.parse(global.localStorage.getItem(LEMON_KEEP) || 'null'); } catch (e) { st = null; }
-    if (!st || st.example || !Array.isArray(st.people)) return null;
+    var st = lemonStore();
+    if (!st) return null;
     var people = st.people.map(lemonReal);
     if (!people.some(Boolean)) return null;
     var jobs = (Array.isArray(st.jobs) ? st.jobs : []).filter(function (j) { return j && !j.ex && !j.personal && String(j.name || '').trim(); }).map(function (j) {
@@ -808,7 +837,8 @@
       });
     });
     var sideNames = Object.keys(sides).map(function (c) { return whoLabel(WPK.CODES.indexOf(c)); });
-    var sideWord = d.by ? d.by + '’s side' : sideNames.length ? andList(sideNames.map(function (x) { return x + '’s'; })) + (sideNames.length === 1 ? ' side' : ' sides') : '';
+    // whose sides actually came in (a stand both people added to carries both, whoever sent it)
+    var sideWord = sideNames.length ? andList(sideNames.map(function (x) { return x + '’s'; })).replace(/ & /, ' and ') + (sideNames.length === 1 ? ' side' : ' sides') : d.by ? d.by + '’s side' : '';
     var hasWp01 = S.stops.some(function (st) { return st.wp === 'WP-01'; }) && !isSolo();
     if (rows.length && hasWp01) {
       var h1 = lemonEntry('WP-01');
@@ -866,6 +896,61 @@
     var host = $('ws-lemon'); if (!host) return;
     var kb = $('ws-lemon-kept'); if (kb) kb.hidden = !lemonKept();
   }
+  // What a stand holds, in a line, before it comes in: "Maya and Jordan; hours on 23 jobs, from Maya's and
+  // Jordan's sides; 5 jobs with an owner"
+  function lemonSummary(d) {
+    var sides = d.people.filter(function (p) { return d.jobs.some(function (j) { return j.home && ((j.v[p] || 0) > 0 || (j.t[p] || 0) > 0); }); });
+    var withHours = d.jobs.filter(function (j) { return j.home && Object.keys(j.v).concat(Object.keys(j.t)).length; }).length;
+    var owned = d.own.filter(function (o) { return o.w; }).length, bits = [andList(d.people).replace(/ & /, ' and ')];
+    if (withHours) bits.push('hours on ' + withHours + (withHours === 1 ? ' job' : ' jobs') + ', from ' + andList(sides.map(function (x) { return x + '’s'; })).replace(/ & /, ' and ') + (sides.length === 1 ? ' side' : ' sides'));
+    else if (d.jobs.length) bits.push(d.jobs.length + (d.jobs.length === 1 ? ' job' : ' jobs') + (d.home1 ? ' (no hours: a household code carries just the names and jobs)' : ''));
+    if (owned) bits.push(owned + (owned === 1 ? ' job' : ' jobs') + ' with an owner');
+    return bits.join('; ');
+  }
+  // the road a stand goes onto when none is picked yet: Family with a child or three grown-ups, else Partners
+  function lemonRoad(d) { return d.kids.length || d.people.length > 2 ? 'family' : 'partners'; }
+  // "Bring in your Lemonade Stand?": a stand that came in through a link (#stand=…) waits here until the
+  // person says yes. Nothing is brought in, and nothing is kept, before that.
+  var lemonWait = null;
+  function lemonOffer(d, from) {
+    var old = $('ws-lemon-offer'); if (old) old.remove();
+    lemonWait = d ? { d: d, from: from } : null;
+    if (!d) return;
+    var road = S.path ? null : pathById(lemonRoad(d));
+    var box = h('div', { className: 'ws-lemon-offer tol-plain no-bubble', id: 'ws-lemon-offer', role: 'group', 'aria-labelledby': 'ws-lemon-offer-h', tabindex: '-1' });
+    box.appendChild(h('p', { className: 'ws-lemon-offer-h', id: 'ws-lemon-offer-h' }, [h('strong', { text: 'Bring in your Lemonade Stand?' })]));
+    box.appendChild(h('p', { text: 'From your stand: ' + lemonSummary(d) + '. It fills in your names' + (d.jobs.some(function (j) { return j.home && Object.keys(j.v).length; }) ? ', a week of Who did what' : '') + ' and One owner per job. Nothing is sent anywhere.' }));
+    if (road) box.appendChild(h('p', { className: 'ws-sub', text: 'It goes onto the ' + road.label + ' road. You can pick a different road any time; what comes in moves with you.' }));
+    box.appendChild(h('div', { className: 'ws-lemon-offer-btns' }, [
+      h('button', { type: 'button', className: 'ws-go', 'data-lemon-offer': 'yes', text: 'Bring it in' }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-lemon-offer': 'no', text: 'Not now' })]));
+    var step = $('ws-step-choose'), sub = step && step.querySelector('.ws-sub');
+    if (sub) sub.parentNode.insertBefore(box, sub.nextSibling); else if (step) step.appendChild(box);
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-lemon-offer]'); if (!b || !lemonWait) return;
+      var w = lemonWait; lemonOffer(null);
+      if (b.getAttribute('data-lemon-offer') === 'no') { say('Not brought in. To bring it in later, open the link again, or paste the code under “Bring in our Lemonade Stand”.'); return; }
+      if (!S.path) { setPath(lemonRoad(w.d), null); changed(); }
+      var msg = lemonBring(w.d, w.from), det = $('ws-lemon'), note = $('ws-lemon-note');
+      if (det) det.open = true;
+      if (note) note.textContent = msg;
+      say(msg);
+      var t = det || $('ws-names'); if (t && t.scrollIntoView) t.scrollIntoView({ block: 'nearest' });
+    });
+    setTimeout(function () { if (box.scrollIntoView) box.scrollIntoView({ block: 'center' }); box.focus({ preventScroll: true }); }, 60);
+  }
+  // …/suite.html#stand=LEMON1:… ("Use this in my Workpaper Suite" on the stand): read here, on this device,
+  // then the address is tidied straight away so the stand doesn't stay in the address bar or the history.
+  function readStandHash() {
+    var hs = global.location.hash || '';
+    if (!/^#stand=/.test(hs)) return;
+    try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
+    lemonRead(hs, function (d) {
+      if (!d) { say(LEMON_HOWTO); return; }
+      lemonOffer(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand link' });
+    });
+  }
+  var LEMON_HOWTO = 'That doesn’t look like a Lemonade Stand code. On the Lemonade Stand, tap “Use this in my Workpaper Suite”, or copy its whole code (it starts with LEMON1: or TOLHOME1:) or the whole link, and paste it here.';
 
   /* ------------------------------------------------------------ keep a draft on this device (opt-in) */
 
@@ -1853,7 +1938,7 @@
     var lemonGo = $('ws-lemon-go'), lemonUse = $('ws-lemon-kept'), lemonSay = function (m) { var n = $('ws-lemon-note'); if (n) { n.textContent = ''; setTimeout(function () { n.textContent = m; }, 30); } };
     if (lemonGo) lemonGo.addEventListener('click', function () {
       lemonRead($('ws-lemon-code').value, function (d) {
-        if (!d) { lemonSay('That doesn’t look like a Lemonade Stand code. Copy the whole thing, starting with LEMON1: (or the whole link).'); $('ws-lemon-code').focus(); return; }
+        if (!d) { lemonSay(LEMON_HOWTO); $('ws-lemon-code').focus(); return; }
         lemonSay(lemonBring(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand code' }));
         $('ws-lemon-code').value = '';
       });
@@ -1953,6 +2038,8 @@
     if ($('ws-sheet-remove')) $('ws-sheet-remove').addEventListener('click', removeSheet);
     readSharedHash();
     global.addEventListener('hashchange', readSharedHash);
+    readStandHash();
+    global.addEventListener('hashchange', readStandHash);
     if ($('ws-sheet-draft')) $('ws-sheet-draft').addEventListener('click', function () { if (app) app.saveDraft(); });
     $('ws-drop').addEventListener('click', function (e) { var hb = e.target.closest('[data-hold]'); if (hb) resolveHeld(hb.getAttribute('data-hold')); var nb = e.target.closest('[data-names]'); if (nb) resolveNames(nb.getAttribute('data-names')); });
     document.addEventListener('keydown', function (e) {

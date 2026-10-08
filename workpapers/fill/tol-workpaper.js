@@ -681,7 +681,7 @@
       syncPeople(s, st);
       var n = peopleCount(st.values);
       CODES.slice(0, n).forEach(function (c, i) {
-        metaDefs.push({ id: 'partner' + c, label: self.opts.personLabel ? self.opts.personLabel(i) : labelFor(i), type: 'text', placeholder: 'First name or initial', person: i });
+        metaDefs.push({ id: 'partner' + c, label: self.opts.personLabel ? self.opts.personLabel(i) : labelFor(i), type: 'text', placeholder: 'First name', person: i });
       });
     }
     metaDefs = metaDefs.concat(s.meta || []);
@@ -717,9 +717,13 @@
     // (and, once it is combined, "Send my changes back" in the same place)
     var inEl = this.shareInEl() || (this.sendBack === 'top' ? this.sendBackEl() : null);
     if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
+    var lead = s.sections[0] && s.sections[0].type === 'note' ? s.sections[0] : null, howEl = null;
     s.sections.forEach(function (sec, k) {
+      // a long note before the first part of the sheet folds into "How to fill it in", with the example
+      // (just after the first part of the sheet, so the first rows come first)
+      if (sec === lead) { howEl = h('details', { className: 'wpf-example wpf-howto' }, [h('summary', { text: 'How to fill it in' }), self.renderSection(sec)]); return; }
       self.root.appendChild(self.renderSection(sec));
-      if (k === 0 && exampleEl) self.root.appendChild(exampleEl);
+      if (k === (lead ? 1 : 0)) { if (howEl) self.root.appendChild(howEl); if (exampleEl) self.root.appendChild(exampleEl); }
       if (self.opts.canShare && s.share && sec.id === s.share.after) self.root.appendChild(self.shareEl());
     });
     if (exampleEl && !exampleEl.parentNode) this.root.appendChild(exampleEl);
@@ -758,7 +762,7 @@
         rows.forEach(function (r, k) { if (at === rows.length && r && sec.personDays.indexOf(r.day) > sec.personDays.indexOf(day)) at = k; });
         rows.splice(at, 0, { day: day, who: code }); i = at;
       }
-      var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { text: ctx.name(code) })]);
+      var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { 'data-name-of': code, text: ctx.name(code) })]);
       cols.forEach(function (q) {
         var c = self.control({ type: 'text' }, rows[i][q[0]], { table: sec.id, row: String(i), col: q[0] });
         c.el.setAttribute('data-tonight', '1');
@@ -1002,6 +1006,7 @@
       b.setAttribute('aria-label', 'Remove ' + ctx.name(CODES[i]));
     });
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-fixed]'), function (t) { t.textContent = rowLabel(t.getAttribute('data-fixed'), ctx); });
+    Array.prototype.forEach.call(this.root.querySelectorAll('[data-name-of]'), function (t) { t.textContent = ctx.name(t.getAttribute('data-name-of')); });
     Array.prototype.forEach.call(this.root.querySelectorAll('input[type="number"]'), function (t) { self.flagRange(t); });
   };
 
@@ -1335,10 +1340,10 @@
   // A button for the site's share sheet (Text, WhatsApp, Email, …, or the phone's own share menu). The
   // link is made fresh at the tap, from the sheet as it is then (see onClick, "share-fresh").
   A.sendBtn = function (label, main) {
-    var what = this.shareWhat(), title = 'Our ' + (this.schema.plain || this.schema.title);
+    var what = this.shareWhat(), title = 'Our ' + String(this.schema.plain || this.schema.title).replace(/^the /i, '').replace(/^./, function (c) { return c.toLowerCase(); });
     var made = this.shareMade && !this.shareMade.error ? this.shareMade.link : '';
     return h('button', { type: 'button', className: 'wpf-add' + (main ? ' wpf-share-main' : ''), 'data-action': 'share-fresh', 'data-share': '', 'data-share-title': title,
-      'data-share-text': title + ': open this to see ' + (what === 'week' ? 'the week' : 'the ' + what) + ' and add to it.', 'data-share-url': made || 'none', text: label });
+      'data-share-text': title + ': open this to see ' + (what === 'week' ? 'the week' : 'the ' + what) + ' and add to it.', 'data-share-url': made || 'none', 'data-share-result': '', text: label });
   };
   // After a shared list or week is combined or opened here: the other phone still has the old one.
   A.sendBackEl = function () {
@@ -1876,7 +1881,7 @@
     var priv = document.querySelector('main .wpf-privacy');
     if (!priv || priv.closest('.wpf-how')) return;
     var det = h('details', { className: 'wpf-how no-bubble', id: 'wpf-how' }, [
-      h('summary', null, [h('span', { className: 'wpf-how-t', text: 'How saving works' }), h('span', { className: 'wpf-how-s', text: 'Everything stays on this device' })])]);
+      h('summary', null, [h('span', { className: 'wpf-how-t', text: 'How saving works' }), h('span', { className: 'wpf-how-s', text: 'It stays on this device' })])]);
     priv.parentNode.insertBefore(det, priv);
     det.appendChild(priv);
     var idea = document.querySelector('main > .pillar-note');

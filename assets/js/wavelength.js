@@ -977,6 +977,11 @@
       '<section class="wl-incoming">' +
         '<h2>Compare with ' + them + ' Wave Code</h2>' +
         '<p>' + (t.from ? esc(t.from) + ' shared their' : 'Someone shared their') + ' Wave Code with you. Two codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong.</p>' +
+        (done ? '' :
+          '<div class="wl-sect wl-knowcode"><h3>Know your code? Type it here</h3>' +
+            '<p class="wl-small">Your four letters, or paste the message you saved. No need to take the quiz again.</p>' +
+            '<div class="wl-pairbox"><label class="wl-sr" for="wl-ic-mine">Your Wave Code</label><input type="text" id="wl-ic-mine" class="wl-codein" placeholder="Your code, e.g. STDE" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="wl-btn" id="wl-ic-cmp">Compare</button></div>' +
+            '<div id="wl-ic-out" aria-live="polite"></div></div>') +
         '<label class="wl-field" for="wl-ic-them">' + cap(them) + ' Wave Code</label>' +
         '<input type="text" id="wl-ic-them" class="wl-codein" value="' + t.code + '" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
         '<p class="wl-small" id="wl-ic-arch">' + t.code + ' is ' + lower(ARCHETYPES[t.code][0]) + ': ' + ARCHETYPES[t.code][1] + '</p>' +
@@ -984,15 +989,12 @@
           ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
             '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
             '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
-          : '<label class="wl-field" for="wl-ic-name">Your first name (optional)</label>' +
+          : '<h3>Don’t know your code yet?</h3>' +
+            '<label class="wl-field" for="wl-ic-name">Your first name (optional)</label>' +
             '<input type="text" id="wl-ic-name" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
             '<p class="wl-small">' + (t.from ? esc(t.from) : 'They') + ' will see it when you share your Wave Code back, so they know it’s you.</p>' +
             '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button>' + (inQuiz ? '' : '<button type="button" class="wl-btn ghost" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button>') + '</div>' +
-            '<p class="wl-small">When you finish, your comparison shows up with your results.</p>' +
-            '<h3>Already know your Wave Code?</h3>' +
-            '<p class="wl-small">Type it in, or paste the message you saved, to compare without retaking the quiz.</p>' +
-            '<div class="wl-pairbox"><label class="wl-sr" for="wl-ic-mine">Your Wave Code</label><input type="text" id="wl-ic-mine" class="wl-codein" placeholder="Your code, e.g. STDE" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="wl-btn ghost" id="wl-ic-cmp">Compare</button></div>' +
-            '<div id="wl-ic-out" aria-live="polite"></div>') +
+            '<p class="wl-small">When you finish, your comparison shows up with your results. Tick “Keep” on your results, and the next Wave Code link you open will use your result straight away.</p>') +
         '<p class="wl-note">Nothing you type or choose is sent anywhere. The code came in the link you opened, and it stays in this browser.</p>' +
       '</section>';
     const themIn = $('#wl-ic-them'), out = $('#wl-ic-out');
@@ -1054,7 +1056,7 @@
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div>' : '') +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
-            (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
+            (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. Keep them on this device, and a Wave Code link someone sends you will open with your result ready. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
           (S.quick ? '<div class="wl-sect wl-more-parts" id="wl-moreparts"><h3>Want more? Parts 5 to 7 are optional</h3><p class="wl-small">How you take things in and learn, what helps you feel understood, and a short statement to share. Each adds to your results below, and you can stop anytime.</p>' +
@@ -1154,7 +1156,10 @@
     on('#wl-share', () => share({ title: 'My Wavelength', text: profileText(), url: false, result: true }));
     on('#wl-sshare', () => share({ title: 'My Wavelength statement', text: stmtPlain(), url: false, result: true }));
     // every way of sharing carries the code: the link opens a ready-made comparison on their side
-    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine:', url: compareLink(code, S.name.trim()), result: true }));
+    // the link sits inside the message itself, so "Copy message", a text, an email or the phone's own share
+    // menu all carry it (some share menus copy only the text and drop a separate link)
+    const codeMessage = () => 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine: ' + absLink(compareLink(code, S.name.trim()));
+    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true }));
     if (window.TOLShareClip && window.TOLShareClip.mount) $$('#wl-share, #wl-sshare, #wl-sharecode').forEach(b => { try { window.TOLShareClip.mount(b); } catch (e) {} });
     on('#wl-scopy', () => copyText(stmtPlain(), '#wl-stoast', 'Copied. Paste it into a message, a note or a card.'));
     on('#wl-sdl', () => { download(stmtPlain(), (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Wavelength statement.txt'); const t = $('#wl-stoast'); if (t) t.textContent = 'Saved to your device.'; });

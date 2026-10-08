@@ -77,10 +77,10 @@
       "steps": ["Talk with your partner first, at a calm time, and agree what you both want (visits, advice, holidays).", "Agree that each of you speaks to your own family about it, as “we”, not “my partner wants”.", "Pick one small change to try, like visits with a set end time, rather than everything at once."],
       "scripts": {
         "default": ["Could we agree a plan for your parents’ visits together first? Then it’s our plan, and you could share it with them.", "I really like your mom, and I’d love for visits to feel easy for all of us. Could we try a set end time this time?"],
-        "family": ["Thank you for all your help with the kids. We’re trying to do bedtime our way for a while, and it would mean a lot if you’d go along with it."]
+        "family": ["(Best said by your partner, to their own parent.) We love having you. Could we plan your visits together, like every other Sunday, so we can all look forward to them?"]
       },
       "scripts_also": ["For your partner", ["I don’t want to come between you and your family. Could we decide what we want together, and you talk to them?"]],
-      "path": [["In-laws (Library)", "/library/life.html#in-laws"], ["Where partners start", "/relationships-in-depth.html#partners"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"]],
+      "path": [["Visits, long stays and elders", "/family-obligations.html#visits"], ["In-laws (Library)", "/library/life.html#in-laws"], ["Where partners start", "/relationships-in-depth.html#partners"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"]],
       "deeper": ["in-laws and two family cultures", "What does the Library say about in-laws?"],
       "ex": "Mia’s mother-in-law often gave parenting advice at dinner. Mia and her husband agreed together that he would mention it to his mom, kindly: “We love your help, and we’re figuring out bedtime our own way.” It landed far better coming from him.",
       "tonight": "jot down the one thing about the in-laws you’d most like to agree on with your partner, so you can bring it up on a calm day."

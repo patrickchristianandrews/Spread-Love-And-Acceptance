@@ -214,6 +214,11 @@
                 need: 'The need underneath may be fair. Say it as one example and one ask: “On Sunday I called first. Could you call me this week?”',
                 // "I'm always the one who reaches out": a pattern noticed on your own side
                 pattern: 'Naming a pattern you’ve noticed isn’t the same as a verdict.' },
+    // "I'm always the one who reaches out": an always/never about your own side names an unmet need. It counts
+    // as a need, not heat, in the table and on the card
+    need:     { label: 'Need named', heat: 0, tone: 'note',
+                hear: 'This names a real need. It’s about your own side (“I’m always the one who…”), not a verdict on the other person. The “always” can still be heard as a charge, so one recent example and one ask help it land.',
+                instead: 'One time and one ask: “On Sunday I called first. Could you call me this week?”' },
     dismiss:  { label: 'Dismissing', heat: 2.5, tone: 'hot',
                 hear: 'Words like “calm down,” “whatever” or “you’re overreacting” tell the other person their feeling doesn’t count. They usually raise the heat.',
                 instead: 'Say what you can hear, even if you see it differently: “I can tell this matters to you.”',
@@ -319,7 +324,7 @@
     // "Fine. Whatever works for you." / "whatever you want" / "I don't care": may be resigned hurt
     marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
     // "I'm always the one who reaches out": a pattern the speaker has noticed on their own side, not a verdict on the other person
-    marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) m.pattern = true; });
+    marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) { m.pattern = true; m.kind = 'need'; } });
     if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
     var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation

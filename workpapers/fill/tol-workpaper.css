@@ -729,3 +729,26 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .wpf-share-new{ font-weight: 600; color: var(--ink, #211D17); }
 .wpf-sendback{ margin: 1em 0; }
 @media (max-width: 560px){ .wpf-people-help{ display: none; } .wpf-people-actions{ margin-top: .5em; } }
+.wpf-howto .wpf-note{ margin: .4em 0 .3em; font-style: normal; }
+.wpf-howto + .wpf-example{ margin-top: 6px; }
+@media (max-width: 560px){
+  /* the sheet's code is in the title and on the PDF; on a phone the heading is just the sheet's name */
+  body[data-wp] main.read > header.read-head .read-code{ display: none; }
+  body[data-wp] main.read > header.read-head h1{ margin-top: 0; }
+  .wpf-people-actions{ display: inline-flex; margin-right: .6em; vertical-align: middle; }
+  .wpf-people-actions + .tol-hh-keep{ display: inline-flex; vertical-align: middle; margin-top: .5em; }
+}
+@media (max-width: 560px){
+  body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .9em; line-height: 1.55; }
+  .wpf-how > summary{ font-size: .95em; }
+  /* the save bar stays one row on a phone, even at Larger text */
+  .wpf-bar-actions.has-more:not(.is-open){ flex-wrap: nowrap; }
+  .wpf-bar-actions.has-more:not(.is-open) button{ min-width: 0; padding-left: 10px; padding-right: 10px; white-space: nowrap; }
+}
+
+/* "Bring in your Lemonade Stand?": a stand that came in through a link, waiting for a yes */
+.ws-lemon-offer{ margin: .8em 0 1em; padding: .9em 1.1em; border-radius: 16px; background: #FFF6D6; border: 1px solid #E9CF7A; }
+.ws-lemon-offer p{ margin: 0 0 .5em; }
+.ws-lemon-offer:focus{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.ws-lemon-offer-btns{ display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.ws-lemon-offer-btns .wpf-add{ min-height: 44px; }

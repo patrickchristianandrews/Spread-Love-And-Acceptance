@@ -199,7 +199,7 @@ const F = [
    what:"\"Always,\" \"never\" and \"everyone\" erase every exception. The listener remembers the time it didn't happen and argues that, and the real point gets lost.",
    fix:"Swap the absolute for one specific, recent example."},
   {id:"madefeel", name:"Blame for a feeling (\"you made me…\")", kind:"static",
-   re:/\byou (?:made|make|are making|'re making|have made|'ve made|keep making) me (?:feel (?!(?:so )?(?:loved|happy|special|safe|welcome|seen|heard|proud|better|good|great|calm|at home|cared))\w+|so (?:angry|mad|sad|upset|anxious|stressed|frustrated|furious)|(?:angry|mad|sad|upset|anxious|nervous|crazy|insane|cry|furious|miserable|late|miss \w+|lose \w+|wait|worry|look (?:stupid|bad|foolish|like \w+)|do this|say that|yell|snap))\b|\bbecause of you,? (?:i|we)\b|\b(?:it's|this is|that's|it is) (?:all )?your fault\b|\byou (?:ruined|wrecked|spoiled) (?:it|everything|my|our|the)\b/gi,
+   re:/\byou (?:made|make|are making|'re making|have made|'ve made|keep making) me (?:feel (?!(?:so )?(?:loved|happy|special|safe|welcome|seen|heard|proud|better|good|great|calm|at home|cared))\w+|so (?:angry|mad|sad|upset|anxious|stressed|frustrated|furious)|(?:angry|mad|sad|upset|anxious|nervous|crazy|insane|cry|furious|miserable|late|miss \w+|lose \w+|wait|worry|look (?:stupid|bad|foolish|like \w+)|do this|say that|yell|snap))\b|(?<!\b(?:not|isn't|wasn't|never|and not|but not) )\bbecause of you,? (?:i|we)\b|\b(?:it's|this is|that's|it is) (?:all )?your fault\b|\byou (?:ruined|wrecked|spoiled) (?:it|everything|my|our|the)\b/gi,
    what:"\"You made me feel\" puts the feeling on the other person's actions. They end up arguing about whether they caused it, instead of hearing how you feel.",
    fix:"Own the feeling and name the event: \"I felt hurt when…\""},
   {id:"compare", name:"Comparison to someone else", kind:"static",
@@ -1261,6 +1261,8 @@ function analyze(textIn, opts){
   drop("critic", h=>/^you're late$/i.test(h.match) && /\b(?:when|if)\s*$/i.test(low.slice(Math.max(0,h.s-6),h.s)));
   drop("absolute", h=>/^never$/i.test(h.match) && /never\s*mind/i.test(low.slice(h.s,h.s+12)));
 
+  // "I said maybe because of work": a report of an earlier answer, not a soft no now
+  drop("softno", h=>/\b(?:i|we) (?:said|told you|meant|answered|was saying)(?: that)?,?\s*["“]?$/i.test(low.slice(Math.max(0,h.s-24), h.s)));
   // a stack of softeners in one request ("could you maybe possibly think about perhaps…")
   sentences.forEach(se=>{
     const st = low.slice(se.s, se.e).toLowerCase();
@@ -1587,6 +1589,7 @@ const BROKEN_RX = [
   /\b(?:you|they|he|she|we)(?:'ll| will| would|'d) (?:often|rarely)\b/i,
   /\b(?:could|can|would) you (?:could|can|would|will|should|must)\b/i,
   /\bnot not\b/i,
+  /,\s*(?:not|but|and|because|or)\s*[.!?]/i,
   /\b(?:could|can|would|will) you (?:do|does|did|are|is|was|were|have|has|had|don't|didn't|can't|won't) (?:you|u|we|i|they)\b/i,
   /\bso \w+ a lot\b/i,
   /\b(?:could|can|would|will) you [^?.!]*\b(?:and|but) (?:it|that|this)(?:'s| is| was)\b[^?.!]*\?/i,
@@ -2164,7 +2167,8 @@ function rewriteSentence(s, ctx, note, an, W){
     const rep = /^when\b/i.test(rest) && !map[w] ? (past?"I felt ":"I get ")+w+" "+rest+"." : (map[w] || ((/making/.test(m[2])?"I'm getting ":past?"I felt ":"I get ")+w+(/making/.test(m[2])?".":past?" when [what happened].":" when [that happens].")));
     t = (m[1]?m[1].replace(/[,\s]+$/,"")+". ":"")+rep; note("madefeel","you "+m[2]+" me "+w, rep);
   }
-  if(/\bbecause of you,?\s*/i.test(t)){ t=t.replace(/\bbecause of you,?\s*/i,""); note("madefeel","because of you",""); }
+  // "because of you" as blame goes; "not because of you" is a reassurance, and stays word for word
+  if(/\bbecause of you\b/i.test(t) && !NEG_REASSURE.test(t)){ t=t.replace(/\bbecause of you,?\s*/i,""); note("madefeel","because of you",""); }
   if(/^(?:it's|this is|that's|it is) (?:all )?your fault\b/i.test(t)){ note("madefeel",t,"[What happened] was hard for me."); t="[What happened] was hard for me."; ctx.critical=true; }
   m = t.match(/^you (?:ruined|wrecked|spoiled) (.+?)[.!?]*$/i);
   if(m){ const rep="I'm really disappointed about "+(/^(?:it|everything)$/i.test(m[1])?"[what happened]":m[1].replace(/^my\b/i,"my").replace(/^our\b/i,"our"))+"."; note("madefeel",t,rep); t=rep; ctx.critical=true; }
@@ -2229,7 +2233,7 @@ function rewriteSentence(s, ctx, note, an, W){
     ["feelingq",/\bhow do you feel(?: about (?:it|that|this))?\?*/gi, "Are you more tired, annoyed or hurt right now? Or would you rather not say yet?"],
     ["feelingq",/\bwhat's wrong\?+/gi, "Would space or company help more right now?"],
     ["feellike",/^i feel (?:like|that) you (.+?)[.!?]*$/gi, "I've been feeling [your feeling]. When [what happened], it seemed to me like you $1."],
-    ["softno",/\bwe'll see\b(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
+    ["softno",/(?<!\b(?:i|we) (?:said|told you|meant|answered),? ["“]?)\bwe'll see\b(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
     ["softno",/\bi'll think about it\b/gi, "I'll think about it and tell you by [a time]"],
     ["urgent",/\bhurry(?: up)?\b[.!]*/gi, "Could we leave by [a time]?"]
   ];
@@ -2893,6 +2897,8 @@ function simpler(text){
   t = t.replace(/\u0001(\d+)\u0002/g, (m,i)=>keep[+i]);
   return t.trim();
 }
+/* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
+const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
 const ATTACK_IDS = ["label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.

@@ -339,18 +339,18 @@ TESTER.forEach(c=>{
   ok(E.rewrite(an,{wirings:["autistic"]}).main.toLowerCase().includes(th), `"${t}": autistic listener lost the fact`);
 });
 { const r=E.rewrite(E.analyze("You left the stove on again.",{channel:"text"}),{wirings:["adhd"], rel:"partner"});
-  ok(/^The stove was left on today, and that scares me\. Can we find a way to make sure the stove gets turned off every time\?/.test(r.main), `ADHD stove rewrite: "${r.main}"`); }
+  ok(/^You left the stove on, and that scares me\. Can we find a way to make sure the stove gets turned off every time\?/.test(r.main), `ADHD stove rewrite: "${r.main}"`); }
 { const r=E.rewrite(E.analyze("You left the stove on again. That's dangerous.",{channel:"text"}),{wirings:["adhd"]});
-  ok(/^The stove was left on today\. That's dangerous, and it worries me\./.test(r.main), `ADHD stove + danger rewrite: "${r.main}"`); }
+  ok(/^You left the stove on\. That's dangerous, and it worries me\./.test(r.main) && !/today|kitchen/.test(r.main), `ADHD stove + danger rewrite (active, nothing added): "${r.main}"`); }
 { const r=E.rewrite(E.analyze("You left the stove on again last night.",{channel:"text"}),{wirings:["adhd"]});
-  ok(/^The stove was left on last night\b/.test(r.main) && !/today/.test(r.main), `a time the speaker gave is kept: "${r.main}"`); }
+  ok(/^You left the stove on last night\b/.test(r.main) && !/today/.test(r.main), `a time the speaker gave is kept: "${r.main}"`); }
 { const r=E.rewrite(E.analyze("You left the stove on again.",{channel:"text"}),{wirings:[]});
   ok(/again/.test(r.main), `without a criticism-sensitive listener the fact is kept as said: "${r.main}"`); }
 // a one-line plain verdict that agrees with the level
 [["I felt hurt when you missed dinner. Could you text me by 6 if you'll be late?","ok",/probably land okay/],
  ["Can you grab milk on your way home","ok",/probably land okay/],
  ["You need to clean your room.","hurt",/might hurt/],
- ["You left the stove on again. That's dangerous.","hurt",/worry is fair.*might hurt/],
+ ["You left the stove on again. That's dangerous.","hurt",/^Your worry is fair and worth saying plainly\. Here's a version that keeps your words direct and lands easier for them\.$/],
  ["You're so lazy and you never help.","fight",/start a fight/],
  ["If you don't clean up, I'm leaving.","fight",/start a fight/],
  ["I'll take you to court and get full custody.","fight",/start a fight/]].forEach(([t,id,re])=>{
@@ -443,6 +443,53 @@ ok(E.title("again", [], null)===E.FBY.again.name, "with no words to show, the fu
  ["You always leave the lights on.",/Could you \(say the one thing you'd like\) going forward\?/]].forEach(([t,re])=>W_ALL.forEach(W=>{
   const r=E.rewrite(E.analyze(t,{channel:"text"}),{wirings:W, rel:"partner"});
   ok(re.test(r.main), `"${t}" [${W}]: ask "${r.main}"`); ok(!/\[one specific thing\]/.test(r.main), `"${t}" [${W}]: raw blank in "${r.main}"`); }));
+
+// ---------- couples review: a direct sender with a fair worry; nothing invented; simpler English ----------
+{ // 1. a fair concern said plainly: the headline doesn't make the directness the problem, and names the listener
+  const t="You left the stove on again. That's dangerous.";
+  [["adhd","Sam"],["general",""],["hsp","Alex"]].forEach(([w,name])=>{
+    const an=E.analyze(t,{channel:"text"}), sc=E.score(an,[w],"text","v"), r=E.rewrite(an,{wirings:[w], rel:"partner"}), v=E.verdict(an,sc,r,{listener:name});
+    if(v.id!=="ok") ok(v.fair && v.text==="Your worry is fair and worth saying plainly. Here's a version that keeps your words direct and lands easier for "+(name||"them")+".", `[${w}] fair-worry headline: "${v.text}"`);
+    ok(!/might hurt|softer/i.test(v.text), `[${w}] directness made the problem: "${v.text}"`); });
+  // an attack keeps the softer wording, even with a safety worry inside it
+  ["You're so careless, you left the stove on again.","You left the stove on again, you idiot."].forEach(m=>{
+    const an=E.analyze(m,{channel:"text"}), sc=E.score(an,["adhd"],"text","v"), v=E.verdict(an,sc,E.rewrite(an,{wirings:["adhd"]}),{listener:"Sam"});
+    ok(!v.fair && !/worth saying plainly/.test(v.text), `"${m}": an attack is not a fair worry: "${v.text}"`); });
+  ok(E.fairConcern(E.analyze(t,{channel:"text"})) && !E.fairConcern(E.analyze("You need to clean your room.",{channel:"text"})), "fairConcern: safety yes, a chore order no");
+}
+{ // 2. rewrites never add a time or a place the message didn't have
+  const ADDED=/\b(today|tonight|tomorrow|yesterday|this (?:morning|afternoon|evening|week|weekend)|last night|(?:mon|tues|wednes|thurs|fri|satur|sun)day|at home|at work|in the kitchen|the kitchen)\b/gi;
+  const msgs=FIX.map(f=>f.t).concat(WORK, ["You left the stove on again. That's dangerous.","You left the front door unlocked again.","You left the oven on.","You forgot to turn off the iron again!","The gate was left open again.","You left the meds on the counter again.","You left the candles burning.","You left the space heater on.","You forgot to lock the back door.","Supportive would be nice for once.","Sure, whatever you say, genius.","You left the knives out where the kids can reach."]);
+  msgs.forEach(m=>{ const an=E.analyze(m,{channel:"text"});
+    [[],["general"],["adhd"],["hsp"],["trauma"],["autistic"],["nt"]].forEach(W=>{ const r=E.rewrite(an,{wirings:W, rel:"partner", channel:"text"});
+      all(r).forEach(x=>{ (x.replace(/\[[^\]]*\]/g,"").match(ADDED)||[]).forEach(w=>ok(new RegExp("\\b"+w+"\\b","i").test(m), `"${m}" [${W}]: rewrite adds "${w}": "${x}"`)); }); }); });
+  // the plain fact stays active and in the speaker's words
+  [["You forgot to turn off the iron again!",/^You forgot to turn off the iron, and that scares me\./],["The gate was left open again.",/^The gate was left open, and that scares me\./],["I noticed you left the stove on again.",/^You left the stove on, and that scares me\./]].forEach(([m,re])=>{
+    const r=E.rewrite(E.analyze(m,{channel:"text"}),{wirings:["adhd"], rel:"partner"}); ok(re.test(r.main) && !/\bagain\b/i.test(r.main), `"${m}": plain fact "${r.main}"`); });
+}
+{ // 3. simpler English re-says the suggested words in short sentences
+  const r=E.rewrite(E.analyze("You are always correcting me with the baby, it is not respectful to me as her mother.",{channel:"text"}),{wirings:["general"], rel:"partner"});
+  ok(E.simpler(r.main)==="You correct me with the baby a lot. It does not feel respectful. I am her mother. Please let me do it my way, and talk to me later if you disagree.", `simpler baby: "${E.simpler(r.main)}"`);
+  ok(E.simpler("You left the stove on. That's dangerous, and it worries me.")==="You left the stove on. That is dangerous. It worries me.", "simpler splits one idea per sentence: "+E.simpler("You left the stove on. That's dangerous, and it worries me."));
+  ok(E.simpler("Could you call the dentist by [a time]?")==="Please call the dentist by [a time].", "simpler keeps blanks: "+E.simpler("Could you call the dentist by [a time]?"));
+  FIX.map(f=>f.t).concat(WORK).forEach(m=>{ const rr=E.rewrite(E.analyze(m,{channel:"text"}),{wirings:["general"]}); all(rr).forEach(x=>{ const sm=E.simpler(x);
+    ok(sm && (x.match(/\[[^\]]*\]/g)||[]).every(b=>sm.includes(b)), `simpler lost a blank: "${x}" -> "${sm}"`);
+    ok(!/\b(?:can't|won't|don't|doesn't|it's|I'm|you're)\b/.test(sm.replace(/\[[^\]]*\]/g,"")), `simpler left a contraction: "${sm}"`);
+    ok(!/\.\s*\./.test(sm) && !/\s[,.]/.test(sm), `simpler broke punctuation: "${sm}"`); }); });
+}
+
+{ // 8. a reassurance is never taken out, no dangling "not", and "I said maybe" reports an earlier answer
+  [["ok. i said maybe because of work, not because of you. call sunday?",/not because of you/],["It's not because of you, I'm just tired.",/not because of you/],["It's not you, it's work. Talk tonight?",/It's not you/],["Not your fault. I forgot to tell you.",/Not your fault/],["I said we'll see, not no.",/I said we'll see, not no/]].forEach(([t,keep])=>{
+    const an=E.analyze(t,{channel:"text"});
+    ok(!an.found.madefeel, `"${t}": a reassurance flagged as blame`);
+    ok(!an.found.softno, `"${t}": a report of an earlier "maybe" flagged as a soft no`);
+    W_ALL.forEach(W=>{ const r=E.rewrite(an,{wirings:W, rel:"partner", channel:"text"});
+      all(r).forEach(x=>{ ok(keep.test(x), `"${t}" [${W}]: reassurance removed in "${x}"`); ok(!/,\s*(?:not|but|and)\s*[.!?]/i.test(x), `"${t}" [${W}]: dangling word in "${x}"`); });
+      ok(!r.changes.some(c=>c.id==="madefeel"), `"${t}" [${W}]: "you made me feel" note on a reassurance`); }); });
+  // blame with "because of you" still gets the note, and a plain soft no is still a soft no
+  ok(E.analyze("Because of you, I missed the bus.",{channel:"text"}).found.madefeel, "\"Because of you, I…\" is still blame");
+  ok(E.analyze("Maybe.",{channel:"text"}).found.softno && E.analyze("We'll see.",{channel:"text"}).found.softno, "a plain maybe is still a soft no");
+}
 
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

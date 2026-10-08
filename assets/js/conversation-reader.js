@@ -7,20 +7,20 @@
   if (!R) return;
 
   var EXAMPLE = [
-    'Sam: hey did you get a chance to look at the sink? it\'s backed up again',
-    'Alex: not yet, I\'ll do it later',
-    'Sam: you said that on Sunday. When exactly?',
+    'Sam: hey, are we still on for Saturday? I was thinking the lake',
+    'Alex: maybe, I\'ll let you know later',
+    'Sam: you said that last week. When will you know?',
     'Alex: I SAID later. Why do you always do this??',
-    'Sam: I\'m not trying to start anything. I\'m just tired and the kitchen is a mess',
-    'Alex: whatever. you never notice anything I do around here',
-    'Sam: that\'s not fair. Remember when I did the whole garage last month?',
+    'Sam: I\'m not trying to start anything. I\'m just tired of not knowing the plan',
+    'Alex: whatever. you never notice anything I do',
+    'Sam: that\'s not fair. Remember when I planned the whole trip last month?',
     'Alex: wow, thanks a lot for keeping score',
     'Sam: ok I\'m sorry, I didn\'t mean it like that. Can we talk tonight?',
     'Alex: fine.'
   ].join('\n');
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
-  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'defend', 'brushaside', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
+  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'defend', 'brushaside', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'need', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
   var GOOD = { repair: 1, pause: 1, warmth: 1, feeling: 1, ask: 1 };
   if (window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById('cr-lookfor'));
 

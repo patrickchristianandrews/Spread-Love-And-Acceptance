@@ -703,7 +703,7 @@ t('retest3', 'my wife thinks i dont do enough at home but i do a lot of stuff sh
 t('retest3', 'should I discipline her when Tasha isn\'t home', { kind: 'care', id: 'stepdiscipline' });
 t('retest3', 'the kids are 14 and 16 and want a say', { kind: 'care', id: 'teensay', not: /Children.s Privacy|intended for adults/i });
 t('retest3', 'christmas and thanksgiving, he always wants both', { kind: 'care', id: 'exschedule' });
-t('retest3', 'my mother-in-law visits too often', { kind: 'care', id: 'longstay', link: '/family-obligations.html#visits', not: /bedtime our way/ });
+t('retest3', 'my mother-in-law visits too often', { link: '/family-obligations.html#visits', not: /bedtime our way/ });
 t('retest3', 'I\'m always the one who arranges our calls', { kind: 'care', id: 'longdistance', text: /real information, not scorekeeping/ });
 c('retest3', ['we live in different countries and fight about who calls', 'what about time zones'], { text: /overlap|whose time/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });

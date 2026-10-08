@@ -253,12 +253,31 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   ok(r.resignedMe === 1 && r.resignedThem === 0, 'the resigned “whatever” is counted for the table (got ' + r.resignedMe + '/' + r.resignedThem + ')');
   ok(r.tallyThem.dismiss === 1 && r.resignedThem === 0, '“Calm down” stays “Dismissing”');
   ok(R.KINDS.dismiss.resigned.label === 'Brush-off, or quiet hurt', 'the gentler label is the card’s');
-  const pat = R.findMarks('I’m always the one who reaches out.').find(m => m.kind === 'absolute');
+  const pat = R.findMarks('I’m always the one who reaches out.').find(m => m.kind === 'need');
   ok(pat && pat.pattern, '“I’m always the one who reaches out” names a pattern');
+  ok(!R.findMarks('I’m always the one who reaches out.').some(m => m.kind === 'absolute'), '“I’m always the one who reaches out” is a need named, not always/never heat');
   ok(/isn’t the same as a verdict/.test(R.KINDS.absolute.pattern), 'always/never has the pattern note');
   const not = R.findMarks('You never listen.').find(m => m.kind === 'absolute');
   ok(not && !not.pattern, '“You never listen” is not marked as a noticed pattern');
-  ok((R.findMarks('I never get a call back.').find(m => m.kind === 'absolute') || {}).pattern, '“I never get a call back” names a pattern');
+  ok((R.findMarks('I never get a call back.').find(m => m.kind === 'need') || {}).pattern, '“I never get a call back” names a pattern');
+  // in Lena and Diego's thread, Lena's line is counted as a need, not under "Always / never", and adds no heat
+  [['Lena', 'Diego'], ['Diego', 'Lena']].forEach(([me]) => {
+    const r2 = readOf(lena, me), side = me === 'Lena' ? r2.tallyMe : r2.tallyThem;
+    ok(side.need === 1 && !side.absolute, 'Lena’s “I’m always the one who reaches out” is counted as Need named (read as ' + me + '): ' + JSON.stringify(side));
+    ok(r2.turns[4].heat === 0, 'a named need adds no heat (got ' + r2.turns[4].heat + ')');
+  });
+  ok(R.KINDS.need.label === 'Need named' && /^This names a real need/.test(R.KINDS.need.hear), 'the need note leads with “This names a real need”');
+}
+
+// the box's placeholder and the example thread fit any couple or friends: no shared home assumed
+{
+  const fs = require('fs');
+  const html = fs.readFileSync(path.join(__dirname, '../../conversation-reader.html'), 'utf8'), ui = fs.readFileSync(path.join(__dirname, '../../assets/js/conversation-reader.js'), 'utf8');
+  const ph = (html.match(/id="cr-input"[^>]*placeholder="([^"]*)"/) || [])[1] || '', ex = (ui.match(/var EXAMPLE = \[([\s\S]*?)\]\.join/) || [])[1] || '';
+  ok(ph && !/sink|kitchen|garage|dishes|laundry/i.test(ph), 'placeholder assumes a shared home: ' + ph);
+  ok(ex && !/sink|kitchen|garage|dishes|laundry/i.test(ex), 'example thread assumes a shared home');
+  const ex2 = ex.split('\n').map(l => (l.match(/'(.*)',?\s*$/) || [])[1]).filter(Boolean).map(l => l.replace(/\\'/g, "'")).join('\n');
+  const rex = readOf(ex2, 'Sam'); ok(rex.turns.length === 10 && rex.turns.some(t => t.marks.some(m => m.kind === 'repair')), 'the example thread still reads, with a repair attempt');
 }
 
 console.log(`${pass} passed, ${fail} failed`);

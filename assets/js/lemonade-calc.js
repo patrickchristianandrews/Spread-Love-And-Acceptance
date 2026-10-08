@@ -12,7 +12,7 @@
   is simply the first person's side of the same stand.
 
   Hours tab: one line per job. Add jobs from the task library (typical minutes filled in, editable) or
-  type your own. Per job: the category, how often (each day, 3 times a week, each week, each month),
+  type your own. Per job: the category, how often (each day, weekdays, 3 times a week, each week, each month),
   minutes or hours, each person's time, and, optionally, the thinking part (noticing, planning,
   remembering) in minutes and who notices first.
   Money tab (optional, group only): one line per cost, what each person paid, in the currency picked
@@ -274,6 +274,7 @@
     keep = false;
     $('keep-device').checked = false;
     status('Erased. Nothing from the stand is kept on this device now.');
+    renderKeepAsk(); renderTrend();
   }
 
   /* ---------- making any saved stand fit the current shape ---------- */
@@ -867,7 +868,7 @@
     foot.appendChild(more); foot.appendChild(sumLine);
     // one person filling in on this device: on a phone each job is one short row (the job, my time, how often),
     // with the rest behind "More" (the CSS only folds it on narrow screens)
-    if (!solo() && state.me >= 0 && !item.ex && !item.expanded) row.classList.add('is-compact');
+    if (!solo() && state.me >= 0 && !item.expanded) row.classList.add('is-compact');
     [each, others, area].forEach(function (x) { if (x) x.classList.add('cx-extra'); });
     us.parentNode.classList.add('cx-extra'); if (item.custom) cs.parentNode.classList.add('cx-extra');
     moreLabel();
@@ -2057,9 +2058,11 @@
         var mark = k === 'home' ? '' : k === 'rest' ? ' (rest, not in the split)' : k === 'work' ? ' (paid work or school, not in the split)' : ' (own family or personal, not in the split)';
         // night feeds inside on-call: where they went, never "Aisha 0h"
         if (fs) { lines.push('- ' + j.name.trim() + mark + ': ' + fs); return; }
-        lines.push('- ' + j.name.trim() + mark + ': ' + state.people.map(function (x, i) {
+        // only the people with time on it (never "Ben 0h")
+        var withT = state.people.map(function (x, i) { return i; }).filter(function (i) { return r1(jobH(j, i)) > 0; });
+        lines.push('- ' + j.name.trim() + mark + ': ' + (withT.length ? withT.map(function (i) {
           return nameOf(i) + ' ' + r1(jobH(j, i)) + 'h' + (j.fq && num(j.v[i]) > 0 ? ' (' + FREQ_LABEL[freqOf(j, i)].toLowerCase() + ')' : '');
-        }).join(', '));
+        }).join(', ') : 'under 0.1h a week'));
       });
     }
     if (s > 0 || anyBad(state.jobs)) {
@@ -2152,7 +2155,8 @@
   if (saved && saved.people && saved.people.length >= MIN) {
     keep = true;
     // the tab's own draft is newer than the kept copy when both exist
-    state = draft && draft.people && draft.people.length >= MIN ? draft : saved;
+    // (an untouched example in this tab never hides a real stand kept on this device)
+    state = draft && draft.people && draft.people.length >= MIN && !(draft.example && !saved.example) ? draft : saved;
   } else if (draft && draft.people && draft.people.length >= MIN) {
     state = draft;
     if (!state.example) status('Your stand from earlier in this tab is back.');
@@ -2388,6 +2392,7 @@
     keep = e.target.checked;
     if (keep) { save(); status('Kept on this device only. Press “Erase” any time to remove it.'); }
     else { try { localStorage.removeItem(KEY); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now.'); }
+    renderKeepAsk(); renderTrend();
   });
   $('erase-device').addEventListener('click', erase);
 

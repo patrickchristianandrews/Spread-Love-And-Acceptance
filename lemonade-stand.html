@@ -343,9 +343,43 @@
   /* "Just the 3 steps" (new baby): only the names, the list and sending your side */
   body[data-ls-compact] #lib, body[data-ls-compact] .ls-tabs, body[data-ls-compact] #panel-money, body[data-ls-compact] #group-results,
   body[data-ls-compact] #ls-body > .ls-res, body[data-ls-compact] #ls-body > .solo-only, body[data-ls-compact] #ls-body > .ls-how:not(.ls-data), body[data-ls-compact] #ls-body > .ls-tools,
-  body[data-ls-compact] #owners, body[data-ls-compact] .try-this, body[data-ls-compact] .pillar-note, body[data-ls-compact] #add-side, body[data-ls-compact] .tol-hh-move, body[data-ls-compact] #as-row, body[data-ls-compact] .ls-as{ display:none !important; }
+  body[data-ls-compact] #owners, body[data-ls-compact] .try-this, body[data-ls-compact] #more-opts, body[data-ls-compact] .ls-suite, body[data-ls-compact] #see-split, body[data-ls-compact] .pillar-note, body[data-ls-compact] #add-side, body[data-ls-compact] .tol-hh-move, body[data-ls-compact] #as-row, body[data-ls-compact] .ls-as{ display:none !important; }
   /* the floating buttons (back to top, breathe) never sit over the end of the result */
   @media (max-width:700px){ .balance-line, .ls-money-sum{ padding-bottom:3.6rem !important; } .ls-money-sum{ padding-right:3.2rem; } }
+  /* keep on this device, who are you, the Suite, More options, the jump, compact rows on a phone */
+  .ls-keepask{ margin:.7rem 0 0; padding:.6rem .8rem; border-radius:14px; border:2px solid var(--credit, #3E6B4C); background:#F3F8F1; }
+  .ls-keepask[hidden], .ls-keepask [hidden], .ls-moreopts[hidden], .ls-jump[hidden]{ display:none !important; }
+  .ls-keepask p{ margin:0 !important; font-size:.95rem; }
+  .ls-keepask-btns{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.45rem 0 0; }
+  .ls-keepask-btns button, .ls-whoask .ls-chip{ font:inherit; min-height:44px; padding:.4rem .95rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
+  .ls-keepask-btns button[data-keep-yes]{ background:#F8E08A; font-weight:600; }
+  .ls-keepask-btns button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  #group-results > .ls-keepask{ margin:1.2rem 0 0; }
+  .ls-whoask{ margin:.7rem 0; padding:.7rem .8rem; border-radius:14px; border:2px solid #C9D8EC; background:#EEF3FA; }
+  .ls-whoask p{ margin:0 !important; font-size:.95rem; }
+  .ls-whoask .ls-pick{ margin:.4rem 0 0; }
+  .ls-recog{ margin:.4rem 0 0 !important; color:var(--credit) !important; }
+  .ls-lonely{ margin:.4rem 0 0 !important; }
+  .ls-solo-note{ margin:.35rem 0 0 !important; }
+  .ls-suite{ margin:.6rem 0 0; }
+  .ls-suite .ls-tools{ margin:.4rem 0 .2rem; }
+  .ls-moreopts{ margin:1.2rem 0 0; padding:.2rem .8rem .6rem; border-radius:16px; background:#FFFDF6; border:2px solid #EAD9A0; }
+  .ls-moreopts > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; color:var(--ink); }
+  .ls-moreopts > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ls-moreopts .try-this{ margin:.8rem 0 0; }
+  .mo-short{ display:none; }
+  .ls-jump{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(4.6rem + env(safe-area-inset-bottom, 0px)); z-index:870; padding:.45rem 1rem; min-height:40px; box-sizing:border-box; display:inline-flex; align-items:center;
+    border-radius:999px; border:2px solid var(--ink); background:#F8E08A; color:var(--ink); font-weight:600; font-size:.92rem; text-decoration:none; box-shadow:0 4px 14px rgba(43,38,32,.18); white-space:nowrap; }
+  .ls-jump:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media (max-width:700px){
+    #rows{ padding-bottom:3.2rem; }
+    .row.is-compact .cx-extra, .row.is-compact .row-amts label.is-theirs, .row.is-compact .row-others, .row.is-compact .row-think{ display:none !important; }
+    .row.is-compact .mo-long{ display:none; }
+    .row.is-compact .mo-short{ display:inline; }
+    .row.is-compact .row-amts{ grid-template-columns:1fr 1fr; margin-top:.3rem; }
+    .row.is-compact{ padding:.45rem .3rem; }
+  }
+  @media print{ .ls-keepask, .ls-whoask, .ls-suite, .ls-jump, .ls-moreopts > summary{ display:none !important; } }
   @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs, .ls-lib, .ls-mode-grid, .ls-more, .ls-draft, .ls-sides, .ls-me, .ls-agree-tick, .row-cue, .row-pick, .tol-hh-move, .ls-wait, .ls-agreed-top, .ls-last, .ls-lib-extra, .row-others, .ls-offer, .ls-steps, .row-area, .ls-freq-each, .ls-data{ display:none; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
@@ -423,31 +457,32 @@
         <p class="ls-mini" id="me-note" hidden></p>
       </div>
       <section class="ls-sides group-only" id="sides" aria-labelledby="sides-h">
-        <p><strong id="sides-h">On two phones?</strong> Each of you fills in your own side, then you bring the two together here. Nothing is uploaded: you send a link between you.</p>
+        <p><strong id="sides-h">On two devices?</strong> Each of you fills in your own side, then you bring the two together here. Nothing is uploaded: you send a link between you.</p>
         <div class="ls-tools">
           <button type="button" id="send-side" aria-expanded="false" aria-controls="send-box">Send my side to my partner</button>
           <button type="button" id="add-side" aria-expanded="false" aria-controls="add-box">Add my partner&rsquo;s side</button>
         </div>
+        <div class="ls-keepask" data-keepask id="keepask-sides" hidden><p class="ls-keepask-q">Keep this on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
         <div class="ls-xfer" id="send-box" hidden>
           <p class="ls-mini" id="send-who" hidden></p>
           <div id="send-acts">
-            <div class="ls-tools ls-main-act"><button type="button" id="send-share" class="ls-main-btn">Share it as a link</button></div>
-            <p class="ls-mini">Send the link any way you like: a text, an email, a chat. Tapping it on the other phone shows a preview before anything is added.</p>
+            <div class="ls-tools ls-main-act"><button type="button" id="send-share" class="ls-main-btn">Share your side (link)</button></div>
+            <p class="ls-mini">Send the link any way you like: a text, an email, a chat. Tapping it on the other device shows a preview before anything is added. Going to the Workpaper Suite instead? Use &ldquo;Use this in my Workpaper Suite&rdquo; under the result.</p>
             <details class="ls-other-ways">
               <summary>Other ways: copy the code, or save a file</summary>
-              <label class="ls-mini ls-code-l" for="send-code">The code (names, jobs, times and bills, nothing else). It&rsquo;s long, so copy all of it.</label>
+              <label class="ls-mini ls-code-l" for="send-code">Your side (code): names, jobs, times and bills, nothing else. It&rsquo;s long, so copy all of it.</label>
               <textarea id="send-code" rows="3" readonly></textarea>
               <div class="ls-tools">
-                <button type="button" id="send-copy">Copy the code</button>
+                <button type="button" id="send-copy">Copy your side (code)</button>
                 <button type="button" id="send-file">Save as a file</button>
               </div>
-              <p class="ls-mini">On the other phone, open the Lemonade Stand, tap &ldquo;Add my partner&rsquo;s side&rdquo; and paste the code, or open the file.</p>
+              <p class="ls-mini">On the other device, open the Lemonade Stand, tap &ldquo;Add my partner&rsquo;s side&rdquo; and paste the code, or open the file.</p>
             </details>
           </div>
           <p class="ls-status" id="send-msg" role="status" aria-live="polite"></p>
         </div>
         <div class="ls-xfer" id="add-box" hidden>
-          <label class="ls-mini ls-add-l" for="add-code" id="add-code-l"><strong>Your partner sent you their side? Paste it here</strong> (the code, or the whole message with the link)</label>
+          <label class="ls-mini ls-add-l" for="add-code" id="add-code-l"><strong>Your partner sent you their side? Paste it here</strong> (their link or code; a household names code works here too)</label>
           <textarea id="add-code" rows="3" autocomplete="off" spellcheck="false" aria-labelledby="add-code-l"></textarea>
           <div class="ls-tools">
             <button type="button" id="add-check">Look it over</button>
@@ -455,7 +490,7 @@
           </div>
           <p class="ls-status" id="add-msg" role="status" aria-live="polite"></p>
           <div id="add-review"></div>
-          <p class="ls-mini">People are matched by name. New jobs and bills are added, and blanks are filled in. Where both phones have different numbers for the same job, you choose what to keep. Nothing is replaced on its own.</p>
+          <p class="ls-mini">People are matched by name. New jobs and bills are added, and blanks are filled in. Where both devices have different numbers for the same job, you choose what to keep. Nothing is replaced on its own.</p>
         </div>
       </section>
     </div>
@@ -514,6 +549,7 @@
 
     <!-- results: the split (group) -->
     <div class="group-only" id="group-results">
+      <div class="ls-keepask" data-keepask id="keepask-res" hidden><p class="ls-keepask-q">Keep this on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
       <div class="ls-glasses hours-only" id="glasses" aria-hidden="true"></div>
       <p class="balance-line hours-only" id="balance-line" aria-live="polite">Add some hours above to see how the work is split.</p>
       <div class="ls-whole hours-only" id="whole-week" hidden></div>
@@ -554,6 +590,7 @@
     <!-- results: my ledger (just me) -->
     <div class="solo-only ls-res">
       <h2 class="ls-h">My week, as a ledger</h2>
+      <div class="ls-keepask" data-keepask id="keepask-solo" hidden><p class="ls-keepask-q">Keep this on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
       <div class="ls-tiles" id="r-tiles"></div>
       <h3 class="ls-h3">Sustainable or stretched?</h3>
       <p class="ls-read" id="r-read" aria-live="polite"></p>
@@ -573,17 +610,23 @@
       <div class="ls-tools"><button type="button" id="copy-explain">Copy my summary</button></div>
     </div>
 
+    <details class="ls-moreopts" id="more-opts" hidden>
+      <summary>More options<span class="group-only">: a split you choose, part-time nights, how to use it</span><span class="solo-only">: how to use it</span></summary>
+      <div id="more-opts-body"></div>
+    </details>
+
     <div class="ls-res">
       <h3 class="ls-h3">Week by week</h3>
       <div id="r-trend"></div>
       <div class="ls-tools" style="margin-top:.6rem"><button type="button" id="save-week">Save this week</button></div>
+      <p class="ls-status" id="week-msg" role="status" aria-live="polite"></p>
     </div>
 
     <details class="ls-how"><summary>How the words are chosen</summary>
       <p class="group-only">With two people, the bigger share under 60% reads as <strong>fairly close</strong>, 60% or more as <strong>leaning one way</strong>, and 90% or more as <strong>nearly all</strong>. With three or more people, a share of 1.5 times an even share or more reads as leaning one way, and anything less as <strong>fairly even</strong>. Exactly equal hours read as an even split. These are plain descriptions of what&rsquo;s written down, never a verdict.</p>
-      <p class="group-only">The balance score is Chapter II&rsquo;s, with the same math as CALC-01: 1 means the hours match an even share (or the split you set), and 0 means one person did everything. When someone is more than about 3 hours a week away from their share, the result says so in plain hours, whatever the score. 0.70 or more reads as <strong>holding</strong>, 0.40 up to 0.70 as <strong>drifting</strong>, and under 0.40 as <strong>worth a kind rethink</strong>. The split counts home jobs plus their thinking part. Work, school and rest are shown beside it, never in it.</p>
+      <p class="group-only">The evenness score is a score out of 1, not a share of the work. It&rsquo;s Chapter II&rsquo;s balance score, with the same math as CALC-01: 1 means the hours match an even share (or the split you set), and 0 means one person did everything. When someone is 5 points or more over the split you set, the result says so in plain words, whatever the score. When someone is more than about 3 hours a week away from their share, the result says so in plain hours, whatever the score. 0.70 or more reads as <strong>holding</strong>, 0.40 up to 0.70 as <strong>drifting</strong>, and under 0.40 as <strong>worth a kind rethink</strong>. The split counts home jobs plus their thinking part. Work, school and rest are shown beside it, never in it.</p>
       <p class="solo-only">Your load is your home and life jobs, their thinking part, and your work and school hours. It&rsquo;s compared with a waking week of about 112 hours (16 a day). Under half spoken for reads as <strong>looks sustainable</strong>, half up to 70% as <strong>full but workable</strong>, and 70% or more as <strong>stretched</strong>. Rest under about half an hour a day is called thin. It reads time, never a person.</p>
-      <p>Invisible work is the thinking part of any job, plus all of &ldquo;Planning &amp; remembering&rdquo; and &ldquo;Emotional work&rdquo;. Each job&rsquo;s time is turned into a week: each day counts 7 times, 3 times a week counts 3, and each month counts about a quarter.</p>
+      <p>Invisible work is the thinking part of any job, plus all of &ldquo;Planning &amp; remembering&rdquo; and &ldquo;Emotional work&rdquo;. Each job&rsquo;s time is turned into a week: each day counts 7 times, weekdays count 5, 3 times a week counts 3, and each month counts about a quarter.</p>
     </details>
 
     <div class="ls-res ls-next">
@@ -612,6 +655,12 @@
       <button type="button" id="print-result">Print a clean summary</button>
       <button type="button" id="share-result">Share</button>
     </div>
+    <div class="ls-suite group-only">
+      <div class="ls-tools"><button type="button" id="to-suite" class="ls-main-btn">Use this in my Workpaper Suite</button></div>
+      <p class="ls-mini">Opens the Workpaper Suite with your names, jobs and hours filled in. Nothing is uploaded: it travels in the page address, after the &ldquo;#&rdquo;.</p>
+      <p class="ls-status" id="suite-msg" role="status" aria-live="polite"></p>
+    </div>
+    <a href="#group-results" class="ls-jump" id="see-split" hidden>See the split &darr;</a>
     <details class="ls-how ls-data" id="data-kept">
       <summary>How your data is kept</summary>
       <p class="ls-draft"><span>Kept in this tab until you close it, so Back or an interruption won&rsquo;t lose it.</span> <button type="button" class="ls-link-btn" id="clear-draft">Clear</button></p>

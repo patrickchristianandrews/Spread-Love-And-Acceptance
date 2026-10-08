@@ -350,6 +350,10 @@ header.top .modes{margin:12px 0 4px}
 .undo{margin-left:6px;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer;padding:2px 10px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .verdict .vbest{background:transparent}}
 :root[data-theme="dark"] .verdict .vbest{background:transparent}
+/* the original beside the suggested words, with "Keep mine" */
+.verdict .vmine{margin:2px 0 12px;padding:8px 12px;border:1px dashed var(--line);border-radius:8px}
+.verdict .vmine .vk{margin:0 0 2px}.verdict .vmine-t{margin:0 0 8px;overflow-wrap:anywhere}
+.verdict .vmine button{min-height:44px}
 /* "More": the other tools and where this fits, below the result */
 .st-more{margin:14px 0 0;padding:0 2px}.st-more summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
 .st-more ul{margin:4px 0 8px}.st-more li{margin:.35rem 0}
@@ -2053,6 +2057,8 @@ function run(){
   if(!rw.unchanged){
     vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say);
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
+    // the original right beside it, and one tap to keep it
+    vtop+='<div class="vmine"><p class="vk">Your words</p><p class="vmine-t">'+esc(text)+'</p><button class="ghost" type="button" id="keepMine">Keep mine</button><span class="small" id="keepMineMsg" role="status"></span></div>';
   } else if(staticIds.length){
     vtop+='<p class="vk">Your words, with the part to look at marked</p><p class="vbest marked">'+markup(an.text, spans)+'</p>';
     vtop+='<p class="small">There\'s no safe automatic rewrite for this one. The marked part may land hard; the notes below say why.</p>';
@@ -2111,6 +2117,13 @@ function run(){
   }));
   $("#pickPri").addEventListener("change",e=>{ if(lastTopic) lastTopic.pri=e.target.value; });
   $("#pickCare").addEventListener("change",e=>{ if(lastTopic) lastTopic.care=e.target.value; });
+  const km=$("#keepMine"); if(km) km.addEventListener("click",()=>{
+    if(lastTopic){ lastTopic.say=text; lastTopic.choice="Keep your own words"; }
+    const r=R.querySelector('input[name="saypick"][value="yours"]'); if(r) r.checked=true;
+    const m=$("#keepMineMsg");
+    (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject()).then(()=>{ if(m) m.textContent=" Kept, and copied. Your own words go on the talking notes."; },()=>{ if(m) m.textContent=" Kept. Your own words go on the talking notes."; });
+    km.textContent="Kept"; km.setAttribute("aria-pressed","true");
+  });
   const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{
     (navigator.clipboard?navigator.clipboard.writeText(opts[0].say):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";});
   });
@@ -2223,12 +2236,13 @@ function runReceived(text){
     + (rv.threat ? '<p><b>Save a copy, with the date.</b> A screenshot is fine. Keep it somewhere the other person can&rsquo;t see. You don&rsquo;t have to answer it. If it frightens you, see <a href="/safety.html">Not safe at home?</a> for free, private people to talk to.'+(rv.coparent ? ' After a breakup, see also <a href="/safety.html#after-separation">After a separation: when it&rsquo;s more than conflict</a>.' : '')+'</p>' : '')
     + '<p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
   h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
-  h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+esc(r.text)+'</p><button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>';
+  h += '<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" aria-expanded="'+simpleOn+'">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button></div>';
+  h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+phHTML(r.text)+'</p>'+simpleLine(r.text)+'<button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>';
   if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer the logistics only. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
   h += '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
   h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
-  const R=$("#results"); R.innerHTML=h; R.hidden=false;
+  const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); paintSimple();
   R.querySelectorAll("[data-copyr]").forEach(b=>b.addEventListener("click",()=>{
     const t = rv.replies[+b.dataset.copyr].text;
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied";},()=>{b.textContent="Select and copy manually";});
@@ -2551,6 +2565,16 @@ sync();
       }
     } catch (e) {}
   })();
+</script>
+<script>
+/* "Listen to this page": the site's reader (listen.js) loads itself only on reading pages (main.read), and this
+   page is a tool, so it loads it here and puts the button under the title. The device's own voice reads it. */
+(function(){
+  if(!("speechSynthesis" in window) || document.body.hasAttribute("data-no-listen") || document.querySelector("main.read")) return;
+  function go(){ if(window.TOLListen && window.TOLListen.mount) window.TOLListen.mount({after: document.querySelector("header.top .lede")}); }
+  if(window.TOLListen) return go();
+  var sc=document.createElement("script"); sc.src="/assets/js/listen.js"; sc.onload=go; document.head.appendChild(sc);
+})();
 </script>
 </body>
 </html>
