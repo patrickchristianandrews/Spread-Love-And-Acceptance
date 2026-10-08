@@ -2604,3 +2604,5 @@ html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-
 /* the menu's short lists and their full lists have no code column: names use the full width */
 .tol-index .tol-picks .tol-row, .tol-panel .tol-picks .tol-row{ grid-template-columns:1fr auto !important; }
 .tol-picks .tol-code:empty{ display:none; }
+/* the first-visit offer sits above the floating Puddles button, so its buttons are never covered */
+.tol-offer{ position:relative; z-index:885; }

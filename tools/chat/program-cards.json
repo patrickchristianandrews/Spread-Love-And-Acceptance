@@ -897,14 +897,14 @@
       "first": true,
       "newTopic": true,
       "name": "finding purpose after retiring",
-      "pat": "\\bi miss (work|my job|working|the office|my colleagues)\\b|\\bwhat (do|should|can) i do (with myself )?all day\\b|\\b(retired|retirement|since i retired)\\b.{0,40}\\b(useless|pointless|lost|in the way|bored|no purpose)\\b|\\b(useless|pointless|bored|no purpose)\\b.{0,40}\\b(retired|retirement)\\b|\\bnothing to do all day\\b",
+      "pat": "\\bi miss (work|my job|working|the office|my colleagues)\\b|\\bwhat (do|should|can) i do (with myself )?all day\\b|\\b(retired|retirement|since i retired)\\b.{0,40}\\b(useless|pointless|lost|in the way|bored|no purpose)\\b|\\b(useless|pointless|bored|no purpose)\\b.{0,40}\\b(retired|retirement)\\b|\\bnothing to do all day\\b|\\bwhere (do|can) i find (volunteering|volunteer (work|roles?|jobs?)|a club|a class|things to do)\\b|\\b(volunteering|volunteer)\\b.{0,30}\\b(where|how|find|start)\\b|\\b(something|things) to do outside (the|of the) house\\b|\\bget (me )?out of the house\\b.{0,20}\\b(retired|all day|something)\\b",
       "notPat": "\\b(died|passed away|widow\\w*)\\b",
       "keys": [],
       "what": [
         "Missing work is common and real: work gave structure, people and a sense of being useful. Most people need to rebuild those on purpose after retiring, and it takes a few months."
       ],
       "how": [
-        "Pick one thing with a regular time and other people: a class, a club, volunteering, a part-time role.",
+        "Pick one thing with a regular time and other people: a class, a club, volunteering, a part-time role. Good places to ask: your library, a place of worship, the local council or community centre, a men’s shed or walking group, or a volunteering website for your area.",
         "Use something you’re good at: fixing, teaching, organizing, cooking for others.",
         "Keep a lunch or call going with a few old colleagues.",
         "Move most days, outside if you can.",
@@ -1706,7 +1706,7 @@
       "first": true,
       "newTopic": true,
       "name": "retired and both home now",
-      "pat": "^retire(d|ment|ing)?$|\\b(retired|retirement|retiring)\\b|\\bunder (my|her|his|their|your) feet\\b|\\b(in (her|his|my|their) way|in the way) (all day|at home|around the house)\\b|\\b(feel|feeling|felt) (useless|in the way|like a spare part)\\b.{0,30}\\b(at home|around the house)?|\\b(find|have) (something|anything) useful to do\\b|\\b(both|we re both|we are both) (at )?home all day\\b|\\bhome all day (now|together)\\b|\\bi miss (work|my job|working|the office)\\b|\\bwhat (do|should|can) i do all day\\b|\\b(bored|lost|no purpose|aimless) (at home |since|now that)\\b|\\b(always|constantly) in the kitchen\\b|\\bnothing to do (all day|at home|now)\\b",
+      "pat": "^retire(d|ment|ing)?$|\\b(retired|retirement|retiring)\\b|\\bunder (my|her|his|their|your) feet\\b|\\b(in (her|his|my|their) way|in the way) (all day|at home|around the house)\\b|\\b(feel|feeling|felt) (useless|in the way|like a spare part)\\b.{0,30}\\b(at home|around the house)?|\\b(find|have) (something|anything) useful to do\\b|\\b(both|we re both|we are both) (at )?home all day\\b|\\bhome all day (now|together)\\b|\\bi miss (work|my job|working|the office)\\b|\\bwhat (do|should|can) i do all day\\b|\\b(bored|lost|no purpose|aimless) (at home |since|now that)\\b|\\b(always|constantly) in the kitchen\\b|\\bnothing to do (all day|at home|now)\\b|\\bwhich (job|jobs) (should|could|can) i (take|own|have)\\b",
       "notPat": "\\b(died|passed away|passed|death|widow\\w*|funeral|lost my (husband|wife|partner))\\b",
       "keys": [],
       "what": [
@@ -2730,7 +2730,7 @@
       "how": [
         "People in the same family often grieve differently: one wants to talk, another keeps busy. Neither is wrong.",
         "Staying connected to the person you lost, through memories and rituals, is healthy. Grief doesn’t have to end in “moving on”.",
-        "If you’ve pulled away from family, one small step is enough: a short call, or one honest line like “I’ve been quiet because I miss her, not because of you.”",
+        "If you’ve pulled away from family, one small step is enough: a short call, or one honest line like “I’ve been quiet because I miss them, not because of you.”",
         "If the weight doesn’t lift, or you have thoughts of not wanting to be here, please talk to a doctor, a grief counselor, or call or text 988 in the US."
       ],
       "links": [
@@ -2760,7 +2760,7 @@
       "first": true,
       "newTopic": true,
       "name": "grown children",
-      "pat": "\\b(grown|adult|grown up|grown-up) (son|daughter|sons|daughters|kids|children|child)\\b|\\breconnect\\w* with my (son|daughter|kids|children)\\b|\\bmy (son|daughter) (and i )?(barely|hardly|never|don t|dont|do not) (talk|speak|call|visit)\\w*\\b.{0,40}\\b(since|after) (his|her|their|my) (mother|father|mom|mum|dad|wife|husband) (died|passed|passed away)\\b",
+      "pat": "\\b(grown|adult|grown up|grown-up) (son|daughter|sons|daughters|kids|children|child)\\b|\\breconnect\\w* with my (son|daughter|kids|children)\\b|\\bmy (son|daughter) (and i )?(barely|hardly|never|don t|dont|do not) (talk|speak|call|visit)\\w*\\b.{0,40}\\b(since|after) (his|her|their|my) (mother|father|mom|mum|dad|wife|husband) (died|passed|passed away)\\b|\\bmy (children|kids|son|daughter|sons|daughters) (don t|dont|do not|never|rarely|hardly|barely|won t|wont) (call|ring|visit|come round|come over|phone|text)\\w*\\b|\\b(ask|get) (my )?(children|kids|son|daughter|them) to (visit|call|come (round|over|see me))\\b.{0,30}\\b(without (nagging|guilt|pressure|sounding))?",
       "keys": [],
       "what": [
         "Distance with a grown son or daughter is common, especially after a loss or a big change, and it usually isn’t a verdict on you. People grieve and pull back in different ways, and grown children often worry about saying the wrong thing."
@@ -2791,6 +2791,84 @@
           "What could I say to my grown son to start?"
         ]
       ]
+    },
+    {
+      "id": "sitesafe",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "is this site safe, or a scam",
+      "pat": "\\bis (this|the|this web)? ?(site|website|page|app) (safe|legit|legitimate|real|trustworthy|a scam|genuine)\\b|\\bis (this|it) a scam\\b|\\b(can|should) i trust (this|the) (site|website)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Good question to ask. This site is free, has no sign-up, and never asks for money, card details, passwords or personal information. What you type stays on this device; it isn’t sent anywhere."
+      ],
+      "how": [
+        "You never need to give your name, email or bank details to use anything here.",
+        "If anything ever asks you for money or card details claiming to be this site, it isn’t us.",
+        "You can see exactly what the site keeps on this device, and clear it with one button.",
+        "It was made by Christian, a former government auditor, as a free self-help project. (“The Objective Ledger” is the name of the program inside the site, not a different company.)"
+      ],
+      "script": [],
+      "plain": [
+        "It is free.",
+        "It never asks for money or card details.",
+        "What you type stays on this device.",
+        "You can clear it any time."
+      ],
+      "links": [
+        [
+          "What’s stored on this device",
+          "/on-this-device.html"
+        ],
+        [
+          "Privacy policy",
+          "/legal/privacy-policy.html"
+        ],
+        [
+          "About the site",
+          "/about.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "cantsleep",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "can’t sleep",
+      "pat": "\\b(i )?(can t|cant|cannot|can not) (get to )?sleep\\b|\\b(trouble|struggling|struggle) (getting to |to )?sleep(ing)?\\b|\\blying awake\\b|\\bawake (all night|at night|at \\d)\\b|\\binsomnia\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "I’m sorry, lying awake is hard, especially when the house is quiet and thoughts get loud."
+      ],
+      "how": [
+        "Try two or three minutes of slow breathing: the Night Garden counts it for you, dark and silent unless you turn sound on.",
+        "Soft, steady sounds can help: Calm-Down Sounds play quietly for as long as you like.",
+        "If thoughts keep circling, write them on a piece of paper by the bed, so they can wait until morning.",
+        "If you’ve slept badly most nights for a few weeks, it’s worth mentioning to your doctor."
+      ],
+      "script": [],
+      "plain": [
+        "Breathe slowly for a few minutes.",
+        "Play a soft sound.",
+        "Write worries on paper.",
+        "See a doctor if it lasts weeks."
+      ],
+      "links": [
+        [
+          "Night Garden: breathe",
+          "/night-garden.html"
+        ],
+        [
+          "Calm-Down Sounds",
+          "/soundscapes.html#brain-breakers"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "phonetrust",

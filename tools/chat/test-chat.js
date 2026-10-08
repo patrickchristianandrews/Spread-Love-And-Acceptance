@@ -733,6 +733,14 @@ t('retest4', 'what evidence is this site based on? where are the sources', { kin
 t('retest4', 'I have ADHD. how does it affect friendships?', { kind: 'care', id: 'adhdfriends' });
 t('retest4', 'tips for ADHD at work, I am a software developer', { kind: 'care', id: 'adhdwork' });
 t('retest4', 'is it free', { id: 'free' });
+t('retest4', 'my children dont call', { id: 'grownkids', not: /teenagers|Parenting styles/ });
+t('retest4', 'how do i ask them to visit without nagging', { not: /One owner per job|Lemonade/ });
+t('retest4', 'is this site safe', { kind: 'care', id: 'sitesafe', not: /Psychological safety/ });
+t('retest4', 'is this a scam', { kind: 'care', id: 'sitesafe' });
+t('retest4', 'i cant sleep', { kind: 'care', id: 'cantsleep' });
+t('retest4', 'my husband died and the house is so quiet', { not: /miss her/ });
+t('retest4', 'where do i find volunteering', { id: 'retirepurpose', text: /library/ });
+t('retest4', 'i want something to do outside the house', { id: 'retirepurpose' });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 
