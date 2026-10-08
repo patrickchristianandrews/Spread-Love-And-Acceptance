@@ -140,7 +140,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(!startUi.fineOpen && !startUi.useVisible, `${tag}: the page should start with just the box and Translate (settings under Fine-tune)`);
     await p.fill('#phrase','You are getting on my last fucking nerve'); await p.click('#go'); await p.waitForSelector('#verdict');
     const v = await p.evaluate(()=>({lvl:document.querySelector('.verdict .vlvl').innerText, found:document.querySelector('.verdict .vfound').innerText, best:(document.querySelector('#vbest')||{}).innerText||''}));
-    ok(/Heavy static/.test(v.lvl), `${tag}: hostile line verdict is "${v.lvl}"`);
+    ok(/very sharp/.test(v.lvl) && !/Signal check|static/i.test(v.lvl), `${tag}: hostile line verdict is "${v.lvl}"`);
     ok(/Swearing/.test(v.found) && /Hostile/.test(v.found), `${tag}: verdict should name what it found: ${v.found}`);
     ok(/frustrated/i.test(v.best) && !/fuck|nerve/i.test(v.best), `${tag}: best rewrite "${v.best}"`);
     const full = await fullText(p);
@@ -158,8 +158,70 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(!/You's|you's/.test(await p.evaluate(()=>document.body.innerText)), `${tag}: "You's" on the page`);
     ok(await overflow(p)<=0, `${tag}: overflow on the hostile read`);
 
+    // ---------- testers, round 4: work messages, examples order, excuses, the speaker's wiring ----------
+    const sel = async (id, v)=>{ await p.evaluate(([id,v])=>{ const s=document.querySelector(id); s.value=v; s.dispatchEvent(new Event('change',{bubbles:true})); }, [id,v]); };
+    // ?use=work: the work examples come first in "Or try an example"
+    await p.goto(URL+'?use=work'); await p.waitForLoadState('load'); await p.waitForTimeout(150);
+    const groups = await p.$$eval('#presetSel optgroup', gs=>gs.map(g=>g.label));
+    ok(/Coworkers|Work/.test(groups[0]) && /Coworkers|Work|Managers/.test(groups[1]), `${tag}: work examples should come first: ${groups.slice(0,3).join(' | ')}`);
+    await sel('#relSel','family');
+    ok(/Family/.test((await p.$$eval('#presetSel optgroup', gs=>gs.map(g=>g.label)))[0]), `${tag}: family examples should come first for Family`);
+    // a team lead in a group channel: fact, impact, one request; no "Guys", no count, team wording
+    await openFine(p); await sel('#relSel','manager'); await sel('#chSel','group');
+    await p.fill('#phrase','Guys, this is the third time the handover was missed. Sort it out.'); await translate(p);
+    const wk = await p.evaluate(()=>({plain:document.querySelector('#vplain').innerText, best:document.querySelector('#vbest').innerText, all:document.querySelector('#results').innerText, opts:[...document.querySelectorAll('#takeaway .opt')].filter(o=>o.querySelector('input').value!=='yours').map(o=>o.querySelector('.saytext').innerText)}));
+    ok(/blame or an order/.test(wk.plain) && !/start a fight/.test(wk.plain), `${tag}: work verdict "${wk.plain}"`);
+    ok(!/\bguys\b|third time|\bagain\b|every time/i.test(wk.opts.join(' ')), `${tag}: work rewrites kept "Guys" or the count: ${wk.opts.join(' / ')}`);
+    ok(/\[days\]/.test(wk.best) && /one owner/.test(wk.best), `${tag}: work rewrite should be fact, impact, request: "${wk.best}"`);
+    ok(!wk.opts.some(o=>/not blaming anyone/i.test(o)), `${tag}: "not blaming anyone" offered next to blame`);
+    ok(!/Person B/.test(wk.all) && /your team/i.test(wk.all), `${tag}: the listener in a group channel should be "your team"`);
+    ok(!/I am not against you/.test(wk.all), `${tag}: couple wording at work`);
+    ok(/Counting the misses/.test(wk.all), `${tag}: the count should be explained in the notes`);
+    // the same words with no work context still read the old way: the setting changes the result
+    await sel('#relSel',''); await sel('#chSel','text'); await sel('#useSel','send'); await translate(p);
+    ok(await p.$eval('#vbest', e=>e.innerText)!==wk.best, `${tag}: Manager / Group channel made no difference`);
+    // "You know how I am": flagged, never kept, and the apology owns it; speaker ADHD in the second person
+    await sel('#wA0','adhd');
+    await p.fill('#phrase','Sorry, I forgot again. You know how I am.'); await translate(p);
+    const ex = await p.evaluate(()=>({best:document.querySelector('#vbest').innerText, found:document.querySelector('.verdict .vfound').innerText, all:document.querySelector('#results').innerText}));
+    ok(!/know how I am/i.test(ex.best) && /That's on me/.test(ex.best), `${tag}: excuse rewrite "${ex.best}"`);
+    ok(/Shifts the job onto them/.test(ex.found), `${tag}: excuse not flagged: ${ex.found}`);
+    ok(/As someone with ADHD, you /.test(ex.all) && !/As ADHD:/.test(ex.all), `${tag}: speaker wiring should be second person`);
+    await sel('#wA0','');
+    // a carer writing to her brothers: "I'm done" and "do nothing" never stay
+    await sel('#relSel','family'); await sel('#chSel','group');
+    await p.fill('#phrase',"I'm done doing everything for Dad while you two do nothing."); await translate(p);
+    const cr = await p.evaluate(()=>[...document.querySelectorAll('#takeaway .opt')].filter(o=>o.querySelector('input').value!=='yours').map(o=>o.querySelector('.saytext').innerText).join(' / '));
+    ok(!/I'm done|do nothing/i.test(cr) && /each take one thing/.test(cr), `${tag}: carer rewrite "${cr}"`);
+    // talking notes: apart (long distance) uses call wording
+    await sel('#chSel','phone'); await sel('#envSel','apart');
+    const ap = await p.evaluate(()=>({apart:[...document.querySelectorAll('#notes [data-rel~="apart"]')].every(e=>!e.hidden), room:[...document.querySelectorAll('#notes [data-rel]')].filter(e=>!e.hidden).some(e=>/One room|Sit down/.test(e.innerText))}));
+    ok(ap.apart && !ap.room, `${tag}: talking notes for apart should use call wording`);
+    await sel('#envSel',''); await sel('#relSel',''); await sel('#chSel','text');
+    // a reply to a message that may carry hurt: amber, never "will probably land okay"
+    await p.check('input[name="stmode"][value="got"]'); await p.fill('#phrase','Fine. Whatever works for you.'); await p.click('#go'); await p.waitForSelector('#checkReply');
+    await p.click('#checkReply'); await p.fill('#phrase','ok. i said maybe because of work, not because of you. call sunday?'); await translate(p);
+    const rp = await p.evaluate(()=>({plain:document.querySelector('#vplain').innerText, lvl:document.querySelector('.verdict .vlvl').className, all:document.querySelector('#results').innerText}));
+    ok(/Clear words/.test(rp.plain) && /lvl-some/.test(rp.lvl) && !/probably land okay/.test(rp.plain), `${tag}: reply verdict "${rp.plain}" (${rp.lvl})`);
+    ok(/The ask:/.test(rp.all) && !/“call sunday”[^\n]*none in this sentence/i.test(rp.all), `${tag}: "call sunday?" should count as an ask`);
+    // plain labels: no "Signal check", no "Absolute or generalization"
+    await p.fill('#phrase','You always forget to call me back.'); await translate(p);
+    const pl = await p.evaluate(()=>document.querySelector('.verdict').innerText);
+    ok(!/Signal check|Absolute or generalization/.test(pl) && /The word “always”/.test(pl), `${tag}: jargon in the verdict: ${pl.slice(0,200)}`);
+    ok(await overflow(p)<=0, `${tag}: overflow on round-4 reads`);
+
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     await p.close();
+    // Easy reading on: the box is on the first screen, and the simpler English comes first
+    const ctxE = await b.newContext({viewport:{width:w,height:h}}); await ctxE.addInitScript(()=>{ try{ localStorage.setItem('tol-easy','1'); }catch(e){} });
+    const pe = await ctxE.newPage(); await pe.goto(URL); await pe.waitForLoadState('load'); await pe.waitForTimeout(300);
+    const eb = await pe.evaluate(()=>({easy:document.documentElement.classList.contains('tol-easy'), bottom:document.querySelector('#phrase').getBoundingClientRect().bottom, vh:innerHeight, pill:!!document.querySelector('nav.tol-pillars'), tucked:!document.querySelector('nav.tol-pillars') || !!document.querySelector('#stMore nav.tol-pillars')}));
+    ok(eb.easy && eb.bottom<=eb.vh, `${tag}: Easy reading: the sentence box should be on the first screen (bottom ${eb.bottom} of ${eb.vh})`);
+    ok(eb.tucked, `${tag}: the Pillars strip should sit in the More fold`);
+    await pe.fill('#phrase','You always forget to call me back.'); await pe.click('#go'); await pe.waitForSelector('#verdict');
+    const eo = await pe.evaluate(()=>{ const f=document.querySelector('.verdict .st-simple-first'), b=document.querySelector('#vbest'), d=document.querySelector('.verdict .vlvl'); return {first:!!f && !!(f.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING), beforeDetail:!!b && !!d && !!(b.compareDocumentPosition(d) & Node.DOCUMENT_POSITION_FOLLOWING)}; });
+    ok(eo.first && eo.beforeDetail, `${tag}: Easy reading: simpler English, then the clearer version, then the details`);
+    await ctxE.close();
   }
   await b.close();
   console.log(`UI: ${pass} checks passed, ${fail} failed`);

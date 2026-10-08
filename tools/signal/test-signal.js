@@ -491,5 +491,95 @@ ok(E.title("again", [], null)===E.FBY.again.name, "with no words to show, the fu
   ok(E.analyze("Maybe.",{channel:"text"}).found.softno && E.analyze("We'll see.",{channel:"text"}).found.softno, "a plain maybe is still a soft no");
 }
 
+// ---------- testers, round 4: work messages, excuses, a carer's group message, the speaker's wiring ----------
+{ // 1. a team lead in a group channel: fact, impact, one request. No "Guys", no count, no "not blaming anyone"
+  const T = "Guys, this is the third time the handover was missed. Sort it out.";
+  const an = E.analyze(T,{channel:"group"});
+  ok(an.found.count, "\"third time\" is flagged as keeping count");
+  const base = E.rewrite(E.analyze(T,{channel:"text"}),{wirings:["general"], channel:"text"});
+  [["manager","group",true],["coworker","chat",true],["","group",true],["manager","text",false],["","text",true]].forEach(([rel,ch,work])=>{
+    const a = E.analyze(T,{channel:ch}), r = E.rewrite(a,{wirings:["general"], channel:ch, rel, work});
+    const tag = `[${rel||"no rel"}/${ch}${work?"/work":""}]`;
+    all(r).forEach(x=>{
+      ok(!/\bguys\b|third time|\bagain\b|every time/i.test(x), `${tag} kept "Guys" or the count: "${x}"`);
+      ok(!/not blaming anyone/i.test(x), `${tag} "not blaming anyone" next to blame: "${x}"`);
+      ok(!/I am not against you|I'm not upset with you as a person/i.test(x), `${tag} couple wording at work: "${x}"`);
+    });
+    ok(/^The handover was missed on \[days\], and \[what that affected\]\. Could we agree one owner for it by \[a day\]\?$/.test(r.main), `${tag} fact / impact / request: "${r.main}"`);
+    ok(r.main!==base.main, `${tag} the work setting changed nothing`);
+    ok(r.changes.some(c=>c.id==="count" && /Counting the misses/.test(c.why)), `${tag} the count is explained in the notes`);
+    ok(r.changes.some(c=>c.id==="guys"), `${tag} "Guys" is explained in the notes`);
+    const safe = r.variants.find(v=>v.id==="safe");
+    ok(safe && /about the process|about how the process works/.test(safe.text) && !/start a fight/.test(safe.why), `${tag} safest at work: ${safe && safe.text}`);
+    const sc = E.score(a,["general"],ch,"v"), v = E.verdict(a, sc, r, {work, rel});
+    ok(/blame or an order/.test(v.text) && !/start a fight/.test(v.text), `${tag} work verdict: "${v.text}"`);
+  });
+  // other work corrections take the same shape
+  [["The report was late again. Fix it.", /^The report was late, and \[what that affected\]\. Could we agree one owner for it by \[a day\]\?$/],
+   ["This is the fifth time the rota wasn't updated. Sort this out.", /^The rota wasn't updated on \[days\], and \[what that affected\]\. Could we agree one owner for it by \[a day\]\?$/],
+   ["Folks, timesheets were missed again!", /^Timesheets were missed, and \[what that affected\]\. Could we agree one owner for it by \[a day\]\?$/]].forEach(([t,re])=>{
+    const r = E.rewrite(E.analyze(t,{channel:"group"}),{wirings:["general"], channel:"group", rel:"manager", work:true});
+    ok(re.test(r.main), `work shape "${t}": "${r.main}"`); });
+  // outside work, the count still never stays as "Guys, this is the third time" in the safest version's lead
+  ok(!E.verdict(E.analyze("You're so lazy and you never help.",{channel:"text"}), E.score(E.analyze("You're so lazy and you never help.",{channel:"text"}),["general"],"text","v"), null, {}).work, "a home message keeps the home verdict");
+}
+{ // 3. "You know how I am": flagged, never kept; the apology says what I did, that it's on me, and what I'll do
+  ["You know how I am","that's just how I am","I can't help it","that's just me"].forEach(x=>{
+    const an = E.analyze("Sorry I forgot again, "+x+".",{channel:"text"});
+    ok(an.found.excuse && E.FBY.excuse.name==="Shifts the job onto them", `"${x}" flagged as shifting the job: ${an.staticIds}`); });
+  [[], ["general"], ["adhd"], ["autistic"]].forEach(W=>{
+    const r = E.rewrite(E.analyze("Sorry, I forgot again. You know how I am.",{channel:"text"}),{wirings:W, rel:"partner", channel:"text"});
+    ok(r.main==="Sorry I forgot [the thing]. That's on me. [I've set a reminder] so it doesn't happen next time.", `[${W}] apology shape: "${r.main}"`);
+    all(r).forEach(x=>ok(!/know how I am|\bagain\b/i.test(x), `[${W}] excuse kept: "${x}"`));
+    ok(r.changes.some(c=>c.id==="excuse"), `[${W}] the excuse change is explained`); });
+  // at work too, the apology stays an apology (no "[what that affected]" on your own miss)
+  const rw = E.rewrite(E.analyze("Sorry, I forgot again. You know how I am.",{channel:"chat"}),{wirings:["general"], channel:"chat", rel:"coworker", work:true});
+  ok(rw.main==="Sorry I forgot [the thing]. That's on me. [I've set a reminder] so it doesn't happen next time.", `apology at work: "${rw.main}"`);
+  // the ownership line comes right after the apology; a question stays last
+  const rq = E.rewrite(E.analyze("Sorry I missed it, I can't help it. Can we reschedule?",{channel:"text"}),{wirings:["general"], channel:"text"});
+  ok(/^Sorry I missed it\. That's on me\. .*Can we reschedule[^?]*\?$/.test(rq.main), `ownership order: "${rq.main}"`);
+  // a fine apology with nothing flagged is left alone
+  ok(E.rewrite(E.analyze("Oops, sorry, I forgot to buy milk!",{channel:"text"}),{wirings:["general"]}).unchanged, "a plain apology is left as typed");
+  const r2 = E.rewrite(E.analyze("Sorry I missed your call, I can't help it.",{channel:"text"}),{wirings:["general"], channel:"text"});
+  all(r2).forEach(x=>ok(!/can't help it/i.test(x), `"I can't help it" kept: "${x}"`));
+}
+{ // 5. a carer writing to her brothers: "I'm done" and "do nothing" never stay; one share each
+  const T = "I'm done doing everything for Dad while you two do nothing.";
+  const an = E.analyze(T,{channel:"group"});
+  ok(an.found.absolute && an.found.absolute.some(w=>/do nothing/i.test(w)), `"you two do nothing" is an absolute: ${JSON.stringify(an.found.absolute)}`);
+  [["family","group"],["","text"],["family","text"]].forEach(([rel,ch])=>{
+    const r = E.rewrite(E.analyze(T,{channel:ch}),{wirings:["general"], channel:ch, rel});
+    all(r).forEach(x=>ok(!/I'm done|do nothing|everything/i.test(x), `[${rel}/${ch}] flagged words kept: "${x}"`));
+    ok(/^I can't keep doing most of Dad's care on my own\. Could you each take one thing, like \[Thursday's appointment\] or \[the Sunday call\]\?$/.test(r.main), `[${rel}/${ch}] carer rewrite: "${r.main}"`);
+  });
+  // a flagged phrase never survives into the clearest version
+  ["I'm done doing all the cooking while you do nothing.","I do everything for Mum and you two do nothing."].forEach(t=>{
+    const a = E.analyze(t,{channel:"text"}), r = E.rewrite(a,{wirings:["general"], channel:"text"});
+    ["hyper","stonewall","absolute"].forEach(id=>(a.found[id]||[]).filter(Boolean).forEach(w=>ok(!r.main.toLowerCase().includes(w.toLowerCase()), `"${t}": flagged "${w}" kept in "${r.main}"`))); });
+}
+{ // 4. the speaker's wiring, in the second person: "As someone with ADHD, you likely meant…"
+  Object.keys(E.NT).filter(id=>id!=="general").forEach(id=>{
+    const m = E.meantSelf(id, []);
+    ok(m && /^As /.test(m.as) && /,$/.test(m.as) && /^(?:you|your|if you|if your|the|a)\b/i.test(m.text), `${id}: meantSelf "${m && m.as} ${m && m.text}"`);
+    Object.keys(E.SELF_MEANT[id]).filter(k=>k!=="as").forEach(k=>ok(!/\b(?:they said|their settled|for them as for you)\b/.test(E.SELF_MEANT[id][k]), `${id}.${k}: third person for the speaker`)); });
+  ok(/^you likely meant what you said, fast\./.test(E.meantSelf("adhd",[]).text) && E.meantSelf("adhd",[]).as==="As someone with ADHD,", "ADHD speaker, second person");
+}
+{ // 5b. "call sunday?" is an ask; a reply that skips their hurt is not "will probably land okay"
+  const an = E.analyze("ok. i said maybe because of work, not because of you. call sunday?",{channel:"text"});
+  ok(an.sentences[2].ask==="call sunday", `"call sunday?" ask: ${an.sentences[2].ask}`);
+  ok(!an.missing.ask, "a proposal is an ask");
+  ["Dinner Friday at 7?","Coffee tomorrow?"].forEach(t=>ok(E.analyze(t,{channel:"text"}).asks.length===1, `"${t}" is an ask`));
+  ["Seriously?","Fine?","Really?"].forEach(t=>ok(!E.analyze(t,{channel:"text"}).asks.length, `"${t}" is not an ask`));
+  const sc = E.score(an,["general"],"text","v"), rw = E.rewrite(an,{wirings:["general"],channel:"text"});
+  const v = E.verdict(an, sc, rw, {replyTo:"Fine. Whatever works for you."});
+  ok(v.id==="hurt" && v.reply && /^Clear words\. Add one line about what you heard first/.test(v.text), `reply verdict: ${v.text}`);
+  const an2 = E.analyze("Sounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?",{channel:"text"});
+  ok(!E.verdict(an2, E.score(an2,["general"],"text","v"), E.rewrite(an2,{wirings:["general"]}), {replyTo:"Fine. Whatever works for you."}).reply, "a reply that says what it heard gets no \"add one line\" note");
+}
+{ // 8. plain labels: "The word “always”", never "Absolute or generalization"
+  ok(E.title("absolute",["always"])==="The word “always”" && E.title("absolute",[])==="Big words like always or never", "absolute title in plain words");
+  ok(!/generalization/i.test(E.FBY.absolute.name), "no jargon name for absolutes");
+}
+
 console.log(`${FIX.length} phrase fixtures + ${WORK.length} workplace review cases, ${pass} checks passed, ${fail} failed`);
 if(fail){ console.log(errs.slice(0,40).join("\n")); process.exit(1); }

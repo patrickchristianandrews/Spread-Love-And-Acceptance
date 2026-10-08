@@ -200,7 +200,7 @@
   var keep = false, mode = null;
   // How a bill is shared
   // (savings and money coming in are kept and shown, never split and never owed between people)
-  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed amount, like family support', savings: 'Savings goal, kept', income: 'Money coming in (pay)' };
+  var BILL_KIND = { shared: 'Shared, split', own: 'One person’s own', agreed: 'Agreed amount, not split', savings: 'Savings goal, kept', income: 'Money coming in (pay)' };
   var BILL_ORDER = ['shared', 'own', 'agreed', 'savings', 'income'];
   // the words for each kind of cost in the money summary
   var KIND_WORD = { shared: 'shared bills', own: 'own costs', agreed: 'family support', savings: 'savings' };
@@ -260,9 +260,31 @@
         (rest.length ? (restNamed.length === rest.length ? ', and ask ' + joinNames(restNamed) + ' for theirs.' : ', and ask the others for theirs.') : '.');
     }
     var named = waitNames(w);
-    if (!named.length || named.length < w.length) return 'Waiting for the other side. Send your side (“Send my side to my partner”, above) ' + see + '.';
-    return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your side ' + see + '.';
+    // children are never waited for: a grown-up's side carries their part
+    var kidsNote = state.kid.some(Boolean) ? ' Children’s parts come in with a grown-up’s side.' : '';
+    if (!named.length || named.length < w.length) return 'Waiting for the other side' + (w.length > 1 ? 's' : '') + '. Send your side (“' + W.send() + '”, above) ' + see + '.' + kidsNote;
+    return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your side ' + see + '.' + kidsNote;
   }
+  // Two people say "my partner"; three or more say "the others", "someone's", "any of you"
+  function many() { return state.people.length > 2; }
+  var W = {
+    send: function () { return many() ? 'Send my side to the others' : 'Send my side to my partner'; },
+    add: function () { return many() ? 'Add someone’s side' : 'Add my partner’s side'; },
+    them: function () { return many() ? 'the others' : 'your partner'; }
+  };
+  function renderWords() {
+    var set = function (id, t) { var e = $(id); if (e && e.textContent !== t) e.textContent = t; };
+    set('send-side', W.send()); set('add-side', W.add());
+    set('sides-h', many() ? 'On more than one device?' : 'On two devices?');
+    set('sides-t', many() ? 'Each of you fills in your own side, then you bring them together here.' : 'Each of you fills in your own side, then you bring the two together here.');
+    set('add-code-q', many() ? 'Someone sent you their side? Paste it here' : 'Your partner sent you their side? Paste it here');
+    set('other-ways-t', 'On the other device, open the Lemonade Stand, tap “' + W.add() + '” and paste the code, or open the file.');
+    set('checked-who', many() ? 'Optional, and any of you can tick it.' : 'Optional, and either of you can tick it.');
+    set('data-send-t', '“' + W.send() + '” makes a link, a code or a file on your device; it only goes where you send it yourself. In a link, your side sits after the “#”, which browsers never send to a server, and the page clears it from the address bar once it’s read.');
+    set('how-send-t', 'On ' + (many() ? 'more than one phone' : 'two phones') + ', tap “' + W.send() + '” on one and “' + W.add() + '” on the other.');
+  }
+  // "Kai’s side", or "their side" when it doesn't say who sent it
+  function sideOf(d) { return d && d.by ? d.by + '’s side' : many() || (d && d.people.length > 2) ? 'their side' : 'your partner’s side'; }
   function status(msg) { var s = $('ls-status'); if (s) { s.textContent = msg; clearTimeout(status.t); status.t = setTimeout(function () { s.textContent = ''; }, 4000); } }
   function solo() { return mode === 'solo'; }
   function visiblePeople() { return solo() ? [0] : state.people.map(function (_, i) { return i; }); }
@@ -910,6 +932,7 @@
         b.addEventListener('click', function () {
           var on = num(item.v[i]) > 0;
           item.v[i] = on ? 0 : item.pick;
+          if (!on && !item.fq) { eowNew(item, i); if (item.fq) { markEdited(); renderRows(); recalc(); return; } }
           if (item.raw) delete item.raw[String(i)];
           b.setAttribute('aria-pressed', String(!on));
           if (!on) sideCue(i, cue);
@@ -1155,7 +1178,7 @@
       if (!j) return;
       sp.textContent = (solo() ? 'Me' : nameOf(i)) + (k === 't' ? ', thinking (min)' : ' (' + unitWord(j) + ')');
     });
-    renderAsRow(); renderMeRow(); renderPartRow(); renderAgreed(); renderOwners(); markSides();
+    renderAsRow(); renderMeRow(); renderPartRow(); renderAgreed(); renderOwners(); markSides(); renderWords();
     document.querySelectorAll('select.ls-bill-who option').forEach(function (o) { var i = +o.value; if (i >= 0) o.textContent = nameOf(i); });
     document.querySelectorAll('.row-pick .ls-chip').forEach(function (b) { var m = /_(\d+)$/.exec(b.getAttribute('data-fk') || ''); if (m) b.textContent = nameOf(+m[1]); });
     document.querySelectorAll('.ls-nf .ls-chip[data-nfp]').forEach(function (b) {
@@ -1271,7 +1294,7 @@
     var j = { name: t[0], v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: t[2], unit: t[3] || 'm', nm: zeros() };
     var pers = !solo() && !!PERSONAL_LIB[t[0].toLowerCase()];
     if (pers) j.personal = true;
-    if (me >= 0) j.v[me] = t[1]; else j.pick = t[1];
+    if (me >= 0) { j.v[me] = t[1]; eowNew(j, me); } else j.pick = t[1];
     state.jobs.push(j);
     markEdited();
     renderRows(); renderLibTasks(); renderOwners(); recalc();
@@ -1319,6 +1342,31 @@
   // are the quick choices), and who's a child (for the "adults and kids" suggestion)
   function nightsOf(i) { return Math.round((state.part[i] || 1) * 14); }
   function nightsWord(n) { return n >= 14 ? 'every night' : n === 7 ? 'half the time' : n + ' of 14 nights'; }
+  // Someone here every other weekend (4 of 14 nights): their jobs start as "Every other weekend" (each one
+  // still changeable), and back to the job's own "how often" when they're here more. Returns how many changed.
+  var eowBack = 'week';
+  function eowRows(i, was) {
+    var nowEow = nightsOf(i) === 4, wasEow = Math.round((was || 1) * 14) === 4, n = 0;
+    if (nowEow === wasEow || state.people.length < 2) return 0;
+    state.jobs.forEach(function (j) {
+      if (j.ex || kindOf(j) !== 'home' || !(num(j.v[i]) > 0)) return;
+      if (nowEow) {
+        if (freqOf(j, i) === 'eow') return;
+        if (!j.fq) j.fq = state.people.map(function () { return j.freq; });
+        j.fq[i] = 'eow'; n++;
+      } else if (j.fq && j.fq[i] === 'eow') {
+        j.fq[i] = j.freq; eowBack = j.freq; n++;
+        if (j.fq.every(function (f) { return f === j.freq; })) delete j.fq;
+      }
+      revalidate(j);
+    });
+    return n;
+  }
+  // a job added for someone who's here every other weekend starts at "Every other weekend" for them
+  function eowNew(j, i) {
+    if (i < 0 || state.people.length < 2 || nightsOf(i) !== 4 || solo() || j.freq === 'eow' || j.freq === 'month') return;
+    j.fq = state.people.map(function () { return j.freq; }); j.fq[i] = 'eow';
+  }
   function renderPartRow() {
     var box = $('part-row'); if (!box) return;
     keepFocus(box, function () {
@@ -1333,8 +1381,11 @@
           var was = state.part[i];
           state.part[i] = +sel.value >= 14 ? 1 : +sel.value / 14;
           if (state.part.every(function (x) { return x < 1; })) { state.part[i] = was; sel.value = String(nightsOf(i)); status('At least one person lives here every night.'); return; }
+          var moved = eowRows(i, was);
+          if (moved) renderRows();
           recalc();
-          status(state.part[i] < 1 ? nameOf(i) + ' counts for the nights they’re here (' + nightsWord(nightsOf(i)) + ').' : nameOf(i) + ' counts as a full share again.');
+          status((state.part[i] < 1 ? nameOf(i) + ' counts for the nights they’re here (' + nightsWord(nightsOf(i)) + ').' : nameOf(i) + ' counts as a full share again.') +
+            (moved ? ' ' + nameOf(i) + '’s ' + (moved === 1 ? 'job is' : moved + ' jobs are') + ' set to “' + (nightsOf(i) === 4 ? 'Every other weekend' : FREQ_LABEL[eowBack] ) + '” now; change any of them under “How often”.' : ''));
         });
         l.appendChild(sel);
         var kl = document.createElement('label'); kl.className = 'ls-check ls-kid';
@@ -1544,8 +1595,12 @@
       });
       // no split chosen yet: never "owes", just what an even split would mean, and that income is another way
       var soft = tg.mode === 'even' && !state.agreed.on;
-      var settle = settleUp(t, fair, soft);
-      out.push(settle ? (soft ? 'If you split shared bills evenly, ' + settle + ' You can also split by income.' : (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you ' + agreedWord() + ': ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle)
+      var settle = settleUp(t, fair, soft), isg = soft ? incomeSplit() : null;
+      if (isg) {
+        // money coming in for everyone, and no split picked yet: both ways side by side, never even first on its own
+        var ip = isg.p.map(function (x) { return x / 100; }), ifair = ip.map(function (x) { return x * s; }), iset = settleUp(t, ifair, true);
+        out.push('Two ways to split the shared bills. Split evenly: ' + (settle ? settle.replace(/\.$/, '') : 'it already comes out even') + ' · Split by income (' + splitShort(ip) + '): ' + (iset ? iset.replace(/\.$/, '') : 'it already comes out even') + '. Pick whichever feels fair to you.');
+      } else out.push(settle ? (soft ? 'If you split shared bills evenly, ' + settle + ' You can also split by income.' : (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you ' + agreedWord() + ': ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle)
         : soft ? 'Split evenly, the shared bills already come out even.' : 'The shared bills are already settled: nobody owes anybody.');
       out.push('Shared bills listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
         (fallback ? ' (The split you set doesn’t add up to 100% yet, so this uses an even split.)' : '') +
@@ -2089,7 +2144,16 @@
     var names = [];
     state.jobs.forEach(function (jb) { if (kindOf(jb) !== 'home') return; var nm = jb.name.trim(); if (nm && names.map(function (x) { return x.toLowerCase(); }).indexOf(nm.toLowerCase()) < 0) names.push(nm); });
     box.innerHTML = '';
-    if (!names.length) { box.innerHTML = '<p class="ls-panel-note">Jobs you list above show up here. Or type one below.</p>'; return; }
+    // nothing listed yet (the one-minute path): a few common jobs to tap, plus your own below
+    var common = !names.length;
+    if (common) {
+      names = UKISH ? ['Dishes', 'Bins & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Loo roll & supplies']
+        : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies'];
+      picked.forEach(function (k) { if (names.map(low).indexOf(k) < 0) { var o = ownersList().filter(function (x) { return low(x.name) === k; })[0]; if (o) names.push(o.name.trim()); } });
+      var hint = document.createElement('p'); hint.className = 'ls-panel-note'; hint.style.flexBasis = '100%'; hint.style.margin = '0';
+      hint.textContent = 'Common ones to start with (jobs you list above show up here too):';
+      box.appendChild(hint);
+    }
     names.forEach(function (nm) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
       var on = picked.indexOf(nm.toLowerCase()) >= 0;
@@ -2171,7 +2235,7 @@
 
   function renderAll() {
     normalize();
-    renderPeople(); renderAsRow(); renderMeRow(); renderPartRow(); renderRows(); renderGlasses(); renderLibTasks(); renderAgreed(); renderCur();
+    renderPeople(); renderAsRow(); renderMeRow(); renderPartRow(); renderRows(); renderGlasses(); renderLibTasks(); renderAgreed(); renderCur(); renderWords();
     $('checked-on').checked = !!state.checked;
     $('example-note').hidden = !anyExample();
     renderOwners();
@@ -2471,7 +2535,7 @@
     state.agreed.on = true; state.agreed.p = sg.p.map(String); state.agreed.src = src;
     renderAgreed(); recalc();
     var w = $('suggest-why'); if (w) { w.textContent = why; w.hidden = false; }
-    status('Filled in a suggested split. Change it to what feels fair to you both.');
+    status('Filled in a suggested split. Change it to what feels fair to ' + (many() ? 'all of you.' : 'you both.'));
   }
   if ($('suggest-work')) $('suggest-work').addEventListener('click', function () { var sg = suggestSplit(); useSuggestion(sg, sg ? suggestWhy(sg) : '', 'work'); });
   if ($('suggest-kids')) $('suggest-kids').addEventListener('click', function () { var sg = suggestKids(); useSuggestion(sg, sg ? kidsWhy(sg) : '', 'kids'); });
@@ -2486,7 +2550,7 @@
     state.agreed.on = true; state.agreed.p = o.p.map(String); var src = offerSrc(o); if (src) state.agreed.src = src; else delete state.agreed.src; delete state.agreedOffer;
     openMoreOpts();
     renderAgreed(); recalc();
-    status('Using ' + splitShort(o.p.map(function (x) { return (parseFloat(x) || 0) / 100; })) + '. Once you’ve both looked it over, tick “We’ve both looked these over”, and it reads as the split you agreed.');
+    status('Using ' + splitShort(o.p.map(function (x) { return (parseFloat(x) || 0) / 100; })) + '. Once you’ve ' + (many() ? 'all' : 'both') + ' looked it over, tick “' + checkedLabel() + '”, and it reads as the split you agreed.');
     var a = $('agreed-on'); if (a) a.focus();
   });
   if ($('agreed-offer-no')) $('agreed-offer-no').addEventListener('click', function () {
@@ -2514,7 +2578,7 @@
   if ($('baby-steps-on')) $('baby-steps-on').addEventListener('click', function () {
     setCompact(true); save();
     var bs = $('baby-steps'); if (bs) { bs.scrollIntoView({ block: 'start', behavior: 'smooth' }); var h = $('baby-steps-h'); if (h) h.focus({ preventScroll: true }); }
-    status('Just the three steps now: the starter pack, your minutes, and Send my side. “Show the full stand” brings the rest back.');
+    status('Just the three steps now: the starter pack, your minutes, and sending your side. “Show the full stand” brings the rest back.');
   });
   if ($('baby-steps-off')) $('baby-steps-off').addEventListener('click', function () {
     setCompact(false); save();
@@ -2712,7 +2776,8 @@
       if (!h) return null;
       // how often comes with the household code now (f); an older code falls back to the library's, or each week
       raw = { app: 'lemonade', by: '', people: h.people, jobs: h.jobs.map(function (j) { var lm = libMatch(j.name); return { n: j.name, f: FREQ[j.f] ? j.f : lm ? lm.t[2] : 'week', fx: !!FREQ[j.f], u: lm && lm.t[3] ? lm.t[3] : 'm' }; }),
-        own: h.jobs.filter(function (j) { return j.owner; }).map(function (j) { return { n: j.name, w: j.owner }; }), household: true };
+        own: h.jobs.filter(function (j) { return j.owner; }).map(function (j) { return { n: j.name, w: j.owner }; }), household: true,
+        agreed: h.split || null, pn: h.nights || null, kids: h.kids || [] };
     }
     var people = [];
     (Array.isArray(raw.people) ? raw.people : []).forEach(function (p) {
@@ -2911,10 +2976,17 @@
       var same = state.agreed.on && ag.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.5; });
       if (Math.abs(sum(ag) - 100) <= 0.5 && !same) { state.agreedOffer = { by: d.by || '', p: ag.map(String) }; if (d.asrc) state.agreedOffer.src = d.asrc; out.offer = true; }
     }
-    plan.add.forEach(function (a) {
-      if (d.half.indexOf(low(a.name)) >= 0) state.part[a.slot] = 0.5;
-      else if (d.pn && d.pn[low(a.name)] >= 1 && d.pn[low(a.name)] < 14) state.part[a.slot] = d.pn[low(a.name)] / 14;
-      if (d.kids.indexOf(low(a.name)) >= 0) state.kid[a.slot] = true;
+    // nights here and children: for people new here, and for people already here where this device hasn't set them
+    d.people.forEach(function (nm) {
+      var li = map[low(nm)]; if (li == null || li >= state.people.length) return;
+      var isNew = plan.add.some(function (a) { return a.slot === li; });
+      if (isNew || state.part[li] === 1) {
+        var was = state.part[li];
+        if (d.half.indexOf(low(nm)) >= 0) state.part[li] = 0.5;
+        else if (d.pn && d.pn[low(nm)] >= 1 && d.pn[low(nm)] < 14) state.part[li] = d.pn[low(nm)] / 14;
+        if (state.part[li] !== was) eowRows(li, was);
+      }
+      if (d.kids.indexOf(low(nm)) >= 0) state.kid[li] = true;
     });
     if (d.cur && !state.curSet && d.cur !== state.cur) { state.cur = d.cur; state.curSet = true; out.cur = d.cur; }
     d.own.forEach(function (o) {
@@ -3000,7 +3072,7 @@
   $('send-copy').addEventListener('click', function () {
     renderSend(); var c = $('send-code').value; if (!c) return;
     copyText(c).then(function (ok) {
-      sideStatus('send-msg', ok ? 'Copied. Send it to your partner any way you like, then they paste it under “Add my partner’s side”.' : 'Couldn’t copy here. Select the code above by hand.');
+      sideStatus('send-msg', ok ? 'Copied. Send it to ' + W.them() + ' any way you like, then they paste it under “' + W.add() + '”.' : 'Couldn’t copy here. Select the code above by hand.');
       if (!ok) { $('send-code').focus(); $('send-code').select(); }
     });
   });
@@ -3015,21 +3087,23 @@
   });
   $('send-file').addEventListener('click', function () {
     var d = sideData(); if (d.error) { sideStatus('send-msg', d.error); return; }
-    if (state.me < 0) { sideStatus('send-msg', 'Tap your own name under “Who’s filling in on this device?” first, so the file has your name on it and never gets mixed up with your partner’s.'); var mr = $('me-row'); if (mr) { mr.scrollIntoView({ block: 'center', behavior: 'smooth' }); var b0 = mr.querySelector('button'); if (b0) b0.focus({ preventScroll: true }); } return; }
+    if (state.me < 0) { sideStatus('send-msg', 'Tap your own name under “Who’s filling in on this device?” first, so the file has your name on it and never gets mixed up with anyone else’s.'); var mr = $('me-row'); if (mr) { mr.scrollIntoView({ block: 'center', behavior: 'smooth' }); var b0 = mr.querySelector('button'); if (b0) b0.focus({ preventScroll: true }); } return; }
     var name = sideFileName(nameOf(state.me));
     try {
       var blob = new Blob([JSON.stringify(d, null, 1)], { type: 'application/json' }), a = document.createElement('a');
       a.href = URL.createObjectURL(blob); a.download = name; a.rel = 'noopener';
       document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to your partner; on their device they tap “Add my partner’s side”, then “Open their file”.');
+      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to ' + W.them() + '; on their device they tap “' + W.add() + '”, then “Open their file”.');
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
   function review(text, note, kindSaid) {
     // a link (or a message with one) carries the side after "#side=": unpack it first
     if (/#side=[zj]/.test(String(text || ''))) {
+      // pasted by hand: the paste box stays (only a link opened straight into this page hides it)
+      var opened = kindSaid === 'link';
       unpackSide(text).then(function (json) {
-        if (json) review(json, note, 'Recognised: your partner’s side (a link).');
+        if (json) review(json, note, opened ? 'link' : 'pasted-link');
         else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (under “Other ways” on their device), and paste it here.'); }
       });
       return;
@@ -3053,11 +3127,12 @@
     if (same.length) li.push('Already the same here: ' + same.length + '.');
     if (plan.skip.length) li.push('No room for ' + joinNames(plan.skip) + ' (eight people is the most).');
     if (d.household) li.push('This is a household names code: names and jobs only, with no times.');
-    var said = d.household ? 'Recognised: a household names code (names and jobs, no times).' : kindSaid || (/LEMON1:/i.test(String(text)) ? 'Recognised: your partner’s side (a code).' : /^\s*\{/.test(String(text)) ? 'Recognised: your partner’s side (a file).' : '');
-    // a partner's link opened in a tab with nothing of this person's own, and nothing kept on this device
-    var lonely = !d.household && tabStart === 'fresh' && !keep && !realJobs().length && !realBills().length;
+    var fromLink = kindSaid === 'link';
+    var said = d.household ? 'Recognised: a household names code (names and jobs, no times).' : fromLink ? '' : kindSaid === 'pasted-link' ? 'Recognised: ' + sideOf(d) + ' (a link).' : (/LEMON1:/i.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a code).' : /^\s*\{/.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a file).' : '');
+    // opened from a link: just the preview and "Add to my stand" (the paste box steps aside; nothing to warn about)
+    var paste = $('add-paste'); if (paste) paste.hidden = fromLink;
+    if (fromLink) note = (d.by ? d.by + ' sent you their side.' : 'Here’s the side that was sent to you.') + ' Look it over below, then tap “Add to my stand”.' + (typeof note === 'string' && /still here/.test(note) ? ' (It isn’t added yet.)' : '');
     var html = (said ? '<p class="ls-mini ls-recog">' + esc(said) + '</p>' : '') +
-      (lonely ? '<p class="row-cue ls-lonely">Your own side isn’t in this tab. If you filled it in another tab, go back there and paste this link into “Add my partner’s side”. Or add their side here and fill yours in again.</p>' : '') +
       (!d.household && tabStart === 'kept' && realJobs().length ? '<p class="ls-mini">Your stand kept on this device is here, so their side is added to it.</p>' : '') +
       '<p class="ls-mini-p"><strong>From ' + esc(fromWord(d)) + ':</strong> ' + esc(joinNames(d.people)) + ' · ' + d.jobs.length + ' job' + (d.jobs.length === 1 ? '' : 's') + ', ' + d.bills.length + ' bill' + (d.bills.length === 1 ? '' : 's') + '.</p>' +
       '<ul class="ls-mini-list">' + li.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
@@ -3094,16 +3169,16 @@
       c.parentNode.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === c)); });
       return;
     }
-    if (e.target.id === 'add-cancel') { pending = null; dropPending(); box.innerHTML = ''; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
+    if (e.target.id === 'add-cancel') { pending = null; dropPending(); box.innerHTML = ''; $('add-paste').hidden = false; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
     if (e.target.id === 'add-go' && pending) {
       var plan = pending, msg = applySide(plan); pending = null; dropPending();
-      box.innerHTML = ''; $('add-code').value = '';
+      box.innerHTML = ''; $('add-code').value = ''; $('add-paste').hidden = false;
       sideStatus('add-msg', msg + afterAdd(plan));
     }
   });
 
   // The "Share this tool" button (placed by site.js) says how to bring the other side over
-  var SHARE_TOOL_TEXT = 'A free, friendly way to see who does what at home. On two devices? Each of you fills in your own side, then taps “Send my side to my partner” and “Add my partner’s side” to put them together. Nothing is uploaded.';
+  var SHARE_TOOL_TEXT = 'A free, friendly way to see who does what at home. On more than one device? Each of you fills in your own side, then taps “Send my side” and “Add someone’s side” to put them together. Nothing is uploaded.';
   function shareHint() {
     document.querySelectorAll('.tol-share-row [data-share]').forEach(function (b) {
       if (!b.hasAttribute('data-share-result')) b.setAttribute('data-share-text', SHARE_TOOL_TEXT);
@@ -3132,7 +3207,29 @@
     }
     ownersList().forEach(function (o) { add(o.name, o.who >= 0 && o.who < state.people.length ? nameOf(o.who) : ''); });
     state.jobs.forEach(function (j) { if (!j.ex && kindOf(j) === 'home') add(j.name); });
-    return { people: state.people.slice(), jobs: jobs };
+    // the split you set, the nights someone is here and who's a child travel too (never any hours)
+    var out = { people: state.people.slice(), jobs: jobs, split: null, nights: null, kids: null };
+    var real = function (i) { return !placeholder(state.people[i]); }, named = function (i) { return state.people[i].trim(); };
+    var tg = state.agreed.on ? target() : null;
+    if (tg && !tg.error && state.people.every(function (_, i) { return real(i); })) { out.split = {}; state.people.forEach(function (_, i) { out.split[named(i)] = Math.round(tg.t[i] * 1000) / 10; }); }
+    state.people.forEach(function (_, i) {
+      if (!real(i)) return;
+      if (state.part[i] < 1) { out.nights = out.nights || {}; out.nights[named(i)] = nightsOf(i); }
+      if (state.kid[i]) { out.kids = out.kids || []; out.kids.push(named(i)); }
+    });
+    return out;
+  }
+  // a household's nights, children and split, onto the people here (nights and children only where this
+  // device hasn't set its own; a split only when none is set here). Returns what changed, in words.
+  function hhExtras(h) {
+    var bits = [], idx = function (nm) { var k = -1; state.people.forEach(function (p, i) { if (k < 0 && low(p) === low(nm)) k = i; }); return k; };
+    Object.keys(h.nights || {}).forEach(function (nm) { var i = idx(nm), n = +h.nights[nm]; if (i >= 0 && state.part[i] === 1 && n >= 1 && n < 14) { var was = state.part[i]; state.part[i] = n / 14; eowRows(i, was); bits.push(nameOf(i) + ' here ' + nightsWord(nightsOf(i))); } });
+    (h.kids || []).forEach(function (nm) { var i = idx(nm); if (i >= 0 && !state.kid[i]) { state.kid[i] = true; bits.push(nameOf(i) + ' as a child'); } });
+    if (h.split && !state.agreed.on) {
+      var p = state.people.map(function (nm) { var k = Object.keys(h.split).filter(function (x) { return low(x) === low(nm); })[0]; return k != null ? +h.split[k] : NaN; });
+      if (p.every(isFinite) && Math.abs(sum(p) - 100) <= 0.5) { state.agreed.on = true; state.agreed.p = p.map(String); delete state.agreed.src; bits.push('the split you set (' + splitShort(p.map(function (x) { return x / 100; })) + ')'); }
+    }
+    return bits.length ? ' Also brought over: ' + joinNames(bits) + '.' : '';
   }
   // the household kept on this device, or one pasted from another phone (household.js transfer)
   function hhUse(src) {
@@ -3171,8 +3268,9 @@
       }
     }
     state.example = false;
+    var more = hhExtras(h);
     renderAll();
-    return HH.addedLine(names, jobs);
+    return HH.addedLine(names, jobs) + more;
   }
   // A stand with no names yet offers the household kept from another tool (only in "Me and others")
   function hhRefresh() {
@@ -3213,7 +3311,7 @@
         $('add-code').value = String(text).trim();
         review(String(text), 'Look it over, then tap “Add to my stand”.');
         var sd = $('sides'); if (sd) sd.scrollIntoView({ block: 'start', behavior: 'smooth' });
-        return 'Recognised: that’s your partner’s side, not a household names code, so it’s opened under “Add my partner’s side” for you to look over.';
+        return 'Recognised: that’s someone’s side of the stand, not a household names code, so it’s opened under “' + W.add() + '” for you to look over.';
       } });
       peopleBox.appendChild(hhMove);
     }
@@ -3273,7 +3371,7 @@
         settle(sides);
       }
       if (h === '#add-side') { $('add-code').focus({ preventScroll: true }); return; }
-      review(h, 'Your partner’s side is here. Look it over below, then tap “Add to my stand”.');
+      review(h, '', 'link');
       return;
     }
     if (h === '#money' || h === '#hours') {
@@ -3299,7 +3397,7 @@
     if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
     $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
     $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
-    review(t, 'Your partner’s side is still here, not added yet. Look it over below, then tap “Add to my stand”.');
+    review(t, 'It’s still here, not added yet. Look it over below, then tap “Add to my stand”.', /#side=[zj]/.test(t) ? 'link' : '');
     if (sides) { sides.scrollIntoView({ block: 'start' }); settle(sides); }
   }
   fromHash();
@@ -3422,7 +3520,7 @@
       if (b.height && b.bottom > top && b.top < bot && b.right > r.left - 6 && b.left < r.right + 6) hit = true;
     });
     jumpBtn.classList.toggle('is-clear', hit);
-    if (hit) jumpBtn.setAttribute('tabindex', '-1'); else jumpBtn.removeAttribute('tabindex');
+    if (hit) { jumpBtn.setAttribute('tabindex', '-1'); jumpBtn.setAttribute('aria-hidden', 'true'); } else { jumpBtn.removeAttribute('tabindex'); jumpBtn.removeAttribute('aria-hidden'); }
   }
   var jcRaf = 0;
   window.addEventListener('scroll', function () { if (jcRaf) return; jcRaf = requestAnimationFrame(function () { jcRaf = 0; jumpClear(); }); }, { passive: true });
@@ -3502,7 +3600,133 @@
     setTimeout(function () { mo.disconnect(); }, 15000);
   })();
 
-  window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
+  /* ---------- the group chat version: each bill and who paid, where we each are, and a link to add your side ---------- */
+  var chatLink = { json: '', url: '' }, chatT = 0;
+  function chatLinkSoon() {
+    if (solo()) return;
+    clearTimeout(chatT);
+    chatT = setTimeout(function () {
+      var d = sideData(); if (d.error) { chatLink = { json: '', url: '' }; return; }
+      var json = JSON.stringify(d); if (chatLink.json === json) return;
+      chatLink = { json: json, url: '' };
+      packSide(json).then(function (pk) { if (chatLink.json === json) chatLink.url = sideLink(pk); }, function () {});
+    }, 400);
+  }
+  function chatUrl() {
+    var d = sideData(); if (d.error) return '';
+    var json = JSON.stringify(d);
+    return chatLink.json === json && chatLink.url ? chatLink.url : sideLink('j' + b64url(new TextEncoder().encode(json)));
+  }
+  function chatText() {
+    var lines = ['Our home this week (a friendly look, not a score):'];
+    var bills = state.bills.filter(function (b) { return !b.ex && b.kind !== 'income' && billTotal(b) > 0 && !(b.raw && Object.keys(b.raw).length); });
+    if (bills.length) {
+      lines.push('', 'Bills and who paid:');
+      bills.forEach(function (b) {
+        var who = state.people.map(function (_, i) { return num(b.v[i]) > 0 ? nameOf(i) + ' ' + cash(num(b.v[i])) : ''; }).filter(Boolean).join(', ');
+        lines.push('- ' + billName(b) + ': ' + who + (b.kind === 'own' ? ' (own cost)' : b.kind === 'savings' ? ' (savings)' : b.kind === 'agreed' ? ' (agreed amount, not split)' : ''));
+      });
+    }
+    var home = anyBad(state.jobs) ? state.people.map(function () { return 0; }) : totals(state.jobs);
+    var each = state.people.map(function (_, i) {
+      var paid = sum(bills.map(function (b) { return num(b.v[i]); })), bits = [];
+      if (home[i] >= 0.05) bits.push(hrs(home[i]) + ' of home jobs');
+      if (paid > 0) bits.push(cash(paid) + ' of bills');
+      return { i: i, t: nameOf(i) + ': ' + (bits.length ? bits.join(' and ') : 'nothing added yet'), none: !bits.length };
+    });
+    // nobody is led with a zero: whoever hasn't added anything yet comes last, without a number
+    each.sort(function (a, b) { return (a.none - b.none) || (a.i - b.i); });
+    if (each.some(function (x) { return !x.none; })) {
+      lines.push('', 'Here’s where we each are:');
+      each.forEach(function (x) { lines.push('- ' + x.t); });
+    }
+    var shared = bills.filter(function (b) { return b.kind === 'shared'; }), st = sum(shared.map(billTotal));
+    if (st > 0) {
+      var tg = target(); if (tg.error) tg = evenTarget();
+      lines.push('', 'Shared bills come to ' + cash(st) + (tg.mode === 'even' ? ', about ' + cash(st / state.people.length) + ' each if we split them evenly.' : ', split by the shares we set: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(tg.t[i] * st); }).join(', ') + '.'));
+    }
+    var url = chatUrl();
+    if (url) lines.push('', 'Add your side here (it shows a preview first, and nothing is uploaded):', url);
+    lines.push('', 'Made with the Lemonade Stand at Spread Love & Acceptance.');
+    return lines.join('\n');
+  }
+  if ($('copy-chat')) $('copy-chat').addEventListener('click', function () {
+    copyText(chatText()).then(function (ok) { status(ok ? 'Copied the group chat version: each bill and who paid, where you each are, and a link for the others to add their side.' : 'Couldn’t copy here. Try “Share” instead.'); });
+  });
+
+  /* ---------- the quick path: a fridge list in a minute, or count the hours and bills ---------- */
+  function renderPath() {
+    var box = $('path-pick'); if (!box) return;
+    box.hidden = solo() || !mode || !!state.path || !!state.compact || realJobs().length > 0 || realBills().length > 0 || !!pending;
+  }
+  if ($('path-fridge')) $('path-fridge').addEventListener('click', function () {
+    state.path = 'fridge'; save(); renderPath(); renderOwners();
+    var o = $('owners'); if (o) o.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    var f = document.querySelector('#own-pick .ls-chip') || $('own-new'); if (f) f.focus({ preventScroll: true });
+    status('The fridge list: tap up to five jobs, then one owner each. Your names go in at the top whenever you like.');
+  });
+  if ($('path-count')) $('path-count').addEventListener('click', function () {
+    state.path = 'count'; save(); renderPath();
+    var f = peopleEl.querySelector('input'); if (f) { f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }); }
+    status('Names first, then the jobs from the library, each person on their own side.');
+  });
+  /* ---------- "Only here for the bills?": straight to the Money tab, the names asked once ---------- */
+  if ($('money-only')) $('money-only').addEventListener('click', function () {
+    state.path = 'money';
+    saveMode('group'); setMode('group', false); setCompact(false); showTab(1); save();
+    $('mode-msg').textContent = 'Money only: your names first (just once, at the top), then the bills on the Money tab. The hours can wait.';
+    var f = [].filter.call(peopleEl.querySelectorAll('input'), function (x) { return placeholder(x.value); })[0];
+    if (f) { f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }); f.select(); }
+    else { var t = $('tab-money'); if (t) { t.scrollIntoView({ block: 'start', behavior: 'smooth' }); t.focus({ preventScroll: true }); } }
+  });
+
+  /* ---------- "Saving for something?": a monthly savings amount and a goal, roughly how long it takes ---------- */
+  function savingsMonthly() { return sum(state.bills.filter(function (b) { return !b.ex && b.kind === 'savings' && !(b.raw && Object.keys(b.raw).length); }).map(billTotal)); }
+  function monthsWords(m) {
+    m = Math.ceil(m - 1e-9);
+    if (m < 12) return m + (m === 1 ? ' month' : ' months');
+    var y = Math.floor(m / 12), r = m % 12;
+    return m + ' months (about ' + y + (y === 1 ? ' year' : ' years') + (r ? ' and ' + r + (r === 1 ? ' month' : ' months') : '') + ')';
+  }
+  function goalText() {
+    var g = num(state.goal.a), m = savingsMonthly(), what = state.goal.f.trim();
+    if (!g) return '';
+    if (!m) return 'Add a line with “Savings goal, kept” above and what each of you puts in a month, and the time to ' + cash(g) + ' shows here.';
+    return 'At ' + cash(m) + ' a month, ' + cash(g) + (what ? ' for ' + what.charAt(0).toLowerCase() + what.slice(1) : '') + ' takes about ' + monthsWords(g / m) + '. Rough, before any interest or changes.';
+  }
+  function renderGoal() {
+    var line = $('goal-line'); if (!line || !state) return;
+    var l = $('goal-amt-l'); if (l) l.textContent = 'Goal amount (' + state.cur + ')';
+    var a = $('goal-amt'), f = $('goal-for');
+    if (a && document.activeElement !== a) a.value = state.goal.a;
+    if (f && document.activeElement !== f) f.value = state.goal.f;
+    line.textContent = goalText();
+    var add = $('goal-add-sav'); if (add) add.hidden = savingsMonthly() > 0 || state.bills.some(function (b) { return !b.ex && b.kind === 'savings'; });
+  }
+  if ($('goal-amt')) $('goal-amt').addEventListener('input', function () { state.goal.a = this.value; renderGoal(); save(); });
+  if ($('goal-for')) $('goal-for').addEventListener('input', function () { state.goal.f = this.value; renderGoal(); save(); });
+  if ($('goal-add-sav')) $('goal-add-sav').addEventListener('click', function () {
+    state.bills = state.bills.filter(function (b) { return !b.ex; });
+    state.bills.push({ name: 'Our savings, each month', v: zeros(), kind: 'savings', who: -1 });
+    markEdited(); renderRows(); recalc();
+    var me0 = state.me >= 0 ? state.me : 0, f0 = moneyEl.querySelector('input[data-fk="b' + me0 + '-' + (state.bills.length - 1) + '"]');
+    if (f0) { f0.scrollIntoView({ block: 'center', behavior: 'smooth' }); f0.focus({ preventScroll: true }); }
+    status('Added a monthly savings line. Put in what each of you saves a month.');
+  });
+  // "Compare with 65/35 from your paid hours?" and "Count it once"
+  if ($('work-offer-use')) $('work-offer-use').addEventListener('click', function () {
+    var sg = suggestSplit(); if (!sg) return;
+    useSuggestion(sg, suggestWhy(sg), 'work');
+    var bl = $('balance-line'); if (bl) { bl.setAttribute('tabindex', '-1'); bl.focus({ preventScroll: true }); }
+  });
+  if ($('work-offer-no')) $('work-offer-no').addEventListener('click', function () {
+    state.workNo = true; recalc();
+    status('Okay. The home split stays against an even share. “Suggest a split from paid hours” is under More options any time.');
+    var bl = $('balance-line'); if (bl) { bl.setAttribute('tabindex', '-1'); bl.focus({ preventScroll: true }); }
+  });
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-dbl-fix]')) dblFix(); });
+
+  window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
     sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); } };
 })();

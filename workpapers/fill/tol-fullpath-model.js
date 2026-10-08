@@ -256,7 +256,7 @@
     if (!ctx.road.refusalsOnly) {
       blocks.push({ kind: 'fields', fields: [f('wp01.weekOf', 'Week beginning', 'date', { half: true })] });
       var audit = section(sc, 'audit'), rows = [];
-      var how = opts(['Asked for', 'Noticed and handled'], ['Asked', 'Noticed']);
+      var how = opts(['Asked for', 'Noticed and handled', 'Thinking and planning'], ['Asked', 'Noticed', 'Thinking']);
       for (i = 0; i < Math.max(10, ctx.sizes.audit || 0); i++) {
         var p = 'wp01.audit.r' + (i + 1) + '.';
         rows.push({ fields: [
@@ -792,6 +792,8 @@
       }
       got.push('WP-01');
       set('wp01.weekOf', e1.state.values.weekOf);
+      // minutes that only came from the Lemonade Stand are estimates, not a logged week
+      if ((by['WP-01'] || []).filter(written).every(function (e) { return e.from && e.from.lemon; })) V['wp01.estimated'] = true;
       if (!R.refusalsOnly) {
         var a1 = rowsOfT(e1.state, 'audit');
         a1.forEach(function (r, i) { var p = 'wp01.audit.r' + (i + 1) + '.'; set(p + 'day', r.day); set(p + 'task', r.task); set(p + 'who', whoName(r.who)); set(p + 'minutes', r.minutes); set(p + 'how', r.how); });
@@ -841,9 +843,29 @@
           lists3.forEach(function (L, li) { L.rows.forEach(function (r) { var k = fold(r.task); (byTask[k] = byTask[k] || { task: trim(r.task), by: [] }).by.push({ whose: L.whose, owner: whoName(r.r) || '' }); }); });
           Object.keys(byTask).forEach(function (k) { var m = byTask[k], ow = {}; m.by.forEach(function (b) { ow[fold(b.owner)] = 1; }); if (m.by.length > 1 && Object.keys(ow).length > 1) differ3.push(m); });
           if (differ3.length) views3 = { lists: lists3.map(function (L) { return { whose: L.whose, owns: L.owns, total: L.total }; }), differ: differ3.slice(0, 40) };
+          // The report reads both lists the same way on every device (never "the newest one here"): each job
+          // once, in the same order, and owned only where the lists agree. Where they differ, it waits for an
+          // owner you agree together. So the same two lists give the same numbers on a phone and a laptop.
+          var ordered = lists3.slice().sort(function (a, b) { return fold(a.whose) < fold(b.whose) ? -1 : fold(a.whose) > fold(b.whose) ? 1 : 0; });
+          var seen3 = {}, merged3 = [];
+          ordered.forEach(function (L) { L.rows.forEach(function (r) { var k = fold(r.task); if (seen3[k]) return; seen3[k] = 1; merged3.push(k); }); });
+          merged3.sort();
+          t3 = merged3.map(function (k) {
+            var m = byTask[k], first = null, owners = {}, helpers = {}, freqs = {};
+            ordered.forEach(function (L) { L.rows.forEach(function (r) { if (fold(r.task) !== k) return; if (!first) first = r; var o = whoName(r.r); owners[fold(o)] = o; var a = whoName(r.a); if (a) helpers[fold(a)] = a; if (trim(r.freq)) freqs[trim(r.freq)] = (freqs[trim(r.freq)] || 0) + 1; }); });
+            // how often: the one the lists share most, then the most frequent ("Daily" before "Weekly"), the same on every device
+            var RANK = ['Daily', 'Each meeting', 'Weekly', 'Every two weeks', 'Monthly', 'Quarterly', 'As needed', 'Ongoing'];
+            var fq = Object.keys(freqs).sort(function (x, y) { return freqs[y] - freqs[x] || ((RANK.indexOf(x) + 99) % 99) - ((RANK.indexOf(y) + 99) % 99) || (x < y ? -1 : 1); })[0] || '';
+            var ok = Object.keys(owners), agreed = ok.length === 1 ? owners[ok[0]] : '';
+            var hk = Object.keys(helpers);
+            var differs = m && m.by.length > 1 && ok.length > 1;
+            return { task: first.task, freq: fq, rName: agreed, aName: hk.length === 1 ? helpers[hk[0]] : '', c: first.c, i: first.i,
+              notes: differs ? 'Your lists differ: ' + m.by.map(function (b) { return (b.owner || 'no owner') + ' on ' + b.whose + '\u2019s'; }).join(', ') : first.notes, r: agreed ? 'x' : '', a: '' };
+          });
+          unpicked3 = unpicked3.filter(function (x) { return !seen3[fold(x)]; });
         }
       }
-      t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', whoName(r.r)); set(p + 'a', whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
+      t3.forEach(function (r, i) { var p = 'wp03.treaty.r' + (i + 1) + '.'; set(p + 'task', r.task); set(p + 'freq', r.freq); set(p + 'r', r.rName != null ? r.rName : whoName(r.r)); set(p + 'a', r.aName != null ? r.aName : whoName(r.a)); set(p + 'c', r.c); set(p + 'i', r.i); set(p + 'notes', r.notes); });
       sizes.treaty = t3.length;
       var am = rowsOfT(e3.state, 'amendments');
       am.forEach(function (r, i) { var p = 'wp03.amend.r' + (i + 1) + '.'; set(p + 'date', r.date); set(p + 'who', [r.initA, r.initB].filter(Boolean).join(' ')); set(p + 'change', r.change); });
@@ -1263,7 +1285,7 @@
         rowsUsed++;
         // a row shared by several named people is split evenly between them, and said so in the report
         if (ow.multi && !ow.all) sharedRows.push({ task: trim(r.task) || 'a row', who: ow.list.map(P.label) });
-        Object.keys(ow.list).forEach(function (j) { var k = ow.list[j], s = m / ow.list.length; mins[k] += s; if (r.how === 'Noticed and handled') noticed[k] += s; });
+        Object.keys(ow.list).forEach(function (j) { var k = ow.list[j], s = m / ow.list.length; mins[k] += s; if (r.how === 'Noticed and handled' || r.how === 'Thinking and planning') noticed[k] += s; });
       });
       // balance for 2 to 8 people against an even split: 1 − (½Σ|share − 1/n|) ÷ (1 − 1/n)
       // read against the split agreed on the Lemonade Stand (or each person's nights here), when there is one,
@@ -1437,6 +1459,9 @@
         calc.apex = ax.value;
         calc.apexRebalanced = ax.rebalanced;
         calc.solBand = calcBand(calc.sol); calc.apexBand = calcBand(calc.apex);
+        // the time split is only an estimate (from the Lemonade Stand), not a logged week: never "working well" yet
+        calc.estimated = V(data, 'wp01.estimated') === true && wbSrc === 'WP-01';
+        if (calc.estimated && calc.sol >= 0.7) calc.solBand = { key: 'drift', label: 'Owners agreed: check again after a week is logged' };
         var FIX = { wb: ['WB', 'how the load is split (WP-01, then WP-03)'], oc: ['OC', 'ownership clarity (the unowned rows on WP-03)'], as: ['AS', 'how full everyone\u2019s load score is (WP-02, and what is driving it)'] };
         var terms = C1().shortfalls(wb, oc, as).map(function (t) { return { key: FIX[t.key][0], value: t.key === 'wb' ? wb : t.key === 'oc' ? oc : as, short: t.short, fix: FIX[t.key][1] }; });
         calc.terms = terms;
@@ -1530,12 +1555,13 @@
         ? { k: 'Is the setup working?', v: c.calc.solBand.label, band: 'CALC-01, from balance, ownership and how much everyone is carrying.', tone: c.calc.solBand.key, note: 'Setup score ' + fmt(c.calc.sol) + ' of 1, higher = working better (0.70+ working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together).' }
         : { k: 'Is the setup working?', v: 'Not worked out yet', band: R.focus && R.optional && R.optional['WP-01'] ? 'This read is built on the load sheets (WP-01 and WP-03), which are optional on your road. Fill them in only if the load feels uneven.' : 'Still needed: ' + c.calc.missing.join('; '), tone: 'none' });
       if (c.calc.sol != null) tiles.push({ k: 'With repairs counted', v: c.calc.apexBand.label, band: c.calc.apexRebalanced ? 'No friction moments were counted, so there was nothing to repair.' : 'Adds how often friction was repaired.', tone: c.calc.apexBand.key, note: 'Apex ' + fmt(c.calc.apex) + ' of 1' + (c.calc.apexRebalanced ? ', from three inputs.' : ', with retuning ' + fmt(c.calc.rf) + '.') });
-      tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? (c.wp01 && c.wp01.oneSided ? 'Waiting for ' + list(c.wp01.oneSided.missing) + '’s week' : 'WP-01 needs minutes and names') : c.calc.wbSrc === 'yours' ? 'Your own number' : 'From WP-01', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = an even split (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
+      tiles.push({ k: 'How the time is shared', v: c.calc.wb != null ? cap(C1().shareWords(c.calc.wb)) : 'Not filled in', band: c.calc.wb == null ? (c.wp01 && c.wp01.oneSided ? 'Waiting for ' + list(c.wp01.oneSided.missing) + '’s week' : 'WP-01 needs minutes and names') : c.calc.wbSrc === 'yours' ? 'Your own number' : c.calc.estimated ? 'Estimated, from the Lemonade Stand (not a logged week yet)' : 'From WP-01, a logged week', tone: tone3(c.calc.wb), note: c.calc.wb != null ? 'Balance ' + fmt(c.calc.wb) + ' of 1, where 1 = ' + (c.target ? c.target.label : 'an even split') + ' (0.70+ fairly even, 0.40 to 0.69 leaning, under 0.40 mostly on one person).' : '' });
       tiles.push({ k: 'Does each job have a name?', v: c.calc.oc == null ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? 'Not picked yet' : 'Not filled in') : c.calc.oc >= 0.995 ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? 'Every job you picked has one' : 'Every job has one') : c.calc.oc >= 0.7 ? 'Most jobs have one' : c.calc.oc >= 0.4 ? 'Some jobs have one' : 'Few jobs have one', band: c.calc.oc == null ? (c.wp03 && c.wp03.listed && c.wp03.listed.length ? listedLine(c.wp03) : 'WP-03 needs owners') : c.calc.ocSrc === 'yours' ? 'Your own number' : c.wp03.owned + ' of ' + c.wp03.tasks + ' jobs with an owner' + (c.wp03.listed && c.wp03.listed.length ? '; ' + c.wp03.listed.length + ' more listed from your Lemonade Stand, without an owner yet' : ''), tone: tone3(c.calc.oc), note: c.calc.oc != null ? 'Ownership clarity ' + fmt(c.calc.oc) + ' of 1.' : '' });
       var co = c.conc && (c.conc.owned && c.conc.owned.flag ? c.conc.owned : c.conc.minutes && c.conc.minutes.flag ? c.conc.minutes : null);
       if (co) tiles.push({ k: 'Who’s carrying more right now', v: P.label(co.top), band: c.conc.lines[0], tone: 'drift', note: 'About ' + pct(co.share) + '; an even share would be ' + pct(1 / c.n) + '. Noted at half or more, and 20 points over even.' });
     }
-    c.battery.forEach(function (b) {
+    // load scores are asked of the adults only: no tile for anyone marked as a child
+    c.battery.filter(function (b) { return !b.child; }).forEach(function (b) {
       tiles.push({ k: R.solo ? 'How much you’re carrying' : 'How much ' + b.label + ' is carrying', v: b.score != null ? b.band.label : 'Not filled in', band: b.score != null ? 'From WP-02' + (b.source === 'shared' ? ' (score shared)' : '') : (b.answered ? b.answered + ' of 5 answered' : 'WP-02 blank'), tone: b.score == null ? 'none' : b.band.key === 'low' ? 'good' : b.band.key === 'medium' ? 'drift' : 'low', person: true, note: b.score != null ? 'Load score ' + fmt(b.score) + ' of 1, higher = heavier (under 0.30 low, 0.30 to 0.59 medium, 0.60+ high).' : '' });
     });
     if (c.calc.rf != null) tiles.push({ k: 'Repair after friction', v: c.calc.rf >= 0.5 ? 'A working habit' : 'Room to grow', band: c.calc.retunes + ' of ' + c.calc.friction + ' friction moments retuned' + (c.calc.capped ? ' (capped at 1.00)' : ''), tone: c.calc.rf >= 0.5 ? 'good' : 'drift', note: 'Retuning ' + fmt(c.calc.rf) + ' of 1 (0.50+ is a working habit).' });
@@ -1618,6 +1644,7 @@
     if (calc.sol != null) {
       var s = fmt(calc.sol), leans = leanReasons(c);
       if (calc.sol >= 0.7 && leans.length) add(10, 'The setup reads ' + s + ' on CALC-01, so the numbers hold, but ' + list(leans) + '. A high score can hide a setup that leans on one person or keeps slipping, so that is the place to look before calling it settled.');
+      else if (calc.sol >= 0.7 && calc.estimated) add(10, 'Owners are agreed, and the time split so far is the Lemonade Stand\u2019s estimate. Log one ordinary week on Who did what (WP-01), then check the setup again.');
       else if (calc.sol >= 0.7) add(10, 'The setup reads ' + s + ' on CALC-01: it is working well. Keep the same rhythm; nothing needs fixing this week.');
       else if (calc.sol >= 0.4) add(10, 'The setup reads ' + s + ' on CALC-01: it needs a look, because something is slipping. The biggest single gap is ' + calc.worst.fix + ', so start there, not with whatever happened most recently.');
       else add(10, 'The setup reads ' + s + ' on CALC-01: it needs a rethink, together, because it is asking too much as it is. That is a statement about the setup, not about anyone. The biggest gap is ' + calc.worst.fix + '.');
@@ -1740,17 +1767,19 @@
       else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
       if (R.solo) { var tf = topFactors(c); if (tf.length) s.shows.push('Scored 3 or 4: ' + list(tf.map(function (x) { return x.toLowerCase(); })) + '.'); }
       var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
-      s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (R.focus === 'apart' ? ' Name when you’ll pick it up, for example “not tonight, Sunday at 10?”' : '')) : 'Keep it to one minute a day for a week. Patterns show up fast.';
+      s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (R.focus === 'apart' ? ' Living apart, say it with a time: “Not today, and I’ll call you at [time].” Then keep that call.' : '')) : 'Keep it to one minute a day for a week. Patterns show up fast.';
       return s;
     }
     if (code === 'WP-03') {
       var t = c.wp03;
-      if (!t.filled) { s.next = 'Sit down once, with the week’s log if you have it, and give every recurring ' + v.task + ' exactly one owner.'; return s; }
+      if (!t.filled) { s.next = (R.focus === 'apart' ? 'On one call, with the week’s log if you have it, ' : 'Sit down once, with the week’s log if you have it, and ') + 'give every recurring ' + v.task + ' exactly one owner.'; return s; }
       s.status = 'filled';
-      s.entered.push([c.road === 'coworkers' ? 'Team tasks listed' : 'Tasks listed', String(t.tasks)]);
-      s.entered.push(['Jobs with an owner', t.owned + ' of ' + t.tasks]);
+      // jobs that came in without an owner yet (from the Lemonade Stand) are listed, just not counted
+      var listedN = t.listed ? t.listed.length : 0;
+      s.entered.push([c.road === 'coworkers' ? 'Team tasks listed' : 'Tasks listed', String(t.tasks + listedN)]);
+      s.entered.push(['Jobs with an owner', t.tasks ? t.owned + ' of ' + t.tasks + (listedN ? ' (and ' + listedN + ' waiting for an owner)' : '') : listedN ? 'None picked yet' : '0']);
       P.list.forEach(function (p) { if (t.byOwner[p.i]) s.entered.push([p.label + ' (owner)', plural(t.byOwner[p.i], 'job')]); });
-      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list still has no owner.') : 'No tasks listed, so there is no clarity number (not a zero).');
+      s.shows.push(t.oc != null ? 'Ownership clarity ' + fmt(t.oc) + '. ' + (t.oc >= 0.9 ? 'Almost everything has a clear owner.' : t.oc >= 0.7 ? 'Most things are owned; a few are still floating.' : t.oc >= 0.4 ? 'Some things are owned; many are still floating.' : 'More than half of the list still has no owner.') : listedN ? 'No owners picked yet, so there is no clarity number yet (not a zero). It appears once you give the first job an owner.' : 'No tasks listed, so there is no clarity number (not a zero).');
       if (t.conc && t.conc.flag) s.shows.push(P.label(t.conc.top) + ' owns ' + t.conc.count + ' of the ' + t.conc.total + ' ' + v.tasks + ' with one named owner (' + pct(t.conc.share) + '; an even share would be ' + pct(1 / c.n) + '). Clarity reads whether each job has a name, not how the jobs are spread, so read the two together.');
       if (t.unowned.length) s.shows.push('No owner yet: ' + list(t.unowned) + '.');
       if (t.listed && t.listed.length) s.shows.push(listedLine(t) + ' They came in from your Lemonade Stand, where you pick owners for a few jobs at a time, so they don\u2019t count against the clarity number.');
@@ -2155,7 +2184,7 @@
       rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
         if (!(trim(r.task) || trim(r.who) || trim(r.minutes) || trim(r.how))) return;
         var m = num(r.minutes), who = P.resolve(r.who);
-        rows.push({ day: trim(r.day), task: trim(r.task), whoRaw: trim(r.who), who: who, min: m, minRaw: trim(r.minutes), how: r.how || '', mental: MENTAL_RE.test(r.task || ''), noticed: r.how === 'Noticed and handled' });
+        rows.push({ day: trim(r.day), task: trim(r.task), whoRaw: trim(r.who), who: who, min: m, minRaw: trim(r.minutes), how: r.how || '', mental: MENTAL_RE.test(r.task || '') || r.how === 'Thinking and planning', noticed: r.how === 'Thinking and planning' || r.how === 'Noticed and handled' });
       });
       var everyone = 0, sinks = {}, names = {};
       rows.forEach(function (r) {
@@ -2304,7 +2333,7 @@
         skipped: pp.filter(function (p) { return p.checkins === 0; }), few: pp.filter(function (p) { return p.checkins > 0 && p.checkins < 4; }),
         frictionRows: fr, frictionOnHigh: fr.filter(function (r) { return r.load === 'High'; }).length,
         frictionDays: byDay.filter(function (d) { return d.friction; }), highDays: byDay.filter(function (d) { return d.high; }),
-        repeatFriction: repeats(fr.map(function (r) { return r.friction; })), repeatAsk: repeats(d13.filter(function (r) { return r.ask; }).map(function (r) { return r.ask; })),
+        repeatFriction: repeats(onceEach(fr, 'friction')), repeatAsk: repeats(onceEach(d13.filter(function (r) { return r.ask; }), 'ask')),
         weekOf: parseISO(V(data, 'wp13.weekOf')) };
       F.w13.bothDays = F.w13.frictionDays.filter(function (d) { return d.high; });
       // Only a day or two of check-ins: too early for a rate or a pattern, so it is read as a start
@@ -2372,11 +2401,27 @@
     if (not.length) line += '; ' + list(not.map(function (p) { return p.label; })) + (not.length === 1 ? ' hasn\u2019t' : ' haven\u2019t') + ' marked any yet';
     return { line: line + '.', top: top, share: cnt[top.i] / total, cnt: cnt, onlyOne: marked.length === 1, rowsBy: rowsBy };
   }
+  // A sentence written more than once (an ask, a sore spot): the same words, or most of the same words,
+  // never just one word in common ("plan Saturday dinner" and "dinner was late" are different).
+  // the "We live apart" road (or its focus): calls and visits, not evenings at home
+  function isApart(F) { return !!F && ((F.R && F.R.focus === 'apart') || (F.data && F.data.focus === 'apart') || F.road === 'apart' || (F.c && F.c.R && F.c.R.focus === 'apart')); }
+  function sameSentence(a, b) {
+    var A = words(a), B = words(b);
+    if (!A.length || !B.length) return trim(a).toLowerCase() === trim(b).toLowerCase() && trim(a) !== '';
+    var shared = A.filter(function (w) { return B.indexOf(w) >= 0; }).length, small = Math.min(A.length, B.length);
+    return small <= 1 ? shared >= 1 && A.length === B.length : shared >= 2 && shared / small >= 0.6;
+  }
+  // each person's day once: the same words from the same person on the same day are one entry
+  function onceEach(rows, key) {
+    var seen = {}, out = [];
+    rows.forEach(function (r) { var k = r.who + '|' + r.day + '|' + trim(r[key]).toLowerCase(); if (!seen[k]) { seen[k] = 1; out.push(r[key]); } });
+    return out;
+  }
   function repeats(list) {
     var out = [];
     list.forEach(function (t, i) {
-      var same = list.filter(function (u, j) { return j !== i && sameTask(t, u); });
-      if (same.length && !out.some(function (o) { return sameTask(o.text, t); })) out.push({ text: t, times: same.length + 1 });
+      var same = list.filter(function (u, j) { return j !== i && sameSentence(t, u); });
+      if (same.length && !out.some(function (o) { return sameSentence(o.text, t); })) out.push({ text: t, times: same.length + 1 });
     });
     return out;
   }
@@ -2456,11 +2501,11 @@
       why: 'A lean in one ordinary week is a fact about how the work fell, not about effort or care. Left alone, a lean tends to settle into a default.',
       rec: function (d, F, v) { var ho = d.ho; return { h: 'week', title: 'One handoff, not a rebuild', first: ho ? 'Move about ' + C1().f1(ho.hours) + ' hour' + (ho.hours === 1 ? '' : 's') + ' a week from ' + ho.from + ' to ' + ho.to + '. Balance would go from ' + fmt(d.wb) + ' to ' + fmt(ho.after) + '.' : 'Pick one ' + v.task + ' that the busiest adult would most like to hand over' + (F.c.kids && F.c.kids.some(Boolean) ? ' to another adult' : '') + '.', script: '“Which of these would you most like to hand over, and what would make that fair?”', link: linkOf('WP-01'), working: 'Next week’s log reads 0.70 or above, and nobody had to be reminded.', plan: { title: 'Hand over one ' + v.task, wp: 'WP-01, WP-03', do: ho ? 'Move about ' + C1().f1(ho.hours) + ' hour' + (ho.hours === 1 ? '' : 's') + ' a week from ' + ho.from + ' to ' + ho.to + ', write it on WP-03, and log the week again.' : 'Hand one ' + v.task + ' from the busiest person to someone else, write it on WP-03, and log the week again.', pillar: 'I' } }; },
       q: function (d) { return d.top.label + ' carried ' + pc(d.top.share) + ' of the logged time. Is that what everyone expected before seeing the number?'; } },
-    { id: 'load-even', pillar: 'I', src: ['WP-01'], pri: 3, strength: true, title: 'The logged time is shared evenly',
+    { id: 'load-even', pillar: 'I', src: ['WP-01'], pri: 3, strength: true, title: function (w, F) { return F.c.target ? (F.c.target.mode === 'agreed' ? 'The logged time is close to the split you agreed' : 'The logged time is close to each person\u2019s fair share') : 'The logged time is shared evenly'; },
       when: function (F) { var w = F.c.wp01; return F.n >= 2 && w && w.wb != null && w.wb >= 0.8 ? w : null; },
       find: function (w, F) { return 'Workload balance reads ' + fmt(w.wb) + ': the logged minutes were close to ' + (F.c.target ? F.c.target.label : 'an even split') + '.'; },
       why: 'An even split in hours is the base everything else stands on. The next thing to check is the planning and remembering, which minutes don’t show.' },
-    { id: 'mental-uneven', pillar: 'I', src: ['WP-01'], pri: 8, title: 'Even in hours, uneven in mental load',
+    { id: 'mental-uneven', pillar: 'I', src: ['WP-01'], pri: 8, title: function (d) { return d.even ? 'Even in hours, uneven in mental load' : 'The planning and remembering sit with one person'; },
       when: function (F) {
         if (!(F.n >= 2 && F.w1 && F.w1.namedMental.length >= 3)) return null;
         var counts = F.pp.map(function (p) { return p.mental; }), top = F.pp.slice().sort(function (a, b) { return b.mental - a.mental; })[0];
@@ -2549,7 +2594,7 @@
       },
       find: function (d, F, v) { return d.top.label + ' owns ' + d.top.recurR + ' of the ' + d.tot + ' daily or weekly ' + v.tasks + '. Recurring work is the kind that never lets up.'; },
       why: 'One-off jobs end; recurring ones come back every day or week. A fair split of recurring jobs matters more than a fair count of jobs.',
-      rec: function (d, F, v) { return { h: 'month', title: 'Share the recurring jobs', first: 'Trade one daily or weekly ' + v.task + ' from ' + d.top.label + ' for one occasional job.', script: '“Could we swap one of the every-week ones for one of the now-and-then ones?”', link: linkOf('WP-03'), working: 'Recurring jobs are split closer to evenly on WP-03.' }; } },
+      rec: function (d, F, v) { return isApart(F) ? { h: 'week', title: d.top.label + ' owns ' + d.top.recurR + ' of the ' + d.tot + ' daily or weekly jobs: trade one this week', first: 'On your next call, pick one daily or weekly ' + v.task + ' (a call to arrange, a visit to plan) that moves from ' + d.top.label + ' to the other of you this week.', script: '“You set up most of our calls and visits. Which one shall I take this week?”', link: linkOf('WP-03'), working: 'The daily and weekly jobs are closer to even on WP-03.' } : { h: 'month', title: 'Share the recurring jobs', first: 'Trade one daily or weekly ' + v.task + ' from ' + d.top.label + ' for one occasional job.', script: '“Could we swap one of the every-week ones for one of the now-and-then ones?”', link: linkOf('WP-03'), working: 'Recurring jobs are split closer to evenly on WP-03.' }; } },
     { id: 'battery-owns-most', pillar: 'V', src: ['WP-02', 'WP-03'], pri: 8, title: 'The highest load also owns the most',
       when: function (F) {
         if (!(F.n >= 2 && F.w3 && F.bat.scored.length >= 2)) return null;
@@ -2618,7 +2663,7 @@
       when: function (F) { return F.bat.high.length ? { who: F.bat.high } : null; },
       find: function (d, F) { return F.solo ? 'Your load reads ' + fmt(d.who[0].score) + ': a high load right now.' : list(d.who.map(function (b) { return b.label + ' (' + fmt(b.score) + ')'; })) + (d.who.length === 1 ? ' is' : ' are') + ' at 0.60 or above: a high load right now.'; },
       why: 'At a high load, words land harder and decisions come out worse. It is a reason to pick the timing, not a reason to avoid the talk.',
-      rec: function (d, F, v) { return { h: F.reach && !F.solo ? 'week' : 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (F.R.focus === 'apart' || F.data.focus === 'apart' ? ' Name when you’ll pick it up, for example “not tonight, Sunday at 10?”, and keep that time.' : ''), script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a heavy-load day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
+      rec: function (d, F, v) { return { h: F.reach && !F.solo ? 'week' : 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (isApart(F) ? ' Living apart, say it with a time: “Not today, and I’ll call you at [time].” Then keep that call.' : ''), script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a heavy-load day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
       q: function (d, F) { return F.solo ? 'What would a slightly lighter week look like for you, and what is one thing you could put down?' : 'When someone is running high, what is the kindest way for them to say "not today"?'; } },
     { id: 'bat-low-all', pillar: 'III', src: ['WP-02'], pri: 3, strength: true, title: 'Loads are light',
       when: function (F) { return F.bat.scored.length && F.bat.scored.every(function (b) { return b.score < 0.3; }) && (F.solo || F.bat.scored.length >= 2) ? F.bat : null; },
@@ -2638,7 +2683,7 @@
       },
       find: function (d) { return lc(d.f) + ' scored 3 or 4 for ' + list(d.who) + '.'; },
       why: 'A stressor you share is one you can tackle together, and knowing it is shared takes some of the sting out.',
-      rec: function (d, F, v) { var sleep = d.k === 0, time = d.k === 4; return { h: 'week', title: 'Tackle the shared stressor together', first: sleep ? 'Agree on one earlier night for everyone this week, and protect it.' : time ? 'Look at next week together and move one deadline or commitment before it arrives.' : 'Name it together, once, and agree one small thing that would ease it this week.', script: '“It sounds like ' + lc(d.f) + ' is hitting all of us. What’s one thing we could do about it together?”', link: linkOf('WP-02'), working: 'That line scores lower for most people next week.' }; } },
+      rec: function (d, F, v) { var sleep = d.k === 0, time = d.k === 4; return { h: 'week', title: 'Tackle the shared stressor together', first: sleep ? (isApart(F) ? 'Agree on one earlier night each this week, and make that night\u2019s call a short goodnight.' : 'Agree on one earlier night for everyone this week, and protect it.') : time ? 'Look at next week together and move one deadline or commitment before it arrives.' : 'Name it together, once, and agree one small thing that would ease it this week.', script: '“It sounds like ' + lc(d.f) + ' is hitting all of us. What’s one thing we could do about it together?”', link: linkOf('WP-02'), working: 'That line scores lower for most people next week.' }; } },
     { id: 'stressor-top', pillar: 'III', src: ['WP-02'], pri: 5, title: 'What is adding most to the load',
       when: function (F) {
         var best = -1; F.factorAvg.forEach(function (a, i) { if (a != null && a >= 2.5 && (best < 0 || a > F.factorAvg[best])) best = i; });
@@ -2857,10 +2902,13 @@
       if (held && (r.src || []).indexOf('WP-01') >= 0) return;
       try { d = r.when(F, v); } catch (e) { d = null; }
       if (!d) return;
-      var o = { id: r.id, pillar: r.pillar, src: r.src, pri: r.pri, strength: !!r.strength, title: typeof r.title === 'function' ? r.title(d, F, v) : r.title,
+      // living apart: who carries the calls and visits comes first, before the load-based advice
+      var pri = r.pri;
+      if (isApart(F) && (r.id === 'recurring-one' || r.id === 'own-concentrated')) pri = Math.max(pri, 10) + (r.id === 'recurring-one' ? 1 : 0);
+      var o = { id: r.id, pillar: r.pillar, src: r.src, pri: pri, strength: !!r.strength, title: typeof r.title === 'function' ? r.title(d, F, v) : r.title,
         finding: r.find(d, F, v), why: typeof r.why === 'function' ? r.why(d, F, v) : r.why,
         rec: r.rec ? r.rec(d, F, v) : null, q: r.q ? r.q(d, F, v) : null };
-      if (o.rec) { o.rec.why = o.finding; o.rec.from = r.id; o.rec.pri = r.pri; o.rec.pillar = r.pillar; }
+      if (o.rec) { o.rec.why = o.finding; o.rec.from = r.id; o.rec.pri = pri; o.rec.pillar = r.pillar; }
       out.push(o);
     });
     out.sort(function (a, b) { return b.pri - a.pri; });
@@ -2874,8 +2922,8 @@
   var CHECKS = [
     { id: 'wp03-lists-differ', where: 'WP-03', level: 'note',
       when: function (F) { return F.c.wp03 && F.c.wp03.views && F.c.wp03.views.differ.length ? F.c.wp03 : null; },
-      text: function (t, F) { return viewsLine(t, F.P) + ' The report reads the newest list, so the numbers follow that one.'; },
-      fix: function (t) { return 'Sit down with both lists, together, and agree who owns ' + (t.views.differ.length === 1 ? 'that job' : 'those jobs') + '. Neither list is wrong: each shows how one of you sees it. Then send the agreed list to each other again.'; } },
+      text: function (t, F) { return viewsLine(t, F.P) + ' The report reads both lists the same way on every device: a job counts as owned only where your lists agree.'; },
+      fix: function (t, F) { return (F && isApart(F) ? 'On your next call, open both lists and agree who owns ' : 'Sit down with both lists, together, and agree who owns ') + '' + (t.views.differ.length === 1 ? 'that job' : 'those jobs') + '. Neither list is wrong: each shows how one of you sees it. Then send the agreed list to each other again.'; } },
     { id: 'wp13-friction-notes', where: 'WP-13', level: 'note',
       when: function (F) {
         if (!F.w13 || F.solo) return null;
@@ -3158,7 +3206,8 @@
         s.bars.push(bars('Jobs owned, by person', F.pp.map(function (p) { return { label: p.label, value: p.r, max: rmax, text: plural(p.r, v.task, v.tasks) }; })));
       }
       if (t3.gaps.length) s.tables.push(tbl(cap(v.tasks) + ' that need a look', ['Job', 'How often', 'What’s missing'], t3.gaps.slice(0, 12).map(function (r) { return [r.task, r.freq || '—', !r.rRaw && !r.aRaw ? 'No owner yet' : !r.rRaw ? 'A helper, but no owner' : 'Several names or "Everyone"']; }), [2.4, 1.1, 1.6]));
-      s.more.push('Ownership rate: ' + c.wp03.owned + ' of ' + c.wp03.tasks + ' ' + v.tasks + ' have an owner (' + (c.wp03.tasks ? pc(c.wp03.owned / c.wp03.tasks) : '0%') + ').');
+      if (c.wp03.tasks) s.more.push('Ownership rate: ' + c.wp03.owned + ' of ' + c.wp03.tasks + ' ' + v.tasks + ' have an owner (' + pc(c.wp03.owned / c.wp03.tasks) + ').');
+      else if (c.wp03.listed && c.wp03.listed.length) s.more.push('Ownership rate: not worked out yet. ' + plural(c.wp03.listed.length, v.task, v.tasks) + ' ' + (c.wp03.listed.length === 1 ? 'is' : 'are') + ' listed, waiting for owners.');
       if (t3.multi.length) s.more.push('Too many owners: ' + list(t3.multi.slice(0, 4).map(function (r) { return r.task; })) + '.');
       s.more.push('How often: ' + t3.recurring.length + ' daily or weekly, ' + t3.occasional.length + ' monthly or as needed' + (t3.rows.length - t3.recurring.length - t3.occasional.length ? ', ' + (t3.rows.length - t3.recurring.length - t3.occasional.length) + ' not marked' : '') + '.');
       if (F.road === 'coworkers') s.more.push(t3.ci ? plural(t3.ci, 'row') + (t3.ci === 1 ? ' uses' : ' use') + ' Consulted or Informed, which is where a group belongs.' : 'No rows use Consulted or Informed yet. They are the right place for "the whole team".');
@@ -3332,7 +3381,7 @@
           plan: { title: 'Agree who leads, together', wp: 'WP-03', do: 'Together, give each of the kids\u2019 jobs one grown-up who leads it this week.', pillar: 'II' } }
       : { h: 'week', pri: 8, pillar: 'II', from: 'together', title: 'Together: choose one ' + v.task + ' to share differently this week',
           why: 'The first steps work best shared. When ' + who + ' choose it together, nobody carries the change alone.',
-          first: 'Sit down together for ten minutes. Each of you names one ' + v.task + ' you would like help with; agree on one change, and who leads it.',
+          first: (isApart(F) ? 'On your next call, ten minutes, both on headphones. ' : 'Sit down together for ten minutes. ') + 'Each of you names one ' + v.task + ' you would like help with; agree on one change, and who leads it.',
           script: '\u201cWhich one would make the biggest difference to you this week?\u201d', link: linkOf('WP-03'),
           working: 'You both know what is changing this week, and it happened without reminders.',
           plan: { title: 'One change, chosen together', wp: 'WP-03', do: 'Together, choose one ' + v.task + ' to share differently, and write it on WP-03.', pillar: 'II' } };
@@ -3636,6 +3685,7 @@
     ['Consulted and Informed', 'People asked before, or told after. A group like "the whole team" fits here.'],
     ['Mental load', 'Planning, remembering and keeping track: work that is short in minutes and long in the head.'],
     ['Noticed and handled', 'Work done without anyone asking. Often invisible, and the first to go unthanked.'],
+    ['Thinking and planning', 'Time spent only noticing, remembering or planning, with nothing to show for it yet. It counts as work.'],
     ['Structural gap', 'A slip caused by the setup: no owner, or an unclear handoff.'],
     ['Capacity issue', 'A slip because the owner can’t keep up. Not a matter of caring.'],
     ['Pattern', 'Something that slipped 3 or 4 weeks out of 4. More than a fluke.'],

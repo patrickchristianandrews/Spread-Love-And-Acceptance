@@ -219,7 +219,7 @@ const F = [
    what:"Counting the misses (\"third time,\" \"three times now\") reads as a record being kept on someone. People hear blame, and stop reading for the fix.",
    fix:"Name the days it happened and what it affected, then ask for one change. If it keeps happening with one person, talk to them on their own."},
   {id:"excuse", name:"Shifts the job onto them", kind:"static",
-   re:/\byou know (?:how i am|how i get|what i'm like|what i am like|me)(?=\s*[.!,…]|\s*$)|\b(?:that's|that is|it's|it is) (?:just )?(?:how|who|the way) i am\b|\bi (?:can't|cannot|can not) help it\b|\b(?:that's|that is) just me\b|\bi'm just like that\b|\bi'm (?:just )?wired (?:that way|like that)\b/gi,
+   re:/\byou know (?:how i am|how i get|what i'm like|what i am like|me)(?=\s*[.!,…]|\s*$)|\b(?:that's|that is|it's|it is) (?:just )?(?:how|who|the way) i am\b|\bi (?:can't|cannot|can not) help it\b|\b(?:that's|that is) just me\b|\bi(?:'m| am) just like that\b|\bi(?:'m| am) (?:just )?wired (?:that way|like that)\b/gi,
    what:"\"You know how I am\" or \"I can't help it\" asks the other person to make room for the miss, so the work of fixing it lands on them. Even when it's honest, it can sound like nothing will change.",
    fix:"Say what you did, that it's on you, and one thing you'll do: \"Sorry I forgot [the thing]. That's on me. I've set a reminder so it doesn't happen next time.\""},
   {id:"threat", name:"Conditional threat (\"if you don't…\")", kind:"static",
@@ -1656,7 +1656,7 @@ function looksLikeGibberish(t){
    "sort it out" becomes one owner by one day. */
 const ORD = "(?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|umpteenth|hundredth|millionth|nth|\\d+(?:st|nd|rd|th))";
 const WORK_ADDR = /^\s*(?:(?:hey|hi|ok(?:ay)?|so|right|look|listen)[\s,]+)?(?:you )?(?:guys|folks|people|lads|ladies|boys|girls|y'all|dudes|mates?|gang|peeps)\s*[,!:.–—-]+\s*/i;
-const WORK_VAGUE = /^(?:(?:could|can|would|will) you (?:all |guys |please )*)?(?:please )?(?:sort (?:it|this|that)(?: out)?|sort out (?:it|this|that)|fix (?:it|this|that)|deal with (?:it|this|that)|handle (?:it|this|that)|get (?:it|this|that) sorted|sort yourselves out|get (?:it|this) together|do better|step up|make sure (?:it|this|that) (?:doesn't|does not|won't|will not|never) happen(?:s)? again)(?: by \[a time\])?[?.!]*$/i;
+const WORK_VAGUE = /^(?:(?:could|can|would|will) you (?:all |guys |please )*)?(?:please )?(?:sort (?:it|this|that)(?: out)?|sort out (?:it|this|that)|fix (?:it|this|that)|deal with (?:it|this|that)|handle (?:it|this|that)|get (?:it|this|that) sorted|sort yourselves out|get (?:it|this) together|do better|step up|make sure (?:it|this|that) (?:doesn't|does not|won't|will not|never) happen(?:s)? again|(?:fix|handle|sort out|deal with) \[the specific thing\])(?: by \[a time\])?[?.!]*$/i;
 const WORK_MISS = /\b(?:was|were|got|has been|have been|had been)\s+(?:\w+ly\s+)?(?:missed|skipped|forgotten|dropped|late|left|ignored|lost|not (?:done|sent|updated|filled in|logged|completed|finished))\b|\b(?:missed|forgot|skipped|didn't|did not|wasn't|weren't|hasn't been|haven't been)\b/i;
 function workReframe(main, an, note, ctx){
   let counted = "", fact = false;
@@ -1675,7 +1675,8 @@ function workReframe(main, an, note, ctx){
     if(!/[A-Za-z]{2}/.test(x.replace(/\[[^\]]*\]/g,""))) return;
     const isQ = /\?\s*$/.test(x) || /\b(?:could|can|would|will) (?:you|we)\b/i.test(x);
     // a miss, said as a fact: when it happened and what it affected
-    if(!isQ && WORK_MISS.test(x) && (cnt || an.found.passive || an.found.count || an.found.again)){
+    // (not your own miss: an apology says what you'll do instead, below)
+    if(!isQ && !ctx.apology && !/^\W*(?:i|we|i'm|i've|we've|sorry)\b/i.test(x) && WORK_MISS.test(x) && (cnt || an.found.passive || an.found.count || an.found.again)){
       fact = true;
       const end = (x.match(/[.!]+$/)||["."])[0];
       let body = x.replace(/[.!]+$/,"");
@@ -1852,10 +1853,21 @@ function rewrite(an, opts){
   }
   // an apology with an excuse ("You know how I am"), or for a thing forgotten: what I did, that it's on me, and
   // what I'll do. The plan is a blank to make true, never a promise sent for them.
-  if(ctx.apology && (ctx.excused || /\b(?:forgot|forget)\b/i.test(main)) && !/\[What you'll do/.test(main)){
+  if(ctx.apology && (ctx.excused || /\b(?:forgot|forget)\b/i.test(main) && log.some(c=>c.id!=="apology")) && !/\[What you'll do/.test(main)){
     main = main.replace(/^(\W*(?:i'm |i am )?(?:so |really )?sorry),\s+(?=i\b)/i, "$1 ").replace(/\b(I) (forgot|forget)(?=\s*(?:[.!?,]|$))/i, "$1 $2 [the thing]");
-    if(!/\b(?:that's on me|my fault|my bad|my mistake|i messed up|that was on me)\b/i.test(main)) main = endP(main.replace(/\s+$/,""))+" That's on me.";
-    if(!/\b(?:i'll|i will|i've set|i have set|i'm going to|i am going to|next time|from now on|going forward)\b/i.test(main)){ main = main+" [I've set a reminder] so it doesn't happen next time."; note("apology","","[I've set a reminder] so it doesn't happen next time"); }
+    // "That's on me" and the plan go right after the apology, before anything else (a question stays last)
+    const ss = splitSentences(main).map(x=>x.text.trim()).filter(Boolean);
+    const at = Math.max(0, ss.findIndex(x=>/\b(?:sorry|apologi[sz]e|my bad)\b/i.test(x)));
+    const add = [];
+    if(!/\b(?:that's on me|my fault|my bad|my mistake|i messed up|that was on me)\b/i.test(main)) add.push("That's on me.");
+    if(!/\b(?:i'll|i will|i've set|i have set|i'm going to|i am going to|next time|from now on|going forward)\b/i.test(main)){ add.push("[I've set a reminder] so it doesn't happen next time."); note("apology","","[I've set a reminder] so it doesn't happen next time"); }
+    if(add.length){ ss[at] = endP(ss[at]); ss.splice(at+1, 0, ...add); main = ss.join(" "); }
+  }
+  // the excuse on its own, with no apology ("I can't help it, I'm wired that way"): say it's hard, and share the fix
+  if(ctx.excused && !ctx.apology && !/[A-Za-z]/.test(main.replace(/\[[^\]]*\]/g,""))){
+    main = "This part is hard for me. Could we find [one thing that would help, like a shared reminder]?"; ctx.noAsk = true;
+  } else if(ctx.excused && !ctx.apology && !/\b(?:could you|would you|can you|can we|could we|will you)\b/i.test(main)){
+    main = endP(main.replace(/\s+$/,""))+" This part is hard for me. Could we find [one thing that would help, like a shared reminder]?"; ctx.noAsk = true;
   }
   // an apology after a miss: a place to say what you'll do about it, never a demand
   if(ctx.apology && log.some(c=>c.id!=="apology") && /\b(?:forgot|forget|missed|late|broke|lost|didn't|messed up|dropped)\b/i.test(main) && !/\[What you'll do|so it doesn't happen next time/.test(main)){
@@ -1916,7 +1928,8 @@ function rewrite(an, opts){
     const tail = pattern ? " going forward" : hadTime ? "" : " by [a time]";
     // when the message already says what it's about ("correcting me with the baby"), the ask can say it too
     const inferred = inferAsk(an.norm);
-    const ask = inferred || "Could you "+ASK_PROMPT+tail+"?";
+    // at work, after a miss said as a fact: one owner, by one day
+    const ask = (opts.work || WORK_REL.includes(opts.rel)) && log.some(c=>c.id==="impact") ? "Could we agree one owner for it by [a day]?" : inferred || "Could you "+ASK_PROMPT+tail+"?";
     main = main.replace(/([^.!?…\s])\s*$/,"$1.").replace(/\s*$/," "+ask);
     note("addask","(no ask)",ask);
   }
@@ -2085,7 +2098,7 @@ function rewriteSentence(s, ctx, note, an, W){
     const EX = new RegExp(FBY.excuse.re.source, "i");
     if(EX.test(t)){
       const hit = (t.match(EX)||[""])[0];
-      const left = t.replace(new RegExp("[,;:–—-]?\\s*(?:and |but |so )?(?:i mean,? |honestly,? )?"+EX.source+"[^.!?]*", "i"), "").replace(/^[\s,;:]+/,"").trim();
+      const left = t.replace(new RegExp("[,;:–—-]?\\s*(?:and |but |so )?(?:i mean,? |honestly,? )?(?:"+EX.source+")[^.!?]*", "gi"), "").replace(/^[\s,;:]+/,"").trim();
       note("excuse", hit, "That's on me.");
       ctx.excused = true; ctx.critical = true;
       if(!/[A-Za-z]/.test(left)) return "";
@@ -2116,6 +2129,14 @@ function rewriteSentence(s, ctx, note, an, W){
       return (lead && !FILLER_ONLY.test(lead) ? endP(capFirst(lead))+" " : "")+rep;
     }
     if(dn) ctx.loadAsk = true;
+    // "It's always me who calls Mum": the load, said as how it's been lately
+    const am = t.match(/^(.*?)\b(?:it's|it is|it's been|it has been) (?:always|only ever|never anyone but) me (?:who|that) (.+?)([.!?]*)$/i);
+    if(am){
+      const lead = (am[1]||"").replace(/[,\s]+$/,"");
+      note("absolute", "always me", "lately, I've been the one");
+      ctx.critical = true; ctx.loadAsk = true;
+      return (lead && !FILLER_ONLY.test(lead) ? endP(capFirst(lead))+" " : "")+"Lately, I've been the one who "+am[2].replace(/\s+$/,"")+" most of the time.";
+    }
   }
   m = t.match(/^(?:and |honestly,? )?i (?:have to|always|end up|got to|gotta|'m left to) (?:do(?:ing)?|clean(?:ing)?|handle|handling) everything(?: around here| at home| in this house| myself| alone)?[.!]*$/i);
   if(m){ const rep = "I'm feeling stretched thin. Could you take on [one specific thing] by [a time]?"; note("guilt", t.replace(/[.!?]+$/,""), rep); ctx.converted = true; return rep; }
@@ -2134,7 +2155,7 @@ function rewriteSentence(s, ctx, note, an, W){
   if(m){ const rep = "I'd really like you to "+m[1].replace(/\s+$/,"")+". Could you let me know by [a time]?"; note("threat", t.replace(/[.!?]+$/,""), rep); ctx.converted = true; return rep; }
   m = t.match(/^why (is|are) (the [\w ]+?|my [\w ]+?|our [\w ]+?|your [\w ]+?) (?:still )?(?:such |so )?(?:a mess|messy|dirty|gross|a disaster|a pigsty)[?!.]*$/i);
   if(m){ const x = m[2].replace(/^your /i,"your ").toLowerCase(); const rep = "I noticed "+x+" "+m[1].toLowerCase()+" still messy. Could you tidy "+x+" by [a time]?"; note("critq", t.replace(/[.!?]+$/,""), rep); ctx.converted = true; return rep; }
-  if(["label","absolute","critic","compare","madefeel","past","again","passive","sarcasm","disclaim","blameq"].some(id=>an.found[id])) ctx.critical = true;
+  if(["label","absolute","critic","compare","madefeel","past","again","passive","sarcasm","disclaim","blameq","count"].some(id=>an.found[id])) ctx.critical = true;
   if(/^(?:obviously,? |clearly,? )?you (?:didn't|did not|forgot|left|missed|broke|lost|ignored)\b/i.test(t)) ctx.critical = true;
   m = t.match(/^(?:obviously,? |clearly,? |so )?you (?:didn't|did not|never) (?:even )?read (it|my (?:message|text|email|note)|the (?:message|text|email|note))[.!?]*$/i);
   if(m){ const rep="Did you get a chance to read "+m[1]+"? Here's the short version: [the main point]."; if(/obviously|clearly/i.test(t)) note("minim", (t.match(/obviously|clearly/i)||[""])[0].toLowerCase(), ""); note("critq", t.replace(/[.!?]+$/,""), rep); return rep; }
@@ -2843,14 +2864,14 @@ const SELF_MEANT = {
   apd:{as:"someone with auditory processing differences", d:"if your reply seemed off-topic to them, you may have been answering what you thought you heard. It's worth checking the words arrived."},
   dld:{as:"someone with DLD", d:"your words may be simpler or vaguer than the thought behind them. Word-finding can be hard.",
     vstd:"you may have used the vague word in place of a specific one you couldn't find.", vemo:"you may have used the vague word in place of a specific one you couldn't find."},
-  tourette:{as:"someone with Tourette", d:"if a sound or gesture came with the words, it may have been a tic, not a comment. It's okay to say so."},
+  tourette:{as:"someone with Tourette", d:"you may have had a tic come with the words, a sound or a movement that wasn't a comment. It's okay to say so."},
   alex:{as:"someone with alexithymia", d:"you may not have a label for the feeling behind this. Your actions may say more than the words.",
     minimal:"you may have given the most accurate answer you have right now.", critic:"a feeling may be showing up in your words as a complaint about a fact."},
   hsp:{as:"a highly sensitive person", d:"you probably worded it carefully. Many highly sensitive people know exactly how words can land."},
   anxiety:{as:"someone with anxiety", d:"you may have worded it to avoid conflict. There may be worry underneath the words.",
     reassure:"you meant it as a real question, and you need a plain answer.", long:"you may be over-explaining, as insurance against being misunderstood.",
     ellipsis:"you meant hesitation, not hostility.", hedge:"you meant caution, not evasion."},
-  trauma:{as:"someone with a trauma history", d:"if it came out defensive, that may have been an alarm going off, not your position."},
+  trauma:{as:"someone with a trauma history", d:"you may have had an alarm go off, if it came out defensive. That isn't the same as your position."},
   ocd:{as:"someone with OCD", d:"your precision, or asking again, may come from a need for certainty, not pickiness or distrust.",
     reassure:"the doubt may be doing the asking, not distrust of them.", vstd:"you may want precision out of a need for certainty, not pickiness."}
 };
@@ -3109,7 +3130,7 @@ function verdict(an, sc, rw, opts){
   const sorry = an.apology && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
-  const work = !!(opts && opts.work);
+  const work = !!(opts && (opts.work || WORK_REL.includes(opts.rel)));
   if((an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy") && work && !an.found.legal && !an.found.kidsfirst && !an.found.violent)
     return {id:"fight", work:true, text: soft ? "This may land as blame or an order. Try the version below." : "This may land as blame or an order. The notes below show why."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")

@@ -195,6 +195,16 @@ const M = [
   ['family', 'Please call your parents back today. They asked twice.', 'CS'],
   ['roommate', 'Can you send your share of the rent by the 1st?', 'CS'],
   ['family', 'Thank you for helping my mother with her forms.', 'C'],
+  // ---------------- testers, round 4: team leads, excuses, a carer's group message, a reply with a proposal
+  ['manager', 'Guys, this is the third time the handover was missed. Sort it out.', 'SH'],
+  ['coworker', 'This is the second time the report was late.', 'S'],
+  ['manager', 'Folks, timesheets were missed again!', 'S'],
+  ['partner', 'Sorry, I forgot again. You know how I am.', 'S'],
+  ['friend', 'Sorry I was late, that’s just how I am.', 'S'],
+  ['roommate', 'I can’t help it, I’m wired that way.', 'S'],
+  ['family', 'I’m done doing everything for Dad while you two do nothing.', 'SH'],
+  ['family', 'It’s always me who calls Mum.', 'S'],
+  ['partner', 'ok. i said maybe because of work, not because of you. call sunday?', 'C'],
 ];
 
 const SWEAR = /\b(?:f+u+c+k\w*|f\*+\w*|fk\w*|fuk\w*|sh[i*]t\w*|bullsh\w*|damn\w*|hell|crap\w*|piss\w*|wtf|ffs|screw you|idiot|nightmare|lazy|selfish|useless|pathetic|slob|disappointment|terrible parent|last nerve|shut up|driving me crazy|can't stand|hate you|done with you)\b/i;
@@ -379,6 +389,26 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
     [x.main].concat(x.variants.map(v => v.text)).forEach(s => chk(!/\[one specific thing\] going forward/.test(s), 'raw blank in “' + m + '”: ' + s));
   });
   chk(!E.analyze('Sorry I’m late! Traffic was awful.', { channel: 'text' }).found.sorrybut, 'an apology with no blame is not flagged');
+}
+// ---------- round 4: a flagged phrase never stays in any version; work wording at work ----------
+{
+  const KEEP_OUT = ['excuse', 'count', 'hyper', 'stonewall'];
+  M.filter(m => /know how I am|just how I am|help it|third time|second time|done doing|always me|again!/.test(m[1])).forEach(([rel, t]) => {
+    const ch = rel === 'coworker' ? 'chat' : 'text';
+    const an = E.analyze(t, { channel: ch });
+    const work = rel === 'coworker' || rel === 'manager';
+    const rw = E.rewrite(an, { wirings: ['general'], channel: ch, rel, work });
+    const texts = [rw.main].concat(rw.variants.map(v => v.text));
+    KEEP_OUT.forEach(id => (an.found[id] || []).filter(Boolean).forEach(w => texts.forEach(x => chk(!x.toLowerCase().includes(w.toLowerCase().replace(/’/g, "'")), '“' + w + '” (' + id + ') kept in: ' + x))));
+    (an.found.absolute || []).filter(Boolean).forEach(w => chk(!rw.main.toLowerCase().includes(w.toLowerCase()), 'absolute “' + w + '” kept in: ' + rw.main));
+    if (work) texts.forEach(x => chk(!/\b(?:guys|folks)\b|not blaming anyone|I am not against you/i.test(x), 'work wording: ' + x));
+    if (/^Sorry/.test(t)) chk(/That's on me\./.test(rw.main), 'the apology owns it: ' + rw.main);
+  });
+  // the speaker's wiring is said to "you", the listener is "they"
+  chk(/^you /.test(E.meantSelf('adhd', ['excuse']).text) && /them/.test(E.meantSelf('adhd', ['excuse']).text), 'meantSelf ADHD + excuse: ' + E.meantSelf('adhd', ['excuse']).text);
+  // the "What it looks for" list: "Calm down" is dismissing; "Fine. Whatever." has its own gentler name
+  const lf = P.lookForHTML();
+  chk(!/Dismissing a feeling<\/b> <span class="lf-ex">\([^)]*Whatever/.test(lf) && /Brush-off, or quiet hurt<\/b> <span class="lf-ex">\(“Fine\. Whatever\.”/.test(lf), '“Fine. Whatever.” is listed as a brush-off, not as dismissing');
 }
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));

@@ -12,7 +12,12 @@
     "Use them" never overwrites a name someone already typed. (One small exception: the Lemonade Stand swaps
     its untouched example labels, "Me" and "Them", for the kept names, and says so.)
 
-  Stored as { v:1, people:[names], jobs:[{ name, owner?, f? }], at: timestamp, links:[tools that keep it up to date] }.
+  Stored as { v:1, people:[names], jobs:[{ name, owner?, f? }], at: timestamp, links:[tools that keep it up to date],
+  split?, nights?, kids? }.
+  The last three are optional, and only there when a tool set them (the Lemonade Stand does): split is the
+  share each person agreed, { name: percent } adding up to 100; nights is how many nights out of 14 someone
+  who lives here part of the time is here, { name: 1 to 13 }; kids is the names of the children. A code or a
+  household from before these existed simply has none of them.
   f is how often the job happens ('day', 'wkd' (weekdays), 'few', 'two', 'week', 'eow', 'month'), when a tool knows it, so a
   second phone shows "Each day" where the first one had it, not a default.
 
@@ -66,14 +71,40 @@
   }
   // how often a job happens: a short word like 'day' or 'week' (the tools know what each one means)
   function cleanFreq(f) { return typeof f === 'string' && /^[a-z]{2,8}$/.test(f) ? f : ''; }
+  // { name: number } for names in the household, numbers between lo and hi; null when there's nothing
+  function cleanMap(o, people, lo, hi) {
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return null;
+    var out = {}, any = false;
+    Object.keys(o).forEach(function (k) {
+      var n = findName(people, k), v = +o[k];
+      if (n && isFinite(v) && v >= lo && v <= hi) { out[n] = Math.round(v * 10) / 10; any = true; }
+    });
+    return any ? out : null;
+  }
+  function cleanExtras(raw, people, h) {
+    var split = cleanMap(raw.split, people, 0, 100);
+    if (split) { var t = 0; Object.keys(split).forEach(function (k) { t += split[k]; }); if (Math.abs(t - 100) > 0.5) split = null; }
+    var nights = cleanMap(raw.nights, people, 1, 13);
+    var kids = (Array.isArray(raw.kids) ? raw.kids : []).map(function (k) { return findName(people, k); }).filter(function (k, i, a) { return k && a.indexOf(k) === i; });
+    if (split) h.split = split;
+    if (nights) h.nights = nights;
+    if (kids.length) h.kids = kids;
+    return h;
+  }
   function normalize(raw) {
     if (!raw || typeof raw !== 'object') return null;
     var people = realNames(raw.people);
-    return {
+    return cleanExtras(raw, people, {
       v: 1, people: people, jobs: cleanJobs(raw.jobs, people),
       at: typeof raw.at === 'number' ? raw.at : Date.now(),
       links: (Array.isArray(raw.links) ? raw.links : []).filter(function (x) { return typeof x === 'string' && x.length < 40; }).slice(0, 20)
-    };
+    });
+  }
+  // the optional extras: given (even as null, to clear them) or else kept from what was there
+  function extras(data, old) {
+    var o = {};
+    ['split', 'nights', 'kids'].forEach(function (k) { o[k] = k in data ? data[k] : old[k]; });
+    return o;
   }
 
   function read() {
@@ -106,7 +137,8 @@
         return { name: o.name, owner: 'owner' in o ? o.owner : had[k] || '', f: cleanFreq(o.f) || hadF[k] || '' };
       });
     }
-    return write(normalize({ people: people, jobs: jobs, links: old.links }));
+    var ex = extras(data, old);
+    return write(normalize({ people: people, jobs: jobs, links: old.links, split: ex.split, nights: ex.nights, kids: ex.kids }));
   }
   // Add names and jobs to what is there, without taking anything away. A job's owner is updated when given.
   function merge(data) {
@@ -119,7 +151,10 @@
       jobs.forEach(function (x) { if (x.name.toLowerCase() === k) hit = x; });
       if (hit) { if (o.owner) hit.owner = o.owner; if (cleanFreq(o.f)) hit.f = o.f; } else jobs.push({ name: o.name, owner: o.owner, f: o.f });
     });
-    return write(normalize({ people: people, jobs: jobs, links: old.links }));
+    // a split, nights or children that come in take the place of what was kept; left out, what was kept stays
+    var kids = (old.kids || []).concat(Array.isArray(data.kids) ? data.kids : []);
+    var nights = {}; [old.nights, data.nights].forEach(function (m) { if (m && typeof m === 'object') Object.keys(m).forEach(function (k) { nights[k] = m[k]; }); });
+    return write(normalize({ people: people, jobs: jobs, links: old.links, split: data.split || old.split, nights: nights, kids: kids }));
   }
   function clear() {
     try { global.localStorage.removeItem(KEY); } catch (e) {}
@@ -193,11 +228,15 @@
     try { var a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return new TextDecoder().decode(a); }
     catch (e) { return decodeURIComponent(escape(bin)); }
   }
-  // The names and jobs as a code: from data ({ people, jobs }) or, left out, from the household kept here.
+  // The names and jobs as a code: from data ({ people, jobs, split?, nights?, kids? }) or, left out, from the household kept here.
   function toCode(data) {
     var d = normalize(data || read() || {});
     if (!d || (!d.people.length && !d.jobs.length)) return '';
-    return CODE + b64enc(JSON.stringify({ v: 1, people: d.people, jobs: d.jobs }));
+    var o = { v: 1, people: d.people, jobs: d.jobs };
+    if (d.split) o.split = d.split;
+    if (d.nights) o.nights = d.nights;
+    if (d.kids) o.kids = d.kids;
+    return CODE + b64enc(JSON.stringify(o));
   }
   // { people, jobs } from a code (any text around it is fine) or from the JSON in a file; null if it isn't one.
   function fromCode(text) {
@@ -207,7 +246,12 @@
     else if ((m = /TOLHOME1:\s*([A-Za-z0-9+\/=_-]+)/i.exec(s))) { try { raw = JSON.parse(b64dec(m[1])); } catch (e) { raw = null; } }
     if (!raw || typeof raw !== 'object') return null;
     var d = normalize(raw);
-    return d && (d.people.length || d.jobs.length) ? { people: d.people, jobs: d.jobs } : null;
+    if (!d || (!d.people.length && !d.jobs.length)) return null;
+    var out = { people: d.people, jobs: d.jobs };
+    if (d.split) out.split = d.split;
+    if (d.nights) out.nights = d.nights;
+    if (d.kids) out.kids = d.kids;
+    return out;
   }
   // Adds a code's names and jobs to the household kept on this device. Only for a button that says so.
   function importCode(text) { var d = fromCode(text); return d ? merge(d) : null; }
@@ -359,7 +403,7 @@
     var sum = el('summary', 'tol-hh-keep-l', opts.label || 'Household names on another device?');
     sum.style.cursor = 'pointer';
     wrap.appendChild(sum);
-    var intro = el('p', 'tol-hh-text', 'Send the names and jobs, with how often each one happens (never any hours), as a household names code, and paste it on the other device. Nothing is uploaded: you pass it between you.');
+    var intro = el('p', 'tol-hh-text', 'Send the names and jobs, with how often each one happens (never any hours), as a household names code, and paste it on the other device. A split you agreed, the nights someone is here and who’s a child go with it, where a tool has them. Nothing is uploaded: you pass it between you.');
     intro.style.margin = '.3rem 0 .5rem';
     var row = el('div', 'tol-hh-btns');
     var cp = el('button', 'tol-hh-btn', 'Copy the household names code'); cp.type = 'button';

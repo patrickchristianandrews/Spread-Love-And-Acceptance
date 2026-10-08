@@ -101,7 +101,7 @@
     sections: [
       {
         id: 'audit', type: 'table', title: 'Part A: Who did what, this week',
-        intro: 'A plain log kept for 5–7 days, written down before anyone decides what it means. Add one row for each task noticed or done, including the invisible ones: remembering, planning, booking, forms. Log what happened, not what should have happened. "Asked for" only means someone mentioned it first; it doesn\'t make the person who did it a helper, and the job counts just the same.',
+        intro: 'A plain log kept for 5–7 days, written down before anyone decides what it means. Add one row for each task noticed or done, including the invisible ones: remembering, planning, booking, forms. Time spent only thinking, noticing or planning counts too: log it with "Thinking and planning". Log what happened, not what should have happened. "Asked for" only means someone mentioned it first; it doesn\'t make the person who did it a helper, and the job counts just the same.',
         library: 'task',
         addLabel: 'Add a row',
         columns: [
@@ -109,15 +109,16 @@
           { id: 'task', label: 'Task noticed or done', type: 'text', w: 3 },
           { id: 'who', label: 'Who did it', type: 'person', both: true, w: 1.3 },
           { id: 'minutes', label: 'Minutes (rough)', type: 'number', w: 0.9, min: 0, max: 1440, step: '5', rangeNote: 'Minutes run from 0 to 1,440 (a whole day) in one row. Split a longer job into one row per day.' },
-          { id: 'how', label: 'How it came up: asked for, or noticed?', type: 'select', options: ['Asked for', 'Noticed and handled'], w: 1.7 }
+          // "Thinking and planning": the noticing, remembering and planning time, with no doing (the Lemonade Stand's thinking work)
+          { id: 'how', label: 'How it came up: asked for, noticed, or thinking time?', type: 'select', options: ['Asked for', 'Noticed and handled', 'Thinking and planning'], w: 1.7 }
         ],
         defaultRows: DAYS.map(function (d) { return { day: d }; })
       },
       {
         id: 'totals', type: 'computed', title: "This week's totals",
         compute: function (ctx) {
-          var people = ctx.people(), t = {}, noticed = {}, bad = [];
-          people.forEach(function (p) { t[p] = 0; noticed[p] = 0; });
+          var people = ctx.people(), t = {}, noticed = {}, thinking = {}, bad = [];
+          people.forEach(function (p) { t[p] = 0; noticed[p] = 0; thinking[p] = 0; });
           ctx.rows('audit').forEach(function (r) {
             var m = parseFloat(r.minutes);
             if (outOfRange(r.minutes, 0, 1440)) { bad.push(r.task || 'a row'); return; }
@@ -127,7 +128,8 @@
             else if (t.hasOwnProperty(r.who)) share[r.who] = m;
             Object.keys(share).forEach(function (p) {
               t[p] += share[p];
-              if (r.how === 'Noticed and handled') noticed[p] += share[p];
+              if (r.how === 'Noticed and handled' || r.how === 'Thinking and planning') noticed[p] += share[p];
+              if (r.how === 'Thinking and planning') thinking[p] += share[p];
             });
           });
           var total = people.reduce(function (a, p) { return a + t[p]; }, 0);
@@ -150,7 +152,7 @@
           // with more, 1 - (the share of time that would have to change hands) / (the most it could be).
           var balance = balanceOf(people.map(function (p) { return t[p]; }), tgt ? tgt.t : null);
           var out = people.map(function (p) {
-            return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes (' + fmt(pct[p], 0) + '%), of which ' + fmt(noticed[p], 0) + ' noticed and handled without being asked' };
+            return { label: ctx.name(p), value: fmt(t[p], 0) + ' minutes (' + fmt(pct[p], 0) + '%), of which ' + fmt(noticed[p], 0) + ' noticed and handled without being asked' + (thinking[p] ? ' (' + fmt(thinking[p], 0) + ' of them thinking and planning)' : '') };
           });
           out.push({ label: 'Workload balance score', value: fmt(balance, 2), note: 'Enter this as the workload balance number in CALC-01. It describes how the logged work was split this week, not anyone in it.' + (tgt ? ' It is read against ' + tgt.label + ', the same way the Lemonade Stand reads it.' : people.length > 2 ? ' With more than two people, it is 1 minus the share of the week\'s time that would have to change hands for an even split, divided by the most that could ever be.' : '') });
           if (tgt) {

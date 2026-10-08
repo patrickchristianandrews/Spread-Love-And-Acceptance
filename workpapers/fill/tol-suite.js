@@ -147,9 +147,10 @@
     return ok;
   }
   // the same sheet from two devices: what is new on the other one is added, nothing here is overwritten
-  function mergeSheet(x, en) {
-    var sc = schema(x.workpaper), got = 0;
-    Object.keys(en.state.values).forEach(function (k) { var v = en.state.values[k]; if (v !== '' && v != null && v !== false && WPK.isBlank(x.state.values[k])) { x.state.values[k] = v; got++; } });
+  // detail: return { got, rows, days, values } instead of the count
+  function mergeSheet(x, en, detail) {
+    var sc = schema(x.workpaper), got = 0, rowsIn = 0, days = {}, vals = 0;
+    Object.keys(en.state.values).forEach(function (k) { var v = en.state.values[k]; if (v !== '' && v != null && v !== false && WPK.isBlank(x.state.values[k])) { x.state.values[k] = v; got++; if (!/^partner[A-H]$|^peopleCount$|^roadPeople$/.test(k)) vals++; } });
     sc.sections.forEach(function (sec) {
       if (sec.type !== 'table') return;
       var rows = x.state.tables[sec.id] || (x.state.tables[sec.id] = []), have = {};
@@ -158,15 +159,30 @@
         if (have[rowKeyOf(r, sec)]) return;
         if (sec.personDays) {
           var hit = rows.filter(function (y) { return y && y.day === r.day && y.who === r.who; })[0];
-          if (hit) { sec.columns.forEach(function (c) { if (!c.prefill && WPK.isBlank(hit[c.id]) && !WPK.isBlank(r[c.id])) { hit[c.id] = r[c.id]; got++; } }); return; }
+          if (hit) { sec.columns.forEach(function (c) { if (!c.prefill && WPK.isBlank(hit[c.id]) && !WPK.isBlank(r[c.id])) { hit[c.id] = r[c.id]; got++; days[r.day + '|' + r.who] = 1; } }); return; }
         }
         var slot = rows.filter(function (y) { return y && WPK.rowIsEmpty(sec, y) && !sec.personDays; })[0];
         if (slot) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else rows.push(JSON.parse(JSON.stringify(r)));
         have[rowKeyOf(r, sec)] = 1; got++;
+        if (sec.personDays) days[r.day + '|' + r.who] = 1; else rowsIn++;
       });
     });
-    return got;
+    return detail ? { got: got, rows: rowsIn, days: Object.keys(days).length, values: vals } : got;
   }
+  // "7 rows", "1 day", "3 answers": what a merge added to a sheet
+  function mergeCount(mi) {
+    var bits = [];
+    if (mi.rows) bits.push(mi.rows + (mi.rows === 1 ? ' row' : ' rows'));
+    if (mi.days) bits.push(mi.days + (mi.days === 1 ? ' day' : ' days'));
+    if (mi.values || !bits.length) bits.push((mi.values || mi.got) + ((mi.values || mi.got) === 1 ? ' answer' : ' answers'));
+    return bits.join(', ');
+  }
+  // whose answers came in: "Jordan's", from the file, or the one name on it that isn't on this device's first place
+  function mergedWho(en) {
+    var by = en.from && en.from.by ? String(en.from.by).trim() : '';
+    return by ? by + '\u2019s' : 'the new';
+  }
+  function andJoin(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
   function filled(en) { return SP.answers(en) > 0; }
   // WP-02 and WP-11 are filled in by each person about themselves: on a shared road, one set per person.
   function perPerson(code) { var sc = schema(code); return !isSolo() && !!(sc && sc.perPerson); }
@@ -282,7 +298,7 @@
     if (!(nm0 && nm0.clash.length)) {
       var twin = null, inside = false;
       S.stops.forEach(function (st) { st.entries.forEach(function (x) { if (en.sid && x.sid === en.sid) twin = x; else if (x.workpaper === en.workpaper && filled(x) && contained(en, x)) inside = true; }); });
-      if (twin) { if (mergeSheet(twin, en)) en.mergedInto = twin; return false; }
+      if (twin) { var mi = mergeSheet(twin, en, true); if (mi.got) { en.mergedInto = twin; en.mergeInfo = mi; } return false; }
       if (inside) return false;
     }
     if (!en.sid) en.sid = newSid();
@@ -793,7 +809,7 @@
   // "WP-03"; "high load (0.75)", not "0.75"). The codes stay on wider screens, in the PDFs and the files.
   function phone() { return !!(global.matchMedia && global.matchMedia('(max-width: 640px)').matches); }
   function codeWord(code) { return phone() ? SP.nameOf(code) : code; }
-  function loadWords(x) { return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'fairly high load' : x >= 0.3 ? 'medium load' : x >= 0.15 ? 'light load' : 'very light load'; }
+  function loadWords(x) { x = Math.round(x * 100 + 1e-7) / 100; return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'medium load, on the heavier side' : x >= 0.3 ? 'medium load, on the lighter side' : x >= 0.15 ? 'light load' : 'very light load'; }
   /* ------------------------------------------------------------ the whole road as a link (#suite=…) */
   // "Send it to my partner as a link": the progress file, squeezed (deflate) where the browser can, after
   // the "#" of a link to this page. A browser never sends that part to any website. Opening the link
@@ -802,7 +818,21 @@
   function b64u(bytes) { var bin = ''; for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function unb64u(str) { var t = String(str || '').replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; var bin = atob(t), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
   function suiteBase() { return global.location.origin + global.location.pathname + SUITE_HASH; }
-  function suiteJson() { var o = snapshot(true); o.saved = String(o.saved || "").slice(0, 10); return JSON.stringify(o); }
+  function suiteJson() { var o = snapshot(true, !linkPrivate); o.saved = String(o.saved || "").slice(0, 10); return JSON.stringify(o); }
+  // Personal notes stay out of a link unless the person ticks "Include private notes": the note on How much
+  // are you carrying?, and the Calm-Down Kit apart from the pause plan you agree together.
+  var linkPrivate = false;
+  var KIT_SHARED = { name: 1, date: 1, planWord: 1, planMin: 1, planBack: 1, planFirst: 1 };
+  function personalOut(code, st) {
+    if (code !== 'WP-02' && code !== 'WP-11') return st;
+    var out = JSON.parse(JSON.stringify(st));
+    if (code === 'WP-02') delete out.values.note;
+    else {
+      Object.keys(out.values).forEach(function (k) { if (!KIT_SHARED[k]) delete out.values[k]; });
+      out.tables = {};
+    }
+    return out;
+  }
   function suiteLinkPlain() { var j = suiteJson(); return { sig: j, url: suiteBase() + 'j' + b64u(new TextEncoder().encode(j)) }; }
   // the squeezed link, made a moment after each change, so it is ready by the time someone taps Send
   function suiteLinkSoon() {
@@ -829,6 +859,7 @@
   function takeSuiteText(text, where) {
     var d = null; try { d = JSON.parse(text); } catch (e) { d = null; }
     if (!d || d.format !== SUITE_FORMAT || !Array.isArray(d.entries)) return false;
+    if (where === 'link') turnWait = d;
     var f; try { f = new File([text], 'suite-from-a-link.json', { type: 'application/json' }); } catch (e) { f = new Blob([text], { type: 'application/json' }); f.name = 'suite-from-a-link.json'; }
     takeFiles([f]);
     return true;
@@ -837,7 +868,48 @@
     var hs = global.location.hash || '';
     if (!/^#suite=/.test(hs)) return;
     try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
-    suiteFromHash(hs, function (t) { if (!t || !takeSuiteText(t)) say('That link looks incomplete. Ask for it again, or ask for the progress file instead.'); });
+    suiteFromHash(hs, function (t) { if (!t || !takeSuiteText(t, 'link')) say('That link looks incomplete. Ask for it again, or ask for the progress file instead.'); });
+  }
+  // "Your turn": someone's road opened from their link. At the top: what they shared, which sheets are
+  // yours to fill in, and a way to send it back. Shown once the sheets are in.
+  var turnWait = null;
+  function yourTurn(d) {
+    var old = $('ws-turn'); if (old) old.remove();
+    if (!d || !S.path) return;
+    var by = String(d.by || '').trim(), byK = SP.fold(by);
+    var shared = {}, mine = [], seen = {};
+    (d.entries || []).forEach(function (x) { if (x && x.workpaper) shared[x.workpaper] = 1; });
+    var me = S.names.map(function (x, i) { return i; }).filter(function (i) { return String(S.names[i] || '').trim() && SP.fold(S.names[i]) !== byK && !isChild(i); });
+    S.stops.forEach(function (st) {
+      if (seen[st.wp]) return;
+      if (perPerson(st.wp)) {
+        me.forEach(function (i) { if (!st.entries.some(function (en) { return personOf(en) === i && filled(en); })) { seen[st.wp] = 1; mine.push({ st: st, person: i, label: SP.nameOf(st.wp) + (me.length > 1 ? ' (' + whoLabel(i) + ')' : '') }); } });
+      } else if (st.wp === 'WP-01' || st.wp === 'WP-13') { seen[st.wp] = 1; mine.push({ st: st, label: SP.nameOf(st.wp) + ': your own rows' }); }
+    });
+    var names = Object.keys(shared).map(function (c) { return SP.nameOf(c); });
+    var box = h('div', { className: 'ws-lemon-offer ws-turn tol-plain no-bubble', id: 'ws-turn', role: 'group', 'aria-labelledby': 'ws-turn-h', tabindex: '-1' });
+    box.appendChild(h('p', { id: 'ws-turn-h' }, [h('strong', { text: 'Your turn' + (me.length === 1 ? ', ' + whoLabel(me[0]) : '') })]));
+    box.appendChild(h('p', { text: (by ? by + ' shared' : 'This link brought in') + ' ' + (names.length ? andJoin(names) : 'their road') + '. It\u2019s on this device now, and nothing was sent anywhere.' }));
+    if (mine.length) {
+      box.appendChild(h('p', { text: 'Yours to fill in:' }));
+      var ul = h('ul', { className: 'ws-turn-list' });
+      mine.slice(0, 6).forEach(function (m) { ul.appendChild(h('li', null, [h('button', { type: 'button', className: 'ws-link', 'data-turn-open': m.st.key, 'data-turn-person': m.person != null ? String(m.person) : '', text: m.label })])); });
+      box.appendChild(ul);
+    }
+    box.appendChild(h('div', { className: 'ws-lemon-offer-btns' }, [
+      h('button', { type: 'button', className: 'ws-go', 'data-turn': 'send', text: 'Send it back' + (by ? ' to ' + by : '') }),
+      h('button', { type: 'button', className: 'wpf-add', 'data-turn': 'close', text: 'Close' })]));
+    box.appendChild(h('p', { className: 'ws-sub', text: 'Fill in your parts first, then send it back. The link carries the whole road, with your answers added.' }));
+    box.addEventListener('click', function (e) {
+      var o = e.target.closest('[data-turn-open]');
+      if (o) { var pa = o.getAttribute('data-turn-person'); openSheet(o.getAttribute('data-turn-open'), '', pa === '' ? null : pa); return; }
+      var b = e.target.closest('[data-turn]'); if (!b) return;
+      if (b.getAttribute('data-turn') === 'close') { box.remove(); return; }
+      var send = $('ws-send'); if (send) send.click();
+    });
+    var step = $('ws-step-choose'), sub = step && step.querySelector('.ws-sub');
+    if (sub) sub.parentNode.insertBefore(box, sub.nextSibling); else if (step) step.appendChild(box);
+    setTimeout(function () { if (box.scrollIntoView) box.scrollIntoView({ block: 'center' }); box.focus({ preventScroll: true }); }, 80);
   }
   // Step 4, without a file: a link or code pasted in (a shared list or week, a whole road, a Lemonade Stand)
   function pasteIn() {
@@ -926,7 +998,7 @@
       Object.keys(j.t).forEach(function (who) {
         var c = codeOf(who); if (!c) return;
         var mins = j.t[who] * LEMON_FREQ[freqOf(j, who)];
-        if (mins >= 1) { sides[c] = 1; push(j.n + ' (noticing and planning)', c, mins, 'Noticed and handled'); }
+        if (mins >= 1) { sides[c] = 1; push(j.n + ' (noticing and planning)', c, mins, 'Thinking and planning'); }
       });
     });
     var sideNames = Object.keys(sides).map(function (c) { return whoLabel(WPK.CODES.indexOf(c)); });
@@ -951,7 +1023,7 @@
     var owner = {}; d.own.forEach(function (o) { if (o.w) owner[SP.fold(o.n)] = o.w; });
     var seen = {}, jobs = [];
     d.jobs.concat(d.own.map(function (o) { return { n: o.n, f: 'week' }; })).forEach(function (j) {
-      var k = SP.fold(j.n); if (seen[k]) return; seen[k] = 1;
+      var k = SP.fold(j.n), jk = WPK.jobKey(j.n); if (seen[jk]) return; seen[jk] = 1;
       var r = { task: j.n, freq: LEMON_OFTEN[freqMain(j)] || 'Weekly' }, c = owner[k] ? codeOf(owner[k]) : '';
       if (c) r.r = c;
       jobs.push(r);
@@ -961,7 +1033,7 @@
       if (h3) {
         var t3 = h3.en.state.tables.treaty || (h3.en.state.tables.treaty = []), sec3 = schema('WP-03').sections.filter(function (x) { return x.id === 'treaty'; })[0], nNew = 0, nSet = 0;
         jobs.forEach(function (r) {
-          var hit = t3.filter(function (x) { return x && SP.fold(x.task) === SP.fold(r.task); })[0];
+          var hit = t3.filter(function (x) { return x && x.task && WPK.jobKey(x.task) === WPK.jobKey(r.task); })[0];
           if (!hit) { var slot = t3.filter(function (x) { return x && WPK.rowIsEmpty(sec3, x); })[0]; if (slot) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else t3.push(r); nNew++; return; }
           if (r.r && !hit.r) { hit.r = r.r; nSet++; }
           if (r.freq && !hit.freq) hit.freq = r.freq;
@@ -1026,6 +1098,7 @@
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-lemon-offer]'); if (!b || !lemonWait) return;
       var w = lemonWait; lemonOffer(null);
+      standWait(null);
       if (b.getAttribute('data-lemon-offer') === 'no') { say('Not brought in. To bring it in later, open the link again, or paste the code under “Bring in our Lemonade Stand”.'); return; }
       if (!S.path) { setPath(lemonRoad(w.d), null); changed(); }
       var msg = lemonBring(w.d, w.from), det = $('ws-lemon'), note = $('ws-lemon-note');
@@ -1038,12 +1111,21 @@
   }
   // …/suite.html#stand=LEMON1:… ("Use this in my Workpaper Suite" on the stand): read here, on this device,
   // then the address is tidied straight away so the stand doesn't stay in the address bar or the history.
+  // A stand still waiting for "Bring it in" or "Not now" is kept for this tab only (sessionStorage), so a
+  // reload doesn't lose the offer. It goes as soon as either is pressed, or the tab is closed.
+  var STAND_WAIT = 'tol-suite-stand-wait';
+  function standWait(hs) {
+    try { if (hs) global.sessionStorage.setItem(STAND_WAIT, hs); else global.sessionStorage.removeItem(STAND_WAIT); } catch (e) {}
+  }
   function readStandHash() {
     var hs = global.location.hash || '';
-    if (!/^#stand=/.test(hs)) return;
+    if (!/^#stand=/.test(hs)) {
+      try { hs = global.sessionStorage.getItem(STAND_WAIT) || ''; } catch (e) { hs = ''; }
+      if (!/^#stand=/.test(hs)) return;
+    } else standWait(hs);
     try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
     lemonRead(hs, function (d) {
-      if (!d) { say(LEMON_HOWTO); return; }
+      if (!d) { standWait(null); say(LEMON_HOWTO); return; }
       lemonOffer(d, { by: d.by, saved: WPK.today(), file: 'Lemonade Stand link' });
     });
   }
@@ -1083,9 +1165,9 @@
     });
     return out || st;
   }
-  function snapshot(forFile) {
+  function snapshot(forFile, noPersonal) {
     var entries = [];
-    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, sid: en.sid || undefined, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? shareable(en) : en.state }); }); });
+    S.stops.forEach(function (st) { st.entries.forEach(function (en) { if (filled(en) || en.label) entries.push({ workpaper: en.workpaper, label: en.label, sid: en.sid || undefined, stop: st.key, person: typeof en.person === 'number' ? en.person : undefined, from: en.from || undefined, state: forFile ? (noPersonal ? personalOut(en.workpaper, shareable(en)) : shareable(en)) : en.state }); }); });
     var out = { format: SUITE_FORMAT, version: 1, path: S.path ? S.path.id : null, names: S.names.slice(), saved: new Date().toISOString(), entries: entries };
     var by = deviceOwner(); if (by) out.by = by;
     if (kidsOn()) { kidsFit(); if (S.kids.some(Boolean)) out.kids = S.kids.slice(); }
@@ -1244,7 +1326,7 @@
         var a = SP.answers(en), label = en.label || entryDay(en, k);
         var btn = h('button', { type: 'button', className: 'ws-sheet-btn' + (a ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': en.id, 'data-person': String(i) }, [
           h('span', { className: 'ws-sheet-label', text: a ? label : 'Keep going: ' + label }),
-          h('span', { className: 'ws-sheet-meta', text: a ? a + (a === 1 ? ' answer' : ' answers') + (st.wp === 'WP-02' && SP.metric(en) != null ? ' · ' + (phone() ? loadWords(SP.metric(en)) + ' (' + Math.round(SP.metric(en) * 20) + ' of 20)' : (Math.round(SP.metric(en) * 100 + 1e-7) / 100).toFixed(2)) : '') : '✎' })
+          h('span', { className: 'ws-sheet-meta', text: a ? a + (a === 1 ? ' answer' : ' answers') + (st.wp === 'WP-02' && SP.metric(en) != null ? ' · ' + loadWords(SP.metric(en)) + ' (' + Math.round(SP.metric(en) * 20) + ' of 20 points)' : '') : '✎' })
         ]);
         btn.setAttribute('aria-label', (a ? 'Open ' : 'Fill in ') + whoLabel(i) + '\u2019s ' + SP.nameOf(st.wp) + ', ' + label);
         list.appendChild(btn);
@@ -1335,10 +1417,10 @@
       return theirs.length ? SP.metric(theirs[theirs.length - 1]) : null;
     });
     var missing = who.filter(function (i, k) { return latest[k] == null; });
-    if (missing.length === who.length) return 'The shared average (the stress number in CALC-01) appears here once everyone has filled in their own.';
+    if (missing.length === who.length) return 'The shared average appears here once everyone has filled in their own.';
     if (missing.length) return 'Shared average: waiting on ' + missing.map(whoLabel).join(', ') + '. It is never worked out while anyone\u2019s is missing.';
     var avg = latest.reduce(function (a, b) { return a + b; }, 0) / latest.length;
-    return 'Shared average of everyone\u2019s latest: ' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ' (both in)' : ' (all ' + latest.length + ' in)') + '. That is the stress number for CALC-01.';
+    return 'Shared average of everyone\u2019s latest: ' + loadWords(avg) + ' (' + (Math.round(avg * 100 + 1e-7) / 100).toFixed(2) + (latest.length === 2 ? ', both in)' : ', all ' + latest.length + ' in)') + '.';
   }
 
   // Week by week: this road's own plan, with its workpapers, reading and a small practice
@@ -1527,15 +1609,39 @@
     S.removed = null;
     app = new WPK.App(root, sc, { state: en.state, statusEl: $('ws-sheet-status'), onChange: onSheetChange, fixedPeople: true, personLabel: roleHeading, road: S.path.sheetRoad || S.path.id,
       // "Share this week" / "Open a shared week" (and list, and score): a partner's link lands on this same sheet
-      canShare: !isSolo() && !!sc.share, takeShared: suiteTakeShared });
+      canShare: !isSolo() && !!sc.share, takeShared: suiteTakeShared, readOnly: othersOwn(en) && !en.unlocked });
     if (sharedFor && sharedFor.wp === st.wp) { app.sharedIn = sharedFor; sharedFor = null; }
     app.render();
+    readOnlyNote(en, root);
     var sheet = $('ws-sheet');
     sheet.hidden = false;
     document.documentElement.classList.add('ws-locked');
     requestAnimationFrame(function () { sheet.classList.add('is-in'); });
     sheet.querySelector('.ws-sheet-scroll').scrollTop = 0;
     $('ws-sheet-title').focus();
+  }
+
+  // Someone else's own sheet (a load score, a calm-down kit) that came in from their file or link: it is
+  // theirs to change, so it opens read-only here. "This is mine" unlocks it (the same person's other device).
+  function othersOwn(en) {
+    if (!perPerson(en.workpaper) || !en.from || !en.from.by) return false;
+    var p = personOf(en), by = SP.fold(en.from.by);
+    if (p == null || SP.fold(whoLabel(p)) !== by) return false;
+    return SP.fold(deviceOwner()) !== by;
+  }
+  function readOnlyNote(en, root) {
+    var old = $('ws-readonly'); if (old) old.remove();
+    if (!othersOwn(en) || en.unlocked) return;
+    var who = whoLabel(personOf(en));
+    var box = h('div', { className: 'ws-readonly tol-plain no-bubble', id: 'ws-readonly', role: 'note' }, [
+      h('p', { text: 'This is ' + who + '\u2019s own sheet, from their link or file, so it is read-only here. Only ' + who + ' changes it, on their own device.' }),
+      h('button', { type: 'button', className: 'wpf-add', text: 'This is mine: let me change it' })]);
+    box.querySelector('button').addEventListener('click', function () {
+      en.unlocked = true;
+      app.opts.readOnly = false; app.render(); box.remove();
+      var f = root.querySelector('input, select, textarea'); if (f) f.focus();
+    });
+    root.parentNode.insertBefore(box, root);
   }
 
   // A name typed on a sheet becomes that person's name on the road too.
@@ -1725,12 +1831,12 @@
   function takeFiles(files) {
     files = Array.prototype.slice.call(files || []);
     if (!files.length) return;
-    var loaded = [], problems = [], dupes = 0, hold = [];
+    var loaded = [], problems = [], dupes = 0, hold = [], merged = [];
     nameAsks = [];
     function put(en, road, names) {
       if (differentRoad(road)) { hold.push({ en: en, road: road, names: names }); return; }
       if (road && pathById(road) && !S.path) setPath(road);
-      if (place(en)) loaded.push(en); else dupes++;
+      if (place(en)) loaded.push(en); else if (en.mergedInto && en.mergeInfo && en.mergeInfo.got) merged.push(en); else dupes++;
     }
     var jobs = files.map(function (f) {
       if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') {
@@ -1788,19 +1894,31 @@
       if (loaded.length && !S.path) setPath('partners');
       syncAllNames(); syncRoadPeople();
       renderNames(); renderRoad();
-      var twice = dupes ? ' ' + dupes + (dupes === 1 ? ' sheet was' : ' sheets were') + ' already on your road, so ' + (dupes === 1 ? 'it wasn\u2019t' : 'they weren\u2019t') + ' added again.' : '';
+      var twice = dupes ? ' ' + dupes + (dupes === 1 ? ' sheet was' : ' sheets were') + ' already on your road with nothing new, so ' + (dupes === 1 ? 'it wasn\u2019t' : 'they weren\u2019t') + ' added again.' : '';
       var msg = '';
       if (loaded.length) {
         changed();
-        var names = loaded.map(function (en) { return codeWord(en.workpaper) + (en.label ? ' (' + en.label + ')' : ''); });
-        msg = 'Brought in ' + loaded.length + (loaded.length === 1 ? ' sheet: ' : ' sheets: ') + names.slice(0, 6).join(', ') + (names.length > 6 ? ' and ' + (names.length - 6) + ' more' : '') + '.';
+        var names = loaded.map(function (en) { return SP.nameOf(en.workpaper) + (en.label ? ' (' + en.label + ')' : ''); });
+        msg = 'Brought in ' + loaded.length + (loaded.length === 1 ? ' sheet: ' : ' sheets: ') + andJoin(names.slice(0, 6)) + (names.length > 6 ? ' and ' + (names.length - 6) + ' more' : '');
+        msg = msg.replace(/[.?!]$/, '') + '.';
         celebrate($('ws-drop'), null);
         var first = document.querySelector('.ws-stop.is-done');
         if (first && first.scrollIntoView && !hold.length) first.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
       }
+      // answers added to sheets already on the road: say whose, and how much, sheet by sheet
+      if (merged.length) {
+        if (!loaded.length) changed();
+        var byWho = {};
+        merged.forEach(function (en) {
+          var who = mergedWho(en);
+          (byWho[who] = byWho[who] || []).push(SP.nameOf(en.workpaper) + ' (' + mergeCount(en.mergeInfo) + ')');
+        });
+        Object.keys(byWho).forEach(function (who) { msg += (msg ? ' ' : '') + 'Added ' + who + ' answers to ' + andJoin(byWho[who]) + '.'; });
+      }
       var matched = loaded.filter(function (en) { return en.matched; }).length;
       if (matched) twice += ' People were matched by name, so everyone\u2019s answers stayed theirs' + (matched > 1 ? ' on ' + matched + ' sheets' : '') + '.';
       $('ws-drop-note').textContent = (msg + twice).trim();
+      if (turnWait) { var tw = turnWait; turnWait = null; if (loaded.length || merged.length) yourTurn(tw); }
       if (nameAsks.length && !hold.length) { askAboutNames(); return; }
       if (hold.length) askAboutRoad(hold);
       else if (msg || twice) say((msg + twice).trim() + (problems.length ? ' ' + problems.join('; ') + '.' : ''));
@@ -2164,7 +2282,14 @@
       sendB.setAttribute('data-share-url', link.url);
       suiteSafe = j;
     });
-    document.addEventListener('tol:shared', function (e) { var u = e.detail && e.detail.url; if (u && u.indexOf(SUITE_HASH) >= 0) { S.dirty = false; say('Sent. If either of you changes something, send a new link.'); } });
+    document.addEventListener('tol:shared', function (e) { var u = e.detail && e.detail.url; if (u && u.indexOf(SUITE_HASH) >= 0) { S.dirty = false; say('Sent. If ' + (S.names.filter(function (x) { return String(x || '').trim(); }).length > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link.'); } });
+    // "Include private notes in the link": off unless ticked, and only for this link
+    var sendRow = sendB && sendB.closest('.ws-send-row');
+    if (sendRow && !$('ws-link-private')) {
+      var pl = h('label', { className: 'ws-link-private' }, [h('input', { type: 'checkbox', id: 'ws-link-private', autocomplete: 'off' }), ' Include private notes in the link (the note on How much are you carrying?, and the Calm-Down Kit beyond the pause plan). Left out unless you tick this.']);
+      sendRow.parentNode.insertBefore(h('p', { className: 'ws-send-private' }, [pl]), sendRow.nextSibling);
+      $('ws-link-private').addEventListener('change', function (e) { linkPrivate = e.target.checked; suiteLinkSoon(); });
+    }
     suiteLinkSoon();
     // "Keep this on this device so it's here tomorrow?", once something is typed (tol-workpaper.js)
     if (WPK.keepAsk) {
@@ -2210,6 +2335,19 @@
       var r = $('fp-road'); if (r) r.focus();
     });
     $('wpf-open').addEventListener('click', function () { fileInput.click(); });
+    // On a phone the save bar is one row: Save my progress, Fillable PDF and More (which opens "Open a saved
+    // file"), the same as on a single worksheet, so the bottom of the screen stays free.
+    var barActs = document.querySelector('.wpf-bar-actions');
+    if (barActs && !$('wpf-more')) {
+      var moreB = h('button', { type: 'button', id: 'wpf-more', className: 'wpf-btn-quiet wpf-bar-more', 'aria-expanded': 'false', text: 'More \u25BE' });
+      barActs.insertBefore(moreB, barActs.firstChild); barActs.classList.add('has-more');
+      moreB.addEventListener('click', function () {
+        var open = !barActs.classList.contains('is-open');
+        barActs.classList.toggle('is-open', open);
+        moreB.setAttribute('aria-expanded', String(open));
+        moreB.textContent = open ? 'Less \u25B4' : 'More \u25BE';
+      });
+    }
     fileInput.addEventListener('change', function () { takeFiles(fileInput.files); fileInput.value = ''; });
     ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('is-over'); }); });
     ['dragleave', 'drop'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('is-over'); }); });

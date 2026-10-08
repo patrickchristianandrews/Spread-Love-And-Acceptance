@@ -130,6 +130,14 @@
   /* ------------------------------------------------------------ state + ctx */
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  // The same job, however it was written: "Cooking dinner", "Cook dinner" and "cook the dinner" are one job.
+  var JOB_SKIP = { the: 1, a: 1, an: 1, and: 1, of: 1, to: 1, for: 1, our: 1, my: 1, your: 1, their: 1 };
+  function jobKey(name) {
+    return String(name == null ? '' : name).toLowerCase().replace(/\(.*?\)/g, ' ').replace(/[^a-z0-9\u00c0-\u024f]+/g, ' ').trim().split(/\s+/)
+      .filter(function (w) { return w && !JOB_SKIP[w]; })
+      .map(function (w) { return w.length > 5 ? w.replace(/ing$/, '').replace(/ies$/, 'y').replace(/s$/, '') : w.replace(/s$/, ''); })
+      .join(' ');
+  }
 
   function blankState(schema) {
     var st = { values: { partnerA: '', partnerB: '' }, tables: {} };
@@ -730,6 +738,9 @@
     });
     if (exampleEl && !exampleEl.parentNode) this.root.appendChild(exampleEl);
     this.refresh();
+    // someone else's own sheet, shown to read (the Workpaper Suite): nothing on it can be changed here
+    this.root.classList.toggle('is-readonly', !!this.opts.readOnly);
+    if (this.opts.readOnly) Array.prototype.forEach.call(this.root.querySelectorAll('input, select, textarea, button'), function (el) { el.disabled = true; });
   };
 
   // Today's name in a day-by-day table ("Thu"), and the Monday of this week (2026-10-05)
@@ -968,18 +979,25 @@
     var lib = sec.library && global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY(this.road(), sec.library) : null;
     // with the household's own jobs first, once this sheet is using the household's names
     var hhg = this.hhLibGroup(sec);
-    if (hhg) lib = { intro: lib && lib.intro, count: (lib ? lib.count : 0) + hhg.items.length, groups: [hhg].concat(lib && lib.groups ? lib.groups : []) };
+    // the household's own jobs first; a library job that is the same job under another name isn't shown twice
+    var libCount = lib ? lib.count : 0, hhCount = 0;
+    if (hhg) {
+      var hk = {}; hhg.items.forEach(function (it) { hk[jobKey(it[0])] = 1; });
+      var groups0 = (lib && lib.groups ? lib.groups : []).map(function (g) { return { name: g.name, hidden: g.hidden, items: g.items.filter(function (it) { return !hk[jobKey(it[0])]; }) }; }).filter(function (g) { return g.items.length; });
+      hhCount = hhg.items.length;
+      lib = { intro: lib && lib.intro, count: libCount, groups: [hhg].concat(groups0) };
+    }
     if (lib && lib.groups && lib.groups.length) {
       var have = {};
-      rows.forEach(function (r) { if (r && r.task) have[String(r.task).trim().toLowerCase()] = true; });
+      rows.forEach(function (r) { if (r && r.task) have[jobKey(r.task)] = true; });
       this.libOpen = this.libOpen || {};
       var det = h('details', { className: 'wpf-lib', 'data-lib': sec.id, open: this.libOpen[sec.id] ? 'open' : null }, [
-        h('summary', { text: 'Add from the task library (' + lib.count + ' common jobs, including the ones nobody sees)' })]);
+        h('summary', { text: 'Add from the task library (' + lib.count + ' common jobs, including the ones nobody sees' + (hhCount ? ', and your household\u2019s ' + hhCount : '') + ')' })]);
       if (lib.intro) det.appendChild(h('p', { className: 'wpf-help', text: lib.intro }));
       lib.groups.forEach(function (g) {
         var grp = h('div', { className: 'wpf-lib-group', role: 'group', 'aria-label': g.name }, [h('p', { className: 'wpf-lib-h', text: g.name + (g.hidden ? ' · often unseen' : '') })]);
         g.items.forEach(function (it) {
-          var on = !!have[it[0].toLowerCase()];
+          var on = !!have[jobKey(it[0])];
           grp.appendChild(h('button', { type: 'button', className: 'wpf-chip' + (on ? ' is-on' : ''), 'data-action': 'lib', 'data-table': sec.id, 'data-task': it[0], 'data-freq': it[1] || '', 'aria-pressed': on ? 'true' : 'false', text: (on ? '✓ ' : '+ ') + it[0] }));
         });
         det.appendChild(grp);
@@ -1717,7 +1735,7 @@
     if (act === 'lib') {
       var tid = b.getAttribute('data-table'), task = b.getAttribute('data-task'), freq = b.getAttribute('data-freq'), trows = this.state.tables[tid];
       var lsec = this.schema.sections.filter(function (s) { return s.id === tid; })[0];
-      if (trows.some(function (r) { return r.task && String(r.task).trim().toLowerCase() === task.toLowerCase(); })) { this.status('“' + task + '” is already on the list.'); return; }
+      if (trows.some(function (r) { return r.task && jobKey(r.task) === jobKey(task); })) { this.status('“' + task + '” is already on the list.'); return; }
       var hasFreq = lsec.columns.some(function (c) { return c.id === 'freq'; }), freqOk = hasFreq && freq && lsec.columns.filter(function (c) { return c.id === 'freq'; })[0].options.indexOf(freq) >= 0;
       var slot = -1;
       trows.forEach(function (r, i) { if (slot < 0 && !r.task && lsec.columns.every(function (c) { return c.prefill || c.type === 'computed' || isBlank(r[c.id]) || c.id === 'day'; })) slot = i; });
@@ -2188,7 +2206,7 @@
     CODES: CODES, MAX_PEOPLE: MAX_PEOPLE, peopleCount: peopleCount, fixedRowsFor: fixedRowsFor, syncPeople: syncPeople, rangeProblem: rangeProblem,
     addPerson: addPerson, removePerson: removePerson, personOptions: personOptions, setDefaultLabels: setDefaultLabels, setHousehold: setHousehold,
     setMinPeople: setMinPeople, optionLabel: optionLabel, isExampleRow: isExampleRow, agreedLine: agreedLine, closingLines: closingLines,
-    labelFor: function (i) { return labelFor(i); }, readShared: readShared, keepAsk: keepAsk
+    labelFor: function (i) { return labelFor(i); }, readShared: readShared, keepAsk: keepAsk, jobKey: jobKey
   };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

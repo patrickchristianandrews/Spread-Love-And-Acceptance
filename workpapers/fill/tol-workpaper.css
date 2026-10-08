@@ -803,6 +803,9 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 
 /* WP-13: the same check-in for a team or housemates */
 .wpf-tonight-others{ margin: 0 0 .8em; }
-.wpf-tonight-others > summary{ cursor: pointer; font-weight: 600; min-height: 40px; display: flex; align-items: center; }
+.wpf-tonight-others > summary{ cursor: pointer; font-weight: 600; font-size: .95rem; min-height: 40px; display: flex; align-items: center; gap: .4em; list-style: none; color: var(--credit, #3E6B4C); text-decoration: underline; text-underline-offset: .15em; }
+.wpf-tonight-others > summary::-webkit-details-marker{ display: none; }
+.wpf-tonight-others > summary::before{ content: "\25B8"; text-decoration: none; display: inline-block; }
+.wpf-tonight-others[open] > summary::before{ content: "\25BE"; }
 .wpf-tonight-others p{ margin: .3em 0 .5em; }
 .wpf-tonight-one select{ width: 100%; }

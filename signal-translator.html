@@ -1064,7 +1064,8 @@ function teamFix(h){
   const on = B==="your team" ? "on your team" : "in the group";
   return String(h)
     .replace(new RegExp("\\bIf "+B+" is\\b","g"), "If someone "+on+" is")
-    .replace(new RegExp("\\bIf you're "+B+":","g"), "If you're "+on+":")
+    .replace(new RegExp("\\bIF "+B.toUpperCase()+" IS\\b","g"), "IF SOMEONE "+on.toUpperCase()+" IS")
+    .replace(new RegExp("\\bIf you're "+B+":","g"), "If you're "+(B==="your team" ? "on the team" : "in the group")+":")
     .replace(new RegExp("\\b"+B+"'s wiring\\b","g"), "their wiring")
     .replace(new RegExp("(^|[.!?]\\s+|>\\s*)"+B+"\\b","g"), (m,p)=>p+B.charAt(0).toUpperCase()+B.slice(1));
 }
@@ -1121,6 +1122,8 @@ function notesMode(){
 function paintNotesRel(){
   const mode = notesMode();
   document.querySelectorAll('#notes [data-rel]').forEach(el=>{ el.hidden = !el.dataset.rel.split(/\s+/).includes(mode); });
+  const st = document.querySelector('#notes > .step');
+  if(st) st.textContent = mode==="apart" ? "KEEP THIS BESIDE YOU ON THE CALL" : mode==="work" ? "TAKE THIS INTO THE MEETING" : "TAKE THIS INTO THE ROOM";
 }
 
 /* ============================================================
