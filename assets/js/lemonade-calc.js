@@ -58,10 +58,11 @@
   var WAKING = 112; // about 16 waking hours a day, 7 days
 
   /* ---------- how often, and categories ---------- */
-  var FREQ = { day: 7, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
-  var FREQ_ORDER = ['day', 'few', 'two', 'week', 'eow', 'month'];
-  var FREQ_LABEL = { day: 'Each day', few: '3 times a week', two: 'Twice a week', week: 'Each week', eow: 'Every other weekend', month: 'Each month' };
-  var FREQ_SHORT = { day: 'a day', few: '3× a week', two: '2× a week', week: 'a week', eow: 'every other weekend', month: 'a month' };
+  // 'wkd' (weekdays, 5 days) came later: a stand or code without it reads exactly as before
+  var FREQ = { day: 7, wkd: 5, few: 3, two: 2, week: 1, eow: 0.5, month: 12 / 52 };
+  var FREQ_ORDER = ['day', 'wkd', 'few', 'two', 'week', 'eow', 'month'];
+  var FREQ_LABEL = { day: 'Each day', wkd: 'Weekdays (5 days)', few: '3 times a week', two: 'Twice a week', week: 'Each week', eow: 'Every other weekend', month: 'Each month' };
+  var FREQ_SHORT = { day: 'a day', wkd: 'each weekday', few: '3× a week', two: '2× a week', week: 'a week', eow: 'every other weekend', month: 'a month' };
   // k: 'home' jobs are counted in the split; 'work' and 'rest' are shown beside it, never in it.
   // inv: the whole job is invisible work (thinking or emotional), not just its thinking part.
   var CATS = [
@@ -85,13 +86,17 @@
     { id: 'other', n: 'Other jobs', k: 'home', act: 'simplify', tip: 'Ask whether it still needs doing at all.' }
   ];
   var CAT = {}; CATS.forEach(function (c) { CAT[c.id] = c; });
+  // Daytime care on your own while the other parent is at work: home work, counted in the split and in
+  // "Home + paid work", the same way paid work is counted for the one at work
+  var SOLO_CARE = 'Looking after the baby on my own (while the other is at work)';
+  function isSoloCare(j) { return !j.ex && low(j.name) === low(SOLO_CARE); }
   // The task library: [name, typical amount, how often, unit ('m' minutes, default, or 'h' hours)]
   var LIB = {
     home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], ['Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
-    food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'day'], ['Clearing out the fridge', 20, 'week']],
+    food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
-    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'day'], ['School drop-off & pickup', 40, 'day'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week']],
-    baby: [['Night feeds', 40, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
+    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week']],
+    baby: [['Night feeds', 40, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
     pets: [['Feeding & fresh water', 10, 'day'], ['Dog walks', 30, 'day'], ['Litter, cage or tank cleaning', 15, 'few'], ['Grooming & baths', 30, 'month'], ['Vet visits & pet supplies', 60, 'month']],
     money: [['Paying bills', 20, 'week'], ['Budget & checking accounts', 30, 'week'], ['Splitting shared costs', 15, 'week'], ['Taxes & receipts', 90, 'month'], ['Comparing plans & renewals', 60, 'month']],
     admin: [['Mail & home email', 15, 'few'], ['School forms & sign-ups', 20, 'week'], ['Calls & customer service', 30, 'week'], ['Insurance & documents', 45, 'month'], ['Licenses & registrations', 30, 'month'], ['Filing & keeping papers in order', 30, 'month']],
@@ -102,7 +107,7 @@
     social: [['Keeping in touch with family', 30, 'week'], ['Keeping up with both families & in-laws', 20, 'week'], ['Birthdays & holidays', 60, 'month'], ['Thank-you notes & messages', 15, 'week'], ['Hosting & visitors', 120, 'month'], ['Planning time with friends', 20, 'week'], ['Kids’ playdates & parties', 60, 'month']],
     mental: [['Keeping the family calendar', 15, 'few'], ['Noticing what’s running low', 10, 'day'], ['Planning the week ahead', 30, 'week'], ['Remembering dates & deadlines', 10, 'day'], ['Childcare & backup plans', 30, 'week'], ['Checking that things got done', 10, 'day'], ['Trips & holiday planning', 120, 'month']],
     emotional: [['Keeping the peace', 15, 'day'], ['Checking in on how people are', 15, 'day'], ['Calming a hard moment', 20, 'few'], ['Listening & support', 30, 'few'], ['Smoothing things over with family', 30, 'week']],
-    work: [['Paid work', 40, 'week', 'h'], ['Commute', 30, 'day'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'day'], ['A side job', 5, 'week', 'h']],
+    work: [['Paid work', 40, 'week', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['A side job', 5, 'week', 'h']],
     rest: [['Time to myself', 30, 'day'], ['A walk or moving my body', 30, 'few'], ['Hobbies', 60, 'week'], ['Time with friends', 120, 'week'], ['Quiet time doing nothing', 20, 'day'], ['A full day off', 8, 'month', 'h']]
   };
   // Library jobs that start as each person's own (their own family, their own life), not shared home work

@@ -699,6 +699,11 @@ t('retest3', 'my wife and I each have our own phone, how do we put our two sides
 t('retest3', 'how do i send my side to my husband', { kind: 'care', id: 'twophones' });
 t('retest3', 'How do I tell my girlfriend she left the stove on without her feeling criticised? She has ADHD.', { kind: 'care', id: 'raisegently', link: '/signal-translator.html' });
 t('retest3', 'she says I am too sensitive when she is just being honest', { kind: 'care', id: 'toosensitive' });
+t('retest3', 'my wife thinks i dont do enough at home but i do a lot of stuff she doesnt see', { kind: 'care', id: 'notenough', not: /teen|dating|password/i });
+t('retest3', 'should I discipline her when Tasha isn\'t home', { kind: 'care', id: 'stepdiscipline' });
+t('retest3', 'the kids are 14 and 16 and want a say', { kind: 'care', id: 'teensay', not: /Children.s Privacy|intended for adults/i });
+t('retest3', 'christmas and thanksgiving, he always wants both', { kind: 'care', id: 'exschedule' });
+t('retest3', 'my mother-in-law visits too often', { kind: 'care', id: 'longstay', link: '/family-obligations.html#visits', not: /bedtime our way/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

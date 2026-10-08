@@ -128,7 +128,7 @@
       say:'Supporting parents, sending money home, long visits from family: in many families these are duties, not habits. They go better when the two of you plan them together, so neither of you feels judged or shut out.',
       picks:[
         ['/family-obligations.html','Supporting family: parents, money home and duty','Agree a monthly amount, save alongside it, and each lead with your own family.'],
-        ['/library/conflict.html','Disagreeing about family and in-laws','Even-handed: loyalty to a parent is not disloyalty to a partner.'],
+        ['/library/conflict.html#family-disagreements','Disagreeing about family and in-laws','Even-handed: loyalty to a parent is not disloyalty to a partner.'],
         ['/lemonade-stand.html#money','Put the money in the Lemonade Stand','Family support as an agreed amount, never a debt between you.']
       ]},
     { id:'apart', ico:'\u2708\uFE0F', label:'We live apart or far away',

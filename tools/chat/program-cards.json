@@ -388,7 +388,7 @@
       "first": true,
       "newTopic": true,
       "name": "a parent coming to stay for a long time",
-      "pat": "\\b(mother|mum|mom|father|dad|parents?|in ?laws?|mother in law|father in law|grandma|grandmother|grandpa|auntie|aunt|uncle)\\b.{0,40}\\b(come|coming|stay|staying|visit|visiting|live|living|move in|moving in)\\b.{0,40}\\b(months?|weeks|long time|long stay|a while|half a year|year)\\b",
+      "pat": "\\b(mother|mum|mom|father|dad|parents?|in ?laws?|mother in law|father in law|grandma|grandmother|grandpa|auntie|aunt|uncle)\\b.{0,40}\\b(come|coming|stay|staying|visit|visiting|live|living|move in|moving in)\\b.{0,40}\\b(months?|weeks|long time|long stay|a while|half a year|year)\\b|\\b(mother in law|father in law|in ?laws?|parents in law|her (mum|mom|mother|dad|father|parents)|his (mum|mom|mother|dad|father|parents)|my (wife|husband|partner)s (mum|mom|mother|parents))\\b.{0,30}\\b(visits?|visiting|comes?( over| round| by)?|drops? (in|by)|is (here|round|over)|stays?)\\b.{0,25}\\b(too (often|much|long)|all the time|every (day|week|weekend)|constantly|unannounced|without asking)\\b",
       "keys": [],
       "what": [
         "In many families, a parent coming to stay for weeks or months is normal and loving. It still changes daily life for both of you, so agree it together before anyone says yes."
@@ -1060,6 +1060,50 @@
         [
           "Different brains, one home",
           "/neurodivergent-relationships.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "notenough",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "“you don’t do enough” when you feel you do",
+      "pat": "\\b(thinks|says|feels|complains|keeps saying|told me|tells me)( that)? (i|i m|im|i am) (dont|don t|do not|never|not|doesnt|isnt)( do| doing| help| helping| pull| pulling)? ?(enough|my share|anything|much|my weight|my part)\\b|\\bi do (a lot|lots|loads|more|plenty|stuff|things|so much)\\b.{0,40}\\b(she|he|they|my \\w+) (doesnt|doesn t|does not|dont|don t|never) (see|notice|count|realise|realize)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Both can be true. You may be doing a lot that isn’t noticed, and your partner may be carrying planning and remembering that you don’t see either. Most of these fights are two people each seeing only their own half."
+      ],
+      "how": [
+        "Before you defend, ask: “What’s the part you feel I’m not seeing?” and just listen.",
+        "Then each of you writes down what you actually do in a normal week, in your own column. The Lemonade Stand does this, and counts the thinking part (noticing, planning, remembering) as well as the doing.",
+        "Your work counts there too: cooking, the car, the bins, whatever it is.",
+        "Look at the result together and pick one or two jobs to move, each with one clear owner.",
+        "If your partner sent you here, “Sent this by someone?” explains what they can and can’t see."
+      ],
+      "script": [
+        "I think I do more than you see, and I bet you do more than I see too. Can we both write it down and look at it together?"
+      ],
+      "plain": [
+        "You may both be right.",
+        "Ask what you are not seeing.",
+        "Each of you writes down what you do.",
+        "Then pick one job to move."
+      ],
+      "links": [
+        [
+          "The Lemonade Stand: who does what",
+          "/lemonade-stand.html"
+        ],
+        [
+          "Invisible labor and the mental load",
+          "/invisible-labor-mental-load.html"
+        ],
+        [
+          "Sent this by someone?",
+          "/sent-this.html"
         ]
       ],
       "chips": []
@@ -2568,7 +2612,7 @@
       "first": true,
       "newTopic": true,
       "name": "agreeing holidays and schedules with an ex",
-      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b|\\bholiday schedule\\b|\\b(christmas|holidays?|thanksgiving)\\b.{0,40}\\b(with )?(my|her|his|the kids ) ?(ex|ex wife|ex husband|co parent|their (dad|mom|mum))\\b",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|co parent|coparent)\\b.{0,50}\\b(holidays?|holiday schedule|christmas|thanksgiving|easter|birthdays?|summer|vacation|custody|visitation|parenting plan)\\b|\\bholiday schedule\\b|\\b(christmas|holidays?|thanksgiving)\\b.{0,40}\\b(with )?(my|her|his|the kids ) ?(ex|ex wife|ex husband|co parent|their (dad|mom|mum))\\b|\\b(he|she|they|my ex|her dad|his mom|their dad|their mom) (always |still |keeps |just )?(wants?|insists on|demands?|takes?) (both|all|every)( the| of the)? ?(holidays?|christmas|thanksgiving|easter|birthdays?|ones)?\\b|\\b(christmas|thanksgiving|easter|hanukkah|eid|diwali|holidays?)\\b.{0,40}\\b(he|she|they|my ex) (always |still )?(wants?|takes?) (both|them all|all of them|every one)\\b",
       "keys": [],
       "what": [
         "Holiday schedules are one of the most common sore spots between separated parents. Your court order or parenting plan comes first; if it covers holidays, that’s the answer, and you can point to it calmly."
@@ -2590,6 +2634,90 @@
         [
           "If this may end up in court",
           "/co-parenting.html#court"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teensay",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "name": "older kids who want a say in the schedule",
+      "pat": "\\b(kids|teens?|children|son|daughter|they)\\b.{0,30}\\b(want|wants|asking for|ask for|should get|get) (a|their|any) say\\b|\\b(should|do|can) (the |our |my )?(kids|teens?|children) (get to )?(choose|decide|pick)\\b.{0,30}\\b(where|which|who|schedule|holiday|christmas|parent)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Teens can share their wishes, and it helps to hear them. But the adults make the decision, so no child has to choose between their parents or feel they caused someone’s disappointment."
+      ],
+      "how": [
+        "Ask each teen privately and calmly what matters to them (a friend’s party, a family tradition, time with one side), and say clearly: “We’ll decide; we just want to know what matters to you.”",
+        "Take their wishes into the conversation with your ex, without quoting them as the reason (“Jaden said he wants…” puts them in the middle).",
+        "Check your court order or parenting plan first: it may already set holidays or let older children’s views count.",
+        "Tell the kids the plan only once both of you have agreed it, together if you can.",
+        "Never ask them to carry messages, report back, or pick a side."
+      ],
+      "script": [
+        "We want to hear what matters to you this holiday. Your dad and I will work out the plan, so you don’t have to choose."
+      ],
+      "plain": [
+        "Teens can say what they want.",
+        "The adults decide.",
+        "Do not make them choose a parent.",
+        "Tell them once you both agree."
+      ],
+      "links": [
+        [
+          "Separated, raising children together",
+          "/co-parenting.html"
+        ],
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "For teens (to share with yours)",
+          "/teens.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "stepdiscipline",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "should a stepparent discipline",
+      "pat": "\\bshould i (discipline|punish|tell off|ground|correct|set rules for)\\b.{0,40}\\b(her|him|them|my step\\w*|the kids|his kids|her kids|their kids)\\b|\\b(discipline|punish|tell off|ground)\\w* (my |the |his |her )?step(daughter|son|kids?|children|child)\\b|\\bstep(dad|mom|mum|parent|father|mother)\\b.{0,40}\\bdisciplin\\w*\\b|\\bdisciplin\\w*\\b.{0,40}\\bstep(dad|mom|mum|parent|kids?|children|daughter|son)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Early on, it usually works best when the child’s own parent leads on discipline and the stepparent backs them up. Stepparents build authority through warmth and time first; rules from someone a child doesn’t feel close to yet tend to land as “you’re not my dad”."
+      ],
+      "how": [
+        "Agree the house rules with your partner privately first, so you’re saying the same thing.",
+        "When you’re in charge alone, act like a trusted babysitter: hold the rules you’ve both agreed (“Your mom and I agreed: phones off at ten”), and leave bigger consequences to their parent.",
+        "Tell your partner what happened later, calmly, and let them follow up.",
+        "Keep putting in the warm moments: a lift, a joke, a shared show. That’s what lets you hold more of a role later.",
+        "Back each other up in front of the kids; disagree in private."
+      ],
+      "script": [
+        "Your mom and I agreed the rule is phones off at ten. I’m just holding it while she’s out; she’ll talk to you about anything else."
+      ],
+      "plain": [
+        "The child’s own parent leads on rules at first.",
+        "Agree the rules together, in private.",
+        "Hold the agreed rules when you are in charge.",
+        "Build warmth first."
+      ],
+      "links": [
+        [
+          "Stepfamilies and blended families",
+          "/parents.html#stepfamilies"
+        ],
+        [
+          "Separated, raising children together",
+          "/co-parenting.html"
         ]
       ],
       "chips": []
