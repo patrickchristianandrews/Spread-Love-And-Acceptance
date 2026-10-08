@@ -685,6 +685,8 @@
       });
     }
     metaDefs = metaDefs.concat(s.meta || []);
+    // "Kind ways to say no" on its own: the ready-made no's come first, above the name and date
+    if (s.readyFirst) s.sections.forEach(function (sec) { if (sec.ready) self.root.appendChild(self.readyEl(sec)); });
     // "Use your household from before?" when this sheet has no names (or no jobs) yet
     var hhEl = this.hhOfferEl();
     if (hhEl) this.root.appendChild(hhEl);
@@ -854,7 +856,7 @@
       wrap.appendChild(h('dl', { id: 'cmp-' + sec.id, 'aria-live': 'polite' }));
     }
 
-    if (sec.type === 'table' && sec.ready) wrap.appendChild(this.readyEl(sec));
+    if (sec.type === 'table' && sec.ready && !this.schema.readyFirst) wrap.appendChild(this.readyEl(sec));
     if (sec.type === 'table') wrap.appendChild(this.renderTable(sec));
     return wrap;
   };
@@ -2024,7 +2026,7 @@
     var code = document.querySelector('main .read-head .read-code'); if (code) code.textContent = 'WP-01 Part B \u00b7 Fill-in workpaper';
     var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)');
     if (lede) {
-      lede.textContent = 'Ready-made, kind ways to say no: tap one to copy it. Then write your own for a real request: say why it\u2019s fair, say what you have left, and offer something smaller instead.';
+      lede.textContent = 'Kind words for \u201cnot this time\u201d, ready to copy. Tap one, paste it into a message, and make it sound like you.';
       var more = h('p', { className: 'wpf-lede wpf-partb-note' }, [h('small', null, ['Just you, nothing to log. Keeping track of who did what with someone too? ', h('a', { href: '/workpapers/fill/wp-01.html', text: 'Open the whole Who did what sheet' }), '.'])]);
       lede.parentNode.insertBefore(more, lede.nextSibling);
     }
@@ -2046,7 +2048,17 @@
     // ?road=self: the sheet worded for one person on their own (the Workpaper Suite's "Just me" wording)
     if ((partB || road === 'self') && global.TOL_WORKPAPER_SOLO) {
       var so = global.TOL_WORKPAPER_SOLO(wp);
-      if (so) { schema = Object.assign({}, so, { road: 'self' }); if (wp === 'wp-01') focusPartB(schema); }
+      if (so) {
+        schema = Object.assign({}, so, { road: 'self' });
+        if (wp === 'wp-01') {
+          // the ready-made no's first, at the top; then "Write your own" (the page's title already says the rest)
+          schema.readyFirst = true;
+          schema.sections = so.sections.map(function (sec) {
+            return sec.id === 'refusals' ? Object.assign({}, sec, { title: 'Write your own', intro: 'For a real request you can\u2019t take on right now: say why it\u2019s fair, say honestly what you have left, and offer something smaller instead. Add as many as you like.' }) : sec;
+          });
+          focusPartB(schema);
+        }
+      }
     }
     var app = new App(root, schema, { road: road, canShare: !!schema.share });
     // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied

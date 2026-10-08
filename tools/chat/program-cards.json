@@ -1232,7 +1232,7 @@
       "newTopic": true,
       "name": "fighting with a brother or sister at home",
       "pat": "\\b(me and my|my) (little |big |younger |older |baby |step ?)?(brother|sister|bro|sis|siblings?)\\b.{0,30}\\b(fight|fighting|argue|arguing|annoying|so annoying|drives? me (crazy|mad|nuts)|takes? my (stuff|things)|gets? me in trouble|winds? me up|always starts?)\\b|\\b(brother|sister|sibling) is so annoying\\b",
-      "notPat": "\\b(dad|mum|mom|parent)s? (care|caring|money|will|inheritance)\\b",
+      "notPat": "\\b(thanksgiving|christmas|easter|holidays?|hosts?|hosting|wedding|inheritance|will|dad s care|mum s care|mom s care|caring for|our (dad|mum|mom|parents))\\b",
       "keys": [],
       "what": [
         "Fighting with a brother or sister is really common, especially when you share space and get compared. It doesn’t mean you don’t care about each other."
@@ -1309,7 +1309,7 @@
       "newTopic": true,
       "name": "winding down after work",
       "pat": "\\b(after|from) (a|my|the|another) (\\d+ ?h(our)?|long|night|double|late|early|12 hour|twelve hour) ?(shift|day|night)\\b.{0,40}\\b(calm|wind|switch|relax|sleep|unwind|decompress|settle)|\\b(calm (down|myself)|wind down|switch off|unwind|decompress|relax)\\b.{0,30}\\b(after|from) (a |my |the )?(\\d+ ?h(our)?|long|night|double|late)? ?(shift|work|day)\\b|\\bcan.?t switch off (after|from) work\\b",
-      "notPat": "",
+      "notPat": "\\b(need|needs|want|wants) (some )?(time|space) to (decompress|unwind|wind down)\\b",
       "keys": [],
       "what": [
         "After a long shift your body is often still running at work speed, even when you’re home. A short, deliberate wind-down helps it catch up."
@@ -3610,7 +3610,7 @@
       "first": true,
       "newTopic": true,
       "name": "a team member doing the invisible work",
-      "pat": "\\b(one|someone|a person|a colleague|a coworker|one of my|a member of my|somebody) (on|in|of) (my|the|our) team\\b.{0,40}\\b(does|do|doing|carries|carrying|feels? (they|she|he) (do|does|carry|carries))\\b.{0,20}\\b(all|most|more|the)\\b.{0,15}\\b(invisible|unseen|background|admin|glue|coordinating|organi[sz]ing|noticing) (work|jobs|tasks|stuff)\\b|\\b(invisible|glue|unseen) work\\b.{0,40}\\b(team|colleague|coworker|staff|report)\\b",
+      "pat": "\\b(team|colleague|coworker|co worker|staff|report|employee)s?\\b.{0,40}\\b(invisible|unseen|background|glue|admin|coordinating|organi[sz]ing) (work|jobs|tasks|stuff)\\b|\\b(invisible|unseen|glue) (work|jobs|tasks)\\b.{0,40}\\b(team|colleague|coworker|staff|employee)s?\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -7694,7 +7694,8 @@
           "What’s new: meet Kip",
           "/whats-new.html"
         ]
-      ]
+      ],
+      "notPat": "\\b(housemates?|flatmates?|roommates?|group chat|group text|my (wife|husband|partner|boyfriend|girlfriend)|two phones|2 phones|my side)\\b"
     },
     {
       "id": "timepicker",

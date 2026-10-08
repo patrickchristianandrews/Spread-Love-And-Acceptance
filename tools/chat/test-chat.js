@@ -193,7 +193,7 @@ s('Handoffs with my ex are really tense', 'coparent+handoffs');
 s('My ex changes the schedule last minute every week', /coparent\+(handoffs|reliability)/);
 s('My co-parent sends rude texts and they always turn into fights', 'coparent+tone');
 s("My roommates don't do their share of chores", 'roommate+fairness');
-s('My roommate always pays their share of the rent late', 'roommate+money');
+t('situations', 'My roommate always pays their share of the rent late', { id: 'rentlate' });
 s('There are three of us roommates and nobody agrees on chores', 'roommate+group');
 s('My boss takes credit for my work', 'coworker+credit');
 s('On my team of seven nobody owns anything and tasks fall through the cracks', /coworker\+(ownership|group)/);
@@ -711,7 +711,7 @@ t('retest4', 'he gives me an allowance and checks my receipts', { kind: 'safety'
 t('retest4', 'i have to ask him for money', { kind: 'safety' });
 t('retest4', 'how do i get him to stop checking my phone', { kind: 'safety', not: /no phones at meals/i });
 c('retest4', ['my boyfriend checks my phone every night', 'he gets angry if i see my friends'], { kind: 'safety', not: /Flood/ });
-c('retest4', ['my boyfriend checks my phone every night', 'is this normal'], { kind: 'safety', text: /not a normal part of disagreeing/, not: /Disagreeing is a normal/ });
+c('retest4', ['my boyfriend checks my phone every night', 'is this normal'], { kind: 'safety', text: /n.t a normal part of disagreeing/, not: /Disagreeing is a normal/ });
 c('retest4', ['my boyfriend checks my phone every night', 'how do i talk to him about it so he stops'], { kind: 'safety', not: /same side/ });
 c('retest4', ['my boyfriend checks my phone every night', 'start over', 'how do we split the chores'], { not: /won.t suggest ways to talk/ });
 t('retest4', 'short team check-in template', { not: /temple|Bears Dojo/ });

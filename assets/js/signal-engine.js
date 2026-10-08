@@ -194,7 +194,7 @@ const F = [
   {id:"hostile", name:"Hostile or fed-up line", kind:"static", re:null,
    what:"A fed-up line (\"you're getting on my last nerve,\" \"shut up,\" \"I'm done with you\") says how angry you are, but not what you need. The listener can only defend themselves or pull away.",
    fix:"Say the feeling and the need, and take a break if you need one: \"I'm really frustrated. I need a few minutes, then can we talk about [the thing]?\""},
-  {id:"absolute", name:"Absolute or generalization", kind:"static",
+  {id:"absolute", name:"Big words like always or never", kind:"static",
    re:/\b(?:always|never|every (?:single )?time|every (?:single )?day|constantly|all the time|nothing ever|no one ever|nobody ever|nobody (?:else )?(?:cares|helps|listens|does|thinks|ever)|no one (?:else )?(?:cares|helps|listens|does|thinks)|everyone (?:else )?(?:knows|can|does|thinks|manages|sees)|everybody (?:else )?(?:knows|can|does|thinks|manages|sees)|all you (?:ever )?do|(?:you|you two|you both|you all|you guys|you lot|the two of you|both of you|all of you|y'all|they|he|she) (?:just )?(?:do|does|did) (?:absolutely )?(?:nothing|zero|sod all|jack(?: all)?)|(?:it's|it is) always me|always me\b|nothing (?:i do|you do|gets done|changes|works)|forever)\b/gi,
    what:"\"Always,\" \"never\" and \"everyone\" erase every exception. The listener remembers the time it didn't happen and argues that, and the real point gets lost.",
    fix:"Swap the absolute for one specific, recent example."},
@@ -1104,6 +1104,9 @@ function askOf(sentence, feats){
   if((m=t.match(/\bi wish (?:you|someone|somebody) would (.+)$/i))) return {text:m[1], kind:"hint"};
   if((m=t.match(/\bthe (trash|garbage|bins?|recycling|dishes|sink|laundry)(?: is| are|'s)\b/i))) return {text:HINT_OBJ[m[1].toLowerCase()]||("deal with the "+m[1]), kind:"hint"};
   if((m=t.match(/\byou (?:still )?(?:haven't|have not|didn't|did not) (\w+)(.*)$/i)) && feats.includes("again")) return {text:baseVerb(m[1])+m[2].replace(/\s*\byet\b/,""), kind:"still"};
+  // a short proposal asked as a question: "call sunday?", "dinner Friday at 7?", "coffee tomorrow?"
+  if(/\?\s*$/.test(sentence) && words(t)<=6 && !/^(?:why|what|how|who|where|when|which|whose|is|are|am|do|does|did|can|could|will|would|should|shall|have|has|had|was|were|ok(?:ay)?|you|really|seriously|right|huh|sure|so|and|but|or|yeah|yes|no|not|me|us|them|this|that|it)\b/i.test(t)
+     && (WHEN_REAL.test(t) || VERBSET.has(t.split(/\s+/)[0].toLowerCase())) && /[a-z]/i.test(t)) return {text:t, kind:"proposal"};
   const c = commandOf(sentence);
   if(c) return {text:c.replace(/[.!?]+$/,""), kind:"command"};
   return null;
@@ -2817,6 +2820,47 @@ Object.assign(CHANGE_WHY, { sorrybut:{g:"The “but you…” came out, so the a
 /* ============================================================
    EXPORT
    ============================================================ */
+/* "What you may have meant", said to the speaker: second person for you, "they" for the listener.
+   as: who the wiring describes ("As someone with ADHD, you likely meant…"). */
+const SELF_MEANT = {
+  nt:{as:"a neurotypical person", d:"you probably meant more than the words alone. Many neurotypical speakers let tone and context carry part of the message, so it helps to say that part out loud.",
+    hint:"you probably meant a polite request. Indirect wording is how many neurotypical speakers soften an ask.", sarcasm:"you probably meant frustration, made lighter or sharper with irony.",
+    minimal:"you may have meant \"fine,\" or \"ask me later.\" Your tone would carry the rest, and they may not hear it.", ominous:"you probably meant something serious, worded this way to signal its weight.",
+    vtime:"you probably meant a soft deadline, often sooner than the words say.", softno:"you may have meant a polite no.", joke:"you were probably signaling friendliness."},
+  autistic:{as:"an autistic person", d:"you most likely meant the words as stated. Many autistic people prefer direct, precise language (National Autistic Society).",
+    minimal:"you probably meant literally that, without social padding.", period:"you almost certainly meant the full stop as plain punctuation.",
+    blameq:"you may have meant it as a real question, wanting the reason, not an apology.", absolute:"you may have meant it precisely, or you may be overloaded. Naming one specific time helps them hear it.",
+    critic:"you probably meant it about the task, not about them.", long:"you probably added the detail out of care or accuracy, not to lecture.",
+    tone:"you may be genuinely unsure what their face or tone is saying.", label:"you may have been overloaded when you wrote it. Naming what specifically went wrong helps them hear it."},
+  adhd:{as:"someone with ADHD", d:"you likely meant what you said, fast. If it came out sharp, it may have been a passing flash of feeling rather than your settled view.",
+    vtime:"you meant it sincerely, but without a time or cue, it's at risk of slipping.", critic:"you may have felt a flash of frustration that passes quickly.",
+    shout:"you may have meant energy or excitement, and it came out loud.", multi:"you may have been thinking out loud. The list may be as much for you as for them.",
+    blameq:"you probably meant frustration more than a real question.", hyper:"you probably meant how strong the feeling is, not a literal claim.",
+    excuse:"you may have meant \"this is hard for me,\" which is real. Saying the system you'll use (a reminder, an alarm) says that without leaving the fix with them."},
+  dyslexic:{as:"someone who's dyslexic", d:"if you wrote it, you may have kept it short, or spelled it oddly, for reasons that have nothing to do with tone.",
+    minimal:"you probably kept it short because typing costs effort, not to be curt.", period:"you probably kept it short because typing costs effort, not to be curt."},
+  dyspraxic:{as:"someone who's dyspraxic", d:"if your reply came slowly, you were building the answer, not holding back."},
+  apd:{as:"someone with auditory processing differences", d:"if your reply seemed off-topic to them, you may have been answering what you thought you heard. It's worth checking the words arrived."},
+  dld:{as:"someone with DLD", d:"your words may be simpler or vaguer than the thought behind them. Word-finding can be hard.",
+    vstd:"you may have used the vague word in place of a specific one you couldn't find.", vemo:"you may have used the vague word in place of a specific one you couldn't find."},
+  tourette:{as:"someone with Tourette", d:"if a sound or gesture came with the words, it may have been a tic, not a comment. It's okay to say so."},
+  alex:{as:"someone with alexithymia", d:"you may not have a label for the feeling behind this. Your actions may say more than the words.",
+    minimal:"you may have given the most accurate answer you have right now.", critic:"a feeling may be showing up in your words as a complaint about a fact."},
+  hsp:{as:"a highly sensitive person", d:"you probably worded it carefully. Many highly sensitive people know exactly how words can land."},
+  anxiety:{as:"someone with anxiety", d:"you may have worded it to avoid conflict. There may be worry underneath the words.",
+    reassure:"you meant it as a real question, and you need a plain answer.", long:"you may be over-explaining, as insurance against being misunderstood.",
+    ellipsis:"you meant hesitation, not hostility.", hedge:"you meant caution, not evasion."},
+  trauma:{as:"someone with a trauma history", d:"if it came out defensive, that may have been an alarm going off, not your position."},
+  ocd:{as:"someone with OCD", d:"your precision, or asking again, may come from a need for certainty, not pickiness or distrust.",
+    reassure:"the doubt may be doing the asking, not distrust of them.", vstd:"you may want precision out of a need for certainty, not pickiness."}
+};
+/* what the speaker may have meant, in the second person: "As someone with ADHD, you likely meant what you said, fast." */
+function meantSelf(id, fids){
+  const m = SELF_MEANT[id]; if(!m) return null;
+  const notes = [];
+  (fids||[]).forEach(f=>{ if(m[f] && !notes.includes(m[f])) notes.push(m[f]); });
+  return {as:"As "+m.as+",", text: notes.length ? notes.slice(0,2).map((x,i)=>i ? x.charAt(0).toUpperCase()+x.slice(1) : x).join(" ") : m.d};
+}
 Object.keys(ADD).forEach(w=>{ if(NT[w]) Object.assign(NT[w].receive, ADD[w]); });
 Object.assign(CHECK, CHECK_ADD);
 
@@ -2955,7 +2999,7 @@ const GLOSS = {
   oblig:"it sounds like an order", should:"it tells them what to do", shouldhave:"it blames them for the past",
   impera:"an order with no \"please\" or \"could you\"", cannot:"it sounds annoyed, not like a real question",
   blameq:"a question that really says \"it's your fault\"", label:"calling the person a name, like \"lazy\"",
-  hostile:"it sounds angry or fed up", absolute:"words like \"always\" and \"never\"",
+  hostile:"it sounds angry or fed up", absolute:"words like \"always\" and \"never\" leave no room for the times it went fine",
   madefeel:"it blames them for how you feel", compare:"saying someone else does it better",
   past:"bringing back an old problem", again:"words that say \"this keeps happening\"",
   threat:"\"do this or else\"", guilt:"it tries to make them feel guilty",
@@ -2998,6 +3042,7 @@ function title(id, words, an){
   // a name built from example words ("Again," "still," "even") would show words that aren't in the message,
   // so when the message's own words are shown beside it, the name says what the words do instead
   if(w && PLAIN_TITLE[id]) return PLAIN_TITLE[id];
+  if(id==="absolute") return w && /^(?:always|never|everything|nothing|constantly|forever|everyone|everybody|nobody)$/.test(w) ? "The word \u201c"+w+"\u201d" : f.name;
   if(w && /\s*\([^)]*["“][^)]*\)\s*$/.test(f.name)) return f.name.replace(/\s*\([^)]*["“][^)]*\)\s*$/, "");
   return f.name;
 }
@@ -3071,6 +3116,6 @@ function verdict(an, sc, rw, opts){
   return {id:"ok", text:"This will probably land okay."};
 }
 
-const api = {receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+const api = {meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

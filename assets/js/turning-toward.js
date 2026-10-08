@@ -5,7 +5,8 @@
   'use strict';
 
   var WHO = [['partner', 'Partner'], ['family', 'Family'], ['friend', 'Friend'], ['roommate', 'Roommate'],
-             ['coparent', 'Co-parent'], ['coworker', 'Coworker'], ['caregiver', 'Someone I care for']];
+             ['coparent', 'Co-parent'], ['coworker', 'Coworker'], ['caregiver', 'Someone I care for'],
+             ['grandchild', 'Grown child or grandchild'], ['neighbor', 'Neighbor']];
 
   // One small moment per day. msg: a message to send, by relationship (default covers the rest).
   var SPARKS = [
@@ -14,7 +15,9 @@
       msg: { default: 'Thank you for [the specific thing]. I noticed [the effort it took], and it made my day easier.',
              coworker: 'Thanks for [the specific thing] this week. It saved me a lot of time on [the task].',
              coparent: 'Thanks for handling [the specific thing] with the kids. It made a real difference.',
-             friend: 'Still thinking about [the specific thing] you did. Thank you, honestly. It meant a lot.' } },
+             friend: 'Still thinking about [the specific thing] you did. Thank you, honestly. It meant a lot.',
+             grandchild: 'Thank you for the call on Sunday. Hearing your news was the best part of my week.',
+             neighbor: 'Thank you for taking my bins in while I was away. It was a real kindness.' } },
     { key: 'bids', title: 'Catch one small reach today',
       todo: 'When they say “look at this,” sigh, or share something small, stop what you’re doing, look, and ask one question about it.',
       msg: null },
@@ -22,7 +25,9 @@
       todo: 'Ask about a good thing in their week, then get curious: ask one more question about the answer.',
       msg: { default: 'What’s been the best part of your week so far?',
              coworker: 'What’s gone well for you this week?',
-             friend: 'Been a minute! What’s the best thing that’s happened to you lately?' } },
+             friend: 'Been a minute! What’s the best thing that’s happened to you lately?',
+             grandchild: 'What’s the best thing that happened to you this week? I’d love to hear.',
+             neighbor: 'How’s the garden doing this year? Mine finally has tomatoes.' } },
     { key: 'their-world', title: 'Learn one new thing about their world',
       todo: 'People change. Ask one question you don’t already know the answer to, and really listen.',
       msg: { default: 'What’s something on your mind this week that I don’t know about?',
@@ -77,7 +82,9 @@
              friend: 'Thanks for being the kind of friend who [always shows up / makes me laugh / tells me the truth].' } },
     { key: 'good-news', title: 'Make a fuss about a small win',
       todo: 'When they share something good, however small, stop and ask how it happened. Let them tell the story.',
-      msg: { default: 'Wait, tell me everything. How did it go?' } },
+      msg: { default: 'Wait, tell me everything. How did it go?',
+             grandchild: 'You passed? That’s wonderful! How did it feel when you found out?',
+             friend: 'The doctor’s appointment went well? Oh, I’m so glad. What did they say?' } },
     { key: 'good-news', title: 'Remember and follow up',
       todo: 'Think of something they were looking forward to or worried about. Ask how it went.',
       msg: { default: 'How did [the thing] go? I was thinking about you.',
@@ -105,7 +112,8 @@
     { key: 'fondness', title: 'Remember a good memory together',
       todo: 'Bring up a moment you both loved. Ask what they remember about it.',
       msg: { default: 'Randomly thought about [the memory] today and smiled. Do you remember [a detail]?',
-             friend: 'Remember [the trip / that night / that dumb joke]? Still one of my favorite memories.' } },
+             friend: 'Remember [the trip / that night / that dumb joke]? Still one of my favorite memories.',
+             grandchild: 'I was remembering when you were little and [the memory]. It still makes me smile.' } },
     { key: 'fondness', title: 'Tell them how they helped you',
       todo: 'Think of a time they made something easier for you. Tell them what it meant.',
       msg: { default: 'I still think about when you [what they did]. It helped more than you know.' } },
@@ -145,6 +153,14 @@
     { key: 'rituals', title: 'End the day with one good thing',
       todo: 'Before sleep, or at the end of a call, each share one thing from today that went well.',
       msg: { default: 'Want to try something? Every night, we each share one good thing from the day.' } },
+    { key: 'good-news', title: 'Share a small good thing with someone',
+      todo: 'The doctor’s appointment went well, the tomatoes finally came up, a grandchild called: tell someone about one small good thing, and ask for theirs.',
+      msg: { default: 'Small good news: [the doctor’s appointment went well / the tomatoes finally came up]. What’s your good thing this week?',
+             grandchild: 'Lovely to hear from you. My good thing this week: [one small thing]. What’s yours?' } },
+    { key: 'rituals', title: 'Make the call they’d love to get',
+      todo: 'Ring a grandchild, an old friend or a neighbor just to hear their news. Ask about one thing they mentioned last time.',
+      msg: { default: 'Just calling to hear your news. How did [the thing you mentioned] go?',
+             grandchild: 'Thinking of you! How did [the match / the exam / the new job] go? Call me when you have a minute.' } },
     { key: 'bids', title: 'Turn toward a reach you missed',
       todo: 'Think back: was there a moment this week you brushed off? Go back to it now.',
       msg: { default: 'Earlier you mentioned [the thing] and I didn’t really listen. I’d like to hear about it now.' } }
@@ -191,11 +207,31 @@
       $('tt-more').setAttribute('href', '/turning-toward-in-depth.html#' + s.key);
       $('tt-more').textContent = 'Dig deeper: ' + (DIG[s.key] || 'why this works');
       var box = $('tt-msg');
-      if (msg) { box.hidden = false; $('tt-msg-text').textContent = msg; }
+      if (msg) { box.hidden = false; $('tt-msg-text').value = msg; }
       else box.hidden = true;
+      fillNote(false);
+    }
+    // anything still in [square brackets] is a gap to fill in first
+    function gaps(text) { return /\[[^\]]*\]/.test(text); }
+    function fillNote(asked) {
+      var t = $('tt-msg-text').value, n = $('tt-fill');
+      n.classList.toggle('is-ask', !!asked);
+      if (!gaps(t)) { n.textContent = ''; return; }
+      n.textContent = asked
+        ? 'Almost there: please fill in the parts in [square brackets] first, so the message sounds like you. Then tap Share again.'
+        : 'Tap the message to fill in the parts in [square brackets].';
+    }
+    $('tt-msg-text').addEventListener('input', function () { fillNote(false); });
+    function focusGap() {
+      var ta = $('tt-msg-text'), i = ta.value.indexOf('['), j = ta.value.indexOf(']', i);
+      try { ta.focus(); if (i >= 0 && j > i) ta.setSelectionRange(i, j + 1); } catch (e) {}
     }
     $('tt-next').addEventListener('click', function () { idx = (idx + 1) % SPARKS.length; show(); });
-    $('tt-copy').addEventListener('click', function () { copy($('tt-msg-text').textContent, this); });
+    $('tt-copy').addEventListener('click', function () {
+      var t = $('tt-msg-text').value;
+      copy(t, this);
+      if (gaps(t)) { $('tt-fill').textContent = 'Copied. Remember to change the parts in [square brackets] before you send it.'; }
+    });
     var share = $('tt-share');
     // the message, and only the message, through the site's own share (the device's share menu, or a small sheet)
     if (window.TOLShare || navigator.share) {
@@ -203,7 +239,9 @@
       share.classList.add('tol-share-btn');
       try { if (window.TOLShareClip && window.TOLShareClip.mount) window.TOLShareClip.mount(share); } catch (e) {}
       share.addEventListener('click', function () {
-        var text = $('tt-msg-text').textContent;
+        var text = $('tt-msg-text').value.trim();
+        if (!text) return;
+        if (gaps(text)) { fillNote(true); focusGap(); return; } // nothing is shared with the brackets still in
         if (window.TOLShare) window.TOLShare.share({ title: 'A little message', text: text, url: false, result: true });
         else navigator.share({ text: text }).catch(function () {});
       });
@@ -211,6 +249,18 @@
     show();
     card.hidden = false;
   }
+
+  // "Why this works": the site adds its Pillars strip under the title; on this page it lives in the
+  // closed "Why this works" box below today's moment, so the page opens with the activity.
+  (function () {
+    var slot = $('tt-why-body'); if (!slot) return;
+    function grab() { var n = document.querySelector('main .tol-pillars'); if (n && n.parentNode !== slot) { slot.appendChild(n); return true; } return !!n; }
+    if (grab()) return;
+    var main = document.querySelector('main'); if (!main || !window.MutationObserver) return;
+    var mo = new MutationObserver(function () { if (grab()) mo.disconnect(); });
+    mo.observe(main, { childList: true });
+    setTimeout(function () { mo.disconnect(); }, 15000);
+  })();
 
   function copy(text, btn) {
     var done = function () { var o = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = o; }, 1500); };

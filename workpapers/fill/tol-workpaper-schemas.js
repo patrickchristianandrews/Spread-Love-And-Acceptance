@@ -180,7 +180,7 @@
         // ready-made no's, shown as tap-to-copy chips above the boxes (on screen only, never in the PDF)
         ready: {
           title: 'Ready-made no\u2019s to copy',
-          help: 'Tap one to copy it, then paste it into a message. Change any words so it sounds like you. Each one says the ask is fair, says what you have left, and offers something smaller instead.',
+          help: 'Tap one to copy it. Each one says the ask is fair, says what you have left, and offers something smaller instead.',
           groups: [
             { name: 'At work', items: [
               ['Can you cover a shift?', 'I can see you\u2019re stuck, and I want it covered too. I\u2019m running on empty this week, so I can\u2019t take another shift. I can help you ask around, or take a short one next week.'],

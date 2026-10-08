@@ -86,17 +86,37 @@
     { id: 'other', n: 'Other jobs', k: 'home', act: 'simplify', tip: 'Ask whether it still needs doing at all.' }
   ];
   var CAT = {}; CATS.forEach(function (c) { CAT[c.id] = c; });
+  // Where this browser seems to be: its languages first ("en-GB"), then its time zone when the language
+  // has no region or says US (an English (US) phone set to UK time is very common). Only for friendly
+  // defaults (the money sign, "rubbish" or "trash"); every one of them can be changed.
+  var TZ_REG = { 'Europe/London': 'GB', 'Europe/Belfast': 'GB', 'Europe/Guernsey': 'GB', 'Europe/Jersey': 'GB', 'Europe/Isle_of_Man': 'GB', 'Europe/Dublin': 'IE',
+    'Europe/Paris': 'FR', 'Europe/Berlin': 'DE', 'Europe/Madrid': 'ES', 'Europe/Rome': 'IT', 'Europe/Amsterdam': 'NL', 'Europe/Brussels': 'BE', 'Europe/Vienna': 'AT', 'Europe/Lisbon': 'PT',
+    'Europe/Helsinki': 'FI', 'Europe/Athens': 'GR', 'Europe/Luxembourg': 'LU', 'Europe/Bratislava': 'SK', 'Europe/Ljubljana': 'SI', 'Europe/Tallinn': 'EE', 'Europe/Riga': 'LV',
+    'Europe/Vilnius': 'LT', 'Europe/Malta': 'MT', 'Asia/Nicosia': 'CY', 'Europe/Zagreb': 'HR', 'Atlantic/Madeira': 'PT', 'Atlantic/Canary': 'ES' };
+  function regionGuess() {
+    var ls = [], reg = '', lang = '', tz = '';
+    try { ls = (navigator.languages && navigator.languages.length ? Array.prototype.slice.call(navigator.languages) : []).concat([navigator.language]); } catch (e) {}
+    ls.forEach(function (l) {
+      var p = String(l || '').split('-');
+      if (!lang && p[0]) lang = p[0].toLowerCase();
+      if (!reg && p.length > 1 && /^[A-Za-z]{2}$/.test(p[p.length - 1])) reg = p[p.length - 1].toUpperCase();
+    });
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+    if ((!reg || reg === 'US') && TZ_REG[tz]) reg = TZ_REG[tz];
+    return { reg: reg === 'UK' ? 'GB' : reg, lang: lang };
+  }
+  var REGION = regionGuess(), UKISH = REGION.reg === 'GB' || REGION.reg === 'IE';
   // Daytime care on your own while the other parent is at work: home work, counted in the split and in
   // "Home + paid work", the same way paid work is counted for the one at work
   var SOLO_CARE = 'Looking after the baby on my own (while the other is at work)';
   function isSoloCare(j) { return !j.ex && low(j.name) === low(SOLO_CARE); }
   // The task library: [name, typical amount, how often, unit ('m' minutes, default, or 'h' hours)]
   var LIB = {
-    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], ['Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
+    home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], [UKISH ? 'Rubbish, bins & recycling' : 'Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
     food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
     kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week']],
-    baby: [['Night feeds', 40, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
+    baby: [['Night feeds', 90, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
     pets: [['Feeding & fresh water', 10, 'day'], ['Dog walks', 30, 'day'], ['Litter, cage or tank cleaning', 15, 'few'], ['Grooming & baths', 30, 'month'], ['Vet visits & pet supplies', 60, 'month']],
     money: [['Paying bills', 20, 'week'], ['Budget & checking accounts', 30, 'week'], ['Splitting shared costs', 15, 'week'], ['Taxes & receipts', 90, 'month'], ['Comparing plans & renewals', 60, 'month']],
     admin: [['Mail & home email', 15, 'few'], ['School forms & sign-ups', 20, 'week'], ['Calls & customer service', 30, 'week'], ['Insurance & documents', 45, 'month'], ['Licenses & registrations', 30, 'month'], ['Filing & keeping papers in order', 30, 'month']],
@@ -114,9 +134,12 @@
   var PERSONAL_LIB = { 'keeping in touch with family': 1 };
   var PLAN = [['keep', 'Keep'], ['handoff', 'Hand off'], ['drop', 'Drop'], ['simplify', 'Simplify'], ['schedule', 'Schedule']];
 
+  // the same job under its UK and US names (a UK phone and a US phone still match it up)
+  var SAME_JOB = { 'trash & recycling': 'bins', 'rubbish, bins & recycling': 'bins' };
+  function jobKey(n) { var l = low(n); return SAME_JOB[l] || l; }
   function libMatch(name) {
-    var l = (name || '').trim().toLowerCase(), hit = null;
-    Object.keys(LIB).forEach(function (c) { LIB[c].forEach(function (t) { if (t[0].toLowerCase() === l) hit = { cat: c, t: t }; }); });
+    var l = jobKey(name), hit = null;
+    Object.keys(LIB).forEach(function (c) { LIB[c].forEach(function (t) { if (jobKey(t[0]) === l) hit = { cat: c, t: t }; }); });
     return hit;
   }
   // Older stands had no categories: make a calm guess from the job's name, or file it under "Other jobs".
@@ -133,7 +156,7 @@
     ['admin', /form|paper|mail|email|insurance|admin|document|renew|licen[cs]e|passport/],
     ['errands', /errand|shop|store|gift|return/], ['car', /car\b|repair|fix|garage|tire/], ['yard', /yard|garden|mow|lawn|snow|leaves|weed/],
     ['social', /birthday|anniversar|family|friend|call|visit|holiday|in-?laws/], ['mental', /plan|remember|calendar|schedul|list|notic|organi[sz]/],
-    ['home', /dish|clean|tidy|vacuum|bathroom|trash|floor|sheet|dust/], ['work', /work|job|commute|class|study/],
+    ['home', /dish|clean|tidy|vacuum|bathroom|trash|rubbish|\bbins?\b|floor|sheet|dust/], ['work', /work|job|commute|class|study/],
     ['rest', /\b(?:naps?|napping|rest|resting|relax|relaxing|hobby|hobbies|me[- ]time|time (?:to|for) myself|gym for me|my gym|yoga|meditat\w*|lie[- ]in|sleep(?:ing)? in|day off)\b/]
   ];
   function guessCat(name) {
@@ -187,10 +210,8 @@
   var OTHER_CUR = { IN: '₹', JP: '¥', CN: '¥', KR: '₩', SE: 'kr', NO: 'kr', DK: 'kr', CH: 'CHF', ZA: 'R', PL: 'zł', BR: 'R$', NG: '₦', PH: '₱' };
   var CUR_PICK = ['$', '£', '€'];
   function defaultCur() {
-    var l = ''; try { l = String(navigator.language || ''); } catch (e) {}
-    var parts = l.split('-'), lang = (parts[0] || '').toLowerCase(), reg = (parts[parts.length - 1] || '').toUpperCase();
-    if (parts.length < 2) reg = '';
-    if (reg === 'GB' || reg === 'UK') return '£';
+    var reg = REGION.reg, lang = REGION.lang;
+    if (reg === 'GB') return '£';
     if (EURO.test(reg)) return '€';
     if (OTHER_CUR[reg]) return OTHER_CUR[reg];
     if (!reg && /^(de|fr|es|it|nl|fi|pt|el|sk|sl|et|lv|lt|ga|mt|hr)$/.test(lang)) return '€';
@@ -323,7 +344,9 @@
     // tasks from the library start with no one's time ("pick who") unless someone chose a person
     if (!state.asSet || typeof state.as !== 'number' || state.as >= n || state.as < -1) { state.as = -1; state.asSet = false; }
     if (typeof state.me !== 'number' || state.me >= n || state.me < -2) state.me = -1;
-    if (typeof state.cur !== 'string' || !state.cur.trim()) { state.cur = defaultCur(); state.curSet = false; }
+    // a money sign nobody picked (not here, not on the other device) follows this browser, so an older
+    // stand that started as "$" on a UK phone shows "£"
+    if (typeof state.cur !== 'string' || !state.cur.trim() || !state.curSet) { state.cur = defaultCur(); state.curSet = false; }
     state.cur = state.cur.trim().slice(0, 4);
     state.checked = !!state.checked;
     state.noWait = !!state.noWait;
@@ -343,7 +366,57 @@
   function mult(j, i) { return FREQ[freqOf(j, i)] || 1; }
   function doH(j, i) {
     var n = num(j.v[i]); if (!n) return 0;
-    return n * (j.unit === 'm' ? 1 / 60 : 1) * (mult(j, i) - feedInside(j, i));
+    var h = n * (j.unit === 'm' ? 1 / 60 : 1) * (mult(j, i) - feedInside(j, i));
+    // daytime baby jobs, once someone says so, count only for the part of the day outside their time on their own with the baby
+    return j.inSolo && isDayCare(j) ? h * (1 - soloShare(i)) : h;
+  }
+  // Feeds, nappies, bottles and settling happen through the day: some of them inside "Looking after the baby
+  // on my own". That share is guessed from the hours on your own out of a daytime week of about 98 hours (14 a day).
+  var DAY_WEEK = 98;
+  function isDayCare(j) { return !j.ex && /^(daytime feeds|nappies|bottles|settling)/.test(low(j.name)); }
+  function soloShare(i) { return Math.min(1, sum(state.jobs.filter(isSoloCare).map(function (j) { return doH(j, i); })) / DAY_WEEK); }
+  function rawH(j, i) { var n = num(j.v[i]); return n ? n * (j.unit === 'm' ? 1 / 60 : 1) * mult(j, i) : 0; }
+  // What may be counted twice, before anyone says so: night feeds on on-call nights, and daytime baby jobs
+  // inside time on your own with the baby. [{ j, kind: 'call' | 'solo', h }]
+  function dblParts() {
+    var out = [];
+    state.jobs.forEach(function (j) {
+      if (j.ex || kindOf(j) !== 'home') return;
+      var call = isNightFeed(j) && !j.inCall, day = isDayCare(j) && !j.inSolo;
+      if (!call && !day) return;
+      var h = sum(visiblePeople().map(function (i) {
+        var n = num(j.v[i]); if (!n) return 0;
+        return call ? n * (j.unit === 'm' ? 1 / 60 : 1) * Math.min(mult(j, i), callNights(i)) : rawH(j, i) * soloShare(i);
+      }));
+      if (h >= 0.1) out.push({ j: j, kind: call ? 'call' : 'solo', h: h });
+    });
+    return out;
+  }
+  function dblText(parts) {
+    var call = parts.filter(function (x) { return x.kind === 'call'; }), so = parts.filter(function (x) { return x.kind === 'solo'; }), bits = [];
+    if (call.length) bits.push(joinNames(call.map(function (x) { return x.j.name.trim(); })) + ' inside On call at night');
+    if (so.length) bits.push(joinNames(so.map(function (x) { return x.j.name.trim(); })) + ' inside Looking after the baby on my own');
+    return 'Possibly counted twice: about ' + hrs(sum(parts.map(function (x) { return x.h; }))) + ' a week (' + bits.join('; ') + ').';
+  }
+  function renderDbl() {
+    var parts = dblParts(), on = parts.length && sum(parts.map(function (x) { return x.h; })) >= 0.25;
+    ['dbl-note', 'dbl-note-solo'].forEach(function (id) {
+      var box = $(id); if (!box) return;
+      box.hidden = !on;
+      if (!on) { box.innerHTML = ''; return; }
+      var t = dblText(parts);
+      if (box.getAttribute('data-t') === t) return;
+      box.setAttribute('data-t', t);
+      box.innerHTML = '<p>' + esc(t) + '</p><div class="ls-tools"><button type="button" data-dbl-fix>Count it once</button></div>';
+    });
+  }
+  function dblFix() {
+    var parts = dblParts(); if (!parts.length) return;
+    parts.forEach(function (x) { if (x.kind === 'call') x.j.inCall = true; else x.j.inSolo = true; });
+    markEdited(); renderRows(); recalc();
+    status('Counted once now: ' + (parts.some(function (x) { return x.kind === 'call'; }) ? 'night feeds count only outside on-call nights' : '') +
+      (parts.some(function (x) { return x.kind === 'call'; }) && parts.some(function (x) { return x.kind === 'solo'; }) ? ', and ' : '') +
+      (parts.some(function (x) { return x.kind === 'solo'; }) ? 'daytime feeds, nappies, bottles and settling count only outside time on your own with the baby' : '') + '. Each row can count it on top again.');
   }
   function isOnCall(j) { return !j.ex && /^on call at night/.test(low(j.name)); }
   function isNightFeed(j) { return !j.ex && /^night feeds?\b/.test(low(j.name)); }
@@ -571,6 +644,25 @@
       solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
       solo1.textContent = 'Counted as home work, in the split and in “Home + paid work”, the same way paid work counts for the one at work. Feeds, nappies and naps in these hours are part of it, so count those jobs only for the rest of the day.';
     }
+    if (isOnCall(item)) {
+      solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note ls-call-note';
+      solo1.textContent = 'Feeds during on-call hours are already counted here: count Night feeds only outside these hours.';
+    }
+    // daytime baby jobs counted only outside time on your own with the baby: say so, and offer to undo it
+    var inSoloBox = null, inSoloP = null;
+    if (isDayCare(item)) {
+      inSoloBox = document.createElement('div'); inSoloBox.className = 'row-cue ls-dbl'; inSoloBox.hidden = true;
+      inSoloP = document.createElement('p'); inSoloP.className = 'ls-mini'; inSoloP.style.margin = '0';
+      var isb = document.createElement('button'); isb.type = 'button'; isb.className = 'ls-link-btn'; isb.setAttribute('data-fk', 'isb' + idx); isb.textContent = 'Count it on top again';
+      isb.addEventListener('click', function () { item.inSolo = false; markEdited(); recalc(); status('“' + item.name.trim() + '” is counted on top of time on your own with the baby again.'); });
+      inSoloBox.appendChild(inSoloP); inSoloBox.appendChild(isb);
+    }
+    function showInSolo() {
+      if (!inSoloBox) return;
+      var ins = sum(visiblePeople().map(function (i) { return rawH(item, i) - doH(item, i); }));
+      inSoloBox.hidden = !(item.inSolo && ins >= 0.05);
+      if (!inSoloBox.hidden) inSoloP.textContent = 'About ' + hrs(ins) + ' a week of this sits inside time on your own with the baby, so it’s counted there, once.';
+    }
     // the first edit to an example row makes it yours: its grey example numbers go
     function own() {
       if (!item.ex) return;
@@ -620,7 +712,7 @@
       area.hidden = !item.name.trim() && !item.v.some(function (x) { return num(x) > 0; });
       areaT.textContent = 'Counted as: ' + areaWords(item) + '.';
     }
-    row._refresh = function () { showNote(); showSum(); showDbl(); showArea(); };
+    row._refresh = function () { showNote(); showSum(); showDbl(); showArea(); showInSolo(); };
     ta.addEventListener('input', function () {
       own(); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited();
       // a job you typed yourself: a calm guess at its area from its name, until you pick one
@@ -876,7 +968,7 @@
     if (pickBox) row.appendChild(pickBox);
     if (ask) row.appendChild(ask);
     row.appendChild(amts); if (solo1) row.appendChild(solo1); if (each) row.appendChild(each); if (others) row.appendChild(others); if (area) row.appendChild(area); row.appendChild(persTag); row.appendChild(foot);
-    row.appendChild(thinkBox); if (dbl) row.appendChild(dbl); row.appendChild(cue); row.appendChild(note);
+    row.appendChild(thinkBox); if (dbl) row.appendChild(dbl); if (inSoloBox) row.appendChild(inSoloBox); row.appendChild(cue); row.appendChild(note);
     refreshInputs();
     if (askI >= 0 && !num(item.v[askI])) inputs.forEach(function (o) { if (o.i === askI && !o.think) o.inp.value = ''; });
     requestAnimationFrame(function () { autoGrow(ta); });
@@ -1039,14 +1131,14 @@
       box.innerHTML = '';
       var c = CAT[libCat];
       var hint = $('lib-hint');
-      if (hint) hint.textContent = libCat === 'baby' ? 'Night time counts. If one of you is on call, listening out while the other sleeps, count those hours too.' :
+      if (hint) hint.textContent = libCat === 'baby' ? 'Night time counts. If one of you is on call, listening out while the other sleeps, count those hours too. A young baby often feeds 2 or 3 times a night, 30 to 40 minutes each, so night feeds start at 90 minutes; change it to fit.' :
         c.k === 'work' ? 'Work and school hours are shown beside your home jobs, never mixed into them.' :
         c.k === 'rest' ? 'Rest counts too. It shows how much room your week has to recover.' :
         libCat === 'appts' ? 'Only the logistics: booking, getting there, forms and pickups.' :
         c.inv ? 'This is the invisible part of running a home. It counts.' : '';
       var extra = $('lib-extra'); if (extra) extra.hidden = libCat !== 'baby';
       (LIB[libCat] || []).forEach(function (t, k) {
-        var have = state.jobs.filter(function (j) { return !j.ex && j.name.trim().toLowerCase() === t[0].toLowerCase(); })[0];
+        var have = state.jobs.filter(function (j) { return !j.ex && jobKey(j.name) === jobKey(t[0]); })[0];
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-task'; b.setAttribute('data-fk', 'lt-' + libCat + '-' + k);
         var amt = t[1] + (t[3] === 'h' ? ' h' : ' min') + ' ' + FREQ_SHORT[t[2]];
         b.setAttribute('aria-pressed', String(!!have));
@@ -1094,7 +1186,7 @@
   }
   function addFromLib(cat, t) {
     var me = addAs();
-    var have = state.jobs.filter(function (j) { return !j.ex && j.name.trim().toLowerCase() === t[0].toLowerCase(); })[0];
+    var have = state.jobs.filter(function (j) { return !j.ex && jobKey(j.name) === jobKey(t[0]); })[0];
     if (have && me < 0) {
       var hr = rowFor(have); if (hr) { hr.scrollIntoView({ block: 'center', behavior: 'smooth' }); var tx = hr.querySelector('.row-pick .ls-chip, .row-amts input'); if (tx) tx.focus({ preventScroll: true }); }
       status('“' + t[0] + '” is already on the list.');
@@ -2491,6 +2583,7 @@
       if (j.fq) { var fq = byName(function (i) { return j.fq[i] !== j.freq ? j.fq[i] : ''; }); if (fq) o.fq = fq; }
       if (j.unit !== 'm') o.u = j.unit;
       if (j.inCall) o.ic = 1;
+      if (j.inSolo) o.is = 1;
       var v = byName(function (i) { return num(j.v[i]); }), t = byName(function (i) { return num(j.t[i]); });
       if (v) o.v = v; if (t) o.t = t;
       // who notices first, as each person marked it (nf as well, for a phone with an older page)
@@ -2546,7 +2639,7 @@
       var fq = {};
       if (j.fq && typeof j.fq === 'object') Object.keys(j.fq).forEach(function (k) { if (low(k) && FREQ[j.fq[k]]) fq[low(k)] = j.fq[k]; });
       var nmk = (Array.isArray(j.nm) ? j.nm : j.nf ? [j.nf] : []).map(low).filter(Boolean);
-      return { n: name, c: CAT[j.c] ? j.c : guessCat(name), f: f, fx: !!j.fx || !!FREQ[j.f], fq: fq, u: u, v: vals(j.v, u === 'h' ? 168 : 168 * 60), t: vals(j.t, 168 * 60), nm: nmk, p: !!j.p, ic: !!j.ic };
+      return { n: name, c: CAT[j.c] ? j.c : guessCat(name), f: f, fx: !!j.fx || !!FREQ[j.f], fq: fq, u: u, v: vals(j.v, u === 'h' ? 168 : 168 * 60), t: vals(j.t, 168 * 60), nm: nmk, p: !!j.p, ic: !!j.ic, is: !!j.is };
     }).filter(function (j) { return j.n || Object.keys(j.v).length; });
     var bills = list(raw.bills, 100).map(function (b) {
       return { n: clean(b.n, 120), k: BILL_KIND[b.k] ? b.k : 'shared', w: low(b.w), v: vals(b.v, 1e9) };
@@ -2583,8 +2676,8 @@
   function myName(line, who) { var nn = yourMy(line.n, who); if (nn !== line.n) { line.n0 = line.n; line.n = nn; line.my = who; } }
   // the same line on both phones: the same name, or this phone's own "my" line coming back as "Tom’s"
   function sameLine(localName, incName, meName) {
-    var a = low(localName), b = low(incName);
-    return !!a && (a === b || (!!meName && low(yourMy(localName, meName)) === b));
+    var a = jobKey(localName), b = jobKey(incName);
+    return !!a && (a === b || (!!meName && jobKey(yourMy(localName, meName)) === b));
   }
   // the incoming time, in this stand's own unit and "how often" (30 min a day there is 3.5 h a week here)
   // (k: the person on the other phone, li: the same person here; each may have their own "how often")
@@ -2683,6 +2776,7 @@
       (ij.nm || []).forEach(function (k) { if (map[k] != null) j.nm[map[k]] = 1; });
       if (ij.p) j.personal = true;
       if (ij.ic) j.inCall = true;
+      if (ij.is) j.inSolo = true;
       if (!libMatch(name)) { j.custom = true; j.catSet = true; }
       return j;
     }
@@ -2732,7 +2826,7 @@
       else if (d.pn && d.pn[low(a.name)] >= 1 && d.pn[low(a.name)] < 14) state.part[a.slot] = d.pn[low(a.name)] / 14;
       if (d.kids.indexOf(low(a.name)) >= 0) state.kid[a.slot] = true;
     });
-    if (d.cur && !state.curSet && d.cur !== state.cur) { state.cur = d.cur; out.cur = d.cur; }
+    if (d.cur && !state.curSet && d.cur !== state.cur) { state.cur = d.cur; state.curSet = true; out.cur = d.cur; }
     d.own.forEach(function (o) {
       var have = ownersList().filter(function (x) { return sameLine(x.name, o.n, plan.meName); })[0], w = o.w && map[o.w] != null ? map[o.w] : -1;
       if (have) { if (have.who < 0 && w >= 0) have.who = w; }

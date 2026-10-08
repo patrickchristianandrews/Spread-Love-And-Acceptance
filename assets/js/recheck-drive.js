@@ -19,8 +19,11 @@
 
   var WHO = [
     ['self', 'Myself'], ['us', 'Us, together'], ['partner', 'A partner'], ['relative', 'A parent or relative'], ['young', 'A child or teen'],
-    ['friend', 'A friend'], ['housemate', 'A housemate'], ['coworker', 'A coworker']
+    ['friend', 'A friend'], ['housemate', 'A housemate'], ['coworker', 'A coworker'],
+    ['grown', 'A grown child or grandchild'], ['neighbor', 'A neighbor']
   ];
+  // the newer choices borrow the closest set of words when a play has none of its own
+  var LIKE = { grown: 'relative', neighbor: 'friend' };
 
   /* ---------- the playbook ---------- */
   var PLAYS = [
@@ -45,6 +48,8 @@
       how: 'Ask it, then listen to the whole answer. Don’t fix and don’t compare. People keep changing, even the ones we know best.',
       say: 'Try asking', lines: {
         self: 'What do I want more of this month, and what have I been putting up with?',
+        grown: 'What’s the best thing that happened to you this week? I’d love to hear all about it.',
+        neighbor: 'How have you been keeping? I realize I never asked how your summer went.',
         partner: 'What’s on your mind this week that I don’t know about?',
         us: 'Take turns: what’s on your mind this week that the other one doesn’t know about?',
         relative: 'What’s something about your life now that I don’t know much about?',
@@ -56,8 +61,10 @@
     { id: 'thank', cat: 'Thank', yards: 7, title: 'Say one specific thank-you',
       how: 'Name the thing, the effort, or the quality behind it. Specific beats general, because it proves you noticed.',
       say: 'Try saying', lines: {
-        self: 'Thank you for keeping going with the things nobody sees.',
-        partner: 'Thank you for handling the school forms. I know that took real effort.',
+        self: ['Thank you for keeping going with the things nobody sees.', 'Well done for keeping the garden going. The tomatoes finally came up.'],
+        partner: ['Thank you for handling the school forms. I know that took real effort.', 'Thank you for coming with me to the doctor’s appointment. It went well, and it helped to have you there.', 'Thank you for keeping the garden going. The tomatoes finally came up, and that’s down to you.'],
+        grown: 'Thank you for the call on Sunday. Hearing your news was the best part of my week.',
+        neighbor: 'Thank you for taking my bins in while I was away. It was a real kindness.',
         us: 'Take turns: one specific thank-you each, for something from this week.',
         relative: 'Thank you for always remembering everyone’s birthday. I notice it.',
         young: 'I saw how patient you were today. Thank you.',
@@ -74,6 +81,7 @@
         relative: 'I’ve been busy and I let our calls get shorter. I’d like to do better, and I’ll tell you more about what’s going on with me.',
         young: 'I’ve been caught up in my own stuff and I haven’t asked enough. I’d like to catch up.',
         friend: 'Life got busy and I let us slide, and that’s on me. I’ve missed you.',
+        grown: 'I don’t always say it, but your calls mean a lot to me, and some days are quiet here. I’d love to hear from you a bit more.',
         housemate: 'My schedule changed a lot this year, and I haven’t said how that’s affecting my share of the chores.',
         coworker: 'I’ve had a heavier load lately, and it’s made me less available for check-ins than I’d like.' },
       why: 'Context on your side, so they don’t have to guess.', flag: 'mine' },
@@ -86,6 +94,7 @@
         relative: 'How have things really been for you? I’d like to hear more than the short version.',
         young: 'What’s been going on for you lately? You can tell me as little or as much as you like.',
         friend: 'What’s been going on with you? I want to hear all of it.',
+        grown: 'How are things really going for you? Not the quick version. I’ve got time.',
         housemate: 'How does this setup look from your side? What’s working and what isn’t?',
         coworker: 'How does this process look from your seat? What would you change?' },
       why: 'Understanding needs both sides’ context.', flag: 'theirs' },
@@ -158,7 +167,17 @@
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function whoName(k) { for (var i = 0; i < WHO.length; i++) if (WHO[i][0] === k) return WHO[i][1]; return ''; }
-  function lineFor(p, who) { return p.lines[who] || p.lines.all || ''; }
+  function lineFor(p, who) {
+    var l = p.lines[who] || (LIKE[who] && p.lines[LIKE[who]]) || p.lines.all || '';
+    return Array.isArray(l) ? l[Math.floor(Math.random() * l.length)] : l; // a few examples: one of them each time
+  }
+  // The two "context" badges, in words that fit who the drive is for. Together, both of you share
+  // and both of you listen, so taking turns on either play ticks both.
+  function badgeWords(who) {
+    if (who === 'us') return ['You each shared your side', 'You each heard the other’s side'];
+    if (who === 'self') return ['Your own side named', 'Someone else’s view asked for'];
+    return ['Your context shared', 'Their context asked for'];
+  }
   function lineLabel(y) { return y < 50 ? 'your ' + y : (y === 50 ? 'the 50' : 'their ' + (100 - y)); }
   function xOf(y) { return X0 + y * PX; }
 
@@ -279,6 +298,9 @@
       pool = PLAYS.map(function (p) { return p.id; }).filter(function (i) { return i !== last; });
     }
     S.hand = shuffle(pool).slice(0, 3);
+    // until both sides' context is in, keep one context play in the hand
+    var need = ['share', 'theirs'].filter(function (i) { return !S.flags[byId[i].flag] && S.done.indexOf(i) < 0; });
+    if (need.length && !S.hand.some(function (i) { return need.indexOf(i) >= 0; })) S.hand[2] = need[Math.floor(Math.random() * need.length)];
   }
   // How far along the drive is, without football words: about how many small plays are left to score.
   function plainWords(y) {
@@ -300,8 +322,10 @@
     var plain = $('rd-plain');
     if (plain) plain.textContent = S.kicked ? '' : plainWords(y);
     var mine = $('rd-b-mine'), theirs = $('rd-b-theirs');
-    mine.className = 'rd-badge' + (S.flags.mine ? ' is-on' : ''); mine.textContent = (S.flags.mine ? '●' : '○') + ' Your context shared';
-    theirs.className = 'rd-badge' + (S.flags.theirs ? ' is-on' : ''); theirs.textContent = (S.flags.theirs ? '●' : '○') + ' Their context asked for';
+    var bw = badgeWords(S.who);
+    mine.className = 'rd-badge' + (S.flags.mine ? ' is-on' : ''); mine.textContent = (S.flags.mine ? '●' : '○') + ' ' + bw[0];
+    theirs.className = 'rd-badge' + (S.flags.theirs ? ' is-on' : ''); theirs.textContent = (S.flags.theirs ? '●' : '○') + ' ' + bw[1];
+    var bwrap = mine.parentNode; if (bwrap) bwrap.setAttribute('aria-label', S.who === 'us' ? 'Both of your sides' : 'Both sides’ context');
     $('rd-kick').hidden = !(y >= KICK && !S.kicked);
     $('rd-handwrap').hidden = !!S.kicked;
     $('rd-done').hidden = !S.kicked;
@@ -352,6 +376,8 @@
     S.yards = Math.min(TOP, S.yards + p.yards);
     if (S.done.indexOf(id) < 0) S.done.push(id);
     if (p.flag) S.flags[p.flag] = true;
+    // together, a turn each means both of you shared and both of you listened
+    if (S.who === 'us' && (p.flag || id === 'listen')) { S.flags.theirs = true; if (p.flag) S.flags.mine = true; }
     var crossed = nextFirst(before) <= S.yards && nextFirst(before) <= 100;
     dealHand();
     $('rd-sheet').hidden = true;
@@ -385,8 +411,12 @@
       var both = S.flags.mine && S.flags.theirs;
       var p = $('rd-done-p');
       p.textContent = both
-        ? 'The kick is good, and it went through on both sides’ context: you shared yours and asked for theirs. That is what lets two people understand each other. Us 3, the Rut 0.'
-        : 'The kick is good. Us 3, the Rut 0. Next drive, try sharing your own side and asking for theirs: context on both sides is what lets two people understand each other.';
+        ? (S.who === 'us'
+          ? 'The kick is good, and it went through on both sides: you each shared your side and heard the other’s. That is what lets two people understand each other. Us 3, the Rut 0.'
+          : 'The kick is good, and it went through on both sides’ context: you shared yours and asked for theirs. That is what lets two people understand each other. Us 3, the Rut 0.')
+        : (S.who === 'us'
+          ? 'The kick is good. Us 3, the Rut 0. Next drive, try taking turns to share your side and hear the other’s: both sides is what lets two people understand each other.'
+          : 'The kick is good. Us 3, the Rut 0. Next drive, try sharing your own side and asking for theirs: context on both sides is what lets two people understand each other.');
       $('rd-done-h').textContent = 'It’s good!';
       renderStatus(); save();
       celebrate();
@@ -477,4 +507,22 @@
     renderAll();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+
+  // "Why this works": the site adds its Pillars strip under the title; on this page it lives in the
+  // closed "Why this works" box below the game, so the page opens with "Who is this drive for?".
+  (function () {
+    function grab() {
+      var slot = $('rd-why-body'), n = document.querySelector('main .tol-pillars');
+      if (slot && n && n.parentNode !== slot) slot.appendChild(n);
+      return !!(slot && n);
+    }
+    function watch() {
+      if (grab()) return;
+      var main = document.querySelector('main'); if (!main || !window.MutationObserver) return;
+      var mo = new MutationObserver(function () { if (grab()) mo.disconnect(); });
+      mo.observe(main, { childList: true });
+      setTimeout(function () { mo.disconnect(); }, 15000);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+  })();
 })();
