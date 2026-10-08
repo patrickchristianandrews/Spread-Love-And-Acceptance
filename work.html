@@ -88,7 +88,7 @@
     .wk-tool select:has(option[value=""]:checked){ color:transparent; }
     html.wk-printing main > *:not(.wk-print-this){ display:none !important; }
     html.wk-printing .wk-tool{ border:0; padding:0; margin:0; box-shadow:none; }
-    .wk-tool tr .wk-warn{ display:none !important; }
+    .wk-tool td.wk-warn-cell{ display:none !important; }
     .ci-person{ break-inside:avoid; }
     .wk-tool textarea, .wk-tool input[type="date"]{ border:0; padding:0; min-height:0; background:transparent; resize:none; }
   }
@@ -358,7 +358,7 @@
   var body = document.getElementById('wk-rows');
   var status = document.getElementById('wk-status');
   if (!team || !body) return;
-  var state = { team: '', rows: [] };
+  var state = { team: '', rows: [], ci: { date: '', people: {}, jobs: '' } };
   var undo = null;      // a function that puts back what was last cleared or removed
   var undoTimer = null;
 
@@ -368,11 +368,13 @@
       if (s && typeof s === 'object') {
         state.team = typeof s.team === 'string' ? s.team : '';
         state.rows = Array.isArray(s.rows) ? s.rows.filter(function (r) { return r && typeof r === 'object'; }) : [];
+        var c = s.ci && typeof s.ci === 'object' ? s.ci : {};
+        state.ci = { date: typeof c.date === 'string' ? c.date : '', people: c.people && typeof c.people === 'object' ? c.people : {}, jobs: typeof c.jobs === 'string' ? c.jobs : '' };
       }
     } catch (e) {}
   }
   function save() {
-    try { localStorage.setItem(KEY, JSON.stringify({ v: 1, team: state.team, rows: state.rows })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ v: 1, team: state.team, rows: state.rows, ci: state.ci })); } catch (e) {}
   }
   function names() {
     var seen = {}, out = [];
@@ -443,13 +445,13 @@
       task.type = 'text'; task.value = r.task || ''; task.autocomplete = 'off';
       task.placeholder = 'For example: send the meeting notes';
       task.setAttribute('aria-label', 'Recurring job, row ' + n);
-      task.addEventListener('input', function () { r.task = task.value; save(); });
+      task.addEventListener('input', function () { r.task = task.value; save(); tally(); });
       var owner = personSelect(r.owner, list);
       owner.setAttribute('aria-label', 'Owner, row ' + n);
-      owner.addEventListener('change', function () { r.owner = owner.value; save(); });
+      owner.addEventListener('change', function () { r.owner = owner.value; save(); warnRow(tr, r); tally(); });
       var backup = personSelect(r.backup, list);
       backup.setAttribute('aria-label', 'Backup, row ' + n);
-      backup.addEventListener('change', function () { r.backup = backup.value; save(); });
+      backup.addEventListener('change', function () { r.backup = backup.value; save(); warnRow(tr, r); tally(); });
       var often = document.createElement('select');
       opt(often, '', 'Choose…');
       OFTEN.forEach(function (f) { opt(often, f, f); });
@@ -475,6 +477,7 @@
       tr.appendChild(cell('Backup', backup));
       tr.appendChild(cell('How often', often));
       var tdDel = cell('', del); tdDel.className = 'wk-del'; tr.appendChild(tdDel);
+      warnRow(tr, r);
       body.appendChild(tr);
     });
     if (!state.rows.length) {
@@ -484,6 +487,102 @@
       td0.textContent = 'No jobs yet. Use “Add a row” to start.';
       tr0.appendChild(td0); body.appendChild(tr0);
     }
+    tally();
+    renderCI();
+  }
+
+  // The same person as owner and backup: a gentle note on that row, so someone else can cover
+  function warnRow(tr, r) {
+    var td = tr.querySelector('td.wk-warn-cell');
+    var same = r.owner && r.backup && r.owner === r.backup;
+    if (!same) { if (td) td.remove(); return; }
+    if (!td) {
+      td = document.createElement('td'); td.className = 'wk-warn-cell';
+      var p = document.createElement('p'); p.className = 'wk-warn'; p.setAttribute('role', 'status');
+      td.appendChild(p); tr.appendChild(td);
+      td.style.gridColumn = '1 / -1';
+    }
+    td.firstChild.textContent = r.owner + ' is the owner and the backup. Pick a different backup, so someone can cover when ' + r.owner + ' is away.';
+  }
+
+  // Who carries what: each person's owner and backup jobs, so the invisible load is visible
+  function tally() {
+    var box = document.getElementById('wk-tally'), list = document.getElementById('wk-tally-list'), note = document.getElementById('wk-tally-note');
+    if (!box) return;
+    var jobs = state.rows.filter(function (r) { return (r.task || '').trim() || r.owner || r.backup; });
+    var people = names(), count = {};
+    function add(n, k) { if (!n) return; if (!count[n]) { count[n] = { owner: 0, backup: 0 }; if (people.indexOf(n) === -1) people.push(n); } count[n][k]++; }
+    people.forEach(function (n) { count[n] = { owner: 0, backup: 0 }; });
+    jobs.forEach(function (r) { add(r.owner, 'owner'); add(r.backup, 'backup'); });
+    var any = jobs.some(function (r) { return r.owner || r.backup; });
+    box.hidden = !any;
+    if (!any) return;
+    list.textContent = '';
+    people.forEach(function (n) {
+      var c = count[n]; if (!c) return;
+      var li = document.createElement('li'), b = document.createElement('strong');
+      b.textContent = n + ':';
+      li.appendChild(b);
+      li.appendChild(document.createTextNode(' ' + c.owner + ' owner, ' + c.backup + ' backup'));
+      list.appendChild(li);
+    });
+    var owned = jobs.filter(function (r) { return r.owner; }).length, open = jobs.filter(function (r) { return (r.task || '').trim() && !r.owner; }).length;
+    var top = null;
+    people.forEach(function (n) { if (count[n] && (!top || count[n].owner > count[top].owner)) top = n; });
+    var bits = [];
+    if (top && owned >= 3 && people.length > 1 && count[top].owner / owned > 0.5) bits.push(top + ' owns ' + count[top].owner + ' of the ' + owned + ' jobs with an owner. It’s worth asking which one they’d hand over first.');
+    if (open) bits.push(open === 1 ? 'One job still needs an owner.' : open + ' jobs still need an owner.');
+    note.textContent = bits.join(' ');
+  }
+
+  /* ---------- Team check-in: how full each week is, one thank-you, one thing that slipped ---------- */
+  var FULL = ['Light', 'About right', 'Full', 'Too full'];
+  var ciBox = document.getElementById('ci-people'), ciNone = document.getElementById('ci-none'), ciStatus = document.getElementById('ci-status');
+  function ciSay(msg, undoFn) {
+    if (!ciStatus) return;
+    ciStatus.textContent = msg;
+    if (undoFn) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'wk-btn wk-small'; b.textContent = 'Undo';
+      b.addEventListener('click', function () { undoFn(); save(); render(); ciSay('Put back.'); });
+      ciStatus.appendChild(document.createTextNode(' ')); ciStatus.appendChild(b);
+    }
+  }
+  function renderCI() {
+    if (!ciBox) return;
+    var list = names();
+    ciNone.hidden = list.length > 0;
+    // keep focus where it was when the list is drawn again
+    var act = document.activeElement, actId = act && ciBox.contains(act) ? act.id : '';
+    ciBox.textContent = '';
+    list.forEach(function (n, i) {
+      var me = state.ci.people[n] || {};
+      var fs = document.createElement('fieldset'); fs.className = 'ci-person';
+      var lg = document.createElement('legend'); lg.textContent = n; fs.appendChild(lg);
+      function field(key, label, control) {
+        control.id = 'ci-' + key + '-' + i;
+        var l = document.createElement('label'); l.setAttribute('for', control.id); l.textContent = label;
+        fs.appendChild(l); fs.appendChild(control);
+        var ev = control.tagName === 'SELECT' ? 'change' : 'input';
+        control.addEventListener(ev, function () {
+          var p = state.ci.people[n] || (state.ci.people[n] = {});
+          p[key] = control.value; save();
+        });
+      }
+      var sel = document.createElement('select');
+      opt(sel, '', 'Choose…');
+      FULL.forEach(function (f) { opt(sel, f, f); });
+      sel.value = FULL.indexOf(me.full) > -1 ? me.full : '';
+      field('full', 'How full is my week?', sel);
+      var t1 = document.createElement('input'); t1.type = 'text'; t1.autocomplete = 'off'; t1.value = me.thanks || ''; t1.placeholder = 'For example: Ben covered my calls on Tuesday';
+      field('thanks', 'One thank-you', t1);
+      var t2 = document.createElement('input'); t2.type = 'text'; t2.autocomplete = 'off'; t2.value = me.slipped || ''; t2.placeholder = 'For example: the client follow-up';
+      field('slipped', 'One thing that slipped', t2);
+      ciBox.appendChild(fs);
+    });
+    var d = document.getElementById('ci-date'); if (d && d.value !== state.ci.date) d.value = state.ci.date;
+    var j = document.getElementById('ci-jobs'); if (j && j.value !== state.ci.jobs) j.value = state.ci.jobs;
+    if (actId) { var back = document.getElementById(actId); if (back) back.focus(); }
   }
 
   team.addEventListener('input', function () { state.team = team.value; save(); render(); });
@@ -493,13 +592,39 @@
     var inputs = body.querySelectorAll('input');
     if (inputs.length) inputs[inputs.length - 1].focus();
   });
-  document.getElementById('wk-print').addEventListener('click', function () {
-    var root = document.documentElement;
-    root.classList.add('wk-printing');
-    var done = function () { root.classList.remove('wk-printing'); window.removeEventListener('afterprint', done); };
+  function printOnly(id) {
+    var root = document.documentElement, part = document.getElementById(id);
+    root.classList.add('wk-printing'); if (part) part.classList.add('wk-print-this');
+    var done = function () { root.classList.remove('wk-printing'); if (part) part.classList.remove('wk-print-this'); window.removeEventListener('afterprint', done); };
     window.addEventListener('afterprint', done);
     window.print();
     setTimeout(done, 1000);
+  }
+  document.getElementById('wk-print').addEventListener('click', function () { printOnly('owner-list'); });
+  document.getElementById('ci-print').addEventListener('click', function () { printOnly('check-in'); });
+  document.getElementById('ci-date').addEventListener('input', function (e) { state.ci.date = e.target.value; save(); });
+  document.getElementById('ci-jobs').addEventListener('input', function (e) { state.ci.jobs = e.target.value; save(); });
+  document.getElementById('ci-add-jobs').addEventListener('click', function () {
+    var have = {};
+    state.rows.forEach(function (r) { if (r.task) have[r.task.trim().toLowerCase()] = 1; });
+    var added = [];
+    state.ci.jobs.split(/\n+/).map(function (x) { return x.replace(/^[-*•\s]+/, '').trim(); }).filter(Boolean).forEach(function (t) {
+      if (have[t.toLowerCase()]) return;
+      have[t.toLowerCase()] = 1; added.push(t);
+    });
+    if (!added.length) { ciSay(state.ci.jobs.trim() ? 'Those jobs are already on the list.' : 'Type a job first, one per line.'); return; }
+    // fill an empty first row before adding new ones
+    state.rows = state.rows.filter(function (r) { return (r.task || '').trim() || r.owner || r.backup || r.often; });
+    added.forEach(function (t) { state.rows.push({ task: t, owner: '', backup: '', often: '' }); });
+    state.ci.jobs = ''; save(); render();
+    ciSay('Added ' + (added.length === 1 ? '“' + added[0] + '”' : added.length + ' jobs') + ' to the one-owner list. Give ' + (added.length === 1 ? 'it' : 'each one') + ' an owner and a backup.');
+  });
+  document.getElementById('ci-clear').addEventListener('click', function () {
+    var was = JSON.parse(JSON.stringify(state.ci));
+    var empty = !was.date && !was.jobs && !Object.keys(was.people).length;
+    if (empty) { ciSay('It’s already empty, ready for this week.'); return; }
+    state.ci = { date: '', people: {}, jobs: '' }; save(); render();
+    ciSay('Cleared, ready for a new week.', function () { state.ci = was; });
   });
   document.getElementById('wk-clear').addEventListener('click', function () {
     if (!state.rows.length) { say('The list is already empty.'); return; }
@@ -513,9 +638,9 @@
   });
   document.getElementById('wk-erase').addEventListener('click', function () {
     try { localStorage.removeItem(KEY); } catch (e) {}
-    state = { team: '', rows: [] }; undo = null;
+    state = { team: '', rows: [], ci: { date: '', people: {}, jobs: '' } }; undo = null;
     team.value = ''; render();
-    say('Erased. Nothing from this list is saved in this browser now.');
+    say('Erased. Nothing from this list or the check-in is saved in this browser now.');
   });
 
   load();

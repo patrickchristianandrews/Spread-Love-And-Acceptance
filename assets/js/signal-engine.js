@@ -1647,6 +1647,51 @@ function looksLikeGibberish(t){
   return odd.length*2 >= ws.length && ws.length<=12 && !/\b(?:the|and|you|you're|can|could|please|thanks|hey|hi|i'm|it's|is|to|of)\b/i.test(t);
 }
 
+/* At work (a team lead, a coworker, a group channel), a correction is rewritten as fact, impact and request:
+   "The shift handover was missed on [days], and [what that affected]. Could we agree one owner for it by [a day]?"
+   "Guys" goes, the count of misses goes ("third time", "again", "every time": the notes say why), and a vague
+   "sort it out" becomes one owner by one day. */
+const ORD = "(?:second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|umpteenth|hundredth|millionth|nth|\\d+(?:st|nd|rd|th))";
+const WORK_ADDR = /^\s*(?:(?:hey|hi|ok(?:ay)?|so|right|look|listen)[\s,]+)?(?:you )?(?:guys|folks|people|lads|ladies|boys|girls|y'all|dudes|mates?|gang|peeps)\s*[,!:.–—-]+\s*/i;
+const WORK_VAGUE = /^(?:(?:could|can|would|will) you (?:all |guys |please )*)?(?:please )?(?:sort (?:it|this|that)(?: out)?|sort out (?:it|this|that)|fix (?:it|this|that)|deal with (?:it|this|that)|handle (?:it|this|that)|get (?:it|this|that) sorted|sort yourselves out|get (?:it|this) together|do better|step up|make sure (?:it|this|that) (?:doesn't|does not|won't|will not|never) happen(?:s)? again)(?: by \[a time\])?[?.!]*$/i;
+const WORK_MISS = /\b(?:was|were|got|has been|have been|had been)\s+(?:\w+ly\s+)?(?:missed|skipped|forgotten|dropped|late|left|ignored|lost|not (?:done|sent|updated|filled in|logged|completed|finished))\b|\b(?:missed|forgot|skipped|didn't|did not|wasn't|weren't|hasn't been|haven't been)\b/i;
+function workReframe(main, an, note, ctx){
+  let counted = "", fact = false;
+  let t = main.replace(WORK_ADDR, mm=>{ note("guys", mm.replace(/[\s,!:.–—-]+$/,""), ""); return ""; })
+              .replace(/,\s*(?:guys|folks|people|lads|y'all)(?=[\s.!?])/gi, mm=>{ note("guys", mm.replace(/^,\s*/,""), ""); return ""; });
+  const sents = splitSentences(t).map(x=>x.text.trim()).filter(Boolean);
+  const out = [];
+  sents.forEach(s0=>{
+    let x = s0, cnt = false;
+    const lead = x.match(new RegExp("^(?:(?:this|that|it)(?:'s| is| was) (?:now |already |officially )?the) "+ORD+" time(?: (?:this|that|in a) (?:week|month|sprint|quarter|year|row))?(?: (?:that|when))?\\s*", "i"));
+    if(lead){ counted = counted || lead[0].trim().replace(/^(?:this|that|it)(?:'s| is| was) (?:now |already |officially )?the /i,"").replace(/\s+(?:that|when)$/i,""); x = x.slice(lead[0].length); cnt = true; if(!/[A-Za-z]{2}/.test(x)) { note("count", counted, ""); return; } x = capFirst(x); }
+    x = x.replace(new RegExp(",?\\s*\\bfor the "+ORD+" time\\b","gi"), mm=>{ counted = counted || mm.replace(/^[,\s]+/,""); cnt = true; return ""; })
+         .replace(/,?\s*\b(?:\d+|two|three|four|five|six|several|so many|too many) times (?:now|already|this (?:week|month|sprint|quarter|year)|in a row)\b/gi, mm=>{ counted = counted || mm.replace(/^[,\s]+/,""); cnt = true; return ""; })
+         .replace(/,?\s*\b(?:yet again|once again|all over again|again|as usual|like always|every (?:single )?time|a few times lately|a lot lately)\b(?!\s+(?:we|you|i|it|this|that|the)\b)/gi, mm=>{ counted = counted || mm.replace(/^[,\s]+/,""); cnt = true; return ""; })
+         .replace(/\s+([.,!?])/g,"$1").replace(/\s{2,}/g," ").trim();
+    if(!/[A-Za-z]{2}/.test(x.replace(/\[[^\]]*\]/g,""))) return;
+    const isQ = /\?\s*$/.test(x) || /\b(?:could|can|would|will) (?:you|we)\b/i.test(x);
+    // a miss, said as a fact: when it happened and what it affected
+    if(!isQ && WORK_MISS.test(x) && (cnt || an.found.passive || an.found.count || an.found.again)){
+      fact = true;
+      const end = (x.match(/[.!]+$/)||["."])[0];
+      let body = x.replace(/[.!]+$/,"");
+      if(cnt && !WHEN_REAL.test(body) && !/\[days\]/.test(body)) body += " on [days]";
+      if(!/\b(?:because|which (?:meant|means)|so (?:the|we|i)|meaning|and (?:that|it|the|we))\b|\[what that affected\]/i.test(body)) body += ", and [what that affected]";
+      if(body!==x.replace(/[.!]+$/,"")) note("impact", x.replace(/[.!]+$/,""), body);
+      x = capFirst(body)+(end.charAt(0)==="!"?".":end.charAt(0));
+    }
+    // a vague "sort it out": one owner, by one day
+    if(WORK_VAGUE.test(x)){
+      const ask = "Could we agree one owner for "+(fact || out.length ? "it" : "[the task]")+" by [a day]?";
+      note("workask", x.replace(/[?.!]+$/,""), ask); x = ask;
+    }
+    out.push(x);
+  });
+  if(counted) note("count", counted, "");
+  return out.join(" ");
+}
+
 function rewrite(an, opts){
   opts = opts||{};
   const W = new Set(opts.wirings||[]);
