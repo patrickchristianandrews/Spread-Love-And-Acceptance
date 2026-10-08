@@ -105,6 +105,16 @@
   /* Keep the little icons in their real colours when the page is shown dark */
   @media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) .read .hh-card-i{ filter:invert(1) hue-rotate(180deg); } }
   html[data-theme="dark"]:not(.tol-nodark) .read .hh-card-i{ filter:invert(1) hue-rotate(180deg); }
+  /* Quiet mode: the same first screen in plain text, no panel, glows, pills, gradients or icons */
+  html.tol-quiet .read .hh{ padding:clamp(1rem, .8rem + 1.5vw, 1.6rem); margin:0 0 1.6rem; border:1px solid var(--line, #D9CBA3); border-radius:12px; background:#FFFBF2; box-shadow:none; -webkit-backdrop-filter:none; backdrop-filter:none; overflow:visible; }
+  html.tol-quiet .read .hh::before, html.tol-quiet .read .hh::after, html.tol-quiet .read .hh-heart, html.tol-quiet .read .hh-card-i{ display:none; }
+  html.tol-quiet .read .hh-kick{ display:block; }
+  html.tol-quiet .read .hh-kick span{ display:inline; padding:0; border:0; background:none; }
+  html.tol-quiet .read .hh-kick span::before{ content:none; }
+  html.tol-quiet .read .hh-kick span + span::before{ content:" · "; }
+  html.tol-quiet .read .hh-accent{ font-style:normal; font-weight:600; color:inherit; background:none; -webkit-text-fill-color:currentColor; }
+  html.tol-quiet .read a.hh-card, html.tol-quiet .read a.hh-card.is-main{ background:#FFFDF7; color:var(--ink, #2B2620); border:1px solid var(--line, #D9CBA3); box-shadow:none; border-radius:10px; transform:none; }
+  html.tol-quiet .read .hh-more a{ background:#FFFDF7; border:1px solid var(--line, #D9CBA3); transform:none; }
   @media (max-width:640px){
     .read .hh{ margin-left:-6px; margin-right:-6px; padding:1.2rem .95rem 1.3rem; border-radius:24px; }
     .read .hh-h1{ font-size:clamp(1.85rem, 1rem + 4.2vw, 2.2rem); }

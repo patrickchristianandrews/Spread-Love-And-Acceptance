@@ -697,6 +697,8 @@ t('retest3', 'we\'ve had a rough week', { not: /wave had|carrier wave/i });
 t('retest3', 'we’ve been fighting a lot', { not: /wave been|carrier wave|I think you mean/i });
 t('retest3', 'my wife and I each have our own phone, how do we put our two sides together?', { kind: 'care', id: 'twophones' });
 t('retest3', 'how do i send my side to my husband', { kind: 'care', id: 'twophones' });
+t('retest3', 'How do I tell my girlfriend she left the stove on without her feeling criticised? She has ADHD.', { kind: 'care', id: 'raisegently', link: '/signal-translator.html' });
+t('retest3', 'she says I am too sensitive when she is just being honest', { kind: 'care', id: 'toosensitive' });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

@@ -977,6 +977,94 @@
       "chips": []
     },
     {
+      "id": "raisegently",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "raising something without it feeling like criticism",
+      "pat": "\\b(tell|say to|bring (it|this|that)? ?up (with|to)|mention (it )?to|raise (it )?with|ask|remind)\\b.{0,80}\\bwithout (him|her|them|my \\w+|it) (feeling|getting|being|sounding|taking it|coming across)\\b|\\bwithout (sounding|coming across as) (critical|like (i m|im|i am) (nagging|criticis\\w+|criticiz\\w+|attacking))\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "You can say it plainly and kindly at the same time. What makes something land as criticism is usually blame words (“again”, “always”, “never”), talking about the person instead of the thing, and timing, not the fact itself."
+      ],
+      "how": [
+        "Pick a calm moment, not the second it happens (unless it’s urgent, like a stove left on: then just say the fact and deal with it).",
+        "Say the fact, how it affects you, and one specific ask: “The stove was on when I came in. It scares me. Could we add a stove check to the kitchen close-down?”",
+        "Leave out “again”, “always” and “never”. For many people with ADHD those words land on the whole history of being told off.",
+        "Make it about a system, not a character: a checklist, a reminder or a habit you both use.",
+        "Check the exact words before you send them in “Check a message before you send it”. It keeps your point and shows how it may land."
+      ],
+      "script": [
+        "This isn’t a telling-off. The stove was on when I got home and it scared me. Can we work out a check that helps us both?"
+      ],
+      "plain": [
+        "Pick a calm time.",
+        "Say what happened, how you feel, and one ask.",
+        "Do not say “again” or “always”.",
+        "Fix it with a system, like a checklist."
+      ],
+      "links": [
+        [
+          "Check a message before you send it",
+          "/signal-translator.html"
+        ],
+        [
+          "Different brains, one home",
+          "/neurodivergent-relationships.html"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "toosensitive",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "“too sensitive” vs “just being honest”",
+      "pat": "\\b(says|said|thinks|calls me|tells me|told me)\\b.{0,10}\\b(i m|im|i am|i ve been|i'm)? ?(too|so|over|overly) sensitive\\b|\\btoo sensitive\\b.{0,60}\\b(honest|direct|blunt)\\b|\\b(honest|direct|blunt)\\b.{0,60}\\btoo sensitive\\b|\\b(just|only) being honest\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "This is usually two styles meeting, not one person being wrong. Some people say things straight and mean no harm; others take in tone and wording as much as the words. “You’re too sensitive” and “you’re too harsh” both put the problem in one person, so neither helps."
+      ],
+      "how": [
+        "Name the two styles out loud: “You say things straight. I hear tone strongly. Both are real.”",
+        "The direct one keeps the honesty and adds one softener: a warm word first, or “this is about the thing, not you”.",
+        "The attuned one asks for the plain meaning when unsure: “Is this a problem, or just information?”",
+        "Agree a word either of you can say when something lands harder than it was meant.",
+        "Compare your Wave Codes or Wiring Cards: they show this difference side by side, with a bridge for each of you."
+      ],
+      "script": [
+        "I don’t want you to stop being honest. I’d like it to land as honest, not harsh. Can we find a way to say hard things that works for both of us?"
+      ],
+      "plain": [
+        "You have two different styles.",
+        "Neither of you is wrong.",
+        "Direct talk can add one kind word.",
+        "Ask “is this a problem, or just information?”"
+      ],
+      "links": [
+        [
+          "Wavelength: compare your codes",
+          "/wavelength.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Different brains, one home",
+          "/neurodivergent-relationships.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "breaklength",
       "kind": "intent",
       "first": true,
