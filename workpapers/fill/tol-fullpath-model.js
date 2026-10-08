@@ -82,6 +82,26 @@
   }
   function said(parts) { return parts.filter(Boolean).join(' '); }
   function numWord(n) { return ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] || String(n); }
+  // "You picked owners for 5 jobs. 11 more are listed without an owner yet; pick owners when you're ready."
+  function listedLine(t) {
+    var n = t && t.listed ? t.listed.length : 0;
+    if (!n) return '';
+    return (t.owned ? 'You picked owners for ' + t.owned + (t.owned === 1 ? ' job' : ' jobs') + '. ' + n + ' more ' + (n === 1 ? 'is' : 'are') : n + (n === 1 ? ' job is' : ' jobs are')) + ' listed without an owner yet; pick owners when you\u2019re ready.';
+  }
+  // Two people's own lists of who owns what, when they differ: "Your two lists differ on 1 job: the
+  // good-morning / good-night text. Lena's list has her owning 3 of 4; Diego's has 2 each."
+  function viewsLine(t, P) {
+    var w = t && t.views; if (!w || !w.differ.length) return '';
+    function ownsText(L) {
+      var names = P.list.map(function (p) { return p.label; }), counts = names.map(function (nm) { return L.owns[nm] || 0; });
+      if (counts.length > 1 && counts.every(function (x) { return x === counts[0]; })) return 'it\u2019s ' + counts[0] + ' each';
+      var top = counts.indexOf(Math.max.apply(null, counts));
+      return names[top] + ' owns ' + counts[top] + ' of the ' + L.total;
+    }
+    var bits = w.lists.map(function (L, k) { return 'on ' + L.whose + '\u2019s' + (k ? '' : ' list') + ', ' + ownsText(L); });
+    bits[0] = bits[0].charAt(0).toUpperCase() + bits[0].slice(1);
+    return 'Your ' + (w.lists.length === 2 ? 'two' : w.lists.length) + ' lists differ on ' + plural(w.differ.length, 'job') + ': ' + list(w.differ.slice(0, 3).map(function (d) { return 'the ' + lc(d.task); })) + (w.differ.length > 3 ? ' and more' : '') + '. ' + bits.join('; ') + '.';
+  }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : (many || one + 's')); }
 
   /* ------------------------------------------------------------ roads */
