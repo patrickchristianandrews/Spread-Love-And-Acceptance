@@ -153,7 +153,7 @@
 <p class="pw-keep"><label><input type="checkbox" id="pp-keep" checked> Keep our plan on this device</label> <span class="pw-keep-note">It stays in this browser only, so it’s here next time. <button type="button" class="pw-link" id="pp-forget">Forget it</button></span></p>
 <p class="pw-acts">
   <button type="button" class="pw-btn" id="pp-copy">Copy our plan</button>
-  <button type="button" class="pw-btn is-quiet" id="pp-share" data-share data-share-from="#pp-out" data-share-url="none" data-share-result data-no-clip>Share it</button>
+  <button type="button" class="pw-btn is-quiet" id="pp-share" data-share data-share-from="#pp-out" data-share-url="none" data-share-title="Our pause plan" data-share-result data-no-clip>Share it</button>
 </p>
 <p class="pw-status" id="pp-status" role="status" aria-live="polite"></p>
 </section>
@@ -200,7 +200,7 @@
   var fromLink = /#plan=([A-Za-z0-9+\/_-]+)/.exec(location.hash), saved = null;
   try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { saved = null; }
   if (fromLink && dec(fromLink[1])) {
-    fill(dec(fromLink[1])); $('pp-from').hidden = false;
+    fill(dec(fromLink[1])); $('pp-from').hidden = false; setTimeout(fromNote, 0);
     try { history.replaceState(null, '', location.pathname + '#plan'); } catch (e) {}
     setTimeout(function () { var pl = document.getElementById('plan'); if (pl) pl.scrollIntoView({ block: 'start' }); }, 300);
   } else if (saved) {
@@ -223,6 +223,11 @@
       'If one of us can’t come back on time: ' + v('pp-late', 'Send a short message with a new time.') + '\n' +
       'When we come back, we start with: “' + v('pp-first', 'I’m back. I’m not against you.').replace(/^[“"]+|[”"]+$/g, '') + '”';
   }
+  // a plan that arrived in a link: say where it came from, and whether it's now kept on this device
+  function fromNote() {
+    var n = $('pp-from'); if (!n) return;
+    n.textContent = 'Your partner shared this pause plan with you. ' + ($('pp-keep').checked ? 'It’s kept on this device now (untick “Keep our plan on this device” below if you’d rather not). ' : '') + 'Change anything you like, then send it back with “Share it”.';
+  }
   function render(save) { out.textContent = planText() + '\n\nOpen our plan: ' + link(); if (save !== false) keep(); }
   ids.forEach(function (id) { $(id).addEventListener('input', render); $(id).addEventListener('change', render); });
   $('pp-keep').addEventListener('change', keep);
@@ -233,7 +238,7 @@
   window.addEventListener('hashchange', function () {
     var m = /#plan=([A-Za-z0-9+\/_-]+)/.exec(location.hash), o = m && dec(m[1]);
     if (!o) return;
-    fill(o); $('pp-from').hidden = false; render();
+    fill(o); $('pp-from').hidden = false; render(); fromNote();
     try { history.replaceState(null, '', location.pathname + '#plan'); } catch (e) {}
     var pl = document.getElementById('plan'); if (pl) pl.scrollIntoView({ block: 'start' });
   });

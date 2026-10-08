@@ -12,7 +12,11 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
 <style>
-  .sf-exit{ position:sticky; top:.5rem; z-index:50; display:flex; justify-content:flex-end; margin:0 0 .5rem !important; }
+  /* always in reach, above the site header, at any scroll position */
+  .sf-exit{ position:fixed; right:max(.75rem, env(safe-area-inset-right)); bottom:max(.75rem, env(safe-area-inset-bottom)); z-index:990; display:flex; justify-content:flex-end; margin:0 !important; }
+  .sf-exit button{ box-shadow:0 6px 18px rgba(60,20,10,.28); }
+  main{ padding-bottom:4.5rem; }
+  @media print{ .sf-exit{ display:none; } }
   .sf-exit button, .sf-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.5rem 1.15rem; border-radius:999px; cursor:pointer; border:1.5px solid #96412B; background:#96412B; color:#fff; }
   .sf-btn.is-soft{ background:#FFFDF7; color:#2B2620; border-color:#B9A8D6; }
   .sf-exit button:focus-visible, .sf-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
@@ -65,7 +69,9 @@
 
 <p class="simple-lede">If someone is hurting you, threatening you, watching you or controlling you, that is not a communication problem, and it is not your fault. The tools on this site (pause lines, calm talks, apologies, “matching energy”) are made for two people who are both safe. Please don’t use them to manage someone who frightens you. Talk to people who do this every day instead.</p>
 
-<p><strong>To leave fast:</strong> press the <em>Leave this site quickly</em> button, or press the <kbd>Esc</kbd> key twice on any page of this site. It opens a weather search in this tab.</p>
+<p><strong>Never been hit? It still counts.</strong> Checking your phone, controlling the money, deciding who you can see, or making you scared of how they’ll react are all real signs of abuse. You can talk to an advocate even if you’re not sure it “counts”.</p>
+
+<p><strong>To leave fast:</strong> tap the red <em>Leave this site quickly</em> button (it stays in the corner as you scroll), or press the <kbd>Esc</kbd> key twice on any page of this site. It opens a weather search in this tab.</p>
 
 <h2 id="now">If you are in danger right now</h2>
 <p>Call <strong>911</strong> in the US and Canada, <strong>999</strong> in the UK, <strong>112</strong> in most of Europe, or your local emergency number.</p>
@@ -102,6 +108,7 @@
   <li><strong>If you are thinking about hurting yourself</strong><br>Call or text <a href="tel:988">988</a> (US).</li>
   <li><strong>For LGBTQ+ young people</strong><br>The Trevor Project: call <a href="tel:18664887386">1-866-488-7386</a> or text <strong>START</strong> to <a href="sms:678678">678-678</a>. Trans Lifeline: <a href="tel:18775658860">877-565-8860</a>. LGBT National Youth Talkline: <a href="tel:18002467743">1-800-246-7743</a>.</li>
   <li><strong>In danger right now</strong><br>Call <a href="tel:911">911</a>.</li>
+  <li><strong>In the UK</strong><br>Childline: call <a href="tel:08001111">0800 1111</a> free, any time, or chat at childline.org.uk. Calls don’t show on the phone bill.</li>
   <li><strong>Outside the US</strong><br><a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free helplines in your country.</li>
 </ul>
 <p>There is more for you on the page <a href="/teens.html">For teens</a>.</p>

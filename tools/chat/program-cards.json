@@ -977,6 +977,343 @@
       "chips": []
     },
     {
+      "id": "evidence",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "is this backed by research",
+      "pat": "\\b(is|are) (this|it|the site|these|that|the wave code|wavelength|the program) (backed|based|grounded|supported) (by|on|in) (research|science|evidence|studies)\\b|\\b(where|what) are (the|your) (sources|references|citations)\\b|\\bwhat (evidence|research|science) is (this|it|the site) based on\\b|\\b(scientifically|clinically) (valid|proven|tested)\\b|\\bjust myers ?briggs\\b|\\bevidence based\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Fair question. The guides draw on published research and name it: each entry in the Professor’s Library has a “What the research says, and its limits” note with its sources, and says where the evidence is thin. Anything marked “This site’s idea” is ours, not established science."
+      ],
+      "how": [
+        "Wavelength (Wave Codes) and the Wiring Card are ways to describe preferences, not tests that measure you. They aren’t validated psychometric instruments like a clinical assessment.",
+        "The site was made by Christian, a former government auditor, not a psychologist or clinician. It’s self-help, not therapy or diagnosis.",
+        "For the research behind a topic, open its Library entry and read the sources and limits section."
+      ],
+      "script": [],
+      "plain": [
+        "The guides name their sources.",
+        "They also say where evidence is weak.",
+        "Wave Codes describe you; they are not a test.",
+        "This is self-help, not therapy."
+      ],
+      "links": [
+        [
+          "The Professor’s Library",
+          "/library.html"
+        ],
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
+        ],
+        [
+          "About the site",
+          "/about.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "adhdfriends",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "ADHD with friends, and remembering what people tell you",
+      "pat": "\\badhd\\b.{0,40}\\b(friend|friends|friendships?|social)\\b|\\bhow (do|can) i remember (what|things) (my )?(friends|people|they|others) (tell|told|say|said)\\b|\\bremember (my )?(friends|people).{0,20}\\b(birthdays|news|names)\\b|\\bforget (my )?(friends|people).{0,20}\\b(birthdays|news|names)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "With ADHD, forgetting what friends told you is usually about working memory, not about caring less. Friends feel it as “you weren’t listening”, so a small system goes a long way."
+      ],
+      "how": [
+        "Write it down straight away: a note on that friend’s contact (“new job at the bakery, starts Monday”).",
+        "Put birthdays and big dates in your calendar with a reminder two days before.",
+        "Repeat the key bit back while they’re talking (“So the interview is Thursday?”). It helps it stick and shows you’re listening.",
+        "When you do forget, own it plainly: “Sorry I forgot your interview. That’s on me. How did it go?” Skip “you know how I am”.",
+        "Tell close friends how you work, once: “If I don’t ask about something, it’s memory, not that I don’t care. Remind me any time.”"
+      ],
+      "script": [
+        "Sorry I forgot to ask about your interview. That’s on me. How did it go?"
+      ],
+      "plain": [
+        "Write it down right away.",
+        "Put birthdays in your calendar.",
+        "Repeat the main thing back.",
+        "If you forget, say sorry plainly."
+      ],
+      "links": [
+        [
+          "ADHD in the Professor’s Library",
+          "/library/wiring.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "adhdwork",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "ADHD at work",
+      "pat": "\\badhd\\b.{0,40}\\b(at work|work|job|office|developer|engineer|manager|boss|meetings?|deadlines?)\\b|\\b(at work|my job)\\b.{0,40}\\badhd\\b",
+      "notPat": "\\b(partner|husband|wife|boyfriend|girlfriend|chores)\\b",
+      "keys": [],
+      "what": [
+        "Plenty of people with ADHD do very well at work with a few supports that match how their attention works. It’s about the setup, not effort."
+      ],
+      "how": [
+        "Make the invisible visible: one task list you trust, deadlines in your calendar, and reminders for handovers.",
+        "Protect focus time: block it out, mute notifications, and batch messages.",
+        "Ask for asks in writing after meetings (“Could you drop the actions in the chat?”).",
+        "Share a short Wiring Card with your team or manager if you’re comfortable: how you work best, and what helps.",
+        "Disclosure is your choice. Where it applies, workplace adjustments are available; a doctor or HR can explain options."
+      ],
+      "script": [
+        "I work best with the ask in writing. Could you drop the actions in the chat after the meeting?"
+      ],
+      "plain": [
+        "Keep one task list.",
+        "Block focus time.",
+        "Ask for actions in writing.",
+        "Telling work about ADHD is your choice."
+      ],
+      "links": [
+        [
+          "The Wiring Card (has a team version)",
+          "/wiring-card.html"
+        ],
+        [
+          "At work: the plain version",
+          "/work.html"
+        ],
+        [
+          "ADHD in the Professor’s Library",
+          "/library/wiring.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teenmiddle",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "stuck in the middle of your parents",
+      "pat": "\\bstuck (in the middle|between) (of )?(my )?(mum|mom|dad|parents|stepdad|stepmom|stepfather|stepmother)\\b|\\b(mum|mom|dad|parents?|stepdad|stepmom) (makes?|made|making|wants?|tries to make) me (pick|choose|take) (a )?sides?\\b|\\b(make|makes|made) me (pick|choose|take) (a )?side between\\b|\\bin the middle of (my )?(mum|mom|dad|parents)( and (my )?(stepdad|stepmom|dad|mum|mom))?\\b",
+      "notPat": "\\bmy (kids|children|son|daughter|stepkids|stepdaughter|stepson)\\b",
+      "keys": [],
+      "what": [
+        "Being stuck in the middle of the adults you love is really hard, and it’s not your job to fix their relationship. You’re allowed to love both of them, and you don’t have to pick a side."
+      ],
+      "how": [
+        "When one of them complains about the other to you, you can say a short line and change the subject.",
+        "If they ask you to pass on messages, it’s okay to say no: “Can you tell them yourself?”",
+        "Give yourself space when it’s loud: headphones, your room, a walk, a friend’s house.",
+        "Tell one adult you trust how it feels: a relative, a teacher or a school counselor.",
+        "If the fighting ever scares you, or anyone gets hurt, that’s more than arguing. You can ask for help even if nobody is hurting you directly."
+      ],
+      "script": [
+        "I love you both and I’m not picking a side. Please don’t ask me to.",
+        "Can you tell them yourself? I don’t want to be the messenger."
+      ],
+      "plain": [
+        "It is not your job to fix it.",
+        "You can love both of them.",
+        "You do not have to pick a side.",
+        "Tell an adult you trust."
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html#middle"
+        ],
+        [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
+        ],
+        [
+          "Calm sounds",
+          "/soundscapes.html#brain-breakers"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teensibling",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "fighting with a brother or sister at home",
+      "pat": "\\b(me and my|my) (little |big |younger |older |baby |step ?)?(brother|sister|bro|sis|siblings?)\\b.{0,30}\\b(fight|fighting|argue|arguing|annoying|so annoying|drives? me (crazy|mad|nuts)|takes? my (stuff|things)|gets? me in trouble|winds? me up|always starts?)\\b|\\b(brother|sister|sibling) is so annoying\\b",
+      "notPat": "\\b(dad|mum|mom|parent)s? (care|caring|money|will|inheritance)\\b",
+      "keys": [],
+      "what": [
+        "Fighting with a brother or sister is really common, especially when you share space and get compared. It doesn’t mean you don’t care about each other."
+      ],
+      "how": [
+        "Agree a few simple rules for shared stuff and your own space (knock first, ask before borrowing).",
+        "When it heats up, walk away for ten minutes instead of having the last word.",
+        "If you keep getting blamed, tell a parent calmly, at a calm time: “Can we work out a fair rule for this?”",
+        "Find one thing you both like (a game, a show) and do it together sometimes."
+      ],
+      "script": [
+        "I need my space for a bit. I’ll come and play later.",
+        "Can we agree a rule for my stuff? Ask me first, and I’ll ask you first too."
+      ],
+      "plain": [
+        "Sibling fights are common.",
+        "Agree simple rules for stuff and space.",
+        "Walk away for ten minutes when it heats up.",
+        "Do one fun thing together sometimes."
+      ],
+      "links": [
+        [
+          "For teens: brothers and sisters",
+          "/teens.html#siblings"
+        ],
+        [
+          "Siblings who fight (for parents)",
+          "/parents.html#siblings"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teentalk",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a young person looking for someone to talk to",
+      "pat": "\\b(i m|im|i am) (1[0-7]|a teen|a teenager|in (year|grade) \\d+)\\b.{0,50}\\b(who can i talk to|talk to someone|who do i talk to|need help|need someone)\\b|\\bwho can i talk to\\b.{0,30}\\b(i m|im|i am) (1[0-7]|a teen)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "It’s good that you’re looking for someone to talk to. You don’t have to handle things alone."
+      ],
+      "how": [
+        "An adult you trust: a relative, a teacher, a school counselor, a coach or a friend’s parent. If the first person doesn’t help, tell someone else.",
+        "In the US, you can text HOME to 741741 (Crisis Text Line) any time, or call or text Childhelp at 1-800-422-4453. In the UK, call Childline free on 0800 1111.",
+        "If you’re thinking about hurting yourself, call or text 988 (US). If you’re in danger right now, call 911 or your local emergency number."
+      ],
+      "script": [
+        "Can I talk to you about something that’s been going on at home? I don’t need you to fix it, I just need someone to know."
+      ],
+      "plain": [
+        "Talk to an adult you trust.",
+        "You can text HOME to 741741 (US) or call Childline 0800 1111 (UK).",
+        "If you are in danger, call 911."
+      ],
+      "links": [
+        [
+          "For teens",
+          "/teens.html"
+        ],
+        [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "shiftwind",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "winding down after work",
+      "pat": "\\b(after|from) (a|my|the|another) (\\d+ ?h(our)?|long|night|double|late|early|12 hour|twelve hour) ?(shift|day|night)\\b.{0,40}\\b(calm|wind|switch|relax|sleep|unwind|decompress|settle)|\\b(calm (down|myself)|wind down|switch off|unwind|decompress|relax)\\b.{0,30}\\b(after|from) (a |my |the )?(\\d+ ?h(our)?|long|night|double|late)? ?(shift|work|day)\\b|\\bcan.?t switch off (after|from) work\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "After a long shift your body is often still running at work speed, even when you’re home. A short, deliberate wind-down helps it catch up."
+      ],
+      "how": [
+        "Two minutes of slow breathing: the Night Garden counts it for you, in the dark and silent by default.",
+        "Mark the end of work: change clothes, wash your face, or a short walk round the block.",
+        "Write down the one thing still on your mind, so it can wait until tomorrow.",
+        "Something low and gentle for the last half hour: calm sounds, no screens with news or messages.",
+        "If you’re running on empty most days, the one-minute load check shows how much you’re carrying."
+      ],
+      "script": [
+        "I’m just off a long shift. Give me twenty minutes to land, then I’m here."
+      ],
+      "plain": [
+        "Breathe slowly for two minutes.",
+        "Mark the end of work.",
+        "Write down what is on your mind.",
+        "Do something calm before bed."
+      ],
+      "links": [
+        [
+          "Night Garden: breathe",
+          "/night-garden.html"
+        ],
+        [
+          "Calm-Down Kit",
+          "/wp-11.html"
+        ],
+        [
+          "How much are you carrying? (load check)",
+          "/workpapers/wp-02-how-much-are-you-carrying.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "roughweek",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a rough patch together",
+      "pat": "\\b(we ve|weve|we have|we re|were|we are|it s|its|it has|it s been|its been|been) (had |having |been having |been )?(a )?(really |so |pretty |very )?(rough|hard|tough|bad|awful|terrible|difficult|stressful) (week|few days|month|time|patch|couple of (days|weeks)|stretch)\\b|\\b(rough|hard|tough|bad) (week|patch|few days|month)\\b.{0,20}\\b(us|together|between us|with (him|her|them|my \\w+))\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "I’m sorry. A rough stretch wears you both down, and small things start to land harder than they’re meant."
+      ],
+      "how": [
+        "First, look after the next hour: if you’re both still raw, take a proper break and agree when you’ll talk.",
+        "When you’re calmer, have a short check-in: one thing that was hard this week, one thing you appreciated, one thing that would help.",
+        "If the same argument keeps coming back, “One wants to talk now, one needs space” has a pause plan you can make together.",
+        "Then something small and warm: a five-minute moment of turning toward each other, no big talk needed."
+      ],
+      "script": [
+        "It’s been a rough week for us. Can we take ten minutes tonight, just to say what was hard and what would help?"
+      ],
+      "plain": [
+        "Rough weeks happen.",
+        "Take a break if you are both upset.",
+        "Then talk for ten minutes, kindly.",
+        "Do one small warm thing together."
+      ],
+      "links": [
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ],
+        [
+          "Check-ins",
+          "/check-ins.html"
+        ],
+        [
+          "Turning toward",
+          "/turning-toward.html"
+        ],
+        [
+          "One wants to talk now, one needs space",
+          "/pursue-withdraw.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "raisegently",
       "kind": "intent",
       "first": true,
@@ -2952,7 +3289,7 @@
       "first": true,
       "newTopic": true,
       "name": "using this at work",
-      "pat": "\\b(use|using|bring|share|try|run) (this|it|the site|these tools|the program) (at|for|with) (work|my team|our team|the office|my job|my staff|my coworkers|my colleagues)\\b|\\b(at|for) work (version|mode)\\b|\\bwork ?mode\\b|\\b(my|our) team (doesnt|does not|won t|wont|keeps|never|always)\\b|\\b(who owns what|nobody owns|no one owns) (at work|on (my|our|the) team)\\b|\\b(team|staff|work) (meeting|session|retro|offsite) (idea|ideas|activity|exercise)\\b|\\bwithout (the )?(cartoons|mascots|dogs|pups) (for|at) work\\b",
+      "pat": "\\b(use|using|bring|share|try|run) (this|it|the site|these tools|the program) (at|for|with) (work|my team|our team|the office|my job|my staff|my coworkers|my colleagues)\\b|\\b(at|for) work (version|mode)\\b|\\bwork ?mode\\b|\\b(my|our) team (doesnt|does not|won t|wont|keeps|never|always)\\b|\\b(who owns what|nobody owns|no one owns) (at work|on (my|our|the) team)\\b|\\b(team|staff|work) (meeting|session|retro|offsite) (idea|ideas|activity|exercise)\\b|\\bwithout (the )?(cartoons|mascots|dogs|pups) (for|at) work\\b|\\b(version|mode|edition) (of (this|the) (site|program) )?for (work|teams?|the office|my team|managers?)\\b|\\b(for|at) (a )?work (teams?|groups?)\\b|\\bteam (check ?in|meeting|stand ?up)s?\\b",
       "keys": [],
       "what": [
         "Yes. The At work page is the plain version for teams, with no cartoons: one owner per job for a team (a small tool you can print), messages that land, appreciation that fits the person, a 45-minute team session, and one-to-ones."
@@ -2984,6 +3321,45 @@
         ]
       ],
       "notPat": "\\b(of|with) (two|three|four|five|six|seven|eight|[2-8])\\b|\\bteam of\\b"
+    },
+    {
+      "id": "teaminvisible",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a team member doing the invisible work",
+      "pat": "\\b(one|someone|a person|a colleague|a coworker|one of my|a member of my|somebody) (on|in|of) (my|the|our) team\\b.{0,40}\\b(does|do|doing|carries|carrying|feels? (they|she|he) (do|does|carry|carries))\\b.{0,20}\\b(all|most|more|the)\\b.{0,15}\\b(invisible|unseen|background|admin|glue|coordinating|organi[sz]ing|noticing) (work|jobs|tasks|stuff)\\b|\\b(invisible|glue|unseen) work\\b.{0,40}\\b(team|colleague|coworker|staff|report)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "That’s worth acting on as their lead. On most teams, the coordinating work (chasing, reminding, onboarding, keeping notes, smoothing handovers) lands on one or two people without anyone deciding it, and it rarely shows up in anyone’s goals."
+      ],
+      "how": [
+        "Thank them for raising it, and ask them to list what they do that isn’t written down anywhere.",
+        "Put those jobs on the team’s one-owner list, so each has a named owner and a backup, and rotate the ones nobody wants.",
+        "Count it: mention coordination work in one-to-ones and reviews, the same as other work.",
+        "Check in a month: is it still landing on the same person?"
+      ],
+      "script": [
+        "Thanks for telling me. Can you list the things you do that keep the team running but aren’t written down? I’d like to share them out properly and make sure they count."
+      ],
+      "plain": [
+        "Thank them for telling you.",
+        "Ask them to list the hidden jobs.",
+        "Give each job an owner and a backup.",
+        "Check again in a month."
+      ],
+      "links": [
+        [
+          "At work: the plain version",
+          "/work.html"
+        ],
+        [
+          "One owner per job",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "teamowners",
@@ -5421,7 +5797,7 @@
       "id": "free",
       "kind": "intent",
       "name": "cost and access",
-      "pat": "(is (it|this|the site|everything) free)|(how much (does|is) (it|this))|(what does it cost)|(do i (have to|need to) pay)|(is there a (fee|charge|subscription|paywall))|(paid (membership|version|plan))|(sign ?up|signup|membership|member)",
+      "pat": "(is (it|this|the site|everything) free)|(how much (does|is) (it|this))|(what does it cost)|(do i (have to|need to) pay)|(is there a (fee|charge|subscription|paywall))|(paid (membership|version|plan))|\\b(sign ?up|signup|membership|members?)\\b",
       "keys": [
         "is it free",
         "is this free",

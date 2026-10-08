@@ -44,7 +44,12 @@
   /* ---------------------------------------------------------------- our one small record */
   var S = { time: null, sit: null, days: [], read: {}, did: {}, earned: {}, tiny: {}, visits: 0 };
   (function () { var o = json(KEY); if (o && typeof o === 'object') for (var k in o) S[k] = o[k]; })();
-  function save() { lsSet(KEY, JSON.stringify(S)); }
+  // with "Stop remembering pages I visit" on, which pages were read or tried is never written down
+  function save() {
+    var o = S, off = false; try { off = !!localStorage.getItem('tol-recent-off'); } catch (e) {}
+    if (off) { o = {}; Object.keys(S).forEach(function (k) { o[k] = S[k]; }); o.read = {}; o.did = {}; }
+    lsSet(KEY, JSON.stringify(o));
+  }
   (function markDay() {
     var t = today();
     if (!Array.isArray(S.days)) S.days = [];
