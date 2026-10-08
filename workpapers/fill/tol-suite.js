@@ -353,6 +353,8 @@
     box.appendChild(row);
     var cur = choices.filter(function (c) { return (S.variant || '') === c[0]; })[0];
     if (cur && cur[1].note) box.appendChild(h('p', { className: 'ws-focus-note', text: cur[1].note }));
+    // living apart, on a phone: just the two call sheets, for five minutes on a call
+    if (S.variant === 'apart' && (phone() || S.short)) box.appendChild(h('p', { className: 'ws-focus-more' }, [h('button', { type: 'button', className: 'ws-focus-b ws-short-b' + (S.short ? ' is-on' : ''), 'data-short': S.short ? 'off' : 'on', 'aria-pressed': S.short ? 'true' : 'false', text: S.short ? 'Show the whole road' : 'Just the two call sheets (5 minutes)' })]));
     // Two or more people may not answer this the same way: one answer each, if you like.
     if (isSolo() || S.names.length < 2) return;
     var each = Array.isArray(S.focusEach) ? S.focusEach : null;
@@ -372,6 +374,22 @@
   }
 
   var namesQ = null, namesNote = null, reportAbout = null; // the page's own words, for the roads with more people
+  var NIGHTS = [[14, 'Every night'], [10, 'Most nights'], [7, 'Half the time'], [4, 'Every other weekend'], [2, 'A night or two'], [1, 'Now and then']];
+  function nightsOf(nm) {
+    var sp = S.split, k = SP.fold(nm || ''), hit = 14;
+    if (sp && sp.nights && k) Object.keys(sp.nights).forEach(function (x) { if (SP.fold(x) === k) hit = Math.round(sp.nights[x]); });
+    return hit;
+  }
+  function setNights(i, v) {
+    var nm = String(S.names[i] || '').trim();
+    if (!nm) return false;
+    S.split = S.split || { nights: {}, agreed: {} };
+    S.split.nights = S.split.nights || {}; S.split.agreed = S.split.agreed || {};
+    Object.keys(S.split.nights).forEach(function (x) { if (SP.fold(x) === SP.fold(nm)) delete S.split.nights[x]; });
+    if (v < 14) S.split.nights[nm] = v;
+    if (!Object.keys(S.split.nights).length && !Object.keys(S.split.agreed).length) S.split = null;
+    return true;
+  }
   function renderNames() {
     var p = S.path, wrap = $('ws-names');
     if (!p) { wrap.hidden = true; return; }
@@ -402,6 +420,12 @@
         var kb = h('input', { type: 'checkbox', id: 'ws-kid-' + i, 'data-kid': String(i), autocomplete: 'off' });
         kb.checked = !!S.kids[i];
         cell.appendChild(h('label', { className: 'ws-kid', for: 'ws-kid-' + i, title: 'Children aren\u2019t asked to fill in a load score or a calm-down kit, and the shared numbers don\u2019t wait for them.' }, [kb, ' Child']));
+        // lives here part of the time (a child who lives in two homes, a partner who works away):
+        // the nights out of 14, kept by name, so the report reads a fair share for the nights they're here
+        var nightsNow = nightsOf(nm), sel = h('select', { id: 'ws-nights-' + i, 'data-nights': String(i), autocomplete: 'off' });
+        NIGHTS.forEach(function (o) { var op = h('option', { value: String(o[0]), text: o[1] }); if (o[0] === nightsNow) op.selected = true; sel.appendChild(op); });
+        if (NIGHTS.every(function (o) { return o[0] !== nightsNow; })) { var op2 = h('option', { value: String(nightsNow), text: nightsNow + ' of 14 nights' }); op2.selected = true; sel.appendChild(op2); }
+        cell.appendChild(h('label', { className: 'ws-nights', for: 'ws-nights-' + i }, [h('span', { text: 'Lives here' }), sel]));
       }
       if (S.names.length > minPeople()) {
         cell.appendChild(h('button', { type: 'button', className: 'ws-name-x', 'data-remove-name': String(i), 'aria-label': 'Take ' + (nm.trim() || roleLabel(i)) + ' off this road', text: '×' }));
@@ -761,10 +785,21 @@
     var bits = [];
     if (nights.length) bits.push(andList(nights.map(function (k) { return k + ' is here ' + (sp.nights[k] === 7 ? 'half the time' : sp.nights[k] + ' of 14 nights'); })));
     if (tg) bits.push('each week is read against ' + tg.label);
-    host.appendChild(h('p', { className: 'ws-split-t', text: 'From your Lemonade Stand: ' + bits.join('; ') + '.' }));
+    host.appendChild(h('p', { className: 'ws-split-t', text: cap1(bits.join('; ')) + '.' }));
     host.appendChild(h('button', { type: 'button', className: 'ws-link', 'data-split-forget': '1', text: 'Use an even split instead' }));
   }
 
+  // On a phone, plain words instead of codes and decimals in what is shown ("Who owns which job", not
+  // "WP-03"; "high load (0.75)", not "0.75"). The codes stay on wider screens, in the PDFs and the files.
+  function phone() { return !!(global.matchMedia && global.matchMedia('(max-width: 640px)').matches); }
+  function codeWord(code) { return phone() ? SP.nameOf(code) : code; }
+  function loadWords(x) { return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'fairly high load' : x >= 0.3 ? 'medium load' : x >= 0.15 ? 'light load' : 'very light load'; }
+  function shortToggle(on) {
+    S.short = !!on; renderFocus(); renderRoad();
+    say(on ? 'Showing just the two call sheets: who starts which calls, and the daily check-in. Nothing else is removed.' : 'Showing the whole road again.');
+    var f = document.querySelector('.ws-short-b'); if (f) f.focus();
+  }
+  function cap1(t) { return t ? t.charAt(0).toUpperCase() + t.slice(1) : t; }
   function splitClean(x) {
     if (!x || typeof x !== 'object') return null;
     var out = { nights: {}, agreed: {} };
@@ -1047,8 +1082,11 @@
     road.hidden = S.view === 'weeks'; weeksEl.hidden = S.view !== 'weeks';
     if (S.view === 'weeks') renderWeeks(weeksEl);
     $('ws-road-title').textContent = S.path.label + ': your road';
-    var groups = [];
+    var groups = [], shortOn = !!S.short && S.variant === 'apart';
+    var old = $('ws-short-note'); if (old) old.remove();
+    if (shortOn) road.parentNode.insertBefore(h('p', { className: 'ws-short-note', id: 'ws-short-note' }, ['Just the two call sheets: who starts which calls, and the 90-second check-in. About five minutes, together on a call. ', h('button', { type: 'button', className: 'ws-link', 'data-short': 'off', text: 'Show the whole road' })]), road);
     S.stops.forEach(function (st) {
+      if (shortOn && st.wp !== 'WP-03' && st.wp !== 'WP-13') return;
       var g = groups.filter(function (x) { return x.title === st.group; })[0];
       if (!g) { g = { title: st.group, note: st.groupNote, along: st.along || [], reads: st.reads || [], stops: [] }; groups.push(g); }
       g.stops.push(st);
@@ -1084,10 +1122,10 @@
         stop.style.setProperty('--c', ['#F7CAD4', '#EBDDF6', '#CFE6D2', '#F8E7AE', '#D8E4F4', '#F9D9B8'][(n - 1) % 6]);
         stop.appendChild(h('span', { className: 'ws-dot', 'aria-hidden': 'true' }, [h('span', { text: done ? '♥' : String(n) })]));
         var body = h('div', { className: 'ws-stop-body' }, [
-          h('p', { className: 'ws-stop-code' }, [st.wp + (done ? ' · ' + done + (done === 1 ? ' sheet filled' : ' sheets filled') : ''), st.optional ? ' ' : null, st.optional ? h('span', { className: 'ws-optional', text: 'Optional' }) : null]),
+          h('p', { className: 'ws-stop-code' }, [(phone() ? '' : st.wp + (done ? ' · ' : '')) + (done ? done + (done === 1 ? ' sheet filled' : ' sheets filled') : ''), st.optional ? ' ' : null, st.optional ? h('span', { className: 'ws-optional', text: 'Optional' }) : null]),
           h('h3', { className: 'ws-stop-name', text: SP.nameOf(st.wp) }),
           h('p', { className: 'ws-stop-why', text: st.why }),
-          PATHS.read && PATHS.read[st.wp] ? h('a', { className: 'ws-read', href: PATHS.read[st.wp], text: 'Read about ' + st.wp + ' first \u2192' }) : null
+          PATHS.read && PATHS.read[st.wp] ? h('a', { className: 'ws-read', href: PATHS.read[st.wp], text: (phone() ? 'Read about it first' : 'Read about ' + st.wp + ' first') + ' \u2192' }) : null
         ]);
         if (S.removed && S.removed.key === st.key) body.appendChild(h('p', { className: 'wpf-undo' }, [h('span', { text: 'Removed ' + S.removed.label + '. ' }), h('button', { type: 'button', className: 'wpf-add', 'data-undo-sheet': '1', text: 'Undo' })]));
         if (perPerson(st.wp)) body.appendChild(personRows(st));
@@ -1142,7 +1180,7 @@
         var a = SP.answers(en), label = en.label || entryDay(en, k);
         var btn = h('button', { type: 'button', className: 'ws-sheet-btn' + (a ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': en.id, 'data-person': String(i) }, [
           h('span', { className: 'ws-sheet-label', text: a ? label : 'Keep going: ' + label }),
-          h('span', { className: 'ws-sheet-meta', text: a ? a + (a === 1 ? ' answer' : ' answers') + (st.wp === 'WP-02' && SP.metric(en) != null ? ' · ' + (Math.round(SP.metric(en) * 100 + 1e-7) / 100).toFixed(2) : '') : '✎' })
+          h('span', { className: 'ws-sheet-meta', text: a ? a + (a === 1 ? ' answer' : ' answers') + (st.wp === 'WP-02' && SP.metric(en) != null ? ' · ' + (phone() ? loadWords(SP.metric(en)) + ' (' + Math.round(SP.metric(en) * 20) + ' of 20)' : (Math.round(SP.metric(en) * 100 + 1e-7) / 100).toFixed(2)) : '') : '✎' })
         ]);
         btn.setAttribute('aria-label', (a ? 'Open ' : 'Fill in ') + whoLabel(i) + '\u2019s ' + SP.nameOf(st.wp) + ', ' + label);
         list.appendChild(btn);
@@ -1259,13 +1297,13 @@
               if (isChild(i)) return;
               var theirs = st.entries.filter(function (en) { return personOf(en) === i; }), done1 = theirs.some(filled);
               row.appendChild(h('button', { type: 'button', className: 'ws-sheet-btn' + (done1 ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': theirs[0] ? theirs[0].id : '', 'data-person': String(i) }, [
-                h('span', { className: 'ws-sheet-label', text: code + ' ' + SP.nameOf(code) + ' · ' + whoLabel(i) }), h('span', { className: 'ws-sheet-meta', text: done1 ? '\u2713' : '\u270E' })]));
+                h('span', { className: 'ws-sheet-label', text: (phone() ? '' : code + ' ') + SP.nameOf(code) + ' · ' + whoLabel(i) }), h('span', { className: 'ws-sheet-meta', text: done1 ? '\u2713' : '\u270E' })]));
             });
             return;
           }
           var done = st.entries.some(filled);
           var b = h('button', { type: 'button', className: 'ws-sheet-btn' + (done ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': st.entries[0] ? st.entries[0].id : '' }, [
-            h('span', { className: 'ws-sheet-label', text: code + ' ' + SP.nameOf(code) }), h('span', { className: 'ws-sheet-meta', text: done ? '\u2713' : '\u270E' })]);
+            h('span', { className: 'ws-sheet-label', text: (phone() ? '' : code + ' ') + SP.nameOf(code) }), h('span', { className: 'ws-sheet-meta', text: done ? '\u2713' : '\u270E' })]);
           row.appendChild(b);
         });
         li.appendChild(row);
@@ -1690,7 +1728,7 @@
       var msg = '';
       if (loaded.length) {
         changed();
-        var names = loaded.map(function (en) { return en.workpaper + (en.label ? ' (' + en.label + ')' : ''); });
+        var names = loaded.map(function (en) { return codeWord(en.workpaper) + (en.label ? ' (' + en.label + ')' : ''); });
         msg = 'Brought in ' + loaded.length + (loaded.length === 1 ? ' sheet: ' : ' sheets: ') + names.slice(0, 6).join(', ') + (names.length > 6 ? ' and ' + (names.length - 6) + ' more' : '') + '.';
         celebrate($('ws-drop'), null);
         var first = document.querySelector('.ws-stop.is-done');
@@ -1919,6 +1957,13 @@
       clearTimeout(nameTimer); nameTimer = setTimeout(roadSoon, 500);
     });
     $('ws-names').addEventListener('change', function (e) {
+      var ni = e.target.getAttribute('data-nights');
+      if (ni != null) {
+        if (!setNights(+ni, +e.target.value)) { e.target.value = '14'; say('Type their name first, then choose how often they live here.'); return; }
+        changed(); renderSplit(); renderRoad();
+        say(whoLabel(+ni) + (+e.target.value < 14 ? ' lives here ' + e.target.options[e.target.selectedIndex].text.toLowerCase() + '. The report counts a fair share for the nights they\u2019re here.' : ' lives here every night.'));
+        return;
+      }
       var k = e.target.getAttribute('data-kid');
       if (k != null) {
         kidsFit(); S.kids[+k] = e.target.checked;
@@ -1930,7 +1975,7 @@
       if (e.target.getAttribute('data-name') != null) { clearTimeout(nameTimer); nameTimer = setTimeout(roadSoon, 0); }
     });
     $('ws-names').addEventListener('click', function (e) {
-      if (e.target.closest('[data-split-forget]')) { S.split = null; changed(); renderNames(); renderRoad(); say('Each week is read against an even split now. Bring in your Lemonade Stand again to use its split.'); return; }
+      if (e.target.closest('[data-split-forget]')) { S.split = null; changed(); renderNames(); renderRoad(); say('Each week is read against an even split now, with everyone counted as here every night.'); return; }
       var x = e.target.closest('[data-remove-name]');
       if (x) removeName(+x.getAttribute('data-remove-name'));
       if (e.target.closest('#ws-name-add')) addName();
@@ -1990,6 +2035,8 @@
         var again = $('ws-focus-p' + i); if (again) again.focus();
       });
       focusBox.addEventListener('click', function (e) {
+        var sb = e.target.closest('[data-short]');
+        if (sb) { shortToggle(sb.getAttribute('data-short') === 'on'); return; }
         var fe = e.target.closest('[data-focus-each]');
         if (fe) { S.focusEach = fe.getAttribute('data-focus-each') === 'on' ? S.names.map(function () { return S.variant || null; }) : null; renderFocus(); changed(); var f0 = $('ws-focus-p0') || $('ws-focus').querySelector('[data-focus-each]'); if (f0) f0.focus(); return; }
         var b = e.target.closest('[data-focus]');
@@ -2016,6 +2063,7 @@
       S.view = b.getAttribute('data-view'); renderRoad();
     });
     $('ws-step-road').addEventListener('click', function (e) {
+      var sh = e.target.closest('[data-short]'); if (sh) { shortToggle(sh.getAttribute('data-short') === 'on'); return; }
       var o = e.target.closest('[data-open]'), a = e.target.closest('[data-again]'), add = e.target.closest('[data-add]');
       if (o) openSheet(o.getAttribute('data-open'), o.getAttribute('data-entry'), o.getAttribute('data-person'));
       if (a) {

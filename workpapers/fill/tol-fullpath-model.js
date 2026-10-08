@@ -1249,6 +1249,8 @@
     var kidAt = P.list.map(function (p) { return !!(KID_ROADS[data.road] && V(data, 'who.p' + (p.i + 1) + '.child')); });
     out.kids = kidAt;
     out.target = targetOf(data, P);
+    // who lives here part of the time (nights out of 14), by place on the road; null = every night
+    out.nights = P.list.map(function (p) { var x = data.split && data.split.nights ? data.split.nights[p.i] : null; return x != null && x < 14 ? x : null; });
     if (on['WP-01'] && !R.refusalsOnly) {
       var mins = P.list.map(function () { return 0; }), noticed = mins.slice(), seen = {}, rowsUsed = 0, unmatched = [], logged = 0, tasks = [], sharedRows = [];
       rowsOf(data, 'wp01.audit', ['day', 'task', 'who', 'minutes', 'how'], sizeOf(data, 'audit')).forEach(function (r) {
@@ -1577,6 +1579,8 @@
     model.anomalies = checks;
     model.recs = recommend(fired, checks, F, v, model.sections.concat(R.solo ? [model.extra[0]] : []));
     otherView(model.recs, fired, F, v);
+    togetherStep(model.recs, F, v);
+    noKidSteps(model.recs, F);
     model.plan = plan2(model.recs, c, v, sp);
     model.persons = personViews(F, v);
     model.self = selfDiscovery(F, v);
@@ -1736,7 +1740,7 @@
       else if (!R.solo && c.calc.applies) s.shows.push('No average yet: still waiting on ' + list(c.battery.filter(function (b) { return b.score == null && !b.child; }).map(function (b) { return b.label; })) + '. CALC-01 never works it out while anyone\u2019s load score is missing.');
       if (R.solo) { var tf = topFactors(c); if (tf.length) s.shows.push('Scored 3 or 4: ' + list(tf.map(function (x) { return x.toLowerCase(); })) + '.'); }
       var hi = c.battery.filter(function (b) { return b.band && b.band.key === 'high'; });
-      s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead, with no explanation needed.') : 'Keep it to one minute a day for a week. Patterns show up fast.';
+      s.next = hi.length ? (R.solo ? 'This week, before any hard conversation, reach for your first settling default and say your number out loud.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (R.focus === 'apart' ? ' Name when you’ll pick it up, for example “not tonight, Sunday at 10?”' : '')) : 'Keep it to one minute a day for a week. Patterns show up fast.';
       return s;
     }
     if (code === 'WP-03') {
@@ -1917,6 +1921,19 @@
       if (t && t.unowned.length) sug('Ask the family: which of these do we each assume someone else is doing? ' + list(t.unowned.slice(0, 4)) + '.');
       sug('Agree on one pause line the whole family recognizes, before the next gathering.');
       sug('Never ask a child to keep track of what an adult does. These pages are for the grown-ups.');
+      // a stepfamily, or anyone who lives here part of the time: a short stop of its own
+      var partTime = c.P.list.filter(function (p) { return c.nights && c.nights[p.i] != null; });
+      if (partTime.length) {
+        out.step = {
+          title: 'When someone lives here part of the time',
+          lines: [
+            list(partTime.map(function (p) { return p.label + ' (' + (c.nights[p.i] === 7 ? 'half the time' : c.nights[p.i] + ' of 14 nights') + ')'; })) + (partTime.length === 1 ? ' lives' : ' live') + ' here part of the time, so the fair share this report reads against counts only the nights they\u2019re here.',
+            'Discipline: at first, the child\u2019s own parent leads on rules and consequences. The step-parent backs that up and builds the friendship first. That is a stage, not a ranking.',
+            'Loyalty binds: a child can feel caught between two homes, or between a parent and a step-parent. Never ask them to choose, and speak kindly of the other home where they can hear.',
+            'Their own space and one small job: even a shelf or a drawer that stays theirs while they\u2019re away, and one small job that is theirs when they\u2019re here, so they belong rather than visit.'
+          ] };
+        sug('For ' + list(partTime.map(function (p) { return p.label; })) + ': their own space here, even a small one, and one small job that is theirs when they\u2019re here.');
+      }
     } else if (c.road === 'coparents') {
       sug('Keep your child out of it, and keep each conversation to one topic: usually the next handoff or one slipping kid task.');
       if (t && t.unowned.length) sug('Give each unowned kid task exactly one parent: ' + list(t.unowned.slice(0, 4)) + '.');
@@ -2600,7 +2617,7 @@
       when: function (F) { return F.bat.high.length ? { who: F.bat.high } : null; },
       find: function (d, F) { return F.solo ? 'Your load reads ' + fmt(d.who[0].score) + ': a high load right now.' : list(d.who.map(function (b) { return b.label + ' (' + fmt(b.score) + ')'; })) + (d.who.length === 1 ? ' is' : ' are') + ' at 0.60 or above: a high load right now.'; },
       why: 'At a high load, words land harder and decisions come out worse. It is a reason to pick the timing, not a reason to avoid the talk.',
-      rec: function (d, F, v) { return { h: 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead, with no explanation needed.', script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a heavy-load day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
+      rec: function (d, F, v) { return { h: F.reach && !F.solo ? 'week' : 'now', title: F.solo ? 'Protect your battery this week' : 'Protect the highest loads this week', first: F.solo ? 'Put off what doesn’t need deciding this week, and use your first settling default before anything hard.' : 'Agree that anyone at 0.60 or above can say “not today” and name a time instead. A high score is a way to press pause, not a way out: it means “let’s come back to this tomorrow”.' + (F.R.focus === 'apart' || F.data.focus === 'apart' ? ' Name when you’ll pick it up, for example “not tonight, Sunday at 10?”, and keep that time.' : ''), script: sayNumber(F) + fmt(d.who[0].score) + ' today. Can we pick this up tomorrow at a set time?”', link: linkOf('WP-02'), working: 'Nothing big gets decided on a heavy-load day, and the number drops within the week.', plan: { title: F.solo ? 'Protect your battery' : 'Protect the batteries', wp: 'WP-02, WP-11', do: F.solo ? 'One minute with the battery meter each morning. On any day at 0.60 or above, use a settling default before anything hard, and put off what can wait.' : 'Everyone does the battery meter daily and says their number before any hard talk. At 0.60 or above, name a time instead.', pillar: 'III' } }; },
       q: function (d, F) { return F.solo ? 'What would a slightly lighter week look like for you, and what is one thing you could put down?' : 'When someone is running high, what is the kindest way for them to say "not today"?'; } },
     { id: 'bat-low-all', pillar: 'III', src: ['WP-02'], pri: 3, strength: true, title: 'Loads are light',
       when: function (F) { return F.bat.scored.length && F.bat.scored.every(function (b) { return b.score < 0.3; }) && (F.solo || F.bat.scored.length >= 2) ? F.bat : null; },
@@ -2854,6 +2871,18 @@
   // typo, or it may be real. level 'check' = probably worth fixing; 'note' = worth knowing.
 
   var CHECKS = [
+    { id: 'wp03-lists-differ', where: 'WP-03', level: 'note',
+      when: function (F) { return F.c.wp03 && F.c.wp03.views && F.c.wp03.views.differ.length ? F.c.wp03 : null; },
+      text: function (t, F) { return viewsLine(t, F.P) + ' The report reads the newest list, so the numbers follow that one.'; },
+      fix: function (t) { return 'Sit down with both lists, together, and agree who owns ' + (t.views.differ.length === 1 ? 'that job' : 'those jobs') + '. Neither list is wrong: each shows how one of you sees it. Then send the agreed list to each other again.'; } },
+    { id: 'wp13-friction-notes', where: 'WP-13', level: 'note',
+      when: function (F) {
+        if (!F.w13 || F.solo) return null;
+        var by = F.pp.map(function (p) { return { p: p, notes: F.w13.rows.filter(function (r) { return r.any && r.who === p.i && r.friction; }) }; }).filter(function (x) { return x.notes.length; });
+        return by.length ? by : null;
+      },
+      text: function (by) { return 'In your own words, what didn\u2019t feel great this week. ' + by.map(function (x) { return x.p.label + ': ' + x.notes.slice(0, 3).map(function (r) { return q(short(r.friction, 140)) + (r.day ? ' (' + r.day + ')' : ''); }).join('; ') + (x.notes.length > 3 ? '; and ' + plural(x.notes.length - 3, 'more') : '') + '.'; }).join(' '); },
+      fix: 'At your weekly catch-up, read these out and just listen first. Ask what would help, and fix nothing on the spot. Each note is that person\u2019s own view, and it counts.' },
     { id: 'wp01-one-sided', where: 'WP-01', level: 'check',
       when: function (F) { return F.c.wp01 && F.c.wp01.oneSided ? F.c.wp01.oneSided : null; },
       text: function (o) { return oneSidedLine(o) + ' A missing week isn’t a week of zero, so the split, the balance and any hand-over are held back until ' + (o.missing.length === 1 ? 'it is' : 'they are') + ' in.'; },
@@ -3267,7 +3296,10 @@
     if (F.solo || F.n < 2) return;
     var text = fired.map(function (r) { return [r.title, r.finding, r.rec ? r.rec.first + ' ' + r.rec.title : ''].join(' '); }).join(' ');
     function count(lab) { var re = new RegExp('(^|[^A-Za-z\u00C0-\u024F])' + lab.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![A-Za-z\u00C0-\u024F])', 'g'); return (text.match(re) || []).length; }
-    var counts = F.pp.map(function (p) { return { p: p, k: count(p.label) }; }).sort(function (a, b) { return b.k - a.k; });
+    // never a child: the pages are for the grown-ups, so no step asks a child for their side
+    var kids = F.c.kids || [];
+    var counts = F.pp.filter(function (p) { return !kids[p.i]; }).map(function (p) { return { p: p, k: count(p.label) }; }).sort(function (a, b) { return b.k - a.k; });
+    if (counts.length < 2) return;
     var most = counts[0], least = counts[counts.length - 1];
     if (most.k < 3 || least.k * 2 > most.k) return;
     var nm = least.p.label;
@@ -3279,6 +3311,39 @@
       plan: { title: 'Hear ' + nm + '\u2019s side', wp: 'Talk, then WP-01', do: 'Ask ' + nm + ' what they carried that the pages don\u2019t show, and add it to next week\u2019s log under their name.', pillar: 'I' } };
     recs.week.unshift(rec);
     if (recs.week.length > 5) recs.week.pop();
+  }
+
+  // At least one step the grown-ups take together, so the first steps never all land on one person.
+  function togetherStep(recs, F, v) {
+    if (F.solo || F.n < 2) return;
+    var kids = F.c.kids || [], adults = F.pp.filter(function (p) { return !kids[p.i]; });
+    if (adults.length < 2) return;
+    var all = recs.now.concat(recs.week);
+    if (all.some(function (r) { return /^together\b/i.test(r.title || ''); })) return;
+    var kidsHere = kids.some(Boolean) || F.road === 'family' || F.road === 'coparents';
+    var who = list(adults.map(function (p) { return p.label; }));
+    var rec = kidsHere
+      ? { h: 'week', pri: 8, pillar: 'II', from: 'together', title: 'Together: agree who leads on the kids\u2019 jobs this week',
+          why: 'The first steps work best shared. When ' + who + ' agree on it together, nobody carries the change alone.',
+          first: 'Sit down together for ten minutes, away from the children. Go through the kids\u2019 jobs for this week and agree who leads on each one.',
+          script: '\u201cFor this week, which of the kids\u2019 jobs would you like to lead, and which shall I?\u201d', link: linkOf('WP-03'),
+          working: 'Each of the kids\u2019 jobs has one grown-up leading it, and nobody had to remind anyone.',
+          plan: { title: 'Agree who leads, together', wp: 'WP-03', do: 'Together, give each of the kids\u2019 jobs one grown-up who leads it this week.', pillar: 'II' } }
+      : { h: 'week', pri: 8, pillar: 'II', from: 'together', title: 'Together: choose one ' + v.task + ' to share differently this week',
+          why: 'The first steps work best shared. When ' + who + ' choose it together, nobody carries the change alone.',
+          first: 'Sit down together for ten minutes. Each of you names one ' + v.task + ' you would like help with; agree on one change, and who leads it.',
+          script: '\u201cWhich one would make the biggest difference to you this week?\u201d', link: linkOf('WP-03'),
+          working: 'You both know what is changing this week, and it happened without reminders.',
+          plan: { title: 'One change, chosen together', wp: 'WP-03', do: 'Together, choose one ' + v.task + ' to share differently, and write it on WP-03.', pillar: 'II' } };
+    recs.week.unshift(rec);
+    if (recs.week.length > 5) recs.week.pop();
+  }
+  // Never a step that asks a child for their side or puts a job on them: these pages are for the grown-ups.
+  function noKidSteps(recs, F) {
+    var kids = F.pp.filter(function (p) { return (F.c.kids || [])[p.i]; }).map(function (p) { return p.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+    if (!kids.length) return;
+    var re = new RegExp('\\b(?:ask|hear|asks)\\s+(?:' + kids.join('|') + ')\\b|\\b(?:' + kids.join('|') + ')\\u2019s side', 'i');
+    ['now', 'week', 'month'].forEach(function (h) { recs[h] = recs[h].filter(function (r) { return !re.test(r.title || '') && !re.test(r.first || ''); }); });
   }
 
   function plan2(recs, c, v, sp) {
@@ -3325,17 +3390,32 @@
         rows.push(['Thinking time: noticing, planning, remembering (WP-01)', !F.w1 ? 'WP-01 not filled in' : waitingP ? 'Not added yet' : think.length ? minText(sumOf(think.map(function (r) { return r.min; }))) + ' in ' + plural(think.length, 'row') : 'None logged yet']);
         rows.push(['Jobs on their own side of the log (WP-01)', !F.w1 ? 'WP-01 not filled in' : waitingP ? 'Not added yet' : String(uniq(F.w1.rows.filter(function (r) { return r.who === p.i && r.task; }).map(function (r) { return r.task.toLowerCase().replace(/\s*\(.*\)$/, ''); })).length)]);
       }
+      if (c.nights && c.nights[p.i] != null) rows.push(['Lives here', c.nights[p.i] === 7 ? 'Half the time' : c.nights[p.i] + ' of 14 nights (what is asked of them is counted for those nights)']);
       rows.push(['Load score (WP-02)', b.score != null ? fmt(b.score) + ', ' + b.band.label.toLowerCase() + (p.top.length ? '. Scored highest: ' + list(p.top.slice(0, 2).map(function (x) { return lc(x.l); })) : '') : b.answered ? b.answered + ' of 5 answered' : 'Not filled in']);
       if (c.on['WP-03']) rows.push([F.road === 'coworkers' ? 'Team roles (WP-03)' : 'Owns (WP-03)', F.w3 ? 'Owns ' + p.r + ', helps with ' + p.a + (p.recurR ? ' (' + p.recurR + ' daily or weekly)' : '') : 'WP-03 not filled in']);
+      // two people's own lists: how each list sees this person
+      if (c.wp03 && c.wp03.views) rows.push(['Owns, on each list (WP-03)', c.wp03.views.lists.map(function (L) { return 'on ' + L.whose + '\u2019s list, ' + (L.owns[p.label] || 0) + ' of ' + L.total; }).join('; ')]);
       if (c.on['WP-13']) rows.push(['Check-ins (WP-13)', F.w13 ? p.checkins + ' of 7 days' + (p.checkins ? '; ' + p.loads.High + ' high, ' + p.loads.Medium + ' medium, ' + p.loads.Low + ' low; ' + plural(p.thanks, 'thanks', 'thanks') + ' written' : '') : 'WP-13 not filled in']);
       if (c.on['WP-11']) rows.push(['Pause line (WP-11)', c.wp11 && c.wp11.lines[p.i] ? q(c.wp11.lines[p.i]) : 'Not written yet']);
       // their own words from WP-02, on their own page only (and only because they wrote it in the file)
       if (b.note) rows.push(['What ' + p.label + ' wanted to name first (WP-02, their own words)', q(b.note)]);
+      // what didn't feel great, in their own words (WP-13), so it is seen, not just the thank-yous
+      var fr13 = F.w13 ? F.w13.rows.filter(function (r) { return r.any && r.who === p.i && r.friction; }) : [];
+      if (fr13.length) rows.push(['What didn\u2019t feel great (WP-13, their own words)', fr13.slice(0, 3).map(function (r) { return q(short(r.friction, 140)) + (r.day ? ' (' + r.day + ')' : ''); }).join('; ') + (fr13.length > 3 ? '; and ' + plural(fr13.length - 3, 'more') : '')]);
+      // the visible work, in hours and the jobs it went on: "8.3 h a week, mostly cooking, vacuuming and the car"
+      var seenTime = F.w1 && !(c.wp01 && c.wp01.oneSided && c.wp01.oneSided.missing.indexOf(p.label) >= 0) ? F.w1.rows.filter(function (r) { return r.who === p.i && r.min > 0 && !(r.mental || /\(noticing and planning\)$/i.test(r.task)); }) : [];
+      if (seenTime.length) {
+        var perJob = {}, jn = {};
+        seenTime.forEach(function (r) { var t = trim(r.task).replace(/\s*\((?:each day|each weekday|3 times a week|twice a week|every other week|each month)\)\s*$/i, ''), k = t.toLowerCase(); if (!k) return; perJob[k] = (perJob[k] || 0) + r.min; jn[k] = t; });
+        var jobsTop = Object.keys(perJob).sort(function (a, b2) { return perJob[b2] - perJob[a]; }).slice(0, 3).map(function (k) { return /^the\b/i.test(jn[k]) ? lc(jn[k]) : lc(jn[k]); });
+        var hrs = sumOf(seenTime.map(function (r) { return r.min; })) / 60;
+        strengths.push((hrs >= 1 ? (Math.round(hrs * 10) / 10) + ' h' : Math.round(hrs * 60) + ' min') + ' a week of visible work' + (jobsTop.length ? ', mostly ' + list(jobsTop) : '') + '.');
+      }
       // strengths: what this person brings
       if (p.thanks >= 2) strengths.push('Wrote ' + p.thanks + ' appreciations in the check-ins: keeps thanks flowing.');
       if (p.mental >= 2) strengths.push('Carries planning and remembering (' + plural(p.mental, 'item') + ').');
       if (p.ra >= 2) strengths.push('Sees ' + plural(p.ra, v.task, v.tasks) + ' through from doing to following up.');
-      else if (p.r >= 2) strengths.push('Clearly named on ' + plural(p.r, v.task, v.tasks) + '.');
+      else if (p.r >= 2) { var mineR = F.w3.rows.filter(function (r) { return r.ro.list.length === 1 && r.ro.list[0] === p.i; }).map(function (r) { return lc(r.task); }); strengths.push('Owns ' + plural(p.r, v.task, v.tasks) + ' on the list' + (mineR.length ? ': ' + list(mineR.slice(0, 3)) + (mineR.length > 3 ? ' and more' : '') : '') + '.'); }
       if (p.a >= 2 && p.ra < p.a) strengths.push('Keeps an eye on ' + plural(p.a - p.ra, v.task, v.tasks) + ' that others do.');
       if (b.score != null && b.band.key === 'low') strengths.push('Load in the low band: steady ground for the harder talks this week.');
       if (p.checkins >= 5) strengths.push('Checked in on ' + p.checkins + ' of 7 days.');
@@ -3349,7 +3429,8 @@
       if (p.top.some(function (x) { return x.k === 0; })) help.push('Protecting sleep this week, which counts as real work on the setup.');
       if (p.top.some(function (x) { return x.k === 4; })) help.push('One deadline or commitment moved before it arrives.');
       if (F.w3 && p.r >= 3 && p.r / Math.max(1, sumOf(F.pp.map(function (x) { return x.r; }))) > 1 / F.n + 0.15) help.push('Handing one ' + v.task + ' to someone else, or naming a backup.');
-      if (F.w13 && p.checkins < 3) help.push('A shorter check-in, even one line.');
+      if (fr13.length) help.push('Being heard on what didn\u2019t feel great this week, before anyone tries to fix it.');
+      if (F.w13 && p.checkins < 3) help.push('A check-in time that suits them, picked together. On a busy day, one line is plenty.');
       if (c.on['WP-11'] && !p.pause) help.push('A pause line written on a calm day.');
       if (b.score == null && !b.answered && !(c.kids && c.kids[p.i])) help.push('Filling in their own battery page, only if they want to.');
       if (!help.length) help.push('More of the same: what they are doing seems to be working.');
@@ -3630,9 +3711,10 @@
     var early = conf.level === 'Early picture' || (F.w13 && F.w13.early && conf.filled <= 3);
     if (early) bits.push('This is an early read. Only a little is filled in so far, so take it as a first look, not a pattern. It gets clearer with each page.');
     if (F.reach) bits.push('First, in ' + F.P.label(F.reach.i) + '\u2019s own words: ' + q(sentence(F.reach.text)) + ' Start there, before any number.');
+    if (c.wp03 && c.wp03.views) bits.push(viewsLine(c.wp03, F.P));
     // what each person brings, before any gap
     if (!F.solo && model && model.persons) {
-      var brings = model.persons.map(function (pv) { var t = (pv.strengths[0] || '').replace(/[.:].*$/, ''); return t ? pv.label + ': ' + lc(t) : ''; }).filter(Boolean);
+      var brings = model.persons.map(function (pv) { var t = (pv.strengths[0] || '').replace(/[.:](?=\s|$).*$/, ''); return t ? pv.label + ': ' + lc(t) : ''; }).filter(Boolean);
       if (brings.length) bits.push('What each of you brings: ' + brings.join('; ') + '.');
     }
     if (k.sol != null) bits.push('Overall, the setup reads ' + fmt(k.sol) + ' on CALC-01 (' + k.solBand.label.toLowerCase() + '), and the part losing the most points is ' + k.worst.fix.replace(/ \(.*\)$/, '') + '.');
@@ -3664,6 +3746,15 @@
     }
     work.forEach(function (r) { addTop(r.id, r.title, r.finding, r.rec.first); });
     recs.now.concat(recs.week, recs.month).forEach(function (r) { addTop(r.from, r.title, r.why, r.first); });
+    // at least one of the first steps is one the grown-ups take together
+    var tog = recs.week.concat(recs.now).filter(function (r) { return r.from === 'together'; })[0];
+    if (tog && !top.some(function (t) { return t.from === 'together' || /^together\b/i.test(t.title || '') || /\b(sit down together|together, )/i.test(t.step || ''); })) {
+      if (top.length >= 3) top.pop();
+      top.push({ title: tog.title, text: tog.why, step: tog.first, from: 'together' });
+    }
+    // and never a step about a child
+    var kidRe = F.pp.filter(function (p) { return (c.kids || [])[p.i]; }).map(function (p) { return p.label; });
+    if (kidRe.length) top = top.filter(function (t) { return !kidRe.some(function (nm) { return new RegExp('\\b(?:ask|hear)\\s+' + nm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b|' + nm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\u2019s side', 'i').test((t.title || '') + ' ' + (t.step || '')); }); });
     var guideBands = [];
     if (k.applies) guideBands.push('Setup score and overall score: 0.70 and up, working well; 0.40 to 0.69, needs a look; under 0.40, needs a rethink, together. Here higher means working better.');
     if (k.applies) guideBands.push('Workload balance and ownership clarity: 1.00 is an even split or every job has an owner; 0.70 and up reads well.');

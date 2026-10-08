@@ -729,6 +729,7 @@
     var rp = m.roadPart, road = [];
     rp.paras.forEach(function (t) { road.push(h('p', { text: t })); });
     (rp.blocks || []).forEach(function (b) { road.push(h('p', { className: 'fp-sub', text: b[0] })); road.push(h('p', { text: b[1] })); });
+    if (rp.step) { road.push(h('p', { className: 'fp-sub', text: rp.step.title })); road.push(ulOf(rp.step.lines)); }
     if (rp.suggestions.length) { road.push(h('p', { className: 'fp-sub', text: 'Suggestions' })); road.push(ulOf(rp.suggestions)); }
     if (rp.look && rp.look.length) { road.push(h('p', { className: 'fp-sub', text: 'What to look for' })); road.push(ulOf(rp.look)); }
     if (rp.together) road.push(h('p', { className: 'fp-callout' }, [h('strong', { text: rp.together[0] + ': ' }), rp.together[1]]));

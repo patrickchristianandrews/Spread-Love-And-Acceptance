@@ -842,6 +842,7 @@
     lay.h1(rp.heading);
     rp.paras.forEach(function (t) { lay.para(t, { size: 9.4 }); });
     if (rp.blocks) rp.blocks.forEach(function (b) { sub(lay, b[0]); lay.para(b[1], { size: 9.4 }); });
+    if (rp.step) { lay.h2(rp.step.title, 50, C.peach); lay.bullets(rp.step.lines, { size: 9.3 }); }
     if (rp.suggestions.length) { lay.h2('Suggestions', 50, C.mint); lay.bullets(rp.suggestions, { size: 9.3 }); }
     if (rp.look && rp.look.length) { lay.h2('What to look for', 50, C.sky); lay.bullets(rp.look, { size: 9 }); }
     if (rp.together) lay.callout(rp.together[0], [rp.together[1]], C.creditSoft, { size: 9 });

@@ -698,7 +698,7 @@
     if (high.length) {
       var nm = String(high[high.length - 1].state.values.name || '').trim();
       hit = solo() ? 'Your latest load reads 0.60 or above. This week, put off what can wait, and reach for your first settling default before anything hard.'
-        : (nm ? nm + '\u2019s' : 'A') + ' load reads 0.60 or above. Agree that anyone that high can say \u201cnot today\u201d and name a time instead, with no explanation needed.';
+        : (nm ? nm + '\u2019s' : 'A') + ' load reads 0.60 or above. Agree that anyone that high can say \u201cnot today\u201d and name a time instead. A high score is a way to press pause, not a way out: it means \u201clet\u2019s come back to this tomorrow\u201d.';
     } else if (owner) hit = 'Give an owner to what is still unowned: ' + owner.value.split(', ').slice(0, 4).join(', ') + (owner.value.split(', ').length > 4 ? ' and the rest' : '') + '. One name each, written down the same day.';
     else if (busy) hit = busy.value.replace(/\.$/, '') + '. Ask which one job they would most like to hand over, and write the new owner on WP-03.';
     if (hit) return hit;

@@ -240,9 +240,9 @@
       if (bad.length) out.push({ label: 'Left out', value: bad.join(', ') + (bad.length === 1 ? ' is' : ' are') + ' not between 0 and 1, so the average waits.', note: 'Each score is five answers added up and divided by 20, so it runs from 0 to 1 (for example 0.45).' });
       else if (others.length) {
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
-        if (road > 1 && all.length < road) out.push({ label: 'Average for CALC-01', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
-        else if (road > 1 && all.length > road) out.push({ label: 'Average for CALC-01', value: 'There are ' + all.length + ' scores here, and ' + road + ' people on your road.', note: 'Check the list of scores: one may be in twice.' });
-        else out.push({ label: 'Average for CALC-01', value: fmt(avg, 2) + ' (' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are).' + (road > 1 ? '' : ' Make sure every person on your road is included: it is never worked out while anyone\'s is missing, or from one person alone.') });
+        if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
+        else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and ' + road + ' people on your road.', note: 'Check the list of scores: one may be in twice.' });
+        else out.push({ label: 'Everyone\u2019s average', value: wp02Words(r2(avg), false)[0].toLowerCase().replace(/^./, function (c) { return c.toUpperCase(); }) + ' (' + fmt(avg, 2) + ', ' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are).' + (road > 1 ? '' : ' Make sure every person on your road is included: it is never worked out while anyone\'s is missing, or from one person alone.') });
       }
       return out;
     };
@@ -280,7 +280,7 @@
         id: 'extra', type: 'fields', title: 'Optional',
         fields: [
           { id: 'roadPeople', label: 'How many people are on your road, counting you?', type: 'number', min: 1, max: 8, step: '1', prefill: true, help: 'So the shared average waits until everyone\'s score is in.' },
-          { id: 'partnerScore', label: "Everyone else's scores, if they've shared them (0–1 each, separated by commas)", type: 'text', placeholder: 'e.g. 0.45, 0.30' },
+          { id: 'partnerScore', label: "Your partner's score, if they sent it", type: 'text', placeholder: 'e.g. 0.45', help: 'The number from their own sheet. More than one person sent theirs? Put them all here, with commas between.' },
           { id: 'caring', label: 'Some of what I\'m carrying is caring for someone', type: 'check' },
           { id: 'note', label: 'Anything you want to name before talking', type: 'textarea' }
         ]

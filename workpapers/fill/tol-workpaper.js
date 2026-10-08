@@ -1295,7 +1295,7 @@
     var box = h('div', { className: 'wpf-share no-print tol-plain', role: 'group', 'aria-label': 'Share this ' + what });
     var one = !this.schema.people;
     box.appendChild(h('p', { className: 'wpf-share-h', text: one ? 'Sharing your ' + what + ' with the others?' : what === 'week' ? 'Keeping this week together?' : 'Keeping this list together?' }));
-    box.appendChild(h('p', { className: 'wpf-help', text: one ? 'Send it as a link instead of a file, and open theirs here. Someone else\u2019s ' + what + ' goes into \u201cEveryone else\u2019s scores\u201d below; your own answers stay as they are.' : 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: one ? 'Send it as a link instead of a file, and open theirs here. Someone else\u2019s ' + what + ' goes into \u201cYour partner\u2019s score\u201d below; your own answers stay as they are.' : 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
     box.appendChild(h('div', { className: 'wpf-share-btns' }, [
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-make', 'aria-expanded': open === 'make' ? 'true' : 'false', text: one ? 'Share as a link' : 'Share this ' + what }),
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-open', 'aria-expanded': open === 'open' ? 'true' : 'false', text: 'Open a shared ' + what })
@@ -1363,7 +1363,7 @@
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
     if (!this.schema.people) {
       box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
-      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cEveryone else\u2019s scores\u201d. Your own answers stay as they are.' }));
+      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cYour partner\u2019s score\u201d. Your own answers stay as they are.' }));
       box.appendChild(h('div', { className: 'wpf-share-btns' }, [
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Add it here' }),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-no', text: 'Not now' })
@@ -1450,13 +1450,13 @@
     if (d.s == null || !(d.s >= 0 && d.s <= 1)) return who + ' hasn\u2019t answered all five rows yet, so there is no score to add.';
     var list = String(v.partnerScore || '').split(/[,;\s]+/).filter(Boolean);
     var txt = d.s.toFixed(2);
-    if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cEveryone else\u2019s scores\u201d.';
+    if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cYour partner\u2019s score\u201d.';
     list.push(txt);
     v.partnerScore = list.join(', ');
     this.lastShared = who + txt;
     this.state = sanitize(sc, this.state);
     this.changed();
-    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cEveryone else\u2019s scores\u201d. Your own answers are as they were. Nothing was sent anywhere.';
+    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cYour partner\u2019s score\u201d. Your own answers are as they were. Nothing was sent anywhere.';
   };
   A.takeShared = function (d, replace) {
     var self = this, sc = this.schema, what = this.shareWhat();
