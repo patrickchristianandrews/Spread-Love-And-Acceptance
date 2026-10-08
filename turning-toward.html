@@ -34,6 +34,17 @@
   .tt-chip:focus-within span{ outline:2px solid var(--focus); outline-offset:2px; }
   .tt-msg{ margin:0 0 .8rem; padding:.8rem .95rem; background:#FFFDF6; border:1px dashed var(--brass); border-radius:var(--radius); }
   .tt-msg q{ quotes:none; display:block; font-size:1.05rem; line-height:1.55; margin:0 0 .6rem; }
+  .tt-edit-l{ display:block; font-size:.85rem; font-weight:600; color:var(--ink-soft); margin:0 0 .3rem; }
+  .tt-msg textarea{ box-sizing:border-box; display:block; width:100%; max-width:100%; min-height:5.5rem; font:inherit; font-size:1.05rem; line-height:1.55; padding:.55rem .7rem; margin:0 0 .4rem; border:1px solid var(--line); border-radius:var(--radius); background:#fff; color:var(--ink); resize:vertical; }
+  .tt-msg textarea:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .tt-fill{ font-size:.88rem; color:var(--ink-soft); margin:0 0 .5rem !important; min-height:0; }
+  .tt-fill:empty{ display:none; }
+  .tt-fill.is-ask{ color:var(--ink); background:var(--paper-deep); border-radius:var(--radius); padding:.45rem .65rem; }
+  .tt-why{ margin:-1rem 0 2rem; padding:.2rem 1rem; border:1px solid var(--line); border-radius:var(--radius); background:rgba(255,253,246,.7); }
+  .tt-why > summary{ cursor:pointer; font-weight:600; min-height:44px; display:flex; align-items:center; }
+  .tt-why > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .tt-why-body{ padding:.2rem 0 .6rem; }
+  .tt-why-body .tol-pillars{ margin:.6rem 0 .4rem !important; }
   .tt-btns{ display:flex; flex-wrap:wrap; gap:.5rem 1rem; align-items:center; }
   .tt-btn{ font:inherit; font-weight:600; font-size:.95rem; padding:.5rem 1rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
   .tt-btn:hover{ background:var(--credit); border-color:var(--credit); }
@@ -115,9 +126,6 @@
 <header class="read-head"><p class="read-code">Guide</p><h1>Turning Toward: small habits for closer relationships</h1></header>
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/turning-toward-in-depth.html">Read the full guide</a></p>
 
-<p class="simple-lede">Feeling close to someone isn’t built mostly on big talks or special dates. It’s built in tiny, everyday moments: a joke, a sigh, a “look at this.” <strong>Turning toward</strong> simply means noticing those little moments and reaching back. Here are seven easy ways to do it, with a partner, a friend, family, a roommate or a coworker.</p>
-<p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> notice the small moments when someone reaches for you, and what you tend to do by default. <strong>Between you and others:</strong> answer those moments warmly, and let specific thanks keep things steady.</p>
-
 <section class="tt-card" id="tt-today" aria-labelledby="tt-title" hidden>
   <p class="tt-kicker">TODAY’S SMALL MOMENT</p>
   <h2 id="tt-title">Say one specific thank-you</h2>
@@ -125,7 +133,9 @@
   <p class="tt-for">Who’s it for?</p>
   <div class="tt-chips" id="tt-who" role="radiogroup" aria-label="Who it is for"></div>
   <div class="tt-msg" id="tt-msg">
-    <q id="tt-msg-text"></q>
+    <label class="tt-edit-l" for="tt-msg-text">Your message. Change it to sound like you:</label>
+    <textarea id="tt-msg-text" rows="3" spellcheck="true"></textarea>
+    <p class="tt-fill" id="tt-fill" aria-live="polite"></p>
     <div class="tt-btns">
       <button type="button" class="tt-btn" id="tt-copy">Copy message</button>
       <button type="button" class="tt-btn is-quiet" id="tt-share" hidden>Share</button>
@@ -135,8 +145,18 @@
     <button type="button" class="tt-btn is-quiet" id="tt-next">Another idea</button>
     <a class="dig" id="tt-more" href="/turning-toward-in-depth.html#thanks">Dig deeper: why specific thanks works</a>
   </div>
-  <p class="tt-note">Change anything in [square brackets] to fit. A new idea appears each day. Nothing you pick is sent anywhere.</p>
+  <p class="tt-note">Fill in anything in [square brackets] before you send it. A new idea appears each day. Nothing you pick or type is sent anywhere.</p>
 </section>
+
+<details class="tt-why" id="why-this-works">
+  <summary>Why this works</summary>
+  <div class="tt-why-body" id="tt-why-body">
+    <p>Feeling close is built mostly in tiny, everyday moments, and answering them warmly is a habit anyone can practise, at any age and in any kind of relationship. The rest of this page explains the seven small habits behind today’s moment.</p>
+    <p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a> and <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> notice the small moments when someone reaches for you, and what you tend to do by default. <strong>Between you and others:</strong> answer those moments warmly, and let specific thanks keep things steady.</p>
+  </div>
+</details>
+
+<p class="simple-lede">Feeling close to someone isn’t built mostly on big talks or special dates. It’s built in tiny, everyday moments: a joke, a sigh, a “look at this.” <strong>Turning toward</strong> simply means noticing those little moments and reaching back. Here are seven easy ways to do it, with a partner, a friend, family, a roommate, a neighbor, a grown child or grandchild, or a coworker. Living on your own? They work just as well on the phone, over the fence or at the shop counter.</p>
 
 <div class="scene">
   <p class="scene-when">A Tuesday, nothing wrong</p>
@@ -152,13 +172,13 @@
   </li>
   <li id="thanks">
     <h2>Say thank you, specifically.</h2>
-    <p>“Thanks for everything” is nice. <em>“Thanks for handling the school forms. I know that ate your whole lunch break”</em> is better, because it shows you noticed. A specific thank-you is how invisible effort finally gets seen.</p>
+    <p>“Thanks for everything” is nice. <em>“Thanks for handling the school forms. I know that ate your whole lunch break”</em> is better, because it shows you noticed. So is <em>“Thank you for driving me to the doctor’s on Tuesday. I know it took your whole morning,”</em> or, to a neighbor, <em>“Thanks for taking my bins in while I was away.”</em> A specific thank-you is how invisible effort finally gets seen.</p>
     <p>Care is received in different ways, so ask what lands: <a href="/love-languages.html">love languages, as a menu</a>.</p>
     <a class="dig" href="/turning-toward-in-depth.html#thanks">Dig deeper: why specific thanks works</a>
   </li>
   <li id="good-news">
     <h2>Celebrate their good news.</h2>
-    <p>When they share something good, match their excitement and ask one question: <em>“No way! What did your boss say?”</em> Save any worries or “buts” for another day. Being happy <em>with</em> someone is one of the fastest ways to feel close.</p>
+    <p>When they share something good, match their excitement and ask one question: <em>“No way! What did your boss say?”</em> It works for every kind of good news: when a friend says <em>“The doctor’s appointment went well,”</em> try <em>“Oh, that’s wonderful. What did they say?”</em> When your grandchild calls to say they passed their test, ask <em>“How did it feel when you found out?”</em> When <em>“The tomatoes finally came up,”</em> ask to see them. Save any worries or “buts” for another day. Being happy <em>with</em> someone is one of the fastest ways to feel close.</p>
     <a class="dig" href="/turning-toward-in-depth.html#good-news">Dig deeper: four ways people respond, and the one that helps</a>
   </li>
   <li id="stress-talk">

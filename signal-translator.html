@@ -985,7 +985,9 @@ const STATES = [
 ].sort(byLabel);
 const WRITTEN = E.WRITTEN || ["text","chat","email","group"];
 const isWritten = ()=>WRITTEN.includes(channel);
-const isWork = ()=>relId==="coworker" || relId==="manager" || useId==="work" || envId==="work" || channel==="chat" || channel==="group";
+/* a close relationship (family, partner, friends) in a group chat is still a family chat, not work */
+const CLOSE_RELS = ["partner","family","friend","coparent","caregiver","roommate"];
+const isWork = ()=>relId==="coworker" || relId==="manager" || useId==="work" || envId==="work" || ((channel==="chat" || channel==="group") && !CLOSE_RELS.includes(relId));
 
 /* ============================================================
    STATE + UI
@@ -1035,7 +1037,19 @@ function paintWiring(who){
   const host=document.querySelector('[data-wiring="'+who+'"]');
   $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
 }
-function nm(who){ const v=$("#name"+who).value.trim(); return v||(who==="A"?"You":"Person B"); }
+/* the listener, when no name is typed: in a group channel it's "your team" at work, or "the group" */
+function nm(who){ const v=$("#name"+who).value.trim(); if(v) return v; if(who==="A") return "You"; return channel==="group" ? (isWork() ? "your team" : "the group") : "Person B"; }
+const groupB = ()=>/^(?:your team|the group)$/.test(nm("B"));
+/* "If your team is ADHD" reads wrong: a group is many people, so it's "someone on your team" */
+function teamFix(h){
+  const B = nm("B"); if(!groupB()) return h;
+  const on = B==="your team" ? "on your team" : "in the group";
+  return String(h)
+    .replace(new RegExp("\\bIf "+B+" is\\b","g"), "If someone "+on+" is")
+    .replace(new RegExp("\\bIf you're "+B+":","g"), "If you're "+on+":")
+    .replace(new RegExp("\\b"+B+"'s wiring\\b","g"), "their wiring")
+    .replace(new RegExp("(^|[.!?]\\s+|>\\s*)"+B+"\\b","g"), (m,p)=>p+B.charAt(0).toUpperCase()+B.slice(1));
+}
 // "your wiring" for the unnamed speaker, "Sam's wiring" for a name
 function poss(name){ return name==="You" ? "your" : name+"'s"; }
 // With no name typed, the speaker is "You": fix the grammar the name templates were written for ("You's wiring")
@@ -1069,7 +1083,7 @@ function sync(){
     $("#picked"+w).innerHTML = s.size ? "Reading for: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : (w==="B" ? "Not sure: you'll get a general reading for most listeners." : "Not sure: that's fine.");
   });
   $("#whoA").textContent = nm("A");
-  $("#whoB").textContent = nm("B");
+  $("#whoB").textContent = groupB() ? nm("B").charAt(0).toUpperCase()+nm("B").slice(1) : nm("B");
   $("#needALab").textContent = (nm("A")==="You" ? "What you need" : "What "+nm("A")+" needs")+" in a hard moment";
   $("#needBLab").textContent = "What "+nm("B")+" needs in a hard moment";
   const aSay = nm("A")==="You" ? "you" : nm("A");
@@ -1716,7 +1730,7 @@ function cueFor(lvlId){
   const stop = useId==="now" || bstate==="d" || envId==="substances" || (lvlId==="heavy" && (bstate==="s" || sitId==="argument"));
   const redirect = !stop && (lvlId!=="clear" || sitId==="argument" || sitId==="bond" || (needA&&needB&&needA!==needB));
   const w = isWritten();
-  const onSide = isWork() ? "I want to get this right." : relId==="coparent" ? "I want to keep this about the kids and the plan." : "I am not against you.";
+  const onSide = isWork() ? (channel==="group" ? "This is about the process, not about any one person." : "This is about the process, not you.") : relId==="coparent" ? "I want to keep this about the kids and the plan." : "I am not against you.";
   if(stop) return {
     id:"stop", label:"Stop",
     when: w ? "Stop before sending more if the thread is heating up, they asked for space, or you are already in the fight."
@@ -1746,7 +1760,8 @@ const WIRING_SHORT = id=>NT[id] ? NT[id].short : id;
 /* A pattern's heading, in words. A safety worry names its thing in the title ("A safety worry about the stove,
    with no plan for next time"), so no stray quoted word is tacked on after it. */
 const OWN_TITLE = ["safeask","safety"];
-let lastAn = null;   // the analysis on screen, so a safety title can name its thing
+let lastAn = null;
+let lastChanged = true;   // did the last translation offer a different way to say it?   // the analysis on screen, so a safety title can name its thing
 function fTitle(id, ws){ return E.title ? E.title(id, ws, lastAn) : (FBY[id] ? FBY[id].name : id); }
 /* the label's plain meaning, for a reader in a second language: "Absolute or generalization (words like "always" and "never")" */
 function fGloss(id){ const g = E.gloss ? E.gloss(id) : ""; return g ? ' <span class="gloss">('+esc(g)+')</span>' : ""; }
@@ -1878,7 +1893,8 @@ function run(){
   const lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
-  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, bond: needB==="bond"||sitId==="bond"}));
+  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond"}));
+  lastChanged = !rw.unchanged;
 
   const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat",group:"in a group channel",email:"by email or long note"}[channel];
   const bWiring = general ? "wiring not chosen, general reading" : listNames(sel.B);
@@ -2041,7 +2057,7 @@ function run(){
     const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0,2));
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
-  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim()}) : null;
+  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() ? nm("B") : ""), work:isWork(), replyTo: replyCtx}) : null;
   let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   const little = /little/i.test(lvl[1]);
   // a real apology: the plain line stays as gentle as the headline above it
@@ -2108,7 +2124,7 @@ function run(){
   h += '<p class="small pillars">Stuck on the wording? <a href="ask.html">Ask Professor Puddles</a>.</p>';
   h += '<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
-  const R=$("#results"); R.innerHTML=youFix(h); R.hidden=false;
+  const R=$("#results"); R.innerHTML=teamFix(youFix(h)); R.hidden=false;
   paintSimple(); paintBrief();
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
   R.querySelectorAll('input[name="saypick"]').forEach(inp=>inp.addEventListener("change",()=>{
@@ -2257,7 +2273,8 @@ document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener(
 /* "What you got from this" (added by come-back.js): words that fit the mode */
 (function(){
   const SENT = "You just found a kinder way to say it, before it was said.", GOT = "You read it carefully before answering. That’s the hardest part.";
-  function fit(){ const b=document.querySelector(".cb-end .cb-benefit"); if(!b) return; const want = stMode==="got" ? GOT : SENT; if(b.textContent!==want) b.textContent=want; }
+  const CHECKED = "You checked how it may land before it was said.";
+  function fit(){ const b=document.querySelector(".cb-end .cb-benefit"); if(!b) return; const want = stMode==="got" ? GOT : lastChanged ? SENT : CHECKED; if(b.textContent!==want) b.textContent=want; }
   const main=document.querySelector("main")||document.body;
   try { new MutationObserver(fit).observe(main, {childList:true, subtree:true}); } catch(e) {}
   document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",fit));

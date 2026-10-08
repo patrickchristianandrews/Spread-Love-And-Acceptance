@@ -663,7 +663,7 @@ t('couples', "she stands in the doorway so I can't get out", { kind: 'safety' })
 t('couples', 'she threw my phone across the room', { kind: 'safety' });
 t('couples', "my husband doesn't understand that I have to support my family", { kind: 'care', id: 'familyduty', not: /dementia/ });
 t('couples', 'my husband no understand i must help my family back home', { kind: 'care', id: 'familyduty' });
-t('couples', "my wife sends a lot of money to her family and I feel we can't save", { kind: 'care', id: 'familyduty', not: /visits/ });
+t('couples', "my wife sends a lot of money to her family and I feel we can't save", { kind: 'care', id: 'savingworry', not: /visits/ });
 t('couples', 'my mother-in-law visits too often', { kind: 'sit', not: /motherinlaw/ });
 t('couples', "my wife says I'm under her feet since I retired", { kind: 'care', id: 'retired' });
 t('couples', 'I just retired and feel useless at home', { kind: 'care', id: /^(retired|retirepurpose)$/ });
