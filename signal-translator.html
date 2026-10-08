@@ -350,6 +350,23 @@ header.top .modes{margin:12px 0 4px}
 .undo{margin-left:6px;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;cursor:pointer;padding:2px 10px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .verdict .vbest{background:transparent}}
 :root[data-theme="dark"] .verdict .vbest{background:transparent}
+/* "More": the other tools and where this fits, below the result */
+.st-more{margin:14px 0 0;padding:0 2px}.st-more summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
+.st-more ul{margin:4px 0 8px}.st-more li{margin:.35rem 0}
+/* "Say it in simpler English": short-sentence versions of the suggested words show only while it is on */
+.st-simple-only{display:none}
+#results.st-simple .st-simple-only{display:block}
+.st-simple-only{margin:-4px 0 10px;padding:6px 10px;border-left:3px dashed var(--line);font-size:1rem;line-height:1.55;overflow-wrap:anywhere}
+.st-simple-only .k{display:block;font-size:.8rem;color:var(--muted);font-family:var(--display)}
+/* "Just the answer": only the suggested words and one line of why */
+.st-brief-row{display:flex;justify-content:flex-end;margin:0 0 6px}
+.st-brief-row label{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-family:var(--display);font-size:.95rem;cursor:pointer}
+.st-brief-row input{width:20px;height:20px;margin:0}
+#results:not(.is-brief) .st-brief{display:none}
+#results.is-brief > :not(.st-brief-keep){display:none}
+.st-brief .why1{margin:0 0 8px;font-size:.98rem}
+#notes.is-brief > :not(.step):not(h2):not(#notesOpen){display:none}
+#notesOpen{display:none}#notes.is-brief #notesOpen{display:inline-flex}
 .lookfor{margin-top:18px}.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
 .lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
 </style>
@@ -531,6 +548,7 @@ header.top .modes{margin:12px 0 4px}
   <section class="panel" id="notes" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Talking notes</h2>
+    <button type="button" class="linkbtn" id="notesOpen" aria-controls="notes">Show the talking notes, check-in rules and conflict rules</button>
     <p class="s4lead">Translate one sentence at a time. Add it here, then write the next. This page is what you print. The score stays off it. How to choose what belongs on the list is on <a href="check-ins.html#notes">Check-ins</a>.</p>
     <div class="actions">
       <button class="go" id="writeNext" type="button">Write the next sentence</button>
@@ -1792,17 +1810,46 @@ const SIMPLE = {
   safeask:"Your worry is fair. Ask for a habit that keeps everyone safe."
 };
 let simpleOn = false; try{ simpleOn = localStorage.getItem("tol-st-simple")==="1"; }catch(e){}
+/* the same words in short sentences, shown only while "simpler English" is on (and only when they differ) */
+function simpleLine(say, tag){
+  const t = tag||"p", sm = E.simpler ? E.simpler(say) : "";
+  if(!sm || sm===cleanSay(say)) return "";
+  return '<'+t+' class="st-simple-only"><span class="k">In short sentences</span>'+phHTML(sm)+'</'+t+'>';
+}
+function paintSimple(){
+  const R=$("#results"); if(R) R.classList.toggle("st-simple", simpleOn);
+  document.querySelectorAll(".st-simple-btn").forEach(b=>{ b.setAttribute("aria-expanded", String(simpleOn)); b.textContent = simpleOn ? "Hide the simpler English" : "Say it in simpler English"; });
+  const box=$("#vsimple"); if(box) box.hidden = !simpleOn;
+}
+function toggleSimple(){ simpleOn = !simpleOn; try{ localStorage.setItem("tol-st-simple", simpleOn?"1":"0"); }catch(e){} paintSimple(); }
+/* "Just the answer": only the suggested words and one line of why; the talking notes and the rules fold away */
+let briefOn = false; try{ briefOn = localStorage.getItem("tol-st-brief")==="1"; }catch(e){}
+function paintBrief(){
+  const R=$("#results"), N=$("#notes"), cb=$("#briefOn");
+  if(R) R.classList.toggle("is-brief", briefOn);
+  if(N) N.classList.toggle("is-brief", briefOn);
+  if(cb) cb.checked = briefOn;
+}
+function briefRow(){ return '<div class="st-brief-row st-brief-keep"><label><input type="checkbox" id="briefOn"'+(briefOn?' checked':'')+'> Just the answer</label></div>'; }
+document.addEventListener("change", e=>{ if(e.target && e.target.id==="briefOn"){ briefOn = e.target.checked; try{ localStorage.setItem("tol-st-brief", briefOn?"1":"0"); }catch(x){} paintBrief(); } });
+document.addEventListener("click", e=>{
+  if(e.target.closest && e.target.closest(".st-simple-btn")) toggleSimple();
+  if(e.target.closest && e.target.closest("#notesOpen")){ const N=$("#notes"); if(N) N.classList.remove("is-brief"); const h=$("#sheetH"); if(h){ h.setAttribute("tabindex","-1"); h.focus(); } }
+  const cp = e.target.closest && e.target.closest("#copyBrief");
+  if(cp){ const t = cp.getAttribute("data-say")||""; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{cp.textContent="Copied";},()=>{cp.textContent="Select and copy manually";}); }
+});
 function simpleHTML(o){
   const head = o.id==="none" ? o.text
     : o.id==="ok" ? "Your message will probably be fine."+(o.ids.length ? " One small change can make it clearer." : "")
     : o.apology ? "You say sorry. That is good. But one part may hurt."
     : o.id==="fight" ? "This may start a fight."
+    : o.fair ? "Your worry is fair. It is good to say it plainly."
     : "Some words may hurt.";
   const why = o.ids.slice(0,3).map(id=>{ const g = E.gloss ? E.gloss(id) : ""; return SIMPLE[id] || (g ? "One part may sound like this: "+g+"." : ""); }).filter(Boolean);
   let h = '<p><b>'+esc(head)+'</b></p>';
   if(why.length) h += '<p>Why:</p><ul>'+why.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
   if(o.heard) h += '<p>They may hear: &ldquo;'+esc(o.heard)+'&rdquo;</p>';
-  if(o.best) h += '<p>Try this instead: '+phHTML(o.best)+'</p>';
+  if(o.best) h += '<p>Try this instead, in short sentences: '+phHTML(E.simpler ? E.simpler(o.best) : o.best)+'</p>';
   h += '<p class="small">This is a guess from the words only. It does not judge you.</p>';
   return h;
 }
@@ -1990,7 +2037,7 @@ function run(){
     const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0,2));
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
-  const plain = E.verdict ? E.verdict(an, sc, rw) : null;
+  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim()}) : null;
   let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   const little = /little/i.test(lvl[1]);
   // a real apology: the plain line stays as gentle as the headline above it
@@ -2004,7 +2051,7 @@ function run(){
   }
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   if(!rw.unchanged){
-    vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>';
+    vtop+='<p class="vk">A clearer way to say it</p><p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say);
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
   } else if(staticIds.length){
     vtop+='<p class="vk">Your words, with the part to look at marked</p><p class="vbest marked">'+markup(an.text, spans)+'</p>';
@@ -2012,7 +2059,7 @@ function run(){
   }
   // short sentences, for anyone reading in a second language
   const simpleIds = (found.sorrybut ? ["sorrybut"] : []).concat(staticIds.filter(id=>id!=="sorrybut" && !["long","period"].includes(id)).sort((a,b)=>(HOTF.includes(b)-HOTF.includes(a))));
-  vtop+='<div class="simple-wrap"><button type="button" class="linkbtn" id="simpleBtn" aria-expanded="'+simpleOn+'" aria-controls="vsimple">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button><div class="vsimple" id="vsimple"'+(simpleOn?'':' hidden')+'>'+simpleHTML({id: plain ? plain.id : "ok", text: plain ? plain.text : "", apology: !!(plain && plain.apology), ids: simpleIds, heard: top ? top.h : "", best: rw.unchanged ? "" : opts[0].say})+'</div></div>';
+  vtop+='<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" id="simpleBtn" aria-expanded="'+simpleOn+'" aria-controls="vsimple">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button><div class="vsimple" id="vsimple"'+(simpleOn?'':' hidden')+'>'+simpleHTML({id: plain ? plain.id : "ok", text: plain ? plain.text : "", apology: !!(plain && plain.apology), ids: simpleIds, heard: top ? top.h : "", best: rw.unchanged ? "" : opts[0].say, fair: !!(plain && plain.fair)})+'</div></div>';
   if(an.readAs && an.readAs.length) vtop+='<p class="readas small">Read as: '+an.readAs.slice(0,4).map(f=>'&ldquo;'+esc(f.to)+'&rdquo; (you typed &ldquo;'+esc(f.from)+'&rdquo;)').join(', ')+'. Spelling never changes the reading.</p>';
   const lit = (window.TOLPatterns && TOLPatterns.idioms ? TOLPatterns.idioms(an.text).map(x=>[x.text, x.means]) : []);
   (E.PLAIN||[]).forEach(([rx,plain])=>{ const m=an.text.match(rx); if(m && !lit.some(x=>x[0].toLowerCase().indexOf(m[0].toLowerCase())!==-1 || m[0].toLowerCase().indexOf(x[0].toLowerCase())!==-1)) lit.push([m[0],plain]); });
@@ -2029,14 +2076,18 @@ function run(){
   if(an.asks.length && (found.oblig||found.impera||found.urgent||found.should)) askBits.push('<span><b>Why:</b> '+(an.missing.why?'missing':'given')+'</span>');
   if(askBits.length) sum+='<p class="askline">'+askBits.join("")+'</p>';
   sum+='<h3 class="say-h">Choose one way to say it</h3><p class="small">Words in <span class="ph">dashed boxes</span> are blanks for your own words. The one you pick goes on the talking notes. <a href="#chg">Why each change was made</a>.</p>';
-  sum+='<div role="radiogroup" aria-label="Ways to say it">'+opts.map((o,i)=>'<label class="opt"><input type="radio" name="saypick" value="'+esc(o.id)+'"'+(i===0?' checked':'')+'> <b>'+esc(o.fit)+'</b><span class="why">'+esc(o.why)+'</span><span class="saytext">'+phHTML(o.say)+'</span></label>').join("")+'</div>';
+  sum+='<div role="radiogroup" aria-label="Ways to say it">'+opts.map((o,i)=>'<label class="opt"><input type="radio" name="saypick" value="'+esc(o.id)+'"'+(i===0?' checked':'')+'> <b>'+esc(o.fit)+'</b><span class="why">'+esc(o.why)+'</span><span class="saytext">'+phHTML(o.say)+'</span>'+simpleLine(o.say, "span")+'</label>').join("")+'</div>';
   sum+='<div class="note-tools"><label>Priority<select id="pickPri"><option value="1"'+(lastTopic.pri==="1"?' selected':'')+'>Say first</option><option value="2"'+(lastTopic.pri==="2"?' selected':'')+'>If there is time</option><option value="3"'+(lastTopic.pri==="3"?' selected':'')+'>Park</option></select></label><label>Care<select id="pickCare"><option value="1"'+(lastTopic.care==="1"?' selected':'')+'>Light</option><option value="2"'+(lastTopic.care==="2"?' selected':'')+'>Careful</option><option value="3"'+(lastTopic.care==="3"?' selected':'')+'>Heavy</option></select></label></div>';
   sum+='<div class="cue'+(cue.id==="stop"?' stop':'')+'"><b>'+esc(cue.label)+'.</b> '+esc(cue.when)+' '+esc(cue.how)+'</div>';
   if(bstate==="d") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is shut down. Even the clearest version is best saved for later.</p>';
   else if(bstate==="s" && lvl[0]!=="clear") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is mobilized. Consider waiting, or say only the first sentence now.</p>';
   sum+='<div class="actions"><button class="ghost" type="button" id="copyTake">Copy the takeaway</button></div></div></div></details>';
 
-  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + vtop + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
+  const why1 = (()=>{ const c = rw.changes.find(x=>x.why); const w = plain && plain.fair ? plain.text.split(/(?<=\.)\s/)[0] : c ? c.why.split(/(?<=[.!?])\s/)[0] : (plain ? plain.text : ""); return w; })();
+  const brief = '<div class="verdict st-brief st-brief-keep">'+(rw.unchanged
+      ? '<p class="vk">Your words</p><p class="vbest">'+esc(text)+'</p><p class="why1">'+esc(plain ? plain.text : "This will probably land okay.")+'</p>'
+      : '<p class="vk">Say it like this</p><p class="vbest">'+phHTML(opts[0].say)+'</p>'+simpleLine(opts[0].say)+(why1?'<p class="why1"><b>Why:</b> '+esc(why1)+'</p>':'')+'<div class="actions" style="margin:0"><button class="go" type="button" id="copyBrief" data-say="'+esc(opts[0].say)+'">Copy this</button></div>')+'</div>';
+  let h = '<h2 id="rTitle" class="sr-only st-brief-keep" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">The read</h2>' + briefRow() + brief + vtop + sum.replace('<h2 id="rTitle">The takeaway</h2>','<h3>The takeaway</h3>');
   h += '<p class="drops-h">The full read. Open any part.</p>';
   h += drop("Your sentence, taken apart", staticIds.length+" to look at"+(goodIds.length?" · "+goodIds.length+" worth keeping":""), p1, false, false);
   h += drop("How it may land for "+esc(B), lvl[1], p2, false, false);
@@ -2052,11 +2103,7 @@ function run(){
   h += '<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
   const R=$("#results"); R.innerHTML=youFix(h); R.hidden=false;
-  const sb=$("#simpleBtn"); if(sb) sb.addEventListener("click",()=>{
-    simpleOn = !simpleOn; try{ localStorage.setItem("tol-st-simple", simpleOn?"1":"0"); }catch(e){}
-    const box=$("#vsimple"); if(box) box.hidden = !simpleOn;
-    sb.setAttribute("aria-expanded", String(simpleOn)); sb.textContent = simpleOn ? "Hide the simpler English" : "Say it in simpler English";
-  });
+  paintSimple(); paintBrief();
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
   R.querySelectorAll('input[name="saypick"]').forEach(inp=>inp.addEventListener("change",()=>{
     const o=opts.find(x=>x.id===inp.value); if(!o||!lastTopic) return;

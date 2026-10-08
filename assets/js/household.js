@@ -13,7 +13,7 @@
     its untouched example labels, "Me" and "Them", for the kept names, and says so.)
 
   Stored as { v:1, people:[names], jobs:[{ name, owner?, f? }], at: timestamp, links:[tools that keep it up to date] }.
-  f is how often the job happens ('day', 'few', 'two', 'week', 'eow', 'month'), when a tool knows it, so a
+  f is how often the job happens ('day', 'wkd' (weekdays), 'few', 'two', 'week', 'eow', 'month'), when a tool knows it, so a
   second phone shows "Each day" where the first one had it, not a default.
 
   Another phone: toCode() turns the names and jobs with how often (never hours, never anything else) into a text
@@ -348,28 +348,30 @@
   // "Household on another phone?": copy the names and jobs as a code, or paste one from the other phone.
   // opts: { collect() -> { people, jobs } (what to send; left out = the household kept here),
   //         onLoad(data) -> message (what to do with a pasted household; left out = add it to the household
-  //         kept on this device, which the button then says) }
+  //         kept on this device, which the button then says),
+  //         onOther(text) -> message or '' (another kind of code pasted here, like a partner's side: the tool
+  //         takes it to the right place and says so; '' = not one it knows) }
   function transfer(opts) {
     opts = opts || {};
     styles();
     var keepHere = typeof opts.onLoad !== 'function';
     var wrap = el('details', 'tol-hh-keep tol-hh-move no-print no-bubble');
-    var sum = el('summary', 'tol-hh-keep-l', opts.label || 'Household names on another phone?');
+    var sum = el('summary', 'tol-hh-keep-l', opts.label || 'Household names on another device?');
     sum.style.cursor = 'pointer';
     wrap.appendChild(sum);
-    var intro = el('p', 'tol-hh-text', 'Send the names and jobs, with how often each one happens (never any hours), as a code, and paste it on the other phone. Nothing is uploaded: you pass it between you.');
+    var intro = el('p', 'tol-hh-text', 'Send the names and jobs, with how often each one happens (never any hours), as a household names code, and paste it on the other device. Nothing is uploaded: you pass it between you.');
     intro.style.margin = '.3rem 0 .5rem';
     var row = el('div', 'tol-hh-btns');
-    var cp = el('button', 'tol-hh-btn', 'Copy the household code'); cp.type = 'button';
+    var cp = el('button', 'tol-hh-btn', 'Copy the household names code'); cp.type = 'button';
     row.appendChild(cp);
     var out = document.createElement('textarea');
     out.readOnly = true; out.rows = 2; out.hidden = true; out.className = 'tol-hh-code';
-    out.setAttribute('aria-label', 'The household code');
-    var lab = el('label', 'tol-hh-text', 'Paste a household code from the other phone');
+    out.setAttribute('aria-label', 'The household names code');
+    var lab = el('label', 'tol-hh-text', 'Paste a household names code from the other device');
     lab.style.display = 'block'; lab.style.marginTop = '.7rem';
     var inp = document.createElement('textarea');
     inp.rows = 2; inp.className = 'tol-hh-code'; inp.autocomplete = 'off'; inp.spellcheck = false;
-    inp.setAttribute('aria-label', 'Paste a household code from the other phone');
+    inp.setAttribute('aria-label', 'Paste a household names code from the other device');
     lab.appendChild(inp);
     [out, inp].forEach(function (t) { t.style.width = '100%'; t.style.boxSizing = 'border-box'; t.style.font = 'inherit'; t.style.fontSize = '.85rem'; t.style.marginTop = '.3rem'; t.style.overflowWrap = 'anywhere'; });
     var row2 = el('div', 'tol-hh-btns'); row2.style.marginTop = '.4rem';
@@ -384,13 +386,18 @@
       var code = toCode(data);
       out.value = code; out.hidden = false;
       copy(code).then(function (ok) {
-        say(ok ? 'Copied. Send it to the other phone any way you like, then paste it there.' : 'Couldn’t copy here. Select the code above by hand.');
+        say(ok ? 'Copied the household names code. Send it to the other device any way you like, then paste it there.' : 'Couldn’t copy here. Select the code above by hand.');
         if (!ok) { out.focus(); out.select(); }
       });
     });
     go.addEventListener('click', function () {
       var d = fromCode(inp.value);
-      if (!d) { say('That doesn’t look like a household code. Copy the whole thing, starting with TOLHOME1:'); inp.focus(); return; }
+      if (!d) {
+        // another kind of code (a partner's side, say): the page takes it where it belongs
+        var other = typeof opts.onOther === 'function' ? opts.onOther(inp.value) : '';
+        if (other) { say(other); inp.value = ''; return; }
+        say('That doesn’t look like a household names code. Copy the whole thing, starting with TOLHOME1:'); inp.focus(); return;
+      }
       if (keepHere) { var h = merge(d); say(h ? 'Kept on this device: ' + andList(h.people) + '. The other tools will offer them. Nothing is sent anywhere.' : 'This browser won’t keep it (storage is off or full).'); }
       else say(opts.onLoad(d) || 'Done.');
       inp.value = '';

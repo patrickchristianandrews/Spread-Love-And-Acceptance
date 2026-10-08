@@ -2743,7 +2743,7 @@
     if (out.theirs) bits.push('used their numbers on ' + out.theirs);
     if (out.both) bits.push('kept both on ' + out.both + ' (marked “from ' + fromWord(d) + '”)');
     return (bits.length ? 'Done: ' + bits.join(', ') + '.' : 'Everything from ' + fromWord(d) + ' was already here.') +
-      (out.offer && state.agreedOffer ? ' ' + offerWords(state.agreedOffer) + ' “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their phone.' : '') +
+      (out.offer && state.agreedOffer ? ' ' + offerWords(state.agreedOffer) + ' “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their device.' : '') +
       (plan.skip.length ? ' There was no room for ' + joinNames(plan.skip) + ' (eight people is the most).' : '') +
       (out.both ? ' Both lines count until you remove one, so talk it through and keep the one that’s right.' : '');
   }
@@ -2833,7 +2833,7 @@
       a.href = URL.createObjectURL(blob); a.download = name; a.rel = 'noopener';
       document.body.appendChild(a); a.click();
       setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to your partner; on their phone they tap “Add my partner’s side”, then “Open their file”.');
+      sideStatus('send-msg', 'Saved as ' + name + '. Send the file to your partner; on their device they tap “Add my partner’s side”, then “Open their file”.');
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
   function review(text, note, kindSaid) {
@@ -2841,7 +2841,7 @@
     if (/#side=[zj]/.test(String(text || ''))) {
       unpackSide(text).then(function (json) {
         if (json) review(json, note, 'Recognised: your partner’s side (a link).');
-        else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (under “Other ways” on their phone), and paste it here.'); }
+        else { $('add-review').innerHTML = ''; sideStatus('add-msg', 'That link didn’t open here. Ask for the code instead (under “Other ways” on their device), and paste it here.'); }
       });
       return;
     }
@@ -2914,7 +2914,7 @@
   });
 
   // The "Share this tool" button (placed by site.js) says how to bring the other side over
-  var SHARE_TOOL_TEXT = 'A free, friendly way to see who does what at home. On two phones? Each of you fills in your own side, then taps “Send my side to my partner” and “Add my partner’s side” to put them together. Nothing is uploaded.';
+  var SHARE_TOOL_TEXT = 'A free, friendly way to see who does what at home. On two devices? Each of you fills in your own side, then taps “Send my side to my partner” and “Add my partner’s side” to put them together. Nothing is uploaded.';
   function shareHint() {
     document.querySelectorAll('.tol-share-row [data-share]').forEach(function (b) {
       if (!b.hasAttribute('data-share-result')) b.setAttribute('data-share-text', SHARE_TOOL_TEXT);
