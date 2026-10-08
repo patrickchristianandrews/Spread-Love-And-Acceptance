@@ -2588,6 +2588,8 @@ html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
 :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .25s ease, transform .25s ease; }
 html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-within){ opacity:0 !important; pointer-events:none !important; transform:translateY(14px); }
 /* Professor Puddles stays in view while reading, so there is always someone to ask */
+/* …but as just his round face, so the wide labelled pill never sits over the words being read */
+@media (min-width:561px){ html.tol-reading .tol-pud-fab:not(:focus-visible){ padding:.3rem !important; gap:0 !important; } html.tol-reading .tol-pud-fab:not(:focus-visible) .tol-pud-fab-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; } }
 
 @media (prefers-reduced-motion: reduce){ html.tol-reading :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transform:none !important; } :is(.tol-pud-fab, .tol-breathe-btn, .tol-top){ transition:opacity .15s linear; } }
 /* "Show N more" at the end of a long menu list */

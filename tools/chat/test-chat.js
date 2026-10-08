@@ -693,6 +693,10 @@ t('retest', 'what if my wife doesn\'t back me up', { kind: 'care', id: 'backmeup
 t('retest', 'what percentage of our income is normal to send to her mum?', { kind: 'care', id: 'sendamount', not: /bedtime/ });
 t('retest', 'a game for two of us', { kind: 'care', id: 'gamefortwo', link: '/recheck-drive.html' });
 c('retest', ['we\'re long distance and always fighting about who calls', 'work is just busy, how do i make her stop being mad'], { text: /call days together/ });
+t('retest3', 'we\'ve had a rough week', { not: /wave had|carrier wave/i });
+t('retest3', 'we’ve been fighting a lot', { not: /wave been|carrier wave|I think you mean/i });
+t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
+t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 
 // ---------------------------------------------------------------- run
 (async () => {

@@ -124,7 +124,7 @@
 <section class="pw-plan lib-own tol-plain" id="plan" aria-labelledby="plan-h">
 <p class="lib-own-k">This site’s idea</p>
 <h2 id="plan-h">Our pause plan</h2>
-<p>Fill this in together on a calm day, or fill it in yourself and send it to your partner to change. Then copy it and keep it somewhere you will both find it. Nothing you type here is saved or sent anywhere.</p>
+<p>Fill this in together on a calm day, or fill it in yourself and send it to your partner to change. Then copy it and keep it somewhere you will both find it. Nothing you type here is sent anywhere. If “Keep our plan on this device” is ticked, it stays in this browser only.</p>
 <div class="pw-fields">
   <label for="pp-word">Our pause word or sentence</label>
   <input type="text" id="pp-word" value="Timeout" autocomplete="off" maxlength="120">
@@ -153,7 +153,7 @@
 <p class="pw-keep"><label><input type="checkbox" id="pp-keep" checked> Keep our plan on this device</label> <span class="pw-keep-note">It stays in this browser only, so it’s here next time. <button type="button" class="pw-link" id="pp-forget">Forget it</button></span></p>
 <p class="pw-acts">
   <button type="button" class="pw-btn" id="pp-copy">Copy our plan</button>
-  <button type="button" class="pw-btn is-quiet" id="pp-share" data-share data-share-from="#pp-out" data-share-result data-no-clip>Share it</button>
+  <button type="button" class="pw-btn is-quiet" id="pp-share" data-share data-share-from="#pp-out" data-share-url="none" data-share-result data-no-clip>Share it</button>
 </p>
 <p class="pw-status" id="pp-status" role="status" aria-live="polite"></p>
 </section>
@@ -223,11 +223,20 @@
       'If one of us can’t come back on time: ' + v('pp-late', 'Send a short message with a new time.') + '\n' +
       'When we come back, we start with: “' + v('pp-first', 'I’m back. I’m not against you.').replace(/^[“"]+|[”"]+$/g, '') + '”';
   }
-  function render() { out.textContent = planText() + '\n\nOpen our plan: ' + link(); keep(); }
+  function render(save) { out.textContent = planText() + '\n\nOpen our plan: ' + link(); if (save !== false) keep(); }
   ids.forEach(function (id) { $(id).addEventListener('input', render); $(id).addEventListener('change', render); });
   $('pp-keep').addEventListener('change', keep);
   $('pp-forget').addEventListener('click', function () { $('pp-keep').checked = false; keep(); say('Forgotten on this device.'); });
-  render();
+  // nothing is kept until something is typed (or a partner's plan arrives)
+  render(!!fromLink);
+  // a plan link opened in a tab that is already on this page
+  window.addEventListener('hashchange', function () {
+    var m = /#plan=([A-Za-z0-9+\/_-]+)/.exec(location.hash), o = m && dec(m[1]);
+    if (!o) return;
+    fill(o); $('pp-from').hidden = false; render();
+    try { history.replaceState(null, '', location.pathname + '#plan'); } catch (e) {}
+    var pl = document.getElementById('plan'); if (pl) pl.scrollIntoView({ block: 'start' });
+  });
   function say(msg) { status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
   function fallbackCopy(text) {
     var ta = document.createElement('textarea');

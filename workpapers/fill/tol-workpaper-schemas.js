@@ -308,7 +308,7 @@
     var people = ctx.people(), byR = people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).length; });
     var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
     var share = clear.length / rows.length;
-    var words = share === 1 ? 'Every job has an owner.' : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
+    var words = share === 1 ? (examples ? 'Every job you’ve set has an owner. ' + examples + ' example ' + (examples === 1 ? 'job is' : 'jobs are') + ' still on the list: give ' + (examples === 1 ? 'it' : 'them') + ' an owner, or remove ' + (examples === 1 ? 'it' : 'them') + ' if you don’t need ' + (examples === 1 ? 'it' : 'them') + '.' : 'Every job has an owner.') : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
     // plain words first; the number, and where it goes, folded under "What's this number?"
     var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
       note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];

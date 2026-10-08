@@ -1722,6 +1722,12 @@
     fab.addEventListener('click', function () { openPud(opts('')); });
     if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); } if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
     window.TOLPuddles = { open: function (topic) { openPud(opts(topic || '')); } };
+    // any link marked data-ask-puddles (like the home page's "Ask Professor Puddles") opens him right here
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest && e.target.closest('[data-ask-puddles]');
+      if (!t || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault(); openPud(opts(''));
+    });
     // and at the end of every page: "Want to know more? Ask Professor Puddles!", which opens him already talking about this page
     if (!main.querySelector('.tol-pud-end')) {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },

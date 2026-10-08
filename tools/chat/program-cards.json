@@ -933,6 +933,50 @@
       "chips": []
     },
     {
+      "id": "selfworry",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "wondering if something is wrong with you",
+      "pat": "\\b(is (there )?)?something wrong with me\\b|\\bwhat'?s wrong with me\\b|\\bwhat is wrong with me\\b|\\bam i (broken|the problem|normal|crazy|a bad (person|partner|husband|wife))\\b|\\bi feel (so )?(low|down|useless|empty|flat|worthless)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Asking that usually means you’re going through a hard patch, not that you’re broken. Big changes like retiring, a new baby, a move or a loss knock most people off balance for a while, and feeling low, flat or in the way is a common part of that."
+      ],
+      "how": [
+        "Be as kind to yourself as you would be to a friend saying the same thing.",
+        "Say it out loud to one person you trust: “I’ve been feeling low lately.”",
+        "Give each day a small shape: one thing with other people, one thing you’re good at, some time outside.",
+        "Notice what helps even a little, and do more of that.",
+        "If you feel low most days for more than a couple of weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step."
+      ],
+      "script": [
+        "I’ve been feeling a bit lost lately. I don’t need you to fix it, I just wanted you to know."
+      ],
+      "plain": [
+        "Nothing is wrong with you for feeling this way.",
+        "Big changes make most people feel low for a while.",
+        "Tell one person you trust.",
+        "If it lasts more than two weeks, see your doctor."
+      ],
+      "links": [
+        [
+          "Feeling useless, or in the way (after retiring)",
+          "/retired-together.html#purpose"
+        ],
+        [
+          "Your self path",
+          "/self-path.html"
+        ],
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "breaklength",
       "kind": "intent",
       "first": true,
