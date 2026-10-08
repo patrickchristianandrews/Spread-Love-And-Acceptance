@@ -2338,6 +2338,7 @@
     });
     return F;
   }
+  var CARE_TASK_RE = /\b(baby|babies|newborn|child|children|kids?|toddler|caring|care for|looking after|night feeds?|bedtime)\b/i;
   var REACH_RE = /\b(only one (?:who(?:\u2019s|'s| is)? )?(?:reach|call|text|start|mak|plan|tr(?:y|ies|ying)|initiat|mak)\w*|always (?:the one|me) (?:who )?(?:reach|call|text|start|plan|initiat)\w*|(?:i|i'm|i\u2019m|i am) (?:always|the one) (?:reaching|calling|texting|starting|planning)|reach(?:ing)? out first|(?:never|nobody) (?:calls|reaches out|texts) (?:me )?first|doing all the reaching)/i;
   function reacherOf(c, data, P) {
     if (!c.n || c.n < 2) return null;
@@ -2479,7 +2480,7 @@
       when: function (F) { return F.w1 && F.w1.sinks.length >= 2 && F.w1.sinks[0].share >= 0.4 ? F.w1.sinks[0] : null; },
       find: function (s) { return q(s.task) + ' took ' + minText(s.min) + ', ' + pc(s.share) + ' of all the logged time.'; },
       why: 'When one job takes this much, a small change to how it is done (batching, sharing, a simpler standard) moves the whole picture.',
-      rec: function (s, F, v) { return { h: 'month', title: 'Make ' + q(s.task) + ' smaller', first: 'Ask whether ' + q(s.task) + ' could be batched, split, or done to a simpler standard.', script: '“This one takes the most time. Is there an easier version we’d both be happy with?”', link: linkOf('WP-01'), working: 'Its share of the logged time drops below 40%.' }; } },
+      rec: function (s, F, v) { if (CARE_TASK_RE.test(s.task)) return { h: 'week', title: 'Share the hours of ' + q(s.task), first: 'Caring for someone can\u2019t be made smaller, but it can be shared: agree together on one stretch of it each week that someone else takes, so ' + (F.w1 && F.w1.sinks ? 'the person doing most of it' : 'the main carer') + ' gets real time off.', script: '\u201cThis takes most of the hours. Which stretch could someone else take each week?\u201d', link: linkOf('WP-01'), working: 'Someone else takes one stretch every week, and it holds.' }; return { h: 'month', title: 'Make ' + q(s.task) + ' smaller', first: 'Ask whether ' + q(s.task) + ' could be batched, split, or done to a simpler standard.', script: '“This one takes the most time. Is there an easier version we’d both be happy with?”', link: linkOf('WP-01'), working: 'Its share of the logged time drops below 40%.' }; } },
     { id: 'everyone-hides', pillar: 'I', src: ['WP-01'], pri: 4, title: '"Everyone" hides who did what',
       when: function (F) { return F.n >= 2 && F.w1 && F.w1.total > 0 && F.w1.everyone / F.w1.total >= 0.3 ? { share: F.w1.everyone / F.w1.total } : null; },
       find: function (d) { return pc(d.share) + ' of the logged minutes were marked "Everyone", which splits them evenly on paper.'; },
@@ -3407,7 +3408,7 @@
       if (seenTime.length) {
         var perJob = {}, jn = {};
         seenTime.forEach(function (r) { var t = trim(r.task).replace(/\s*\((?:each day|each weekday|3 times a week|twice a week|every other week|each month)\)\s*$/i, ''), k = t.toLowerCase(); if (!k) return; perJob[k] = (perJob[k] || 0) + r.min; jn[k] = t; });
-        var jobsTop = Object.keys(perJob).sort(function (a, b2) { return perJob[b2] - perJob[a]; }).slice(0, 3).map(function (k) { return /^the\b/i.test(jn[k]) ? lc(jn[k]) : lc(jn[k]); });
+        var jobsTop = Object.keys(perJob).sort(function (a, b2) { return perJob[b2] - perJob[a]; }).slice(0, 3).map(function (k) { return lc(jn[k]).replace(/\bon my own\b/gi, 'alone').replace(/\bmy\b/gi, 'their'); });
         var hrs = sumOf(seenTime.map(function (r) { return r.min; })) / 60;
         strengths.push((hrs >= 1 ? (Math.round(hrs * 10) / 10) + ' h' : Math.round(hrs * 60) + ' min') + ' a week of visible work' + (jobsTop.length ? ', mostly ' + list(jobsTop) : '') + '.');
       }

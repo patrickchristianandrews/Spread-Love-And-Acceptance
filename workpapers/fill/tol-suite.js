@@ -51,7 +51,7 @@
   /* ------------------------------------------------------------ state (in memory only) */
 
   var S = { path: null, variant: null, names: ['', ''], stops: [], dirty: false, view: 'steps' };
-  var uid = 0, keep = false, keepTimer = null;
+  var uid = 0, keep = false, keepTimer = null, suiteSafe = '', suiteAsk = null;
 
   // "Just me" is one person, on their own. Every other road has at least two.
   function isSolo() { return !!S.path && S.path.id === 'self'; }
@@ -794,6 +794,62 @@
   function phone() { return !!(global.matchMedia && global.matchMedia('(max-width: 640px)').matches); }
   function codeWord(code) { return phone() ? SP.nameOf(code) : code; }
   function loadWords(x) { return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'fairly high load' : x >= 0.3 ? 'medium load' : x >= 0.15 ? 'light load' : 'very light load'; }
+  /* ------------------------------------------------------------ the whole road as a link (#suite=…) */
+  // "Send it to my partner as a link": the progress file, squeezed (deflate) where the browser can, after
+  // the "#" of a link to this page. A browser never sends that part to any website. Opening the link
+  // brings it in like a file. Each change needs a new link, made fresh when the button is tapped.
+  var SUITE_HASH = '#suite=', suiteLink = { sig: '', url: '' }, suiteTimer = null;
+  function b64u(bytes) { var bin = ''; for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function unb64u(str) { var t = String(str || '').replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; var bin = atob(t), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
+  function suiteBase() { return global.location.origin + global.location.pathname + SUITE_HASH; }
+  function suiteJson() { var o = snapshot(true); o.saved = String(o.saved || "").slice(0, 10); return JSON.stringify(o); }
+  function suiteLinkPlain() { var j = suiteJson(); return { sig: j, url: suiteBase() + 'j' + b64u(new TextEncoder().encode(j)) }; }
+  // the squeezed link, made a moment after each change, so it is ready by the time someone taps Send
+  function suiteLinkSoon() {
+    clearTimeout(suiteTimer);
+    suiteTimer = setTimeout(function () {
+      if (!S.path || typeof CompressionStream !== 'function') return;
+      var j = suiteJson();
+      if (j === suiteLink.sig) return;
+      try {
+        new Response(new Blob([new TextEncoder().encode(j)]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer().then(function (buf) {
+          suiteLink = { sig: j, url: suiteBase() + 'z' + b64u(new Uint8Array(buf)) };
+        }, function () {});
+      } catch (e) {}
+    }, 700);
+  }
+  function suiteFromHash(hs, done) {
+    var m = /#suite=([zj])([A-Za-z0-9_-]+)/.exec(String(hs || ''));
+    if (!m) return done(null);
+    var bytes; try { bytes = unb64u(m[2]); } catch (e) { return done(null); }
+    if (m[1] === 'j') { try { return done(new TextDecoder().decode(bytes)); } catch (e) { return done(null); } }
+    if (typeof DecompressionStream !== 'function') return done(null);
+    try { new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text().then(function (t) { done(t); }, function () { done(null); }); } catch (e) { done(null); }
+  }
+  function takeSuiteText(text, where) {
+    var d = null; try { d = JSON.parse(text); } catch (e) { d = null; }
+    if (!d || d.format !== SUITE_FORMAT || !Array.isArray(d.entries)) return false;
+    var f; try { f = new File([text], 'suite-from-a-link.json', { type: 'application/json' }); } catch (e) { f = new Blob([text], { type: 'application/json' }); f.name = 'suite-from-a-link.json'; }
+    takeFiles([f]);
+    return true;
+  }
+  function readSuiteHash() {
+    var hs = global.location.hash || '';
+    if (!/^#suite=/.test(hs)) return;
+    try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
+    suiteFromHash(hs, function (t) { if (!t || !takeSuiteText(t)) say('That link looks incomplete. Ask for it again, or ask for the progress file instead.'); });
+  }
+  // Step 4, without a file: a link or code pasted in (a shared list or week, a whole road, a Lemonade Stand)
+  function pasteIn() {
+    var box = $('ws-paste-in'), note = $('ws-paste-note'), text = box ? box.value.trim() : '';
+    function tell(m) { if (note) { note.textContent = ''; setTimeout(function () { note.textContent = m; }, 30); } }
+    if (!text) { tell('Paste the whole link or code first.'); if (box) box.focus(); return; }
+    if (/#suite=/.test(text)) { suiteFromHash(text, function (t) { if (t && takeSuiteText(t)) { box.value = ''; tell('Brought in the road from the link. Check it below.'); } else tell('That link looks incomplete. Copy the whole thing, from https to the end.'); }); return; }
+    var d = WPK.readShared ? WPK.readShared(text) : null;
+    if (d && schema(d.wp)) { box.value = ''; tell('Opening ' + SP.nameOf(d.wp) + ' from the link. Choose to combine it with what is here, or replace it.'); openShared(d); return; }
+    if (/LEMON1:|TOLHOME1:|#side=|#stand=/i.test(text)) { lemonRead(text, function (ld) { if (!ld) { tell(LEMON_HOWTO); return; } box.value = ''; tell('That is a Lemonade Stand. It is waiting at the top of the page.'); lemonOffer(ld, { by: ld.by, saved: WPK.today(), file: 'Lemonade Stand code' }); }); return; }
+    tell('That doesn\u2019t look like a shared list, week or road. On the other phone, tap \u201cShare this list\u201d (or \u201cShare this week\u201d) and send the link, then paste the whole link here.');
+  }
   function shortToggle(on) {
     S.short = !!on; renderFocus(); renderRoad();
     say(on ? 'Showing just the two call sheets: who starts which calls, and the daily check-in. Nothing else is removed.' : 'Showing the whole road again.');
@@ -810,6 +866,8 @@
     var o = {};
     ['by', 'saved', 'file'].forEach(function (k) { if (typeof f[k] === 'string') o[k] = f[k].slice(0, 80); });
     if (f.lemon) o.lemon = 1;
+    // the jobs that came in from the stand without an owner (listed there, not picked yet)
+    if (Array.isArray(f.unpicked)) o.unpicked = f.unpicked.slice(0, 200).filter(function (x) { return typeof x === 'string'; }).map(function (x) { return x.slice(0, 120); });
     return o;
   }
   // The sheets the stand fills in carry from.lemon, so bringing the stand in again updates them in place.
@@ -908,10 +966,14 @@
           if (r.r && !hit.r) { hit.r = r.r; nSet++; }
           if (r.freq && !hit.freq) hit.freq = r.freq;
         });
+        var up0 = Array.isArray(h3.en.from.unpicked) ? h3.en.from.unpicked : [];
+        jobs.forEach(function (r) { if (!r.r && up0.indexOf(r.task) < 0) up0.push(r.task); });
+        h3.en.from.unpicked = up0.filter(function (t) { var hit = t3.filter(function (x) { return x && SP.fold(x.task) === SP.fold(t); })[0]; return hit && !hit.r && !hit.a; }).slice(0, 200);
         made.push('Updated ' + SP.nameOf('WP-03') + ' (' + sheetName(h3) + ')' + (nNew || nSet ? ': ' + [nNew ? nNew + ' new ' + (nNew === 1 ? 'job' : 'jobs') : '', nSet ? nSet + ' owner' + (nSet === 1 ? '' : 's') + ' filled in' : ''].filter(Boolean).join(', ') : ', nothing new on it'));
       } else {
-        var e3 = newEntry('WP-03'); e3.state.tables.treaty = jobs; e3.from = { by: from.by, saved: from.saved, file: from.file, lemon: 1 };
-        if (place(e3)) made.push(SP.nameOf('WP-03') + ' (' + jobs.length + ' jobs, ' + jobs.filter(function (r) { return r.r; }).length + ' with an owner)');
+        var e3 = newEntry('WP-03'); e3.state.tables.treaty = jobs; e3.from = { by: from.by, saved: from.saved, file: from.file, lemon: 1, unpicked: jobs.filter(function (r) { return !r.r; }).map(function (r) { return r.task; }).slice(0, 200) };
+        var nOwn = jobs.filter(function (r) { return r.r; }).length;
+        if (place(e3)) made.push(SP.nameOf('WP-03') + ' (' + (nOwn ? 'you picked owners for ' + nOwn + (nOwn === 1 ? ' job' : ' jobs') + '; ' + (jobs.length - nOwn) + ' more listed, without an owner yet' : jobs.length + ' jobs listed, without an owner yet') + ')');
       }
     }
     syncAllNames(); syncRoadPeople(); renderNames(); renderRoad(); changed();
@@ -1035,6 +1097,8 @@
   function changed() {
     S.dirty = true;
     refreshDynamic();
+    suiteLinkSoon();
+    if (suiteAsk) suiteAsk();
     if (hhWrite) hhWrite.soon();
     if (!keep) return;
     clearTimeout(keepTimer);
@@ -1522,7 +1586,7 @@
   // A link opened on this page (…/suite.html#list=…): the sheet it belongs to opens with the choice at the
   // top. A week goes to the sheet for the same week; a score to that person's own sheet.
   function openShared(d) {
-    if (!S.path) { sharedWait = d; say('Someone shared a ' + d.wp + ' with you. Choose your road first, and it opens on the right sheet.'); return; }
+    if (!S.path) { sharedWait = d; say('Someone shared ' + SP.nameOf(d.wp) + ' with you. Choose your road first, and it opens on the right sheet.'); return; }
     sharedWait = null;
     var stops = S.stops.filter(function (x) { return x.wp === d.wp; });
     var st = stops[0] || extraStop(d.wp), pick = null, person = null;
@@ -1996,7 +2060,7 @@
     lemonRender();
     var keepBox = $('ws-keep');
     if (keepBox) keepBox.addEventListener('change', function () {
-      if (keepBox.checked) { keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); }
+      if (keepBox.checked) { keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); if (suiteAsk) suiteAsk(); }
       else eraseKept('Not kept any more. Nothing from your suite is stored on this device.');
     });
     var eraseBtn = $('ws-erase');
@@ -2088,6 +2152,30 @@
     global.addEventListener('hashchange', readSharedHash);
     readStandHash();
     global.addEventListener('hashchange', readStandHash);
+    readSuiteHash();
+    global.addEventListener('hashchange', readSuiteHash);
+    if ($('ws-paste-go')) $('ws-paste-go').addEventListener('click', pasteIn);
+    var sendB = $('ws-send');
+    if (sendB) sendB.addEventListener('click', function (e) {
+      // the link is made here, from the road as it is now, before the share sheet (site.js) reads it
+      if (!S.path || !S.stops.some(function (st) { return st.entries.some(filled); })) { e.stopPropagation(); e.preventDefault(); say('Fill in a sheet first, then send it.'); return; }
+      var j = suiteJson(), link = suiteLink.sig === j ? suiteLink : suiteLinkPlain();
+      if (link.url.length > 60000) { e.stopPropagation(); e.preventDefault(); say('Your road is too big for one link. Use \u201cSave my progress\u201d and send the small file instead.'); return; }
+      sendB.setAttribute('data-share-url', link.url);
+      suiteSafe = j;
+    });
+    document.addEventListener('tol:shared', function (e) { var u = e.detail && e.detail.url; if (u && u.indexOf(SUITE_HASH) >= 0) { S.dirty = false; say('Sent. If either of you changes something, send a new link.'); } });
+    suiteLinkSoon();
+    // "Keep this on this device so it's here tomorrow?", once something is typed (tol-workpaper.js)
+    if (WPK.keepAsk) {
+      var askS = WPK.keepAsk({
+        key: 'suite', bar: document.querySelector('.wpf-bar-inner'),
+        want: function () { return !keep && !!S.path && (S.stops.some(function (st) { return st.entries.some(filled); }) || S.names.some(function (x) { return String(x || '').trim(); })); },
+        onKeep: function () { var kb2 = $('ws-keep'); if (kb2) kb2.checked = true; keep = true; if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press \u201cErase\u201d to remove it.'); if (suiteAsk) suiteAsk(); }
+      });
+      suiteAsk = askS.check;
+      askS.check();
+    }
     if ($('ws-sheet-draft')) $('ws-sheet-draft').addEventListener('click', function () { if (app) app.saveDraft(); });
     $('ws-drop').addEventListener('click', function (e) { var hb = e.target.closest('[data-hold]'); if (hb) resolveHeld(hb.getAttribute('data-hold')); var nb = e.target.closest('[data-names]'); if (nb) resolveNames(nb.getAttribute('data-names')); });
     document.addEventListener('keydown', function (e) {

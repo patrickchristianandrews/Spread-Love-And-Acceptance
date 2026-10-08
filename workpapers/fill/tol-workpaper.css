@@ -760,3 +760,15 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .ws-nights select:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; }
 .ws-nights > span{ white-space: nowrap; }
 .ws-short-note{ margin: 0 0 1em; padding: .6em .9em; border-radius: 12px; background: #FDEEF2; border: 1px solid #EBD3E4; font-size: .95em; }
+
+/* step 4: a link or code pasted in, no file needed; step 5: the whole road as a link */
+.ws-paste{ margin-top: 1em; padding: .8em 1em; border: 1px solid var(--line, #D9CBA3); border-radius: 14px; background: #FFFDF7; }
+.ws-paste-l{ display: block; font-weight: 600; }
+.ws-paste-sub{ margin: .2em 0 .4em; font-size: .9em; color: var(--ink-soft, #524B3E); }
+.ws-paste textarea{ width: 100%; box-sizing: border-box; font: inherit; font-size: .9rem; overflow-wrap: anywhere; }
+.ws-paste .wpf-add{ min-height: 44px; }
+.ws-paste-note:empty{ display: none; }
+.ws-send-row{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.ws-send-row .ws-send{ min-height: 44px; font-weight: 600; border-style: solid; border-color: var(--credit, #3E6B4C); }
+.ws-send-note{ font-size: .88em; color: var(--ink-soft, #524B3E); flex: 1 1 16rem; }
+@media print{ .ws-paste, .ws-send-row{ display: none !important; } }
