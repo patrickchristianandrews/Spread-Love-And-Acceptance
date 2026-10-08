@@ -353,6 +353,10 @@
     state.noWait = !!state.noWait;
     state.asPick = !!state.asPick;
     state.compact = !!state.compact;
+    state.workNo = !!state.workNo;
+    if (state.path !== 'fridge' && state.path !== 'count' && state.path !== 'money') delete state.path;
+    if (!state.goal || typeof state.goal !== 'object') state.goal = { a: '', f: '' };
+    state.goal = { a: String(state.goal.a == null ? '' : state.goal.a).slice(0, 12), f: String(state.goal.f || '').slice(0, 40) };
     if (state.tab !== 'money') delete state.tab;
     // a split suggested from the other phone, waiting for "Use it?"
     var ao = state.agreedOffer;
@@ -2071,10 +2075,10 @@
     rowsEl.querySelectorAll('.row').forEach(function (r) { if (r._refresh) r._refresh(); });
     renderCats();
     if (solo()) soloResults(); else groupResults();
-    renderTrend();
+    renderTrend(); renderDbl(); renderGoal(); renderPath();
     var ex = $('explain-text'); if (ex) ex.textContent = solo() ? resultText() : '';
     save();
-    renderKeepAsk(); jumpSync();
+    renderKeepAsk(); jumpSync(); chatLinkSoon();
   }
 
   /* ---------- chores with one owner each (no week of logging needed) ---------- */
@@ -3308,17 +3312,42 @@
   var KEEP_NO = 'tol-lemonade-keep-no', keptSaid = 0;
   function keepDismissed() { try { return sessionStorage.getItem(KEEP_NO) === '1'; } catch (e) { return false; } }
   function storageOk() { try { localStorage.setItem('tol-lemonade-test', '1'); localStorage.removeItem('tol-lemonade-test'); return true; } catch (e) { return false; } }
-  function entered() { return !!state && (realJobs().some(function (j) { return j.v.some(function (x) { return num(x) > 0; }) || j.name.trim(); }) || realBills().length > 0); }
+  // something worth keeping: a job or a bill, or in "Me and others" the names typed on this device
+  function entered() { return !!state && (realJobs().some(function (j) { return j.v.some(function (x) { return num(x) > 0; }) || j.name.trim(); }) || realBills().length > 0 ||
+    (!solo() && !state.example && state.people.filter(function (p) { return !placeholder(p); }).length >= 2)); }
+  // Only one "Keep this?" at a time: the one nearest what the person is doing (the sending and adding of
+  // sides near the names, or the result). Just me has its own, under its ledger.
+  var keepZone = 'res';
+  function keepBoxFor() {
+    if (solo()) return $('keepask-solo');
+    var sendOpen = !$('send-box').hidden || !$('add-box').hidden;
+    return $(sendOpen || keepZone === 'sides' ? 'keepask-sides' : 'keepask-res');
+  }
   function renderKeepAsk() {
     var boxes = document.querySelectorAll('[data-keepask]'); if (!boxes.length || !state) return;
     var ask = !keep && !keepDismissed() && entered() && storageOk(), said = keep && Date.now() - keptSaid < 8000;
+    // in "Me and others", once kept, a quiet line stays with a plain way to erase it
+    var kept = keep && !solo() && !said, mine = keepBoxFor();
     boxes.forEach(function (b) {
-      b.hidden = !ask && !said;
+      var me = b === mine;
+      b.hidden = !me || (!ask && !said && !kept);
       var q = b.querySelector('.ls-keepask-q'), btns = b.querySelector('.ls-keepask-btns'), done = b.querySelector('.ls-keepask-done');
       if (q) q.hidden = !ask; if (btns) btns.hidden = !ask;
-      if (done) { done.hidden = !said; if (said && !done.textContent) done.textContent = 'Kept on this device, so it’s here tomorrow. You can erase it under “How your data is kept”.'; if (!said) done.textContent = ''; }
+      if (done) {
+        done.hidden = !said && !kept;
+        var t = said ? 'Kept on this device, so it’s here tomorrow. Nothing is sent anywhere.' : kept ? 'Kept on this device only.' : '';
+        if (done.getAttribute('data-t') !== t) {
+          done.setAttribute('data-t', t);
+          done.innerHTML = t ? esc(t) + ' <button type="button" class="ls-link-btn" data-keep-erase>Erase it</button>' : '';
+        }
+      }
     });
   }
+  // which part of the stand the person is in, for the one "Keep this?" box
+  document.addEventListener('focusin', function (e) {
+    var z = e.target.closest && (e.target.closest('#sides, .ls-me, #people') ? 'sides' : e.target.closest('#rows, #money-rows, #group-results, #lib') ? 'res' : '');
+    if (z && z !== keepZone) { keepZone = z; renderKeepAsk(); }
+  });
   function keepOn() {
     keep = true; $('keep-device').checked = true; save();
     var ok = false; try { ok = !!localStorage.getItem(KEY); } catch (e) {}
@@ -3329,6 +3358,9 @@
   document.addEventListener('click', function (e) {
     var y = e.target.closest && e.target.closest('[data-keep-yes]'), n = e.target.closest && e.target.closest('[data-keep-no]');
     if (y) { var box = y.closest('[data-keepask]'); keepOn(); var d = box && box.querySelector('.ls-keepask-done'); if (d) { d.setAttribute('tabindex', '-1'); d.focus({ preventScroll: true }); } }
+    else if (e.target.closest && e.target.closest('[data-keep-erase]')) {
+      erase(); renderKeepAsk();
+    }
     else if (n) {
       try { sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {}
       renderKeepAsk();
@@ -3368,7 +3400,9 @@
   try { var mqp = window.matchMedia('(max-width: 700px)'); if (mqp.addEventListener) mqp.addEventListener('change', placeMoreOpts); else if (mqp.addListener) mqp.addListener(placeMoreOpts); } catch (e) {}
   placeMoreOpts();
   // anything inside that gets focus (a link into it, "Use it") opens it first
-  if (moreBox) moreBox.addEventListener('focusin', function () { moreBox.open = true; });
+  // (not the summary itself: focus lands there on the tap, just before the tap toggles it, so opening here
+  // would make that same tap close it again)
+  if (moreBox) moreBox.addEventListener('focusin', function (e) { if (!e.target.closest('summary')) moreBox.open = true; });
 
   var jumpBtn = $('see-split'), rowsSeen = false, resSeen = false, typing = false;
   function jumpTarget() { return solo() ? document.querySelector('.solo-only.ls-res') : $('glasses'); }
@@ -3376,7 +3410,22 @@
     if (!jumpBtn || !state) return;
     var on = phone() && !!mode && !state.compact && rowsSeen && !resSeen && !typing && document.body.getAttribute('data-ls-tab') !== 'money' && realJobs().length > 0;
     jumpBtn.hidden = !on;
+    jumpClear();
   }
+  // the pill steps aside while it would sit over a row's guidance (a note, a question, a cue), so it never hides words
+  var GUIDE = '#rows .ls-solo-note, #rows .row-cue:not([hidden]), #rows .row-note:not([hidden]), #rows .ls-freq-ask, #rows .row-own:not([hidden]), #rows .row-area:not([hidden]), #rows .row-pick';
+  function jumpClear() {
+    if (!jumpBtn || jumpBtn.hidden) return;
+    var r = jumpBtn.getBoundingClientRect(), top = r.top - 6, bot = r.bottom + 6, hit = false;
+    if (r.height) document.querySelectorAll(GUIDE).forEach(function (el) {
+      if (hit) return; var b = el.getBoundingClientRect();
+      if (b.height && b.bottom > top && b.top < bot && b.right > r.left - 6 && b.left < r.right + 6) hit = true;
+    });
+    jumpBtn.classList.toggle('is-clear', hit);
+    if (hit) jumpBtn.setAttribute('tabindex', '-1'); else jumpBtn.removeAttribute('tabindex');
+  }
+  var jcRaf = 0;
+  window.addEventListener('scroll', function () { if (jcRaf) return; jcRaf = requestAnimationFrame(function () { jcRaf = 0; jumpClear(); }); }, { passive: true });
   if (jumpBtn) {
     jumpBtn.addEventListener('click', function (e) {
       e.preventDefault();

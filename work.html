@@ -530,7 +530,7 @@
     var top = null;
     people.forEach(function (n) { if (count[n] && (!top || count[n].owner > count[top].owner)) top = n; });
     var bits = [];
-    if (top && owned >= 3 && people.length > 1 && count[top].owner / owned > 0.5) bits.push(top + ' owns ' + count[top].owner + ' of the ' + owned + ' jobs with an owner. It’s worth asking which one they’d hand over first.');
+    if (top && owned >= 3 && people.length > 1 && count[top].owner / owned > 0.5) bits.push(top + ' owns ' + (count[top].owner === owned ? 'all ' + owned : count[top].owner + ' of the ' + owned) + ' jobs with an owner. It’s worth asking which one they’d hand over first.');
     if (open) bits.push(open === 1 ? 'One job still needs an owner.' : open + ' jobs still need an owner.');
     note.textContent = bits.join(' ');
   }
