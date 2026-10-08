@@ -1071,6 +1071,12 @@
 
   A.onInput = function (e) {
     var t = e.target;
+    // "Use these names in the other tools" (household.js handles the box): an untick is remembered, so it is
+    // never ticked again by itself on this device
+    if (t.closest && t.closest('.tol-hh-keep')) {
+      if (e.type === 'change' && t.type === 'checkbox') { try { if (t.checked) global.localStorage.removeItem(HH_AUTO_OFF); else global.localStorage.setItem(HH_AUTO_OFF, '1'); } catch (er) {} }
+      return;
+    }
     if (t.getAttribute('data-rows-for')) {
       if (e.type !== 'change') return;
       this.rowsFor = this.rowsFor || {}; this.rowsFor[t.getAttribute('data-rows-for')] = t.value;
@@ -1097,6 +1103,7 @@
     } else if (t.getAttribute('data-key')) {
       if (t.type === 'radio' && !t.checked) return;
       this.state.values[t.getAttribute('data-key')] = val;
+      if (/^partner[A-H]$/.test(t.getAttribute('data-key'))) this.hhAutoKeep();
       // the day the closing box was ticked, for the "Agreed on …" line
       if (t.getAttribute('data-key') === 'agreed') { if (val) { if (!this.state.values.agreedOn) this.state.values.agreedOn = today(); } else delete this.state.values.agreedOn; }
     } else return;
@@ -1128,6 +1135,23 @@
 
   /* ---------- the household: names and jobs typed once, offered in every tool (/assets/js/household.js) ---------- */
   function HHmod() { return global.TOLHousehold || null; }
+  // Names typed here are kept for the site's other tools (only in this browser) as soon as there is a real
+  // name, so they carry from one worksheet to the next on this device; the box under the names shows it
+  // ticked and says so once. Unticking it forgets them, and it is never ticked again by itself here.
+  var HH_AUTO_OFF = 'tol-hh-auto-off';
+  A.hhAutoKeep = function () {
+    var HH = HHmod();
+    if (!HH || !this.hhWrite || this.opts.fixedPeople || !this.schema.people) return;
+    var tool = this.hhTool();
+    if (HH.isLinked(tool)) return;
+    try { if (global.localStorage.getItem(HH_AUTO_OFF)) return; } catch (e) { return; }
+    if (!HH.realNames(this.hhNames()).length) return;
+    if (!HH.link(tool)) return;
+    var k = this.root.querySelector('.tol-hh-keep');
+    if (k && k.sync) k.sync();
+    var st = k && k.querySelector('.tol-hh-status');
+    if (st) { st.textContent = ''; setTimeout(function () { st.textContent = 'Ticked for you: the names are kept only on this device, so your other worksheets can offer them. Nothing is sent anywhere. Untick to forget them.'; }, 30); }
+  };
   A.hhTool = function () { return String(this.schema.code || '').toLowerCase(); };
   // The job list a household's jobs go into: One owner per job's table (on any road)
   A.hhJobTable = function () { return this.schema.sections.filter(function (s) { return s.type === 'table' && s.library === 'owner'; })[0] || null; };
@@ -1991,6 +2015,22 @@
     return { check: check, hide: hide };
   }
 
+  // The page around the sheet, for "Kind ways to say no" on its own: its own title and opening line, and a
+  // way to the whole Who did what sheet.
+  function focusPartB(schema) {
+    var t = schema.title || 'Kind ways to say no';
+    try { document.title = t + ' \u2014 WP-01 Part B \u00b7 Spread Love & Acceptance'; } catch (e) {}
+    var h1 = document.querySelector('main .read-head h1'); if (h1) h1.textContent = t;
+    var code = document.querySelector('main .read-head .read-code'); if (code) code.textContent = 'WP-01 Part B \u00b7 Fill-in workpaper';
+    var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)');
+    if (lede) {
+      lede.textContent = 'Ready-made, kind ways to say no: tap one to copy it. Then write your own for a real request: say why it\u2019s fair, say what you have left, and offer something smaller instead.';
+      var more = h('p', { className: 'wpf-lede wpf-partb-note' }, [h('small', null, ['Just you, nothing to log. Keeping track of who did what with someone too? ', h('a', { href: '/workpapers/fill/wp-01.html', text: 'Open the whole Who did what sheet' }), '.'])]);
+      lede.parentNode.insertBefore(more, lede.nextSibling);
+    }
+    var root = document.getElementById('wpf-root'); if (root) root.setAttribute('aria-label', t + ' worksheet');
+  }
+
   function boot() {
     var wp = document.body.getAttribute('data-wp');
     var schema = global.TOL_WORKPAPERS && global.TOL_WORKPAPERS[wp];
@@ -1999,6 +2039,14 @@
     // ?road=coworkers (or roommates, caregivers) shows a worksheet worded for that road
     var road = (global.location && (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1]) || '';
     if (road && global.TOL_WORKPAPER_VARIANT) schema = global.TOL_WORKPAPER_VARIANT(wp, road) || schema;
+    // "Kind ways to say no" on its own (WP-01 Part B): /workpapers/fill/wp-01.html?only=b, or #part-b.
+    // Just Part B, worded for one person, with the ready-made no's on top. It keeps its own draft
+    // (road "self"), so it never touches a Who did what draft kept on this device.
+    var partB = wp === 'wp-01' && (/[?&]only=b(&|$)/.test(global.location.search || '') || /^#part-b$/i.test(global.location.hash || ''));
+    if (partB && global.TOL_WORKPAPER_SOLO) {
+      var so = global.TOL_WORKPAPER_SOLO(wp);
+      if (so) { schema = Object.assign({}, so, { road: 'self' }); focusPartB(schema); }
+    }
     var app = new App(root, schema, { road: road, canShare: !!schema.share });
     // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied
     // straight away so it doesn't stay in the address bar or the history. Nothing is opened until the person chooses.
