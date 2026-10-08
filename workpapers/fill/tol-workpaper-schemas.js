@@ -177,6 +177,31 @@
         id: 'refusals', type: 'table', title: 'Part B (optional): Kind ways to say no', optional: true,
         intro: 'Optional. Kind ways to say no, drafted ahead of time. Draft a "not right now" for a real situation in three steps: say why the request is fair, say honestly what you have left, and offer something instead.',
         addLabel: 'Add a refusal',
+        // ready-made no's, shown as tap-to-copy chips above the boxes (on screen only, never in the PDF)
+        ready: {
+          title: 'Ready-made no\u2019s to copy',
+          help: 'Tap one to copy it, then paste it into a message. Change any words so it sounds like you. Each one says the ask is fair, says what you have left, and offers something smaller instead.',
+          groups: [
+            { name: 'At work', items: [
+              ['Can you cover a shift?', 'I can see you\u2019re stuck, and I want it covered too. I\u2019m running on empty this week, so I can\u2019t take another shift. I can help you ask around, or take a short one next week.'],
+              ['Can you stay late tonight?', 'I know today got away from us. I can\u2019t stay past the end of my shift tonight. I can come in fifteen minutes early tomorrow to help catch up.'],
+              ['Can you take on one more thing?', 'Thanks for thinking of me. My plate is full until the end of the month. If something comes off it, I can take this on. Which would you like me to drop?']
+            ] },
+            { name: 'Friends and family', items: [
+              ['Can you help me move on Saturday?', 'I\u2019d love to help you settle in. I can\u2019t do a whole moving day this weekend; I need the rest. I can bring dinner on Sunday, or help unpack for an hour.'],
+              ['Can you host this year?', 'I know someone has to, and it matters. I can\u2019t host this year. I\u2019ll bring a dish and help clear up.'],
+              ['Are you coming out tonight?', 'I really want to see you. I\u2019m worn out tonight. Could we have a slow coffee this weekend instead?']
+            ] },
+            { name: 'At home', items: [
+              ['Can you sort this out now?', 'That\u2019s fair, and it does need doing. I don\u2019t have it in me tonight. I\u2019ll do it first thing tomorrow.'],
+              ['Can you do it this week?', 'I can see why it matters. I can\u2019t do the whole thing this week. I can do the first half on Thursday. Would that help?']
+            ] },
+            { name: 'Any time', items: [
+              ['When you need a moment', 'I want to say yes, and I\u2019d do it badly right now. Can I give you a proper answer tomorrow?'],
+              ['When the answer is just no', 'Not today. That isn\u2019t a no to you; it\u2019s a yes to the rest I need.']
+            ] }
+          ]
+        },
         columns: [
           { id: 'kind', label: 'Type', type: 'select', options: ['Capacity check', 'Delegation pivot', 'Time commitment'], w: 1.2 },
           { id: 'ack', label: 'Acknowledge', type: 'textarea', w: 2 },
@@ -279,8 +304,10 @@
       {
         id: 'extra', type: 'fields', title: 'Optional',
         fields: [
-          { id: 'roadPeople', label: 'How many people are on your road, counting you?', type: 'number', min: 1, max: 8, step: '1', prefill: true, help: 'So the shared average waits until everyone\'s score is in.' },
-          { id: 'partnerScore', label: "Your partner's score, if they sent it", type: 'text', placeholder: 'e.g. 0.45', help: 'The number from their own sheet. More than one person sent theirs? Put them all here, with commas between.' },
+          { id: 'roadPeople', label: 'Doing this with others? How many people, counting you?', type: 'number', min: 1, max: 8, step: '1', prefill: true, help: 'Just you? Leave it blank. With others, the shared average waits until everyone\'s score is in.' },
+          // the id stays partnerScore, so drafts and PDFs saved before still open; it shows once there is someone else
+          { id: 'partnerScore', label: 'Someone else\'s score (optional)', type: 'text', placeholder: 'e.g. 0.45', help: 'The number from their own sheet, if they sent it. More than one? Put them all here, with commas between.',
+            showIf: function (v) { return parseInt(v.roadPeople, 10) > 1 || String(v.partnerScore == null ? '' : v.partnerScore).trim() !== ''; } },
           { id: 'caring', label: 'Some of what I\'m carrying is caring for someone', type: 'check' },
           { id: 'note', label: 'Anything you want to name before talking', type: 'textarea' }
         ]
@@ -328,7 +355,7 @@
     slug: 'One-owner-per-job',
     // "Share this list" / "Open a shared list" (tol-workpaper.js): jobs are matched by their name
     share: { what: 'list', after: 'treaty', keys: { treaty: 'task' } },
-    purpose: 'A living agreement that gives every regular household job one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
+    purpose: 'A living agreement about who owns which job, for a household, a team, or a family sharing someone\'s care. Every regular job gets one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
     people: true,
     meta: [
       { id: 'reviewDate', label: 'Date of this list', type: 'date' }
@@ -336,7 +363,7 @@
     sections: [
       {
         type: 'note', pdf: false,
-        text: "This works on its own: list the jobs that keep your home (or homes) running and give each one a single owner. If you still disagree about who does what, a week of Who did what (WP-01) helps settle it. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to your household, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning."
+        text: "This works on its own: list the jobs that keep things running (a home or two, a team, or a parent's care) and give each one a single owner. If you still disagree about who does what, a week of Who did what (WP-01) helps settle it. The starter jobs below are examples. They don't count until you give one an owner or change it. Remove any that don't apply to you, and add the ones that do, including the invisible ones: forms, gifts, renewals, planning, appointments. Sharing a parent's care? The task library below has a Caring for a parent group."
       },
       {
         id: 'treaty', type: 'table', title: 'Who owns each job',
@@ -660,9 +687,14 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated about the other person today (or someone at home, if there are more of you). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face or on a call, and kindly.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face or on a call, and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
+        // shown under "Just tonight's check-in": the same questions, for a team or for housemates
+        others: [
+          ['A team', 'Make it a 5-minute stand-up, at the start or end of the day. Go round once, one sentence each, with the same questions: how full is your load (low, medium or high), one thank-you to someone on the team, one thing that got in the way (a process, not a person), and one thing that would help tomorrow. Anything bigger goes to a follow-up, not the stand-up. A \u201chigh\u201d is useful information, never a complaint.'],
+          ['Housemates', 'Once or twice a week is plenty, at a time you\u2019re all home, like Sunday evening. Same questions, one sentence each. Keep the thing that didn\u2019t feel great about a shared thing (the bins, the noise, the bills), never someone\u2019s character. Jobs that keep slipping go on One owner per job (WP-03).']
+        ],
         columns: [
           { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
           { id: 'who', label: 'Person', type: 'person', w: 1.1, prefill: true },

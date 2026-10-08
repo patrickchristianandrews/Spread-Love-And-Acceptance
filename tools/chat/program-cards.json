@@ -1852,8 +1852,8 @@
         "Plan the next visit before the goodbye, so the gap has an end."
       ],
       "script": [
-        "If you usually reach out: “I’ve noticed I start most of our calls, and I’d love it if you started some. Can we pick our call days together?”",
-        "If you call less: “It’s the hours, not you. Can we set two call times a week that I can actually keep?”",
+        "I’ve noticed I start most of our calls, and I’d love it if you started some. Can we pick our call days together?",
+        "It’s the hours, not you. Can we set two call times a week that I can actually keep?",
         "When you wrote “Fine.” earlier, I wasn’t sure how you meant it. Are you okay?"
       ],
       "links": [
@@ -1880,6 +1880,11 @@
         "Agree which days you call, and who calls.",
         "Send small messages between calls.",
         "If a text sounds cold, ask. Don’t guess."
+      ],
+      "scriptLabels": [
+        "If you usually reach out",
+        "If you call less",
+        "After a short text"
       ]
     },
     {
@@ -1916,7 +1921,7 @@
         ],
         [
           "Who calls, and how often",
-          "/long-distance.html#calls"
+          "/long-distance.html#rhythm"
         ]
       ],
       "chips": []

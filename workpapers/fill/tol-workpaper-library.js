@@ -28,6 +28,8 @@
     g('Planning and remembering', [['Keep the family calendar', O], ['Remember appointments', O], ['Book the dentist and checkups', AN], ['Plan weekends', Wk], ['Plan trips and vacations', AN], ['Research big purchases', AN], ['Remember what needs replacing', O], ['Make the to-do list', Wk], ['Arrange repairs and wait for them', AN], ['Keep the spare keys and passwords sorted', O], ['Plan for guests', AN], ['Notice when things are running late', O]], true),
     g('Kids and school', [['School forms and permission slips', AN], ['School lunches', D], ['Drop-off and pick-up', D], ['Homework help', D], ['Bedtime', D], ['Bath time', D], ['Kids’ doctor and dentist visits', AN], ['Activities and sign-ups', AN], ['Buy clothes as they outgrow them', AN], ['Arrange babysitting', AN], ['Reply to school emails and apps', Wk], ['Plan playdates', AN]], true),
     g('Health and care', [['Pick up prescriptions', AN], ['Keep the first-aid kit stocked', AN], ['Book appointments', AN], ['Look after someone who is sick', AN], ['Keep track of vaccinations and records', O], ['Arrange care for a relative', AN]], true),
+    // a parent's care shared between grown-up children, often in different homes
+    g('Caring for a parent', [['Visits and sitting with them', Wk], ['Refill the pill box (as the care team directs)', Wk], ['Keep the medication list up to date', O], ['Memory clinic and other appointments', AN], ['Go along to appointments and take notes', AN], ['Insurance and paperwork', AN], ['The Sunday call', Wk], ['Night calls', AN], ['Update the others on how they are', Wk]], true),
     g('People and occasions', [['Remember birthdays', O], ['Buy and wrap gifts', AN], ['Send cards and thank-you notes', AN], ['Plan holidays and gatherings', AN], ['Keep in touch with family', O], ['RSVP to invitations', AN], ['Check in with a relative who is alone', Wk], ['Emotional check-ins at home', Wk], ['Smooth things over after a hard day', AN]], true),
     g('Home and car', [['Car maintenance', AN], ['Fill the car with gas', Wk], ['Yard and garden', Wk], ['Small repairs', AN], ['Change light bulbs and batteries', AN], ['Replace smoke alarm batteries', AN], ['Home maintenance schedule', M], ['Seasonal clothes swap', AN]]),
     g('Pets and plants', [['Feed the pets', D], ['Walk the dog', D], ['Vet visits', AN], ['Litter box or cage', Wk], ['Water the plants', Wk]])
@@ -169,7 +171,8 @@
     var P = roadWords(road), two = P.length > 1;
     function who(i) { return P[i % P.length]; }
     if (code === 'WP-01') {
-      if (road === 'self') return { intro: 'Three kind no’s someone wrote ahead of time. Borrow any of them.', parts: [{ title: 'Kind ways to say no', head: ['Type', 'What you could say'], rows: SCRIPTS.no.slice(0, 6) }], note: 'Each one says why the request is fair, what you have left, and what you can offer instead.' };
+      // on the "Just me" road the ready-made no's are on the sheet itself, as chips to copy
+      if (road === 'self') return null;
       var rows = (EX01[road] || EX01.partners).map(function (r) { return [r[0], r[1], who(r[2]), r[3], r[4]]; });
       return { intro: 'A few rows from an ordinary week, logged before anyone decided what they meant. Notice the planning and remembering rows: short in minutes, easy to miss.',
         parts: [{ title: 'Part A: who did what', head: ['Day', 'Task', 'Who', 'Minutes', 'Asked or noticed'], rows: rows }, { title: 'Part B: kind no’s to borrow', lines: SCRIPTS.no.slice(0, 4).map(function (s) { return s[0] + ': “' + s[1] + '”'; }) }],

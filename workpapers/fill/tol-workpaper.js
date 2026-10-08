@@ -737,6 +737,7 @@
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
   var TONIGHT = [
+    ['load', 'How full was today?', { type: 'select', options: ['Low', 'Medium', 'High'] }],
     ['thanks', 'Something I appreciated today'],
     ['friction', 'Something that didn’t feel great'],
     ['ask', 'Something that would help tomorrow']
@@ -750,7 +751,13 @@
     var hid = 'tonight-' + sec.id;
     var box = h('section', { className: 'wpf-tonight no-print tol-plain', 'aria-labelledby': hid });
     box.appendChild(h('h2', { id: hid, text: 'Just tonight’s check-in' }));
-    box.appendChild(h('p', { className: 'wpf-help', text: 'About 90 seconds. Each of you answers in a sentence, about your own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: 'About 90 seconds. Each person says how full today was (low, medium or high), then answers in a sentence, about their own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
+    // the same questions for a team (a short stand-up) or for housemates
+    if (sec.others && sec.others.length) {
+      var oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with housemates?' })]);
+      sec.others.forEach(function (o) { oth.appendChild(h('p', { className: 'wpf-help' }, [h('strong', { text: o[0] + ': ' }), o[1]])); });
+      box.appendChild(oth);
+    }
     var grid = h('div', { className: 'wpf-tonight-people' });
     ctx.people().forEach(function (code) {
       if (only && code !== only) return;
@@ -764,7 +771,7 @@
       }
       var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { 'data-name-of': code, text: ctx.name(code) })]);
       cols.forEach(function (q) {
-        var c = self.control({ type: 'text' }, rows[i][q[0]], { table: sec.id, row: String(i), col: q[0] });
+        var c = self.control(q[2] || { type: 'text' }, rows[i][q[0]], { table: sec.id, row: String(i), col: q[0] });
         c.el.setAttribute('data-tonight', '1');
         fs.appendChild(h('div', { className: 'wpf-field' }, [h('label', { for: c.id, text: q[1] }), c.el]));
       });
@@ -795,6 +802,7 @@
           field.appendChild(chips);
         }
         if (f.help) field.appendChild(h('p', { className: 'wpf-help', text: f.help }));
+        if (f.showIf) { field.setAttribute('data-show-if', f.id); field.hidden = !f.showIf(st.values); }
         // a calm line under the closing tick: "Agreed on …", or what is still to do first
         if (f.closing) field.appendChild(h('p', { className: 'wpf-agreed-note', id: 'wpf-agreed-note', role: 'status', 'aria-live': 'polite' }));
         if (f.privateOptIn) {
@@ -846,8 +854,26 @@
       wrap.appendChild(h('dl', { id: 'cmp-' + sec.id, 'aria-live': 'polite' }));
     }
 
+    if (sec.type === 'table' && sec.ready) wrap.appendChild(this.readyEl(sec));
     if (sec.type === 'table') wrap.appendChild(this.renderTable(sec));
     return wrap;
+  };
+
+  // "Ready-made no's to copy": one tap copies the words, to paste into a message. On screen only.
+  A.readyEl = function (sec) {
+    var r = sec.ready, box = h('div', { className: 'wpf-ready no-print tol-plain', role: 'group', 'aria-label': r.title });
+    box.appendChild(h('p', { className: 'wpf-ready-h', text: r.title }));
+    if (r.help) box.appendChild(h('p', { className: 'wpf-help', text: r.help }));
+    r.groups.forEach(function (g) {
+      var grp = h('div', { className: 'wpf-ready-group', role: 'group', 'aria-label': g.name }, [h('p', { className: 'wpf-lib-h', text: g.name })]);
+      g.items.forEach(function (it) {
+        grp.appendChild(h('button', { type: 'button', className: 'wpf-ready-chip', 'data-action': 'copy-ready', 'data-text': it[1] }, [
+          h('span', { className: 'wpf-ready-ask', text: it[0] }), h('span', { className: 'wpf-ready-say', text: '\u201c' + it[1] + '\u201d' }),
+          h('span', { className: 'wpf-ready-tap', 'aria-hidden': 'true', text: 'Tap to copy' })]));
+      });
+      box.appendChild(grp);
+    });
+    return box;
   };
 
   A.renderTable = function (sec) {
@@ -1008,6 +1034,11 @@
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-fixed]'), function (t) { t.textContent = rowLabel(t.getAttribute('data-fixed'), ctx); });
     Array.prototype.forEach.call(this.root.querySelectorAll('[data-name-of]'), function (t) { t.textContent = ctx.name(t.getAttribute('data-name-of')); });
     Array.prototype.forEach.call(this.root.querySelectorAll('input[type="number"]'), function (t) { self.flagRange(t); });
+    Array.prototype.forEach.call(this.root.querySelectorAll('[data-show-if]'), function (el) {
+      var id = el.getAttribute('data-show-if'), def = null;
+      self.schema.sections.forEach(function (s) { (s.fields || []).forEach(function (f) { if (f.id === id) def = f; }); });
+      if (def && def.showIf) el.hidden = !def.showIf(self.state.values);
+    });
   };
 
   // Starter rows that nobody has changed carry an "Example" tag; it goes as soon as the row is edited.
@@ -1295,7 +1326,7 @@
     var box = h('div', { className: 'wpf-share no-print tol-plain', role: 'group', 'aria-label': 'Share this ' + what });
     var one = !this.schema.people;
     box.appendChild(h('p', { className: 'wpf-share-h', text: one ? 'Sharing your ' + what + ' with the others?' : what === 'week' ? 'Keeping this week together?' : 'Keeping this list together?' }));
-    box.appendChild(h('p', { className: 'wpf-help', text: one ? 'Send it as a link instead of a file, and open theirs here. Someone else\u2019s ' + what + ' goes into \u201cYour partner\u2019s score\u201d below; your own answers stay as they are.' : 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: one ? 'Send it as a link instead of a file, and open theirs here. Someone else\u2019s ' + what + ' goes into \u201cSomeone else\u2019s score\u201d below; your own answers stay as they are.' : 'Send it to the others as a link, and open theirs here. When you open one, you choose to combine it with what is here or to replace it. People are matched by name.' }));
     box.appendChild(h('div', { className: 'wpf-share-btns' }, [
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-make', 'aria-expanded': open === 'make' ? 'true' : 'false', text: one ? 'Share as a link' : 'Share this ' + what }),
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-open', 'aria-expanded': open === 'open' ? 'true' : 'false', text: 'Open a shared ' + what })
@@ -1306,7 +1337,7 @@
       if (made && made.error) p.appendChild(h('p', { className: 'wpf-share-msg', role: 'note', text: made.error }));
       else if (made) {
         p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true)]));
-        p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time either of you changes something, send a new link: an old one won\u2019t show the change.' }));
+        p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time ' + (one || peopleCount(this.state.values) > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link: an old one won\u2019t show the change.' }));
         var lid = 'f' + (++this.uid);
         p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'Or copy the link yourself' }));
         var ta = h('textarea', { id: lid, rows: '3', readonly: 'readonly', className: 'wpf-share-code', 'data-share-out': 'link', spellcheck: 'false' });
@@ -1589,9 +1620,10 @@
   };
   A.setKeep = function (on) {
     this.keep = !!on;
+    keepOff(this.keepKey(), !on);
     if (this.afterChange) this.afterChange();
     if (on) {
-      if (this.keepNow()) this.status('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.');
+      if (this.keepNow()) this.status('Kept on this device for next time. To remove it: “Erase”, under How saving works.');
     } else {
       clearTimeout(this.keepTimer);
       try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
@@ -1603,6 +1635,7 @@
   A.eraseKept = function () {
     clearTimeout(this.keepTimer);
     try { global.localStorage.removeItem(this.keepKey()); } catch (e) {}
+    keepOff(this.keepKey(), true);
     this.keep = false;
     this.safeSig = null;
     this.dirty = answered(this.schema, this.state) > 0;
@@ -1634,6 +1667,15 @@
       this.render();
       var nb = this.root.querySelector('[data-key="name"]'); if (nb) nb.focus();
       this.status(nm0 ? 'Filled in your name: ' + nm0 + '. Change it any time.' : 'No problem. Type your name in the box if you like.');
+      return;
+    }
+    if (act === 'copy-ready') {
+      var said = b.getAttribute('data-text') || '', self0 = this;
+      copyText(said).then(function (ok) {
+        Array.prototype.forEach.call(self0.root.querySelectorAll('.wpf-ready-chip.is-copied'), function (x) { x.classList.remove('is-copied'); });
+        if (ok) { b.classList.add('is-copied'); setTimeout(function () { b.classList.remove('is-copied'); }, 2500); }
+        self0.status(ok ? 'Copied. Paste it into a message, and change any words so it sounds like you.' : 'This browser wouldn\u2019t copy. Press and hold the words to copy them by hand.');
+      });
       return;
     }
     if (act === 'chip') {
@@ -1758,6 +1800,21 @@
     el.textContent = '';
     setTimeout(function () { el.textContent = msg; }, 30);
   };
+
+  // Copy text to the clipboard; resolves true when it worked
+  function copyText(text) {
+    function fallback() {
+      var ta = document.createElement('textarea'), ok = false;
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      ta.remove(); return ok;
+    }
+    try {
+      if (global.navigator && navigator.clipboard && navigator.clipboard.writeText && global.isSecureContext) return navigator.clipboard.writeText(text).then(function () { return true; }, fallback);
+    } catch (e) {}
+    return Promise.resolve(fallback());
+  }
 
   function download(bytesOrText, filename, type) {
     var blob = new Blob([bytesOrText], { type: type });
@@ -1887,11 +1944,19 @@
     var idea = document.querySelector('main > .pillar-note');
     if (idea) det.appendChild(idea);
   }
-  // "Keep this on this device so it's here tomorrow? [Keep it] [Not now]", in the save bar (always in
-  // view, and it never pushes the form about). "Not now" is remembered for this tab only.
-  // o: { key, bar, want(), onKeep() }. Returns { check, hide }.
+  // "Keep this on this device? [Keep it] [Not now]": one small line in the save bar (always in view, and it
+  // never pushes the form about). It goes as soon as either is pressed. "Not now" is remembered for this tab.
+  // "Keep it" on any sheet is remembered on this device (KEPT_ANY): after that no sheet asks again. A sheet
+  // that opts in (o.auto) is then kept by itself once something is typed, and says so, unless the person
+  // turned keeping off or erased that sheet before (keepOff).
+  // o: { key, bar, want(), onKeep(auto), auto }. Returns { check, hide }.
+  var KEPT_ANY = 'tol-keepask-kept', OFF_PREFIX = 'tol-keep-off:';
+  function keepOff(key, on) {
+    try { if (on) global.localStorage.setItem(OFF_PREFIX + key, '1'); else global.localStorage.removeItem(OFF_PREFIX + key); } catch (e) {}
+  }
   function keepAsk(o) {
     var el = null, noKey = 'tol-keepask-no:' + o.key;
+    function store(k) { try { return global.localStorage.getItem(k); } catch (e) { return null; } }
     function can() {
       try { if (global.sessionStorage.getItem(noKey)) return false; global.localStorage.setItem('tol-keepask-test', '1'); global.localStorage.removeItem('tol-keepask-test'); return true; } catch (e) { return false; }
     }
@@ -1900,18 +1965,26 @@
       if (!o.bar) return;
       if (!o.want()) { hide(); return; }
       if (el || !can()) return;
+      if (store(KEPT_ANY)) {
+        // kept before on this device: no question, and (where the sheet allows it) kept straight away
+        if (o.auto && !store(OFF_PREFIX + o.key)) o.onKeep(true);
+        return;
+      }
       el = h('div', { className: 'wpf-keepask no-print', role: 'group', 'aria-label': 'Keep a draft on this device' }, [
-        h('p', { className: 'wpf-keepask-q', text: 'Keep this on this device so it\u2019s here tomorrow?' }),
-        h('div', { className: 'wpf-keepask-btns' }, [
-          h('button', { type: 'button', className: 'wpf-keepask-yes', 'data-keepask': 'yes', text: 'Keep it' }),
-          h('button', { type: 'button', className: 'wpf-keepask-no', 'data-keepask': 'no', text: 'Not now' })])
+        h('p', { className: 'wpf-keepask-q', text: 'Keep this on this device for next time?' }),
+        h('button', { type: 'button', className: 'wpf-keepask-yes', 'data-keepask': 'yes', text: 'Keep it' }),
+        h('button', { type: 'button', className: 'wpf-keepask-no', 'data-keepask': 'no', text: 'Not now' })
       ]);
       el.addEventListener('click', function (e) {
         var b = e.target.closest('[data-keepask]'); if (!b) return;
         var yes = b.getAttribute('data-keepask') === 'yes';
         if (!yes) { try { global.sessionStorage.setItem(noKey, '1'); } catch (er) {} }
+        else { try { global.localStorage.setItem(KEPT_ANY, '1'); } catch (er) {} }
+        // keep keyboard focus in the bar once the line has gone
+        var next = o.bar.querySelector('#wpf-pdf, button:not([data-keepask])');
         hide();
-        if (yes) o.onKeep();
+        if (yes) o.onKeep(false);
+        if (next && document.activeElement === document.body) { try { next.focus(); } catch (er) {} }
       });
       o.bar.insertBefore(el, o.bar.firstChild);
     }
@@ -1985,7 +2058,12 @@
       key: app.keepKey(),
       bar: document.querySelector('.wpf-bar-inner'),
       want: function () { return !app.keep && app.hasAnything(); },
-      onKeep: function () { if (keepBox) keepBox.checked = true; app.setKeep(true); }
+      auto: true,
+      onKeep: function (auto) {
+        if (keepBox) keepBox.checked = true;
+        app.setKeep(true);
+        if (auto && app.keep) app.status('Kept on this device, like your other worksheets. To remove it: \u201cErase\u201d, under How saving works.');
+      }
     });
     app.afterChange = ask.check;
     ask.check();
