@@ -781,8 +781,10 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
   .wpf-keepask-q{ font-size: .8rem; }
   .wpf-bar .wpf-keepask button{ min-height: 32px; padding: 3px 10px; font-size: .8rem; }
 }
-/* at Larger text the keep line may wrap its question, never its buttons */
-:root.tol-text-xl .wpf-keepask, :root.tol-text-xxl .wpf-keepask{ flex-wrap: wrap; }
+/* the "Use these names" box under the names: its message gets a line of its own */
+.wpf-form .tol-hh-keep{ flex-wrap: wrap; }
+.wpf-form .tol-hh-keep .tol-hh-status{ flex: 1 1 100%; }
+.wpf-form .tol-hh-keep .tol-hh-status:empty{ display: none; }
 
 /* "Ready-made no's to copy" (WP-01 Part B): tap a card to copy the words */
 .wpf-ready{ margin: .6em 0 1.1em; padding: .8em 1em 1em; border-radius: 16px; background: #F7F3FF; border: 1px solid #D6CBEF; }

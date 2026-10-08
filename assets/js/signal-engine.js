@@ -3091,6 +3091,15 @@ const ATTACK_IDS = ["label","contempt","swear","hostile","sarcasm","compare","dx
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
 function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
+/* A reply to a message that may carry hurt ("Fine. Whatever works for you."), with nothing in it that shows the hurt
+   was heard: the words can be clear and still miss. */
+const HURT_IN = ["brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"];
+const ACK_RE = /\b(?:i hear you|i get (?:it|that|why)|it sounds like|sounds like you|i'm sorry|i am sorry|sorry|you're right|that's fair|fair enough|makes sense|i understand|i miss (?:you|our|it|talking)|i know you|i can tell|i can see)\b/i;
+function replyMissesHurt(an, prev){
+  if(!prev || !an) return false;
+  const pv = analyze(prev, {channel: an.channel});
+  return HURT_IN.some(id=>pv.found[id]) && !ACK_RE.test(an.norm);
+}
 function verdict(an, sc, rw, opts){
   const listener = (opts && String(opts.listener||"").trim()) || "them";
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
@@ -3111,11 +3120,13 @@ function verdict(an, sc, rw, opts){
     return {id:"hurt", work:true, text: "This may land as blame. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
     return {id:"hurt", text: (an.safety ? "Your worry is fair, but this might hurt. " : "This might hurt. ")+(soft ? "Here's a softer way to say it." : "The notes below show why.")};
+  if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
+    return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
   if(an.staticIds && an.staticIds.length)
     return {id:"ok", text: "This will probably land okay."+(soft ? " A small change below could make it even clearer." : "")};
   return {id:"ok", text:"This will probably land okay."};
 }
 
-const api = {meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+const api = {replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

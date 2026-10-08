@@ -2100,7 +2100,9 @@ function run(){
   const little = /little/i.test(lvl[1]);
   // a real apology: the plain line stays as gentle as the headline above it
   const lvlKey = little ? "little" : (plain && plain.apology && lvl[0]==="heavy") ? "some" : lvl[0];
-  vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(LVL_WORDS[lvlKey]||lvl[1])+'<span class="gloss">'+esc(little ? "One small part may get in the way of what you mean." : LVL_PLAIN[lvlKey]||"")+'</span><span class="vtech">How it may sound: '+esc(soundOf(lvl))+'</span></p>';
+  if(plain && plain.reply && lvl[0]==="clear" || plain && plain.reply && little)
+    vtop+='<p class="vlvl lvl-some">Clear words, with one line missing<span class="gloss">Their message may carry hurt. Say what you heard before your answer, and the rest lands softer.</span><span class="vtech">How it may sound: clear, but it skips how they feel</span></p>';
+  else vtop+='<p class="vlvl lvl-'+lvl[0]+'">'+esc(LVL_WORDS[lvlKey]||lvl[1])+'<span class="gloss">'+esc(little ? "One small part may get in the way of what you mean." : LVL_PLAIN[lvlKey]||"")+'</span><span class="vtech">How it may sound: '+esc(soundOf(lvl))+'</span></p>';
   // an apology with "but you…" after it: that clause is the part most likely to sting, so it comes first
   const sting = found.sorrybut ? '<span class="vsting">Most likely to sting:</span> '+fLabel("sorrybut", found.sorrybut.slice(0,1))+'.'+(foundList.length ? ' Also worth a look: '+foundList.join(' &middot; ')+'.' : '') : '';
   vtop+='<p class="vfound">'+(sting ? sting : foundList.length ? 'What stands out: '+foundList.join(' &middot; ')+'.' : staticIds.length ? 'A small gap: '+esc(fTitle(staticIds[0], found[staticIds[0]]).toLowerCase())+fGloss(staticIds[0])+'.' : 'Nothing in the words is a known trouble spot. Tone, timing and history can still add static the words don\'t show.')+'</p>';

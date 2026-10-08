@@ -70,6 +70,10 @@
   .tt-how{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--brass-ink, #7A5620) !important; }
   .tt-pair{ margin:.2rem 0 .8rem; }
   .tt-pair-names{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap:.5rem .8rem; margin-top:.6rem; }
+  .tt-pair-names[hidden]{ display:none; }
+  #tt-week li{ flex-wrap:wrap; min-width:0; }
+  #tt-week label{ min-width:0; flex:1 1 12rem; }
+  .tt-task{ min-width:0; overflow-wrap:break-word; }
   .tt-pair-names label{ display:flex; flex-direction:column; gap:.2rem; font-size:.85rem; font-weight:600; }
   .tt-pair-names input{ font:inherit; font-weight:400; padding:.4rem .6rem; border:1px solid var(--line); border-radius:var(--radius); background:#FFFDF6; min-height:2.5rem; max-width:100%; }
   #tt-week.is-pair li{ flex-wrap:wrap; align-items:center; }

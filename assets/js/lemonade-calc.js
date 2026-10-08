@@ -327,6 +327,7 @@
       }
       j.nm = fit(Array.from(j.nm), n, 0).map(function (x) { return x ? 1 : 0; });
       delete j.nf;
+      if (j.fa && (typeof j.fa !== 'object' || j.fa.who >= n)) delete j.fa;
     });
     state.bills.forEach(function (b) {
       b.name = b.name || ''; b.v = fit(b.v, n, 0);
@@ -582,6 +583,8 @@
   // kindly, under that row. Who's filling in comes from the chips near the names; if nobody said, the
   // first side typed on in this visit counts as theirs.
   var cued = {}, firstSide = -1;
+  // who is filling in on this device: the one picked, or the first side typed on in this visit (-1: not known)
+  function fillerNow() { return solo() ? 0 : state.me >= 0 ? state.me : state.me === -1 && firstSide >= 0 ? firstSide : -1; }
   function sideCue(i, el) {
     if (solo() || !el || state.me === -2) return;
     var other;
@@ -675,7 +678,13 @@
       var vp = visiblePeople(), tot = sum(vp.map(function (i) { return jobH(item, i); })), fs = feedSummary(item);
       // night feeds counted inside on-call: say where they went, never "0 h"
       if (fs) { sumLine.textContent = fs.charAt(0).toUpperCase() + fs.slice(1) + '.'; return; }
-      sumLine.textContent = tot > 0 ? 'About ' + hrs(tot) + ' a week' + (vp.length > 1 ? ' in all' : '') + '.' : '';
+      if (tot <= 0) { sumLine.textContent = ''; return; }
+      // whose hours the total holds, said plainly: one column may be all that shows on a phone
+      var withH = vp.filter(function (i) { return jobH(item, i) > 0; }), me = fillerNow();
+      if (vp.length < 2 || (withH.length === 1 && withH[0] === me)) { sumLine.textContent = 'About ' + hrs(tot) + ' a week.'; return; }
+      if (withH.length === 1) { sumLine.textContent = nameOf(withH[0]) + ': about ' + hrs(tot) + ' a week.'; return; }
+      var shown = withH.filter(function (i) { return me < 0 || i !== me; });
+      sumLine.textContent = (state.people.length === 2 ? 'Both of you' : 'All of you') + ': ' + hrs(tot) + ' a week (' + shown.map(function (i) { return nameOf(i) + ' ' + hrs(jobH(item, i)); }).join(', ') + ').';
     }
     // night feeds listed beside "On call at night": offer to count them once
     var dbl = null;
@@ -744,7 +753,21 @@
     function labeled(txt, el, cls) { var l = document.createElement('label'); if (cls) l.className = cls; var sp = document.createElement('span'); sp.textContent = txt; l.appendChild(sp); l.appendChild(el); return l; }
     if (!item.custom) meta.appendChild(labeled('Kind of job', cs));
     cs.addEventListener('change', function () { own(); item.cat = cs.value; item.catSet = true; markEdited(); renderRows(); renderLibTasks(); recalc(); status('Moved to ' + CAT[item.cat].n + '.'); });
-    fs.addEventListener('change', function () { own(); if (item.fq && solo()) item.fq[0] = fs.value; else { item.freq = fs.value; delete item.fq; } revalidate(item); markEdited(); refreshInputs(); recalc(); });
+    fs.addEventListener('change', function () {
+      own();
+      if (solo()) { if (item.fq) item.fq[0] = fs.value; else item.freq = fs.value; revalidate(item); markEdited(); refreshInputs(); recalc(); return; }
+      // never change someone else's "how often" quietly: with others' time on this row, the change is for the
+      // person filling in (a "how often" each), and we ask "just for me, or for everyone on this row?"
+      var was = item.freq, to = fs.value, who = fillerNow();
+      var others = state.people.map(function (_, i) { return i; }).filter(function (i) { return i !== who && (num(item.v[i]) > 0 || num(item.t[i]) > 0); });
+      if (!others.length || to === was) { item.freq = to; delete item.fq; delete item.fa; revalidate(item); markEdited(); refreshInputs(); recalc(); return; }
+      if (who >= 0) { item.fq = state.people.map(function () { return was; }); item.fq[who] = to; }
+      else { item.freq = to; delete item.fq; }
+      item.fa = { who: who, was: was, to: to, pick: who >= 0 ? who : -1 };
+      revalidate(item); markEdited(); renderRows(); recalc();
+      var r = rowFor(item), f = r && r.querySelector('.ls-freq-ask button[aria-pressed="true"]'); if (f) f.focus();
+      status(who >= 0 ? '“How often” changed for ' + nameOf(who) + ' only. ' + joinNames(others.map(nameOf)) + (others.length === 1 ? '’s stays ' : '’s stay ') + FREQ_LABEL[was].toLowerCase() + '.' : '“How often” changed for everyone on this row. You can make it just one person’s, just below.');
+    });
     // how often, person by person: "Ben twice a week, Aisha each day"
     function freqSel(i) {
       var ps = select(FREQ_ORDER.map(function (f) { return [f, FREQ_LABEL[f]]; }), freqOf(item, i), (solo() ? 'You' : nameOf(i)) + ', how often', 'fq' + i + '-' + idx);
@@ -804,15 +827,18 @@
     visiblePeople().forEach(function (i) { amts.appendChild(amountInput(i, false)); });
     amts.appendChild(labeled('Counted in', us, 'ls-sel'));
     var fsLab = labeled('How often', fs, 'ls-sel'); fsLab.hidden = !!item.fq && !solo();
-    amts.appendChild(fsLab);
+    var fsCell = document.createElement('div'); fsCell.className = 'ls-freq-cell';
+    fsCell.appendChild(fsLab);
+    amts.appendChild(fsCell);
     // a job you typed yourself shows its area right here, so it never quietly lands in the wrong one
     if (item.custom) amts.appendChild(labeled('Area', cs, 'ls-sel ls-sel-wide'));
     // "How often differs by person?": each person's own "how often" beside their time
-    var each = null;
+    var each = null, meNow = fillerNow();
     if (!solo() && !item.ex && state.people.length > 1) {
       each = document.createElement('p'); each.className = 'ls-mini ls-freq-each';
       var eb = document.createElement('button'); eb.type = 'button'; eb.className = 'ls-link-btn'; eb.setAttribute('data-fk', 'fe' + idx);
-      eb.textContent = item.fq ? 'Same “how often” for everyone' : 'How often differs by person?';
+      // right beside "How often": "Different days for me" when this device is one person's
+      eb.textContent = item.fq ? 'Same “how often” for everyone' : state.me >= 0 ? 'Different days for me' : 'How often differs by person?';
       eb.setAttribute('aria-expanded', String(!!item.fq));
       eb.addEventListener('click', function () {
         own();
@@ -825,11 +851,43 @@
           item.fq = state.people.map(function () { return item.freq; });
           status('Each person has their own “how often” on “' + (item.name.trim() || 'this job') + '” now, beside their time.');
         }
+        delete item.fa;
         revalidate(item); markEdited(); renderRows(); recalc();
         var r = rowFor(item), f = r && (r.querySelector('select.ls-pfreq[data-fk^="fq' + (state.me >= 0 ? state.me : 0) + '-"]') || r.querySelector('[data-fk^="fe"]'));
         if (f) f.focus();
       });
       each.appendChild(eb);
+      fsCell.appendChild(each);
+    }
+    // "Just for Ben, or for everyone on this row?", right after a change to "How often" on a shared row
+    var faBox = null, fa = item.fa;
+    if (fa && !solo() && FREQ[fa.to] && FREQ[fa.was]) {
+      faBox = document.createElement('div'); faBox.className = 'ls-freq-ask'; faBox.setAttribute('role', 'group'); faBox.id = 'fa-' + idx;
+      var faP = document.createElement('p'); faP.id = 'fa-h' + idx; faBox.setAttribute('aria-labelledby', faP.id);
+      var faG = document.createElement('div'); faG.className = 'ls-pick';
+      var withT = state.people.map(function (_, i) { return i; }).filter(function (i) { return num(item.v[i]) > 0 || num(item.t[i]) > 0 || i === fa.who; });
+      faP.textContent = fa.who >= 0 ? 'Changed to ' + FREQ_LABEL[fa.to].toLowerCase() + '. Just for ' + nameOf(fa.who) + ', or for everyone on this row?'
+        : 'Changed to ' + FREQ_LABEL[fa.to].toLowerCase() + ' for everyone on this row. Or just for one of you?';
+      var faOpts = fa.who >= 0 ? [[fa.who, 'Just for ' + nameOf(fa.who)], [-1, 'For everyone on this row']]
+        : [[-1, 'Everyone']].concat(withT.map(function (i) { return [i, 'Just ' + nameOf(i)]; }));
+      faOpts.forEach(function (o) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip'; b.setAttribute('data-fk', 'fa' + idx + '_' + o[0]);
+        if (o[0] >= 0) b.style.setProperty('--pc', COLORS[o[0]]);
+        b.setAttribute('aria-pressed', String(fa.pick === o[0])); b.textContent = o[1];
+        b.addEventListener('click', function () {
+          if (o[0] < 0) { item.freq = fa.to; delete item.fq; }
+          else { item.fq = state.people.map(function () { return fa.was; }); item.fq[o[0]] = fa.to; }
+          delete item.fa;
+          revalidate(item); markEdited(); renderRows(); recalc();
+          var r = rowFor(item), f = r && r.querySelector('select[aria-label="How often"], select.ls-pfreq[data-fk^="fq' + (o[0] >= 0 ? o[0] : 0) + '-"]'); if (f) f.focus();
+          status(o[0] < 0 ? 'Everyone on “' + (item.name.trim() || 'this job') + '” is ' + FREQ_LABEL[fa.to].toLowerCase() + ' now.' : 'Only ' + nameOf(o[0]) + ' is ' + FREQ_LABEL[fa.to].toLowerCase() + ' on “' + (item.name.trim() || 'this job') + '”; the others keep ' + FREQ_LABEL[fa.was].toLowerCase() + '.');
+        });
+        faG.appendChild(b);
+      });
+      var faDone = document.createElement('button'); faDone.type = 'button'; faDone.className = 'ls-link-btn'; faDone.textContent = 'Done'; faDone.setAttribute('data-fk', 'fad' + idx);
+      faDone.addEventListener('click', function () { delete item.fa; save(); faBox.remove(); var f = row.querySelector('input'); if (f) f.focus(); });
+      faG.appendChild(faDone);
+      faBox.appendChild(faP); faBox.appendChild(faG);
     }
 
     // a new task from the library starts with no one's time: tap who does it to fill in the typical time
@@ -961,13 +1019,13 @@
     // one person filling in on this device: on a phone each job is one short row (the job, my time, how often),
     // with the rest behind "More" (the CSS only folds it on narrow screens)
     if (!solo() && state.me >= 0 && !item.expanded) row.classList.add('is-compact');
-    [each, others, area].forEach(function (x) { if (x) x.classList.add('cx-extra'); });
+    [others, area].forEach(function (x) { if (x) x.classList.add('cx-extra'); });
     us.parentNode.classList.add('cx-extra'); if (item.custom) cs.parentNode.classList.add('cx-extra');
     moreLabel();
     row.appendChild(top);
     if (pickBox) row.appendChild(pickBox);
     if (ask) row.appendChild(ask);
-    row.appendChild(amts); if (solo1) row.appendChild(solo1); if (each) row.appendChild(each); if (others) row.appendChild(others); if (area) row.appendChild(area); row.appendChild(persTag); row.appendChild(foot);
+    row.appendChild(amts); if (faBox) row.appendChild(faBox); if (solo1) row.appendChild(solo1); if (others) row.appendChild(others); if (area) row.appendChild(area); row.appendChild(persTag); row.appendChild(foot);
     row.appendChild(thinkBox); if (dbl) row.appendChild(dbl); if (inSoloBox) row.appendChild(inSoloBox); row.appendChild(cue); row.appendChild(note);
     refreshInputs();
     if (askI >= 0 && !num(item.v[askI])) inputs.forEach(function (o) { if (o.i === askI && !o.think) o.inp.value = ''; });
@@ -1429,7 +1487,8 @@
     var ov = -1, gaps = p.map(function (x, i) { return x - tg.t[i] * 100; });
     gaps.forEach(function (x, i) { if (Math.round(x) >= 5 && (ov < 0 || x > gaps[ov])) ov = i; });
     if (ov < 0) return null;
-    var h = gaps[ov] / 100 * sum(totals(state.jobs));
+    // the hours from the exact shares (not the rounded points), so they match "would need to move" below
+    var tt = totals(state.jobs), ts = sum(tt), h = ts > 0 ? tt[ov] - tg.t[ov] * ts : 0;
     return { i: ov, pts: Math.round(gaps[ov]), txt: nameOf(ov) + ' is doing about ' + Math.round(gaps[ov]) + ' points more than the ' + pctNum(tg.t[ov] * 100) + '% ' +
       (tg.mode === 'agreed' ? 'you ' + agreedWord() : 'that’s a fair share for the nights they’re here') + (h >= 0.25 ? ' (about ' + hrs(h) + ' a week)' : '') };
   }
@@ -1554,6 +1613,14 @@
     return { value: most > 0 ? Math.max(0, Math.min(1, 1 - moved / most)) : 1, shares: s, target: t, gaps: gaps, mode: tg.mode, movedHours: moved * total };
   }
   function band(v) { return v >= 0.70 ? 'holding' : v >= 0.40 ? 'drifting' : 'worth a kind rethink'; }
+  // One plain line: the hours that would need to move. The score and its bands sit behind "Show the maths".
+  function balancePlain(b) {
+    if (!b) return '';
+    if (b.error) return b.error;
+    var to = b.mode === 'even' ? 'make it even' : b.mode === 'agreed' ? 'match the ' + splitShort(b.target) + ' you ' + agreedWord() : 'match a fair share for the nights each person is here';
+    if (b.value >= 0.995 || b.movedHours < 0.25) return 'The hours already ' + (b.mode === 'even' ? 'come out about even.' : 'match ' + (b.mode === 'agreed' ? 'the ' + splitShort(b.target) + ' you ' + agreedWord() : 'a fair share for the nights each person is here') + '.');
+    return 'About ' + hrs(b.movedHours) + ' a week would need to move to ' + to + '.';
+  }
   function balanceText(b) {
     if (!b) return '';
     if (b.error) return b.error;
@@ -1566,7 +1633,7 @@
     // never "0.67" beside "67%": it's a score out of 1, not a share
     var one = b.mode === 'even' ? 'even' : b.mode === 'agreed' ? 'right on the ' + splitShort(b.target) + ' you ' + agreedWord() : 'right on a fair share for the nights each person is here';
     var txt = 'Evenness: ' + b.value.toFixed(2) + ' of 1 (1 = ' + one + '), against ' + against + '. On Chapter II’s scale (it calls this the balance score) ' + reads + ' (0.70 or more is holding, 0.40 up to 0.70 is drifting, under 0.40 asks for a kind rethink). It reads the setup, never a person.';
-    if (b.value < 0.995 && b.movedHours >= 0.25) txt += ' About ' + hrs(b.movedHours) + ' a week would need to change hands to match.';
+    if (b.value < 0.995 && b.movedHours >= 0.25) txt += ' About ' + hrs(b.movedHours) + ' a week would need to move to match.';
     var lean = invLean();
     if (lean) txt += ' The score counts hours only: ' + lean.t + ', and that load is real too.';
     return txt;
@@ -1651,7 +1718,9 @@
   }
   function groupResults() {
     var b = balance();
-    $('r-balance').textContent = balanceText(b);
+    $('r-balance').textContent = balancePlain(b);
+    var mt = b && !b.error ? balanceText(b) : '';
+    if ($('r-maths')) { $('r-maths').hidden = !mt; $('r-maths-t').textContent = mt; }
     var vis = $('r-vis');
     var home = totals(state.jobs), inv = peopleTotals('home', invH), allInv = sum(inv);
     if (sum(home) <= 0) vis.innerHTML = '<p class="ls-panel-note">Once there are hours, you’ll see the work you can see and the work you can’t, side by side.</p>';
@@ -1669,14 +1738,28 @@
     // the whole week side by side, for seeing only: it never changes the home split. When paid hours differ,
     // it sits right under the glasses, where the split is read, not far below.
     var soloCare = state.jobs.some(function (j) { return isSoloCare(j) && kindOf(j) === 'home' && state.people.some(function (_, i) { return jobH(j, i) > 0; }); });
-    var whole = sum(work) > 0 && sum(home) > 0 ? (soloCare ? 'Home (time on your own with the baby included) + paid work: ' : 'Home + paid work: ') + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '. ' +
-      (soloCare ? 'Looking after the baby on your own counts as work here, the same as paid work. ' : '') + 'This doesn’t change the home split; it shows the whole week.' : '';
+    var wholeLead = sum(work) > 0 && sum(home) > 0 ? 'Across home and paid work' + (soloCare ? ' (time on your own with the baby included)' : '') + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '.' : '';
+    var wholeMore = (soloCare ? 'Looking after the baby on your own counts as work here, the same as paid work. ' : '') + 'This doesn’t change the home split; it shows the whole week.';
+    var whole = wholeLead ? wholeLead + ' ' + wholeMore : '';
     var ww = $('whole-week'), wwOn = !!(whole && differ && !waitingFor().length);
+    // when paid hours differ, the result leads with the whole week; the glasses below are the home jobs only
     if (ww) {
       ww.hidden = !wwOn;
-      ww.innerHTML = wwOn ? '<p>' + esc(whole) + '</p>' + bar(state.people.map(function (_, i) { return { v: home[i] + work[i], c: COLORS[i] }; })) : '';
+      ww.innerHTML = wwOn ? '<p><strong>' + esc(wholeLead) + '</strong></p>' + bar(state.people.map(function (_, i) { return { v: home[i] + work[i], c: COLORS[i] }; })) +
+        '<p class="ls-mini">' + esc(wholeMore) + ' The glasses below show the home jobs only.</p>' : '';
     }
     lastWhole = wwOn ? whole : '';
+    // "Compare with 65/35 from your paid hours?", right under the glasses, never tucked into More options
+    var wo = $('work-offer'), wsg = wwOn && !state.agreed.on && !state.workNo && !state.agreedOffer ? suggestSplit() : null;
+    if (wo) {
+      wo.hidden = !wsg;
+      if (wsg) {
+        var wst = splitShort(wsg.p.map(function (x) { return x / 100; }));
+        $('work-offer-t').textContent = 'Compare with ' + wst + ' from your paid hours?';
+        $('work-offer-d').textContent = 'With paid work counted, ' + wst + ' of the home jobs would give each of you about the same week (' + state.people.map(function (_, i) { return nameOf(i) + ' about ' + hrs(wsg.after[i]); }).join(', ') + '). A starting point, not a rule.';
+        $('work-offer-use').textContent = 'Compare with ' + wst;
+      }
+    }
     if (sum(work) > 0) {
       ctx.push('Paid work and school, kept out of the split: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(work[i]); }).join(', ') + '.' + (differ && !state.agreed.on ? ' These differ quite a bit, so a split you set together may be fairer than an even one, as Chapter II says.' : ''));
       if (whole && !wwOn) ctx.push(whole);
@@ -2135,13 +2218,13 @@
     var listed = state.jobs.filter(function (j) { return !j.ex && j.name.trim() && state.people.some(function (_, i) { return jobH(j, i) > 0 || num(j.v[i]) > 0; }); });
     var hasHours = s > 0 || anyBad(state.jobs) || listed.length > 0;
     var lines = [hasHours ? 'Our lemonade stand this week (hours, not a verdict):' : ms ? 'Our shared costs (not a verdict):' : 'Our lemonade stand this week:'];
+    if (s > 0 && lastWhole) lines.push(lastWhole, 'The home jobs only:');
     if (s > 0) {
       var tgOn = !tg.error && tg.mode !== 'even', wait = anyBad(state.jobs) ? [] : waitingFor();
       // while a side is still to come: hours only, no percentages
       state.people.forEach(function (x, i) {
         lines.push('- ' + nameOf(i) + ': ' + (wait.indexOf(i) >= 0 ? 'side not in yet' : r1(t[i]) + 'h' + (wait.length ? '' : ' (' + pctNum(p[i]) + '%' + (tgOn ? (tg.mode === 'agreed' ? ', ' + agreedWord() + ' ' : ', fair share ') + pctNum(tg.t[i] * 100) + '%' : '') + ')')));
       });
-      if (lastWhole) lines.push(lastWhole);
     }
     if (listed.length) {
       lines.push('', 'Jobs (hours a week, thinking part included):');
@@ -2159,7 +2242,10 @@
     }
     if (s > 0 || anyBad(state.jobs)) {
       lines.push('', hoursSentence());
-      var bt = balanceText(balance()); if (bt) lines.push('', bt);
+      var bb = balance(), bp = balancePlain(bb), bt = bb && !bb.error ? balanceText(bb) : '';
+      if (bp) lines.push('', bp);
+      if (bt) lines.push('The maths: ' + bt);
+      var dp = dblParts(); if (dp.length && sum(dp.map(function (x) { return x.h; })) >= 0.25) lines.push('', dblText(dp));
       var tc = topCats(6);
       if (tc.length) { lines.push('', 'By area:'); catTotals().forEach(function (x) { var h = sum(x.per); if (h > 0 && x.c.k === 'home') lines.push('- ' + x.c.n + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(x.per[i]); }).join(', ')); }); }
       var inv = peopleTotals('home', invH);

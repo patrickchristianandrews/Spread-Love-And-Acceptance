@@ -655,7 +655,7 @@
       "first": true,
       "newTopic": true,
       "name": "a child who lives with you part of the time",
-      "pat": "\\b(every other|every second|alternate) weekends?\\b.{0,80}\\b(visitor|guest|left out|belong|feel\\w*|fit in|outsider)\\b|\\b(son|daughter|kid|child|stepson|stepdaughter|boy|girl)\\b.{0,60}\\b(feels like|feel like|treated like) a (visitor|guest)\\b|\\b(part time|part of the week) (with us|at ours|here)\\b",
+      "pat": "\\b(every other|every second|alternate) weekends?\\b.{0,80}\\b(visitor|guest|left out|belong|feel\\w*|fit in|outsider)\\b|\\b(son|daughter|kid|child|stepson|stepdaughter|boy|girl)\\b.{0,60}\\b(feels like|feel like|treated like) a (visitor|guest)\\b|\\b(part time|part of the week) (with us|at ours|here)\\b|\\b(same|different) rules (as|for|from) (the )?(other )?(kids|children|siblings)\\b|\\b(should|does|do) \\w+ (have|get|follow) the same rules\\b",
       "keys": [],
       "what": [
         "A child who comes every other weekend can feel like a guest in a home where everyone else lives full time. Small, steady things help them feel it’s their home too."
@@ -973,6 +973,50 @@
         [
           "Upset right now?",
           "/upset-right-now.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "feltsmall",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling told off by your partner",
+      "pat": "\\b(she|he|they|my (partner|girlfriend|boyfriend|wife|husband))\\b.{0,10}\\b(told|said to|texted|messaged)\\b.{0,10}\\bme\\b.{0,100}\\b(i )?(felt|feel|made me feel)( like)? (a (kid|child|little kid)|stupid|small|criticised|criticized|attacked|told off|useless|scolded|like a failure)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Feeling like a told-off kid is a horrible feeling, and it makes sense if criticism hits you hard. Often the other person was worried about the thing (like a safety risk), and the words came out sharper than they meant."
+      ],
+      "how": [
+        "Take a breath before you answer. Ten minutes is fine.",
+        "Read the message for the worry underneath: “Someone sent me this” in the message checker shows what they may have meant, and gives you a calm reply.",
+        "Say how it landed, without arguing about the fact: “You’re right that it matters. The way it was said made me feel like a kid.”",
+        "Agree a system for the thing itself (a stove check by the door, a reminder), so it doesn’t keep coming back as criticism.",
+        "If your wiring is different (ADHD, autistic or otherwise), swapping Wiring Cards shows how each of you takes in words."
+      ],
+      "script": [
+        "You’re right that it matters, and I want to fix it. The way it came across made me feel like a kid. Can we work out a check together?"
+      ],
+      "plain": [
+        "Take a breath first.",
+        "Look for the worry under the words.",
+        "Say how it felt, calmly.",
+        "Agree a fix for the thing itself."
+      ],
+      "links": [
+        [
+          "Someone sent me this: read it kindly",
+          "/signal-translator.html"
+        ],
+        [
+          "The Wiring Card",
+          "/wiring-card.html"
+        ],
+        [
+          "Different brains, one home",
+          "/neurodivergent-relationships.html"
         ]
       ],
       "chips": []
@@ -3202,7 +3246,7 @@
       "first": true,
       "newTopic": true,
       "name": "a parent caught between partner and kids",
-      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b|\\b(husband|wife|partner|boyfriend|girlfriend)\\b.{0,40}\\b(and )?my (\\d+ year old|teen\\w*|son|daughter|kids?)\\b.{0,40}\\b(clash\\w*|fight\\w*|argu\\w*|don t get along)\\b|\\b(pick|take|choose) (a )?side\\b.{0,40}\\b(husband|wife|partner|kids?|teen\\w*|son|daughter)\\b",
+      "pat": "\\b(stuck|caught|torn) (in the middle|between)\\b.{0,60}\\b(husband|wife|partner|spouse|stepdad|stepmom)\\b|\\bmy (husband|wife|partner|spouse) is (too )?(strict|harsh|hard|mean|cold) (on|with|to) my (kids|children|son|daughter|teens|teenagers)\\b|\\bmy (husband|wife|partner) and my (kids|teens|teenagers|children|son|daughter) (don t|dont|do not|can t|cant|won t|wont) get (along|on)\\b|\\b(husband|wife|partner|boyfriend|girlfriend)\\b.{0,40}\\b(and )?my (\\d+ year old|teen\\w*|son|daughter|kids?)\\b.{0,40}\\b(clash\\w*|fight\\w*|argu\\w*|don t get along)\\b|\\b(pick|take|choose) (a )?side\\b.{0,40}\\b(husband|wife|partner|kids?|teen\\w*|son|daughter)\\b|\\b(he|she|my husband|my wife|my partner) thinks i (always )?(take|am taking|m taking) (their|the kids |my kids |her|his) side\\b|\\b(won t|wont|doesn t|doesnt) (even )?(talk|speak) to (him|her|my husband|my wife|my partner|their stepdad|their stepmom)\\b",
       "keys": [],
       "what": [
         "Being in the middle is one of the hardest spots in a blended family. You love your kids, you love your partner, and it can feel like every choice lets one of them down. That’s a very common feeling, and it isn’t a sign you’ve chosen wrong."
@@ -3261,6 +3305,46 @@
         [
           "Turning toward",
           "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "holidayboth",
+      "kind": "intent",
+      "first": true,
+      "newTopic": false,
+      "name": "an ex who wants every holiday",
+      "pat": "\\b(he|she|they|my ex|their dad|their mom|their mum)\\b.{0,10}\\b(always |still |keeps |just )?(wants?|insists on|demands?|takes?) (both|all|every)( the| of the)? ?(holidays?|christmas|thanksgiving|easter|ones)?\\b|\\b(alternate|alternating|swap|switch|take turns with)\\b.{0,20}\\b(christmas|thanksgiving|easter|holidays?)\\b|\\b(christmas|thanksgiving|easter)\\b.{0,10}\\b(and|or)\\b.{0,10}\\b(christmas|thanksgiving|easter)\\b.{0,40}\\b(both|each year|every year|alternate|split)\\b",
+      "notPat": "\\b(host|hosting|in laws|my parents|his parents|her parents)\\b",
+      "keys": [],
+      "what": [
+        "When one parent wants every holiday, a simple, predictable rule usually works better than arguing each year. Check your court order or parenting plan first; it may already say."
+      ],
+      "how": [
+        "Alternate the big ones: Thanksgiving with one of you and Christmas with the other this year, then swap next year.",
+        "Or split the day: Christmas Eve to noon on Christmas Day with one parent, the rest with the other.",
+        "Put it in writing once, with a reply-by date, and keep it the same each year so the kids can count on it.",
+        "Teens can say what matters to them, but the adults decide, so they never have to choose.",
+        "If they won’t agree to anything, keep messages short and factual, and a mediator or your parenting plan can settle it."
+      ],
+      "script": [
+        "To keep it fair: this year the kids are with you for Thanksgiving and with me for Christmas, and we swap next year. Can you confirm by Nov 15?"
+      ],
+      "plain": [
+        "Check your court order first.",
+        "Alternate the big holidays each year.",
+        "Or split the day.",
+        "Write it down and keep it the same."
+      ],
+      "links": [
+        [
+          "Separated co-parents: holidays",
+          "/co-parenting.html#holidays"
+        ],
+        [
+          "Check a message before you send it",
+          "/signal-translator.html"
         ]
       ],
       "chips": []
@@ -3347,7 +3431,7 @@
       "first": true,
       "newTopic": true,
       "name": "should a stepparent discipline",
-      "pat": "\\bshould i (discipline|punish|tell off|ground|correct|set rules for)\\b.{0,40}\\b(her|him|them|my step\\w*|the kids|his kids|her kids|their kids)\\b|\\b(discipline|punish|tell off|ground)\\w* (my |the |his |her )?step(daughter|son|kids?|children|child)\\b|\\bstep(dad|mom|mum|parent|father|mother)\\b.{0,40}\\bdisciplin\\w*\\b|\\bdisciplin\\w*\\b.{0,40}\\bstep(dad|mom|mum|parent|kids?|children|daughter|son)\\b",
+      "pat": "\\bshould i (discipline|punish|tell off|ground|correct|set rules for)\\b.{0,40}\\b(her|him|them|my step\\w*|the kids|his kids|her kids|their kids)\\b|\\b(discipline|punish|tell off|ground)\\w* (my |the |his |her )?step(daughter|son|kids?|children|child)\\b|\\bstep(dad|mom|mum|parent|father|mother)\\b.{0,40}\\bdisciplin\\w*\\b|\\bdisciplin\\w*\\b.{0,40}\\bstep(dad|mom|mum|parent|kids?|children|daughter|son)\\b|\\b(she|he|they|my step\\w+)\\b.{0,10}\\b(flat out |just |completely )?refuses? to (do|listen|follow|clean|help)\\b.{0,30}\\b(i ask|i say|asked|told)\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -3458,7 +3542,7 @@
       "first": true,
       "newTopic": true,
       "name": "an ex badmouthing you to the kids",
-      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b.{0,40}\\b(badmouth\\w*|bad mouth\\w*|trash talk\\w*|talks? (bad|badly|crap|trash) about me|says (bad|awful|horrible|terrible) things about me|turning the kids against me|turns? the kids against me|poison\\w*)\\b",
+      "pat": "\\b(my )?(ex|ex wife|ex husband|ex partner|exwife|exhusband|kids dad|kids mom|kids father|kids mother|children s father|children s mother|baby mama|baby daddy|co parent|coparent)\\b.{0,40}\\b(badmouth\\w*|bad mouth\\w*|trash talk\\w*|talks? (bad|badly|crap|trash) about me|says (bad|awful|horrible|terrible) things about me|turning the kids against me|turns? the kids against me|poison\\w*)\\b|\\b(my )?ex\\b.{0,10}\\b(says|said|tells|told|saying)\\b.{0,10}\\b(bad|nasty|horrible|mean|awful) things about \\w+\\b.{0,20}\\b(to )?(the |my |our )?(kids|children)\\b",
       "keys": [],
       "what": [
         "That hurts, and it puts your kids in the middle. The best protection is usually steady, calm parenting on your side, not answering it in kind."

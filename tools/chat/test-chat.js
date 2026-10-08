@@ -702,7 +702,7 @@ t('retest3', 'she says I am too sensitive when she is just being honest', { kind
 t('retest3', 'my wife thinks i dont do enough at home but i do a lot of stuff she doesnt see', { kind: 'care', id: 'notenough', not: /teen|dating|password/i });
 t('retest3', 'should I discipline her when Tasha isn\'t home', { kind: 'care', id: 'stepdiscipline' });
 t('retest3', 'the kids are 14 and 16 and want a say', { kind: 'care', id: 'teensay', not: /Children.s Privacy|intended for adults/i });
-t('retest3', 'christmas and thanksgiving, he always wants both', { kind: 'care', id: 'exschedule' });
+t('retest3', 'christmas and thanksgiving, he always wants both', { kind: 'care', id: 'holidayboth' });
 t('retest3', 'my mother-in-law visits too often', { link: '/family-obligations.html#visits', not: /bedtime our way/ });
 t('retest3', 'I\'m always the one who arranges our calls', { kind: 'care', id: 'longdistance', text: /real information, not scorekeeping/ });
 c('retest3', ['we live in different countries and fight about who calls', 'what about time zones'], { text: /overlap|whose time/ });
@@ -750,6 +750,12 @@ t('retest4', 'my husband says i\'m never home', { kind: 'care', id: 'caremarriag
 t('retest4', 'We have a 3 month old. How do we fill in the Lemonade Stand on two phones, one each?', { id: 'twophones' });
 t('retest4', 'how do I add my wife\'s side on my phone', { id: 'twophones' });
 t('retest4', 'my wife sends a lot of money to her family and I feel we can\'t save', { kind: 'care', id: 'savingworry', text: /worry about savings is fair/ });
+t('retest4', 'my ex says bad things about Marcus to the kids', { id: 'exbadmouth', not: /marks/ });
+c('retest4', ['should I discipline her when Tasha isn\'t home', 'what if she flat out refuses to do what I ask'], { id: 'stepdiscipline', not: /worry/ });
+t('retest4', 'should Leo have the same rules as the other kids', { id: 'parttimechild' });
+t('retest4', 'can we alternate christmas and thanksgiving each year', { id: 'holidayboth' });
+t('retest4', 'my 14 year old won\'t even talk to him and he thinks I always take their side', { id: 'bioparent' });
+t('retest4', 'she told me I left the stove on again and that it\'s dangerous and I felt like a kid', { kind: 'care', id: 'feltsmall', not: /little pond/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

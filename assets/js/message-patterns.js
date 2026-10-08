@@ -60,9 +60,12 @@
       ex: ['You never help.', 'Nobody ever listens to me.'] },
     { id: 'dismiss', name: 'Dismissing a feeling', group: 'blame', heat: 2.5,
       re: /\b(?:calm down|just relax|chill out|you're overreacting|you are overreacting|you're (?:too|so) sensitive|you're being dramatic|not a big deal|no big deal|get over it|if you say so|ok whatever|whatever(?= *(?:[.!…🙄😒]|$))|whatev(?:s|er)?(?= *(?:[.!…🙄😒]|$))|(?:fine|ok(?:ay)?|sure),? whatev(?:s|er)?|whatever you (?:want|like|think|say)(?= *(?:[.!…🙄😒]|$))|whatever (?:works|suits) (?:for you|you|best)(?= *(?:[.!…🙄😒]|$))|whatever you think is (?:best|right)(?= *(?:[.!…🙄😒]|$))|(?:^|(?:fine|ok(?:ay)?|sure|k)[.,!]* +)do what you want(?= *(?:[.!…🙄😒]|$))|i (?:really )?(?:don't|do not) care|i could(?:n't| not) care less|stop being so \w+|you're imagining (?:it|things)|it was (?:just )?a joke|can't you take a joke)\b/g,
-      what: '“Calm down,” “whatever” or “you’re overreacting” tell the reader their feeling doesn’t count. They usually raise the heat.',
+      what: '“Calm down” or “you’re overreacting” tell the reader their feeling doesn’t count. They usually raise the heat.',
       fix: 'Say what you can see, even if you see it differently: “I can tell this matters to you.”',
-      ex: ['Calm down.', 'Fine. Whatever works for you.', 'Whatever.'] },
+      ex: ['Calm down.', 'You’re overreacting.'],
+      // "Fine. Whatever." is matched here too, but the list shows it under its own, gentler name (below)
+      alsoAs: { name: 'Brush-off, or quiet hurt', ex: ['Fine. Whatever.', 'Whatever works for you.'],
+        what: 'A short “fine” or “whatever” can mean “either is fine,” or quiet hurt from someone who has stopped asking for what they want. The reader can’t tell which, and often hears “I don’t care.” It’s worth asking, not deciding.' } },
     { id: 'stonewall', name: 'Shutting the door', group: 'door', heat: 2,
       re: /^\s*(?:\.{3,}|…)\s*$|\b(?:not now|i (?:just |really |honestly )?can't do this(?: right now| anymore| today| tonight)?|i (?:just )?can't talk (?:about this )?(?:right )?now|i'm done(?: talking)?(?: about (?:this|it))?|i am done|leave me alone|forget it|never ?mind|i don't want to talk(?: about (?:it|this))?|i have nothing (?:more )?to say|stop (?:texting|messaging|calling) me|don't (?:text|talk to|call) me|i give up|it doesn't matter|doesn't matter)\b/g,
       what: '“Not now,” “forget it” or a silent “…” can mean someone is flooded and needs a break. Without a time to come back, the other person hears “this is over” or “you don’t matter.”',
@@ -356,7 +359,7 @@
     var hard = LIST.filter(function (p) { return !p.good; }), good = LIST.filter(function (p) { return p.good; });
     function li(p) { return '<li><b>' + esc(p.name) + '</b>' + (p.ex && p.ex.length ? ' <span class="lf-ex">(' + p.ex.slice(0, 2).map(function (e) { return '“' + esc(e) + '”'; }).join(', ') + ')</span>' : '') + '<br><span class="lf-why">' + esc(p.what) + '</span></li>'; }
     return '<p>' + esc(opts.intro || 'The Signal Translator, the Carrier Wave Decoder’s tone check and the Conversation Reader all read wording with this same list, so the same words get the same reading in each. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict.') + '</p>' +
-      '<h3 class="lf-h">What may land harder than you mean</h3><ul class="lf-list">' + hard.map(li).join('') + '</ul>' +
+      '<h3 class="lf-h">What may land harder than you mean</h3><ul class="lf-list">' + hard.map(function (p) { return li(p) + (p.alsoAs ? li(p.alsoAs) : ''); }).join('') + '</ul>' +
       '<h3 class="lf-h">What tends to help</h3><ul class="lf-list">' + good.map(li).join('') + '</ul>' +
       '<p class="lf-note">Each tool also has a few checks of its own, like orders, labels, or a question that went unanswered, and it names them where they come up.</p>';
   }
