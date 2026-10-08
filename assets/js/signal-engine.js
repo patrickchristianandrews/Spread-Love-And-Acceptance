@@ -1806,7 +1806,11 @@ function rewrite(an, opts){
 
   // at work: the fact, what it affected, and one request. No "guys", no count of misses, no "sort it out"
   const work = !!(opts.work || WORK_REL.includes(opts.rel));
-  if(work && main.trim() && !ctx.legal && !ctx.kids) main = workReframe(main, an, note, ctx);
+  if(work && main.trim() && !ctx.legal && !ctx.kids){
+    main = workReframe(main, an, note, ctx);
+    // the vague order became one owner by one day: the older "Could you…?" note no longer describes the rewrite
+    if(log.some(c=>c.id==="workask")) for(let i=log.length-1;i>=0;i--) if(log[i].id==="impera" && (an.found.impera||[]).length<=1) log.splice(i,1);
+  }
   // several asks: say them as a short list. Nothing is dropped: a sentence
   // around the asks that carries a task or a deadline becomes its own item,
   // and any other sentence stays as a line above the list.
@@ -1851,7 +1855,7 @@ function rewrite(an, opts){
     if(!/\b(?:i'll|i will|i've set|i have set|i'm going to|i am going to|next time|from now on|going forward)\b/i.test(main)){ main = main+" [I've set a reminder] so it doesn't happen next time."; note("apology","","[I've set a reminder] so it doesn't happen next time"); }
   }
   // an apology after a miss: a place to say what you'll do about it, never a demand
-  if(ctx.apology && log.some(c=>c.id!=="apology") && /\b(?:forgot|forget|missed|late|broke|lost|didn't|messed up|dropped)\b/i.test(main) && !/\[What you'll do/.test(main)){
+  if(ctx.apology && log.some(c=>c.id!=="apology") && /\b(?:forgot|forget|missed|late|broke|lost|didn't|messed up|dropped)\b/i.test(main) && !/\[What you'll do|so it doesn't happen next time/.test(main)){
     main = endP(main.replace(/\s+$/,""))+" [What you'll do to put it right, if there's something, like \"I'll set a reminder.\"]";
     note("apology","","[what you'll do to put it right]");
   }
@@ -2624,8 +2628,14 @@ function safestVersion(base, o){
   // an apology needs no "I'm not upset with you"; everything else gets the person kept separate from the problem
   const sorry = /^\W*(?:(?:i'm|i am|so|really)\s+)*sorry\b|^\W*i apologi[sz]e\b/i.test(t);
   // co-parents: a neutral, businesslike opener (brief, about the plan, nothing about feelings for the person)
-  const lead = !o.criticism || sorry ? "" : o.coparent ? "I'd like to keep this to the plan for the kids. " : o.work ? "I'd like to sort something out, and I'm not blaming anyone. " : "I'm not upset with you as a person. I'd like us to sort this out together. ";
-  const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay)\b/i.test(t) ? "" :
+  // never "this isn't about you" right next to words that still blame
+  const blameLeft = /\b(?:you (?:always|never|keep)|again|"?(?:second|third|fourth|fifth|\d+(?:st|nd|rd|th)) time|every (?:single )?time|your fault|blame|lazy|careless|useless|sort it out)\b/i.test(t);
+  const lead = !o.criticism || sorry ? "" : o.coparent ? "I'd like to keep this to the plan for the kids. "
+    : o.work ? (blameLeft ? "" : o.group ? "This is about how the process works, not about any one person. " : "This is about the process, not you. ")
+    : o.group ? "I'd like us to sort this out together. "
+    : "I'm not upset with you as a person. I'd like us to sort this out together. ";
+  const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay|getting in the way)\b/i.test(t) ? "" :
+    o.work ? (o.isAsk ? " If something is getting in the way, say so, and we'll fix the process together." : " I'd like to hear how it looks from your side, too.") :
     (o.isAsk ? " Is that okay, or would something else work better for you?" : " I'd like to hear how it looks to you, too.");
   return tidy(lead + t + close);
 }
@@ -2658,9 +2668,10 @@ function finish(main, list, log, an, W, opts){
     // between co-parents, keep it brief and businesslike: no reassurance about the relationship
     const close = CLOSE_REL.includes(opts.rel) && !WORK_REL.includes(opts.rel) && opts.rel!=="coparent" && opts.channel!=="group";
     const bondy = close && (W.has("anxiety")||W.has("adhd")||W.has("trauma")||W.has("hsp")||opts.bond);
-    let opener = criticism ? "I'd like us to sort this out together. " : "";
+    const sorryLead = /^\W*(?:(?:i'm|i am|so|really)\s+)*sorry\b|^\W*i apologi[sz]e\b/i.test(base0);
+    let opener = criticism && !sorryLead ? "I'd like us to sort this out together. " : "";
     if(bondy) opener = "We're okay. "+opener;
-    const thanks = /\bthank/i.test(base) ? "" : sep+"Thank you.";
+    const thanks = /\bthank/i.test(base) || sorryLead ? "" : sep+"Thank you.";
     if(opener || thanks.trim()) variants.push({id:"warm", label:"Warm", why: bondy ? "Reassurance first, then the same ask. For a listener who may hear a hard sentence as rejection, the first words set the frame. Only say \"we're okay\" if it's true." : "A kind frame first, and thanks at the end. The ask is the same.", text: (listMain ? opener+base : tidy(opener+base))+thanks});
   }
   if(isAsk && !listMain){
@@ -2672,8 +2683,10 @@ function finish(main, list, log, an, W, opts){
   }
   if(isAsk){
     const extra = [];
-    if(isTask && !hasReason) extra.push("It matters because [the reason].");
-    if(isTask && (an.found.vstd || /\b(?:clean|tidy|fix|help)\b/i.test(firstAsk))) extra.push("Done looks like [what finished means].");
+    const ownerAsk = /\bone owner\b/i.test(firstAsk);
+    if(isTask && !hasReason && !/\[what that affected\]/.test(base0)) extra.push("It matters because [the reason].");
+    if(isTask && !ownerAsk && (an.found.vstd || /\b(?:clean|tidy|fix|help)\b/i.test(firstAsk))) extra.push("Done looks like [what finished means].");
+    if(ownerAsk) extra.push("Done looks like one name next to it, and a note in the channel when it's handed over.");
     if(an.staticIds.some(id=>["oblig","should","cannot","blameq","shouldhave","threat"].includes(id))) extra.push("This is a request, not a criticism.");
     if(/\[a time\]|\bby \d|\bat \d|\btonight\b|\btomorrow\b/i.test(base0)) extra.push("If that time doesn't work, tell me what does.");
     if(extra.length) variants.push({id:"explicit", label:"Very explicit", why:"Says what, when, why and what done looks like, out loud. Nothing is left to read between the lines. Helpful for literal listeners, and for anyone under stress.", text:(listMain ? base : tidy(base))+sep+extra.join(" ")});
@@ -2688,9 +2701,9 @@ function finish(main, list, log, an, W, opts){
   // The safest way to say it: the version least likely to land as an attack, whoever is listening.
   // No blame, the person kept separate from the problem, one plain ask, a choice, and room for their side.
   // Offered whenever the words carry static, an ask or a criticism; it sits right after the first choice.
-  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: WORK_REL.includes(opts.rel), coparent: opts.rel==="coparent"});
+  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: !!(opts.work || WORK_REL.includes(opts.rel)), group: opts.channel==="group", coparent: opts.rel==="coparent"});
   if(safe && !variants.some(v=>v.text.toLowerCase()===safe.toLowerCase())) variants.splice(Math.min(1, variants.length), 0, {id:"safe", label:"Safest way to say it",
-    why:"The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
+    why: (opts.work || WORK_REL.includes(opts.rel)) ? "The version least likely to land as blame or an order, whoever reads it: about the process, not a person, one clear ask, and room for what's getting in the way. Send it once." : "The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
   return {main: base, primary: variants[0], variants, changes, ask, list, unchanged};
 }
 
@@ -3042,10 +3055,15 @@ function verdict(an, sc, rw, opts){
   const sorry = an.apology && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
+  const work = !!(opts && opts.work);
+  if((an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy") && work && !an.found.legal && !an.found.kidsfirst && !an.found.violent)
+    return {id:"fight", work:true, text: soft ? "This may land as blame or an order. Try the version below." : "This may land as blame or an order. The notes below show why."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
     return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && fairConcern(an))
     return {id:"hurt", fair:true, text: "Your worry is fair and worth saying plainly. "+(soft ? "Here's a version that keeps your words direct and lands easier for "+listener+"." : "The notes below show which words may land hard.")};
+  if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && work)
+    return {id:"hurt", work:true, text: "This may land as blame. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
     return {id:"hurt", text: (an.safety ? "Your worry is fair, but this might hurt. " : "This might hurt. ")+(soft ? "Here's a softer way to say it." : "The notes below show why.")};
   if(an.staticIds && an.staticIds.length)

@@ -807,6 +807,7 @@
       "how": [
         "Add up what goes now, and fix the basics first: rent, food, bills and an amount of savings you both want.",
         "From what’s left, agree a monthly family-support line, and write it down.",
+        "For example: if you take home £3,000 a month and rent, food, bills and the savings you want come to £2,500, a family line of up to about £300 still leaves a cushion for surprises. The right number is the one you can both keep up without dread.",
         "Agree an emergency rule (for example: a phone call before any extra amount above a set figure).",
         "Look at it again twice a year, or when income or family needs change.",
         "Put it in the Lemonade Stand’s Money tab as an agreed amount, so it is never a debt between you."
@@ -1725,6 +1726,46 @@
         "If you want to talk now: ask for a time. Wait for that time.",
         "Agree a pause word on a calm day."
       ]
+    },
+    {
+      "id": "savingworry",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "worried about saving when your partner sends money home",
+      "pat": "\\b(my )?(wife|husband|partner|boyfriend|girlfriend)\\b.{0,10}\\b(sends?|sending|gives?|giving)\\b.{0,25}\\b(money|cash)\\b.{0,40}\\b(family|home|parents|mum|mom|mother)\\b.{0,60}\\b(can t|cant|cannot|never|won t|wont) (save|get ahead|afford)|\\b(can t|cant|cannot) save\\b.{0,60}\\b(sends?|sending)\\b.{0,20}\\b(money|home|family)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Your worry about savings is fair, and worth saying. Supporting family back home is often a real duty for your partner, not a spending habit, so the aim isn’t to stop it. It’s to plan it, with savings alongside it, so neither duty nor security always gives way."
+      ],
+      "how": [
+        "Start by asking what the support means to them and what their family needs, before talking numbers.",
+        "Then say your worry plainly and specifically: “I’d feel safer with three months of costs saved.”",
+        "Your partner leads with their family; you lead with your worry about savings. Then decide together.",
+        "Agree a monthly family-support line and a monthly savings line, side by side, plus a rule for emergencies.",
+        "Put both in the Lemonade Stand’s Money tab: family support as an agreed amount (never a debt), savings as its own line, and see what’s left."
+      ],
+      "script": [
+        "I know helping your mum matters, and I don’t want to stop it. I’m worried we’re not saving. Can we agree an amount for her and an amount for savings, and look at it together?"
+      ],
+      "plain": [
+        "Your worry is fair.",
+        "Helping family is often a duty.",
+        "Agree a family amount and a savings amount.",
+        "Write both down together."
+      ],
+      "links": [
+        [
+          "Supporting family: parents, money home and duty",
+          "/family-obligations.html"
+        ],
+        [
+          "The Lemonade Stand (Money)",
+          "/lemonade-stand.html#money"
+        ]
+      ],
+      "chips": []
     },
     {
       "id": "familyduty",

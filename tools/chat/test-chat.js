@@ -749,6 +749,7 @@ t('retest4', 'how do i get my brothers to share looking after dad fairly', { kin
 t('retest4', 'my husband says i\'m never home', { kind: 'care', id: 'caremarriage', not: /newlywed/i });
 t('retest4', 'We have a 3 month old. How do we fill in the Lemonade Stand on two phones, one each?', { id: 'twophones' });
 t('retest4', 'how do I add my wife\'s side on my phone', { id: 'twophones' });
+t('retest4', 'my wife sends a lot of money to her family and I feel we can\'t save', { kind: 'care', id: 'savingworry', text: /worry about savings is fair/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

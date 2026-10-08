@@ -283,7 +283,8 @@
       { href: '/family-obligations.html', code: 'New', title: 'Supporting family, money home', note: 'A duty you plan around together' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD and autistic couples and families' }
     ]},
-    { id: 'load', pick: ['/share-the-load.html', '/lemonade-stand.html', '/chore-chart-for-couples.html', '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-13-daily-check-in.html', '/invisible-labor-mental-load.html'], name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
+    { id: 'load', pick: ['/share-the-load.html', '/lemonade-stand.html', '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-13-daily-check-in.html', '/invisible-labor-mental-load.html', '/family-obligations.html'], name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
+      { href: '/family-obligations.html', code: 'Guide', title: 'Family, money and in-laws', note: 'Supporting parents, money home, long visits: plan it together' },
       { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
       { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
