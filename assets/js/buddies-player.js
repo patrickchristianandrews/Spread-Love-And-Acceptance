@@ -1932,7 +1932,7 @@
     '@media (max-width:600px){.fb-ovc p{font-size:.88rem;margin-bottom:.45rem}.fb-ovc .fb-hide-s{display:none}}' +
     '.fb-note{margin:0;padding:0 .3rem;font-size:.8rem;color:#CFC3E4}' +
     // full screen: only the picture, filling the screen, with the caption as a subtitle on it and the tap controls
-    '.fb-player.is-fs{position:fixed;inset:0;z-index:10050;border-radius:0;padding:0;gap:0;background:#000;box-shadow:none;overflow:hidden}' +
+    '.fb-player.is-fs{position:fixed;inset:0;z-index:10050;border-radius:0!important;margin:0!important;max-width:none!important;padding:0;gap:0;background:#000;box-shadow:none;overflow:hidden}' +
     '.fb-player.is-fs .fb-head,.fb-player.is-fs .fb-prog,.fb-player.is-fs .fb-ctrl,.fb-player.is-fs .fb-under,.fb-player.is-fs .fb-chaps,.fb-player.is-fs .fb-note{display:none!important}' +
     '.fb-player.is-fs .fb-stage{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;border-radius:0!important}.fb-player.is-fs .fb-cv{border-radius:0!important}.fb-player.is-fs{filter:none!important}' +
     '.fb-player.is-fs .fb-cap{position:absolute;left:50%;bottom:max(2.6vh,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;width:auto;max-width:min(64vw,54rem);min-height:0;margin:0;padding:.35em .9em .45em;border-radius:14px;background:rgba(20,14,32,.74);font-size:clamp(15px,2.1vw,34px);line-height:1.3;pointer-events:none}' +
