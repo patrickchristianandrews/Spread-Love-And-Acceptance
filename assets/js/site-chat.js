@@ -2074,7 +2074,7 @@
     return safeLinks(dlist(dget(T, ['links'])).map(function (l) { return Array.isArray(l) ? l : l && (l.u || l.url) ? [l.t || l.title || l.u || l.url, l.u || l.url] : null; }).filter(Boolean));
   }
   function dChips(state, T) {
-    var fu = dlist(dRule('follow_ups')).filter(function (x) { return typeof x === 'string'; }), chips = [];
+    var fu = dlist(dRule('follow_ups')).filter(function (x) { return typeof x === 'string' && !/keep it light|big question/i.test(x); }), chips = [];
     for (var n = 0; n < 2 && fu.length; n++) { var x = fu.splice(Math.floor(frand(state) * fu.length) % fu.length, 1)[0]; chips.push({ label: x, q: x }); }
     chips.push({ label: 'Another big question', q: 'Ask me a big question' });
     chips.push({ label: 'Back to small talk', q: 'Small talk' });
