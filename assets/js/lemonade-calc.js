@@ -2292,6 +2292,7 @@
   }
 
   function recalc() {
+    if (cardP) cardP.later();
     var t = totals(state.jobs), p = shares(t), any = t.some(function (x) { return x > 0; }) && !anyBad(state.jobs);
     var wait = any ? waitingFor() : [];
     var wraps = document.querySelectorAll('#glasses .ls-gwrap');
@@ -2858,6 +2859,63 @@
     } else {
       copyText(text).then(function (ok) { status(ok ? 'Sharing isn’t available here, so it’s copied. Paste it wherever you like.' : 'Couldn’t share here.'); });
     }
+  });
+  /* ---------- the result as a picture (drawn by TOLLemonadeCard in lemonade-quick.js) ---------- */
+  // plain words, never a score: "Mostly Alex", "A little more with Sam", "About even"
+  function cardLean(arr) {
+    var s = sum(arr), n = arr.length; if (s <= 0.01) return null;
+    var top = 0; arr.forEach(function (x, i) { if (x > arr[top]) top = i; });
+    var sh = arr[top] / s;
+    if (n === 2 ? sh >= 0.6 : sh >= 1.5 / n) return { t: 'Mostly ' + nameOf(top), c: COLORS[top] };
+    if (n === 2 ? sh >= 0.53 : sh >= 1.15 / n) return { t: 'A little more with ' + nameOf(top), c: COLORS[top] };
+    return { t: n === 2 ? 'About even' : 'Spread between us', c: 'both' };
+  }
+  function cardData() {
+    if (!state || !mode) return null;
+    if (solo()) {
+      var sn = soloNums(); if (sn.load <= 0 && sn.rest <= 0) return null;
+      var rows = [];
+      if (sn.home > 0) rows.push({ h: 'Home and life jobs', t: 'About ' + hrs(sn.home) + ' a week' });
+      if (sn.inv > 0) rows.push({ h: 'The thinking work nobody sees', t: 'About ' + hrs(sn.inv) + ' a week', hl: true });
+      if (sn.work > 0) rows.push({ h: 'Work or school', t: 'About ' + hrs(sn.work) + ' a week' });
+      if (sn.rest > 0) rows.push({ h: 'Rest', t: 'About ' + hrs(sn.rest) + ' a week' });
+      var nm0 = (state.people[0] || '').trim();
+      return { title: 'My week, made visible', sub: nm0 && !/^me$/i.test(nm0) ? nm0 + '’s week at the Lemonade Stand' : 'My week at the Lemonade Stand', people: [], rows: rows,
+        notes: ['Rough on purpose. It reads time, not how anyone feels.'], ask: 'Does this match how my week feels?' };
+    }
+    var t = totals(state.jobs); if (sum(t) <= 0 || anyBad(state.jobs)) return null;
+    var wait = waitingFor(), two = state.people.length === 2, rows2 = [], notes = [];
+    var people = state.people.map(function (_, i) { return { n: nameOf(i), c: COLORS[i] }; });
+    if (wait.length) {
+      rows2.push({ h: 'Home jobs', t: 'Waiting for ' + joinNames(wait.map(nameOf)) + '’s side' });
+    } else {
+      var hl = cardLean(t), il = cardLean(peopleTotals('home', invH)), wl = cardLean(peopleTotals('work'));
+      if (hl) rows2.push({ h: 'Home jobs, the doing and the thinking', t: hl.t, c: hl.c });
+      if (il) rows2.push({ h: 'Planning and remembering (the thinking work)', t: il.t, c: il.c, hl: true });
+      if (wl) rows2.push({ h: 'Paid work and school', t: wl.t, c: wl.c });
+      if (il && hl && il.c !== 'both' && il.c === hl.c) notes.push('The thinking work is easy to miss, because nobody sees it happen.');
+    }
+    var tg = target();
+    if (!tg.error && tg.mode !== 'even') notes.push('We chose our own split. Fair isn’t always 50/50.');
+    else if (sum(peopleTotals('work')) > 0) notes.push('Fair isn’t always 50/50: long hours, nights or illness count too.');
+    return { title: 'Who does what at home', sub: 'Our week at the Lemonade Stand', people: people, rows: rows2, notes: notes,
+      ask: 'Does this match how it feels to ' + (two ? 'both of us' : 'all of us') + '?' };
+  }
+  var cardP = null;
+  if (window.TOLLemonadeCard && $('ls-card')) {
+    cardP = window.TOLLemonadeCard.panel($('ls-card'), {
+      card: cardData, title: 'Our lemonade stand', file: 'lemonade-stand-result.png', print: printSummary,
+      text: function () { var d = cardData(); return d ? window.TOLLemonadeCard.altText(d) : ''; },
+      // the stand's own link: your side, for the others to add to theirs (nothing is uploaded)
+      link: function () { if (solo()) return location.origin + '/lemonade-stand.html'; var d = sideData(); return d.error ? '' : packSide(JSON.stringify(d)).then(sideLink); }
+    });
+  }
+  if ($('card-result')) $('card-result').addEventListener('click', function () {
+    var b = $('card-result');
+    if (!cardP) { status('The picture didn’t load. Try reloading the page.'); return; }
+    if (!cardP.open && !cardData()) { status('Fill in a few jobs and hours first. Then your result can be a picture.'); return; }
+    cardP.show(!cardP.open); b.setAttribute('aria-expanded', String(cardP.open));
+    if (cardP.open) { var f = $('ls-card').querySelector('[data-card="save"]'); if (f) f.focus(); }
   });
   $('keep-device').addEventListener('change', function (e) {
     keep = e.target.checked;

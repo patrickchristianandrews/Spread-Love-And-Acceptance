@@ -1040,7 +1040,7 @@
       "first": true,
       "newTopic": true,
       "name": "when a child has ADHD",
-      "pat": "\\b(my|our|his|her|their) (son|daughter|kid|kids|child|children|grandson|granddaughter|grandchild\\w*|grandkids?|stepson|stepdaughter|boy|girl|little one|nephew|niece|pupil|student)\\b.{0,40}\\b(adhd|add|attention deficit)\\b|\\b(adhd|add)\\b.{0,30}\\b(in )?(children|kids|child|boys|girls|toddlers?)\\b|\\bis adhd (real|made up|an excuse|just|a real)\\b|\\badhd\\b.{0,20}\\b(or|vs|versus|just) (just )?(bad|naughty|poor)? ?(behaviou?r|parenting|upbringing|discipline)\\b|\\b(what is|explain) adhd\\b",
+      "pat": "\\b(my|our|his|her|their) (son|daughter|kid|kids|child|children|grandson|granddaughter|grandchild\\w*|grandkids?|stepson|stepdaughter|boy|girl|little one|nephew|niece|pupil|student)\\b.{0,40}\\b(adhd|add|attention deficit)\\b|\\b(adhd|add)\\b.{0,30}\\b(in )?(children|kids|child|boys|girls|toddlers?)\\b|\\bis adhd (real|made up|an excuse|just|a real)\\b|\\badhd\\b.{0,20}\\b(or|vs|versus|just) (just )?(bad|naughty|poor)? ?(behaviou?r|parenting|upbringing|discipline)\\b|\\b(what is|explain) adhd\\b|\\b(he|she|my (son|daughter|grandson|granddaughter|kid|child|boy|girl)) (can t|cant|cannot|won t|wont) (sit still|stay still|stop fidgeting)\\b",
       "keys": [],
       "what": [
         "Yes, ADHD is real and well studied. It is not bad behaviour or bad upbringing. In plain words: a child with ADHD has a brain that finds it harder to keep attention on dull things, to wait, to sit still and to remember steps, even when they really want to."
@@ -1111,7 +1111,8 @@
           "/grown-up-children.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "notPat": "\\bmy (mum|mom|mother|dad|father|parents|mil|mother ?in ?law|motherinlaw|in ?laws|inlaws|nan|nana|grandma|gran|sister|brother|aunt|uncle)\\b.{0,25}\\b(keeps? |always |just )?(turns?|turning|shows?|showing|comes?|coming|pops?|popping|drops?|dropping)\\b"
     },
     {
       "id": "gpshutout",
@@ -1225,7 +1226,7 @@
       "notPat": "\\b(ex (husband|wife|partner|boyfriend|girlfriend)? ?(texts|messages|calls|harass\\w*))\\b",
       "keys": [],
       "what": [
-        "That’s worrying, especially with medicine, and tiring when you’re always the one who remembers. A checklist that travels with the bag usually works better than reminders."
+        "It’s tiring to always be the one who remembers, and worrying when it’s medicine. A checklist that travels with the bag usually works better than reminders."
       ],
       "how": [
         "Make a handover checklist that lives in her bag: inhaler, medicines, glasses, homework, charger.",
@@ -1521,7 +1522,7 @@
       "pat": "\\b(twins|toddlers|a toddler|our toddler|two under (two|2|three|3)|baby and a toddler|newborn and a toddler|\\d ?year ?old twins)\\b",
       "keys": [],
       "what": [
-        "Two little ones at once is one of the most tiring stages there is. Both of you being exhausted is normal, not a sign you’re doing it wrong."
+        "Toddlers (and two at once even more so) are one of the most tiring stages there is. Both of you being exhausted is normal, not a sign you’re doing it wrong."
       ],
       "how": [
         "Protect sleep first: take turns on nights or early mornings, so each of you gets one longer stretch.",
@@ -1967,7 +1968,7 @@
       "first": true,
       "newTopic": true,
       "name": "sharing a room",
-      "pat": "\\b(dorm|dorm room|share a room|sharing a room|shared room|room agreement|bunk beds?|halls of residence)\\b",
+      "pat": "\\b(dorm|dorm room|share a room|sharing a room|shared room|room agreement|bunk beds?|halls of residence)\\b|\\broom ?mates?\\b.{0,40}\\b(rules|agreement|ground rules|house rules)\\b|\\b(rules|agreement)\\b.{0,30}\\broom ?mates?\\b",
       "notPat": "\\b(brother|sister|sibling|stepbrother|stepsister)\\b",
       "keys": [],
       "what": [
@@ -2748,7 +2749,7 @@
       "first": true,
       "newTopic": true,
       "name": "coming out as an adult",
-      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b",
+      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b|\\b(i m|im|i am) (\\d{2}|an adult|a grown (up|woman|man)|grown up|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b.{0,40}\\b(come|coming) out\\b|\\b(come|coming) out\\b.{0,30}\\b(at work|to my (boss|manager|coworkers?|colleagues?|team)|as an adult|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b",
       "notPat": "",
       "keys": [],
       "what": [

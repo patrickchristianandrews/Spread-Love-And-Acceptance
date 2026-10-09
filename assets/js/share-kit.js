@@ -31,11 +31,16 @@
   var enc = encodeURIComponent;
 
   // ---------- its stylesheet ----------
-  (function linkCss() {
-    if (document.querySelector('link[href="/assets/css/share-kit.css"]')) return;
-    var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = '/assets/css/share-kit.css';
-    document.head.appendChild(l);
-  })();
+  // the line buttons wait for it, so they never show unstyled
+  var cssReady = new Promise(function (ok) {
+    var l = document.querySelector('link[href="/assets/css/share-kit.css"]');
+    if (l) { if (l.sheet) { ok(); return; } } else {
+      l = document.createElement('link'); l.rel = 'stylesheet'; l.href = '/assets/css/share-kit.css';
+      document.head.appendChild(l);
+    }
+    l.addEventListener('load', function () { ok(true); }); l.addEventListener('error', function () { ok(false); });
+    setTimeout(function () { ok(true); }, 4000);
+  });
 
   function mk(tag, attrs, text) {
     var n = document.createElement(tag);
@@ -294,13 +299,22 @@
   // =====================================================================================
   // Save as image: the words on a soft card with the site's name, drawn here, saved as a PNG
   // =====================================================================================
+  // only for words (a line, a quote, an answer), not for a page's link
   var IMAGE_MAX = 300;
-  function imageText(d) { var t = (d.text || d.title || '').trim(); return t.length && t.length <= IMAGE_MAX ? t : ''; }
+  function imageText(d) { var t = d.result ? (d.text || '').trim() : ''; return t.length && t.length <= IMAGE_MAX ? t : ''; }
   function wrap(ctx, text, maxW) {
     var out = [];
     text.split(/\n+/).forEach(function (para) {
       var line = '';
       para.split(/\s+/).forEach(function (w) {
+        if (!w) return;
+        // a word too long for one line is broken where it must be
+        while (ctx.measureText(w).width > maxW && w.length > 1) {
+          var k = w.length - 1;
+          while (k > 1 && ctx.measureText(w.slice(0, k)).width > maxW) k--;
+          if (line) { out.push(line); line = ''; }
+          out.push(w.slice(0, k)); w = w.slice(k);
+        }
         var t = line ? line + ' ' + w : w;
         if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
       });
@@ -316,7 +330,7 @@
     ctx.strokeStyle = '#B9A8D6'; ctx.lineWidth = 6; ctx.strokeRect(60, 88, W - 120, H - 176);
     var size = 64, lines, lh, maxW = W - 240, maxH = H - 460;
     for (; size >= 30; size -= 2) {
-      ctx.font = size + 'px Georgia, "Times New Roman", serif';
+      ctx.font = size + 'px Lora, Georgia, "Times New Roman", serif';
       lines = wrap(ctx, text, maxW); lh = Math.round(size * 1.32);
       if (lines.length * lh <= maxH) break;
     }
@@ -328,9 +342,9 @@
       sl.forEach(function (s, i) { ctx.fillText(s, W / 2, 170 + i * 42); });
       ctx.fillStyle = '#2B2620';
     }
-    ctx.font = size + 'px Georgia, "Times New Roman", serif';
+    ctx.font = size + 'px Lora, Georgia, "Times New Roman", serif';
     lines.forEach(function (ln, i) { ctx.fillText(ln, W / 2, top + i * lh); });
-    ctx.fillStyle = '#3C3354'; ctx.font = '600 36px Georgia, "Times New Roman", serif';
+    ctx.fillStyle = '#3C3354'; ctx.font = '600 36px Lora, Georgia, "Times New Roman", serif';
     ctx.fillText(SITE_NAME, W / 2, H - 200);
     ctx.fillStyle = '#5A5346'; ctx.font = '28px system-ui, -apple-system, "Segoe UI", sans-serif';
     ctx.fillText(SITE_HOST, W / 2, H - 150);
@@ -369,7 +383,6 @@
   function buildKit(box) {
     var root = mk('div', { class: 'tsk-kit' });
     var acts = mk('div', { class: 'tsk-acts' });
-    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-kit': 'native' }, 'More apps on this device'));
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-kit': 'qr', 'aria-expanded': 'false', 'aria-controls': 'tsk-qr' }, 'Show a QR code'));
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-kit': 'image' }, 'Save as image'));
     var tog = mk('button', { type: 'button', class: 'tol-share-act tsk-toggle', 'data-kit': 'places', 'aria-expanded': 'false', 'aria-controls': 'tsk-places' }, 'More places');
@@ -415,15 +428,6 @@
         }, function () { status('Couldn’t make the picture here. Try “Copy message” instead.'); });
         return;
       }
-      if (k === 'native') {
-        var d = cur, done = ctl;
-        try {
-          Promise.resolve(navigator.share(nativeData(d))).then(function () {
-            fireShared(d.url, 'native'); if (done && done.close) done.close();
-          }, function () {});
-        } catch (er) {}
-        return;
-      }
       if (k === 'go') {
         var place = b.getAttribute('data-place');
         fireShared(cur.url, place);
@@ -440,7 +444,25 @@
     });
     var card = box.querySelector('.tol-share-card') || box, before = box.querySelector('.tol-share-status');
     card.insertBefore(root, before && before.parentNode === card ? before : null);
+
+    // the device's own share menu goes first in the sheet, where the device has one
+    var nat = mk('button', { type: 'button', class: 'tol-share-act tsk-native', 'data-kit': 'native' }, 'More apps on this device');
+    nat.addEventListener('click', function () {
+      var d = cur, done = ctl; if (!d) return;
+      try {
+        Promise.resolve(navigator.share(nativeData(d))).then(function () {
+          fireShared(d.url, 'native'); closeSheet(done);
+        }, function () {});
+      } catch (er) {}
+    });
+    var main = box.querySelector('.tol-share-acts');
+    if (main) main.insertBefore(nat, main.firstChild); else root.insertBefore(nat, root.firstChild);
+    root._native = nat;
     return root;
+  }
+  function closeSheet(c) {
+    if (c && c.close) c.close();
+    else if (window.TOLShare && window.TOLShare.close) window.TOLShare.close();
   }
 
   function onSheet(e) {
@@ -455,7 +477,7 @@
     var qb = kit.querySelector('[data-kit="qr"]'), pb = kit.querySelector('[data-kit="places"]'), ib = kit.querySelector('[data-kit="image"]');
     qb.setAttribute('aria-expanded', 'false'); qb.textContent = 'Show a QR code';
     pb.setAttribute('aria-expanded', 'false'); ib.textContent = 'Save as image';
-    kit.querySelector('[data-kit="native"]').hidden = !canNative(d);
+    kit._native.hidden = !canNative(d);
     // the QR code holds the link (or, with no link, short words)
     var qrText = d.url || (d.text && d.text.length <= 180 ? d.text : ''), box = qr.querySelector('.tsk-qr-box');
     box.textContent = '';
@@ -474,7 +496,42 @@
     });
     pb.hidden = !anyPlace;
   }
-  document.addEventListener('tol-share-sheet', onSheet);
+  // site.js may announce each opening with a 'tol-share-sheet' event ({ data, box, close }).
+  // Without it, the kit watches the sheet and reads what is being shared back from the sheet itself.
+  var seenOpen = false;
+  document.addEventListener('tol-share-sheet', function (e) { seenOpen = true; onSheet(e); });
+  function readSheet(box) {
+    function shown(sel) { var n = box.querySelector(sel); return !!n && !n.hidden; }
+    var wa = box.querySelector('[data-act="whatsapp"]'), msg = '';
+    try { msg = new URL(wa.getAttribute('href')).searchParams.get('text') || ''; } catch (e) { return null; }
+    var what = box.querySelector('.tol-share-what'), title = what && !what.hidden ? what.textContent : '';
+    var hasUrl = shown('[data-act="copy"]'), url = '', text = msg;
+    if (hasUrl) { var i = msg.lastIndexOf('\n'); url = i < 0 ? msg : msg.slice(i + 1); text = i < 0 ? '' : msg.slice(0, i); }
+    var h = box.querySelector('#tol-share-h');
+    return { title: title, text: text, url: url, result: shown('.tol-share-preview') || shown('[data-act="copy-text"]') || (!!h && h.textContent === 'Share what you made') };
+  }
+  function watchSheet(box) {
+    if (box._tskWatched) return; box._tskWatched = true;
+    var check = function () {
+      if (box.hidden) { seenOpen = false; return; }
+      if (seenOpen) return;   // the event already did it
+      seenOpen = true;
+      var d = readSheet(box);
+      if (d) onSheet({ detail: { data: d, box: box, close: window.TOLShare && window.TOLShare.close } });
+    };
+    new MutationObserver(check).observe(box, { attributes: true, attributeFilter: ['hidden'] });
+    check();
+  }
+  function findSheet() {
+    var b = document.querySelector('.tol-sharesheet[data-share-sheet]');
+    if (b) { watchSheet(b); return true; }
+    return false;
+  }
+  function startWatch() {
+    if (findSheet()) return;
+    var mo = new MutationObserver(function () { if (findSheet()) mo.disconnect(); });
+    mo.observe(document.body, { childList: true });
+  }
 
   function shareText(o) {
     o = o || {};
@@ -497,7 +554,7 @@
   // =====================================================================================
   // boxes of words to say: p.tol-try, the "-say" boxes on each page (gp-say, pg-say, wk-say ...),
   // p.say, script lines and blockquote.script
-  var BOX_SEL = '.tol-try, [class*="-say"], p.say, .script-line, .ci-script, blockquote.script, blockquote.tol-say';
+  var BOX_SEL = '.tol-try, [class*="-say"], p.say, .script-line, .ci-script, blockquote';
   var SAY_CLASS = /(^|\s)[a-z]+-say(\s|$)/;
   var QUOTE = /“([^”]{3,})”|"([^"]{3,})"/g;
   function lineText(p) {
@@ -512,16 +569,20 @@
   function linesIn(box) {
     if (box.tagName === 'P') return [box];
     var ps = box.querySelectorAll('p');
+    if (!ps.length) return box.querySelector('[class*="-say"], .script-line, .tol-try') ? [] : [box];   // a line written straight into the box
     return Array.prototype.filter.call(ps, function (p) { return !p.closest('.tsk-line'); });
   }
-  var SECT_SEL = 'h2[id], h3[id], section[id], article[id], li[id], details[id]';
+  // the nearest part of the page with an id: the heading above the line, or a box around it that starts later
   function sectionOf(node, main) {
-    var best = null, all = main.querySelectorAll(SECT_SEL);
-    for (var i = 0; i < all.length; i++) {
-      var c = all[i];
-      if (c === node || c.contains(node) || (c.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING)) best = c; else break;
+    var hs = main.querySelectorAll('h2[id], h3[id], h4[id]'), head = null;
+    for (var i = 0; i < hs.length; i++) {
+      if (hs[i].compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING) head = hs[i]; else break;
     }
-    return best;
+    var box = node.parentElement && node.parentElement.closest('[id]');
+    if (box && !main.contains(box)) box = null;
+    if (box === main) box = null;
+    if (box && (!head || (head.compareDocumentPosition(box) & Node.DOCUMENT_POSITION_FOLLOWING))) return box;
+    return head;
   }
   function headingFor(node, main) {
     var hs = main.querySelectorAll('h1, h2, h3'), best = null;
@@ -532,21 +593,33 @@
     }
     return best ? best.textContent.replace(/\s+/g, ' ').trim() : '';
   }
+  // a small "share" arrow out of a box, drawn in the text colour
+  function icon() {
+    var NS = 'http://www.w3.org/2000/svg', v = document.createElementNS(NS, 'svg');
+    v.setAttribute('viewBox', '0 0 24 24'); v.setAttribute('aria-hidden', 'true'); v.setAttribute('focusable', 'false');
+    var p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', 'M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7');
+    p.setAttribute('fill', 'none'); p.setAttribute('stroke', 'currentColor'); p.setAttribute('stroke-width', '2');
+    p.setAttribute('stroke-linecap', 'round'); p.setAttribute('stroke-linejoin', 'round');
+    v.appendChild(p);
+    return v;
+  }
   function scan(root) {
     var main = root || document.querySelector('main');
     if (!main || document.body.hasAttribute('data-no-share') || document.body.hasAttribute('data-no-line-share')) return 0;
     var seen = [], n = 0;
     Array.prototype.forEach.call(main.querySelectorAll(BOX_SEL), function (box) {
       if (/-say/.test(box.className) && !SAY_CLASS.test(box.className) && !box.matches('.tol-try, p.say, .script-line, .ci-script, blockquote')) return;
-      if (box.closest('.tol-sharesheet, form, [contenteditable], .no-line-share')) return;
+      if (box.closest('.tol-sharesheet, form, [contenteditable], .no-line-share, .ci-bad')) return;   // not the "how it can go wrong" examples
       linesIn(box).forEach(function (p) {
         if (seen.indexOf(p) !== -1 || p.querySelector('.tsk-line')) return;
         seen.push(p);
         var text = lineText(p); if (!text || text.length > 400) return;
         var b = mk('button', { type: 'button', class: 'tsk-line', 'aria-label': 'Share this line', title: 'Share this line' });
+        b.appendChild(icon());
         b.addEventListener('click', function (e) {
           e.preventDefault(); e.stopPropagation();
-          var t = lineText(p), sec = sectionOf(p, main), url = location.origin + location.pathname + (sec ? '#' + sec.id : '');
+          var t = lineText(p), sec = sectionOf(p, main), url = location.origin + location.pathname + (sec ? '#' + encodeURIComponent(sec.id) : '');
           var head = headingFor(p, main) || (document.querySelector('h1') || {}).textContent || '';
           pendingHeading = 'Share this line';
           if (window.TOLShare && window.TOLShare.open) window.TOLShare.open({ title: head.trim(), text: t, url: url, result: true });
@@ -559,7 +632,7 @@
     });
     return n;
   }
-  function start() { try { scan(); } catch (e) {} }
+  function start() { try { startWatch(); } catch (e) {} cssReady.then(function (good) { if (good !== false) try { scan(); } catch (e) {} }); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 
   window.TOLShareKit = {

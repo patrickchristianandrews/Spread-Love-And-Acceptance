@@ -22,46 +22,64 @@
     one-page layout if applied here.
   */
 
+  /* No fixed paper size: the print stylesheet at the end fits one A4 or one US Letter page. */
   @page{
-    size: letter portrait;
-    margin: 0.5in;
+    margin: 11mm;
   }
 
   .print-bar{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 12px 20px;
     max-width: 8.5in;
+    box-sizing: border-box;
     margin: 20px auto;
-    padding: 14px 20px;
+    padding: 16px 20px;
     background: var(--paper-deep);
     border: 1px solid var(--line);
-    border-radius: var(--radius);
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.8rem;
+    border-radius: 12px;
+    font-family: "Lora", Georgia, serif;
+    font-size: 0.95rem;
   }
 
-  .print-bar-copy{ color: var(--ink-soft); }
+  .print-bar-copy{ color: var(--ink-soft); flex: 1 1 18rem; line-height: 1.45; }
+  .print-bar-copy strong{ display: block; color: var(--ink); font-family: "Fraunces", Georgia, serif; font-size: 1.1rem; }
 
   .print-bar-actions{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 16px;
+    gap: 10px 12px;
   }
 
   .print-bar .back-link{
     color: var(--ink-soft);
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     text-decoration: underline;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
 
-  .print-bar button.cta-button{
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.75rem;
-    border: none;
+  .ig-btn{
+    font: 600 0.98rem/1.2 "Lora", Georgia, serif;
+    min-height: 48px;
+    padding: 0.5rem 1.15rem;
+    border-radius: 999px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
     cursor: pointer;
   }
+  .ig-btn.is-main{ background: var(--ink); color: var(--paper); }
+  .ig-btn:focus-visible, .ig-acc summary:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
+  .ig-status{ flex: 1 1 100%; margin: 0; min-height: 1.2em; font-size: 0.9rem; color: var(--ink-soft); }
+  .ig-status:empty{ display: none; }
+
+  .ig-try{ display: inline-block; margin-top: 6px; font-size: 0.7rem; color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: 3px; }
+  .ig-try-inline{ color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: 3px; }
 
   @media print{
     .print-bar{ display: none; }
@@ -390,12 +408,18 @@
 </head>
 <body>
 
-  <div class="print-bar" role="toolbar" aria-label="Page actions">
-    <span class="print-bar-copy">Printable Executive Summary &middot; US Letter, portrait</span>
-    <div class="print-bar-actions">
-      <a class="back-link" href="index.html">&larr; Back to the full ledger</a>
-      <button class="cta-button" type="button" onclick="window.print()">Print / Save as PDF</button>
+  <div class="print-bar" role="toolbar" aria-label="Save or print this page">
+    <div class="print-bar-copy">
+      <strong>The whole idea on one page.</strong>
+      <span>It fits on one A4 or US Letter page. To keep a PDF, choose “Save as PDF” as the printer.</span>
     </div>
+    <div class="print-bar-actions">
+      <button class="ig-btn is-main" type="button" id="ig-print">Save as PDF / Print</button>
+      <button class="ig-btn" type="button" id="ig-svg" hidden>Download the picture (SVG)</button>
+      <button class="ig-btn" type="button" id="ig-png" hidden>Download the picture (PNG)</button>
+      <a class="back-link" href="/">&larr; Back to the home page</a>
+    </div>
+    <p class="ig-status" id="ig-status" role="status" aria-live="polite"></p>
   </div>
 
   <main class="sheet" aria-label="The Objective Ledger — executive summary">
@@ -426,6 +450,7 @@
           <div class="pillar-mono">III</div>
           <h3>Read your state first</h3>
           <p>In you: know if you're calm and connected, revved up, or running on empty before you judge a moment. Between you: pick the timing, pause and come back.</p>
+          <a class="ig-try" href="/ladder.html">Where am I right now? &rarr;</a>
         </div>
         <div class="pillar-card">
           <div class="pillar-mono">IV</div>
@@ -487,7 +512,7 @@
 
     <article class="block block-refusals" aria-labelledby="refusals-h">
       <h2 id="refusals-h"><span class="block-num">04</span> Three kind ways to say no</h2>
-      <p class="block-intro">Ready-to-use scripts for declining or deferring a task without starting a fight.</p>
+      <p class="block-intro">Ready-to-use scripts for declining or deferring a task without starting a fight. Each one does three things: says the request is fair, says honestly what you have left, and offers something instead. <a class="ig-try-inline" href="/refusals.html">Make your own kind no for your situation &rarr;</a></p>
       <div class="refusal-grid">
         <div class="refusal-card">
           <h3>“I’m full today”</h3>

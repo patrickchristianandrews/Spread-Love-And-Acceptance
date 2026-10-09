@@ -571,6 +571,107 @@
     });
   });
 
+  // ===== Focus mode: "Focus on what I'm learning" =====
+  // Someone can pick one or more areas (who it's about, or what they're working on). While it's on, the menus,
+  // search, "What's new" and the suggestions show just those areas; every page is still reachable by its link.
+  // Safety ("Not safe at home?", "Leave this site quickly", "Upset right now?") is never hidden.
+  // Kept in this browser only, as tol-focus: {"on":true,"areas":["couples","load"]}.
+  // Other scripts: window.TOLFocus (isOn, areas, matches, allows, open, off) and the 'tol-focus-change' event;
+  // while it's on, <html> and <body> have class tol-focus and body[data-focus] lists the chosen ids.
+  var FOCUS_KEY = 'tol-focus';
+  // [id, name, kind, short name]
+  var FOCUS_AREAS = [
+    ['just-me', 'Just me', 'rel'], ['couples', 'Couples & partners', 'rel', 'Couples'], ['friends', 'Friends', 'rel'], ['family', 'Family', 'rel'],
+    ['co-parents', 'Separated & co-parents', 'rel', 'Co-parents'], ['housemates', 'Housemates', 'rel'], ['work', 'Work & business partners', 'rel', 'Work'],
+    ['life-changes', 'Life changes', 'rel'],
+    ['load', 'Share the load', 'topic'], ['talk', 'Talk it through', 'topic'], ['self', 'Know yourself', 'topic'], ['play', 'Calm & play', 'topic'],
+    ['media', 'Watch & listen', 'topic'], ['read', 'Read & learn', 'topic']
+  ];
+  // the groups on /by-relationship.html (page names without .html); the menu's own groups are added below
+  var FOCUS_PAGES = {
+    'just-me': 'self-path know-yourself wavelength communication-style-quiz wiring-card growing-up wired-differently tools/frequency-calibration workpapers/fill/suite quick-checks workpapers/wp-02-how-much-are-you-carrying library/stress wp-11 on-my-own coming-out teens ladder',
+    'couples': 'how-to-stop-fighting-with-your-partner pursue-withdraw check-ins workpapers/wp-13-daily-check-in love-languages apology-languages turning-toward complacency touchstones neurodivergent-relationships lemonade-stand chore-chart-for-couples invisible-labor-mental-load share-the-load money-together prog-01 more-than-two gaming-and-time-together different-hours long-distance coming-home when-one-is-ill two-faiths family-obligations new-parent empty-nest retired-together refusals',
+    'friends': 'friends teens relationships signal-translator conversation-reader apology-languages sent-this turning-toward refusals',
+    'family': 'parents teens adhd-kids foster-and-kinship new-parent frequency-buddies grandparents grown-up-children family-rifts family-obligations two-faiths caregivers neurodivergent-relationships',
+    'co-parents': 'co-parenting on-my-own parents teens signal-translator',
+    'housemates': 'sharing-a-room share-the-load chore-chart-for-couples relationships lemonade-stand workpapers/wp-03-one-owner-per-job workpapers/calculators/is-the-setup-working-quick is-the-setup-working',
+    'work': 'work appreciation-at-work workpapers/wp-09-say-it-so-it-lands library/teams coming-out different-hours groups for-counselors wiring-card',
+    'life-changes': 'new-parent grown-up-children money-together coming-home when-one-is-ill caregivers empty-nest retired-together grief on-my-own coming-out library/life',
+    'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo',
+    'media': 'calm-visualizer soundscapes wp-11-sound-toolkit echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
+  };
+  // pages that are never "outside your focus": the start, safety, help and the site's own pages
+  var FOCUS_NEUTRAL = /^\/(index|start-here|safety|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
+  var AREA_OF = {};
+  function fpath(u) {
+    var p = String(u || '').split(/[?#]/)[0];
+    if (!p) return '';
+    try { if (/^https?:/.test(p)) { var x = new URL(p); if (x.origin !== location.origin) return ''; p = x.pathname; } } catch (e) { return ''; }
+    if (p.charAt(0) !== '/') p = '/' + p;
+    if (/\/$/.test(p)) p += 'index.html'; else if (!/\.[a-z0-9]+$/i.test(p)) p += '.html';
+    return p.replace(/-in-depth\.html$/, '.html');
+  }
+  function tagArea(u, a) { var p = fpath(u); if (p) (AREA_OF[p] = AREA_OF[p] || {})[a] = 1; }
+  Object.keys(FOCUS_PAGES).forEach(function (a) { FOCUS_PAGES[a].split(' ').forEach(function (x) { tagArea('/' + x + '.html', a); }); });
+  MENU.forEach(function (g) {
+    if (/^(load|talk|self|play|media|read)$/.test(g.id)) g.items.forEach(function (it) { if (it.href) tagArea(it.href, g.id); });
+    if (g.id === 'rel') {
+      var cur = null;
+      g.items.forEach(function (it) {
+        if (it.sub) { var m = /#([a-z-]+)$/.exec(it.all || ''); cur = m && m[1] !== 'misc' ? m[1] : null; return; }
+        if (cur && it.href) tagArea(it.href, cur);
+      });
+    }
+  });
+  SECTIONS.forEach(function (s) { if (s.id === 'book' || s.id === 'media') s.items.forEach(function (it) { tagArea(it.href, s.id === 'book' ? 'read' : 'media'); }); });
+  function areasOf(u) {
+    var p = fpath(u); if (!p) return null;
+    var a = AREA_OF[p] || null;
+    if (/^\/(book|library|learn)\//.test(p) || p === '/library.html') { a = a || {}; a.read = 1; }
+    return a;
+  }
+  function focusState() {
+    var v = null; try { v = JSON.parse(lsGet(FOCUS_KEY) || 'null'); } catch (e) { v = null; }
+    var ok = {}; FOCUS_AREAS.forEach(function (x) { ok[x[0]] = 1; });
+    var areas = (v && Array.isArray(v.areas) ? v.areas : []).filter(function (a) { return ok[a]; });
+    return { on: !!(v && v.on && areas.length), areas: areas };
+  }
+  function focusOn() { return focusState().on; }
+  function focusAreas() { var s = focusState(); return s.on ? s.areas.slice() : []; }
+  // strictly in a chosen area
+  function focusMatches(u) {
+    var s = focusState(); if (!s.on) return false;
+    var a = areasOf(u); if (!a) return false;
+    return s.areas.some(function (x) { return a[x]; });
+  }
+  function focusNeutral(u) { var p = fpath(u); return !p || FOCUS_NEUTRAL.test(p) || !areasOf(u); }
+  // fine to show while focused: in a chosen area, or a page that belongs to no area (safety, the start, help)
+  function focusAllows(u) { return !focusOn() || focusNeutral(u) || focusMatches(u); }
+  function focusName(id, short) { for (var i = 0; i < FOCUS_AREAS.length; i++) if (FOCUS_AREAS[i][0] === id) return (short && FOCUS_AREAS[i][3]) || FOCUS_AREAS[i][1]; return id; }
+  function focusList() { return focusAreas().map(function (a) { return focusName(a, true); }).join(', '); }
+  // the menu, as it shows right now: in focus, each group keeps only its pages in your areas (plus its general pages),
+  // and a group with none of them steps aside. Start here and About always stay whole.
+  function menuGroup(g) {
+    if (!focusOn() || g.id === 'start' || g.id === 'about') return g;
+    var items = [], any = false;
+    g.items.forEach(function (it) {
+      if (it.sub) { items.push(it); return; }
+      if (!it.href) return;
+      if (focusMatches(it.href)) { any = true; items.push(it); }
+      else if (focusNeutral(it.href) && !/^\/(install|on-this-device)\.html$/.test(fpath(it.href))) items.push(it);
+    });
+    if (!any) return null;
+    // a sub-menu left with no pages goes too (its "All …" link with it)
+    var out = [];
+    items.forEach(function (it, i) {
+      if (it.sub) { var nx = items[i + 1]; if (!nx || nx.sub) return; out.push({ sub: it.sub, all: it.all, allLabel: it.allLabel }); return; }
+      out.push(it);
+    });
+    var c = {}; Object.keys(g).forEach(function (k) { c[k] = g[k]; }); c.items = out;
+    return c;
+  }
+  function menuNow() { return MENU.map(menuGroup).filter(Boolean); }
+
   function el(tag, attrs, html) {
     var n = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) {
@@ -624,6 +725,12 @@
       if (isHere(it)) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); return li;
     }
+    // Start here opens with "Focus on what I'm learning" (the top bar) and a small, kind progress line
+    if (g.id === 'start') {
+      if (mode === 'drop') { var fli = el('li', { class: 'tol-focus-li' }); fli.appendChild(focusLine('drop')); ul.appendChild(fli); }
+      var pg = progress();
+      if (pg) ul.appendChild(el('li', { class: 'tol-prog-li' }, progressHTML(pg)));
+    }
     T.top.forEach(function (it) { ul.appendChild(link(it)); });
     var subBtns = [];
     T.subs.forEach(function (sm) {
@@ -667,7 +774,7 @@
   function buildIndex(opts) {
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
     // the menu panel shows the grouped MENU; the Contents page lists every page in SECTIONS
-    (opts.accordion ? MENU : SECTIONS).forEach(function (s) {
+    (opts.accordion ? menuNow() : SECTIONS).forEach(function (s) {
       if (opts.page && s.id === 'about' && !opts.all) return;
       if (opts.page && s.id === 'new' && opts.all) return; // the contents list names each page once, in its home section
       var sec;
@@ -728,7 +835,9 @@
   var panel, scrim, lastFocus, memberLink;
 
   // The sections shown in the top bar. Each opens a short list of its pages.
-  var RIBBON = MENU.filter(function (g) { return g.id !== 'about'; }).map(function (g) { return [g.id, g.name || g.title]; });
+  // (in Focus mode, only the sections with pages in your areas: see menuNow)
+  function ribbon() { return menuNow().filter(function (g) { return g.id !== 'about'; }).map(function (g) { return [g.id, g.name || g.title]; }); }
+  var ribbonHook = null;
   var openDrop = null;
 
   function closeDrop(refocus) {
@@ -740,7 +849,7 @@
   }
 
   function buildDrop(id, name, alignRight) {
-    var s = MENU.filter(function (x) { return x.id === id; })[0];
+    var s = menuGroup(MENU.filter(function (x) { return x.id === id; })[0]);
     var item = el('div', { class: 'tol-nav-item' });
     var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
     if (hereGroup && hereGroup.id === id) btn.setAttribute('aria-current', 'true');
@@ -796,6 +905,7 @@
     if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); });
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId, full: !!full }));
+    renderPanelFocus();
     if (!toSearch) { var q0 = panel.querySelector('.tol-find input'); if (q0 && q0.value) { q0.value = ''; runSearch(''); } }
     else { var q1 = panel.querySelector('.tol-find input'); if (q1 && q1.value) runSearch(q1.value); }
     scrim.hidden = false; panel.hidden = false;
@@ -858,11 +968,19 @@
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
     var FOLD = { read: 1, media: 2, new: 3, self: 4 };
-    RIBBON.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= RIBBON.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.appendChild(d); });
     // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
     var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
     if (current === '/en-espanol.html') esLink.setAttribute('aria-current', 'page');
     nav.appendChild(esLink);
+    // the section buttons (built again when Focus mode changes)
+    ribbonHook = function () {
+      closeDrop();
+      Array.prototype.forEach.call(nav.querySelectorAll('.tol-nav-item'), function (n) { n.remove(); });
+      var R = ribbon();
+      R.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= R.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.insertBefore(d, esLink); });
+      if (typeof barHeightHook === 'function') barHeightHook();
+    };
+    ribbonHook();
     bar.appendChild(nav);
 
     bar.appendChild(quietButton('bar'));
@@ -889,6 +1007,7 @@
     panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">Not safe at home?</a> <button type="button" data-tol-exit>Leave this site quickly</button>'));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
+    panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     panel.appendChild(buildIndex({ accordion: true }));
     // after the sections: where you left off, then settings in one button (Quiet mode, dark mode and the rest live there)
     panel.appendChild(el('div', { class: 'tol-panel-pickup', 'data-pickup': 'menu' }));
@@ -1705,6 +1824,7 @@
       '<ol class="tol-find-results" hidden></ol>');
     var input = box.querySelector('input'), note = box.querySelector('.tol-find-note'), list = box.querySelector('.tol-find-results'), timer = null;
     var shownFor = null;   // the words the list on screen is for
+    var searchAll = false; // in Focus mode: true once "Show everything" is pressed for these results
     runSearch = function (q, then) {
       q = String(q || '').trim();
       var idx = panel && panel.querySelector('.tol-index');
@@ -1721,6 +1841,16 @@
           return;
         }
         var hits = R.hits, used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
+        // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
+        // the rest wait behind "Show everything"
+        var outside = 0, focusNone = false;
+        if (focusOn()) {
+          var inF = hits.filter(function (h) { return h.p.u.charAt(0) === '#' || focusAllows(h.p.u); });
+          outside = hits.length - inF.length;
+          if (searchAll) hits = inF.concat(hits.filter(function (h) { return inF.indexOf(h) === -1; }));
+          else if (inF.length) hits = inF;
+          else if (outside) focusNone = true;
+        }
         if (idx) idx.hidden = !!hits.length;
         list.hidden = !hits.length;
         list.innerHTML = hits.map(function (h) {
@@ -1737,6 +1867,14 @@
         if (auto) note.appendChild(document.createTextNode('Showing results for “' + R.said + '” (you typed “' + q + '”). '));
         note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? 'The 25 best matches.' : hits.length + (hits.length === 1 ? ' result.' : ' results.')) : head));
         if (!hits.length || hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, 'Ask Professor Puddles')); }
+        if (outside) {
+          note.appendChild(document.createTextNode(focusNone ? ' Nothing in your focus matches, so here is everything. ' : searchAll ? ' Your focus first, then everything else. ' : ' Showing your focus (' + focusList() + '). '));
+          if (!focusNone) {
+            var fb = el('button', { type: 'button', class: 'tol-find-dym tol-find-focus', 'aria-pressed': String(searchAll) }, searchAll ? 'Only my focus' : 'Show everything (' + outside + ' more)');
+            fb.addEventListener('click', function () { searchAll = !searchAll; runSearch(input.value, function () { var b2 = note.querySelector('.tol-find-focus'); if (b2) b2.focus(); }); });
+            note.appendChild(fb);
+          }
+        }
         if (changed && !auto) {
           var dym = el('button', { type: 'button', class: 'tol-find-dym' }, 'Did you mean “' + esc(R.said) + '”?');
           dym.addEventListener('click', function () { input.value = R.said; runSearch(input.value); input.focus(); });
@@ -1756,7 +1894,7 @@
       if (what === 'palcam' && window.TOLPalCam) window.TOLPalCam.open({});
       if (what === 'print') setTimeout(function () { window.print(); }, 150);
     });
-    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { runSearch(input.value); }, 140); });
+    input.addEventListener('input', function () { searchAll = false; clearTimeout(timer); timer = setTimeout(function () { runSearch(input.value); }, 140); });
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
         e.preventDefault();

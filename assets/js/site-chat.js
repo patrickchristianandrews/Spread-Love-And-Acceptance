@@ -23,7 +23,7 @@
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages.'
+    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, or talk deep about the big questions.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -419,7 +419,7 @@
   ];
 
   // the greeting's chips: the usual ways in, and a way to just chat
-  var GREET_CHIPS = STARTERS.slice(0, 4).concat([{ label: 'Just chat', q: 'Let’s just chat' }]);
+  var GREET_CHIPS = STARTERS.slice(0, 3).concat([{ label: 'Just chat', q: 'Let’s just chat' }, { label: 'Talk deep', q: 'Talk deep' }]);
 
   // Topics this helper never takes on, however a word or two might overlap with the notes
   var OFF_TOPIC = /\b(car|cars|engine|tires?|tyres?|oil change|brakes?|mechanic|transmission|resumes?|cv|cover letter|job application|recipes?|bake|baking|coding|javascript|python|programming|homework|stocks?|crypto|bitcoin|forecast|football|basketball|baseball|soccer|movie times|flights?|hotels?|translate)\b/;
@@ -976,10 +976,13 @@
     // a feeling that belongs to someone else ("my partner is upset") isn't mine to reflect back
     var fMine = f.replace(/\b(my \w+|your \w+|his \w+|her \w+|their \w+|he|she|they|hes|shes|theyre)( is| are| was| were| gets| got| seems| feels| felt| looks)?( so| really| very| pretty| kind of| a bit)? (upset|mad|angry|annoyed|irritated|frustrated|hurt|sad|furious|fed up|tired|exhausted|worried|anxious|stressed)\b/g, ' ');
     for (var j = 0; j < FEELS.length; j++) { var fm = FEELS[j][0].exec(fMine); if (fm) { feel = typeof FEELS[j][1] === 'function' ? FEELS[j][1](fm) : FEELS[j][1]; break; } }
+    // "the three of us", "my partners", "my housemates": more than one other person, so never "the other person" or "both of you"
+    if ((!who || who === 'other') && !noun && /\b(three|four|five|six|seven|eight) of us\b|\bmy (partners|metamours|housemates|flatmates|roommates)\b|\bthe (others|rest of them|rest of the house)\b|\beveryone else\b|\bour triad\b/.test(f)) { who = 'other'; noun = '#group'; }
     return { issue: best, score: bs, who: who, noun: noun, personal: personal || pronoun, pronoun: pronoun, actor: actor, feel: feel };
   }
   function whoCtx(who, noun) {
     var W = IDX.sit.who[who] || IDX.sit.who.other;
+    if (noun === '#group') return { them: 'the others', they: 'they', their: 'their', who: who, W: W };
     var them = noun ? 'your ' + noun.replace(/^(my|our|the|a|an)\s+/, '').replace(/\b(mother|father|sister|brother|son|daughter|parent)(s?) ?in ?law(s?)\b/g, function (m, a, b, c) { return a + (b || '') + '-in-law' + (c || ''); }) : W.them;
     return { them: them, they: 'they', their: 'their', who: who, W: W };
   }
@@ -1685,15 +1688,30 @@
       if (qs.length) {
         var tt = tokens(it[0]), sx = tokens(it[2] + ' ' + it[4].map(function (k) { return (R.tags[k] || '') + ' ' + k; }).join(' '));
         var has = function (list, q) { if (list.indexOf(q) >= 0) return true; if (q.length < 5) return false; var p5 = q.slice(0, 5); for (var z = 0; z < list.length; z++) if (list[z].slice(0, 5) === p5) return true; return false; };
-        qs.forEach(function (q) { if (has(tt, q)) sc += 3; if (has(sx, q)) sc += 1.5; });
+        var hitN = 0;
+        qs.forEach(function (q) { var h1 = has(tt, q), h2 = has(sx, q); if (h1) sc += 3; if (h2) sc += 1.5; if (h1 || h2) hitN++; });
         if (!sc) return;
+        // a long topic ("raising a child in two religions") needs most of its words, not just "child"
+        if (qs.length >= 3 && hitN * 2 <= qs.length) return;
       } else sc = Math.random();
       if (seen[i]) sc -= 100;
       scored.push([sc + Math.random() * 0.5, i]);
     });
     scored.sort(function (a, b) { return b[0] - a[0]; });
     var pick = scored.filter(function (x) { return x[0] > -50; }).slice(0, 3);
-    if (!pick.length && qs.length) return null;
+    if (!pick.length && qs.length) {
+      // nothing hand-picked on this, but a page on this site covers it: say so honestly, and offer the page
+      var site0 = null;
+      (IDX.first || []).some(function (c) {
+        if (!c.newTopic || !CV_PERSONAL[c.id] || !c.links || !c.links.length || !c.re.test(aq.f || '') || (c.notRe && c.notRe.test(aq.f || ''))) return false;
+        site0 = safeLinks(c.links)[0] || null; return !!site0;
+      });
+      if (!site0) return null;
+      state.last = { kind: 'card', card: 'reading', q: 'articles', topic: 'articles', u: '/reading.html' };
+      return { blocks: [{ k: 'p', x: 'I don’t have hand-picked articles on “' + aq.topic + '” yet. This site has a page on it, though:' },
+        { k: 'links', x: [['On this site: ' + site0[0], site0[1]], ['Browse every article', '/reading.html']] }],
+        chips: [{ label: 'Find me a good article', q: 'Find me a good article' }], kind: 'card', id: 'reading', noBrief: true };
+    }
     if (!pick.length) pick = scored.slice(0, 3);
     pick.forEach(function (x) { seen[x[1]] = 1; });
     state.art = { topic: aq.topic, seen: seen };

@@ -32,6 +32,186 @@
   var KEY = 'tol-lemonade-quick', VIEW = 'tol-lemonade-view', MAX_P = 6;
   var COLORS = ['#BFE3CF', '#F8DC6E', '#F2B8C6', '#B9D3F0', '#D9C4F0', '#F6C99B'];
 
+  /* ---------- the result as a picture (window.TOLLemonadeCard, used by the full stand too) ----------
+     A tidy card drawn on a canvas, here on this device: names, who carries what in plain words, the
+     thinking work on its own line, the site's name. Never a score or a verdict. "Save image" (a PNG),
+     "Copy link" (the page's own hash link), "Share" (TOLShareKit.shareText, else the device's share menu,
+     with the picture where it takes files, else a copy) and "Save as PDF or print". Nothing is uploaded.
+     card = { title, sub, people: [{ n, c }], rows: [{ h, t, c, hl }], notes: [..], ask } */
+  var Card = (function () {
+    var SERIF = 'Georgia, "Times New Roman", serif', SANS = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+    var INK = '#2B2620', SOFT = '#5A5346';
+    function wrapText(ctx, text, maxW) {
+      var out = [], line = '';
+      String(text || '').split(/\s+/).forEach(function (w) {
+        if (!w) return;
+        var t = line ? line + ' ' + w : w;
+        if (ctx.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
+      });
+      if (line) out.push(line);
+      return out;
+    }
+    function rr(ctx, x, y, w, h, r) {
+      ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+    }
+    function draw(d) {
+      var W = 1080, c = document.createElement('canvas'); c.width = W; c.height = 2600;
+      var ctx = c.getContext('2d'), X = 110, MW = W - 2 * X, y = 0;
+      ctx.fillStyle = '#FFF8E1'; ctx.fillRect(0, 0, W, c.height);
+      // the awning
+      var sw = W / 12;
+      for (var k = 0; k < 12; k++) {
+        ctx.fillStyle = k % 2 ? '#FFFDF6' : '#F8DC6E'; ctx.fillRect(k * sw, 0, sw, 64);
+        ctx.beginPath(); ctx.arc(k * sw + sw / 2, 64, sw / 2, 0, Math.PI); ctx.fill();
+      }
+      y = 64 + sw / 2 + 50;
+      var top = y - 20;
+      ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+      var ops = [];   // the panel goes behind the words, so the words are drawn after it
+      function text(t, font, color, lh, gap) {
+        ctx.font = font;
+        wrapText(ctx, t, MW).forEach(function (l) { y += lh; ops.push([l, font, color, X, y]); });
+        y += gap || 0;
+      }
+      y += 30;
+      text(d.title || 'Who does what at home', '700 62px ' + SERIF, INK, 70, 6);
+      if (d.sub) text(d.sub, '400 32px ' + SANS, SOFT, 42, 4);
+      if (d.people && d.people.length) {
+        y += 22; ctx.font = '600 34px ' + SANS;
+        var x = X;
+        d.people.forEach(function (p) {
+          var w = ctx.measureText(p.n).width + 66;
+          if (x + w > X + MW && x > X) { x = X; y += 54; }
+          ops.push(['dot', p.c, x + 16, y + 24]);
+          ops.push([p.n, '600 34px ' + SANS, INK, x + 42, y + 36]);
+          x += w;
+        });
+        y += 60;
+      }
+      y += 16;
+      (d.rows || []).forEach(function (r) {
+        var y0 = y; y += 22;
+        var keep = ops.length;
+        text(r.h, '600 30px ' + SANS, SOFT, 38, 4);
+        text(r.t, '400 46px ' + SERIF, INK, 56, 0);
+        y += 26;
+        ops.splice(keep, 0, ['row', y0, y - y0, r.c, !!r.hl]);
+        y += 16;
+      });
+      if (d.notes && d.notes.length) { y += 8; d.notes.forEach(function (n) { text(n, '400 31px ' + SANS, INK, 44, 14); }); }
+      if (d.ask) { y += 14; text(d.ask, 'italic 400 40px ' + SERIF, INK, 52, 0); }
+      y += 54;
+      var bottom = y;
+      // the panel
+      ctx.fillStyle = '#FFFDF6'; rr(ctx, 60, top, W - 120, bottom - top, 28); ctx.fill();
+      ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.stroke();
+      ops.forEach(function (o) {
+        if (o[0] === 'dot') { ctx.beginPath(); ctx.arc(o[2], o[3], 15, 0, Math.PI * 2); ctx.fillStyle = o[1] || '#E7DDC0'; ctx.fill(); ctx.strokeStyle = 'rgba(43,38,32,.35)'; ctx.lineWidth = 2; ctx.stroke(); return; }
+        if (o[0] === 'row') {
+          ctx.fillStyle = o[4] ? '#FFF3C4' : '#FBF5E3'; rr(ctx, X - 24, o[1], MW + 48, o[2], 18); ctx.fill();
+          if (o[4]) { ctx.strokeStyle = '#E2C766'; ctx.lineWidth = 2; ctx.stroke(); }
+          if (o[3] === 'both') {
+            ctx.save(); rr(ctx, X - 24, o[1], 14, o[2], 7); ctx.clip();
+            for (var s = 0; s < o[2]; s += 10) { ctx.fillStyle = (s / 10) % 2 ? '#C9B98E' : '#F3EBD2'; ctx.fillRect(X - 24, o[1] + s, 14, 10); }
+            ctx.restore();
+          } else if (o[3]) { ctx.fillStyle = o[3]; rr(ctx, X - 24, o[1], 14, o[2], 7); ctx.fill(); }
+          return;
+        }
+        ctx.font = o[1]; ctx.fillStyle = o[2]; ctx.fillText(o[0], o[3], o[4]);
+      });
+      // the foot
+      y = bottom + 66;
+      ctx.font = '600 30px ' + SANS; ctx.fillStyle = INK; ctx.textAlign = 'center';
+      ctx.fillText('Spread Love & Acceptance', W / 2, y);
+      ctx.font = '400 26px ' + SANS; ctx.fillStyle = SOFT;
+      ctx.fillText('The Lemonade Stand · a way to talk, not a score', W / 2, y + 40);
+      ctx.fillText('spreadloveandacceptance.com', W / 2, y + 78);
+      var H = Math.max(1080, Math.ceil(y + 120));
+      var out = document.createElement('canvas'); out.width = W; out.height = H;
+      var o2 = out.getContext('2d'); o2.fillStyle = '#FFF8E1'; o2.fillRect(0, 0, W, H); o2.drawImage(c, 0, 0);
+      return out;
+    }
+    function altText(d) {
+      var t = [d.title, d.sub, d.people && d.people.length ? d.people.map(function (p) { return p.n; }).join(', ') : ''];
+      (d.rows || []).forEach(function (r) { t.push(r.h + ': ' + r.t); });
+      return t.concat(d.notes || [], [d.ask, 'Spread Love & Acceptance']).filter(Boolean).join('. ').replace(/([.?!:])\./g, '$1');
+    }
+    function copyIt(text) {
+      if (window.TOLShare && window.TOLShare.copy) { try { return Promise.resolve(window.TOLShare.copy(text)); } catch (e) {} }
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return false; });
+      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+      return Promise.resolve(ok);
+    }
+    // box: an empty element; o = { card(), link() → url or Promise, text(), print(), title, file }
+    function panel(box, o) {
+      var p = { box: box, o: o, blob: null, url: '', link: '', seq: 0, open: false };
+      box.innerHTML = '<h4>Your result as a picture</h4>' +
+        '<img class="ls-card-img" alt="">' +
+        '<div class="ls-card-btns">' +
+        '<button type="button" class="is-main" data-card="save">Save image</button>' +
+        '<button type="button" data-card="link">Copy link</button>' +
+        '<button type="button" data-card="share">Share</button>' +
+        '<button type="button" data-card="print">Save as PDF or print</button></div>' +
+        '<p class="ls-card-note">Made here, on this device. Nothing is uploaded: the picture and the link stay with you until you send them.</p>' +
+        '<p class="ls-card-st" role="status" aria-live="polite"></p>';
+      var img = box.querySelector('img'), st = box.querySelector('.ls-card-st'), stT = 0;
+      function say(m) { st.textContent = m; clearTimeout(stT); stT = setTimeout(function () { st.textContent = ''; }, 7000); }
+      p.refresh = function () {
+        if (!p.open) return;
+        var d = o.card(); if (!d) return;
+        var cv = draw(d), my = ++p.seq;
+        img.src = cv.toDataURL('image/png'); img.alt = 'Picture of your result: ' + altText(d);
+        p.blob = null;
+        if (cv.toBlob) cv.toBlob(function (b) { if (my === p.seq) p.blob = b; }, 'image/png');
+        // the link is made ahead of time, so "Share" still counts as the tap that asked for it
+        Promise.resolve(o.link ? o.link() : '').then(function (u) { if (my === p.seq) p.link = u || ''; }, function () {});
+      };
+      var refT = 0;
+      p.later = function () { if (!p.open) return; clearTimeout(refT); refT = setTimeout(p.refresh, 250); };
+      p.show = function (on) { p.open = on; box.hidden = !on; if (on) p.refresh(); };
+      function file() { return o.file || 'lemonade-stand-result.png'; }
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-card]'); if (!b) return;
+        var k = b.getAttribute('data-card');
+        if (k === 'save') {
+          var a = document.createElement('a'); a.download = file();
+          var obj = p.blob && window.URL && URL.createObjectURL ? URL.createObjectURL(p.blob) : '';
+          a.href = obj || img.src; document.body.appendChild(a); a.click(); a.remove();
+          if (obj) setTimeout(function () { URL.revokeObjectURL(obj); }, 4000);
+          say('Saved to your downloads as ' + file() + '. It stays on your device until you share it.');
+        } else if (k === 'link') {
+          Promise.resolve(p.link || (o.link ? o.link() : '')).then(function (u) {
+            if (!u) { say('There’s no link yet. Fill in a little more first.'); return; }
+            copyIt(u).then(function (ok) { say(ok ? 'Link copied. It opens the Lemonade Stand with this in it. Nothing is uploaded: it rides inside the link.' : 'Couldn’t copy here. Try “Share” instead.'); });
+          });
+        } else if (k === 'share') {
+          var text = o.text ? o.text() : altText(o.card() || {}), url = p.link, title = o.title || 'Our Lemonade Stand';
+          if (window.TOLShareKit && window.TOLShareKit.shareText) {
+            try { window.TOLShareKit.shareText({ title: title, text: text, url: url || false, heading: 'Share your result' }); return; } catch (err) {}
+          }
+          if (navigator.share) {
+            var d = { title: title, text: text + (url ? '\n' + url : '') }, f = null;
+            try { f = p.blob && typeof File === 'function' ? new File([p.blob], file(), { type: 'image/png' }) : null; } catch (err) { f = null; }
+            if (f && navigator.canShare && navigator.canShare({ files: [f] })) d.files = [f];
+            navigator.share(d).then(function () { say('Shared.'); }, function (err) {
+              if (err && err.name === 'AbortError') return;
+              copyIt(d.text).then(function (ok) { say(ok ? 'Copied instead. Paste it wherever you like.' : 'Couldn’t share here. Try “Save image”.'); });
+            });
+            return;
+          }
+          copyIt(text + (url ? '\n' + url : '')).then(function (ok) { say(ok ? 'Sharing isn’t available here, so the words and link are copied. Use “Save image” for the picture.' : 'Couldn’t share here. Try “Save image”.'); });
+        } else if (k === 'print') {
+          if (o.print) o.print(); else window.print();
+        }
+      });
+      return p;
+    }
+    return { draw: draw, panel: panel, altText: altText };
+  })();
+  window.TOLLemonadeCard = Card;
+
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
 
@@ -495,6 +675,7 @@
     if (out.getAttribute('data-h') !== html) { out.setAttribute('data-h', html); out.innerHTML = html; }
     var ill = $('lq-ill'); if (ill) ill.setAttribute('aria-pressed', String(!!q.ill));
     renderCompare(); renderSend(); renderMini();
+    if (cardP) { if (!all.n && cardP.open) cardP.show(false); else cardP.later(); }
     document.querySelectorAll('#lq-list .lq-row').forEach(paintRow);
   }
   function ansWords(x) {
@@ -598,6 +779,7 @@
         html += '<button type="button" class="' + (html ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
       });
       html += '<button type="button" data-lq-chat>Copy for the group chat</button>';
+      html += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">Share your result as an image</button>';
       var next = nextTurn();
       if (next >= 0) html += '<button type="button" data-lq-turn="' + next + '">' + esc('Pass this phone to ' + (typed(next) || (q.people.length === 2 ? 'them' : 'Person ' + (next + 1)))) + '</button>';
     }
@@ -649,7 +831,7 @@
       var f = document.querySelector('#lq-list .lq-w'); if (f) f.focus({ preventScroll: true });
     }
   });
-  function chatText() {
+  function chatText(noLink) {
     var all = tally(q.me), lines = [];
     var whoView = multiView() && typed(q.me) ? ' (' + typed(q.me) + '’s view)' : '';
     lines.push('Our quick look at who does what at home' + whoView + '. A way to talk, not a score:');
@@ -668,10 +850,58 @@
     if (q.ill || (all.n && workLeans())) lines.push('• Fair isn’t always 50/50 for us: long hours, nights or illness count too.');
     lines.push('Does this match how it feels to everyone?');
     if (!all.n) lines = ['Our quick look at who does what at home. Tap who mostly does each job, as you see it:'];
-    lines.push('', 'Add your own view (nothing is uploaded): ' + linkFor(-1));
+    if (!noLink) lines.push('', 'Add your own view (nothing is uploaded): ' + linkFor(-1));
     return lines.join('\n');
   }
   function chatName(i) { return typed(i) || (i === q.me ? 'Me' : 'Person ' + (i + 1)); }
+
+  /* ---------- the result as a picture, and printed ---------- */
+  var cardP = null;
+  function cardName(i) { return typed(i) || nm(i); }
+  function cardLean(t) {
+    if (!t.n) return null;
+    var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
+    if (alone && max > t.both) return { t: (max / t.n >= 0.6 ? 'Mostly ' : 'A little more often ') + cardName(top), c: COLORS[top] };
+    if (t.both > 0 && t.both >= max) return { t: 'Mostly shared', c: 'both' };
+    return { t: 'Spread between ' + (q.people.length === 2 ? 'the two of us' : 'all of us'), c: 'both' };
+  }
+  function cardData() {
+    var all = tally(q.me); if (!all.n) return null;
+    var rows = [], notes = [];
+    var HEADS = { home: 'Everyday jobs', think: 'Planning and remembering (the thinking work)', work: 'Paid work and nights' };
+    SECTIONS.forEach(function (s) {
+      var t = tally(q.me, s[0]), l = cardLean(t); if (!l) return;
+      rows.push({ h: HEADS[s[0]], t: l.t, c: l.c, hl: s[0] === 'think' });
+    });
+    var th = tally(q.me, 'think'), tl = lean(th);
+    if (tl && tl.one != null && th.n >= 2) notes.push('The thinking work is easy to miss, because nobody sees it happen.');
+    shownOthers().forEach(function (o) {
+      var mine = q.ans[q.me] || {}, ot = q.ans[o] || {}, same = 0, diff = 0;
+      q.list.forEach(function (id) { if (mine[id] == null || ot[id] == null) return; if (mine[id] === ot[id]) same++; else diff++; });
+      if (!same && !diff) return;
+      var whoW = q.people.length === 2 ? 'We' : cardName(q.me) + ' and ' + cardName(o);
+      notes.push(diff ? whoW + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + ' and see ' + diff + ' differently. Those are the good ones to talk about.' : whoW + ' see it the same way.');
+    });
+    if (q.ill || workLeans()) notes.push('Fair isn’t always 50/50: long hours, nights or illness count too.');
+    return {
+      title: 'Who does what at home',
+      sub: multiView() && typed(q.me) ? 'As ' + typed(q.me) + ' sees it' : 'Our quick look',
+      people: q.people.map(function (_, i) { return { n: cardName(i), c: COLORS[i] }; }),
+      rows: rows, notes: notes,
+      ask: 'Does this match how it feels to ' + (q.people.length === 2 ? 'both of us' : 'all of us') + '?'
+    };
+  }
+  function printQuick() {
+    var h = $('lq-print-head');
+    if (h) { var dt = ''; try { dt = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) {} h.textContent = 'Spread Love & Acceptance · The Lemonade Stand, quick look' + (dt ? ' · ' + dt : ''); }
+    try { window.print(); } catch (e) {}
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-lq-card]'); if (!b || !cardP) return;
+    cardP.show(!cardP.open); renderSend();
+    var box = $('lq-card');
+    if (cardP.open && box) { goTo(box, 'nearest'); var f = box.querySelector('[data-card="save"]'); if (f) f.focus({ preventScroll: true }); }
+  });
 
   /* ---------- opening a link: someone's quick look ---------- */
   function decode(h) {
@@ -819,6 +1049,8 @@
     if (hh && hh.people && hh.people.length >= 2 && q.people.every(function (p) { return !String(p || '').trim(); }) && !Object.keys(q.ans).some(function (p) { return hasAny(+p); })) {
       q.people = hh.people.slice(0, MAX_P).map(function (p) { return String(p || '').slice(0, 40); });
     }
+    var cb = $('lq-card');
+    if (cb) cardP = Card.panel(cb, { card: cardData, link: function () { return linkFor(-1); }, text: function () { return chatText(true); }, print: printQuick, title: 'Our quick look', file: 'who-does-what.png' });
     ready = true;
     renderAll();
     if (/^#q=/.test(location.hash || '')) receive(location.hash);
@@ -849,7 +1081,7 @@
       }
       delete er.dataset.armed; er.textContent = 'Erase the quick look';
       try { localStorage.removeItem(KEY); } catch (e) {}
-      q = fresh(); undoQ = null; renderAll();
+      q = fresh(); undoQ = null; if (cardP) cardP.show(false); renderAll();
       status('Erased. Nothing from the quick look is kept on this device now.');
     });
     document.addEventListener('tol-lemonade-erased', function () { q = fresh(); undoQ = null; renderAll(); });

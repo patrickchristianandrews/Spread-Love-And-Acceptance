@@ -1,0 +1,37 @@
+/* share-kit.css: the extra parts of the share sheet and the small "Share this line" buttons.
+   Loaded by /assets/js/share-kit.js (a <link>, so it works under the workpaper pages' strict rules). */
+
+/* ---- in the share sheet ---- */
+.tsk-kit{ margin:0 0 .3rem; }
+.tsk-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.5rem 0 0; }
+.tsk-acts[hidden], .tsk-qr[hidden]{ display:none; }
+.tsk-native{ grid-column:1 / -1; }
+.tsk-toggle[aria-expanded="true"]{ background:#EFE8FA; border-color:#B9A8D6; }
+.tsk-places{ padding:.5rem; border:1px dashed #D9C8F0; border-radius:16px; }
+.tsk-qr{ margin:.6rem 0 0; text-align:center; }
+.tsk-qr-box{ display:inline-block; padding:.4rem; background:#fff; border:1.5px solid #D9C8F0; border-radius:14px; line-height:0; }
+.tsk-qr-img{ display:block; width:min(220px, 62vw); height:auto; }
+.tsk-qr-note{ margin:.45rem auto 0; max-width:22rem; font-size:.88rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+
+/* ---- "Share this line" ---- */
+.tsk-line{ position:relative; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box;
+  width:1.5em; height:1.5em; margin:0 0 0 .3em; padding:0; vertical-align:-.35em; line-height:1;
+  font-size:1em; color:#6B5A8E; background:transparent; border:1px solid transparent; border-radius:50%;
+  cursor:pointer; opacity:.75; transition:opacity .15s, background-color .15s; }
+.tsk-line svg{ width:.95em; height:.95em; pointer-events:none; }
+/* a bigger place to tap than the icon itself, without taking any room */
+.tsk-line::after{ content:""; position:absolute; inset:-.5em; border-radius:50%; }
+.tsk-line:hover{ opacity:1; background:#F3EEF9; border-color:#D9C8F0; }
+.tsk-line:focus-visible{ opacity:1; outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+
+/* with a mouse: there all along (so nothing moves), and seen when you point at the line or tab to it */
+@media (hover:hover) and (pointer:fine){
+  .tsk-line{ opacity:0; }
+  .tsk-has:hover > .tsk-line, .tsk-line:focus-visible, .tsk-line:hover{ opacity:1; }
+}
+
+/* Quiet mode, print, and the page's own "no sharing" choice */
+html.tol-quiet .tsk-line, body[data-no-share] .tsk-line{ display:none; }
+@media print{ .tsk-line, .tsk-kit, .tsk-native{ display:none !important; } }
+@media (prefers-reduced-motion: reduce){ .tsk-line{ transition:none; } }
+html.tol-still .tsk-line{ transition:none; }

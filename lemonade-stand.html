@@ -548,7 +548,33 @@
   @media (prefers-reduced-motion: reduce){ .lq-seg{ transition:none; } }
   html.tol-quiet .lq-seg{ transition:none; }
   html.tol-quiet .lq-mini-sum{ box-shadow:none; }
-  @media print{ #quick, .ls-deep-bar{ display:none !important; } }
+  @media print{ body:not([data-ls-view="quick"]) #quick, .ls-deep-bar{ display:none !important; } }
+  /* the result as a picture, a link or a printout (the quick look and the full stand share these) */
+  .ls-card{ margin:.8rem 0 0; padding:.8rem; border-radius:14px; background:#FFF8DB; border:1px solid #EAD9A0; }
+  .ls-card[hidden]{ display:none !important; }
+  .ls-card h4{ margin:0 0 .3rem !important; font-size:1rem; }
+  .ls-card-img{ display:block; width:100%; max-width:22rem; height:auto; margin:.4rem 0 .5rem; border-radius:10px; border:1px solid #E6D8AC; background:#FFFDF6; }
+  .ls-card .ls-card-btns{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .ls-card .ls-card-btns button{ font:inherit; font-size:.95rem; min-height:44px; margin:0 !important; padding:.4rem .9rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
+  .ls-card .ls-card-btns button:hover{ background:#F8E08A; }
+  .ls-card .ls-card-btns button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ls-card .ls-card-btns .is-main{ background:#F8E08A; font-weight:600; }
+  .ls-card-note{ font-size:.86rem; color:var(--ink-soft); margin:.4rem 0 0 !important; }
+  .ls-card-st{ min-height:1.2em; font-size:.9rem; color:var(--credit); margin:.3rem 0 0 !important; }
+  .lq-print-only{ display:none; }
+  /* printing (or "Save as PDF") from the quick look: just the result */
+  @media print{
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) > *:not(main),
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) main > *:not(#quick),
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #quick > *:not(.lq-grid),
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) .lq-grid > *:not(#lq-res),
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #lq-res :is(button, .lq-tools, .lq-linkbox, .lq-status, .lq-next, .ls-card, .lq-mini-sum){ display:none !important; }
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #quick{ border:0 !important; background:none !important; box-shadow:none !important; padding:0 !important; margin:0 !important; }
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) .lq-grid{ display:block !important; margin:0 !important; }
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #lq-res{ position:static !important; max-height:none !important; overflow:visible !important; border:0 !important; padding:0 !important; font-size:11.5pt; }
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) .lq-print-only{ display:block !important; }
+    .lq-bar, .lq-seg, .lq-key li::before, .lq-cmpbox, .lq-fair{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -615,11 +641,13 @@
       </details>
     </div>
     <section class="lq-res" id="lq-res" aria-labelledby="lq-res-h" tabindex="-1">
+      <p class="lq-print-only" id="lq-print-head">Spread Love &amp; Acceptance &middot; The Lemonade Stand, quick look</p>
       <h3 id="lq-res-h">How it looks</h3>
       <div id="lq-out" aria-live="polite"></div>
       <button type="button" class="lq-toggle" id="lq-ill" aria-pressed="false">Someone works long hours or is ill</button>
       <div id="lq-cmp"></div>
       <div class="lq-tools" id="lq-send"></div>
+      <div class="ls-card" id="lq-card" role="region" aria-label="Your result as a picture" hidden></div>
       <div class="lq-linkbox" id="lq-linkbox" hidden>
         <label class="lq-mini" for="lq-link">The link (nothing is uploaded; your answers ride inside it):</label>
         <input type="text" id="lq-link" readonly>
@@ -902,9 +930,11 @@
     <div class="ls-tools">
       <button type="button" id="copy-chat" class="group-only">Copy for the group chat</button>
       <button type="button" id="copy-result">Copy the result</button>
-      <button type="button" id="print-result">Print a clean summary</button>
+      <button type="button" id="print-result">Save as PDF or print</button>
       <button type="button" id="share-result">Share</button>
+      <button type="button" id="card-result" aria-expanded="false" aria-controls="ls-card">Share your result as an image</button>
     </div>
+    <div class="ls-card" id="ls-card" role="region" aria-label="Your result as a picture" hidden></div>
     <div class="ls-suite group-only">
       <div class="ls-tools"><button type="button" id="to-suite" class="ls-main-btn">Use this in my Workpaper Suite</button></div>
       <p class="ls-mini">Opens the Workpaper Suite with your names, jobs and hours filled in. Nothing is uploaded: it travels in the page address, after the &ldquo;#&rdquo;.</p>

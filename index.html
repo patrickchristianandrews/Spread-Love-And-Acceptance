@@ -86,6 +86,22 @@
   .read .hh-wx-main{ font-family:"Fraunces", Georgia, serif; font-weight:700; font-size:1.2rem; line-height:1.2; }
   .read .hh-wx-sub{ font-size:.92rem; line-height:1.35; }
   .read .hh-wx-go{ font-size:1.4rem; font-weight:700; }
+  /* the first screen's one-line "what this is", then three plain ways in (one per reason people come) */
+  .read .hh-lede .hh-pos{ display:block; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.16rem; line-height:1.35; color:var(--ink, #2B2620); }
+  .read .hh-lede .hh-sub{ display:block; margin-top:.2rem; font-size:.95rem; line-height:1.5; color:var(--ink-soft, #5A5346); }
+  .read .hh-sub a{ color:inherit; font-weight:600; text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+  .read .hh .hh-go-h{ margin:0 0 .5rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.3; color:var(--ink, #2B2620); }
+  .read .hh .hh-go li{ display:flex; flex-direction:column; gap:.3rem; }
+  .read .hh .hh-go li > a.hh-card{ flex:1 1 auto; }
+  .read a.hh-also{ align-self:flex-start; display:inline-block; box-sizing:border-box; min-height:36px; padding:.45rem .3rem .3rem; font-size:.9rem; font-weight:600; line-height:1.3; color:#2B5B8C;
+    text-decoration:underline; text-decoration-color:#BFD2E6; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+  .read a.hh-also::after{ content:"\a0\2192"; font-weight:400; }
+  .read a.hh-also:hover{ text-decoration-color:currentColor; }
+  .read a.hh-also:focus-visible, .read .hh-ten a:focus-visible, .read .hh-sub a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:4px; }
+  .read .hh .hh-ten{ margin:.1rem 0 1rem; font-size:.95rem; line-height:1.5; color:var(--ink-soft, #5A5346); }
+  .read .hh-ten a{ display:inline-flex; align-items:center; min-height:36px; padding:.1rem .8rem; border-radius:999px; font-weight:600; color:#4E3F6B; background:#F4ECFB; border:1px solid #D9C8F0; text-decoration:none; }
+  .read .hh-ten a:hover{ background:#EADCF8; }
+  html.tol-quiet .read .hh-ten a{ background:none; border:0; padding:0; text-decoration:underline; }
   .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.8rem; margin:0 0 1rem; padding:0; list-style:none; }
   .read .hh .hh-go li{ margin:0; padding:0; width:auto; }
   .read .hh-go li::before, .read .hh-more li::before{ content:none; }
@@ -94,8 +110,9 @@
     box-shadow:0 10px 24px -16px rgba(78,63,107,.55), 0 1px 2px rgba(78,63,107,.06); }
   .read a.hh-card.is-main{ background:linear-gradient(140deg, #5B3F82 0%, #2B5B8C 100%); border-color:transparent; color:#FFFDF7; box-shadow:0 14px 30px -14px rgba(43,91,140,.7); }
   .read .hh-card-i{ display:grid; place-items:center; flex:0 0 auto; width:2.5rem; height:2.5rem; border-radius:14px; font-size:1.35rem; line-height:1; background:#F4ECFB; }
+  .read .hh-go li:nth-child(1) .hh-card-i{ background:#E3F2E7; }
   .read .hh-go li:nth-child(2) .hh-card-i{ background:#FFF0D9; }
-  .read .hh-go li:nth-child(3) .hh-card-i{ background:#E3F2E7; }
+  .read .hh-go li:nth-child(3) .hh-card-i{ background:#F4ECFB; }
   .read a.hh-card.is-main .hh-card-i{ background:rgba(255,255,255,.18); }
   .read .hh-card-b{ display:flex; flex-direction:column; gap:.2rem; min-width:0; }
   .read .hh-card-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; line-height:1.2; }
@@ -136,7 +153,13 @@
     .read a.hh-card{ flex-direction:row; align-items:center; gap:.8rem; min-height:56px; padding:.7rem .9rem; }
     .read .hh-card-i{ width:2.3rem; height:2.3rem; font-size:1.2rem; border-radius:12px; }
     .read .hh-card-t{ font-size:1.08rem; }
-    .read .hh-lede{ font-size:1.06rem; margin-bottom:1.1rem; }
+    .read .hh-lede{ font-size:1.06rem; margin-bottom:1rem; }
+    .read .hh-lede .hh-pos{ font-size:1.08rem; }
+    .read .hh-lede .hh-sub{ font-size:.9rem; }
+    .read .hh .hh-go li{ gap:.1rem; }
+    .read a.hh-also{ min-height:32px; padding:.3rem .3rem .2rem; font-size:.86rem; }
+    .read .hh .hh-go li > a.hh-card{ padding:.6rem .8rem; }
+    .read .hh-card-n{ font-size:.86rem; line-height:1.35; }
     .read .hh .hh-for{ margin-bottom:1rem; font-size:.88rem; line-height:1.7; }
     .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
     .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
@@ -550,8 +573,15 @@
   <p class="hh-brand"><span class="hh-heart" aria-hidden="true">&#9825;</span> Spread Love &amp; Acceptance</p>
   <p class="hh-kick"><span>Free</span> <span>Private</span> <span>No sign-up</span> <a class="hh-es" href="/en-espanol.html" lang="es" hreflang="es">En español</a></p>
   <h1 id="hero-h" class="hh-h1">Less keeping score.<br> <span class="hh-accent">More being on the <span class="hh-nw">same side.</span></span></h1>
-  <p class="hh-lede">Kind, practical help for the people you share life with, or just for you. Most tools take a minute or two.</p>
-  <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>.</p>
+  <p class="hh-lede"><span class="hh-pos">Free tools to share life fairly and calm hard moments.</span> <span class="hh-sub">Built on <a href="/how-it-works.html">The Objective Ledger</a>: a simple, fair way to see who carries what.</span></p>
+  <h2 class="hh-go-h" id="hh-go-h">What brings you here?</h2>
+  <ul class="hh-go" aria-labelledby="hh-go-h">
+    <li><a class="hh-card" href="/ladder.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">I need calm right now</span><span class="hh-card-n">Where am I right now? A one-minute check, then one calm step that fits.</span></span></a><a class="hh-also" href="/upset-right-now.html">Upset right now? Five minutes to pause</a></li>
+    <li><a class="hh-card" href="/lemonade-stand.html"><span class="hh-card-i" aria-hidden="true">&#127819;</span><span class="hh-card-b"><span class="hh-card-t">I want to share the load or sort out a conflict</span><span class="hh-card-n">Chores, bills and who does what, added up fairly with no blame.</span></span></a><a class="hh-also" href="/how-to-stop-fighting-with-your-partner.html">Talk it through: seven calm steps</a></li>
+    <li><a class="hh-card" href="/book/topic-start-here.html"><span class="hh-card-i" aria-hidden="true">&#128214;</span><span class="hh-card-b"><span class="hh-card-t">I want to learn how it all works</span><span class="hh-card-n">The book at a glance: the whole idea in plain words.</span></span></a><a class="hh-also" href="/book/preface.html">Or start the book at the beginning</a></li>
+  </ul>
+  <p class="hh-ten">Not sure? <a href="/start-in-10-minutes.html">Start in 10 minutes</a>: one short, guided path. No sign-up.</p>
+  <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>, or just for you. Most tools take a minute or two.</p>
   <div class="hh-pud">
     <span class="hh-pud-art"><svg viewBox="-4 -14 88 92" width="48" height="48" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg></span>
     <p class="hh-pud-t"><strong>Meet Professor Puddles.</strong> Ask anything in your own words<span class="hh-pud-x">, about your relationship, family, roommates or work,</span> and get kind, practical steps. Small talk with him, talk deep, or ask him to make you an infographic. Private: nothing you type leaves your device.</p>
@@ -566,7 +596,6 @@
     }).observe(card);
   })();
   </script>
-  <h2 class="sr-only">Where to start</h2>
   <div class="hh-time" data-cb-time>
     <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
     <div class="hh-time-opts" role="group" aria-labelledby="hh-time-q">
@@ -578,11 +607,6 @@
     </div>
     <div class="hh-time-plan" id="hh-time-plan" data-cb-plan aria-live="polite" hidden></div>
   </div>
-  <ul class="hh-go">
-    <li><a class="hh-card is-main" href="/start-in-10-minutes.html"><span class="hh-card-i" aria-hidden="true">&#127793;</span><span class="hh-card-b"><span class="hh-card-t">Start in 10 minutes</span><span class="hh-card-n">One short, guided path. No sign-up.</span></span></a></li>
-    <li><a class="hh-card" href="/share-the-load.html"><span class="hh-card-i" aria-hidden="true">&#129530;</span><span class="hh-card-b"><span class="hh-card-t">Share the load</span><span class="hh-card-n">Chores, bills and the invisible jobs, in order</span></span></a></li>
-    <li><a class="hh-card" href="/upset-right-now.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">Upset right now?</span><span class="hh-card-n">Five minutes to pause, breathe and come back</span></span></a></li>
-  </ul>
   <ul class="hh-more" aria-label="More ways in">
     <li><a href="#start-where"><span class="hh-more-k">New baby, money, faith…?</span> See every situation</a></li>
     <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
