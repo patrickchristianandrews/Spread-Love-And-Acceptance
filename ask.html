@@ -336,6 +336,8 @@
         return;
       }
       var deep = b.hasAttribute('data-deep');
+      // keyboard and screen reader users follow the question into the conversation
+      if (chat.log) chat.log.focus({ preventScroll: true });
       b.setAttribute('aria-busy', 'true');
       queue = queue.then(function () {
         return new Promise(function (done) {
