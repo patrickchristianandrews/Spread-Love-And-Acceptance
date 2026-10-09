@@ -180,7 +180,7 @@
     }
     t.me = typeof o.me === 'number' && o.me >= 0 && o.me < n ? o.me : 0;
     if (o.peek && typeof o.peek === 'object') Object.keys(o.peek).forEach(function (k) { if (/^\d>\d$/.test(k)) t.peek[k] = 1; });
-    if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply };
+    if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply, f: typeof o.from.f === 'number' ? o.from.f : -1, t: typeof o.from.t === 'number' ? o.from.t : -1, replaced: !!o.from.replaced };
     return t;
   }
   function load() { try { return tidy(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return null; } }
@@ -193,6 +193,10 @@
   // inside a sentence: "you" for whoever is answering here, "them" for an unnamed other
   function say(i) { return i === q.me ? 'you' : typed(i) || (q.people.length === 2 ? 'them' : 'Person ' + (i + 1)); }
   function Say(i) { var s = say(i); return s.charAt(0).toUpperCase() + s.slice(1); }
+  // "Sam says", "they say", "you say"
+  function says(i) { return i === q.me ? 'you say' : typed(i) ? typed(i) + ' says' : (q.people.length === 2 ? 'they say' : 'Person ' + (i + 1) + ' says'); }
+  function Says(i) { var s = says(i); return s.charAt(0).toUpperCase() + s.slice(1); }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function poss(i) { return i === q.me ? 'your' : typed(i) ? typed(i) + '’s' : q.people.length === 2 ? 'their' : 'Person ' + (i + 1) + '’s'; }
   function joinA(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
   function lc(s) { return /^[A-Z][a-z]/.test(s) && !/^(I|I’m)\b/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
@@ -358,8 +362,8 @@
     var c = r.querySelector('.lq-cmp'), bits = [], same = true;
     shownOthers().forEach(function (o) {
       var x = (q.ans[o] || {})[id]; if (x == null) return;
-      if (v != null && x === v) bits.push(Say(o) + ' says the same');
-      else { same = false; bits.push(Say(o) + ' says ' + ansWords(x, o)); }
+      if (v != null && x === v) bits.push(Says(o) + ' the same');
+      else { same = false; bits.push(Says(o) + ' ' + ansWords(x)); }
     });
     c.hidden = !bits.length; c.textContent = bits.join('. ') + (bits.length ? '.' : '');
     c.classList.toggle('is-same', same && v != null);
@@ -451,12 +455,10 @@
     var order = q.people.length === 2 ? [0, 'b', 1] : q.people.map(function (_, i) { return i; }).concat(['b']);
     order.forEach(function (w) {
       var c = w === 'b' ? t.both : t.per[w]; if (!c) return;
-      var col = w === 'b' ? '' : ' style="--pc:' + COLORS[w] + '"';
-      segs += '<span class="lq-seg' + (w === 'b' ? ' is-both' : '') + '"' + col + ' style="flex-grow:' + c + '"' + '>' + c + '</span>';
-      key += '<li' + (w === 'b' ? ' class="is-both"' : col) + '>' + esc(w === 'b' ? both() : nm(w)) + ' ' + c + '</li>';
+      var pc = w === 'b' ? '' : '--pc:' + COLORS[w] + ';';
+      segs += '<span class="lq-seg' + (w === 'b' ? ' is-both' : '') + '" style="' + pc + 'flex-grow:' + c + '">' + c + '</span>';
+      key += '<li' + (w === 'b' ? ' class="is-both"' : ' style="' + pc + '"') + '>' + esc(w === 'b' ? both() : nm(w)) + ' ' + c + '</li>';
     });
-    // one style attribute per segment
-    segs = segs.replace(/ style="--pc:([^"]+)" style="flex-grow:(\d+)"/g, ' style="--pc:$1;flex-grow:$2"');
     return '<div class="lq-bar" aria-hidden="true">' + segs + '</div><ul class="lq-key">' + key + '</ul>';
   }
   function workLeans() {
@@ -494,7 +496,7 @@
     renderCompare(); renderSend(); renderMini();
     document.querySelectorAll('#lq-list .lq-row').forEach(paintRow);
   }
-  function ansWords(x, p) {
+  function ansWords(x) {
     if (x === 'b') return q.people.length === 2 ? 'both' : 'shared';
     return 'mostly ' + say(x);
   }
@@ -512,8 +514,8 @@
       var theirN = q.list.filter(function (id) { return th[id] != null; }).length;
       if (!shown(o)) {
         var done = theirN - pendingFor(o).length;
-        html += '<div class="lq-cmpbox"><h4>' + esc(Say(o) === 'Them' ? 'Their view' : poss(o).charAt(0).toUpperCase() + poss(o).slice(1) + ' view') + ' is in</h4>' +
-          '<p class="lq-pend">' + esc(Say(o)) + ' answered ' + theirN + (theirN === 1 ? ' job' : ' jobs') + '. Tap your own answers first, so you’re not swayed: ' + done + ' of ' + theirN + ' done. Then you’ll see where you agree.</p>' +
+        html += '<div class="lq-cmpbox"><h4>' + esc(cap(poss(o)) + ' view is in') + '</h4>' +
+          '<p class="lq-pend">' + esc(typed(o) || 'They') + ' answered ' + theirN + (theirN === 1 ? ' job' : ' jobs') + '. Tap your own answers first, so you’re not swayed: ' + done + ' of ' + theirN + ' done. Then you’ll see where you agree.</p>' +
           '<div class="lq-tools"><button type="button" data-lq-peek="' + o + '">Show ' + esc(poss(o)) + ' view now</button></div></div>';
         return;
       }
@@ -531,20 +533,20 @@
         var by = {};
         same.forEach(function (id) { var k = String(mine[id]); (by[k] = by[k] || []).push(lc(label(id))); });
         var agreeLis = Object.keys(by).map(function (k) {
-          var w = k === 'b' ? (q.people.length === 2 ? 'you share' : 'it’s shared') : 'mostly ' + say(+k);
-          return '<li>' + esc((q.people.length === 2 ? 'You both say ' : 'You both say ') + w + ': ' + joinA(by[k]) + '.') + '</li>';
+          var w = k === 'b' ? 'it’s shared' : 'it’s mostly ' + say(+k);
+          return '<li>' + esc('You both say ' + w + ': ' + joinA(by[k]) + '.') + '</li>';
         });
         if (agreeLis.length) html += '<ul>' + agreeLis.join('') + '</ul>';
         if (diff.length) {
           html += '<p><strong>You see these differently:</strong></p><ul>' + diff.map(function (id) {
-            return '<li>' + esc(label(id) + ': you say ' + ansWords(mine[id]) + ', ' + say(o) + ' say' + (typed(o) ? 's ' : ' ') + ansWords(th[id], o) + '.') + '</li>';
+            return '<li>' + esc(label(id) + ': you say ' + ansWords(mine[id]) + ', ' + says(o) + ' ' + ansWords(th[id]) + '.') + '</li>';
           }).join('') + '</ul><p class="lq-mini">These are the good ones to talk about. Not to settle who’s right: each of you may see work the other misses.</p>';
         }
       }
       // their whole picture in one line
       var bits = [];
       SECTIONS.forEach(function (s) { var t = tally(o, s[0]), l = lean(t); if (l) bits.push(lc(s[1]) + ' ' + l.words); });
-      if (bits.length) html += '<p class="lq-mini">' + esc((poss(o).charAt(0).toUpperCase() + poss(o).slice(1)) + ' view: ' + bits.join('; ') + '.') + '</p>';
+      if (bits.length) html += '<p class="lq-mini">' + esc(cap(poss(o)) + ' view: ' + bits.join('; ') + '.') + '</p>';
       html += '</div>';
     });
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
@@ -591,10 +593,8 @@
     if (n) {
       q.people.forEach(function (_, o) {
         if (o === q.me) return;
-        var replied = hasAny(o);
         var t = 'Send to ' + (typed(o) || (q.people.length === 2 ? 'them' : 'Person ' + (o + 1)));
         html += '<button type="button" class="' + (html ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
-        void replied;
       });
       html += '<button type="button" data-lq-chat>Copy for the group chat</button>';
       var next = nextTurn();
@@ -697,13 +697,15 @@
     setView('quick');
     if (!d) { status('That link didn’t open. Ask for it again, and copy all of it.'); renderAll(); return; }
     var localAny = Object.keys(q.ans).some(function (p) { return hasAny(+p); });
-    var same = d.people.length === q.people.length && d.people.every(function (p, i) { return low(p) === low(q.people[i]); });
+    // the same people: every name matches, or one side left it blank
+    var same = d.people.length === q.people.length && d.people.every(function (p, i) { return low(p) === low(q.people[i]) || !low(p) || !low(q.people[i]); });
     // who's opening it: the person it was sent to, or the first one without answers (a group chat link)
     var me = d.t >= 0 ? d.t : -1;
     if (me < 0) { for (var i = 0; i < d.people.length; i++) if (i !== d.f && !(d.ans[i] && Object.keys(d.ans[i]).length)) { me = i; break; } }
     if (me < 0) me = d.f === 0 ? 1 : 0;
     var replaced = false;
     if (localAny && same) {
+      q.people = q.people.map(function (p, i) { return String(p || '').trim() ? p : d.people[i]; });
       d.list.forEach(function (id) { if (q.list.indexOf(id) < 0) q.list.push(id); });
       Object.keys(d.ans).forEach(function (p) {
         p = +p;
@@ -746,7 +748,7 @@
   }
   document.addEventListener('click', function (e) {
     var t = e.target.closest && e.target.closest('[data-lq-iam], [data-lq-undo], [data-lq-from-ok]'); if (!t) return;
-    if (t.hasAttribute('data-lq-iam')) { var i = +t.getAttribute('data-lq-iam'); if (q.from) q.from.t = q.people.length > 2 ? q.from.t : i; setMe(i, true); return; }
+    if (t.hasAttribute('data-lq-iam')) { setMe(+t.getAttribute('data-lq-iam'), true); return; }
     if (t.hasAttribute('data-lq-undo')) {
       if (undoQ) { q = undoQ; undoQ = null; delete q.from; save(); renderAll(); status('Your earlier quick look is back.'); }
       return;

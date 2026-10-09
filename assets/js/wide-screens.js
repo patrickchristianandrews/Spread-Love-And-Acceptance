@@ -47,6 +47,7 @@
     '.tol-prog{ position:fixed; top:0; left:0; height:3px; width:0; z-index:900; background:linear-gradient(90deg,#8FD3AE,#F8D76A,#F7A896); transition:width .1s linear; pointer-events:none; }' +
     '.tol-top{ position:fixed; right:max(1rem,env(safe-area-inset-right)); bottom:4.4rem; z-index:860; width:46px; height:46px; border-radius:50%; border:2px solid #C9B3EA; background:rgba(255,253,248,.95); color:#5B3F73; font-size:1.2rem; cursor:pointer; box-shadow:0 6px 16px -8px rgba(60,40,90,.5); opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity .2s, transform .2s; }' +
     '.tol-top.on{ opacity:1; pointer-events:auto; transform:none; }' +
+    '@media (max-width:560px){ .tol-top{ right:.35rem; width:40px; height:40px; bottom:5.6rem; } }' +
     '.tol-top:hover{ background:#EDE3F8; } .tol-top:focus-visible{ outline:3px solid #3B2A55; outline-offset:2px; }' +
     '.tol-hl{ margin-left:.4rem; padding:0 .35rem; border:0; background:none; color:#8A4FA8; font:600 .8em "IBM Plex Mono",monospace; cursor:pointer; opacity:0; transition:opacity .15s; border-radius:6px; vertical-align:middle; }' +
     'h2:hover > .tol-hl, h2:focus-within > .tol-hl, .tol-hl:focus-visible{ opacity:1; }' +
@@ -64,7 +65,7 @@
     '.tol-keys-in dt{ white-space:nowrap; } .tol-keys-in dd{ margin:0; }' +
     '.tol-keys-in kbd{ display:inline-block; min-width:1.6rem; padding:.1rem .45rem; text-align:center; border-radius:7px; border:1px solid #B9A0E0; border-bottom-width:3px; background:#F6F1FD; font:600 .85rem "IBM Plex Mono",monospace; }' +
     '.tol-keys-x{ margin-top:.9rem; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; border:1px solid #6B4F8A; background:#6B4F8A; color:#fff; font:inherit; cursor:pointer; }' +
-    '.tol-keys-hint{ position:fixed; left:50%; bottom:.6rem; transform:translateX(-50%); z-index:870; padding:.25rem .8rem; border-radius:999px; background:rgba(43,33,64,.78); color:#fff; font:500 .78rem "Lora",Georgia,serif; pointer-events:none; opacity:0; transition:opacity .4s; }' +
+    '.tol-keys-hint{ position:fixed; left:auto; right:5rem; bottom:.6rem; transform:none; z-index:870; padding:.25rem .8rem; border-radius:999px; background:rgba(43,33,64,.78); color:#fff; font:500 .78rem "Lora",Georgia,serif; pointer-events:none; opacity:0; transition:opacity .4s; }' +
     '.tol-keys-hint.on{ opacity:1; }';
   function css() { if (document.getElementById('tol-wide-css')) return; var s = document.createElement('style'); s.id = 'tol-wide-css'; s.textContent = CSS; document.head.appendChild(s); }
 

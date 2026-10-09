@@ -418,6 +418,9 @@
     { label: 'Which tool fits me?', q: 'Which tool fits my situation?' }
   ];
 
+  // the greeting's chips: the usual ways in, and a way to just chat
+  var GREET_CHIPS = STARTERS.slice(0, 4).concat([{ label: 'Just chat', q: 'Let’s just chat' }]);
+
   // Topics this helper never takes on, however a word or two might overlap with the notes
   var OFF_TOPIC = /\b(car|cars|engine|tires?|tyres?|oil change|brakes?|mechanic|transmission|resumes?|cv|cover letter|job application|recipes?|bake|baking|coding|javascript|python|programming|homework|stocks?|crypto|bitcoin|forecast|football|basketball|baseball|soccer|movie times|flights?|hotels?|translate)\b/;
 
@@ -1742,6 +1745,8 @@
       }
       var vf = norm(q);
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
+      var ft = !DANGER.test(vf) && !state.unsafe && funTurn(state, vf);
+      if (ft) return ft;
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
       if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
@@ -1796,6 +1801,93 @@
       'I want to get this right. Is it more about time and attention together, or about not being listened to when you talk?',
       [['Time and attention together', 'How do we get more time together? We hardly spend time together'], ['Not listened to when I talk', 'I keep getting interrupted and not heard when I talk']]]
   ];
+
+  // ------------------------------------------------------------------ Professor Puddles' voice (tools/chat/personality.json → KB.pers)
+  // At most one light line, and only on light, practical replies (a tool, a game, "thanks", nothing found). Never on safety,
+  // care or someone's own situation, never when they sound upset, never inside a list or words they'd send, and never in
+  // Quiet mode, Easy reading or short answers. A seeded random number, so the tests can repeat a conversation exactly.
+  var FUN_UPSET = /\b(sad|upset|hurt\w*|cry|cried|crying|tears|scared|afraid|frightened|terrified|anxious|anxiety|panic\w*|worried|lonely|alone|grief|griev\w*|died|dead|death|passed away|funeral|loss|lost my|ill|illness|sick|cancer|pain|hospital|diagnos\w*|rehab|addict\w*|drunk|drinking|abus\w*|hits?|yell\w*|scream\w*|shout\w*|angry|furious|mad at|hate|depress\w*|exhausted|overwhelmed|stress\w*|burn\w* out|tired of|divorc\w*|separat\w*|breakup|broke up|break up|cheat\w*|affair|fight|fought|fighting|argu\w*|guilt\w*|ashamed|awful|terrible|horrible|miss|missing|suicid\w*|kill\w*|die|dying|harm\w*|unsafe|safe|threat\w*|control\w*|debt|broke|money trouble|custody|police|ptsd|nightmares?|not in the mood|no jokes|stop joking|be serious|plain answers?)\b/;
+  function frand(state) {
+    if (state.rs == null) { var sd = window.TOL_CHAT_SEED != null ? +window.TOL_CHAT_SEED : (Date.now() % 2147483646); state.rs = (sd % 2147483646) + 1; }
+    state.rs = state.rs * 16807 % 2147483647;
+    return (state.rs - 1) / 2147483646;
+  }
+  function quietOn() { var h = document.documentElement, c = (h && (h.className || (h.getAttribute && h.getAttribute('class')))) || ''; return /\btol-(quiet|easy)\b/.test(String(c)); }
+  function funLine(state, bank) {
+    var P = KB && KB.pers, list = P && P[bank] ? P[bank].filter(Boolean) : [];
+    if (!list.length) return '';
+    var seen = state.funSeen || (state.funSeen = []), n = (P.rules && P.rules.no_repeat_within) || 8;
+    var fresh = list.filter(function (x) { return seen.indexOf(x) === -1; });
+    if (!fresh.length) fresh = list;
+    var x = fresh[Math.floor(frand(state) * fresh.length) % fresh.length];
+    seen.push(x); while (seen.length > n) seen.shift();
+    return x;
+  }
+  var GAME_CARDS = /^(garden|pauseplay|wordbloom|quietcross|dailycross|quietwords|journey|palcam|soundscapes|album|podcast|buddies|buddiess2|buddieslive|buddiesmvmaker|buddiesmusicvideo|bearsdojo|recheckdrive|brainbreak|findsound|senses|drift|syncviz|gamefortwo|kidswatch)$/;
+  function flair(state, q, r) {
+    var P = KB && KB.pers;
+    if (!P || !r || !r.blocks || !r.blocks.length || r.fun) return r;
+    var R = P.rules || {}, k = r.kind || 'search', f = norm(q);
+    // after anything serious, stay plain: for good after safety, and after care or someone's situation until a light topic
+    if (/^(safety|redflag)$/.test(k) || state.unsafe) { state.plain = 2; return r; }
+    if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
+    if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
+    if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
+    var txt = JSON.stringify(r.blocks);
+    if (/\d{3}[- ]\d{3}[- ]\d{4}|\b0\d{3} ?\d{3} ?\d{3,4}\b|\b(988|911|999|116 ?123)\b|\/safety\.html/.test(txt)) return r;
+    var card = (k === 'card' || k === 'card-more') && r.id ? cardById(r.id) : null;
+    var light = card ? (card.kind === 'tool' || (R.light_card_ids || []).indexOf(card.id) !== -1) : false;
+    if (light || k === 'thanks' || k === 'fun') { if (state.plain === 1) state.plain = 0; }
+    if (state.plain) return r;
+    if (card && !light) return r;
+    var quiet = quietOn() || state.easy || state.brief;
+    var sec = (R.section_for_kind || {})[k];
+    var openerOk = !quiet && (light || (R.opener_kinds || []).indexOf(k) !== -1 || k === 'fun');
+    var closerOk = light || (R.closer_only_kinds || []).indexOf(k) !== -1 || (R.opener_kinds || []).indexOf(k) !== -1;
+    // the kinds with their own voice: "thanks", nothing found, a choice to make
+    if (sec && !quiet) {
+      var line0 = funLine(state, sec);
+      if (!line0) return r;
+      var b0 = r.blocks[0];
+      if (k === 'thanks' && b0.k === 'p') b0.x = line0;
+      else if ((k === 'none' || k === 'offtopic' || k === 'unclear') && b0.k === 'p') {
+        var tail = b0.x.match(/(You could tell me[\s\S]*|I stick to this program[\s\S]*|Could you say it another way[\s\S]*)$/);
+        b0.x = line0 + (tail ? ' ' + tail[1] : '');
+      } else if (k === 'clarify' && r.amb) r.blocks.unshift({ k: 'p', x: line0, fun: 1 });
+      else return r;
+      r.fun = 1;
+      return r;
+    }
+    if (!openerOk && !closerOk) return r;
+    var roll = frand(state), co = R.chance_opener != null ? R.chance_opener : 0.6, cc = R.chance_closer != null ? R.chance_closer : 0.3;
+    if (openerOk && roll < co) {
+      var op = funLine(state, card && GAME_CARDS.test(card.id) && P.game_and_play ? 'game_and_play' : 'light_openers');
+      if (op) { r.blocks.unshift({ k: 'p', x: op, fun: 1 }); r.fun = 1; }
+    } else if (closerOk && roll >= (openerOk ? co : 0) && roll < (openerOk ? co : 0) + cc) {
+      var cl = funLine(state, 'light_closers');
+      if (cl) { r.blocks.push({ k: 'p', x: cl, fun: 1 }); r.fun = 1; }
+    }
+    return r;
+  }
+  // "tell me a joke", "lol", "you're funny": answered in character (jokes only when asked)
+  var JOKE_ASK = /\b(tell|give|got|know|hear|share|say|want|need)\b.{0,12}\b(a |another |any |one more |some |your best )?(joke|jokes|pun|puns|something funny|funny one)\b|^(a |another |one more |more )?(joke|jokes|pun)( please)?$|^another( one)?( please)?$|\bmake me (laugh|smile)\b|\bcheer me up with a joke\b/;
+  var LOL = /^(lol|lmao|lmfao|rofl|haha\w*|hehe\w*|ha ha( ha)?|ha|heh|that s funny|thats funny|so funny|very funny|hilarious|good one|nice one|(you re|youre|you are) (so |really |very )?(funny|hilarious|a hoot|a riot))( lol| haha)?( puddles| professor)?$/;
+  function funTurn(state, f) {
+    var P = KB && KB.pers;
+    if (!P) return null;
+    var lastFun = state.lastKind === 'fun';
+    if (JOKE_ASK.test(f) && (!/^another( one)?( please)?$/.test(f) || lastFun)) {
+      var j = funLine(state, 'jokes');
+      if (!j) return null;
+      return { blocks: [{ k: 'p', x: j }], chips: [{ label: 'Another joke', q: 'Tell me another joke' }, { label: 'Something else', q: 'What can I ask?' }], kind: 'fun', fun: 1 };
+    }
+    if (LOL.test(f)) {
+      var t = funLine(state, 'thanks_replies');
+      if (!t) return null;
+      return { blocks: [{ k: 'p', x: t }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Something else', q: 'What can I ask?' }], kind: 'fun', fun: 1 };
+    }
+    return null;
+  }
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null && SELF_HARMFUL.test(f) && !/\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend|ex|dad|mum|mom|father|mother|stepdad|stepmom)) (says|said|calls|called|tells|told) (me )?(i m|im|i am)\b/.test(f)) { state.last = null; state.unsafe = false; return selfHarmfulReply(f); }
@@ -1847,7 +1939,7 @@
       if (wo && !(detectSituation(f).score >= 5)) return clarifyWho(state, wo.who, wo.noun);
       for (var ci = 0; ci < (KB.clar || []).length; ci++) {
         var cl = KB.clar[ci];
-        if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify' }; }
+        if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify', amb: 1 }; }
       }
       var sit = detectSituation(f);
       // "he", "she", "they" after a playbook about someone: the same person, unless someone new is named
@@ -1887,19 +1979,20 @@
         chips: moreChips(state, followUps([chipDoc], res0.hits, 2)) };
     }
     if (/^(hi+|hello+|hey+|hiya|howdy|yo|heya|good (morning|afternoon|evening|day)|greetings)( there)?( buddy| friend)?$/.test(f))
-      return { blocks: [{ k: 'p', x: pick(['Hello! ', 'Hi there! ', 'Hey, nice to see you. ']) + 'I can share what this site says about relationships, fair sharing of the load, check-ins, different wiring and calming down. What’s on your mind?' }], chips: STARTERS };
+      { var gl = KB.pers && !quietOn() ? funLine(state, 'greetings') : '';
+        return { blocks: [{ k: 'p', x: gl || (pick(['Hello! ', 'Hi there! ', 'Hey, nice to see you. ']) + 'I can share what this site says about relationships, fair sharing of the load, check-ins, different wiring and calming down. What’s on your mind?') }], chips: GREET_CHIPS, kind: 'hello', fun: gl ? 1 : 0 }; }
     if (/^(thanks?( you)?( so much| a lot)?|ty|thx|cheers|thank u|appreciate it|that helps?|that was helpful|great|perfect|nice|cool|lovely|awesome)$/.test(f))
       return { blocks: [{ k: 'p', x: pick(['You’re welcome. ', 'Happy to help. ', 'Any time. ']) + 'Ask me something else whenever you like.' }], chips: [{ label: 'Surprise me', q: 'Surprise me' }, { label: 'Give me a little tip', q: 'Give me a tip' }] };
     if (/^(bye|goodbye|see (you|ya)|good ?night|later)$/.test(f))
       return { blocks: [{ k: 'p', x: 'Take care. I’ll be here if you want to look something up again.' }], chips: [] };
     if (/\b(what can you do|what do you do|how do(es)? (this|you) work|who are you|what are you|help me use|what can i ask|how can you help|are you (an? )?(ai|bot|robot|human|real))\b/.test(f) || f === 'help')
       return { blocks: [
-        { k: 'p', x: 'I’m Professor Puddles, a small helper that knows this program inside out. I can explain any tool, workpaper, chapter or game, and walk you through how to use it and what your results mean.' },
+        { k: 'p', x: (KB.pers && !quietOn() && funLine(state, 'self_description')) || 'I’m Professor Puddles, a small helper that knows this program inside out. I can explain any tool, workpaper, chapter or game, and walk you through how to use it and what your results mean.' },
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.'] },
         { k: 'p', x: 'When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. I’m not a counselor, and I won’t guess. Everything happens in your browser: what you type stays on this device.' }],
-        chips: STARTERS };
+        chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
     if (/^(give me |got |share )?(a |another |one )?(little |quick |small )?(tip|tips)( please)?( for today)?$/.test(f)) return tip(state);
     var moreQ = /^(tell me )?(more|some more|more please|go on|continue|keep going|and|another|next|what else|anything else|say more|more on that|more about (that|this|it)|and then|then what|why|how so|like what|such as|example|an example|give me an example)$/.test(f);
@@ -2105,7 +2198,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); cb0(x); }
+    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -2194,6 +2287,7 @@
     '.tolc-chip{min-height:44px;padding:.45rem .9rem;border-radius:22px;border:1px solid var(--c);background:#fff;color:var(--ink);font:inherit;font-size:.88rem;line-height:1.25;cursor:pointer;text-align:left}',
     '.tolc-chip:hover{background:var(--c-soft)}',
     '.tolc-typing{align-self:flex-start;display:flex;gap:5px;padding:.85rem 1rem;background:#fff;border:1px solid var(--line);border-radius:18px;border-bottom-left-radius:6px}',
+    '.tolc-think{margin-left:.45rem;font-size:.8rem;font-style:italic;color:var(--ink-soft);align-self:center}',
     '.tolc-typing i{width:7px;height:7px;border-radius:50%;background:var(--c);animation:tolc-dot 1.1s infinite ease-in-out}',
     '.tolc-typing i:nth-child(2){animation-delay:.15s}.tolc-typing i:nth-child(3){animation-delay:.3s}',
     '@keyframes tolc-dot{0%,80%,100%{opacity:.3;transform:none}40%{opacity:1;transform:translateY(-3px)}}',
@@ -2428,11 +2522,12 @@
     log.scrollTop = Math.max(0, Math.min(top, log.scrollHeight));
   };
 
-  Chat.prototype.say = function (blocks, chips, delay) {
+  Chat.prototype.say = function (blocks, chips, delay, think) {
     var me = this;
     this.busy = true;
     this.root.classList.add('is-typing');
     var t = document.createElement('div'); t.className = 'tolc-typing'; t.setAttribute('aria-hidden', 'true'); t.innerHTML = '<i></i><i></i><i></i>';
+    if (think) { var th = document.createElement('span'); th.className = 'tolc-think'; th.textContent = think; t.appendChild(th); }
     this.log.appendChild(t); this.scrollTo();
 
     setTimeout(function () {
@@ -2461,13 +2556,13 @@
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
       reply(me.state, text, doc, function (r) {
         var len = r.blocks.reduce(function (n, b) { return n + wc(b.x && b.x.join ? b.x.join(' ') : b.x || ''); }, 0);
-        me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6));
+        me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6), r.think);
       });
     });
   };
 
   Chat.prototype.greet = function (text) {
-    this.say([{ k: 'p', x: text }], STARTERS, REDUCED ? 150 : 450);
+    this.say([{ k: 'p', x: text }], GREET_CHIPS, REDUCED ? 150 : 450);
   };
 
   Chat.prototype.start = function (opts) {
