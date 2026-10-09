@@ -1639,12 +1639,13 @@
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
       var es = String(q).toLowerCase();
-      if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es))
+      if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es)) {
         if (/\b(cuid\w*|enferm\w*|agotad\w*|cansad\w*|parkinson|alzheimer|demencia|c[aá]ncer)\b/.test(es)) return { blocks: [
           { k: 'p', x: 'Hola. Cuidar a alguien que quieres, día tras día, es mucho trabajo, y es normal estar agotado, impaciente a veces, y luego sentir culpa. No es un fallo suyo.' },
           { k: 'p', x: 'Por ahora solo puedo responder en inglés, pero hay una parte en español para quien cuida, con ideas para pedir ayuda a los hijos y líneas de apoyo. (Sorry, I can only answer in English for now. There is a Spanish section for carers, and the full carer page in English.)' },
           { k: 'links', x: [['Cuando cuido a alguien que quiero (en español)', '/en-espanol.html#cuidar'], ['Caring for someone you love (English)', '/caregivers.html']] }], chips: [], kind: 'lang' };
         return { blocks: [{ k: 'p', x: 'Hola. Lo siento: por ahora solo puedo responder en inglés. Hay una página corta en español con pasos para cuando los hijos pelean, cuando estás muy enojado, y si no estás seguro en casa. (Sorry, I can only answer in English for now. Here is a short page in Spanish.)' }, { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
+      }
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
       if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview

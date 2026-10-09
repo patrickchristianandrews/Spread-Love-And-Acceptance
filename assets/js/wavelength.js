@@ -251,13 +251,18 @@
   ];
   // Statement choices that Parts 1 to 4 already asked about. They're filled in from those answers and tucked away,
   // unless you choose to answer them again here ("Change"), so the statement doesn't ask the same thing twice.
+  // Each one follows the four letters, so the statement never says the opposite of the Wave Code (a "leans" result
+  // included): Lens picks "big picture" or "details" from F or T, Sending picks "direct" or "hint" from D or N.
+  // "Think out loud" and "a plan" come from their own question, and only when that answer agrees with the Pace letter.
   const FROM_PARTS = [
-    { key: 'talk', ids: ['thinkloud', 'thinkfirst'], from: st => ({ a: 'thinkloud', b: 'thinkfirst' }[st.answers.pace[0]] || null) },
-    { key: 'speed', ids: ['fast', 'slow'], from: st => st.answers.pace.every(v => v !== null) ? (score(st).code[0] === 'Q' ? 'fast' : 'slow') : null },
-    { key: 'lens', ids: ['bigpic', 'details'], from: st => ({ a: 'bigpic', b: 'details' }[st.answers.lens[2]] || null) },
-    { key: 'send', ids: ['direct', 'hint'], from: st => ({ a: 'direct', b: 'hint' }[st.answers.send[0]] || null) },
-    { key: 'plan', ids: ['plans', 'flow'], from: st => ({ a: 'flow', b: 'plans' }[st.answers.pace[2]] || null) }
+    { key: 'talk', ids: ['thinkloud', 'thinkfirst'], from: st => { const L = letterOf(st, 0), a = st.answers.pace[0]; return L === 'Q' && a === 'a' ? 'thinkloud' : L === 'S' && a === 'b' ? 'thinkfirst' : null; } },
+    { key: 'speed', ids: ['fast', 'slow'], from: st => ({ Q: 'fast', S: 'slow' }[letterOf(st, 0)] || null) },
+    { key: 'lens', ids: ['bigpic', 'details'], from: st => ({ F: 'bigpic', T: 'details' }[letterOf(st, 1)] || null) },
+    { key: 'send', ids: ['direct', 'hint'], from: st => ({ D: 'direct', N: 'hint' }[letterOf(st, 2)] || null) },
+    { key: 'plan', ids: ['plans', 'flow'], from: st => { const L = letterOf(st, 0), a = st.answers.pace[2]; return L === 'Q' && a === 'a' ? 'flow' : L === 'S' && a === 'b' ? 'plans' : null; } }
   ];
+  // the letter on one line of the Wave Code, once that line's questions are all answered
+  function letterOf(st, i) { const id = ['pace', 'lens', 'send', 'recv'][i]; return st.answers[id].every(v => v !== null) ? score(st).code[i] : null; }
   function partsGroup(id) { return FROM_PARTS.find(g => g.ids.indexOf(id) >= 0) || null; }
   // older saves have no record of this: anything already picked in these groups was picked by hand, so it stays as it is
   function ensureOwn(st) {

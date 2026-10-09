@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sharing a Room: Dorm and Flat Roommate Agreement</title>
+<meta name="description" content="Free, calm help for sharing a dorm room or flat: overnight guests, quiet hours and sleep, cleaning, borrowing, talking to your RA, and a room agreement to fill in.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .rm-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .rm-jump li{ margin:0 !important; max-width:none !important; }
+  .rm-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .rm-jump a:hover{ border-color:var(--credit); }
+  main.read > ul.rm-jump.rm-jump.rm-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
+  .rm-go{ display:inline-flex; align-items:center; min-height:48px; box-sizing:border-box; padding:.6rem 1.3rem; border-radius:999px; background:var(--ink); color:var(--paper) !important; text-decoration:none; font-weight:600; }
+  .rm-go:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .rm-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .rm-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .rm-say p{ margin:.35rem 0 !important; font-style:italic; }
+  .rm-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .rm-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .rm-links a{ display:block; min-height:44px; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .rm-links a:hover{ border-color:var(--credit); }
+  .rm-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .rm-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .rm-plan{ margin:1.2rem 0 1.6rem; padding:1rem 1.1rem; border-radius:16px; border:1px solid var(--line); background:var(--paper); }
+  .rm-plan h2{ margin-top:.2rem !important; }
+  .rm-fields{ display:grid; gap:.25rem; margin:.8rem 0 1rem; max-width:36rem; }
+  .rm-fields label{ font-weight:600; margin-top:.55rem; }
+  .rm-fields input, .rm-fields textarea{ font:inherit; min-height:44px; padding:.45rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); width:100%; max-width:100%; box-sizing:border-box; }
+  .rm-fields textarea{ min-height:4.2em; resize:vertical; line-height:1.4; }
+  .rm-fields input:focus-visible, .rm-fields textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .rm-names{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+  .rm-names label{ font-weight:400; margin-top:0; font-size:.95rem; }
+  .read p.rm-out-h{ margin:1rem 0 .3rem !important; font-weight:600; }
+  .rm-out{ white-space:pre-line; overflow-wrap:anywhere; padding:.8rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); line-height:1.55; }
+  .read p.rm-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 .2rem !important; }
+  .rm-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .rm-btn.is-quiet{ background:transparent; color:var(--ink); }
+  .rm-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read p.rm-status{ min-height:1.4em; margin:.3rem 0 .4rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .rm-from{ margin:.4rem 0; font-weight:600; }
+  .read #faq h3{ font-size:1.05rem; margin-top:1.4rem; }
+</style>
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · Roommates</p><h1>Sharing a room (dorm or flat)</h1></header>
+
+<aside class="tol-inshort no-cheer" aria-label="In short">
+  <p class="tol-inshort-h"><span aria-hidden="true">&#128204;</span> In short</p>
+  <ul>
+    <li>Most roommate trouble is not about a bad person. It is about rules nobody said out loud.</li>
+    <li>Agree a few things early: guests, overnight guests, quiet hours, cleaning and borrowing.</li>
+    <li>Write them down in the room agreement below, and say how you will bring up problems.</li>
+  </ul>
+</aside>
+
+<p class="simple-lede">Sharing one room with someone, often someone you didn’t choose, is a lot. You don’t have to be best friends. You just need a room that works for both of you, so you can sleep, study and relax at home.</p>
+<p><a class="rm-go" href="#agreement">Make our room agreement (5 min) &rarr;</a></p>
+
+<nav aria-label="On this page">
+<ul class="rm-jump no-bubble">
+  <li><a href="#guests">Guests</a></li>
+  <li><a href="#sleep">Quiet hours and sleep</a></li>
+  <li><a href="#cleaning">Cleaning</a></li>
+  <li><a href="#borrowing">Borrowing</a></li>
+  <li><a href="#lights">Lights and temperature</a></li>
+  <li><a href="#bring-it-up">Bringing it up</a></li>
+  <li><a href="#ra">Talking to your RA</a></li>
+  <li><a href="#agreement">Room agreement</a></li>
+</ul>
+</nav>
+
+<h2 id="guests">Guests and overnight guests</h2>
+<p>This is the most common sore spot. One roommate’s partner or friend starts staying over, and slowly the room has three people in it. The roommate who didn’t invite them often says nothing, because it feels rude to ask. Then they dread going home.</p>
+<p>It helps to agree three things: how many nights a week someone can stay, how much notice you give, and whether a guest can be in the room when their host isn’t there. Both of you have a right to a home you feel easy in.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?”</p>
+  <p>“I like having them around sometimes. Could we agree on two nights a week, with a text the day before?”</p>
+</div>
+
+<h2 id="sleep">Quiet hours and sleep</h2>
+<p>Different schedules are normal. One of you has an 8am class, the other works late. Pick quiet hours together, and say what “quiet” means: headphones on, calls outside the room, a small lamp instead of the big light.</p>
+<p>Little things help a lot: earplugs and an eye mask, phones on silent at night, and getting ready for bed with the door shut softly.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“I’m not sleeping well, and I think it’s the late calls. Could we keep calls outside the room after 11?”</p>
+</div>
+
+<h2 id="cleaning">Cleaning</h2>
+<p>A simple rule works for most rooms: <strong>your side is yours, shared space is shared.</strong> Then give each shared job one owner, like the bin, the floor, the fridge and the bathroom if you have one. Swap jobs every week if you like. A ten-minute tidy on the same day each week stops small mess from turning into a fight.</p>
+<p>For a flat with more people, the <a href="/share-the-load.html#roommates">roommates guide</a> and the <a href="/workpapers/fill/wp-03.html">one owner per job list</a> help the whole house.</p>
+
+<h2 id="borrowing">Borrowing</h2>
+<p>Agree which things are shared and which are not. Some people are happy to say “help yourself”. Others need to be asked every time. Neither is wrong, but guessing causes trouble. Food is the usual one, so say which shelf, or which snacks, are shared.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“I don’t mind sharing, I just want to be asked first. Is that okay with you?”</p>
+</div>
+
+<h2 id="lights">Lights, alarms and temperature</h2>
+<p>Window open or shut, heating up or down, the big light on or off, and how many times the alarm goes off. These sound small, but they happen every day. Pick a middle ground, like a fan for one of you and a blanket for the other, and one alarm with no more than one snooze.</p>
+
+<h2 id="bring-it-up">How to bring it up if you hate confrontation</h2>
+<p>Lots of people would rather put up with something for months than have one awkward talk. But a small, calm talk early is much kinder, to both of you, than a big one later.</p>
+<ul>
+  <li><strong>Pick a calm time.</strong> Not when they walk in with their guest, and not late at night.</li>
+  <li><strong>A text is fine</strong> to start: “Can we talk about something small tonight?”</li>
+  <li><strong>One topic, and one clear ask.</strong> Say what you need and ask what works for them.</li>
+  <li><strong>Talk about the room, not the person.</strong> “The room is getting crowded” lands better than “You’re so inconsiderate.”</li>
+</ul>
+<p>Not sure how your message sounds? Paste it into the <a href="/signal-translator.html">Signal Translator</a> before you send it.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“This is a bit awkward, but I’d rather say it now than let it build up. Can we agree on a few room rules?”</p>
+  <p>“I’m not upset with you. I just think we never talked about this.”</p>
+</div>
+
+<h2 id="ra">Talking to your RA</h2>
+<p>If you live in student housing, your RA (resident assistant) is there for exactly this. Helping roommates agree on rules, and sitting in on a hard talk, is part of their job. Asking them is not snitching.</p>
+<ul>
+  <li><strong>Usually, try talking to your roommate first,</strong> if it feels safe. Then go to your RA if nothing changes, or if you can’t agree.</li>
+  <li><strong>Go to your RA straight away</strong> if you feel unsafe, if someone won’t leave when asked, if your things are being taken, or if a guest makes you uncomfortable.</li>
+  <li><strong>In a rented flat,</strong> your tenancy agreement or landlord may have rules about guests. Check those first.</li>
+</ul>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>To your RA: “My roommate’s boyfriend stays most nights and I’m not sleeping. I’ve tried to talk about it. Could you help us make a room agreement?”</p>
+</div>
+<p>If anyone threatens you, scares you or won’t let you be, that is not a roommate problem. Tell residence staff or campus security, and see <a href="/safety.html">Not safe at home?</a> for people to talk to.</p>
+
+<section class="rm-plan" id="agreement" aria-labelledby="agreement-h">
+<h2 id="agreement-h">Our room agreement</h2>
+<p>We filled in a common starting point. Change anything, together or on your own, then copy it or send the link to your roommate to change. Nothing you type here is sent anywhere or kept. The link carries the agreement inside it.</p>
+<div class="rm-fields">
+  <div class="rm-names">
+    <div><label for="ra-me">Your name (optional)</label><input type="text" id="ra-me" autocomplete="off" maxlength="40"></div>
+    <div><label for="ra-them">Roommate’s name (optional)</label><input type="text" id="ra-them" autocomplete="off" maxlength="40"></div>
+  </div>
+  <label for="ra-quiet">Quiet hours</label>
+  <textarea id="ra-quiet" maxlength="240">Weeknights 11pm to 7am: headphones on, calls outside the room.</textarea>
+  <label for="ra-guests">Guests (daytime)</label>
+  <textarea id="ra-guests" maxlength="240">Fine with a quick text first. Not during the other one’s study or sleep time.</textarea>
+  <label for="ra-over">Overnight guests</label>
+  <textarea id="ra-over" maxlength="240">Up to 2 nights a week, agreed the day before. A guest doesn’t stay in the room when their host isn’t there.</textarea>
+  <label for="ra-clean">Cleaning</label>
+  <textarea id="ra-clean" maxlength="240">Each keeps our own side clear. Shared floor and bin: we take turns, every Sunday.</textarea>
+  <label for="ra-borrow">Borrowing</label>
+  <textarea id="ra-borrow" maxlength="240">Ask first, every time. Food on the shared shelf is for both of us.</textarea>
+  <label for="ra-lights">Lights and alarms</label>
+  <textarea id="ra-lights" maxlength="240">Big light off by 11:30 on weeknights; a desk lamp is fine. One alarm, one snooze at most.</textarea>
+  <label for="ra-raise">How we bring up problems</label>
+  <textarea id="ra-raise" maxlength="240">Text first if that’s easier, then talk within a few days, one topic at a time. If we’re stuck, we ask our RA to help.</textarea>
+</div>
+<p class="rm-out-h" id="ra-out-h">Your agreement, ready to send:</p>
+<p class="rm-from" id="ra-from" hidden>This room agreement came to you in a link. Change anything you’d like, then send it back.</p>
+<div class="rm-out" id="ra-out" aria-labelledby="ra-out-h" aria-live="polite"></div>
+<p class="rm-acts">
+  <button type="button" class="rm-btn" id="ra-copy">Copy our agreement</button>
+  <button type="button" class="rm-btn is-quiet" id="ra-share" data-share data-share-from="#ra-out" data-share-url="none" data-share-title="Our room agreement" data-share-result data-no-clip>Share it</button>
+</p>
+<p class="rm-status" id="ra-status" role="status" aria-live="polite"></p>
+<p>Look at it again together after a month. Rules that don’t work can change.</p>
+</section>
+
+<section id="faq">
+  <h2>Questions roommates often ask</h2>
+  <h3>How many nights can a roommate’s partner stay over?</h3>
+  <p>There is no right number. Many roommates settle on one or two nights a week, with notice. What matters is that you both agree, and that neither of you feels like a guest in your own room.</p>
+  <h3>Should I talk to my RA?</h3>
+  <p>Yes, if talking to your roommate hasn’t worked, or if you feel unsafe. Helping roommates make an agreement is part of an RA’s job.</p>
+  <h3>What if my roommate ignores our agreement?</h3>
+  <p>Bring it up once, calmly, and point to what you both wrote. If it keeps happening, ask your RA or housing office to sit down with you both.</p>
+</section>
+
+<h2 id="more">More for your situation</h2>
+<ul class="rm-links no-bubble">
+  <li><a href="/share-the-load.html#roommates"><strong>Roommates and housemates</strong><span>A house of three or more: chores, rent and bills.</span></a></li>
+  <li><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>Who did what this week, with a section that works out who owes whom.</span></a></li>
+  <li><a href="/signal-translator.html"><strong>The Signal Translator</strong><span>Check how a tricky message may land before you send it.</span></a></li>
+  <li><a href="/check-ins.html"><strong>Check-ins</strong><span>A short, calm talk about one topic, at a time that suits you both.</span></a></li>
+  <li><a href="/friends.html"><strong>Friends</strong><span>When a friendship drifts, or you are always the one reaching out.</span></a></li>
+  <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>A five-minute page to pause, breathe and come back.</span></a></li>
+</ul>
+<p>This page shares general ideas, not legal advice. Your housing or tenancy rules come first.</p>
+
+<script>
+(function () {
+  'use strict';
+  // Builds the agreement as plain text from the fields. Nothing is kept: the link you send carries the
+  // agreement after the # (never sent to any server), so your roommate opens the same agreement.
+  var $ = function (id) { return document.getElementById(id); };
+  var out = $('ra-out'), status = $('ra-status');
+  var rows = [['ra-quiet', 'Quiet hours'], ['ra-guests', 'Guests'], ['ra-over', 'Overnight guests'], ['ra-clean', 'Cleaning'],
+              ['ra-borrow', 'Borrowing'], ['ra-lights', 'Lights and alarms'], ['ra-raise', 'How we bring up problems']];
+  var ids = ['ra-me', 'ra-them'].concat(rows.map(function (r) { return r[0]; }));
+  function val(id) { return ($(id).value || '').trim(); }
+  function fields() { var o = {}; ids.forEach(function (id) { o[id] = val(id); }); return o; }
+  function fill(o, swap) {
+    if (!o) return;
+    ids.forEach(function (id) { if (typeof o[id] === 'string') $(id).value = o[id].slice(0, 240); });
+    // the sender's "me" is the reader's roommate
+    if (swap) { var a = $('ra-me').value; $('ra-me').value = $('ra-them').value; $('ra-them').value = a; }
+  }
+  function enc(o) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, ''); } catch (e) { return ''; } }
+  function dec(t) { try { return JSON.parse(decodeURIComponent(escape(atob(t)))); } catch (e) { return null; } }
+  function link() { return location.origin + location.pathname + '#room=' + enc(fields()); }
+  function text() {
+    var me = val('ra-me'), them = val('ra-them');
+    var head = 'Our room agreement' + (me && them ? ' (' + me + ' and ' + them + ')' : '');
+    return head + '\n' + rows.map(function (r) { return r[1] + ': ' + (val(r[0]) || 'not decided yet'); }).join('\n') +
+      '\nWe’ll look at it again together in a month.';
+  }
+  function render() { out.textContent = text() + '\n\nOpen our agreement: ' + link(); }
+  function fromLink() {
+    var m = /#room=([A-Za-z0-9+\/_-]+)/.exec(location.hash), o = m && dec(m[1]);
+    if (!o) return false;
+    fill(o, true); $('ra-from').hidden = false;
+    try { history.replaceState(null, '', location.pathname + '#agreement'); } catch (e) {}
+    setTimeout(function () { var a = $('agreement'); if (a) a.scrollIntoView({ block: 'start' }); }, 300);
+    return true;
+  }
+  ids.forEach(function (id) { $(id).addEventListener('input', render); });
+  fromLink(); render();
+  window.addEventListener('hashchange', function () { if (fromLink()) render(); });
+  function say(msg) { status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+  function fallbackCopy(t) {
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); return ok;
+  }
+  $('ra-copy').addEventListener('click', function () {
+    var t = text() + '\n\nOpen our agreement: ' + link();
+    var okMsg = 'Copied. Paste it into a message to your roommate.';
+    var fail = function () { say(fallbackCopy(t) ? okMsg : 'Copying didn’t work here. Select the agreement above and copy it by hand.'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { say(okMsg); }, fail);
+    else fail();
+  });
+})();
+</script>
+</main>
+</body>
+</html>
