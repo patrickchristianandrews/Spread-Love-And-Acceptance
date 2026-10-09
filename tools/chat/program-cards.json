@@ -10613,6 +10613,47 @@
           "/book/self-3-next-in-depth.html#control"
         ]
       ]
+    },
+    {
+      "id": "feelinglow",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a sad or heavy day",
+      "pat": "\\b(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |a bit |kind of |kinda )?(sad|low|blue|miserable|hopeless|empty)( today| tonight| lately| right now| again)?$|^(im|i m|i am|feeling) (so |really |very |a bit )?(sad|miserable|hopeless)\\b|\\b(tired|sick|exhausted) of (everything|it all|life|all of it)\\b|\\b(having|had) (a|such a) (bad|awful|horrible|rough|terrible|sad) day\\b|\\bnothing (feels|seems) (worth it|good anymore)\\b",
+      "notPat": "\\b(died|passed away|funeral|baby|retir\\w*|ex|breakup|broke up)\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry you’re feeling this way. Heavy days happen to everyone, and you don’t need a reason, or to have it all worked out, to deserve some kindness."
+      ],
+      "how": [
+        "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
+        "Tell one person you trust, even in one line: “I’m having a hard day.”",
+        "Make the day smaller: pick one small thing to do, and let the rest wait.",
+        "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step.",
+        "If you ever feel you can’t go on, or think about ending your life, please reach out now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time."
+      ],
+      "script": [
+        "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
+      ],
+      "plain": [
+        "I’m sorry you feel this way.",
+        "Drink some water and eat something.",
+        "Tell one person you trust.",
+        "If it lasts more than two weeks, see your doctor.",
+        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK)."
+      ],
+      "links": [
+        [
+          "Upset right now?",
+          "/upset-right-now.html"
+        ],
+        [
+          "Your self path",
+          "/self-path.html"
+        ]
+      ],
+      "chips": []
     }
   ],
   "clarify": [

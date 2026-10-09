@@ -293,14 +293,22 @@
   };
 
   L.checklist = function (sp, y0, T, F) {
-    var items = strArr(sp.items).slice(0, 8), out = '', y = y0 + 22, bx = PAD + 34, tx = PAD + 112, tw = W - PAD - 34 - tx;
-    var rows = items.map(function (t) { return fit(clip(t, 170), { fam: F.body, size: 34, min: 28, lines: 3, width: tw }); });
+    var items = (sp.items || []).map(itemOf).slice(0, 8), out = '', y = y0 + 22, bx = PAD + 34, tx = PAD + 112, tw = W - PAD - 34 - tx;
+    var mark = sp.marker || 'check';
+    var rows = items.map(function (it) {
+      var lab = it.label ? fit(clip(it.label, 60), { fam: F.title, weight: 600, size: 32, min: 28, lines: 2, width: tw }) : null;
+      var body = it.text ? fit(clip(it.text, lab ? 150 : 170), { fam: F.body, size: lab ? 31 : 34, min: 27, lines: 3, width: tw }) : null;
+      return { lab: lab, body: body, h: (lab ? lab.h : 0) + (lab && body ? 4 : 0) + (body ? body.h : 0) };
+    });
     var inner = '';
     rows.forEach(function (f, i) {
       var h = Math.max(56, f.h) + 40, a = T.acc[1];
-      inner += rect(bx, y + (h - 52) / 2, 52, 52, 12, a.f, a.d, 3);
-      inner += icon('check', bx + 26, y + h / 2, 34, a.d, 3.2);
-      inner += txt(tx, y + (h - f.h) / 2, f, { fill: T.ink });
+      if (mark === 'dot') inner += circ(bx + 26, y + h / 2, 11, a.d);
+      else if (mark === 'number') inner += circ(bx + 26, y + h / 2, 26, a.d) + '<text x="' + (bx + 26) + '" y="' + r(y + h / 2 + 10) + '" text-anchor="middle" font-family="' + esc(F.title) + '" font-weight="600" font-size="28" fill="' + T.onDeep + '">' + (i + 1) + '</text>';
+      else { inner += rect(bx, y + (h - 52) / 2, 52, 52, 12, a.f, a.d, 3); inner += icon('check', bx + 26, y + h / 2, 34, a.d, 3.2); }
+      var ty = y + (h - f.h) / 2;
+      if (f.lab) { inner += txt(tx, ty, f.lab, { fill: T.ink }); ty += f.lab.h + 4; }
+      if (f.body) inner += txt(tx, ty, f.body, { fill: T.ink });
       if (i < rows.length - 1) inner += line(bx, y + h, W - PAD - 34, y + h, T.line, 2, ' stroke-dasharray="3 7"');
       y += h;
     });
@@ -496,7 +504,7 @@
   L.cycle = function (sp, y0, T, F) {
     var items = (sp.items || []).map(itemOf).slice(0, 5), n = Math.max(3, items.length), out = '';
     while (items.length < 3) items.push({ text: '' });
-    var cw = n === 5 ? 300 : n === 4 ? 340 : 380;
+    var cw = n === 5 ? 300 : n === 4 ? 360 : 400;
     var cards = items.map(function (it, i) {
       var a = T.acc[i % T.acc.length];
       var lab = fit(clip(it.label || it.text, 50), { fam: F.title, weight: 600, size: 33, min: 28, lines: 3, width: cw - 48 });
@@ -523,7 +531,7 @@
       var m = t + Math.PI / n, px = W / 2 + rx * Math.cos(m), py = cy + ry * Math.sin(m);
       var dx = -rx * Math.sin(m), dy = ry * Math.cos(m), deg = Math.atan2(dy, dx) * 180 / Math.PI;
       out += '<g transform="translate(' + r(px) + ' ' + r(py) + ') rotate(' + r(deg) + ')">' + circ(0, 0, 26, T.bg, T.soft, 2.5) +
-        '<path d="M-8 -10 4 0-8 10" fill="none" stroke="' + T.soft + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>';
+        '<path d="M-10 0H9M2 -7l7 7-7 7" fill="none" stroke="' + T.soft + '" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>';
     });
     if (sp.center) {
       var cwid = Math.max(220, 2 * rx - cw - 60);
@@ -586,7 +594,7 @@
     sp.title = clip(sp.title || 'A little picture', 90);
     if (sp.subtitle) sp.subtitle = clip(sp.subtitle, 190);
     if (sp.items && !Array.isArray(sp.items)) sp.items = [sp.items];
-    if (sp.layout === 'checklist' || sp.layout === 'words') sp.items = strArr(sp.items);
+    if (sp.layout === 'words') sp.items = strArr(sp.items);
     return sp;
   }
 
@@ -715,7 +723,8 @@
     if (k === 'checklist-plain') { spec.layout = 'checklist'; spec.items = plain.slice(0, 8); if (script[0]) spec.say = script[0]; return spec; }
     if (k === 'checklist' || (!k && (how.length > 6 || (how.length < 3 && plain.length >= 3)))) {
       var list = how.length >= 2 ? how : plain.length ? plain : sentences(what);
-      spec.layout = 'checklist'; spec.items = list.slice(0, 8).map(function (s) { return clip(s, 170); });
+      spec.layout = 'checklist'; spec.items = list.slice(0, 8).map(labelled);
+      if (spec.items.filter(function (x) { return x.label; }).length >= spec.items.length / 2) spec.marker = 'dot';
       if (script[0]) spec.say = script[0];
       return spec;
     }
@@ -799,7 +808,7 @@
       layout: 'split', title: opts.title || 'Who does what', kicker: 'The split, as a picture',
       subtitle: opts.subtitle || (unit === 'hours' ? 'Out of ' + fmtNum(tot) + ' hours of shared work.' : unit === 'minutes' ? 'Out of ' + fmtNum(tot) + ' minutes of shared work.' : unit === 'jobs' ? 'Out of ' + fmtNum(tot) + ' shared jobs.' : 'How the shared work is split right now.'),
       data: p.data, unit: unit, source: '/lemonade-stand.html',
-      say: opts.say === false ? '' : 'Could we look at this together and give each regular job one owner, so it feels fair to both of us?'
+      say: opts.say === false ? '' : 'Could we look at this together and give each regular job one owner, so it feels fair to ' + (p.data.length > 2 ? 'all' : 'both') + ' of us?'
     };
   }
 
@@ -852,10 +861,10 @@
     pause: {
       layout: 'timeline', title: 'Taking a good pause', kicker: 'Before, during, after',
       subtitle: 'A break feels safe to both of you when it comes with a time to come back.',
-      items: [{ when: 'Notice', label: 'Notice you’re flooded', text: 'A racing heart, a rising voice, or going blank. That’s the signal to pause.', icon: 'heart' },
-              { when: 'Name it', label: 'Say it kindly', text: '“I need a break so I don’t say something unfair. I’ll be back at 8:30.”', icon: 'chat' },
-              { when: '20 to 30 minutes', label: 'Take a real break', text: 'Walk, breathe out slowly, do something absorbing. Try not to rehearse your case.', icon: 'leaf' },
-              { when: 'Return', label: 'Come back at the time you said', text: 'Even if it’s only to say “I need another half hour.” Keeping the time is what makes a pause safe.', icon: 'clock' }],
+      items: [{ when: 'Before', label: 'Notice you’re flooded', text: 'A racing heart, a rising voice, or going blank. That’s the signal to pause.', icon: 'heart' },
+              { when: 'Starting the pause', label: 'Say it kindly', text: '“I need a break so I don’t say something unfair. I’ll be back at 8:30.”', icon: 'chat' },
+              { when: 'During: 20 to 30 minutes', label: 'Take a real break', text: 'Walk, breathe out slowly, do something absorbing. Try not to rehearse your case.', icon: 'leaf' },
+              { when: 'After', label: 'Come back at the time you said', text: 'Even if it’s only to say “I need another half hour.” Keeping the time is what makes a pause safe.', icon: 'clock' }],
       source: '/upset-right-now.html'
     },
     'mental-load': {
