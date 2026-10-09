@@ -96,7 +96,7 @@
   <p>The Frequency Buddies station is always on. Whenever you tune in, you join the episode that’s playing right now, just like live TV, and everyone watching sees the same moment.</p>
 </section>
 
-<div class="fbl-tv" id="fbl-tv">
+<div class="fbl-tv" id="fbl-tv" data-tol-clock="">
   <video id="fbl-v" playsinline preload="none" poster="/assets/img/frequency-buddies-season-1.jpg" hidden x-webkit-airplay="allow"></video>
   <p class="fbl-badge" id="fbl-badge" hidden><i aria-hidden="true"></i><span>Live</span></p>
   <div class="fbl-start" id="fbl-start">
@@ -106,7 +106,6 @@
   <div class="fbl-ctl" id="fbl-ctl" hidden>
     <button type="button" id="fbl-pause" aria-label="Pause">⏸ Pause</button>
     <button type="button" id="fbl-live" hidden>⏩ Back to live</button>
-    <button type="button" id="fbl-mute" aria-pressed="true">🔊 Sound on</button>
     <button type="button" id="fbl-full">⛶ Full screen</button>
     <button type="button" id="fbl-remote" hidden>📺 Play on a TV</button>
   </div>
@@ -220,8 +219,10 @@
     else { paused = false; play(); this.textContent = '⏸ Pause'; this.setAttribute('aria-label', 'Pause'); }
   });
   $('fbl-live').addEventListener('click', function () { paused = false; $('fbl-pause').textContent = '⏸ Pause'; toLive(); play(); setBehind(false); });
-  function muteLabel() { var b = $('fbl-mute'); b.textContent = v.muted ? '🔇 Sound off' : '🔊 Sound on'; b.setAttribute('aria-pressed', String(!v.muted)); }
-  $('fbl-mute').addEventListener('click', function () { v.muted = !v.muted; muteLabel(); });
+  // no sound switch: the sound is simply on. If the browser only let it start muted, the next tap or key turns it on.
+  function muteLabel() { if (!v.muted) return; var un = function () { v.muted = false; document.removeEventListener('pointerdown', un, true); document.removeEventListener('keydown', un, true); }; document.addEventListener('pointerdown', un, true); document.addEventListener('keydown', un, true); }
+  // while it plays, the floating helpers step aside (site.css), and the time-and-weather note stays in the picture's corner in full screen
+  ['play', 'playing', 'pause', 'ended'].forEach(function (ev) { v.addEventListener(ev, function () { document.body.classList.toggle('tol-video-playing', !v.paused && !v.ended); }); });
   $('fbl-full').addEventListener('click', function () {
     var d = document;
     if (d.fullscreenElement || d.webkitFullscreenElement) { (d.exitFullscreen || d.webkitExitFullscreen).call(d); return; }
