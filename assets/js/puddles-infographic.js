@@ -106,8 +106,10 @@
       if (!mctx) mctx = document.createElement('canvas').getContext('2d');
       // measure with each font in the list (the web font, then its fallback) and keep the widest,
       // so the text fits whether the site's fonts are loaded or not (a saved PNG uses the fallback)
-      fam.split(',').map(function (s) { return s.trim(); }).filter(function (s) { return !/^(serif|sans-serif|monospace)$/.test(s); }).forEach(function (f) {
-        mctx.font = (italic ? 'italic ' : '') + (weight || 400) + ' ' + size + 'px "' + f + '", serif';
+      // (and the generic family on its own, which is what shows when neither is installed)
+      var list = fam.split(',').map(function (s) { return s.trim(); }), gen = list.filter(function (s) { return /^(serif|sans-serif|monospace)$/.test(s); })[0] || 'serif';
+      list.filter(function (s) { return s !== gen; }).map(function (f) { return '"' + f + '", ' + gen; }).concat([gen]).forEach(function (f) {
+        mctx.font = (italic ? 'italic ' : '') + (weight || 400) + ' ' + size + 'px ' + f;
         w = Math.max(w, mctx.measureText(str).width);
       });
     } catch (e) { w = 0; }

@@ -1963,7 +1963,7 @@
   // the best deep topic (or big question) for a message, or null
   function deepFind(fs, f) {
     var D = KB && KB.deep; if (!D || !fs) return null;
-    var byName = dById(fs); if (byName) return byName;
+    var byName = dById(fs); if (byName) return { t: byName };
     var bq = D.big_questions || D.questions || [];
     if (!Array.isArray(bq)) bq = Object.keys(bq).map(function (k) { var x = bq[k]; if (x && typeof x === 'object' && !x.id) x.id = k; return x; });
     for (var i = 0; i < bq.length; i++) {
@@ -2169,7 +2169,7 @@
     var S = KB && KB.pers && KB.pers.smalltalk;
     if (state.stAsk == null || state.stAsk !== (state.turn || 0) - 1 || f.split(' ').length > 14) return null;
     // a real question after the chat prompt is answered as a question
-    if (/^(what|whats|how|hows|why|where|when|which|who|can|could|should|is|are|do|does|tell me|explain|help)\b/.test(f) && f.split(' ').length > 3) return null;
+    if (/^(what|whats|how|hows|why|where|when|which|who|can|could|should|is|are|do|does|tell me|explain|help)\b/.test(f) && f.split(' ').length >= 3) return null;
     var acks = (S && (S.acks || S.acknowledgements)) || [];
     var a = acks.length ? acks[Math.floor(frand(state) * acks.length) % acks.length] : pick(['Ooh, I like that. Thank you for telling me.', 'That’s lovely. I’m writing it in my waterproof notebook.', 'Ha, wonderful. You’ve made my pond a little brighter.']);
     var b = [{ k: 'p', x: nameFill(a, chatName(state)) }];
