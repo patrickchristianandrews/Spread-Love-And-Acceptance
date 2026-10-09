@@ -48,7 +48,7 @@
   ];
   var SEE = [
     { id: 'theysaw', t: 'They may have seen or known things you didn’t', o: [['load', 'their whole day and workload'], ['msg', 'a message, call or news you didn’t see'], ['planned', 'something they had already planned or done'], ['where', 'how it looked from where they stood'], ['promise', 'a promise someone else made them'], ['feel', 'how they were feeling inside']] },
-    { id: 'yousaw', t: 'You may have seen or known things they didn’t', o: [['plan', 'the planning you had already done'], ['why', 'the reason behind your timing'], ['meant', 'what you actually meant'], ['tired', 'how tired or stretched you were'], ['done', 'the part already done'], ['deadline', 'a deadline only you knew about']] },
+    { id: 'yousaw', t: 'You may have seen or known things they didn’t', o: [['plan', 'the planning you had already done', 'the planning I had already done'], ['why', 'the reason behind your timing', 'the reason behind my timing'], ['meant', 'what you actually meant', 'what I actually meant'], ['tired', 'how tired or stretched you were', 'how tired or stretched I was'], ['done', 'the part already done', 'the part already done'], ['deadline', 'a deadline only you knew about', 'a deadline only I knew about']] },
     { id: 'neither', t: 'Neither of you could fully see', o: [['tone', 'each other’s tone, in writing'], ['intent', 'what was going on in the other’s head'], ['next', 'what would happen next'], ['others', 'what other people had said to each of you']] }
   ];
   var S = {}; function sel(g) { return S[g] || (S[g] = []); }
@@ -107,7 +107,7 @@
     if (!qs.length) qs.push('How did that moment look from where you were?');
     h += '<h3>Questions to check, instead of guessing</h3><ul>' + qs.slice(0, 4).map(function (q) { return '<li>“' + esc(q) + '”</li>'; }).join('') + '</ul>';
     // a sentence to bridge the gap
-    var mine = seen.yousaw[0], theirs = (picks.filter(function (p) { return p.g.id === 'around' || p.g.id === 'state'; })[0] || {}).o;
+    var mineId = sel('yousaw')[0], mineO = mineId ? label(SEE, 'yousaw', mineId) : null, mine = mineO ? (mineO[2] || mineO[1]) : '', theirs = (picks.filter(function (p) { return p.g.id === 'around' || p.g.id === 'state'; })[0] || {}).o;
     var bridge = 'I think we may have been seeing this from different places.' +
       (mine ? ' On my side, I knew about ' + mine + ', and I’m not sure that came across.' : '') +
       (theirs ? ' I’m wondering whether, for you, ' + theirsPhrase(theirs[0]) + '.' : '') +

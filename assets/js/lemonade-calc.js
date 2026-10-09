@@ -70,6 +70,7 @@
     { id: 'food', n: 'Food & meals', k: 'home', act: 'simplify', tip: 'Repeat a few easy meals, or cook once for two nights.' },
     { id: 'laundry', n: 'Laundry', k: 'home', act: 'handoff', tip: 'Older kids and adults can each own their own laundry.' },
     { id: 'kids', n: 'Kids & caring', k: 'home', act: 'handoff', tip: 'Trade whole routines, like bedtime on set nights.' },
+    { id: 'care', n: 'Care for my partner', k: 'home', act: 'handoff', tip: 'Share out what can be shared, and ask who else could carry a piece of it (family, friends, a service).' },
     { id: 'baby', n: 'New baby', k: 'home', act: 'handoff', tip: 'Take whole nights or whole feeds in turns, so each of you gets a stretch of real sleep.' },
     { id: 'pets', n: 'Pets', k: 'home', act: 'handoff', tip: 'One person owns feeding, another owns walks.' },
     { id: 'money', n: 'Money & bills', k: 'home', act: 'schedule', tip: 'Set autopay where you can, and keep one money half hour a week.' },
@@ -109,13 +110,24 @@
   // Daytime care on your own while the other parent is at work: home work, counted in the split and in
   // "Home + paid work", the same way paid work is counted for the one at work
   var SOLO_CARE = 'Looking after the baby on my own (while the other is at work)';
-  function isSoloCare(j) { return !j.ex && low(j.name) === low(SOLO_CARE); }
+  // the same for older children (a parent at home with toddlers all day), under "Kids & caring"
+  var SOLO_KIDS = 'Looking after the kids on my own (while the other is at work)';
+  function isSoloCare(j) { return !j.ex && (low(j.name) === low(SOLO_CARE) || low(j.name) === low(SOLO_KIDS)); }
+  function isBabySolo(j) { return !j.ex && low(j.name) === low(SOLO_CARE); }
+  // Night work: the shifts and the sleep after them are part of the work week (shown with paid work, never as rest)
+  // rest an illness needs (pacing, lying down to manage symptoms): rest, but never idle time
+  var PACING = 'Pacing & symptom rest (managing an illness)';
+  function isPacing(j) { return !j.ex && /^pacing|symptom rest|managing (?:an |my )?illness/.test(low(j.name)); }
+  var NIGHT_SHIFT = 'Night shift', NIGHT_SLEEP = 'Recovery sleep after a night shift';
+  function isNightShift(j) { return !j.ex && /^night shifts?$/.test(low(j.name)); }
+  function isNightSleep(j) { return !j.ex && /recovery sleep|sleep after (?:a |my |the )?(?:night )?shifts?/.test(low(j.name)); }
   // The task library: [name, typical amount, how often, unit ('m' minutes, default, or 'h' hours)]
   var LIB = {
     home: [['Dishes & kitchen reset', 20, 'day'], ['Tidying up', 15, 'day'], ['Vacuuming & floors', 45, 'week'], ['Cleaning the bathroom', 40, 'week'], [UKISH ? 'Rubbish, bins & recycling' : 'Trash & recycling', 10, 'few'], ['Changing the sheets', 20, 'week'], ['Restocking soap, paper & supplies', 15, 'week'], ['Deep clean (fridge, oven, windows)', 60, 'month']],
     food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
-    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week']],
+    kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week'], [SOLO_KIDS, 8, 'wkd', 'h']],
+    care: [['Personal care (washing, dressing)', 30, 'day'], ['Medicines & refills', 10, 'day'], ['Health appointments & calls for my partner', 90, 'month'], ['Pacing support (planning the day around energy)', 15, 'day'], ['Being on call for a partner who is unwell', 4, 'few', 'h'], ['Meals in bed & bringing what is needed', 20, 'day']],
     baby: [['Night feeds', 90, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
     pets: [['Feeding & fresh water', 10, 'day'], ['Dog walks', 30, 'day'], ['Litter, cage or tank cleaning', 15, 'few'], ['Grooming & baths', 30, 'month'], ['Vet visits & pet supplies', 60, 'month']],
     money: [['Paying bills', 20, 'week'], ['Budget & checking accounts', 30, 'week'], ['Splitting shared costs', 15, 'week'], ['Taxes & receipts', 90, 'month'], ['Comparing plans & renewals', 60, 'month']],
@@ -127,8 +139,8 @@
     social: [['Keeping in touch with family', 30, 'week'], ['Keeping up with both families & in-laws', 20, 'week'], ['Birthdays & holidays', 60, 'month'], ['Thank-you notes & messages', 15, 'week'], ['Hosting & visitors', 120, 'month'], ['Planning time with friends', 20, 'week'], ['Kids’ playdates & parties', 60, 'month']],
     mental: [['Keeping the family calendar', 15, 'few'], ['Noticing what’s running low', 10, 'day'], ['Planning the week ahead', 30, 'week'], ['Remembering dates & deadlines', 10, 'day'], ['Childcare & backup plans', 30, 'week'], ['Checking that things got done', 10, 'day'], ['Trips & holiday planning', 120, 'month']],
     emotional: [['Keeping the peace', 15, 'day'], ['Checking in on how people are', 15, 'day'], ['Calming a hard moment', 20, 'few'], ['Listening & support', 30, 'few'], ['Smoothing things over with family', 30, 'week']],
-    work: [['Paid work', 40, 'week', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['A side job', 5, 'week', 'h']],
-    rest: [['Time to myself', 30, 'day'], ['A walk or moving my body', 30, 'few'], ['Hobbies', 60, 'week'], ['Time with friends', 120, 'week'], ['Quiet time doing nothing', 20, 'day'], ['A full day off', 8, 'month', 'h']]
+    work: [['Paid work', 40, 'week', 'h'], [NIGHT_SHIFT, 12, 'few', 'h'], [NIGHT_SLEEP, 7, 'few', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['A side job', 5, 'week', 'h']],
+    rest: [['Time to myself', 30, 'day'], ['A walk or moving my body', 30, 'few'], ['Hobbies', 60, 'week'], ['Time with friends', 120, 'week'], ['Quiet time doing nothing', 20, 'day'], ['A full day off', 8, 'month', 'h'], [PACING, 2, 'day', 'h']]
   };
   // Library jobs that start as each person's own (their own family, their own life), not shared home work
   var PERSONAL_LIB = { 'keeping in touch with family': 1 };
@@ -147,6 +159,8 @@
   // drop-off, a hand-over, a school run, a drive or an appointment is work for someone, never rest.
   var NOT_REST = /pick(?:ing|s)?[ -]?up|drop(?:ping|s)?[ -]?off|hand-?(?:off|over)|school run|\bdriv(?:e|es|ing)\b|\blifts?\b|\brides?\b|appoint|custody|co-?parent|collect|ferry|transport|errand/;
   var GUESS = [
+    // night work first: "Sleep after night shifts" is the work week, never rest, bills or a baby's night
+    ['work', /night[- ]?shifts?|shift work|recovery sleep|sleep after (?:a |my |the )?(?:night )?shifts?|day sleep after/],
     ['baby', /baby|newborn|nappy|nappies|diaper|night feed|bottle|pump|formula|burp/],
     ['emotional', /emotion|check-?in|peace|listen|support|comfort/], ['money', /bill|budget|money|\btax|\brent\b|bank|\bpay|mortgage|subscription/],
     ['food', /groc|meal|cook|lunch|dinner|breakfast|food|kitchen/], ['laundry', /laundry|fold|iron|towel/],
@@ -221,7 +235,8 @@
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function num(x) { var n = parseFloat(x); return isFinite(n) && n > 0 ? n : 0; }
-  function r1(n) { return Math.round(n * 10) / 10; }
+  // one rounding everywhere: 1.75 is 1.8 (the tiny nudge keeps 1.7499999 from sums rounding down)
+  function r1(n) { return Math.round(n * 10 + (n >= 0 ? 1e-7 : -1e-7)) / 10; }
   function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function money(n) { return (Math.round(n * 100) / 100).toLocaleString(undefined, { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); }
@@ -402,7 +417,7 @@
   // on my own". That share is guessed from the hours on your own out of a daytime week of about 98 hours (14 a day).
   var DAY_WEEK = 98;
   function isDayCare(j) { return !j.ex && /^(daytime feeds|nappies|bottles|settling)/.test(low(j.name)); }
-  function soloShare(i) { return Math.min(1, sum(state.jobs.filter(isSoloCare).map(function (j) { return doH(j, i); })) / DAY_WEEK); }
+  function soloShare(i) { return Math.min(1, sum(state.jobs.filter(isBabySolo).map(function (j) { return doH(j, i); })) / DAY_WEEK); }
   function rawH(j, i) { var n = num(j.v[i]); return n ? n * (j.unit === 'm' ? 1 / 60 : 1) * mult(j, i) : 0; }
   // What may be counted twice, before anyone says so: night feeds on on-call nights, and daytime baby jobs
   // inside time on your own with the baby. [{ j, kind: 'call' | 'solo', h }]
@@ -672,7 +687,15 @@
     var solo1 = null;
     if (isSoloCare(item)) {
       solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
-      solo1.textContent = 'Counted as home work, in the split and in “Home + paid work”, the same way paid work counts for the one at work. Feeds, nappies and naps in these hours are part of it, so count those jobs only for the rest of the day.';
+      solo1.textContent = 'Counted as home work, in the split and in “Home + paid work”, the same way paid work counts for the one at work. ' + (isBabySolo(item) ? 'Feeds, nappies and naps' : 'Meals, naps and play') + ' in these hours are part of it, so count those jobs only for the rest of the day.';
+    }
+    if (isNightShift(item) || isNightSleep(item)) {
+      solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
+      solo1.textContent = isNightShift(item) ? 'Counted with paid work, beside the home split. Add “Recovery sleep after a night shift” too: the sleep a night needs is part of the work week.' : 'Part of the work week, shown with paid work, never as rest or free time.';
+    }
+    if (isPacing(item)) {
+      solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note';
+      solo1.textContent = 'Shown with rest, and read as what managing an illness takes: needed, not idle time.';
     }
     if (isOnCall(item)) {
       solo1 = document.createElement('p'); solo1.className = 'ls-mini ls-solo-note ls-call-note';
@@ -1218,8 +1241,10 @@
       var c = CAT[libCat];
       var hint = $('lib-hint');
       if (hint) hint.textContent = libCat === 'baby' ? 'Night time counts. If one of you is on call, listening out while the other sleeps, count those hours too. A young baby often feeds 2 or 3 times a night, 30 to 40 minutes each, so night feeds start at 90 minutes; change it to fit.' :
-        c.k === 'work' ? 'Work and school hours are shown beside your home jobs, never mixed into them.' :
-        c.k === 'rest' ? 'Rest counts too. It shows how much room your week has to recover.' :
+        c.k === 'work' ? 'Work and school hours are shown beside your home jobs, never mixed into them. Work nights? Add “Night shift” and “Recovery sleep after a night shift”: both count as part of your work week, not as rest.' :
+        c.k === 'rest' ? 'Rest counts too. It shows how much room your week has to recover. Living with an illness? Pacing and symptom rest is how it’s managed: it’s needed, not idle time.' :
+        libCat === 'care' ? 'Caring for a partner who is ill, disabled or recovering. It’s home work, counted in the split. Whatever the person being cared for still does, from bed or on good days, counts too.' :
+        libCat === 'kids' ? 'At home all day with little ones while the other is at work? Add “Looking after the kids on my own”: it counts as work, the same as paid work.' :
         libCat === 'appts' ? 'Only the logistics: booking, getting there, forms and pickups.' :
         c.inv ? 'This is the invisible part of running a home. It counts.' : '';
       var extra = $('lib-extra'); if (extra) extra.hidden = libCat !== 'baby';

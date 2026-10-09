@@ -15542,3 +15542,14 @@ rotas
 allowance
 receipts
 calling
+dorm
+dorms
+college
+university
+parkinson
+parkinsons
+bisexual
+nonbinary
+pansexual
+flinched
+flinch

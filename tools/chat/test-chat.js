@@ -756,6 +756,22 @@ t('retest4', 'should Leo have the same rules as the other kids', { id: 'parttime
 t('retest4', 'can we alternate christmas and thanksgiving each year', { id: 'holidayboth' });
 t('retest4', 'my 14 year old won\'t even talk to him and he thinks I always take their side', { id: 'bioparent' });
 t('retest4', 'she told me I left the stove on again and that it\'s dangerous and I felt like a kid', { kind: 'care', id: 'feltsmall', not: /little pond/ });
+t('round7', 'am i an abuser', { kind: 'care', not: /If someone is hurting, threatening, watching or controlling you/ });
+t('round7', 'is yelling at kids abuse', { kind: 'care', text: /not the same as abuse/ });
+c('round7', ['am i an abuser', 'how do i apologize to my wife for yelling'], { not: /won.t suggest ways to talk them round/ });
+t('round7', 'my son flinched when i raised my voice', { kind: 'care', text: /flinch/ });
+t('round7', 'should i see a therapist about my anger', { id: 'angerhelp', not: /^No\./ });
+t('round7', 'anger management classes', { id: 'angerhelp' });
+t('round7', 'i yell at my wife when im stressed', { id: 'yellpartner' });
+t('round7', 'my wife has Parkinson', { id: 'illnesscare', not: /Parkinson.s law/ });
+t('round7', 'cuido a mi esposa enferma y estoy agotado', { text: /agotado/, link: '/en-espanol.html#cuidar' });
+t('round7', 'sometimes I am impatient with my wife and then I feel guilty', { id: 'careresent' });
+t('round7', 'i\'m 31 and bisexual, how do i tell my family about my girlfriend', { id: 'lgbtadult', not: /school counselor|GSA/ });
+t('round7', 'my girlfriend is pressuring me to come out to my family before i\'m ready', { id: 'lgbtadult' });
+t('round7', 'what if they cut me off', { id: 'familycutoff', not: /Watching someone you care about/ });
+t('round7', 'can my family see what i look at on here on our wifi', { id: 'wifiprivacy' });
+t('round7', 'can i talk to my RA about this', { id: 'rahelp' });
+t('round7', 'im starting to dread going back to my dorm room', { not: /drama room/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

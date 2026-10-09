@@ -123,7 +123,7 @@
   // top of the sheet, then "Both"/"Everyone" (left off when there is only one person).
   function personOptions(ctx, def) {
     var list = ctx.people().map(function (c) { return { v: c, l: ctx.name(c), person: c }; });
-    if (def && def.both && list.length > 1) list.push({ v: 'Both', l: ctx.name('Both'), person: 'Both' });
+    if (def && def.both && list.length > 1) list.push({ v: 'Both', l: ctx.name('Both') + (def.bothNote ? ' ' + def.bothNote : ''), person: 'Both' });
     return list;
   }
 
@@ -603,7 +603,7 @@
       el = h('textarea', Object.assign(base, { rows: data.table ? 2 : 3, spellcheck: 'true' }));
       el.value = value || '';
     } else if (def.type === 'select' || def.type === 'person') {
-      el = h('select', Object.assign(base, { 'data-person-select': def.type === 'person' ? (def.both ? 'both' : 'one') : null }));
+      el = h('select', Object.assign(base, { 'data-person-select': def.type === 'person' ? (def.both ? 'both' : 'one') : null, 'data-both-note': def.bothNote || null }));
       el.appendChild(h('option', { value: '', text: '—' }));
       var opts = def.type === 'person'
         ? personOptions(self.ctx(), def)
@@ -983,7 +983,7 @@
     var libCount = lib ? lib.count : 0, hhCount = 0;
     if (hhg) {
       var hk = {}; hhg.items.forEach(function (it) { hk[jobKey(it[0])] = 1; });
-      var groups0 = (lib && lib.groups ? lib.groups : []).map(function (g) { return { name: g.name, hidden: g.hidden, items: g.items.filter(function (it) { return !hk[jobKey(it[0])]; }) }; }).filter(function (g) { return g.items.length; });
+      var groups0 = (lib && lib.groups ? lib.groups : []).map(function (g) { return { name: g.name, hidden: g.hidden, hint: g.hint, items: g.items.filter(function (it) { return !hk[jobKey(it[0])]; }) }; }).filter(function (g) { return g.items.length; });
       hhCount = hhg.items.length;
       lib = { intro: lib && lib.intro, count: libCount, groups: [hhg].concat(groups0) };
     }
@@ -996,6 +996,7 @@
       if (lib.intro) det.appendChild(h('p', { className: 'wpf-help', text: lib.intro }));
       lib.groups.forEach(function (g) {
         var grp = h('div', { className: 'wpf-lib-group', role: 'group', 'aria-label': g.name }, [h('p', { className: 'wpf-lib-h', text: g.name + (g.hidden ? ' · often unseen' : '') })]);
+        if (g.hint) grp.appendChild(h('p', { className: 'wpf-help wpf-lib-hint', text: g.hint }));
         g.items.forEach(function (it) {
           var on = !!have[jobKey(it[0])];
           grp.appendChild(h('button', { type: 'button', className: 'wpf-chip' + (on ? ' is-on' : ''), 'data-action': 'lib', 'data-table': sec.id, 'data-task': it[0], 'data-freq': it[1] || '', 'aria-pressed': on ? 'true' : 'false', text: (on ? '✓ ' : '+ ') + it[0] }));
@@ -1043,7 +1044,8 @@
     // Person drop-downs: fresh names, in the order they were typed at the top
     Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select]'), function (sel) {
       var opts = Array.prototype.slice.call(sel.querySelectorAll('option[data-person]'));
-      opts.forEach(function (o) { o.textContent = ctx.name(o.getAttribute('data-person')); });
+      var note = sel.getAttribute('data-both-note') || '';
+      opts.forEach(function (o) { var p = o.getAttribute('data-person'); o.textContent = ctx.name(p) + (p === 'Both' && note ? ' ' + note : ''); });
     });
     this.refreshExamples();
     this.refreshClosing();

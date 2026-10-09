@@ -978,6 +978,289 @@
       "chips": []
     },
     {
+      "id": "angerhelp",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "getting help for your anger",
+      "pat": "\\b(therapist|therapy|counsel\\w*|anger management|classes|course|group|help|support)\\b.{0,30}\\b(for|with|about) (my )?(anger|temper|yelling|rage)\\b|\\banger management\\b|\\b(should|do) i (see|get|need) (a )?(therapist|counsel\\w*|help)\\b.{0,30}\\b(anger|temper|yell\\w*)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Yes: getting support for your anger is a strong, sensible step, and it’s good for your family. This site isn’t therapy, but here’s where people usually start."
+      ],
+      "how": [
+        "Your doctor: stress, sleep, alcohol and low mood all shorten a fuse, and a doctor can help with those and point you to local support.",
+        "An Employee Assistance Program (EAP) through work, if you have one: a few free, confidential counselling sessions.",
+        "A counsellor or anger-management group: search “anger management” in a therapist directory such as Psychology Today, or ask your doctor for a local group.",
+        "Meanwhile, the Calm-Down Kit helps you spot your triggers and first warning signs, and the four steps on Upset right now? help in the moment."
+      ],
+      "script": [
+        "I’ve realised my temper is hurting my family, and I want help with it. Can you point me to someone who does anger management?"
+      ],
+      "plain": [
+        "Yes, getting help is a good step.",
+        "Talk to your doctor.",
+        "Ask about counselling or an anger group.",
+        "Use the Calm-Down Kit meanwhile."
+      ],
+      "links": [
+        [
+          "Getting help for your anger",
+          "/parents.html#anger-help"
+        ],
+        [
+          "The Calm-Down Kit",
+          "/workpapers/fill/wp-11.html"
+        ],
+        [
+          "When it’s you and your child",
+          "/upset-right-now.html#parent-child"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "yellpartner",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "yelling at your partner",
+      "pat": "\\bi (yell|shout|scream|snap) at (my )?(wife|husband|partner|girlfriend|boyfriend|spouse)\\b|\\bi (keep |always )?(lose|losing) my temper with (my )?(wife|husband|partner|girlfriend|boyfriend)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Noticing it is the first step, and wanting to change matters. Yelling usually comes when stress is already high and there’s no pause plan, but it still hurts the person on the other end, so it’s worth working on."
+      ],
+      "how": [
+        "Agree a pause word together on a calm day: either of you can say it, and you step away for twenty minutes, then come back at a time you name.",
+        "When you feel it rising, say “I’m getting too loud, I’m going to take a breath,” and step away before the words come out.",
+        "Afterwards, apologise for the specific thing, without a “but”, and say what you’ll do differently.",
+        "If it happens most days, or anyone at home is afraid of you, get support for yourself: your doctor or a counsellor who does anger management."
+      ],
+      "script": [
+        "I yelled at you last night. That wasn’t fair, and it wasn’t about you. Next time I’ll step away when I feel it rising, and come back in twenty minutes."
+      ],
+      "plain": [
+        "Agree a pause word.",
+        "Step away before you shout.",
+        "Say sorry for the specific thing.",
+        "Get help if it happens a lot."
+      ],
+      "links": [
+        [
+          "Making it right with your partner",
+          "/parents.html#repair-partner"
+        ],
+        [
+          "A pause plan for two",
+          "/pursue-withdraw.html#plan"
+        ],
+        [
+          "Getting help for your anger",
+          "/parents.html#anger-help"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "illnesscare",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a partner or parent with a long-term illness",
+      "pat": "\\bmy (wife|husband|partner|mum|mom|mother|dad|father|spouse)\\b.{0,15}\\b(has|with|diagnosed with|got)\\b.{0,10}\\b(parkinson\\w*|dementia|alzheimer\\w*|ms|multiple sclerosis|cancer|a stroke|copd|als|huntington\\w*|chronic illness|long covid)\\b|\\b(parkinson\\w*|dementia|alzheimer\\w*)\\b.{0,30}\\b(my (wife|husband|partner|mum|mom|mother|dad|father))\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "I’m sorry. Caring for someone you love through a long illness is hard work and a slow kind of grief, and you matter here too."
+      ],
+      "how": [
+        "It’s normal to feel tired, sad, and sometimes impatient, then guilty. That’s a sign you need more support, not that you’re failing.",
+        "Ask family for specific jobs with a time, including grown children far away: calls, paperwork, a regular phone call, paying for a sitter.",
+        "Look for respite: day centres, sitters, and carer support groups.",
+        "Illness helplines know your situation well (in the US: Parkinson’s Foundation 1-800-473-4636, Alzheimer’s Association 800-272-3900)."
+      ],
+      "script": [
+        "I’m tired and I need more help with your mum. Could you take the insurance calls and call her every Sunday at six?"
+      ],
+      "plain": [
+        "Caring is hard work.",
+        "Feeling tired or impatient is normal.",
+        "Ask for one clear kind of help.",
+        "Call a helpline for support."
+      ],
+      "links": [
+        [
+          "Caring for someone you love",
+          "/caregivers.html"
+        ],
+        [
+          "En español: cuando cuido a alguien",
+          "/en-espanol.html#cuidar"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "lgbtadult",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "coming out as an adult",
+      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "You get to decide who you tell, when and how. There’s no deadline, and it’s okay to wait until you feel ready and safe, even if a partner hopes it’ll be sooner."
+      ],
+      "how": [
+        "Think about safety and practical ties first: do you depend on family for money, housing or work? If a bad reaction could put you at risk, plan around that.",
+        "Choose a calm time and say it simply: “I’m telling you because I love you and want you in my life. I’m bisexual, and Dani is my partner.”",
+        "Expect that first reactions aren’t always final ones. Give them time, and set one clear boundary: “I won’t stay if Dani is insulted. I’ll call you next week.”",
+        "If your partner wants you to come out sooner, tell them what you need: “I want to, and I need to do it on my timing. Can you support me with that?”",
+        "Line up your own support: friends, a counsellor, or an LGBTQ+ line. In the US the LGBT National Help Center line is 1-888-843-4564; the Trevor Project serves people under 25."
+      ],
+      "script": [
+        "I’m telling you because I love you and want you in my life. I’m bisexual, and Dani is my partner. I don’t need you to have all the answers today."
+      ],
+      "plain": [
+        "You choose when and how.",
+        "Think about safety first.",
+        "Say it simply, with love.",
+        "Set one clear boundary."
+      ],
+      "links": [
+        [
+          "Not safe at home? (if a reaction could be dangerous)",
+          "/safety.html"
+        ],
+        [
+          "Check what you’ll say first",
+          "/signal-translator.html"
+        ],
+        [
+          "For teens: being yourself at home",
+          "/teens.html#lgbtq"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "familycutoff",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "fear of family cutting you off",
+      "pat": "\\bwhat if (they|my (parents|family|mum|mom|dad))\\b.{0,15}\\b(cut me off|disown me|stop talking to me|reject me|never speak to me)\\b|\\b(cut off|disowned|rejected) by (my )?(parents|family)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "That fear makes complete sense, and it’s worth planning for gently rather than pushing it away."
+      ],
+      "how": [
+        "Think through what you depend on them for (money, housing, a job, childcare) and make a backup for each before a big conversation.",
+        "Have your own people lined up for the day of the talk and the days after: a friend, a partner, a counsellor.",
+        "First reactions often soften with time. Leave the door open (“I’ll call you next week”) without accepting cruelty.",
+        "If a reaction could be dangerous, or you’d need somewhere to go, look at the Not safe at home? page first."
+      ],
+      "script": [
+        "I’m not asking you to agree with everything today. I’m asking you to stay in my life while you think about it."
+      ],
+      "plain": [
+        "Plan for money and housing first.",
+        "Have friends ready to support you.",
+        "First reactions can change.",
+        "Get help if it could be dangerous."
+      ],
+      "links": [
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ],
+        [
+          "What’s stored on this device",
+          "/on-this-device.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "wifiprivacy",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "can people on my Wi-Fi see this",
+      "pat": "\\b(wifi|wi fi|router|network|internet provider|isp)\\b.{0,40}\\b(see|know|track|tell|show)\\b|\\b(see|know|track)\\b.{0,40}\\b(on|through|via) (our|the|my|their) (wifi|wi fi|router|network)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Good question. What you type here stays on this device and is never sent to us or anyone. But whoever runs a Wi-Fi network (or a work or school network) can usually see the names of sites a device visits, though not what you read or type on them."
+      ],
+      "how": [
+        "If that matters, use mobile data instead of the home Wi-Fi, or a device and network they don’t control.",
+        "A private (incognito) window keeps the visit out of your browser history on this device, but it doesn’t hide it from the network.",
+        "You can erase what this site keeps on your device in one tap, and turn off “remember pages I visit”."
+      ],
+      "script": [],
+      "plain": [
+        "What you type stays on your device.",
+        "The Wi-Fi owner may see the site name.",
+        "Use mobile data if that matters.",
+        "You can erase what the site keeps."
+      ],
+      "links": [
+        [
+          "What’s stored on this device",
+          "/on-this-device.html"
+        ],
+        [
+          "Not safe at home? (clearing what this site keeps)",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "rahelp",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "talking to an RA or residence staff",
+      "pat": "\\b(ra|r a|resident assistant|resident advisor|residence (staff|hall staff|life)|housing office|dorm staff)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Yes, you can. Helping roommates sort things out is part of an RA’s job, and many will help you write a room agreement or sit in on a conversation."
+      ],
+      "how": [
+        "If it feels safe, try a short, calm chat with your roommate first, about the room, not about them.",
+        "If that doesn’t change anything, or you dread going back to your room, talk to your RA. It isn’t snitching; it’s using the help that’s there.",
+        "Ask the RA for a roommate agreement form, or a mediated conversation.",
+        "If you ever feel unsafe in your room, go to residence staff straight away."
+      ],
+      "script": [
+        "Hi, my roommate’s partner stays over most nights and I’m not sleeping. I’ve tried to raise it. Could you help us make a room agreement?"
+      ],
+      "plain": [
+        "You can talk to your RA.",
+        "Try a calm chat first if it feels safe.",
+        "Ask for a room agreement.",
+        "Get help straight away if you feel unsafe."
+      ],
+      "links": [
+        [
+          "Roommates and housemates",
+          "/share-the-load.html#roommates"
+        ],
+        [
+          "Check a message before you send it",
+          "/signal-translator.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "feltsmall",
       "kind": "intent",
       "first": true,
@@ -2904,7 +3187,7 @@
       "first": true,
       "newTopic": true,
       "name": "resentment and guilt as a caregiver",
-      "pat": "\\b(resent\\w*|angry at|frustrated with|annoyed with|hate)\\b.{0,40}\\b(the person i care for|him|her|my husband|my wife|my mom|my mum|my dad|my mother|my father|caring|caregiving)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b|\\b(guilt\\w*|ashamed|bad person)\\b.{0,40}\\b(resent\\w*)\\b|\\bi resent (caring|looking after|the person i care for)\\b",
+      "pat": "\\b(resent\\w*|angry at|frustrated with|annoyed with|hate)\\b.{0,40}\\b(the person i care for|him|her|my husband|my wife|my mom|my mum|my dad|my mother|my father|caring|caregiving)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b|\\b(guilt\\w*|ashamed|bad person)\\b.{0,40}\\b(resent\\w*)\\b|\\bi resent (caring|looking after|the person i care for)\\b|\\b(impatient|snap\\w*|short|cross|angry) with (my )?(wife|husband|partner|mum|mom|mother|dad|father)\\b.{0,50}\\bguilt\\w*\\b",
       "keys": [],
       "what": [
         "Resentment and guilt are among the most common feelings caregivers have. They don’t mean you love the person less. They usually mean you’re carrying too much, for too long, with too little rest."
@@ -2941,7 +3224,7 @@
       "pat": "\\bhow (do |can |should )?i stop (yell\\w*|scream\\w*|shout\\w*)\\b|\\bi (always |keep |constantly |still )?(yell|scream|shout) at (my|the) (kids?|children|son|daughter)\\b|\\bstop (yelling|screaming|shouting) at (my|the) (kids?|children)\\b|\\bhow (do )?i stop\\b.{0,20}\\b(yell\\w*|scream\\w*)\\b",
       "keys": [],
       "what": [
-        "Almost every parent yells sometimes. You can change it, and you can repair it when it happens."
+        "Feeling this bad about it means you care, and that matters. Shame tends to make yelling worse, so be as kind to yourself as you’re trying to be to them. Almost every parent yells sometimes. You can change it, and you can repair it when it happens."
       ],
       "how": [
         "Notice the warning signs early: a tight jaw, a louder voice, a short fuse. That’s the moment to step back.",

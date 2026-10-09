@@ -57,6 +57,12 @@
   .ten-list{ margin:.5rem 0 0 !important; padding-left:1.2rem !important; }
   .ten-list li{ margin:.15rem 0 !important; }
   .ten-say{ min-height:1.4em; font-size:.93rem; color:#2F5A3C; }
+  .ten-rm-own{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .7rem; margin:.4rem 0; }
+  .ten-rm-own[hidden]{ display:none; }
+  .ten-rm-own label{ font-weight:600; font-size:.95rem; }
+  .ten-rm-own input{ min-height:44px; box-sizing:border-box; padding:.3rem .6rem; border-radius:10px; border:1.5px solid #D9C8F0; background:#FFFDF7; color:#2B2620; font:inherit; }
+  .ten-rm-own input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read .tol-remind .ten-rm-hint{ margin:.2rem 0 .3rem !important; font-size:.92rem; color:var(--ink-soft); }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/start-in-10-minutes.html">
@@ -227,6 +233,63 @@
       panel.innerHTML = '<p>The Preface couldn’t open here. <a href="/book/preface.html" data-ten-step="2">Open it on its own page</a>; a bar there brings you back to step 3.</p>';
     });
   });
+})();
+// "Come back gently": the reminder (remind.js) offers a few set times. Shift and night workers need others,
+// so this page adds more times through the day and night, plus "Another time" with a time box of their own.
+(function () {
+  'use strict';
+  var host = document.querySelector('[data-tol-remind]');
+  if (!host) return;
+  var MORE = [['06:00', '6 am'], ['10:00', '10 am'], ['15:00', '3 pm'], ['16:30', '4:30 pm'], ['22:30', '10:30 pm'], ['23:30', '11:30 pm']];
+  function label(hm) {
+    var p = hm.split(':'), h = +p[0], m = p[1], ap = h < 12 ? 'am' : 'pm', h12 = h % 12 || 12;
+    return h12 + (m === '00' ? '' : ':' + m) + ' ' + ap;
+  }
+  function addTo(sel) {
+    if (!sel || sel.getAttribute('data-ten-more')) return;
+    sel.setAttribute('data-ten-more', '1');
+    var have = {};
+    Array.prototype.forEach.call(sel.options, function (o) { have[o.value] = 1; });
+    MORE.forEach(function (t) { if (!have[t[0]]) { var o = document.createElement('option'); o.value = t[0]; o.textContent = t[1]; sel.appendChild(o); } });
+    // keep the list in time order, and the current choice selected
+    var keep = sel.value, opts = Array.prototype.slice.call(sel.options).filter(function (o) { return /^\d\d:\d\d$/.test(o.value); });
+    opts.sort(function (a, b) { return a.value < b.value ? -1 : a.value > b.value ? 1 : 0; });
+    opts.forEach(function (o) { sel.appendChild(o); });
+    sel.value = keep;
+    if ([].some.call(sel.options, function (o) { return o.value === 'own' || o.getAttribute('data-own'); }) || host.querySelector('input[type=time]')) return; // remind.js already has its own
+    var own = document.createElement('option'); own.value = 'own'; own.setAttribute('data-own', '1'); own.textContent = 'Another time…'; sel.appendChild(own);
+    var id = sel.id + '-own', row = document.createElement('div');
+    row.className = 'ten-rm-own'; row.hidden = true;
+    row.innerHTML = '<label for="' + id + '">Your time</label><input type="time" id="' + id + '" value="14:00" step="300">';
+    var hint = document.createElement('p');
+    hint.className = 'ten-rm-hint';
+    hint.textContent = 'Work nights or shifts? Pick a time when you are usually awake and off work, even if it is the middle of the night.';
+    var rowEl = sel.closest('.tol-rm-row') || sel.parentNode;
+    rowEl.parentNode.insertBefore(row, rowEl.nextSibling);
+    rowEl.parentNode.insertBefore(hint, row.nextSibling);
+    var box = row.querySelector('input'), last = keep;
+    function useOwn() {
+      var v = /^\d\d:\d\d/.exec(box.value || ''); if (!v) return;
+      var o = sel.querySelector('option[data-own-time]');
+      if (!o) { o = document.createElement('option'); o.setAttribute('data-own-time', '1'); sel.insertBefore(o, own); }
+      o.value = v[0]; o.textContent = label(v[0]) + ' (your time)';
+      sel.value = v[0];
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+    sel.addEventListener('change', function () {
+      if (sel.value === 'own') { row.hidden = false; useOwn(); if (sel.value === 'own') sel.value = last; box.focus(); return; }
+      var isOwn = sel.options[sel.selectedIndex] && sel.options[sel.selectedIndex].hasAttribute('data-own-time');
+      row.hidden = !isOwn;
+      last = sel.value;
+    });
+    box.addEventListener('change', useOwn);
+    box.addEventListener('input', useOwn);
+  }
+  function tryAdd() { var sel = host.querySelector('select[id$="-t"]'); if (sel) { addTo(sel); return true; } return false; }
+  if (tryAdd()) return;
+  if (!('MutationObserver' in window)) return;
+  var mo = new MutationObserver(function () { if (tryAdd()) mo.disconnect(); });
+  mo.observe(host, { childList: true, subtree: true });
 })();
 </script>
 </body>

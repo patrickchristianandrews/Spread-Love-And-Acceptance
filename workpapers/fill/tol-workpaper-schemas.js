@@ -333,17 +333,29 @@
     if (!rows.length) return [{ label: 'Jobs with an owner', value: examples ? 'Add an owner to a job, or add your own jobs, to see the score. Nothing is counted yet.' : 'Add jobs to see the score.', note: exNote ? exNote.trim() : '' }];
     var clear = rows.filter(function (r) { return r.r; });
     var missing = rows.filter(function (r) { return !r.r; }).map(function (r) { return r.task; });
-    // how the owners are spread: clarity can read 1.00 with one person holding everything
+    // how the owners are spread: clarity can read 1.00 with one person holding everything. "Both (decide
+    // together)" counts as owned, and for nobody's share. No verdict against an even split: two homes, a
+    // weekday/weekend schedule or very different hours can make another split the fair one.
     var people = ctx.people(), byR = people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).length; });
+    var together = rows.filter(function (r) { return r.r === 'Both'; }).length;
     var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
     var share = clear.length / rows.length;
     var words = share === 1 ? (examples ? 'Every job you’ve set has an owner. ' + examples + ' example ' + (examples === 1 ? 'job is' : 'jobs are') + ' still on the list: give ' + (examples === 1 ? 'it' : 'them') + ' an owner, or remove ' + (examples === 1 ? 'it' : 'them') + ' if you don’t need ' + (examples === 1 ? 'it' : 'them') + '.' : 'Every job has an owner.') : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
     // plain words first; the number, and where it goes, folded under "What's this number?"
     var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
-      note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
+      note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. “' + ctx.name('Both') + ' (decide together)” counts as an owner. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
     if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
-    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with an owner (' + fmt(c.share * 100, 0) + '%). An even share would be ' + fmt(100 / people.length, 0) + '%.', note: 'Clear, but leaning on one person. Jobs drift to whoever is reliable and settle there. Ask which one they would hand over first.' });
-    else if (people.length >= 2 && named >= 3) out.push({ label: 'How the jobs are spread', value: people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + ' (jobs owned).' });
+    // an optional size on each job (Small 1, Medium 2, Big 3; no size counts as Medium), so a weekly
+    // meeting doesn't weigh the same as a quick email
+    var SIZE = { Small: 1, Medium: 2, Big: 3 }, sized = rows.some(function (r) { return SIZE[r.size]; });
+    var weighted = sized ? people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).reduce(function (a, r) { return a + (SIZE[r.size] || 2); }, 0); }) : null;
+    var spread = people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + (together ? ', ' + (people.length > 2 ? 'everyone' : 'both') + ' together ' + together : '') + ' (jobs owned).';
+    var weighNote = weighted ? 'Counting size (Big 3, Medium 2, Small 1, no size counts as Medium): ' + people.map(function (p, i) { return ctx.name(p) + ' ' + weighted[i]; }).join(', ') + '.' : 'Some jobs are bigger than others. Give jobs a size (optional) and this counts a big one for more than a quick one.';
+    var agreed = String(ctx.value('split') || '').trim(), tgt = ctx.target ? ctx.target() : null;
+    var ask = agreed ? 'You wrote down the split you agreed: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
+    if (tgt && c.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[c.top]) + ' about ' + fmt(tgt.t[c.top] * 100, 0) + '%.';
+    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner. ' + spread, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote });
+    else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: spread, note: (agreed ? ask + ' ' : '') + weighNote });
     return out;
   }
   // The jobs that still have no owner (untouched examples left out), for the closing's gentle note.
@@ -360,7 +372,8 @@
     purpose: 'A living agreement about who owns which job, for a household, a team, or a family sharing someone\'s care. Every regular job gets one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
     people: true,
     meta: [
-      { id: 'reviewDate', label: 'Date of this list', type: 'date' }
+      { id: 'reviewDate', label: 'Date of this list', type: 'date' },
+      { id: 'split', label: 'The split you agreed (optional)', type: 'text', placeholder: 'e.g. weekdays at one home, weekends at the other' }
     ],
     sections: [
       {
@@ -375,8 +388,9 @@
         columns: [
           { id: 'task', label: 'Job', type: 'text', w: 2.3 },
           { id: 'freq', label: 'How often', type: 'select', options: ['Daily', 'Weekly', 'Monthly', 'As needed', 'Ongoing'], w: 1.1 },
-          { id: 'r', label: 'Owner', type: 'person', w: 1.1 },
+          { id: 'r', label: 'Owner', type: 'person', both: true, bothNote: '(decide together)', w: 1.1 },
           { id: 'a', label: 'Helper (optional)', type: 'person', w: 1.1 },
+          { id: 'size', label: 'Size (optional)', type: 'select', options: ['Small', 'Medium', 'Big'], w: 1 },
           { id: 'notes', label: 'Notes', type: 'text', w: 2 }
         ],
         defaultRows: [

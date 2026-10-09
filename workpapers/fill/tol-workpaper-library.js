@@ -17,7 +17,8 @@
   'use strict';
 
   var D = 'Daily', Wk = 'Weekly', M = 'Monthly', AN = 'As needed', O = 'Ongoing', EM = 'Each meeting';
-  function g(name, items, hidden) { return { name: name, hidden: !!hidden, items: items }; }
+  function byName(list, name) { return list.filter(function (x) { return x.name === name; })[0]; }
+  function g(name, items, hidden, hint) { return { name: name, hidden: !!hidden, items: items, hint: hint || '' }; }
 
   /* ------------------------------------------------------------ jobs, by road */
 
@@ -26,7 +27,11 @@
     g('Cleaning and laundry', [['Laundry: wash and dry', Wk], ['Fold and put laundry away', Wk], ['Change the sheets', Wk], ['Clean the bathroom', Wk], ['Vacuum', Wk], ['Mop the floors', Wk], ['Take out the trash and recycling', Wk], ['Tidy the shared rooms', D], ['Dust', M], ['Deep clean (oven, windows)', AN]]),
     g('Money and paperwork', [['Pay the bills', M], ['Keep track of the budget', M], ['Renew car registration', AN], ['Renew insurance', AN], ['Taxes and receipts', AN], ['Sort the mail', Wk], ['Cancel or change subscriptions', AN], ['Keep important papers in one place', O], ['Deal with bank or billing problems', AN], ['Save for bigger costs', M]], true),
     g('Planning and remembering', [['Keep the family calendar', O], ['Remember appointments', O], ['Book the dentist and checkups', AN], ['Plan weekends', Wk], ['Plan trips and vacations', AN], ['Research big purchases', AN], ['Remember what needs replacing', O], ['Make the to-do list', Wk], ['Arrange repairs and wait for them', AN], ['Keep the spare keys and passwords sorted', O], ['Plan for guests', AN], ['Notice when things are running late', O]], true),
-    g('Kids and school', [['School forms and permission slips', AN], ['School lunches', D], ['Drop-off and pick-up', D], ['Homework help', D], ['Bedtime', D], ['Bath time', D], ['Kids’ doctor and dentist visits', AN], ['Activities and sign-ups', AN], ['Buy clothes as they outgrow them', AN], ['Arrange babysitting', AN], ['Reply to school emails and apps', Wk], ['Plan playdates', AN]], true),
+    g('Kids and school', [['School forms and permission slips', AN], ['School lunches', D], ['Drop-off and pick-up', D], ['Homework help', D], ['Bedtime', D], ['Bath time', D], ['Kids’ doctor and dentist visits', AN], ['Activities and sign-ups', AN], ['Buy clothes as they outgrow them', AN], ['Arrange babysitting', AN], ['Reply to school emails and apps', Wk], ['Plan playdates', AN], ['Big decisions (school, health, new activities)', AN]], true),
+    // foster, adoptive and kinship carers: the meetings and records that come with a child in care
+    g('Caring for a child in care', [['Social worker visits', M], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', M]], true, 'These take real time and rarely get counted. The meetings and the being-there both belong on the list.'),
+    // a family with teens agreeing house rules together: the owner keeps to it (or Both decide together)
+    g('House rules for us', [['Phone time: where phones go at night', D], ['Homework before games', D], ['Bedtime on school nights', D], ['Bedtime and curfew at weekends', Wk], ['Chores for everyone (who does which)', Wk], ['Friends over: when and how many', AN], ['Say where you are going and when you’ll be back', AN], ['Screen time', D], ['Family meal together', Wk]], false, 'For a family with teens. The owner is whoever keeps to it, or Both (decide together). Write why it matters to each of you in Notes.'),
     g('Health and care', [['Pick up prescriptions', AN], ['Keep the first-aid kit stocked', AN], ['Book appointments', AN], ['Look after someone who is sick', AN], ['Keep track of vaccinations and records', O], ['Arrange care for a relative', AN]], true),
     // a parent's care shared between grown-up children, often in different homes
     g('Caring for a parent', [['Visits and sitting with them', Wk], ['Refill the pill box (as the care team directs)', Wk], ['Keep the medication list up to date', O], ['Memory clinic and other appointments', AN], ['Go along to appointments and take notes', AN], ['Insurance and paperwork', AN], ['The Sunday call', Wk], ['Night calls', AN], ['Update the others on how they are', Wk]], true),
@@ -61,7 +66,7 @@
     g('Their wishes and plans', [['Keep their contact list current', O], ['Write down their routines and preferences', AN], ['Plan for the next stage of care', AN], ['Keep spare keys with the right people', O], ['Remember the small things they like', O], ['Check in on how they are feeling about the care', Wk]], true)
   ];
   var COPARENTS = [
-    g('School', [['School forms and permission slips', AN], ['School lunches', D], ['Drop-off', D], ['Pick-up', D], ['Homework help', D], ['Parent-teacher conferences', AN], ['Read school emails and the app', Wk], ['Buy school supplies', AN], ['Picture day and field trips', AN], ['Library books back', Wk], ['Class gifts and collections', AN], ['Track the school calendar', O], ['Report cards and follow-up', AN], ['Sign up for the next school year', AN]], true),
+    g('School', [['School forms and permission slips', AN], ['School lunches', D], ['Drop-off', D], ['Pick-up', D], ['Homework help', D], ['Parent-teacher conferences', AN], ['Read school emails and the app', Wk], ['Buy school supplies', AN], ['Picture day and field trips', AN], ['Library books back', Wk], ['Class gifts and collections', AN], ['Track the school calendar', O], ['Report cards and follow-up', AN], ['Sign up for the next school year', AN], ['Big decisions (school, health, new activities)', AN]], true),
     g('Health', [['Doctor visits', AN], ['Dentist visits', AN], ['Keep vaccination records', O], ['Pick up prescriptions', AN], ['Stay home when they are sick', AN], ['Eye checks and glasses', AN], ['Keep health insurance cards current', O], ['Share health updates between homes', AN]]),
     g('Activities', [['Sign up for activities', AN], ['Pay activity fees', AN], ['Drive to practice', Wk], ['Buy gear and uniforms', AN], ['Wash the uniform', Wk], ['Games and recitals', AN], ['Coordinate carpools', Wk], ['Summer camp research and sign-up', AN], ['Birthday party invitations and RSVPs', AN], ['Playdates', AN]]),
     g('Handoffs between homes', [['Pack the bag for the other home', Wk], ['Send the medicine and chargers along', Wk], ['Share the week’s news before handoff', Wk], ['Handoff pickup and drop-off', Wk], ['Swap weekends when plans change', AN], ['Keep the shared calendar', O], ['Holiday schedule', AN], ['Tell the other home about school changes', AN], ['Return borrowed clothes and toys', Wk], ['Keep the parenting plan handy', O]], true),
@@ -84,7 +89,7 @@
     g('Calls and messages', [['Arrange our call', Wk], ['Reschedule a call', AN], ['Good-morning / good-night text', D], ['Time-zone juggling: pick times that work for both', Wk], ['Keep the shared calendar across time zones', O], ['Plan a video date', Wk], ['Remember the other’s big days (exams, interviews)', O]], true),
     g('Visits', [['Plan or book a visit', M], ['Book travel and tickets', AN], ['Track travel costs and who paid', M], ['Plan what we do on a visit', AN], ['Get the place ready for a visit', AN], ['Airport or station pick-up', AN]]),
     g('Staying close', [['Send a card or a care package', AN], ['Plan something to watch or play together online', Wk], ['Share small news during the day', D], ['Check in after a hard day', AN]], true),
-    HOME[2], HOME[3], HOME[6]
+    byName(HOME, 'Money and paperwork'), byName(HOME, 'Planning and remembering'), byName(HOME, 'Caring for a parent')
   ];
   var BY_ROAD = { apart: APART, partners: HOME, family: HOME, program: HOME, coparents: COPARENTS, roommates: ROOMMATES, coworkers: COWORKERS, caregivers: CAREGIVERS, friends: FRIENDS };
 
