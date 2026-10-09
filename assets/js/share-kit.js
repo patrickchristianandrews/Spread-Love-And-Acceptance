@@ -7,8 +7,9 @@
      Threads and LINE. They are plain links that open the chosen service only when tapped. Nothing is sent
      from this site.
    - "Show a QR code": the link drawn as a QR code, so someone in the room can scan it with their phone.
-     The code is made here, on this device (byte mode, error correction M, versions 1-10). Checked against
-     reference encoders and a decoder (bit-for-bit for every mask, and the same mask choice as the standard).
+     The code is made here, on this device (byte mode, versions 1-40, error correction M, or L for long links).
+     Checked against reference encoders and a decoder (bit-for-bit for every mask, and the same mask choice as
+     the standard). Long links (over 213 bytes) open the big code (showQR) instead of a small one in the sheet.
    - "Save as image": a short line (a script, a quote, an answer) drawn on a card with the site's name, saved as a PNG.
    - "More apps on this device": the device's own share menu, first in the sheet, where there is one.
    - "Share this line": a small button by each "Words you could use" line. It shares just that sentence and a
@@ -19,7 +20,10 @@
      TOLShareKit.shareText({ title, text, url, heading })  open the sheet for a piece of text
        (url omitted → this page; false → the text alone). Professor Puddles can use this for an answer.
      TOLShareKit.links(d)   the extra share links for { title, text, url, result }
-     TOLShareKit.qr.matrix(text[, mask]) → { version, size, mask, modules[y][x] } or null when too long
+     TOLShareKit.qr.matrix(text[, mask[, 'L'|'M']]) → { version, ecl, size, mask, modules[y][x] } or null when too long
+     TOLShareKit.showQR(url, { title, note })  the link as a big QR code in a dialog, for a phone in the same room;
+       Copy link as the backup. Returns false (and shows only Copy link) when the link is too long for a code.
+     TOLShareKit.qrFits(url) → true when showQR can draw it (up to 2,000 bytes)
      TOLShareKit.qr.svg(text) → an <svg> element, or null
      TOLShareKit.saveImage({ text, title }) → Promise, downloads a PNG
      TOLShareKit.scan(root)  add "Share this line" buttons inside root (runs once on load for <main>)
@@ -302,6 +306,132 @@
   })();
 
   // =====================================================================================
+  // showQR(url, { title, note }): a link drawn big as a QR code, for a hand-off between two phones in the
+  // same room. Made here, on this device; nothing is uploaded. Copy link stays there as the backup.
+  // =====================================================================================
+  var QR_MAX_BYTES = 2000;          // checked bit-for-bit and decoded up to 2,953; past 2,000 a phone screen is too small
+  var MIN_PX = 4;                   // never fewer than 4 canvas pixels per module
+  function qrBytes(t) { try { return new TextEncoder().encode(String(t)).length; } catch (e) { return unescape(encodeURIComponent(String(t))).length; } }
+  function qrFits(t) { return !!t && qrBytes(t) <= QR_MAX_BYTES; }
+  var dlg = null, dlgCur = null, dlgBack = null, dlgBig = false;
+  function copyText(t) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(function () { return true; }, function () { return legacyCopy(t); });
+    return Promise.resolve(legacyCopy(t));
+  }
+  function legacyCopy(t) {
+    var ta = mk('textarea', { readonly: '', 'aria-hidden': 'true', class: 'tsk-offscreen' }); ta.value = t;
+    (dlg || document.body).appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    ta.remove(); return ok;
+  }
+  function buildDialog() {
+    var native = typeof HTMLDialogElement === 'function' && !!document.createElement('dialog').showModal;
+    var d = mk(native ? 'dialog' : 'div', { class: 'tsk-qrd' + (native ? '' : ' tsk-qrd-plain'), 'aria-labelledby': 'tsk-qrd-h', 'aria-describedby': 'tsk-qrd-note' });
+    if (!native) { d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.hidden = true; }
+    var card = mk('div', { class: 'tsk-qrd-card' });
+    var head = mk('div', { class: 'tsk-qrd-head' });
+    head.appendChild(mk('h2', { id: 'tsk-qrd-h' }, 'Scan with the other phone'));
+    var x = mk('button', { type: 'button', class: 'tsk-qrd-close', 'data-qrd': 'close' }, 'Close');
+    head.appendChild(x);
+    card.appendChild(head);
+    card.appendChild(mk('p', { class: 'tsk-qrd-note', id: 'tsk-qrd-note' }));
+    var box = mk('div', { class: 'tsk-qrd-code' });
+    box.appendChild(mk('canvas', { role: 'img', 'aria-label': 'QR code for the link' }));
+    card.appendChild(box);
+    card.appendChild(mk('p', { class: 'tsk-qrd-hint', hidden: '' }, 'Hold the phones closer, or use Copy link.'));
+    card.appendChild(mk('p', { class: 'tsk-qrd-long', hidden: '' }, 'This link is too long to fit in a QR code. Use Copy link and send it instead.'));
+    var acts = mk('div', { class: 'tsk-qrd-acts' });
+    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-qrd': 'big', 'aria-pressed': 'false' }, 'Bigger'));
+    acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-qrd-copy', 'data-qrd': 'copy' }, 'Copy link'));
+    card.appendChild(acts);
+    card.appendChild(mk('p', { class: 'tsk-qrd-private' }, 'The code holds the link and nothing else. It is made on this device; nothing is uploaded.'));
+    card.appendChild(mk('p', { class: 'tsk-qrd-status', role: 'status', 'aria-live': 'polite' }));
+    d.appendChild(card);
+    d.addEventListener('click', function (e) {
+      if (e.target === d) { closeQR(); return; }   // a tap on the backdrop
+      var b = e.target.closest('[data-qrd]'); if (!b) return;
+      var k = b.getAttribute('data-qrd');
+      if (k === 'close') closeQR();
+      else if (k === 'big') { dlgBig = !dlgBig; drawQR(); }
+      else if (k === 'copy') {
+        var u = dlgCur && dlgCur.url, st = d.querySelector('.tsk-qrd-status');
+        copyText(u).then(function (ok) {
+          st.textContent = ok ? 'Link copied. Paste it into a message to the other person.' : 'Couldn’t copy here. Press and hold the link in your address bar to copy it.';
+          if (ok) fireShared(u, 'copy');
+        });
+      }
+    });
+    d.addEventListener('cancel', function (e) { e.preventDefault(); closeQR(); });
+    d.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeQR(); return; }
+      if (e.key !== 'Tab' || native) return;
+      var f = Array.prototype.filter.call(d.querySelectorAll('button'), function (n) { return n.getClientRects().length > 0; });
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    });
+    window.addEventListener('resize', function () { if (isOpen()) drawQR(); });
+    document.body.appendChild(d);
+    return d;
+  }
+  function isOpen() { return !!dlg && (dlg.open || (dlg.tagName !== 'DIALOG' && !dlg.hidden)); }
+  // draws the code as large as the room allows, in whole canvas pixels per module (at least 4)
+  function drawQR() {
+    var q = dlgCur && dlgCur.q, cv = dlg.querySelector('canvas'), box = dlg.querySelector('.tsk-qrd-code');
+    var hint = dlg.querySelector('.tsk-qrd-hint'), big = dlg.querySelector('[data-qrd="big"]');
+    dlg.classList.toggle('tsk-qrd-big', dlgBig);
+    big.setAttribute('aria-pressed', String(dlgBig)); big.textContent = dlgBig ? 'Smaller' : 'Bigger';
+    if (!q) return;
+    var n = q.size + 8, vw = document.documentElement.clientWidth || window.innerWidth, vh = window.innerHeight;
+    // room left for the code: the card's width, and the height after the words and buttons
+    var room = dlgBig ? Math.min(vw - 24, vh - 120) : Math.min(vw - 64, 380, vh - 300);
+    room = Math.max(room, Math.min(vw - 24, 160));
+    var css = Math.floor(room / n) >= MIN_PX ? Math.floor(room / n) * n : room;   // whole CSS pixels per module when there is room
+    var dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 4));
+    var k = Math.max(MIN_PX, Math.round(css * dpr / n)), px = n * k;
+    cv.width = px; cv.height = px;
+    cv.style.width = css + 'px'; cv.style.height = css + 'px';
+    var ctx = cv.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, px, px);
+    ctx.fillStyle = '#000000';
+    for (var y = 0; y < q.size; y++) for (var x = 0; x < q.size; x++) if (q.modules[y][x]) ctx.fillRect((x + 4) * k, (y + 4) * k, k, k);
+    box.hidden = false;
+    // fewer than 4 screen pixels a module: a dense code, harder for a camera
+    hint.hidden = css / n >= MIN_PX;
+  }
+  function showQR(url, o) {
+    o = o || {};
+    url = String(url || '');
+    if (!dlg) dlg = buildDialog();
+    var q = qrFits(url) ? QR.matrix(url) : null;
+    dlgCur = { url: url, q: q }; dlgBig = false;
+    dlg.querySelector('#tsk-qrd-h').textContent = o.title || 'Scan with the other phone';
+    var note = dlg.querySelector('.tsk-qrd-note');
+    note.textContent = o.note || 'Open the camera on the other phone and point it at this code. The link opens there.';
+    dlg.querySelector('.tsk-qrd-status').textContent = '';
+    dlg.querySelector('.tsk-qrd-long').hidden = !!q;
+    dlg.querySelector('[data-qrd="big"]').hidden = !q;
+    dlg.querySelector('.tsk-qrd-code').hidden = !q;
+    dlg.querySelector('.tsk-qrd-hint').hidden = true;
+    dlg.querySelector('.tsk-qrd-private').hidden = !q;
+    dlgBack = document.activeElement;
+    if (dlg.tagName === 'DIALOG') { if (!dlg.open) dlg.showModal(); } else dlg.hidden = false;
+    document.documentElement.classList.add('tsk-qrd-on');
+    drawQR();
+    var f = dlg.querySelector(q ? '[data-qrd="big"]' : '[data-qrd="copy"]');
+    try { f.focus({ preventScroll: true }); } catch (e) { f.focus(); }
+    if (q) fireShared(url, 'qr');
+    return !!q;
+  }
+  function closeQR() {
+    if (!isOpen()) return;
+    if (dlg.tagName === 'DIALOG') dlg.close(); else dlg.hidden = true;
+    document.documentElement.classList.remove('tsk-qrd-on');
+    var back = dlgBack; dlgBack = null;
+    if (back && back.focus && document.contains(back)) { try { back.focus({ preventScroll: true }); } catch (e) { back.focus(); } }
+  }
+
+  // =====================================================================================
   // Share links: each one built only from what is being shared, opened only when tapped
   // =====================================================================================
   function message(d) { return [d.text, d.url].filter(Boolean).join('\n'); }
@@ -434,6 +564,7 @@
         return;
       }
       if (k === 'qr') {
+        if (!qr.querySelector('svg')) { showQR(b._qrText); return; }   // a long link: the big code, over the sheet
         var show = qr.hidden;
         qr.hidden = !show; b.setAttribute('aria-expanded', String(show));
         b.textContent = show ? 'Hide the QR code' : 'Show a QR code';
@@ -505,13 +636,16 @@
     // the QR code holds the link (or, with no link, short words)
     var qrText = d.url || (d.text && d.text.length <= 180 ? d.text : ''), box = qr.querySelector('.tsk-qr-box');
     box.textContent = '';
-    var s = qrText ? QR.svg(qrText) : null;
+    // a short link fits in the sheet; a longer one opens the big code (showQR) instead
+    var s = qrText && qrBytes(qrText) <= 213 ? QR.svg(qrText) : null;
+    qb._qrText = qrFits(qrText) ? qrText : '';
+    if (qb._qrText && !s) qb.removeAttribute('aria-controls'); else qb.setAttribute('aria-controls', 'tsk-qr');
     if (s) {
       s.setAttribute('aria-label', 'QR code for ' + (d.url ? 'the link' : 'these words'));
       box.appendChild(s);
       qr.querySelector('.tsk-qr-note').textContent = d.url ? 'Scan it with another phone’s camera to open the link. It holds the link and nothing else.' : 'Scan it with another phone’s camera to read the words.';
     }
-    qb.hidden = !s;
+    qb.hidden = !s && !qb._qrText;
     ib.hidden = !imageText(d);
     var anyPlace = false;
     Array.prototype.forEach.call(places.querySelectorAll('[data-place]'), function (a) {
@@ -681,6 +815,9 @@
     shareText: shareText,
     links: links,
     qr: QR,
+    showQR: showQR,
+    closeQR: closeQR,
+    qrFits: qrFits,
     saveImage: saveImage,
     drawCard: drawCard,
     scan: scan

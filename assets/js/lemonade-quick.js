@@ -777,6 +777,8 @@
         if (o === q.me) return;
         var t = 'Send to ' + (typed(o) || (q.people.length === 2 ? 'them' : 'Person ' + (o + 1)));
         html += '<button type="button" class="' + (html ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
+        // the same link as a QR code, for a phone in the same room
+        html += '<button type="button" data-lq-qr="' + o + '">' + esc(q.people.length === 2 ? 'Show a QR code' : 'QR code for ' + (typed(o) || 'Person ' + (o + 1))) + '</button>';
       });
       html += '<button type="button" data-lq-chat>Copy for the group chat</button>';
       html += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">Share your result as an image</button>';
@@ -816,6 +818,13 @@
         : 'Here’s my quick look at who does what at home. Tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.';
       share('Our quick look', text, url);
       status((typed(o) ? 'Made a link for ' + typed(o) + '.' : 'Made the link.') + ' It opens their quick look with the same jobs.' + (typed(me) && typed(o) ? '' : ' Tip: type your names first, so it says who’s who.'));
+      return;
+    }
+    var qb = e.target.closest && e.target.closest('[data-lq-qr]');
+    if (qb) {
+      var qo = +qb.getAttribute('data-lq-qr'), qurl = linkFor(qo), qo2 = { title: 'Scan with ' + (typed(qo) ? typed(qo) + '’s' : 'the other') + ' phone', note: 'It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs.' };
+      if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(qurl, qo2);
+      else { var sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = function () { if (window.TOLShareKit) window.TOLShareKit.showQR(qurl, qo2); }; document.head.appendChild(sc); }
       return;
     }
     if (e.target.closest && e.target.closest('[data-lq-chat]')) {

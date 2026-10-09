@@ -13,6 +13,43 @@
 .tsk-qr-img{ display:block; width:min(220px, 62vw); height:auto; }
 .tsk-qr-note{ margin:.45rem auto 0; max-width:22rem; font-size:.88rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
 
+/* ---- the big QR code (TOLShareKit.showQR): for a hand-off between two phones in the same room ---- */
+.tsk-qrd{ box-sizing:border-box; width:min(28rem, calc(100vw - 16px)); max-width:none; max-height:calc(100vh - 16px); max-height:calc(100dvh - 16px);
+  margin:auto; padding:0; overflow:auto; overscroll-behavior:contain; color:var(--ink, #2B2620); background:#FFFDF7;
+  border:1.5px solid #B9A8D6; border-radius:20px; box-shadow:0 18px 50px rgba(33,29,23,.25); font-family:var(--tol-sans, system-ui, sans-serif); }
+.tsk-qrd::backdrop{ background:rgba(33,29,23,.45); }
+.tsk-qrd-plain{ position:fixed; z-index:995; left:50%; top:50%; transform:translate(-50%, -50%); }
+.tsk-qrd-plain[hidden]{ display:none; }
+.tsk-qrd-card{ padding:1rem 1.1rem 1.1rem; }
+.tsk-qrd-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.tsk-qrd-head h2{ margin:0; font:600 1.25rem/1.2 "Fraunces", Georgia, serif; }
+.tsk-qrd-close{ flex:none; min-height:44px; min-width:44px; padding:.35rem .9rem; font:inherit; font-size:.95rem; color:var(--ink, #2B2620); background:none;
+  border:1px solid #8C826E; border-radius:999px; cursor:pointer; }
+.tsk-qrd-close:hover{ background:var(--paper-deep, #ECE2C4); }
+.tsk-qrd p{ max-width:none; }
+.tsk-qrd-note{ margin:.45rem 0 .6rem; font-size:.95rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.tsk-qrd-code{ display:flex; justify-content:center; line-height:0; }
+.tsk-qrd-code[hidden]{ display:none; }
+/* the canvas carries its own white quiet zone; it is drawn in whole pixels and never smoothed */
+.tsk-qrd-code canvas{ display:block; max-width:100%; height:auto; background:#fff; border-radius:6px; image-rendering:pixelated; image-rendering:crisp-edges; }
+.tsk-qrd-hint{ margin:.55rem 0 0; padding:.45rem .65rem; font-size:.92rem; line-height:1.35; text-align:center; background:#FFF6DA; border:1px solid #E8D49A; border-radius:12px; }
+.tsk-qrd-long{ margin:.4rem 0 0; font-size:.95rem; line-height:1.4; }
+.tsk-qrd-hint[hidden], .tsk-qrd-long[hidden], .tsk-qrd-private[hidden]{ display:none; }
+.tsk-qrd-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.75rem 0 .2rem; }
+.tsk-qrd-acts .tol-share-act[hidden]{ display:none; }
+.tsk-qrd-acts .tol-share-act[hidden] + .tsk-qrd-copy{ grid-column:1 / -1; }
+.tsk-qrd-copy{ background:#EFE8FA; border-color:#B9A8D6; }
+.tsk-qrd-private{ margin:.35rem 0 0; font-size:.85rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.tsk-qrd-status{ min-height:1.2em; margin:.2rem 0 0; font-size:.9rem; color:#2F5A3C; }
+/* "Bigger": the code takes the whole screen; the words step back */
+.tsk-qrd.tsk-qrd-big{ width:100vw; max-height:100vh; max-height:100dvh; height:100%; border-radius:0; border:0; background:#fff; }
+.tsk-qrd-big .tsk-qrd-card{ padding:.5rem .75rem; }
+.tsk-qrd-big .tsk-qrd-note, .tsk-qrd-big .tsk-qrd-private{ display:none; }
+.tsk-qrd-big .tsk-qrd-head h2{ font-size:1.05rem; }
+html.tsk-qrd-on{ overflow:hidden; }
+.tsk-offscreen{ position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
+@media print{ .tsk-qrd{ display:none !important; } }
+
 /* ---- "Share this line" ---- */
 .tsk-line{ position:relative; z-index:1; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box;
   width:1.3em; height:1.3em; margin:-.5em 0 -.5em .2em; padding:0; vertical-align:middle; line-height:1;

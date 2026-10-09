@@ -1422,7 +1422,7 @@
       var made = this.shareMade;
       if (made && made.error) p.appendChild(h('p', { className: 'wpf-share-msg', role: 'note', text: made.error }));
       else if (made) {
-        p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true)]));
+        p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true), this.qrBtn()]));
         p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time ' + (one || peopleCount(this.state.values) > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link: an old one won\u2019t show the change.' }));
         var lid = 'f' + (++this.uid);
         p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'Or copy the link yourself' }));
@@ -1464,12 +1464,20 @@
     return h('button', { type: 'button', className: 'wpf-add' + (main ? ' wpf-share-main' : ''), 'data-action': 'share-fresh', 'data-share': '', 'data-share-title': title,
       'data-share-text': title + ': open this to see ' + (what === 'week' ? 'the week' : 'the ' + what) + ' and add to it.', 'data-share-url': made || 'none', 'data-share-result': '', text: label });
   };
+  // "Show a QR code": the same link as the Send button, drawn big for a phone in the same room
+  // (TOLShareKit.showQR in /assets/js/share-kit.js, loaded here at the tap if site.js hasn't yet)
+  A.qrBtn = function () { return h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-qr', text: 'Show a QR code' }); };
+  function qrShow(url, o) {
+    function go() { if (global.TOLShareKit && global.TOLShareKit.showQR) global.TOLShareKit.showQR(url, o); }
+    if (global.TOLShareKit && global.TOLShareKit.showQR) { go(); return; }
+    var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
+  }
   // After a shared list or week is combined or opened here: the other device still has the old one.
   A.sendBackEl = function () {
     var what = this.shareWhat();
     return h('div', { className: 'wpf-share-in wpf-sendback no-print tol-plain', role: 'group', 'aria-label': 'Send your changes back' }, [
       h('p', {}, [h('strong', { text: 'Send my changes back? ' }), 'The other device still has the ' + what + ' as it was. Each change needs a new link, so send one now, and again after any change.']),
-      h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send my changes back', true),
+      h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send my changes back', true), this.qrBtn(),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-back-no', text: 'Not now' })])
     ]);
   };
@@ -1558,6 +1566,15 @@
   };
   A.onShare = function (act) {
     var self = this, what = this.shareWhat();
+    if (act === 'share-qr') {
+      // the link made now, exactly as "Send it" would send it
+      var dq = this.shareData();
+      if (dq.error) { this.status(dq.error); return; }
+      this.shareMade = this.shareLink(dq); this.shareSig = JSON.stringify(this.state); this.sharedOnce = true;
+      var oq = this.root.querySelector('[data-share-out]'); if (oq) oq.value = this.shareMade.link;
+      qrShow(this.shareMade.link, { title: 'Scan with the other phone', note: 'The ' + what + ' opens on the other phone, on this same page. They choose to combine it with theirs or to replace it.' });
+      return;
+    }
     function copyIt(text, ok) {
       function done(worked) {
         if (worked) { self.status(ok); if (self.shareSig) self.markSafe(self.shareSig); }

@@ -3403,6 +3403,19 @@
     else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
     else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Sharing isn’t available here, so the link is copied. Paste it into a message.' : 'Couldn’t share here. Open “Other ways” and copy the code.'); });
   });
+  // "Show a QR code": the same link as "Share your side (link)", drawn big for the other phone in the room
+  // (TOLShareKit.showQR in share-kit.js; loaded at the tap if it isn't here yet)
+  function qrShow(url, o) {
+    function go() { if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); }
+    if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
+    var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
+  }
+  if ($('send-qr')) $('send-qr').addEventListener('click', function () {
+    renderSend(); if (!$('send-code').value) return;
+    var json = sendLink.json, o = { title: 'Scan with the other phone', note: 'Your side opens on their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand”.' };
+    if (sendLink.url) { qrShow(sendLink.url, o); return; }
+    packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); qrShow(sideLink(pk), o); });
+  });
   $('send-file').addEventListener('click', function () {
     var d = sideData(); if (d.error) { sideStatus('send-msg', d.error); return; }
     if (state.me < 0) { sideStatus('send-msg', 'Tap your own name under “Who’s filling in on this device?” first, so the file has your name on it and never gets mixed up with anyone else’s.'); var mr = $('me-row'); if (mr) { mr.scrollIntoView({ block: 'center', behavior: 'smooth' }); var b0 = mr.querySelector('button'); if (b0) b0.focus({ preventScroll: true }); } return; }

@@ -190,7 +190,7 @@ SEARCH = {
 # honestly fit. These replace the entries above for the same page.
 SEARCH.update({
  # home and start
- 'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a cartoon for all ages.'),
+ 'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a style quiz and a cartoon for all ages.'),
  'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a gentle six-week path to fairer chores, fewer fights and kinder talks at home.'),
  'recheck-drive.html': ('The Re-check Drive: A Calm Football Game for Keeping Things Alive', 'A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal on screen.'),
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
@@ -332,6 +332,33 @@ SEARCH.update({
  'family-obligations.html': ('Supporting Family: Parents, Money Home and Duty', 'Free, even-handed help for couples who support parents and family: agree a monthly family-support amount, lead with your own family, and save alongside it.'),
  'long-distance.html': ('Long-Distance and Apart: Staying Close Across the Miles', 'Free, practical help for couples living apart: time zones, check-ins on video, a call rhythm you agree, small bids, short texts, and visits and goodbyes.'),
  'pursue-withdraw.html': ('One of You Wants to Talk Now, the Other Needs Space', 'Free, even-handed help when one partner wants to talk now and the other needs space: why it hurts on both sides, and a pause plan you can fill in and share.'),
+ # the book, Part Three: Understanding people, and two small tools
+ 'book/understanding-1-feelings.html': ('Chapter 1: How Feelings Work, and Naming What You Feel', 'How feelings work: signals from the body, why naming a feeling helps, layers and waves, and kind words to use alone, at home, with friends and at work.'),
+ 'book/understanding-1-feelings-in-depth.html': ('Chapter 1 in depth: How Feelings Work', 'Feelings in full: signals, the body, naming, finer words, layers, waves and urges, through psychology, philosophy and an autistic lens, with exercises.'),
+ 'book/understanding-2-stress.html': ('Chapter 2: Stress, Flooding, Rest and Recovery', 'How stress works: your body getting ready, the calm, revved up and running on empty ladder, flooding, why stress adds up, and the rest that helps.'),
+ 'book/understanding-2-stress-in-depth.html': ('Chapter 2 in depth: Stress and the Nervous System', 'Stress in full: appraisal, the ladder, flooding, load that adds up, settling and kinds of rest, through psychology, philosophy and an autistic lens.'),
+ 'book/understanding-3-seeing.html': ('Chapter 3: How We See Each Other: Perception and Bias', 'Why perception is a best guess, the stories we fill gaps with, everyday bias, us and them, and how to see people more fairly by asking, not guessing.'),
+ 'book/understanding-3-seeing-in-depth.html': ('Chapter 3 in depth: How We See Each Other', 'Perception in full: attention, stories and memory, attribution, bias, naive realism and groups, through psychology, philosophy and an autistic lens.'),
+ 'book/understanding-4-communication.html': ('Chapter 4: How Communication Works: Listening and Repair', 'How communication works: why meaning is made between two people, listening, checking, saying hard things kindly, repairing mix-ups and messages that land.'),
+ 'book/understanding-4-communication-in-depth.html': ('Chapter 4 in depth: How Communication Works', 'Communication in full: meaning, two layers, listening, checking, hard talks, repair, texts and styles, through psychology, philosophy and an autistic lens.'),
+ 'book/understanding-5-belonging.html': ('Chapter 5: Attachment, Trust and Belonging', 'Why belonging is a basic need, how early bonds shape what we expect, how trust grows in small moments, and how to rebuild it and find your people. Free.'),
+ 'book/understanding-5-belonging-in-depth.html': ('Chapter 5 in depth: Attachment, Trust and Belonging', 'Belonging in full: the need to belong, attachment, trust, safe havens, groups, masking and rebuilding trust, via psychology, philosophy and an autistic lens.'),
+ 'book/understanding-6-change.html': ('Chapter 6: Habits and Change: How Small Steps Work', 'Why change is hard, how habits run on cues, and how tiny steps, a kinder setup and self-compassion after slips help change last, alone or with others.'),
+ 'book/understanding-6-change-in-depth.html': ('Chapter 6 in depth: Habits and Change', 'Habits and change in full: cues, tiny steps, setup over willpower, mixed feelings, slips and values, through psychology, philosophy and an autistic lens.'),
+ 'book/understanding-7-worth.html': ('Chapter 7: Self-worth, shame and self-compassion', 'Why worth is not a score, how shame differs from guilt, what the inner critic is for, and how self-compassion helps you own mistakes and grow. Free.'),
+ 'book/understanding-7-worth-in-depth.html': ('Chapter 7 in depth: Self-worth, shame and self-compassion', 'Self-worth and shame in full: the psychology, the philosophy and an autistic lens, with worked examples, exercises and kind words for hard moments.'),
+ 'book/understanding-8-loss.html': ('Chapter 8: Loss, grief and big life changes', 'How grief works: waves not stages, grief in the body, losses nobody sees, staying connected to who you lost, big life changes, and how to help. Free.'),
+ 'book/understanding-8-loss-in-depth.html': ('Chapter 8 in depth: Loss, grief and big life changes', 'Grief in full: the research, what philosophers and traditions say, an autistic lens on loss and change, worked examples, exercises and when to get help.'),
+ 'book/understanding-9-minds.html': ('Chapter 9: Minds that work differently', 'A plain guide to neurodiversity: autism, ADHD, sensory and learning differences, masking and energy, and how to meet in the middle at home and work.'),
+ 'book/understanding-9-minds-in-depth.html': ('Chapter 9 in depth: Minds that work differently', 'Autism, ADHD, sensory and learning differences in full: the research, the philosophy of difference and disability, autistic voices, examples and exercises.'),
+ 'book/understanding-10-values.html': ('Chapter 10: Values, meaning and a good life', 'What values are, how to find yours, what to do when two good things clash, and what old philosophy offers a busy, ordinary life today.'),
+ 'book/understanding-10-values-in-depth.html': ('Chapter 10 in depth: Values and meaning', 'Chapter 10 in full: values, meaning and flourishing through psychology, philosophy and an autistic lens, with worked examples, exercises and an FAQ.'),
+ 'book/understanding-11-healing.html': ('Chapter 11: Healing after hurt', 'How hurt heals: repair after small ruptures, apologies that land, what forgiveness is and is not, rebuilding trust, and when to get more help.'),
+ 'book/understanding-11-healing-in-depth.html': ('Chapter 11 in depth: Healing after hurt', 'Chapter 11 in full: repair, apology, forgiveness and trust through psychology, philosophy and an autistic lens, with examples, exercises and an FAQ.'),
+ 'book/understanding-12-helping.html': ('Chapter 12: Helping others well', 'How to help without taking over: ask what help is wanted, listen first, keep kind limits, help in a crisis, and look after yourself so you last.'),
+ 'book/understanding-12-helping-in-depth.html': ('Chapter 12 in depth: Helping others well', 'Chapter 12 in full: support, listening, compassion, boundaries and burnout through psychology, philosophy and an autistic lens, with examples and an FAQ.'),
+ 'ladder.html': ('Where Am I Right Now? A Nervous System Ladder Check', 'Four quick taps show if you’re calm and connected, revved up or running on empty, with what helps right now, a pause line to say and when to talk again.'),
+ 'refusals.html': ('Say No Kindly: Neutral Refusal Scripts', 'Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.'),
 })
 
 # Titles past about 60 characters and descriptions past about 160 are cut off in search results
@@ -403,6 +430,21 @@ PUBLISHER = {'@type': 'Organization', '@id': SITE + '/#org', 'name': BRAND, 'url
 BOOK_PARTS = [('Preface: The work nobody sees', 'book/preface.html'), ('Chapter I: Why we get out of tune', 'book/chapter-1.html'),
               ('Chapter II: Is the split working?', 'book/chapter-2.html'), ('Chapter III: Full tanks and different angles', 'book/chapter-3.html'),
               ('Chapter IV: Two kinds of fair', 'book/chapter-4.html'), ('Chapter V: The monthly look-back', 'book/chapter-5.html')]
+# Part Three: Understanding people, twelve chapters on how people work (each also has an -in-depth page)
+BOOK_PARTS += [('Part Three, Chapter %d: %s' % (i + 1, n), 'book/understanding-%s.html' % s) for i, (s, n) in enumerate([
+    ('1-feelings', 'How feelings work'),
+    ('2-stress', 'Stress and the nervous system'),
+    ('3-seeing', 'How we see each other'),
+    ('4-communication', 'How communication works'),
+    ('5-belonging', 'Attachment, trust and belonging'),
+    ('6-change', 'Habits and change'),
+    ('7-worth', 'Self-worth, shame and self-compassion'),
+    ('8-loss', 'Loss, grief and big life changes'),
+    ('9-minds', 'Minds that work differently'),
+    ('10-values', 'Values, meaning and a good life'),
+    ('11-healing', 'Healing after hurt'),
+    ('12-helping', 'Helping others well'),
+])]
 BOOK_ID = SITE + '/contents.html#book'
 
 # The middle step of each page's breadcrumb trail (name, page)
@@ -621,8 +663,8 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
     else:
         graph.append(dict(common, **{'@type': 'WebPage'}))
     if path == 'contents.html':
-        graph.append({'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'alternateName': 'The Objective Ledger: a free self-help book on sharing the load',
-                      'description': 'A free, growing self-help book on the mental load, fair chores and calmer communication at home. The Preface and Chapters I to V are live.',
+        graph.append({'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'alternateName': 'The Objective Ledger: a free self-help book on knowing yourself, sharing the load and understanding people',
+                      'description': 'A free, growing self-help book in three parts: knowing yourself; sharing a life, a home or a job fairly and kindly (the Preface and Chapters I to V); and understanding people, twelve chapters on how feelings, stress, trust, change, grief and healing work.',
                       'url': SITE + '/contents.html', 'author': AUTHOR, 'publisher': publisher, 'inLanguage': 'en-US', 'bookFormat': 'https://schema.org/EBook',
                       'isAccessibleForFree': True, 'image': OG_IMAGE,
                       'hasPart': [{'@type': 'Chapter', 'position': i, 'name': n, 'url': SITE + rel_url(p)} for i, (n, p) in enumerate(BOOK_PARTS)]})
@@ -834,6 +876,8 @@ GROUPS = [
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
+    ('Help for your situation', r'^(by-relationship|ladder|refusals|upset-right-now|safety|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
+    ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
     ('The Professor’s Library and further reading', r'^(library|learn/|reading|podcast|frequency-framework)'),
 ]
@@ -856,7 +900,7 @@ def write_llms(report):
     short, full = list(intro), list(intro)
     used = set()
     for name, pat in GROUPS:
-        items = sorted([p for p in by if re.search(pat, p) and p not in used], key=lambda p: (p != 'index.html', p))
+        items = sorted([p for p in by if re.search(pat, p) and p not in used], key=lambda p: (p != 'index.html', re.sub(r'\d+', lambda m: m.group().zfill(3), p)))
         if not items: continue
         short.append('## ' + name); full.append('## ' + name)
         for p in items:

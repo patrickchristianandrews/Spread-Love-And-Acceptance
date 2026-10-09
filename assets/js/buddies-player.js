@@ -538,7 +538,11 @@
       }
     };
     S.place = function (pl, instant) {
-      for (var id in pl) { var c = get(id); if (!c) continue; var x = clamp(num(pl[id], c.x), 0, 1); if (instant) { c.x = x; c.act = null; } else { c.act = { name: '_place', t0: S.t, dur: PLACE_T, fromX: c.x, toX: x, p: {} }; } }
+      var tg = {}, ids = [];
+      for (var id in pl) { var c = get(id); if (!c) continue; tg[id] = clamp(num(pl[id], c.x), 0, 1); ids.push(id); }
+      var two = ids.filter(function (i) { return i === 'tidbit' || i === 'sugarfoot'; });
+      if (two.length) spaceOut('_place', two, tg); // never set down on top of each other (on a narrow stage too)
+      ids.forEach(function (id) { var c = get(id), x = tg[id]; if (instant) { c.x = x; c.act = null; } else { c.act = { name: '_place', t0: S.t, dur: PLACE_T, fromX: c.x, toX: x, p: {} }; } });
     };
     S.addGuest = function (id, enter, name, instant) {
       if (!GUESTS[id]) return;
@@ -565,21 +569,27 @@
       });
       return dur;
     };
-    // the pals never end a move on top of each other (hugs, nuzzles and high-fives are meant to be close)
-    var GAP = 0.14, CLOSE = { hug: 1, nuzzle: 1, highfive: 1 };
+    // the pals never end a move (or get placed) with their heads on top of each other. The room that takes depends on
+    // how big they are drawn on this stage: a pup's head reaches about 42 units (times S.sp) out in front of her middle,
+    // so two pals facing each other need twice that between their middles, which is a much bigger share of a narrow
+    // phone stage than of a wide one. Hugs, nuzzles and high-fives come closer: snout to snout, cheeks touching.
+    var REACH = 43, REACH_CLOSE = 38.5, CLOSE = { hug: 1, nuzzle: 1, highfive: 1 };
+    function span() { var gg = S.geo; return gg ? Math.max(120, gg.x1 - gg.x0 - 68) : 465; }
+    function pairGap(close) { return clamp(2 * (close ? REACH_CLOSE : REACH) * (S.sp || SP) / span(), 0.1, 0.42); }
+    S.pairGap = pairGap;
     function spaceOut(name, ids, tg) {
-      if (CLOSE[name]) return;
+      var close = !!CLOSE[name], GAP = pairGap(close);
       if (ids.length === 2) {
         var T = S.chars.tidbit, Sg = S.chars.sugarfoot, together = name === 'carry' || (T.shared && Sg.shared && T.item && T.item === Sg.item);
         if (together && tg.tidbit == null) { tg.tidbit = T.x; tg.sugarfoot = Sg.x; } // picking it up together: they step apart to hold each side
         if (tg.tidbit == null || tg.sugarfoot == null) return;
-        var need = together ? 0.27 : GAP, d = tg.sugarfoot - tg.tidbit; if (Math.abs(d) >= need) return;
+        var need = together ? Math.max(0.27, GAP) : GAP, d = tg.sugarfoot - tg.tidbit; if (Math.abs(d) >= need - 1e-6) return;
         var mid = clamp((tg.tidbit + tg.sugarfoot) / 2, 0.03 + need / 2, 0.97 - need / 2), side = d !== 0 ? sgn(d) : sgn(Sg.x - T.x) || 1;
         tg.tidbit = mid - side * need / 2; tg.sugarfoot = mid + side * need / 2; return;
       }
       var id = ids[0], c = get(id); if (!c || c.guest || tg[id] == null) return;
       var o = other(c), ox = o.act && o.act.toX != null ? o.act.toX : o.x;
-      if (Math.abs(tg[id] - ox) >= GAP) return;
+      if (Math.abs(tg[id] - ox) >= GAP - 1e-6) return;
       var from = c.x <= ox ? -1 : 1, want = ox + from * GAP;
       if (want < 0.03 || want > 0.97) want = ox - from * GAP;
       tg[id] = clamp(want, 0.03, 0.97);
@@ -1089,7 +1099,7 @@
       }
       if (d.hammer != null) later(g.getTransform(), 'hammer', 0, d.hammer * -2);
       if (c.rider) later(g.getTransform(), 'snailrider', 0, 0);
-      var m = g.getTransform(); c.headPx = { x: m.e, y: m.f, r: 14 * Math.hypot(m.a, m.b) };
+      var m = g.getTransform(); c.headPx = { x: m.e, y: m.f, r: 14 * Math.hypot(m.a, m.b) }; c.headM = m;
       var inv = S.geo; c.headStage = { x: (m.e - inv.ox - S.shift) / inv.k, y: (m.f - inv.oy) / inv.k };
       var mo = m.transformPoint ? m.transformPoint({ x: 16, y: 6 }) : { x: m.e, y: m.f }; c.mouthPx = { x: mo.x, y: mo.y };
       g.restore();
