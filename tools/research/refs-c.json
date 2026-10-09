@@ -1,0 +1,3714 @@
+[
+ {
+  "id": "schwarz-clore-1983",
+  "authors": "Schwarz, N., & Clore, G. L.",
+  "year": 1983,
+  "title": "Mood, misattribution, and judgments of well-being: Informative and directive functions of affective states",
+  "venue": "Journal of Personality and Social Psychology, 45(3), 513–523",
+  "doi": null,
+  "url": "https://worlddatabaseofhappiness.eur.nl/publications/mood-misattribution-and-judgements-of-well-being-informative-and-directive-functions-of-affective-states-1841",
+  "kind": "study",
+  "finding": "People in a good mood (including people phoned on sunny days) rated their happiness and life satisfaction higher. A bad mood stopped lowering their ratings once their attention was drawn to an outside cause, such as the weather.",
+  "strength": "moderate: a classic demonstration of \"feelings as information\"; later large studies found the weather effect on life satisfaction to be very small.",
+  "topics": [
+   "emotions",
+   "feelings-as-information"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#signals",
+   "/library/thinking.html#emotional-reasoning"
+  ],
+  "verified": true,
+  "verified_by": "https://worlddatabaseofhappiness.eur.nl/publications/mood-misattribution-and-judgements-of-well-being-informative-and-directive-functions-of-affective-states-1841 ; https://api.isr.umich.edu/?p=190605 (DOI not confirmed in search, so none given)"
+ },
+ {
+  "id": "james-1884",
+  "authors": "James, W.",
+  "year": 1884,
+  "title": "What is an emotion?",
+  "venue": "Mind, os-IX(34), 188–205",
+  "doi": "10.1093/mind/os-IX.34.188",
+  "url": "https://doi.org/10.1093/mind/os-IX.34.188",
+  "kind": "theory",
+  "finding": "James argued that bodily changes follow directly from perceiving something exciting, and that our feeling of those bodily changes is the emotion.",
+  "strength": "debated: a founding theory; challenged by Cannon and others, but body–feeling links remain central in emotion science.",
+  "topics": [
+   "emotions",
+   "interoception"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body",
+   "/book/understanding-3-seeing-in-depth.html#attention",
+   "/book/understanding-6-change-in-depth.html#loop",
+   "/book/understanding-9-minds-in-depth.html#adhd",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://zenodo.org/record/1431811 ; https://psychclassics.yorku.ca/James/emotion.htm"
+ },
+ {
+  "id": "schachter-singer-1962",
+  "authors": "Schachter, S., & Singer, J.",
+  "year": 1962,
+  "title": "Cognitive, social, and physiological determinants of emotional state",
+  "venue": "Psychological Review, 69(5), 379–399",
+  "doi": "10.1037/h0046234",
+  "url": "https://doi.org/10.1037/h0046234",
+  "kind": "study",
+  "finding": "Proposed the two-factor theory: an emotion is physical arousal plus a label we give it from the situation.",
+  "strength": "debated: the original experiment has not replicated well, though the broad idea is still influential.",
+  "topics": [
+   "emotions",
+   "interoception"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body"
+  ],
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Two-factor_theory_of_emotion ; https://replicationindex.com/2019/02/24/schachter-and-singer-1962-the-experiment-that-never-happened/ (PMID 14497895)"
+ },
+ {
+  "id": "craig-2002",
+  "authors": "Craig, A. D.",
+  "year": 2002,
+  "title": "How do you feel? Interoception: the sense of the physiological condition of the body",
+  "venue": "Nature Reviews Neuroscience, 3(8), 655–666",
+  "doi": "10.1038/nrn894",
+  "url": "https://doi.org/10.1038/nrn894",
+  "kind": "review",
+  "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
+  "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+  "topics": [
+   "interoception",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body",
+   "/library/stress.html#interoception"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12154366/"
+ },
+ {
+  "id": "barrett-2017-constructed",
+  "authors": "Barrett, L. F.",
+  "year": 2017,
+  "title": "The theory of constructed emotion: an active inference account of interoception and categorization",
+  "venue": "Social Cognitive and Affective Neuroscience, 12(1), 1–23",
+  "doi": "10.1093/scan/nsw154",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5390700/",
+  "kind": "theory",
+  "finding": "Sets out the theory that the brain constantly predicts the body's needs and constructs emotions by making sense of body sensations using learned concepts.",
+  "strength": "debated: influential and actively tested; basic-emotion researchers disagree.",
+  "topics": [
+   "emotions",
+   "interoception"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body",
+   "/library/emotions.html#what-emotions-are"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5390700/ ; https://www.ovid.com/journals/scan/fulltext/10.1093/scan/nsw154"
+ },
+ {
+  "id": "lieberman-2007",
+  "authors": "Lieberman, M. D., Eisenberger, N. I., Crockett, M. J., Tom, S. M., Pfeifer, J. H., & Way, B. M.",
+  "year": 2007,
+  "title": "Putting feelings into words: Affect labeling disrupts amygdala activity in response to affective stimuli",
+  "venue": "Psychological Science, 18(5), 421–428",
+  "doi": "10.1111/j.1467-9280.2007.01916.x",
+  "url": "https://doi.org/10.1111/j.1467-9280.2007.01916.x",
+  "kind": "study",
+  "finding": "In a brain-imaging study, labelling the emotion in a picture reduced amygdala and other limbic responses compared with other ways of processing the image.",
+  "strength": "moderate: replicated lab finding; effects are modest and mostly measured with pictures in the lab.",
+  "topics": [
+   "emotions",
+   "affect-labeling"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#retuning",
+   "/book/chapter-4-in-depth.html#steps-one",
+   "/book/self-2-now-in-depth.html#state",
+   "/book/understanding-1-feelings-in-depth.html#naming",
+   "/library/emotions.html#affect-labeling"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17576282/"
+ },
+ {
+  "id": "torre-lieberman-2018",
+  "authors": "Torre, J. B., & Lieberman, M. D.",
+  "year": 2018,
+  "title": "Putting feelings into words: Affect labeling as implicit emotion regulation",
+  "venue": "Emotion Review, 10(2), 116–124",
+  "doi": "10.1177/1754073917742706",
+  "url": "https://doi.org/10.1177/1754073917742706",
+  "kind": "review",
+  "finding": "Reviewed evidence that naming a feeling can reduce its intensity even though it does not feel like regulating it at the time.",
+  "strength": "moderate: consistent lab evidence; the authors say understanding of how it works is still early.",
+  "topics": [
+   "emotions",
+   "affect-labeling"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#naming",
+   "/library/emotions.html#affect-labeling"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1754073917742706 ; https://api.philpapers.org/rec/TORPFI"
+ },
+ {
+  "id": "kircanski-2012",
+  "authors": "Kircanski, K., Lieberman, M. D., & Craske, M. G.",
+  "year": 2012,
+  "title": "Feelings into words: Contributions of language to exposure therapy",
+  "venue": "Psychological Science, 23(10), 1086–1091",
+  "doi": "10.1177/0956797612443830",
+  "url": "https://doi.org/10.1177/0956797612443830",
+  "kind": "study",
+  "finding": "Spider-fearful people who described their feelings in words while near a live spider showed lower skin-conductance arousal a week later than people who reappraised, distracted themselves or had exposure alone; self-reported fear did not differ between groups.",
+  "strength": "early: a single small experiment.",
+  "topics": [
+   "emotions",
+   "affect-labeling"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#naming"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22902568/"
+ },
+ {
+  "id": "pennebaker-beall-1986",
+  "authors": "Pennebaker, J. W., & Beall, S. K.",
+  "year": 1986,
+  "title": "Confronting a traumatic event: Toward an understanding of inhibition and disease",
+  "venue": "Journal of Abnormal Psychology, 95(3), 274–281",
+  "doi": "10.1037/0021-843X.95.3.274",
+  "url": "https://doi.org/10.1037/0021-843X.95.3.274",
+  "kind": "study",
+  "finding": "An early expressive-writing experiment in which students wrote about traumatic experiences over several days; it launched decades of research on whether writing about difficult experiences helps health and well-being.",
+  "strength": "moderate: launched a large literature; later meta-analyses find small average benefits.",
+  "topics": [
+   "emotions",
+   "expressive-writing",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#rulebook",
+   "/book/understanding-1-feelings-in-depth.html#naming",
+   "/book/understanding-11-healing-in-depth.html#without-them",
+   "/book/understanding-8-loss-in-depth.html#support",
+   "/library/emotions.html#expressive-writing"
+  ],
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/0003309D2A9A1CBBA6AF364BBCC9B2 (PMID 3745650)"
+ },
+ {
+  "id": "frattaroli-2006",
+  "authors": "Frattaroli, J.",
+  "year": 2006,
+  "title": "Experimental disclosure and its moderators: A meta-analysis",
+  "venue": "Psychological Bulletin, 132(6), 823–865",
+  "doi": "10.1037/0033-2909.132.6.823",
+  "url": "https://doi.org/10.1037/0033-2909.132.6.823",
+  "kind": "meta-analysis",
+  "finding": "Pooling 146 randomized studies, experimental disclosure (such as expressive writing) had a small but significant positive average effect.",
+  "strength": "moderate: real but small effect that varies by person and outcome.",
+  "topics": [
+   "emotions",
+   "expressive-writing",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#without-them",
+   "/library/emotions.html#expressive-writing"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073523/"
+ },
+ {
+  "id": "kashdan-barrett-mcknight-2015",
+  "authors": "Kashdan, T. B., Barrett, L. F., & McKnight, P. E.",
+  "year": 2015,
+  "title": "Unpacking emotion differentiation: Transforming unpleasant experience by perceiving distinctions in negativity",
+  "venue": "Current Directions in Psychological Science, 24(1), 10–16",
+  "doi": "10.1177/0963721414550708",
+  "url": "https://doi.org/10.1177/0963721414550708",
+  "kind": "review",
+  "finding": "Reviewed research on emotion differentiation (emotional granularity): people who describe negative feelings in fine-grained ways tend to rely less on unhelpful coping such as binge drinking or aggression.",
+  "strength": "moderate: consistent findings, but mostly correlational.",
+  "topics": [
+   "emotions",
+   "emotional-granularity"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#words",
+   "/library/emotions.html#emotional-granularity"
+  ],
+  "verified": true,
+  "verified_by": "https://www.psychologicalscience.org/journals/current-directions/0963721414550708/ ; https://www.affective-science.org/pubs/2015/kashdan-et-all-unpacking-emotion-differentiation-2015.pdf"
+ },
+ {
+  "id": "wegner-1987",
+  "authors": "Wegner, D. M., Schneider, D. J., Carter, S. R., & White, T. L.",
+  "year": 1987,
+  "title": "Paradoxical effects of thought suppression",
+  "venue": "Journal of Personality and Social Psychology, 53(1), 5–13",
+  "doi": "10.1037/0022-3514.53.1.5",
+  "url": "https://dtg.sites.fas.harvard.edu/DANWEGNER/pub/Wegner,Schneider,Carter,&White%201987.pdf",
+  "kind": "study",
+  "finding": "People asked not to think of a white bear kept thinking of it, suggesting that trying to suppress a thought can backfire.",
+  "strength": "moderate: classic, widely replicated in broad form; size of the rebound varies.",
+  "topics": [
+   "emotions",
+   "thought-suppression"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#layers"
+  ],
+  "verified": true,
+  "verified_by": "https://dtg.sites.fas.harvard.edu/DANWEGNER/pub/Wegner,Schneider,Carter,&White%201987.pdf ; https://brainblogger.com/2009/12/09/white-bears-the-paradox-of-mental-suppression (cites DOI)"
+ },
+ {
+  "id": "verduyn-lavrijsen-2015",
+  "authors": "Verduyn, P., & Lavrijsen, S.",
+  "year": 2015,
+  "title": "Which emotions last longest and why: The role of event importance and rumination",
+  "venue": "Motivation and Emotion, 39(1), 119–127",
+  "doi": null,
+  "url": "https://ppw.kuleuven.be/okp/_pdf/Verduyn2015WELLA.pdf",
+  "kind": "study",
+  "finding": "Of 27 emotions studied, sadness lasted longest, while shame, surprise, fear and disgust were among the shortest; long-lasting emotions tended to follow important events and involve rumination.",
+  "strength": "moderate: a single self-report study, consistent with other duration research.",
+  "topics": [
+   "emotions",
+   "rumination"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#waves"
+  ],
+  "verified": true,
+  "verified_by": "https://ppw.kuleuven.be/okp/_pdf/Verduyn2015WELLA.pdf ; https://cris.maastrichtuniversity.nl/en/publications/which-emotions-last-longest-and-why-the-role-of-event-importance-"
+ },
+ {
+  "id": "hatfield-cacioppo-rapson-1994",
+  "authors": "Hatfield, E., Cacioppo, J. T., & Rapson, R. L.",
+  "year": 1994,
+  "title": "Emotional contagion",
+  "venue": "Cambridge University Press (Studies in Emotion and Social Interaction)",
+  "doi": null,
+  "url": "https://catalogue.bnf.fr/ark:/12148/cb37435416b",
+  "kind": "book",
+  "finding": "Describes emotional contagion: people tend to mimic each other's faces, voices and postures, and that mimicry can shift their own feelings.",
+  "strength": "moderate: well supported face to face; online contagion effects are small.",
+  "topics": [
+   "emotions",
+   "emotional-contagion"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#spread",
+   "/library/emotions.html#emotional-contagion"
+  ],
+  "verified": true,
+  "verified_by": "https://search.ub.tum.de/vufind/Record/DE-604.BV009636515 ; https://catalogue.bnf.fr/ark:/12148/cb37435416b"
+ },
+ {
+  "id": "gross-1998",
+  "authors": "Gross, J. J.",
+  "year": 1998,
+  "title": "The emerging field of emotion regulation: An integrative review",
+  "venue": "Review of General Psychology, 2(3), 271–299",
+  "doi": "10.1037/1089-2680.2.3.271",
+  "url": "https://doi.org/10.1037/1089-2680.2.3.271",
+  "kind": "review",
+  "finding": "Set out the process model of emotion regulation, with five points where emotion can be shaped: situation selection, situation modification, attention, cognitive change (reappraisal) and response modulation.",
+  "strength": "strong: the dominant framework in emotion-regulation research.",
+  "topics": [
+   "emotions",
+   "emotion-regulation"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#emotion-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/2096423181 ; https://data.gesis.org/gesiskg/resource/zis-Gross1998The"
+ },
+ {
+  "id": "gross-john-2003",
+  "authors": "Gross, J. J., & John, O. P.",
+  "year": 2003,
+  "title": "Individual differences in two emotion regulation processes: Implications for affect, relationships, and well-being",
+  "venue": "Journal of Personality and Social Psychology, 85(2), 348–362",
+  "doi": "10.1037/0022-3514.85.2.348",
+  "url": "https://doi.org/10.1037/0022-3514.85.2.348",
+  "kind": "study",
+  "finding": "Across five studies, people who habitually reappraised had better emotional experience, relationships and well-being; habitual suppression was linked to worse outcomes.",
+  "strength": "strong: widely replicated, though costs of suppression vary across cultures.",
+  "topics": [
+   "emotions",
+   "emotion-regulation"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#urges",
+   "/library/emotions.html#reappraisal-suppression"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12916575/"
+ },
+ {
+  "id": "butler-2003",
+  "authors": "Butler, E. A., Egloff, B., Wilhelm, F. H., Smith, N. C., Erickson, E. A., & Gross, J. J.",
+  "year": 2003,
+  "title": "The social consequences of expressive suppression",
+  "venue": "Emotion, 3(1), 48–67",
+  "doi": "10.1037/1528-3542.3.1.48",
+  "url": "https://doi.org/10.1037/1528-3542.3.1.48",
+  "kind": "study",
+  "finding": "When one person hid their emotions while discussing an upsetting topic, communication suffered, their partner's blood pressure rose, and rapport and relationship formation were reduced.",
+  "strength": "moderate: two lab studies with unacquainted women.",
+  "topics": [
+   "emotions",
+   "emotion-regulation",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#reappraisal-suppression"
+  ],
+  "verified": true,
+  "verified_by": "https://experts.arizona.edu/en/publications/the-social-consequences-of-expressive-suppression/"
+ },
+ {
+  "id": "bushman-2002",
+  "authors": "Bushman, B. J.",
+  "year": 2002,
+  "title": "Does venting anger feed or extinguish the flame? Catharsis, rumination, distraction, anger, and aggressive responding",
+  "venue": "Personality and Social Psychology Bulletin, 28(6), 724–731",
+  "doi": "10.1177/0146167202289002",
+  "url": "https://public.websites.umich.edu/~bbushman/PSPB02.pdf",
+  "kind": "study",
+  "finding": "Angered people who hit a punching bag while thinking about the person who provoked them felt angrier afterwards than people who were distracted or did nothing.",
+  "strength": "moderate: a single experiment, consistent with later meta-analytic work.",
+  "topics": [
+   "emotions",
+   "anger"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#urges",
+   "/library/emotions.html#anger"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/0146167202289002 ; https://public.websites.umich.edu/~bbushman/PSPB02.pdf"
+ },
+ {
+  "id": "kjaervik-bushman-2024",
+  "authors": "Kjærvik, S. L., & Bushman, B. J.",
+  "year": 2024,
+  "title": "A meta-analytic review of anger management activities that increase or decrease arousal: What fuels or douses rage?",
+  "venue": "Clinical Psychology Review (April 2024)",
+  "doi": null,
+  "url": "https://news.osu.edu/breathe-dont-vent-turning-down-the-heat-is-key-to-managing-anger/",
+  "kind": "meta-analysis",
+  "finding": "Across 154 studies, activities that calm the body (such as slow breathing, relaxation and mindfulness) reduced anger and aggression, while arousal-increasing activities showed little or no benefit.",
+  "strength": "moderate: a large meta-analysis; the authors say more research is needed. DOI not confirmed in search, so the link is the university news release.",
+  "topics": [
+   "emotions",
+   "anger",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#anger"
+  ],
+  "verified": true,
+  "verified_by": "https://news.osu.edu/breathe-dont-vent-turning-down-the-heat-is-key-to-managing-anger/ ; https://www.psypost.org/effective-anger-reduction-techniques-revealed-in-comprehensive-review-of-154-studies"
+ },
+ {
+  "id": "sifneos-1973",
+  "authors": "Sifneos, P. E.",
+  "year": 1973,
+  "title": "The prevalence of \"alexithymic\" characteristics in psychosomatic patients",
+  "venue": "Psychotherapy and Psychosomatics, 22(2–6), 255–262",
+  "doi": null,
+  "url": "https://karger.com/pps/article/22/2-6/255/280361/The-Prevalence-of-Alexithymic-Characteristics-in",
+  "kind": "study",
+  "finding": "Introduced the term \"alexithymia\" for difficulty finding words for feelings, along with a limited fantasy life, and found these traits more often in psychosomatic patients than in controls.",
+  "strength": "early: small clinical sample; historically important as the origin of the term.",
+  "topics": [
+   "emotions",
+   "alexithymia"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#alexithymia"
+  ],
+  "verified": true,
+  "verified_by": "https://karger.com/pps/article/22/2-6/255/280361/The-Prevalence-of-Alexithymic-Characteristics-in"
+ },
+ {
+  "id": "bagby-parker-taylor-1994",
+  "authors": "Bagby, R. M., Parker, J. D. A., & Taylor, G. J.",
+  "year": 1994,
+  "title": "The twenty-item Toronto Alexithymia Scale—I. Item selection and cross-validation of the factor structure",
+  "venue": "Journal of Psychosomatic Research, 38(1), 23–32",
+  "doi": "10.1016/0022-3999(94)90005-1",
+  "url": "https://doi.org/10.1016/0022-3999(94)90005-1",
+  "kind": "study",
+  "finding": "Developed the 20-item Toronto Alexithymia Scale (TAS-20) and tested its three-factor structure in clinical and non-clinical groups.",
+  "strength": "strong: the most widely used alexithymia measure, though self-report has limits.",
+  "topics": [
+   "emotions",
+   "alexithymia"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#alexithymia"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8126686/"
+ },
+ {
+  "id": "kinnaird-2019",
+  "authors": "Kinnaird, E., Stewart, C., & Tchanturia, K.",
+  "year": 2019,
+  "title": "Investigating alexithymia in autism: A systematic review and meta-analysis",
+  "venue": "European Psychiatry, 55, 80–89",
+  "doi": "10.1016/j.eurpsy.2018.09.004",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
+  "kind": "meta-analysis",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
+  "topics": [
+   "alexithymia",
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#alexithymia"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/"
+ },
+ {
+  "id": "bird-cook-2013",
+  "authors": "Bird, G., & Cook, R.",
+  "year": 2013,
+  "title": "Mixed emotions: The contribution of alexithymia to the emotional symptoms of autism",
+  "venue": "Translational Psychiatry, 3(7), e285",
+  "doi": "10.1038/tp.2013.61",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3731793/",
+  "kind": "review",
+  "finding": "Argued that emotional difficulties seen in some autistic people are better explained by co-occurring alexithymia than by autism itself.",
+  "strength": "moderate: an influential hypothesis with growing support; still being tested.",
+  "topics": [
+   "alexithymia",
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#naming",
+   "/book/understanding-9-minds-in-depth.html#autism",
+   "/signal-translator.html#lookfor",
+   "/wired-differently-in-depth.html#alexithymia"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3731793/ ; https://openaccess.city.ac.uk/4531"
+ },
+ {
+  "id": "tangney-dearing-2002",
+  "authors": "Tangney, J. P., & Dearing, R. L.",
+  "year": 2002,
+  "title": "Shame and guilt",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://www.guilford.com/books/Shame-and-Guilt/Tangney-Dearing/9781572309876",
+  "kind": "book",
+  "finding": "Summarizes years of research distinguishing shame (about the self) from guilt (about the act): guilt-proneness goes with empathy and repair, shame-proneness with hiding, blame and anger.",
+  "strength": "moderate: a large body of research, with some debate about whether measures fully separate the two and about cultural differences.",
+  "topics": [
+   "self-worth",
+   "shame-guilt"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#hiding",
+   "/book/understanding-7-worth-in-depth.html#shame-guilt",
+   "/library/emotions.html#shame-and-guilt"
+  ],
+  "verified": true,
+  "verified_by": "https://www.guilford.com/re/9781572307155 ; https://metapsychology.net/?p=1826"
+ },
+ {
+  "id": "lewis-1971",
+  "authors": "Lewis, H. B.",
+  "year": 1971,
+  "title": "Shame and guilt in neurosis",
+  "venue": "International Universities Press, New York",
+  "doi": null,
+  "url": "https://find.library.upenn.edu/catalog/99549673503681",
+  "kind": "book",
+  "finding": "Drawing on therapy sessions, Lewis distinguished shame, which centres on the whole self, from guilt, which centres on a specific act.",
+  "strength": "moderate: clinical observation that later research by Tangney and others built on.",
+  "topics": [
+   "self-worth",
+   "shame-guilt"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#hiding",
+   "/book/understanding-7-worth-in-depth.html#shame-guilt"
+  ],
+  "verified": true,
+  "verified_by": "https://www.cambridge.org/core/journals/the-british-journal-of-psychiatry/article/shame-and-guilt-in-neurosis-by-helen-block-lewis-international-universities-press-new-york-1971-pp-525-price-1500/D78BE2422FC60345F923EA0C6815036B ; https://find.library.upenn.edu/catalog/99549673503681"
+ },
+ {
+  "id": "nolen-hoeksema-1991",
+  "authors": "Nolen-Hoeksema, S.",
+  "year": 1991,
+  "title": "Responses to depression and their effects on the duration of depressive episodes",
+  "venue": "Journal of Abnormal Psychology, 100(4), 569–582",
+  "doi": "10.1037/0021-843X.100.4.569",
+  "url": "https://doi.org/10.1037/0021-843X.100.4.569",
+  "kind": "theory",
+  "finding": "Proposed the response styles theory: people who ruminate on their low mood tend to have longer depressions than people who distract themselves.",
+  "strength": "strong: extensive, consistent later research.",
+  "topics": [
+   "emotions",
+   "rumination"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#control",
+   "/book/understanding-11-healing-in-depth.html#hurt",
+   "/book/understanding-7-worth-in-depth.html#mistakes",
+   "/library/emotions.html#rumination"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/1757671/"
+ },
+ {
+  "id": "rose-2002",
+  "authors": "Rose, A. J.",
+  "year": 2002,
+  "title": "Co-rumination in the friendships of girls and boys",
+  "venue": "Child Development, 73(6), 1830–1843",
+  "doi": "10.1111/1467-8624.00509",
+  "url": "https://doi.org/10.1111/1467-8624.00509",
+  "kind": "study",
+  "finding": "In 608 school students, co-rumination (repeatedly going over problems with a friend) was linked both to closer friendships and to more depression and anxiety symptoms; girls co-ruminated more.",
+  "strength": "moderate: replicated mostly with adolescents; correlational.",
+  "topics": [
+   "emotions",
+   "rumination"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#rumination"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12487497/"
+ },
+ {
+  "id": "bonanno-2004",
+  "authors": "Bonanno, G. A.",
+  "year": 2004,
+  "title": "Loss, trauma, and human resilience: Have we underestimated the human capacity to thrive after extremely aversive events?",
+  "venue": "American Psychologist, 59(1), 20–28",
+  "doi": "10.1037/0003-066X.59.1.20",
+  "url": "https://doi.org/10.1037/0003-066X.59.1.20",
+  "kind": "review",
+  "finding": "Argued that resilience after loss or trauma is distinct from recovery, is more common than many theorists assumed, and can come about in several ways.",
+  "strength": "strong: supported by many later trajectory studies.",
+  "topics": [
+   "grief",
+   "resilience",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care",
+   "/book/understanding-8-loss-in-depth.html#support",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change",
+   "/library/emotions.html#resilience"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/14736317/"
+ },
+ {
+  "id": "masten-2001",
+  "authors": "Masten, A. S.",
+  "year": 2001,
+  "title": "Ordinary magic: Resilience processes in development",
+  "venue": "American Psychologist, 56(3), 227–238",
+  "doi": "10.1037/0003-066X.56.3.227",
+  "url": "https://doi.org/10.1037/0003-066X.56.3.227",
+  "kind": "review",
+  "finding": "Concluded that resilience is common and usually arises from ordinary human adaptive systems, such as relationships; the main threats are things that damage those systems.",
+  "strength": "strong: influential review of developmental research.",
+  "topics": [
+   "resilience"
+  ],
+  "mentioned_on": [
+   "/know-yourself-in-depth.html#adversity",
+   "/library/emotions.html#resilience"
+  ],
+  "verified": true,
+  "verified_by": "https://www.academia.edu/34570053/Ordinary_Magic_Resilience_Processes_in_Development ; https://experts.umn.edu/en/publications/ordinary-magic-resilience-processes-in-development-2/"
+ },
+ {
+  "id": "fredrickson-2001",
+  "authors": "Fredrickson, B. L.",
+  "year": 2001,
+  "title": "The role of positive emotions in positive psychology: The broaden-and-build theory of positive emotions",
+  "venue": "American Psychologist, 56(3), 218–226",
+  "doi": "10.1037/0003-066X.56.3.218",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3122271/",
+  "kind": "theory",
+  "finding": "Proposed that positive emotions broaden attention and thinking and, over time, help build lasting personal resources.",
+  "strength": "moderate: influential, with experimental support for broadening; the separate \"positivity ratio\" claim was discredited.",
+  "topics": [
+   "emotions",
+   "positive-emotions"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#positive-emotions",
+   "/library/thinking.html#peak-end-rule"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/11315248/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3122271/"
+ },
+ {
+  "id": "brown-sokal-friedman-2013",
+  "authors": "Brown, N. J. L., Sokal, A. D., & Friedman, H. L.",
+  "year": 2013,
+  "title": "The complex dynamics of wishful thinking: The critical positivity ratio",
+  "venue": "American Psychologist, 68(9), 801–813",
+  "doi": "10.1037/a0032850",
+  "url": "https://doi.org/10.1037/a0032850",
+  "kind": "review",
+  "finding": "Showed that the mathematical model behind the claimed \"critical positivity ratio\" of 2.9013 had no valid basis, so the ratio claim was unfounded.",
+  "strength": "strong: a decisive critique of one specific claim.",
+  "topics": [
+   "emotions",
+   "positive-emotions"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#positive-emotions"
+  ],
+  "verified": true,
+  "verified_by": "https://arxiv.org/pdf/1307.7006 ; https://discovery.ucl.ac.uk/id/eprint/1404587/"
+ },
+ {
+  "id": "barrett-2019-faces",
+  "authors": "Barrett, L. F., Adolphs, R., Marsella, S., Martinez, A. M., & Pollak, S. D.",
+  "year": 2019,
+  "title": "Emotional expressions reconsidered: Challenges to inferring emotion from human facial movements",
+  "venue": "Psychological Science in the Public Interest, 20(1), 1–68",
+  "doi": "10.1177/1529100619832930",
+  "url": "https://doi.org/10.1177/1529100619832930",
+  "kind": "review",
+  "finding": "Concluded that facial movements are not reliable enough to infer a person's specific emotion across situations and cultures.",
+  "strength": "debated: a major review; basic-emotion researchers dispute parts of it.",
+  "topics": [
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#what-emotions-are"
+  ],
+  "verified": true,
+  "verified_by": "https://eprints.gla.ac.uk/178385 ; https://www.psychologicalscience.org/publications/emotional-expressions-reconsidered-challenges-to-inferring-emotion-from-human-facial-movements.html"
+ },
+ {
+  "id": "kramer-2014",
+  "authors": "Kramer, A. D. I., Guillory, J. E., & Hancock, J. T.",
+  "year": 2014,
+  "title": "Experimental evidence of massive-scale emotional contagion through social networks",
+  "venue": "PNAS, 111(24), 8788–8790",
+  "doi": "10.1073/pnas.1320040111",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4066473/",
+  "kind": "study",
+  "finding": "Changing how many positive or negative posts Facebook users saw slightly shifted the emotional tone of their own posts.",
+  "strength": "debated: very small effects, and the journal published an editorial expression of concern about consent.",
+  "topics": [
+   "emotions",
+   "emotional-contagion"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#emotional-contagion"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4066473/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC4115552 (expression of concern)"
+ },
+ {
+  "id": "eisenberger-2003",
+  "authors": "Eisenberger, N. I., Lieberman, M. D., & Williams, K. D.",
+  "year": 2003,
+  "title": "Does rejection hurt? An fMRI study of social exclusion",
+  "venue": "Science, 302(5643), 290–292",
+  "doi": "10.1126/science.1089134",
+  "url": "https://doi.org/10.1126/science.1089134",
+  "kind": "study",
+  "finding": "Being left out of a virtual ball-tossing game increased activity in the anterior cingulate cortex, a region also involved in physical pain distress, in proportion to how upset people felt.",
+  "strength": "debated: influential small brain-imaging study; how closely social and physical pain overlap is still argued.",
+  "topics": [
+   "emotions",
+   "healing",
+   "belonging"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#hurt"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/14551436/"
+ },
+ {
+  "id": "leary-1998",
+  "authors": "Leary, M. R., Springer, C., Negel, L., Ansell, E., & Evans, K.",
+  "year": 1998,
+  "title": "The causes, phenomenology, and consequences of hurt feelings",
+  "venue": "Journal of Personality and Social Psychology, 74(5), 1225–1237",
+  "doi": "10.1037/0022-3514.74.5.1225",
+  "url": "https://doi.org/10.1037/0022-3514.74.5.1225",
+  "kind": "study",
+  "finding": "Hurt feelings were triggered by events that signalled relational devaluation (feeling less valued by someone), usually by people the person knew well.",
+  "strength": "moderate: retrospective accounts; widely supported idea.",
+  "topics": [
+   "emotions",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#hurt"
+  ],
+  "verified": true,
+  "verified_by": "https://scholars.duke.edu/publication/677019 ; https://pure.psu.edu/en/publications/the-causes-phenomenology-and-consequences-of-hurt-feelings/"
+ },
+ {
+  "id": "singer-klimecki-2014",
+  "authors": "Singer, T., & Klimecki, O. M.",
+  "year": 2014,
+  "title": "Empathy and compassion",
+  "venue": "Current Biology, 24(18), R875–R878",
+  "doi": "10.1016/j.cub.2014.06.054",
+  "url": "https://doi.org/10.1016/j.cub.2014.06.054",
+  "kind": "review",
+  "finding": "Distinguished empathic distress (sharing someone's pain, which can overwhelm) from compassion (warm concern), which engage different brain networks; brief compassion training increased positive feelings.",
+  "strength": "early: promising lab studies with relatively small samples.",
+  "topics": [
+   "helping",
+   "compassion-fatigue",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#spread",
+   "/book/understanding-12-helping-in-depth.html#compassion",
+   "/library/communication.html#empathy-vs-sympathy",
+   "/library/connection.html#compassion-fatigue"
+  ],
+  "verified": true,
+  "verified_by": "https://pure.mpg.de/pubman/item/item_2036548_8"
+ },
+ {
+  "id": "figley-1995",
+  "authors": "Figley, C. R. (Ed.)",
+  "year": 1995,
+  "title": "Compassion fatigue: Coping with secondary traumatic stress disorder in those who treat the traumatized",
+  "venue": "Brunner/Mazel, New York",
+  "doi": null,
+  "url": "https://www.routledge.com/Compassion-Fatigue-Coping-with-Secondary-Traumatic-Stress-Disorder-in-Those/Figley/p/book/9780876307595",
+  "kind": "book",
+  "finding": "An edited volume introducing \"compassion fatigue\" as a cost of helping traumatized people, distinguished from burnout and PTSD, with ideas for prevention.",
+  "strength": "moderate: a widely used clinical concept; measurement is debated.",
+  "topics": [
+   "helping",
+   "compassion-fatigue",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#compassion",
+   "/library/connection.html#compassion-fatigue"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ojp.gov/ncjrs/virtual-library/abstracts/compassion-fatigue-coping-secondary-traumatic-stress-disorder-those ; https://identity.wellcomecollection.org/works/hbkt3xdu"
+ },
+ {
+  "id": "taylor-2000",
+  "authors": "Taylor, S. E., Klein, L. C., Lewis, B. P., Gruenewald, T. L., Gurung, R. A. R., & Updegraff, J. A.",
+  "year": 2000,
+  "title": "Biobehavioral responses to stress in females: Tend-and-befriend, not fight-or-flight",
+  "venue": "Psychological Review, 107(3), 411–429",
+  "doi": "10.1037/0033-295X.107.3.411",
+  "url": "https://doi.org/10.1037/0033-295X.107.3.411",
+  "kind": "theory",
+  "finding": "Proposed that under stress people, perhaps especially women, often respond by protecting others and seeking social connection (\"tend and befriend\"), not only fight or flight.",
+  "strength": "moderate: influential theory with supporting evidence; sex differences are debated.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#ready",
+   "/library/stress.html#stress-response"
+  ],
+  "verified": true,
+  "verified_by": "https://taylorlab.psych.ucla.edu/wp-content/uploads/sites/5/2014/10/2000_Biobehavioral-responses-to-stress-in-females_tend-and-befriend.pdf ; https://www.deepdyve.com/lp/doc/tSvZ2obcc9"
+ },
+ {
+  "id": "lazarus-folkman-1984",
+  "authors": "Lazarus, R. S., & Folkman, S.",
+  "year": 1984,
+  "title": "Stress, appraisal, and coping",
+  "venue": "Springer Publishing, New York",
+  "doi": null,
+  "url": "https://wellcomecollection.org/works/b5zr7tvm",
+  "kind": "book",
+  "finding": "Set out the appraisal model: stress depends on judging whether something threatens you and whether you can cope; it also distinguished problem-focused from emotion-focused coping.",
+  "strength": "strong: one of the most influential frameworks in stress research.",
+  "topics": [
+   "stress",
+   "values"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#control",
+   "/book/understanding-10-values-in-depth.html#control",
+   "/book/understanding-2-stress-in-depth.html#demand",
+   "/library/stress.html#appraisal"
+  ],
+  "verified": true,
+  "verified_by": "https://wellcomecollection.org/works/b5zr7tvm ; https://krimdok.uni-tuebingen.de/Record/1617692433"
+ },
+ {
+  "id": "grossman-taylor-2007",
+  "authors": "Grossman, P., & Taylor, E. W.",
+  "year": 2007,
+  "title": "Toward understanding respiratory sinus arrhythmia: Relations to cardiac vagal tone, evolution and biobehavioral functions",
+  "venue": "Biological Psychology, 74(2), 263–285",
+  "doi": "10.1016/j.biopsycho.2005.11.014",
+  "url": "https://doi.org/10.1016/j.biopsycho.2005.11.014",
+  "kind": "review",
+  "finding": "Raised caveats about using respiratory sinus arrhythmia as an index of vagal tone and challenged evolutionary assumptions used in polyvagal theory.",
+  "strength": "strong: a detailed physiological critique.",
+  "topics": [
+   "stress",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#polyvagal-theory"
+  ],
+  "verified": true,
+  "verified_by": "https://synapsesocial.com/papers/W2060699864 ; https://qigonginstitute.org/abstract-print/16846"
+ },
+ {
+  "id": "grossman-2023",
+  "authors": "Grossman, P.",
+  "year": 2023,
+  "title": "Fundamental challenges and likely refutations of the five basic premises of the polyvagal theory",
+  "venue": "Biological Psychology, 180, 108589",
+  "doi": "10.1016/j.biopsycho.2023.108589",
+  "url": "https://doi.org/10.1016/j.biopsycho.2023.108589",
+  "kind": "review",
+  "finding": "Reviewed the evidence for each of polyvagal theory's five basic premises and argued that each is untenable or highly implausible.",
+  "strength": "debated: a strong critique; Porges and colleagues have responded.",
+  "topics": [
+   "stress",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#polyvagal-theory"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/37230290/"
+ },
+ {
+  "id": "arnsten-2009",
+  "authors": "Arnsten, A. F. T.",
+  "year": 2009,
+  "title": "Stress signalling pathways that impair prefrontal cortex structure and function",
+  "venue": "Nature Reviews Neuroscience, 10(6), 410–422",
+  "doi": "10.1038/nrn2648",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2907136/",
+  "kind": "review",
+  "finding": "Reviewed evidence that stress chemicals rapidly weaken the prefrontal cortex, which supports planning and flexible thinking, while strengthening more habitual responses.",
+  "strength": "strong: well-established neuroscience, much of it from animal studies.",
+  "topics": [
+   "stress",
+   "flooding"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#flooding"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/19455173/"
+ },
+ {
+  "id": "mcewen-stellar-1993",
+  "authors": "McEwen, B. S., & Stellar, E.",
+  "year": 1993,
+  "title": "Stress and the individual: Mechanisms leading to disease",
+  "venue": "Archives of Internal Medicine, 153(18), 2093–2101",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/8379800/",
+  "kind": "theory",
+  "finding": "Introduced \"allostatic load\": the cumulative wear and tear on the body from repeated or chronic stress responses.",
+  "strength": "moderate: a widely used framework; there is no single agreed way to measure it.",
+  "topics": [
+   "stress",
+   "allostatic-load"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#load"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8379800/ (DOI not confirmed in search)"
+ },
+ {
+  "id": "mcewen-1998",
+  "authors": "McEwen, B. S.",
+  "year": 1998,
+  "title": "Protective and damaging effects of stress mediators",
+  "venue": "New England Journal of Medicine, 338(3), 171–179",
+  "doi": "10.1056/NEJM199801153380307",
+  "url": "https://doi.org/10.1056/NEJM199801153380307",
+  "kind": "review",
+  "finding": "Explained how the same stress hormones that protect us in the short term cause wear and tear (allostatic load) when stress systems are chronically over- or under-active.",
+  "strength": "strong: highly influential review.",
+  "topics": [
+   "stress",
+   "allostatic-load"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#allostatic-load"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9428819/ ; https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/1260946"
+ },
+ {
+  "id": "kanner-1981",
+  "authors": "Kanner, A. D., Coyne, J. C., Schaefer, C., & Lazarus, R. S.",
+  "year": 1981,
+  "title": "Comparison of two modes of stress measurement: Daily hassles and uplifts versus major life events",
+  "venue": "Journal of Behavioral Medicine, 4(1), 1–39",
+  "doi": "10.1007/BF00844845",
+  "url": "https://doi.org/10.1007/BF00844845",
+  "kind": "study",
+  "finding": "Everyday hassles predicted psychological symptoms better than major life events did, and still did after life events were taken into account.",
+  "strength": "moderate: a classic study; many later studies support the importance of daily hassles.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#load"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/7288876/"
+ },
+ {
+  "id": "repetti-1989",
+  "authors": "Repetti, R. L.",
+  "year": 1989,
+  "title": "Effects of daily workload on subsequent behavior during marital interaction: The roles of social withdrawal and spouse support",
+  "venue": "Journal of Personality and Social Psychology, 57(4), 651–659",
+  "doi": null,
+  "url": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf",
+  "kind": "study",
+  "finding": "Air traffic controllers (33) and their wives reported over three days; after high-workload days the controllers were more socially withdrawn at home, especially when their wives were supportive.",
+  "strength": "moderate: a small, influential daily study of stress spillover.",
+  "topics": [
+   "stress",
+   "work"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/library/calm.html#environment-and-mood",
+   "/library/life.html#work-life"
+  ],
+  "verified": true,
+  "verified_by": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf (DOI not confirmed in search)"
+ },
+ {
+  "id": "yoo-walker-2007",
+  "authors": "Yoo, S.-S., Gujar, N., Hu, P., Jolesz, F. A., & Walker, M. P.",
+  "year": 2007,
+  "title": "The human emotional brain without sleep—a prefrontal amygdala disconnect",
+  "venue": "Current Biology, 17(20), R877–R878",
+  "doi": "10.1016/j.cub.2007.08.007",
+  "url": "https://doi.org/10.1016/j.cub.2007.08.007",
+  "kind": "study",
+  "finding": "After a night without sleep, the amygdala reacted more strongly to negative pictures and was less connected to the prefrontal cortex.",
+  "strength": "moderate: a small lab study, consistent with later sleep research.",
+  "topics": [
+   "stress",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#state",
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/library/stress.html#sleep-and-mood"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17956744 ; https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml"
+ },
+ {
+  "id": "gordon-chen-2014",
+  "authors": "Gordon, A. M., & Chen, S.",
+  "year": 2014,
+  "title": "The role of sleep in interpersonal conflict: Do sleepless nights mean worse fights?",
+  "venue": "Social Psychological and Personality Science, 5(2), 168–175",
+  "doi": "10.1177/1948550613488952",
+  "url": "https://doi.org/10.1177/1948550613488952",
+  "kind": "study",
+  "finding": "In a 14-day daily study, people reported more conflict with their partner after poor nights of sleep, and conflicts were resolved best when both partners were well rested.",
+  "strength": "moderate: diary and lab evidence; correlational in part.",
+  "topics": [
+   "stress",
+   "sleep",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#sleep-and-mood"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1948550613488952 ; https://news.fit.edu/?p=36479"
+ },
+ {
+  "id": "zaccaro-2018",
+  "authors": "Zaccaro, A., Piarulli, A., Laurino, M., Garbella, E., Menicucci, D., Neri, B., & Gemignani, A.",
+  "year": 2018,
+  "title": "How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing",
+  "venue": "Frontiers in Human Neuroscience, 12, 353",
+  "doi": "10.3389/fnhum.2018.00353",
+  "url": "https://doi.org/10.3389/fnhum.2018.00353",
+  "kind": "review",
+  "finding": "Slow breathing was linked with changes in heart-rate variability and with more comfort, relaxation and alertness and less arousal and anxiety.",
+  "strength": "moderate: consistent direction, but many included studies were small.",
+  "topics": [
+   "stress",
+   "calm",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#settle",
+   "/library/calm.html#slow-breathing"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/"
+ },
+ {
+  "id": "balban-2023",
+  "authors": "Balban, M. Y., Neri, E., Kogon, M. M., Weed, L., Nouriani, B., Jo, B., Holl, G., Zeitzer, J. M., Spiegel, D., & Huberman, A. D.",
+  "year": 2023,
+  "title": "Brief structured respiration practices enhance mood and reduce physiological arousal",
+  "venue": "Cell Reports Medicine, 4(1), 100895",
+  "doi": "10.1016/j.xcrm.2022.100895",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947/",
+  "kind": "study",
+  "finding": "In a month-long randomized trial of five minutes a day, breathing exercises improved mood more than mindfulness meditation, with cyclic sighing (long out-breaths) showing the largest benefits.",
+  "strength": "early: a single remote trial; needs replication.",
+  "topics": [
+   "stress",
+   "calm",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#settle",
+   "/library/calm.html#box-breathing",
+   "/library/calm.html#physiological-sigh"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947 ; https://hubermanlab.stanford.edu/publications/brief-structured-respiration-practices-enhance-mood-and-reduce-physiological-arousal"
+ },
+ {
+  "id": "sonnentag-fritz-2007",
+  "authors": "Sonnentag, S., & Fritz, C.",
+  "year": 2007,
+  "title": "The Recovery Experience Questionnaire: Development and validation of a measure for assessing recuperation and unwinding from work",
+  "venue": "Journal of Occupational Health Psychology, 12(3), 204–221",
+  "doi": "10.1037/1076-8998.12.3.204",
+  "url": "https://doi.org/10.1037/1076-8998.12.3.204",
+  "kind": "study",
+  "finding": "Identified four separate recovery experiences outside work: psychological detachment, relaxation, mastery and control.",
+  "strength": "strong: widely used measure; recovery research is extensive and consistent.",
+  "topics": [
+   "stress",
+   "rest",
+   "work"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#rest",
+   "/library/calm.html#breaks"
+  ],
+  "verified": true,
+  "verified_by": "https://kops.uni-konstanz.de/entities/publication/901f4299-e3f5-46af-99cb-a27bdd4bca71 ; https://www.sowi.uni-mannheim.de/en/sonnentag/research/measures-and-tools"
+ },
+ {
+  "id": "leikas-ilmarinen-2017",
+  "authors": "Leikas, S., & Ilmarinen, V.-J.",
+  "year": 2017,
+  "title": "Happy now, tired later? Extraverted and conscientious behavior are related to immediate mood gains, but to later fatigue",
+  "venue": "Journal of Personality, 85(5), 603–615",
+  "doi": "10.1111/jopy.12264",
+  "url": "https://doi.org/10.1111/jopy.12264",
+  "kind": "study",
+  "finding": "In a 12-day experience-sampling study, acting extraverted went with better mood at the time but more fatigue about three hours later, for introverts and extraverts alike.",
+  "strength": "early: small sample (48 people); the authors called for replication.",
+  "topics": [
+   "stress",
+   "rest",
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#rest"
+  ],
+  "verified": true,
+  "verified_by": "https://helda.helsinki.fi/server/api/core/bitstreams/e6ff30bd-64bb-47fe-b87a-0be781d2a268/content ; https://www.psypost.org/study-sociable-makes-tired-even-youre-extraverted"
+ },
+ {
+  "id": "coan-2006",
+  "authors": "Coan, J. A., Schaefer, H. S., & Davidson, R. J.",
+  "year": 2006,
+  "title": "Lending a hand: Social regulation of the neural response to threat",
+  "venue": "Psychological Science, 17(12), 1032–1039",
+  "doi": "10.1111/j.1467-9280.2006.01832.x",
+  "url": "https://doi.org/10.1111/j.1467-9280.2006.01832.x",
+  "kind": "study",
+  "finding": "Married women facing threat of a mild shock showed less threat-related brain activity when holding their husband's hand, more so in higher-quality marriages.",
+  "strength": "early: a small study (16 women), but part of a consistent wider literature.",
+  "topics": [
+   "stress",
+   "co-regulation",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#shared",
+   "/book/understanding-5-belonging-in-depth.html#safe-haven",
+   "/library/stress.html#co-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17201784/"
+ },
+ {
+  "id": "coan-sbarra-2015",
+  "authors": "Coan, J. A., & Sbarra, D. A.",
+  "year": 2015,
+  "title": "Social baseline theory: The social regulation of risk and effort",
+  "venue": "Current Opinion in Psychology, 1, 87–91",
+  "doi": "10.1016/j.copsyc.2014.12.021",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
+  "kind": "theory",
+  "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort; without them, coping takes more effort.",
+  "strength": "moderate: a theory supported by a growing set of mostly small studies.",
+  "topics": [
+   "stress",
+   "co-regulation"
+  ],
+  "mentioned_on": [
+   "/book/understanding-5-belonging-in-depth.html#safe-haven",
+   "/library/stress.html#co-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/"
+ },
+ {
+  "id": "butler-randall-2013",
+  "authors": "Butler, E. A., & Randall, A. K.",
+  "year": 2013,
+  "title": "Emotional coregulation in close relationships",
+  "venue": "Emotion Review, 5(2), 202–210",
+  "doi": "10.1177/1754073912451630",
+  "url": "https://doi.org/10.1177/1754073912451630",
+  "kind": "review",
+  "finding": "Defined emotional coregulation as a two-way link between partners' emotional states that helps keep both of them steady.",
+  "strength": "moderate: conceptual review of mostly small lab studies.",
+  "topics": [
+   "stress",
+   "co-regulation",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#co-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1754073912451630 ; https://experts.arizona.edu/en/publications/emotional-coregulation-in-close-relationships/"
+ },
+ {
+  "id": "khalsa-2018",
+  "authors": "Khalsa, S. S., Adolphs, R., Cameron, O. G., Critchley, H. D., Davenport, P. W., Feinstein, J. S., et al.",
+  "year": 2018,
+  "title": "Interoception and mental health: A roadmap",
+  "venue": "Biological Psychiatry: Cognitive Neuroscience and Neuroimaging, 3(6), 501–513",
+  "doi": "10.1016/j.bpsc.2017.12.004",
+  "url": "https://doi.org/10.1016/j.bpsc.2017.12.004",
+  "kind": "review",
+  "finding": "A consensus review from the 2016 Interoception Summit on how to measure interoception and study its role in mental health.",
+  "strength": "moderate: expert consensus; the field is still developing reliable measures.",
+  "topics": [
+   "interoception",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#interoception"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/29884281/"
+ },
+ {
+  "id": "yerkes-dodson-1908",
+  "authors": "Yerkes, R. M., & Dodson, J. D.",
+  "year": 1908,
+  "title": "The relation of strength of stimulus to rapidity of habit-formation",
+  "venue": "Journal of Comparative Neurology and Psychology, 18(5), 459–482",
+  "doi": "10.1002/cne.920180503",
+  "url": "https://psychclassics.yorku.ca/Yerkes/Law/",
+  "kind": "study",
+  "finding": "Studied how the strength of an electric shock affected how quickly dancing mice learned to avoid a black passage; later writers turned it into a general \"inverted U\" for arousal and performance.",
+  "strength": "debated: the original was an animal study; the popular human \"law\" is an oversimplification.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#demand",
+   "/library/stress.html#yerkes-dodson"
+  ],
+  "verified": true,
+  "verified_by": "https://zenodo.org/record/1426769 ; https://psychclassics.yorku.ca/Yerkes/Law/"
+ },
+ {
+  "id": "maslach-jackson-1981",
+  "authors": "Maslach, C., & Jackson, S. E.",
+  "year": 1981,
+  "title": "The measurement of experienced burnout",
+  "venue": "Journal of Occupational Behaviour, 2(2), 99–113",
+  "doi": null,
+  "url": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4",
+  "kind": "study",
+  "finding": "Introduced the Maslach Burnout Inventory, with three parts: emotional exhaustion, depersonalization and reduced personal accomplishment.",
+  "strength": "strong: the standard burnout measure; its overlap with depression is debated.",
+  "topics": [
+   "burnout",
+   "helping",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#burnout",
+   "/library/stress.html#burnout",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4 ; https://search.worldcat.org/title/9971557912 (DOI not confirmed in search)"
+ },
+ {
+  "id": "who-2019-burnout",
+  "authors": "World Health Organization",
+  "year": 2019,
+  "title": "Burn-out an \"occupational phenomenon\": International Classification of Diseases",
+  "venue": "WHO news release, 28 May 2019",
+  "doi": null,
+  "url": "https://www.who.int/news-room/detail/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases",
+  "kind": "guideline",
+  "finding": "ICD-11 includes burn-out as an occupational phenomenon, not a medical condition: a syndrome from chronic workplace stress that has not been successfully managed, with exhaustion, mental distance or cynicism, and reduced professional efficacy.",
+  "strength": "strong: official classification statement.",
+  "topics": [
+   "burnout",
+   "helping",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#burnout",
+   "/library/stress.html#burnout"
+  ],
+  "verified": true,
+  "verified_by": "https://www.who.int/news-room/detail/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases"
+ },
+ {
+  "id": "pinquart-sorensen-2003",
+  "authors": "Pinquart, M., & Sörensen, S.",
+  "year": 2003,
+  "title": "Differences between caregivers and noncaregivers in psychological health and physical health: A meta-analysis",
+  "venue": "Psychology and Aging, 18(2), 250–267",
+  "doi": "10.1037/0882-7974.18.2.250",
+  "url": "https://doi.org/10.1037/0882-7974.18.2.250",
+  "kind": "meta-analysis",
+  "finding": "Across 84 studies, caregivers reported more stress and depression and lower well-being than non-caregivers, with smaller differences in physical health and larger differences for dementia caregivers.",
+  "strength": "strong: large meta-analysis; caregiving also brings positive aspects such as meaning.",
+  "topics": [
+   "helping",
+   "carer-burden",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#burnout",
+   "/library/life.html#ageing-parents",
+   "/library/stress.html#caregiver-strain"
+  ],
+  "verified": true,
+  "verified_by": "https://researchgate.net/profile/Silvia-Soerensen/publication/10691251 ; https://wikidp.org/Q35162212"
+ },
+ {
+  "id": "maccormack-lindquist-2019",
+  "authors": "MacCormack, J. K., & Lindquist, K. A.",
+  "year": 2019,
+  "title": "Feeling hangry? When hunger is conceptualized as emotion",
+  "venue": "Emotion (published online June 2018)",
+  "doi": "10.1037/emo0000422",
+  "url": "https://doi.org/10.1037/emo0000422",
+  "kind": "study",
+  "finding": "Hunger made people judge things more negatively in negative situations, and in the lab hungry people felt worse and judged a researcher more harshly, but mainly when they were not paying attention to their own feelings.",
+  "strength": "early: a few experiments; the authors argue hunger alone is not enough to cause \"hangriness\".",
+  "topics": [
+   "stress",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#hangry"
+  ],
+  "verified": true,
+  "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf"
+ },
+ {
+  "id": "swami-2022",
+  "authors": "Swami, V., Hochstöger, S., Kargl, E., & Stieger, S.",
+  "year": 2022,
+  "title": "Hangry in the field: An experience sampling study on the impact of hunger on anger, irritability, and affect",
+  "venue": "PLOS ONE, 17(7), e0269629",
+  "doi": "10.1371/journal.pone.0269629",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9258883/",
+  "kind": "study",
+  "finding": "Over 21 days, 64 adults reported more anger and irritability and less pleasure when they felt hungrier, even after accounting for factors like age, sex and trait anger.",
+  "strength": "early: a single, fairly small experience-sampling study.",
+  "topics": [
+   "stress",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#hangry"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9258883"
+ },
+ {
+  "id": "roskam-2017",
+  "authors": "Roskam, I., Raes, M.-E., & Mikolajczak, M.",
+  "year": 2017,
+  "title": "Exhausted parents: Development and preliminary validation of the Parental Burnout Inventory",
+  "venue": "Frontiers in Psychology, 8, 163",
+  "doi": "10.3389/fpsyg.2017.00163",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5298986/",
+  "kind": "study",
+  "finding": "Developed a 22-item Parental Burnout Inventory and found parental burnout to be related to, but distinct from, job burnout, parental stress and depression.",
+  "strength": "moderate: early validation work that started a fast-growing field.",
+  "topics": [
+   "burnout",
+   "helping",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/library/stress.html#burnout"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5298986/"
+ },
+ {
+  "id": "jamieson-2012",
+  "authors": "Jamieson, J. P., Nock, M. K., & Mendes, W. B.",
+  "year": 2012,
+  "title": "Mind over matter: Reappraising arousal improves cardiovascular and cognitive responses to stress",
+  "venue": "Journal of Experimental Psychology: General, 141(3), 417–422",
+  "doi": "10.1037/a0025719",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3410434/",
+  "kind": "study",
+  "finding": "People told to see their stress arousal as helpful showed healthier cardiovascular responses and less attention to negative information than control groups.",
+  "strength": "moderate: replicated in several studies, with modest effects.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#demand",
+   "/library/stress.html#appraisal"
+  ],
+  "verified": true,
+  "verified_by": "https://dash.harvard.edu/handle/1/33461091 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3410434/"
+ },
+ {
+  "id": "dutton-aron-1974",
+  "authors": "Dutton, D. G., & Aron, A. P.",
+  "year": 1974,
+  "title": "Some evidence for heightened sexual attraction under conditions of high anxiety",
+  "venue": "Journal of Personality and Social Psychology, 30(4), 510–517",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "emotions",
+   "interoception"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body"
+  ],
+  "verified": false,
+  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Candidate DOI 10.1037/h0037031 (not confirmed)."
+ },
+ {
+  "id": "barrett-2001-differentiation",
+  "authors": "Barrett, L. F., Gross, J., Conner, T. S., & Benvenuto, M.",
+  "year": 2001,
+  "title": "Knowing what you're feeling and knowing what to do about it: Mapping the relation between emotion differentiation and emotion regulation",
+  "venue": "Cognition and Emotion, 15(6), 713–724",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "emotions",
+   "emotional-granularity"
+  ],
+  "mentioned_on": [
+   "/library/emotions.html#emotional-granularity"
+  ],
+  "verified": false,
+  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed title, authors, volume and pages (third author is Tamlin Conner). Candidate DOI 10.1080/02699930143000239 returned no match in search."
+ },
+ {
+  "id": "gottman-katz-hooven-1996",
+  "authors": "Gottman, J. M., Katz, L. F., & Hooven, C.",
+  "year": 1996,
+  "title": "Parental meta-emotion philosophy and the emotional life of families: Theoretical models and preliminary data",
+  "venue": "Journal of Family Psychology, 10(3), 243–268",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "emotions",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#layers"
+  ],
+  "verified": false,
+  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Candidate DOI 10.1037/0893-3200.10.3.243 returned no match in search."
+ },
+ {
+  "id": "siegel-1999",
+  "authors": "Siegel, D. J.",
+  "year": 1999,
+  "title": "The developing mind: Toward a neurobiology of interpersonal experience",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "window-of-tolerance",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#ladder",
+   "/library/stress.html#window-of-tolerance",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed the 1999 book as the origin of \"window of tolerance\"; only a 2012 second-edition listing (Guilford) was seen, and the 1999 subtitle and publisher page were not confirmed."
+ },
+ {
+  "id": "porges-1995",
+  "authors": "Porges, S. W.",
+  "year": 1995,
+  "title": "Orienting in a defensive world: Mammalian modifications of our evolutionary heritage. A polyvagal theory",
+  "venue": "Psychophysiology, 32(4), 301–318",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#ladder",
+   "/know-yourself-in-depth.html#shaping",
+   "/library/stress.html#polyvagal-theory"
+  ],
+  "verified": false,
+  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed journal, volume 32, pages 301–318 and that it was his 1994 presidential address. Candidate DOI 10.1111/j.1469-8986.1995.tb01213.x returned no match."
+ },
+ {
+  "id": "hogeveen-grafman-2021",
+  "authors": "Hogeveen, J., & Grafman, J.",
+  "year": 2021,
+  "title": "Alexithymia",
+  "venue": "Handbook of Clinical Neurology, 183",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "alexithymia",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/signal-translator.html#lookfor",
+   "/wired-differently-in-depth.html#alexithymia"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC8456171/ on wired-differently-in-depth.html; not re-checked."
+ },
+ {
+  "id": "wood-quinn-kashy-2002",
+  "authors": "Wood, W., Quinn, J. M., & Kashy, D. A.",
+  "year": 2002,
+  "title": "Habits in everyday life: Thought, emotion, and action",
+  "venue": "Journal of Personality and Social Psychology, 83(6), 1281–1297",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#why-hard",
+   "/library/motivation.html#habits-and-cues"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.83.6.1281."
+ },
+ {
+  "id": "neal-2011",
+  "authors": "Neal, D. T., Wood, W., Wu, M., & Kurlander, D.",
+  "year": 2011,
+  "title": "The pull of the past: When do habits persist despite conflict with motives?",
+  "venue": "Personality and Social Psychology Bulletin, 37(11), 1428–1437",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#loop"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/0146167211419863."
+ },
+ {
+  "id": "lally-2010",
+  "authors": "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W., & Wardle, J.",
+  "year": 2010,
+  "title": "How are habits formed: Modelling habit formation in the real world",
+  "venue": "European Journal of Social Psychology, 40(6), 998–1009",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#daily",
+   "/book/self-3-next-in-depth.html#tiny",
+   "/book/understanding-10-values-in-depth.html#small-acts",
+   "/book/understanding-6-change-in-depth.html",
+   "/book/understanding-6-change-in-depth.html#faq",
+   "/book/understanding-6-change-in-depth.html#slips",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#habit-formation"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1002/ejsp.674 (online 2009, print 2010)."
+ },
+ {
+  "id": "gollwitzer-1999",
+  "authors": "Gollwitzer, P. M.",
+  "year": 1999,
+  "title": "Implementation intentions: Strong effects of simple plans",
+  "venue": "American Psychologist, 54(7), 493–503",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change",
+   "implementation-intentions"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#choose",
+   "/book/self-2-now-in-depth.html#settle",
+   "/book/self-3-next-in-depth.html#if-then",
+   "/book/self-3-next-in-depth.html#support",
+   "/book/understanding-10-values-in-depth.html#small-acts",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#implementation-intentions",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.54.7.493."
+ },
+ {
+  "id": "gollwitzer-sheeran-2006",
+  "authors": "Gollwitzer, P. M., & Sheeran, P.",
+  "year": 2006,
+  "title": "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
+  "venue": "Advances in Experimental Social Psychology, 38, 69–119",
+  "doi": null,
+  "url": null,
+  "kind": "meta-analysis",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change",
+   "implementation-intentions"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#settle",
+   "/book/self-3-next-in-depth.html#if-then",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#implementation-intentions"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(06)38002-1."
+ },
+ {
+  "id": "baumeister-1998-ego-depletion",
+  "authors": "Baumeister, R. F., Bratslavsky, E., Muraven, M., & Tice, D. M.",
+  "year": 1998,
+  "title": "Ego depletion: Is the active self a limited resource?",
+  "venue": "Journal of Personality and Social Psychology, 74(5), 1252–1265",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change",
+   "ego-depletion"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup",
+   "/library.html#pillar-v",
+   "/library/motivation.html#pillars",
+   "/library/motivation.html#willpower-ego-depletion",
+   "/library/thinking.html#negativity-bias"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.74.5.1252."
+ },
+ {
+  "id": "hagger-2016",
+  "authors": "Hagger, M. S., Chatzisarantis, N. L. D., et al.",
+  "year": 2016,
+  "title": "A multilab preregistered replication of the ego-depletion effect",
+  "venue": "Perspectives on Psychological Science, 11(4), 546–573",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change",
+   "ego-depletion"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup",
+   "/library/motivation.html#willpower-ego-depletion"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1745691616652873."
+ },
+ {
+  "id": "hofmann-2012",
+  "authors": "Hofmann, W., Baumeister, R. F., Förster, G., & Vohs, K. D.",
+  "year": 2012,
+  "title": "Everyday temptations: An experience sampling study of desire, conflict, and self-control",
+  "venue": "Journal of Personality and Social Psychology, 102(6), 1318–1335",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0026545."
+ },
+ {
+  "id": "thaler-sunstein-2008",
+  "authors": "Thaler, R. H., & Sunstein, C. R.",
+  "year": 2008,
+  "title": "Nudge: Improving decisions about health, wealth, and happiness",
+  "venue": "Yale University Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "samuelson-zeckhauser-1988",
+  "authors": "Samuelson, W., & Zeckhauser, R.",
+  "year": 1988,
+  "title": "Status quo bias in decision making",
+  "venue": "Journal of Risk and Uncertainty, 1, 7–59",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#why-hard"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/BF00055564."
+ },
+ {
+  "id": "prochaska-diclemente-1983",
+  "authors": "Prochaska, J. O., & DiClemente, C. C.",
+  "year": 1983,
+  "title": "Stages and processes of self-change of smoking: Toward an integrative model of change",
+  "venue": "Journal of Consulting and Clinical Psychology, 51(3), 390–395",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "stages-of-change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library/motivation.html#stages-of-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-006X.51.3.390."
+ },
+ {
+  "id": "west-2005",
+  "authors": "West, R.",
+  "year": 2005,
+  "title": "Time for a change: Putting the Transtheoretical (Stages of Change) Model to rest",
+  "venue": "Addiction, 100(8), 1036–1039",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "stages-of-change"
+  ],
+  "mentioned_on": [
+   "/library/motivation.html#stages-of-change"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1360-0443.2005.01139.x."
+ },
+ {
+  "id": "miller-rollnick-1991",
+  "authors": "Miller, W. R., & Rollnick, S.",
+  "year": 1991,
+  "title": "Motivational interviewing: Preparing people to change addictive behavior",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "helping"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#listening",
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library/communication.html#asking-questions",
+   "/library/motivation.html#stages-of-change"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book (later editions 2002, 2013); publisher page not checked."
+ },
+ {
+  "id": "marlatt-gordon-1985",
+  "authors": "Marlatt, G. A., & Gordon, J. R. (Eds.)",
+  "year": 1985,
+  "title": "Relapse prevention: Maintenance strategies in the treatment of addictive behaviors",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "habits"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#waves",
+   "/book/understanding-6-change-in-depth.html#slips"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "breines-chen-2012",
+  "authors": "Breines, J. G., & Chen, S.",
+  "year": 2012,
+  "title": "Self-compassion increases self-improvement motivation",
+  "venue": "Personality and Social Psychology Bulletin, 38(9), 1133–1143",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-compassion",
+   "self-worth",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#kindness",
+   "/book/understanding-6-change-in-depth.html#slips",
+   "/book/understanding-7-worth-in-depth.html#self-compassion",
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#self-compassion"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/0146167212445599."
+ },
+ {
+  "id": "bem-1972",
+  "authors": "Bem, D. J.",
+  "year": 1972,
+  "title": "Self-perception theory",
+  "venue": "Advances in Experimental Social Psychology, 6, 1–62",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#identity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(08)60024-6."
+ },
+ {
+  "id": "bryan-2011",
+  "authors": "Bryan, C. J., Walton, G. M., Rogers, T., & Dweck, C. S.",
+  "year": 2011,
+  "title": "Motivating voter turnout by invoking the self",
+  "venue": "PNAS, 108(31), 12653–12656",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#identity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1073/pnas.1103343108."
+ },
+ {
+  "id": "lewis-rook-1999",
+  "authors": "Lewis, M. A., & Rook, K. S.",
+  "year": 1999,
+  "title": "Social control in personal relationships: Impact on health behaviors and psychological distress",
+  "venue": "Health Psychology, 18(1), 63–71",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "helping",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#others"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0278-6133.18.1.63."
+ },
+ {
+  "id": "drigotas-1999",
+  "authors": "Drigotas, S. M., Rusbult, C. E., Wieselquist, J., & Whitton, S. W.",
+  "year": 1999,
+  "title": "Close partner as sculptor of the ideal self: Behavioral affirmation and the Michelangelo phenomenon",
+  "venue": "Journal of Personality and Social Psychology, 77(2), 293–323",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "change",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#others",
+   "/library/relationships.html#michelangelo-effect"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.77.2.293."
+ },
+ {
+  "id": "wood-runger-2016",
+  "authors": "Wood, W., & Rünger, D.",
+  "year": 2016,
+  "title": "Psychology of habit",
+  "venue": "Annual Review of Psychology, 67, 289–314",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/library/motivation.html#habits-and-cues"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1146/annurev-psych-122414-033417."
+ },
+ {
+  "id": "hayes-strosahl-wilson-1999",
+  "authors": "Hayes, S. C., Strosahl, K. D., & Wilson, K. G.",
+  "year": 1999,
+  "title": "Acceptance and commitment therapy: An experiential approach to behavior change",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#directions",
+   "/library/motivation.html#values"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "ryan-deci-2000",
+  "authors": "Ryan, R. M., & Deci, E. L.",
+  "year": 2000,
+  "title": "Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being",
+  "venue": "American Psychologist, 55(1), 68–78",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "motivation",
+   "self-determination"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#matters",
+   "/book/understanding-10-values-in-depth.html#directions",
+   "/book/understanding-10-values.html#tools",
+   "/book/understanding-12-helping-in-depth.html#not-fixing",
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library.html#pillar-v",
+   "/library/conflict.html#time-disagreements",
+   "/library/life.html#teenagers",
+   "/library/motivation.html#pillars",
+   "/library/motivation.html#self-determination-theory",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.55.1.68 (site says \"an influential 2000 review\"; could instead be Deci & Ryan 2000, Psychological Inquiry 11(4), 227–268)."
+ },
+ {
+  "id": "crocker-wolfe-2001",
+  "authors": "Crocker, J., & Wolfe, C. T.",
+  "year": 2001,
+  "title": "Contingencies of self-worth",
+  "venue": "Psychological Review, 108(3), 593–623",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#score",
+   "/library/motivation.html#self-esteem"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-295X.108.3.593."
+ },
+ {
+  "id": "neff-2003-definition",
+  "authors": "Neff, K. D.",
+  "year": 2003,
+  "title": "Self-compassion: An alternative conceptualization of a healthy attitude toward oneself",
+  "venue": "Self and Identity, 2(2), 85–101",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#leftover",
+   "/book/self-3-next-in-depth.html#kindness",
+   "/book/understanding-11-healing-in-depth.html#self-care",
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/book/understanding-7-worth-in-depth.html#self-compassion",
+   "/library/connection.html#self-compassion",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/15298860309032."
+ },
+ {
+  "id": "neff-2003-scale",
+  "authors": "Neff, K. D.",
+  "year": 2003,
+  "title": "The development and validation of a scale to measure self-compassion",
+  "venue": "Self and Identity, 2(3), 223–250",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#self-compassion"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/15298860309027."
+ },
+ {
+  "id": "neff-vonk-2009",
+  "authors": "Neff, K. D., & Vonk, R.",
+  "year": 2009,
+  "title": "Self-compassion versus global self-esteem: Two different ways of relating to oneself",
+  "venue": "Journal of Personality, 77(1), 23–50",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#comparison"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1467-6494.2008.00537.x."
+ },
+ {
+  "id": "baumeister-2003-self-esteem",
+  "authors": "Baumeister, R. F., Campbell, J. D., Krueger, J. I., & Vohs, K. D.",
+  "year": 2003,
+  "title": "Does high self-esteem cause better performance, interpersonal success, happiness, or healthier lifestyles?",
+  "venue": "Psychological Science in the Public Interest, 4(1), 1–44",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/library/motivation.html#self-esteem"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/1529-1006.01431."
+ },
+ {
+  "id": "curran-hill-2019",
+  "authors": "Curran, T., & Hill, A. P.",
+  "year": 2019,
+  "title": "Perfectionism is increasing over time: A meta-analysis of birth cohort differences from 1989 to 2016",
+  "venue": "Psychological Bulletin, 145(4), 410–429",
+  "doi": null,
+  "url": null,
+  "kind": "meta-analysis",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth",
+   "perfectionism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#shields",
+   "/library/motivation.html#perfectionism"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/bul0000138."
+ },
+ {
+  "id": "hewitt-flett-1991",
+  "authors": "Hewitt, P. L., & Flett, G. L.",
+  "year": 1991,
+  "title": "Perfectionism in the self and social contexts: Conceptualization, assessment, and association with psychopathology",
+  "venue": "Journal of Personality and Social Psychology, 60(3), 456–470",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth",
+   "perfectionism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#shields",
+   "/library/motivation.html#perfectionism"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.60.3.456."
+ },
+ {
+  "id": "mueller-dweck-1998",
+  "authors": "Mueller, C. M., & Dweck, C. S.",
+  "year": 1998,
+  "title": "Praise for intelligence can undermine children's motivation and performance",
+  "venue": "Journal of Personality and Social Psychology, 75(1), 33–52",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#others"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.75.1.33."
+ },
+ {
+  "id": "festinger-1954",
+  "authors": "Festinger, L.",
+  "year": 1954,
+  "title": "A theory of social comparison processes",
+  "venue": "Human Relations, 7(2), 117–140",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/growing-up-in-depth.html#research",
+   "/growing-up-in-depth.html#world",
+   "/library/life.html#social-comparison"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/001872675400700202."
+ },
+ {
+  "id": "leary-2007-self-compassion",
+  "authors": "Leary, M. R., Tate, E. B., Adams, C. E., Allen, A. B., & Hancock, J.",
+  "year": 2007,
+  "title": "Self-compassion and reactions to unpleasant self-relevant events: The implications of treating oneself kindly",
+  "venue": "Journal of Personality and Social Psychology, 92(5), 887–904",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "self-compassion",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.92.5.887."
+ },
+ {
+  "id": "holmes-rahe-1967",
+  "authors": "Holmes, T. H., & Rahe, R. H.",
+  "year": 1967,
+  "title": "The Social Readjustment Rating Scale",
+  "venue": "Journal of Psychosomatic Research, 11(2), 213–218",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief",
+   "loss",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#any-loss"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/0022-3999(67)90010-4."
+ },
+ {
+  "id": "kubler-ross-1969",
+  "authors": "Kübler-Ross, E.",
+  "year": 1969,
+  "title": "On death and dying",
+  "venue": "Macmillan",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#waves",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "stroebe-schut-1999",
+  "authors": "Stroebe, M., & Schut, H.",
+  "year": 1999,
+  "title": "The dual process model of coping with bereavement: Rationale and description",
+  "venue": "Death Studies, 23(3), 197–224",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#waves",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/074811899201046."
+ },
+ {
+  "id": "oconnor-2022",
+  "authors": "O'Connor, M.-F.",
+  "year": 2022,
+  "title": "The grieving brain: The surprising science of how we learn from love and loss",
+  "venue": "HarperOne",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#body"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "boss-1999",
+  "authors": "Boss, P.",
+  "year": 1999,
+  "title": "Ambiguous loss: Learning to live with unresolved grief",
+  "venue": "Harvard University Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief",
+   "ambiguous-loss"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#unseen",
+   "/library/life.html#ambiguous-loss",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
+ },
+ {
+  "id": "doka-1989",
+  "authors": "Doka, K. J. (Ed.)",
+  "year": 1989,
+  "title": "Disenfranchised grief: Recognizing hidden sorrow",
+  "venue": "Lexington Books",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#unseen"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+ },
+ {
+  "id": "martin-doka-2000",
+  "authors": "Martin, T. L., & Doka, K. J.",
+  "year": 2000,
+  "title": "Men don't cry... women do: Transcending gender stereotypes of grief",
+  "venue": "Brunner/Mazel",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#styles"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+ },
+ {
+  "id": "klass-1996",
+  "authors": "Klass, D., Silverman, P. R., & Nickman, S. L. (Eds.)",
+  "year": 1996,
+  "title": "Continuing bonds: New understandings of grief",
+  "venue": "Taylor & Francis",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#bonds",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+ },
+ {
+  "id": "bridges-1980",
+  "authors": "Bridges, W.",
+  "year": 1980,
+  "title": "Transitions: Making sense of life's changes",
+  "venue": "Addison-Wesley",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#changes"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+ },
+ {
+  "id": "bonanno-2009",
+  "authors": "Bonanno, G. A.",
+  "year": 2009,
+  "title": "The other side of sadness: What the new science of bereavement tells us about life after loss",
+  "venue": "Basic Books",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief",
+   "resilience"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#support"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+ },
+ {
+  "id": "prolonged-grief-2022",
+  "authors": "American Psychiatric Association; World Health Organization",
+  "year": 2022,
+  "title": "Prolonged grief disorder (DSM-5-TR; ICD-11)",
+  "venue": "APA / WHO",
+  "doi": null,
+  "url": null,
+  "kind": "guideline",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#support"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: official pages (APA, WHO ICD-11 6B42) not checked."
+ },
+ {
+  "id": "milton-2012",
+  "authors": "Milton, D. E. M.",
+  "year": 2012,
+  "title": "On the ontological status of autism: The \"double empathy problem\"",
+  "venue": "Disability & Society, 27(6), 883–887",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/bonding.html#autistic-and-sensory",
+   "/book/chapter-1-in-depth.html#no-fault",
+   "/book/self-2-now-in-depth.html#different",
+   "/book/understanding-1-feelings-in-depth.html#spread",
+   "/book/understanding-10-values-in-depth.html#clashes",
+   "/book/understanding-11-healing-in-depth.html#rupture-repair",
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/book/understanding-4-communication-in-depth.html#styles",
+   "/book/understanding-9-minds-in-depth.html#autism",
+   "/communication.html#research",
+   "/know-yourself-in-depth.html#neurodiversity",
+   "/library/communication.html#directness",
+   "/library/wiring.html#double-empathy",
+   "/tools/chat/deep.json",
+   "/wired-differently-in-depth.html#double-empathy"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/09687599.2012.710008."
+ },
+ {
+  "id": "crompton-2020",
+  "authors": "Crompton, C. J., Ropar, D., Evans-Williams, C. V. M., Flynn, E. G., & Fletcher-Watson, S.",
+  "year": 2020,
+  "title": "Autistic peer-to-peer information transfer is highly effective",
+  "venue": "Autism, 24(7), 1704–1712",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/book/understanding-4-communication-in-depth.html#styles",
+   "/book/understanding-5-belonging-in-depth.html#groups",
+   "/book/understanding-9-minds-in-depth.html#autism",
+   "/library/wiring.html#double-empathy",
+   "/signal-translator.html#lookfor",
+   "/tools/chat/deep.json",
+   "/wired-differently-in-depth.html#double-empathy"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361320919286; site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/ on wired-differently-in-depth.html (not re-checked)."
+ },
+ {
+  "id": "sasson-2017",
+  "authors": "Sasson, N. J., Faso, D. J., Nugent, J., Lovell, S., Kennedy, D. P., & Grossman, R. B.",
+  "year": 2017,
+  "title": "Neurotypical peers are less willing to interact with those with autism based on thin slice judgments",
+  "venue": "Scientific Reports, 7, 40700",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#reasons",
+   "/book/understanding-9-minds-in-depth.html#autism",
+   "/library/wiring.html#double-empathy"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1038/srep40700."
+ },
+ {
+  "id": "hull-2017",
+  "authors": "Hull, L., Petrides, K. V., Allison, C., Smith, P., Baron-Cohen, S., Lai, M.-C., & Mandy, W.",
+  "year": 2017,
+  "title": "\"Putting on my best normal\": Social camouflaging in adults with autism spectrum conditions",
+  "venue": "Journal of Autism and Developmental Disorders, 47(8), 2519–2534",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "masking"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#different",
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/book/understanding-5-belonging-in-depth.html#groups",
+   "/book/understanding-9-minds-in-depth.html#masking",
+   "/library/wiring.html#masking",
+   "/tools/chat/deep.json",
+   "/wired-differently-in-depth.html#autistic"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/s10803-017-3166-5; site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ (not re-checked)."
+ },
+ {
+  "id": "hull-2019-catq",
+  "authors": "Hull, L., Mandy, W., Lai, M.-C., et al.",
+  "year": 2019,
+  "title": "Development and validation of the Camouflaging Autistic Traits Questionnaire (CAT-Q)",
+  "venue": "Journal of Autism and Developmental Disorders, 49(3), 819–833",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "masking"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#masking"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/s10803-018-3792-6."
+ },
+ {
+  "id": "raymaker-2020",
+  "authors": "Raymaker, D. M., Teo, A. R., Steckler, N. A., et al.",
+  "year": 2020,
+  "title": "\"Having all of your internal resources exhausted beyond measure and being left with no clean-up crew\": Defining autistic burnout",
+  "venue": "Autism in Adulthood, 2(2), 132–143",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care",
+   "/book/understanding-12-helping-in-depth.html#burnout",
+   "/book/understanding-2-stress-in-depth.html#ladder",
+   "/book/understanding-6-change-in-depth.html#slips",
+   "/book/understanding-9-minds-in-depth.html#masking",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1089/aut.2019.0079."
+ },
+ {
+  "id": "murray-lesser-lawson-2005",
+  "authors": "Murray, D., Lesser, M., & Lawson, W.",
+  "year": 2005,
+  "title": "Attention, monotropism and the diagnostic criteria for autism",
+  "venue": "Autism, 9(2), 139–156",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "monotropism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#flourishing",
+   "/book/understanding-2-stress-in-depth.html#more",
+   "/book/understanding-2-stress-in-depth.html#rest",
+   "/book/understanding-3-seeing-in-depth.html#attention",
+   "/book/understanding-6-change-in-depth.html#loop",
+   "/book/understanding-9-minds-in-depth.html#focus",
+   "/book/understanding-9-minds-in-depth.html#limits",
+   "/book/understanding-9-minds.html",
+   "/book/understanding-9-minds.html#tools",
+   "/library.html#pillar-v",
+   "/library/wiring.html#autism-basics",
+   "/library/wiring.html#monotropism",
+   "/library/wiring.html#pillars",
+   "/signal-translator.html#lookfor",
+   "/tools/chat/deep.json",
+   "/wired-differently-in-depth.html#autistic"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361305051398."
+ },
+ {
+  "id": "miserandino-2003",
+  "authors": "Miserandino, C.",
+  "year": 2003,
+  "title": "The spoon theory",
+  "venue": "ButYouDontLookSick.com (essay)",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "energy"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#boundaries",
+   "/book/understanding-2-stress-in-depth.html#demand",
+   "/book/understanding-2-stress-in-depth.html#more",
+   "/book/understanding-9-minds-in-depth.html#limits",
+   "/book/understanding-9-minds-in-depth.html#masking",
+   "/library.html#pillar-v",
+   "/library/wiring.html#pillars",
+   "/library/wiring.html#spoon-theory",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: online essay; original page not checked."
+ },
+ {
+  "id": "dunn-1997",
+  "authors": "Dunn, W.",
+  "year": 1997,
+  "title": "The impact of sensory processing abilities on the daily lives of young children and their families: A conceptual model",
+  "venue": "Infants & Young Children, 9(4), 23–35",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds-in-depth.html#senses",
+   "/library/stress.html#sensory-load",
+   "/library/wiring.html#sensory-profiles",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1097/00001163-199704000-00005."
+ },
+ {
+  "id": "aron-aron-1997",
+  "authors": "Aron, E. N., & Aron, A.",
+  "year": 1997,
+  "title": "Sensory-processing sensitivity and its relation to introversion and emotionality",
+  "venue": "Journal of Personality and Social Psychology, 73(2), 345–368",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "sensory",
+   "highly-sensitive-person"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds-in-depth.html#senses",
+   "/library/wiring.html#sensory-processing-sensitivity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.73.2.345."
+ },
+ {
+  "id": "belsky-pluess-2009",
+  "authors": "Belsky, J., & Pluess, M.",
+  "year": 2009,
+  "title": "Beyond diathesis stress: Differential susceptibility to environmental influences",
+  "venue": "Psychological Bulletin, 135(6), 885–908",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "highly-sensitive-person",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/know-yourself-in-depth.html#temperament",
+   "/library/wiring.html#sensory-processing-sensitivity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0017376."
+ },
+ {
+  "id": "pluess-2018",
+  "authors": "Pluess, M., Assary, E., Lionetti, F., et al.",
+  "year": 2018,
+  "title": "Environmental sensitivity in children: Development of the Highly Sensitive Child Scale and identification of sensitivity groups",
+  "venue": "Developmental Psychology, 54(1), 51–70",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "highly-sensitive-person",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#sensory-processing-sensitivity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/dev0000406 (could instead be Lionetti et al. 2018, Translational Psychiatry, on adult sensitivity groups)."
+ },
+ {
+  "id": "barkley-1997",
+  "authors": "Barkley, R. A.",
+  "year": 1997,
+  "title": "Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD",
+  "venue": "Psychological Bulletin, 121(1), 65–94",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds-in-depth.html#adhd",
+   "/library/wiring.html#adhd-basics"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-2909.121.1.65."
+ },
+ {
+  "id": "downey-feldman-1996",
+  "authors": "Downey, G., & Feldman, S. I.",
+  "year": 1996,
+  "title": "Implications of rejection sensitivity for intimate relationships",
+  "venue": "Journal of Personality and Social Psychology, 70(6), 1327–1343",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "adhd",
+   "rejection-sensitivity"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#rejection-sensitivity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.70.6.1327."
+ },
+ {
+  "id": "kenny-2016",
+  "authors": "Kenny, L., Hattersley, C., Molins, B., Buckley, C., Povey, C., & Pellicano, E.",
+  "year": 2016,
+  "title": "Which terms should be used to describe autism? Perspectives from the UK autism community",
+  "venue": "Autism, 20(4), 442–462",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "language"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds-in-depth.html#labels"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361315588200."
+ },
+ {
+  "id": "blackwell-2017",
+  "authors": "Blackwell, A. G.",
+  "year": 2017,
+  "title": "The curb-cut effect",
+  "venue": "Stanford Social Innovation Review, Winter 2017",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "accessibility"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds-in-depth.html#meeting"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: magazine article; page not checked."
+ },
+ {
+  "id": "singer-1998",
+  "authors": "Singer, J.",
+  "year": 1998,
+  "title": "Odd people in: The birth of community amongst people on the autistic spectrum (honours thesis)",
+  "venue": "University of Technology, Sydney",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#neurodiversity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: thesis; title and record not checked."
+ },
+ {
+  "id": "kapp-2019",
+  "authors": "Kapp, S. K., Steward, R., Crane, L., et al.",
+  "year": 2019,
+  "title": "\"People should be allowed to do what they like\": Autistic adults' views and experiences of stimming",
+  "venue": "Autism, 23(7), 1782–1792",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "stimming"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#stimming"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361319829628."
+ },
+ {
+  "id": "buckle-2021",
+  "authors": "Buckle, K. L., Leadbitter, K., Poliakoff, E., & Gowen, E.",
+  "year": 2021,
+  "title": "\"No way out except from external intervention\": First-hand accounts of autistic inertia",
+  "venue": "Frontiers in Psychology, 12, 631596",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#autistic-inertia"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate details from memory (journal uncertain)."
+ },
+ {
+  "id": "carleton-2016",
+  "authors": "Carleton, R. N.",
+  "year": 2016,
+  "title": "Fear of the unknown: One fear to rule them all?",
+  "venue": "Journal of Anxiety Disorders, 41, 5–21",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "neurodiversity",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/library/wiring.html#intolerance-of-uncertainty"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/j.janxdis.2016.03.011 (uncertain)."
+ },
+ {
+  "id": "ryan-deci-2001",
+  "authors": "Ryan, R. M., & Deci, E. L.",
+  "year": 2001,
+  "title": "On happiness and human potentials: A review of research on hedonic and eudaimonic well-being",
+  "venue": "Annual Review of Psychology, 52, 141–166",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#flourishing"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1146/annurev.psych.52.1.141."
+ },
+ {
+  "id": "ryff-1989",
+  "authors": "Ryff, C. D.",
+  "year": 1989,
+  "title": "Happiness is everything, or is it? Explorations on the meaning of psychological well-being",
+  "venue": "Journal of Personality and Social Psychology, 57(6), 1069–1081",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#flourishing"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.57.6.1069."
+ },
+ {
+  "id": "steger-2006",
+  "authors": "Steger, M. F., Frazier, P., Oishi, S., & Kaler, M.",
+  "year": 2006,
+  "title": "The Meaning in Life Questionnaire: Assessing the presence of and search for meaning in life",
+  "venue": "Journal of Counseling Psychology, 53(1), 80–93",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#meaning"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-0167.53.1.80."
+ },
+ {
+  "id": "martela-steger-2016",
+  "authors": "Martela, F., & Steger, M. F.",
+  "year": 2016,
+  "title": "The three meanings of meaning in life: Distinguishing coherence, purpose, and significance",
+  "venue": "Journal of Positive Psychology, 11(5), 531–545",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#meaning"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/17439760.2015.1137623."
+ },
+ {
+  "id": "baumeister-2013-meaning",
+  "authors": "Baumeister, R. F., Vohs, K. D., Aaker, J. L., & Garbinsky, E. N.",
+  "year": 2013,
+  "title": "Some key differences between a happy life and a meaningful life",
+  "venue": "Journal of Positive Psychology, 8(6), 505–516",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#meaning"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/17439760.2013.830764."
+ },
+ {
+  "id": "markus-kitayama-1991",
+  "authors": "Markus, H. R., & Kitayama, S.",
+  "year": 1991,
+  "title": "Culture and the self: Implications for cognition, emotion, and motivation",
+  "venue": "Psychological Review, 98(2), 224–253",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "culture"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#different-values"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-295X.98.2.224."
+ },
+ {
+  "id": "schwartz-1992",
+  "authors": "Schwartz, S. H.",
+  "year": 1992,
+  "title": "Universals in the content and structure of values: Theoretical advances and empirical tests in 20 countries",
+  "venue": "Advances in Experimental Social Psychology, 25, 1–65",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#clashes",
+   "/book/understanding-10-values-in-depth.html#different-values",
+   "/book/understanding-10-values-in-depth.html#finding"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(08)60281-6."
+ },
+ {
+  "id": "curry-2018",
+  "authors": "Curry, O. S., Rowland, L. A., Van Lissa, C. J., Zlotowitz, S., McAlaney, J., & Whitehouse, H.",
+  "year": 2018,
+  "title": "Happy to help? A systematic review and meta-analysis of the effects of performing acts of kindness on the well-being of the actor",
+  "venue": "Journal of Experimental Social Psychology, 76, 320–329",
+  "doi": null,
+  "url": null,
+  "kind": "meta-analysis",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "kindness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#small-acts",
+   "/library/connection.html#kindness"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/j.jesp.2018.02.014."
+ },
+ {
+  "id": "rotter-1966",
+  "authors": "Rotter, J. B.",
+  "year": 1966,
+  "title": "Generalized expectancies for internal versus external control of reinforcement",
+  "venue": "Psychological Monographs: General and Applied, 80(1), 1–28",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "values",
+   "control"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#control"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/h0092976."
+ },
+ {
+  "id": "house-1981",
+  "authors": "House, J. S.",
+  "year": 1981,
+  "title": "Work stress and social support",
+  "venue": "Addison-Wesley",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "social-support"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#ask"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; not checked."
+ },
+ {
+  "id": "cutrona-russell-1990",
+  "authors": "Cutrona, C. E., & Russell, D. W.",
+  "year": 1990,
+  "title": "Type of social support and specific stress: Toward a theory of optimal matching",
+  "venue": "In B. R. Sarason, I. G. Sarason & G. R. Pierce (Eds.), Social support: An interactional view (pp. 319–366). Wiley",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "social-support"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#ask",
+   "/library/communication.html#advice-vs-support"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book chapter; not checked."
+ },
+ {
+  "id": "bolger-2000",
+  "authors": "Bolger, N., Zuckerman, A., & Kessler, R. C.",
+  "year": 2000,
+  "title": "Invisible support and adjustment to stress",
+  "venue": "Journal of Personality and Social Psychology, 79(6), 953–961",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "social-support",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#not-fixing",
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/book/understanding-6-change-in-depth.html#others",
+   "/library/communication.html#advice-vs-support",
+   "/love-languages-in-depth.html#similar"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.79.6.953."
+ },
+ {
+  "id": "helgeson-fritz-1998",
+  "authors": "Helgeson, V. S., & Fritz, H. L.",
+  "year": 1998,
+  "title": "A theory of unmitigated communion",
+  "venue": "Personality and Social Psychology Review, 2(3), 173–183",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#boundaries"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1207/s15327957pspr0203_2."
+ },
+ {
+  "id": "hobfoll-1989",
+  "authors": "Hobfoll, S. E.",
+  "year": 1989,
+  "title": "Conservation of resources: A new attempt at conceptualizing stress",
+  "venue": "American Psychologist, 44(3), 513–524",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "stress",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#boundaries"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.44.3.513."
+ },
+ {
+  "id": "dazzi-2014",
+  "authors": "Dazzi, T., Gribble, R., Wessely, S., & Fear, N. T.",
+  "year": 2014,
+  "title": "Does asking about suicide and related behaviours induce suicidal ideation? What is the evidence?",
+  "venue": "Psychological Medicine, 44(16), 3361–3363",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "crisis"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#crisis"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1017/S0033291714001299."
+ },
+ {
+  "id": "darley-latane-1968",
+  "authors": "Darley, J. M., & Latané, B.",
+  "year": 1968,
+  "title": "Bystander intervention in emergencies: Diffusion of responsibility",
+  "venue": "Journal of Personality and Social Psychology, 8(4), 377–383",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "bystander"
+  ],
+  "mentioned_on": [
+   "/book/chapter-2-in-depth.html#ownership",
+   "/book/chapter-4-in-depth.html#owner-research",
+   "/book/chapter-5-in-depth.html#deficit-why",
+   "/book/preface-in-depth.html#who-for",
+   "/book/understanding-12-helping-in-depth.html#bystander",
+   "/library/teams.html#diffusion-of-responsibility",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/h0025589."
+ },
+ {
+  "id": "fischer-2011",
+  "authors": "Fischer, P., Krueger, J. I., Greitemeyer, T., et al.",
+  "year": 2011,
+  "title": "The bystander-effect: A meta-analytic review on bystander intervention in dangerous and non-dangerous emergencies",
+  "venue": "Psychological Bulletin, 137(4), 517–537",
+  "doi": null,
+  "url": null,
+  "kind": "meta-analysis",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "bystander"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#bystander",
+   "/library/teams.html#diffusion-of-responsibility"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0023304."
+ },
+ {
+  "id": "philpot-2020",
+  "authors": "Philpot, R., Liebst, L. S., Levine, M., Bernasco, W., & Lindegaard, M. R.",
+  "year": 2020,
+  "title": "Would I be helped? Cross-national CCTV footage shows that intervention is the norm in public conflicts",
+  "venue": "American Psychologist, 75(1), 66–75",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "bystander"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#bystander"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/amp0000469."
+ },
+ {
+  "id": "gouldner-1960",
+  "authors": "Gouldner, A. W.",
+  "year": 1960,
+  "title": "The norm of reciprocity: A preliminary statement",
+  "venue": "American Sociological Review, 25(2), 161–178",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#receiving"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.2307/2092623."
+ },
+ {
+  "id": "flynn-bohns-2008",
+  "authors": "Flynn, F. J., & Lake, V. K. B. (Bohns)",
+  "year": 2008,
+  "title": "\"If you need help, just ask\": Underestimating compliance with direct requests for help",
+  "venue": "Journal of Personality and Social Psychology, 95(1), 128–143",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#receiving"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.95.1.128 (Bohns published then as Vanessa Lake)."
+ },
+ {
+  "id": "dunn-aknin-norton-2008",
+  "authors": "Dunn, E. W., Aknin, L. B., & Norton, M. I.",
+  "year": 2008,
+  "title": "Spending money on others promotes happiness",
+  "venue": "Science, 319(5870), 1687–1688",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "kindness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#receiving",
+   "/library/connection.html#prosocial-spending"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1126/science.1150952."
+ },
+ {
+  "id": "brown-2003-giving",
+  "authors": "Brown, S. L., Nesse, R. M., Vinokur, A. D., & Smith, D. M.",
+  "year": 2003,
+  "title": "Providing social support may be more beneficial than receiving it: Results from a prospective study of mortality",
+  "venue": "Psychological Science, 14(4), 320–327",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "kindness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#receiving"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/1467-9280.14461."
+ },
+ {
+  "id": "bloom-2016",
+  "authors": "Bloom, P.",
+  "year": 2016,
+  "title": "Against empathy: The case for rational compassion",
+  "venue": "Ecco",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "helping",
+   "compassion-fatigue"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#compassion"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; not checked."
+ },
+ {
+  "id": "cohen-wills-1985",
+  "authors": "Cohen, S., & Wills, T. A.",
+  "year": 1985,
+  "title": "Stress, social support, and the buffering hypothesis",
+  "venue": "Psychological Bulletin, 98(2), 310–357",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "social-support",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-2909.98.2.310."
+ },
+ {
+  "id": "tedeschi-calhoun-1996",
+  "authors": "Tedeschi, R. G., & Calhoun, L. G.",
+  "year": 1996,
+  "title": "The Posttraumatic Growth Inventory: Measuring the positive legacy of trauma",
+  "venue": "Journal of Traumatic Stress, 9(3), 455–471",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "trauma",
+   "healing",
+   "resilience"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1002/jts.2490090305."
+ },
+ {
+  "id": "frazier-2009",
+  "authors": "Frazier, P., Tennen, H., Gavian, M., Park, C., Tomich, P., & Tashiro, T.",
+  "year": 2009,
+  "title": "Does self-reported posttraumatic growth reflect genuine positive change?",
+  "venue": "Psychological Science, 20(7), 912–919",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "trauma",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1467-9280.2009.02381.x."
+ },
+ {
+  "id": "park-2010",
+  "authors": "Park, C. L.",
+  "year": 2010,
+  "title": "Making sense of the meaning literature: An integrative review of meaning making and its effects on adjustment to stressful life events",
+  "venue": "Psychological Bulletin, 136(2), 257–301",
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "trauma",
+   "healing",
+   "meaning"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#without-them"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0018301."
+ },
+ {
+  "id": "felitti-1998",
+  "authors": "Felitti, V. J., Anda, R. F., Nordenberg, D., et al.",
+  "year": 1998,
+  "title": "Relationship of childhood abuse and household dysfunction to many of the leading causes of death in adults: The Adverse Childhood Experiences (ACE) Study",
+  "venue": "American Journal of Preventive Medicine, 14(4), 245–258",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#timing",
+   "/know-yourself-in-depth.html#adversity"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0749-3797(98)00017-8."
+ },
+ {
+  "id": "stark-2007",
+  "authors": "Stark, E.",
+  "year": 2007,
+  "title": "Coercive control: How men entrap women in personal life",
+  "venue": "Oxford University Press",
+  "doi": null,
+  "url": null,
+  "kind": "book",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "safety",
+   "coercive-control"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#boundaries",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; OUP page not checked."
+ },
+ {
+  "id": "tronick-1978",
+  "authors": "Tronick, E., Als, H., Adamson, L., Wise, S., & Brazelton, T. B.",
+  "year": 1978,
+  "title": "The infant's response to entrapment between contradictory messages in face-to-face interaction",
+  "venue": "Journal of the American Academy of Child Psychiatry, 17(1), 1–13",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "co-regulation",
+   "repair"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#rupture-repair",
+   "/book/understanding-2-stress-in-depth.html#shared",
+   "/book/understanding-4-communication-in-depth.html#repair",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0002-7138(09)62273-1."
+ },
+ {
+  "id": "bakker-demerouti-2007",
+  "authors": "Bakker, A. B., & Demerouti, E.",
+  "year": 2007,
+  "title": "The job demands-resources model: State of the art",
+  "venue": "Journal of Managerial Psychology, 22(3), 309–328",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "work"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#demand"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1108/02683940710733115."
+ },
+ {
+  "id": "kaplan-1995",
+  "authors": "Kaplan, S.",
+  "year": 1995,
+  "title": "The restorative benefits of nature: Toward an integrative framework",
+  "venue": "Journal of Environmental Psychology, 15(3), 169–182",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": null,
+  "strength": null,
+  "topics": [
+   "stress",
+   "rest"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress-in-depth.html#rest",
+   "/library/calm.html#attention-restoration",
+   "/library/fairness.html#invisible-work",
+   "/tools/chat/deep.json"
+  ],
+  "verified": false,
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/0272-4944(95)90001-2."
+ }
+]

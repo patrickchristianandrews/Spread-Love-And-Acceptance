@@ -193,6 +193,8 @@
     ['Help a parent with a job they have been putting off, like the garden or the loft, and have lunch in the middle.', 'pr', 'wknd', 'lots', 0],
     ['Have an old-fashioned sleepover at a grandparent’s: the same dinner, the same story, the same breakfast.', 'gr', 'wknd', 'some', 0],
     ['Join a team walk, a charity run or a community day that your workplace already does, if it suits you.', 'co', 'wknd', 'lots', 0],
+    ['Join a coworker for a weekend park run or a long walk. Headphones in is fine; showing up side by side is the point.', 'co fr', 'wknd', 'lots', 1],
+    ['Pair up on a hands-on job, like setting up a room or sorting the supply cupboard, and get it done side by side.', 'co ho', 'eve', 'some', 1],
     ['Rest together: a lazy day of films, naps and snacks, with no to-do list.', 'pa ho si', 'wknd', 'low', 1],
     ['Go on a bike ride with a stop for ice cream or chips halfway.', 'ch te pa fr', 'wknd', 'lots', 1],
     ['Write a letter to a friend you have drifted from, and post it.', 'me fr', 'wknd 10', 'low', 0]
