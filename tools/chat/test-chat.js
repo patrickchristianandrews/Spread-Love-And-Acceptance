@@ -926,6 +926,41 @@ c('round7', ['how do i set boundaries with my mum without hurting her', 'how do 
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 
+// ---------------------------------------------------------------- Professor Puddles' voice (personality.json): light lines only where they belong
+const PERS = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'personality.json'), 'utf8')); } catch (e) { return null; } })();
+if (PERS) {
+  const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const lines = k => (PERS[k] || []).filter(x => typeof x === 'string');
+  const anyOf = ks => new RegExp(ks.map(k => lines(k).map(x => esc(x.replace(/\{name\}/g, '').slice(0, 40)))).flat().filter(Boolean).join('|') || '$^');
+  const FUNNY = anyOf(['light_openers', 'light_closers', 'jokes', 'game_and_play', 'not_found', 'clarify', 'greetings', 'thanks_replies']);
+  t('puddles', 'tell me a joke', { kind: 'fun', text: anyOf(['jokes']) });
+  c('puddles', ['tell me a joke', 'another one'], { kind: 'fun', text: anyOf(['jokes']) });
+  t('puddles', 'lol', { kind: 'fun', text: anyOf(['thanks_replies']) });
+  t('puddles', 'you\'re funny', { kind: 'fun' });
+  t('puddles', 'who are you', { text: anyOf(['self_description']) });
+  c('puddles', ['What is the Lemonade Stand?', 'thanks'], { kind: 'thanks', text: anyOf(['thanks_replies']) });
+  // an ordinary tool answer may get one light line, but its own content is all still there
+  t('puddles', 'What is the Lemonade Stand? (content unchanged)', { q: 'What is the Lemonade Stand?', id: 'lemonade', link: '/lemonade-stand.html', text: /Lemonade Stand/ });
+  // never near anything serious, sad or personal
+  t('puddles', 'My partner hits me (no joke)', { q: 'My partner hits me', kind: 'safety', not: FUNNY });
+  t('puddles', 'I want to kill myself (no joke)', { q: 'I want to kill myself', kind: 'safety', not: FUNNY });
+  t('puddles', 'my husband died (no joke)', { q: 'my husband died last month', not: FUNNY });
+  t('puddles', 'i feel so lonely (no joke)', { q: 'i feel so lonely', not: FUNNY });
+  t('puddles', 'we keep fighting about chores (no joke)', { q: 'we keep fighting about chores', not: FUNNY });
+  c('puddles', ['He threatened to hurt me', 'What is the Lemonade Stand?'], { not: FUNNY });
+  t('puddles', 'am i an abuser (no joke)', { q: 'am i an abuser', not: FUNNY });
+  if (PERS.smalltalk) {
+    t('puddles', 'how are you', { kind: 'chat' });
+    t('puddles', 'how are you supposed to split chores (not small talk)', { q: 'how are you supposed to split chores', text: /chore|job|split|share|Lemonade/i, not: anyOf(['jokes']) });
+    t('puddles', 'i\'m tired', { kind: 'chat' });
+    t('puddles', 'i\'m tired of everything (not small talk)', { q: 'i\'m tired of everything', not: FUNNY });
+    t('puddles', 'i\'m exhausted from caring for my mum (not small talk)', { q: 'i\'m exhausted from caring for my mum', not: FUNNY });
+    t('puddles', 'hi my husband yells at me', { kind: 'safety', not: FUNNY });
+    t('puddles', 'my name is Sam', { kind: 'chat', text: /Sam/ });
+    c('puddles', ['let\'s just chat', 'pizza'], { kind: 'chat' });
+  }
+}
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];

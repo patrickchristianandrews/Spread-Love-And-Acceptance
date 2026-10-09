@@ -191,7 +191,7 @@
   // the name on a button: a typed name, or "Me" for whoever is answering on this device, "Them" for the other
   function nm(i) { return typed(i) || (i === q.me ? 'Me' : q.people.length === 2 ? 'Them' : 'Person ' + (i + 1)); }
   // inside a sentence: "you" for whoever is answering here, "them" for an unnamed other
-  function say(i) { return i === q.me ? 'you' : typed(i) || (q.people.length === 2 ? 'them' : 'Person ' + (i + 1)); }
+  function say(i) { return typed(i) || (i === q.me ? 'you' : q.people.length === 2 ? 'them' : 'Person ' + (i + 1)); }
   function Say(i) { var s = say(i); return s.charAt(0).toUpperCase() + s.slice(1); }
   // "Sam says", "they say", "you say"
   function says(i) { return i === q.me ? 'you say' : typed(i) ? typed(i) + ' says' : (q.people.length === 2 ? 'they say' : 'Person ' + (i + 1) + ' says'); }
@@ -306,6 +306,7 @@
     var box = $('lq-list'); if (!box) return;
     var act = document.activeElement, keep = act && act.closest && act.closest('#lq-list') ? { id: act.closest('.lq-row') && act.closest('.lq-row').getAttribute('data-id'), w: act.getAttribute('data-w'), rm: act.classList.contains('remove') } : null;
     box.innerHTML = '';
+    box.classList.toggle('is-two', q.people.length === 2);
     GROUPS.forEach(function (g) {
       var ids = q.list.filter(function (id) { return groupOf(id) === g[0]; });
       if (!ids.length) return;

@@ -46,6 +46,7 @@ function makeChat() {
     matchMedia: () => ({ matches: false }),
     addEventListener: noop,
     location: { search: '' },
+    TOL_CHAT_SEED: 7,  // Puddles' light lines come from a seeded random number, so a test run repeats exactly
     sessionStorage: { getItem: k => store[k] || null, setItem: (k, v) => { store[k] = String(v); } }
   };
   window.window = window;

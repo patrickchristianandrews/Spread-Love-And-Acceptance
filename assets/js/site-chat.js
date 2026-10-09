@@ -563,7 +563,7 @@
 
   // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
   // angry": from the person on the receiving end, that is a safety matter, not a wording problem. Never a script for them.
-  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?narcissis\w*\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b/;
+  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?narcissis\w*\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
   // a sibling, a child, a classmate or a boss calling names is a different conversation
   var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
   function verbalReply(f) {
@@ -1756,6 +1756,11 @@
       if (ar0) return meant(ar0, sp);
       var cf = careFirst(state, q);
       if (cf) return meant(cf, sp);
+      var sf = norm(q);
+      if (!state.unsafe && !DANGER.test(sf) && !VERBAL.test(sf) && !SELF_HARMFUL.test(sf) && !NOT_LIVE.test(sf) && !FUN_UPSET.test(sf) && sf.split(' ').length <= 12) {
+        var sit0 = detectSituation(sf), card0 = matchCard(sf);
+        if (!(sit0.issue && sit0.score >= 3) && !card0) { var stt = smallTalk(state, q, sf); if (stt) return stt; }
+      }
     }
     var f = norm(q), prevLast = state.last;
     var r = respond1(state, q, chipDoc);
@@ -1765,6 +1770,10 @@
     r = meant(r, sp);
     // an in-scope message that found nothing (a short, feeling-led one, or a follow-up in its own words):
     // stay with the last topic, or ask a warm clarifying question, rather than "outside my little pond"
+    if (chipDoc == null && r && /^(offtopic|none|clarify|unclear)$|^$/.test(r.kind || '') && !FUN_UPSET.test(f) && !DANGER.test(f)) {
+      var ack = stAck(state, f);
+      if (ack) return ack;
+    }
     if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && !OFF_TOPIC.test(f)) {
       var alt = contextReply(state, prevLast, f) || softClarify(state, f);
       if (alt) return meant(alt, sp);
@@ -1887,6 +1896,78 @@
       return { blocks: [{ k: 'p', x: t }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Something else', q: 'What can I ask?' }], kind: 'fun', fun: 1 };
     }
     return null;
+  }
+
+  // ---------- small talk: "how are you?", "what's your favourite food?", "my name is Sam", "let's just chat"
+  // Only after the safety checks and the topic cards, and only when nothing about someone's life is in the message:
+  // "how are you supposed to split chores" is still about chores. The name someone gives stays in this tab only.
+  function nameFill(x, name) {
+    return String(x || '').replace(/(,\s*|\s+)?\{name\}/g, function (m, sep) { return name ? (sep || '') + name : ''; }).replace(/\s+([,.!?])/g, '$1');
+  }
+  function chatName(state) {
+    if (state.name) return state.name;
+    try { var n = sessionStorage.getItem('tol-chat-name'); if (n && /^[A-Za-z][A-Za-z'-]{0,19}$/.test(n)) state.name = n; } catch (e) {}
+    return state.name || '';
+  }
+  var NAME_SAY = /^(?:hi|hello|hey|hiya)?[\s,!]*(?:my name is|my names|my name's|call me|i am|i'm|i’m|im|it's|it’s|this is)\s+([A-Za-z][a-z'-]{1,19})[\s.!]*(?:here)?[.!]*$/i;
+  function nameFrom(q) {
+    var m = NAME_SAY.exec(String(q).trim()); if (!m) return '';
+    var w = m[1], lw = w.toLowerCase(), named = /my name|call me/i.test(q);
+    // "I'm tired" is a feeling, not a name: unless they said "my name is", the word must look like a name (a capital, not a known word)
+    if (!named && (w.charAt(0) !== w.charAt(0).toUpperCase() || STOP[lw] || ROLE[stem(lw)] || (IDX && IDX.vocab[lw]) || english(lw) || FEELS.some(function (x) { return x[0].test(lw); }))) return '';
+    if (STOP[lw] || /^(not|so|very|just|fine|good|ok|okay|here|back|sorry|tired|sad|bored|new|done|ready|lost|stuck|confused)$/.test(lw)) return '';
+    return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+  }
+  var JUST_CHAT = /^(lets|let s|can we|could we|i (just )?want to|i d like to|id like to)? ?(just )?(chat|talk|have a chat|have a natter|chit ?chat|hang out)( for a bit| for a while| with you| a bit)?( please)?$|^just chat$/;
+  function stPrompt(state) {
+    var S = KB.pers && KB.pers.smalltalk, list = S && S.chat_prompts ? S.chat_prompts : [];
+    if (!list.length) return '';
+    var seen = state.funSeen || (state.funSeen = []), fresh = list.filter(function (x) { return seen.indexOf(x) === -1; });
+    if (!fresh.length) fresh = list;
+    var x = fresh[Math.floor(frand(state) * fresh.length) % fresh.length]; seen.push(x);
+    return nameFill(x, chatName(state));
+  }
+  function smallTalk(state, q, f) {
+    var P = KB && KB.pers, S = P && P.smalltalk;
+    var fq = String(q).toLowerCase().replace(/[’‘`´]/g, "'").trim();
+    var nm = nameFrom(q);
+    if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
+    var hit = null;
+    if (S && S.intents) for (var i = 0; i < S.intents.length && !hit; i++) {
+      var it = S.intents[i];
+      (it.patterns || []).some(function (src) {
+        var re = it._re && it._re[src]; if (!re) { try { re = new RegExp(src, 'i'); } catch (e) { re = /$^/; } (it._re = it._re || {})[src] = re; }
+        if (re.test(f) || re.test(fq)) { hit = it; return true; } return false;
+      });
+    }
+    if (!hit && !nm && !JUST_CHAT.test(f)) return null;
+    var name = chatName(state), b = [], chips = [];
+    if (hit && hit.replies && hit.replies.length) {
+      var rl = hit.replies.filter(function (x) { return (state.funSeen || []).indexOf(x) === -1; }); if (!rl.length) rl = hit.replies;
+      var line = rl[Math.floor(frand(state) * rl.length) % rl.length]; (state.funSeen = state.funSeen || []).push(line);
+      b.push({ k: 'p', x: nameFill(line, name) });
+      (hit.chips || []).forEach(function (c) { if (Array.isArray(c)) chips.push({ label: c[0], q: c[1] || c[0] }); else if (c && c.label) chips.push({ label: c.label, q: c.q || c.label }); else if (typeof c === 'string') chips.push({ label: c, q: c }); });
+    } else if (nm) b.push({ k: 'p', x: 'Lovely to meet you, ' + nm + '! I’ll remember your name while this tab is open (it never leaves your device).' });
+    else b.push({ k: 'p', x: 'I’d love that. A professor needs a break from lecturing now and then.' });
+    // keep a casual chat going: sometimes ask one of the chat prompts back
+    var askBack = (!hit || JUST_CHAT.test(f) || frand(state) < 0.5) && stPrompt(state);
+    if (askBack) { b.push({ k: 'p', x: askBack }); state.stAsk = state.turn || 0; }
+    if (!chips.length) chips = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }];
+    state.last = null;
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'chat', fun: 1 };
+  }
+  // a short answer to the question Puddles just asked back: a warm reply in character, not "I couldn't find that"
+  function stAck(state, f) {
+    var S = KB && KB.pers && KB.pers.smalltalk;
+    if (state.stAsk == null || state.stAsk !== (state.turn || 0) - 1 || f.split(' ').length > 14) return null;
+    // a real question after the chat prompt is answered as a question
+    if (/^(what|whats|how|hows|why|where|when|which|who|can|could|should|is|are|do|does|tell me|explain|help)\b/.test(f) && f.split(' ').length > 3) return null;
+    var acks = (S && (S.acks || S.acknowledgements)) || [];
+    var a = acks.length ? acks[Math.floor(frand(state) * acks.length) % acks.length] : pick(['Ooh, I like that. Thank you for telling me.', 'That’s lovely. I’m writing it in my waterproof notebook.', 'Ha, wonderful. You’ve made my pond a little brighter.']);
+    var b = [{ k: 'p', x: nameFill(a, chatName(state)) }];
+    var nx = frand(state) < 0.6 && stPrompt(state);
+    if (nx) { b.push({ k: 'p', x: nx }); state.stAsk = state.turn || 0; } else state.stAsk = null;
+    return { blocks: b, chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', fun: 1 };
   }
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
