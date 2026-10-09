@@ -1992,6 +1992,7 @@
   // "Not now" shrinks it to a small chip for the rest of the visit, so it's never lost
   function buildPuddles(body) {
     if (current !== '/index.html' && current !== '/') return;
+    if (document.querySelector('.hh-pud')) return;   // the home page's opening already has its own Professor Puddles card
     var small = false;
     try { small = sessionStorage.getItem('tol-puddles-small') === '1'; } catch (e) {}
     // on a phone the hello starts as its small chip, so the page's opening line and "Start here" fit on the first screen

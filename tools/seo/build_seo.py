@@ -44,7 +44,7 @@ SECTION_KEYWORDS = [
     (r'^library', ['psychology', 'relationship research', 'conflict resolution', 'gratitude', 'self-compassion', 'emotions', 'stress', 'neurodiversity', 'mindfulness']),
     (r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|pause-and-play|echoes-of-gold)',
      ['calm', 'relaxation', 'breathing', 'meditation', 'mindfulness', 'peace', 'soundscapes', 'ambient music', 'sound frequencies', 'higher frequency']),
-    (r'^frequency-buddies', ['animated stories', 'cartoon for kids and families', 'Tidbit and Sugarfoot', 'kindness stories', 'working through tough times together', 'captions']),
+    (r'^frequency-buddies', ['animated stories', 'cartoon for all ages', 'Tidbit and Sugarfoot', 'kindness stories', 'working through tough times together', 'captions']),
     (r'^(frequency-journey|frequency-framework)', ['higher frequency', 'sound frequencies', 'Solfeggio tones', 'harmony', 'being in tune', 'calm arcade game', 'maze game', 'crossing game']),
     (r'^(quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|quest|keepsakes|garden-backdrop|pal-cam)',
      ['calm games', 'relaxing word games', 'crossword', 'word search', 'cozy games', 'no timers', 'Tidbit and Sugarfoot']),
@@ -121,7 +121,7 @@ OVERRIDE = {
 
 # search-led titles and descriptions: what people type, in plain words (title without the site name)
 SEARCH = {
- 'index.html': ('Free Relationship Self-Help · Spread Love & Acceptance', 'Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a kids’ cartoon.'),
+ 'index.html': ('Free Relationship Self-Help · Spread Love & Acceptance', 'Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a cartoon for all ages.'),
  'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a gentle six-week path to fairer chores and kinder conversations at home.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole load, fix the setup not the person, read your state first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Family and Roommates', 'Fair ways to share chores, kinder words and calmer check-ins for partners, families, co-parents, friends, roommates, coworkers and caregivers.'),
@@ -141,7 +141,7 @@ SEARCH = {
  'quiet-words.html': ('Quiet Words: A Calm, Free Word Search', 'A calming word search with soft themes, levels from easy to tricky and no timers. Free to play on your phone or computer.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style crossword with fair, friendly clues. Play in your browser on any device, at your own pace.'),
  'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Five Calm Classic Games', 'Play as Tidbit or Sugarfoot in five gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker and a catching game. Easy touch controls, a relaxed pace and no game over.'),
- 'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Gentle animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
+ 'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Gentle animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. Free, with captions.'),
  'frequency-buddies-live.html': ('Frequency Buddies Live: Drop In Anytime', 'A Frequency Buddies TV station that is always on: drop in anytime, watch the episode playing right now, and cast it to your TV.'),
  'frequency-buddies-shuffle.html': ('Frequency Buddies: Watch Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song, plus every episode to download and watch offline.'),
  'soundscapes.html': ('Brain Breakers: Instrumental Music with a Visualizer', 'Four instrumental pieces by Christian’s Lab, from soft and floating to big and cinematic, with a media-player-style music visualizer and gentle vibration.'),
@@ -190,7 +190,7 @@ SEARCH = {
 # honestly fit. These replace the entries above for the same page.
 SEARCH.update({
  # home and start
- 'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a kids’ cartoon.'),
+ 'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a communication quiz and a cartoon for all ages.'),
  'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a gentle six-week path to fairer chores, fewer fights and kinder talks at home.'),
  'recheck-drive.html': ('The Re-check Drive: A Calm Football Game for Keeping Things Alive', 'A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal on screen.'),
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),
@@ -242,11 +242,11 @@ SEARCH.update({
  'quiet-crossword.html': ('Quiet Crossword: Easy, Gentle Mini Crosswords', 'Small, friendly mini crosswords with gentle clues in five levels from easy to tricky. Free and calm with no timer: a peaceful puzzle for a few quiet minutes.'),
  'daily-ledger-crossword.html': ('Daily Crossword Puzzle, Newspaper Style (Free)', 'A free newspaper-style daily crossword with fair, friendly clues, from a quick 5x5 mini to a big Sunday grid. Play in your browser on any device, at your pace.'),
  'frequency-journey.html': ('Tidbit and Sugarfoot’s Arcade: Five Calm Classic Games', 'Play as Tidbit or Sugarfoot in five gentle classic games: a maze chase, a road-and-river crossing, a wagon-trail journey, a brick breaker and a catching game. Easy touch controls, a relaxed pace and no game over.'),
- 'frequency-buddies.html': ('Frequency Buddies: A Kids’ Cartoon About Feelings', 'Free animated episodes for kids and families: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
- 'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free kids’ cartoon about feelings, plus each episode to download.'),
+ 'frequency-buddies.html': ('Frequency Buddies: A Cartoon About Feelings, for All Ages', 'Free animated episodes for all ages: two pups, Tidbit and Sugarfoot, face tough times, talk it through and come out stronger. With captions.'),
+ 'frequency-buddies-shuffle.html': ('Frequency Buddies: Every Episode on Shuffle', 'Every Frequency Buddies episode back to back in a random order, with the theme song: a free cartoon about feelings for all ages, plus each episode to download.'),
  'frequency-buddies-music-video-maker.html': ('Make Your Own Frequency Buddies Music Video', 'Make your own Frequency Buddies theme song music video: pick the stage, lights, effects, dance moves, costumes and who’s on stage, then play it and share the link.'),
  'frequency-buddies-music-video.html': ('Frequency Buddies Theme Song Music Video', 'The Frequency Buddies theme song as a music video: Tidbit, Sugarfoot and every friend from the episodes sing, dance and cheer on a stage that moves.'),
- 'frequency-buddies-live.html': ('Frequency Buddies Live: A Kids’ Cartoon Channel', 'An always-on Frequency Buddies channel: drop in anytime, watch the kids’ cartoon episode playing right now, and cast it to your TV. Free, with captions.'),
+ 'frequency-buddies-live.html': ('Frequency Buddies Live: A Cartoon Channel for All Ages', 'An always-on Frequency Buddies channel: drop in anytime, watch the cartoon episode playing right now, and cast it to your TV. Free, with captions.'),
  'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
@@ -342,14 +342,14 @@ def fit_desc(d):
 SEASON_VIDEO = {
     'url': SITE + '/assets/video/frequency-buddies-season-1.mp4', 'thumb': SITE + '/assets/img/frequency-buddies-season-1.jpg',
     'name': 'Frequency Buddies · Season 1 · All five episodes', 'duration': 'PT1H14M5S', 'seconds': 4445, 'uploaded': '2026-10-03',
-    'desc': 'Five gentle animated episodes for kids and families: Tidbit and Sugarfoot set off on big little quests, hit real tough times and find their way through, together. With the theme song, captions in the picture and chapters.',
+    'desc': 'Five gentle animated episodes for all ages: Tidbit and Sugarfoot set off on big little quests, hit real tough times and find their way through, together. With the theme song, captions in the picture and chapters.',
     'chapters': [(0, 905, 'Episode 1: The Storm Over the Treehouse'), (905, 1792, 'Episode 2: Out of Tune'), (1792, 2662, 'Episode 3: The Heavy Basket'),
                  (2662, 3538, 'Episode 4: Who Broke the Kite?'), (3538, 4445, 'Episode 5: The Longest Night')],
 }
 # each episode is its own video file (every file stays under the 25 MB limit some hosts have)
 EPISODE_VIDEOS = [{'url': SITE + '/assets/video/frequency-buddies-s1e%d.mp4' % (i + 1), 'thumb': SEASON_VIDEO['thumb'], 'name': 'Frequency Buddies · ' + n,
                    'seconds': b - a, 'duration': 'PT%dM%dS' % ((b - a) // 60, (b - a) % 60), 'uploaded': SEASON_VIDEO['uploaded'],
-                   'desc': 'A gentle animated episode for kids and families: Tidbit and Sugarfoot on a big little quest, with the theme song and captions in the picture.'}
+                   'desc': 'A gentle animated episode for all ages: Tidbit and Sugarfoot on a big little quest, with the theme song and captions in the picture.'}
                   for i, (a, b, n) in enumerate(SEASON_VIDEO['chapters'])]
 VIDEO_PAGES = ('frequency-buddies.html', 'frequency-buddies-shuffle.html')
 
@@ -370,7 +370,7 @@ CANONICAL_TO = {
 # Sharing images: size and a plain description for each one used in og:image
 IMAGE_INFO = {
     OG_IMAGE: (1200, 630, 'image/png', 'Two friends sharing one heart, with two happy pups: Spread Love & Acceptance'),
-    SEASON_VIDEO['thumb']: (1280, 720, 'image/jpeg', 'Tidbit and Sugarfoot, the two pups of the Frequency Buddies kids’ cartoon'),
+    SEASON_VIDEO['thumb']: (1280, 720, 'image/jpeg', 'Tidbit and Sugarfoot, the two pups of the Frequency Buddies cartoon'),
     SITE + '/assets/img/frequency-buddies-season-2-teaser.jpg': (1280, 720, 'image/jpeg', 'Frequency Buddies Season 2, coming soon: Tidbit and Sugarfoot under a starry sky'),
 }
 PAGE_IMAGE = {p: SEASON_VIDEO['thumb'] for p in ('frequency-buddies.html', 'frequency-buddies-shuffle.html', 'frequency-buddies-live.html', 'frequency-buddies-music-video.html', 'frequency-buddies-music-video-maker.html')}
@@ -405,7 +405,7 @@ def video_ld(publisher):
 
 def series_ld(publisher):
     eps = [('s1e1', 'The Storm Over the Treehouse'), ('s1e2', 'Out of Tune'), ('s1e3', 'The Heavy Basket'), ('s1e4', 'Who Broke the Kite?'), ('s1e5', 'The Longest Night')]
-    return {'@type': 'TVSeries', 'name': 'Frequency Buddies', 'description': 'A gentle animated series for kids and families starring two pups, Tidbit and Sugarfoot.',
+    return {'@type': 'TVSeries', 'name': 'Frequency Buddies', 'description': 'A gentle animated series for all ages starring two pups, Tidbit and Sugarfoot.',
             'genre': ['Animation', 'Kids & Family'], 'inLanguage': 'en-US', 'isFamilyFriendly': True, 'url': SITE + '/frequency-buddies.html',
             'image': SEASON_VIDEO['thumb'], 'publisher': publisher, 'numberOfSeasons': 1, 'numberOfEpisodes': len(eps),
             'character': [{'@type': 'Person', 'name': 'Tidbit'}, {'@type': 'Person', 'name': 'Sugarfoot'}],
