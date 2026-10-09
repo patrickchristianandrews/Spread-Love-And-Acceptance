@@ -205,6 +205,8 @@
   @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .cr-rv-row{ background:rgba(40,36,50,.9); } :root:not([data-theme="light"]) .cr-rv-row.is-me{ background:rgba(36,56,46,.9); } }
   :root[data-theme="dark"] .cr-rv-row{ background:rgba(40,36,50,.9); }
   :root[data-theme="dark"] .cr-rv-row.is-me{ background:rgba(36,56,46,.9); }
+/* never show a reward card next to a safety read */
+body:has(#cr-out .cr-safety) .cb-end { display: none !important; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/message-patterns.js" defer></script>

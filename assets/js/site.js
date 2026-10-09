@@ -1215,7 +1215,7 @@
         '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
         '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
         '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
-        '<a href="/frequency-buddies.html" data-work-hide>Kids’ cartoon</a>' +
+        '<a href="/frequency-buddies.html" data-work-hide>Cartoon for all ages</a>' +
       '</nav>' +
       '<span class="tol-foot-links">' +
         '<a href="/safety.html">Not safe at home?</a>' +
@@ -3422,12 +3422,12 @@
     [/^\/wiring-card\.html$/, 'Share this tool', 'Make a free one-page card about how you take in words.'],
     [/^\/carrier-wave-decoder\.html$/, 'Share this tool', 'A free, step-by-step guide for when a conversation starts going sideways.'],
     [/^\/workpapers\/fill\/suite\.html$/, 'Share this tool', 'Free, printable worksheets for sharing the load at home.', { url: '/workpapers/fill/suite.html' }],
-    // kids and families
-    [/^\/frequency-buddies\.html$/, 'Share this episode', 'Frequency Buddies: a gentle cartoon for kids and families, free, with captions.', { pin: true, episode: true }],
-    [/^\/frequency-buddies-live\.html$/, 'Share the station', 'Frequency Buddies Live: a gentle cartoon station for kids and families, always on.', { pin: true }],
-    [/^\/frequency-buddies-shuffle\.html$/, 'Share this page', 'Frequency Buddies on shuffle: gentle cartoon episodes for kids and families.', { pin: true }],
+    // Frequency Buddies (for all ages)
+    [/^\/frequency-buddies\.html$/, 'Share this episode', 'Frequency Buddies: a gentle cartoon for all ages, free, with captions.', { pin: true, episode: true }],
+    [/^\/frequency-buddies-live\.html$/, 'Share the station', 'Frequency Buddies Live: a gentle cartoon station for all ages, always on.', { pin: true }],
+    [/^\/frequency-buddies-shuffle\.html$/, 'Share this page', 'Frequency Buddies on shuffle: gentle cartoon episodes for all ages.', { pin: true }],
     [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is coming! Watch the two-minute teaser and look for the five secrets.', { pin: true }],
-    [/^\/frequency-buddies-music-video[\w-]*\.html$/, 'Share the music video', 'A Frequency Buddies music video for kids and families.', { pin: true }],
+    [/^\/frequency-buddies-music-video[\w-]*\.html$/, 'Share the music video', 'A Frequency Buddies music video for all ages.', { pin: true }],
     // games (the game, never a score)
     [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
     [/^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words)\.html$/, 'Share this game', 'A calm word game I like.'],
@@ -3451,7 +3451,7 @@
       return !!hit;
     });
     return { url: location.pathname + '?ep=' + id, title: 'Frequency Buddies' + (name ? ', ' + name : ''),
-      text: 'Frequency Buddies' + (name ? ', ' + name : '') + ': a gentle cartoon for kids and families, free, with captions.' };
+      text: 'Frequency Buddies' + (name ? ', ' + name : '') + ': a gentle cartoon for all ages, free, with captions.' };
   }
   function placeShare(body) {
     var main = document.querySelector('main');
