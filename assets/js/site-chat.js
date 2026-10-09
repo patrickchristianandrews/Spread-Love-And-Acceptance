@@ -2147,7 +2147,8 @@
     '.tolc-av svg{width:38px;height:38px;display:block}',
     '.tolc.is-typing .tolc-av{animation:tolc-bob 1.4s ease-in-out infinite}',
     '@keyframes tolc-bob{0%,100%{transform:none}50%{transform:translateY(-2px) rotate(-3deg)}}',
-    '.tolc-who{flex:1;min-width:0}',
+    '.tolc-who{flex:1 1 9.5rem;min-width:9.5rem}',
+    '.tolc-head{flex-wrap:wrap;row-gap:.2rem}',
     '.tolc-name{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.12rem;line-height:1.2;margin:0;letter-spacing:-.01em}',
     '.tolc-sub{margin:0;font-size:.82rem;color:var(--ink-soft);line-height:1.3}',
     // the subtitle never wraps one word per line (phones, Larger text): one line, cut short, or hidden when the header is tight
@@ -2157,6 +2158,9 @@
     'html.tol-text-lg .tolc-sub,html.tol-text-xl .tolc-sub,html.tol-text-xxl .tolc-sub{display:none}',
     // tablets: a taller answer area
     '@media (min-width:720px) and (min-height:900px){.tolc.is-modal{height:min(860px,calc(100vh - 48px));width:440px}}',
+    // Larger text zooms the page body: keep the whole panel (and its Leave quickly button) on screen
+    'html.tol-text-lg:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.15 - 12px);max-height:calc(100dvh / 1.15 - 12px)}',
+    'html.tol-text-xl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.35 - 12px);max-height:calc(100dvh / 1.35 - 12px)}',
     '.tolc-hbtn{white-space:nowrap;flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',
     '.tolc-hbtn:hover{background:var(--paper2);color:var(--ink)}',
     '.tolc-x{font-size:1.5rem;line-height:1}',
