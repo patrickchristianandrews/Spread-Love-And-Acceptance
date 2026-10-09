@@ -1872,6 +1872,8 @@
     var openerOk = !quiet && (light || (R.opener_kinds || []).indexOf(k) !== -1 || k === 'fun');
     var closerOk = light || (R.closer_only_kinds || []).indexOf(k) !== -1 || (R.opener_kinds || []).indexOf(k) !== -1;
     // the kinds with their own voice: "thanks", nothing found, a choice to make
+    // gibberish keeps its plain "I didn't catch that": a joke there reads as not listening
+    if (k === 'unclear') return r;
     if (sec && !quiet) {
       var line0 = funLine(state, sec);
       if (!line0) return r;

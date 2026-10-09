@@ -199,7 +199,8 @@ s('My boss takes credit for my work', 'coworker+credit');
 s('On my team of seven nobody owns anything and tasks fall through the cracks', /coworker\+(ownership|group)/);
 s('My manager criticizes my work in front of everyone', 'coworker+criticism');
 s('My friend keeps cancelling plans last minute', 'friend+reliability');
-s('My best friend and I are drifting apart', 'friend+distance');
+// a drifting friendship has its own page now (friends.html)
+t('situations', 'My best friend and I are drifting apart', { id: 'friends', link: '/friends.html' });
 s('My friend took my text the wrong way', 'friend+tone');
 s("I'm caring for my mom and running on empty", /caregiving\+(overwhelm|care)/);
 s("I'm caring for my husband after his surgery and doing everything", /caregiving\+(care|load|overwhelm)/);
@@ -280,8 +281,9 @@ c('followups', ['We keep fighting about money', 'is that a red flag?', 'what sho
 c('followups', ['I feel lonely since my mom died', 'what about my sister?'], { kind: 'care', text: /your sister/ });
 c('followups', ['My partner never does the dishes', 'different question, how do I calm down fast'], { kind: 'care', link: '/night-garden.html' });
 c('followups', ['My partner never does the dishes', 'start over'], { kind: 'restart' });
-c('followups', ['My partner never does the dishes', 'thanks'], { kind: 'thanks', text: /^You’re welcome/ });
-c('followups', ['thank you so much puddles'], { kind: 'thanks', text: /You’re welcome/ });
+// Puddles answers thanks in his own voice (personality.json thanks_replies), so only the kind is fixed
+c('followups', ['My partner never does the dishes', 'thanks'], { kind: 'thanks', not: /dishes|Lemonade/ });
+c('followups', ['thank you so much puddles'], { kind: 'thanks' });
 c('followups', ['is this controlling?'], { kind: 'redflag', link: '/safety.html' });
 
 // ---------------------------------------------------------------- friendly clarifying questions

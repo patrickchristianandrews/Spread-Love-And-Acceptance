@@ -199,7 +199,7 @@
   function icon(name, cx, cy, size, color, sw) {
     var d = ICONS[name] || ICONS.heart, s = size / 24;
     return '<g transform="translate(' + r(cx - size / 2) + ' ' + r(cy - size / 2) + ') scale(' + r(s * 1000) / 1000 + ')">' +
-      '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + r((sw || 2) / s * (s > 1 ? 1 : 1)) / 1 + '" stroke-linecap="round" stroke-linejoin="round"/></g>';
+      '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + r((sw || 2) / s) + '" stroke-linecap="round" stroke-linejoin="round"/></g>';
   }
   var ICON_WORDS = [
     ['pause', /\b(pause|break|time ?out|stop|cool(ing)? (down|off)|step away)\b/],
@@ -1011,7 +1011,7 @@
   function saveBlob(blob, name) {
     var a = document.createElement('a'), u = URL.createObjectURL(blob);
     a.href = u; a.download = name; a.rel = 'noopener';
-    a.style.display = 'none'; document.body.appendChild(a); a.click();
+    a.hidden = true; document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 4000);
   }
   function download(svg, filename) {
