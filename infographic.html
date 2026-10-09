@@ -376,6 +376,7 @@
   .ig-acc{ display: none; }
   @media screen and (max-width: 760px){
     .print-bar{ margin: 12px 16px; flex-direction: column; align-items: stretch; }
+    .print-bar-copy{ flex: 0 0 auto; }
     .print-bar-actions{ flex-direction: column; align-items: stretch; }
     .print-bar-actions .ig-btn{ width: 100%; }
     .print-bar .back-link{ justify-content: center; }
@@ -684,7 +685,7 @@
     var all = document.createElement('button'); all.type = 'button'; all.textContent = 'Open all';
     tools.appendChild(all); wrap.appendChild(tools);
     BLOCKS.forEach(function (b, i) {
-      var d = document.createElement('details'); if (i === 0) d.open = true;
+      var d = document.createElement('details');
       var s = document.createElement('summary');
       var n = document.createElement('span'); n.className = 'ig-n'; n.textContent = b.num;
       s.appendChild(n); s.appendChild(document.createTextNode(b.title)); d.appendChild(s);
@@ -788,7 +789,7 @@
         out.push('<rect x="' + M + '" y="' + y + '" width="' + IW + '" height="' + (ll.length * 15 + 12) + '" rx="6" fill="' + C.debitSoft + '" stroke="' + C.debit + '" stroke-dasharray="4 3"/>');
         y = textLines(out, ll, W / 2, y + 18, 11.5, 15, { anchor: 'middle' }) + 8;
       }
-      if (b.more) y = textLines(out, wrapText(b.more, 11.5, 400, '', IW), M, y + 4, 11.5, 16, { fill: C.soft });
+      if (b.more) y = textLines(out, wrapText(b.more, 11.5, 400, '', IW), M, y + 10, 11.5, 16, { fill: C.soft });
       if (b.callout) {
         var cl = wrapText(b.callout, 12.5, 400, '', IW - 36);
         var hh = cl.length * 18 + 22;
@@ -797,7 +798,7 @@
         textLines(out, cl, M + 20, y + 24, 12.5, 18, {});
         y += hh;
       }
-      y += 26;
+      y += 36;
     });
     out.push('<rect x="' + M + '" y="' + (y - 8) + '" width="' + IW + '" height="1" fill="' + C.line + '"/>');
     y = textLines(out, wrapText(HEAD.disclaimer, 11, 400, 'italic', IW - 80), W / 2, y + 10, 11, 15, { italic: true, anchor: 'middle', fill: C.soft });

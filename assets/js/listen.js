@@ -204,9 +204,31 @@
   });
 
   // ---------- the Listen button at the top of a reading page ----------
+  // a page can put its own big "Listen to this chapter" row at the top (<div data-listen-top hidden> with
+  // .tol-listen-top-go and .tol-listen-here buttons): it is shown and wired here instead of adding a second one,
+  // and its "(about N min)" is worked out from the words that will actually be read (about 150 a minute)
+  function wireTop(top, main) {
+    if (top.__tolListen) return top;
+    top.__tolListen = true;
+    var go = top.querySelector('.tol-listen-top-go'), here = top.querySelector('.tol-listen-here');
+    top.classList.add('tol-listen');
+    if (go) {
+      go.classList.add('tol-listen-go');
+      var words = 0;
+      blocksIn(main).forEach(function (b) { words += (textOf(b).match(/\S+/g) || []).length; });
+      var len = go.querySelector('.tol-listen-len');
+      if (len && words > 60) len.textContent = '(about ' + Math.max(1, Math.round(words / 150)) + ' min)';
+      go.addEventListener('click', function () { S.host = main; start(blocksIn(main), 0); });
+    }
+    if (here) here.addEventListener('click', function () { S.host = main; showBar(); pickMode(true); status(); });
+    top.hidden = false;
+    return top;
+  }
   function mount(opts) {
     opts = opts || {};
     var main = opts.host || document.querySelector('main');
+    var top = main && main.querySelector('[data-listen-top]');
+    if (top) return wireTop(top, main);
     if (!main || document.querySelector('.tol-listen')) return;
     var box = document.createElement('div');
     box.className = 'tol-listen no-bubble no-cheer';
