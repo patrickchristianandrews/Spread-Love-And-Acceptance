@@ -717,8 +717,11 @@
       if (!inSoloBox.hidden) inSoloP.textContent = 'About ' + hrs(ins) + ' a week of this sits inside time on your own with the baby, so it’s counted there, once.';
     }
     // the first edit to an example row makes it yours: its grey example numbers go
-    function own() {
+    // (typing a time over a grey example, with no name typed, keeps the example's name, so the line never
+    // travels as "a line with no name")
+    function own(fromName) {
       if (!item.ex) return;
+      if (!fromName && !item.name.trim() && item.ex.name) { item.name = item.ex.name; ta.value = item.name; requestAnimationFrame(function () { autoGrow(ta); }); }
       delete item.ex; row.classList.remove('is-example');
       ta.placeholder = 'What was the job?';
       amts.querySelectorAll('input').forEach(function (x) { x.placeholder = '0'; });
@@ -773,7 +776,7 @@
     }
     row._refresh = function () { showNote(); showSum(); showDbl(); showArea(); showInSolo(); };
     ta.addEventListener('input', function () {
-      own(); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited();
+      own(true); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited();
       // a job you typed yourself: a calm guess at its area from its name, until you pick one
       if (item.custom && !item.catSet) { var g = guessCat(item.name); if (g !== 'other' && cs.value !== g) cs.value = g; }
       recalc(); renderPicks(); showArea();
@@ -864,16 +867,18 @@
         if (o.pf) { o.pf.setAttribute('aria-label', nameOf(i) + ', how often'); if (document.activeElement !== o.pf) o.pf.value = freqOf(item, i); }
         if (item.ex && !o.think) { inp.value = ''; inp.placeholder = String(item.ex.v[i] || 0); lab += ' (example: ' + (item.ex.v[i] || 0) + ')'; }
         else {
-          inp.placeholder = '0';
+          // someone else's empty box stays blank (never "0", which reads as "does nothing"); your own shows a grey 0
+          inp.placeholder = !solo() && state.me >= 0 && i !== state.me ? '' : '0';
           var raw = item.raw && item.raw[o.k] != null ? item.raw[o.k] : null;
           var v = o.think ? item.t[i] : item.v[i];
-          if (document.activeElement !== inp) inp.value = raw != null ? raw : (o.think ? (v || '') : (v || 0));
+          if (document.activeElement !== inp) inp.value = raw != null ? raw : (v || '');
         }
         inp.setAttribute('aria-label', lab);
         if (item.raw && item.raw[o.k] != null) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
       });
       row._refresh();
     }
+    row._relabel = function () { refreshInputs(); };
     visiblePeople().forEach(function (i) { amts.appendChild(amountInput(i, false)); });
     amts.appendChild(labeled('Counted in', us, 'ls-sel'));
     var fsLab = labeled('How often', fs, 'ls-sel'); fsLab.hidden = !!item.fq && !solo();
@@ -1084,7 +1089,10 @@
     return row;
   }
   // "Tom paid (£)", "Tom puts in (£)" for savings, "Tom brings in (£)" for money coming in
-  function billWho(b, i) { return nameOf(i) + (b.kind === 'income' ? ' brings in' : b.kind === 'savings' ? ' puts in' : ' paid') + ' (' + state.cur + ')'; }
+  // (planning, not settling up: "Tom puts in" for every cost, nothing "paid" yet)
+  function billWho(b, i) { return nameOf(i) + (b.kind === 'income' ? ' brings in' : b.kind === 'savings' || state.planning ? ' puts in' : ' paid') + ' (' + state.cur + ')'; }
+  // the input's spoken name, with the real name: "Sophie, amount paid ($)"
+  function billAria(b, i) { return nameOf(i) + ', ' + (b.kind === 'income' ? 'amount coming in' : b.kind === 'savings' || state.planning ? 'amount put in' : 'amount paid') + ' (' + state.cur + ')' + (b.ex ? ' (example: ' + (b.ex.v[i] || 0) + ')' : ''); }
   function makeBillRow(idx) {
     var item = state.bills[idx]; item.isBill = true;
     var row = document.createElement('div'); row.className = 'row'; row.setAttribute('data-bidx', idx);
@@ -1097,13 +1105,14 @@
     var amts = document.createElement('div'); amts.className = 'row-amts';
     var note = document.createElement('p'); note.className = 'row-note'; note.setAttribute('aria-live', 'polite');
     var cue = document.createElement('p'); cue.className = 'row-cue'; cue.hidden = true; cue.setAttribute('aria-live', 'polite');
-    function own() {
+    function own(fromName) {
       if (!item.ex) return;
+      if (!fromName && !item.name.trim() && item.ex.name) { item.name = item.ex.name; ta.value = item.name; }
       delete item.ex; row.classList.remove('is-example'); ta.placeholder = 'What was the cost?';
       amts.querySelectorAll('input').forEach(function (x) { x.placeholder = '0'; });
     }
     function showNote() { var t = noteText(item); note.textContent = t; note.hidden = !t; }
-    ta.addEventListener('input', function () { own(); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited(); recalc(); });
+    ta.addEventListener('input', function () { own(true); item.name = ta.value.replace(/\n/g, ' '); autoGrow(ta); markEdited(); recalc(); });
     ta.addEventListener('keydown', function (e) { if (e.key === 'Enter') e.preventDefault(); });
     var rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;'; rm.setAttribute('aria-label', 'Remove this bill');
@@ -1115,9 +1124,9 @@
       sp.textContent = billWho(item, i);
       var inp = document.createElement('input');
       inp.type = 'number'; inp.min = '0'; inp.step = '0.01'; inp.inputMode = 'decimal'; inp.autocomplete = 'off'; inp.setAttribute('data-fk', 'b' + i + '-' + idx);
-      inp.setAttribute('aria-label', nameOf(i) + ', amount paid' + (item.ex ? ' (example: ' + (item.ex.v[i] || 0) + ')' : ''));
+      inp.setAttribute('aria-label', billAria(item, i));
       if (item.ex) { inp.value = ''; inp.placeholder = String(item.ex.v[i] || 0); }
-      else { inp.placeholder = '0'; inp.value = item.raw && item.raw[i] != null ? item.raw[i] : (item.v[i] || 0); }
+      else { inp.placeholder = '0'; inp.value = item.raw && item.raw[i] != null ? item.raw[i] : (item.v[i] || ''); }
       if (item.raw && item.raw[i] != null) inp.setAttribute('aria-invalid', 'true');
       inp.addEventListener('input', function () {
         own();
@@ -1197,11 +1206,17 @@
   function relabel() {
     document.querySelectorAll('.row-amts .pname').forEach(function (sp) {
       var i = +sp.dataset.i, k = sp.dataset.k;
-      if (k === 'b') { var br = sp.closest('.row'), bb = br ? state.bills[+br.getAttribute('data-bidx')] : null; sp.textContent = bb ? billWho(bb, i) : nameOf(i) + ' paid (' + state.cur + ')'; return; }
+      if (k === 'b') {
+        var br = sp.closest('.row'), bb = br ? state.bills[+br.getAttribute('data-bidx')] : null; sp.textContent = bb ? billWho(bb, i) : nameOf(i) + ' paid (' + state.cur + ')';
+        var bi = sp.parentNode && sp.parentNode.querySelector('input'); if (bi && bb) bi.setAttribute('aria-label', billAria(bb, i));
+        return;
+      }
       var row = sp.closest('.row'), j = row ? state.jobs[+row.getAttribute('data-idx')] : null;
       if (!j) return;
       sp.textContent = (solo() ? 'Me' : nameOf(i)) + (k === 't' ? ', thinking (min)' : ' (' + unitWord(j) + ')');
     });
+    // the spoken names on the job boxes follow the names too ("Sophie, hours, each week", never "Me, …")
+    rowsEl.querySelectorAll('.row').forEach(function (r) { if (r._relabel) r._relabel(); });
     renderAsRow(); renderMeRow(); renderPartRow(); renderAgreed(); renderOwners(); markSides(); renderWords();
     document.querySelectorAll('select.ls-bill-who option').forEach(function (o) { var i = +o.value; if (i >= 0) o.textContent = nameOf(i); });
     document.querySelectorAll('.row-pick .ls-chip').forEach(function (b) { var m = /_(\d+)$/.exec(b.getAttribute('data-fk') || ''); if (m) b.textContent = nameOf(+m[1]); });

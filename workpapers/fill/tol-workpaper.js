@@ -282,7 +282,7 @@
   function displayCell(col, row, ctx) {
     var v = row[col.id];
     if (col.type === 'computed') return col.compute(row);
-    if (col.type === 'person') return ctx.name(v);
+    if (col.type === 'person') return ctx.name(v) + (v === 'Both' && col.bothNote ? ' (together)' : '');
     if (col.type === 'select' && col.labels && col.labels[v]) return col.labels[v];
     if (col.type === 'check') return v ? (col.pdfTrue || 'Yes') : '';
     if (col.type === 'date') return formatDate(v);
