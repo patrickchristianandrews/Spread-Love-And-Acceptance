@@ -817,7 +817,22 @@
       // the same answer twice in a row reads like a machine: the second time, just the words to use and where to read more
       if (state.easy && c.plain && c.plain.length) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name }; return { blocks: easyBlocks(c), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'card', id: c.id, noBrief: 1 }; }
       var again = c.kind === 'intent' && state.last && state.last.card === c.id && alike(state.prevF, state.curF) >= 0.5;
+      var same = !again && c.kind === 'intent' && state.last && state.last.card === c.id && c.how && c.how.length > 1;
       if (again) b.push({ k: 'p', x: 'That’s the same thing we just looked at, so here’s the short version. The page below has the rest.' });
+      else if (same) {
+        // the same topic card for a follow-up ("he forgets everything I tell him"): the steps that fit it, not the whole answer again
+        var qt = {}; tokens(state.curF || '').forEach(function (t) { if (t.length > 2 && !ROLE[t] && !ASPECT[t]) qt[t] = 1; });
+        var fit = c.how.map(function (x, i) { var sc = 0, seen = {}; tokens(x).forEach(function (t) { if (qt[t] && !seen[t]) { seen[t] = 1; sc++; } }); return { x: x, i: i, sc: sc }; })
+          .filter(function (o) { return o.sc > 0; }).sort(function (a2, b2) { return b2.sc - a2.sc || a2.i - b2.i; });
+        b.push({ k: 'p', x: fit.length ? 'Staying with ' + c.name + ', this part fits what you said:' : 'Staying with ' + c.name + ', here are two more things to try:' });
+        b.push({ k: 'list', x: fit.length ? fit.slice(0, 2).map(function (o) { return o.x; }) : c.how.slice(1, 3) });
+        var sc2 = Array.isArray(c.script) ? c.script : c.script ? [c.script] : [];
+        if (sc2.length) { var si = sc2.length > 1 ? 1 : 0; b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
+        var lk2 = safeLinks(c.links).slice(0, 1);
+        if (lk2.length) b.push({ k: 'links', x: lk2 });
+        state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk2[0] && lk2[0][1] };
+        return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id };
+      }
       else {
         (Array.isArray(c.what) ? c.what : [c.what]).forEach(function (x) { if (x) b.push({ k: 'p', x: x }); });
         if (c.how && c.how.length && c.kind !== 'intent') { b.push({ k: 'h', x: 'How to use it' }); b.push({ k: 'list', x: c.how.slice(0, c.how.length <= 5 ? 5 : 4) }); }
@@ -1437,6 +1452,18 @@
           'If you call less: “I know you’ve been reaching out more. Work is heavy right now, and it isn’t about you. Can we pick our call days together, and I’ll start the Sunday one?”',
           'Answer the person as well as the plan: if they asked “are we still on tonight?”, answer that first.'] },
         { k: 'links', x: safeLinks((ld && ld.links) || []).slice(0, 2) }], chips: [], kind: 'care', id: 'longdistance' };
+    }
+    // a short follow-up just after a topic card ("i do all the meetings and paperwork" after fostering, "how do i get a say"
+    // after a co-parent answer) stays with that topic: a card names, in "follow", the card that answers a follow-up's words
+    var C1 = state.care, cc1 = C1 && CV_PERSONAL[C1.id] && (state.turn || 0) - C1.turn <= 2 && n <= 20 ? cardById(C1.id) : null;
+    var roots = cc1 ? [cc1].concat(C1.root && C1.root !== cc1.id && cardById(C1.root) ? [cardById(C1.root)] : []) : [];
+    for (var ri = 0; ri < roots.length; ri++) {
+      var fl = roots[ri].follow || [];
+      for (var fi = 0; fi < fl.length; fi++) {
+        var fre = null; try { fre = new RegExp(fl[fi][0]); } catch (e) { fre = null; }
+        var tcard = fre && fre.test(f) && cardById(fl[fi][1]);
+        if (tcard) { var rf = cardReply(state, tcard, 'about'); rf.kind = 'care'; state.care = { id: tcard.id, turn: state.turn || 0, f: f, root: C1.root || C1.id }; return rf; }
+      }
     }
     for (var i = 0; i < (IDX.first || []).length; i++) {
       var c = IDX.first[i];
