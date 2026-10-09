@@ -914,10 +914,29 @@
     outTime = out ? outTime + dt : 0; stats.maxOut = Math.max(stats.maxOut, outTime);
     if (outTime > 350) { recover('bounds'); return step(0); }
 
+    keepApart(D);
     idle(D, dt);
     smooth(D, dt);
     stepParts(dt * PACE);
     shake = Math.max(0, shake - dt * 0.02);
+  }
+
+  // ---------- heads never on top of each other ----------
+  // When the pals face each other, each head reaches out in front of her middle (its centre about 18-22 units, the
+  // snout another 19, times her drawn size), so their middles need that much room between them. Closer than that and
+  // the heads would sit inside each other; at exactly that they touch noses, which is as close as any moment gets.
+  // Pals passing each other (facing the same way), or one up in the air over the other, are left as they are.
+  var REACH_X = { sit: 18, bow: 22, lie: 19 }, SNOUT = 19, TOUCH = 3;
+  function reachOf(d) { return ((REACH_X[d.pose] || 21) + SNOUT) * S * d.scale * clamp(Math.abs(d.face), 0.15, 1) * (d.sx || 1); }
+  function headY(d, i) { var p = d.pose, hy = p === 'sit' ? -38 : p === 'bow' ? -14 : p === 'lie' ? -19 : (LEAN[i] ? -33 : -30.5); return G + d.dy - d.lift + hy * S * d.scale * (d.sy || 1); }
+  function keepApart(D) {
+    var a = D[0], b = D[1]; if (!a || !b || a.hide || b.hide || a.alpha < 0.3 || b.alpha < 0.3) return;
+    var dx = b.x - a.x, side = dx < 0 ? -1 : 1;
+    if (sgn(a.face) !== side || sgn(b.face) !== -side) return;                    // not facing each other
+    if (Math.abs(headY(a, 0) - headY(b, 1)) > 24 * S * Math.min(a.scale, b.scale)) return; // one head well above the other
+    var need = reachOf(a) + reachOf(b) - TOUCH * S, have = Math.abs(dx); if (have >= need) return;
+    var c = cx(), sp = span(), mid = clamp((a.x + b.x) / 2, c - sp + need / 2, c + sp - need / 2);
+    a.x = mid - side * need / 2; b.x = mid + side * need / 2;
   }
 
   function travelDogs(tv) {
