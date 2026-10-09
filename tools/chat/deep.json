@@ -68,6 +68,7 @@
    "fear-and-control"
   ],
   "safety_aware_ids": [
+   "fear-and-control",
    "forgiveness",
    "co-parenting",
    "family-duty",
@@ -77,7 +78,6 @@
    "coming-out",
    "money",
    "anger",
-   "fear-and-control",
    "can-people-change",
    "what-we-owe-family",
    "are-boundaries-selfish",
@@ -132,9 +132,99 @@
  ],
  "topics": [
   {
+   "id": "fear-and-control",
+   "title": "Fear, control and safety",
+   "patterns": [
+    "\\bfear (and |or )?control\\b",
+    "\\b(feel|feeling|am|i m) (afraid|scared|frightened) at home\\b",
+    "\\b(controlling|threaten\\w*|walking on eggshells|not safe|unsafe)\\b",
+    "\\b(afraid|scared|frightened) of (him|her|them|my)\\b",
+    "\\b(controls|tracks|watches) (me|my)\\b",
+    "\\b(hits|hurts|hit|hurt) me\\b"
+   ],
+   "links": [
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ],
+    [
+     "Emotional safety",
+     "/library/emotions.html#emotional-safety"
+    ],
+    [
+     "What’s stored on this device",
+     "/on-this-device.html"
+    ]
+   ],
+   "philosophy": "Kant held that every person must be treated as an end, never merely as a tool for someone else’s will. De Beauvoir argued that real love needs two free people. Neither tradition asks anyone to endure being controlled or frightened in the name of love or loyalty.",
+   "psychology": "Researchers such as Evan Stark describe ‘coercive control’: a pattern of controlling money, contact, movement or choices that can do serious harm even without physical violence. Feeling afraid of a partner or family member is an important signal, not an overreaction.",
+   "autistic_lens": "Many autistic people have been taught to doubt their own reading of situations, and to mask and go along. Through an autistic lens, it’s worth saying plainly: if you feel afraid, that feeling is real information. Clear rules are care; rules enforced by fear are not.",
+   "together": "Love doesn’t require fear, and being strong doesn’t mean staying put. Please start with the “Not safe at home?” page (/safety.html) now; it has calm, practical steps and a quick way to leave the page.",
+   "question": "Do you feel free to say no, change your mind, or leave, without being afraid?",
+   "try": "Open the “Not safe at home?” page on a device you trust, and read just the first part."
+  },
+  {
+   "id": "autistic-lens",
+   "title": "Why look through an autistic lens?",
+   "patterns": [
+    "\\b(autistic (lens|view|perspective|way of seeing)|why (an )?autistic|three lenses)\\b"
+   ],
+   "links": [
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ],
+    [
+     "The double empathy problem",
+     "/library/wiring.html#double-empathy"
+    ],
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ]
+   ],
+   "philosophy": "Philosophers have long used an outsider’s eye to see what insiders miss: Socrates asking questions everyone thought were obvious, or Wittgenstein asking what our words are really doing. An autistic lens often works like that. It asks: what is the actual rule here, and has anyone said it?",
+   "psychology": "The double empathy problem (Milton) and research on autistic communication suggest autistic ways of talking are different, not broken. Many autistic people value clear, literal messages, honesty, predictability and deep focus, and these line up closely with what research says helps any relationship: clear requests, repair, rituals and attention.",
+   "autistic_lens": "Puddles doesn’t speak for all autistic people; nobody can, and autistic people differ from each other as much as anyone. This is one perspective, drawn from what many autistic people say about themselves. It treats autistic traits as a way of seeing, not a problem, and it notices how often ‘say the rule out loud’ makes life fairer for everyone.",
+   "together": "Looking through an autistic lens is like turning on the lights in a room full of unspoken rules. Once you can see them, you can choose together which ones to keep.",
+   "question": "Which unspoken rule in your life would you most like to see in plain light?",
+   "try": "Pick one hint, one ‘you should know’, or one unwritten rule, and say it out loud this week."
+  },
+  {
+   "id": "quiet-togetherness",
+   "title": "Being together without talking",
+   "patterns": [
+    "\\btogether without talking\\b",
+    "\\bparallel play\\b",
+    "\\b(parallel play|comfortable silence|quiet together|body doubl\\w*|side by side)\\b",
+    "\\b(don t|do not) (need|have) to talk\\b"
+   ],
+   "links": [
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Co-regulation",
+     "/library/stress.html#co-regulation"
+    ],
+    [
+     "The Night Garden",
+     "/night-garden.html"
+    ]
+   ],
+   "philosophy": "Martin Buber described two strangers sitting silently side by side on a bench, and suggested that real meeting can happen without a word. Quaker meetings and Zen sitting both treat shared silence as deep company. Being with someone doesn’t always mean talking to them.",
+   "psychology": "Mildred Parten described ‘parallel play’ in young children in the 1930s: playing near each other, side by side. Adults do it too. ‘Body doubling’, working alongside someone, is a well-known strategy among ADHD and autistic people for getting tasks done, and research on co-regulation shows that calm people near each other can help each other settle.",
+   "autistic_lens": "Many autistic people say the best company is someone you don’t have to talk to: reading on the same sofa, gaming side by side, each lost in their own thing but together. Through an autistic lens, that isn’t distance. It’s closeness without demands, and many non-autistic people find they love it too.",
+   "together": "Being near each other can be a full kind of connection, words optional. Make room for quiet togetherness as well as talk.",
+   "question": "Who do you feel comfortable being quiet with?",
+   "try": "Suggest an hour of side-by-side time: same room, separate activities, no need to talk."
+  },
+  {
    "id": "invisible-work",
    "title": "The work nobody sees",
    "patterns": [
+    "\\bwork (that )?(nobody|no one) sees\\b",
     "\\b(mental load|invisible (work|labou?r|load)|cognitive (labou?r|load)|emotional labou?r|default parent|second shift)\\b",
     "\\bi (do|carry|remember) (everything|it all)\\b",
     "\\b(nobody|no one) (sees|notices) what i do\\b"
@@ -693,6 +783,7 @@
    "id": "caregiving",
    "title": "Caring for someone you love",
    "patterns": [
+    "\\bcaring for (someone|somebody) (you|i) love\\b",
     "\\b(caregiv\\w*|carers?|caring for (my|our|a))\\b",
     "\\blook(ing)? after (my|our) (mum|mom|dad|mother|father|parents?|partner|wife|husband|child|son|daughter)\\b"
    ],
@@ -778,6 +869,7 @@
    "id": "parenting",
    "title": "Raising kind, steady kids",
    "patterns": [
+    "\\braising (kind |steady |good )+(kids|children)\\b",
     "\\b(parenting|raising (kids|children)|new parents?|new baby|toddlers?)\\b",
     "\\bmy (kids?|children|son|daughter|baby)\\b"
    ],
@@ -860,6 +952,7 @@
    "id": "family-duty",
    "title": "What we owe family",
    "patterns": [
+    "\\bwhat (we|i) owe (our |my )?family\\b",
     "\\b(family (obligations?|duty|duties)|filial|send(ing)? money home)\\b",
     "\\bowe (my|our) (parents|family|mother|father|mum|mom|dad)\\b"
    ],
@@ -1274,6 +1367,7 @@
    "id": "on-your-own",
    "title": "Being on your own",
    "patterns": [
+    "\\bbeing on (my|your) own\\b",
     "\\b(on my own|by myself|single again|lonely|loneliness|solitude|break ?up|broke up|divorc\\w*)\\b"
    ],
    "links": [
@@ -1328,7 +1422,9 @@
    "id": "rest",
    "title": "Rest",
    "patterns": [
-    "\\b(rest|resting|burn(ed|t)? out|burnout|exhausted|downtime|recharg\\w*|doing nothing)\\b"
+    "^rest$",
+    "\\b(resting|burn(ed|t)? out|burnout|exhausted|downtime|recharg\\w*|doing nothing)\\b",
+    "\\b(need|get|take|taking|more|no|some|enough) rest\\b"
    ],
    "links": [
     [
@@ -1520,6 +1616,7 @@
    "id": "naming-feelings",
    "title": "Naming what you feel",
    "patterns": [
+    "\\bnaming (what|how) (i|you) feel\\b",
     "\\b(alexithymi\\w*|emotional granularity|interocept\\w*|numb)\\b",
     "\\b(don t|do not|can t) (know|name|tell) what i (feel|m feeling)\\b",
     "\\b(name|naming|label(l)?ing) (my |the |our )?(feelings?|emotions?)\\b"
@@ -1549,6 +1646,7 @@
    "id": "read-your-state",
    "title": "Reading your state first",
    "patterns": [
+    "\\bread(ing)? (my|your) state\\b",
     "\\b(stressed|stress|battery|running on empty|frazzled|on edge|hangry|today s weather)\\b"
    ],
    "links": [
@@ -1627,91 +1725,6 @@
    "together": "When something keeps going wrong, look at the setup before you look at the person. Clear cues and clear owners do more than criticism ever can.",
    "question": "What keeps going wrong that you’ve been blaming on character instead of setup?",
    "try": "Pick one slipping job and add a cue: a time, a place, an alarm or a note."
-  },
-  {
-   "id": "fear-and-control",
-   "title": "Fear, control and safety",
-   "patterns": [
-    "\\b(controlling|threaten\\w*|walking on eggshells|not safe|unsafe)\\b",
-    "\\b(afraid|scared|frightened) of (him|her|them|my)\\b",
-    "\\b(controls|tracks|watches) (me|my)\\b",
-    "\\b(hits|hurts|hit|hurt) me\\b"
-   ],
-   "links": [
-    [
-     "Not safe at home?",
-     "/safety.html"
-    ],
-    [
-     "Emotional safety",
-     "/library/emotions.html#emotional-safety"
-    ],
-    [
-     "What’s stored on this device",
-     "/on-this-device.html"
-    ]
-   ],
-   "philosophy": "Kant held that every person must be treated as an end, never merely as a tool for someone else’s will. De Beauvoir argued that real love needs two free people. Neither tradition asks anyone to endure being controlled or frightened in the name of love or loyalty.",
-   "psychology": "Researchers such as Evan Stark describe ‘coercive control’: a pattern of controlling money, contact, movement or choices that can do serious harm even without physical violence. Feeling afraid of a partner or family member is an important signal, not an overreaction.",
-   "autistic_lens": "Many autistic people have been taught to doubt their own reading of situations, and to mask and go along. Through an autistic lens, it’s worth saying plainly: if you feel afraid, that feeling is real information. Clear rules are care; rules enforced by fear are not.",
-   "together": "Love doesn’t require fear, and being strong doesn’t mean staying put. Please start with the “Not safe at home?” page (/safety.html) now; it has calm, practical steps and a quick way to leave the page.",
-   "question": "Do you feel free to say no, change your mind, or leave, without being afraid?",
-   "try": "Open the “Not safe at home?” page on a device you trust, and read just the first part."
-  },
-  {
-   "id": "autistic-lens",
-   "title": "Why look through an autistic lens?",
-   "patterns": [
-    "\\b(autistic (lens|view|perspective|way of seeing)|why (an )?autistic|three lenses)\\b"
-   ],
-   "links": [
-    [
-     "Wired Differently",
-     "/wired-differently.html"
-    ],
-    [
-     "The double empathy problem",
-     "/library/wiring.html#double-empathy"
-    ],
-    [
-     "Know your own wiring",
-     "/know-yourself.html"
-    ]
-   ],
-   "philosophy": "Philosophers have long used an outsider’s eye to see what insiders miss: Socrates asking questions everyone thought were obvious, or Wittgenstein asking what our words are really doing. An autistic lens often works like that. It asks: what is the actual rule here, and has anyone said it?",
-   "psychology": "The double empathy problem (Milton) and research on autistic communication suggest autistic ways of talking are different, not broken. Many autistic people value clear, literal messages, honesty, predictability and deep focus, and these line up closely with what research says helps any relationship: clear requests, repair, rituals and attention.",
-   "autistic_lens": "Puddles doesn’t speak for all autistic people; nobody can, and autistic people differ from each other as much as anyone. This is one perspective, drawn from what many autistic people say about themselves. It treats autistic traits as a way of seeing, not a problem, and it notices how often ‘say the rule out loud’ makes life fairer for everyone.",
-   "together": "Looking through an autistic lens is like turning on the lights in a room full of unspoken rules. Once you can see them, you can choose together which ones to keep.",
-   "question": "Which unspoken rule in your life would you most like to see in plain light?",
-   "try": "Pick one hint, one ‘you should know’, or one unwritten rule, and say it out loud this week."
-  },
-  {
-   "id": "quiet-togetherness",
-   "title": "Being together without talking",
-   "patterns": [
-    "\\b(parallel play|comfortable silence|quiet together|body doubl\\w*|side by side)\\b",
-    "\\b(don t|do not) (need|have) to talk\\b"
-   ],
-   "links": [
-    [
-     "Turning toward",
-     "/turning-toward.html"
-    ],
-    [
-     "Co-regulation",
-     "/library/stress.html#co-regulation"
-    ],
-    [
-     "The Night Garden",
-     "/night-garden.html"
-    ]
-   ],
-   "philosophy": "Martin Buber described two strangers sitting silently side by side on a bench, and suggested that real meeting can happen without a word. Quaker meetings and Zen sitting both treat shared silence as deep company. Being with someone doesn’t always mean talking to them.",
-   "psychology": "Mildred Parten described ‘parallel play’ in young children in the 1930s: playing near each other, side by side. Adults do it too. ‘Body doubling’, working alongside someone, is a well-known strategy among ADHD and autistic people for getting tasks done, and research on co-regulation shows that calm people near each other can help each other settle.",
-   "autistic_lens": "Many autistic people say the best company is someone you don’t have to talk to: reading on the same sofa, gaming side by side, each lost in their own thing but together. Through an autistic lens, that isn’t distance. It’s closeness without demands, and many non-autistic people find they love it too.",
-   "together": "Being near each other can be a full kind of connection, words optional. Make room for quiet togetherness as well as talk.",
-   "question": "Who do you feel comfortable being quiet with?",
-   "try": "Suggest an hour of side-by-side time: same room, separate activities, no need to talk."
   },
   {
    "id": "chosen-and-blended-families",

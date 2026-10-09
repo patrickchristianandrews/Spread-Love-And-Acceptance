@@ -12,7 +12,8 @@
      fromDeep(topic[, opts])       a deep.json entry {id,title,philosophy,psychology,autistic_lens,together,question,try,links}
      fromSplit(textOrData[, opts]) "me 60 them 40" / [{name, value}] → a "split" spec (a picture, never a verdict)
      fromAnswer(blocks[, opts])    the chat's answer blocks ({k:'p'|'list'|'script'|...}) → spec ("summarise this")
-     fromKB(topic, KB[, opts])     find the best preset / deep entry / card / playbook for a topic → spec or null
+     fromKB(topic, KB[, opts])     find the best preset / deep topic / card / playbook for a topic → spec or null
+                                   (KB = window.TOL_CHAT_KB; KB.deep may be an array or deep.json's {topics:[...]})
      parseRequest(text)            → null or { topic, last, layout } for "make an infographic about X" and friends
      presets                       { 'fair-equal', 'pursue-withdraw', 'pause', 'mental-load' } → spec
      toPNG(svg[, {scale:2, theme:'light'}]) → Promise<Blob>
@@ -708,8 +709,11 @@
 
   // a card that touches fear or control keeps the way to help on the poster itself
   var SAFETY = /not safe at home|\/safety\.html|scared of (them|him|her)|afraid of (them|him|her)|control(ling)? (you|me)/i;
+  // topics about fear, control or safety: no Save / Share / Print, so nothing is left on the device by accident
+  var SENSITIVE_ID = /control|safe|abuse|harass|usedagainst|wifiprivacy|phonetrust|fear/i;
   function fromCard(card, kind, opts) {
     var s = fromCard0(card, kind, opts);
+    if (s && card && SENSITIVE_ID.test(String(card.id || ''))) s.sensitive = true;
     if (s && !s.note) { try { if (SAFETY.test(JSON.stringify(card))) s.note = 'If you ever feel afraid or controlled, there’s help at ' + SITE + '/safety'; } catch (e) {} }
     return s;
   }
@@ -790,6 +794,7 @@
               t['try'] ? { label: 'Try this', text: clip(tidy(arr(t['try']).join(' ')), 170), icon: 'star' } : null].filter(Boolean),
       source: firstLink(t.links), from: t.id || ''
     };
+    if (SENSITIVE_ID.test(String(t.id || ''))) spec.sensitive = true;
     return spec;
   }
 
@@ -925,8 +930,11 @@
     KB = KB || window.TOL_CHAT_KB || {};
     var best = null;
     function consider(score, make) { if (score > 0 && (!best || score > best.score)) best = { score: score, make: make }; }
-    arr(KB.deep).forEach(function (d) {
+    var deep = Array.isArray(KB.deep) ? KB.deep : (KB.deep && KB.deep.topics) || [];
+    deep.forEach(function (d) {
+      if (!d || !(d.philosophy || d.psychology)) return;
       var sc = overlap(q, (d.title || '') + ' ' + (d.id || '').replace(/[-_]/g, ' ')) * 2 + (q.indexOf(String(d.title || '').toLowerCase()) >= 0 ? 4 : 0);
+      arr(d.patterns).forEach(function (pt) { try { if (new RegExp(pt, 'i').test(q)) sc = Math.max(sc, 5); } catch (e) {} });
       consider(sc + 0.5, function () { return fromDeep(d, opts); });
     });
     arr(KB.cards).forEach(function (c) {
@@ -1104,7 +1112,9 @@
     var acts = document.createElement('div'); acts.className = 'tol-ig-actions';
     var bSave = btn('Save image', 'is-save'), bShare = btn('Share', 'is-share'), bPrint = btn('Print', 'is-print'), bBig = btn('Make it bigger', 'is-big');
     var status = document.createElement('p'); status.className = 'tol-ig-status'; status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
-    [bSave, bShare, bPrint, bBig].forEach(function (b) { acts.appendChild(b); });
+    var quiet = !!(opts.sensitive || (spec && spec.sensitive));
+    (quiet ? [bBig] : [bSave, bShare, bPrint, bBig]).forEach(function (b) { acts.appendChild(b); });
+    if (quiet) { status.textContent = 'To keep this private, this picture has no save or share button. Nothing about it is kept on this device.'; status.classList.add('is-note'); }
     fig.appendChild(acts); fig.appendChild(status);
     var det = document.createElement('details'); det.className = 'tol-ig-text';
     var sum = document.createElement('summary'); sum.textContent = 'Read it as text'; det.appendChild(sum);
@@ -1116,7 +1126,7 @@
     }
     fillText(svg); fig.appendChild(det);
     function cur() { return art.querySelector('svg'); }
-    function say(t) { status.textContent = t; clearTimeout(status._t); status._t = setTimeout(function () { status.textContent = ''; }, 6000); }
+    function say(t) { if (quiet) return; status.textContent = t; clearTimeout(status._t); status._t = setTimeout(function () { status.textContent = ''; }, 6000); }
     bSave.addEventListener('click', function () {
       download(cur()).then(function () { say('Saved as a picture on this device.'); }, function () { say('Sorry, this browser couldn’t make the picture. Try Print instead.'); });
     });
@@ -1140,7 +1150,8 @@
     dlg.setAttribute('role', 'dialog'); dlg.setAttribute('aria-modal', 'true'); dlg.setAttribute('aria-label', (svg.tolSpec && svg.tolSpec.title) || 'Infographic');
     var bar = document.createElement('div'); bar.className = 'tol-ig-big-bar';
     var close = btn('Close', 'is-close'), save = btn('Save image', 'is-save'), zoom = btn('Zoom in', 'is-zoom');
-    bar.appendChild(zoom); bar.appendChild(save); bar.appendChild(close);
+    var noSave = !!(svg.tolSpec && svg.tolSpec.sensitive);
+    bar.appendChild(zoom); if (!noSave) bar.appendChild(save); bar.appendChild(close);
     var stage = document.createElement('div'); stage.className = 'tol-ig-big-stage';
     // on a phone the poster already fills the width, so start zoomed in (scroll to move around)
     function setZoom(on) { stage.classList.toggle('is-zoom', on); zoom.textContent = on ? 'Fit to screen' : 'Zoom in'; zoom.setAttribute('aria-pressed', String(on)); }
@@ -1159,7 +1170,7 @@
     function onKey(e) {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); shut(); }
       else if (e.key === 'Tab') { // keep focus inside
-        var f = [zoom, save, close];
+        var f = noSave ? [zoom, close] : [zoom, save, close];
         var i = f.indexOf(document.activeElement);
         if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
       }
