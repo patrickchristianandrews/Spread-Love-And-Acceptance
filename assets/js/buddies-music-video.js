@@ -1293,7 +1293,7 @@
   }
   function mount(host, opts) {
     opts = opts || {}; var CH = opts.plan ? SECTIONS.map(function (S) { return [S.a, S.name]; }) : CHAPTERS;
-    var mem = memGet(), P = { playing: false, pos: 0, sound: mem.sound !== false, calm: mem.calm != null ? !!mem.calm : stillChosen(), calmPicked: mem.calm != null, ended: false, raf: 0, errors: 0, frames: [], startedOnce: false, n: 0, q: 1 };
+    var mem = memGet(), P = { playing: false, pos: 0, sound: true, calm: mem.calm != null ? !!mem.calm : stillChosen(), calmPicked: mem.calm != null, ended: false, raf: 0, errors: 0, frames: [], startedOnce: false, n: 0, q: 1 };
     host.classList.add('fb-player', 'fbmv');
     host.innerHTML =
       '<div class="fbmv-stage"><canvas class="fbmv-cv" role="img" aria-label="The Frequency Buddies music video: Tidbit, Sugarfoot and all their friends sing and dance the theme song on a moving stage"></canvas>' +
@@ -1306,7 +1306,6 @@
         '<button type="button" class="fbmv-b is-main fbmv-play" aria-label="Play">▶ Play</button>' +
         '<button type="button" class="fbmv-b fbmv-replay" aria-label="Play again from the start" title="From the start (R)">↺<span class="fbmv-lbl"> From the start</span></button>' +
         '<span class="fbmv-sp"></span>' +
-        '<button type="button" class="fbmv-b fbmv-snd" aria-pressed="true">🎵<span class="fbmv-lbl"> Sound</span> <span class="fbmv-st">on</span></button>' +
         '<button type="button" class="fbmv-b fbmv-calm" aria-pressed="false">🌙<span class="fbmv-lbl"> Calm version</span> <span class="fbmv-st">off</span></button>' +
         '<button type="button" class="fbmv-b fbmv-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fbmv-lbl"> Full screen</span></button>' +
         (opts.noShare ? '' : '<button type="button" class="fbmv-b fbmv-share" aria-label="Share this music video">🔗<span class="fbmv-lbl"> Share</span></button>') +
@@ -1316,7 +1315,7 @@
       '<p class="fbmv-sr" aria-live="polite"></p>';
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fbmv-cv'), g = cv.getContext('2d'), stageEl = $('.fbmv-stage'), capEl = $('.fbmv-cap'), whoEl = $('.fbmv-who'), lineEl = $('.fbmv-line'), fill = $('.fbmv-fill'), track = $('.fbmv-track'), timeEl = $('.fbmv-time');
-    var playBtn = $('.fbmv-play'), sndBtn = $('.fbmv-snd'), calmBtn = $('.fbmv-calm'), startOv = $('.fbmv-start'), endOv = $('.fbmv-end'), nowEl = $('.fbmv-now'), live = $('.fbmv-sr'), chapsEl = $('.fbmv-chaps');
+    var playBtn = $('.fbmv-play'), calmBtn = $('.fbmv-calm'), startOv = $('.fbmv-start'), endOv = $('.fbmv-end'), nowEl = $('.fbmv-now'), live = $('.fbmv-sr'), chapsEl = $('.fbmv-chaps');
     if (chapsEl) CH.forEach(function (c, i) { var b = document.createElement('button'); b.type = 'button'; b.textContent = c[1]; b.setAttribute('data-t', c[0]); b.addEventListener('click', function () { seek(c[0]); if (!P.playing) play(); }); chapsEl.appendChild(b); });
     var chapBtns = chapsEl ? chapsEl.querySelectorAll('button') : [];
     var W = 0, H = 0;
@@ -1434,7 +1433,6 @@
     function sync() {
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
       var tp = $('.fbmv-tplay'); tp.textContent = P.playing ? '❚❚' : '▶'; tp.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
-      sndBtn.setAttribute('aria-pressed', String(P.sound)); sndBtn.querySelector('.fbmv-st').textContent = P.sound ? 'on' : 'off'; sndBtn.setAttribute('aria-label', P.sound ? 'Sound is on. Turn the sound off' : 'Sound is off. Turn the sound on');
       calmBtn.setAttribute('aria-pressed', String(P.calm)); calmBtn.querySelector('.fbmv-st').textContent = P.calm ? 'on' : 'off'; calmBtn.setAttribute('aria-label', P.calm ? 'The calm version is on: softer, slower lights and smaller moves. Turn it off' : 'The calm version is off. Turn it on for softer, slower lights and smaller moves');
       host.classList.toggle('is-playing', !!P.playing); // site.js keeps the screen awake and pop-ups away while this is on
       document.documentElement.classList.toggle('fb-watching', !!P.playing);
@@ -1445,7 +1443,6 @@
     Array.prototype.forEach.call(host.querySelectorAll('.fbmv-go'), function (b) { b.addEventListener('click', function () { play(); wake(); }); });
     Array.prototype.forEach.call(host.querySelectorAll('.fbmv-again'), function (b) { b.addEventListener('click', function () { seek(0); play(); }); });
     $('.fbmv-replay').addEventListener('click', function () { seek(0); if (!P.playing) play(); });
-    sndBtn.addEventListener('click', function () { P.sound = !P.sound; var m = memGet(); m.sound = P.sound; memSet(m); if (P.sound) ensureCtx(); if (AU.gain && AU.ctx) AU.gain.gain.setTargetAtTime(P.sound ? 1 : 0, AU.ctx.currentTime, 0.05); sync(); });
     calmBtn.addEventListener('click', function () { P.calm = !P.calm; P.calmPicked = true; var m = memGet(); m.calm = P.calm; memSet(m); sync(); paint(); });
     document.addEventListener('tol-still', function () { if (!P.calmPicked) { P.calm = stillChosen(); sync(); paint(); } });
     $('.fbmv-full').addEventListener('click', function () {
