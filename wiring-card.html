@@ -73,7 +73,7 @@ details.aboutcard > summary::-webkit-details-marker{display:none}
 details.aboutcard > summary::before{content:"\25B8";margin-right:.45rem;display:inline-block;transition:transform .15s}
 details.aboutcard[open] > summary::before{transform:rotate(90deg)}
 details.aboutcard .tol-pillars{margin:10px 0 0}
-.forwho .chips button{background:#FFF8E6}
+.forwho .chips button:not([aria-pressed="true"]){background:#FFF8E6}
 .managernote{margin:8px 0 0}
 .codeopt{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;color:var(--muted);margin:8px 0 0;max-width:62ch}
 .codeopt input{margin-top:4px;min-width:18px;min-height:18px}
