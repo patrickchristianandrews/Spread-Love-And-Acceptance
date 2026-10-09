@@ -910,6 +910,7 @@
       '<p>' + countLine(mine, theirs) + '</p>' +
       AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
       '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your Wiring Cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
+      '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second daily check-in together</a>, or pick one small habit from <a href="/turning-toward.html">Turning Toward</a>.</p>' +
       '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-ccopy">Copy this comparison</button><button type="button" class="wl-btn ghost" id="wl-cdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-cprint">Print</button></div>' +
       '<p class="wl-toast" id="wl-ctoast" role="status"></p></div>';
   }
@@ -917,7 +918,8 @@
     const n = who2(myName, theirName);
     return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
       .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i)))
-      .concat(['', 'Next: make your Wiring Cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT]).join('\n');
+      .concat(['', 'Next: make your Wiring Cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
+        'One small thing to try together: the 90-second daily check-in (spreadloveandacceptance.com/workpapers/fill/wp-13.html), or one small habit from Turning Toward (spreadloveandacceptance.com/turning-toward.html).']).join('\n');
   }
   function wireCompare(mine, theirs, myName, theirName) {
     const text = () => compareText(mine, theirs, myName, theirName) + '\n\nMade with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html';
@@ -1059,7 +1061,8 @@
             (S.name.trim() ? '' : '<div class="wl-rname"><label class="wl-field" for="wl-rname">Your first name (optional)</label>' +
               '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
-            (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div>' : '') +
+            (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
+            '<p class="wl-small wl-tocard">Make a one-page Wiring Card from your answers: <a href="/wiring-card.html?for=work">for work</a> or <a href="/wiring-card.html">for someone close</a>.</p>' +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
             (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. Keep them on this device, and a Wave Code link someone sends you will open with your result ready. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
@@ -1164,7 +1167,17 @@
     // the link sits inside the message itself, so "Copy message", a text, an email or the phone's own share
     // menu all carry it (some share menus copy only the text and drop a separate link)
     const codeMessage = () => 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine: ' + absLink(compareLink(code, S.name.trim()));
-    on('#wl-sharecode', () => share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true }));
+    // no name yet? ask once (it's optional), so the comparison on their side says who it's from
+    let askedName = false;
+    const shareCode = () => share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true });
+    on('#wl-sharecode', () => {
+      const nn = $('#wl-namenudge'), rn2 = $('#wl-rname');
+      if (S.name.trim() || askedName || !rn2 || !nn) { if (nn) nn.innerHTML = ''; shareCode(); return; }
+      askedName = true;
+      nn.innerHTML = '<p class="wl-small wl-mine">Add your first name above, so they know whose Wave Code it is? Then tap Share again. <button type="button" class="wl-linkbtn" id="wl-sharenoname">Share without a name</button></p>';
+      rn2.focus();
+      const sk = $('#wl-sharenoname'); if (sk) sk.onclick = () => { nn.innerHTML = ''; shareCode(); };
+    });
     if (window.TOLShareClip && window.TOLShareClip.mount) $$('#wl-share, #wl-sshare, #wl-sharecode').forEach(b => { try { window.TOLShareClip.mount(b); } catch (e) {} });
     on('#wl-scopy', () => copyText(stmtPlain(), '#wl-stoast', 'Copied. Paste it into a message, a note or a card.'));
     on('#wl-sdl', () => { download(stmtPlain(), (S.name.trim() ? S.name.trim().replace(/[^\w -]/g, '') + ' - ' : '') + 'My Wavelength statement.txt'); const t = $('#wl-stoast'); if (t) t.textContent = 'Saved to your device.'; });

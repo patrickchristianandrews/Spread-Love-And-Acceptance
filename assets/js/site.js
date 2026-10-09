@@ -1116,11 +1116,17 @@
   }
   function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
   function reEsc(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
-  var STOP = { the: 1, and: 1, for: 1, with: 1, how: 1, what: 1, can: 1, you: 1, your: 1, are: 1, was: 1, when: 1, why: 1, who: 1, does: 1, just: 1, had: 1, have: 1, into: 1, from: 1, this: 1, that: 1, about: 1, get: 1, its: 1, too: 1, very: 1, some: 1, any: 1, all: 1, our: 1, out: 1, but: 1, not: 1, him: 1, her: 1, she: 1, they: 1, them: 1, his: 1, one: 1, did: 1, i: 1, me: 1, my: 1, to: 1, of: 1, in: 1, on: 1, at: 1, is: 1, it: 1, an: 1, a: 1, do: 1, be: 1, or: 1, so: 1, we: 1, us: 1, am: 1, im: 1 };
+  var STOP = { the: 1, and: 1, for: 1, with: 1, how: 1, what: 1, can: 1, you: 1, your: 1, are: 1, was: 1, when: 1, why: 1, who: 1, does: 1, just: 1, had: 1, have: 1, into: 1, from: 1, this: 1, that: 1, about: 1, get: 1, its: 1, too: 1, very: 1, some: 1, any: 1, all: 1, our: 1, out: 1, but: 1, not: 1, him: 1, her: 1, she: 1, they: 1, them: 1, his: 1, one: 1, did: 1, i: 1, me: 1, my: 1, to: 1, of: 1, in: 1, on: 1, at: 1, is: 1, it: 1, an: 1, a: 1, do: 1, be: 1, or: 1, so: 1, we: 1, us: 1, am: 1, im: 1,
+    he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, id: 1, ill: 0, if: 1, as: 1, by: 1, than: 1, then: 1, were: 1, been: 1, really: 1, always: 0, help: 0 };
+  var JOIN_RE = null;
   function searchTerms(q) {
-    var f = fold(q).replace(/\s+·\s+spread love.*$/, '');
-    Object.keys(JOIN).forEach(function (k) { f = f.replace(new RegExp('\\b' + k.replace(/ /g, '\\s+') + '\\b', 'g'), JOIN[k]); });
-    var all = f.split(/[^a-z0-9'-]+/).filter(function (t) { return t.length > 1 || /\d/.test(t); });
+    var f = fold(q).replace(/\s+·\s+spread love.*$/, '').replace(/[¿?¡!.,;:()"“”]+/g, ' ').trim();
+    // one word on its own that means something else in a longer sentence ("will" as in a will, "my partners")
+    if (/^(a |the )?will$/.test(f)) f = 'inheritance';
+    if (/^(my |our )?partners$/.test(f)) f = 'polyamory';
+    if (!JOIN_RE) JOIN_RE = Object.keys(JOIN).map(function (k) { return [new RegExp('\\b' + reEsc(k).replace(/ /g, '\\s+') + '\\b', 'g'), JOIN[k]]; });
+    JOIN_RE.forEach(function (r) { f = f.replace(r[0], r[1]); });
+    var all = f.split(/[^a-z0-9'+-]+/).map(function (t) { return t.replace(/^['+-]+|['-]+$/g, '').replace(/'s$/, ''); }).filter(function (t) { return t.length > 1 || /\d/.test(t); });
     var kept = all.filter(function (t) { return !STOP[t.replace(/'/g, '')]; });
     return kept.length ? kept : all;
   }

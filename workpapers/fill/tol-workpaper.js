@@ -726,7 +726,7 @@
     // "Someone shared a list with you": the choice comes first, before anything else on the sheet
     // (and, once it is combined, "Send my changes back" in the same place)
     var inEl = this.shareInEl() || (this.sendBack === 'top' ? this.sendBackEl() : null);
-    var cfEl = this.shareInEl === A.shareInEl && !this.sharedIn ? this.conflictsEl() : null;
+    var cfEl = !this.sharedIn ? this.conflictsEl() : null;
     if (cfEl) this.root.insertBefore(cfEl, this.root.firstChild);
     if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
     var lead = s.sections[0] && s.sections[0].type === 'note' ? s.sections[0] : null, howEl = null;
@@ -2218,11 +2218,18 @@
     // this tab's own copy is the newest, kept or not (and it knows whether it was already saved or sent)
     if (tabbed && JSON.stringify(sanitize(schema, tabbed.state)) !== JSON.stringify(blankState(schema))) { app.state = sanitize(schema, tabbed.state); app.dirty = true; if (tabbed.safe) app.safeSig = JSON.stringify(app.state); }
     if (keepBox) keepBox.checked = app.keep;
+    // a list or week two people keep together is kept on this device as soon as something is typed,
+    // unless the person turned keeping off or erased it here before
+    if (schema.share && schema.people && !app.keep) {
+      var off = false; try { off = !!global.localStorage.getItem(OFF_PREFIX + app.keepKey()); } catch (e) { off = true; }
+      app.autoKeep = !off;
+      if (app.autoKeep && app.hasAnything()) app.startKeep();
+    }
     // say plainly what happens by default, with a way to clear it now
     var keepP = keepBox && keepBox.closest('p');
     if (keepP && !document.getElementById('wpf-tabnote')) {
       var tn = h('p', { className: 'wpf-tabnote', id: 'wpf-tabnote' });
-      tn.appendChild(h('span', { text: 'Kept in this tab until you close it, so a reload or Back won’t lose your answers. ' }));
+      tn.appendChild(h('span', { text: app.autoKeep || app.keep ? 'Saved on ' + deviceWord() + ' as you type (the box below), so closing the tab won’t lose it. On a shared device, untick it or press Erase when you’re done. ' : 'Kept in this tab until you close it, so a reload or Back won’t lose your answers. ' }));
       var cb = h('button', { type: 'button', className: 'wpf-erase', id: 'wpf-tabclear', text: 'Clear' });
       tn.appendChild(cb);
       keepP.parentNode.insertBefore(tn, keepP);
@@ -2241,7 +2248,7 @@
     var ask = keepAsk({
       key: app.keepKey(),
       bar: document.querySelector('.wpf-bar-inner'),
-      want: function () { return !app.keep && app.hasAnything(); },
+      want: function () { return !app.keep && !app.autoKeep && app.hasAnything(); },
       auto: true,
       onKeep: function (auto) {
         if (keepBox) keepBox.checked = true;
@@ -2251,6 +2258,31 @@
     });
     app.afterChange = ask.check;
     ask.check();
+    // "✓ Saved on this phone", in the save bar, while it is kept
+    var barIn = document.querySelector('.wpf-bar-inner'), stEl = document.getElementById('wpf-status');
+    if (barIn && stEl && !document.getElementById('wpf-saved')) stEl.parentNode.insertBefore(h('span', { className: 'wpf-saved', id: 'wpf-saved' }), stEl.nextSibling);
+    app.savedNote();
+    // the bar's own buttons (the "Send a new link" nudge)
+    if (barIn) barIn.addEventListener('click', function (e) { if (e.target.closest('[data-action]')) app.onClick(e); });
+    // On a phone the save bar steps aside while someone types, so it never covers the box they are in;
+    // anywhere else a box that lands under the bar is scrolled up above it.
+    var typingT = null;
+    function isTyping(el) { return el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && !/^(checkbox|radio|button|submit|file)$/i.test(el.type))); }
+    root.addEventListener('focusin', function (e) {
+      var t = e.target; clearTimeout(typingT);
+      var phone = global.matchMedia && global.matchMedia('(max-width: 640px)').matches;
+      if (phone && isTyping(t)) document.body.classList.add('wpf-typing');
+      setTimeout(function () {
+        var bar = document.querySelector('.wpf-bar'); if (!bar || !t.getBoundingClientRect) return;
+        var top = document.body.classList.contains('wpf-typing') ? (global.visualViewport ? global.visualViewport.height : global.innerHeight) : bar.getBoundingClientRect().top;
+        var r = t.getBoundingClientRect();
+        if (r.bottom > top - 8) global.scrollBy(0, r.bottom - top + 24);
+      }, 60);
+    });
+    root.addEventListener('focusout', function () {
+      clearTimeout(typingT);
+      typingT = setTimeout(function () { if (!isTyping(document.activeElement)) document.body.classList.remove('wpf-typing'); }, 150);
+    });
     // a list or week sent from here through the share sheet (or the phone's own share menu)
     document.addEventListener('tol:shared', function (e) {
       var u = e.detail && e.detail.url;
