@@ -286,6 +286,8 @@ def main():
              'research says and its limits</em>, <em>how it connects to the program</em>, and <em>to talk about</em>. '
              'Read one a day, or pick a theme that fits what is going on for you. Professor Puddles, the site’s chat '
              'helper on the <a href="/ask.html">Ask page</a>, can look things up in here too.</p>')
+    o.append('<p><strong><a href="/research.html">Read the research behind this site</a></strong>: every study, book and '
+             'review the site draws on, with what it found, how strong the evidence is, and a link to read more.</p>')
     o.append('<h2>The themes</h2>\n<ul class="lib-themes">')
     for meta, en in themes:
         o.append('<li><a href="/library/%s.html">%s</a><p>%s (%d entries; %s)</p></li>' % (

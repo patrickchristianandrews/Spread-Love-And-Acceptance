@@ -46,7 +46,6 @@
 .tsk-qrd-big .tsk-qrd-card{ padding:.5rem .75rem; }
 .tsk-qrd-big .tsk-qrd-note, .tsk-qrd-big .tsk-qrd-private{ display:none; }
 .tsk-qrd-big .tsk-qrd-head h2{ font-size:1.05rem; }
-html.tsk-qrd-on{ overflow:hidden; }
 .tsk-offscreen{ position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
 @media print{ .tsk-qrd{ display:none !important; } }
 

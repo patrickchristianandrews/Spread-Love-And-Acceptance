@@ -1254,6 +1254,13 @@
       document.head.appendChild(rl);
     }
 
+    // research named in the reading ("Ross and Sicoly (1979)") links to its entry on /research.html (research-links.js; both files are local)
+    var rlMain = document.querySelector('main');
+    if (rlMain && current !== '/research.html' && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]') &&
+        (/^\/(book|library)\//.test(current) || (rlMain.classList.contains('read') && /\b(18|19|20)\d\d\b/.test(rlMain.textContent || '')))) {
+      loadScript('/assets/js/research-index.js').then(function () { return loadScript('/assets/js/research-links.js'); }).catch(function () {});
+    }
+
     popBubbles();
 
     // "Breathe": a one-minute calm break on every page (the Night Garden has its own)

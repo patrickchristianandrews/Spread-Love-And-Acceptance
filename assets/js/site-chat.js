@@ -1982,7 +1982,12 @@
         if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
         spec = IG.fromKB(tp, KB, { layout: rq.layout });
         // nothing to draw from the cards: a deep topic on it ("the double empathy problem") can still make a picture
-        if (!spec && KB.deep) { var dh = deepFind(stNorm(tp), norm(tp)); if (dh && dh.t && (dh.t.philosophy || dh.t.psychology)) spec = IG.fromDeep(dh.t); }
+        if (!spec && KB.deep) {
+          var tpn = stNorm(tp).replace(/^(the|a|an) /, ''), dh = deepFind(stNorm(tp), norm(tp)) || deepLoose(stNorm(tp));
+          // or a deep topic that explains it in its own words ("double empathy" lives in the autistic-lens topic)
+          if (!dh && tpn.split(' ').length >= 2) { var core = tpn.replace(/ (problem|idea|theory|effect)$/, ''); dTopics().concat(dBig()).some(function (T) { var tx = stNorm([T.title, T.philosophy, T.psychology, T.autistic_lens].join(' ')); if (tx.indexOf(core) !== -1) { dh = { t: T }; return true; } return false; }); }
+          if (dh && dh.t && (dh.t.philosophy || dh.t.psychology)) spec = IG.fromDeep(dh.t);
+        }
         if (!spec) return { blocks: [{ k: 'p', x: 'I don’t have enough on “' + tp + '” to draw it well. I can make one about the mental load, fair vs equal, a good pause, or any tool or worry here. What would you like?' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
       }
@@ -2052,7 +2057,7 @@
   // the deep entry for a message: the big questions first (they are more specific), then the topics; first match wins
   function deepFind(fs, f) {
     var D = KB && KB.deep; if (!D || !fs) return null;
-    var byName = dById(fs); if (byName) return { t: byName };
+    var byName = dById(fs); if (byName) return { t: byName, big: dBig().indexOf(byName) !== -1 };
     var lists = [dBig(), dTopics()];
     for (var l = 0; l < lists.length; l++) for (var i = 0; i < lists[l].length; i++) {
       var T = lists[l][i]; if (!T || typeof T !== 'object') continue;
@@ -2060,6 +2065,15 @@
         var tid = dget(T, ['topic', 'topic_id']); var R = tid ? dById(tid) : null;
         return { t: R || T, bq: R ? T : null, big: l === 0 };
       }
+    }
+    return null;
+  }
+  // "talk deep about what love is": an entry whose title words all appear in the message (big questions first)
+  function deepLoose(fs) {
+    var w = ' ' + fs + ' ', lists = [dBig(), dTopics()];
+    for (var l = 0; l < lists.length; l++) for (var i = 0; i < lists[l].length; i++) {
+      var T = lists[l][i], tw = stNorm(dTitle(T)).split(' ').filter(function (x) { return x.length > 2 && !STOP[x]; });
+      if (tw.length && tw.every(function (x) { return w.indexOf(' ' + x + ' ') !== -1 || w.indexOf(' ' + x.replace(/s$/, '') + ' ') !== -1; })) return { t: T, big: l === 0 };
     }
     return null;
   }
@@ -2148,7 +2162,7 @@
     var fs = stNorm(q), on = deepOn(state);
     var about = DEEP_ABOUT.exec(fs) || (/^\s*deep\s*:/i.test(String(q)) && /^deep (.+)$/.exec(fs));
     if (about && !DEEP_IN.test(fs)) {
-      var ab = about[1] || about[2] || '', h = deepFind(stNorm(ab), norm(ab));
+      var ab = about[1] || about[2] || '', h = deepFind(stNorm(ab), norm(ab)) || deepLoose(stNorm(ab));
       setDeep(state, true);
       return h ? deepReply(state, h) : deepIntro(state);
     }
@@ -2208,7 +2222,7 @@
     r.chips = (r.chips || []).slice(0, 4);
     r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + (h.t.id || dTitle(h.t)) });
     // a big question answered from loose search hits: say plainly that deep talk is the better place for it
-    if (h.big && !/^(card|card-more|sit|sit-more|term)$/.test(k)) r.blocks.push({ k: 'p', x: 'That’s a big question. If you’d like, we can talk deep about it: what philosophers say, what research has found, and how it looks through an autistic lens. Tap “Go deeper on this”.' });
+    if (h.big && !/^(card|card-more|sit|sit-more|term)$/.test(k)) r.blocks.splice(r.blocks.length && r.blocks[r.blocks.length - 1].fun ? r.blocks.length - 1 : r.blocks.length, 0, { k: 'p', x: 'That’s a big question. If you’d like, we can talk deep about it: what philosophers say, what research has found, and how it looks through an autistic lens. Tap “Go deeper on this”.' });
     return r;
   }
 

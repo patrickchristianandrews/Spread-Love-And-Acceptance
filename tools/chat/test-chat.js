@@ -1010,6 +1010,14 @@ if (PERS) {
     t('deep', 'my partner never does the dishes (no deep offer on a personal situation)', { q: 'my partner never does the dishes', nochip: /Go deeper on this/ });
     t('deep', 'My partner hits me (no deep offer)', { q: 'My partner hits me', kind: 'safety', nochip: /Go deeper|infographic/i });
     c('deep', ['my partner never does the dishes', 'go deeper'], { not: /## Philosophy/ });
+    t('deep', 'talk deep: what is love?', { kind: 'deep', id: 'what-is-love', text: ALL3 });
+    t('deep', 'Talk deep, is honesty always kind?', { kind: 'deep', id: 'is-honesty-kind' });
+    t('deep', 'Talk deep about what love is', { kind: 'deep', id: 'what-is-love' });
+    t('deep', 'deep: can people change?', { kind: 'deep', id: 'can-people-change' });
+    t('deep', 'deep breathing exercises (not deep mode)', { q: 'deep breathing exercises', not: /## Philosophy/ });
+    c('deep', ['talk deep', 'is it selfish to have boundaries?'], { kind: 'deep', id: 'are-boundaries-selfish' });
+    c('deep', ['talk deep', "my mum says i'm selfish for having boundaries"], { kind: 'care', not: /## Philosophy/ });
+    t('deep', 'Is honesty always kind? (outside deep mode: offered)', { q: 'Is honesty always kind?', text: /talk deep about it/, chip: /Go deeper on this/ });
     (DEEP.follow_ups || []).forEach(fu => c('deep', ['talk deep', 'what is love', fu], { not: /beyond my pond|couldn.t find|didn.t catch/i }));
   }
   // infographics (assets/js/puddles-infographic.js): asked for, or offered under an answer; never of a safety reply
@@ -1021,6 +1029,9 @@ if (PERS) {
     t('info', 'show me the mental load as a picture', { kind: 'info', info: true });
     c('info', ['How do we stop fighting about chores?', 'summarise this as an infographic'], { kind: 'info', info: true });
     c('info', ['talk deep', 'what is love', 'summarise this as an infographic'], { kind: 'info', info: true });
+    t('info', 'Show fair vs equal as a picture', { kind: 'info', info: true });
+    t('info', 'Draw fair vs equal as a picture', { kind: 'info', info: true });
+    t('info', 'make an infographic about the double empathy problem', { kind: 'info', info: true });
     t('info', 'make an infographic about bananas', { kind: 'clarify', chip: /mental load/i });
     t('info', 'infographic', { kind: 'clarify' });
     t('info', 'what is the infographic? (the site page)', { q: 'what is the infographic?', id: 'infographic' });
