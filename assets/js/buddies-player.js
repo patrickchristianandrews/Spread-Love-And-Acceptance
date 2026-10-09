@@ -1904,7 +1904,7 @@
     '.fb-player.is-idle .fb-tap{opacity:0}.fb-player.is-idle .fb-tap-b{pointer-events:none}.fb-player.is-idle .fb-stage{cursor:none}' +
     '.fb-stage:has(.fb-ov:not([hidden])) .fb-tap{display:none}' +
     '.fb-under{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}.fb-under .fb-b{text-decoration:none}.fb-player a.fb-b,.fb-player a.fb-b:visited{color:#FFF6E6}.fb-player a.fb-b.is-main,.fb-player a.fb-b.is-main:visited{color:#2B2140}.fb-player a.fb-b:hover{color:#FFFFFF}.fb-player a.fb-dl{display:inline-flex;align-items:center;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.45)}.fb-player a.fb-dl[hidden]{display:none}.fb-player:fullscreen .fb-under,.fb-player.is-full .fb-under,.fb-player.is-stream .fb-under{display:none}' +
-    '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
+    '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}}' +
     '.fb-ovc .fb-cn{margin:.1rem auto .75rem;padding:.55rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);border-left:3px solid #BFE3D6;text-align:left;font-size:.92rem;line-height:1.45;color:#F2EAFB}' +
     '.fb-ovc .fb-cn b{color:#CDEFE2}' +
     '@media (max-width:600px){.fb-ovc .fb-cn{font-size:.86rem;padding:.45rem .6rem;margin-bottom:.5rem}}' +
@@ -1934,7 +1934,7 @@
     // full screen: only the picture, filling the screen, with the caption as a subtitle on it and the tap controls
     '.fb-player.is-fs{position:fixed;inset:0;z-index:10050;border-radius:0;padding:0;gap:0;background:#000;box-shadow:none;overflow:hidden}' +
     '.fb-player.is-fs .fb-head,.fb-player.is-fs .fb-prog,.fb-player.is-fs .fb-ctrl,.fb-player.is-fs .fb-under,.fb-player.is-fs .fb-chaps,.fb-player.is-fs .fb-note{display:none!important}' +
-    '.fb-player.is-fs .fb-stage{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;border-radius:0}.fb-player.is-fs .fb-cv{border-radius:0}' +
+    '.fb-player.is-fs .fb-stage{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;border-radius:0!important}.fb-player.is-fs .fb-cv{border-radius:0!important}.fb-player.is-fs{filter:none!important}' +
     '.fb-player.is-fs .fb-cap{position:absolute;left:50%;bottom:max(2.6vh,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;width:auto;max-width:min(64vw,54rem);min-height:0;margin:0;padding:.35em .9em .45em;border-radius:14px;background:rgba(20,14,32,.74);font-size:clamp(15px,2.1vw,34px);line-height:1.3;pointer-events:none}' +
     '.fb-player.is-fs .fb-cap .fb-who{font-size:.5em;margin-bottom:.15em}.fb-player.is-fs .fb-cap.is-empty{display:none}' +
     '@media (max-width:760px){.fb-player.is-fs .fb-cap{max-width:calc(100vw - 1.5rem);bottom:calc(max(8px,env(safe-area-inset-bottom)) + 2.9rem)}}' +
@@ -2533,7 +2533,7 @@
     $('.fb-full').addEventListener('click', function () { if (P.fs) leaveFull(); else enterFull(); });
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { if (!host.classList.contains('is-full')) setFs(fsEl() === host); setTimeout(resize, 60); }); });
     window.addEventListener('popstate', function () { if (host.classList.contains('is-full')) leaveFull(true); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && host.classList.contains('is-full')) { e.preventDefault(); leaveFull(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && P.fs) { e.preventDefault(); leaveFull(); } });
     // the time-and-weather note (clock-weather.js) sits in the picture's corner while the show plays, and in full screen,
     // instead of floating over the buttons and chapters
     host.setAttribute('data-tol-clock', '.fb-stage');

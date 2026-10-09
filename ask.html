@@ -44,7 +44,7 @@
   .ap-sec > h2 .ap-ico svg{ width:1.2rem; height:1.2rem; }
 
   /* how he answers */
-  .ap-trust{ border:1px solid var(--line); border-left:4px solid var(--credit, #3E6B4C); border-radius:14px; padding:1rem 1.1rem .4rem; background:var(--paper); }
+  .ap-trust{ border:1px solid var(--line) !important; border-left:4px solid var(--credit, #3E6B4C) !important; border-radius:14px; padding:1rem 1.1rem .4rem; background:var(--paper); }
   .ap-trust p{ margin:0 0 .8rem; }
   .ap-trust ul{ margin:0 0 .8rem; }
   .ap-trust li{ margin:.25rem 0; }
@@ -153,7 +153,7 @@
 
 <section class="ap-sec" id="how-he-answers" aria-labelledby="how-he-answers-h">
 <h2 id="how-he-answers-h"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg></span>How Professor Puddles answers</h2>
-<div class="ap-trust">
+<div class="ap-trust tol-plain">
   <p><strong>He doesn’t make things up.</strong> Professor Puddles isn’t a generative AI that writes new text. He is a small scripted helper that runs right here in your browser.</p>
   <ul>
     <li>Every answer is drawn from this site’s own pages, cards and library, written and checked by people, with a link to read more. When an answer comes from his background notes rather than a page, he says so.</li>
@@ -167,7 +167,7 @@
 <section class="ap-sec" id="what-he-can-do" aria-labelledby="what-he-can-do-h">
 <h2 id="what-he-can-do-h">What he can do</h2>
 <p>Ten things to try. You don’t need the right words: type it the way you’d say it to a friend.</p>
-<ul class="ap-cards">
+<ul class="ap-cards tol-plain">
   <li class="ap-card"><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span><h3>Your situation, your words</h3><p>Couples, friends, family, co-parents, housemates, work. Describe what’s happening and get a few kind next steps.</p></li>
   <li class="ap-card"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v18M9 21h6"/><path d="M5 6h11l3 2.5L16 11H5z"/><path d="M19 13H9l-3 2.5L9 18h10z"/></svg></span><h3>Finds the right tool or page</h3><p>Every tool, workpaper, chapter and game: what it’s for, how to use it and what your results mean.</p></li>
   <li class="ap-card"><span class="ap-ico t-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7 7H4.5v5H8c0 2.5-1 4-3 5M17 7h-2.5v5H18c0 2.5-1 4-3 5"/></svg></span><h3>Words you could use</h3><p>Short sentences you could say out loud or send, for raising something hard, saying no or saying sorry.</p></li>
@@ -184,7 +184,7 @@
 <section class="ap-sec no-dive" id="try-asking" aria-labelledby="try-asking-h">
 <h2 id="try-asking-h">Try asking…</h2>
 <p>Tap any question and the Professor will answer it in the chat above. Or type your own.</p>
-<div class="ap-groups">
+<div class="ap-groups tol-plain">
   <details class="ap-group" open>
     <summary><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5h16v11H10l-5 4v-4H4z"/></svg></span>Everyday situations</summary>
     <ul class="ap-qs">
@@ -260,13 +260,13 @@
   <details class="ap-group">
     <summary><span class="ap-ico t-sand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5.5c2.5-1 5.5-1 8 .8 2.5-1.8 5.5-1.8 8-.8V19c-2.5-1-5.5-1-8 .8-2.5-1.8-5.5-1.8-8-.8z"/><path d="M12 6.3v13.5"/></svg></span>Learn something</summary>
     <ul class="ap-qs">
-      <li><button type="button" class="ap-q" data-q>What is the double empathy problem?</button></li>
-      <li><button type="button" class="ap-q" data-q>What is the mental load?</button></li>
-      <li><button type="button" class="ap-q" data-q>Why isn’t fair always 50/50?</button></li>
-      <li><button type="button" class="ap-q" data-q>What is a bid for connection?</button></li>
-      <li><button type="button" class="ap-q" data-q>What does flooded mean?</button></li>
-      <li><button type="button" class="ap-q" data-q>What does my battery score mean?</button></li>
-      <li><button type="button" class="ap-q" data-q>What is the Signal Translator for?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What is the double empathy problem?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What is the mental load?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>Why isn’t fair always 50/50?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What is a bid for connection?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What does flooded mean?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What does my battery score mean?</button></li>
+      <li><button type="button" class="ap-q" data-q data-light>What is the Signal Translator for?</button></li>
     </ul>
   </details>
 </div>
@@ -274,7 +274,7 @@
 
 <section class="ap-sec" id="good-to-know" aria-labelledby="good-to-know-h">
 <h2 id="good-to-know-h">Good to know</h2>
-<div class="ap-know">
+<div class="ap-know tol-plain">
   <div>
     <h3>Private by design</h3>
     <p>Everything happens in your browser. Nothing you type or choose is sent anywhere. This tab remembers the conversation until you close it, and then it’s gone. Pictures you save stay on your device too.</p>
@@ -338,14 +338,16 @@
         if (window.TOLChat) window.TOLChat.open({ topic: q });
         return;
       }
-      var deep = b.hasAttribute('data-deep');
+      var deep = b.hasAttribute('data-deep'), light = b.hasAttribute('data-light');
       // keyboard and screen reader users follow the question into the conversation
       if (chat.log) chat.log.focus({ preventScroll: true });
       b.setAttribute('aria-busy', 'true');
       queue = queue.then(function () {
         return new Promise(function (done) {
           idle(function () {
-            if (deep && !deepOn()) { send('Talk deep'); idle(function () { send(q); done(); }); }
+            // deep talk answers a big question with philosophy; "Learn something" wants the plain answer
+            var sw = deep && !deepOn() ? 'Talk deep' : (light && deepOn() ? 'Small talk' : '');
+            if (sw) { send(sw); idle(function () { send(q); done(); }); }
             else { send(q); done(); }
           });
         });
