@@ -3236,7 +3236,7 @@ function receive(an, opts){
   // the shapes testers met most: what it may mean, and a reply to the need underneath
   const rf = !crossed ? reframeOf(an, opts) : null;
   if(rf && rf.r.recv) meanings.push(rf.r.recv.mean);
-  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && (ids.includes("hint") || ids.includes("vtime") || ids.includes("jab") || ids.includes("softno")))) meanings.push(line); });
+  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm"].includes(id)))) meanings.push(line); });
   const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
   if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
@@ -3266,7 +3266,7 @@ function receive(an, opts){
   }
   if(has("brushoff")||has("minimal")) push("Ask which one they mean", "Do you mean it's really okay, or are you upset? Either is okay to say.");
   const order = ["jab","motive","blunt","closer","absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
-  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
+  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab","closer","blunt","sarcasm"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
   if(crossed && replies.length<4 && (has("label")||has("dxlabel")||has("contempt"))) push("Ask for the real thing", "What's the specific thing that's bothering you?");
   const mild = found.length && an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
   const head = crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
@@ -3423,7 +3423,8 @@ function verdict(an, sc, rw, opts){
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && work)
     return {id:"hurt", work:true, text: "This may land as blame. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
-    return {id:"hurt", mild: !attack && an.staticIds.every(id=>MILD_IDS.includes(id)), text: (an.safety ? "Your worry is fair, but this might hurt. " : !attack && an.staticIds.every(id=>MILD_IDS.includes(id)) ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (!attack && an.staticIds.every(id=>MILD_IDS.includes(id)) ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")};
+  { const mild = an.staticIds.every(id=>MILD_IDS.includes(id));
+    return {id:"hurt", mild, text: (an.safety ? "Your worry is fair, but this might hurt. " : mild ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (mild ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")}; }
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
     return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
   if(an.staticIds && an.staticIds.length)

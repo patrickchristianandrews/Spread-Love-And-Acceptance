@@ -66,7 +66,7 @@
   .read .hh-kick a.hh-es:focus-visible, .read .hh-for a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
   /* Who it's for: one quiet row of small links under the lede */
   .read .hh .hh-for{ margin:-.6rem 0 1.15rem; font-size:.92rem; line-height:1.75; color:var(--ink-soft, #5A5346); text-wrap:pretty; }
-  .read .hh-for a{ color:var(--ink, #2B2620); font-weight:600; text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+  .read .hh-for a{ white-space:nowrap; color:var(--ink, #2B2620); font-weight:600; text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
   .read .hh-for a:hover{ text-decoration-color:currentColor; }
   /* the walking pups pass behind this button, so give it a solid face */
   .read #start-where .sw-showmore{ background:#FFFBF4; }
@@ -125,7 +125,7 @@
   html.tol-quiet .read .hh-kick span::before{ content:none; }
   html.tol-quiet .read .hh-kick span + span::before{ content:" · "; }
   html.tol-quiet .read .hh-kick a.hh-es{ display:inline; min-height:0; padding:0; border:0; background:none; text-decoration:underline; text-underline-offset:3px; }
-  html.tol-quiet .read .hh-kick a.hh-es::before{ content:" · "; display:inline-block; white-space:pre; color:var(--ink-soft, #5A5346); }
+  html.tol-quiet .read .hh-kick a.hh-es::before{ content:"\b7\a0"; display:inline-block; margin-right:.25rem; color:var(--ink-soft, #5A5346); }
   html.tol-quiet .read .hh-accent{ font-style:normal; font-weight:600; color:inherit; background:none; -webkit-text-fill-color:currentColor; }
   html.tol-quiet .read a.hh-card, html.tol-quiet .read a.hh-card.is-main{ background:#FFFDF7; color:var(--ink, #2B2620); border:1px solid var(--line, #D9CBA3); box-shadow:none; border-radius:10px; transform:none; }
   html.tol-quiet .read .hh-more a{ background:#FFFDF7; border:1px solid var(--line, #D9CBA3); transform:none; }

@@ -148,11 +148,12 @@
 
 <section class="rm-plan tol-plain" id="agreement" aria-labelledby="agreement-h">
 <h2 id="agreement-h">Our room agreement</h2>
+<p class="rm-from" id="ra-from" hidden>This room agreement came to you in a link. Change anything you’d like, then send it back.</p>
 <p>We filled in a common starting point. Change anything, together or on your own, then copy it or send the link to your roommate to change. Nothing you type here is sent anywhere or kept. The link carries the agreement inside it.</p>
 <div class="rm-fields">
   <div class="rm-names">
-    <div><label for="ra-me">Your name (optional)</label><input type="text" id="ra-me" autocomplete="off" maxlength="40"></div>
-    <div><label for="ra-them">Roommate’s name (optional)</label><input type="text" id="ra-them" autocomplete="off" maxlength="40"></div>
+    <div><label for="ra-me">Your name</label><input type="text" id="ra-me" autocomplete="off" maxlength="40" placeholder="optional"></div>
+    <div><label for="ra-them">Their name</label><input type="text" id="ra-them" autocomplete="off" maxlength="40" placeholder="optional"></div>
   </div>
   <label for="ra-quiet">Quiet hours</label>
   <textarea id="ra-quiet" maxlength="240">Weeknights 11pm to 7am: headphones on, calls outside the room.</textarea>
@@ -170,7 +171,6 @@
   <textarea id="ra-raise" maxlength="240">Text first if that’s easier, then talk within a few days, one topic at a time. If we’re stuck, we ask our RA to help.</textarea>
 </div>
 <p class="rm-out-h" id="ra-out-h">Your agreement, ready to send:</p>
-<p class="rm-from" id="ra-from" hidden>This room agreement came to you in a link. Change anything you’d like, then send it back.</p>
 <div class="rm-out" id="ra-out" aria-labelledby="ra-out-h" aria-live="polite"></div>
 <p class="rm-acts">
   <button type="button" class="rm-btn" id="ra-copy">Copy our agreement</button>

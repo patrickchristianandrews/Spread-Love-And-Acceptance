@@ -2511,9 +2511,31 @@
   function setFull(on) {
     document.documentElement.classList.toggle('ng-full', on);
     fullBtn.setAttribute('aria-pressed', String(on));
-    fullBtn.innerHTML = on ? '&#10530; Show the menu' : '&#10530; Full screen';
-    window.scrollTo(0, 0); resize();
+    fullBtn.innerHTML = on ? '<span aria-hidden="true">&#10530;</span> <span class="ng-long">Show the menu</span><span class="ng-short">Menu</span>'
+      : '<span aria-hidden="true">&#10530;</span> <span class="ng-long">Full screen</span><span class="ng-short">Full</span>';
+    window.scrollTo(0, 0); resize(); fitBar();
   }
+  // Professor Puddles' button (site-chat.js) floats at the bottom left. If it would cover the garden's buttons, the bar
+  // moves to its right (wrapping onto two rows if it needs to), or, on a narrow screen, up above it.
+  var ngBar = document.querySelector('.ng-bar'), ngStage = document.getElementById('ng-stage'), fitQueued = false;
+  function fitBar() {
+    if (!ngBar || !ngStage) return;
+    ngBar.classList.remove('ng-bar-right'); ngBar.style.removeProperty('--ng-safe-left'); ngBar.style.removeProperty('bottom');
+    var fab = document.querySelector('.tol-pud-fab');
+    if (!fab) return;
+    var cs = getComputedStyle(fab), f = fab.getBoundingClientRect();
+    if (!f.width || cs.display === 'none' || cs.visibility === 'hidden') return;
+    var b = ngBar.getBoundingClientRect(), st = ngStage.getBoundingClientRect();
+    if (!(f.right > b.left && f.left < b.right && f.bottom > b.top && f.top < b.bottom)) return;
+    if (st.right - f.right - 20 >= 300) { ngBar.style.setProperty('--ng-safe-left', Math.ceil(f.right - st.left + 10) + 'px'); ngBar.classList.add('ng-bar-right'); }
+    else ngBar.style.bottom = Math.ceil(st.bottom - f.top + 8) + 'px';
+  }
+  function queueFit() { if (fitQueued) return; fitQueued = true; requestAnimationFrame(function () { fitQueued = false; fitBar(); }); }
+  window.addEventListener('resize', queueFit);
+  window.addEventListener('scroll', queueFit, { passive: true });
+  // the button arrives after the page, and can change size (its name shows, then tucks away)
+  [300, 1200, 3000, 6000].forEach(function (t) { setTimeout(queueFit, t); });
+  setInterval(queueFit, 2500);
   if (fullBtn) {
     fullBtn.addEventListener('click', function () {
       var on = !document.documentElement.classList.contains('ng-full');
