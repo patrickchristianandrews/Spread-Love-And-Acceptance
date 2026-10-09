@@ -993,7 +993,9 @@
     }
     var steps = (pickF('steps') || []).slice(0, I.ownSteps ? 4 : 3);
     var wstep = I.ownSteps ? null : (W.steps && W.steps[issueKey]) || W.step;  // ownSteps: the issue's own steps say it all
-    if (wstep && !C.steps && steps.length < 4 && (!self || I.selfFirst) && !(self && steps.some(function (x) { return /battery/.test(x); }))) steps.push(wstep);
+    // (never a second step that says the same thing in other words: "Ask for one specific kind of help, with a time" twice)
+    var sameStep = function (a, b2) { var x = norm(a).split(' ').slice(0, 6).join(' '), y = norm(b2).split(' ').slice(0, 6).join(' '); return x === y || alike(norm(a), norm(b2)) >= 0.5; };
+    if (wstep && !C.steps && steps.length < 4 && (!self || I.selfFirst) && !(self && steps.some(function (x) { return /battery/.test(x); })) && !steps.some(function (x) { return sameStep(x, wstep); })) steps.push(wstep);
     var scripts = theirSide && I.scripts_other ? I.scripts_other.slice() : (C.scripts || []);
     if (!scripts.length) {
       var sx = I.scripts || {};
