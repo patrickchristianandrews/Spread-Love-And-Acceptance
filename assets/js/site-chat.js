@@ -2015,11 +2015,11 @@
     var T = hit.t, b = [], id = String(T.id || dTitle(T));
     var safetyTopic = dlist(dRule('safety_topic_ids')).indexOf(T.id) !== -1;
     if (!only) b.push({ k: 'p', x: dTitle(T).replace(/\?$/, '') === dTitle(T) ? 'Let’s think about ' + dTitle(T).charAt(0).toLowerCase() + dTitle(T).slice(1) + '.' : dTitle(T) });
-    var keys = only ? [only, 'together'] : safetyTopic ? ['together'] : DEEP_SECTIONS.map(function (S) { return S[0]; });
+    var keys = only === 'links' ? [] : only ? [only, 'together'] : safetyTopic ? ['together'] : DEEP_SECTIONS.map(function (S) { return S[0]; });
     var links = dLinks(T);
     // fear, control or harm: the safety page first, and no lenses unless asked
     if (safetyTopic && !only) { var sl = links.filter(function (l) { return /\/safety\.html/.test(l[1]); }); if (sl.length) b.push({ k: 'links', x: sl }); }
-    DEEP_SECTIONS.forEach(function (S) {
+    (only ? DEEP_SECTIONS.slice().sort(function (a, c) { return keys.indexOf(a[0]) - keys.indexOf(c[0]); }) : DEEP_SECTIONS).forEach(function (S) {
       if (keys.indexOf(S[0]) === -1) return;
       var ps = dParas(dget(T, S[2])); if (!ps.length) return;
       b.push({ k: 'h', x: S[1] }); b = b.concat(ps);
@@ -2039,12 +2039,17 @@
       { k: 'p', x: 'Ask me a big question' + (pickd.length ? ', like “' + pickd[0] + '”' : '') + ', or name a part of life you’re thinking about. Say “small talk” whenever you want to come back up.' }],
       chips: pickd.map(function (x) { return { label: x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
   }
-  var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
+  var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question)|another big question|one more big question(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
   var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk|get philosophical) (?:about|on|into) (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
   var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|(?:exit|leave|end|stop) deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|keep it light|back to normal)(?: please| now)?$/;
   // a follow-up about the last deep topic: which part they asked for
-  var DEEP_FU = [[/\b(autis\w*|neurodiverg\w*|nd lens)\b/, 'autistic_lens'], [/\b(research|science|psycholog\w*|studies|study|evidence)\b/, 'psychology'],
-    [/\b(stoics?|aristotle|plato|kant|philosoph\w*|confucius|buddh\w*|socrates|thinkers?)\b/, 'philosophy'], [/\b(tonight|use this|try|do about it|practical|in practice|what can i do)\b/, 'try'], [/\b(sum (it )?up|together|bottom line|so what)\b/, 'together']];
+  var DEEP_FU = [[/\b(autis\w*|neurodiverg\w*|double empathy|sensory|predictable|rule out loud|say (this|it) plainly|plainly)\b/, 'autistic_lens'],
+    [/\b(research|science|psycholog\w*|studies|study|evidence)\b/, 'psychology'],
+    [/\b(stoics?|aristotle|plato|kant|philosoph\w*|confucius|buddh\w*|socrates|thinkers?|care ethic\w*|iris murdoch|murdoch|rawls|ubuntu|arendt|hannah arendt)\b/, 'philosophy'],
+    [/\b(question to ask)\b/, 'question'], [/\b(page to read|something to read|read more)\b/, 'links'],
+    [/\b(tonight|use this|one small thing|smallest version|try|repair look like|in my control|do about it|practical|in practice|what can i do)\b/, 'try'],
+    [/\b(sum (it )?up|together|bottom line|so what|kind and honest|their side|setup|fairest|fairness or feeling seen)\b/, 'together']];
+  var DEEP_FU_LEAD = /^(and|what would|what does|what do|what s|whats|how do i|how does|how could|how might|is it|is there|is this|give me|say the|show me|one small|so|but)\b/;
   function phraseIn(list, fs) { return dPhraseRes(list).some(function (re) { return re.test(fs); }); }
   function deepTurn(state, q, f) {
     var D = KB && KB.deep; if (!D) return null;
@@ -2058,9 +2063,9 @@
     // "go deeper" alone keeps its old meaning (that page's deeper link) unless deep mode is already on
     var goDeeper = /^(go deeper|deeper|go deeper please)$/.test(fs);
     if (DEEP_IN.test(fs) || (phraseIn(dRule('enter_phrases'), fs) && (!goDeeper || on))) {
-      if (on && /big question|something deep/.test(fs)) {
+      if (on && /big question|something deep/.test(fs) || /^(another|one more) big question$/.test(fs)) {
         var bq = dBig().filter(function (B) { return String(B.id) !== state.deepLast; });
-        if (bq.length) return deepReply(state, { t: bq[Math.floor(frand(state) * bq.length) % bq.length] });
+        if (bq.length) { setDeep(state, true); return deepReply(state, { t: bq[Math.floor(frand(state) * bq.length) % bq.length] }); }
       }
       if (on && state.deepLast && !DEEP_IN.test(fs)) { var fu0 = deepFollow(state, fs); if (fu0) return fu0; }
       setDeep(state, true);
@@ -2076,6 +2081,7 @@
         chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', fun: 1 };
     }
     // someone's own situation ("my husband never listens") gets the usual help, even in deep mode
+    if (DEEP_FU_LEAD.test(fs) && fs.split(' ').length <= 9 && !/\b(he|she|him|her|husband|wife|partner|boyfriend|girlfriend|mum|mom|dad|boss)\b/.test(fs)) { var fu1 = deepFollow(state, fs); if (fu1) return fu1; }
     if (personalHit(f)) return null;
     var hit = deepFind(fs, f);
     if (hit) return deepReply(state, hit);
