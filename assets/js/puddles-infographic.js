@@ -151,8 +151,9 @@
       }
     }
     lines = greedy(text, o, min, o.width).slice(0, maxLines);
-    var last = lines[lines.length - 1] || '';
+    var last = lines[lines.length - 1] || '', orig = last.replace(/-$/, '');
     while (last && measure(last + '…', min, o.fam, o.weight, o.italic) > o.width) last = last.replace(/\s*\S+$/, '');
+    if (!last) { last = orig; while (last.length > 1 && measure(last + '…', min, o.fam, o.weight, o.italic) > o.width) last = last.slice(0, -1); }
     lines[lines.length - 1] = last.replace(/[\s,;:.\-–—]+$/, '') + '…';
     return done(lines, min);
     function done(L, sz) { var lh = Math.round(sz * (o.lh || 1.32)); return { lines: L, size: sz, lh: lh, h: L.length * lh, o: o }; }
