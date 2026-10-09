@@ -21,6 +21,10 @@
       "reflect": "Shutting down when your partner raises their voice isn’t weakness or not caring. It’s often your body protecting you from overload.",
       "steps": ["On a calm day, tell your partner what happens in your body when voices rise, and agree a pause line and a return time.", "In the moment, say the line, take at least 20 minutes to settle (a walk, slow breathing), and don’t rehearse the argument.", "Come back at the time you said. Your partner may need reassurance that the pause isn’t you leaving."]
     },
+    "family+repair": {
+      "reflect": "Wanting to make things right with family takes courage, whether it was a sharp word this week or something older between you.",
+      "scripts": ["I’m sorry for my part in what happened between us. I’ve missed you, and I’d like to put it right, if you’re open to it.", "I’m sorry for how I spoke to you. You didn’t deserve that. Can we talk when you’re ready?"]
+    },
     "roommate+repair": {
       "steps": ["Give yourself a little time to settle, so the apology comes from a calm place.", "Keep it short and specific, with no “but”: what you did, that it wasn’t fair, and that it wasn’t about them.", "If there’s a real house issue underneath, offer a better time to sort it out, maybe with the Lemonade Stand."]
     },

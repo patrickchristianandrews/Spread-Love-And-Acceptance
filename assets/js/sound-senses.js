@@ -15,6 +15,9 @@
         Match follows the track (slow heartbeat for Shooting Star, rumble for Thunderous Shimmer, beat for
         Watching a Shooting Star). Rumble follows the low tones, Beat follows pulses, Heartbeat is a steady lub-dub. Pulses are short and
         never faster than about two a second, and stop when the sound stops or the page is hidden.
+   YOUR OWN MUSIC: under the stage (and in the full-screen Choose panel), "Use my microphone" or "Use sound from a tab"
+        (desktop Chrome and Edge) lets the visualizer and vibration follow Spotify or any other music app. That sound is only
+        measured, live, on this device (your-music.js): never played back, recorded or sent. Starting a track stops it.
    */
 (function () {
   'use strict';
@@ -48,16 +51,18 @@
   host.innerHTML =
     '<p class="sn-kick">The big idea</p>' +
     '<h2 id="senses-h" class="sn-title">Music visualizer and vibration</h2>' +
-    '<p class="sn-lede">Press play on a Brain Breaker and the visualizer moves with the music, like the classic media players. Turn on vibration and your phone feels it with you, each track with its own kind of pulse. Everything happens on your device.</p>' +
-    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>Play in the visualizer</strong> on a track below, or pick one with Find your Brain Breaker.</p>' +
+    '<p class="sn-lede">Press play on a Brain Breaker and the visualizer moves with the music, like the classic media players. Turn on vibration and your phone feels it with you, each track with its own kind of pulse. You can also let it follow your own music, from Spotify or any app. Everything happens on your device.</p>' +
+    '<div class="sn-stage" id="sn-stage"><canvas id="sn-cv" aria-hidden="true"></canvas><p class="sn-idle" id="sn-idle">Press <strong>Play in the visualizer</strong> on a track below, or visualize your own music.</p>' +
     '<div class="sn-hud"><span class="sn-now" id="sn-now"></span><span class="sn-buzz" id="sn-buzz" title="Lights up when the phone is asked to vibrate" aria-hidden="true">&#x26A1;</span><button type="button" class="sn-b sn-hud-b" id="sn-full" aria-label="Full screen">&#x26F6; Full screen</button></div>' +
     '<div class="sn-ovl" id="sn-ovl" role="dialog" aria-label="Choose a track" hidden><div class="sn-ovl-in">' +
       '<div class="sn-ovl-top"><p class="sn-ovl-k">Pick a Brain Breaker</p><button type="button" class="sn-b" id="sn-ovl-x" aria-label="Close this panel">&times; Close</button></div>' +
       '<div class="sn-trk" id="sn-trk"></div>' +
       '<div class="sn-find" id="sn-ovl-find" hidden></div>' +
+      '<div id="sn-ovl-mine"></div>' +
       '<p class="sn-ovl-k" id="sn-ovl-vk">Vibration</p><div id="sn-ovl-ctl"></div>' +
     '</div></div>' +
     '<button type="button" class="sn-b sn-opt" id="sn-opt" aria-expanded="false" aria-controls="sn-ovl">&#x2630; Choose</button></div>' +
+    '<div class="sn-mine" id="sn-mine"></div>' +
     '<div class="sn-info" id="sn-info" hidden aria-live="polite"><div class="sn-info-top"><strong id="sn-info-name"></strong><span class="sn-meter" aria-hidden="true"><i id="sn-meter"></i></span><span class="sn-meter-l">Energy</span></div><dl id="sn-info-fx"></dl></div>' +
     '<div class="sn-row" id="sn-feel-row" role="group" aria-label="Vibration"><button type="button" class="sn-b sn-vib" id="sn-vib" aria-pressed="' + (level !== 'off') + '">&#x1F4F3; Vibration: <b>' + (level !== 'off' ? 'on' : 'off') + '</b></button></div>' +
     '<p class="sn-note" id="sn-note"></p><p class="sn-status" id="sn-status" role="status" aria-live="polite"></p>';
@@ -81,6 +86,7 @@
   function press(group, val) { host.querySelectorAll('[data-' + group + ']').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-' + group) === val)); }); }
   function smooth() { return RM ? 'auto' : 'smooth'; }
   function stopAll() {
+    if (mine) mine.stop('stop');
     document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} });
     if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {}
   }
@@ -122,7 +128,7 @@
     trkEl.innerHTML = html;
     trkEl.querySelectorAll('*').forEach(function (n) { n.classList.add('no-bubble'); });
   }
-  function anyPlaying() { return cards().some(function (c) { var a = c.querySelector('.track-player'); return a && !a.paused && !a.ended; }); }
+  function anyPlaying() { return (mine && mine.active()) || cards().some(function (c) { var a = c.querySelector('.track-player'); return a && !a.paused && !a.ended; }); }
   function openOvl() { drawTracks(); ovl.hidden = false; optBtn.setAttribute('aria-expanded', 'true'); var f = trkEl.querySelector('button'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {} }
   function closeOvl() { ovl.hidden = true; optBtn.setAttribute('aria-expanded', 'false'); }
   optBtn.addEventListener('click', function () { if (ovl.hidden) openOvl(); else closeOvl(); });
@@ -210,12 +216,27 @@
     return t.an;
   }
   function findSource() {
+    if (mine && mine.active() && mine.analyser()) return { an: mine.analyser(), card: null, name: 'Your music', mine: true };
     var audios = document.querySelectorAll('.track-player');
     for (var i = 0; i < audios.length; i++) {
       var a = audios[i];
       if (!a.paused && !a.ended) { var n = trackAnalyser(a); if (n) { var card = a.closest('.track-card'), h = card && card.querySelector('.track-title'); return { an: n, card: card, name: h ? h.textContent.replace(/^\d+\.\s*/, '') : 'the track' }; } }
     }
     return null;
+  }
+
+  // ---------- your own music (Spotify or any app), through the microphone or a shared tab ----------
+  var mine = window.TOLYourMusic ? window.TOLYourMusic.create({
+    context: shared,
+    beforeStart: function () { document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} }); if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {} },
+    onStart: function () { lastCheck = 0; if (!ovl.hidden) closeOvl(); },
+    onStop: function () { lastCheck = 0; if (!ovl.hidden) drawTracks(); }
+  }) : null;
+  if (mine) {
+    mine.ui(document.getElementById('sn-mine'));
+    mine.ui(document.getElementById('sn-ovl-mine'), { compact: true, title: 'Or your own music' });
+    // starting one of the tracks here stops listening to your own music
+    document.querySelectorAll('.track-player').forEach(function (a) { a.addEventListener('play', function () { if (mine.active()) mine.stop('source', 'Stopped listening to your music, so this track can play.'); }); });
   }
 
   function trackKey() { return TRACKID[srcName] || 'other'; }
@@ -455,7 +476,7 @@
     if (now - lastCheck > 400) {
       lastCheck = now;
       var s = findSource();
-      if (s && s.an !== an) { an = s.an; srcName = s.name; curCard = s.card; showInfo(); idle.hidden = true; say('Seeing ' + srcName + '.'); nowEl.textContent = srcName; dname.textContent = srcName; lastBeat = 0; ema = 0; }
+      if (s && s.an !== an) { an = s.an; srcName = s.name; curCard = s.card; showInfo(); idle.hidden = true; say(s.mine ? 'Seeing your music.' : 'Seeing ' + srcName + '.'); nowEl.textContent = srcName; dname.textContent = srcName; lastBeat = 0; ema = 0; }
       else if (!s && an) { an = null; stopBuzz(); idle.hidden = false; rings.length = 0; nowEl.textContent = ''; infoEl.hidden = true; curCard = null; say('The sound stopped.'); }
     }
     showDock(!!an && !visible && !isFull());

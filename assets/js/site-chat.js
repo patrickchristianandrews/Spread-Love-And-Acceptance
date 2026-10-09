@@ -843,7 +843,7 @@
         var qt = {}; tokens(state.curF || '').forEach(function (t) { if (t.length > 2 && !ROLE[t] && !ASPECT[t]) qt[t] = 1; });
         var fit = c.how.map(function (x, i) { var sc = 0, seen = {}; tokens(x).forEach(function (t) { if (qt[t] && !seen[t]) { seen[t] = 1; sc++; } }); return { x: x, i: i, sc: sc }; })
           .filter(function (o) { return o.sc > 0; }).sort(function (a2, b2) { return b2.sc - a2.sc || a2.i - b2.i; });
-        b.push({ k: 'p', x: fit.length ? 'Staying with ' + c.name + ', this part fits what you said:' : 'Staying with ' + c.name + ', here are two more things to try:' });
+        b.push({ k: 'p', x: fit.length ? 'Staying with that, this part fits what you said:' : 'Staying with that, here are two more things to try:' });
         b.push({ k: 'list', x: fit.length ? fit.slice(0, 2).map(function (o) { return o.x; }) : c.how.slice(1, 3) });
         var sc2 = Array.isArray(c.script) ? c.script : c.script ? [c.script] : [];
         if (sc2.length) { var si = sc2.length > 1 ? 1 : 0; b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
@@ -1392,7 +1392,7 @@
     [/\bemotional granularity\b/gi, 'naming feelings more exactly'], [/\bgranularity\b/g, 'detail'], [/\btaken for granted\b/g, 'not noticed or thanked'],
     [/\btak(e|es|ing) (\w+) for granted\b/g, 'stop noticing $2'], [/\bships passing in the night\b/g, 'hardly seeing each other'], [/\bon the same page\b/g, 'agreeing'],
     [/\brunning on empty\b/g, 'very tired'], [/\bbandwidth\b/g, 'energy'], [/\bresentment\b/g, 'anger that builds up'], [/\breciprocat\w*\b/g, 'give back'],
-    [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 warmly to'],
+    [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 to'],
     [/\bbids? for (attention|connection)\b/g, 'small ways of reaching for you'], [/\bdynamics?\b/g, 'pattern'], [/\bhold(ing)? the fort\b/g, 'keep$1 things going'],
     [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears? on\b/g, 'hurts'], [/\bloaded\b/g, 'tense'],
     [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement']];
