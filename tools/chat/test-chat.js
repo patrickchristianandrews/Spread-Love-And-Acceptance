@@ -802,7 +802,7 @@ t('round7', 'how do we agree on how much he games vs time with me', { id: 'gamin
 t('round7', 'my husband ignores me', { kind: 'clarify', text: /time and attention together/ });
 t('round7', 'my best friend never texts back since she had her baby', { id: 'friends', link: '/friends.html', not: /bath time|just for the two of you|call rhythm/ });
 t('round7', 'i have a newborn and i\'m neglecting my best friend', { id: 'friends', not: /bath time|just for the two of you/ });
-t('round7', 'how do i tell my friend i still care when i have no energy to reply', { id: 'friends', script: true, text: /A text you could send now/ });
+t('round7', 'how do i tell my friend i still care when i have no energy to reply', { id: 'friends', script: true, text: /I still care about you so much/ });
 t('round7', 'we\'re a polyamorous triad living together, is this site for us?', { id: 'poly', text: /^Yes\. Every tool here works for two to eight partners/, link: '/more-than-two.html', not: /third/ });
 t('round7', 'does this work for polyamorous relationships', { id: 'poly', link: '/more-than-two.html' });
 t('round7', 'i moved in with my partners and still feel like a guest', { id: 'joinhome', not: /stepkid/ });

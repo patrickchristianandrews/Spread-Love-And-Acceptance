@@ -2150,7 +2150,14 @@
     '.tolc-who{flex:1;min-width:0}',
     '.tolc-name{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.12rem;line-height:1.2;margin:0;letter-spacing:-.01em}',
     '.tolc-sub{margin:0;font-size:.82rem;color:var(--ink-soft);line-height:1.3}',
-    '.tolc-hbtn{min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',
+    // the subtitle never wraps one word per line (phones, Larger text): one line, cut short, or hidden when the header is tight
+    '.tolc-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.tolc-name{overflow-wrap:normal;word-break:normal}',
+    '@media (max-width:480px){.tolc-sub{display:none}}',
+    'html.tol-larger .tolc-sub,html.tol-text-large .tolc-sub,html.tol-big-text .tolc-sub{display:none}',
+    // tablets: a taller answer area
+    '@media (min-width:720px) and (min-height:900px){.tolc.is-modal{height:min(860px,calc(100vh - 48px));width:440px}}',
+    '.tolc-hbtn{white-space:nowrap;flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',
     '.tolc-hbtn:hover{background:var(--paper2);color:var(--ink)}',
     '.tolc-x{font-size:1.5rem;line-height:1}',
     '.tolc-log{flex:1;overflow-y:auto;padding:1rem .9rem .5rem;display:flex;flex-direction:column;gap:.7rem;overscroll-behavior:contain;scroll-behavior:smooth}',

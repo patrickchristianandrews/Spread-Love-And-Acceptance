@@ -228,7 +228,7 @@
   // ---------- your own music (Spotify or any app), through the microphone or a shared tab ----------
   var mine = window.TOLYourMusic ? window.TOLYourMusic.create({
     context: shared,
-    beforeStart: function () { document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} }); if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {} },
+    beforeStart: function () { var c = shared(); if (c && c.state === 'suspended') try { c.resume(); } catch (e) {} document.querySelectorAll('.track-player').forEach(function (a) { try { if (!a.paused) a.pause(); } catch (e) {} }); if (window.TOLBrainBreaks && window.TOLBrainBreaks.stop) try { window.TOLBrainBreaks.stop(); } catch (e) {} },
     onStart: function () { lastCheck = 0; if (!ovl.hidden) closeOvl(); },
     onStop: function () { lastCheck = 0; if (!ovl.hidden) drawTracks(); }
   }) : null;

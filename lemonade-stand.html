@@ -421,6 +421,123 @@
   @media print{ .ls-take, .ls-own-names, .ls-plan-tick{ display:none !important; } }
   @media print{ .ls-keepask, .ls-whoask, .ls-suite, .ls-jump, .ls-moreopts > summary{ display:none !important; } }
   @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs, .ls-lib, .ls-mode-grid, .ls-more, .ls-draft, .ls-sides, .ls-me, .ls-agree-tick, .row-cue, .row-pick, .tol-hh-move, .ls-wait, .ls-agreed-top, .ls-last, .ls-lib-extra, .row-others, .ls-offer, .ls-steps, .row-area, .ls-freq-each, .ls-data, .ls-dblnote, .ls-path, .ls-freq-ask, .ls-money-start, .ls-goal, .ls-maths{ display:none; } }
+  /* ---------- Quick look (the default first view): names, one tap per job, the picture right away ---------- */
+  body:not([data-ls-view]) #quick, body[data-ls-view="deep"] #quick{ display:none !important; }
+  body[data-ls-view="quick"] :is(.simple-lede, #stand, .pillar-note, .try-this, .cr-note){ display:none !important; }
+  body[data-ls-view="quick"]:not([data-ls-fridge]) #owners{ display:none !important; }
+  body:not([data-ls-view="deep"]) .ls-deep-bar{ display:none !important; }
+  .ls-deep-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; margin:0 0 1rem !important; padding:.55rem .8rem; border-radius:14px; background:#FFFDF6; border:1px solid #EAD9A0; font-size:.95rem; }
+  .ls-deep-bar .ls-link-btn{ min-height:44px; font-size:.98rem; }
+  .ls-deep-msg{ flex-basis:100%; margin:0 !important; font-size:.92rem; color:var(--credit); }
+  .ls-deep-msg:empty{ display:none; }
+  .lq{ margin:1.2rem 0 1.5rem; }
+  .lq-h{ margin:0 0 .3rem !important; font-size:1.35rem; }
+  .lq-lede{ margin:0 0 .8rem !important; font-size:1rem; line-height:1.5; }
+  .lq-mini{ font-size:.88rem; color:var(--ink-soft); margin:.3rem 0 0 !important; }
+  .lq-kept{ margin:0 0 .8rem !important; padding:.5rem .7rem; border-radius:12px; background:#EEF6EF; border:1px solid #BFDCC8; font-size:.92rem; }
+  .lq-kept[hidden], .lq-from[hidden], .lq-asrow[hidden], .lq-mini-sum[hidden], .lq-linkbox[hidden], .lq-fair[hidden]{ display:none !important; }
+  .lq-names{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:.5rem; margin:0 0 .4rem; }
+  .lq-name{ display:flex; flex-direction:column; gap:.1rem; flex:1 1 8rem; max-width:13rem; font-size:.82rem; color:var(--ink-soft); min-width:0; }
+  .lq-name-in{ display:flex; align-items:center; gap:.25rem; }
+  .lq-name-in .dot{ width:.75rem; height:.75rem; border-radius:50%; background:var(--pc); flex:none; }
+  .lq-name input{ min-height:44px; }
+  .lq-name .remove{ width:2.2rem !important; height:2.2rem !important; font-size:.95rem !important; }
+  .lq-btn-link{ font:inherit; font-size:.95rem; min-height:44px; padding:.2rem .4rem; background:none; border:0; color:var(--focus); text-decoration:underline; cursor:pointer; }
+  .lq-from{ margin:.6rem 0 .8rem !important; padding:.7rem .8rem; border-radius:14px; background:#EEF3FA; border:2px solid #C9D8EC; font-size:.97rem; }
+  .lq-from p{ margin:0 !important; }
+  .lq-from .lq-pick{ margin:.45rem 0 0; }
+  .lq-asrow{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .5rem; margin:.4rem 0 .2rem; font-size:.92rem; }
+  .lq-pick{ display:flex; flex-wrap:wrap; gap:.4rem; }
+  .lq-grid{ display:grid; grid-template-columns:minmax(0, 1fr); gap:1rem; margin-top:.6rem; }
+  @media (min-width:900px){
+    .lq-grid{ grid-template-columns:minmax(0, 1.25fr) minmax(0, 1fr); align-items:start; }
+    .lq-res{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .8rem); max-height:calc(100vh - var(--tol-bar-h, 58px) - 1.6rem); overflow:auto; }
+    .lq-mini-sum{ display:none !important; }
+  }
+  .lq-mini-sum{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .3rem); z-index:5; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; margin:0 0 .5rem; padding:.4rem .7rem; border-radius:12px; background:#FFFDF6; border:2px solid var(--ink); box-shadow:0 3px 10px rgba(43,38,32,.12); font-size:.9rem; }
+  .lq-mini-sum .lq-mini-t{ flex:1 1 12rem; min-width:0; }
+  .lq-mini-sum a{ font-size:.9rem; color:var(--focus); min-height:36px; display:inline-flex; align-items:center; }
+  .lq-group{ margin:.2rem 0 .6rem; }
+  .lq-group-h{ margin:.6rem 0 .1rem !important; padding:.15rem .1rem; font-size:.98rem !important; font-weight:600; border-bottom:2px solid #EFD27A; }
+  .lq-group-h small{ font-weight:400; color:var(--ink-soft); font-size:.82rem; }
+  .lq-row{ display:grid; grid-template-columns:minmax(0, 1fr); gap:.3rem; align-items:center; padding:.45rem .2rem; border-bottom:1px dotted #EFD27A; }
+  .lq-row.is-on{ background:rgba(248,224,138,.18); border-radius:10px; }
+  .lq-row-top{ display:flex; align-items:center; gap:.4rem; min-width:0; }
+  .lq-job{ margin:0 !important; flex:1 1 auto; min-width:0; font-size:.98rem; line-height:1.3; overflow-wrap:anywhere; }
+  .lq-row .remove{ width:2.2rem !important; height:2.2rem !important; font-size:.95rem !important; }
+  .lq-who{ display:grid; grid-template-columns:repeat(auto-fit, minmax(4.6rem, 1fr)); gap:.3rem; }
+  .lq-w{ font:inherit; font-size:.9rem; min-height:44px; padding:.25rem .4rem; border-radius:999px; border:2px solid var(--pc, #EAD9A0); background:#FFFDF6; color:var(--ink); cursor:pointer; overflow-wrap:anywhere; line-height:1.15; }
+  .lq-w:hover{ background:#FFF3C4; }
+  .lq-w[aria-pressed="true"]{ background:var(--pc, #F8E08A); border-color:var(--ink); font-weight:600; }
+  .lq-w[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+  .lq-w.is-both{ --pc:#E7DDC0; }
+  .lq-w:focus-visible, .lq-chip:focus-visible, .lq-btn-link:focus-visible, .lq-tools button:focus-visible, .lq-next a:focus-visible, .lq-toggle:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .lq-cmp{ margin:0 !important; font-size:.84rem; color:#6B4A1F; }
+  .lq-cmp.is-same{ color:var(--credit); }
+  @media (min-width:640px){
+    .lq-row{ grid-template-columns:minmax(0, 1fr) minmax(0, 1.25fr); }
+    .lq-cmp{ grid-column:1 / -1; }
+  }
+  .lq-add{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.7rem 0 0; }
+  .lq-add input{ flex:1 1 11rem; min-height:44px; }
+  .lq-add button{ margin:0 !important; min-height:44px; }
+  .lq-more{ margin:.6rem 0 0; }
+  .lq-more > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; color:var(--focus); text-decoration:underline; }
+  .lq-more-g{ margin:.5rem 0 0; }
+  .lq-more-g p{ margin:0 0 .25rem !important; font-size:.88rem; font-weight:600; }
+  .lq-more-g p small{ font-weight:400; color:var(--ink-soft); }
+  .lq-chip{ font:inherit; font-size:.88rem; min-height:44px; padding:.25rem .7rem; border-radius:999px; border:1.5px dashed #E2C766; background:#FFFDF6; color:var(--ink); cursor:pointer; text-align:left; }
+  .lq-chip::before{ content:"+ "; }
+  .lq-chip[aria-pressed="true"]{ border-style:solid; border-color:var(--credit); background:#EEF6EF; }
+  .lq-chip[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+  .lq-res{ padding:1rem; border-radius:16px; background:#FFFDF6; border:2px solid var(--ink); scroll-margin-top:calc(var(--tol-bar-h, 58px) + .8rem); }
+  .lq-res h3{ margin:0 0 .4rem !important; font-size:1.15rem; }
+  .lq-res p{ font-size:.97rem; line-height:1.5; }
+  .lq-sec{ margin:.7rem 0 0; }
+  .lq-sec-h{ display:flex; justify-content:space-between; gap:.5rem; margin:0 !important; font-weight:600; font-size:.95rem !important; }
+  .lq-sec-h small{ font-weight:400; color:var(--ink-soft); white-space:nowrap; }
+  .lq-bar{ display:flex; height:1.6rem; margin:.3rem 0 .2rem; border-radius:999px; overflow:hidden; background:#F3EBD2; border:1px solid #E6D8AC; }
+  .lq-seg{ display:flex; align-items:center; justify-content:center; height:100%; background:var(--pc, #F8DC6E); font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; font-weight:600; color:var(--ink); min-width:0; overflow:hidden; transition:flex-grow .35s ease; }
+  .lq-seg + .lq-seg{ border-left:2px solid #FFFDF6; }
+  .lq-seg.is-both{ background:repeating-linear-gradient(135deg, #F3EBD2 0 5px, #E7DDC0 5px 10px); }
+  .lq-key{ display:flex; flex-wrap:wrap; gap:.2rem .7rem; margin:0; padding:0; list-style:none; font-size:.85rem; }
+  .lq-key li{ display:flex; align-items:center; gap:.3rem; max-width:none !important; }
+  .lq-key li::before{ content:""; width:.7rem; height:.7rem; border-radius:50%; background:var(--pc); border:1px solid rgba(43,38,32,.25); }
+  .lq-key li.is-both::before{ background:repeating-linear-gradient(135deg, #F3EBD2 0 2px, #C9B98E 2px 4px); }
+  .lq-words{ margin:.7rem 0 0 !important; }
+  .lq-ask{ margin:.7rem 0 0 !important; font-weight:600; }
+  .lq-fair{ margin:.6rem 0 0 !important; padding:.55rem .7rem; border-radius:12px; background:#EEF6EF; border:1px solid #BFDCC8; font-size:.93rem !important; }
+  .lq-toggle{ font:inherit; font-size:.92rem; min-height:44px; margin:.7rem 0 0; padding:.35rem .85rem; border-radius:999px; border:2px solid #BFDCC8; background:#FFFDF6; color:var(--ink); cursor:pointer; text-align:left; }
+  .lq-toggle[aria-pressed="true"]{ background:#EEF6EF; border-color:var(--credit); font-weight:600; }
+  .lq-toggle[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+  .lq-cmpbox{ margin:.8rem 0 0; padding:.7rem .8rem; border-radius:12px; background:#FFF8DB; border:1px solid #EAD9A0; }
+  .lq-cmpbox h4{ margin:0 0 .3rem !important; font-size:1rem; }
+  .lq-cmpbox ul{ margin:.2rem 0 .3rem !important; padding-left:1.1rem !important; }
+  .lq-cmpbox li{ font-size:.93rem; margin:.2rem 0; max-width:none !important; }
+  .lq-cmpbox .lq-pend{ font-size:.93rem; }
+  .lq-tools{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 0; }
+  .lq-tools button{ font:inherit; min-height:44px; padding:.45rem .95rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
+  .lq-tools button:hover{ background:#F8E08A; }
+  .lq-tools .lq-main{ background:#F8E08A; font-weight:600; }
+  .lq-linkbox{ margin:.5rem 0 0; }
+  .lq-linkbox input{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; min-height:40px; }
+  .lq-status{ min-height:1.3em; margin:.4rem 0 0 !important; font-size:.9rem !important; color:var(--credit); }
+  .lq-next{ margin:1rem 0 0; padding:.8rem 0 0; border-top:2px dashed #EFD27A; }
+  .lq-next h4{ margin:0 0 .4rem !important; font-size:1rem; }
+  .lq-next ul{ list-style:none; margin:0 !important; padding:0 !important; display:grid; gap:.45rem; }
+  .lq-next li{ margin:0; max-width:none !important; }
+  .lq-next button, .lq-next a{ display:flex; flex-direction:column; align-items:flex-start; width:100%; box-sizing:border-box; min-height:44px; padding:.55rem .8rem; border-radius:14px; border:2px solid #EAD9A0; background:#FFF8DB; color:var(--ink); font:inherit; text-align:left; text-decoration:none; cursor:pointer; }
+  .lq-next button:hover, .lq-next a:hover{ border-color:var(--ink); }
+  .lq-next .t{ font-weight:600; }
+  .lq-next .d{ font-size:.85rem; color:var(--ink-soft); }
+  .lq-keep{ display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; margin:1rem 0 0 !important; font-size:.88rem; color:var(--ink-soft); }
+  .lq-keep .lq-btn-link{ font-size:.88rem; }
+  .ls-own-status:empty{ display:none; }
+  @media (max-width:560px){ .lq-res{ padding:.8rem .7rem; } .lq{ padding:1rem .6rem 1.2rem; } }
+  @media (prefers-reduced-motion: reduce){ .lq-seg{ transition:none; } }
+  html.tol-quiet .lq-seg{ transition:none; }
+  html.tol-quiet .lq-mini-sum{ box-shadow:none; }
+  @media print{ #quick, .ls-deep-bar{ display:none !important; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -462,6 +579,55 @@
 <div class="ls-awning" aria-hidden="true"><span>Fresh squeezed &middot; always free</span></div>
 <header class="read-head"><p class="read-code">Tool &middot; nothing leaves your device</p><h1>The Lemonade Stand: chores, bills and who does what <svg class="ls-lemon" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 34c0-13 11-24 26-24 5 0 9 1 12 3 3-2 7-2 9 0-1 3-1 6 0 9 2 3 3 7 3 11 0 14-12 23-27 23S8 47 8 34z" fill="#F8DC6E" stroke="#C9A227" stroke-width="3" stroke-linejoin="round"/><path d="M40 11c2-5 7-7 12-6-2 5-6 8-12 6z" fill="#8CC7A5" stroke="#4E8A66" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="32" r="2.6" fill="#211D17"/><circle cx="38" cy="32" r="2.6" fill="#211D17"/><path d="M26 40c3 3 7 3 10 0" fill="none" stroke="#211D17" stroke-width="2.5" stroke-linecap="round"/><circle cx="19" cy="38" r="3" fill="#F2A3B6" opacity=".7"/><circle cx="43" cy="38" r="3" fill="#F2A3B6" opacity=".7"/></svg></h1></header>
 <p class="ls-tag">List the jobs and the bills, and see who does what, or your own load.</p>
+
+<section class="stand lq" id="quick" aria-labelledby="quick-h">
+  <h2 class="lq-h" id="quick-h" tabindex="-1">Quick look: who does what at home</h2>
+  <p class="lq-lede">Tap who mostly does each job. The picture builds as you go, the thinking work too. About two minutes, and nothing leaves this device.</p>
+  <p class="lq-kept" id="lq-kept" hidden>Your full stand, with hours and bills, is kept on this device. <button type="button" class="lq-btn-link" id="lq-open-deep">Open it</button></p>
+  <div class="lq-from" id="lq-from" role="status" aria-live="polite" hidden></div>
+  <p class="lq-mini" id="lq-names-h">Your names (optional)</p>
+  <div class="lq-names" id="lq-names" role="group" aria-labelledby="lq-names-h"></div>
+  <div class="lq-asrow" id="lq-asrow" role="group" aria-label="Whose view is this?" hidden></div>
+  <div class="lq-grid">
+    <div class="lq-list-wrap">
+      <div class="lq-mini-sum" id="lq-mini" hidden><span class="lq-mini-t" id="lq-mini-t"></span><a href="#lq-res" id="lq-mini-go">See it &darr;</a></div>
+      <div id="lq-list"></div>
+      <div class="lq-add">
+        <label class="sr-only" for="lq-new">Another job</label>
+        <input type="text" id="lq-new" maxlength="60" autocomplete="off" placeholder="+ add a job">
+        <button type="button" class="add-row" id="lq-new-go">Add it</button>
+      </div>
+      <details class="lq-more" id="lq-more">
+        <summary>Show more jobs</summary>
+        <p class="lq-mini">Tap to put a job on the list above. Baby, caring, pets, paperwork, and work nights are here too.</p>
+        <div id="lq-more-list"></div>
+      </details>
+    </div>
+    <section class="lq-res" id="lq-res" aria-labelledby="lq-res-h" tabindex="-1">
+      <h3 id="lq-res-h">How it looks</h3>
+      <div id="lq-out" aria-live="polite"></div>
+      <button type="button" class="lq-toggle" id="lq-ill" aria-pressed="false">Someone works long hours or is ill</button>
+      <div id="lq-cmp"></div>
+      <div class="lq-tools" id="lq-send"></div>
+      <div class="lq-linkbox" id="lq-linkbox" hidden>
+        <label class="lq-mini" for="lq-link">The link (nothing is uploaded; your answers ride inside it):</label>
+        <input type="text" id="lq-link" readonly>
+      </div>
+      <p class="lq-status" id="lq-status" role="status" aria-live="polite"></p>
+      <div class="lq-next">
+        <h4>Next steps</h4>
+        <ul>
+          <li><button type="button" id="lq-fridge"><span class="t">Make a fridge list (one owner per job)</span><span class="d">Your answers fill it in. Up to five jobs, then print or copy it.</span></button></li>
+          <li><button type="button" id="lq-deeper"><span class="t">Go deeper: count the hours</span><span class="d">The full stand, with times, bills and each person&rsquo;s own side. Your names and jobs come with you.</span></button></li>
+          <li><a href="/check-ins.html"><span class="t">Talk about it</span><span class="d">A calm way to bring it up, when you&rsquo;re both rested.</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <p class="lq-keep">Kept on this device so it&rsquo;s here next time. Never sent anywhere. <button type="button" class="lq-btn-link" id="lq-erase">Erase the quick look</button></p>
+</section>
+
+<p class="ls-deep-bar" id="ls-deep-bar"><button type="button" class="ls-link-btn" id="back-quick">&larr; Back to the quick look</button> <span>The full stand: hours, bills, and each person&rsquo;s own side.</span><span class="ls-deep-msg" id="ls-deep-msg" role="status" aria-live="polite"></span></p>
 
 <p class="simple-lede">For just you, or for two to eight people who share a home. List what it took to keep life running this week, from the dishes to remembering the dentist, and about how long each job took. <em>Just me</em> shows your own week as a ledger: where your time and attention go, the thinking work nobody sees, and your rest. <em>Me and others</em> shows the split as a plain fact, not a verdict on anyone.</p>
 
@@ -775,6 +941,7 @@
     <button type="button" id="own-print">Print the fridge list</button>
   </div>
   <div class="ls-keepask" data-keepask id="keepask-own" hidden><p class="ls-keepask-q">Keep this list on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
+  <p class="ls-status ls-own-status" id="own-status" role="status" aria-live="polite"></p>
   <pre class="ls-fridge" id="fridge" aria-hidden="true"></pre>
 </section>
 
@@ -787,6 +954,7 @@
 </main>
 
 <script src="/assets/js/household.js"></script>
+<script src="/assets/js/lemonade-quick.js"></script>
 <script src="/assets/js/lemonade-calc.js"></script>
 </body>
 </html>

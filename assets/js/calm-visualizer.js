@@ -784,6 +784,7 @@
   // ---------- your own music ----------
   var mine = window.TOLYourMusic ? window.TOLYourMusic.create({
     context: ensureCtx,
+    beforeStart: function () { ensureCtx(); },   // made during the tap, so the browser lets it run
     onStart: function (an, kind) {
       M.on = true; M.an = an; M.lvl = 0;
       V.dim = 1; V.cap = 0.82; V.iri = 0.38; V.beat = 10;
