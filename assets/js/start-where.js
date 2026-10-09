@@ -305,6 +305,14 @@
       list = first.map(function (id) { return S.filter(function (s) { return s.id === id; })[0]; }).filter(Boolean);
       S.forEach(function (s) { if (list.indexOf(s) === -1) list.push(s); });
     }
+    // Focus mode (site.js TOLFocus): situations that fit the chosen areas come first; the rest stay one tap away
+    try {
+      var F = window.TOLFocus;
+      if (F && F.isOn && F.isOn() && F.allows) {
+        var fit = list.filter(function (s) { return (s.picks || []).some(function (p) { return p[0] && p[0].charAt(0) === '/' && F.allows(p[0]); }); });
+        if (fit.length) { list = fit.concat(list.filter(function (s) { return fit.indexOf(s) === -1; })); first = fit.slice(0, 9).map(function (s) { return s.id; }); }
+      }
+    } catch (e) {}
     list.forEach(function (s, i) {
       var b = el('button', { type: 'button', class: 'sw-opt', 'aria-pressed': 'false', 'data-id': s.id },
         '<span class="sw-ico" aria-hidden="true">' + s.ico + '</span><span class="sw-label">' + esc(s.label) + '</span>');

@@ -1074,6 +1074,7 @@
     addPrivateNote(body);
     addTip(body);
     placeShare(body);
+    loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
     // Kip stays away from careful reading: not with Easy reading, larger text, a still page, hidden helpers or on the working pages
     var kipOk = !helpersHidden() && !WORKSPACE.test(current) && !/\btol-(easy|still|text-(lg|xl|xxl))\b/.test(document.documentElement.className);
     if (kipOk && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
@@ -3704,7 +3705,7 @@
   function shareNow(o) {
     o = o || {};
     var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin };
-    if (navigator.share) {
+    if (navigator.share && !(window.TOLShareKit && window.TOLShareKit.sheetFirst)) {
       var data = {}; if (d.title) data.title = d.title; if (d.text) data.text = d.text; if (d.url) data.url = d.url;
       var can = true; try { if (navigator.canShare) can = navigator.canShare(data); } catch (e) { can = true; }
       if (can) {

@@ -1114,7 +1114,7 @@
     var status = document.createElement('p'); status.className = 'tol-ig-status'; status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
     var quiet = !!(opts.sensitive || (spec && spec.sensitive));
     (quiet ? [bBig] : [bSave, bShare, bPrint, bBig]).forEach(function (b) { acts.appendChild(b); });
-    if (quiet) { status.textContent = 'To keep this private, this picture has no save or share button. Nothing about it is kept on this device.'; status.classList.add('is-note'); }
+    if (quiet) { status.textContent = 'To keep this private, this picture has no save or share button.'; status.classList.add('is-note'); }
     fig.appendChild(acts); fig.appendChild(status);
     var det = document.createElement('details'); det.className = 'tol-ig-text';
     var sum = document.createElement('summary'); sum.textContent = 'Read it as text'; det.appendChild(sum);
