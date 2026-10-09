@@ -2154,7 +2154,7 @@
     '.tolc-sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
     '.tolc-name{overflow-wrap:normal;word-break:normal}',
     '@media (max-width:480px){.tolc-sub{display:none}}',
-    'html.tol-larger .tolc-sub,html.tol-text-large .tolc-sub,html.tol-big-text .tolc-sub{display:none}',
+    'html.tol-text-lg .tolc-sub,html.tol-text-xl .tolc-sub,html.tol-text-xxl .tolc-sub{display:none}',
     // tablets: a taller answer area
     '@media (min-width:720px) and (min-height:900px){.tolc.is-modal{height:min(860px,calc(100vh - 48px));width:440px}}',
     '.tolc-hbtn{white-space:nowrap;flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',

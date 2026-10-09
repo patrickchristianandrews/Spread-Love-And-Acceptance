@@ -325,7 +325,13 @@
     var many0 = sidesIn(d).length > 1;
     return (d.by ? d.by + (many0 ? ' te envió las partes de todos.' : ' te envió su parte.') : (many0 ? 'Te enviaron las partes de todos.' : 'Te enviaron una parte.')) + ' Toca «Add to my stand» para añadirla. «Not now» es «ahora no».';
   }
-  function status(msg) { var s = $('ls-status'); if (s) { s.textContent = msg; clearTimeout(status.t); status.t = setTimeout(function () { s.textContent = ''; }, 4000); } }
+  function status(msg) {
+    // the quick look hides the full stand (and its status line): the fridge list then says it under itself
+    var ids = document.body.getAttribute('data-ls-view') === 'quick' ? ['ls-status', 'own-status'] : ['ls-status'];
+    clearTimeout(status.t);
+    ids.forEach(function (id) { var s = $(id); if (s) s.textContent = msg; });
+    status.t = setTimeout(function () { ids.forEach(function (id) { var s = $(id); if (s) s.textContent = ''; }); }, 4000);
+  }
   function solo() { return mode === 'solo'; }
   function visiblePeople() { return solo() ? [0] : state.people.map(function (_, i) { return i; }); }
 
@@ -353,7 +359,9 @@
   // "you" and "them" read better than "Me" and "Them" inside a sentence
   function who(i) { var n = nameOf(i), l = n.toLowerCase(); return l === 'me' ? 'you' : l === 'them' ? 'them' : n; }
   function erase() {
-    try { localStorage.removeItem(KEY); localStorage.removeItem(MODE_KEY); } catch (e) {}
+    // the quick look's answers go too ("Erase" means nothing from the stand stays on this device)
+    try { localStorage.removeItem(KEY); localStorage.removeItem(MODE_KEY); localStorage.removeItem('tol-lemonade-quick'); } catch (e) {}
+    try { document.dispatchEvent(new CustomEvent('tol-lemonade-erased')); } catch (e) {}
     keep = false;
     $('keep-device').checked = false;
     status('Erased. Nothing from the stand is kept on this device now.');
@@ -4029,7 +4037,83 @@
     return e.returnValue;
   });
 
+
+  /* ---------- from the quick look (assets/js/lemonade-quick.js): its names, and its jobs or a fridge list ---------- */
+  // q: { people: [names], me: index answering on this device, jobs: [{ name, cat, m, f, u, who }] (who: a person's
+  // index, or -1 for "both"), owners: [{ name, who }] }. Nothing already on the stand is overwritten: a job that's
+  // there keeps its numbers, and a fridge list keeps its jobs (up to five in all).
+  function quickPeople(names) {
+    names = (names || []).map(function (n) { return String(n || '').trim().slice(0, 40); });
+    var fresh = state.example || (!realJobs().length && !realBills().length);
+    if (fresh) {
+      // an untouched stand takes the quick look's names, in its order (its grey example rows stay until jobs come in)
+      var n = Math.max(MIN, Math.min(MAX, names.length));
+      var old = state.people.slice();
+      state.people = [];
+      for (var i = 0; i < n; i++) state.people.push(names[i] || old[i] || (i === 0 ? 'Me' : i === 1 ? 'Them' : ''));
+      normalize();
+      return names.map(function (_, i) { return i < n ? i : -1; });
+    }
+    // a stand with entries: match people by name, add anyone new (up to eight), never rename
+    return names.map(function (nm, i) {
+      var k = -1;
+      state.people.forEach(function (p, j) { if (k < 0 && nm && low(p) === low(nm)) k = j; });
+      if (k < 0 && (!nm || placeholder(nm)) && i < state.people.length && placeholder(state.people[i])) k = i;
+      if (k < 0 && state.people.length < MAX) {
+        state.people.push(nm || 'Person ' + (state.people.length + 1));
+        normalize();
+        k = state.people.length - 1;
+      }
+      return k;
+    });
+  }
+  function fromQuick(q) {
+    q = q || {};
+    var map = quickPeople(q.people), me = typeof q.me === 'number' && map[q.me] != null ? map[q.me] : -1, added = 0, own = 0;
+    (q.jobs || []).forEach(function (x) {
+      var nm = String(x.name || '').trim().slice(0, 80); if (!nm) return;
+      if (state.jobs.some(function (j) { return !j.ex && jobKey(j.name) === jobKey(nm); })) return;
+      var t = libTask(nm), cat = CAT[x.cat] ? x.cat : t ? libMatch(nm).cat : guessCat(nm);
+      var f = FREQ[x.f] ? x.f : t ? t[2] : 'week', u = x.u === 'h' || x.u === 'm' ? x.u : t ? (t[3] || 'm') : 'm', m = num(x.m) || (t ? t[1] : 0);
+      var j = { name: nm, v: zeros(), t: zeros(), cat: cat, freq: f, unit: u, nm: zeros() };
+      if (!t) j.custom = true;
+      if (!solo() && PERSONAL_LIB[nm.toLowerCase()]) j.personal = true;
+      // your own side only (each person fills in their own): a typical time where you said you do it, half of it
+      // where you share it, and nothing on the others' side for them to fill in
+      var w = typeof x.who === 'number' ? (x.who >= 0 ? map[x.who] : -1) : null;
+      if (me >= 0 && m) {
+        if (w === me) j.v[me] = m;
+        else if (w === -1) j.v[me] = u === 'h' ? Math.round(m / 2 * 10) / 10 : Math.max(5, Math.round(m / 2 / 5) * 5);
+      } else if (m) j.pick = m;
+      state.jobs.push(j); added++;
+    });
+    if (q.owners && q.owners.length) {
+      var list = ownersList();
+      q.owners.forEach(function (o) {
+        var nm = String(o.name || '').trim().slice(0, 60); if (!nm) return;
+        var who = typeof o.who === 'number' && o.who >= 0 && map[o.who] != null ? map[o.who] : -1;
+        var have = list.filter(function (x) { return low(x.name) === low(nm); })[0];
+        if (have) { if (have.who < 0) have.who = who; own++; return; }
+        if (list.length >= MAX_OWN) return;
+        list.push({ name: nm, who: who }); own++;
+      });
+      // the quick look keeps itself on this device, so the fridge list made from it does too
+      if (!keep) { keep = true; $('keep-device').checked = true; }
+    }
+    if (me >= 0) state.me = me;
+    if (added) {
+      // the first jobs clear the grey example, so it never mixes with yours
+      state.jobs = state.jobs.filter(function (j) { return !j.ex; });
+      state.bills = state.bills.filter(function (b) { return !b.ex; });
+      markEdited();
+      if (q.mode !== false) { saveMode('group'); setMode('group', false); }
+    }
+    renderAll(); save();
+    return { added: added, owners: own, me: me };
+  }
+
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
-    sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); } };
+    sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); },
+    fromQuick: fromQuick, hasStand: function () { return !!state && !state.example && (realJobs().length > 0 || realBills().length > 0); } };
 })();

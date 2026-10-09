@@ -228,7 +228,7 @@ talk:
 
 @@ holidays | Holidays and family gatherings
 pillars: I, II
-aka: holidays, Christmas, family gatherings, visiting family, holiday stress, festive season
+aka: holidays, festivals, Eid, Christmas, Diwali, Hanukkah, Lunar New Year, Passover, Nowruz, family gatherings, visiting family, holiday stress, festive season, two faiths, interfaith
 nut: Holidays combine high expectations, extra work, family dynamics and disrupted routines. Planning together, sharing the work and agreeing on limits can make them more enjoyable.
 deep:
 Holidays often come with a hidden load: presents, food, travel, cards, hosting. This work tends to fall on whoever usually does the planning, which can make holidays exhausting for one person and relaxing for another.
@@ -236,11 +236,14 @@ Holidays often come with a hidden load: presents, food, travel, cards, hosting. 
 Family gatherings can also bring back old roles: adult children may slip into childhood patterns, and old tensions may resurface.
 
 Practical steps: list all the holiday tasks and share them; agree on how much time to spend with each side of the family; decide in advance how to handle difficult topics; and build in rest.
+
+Whatever you celebrate, the same steps work. If your family keeps more than one faith or culture, put both sets of festivals on one calendar and decide which you host and which you visit.
 research:
 Research specifically on holiday stress is limited, though surveys often report increased stress around major holidays. Research on the division of household labour, emotional labour and family roles applies. Anthropologist Micaela di Leonardo’s 1987 essay described “kin work”: the cards, calls, gifts and gatherings that keep extended families connected, which she found was done mostly by women in the families she studied.
 links:
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)
 /lemonade-stand.html | The Lemonade Stand
+/two-faiths.html | Two faiths or cultures, one family
 talk:
 - What hidden holiday work does each of us do?
 - How should we divide time between families?
