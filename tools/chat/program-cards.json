@@ -388,7 +388,7 @@
       "first": true,
       "newTopic": true,
       "name": "whether I can be your therapist",
-      "pat": "\\b(can|could|will|would) you be (my|our) (therapist|counsel\\w*|psychologist|shrink|couples counsel\\w*)\\b|\\bare you (a |an )?(real )?(therapist|counsel\\w*|psychologist|doctor|professional)\\b|\\b(is this|is it|are you) (like )?(therapy|counsel\\w*)\\b|\\b(instead of|replace|replacing|substitute for) (a |my |our )?(therapist|therapy|counsel\\w*)\\b|\\b(how|where) (do|can|could) (i|we) find (a |an )?(good )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*)\\b",
+      "pat": "\\b(can|could|will|would) you be (my|our) (therapist|counsel\\w*|psychologist|shrink|couples counsel\\w*)\\b|\\bare you (a |an )?(real )?(therapist|counsel\\w*|psychologist|doctor|professional)\\b|\\bare you (like )?(therapy|counsel\\w*)\\b|\\b(instead of|replace|replacing|substitute for) (a |my |our )?(therapist|therapy|counsel\\w*)\\b|\\b(how|where) (do|can|could) (i|we) find (a |an )?(good )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*)\\b",
       "notPat": "\\b(anger|temper|yell\\w*|rage)\\b",
       "keys": [],
       "what": [
@@ -522,7 +522,8 @@
           "/lemonade-stand.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "notPat": "\\bretir\\w*\\b"
     },
     {
       "id": "differenthours",
@@ -607,7 +608,7 @@
       "newTopic": true,
       "name": "a friendship that has drifted",
       "pat": "\\b(best friend|bestie|bff|my friend|our friend|old friend|close friend|my mate|friendship)s?\\b.{0,60}\\b(never|doesnt|dont|stopped|barely|hardly|no longer|no energy|neglect\\w*|drift\\w*|baby|newborn|text\\w* back|reply|replies|replying|respond\\w*|reach\\w* out|distant|still care|ghost\\w*|lost touch)\\b|\\b(neglect\\w*|ignor\\w*|lost touch with|drift\\w* (apart )?from|ghost\\w*) (my )?(best |old |close )?friends?\\b|\\b(no energy|too tired) to (reply|text|answer|see|call) (to )?(my )?friends?\\b",
-      "notPat": "\\b(died|passed|funeral|dead|killed|cancer|hospital|cuts? (herself|himself|themselves)|hurt\\w* (herself|himself|themselves))\\b",
+      "notPat": "\\b(died|passed|funeral|dead|killed|cancer|hospital|cuts? (herself|himself|themselves)|hurt\\w* (herself|himself|themselves)|help plan|plan anything|plans? (things|stuff|trips?|nights? out)|friend group|group chat|split (the )?(bill|costs?)|pay (their|her|his) share)\\b",
       "keys": [],
       "what": [
         "Friendships drift most when life changes: a new baby, a move, a new job, or just low energy. It rarely means the friendship is over. It usually needs a smaller, kinder rhythm for a while."
@@ -645,7 +646,7 @@
       "newTopic": true,
       "name": "joining a home and feeling like a guest",
       "pat": "\\b(moved in with|moving in with|joined|joining|live with) (my |our |his |her |their )?(partners|partner|boyfriend|girlfriend|husband|wife|them|him|her)\\b.{0,50}\\b(guest|outsider|visitor|dont belong|don t belong|not my home|their house|his house|her house)\\b|\\b(feel|feels|feeling) like a (guest|visitor|lodger)\\b",
-      "notPat": "\\b(kids?|children|stepkids?|step ?(son|daughter|children|child)|his son|her son|his daughter|her daughter)\\b",
+      "notPat": "\\b(kids?|children|stepkids?|step ?(son|daughter|children|child)|his son|her son|his daughter|her daughter|my own|every other weekend|weekends? with us)\\b",
       "keys": [],
       "what": [
         "Moving into a home that already has its own rhythm often leaves the newest person feeling like a guest for a while. That’s about how the home runs, not about whether you’re wanted."
