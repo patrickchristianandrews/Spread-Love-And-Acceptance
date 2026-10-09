@@ -463,11 +463,11 @@
   "year": 1990,
   "title": "Gender and social structure in the demand/withdraw pattern of marital conflict",
   "venue": "Journal of Personality and Social Psychology, 59(1), 73–81",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.59.1.73",
+  "url": "https://doi.org/10.1037/0022-3514.59.1.73",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Wife-demand/husband-withdraw was more common overall, but who demanded depended partly on whose issue was being discussed; the authors linked the pattern to social structure (who wants change) as well as gender.",
+  "strength": "moderate — influential observational study; later work finds topic predicts the demander role about as strongly as gender",
   "topics": [
    "pursue-withdraw",
    "demand-withdraw"
@@ -480,20 +480,20 @@
    "/pursue-withdraw.html",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.59.1.73 Title, authors, journal, volume and pages WERE confirmed via citing reference lists (UCLA publication list; Cambridge reference list), but no page showing the DOI or the article itself was found."
+  "verified": true,
+  "verified_by": "DOI 10.1037/0022-3514.59.1.73 shown in citing reference (search result); https://www.researchgate.net/publication/20941551_Gender_and_Social_Structure_in_the_DemandWithdraw_Pattern_of_Marital_Conflict"
  },
  {
   "id": "gottman-silver-1999",
   "authors": "Gottman, J. M., & Silver, N.",
   "year": 1999,
   "title": "The Seven Principles for Making Marriage Work",
-  "venue": "Crown (book; revised editions later)",
+  "venue": "Crown Publishers (New York); revised edition 2015",
   "doi": null,
-  "url": null,
+  "url": "https://en.wikipedia.org/wiki/The_Seven_Principles_for_Making_Marriage_Work",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A popular book translating Gottman's research into practice: love maps, fondness and admiration, turning toward bids, accepting influence, solving solvable problems, managing perpetual ones, and shared meaning.",
+  "strength": "moderate — practice framework drawing on his research rather than separately tested",
   "topics": [
    "love-maps",
    "bids",
@@ -507,20 +507,20 @@
    "/turning-toward-in-depth.html#their-world",
    "/turning-toward-in-depth.html#sources"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/The_Seven_Principles_for_Making_Marriage_Work ; https://biblio.co.uk/0609601040 (Crown, 1999)"
  },
  {
   "id": "gottman-2011-science-of-trust",
   "authors": "Gottman, J. M.",
   "year": 2011,
   "title": "The Science of Trust: Emotional Attunement for Couples",
-  "venue": "W. W. Norton (book)",
+  "venue": "W. W. Norton (New York)",
   "doi": null,
-  "url": null,
+  "url": "https://wwnorton.co.uk/books/9780393705959-the-science-of-trust",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A book drawing on Gottman's lab research and game theory to argue that trust is built through emotional attunement in everyday moments, and describing how couples can repair it.",
+  "strength": "moderate — book-length synthesis of one research program",
   "topics": [
    "trust"
   ],
@@ -528,8 +528,8 @@
    "/book/understanding-11-healing-in-depth.html#trust",
    "/library/relationships.html#trust"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://wwnorton.co.uk/books/9780393705959-the-science-of-trust ; https://greatergood.berkeley.edu/article/item/from_our_bookshelf_trusting_relationships_caring_for_the_caregivers"
  },
  {
   "id": "brown-sokal-friedman-2013",
@@ -537,11 +537,11 @@
   "year": 2013,
   "title": "The complex dynamics of wishful thinking: The critical positivity ratio",
   "venue": "American Psychologist, 68(9), 801–813",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/a0032850",
+  "url": "https://doi.org/10.1037/a0032850",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "Showed that the mathematical modelling behind the claimed 'critical positivity ratio' (about 2.9 to 1, the so-called Losada ratio) was unfounded; the original paper's modelling claims were formally withdrawn.",
+  "strength": "strong — the critique was accepted and the original model retracted",
   "topics": [
    "five-to-one",
    "limits"
@@ -550,8 +550,8 @@
    "/library/emotions.html#positive-emotions",
    "/library/relationships.html#five-to-one"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/a0032850"
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/23855896/ ; https://arxiv.org/pdf/1307.7006"
  },
  {
   "id": "hazan-shaver-1987",
@@ -559,11 +559,11 @@
   "year": 1987,
   "title": "Romantic love conceptualized as an attachment process",
   "venue": "Journal of Personality and Social Psychology, 52(3), 511–524",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.52.3.511",
+  "url": "https://doi.org/10.1037/0022-3514.52.3.511",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Two questionnaire studies proposed that adult romantic love is an attachment process: the share of adults in each of three attachment styles roughly matched infant figures, and the styles differed in how people experienced love, their views of self and others, and recalled relationships with parents.",
+  "strength": "strong — landmark paper; self-report and cross-sectional",
   "topics": [
    "attachment"
   ],
@@ -572,8 +572,8 @@
    "/book/understanding-5-belonging-in-depth.html#patterns",
    "/library/relationships.html#adult-attachment"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.52.3.511"
+  "verified": true,
+  "verified_by": "https://psycnet.apa.org/doiLanding?doi=10.1037%2F0022-3514.52.3.511"
  },
  {
   "id": "bartholomew-horowitz-1991",
@@ -581,19 +581,19 @@
   "year": 1991,
   "title": "Attachment styles among young adults: A test of a four-category model",
   "venue": "Journal of Personality and Social Psychology, 61(2), 226–244",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.61.2.226",
+  "url": "https://doi.org/10.1037/0022-3514.61.2.226",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed and tested a four-category model of adult attachment (secure, preoccupied, dismissing and fearful).",
+  "strength": "strong — highly influential; later work favors dimensions over categories",
   "topics": [
    "attachment"
   ],
   "mentioned_on": [
    "/library/relationships.html#adult-attachment"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.61.2.226"
+  "verified": true,
+  "verified_by": "Citation with DOI 10.1037/0022-3514.61.2.226 shown in reference lists of PubMed-indexed citing papers (e.g. https://pubmed.ncbi.nlm.nih.gov/31523148/)"
  },
  {
   "id": "brennan-clark-shaver-1998",
@@ -602,10 +602,10 @@
   "title": "Self-report measurement of adult attachment: An integrative overview",
   "venue": "In J. A. Simpson & W. S. Rholes (Eds.), Attachment Theory and Close Relationships (pp. 46–76). Guilford",
   "doi": null,
-  "url": null,
+  "url": "https://labs.psychology.illinois.edu/~rcfraley/measures/brennan.html",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "A large factor-analytic study of all known self-report adult attachment measures found that they reduce to two broad dimensions: attachment anxiety and avoidance.",
+  "strength": "strong — the basis of the widely used two-dimension approach; self-report",
   "topics": [
    "attachment"
   ],
@@ -613,8 +613,8 @@
    "/book/understanding-5-belonging-in-depth.html#patterns",
    "/library/relationships.html#adult-attachment"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://labs.psychology.illinois.edu/~rcfraley/measures/brennan.html ; https://library.usi.edu/record/285405"
  },
  {
   "id": "fraley-2015-dimensional",
@@ -622,11 +622,11 @@
   "year": 2015,
   "title": "Are adult attachment styles categorical or dimensional? A taxometric analysis of general and relationship-specific attachment orientations",
   "venue": "Journal of Personality and Social Psychology, 109(2), 354–368",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/pspp0000027",
+  "url": "https://doi.org/10.1037/pspp0000027",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Taxometric analyses suggested that adult attachment differences are dimensional (degrees of anxiety and avoidance) rather than distinct types.",
+  "strength": "strong — large samples; consistent with the field's current consensus",
   "topics": [
    "attachment"
   ],
@@ -634,20 +634,20 @@
    "/book/understanding-5-belonging-in-depth.html#patterns",
    "/library/relationships.html#adult-attachment"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/pspp0000027 The site names only 'R. Chris Fraley and others'; this paper is a suggested supporting source."
+  "verified": true,
+  "verified_by": "DOI shown in citing references (e.g. https://psycnet.apa.org/manuscript/2017-33746-001.pdf)"
  },
  {
   "id": "bowlby-1969",
   "authors": "Bowlby, J.",
   "year": 1969,
   "title": "Attachment and Loss, Vol. 1: Attachment",
-  "venue": "Hogarth Press / Basic Books (book)",
+  "venue": "Hogarth Press and the Institute of Psycho-Analysis (London) / Basic Books (New York)",
   "doi": null,
-  "url": null,
+  "url": "https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "The first volume of Bowlby's trilogy, setting out attachment theory: children's bond with caregivers is an evolved system for seeking safety and comfort.",
+  "strength": "strong — foundational theory, extensively supported in later research",
   "topics": [
    "attachment"
   ],
@@ -662,20 +662,20 @@
    "/library/relationships.html#attachment-theory",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://works.www.wellcomecollection.org/works/wu7gxjkb ; https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp (Hogarth Press / Basic Books, 1969)"
  },
  {
   "id": "ainsworth-1978",
   "authors": "Ainsworth, M. D. S., Blehar, M. C., Waters, E., & Wall, S.",
   "year": 1978,
   "title": "Patterns of Attachment: A Psychological Study of the Strange Situation",
-  "venue": "Lawrence Erlbaum (book)",
+  "venue": "Lawrence Erlbaum Associates (Hillsdale, NJ)",
   "doi": null,
-  "url": null,
+  "url": "https://search.worldcat.org/title/4194069",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "Reported the Strange Situation studies of infants and mothers and described secure and insecure attachment patterns.",
+  "strength": "strong — foundational, widely replicated method",
   "topics": [
    "attachment"
   ],
@@ -688,8 +688,8 @@
    "/library/relationships.html#adult-attachment",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/title/4194069"
  },
  {
   "id": "coan-schaefer-davidson-2006",
@@ -697,11 +697,11 @@
   "year": 2006,
   "title": "Lending a hand: Social regulation of the neural response to threat",
   "venue": "Psychological Science, 17(12), 1032–1039",
-  "doi": null,
-  "url": null,
+  "doi": "10.1111/j.1467-9280.2006.01832.x",
+  "url": "https://doi.org/10.1111/j.1467-9280.2006.01832.x",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In an fMRI study, married women facing the threat of a mild shock showed less threat-related brain activity while holding their husband's hand than when alone.",
+  "strength": "moderate — small, much-cited brain-imaging study",
   "topics": [
    "social-support",
    "attachment"
@@ -711,8 +711,8 @@
    "/book/understanding-5-belonging-in-depth.html#safe-haven",
    "/library/stress.html#co-regulation"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1111/j.1467-9280.2006.01832.x"
+  "verified": true,
+  "verified_by": "DOI shown in citing references on journals.sagepub.com (e.g. https://journals.sagepub.com/doi/10.1177/1948550616646427)"
  },
  {
   "id": "impett-park-muise-2024",
@@ -720,11 +720,11 @@
   "year": 2024,
   "title": "Popular psychology through a scientific lens: Evaluating love languages from a relationship science perspective",
   "venue": "Current Directions in Psychological Science, 33(2), 87–92",
-  "doi": null,
-  "url": null,
+  "doi": "10.1177/09637214231217663",
+  "url": "https://doi.org/10.1177/09637214231217663",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "Reviewing the evidence, the authors concluded that the core assumptions of the five love languages (that people have one primary language and that matching languages improves relationships) are not well supported, while its underlying message of learning what a partner needs is sound.",
+  "strength": "strong — peer-reviewed review of the evidence",
   "topics": [
    "love-languages"
   ],
@@ -733,20 +733,20 @@
    "/library/relationships.html#love-languages",
    "/love-languages-in-depth.html#honest"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/09637214231217663"
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/09637214231217663"
  },
  {
   "id": "chapman-1992",
   "authors": "Chapman, G.",
   "year": 1992,
-  "title": "The Five Love Languages",
-  "venue": "Northfield Publishing (book; many later editions)",
+  "title": "The Five Love Languages: How to Express Heartfelt Commitment to Your Mate",
+  "venue": "Northfield Publishing (Chicago); later editions retitled The 5 Love Languages",
   "doi": null,
-  "url": null,
+  "url": "https://en.wikipedia.org/wiki/The_Five_Love_Languages",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A counselor's book proposing five ways people express and prefer to receive love: words of affirmation, acts of service, receiving gifts, quality time and physical touch. It came from counseling experience, not research.",
+  "strength": "debated — very popular; research has not supported its core assumptions (see Impett, Park & Muise, 2024)",
   "topics": [
    "love-languages"
   ],
@@ -763,20 +763,20 @@
    "/love-languages.html#honest",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/The_Five_Love_Languages ; https://catalog.cadl.org/Record/.b12894692 (Northfield, 1992)"
  },
  {
   "id": "chapman-thomas-2006",
   "authors": "Chapman, G., & Thomas, J.",
   "year": 2006,
-  "title": "The Five Languages of Apology",
-  "venue": "Northfield Publishing (book)",
+  "title": "The Five Languages of Apology: How to Experience Healing in All Your Relationships",
+  "venue": "Northfield Publishing (Chicago); revised 2022 as The 5 Apology Languages",
   "doi": null,
-  "url": null,
+  "url": "https://boulder.flatironslibrary.org/Record/.b16633180",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposes that people look for different parts of an apology: expressing regret, accepting responsibility, making restitution, genuinely repenting and requesting forgiveness.",
+  "strength": "early — popular book with little direct research; Lewicki et al. (2016) tested similar components",
   "topics": [
    "apology",
    "love-languages"
@@ -785,20 +785,20 @@
    "/apology-languages.html#honest",
    "/love-languages-in-depth.html#similar"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "verified": true,
+  "verified_by": "https://catalog.burlesontx.com/Record/563560 ; https://boulder.flatironslibrary.org/Record/.b16633180"
  },
  {
   "id": "chapman-white-2011",
   "authors": "Chapman, G., & White, P.",
   "year": 2011,
-  "title": "The 5 Languages of Appreciation in the Workplace",
-  "venue": "Northfield Publishing (book)",
+  "title": "The 5 Languages of Appreciation in the Workplace: Empowering Organizations by Encouraging People",
+  "venue": "Northfield Publishing (Chicago)",
   "doi": null,
-  "url": null,
+  "url": "https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "Applies the love-languages idea to the workplace, proposing that employees differ in how they prefer to receive appreciation.",
+  "strength": "early — popular practitioner book with very little independent research",
   "topics": [
    "appreciation",
    "work"
@@ -808,8 +808,8 @@
    "/appreciation-at-work.html#honest",
    "/love-languages-in-depth.html#work"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Site gives 2012; first edition is believed to be 2011 — see fixnotes."
+  "verified": true,
+  "verified_by": "Library catalogs list Northfield, Chicago, 2011 (e.g. https://catalog.burlesontx.com/Record/287988 ; https://search.icpl.org/Record/1376580)"
  },
  {
   "id": "emmons-mccullough-2003",
@@ -817,19 +817,19 @@
   "year": 2003,
   "title": "Counting blessings versus burdens: An experimental investigation of gratitude and subjective well-being in daily life",
   "venue": "Journal of Personality and Social Psychology, 84(2), 377–389",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.84.2.377",
+  "url": "https://doi.org/10.1037/0022-3514.84.2.377",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In three studies, people randomly assigned to list things they were grateful for generally reported higher well-being than comparison groups, though not on every measure; effects on positive mood were the most consistent.",
+  "strength": "moderate — classic experiments; later meta-analyses find small average effects",
   "topics": [
    "gratitude"
   ],
   "mentioned_on": [
    "/library/connection.html#gratitude"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.84.2.377"
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12585811/"
  },
  {
   "id": "algoe-2012",
@@ -837,11 +837,11 @@
   "year": 2012,
   "title": "Find, remind, and bind: The functions of gratitude in everyday relationships",
   "venue": "Social and Personality Psychology Compass, 6(6), 455–469",
-  "doi": null,
-  "url": null,
+  "doi": "10.1111/j.1751-9004.2012.00439.x",
+  "url": "https://doi.org/10.1111/j.1751-9004.2012.00439.x",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Sets out find-remind-and-bind theory: gratitude helps people find good relationship partners, reminds them of existing good relationships, and binds them closer, by fueling cycles of mutually responsive behavior.",
+  "strength": "moderate — theory paper drawing on diary, observational and some experimental studies",
   "topics": [
    "gratitude",
    "appreciation"
@@ -855,8 +855,8 @@
    "/turning-toward-in-depth.html#sources",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1111/j.1751-9004.2012.00439.x"
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1751-9004.2012.00439.x"
  },
  {
   "id": "algoe-gable-maisel-2010",
@@ -864,19 +864,19 @@
   "year": 2010,
   "title": "It's the little things: Everyday gratitude as a booster shot for romantic relationships",
   "venue": "Personal Relationships, 17(2), 217–233",
-  "doi": null,
-  "url": null,
+  "doi": "10.1111/j.1475-6811.2010.01273.x",
+  "url": "https://doi.org/10.1111/j.1475-6811.2010.01273.x",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In a daily-diary study of cohabiting couples, feeling gratitude after a partner's thoughtful act predicted greater relationship connection and satisfaction the next day, for both partners.",
+  "strength": "moderate — daily diary, correlational",
   "topics": [
    "gratitude"
   ],
   "mentioned_on": [
    "/library/connection.html#find-remind-bind"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1111/j.1475-6811.2010.01273.x"
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1475-6811.2010.01273.x"
  },
  {
   "id": "gordon-2012-gratitude",
@@ -884,11 +884,11 @@
   "year": 2012,
   "title": "To have and to hold: Gratitude promotes relationship maintenance in intimate bonds",
   "venue": "Journal of Personality and Social Psychology, 103(2), 257–274",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/a0028723",
+  "url": "https://doi.org/10.1037/a0028723",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Across cross-sectional, daily, observational and longitudinal studies, people who felt appreciated by their partners were more appreciative in return; appreciative partners were more responsive and committed, and more likely to still be together months later.",
+  "strength": "moderate — multi-method but mostly correlational",
   "topics": [
    "gratitude",
    "appreciation",
@@ -900,8 +900,8 @@
    "/library/fairness.html#appreciation-and-recognition",
    "/library/stress.html#sleep-and-mood"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/a0028723"
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22642482/"
  },
  {
   "id": "dickens-2017-gratitude-meta",
@@ -909,39 +909,39 @@
   "year": 2017,
   "title": "Using gratitude to promote positive change: A series of meta-analyses investigating the effectiveness of gratitude interventions",
   "venue": "Basic and Applied Social Psychology, 39(4), 193–208",
-  "doi": null,
-  "url": null,
+  "doi": "10.1080/01973533.2017.1323638",
+  "url": "https://doi.org/10.1080/01973533.2017.1323638",
   "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
+  "finding": "A series of meta-analyses (38 studies) found gratitude interventions improved outcomes such as happiness compared with neutral conditions, with smaller or no advantages over other positive activities; the author suggested their unique benefits may be overemphasized.",
+  "strength": "strong — meta-analysis; effects generally small",
   "topics": [
    "gratitude"
   ],
   "mentioned_on": [
    "/library/connection.html#gratitude"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1080/01973533.2017.1323638"
+  "verified": true,
+  "verified_by": "https://www.tandfonline.com/doi/abs/10.1080/01973533.2017.1323638"
  },
  {
   "id": "davis-2016-gratitude-meta",
-  "authors": "Davis, D. E., Choe, E., Meyers, J., et al.",
+  "authors": "Davis, D. E., Choe, E., Meyers, J., Wade, N., Varjas, K., Gifford, A., Quinn, A., Hook, J. N., Van Tongeren, D. R., Griffin, B. J., & Worthington, E. L., Jr.",
   "year": 2016,
   "title": "Thankful for the little things: A meta-analysis of gratitude interventions",
   "venue": "Journal of Counseling Psychology, 63(1), 20–31",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/cou0000107",
+  "url": "https://doi.org/10.1037/cou0000107",
   "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
+  "finding": "A meta-analysis found gratitude interventions had small benefits for well-being compared with measurement-only controls and with alternative activities, with mixed results on other outcomes.",
+  "strength": "strong — meta-analysis; effects small",
   "topics": [
    "gratitude"
   ],
   "mentioned_on": [
    "/library/connection.html#gratitude"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/cou0000107"
+  "verified": true,
+  "verified_by": "DOI 10.1037/cou0000107 shown in citing paper (https://link.springer.com/10.1007/s41042-023-00086-6)"
  },
  {
   "id": "gable-2004-capitalization",
@@ -949,11 +949,11 @@
   "year": 2004,
   "title": "What do you do when things go right? The intrapersonal and interpersonal benefits of sharing positive events",
   "venue": "Journal of Personality and Social Psychology, 87(2), 228–245",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.87.2.228",
+  "url": "https://doi.org/10.1037/0022-3514.87.2.228",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Across four studies, telling others about good news was linked with higher daily positive mood and well-being beyond the event itself, especially when the listener responded actively and constructively; couples whose partners usually responded enthusiastically reported more intimacy and satisfaction.",
+  "strength": "strong — multiple studies, widely replicated; mostly correlational",
   "topics": [
    "capitalization",
    "good-news"
@@ -967,8 +967,8 @@
    "/turning-toward-in-depth.html#sources",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.87.2.228"
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15301629/"
  },
  {
   "id": "gable-gonzaga-strachman-2006",
@@ -976,19 +976,1308 @@
   "year": 2006,
   "title": "Will you be there for me when things go right? Supportive responses to positive event disclosures",
   "venue": "Journal of Personality and Social Psychology, 91(5), 904–917",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.91.5.904",
+  "url": "https://doi.org/10.1037/0022-3514.91.5.904",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In 79 dating couples filmed sharing recent events, how partners responded to good news predicted relationship well-being and break-ups two months later more strongly than how they responded to bad news.",
+  "strength": "moderate — observational study with a modest sample",
   "topics": [
    "capitalization"
   ],
   "mentioned_on": [
    "/library/connection.html#capitalization"
   ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.91.5.904"
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17059309/"
+ },
+ {
+  "id": "brickman-campbell-1971",
+  "authors": "Brickman, P., & Campbell, D. T.",
+  "year": 1971,
+  "title": "Hedonic relativism and planning the good society",
+  "venue": "In M. H. Appley (Ed.), Adaptation-Level Theory (pp. 287–302). Academic Press",
+  "doi": null,
+  "url": "https://worlddatabaseofhappiness.eur.nl/publications/hedonic-relativism-and-planning-the-good-society-244/",
+  "kind": "theory",
+  "finding": "Introduced the idea later called the hedonic treadmill: people adapt to improved circumstances, so gains in happiness tend to fade.",
+  "strength": "moderate — influential theory; later research shows adaptation is real but often incomplete and varies by event",
+  "topics": [
+   "complacency",
+   "hedonic-adaptation"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#complacency",
+   "/library/life.html#hedonic-adaptation"
+  ],
+  "verified": true,
+  "verified_by": "https://worlddatabaseofhappiness.eur.nl/publications/hedonic-relativism-and-planning-the-good-society-244/"
+ },
+ {
+  "id": "lyubomirsky-2011-hedonic-adaptation",
+  "authors": "Lyubomirsky, S.",
+  "year": 2011,
+  "title": "Hedonic adaptation to positive and negative experiences",
+  "venue": "In S. Folkman (Ed.), The Oxford Handbook of Stress, Health, and Coping (pp. 200–224). Oxford University Press (online 2010)",
+  "doi": "10.1093/oxfordhb/9780195375343.013.0011",
+  "url": "https://doi.org/10.1093/oxfordhb/9780195375343.013.0011",
+  "kind": "review",
+  "finding": "Reviews evidence that both joys and sorrows fade over time, discusses why people may adapt differently to positive and negative changes, and presents a model of how adaptation to positive changes might be slowed.",
+  "strength": "moderate — narrative review",
+  "topics": [
+   "complacency",
+   "hedonic-adaptation"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#complacency"
+  ],
+  "verified": true,
+  "verified_by": "https://sonjalyubomirsky.com/wp-content/uploads/2024/03/Lyubomirsky-2011.pdf ; Oxford Handbooks Online DOI 10.1093/oxfordhb/9780195375343.013.0011 shown in search result"
+ },
+ {
+  "id": "aron-2000-novel-activities",
+  "authors": "Aron, A., Norman, C. C., Aron, E. N., McKenna, C., & Heyman, R. E.",
+  "year": 2000,
+  "title": "Couples' shared participation in novel and arousing activities and experienced relationship quality",
+  "venue": "Journal of Personality and Social Psychology, 78(2), 273–284",
+  "doi": "10.1037/0022-3514.78.2.273",
+  "url": "https://doi.org/10.1037/0022-3514.78.2.273",
+  "kind": "study",
+  "finding": "Couples who took part together in a novel, mildly challenging activity reported higher relationship quality afterward than couples who did a mundane task.",
+  "strength": "moderate — experiments with short-term lab effects; later studies mostly supportive",
+  "topics": [
+   "complacency",
+   "self-expansion",
+   "novelty"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#partner",
+   "/complacency-in-depth.html#sources",
+   "/library.html#pillar-v",
+   "/library/connection.html#complacency",
+   "/library/relationships.html#pillars",
+   "/library/relationships.html#self-expansion",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "DOI 10.1037/0022-3514.78.2.273 shown in citing reference lists; cited in https://pubmed.ncbi.nlm.nih.gov/42193579/"
+ },
+ {
+  "id": "aron-aron-1986",
+  "authors": "Aron, A., & Aron, E. N.",
+  "year": 1986,
+  "title": "Love and the Expansion of Self: Understanding Attraction and Satisfaction",
+  "venue": "Hemisphere Publishing (Washington, DC)",
+  "doi": null,
+  "url": "https://libcat.library.tamu.edu/Record/in00000408876",
+  "kind": "book",
+  "finding": "Introduced the self-expansion model: people are motivated to grow by including a partner's perspectives, resources and identity in their sense of self.",
+  "strength": "moderate — influential theory with broad later support",
+  "topics": [
+   "self-expansion"
+  ],
+  "mentioned_on": [
+   "/library/relationships.html#self-expansion"
+  ],
+  "verified": true,
+  "verified_by": "https://www.lib.sophia.ac.jp/opac/opac_link/bibid/1000353200 ; https://libcat.library.tamu.edu/Record/in00000408876"
+ },
+ {
+  "id": "hopper-knapp-scott-1981",
+  "authors": "Hopper, R., Knapp, M. L., & Scott, L.",
+  "year": 1981,
+  "title": "Couples' personal idioms: Exploring intimate talk",
+  "venue": "Journal of Communication, 31(1), 23–33",
+  "doi": "10.1111/j.1460-2466.1981.tb01201.x",
+  "url": "https://doi.org/10.1111/j.1460-2466.1981.tb01201.x",
+  "kind": "study",
+  "finding": "An exploratory study of the private words, nicknames and phrases couples develop (personal idioms) and what they are used for in intimate talk.",
+  "strength": "early — descriptive, exploratory study",
+  "topics": [
+   "shared-language",
+   "maintenance"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#shared-language"
+  ],
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/10.1111/j.1460-2466.1981.tb01201.x ; https://academic.oup.com/joc/issue/31/1"
+ },
+ {
+  "id": "bruess-pearson-1993",
+  "authors": "Bruess, C. J. S., & Pearson, J. C.",
+  "year": 1993,
+  "title": "'Sweet pea' and 'pussy cat': An examination of idiom use and marital satisfaction over the life cycle",
+  "venue": "Journal of Social and Personal Relationships, 10(4), 609–615",
+  "doi": "10.1177/0265407593104009",
+  "url": "https://doi.org/10.1177/0265407593104009",
+  "kind": "study",
+  "finding": "In 154 married couples, more satisfied spouses reported using more private idioms; idiom use was highest early in marriage and declined across the life cycle.",
+  "strength": "early — one correlational study using recalled idioms",
+  "topics": [
+   "shared-language",
+   "maintenance"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#shared-language",
+   "/touchstones-in-depth.html#evidence",
+   "/touchstones.html#honest"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/0265407593104009"
+ },
+ {
+  "id": "bruess-pearson-1997",
+  "authors": "Bruess, C. J. S., & Pearson, J. C.",
+  "year": 1997,
+  "title": "Interpersonal rituals in marriage and adult friendship",
+  "venue": "Communication Monographs, 64(1), 25–46",
+  "doi": "10.1080/03637759709376403",
+  "url": "https://doi.org/10.1080/03637759709376403",
+  "kind": "study",
+  "finding": "Interviews and questionnaires with married couples produced typologies of the everyday rituals people share in marriage (seven types) and in adult friendship (six types).",
+  "strength": "early — descriptive, qualitative study",
+  "topics": [
+   "rituals",
+   "maintenance",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#shared-language",
+   "/touchstones-in-depth.html#evidence",
+   "/touchstones.html#honest"
+  ],
+  "verified": true,
+  "verified_by": "https://www.tandfonline.com/doi/abs/10.1080/03637759709376403"
+ },
+ {
+  "id": "fiese-2002-rituals",
+  "authors": "Fiese, B. H., Tomcho, T. J., Douglas, M., Josephs, K., Poltrock, S., & Baker, T.",
+  "year": 2002,
+  "title": "A review of 50 years of research on naturally occurring family routines and rituals: Cause for celebration?",
+  "venue": "Journal of Family Psychology, 16(4), 381–390",
+  "doi": "10.1037/0893-3200.16.4.381",
+  "url": "https://doi.org/10.1037/0893-3200.16.4.381",
+  "kind": "review",
+  "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
+  "strength": "moderate — qualitative review of mostly correlational studies",
+  "topics": [
+   "rituals"
+  ],
+  "mentioned_on": [
+   "/bonding.html#how-it-grows",
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#rituals-of-connection",
+   "/library/connection.html#shared-language"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12561283/"
+ },
+ {
+  "id": "rusbult-1980",
+  "authors": "Rusbult, C. E.",
+  "year": 1980,
+  "title": "Commitment and satisfaction in romantic associations: A test of the investment model",
+  "venue": "Journal of Experimental Social Psychology, 16(2), 172–186",
+  "doi": "10.1016/0022-1031(80)90007-4",
+  "url": "https://doi.org/10.1016/0022-1031(80)90007-4",
+  "kind": "study",
+  "finding": "Two studies tested the investment model: commitment to a relationship was predicted by satisfaction, the quality of alternatives and the size of investments.",
+  "strength": "strong — foundational, later confirmed by meta-analyses",
+  "topics": [
+   "commitment",
+   "maintenance"
+  ],
+  "mentioned_on": [
+   "/library.html#pillar-v",
+   "/library/relationships.html#pillars",
+   "/library/relationships.html#investment-model",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.sciencedirect.com search result citing DOI 10.1016/0022-1031(80)90007-4 (JESP 16, 172–186)"
+ },
+ {
+  "id": "le-agnew-2003",
+  "authors": "Le, B., & Agnew, C. R.",
+  "year": 2003,
+  "title": "Commitment and its theorized determinants: A meta-analysis of the Investment Model",
+  "venue": "Personal Relationships, 10(1), 37–57",
+  "doi": "10.1111/1475-6811.00035",
+  "url": "https://doi.org/10.1111/1475-6811.00035",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 52 studies (11,582 participants) found satisfaction, quality of alternatives and investments each correlated with commitment, together explaining about two-thirds of its variance; commitment in turn predicted break-up.",
+  "strength": "strong — meta-analysis, updated by Tran et al. (2019) with similar conclusions",
+  "topics": [
+   "commitment"
+  ],
+  "mentioned_on": [
+   "/library/relationships.html#investment-model"
+  ],
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/10.1111/1475-6811.00035"
+ },
+ {
+  "id": "rempel-holmes-zanna-1985",
+  "authors": "Rempel, J. K., Holmes, J. G., & Zanna, M. P.",
+  "year": 1985,
+  "title": "Trust in close relationships",
+  "venue": "Journal of Personality and Social Psychology, 49(1), 95–112",
+  "doi": "10.1037/0022-3514.49.1.95",
+  "url": "https://doi.org/10.1037/0022-3514.49.1.95",
+  "kind": "study",
+  "finding": "Described trust in close relationships as having three components, predictability, dependability and faith, and developed a self-report Trust Scale to measure them.",
+  "strength": "strong — landmark, highly cited model and measure",
+  "topics": [
+   "trust"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#trust",
+   "/book/understanding-5-belonging-in-depth.html#trust",
+   "/library/relationships.html#trust"
+  ],
+  "verified": true,
+  "verified_by": "https://synapsesocial.com/papers/W2034235631 (DOI shown) ; https://www.yorku.ca/rokada/psyctest/trust.pdf"
+ },
+ {
+  "id": "murray-holmes-griffin-1996-prescient",
+  "authors": "Murray, S. L., Holmes, J. G., & Griffin, D. W.",
+  "year": 1996,
+  "title": "The self-fulfilling nature of positive illusions in romantic relationships: Love is not blind, but prescient",
+  "venue": "Journal of Personality and Social Psychology, 71(6), 1155–1180",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/8979384/",
+  "kind": "study",
+  "finding": "Following dating couples over a year, relationships were most likely to last, even through conflicts and doubts, when partners idealized each other most; idealization predicted later gains in satisfaction and fewer conflicts.",
+  "strength": "moderate — longitudinal but correlational; later work shows limits when problems are serious",
+  "topics": [
+   "positive-illusions"
+  ],
+  "mentioned_on": [
+   "/library/relationships.html#positive-illusions"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8979384/",
+  "note": "Replaces the companion paper 'The benefits of positive illusions' (JPSP 70(1)), which could not be confirmed in search."
+ },
+ {
+  "id": "drigotas-1999-michelangelo",
+  "authors": "Drigotas, S. M., Rusbult, C. E., Wieselquist, J., & Whitton, S. W.",
+  "year": 1999,
+  "title": "Close partner as sculptor of the ideal self: Behavioral affirmation and the Michelangelo phenomenon",
+  "venue": "Journal of Personality and Social Psychology, 77(2), 293–323",
+  "doi": "10.1037/0022-3514.77.2.293",
+  "url": "https://doi.org/10.1037/0022-3514.77.2.293",
+  "kind": "study",
+  "finding": "Across four studies, people whose partners saw and treated them in line with their ideal self moved closer to that ideal over time, and this affirmation was linked with better couple functioning and more stable relationships.",
+  "strength": "moderate — correlational and longitudinal, not experimental",
+  "topics": [
+   "michelangelo-effect"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#others",
+   "/library/relationships.html#michelangelo-effect"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/10474210/"
+ },
+ {
+  "id": "ross-1977-fae",
+  "authors": "Ross, L.",
+  "year": 1977,
+  "title": "The intuitive psychologist and his shortcomings: Distortions in the attribution process",
+  "venue": "Advances in Experimental Social Psychology, 10, 173–220",
+  "doi": "10.1016/S0065-2601(08)60357-3",
+  "url": "https://doi.org/10.1016/S0065-2601(08)60357-3",
+  "kind": "theory",
+  "finding": "Reviewed the biases of the lay 'intuitive psychologist' and named the fundamental attribution error: underestimating situational causes and overestimating personal dispositions when explaining others' behavior.",
+  "strength": "strong — foundational and widely replicated, though weaker in some cultures",
+  "topics": [
+   "fundamental-attribution-error",
+   "perception"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#no-fault",
+   "/book/self-1-then-in-depth.html#rules",
+   "/book/understanding-3-seeing-in-depth.html#reasons",
+   "/book/understanding-3-seeing.html#tools",
+   "/growing-up-in-depth.html#others",
+   "/growing-up-in-depth.html#research",
+   "/know-yourself-in-depth.html#mix-ups",
+   "/library.html#pillar-v",
+   "/library/thinking.html#pillars",
+   "/library/thinking.html#fundamental-attribution-error",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.sciencedirect.com/science/article/pii/S0065260108603573"
+ },
+ {
+  "id": "jones-harris-1967",
+  "authors": "Jones, E. E., & Harris, V. A.",
+  "year": 1967,
+  "title": "The attribution of attitudes",
+  "venue": "Journal of Experimental Social Psychology, 3(1), 1–24",
+  "doi": "10.1016/0022-1031(67)90034-0",
+  "url": "https://doi.org/10.1016/0022-1031(67)90034-0",
+  "kind": "study",
+  "finding": "In three experiments, people judged a speaker's true attitude from a speech; they tended to attribute the stated position to the speaker even when told the speaker had been assigned it.",
+  "strength": "strong — classic, widely replicated paradigm",
+  "topics": [
+   "fundamental-attribution-error"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#reasons",
+   "/library/thinking.html#fundamental-attribution-error"
+  ],
+  "verified": true,
+  "verified_by": "https://www.sciencedirect.com/science/article/abs/pii/0022103167900340"
+ },
+ {
+  "id": "jones-nisbett-1971",
+  "authors": "Jones, E. E., & Nisbett, R. E.",
+  "year": 1971,
+  "title": "The actor and the observer: Divergent perceptions of the causes of behavior",
+  "venue": "General Learning Press (short monograph)",
+  "doi": null,
+  "url": "https://krimdok.uni-tuebingen.de/Record/1098932900",
+  "kind": "theory",
+  "finding": "Proposed the actor-observer hypothesis: people tend to explain their own actions by the situation and others' actions by their dispositions.",
+  "strength": "debated — Malle's 2006 meta-analysis found little overall support for the general claim",
+  "topics": [
+   "actor-observer"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#vectors",
+   "/book/self-1-then-in-depth.html#rules",
+   "/book/understanding-3-seeing-in-depth.html#reasons",
+   "/library/thinking.html#actor-observer"
+  ],
+  "verified": true,
+  "verified_by": "https://krimdok.uni-tuebingen.de/Record/1098932900 ; https://en.wikipedia.org/wiki/Edward_E._Jones"
+ },
+ {
+  "id": "malle-2006-actor-observer",
+  "authors": "Malle, B. F.",
+  "year": 2006,
+  "title": "The actor-observer asymmetry in attribution: A (surprising) meta-analysis",
+  "venue": "Psychological Bulletin, 132(6), 895–919",
+  "doi": "10.1037/0033-2909.132.6.895",
+  "url": "https://doi.org/10.1037/0033-2909.132.6.895",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 173 studies found average actor-observer effects near zero; the asymmetry appeared only in some conditions (for example when actor and observer were intimates, or for negative events), with a reverse pattern for positive events.",
+  "strength": "strong — large meta-analysis",
+  "topics": [
+   "actor-observer"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#rules",
+   "/book/understanding-3-seeing-in-depth.html#reasons",
+   "/library/thinking.html#actor-observer"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073526/"
+ },
+ {
+  "id": "ross-ward-1996-naive-realism",
+  "authors": "Ross, L., & Ward, A.",
+  "year": 1996,
+  "title": "Naive realism in everyday life: Implications for social conflict and misunderstanding",
+  "venue": "In E. S. Reed, E. Turiel, & T. Brown (Eds.), Values and Knowledge (pp. 103–135). Lawrence Erlbaum / Psychology Press",
+  "doi": "10.4324/9780203773772-6",
+  "url": "https://doi.org/10.4324/9780203773772-6",
+  "kind": "theory",
+  "finding": "Described naive realism: people assume they see the world objectively, so those who disagree must be uninformed, irrational or biased — a dynamic that fuels conflict and misunderstanding.",
+  "strength": "strong — foundational account; its predictions are well replicated",
+  "topics": [
+   "naive-realism"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#vectors",
+   "/book/preface-in-depth.html#own-side",
+   "/book/understanding-10-values-in-depth.html#different-values",
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/book/understanding-3-seeing.html#tools",
+   "/library.html#pillar-v",
+   "/library/thinking.html#pillars",
+   "/library/thinking.html#naive-realism",
+   "/library/thinking.html#false-consensus",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.taylorfrancis.com/chapters/edit/10.4324/9780203773772-6/naive-realism-everyday-life-lee-ross-andrew-ward"
+ },
+ {
+  "id": "pronin-lin-ross-2002",
+  "authors": "Pronin, E., Lin, D. Y., & Ross, L.",
+  "year": 2002,
+  "title": "The bias blind spot: Perceptions of bias in self versus others",
+  "venue": "Personality and Social Psychology Bulletin, 28(3), 369–381",
+  "doi": "10.1177/0146167202286008",
+  "url": "https://doi.org/10.1177/0146167202286008",
+  "kind": "study",
+  "finding": "People, from students to airport travelers, readily saw common biases in others but rated themselves as less biased than their peers (the bias blind spot).",
+  "strength": "strong — replicated in many later studies",
+  "topics": [
+   "naive-realism",
+   "bias-blind-spot"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/library/thinking.html#naive-realism"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in search results citing the paper (e.g. https://journals.sagepub.com/doi/full/10.1177/23970022221094523)"
+ },
+ {
+  "id": "gilovich-savitsky-medvec-1998",
+  "authors": "Gilovich, T., Savitsky, K., & Medvec, V. H.",
+  "year": 1998,
+  "title": "The illusion of transparency: Biased assessments of others' ability to read one's emotional states",
+  "venue": "Journal of Personality and Social Psychology, 75(2), 332–346",
+  "doi": "10.1037/0022-3514.75.2.332",
+  "url": "https://doi.org/10.1037/0022-3514.75.2.332",
+  "kind": "study",
+  "finding": "In several sets of studies, people overestimated how well others could read their internal states (for example, liars overestimated how detectable their lies were, and people thought their disgust showed more than it did).",
+  "strength": "strong — replicated and extended",
+  "topics": [
+   "illusion-of-transparency"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#squeal",
+   "/book/understanding-4-communication-in-depth.html#meaning",
+   "/library.html#pillar-iv",
+   "/library.html#pillar-v",
+   "/library/thinking.html#pillars",
+   "/library/thinking.html#mind-reading",
+   "/library/thinking.html#spotlight-effect",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9731312/"
+ },
+ {
+  "id": "savitsky-2011-closeness-communication",
+  "authors": "Savitsky, K., Keysar, B., Epley, N., Carter, T., & Swanson, A.",
+  "year": 2011,
+  "title": "The closeness-communication bias: Increased egocentrism among friends versus strangers",
+  "venue": "Journal of Experimental Social Psychology, 47(1), 269–273",
+  "doi": null,
+  "url": "https://www.sciencedirect.com/science/article/abs/pii/S0022103110002118",
+  "kind": "study",
+  "finding": "In three experiments, people overestimated how well they communicated with friends and spouses, more than with strangers, and made more egocentric errors following a friend's directions; closeness seemed to relax the checking people do with strangers.",
+  "strength": "moderate — short report of three small experiments; later work extended it",
+  "topics": [
+   "closeness-communication-bias"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#almost",
+   "/book/understanding-4-communication-in-depth.html#checking",
+   "/book/understanding-4-communication-in-depth.html#faq",
+   "/communication.html#research"
+  ],
+  "verified": true,
+  "verified_by": "https://www.sciencedirect.com/science/article/abs/pii/S0022103110002118"
+ },
+ {
+  "id": "eyal-steffel-epley-2018",
+  "authors": "Eyal, T., Steffel, M., & Epley, N.",
+  "year": 2018,
+  "title": "Perspective mistaking: Accurately understanding the mind of another requires getting perspective, not taking perspective",
+  "venue": "Journal of Personality and Social Psychology, 114(4), 547–571",
+  "doi": "10.1037/pspa0000115",
+  "url": "https://doi.org/10.1037/pspa0000115",
+  "kind": "study",
+  "finding": "As the title states, a series of experiments found that imagining another person's perspective did not make people more accurate about what that person thought or felt, whereas getting their perspective directly (by asking) did.",
+  "strength": "strong — many experiments in one paper",
+  "topics": [
+   "perspective-taking"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#asking"
+  ],
+  "verified": true,
+  "verified_by": "DOI 10.1037/pspa0000115 shown in reference lists in search results (abstract not retrieved)"
+ },
+ {
+  "id": "epley-2014-mindwise",
+  "authors": "Epley, N.",
+  "year": 2014,
+  "title": "Mindwise: How We Understand What Others Think, Believe, Feel, and Want",
+  "venue": "Alfred A. Knopf (New York)",
+  "doi": null,
+  "url": "https://www.publishersweekly.com/9780307595911",
+  "kind": "book",
+  "finding": "A book reviewing research on how people infer others' thoughts and feelings, and why this 'sixth sense' is more error-prone than we believe.",
+  "strength": "moderate — popular book summarizing peer-reviewed research",
+  "topics": [
+   "perspective-taking"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#asking"
+  ],
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/9780307595911 ; https://casbs.stanford.edu/mindwise-how-we-understand-what-others-think-believe-feel-and-want"
+ },
+ {
+  "id": "hastorf-cantril-1954",
+  "authors": "Hastorf, A. H., & Cantril, H.",
+  "year": 1954,
+  "title": "They saw a game: A case study",
+  "venue": "Journal of Abnormal and Social Psychology, 49(1), 129–134",
+  "doi": "10.1037/h0057880",
+  "url": "https://doi.org/10.1037/h0057880",
+  "kind": "study",
+  "finding": "Students from Princeton and Dartmouth watched the same rough football game and saw it very differently, for example in how many infractions each team committed.",
+  "strength": "moderate — classic single case study, widely cited",
+  "topics": [
+   "naive-realism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-3-seeing-in-depth.html#realism"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in search result reference (psycnet citing documents)"
+ },
+ {
+  "id": "hall-2019-hours-friend",
+  "authors": "Hall, J. A.",
+  "year": 2019,
+  "title": "How many hours does it take to make a friend?",
+  "venue": "Journal of Social and Personal Relationships, 36(4), 1278–1296 (online first 2018)",
+  "doi": "10.1177/0265407518761225",
+  "url": "https://doi.org/10.1177/0265407518761225",
+  "kind": "study",
+  "finding": "Studies of adults who had recently moved and of students found that more hours spent together, especially in leisure, went with moving from acquaintance to closer friendship.",
+  "strength": "moderate — survey studies; hour estimates are rough",
+  "topics": [
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/bonding.html#how-it-grows",
+   "/book/understanding-5-belonging-in-depth.html#building",
+   "/library/connection.html#friendship"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/0265407518761225"
+ },
+ {
+  "id": "holt-lunstad-2010",
+  "authors": "Holt-Lunstad, J., Smith, T. B., & Layton, J. B.",
+  "year": 2010,
+  "title": "Social relationships and mortality risk: A meta-analytic review",
+  "venue": "PLoS Medicine, 7(7), e1000316",
+  "doi": "10.1371/journal.pmed.1000316",
+  "url": "https://doi.org/10.1371/journal.pmed.1000316",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
+  "strength": "strong — large meta-analysis of observational studies; causation not established",
+  "topics": [
+   "social-support",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-5-belonging-in-depth.html#belonging",
+   "/library/connection.html#loneliness",
+   "/library/connection.html#social-support"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316"
+ },
+ {
+  "id": "holt-lunstad-2015",
+  "authors": "Holt-Lunstad, J., Smith, T. B., Baker, M., Harris, T., & Stephenson, D.",
+  "year": 2015,
+  "title": "Loneliness and social isolation as risk factors for mortality: A meta-analytic review",
+  "venue": "Perspectives on Psychological Science, 10(2), 227–237",
+  "doi": "10.1177/1745691614568352",
+  "url": "https://doi.org/10.1177/1745691614568352",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis linking loneliness, social isolation and living alone with a higher risk of earlier death.",
+  "strength": "strong — meta-analysis of observational studies",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#loneliness"
+  ],
+  "verified": true,
+  "verified_by": "PubMed citation with DOI 10.1177/1745691614568352, PMID 25910392 shown in search result"
+ },
+ {
+  "id": "cacioppo-patrick-2008",
+  "authors": "Cacioppo, J. T., & Patrick, W.",
+  "year": 2008,
+  "title": "Loneliness: Human Nature and the Need for Social Connection",
+  "venue": "W. W. Norton (New York)",
+  "doi": null,
+  "url": "https://www.publishersweekly.com/9780393061703",
+  "kind": "book",
+  "finding": "A book arguing that loneliness is a biological signal, like hunger, that we need connection, and that chronic loneliness can trap people in isolation and harm health.",
+  "strength": "moderate — popular book summarizing the authors' and others' research",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#spread",
+   "/book/understanding-5-belonging-in-depth.html#belonging",
+   "/library/connection.html#loneliness",
+   "/library/emotions.html#emotional-contagion",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306"
+ },
+ {
+  "id": "russell-peplau-ferguson-1978",
+  "authors": "Russell, D., Peplau, L. A., & Ferguson, M. L.",
+  "year": 1978,
+  "title": "Developing a measure of loneliness",
+  "venue": "Journal of Personality Assessment, 42(3), 290–294",
+  "doi": "10.1207/s15327752jpa4203_11",
+  "url": "https://doi.org/10.1207/s15327752jpa4203_11",
+  "kind": "study",
+  "finding": "Introduced the original 20-item UCLA Loneliness Scale, which showed high internal consistency and links with self-reported loneliness; it was later revised.",
+  "strength": "strong — the most widely used loneliness measure (in revised forms)",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#loneliness"
+  ],
+  "verified": true,
+  "verified_by": "https://www.tandfonline.com/doi/abs/10.1207/s15327752jpa4203_11 ; https://pubmed.ncbi.nlm.nih.gov/660402/"
+ },
+ {
+  "id": "masi-2011-loneliness-meta",
+  "authors": "Masi, C. M., Chen, H.-Y., Hawkley, L. C., & Cacioppo, J. T.",
+  "year": 2011,
+  "title": "A meta-analysis of interventions to reduce loneliness",
+  "venue": "Personality and Social Psychology Review, 15(3), 219–266",
+  "doi": "10.1177/1088868310377394",
+  "url": "https://doi.org/10.1177/1088868310377394",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of loneliness interventions; it is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
+  "strength": "strong — meta-analysis, though many included studies were small",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#loneliness"
+  ],
+  "verified": true,
+  "verified_by": "PubMed-style citation with DOI 10.1177/1088868310377394 and PMID 20716644 shown in search result; https://journals.sagepub.com/doi/10.1177/1745691615570616 (citing review)"
+ },
+ {
+  "id": "surgeon-general-2023-loneliness",
+  "authors": "Office of the U.S. Surgeon General (Murthy, V. H.)",
+  "year": 2023,
+  "title": "Our Epidemic of Loneliness and Isolation: The U.S. Surgeon General's Advisory on the Healing Effects of Social Connection and Community",
+  "venue": "U.S. Department of Health and Human Services",
+  "doi": null,
+  "url": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf",
+  "kind": "guideline",
+  "finding": "A U.S. public-health advisory reporting that about half of U.S. adults experience measurable loneliness, linking poor social connection with higher risks of heart disease, stroke, dementia and early death, and proposing a national strategy to strengthen connection.",
+  "strength": "strong — official synthesis of research, though most underlying evidence is observational",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#loneliness"
+  ],
+  "verified": true,
+  "verified_by": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf ; https://www.hhs.gov/surgeongeneral/reports-and-publications/connection/index.html"
+ },
+ {
+  "id": "dunbar-1992",
+  "authors": "Dunbar, R. I. M.",
+  "year": 1992,
+  "title": "Neocortex size as a constraint on group size in primates",
+  "venue": "Journal of Human Evolution, 22(6), 469–493",
+  "doi": null,
+  "url": "https://www.neuroscience.ox.ac.uk/publications/945607",
+  "kind": "study",
+  "finding": "Across primates, typical group size was predicted by relative neocortex size rather than by ecological variables; extrapolating to humans gave a rough group size of about 150, the origin of 'Dunbar's number'.",
+  "strength": "debated — influential; the human extrapolation has wide uncertainty and has been challenged (Lindenfors et al., 2021)",
+  "topics": [
+   "friendship",
+   "dunbar-number"
+  ],
+  "mentioned_on": [
+   "/library.html#pillar-v",
+   "/library/connection.html#pillars",
+   "/library/connection.html#friendship",
+   "/library/connection.html#dunbar-number"
+  ],
+  "verified": true,
+  "verified_by": "https://www.neuroscience.ox.ac.uk/publications/945607 ; https://www.danielharper.org/yauu/2011/03/neocortex-size-as-a-constraint-on-group-size-in-primates/"
+ },
+ {
+  "id": "lindenfors-2021-dunbar",
+  "authors": "Lindenfors, P., Wartel, A., & Lind, J.",
+  "year": 2021,
+  "title": "'Dunbar's number' deconstructed",
+  "venue": "Biology Letters, 17(5), 20210158",
+  "doi": "10.1098/rsbl.2021.0158",
+  "url": "https://doi.org/10.1098/rsbl.2021.0158",
+  "kind": "study",
+  "finding": "Reanalysing primate brain and group-size data with modern methods gave estimates for human group size that varied widely with method and had very wide confidence intervals, so a specific figure like 150 is not supported.",
+  "strength": "moderate — methodological reanalysis; Dunbar and colleagues have disputed it",
+  "topics": [
+   "dunbar-number"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#dunbar-number"
+  ],
+  "verified": true,
+  "verified_by": "https://royalsocietypublishing.org/doi/10.1098/rsbl.2021.0158 ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8103230/"
+ },
+ {
+  "id": "oswald-clark-kelly-2004",
+  "authors": "Oswald, D. L., Clark, E. M., & Kelly, C. M.",
+  "year": 2004,
+  "title": "Friendship maintenance: An analysis of individual and dyad behaviors",
+  "venue": "Journal of Social and Clinical Psychology, 23(3), 413–441",
+  "doi": "10.1521/jscp.23.3.413.35460",
+  "url": "https://doi.org/10.1521/jscp.23.3.413.35460",
+  "kind": "study",
+  "finding": "Three studies identified four kinds of friendship maintenance behavior (positivity, supportiveness, openness and interaction); best friends did more of them, and both friends' maintenance predicted satisfaction and commitment.",
+  "strength": "moderate — survey studies, mostly students",
+  "topics": [
+   "friendship",
+   "maintenance"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#friendship"
+  ],
+  "verified": true,
+  "verified_by": "https://guilfordjournals.com/doi/10.1521/jscp.23.3.413.35460"
+ },
+ {
+  "id": "granovetter-1973",
+  "authors": "Granovetter, M. S.",
+  "year": 1973,
+  "title": "The strength of weak ties",
+  "venue": "American Journal of Sociology, 78(6), 1360–1380",
+  "doi": "10.1086/225469",
+  "url": "https://doi.org/10.1086/225469",
+  "kind": "theory",
+  "finding": "Argued that weak ties (acquaintances) are valuable because they bridge between close-knit groups and carry new information, for example about jobs.",
+  "strength": "strong — one of the most cited papers in sociology; supported by later work including a large 2022 experiment",
+  "topics": [
+   "weak-ties",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#weak-ties"
+  ],
+  "verified": true,
+  "verified_by": "https://www.journals.uchicago.edu/doi/abs/10.1086/225469"
+ },
+ {
+  "id": "sandstrom-dunn-2014-weak-ties",
+  "authors": "Sandstrom, G. M., & Dunn, E. W.",
+  "year": 2014,
+  "title": "Social interactions and well-being: The surprising power of weak ties",
+  "venue": "Personality and Social Psychology Bulletin, 40(7), 910–922",
+  "doi": "10.1177/0146167214529799",
+  "url": "https://doi.org/10.1177/0146167214529799",
+  "kind": "study",
+  "finding": "Students were happier and felt more belonging on days they interacted with more classmates than usual, and in community samples interactions with weak ties as well as close ties were linked with daily well-being.",
+  "strength": "moderate — diary studies, correlational",
+  "topics": [
+   "weak-ties"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#weak-ties"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/0146167214529799"
+ },
+ {
+  "id": "sandstrom-dunn-2014-barista",
+  "authors": "Sandstrom, G. M., & Dunn, E. W.",
+  "year": 2014,
+  "title": "Is efficiency overrated? Minimal social interactions lead to belonging and positive affect",
+  "venue": "Social Psychological and Personality Science, 5(4), 437–442",
+  "doi": "10.1177/1948550613502990",
+  "url": "https://doi.org/10.1177/1948550613502990",
+  "kind": "study",
+  "finding": "People who had a brief, friendly social exchange with a coffee-shop barista reported more belonging and positive mood than those who kept the exchange purely efficient.",
+  "strength": "early — one small field experiment",
+  "topics": [
+   "weak-ties",
+   "belonging"
+  ],
+  "mentioned_on": [
+   "/book/understanding-5-belonging-in-depth.html#building",
+   "/library/connection.html#weak-ties"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in citing reference (https://journals.sagepub.com/doi/full/10.1177/09637214211002538)"
+ },
+ {
+  "id": "epley-schroeder-2014",
+  "authors": "Epley, N., & Schroeder, J.",
+  "year": 2014,
+  "title": "Mistakenly seeking solitude",
+  "venue": "Journal of Experimental Psychology: General, 143(5), 1980–1999",
+  "doi": "10.1037/a0037323",
+  "url": "https://doi.org/10.1037/a0037323",
+  "kind": "study",
+  "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite; misjudging how pleasant such talk would be keeps people apart.",
+  "strength": "moderate — field and lab experiments; replicated in later work",
+  "topics": [
+   "weak-ties",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/book/understanding-5-belonging-in-depth.html#building",
+   "/library/connection.html#weak-ties"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in citing references in search result (e.g. https://pubmed.ncbi.nlm.nih.gov/34618536/)"
+ },
+ {
+  "id": "rajkumar-2022-linkedin",
+  "authors": "Rajkumar, K., Saint-Jacques, G., Bojinov, I., Brynjolfsson, E., & Aral, S.",
+  "year": 2022,
+  "title": "A causal test of the strength of weak ties",
+  "venue": "Science, 377(6612), 1304–1310",
+  "doi": "10.1126/science.abl4476",
+  "url": "https://doi.org/10.1126/science.abl4476",
+  "kind": "study",
+  "finding": "Randomized experiments on LinkedIn's 'People You May Know' feature, covering over 20 million users, found that moderately weak ties were most valuable for job mobility, with diminishing returns for the very weakest ties.",
+  "strength": "strong — large-scale randomized experiments, though on one platform",
+  "topics": [
+   "weak-ties"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#weak-ties"
+  ],
+  "verified": true,
+  "verified_by": "https://www.science.org/doi/10.1126/science.abl4476"
+ },
+ {
+  "id": "bolger-zuckerman-kessler-2000",
+  "authors": "Bolger, N., Zuckerman, A., & Kessler, R. C.",
+  "year": 2000,
+  "title": "Invisible support and adjustment to stress",
+  "venue": "Journal of Personality and Social Psychology, 79(6), 953–961",
+  "doi": "10.1037/0022-3514.79.6.953",
+  "url": "https://doi.org/10.1037/0022-3514.79.6.953",
+  "kind": "study",
+  "finding": "In couples where one partner faced a stressful exam, support the recipient did not notice (reported by the giver but not the receiver) was linked with better adjustment, while noticed (visible) support was not.",
+  "strength": "moderate — diary study; later work shows effects depend on how support is given",
+  "topics": [
+   "social-support",
+   "invisible-support"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#not-fixing",
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/book/understanding-6-change-in-depth.html#others",
+   "/library/communication.html#advice-vs-support",
+   "/love-languages-in-depth.html#similar"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in reference lists of PubMed-indexed citing studies (e.g. https://pubmed.ncbi.nlm.nih.gov/35373659/)"
+ },
+ {
+  "id": "cohen-wills-1985",
+  "authors": "Cohen, S., & Wills, T. A.",
+  "year": 1985,
+  "title": "Stress, social support, and the buffering hypothesis",
+  "venue": "Psychological Bulletin, 98(2), 310–357",
+  "doi": "10.1037/0033-2909.98.2.310",
+  "url": "https://doi.org/10.1037/0033-2909.98.2.310",
+  "kind": "review",
+  "finding": "A review arguing that social support protects (buffers) people from the harmful effects of stress, especially perceived availability of support, alongside general main effects of being socially integrated.",
+  "strength": "strong — highly influential review; later tests are mixed in some settings",
+  "topics": [
+   "social-support"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in reference lists in search results (e.g. https://pubmed.ncbi.nlm.nih.gov/32836986/)"
+ },
+ {
+  "id": "house-1981",
+  "authors": "House, J. S.",
+  "year": 1981,
+  "title": "Work Stress and Social Support",
+  "venue": "Addison-Wesley (Reading, MA)",
+  "doi": null,
+  "url": "https://libcat.library.tamu.edu/Record/in00000649568",
+  "kind": "book",
+  "finding": "A book on social support at work that distinguished emotional, instrumental, informational and appraisal support.",
+  "strength": "moderate — widely used framework",
+  "topics": [
+   "social-support"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#ask"
+  ],
+  "verified": true,
+  "verified_by": "https://libcat.library.tamu.edu/Record/in00000649568 ; https://econbiz.de/Record/work-stress-and-social-support-house-james/10004389064"
+ },
+ {
+  "id": "flynn-bohns-2008",
+  "authors": "Flynn, F. J., & Lake, V. K. B. (Vanessa Bohns)",
+  "year": 2008,
+  "title": "If you need help, just ask: Underestimating compliance with direct requests for help",
+  "venue": "Journal of Personality and Social Psychology, 95(1), 128–143",
+  "doi": null,
+  "url": "https://www.gsb.stanford.edu/news/research/flynn_ask.html",
+  "kind": "study",
+  "finding": "People asking for help underestimated, by as much as 50%, how many others would agree to a direct request, because they overlooked how awkward it feels to say no.",
+  "strength": "strong — several experiments and field studies, widely replicated since",
+  "topics": [
+   "social-support",
+   "asking-for-help"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#receiving"
+  ],
+  "verified": true,
+  "verified_by": "https://www.gsb.stanford.edu/news/research/flynn_ask.html (citation: Flynn & Lake, JPSP 95(1), 128–143)"
+ },
+ {
+  "id": "baumeister-leary-1995",
+  "authors": "Baumeister, R. F., & Leary, M. R.",
+  "year": 1995,
+  "title": "The need to belong: Desire for interpersonal attachments as a fundamental human motivation",
+  "venue": "Psychological Bulletin, 117(3), 497–529",
+  "doi": "10.1037/0033-2909.117.3.497",
+  "url": "https://doi.org/10.1037/0033-2909.117.3.497",
+  "kind": "review",
+  "finding": "A major review arguing that the need to belong is a fundamental human motivation: people need frequent, pleasant contact within a few stable, caring relationships, and unmet belonging has wide emotional and cognitive costs.",
+  "strength": "strong — highly influential review",
+  "topics": [
+   "belonging",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/book/understanding-5-belonging-in-depth.html",
+   "/book/understanding-5-belonging-in-depth.html#belonging"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in search result references (e.g. https://pubmed.ncbi.nlm.nih.gov/27134325/)"
+ },
+ {
+  "id": "kurtz-algoe-2015",
+  "authors": "Kurtz, L. E., & Algoe, S. B.",
+  "year": 2015,
+  "title": "Putting laughter in context: Shared laughter as behavioral indicator of relationship well-being",
+  "venue": "Personal Relationships, 22(4), 573–590",
+  "doi": "10.1111/pere.12095",
+  "url": "https://doi.org/10.1111/pere.12095",
+  "kind": "study",
+  "finding": "In 71 couples filmed talking about how they met, the share of time partners spent laughing together (beyond laughter overall) went with higher relationship quality, closeness and perceived support.",
+  "strength": "moderate — one observational study, correlational",
+  "topics": [
+   "humour",
+   "play"
+  ],
+  "mentioned_on": [
+   "/bonding.html#how-it-grows",
+   "/library/communication.html#humour",
+   "/library/connection.html#play"
+  ],
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/pere.12095"
+ },
+ {
+  "id": "shenk-fruzzetti-2011",
+  "authors": "Shenk, C. E., & Fruzzetti, A. E.",
+  "year": 2011,
+  "title": "The impact of validating and invalidating responses on emotional reactivity",
+  "venue": "Journal of Social and Clinical Psychology, 30(2), 163–183",
+  "doi": "10.1521/jscp.2011.30.2.163",
+  "url": "https://doi.org/10.1521/jscp.2011.30.2.163",
+  "kind": "study",
+  "finding": "In a lab stress task, people who received invalidating responses showed more negative emotion, higher heart rate and higher skin conductance over time than those who received validating responses.",
+  "strength": "moderate — lab experiment",
+  "topics": [
+   "validation"
+  ],
+  "mentioned_on": [
+   "/library/communication.html#validation-in-conversation"
+  ],
+  "verified": true,
+  "verified_by": "https://guilfordjournals.com/doi/10.1521/jscp.2011.30.2.163"
+ },
+ {
+  "id": "gordon-1970-pet",
+  "authors": "Gordon, T.",
+  "year": 1970,
+  "title": "P.E.T.: Parent Effectiveness Training",
+  "venue": "Peter H. Wyden (New York) (book; revised 2000)",
+  "doi": null,
+  "url": "https://en.wikipedia.org/wiki/Parent_Effectiveness_Training",
+  "kind": "book",
+  "finding": "A parenting book and course that popularized 'I-messages': describing your own feelings and the effect of a behavior rather than blaming the other person.",
+  "strength": "mixed — widely taught; research on I-statements finds tone and context matter as much as wording",
+  "topics": [
+   "i-statements"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#going-back",
+   "/book/understanding-4-communication-in-depth.html#hard-things",
+   "/library/communication.html#i-statements"
+  ],
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Parent_Effectiveness_Training ; https://en.wikipedia.org/wiki/I-message ; https://www.kirkusreviews.com/book-reviews/thomas-gordon/pet-in-action/"
+ },
+ {
+  "id": "rosenberg-nvc",
+  "authors": "Rosenberg, M. B.",
+  "year": 1999,
+  "title": "Nonviolent Communication: A Language of Compassion (later editions: A Language of Life)",
+  "venue": "PuddleDancer Press (Encinitas, CA); 2nd ed. 2003, 3rd ed. 2015",
+  "doi": null,
+  "url": "https://www.harvard.com/book/9781892005281",
+  "kind": "book",
+  "finding": "Describes Nonviolent Communication: expressing observations, feelings, needs and requests, and listening for the same in others.",
+  "strength": "early — widely used practice; few rigorous studies",
+  "topics": [
+   "nvc"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#going-back",
+   "/book/self-2-now-in-depth.html#needs",
+   "/book/understanding-11-healing-in-depth.html#telling",
+   "/book/understanding-4-communication-in-depth.html#hard-things",
+   "/communication.html#research",
+   "/library.html#pillar-v",
+   "/library/communication.html#pillars",
+   "/library/communication.html#nonviolent-communication"
+  ],
+  "verified": true,
+  "verified_by": "Bookseller and library records: 1999 PuddleDancer first edition titled 'A Language of Compassion' (https://www.abebooks.com/first-edition/Nonviolent-Communication-Language-Compassion-Marshall-Rosenberg/31730622023/bd); later editions 'A Language of Life' (2003 2nd ed.; 3rd ed. https://www.harvard.com/book/9781892005281)"
+ },
+ {
+  "id": "stone-patton-heen-1999",
+  "authors": "Stone, D., Patton, B., & Heen, S.",
+  "year": 1999,
+  "title": "Difficult Conversations: How to Discuss What Matters Most",
+  "venue": "Viking (New York); 10th-anniversary edition, Penguin 2010",
+  "doi": null,
+  "url": "https://www.publishersweekly.com/978-0-670-88339-4",
+  "kind": "book",
+  "finding": "A practitioner book from the Harvard Negotiation Project describing three conversations inside every hard conversation (what happened, feelings, identity) and the gap between intent and impact.",
+  "strength": "moderate — practice framework grounded in negotiation experience, not controlled studies",
+  "topics": [
+   "difficult-conversations",
+   "intent-impact"
+  ],
+  "mentioned_on": [
+   "/book/chapter-4-in-depth.html#two-questions-examples",
+   "/library/conflict.html#intent-impact",
+   "/library/conflict.html#three-conversations"
+  ],
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/978-0-670-88339-4 ; https://bemis2.marmot.org/Record/.b10989559"
+ },
+ {
+  "id": "markman-stanley-blumberg-1994",
+  "authors": "Markman, H. J., Stanley, S. M., & Blumberg, S. L.",
+  "year": 1994,
+  "title": "Fighting for Your Marriage: Positive Steps for Preventing Divorce and Preserving a Lasting Love",
+  "venue": "Jossey-Bass (San Francisco); revised 2001 and 2010",
+  "doi": null,
+  "url": "https://libcat.simmons.edu/Record/b1586957",
+  "kind": "book",
+  "finding": "A book based on the PREP couples program, teaching skills such as the speaker-listener technique for safer conflict.",
+  "strength": "moderate — PREP has been tested in trials with some positive and some mixed long-term results",
+  "topics": [
+   "speaker-listener",
+   "prep"
+  ],
+  "mentioned_on": [
+   "/library/conflict.html#speaker-listener"
+  ],
+  "verified": true,
+  "verified_by": "https://libcat.simmons.edu/Record/b1586957 ; https://magazine-archive.du.edu/?p=12312"
+ },
+ {
+  "id": "fisher-ury-1981",
+  "authors": "Fisher, R., & Ury, W. (later editions with Patton, B.)",
+  "year": 1981,
+  "title": "Getting to Yes: Negotiating Agreement Without Giving In",
+  "venue": "Houghton Mifflin (Boston); 2nd ed. 1991 and 3rd ed. 2011 with Bruce Patton (Penguin)",
+  "doi": null,
+  "url": "https://search.worldcat.org/oclc/7575986",
+  "kind": "book",
+  "finding": "Set out principled negotiation: separate people from the problem, focus on interests rather than positions, invent options for mutual gain, use objective criteria, and know your best alternative to a negotiated agreement (BATNA).",
+  "strength": "moderate — very influential practitioner framework informed by research; critics note it can underplay power differences",
+  "topics": [
+   "negotiation",
+   "interests-vs-positions"
+  ],
+  "mentioned_on": [
+   "/library/conflict.html#interests-vs-positions",
+   "/library/conflict.html#principled-negotiation",
+   "/library/conflict.html#batna"
+  ],
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/oclc/7575986 ; https://en.wikipedia.org/wiki/Getting_to_Yes"
+ },
+ {
+  "id": "baumeister-stillwell-wotman-1990",
+  "authors": "Baumeister, R. F., Stillwell, A., & Wotman, S. R.",
+  "year": 1990,
+  "title": "Victim and perpetrator accounts of interpersonal conflict: Autobiographical narratives about anger",
+  "venue": "Journal of Personality and Social Psychology, 59(5), 994–1005",
+  "doi": "10.1037/0022-3514.59.5.994",
+  "url": "https://doi.org/10.1037/0022-3514.59.5.994",
+  "kind": "study",
+  "finding": "People wrote stories about a time they angered someone and a time someone angered them; perpetrators and victims described the same kinds of event very differently, for example in how serious, understandable and finished the harm was.",
+  "strength": "moderate — classic narrative study, self-reported memories",
+  "topics": [
+   "perception",
+   "conflict",
+   "repair"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#telling"
+  ],
+  "verified": true,
+  "verified_by": "DOI 10.1037/0022-3514.59.5.994 shown in reference lists in search results (e.g. https://psycnet.apa.org/fulltext/1994-98807-000-BKM.pdf)"
+ },
+ {
+  "id": "eubanks-muran-safran-2018",
+  "authors": "Eubanks, C. F., Muran, J. C., & Safran, J. D.",
+  "year": 2018,
+  "title": "Alliance rupture repair: A meta-analysis",
+  "venue": "Psychotherapy, 55(4), 508–519",
+  "doi": "10.1037/pst0000185",
+  "url": "https://doi.org/10.1037/pst0000185",
+  "kind": "meta-analysis",
+  "finding": "Across 11 studies (1,314 patients), repairing ruptures in the therapist-client relationship was moderately associated with better outcomes; training therapists in rupture repair did not show a significant effect on outcomes in 6 studies.",
+  "strength": "strong — meta-analysis, correlational for the main finding",
+  "topics": [
+   "repair"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#rupture-repair"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30335462/"
+ },
+ {
+  "id": "schegloff-jefferson-sacks-1977",
+  "authors": "Schegloff, E. A., Jefferson, G., & Sacks, H.",
+  "year": 1977,
+  "title": "The preference for self-correction in the organization of repair in conversation",
+  "venue": "Language, 53(2), 361–382",
+  "doi": "10.1353/lan.1977.0041",
+  "url": "https://doi.org/10.1353/lan.1977.0041",
+  "kind": "study",
+  "finding": "Analyses of everyday conversation showed that 'repair' of trouble in speaking, hearing and understanding is a built-in, organized part of talk, and that people strongly prefer to correct themselves rather than be corrected.",
+  "strength": "strong — foundational conversation-analysis finding",
+  "topics": [
+   "repair",
+   "communication"
+  ],
+  "mentioned_on": [
+   "/book/understanding-4-communication-in-depth.html#repair"
+  ],
+  "verified": true,
+  "verified_by": "https://muse.jhu.edu/article/453740/summary"
+ },
+ {
+  "id": "jiang-hancock-2013",
+  "authors": "Jiang, L. C., & Hancock, J. T.",
+  "year": 2013,
+  "title": "Absence makes the communication grow fonder: Geographic separation, interpersonal media, and intimacy in dating relationships",
+  "venue": "Journal of Communication, 63(3), 556–577",
+  "doi": "10.1111/jcom.12029",
+  "url": "https://doi.org/10.1111/jcom.12029",
+  "kind": "study",
+  "finding": "A diary study found long-distance dating couples disclosed more and idealized each other more than geographically close couples, which helped them feel as intimate or more so, with effects varying by communication medium.",
+  "strength": "early — one diary study of student couples",
+  "topics": [
+   "long-distance"
+  ],
+  "mentioned_on": [
+   "/long-distance.html",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/jcom.12029"
+ },
+ {
+  "id": "roberts-david-2016-phubbing",
+  "authors": "Roberts, J. A., & David, M. E.",
+  "year": 2016,
+  "title": "My life has become a major distraction from my cell phone: Partner phubbing and relationship satisfaction among romantic partners",
+  "venue": "Computers in Human Behavior, 54, 134–141",
+  "doi": "10.1016/j.chb.2015.07.058",
+  "url": "https://doi.org/10.1016/j.chb.2015.07.058",
+  "kind": "study",
+  "finding": "In surveys of adults in romantic relationships, a partner's phone snubbing (phubbing) was linked with more conflict over phone use and, through that, lower relationship satisfaction, and indirectly with lower life satisfaction and more depressive symptoms.",
+  "strength": "moderate — cross-sectional surveys; replicated in several later studies",
+  "topics": [
+   "phubbing",
+   "attention"
+  ],
+  "mentioned_on": [
+   "/library/calm.html#phones-and-presence",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.researchgate.net/publication/282763744 (search result showing DOI 10.1016/j.chb.2015.07.058)"
+ },
+ {
+  "id": "bradbury-fincham-1990",
+  "authors": "Bradbury, T. N., & Fincham, F. D.",
+  "year": 1990,
+  "title": "Attributions in marriage: Review and critique",
+  "venue": "Psychological Bulletin, 107(1), 3–33",
+  "doi": "10.1037/0033-2909.107.1.3",
+  "url": "https://doi.org/10.1037/0033-2909.107.1.3",
+  "kind": "review",
+  "finding": "A review finding that distressed spouses explain their partner's negative behavior in more blaming, global and stable ways than satisfied spouses, with experimental, clinical and longitudinal evidence suggesting these attributions may affect satisfaction.",
+  "strength": "strong — influential review; later longitudinal work suggests effects run both ways",
+  "topics": [
+   "attributions",
+   "perception"
+  ],
+  "mentioned_on": [
+   "/library/communication.html#complaints-vs-criticism",
+   "/library/conflict.html#conflict-is-normal",
+   "/library/thinking.html#personalisation"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/2404292/"
+ },
+ {
+  "id": "eidelson-epstein-1982",
+  "authors": "Eidelson, R. J., & Epstein, N.",
+  "year": 1982,
+  "title": "Cognition and relationship maladjustment: Development of a measure of dysfunctional relationship beliefs",
+  "venue": "Journal of Consulting and Clinical Psychology, 50(5), 715–720",
+  "doi": "10.1037/0022-006X.50.5.715",
+  "url": "https://doi.org/10.1037/0022-006X.50.5.715",
+  "kind": "study",
+  "finding": "Developed the Relationship Belief Inventory, a measure of unrealistic relationship beliefs (such as 'disagreement is destructive' or 'partners should read each other's minds'), which were linked with lower relationship satisfaction.",
+  "strength": "moderate — widely used measure; correlational findings",
+  "topics": [
+   "mind-reading",
+   "relationship-beliefs"
+  ],
+  "mentioned_on": [
+   "/library/thinking.html#should-statements"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in search result summary of citing records (https://mro.massey.ac.nz/handle/10179/10857 ; https://psytests.org/cbt/relbien.html)"
  },
  {
   "id": "reis-shaver-1988",
@@ -1012,903 +2301,7 @@
    "/tools/chat/deep.json"
   ],
   "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "brickman-campbell-1971",
-  "authors": "Brickman, P., & Campbell, D. T.",
-  "year": 1971,
-  "title": "Hedonic relativism and planning the good society",
-  "venue": "In M. H. Appley (Ed.), Adaptation-Level Theory (pp. 287–302). Academic Press",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "complacency",
-   "hedonic-adaptation"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#complacency",
-   "/library/life.html#hedonic-adaptation"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "lyubomirsky-2011-hedonic-adaptation",
-  "authors": "Lyubomirsky, S.",
-  "year": 2011,
-  "title": "Hedonic adaptation to positive and negative experiences",
-  "venue": "In S. Folkman (Ed.), The Oxford Handbook of Stress, Health, and Coping (pp. 200–224). Oxford University Press",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "complacency",
-   "hedonic-adaptation"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#complacency"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "aron-2000-novel-activities",
-  "authors": "Aron, A., Norman, C. C., Aron, E. N., McKenna, C., & Heyman, R. E.",
-  "year": 2000,
-  "title": "Couples' shared participation in novel and arousing activities and experienced relationship quality",
-  "venue": "Journal of Personality and Social Psychology, 78(2), 273–284",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "complacency",
-   "self-expansion",
-   "novelty"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#partner",
-   "/complacency-in-depth.html#sources",
-   "/library.html#pillar-v",
-   "/library/connection.html#complacency",
-   "/library/relationships.html#pillars",
-   "/library/relationships.html#self-expansion",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.78.2.273"
- },
- {
-  "id": "aron-aron-1986",
-  "authors": "Aron, A., & Aron, E. N.",
-  "year": 1986,
-  "title": "Love and the Expansion of Self: Understanding Attraction and Satisfaction",
-  "venue": "Hemisphere (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-expansion"
-  ],
-  "mentioned_on": [
-   "/library/relationships.html#self-expansion"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "hopper-knapp-scott-1981",
-  "authors": "Hopper, R., Knapp, M. L., & Scott, L.",
-  "year": 1981,
-  "title": "Couples' personal idioms: Exploring intimate talk",
-  "venue": "Journal of Communication, 31(1), 23–33",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "shared-language",
-   "maintenance"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#shared-language"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "bruess-pearson-1993",
-  "authors": "Bruess, C. J. S., & Pearson, J. C.",
-  "year": 1993,
-  "title": "'Sweet pea' and 'pussy cat': An examination of idiom use and marital satisfaction over the life cycle",
-  "venue": "Journal of Social and Personal Relationships, 10(4), 609–615",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "shared-language",
-   "maintenance"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#shared-language",
-   "/touchstones-in-depth.html#evidence",
-   "/touchstones.html#honest"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "bruess-pearson-1997",
-  "authors": "Bruess, C. J. S., & Pearson, J. C.",
-  "year": 1997,
-  "title": "Interpersonal rituals in marriage and adult friendship",
-  "venue": "Communication Monographs, 64(1), 25–46",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "rituals",
-   "maintenance",
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#shared-language",
-   "/touchstones-in-depth.html#evidence",
-   "/touchstones.html#honest"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "fiese-2002-rituals",
-  "authors": "Fiese, B. H., Tomcho, T. J., Douglas, M., Josephs, K., Poltrock, S., & Baker, T.",
-  "year": 2002,
-  "title": "A review of 50 years of research on naturally occurring family routines and rituals: Cause for celebration?",
-  "venue": "Journal of Family Psychology, 16(4), 381–390",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "rituals"
-  ],
-  "mentioned_on": [
-   "/bonding.html#how-it-grows",
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#rituals-of-connection",
-   "/library/connection.html#shared-language"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0893-3200.16.4.381"
- },
- {
-  "id": "rusbult-1980",
-  "authors": "Rusbult, C. E.",
-  "year": 1980,
-  "title": "Commitment and satisfaction in romantic associations: A test of the investment model",
-  "venue": "Journal of Experimental Social Psychology, 16(2), 172–186",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "commitment",
-   "maintenance"
-  ],
-  "mentioned_on": [
-   "/library.html#pillar-v",
-   "/library/relationships.html#pillars",
-   "/library/relationships.html#investment-model",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "le-agnew-2003",
-  "authors": "Le, B., & Agnew, C. R.",
-  "year": 2003,
-  "title": "Commitment and its theorized determinants: A meta-analysis of the Investment Model",
-  "venue": "Personal Relationships, 10(1), 37–57",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "commitment"
-  ],
-  "mentioned_on": [
-   "/library/relationships.html#investment-model"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Site says 1998; the meta-analysis is believed to be 2003 — see fixnotes."
- },
- {
-  "id": "rempel-holmes-zanna-1985",
-  "authors": "Rempel, J. K., Holmes, J. G., & Zanna, M. P.",
-  "year": 1985,
-  "title": "Trust in close relationships",
-  "venue": "Journal of Personality and Social Psychology, 49(1), 95–112",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "trust"
-  ],
-  "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#trust",
-   "/book/understanding-5-belonging-in-depth.html#trust",
-   "/library/relationships.html#trust"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.49.1.95"
- },
- {
-  "id": "murray-holmes-griffin-1996",
-  "authors": "Murray, S. L., Holmes, J. G., & Griffin, D. W.",
-  "year": 1996,
-  "title": "The benefits of positive illusions: Idealization and the construction of satisfaction in close relationships",
-  "venue": "Journal of Personality and Social Psychology, 70(1), 79–98",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "positive-illusions"
-  ],
-  "mentioned_on": [
-   "/library/relationships.html#positive-illusions"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.70.1.79"
- },
- {
-  "id": "drigotas-1999-michelangelo",
-  "authors": "Drigotas, S. M., Rusbult, C. E., Wieselquist, J., & Whitton, S. W.",
-  "year": 1999,
-  "title": "Close partner as sculptor of the ideal self: Behavioral affirmation and the Michelangelo phenomenon",
-  "venue": "Journal of Personality and Social Psychology, 77(2), 293–323",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "michelangelo-effect"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#others",
-   "/library/relationships.html#michelangelo-effect"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.77.2.293"
- },
- {
-  "id": "ross-1977-fae",
-  "authors": "Ross, L.",
-  "year": 1977,
-  "title": "The intuitive psychologist and his shortcomings: Distortions in the attribution process",
-  "venue": "Advances in Experimental Social Psychology, 10, 173–220",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "fundamental-attribution-error",
-   "perception"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#no-fault",
-   "/book/self-1-then-in-depth.html#rules",
-   "/book/understanding-3-seeing-in-depth.html#reasons",
-   "/book/understanding-3-seeing.html#tools",
-   "/growing-up-in-depth.html#others",
-   "/growing-up-in-depth.html#research",
-   "/know-yourself-in-depth.html#mix-ups",
-   "/library.html#pillar-v",
-   "/library/thinking.html#pillars",
-   "/library/thinking.html#fundamental-attribution-error",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "jones-harris-1967",
-  "authors": "Jones, E. E., & Harris, V. A.",
-  "year": 1967,
-  "title": "The attribution of attitudes",
-  "venue": "Journal of Experimental Social Psychology, 3(1), 1–24",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "fundamental-attribution-error"
-  ],
-  "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#reasons",
-   "/library/thinking.html#fundamental-attribution-error"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "jones-nisbett-1971",
-  "authors": "Jones, E. E., & Nisbett, R. E.",
-  "year": 1971,
-  "title": "The actor and the observer: Divergent perceptions of the causes of behavior",
-  "venue": "General Learning Press (monograph)",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "actor-observer"
-  ],
-  "mentioned_on": [
-   "/book/chapter-3-in-depth.html#vectors",
-   "/book/self-1-then-in-depth.html#rules",
-   "/book/understanding-3-seeing-in-depth.html#reasons",
-   "/library/thinking.html#actor-observer"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "malle-2006-actor-observer",
-  "authors": "Malle, B. F.",
-  "year": 2006,
-  "title": "The actor-observer asymmetry in attribution: A (surprising) meta-analysis",
-  "venue": "Psychological Bulletin, 132(6), 895–919",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "actor-observer"
-  ],
-  "mentioned_on": [
-   "/book/self-1-then-in-depth.html#rules",
-   "/book/understanding-3-seeing-in-depth.html#reasons",
-   "/library/thinking.html#actor-observer"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0033-2909.132.6.895"
- },
- {
-  "id": "ross-ward-1996-naive-realism",
-  "authors": "Ross, L., & Ward, A.",
-  "year": 1996,
-  "title": "Naive realism in everyday life: Implications for social conflict and misunderstanding",
-  "venue": "In E. S. Reed, E. Turiel, & T. Brown (Eds.), Values and Knowledge (pp. 103–135). Erlbaum",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "naive-realism"
-  ],
-  "mentioned_on": [
-   "/book/chapter-3-in-depth.html#vectors",
-   "/book/preface-in-depth.html#own-side",
-   "/book/understanding-10-values-in-depth.html#different-values",
-   "/book/understanding-3-seeing-in-depth.html#realism",
-   "/book/understanding-3-seeing.html#tools",
-   "/library.html#pillar-v",
-   "/library/thinking.html#pillars",
-   "/library/thinking.html#naive-realism",
-   "/library/thinking.html#false-consensus",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "pronin-lin-ross-2002",
-  "authors": "Pronin, E., Lin, D. Y., & Ross, L.",
-  "year": 2002,
-  "title": "The bias blind spot: Perceptions of bias in self versus others",
-  "venue": "Personality and Social Psychology Bulletin, 28(3), 369–381",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "naive-realism",
-   "bias-blind-spot"
-  ],
-  "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#realism",
-   "/library/thinking.html#naive-realism"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/0146167202286008"
- },
- {
-  "id": "gilovich-savitsky-medvec-1998",
-  "authors": "Gilovich, T., Savitsky, K., & Medvec, V. H.",
-  "year": 1998,
-  "title": "The illusion of transparency: Biased assessments of others' ability to read one's emotional states",
-  "venue": "Journal of Personality and Social Psychology, 75(2), 332–346",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "illusion-of-transparency"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#squeal",
-   "/book/understanding-4-communication-in-depth.html#meaning",
-   "/library.html#pillar-iv",
-   "/library.html#pillar-v",
-   "/library/thinking.html#pillars",
-   "/library/thinking.html#mind-reading",
-   "/library/thinking.html#spotlight-effect",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.75.2.332"
- },
- {
-  "id": "savitsky-2011-closeness-communication",
-  "authors": "Savitsky, K., Keysar, B., Epley, N., Carter, T., & Swanson, A.",
-  "year": 2011,
-  "title": "The closeness-communication bias: Increased egocentrism among friends versus strangers",
-  "venue": "Journal of Experimental Social Psychology, 47(1), 269–273",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "closeness-communication-bias"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#almost",
-   "/book/understanding-4-communication-in-depth.html#checking",
-   "/book/understanding-4-communication-in-depth.html#faq",
-   "/communication.html#research"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1016/j.jesp.2010.09.005"
- },
- {
-  "id": "eyal-steffel-epley-2018",
-  "authors": "Eyal, T., Steffel, M., & Epley, N.",
-  "year": 2018,
-  "title": "Perspective mistaking: Accurately understanding the mind of another requires getting perspective, not taking perspective",
-  "venue": "Journal of Personality and Social Psychology, 114(4), 547–571",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "perspective-taking"
-  ],
-  "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#asking"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/pspa0000115"
- },
- {
-  "id": "epley-2014-mindwise",
-  "authors": "Epley, N.",
-  "year": 2014,
-  "title": "Mindwise: How We Understand What Others Think, Believe, Feel, and Want",
-  "venue": "Knopf (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "perspective-taking"
-  ],
-  "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#asking"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "hastorf-cantril-1954",
-  "authors": "Hastorf, A. H., & Cantril, H.",
-  "year": 1954,
-  "title": "They saw a game: A case study",
-  "venue": "Journal of Abnormal and Social Psychology, 49(1), 129–134",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "naive-realism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#realism"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "hall-2019-hours-friend",
-  "authors": "Hall, J. A.",
-  "year": 2019,
-  "title": "How many hours does it take to make a friend?",
-  "venue": "Journal of Social and Personal Relationships, 36(4), 1278–1296 (online first 2018)",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/bonding.html#how-it-grows",
-   "/book/understanding-5-belonging-in-depth.html#building",
-   "/library/connection.html#friendship"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/0265407518761225"
- },
- {
-  "id": "holt-lunstad-2010",
-  "authors": "Holt-Lunstad, J., Smith, T. B., & Layton, J. B.",
-  "year": 2010,
-  "title": "Social relationships and mortality risk: A meta-analytic review",
-  "venue": "PLoS Medicine, 7(7), e1000316",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "social-support",
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html#belonging",
-   "/library/connection.html#loneliness",
-   "/library/connection.html#social-support"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1371/journal.pmed.1000316"
- },
- {
-  "id": "holt-lunstad-2015",
-  "authors": "Holt-Lunstad, J., Smith, T. B., Baker, M., Harris, T., & Stephenson, D.",
-  "year": 2015,
-  "title": "Loneliness and social isolation as risk factors for mortality: A meta-analytic review",
-  "venue": "Perspectives on Psychological Science, 10(2), 227–237",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#loneliness"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/1745691614568352"
- },
- {
-  "id": "cacioppo-patrick-2008",
-  "authors": "Cacioppo, J. T., & Patrick, W.",
-  "year": 2008,
-  "title": "Loneliness: Human Nature and the Need for Social Connection",
-  "venue": "W. W. Norton (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#spread",
-   "/book/understanding-5-belonging-in-depth.html#belonging",
-   "/library/connection.html#loneliness",
-   "/library/emotions.html#emotional-contagion",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "russell-peplau-ferguson-1978",
-  "authors": "Russell, D., Peplau, L. A., & Ferguson, M. L.",
-  "year": 1978,
-  "title": "Developing a measure of loneliness",
-  "venue": "Journal of Personality Assessment, 42(3), 290–294",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#loneliness"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "masi-2011-loneliness-meta",
-  "authors": "Masi, C. M., Chen, H.-Y., Hawkley, L. C., & Cacioppo, J. T.",
-  "year": 2011,
-  "title": "A meta-analysis of interventions to reduce loneliness",
-  "venue": "Personality and Social Psychology Review, 15(3), 219–266",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#loneliness"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/1088868310377394"
- },
- {
-  "id": "surgeon-general-2023-loneliness",
-  "authors": "Office of the U.S. Surgeon General",
-  "year": 2023,
-  "title": "Our Epidemic of Loneliness and Isolation: The U.S. Surgeon General's Advisory on the Healing Effects of Social Connection and Community",
-  "venue": "U.S. Department of Health and Human Services",
-  "doi": null,
-  "url": null,
-  "kind": "guideline",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#loneliness"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "dunbar-1992",
-  "authors": "Dunbar, R. I. M.",
-  "year": 1992,
-  "title": "Neocortex size as a constraint on group size in primates",
-  "venue": "Journal of Human Evolution, 22(6), 469–493",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "friendship",
-   "dunbar-number"
-  ],
-  "mentioned_on": [
-   "/library.html#pillar-v",
-   "/library/connection.html#pillars",
-   "/library/connection.html#friendship",
-   "/library/connection.html#dunbar-number"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "lindenfors-2021-dunbar",
-  "authors": "Lindenfors, P., Wartel, A., & Lind, J.",
-  "year": 2021,
-  "title": "'Dunbar's number' deconstructed",
-  "venue": "Biology Letters, 17(5), 20210158",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "dunbar-number"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#dunbar-number"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1098/rsbl.2021.0158"
- },
- {
-  "id": "oswald-clark-kelly-2004",
-  "authors": "Oswald, D. L., Clark, E. M., & Kelly, C. M.",
-  "year": 2004,
-  "title": "Friendship maintenance: An analysis of individual and dyad behaviors",
-  "venue": "Journal of Social and Clinical Psychology, 23(3), 413–441",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "friendship",
-   "maintenance"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#friendship"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "granovetter-1973",
-  "authors": "Granovetter, M. S.",
-  "year": 1973,
-  "title": "The strength of weak ties",
-  "venue": "American Journal of Sociology, 78(6), 1360–1380",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "weak-ties",
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#weak-ties"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1086/225469"
- },
- {
-  "id": "sandstrom-dunn-2014-weak-ties",
-  "authors": "Sandstrom, G. M., & Dunn, E. W.",
-  "year": 2014,
-  "title": "Social interactions and well-being: The surprising power of weak ties",
-  "venue": "Personality and Social Psychology Bulletin, 40(7), 910–922",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "weak-ties"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#weak-ties"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/0146167214529799"
- },
- {
-  "id": "sandstrom-dunn-2014-barista",
-  "authors": "Sandstrom, G. M., & Dunn, E. W.",
-  "year": 2014,
-  "title": "Is efficiency overrated? Minimal social interactions lead to belonging and positive affect",
-  "venue": "Social Psychological and Personality Science, 5(4), 437–442",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "weak-ties",
-   "belonging"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html#building",
-   "/library/connection.html#weak-ties"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1177/1948550613502990"
- },
- {
-  "id": "epley-schroeder-2014",
-  "authors": "Epley, N., & Schroeder, J.",
-  "year": 2014,
-  "title": "Mistakenly seeking solitude",
-  "venue": "Journal of Experimental Psychology: General, 143(5), 1980–1999",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "weak-ties",
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html#building",
-   "/library/connection.html#weak-ties"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/a0037323"
- },
- {
-  "id": "rajkumar-2022-linkedin",
-  "authors": "Rajkumar, K., Saint-Jacques, G., Bojinov, I., Brynjolfsson, E., & Aral, S.",
-  "year": 2022,
-  "title": "A causal test of the strength of weak ties",
-  "venue": "Science, 377(6612), 1304–1310",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "weak-ties"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#weak-ties"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1126/science.abl4476"
- },
- {
-  "id": "bolger-zuckerman-kessler-2000",
-  "authors": "Bolger, N., Zuckerman, A., & Kessler, R. C.",
-  "year": 2000,
-  "title": "Invisible support and adjustment to stress",
-  "venue": "Journal of Personality and Social Psychology, 79(6), 953–961",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "social-support",
-   "invisible-support"
-  ],
-  "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#not-fixing",
-   "/book/understanding-2-stress-in-depth.html#load",
-   "/book/understanding-6-change-in-depth.html#others",
-   "/library/communication.html#advice-vs-support",
-   "/love-languages-in-depth.html#similar"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.79.6.953"
+  "note": "Not verified as linkable: Citation details (Handbook of Personal Relationships, Wiley, 1988, pp. 367–389) were confirmed via reference lists, but no publisher or reader page for the chapter was found, so no link."
  },
  {
   "id": "cutrona-russell-1990",
@@ -1929,226 +2322,7 @@
    "/library/communication.html#advice-vs-support"
   ],
   "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "cohen-wills-1985",
-  "authors": "Cohen, S., & Wills, T. A.",
-  "year": 1985,
-  "title": "Stress, social support, and the buffering hypothesis",
-  "venue": "Psychological Bulletin, 98(2), 310–357",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "social-support"
-  ],
-  "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#self-care"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0033-2909.98.2.310"
- },
- {
-  "id": "house-1981",
-  "authors": "House, J. S.",
-  "year": 1981,
-  "title": "Work Stress and Social Support",
-  "venue": "Addison-Wesley (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "social-support"
-  ],
-  "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#ask"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "flynn-bohns-2008",
-  "authors": "Flynn, F. J., & Lake, V. K. B. (Bohns)",
-  "year": 2008,
-  "title": "If you need help, just ask: Underestimating compliance with direct requests for help",
-  "venue": "Journal of Personality and Social Psychology, 95(1), 128–143",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "social-support",
-   "asking-for-help"
-  ],
-  "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#receiving"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.95.1.128 Vanessa Bohns published this under the name Vanessa Lake."
- },
- {
-  "id": "baumeister-leary-1995",
-  "authors": "Baumeister, R. F., & Leary, M. R.",
-  "year": 1995,
-  "title": "The need to belong: Desire for interpersonal attachments as a fundamental human motivation",
-  "venue": "Psychological Bulletin, 117(3), 497–529",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "belonging",
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html",
-   "/book/understanding-5-belonging-in-depth.html#belonging"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0033-2909.117.3.497"
- },
- {
-  "id": "kurtz-algoe-2015",
-  "authors": "Kurtz, L. E., & Algoe, S. B.",
-  "year": 2015,
-  "title": "Putting laughter in context: Shared laughter as behavioral indicator of relationship well-being",
-  "venue": "Personal Relationships, 22(4), 573–590",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "humour",
-   "play"
-  ],
-  "mentioned_on": [
-   "/bonding.html#how-it-grows",
-   "/library/communication.html#humour",
-   "/library/connection.html#play"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1111/pere.12095"
- },
- {
-  "id": "shenk-fruzzetti-2011",
-  "authors": "Shenk, C. E., & Fruzzetti, A. E.",
-  "year": 2011,
-  "title": "The impact of validating and invalidating responses on emotional reactivity",
-  "venue": "Journal of Social and Clinical Psychology, 30(2), 163–183",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "validation"
-  ],
-  "mentioned_on": [
-   "/library/communication.html#validation-in-conversation"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1521/jscp.2011.30.2.163"
- },
- {
-  "id": "gordon-1970-pet",
-  "authors": "Gordon, T.",
-  "year": 1970,
-  "title": "Parent Effectiveness Training",
-  "venue": "Peter H. Wyden (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "i-statements"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#going-back",
-   "/book/understanding-4-communication-in-depth.html#hard-things",
-   "/library/communication.html#i-statements"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "rosenberg-nvc",
-  "authors": "Rosenberg, M. B.",
-  "year": 1999,
-  "title": "Nonviolent Communication: A Language of Compassion (later editions: A Language of Life)",
-  "venue": "PuddleDancer Press (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "nvc"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#going-back",
-   "/book/self-2-now-in-depth.html#needs",
-   "/book/understanding-11-healing-in-depth.html#telling",
-   "/book/understanding-4-communication-in-depth.html#hard-things",
-   "/communication.html#research",
-   "/library.html#pillar-v",
-   "/library/communication.html#pillars",
-   "/library/communication.html#nonviolent-communication"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. See fixnotes on the subtitle/edition year."
- },
- {
-  "id": "stone-patton-heen-1999",
-  "authors": "Stone, D., Patton, B., & Heen, S.",
-  "year": 1999,
-  "title": "Difficult Conversations: How to Discuss What Matters Most",
-  "venue": "Viking/Penguin (book; revised 2010)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "difficult-conversations",
-   "intent-impact"
-  ],
-  "mentioned_on": [
-   "/book/chapter-4-in-depth.html#two-questions-examples",
-   "/library/conflict.html#intent-impact",
-   "/library/conflict.html#three-conversations"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "markman-stanley-blumberg-1994",
-  "authors": "Markman, H. J., Stanley, S. M., & Blumberg, S. L.",
-  "year": 1994,
-  "title": "Fighting for Your Marriage",
-  "venue": "Jossey-Bass (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "speaker-listener",
-   "prep"
-  ],
-  "mentioned_on": [
-   "/library/conflict.html#speaker-listener"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
+  "note": "Not verified as linkable: Citation details (Sarason, Sarason & Pierce (Eds.), Social Support: An Interactional View, Wiley, 1990, pp. 319–366) were confirmed via reference lists (e.g. https://aura-lab.siue.edu/theories/social-support/), but no publisher page was found, so no link."
  },
  {
   "id": "rogers-farson-1957",
@@ -2170,179 +2344,6 @@
    "/library/conflict.html#reflective-listening"
   ],
   "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "fisher-ury-1981",
-  "authors": "Fisher, R., & Ury, W. (later editions with Patton, B.)",
-  "year": 1981,
-  "title": "Getting to Yes: Negotiating Agreement Without Giving In",
-  "venue": "Houghton Mifflin (book)",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "negotiation",
-   "interests-vs-positions"
-  ],
-  "mentioned_on": [
-   "/library/conflict.html#interests-vs-positions",
-   "/library/conflict.html#principled-negotiation",
-   "/library/conflict.html#batna"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "baumeister-stillwell-wotman-1990",
-  "authors": "Baumeister, R. F., Stillwell, A., & Wotman, S. R.",
-  "year": 1990,
-  "title": "Victim and perpetrator accounts of interpersonal conflict: Autobiographical narratives about anger",
-  "venue": "Journal of Personality and Social Psychology, 59(5), 994–1005",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "perception",
-   "conflict",
-   "repair"
-  ],
-  "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#telling"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-3514.59.5.994"
- },
- {
-  "id": "eubanks-muran-safran-2018",
-  "authors": "Eubanks, C. F., Muran, J. C., & Safran, J. D.",
-  "year": 2018,
-  "title": "Alliance rupture repair: A meta-analysis",
-  "venue": "Psychotherapy, 55(4), 508–519",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "repair"
-  ],
-  "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#rupture-repair"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/pst0000185"
- },
- {
-  "id": "schegloff-jefferson-sacks-1977",
-  "authors": "Schegloff, E. A., Jefferson, G., & Sacks, H.",
-  "year": 1977,
-  "title": "The preference for self-correction in the organization of repair in conversation",
-  "venue": "Language, 53(2), 361–382",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "repair",
-   "communication"
-  ],
-  "mentioned_on": [
-   "/book/understanding-4-communication-in-depth.html#repair"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published."
- },
- {
-  "id": "jiang-hancock-2013",
-  "authors": "Jiang, L. C., & Hancock, J. T.",
-  "year": 2013,
-  "title": "Absence makes the communication grow fonder: Geographic separation, interpersonal media, and intimacy in dating relationships",
-  "venue": "Journal of Communication, 63(3), 556–577",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "long-distance"
-  ],
-  "mentioned_on": [
-   "/long-distance.html",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1111/jcom.12029 Site does not name this study; suggested source for its long-distance claim."
- },
- {
-  "id": "roberts-david-2016-phubbing",
-  "authors": "Roberts, J. A., & David, M. E.",
-  "year": 2016,
-  "title": "My life has become a major distraction from my cell phone: Partner phubbing and relationship satisfaction among romantic partners",
-  "venue": "Computers in Human Behavior, 54, 134–141",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "phubbing",
-   "attention"
-  ],
-  "mentioned_on": [
-   "/library/calm.html#phones-and-presence",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1016/j.chb.2015.07.058"
- },
- {
-  "id": "bradbury-fincham-1990",
-  "authors": "Bradbury, T. N., & Fincham, F. D.",
-  "year": 1990,
-  "title": "Attributions in marriage: Review and critique",
-  "venue": "Psychological Bulletin, 107(1), 3–33",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "attributions",
-   "perception"
-  ],
-  "mentioned_on": [
-   "/library/communication.html#complaints-vs-criticism",
-   "/library/conflict.html#conflict-is-normal",
-   "/library/thinking.html#personalisation"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0033-2909.107.1.3 Site names Bradbury and Fincham's attribution research without a specific paper; suggested source."
- },
- {
-  "id": "eidelson-epstein-1982",
-  "authors": "Eidelson, R. J., & Epstein, N.",
-  "year": 1982,
-  "title": "Cognition and relationship maladjustment: Development of a measure of dysfunctional relationship beliefs",
-  "venue": "Journal of Consulting and Clinical Psychology, 50(5), 715–720",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "mind-reading",
-   "relationship-beliefs"
-  ],
-  "mentioned_on": [
-   "/library/thinking.html#should-statements"
-  ],
-  "verified": false,
-  "note": "Not verified: the shared web-search budget ran out before this could be checked. Candidate details below are from the site text and memory and must be confirmed (title, authors, year, venue, link) before any link is published. Unconfirmed candidate link: doi 10.1037/0022-006X.50.5.715"
+  "note": "Not verified as linkable: The 1957 essay is confirmed by bookseller/reprint listings (Mockingbird Press reprint, 2021) but no original-publication record or stable reader link was found."
  }
 ]

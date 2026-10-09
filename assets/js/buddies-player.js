@@ -838,6 +838,9 @@
       if (!geo) { geo = geoFor(w, h); paintBlank(b, w, h, geo); geo.env = { x0: geo.x0 - 4, x1: geo.x1 + 4, y0: geo.y0 - 4, y1: geo.y1 + 4, dark: 0 }; }
       S.sp = SP * clamp((geo.LW || 533) / 520, 0.66, 1); // a little smaller on narrow stages, so the pals have room
       S.geo = geo; S.info = PC2 && PC2.sceneInfo ? PC2.sceneInfo(S.scene) : null;
+      // the stage got narrower (a phone turned upright, leaving full screen): step apart if their heads would now meet
+      var gk = pairGap(false).toFixed(3); if (gk !== S.gapKey) { S.gapKey = gk; var T = S.chars.tidbit, Sg = S.chars.sugarfoot;
+        if (!T.act && !Sg.act && !(S.hidden && (S.hidden.tidbit || S.hidden.sugarfoot))) { var tg = { tidbit: T.x, sugarfoot: Sg.x }; spaceOut('_place', ['tidbit', 'sugarfoot'], tg); T.x = tg.tidbit; Sg.x = tg.sugarfoot; } }
     }
     function paintBlank(b, w, h, geo) {
       var gr = b.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#FBE3EC'); gr.addColorStop(0.55, '#EDE3FA'); gr.addColorStop(1, '#DDEBFA');
