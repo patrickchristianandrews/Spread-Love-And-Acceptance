@@ -3210,25 +3210,42 @@ const RECEIVE_MEANS = [
   [["softno"], "\"We'll see\" or \"maybe\" can be a real maybe or a polite no. It's okay to ask which."],
   [["selfput"], "They're being hard on themselves. A kind word may help more than agreeing or arguing."],
   [["vtime","nowhen"], "The timing is open. If you need to know when, it's okay to ask."],
+  [["jab"], "This sounds like hurt or frustration said as blame. Underneath, there's usually something they need."],
+  [["motive"], "\"On purpose\" is their guess about your reasons. You can answer what happened without arguing about intent."],
+  [["blunt"], "It's a correction, said bluntly. It's about the fact, not about you."],
+  [["closer"], "They're saying this decision is theirs to make. It doesn't mean your view doesn't matter to them."],
   [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
 ];
-const RECEIVE_GOOD = {repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
+const RECEIVE_GOOD = {boundary:"They're setting a calm limit, with care in it. It's about what they need, not a threat to you.", disclose:"They're trusting you with something important about who they are. That's a reach toward you.", repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
 const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
 function turnAround(t){ const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",you:"me",myself:"yourself",yourself:"myself"}; return String(t).replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, w=>SW[w.toLowerCase()]); }
 function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
-function receive(an){
+function receive(an, opts){
+  opts = opts||{};
   const has = id=>!!an.found[id];
+  const found = an.staticIds.filter(id=>FBY[id] && !["period","long","nowhen"].includes(id)).map(id=>FBY[id].name);
+  // a threat that would frighten or control: named plainly, with no reading that excuses it, and no "fix the tone" reply
+  if(an.danger) return {crossed:true, danger:true, threat:true, head:["danger","This is a threat, not a tone problem."],
+    meanings:["It's worded as a threat. That isn't okay, whatever was meant, and it isn't your job to fix how it was said.",
+      "You don't have to answer it, and you don't have to do what it asks to keep the peace.",
+      "If it frightens you, or it's part of a pattern (checking up on you, cutting you off from friends, threats), you deserve support. Free, private people can help, any time."],
+    literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   const crossed = CROSSED.some(has);
   const meanings = [];
-  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line)) meanings.push(line); });
+  // the shapes testers met most: what it may mean, and a reply to the need underneath
+  const rf = !crossed ? reframeOf(an, opts) : null;
+  if(rf && rf.r.recv) meanings.push(rf.r.recv.mean);
+  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && (ids.includes("hint") || ids.includes("vtime") || ids.includes("jab") || ids.includes("softno")))) meanings.push(line); });
   const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
   if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
-  if(!meanings.length) meanings.push("This reads as a plain message. It's probably fine to take it at face value, and it's always okay to ask if you're not sure.");
+  // the header and the body agree: "plain message" only when nothing in the words was flagged
+  if(!meanings.length) meanings.push(found.length ? "Some of the wording is sharper than it needs to be, but the point itself is plain. It's fine to answer the point." : "This reads as a plain message. It's probably fine to take it at face value, and it's always okay to ask if you're not sure.");
   const literal = SHARED && SHARED.idioms ? SHARED.idioms(an.text).map(x=>({text:x.text, means:x.means})) : [];
   const replies = [];
   const push = (label, text)=>{ if(text && !replies.some(r=>r.text===text)) replies.push({label, text}); };
+  if(rf && rf.r.recv) push("Answer the need underneath", rf.r.recv.reply);
   if(crossed && has("legal") && !["label","dxlabel","contempt","hostile","swear","violent"].some(has)){
     push("Answer calmly, without the threat", "I've read this. I'd like us to sort out [the specific thing] between us first. Can we talk about it at [a time]?");
     push("Take time before you answer", "I've read this. I'm going to take some time before I reply.");
@@ -3243,16 +3260,20 @@ function receive(an){
     push("Agree on a habit", "You're right, that wasn't safe. Can we find a way to make sure the "+th+" gets checked every time? Maybe a note by the door?");
   }
   if(has("kidsfirst")) push("Keep the kids out of it", "I'd like us to agree together on what we tell the kids. Can we talk about that at [a time]?");
-  if(ask){
+  if(ask && !rf){
     const hasWhen = an.found.when || /\b(?:by|at|on|before|after)\s+\S/i.test(ask);
     push("Check the ask", "Just to check: you'd like me to "+turnAround(ask).replace(/[.?!]+$/,"")+(hasWhen ? "?" : ". By when?"));
   }
   if(has("brushoff")||has("minimal")) push("Ask which one they mean", "Do you mean it's really okay, or are you upset? Either is okay to say.");
-  const order = ["absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
-  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<4) push("Check what they meant", unq(CHECK[id])); });
+  const order = ["jab","motive","blunt","closer","absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
+  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
   if(crossed && replies.length<4 && (has("label")||has("dxlabel")||has("contempt"))) push("Ask for the real thing", "What's the specific thing that's bothering you?");
-  return {crossed, meanings: meanings.slice(0,5), literal, replies: replies.slice(0,4),
-    found: an.staticIds.filter(id=>FBY[id] && !["period","long","nowhen"].includes(id)).map(id=>FBY[id].name)};
+  const mild = found.length && an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
+  const head = crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
+    : found.length ? ["hurt", mild ? "This may sound a little sharper than they meant. Here\u2019s how to read it." : "This may sound harsher than they meant. Here are kinder ways to read it."]
+    : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."]
+    : ["ok","This looks okay. Nothing here needs decoding."];
+  return {crossed, head, meanings: meanings.slice(0,5), literal, replies: replies.slice(0,4), found};
 }
 
 /* ============================================================
