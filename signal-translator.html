@@ -1643,6 +1643,8 @@ function settleHTML(A, B){
   return h;
 }
 
+const LONG_GAP = /\b(?:it's been (?:a (?:long|while)|so long|years|months|ages)|long time no|haven't (?:spoken|talked|seen each other|been in touch)|(?:years|months) since|since (?:the funeral|the wedding|we fell out|everything happened)|reach(?:ing)? out after|out of the blue|i know (?:it's been|we haven't))\b/i;
+const ONLY_ONE = /\b(?:always (?:me|the one) (?:who )?(?:reach|text|call|message|make)|only one (?:who )?(?:reach|text|call|make|tries)|i always have to (?:text|call|reach|message)|never (?:text|call|reach out|message) (?:me )?first)\w*/i;
 const REL_MORE = {
   family:[["/family-rifts.html","Family rifts: reaching out after a long silence"],["/grown-up-children.html","Boundaries with a parent you love"]],
   coparent:[["/co-parenting.html","Separated co-parents"]],
@@ -1741,6 +1743,16 @@ function replyHTML(reply, A, B, phraseFound, phrase){
 /* ============================================================
    RUN
    ============================================================ */
+/* what's working, in plain words: "It gives a clear day (Friday)." */
+function goodWhy(ids, found){
+  const w = id=>((found[id]||[]).filter(Boolean)[0]||"").replace(/^(?:by|on|at|before|after|until|around|from)\s+/i,"").replace(/[.,;:!?]+$/,"");
+  const DAY = /day\b|tonight|tomorrow|today|weekend|week|month/i;
+  const bits = ids.slice(0,3).map(id=>{
+    if(id==="when"){ const x=w("when"); return x ? "It gives a clear "+(DAY.test(x)?"day":"time")+" ("+x+")" : "It gives a clear day or time"; }
+    return {reason:"It says why", clearask:"It asks rather than tells", istate:"It speaks from your side", feeling:"It names the feeling", appreciation:"It says thanks or shows care", softener:"It has a kind softener", repair:"It owns your part", pause:"It says when you'll come back", boundary:"It sets a calm limit, with care", disclose:"It shares something important, plainly"}[id] || ("It has "+FBY[id].name.toLowerCase());
+  });
+  return bits.join(". ")+".";
+}
 function cleanSay(s){ return String(s||"").replace(/[ \t]+/g," ").trim(); }
 /* The rewrite keeps the fact, not the blame: "…the dishes and you forgot." becomes "…the dishes."
    A trailing "and you forgot / didn't / never / always…" clause is dropped from each version. */
@@ -1996,6 +2008,7 @@ function run(){
   if(goodIds.length){
     p1 += '<h3>Worth keeping</h3><ul class="keeps">'+goodIds.map(id=>{
       const f=FBY[id]; const ws=(found[id]||[]).filter(Boolean);
+      if(id==="when" && !an.asks.length) return '<li><span class="fname">A clear day or time</span> '+quoteWords(ws)+'<span class="small"> Everyone knows which day or time you mean.</span></li>';
       return '<li><span class="fname">'+esc(fTitle(id, ws))+'</span> '+(OWN_TITLE.includes(id)?'':quoteWords(ws))+'<span class="small"> '+esc(f.what)+'</span></li>';
     }).join("")+'</ul>';
   }
@@ -2104,7 +2117,7 @@ function run(){
     meantBits.push("If "+A+" is "+NT[a].short+": "+(notes[0]||NT[a].meantDefault));
   });
   const top = heard[0];
-  const heardWhy = top ? top.y : (goodIds.length ? "The structure is clear: "+goodIds.map(id=>FBY[id].name.toLowerCase()).join(", ")+"." : "Nothing in the words is a known trouble spot for this wiring.");
+  const heardWhy = top ? top.y : (goodIds.length ? goodWhy(goodIds, found) : "Nothing in the words is a known trouble spot for this wiring.");
   // the headline agrees with the flags: never "close to what you meant" while static is flagged
   const perceived = top ? top.h : (staticIds.length ? "Mostly as you meant it, with a rough spot or two worth a look." : "Close to what you meant.");
   lastTopic={
@@ -2142,6 +2155,8 @@ function run(){
   if(found.legal || found.kidsfirst){
     vtop+='<p class="vwarn"><b>Likely to escalate.</b> '+(found.legal?'A threat about court, a lawyer or custody':'Telling the children first')+(found.legal&&found.kidsfirst?', and telling the children first,':'')+' usually turns a disagreement into a fight about the kids. The versions below leave '+(found.legal&&found.kidsfirst?'them':'it')+' out.'+(relId==="coparent"?' Between co-parents, messages like this are often saved and shown later. If there is a real legal step, take it through the proper channel. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.':'')+'</p>';
   }
+  if(relId==="family" && LONG_GAP.test(text)) vtop+='<p class="small"><b>After a long gap,</b> short and no-pressure works best: name the rift, own your part, and make the invite easy to decline. More in <a href="/family-rifts.html">Family rifts</a>.</p>';
+  if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   // Easy reading: the words to send come straight after the plain line, the simpler English first
   let vdetail = '';
@@ -2341,7 +2356,7 @@ function fitReceived(an, rv){
   if(rv.coparent){
     if(an.found.brushoff || an.found.minimal) rv.meanings.push("Between co-parents, \u201cwhatever works for you\u201d can be real flexibility, or a tired \u201cI\u2019ve stopped arguing.\u201d Answering with the specific plan settles it either way.");
     if(an.found.legal) rv.meanings.push("Between co-parents, keep your reply to the children\u2019s schedule and the facts. You don\u2019t have to answer the threat itself.");
-    const keep = rv.replies.filter(r=>["Check the ask","Agree on a habit","Keep the kids out of it"].includes(r.label));
+    const keep = rv.replies.filter(r=>["Answer the need underneath","Check the ask","Agree on a habit","Keep the kids out of it"].includes(r.label));
     rv.replies = rv.crossed
       ? COPARENT_REPLIES.slice(1,2).concat([{label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}])
       : keep.concat(an.found.brushoff ? [{label:"Name the plan", text:"Thanks. Then let's go with [the plan]: [the day] at [the time]. Tell me by [a time] if that doesn't work."}] : []).concat(COPARENT_REPLIES).slice(0,3);
