@@ -2648,3 +2648,8 @@ html.tol-work-page .tol-nav-item:has(> button:is([data-sec="play"], [data-sec="m
 .tol-bar:is(.is-fold1, .is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="1"], .tol-bar:is(.is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="2"],
 .tol-bar:is(.is-fold3, .is-fold4) .tol-nav-item[data-fold="3"], .tol-bar.is-fold4 .tol-nav-item[data-fold]{ display:none; }
 .tol-bar:is(.is-fold1, .is-fold2, .is-fold3, .is-fold4) .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
+/* nine sections (with Watch & listen): a little less padding on a 1281-1440px laptop keeps them all on one line */
+@media (max-width:1440px) and (min-width:1281px){
+  .tol-sections{ gap:.1rem; }
+  .tol-sections .tol-nav-item > button{ padding:.5rem .26rem; }
+}

@@ -1402,7 +1402,7 @@
     [/\brunning on empty\b/g, 'very tired'], [/\bbandwidth\b/g, 'energy'], [/\bresentment\b/g, 'anger that builds up'], [/\breciprocat\w*\b/g, 'give back'],
     [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 to'],
     [/\bbids? for (attention|connection)\b/g, 'small ways of reaching for you'], [/\bdynamics?\b/g, 'pattern'], [/\bhold(ing)? the fort\b/g, 'keep$1 things going'],
-    [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears? on\b/g, 'hurts'], [/\bloaded\b/g, 'tense'],
+    [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears on\b/g, 'hurts'], [/\bwear on\b/g, 'hurt'], [/\bloaded\b/g, 'tense'],
     [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement']];
   function easyText(x) { var o = String(x); EASY_SWAP.forEach(function (e) { o = o.replace(e[0], function () { var a = arguments, t = e[1].replace(/\$(\d)/g, function (m, d) { return a[+d] || ''; }); return t; }); }); return o; }
   function easySwap(r) {
