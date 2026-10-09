@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>More Than Two Partners at Home</title>
+<meta name="description" content="Free help for triads and homes with more than two partners: share the planning, join a home that ran before you, and include the partner who works long hours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .pg-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pg-jump li{ margin:0 !important; max-width:none !important; }
+  .pg-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .pg-jump a:hover{ border-color:var(--credit); }
+  .pg-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .pg-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .pg-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .pg-links a:hover{ border-color:var(--credit); }
+  .pg-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .pg-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .pg-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .pg-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .pg-say p{ margin:.4rem 0 !important; font-style:italic; }
+  .pg-say p .pg-who{ font-style:normal; font-weight:600; }
+  .pg-say p.pg-plain{ font-style:normal; }
+  .pg-msg{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; }
+  .pg-msg q{ quotes:none; flex:1 1 14rem; }
+  .pg-copy{ font:600 .88rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.35rem .9rem; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; font-style:normal; }
+  .pg-copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read ol.pg-steps{ margin:.5rem 0 1rem !important; padding-left:1.3rem !important; }
+  .read ol.pg-steps li{ margin:.45rem 0 !important; }
+  .read #faq h3{ font-size:1.05rem; margin-top:1.4rem; }
+  .pg-fields{ display:grid; gap:.25rem; margin:.8rem 0 1rem; max-width:34rem; }
+  .pg-fields label{ font-weight:600; margin-top:.55rem; }
+  .pg-fields input{ font:inherit; min-height:44px; padding:.45rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); width:100%; max-width:100%; box-sizing:border-box; }
+  .pg-fields input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .pg-names{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+  .pg-names label{ display:block; }
+  .read p.pg-out-h{ margin:1rem 0 .3rem !important; font-weight:600; }
+  .pg-out{ white-space:pre-line; overflow-wrap:anywhere; padding:.8rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); line-height:1.55; }
+  .read p.pg-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 .2rem !important; }
+  .pg-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .pg-btn.is-quiet{ background:transparent; color:var(--ink); }
+  .pg-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read p.pg-status{ min-height:1.4em; margin:.3rem 0 .4rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .pg-from{ margin:.4rem 0; font-weight:600; }
+  .pg-keep{ font-size:.95rem; margin:.5rem 0; }
+  .pg-keep-note{ color:var(--ink-soft); font-size:.9rem; }
+  .pg-link{ background:none; border:0; padding:0; color:inherit; text-decoration:underline; cursor:pointer; font:inherit; min-height:44px; }
+  .pg-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .pg-safe p, .pg-safe ul{ margin:.4rem 0 !important; }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/more-than-two.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/more-than-two.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/more-than-two.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="More Than Two Partners at Home">
+<meta property="og:description" content="Free help for triads and homes with more than two partners: share the planning, join a home that ran before you, and include the partner who works long hours.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/more-than-two.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09">
+<meta property="article:modified_time" content="2026-10-09">
+<meta property="article:author" content="https://spreadloveandacceptance.com/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="More Than Two Partners at Home">
+<meta name="twitter:description" content="Free help for triads and homes with more than two partners: share the planning, join a home that ran before you, and include the partner who works long hours.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/more-than-two.html#page","name":"More Than Two Partners at Home","headline":"More Than Two Partners at Home","description":"Free help for triads and homes with more than two partners: share the planning, join a home that ran before you, and include the partner who works long hours.","url":"https://spreadloveandacceptance.com/more-than-two.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-09","dateModified":"2026-10-09","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/more-than-two.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"More Than Two Partners at Home","item":"https://spreadloveandacceptance.com/more-than-two.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · More than two of you</p><h1>More than two partners at home</h1></header>
+
+<p class="simple-lede">Some homes have three or more partners: a triad, a quad, or partners who share a kitchen and a calendar. You are welcome here. <strong>Every tool on this site works for two to eight people.</strong> In the <a href="/lemonade-stand.html">Lemonade Stand</a>, tap “+ Add a person”. One owner per job and check-ins work the same way with three of you as with two.</p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li>Every tool here works for two to eight people.</li>
+    <li>Planning doesn’t have to stay with one person: rotate it, keep one shared list of decisions, and meet for ten minutes a week.</li>
+    <li>New to the home? Ask for a job, a space and a say in one house decision.</li>
+    <li>Use each person’s own name, pronouns and words for your relationship.</li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="pg-jump no-bubble">
+  <li><a href="#tools">The tools, for more than two</a></li>
+  <li><a href="#planning">Sharing the planning</a></li>
+  <li><a href="#joining">Joining a home</a></li>
+  <li><a href="#long-hours">Long hours</a></li>
+  <li><a href="#respect">Names and pronouns</a></li>
+</ul>
+</nav>
+
+<h2 id="tools">Every tool here works for more than two</h2>
+<ul class="pg-links no-bubble">
+  <li><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>Choose “Me and others” and tap “+ Add a person”. Each of you fills in your own side on your own phone and taps “Send my side to the others”. It shows the hours, and also the thinking work (noticing, planning, reminding), without blaming anyone.</span></a></li>
+  <li><a href="/workpapers/fill/wp-03.html"><strong>One owner per job</strong><span>Give every regular job one owner, from any of you. Copy the list into your group chat.</span></a></li>
+  <li><a href="/check-ins.html"><strong>Check-ins</strong><span>One topic, a calm time, everyone heard. It works as a house meeting.</span></a></li>
+  <li><a href="/workpapers/fill/wp-13.html"><strong>The 90-second check-in</strong><span>A short, regular talk that keeps everyone in step, on a call or in the kitchen.</span></a></li>
+</ul>
+<p>With three or more of you, one person often ends up collecting everyone’s side and sending the result back. That’s fine for a first try. After that, take turns being the one who does it.</p>
+
+<h2 id="planning">Planning doesn’t have to stay with one person</h2>
+<p>In many homes with three or more partners, one person becomes the hub. They keep the calendar, remember the bills, send the links and chase the replies. Often it starts because they are good at it. Over time it gets heavy, and the others end up out of the loop without meaning to be.</p>
+<ul>
+  <li><strong>Rotate the planner.</strong> Take turns being the planner for a week or a month: the calendar, the shopping list and the reminders. Then hand it on.</li>
+  <li><strong>Keep one shared decisions list.</strong> A note everyone can edit: what needs deciding, by when, and who is leading it. Anyone can add to it, from anywhere.</li>
+  <li><strong>Meet for ten minutes a week.</strong> Same time each week, and anyone can join from a phone. Go through the decisions list, then each person says one thing that went well and one thing to change.</li>
+  <li><strong>Hand over whole jobs, not errands.</strong> “You own birthdays and gifts, start to finish” works better than “Can you buy this card?”</li>
+</ul>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p><span class="pg-who">If you’re the planner:</span> “I’ve become the hub for everything, and I’m tired. Could each of you take one planning job, starting this week?”</p>
+  <p><span class="pg-who">If you’d like to help more:</span> “I want to take something off your plate. Can I own the bills, start to finish, from my phone?”</p>
+</div>
+
+<h2 id="joining">Joining a home that ran before you</h2>
+<p>Moving into a home your partners already shared can feel like being a guest, even when you are loved. The routines, the cupboards and the in-jokes were there before you. That isn’t anyone’s fault. The setup just hasn’t made room for you yet.</p>
+<p>Three things help a home feel like yours:</p>
+<ol class="pg-steps">
+  <li><strong>A job that is clearly yours.</strong> Own one or two regular jobs, start to finish, like the groceries or the dishes. Being part of how the house runs is a big part of belonging.</li>
+  <li><strong>A space that is yours.</strong> A shelf, a corner, a drawer, or a room if you can. Somewhere you never have to ask about.</li>
+  <li><strong>A say in one house decision.</strong> Something real: the new sofa, the weekly menu, how you host friends.</li>
+</ol>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p><span class="pg-who">If you’re the one who joined:</span> “I love living here. Sometimes I still feel like a guest. Could I own the groceries, and have a say in how we set up the living room?”</p>
+  <p><span class="pg-who">If you were there first:</span> “We had our ways of doing things for a long time. What would make this feel like your home too?”</p>
+</div>
+
+<h2 id="long-hours">The partner who works long hours</h2>
+<p>If you work long shifts, decisions can get made while you are away. It is lonely to come home to a plan you had no part in. And for the others, waiting for you can feel like everything stalls. Both sides make sense.</p>
+<ul>
+  <li><strong>Add to the decisions list from work.</strong> A line on your break counts as having your say.</li>
+  <li><strong>Own one planning job that fits your hours,</strong> such as paying the bills, planning next week’s meals or booking trips. Something you can do from your phone.</li>
+  <li><strong>Agree which decisions wait for everyone.</strong> For example: anything over a set amount, or anything about the bedrooms, waits for the weekly meeting. The rest can go ahead.</li>
+</ul>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p><span class="pg-who">If you work long hours:</span> “Working long hours and missing the decisions is lonely. Could we keep a list I can add to from work, and save the big ones for Sunday?”</p>
+  <p><span class="pg-who">If you’re home more:</span> “We don’t want to decide things without you. What’s the easiest way to reach you during the week?”</p>
+</div>
+
+<h2 id="respect">Names, pronouns and your own words</h2>
+<ul>
+  <li><strong>Use each person’s name and pronouns, every time,</strong> including in shared lists and the group chat. If you get it wrong, say sorry once, fix it and carry on.</li>
+  <li><strong>Describe your relationship in your own words:</strong> partners, triad, polycule, family. The tools here let you type your own names, so nobody has to be “Person 3”.</li>
+  <li><strong>Telling family or work about your relationship?</strong> <a href="/coming-out.html">Coming out as an adult</a> has calm first steps.</li>
+</ul>
+<div class="pg-safe" role="note">
+  <p><strong>Fair is the goal for everyone.</strong> If one person makes every decision, controls the money or who you see, or you feel afraid at home, that isn’t a planning problem. See <a href="/safety.html">Not safe at home?</a> for the signs and where to get help.</p>
+</div>
+
+<h2 id="more">More for your situation</h2>
+<ul class="pg-links no-bubble">
+  <li><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>See who carries what, for two to eight people.</span></a></li>
+  <li><a href="/check-ins.html"><strong>Check-ins</strong><span>A calm, agreed time for one hard topic.</span></a></li>
+  <li><a href="/workpapers/fill/wp-13.html"><strong>The 90-second check-in</strong><span>A short, regular talk to stay in step.</span></a></li>
+  <li><a href="/money-together.html"><strong>Money together</strong><span>Different money styles, shared bills and personal money.</span></a></li>
+  <li><a href="/coming-out.html"><strong>Coming out as an adult</strong><span>To family, at work, or with a partner.</span></a></li>
+</ul>
+</main>
+</body>
+</html>

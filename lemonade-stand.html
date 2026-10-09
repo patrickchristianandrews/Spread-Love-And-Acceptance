@@ -406,6 +406,19 @@
   .ls-moreopts[open] > summary .mo-t::before{ content:"\2212\00a0"; }
   .ls-jump{ padding:.3rem .8rem !important; font-size:.85rem !important; transition:opacity .15s; }
   .ls-jump.is-clear{ opacity:0; pointer-events:none; }
+  /* round 7: planning job, names for the fridge list, the full list, planning tick */
+  .ls-take{ margin:.8rem 0 0; padding:.6rem .8rem; border-radius:12px; background:#EEF6EF; border:1px solid #BFDCC8; }
+  .ls-take p{ margin:0 !important; font-size:.95rem; }
+  .ls-take .ls-pick{ margin:.4rem 0 0; }
+  .ls-own-names{ margin:.6rem 0 0; padding:.6rem .8rem; border-radius:14px; border:2px solid #C9D8EC; background:#EEF3FA; }
+  .ls-own-names[hidden], .ls-own-full[hidden], #send-full[hidden], #send-full-t[hidden]{ display:none !important; }
+  .ls-own-names p{ margin:0 !important; font-size:.95rem; }
+  .ls-own-names-row{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.4rem 0 0; }
+  .ls-own-names-row label{ display:flex; flex-direction:column; gap:.1rem; flex:1 1 9rem; font-size:.85rem; color:var(--ink-soft); }
+  .ls-own-full{ margin:.8rem 0 0 !important; font-weight:600; color:var(--ink) !important; }
+  .ls-plan-tick{ margin:.8rem 0 0; }
+  .ls-owners .ls-keepask{ margin:1rem 0 0; }
+  @media print{ .ls-take, .ls-own-names, .ls-plan-tick{ display:none !important; } }
   @media print{ .ls-keepask, .ls-whoask, .ls-suite, .ls-jump, .ls-moreopts > summary{ display:none !important; } }
   @media print{ .ls-awning, .ls-lemon, .ls-glasses, .ls-tools, .ls-keep, .remove, .add-row, .ls-tabs, .ls-lib, .ls-mode-grid, .ls-more, .ls-draft, .ls-sides, .ls-me, .ls-agree-tick, .row-cue, .row-pick, .tol-hh-move, .ls-wait, .ls-agreed-top, .ls-last, .ls-lib-extra, .row-others, .ls-offer, .ls-steps, .row-area, .ls-freq-each, .ls-data, .ls-dblnote, .ls-path, .ls-freq-ask, .ls-money-start, .ls-goal, .ls-maths{ display:none; } }
 </style>
@@ -502,7 +515,8 @@
         <div class="ls-xfer" id="send-box" hidden>
           <p class="ls-mini" id="send-who" hidden></p>
           <div id="send-acts">
-            <div class="ls-tools ls-main-act"><button type="button" id="send-share" class="ls-main-btn">Share your side (link)</button></div>
+            <div class="ls-tools ls-main-act"><button type="button" id="send-share" class="ls-main-btn">Share your side (link)</button><button type="button" id="send-full" hidden>Send everyone the full picture</button></div>
+            <p class="ls-mini" id="send-full-t" hidden>&ldquo;Send everyone the full picture&rdquo; sends every side on this device and the fridge list in one link, for the group chat, so nobody has to add the sides one by one.</p>
             <p class="ls-mini">Send the link any way you like: a text, an email, a chat. Tapping it on the other device shows a preview before anything is added. Going to the Workpaper Suite instead? Use &ldquo;Use this in my Workpaper Suite&rdquo; under the result.</p>
             <details class="ls-other-ways">
               <summary>Other ways: copy the code, or save a file</summary>
@@ -582,6 +596,7 @@
       <button class="add-row" id="add-bill" type="button">🍋 Add a bill</button>
       <div class="ls-tools" id="income-row" hidden><button type="button" id="income-split"></button></div>
       <p class="ls-mini-p" id="income-why" hidden></p>
+      <label class="ls-check ls-plan-tick"><input type="checkbox" id="planning-on" autocomplete="off"> We&rsquo;re planning, not settling up (nothing&rsquo;s been paid yet): show what each of us puts in, not who owes whom</label>
       <p class="ls-money-sum" id="money-line" aria-live="polite"></p>
       <details class="ls-other-ways ls-goal" id="goal-box">
         <summary>Saving for something? See roughly how long a goal takes</summary>
@@ -612,16 +627,17 @@
         <p id="agreed-offer-t"></p>
         <div class="ls-tools"><button type="button" id="agreed-offer-use">Use it</button><button type="button" id="agreed-offer-no">Not now</button></div>
       </div>
-      <div class="ls-agreed ls-agreed-top">
+      <div class="ls-agreed ls-agreed-top group-only">
         <label class="ls-check"><input type="checkbox" id="agreed-on" autocomplete="off"> Compare with a split you choose (like 60/40), instead of an even share</label>
         <div class="row-amts" id="agreed-pcts" hidden></div>
-        <p class="ls-mini">Fair isn&rsquo;t always even. Paid work, part-time hours, a new baby, health, both of you being retired, or a child who lives here part of the time can all change what feels fair. You might agree on something like 60/40, or keep 50/50. Three or more of you? Each share is compared with an even share, or with the split you set. The split you set is used for shared bills too.</p>
+        <p class="ls-mini">Fair isn&rsquo;t always even. Paid work, part-time hours, a new baby, health, an illness or disability, being retired, or a child who lives here part of the time can all change what feels fair. You might agree on something like 60/40, or keep an even split. Paid hours don&rsquo;t show energy: if one of you is ill, see <a href="/when-one-is-ill.html">when one of you is ill</a>. Three or more of you? Each share is compared with an even share, or with the split you set. The split you set is used for shared bills too.</p>
         <p class="ls-mini-p hours-only" id="agreed-nudge" hidden></p>
         <div class="ls-tools" id="suggest-row" hidden>
           <button type="button" id="suggest-work" hidden>Suggest a split from paid hours</button>
           <button type="button" id="suggest-kids" hidden>Suggest an adults and kids split</button>
         </div>
         <p class="ls-mini-p" id="suggest-why" aria-live="polite" hidden></p>
+        <p class="ls-mini">Work nights or shifts? Add &ldquo;Night shift&rdquo; and &ldquo;Recovery sleep after a night shift&rdquo; from Work &amp; school in the task library: they count with paid work, not as rest. (The nights just below are about who lives here.)</p>
         <div class="ls-part hours-only">
           <p class="ls-mini" id="part-h">Someone lives here only part of the time, like a child who&rsquo;s here every other weekend? Set the nights they&rsquo;re here out of 14, and their fair share follows. Tick &ldquo;Child&rdquo; for children, to get an adults and kids suggestion. (A split you agree on, above, takes the place of this.)</p>
           <div class="ls-pick" id="part-row" role="group" aria-labelledby="part-h"></div>
@@ -667,7 +683,7 @@
     </div>
 
     <details class="ls-moreopts" id="more-opts" hidden>
-      <summary><span class="mo-sum"><span class="mo-t">More options</span><span class="group-only">: a split you choose, part-time nights, how to use it</span><span class="solo-only">: how to use it</span></span></summary>
+      <summary><span class="mo-sum"><span class="mo-t">More options</span><span class="group-only">: a split you choose, someone who lives here part of the time, week by week, how it works</span><span class="solo-only">: week by week, how it works</span></span></summary>
       <div id="more-opts-body"></div>
     </details>
 
@@ -739,6 +755,10 @@
 <section class="stand ls-owners" id="owners" aria-labelledby="owners-h">
   <h2 id="owners-h">No project needed: one owner per job</h2>
   <p class="ls-panel-note">Skip the week of logging. Pick up to five jobs you go back and forth about most, give each one an owner with one tap, then copy or print the list for the fridge. Owning a job means you do it, or you make sure it gets done.</p>
+  <div class="ls-own-names" id="own-names" role="group" aria-labelledby="own-names-h" hidden>
+    <p id="own-names-h"><strong>Whose list is it?</strong> Type your names, so the list says who owns what (not &ldquo;Me&rdquo; and &ldquo;Them&rdquo;).</p>
+    <div class="ls-own-names-row" id="own-names-row"></div>
+  </div>
   <p class="ls-panel-note" style="margin-top:.6rem !important"><strong>1. Pick the jobs</strong> (tap to add or take off)</p>
   <div class="ls-pick" id="own-pick"></div>
   <div class="ls-own-add" id="own-add">
@@ -746,6 +766,7 @@
     <input type="text" id="own-new" placeholder="Or type another job" maxlength="60" autocomplete="off">
     <button type="button" class="add-row" id="own-add-go" style="margin:0">Add it</button>
   </div>
+  <p class="ls-panel-note ls-own-full" id="own-full" role="status" hidden>That&rsquo;s five, the most for one list. Swap one out to add another.</p>
   <p class="ls-panel-note" style="margin-top:1rem !important"><strong>2. One owner each</strong></p>
   <p class="ls-panel-note" id="own-empty">Nothing picked yet.</p>
   <ol id="own-list"></ol>
@@ -753,6 +774,7 @@
     <button type="button" id="own-copy">Copy the list</button>
     <button type="button" id="own-print">Print the fridge list</button>
   </div>
+  <div class="ls-keepask" data-keepask id="keepask-own" hidden><p class="ls-keepask-q">Keep this list on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
   <pre class="ls-fridge" id="fridge" aria-hidden="true"></pre>
 </section>
 

@@ -150,6 +150,16 @@
       todo: 'Think of someone you’ve lost touch with. Send one low-pressure message, with no need for a long reply.',
       msg: { default: 'Hey, it’s been a while and I was thinking of you. How are things?',
              friend: 'It’s been way too long! No pressure to write back properly, just wanted to say hi. Coffee sometime?' } },
+    { key: 'rituals', title: 'Short on energy? Send ten seconds',
+      todo: 'When life is full (a new baby, a new job, a hard patch), a tiny message keeps the thread. No catch-up needed.',
+      msg: { default: 'Life is full right now and I’ve been quiet. I’m thinking of you, and I’m not ignoring you.',
+             friend: 'I’ve been underwater [with the baby / with work]. I miss you and I’m not ignoring you. Voice note this weekend?',
+             family: 'I’ve been quiet because life is full, not because I don’t care. Can I call you on Sunday?' } },
+    { key: 'bids', title: 'Say you miss them',
+      todo: 'If you’ve been feeling left out, say it once, kindly, with one small ask. No list of who texted first.',
+      msg: { default: 'I miss you. Could we find ten minutes this week?',
+             friend: 'I miss you and I’ve been feeling a bit left out. Could we find ten minutes this week?',
+             coworker: 'I miss our catch-ups. Coffee for ten minutes this week?' } },
     { key: 'rituals', title: 'End the day with one good thing',
       todo: 'Before sleep, or at the end of a call, each share one thing from today that went well.',
       msg: { default: 'Want to try something? Every night, we each share one good thing from the day.' } },
@@ -188,6 +198,11 @@
     var dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
     var idx = dayOfYear % SPARKS.length;
     var who = get('tol-tt-who') || 'partner';
+    // a shared link can say who it's for (?who=friend), so the person who got a message can send one back
+    try {
+      var qWho = new URLSearchParams(location.search).get('who');
+      if (qWho && WHO.some(function (w) { return w[0] === qWho; })) who = qWho;
+    } catch (e) {}
 
     var whoWrap = $('tt-who');
     WHO.forEach(function (w) {
@@ -226,14 +241,43 @@
       var ta = $('tt-msg-text'), i = ta.value.indexOf('['), j = ta.value.indexOf(']', i);
       try { ta.focus(); if (i >= 0 && j > i) ta.setSelectionRange(i, j + 1); } catch (e) {}
     }
-    $('tt-next').addEventListener('click', function () { idx = (idx + 1) % SPARKS.length; show(); });
+    // "Another idea": go through the ideas in a shuffled order, never showing the same idea or the same
+    // message twice in a row, and not repeating one until the rest have had a turn
+    function msgOf(i) { var s = SPARKS[i]; return s.msg ? (s.msg[who] || s.msg.default) : ''; }
+    var deck = [], recent = [];
+    function shuffled() {
+      var a = SPARKS.map(function (_, i) { return i; });
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function nextIdx() {
+      var curMsg = msgOf(idx), curTitle = SPARKS[idx].title;
+      for (var round = 0; round < 2; round++) {
+        if (!deck.length) deck = shuffled();
+        for (var k = 0; k < deck.length; k++) {
+          var i = deck[k], m = msgOf(i);
+          if (i === idx || SPARKS[i].title === curTitle) continue;
+          if (m && (m === curMsg || recent.indexOf(m) !== -1)) continue;
+          deck.splice(k, 1);
+          return i;
+        }
+        deck = [];   // everything left would repeat: start a fresh shuffle
+        recent = recent.slice(-1);
+      }
+      return (idx + 1) % SPARKS.length;
+    }
+    $('tt-next').addEventListener('click', function () {
+      var m = msgOf(idx); if (m) { recent.push(m); if (recent.length > 12) recent.shift(); }
+      idx = nextIdx(); show();
+    });
     $('tt-copy').addEventListener('click', function () {
       var t = $('tt-msg-text').value;
       copy(t, this);
       if (gaps(t)) { $('tt-fill').textContent = 'Copied. Remember to change the parts in [square brackets] before you send it.'; }
     });
     var share = $('tt-share');
-    // the message, and only the message, through the site's own share (the device's share menu, or a small sheet)
+    // the message, with a link back to this page (set to the same relationship) so the other person can
+    // find the tool and send one back, through the site's own share (the device's share menu, or a small sheet)
     if (window.TOLShare || navigator.share) {
       share.hidden = false;
       share.classList.add('tol-share-btn');
@@ -242,8 +286,10 @@
         var text = $('tt-msg-text').value.trim();
         if (!text) return;
         if (gaps(text)) { fillNote(true); focusGap(); return; } // nothing is shared with the brackets still in
-        if (window.TOLShare) window.TOLShare.share({ title: 'A little message', text: text, url: false, result: true });
-        else navigator.share({ text: text }).catch(function () {});
+        var url = location.origin + '/turning-toward.html?who=' + encodeURIComponent(who);
+        var body = text + '\n\nLittle messages like this one:';
+        if (window.TOLShare) window.TOLShare.share({ title: 'A little message', text: body, url: url, result: true });
+        else navigator.share({ text: body, url: url }).catch(function () {});
       });
     }
     show();

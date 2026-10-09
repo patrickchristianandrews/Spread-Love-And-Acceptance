@@ -201,5 +201,52 @@
   <p><a href="/complacency.html">Read the Complacency guide &rarr;</a> <a href="/check-ins.html">Check-ins</a> <a href="/turning-toward.html">Turning Toward</a></p>
 </div>
 </main>
+<script>
+/* "Something to read" fits who the drive is for. The site picks the article from this page's words,
+   and the long list of choices (housemate, coworker...) can tip it toward workplace articles. When
+   the drive is for "Us, together", a partner, family or a friend, the card is shown again with
+   articles about closeness and repair instead, and workplace-only articles are left out. Nothing is
+   stored or sent: it reads the choice on screen and the drive this browser already keeps. */
+(function () {
+  'use strict';
+  var TOPICS = {
+    us: ['connection', 'gratitude', 'repair', 'communication'],
+    partner: ['connection', 'gratitude', 'repair', 'communication'],
+    self: ['self-compassion', 'habits', 'stress'],
+    relative: ['family', 'connection'], grown: ['family', 'connection'], young: ['family', 'connection'],
+    friend: ['connection', 'gratitude'], neighbor: ['connection', 'gratitude'],
+    housemate: ['teams', 'invisible-work'], coworker: ['teams']
+  };
+  var WORK = { housemate: 1, coworker: 1 };
+  var full = null, last = '';
+  function chosen() {
+    var game = document.getElementById('rd-game');
+    if (game && !game.hidden) {
+      try { var d = JSON.parse(localStorage.getItem('tol-recheck-drive-v1') || 'null'); if (d && d.started && d.who) return d.who; } catch (e) { }
+    }
+    var r = document.querySelector('input[name="rd-who"]:checked');
+    return r ? r.value : '';
+  }
+  function remount() {
+    var who = chosen(), host = document.querySelector('main .tol-read-host');
+    if (!who || who === last || !host || !window.TOLReading || !window.TOL_READING || !TOPICS[who]) return;
+    if (!full) full = window.TOL_READING;
+    window.TOL_READING = WORK[who] ? full : Object.assign({}, full, { items: (full.items || []).filter(function (it) { return (it.topics || []).indexOf('teams') === -1; }) });
+    last = who;
+    try { window.TOLReading.mount(host, { heading: 'none', topics: TOPICS[who], scan: false }); } catch (e) { }
+  }
+  function start() {
+    var main = document.querySelector('main'); if (!main) return;
+    document.addEventListener('change', function (e) { if (e.target && e.target.name === 'rd-who') remount(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('#rd-start, #rd-again, #rd-reset')) setTimeout(remount, 0); });
+    remount();
+    if (!window.MutationObserver) return;
+    var mo = new MutationObserver(function () { if (main.querySelector('.tol-read-host .tol-read')) { mo.disconnect(); remount(); } });
+    mo.observe(main, { childList: true, subtree: true });
+    setTimeout(function () { mo.disconnect(); }, 20000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
 </body>
 </html>

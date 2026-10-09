@@ -9,6 +9,10 @@
   - Nothing is stored in the browser unless the person ticks "Keep a draft on
     this device". Then one draft per worksheet is kept in localStorage, on this
     device only, until they press "Erase". No cookies, no IndexedDB.
+    A sheet two people keep together (share: list or week, with people: One owner
+    per job, the daily check-in) ticks that box by itself as soon as something is
+    typed, so a list isn't lost when the tab closes, and says "Saved on this phone".
+    Unticking it or "Erase" turns that off for the sheet on this device.
   - The one exception is a tick the person makes themselves: "Use these names in
     the other tools" keeps just the names (and, on One owner per job, the jobs
     and their owners) in localStorage ('tol-household-v1', see
@@ -727,8 +731,9 @@
     // (and, once it is combined, "Send my changes back" in the same place)
     var inEl = this.shareInEl() || (this.sendBack === 'top' ? this.sendBackEl() : null);
     var cfEl = !this.sharedIn ? this.conflictsEl() : null;
-    if (cfEl) this.root.insertBefore(cfEl, this.root.firstChild);
+    // what differs comes first: choose, then send the list back
     if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
+    if (cfEl) this.root.insertBefore(cfEl, this.root.firstChild);
     var lead = s.sections[0] && s.sections[0].type === 'note' ? s.sections[0] : null, howEl = null;
     s.sections.forEach(function (sec, k) {
       // a long note before the first part of the sheet folds into "How to fill it in", with the example
@@ -843,7 +848,7 @@
         }
         fs.appendChild(opts);
         // the two ends in words on every row, so nobody has to scroll back up to remember them
-        fs.appendChild(h('p', { className: 'wpf-scale-ends', 'aria-hidden': 'true' }, [h('span', { text: sec.min + ' = ' + sec.anchors[0] }), h('span', { text: sec.max + ' = ' + sec.anchors[1] })]));
+        fs.appendChild(h('p', { className: 'wpf-scale-ends', 'aria-hidden': 'true' }, [h('span', { text: sec.min + ' = ' + sec.anchors[0] }), h('span', { className: 'wpf-scale-sep', text: ' \u00b7 ' }), h('span', { text: sec.max + ' = ' + sec.anchors[1] })]));
         wrap.appendChild(fs);
       });
     }
@@ -1437,6 +1442,8 @@
       box.appendChild(q);
     }
     if (this.sendBack === 'share') box.appendChild(this.sendBackEl());
+    // a note that came with someone else's score stays in view here, so it isn't lost with the banner
+    if (one && this.sharedNote) box.appendChild(h('p', { className: 'wpf-shared-note' }, [h('strong', { text: 'What ' + this.sharedNote.who + ' wanted to name: ' }), '\u201c' + this.sharedNote.note + '\u201d']));
     return box;
   };
   // A button for the site's share sheet (Text, WhatsApp, Email, …, or the phone's own share menu). The
@@ -1520,7 +1527,9 @@
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
     if (!this.schema.people) {
       box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
-      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cYour partner\u2019s score\u201d. Your own answers stay as they are.' }));
+      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cSomeone else\u2019s score\u201d. Your own answers stay as they are.' }));
+      var their = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 600) : '';
+      if (their && !this.oneIsMine(d)) box.appendChild(h('p', { className: 'wpf-shared-note' }, [h('strong', { text: 'What ' + (names[0] || 'they') + ' wanted to name: ' }), '\u201c' + their + '\u201d']));
       box.appendChild(h('div', { className: 'wpf-share-btns' }, [
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Add it here' }),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-no', text: 'Not now' })
@@ -1607,13 +1616,15 @@
     if (d.s == null || !(d.s >= 0 && d.s <= 1)) return who + ' hasn\u2019t answered all five rows yet, so there is no score to add.';
     var list = String(v.partnerScore || '').split(/[,;\s]+/).filter(Boolean);
     var txt = d.s.toFixed(2);
-    if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cYour partner\u2019s score\u201d.';
+    if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cSomeone else\u2019s score\u201d.';
     list.push(txt);
     v.partnerScore = list.join(', ');
     this.lastShared = who + txt;
     this.state = sanitize(sc, this.state);
     this.changed();
-    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cYour partner\u2019s score\u201d. Your own answers are as they were. Nothing was sent anywhere.';
+    var said = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 300) : '';
+    this.sharedNote = said ? { who: who, note: said } : this.sharedNote;
+    return 'Added ' + who + '\u2019s load score (' + txt + ') to \u201cSomeone else\u2019s score\u201d. Your own answers are as they were.' + (said ? ' ' + who + ' wanted to name: \u201c' + said + '\u201d' : '') + ' Nothing was sent anywhere.';
   };
   A.takeShared = function (d, replace) {
     var self = this, sc = this.schema, what = this.shareWhat();
@@ -2291,7 +2302,7 @@
       if (app.sendBack) { app.sendBack = ''; var sb = root.querySelector('.wpf-sendback'); if (sb) sb.remove(); }
     });
     if (sharedSay()) { /* said */ }
-    else if (kept) app.status('Picked up the draft kept on this device. Press “Erase” to remove it.');
+    else if (kept) app.status('Picked up what you saved on ' + deviceWord() + '. To remove it: “Erase”, under How saving works.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });
     if (keepBox) keepBox.addEventListener('change', function () { app.setKeep(keepBox.checked); });

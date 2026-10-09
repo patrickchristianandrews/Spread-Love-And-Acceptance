@@ -257,8 +257,10 @@
       // Only when caring is part of it (the tick, or the note says so), not for a work deadline.
       var caring = ctx.value('caring') === true || CARE_WORDS.test(String(ctx.value('note') || ''));
       if (sb >= 0.60 && caring) out.push({ label: 'If it can\u2019t wait', value: 'If what you\u2019re carrying can\u2019t wait, like caring for someone who is ill, that\u2019s a sign to get more help, not to try harder: ask one person for one specific thing this week, and look into respite care.', note: 'For people caring for someone: spreadloveandacceptance.com/caregivers.html', link: ['Help for caregivers', '/caregivers.html'] });
+      // a long-term illness keeps the physical row high: that is load, not a mood
+      if (Number(ctx.value('factors.physical')) >= 3) out.push({ label: 'If it\u2019s a long-term illness', value: 'Your physical row may always be high. That is load, not a mood.', note: 'When one of you is ill: spreadloveandacceptance.com/when-one-is-ill.html', link: ['When one of you is ill', '/when-one-is-ill.html'] });
       if (top.length) out.push({ label: 'Filled most by', value: top.join(', ') + '.', note: 'Conditions, not character. Some of them are in your control this week; some are just weather.' });
-      out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.)' });
+      out.push({ label: 'Load score', value: fmt(s, 2) + ' out of 1.00', more: 'How is this scored?', num: s, note: 'The five answers added up, then divided by 20. Higher means a heavier load (and a lower battery). The words follow these cut-offs: under 0.15 very light; 0.15 to 0.29 light; 0.30 to 0.44 medium, lighter side; 0.45 to 0.59 medium, heavier side; 0.60 to 0.79 high; 0.80 and up very high. (CALC-01 and the reports group them as under 0.30 low, 0.30 to 0.59 medium, 0.60 and up high.) These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
       if (solo) return out;
       // everyone else's shared scores ("0.4, 0.55, 0.3"); the average covers everyone on the road, or waits
       var raw = String(ctx.value('partnerScore') || '').split(/[,;\s]+/).filter(Boolean), others = raw.map(parseFloat);
@@ -269,7 +271,12 @@
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and ' + road + ' people on your road.', note: 'Check the list of scores: one may be in twice.' });
-        else out.push({ label: 'Everyone\u2019s average', value: wp02Words(r2(avg), false)[0].toLowerCase().replace(/^./, function (c) { return c.toUpperCase(); }) + ' (' + fmt(avg, 2) + ', ' + all.length + ' people)', note: 'The average of everyone\'s scores is the stress number in CALC-01 (how stretched you all are).' + (road > 1 ? '' : ' Make sure every person on your road is included: it is never worked out while anyone\'s is missing, or from one person alone.') });
+        else {
+          // plain words: "Your average: 0.55, medium. Go gently with each other today."
+          var ra = r2(avg), band = ra < 0.30 ? 'low' : ra < 0.60 ? 'medium' : 'high';
+          var doNow = ra < 0.30 ? 'A fair day to talk things through.' : ra < 0.60 ? 'Go gently with each other today.' : 'Keep today light, and pick a time for anything big.';
+          out.push({ label: 'Your average', value: 'Your average: ' + fmt(avg, 2) + ', ' + band + ' (' + all.length + ' people). ' + doNow, note: (road > 1 ? '' : 'Make sure everyone\'s score is in: an average from only some of you can mislead. ') + 'These bands are this site\u2019s rule of thumb, not a validated clinical scale.' });
+        }
       }
       return out;
     };
@@ -295,7 +302,7 @@
       },
       {
         id: 'factors', type: 'scale', title: 'The checklist',
-        intro: 'Score each row based on how the last 24–48 hours have actually gone.',
+        intro: 'Score each row based on how the last 24–48 hours have actually gone. Living with a long-term illness? Your physical row may always be high. That is load, not a mood.',
         min: 0, max: 4, anchors: ['Not at all', 'Very true'],
         items: WP02_FACTORS
       },
@@ -354,7 +361,7 @@
     var agreed = String(ctx.value('split') || '').trim(), tgt = ctx.target ? ctx.target() : null;
     var ask = agreed ? 'You wrote down the split you agreed: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
     if (tgt && c.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[c.top]) + ' about ' + fmt(tgt.t[c.top] * 100, 0) + '%.';
-    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner. ' + spread, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote });
+    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner.' + (together ? ' ' + together + ' decided together.' : ''), note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote });
     else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: spread, note: (agreed ? ask + ' ' : '') + weighNote });
     return out;
   }
@@ -373,7 +380,7 @@
     people: true,
     meta: [
       { id: 'reviewDate', label: 'Date of this list', type: 'date' },
-      { id: 'split', label: 'The split you agreed (optional)', type: 'text', placeholder: 'e.g. weekdays at one home, weekends at the other' }
+      { id: 'split', label: 'The split you agreed (optional)', type: 'text', placeholder: 'e.g. weekdays here, weekends there' }
     ],
     sections: [
       {
@@ -577,19 +584,32 @@
   var WP11_TACTICS = ['Asymmetric breathing (4 in, 6 out)', 'Naming the room (5-4-3)', 'Weight and pressure', 'Gating (lower the lights, step out)', 'Walking it out', 'Low, steady sound'];
   // solo: "pick things back up" rather than "go back in" to a conversation
   function wp11Next(solo) {
+    var RT = ' These bands are this site\u2019s rule of thumb, not a validated clinical scale.';
+    var BACK = solo ? 'pick things back up' : 'go back to the conversation';
     return function (ctx) {
       var all = ctx.rows('reentry'), bad = all.filter(function (r) { return outOfRange(r.before, 0, 1) || outOfRange(r.after, 0, 1); });
-      var rows = all.filter(function (r) { return inRange(r.after, 0, 1) !== null && !outOfRange(r.before, 0, 1); });
       var left = bad.length ? [{ label: 'Left out', value: plural(bad.length, 'reading') + ' with a number outside 0 to 1.', note: 'These are WP-02 load scores: the five answers added up and divided by 20, so they run from 0 to 1 (for example 0.45).' }] : [];
-      if (!rows.length) return [{ label: 'Coming back', value: 'Add a before-and-after reading to see where you are.' }].concat(left);
+      var come = 'When you come back, start with one small, simple task, like putting the dishes away.';
+      // the plain rule first: how you feel now. "Still hot? Another round. Twice? Name a new time."
+      var felt = all.filter(function (r) { return r.feel; });
+      if (felt.length) {
+        var lastF = felt[felt.length - 1], hot = felt.filter(function (r) { return r.feel === 'Still hot'; }).length;
+        var say = lastF.feel === 'Settled enough' ? 'Settled enough: ' + BACK + ', at the time you named.'
+          : hot >= 2 ? 'Still hot, twice now: name a new time. "Tomorrow after dinner" is a real plan; "later" is not.'
+            : 'Still hot: take another round, with the same calming step or the other one.';
+        return [{ label: 'Next', value: say, note: come }].concat(left);
+      }
+      var rows = all.filter(function (r) { return inRange(r.after, 0, 1) !== null && !outOfRange(r.before, 0, 1); });
+      if (!rows.length) return [{ label: 'Coming back', value: 'After a round, pick how you feel now (still hot, or settled enough) to see what comes next.' }].concat(left);
+      // for number fans: the load score as a second opinion
       var last = rows[rows.length - 1], a = inRange(last.after, 0, 1), b = inRange(last.before, 0, 1);
-      var band = a < 0.5 ? (solo ? 'Settled enough: pick things back up, at the time you named. (Under 0.50.)' : 'Settled enough: go back to the conversation, at the time you named. (Under 0.50.)')
+      var band = a < 0.5 ? 'Settled enough: ' + BACK + ', at the time you named. (Under 0.50.)'
         : a < 0.6 ? 'If you still feel hot, take another round, with the same calming step or the other one. (0.50 to 0.59.)'
           : (rows.length >= 2 ? 'Still hot after two rounds: put it off to a specific time. "Tomorrow after dinner" is a real plan; "later" is not. (0.60 or above.)' : 'Still hot: take another round first. (0.60 or above.)');
       var out = [{ label: 'Latest reading', value: fmt(a, 2) }];
       // a reading that went up is worth saying out loud, kindly
       if (b !== null && r2(a) > r2(b)) out.push({ label: 'It went up', value: 'Your load went from ' + fmt(b, 2) + ' to ' + fmt(a, 2) + '. That happens, and it is useful to know. Try your other calming step, or put it off to a named time.' });
-      out.push({ label: 'Next', value: band, note: 'When you come back, start with one small, simple task, like putting the dishes away. (0.50 is the come-back line for settling. It sits inside WP-02\'s medium range on purpose: you don\'t need a light load to come back, just less than half.)' });
+      out.push({ label: 'Next', value: band, note: come + ' (0.50 is the come-back line for settling: you don\'t need a light load to come back, just less than half.)' + RT });
       return out.concat(left);
     };
   }
@@ -653,15 +673,17 @@
       },
       {
         id: 'reentry', type: 'table', title: 'Part C: Coming back',
-        intro: 'After each round, ask yourself one thing: do I still feel hot? If you still feel hot, take another round. If you feel settled enough to listen, go back at the time you named. Still hot after two rounds? Put it off to a named time; that is a plan, not giving up. If you like numbers, the load score (WP-02) is a second opinion: under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off.',
+        intro: 'Still hot? Another round. Twice? Name a new time. Settled enough to listen? Go back at the time you named. After each round, write what you did and how you feel now. Putting it off to a named time is a plan, not giving up.',
+        fans: { label: 'For number fans: add load scores', note: 'If you like numbers, the load score (WP-02, 0 to 1) is a second opinion: under 0.50 go back, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. ' + 'These bands are this site\u2019s rule of thumb, not a validated clinical scale.' },
         addLabel: 'Add a reading',
         rangeCols: true,
         columns: [
           { id: 'time', label: 'Time', type: 'text', w: 1, placeholder: 'e.g. 7:40pm' },
           { id: 'tactic', label: 'What I did', type: 'select', options: WP11_TACTICS, w: 2.2 },
-          { id: 'before', label: 'Load before (WP-02, 0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
-          { id: 'after', label: 'Load after (WP-02, 0–1)', type: 'number', w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
-          { id: 'change', label: 'Change', type: 'computed', w: 0.9, compute: function (r) {
+          { id: 'feel', label: 'How I feel now', type: 'select', options: ['Still hot', 'Settled enough'], w: 1.3 },
+          { id: 'before', label: 'Load before (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
+          { id: 'after', label: 'Load after (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
+          { id: 'change', label: 'Change', type: 'computed', fans: true, w: 0.9, compute: function (r) {
             var b = inRange(r.before, 0, 1), a = inRange(r.after, 0, 1);
             if (outOfRange(r.before, 0, 1) || outOfRange(r.after, 0, 1)) return 'Check 0–1';
             return (b !== null && a !== null) ? (a - b > 0 ? '+' : '') + fmt(a - b, 2) : '';
@@ -914,7 +936,7 @@
           { id: 'planBack', label: 'How I set the time to come back', type: 'text', placeholder: 'e.g. I name a time, within the day' },
           { id: 'planFirst', label: 'The first sentence when I come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready now.' }
         ], intro: 'The one part of the kit you might share with someone close: the word you\'ll use, how long a break you take, and how you come back. A few words in each box is plenty.' },
-        reentry: { intro: 'After each round, ask yourself: do I still feel hot? If you still feel hot, take another round. If you feel settled, pick things back up. Still hot after two rounds? Put it off to a named time. If you like numbers, the load score (WP-02) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off.' },
+        reentry: { intro: 'Still hot? Another round. Twice? Name a new time. Settled? Pick things back up. After each round, write what you did and how you feel now.', fans: { label: 'For number fans: add load scores', note: 'If you like numbers, the load score (WP-02, 0 to 1) is a second opinion: under 0.50 pick things back up, 0.50 to 0.59 another round, 0.60 or above after two rounds put it off. These bands are this site\u2019s rule of thumb, not a validated clinical scale.' } },
         next: { compute: wp11Next(true) },
         after: {
           fields: [

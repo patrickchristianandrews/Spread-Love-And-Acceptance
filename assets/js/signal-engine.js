@@ -226,6 +226,22 @@ const F = [
    re:/\bif you (?:don't|do not|won't|can't|ever|keep|dare|refuse to)\b(?! mind)[^.!?]{1,80}?,?\s*(?:then )?(?:i'm|i'll|i will|i am|we're|we'll|we will|you'll|you will|i swear)\s+(?:be\s+)?(?:leaving|leave|done|out|gone|going to (?:leave|tell|take|stop|cancel|end|move)|tell (?:your|every)|telling (?:your|every|them|him|her|the)|taking (?:away|your|the)|cancel(?:l)?ing|calling (?:your|the)|take (?:away|your|the)|cancel|stop|never|not (?:going|coming|helping|talking)|throw|sell|ground|regret|lose|be sorry|end|kick|break up|move out|finished|over|through)|\bor else\b|\bdon't make me\b|\byou'll regret\b|\blast chance\b|\bor (?:i'm|i'll be) (?:leaving|done|out|going|gone)\b|\bor we're (?:done|over|finished|through)\b|\bthis is your (?:final|last) (?:warning|chance)\b/gi,
    what:"An \"if you don't… then I'll…\" sentence is an ultimatum. The listener stops thinking about the task and starts thinking about the threat: fight, freeze or give in.",
    fix:"Make the ask on its own. If there is a real limit, say it once, calmly, at a calm time, as your own plan, not as leverage."},
+  {id:"menace", name:"A threat (\"you'll regret it\")", kind:"static", re:null,
+   what:"\"You'll regret it,\" \"or else\" or \"if you tell anyone…\" is a threat. It would frighten or control the other person. That isn't a tone problem a softer wording can fix.",
+   fix:"Leave the threat out completely. Say what you feel and what you need, or take a break until you're calm."},
+  {id:"jab", name:"Blame or a dig", kind:"static", re:null,
+   what:"Keeping score (\"I managed fine without you\"), a dig (\"when it suits you\", \"must be nice\") or a label (\"you treat me like the help\") says the hurt as blame. The listener defends themselves instead of hearing what you need.",
+   fix:"Say the hurt and the real ask: \"I've been feeling left out. Could we find ten minutes this week?\""},
+  {id:"motive", name:"Guessing their motive (\"on purpose\")", kind:"static",
+   re:/\b(?:on purpose|deliberately|intentionally|just to (?:annoy|spite|hurt|upset|punish|wind up|get at) (?:me|us)|to spite me|to get back at me|to punish me)\b/gi,
+   what:"\"On purpose\" says you know why they did it. They can only argue about their motive, and the thing you need gets lost.",
+   fix:"Leave the motive out. Say what happened and what you'd like: \"Plans have landed on my weekends a few times. Can we check the calendar first?\""},
+  {id:"blunt", name:"Blunt opener (\"That is incorrect\")", kind:"static", re:null,
+   what:"\"That is incorrect\" is clear, and many listeners still hear it as cold, or as a mark against them. The fact is fine; the opener carries the edge.",
+   fix:"Keep the fact and soften the opener: \"Quick correction: the deadline is Friday, not Thursday.\""},
+  {id:"closer", name:"Closes the topic", kind:"static", re:null,
+   what:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing on someone who cares.",
+   fix:"Lead with warmth, then say the same thing: \"I know how much this means to you. We'll decide together and tell you as soon as we do.\""},
   {id:"guilt", name:"Guilt framing", kind:"static",
    re:/\bafter (?:all|everything) (?:i(?:'ve)? (?:do|did|done|have done)|i've done|that i do|i've given)(?: for you)?|\bi do everything\b|\bthe least you (?:could|can) do\b|\byou owe me\b|\bi gave up [^.!?]{0,30}for you\b|\bi(?:'ve| have) sacrificed\b|\bdo you (?:know|have any idea) how (?:hard|much|long) i\b|\bi guess i (?:just )?don't matter\b|\bi work (?:all day|so hard)\b[^.!?]{0,40}?\b(?:and|but) you\b|\bdon't worry about me\b|\bi'll just (?:sit|wait) here(?=(?:,? then)?\s*[.!…🙄😒🙃]*\s*$)|\bi'll just do everything\b|\bafter all i've done\b|\bi guess i'll just (?:be|stay|sit)\b/gi,
    what:"Guilt framing asks for payment for past effort. The task may get done, but it leaves resentment, and the real ask is buried under the account of what you have given.",
@@ -405,6 +421,10 @@ const F = [
    fix:"Keep one softener and say the ask plainly: \"Could you do the dishes tonight, if that works?\""},
 
   /* ---------- worth keeping ---------- */
+  {id:"boundary", name:"A clear, caring boundary", kind:"good", re:null,
+   what:"A step you'll take to look after yourself, said calmly and with care. It may still be hard to hear, and that's not a threat."},
+  {id:"disclose", name:"Sharing something important about you", kind:"good", re:null,
+   what:"Telling someone who you are, or what's true for you, takes courage. It may still be hard for them to hear, and that's not your fault."},
   {id:"istate", name:"I-statement", kind:"good",
    re:/\b(?:i feel|i felt|i'm feeling|i was feeling|i'd like|i would like|i'd love|i would love|i need (?!you to|to talk)(?:a |an |some |help|space|time|a hand|a break|to know|to hear|more|us|you)|i noticed|i've noticed|i'm noticing|it matters to me|for me,|i'm worried|i'm hoping|i was hoping|i want us to|i miss|i care about|i'm struggling|i'm finding)\b/gi,
    what:"Talking from your side (\"I felt,\" \"I'd like\") tells them what is going on for you without a verdict on them.",
@@ -763,7 +783,7 @@ const NT = {
 /* ---------- check-back scripts for the listener ---------- */
 const CHECK = {
   hint:"\"Is that a request? If so, what would you like, and by when?\"",
-  sarcasm:"\"Did you mean that literally, or were you being sarcastic?\"",
+  sarcasm:"\"Sounds like something's getting to you. What would help most?\"",
   joke:"\"Was that a joke, or is something bothering you?\"",
   idiom:"\"I want to be sure I've got it. What do you mean by that, exactly?\"",
   vtime:"\"When do you need it by?\"",
@@ -1143,6 +1163,128 @@ function subjectOf(sentence){
   return "you, the speaker";
 }
 
+/* ============================================================
+   THREATS, DIGS AND BOUNDARIES
+   A threat that would frighten or control the other person is not a tone problem, and no rewrite keeps it.
+   Blame said as a dig ("I managed fine without you", "when it suits you", "you treat me like the help") is flagged
+   and rewritten to the hurt and the real ask. A calm boundary ("If you can't respect X, I'll leave for today. I love
+   you.") and a coming-out are named as caring, never as threats.
+   ============================================================ */
+const MENACE_RE = /\byou(?:'ll| will| are going to|'re going to|'re gonna) (?:be sorry|regret (?:it|this|that|ever)|pay for (?:this|that|it)|pay\b(?! (?:me|you|us|them|him|her|the|for (?:the|your|my|our|dinner|lunch|it all)|back|half|rent|bills?)\b)|wish you (?:hadn't|had never|never|were dead))|\b(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) make (?:you|your life) (?:regret|pay\b|sorry|suffer|a (?:living )?hell|hell|miserable)|\b(?:i'll|i will|i'm going to|i'm gonna) make sure you (?:regret|pay\b|never|don't|can't|lose)|\bor else\b|\bor you'll (?:see|be sorry|regret)|\bwatch your back\b|\byou(?:'d| had) better not (?:tell|leave|go|say|talk|see|call|text|dare)\b|\bdon't you dare (?:tell|leave|go out|say|talk to|see|call|text)\b|\b(?:you're|you are) not (?:going anywhere|allowed to (?:go|leave|see|talk|have|text|call|spend|wear|go out))\b|\bi won't let you (?:leave|go out|see|talk to|have)\b|\bif you (?:ever )?(?:tell|leave|go out|go|see|talk to|text|call|try|walk out)\b[^.!?]{0,60}?,?\s*(?:i(?:'ll| will|'m going to| am going to|'m gonna)) (?:make you|hurt|kill|ruin|destroy|come after|find you|show (?:everyone|your|them)|post|send (?:everyone|your|them)|tell everyone|tell your|take the (?:kids|children)|take (?:the|your) (?:kids|children|phone|car|money|keys)|end you|make your life|throw you out|kick you out|kill myself|hurt myself|end it|leave you with nothing)|\bif you tell (?:anyone|anybody|someone|your)\b[^.!?]{0,50}?,?\s*(?:you(?:'ll| will)|i(?:'ll| will))\b/i;
+// a step you take to look after yourself, said with care, is a boundary, not a threat
+const BOUNDARY_RE = /\bif you (?:can't|cannot|won't|don't|keep|start|carry on)\b[^.!?]{1,90}?,?\s*(?:then )?(?:i'm going to|i am going to|i'll|i will|i'm gonna|we'll|we will|i need to|i'm)\s+(?:need to |have to |be )?(?:leave|leaving|go|going|head (?:home|out)|step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|end (?:the|this) (?:call|visit|conversation|chat)|hang up|go home|stay (?:home|away)|not (?:come|visit|stay)|leave the (?:room|conversation|call))\b[^.!?]*/i;
+const BOUNDARY_CARE = /\b(?:for (?:today|tonight|now|the (?:day|night|evening|weekend)|a (?:bit|while|few (?:minutes|hours|days)))|early|this time|and (?:come back|call|try again)|i love you|love you|i'll call|i will call|talk (?:soon|tomorrow|next week)|call (?:you )?(?:next week|tomorrow|soon)|until (?:we|you|things))\b/i;
+const DISCLOSE_RE = /\bi(?:'m| am)(?: (?:actually|really|also|finally ready to say i'm))? (?:bi|bisexual|gay|lesbian|queer|trans|transgender|non-?binary|pan|pansexual|asexual|ace|aromantic|a trans (?:man|woman)|intersex)\b|\bi(?:'ve| have) been diagnosed (?:with|as)\b|\bi(?:'m| am) pregnant\b|\b(?:he|she|they)(?:'s| is| are)(?: actually)? my (?:girlfriend|boyfriend|partner|wife|husband|fiancee?)\b|\bi(?:'m| am) (?:in love with|dating|seeing) (?:a (?:man|woman|girl|guy)|her|him|them)\b/i;
+// blame said as a dig, or keeping score
+const JAB_RES = [
+  /\b(?:i|we) (?:managed|coped|got by|survived|did (?:fine|okay|ok|well|great))(?: (?:just|perfectly|totally|absolutely))?(?: (?:fine|okay|ok|well|great))? without you\b/i,
+  /\bi (?:did|have done|handled|ran|managed|was doing|carried) (?:it|everything|this|that|all of it|it all|the (?:\w+ ?){1,2})(?: all)? (?:alone|on my own|by myself|single-handedly|solo)\b/i,
+  /\bi know how (?:[a-z' ]{1,25}) works\b/i,
+  /\byou treat(?:ed|s|ing)? me like (?:the |a |an |your |some |i'm |i am )?[a-z' -]{2,30}/i,
+  /\b(?:you're|you are) (?:treating me|acting) like (?:i'm|i am) (?:the |a |an |your )?(?:help|maid|servant|cleaner|nanny|babysitter|slave|child|kid|idiot|employee|staff|secretary|assistant|housekeeper|chauffeur|taxi|bank|atm)\b/i,
+  /\b(?:so )?stop (?:policing|nagging|controlling|micromanaging|monitoring|checking up on|lecturing|bossing|telling me (?:what|how)|changing (?:everything|things|it all|all of it)|making (?:decisions|plans|choices)|taking (?:decisions|choices)|acting like (?:you're|you are|my)|interfering|meddling|undermining)\b/i,
+  /\bwhen(?:ever)? it suits you\b|\bonly (?:when|if) (?:it's|it is) convenient(?: for you)?\b/i,
+  /\bi guess i'm (?:only|just) (?:your|a|the)\b/i,
+  /\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b/i,
+  /(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*/i,
+  /\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b/i
+];
+// "That is incorrect." at the start of a correction
+const BLUNT_RE = /^\s*(?:no[,.]?\s+)?(?:that is|that's|this is|you are|you're) (?:incorrect|wrong|not (?:correct|right|true|accurate))[.!]+|^\s*(?:incorrect|wrong)[.!]+(?=\s+\S)/i;
+// a statement that closes the topic to the other person
+const CLOSER_RE = /\bwe(?:'ll| will) (?:decide|make (?:the|that|this) (?:decision|call)|choose|figure (?:it|that|this) out|sort (?:it|that|this) out)(?: (?:about|on) [^.!?]{1,40}?)? (?:ourselves|on our own|by ourselves|without (?:you|your input))\b|\b(?:it's|that's|this is) (?:our|my) (?:decision|call|choice|business),? not yours\b|\bstay out of (?:it|this|our (?:business|marriage|lives))\b/i;
+const FAMILY_VOC = /^(?:mum|mom|mommy|mummy|mam|ma|mother|dad|daddy|father|pa|nan|nana|gran|granny|grandma|grandpa|grandad|granddad|auntie|aunt|uncle)$/i;
+function vocOf(text){ const m = String(text||"").match(/^\s*(?:(?:hi|hey|hello),?\s+)?([A-Z][a-z]+(?:,? [A-Z][a-z]+)?),\s+/); return m && !/^(?:So|Well|Look|Listen|Okay|Ok|Honestly|Seriously|Yes|No|Sure|Fine|Right|Also|And|But|Now|Then|Sorry|Thanks|Babe|Honey)$/.test(m[1]) ? m[1] : ""; }
+
+/* Whole-message rewrites for the shapes testers met most: each keeps the real ask and drops the jab.
+   send(m, ctx) -> the new words; recv: what it may mean, and a calm reply, for "Someone sent me this". */
+const REFRAMES = [
+  {id:"visits", re:/\b(?:you can't|you cannot|you can not|stop|please don't|don't|you shouldn't|you need to stop)\s+(?:just\s+)?(?:turn(?:ing)? up|show(?:ing)? up|com(?:e|ing) (?:over|round|around|by)|drop(?:ping)? (?:by|in|round)|pop(?:ping)? (?:by|in|round|over)|visit(?:ing)?|let(?:ting)? yourself in)(?: (?:here|at ours|at our place|at the house))?\s*(?:whenever|any ?time|when(?:ever)? you (?:want|like|feel like it|please)|unannounced|without (?:asking|calling|texting|warning|telling us|a heads-up))/i,
+   why:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and it keeps the door open.",
+   send:(m,c)=>(c.voc ? c.voc+", " : "")+(c.family ? "I love seeing you. Could you" : c.voc ? "could you" : "Could you")+" text before you come over, so we can make sure it's a good time?",
+   recv:{mean:"They're asking for a heads-up before visits. It's a request about timing, not a rejection of you.", reply:"You're right, I'll text first. When suits you?"}},
+  {id:"closer", re:CLOSER_RE,
+   why:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing. Leading with warmth says the same thing and keeps them close.",
+   send:(m,c)=>{ const about = (m[0].match(/\b(?:about|on) ([^.!?]{1,40}?) (?:ourselves|on our own|by ourselves|without)/i)||[])[1]; return (c.voc ? c.voc+", " : "")+"I know how much this means to you. We'll decide"+(about ? " about "+about : "")+" together, and tell you as soon as we do."; },
+   recv:{mean:"They're saying this decision is theirs to make together. It doesn't mean your view doesn't matter to them.", reply:"I understand it's your decision. I'm here if you ever want to talk it through."}},
+  {id:"inhaler", rel:["coparent"], re:/\byou (?:forgot|didn't pack|did not pack|didn't send|left out|forgot to pack|forgot to send) (her|his|their|the kids'?|the children's|[A-Z][a-z]+'s) ([a-z][a-z ]{1,24}?)(?:\s+(?:again|AGAIN|once again))?(?=[.!?,]|$)/i,
+   why:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. A question like \"do you even care?\" starts a fight about the past.",
+   send:(m)=>{ const who=m[1].toLowerCase(); const named = /^[A-Z][a-z]+'s$/.test(m[1]); const pro = who==="his" ? "his" : who==="her" ? "her" : "their"; const child = named ? m[1].replace(/'s$/,"") : "[Child]"; return child+"'s "+m[2].trim()+" wasn't in "+pro+" bag on [day]. Please pack it before the [day] handoff."; },
+   recv:{mean:"Under the frustration is a practical worry about what the child needs.", reply:"Thanks for telling me. I'll make sure it's packed for the [day] handoff."}},
+  {id:"weekends", re:/\byou (?:always |keep |constantly |just )?(?:schedule|book|plan|arrange|put|sign (?:her|him|them) up for) ([a-z ]{2,30}?) (?:on|for|during) my (weekends?|days|time|nights|week)\b/i,
+   why:"\"On purpose\" guesses at their motive, and \"always\" invites an argument about the exceptions. The plain pattern and one ask can actually be answered.",
+   send:(m,c)=>c.coparent ? "The kids' plans have landed on my "+m[2]+" a few times. Can we check the calendar together before booking things on my "+m[2]+"?" : "Plans have landed on my "+m[2]+" a few times lately. Can we check the calendar together before booking things then?",
+   recv:{mean:"They feel their time keeps getting taken. Underneath is a wish to plan together.", reply:"I hadn't seen it that way. Let's check the calendar together before either of us books anything. When suits you?"}},
+  {id:"without", re:/\b(?:i|we) (?:managed|coped|got by|survived|did (?:fine|okay|ok|well))(?: (?:just|perfectly|totally))?(?: (?:fine|okay|ok|well|great))? without you\b/i,
+   why:"\"I managed fine without you\" keeps score, and it lands as \"you're not needed.\" Saying you got used to your way, and asking which jobs they take back, keeps what you need.",
+   send:()=>"I got used to doing it my way while you were gone. Can we pick which jobs you take back?",
+   recv:{mean:"This sounds like hurt said as scorekeeping. They've been carrying a lot alone, and changes may feel like criticism of how they managed.", reply:"You carried a lot while I was gone, and I'm grateful. Which jobs would you like me to take back first?"}},
+  {id:"alone", re:/\bi (?:did|have done|handled|ran|managed|was doing|carried) (?:it|everything|this|that|all of it|it all|the (?:\w+ ?){1,2})(?: all)? (?:alone|on my own|by myself|single-handedly|solo)\b(?:[^.!?]*?\bi know how ([a-z' ]{1,25}?) works)?/i,
+   why:"\"I did it alone\" keeps score, and \"I know how it works\" closes the door. Saying you got used to your way, and asking to agree together, keeps what you need.",
+   send:(m)=>m[1] ? "I did "+m[1].replace(/^the /,"")+" on my own while you were away, so I got used to my way. Can we agree together how we do "+m[1].replace(/^the /,"")+" now?" : "I did a lot on my own while you were away, and I got used to my way. Can we pick which jobs you take back?",
+   recv:{mean:"This sounds like hurt said as scorekeeping. They carried a lot on their own, and changes may feel like criticism.", reply:"You carried a lot on your own. I'd like to learn your way. Can we agree together how we do it now?"}},
+  {id:"money", re:/\bstop (?:policing|monitoring|checking|controlling|questioning|judging) (?:what i spend|my spending|how i spend|my money|every (?:purchase|penny|thing i buy))|\bit's my money too\b[^.!?]*/i,
+   why:"\"Stop policing\" is a charge, and the listener defends themselves. Asking for some money that's just yours, and offering a shared limit for big things, keeps what you need.",
+   send:()=>"I'd like some money that's just mine to spend, and I'm happy to agree a limit for big things together.",
+   recv:{mean:"They want some say over their own spending. Underneath is usually a wish for trust and a bit of freedom, not a fight about every purchase.", reply:"Fair. How about some money each that's just ours, and we agree a limit for big things together?"}},
+  {id:"treat", re:/\byou treat(?:ed|s|ing)? me like (?:the |a |an |your |some )?(help|maid|servant|cleaner|nanny|babysitter|slave|housekeeper|staff|employee|secretary|assistant|skivvy|doormat|child|kid|idiot|[a-z]+)\b/i,
+   why:"\"You treat me like the help\" is a label, so the listener argues with the label. The feeling (taken for granted) and one fair split can actually be answered.",
+   send:(m,c)=>/\b(?:job|work|working)\b(?:\s+too)?/i.test(c.text) && /\btoo\b/i.test(c.text) ? "I'm working too, and when the house jobs default to me, I feel taken for granted. Can we split [one job, like the dog walks]?" : /^(?:child|kid|idiot)$/i.test(m[1]) ? "When [what happened], I felt talked down to. Could you [one specific thing] next time?" : "I've been feeling taken for granted lately. Can we split [one job, like the dog walks]?",
+   recv:{mean:"This sounds like they feel taken for granted. The label is the hurt talking; underneath is usually a wish for a fairer split.", reply:"I don't want you to feel that way. Which job would help most if I took it?"}},
+  {id:"suits", re:/\b(?:i guess )?i'm (?:only|just) your (?:\w+) when it suits you\b|\bwhen(?:ever)? it suits you\b|\bi guess i'm (?:only|just) (?:your|a|the)\b[^.!?]*/i,
+   why:"\"Only when it suits you\" is an accusation, so the listener defends themselves. Saying you miss them and asking for a little time says what you need.",
+   send:(m,c)=>c.work ? "I've been feeling a bit left out of things lately. Could we find ten minutes this week to catch up?" : "I miss you and I've been feeling a bit left out. Could we find ten minutes this week?",
+   recv:{mean:"This sounds like they're hurt and feel left out. Underneath, they probably miss you.", reply:"I'm sorry you've felt left out. I miss you too. Are you free for a call this week?"}},
+  {id:"nice", re:/(?:^|[.!?]\s+)(?:it )?must be nice(?: to (?:just )?(.+?))?(?: while (?:i|we) (.+?))?(?=[.!?]|$)/i,
+   why:"Sarcasm carries the real message in the tone, and it lands as a dig. Saying you're stretched, and asking to share the load, can actually be answered. (It doesn't add an ask you didn't make.)",
+   send:(m)=>{ const y = m[2] ? m[2].trim() : ""; const admin = /\b(?:running|place|business|office|shop|bakery|store|house|home|team|company)\b/i.test(y);
+     return "I'm feeling stretched thin"+(y ? " "+ingForm(y.replace(/^(?:have to|having to|need to) /i,"")) : "")+". Could we look at "+(admin ? "the admin" : "what's on my plate")+" together and share some of it?"; },
+   recv:{mean:"Sarcasm like this usually means they're stretched and feel the load isn't shared.", reply:"Sounds like you're stretched. What would help most this week?"}},
+  {id:"decide", re:/\bstop (?:making|taking) (?:decisions|choices|plans)(?: about ([^.!?]+?))? without (?:me|asking me|talking to me|checking with me)\b/i,
+   why:"\"Stop making decisions without me\" is a charge, and the listener defends the past. Asking to check with each other first says what you need.",
+   send:(m,c)=>c.coparent ? "For school, health and new activities, can we text each other first and decide together?" : "I'd like a say in decisions about "+(m[1] ? m[1].trim() : "[the thing]")+". Can we check with each other first and decide together?",
+   recv:{mean:"They want a say before decisions are made. Underneath is a wish to be included, not only a complaint.", reply:"Okay. For the big things, I'll check with you first. Which decisions matter most to you?"}},
+  {id:"changing", re:/\b(?:so )?stop changing (?:everything|things|it all|all of it)\b/i,
+   why:"\"Stop changing everything\" is a charge. Saying you got used to your way, and asking to pick the changes together, keeps what you need.",
+   send:()=>"I got used to doing things my way. Can we pick which things to change, one at a time?",
+   recv:{mean:"They may feel their way of doing things is being overruled. Underneath is a wish to be asked first.", reply:"Fair. Which things would you like to keep the way they are?"}},
+  {id:"stopit", re:/\bstop (policing|nagging|controlling|micromanaging|monitoring|checking up on|lecturing|bossing) me(?: (?:about|around|over|on) ([^.!?]{2,40}?))?(?=[.!?]|$)|\bstop (policing|nagging|controlling|micromanaging|monitoring|lecturing|bossing)(?=[.!?]|$)/i,
+   why:"\"Stop nagging\" or \"stop controlling me\" is a label, and the listener defends themselves. Saying what you'd like instead can actually be answered.",
+   send:(m)=>{ const v=(m[1]||m[3]||"").toLowerCase(), what = m[2] ? m[2].trim() : "[the thing]";
+     return /nag/.test(v) ? "I'd like to sort out "+what+" without reminders. Could we agree who does what, and by when?" : /lectur|boss|micro/.test(v) ? "I'd like to do "+what+" my way. If something matters to you, could you tell me once, and then trust me with it?" : "I'd like to make my own choices about "+what+". Can we talk about where we each need a say?"; },
+   recv:{mean:"They feel watched or told what to do. Underneath is usually a wish for trust and room to do it their way.", reply:"I don't want you to feel watched. What would help you feel trusted with it?"}},
+  {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
+   why:"\"You're not my mum\" hurts, and it hides what you need. Saying you need some space, and that you'll talk later, keeps the door open.",
+   send:()=>"I know you're trying. I need some space right now, can we talk later?",
+   recv:{mean:"This hurts to hear. Often it means they feel crowded or told what to do and need some space. It doesn't mean you don't matter to them.", reply:"Okay. I'll give you some space. I'm here when you want to talk."}},
+  {id:"nowyou", re:/(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*[.!?]*(?:\s*after (?:you|everything you|all you|what you) [^.!?]*[.!?]*)?|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b[^.!?]*/i,
+   why:"A sharp question or an \"after you…\" says the hurt as blame, so the listener defends the past. Saying the hurt plainly, and what you need before you talk, can actually be heard.",
+   send:()=>"I'm still hurt about what happened. If we talk, I need us to start there.",
+   recv:{mean:"They're still hurt about what happened before. The edge is the hurt; it doesn't have to mean the door is shut for good.", reply:"You're right to be hurt. I'm not asking you to talk before you're ready. I'm here when you are."}},
+  {id:"guests", re:/\b(?:can|could|would) (?:your|you(?:r)?) (boyfriend|girlfriend|partner|friend|bf|gf)\s+(?:maybe |please |just |possibly )*(?:not|stop) (?:stay(?:ing)?|sleep(?:ing)?|com(?:e|ing)) over (?:every|each) night\b|\b(?:your|ur) (boyfriend|girlfriend|partner|bf|gf) is (?:here|over|staying (?:here|over)) (?:every|each) (?:single )?night\b/i,
+   why:"A plain, kind ask about how many nights, with a heads-up, gives them something to agree to. \"Maybe\" and shouting both make it easy to shrug off.",
+   send:()=>"Could we agree on a few nights a week for overnight guests, with a heads-up text? I'm not sleeping well.",
+   recv:{mean:"They're asking for fewer overnight stays, or a heads-up. It's about sleep and the shared room, not about you as a person.", reply:"That's fair. How many nights a week would work for you, if I text you first?"}},
+  {id:"incorrect", re:BLUNT_RE,
+   why:"\"That is incorrect\" is clear, and it can land cold, like a mark against them. \"Quick correction\" keeps the same fact and sounds like help.",
+   send:(m,c)=>{ const rest = c.text.slice(m.index+m[0].length).trim(); return "Quick correction: "+(rest ? lowerFirst(rest).replace(/\s*$/,"") : "[the right fact].").replace(/([^.!?])$/,"$1."); },
+   recv:{mean:"It's a correction, said bluntly. It's about the fact, not about you.", reply:"Thanks for catching that."}}
+];
+const REFRAME_BY = Object.fromEntries(REFRAMES.map(r=>[r.id, r]));
+function reframeOf(an, opts){
+  opts = opts||{};
+  const text = an.norm.trim(), voc = vocOf(text);
+  const c = {text, voc, rel: opts.rel||"", coparent: opts.rel==="coparent", work: !!(opts.work || WORK_REL.includes(opts.rel)),
+    family: opts.rel==="family" || (voc && FAMILY_VOC.test(voc))};
+  for(const r of REFRAMES){
+    if(!r.re) continue;
+    if(r.rel && !r.rel.includes(c.rel)) continue;
+    const m = text.match(r.re);
+    if(m) return {r, m, c, send: r.send(m, c)};
+  }
+  return null;
+}
+
 function analyze(textIn, opts){
   opts = opts||{};
   const ch = opts.channel||"person";
@@ -1172,6 +1314,8 @@ function analyze(textIn, opts){
         if(/^always$/.test(mm) && /^\s*(?:so |such an? |really )?(?:thoughtful|kind|sweet|generous|helpful|patient|supportive|caring|lovely|wonderful|amazing|great|good to me|there for me|on time|fun|the best|so good)\b/.test(after)) continue;
       }
       if(f.id==="minim" && /^just$/.test(mm) && /\b(?:i'll|i will|i'm|i|we'll|we)\s+$/.test(before)) continue;
+      // "whenever you want" is an open door, not a deadline to fill in
+      if(f.id==="vtime" && /^whenever$/.test(mm) && /^\s*(?:(?:you|they|he|she|we|i) (?:want|like|feel like it|please|fancy|need|can|are ready|'re ready)|it suits)\b/.test(after)) continue;
       if(f.id==="label" && /^how (?:difficult|hard)/.test(mm) && /^\s*(?:is|was|can)\b/.test(after)) continue;
       if(f.id==="hedge" && /\bi think\b/.test(mm) && /^\s*(?:we|you) (?:could|should|might)\b/.test(after)) {/* still a hedge, keep */}
       push(f.id, s, e);
@@ -1211,6 +1355,8 @@ function analyze(textIn, opts){
     const h=hits[i]; if(h.id!=="ominous") continue;
     const se=sentOf(h); const rest=text.slice(h.e, se.e);
     if(/\b(?:about|regarding|re:|to (?:discuss|go over|review|talk about|look at)|on (?:the|your|my|our) \w+)/i.test(rest)) hits.splice(i,1);
+    // "I need to tell you something. I'm bisexual, and…": the topic follows straight away
+    else if(words(text.slice(se.e))>=6) hits.splice(i,1);
   }
   // a nudge with a topic and a time is a fine follow-up
   for(let i=hits.length-1;i>=0;i--){
@@ -1269,6 +1415,26 @@ function analyze(textIn, opts){
   // an ultimatum without "then I'll": "if you don't come for Thanksgiving, don't bother coming at Christmas"
   { const ULT = /\bif you (?:don't|do not|won't|can't|ever) [^.!?]{1,70}?,?\s*(?:then )?(?:don't (?:bother|come|call|talk|expect)|forget (?:about )?(?:it|me|us)|we're (?:done|through|over)|i'm (?:done|gone|out)|you can forget|you'll (?:regret|be sorry)|don't ever)\b/i;
     const um = low.match(ULT); if(um && !has("threat")) push("threat", um.index, um.index+um[0].length); }
+  // a threat that would frighten or control ("you'll regret it", "or else", "if you tell anyone…"): not a tone problem
+  { const mm = low.match(MENACE_RE);
+    if(mm){ const st=mm.index, en=mm.index+mm[0].replace(/[\s,]+$/,"").length;
+      drop("threat", h=>h.s<en+40 && st-60<h.e); drop("swear", h=>h.s<en && st<h.e); drop("impera", h=>h.s<en && st<h.e); drop("again"); push("menace", st, en); } }
+  // a calm boundary ("If you can't respect my relationship, I'm going to leave for today. I love you."): caring, not a threat
+  { const bm = low.match(BOUNDARY_RE);
+    if(bm && !has("menace") && !["swear","hostile","label","contempt","violent","legal","dxlabel"].some(has) && (BOUNDARY_CARE.test(low) || /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i.test(bm[0]))){
+      drop("threat"); push("boundary", bm.index, bm.index+bm[0].replace(/[\s,.]+$/,"").length); } }
+  // coming out, or sharing a diagnosis: brave and caring, never "might hurt"
+  { const dm = low.match(DISCLOSE_RE); if(dm){ push("disclose", dm.index, dm.index+dm[0].length); drop("ominous"); } }
+  // blame said as a dig, or keeping score
+  JAB_RES.forEach(re=>{ const jm = low.match(re); if(!jm) return;
+    const st = jm.index + (jm[0].match(/^[.!?]\s+/)||[""])[0].length, en = jm.index+jm[0].replace(/[\s,.!?]+$/,"").length;
+    if(hits.some(h=>["jab","sarcasm","guilt","legal","menace","kidsfirst"].includes(h.id) && h.s<en && st<h.e)) return;
+    push("jab", st, en); });
+  if(has("jab")){ drop("impera", h=>inside(h,"jab")); drop("hedge", h=>inside(h,"jab")); drop("vstd", h=>inside(h,"jab")); }
+  // "That is incorrect." before a correction: clear, and it can land cold
+  { const bm = low.match(BLUNT_RE); if(bm){ const st = bm.index + (bm[0].length - bm[0].replace(/^\s+/,"").length), en = bm.index+bm[0].replace(/[\s.!]+$/,"").length; push("blunt", st, en); drop("critic", h=>inside(h,"blunt")); } }
+  // "We'll decide about it ourselves": fair, and it can sound like a closed door
+  { const cm = low.match(CLOSER_RE); if(cm && !hits.some(h=>["hostile","contempt","swear"].includes(h.id) && h.s<cm.index+cm[0].length && cm.index<h.e)) push("closer", cm.index, cm.index+cm[0].length); }
   if(has("butc") && has("sarcasm")){ drop("sarcasm", h=>hits.some(b=>b.id==="butc" && h.s>=b.s && h.e<=b.e)); }
   if(has("vstd") && has("idiom") && hits.some(h=>h.id==="vstd" && /pull your weight/i.test(h.match))) drop("vstd");
   if(has("critic") && has("again")) drop("critic", h=>/again/i.test(h.match));
@@ -1405,11 +1571,12 @@ function analyze(textIn, opts){
       when: !!(asks.some(a=>!standingSent(a.sentence)) && !hasWhen),
       why: !!(asks.length && !hasWhy),
       topic: !!found.ominous,
-      feeling: !feelingM && staticIds.some(id=>["label","absolute","critic","madefeel","compare","blameq","again","past","guilt","threat","sarcasm"].includes(id)),
+      feeling: !feelingM && staticIds.some(id=>["label","absolute","critic","madefeel","compare","blameq","again","past","guilt","threat","sarcasm","jab"].includes(id)),
       ask: !asks.length && staticIds.some(id=>["disclaim","label","absolute","critic","madefeel","compare","again","past","passive","sarcasm","vemo","guilt","feellike","blameq"].includes(id))
     },
     feelingWord: feelingM ? feelingM[1] : "",
     safety,
+    danger: !!found.menace,
     apology: apology >= 0
   };
 }
@@ -1455,7 +1622,7 @@ function readings(an, ids, ch){
   return out;
 }
 
-const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst"];
+const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace"];
 /* a static score: sum of the loudest reading per feature, minus a little for what's worth keeping */
 function score(an, ids, ch, state){
   let sc=0; const top=[];
@@ -1741,7 +1908,29 @@ function rewrite(an, opts){
     return finish(out, out, log, an, W, opts);
   }
 
+  // a threat that would frighten or control: no rewrite keeps it. What's left is the feeling and the need, or a break
+  if(an.danger){
+    log.push({id:"menace", from:[(an.found.menace||[""])[0]], to:[], extra:""});
+    const need = "I'm really upset right now. I feel [one feeling word] when [what happened], and what I need is [one thing]. I'd like us to talk about it when we're both calm.";
+    const pause = "I'm too angry to talk well right now. I'm going to take a break, and come back to this at [a time].";
+    const variants = [{id:"main", label:"Say what you need, without a threat", why:"No threat, no condition: your feeling and your need, in your own words.", text:need},
+      {id:"pause", label:"Take a break first", why:"If you're too angry to say it calmly, a break is the safest thing you can send.", text:pause}];
+    return {main:need, primary:variants[0], variants, changes:log.map(c=>explainChange(c, W)), ask:null, list:"", unchanged:false, danger:true};
+  }
+  // whole-message shapes testers met most ("I managed fine without you", "stop policing what I spend",
+  // "you can't just turn up whenever you want"): the jab goes, the real ask stays
+  { const rf = reframeOf(an, opts);
+    if(rf){
+      log.push({id:"rf_"+rf.r.id, from:[rf.m[0].replace(/^[.!?\s]+|[.!?\s]+$/g,"")], to:[rf.send], extra:""});
+      ["motive","absolute","again","shout","hedge","softno","intens","minim"].forEach(id=>{ if(an.found[id] && id!=="shout") log.push({id, from:(an.found[id]||[]).filter(Boolean).slice(0,2), to:[], extra:""}); });
+      return finish(rf.send, "", log, an, W, Object.assign({}, opts, {reframed:true}));
+    } }
+
   // whole-text clean-ups
+  // "on purpose" guesses at their reasons: it goes
+  if(has("motive")) text = text.replace(/\s*,?\s*\b(?:on purpose|deliberately|intentionally|just to (?:annoy|spite|hurt|upset|punish|wind up|get at) (?:me|us)|to spite me|to get back at me|to punish me)\b/gi, mm=>{ note("motive", mm.trim().replace(/^,\s*/,""), ""); return ""; }).replace(/\s+([.,!?])/g,"$1");
+  // "Can your boyfriend maybe not…": "maybe" in a request makes it sound optional
+  if(has("softno")) text = text.replace(/\b((?:can|could|would|will) (?:you|u|your \w+)\b[^.?!]{0,30}?)\s+\b(?:maybe|perhaps)\b\s*/gi, (mm,a)=>{ note("reqmaybe","maybe",""); return a+" "; });
   if(an.allCaps){
     const before = text;
     text = text.toLowerCase().replace(/(^|[.!?]\s+)([a-z])/g, (m,a,c)=>a+c.toUpperCase()).replace(/\bi\b/g,"I");
@@ -1945,6 +2134,14 @@ function rewrite(an, opts){
     main = main.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; });
   }
   if(laterLine) main = endP(main.replace(/\s+$/,""))+" "+laterLine;
+  // co-parents: brief and factual (the child's need, the ask, a time). No feelings about each other, no "let's talk about it"
+  if(opts.rel==="coparent"){
+    const before = main;
+    main = main.replace(/\s*I'm not feeling cared about right now, and I'd like to talk about it\./g,"").replace(/\s*I'd like to hear how it looks to you, too\./g,"").replace(/,? and I'd like to talk about it\./g,".").replace(/^\s+/,"");
+    if(main!==before) note("coparent","feelings about each other","");
+    if(!/[A-Za-z]/.test(main.replace(/\[[^\]]*\]/g,""))) main = "[What the kids need, plainly.]";
+    if(main!==before && !/\b(?:could you|would you|can you|can we|could we|will you|please)\b/i.test(main)) main = endP(main)+" Please [what the kids need] by [the day].";
+  }
   main = tidy(main);
   if(list) list = list.split("\n").map((l,i)=>i?l:tidy(l)).join("\n");
   // nothing changed: give the words back exactly as typed ("hey" stays "hey", not "Hey.")
@@ -2191,7 +2388,7 @@ function rewriteSentence(s, ctx, note, an, W){
   t = t.replace(/\b((?:can|could|will|would) you (?:please )?)actually\s+/gi, (mm,a)=>{ note("heat","actually",""); return a; });
   t = t.replace(/\b(?:i'm|i am)(?: getting)?(?: so| really)? (?:sick|tired) of (it|this|that)\b/gi, (mm,w)=>{ note("heat", mm, "I'm frustrated about "+w); return "I'm frustrated about "+w; });
   t = t.replace(/\s*,?\s*\bfor (?:(?:god's|heaven's|pete's) sake|crying out loud)\b,?/gi, (mm)=>{ note("heat", mm.replace(/^[\s,]+|[\s,]+$/g,""), ""); return ""; });
-  if(!/^\W*seriously\W*$/i.test(t)) t = t.replace(/(^|\s|,)\s*seriously\b\s*,?\s*/gi, (mm,p)=>{ note("minim","seriously",""); return p===","?" ":p; }).replace(/^\s+/,"");
+  if(!/^\W*seriously\W*$/i.test(t)) t = t.replace(/(^|\s|,)\s*seriously\b\s*,?\s*/gi, (mm,p)=>{ note("intens","seriously",""); return p===","?" ":p; }).replace(/^\s+/,"");
 
   // --- minimizers
   m = t.match(/^(?:it's|that's|it is) (?:so |really )?(?:simple|easy)\s*[,.!:;-]+\s*/i);
@@ -2199,8 +2396,8 @@ function rewriteSentence(s, ctx, note, an, W){
   m = t.match(/^all you (?:have|need) to do is\s+(.+?)[.!?]*$/i);
   if(m){ t = "Could you "+m[1]+"?"; note("minim","all you have to do is","Could you"); ctx.converted=true; }
   t = t.replace(/,?\s*(?:it )?only takes a (?:second|minute|sec)\b[.!]?/i, mm=>{ note("minim", mm.replace(/^[,\s]+/,"").replace(/[.!]$/,""), ""); return "."; });
-  t = t.replace(/\b(simply|obviously|clearly|literally)\b,?\s*/gi, (mm,w)=>{ note("minim", w.toLowerCase(), ""); return ""; });
-  t = t.replace(/^seriously,?\s+(?=\w)/i, mm=>{ note("minim","seriously",""); return ""; });
+  t = t.replace(/\b(simply|obviously|clearly|literally)\b,?\s*/gi, (mm,w)=>{ note(/literally/i.test(w) ? "intens" : "minim", w.toLowerCase(), ""); return ""; });
+  t = t.replace(/^seriously,?\s+(?=\w)/i, mm=>{ note("intens","seriously",""); return ""; });
   t = t.replace(/\bjust\s+(?=(?:do|go|get|put|ask|tell|say|stop|clean|pick|take|call|be|try|make|use|let|leave|finish|fix|wash|text|send|listen|give|bring|move|pay|answer|grow|relax|calm|deal|remember|read|check|look|throw|hang|reply|help|sit|turn|shut|close|open|wait|need|have)\b)/gi, (mm, off, str)=>{ if(/\b(?:i'll|i will|i'm|i|we'll|we)\s+$/i.test(str.slice(Math.max(0,off-8), off))) return mm; note("minim","just",""); return ""; });
   t = t.replace(/\b(you|it's|that's|you're)\s+just\b/gi, (mm,a)=>{ note("minim","just",""); return a; });
 
@@ -2227,7 +2424,7 @@ function rewriteSentence(s, ctx, note, an, W){
     [/^(?:glad you could (?:finally )?(?:make it|join us|show up))[^.!?]*[.!?]*$/i, "sarcasm", "I was waiting, and it was hard. Could you text me next time if you're running late?"],
     [/^(?:wow,?\s*|gee,?\s*)?thanks? (?:a lot )?for nothing[.!]*$/i, "sarcasm", "I was counting on your help with this, and I'm disappointed. Could you [one specific thing] by [a time]?"],
     [/^(?:wow,?\s*)?(?:thanks a lot|gee,? thanks)[.!]*$/i, "sarcasm", "That didn't help me. Could you [one specific thing] by [a time]?"],
-    [/^(?:it )?must be nice(?: to (.+?))?[.!]*$/i, "sarcasm", m=>"I'm feeling stretched thin"+(m[1]?" while you "+m[1].replace(/\bjust\b\s*/,""):"")+". Could we find a way for me to get a break too?"],
+    [/^(?:it )?must be nice(?: to (?:just )?(.+?))?(?: while (?:i|we) (.+?))?[.!]*$/i, "sarcasm", m=>REFRAME_BY.nice.send(m)],
     [/^(?:lol,?\s*)?(?:(?:ok(?:ay)?|sure|fine|yeah),?\s*)?(?:whatever you say|sure,? whatever|if you say so)[.!]*$/i, "sarcasm", "I see it differently, and I'd like to talk about it when we're both calm. Could we talk at [a time]?"],
     [/^(?:lol,?\s*)?ok(?:ay)?,? whatever[.!]*$/i, "sarcasm", "I'm not sure how to answer that. Can we come back to it at [a time]?"],
     [/^some of us (?:actually |still |do |would )?(?:like|want|need|prefer|enjoy) (?:having |to have )?(.+?)[.!]*$/i, "passiveag", m=>"I'd really like "+m[1].replace(/^a /,"a ")+". Could you help with that by [a time]?"],
@@ -2599,7 +2796,8 @@ function rewriteSentence(s, ctx, note, an, W){
   if(m){ t = endP(m[1])+" [Later, as its own sentence:] "+capFirst(m[2])+"."; note("butc","…, but …","two separate sentences"); }
 
   // --- hedges, jokes
-  if(an.found.hedge && words(an.norm)<=14 && /\b(?:i think|pretty sure|probably|i guess|i believe)\b/i.test(t)){
+  // never on an accusation or a dig: "[If you're sure:] I'm only your friend when it suits you" would be harsher
+  if(an.found.hedge && words(an.norm)<=14 && /\b(?:i think|pretty sure|probably|i guess|i believe)\b/i.test(t) && !["jab","sarcasm","passiveag","guilt","contempt","label","critic","absolute"].some(id=>an.found[id]) && !/\byou(?:r|'re|'ve|'ll)?\b/i.test(t.replace(/\b(?:i think|i guess|i believe)\b/gi,""))){
     const plain = t.replace(/\b(?:i think|pretty sure|probably|i guess|i believe)\s*/gi,"");
     t = (plain.split(/\s+/).filter(Boolean).length < 2 ? "I think so." : "[If you're sure:] "+capFirst(plain))+" [If you're not: \"I'm not sure yet. I'll check and tell you by [a time].\"]"; note("hedge","hedge","");
   }
@@ -2660,6 +2858,7 @@ function safestVersion(base, o){
     : "I'm not upset with you as a person. I'd like us to sort this out together. ";
   const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay|getting in the way)\b/i.test(t) ? "" :
     o.work ? (o.isAsk ? " If something is getting in the way, say so, and we'll fix the process together." : " I'd like to hear how it looks from your side, too.") :
+    o.coparent ? (o.isAsk ? " Does that work for you?" : "") :
     (o.isAsk ? " Is that okay, or would something else work better for you?" : " I'd like to hear how it looks to you, too.");
   return tidy(lead + t + close);
 }
@@ -2682,7 +2881,7 @@ function finish(main, list, log, an, W, opts){
   const firstAsk = (base0.match(/(?:^|[.!?\]]\s+)([^.!?\]]*\b(?:could you|would you|can you|can we|could we|would that work)\b[^?]*\?)/i)||["",""])[1].trim();
   const isAsk = !!firstAsk;
   const hasReason = WHY_RE.test(base0) || an.goodIds.includes("reason") || an.goodIds.includes("feeling");
-  const criticism = an.staticIds.some(id=>["label","absolute","critic","again","compare","madefeel","past","blameq","cannot","threat","guilt","shouldhave","sarcasm","passive","disclaim","oblig","should"].includes(id));
+  const criticism = an.staticIds.some(id=>["jab","motive","label","absolute","critic","again","compare","madefeel","past","blameq","cannot","threat","guilt","shouldhave","sarcasm","passive","disclaim","oblig","should"].includes(id));
   const isTask = isAsk && !/\b(?:talk|look at it together|come back to it)\b/i.test(firstAsk);
   const sep = listMain ? "\n" : " ";
 
@@ -2696,7 +2895,7 @@ function finish(main, list, log, an, W, opts){
     let opener = criticism && !sorryLead ? "I'd like us to sort this out together. " : "";
     if(bondy) opener = "We're okay. "+opener;
     const thanks = /\bthank/i.test(base) || sorryLead ? "" : sep+"Thank you.";
-    if(opener || thanks.trim()) variants.push({id:"warm", label:"Warm", why: bondy ? "Reassurance first, then the same ask. For a listener who may hear a hard sentence as rejection, the first words set the frame. Only say \"we're okay\" if it's true." : "A kind frame first, and thanks at the end. The ask is the same.", text: (listMain ? opener+base : tidy(opener+base))+thanks});
+    if((opener || thanks.trim()) && !opts.reframed && !vocOf(base)) variants.push({id:"warm", label:"Warm", why: bondy ? "Reassurance first, then the same ask. For a listener who may hear a hard sentence as rejection, the first words set the frame. Only say \"we're okay\" if it's true." : "A kind frame first, and thanks at the end. The ask is the same.", text: (listMain ? opener+base : tidy(opener+base))+thanks});
   }
   if(isAsk && !listMain){
     // Brief keeps every sentence that carries content (an ask, a time, a fact).
@@ -2705,7 +2904,7 @@ function finish(main, list, log, an, W, opts){
     const brief = tidy(kept.join(" "));
     if(kept.length && brief!==tidy(base0)) variants.push({id:"brief", label:"Brief", why:"The same ask and details, without the extra lines. Easiest to take in when someone is busy, stressed, reading a text, or has a lot on their mind.", text:brief});
   }
-  if(isAsk){
+  if(isAsk && !opts.reframed){
     const extra = [];
     const ownerAsk = /\bone owner\b/i.test(firstAsk);
     if(isTask && !hasReason && !/\[what that affected\]/.test(base0)) extra.push("It matters because [the reason].");
@@ -2725,7 +2924,7 @@ function finish(main, list, log, an, W, opts){
   // The safest way to say it: the version least likely to land as an attack, whoever is listening.
   // No blame, the person kept separate from the problem, one plain ask, a choice, and room for their side.
   // Offered whenever the words carry static, an ask or a criticism; it sits right after the first choice.
-  const safe = safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: !!(opts.work || WORK_REL.includes(opts.rel)), group: opts.channel==="group", coparent: opts.rel==="coparent"});
+  const safe = vocOf(base0) ? "" : safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: !!(opts.work || WORK_REL.includes(opts.rel)), group: opts.channel==="group", coparent: opts.rel==="coparent"});
   if(safe && !variants.some(v=>v.text.toLowerCase()===safe.toLowerCase())) variants.splice(Math.min(1, variants.length), 0, {id:"safe", label:"Safest way to say it",
     why: (opts.work || WORK_REL.includes(opts.rel)) ? "The version least likely to land as blame or an order, whoever reads it: about the process, not a person, one clear ask, and room for what's getting in the way. Send it once." : "The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
   return {main: base, primary: variants[0], variants, changes, ask, list, unchanged};
@@ -2885,6 +3084,52 @@ function meantSelf(id, fids){
 Object.keys(ADD).forEach(w=>{ if(NT[w]) Object.assign(NT[w].receive, ADD[w]); });
 Object.assign(CHECK, CHECK_ADD);
 
+/* Threats, digs, guessed motives, blunt openers and closed doors; boundaries and disclosures worth keeping */
+const DIG_READ = {
+ nt:{menace:[3,"They're threatening me.","A threat is heard as a threat, whatever was meant. It frightens, or it controls, and the point is lost."],
+     jab:[2,"They're keeping score, and I'm losing.","A dig or a scorecard is heard as blame, so the listener defends themselves instead of hearing the need."],
+     motive:[2,"They think I did it to hurt them.","Being told your motive invites an argument about intent, not a fix."],
+     blunt:[2,"They're telling me off.","A flat \"That is incorrect\" is often heard as cold, even when the fact is fair."],
+     closer:[1,"I'm being shut out.","A closed door can sting, even when the decision is fair."],
+     boundary:[0,"They're looking after themselves, and they still care.","A calm limit with care in it is usually understood, even when it's hard to hear."],
+     disclose:[0,"They trust me with something important.","Sharing who you are is a reach toward someone."]},
+ anxiety:{menace:[3,"I'm not safe.","A threat goes straight to fear."],
+     jab:[3,"I've failed them, and they resent me.","A dig leaves an anxious listener replaying it, and looking for proof."],
+     motive:[2,"They think I'm a bad person.","Being accused of meaning harm is hard to put down."],
+     blunt:[2,"I've got it wrong, and now they're annoyed.","A blunt correction can feel like a judgment."],
+     closer:[2,"They don't want me involved any more.","A closed door is filled in with the worst case."]},
+ adhd:{menace:[3,"This is out of control.","A threat lands fast and loud."],
+     jab:[2,"Nothing I do is ever enough.","A scorecard echoes years of being told they didn't try hard enough."],
+     motive:[3,"I didn't mean it. Why do they think I did?","Being accused of intent hurts when the miss was forgetting, not malice."],
+     blunt:[2,"I've messed up again.","A blunt correction can land on old rejection sensitivity."],
+     closer:[1,"I'm out of the loop.","A closed door can feel like being left out."]},
+ autistic:{menace:[3,"Will they really do that?","A threat may be taken literally, as a plan."],
+     jab:[2,"Is that a fact or a complaint? What do they want?","A dig hides the request, so the listener may answer the words instead of the need."],
+     motive:[2,"That's not true. I didn't plan that.","A guessed motive may be answered as a factual error."],
+     blunt:[0,"Okay, Friday. Thanks.","Many autistic listeners prefer a plain correction."],
+     closer:[0,"Understood: they decide.","Likely taken at its word."]},
+ hsp:{menace:[3,"Danger.","A threat registers strongly."], jab:[3,"That stung, and I'll keep thinking about it.","Digs land hard and stay."]},
+ trauma:{menace:[3,"I'm not safe.","A threat can go straight to the alarm."], jab:[3,"I'm being attacked.","Blame can register as threat."]}
+};
+Object.keys(DIG_READ).forEach(w=>{ if(NT[w]) Object.keys(DIG_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=DIG_READ[w][f]; }); });
+Object.assign(CHECK, {
+  menace:"\"That sounded like a threat. I'm not going to talk about it while it's said like that.\"",
+  jab:"\"That sounds like it's been building up. What's the one thing you'd like to change?\"",
+  motive:"\"It wasn't on purpose. Can we look at what happened, and what would help next time?\"",
+  blunt:"\"Thanks for the correction.\"",
+  closer:"\"I understand it's your decision. I'm here if you want to talk it through.\""
+});
+Object.assign(CHANGE_WHY, {
+  menace:{g:"A threat would frighten or control the other person. No wording makes a threat okay, so it's left out completely. What's left is what you feel and what you need."},
+  jab:{g:"A dig or a scorecard says the hurt as blame, so the listener defends themselves. The rewrite says the hurt plainly and keeps the real ask."},
+  motive:{g:"\"On purpose\" guesses at their reasons, so they argue about intent instead of the problem. Without it, what happened and what you'd like can be answered."},
+  blunt:{g:"\"That is incorrect\" is clear, and it can still land cold. \"Quick correction\" keeps the same fact and sounds like help."},
+  closer:{g:"Leading with warmth keeps someone close while you still make the decision yourselves."},
+  visits:{g:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and keeps the door open."},
+  coparent:{g:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. Feelings about each other are better kept for a calmer place, or a mediator."},
+  reqmaybe:{g:"\"Maybe\" in a request makes it sound optional, so it's easy to shrug off. A plain, kind ask is clearer."}
+});
+REFRAMES.forEach(r=>{ CHANGE_WHY["rf_"+r.id] = {g:r.why}; });
 /* "Not sure" of the listener's wiring: a general reading. For each pattern it
    takes the average weight across several common wirings (at least 1 for
    anything that may add static), and the plainest wording of what may be heard. */
@@ -2968,7 +3213,7 @@ const RECEIVE_MEANS = [
   [["tic"], "They're asking you to stop something. If it's a stim or a tic, you can say so: it isn't a message to them."]
 ];
 const RECEIVE_GOOD = {repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
-const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal"];
+const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
 function turnAround(t){ const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",you:"me",myself:"yourself",yourself:"myself"}; return String(t).replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, w=>SW[w.toLowerCase()]); }
 function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
@@ -3108,13 +3353,13 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
-const ATTACK_IDS = ["label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
+const ATTACK_IDS = ["menace","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
 function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
 /* A reply to a message that may carry hurt ("Fine. Whatever works for you."), with nothing in it that shows the hurt
    was heard: the words can be clear and still miss. */
-const HURT_IN = ["brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"];
+const HURT_IN = ["jab","brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"];
 const ACK_RE = /\b(?:i hear you|i get (?:it|that|why)|it sounds like|sounds like you|i'm sorry|i am sorry|sorry|you're right|that's fair|fair enough|makes sense|i understand|i miss (?:you|our|it|talking)|i know you|i can tell|i can see)\b/i;
 function replyMissesHurt(an, prev){
   if(!prev || !an) return false;

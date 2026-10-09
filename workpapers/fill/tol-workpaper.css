@@ -829,3 +829,18 @@ body[data-wp] main.read > .wpf-lede:not(.pillar-note){ font-size: .95em; margin-
 .ws-send-private{ margin: .2em 0 0; font-size: .92rem; }
 .ws-send-private label{ display: inline-flex; gap: .5em; align-items: flex-start; cursor: pointer; }
 .ws-send-private input{ margin-top: .3em; flex: none; }
+
+/* "✓ Saved on this phone": a quiet word in the save bar, hidden while a message is showing */
+.wpf-saved{ font-size: .82rem; color: var(--credit, #3E6B4C); flex: 1 1 auto; }
+.wpf-saved:empty, #wpf-status:not(:empty) + .wpf-saved{ display: none; }
+/* on a phone the save bar steps aside while someone types, so it never covers the box they are in */
+.wpf-bar{ transition: transform .18s ease; }
+body.wpf-typing .wpf-bar{ transform: translateY(110%); }
+@media (prefers-reduced-motion: reduce){ .wpf-bar{ transition: none; } }
+/* what differs after combining a shared list, each with a choice */
+.wpf-conflicts .wpf-conflict-list{ list-style: none; margin: .4em 0 .6em; padding: 0; }
+.wpf-conflicts .wpf-conflict-list li{ padding: .5em 0; border-top: 1px solid var(--line, #D9CBA3); }
+.wpf-conflicts .wpf-conflict-q{ margin: 0 0 .35em; overflow-wrap: anywhere; }
+.wpf-conflicts .wpf-add{ min-height: 44px; }
+.wpf-lib-hint{ margin: .1em 0 .4em; }
+@media (max-width: 560px){ .wpf-bar-inner:has(.wpf-keepask) .wpf-saved{ display: none; } }

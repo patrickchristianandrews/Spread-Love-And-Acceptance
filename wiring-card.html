@@ -67,6 +67,13 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 .sheet dd{margin:0;font-size:1.02rem}
 .sheet dd.empty{color:var(--muted);font-style:italic}
 .sheet .emptycard{color:var(--muted);font-size:.95rem;margin:4px 0 0}
+details.aboutcard{margin:10px 0 4px;max-width:62ch}
+details.aboutcard > summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;color:var(--ink)}
+details.aboutcard .tol-pillars{margin:10px 0 0}
+.forwho .chips button{background:#FFF8E6}
+.managernote{margin:8px 0 0}
+.codeopt{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;color:var(--muted);margin:8px 0 0;max-width:62ch}
+.codeopt input{margin-top:4px;min-width:18px;min-height:18px}
 details.more{margin:18px 0 0;border-top:1px solid var(--line);padding-top:12px}
 details.more > summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;gap:.3rem}
 .swapnote{margin:6px 0 0;font-size:.88rem;color:var(--ink);background:#FFF8E6;border-left:3px solid var(--brass);padding:4px 8px;border-radius:4px}
@@ -115,7 +122,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   #compare{display:none!important}
 }
 @media print{
-  .sitebar,.formside,.actions,.privacy,.lede,.kicker,h1,.note,.tol-bar,.tol-panel{display:none!important}
+  .sitebar,.formside,.aboutcard,.managernote,.codeopt,.actions,.privacy,.lede,.kicker,h1,.note,.tol-bar,.tol-panel{display:none!important}
   body{background:#fff}
   .wrap{max-width:none;padding:0}
   .layout{display:block}
@@ -170,11 +177,16 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   <header>
     <p class="kicker">Tool &middot; Pairs with <a href="wired-differently.html#card">the wiring card</a> in Wired Differently</p>
     <h1>Wiring Card</h1>
-    <p class="lede">Fill in how you actually receive words. Your card updates as you go: beside the form on a wide screen, and below it on a phone. Print it, or copy it, and give it to the people you live and work with before a hard conversation, not during one.</p>
+    <p class="lede">Pick what helps words reach you. Your card builds itself as you go. Copy it or print it, and give it to someone before a hard conversation, not during one.</p>
+    <p class="privacy">Nothing you type is sent anywhere. Not a diagnosis.</p>
+  </header>
+  <details class="aboutcard" id="aboutcard">
+    <summary>More about this card</summary>
+    <p class="privacy">Your card updates as you go: beside the form on a wide screen, and below it on a phone. Give it to the people you live and work with.</p>
     <p class="privacy">Runs in your browser. Nothing you type is sent anywhere. A draft is kept in this tab only until you close it (Clear removes it sooner), and nothing is kept longer unless you tick &ldquo;Keep my card on this device&rdquo; (Erase removes it). &ldquo;Fill from my Wavelength answers&rdquo; only reads what Wavelength already keeps in this browser. This is not a diagnosis and not a label: it describes what helps words reach you. When you are running low, every line applies more strictly.</p>
     <p class="privacy pillar-note">The Wiring Card puts <a href="/five-pillars.html#tune-signals">Pillar IV (“Tune how you send and receive”)</a> to work. In you: you name your own wiring, pace and how you hear things. Between you and others: people learn how to send a request so it lands, and a mismatch becomes tuning, not a moral failing.</p>
     <p class="privacy">See also: <a href="/know-yourself.html">Know your own wiring</a>, which helps you tell lasting wiring from learned patterns and today’s conditions, and <a href="/wavelength.html">Wavelength</a>, which finds your four-letter Wave Code for how you think, talk and listen.</p>
-  </header>
+  </details>
 
   <div class="layout">
     <div class="formside" id="forms"></div>
@@ -382,6 +394,12 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   const people = ["A"];
   const state = {A: fresh(), B: fresh()};
   let keep = false, lastSwap = "", lastSwapAt = "";
+  // who the card is for: partner, family, friend or work. At work the copied card has no "partner" wording and no long
+  // card code (unless you tick it on); withCode stays null until you choose, and then your choice wins.
+  const FOR = [["partner","A partner"],["family","Family"],["friend","A friend"],["work","Work (a manager or coworker)"]];
+  let forWho = "", withCode = null;
+  function codeOn(){ return withCode !== null ? withCode : forWho !== "work"; }
+  const MANAGER_LINE = "Here’s a short card about how I work best. It’s not a request for anything big; it just helps us avoid crossed wires.";
   // the lines shown up front; the rest sit behind "More lines" until wanted
   const CORE = ["receive","words","time","quiet","ask"];
   const moreOpen = {A:false, B:false};
@@ -499,6 +517,11 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     let h = '<section class="panel" data-who="'+who+'">';
     h += '<h2>'+title+'</h2>';
     h += '<p class="hint">Pick what is usually true for you. Add a few words where the buttons are not enough. Leave a line blank if it does not apply.</p>';
+    if(who==="A"){
+      h += '<div class="forwho"><span class="lab">Who is this card for? <span class="how">(optional; it changes the wording)</span></span><div class="chips" role="group" aria-label="Who is this card for?">' +
+        FOR.map(f=>'<button type="button" data-for="'+f[0]+'" aria-pressed="'+(forWho===f[0]?"true":"false")+'">'+esc(f[1])+'</button>').join("") + '</div>' +
+        (forWho==="work" ? '<p class="hint" style="margin:6px 0 0">For work: the copied card is short and plain, with no card code at the end. Pick only what you are happy for work to know.</p>' : '') + '</div>';
+    }
     h += '<label class="lab" for="name'+who+'">Name on the card, optional</label>';
     h += '<input id="name'+who+'" data-name="'+who+'" type="text" maxlength="60" placeholder="Alex" value="'+esc(st.name)+'">';
     h += waveBox(who);
@@ -553,14 +576,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   function paintForms(){
     let h = '<p class="privacy" id="pickmsg" role="status" aria-live="polite">' + esc(lastSwap) + '</p>';
     h += people.map(buildForm).join("");
-    const pasteBtn = '<button class="ghost" type="button" id="pasteopen" aria-expanded="'+(pasteOpen?"true":"false")+'" aria-controls="pastebox">Paste my partner&rsquo;s card</button>';
+    const pasteBtn = '<button class="ghost" type="button" id="pasteopen" aria-expanded="'+(pasteOpen?"true":"false")+'" aria-controls="pastebox">Paste someone&rsquo;s card</button>';
     if(!people.includes("B")){
       h += '<div class="actions"><button class="go" type="button" id="addB">Add the other person\'s card</button>'+pasteBtn+'</div>';
     } else {
       h += '<div class="actions"><button class="go" type="button" id="cmpbtn" aria-controls="compare" aria-expanded="'+(showCmp?"true":"false")+'">'+(showCmp?"Hide the comparison":"Compare the two cards")+'</button>'+pasteBtn+'</div>';
     }
     if(pasteOpen){
-      h += '<div class="panel" id="pastebox" style="margin-top:12px"><h2>Paste your partner&rsquo;s card</h2>' +
+      h += '<div class="panel" id="pastebox" style="margin-top:12px"><h2>Paste their card</h2>' +
         '<p class="hint">On their device, they make their card and tap &ldquo;Copy the card&rdquo; or &ldquo;Copy a link to my card&rdquo;, then send it to you. Paste the whole message or the link here and it fills in the other person&rsquo;s card, so you can compare without retyping. (Opening the link does the same thing.) Nothing is sent anywhere.</p>' +
         '<label class="lab" for="pastetext">Their copied card</label><textarea id="pastetext" class="pastein" spellcheck="false">'+esc(pasteDraft)+'</textarea>' +
         '<div class="actions"><button class="go" type="button" id="pastego">Fill in their card</button><button class="ghost" type="button" id="pastecancel">Cancel</button></div>' +
@@ -584,7 +607,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       }).join("");
       const body = rows ? '<dl>'+rows+'</dl>' : (wire || st.wave ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
       return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(st.wave?'<p class="wavecode">Wave Code '+esc(waveLabel(st.wave))+'</p>':'')+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
-    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copylink">Copy a link to my card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div><p class="privacy" id="copymsg" role="status" aria-live="polite"></p>';
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copylink">Copy a link to my card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div>' +
+      '<p class="privacy" id="copymsg" role="status" aria-live="polite"></p>' +
+      '<label class="codeopt"><input type="checkbox" id="codeopt"'+(codeOn()?" checked":"")+'> <span>Add a card code at the end of &ldquo;Copy the card&rdquo;, so they can paste it into their own Wiring Card and compare</span></label>' +
+      '<p class="hint managernote"><strong>How to give this to your manager:</strong> send it with one line, like &ldquo;'+esc(MANAGER_LINE)+'&rdquo;'+(forWho==="work" ? ' &ldquo;Copy the card&rdquo; starts with that line; change it as you like.' : '')+'</p>';
     $("#printwallet").addEventListener("click", printWallet);
     $("#copy").addEventListener("click", copyCard);
     $("#copylink").addEventListener("click", copyLink);
@@ -632,7 +658,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   }
 
   // "Keep my card on this device": off by default, in this browser only, removed by Erase.
-  function snapshot(){ const o = {people: people.slice(), cmp: showCmp ? "open" : (cmpHidden ? "hidden" : "")}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom, wave: s.wave||""}; }); return o; }
+  function snapshot(){ const o = {people: people.slice(), cmp: showCmp ? "open" : (cmpHidden ? "hidden" : ""), forWho: forWho, withCode: withCode}; ["A","B"].forEach(w=>{ const s = state[w]; o[w] = {name: s.name, wiring: [...s.wiring], picks: s.picks, custom: s.custom, wave: s.wave||""}; }); return o; }
   function keepNow(){ if(!keep) return; try{ localStorage.setItem(KEEP_KEY, JSON.stringify(snapshot())); }catch(e){} }
   function readKept(){
     try{
@@ -640,6 +666,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       if(!d || !Array.isArray(d.people)) return false;
       people.length = 0; d.people.filter(w=>w==="A"||w==="B").forEach(w=>people.push(w)); if(!people.length) people.push("A");
       ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: s.picks||{}, custom: s.custom||{}, wave: okWave(s.wave)}; });
+      readFor(d);
       return true;
     }catch(e){ return false; }
   }
@@ -656,12 +683,12 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       if(t) lines.push(line.q+": "+t);
     });
     lines.push("Not a diagnosis. Applies more strictly when I am running low. Not a contract.");
-    lines.push("Card code: " + cardCode(who));
+    if(codeOn()) lines.push("Card code: " + cardCode(who));
     return lines.join("\n");
   }
 
   // A compact, exact copy of one card at the end of "Copy the card", so the other person can bring it in with
-  // "Paste my partner's card". It travels only inside the text you copy; nothing is sent anywhere.
+  // "Paste someone's card". It travels only inside the text you copy; nothing is sent anywhere.
   function cardCode(who){
     const st = state[who], o = {};
     if(st.name.trim()) o.n = st.name.trim();
@@ -773,7 +800,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     } else fallback();
   }
   function copyCard(){
-    copyText(people.map(plain).join("\n\n") + "\n\nTo compare on your own device: open spreadloveandacceptance.com/wiring-card.html and tap “Paste my partner’s card”.", $("#copy"), "Copied as plain text. The other person can paste it into their Wiring Card with “Paste my partner’s card” to compare.");
+    const work = forWho === "work", code = codeOn();
+    copyText((work ? MANAGER_LINE + "\n\n" : "") + people.map(plain).join("\n\n") + (code ? "\n\nTo compare on your own device: open spreadloveandacceptance.com/wiring-card.html and tap “Paste someone’s card”." : ""), $("#copy"),
+      work ? "Copied as plain text, starting with a short line you can send with it. Change anything you like before you send it." :
+      code ? "Copied as plain text. The other person can paste it into their Wiring Card with “Paste someone’s card” to compare." : "Copied as plain text, ready to send.");
   }
   // A link that carries your card after the #, the way Wavelength's ?compare= link carries a Wave Code. The part after
   // the # stays in the browser: it is never sent to the website when the link is opened.
@@ -810,8 +840,10 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(!d || !Array.isArray(d.people)) return false;
     people.length = 0; d.people.filter(w=>w==="A"||w==="B").forEach(w=>people.push(w)); if(!people.length) people.push("A");
     ["A","B"].forEach(w=>{ const s = d[w] || {}; state[w] = {name: String(s.name||""), wiring: new Set((s.wiring||[]).filter(id=>WIRING.some(x=>x[0]===id))), picks: JSON.parse(JSON.stringify(s.picks||{})), custom: Object.assign({}, s.custom||{}), wave: okWave(s.wave)}; });
+    readFor(d);
     return true;
   }
+  function readFor(d){ forWho = FOR.some(f=>f[0]===d.forWho) ? d.forWho : ""; withCode = typeof d.withCode === "boolean" ? d.withCode : null; }
   function hasContent(who){ const s = state[who]; return !!(s.wave || s.wiring.size || Object.keys(s.picks).some(k=>(s.picks[k]||[]).length) || Object.keys(s.custom).some(k=>String(s.custom[k]||"").trim())); }
 
   // Side by side: where two cards overlap, and where they don't (the best places for a short talk).
@@ -905,7 +937,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       receive:["writing"], words:["literal"], time:["min"], quiet:["think"],
       texts:["brief"], upset:["space"], avoid:["sarcasm","calm"], ask:["could"], depleted:["writing"]
     };
-    state[who].custom = {ask:"Could you take the trash out by 8?"};
+    state[who].custom = {ask: forWho==="work" ? "Could you send me the notes by Friday?" : "Could you take the trash out by 8?"};
   }
 
   function applyPreset(who, id){
@@ -932,6 +964,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       const m = $("#pickmsg"); if(m) m.textContent = keep ? "Cleared. The card kept on this device is blank now too; Erase removes it." : "Cleared. Nothing from this card is kept in this tab.";
       return;
     }
+    if(t.dataset.for){ forWho = forWho===t.dataset.for ? "" : t.dataset.for; paintForms(); paint(); const again = document.querySelector('[data-for="'+t.dataset.for+'"]'); if(again) again.focus(); return; }
     if(t.dataset.preset){ applyPreset(t.dataset.who, t.dataset.preset); paintForms(); paint(); return; }
     if(t.id==="pasteopen"){ pasteOpen = !pasteOpen; pasteMsg = ""; paintForms(); const ta = $("#pastetext"); if(ta) ta.focus(); else { const b = $("#pasteopen"); if(b) b.focus(); } return; }
     if(t.id==="pastecancel"){ pasteOpen = false; pasteDraft = ""; pasteMsg = ""; paintForms(); const b = $("#pasteopen"); if(b) b.focus(); return; }
@@ -966,6 +999,11 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     box.scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
     const h = $("#cmp-h"); if(h) h.focus({preventScroll:true});
   }
+  $("#sheets").addEventListener("change", e=>{
+    if(e.target.id !== "codeopt") return;
+    withCode = e.target.checked; keepNow(); saveDraft();
+    const m = $("#copymsg"); if(m) m.textContent = withCode ? "“Copy the card” now ends with a card code they can paste in to compare." : "“Copy the card” now leaves out the card code.";
+  });
   $("#forms").addEventListener("paste", e=>{ if(e.target.id !== "pastetext") return; setTimeout(()=>{ const ta = $("#pastetext"); if(ta && ta.value.trim()) { pasteDraft = ta.value; if(/WC1\./.test(ta.value)) pasteIn(ta.value); } }, 0); });
   $("#forms").addEventListener("change", e=>{
     if(e.target.id !== "keepcard") return;
@@ -992,10 +1030,19 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   (function(){ let d = null; try{ d = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null"); }catch(e){} if(!d){ try{ d = JSON.parse(localStorage.getItem(KEEP_KEY) || "null"); }catch(e){} }
     cmpHidden = !!(d && d.cmp==="hidden");
     if(people.includes("B") && hasContent("A") && hasContent("B") && !cmpHidden) showCmp = true; })();
+  (function(){ let q = ""; try{ q = new URLSearchParams(location.search).get("for") || ""; }catch(e){}
+    if(FOR.some(f=>f[0]===q)){ forWho = q; if(q==="work") withCode = null; try{ history.replaceState(history.state, "", location.pathname + location.hash); }catch(e){} } })();
   const fromLink = readLink();
   window.addEventListener("hashchange", ()=>{ if(readLink()){ paintForms(); paint(); toCompareOrB(); } });
   function toCompareOrB(){ if(showCmp && hasContent("A")) toCompare(); else { const sec = document.querySelector('[data-who="B"].panel'); if(sec) sec.scrollIntoView({block:"start"}); } }
   window.addEventListener("pageshow", ev=>{ if(ev.persisted){ paintForms(); paint(); } });
+  // the "Pillars in this page" strip (pillars.js) goes inside "More about this card", so the form comes first
+  (function(){
+    const fold = $("#aboutcard"), main = document.querySelector("main"); if(!fold || !main) return;
+    const tuck = ()=>{ const nav = main.querySelector(":scope > nav.tol-pillars"); if(nav) fold.appendChild(nav); };
+    tuck();
+    if(window.MutationObserver) new MutationObserver(tuck).observe(main, {childList:true});
+  })();
   paintForms();
   paint();
   if(fromLink) toCompareOrB();

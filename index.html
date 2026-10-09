@@ -59,6 +59,19 @@
   .read .hh-kick span{ display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .65rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; font-weight:500; letter-spacing:.05em; text-transform:uppercase;
     color:#2F5E3E; background:rgba(226,242,230,.9); border:1px solid #C6E0CD; }
   .read .hh-kick span::before{ content:"\2713"; font-weight:700; }
+  .read .hh-kick a.hh-es{ display:inline-flex; align-items:center; min-height:24px; box-sizing:border-box; padding:.15rem .7rem; border-radius:999px; font-size:.84rem; font-weight:600; line-height:1.2;
+    color:#2B5B8C; background:#FFFFFF; border:1px solid #BFD2E6; text-decoration:none; }
+  .read .hh-kick a.hh-es::after{ content:"\a0\2192"; }
+  .read .hh-kick a.hh-es:hover{ border-color:#2B5B8C; }
+  .read .hh-kick a.hh-es:focus-visible, .read .hh-for a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  /* Who it's for: one quiet row of small links under the lede */
+  .read .hh .hh-for{ margin:-.6rem 0 1.15rem; font-size:.92rem; line-height:1.75; color:var(--ink-soft, #5A5346); text-wrap:pretty; }
+  .read .hh-for a{ color:var(--ink, #2B2620); font-weight:600; text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
+  .read .hh-for a:hover{ text-decoration-color:currentColor; }
+  .read .hh-for .hh-for-s{ margin:0 .2rem; color:#B9A2DD; }
+  /* the walking pups pass behind this button, so give it a solid face */
+  .read #start-where .sw-showmore{ background:#FFFBF4; }
+  .read #start-where .sw-showmore:hover{ background:var(--paper-deep, #ECE2C4); }
   .read .hh-h1{ margin:0 0 .8rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(2rem, 1.2rem + 3vw, 2.75rem); line-height:1.1; letter-spacing:-.02em; color:var(--ink, #2B2620); text-wrap:balance; }
   .read .hh-accent{ display:inline; font-style:italic; font-weight:500; color:#8A3F72;
     background:linear-gradient(100deg, #B0405F 0%, #7A4A92 55%, #2B5B8C 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
@@ -112,6 +125,8 @@
   html.tol-quiet .read .hh-kick span{ display:inline; padding:0; border:0; background:none; }
   html.tol-quiet .read .hh-kick span::before{ content:none; }
   html.tol-quiet .read .hh-kick span + span::before{ content:" · "; }
+  html.tol-quiet .read .hh-kick a.hh-es{ display:inline; min-height:0; padding:0; border:0; background:none; text-decoration:underline; text-underline-offset:3px; }
+  html.tol-quiet .read .hh-kick a.hh-es::before{ content:" · "; display:inline-block; white-space:pre; color:var(--ink-soft, #5A5346); }
   html.tol-quiet .read .hh-accent{ font-style:normal; font-weight:600; color:inherit; background:none; -webkit-text-fill-color:currentColor; }
   html.tol-quiet .read a.hh-card, html.tol-quiet .read a.hh-card.is-main{ background:#FFFDF7; color:var(--ink, #2B2620); border:1px solid var(--line, #D9CBA3); box-shadow:none; border-radius:10px; transform:none; }
   html.tol-quiet .read .hh-more a{ background:#FFFDF7; border:1px solid var(--line, #D9CBA3); transform:none; }
@@ -123,6 +138,7 @@
     .read .hh-card-i{ width:2.3rem; height:2.3rem; font-size:1.2rem; border-radius:12px; }
     .read .hh-card-t{ font-size:1.08rem; }
     .read .hh-lede{ font-size:1.06rem; margin-bottom:1.1rem; }
+    .read .hh .hh-for{ margin-bottom:1rem; font-size:.88rem; line-height:1.7; }
     .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
     .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
   }
@@ -468,9 +484,10 @@
 <main class="read">
 <section class="hh tol-plain no-bubble" data-home-intro aria-labelledby="hero-h">
   <p class="hh-brand"><span class="hh-heart" aria-hidden="true">&#9825;</span> Spread Love &amp; Acceptance</p>
-  <p class="hh-kick"><span>Free</span> <span>Private</span> <span>No sign-up</span></p>
+  <p class="hh-kick"><span>Free</span> <span>Private</span> <span>No sign-up</span> <a class="hh-es" href="/en-espanol.html" lang="es" hreflang="es">En español</a></p>
   <h1 id="hero-h" class="hh-h1">Less keeping score.<br> <span class="hh-accent">More being on the <span class="hh-nw">same side.</span></span></h1>
-  <p class="hh-lede">Kind, practical help for couples, families, housemates and coworkers, or just for you. Most tools take a minute or two, and nothing you type ever leaves your device.</p>
+  <p class="hh-lede">Kind, practical help for the people you share life with, or just for you. Most tools take a minute or two, and nothing you type ever leaves your device.</p>
+  <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>.</p>
   <h2 class="sr-only">Where to start</h2>
   <div class="hh-time" data-cb-time>
     <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
@@ -490,22 +507,21 @@
   </ul>
   <ul class="hh-more" aria-label="More ways in">
     <li><a href="/ask.html" data-ask-puddles><span class="hh-more-k">Got a question?</span> Ask Professor Puddles</a></li>
-    <li><a href="#start-where"><span class="hh-more-k">Apart, stepfamily, new baby…?</span> See every situation</a></li>
+    <li><a href="#start-where"><span class="hh-more-k">New baby, money, faith…?</span> See every situation</a></li>
+    <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
+    <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
+    <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
+    <li><a href="/safety.html"><span class="hh-more-k">Not safe at home?</span> Get help</a></li>
     <li><a href="/sent-this.html"><span class="hh-more-k">Sent a link by someone?</span> Start here</a></li>
     <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
-    <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
-    <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
     <li><a href="/grief.html"><span class="hh-more-k">Lost someone?</span> Grief and later life</a></li>
-    <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
-    <li><a href="/safety.html"><span class="hh-more-k">Not safe at home?</span> Get help</a></li>
-    <li><a href="/en-espanol.html" lang="es"><span class="hh-more-k">¿Español?</span> En español</a></li>
   </ul>
 </section>
 
     <section id="start-where" aria-labelledby="sw-h">
       <h2 id="sw-h">Start where you are</h2>
       <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
-      <div data-tol-start data-first="same-fight,empty,home-bills,new-baby,grief,family-duty,stepfamily,apart,child-teen,caring,keep-good,separated,not-safe"></div>
+      <div data-tol-start data-first="same-fight,friends,separated,grandparents,more-than-two,child-teen,home-bills,work,not-safe" data-more="Something else? See every situation"></div>
     </section>
 
     <section id="guides" aria-labelledby="guides-h">
@@ -522,7 +538,7 @@
 
     <section id="explore" class="home-explore" aria-labelledby="explore-h">
       <h2 id="explore-h">More to explore</h2>
-      <p class="home-new"><span class="announce-tag">New</span> <a href="/work.html">At work</a> <span aria-hidden="true">&middot;</span> <a href="/grief.html">Grief and later life</a> <span aria-hidden="true">&middot;</span> <a href="/complacency.html">Complacency</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
+      <p class="home-new"><span class="announce-tag">New</span> <a href="/friends.html">Friends</a> <span aria-hidden="true">&middot;</span> <a href="/family-rifts.html">Family rifts</a> <span aria-hidden="true">&middot;</span> <a href="/coming-home.html">Coming home after time apart</a> <span aria-hidden="true">&middot;</span> <a href="/whats-new.html">Everything new &rarr;</a></p>
 <details class="home-fold home-extras">
         <summary>Breaks and extras: music, the pups, and the app</summary>
 <!-- pal cam hook (site.js loads the cam on demand): check in on Tidbit & Sugarfoot -->

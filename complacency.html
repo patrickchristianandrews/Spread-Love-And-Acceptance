@@ -21,6 +21,11 @@
 <style>
   .read .ideas .cx-list{ margin:0 0 .8rem; padding-left:1.1rem; font-size:.95rem; line-height:1.55; color:var(--ink-soft); }
   .read .ideas .cx-list li{ margin:.3rem 0; }
+  .read .cx-today{ margin:1rem 0 1.5rem; }
+  .read .cx-more{ margin:2rem 0 1rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper); }
+  .read .cx-more > summary{ min-height:44px; box-sizing:border-box; display:flex; align-items:center; padding:.6rem 1rem; cursor:pointer; font-family:"Fraunces", Georgia, serif; font-weight:600; }
+  .read .cx-more-body{ padding:0 .75rem .5rem; }
+  .read .cx-more-body > *{ max-width:100%; }
   .read .ideas .cx-say{ margin:.2rem 0 .8rem; padding:.6rem .85rem; background:#FFFDF6; border:1px dashed var(--brass); border-radius:var(--radius); font-size:.97rem; }
 </style>
 <script src="/assets/js/site.js" defer></script>
@@ -67,6 +72,10 @@
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/complacency-in-depth.html">Read the full guide</a></p>
 
 <p class="simple-lede">Complacency doesn’t look like a problem. It looks like things going fine. Something has worked for a long time, so you stop checking on it, and one day it isn’t working and nobody saw it start. This guide is about spotting that quiet drift in yourself and in the people you share life with, and keeping things fresh without making a drama of it.</p>
+<div class="try-this cx-today" id="try-today">
+  <p><strong>Try this today:</strong> Ask one question you don’t already know the answer to, of someone close or of yourself, and listen to the whole answer. Then put one small re-check in your calendar for a month from now.</p>
+  <p><a href="/turning-toward-in-depth.html#their-world">Ten questions to ask &rarr;</a> <a href="/workpapers/fill/wp-13.html">The 90-second daily check-in</a></p>
+</div>
 <p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#quiet-incentives">Pillar V, Notice the quiet incentives</a> and <a href="/five-pillars.html#see-the-load">Pillar I, See the whole load</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> notice what you’ve stopped checking, from your habits and health to your own “I’m fine.” <strong>Between you and others:</strong> build a small, regular re-check into the setup, so what’s good stays seen and thanked.</p>
 
 <div class="scene">
@@ -102,6 +111,7 @@
   <li id="partner">
     <h2>With a partner: the long, easy stretch is the risky one.</h2>
     <p>Early on, everything is curious. Years in, we assume we know. And we do, partly: we know who they were. People keep changing. Taking each other for granted often starts as a compliment (“I trust you”) and ends with unthanked work, unasked questions and dates that turned into errands. The fix is small: one real question and one specific thank-you, every week.</p>
+    <p>If the children have grown and left home, and the house feels quiet between the two of you, <a href="/empty-nest.html">Kids grown and gone</a> has small daily habits, in plain English.</p>
     <a class="dig" href="/complacency-in-depth.html#partner">Dig deeper: partners, and the unseen work</a>
   </li>
   <li id="family-friends">
@@ -137,11 +147,34 @@
   </li>
 </ol>
 
-<div class="try-this">
-  <p><strong>Try this:</strong> Today, ask one question you don’t already know the answer to, of someone close or of yourself, and listen to the whole answer. Then put one small re-check in your calendar for a month from now.</p>
-  <p><a href="/turning-toward-in-depth.html#their-world">Ten questions to ask &rarr;</a> <a href="/recheck-drive.html">Play it out: the Re-check Drive</a></p>
-  <p>Want to see where the quiet drift is already happening at home? Start with <a href="/workpapers/wp-04-what-keeps-coming-back.html">WP-04, what keeps coming back?</a> or the <a href="/know-yourself.html">Know your own wiring</a> guide.</p>
-</div>
+<p class="cx-next">Want to see where the quiet drift is already happening at home? Start with <a href="/workpapers/wp-04-what-keeps-coming-back.html">WP-04, what keeps coming back?</a> or the <a href="/know-yourself.html">Know your own wiring</a> guide. Or play it out in <a href="/recheck-drive.html">the Re-check Drive</a>.</p>
+
+<details class="cx-more no-bubble" id="more" hidden>
+  <summary>More: something to watch, listen to and read</summary>
+  <div class="cx-more-body"></div>
+</details>
 </main>
+<script>
+/* The extras the site adds at the end of a reading page (the cartoon, a tip, the package note, the
+   music break and an outside article) are folded into one "More" box here, so the useful part
+   stays short. Nothing is removed, and nothing is stored or sent. */
+(function () {
+  'use strict';
+  var main = document.querySelector('main'), box = document.getElementById('more');
+  if (!main || !box) return;
+  var body = box.querySelector('.cx-more-body');
+  var SEL = '.tol-fbs-wrap, .tol-tip, .tol-fp-note, .bkb, .tol-read-host';
+  function sweep() {
+    Array.prototype.slice.call(main.children).forEach(function (n) {
+      if (n !== box && n.matches && n.matches(SEL)) { body.appendChild(n); box.hidden = false; }
+    });
+  }
+  sweep();
+  if (!window.MutationObserver) return;
+  var mo = new MutationObserver(sweep);
+  mo.observe(main, { childList: true });
+  setTimeout(function () { mo.disconnect(); }, 20000);
+})();
+</script>
 </body>
 </html>

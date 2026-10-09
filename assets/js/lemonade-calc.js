@@ -282,7 +282,8 @@
     return 'Waiting for ' + joinNames(named.map(function (x) { return x + '’s'; })) + (named.length === 1 ? ' side' : ' sides') + '. Send ' + joinNames(named) + ' your side ' + see + '.' + kidsNote;
   }
   // Two people say "my partner"; three or more say "the others", "someone's", "any of you"
-  function many() { return state.people.length > 2; }
+  // (a preview of a link with three or more people counts too, before it's added)
+  function many() { return state.people.length > 2 || !!(pending && pending.d && pending.d.people.length > 2); }
   var W = {
     send: function () { return many() ? 'Send my side to the others' : 'Send my side to my partner'; },
     add: function () { return many() ? 'Add someone’s side' : 'Add my partner’s side'; },
@@ -300,7 +301,30 @@
     set('how-send-t', 'On ' + (many() ? 'more than one phone' : 'two phones') + ', tap “' + W.send() + '” on one and “' + W.add() + '” on the other.');
   }
   // "Kai’s side", or "their side" when it doesn't say who sent it
-  function sideOf(d) { return d && d.by ? d.by + '’s side' : many() || (d && d.people.length > 2) ? 'their side' : 'your partner’s side'; }
+  function sideOf(d) {
+    var ins = d ? sidesIn(d) : [];
+    if (ins.length > 1) return ins.length === d.people.length ? 'everyone’s sides' : joinNames(ins.map(function (p) { return p + '’s'; })) + ' sides';
+    return d && d.by ? d.by + '’s side' : many() || (d && d.people.length > 2) ? 'their side' : 'your partner’s side';
+  }
+  // the people whose numbers a side carries (a planner's link can hold everyone's)
+  function sidesIn(d) {
+    var has = {};
+    d.jobs.concat(d.bills).forEach(function (l) { Object.keys(l.v || {}).concat(Object.keys(l.t || {})).forEach(function (k) { has[k] = 1; }); });
+    return d.people.filter(function (p) { return has[low(p)]; });
+  }
+  // "Lucas sent you their side." / "Alex sent everyone’s sides." / "Alex sent everyone the full picture: …"
+  function sentLine(d) {
+    var ins = sidesIn(d), all = ins.length > 1 && ins.length === d.people.length, own = d.own && d.own.length ? ' and the fridge list' : '';
+    if (d.full) return (d.by ? d.by + ' sent everyone the full picture: ' : 'Here’s the full picture: ') + (ins.length > 1 ? (all ? 'everyone’s sides' : joinNames(ins.map(function (p) { return p + '’s'; })) + ' sides') : 'the stand') + own + '.';
+    if (ins.length > 1) return (d.by ? d.by + ' sent ' : 'Here are ') + (all ? 'everyone’s sides' : joinNames(ins.map(function (p) { return d.by && low(p) === low(d.by) ? 'their own' : p + '’s'; })) + ' sides') + own + '.';
+    return d.by ? d.by + ' sent you their side' + own + '.' : 'Here’s the side that was sent to you.';
+  }
+  // a short Spanish line on the share text and the preview, for a browser set to Spanish
+  var ES = (function () { try { return /^es\b/i.test(navigator.language || ''); } catch (e) { return false; } })();
+  function esLine(d) {
+    var many0 = sidesIn(d).length > 1;
+    return (d.by ? d.by + (many0 ? ' te envió las partes de todos.' : ' te envió su parte.') : (many0 ? 'Te enviaron las partes de todos.' : 'Te enviaron una parte.')) + ' Toca «Add to my stand» para añadirla. «Not now» es «ahora no».';
+  }
   function status(msg) { var s = $('ls-status'); if (s) { s.textContent = msg; clearTimeout(status.t); status.t = setTimeout(function () { s.textContent = ''; }, 4000); } }
   function solo() { return mode === 'solo'; }
   function visiblePeople() { return solo() ? [0] : state.people.map(function (_, i) { return i; }); }
@@ -392,6 +416,7 @@
     state.asPick = !!state.asPick;
     state.compact = !!state.compact;
     state.workNo = !!state.workNo;
+    state.planning = !!state.planning;
     if (state.path !== 'fridge' && state.path !== 'count' && state.path !== 'money') delete state.path;
     if (!state.goal || typeof state.goal !== 'object') state.goal = { a: '', f: '' };
     state.goal = { a: String(state.goal.a == null ? '' : state.goal.a).slice(0, 12), f: String(state.goal.f || '').slice(0, 40) };
@@ -1600,12 +1625,30 @@
     var shared = byKind('shared'), own = byKind('own'), set = byKind('agreed'), saving = byKind('savings'), inc = byKind('income');
     var costs = real.filter(function (b) { return b.kind !== 'income'; });
     var used = COST_KINDS.filter(function (k) { return byKind(k).length; });
-    var out = [], wait = waitingFor('bills');
-    // 1. each person's total, family support and savings included
+    var out = [], wait = state.planning ? [] : waitingFor('bills');
+    // Planning, not settling up: nothing's been paid yet, so no "paid", "over" or "owes", just what each person
+    // puts in under the split ("Sophie puts in $1,196 a month")
+    if (state.planning && costs.length) {
+      var pS = sum(shared.map(billTotal)), ptg = target(), pfb = !!ptg.error; if (pfb) ptg = evenTarget();
+      var putIn = function (tt) { return state.people.map(function (_, i) { return tt.t[i] * pS + sum(costs.filter(function (b) { return b.kind !== 'shared'; }).map(function (b) { return num(b.v[i]); })); }); };
+      var pIn = putIn(ptg), sayIn = function (arr) { return joinNames(state.people.map(function (_, i) { return (i ? nameOf(i) + ' ' : nameOf(i) + ' puts in ') + cash(arr[i]); })) + ' a month'; };
+      var pl = 'We’re planning, not settling up. ' + sayIn(pIn) + (pS > 0 ? ' (shared bills ' + cash(pS) + ', ' + (ptg.mode === 'agreed' ? 'split by the ' + splitShort(ptg.t) + ' you ' + agreedWord() : ptg.mode === 'part' ? 'split by the nights each person is here' : 'split evenly') + ')' : '') + '.';
+      var pIs = ptg.mode === 'even' && !state.agreed.on ? incomeSplit() : null;
+      if (pIs && pS > 0) pl += ' Split by income (' + splitShort(pIs.p.map(function (x) { return x / 100; })) + ') instead: ' + sayIn(putIn({ t: pIs.p.map(function (x) { return x / 100; }) })) + '. Pick whichever feels fair to you.';
+      if (pfb) pl += ' (The split you set doesn’t add up to 100% yet, so this uses an even split.)';
+      out.push(pl);
+      var incP = sum(inc.map(billTotal));
+      if (incP > 0) out.push('Coming in: ' + cash(incP) + '. After the plan: ' + (incP - sum(costs.map(billTotal)) >= -0.005 ? cash(Math.max(0, incP - sum(costs.map(billTotal)))) + ' left.' : cash(sum(costs.map(billTotal)) - incP) + ' more going out than coming in.'));
+      if (set.length) out.push('Family support and other agreed amounts, not split: ' + set.map(function (b) { return billName(b) + ' (' + cash(billTotal(b)) + ')'; }).join('; ') + '.');
+      if (saving.length) out.push('Savings, kept and never owed between you: ' + saving.map(function (b) { return billName(b) + ' (' + cash(billTotal(b)) + ')'; }).join('; ') + '.');
+      return out.join('\n');
+    }
+    // 1. each person's total, family support and savings included (a side still to come: "pending", never 0)
     if (costs.length) {
       out.push('Each person’s total: ' + state.people.map(function (_, i) {
         var tot = sum(costs.map(function (b) { return num(b.v[i]); }));
         var parts = used.map(function (k) { var x = sum(byKind(k).map(function (b) { return num(b.v[i]); })); return x > 0 ? KIND_WORD[k] + ' ' + cash(x) : ''; }).filter(Boolean);
+        if (wait.indexOf(i) >= 0) return nameOf(i) + ' pending';
         return nameOf(i) + ' ' + cash(tot) + (used.length > 1 && parts.length ? ' (' + parts.join(', ') + ')' : '');
       }).join('; ') + '.');
     }
@@ -1889,7 +1932,7 @@
     if (sum(work) > 0) {
       ctx.push('Paid work and school, kept out of the split: ' + wl(work) + '.' + (differ && !state.agreed.on ? ' These differ quite a bit, so a split you set together may be fairer than an even one, as Chapter II says.' : ''));
       var nl = nightLine(); if (nl) ctx.push(nl);
-      if (whole && !wwOn) ctx.push(whole);
+      if (whole && !wwOn && !wait.length) ctx.push(whole);
     }
     if (sum(pers) > 0) ctx.push('Each person’s own family and personal time, counted on its own and not in the split: ' + wl(pers) + '.');
     if (sum(rest) > 0) ctx.push('Rest and recharging logged: ' + wl(rest) + '.' + (pacingIn() ? ' Pacing and symptom rest is how an illness is managed: needed, not idle time.' : ''));
@@ -2308,7 +2351,7 @@
     var list = ownersList(), k = -1;
     list.forEach(function (o, i) { if (o.name.trim().toLowerCase() === nm.trim().toLowerCase()) k = i; });
     if (k >= 0) { list.splice(k, 1); status('Took “' + nm + '” off the list.'); }
-    else if (list.length >= MAX_OWN) { status('Five is plenty for one fridge list. Take one off first.'); return; }
+    else if (list.length >= MAX_OWN) { status('That’s five, the most for one list. Swap one out to add another.'); return; }
     else { list.push({ name: nm, who: -1 }); status('Added “' + nm + '”. Now tap who owns it.'); }
     renderOwners(); save();
   }
@@ -2336,8 +2379,33 @@
       li.appendChild(h); li.appendChild(g); li.appendChild(rm);
       ol.appendChild(li);
     });
+    // at five: say so where the box was, never just hide it
     $('own-add').hidden = list.length >= MAX_OWN;
+    var full = $('own-full'); if (full) full.hidden = list.length < MAX_OWN;
+    renderOwnNames();
     var fl = $('fridge'); if (fl) fl.textContent = fridgeText();
+    renderKeepAsk();
+  }
+  // No names yet (still "Me" and "Them"): ask for them right above the list, so the chips and the copied list
+  // say who owns what. The boxes are the same names as at the top of the stand.
+  function renderOwnNames() {
+    var box = $('own-names'), row = $('own-names-row'); if (!box || !row || solo()) { if (box) box.hidden = true; return; }
+    var ask = ownersList().length > 0 && state.people.some(function (p) { return placeholder(p); });
+    if (!ask && !box.contains(document.activeElement)) { box.hidden = true; return; }
+    box.hidden = false;
+    if (row.children.length === state.people.length && box.contains(document.activeElement)) return;
+    row.innerHTML = '';
+    state.people.forEach(function (p, i) {
+      var l = document.createElement('label'); var sp = document.createElement('span'); sp.textContent = 'Person ' + (i + 1) + '’s name';
+      var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.autocomplete = 'off'; inp.value = placeholder(p) ? '' : p;
+      inp.placeholder = i === 0 ? 'Your name' : i === 1 ? 'Their name' : 'Name';
+      inp.addEventListener('input', function () {
+        state.people[i] = inp.value.trim() ? inp.value : (i === 0 ? 'Me' : i === 1 ? 'Them' : '');
+        var top = peopleEl.querySelectorAll('input')[i]; if (top) top.value = state.people[i];
+        relabel(); recalc();
+      });
+      l.appendChild(sp); l.appendChild(inp); row.appendChild(l);
+    });
   }
   function fridgeText() {
     var list = ownersList();
@@ -2379,6 +2447,7 @@
     normalize();
     renderPeople(); renderAsRow(); renderMeRow(); renderPartRow(); renderRows(); renderGlasses(); renderLibTasks(); renderAgreed(); renderCur(); renderWords();
     $('checked-on').checked = !!state.checked;
+    if ($('planning-on')) $('planning-on').checked = !!state.planning;
     $('example-note').hidden = !anyExample();
     renderOwners();
     recalc();
@@ -2400,6 +2469,7 @@
     lines.push('- Home and life jobs: ' + hrs(s.doing));
     lines.push('- The thinking part (noticing, planning, remembering): ' + hrs(s.think));
     if (s.work > 0) lines.push('- Work and school: ' + hrs(s.work));
+    var snl = nightLine(); if (snl) lines.push('- ' + snl.replace(/^Night work, counted as part of the work week \(not rest\): You: /, 'Of that, night work: '));
     lines.push('- Rest and recharging: ' + hrs(s.rest));
     lines.push('', stretchRead(s).t);
     var tc = topCats(5);
@@ -2616,7 +2686,8 @@
   $('own-copy').addEventListener('click', function () {
     var t = fridgeText();
     if (!t) { status('Pick a job or two first.'); return; }
-    copyText(t).then(function (ok) { status(ok ? 'Copied. Paste it into your group chat, or print it for the fridge.' : 'Couldn’t copy here. Try selecting the text by hand.'); });
+    var noNames = state.people.some(function (p) { return placeholder(p); });
+    copyText(t).then(function (ok) { status(ok ? 'Copied. Paste it into your group chat, or print it for the fridge.' + (noNames ? ' Tip: type your names above the list, so it says who owns what.' : '') : 'Couldn’t copy here. Try selecting the text by hand.'); });
   });
   $('own-print').addEventListener('click', function () {
     if (!fridgeText()) { status('Pick a job or two first.'); return; }
@@ -2629,12 +2700,13 @@
 
   $('add-person').addEventListener('click', addPerson);
   $('add-row').addEventListener('click', function () {
-    // the area you were looking at in the library, if you picked one; otherwise a guess from the name you type
-    var cat = libTouched && CAT[libCat] ? libCat : 'other';
-    state.jobs.push({ name: '', v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: 'week', unit: 'm', nm: zeros(), custom: true });
+    // always "Other jobs" to start (never the library tab that happened to be open), then a guess from the name
+    // you type, and the "Area" choice is right on the row (not folded away on a phone)
+    var cat = 'other';
+    state.jobs.push({ name: '', v: state.people.map(function () { return 0; }), t: state.people.map(function () { return 0; }), cat: cat, freq: 'week', unit: 'm', nm: zeros(), custom: true, expanded: true });
     renderRows(); recalc();
     var r = rowFor(state.jobs[state.jobs.length - 1]); var t = r && r.querySelector('textarea'); if (t) t.focus();
-    status('Added a blank job under ' + CAT[cat].n + '. Type its name, then the time, and pick its area if it’s not right.');
+    status('Added a blank job under Other jobs. Type its name and time, then pick its area (like Rest, or Work & school) if another fits better.');
   });
   $('add-bill').addEventListener('click', function () {
     state.bills.push({ name: '', v: state.people.map(function () { return 0; }), kind: 'shared', who: -1 });
@@ -2863,12 +2935,16 @@
     var idx = state.people.map(function (_, i) { return i; }).filter(function (i) { return !placeholder(state.people[i]) || hasData(i); });
     if (idx.some(function (i) { return placeholder(state.people[i]); })) return { error: 'Give everyone a name first (tap a name above), so the other device knows whose times are whose.' };
     if (!idx.length) return { error: 'Type your names first (tap a name above), then send your side.' };
-    if (!realJobs().length && !realBills().length) return { error: 'Add a job or a bill first. The grey example is never sent.' };
+    if (!realJobs().length && !realBills().length && !ownersList().length) return { error: 'Add a job, a bill or a fridge-list job first. The grey example is never sent.' };
+    // a line with time on it but no name would arrive as "a line with no name": ask for its name first
+    var noName = realJobs().filter(function (j) { return !j.name.trim(); }).length + realBills().filter(function (b) { return !b.name.trim(); }).length;
+    if (noName) return { error: (noName === 1 ? 'One line has' : noName + ' lines have') + ' a time or an amount but no name yet. Type what ' + (noName === 1 ? 'it is' : 'each one is') + ' (like “Dishes”), so the other device knows which job it is.', noName: true };
     function nm(i) { return state.people[i].trim(); }
     function byName(f) { var o = {}, any = false; idx.forEach(function (i) { var v = f(i); if (v) { o[nm(i)] = v; any = true; } }); return any ? o : null; }
     var d = { app: 'lemonade', v: 1, people: idx.map(nm) };
     if (state.me >= 0 && !placeholder(state.people[state.me])) d.by = nm(state.me);
     if (state.curSet || state.cur !== '$') d.cur = state.cur;
+    if (state.planning) d.plan = 1;
     var half = idx.filter(function (i) { return state.part[i] === 0.5; }).map(nm); if (half.length) d.half = half;
     var pn = byName(function (i) { return state.part[i] < 1 && state.part[i] !== 0.5 ? nightsOf(i) : 0; }); if (pn) d.pn = pn;
     var kids = idx.filter(function (i) { return state.kid[i]; }).map(nm); if (kids.length) d.kids = kids;
@@ -2876,7 +2952,8 @@
     d.jobs = realJobs().map(function (j) {
       // defaults are left out (the reader fills them back in): each week, minutes, the area the name suggests
       var o = { n: j.name.trim() };
-      if (j.cat !== guessCat(o.n)) o.c = j.cat;
+      // work and rest always say so (another page may guess "Night shift" as a home job)
+      if (j.cat !== guessCat(o.n) || (CAT[j.cat] || CAT.other).k !== 'home') o.c = j.cat;
       if (j.freq !== 'week') o.f = j.freq;
       // each person's own "how often", where it differs from the job's
       if (j.fq) { var fq = byName(function (i) { return j.fq[i] !== j.freq ? j.fq[i] : ''; }); if (fq) o.fq = fq; }
@@ -2965,7 +3042,7 @@
     }
     return { by: clean(raw.by), cur: clean(raw.cur, 4), people: people, half: (Array.isArray(raw.half) ? raw.half : []).map(low),
       pn: raw.pn && typeof raw.pn === 'object' ? vals(raw.pn, 13) : null, kids: (Array.isArray(raw.kids) ? raw.kids : []).map(low),
-      agreed: raw.agreed && typeof raw.agreed === 'object' ? vals(raw.agreed, 100) : null, asrc: SPLIT_SRC[raw.asrc] ? raw.asrc : '', jobs: jobs, bills: bills, own: own, household: !!raw.household };
+      plan: !!raw.plan, full: !!raw.full, agreed: raw.agreed && typeof raw.agreed === 'object' ? vals(raw.agreed, 100) : null, asrc: SPLIT_SRC[raw.asrc] ? raw.asrc : '', jobs: jobs, bills: bills, own: own, household: !!raw.household };
   }
   // "Call my mum" as Amara's line: "Call Amara’s mum". Library tasks keep their names (their columns
   // already say whose time it is, and both phones' times belong on the one line).
@@ -3115,12 +3192,18 @@
         out.both++;
       }
     });
-    // a split from the other phone is offered ("Ben suggests 71/29. Use it?"), never switched on by itself
+    // The split set on the other device travels with it, so both devices show the same "who puts in what".
+    // With no split set here, it's used at once (and said so); a different split already set here is never
+    // replaced on its own: that one is offered ("Ben suggests 71/29. Use it?").
     if (d.agreed) {
       var ag = state.people.map(function (p) { return d.agreed[low(p)] || 0; });
       var same = state.agreed.on && ag.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.5; });
-      if (Math.abs(sum(ag) - 100) <= 0.5 && !same) { state.agreedOffer = { by: d.by || '', p: ag.map(String) }; if (d.asrc) state.agreedOffer.src = d.asrc; out.offer = true; }
+      if (Math.abs(sum(ag) - 100) <= 0.5 && !same) {
+        if (!state.agreed.on) { state.agreed.on = true; state.agreed.p = ag.map(String); if (d.asrc) state.agreed.src = d.asrc; else delete state.agreed.src; delete state.agreedOffer; out.split = splitShort(ag.map(function (x) { return x / 100; })); }
+        else { state.agreedOffer = { by: d.by || '', p: ag.map(String) }; if (d.asrc) state.agreedOffer.src = d.asrc; out.offer = true; }
+      }
     }
+    if (d.plan && !state.planning) { state.planning = true; out.plan = true; }
     // nights here and children: for people new here, and for people already here where this device hasn't set them
     d.people.forEach(function (nm) {
       var li = map[low(nm)]; if (li == null || li >= state.people.length) return;
@@ -3136,8 +3219,8 @@
     if (d.cur && !state.curSet && d.cur !== state.cur) { state.cur = d.cur; state.curSet = true; out.cur = d.cur; }
     d.own.forEach(function (o) {
       var have = ownersList().filter(function (x) { return sameLine(x.name, o.n, plan.meName); })[0], w = o.w && map[o.w] != null ? map[o.w] : -1;
-      if (have) { if (have.who < 0 && w >= 0) have.who = w; }
-      else if (state.owners.length < MAX_OWN) state.owners.push({ name: o.n, who: w });
+      if (have) { if (have.who < 0 && w >= 0) { have.who = w; out.own = (out.own || 0) + 1; } }
+      else if (state.owners.length < MAX_OWN) { state.owners.push({ name: o.n, who: w }); out.own = (out.own || 0) + 1; }
     });
     state.example = false; state.checked = false;
     renderAll();
@@ -3148,6 +3231,9 @@
     if (out.filled) bits.push('filled in ' + out.filled + ' line' + (out.filled === 1 ? '' : 's') + ' that were blank here');
     if (out.theirs) bits.push('used their numbers on ' + out.theirs);
     if (out.both) bits.push('kept both on ' + out.both + ' (marked “from ' + fromWord(d) + '”)');
+    if (out.own) bits.push(out.own + ' fridge-list job' + (out.own === 1 ? '' : 's') + ' with ' + (out.own === 1 ? 'its owner' : 'their owners'));
+    if (out.split) bits.push('the split set on ' + fromWord(d) + ' (' + out.split + '), so you both see the same “who puts in what”');
+    if (out.plan) bits.push('“We’re planning, not settling up”, as on their device');
     return (bits.length ? 'Done: ' + bits.join(', ') + '.' : 'Everything from ' + fromWord(d) + ' was already here.') +
       (out.offer && state.agreedOffer ? ' ' + offerWords(state.agreedOffer) + ' “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their device.' : '') +
       (plan.skip.length ? ' There was no room for ' + joinNames(plan.skip) + ' (eight people is the most).' : '') +
@@ -3191,7 +3277,7 @@
     var d = sideData(), code = $('send-code'), acts = $('send-acts'), who = $('send-who');
     who.hidden = state.me >= 0;
     if (!who.hidden) who.textContent = 'Tip: tap your own name under “Who’s filling in on this device?”, so the code and the file carry your name.';
-    if (d.error) { code.value = ''; code.hidden = true; acts.hidden = true; $('send-msg').textContent = d.error; return; }
+    if (d.error) { code.value = ''; code.hidden = true; acts.hidden = true; $('send-msg').textContent = d.error; renderFull(); return; }
     $('send-msg').textContent = '';
     var json = JSON.stringify(d);
     code.value = SIDE + b64enc(json); code.hidden = false; acts.hidden = false;
@@ -3200,8 +3286,28 @@
       sendLink = { json: json, url: '', who: d.by || '' };
       packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); }, function () {});
     }
+    renderFull();
   }
-  var sendLink = { json: '', url: '', who: '' };
+  var sendLink = { json: '', url: '', who: '' }, fullLink = { json: '', url: '' };
+  // "Send everyone the full picture" (three or more): every side on this device plus the fridge list, in one link
+  function fullData() { var d = sideData(); if (d.error) return d; d.full = 1; return d; }
+  function renderFull() {
+    var b = $('send-full'); if (!b) return;
+    var d = sideData(), on = !d.error && state.people.length > 2 && (sidesIn(readSide(JSON.stringify(d)) || { people: [], jobs: [], bills: [] }).length > 1);
+    b.hidden = !on; var t = $('send-full-t'); if (t) t.hidden = !on;
+    if (!on) return;
+    var json = JSON.stringify(fullData());
+    if (fullLink.json !== json) { fullLink = { json: json, url: '' }; packSide(json).then(function (pk) { if (fullLink.json === json) fullLink.url = sideLink(pk); }, function () {}); }
+  }
+  if ($('send-full')) $('send-full').addEventListener('click', function () {
+    var d = fullData(); if (d.error) { sideStatus('send-msg', d.error); return; }
+    var json = JSON.stringify(d), url = fullLink.json === json && fullLink.url ? fullLink.url : sideLink('j' + b64url(new TextEncoder().encode(json)));
+    var line = 'Here’s everyone’s side of our Lemonade Stand' + (d.own ? ', plus the fridge list' : '') + '. Tap to see the full picture (a preview comes first, and nothing is uploaded)';
+    if (ES) line += '. Aquí están las partes de todos. Toca el enlace y luego «Add to my stand».';
+    if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
+    else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
+    else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Copied the full-picture link. Paste it into your group chat.' : 'Couldn’t share here.'); });
+  });
   function toggleBox(btn, box, other, otherBtn) {
     var open = box.hidden;
     box.hidden = !open; btn.setAttribute('aria-expanded', String(open));
@@ -3226,6 +3332,7 @@
     // one short line and a link: the side rides after the "#", so it's never uploaded anywhere
     var url = sendLink.url || sideLink('j' + b64url(new TextEncoder().encode(sendLink.json)));
     var line = 'Tap to add ' + (sendLink.who ? sendLink.who + '’s' : 'my') + ' side to your Lemonade Stand';
+    if (ES) line += '. ' + (sendLink.who ? sendLink.who + ' te envió su parte.' : 'Te envié mi parte.') + ' Toca el enlace y luego «Add to my stand» para añadirla.';
     if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
     else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
     else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Sharing isn’t available here, so the link is copied. Paste it into a message.' : 'Couldn’t share here. Open “Other ways” and copy the code.'); });
@@ -3272,11 +3379,12 @@
     if (same.length) li.push('Already the same here: ' + same.length + '.');
     if (plan.skip.length) li.push('No room for ' + joinNames(plan.skip) + ' (eight people is the most).');
     if (d.household) li.push('This is a household names code: names and jobs only, with no times.');
+    if (!d.household && d.own.length) li.push('Fridge list: ' + d.own.length + ' job' + (d.own.length === 1 ? '' : 's') + (d.own.some(function (o) { return o.w; }) ? ', with ' + (d.own.filter(function (o) { return o.w; }).length === d.own.length ? 'an owner each' : 'owners where they’re picked') : '') + ' (' + d.own.slice(0, 3).map(function (o) { return o.n; }).join(', ') + (d.own.length > 3 ? ' and more' : '') + ').');
     var fromLink = kindSaid === 'link';
     var said = d.household ? 'Recognised: a household names code (names and jobs, no times).' : fromLink ? '' : kindSaid === 'pasted-link' ? 'Recognised: ' + sideOf(d) + ' (a link).' : (/LEMON1:/i.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a code).' : /^\s*\{/.test(String(text)) ? 'Recognised: ' + sideOf(d) + ' (a file).' : '');
     // opened from a link: just the preview and "Add to my stand" (the paste box steps aside; nothing to warn about)
     var paste = $('add-paste'); if (paste) paste.hidden = fromLink;
-    if (fromLink) note = (d.by ? d.by + ' sent you their side.' : 'Here’s the side that was sent to you.') + ' Look it over below, then tap “Add to my stand”.' + (typeof note === 'string' && /still here/.test(note) ? ' (It isn’t added yet.)' : '');
+    if (fromLink) note = sentLine(d) + ' Look it over below, then tap “Add to my stand”.' + (typeof note === 'string' && /still here/.test(note) ? ' (It isn’t added yet.)' : '');
     var html = (said ? '<p class="ls-mini ls-recog">' + esc(said) + '</p>' : '') +
       (!d.household && tabStart === 'kept' && realJobs().length ? '<p class="ls-mini">Your stand kept on this device is here, so their side is added to it.</p>' : '') +
       '<p class="ls-mini-p"><strong>From ' + esc(fromWord(d)) + ':</strong> ' + esc(joinNames(d.people)) + ' · ' + d.jobs.length + ' job' + (d.jobs.length === 1 ? '' : 's') + ', ' + d.bills.length + ' bill' + (d.bills.length === 1 ? '' : 's') + '.</p>' +
@@ -3291,8 +3399,10 @@
             '</div></li>';
         }).join('') + '</ol>';
     }
-    html += '<div class="ls-tools"><button type="button" id="add-go">Add to my stand</button><button type="button" id="add-cancel">Not now</button></div>';
+    if (ES && !d.household) html += '<p class="ls-mini" lang="es">' + esc(esLine(d)) + '</p>';
+    html += '<div class="ls-tools"><button type="button" id="add-go">Add to my stand' + (ES ? ' <span lang="es">(Añadir)</span>' : '') + '</button><button type="button" id="add-cancel">Not now' + (ES ? ' <span lang="es">(Ahora no)</span>' : '') + '</button></div>';
     box.innerHTML = html;
+    renderWords();
     box._conf = conf;
     var go = $('add-go'); if (go && !conf.length) go.focus({ preventScroll: !!note });
     if (note) sideStatus('add-msg', note);
@@ -3314,8 +3424,9 @@
       c.parentNode.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(b === c)); });
       return;
     }
-    if (e.target.id === 'add-cancel') { pending = null; dropPending(); box.innerHTML = ''; $('add-paste').hidden = false; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
-    if (e.target.id === 'add-go' && pending) {
+    var tb = e.target.closest('button'), tid = tb ? tb.id : '';
+    if (tid === 'add-cancel') { pending = null; renderWords(); dropPending(); box.innerHTML = ''; $('add-paste').hidden = false; sideStatus('add-msg', 'Nothing was added.'); $('add-code').focus(); return; }
+    if (tid === 'add-go' && pending) {
       var plan = pending, msg = applySide(plan); pending = null; dropPending();
       box.innerHTML = ''; $('add-code').value = ''; $('add-paste').hidden = false;
       sideStatus('add-msg', msg + afterAdd(plan));
@@ -3556,12 +3667,13 @@
   function keepDismissed() { try { return sessionStorage.getItem(KEEP_NO) === '1'; } catch (e) { return false; } }
   function storageOk() { try { localStorage.setItem('tol-lemonade-test', '1'); localStorage.removeItem('tol-lemonade-test'); return true; } catch (e) { return false; } }
   // something worth keeping: a job or a bill, or in "Me and others" the names typed on this device
-  function entered() { return !!state && (realJobs().some(function (j) { return j.v.some(function (x) { return num(x) > 0; }) || j.name.trim(); }) || realBills().length > 0 ||
+  function entered() { return !!state && (realJobs().some(function (j) { return j.v.some(function (x) { return num(x) > 0; }) || j.name.trim(); }) || realBills().length > 0 || ownersList().length > 0 ||
     (!solo() && !state.example && state.people.filter(function (p) { return !placeholder(p); }).length >= 2)); }
   // Only one "Keep this?" at a time: the one nearest what the person is doing (the sending and adding of
   // sides near the names, or the result). Just me has its own, under its ledger.
   var keepZone = 'res';
   function keepBoxFor() {
+    if (keepZone === 'own') return $('keepask-own');
     if (solo()) return $('keepask-solo');
     var sendOpen = !$('send-box').hidden || !$('add-box').hidden;
     return $(sendOpen || keepZone === 'sides' ? 'keepask-sides' : 'keepask-res');
@@ -3588,7 +3700,7 @@
   }
   // which part of the stand the person is in, for the one "Keep this?" box
   document.addEventListener('focusin', function (e) {
-    var z = e.target.closest && (e.target.closest('#sides, .ls-me, #people') ? 'sides' : e.target.closest('#rows, #money-rows, #group-results, #lib') ? 'res' : '');
+    var z = e.target.closest && (e.target.closest('#sides, .ls-me, #people') ? 'sides' : e.target.closest('#owners') ? 'own' : e.target.closest('#rows, #money-rows, #group-results, #lib') ? 'res' : '');
     if (z && z !== keepZone) { keepZone = z; renderKeepAsk(); }
   });
   function keepOn() {
@@ -3616,7 +3728,7 @@
     var d = sideData(), msg = $('suite-msg');
     if (d.error) { if (msg) { msg.textContent = ''; setTimeout(function () { msg.textContent = d.error; }, 30); } return; }
     var code = SIDE + b64enc(JSON.stringify(d));
-    save();
+    save(); leavingInside = true;
     location.href = '/workpapers/fill/suite.html#stand=' + code;
   }
   if ($('to-suite')) $('to-suite').addEventListener('click', suiteGo);
@@ -3626,7 +3738,10 @@
   function placeMoreOpts() {
     if (!moreBox || !moreBody) return;
     if (!moved.length) {
-      [document.querySelector('#group-results .ls-agreed-top'), document.querySelector('main > .try-this')].forEach(function (el) {
+      // on a phone the result ends at the split and "Copy the result": the split you choose, how to use it,
+      // week by week and how the words are chosen all sit behind this one "More options"
+      [document.querySelector('#group-results .ls-agreed-top'), document.querySelector('main > .try-this'), $('r-trend') && $('r-trend').closest('.ls-res'),
+        document.querySelector('#ls-body > details.ls-how:not(.ls-data)')].forEach(function (el) {
         if (!el) return; var mark = document.createComment('more-opts'); el.parentNode.insertBefore(mark, el); moved.push({ el: el, mark: mark });
       });
     }
@@ -3790,6 +3905,11 @@
       var tg = target(); if (tg.error) tg = evenTarget();
       lines.push('', 'Shared bills come to ' + cash(st) + (tg.mode === 'even' ? ', about ' + cash(st / state.people.length) + ' each if we split them evenly.' : ', split by the shares we set: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(tg.t[i] * st); }).join(', ') + '.'));
     }
+    // the thinking and emotional work too, not only the hours you can see
+    var inv = anyBad(state.jobs) ? [] : peopleTotals('home', invH), wt = anyBad(state.jobs) ? [] : waitingFor();
+    if (sum(inv) > 0) lines.push('', 'Thinking and emotional work (noticing, planning, remembering): ' + state.people.map(function (_, i) { return wt.indexOf(i) >= 0 ? nameOf(i) + ' pending' : nameOf(i) + ' ' + hrs(inv[i]); }).join(', ') + '.');
+    var nl = nightLine(); if (nl) lines.push(nl);
+    if (ownersList().length) { lines.push('', 'Who owns what (our fridge list):'); ownersList().forEach(function (o) { lines.push('- ' + o.name + ': ' + (o.who >= 0 ? nameOf(o.who) : 'no owner yet')); }); }
     var url = chatUrl();
     if (url) lines.push('', 'Add your side here (it shows a preview first, and nothing is uploaded):', url);
     lines.push('', 'Made with the Lemonade Stand at Spread Love & Acceptance.');
@@ -3860,6 +3980,14 @@
   });
   // "Compare with 65/35 from your paid hours?" and "Count it once"
   if ($('work-offer-use')) $('work-offer-use').addEventListener('click', function () {
+    // "Is either of you ill, disabled, caring or recovering?": straight to setting the split together
+    if ($('work-offer').getAttribute('data-kind') === 'ask') {
+      state.workNo = true; openMoreOpts();
+      var ao = $('agreed-on'); if (ao && !ao.checked) { ao.checked = true; ao.dispatchEvent(new Event('change')); } else recalc();
+      var f = document.querySelector('#agreed-pcts input'); if (f) { f.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }); }
+      status('Type the split you agree on together, like 70/30. What each of you can do, on good days and bad, is what counts.');
+      return;
+    }
     var sg = suggestSplit(); if (!sg) return;
     useSuggestion(sg, suggestWhy(sg), 'work');
     var bl = $('balance-line'); if (bl) { bl.setAttribute('tabindex', '-1'); bl.focus({ preventScroll: true }); }
@@ -3870,6 +3998,36 @@
     var bl = $('balance-line'); if (bl) { bl.setAttribute('tabindex', '-1'); bl.focus({ preventScroll: true }); }
   });
   document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('[data-dbl-fix]')) dblFix(); });
+  // "Sam takes paying bills": onto the fridge list with Sam as its owner
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-take]'); if (!b) return;
+    var i = +b.getAttribute('data-take'), nm = b.getAttribute('data-take-n'), list = ownersList();
+    var have = list.filter(function (o) { return low(o.name) === low(nm); })[0];
+    if (have) have.who = i;
+    else if (list.length >= MAX_OWN) { status('The fridge list has five jobs already. Swap one out to add “' + nm + '”.'); return; }
+    else list.push({ name: nm, who: i });
+    renderOwners(); save();
+    status(nameOf(i) + ' owns “' + nm + '” on the fridge list below, the remembering included.');
+  });
+  // "We're planning, not settling up"
+  if ($('planning-on')) $('planning-on').addEventListener('change', function (e) {
+    state.planning = e.target.checked; relabel(); recalc();
+    status(state.planning ? 'Planning: the summary says what each of you puts in, with no “paid” or “owes”.' : 'Settling up: the summary says who paid what, and who owes whom.');
+  });
+  // Nothing typed is ever sent anywhere, but a tab closed before "Keep it" loses the stand: say so first. The draft
+  // stays in this tab on its own (Back, a reload, or a link to another page here keeps it), so a link inside the site
+  // never asks.
+  var leavingInside = false;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+    try { var u = new URL(a.href, location.href); if (u.origin === location.origin && !a.target) leavingInside = true; setTimeout(function () { leavingInside = false; }, 1500); } catch (err) {}
+  });
+  window.addEventListener('beforeunload', function (e) {
+    save();
+    if (leavingInside || keep || !mode || !entered()) return;
+    e.preventDefault(); e.returnValue = 'Your stand is only in this tab. Keep it on this device first, under “Keep it”, or it’s gone when the tab closes.';
+    return e.returnValue;
+  });
 
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,

@@ -1355,6 +1355,34 @@
     return true;
   })();
 
+  // The cheering friends between the page's sections (cheer.js) share a "Did you know?" from the glossary. Here, the
+  // ones about one kind of wiring show only to people who picked that wiring (or "Not sure yet", which shows every type);
+  // anyone else gets a general tip about the Wave Code instead.
+  const WIRING_FACTS = { audhd: ['adhd', 'autistic'], adhd: ['adhd'], rsd: ['adhd'], autistic: ['autistic'], masking: ['autistic'], alexithymia: ['autistic'],
+    overload: ['autistic', 'sensitive'], gating: ['sensitive'], hsp: ['sensitive'], dyslexic: ['dyslexic'], dyspraxic: ['other'], tourette: ['other'], ocd: ['other'] };
+  const GENERAL_TIPS = [
+    'Most pairs differ on at least one or two of the four lines. Different letters mean different defaults, not a bad match.',
+    'Everyone uses both ends of each line sometimes. Your Wave Code shows what you lean toward, not what you can do.',
+    'Taking time before you answer a big question is a real answer, not avoidance. Saying “let me think and get back to you” helps.',
+    'Plain words and soft words can both carry care. Saying which one you need saves a lot of guessing.',
+    'A message often lands differently than it was meant. Asking “how did that sound to you?” is a quick way to check.'
+  ];
+  let tipAt = 0;
+  function fitsWiring(key) {
+    const w = WIRING_FACTS[key];
+    if (!w || S.nts.indexOf('unsure') >= 0) return true;
+    return key === 'audhd' ? w.every(id => S.nts.indexOf(id) >= 0) : w.some(id => S.nts.indexOf(id) >= 0);
+  }
+  function tidyTips() {
+    const host = root.closest('main') || document.body;
+    Array.prototype.forEach.call(host.querySelectorAll('.tol-cheer-line [data-cheer-dive]'), b => {
+      if (fitsWiring(b.getAttribute('data-cheer-dive'))) return;
+      const line = b.closest('.tol-cheer-line'); if (!line) return;
+      line.innerHTML = '<b><span aria-hidden="true">&#128161;</span> Did you know?</b> ' + esc(GENERAL_TIPS[tipAt++ % GENERAL_TIPS.length]);
+    });
+  }
+  if (window.MutationObserver) { try { new MutationObserver(tidyTips).observe(root.closest('main') || document.body, { childList: true, subtree: true }); } catch (e) {} }
+
   render();
   // a ?compare= link opens at "Compare with ...'s Wave Code", not at the top of the page (on a phone it's well down);
   // once more after fonts and images settle, unless the reader has already started scrolling

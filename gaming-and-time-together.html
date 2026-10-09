@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaming, Phones and Time Together</title>
+<meta name="description" content="Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening, and a time-together deal to fill in and share.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .pg-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pg-jump li{ margin:0 !important; max-width:none !important; }
+  .pg-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .pg-jump a:hover{ border-color:var(--credit); }
+  .pg-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .pg-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .pg-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .pg-links a:hover{ border-color:var(--credit); }
+  .pg-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .pg-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .pg-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .pg-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .pg-say p{ margin:.4rem 0 !important; font-style:italic; }
+  .pg-say p .pg-who{ font-style:normal; font-weight:600; }
+  .pg-say p.pg-plain{ font-style:normal; }
+  .pg-msg{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; }
+  .pg-msg q{ quotes:none; flex:1 1 14rem; }
+  .pg-copy{ font:600 .88rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.35rem .9rem; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; font-style:normal; }
+  .pg-copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read ol.pg-steps{ margin:.5rem 0 1rem !important; padding-left:1.3rem !important; }
+  .read ol.pg-steps li{ margin:.45rem 0 !important; }
+  .read #faq h3{ font-size:1.05rem; margin-top:1.4rem; }
+  .pg-fields{ display:grid; gap:.25rem; margin:.8rem 0 1rem; max-width:34rem; }
+  .pg-fields label{ font-weight:600; margin-top:.55rem; }
+  .pg-fields input{ font:inherit; min-height:44px; padding:.45rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); width:100%; max-width:100%; box-sizing:border-box; }
+  .pg-fields input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .pg-names{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+  .pg-names label{ display:block; }
+  .read p.pg-out-h{ margin:1rem 0 .3rem !important; font-weight:600; }
+  .pg-out{ white-space:pre-line; overflow-wrap:anywhere; padding:.8rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); line-height:1.55; }
+  .read p.pg-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 .2rem !important; }
+  .pg-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .pg-btn.is-quiet{ background:transparent; color:var(--ink); }
+  .pg-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read p.pg-status{ min-height:1.4em; margin:.3rem 0 .4rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .pg-from{ margin:.4rem 0; font-weight:600; }
+  .pg-keep{ font-size:.95rem; margin:.5rem 0; }
+  .pg-keep-note{ color:var(--ink-soft); font-size:.9rem; }
+  .pg-link{ background:none; border:0; padding:0; color:inherit; text-decoration:underline; cursor:pointer; font:inherit; min-height:44px; }
+  .pg-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .pg-safe p, .pg-safe ul{ margin:.4rem 0 !important; }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/gaming-and-time-together.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/gaming-and-time-together.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/gaming-and-time-together.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Gaming, Phones and Time Together">
+<meta property="og:description" content="Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening, and a time-together deal to fill in and share.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/gaming-and-time-together.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09">
+<meta property="article:modified_time" content="2026-10-09">
+<meta property="article:author" content="https://spreadloveandacceptance.com/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Gaming, Phones and Time Together">
+<meta name="twitter:description" content="Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening, and a time-together deal to fill in and share.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/gaming-and-time-together.html#page","name":"Gaming, Phones and Time Together","headline":"Gaming, Phones and Time Together","description":"Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening, and a time-together deal to fill in and share.","url":"https://spreadloveandacceptance.com/gaming-and-time-together.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-09","dateModified":"2026-10-09","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/gaming-and-time-together.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Gaming, Phones and Time Together","item":"https://spreadloveandacceptance.com/gaming-and-time-together.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body data-no-pupvisits>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · Time together</p><h1>Gaming, phones and time together</h1></header>
+
+<p class="simple-lede">Gaming is a real way to unwind, and for a lot of people it’s where their friends are. Phones are how we keep up with everyone. None of that is the problem. The trouble starts when one of you feels ignored and the other feels nagged. <strong>The goal isn’t less gaming. It’s both of you feeling chosen.</strong></p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li>Games and phones aren’t the enemy. Feeling invisible is.</li>
+    <li>Give a heads-up before a long session, and use the breaks between matches for small check-ins.</li>
+    <li>Protect one evening a week, and keep dinner phone-free.</li>
+    <li>Get the chores done before the session, so nobody has to chase.</li>
+    <li>Fill in <a href="#deal">our time-together deal</a> and send it to each other.</li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="pg-jump no-bubble">
+  <li><a href="#ignored">I feel ignored</a></li>
+  <li><a href="#unwind">Gaming is how I unwind</a></li>
+  <li><a href="#habits">Habits that help</a></li>
+  <li><a href="#deal">Our deal</a></li>
+</ul>
+</nav>
+
+<h2 id="ignored">If you feel ignored during a session</h2>
+<p>It’s lonely to sit next to someone who is somewhere else. You might start to feel like you come second to a screen. That feeling makes sense, and it is worth saying, without making the game the bad guy.</p>
+<ul>
+  <li><strong>Say what you miss, not what they do wrong.</strong> “I miss you on weeknights” lands better than “You’re always on that game.”</li>
+  <li><strong>Use the breaks.</strong> Most games have natural stops: between matches, after a round, on a loading screen. Ask then, not mid-fight.</li>
+  <li><strong>Ask for something specific:</strong> an evening, a walk, dinner together.</li>
+</ul>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p>“Can I grab you between matches? Just five minutes.”</p>
+  <p>“I’m not asking you to stop gaming. I miss us. Could Thursday be ours?”</p>
+</div>
+
+<h2 id="unwind">If gaming is how you unwind</h2>
+<p>After a long day, a game can be the thing that resets you, and online it is often where your friends are. That matters, and you don’t need to apologize for it. Your partner probably isn’t against your games. They want to feel noticed too.</p>
+<ul>
+  <li><strong>Give a heads-up before a long session.</strong> “Raid tonight, probably till ten.” No surprises.</li>
+  <li><strong>Answer small bids in the breaks.</strong> A quick “Hey, what’s up?” between matches goes a long way.</li>
+  <li><strong>“Two more matches” means two.</strong> Say a number and keep it. Then the next “two more” gets believed.</li>
+  <li><strong>Ask what they’d like</strong> instead of guessing.</li>
+</ul>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p>“Gaming is how I switch off and see my friends. I still want time with you. Which evening should be ours?”</p>
+  <p>“Heads-up: big session with the squad Saturday from eight. Want to do brunch together before?”</p>
+</div>
+
+<h2 id="habits">Small habits that help both of you</h2>
+<ul>
+  <li><strong>A heads-up before a long session,</strong> with a rough end time.</li>
+  <li><strong>The “two more matches” rule.</strong> When one of you asks for time, finish two more matches (or the round), then come.</li>
+  <li><strong>One protected evening a week.</strong> No games and no scrolling, just the two of you, even if it’s only takeout and a walk.</li>
+  <li><strong>Phone-free dinner.</strong> Phones face down, or in another room.</li>
+  <li><strong>Chores before the session.</strong> The dishes and your own jobs for the day are done before you log on, so nobody has to chase or keep score. Not sure whose job is whose? Make a quick list with <a href="/workpapers/fill/wp-03.html">one owner per job</a>.</li>
+  <li><strong>Phones count too.</strong> Scrolling in bed, or a phone at every meal, feels the same to the person next to you. The same habits help.</li>
+</ul>
+<p>If gaming or a phone is crowding out sleep, work, money or friends, and cutting back is hard even when you want to, that is worth talking about with a doctor. It isn’t a character flaw, and help is there.</p>
+
+<section class="lib-own tol-plain" id="deal" aria-labelledby="deal-h">
+<p class="lib-own-k">This site’s idea</p>
+<h2 id="deal-h">Our time-together deal</h2>
+<p>Fill this in together, or fill it in yourself and send it to the other person to change. Nothing you type here is sent anywhere. The link you send carries the deal inside it, and opening it fills in this form.</p>
+<div class="pg-fields">
+  <div class="pg-names">
+    <label for="td-n1">Your name<input type="text" id="td-n1" autocomplete="off" maxlength="40" placeholder="Name"></label>
+    <label for="td-n2">Their name<input type="text" id="td-n2" autocomplete="off" maxlength="40" placeholder="Name"></label>
+  </div>
+  <label for="td-games">Game nights (or long phone time)</label>
+  <input type="text" id="td-games" value="Tuesday and Saturday evenings" autocomplete="off" maxlength="160">
+  <label for="td-heads">Heads-up rule</label>
+  <input type="text" id="td-heads" value="Say before a session over an hour, and roughly when it ends." autocomplete="off" maxlength="160">
+  <label for="td-ask">When one of us asks for time</label>
+  <input type="text" id="td-ask" value="Two more matches, then I’m yours." autocomplete="off" maxlength="160">
+  <label for="td-eve">Our protected evening</label>
+  <input type="text" id="td-eve" value="Thursday, from 7" autocomplete="off" maxlength="160">
+  <label for="td-phone">Phone-free times</label>
+  <input type="text" id="td-phone" value="Dinner, and the first 20 minutes in bed" autocomplete="off" maxlength="160">
+  <label for="td-chores">Chores before the session</label>
+  <input type="text" id="td-chores" value="Dishes and our own jobs for the day are done first." autocomplete="off" maxlength="160">
+</div>
+<p class="pg-out-h" id="td-out-h">Your deal, ready to send:</p>
+<p class="pg-from" id="td-from" hidden></p>
+<div class="pg-out" id="td-out" aria-labelledby="td-out-h" aria-live="polite"></div>
+<p class="pg-keep"><label><input type="checkbox" id="td-keep" checked> Keep our deal on this device</label> <span class="pg-keep-note">It stays in this browser only. <button type="button" class="pg-link" id="td-forget">Forget it</button></span></p>
+<p class="pg-acts">
+  <button type="button" class="pg-btn" id="td-copy">Copy our deal</button>
+  <button type="button" class="pg-btn is-quiet" id="td-share" data-share data-share-from="#td-out" data-share-url="none" data-share-title="Our time-together deal" data-share-result data-no-clip>Share it</button>
+</p>
+<p class="pg-status" id="td-status" role="status" aria-live="polite"></p>
+<p class="pg-keep-note">A link holds the deal as it is right now. If either of you changes something, send a new link.</p>
+</section>
+
+<h2 id="more">More for your situation</h2>
+<ul class="pg-links no-bubble">
+  <li><a href="/wavelength.html"><strong>Compare your Wave Codes</strong><span>A two-minute quiz each, then a compare link. Different defaults, not anyone being wrong.</span></a></li>
+  <li><a href="/turning-toward.html"><strong>Turning Toward</strong><span>Small, everyday ways to answer when someone reaches for you.</span></a></li>
+  <li><a href="/workpapers/fill/wp-03.html"><strong>One owner per job</strong><span>A shared chore list in about a minute, so nobody has to nag.</span></a></li>
+  <li><a href="/pursue-withdraw.html"><strong>One of you wants to talk now, the other needs space</strong><span>A pause plan for when a talk gets heated.</span></a></li>
+  <li><a href="/money-together.html"><strong>Money together</strong><span>For your first place: bills, saving and personal money.</span></a></li>
+</ul>
+
+<script>
+(function () {
+  'use strict';
+  // Builds the deal as plain text from the fields. It is kept in this browser only if "Keep" is ticked
+  // (and only once something is typed), and the link you send carries the deal after the #, which never
+  // reaches any server, so the other person opens the same deal.
+  var $ = function (id) { return document.getElementById(id); };
+  var out = $('td-out'), status = $('td-status'), KEY = 'tol-time-deal-v1';
+  var ids = ['td-n1', 'td-n2', 'td-games', 'td-heads', 'td-ask', 'td-eve', 'td-phone', 'td-chores'];
+  var LABELS = { 'td-games': 'Game nights', 'td-heads': 'Heads-up', 'td-ask': 'When one of us asks for time', 'td-eve': 'Our protected evening', 'td-phone': 'Phone-free times', 'td-chores': 'Before a session' };
+  function val(id) { return ($(id).value || '').trim(); }
+  function fields() { var o = {}; ids.forEach(function (id) { o[id] = val(id); }); return o; }
+  function fill(o) { ids.forEach(function (id) { if (o && typeof o[id] === 'string') $(id).value = o[id].slice(0, 160); }); }
+  function enc(o) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_'); } catch (e) { return ''; } }
+  function dec(t) {
+    try { var s = t.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var o = JSON.parse(decodeURIComponent(escape(atob(s)))); return o && typeof o === 'object' ? o : null; } catch (e) { return null; }
+  }
+  function link() { return location.origin + location.pathname + '#deal=' + enc(fields()); }
+  function keep() {
+    try { if ($('td-keep').checked) localStorage.setItem(KEY, JSON.stringify(fields())); else localStorage.removeItem(KEY); } catch (e) {}
+  }
+  function names() {
+    var a = val('td-n1'), b = val('td-n2');
+    return a && b ? a + ' and ' + b : (a || b || '');
+  }
+  function dealText() {
+    var lines = ['Our time-together deal' + (names() ? ' (' + names() + ')' : '')];
+    ['td-games', 'td-heads', 'td-ask', 'td-eve', 'td-phone', 'td-chores'].forEach(function (id) { var x = val(id); if (x) lines.push(LABELS[id] + ': ' + x); });
+    return lines.join('\n');
+  }
+  function full() { return dealText() + '\n\nOpen our deal: ' + link() + '\n(If you change anything, send a new link.)'; }
+  function render(save) { out.textContent = full(); if (save !== false) keep(); }
+  function fromLink(o) {
+    // their "Your name" is your "Their name": swap the two, so each phone reads from its own side
+    var who = typeof o['td-n1'] === 'string' ? o['td-n1'].trim() : '';
+    var mine = typeof o['td-n2'] === 'string' ? o['td-n2'] : '';
+    o['td-n2'] = o['td-n1'] || ''; o['td-n1'] = mine;
+    fill(o);
+    var n = $('td-from');
+    n.hidden = false;
+    n.textContent = (who ? who + ' shared' : 'Someone shared') + ' this deal with you. Change anything you like, then send it back with “Share it”.';
+    try { history.replaceState(null, '', location.pathname + location.search + '#deal'); } catch (e) {}
+    setTimeout(function () { var d = $('deal'); if (d) d.scrollIntoView({ block: 'start' }); }, 300);
+  }
+  // a deal in the link wins; otherwise the one kept on this device
+  var m = /#deal=([A-Za-z0-9+\/_-]+)/.exec(location.hash), got = m ? dec(m[1]) : null, saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { saved = null; }
+  if (got) fromLink(got);
+  else if (saved && typeof saved === 'object') fill(saved);
+  render(!!got);
+  ids.forEach(function (id) { $(id).addEventListener('input', render); });
+  $('td-keep').addEventListener('change', keep);
+  $('td-forget').addEventListener('click', function () { $('td-keep').checked = false; keep(); say('Forgotten on this device.'); });
+  window.addEventListener('hashchange', function () {
+    var mm = /#deal=([A-Za-z0-9+\/_-]+)/.exec(location.hash), o = mm && dec(mm[1]);
+    if (o) { fromLink(o); render(); }
+  });
+  function say(msg) { status.textContent = ''; setTimeout(function () { status.textContent = msg; }, 30); }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea'), ok = false;
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); return ok;
+  }
+  $('td-copy').addEventListener('click', function () {
+    var text = full();
+    var done = function () { say('Copied. Paste it into a message to the other person.'); };
+    var fail = function () { say(fallbackCopy(text) ? 'Copied. Paste it into a message to the other person.' : 'Copying didn’t work here. Select the deal above and copy it by hand.'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail); else fail();
+  });
+})();
+</script>
+</main>
+</body>
+</html>
