@@ -18,6 +18,9 @@
   var BG_URL = KB_URL.replace(/chat-kb\.js$/, 'chat-kb-bg.js');
   var STORE_KEY = 'tol-chat-v1';
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var HONEST_LINE = 'I don’t make things up: every answer comes from this site’s own pages, written and checked by people. I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.';
+  // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
+  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you say|this chat|puddles)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up)\b/;
   var PRIVACY_LINE = 'Answers come from this site’s pages and the Professor’s notes. What you type stays on this device.';
 
   var DEFAULT_CHAR = {
@@ -1777,6 +1780,7 @@
       }
       var vf = norm(q);
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
+      if (!DANGER.test(vf) && TRUST_Q.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small guide to this site. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       var igr = igTurn(state, q0, vf);
       if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
@@ -2187,7 +2191,7 @@
   function deepChip(state, q, r) {
     var D = KB && KB.deep;
     if (!D || !r || !r.blocks || deepOn(state) || state.unsafe) return r;
-    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more', 'info']);
+    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more', 'info', 'about']);
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
@@ -2397,7 +2401,7 @@
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
           'Or just chat with me (“how are you?”, “tell me a joke”), or say “talk deep” to think through a big question, like what love is.',
           'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load”, or “summarise this as an infographic” after an answer.'] },
-        { k: 'p', x: 'When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. I’m not a counselor, and I won’t guess. Everything happens in your browser: what you type stays on this device.' }],
+        { k: 'p', x: HONEST_LINE + ' When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
     if (/^(give me |got |share )?(a |another |one )?(little |quick |small )?(tip|tips)( please)?( for today)?$/.test(f)) return tip(state);

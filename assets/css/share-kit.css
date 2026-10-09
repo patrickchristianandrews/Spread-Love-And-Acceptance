@@ -34,7 +34,7 @@
 .tsk-qrd-code canvas{ display:block; max-width:100%; height:auto; background:#fff; border-radius:6px; image-rendering:pixelated; image-rendering:crisp-edges; }
 .tsk-qrd-hint{ margin:.55rem 0 0; padding:.45rem .65rem; font-size:.92rem; line-height:1.35; text-align:center; background:#FFF6DA; border:1px solid #E8D49A; border-radius:12px; }
 .tsk-qrd-long{ margin:.4rem 0 0; font-size:.95rem; line-height:1.4; }
-.tsk-qrd-hint[hidden], .tsk-qrd-long[hidden], .tsk-qrd-private[hidden]{ display:none; }
+.tsk-qrd-hint[hidden], .tsk-qrd-long[hidden], .tsk-qrd-private[hidden], .tsk-qrd-note[hidden]{ display:none; }
 .tsk-qrd-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.75rem 0 .2rem; }
 .tsk-qrd-acts .tol-share-act[hidden]{ display:none; }
 .tsk-qrd-acts .tol-share-act[hidden] + .tsk-qrd-copy{ grid-column:1 / -1; }

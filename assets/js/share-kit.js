@@ -339,7 +339,7 @@
     box.appendChild(mk('canvas', { role: 'img', 'aria-label': 'QR code for the link' }));
     card.appendChild(box);
     card.appendChild(mk('p', { class: 'tsk-qrd-hint', hidden: '' }, 'Hold the phones closer, or use Copy link.'));
-    card.appendChild(mk('p', { class: 'tsk-qrd-long', hidden: '' }, 'This link is too long to fit in a QR code. Use Copy link and send it instead.'));
+    card.appendChild(mk('p', { class: 'tsk-qrd-long', hidden: '' }, 'This link holds too much to fit in a QR code a phone can read. Use Copy link and send it in a message instead.'));
     var acts = mk('div', { class: 'tsk-qrd-acts' });
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act', 'data-qrd': 'big', 'aria-pressed': 'false' }, 'Bigger'));
     acts.appendChild(mk('button', { type: 'button', class: 'tol-share-act tsk-qrd-copy', 'data-qrd': 'copy' }, 'Copy link'));
@@ -406,9 +406,10 @@
     if (!dlg) dlg = buildDialog();
     var q = qrFits(url) ? QR.matrix(url) : null;
     dlgCur = { url: url, q: q }; dlgBig = false;
-    dlg.querySelector('#tsk-qrd-h').textContent = o.title || 'Scan with the other phone';
+    dlg.querySelector('#tsk-qrd-h').textContent = q ? (o.title || 'Scan with the other phone') : 'Too long for a QR code';
     var note = dlg.querySelector('.tsk-qrd-note');
     note.textContent = o.note || 'Open the camera on the other phone and point it at this code. The link opens there.';
+    note.hidden = !q;
     dlg.querySelector('.tsk-qrd-status').textContent = '';
     dlg.querySelector('.tsk-qrd-long').hidden = !!q;
     dlg.querySelector('[data-qrd="big"]').hidden = !q;

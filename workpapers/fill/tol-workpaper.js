@@ -1466,7 +1466,12 @@
   };
   // "Show a QR code": the same link as the Send button, drawn big for a phone in the same room
   // (TOLShareKit.showQR in /assets/js/share-kit.js, loaded here at the tap if site.js hasn't yet)
-  A.qrBtn = function () { return h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-qr', text: 'Show a QR code' }); };
+  A.qrBtn = function () {
+    var b = h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-qr', text: 'Show a QR code' }), K = global.TOLShareKit;
+    // a list too long for a QR code: the button steps aside, and the link still goes
+    if (K && K.qrFits && this.shareMade && this.shareMade.link && !K.qrFits(this.shareMade.link)) b.hidden = true;
+    return b;
+  };
   function qrShow(url, o) {
     function go() { if (global.TOLShareKit && global.TOLShareKit.showQR) global.TOLShareKit.showQR(url, o); }
     if (global.TOLShareKit && global.TOLShareKit.showQR) { go(); return; }

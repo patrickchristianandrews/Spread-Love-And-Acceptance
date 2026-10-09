@@ -13,13 +13,84 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/site-chat.js" defer></script>
 <style>
+  .ask-head{ margin-bottom:1rem; padding-bottom:.9rem; }
   .ask-head h1{ font-size:clamp(1.35rem,4.5vw,1.8rem); margin-bottom:.2rem; }
-  .ask-about{ margin-top:1.4rem; }
-  .ask-about summary{ cursor:pointer; font-weight:600; min-height:44px; display:flex; align-items:center; }
   .ask-exit{ margin:.2rem 0 1rem; font-size:.92rem; display:flex; flex-wrap:wrap; gap:.4rem .7rem; align-items:center; }
   .ask-exit button{ font:inherit; font-size:.9rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; border:1px solid var(--line, #d8cfb8); background:var(--paper, #fffaf0); color:var(--ink, #2a2530); cursor:pointer; }
   .ask-exit button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
   .ask-exit small{ color:var(--ink-soft, #5A5346); }
+
+  /* the intro: who he is, in two sentences */
+  .ap-intro{ display:flex; gap:.9rem; align-items:flex-start; margin:0 0 .6rem; }
+  .ap-art{ flex:0 0 auto; width:64px; height:68px; }
+  .ap-art svg{ width:100%; height:100%; display:block; }
+  .ap-intro p{ margin:0; font-size:1.02rem; line-height:1.6; }
+  .ap-facts{ list-style:none; padding:0 !important; margin:.2rem 0 .7rem !important; display:flex; flex-wrap:wrap; gap:.35rem .45rem; }
+  .ap-facts li{ margin:0; font-size:.84rem; line-height:1.3; padding:.3rem .65rem; border-radius:999px; background:var(--paper-deep, #ECE2C4); color:var(--ink); max-width:none; }
+  .ap-trustline{ display:flex; gap:.5rem; align-items:center; margin:.4rem 0 0 !important; font-size:.92rem; line-height:1.45; color:var(--ink-soft); }
+  .ap-trustline svg{ flex:0 0 auto; width:20px; height:20px; color:var(--credit, #3E6B4C); }
+  .ap-trustline a{ white-space:nowrap; }
+  #ask-chat .tolc.is-inline{ margin-top:.9rem; scroll-margin-top:4.5rem; }
+
+  /* sections */
+  .ap-sec{ margin-top:2.6rem; scroll-margin-top:4.5rem; }
+  .ap-sec > h2{ margin:0 0 .5rem; font-size:clamp(1.3rem,4.4vw,1.6rem); display:flex; align-items:center; gap:.55rem; }
+  .ap-sec > p{ margin-bottom:.9rem; }
+  .ap-ico{ flex:0 0 auto; display:inline-grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:12px; background:var(--ap-tint, #E3EEDF); color:var(--ink); }
+  .ap-ico svg{ width:1.35rem; height:1.35rem; }
+  .ap-sec > h2 .ap-ico{ width:2.1rem; height:2.1rem; border-radius:10px; }
+  .ap-sec > h2 .ap-ico svg{ width:1.2rem; height:1.2rem; }
+
+  /* how he answers */
+  .ap-trust{ border:1px solid var(--line); border-left:4px solid var(--credit, #3E6B4C); border-radius:14px; padding:1rem 1.1rem .4rem; background:var(--paper); }
+  .ap-trust p{ margin:0 0 .8rem; }
+  .ap-trust ul{ margin:0 0 .8rem; }
+  .ap-trust li{ margin:.25rem 0; }
+
+  /* what he can do */
+  .ap-cards{ list-style:none; padding:0 !important; margin:0 !important; display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); gap:.75rem; }
+  .ap-card{ margin:0 !important; max-width:none !important; display:grid; grid-template-columns:auto 1fr; gap:.15rem .75rem; align-content:start; padding:.85rem .9rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); }
+  .ap-card .ap-ico{ grid-row:span 2; }
+  .ap-card h3{ margin:0; font-size:1.05rem; line-height:1.3; font-weight:600; }
+  .ap-card p{ margin:0; font-size:.93rem; line-height:1.5; color:var(--ink-soft); }
+  .t-sage{ --ap-tint:#DDEBD9; } .t-sky{ --ap-tint:#D7E8F7; } .t-sun{ --ap-tint:#F6E6B8; } .t-rose{ --ap-tint:#F5DCE2; }
+  .t-lilac{ --ap-tint:#E6DFF2; } .t-sand{ --ap-tint:#EFE3CB; }
+
+  /* try asking */
+  .ap-groups{ display:grid; gap:.6rem; }
+  .ap-group{ border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:0 .9rem; }
+  .ap-group > summary{ cursor:pointer; list-style:none; display:flex; align-items:center; gap:.65rem; min-height:52px; padding:.35rem 0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; }
+  .ap-group > summary::-webkit-details-marker{ display:none; }
+  .ap-group > summary::after{ content:""; margin-left:auto; width:.6rem; height:.6rem; border-right:2px solid var(--ink-soft); border-bottom:2px solid var(--ink-soft); transform:rotate(45deg); margin-right:.3rem; flex:0 0 auto; }
+  .ap-group[open] > summary::after{ transform:rotate(-135deg); }
+  .ap-group > summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:8px; }
+  .ap-group > summary .ap-ico{ width:2rem; height:2rem; border-radius:9px; }
+  .ap-group > summary .ap-ico svg{ width:1.1rem; height:1.1rem; }
+  .ap-group > summary small{ font-family:"Lora", Georgia, serif; font-weight:400; font-size:.85rem; color:var(--ink-soft); }
+  .ap-group .ap-note{ font-size:.88rem; color:var(--ink-soft); margin:0 0 .5rem; }
+  .ap-qs{ list-style:none; padding:0 !important; margin:0 0 .9rem !important; display:flex; flex-wrap:wrap; gap:.45rem; }
+  .ap-qs li{ margin:0; max-width:100%; }
+  .ap-q{ font:inherit; font-size:.93rem; line-height:1.35; text-align:left; min-height:44px; max-width:100%; padding:.5rem .9rem .5rem .75rem; border-radius:999px; border:1px solid var(--line); background:var(--paper-deep, #ECE2C4); color:var(--ink); cursor:pointer; display:inline-flex; align-items:center; gap:.45rem; overflow-wrap:anywhere; }
+  .ap-q::before{ content:"\201C"; font-family:"Fraunces", Georgia, serif; font-size:1.25rem; line-height:0; color:var(--brass-ink, #7A5620); transform:translateY(.2rem); }
+  .ap-q:hover{ border-color:var(--ink-soft); background:var(--paper); }
+  .ap-q:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .ap-q[aria-busy="true"]{ opacity:.7; }
+
+  /* good to know */
+  .ap-know{ display:grid; gap:.75rem; grid-template-columns:repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+  .ap-know > div{ border-top:3px double var(--ink); padding-top:.6rem; }
+  .ap-know h3{ margin:0 0 .3rem; font-size:1.1rem; }
+  .ap-know p{ margin:0 0 .5rem; font-size:.95rem; line-height:1.6; }
+  .ap-browse{ margin-top:2.4rem; }
+
+  @media (min-width:900px){ .ap-cards{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:420px){ .ap-art{ width:52px; height:56px; } .ap-intro p{ font-size:.98rem; } }
+
+  /* dark mode inverts the page: these line icons follow the text instead of being turned back */
+  html[data-theme="dark"]:not(.tol-nodark) .ap-ico svg, html[data-theme="dark"]:not(.tol-nodark) .ap-trustline svg{ filter:none !important; }
+  @media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) :is(.ap-ico, .ap-trustline) svg{ filter:none !important; } }
+  @media (prefers-reduced-motion: reduce){ .ap-q, .ap-group > summary::after{ transition:none !important; } }
+  @media print{ .ap-group{ break-inside:avoid; } .ap-q{ border:0; background:none; padding:0; min-height:0; } .ask-exit, #ask-chat{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/ask.html">
@@ -58,34 +129,223 @@
 <body data-no-tip data-no-breathe>
 <main class="read">
 <header class="read-head ask-head"><p class="read-code">Ask</p><h1>Chat with Professor Puddles</h1></header>
+
+<div class="ap-intro">
+  <span class="ap-art" aria-hidden="true"><svg viewBox="-4 -14 88 92" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg></span>
+  <p>Meet Professor Puddles, a cheerful raindrop in round glasses who knows this whole site. Tell him what’s going on in your own words, and he’ll suggest kind next steps, words you could use and the right page to read.</p>
+</div>
+<ul class="ap-facts" aria-label="About Professor Puddles">
+  <li>Free</li>
+  <li>Runs on your device</li>
+  <li>Nothing you type leaves it</li>
+  <li>Not a person, not AI, not a therapist</li>
+</ul>
+
 <p class="ask-exit no-bubble"><button type="button" data-tol-exit>Leave this site quickly</button> <small>Or press Esc twice. Not safe at home? <a href="/safety.html">Free, private help</a>.</small></p>
+
+<p class="ap-trustline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg><span>Answers come only from this site’s checked pages. No made-up answers. <a href="#how-he-answers">How he answers</a></span></p>
 
 <div id="ask-chat"></div>
 <noscript><p>The Professor needs JavaScript to run in your browser. You can still browse everything from the <a href="/contents.html">Contents</a>.</p></noscript>
 
-<details class="ask-about">
-<summary>What the Professor can help with</summary>
-<p>Type a question in your own words, like “how do I use the Lemonade Stand?”, “what does my battery score mean?” or “my coworker keeps interrupting me”, and Professor Puddles, a small drop with a big brain, will answer from this program, with links to the right pages.</p>
-<ul>
-  <li><strong>Knows the whole program.</strong> Every tool, workpaper, chapter and game: what it’s for, how to use it step by step, and what your results mean. Type your Battery Meter answers or CALC-01 numbers and he’ll work out the score with you.</li>
-  <li><strong>Kind next steps for what’s going on.</strong> Describe a situation, with yourself or someone else, and he’ll suggest a few steps, words you could use and a short path on the site. You know your situation best.</li>
-  <li><strong>Background notes, clearly labelled.</strong> When the site doesn’t cover something, the Professor has notes on related topics, like negotiation, habits or co-parenting logistics. Answers from them always say so, and point you to a page to put it into practice.</li>
-  <li><strong>What you type stays on this device.</strong> Everything happens in your browser. Nothing you type or choose is sent anywhere, and the conversation is forgotten when you close the tab.</li>
-  <li><strong>Not a counselor.</strong> It’s general guidance and a friendly way around the site, not therapy or professional advice.</li>
+<section class="ap-sec" id="how-he-answers" aria-labelledby="how-he-answers-h">
+<h2 id="how-he-answers-h"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg></span>How Professor Puddles answers</h2>
+<div class="ap-trust">
+  <p><strong>He doesn’t make things up.</strong> Professor Puddles isn’t a generative AI that writes new text. He is a small scripted helper that runs right here in your browser.</p>
+  <ul>
+    <li>Every answer is drawn from this site’s own pages, cards and library, written and checked by people, with a link to read more. When an answer comes from his background notes rather than a page, he says so.</li>
+    <li>Research he mentions is named honestly, and the site is adding a page of checked sources.</li>
+    <li>He can still pick the wrong topic. If he misses, tell him “that’s not it” or say it another way.</li>
+    <li>He isn’t a therapist and can’t diagnose. For anything about safety, he points you to real help.</li>
+  </ul>
+</div>
+</section>
+
+<section class="ap-sec" id="what-he-can-do" aria-labelledby="what-he-can-do-h">
+<h2 id="what-he-can-do-h">What he can do</h2>
+<p>Ten things to try. You don’t need the right words: type it the way you’d say it to a friend.</p>
+<ul class="ap-cards">
+  <li class="ap-card"><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span><h3>Your situation, your words</h3><p>Couples, friends, family, co-parents, housemates, work. Describe what’s happening and get a few kind next steps.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v18M9 21h6"/><path d="M5 6h11l3 2.5L16 11H5z"/><path d="M19 13H9l-3 2.5L9 18h10z"/></svg></span><h3>Finds the right tool or page</h3><p>Every tool, workpaper, chapter and game: what it’s for, how to use it and what your results mean.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7 7H4.5v5H8c0 2.5-1 4-3 5M17 7h-2.5v5H18c0 2.5-1 4-3 5"/></svg></span><h3>Words you could use</h3><p>Short sentences you could say out loud or send, for raising something hard, saying no or saying sorry.</p></li>
+  <li class="ap-card"><span class="ap-ico t-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16"/><path d="M9 3.5c-.8 1 .8 1.8 0 3M12.5 3.5c-.8 1 .8 1.8 0 3"/></svg></span><h3>Just chat</h3><p>Small talk when you want company: how he’s doing, a riddle, a fun fact. Say “just chat” to start.</p></li>
+  <li class="ap-card"><span class="ap-ico t-lilac" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0012 3z"/></svg></span><h3>Talk deep</h3><p>Big questions, like what love is or whether honesty is always kind, through philosophy, psychology and an autistic lens.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M7.5 16v-3M11 16V9.5M14.5 16v-5M7.5 7.5h3"/><circle cx="17" cy="8" r="1.5"/></svg></span><h3>Makes infographics</h3><p>A small poster about a topic, drawn on your device, that you can save as an image, share or print.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M12 8.5v4M12 15.5h.01"/></svg></span><h3>Safety first</h3><p>If something sounds like fear or control, not a communication problem, he says so gently and points to real help.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5.5c2.5-1 5.5-1 8 .8 2.5-1.8 5.5-1.8 8-.8V19c-2.5-1-5.5-1-8 .8-2.5-1.8-5.5-1.8-8-.8z"/><path d="M12 6.3v13.5"/></svg></span><h3>Explains ideas plainly</h3><p>The mental load, fair vs equal, “flooded”, the double empathy problem: what they mean, with an everyday example.</p></li>
+  <li class="ap-card"><span class="ap-ico t-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c.9 1.4 2.1 2 3.5 2s2.6-.6 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg></span><h3>Jokes on request</h3><p>Very bad pond puns, only when you ask. Never in the middle of something hard.</p></li>
+  <li class="ap-card"><span class="ap-ico t-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5c-2.3-2.4-3.4-5.2-3.4-8.5S9.7 5.9 12 3.5z"/></svg></span><h3 lang="es">Un poco de español</h3><p>Ask in Spanish and he’ll answer the basics in Spanish, with the site’s Spanish page.</p></li>
 </ul>
-</details>
+</section>
 
+<section class="ap-sec" id="try-asking" aria-labelledby="try-asking-h">
+<h2 id="try-asking-h">Try asking…</h2>
+<p>Tap any question and the Professor will answer it in the chat above. Or type your own.</p>
+<div class="ap-groups">
+  <details class="ap-group" open>
+    <summary><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5h16v11H10l-5 4v-4H4z"/></svg></span>Everyday situations</summary>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>I feel like I do everything at home</button></li>
+      <li><button type="button" class="ap-q" data-q>My best friend never texts back since she had her baby</button></li>
+      <li><button type="button" class="ap-q" data-q>My housemate never does the dishes</button></li>
+      <li><button type="button" class="ap-q" data-q>My co-parent changes the schedule at the last minute</button></li>
+      <li><button type="button" class="ap-q" data-q>My coworker keeps interrupting me</button></li>
+      <li><button type="button" class="ap-q" data-q>My teenager won’t talk to me</button></li>
+      <li><button type="button" class="ap-q" data-q>My partner works nights and we never see each other</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-sage" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v18M9 21h6"/><path d="M5 6h11l3 2.5L16 11H5z"/></svg></span>Find a tool</summary>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>What’s the Lemonade Stand?</button></li>
+      <li><button type="button" class="ap-q" data-q>Which tool helps us split chores fairly?</button></li>
+      <li><button type="button" class="ap-q" data-q>How do I use the Battery Meter?</button></li>
+      <li><button type="button" class="ap-q" data-q>Is there a game we can play together?</button></li>
+      <li><button type="button" class="ap-q" data-q>I need to calm down right now</button></li>
+      <li><button type="button" class="ap-q" data-q>Where do I start?</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7 7H4.5v5H8c0 2.5-1 4-3 5M17 7h-2.5v5H18c0 2.5-1 4-3 5"/></svg></span>Words to say</summary>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>How do I tell my mum to text before visiting?</button></li>
+      <li><button type="button" class="ap-q" data-q>Help me say no to extra work</button></li>
+      <li><button type="button" class="ap-q" data-q>How do I ask my partner for more help at home?</button></li>
+      <li><button type="button" class="ap-q" data-q>Give me words to ask for a pause</button></li>
+      <li><button type="button" class="ap-q" data-q>How do I apologise so it lands?</button></li>
+      <li><button type="button" class="ap-q" data-q>How do I say sorry to my sister?</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-rose" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16"/></svg></span>Just chat</summary>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>How are you, Professor?</button></li>
+      <li><button type="button" class="ap-q" data-q>Let’s just chat</button></li>
+      <li><button type="button" class="ap-q" data-q>Tell me a joke</button></li>
+      <li><button type="button" class="ap-q" data-q>Tell me a riddle</button></li>
+      <li><button type="button" class="ap-q" data-q>Tell me a fun fact</button></li>
+      <li><button type="button" class="ap-q" data-q>Who are you?</button></li>
+      <li><button type="button" class="ap-q" data-q lang="es">¿Hablas español?</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-lilac" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0012 3z"/></svg></span>Talk deep</summary>
+    <p class="ap-note">These switch on deep talk first. Say “small talk” any time to come back.</p>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q data-deep>What is love?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>Is honesty always kind?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>Can people change?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>Why do we fight with the people we love?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>Is it okay to need routines?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>Is it wrong to want time alone?</button></li>
+      <li><button type="button" class="ap-q" data-q data-deep>What makes a good friend?</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-sky" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M7.5 16v-3M11 16V9.5M14.5 16v-5"/></svg></span>Infographics</summary>
+    <p class="ap-note">After any answer you can also say “summarise this as an infographic”.</p>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>Make an infographic about the mental load</button></li>
+      <li><button type="button" class="ap-q" data-q>Draw me a picture of fair vs equal</button></li>
+      <li><button type="button" class="ap-q" data-q>Make an infographic about taking a good pause</button></li>
+      <li><button type="button" class="ap-q" data-q>Make an infographic about one wants to talk and one needs space</button></li>
+      <li><button type="button" class="ap-q" data-q>Make an infographic about love languages</button></li>
+      <li><button type="button" class="ap-q" data-q>Make a checklist infographic about a calm check-in</button></li>
+      <li><button type="button" class="ap-q" data-q>Make me a chart: me 60 them 40</button></li>
+    </ul>
+  </details>
+  <details class="ap-group">
+    <summary><span class="ap-ico t-sand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 5.5c2.5-1 5.5-1 8 .8 2.5-1.8 5.5-1.8 8-.8V19c-2.5-1-5.5-1-8 .8-2.5-1.8-5.5-1.8-8-.8z"/><path d="M12 6.3v13.5"/></svg></span>Learn something</summary>
+    <ul class="ap-qs">
+      <li><button type="button" class="ap-q" data-q>What is the double empathy problem?</button></li>
+      <li><button type="button" class="ap-q" data-q>What is the mental load?</button></li>
+      <li><button type="button" class="ap-q" data-q>Why isn’t fair always 50/50?</button></li>
+      <li><button type="button" class="ap-q" data-q>What is a bid for connection?</button></li>
+      <li><button type="button" class="ap-q" data-q>What does flooded mean?</button></li>
+      <li><button type="button" class="ap-q" data-q>What does my battery score mean?</button></li>
+      <li><button type="button" class="ap-q" data-q>What is the Signal Translator for?</button></li>
+    </ul>
+  </details>
+</div>
+</section>
 
+<section class="ap-sec" id="good-to-know" aria-labelledby="good-to-know-h">
+<h2 id="good-to-know-h">Good to know</h2>
+<div class="ap-know">
+  <div>
+    <h3>Private by design</h3>
+    <p>Everything happens in your browser. Nothing you type or choose is sent anywhere. This tab remembers the conversation until you close it, and then it’s gone. Pictures you save stay on your device too.</p>
+  </div>
+  <div>
+    <h3>What he can’t do</h3>
+    <p>He can’t diagnose, and he isn’t therapy or professional advice. He can be wrong or pick the wrong topic: tell him “that’s not it”, or say it another way. You know your situation best.</p>
+  </div>
+  <div>
+    <h3>If you don’t feel safe</h3>
+    <p>If someone frightens you, controls you or hurts you, that isn’t a communication problem. <a href="/safety.html">Not safe at home?</a> has free, private help. The <strong>Leave quickly</strong> button, or Esc twice, takes you off this site fast.</p>
+  </div>
+  <div>
+    <h3>Starting over</h3>
+    <p>Tap <strong>Start over</strong> at the top of the chat for a fresh conversation. Closing the tab clears it too. In deep talk, say “small talk” to come back to lighter chat.</p>
+  </div>
+</div>
+</section>
 
-
-<p>Prefer to browse? The <a href="/contents.html">Contents</a> and its <a href="/contents-in-depth.html#directory">site directory</a> list every page, and <a href="/start-here.html">Start here</a> is a gentle first step.</p>
+<p class="ap-browse">Prefer to browse? The <a href="/contents.html">Contents</a> and its <a href="/contents-in-depth.html#directory">site directory</a> list every page, and <a href="/start-here.html">Start here</a> is a gentle first step.</p>
 </main>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    var host = document.getElementById('ask-chat');
     var about = (location.search.match(/[?&]about=([^&]*)/) || [])[1];
     try { about = about ? decodeURIComponent(about.replace(/\+/g, ' ')).slice(0, 120) : ''; } catch (e) { about = ''; }
-    if (window.TOLChat) window.TOLChat.mount(document.getElementById('ask-chat'), about ? { topic: about,
+    var chat = null;
+    if (window.TOLChat) chat = window.TOLChat.mount(host, about ? { topic: about,
       greeting: 'Hello! I’m Professor Puddles. You were reading “' + about + '”, so let’s start there. Ask me anything else about it in your own words.' } : {});
+
+    // "Try asking…": each question is asked in the chat above, just as if it had been typed
+    var still = function () { return (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || document.documentElement.classList.contains('tol-still'); };
+    function input() { return (chat && chat.input) || host.querySelector('.tolc-input'); }
+    // wait until the Professor has finished his last reply (up to ~15s), then go on
+    function idle(cb, n) {
+      n = n || 0;
+      var last = chat && chat.msgs && chat.msgs[chat.msgs.length - 1];
+      if (!chat || n > 100 || (!chat.busy && (!last || last.r !== 'u'))) return cb();
+      setTimeout(function () { idle(cb, n + 1); }, 150);
+    }
+    function send(q) {
+      var f = chat && chat.form, i = input();
+      if (!f || !i) return false;
+      i.value = q;
+      if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit', { cancelable: true }));
+      return true;
+    }
+    function deepOn() { try { return sessionStorage.getItem('tol-chat-deep') === '1'; } catch (e) { return false; } }
+    var queue = Promise.resolve();
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('.ap-q[data-q]');
+      if (!b) return;
+      var q = (b.getAttribute('data-q') || b.textContent).replace(/\s+/g, ' ').trim();
+      var root = host.querySelector('.tolc') || host;
+      root.scrollIntoView({ block: 'start', behavior: still() ? 'auto' : 'smooth' });
+      if (!chat || !chat.form) {
+        // the chat couldn't start here: put the question in its box if there is one, or copy it
+        var i = input();
+        if (i) { i.value = q; i.focus({ preventScroll: true }); return; }
+        try { navigator.clipboard.writeText(q); } catch (err) {}
+        if (window.TOLChat) window.TOLChat.open({ topic: q });
+        return;
+      }
+      var deep = b.hasAttribute('data-deep');
+      b.setAttribute('aria-busy', 'true');
+      queue = queue.then(function () {
+        return new Promise(function (done) {
+          idle(function () {
+            if (deep && !deepOn()) { send('Talk deep'); idle(function () { send(q); done(); }); }
+            else { send(q); done(); }
+          });
+        });
+      }).then(function () { b.removeAttribute('aria-busy'); });
+    });
   });
 </script>
 </body>

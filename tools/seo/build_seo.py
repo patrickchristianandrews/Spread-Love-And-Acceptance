@@ -190,7 +190,7 @@ SEARCH = {
 # honestly fit. These replace the entries above for the same page.
 SEARCH.update({
  # home and start
- 'index.html': ('Spread Love & Acceptance: Free Relationship Self-Help Tools', 'Free self-help for love and acceptance at home: share the mental load, a fair chore chart, calm ways to stop fighting, a style quiz and a cartoon for all ages.'),
+ 'index.html': ('Understand Yourself, Understand Each Other: Free Self-Help', 'Free, kind lessons and tools for self-help and healing: how communication, relationships and the mind work, and what to do about it. Private, no sign-up.'),
  'start-here.html': ('Start Here: Fair Chores, Calm Talks, Kinder Relationships', 'New here? The one idea behind it all, the best free first tools, and a gentle six-week path to fairer chores, fewer fights and kinder talks at home.'),
  'recheck-drive.html': ('The Re-check Drive: A Calm Football Game for Keeping Things Alive', 'A calm football game with no clock and no way to lose. Do the small, kind things from the complacency playbook for real, and the ball moves toward a field goal on screen.'),
  'complacency.html': ('Complacency in Relationships: When “It’s Fine” Stops Being Checked', 'Complacency isn’t laziness. It’s what happens when something has worked for a long time and we stop looking. How to spot it in yourself and in relationships, and small re-checks that keep things alive.'),

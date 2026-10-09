@@ -982,7 +982,11 @@ if (PERS) {
     c('puddles', ["let's just chat", 'i feel sad today'], { kind: 'care', not: FUNNY });
     t('puddles', 'hi', { kind: 'chat' });
     t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
-    t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', not: /splendid|Peak duck/ });
+    t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', text: /chore|job|split|share|Lemonade/i });
+    t('puddles', 'can I trust your answers', { kind: 'about', text: /I don’t make things up: every answer comes from this site’s own pages, written and checked by people/, link: '/method-and-limits.html' });
+    t('puddles', 'do you hallucinate', { kind: 'about', text: /I don’t make things up[\s\S]*that’s not it[\s\S]*not a therapist and can’t diagnose/ });
+    t('puddles', 'are you AI?', { kind: 'about', text: /written and checked by people/ });
+    t('puddles', 'who are you (says where answers come from)', { q: 'who are you', text: /I don’t make things up/ });
   }
   // deep talk (deep.json): three lenses, put together; safety, care and someone's own situation always first; no jokes
   const DEEP = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'deep.json'), 'utf8')); } catch (e) { return null; } })();
