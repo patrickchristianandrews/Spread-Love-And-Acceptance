@@ -212,7 +212,8 @@
               ['ra-borrow', 'Borrowing'], ['ra-lights', 'Lights and alarms'], ['ra-raise', 'How we bring up problems']];
   var ids = ['ra-me', 'ra-them'].concat(rows.map(function (r) { return r[0]; }));
   function val(id) { return ($(id).value || '').trim(); }
-  function fields() { var o = {}; ids.forEach(function (id) { o[id] = val(id); }); return o; }
+  // only what differs from the starting text goes in the link, so the link stays short
+  function fields() { var o = {}; ids.forEach(function (id) { var x = val(id); if (x !== ($(id).defaultValue || '').trim()) o[id] = x; }); return o; }
   function fill(o, swap) {
     if (!o) return;
     ids.forEach(function (id) { if (typeof o[id] === 'string') $(id).value = o[id].slice(0, 240); });

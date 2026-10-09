@@ -524,8 +524,10 @@
         R.heading(s.title, introH + 70);
         if (s.intro) R.paragraph(s.intro, { size: 8.5, color: COLORS.soft, after: 6 });
         if (!filled.length) { R.paragraph('No entries recorded.', { font: 'Times-Italic', color: COLORS.soft }); return; }
-        cells = filled.map(function (r) { return s.columns.map(function (c) { return displayCell(c, r, ctx); }); });
-        R.table(s.columns, cells);
+        // "For number fans" columns only go in when someone filled them in
+        var pcols = s.columns.filter(function (c) { return !c.fans || filled.some(function (r) { return !isBlank(r[c.id]) || (c.type === 'computed' && c.compute(r)); }); });
+        cells = filled.map(function (r) { return pcols.map(function (c) { return displayCell(c, r, ctx); }); });
+        R.table(pcols, cells);
         return;
       }
 
@@ -928,11 +930,19 @@
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'week-toggle', 'data-table': sec.id, 'aria-expanded': foldDay ? 'false' : 'true', 'aria-describedby': fid, text: foldDay ? 'Show the whole week' : 'Show just today' })
       ]));
     }
+    // "For number fans": columns marked fans are only shown once asked for (or already filled in)
+    var fansOn = !sec.fans || (this.fansOn && this.fansOn[sec.id]) || rows.some(function (r) { return r && sec.columns.some(function (c) { return c.fans && c.type !== 'computed' && !isBlank(r[c.id]); }); });
+    var cols = sec.columns.filter(function (c) { return fansOn || !c.fans; });
+    if (sec.fans) {
+      var fb = h('div', { className: 'wpf-fans' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'fans', 'data-table': sec.id, 'aria-expanded': fansOn ? 'true' : 'false', text: fansOn ? sec.fans.label.replace(/^For number fans: add/, 'For number fans: hide') : sec.fans.label })]);
+      if (fansOn) fb.appendChild(h('p', { className: 'wpf-help', text: sec.fans.note }));
+      box.appendChild(fb);
+    }
     var table = h('table', { className: 'wpf-table no-bubble' + (sec.fixedRows ? ' wpf-fixed' : '') });
     var headRow = h('tr');
     if (sec.fixedRows) headRow.appendChild(h('th', { scope: 'col' }, [h('span', { className: 'visually-hidden', text: 'Person' })]));
-    var totalW = sec.columns.reduce(function (a, c) { return a + (c.w || 1); }, 0) + (sec.fixedRows ? 1.6 : 0);
-    sec.columns.forEach(function (c) {
+    var totalW = cols.reduce(function (a, c) { return a + (c.w || 1); }, 0) + (sec.fixedRows ? 1.6 : 0);
+    cols.forEach(function (c) {
       var th = h('th', { scope: 'col', text: c.label });
       th.style.width = ((c.w || 1) / totalW * 94).toFixed(1) + '%'; // set through CSSOM so the page's CSP allows it
       headRow.appendChild(th);
@@ -946,7 +956,7 @@
       if (only && r && r.who !== only) tr.hidden = true;
       else if (foldDay && r && r.day !== foldDay) { tr.hidden = true; folded++; }
       if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
-      sec.columns.forEach(function (c, ci) {
+      cols.forEach(function (c, ci) {
         var td = h('td', { 'data-label': c.label });
         if (c.type === 'computed') {
           td.appendChild(h('output', { 'data-computed': sec.id + ':' + i + ':' + c.id, text: c.compute(r) }));
@@ -1810,6 +1820,16 @@
       b.setAttribute('data-share-url', this.shareMade.link);
       if (this.nudge) this.nudge();
       var out = this.root.querySelector('[data-share-out]'); if (out) out.value = this.shareMade.link;
+      return;
+    }
+    if (act === 'fans') {
+      var ft = b.getAttribute('data-table'); this.fansOn = this.fansOn || {};
+      var fsec = this.schema.sections.filter(function (x) { return x.id === ft; })[0], frows = this.state.tables[ft] || [];
+      var has = fsec && frows.some(function (r) { return r && fsec.columns.some(function (c) { return c.fans && c.type !== 'computed' && !isBlank(r[c.id]); }); });
+      if (has && this.fansOn[ft] !== false && b.getAttribute('aria-expanded') === 'true') { this.status('The load scores you wrote stay. Clear them from the rows to hide these columns.'); return; }
+      this.fansOn[ft] = b.getAttribute('aria-expanded') !== 'true';
+      var y0 = global.scrollY; this.render(); global.scrollTo(0, y0);
+      var again0 = this.root.querySelector('[data-action="fans"][data-table="' + ft + '"]'); if (again0) again0.focus();
       return;
     }
     if (act === 'conflict-mine' || act === 'conflict-theirs') { this.resolveConflict(+b.getAttribute('data-i'), act === 'conflict-theirs'); return; }
