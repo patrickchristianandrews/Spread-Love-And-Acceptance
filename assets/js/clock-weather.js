@@ -11,7 +11,7 @@
   function render() {
     if (!el) return;
     var t = ''; try { t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); } catch (e) {}
-    var narrow = window.innerWidth <= 560;   // on a phone it stays short so it never sits under the Puddles button
+    var narrow = window.innerWidth <= 560 || el.classList.contains('is-docked');   // on a phone (or on a video) it stays short
     // just the time until someone turns the weather on (the note explains the rest when tapped)
     el.textContent = narrow ? t.replace(' ', '\u00a0') + (WX ? ' ' + WX.icon + WX.deg + '°' : '') : t + (WX ? ' · ' + WX.icon + ' ' + WX.deg + '° ' + WX.text : '');
     el.classList.toggle('is-set', !!WX);
@@ -59,6 +59,11 @@
       '.tol-cw.is-set{cursor:pointer}.tol-cw:hover,.tol-cw:focus-visible{opacity:1;background:rgba(255,253,248,.96)}.tol-cw:focus-visible{outline:2px solid #2B5B8C;outline-offset:2px}' +
       '@media (prefers-color-scheme:dark){.tol-cw{color:#E4D7FF;border-color:rgba(228,215,255,.35);background:rgba(20,14,34,.72)}.tol-cw:hover,.tol-cw:focus-visible{background:rgba(20,14,34,.96)}}' +
       '.tol-cw-card{position:fixed;left:max(8px,env(safe-area-inset-left));bottom:calc(max(6px,env(safe-area-inset-bottom)) + 2.1rem);z-index:41;max-width:min(20rem,calc(100vw - 16px));padding:.8rem .95rem;border-radius:16px;background:#FFFDF8;color:#2B2140;box-shadow:0 8px 28px rgba(30,20,60,.3);border:1px solid #D9CFEE;font:500 .95rem/1.4 Lora,Georgia,serif}.tol-cw-card[hidden]{display:none}.tol-cw-t{margin:0 0 .25rem;font:700 1.02rem Fraunces,Georgia,serif}.tol-cw-p{margin:0 0 .6rem}.tol-cw-b{display:flex;flex-wrap:wrap;gap:.4rem}.tol-cw-b button{min-height:44px;padding:.4rem .9rem;border-radius:999px;border:1.5px solid #8C7DB5;background:#fff;color:#2B2140;font:600 .9rem Lora,Georgia,serif;cursor:pointer}.tol-cw-b .is-main{background:#3C3350;color:#fff;border-color:#3C3350}' +
+      // on a video (Frequency Buddies while it plays, and in full screen): in the picture's bottom-left corner, big enough to read from the couch
+      '.tol-cw.is-docked{position:absolute;left:.55rem;bottom:.55rem;z-index:4;padding:.2rem .6rem;border-color:rgba(255,255,255,.3);background:rgba(20,14,34,.58);color:#FFF6E6;font-size:.74rem;opacity:.92;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}' +
+      '.tol-cw.is-docked:hover,.tol-cw.is-docked:focus-visible{background:rgba(20,14,34,.8)}' +
+      '.tol-cw.is-docked.is-fs{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(12px,env(safe-area-inset-bottom));z-index:6;padding:.3rem .85rem;font-size:clamp(.85rem,.5rem + 1.05vw,1.6rem)}' +
+      '.tol-cw.is-away{display:none}' +
       'html.pc-lock .tol-cw,html.pc-lock .tol-cw-card,html.tv-quiet .tol-cw,html.tol-text-xl .tol-cw,html.tol-text-xxl .tol-cw,html.tol-easy .tol-cw,.tol-cw[hidden]{display:none}@media print{.tol-cw{display:none}}';
     document.head.appendChild(st);
     el = document.createElement('button'); el.type = 'button'; el.className = 'tol-cw'; el.title = 'Local time. Tap to add the weather where you are.';
@@ -68,7 +73,7 @@
     document.addEventListener('click', function (e) { if (!card.hidden && e.target !== el && !card.contains(e.target)) card.hidden = true; });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') card.hidden = true; });
     document.body.appendChild(el); render(); start(false); setInterval(render, 15000); window.addEventListener('resize', render);
-    document.addEventListener('fullscreenchange', function () { el.hidden = !!document.fullscreenElement; });
+    document.addEventListener('fullscreenchange', dock); document.addEventListener('webkitfullscreenchange', dock); document.addEventListener('tol-clock-dock', dock); dock();
     // on a touch screen the note steps out of the way while the page scrolls, so it never sits on what someone is reading
     var rest = null;
     window.addEventListener('scroll', function () {
@@ -76,6 +81,20 @@
       el.classList.add('is-scrolling'); clearTimeout(rest);
       rest = setTimeout(function () { el.classList.remove('is-scrolling'); }, 1400);
     }, { passive: true });
+  }
+  // a page can offer the note a place on its video: data-tol-clock="<selector of the box to sit in>" on the player. It moves
+  // there while the player plays (class is-playing) or is full screen (class is-fs, or the browser's own full screen), so it
+  // never floats over the player's buttons, and stays visible in full screen. Any other full screen hides it, as before.
+  function dock() {
+    if (!el) return;
+    var fe = document.fullscreenElement || document.webkitFullscreenElement || null, host = null;
+    if (fe) host = fe.hasAttribute && fe.hasAttribute('data-tol-clock') ? fe : null;
+    else host = document.querySelector('[data-tol-clock].is-fs') || document.querySelector('[data-tol-clock].is-playing');
+    var box = host ? (host.querySelector(host.getAttribute('data-tol-clock') || '') || host) : document.body, full = !!host && (host === fe || host.classList.contains('is-fs'));
+    if (el.parentNode !== box) box.appendChild(el);
+    var cbox = full ? host : document.body; if (card.parentNode !== cbox) cbox.appendChild(card);
+    el.classList.toggle('is-docked', !!host); el.classList.toggle('is-fs', full); el.classList.toggle('is-away', !!fe && !host);
+    render();
   }
   function offWx() { try { localStorage.removeItem(KEY); } catch (e) {} WX = null; render(); }
   function showNote(on) {

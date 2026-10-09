@@ -1416,6 +1416,848 @@
   "verified_by": "https://dash.harvard.edu/handle/1/33461091 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3410434/"
  },
  {
+  "id": "wood-quinn-kashy-2002",
+  "authors": "Wood, W., Quinn, J. M., & Kashy, D. A.",
+  "year": 2002,
+  "title": "Habits in everyday life: Thought, emotion, and action",
+  "venue": "Journal of Personality and Social Psychology, 83(6), 1281–1297",
+  "doi": null,
+  "url": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/Wood.Quinn_.Kashy_.2002_Habits_in_everyday_life.pdf",
+  "kind": "study",
+  "finding": "In two diary studies with hourly reports, a large share of everyday behaviour was habitual (repeated in the same place, often while thinking about something else), and habits came with less stress than non-habitual actions.",
+  "strength": "strong: an influential diary study; supported by later habit research.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#why-hard",
+   "/library/motivation.html#habits-and-cues"
+  ],
+  "verified": true,
+  "verified_by": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/Wood.Quinn_.Kashy_.2002_Habits_in_everyday_life.pdf ; https://www.scinapse.io/papers/2099800158 (DOI not confirmed)"
+ },
+ {
+  "id": "neal-2011",
+  "authors": "Neal, D. T., Wood, W., Wu, M., & Kurlander, D.",
+  "year": 2011,
+  "title": "The pull of the past: When do habits persist despite conflict with motives?",
+  "venue": "Personality and Social Psychology Bulletin, 37(11), 1428–1437",
+  "doi": "10.1177/0146167211419863",
+  "url": "https://doi.org/10.1177/0146167211419863",
+  "kind": "study",
+  "finding": "In field experiments on habitual eating, people with a strong cinema-popcorn habit ate stale popcorn about as much as fresh popcorn in a cinema, but not in a different setting: context cues drove the habit more than taste or intentions.",
+  "strength": "moderate: two field experiments; consistent with wider habit research.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#loop"
+  ],
+  "verified": true,
+  "verified_by": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/neal.wood_.wu_.kurlander.2011.the_pull_of_the_past.pdf (DOI on first page)"
+ },
+ {
+  "id": "lally-2010",
+  "authors": "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W., & Wardle, J.",
+  "year": 2010,
+  "title": "How are habits formed: Modelling habit formation in the real world",
+  "venue": "European Journal of Social Psychology, 40(6), 998–1009",
+  "doi": "10.1002/ejsp.674",
+  "url": "https://doi.org/10.1002/ejsp.674",
+  "kind": "study",
+  "finding": "Following 96 volunteers who repeated a daily behaviour in the same context for 12 weeks, automaticity rose along a curve that levelled off; reaching 95% of each person's plateau took between 18 and 254 days, and missing a single day did not meaningfully set progress back.",
+  "strength": "moderate: small sample (82 gave usable data, with good model fit for fewer); widely cited and not yet closely replicated.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#daily",
+   "/book/self-3-next-in-depth.html#tiny",
+   "/book/understanding-10-values-in-depth.html#small-acts",
+   "/book/understanding-6-change-in-depth.html",
+   "/book/understanding-6-change-in-depth.html#faq",
+   "/book/understanding-6-change-in-depth.html#slips",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#habit-formation"
+  ],
+  "verified": true,
+  "verified_by": "https://api.crossref.org/works/10.1002/ejsp.674 ; https://repositorio.ispa.pt/handle/10400.12/3364 ; https://bps.org.uk/research-digest/how-form-habit"
+ },
+ {
+  "id": "gollwitzer-1999",
+  "authors": "Gollwitzer, P. M.",
+  "year": 1999,
+  "title": "Implementation intentions: Strong effects of simple plans",
+  "venue": "American Psychologist, 54(7), 493–503",
+  "doi": "10.1037/0003-066X.54.7.493",
+  "url": "https://doi.org/10.1037/0003-066X.54.7.493",
+  "kind": "review",
+  "finding": "Reviewed research showing that if-then plans (\"when situation X arises, I will do Y\") hand control of action to the planned cue and help people act on their goals.",
+  "strength": "strong: a well-supported, widely replicated idea.",
+  "topics": [
+   "habits",
+   "change",
+   "implementation-intentions"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#choose",
+   "/book/self-2-now-in-depth.html#settle",
+   "/book/self-3-next-in-depth.html#if-then",
+   "/book/self-3-next-in-depth.html#support",
+   "/book/understanding-10-values-in-depth.html#small-acts",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#implementation-intentions",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.socmot.uni-konstanz.de/publications/implementation-intentions-strong-effects-simple-plans ; https://kops.uni-konstanz.de/entities/publication/cd4fd110-827b-4d7d-b857-3ed414c7f0f0"
+ },
+ {
+  "id": "gollwitzer-sheeran-2006",
+  "authors": "Gollwitzer, P. M., & Sheeran, P.",
+  "year": 2006,
+  "title": "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
+  "venue": "Advances in Experimental Social Psychology, 38, 69–119",
+  "doi": "10.1016/S0065-2601(06)38002-1",
+  "url": "https://doi.org/10.1016/S0065-2601(06)38002-1",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 94 independent tests found that forming if-then plans had a medium-to-large effect on reaching goals (d = .65).",
+  "strength": "strong: one of the more robust findings in behaviour change, though effects vary by task.",
+  "topics": [
+   "habits",
+   "change",
+   "implementation-intentions"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#settle",
+   "/book/self-3-next-in-depth.html#if-then",
+   "/book/understanding-6-change-in-depth.html#small",
+   "/library/motivation.html#implementation-intentions"
+  ],
+  "verified": true,
+  "verified_by": "https://www.socmot.uni-konstanz.de/publications/implementation-intentions-and-goal-achievement-meta-analysis-effects-and-processes ; https://stafforini.com/works/gollwitzer-2006-implementation-intentions-and/"
+ },
+ {
+  "id": "baumeister-1998-ego-depletion",
+  "authors": "Baumeister, R. F., Bratslavsky, E., Muraven, M., & Tice, D. M.",
+  "year": 1998,
+  "title": "Ego depletion: Is the active self a limited resource?",
+  "venue": "Journal of Personality and Social Psychology, 74(5), 1252–1265",
+  "doi": null,
+  "url": "https://researchconnect.suny.edu/en/publications/ego-depletion-is-the-active-self-a-limited-resource-2/",
+  "kind": "study",
+  "finding": "In four experiments, an earlier act of self-control (such as resisting chocolate and eating radishes) was followed by giving up sooner on a later task, which the authors took as evidence that self-control draws on a limited resource.",
+  "strength": "debated: very influential, but a large 2016 multi-lab replication found an effect near zero.",
+  "topics": [
+   "habits",
+   "change",
+   "ego-depletion"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup",
+   "/library.html#pillar-v",
+   "/library/motivation.html#pillars",
+   "/library/motivation.html#willpower-ego-depletion",
+   "/library/thinking.html#negativity-bias"
+  ],
+  "verified": true,
+  "verified_by": "https://researchconnect.suny.edu/en/publications/ego-depletion-is-the-active-self-a-limited-resource-2/ ; https://faculty.washington.edu/jdb/345/345%20Articles/Baumeister%20et%20al.%20%281998%29.pdf (DOI not confirmed)"
+ },
+ {
+  "id": "hagger-2016",
+  "authors": "Hagger, M. S., Chatzisarantis, N. L. D., Alberts, H., et al.",
+  "year": 2016,
+  "title": "A multilab preregistered replication of the ego-depletion effect",
+  "venue": "Perspectives on Psychological Science, 11(4), 546–573",
+  "doi": "10.1177/1745691616652873",
+  "url": "https://doi.org/10.1177/1745691616652873",
+  "kind": "study",
+  "finding": "A preregistered replication across 23 labs (2,141 participants) found an ego-depletion effect close to zero (d = 0.04, confidence interval including zero).",
+  "strength": "strong: large preregistered replication; the debate over ego depletion continues.",
+  "topics": [
+   "habits",
+   "change",
+   "ego-depletion"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup",
+   "/library/motivation.html#willpower-ego-depletion"
+  ],
+  "verified": true,
+  "verified_by": "https://mro.massey.ac.nz/items/4a1951d7-6022-4d0e-bbb6-fc336ecd4792/full ; https://cris.maastrichtuniversity.nl/en/publications/a-multilab-preregistered-replication-of-the-ego-depletion-effect/"
+ },
+ {
+  "id": "hofmann-2012",
+  "authors": "Hofmann, W., Baumeister, R. F., Förster, G., & Vohs, K. D.",
+  "year": 2012,
+  "title": "Everyday temptations: An experience sampling study of desire, conflict, and self-control",
+  "venue": "Journal of Personality and Social Psychology, 102(6), 1318–1335",
+  "doi": "10.1037/a0026545",
+  "url": "https://doi.org/10.1037/a0026545",
+  "kind": "study",
+  "finding": "Tracking people's desires through the day by smartphone, the researchers found that people high in trait self-control reported fewer temptations and conflicts, rather than resisting more often.",
+  "strength": "moderate: a large experience-sampling study; interpretation about avoiding temptation is the authors' suggestion.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup"
+  ],
+  "verified": true,
+  "verified_by": "https://experts.umn.edu/en/publications/everyday-temptations-an-experience-sampling-study-of-desire-confl/ ; https://bps.org.uk/research-digest/already-struggling-keep-new-year-resolutions-heres-first-detailed-study-daily (cites DOI)"
+ },
+ {
+  "id": "thaler-sunstein-2008",
+  "authors": "Thaler, R. H., & Sunstein, C. R.",
+  "year": 2008,
+  "title": "Nudge: Improving decisions about health, wealth, and happiness",
+  "venue": "Yale University Press",
+  "doi": null,
+  "url": "https://identity.wellcomecollection.org/works/usu4u2um",
+  "kind": "book",
+  "finding": "Argues that small changes in how choices are presented (defaults, order, ease) can steer people toward better decisions without removing their freedom to choose.",
+  "strength": "moderate: influential; later meta-analyses find nudge effects vary widely and are smaller after accounting for publication bias.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#setup"
+  ],
+  "verified": true,
+  "verified_by": "https://catalog.saclibrary.org/Record/.b1896347x ; https://identity.wellcomecollection.org/works/usu4u2um (Yale University Press, New Haven, 2008)"
+ },
+ {
+  "id": "samuelson-zeckhauser-1988",
+  "authors": "Samuelson, W., & Zeckhauser, R.",
+  "year": 1988,
+  "title": "Status quo bias in decision making",
+  "venue": "Journal of Risk and Uncertainty, 1, 7–59",
+  "doi": null,
+  "url": "https://www.jstor.org/stable/41760530",
+  "kind": "study",
+  "finding": "In decision experiments and in real choices of health plans and retirement programmes, people disproportionately stuck with the current option (status quo bias).",
+  "strength": "strong: a 2021 replication supported the bias in three of four original scenarios.",
+  "topics": [
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#why-hard"
+  ],
+  "verified": true,
+  "verified_by": "https://ideas.repec.org/a/kap/jrisku/v1y1988i1p7-59.html ; https://scholar.harvard.edu/files/rzeckhauser/files/status_quo_bias_in_decision_making.pdf ; https://doi.org/10.15626/MP.2020.2470 (replication)"
+ },
+ {
+  "id": "prochaska-diclemente-1983",
+  "authors": "Prochaska, J. O., & DiClemente, C. C.",
+  "year": 1983,
+  "title": "Stages and processes of self-change of smoking: Toward an integrative model of change",
+  "venue": "Journal of Consulting and Clinical Psychology, 51(3), 390–395",
+  "doi": null,
+  "url": "https://digitalcommons.uri.edu/psy_facpubs/572",
+  "kind": "theory",
+  "finding": "Applied an integrative \"stages of change\" model to 872 people quitting smoking on their own, describing movement through stages such as contemplation, action and maintenance.",
+  "strength": "debated: widely used as a rough map, but critics argue the stage boundaries are arbitrary and stage-matched interventions have weak support.",
+  "topics": [
+   "change",
+   "stages-of-change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library/motivation.html#stages-of-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://digitalcommons.uri.edu/psy_facpubs/572 (DOI not confirmed)"
+ },
+ {
+  "id": "miller-rollnick-1991",
+  "authors": "Miller, W. R., & Rollnick, S.",
+  "year": 1991,
+  "title": "Motivational interviewing: Preparing people to change addictive behavior",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://motivationalinterviewing.org/motivational-interviewing-preparing-people-change-addictive-behavior",
+  "kind": "book",
+  "finding": "The first full presentation of motivational interviewing: a way of talking about change that treats mixed feelings as normal and draws out the person's own reasons for change.",
+  "strength": "moderate: meta-analyses show modest positive effects across many behaviours, strongest in health settings.",
+  "topics": [
+   "change",
+   "helping"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#listening",
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library/communication.html#asking-questions",
+   "/library/motivation.html#stages-of-change"
+  ],
+  "verified": true,
+  "verified_by": "https://motivationalinterviewing.org/motivational-interviewing-preparing-people-change-addictive-behavior ; https://library.usi.edu/record/155252 (Guilford, New York, 1991)"
+ },
+ {
+  "id": "marlatt-gordon-1985",
+  "authors": "Marlatt, G. A., & Gordon, J. R. (Eds.)",
+  "year": 1985,
+  "title": "Relapse prevention: Maintenance strategies in the treatment of addictive behaviors",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://krimdok.uni-tuebingen.de/Record/27251005X",
+  "kind": "book",
+  "finding": "An edited volume setting out the cognitive-behavioural relapse prevention model, including the \"abstinence violation effect\": after one slip, guilt and a sense of total failure can make a full relapse more likely.",
+  "strength": "moderate: a foundational clinical model, widely used in addiction treatment.",
+  "topics": [
+   "change",
+   "habits"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#waves",
+   "/book/understanding-6-change-in-depth.html#slips"
+  ],
+  "verified": true,
+  "verified_by": "https://krimdok.uni-tuebingen.de/Record/27251005X ; https://library.usi.edu/record/106527 (Guilford, New York, 1985)"
+ },
+ {
+  "id": "breines-chen-2012",
+  "authors": "Breines, J. G., & Chen, S.",
+  "year": 2012,
+  "title": "Self-compassion increases self-improvement motivation",
+  "venue": "Personality and Social Psychology Bulletin, 38(9), 1133–1143",
+  "doi": "10.1177/0146167212445599",
+  "url": "https://doi.org/10.1177/0146167212445599",
+  "kind": "study",
+  "finding": "In four experiments, people encouraged to be self-compassionate about a failure or moral mistake were more motivated to improve (for example, studying longer for a retest) than people encouraged to boost their self-esteem.",
+  "strength": "moderate: well-cited experiments; part of a larger, mostly supportive literature.",
+  "topics": [
+   "self-compassion",
+   "self-worth",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#kindness",
+   "/book/understanding-6-change-in-depth.html#slips",
+   "/book/understanding-7-worth-in-depth.html#self-compassion",
+   "/complacency-in-depth.html#sources",
+   "/library/connection.html#self-compassion"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22645164/"
+ },
+ {
+  "id": "bem-1972",
+  "authors": "Bem, D. J.",
+  "year": 1972,
+  "title": "Self-perception theory",
+  "venue": "Advances in Experimental Social Psychology, 6, 1–62",
+  "doi": "10.1016/S0065-2601(08)60024-6",
+  "url": "https://doi.org/10.1016/S0065-2601(08)60024-6",
+  "kind": "theory",
+  "finding": "Proposed that people come to know their own attitudes and feelings partly by observing their own behaviour, much as an outside observer would.",
+  "strength": "moderate: a classic theory with broad support in specific conditions.",
+  "topics": [
+   "change",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#identity"
+  ],
+  "verified": true,
+  "verified_by": "https://deepdyve.com/lp/doc/v0q2I8hZnk"
+ },
+ {
+  "id": "bryan-2011",
+  "authors": "Bryan, C. J., Walton, G. M., Rogers, T., & Dweck, C. S.",
+  "year": 2011,
+  "title": "Motivating voter turnout by invoking the self",
+  "venue": "PNAS, 108(31), 12653–12656",
+  "doi": "10.1073/pnas.1103343108",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3150938/",
+  "kind": "study",
+  "finding": "Asking people about \"being a voter\" rather than \"voting\" increased interest in registering and, in two US statewide elections, increased turnout measured in official records.",
+  "strength": "debated: three small experiments; later replication attempts had mixed results.",
+  "topics": [
+   "change",
+   "identity"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#identity"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3150938"
+ },
+ {
+  "id": "drigotas-1999",
+  "authors": "Drigotas, S. M., Rusbult, C. E., Wieselquist, J., & Whitton, S. W.",
+  "year": 1999,
+  "title": "Close partner as sculptor of the ideal self: Behavioral affirmation and the Michelangelo phenomenon",
+  "venue": "Journal of Personality and Social Psychology, 77(2), 293–323",
+  "doi": "10.1037/0022-3514.77.2.293",
+  "url": "https://doi.org/10.1037/0022-3514.77.2.293",
+  "kind": "study",
+  "finding": "Described the Michelangelo phenomenon: when a partner sees and affirms the best in us, we tend to move toward our ideal self, and this goes with better relationships.",
+  "strength": "moderate: replicated across several studies of couples.",
+  "topics": [
+   "change",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#others",
+   "/library/relationships.html#michelangelo-effect"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/10474210/"
+ },
+ {
+  "id": "wood-runger-2016",
+  "authors": "Wood, W., & Rünger, D.",
+  "year": 2016,
+  "title": "Psychology of habit",
+  "venue": "Annual Review of Psychology, 67, 289–314",
+  "doi": "10.1146/annurev-psych-122414-033417",
+  "url": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/wood.runger.2016.pdf",
+  "kind": "review",
+  "finding": "Reviewed research showing that habits are triggered by context cues learned through repetition, so changing the setting is often more effective than relying on intentions alone.",
+  "strength": "strong: an authoritative review.",
+  "topics": [
+   "habits",
+   "change"
+  ],
+  "mentioned_on": [
+   "/library/motivation.html#habits-and-cues"
+  ],
+  "verified": true,
+  "verified_by": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/wood.runger.2016.pdf ; https://friendsresearch.org/paper/psychology-of-habit/"
+ },
+ {
+  "id": "hayes-strosahl-wilson-1999",
+  "authors": "Hayes, S. C., Strosahl, K. D., & Wilson, K. G.",
+  "year": 1999,
+  "title": "Acceptance and commitment therapy: An experiential approach to behavior change",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://contextualscience.org/publications/hayes_strosahl_wilson_1999",
+  "kind": "book",
+  "finding": "The first main book on acceptance and commitment therapy (ACT), which puts chosen values at the centre and teaches making room for difficult feelings while acting on what matters.",
+  "strength": "strong for ACT as a whole: meta-analyses find it effective for several problems, comparable to other established therapies.",
+  "topics": [
+   "values",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-10-values-in-depth.html#directions",
+   "/library/motivation.html#values"
+  ],
+  "verified": true,
+  "verified_by": "https://contextualscience.org/publications/hayes_strosahl_wilson_1999 ; https://search.ub.tum.de/vufind/Record/DE-604.BV026513694 (Guilford, New York, 1999)"
+ },
+ {
+  "id": "ryan-deci-2000",
+  "authors": "Ryan, R. M., & Deci, E. L.",
+  "year": 2000,
+  "title": "Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being",
+  "venue": "American Psychologist, 55(1), 68–78",
+  "doi": "10.1037/0003-066X.55.1.68",
+  "url": "https://doi.org/10.1037/0003-066X.55.1.68",
+  "kind": "theory",
+  "finding": "Summarised self-determination theory: people are most motivated and well when three basic needs are met: autonomy, competence and relatedness.",
+  "strength": "strong: one of the best-supported theories of motivation, tested across many settings and cultures.",
+  "topics": [
+   "values",
+   "motivation",
+   "self-determination"
+  ],
+  "mentioned_on": [
+   "/book/self-3-next-in-depth.html#matters",
+   "/book/understanding-10-values-in-depth.html#directions",
+   "/book/understanding-10-values.html#tools",
+   "/book/understanding-12-helping-in-depth.html#not-fixing",
+   "/book/understanding-6-change-in-depth.html#ready",
+   "/library.html#pillar-v",
+   "/library/conflict.html#time-disagreements",
+   "/library/life.html#teenagers",
+   "/library/motivation.html#pillars",
+   "/library/motivation.html#self-determination-theory",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/11392867/ ; https://www.deepdyve.com/lp/doc/40grO70c00"
+ },
+ {
+  "id": "neff-2003-definition",
+  "authors": "Neff, K. D.",
+  "year": 2003,
+  "title": "Self-compassion: An alternative conceptualization of a healthy attitude toward oneself",
+  "venue": "Self and Identity, 2(2), 85–101",
+  "doi": "10.1080/15298860309032",
+  "url": "https://doi.org/10.1080/15298860309032",
+  "kind": "theory",
+  "finding": "Defined self-compassion as three parts: self-kindness instead of harsh judgement, common humanity instead of isolation, and mindfulness instead of over-identifying with painful feelings.",
+  "strength": "moderate: widely studied and promising; much research is correlational and the scale's structure is debated.",
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#leftover",
+   "/book/self-3-next-in-depth.html#kindness",
+   "/book/understanding-11-healing-in-depth.html#self-care",
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/book/understanding-7-worth-in-depth.html#self-compassion",
+   "/library/connection.html#self-compassion",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/1969977883 ; https://aassjournal.com/article-1-823-fa.html (reference list gives DOI)"
+ },
+ {
+  "id": "neff-2003-scale",
+  "authors": "Neff, K. D.",
+  "year": 2003,
+  "title": "The development and validation of a scale to measure self-compassion",
+  "venue": "Self and Identity, 2(3), 223–250",
+  "doi": "10.1080/15298860309027",
+  "url": "https://doi.org/10.1080/15298860309027",
+  "kind": "study",
+  "finding": "Developed and validated the Self-Compassion Scale, the questionnaire used in most self-compassion research.",
+  "strength": "moderate: widely used; some researchers question whether it mixes self-compassion with low self-criticism.",
+  "topics": [
+   "self-compassion",
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/library/connection.html#self-compassion"
+  ],
+  "verified": true,
+  "verified_by": "https://aassjournal.com/article-1-823-fa.html (reference list: Self Identity 2003;2(3):223-50)"
+ },
+ {
+  "id": "baumeister-2003-self-esteem",
+  "authors": "Baumeister, R. F., Campbell, J. D., Krueger, J. I., & Vohs, K. D.",
+  "year": 2003,
+  "title": "Does high self-esteem cause better performance, interpersonal success, happiness, or healthier lifestyles?",
+  "venue": "Psychological Science in the Public Interest, 4(1), 1–44",
+  "doi": "10.1111/1529-1006.01431",
+  "url": "https://doi.org/10.1111/1529-1006.01431",
+  "kind": "review",
+  "finding": "A major review concluded that high self-esteem does not reliably cause better performance or relationships; for example, good school performance partly produces high self-esteem rather than the reverse.",
+  "strength": "strong: an influential review; later work suggests self-esteem has some modest prospective links with outcomes.",
+  "topics": [
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/library/motivation.html#self-esteem"
+  ],
+  "verified": true,
+  "verified_by": "https://www.slideshare.net/slideshow/does-high-selfesteem-cause-better-performance/12141104 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9310667/ (reference list with DOI)"
+ },
+ {
+  "id": "curran-hill-2019",
+  "authors": "Curran, T., & Hill, A. P.",
+  "year": 2019,
+  "title": "Perfectionism is increasing over time: A meta-analysis of birth cohort differences from 1989 to 2016",
+  "venue": "Psychological Bulletin, 145(4), 410–429",
+  "doi": "10.1037/bul0000138",
+  "url": "https://doi.org/10.1037/bul0000138",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of college students' perfectionism scores found perfectionism rose between 1989 and 2016, with the largest rise in the sense that others expect perfection.",
+  "strength": "moderate: questionnaire data from Western countries; does not explain why.",
+  "topics": [
+   "self-worth",
+   "perfectionism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#shields",
+   "/library/motivation.html#perfectionism"
+  ],
+  "verified": true,
+  "verified_by": "https://eprints.lse.ac.uk/101352 ; https://researchportal.bath.ac.uk/en/publications/perfectionism-is-increasing-over-time-a-meta-analysis-of-birth-co/"
+ },
+ {
+  "id": "hewitt-flett-1991",
+  "authors": "Hewitt, P. L., & Flett, G. L.",
+  "year": 1991,
+  "title": "Perfectionism in the self and social contexts: Conceptualization, assessment, and association with psychopathology",
+  "venue": "Journal of Personality and Social Psychology, 60(3), 456–470",
+  "doi": "10.1037/0022-3514.60.3.456",
+  "url": "https://doi.org/10.1037/0022-3514.60.3.456",
+  "kind": "study",
+  "finding": "Introduced a multidimensional model of perfectionism, distinguishing self-oriented, other-oriented and socially prescribed perfectionism, and linked these to psychological difficulties.",
+  "strength": "strong: a foundational, widely used model.",
+  "topics": [
+   "self-worth",
+   "perfectionism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#shields",
+   "/library/motivation.html#perfectionism"
+  ],
+  "verified": true,
+  "verified_by": "https://dlab.sauder.ubc.ca/sjdm/dmidi/Multidimensional%20Perfectionism%20Scale%20II.html ; https://hewittlab.sites.olt.ubc.ca/files/2014/11/MPS.pdf"
+ },
+ {
+  "id": "mueller-dweck-1998",
+  "authors": "Mueller, C. M., & Dweck, C. S.",
+  "year": 1998,
+  "title": "Praise for intelligence can undermine children's motivation and performance",
+  "venue": "Journal of Personality and Social Psychology, 75(1), 33–52",
+  "doi": "10.1037/0022-3514.75.1.33",
+  "url": "https://doi.org/10.1037/0022-3514.75.1.33",
+  "kind": "study",
+  "finding": "In six studies, children praised for intelligence cared more about looking good than learning, and after failure persisted less and performed worse than children praised for effort.",
+  "strength": "moderate: classic findings; wider growth-mindset interventions have had mixed results at scale.",
+  "topics": [
+   "self-worth",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#others"
+  ],
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/1972987799 ; https://www.columbia.edu/cu/psychology/courses/3615/Readings/Mueller_Dweck.pdf"
+ },
+ {
+  "id": "festinger-1954",
+  "authors": "Festinger, L.",
+  "year": 1954,
+  "title": "A theory of social comparison processes",
+  "venue": "Human Relations, 7(2), 117–140",
+  "doi": "10.1177/001872675400700202",
+  "url": "https://doi.org/10.1177/001872675400700202",
+  "kind": "theory",
+  "finding": "Proposed that people judge their own opinions and abilities by comparing themselves with others, especially when there is no objective standard.",
+  "strength": "strong: a foundational theory with extensive later research.",
+  "topics": [
+   "self-worth"
+  ],
+  "mentioned_on": [
+   "/book/understanding-7-worth-in-depth.html#comparison",
+   "/growing-up-in-depth.html#research",
+   "/growing-up-in-depth.html#world",
+   "/library/life.html#social-comparison"
+  ],
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/2157300266 ; https://www2.psych.ubc.ca/%7Eschaller/528Readings/Festinger1954.pdf"
+ },
+ {
+  "id": "leary-2007-self-compassion",
+  "authors": "Leary, M. R., Tate, E. B., Adams, C. E., Allen, A. B., & Hancock, J.",
+  "year": 2007,
+  "title": "Self-compassion and reactions to unpleasant self-relevant events: The implications of treating oneself kindly",
+  "venue": "Journal of Personality and Social Psychology, 92(5), 887–904",
+  "doi": "10.1037/0022-3514.92.5.887",
+  "url": "https://doi.org/10.1037/0022-3514.92.5.887",
+  "kind": "study",
+  "finding": "In five studies, self-compassion softened people's reactions to unpleasant events in ways distinct from, and sometimes more helpful than, self-esteem.",
+  "strength": "moderate: several studies, mostly with students.",
+  "topics": [
+   "self-compassion",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#self-care"
+  ],
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/5846A320F58FCFB0CDB867BB021C8F (PMID 17484611)"
+ },
+ {
+  "id": "holmes-rahe-1967",
+  "authors": "Holmes, T. H., & Rahe, R. H.",
+  "year": 1967,
+  "title": "The Social Readjustment Rating Scale",
+  "venue": "Journal of Psychosomatic Research, 11(2), 213–218",
+  "doi": "10.1016/0022-3999(67)90010-4",
+  "url": "https://doi.org/10.1016/0022-3999(67)90010-4",
+  "kind": "study",
+  "finding": "Created the Social Readjustment Rating Scale, a list of 43 life events (such as divorce, job loss, moving and bereavement) rated by how much readjustment they demand.",
+  "strength": "moderate: a classic but dated and rough measure.",
+  "topics": [
+   "grief",
+   "loss",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#any-loss"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/6059863/"
+ },
+ {
+  "id": "kubler-ross-1969",
+  "authors": "Kübler-Ross, E.",
+  "year": 1969,
+  "title": "On death and dying",
+  "venue": "Macmillan",
+  "doi": null,
+  "url": "https://search.worldcat.org/title/4238",
+  "kind": "book",
+  "finding": "Described five stages (denial, anger, bargaining, depression, acceptance) from work with dying patients.",
+  "strength": "debated: research on bereaved people does not find that most move through these stages in order; best read as feelings people may have.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#waves",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change"
+  ],
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/title/4238 ; https://adams.marmot.org/Record/.b1000175x (New York: Macmillan, 1969)"
+ },
+ {
+  "id": "stroebe-schut-1999",
+  "authors": "Stroebe, M., & Schut, H.",
+  "year": 1999,
+  "title": "The dual process model of coping with bereavement: Rationale and description",
+  "venue": "Death Studies, 23(3), 197–224",
+  "doi": null,
+  "url": "https://research-portal.uu.nl/en/publications/the-dual-process-model-of-coping-with-bereavement-rationale-and-d/",
+  "kind": "theory",
+  "finding": "Proposed the dual process model: healthy grieving moves back and forth (oscillates) between loss-oriented and restoration-oriented coping, including taking breaks from grief.",
+  "strength": "moderate: widely used framework with partial empirical support.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#waves",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://research-portal.uu.nl/en/publications/the-dual-process-model-of-coping-with-bereavement-rationale-and-d/ ; https://www.suicideinfo.ca/resource/siecno-19990100/ (Death Studies 23(3), 197-224; DOI not confirmed)"
+ },
+ {
+  "id": "oconnor-2022",
+  "authors": "O'Connor, M.-F.",
+  "year": 2022,
+  "title": "The grieving brain: The surprising science of how we learn from love and loss",
+  "venue": "HarperOne",
+  "doi": null,
+  "url": "https://newbooksnetwork.com/the-grieving-brain",
+  "kind": "book",
+  "finding": "A neuroscientist's account of grief as partly a learning problem: the brain must slowly update a map of the world in which the lost person is always there.",
+  "strength": "moderate: draws on research, written for general readers.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#body"
+  ],
+  "verified": true,
+  "verified_by": "https://newbooksnetwork.com/the-grieving-brain ; https://catalog.dmpl.org/Record/17360 (HarperOne, 2022)"
+ },
+ {
+  "id": "boss-1999",
+  "authors": "Boss, P.",
+  "year": 1999,
+  "title": "Ambiguous loss: Learning to live with unresolved grief",
+  "venue": "Harvard University Press",
+  "doi": null,
+  "url": "https://bookshare.org/browse/book/2050897",
+  "kind": "book",
+  "finding": "Named \"ambiguous loss\": losses without clear closure, such as someone physically absent but psychologically present, or present but psychologically changed (as in dementia), and suggested ways to cope.",
+  "strength": "moderate: a widely used conceptual framework supported by clinical and qualitative research.",
+  "topics": [
+   "grief",
+   "ambiguous-loss"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#unseen",
+   "/library/life.html#ambiguous-loss",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://bookshare.org/browse/book/2050897 (Harvard University Press, 1999)"
+ },
+ {
+  "id": "doka-1989",
+  "authors": "Doka, K. J. (Ed.)",
+  "year": 1989,
+  "title": "Disenfranchised grief: Recognizing hidden sorrow",
+  "venue": "Lexington Books",
+  "doi": null,
+  "url": "https://openlibrary.org/books/OL354418M",
+  "kind": "book",
+  "finding": "Coined \"disenfranchised grief\": grief that is not openly acknowledged, publicly mourned or socially supported.",
+  "strength": "moderate: a widely accepted concept from clinical work.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#unseen"
+  ],
+  "verified": true,
+  "verified_by": "https://openlibrary.org/books/OL354418M ; https://ebsco.com/research-starters/psychology/disenfranchised-grief (Lexington Books, 1989)"
+ },
+ {
+  "id": "martin-doka-2000",
+  "authors": "Martin, T. L., & Doka, K. J.",
+  "year": 2000,
+  "title": "Men don't cry... women do: Transcending gender stereotypes of grief",
+  "venue": "Brunner/Mazel",
+  "doi": null,
+  "url": "https://opac.tangaza.ac.ke/bib/168348",
+  "kind": "book",
+  "finding": "Described intuitive (feeling-focused) and instrumental (thinking- and doing-focused) grieving patterns, plus blended ones, arguing that they are related to gender but not determined by it.",
+  "strength": "moderate: a clinical framework rather than a tested model.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#styles"
+  ],
+  "verified": true,
+  "verified_by": "https://opac.tangaza.ac.ke/bib/168348 ; https://www.librarything.com/work/600141 (Philadelphia: Brunner/Mazel, 2000)"
+ },
+ {
+  "id": "klass-1996",
+  "authors": "Klass, D., Silverman, P. R., & Nickman, S. L. (Eds.)",
+  "year": 1996,
+  "title": "Continuing bonds: New understandings of grief",
+  "venue": "Taylor & Francis",
+  "doi": null,
+  "url": "https://www.routledge.com/Continuing-Bonds-New-Understandings-of-Grief/Klass-Nickman-Silverman/p/book/9781560323396",
+  "kind": "book",
+  "finding": "Challenged the idea that healthy mourning means cutting ties with the dead, showing across many groups that ongoing inner bonds with the deceased are common and often healthy.",
+  "strength": "moderate: influential; later research finds continuing bonds can comfort or distress depending on the person.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#bonds",
+   "/grief.html#grief",
+   "/library/emotions.html#grief-and-change",
+   "/tools/chat/deep.json"
+  ],
+  "verified": true,
+  "verified_by": "https://www.routledge.com/Continuing-Bonds-New-Understandings-of-Grief/Klass-Nickman-Silverman/p/book/9781560323396 ; https://catalog.flo.org/Record/095c71de-f776-4196-80d5-e5b88798efef (Washington, DC: Taylor & Francis, 1996)"
+ },
+ {
+  "id": "bridges-1980",
+  "authors": "Bridges, W.",
+  "year": 1980,
+  "title": "Transitions: Making sense of life's changes",
+  "venue": "Addison-Wesley",
+  "doi": null,
+  "url": "https://narrativestudies.lib.unb.ca/bibcite/reference/16554",
+  "kind": "book",
+  "finding": "Distinguished outer change from inner transition and described three phases: endings, a \"neutral zone\", and new beginnings.",
+  "strength": "early: from coaching and practice, not controlled studies.",
+  "topics": [
+   "grief",
+   "change"
+  ],
+  "mentioned_on": [
+   "/book/understanding-8-loss-in-depth.html#changes"
+  ],
+  "verified": true,
+  "verified_by": "https://narrativestudies.lib.unb.ca/bibcite/reference/16554 (Reading, MA: Addison-Wesley, 1980)"
+ },
+ {
   "id": "dutton-aron-1974",
   "authors": "Dutton, D. G., & Aron, A. P.",
   "year": 1974,
@@ -1548,265 +2390,6 @@
   "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC8456171/ on wired-differently-in-depth.html; not re-checked."
  },
  {
-  "id": "wood-quinn-kashy-2002",
-  "authors": "Wood, W., Quinn, J. M., & Kashy, D. A.",
-  "year": 2002,
-  "title": "Habits in everyday life: Thought, emotion, and action",
-  "venue": "Journal of Personality and Social Psychology, 83(6), 1281–1297",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#why-hard",
-   "/library/motivation.html#habits-and-cues"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.83.6.1281."
- },
- {
-  "id": "neal-2011",
-  "authors": "Neal, D. T., Wood, W., Wu, M., & Kurlander, D.",
-  "year": 2011,
-  "title": "The pull of the past: When do habits persist despite conflict with motives?",
-  "venue": "Personality and Social Psychology Bulletin, 37(11), 1428–1437",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#loop"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/0146167211419863."
- },
- {
-  "id": "lally-2010",
-  "authors": "Lally, P., van Jaarsveld, C. H. M., Potts, H. W. W., & Wardle, J.",
-  "year": 2010,
-  "title": "How are habits formed: Modelling habit formation in the real world",
-  "venue": "European Journal of Social Psychology, 40(6), 998–1009",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/chapter-1-in-depth.html#daily",
-   "/book/self-3-next-in-depth.html#tiny",
-   "/book/understanding-10-values-in-depth.html#small-acts",
-   "/book/understanding-6-change-in-depth.html",
-   "/book/understanding-6-change-in-depth.html#faq",
-   "/book/understanding-6-change-in-depth.html#slips",
-   "/book/understanding-6-change-in-depth.html#small",
-   "/library/motivation.html#habit-formation"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1002/ejsp.674 (online 2009, print 2010)."
- },
- {
-  "id": "gollwitzer-1999",
-  "authors": "Gollwitzer, P. M.",
-  "year": 1999,
-  "title": "Implementation intentions: Strong effects of simple plans",
-  "venue": "American Psychologist, 54(7), 493–503",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change",
-   "implementation-intentions"
-  ],
-  "mentioned_on": [
-   "/book/self-1-then-in-depth.html#choose",
-   "/book/self-2-now-in-depth.html#settle",
-   "/book/self-3-next-in-depth.html#if-then",
-   "/book/self-3-next-in-depth.html#support",
-   "/book/understanding-10-values-in-depth.html#small-acts",
-   "/book/understanding-6-change-in-depth.html#small",
-   "/library/motivation.html#implementation-intentions",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.54.7.493."
- },
- {
-  "id": "gollwitzer-sheeran-2006",
-  "authors": "Gollwitzer, P. M., & Sheeran, P.",
-  "year": 2006,
-  "title": "Implementation intentions and goal achievement: A meta-analysis of effects and processes",
-  "venue": "Advances in Experimental Social Psychology, 38, 69–119",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change",
-   "implementation-intentions"
-  ],
-  "mentioned_on": [
-   "/book/self-2-now-in-depth.html#settle",
-   "/book/self-3-next-in-depth.html#if-then",
-   "/book/understanding-6-change-in-depth.html#small",
-   "/library/motivation.html#implementation-intentions"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(06)38002-1."
- },
- {
-  "id": "baumeister-1998-ego-depletion",
-  "authors": "Baumeister, R. F., Bratslavsky, E., Muraven, M., & Tice, D. M.",
-  "year": 1998,
-  "title": "Ego depletion: Is the active self a limited resource?",
-  "venue": "Journal of Personality and Social Psychology, 74(5), 1252–1265",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change",
-   "ego-depletion"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#setup",
-   "/library.html#pillar-v",
-   "/library/motivation.html#pillars",
-   "/library/motivation.html#willpower-ego-depletion",
-   "/library/thinking.html#negativity-bias"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.74.5.1252."
- },
- {
-  "id": "hagger-2016",
-  "authors": "Hagger, M. S., Chatzisarantis, N. L. D., et al.",
-  "year": 2016,
-  "title": "A multilab preregistered replication of the ego-depletion effect",
-  "venue": "Perspectives on Psychological Science, 11(4), 546–573",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change",
-   "ego-depletion"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#setup",
-   "/library/motivation.html#willpower-ego-depletion"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1745691616652873."
- },
- {
-  "id": "hofmann-2012",
-  "authors": "Hofmann, W., Baumeister, R. F., Förster, G., & Vohs, K. D.",
-  "year": 2012,
-  "title": "Everyday temptations: An experience sampling study of desire, conflict, and self-control",
-  "venue": "Journal of Personality and Social Psychology, 102(6), 1318–1335",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#setup"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0026545."
- },
- {
-  "id": "thaler-sunstein-2008",
-  "authors": "Thaler, R. H., & Sunstein, C. R.",
-  "year": 2008,
-  "title": "Nudge: Improving decisions about health, wealth, and happiness",
-  "venue": "Yale University Press",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#setup"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "samuelson-zeckhauser-1988",
-  "authors": "Samuelson, W., & Zeckhauser, R.",
-  "year": 1988,
-  "title": "Status quo bias in decision making",
-  "venue": "Journal of Risk and Uncertainty, 1, 7–59",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#why-hard"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/BF00055564."
- },
- {
-  "id": "prochaska-diclemente-1983",
-  "authors": "Prochaska, J. O., & DiClemente, C. C.",
-  "year": 1983,
-  "title": "Stages and processes of self-change of smoking: Toward an integrative model of change",
-  "venue": "Journal of Consulting and Clinical Psychology, 51(3), 390–395",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "stages-of-change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#ready",
-   "/library/motivation.html#stages-of-change",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-006X.51.3.390."
- },
- {
   "id": "west-2005",
   "authors": "West, R.",
   "year": 2005,
@@ -1825,121 +2408,7 @@
    "/library/motivation.html#stages-of-change"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1360-0443.2005.01139.x."
- },
- {
-  "id": "miller-rollnick-1991",
-  "authors": "Miller, W. R., & Rollnick, S.",
-  "year": 1991,
-  "title": "Motivational interviewing: Preparing people to change addictive behavior",
-  "venue": "Guilford Press",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "helping"
-  ],
-  "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#listening",
-   "/book/understanding-6-change-in-depth.html#ready",
-   "/library/communication.html#asking-questions",
-   "/library/motivation.html#stages-of-change"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book (later editions 2002, 2013); publisher page not checked."
- },
- {
-  "id": "marlatt-gordon-1985",
-  "authors": "Marlatt, G. A., & Gordon, J. R. (Eds.)",
-  "year": 1985,
-  "title": "Relapse prevention: Maintenance strategies in the treatment of addictive behaviors",
-  "venue": "Guilford Press",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "habits"
-  ],
-  "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#waves",
-   "/book/understanding-6-change-in-depth.html#slips"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "breines-chen-2012",
-  "authors": "Breines, J. G., & Chen, S.",
-  "year": 2012,
-  "title": "Self-compassion increases self-improvement motivation",
-  "venue": "Personality and Social Psychology Bulletin, 38(9), 1133–1143",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-compassion",
-   "self-worth",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/self-3-next-in-depth.html#kindness",
-   "/book/understanding-6-change-in-depth.html#slips",
-   "/book/understanding-7-worth-in-depth.html#self-compassion",
-   "/complacency-in-depth.html#sources",
-   "/library/connection.html#self-compassion"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/0146167212445599."
- },
- {
-  "id": "bem-1972",
-  "authors": "Bem, D. J.",
-  "year": 1972,
-  "title": "Self-perception theory",
-  "venue": "Advances in Experimental Social Psychology, 6, 1–62",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "identity"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#identity"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(08)60024-6."
- },
- {
-  "id": "bryan-2011",
-  "authors": "Bryan, C. J., Walton, G. M., Rogers, T., & Dweck, C. S.",
-  "year": 2011,
-  "title": "Motivating voter turnout by invoking the self",
-  "venue": "PNAS, 108(31), 12653–12656",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "identity"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#identity"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1073/pnas.1103343108."
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed author, year, title and journal (Addiction) via secondary coverage (thebehavioralscientist.com) but no DOI or paper page; candidate DOI 10.1111/j.1360-0443.2005.01139.x unconfirmed."
  },
  {
   "id": "lewis-rook-1999",
@@ -1961,104 +2430,7 @@
    "/book/understanding-6-change-in-depth.html#others"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0278-6133.18.1.63."
- },
- {
-  "id": "drigotas-1999",
-  "authors": "Drigotas, S. M., Rusbult, C. E., Wieselquist, J., & Whitton, S. W.",
-  "year": 1999,
-  "title": "Close partner as sculptor of the ideal self: Behavioral affirmation and the Michelangelo phenomenon",
-  "venue": "Journal of Personality and Social Psychology, 77(2), 293–323",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "change",
-   "relationships"
-  ],
-  "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#others",
-   "/library/relationships.html#michelangelo-effect"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.77.2.293."
- },
- {
-  "id": "wood-runger-2016",
-  "authors": "Wood, W., & Rünger, D.",
-  "year": 2016,
-  "title": "Psychology of habit",
-  "venue": "Annual Review of Psychology, 67, 289–314",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "habits",
-   "change"
-  ],
-  "mentioned_on": [
-   "/library/motivation.html#habits-and-cues"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1146/annurev-psych-122414-033417."
- },
- {
-  "id": "hayes-strosahl-wilson-1999",
-  "authors": "Hayes, S. C., Strosahl, K. D., & Wilson, K. G.",
-  "year": 1999,
-  "title": "Acceptance and commitment therapy: An experiential approach to behavior change",
-  "venue": "Guilford Press",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "values",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-10-values-in-depth.html#directions",
-   "/library/motivation.html#values"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "ryan-deci-2000",
-  "authors": "Ryan, R. M., & Deci, E. L.",
-  "year": 2000,
-  "title": "Self-determination theory and the facilitation of intrinsic motivation, social development, and well-being",
-  "venue": "American Psychologist, 55(1), 68–78",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "values",
-   "motivation",
-   "self-determination"
-  ],
-  "mentioned_on": [
-   "/book/self-3-next-in-depth.html#matters",
-   "/book/understanding-10-values-in-depth.html#directions",
-   "/book/understanding-10-values.html#tools",
-   "/book/understanding-12-helping-in-depth.html#not-fixing",
-   "/book/understanding-6-change-in-depth.html#ready",
-   "/library.html#pillar-v",
-   "/library/conflict.html#time-disagreements",
-   "/library/life.html#teenagers",
-   "/library/motivation.html#pillars",
-   "/library/motivation.html#self-determination-theory",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.55.1.68 (site says \"an influential 2000 review\"; could instead be Deci & Ryan 2000, Psychological Inquiry 11(4), 227–268)."
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed authors, year, title, Health Psychology 18(1) 63-71 via a reference list, but no DOI or stable page; candidate DOI 10.1037/0278-6133.18.1.63 unconfirmed."
  },
  {
   "id": "crocker-wolfe-2001",
@@ -2079,55 +2451,7 @@
    "/library/motivation.html#self-esteem"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-295X.108.3.593."
- },
- {
-  "id": "neff-2003-definition",
-  "authors": "Neff, K. D.",
-  "year": 2003,
-  "title": "Self-compassion: An alternative conceptualization of a healthy attitude toward oneself",
-  "venue": "Self and Identity, 2(2), 85–101",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-compassion",
-   "self-worth"
-  ],
-  "mentioned_on": [
-   "/book/chapter-3-in-depth.html#leftover",
-   "/book/self-3-next-in-depth.html#kindness",
-   "/book/understanding-11-healing-in-depth.html#self-care",
-   "/book/understanding-7-worth-in-depth.html#comparison",
-   "/book/understanding-7-worth-in-depth.html#self-compassion",
-   "/library/connection.html#self-compassion",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/15298860309032."
- },
- {
-  "id": "neff-2003-scale",
-  "authors": "Neff, K. D.",
-  "year": 2003,
-  "title": "The development and validation of a scale to measure self-compassion",
-  "venue": "Self and Identity, 2(3), 223–250",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-compassion",
-   "self-worth"
-  ],
-  "mentioned_on": [
-   "/library/connection.html#self-compassion"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/15298860309027."
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed citation (Psychological Review 108(3), 593-623) via secondary sources but no DOI or stable page; candidate DOI 10.1037/0033-295X.108.3.593 unconfirmed."
  },
  {
   "id": "neff-vonk-2009",
@@ -2148,331 +2472,7 @@
    "/book/understanding-7-worth-in-depth.html#comparison"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1467-6494.2008.00537.x."
- },
- {
-  "id": "baumeister-2003-self-esteem",
-  "authors": "Baumeister, R. F., Campbell, J. D., Krueger, J. I., & Vohs, K. D.",
-  "year": 2003,
-  "title": "Does high self-esteem cause better performance, interpersonal success, happiness, or healthier lifestyles?",
-  "venue": "Psychological Science in the Public Interest, 4(1), 1–44",
-  "doi": null,
-  "url": null,
-  "kind": "review",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-worth"
-  ],
-  "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#comparison",
-   "/library/motivation.html#self-esteem"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/1529-1006.01431."
- },
- {
-  "id": "curran-hill-2019",
-  "authors": "Curran, T., & Hill, A. P.",
-  "year": 2019,
-  "title": "Perfectionism is increasing over time: A meta-analysis of birth cohort differences from 1989 to 2016",
-  "venue": "Psychological Bulletin, 145(4), 410–429",
-  "doi": null,
-  "url": null,
-  "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-worth",
-   "perfectionism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#shields",
-   "/library/motivation.html#perfectionism"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/bul0000138."
- },
- {
-  "id": "hewitt-flett-1991",
-  "authors": "Hewitt, P. L., & Flett, G. L.",
-  "year": 1991,
-  "title": "Perfectionism in the self and social contexts: Conceptualization, assessment, and association with psychopathology",
-  "venue": "Journal of Personality and Social Psychology, 60(3), 456–470",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-worth",
-   "perfectionism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#shields",
-   "/library/motivation.html#perfectionism"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.60.3.456."
- },
- {
-  "id": "mueller-dweck-1998",
-  "authors": "Mueller, C. M., & Dweck, C. S.",
-  "year": 1998,
-  "title": "Praise for intelligence can undermine children's motivation and performance",
-  "venue": "Journal of Personality and Social Psychology, 75(1), 33–52",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-worth",
-   "parenting"
-  ],
-  "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#others"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.75.1.33."
- },
- {
-  "id": "festinger-1954",
-  "authors": "Festinger, L.",
-  "year": 1954,
-  "title": "A theory of social comparison processes",
-  "venue": "Human Relations, 7(2), 117–140",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-worth"
-  ],
-  "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#comparison",
-   "/growing-up-in-depth.html#research",
-   "/growing-up-in-depth.html#world",
-   "/library/life.html#social-comparison"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/001872675400700202."
- },
- {
-  "id": "leary-2007-self-compassion",
-  "authors": "Leary, M. R., Tate, E. B., Adams, C. E., Allen, A. B., & Hancock, J.",
-  "year": 2007,
-  "title": "Self-compassion and reactions to unpleasant self-relevant events: The implications of treating oneself kindly",
-  "venue": "Journal of Personality and Social Psychology, 92(5), 887–904",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "self-compassion",
-   "healing"
-  ],
-  "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#self-care"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.92.5.887."
- },
- {
-  "id": "holmes-rahe-1967",
-  "authors": "Holmes, T. H., & Rahe, R. H.",
-  "year": 1967,
-  "title": "The Social Readjustment Rating Scale",
-  "venue": "Journal of Psychosomatic Research, 11(2), 213–218",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief",
-   "loss",
-   "stress"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#any-loss"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/0022-3999(67)90010-4."
- },
- {
-  "id": "kubler-ross-1969",
-  "authors": "Kübler-Ross, E.",
-  "year": 1969,
-  "title": "On death and dying",
-  "venue": "Macmillan",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#waves",
-   "/grief.html#grief",
-   "/library/emotions.html#grief-and-change"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "stroebe-schut-1999",
-  "authors": "Stroebe, M., & Schut, H.",
-  "year": 1999,
-  "title": "The dual process model of coping with bereavement: Rationale and description",
-  "venue": "Death Studies, 23(3), 197–224",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#waves",
-   "/grief.html#grief",
-   "/library/emotions.html#grief-and-change",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/074811899201046."
- },
- {
-  "id": "oconnor-2022",
-  "authors": "O'Connor, M.-F.",
-  "year": 2022,
-  "title": "The grieving brain: The surprising science of how we learn from love and loss",
-  "venue": "HarperOne",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#body"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "boss-1999",
-  "authors": "Boss, P.",
-  "year": 1999,
-  "title": "Ambiguous loss: Learning to live with unresolved grief",
-  "venue": "Harvard University Press",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief",
-   "ambiguous-loss"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#unseen",
-   "/library/life.html#ambiguous-loss",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher page not checked."
- },
- {
-  "id": "doka-1989",
-  "authors": "Doka, K. J. (Ed.)",
-  "year": 1989,
-  "title": "Disenfranchised grief: Recognizing hidden sorrow",
-  "venue": "Lexington Books",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#unseen"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
- },
- {
-  "id": "martin-doka-2000",
-  "authors": "Martin, T. L., & Doka, K. J.",
-  "year": 2000,
-  "title": "Men don't cry... women do: Transcending gender stereotypes of grief",
-  "venue": "Brunner/Mazel",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#styles"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
- },
- {
-  "id": "klass-1996",
-  "authors": "Klass, D., Silverman, P. R., & Nickman, S. L. (Eds.)",
-  "year": 1996,
-  "title": "Continuing bonds: New understandings of grief",
-  "venue": "Taylor & Francis",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#bonds",
-   "/grief.html#grief",
-   "/library/emotions.html#grief-and-change",
-   "/tools/chat/deep.json"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
- },
- {
-  "id": "bridges-1980",
-  "authors": "Bridges, W.",
-  "year": 1980,
-  "title": "Transitions: Making sense of life's changes",
-  "venue": "Addison-Wesley",
-  "doi": null,
-  "url": null,
-  "kind": "book",
-  "finding": null,
-  "strength": null,
-  "topics": [
-   "grief",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#changes"
-  ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed the paper and its main finding via secondary sources but no DOI or stable page; DOI uncertain (10.1111/j.1467-6494.2008.00537.x or .00564.x), unconfirmed."
  },
  {
   "id": "bonanno-2009",

@@ -2320,6 +2320,13 @@ html.tol-no-helpers .tol-pud-fab{ display:none !important; }
 /* the time and weather note never sits under Professor Puddles: on wider screens it rides just above him */
 body.has-pud-fab:not(.is-home-pud) .tol-cw{ bottom:calc(max(1rem, env(safe-area-inset-bottom)) + 58px) !important; }
 body.has-pud-fab:not(.is-home-pud) .tol-cw-card{ bottom:calc(max(1rem, env(safe-area-inset-bottom)) + 94px) !important; }
+/* while a Frequency Buddies episode plays (and in its full screen), the floating helpers step aside so nothing covers
+   the player; the time and weather note moves into the picture's bottom-left corner instead (clock-weather.js) */
+body.tol-video-playing .tol-pud-fab, body.tol-video-full .tol-pud-fab,
+body.tol-video-playing .tol-breathe-btn, body.tol-video-full .tol-breathe-btn{ display:none !important; }
+body .tol-cw.is-docked{ bottom:.55rem !important; }
+body .tol-cw.is-docked.is-fs{ bottom:max(12px, env(safe-area-inset-bottom)) !important; }
+body .tol-cw.is-docked.is-scrolling{ opacity:.92 !important; pointer-events:auto; }
 /* while scrolling on a touch screen, the note fades out of the way, and comes back when the page rests */
 .tol-cw.is-scrolling{ opacity:0 !important; pointer-events:none; }
 /* game mode (set by a game while it runs): nothing floats over the controls */

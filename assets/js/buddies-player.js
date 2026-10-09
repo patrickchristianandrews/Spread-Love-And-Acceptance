@@ -1903,11 +1903,8 @@
     '.fb-tap-b:focus-visible{outline:3px solid #F7C98B;outline-offset:2px}' +
     '.fb-player.is-idle .fb-tap{opacity:0}.fb-player.is-idle .fb-tap-b{pointer-events:none}.fb-player.is-idle .fb-stage{cursor:none}' +
     '.fb-stage:has(.fb-ov:not([hidden])) .fb-tap{display:none}' +
-    '.fb-player:fullscreen .fb-prog,.fb-player:fullscreen .fb-ctrl,.fb-player.is-full .fb-prog,.fb-player.is-full .fb-ctrl{transition:opacity .35s}' +
-    '.fb-player.is-idle:fullscreen .fb-prog,.fb-player.is-idle:fullscreen .fb-ctrl,.fb-player.is-idle.is-full .fb-prog,.fb-player.is-idle.is-full .fb-ctrl{opacity:0;pointer-events:none}' +
-    '.fb-under{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}.fb-under .fb-b{text-decoration:none}.fb-player:fullscreen .fb-under,.fb-player.is-full .fb-under,.fb-player.is-stream .fb-under{display:none}' +
+    '.fb-under{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0 0}.fb-under .fb-b{text-decoration:none}.fb-player a.fb-b,.fb-player a.fb-b:visited{color:#FFF6E6}.fb-player a.fb-b.is-main,.fb-player a.fb-b.is-main:visited{color:#2B2140}.fb-player a.fb-b:hover{color:#FFFFFF}.fb-player a.fb-dl{display:inline-flex;align-items:center;background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.45)}.fb-player a.fb-dl[hidden]{display:none}.fb-player:fullscreen .fb-under,.fb-player.is-full .fb-under,.fb-player.is-stream .fb-under{display:none}' +
     '@media (max-width:600px){.fb-ctrl .fb-full .fb-lbl{display:none}.fb-b{padding:.35rem .65rem}.fb-sp{flex-basis:100%;height:0}}' +
-    '.fb-b.fb-flash[hidden]{display:none}' +
     '.fb-ovc .fb-cn{margin:.1rem auto .75rem;padding:.55rem .75rem;border-radius:12px;background:rgba(255,255,255,.1);border-left:3px solid #BFE3D6;text-align:left;font-size:.92rem;line-height:1.45;color:#F2EAFB}' +
     '.fb-ovc .fb-cn b{color:#CDEFE2}' +
     '@media (max-width:600px){.fb-ovc .fb-cn{font-size:.86rem;padding:.45rem .6rem;margin-bottom:.5rem}}' +
@@ -1934,9 +1931,14 @@
     '.fb-ovc a.fb-b{display:inline-flex;align-items:center;text-decoration:none}' +
     '@media (max-width:600px){.fb-ovc p{font-size:.88rem;margin-bottom:.45rem}.fb-ovc .fb-hide-s{display:none}}' +
     '.fb-note{margin:0;padding:0 .3rem;font-size:.8rem;color:#CFC3E4}' +
-    '.fb-player:fullscreen,.fb-player.is-full{position:fixed;inset:0;z-index:10050;border-radius:0;padding:max(.6rem,env(safe-area-inset-top)) .8rem max(.6rem,env(safe-area-inset-bottom));overflow:auto}' +
-    '.fb-player:fullscreen .fb-stage,.fb-player.is-full .fb-stage{flex:1 1 auto;aspect-ratio:auto;min-height:40vh}' +
-    '.fb-player:fullscreen .fb-chaps,.fb-player.is-full .fb-chaps,.fb-player:fullscreen .fb-note,.fb-player.is-full .fb-note{display:none}' +
+    // full screen: only the picture, filling the screen, with the caption as a subtitle on it and the tap controls
+    '.fb-player.is-fs{position:fixed;inset:0;z-index:10050;border-radius:0;padding:0;gap:0;background:#000;box-shadow:none;overflow:hidden}' +
+    '.fb-player.is-fs .fb-head,.fb-player.is-fs .fb-prog,.fb-player.is-fs .fb-ctrl,.fb-player.is-fs .fb-under,.fb-player.is-fs .fb-chaps,.fb-player.is-fs .fb-note{display:none!important}' +
+    '.fb-player.is-fs .fb-stage{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;border-radius:0}.fb-player.is-fs .fb-cv{border-radius:0}' +
+    '.fb-player.is-fs .fb-cap{position:absolute;left:50%;bottom:max(2.6vh,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;width:auto;max-width:min(64vw,54rem);min-height:0;margin:0;padding:.35em .9em .45em;border-radius:14px;background:rgba(20,14,32,.74);font-size:clamp(15px,2.1vw,34px);line-height:1.3;pointer-events:none}' +
+    '.fb-player.is-fs .fb-cap .fb-who{font-size:.5em;margin-bottom:.15em}.fb-player.is-fs .fb-cap.is-empty{display:none}' +
+    '@media (max-width:760px){.fb-player.is-fs .fb-cap{max-width:calc(100vw - 1.5rem);bottom:calc(max(8px,env(safe-area-inset-bottom)) + 2.9rem)}}' +
+    '.fb-player.is-fs .fb-tap-re{left:max(.8rem,env(safe-area-inset-left));top:max(.8rem,env(safe-area-inset-top))}.fb-player.is-fs .fb-tap-full{right:max(.8rem,env(safe-area-inset-right));top:max(.8rem,env(safe-area-inset-top))}' +
     '.fb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}' +
     // the episode cards (the Frequency Journey page and the player page)
     '.fb-season{margin:0;padding:1.1rem;border-radius:26px;background:linear-gradient(160deg,#2A2244,#43315E 60%,#6B4A6E);color:#FFF6E6}' +
@@ -1967,7 +1969,7 @@
     var rate = clamp(parseFloat(q.rate) || 1, 0.25, 32), mem = memGet();
     var shuffle = !!(opts.shuffle || q.shuffle === '1');
     var id = /^s\d+e\d+$/.test(q.ep || '') ? q.ep : shuffle ? shufflePick(null) : (opts.ep || mem.last || 's1e1');
-    var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: mem.voices !== false, music: mem.music !== false, bright: mem.bright === true, one: false, oneCh: 0, oneFirst: q.one === '1', rate: rate, ch: 0 };
+    var P = { host: host, id: id, ep: null, stage: null, dir: null, raf: 0, last: 0, errors: 0, playing: false, started: false, voices: true, music: true, bright: false, one: false, oneCh: 0, oneFirst: q.one === '1', rate: rate, ch: 0 };
     host.classList.add('fb-player'); P.shuffle = shuffle; P.stream = !!(opts.stream || q.stream === '1');
     if (P.stream) { host.classList.add('is-stream'); document.documentElement.classList.add('fb-streaming'); P.voices = true; P.music = true; P.rate = 1; }
     host.innerHTML =
@@ -1983,9 +1985,6 @@
         '<button type="button" class="fb-b fb-nextc" aria-label="Next chapter" title="Next chapter (Right arrow)">⏭</button>' +
         '<button type="button" class="fb-b fb-restart" aria-label="Restart the episode from the beginning" title="Restart the episode (R)">↺ Restart</button>' +
         '<span class="fb-sp"></span>' +
-        '<button type="button" class="fb-b fb-voice" aria-pressed="true">🗣️<span class="fb-lbl"> Voices</span> <span class="fb-st">on</span></button>' +
-        '<button type="button" class="fb-b fb-mus" aria-pressed="true">🎵<span class="fb-lbl"> Music</span> <span class="fb-st">on</span></button>' +
-        '<button type="button" class="fb-b fb-flash" aria-pressed="false" hidden>⚡<span class="fb-lbl"> Flashes</span> <span class="fb-st">soft</span></button>' +
         '<button type="button" class="fb-b fb-full" aria-label="Full screen" title="Full screen (F)">⛶<span class="fb-lbl"> Full screen</span></button>' +
       '</div>' +
       '<div class="fb-under"><button type="button" class="fb-b fb-restart2">↺ Restart episode</button><a class="fb-b fb-dl" hidden>⬇ Download this episode</a></div>' +
@@ -1994,7 +1993,7 @@
       '<p class="fb-sr fb-live" aria-live="polite"></p>';
     var $ = function (s) { return host.querySelector(s); };
     var cv = $('.fb-cv'), g = cv.getContext('2d'), stageEl = $('.fb-stage'), capEl = $('.fb-cap'), whoEl = $('.fb-who'), lineEl = $('.fb-line'), fill = $('.fb-fill'), trackEl = $('.fb-track'), timeEl = $('.fb-time');
-    var skipBtn = $('.fb-skip'), playBtn = $('.fb-play'), vBtn = $('.fb-voice'), mBtn = $('.fb-mus'), fBtn = $('.fb-flash'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
+    var skipBtn = $('.fb-skip'), playBtn = $('.fb-play'), startOv = $('.fb-start'), endOv = $('.fb-end'), chapEl = $('.fb-chap'), live = $('.fb-live');
     var W = 0, H = 0, DPR = 1;
     function resize() {
       var r = stageEl.getBoundingClientRect(); DPR = Math.max(0.6, Math.min(2, window.devicePixelRatio || 1) * (P.q || 1)); // P.q: lowered on slow devices
@@ -2003,29 +2002,18 @@
     }
     function paint(dt) { if (!P.stage || !W) return; try { P.stage.render(g, W, H, DPR, dt); } catch (e) { P.errors++; if (window.console) console.error('buddies render', e); } }
     function syncBtns() {
-      vBtn.setAttribute('aria-pressed', String(P.voices)); vBtn.querySelector('.fb-st').textContent = P.voices ? 'on' : 'off'; vBtn.setAttribute('aria-label', P.voices ? 'Voices are on. Turn the voices off' : 'Voices are off. Turn the voices on');
-      mBtn.setAttribute('aria-pressed', String(P.music)); mBtn.querySelector('.fb-st').textContent = P.music ? 'on' : 'off'; mBtn.setAttribute('aria-label', P.music ? 'Music and sounds are on. Turn them off' : 'Music and sounds are off. Turn them on');
       playBtn.textContent = P.playing ? '❚❚ Pause' : '▶ Play'; playBtn.setAttribute('aria-label', P.playing ? 'Pause' : 'Play');
       var tp = host.querySelector('.fb-tap-play'); if (tp) { tp.textContent = P.playing ? '❚❚' : '▶'; tp.setAttribute('aria-label', P.playing ? 'Pause' : 'Play'); }
       if (typeof wakeTap === 'function') wakeTap(!P.playing);
-      var still = P.stage && P.stage.reduced; // with less motion on, lightning is only ever a soft glow
-      fBtn.setAttribute('aria-pressed', String(P.bright && !still)); fBtn.querySelector('.fb-st').textContent = still ? 'soft (less motion)' : P.bright ? 'bright' : 'soft';
-      fBtn.disabled = !!still;
-      fBtn.setAttribute('aria-label', still ? 'Lightning shows as a soft glow while less motion is on' : P.bright ? 'Lightning shows as bright flashes. Switch to a soft glow' : 'Lightning shows as a soft glow. Switch to bright flashes');
       host.classList.toggle('is-playing', !!P.playing); // site.js keeps pop-ups and helpers away while this is on
       document.documentElement.classList.toggle('fb-watching', !!P.playing); // and the moving garden behind the page rests, so the show runs smoothly
+      if (document.body) document.body.classList.toggle('tol-video-playing', !!P.playing); // site.css tucks the floating helpers away while it plays
+      if (P.wasPlaying !== !!P.playing) { P.wasPlaying = !!P.playing; if (typeof dockNote === 'function') dockNote(); }
       var gf = document.querySelector('iframe.tol-garden-bg');
       if (gf && P.playing && !gf.__rest) { gf.__rest = gf.src; gf.src = 'about:blank'; } else if (gf && !P.playing && gf.__rest) { gf.src = gf.__rest; gf.__rest = null; }
-      if (!voiceOk()) { vBtn.title = P.rate !== 1 ? 'Voices are off while the story plays fast' : 'This device has no voices to read with, so the captions tell the story'; }
-      // say it on the button itself, not only in a hover tip: no recordings and no device voices means captions only
-      var canVoice = !!CL.ready[P.id] || (VO.ok && vlist().length > 0);
-      if (P.voices && P.rate === 1 && CL.ready[P.id] === false && !canVoice) {
-        vBtn.querySelector('.fb-st').textContent = 'captions only';
-        vBtn.setAttribute('aria-label', 'Voices are not available on this device, so the captions tell the story');
-      }
     }
     function voiceOk() { return (VO.ok || CL.ready[P.id]) && P.rate === 1; }
-    function save() { var m = memGet(); m.last = P.id; m.pos = m.pos || {}; m.pos[P.id] = { ch: P.ch }; m.voices = P.voices; m.music = P.music; m.bright = P.bright; memSet(m); }
+    function save() { var m = memGet(); m.last = P.id; m.pos = m.pos || {}; m.pos[P.id] = { ch: P.ch }; delete m.voices; delete m.music; delete m.bright; memSet(m); } // (older saves could turn voices or music off; those switches are gone)
     function setCaption(who, text, b) {
       capEl.setAttribute('data-who', who || '');
       var nm = who === 'scene' ? '' : who === 'narrator' ? 'Narrator' : PALS[who] ? PALS[who].name : GUESTS[who] ? (P.stage && P.stage.guests[who] ? P.stage.guests[who].name : GUESTS[who].name) : '';
@@ -2414,11 +2402,11 @@
       if (P.ftN > 60) { P.ftN = 0;
         if (P.ft > 0.045 && (P.q || 1) > 0.5) { P.q = Math.max(0.5, (P.q || 1) * 0.8); resize(); }
         else if (P.ft < 0.022 && (P.q || 1) < 1) { P.q = Math.min(1, P.q * 1.12); resize(); } }
-      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } progress(); if (P.rec) recFrame(); if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
+      if (P.th) { try { themeTick(dt); } catch (e) { P.errors++; if (window.console) console.error('buddies theme', e); endTheme(true); } progress(); if (P.rec) recFrame(); if (P.stream || P.fs) capEl.classList.toggle('is-empty', !lineEl.textContent); return; }
       try { P.dir.tick(dt * P.rate); } catch (e) { P.errors++; if (window.console) console.error('buddies tick', e); }
       if (P.one && !P.dir.ended && P.dir.chapterAt() !== P.oneCh) { chapterBreak(P.dir.chapterAt()); return; }
       paint(dt * P.rate); progress(); capLight(); if (P.rec) recFrame();
-      if (P.stream) capEl.classList.toggle('is-empty', !lineEl.textContent);
+      if (P.stream || P.fs) capEl.classList.toggle('is-empty', !lineEl.textContent);
     }
     function chMins(i) { var e = estimate(P.ep).chapters[i]; return e ? Math.max(1, Math.round(e.dur / 60)) : 2; }
     function oneLabel(i) { var n = chMins(i); return 'Watch one chapter (about ' + n + ' minute' + (n === 1 ? '' : 's') + ')'; }
@@ -2464,7 +2452,7 @@
     }
     // on Play, bring the whole screen into view below the site's sticky header
     function inView() {
-      if (host.classList.contains('is-full') || document.fullscreenElement) return;
+      if (P.fs || document.fullscreenElement) return;
       var hd = document.querySelector('.tol-bar'), top = hd ? Math.max(0, hd.getBoundingClientRect().bottom) : 0;
       var r = host.getBoundingClientRect();
       if (r.top < top + 4 || r.top > innerHeight * 0.5) { try { scrollBy({ top: r.top - top - 10, behavior: stillNow() ? 'auto' : 'smooth' }); } catch (e) { scrollBy(0, r.top - top - 10); } }
@@ -2492,7 +2480,7 @@
         // not while someone is moving through the buttons with a keyboard
         var a = document.activeElement, kb = false; try { kb = !!(a && host.contains(a) && a.matches(':focus-visible') && a.closest('.fb-tap, .fb-ctrl, .fb-prog')); } catch (e) {}
         if (P.playing && !kb) host.classList.add('is-idle');
-      }, 2600);
+      }, P.fs ? 2000 : 2600);
     }
     var lastTouch = 0;
     stageEl.addEventListener('touchstart', function () { lastTouch = Date.now(); }, { passive: true });
@@ -2510,20 +2498,46 @@
     ['fb-ctrl', 'fb-prog'].forEach(function (c) { var n = host.querySelector('.' + c); if (n) { n.addEventListener('pointerdown', function () { wakeTap(); }); n.addEventListener('focusin', function () { wakeTap(); }); } });
     $('.fb-prev').addEventListener('click', prevChapter);
     $('.fb-nextc').addEventListener('click', nextChapter);
-    vBtn.addEventListener('click', function () { P.voices = !P.voices; if (!P.voices) vstop(); else if (P.playing) P.dir.restartLine(); syncBtns(); save(); });
-    fBtn.addEventListener('click', function () { P.bright = !P.bright; if (P.stage) P.stage.bright = P.bright; syncBtns(); save(); });
     skipBtn.addEventListener('click', function () { endTheme(true); });
-    mBtn.addEventListener('click', function () { P.music = !P.music; if (!P.music && P.th) endTheme(true); if (P.music) { auEnsure(); auOn(true); if (P.dir) { auMood(MF.cur !== 'none' ? MF.cur : P.dir.music); auWeather(P.stage.weather); } } else auOn(false); syncBtns(); save(); });
-    $('.fb-full').addEventListener('click', function () {
-      var fs = document.fullscreenElement || document.webkitFullscreenElement;
-      if (fs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
-      if (host.classList.contains('is-full')) { host.classList.remove('is-full'); document.documentElement.style.overflow = ''; setTimeout(resize, 50); return; }
+    // ---------- full screen: the picture alone, filling the screen ----------
+    function fsEl() { return document.fullscreenElement || document.webkitFullscreenElement || null; }
+    function setFs(on) {
+      if (P.fs === on) return; P.fs = on;
+      host.classList.toggle('is-fs', on); document.documentElement.classList.toggle('fb-full-open', on);
+      if (document.body) document.body.classList.toggle('tol-video-full', on);
+      var tf = host.querySelector('.fb-tap-full'); if (tf) { tf.textContent = on ? '✕' : '⛶'; tf.setAttribute('aria-label', on ? 'Leave full screen' : 'Full screen'); tf.title = on ? 'Leave full screen (Esc)' : 'Full screen'; }
+      capEl.classList.toggle('is-empty', !lineEl.textContent);
+      if (!on) { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {} }
+      dockNote(); setTimeout(resize, 60); wakeTap(!P.playing);
+    }
+    function lockLandscape() { // phones: turn the picture sideways when the phone allows it (only works in real full screen)
+      try { if (screen.orientation && screen.orientation.lock && window.matchMedia && matchMedia('(pointer:coarse)').matches) { var lp = screen.orientation.lock('landscape'); if (lp && lp.catch) lp.catch(function () {}); } } catch (e) {}
+    }
+    function fakeFull() { // no full screen on this browser (an iPhone): cover the window instead, and let Back leave it
+      host.classList.add('is-full'); document.documentElement.style.overflow = 'hidden';
+      try { history.pushState({ fbFull: 1 }, ''); P.fsHist = true; } catch (e) {}
+      setFs(true);
+    }
+    function enterFull() {
       var rq = host.requestFullscreen || host.webkitRequestFullscreen;
-      if (rq) { try { var pr = rq.call(host); if (pr && pr.catch) pr.catch(function () { host.classList.add('is-full'); setTimeout(resize, 50); }); } catch (e) { host.classList.add('is-full'); } }
-      else { host.classList.add('is-full'); document.documentElement.style.overflow = 'hidden'; }
-      setTimeout(resize, 80);
-    });
-    ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(resize, 60); }); });
+      if (!rq) { fakeFull(); return; }
+      try { var pr = rq.call(host); if (pr && pr.then) pr.then(lockLandscape, fakeFull); else lockLandscape(); } catch (e) { fakeFull(); }
+    }
+    function leaveFull(fromHistory) {
+      if (fsEl()) { try { var xp = (document.exitFullscreen || document.webkitExitFullscreen).call(document); if (xp && xp.catch) xp.catch(function () {}); } catch (e) {} return; }
+      if (host.classList.contains('is-full')) {
+        host.classList.remove('is-full'); document.documentElement.style.overflow = ''; setFs(false);
+        if (P.fsHist) { P.fsHist = false; if (!fromHistory) try { history.back(); } catch (e) {} }
+      }
+    }
+    $('.fb-full').addEventListener('click', function () { if (P.fs) leaveFull(); else enterFull(); });
+    ['fullscreenchange', 'webkitfullscreenchange'].forEach(function (ev) { document.addEventListener(ev, function () { if (!host.classList.contains('is-full')) setFs(fsEl() === host); setTimeout(resize, 60); }); });
+    window.addEventListener('popstate', function () { if (host.classList.contains('is-full')) leaveFull(true); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && host.classList.contains('is-full')) { e.preventDefault(); leaveFull(); } });
+    // the time-and-weather note (clock-weather.js) sits in the picture's corner while the show plays, and in full screen,
+    // instead of floating over the buttons and chapters
+    host.setAttribute('data-tol-clock', '.fb-stage');
+    function dockNote() { try { document.dispatchEvent(new CustomEvent('tol-clock-dock')); } catch (e) {} }
     function seekFromPointer(e) { if (!P.dir) return; var r = trackEl.getBoundingClientRect(), p = clamp((e.clientX - r.left) / r.width, 0, 1); if (p < 0.012 || p * P.dir.total < 3) { restart(); return; } if (P.th) endTheme(false); endOv.hidden = true; startOv.hidden = true; P.started = true; P.dir.seekTime(p * P.dir.total); P.ch = P.dir.chapterAt(); if (P.one) P.oneCh = P.ch; renderChapter(); paint(0); progress(); if (P.playing) P.dir.playing = true; else play(); }
     trackEl.addEventListener('click', seekFromPointer);
     trackEl.addEventListener('keydown', function (e) { if (e.key === 'Home') { e.preventDefault(); goChapter(0); } else if (e.key === 'End') { e.preventDefault(); goChapter(P.ep.chapters.length - 1); } });
@@ -2535,7 +2549,7 @@
       if (document.querySelector('.pc-ov:not([hidden]), .tol-menu-panel.is-open')) return;
       // only when the player has focus or is mostly on screen, so Space still scrolls the story below
       var hr = host.getBoundingClientRect(), vh = window.innerHeight || 1, seen = Math.max(0, Math.min(hr.bottom, vh) - Math.max(hr.top, 0)) / Math.max(1, Math.min(hr.height, vh));
-      if (!host.contains(document.activeElement) && !document.fullscreenElement && seen < 0.6) return;
+      if (!host.contains(document.activeElement) && !P.fs && seen < 0.6) return;
       if (e.key === ' ' || e.key === 'k' || e.key === 'K') { e.preventDefault(); toggle(); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); prevChapter(); }
       else if (e.key === 'ArrowRight') { e.preventDefault(); nextChapter(); }
@@ -2556,7 +2570,7 @@
       var oneBtn = '<button type="button" class="fb-b' + (P.oneFirst ? ' is-main' : '') + ' fb-onech">' + (P.oneFirst ? '▶ ' : '') + oneLabel(ch) + '</button>';
       startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Season ' + (ep.season || 1) + ' · Episode ' + (ep.number || 1) + ' · about ' + mins(est.total) + ' · ' + ep.chapters.length + ' chapters</p>' +
         '<h3>' + esc(ep.title) + '</h3><p class="fb-hide-s">' + esc(ep.blurb) + '</p>' +
-        (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) + (hasStorm() ? ' <span class="fb-hide-s">You can turn on bright flashes with the ⚡ Flashes button.</span>' : '') + soundLine() + '</p>' : '') +
+        (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) +  + soundLine() + '</p>' : '') +
         '<div class="fb-row">' +
         (P.oneFirst ? oneBtn : '') +
         '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-begin">▶ Play the episode</button>' +
@@ -2570,7 +2584,7 @@
     }
     function soundLine() {
       var what = P.voices && P.music ? 'Voices, music and sounds' : P.voices ? 'Voices' : P.music ? 'Music and sounds' : '';
-      return what ? ' <span class="fb-hide-s">' + what + ' will play; the buttons below turn them off anytime.</span>' : ' <span class="fb-hide-s">Voices and music are off; captions tell the story.</span>';
+      return what ? ' <span class="fb-hide-s">' + what + ' will play, and the captions are always on.</span>' : ' <span class="fb-hide-s">Captions tell the story.</span>';
     }
     function hasStorm() { return !!(P.ep && P.ep.chapters.some(function (c) { return c.beats.some(function (b) { return b.weather === 'storm'; }); })); }
     function showEnd() {
@@ -2593,7 +2607,7 @@
       P.says = []; ep.chapters.forEach(function (c) { c.beats.forEach(function (b) { if (b.say) P.says.push(b); }); });
       clipMap(P.id).then(function (m) { if (m) fxLoad(); clipPrefetch(P.id, P.says, 0, 3); syncBtns(); });
       P.ep = ep; P.stage = makeStage({ reduced: stillNow(), bright: P.bright });
-      fBtn.hidden = !hasStorm(); P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
+      P.stage.onSound = function (k, who) { if (P.music) auSound(k, who); };
       P.dir = makeDirector(P.stage, ep, hooks);
       $('.fb-title').textContent = ep.title;
       var dl = host.querySelector('.fb-dl');
