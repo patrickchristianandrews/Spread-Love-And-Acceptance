@@ -2147,8 +2147,11 @@
     '.tolc-av svg{width:38px;height:38px;display:block}',
     '.tolc.is-typing .tolc-av{animation:tolc-bob 1.4s ease-in-out infinite}',
     '@keyframes tolc-bob{0%,100%{transform:none}50%{transform:translateY(-2px) rotate(-3deg)}}',
-    '.tolc-who{flex:1 1 9.5rem;min-width:9.5rem}',
-    '.tolc-head{flex-wrap:wrap;row-gap:.2rem}',
+    '.tolc-who{flex:1 1 5.5rem;min-width:5.5rem}',
+    '.tolc-hbtns{display:flex;align-items:center;margin-left:auto;flex:0 0 auto}',
+    // Larger text on a phone: the buttons move to their own row, on the right, so the name keeps its room
+    'html:is(.tol-text-lg,.tol-text-xl,.tol-text-xxl) .tolc-head{flex-wrap:wrap;row-gap:.1rem}',
+    'html:is(.tol-text-lg,.tol-text-xl,.tol-text-xxl) .tolc-who{flex-basis:9rem;min-width:9rem}',
     '.tolc-name{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:1.12rem;line-height:1.2;margin:0;letter-spacing:-.01em}',
     '.tolc-sub{margin:0;font-size:.82rem;color:var(--ink-soft);line-height:1.3}',
     // the subtitle never wraps one word per line (phones, Larger text): one line, cut short, or hidden when the header is tight
@@ -2260,10 +2263,10 @@
       root.setAttribute('aria-labelledby', uid + '-name');
     }
     root.innerHTML =
-      '<div class="tolc-head"><div class="tolc-av"></div><div class="tolc-who"><p class="tolc-name" id="' + uid + '-name"></p><p class="tolc-sub">Your guide to the whole program</p></div>' +
-      '<button type="button" class="tolc-hbtn tolc-reset">Start over</button>' +
+      '<div class="tolc-head"><div class="tolc-av"></div><div class="tolc-who"><p class="tolc-name" id="' + uid + '-name"></p><p class="tolc-sub" title="Your guide to the whole program">Program guide</p></div>' +
+      '<div class="tolc-hbtns"><button type="button" class="tolc-hbtn tolc-reset">Start over</button>' +
       '<button type="button" class="tolc-hbtn tolc-leave" data-tol-exit title="Leave this site quickly">Leave quickly</button>' +
-      (mode === 'modal' ? '<button type="button" class="tolc-hbtn tolc-x" aria-label="Close chat">&times;</button>' : '') + '</div>' +
+      (mode === 'modal' ? '<button type="button" class="tolc-hbtn tolc-x" aria-label="Close chat">&times;</button>' : '') + '</div></div>' +
       '<div class="tolc-log" role="log" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Conversation"></div>' +
       '<div class="tolc-chips" role="group" aria-label="Suggestions"></div>' +
       '<form class="tolc-form" autocomplete="off"><label class="tolc-sr" for="' + uid + '-in"></label>' +
