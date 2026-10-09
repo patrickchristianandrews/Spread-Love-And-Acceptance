@@ -23,7 +23,7 @@
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, or say ‘talk deep’ and we’ll explore the big questions.'
+    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, say ‘talk deep’ for the big questions, or ask me for an infographic, like ‘make an infographic about the mental load’.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -218,6 +218,20 @@
     if (window.TOL_CHAT_BG) return done();
     var sc = document.createElement('script');
     sc.src = BG_URL; sc.async = true;
+    sc.onload = done; sc.onerror = done;
+    document.head.appendChild(sc);
+  }
+  // Professor Puddles' infographics (assets/js/puddles-infographic.js): loaded the first time someone asks for a picture
+  var IG_URL = KB_URL.replace(/chat-kb\.js$/, 'puddles-infographic.js'), igWaiting = [], igTried = false;
+  function loadIG(cb) {
+    if (window.TOLInfographic) return cb(window.TOLInfographic);
+    if (igTried && !igWaiting.length) return cb(null);
+    igWaiting.push(cb);
+    if (igWaiting.length > 1) return;
+    igTried = true;
+    function done() { var w = igWaiting; igWaiting = []; w.forEach(function (f) { f(window.TOLInfographic || null); }); }
+    var sc = document.createElement('script');
+    sc.src = IG_URL; sc.async = true;
     sc.onload = done; sc.onerror = done;
     document.head.appendChild(sc);
   }
@@ -419,7 +433,7 @@
   ];
 
   // the greeting's chips: the usual ways in, and a way to just chat
-  var GREET_CHIPS = STARTERS.slice(0, 3).concat([{ label: 'Just chat', q: 'Let’s just chat' }, { label: 'Talk deep', q: 'Talk deep' }]);
+  var GREET_CHIPS = STARTERS.slice(0, 3).concat([{ label: 'Just chat', q: 'Let’s just chat' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }]);
 
   // Topics this helper never takes on, however a word or two might overlap with the notes
   var OFF_TOPIC = /\b(car|cars|engine|tires?|tyres?|oil change|brakes?|mechanic|transmission|resumes?|cv|cover letter|job application|recipes?|bake|baking|coding|javascript|python|programming|homework|stocks?|crypto|bitcoin|forecast|football|basketball|baseball|soccer|movie times|flights?|hotels?|translate)\b/;
@@ -1763,6 +1777,8 @@
       }
       var vf = norm(q);
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
+      var igr = igTurn(state, q0, vf);
+      if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
       if (dt) return dt;
       var ft = !DANGER.test(vf) && !state.unsafe && funTurn(state, vf);
@@ -1925,6 +1941,60 @@
       return { blocks: [{ k: 'p', x: t }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Something else', q: 'What can I ask?' }], kind: 'fun', fun: 1 };
     }
     return null;
+  }
+
+  // ---------- infographics: "make an infographic about the mental load", "make me a chart: me 60 them 40",
+  // "summarise this as an infographic" (the last answer). Never of a safety reply, and never in place of one.
+  var IG_ASK = /\b(infographic|info ?graphic|poster|cheat ?sheet|one ?pager|visuali[sz]\w*|diagram|graphic|picture|chart|graph|mind ?map|timeline|draw|sketch|illustrate|map out)s?\b/;
+  function igTurn(state, q, f) {
+    if (!IG_ASK.test(f)) return null;
+    if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return null;
+    var IG = window.TOLInfographic;
+    if (!IG) { if (igTried) return null; return { needIG: true }; }
+    var rq = null; try { rq = IG.parseRequest(q); } catch (e) { rq = null; }
+    if (!rq) return null;
+    // after a safety reply (or once someone has told us about danger), no pictures: privacy and safety come first
+    if (state.unsafe || state.lastKind === 'safety' || state.lastKind === 'redflag') {
+      return { blocks: [{ k: 'p', x: 'I won’t make a picture of this one. Pictures can be saved and shared, and what you told me deserves to stay private. The safety page has everything in one place, and a quick way to leave.' },
+        { k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] }], chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety' };
+    }
+    var spec = null, src = '';
+    try {
+      if (rq.last) {
+        var L = state.last, LR = state.lastReply;
+        if (state.deepLast && state.lastKind === 'deep' && dById(state.deepLast)) spec = IG.fromDeep(dById(state.deepLast));
+        else if (L && L.kind === 'sit' && KB.sit && KB.sit.issues && KB.sit.issues[L.issue]) spec = IG.fromSituation(KB.sit.issues[L.issue], { who: whoCtx(L.who, L.noun), whoKey: L.who, self: L.who === 'self', id: L.issue });
+        else if (L && L.card && cardById(L.card)) spec = IG.fromCard(cardById(L.card), rq.layout || null);
+        else if (state.care && cardById(state.care.id) && (state.turn || 0) - state.care.turn <= 2) spec = IG.fromCard(cardById(state.care.id), rq.layout || null);
+        if (!spec && LR && LR.blocks && LR.blocks.length) spec = IG.fromAnswer(LR.blocks, { title: (L && (L.topic || L.q)) || '' });
+        if (!spec) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
+          chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
+      } else {
+        var tp = String(rq.topic || '').trim();
+        if (!tp) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
+          chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify' };
+        if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
+        spec = IG.fromKB(tp, KB, { layout: rq.layout });
+        if (!spec) return { blocks: [{ k: 'p', x: 'I don’t have enough on “' + tp + '” to draw it well. I can make one about the mental load, fair vs equal, a good pause, or any tool or worry here. What would you like?' }],
+          chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
+      }
+    } catch (e) { spec = null; }
+    if (!spec) return null;
+    src = spec.source && safePath(spec.source) ? spec.source : '';
+    var b = [{ k: 'p', x: spec.sensitive ? 'Here it is as a picture. To keep it private, it has no save or share button.' : 'Here’s a little picture of it. You can save it, share it or print it.' }, { k: 'info', spec: spec }];
+    if (src) b.push({ k: 'links', x: [['Read the page this comes from', src]] });
+    var igc = [{ label: 'Make another', q: 'Make an infographic' }];
+    if (!/^(split|checklist)$/.test(spec.layout) && !spec.sensitive && spec.items && spec.items.length >= 3) igc.unshift({ label: 'Make it a checklist', q: 'Make a checklist infographic of ' + (spec.title || 'this') });
+    return { blocks: b, chips: igc, kind: 'info', id: spec.from || spec.layout || 'info', noBrief: true };
+  }
+  // under an ordinary answer with steps or words to say: offer it as a picture
+  function igChip(state, r) {
+    if (!r || !r.blocks || state.unsafe || !/^(card|card-more|sit|sit-more|term|bg|bg-more|deep|search)$/.test(r.kind || 'search') || r.id === 'intro' || r.id === 'nomatch' || r.id === 'infographic') return r;
+    if (!r.blocks.some(function (b) { return b.k === 'list' || b.k === 'script' || b.k === 'h'; })) return r;
+    if (/\/safety\.html/.test(JSON.stringify(r.blocks))) return r;
+    r.chips = r.chips || [];
+    if (r.chips.length < 5) r.chips.push({ label: 'Make this an infographic', q: 'Summarise this as an infographic' });
+    return r;
   }
 
   // ---------- deep talk (tools/chat/deep.json → KB.deep): "talk deep" switches it on for this tab, "small talk" switches it off.
@@ -2104,7 +2174,7 @@
   function deepChip(state, q, r) {
     var D = KB && KB.deep;
     if (!D || !r || !r.blocks || deepOn(state) || state.unsafe) return r;
-    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more']);
+    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more', 'info']);
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
@@ -2312,7 +2382,8 @@
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
-          'Or just chat with me (“how are you?”, “tell me a joke”), or say “talk deep” to think through a big question, like what love is.'] },
+          'Or just chat with me (“how are you?”, “tell me a joke”), or say “talk deep” to think through a big question, like what love is.',
+          'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load”, or “summarise this as an infographic” after an answer.'] },
         { k: 'p', x: 'When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. I’m not a counselor, and I won’t guess. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);
@@ -2520,12 +2591,21 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) x = deepChip(state, q, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
     }
     r = safe(function () { return respond(state, q, doc); });
+    if (r && r.needIG) {
+      loadIG(function () {
+        var r3 = safe(function () { return respond(state, q, doc); });
+        if (r3 && r3.needIG) r3 = { blocks: [{ k: 'p', x: 'Sorry, I couldn’t open my drawing kit just now. Could you try again in a moment?' }], chips: STARTERS };
+        if (r3 && r3.needBG) { loadBG(function () { cb(safe(function () { return respond(state, q, doc); })); }); return; }
+        cb(r3);
+      });
+      return;
+    }
     if (r && r.needBG) {
       loadBG(function () {
         var r2 = safe(function () { return respond(state, q, doc); });
@@ -2543,6 +2623,7 @@
     '.tolc{--c:#7FA88A;--c-soft:#E6EFE6;--paper:#FBF7EC;--paper2:#F3ECD9;--ink:#2B2620;--ink-soft:#5A5346;--line:#DCCFAE;--focus:#2B5B8C;',
     ' font-family:"Lora",Georgia,serif;color:var(--ink);font-size:16px;line-height:1.55;display:flex;flex-direction:column;background:var(--paper);text-align:left}',
     '.tolc p,.tolc h3{margin:0;max-width:none;line-height:1.5}',
+    '.tolc .tolc-msg .tolc-info{margin:.3rem 0 0;width:100%}.tolc .tolc-msg.has-info{max-width:100%;width:100%}',
     '.tolc .tolc-name{line-height:1.2}.tolc .tolc-sub{line-height:1.3}',
     '.tolc-scrim{position:fixed;inset:0;z-index:1090;background:rgba(43,38,32,.28)}',
     '.tolc.is-modal{position:fixed;z-index:1100;left:0;right:0;bottom:0;height:min(88vh,720px);height:min(88dvh,720px);border-radius:22px 22px 0 0;',
@@ -2756,6 +2837,16 @@
       var sr2 = document.createElement('span'); sr2.className = 'tolc-sr'; sr2.textContent = (m.n || 'Buddy') + ' says: '; el.appendChild(sr2);
       (m.b || []).forEach(function (b) {
         if (b.k === 'p') { var p2 = document.createElement('p'); p2.textContent = b.x; el.appendChild(p2); return; }
+        if (b.k === 'info') {
+          // an infographic: drawn by puddles-infographic.js, loaded the first time one is shown
+          var box = document.createElement('div'); box.className = 'tolc-info';
+          el.appendChild(box); el.classList.add('has-info');
+          loadIG(function (IG) {
+            if (IG && b.spec) { try { IG.mount(box, b.spec); return; } catch (e) {} }
+            var pf = document.createElement('p'); pf.textContent = 'Sorry, I couldn’t draw that here.'; box.appendChild(pf);
+          });
+          return;
+        }
         if (b.k === 'h' || b.k === 'note') { var ph = document.createElement('p'); ph.className = b.k === 'h' ? 'tolc-h' : 'tolc-fine'; ph.textContent = b.x; el.appendChild(ph); return; }
         if (b.k === 'list') {
           var ul = document.createElement('ul'); ul.className = 'tolc-list';
@@ -2877,7 +2968,7 @@
     loadKB(function (ok) {
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
       reply(me.state, text, doc, function (r) {
-        var len = r.blocks.reduce(function (n, b) { return n + wc(b.x && b.x.join ? b.x.join(' ') : b.x || ''); }, 0);
+        var len = r.blocks.reduce(function (n, b) { return n + (b.k === 'info' ? 20 : wc(b.x && b.x.join ? b.x.join(' ') : b.x || '')); }, 0);
         me.say(r.blocks, r.chips, REDUCED ? 250 : Math.min(1300, 450 + len * 6), r.think);
       });
     });

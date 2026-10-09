@@ -70,6 +70,7 @@ function replyText(r) {
   return (r.blocks || []).map(b => {
     if (b.k === 'p' || b.k === 'note' || b.k === 'script') return b.x;
     if (b.k === 'h') return '## ' + b.x;
+    if (b.k === 'info') return '[infographic: ' + (b.spec && b.spec.layout) + '] ' + (b.spec && b.spec.title || '');
     if (b.k === 'list') return b.x.map(x => '• ' + x).join('\n');
     if (b.k === 'links') return b.x.map(l => '→ ' + l[0] + ' (' + l[1] + ')').join('\n');
     if (b.k === 'art') return b.x.map(a => '📰 ' + a.t + ' (' + a.s + '): ' + a.x).join('\n');

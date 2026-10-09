@@ -15598,3 +15598,10 @@ stepmum
 stepdad
 wifi
 wi
+summarise
+visualise
+infographic
+cheatsheet
+philosophical
+philosopher
+stoics
