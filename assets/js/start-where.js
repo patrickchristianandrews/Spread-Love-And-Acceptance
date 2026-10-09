@@ -32,6 +32,125 @@
         ['/lemonade-stand.html','The Lemonade Stand','Jobs and hours side by side. Works with more than two people.'],
         ['/signal-translator.html','The Signal Translator','Test your opening line about money before the house meeting.']
       ]},
+    { id:'friends', ico:'\uD83E\uDEC2', label:'A friendship has drifted',
+      say:'Friendships often drift without anyone choosing it: a move, a new baby, a busy year. It is fine to be the one who reaches out first, and it is fine to ask for a little more back. A short, warm message with no guilt in it usually does more than a long one.',
+      picks:[
+        ['/friends.html','Friends: when a friendship drifts','Always the one reaching out, big life changes, and low-energy ways to stay close.'],
+        ['/signal-translator.html','Check a message first','See how a short text might land before you send it.'],
+        ['/turning-toward.html','Turning toward','Small, easy ways to stay in touch.']
+      ]},
+    { id:'more-than-two', ico:'\uD83D\uDC9E', label:'More than two partners at home',
+      say:'Most of the tools here work for three or more people: one list, one owner per job, and a regular time to talk. Feeling like a guest in a home you joined is common, and it usually eases once you own a few whole jobs and have a say in decisions.',
+      picks:[
+        ['/more-than-two.html','More than two partners at home','Sharing the load, joining a home that was already running, and decisions everyone can join.'],
+        ['/lemonade-stand.html','The Lemonade Stand','Jobs and hours side by side, for two to eight people.'],
+        ['/check-ins.html','Check-ins','A short, regular time where everyone gets heard.']
+      ]},
+    { id:'gaming', ico:'\uD83C\uDFAE', label:'Gaming, phones and not enough us-time',
+      say:'Games and phones are how many people relax, and wanting more time together is fair too. Neither of you is wrong. A small, clear deal about when it is game time and when it is your time usually works better than counting hours.',
+      picks:[
+        ['/gaming-and-time-together.html','Gaming, phones and time together','Why it stings, and a small \u201Ctime together deal\u201D you can fill in.'],
+        ['/turning-toward.html','Turning toward','Small moments of attention that add up.'],
+        ['/check-ins.html','Check-ins','Raise it once, calmly, at a good time.']
+      ]},
+    { id:'money', ico:'\uD83D\uDCB0', label:'Money, moving in, a wedding',
+      say:'Money talks go better when you start with what money means to each of you, like safety or freedom, before the numbers. Different styles are normal. If one person controls all the money or checks every purchase, that is something else, and help is there.',
+      picks:[
+        ['/money-together.html','Money together','Saver and spender, moving in, wedding costs and family expectations.'],
+        ['/lemonade-stand.html#money','Money in the Lemonade Stand','Bills and shared costs as plain numbers, never a debt between you.'],
+        ['/safety.html#signs','When it\u2019s more than a difference','Signs of money control, and who can help.']
+      ]},
+    { id:'coming-home', ico:'\uD83E\uDDF3', label:'Someone just came home after months away',
+      say:'After a deployment, a long stretch of work away or a hospital stay, both of you have changed how things run. That is nobody\u2019s fault. Handing jobs back one at a time, with patience on both sides, helps everyone find their place again.',
+      picks:[
+        ['/coming-home.html','Coming home after time apart','A handover week, finding your place, and where to get support.'],
+        ['/workpapers/wp-03-one-owner-per-job.html','One owner per job','Decide together who owns what now.'],
+        ['/check-ins.html','Check-ins','A calm, regular time to talk about how it\u2019s going.']
+      ]},
+    { id:'different-hours', ico:'\uD83C\uDF19', label:'We work different hours',
+      say:'Night shifts, early starts, or one of you working from home can make it feel like you live on different clocks. Sleep after a night shift is not a day off, and working from home is still work. A shared plan for the week protects sleep and still finds time together.',
+      picks:[
+        ['/different-hours.html','Different hours','Night shifts, shift work, and when working from home looks like being free.'],
+        ['/lemonade-stand.html','The Lemonade Stand','Paid work and home jobs in one picture.'],
+        ['/turning-toward.html','Turning toward','Small ways to stay close when you\u2019re rarely awake at the same time.']
+      ]},
+    { id:'two-faiths', ico:'\uD83D\uDD6F\uFE0F', label:'Two faiths or cultures, one family',
+      say:'Two faiths or cultures in one family can be a gift, and a lot to work out: holidays, food, names, raising children and what each family expects. You don\u2019t have to settle everything at once. Start with what matters most to each of you, and why.',
+      picks:[
+        ['/two-faiths.html','Two faiths or cultures, one family','Holidays, rituals, children and family expectations, with words you could use.'],
+        ['/family-obligations.html','Supporting family','Each of you leads with your own family.'],
+        ['/check-ins.html','Check-ins','Hear each other out before you decide.']
+      ]},
+    { id:'foster', ico:'\uD83E\uDDF8', label:'We foster, adopt, or I\u2019m raising a relative\u2019s child',
+      say:'Children who have moved homes often need time before they trust new adults, and that is not a sign you are doing it wrong. Calm routines, small promises kept, and support for you as the carer all matter.',
+      picks:[
+        ['/foster-and-kinship.html','Foster, adoptive and kinship families','Building trust, house rules, and support for grandparents and relatives raising a child.'],
+        ['/parents.html','For parents','Big feelings, coming back after you yell, and teens.'],
+        ['/caregivers.html','Looking after you, too','Where carers can find a break and support.']
+      ]},
+    { id:'grandparents', ico:'\uD83D\uDC75', label:'A grandparent and a grown-up child finding new rules',
+      say:'When a grown-up child has a home, and maybe a baby, of their own, everyone is learning new rules: visits, advice, and who decides what. Both sides usually mean well. Clear, kind words about what helps work better than hints.',
+      picks:[
+        ['/grandparents.html','For grandparents','Being close to the grandchildren, offering help, and when to hold back.'],
+        ['/grown-up-children.html','For grown-up children','Kind boundaries with a parent you love: visits, advice and the new baby.'],
+        ['/signal-translator.html','Check a message first','Test the words before you send them.']
+      ]},
+    { id:'family-rifts', ico:'\uD83C\uDF09', label:'A family rift: sibling, parent or grown child',
+      say:'After a loss, a will, or years of silence, a family rift can hurt for a long time. You can reach out, and you can also decide you are not ready. Both are allowed. Start small, and look after yourself whichever you choose.',
+      picks:[
+        ['/family-rifts.html','Family rifts','Reaching out, what to say first, and \u201CI\u2019m not ready\u201D or \u201CI don\u2019t have to\u201D.'],
+        ['/grief.html','Grief and later life','Family after a loss, and reconnecting.'],
+        ['/signal-translator.html','Check a first message','See how it might land before you send it.']
+      ]},
+    { id:'on-my-own', ico:'\uD83E\uDEB4', label:'On my own after a breakup',
+      say:'After a breakup or divorce, the house, the week and the jobs all change at once. Go gently. Start with your own energy, then build a simple routine that is yours, including the days the kids are with you if you share them.',
+      picks:[
+        ['/on-my-own.html','On my own after a breakup','A new routine, part-time parenting, and making your place feel like home.'],
+        ['/self-path.html','Your self-discovery path','Step by step, on your own.'],
+        ['/co-parenting.html','Separated co-parents','If you share the kids: calmer handoffs and short messages.']
+      ]},
+    { id:'anger', ico:'\uD83C\uDF21\uFE0F', label:'Losing your temper?',
+      say:'Wanting to stop is the biggest step. Most people can learn to catch the first sign in their body and pause before they shout. If your temper scares the people you live with, getting support for yourself is a strong, loving thing to do.',
+      picks:[
+        ['/upset-right-now.html','Upset right now?','Five minutes to pause, breathe and come back.'],
+        ['/parents.html#anger-help','Getting help for your anger','Your doctor, a counsellor or a group, and what to try first.'],
+        ['/wp-11.html','The Calm-Down Kit','Write down your triggers and your own pause line ahead of time.']
+      ]},
+    { id:'sharing-a-room', ico:'\uD83D\uDECF\uFE0F', label:'Sharing a room or a dorm',
+      say:'Sharing a room is close quarters, and small things like lights, noise and guests add up fast. A short room agreement, made early and checked again later, saves a lot of awkward moments.',
+      picks:[
+        ['/sharing-a-room.html','Sharing a room','Sleep, noise, guests and tidiness, with a room agreement to fill in.'],
+        ['/share-the-load.html#roommates','Roommates and housemates','Chores, bills and a house meeting.'],
+        ['/signal-translator.html','Check a message first','Raise it kindly before it builds up.']
+      ]},
+    { id:'coming-out', ico:'\uD83C\uDF08', label:'Coming out as an adult',
+      say:'Coming out as an adult, to family, at work or with a partner, is yours to share at your own pace. You choose who, when and how much. If someone threatens or controls you, your safety comes first.',
+      picks:[
+        ['/coming-out.html','Coming out as an adult','To family, at work or with a partner, with words you could use.'],
+        ['/signal-translator.html','Check a message first','Try the words before you say them.'],
+        ['/safety.html','Not safe at home?','Free, private people to talk to.']
+      ]},
+    { id:'adhd-kids', ico:'\uD83C\uDF92', label:'A child with ADHD',
+      say:'A child who can\u2019t sit still, forgets things or melts down is not being naughty on purpose. ADHD is a different kind of wiring. Short steps, calm reminders and noticing what goes right help the whole family.',
+      picks:[
+        ['/adhd-kids.html','When a child has ADHD','For parents and grandparents: routines, reminders and calm.'],
+        ['/parents.html','For parents','Big feelings, siblings, and coming back after you yell.'],
+        ['/neurodivergent-relationships.html','Neurodivergent families','When the grown-ups are wired differently too.']
+      ]},
+    { id:'illness', ico:'\uD83E\uDEF6', label:'One of us lives with an illness or disability',
+      say:'When one of you is ill or disabled, the load is better shared by energy than by hours. Nobody here is a burden. Plan around good days and bad days, and let whoever has more energy that day carry more, without keeping score.',
+      picks:[
+        ['/when-one-is-ill.html','When one of you is ill','Sharing the load by energy, not hours, with ideas for bad days.'],
+        ['/caregivers.html','Caring for someone you love','For the one who cares: your battery matters too.'],
+        ['/turning-toward.html','Turning toward','Gentle ways to stay close, even on a day in bed.']
+      ]},
+    { id:'empty-nest', ico:'\uD83C\uDFE1', label:'Kids grown and gone, it feels quiet',
+      say:'When the children leave, the house goes quiet and you can feel more like housemates. That is common after busy years, and it can become a good new chapter. Small daily moments of attention bring you back to each other.',
+      picks:[
+        ['/empty-nest.html','Kids grown and gone','When the house is quiet between you, and how to start again.'],
+        ['/workpapers/wp-13-daily-check-in.html','The 90-second daily check-in','The smallest habit here, and the one that lasts.'],
+        ['/turning-toward.html','Turning toward','Seven small, everyday ways to reconnect.']
+      ]},
     { id:'invisible', ico:'\uD83D\uDC41', label:'Nobody sees what I do',
       say:'That is the oldest problem in this program, and the reason it exists. Work that is never seen cannot be shared, and saying "you never help" rarely makes it visible. Writing it down does.',
       picks:[
@@ -102,12 +221,12 @@
       picks:[
         ['/safety.html','Not safe at home?','Free hotlines, how to leave this site quickly, and how to clear what it keeps.']
       ]},
-    { id:'work', ico:'\uD83D\uDCBC', label:'Things are hard at work',
-      say:'Work has its own version of all of this: who owns which job, messages that land badly, and effort nobody sees. You can use the plain, no-cartoons version with your team.',
+    { id:'work', ico:'\uD83D\uDCBC', label:'At work, or in business together',
+      say:'Work has its own version of all of this: who owns which job, messages that land badly, and effort nobody sees. Business partners have it too, plus money and big decisions. There is a plain, no-cartoons version you can use with your team or your partner in the business.',
       picks:[
-        ['/work.html','At work','One owner per job for a team, messages that land, appreciation that fits, and a 45-minute team session.'],
-        ['/signal-translator.html?use=work','The message checker','Test an email or chat message before you send it.'],
-        ['/appreciation-at-work.html','Appreciation at work','Thanks that fits the person, without anything awkward.']
+        ['/work.html','At work: the plain version','One owner per job for a team, messages that land, appreciation that fits, and a 45-minute team session.'],
+        ['/work.html#business-partners','Running a business together','Co-founders and co-owners: who owns what, money, and how to decide.'],
+        ['/signal-translator.html?use=work','The message checker','Test an email or chat message before you send it.']
       ]},
     { id:'grief', ico:'\uD83D\uDD4A', label:'Just retired, a loss, or a big life change',
       say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
@@ -203,7 +322,7 @@
     });
     wrap.appendChild(opts);
     if (extra.length) {
-      var more = el('button', { type: 'button', class: 'sw-showmore', 'aria-expanded': 'false' }, 'More situations (' + extra.length + ')');
+      var more = el('button', { type: 'button', class: 'sw-showmore', 'aria-expanded': 'false' }, esc(host.getAttribute('data-more') || 'More situations') + ' (' + extra.length + ')');
       more.addEventListener('click', function () {
         extra.forEach(function (b) { b.hidden = false; });
         more.remove(); extra[0].focus();
