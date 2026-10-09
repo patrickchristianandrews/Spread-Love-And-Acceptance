@@ -14,7 +14,7 @@
 .tsk-qr-note{ margin:.45rem auto 0; max-width:22rem; font-size:.88rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
 
 /* ---- "Share this line" ---- */
-.tsk-line{ position:relative; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box;
+.tsk-line{ position:relative; z-index:1; display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box;
   width:1.5em; height:1.5em; margin:0 0 0 .3em; padding:0; vertical-align:-.35em; line-height:1;
   font-size:1em; color:#6B5A8E; background:transparent; border:1px solid transparent; border-radius:50%;
   cursor:pointer; opacity:.75; transition:opacity .15s, background-color .15s; }

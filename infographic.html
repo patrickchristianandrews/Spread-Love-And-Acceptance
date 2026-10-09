@@ -24,7 +24,7 @@
 
   /* No fixed paper size: the print stylesheet at the end fits one A4 or one US Letter page. */
   @page{
-    margin: 11mm;
+    margin: 10mm;
   }
 
   .print-bar{
@@ -370,6 +370,83 @@
     .cycle{ flex-direction: row; }
     .refusal-grid{ grid-template-columns: repeat(3, 1fr); }
   }
+
+  /* Phones: the dense one-page sheet becomes an accordion with large text (built by the script at the end).
+     Desktop and print keep the one-page layout. Without the script, the sheet shows as before. */
+  .ig-acc{ display: none; }
+  @media screen and (max-width: 760px){
+    .print-bar{ margin: 12px 16px; flex-direction: column; align-items: stretch; }
+    .print-bar-actions{ flex-direction: column; align-items: stretch; }
+    .print-bar-actions .ig-btn{ width: 100%; }
+    .print-bar .back-link{ justify-content: center; }
+    .sheet{ padding: 18px 16px 28px; margin: 0 0 40px; border-left: 0; border-right: 0; }
+    .sheet-tagline{ font-size: 1.45rem; }
+    .sheet-sub{ font-size: 1.02rem; line-height: 1.5; }
+    html.ig-acc-on .sheet > article.block{ display: none; }
+    html.ig-acc-on .ig-acc{ display: block; }
+  }
+  .ig-acc-tools{ display: flex; justify-content: flex-end; margin: 0 0 10px; }
+  .ig-acc-tools button{ font: 600 0.98rem/1.2 "Lora", Georgia, serif; min-height: 44px; padding: 0.4rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+  .ig-acc details{ border: 1px solid var(--line); border-radius: 12px; background: var(--paper); margin: 0 0 12px; }
+  .ig-acc summary{ display: flex; align-items: center; gap: 10px; min-height: 56px; box-sizing: border-box; padding: 10px 14px; cursor: pointer; list-style: none; font: 600 1.2rem/1.3 "Fraunces", Georgia, serif; color: var(--ink); }
+  .ig-acc summary::-webkit-details-marker{ display: none; }
+  .ig-acc summary::after{ content: "+"; margin-left: auto; font-size: 1.5rem; line-height: 1; color: var(--brass-ink, #7A5620); }
+  .ig-acc details[open] > summary::after{ content: "\2212"; }
+  .ig-acc .ig-n{ flex: 0 0 auto; font: 500 0.8rem/1 "IBM Plex Mono", monospace; color: var(--brass-ink, #7A5620); border: 1px solid var(--brass); border-radius: 4px; padding: 4px 6px; }
+  .ig-acc-body{ padding: 0 16px 16px; font-size: 1.08rem; line-height: 1.6; }
+  .ig-acc-body h3{ font-family: "Fraunces", Georgia, serif; font-size: 1.12rem; margin: 16px 0 4px; }
+  .ig-acc-body p{ margin: 0 0 10px; }
+  .ig-acc-body .ig-q{ font-style: italic; }
+  .ig-acc-body .ig-note{ font-size: 0.98rem; color: var(--ink-soft); }
+  .ig-acc-body a.ig-go{ display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: 3px; }
+  .ig-acc-body ol{ padding-left: 1.3rem; margin: 6px 0 10px; }
+  .ig-acc-body ol li{ margin: 0 0 10px; }
+
+  /* Print: one A4 or one US Letter page. Sizes in points so the page fits whatever paper is chosen. */
+  @media print{
+    html, body{ background: #fff !important; }
+    body{ padding: 0 !important; margin: 0 !important; }
+    .ig-acc, .print-bar, .ig-try, .sheet > :not(.sheet-header, article, .sheet-footer){ display: none !important; }
+    .sheet{ max-width: none; width: auto; margin: 0; padding: 0; border: 0; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .sheet :is(p, h1, h2, h3){ padding-left: 0 !important; padding-right: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; width: auto !important; max-width: none !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; }
+    .sheet .block h2{ padding-bottom: 3pt !important; }
+    .sheet-header{ padding-bottom: 5pt; margin-bottom: 7pt; }
+    .sheet-mark{ font-size: 13pt; }
+    .sheet-mark small{ font-size: 6.5pt; margin-top: 2pt; }
+    .sheet-tagline{ font-size: 12pt; margin-top: 3pt; }
+    .sheet-sub{ font-size: 8pt; margin-top: 2pt; }
+    .block{ margin-bottom: 6pt; }
+    .block h2{ font-size: 11pt; margin: 0 0 5pt 0; gap: 6pt; }
+    .block-num{ font-size: 7pt; }
+    .block-intro{ font-size: 8pt; line-height: 1.3; margin: 0 0 5pt 0; max-width: none; }
+    .tech-name{ font-size: 7.5pt; margin-top: 1pt; }
+    .pillar-grid{ gap: 5pt; }
+    .pillar-card{ padding: 5pt 5pt; }
+    .pillar-mono{ font-size: 7pt; margin-bottom: 2pt; }
+    .pillar-card h3{ font-size: 8.5pt; margin: 0 0 3pt 0; }
+    .pillar-card p{ font-size: 7.2pt; line-height: 1.28; }
+    .pillar-more{ font-size: 7.5pt; margin-top: 3pt; }
+    .cycle{ gap: 3pt; }
+    .cycle-step{ padding: 5pt 5pt; }
+    .cycle-step .step-num{ font-size: 7pt; }
+    .cycle-step h3{ font-size: 8pt; margin: 2pt 0; }
+    .cycle-step p{ font-size: 7pt; line-height: 1.28; }
+    .cycle-arrow{ width: 9pt; font-size: 9pt; }
+    .cycle-loop{ font-size: 7.5pt; padding: 3pt 8pt; margin-top: 4pt; }
+    .lemonade-callout{ padding: 6pt 10pt; }
+    .lemonade-callout p{ font-size: 7.8pt; line-height: 1.35; }
+    .refusal-grid{ gap: 6pt; }
+    .refusal-card{ padding: 6pt 7pt; }
+    .refusal-card h3{ font-size: 9pt; margin: 0 0 3pt 0; }
+    .refusal-card .script{ font-size: 7.6pt; line-height: 1.3; margin: 0 0 4pt 0; }
+    .refusal-card .use-note{ font-size: 6.5pt; }
+    .sheet-footer{ margin: 6pt 0 0 0 !important; padding: 5pt 0 0 0 !important; }
+    .sheet-footer p{ font-size: 6.5pt; margin: 1pt 0; }
+    .sheet-footer .disclaimer{ font-size: 7pt; margin-bottom: 2pt; }
+    .sheet a{ color: inherit; text-decoration: none; }
+    .ig-print-only{ display: inline !important; }
+  }
+  .ig-print-only{ display: none; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -539,6 +616,228 @@
     </footer>
 
   </main>
+
+<script>
+/* infographic.html: "Save as PDF / Print", the picture download (SVG and PNG, drawn here on this device
+   from the words on this page), and the phone accordion. Nothing is sent anywhere. */
+(function () {
+  'use strict';
+  var sheet = document.querySelector('main.sheet');
+  if (!sheet) return;
+  var statusEl = document.getElementById('ig-status');
+  function say(t) { if (statusEl) statusEl.textContent = t; }
+  function txt(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
+
+  // ---------- Save as PDF / Print ----------
+  var pb = document.getElementById('ig-print');
+  if (pb) pb.addEventListener('click', function () {
+    document.querySelectorAll('.ig-acc details').forEach(function (d) { d.open = true; });
+    try { window.print(); } catch (e) { say('Printing isn’t available here. Try your browser’s menu: Print, then Save as PDF.'); }
+  });
+
+  // ---------- the words on the page, read once ----------
+  function readBlocks() {
+    var blocks = [];
+    sheet.querySelectorAll(':scope > article.block').forEach(function (art) {
+      var h2 = art.querySelector('h2'), num = txt(h2 && h2.querySelector('.block-num'));
+      var title = txt(h2).replace(num, '').trim();
+      var intro = art.querySelector('.block-intro');
+      var introText = '';
+      if (intro) { var c = intro.cloneNode(true); c.querySelectorAll('a, small').forEach(function (n) { n.remove(); }); introText = txt(c); }
+      var items = [];
+      art.querySelectorAll('.pillar-card, .cycle-step, .refusal-card').forEach(function (card) {
+        var cc = card.cloneNode(true); cc.querySelectorAll('a').forEach(function (n) { n.remove(); });
+        items.push({
+          tag: txt(cc.querySelector('.pillar-mono, .step-num')),
+          title: txt(cc.querySelector('h3')),
+          body: txt(cc.querySelector('p:not(.use-note)')),
+          note: txt(cc.querySelector('.use-note'))
+        });
+      });
+      var callout = txt(art.querySelector('.lemonade-callout'));
+      var more = art.querySelector('.pillar-more'), moreText = '';
+      if (more) { var mc = more.cloneNode(true); mc.querySelectorAll('a').forEach(function (n) { n.remove(); }); moreText = txt(mc); }
+      blocks.push({ el: art, id: art.className.replace(/.*block-/, ''), num: num, title: title, intro: introText, items: items, callout: callout, more: moreText, loop: txt(art.querySelector('.cycle-loop')) });
+    });
+    return blocks;
+  }
+  var BLOCKS = readBlocks();
+  var HEAD = {
+    mark: txt(sheet.querySelector('.sheet-mark')).replace(txt(sheet.querySelector('.sheet-mark small')), '').trim(),
+    small: txt(sheet.querySelector('.sheet-mark small')),
+    tagline: txt(sheet.querySelector('.sheet-tagline')),
+    sub: txt(sheet.querySelector('.sheet-sub')),
+    disclaimer: txt(sheet.querySelector('.sheet-footer .disclaimer'))
+  };
+
+  // ---------- phones: an accordion with large text ----------
+  (function buildAccordion() {
+    var LINKS = {
+      pillars: [['/ladder.html', 'Where am I right now? Check your state in a few taps'], ['/five-pillars.html', 'See how each pillar ties to the course']],
+      cycle: [['/lemonade-stand.html', 'Try the Lemonade Stand check']],
+      lemonade: [['/lemonade-stand.html', 'Try the Lemonade Stand check']],
+      refusals: [['/refusals.html', 'Make your own kind no, for your situation']]
+    };
+    var wrap = document.createElement('div');
+    wrap.className = 'ig-acc';
+    var tools = document.createElement('p'); tools.className = 'ig-acc-tools tol-plain';
+    var all = document.createElement('button'); all.type = 'button'; all.textContent = 'Open all';
+    tools.appendChild(all); wrap.appendChild(tools);
+    BLOCKS.forEach(function (b, i) {
+      var d = document.createElement('details'); if (i === 0) d.open = true;
+      var s = document.createElement('summary');
+      var n = document.createElement('span'); n.className = 'ig-n'; n.textContent = b.num;
+      s.appendChild(n); s.appendChild(document.createTextNode(b.title)); d.appendChild(s);
+      var body = document.createElement('div'); body.className = 'ig-acc-body';
+      function p(t, cls) { if (!t) return; var e = document.createElement('p'); if (cls) e.className = cls; e.textContent = t; body.appendChild(e); }
+      p(b.intro);
+      if (b.id === 'cycle') {
+        var ol = document.createElement('ol');
+        b.items.forEach(function (it) { var li = document.createElement('li'); var st = document.createElement('strong'); st.textContent = it.title + '. '; li.appendChild(st); li.appendChild(document.createTextNode(it.body)); ol.appendChild(li); });
+        body.appendChild(ol); p(b.loop.replace(/^\W+/, ''), 'ig-note');
+      } else {
+        b.items.forEach(function (it) {
+          var h = document.createElement('h3'); h.textContent = (b.id === 'pillars' ? it.tag + '. ' : '') + it.title; body.appendChild(h);
+          p(it.body, b.id === 'refusals' ? 'ig-q' : '');
+          if (it.note) p('For: ' + it.note.toLowerCase().replace(/^for /, ''), 'ig-note');
+        });
+      }
+      p(b.callout); p(b.more, 'ig-note');
+      (LINKS[b.id] || []).forEach(function (l) {
+        var pa = document.createElement('p'); var a = document.createElement('a'); a.className = 'ig-go'; a.href = l[0]; a.textContent = l[1] + ' →'; pa.appendChild(a); body.appendChild(pa);
+      });
+      d.appendChild(body); wrap.appendChild(d);
+    });
+    all.addEventListener('click', function () {
+      var ds = wrap.querySelectorAll('details'), open = all.textContent === 'Open all';
+      ds.forEach(function (d) { d.open = open; });
+      all.textContent = open ? 'Close all' : 'Open all';
+    });
+    var head = sheet.querySelector('.sheet-header');
+    head.parentNode.insertBefore(wrap, head.nextSibling);
+    document.documentElement.classList.add('ig-acc-on');
+  })();
+
+  // ---------- the picture: an SVG drawn from the same words ----------
+  var C = { paper: '#F5EFDE', deep: '#ECE2C4', ink: '#2B2620', soft: '#5A5346', line: '#D9CBA3', brass: '#A8792F', brassInk: '#7A5620', credit: '#3E6B4C', creditSoft: '#E4EDE3', debit: '#96412B', debitSoft: '#F2E2DB' };
+  var SERIF = 'Georgia, \'Times New Roman\', serif', MONO = '\'Courier New\', monospace';
+  var mctx = null;
+  try { mctx = document.createElement('canvas').getContext('2d'); } catch (e) {}
+  function wrapText(t, size, weight, style, maxW, family) {
+    if (!t) return [];
+    if (mctx) mctx.font = (style || '') + ' ' + (weight || 400) + ' ' + size + 'px ' + (family || SERIF);
+    var width = function (s) { return mctx ? mctx.measureText(s).width : s.length * size * 0.52; };
+    var words = t.split(' '), lines = [], cur = '';
+    words.forEach(function (w) {
+      var test = cur ? cur + ' ' + w : w;
+      if (width(test) > maxW && cur) { lines.push(cur); cur = w; } else cur = test;
+    });
+    if (cur) lines.push(cur);
+    return lines;
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function textLines(out, lines, x, y, size, lh, opts) {
+    opts = opts || {};
+    lines.forEach(function (l, i) {
+      out.push('<text x="' + x + '" y="' + (y + i * lh).toFixed(1) + '" font-family="' + esc(opts.family || SERIF) + '" font-size="' + size + '"' +
+        (opts.weight ? ' font-weight="' + opts.weight + '"' : '') + (opts.italic ? ' font-style="italic"' : '') +
+        (opts.anchor ? ' text-anchor="' + opts.anchor + '"' : '') + ' fill="' + (opts.fill || C.ink) + '">' + esc(l) + '</text>');
+    });
+    return y + lines.length * lh;
+  }
+  function buildSvg() {
+    var W = 850, M = 48, IW = W - 2 * M, out = [], y = M;
+    // header
+    y = textLines(out, [HEAD.mark], W / 2, y + 26, 28, 30, { weight: 700, anchor: 'middle' });
+    y = textLines(out, [HEAD.small.toUpperCase()], W / 2, y, 11, 14, { family: MONO, anchor: 'middle', fill: C.brassInk });
+    y = textLines(out, wrapText(HEAD.tagline, 22, 700, '', IW), W / 2, y + 22, 22, 28, { weight: 700, anchor: 'middle' });
+    y = textLines(out, wrapText(HEAD.sub, 13, 400, '', IW - 60), W / 2, y + 4, 13, 18, { anchor: 'middle', fill: C.soft });
+    out.push('<rect x="' + M + '" y="' + (y + 4) + '" width="' + IW + '" height="2" fill="' + C.brass + '"/>');
+    y += 30;
+    BLOCKS.forEach(function (b) {
+      // heading
+      out.push('<rect x="' + M + '" y="' + (y - 13) + '" width="28" height="18" rx="3" fill="none" stroke="' + C.brass + '"/>');
+      textLines(out, [b.num], M + 14, y, 11, 14, { family: MONO, anchor: 'middle', fill: C.brassInk });
+      textLines(out, [b.title], M + 38, y + 1, 18, 22, { weight: 700 });
+      out.push('<rect x="' + M + '" y="' + (y + 10) + '" width="' + IW + '" height="1" fill="' + C.line + '"/>');
+      y += 32;
+      if (b.intro) y = textLines(out, wrapText(b.intro, 12.5, 400, '', IW), M, y, 12.5, 17, { fill: C.soft }) + 6;
+      if (b.items.length) {
+        var n = b.items.length, gap = b.id === 'cycle' ? 18 : 10, cw = (IW - gap * (n - 1)) / n, pad = 9;
+        var cards = b.items.map(function (it) {
+          var tl = wrapText(it.title, 13, 700, '', cw - 2 * pad);
+          var bl = wrapText(it.body, b.id === 'refusals' ? 12 : 11, 400, b.id === 'refusals' ? 'italic' : '', cw - 2 * pad);
+          var nl = wrapText(it.note, 9, 400, '', cw - 2 * pad, MONO);
+          var h = pad + (it.tag ? 16 : 0) + tl.length * 16 + 4 + bl.length * (b.id === 'refusals' ? 16 : 14.5) + (nl.length ? 6 + nl.length * 12 : 0) + pad + 4;
+          return { it: it, tl: tl, bl: bl, nl: nl, h: h };
+        });
+        var ch = Math.max.apply(null, cards.map(function (c) { return c.h; }));
+        cards.forEach(function (c, i) {
+          var x = M + i * (cw + gap), yy = y + pad + 10;
+          out.push('<rect x="' + x.toFixed(1) + '" y="' + y + '" width="' + cw.toFixed(1) + '" height="' + ch.toFixed(1) + '" rx="6" fill="' + (b.id === 'cycle' ? C.paper : C.deep) + '" stroke="' + C.line + '"/>');
+          if (c.it.tag) { textLines(out, [c.it.tag], x + pad, yy, 10, 16, { family: MONO, fill: b.id === 'cycle' ? C.debit : C.brassInk }); yy += 16; }
+          yy = textLines(out, c.tl, x + pad, yy, 13, 16, { weight: 700 }) + 4;
+          yy = textLines(out, c.bl, x + pad, yy, b.id === 'refusals' ? 12 : 11, b.id === 'refusals' ? 16 : 14.5, { fill: b.id === 'refusals' ? C.ink : C.soft, italic: b.id === 'refusals' });
+          if (c.nl.length) textLines(out, c.nl, x + pad, yy + 6, 9, 12, { family: MONO, fill: C.soft });
+          if (b.id === 'cycle' && i < n - 1) textLines(out, ['→'], x + cw + gap / 2, y + ch / 2 + 5, 14, 14, { anchor: 'middle', fill: C.brass });
+        });
+        y += ch + 10;
+      }
+      if (b.loop) {
+        var ll = wrapText(b.loop, 11.5, 400, '', IW - 24);
+        out.push('<rect x="' + M + '" y="' + y + '" width="' + IW + '" height="' + (ll.length * 15 + 12) + '" rx="6" fill="' + C.debitSoft + '" stroke="' + C.debit + '" stroke-dasharray="4 3"/>');
+        y = textLines(out, ll, W / 2, y + 18, 11.5, 15, { anchor: 'middle' }) + 8;
+      }
+      if (b.more) y = textLines(out, wrapText(b.more, 11.5, 400, '', IW), M, y + 4, 11.5, 16, { fill: C.soft });
+      if (b.callout) {
+        var cl = wrapText(b.callout, 12.5, 400, '', IW - 36);
+        var hh = cl.length * 18 + 22;
+        out.push('<rect x="' + M + '" y="' + y + '" width="' + IW + '" height="' + hh + '" rx="6" fill="' + C.creditSoft + '"/>');
+        out.push('<rect x="' + M + '" y="' + y + '" width="5" height="' + hh + '" fill="' + C.credit + '"/>');
+        textLines(out, cl, M + 20, y + 24, 12.5, 18, {});
+        y += hh;
+      }
+      y += 26;
+    });
+    out.push('<rect x="' + M + '" y="' + (y - 8) + '" width="' + IW + '" height="1" fill="' + C.line + '"/>');
+    y = textLines(out, wrapText(HEAD.disclaimer, 11, 400, 'italic', IW - 80), W / 2, y + 10, 11, 15, { italic: true, anchor: 'middle', fill: C.soft });
+    y = textLines(out, ['spreadloveandacceptance.com/infographic.html'], W / 2, y + 4, 11, 15, { family: MONO, anchor: 'middle', fill: C.soft });
+    var H = Math.ceil(y + M - 10);
+    return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<title>' + esc(HEAD.mark + ': ' + HEAD.tagline) + '</title><rect width="100%" height="100%" fill="' + C.paper + '"/>' + out.join('') + '</svg>';
+  }
+  function download(blob, name) {
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+  var svgBtn = document.getElementById('ig-svg'), pngBtn = document.getElementById('ig-png');
+  if (svgBtn && window.Blob && window.URL && URL.createObjectURL) {
+    svgBtn.hidden = false;
+    svgBtn.addEventListener('click', function () {
+      try { download(new Blob([buildSvg()], { type: 'image/svg+xml' }), 'the-whole-idea-on-one-page.svg'); say('Saved the picture (SVG). It stays sharp at any size, so it prints well.'); }
+      catch (e) { say('The picture couldn’t be made here. “Save as PDF / Print” still works.'); }
+    });
+  }
+  if (pngBtn && mctx && window.Blob && window.URL && URL.createObjectURL && HTMLCanvasElement.prototype.toBlob) {
+    pngBtn.hidden = false;
+    pngBtn.addEventListener('click', function () {
+      var svg = buildSvg(), url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' })), img = new Image();
+      img.onload = function () {
+        try {
+          var cv = document.createElement('canvas'), k = 2;
+          cv.width = img.naturalWidth * k; cv.height = img.naturalHeight * k;
+          var ctx = cv.getContext('2d'); ctx.scale(k, k); ctx.drawImage(img, 0, 0);
+          cv.toBlob(function (b) { URL.revokeObjectURL(url); if (b) { download(b, 'the-whole-idea-on-one-page.png'); say('Saved the picture (PNG).'); } else say('The picture couldn’t be made here. Try the SVG.'); }, 'image/png');
+        } catch (e) { URL.revokeObjectURL(url); say('The picture couldn’t be made here. Try the SVG.'); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); say('The picture couldn’t be made here. Try the SVG.'); };
+      img.src = url;
+    });
+  }
+  window.__igSvg = buildSvg; // handy for checks; harmless
+})();
+</script>
 
 </body>
 </html>

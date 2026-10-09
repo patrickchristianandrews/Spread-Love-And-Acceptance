@@ -893,7 +893,7 @@
   }
   function printQuick() {
     var h = $('lq-print-head');
-    if (h) { var dt = ''; try { dt = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) {} h.textContent = 'Spread Love & Acceptance · The Lemonade Stand, quick look' + (dt ? ' · ' + dt : ''); }
+    if (h) { var dt = ''; try { dt = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) {} h.textContent = 'Spread Love & Acceptance · The Lemonade Stand, quick look' + (dt ? ' · ' + dt : '') + ' · ' + joinA(q.people.map(function (_, i) { return cardName(i); })); }
     try { window.print(); } catch (e) {}
   }
   document.addEventListener('click', function (e) {

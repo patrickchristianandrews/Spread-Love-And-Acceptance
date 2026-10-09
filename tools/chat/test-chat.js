@@ -926,6 +926,20 @@ c('round7', ['how do i set boundaries with my mum without hurting her', 'how do 
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 
+// round 7, second pass (chat2): what the probe of every brief phrase still found
+t('round7b', "what do I say when he can't sit still", { id: 'adhdkids', link: '/adhd-kids.html' });
+t('round7b', 'my roommate and i need some rules', { id: 'sharingroom', link: '/sharing-a-room.html' });
+t('round7b', "i'm 30 and want to come out to my parents", { id: 'lgbtadult', link: '/coming-out.html', not: /You belong here, exactly as you are/ });
+t('round7b', 'articles about raising a child in two religions (no unrelated article)', { q: 'articles about raising a child in two religions', link: '/two-faiths.html', not: /Mental Load|Caregiving/ });
+t('round7b', 'i do all the planning for the three of us', { not: /the other person|both lists|both of you/ });
+t('round7b', 'my mum keeps dropping by unannounced (grown child, not the grandparent card)', { q: 'my mum keeps dropping by unannounced', not: /new parents to want to find their own way/ });
+t('round7b', 'she says i just turn up without calling. i only want to help', { id: 'gpadvice' });
+c('round7b', ['please use more simple English', 'how do we close the gap on chores'], { not: /can hurts|close the gap|wear on/ });
+t('round7b', 'toddlers', { id: 'toddlers', not: /Two little ones at once/ });
+t('round7b', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^It’s tiring/ });
+t('round7b', 'my nan says im useless and i want to die', { kind: 'safety', text: /Samaritans.*116 123/ });
+t('round7b', 'i want to kill myself (UK lines too)', { q: 'i want to kill myself', kind: 'safety', text: /988[\s\S]*Childline[\s\S]*0800 1111/ });
+
 // ---------------------------------------------------------------- Professor Puddles' voice (personality.json): light lines only where they belong
 const PERS = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'personality.json'), 'utf8')); } catch (e) { return null; } })();
 if (PERS) {

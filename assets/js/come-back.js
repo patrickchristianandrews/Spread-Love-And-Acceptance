@@ -9,7 +9,8 @@
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
    levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest.
    No streaks to keep, no timers, nothing to lose: pick up anytime. Nothing is sent anywhere.
-   "Hide the helpers" and Quiet mode hide the extras (the time picker stays); a still page never moves. */
+   "Hide the helpers" and Quiet mode hide the extras (the time picker stays); a still page never moves.
+   In Focus mode (site.js, window.TOLFocus) plans and "Next time" ideas keep to the chosen areas where they can. */
 (function () {
   'use strict';
   if (window.TOLComeBack) return;
@@ -173,6 +174,8 @@
     'went-badly': 'talk', 'say-hard': 'talk', 'past-each-other': 'talk', 'know-myself': 'self', 'keep-good': 'book', unsure: 'book' };
   var HREF_TAGS = [[/night-garden|breathe|soundscapes|word-bloom|quiet-|pause-and-play|frequency-journey/, 'calm'], [/signal-translator|conversation-reader|carrier-wave|check-ins/, 'talk'],
     [/lemonade|workpapers|wp-0|calc01|chore/, 'load'], [/wavelength|wiring-card|know-yourself|wired-differently|quick-checks/, 'self'], [/^\/book\//, 'book'], [/frequency-buddies|pal-cam/, 'kids']];
+  // Focus mode: an idea fits when it's in the chosen areas, or belongs to none (Breathe, today's tiny thing)
+  function fits(u) { var F = window.TOLFocus; try { return !F || !F.isOn() || F.allows(u); } catch (e) { return true; } }
   function tagOf(u) { for (var i = 0; i < HREF_TAGS.length; i++) if (HREF_TAGS[i][0].test(u)) return HREF_TAGS[i][1]; return ''; }
   function wanted() {
     var w = {};
@@ -236,6 +239,8 @@
     });
     // the 10-minute plan can also use the five-minute ideas that take the full five
     P[5].forEach(function (x) { if (x.m === 5 && !P[10].some(function (y) { return samePage(x, y); })) P[10].push(x); });
+    // in Focus mode, each list keeps the ideas in your areas (a list with none of them stays as it was)
+    Object.keys(P).forEach(function (k) { var f = P[k].filter(function (x) { return !x.u || fits(x.u); }); if (f.some(function (x) { return x.u && x.u.charAt(0) !== '#'; })) P[k] = f; });
     return P;
   }
   var CLOSERS = [
@@ -422,14 +427,16 @@
     return '<li class="' + (n ? 'is-on' : 'is-zero') + '"><span class="cb-n">' + n + (of ? '<small> of ' + of + '</small>' : '') + '</span><span class="cb-l">' + esc(n ? label : none) + '</span>' + dots + '</li>';
   }
   function nextIdea() {
-    var nc = nextChapter(), ne = nextEpisode(), tools = toolsTried(), w = wanted();
-    if (w.kids && ne) return ['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot'];
-    if (nc && chaptersRead()) return [nc.u, nc.code + ': ' + nc.t, nc.n];
-    if (tools.indexOf('/quick-checks.html') === -1) return ['/quick-checks.html#today', 'Today’s Weather', 'one minute on how you are doing'];
-    if (tools.indexOf('/wavelength.html') === -1) return ['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen'];
-    if (nc) return [nc.u, nc.code + ': ' + nc.t, nc.n];
-    if (ne) return ['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot'];
-    return ['/prog-01.html', 'Six gentle weeks', 'one small session a week'];
+    var nc = nextChapter(), ne = nextEpisode(), tools = toolsTried(), w = wanted(), c = [];
+    if (w.kids && ne) c.push(['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
+    if (nc && chaptersRead()) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
+    if (tools.indexOf('/quick-checks.html') === -1) c.push(['/quick-checks.html#today', 'Today’s Weather', 'one minute on how you are doing']);
+    if (tools.indexOf('/wavelength.html') === -1) c.push(['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen']);
+    if (nc) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
+    if (ne) c.push(['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
+    c.push(['/prog-01.html', 'Six gentle weeks', 'one small session a week']);
+    // the first idea in your focus, if Focus mode is on and one fits
+    return c.filter(function (x) { return fits(x[0]); })[0] || c[0];
   }
   function anything() { return chaptersRead() || toolsTried().length || Object.keys(gamesPlayed()).length || episodesWatched().length || petals(); }
   /* ---------------------------------------------------------------- end cards */

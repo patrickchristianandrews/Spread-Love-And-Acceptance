@@ -2089,7 +2089,8 @@
         { k: 'p', x: (KB.pers && !quietOn() && funLine(state, 'self_description')) || 'I’m Professor Puddles, a small helper that knows this program inside out. I can explain any tool, workpaper, chapter or game, and walk you through how to use it and what your results mean.' },
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
-          'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.'] },
+          'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
+          'Or just chat with me (“how are you?”, “tell me a joke”), or say “talk deep” to think through a big question, like what love is.'] },
         { k: 'p', x: 'When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. I’m not a counselor, and I won’t guess. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
     if (/\b(surprise me|random|anything interesting|tell me something|teach me something|something new|inspire me)\b/.test(f)) return surprise(state);

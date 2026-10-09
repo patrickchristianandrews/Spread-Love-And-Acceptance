@@ -40,6 +40,8 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added, newest first. Older pages live in their own sections.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
+      { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, housemates, work and life changes' },
       { href: '/friends.html', code: 'New', title: 'Friends', note: 'When a friendship drifts, you’re always the one reaching out, or life changes pull you apart' },
       { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs, family expectations, and normal limits versus control' },
@@ -265,6 +267,7 @@
       { href: '/co-parenting.html', code: 'New', title: 'Separated co-parents', note: 'Calmer handoffs, a tone check, and a route for a co-parent who won’t cooperate' },
       { href: '/en-espanol.html', code: 'ES', title: 'En español', note: 'Una página corta en español' },
       { sub: 'More ways in' },
+      { href: '/ladder.html', code: 'Now', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/sent-this.html', title: 'Sent this by someone?', note: 'What they see, what stays yours, and how to say no kindly' },
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
@@ -275,6 +278,8 @@
     ]},
     { id: 'new', name: 'What’s new', title: 'What’s new', blurb: 'Newly added, newest first.', items: [
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page, grouped by who it’s about' },
+      { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
+      { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/friends.html', code: 'New', title: 'Friends', note: 'When a friendship drifts, or you’re always the one reaching out' },
       { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
       { href: '/when-one-is-ill.html', code: 'New', title: 'When one of you is ill', note: 'Chronic illness or disability, without anyone feeling a burden' },
@@ -384,6 +389,7 @@
       { href: '/signal-translator.html', code: 'Tool', title: 'The Signal Translator', note: 'How a sentence might land for someone wired differently' },
       { href: '/book/topic-talk-it-through.html', code: 'Book', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening, plus the tools' },
       { sub: 'Tools for a message or a moment' },
+      { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/conversation-reader.html', code: 'Tool', title: 'The Conversation Reader', note: 'Paste a thread and see where it turned' },
       { href: '/perspective-shifter.html', code: 'Tool', title: 'The Perspective Shifter', note: 'See a moment from their side' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'For when a talk starts going sideways' },
@@ -435,6 +441,7 @@
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
       { sub: 'Breathe & quiet' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/ladder.html', code: 'Now', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
@@ -1215,6 +1222,7 @@
     buildPuddlesPop(body);
     comfortOffer(body);
     rememberPage(body);
+    progNote();
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this" (come-back.js)
     if (current === '/index.html') {
       var hi = document.querySelector('main [data-home-intro]');
@@ -1251,6 +1259,7 @@
       if (wm) wm.insertBefore(wk, wm.firstChild); else bar.after(wk);
     }
     spanishHint(bar);
+    applyFocus(); renderFocusPill();
     if (document.querySelector('aside.sidebar')) document.documentElement.classList.add('tol-own-side');
     // Big text or zoom: nothing in the bar is ever pushed off the side. Step by step, the section
     // buttons fold into Menu, then Join moves into the menu panel, then the name wraps onto two lines.
@@ -1575,7 +1584,9 @@
     rota: 'diffhours', nurse: 'diffhours', nurses: 'diffhours', pan: 'comingout', pansexual: 'comingout', aqiqah: 'twofaiths',
     print: ['#print', '/chore-chart-for-couples.html', '/workpapers/fill/suite.html', '/infographic.html'], printing: 'print', printable: 'print', printout: 'print', pdf: 'print',
     // the plain meaning of these is a feeling or a fight, not the site's Quiet mode or the app
-    phone: ['/install.html', '/gaming-and-time-together.html'], quiet: ['#settings', '/sharing-a-room.html']
+    phone: ['/install.html', '/gaming-and-time-together.html'], quiet: ['#settings', '/sharing-a-room.html'],
+    refuse: ['/refusals.html', '/workpapers/wp-01.html'], refusal: 'refuse', refusals: 'refuse', refusing: 'refuse', decline: 'refuse', declining: 'refuse',
+    ladder: ['/ladder.html', '/wp-11.html']
   };
   Object.keys(ACT_MORE).forEach(function (k) { ACT[k] = ACT_MORE[k]; });
   // a word chain ends in a list of pages; anything else (a loop, a missing name) is no list at all
@@ -1610,6 +1621,8 @@
   EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. On any guide, “Share this guide” also has “Print this page”, or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
+    '/ladder.html': ['Where am I right now?', 'Find where you are right now, and a next step that fits.'],
+    '/refusals.html': ['Say no kindly', 'Kind, clear ways to turn something down, with words you could use.'],
     '/friends.html': ['Friends: when a friendship drifts', 'When you’re always the one reaching out, a friend never texts back, or life changes pull you apart: kind words to say, and low-energy ways to stay close.'],
     '/more-than-two.html': ['More than two partners at home', 'For polyamorous families, triads and throuples: sharing the load between three or more, and joining a home without feeling like a guest.'],
     '/gaming-and-time-together.html': ['Gaming, phones and time together', 'When one of you games or scrolls all night: a calm talk with no blame, and a small “time together deal” to fill in.'],
@@ -2603,6 +2616,7 @@
     box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles|wxnote|wxloc)$/.test(i.getAttribute('data-switch')); });
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
+    var fo = box.querySelector('.tol-set-focus'); if (fo) { fo.innerHTML = ''; fo.appendChild(focusLine('settings')); }
 
   }
   function buildSettings() {
@@ -2621,6 +2635,8 @@
         '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>Quiet mode</strong><small>A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
         '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>Easy reading</strong><small>A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
       '</div>' +
+      '<h3 class="tol-set-k">Focus</h3>' +
+      '<div class="tol-set-focus"></div>' +
       '<h3 class="tol-set-k">Calm</h3>' +
       '<p class="tol-set-qnote" hidden>Quiet mode is looking after these. Turn it off above to change them one by one.</p>' +
       sw('still', 'Keep the page still', 'No moving garden, bubbles, hearts or sliding in, here and in the Breathe break') +
@@ -2713,6 +2729,194 @@
     if (setLast && setLast.focus) setLast.focus();
   }
   window.TOLSettings = { open: openSettings, close: closeSettings };
+
+  // ---- Focus mode: the line in the menus and Settings, the pill at the top of the page, and the picker ----
+  // kind: 'drop' (Start here in the top bar), 'panel' (the Menu), 'settings' or 'page' (the pill above the page)
+  function focusLine(kind) {
+    var on = focusOn(), box = el(kind === 'page' ? 'p' : 'div', { class: 'tol-focus-line is-' + kind + (on ? ' is-on' : '') + ' no-bubble no-cheer' });
+    if (!on) {
+      box.innerHTML = '<button type="button" class="tol-focus-go" data-open-focus>Focus on what I’m learning</button>' +
+        (kind === 'drop' ? '' : ' <small>Show only the parts you’re working on now. Change it any time.</small>');
+      return box;
+    }
+    var outside = kind === 'page' && !focusAllows(current);
+    if (kind === 'page') { box.setAttribute('role', 'note'); box.setAttribute('aria-label', 'Focus mode'); }
+    box.innerHTML = (outside ? '<span>This page is outside your focus <small>(' + esc(focusList()) + ')</small></span>'
+        : '<span><strong>Focus:</strong> ' + esc(focusList()) + '</span>') +
+      '<span class="tol-focus-sep" aria-hidden="true">·</span><button type="button" data-open-focus>Change</button>' +
+      '<span class="tol-focus-sep" aria-hidden="true">·</span><button type="button" data-focus-off>Show everything</button>';
+    return box;
+  }
+  function renderPanelFocus() {
+    var host = panel && panel.querySelector('.tol-panel-focus'); if (!host) return;
+    host.innerHTML = ''; host.appendChild(focusLine('panel'));
+  }
+  function renderFocusPill() {
+    Array.prototype.forEach.call(document.querySelectorAll('.tol-focus-line.is-page'), function (n) { n.remove(); });
+    if (!focusOn() || !document.querySelector('.tol-bar')) return;
+    var pill = focusLine('page'), m = document.querySelector('main');
+    if (m) { var wk = m.querySelector(':scope > .tol-work-note'); if (wk) wk.after(pill); else m.insertBefore(pill, m.firstChild); }
+    else document.querySelector('.tol-bar').after(pill);
+  }
+  function applyFocus() {
+    var st = focusState(), h = document.documentElement, b = document.body;
+    h.classList.toggle('tol-focus', st.on);
+    if (b) { b.classList.toggle('tol-focus', st.on); if (st.on) b.setAttribute('data-focus', st.areas.join(' ')); else b.removeAttribute('data-focus'); }
+  }
+  function setFocus(on, areas) {
+    var st = focusState();
+    lsSet(FOCUS_KEY, JSON.stringify({ on: !!on, areas: areas || st.areas }));
+    applyFocus();
+    if (ribbonHook) ribbonHook();
+    renderFocusPill();
+    renderPanelFocus();
+    if (panel && !panel.hidden) { var ix = panel.querySelector('.tol-index'); if (ix) ix.replaceWith(buildIndex({ accordion: true })); var q = panel.querySelector('.tol-find input'); if (q && q.value) runSearch(q.value); }
+    if (setBox && !setBox.hidden) syncSettings(setBox);
+    var now = focusState();
+    try { window.dispatchEvent(new CustomEvent('tol-focus-change', { detail: { on: now.on, areas: now.on ? now.areas.slice() : [] } })); } catch (e) {}
+  }
+  var focusBox = null, focusLast = null, focusInerted = [];
+  function buildFocus() {
+    var id = 'tol-focus-' + Math.random().toString(36).slice(2, 7);
+    function group(kind, legend) {
+      return '<fieldset class="tol-focus-grp"><legend>' + legend + '</legend><div class="tol-focus-opts">' +
+        FOCUS_AREAS.filter(function (x) { return x[2] === kind; }).map(function (x) {
+          return '<button type="button" class="tol-focus-opt" data-area="' + x[0] + '" aria-pressed="false"><span class="tol-focus-tick" aria-hidden="true"></span>' + esc(x[1]) + '</button>';
+        }).join('') + '</div></fieldset>';
+    }
+    var box = el('div', { class: 'tol-set tol-focus-dlg', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': id + '-h', 'aria-describedby': id + '-d', hidden: '' },
+      '<div class="tol-set-card">' +
+      '<div class="tol-set-head"><h2 id="' + id + '-h">Focus on what I’m learning</h2><button type="button" class="tol-set-close tol-focus-close">Close</button></div>' +
+      '<p class="tol-set-intro" id="' + id + '-d">Pick one or more. The menu, search and suggestions then show just these, until you choose Show everything. Safety links, search and Settings always stay, and any page still opens from a link.</p>' +
+      group('rel', 'Who it’s about') + group('topic', 'What you’re working on') +
+      '<p class="tol-focus-msg" role="status" aria-live="polite"></p>' +
+      '<p class="tol-focus-row"><button type="button" class="tol-focus-save">Focus on these</button> <button type="button" class="tol-focus-all">Show everything</button></p>' +
+      '<p class="tol-set-foot">Kept in this browser only, never sent anywhere. <a href="/on-this-device.html">What’s stored on this device</a></p>' +
+      '</div>');
+    box.addEventListener('click', function (e) {
+      var o = e.target.closest('.tol-focus-opt');
+      if (o) { o.setAttribute('aria-pressed', String(o.getAttribute('aria-pressed') !== 'true')); box.querySelector('.tol-focus-msg').textContent = ''; return; }
+      if (e.target.closest('.tol-focus-save')) {
+        var pick = Array.prototype.filter.call(box.querySelectorAll('.tol-focus-opt'), function (b) { return b.getAttribute('aria-pressed') === 'true'; }).map(function (b) { return b.getAttribute('data-area'); });
+        if (!pick.length) { box.querySelector('.tol-focus-msg').textContent = 'Pick at least one, or choose Show everything.'; return; }
+        closeFocus(); setFocus(true, pick); announce('Focus is on: ' + focusList() + '. Show everything turns it off.');
+        return;
+      }
+      if (e.target.closest('.tol-focus-all')) { closeFocus(); setFocus(false); announce('Showing everything again.'); return; }
+      if (e.target.closest('.tol-focus-close') || e.target === box) closeFocus();
+    });
+    box.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeFocus(); }
+      if (e.key === 'Tab') {
+        var f = Array.prototype.filter.call(box.querySelectorAll('a[href], button:not([disabled])'), function (n) { return n.getClientRects().length > 0; });
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    document.body.appendChild(box);
+    return box;
+  }
+  function openFocus(from) {
+    var back = from || document.activeElement;
+    // opened from the Menu or Settings: those close first, and focus comes back to the button that opened them
+    if (panel && !panel.hidden) { closePanel(); back = lastFocus || back; }
+    if (setBox && !setBox.hidden) { closeSettings(); back = setLast || back; }
+    closeDrop();
+    if (!focusBox) focusBox = buildFocus();
+    focusLast = back && document.contains(back) ? back : null;
+    var st = focusState();
+    focusBox.querySelectorAll('.tol-focus-opt').forEach(function (b) { b.setAttribute('aria-pressed', String(st.areas.indexOf(b.getAttribute('data-area')) !== -1)); });
+    focusBox.querySelector('.tol-focus-msg').textContent = '';
+    focusBox.querySelector('.tol-focus-all').hidden = !st.on;
+    focusBox.hidden = false;
+    focusInerted = Array.prototype.filter.call(document.body.children, function (n) { return n !== focusBox && !n.hasAttribute('inert') && !/^(SCRIPT|STYLE|LINK)$/.test(n.tagName); });
+    focusInerted.forEach(function (n) { n.setAttribute('inert', ''); });
+    var first = focusBox.querySelector('.tol-focus-opt[aria-pressed="true"]') || focusBox.querySelector('.tol-focus-opt');
+    first.focus({ preventScroll: true });
+  }
+  function closeFocus() {
+    if (!focusBox || focusBox.hidden) return;
+    focusInerted.forEach(function (n) { n.removeAttribute('inert'); }); focusInerted = [];
+    focusBox.hidden = true;
+    var b = focusLast;
+    // the button that opened it may have been rebuilt (the Start here list): fall back to the Menu button or the page
+    if (!b || !document.contains(b) || !b.getClientRects().length) b = document.querySelector('.tol-focus-line.is-page button, .tol-contents-btn:not([hidden])');
+    if (b && b.focus) try { b.focus({ preventScroll: true }); } catch (e) {}
+  }
+  // any [data-open-focus] opens the picker (the home page has one too); [data-focus-off] shows everything again
+  document.addEventListener('click', function (e) {
+    var o = e.target.closest && e.target.closest('[data-open-focus]');
+    if (o) { e.preventDefault(); openFocus(o); return; }
+    var f = e.target.closest && e.target.closest('[data-focus-off]');
+    if (f) {
+      e.preventDefault();
+      var inPanel = panel && panel.contains(f), inSet = setBox && setBox.contains(f);
+      setFocus(false); announce('Showing everything again.');
+      var tgt = inPanel ? panel.querySelector('.tol-panel-focus button') : inSet ? setBox.querySelector('.tol-set-focus button') : document.querySelector('.tol-contents-btn') ;
+      if (inPanel || inSet) { if (tgt) tgt.focus(); }
+      else { var m = document.getElementById('tol-main'); if (m) m.focus({ preventScroll: true }); }
+    }
+  });
+  window.TOLFocus = {
+    isOn: focusOn, areas: focusAreas, matches: focusMatches, allows: focusAllows,
+    names: function () { return focusAreas().map(function (a) { return focusName(a); }); },
+    choices: function () { return FOCUS_AREAS.map(function (x) { return { id: x[0], name: x[1], kind: x[2] }; }); },
+    open: function () { openFocus(); }, off: function () { setFocus(false); }, set: function (areas) { setFocus(!!(areas && areas.length), areas); }
+  };
+
+  // ---- Your progress: a small, kind line (no streaks, nothing to lose), kept in this browser only ----
+  // A core tool counts as tried once its page is opened; a chapter counts once any page of the book is opened.
+  var PROG_KEY = 'tol-progress-v1';
+  var CORE = [
+    ['lemonade', 'The Lemonade Stand', '/lemonade-stand.html', /^\/lemonade-stand\.html$/],
+    ['checkin', 'Check-ins', '/check-ins.html', /^\/(check-ins|workpapers\/wp-13-daily-check-in|workpapers\/fill\/wp-13)\.html$/],
+    ['signal', 'The Signal Translator', '/signal-translator.html', /^\/signal-translator\.html$/],
+    ['calm', 'The Calm-Down Kit', '/wp-11.html', /^\/(wp-11|workpapers\/fill\/wp-11|ladder)\.html$/],
+    ['wave', 'Wavelength', '/wavelength.html', /^\/wavelength\.html$/]
+  ];
+  var BOOK_PAGE = /^\/book\/(?!topic-)[a-z0-9-]+\.html$/;
+  function progGet() {
+    var v = null; try { v = JSON.parse(lsGet(PROG_KEY) || 'null'); } catch (e) { v = null; }
+    if (!v || typeof v !== 'object') v = null;
+    return v;
+  }
+  function progNote() {
+    if (lsGet('tol-recent-off')) return;
+    var v = progGet(), changed = false;
+    if (!v) {
+      // the first time: start from what this browser already remembers (recent pages, chapters read to the end)
+      v = { t: {}, b: {} }; changed = true;
+      var seen = [];
+      try { (JSON.parse(lsGet('tol-recent') || '[]') || []).forEach(function (r) { if (r && r.u) seen.push(fpath(r.u)); }); } catch (e) {}
+      try { var cb = JSON.parse(lsGet('tol-come-back-v1') || 'null'); if (cb && cb.read) Object.keys(cb.read).forEach(function (u) { seen.push(fpath(u)); }); if (cb && cb.did) Object.keys(cb.did).forEach(function (u) { seen.push(fpath(u)); }); } catch (e) {}
+      seen.forEach(function (p) { CORE.forEach(function (c) { if (c[3].test(p)) v.t[c[0]] = 1; }); if (BOOK_PAGE.test(p)) v.b[p] = 1; });
+    }
+    v.t = v.t || {}; v.b = v.b || {};
+    CORE.forEach(function (c) { if (c[3].test(current) && !v.t[c[0]]) { v.t[c[0]] = 1; changed = true; } });
+    if (BOOK_PAGE.test(current) && !v.b[current]) { v.b[current] = 1; changed = true; }
+    if (changed) lsSet(PROG_KEY, JSON.stringify(v));
+  }
+  // { tried, of, chapters, next: [name, url] } or null when there's nothing yet (or pages aren't remembered)
+  function progress() {
+    if (lsGet('tol-recent-off')) return null;
+    var v = progGet(); if (!v) return null;
+    var core = CORE.filter(function (c) { return focusAllows(c[2]); });
+    var tried = core.filter(function (c) { return v.t && v.t[c[0]]; });
+    var chapters = focusAllows('/book/chapter-1.html') ? Object.keys(v.b || {}).length : 0;
+    if (!tried.length && !chapters) return null;
+    var nx = core.filter(function (c) { return !(v.t && v.t[c[0]]); })[0];
+    return { tried: tried.length, of: core.length, chapters: chapters, next: nx ? [nx[1], nx[2]] : null };
+  }
+  function progressHTML(pg) {
+    var bits = [];
+    if (pg.tried) bits.push(pg.tried + ' of ' + pg.of + ' core tools tried');
+    if (pg.chapters) bits.push(pg.chapters + (pg.chapters === 1 ? ' chapter' : ' chapters') + ' read');
+    return '<span class="tol-prog"><span class="tol-prog-k">Your progress:</span> ' + esc(bits.join(' · ')) +
+      (pg.next ? '. <span class="tol-prog-nx">When you like: <a href="' + esc(pg.next[1]) + '">' + esc(pg.next[0]) + '</a></span>' : '') + '</span>';
+  }
+  window.TOLProgress = { get: progress, html: function () { var p = progress(); return p ? progressHTML(p) : ''; } };
 
   // ---- the reading ruler: a soft band across the page that follows the pointer, a finger, or focus ----
   var rulerEl = null;

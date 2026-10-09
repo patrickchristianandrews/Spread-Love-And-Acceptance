@@ -1,0 +1,46 @@
+/* mini-player.css — the small "Calm sounds" player (mini-player.js) */
+.tol-mp{ box-sizing:border-box; max-width:34rem; margin:.8rem 0 1.2rem; padding:.65rem .8rem .55rem; border-radius:18px; border:1px solid #C6DFF4;
+  background:linear-gradient(135deg, rgba(238,244,251,.97), rgba(244,238,252,.97)); color:var(--ink, #2B2620); font-family:var(--tol-sans, system-ui, sans-serif); }
+.read .tol-mp p{ max-width:none; }
+.tol-mp .tol-mp-h{ display:flex; align-items:center; gap:.45rem; margin:0 0 .4rem; font:600 .95rem/1.3 "Fraunces", Georgia, serif; color:#2F4F6E; }
+.tol-mp-wave{ display:inline-flex; align-items:flex-end; gap:2px; width:14px; height:14px; }
+.tol-mp-wave i{ display:block; width:3px; height:40%; border-radius:2px; background:#5E86B0; }
+.tol-mp-wave i:nth-child(2){ height:80%; }
+.tol-mp-wave i:nth-child(3){ height:55%; }
+.tol-mp-row{ display:flex; align-items:center; gap:.6rem; }
+.tol-mp-row2{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; margin-top:.45rem; font-size:.88rem; }
+.tol-mp button{ display:inline-flex; align-items:center; justify-content:center; gap:.3rem; box-sizing:border-box; cursor:pointer; font:600 .88rem/1.2 var(--tol-sans, system-ui, sans-serif);
+  color:#2F4F6E; background:#FFFFFF; border:1.5px solid #B9CFE6; border-radius:999px; }
+.tol-mp .tol-mp-play{ flex:none; width:48px; height:48px; padding:0; border-radius:50%; background:#2F5F8A; border-color:#2F5F8A; color:#FFFFFF; }
+.tol-mp .tol-mp-play:hover{ background:#264E73; }
+.tol-mp .tol-mp-next{ flex:none; width:44px; height:44px; padding:0; border-radius:50%; }
+.tol-mp .tol-mp-loop{ min-height:36px; padding:.2rem .7rem; }
+.tol-mp .tol-mp-loop[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; color:#2F5E3E; }
+.tol-mp button:hover{ border-color:#7A5FA8; }
+.tol-mp button:focus-visible, .tol-mp a:focus-visible, .tol-mp input:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-mp .tol-mp-now{ flex:1 1 auto; min-width:0; margin:0; display:flex; flex-direction:column; gap:.05rem; }
+.tol-mp-t{ font-weight:700; font-size:.98rem; line-height:1.25; overflow-wrap:anywhere; }
+.tol-mp-n{ font-size:.82rem; line-height:1.3; color:var(--ink-soft, #5A5346); }
+.tol-mp-vol{ display:inline-flex; align-items:center; gap:.4rem; min-height:36px; color:var(--ink-soft, #5A5346); }
+.tol-mp-vol input{ width:7.5rem; max-width:40vw; accent-color:#2F5F8A; }
+.tol-mp a.tol-mp-full{ display:inline-flex; align-items:center; min-height:36px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+.tol-mp a.tol-mp-full::after{ content:"\a0\2192"; font-weight:400; }
+.tol-mp .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+@media (prefers-reduced-motion: no-preference){
+  .tol-mp.is-playing .tol-mp-wave i{ animation:tol-mp-bob 1.6s ease-in-out infinite; }
+  .tol-mp.is-playing .tol-mp-wave i:nth-child(2){ animation-delay:-.5s; }
+  .tol-mp.is-playing .tol-mp-wave i:nth-child(3){ animation-delay:-1s; }
+}
+@keyframes tol-mp-bob{ 0%, 100%{ transform:scaleY(.5); } 50%{ transform:scaleY(1); } }
+.tol-mp-wave i{ transform-origin:bottom; }
+html.tol-still .tol-mp-wave i, html.tol-quiet .tol-mp-wave i{ animation:none !important; }
+html.tol-quiet .tol-mp{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+/* the site's dark theme turns the page over; keep these icons with their buttons */
+html[data-theme="dark"]:not(.tol-nodark) .tol-mp button svg{ filter:none !important; }
+@media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) .tol-mp button svg{ filter:none !important; } }
+@media (max-width:420px){
+  .tol-mp{ padding:.6rem .65rem .5rem; }
+  .tol-mp-row2{ gap:.2rem .6rem; }
+  .tol-mp-vol input{ width:6rem; }
+}
+@media print{ .tol-mp{ display:none !important; } }

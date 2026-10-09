@@ -1,14 +1,16 @@
 /* pick-up.js — "Pick up where you left off" and "I have 2, 5 or 10 minutes".
    site.js loads this on the home page (inside the opening block) and when the menu opens.
    Everything it shows is read from this browser: the last pages you opened here (site.js keeps a
-   short list, which you can switch off or erase), the six weeks, today's weather and any drafts
-   the tools keep on this device. Nothing is sent anywhere. */
+   short list; /on-this-device.html shows it and erases it), the six weeks, today's weather, your
+   progress and any drafts the tools keep on this device. Nothing is sent anywhere.
+   In Focus mode (site.js, window.TOLFocus) the suggestions keep to the chosen areas. */
 (function () {
   'use strict';
   if (window.TOLPickUp) return;
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
-  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  // Focus mode: a suggestion fits when it's in the chosen areas (or belongs to none, like Breathe)
+  function fits(u) { var F = window.TOLFocus; try { return !F || !F.isOn() || F.allows(u); } catch (e) { return true; } }
+  function keepFits(list, url) { var f = list.filter(function (x) { return fits(url(x)); }); return f.length ? f : list; }
   function json(k) { try { return JSON.parse(lsGet(k) || 'null'); } catch (e) { return null; } }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function ago(ms) {
@@ -115,9 +117,10 @@
     var here = location.pathname.replace(/\/$/, '/index.html');
     var seenT = {}, rec = recent().filter(function (r) { if (!r || !r.u || r.u === here || seenT[r.t]) return false; seenT[r.t] = 1; return true; }), last = rec[0];  // one line per page name (the simple page and its fill-in share a name)
     var d = drafts(), six = sixWeeks(), wx = weather(), prev = lastVisitDay(), gap = daysSince(prev), nx = nextStep();
-    var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev; }).slice(0, 3) : [];
+    var fresh = prev ? NEWS.filter(function (n) { return n[0] > prev && fits(n[2]); }).slice(0, 3) : [];
     var prog = inProgress();
-    if (!last && !d.length && !six && !nx && !fresh.length && !prog.length) return null;
+    var pg = window.TOLProgress && window.TOLProgress.html ? window.TOLProgress.html() : '';
+    if (!last && !d.length && !six && !nx && !fresh.length && !prog.length && !pg) return null;
     var rows = '';
     // only on the first look this visit: not when they were on another page a few minutes ago
     var justHere = last && last.at && Date.now() - last.at < 6 * 3600e3;
@@ -127,6 +130,7 @@
     if (fresh.length) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#10024;</span><span>New since your last visit: ' + fresh.map(function (n) { return '<a href="' + esc(n[2]) + '">' + esc(n[1]) + '</a>'; }).join(', ') + '</span></li>';
     if (last) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128278;</span><span>You were last on <a href="' + esc(last.u) + '">' + esc(last.t) + '</a> <small>' + esc(ago(last.at)) + '</small>' +
       (rec[1] ? '. Before that: <a href="' + esc(rec[1].u) + '">' + esc(rec[1].t) + '</a>' : '') + '</span></li>';
+    if (pg) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#127793;</span><span>' + pg + '</span></li>';
     if (six) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128197;</span><span><a href="/prog-01.html">Six gentle weeks</a>: ' + esc(six) + '</span></li>';
     rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#9925;</span><span>' + (wx ? esc(wx) + '. <a href="/quick-checks.html#today">See it again</a>' : 'Today’s weather isn’t checked yet. <a href="/quick-checks.html#today">A one-minute check-in</a>') + '</span></li>';
     if (d.length) rows += '<li><span class="tol-pu-ico" aria-hidden="true">&#128221;</span><span>Kept on this device: ' + d.slice(0, 4).map(function (x) {
@@ -136,15 +140,7 @@
     box.className = 'tol-pickup no-bubble no-cheer' + (where === 'menu' ? ' is-menu' : '');
     box.setAttribute('aria-label', 'Pick up where you left off');
     box.innerHTML = '<h2 class="tol-pu-h">Pick up where you left off</h2><ul>' + rows + '</ul>' +
-      '<p class="tol-pu-foot">Only on this device. <button type="button" data-pu="erase">Forget the pages I visited</button> <button type="button" data-pu="off">' + (lsGet('tol-recent-off') ? 'Remember them again' : 'Stop remembering them') + '</button> <a href="/on-this-device.html">Everything stored here</a></p>';
-    box.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-pu]'); if (!b) return;
-      if (b.getAttribute('data-pu') === 'erase') { lsDel('tol-recent'); b.textContent = 'Forgotten'; b.disabled = true; var f = box.querySelector('li'); if (f && last) f.remove(); }
-      if (b.getAttribute('data-pu') === 'off') {
-        if (lsGet('tol-recent-off')) { lsDel('tol-recent-off'); b.textContent = 'Stop remembering them'; }
-        else { lsSet('tol-recent-off', '1'); lsDel('tol-recent'); b.textContent = 'Remember them again'; }
-      }
-    });
+      '<p class="tol-pu-foot">Only on this device. <a href="/on-this-device.html">Everything stored here</a></p>';
     return box;
   }
 
@@ -171,7 +167,7 @@
         var on = b.getAttribute('aria-pressed') !== 'true', m = b.getAttribute('data-min'), list = box.querySelector('.tol-time-list');
         box.querySelectorAll('[data-min]').forEach(function (x) { x.setAttribute('aria-pressed', String(on && x === b)); });
         list.hidden = !on;
-        list.innerHTML = on ? TIME[m].map(function (r) { return '<li><span>' + esc(r[0]) + ':</span> <a href="' + esc(r[2]) + '"' + (r[2] === '#breathe' ? ' data-breathe' : '') + '>' + esc(r[1]) + '</a></li>'; }).join('') : '';
+        list.innerHTML = on ? keepFits(TIME[m], function (r) { return r[2]; }).map(function (r) { return '<li><span>' + esc(r[0]) + ':</span> <a href="' + esc(r[2]) + '"' + (r[2] === '#breathe' ? ' data-breathe' : '') + '>' + esc(r[1]) + '</a></li>'; }).join('') : '';
         return;
       }
       var br = e.target.closest('[data-breathe]');

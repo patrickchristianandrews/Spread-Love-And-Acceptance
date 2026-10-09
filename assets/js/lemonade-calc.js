@@ -2893,7 +2893,7 @@
       if (hl) rows2.push({ h: 'Home jobs, the doing and the thinking', t: hl.t, c: hl.c });
       if (il) rows2.push({ h: 'Planning and remembering (the thinking work)', t: il.t, c: il.c, hl: true });
       if (wl) rows2.push({ h: 'Paid work and school', t: wl.t, c: wl.c });
-      if (il && hl && il.c !== 'both' && il.c === hl.c) notes.push('The thinking work is easy to miss, because nobody sees it happen.');
+      if (il && /^Mostly /.test(il.t)) notes.push('The thinking work is easy to miss, because nobody sees it happen.');
     }
     var tg = target();
     if (!tg.error && tg.mode !== 'even') notes.push('We chose our own split. Fair isn’t always 50/50.');
