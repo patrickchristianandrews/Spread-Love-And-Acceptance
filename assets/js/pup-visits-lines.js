@@ -225,7 +225,7 @@ window.TOL_PUP_LINES = {
       ['What’s built, what’s next, and what’s still a sketch.', '/roadmap.html', 'The roadmap'],
       ['The whole program in one overview.', '/program-overview.html', 'Program overview'],
       ['See every workpaper in order.', '/suite-index.html', 'The Suite Index'],
-      ['Right now it’s all free with an email.', '/ways-in.html', 'Ways in']
+      ['Right now it’s all free, with no sign-up.', '/ways-in.html', 'Ways in']
     ],
     new: [
       'Ooh, new things! Pick one that looks fun.',
