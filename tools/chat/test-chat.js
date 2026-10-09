@@ -974,6 +974,14 @@ if (PERS) {
     t('puddles', 'hi my husband yells at me', { kind: 'safety', not: FUNNY });
     t('puddles', 'my name is Sam', { kind: 'chat', text: /Sam/ });
     c('puddles', ['let\'s just chat', 'pizza'], { kind: 'chat' });
+    t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /988/ });
+    t('puddles', "I'm Sam (a name, said the short way)", { q: "I'm Sam", kind: 'chat', text: /Sam/ });
+    t('puddles', "I'm Tired (a feeling, not a name)", { q: "I'm Tired", kind: 'chat', not: /meet you, Tired/ });
+    c('puddles', ['my name is Sam', 'how are you'], { kind: 'chat', not: /\{name\}/ });
+    c('puddles', ["let's just chat", 'i feel sad today'], { kind: 'care', not: FUNNY });
+    t('puddles', 'hi', { kind: 'chat' });
+    t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
+    t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', not: /splendid|Peak duck/ });
   }
 }
 

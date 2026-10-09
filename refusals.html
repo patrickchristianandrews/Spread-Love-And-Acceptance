@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Say No Kindly: Neutral Refusal Scripts</title>
+<meta name="description" content="Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .pg-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pg-jump li{ margin:0 !important; max-width:none !important; }
+  .pg-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .pg-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .pg-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .pg-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .pg-links a:hover{ border-color:var(--credit); }
+  .pg-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .pg-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .pg-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .pg-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .pg-say p{ margin:.4rem 0 !important; font-style:italic; }
+  .pg-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .pg-safe p{ margin:.4rem 0 !important; }
+
+  /* the script maker */
+  .rf-tool{ margin:1rem 0 1.5rem; }
+  .rf-step{ border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:.9rem 1rem 1rem; margin:0 0 .9rem; min-width:0; }
+  .rf-step legend{ font:600 1.08rem/1.35 "Fraunces", Georgia, serif; padding:0 .3rem; }
+  .rf-chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.4rem; }
+  .rf-chip{ font:1rem/1.25 "Lora", Georgia, serif; min-height:48px; box-sizing:border-box; padding:.5rem 1rem; border-radius:999px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); color:var(--ink); cursor:pointer; text-align:left; }
+  .rf-chip:hover{ border-color:var(--credit); }
+  .rf-chip[aria-pressed="true"]{ border:2px solid var(--credit); background:var(--paper); font-weight:600; }
+  .rf-chip[aria-pressed="true"]::before{ content:"\2713  "; color:var(--credit); }
+  .rf-chip:focus-visible, .rf-btn:focus-visible, .rf-field input:focus-visible, .rf-mine textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .rf-field{ display:grid; gap:.3rem; margin:.4rem 0 0; max-width:30rem; }
+  .rf-field label{ font-weight:600; }
+  .rf-field input, .rf-mine textarea{ font:inherit; font-size:1rem; min-height:44px; padding:.5rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); width:100%; max-width:100%; box-sizing:border-box; }
+  .rf-hint{ color:var(--ink-soft); font-size:.93rem; margin:.2rem 0 0; }
+  .rf-out{ margin:1.2rem 0; scroll-margin-top:80px; }
+  .rf-out h3{ font-size:1.1rem; margin:0 0 .6rem; }
+  .rf-card{ border:1px solid var(--line); border-left:4px solid var(--credit); border-radius:12px; background:var(--paper); padding:.8rem 1rem; margin:0 0 .8rem; }
+  .rf-card .rf-k{ font:600 1.02rem/1.3 "Fraunces", Georgia, serif; margin:0; }
+  .rf-card .rf-for{ font-size:.92rem; color:var(--ink-soft); margin:.15rem 0 .5rem; }
+  .rf-card q{ quotes:none; display:block; font-style:italic; line-height:1.55; overflow-wrap:anywhere; }
+  .rf-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 0; }
+  .rf-btn{ font:600 .98rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; box-sizing:border-box; }
+  .rf-btn.is-main{ background:var(--ink); color:var(--paper); }
+  .rf-mine{ border:1px solid var(--line); border-radius:14px; background:var(--paper-deep, var(--paper)); padding:.9rem 1rem 1rem; margin:1rem 0; scroll-margin-top:80px; }
+  .rf-mine h3{ font-size:1.1rem; margin:0 0 .4rem; }
+  .rf-mine textarea{ min-height:8.5rem; line-height:1.5; resize:vertical; }
+  .rf-status{ min-height:1.4em; margin:.3rem 0 0; font-size:.95rem; color:var(--ink-soft); }
+  .rf-note{ margin:.8rem 0 0; font-size:.95rem; }
+  .rf-parts{ list-style:none; padding:0 !important; margin:.6rem 0 1rem !important; display:grid; gap:.5rem; }
+  .rf-parts li{ margin:0 !important; max-width:none !important; padding:.55rem .85rem; border-radius:10px; border:1px solid var(--line); background:var(--paper); }
+  @media print{ .rf-tool .rf-step, .rf-acts, .rf-mine{ display:none !important; } }
+</style>
+
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/refusals.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/refusals.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/refusals.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Say No Kindly: Neutral Refusal Scripts">
+<meta property="og:description" content="Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/refusals.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09">
+<meta property="article:modified_time" content="2026-10-09">
+<meta property="article:author" content="https://spreadloveandacceptance.com/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Say No Kindly: Neutral Refusal Scripts">
+<meta name="twitter:description" content="Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/refusals.html#page","name":"Say No Kindly: Neutral Refusal Scripts","headline":"Say No Kindly: Neutral Refusal Scripts","description":"Pick a situation and a tone, and get three kind, copy-ready ways to say no: “I’m full today”, “Not me, but let’s find who” or “Yes, just later”. Free.","url":"https://spreadloveandacceptance.com/refusals.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-09","dateModified":"2026-10-09","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/refusals.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Say No Kindly: Neutral Refusal Scripts","item":"https://spreadloveandacceptance.com/refusals.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Tool · Kind ways to say no</p><h1>Say no kindly: neutral refusal scripts</h1></header>
+
+<p class="simple-lede">Saying no is easier when you have the words ready. Pick your situation and a tone, and you get three kind ways to say no that you can copy, change and send. They use the site’s three kind ways to say no: “I’m full today”, “Not me, but let’s find who” and “Yes, just later”. Nothing you pick or type leaves this device.</p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li>A kind no does three things: says the request is fair, says honestly what you have left, and offers something instead.</li>
+    <li>One calm statement is enough. No long list of reasons, and no tally of everything you already do.</li>
+    <li>These are for safe relationships. If saying no feels dangerous, see <a href="/safety.html">Not safe at home?</a></li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="pg-jump no-bubble">
+  <li><a href="#make">Make your scripts</a></li>
+  <li><a href="#how">How a kind no works</a></li>
+  <li><a href="#not">What it is not</a></li>
+  <li><a href="#safe">When no isn’t safe</a></li>
+</ul>
+</nav>
+
+<h2 id="make">Make your scripts</h2>
+<div class="rf-tool tol-plain" id="rf-tool">
+  <fieldset class="rf-step">
+    <legend>1. What’s the situation?</legend>
+    <div class="rf-chips" id="rf-sits" role="group" aria-label="Situation"></div>
+  </fieldset>
+  <fieldset class="rf-step">
+    <legend>2. How do you want it to sound?</legend>
+    <div class="rf-chips" id="rf-tones" role="group" aria-label="Tone">
+      <button type="button" class="rf-chip" data-tone="warmer" aria-pressed="false">Warmer</button>
+      <button type="button" class="rf-chip" data-tone="plainer" aria-pressed="true">Plainer</button>
+      <button type="button" class="rf-chip" data-tone="firmer" aria-pressed="false">Firmer</button>
+    </div>
+    <div class="rf-field">
+      <label for="rf-when">A time you could offer (optional)</label>
+      <input id="rf-when" type="text" maxlength="60" autocomplete="off" placeholder="for example: Sunday afternoon">
+    </div>
+  </fieldset>
+
+  <div class="rf-out" id="rf-out" hidden aria-live="polite">
+    <h3 id="rf-out-h">Three ways to say it</h3>
+    <div id="rf-cards"></div>
+    <p class="rf-note" id="rf-extra" hidden></p>
+  </div>
+
+  <div class="rf-mine" id="rf-mine-box">
+    <h3><label for="rf-mine">Make it mine</label></h3>
+    <p class="rf-hint">Tap “Make it mine” under a script, or type your own. Change any words so it sounds like you.</p>
+    <textarea id="rf-mine" maxlength="1500" placeholder="Your words go here."></textarea>
+    <p class="rf-acts"><button type="button" class="rf-btn is-main" id="rf-mine-copy">Copy</button><a class="rf-btn" id="rf-check" href="/signal-translator.html">Check it in the Signal Translator</a></p>
+    <p class="rf-status" id="rf-status" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<h2 id="how">How a kind no works</h2>
+<p>Every script here follows the same three steps, in this order:</p>
+<ol class="rf-parts no-bubble">
+  <li><strong>Say why the request is fair.</strong> Something true and specific, not a vague “I understand”.</li>
+  <li><strong>Say honestly what you have left.</strong> Your time, energy or focus right now. Not an excuse, and not worse than it is.</li>
+  <li><strong>Offer something instead.</strong> Another time, another person, or part of the job, so the other person isn’t left with nothing.</li>
+</ol>
+<p>Then pick the kind of “not now” you mean:</p>
+<ul>
+  <li><strong>“I’m full today.”</strong> You’re already at capacity, and saying yes would cost you something real.</li>
+  <li><strong>“Not me, but let’s find who.”</strong> It isn’t really yours to do. Someone else is better placed.</li>
+  <li><strong>“Yes, just later.”</strong> You’ll do it, just not on the timeline being assumed.</li>
+</ul>
+<p>Each one is an opening line, not the end of the talk. The other person can still answer, push back or suggest something different. If you’re running on empty yourself, <a href="/ladder.html">check where you are</a> first: a no said calmly lands much better than one said revved up.</p>
+<div class="pg-say">
+  <h3>Words you could use</h3>
+  <p>“I don’t have room for this today. Can it wait until tomorrow, or can we find someone else to own it right now?”</p>
+  <p>“I’m not the right person for this one. I can help find who is, but it isn’t going to be me tonight.”</p>
+  <p>“I’ll take this, just not until Saturday. I can’t do it well right now, and a rushed version isn’t a favor to either of us.”</p>
+</div>
+
+<h2 id="not">What a kind no is not</h2>
+<p>It isn’t a long list of reasons, a tally of everything you’ve already done, or a refusal to ever talk about it again. It’s one calm statement of your limit that leaves the door open.</p>
+<p>It also isn’t a test of whether the other person is a good person. They asked; you answered. Both are fine. If you feel guilty afterwards, that’s common, especially with family. Guilt is a feeling, not proof you did something wrong.</p>
+<p>Not sure how your words will land? Paste them into the <a href="/signal-translator.html">Signal Translator</a> before you send them.</p>
+
+<h2 id="safe">When saying no doesn’t feel safe</h2>
+<div class="pg-safe">
+  <p>These scripts are for safe relationships, where a no might bring disappointment but not danger. If you’re afraid of what will happen when you say no, if someone controls your money or where you go, or a no has led to threats or harm before, that is not a communication problem. You don’t have to find the perfect words.</p>
+  <p><a href="/safety.html">Not safe at home?</a> has free, private help and people to talk to.</p>
+</div>
+
+<h2 id="more">More for your situation</h2>
+<ul class="pg-links no-bubble">
+  <li><a href="/workpapers/wp-01.html"><strong>Who did what, and kind ways to say no</strong><span>A one-week log of who did what at home, plus the three kind ways to say no.</span></a></li>
+  <li><a href="/infographic.html"><strong>The whole idea on one page</strong><span>The three kind ways to say no, with the rest of the idea, ready to print.</span></a></li>
+  <li><a href="/grown-up-children.html"><strong>Boundaries with a parent you love</strong><span>Visits, advice and the new baby, from the grown-up child’s side.</span></a></li>
+  <li><a href="/money-together.html"><strong>Money together</strong><span>Money styles, family expectations, and normal limits versus control.</span></a></li>
+  <li><a href="/ladder.html"><strong>Where am I right now?</strong><span>Four quick taps to check your state before a hard talk.</span></a></li>
+</ul>
+
+<script>
+(function () {
+  'use strict';
+  // Kind-no script maker. Everything is put together here, on this device. Nothing is sent anywhere.
+  // Each script: say why it's fair (ack) + what you have left (cap) + something instead (alt).
+  var TYPES = [
+    { k: 'capacity', name: '“I’m full today”', for: 'For when you’re already at capacity.' },
+    { k: 'delegate', name: '“Not me, but let’s find who”', for: 'For when it isn’t really yours to do.' },
+    { k: 'later', name: '“Yes, just later”', for: 'For when you’ll do it, just not on their timeline.' }
+  ];
+  var S = {
+    family: { label: 'Family guilt', rel: 'family', when: 'next Sunday',
+      ack: { warmer: 'I know how much it means to you when we’re all together, and I love that you want me there.', plainer: 'I know you’d like me to come.', firmer: 'I hear that you’d like me there.' },
+      capacity: ['I don’t have it in me this weekend. I’m stretched thin, and I’d be poor company.', 'I’m not able to come this weekend.', 'Could I come for lunch {when} instead?', 'I can come {when}, if that works.'],
+      delegate: ['I can’t be the one who organizes it this time.', 'I won’t be organizing it this time.', 'Could one of the others take the lead? I’m happy to bring something.', 'Someone else will need to take the lead. I can bring something.'],
+      later: ['I do want to see you, just not this weekend.', 'Not this weekend.', 'Let’s put {when} in the calendar now, so it’s settled.', 'I’ll come {when}. Let’s put it in the calendar.'],
+      warm: 'I love you, and I’m not going anywhere.', firm: 'I’ve thought about it, and that’s my answer for now.' },
+    friend: { label: 'A friend asking a favor', rel: 'friends', when: 'Saturday morning',
+      ack: { warmer: 'I’m really glad you asked me, and I can see you need a hand.', plainer: 'I can see you need a hand with this.', firmer: 'I understand you need help with this.' },
+      capacity: ['My week is already full, and I can’t take on anything else right now.', 'I can’t do it this week.', 'Could I help for an hour {when} instead?', 'I could do one hour {when}.'],
+      delegate: ['I’m not the best person for this one.', 'I’m not the right person for this one.', 'Could I help you find someone who is? I can ask around tonight.', 'I can help you find someone else, but it won’t be me.'],
+      later: ['I’d like to help, just not today.', 'Not today.', 'I’m free {when}. Would that still help?', 'I can do {when}.'],
+      warm: 'You matter to me, so I’d rather be honest than let you down.', firm: '' },
+    work: { label: 'Extra work at my job', rel: 'coworkers', when: 'next Monday',
+      ack: { warmer: 'Thanks for thinking of me. I can see this needs doing.', plainer: 'I can see this needs doing.', firmer: 'I understand this needs doing.' },
+      capacity: ['My plate is full this week, and taking this on would put my current deadlines at risk.', 'I don’t have capacity for this right now.', 'If it’s urgent, which of my current tasks should move so I can fit it in?', 'If it has to be me, please tell me which of my current tasks should wait.'],
+      delegate: ['I’m not the right person for this one.', 'This one shouldn’t be mine.', 'Someone who knows this area might be a better fit. I’m happy to hand over what I know.', 'It should go to someone else. I can hand over what I know.'],
+      later: ['I can take it on, just not until {when}.', 'I can start it {when}, not before.', 'If that’s too late, can we look at what else could move?', 'If that’s too late, it will need to go to someone else.'],
+      warm: 'I want to do it well, and right now I can’t.', firm: '' },
+    pushed: { label: 'A no that keeps getting pushed', rel: '', when: 'next month',
+      ack: { warmer: 'I know this matters to you, and I can tell you were hoping I’d change my mind.', plainer: 'I know you’d like a different answer.', firmer: 'I’ve heard you, and I’ve already given my answer.' },
+      capacity: ['My answer is still no. I don’t have room for it.', 'My answer is still no.', 'I’m happy to talk about something else I could do instead.', 'I won’t keep going over it, but I’m glad to talk about something else.'],
+      delegate: ['This isn’t something I’m going to do.', 'I’m not going to do this.', 'Maybe someone else can help with it. I’m glad to think through who.', 'You’ll need to find another way. It won’t be me.'],
+      later: ['I’m not changing my answer today.', 'Asking again won’t change my answer today.', 'If that changes, I’ll be the one to bring it up, maybe {when}.', 'If that changes, I’ll tell you. Please don’t ask again before then.'],
+      warm: 'I care about you, and saying no is part of how I keep caring well.', firm: '',
+      extra: 'A no that gets pushed again and again is worth noticing. If you feel worn down, pressured or afraid, see <a href="/safety.html">Not safe at home?</a>' },
+    money: { label: 'Someone asking for money', rel: '', when: 'at the start of next month',
+      ack: { warmer: 'I can hear how stressful money is for you right now, and I’m glad you felt you could ask me.', plainer: 'I can see money is tight for you right now.', firmer: 'I understand you need money.' },
+      capacity: ['I’m not able to lend money right now. My own budget doesn’t have room.', 'I can’t lend money.', 'I could help in another way, like going through a budget with you.', 'I can help you look for other support.'],
+      delegate: ['I’m not the right person to lend money. Lending between us could strain things.', 'I don’t lend money, even to people I love.', 'Could we look together at who could help, like a free money advice service?', 'A free money advice service would be a better place to start.'],
+      later: ['I can’t help with money now.', 'Not right now.', 'I can look at my own budget again {when} and tell you honestly then.', 'I’ll let you know {when}, not before.'],
+      warm: 'This is about my budget, not about how much I care.', firm: '',
+      extra: 'If money is being used to control you, or someone takes or checks your money without asking, see <a href="/money-together.html">Money together</a> on normal limits versus control, and <a href="/safety.html">Not safe at home?</a>' },
+    visit: { label: 'A visit or a stay', rel: 'family', when: 'next month',
+      ack: { warmer: 'I’d love to see you, and it means a lot that you want to come.', plainer: 'I know you’d like to come and stay.', firmer: 'I hear that you’d like to visit.' },
+      capacity: ['We can’t have overnight guests right now. The house and the week are both too full.', 'We can’t have you to stay this time.', 'Could we meet for a meal while you’re in town instead?', 'We can meet for a meal while you’re here.'],
+      delegate: ['Our place isn’t the best place to stay this time.', 'Staying with us won’t work this time.', 'There’s a nice place to stay nearby. I’m happy to send you the details.', 'You’ll need to book somewhere nearby. I can send some ideas.'],
+      later: ['We’d love to have you, just not this month.', 'Not this month.', 'Would {when} work for you instead?', 'We could do {when}.'],
+      warm: 'We’ll make it a good visit when it happens.', firm: '' },
+    partner: { label: 'My partner’s plan', rel: 'partner', when: 'next weekend',
+      ack: { warmer: 'I love that you planned something for us, and I can tell you put thought into it.', plainer: 'I can see you’ve made a plan for us.', firmer: 'I see you’ve made a plan for us.' },
+      capacity: ['I’m running on empty this week, and a big evening out is more than I’ve got.', 'I’m not up for it this week.', 'Could we do something quieter at home instead, and save the big plan?', 'I’d rather stay home this time.'],
+      delegate: ['I’m not the right company for this one. It’s more your thing than mine.', 'This one isn’t for me.', 'Would you like to go with a friend who’d enjoy it more? I’d love to hear all about it.', 'Go with someone who’ll enjoy it. I’m happy to stay home.'],
+      later: ['I’d like to do it, just not this week.', 'Not this week.', 'Can we move it to {when} instead?', 'I can do {when}.'],
+      warm: 'I really do want time with you.', firm: 'Next time, can we check with each other before we make plans for both of us?' },
+    roommate: { label: 'A roommate’s request', rel: 'roommates', when: 'tomorrow evening',
+      ack: { warmer: 'Thanks for asking me first. I know it’s important to you.', plainer: 'I see why you’re asking.', firmer: 'I understand what you’re asking.' },
+      capacity: ['I can’t take that on this week. I’ve already got a lot on.', 'I can’t do it this week.', 'Could we swap? You take it this week, and I’ll take one of yours next week.', 'It will need to be you this week. I’ll do my usual jobs.'],
+      delegate: ['I don’t think this one should be my job.', 'That one isn’t mine to do.', 'Let’s put it on the shared list so we can agree who owns it.', 'Let’s agree an owner for it on the shared list.'],
+      later: ['I can do it, just not tonight.', 'Not tonight.', 'I’ll do it {when}. Does that work?', 'I’ll do it {when}.'],
+      warm: 'I want living together to feel fair for both of us.', firm: '' },
+    advice: { label: 'A parent’s advice', rel: 'family', when: 'at the weekend',
+      ack: { warmer: 'I know you’re saying this because you love us, and you’ve been through it yourself.', plainer: 'Thanks. I know you mean well.', firmer: 'I hear your advice.' },
+      capacity: ['I don’t have room for more opinions on this right now. I’m still finding my way.', 'I’m not looking for advice on this right now.', 'What would really help is a hand with something practical, like dinner one night.', 'I’d welcome help with something practical instead.'],
+      delegate: ['This is one we need to decide ourselves.', 'This one is ours to decide.', 'If we want advice, we’ll ask, and you’ll be one of the first people we come to.', 'We’ll ask if we want advice.'],
+      later: ['I might want your thoughts, just not today.', 'Not today.', 'Can I come to you about it {when}, when I’ve had time to think?', 'I’ll ask you {when}, if I want to talk it through.'],
+      warm: 'I’m glad you’re in our lives.', firm: '' },
+    host: { label: 'Hosting a holiday or event', rel: 'family', when: 'next year',
+      ack: { warmer: 'I know how much everyone loves being together for the holidays, and I love it too.', plainer: 'I know everyone would like to come here again.', firmer: 'I know you’d all like to come here.' },
+      capacity: ['Hosting this year is more than I can manage.', 'I can’t host this year.', 'Could we share it? One person hosts, and everyone brings a dish.', 'I’m happy to bring a dish to wherever it is.'],
+      delegate: ['I’ve hosted for a few years now, and I’d like someone else to have a turn.', 'It’s someone else’s turn to host.', 'Could we decide together who hosts this year? I’ll help them plan.', 'Let’s agree who hosts. It won’t be me this year.'],
+      later: ['I’d like to host again, just not this year.', 'Not this year.', 'Could I take {when} instead?', 'I can host {when}.'],
+      warm: 'Being together is what matters to me, not whose house it is.', firm: '' }
+  };
+  var ORDER = ['family', 'friend', 'work', 'pushed', 'money', 'visit', 'partner', 'roommate', 'advice', 'host'];
+  var sit = null, tone = 'plainer';
+  var $ = function (id) { return document.getElementById(id); };
+  var sitsEl = $('rf-sits'), cardsEl = $('rf-cards'), out = $('rf-out'), mine = $('rf-mine'), statusEl = $('rf-status'), whenEl = $('rf-when');
+  function say(t) { statusEl.textContent = ''; setTimeout(function () { statusEl.textContent = t; }, 30); }
+  function escH(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  ORDER.forEach(function (k) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'rf-chip'; b.setAttribute('data-sit', k); b.setAttribute('aria-pressed', 'false'); b.textContent = S[k].label;
+    sitsEl.appendChild(b);
+  });
+
+  function script(k, typeKey) {
+    var d = S[k], t = d[typeKey], firm = tone === 'firmer';
+    var when = (whenEl.value || '').replace(/\s+/g, ' ').trim() || d.when;
+    var parts = [d.ack[tone], firm ? t[1] : t[0], firm ? t[3] : t[2]];
+    if (tone === 'warmer' && d.warm) parts.push(d.warm);
+    if (firm && d.firm) parts.push(d.firm);
+    return parts.join(' ').replace(/\{when\}/g, when);
+  }
+
+  function render() {
+    if (!sit) return;
+    cardsEl.innerHTML = TYPES.map(function (t, i) {
+      var s = script(sit, t.k);
+      return '<div class="rf-card"><p class="rf-k">' + (i + 1) + '. ' + t.name + '</p><p class="rf-for">' + t.for + '</p>' +
+        '<q data-i="' + i + '">“' + escH(s) + '”</q>' +
+        '<p class="rf-acts"><button type="button" class="rf-btn is-main" data-copy="' + i + '">Copy</button><button type="button" class="rf-btn" data-mine="' + i + '">Make it mine</button></p></div>';
+    }).join('');
+    $('rf-out-h').textContent = 'Three ways to say it: ' + S[sit].label.toLowerCase() + ', ' + tone;
+    var ex = $('rf-extra');
+    if (S[sit].extra) { ex.hidden = false; ex.innerHTML = S[sit].extra; } else ex.hidden = true;
+    out.hidden = false;
+    var rel = S[sit].rel;
+    $('rf-check').href = '/signal-translator.html' + (rel ? '?rel=' + rel : '');
+  }
+
+  sitsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.rf-chip'); if (!b) return;
+    sit = b.getAttribute('data-sit');
+    sitsEl.querySelectorAll('.rf-chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); });
+    render();
+    if (window.innerWidth < 700) out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('rf-tones').addEventListener('click', function (e) {
+    var b = e.target.closest('.rf-chip'); if (!b) return;
+    tone = b.getAttribute('data-tone');
+    $('rf-tones').querySelectorAll('.rf-chip').forEach(function (c) { c.setAttribute('aria-pressed', c === b ? 'true' : 'false'); });
+    render();
+  });
+  whenEl.addEventListener('input', render);
+
+  function fallback(text) {
+    var ta = document.createElement('textarea'), ok = false;
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); return ok;
+  }
+  function copy(text, btn) {
+    var done = function () { if (btn) { var o = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = o; }, 1500); } say('Copied. Paste it into a message, and change any words you like.'); };
+    var fail = function () { if (fallback(text)) done(); else say('Copying didn’t work here. Select the words and copy them by hand.'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fail); else fail();
+  }
+  function plain(i) { var q = cardsEl.querySelector('q[data-i="' + i + '"]'); return q ? q.textContent.replace(/^“|”$/g, '').trim() : ''; }
+  cardsEl.addEventListener('click', function (e) {
+    var c = e.target.closest('[data-copy]'), m = e.target.closest('[data-mine]');
+    if (c) copy(plain(c.getAttribute('data-copy')), c);
+    if (m) {
+      mine.value = plain(m.getAttribute('data-mine'));
+      $('rf-mine-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try { mine.focus({ preventScroll: true }); } catch (x) {}
+      say('It’s in the box. Change any words so it sounds like you.');
+    }
+  });
+  $('rf-mine-copy').addEventListener('click', function () {
+    var t = mine.value.trim();
+    if (!t) { say('The box is empty. Tap “Make it mine” under a script, or type your own.'); mine.focus(); return; }
+    copy(t, this);
+  });
+  // The Signal Translator picks the words up from this tab's sessionStorage, so they never go in the address.
+  $('rf-check').addEventListener('click', function (e) {
+    var t = mine.value.trim();
+    if (!t && sit) t = plain(0);
+    if (!t) return;
+    var stored = false;
+    try { sessionStorage.setItem('tol-st-text', t.slice(0, 1500)); stored = true; } catch (x) {}
+    if (!stored) { e.preventDefault(); location.href = this.href + (this.href.indexOf('?') > -1 ? '&' : '?') + 'text=' + encodeURIComponent(t.slice(0, 1500)); }
+  });
+})();
+</script>
+</main>
+</body>
+</html>

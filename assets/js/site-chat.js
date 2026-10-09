@@ -23,7 +23,7 @@
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, or talk deep about the big questions.'
+    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, or say ‘talk deep’ and we’ll explore the big questions.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -1733,7 +1733,7 @@
     return { blocks: b, chips: chips, kind: 'card', id: 'reading', noBrief: true };
   }
   function respond(state, q, chipDoc) {
-    var sp = null;
+    var sp = null, q0 = q;
     state.turn = (state.turn || 0) + 1;
     if (chipDoc == null) {
       sp = spellFix(q);
@@ -1763,6 +1763,8 @@
       }
       var vf = norm(q);
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
+      var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
+      if (dt) return dt;
       var ft = !DANGER.test(vf) && !state.unsafe && funTurn(state, vf);
       if (ft) return ft;
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
@@ -1777,7 +1779,7 @@
       var sf = norm(q);
       if (!state.unsafe && !DANGER.test(sf) && !VERBAL.test(sf) && !SELF_HARMFUL.test(sf) && !NOT_LIVE.test(sf) && !FUN_UPSET.test(sf) && sf.split(' ').length <= 12) {
         var sit0 = detectSituation(sf), card0 = matchCard(sf);
-        if (!(sit0.issue && sit0.score >= 3) && !card0) { var stt = smallTalk(state, q, sf); if (stt) return stt; }
+        if (!(sit0.issue && sit0.score >= 3) && !card0) { var stt = smallTalk(state, q, sf, q0); if (stt) return stt; }
       }
     }
     var f = norm(q), prevLast = state.last;
@@ -1854,6 +1856,7 @@
   function flair(state, q, r) {
     var P = KB && KB.pers;
     if (!P || !r || !r.blocks || !r.blocks.length || r.fun) return r;
+    if (r.kind === 'deep') return r;   // deep talk is never joked about
     var R = P.rules || {}, k = r.kind || 'search', f = norm(q);
     // after anything serious, stay plain: for good after safety, and after care or someone's situation until a light topic
     if (/^(safety|redflag)$/.test(k) || state.unsafe) { state.plain = 2; return r; }
@@ -1918,6 +1921,169 @@
     return null;
   }
 
+  // ---------- deep talk (tools/chat/deep.json → KB.deep): "talk deep" switches it on for this tab, "small talk" switches it off.
+  // In deep mode a big question ("what is love?") gets philosophy, psychology and an autistic lens, put together, with a
+  // question to sit with and one thing to try. Safety, danger and someone's own hard situation always come first, and
+  // deep replies never carry a joke. Outside deep mode, an ordinary answer on a deep topic offers "Go deeper on this".
+  function deepOn(state) {
+    if (state.deep == null) { try { state.deep = sessionStorage.getItem('tol-chat-deep') === '1'; } catch (e) { state.deep = false; } }
+    return !!state.deep;
+  }
+  function setDeep(state, on) { state.deep = !!on; try { sessionStorage.setItem('tol-chat-deep', on ? '1' : '0'); } catch (e) {} }
+  function dget(o, keys) { for (var i = 0; o && i < keys.length; i++) if (o[keys[i]] != null && o[keys[i]] !== '' && !(Array.isArray(o[keys[i]]) && !o[keys[i]].length)) return o[keys[i]]; return null; }
+  function dlist(x) { return x == null ? [] : Array.isArray(x) ? x : [x]; }
+  function dPick(state, x) { var l = dlist(x).filter(function (s) { return typeof s === 'string' && s; }); return l.length ? l[Math.floor(frand(state) * l.length) % l.length] : ''; }
+  // a phrase list: plain phrases match the whole message (after "let's", "please" and the like); anything regex-like is a regex
+  function dPhraseRes(list) {
+    return dlist(list).map(function (p) {
+      if (typeof p !== 'string' || !p.trim()) return null;
+      if (/[\^$\\()[\]|?*+]/.test(p)) { try { return new RegExp(p, 'i'); } catch (e) { return null; } }
+      return new RegExp('^(?:(?:lets|let s|can we|could we|i want to|i wanna|id like to|i d like to|please|ok|okay|so|hey|puddles|professor) )*' + stNorm(p).replace(/\s+/g, ' ') + '(?: (?:please|puddles|professor|now|with me|for a bit|for a while))*$', 'i');
+    }).filter(Boolean);
+  }
+  function dRes(o) {
+    if (o._re) return o._re;
+    var out = [];
+    dlist(dget(o, ['patterns', 'pattern', 'regex', 're'])).forEach(function (src) { try { out.push(new RegExp(src, 'i')); } catch (e) {} });
+    dlist(dget(o, ['keywords', 'match', 'triggers', 'phrases', 'keys'])).forEach(function (w) {
+      if (typeof w === 'string' && stNorm(w)) out.push(new RegExp('\\b' + stNorm(w).replace(/\s+/g, '\\s+') + '\\b', 'i'));
+    });
+    return (o._re = out);
+  }
+  function dTopics() {
+    var D = KB && KB.deep; if (!D) return [];
+    if (D._all) return D._all;
+    var t = D.topics || [], all = [];
+    if (!Array.isArray(t)) Object.keys(t).forEach(function (k) { var x = t[k]; if (x && typeof x === 'object') { if (!x.id) x.id = k; all.push(x); } });
+    else all = t.slice();
+    return (D._all = all);
+  }
+  function dTitle(t) { return String(dget(t, ['title', 'name', 'label', 'topic', 'id']) || 'this'); }
+  function dById(id) { var s = stNorm(id); return dTopics().filter(function (t) { return stNorm(t.id || '') === s || stNorm(dTitle(t)) === s; })[0] || null; }
+  // the best deep topic (or big question) for a message, or null
+  function deepFind(fs, f) {
+    var D = KB && KB.deep; if (!D || !fs) return null;
+    var byName = dById(fs); if (byName) return byName;
+    var bq = D.big_questions || D.questions || [];
+    if (!Array.isArray(bq)) bq = Object.keys(bq).map(function (k) { var x = bq[k]; if (x && typeof x === 'object' && !x.id) x.id = k; return x; });
+    for (var i = 0; i < bq.length; i++) {
+      var B = bq[i]; if (!B || typeof B !== 'object') continue;
+      var qs = dget(B, ['question', 'q', 'title']);
+      var hit = dRes(B).some(function (re) { return re.test(fs) || re.test(f); }) || (qs && stNorm(qs) === fs);
+      if (hit) { var tid = dget(B, ['topic', 'topic_id', 'answer_topic']); var T = tid ? dById(tid) : null; return T ? { t: T, bq: B } : { t: B, bq: B }; }
+    }
+    var ts = dTopics(), best = null, bl = 0;
+    ts.forEach(function (T) { dRes(T).forEach(function (re) { var m = re.exec(fs) || re.exec(f); if (m && m[0].length > bl) { bl = m[0].length; best = T; } }); });
+    return best ? { t: best } : null;
+  }
+  var DEEP_SECTIONS = [
+    ['Philosophy', ['philosophy', 'philosophical', 'philosophers', 'phil']],
+    ['Psychology', ['psychology', 'psych', 'science', 'research']],
+    ['Through an autistic lens', ['autistic_lens', 'autistic', 'autism', 'autism_lens', 'through_an_autistic_lens', 'nd_lens', 'neurodivergent']],
+    ['Putting it together', ['together', 'putting_it_together', 'synthesis', 'bring_together', 'bringing_it_together', 'combined']]];
+  function dParas(v) {
+    var out = [];
+    dlist(v).forEach(function (x) {
+      if (typeof x === 'string') { if (x.trim()) out.push({ k: 'p', x: x }); }
+      else if (x && typeof x === 'object') {
+        var h = dget(x, ['h', 'heading', 'title', 'name', 'who']), tx = dget(x, ['x', 'text', 'body', 'idea', 'summary', 'p']);
+        if (tx) out.push({ k: 'p', x: (h && typeof h === 'string' ? h + ': ' : '') + dlist(tx).join(' ') });
+      }
+    });
+    return out;
+  }
+  function deepReply(state, hit, lead) {
+    var T = hit.t, b = [], title = dTitle(T);
+    var open = lead || dget(hit.bq || {}, ['answer_intro', 'intro', 'opener']) || dget(T, ['intro', 'opener', 'opening', 'summary', 'short']);
+    if (open) b.push({ k: 'p', x: dlist(open).join(' ') });
+    var secs = dget(T, ['sections', 'lenses', 'blocks']);
+    if (Array.isArray(secs)) secs.forEach(function (s) { var h = dget(s, ['h', 'heading', 'title', 'lens', 'name']); var ps = dParas(dget(s, ['x', 'text', 'body', 'paras', 'points'])); if (h && ps.length) { b.push({ k: 'h', x: h }); b = b.concat(ps); } });
+    else {
+      var src = secs && typeof secs === 'object' ? secs : T;
+      DEEP_SECTIONS.forEach(function (S) { var ps = dParas(dget(src, S[1])); if (ps.length) { b.push({ k: 'h', x: S[0] }); b = b.concat(ps); } });
+    }
+    var rq = dget(T, ['question', 'reflective_question', 'reflect', 'reflection', 'ask', 'question_to_sit_with']);
+    if (rq) { b.push({ k: 'h', x: 'A question to sit with' }); b.push({ k: 'p', x: dlist(rq).join(' ') }); }
+    var tr = dget(T, ['try_this', 'try', 'practice', 'exercise', 'tryit']);
+    if (tr) { b.push({ k: 'h', x: 'Try this' }); var tl = dlist(tr).filter(function (x) { return typeof x === 'string'; }); if (tl.length > 1) b.push({ k: 'list', x: tl }); else if (tl.length) b.push({ k: 'p', x: tl[0] }); }
+    var links = safeLinks(dlist(dget(T, ['links', 'read_more', 'pages'])).map(function (l) { return Array.isArray(l) ? l : l && (l.u || l.url || l.href) ? [l.t || l.title || l.label || l.u || l.url, l.u || l.url || l.href] : null; }).filter(Boolean)).slice(0, 4);
+    if (links.length) b.push({ k: 'links', x: links });
+    var chips = [];
+    dlist(dget(T, ['related', 'see', 'see_also', 'next'])).slice(0, 2).forEach(function (r) { var R = typeof r === 'string' ? dById(r) : null; var lab = R ? dTitle(R) : (typeof r === 'string' ? r : ''); if (lab) chips.push({ label: 'Go deeper: ' + lab.charAt(0).toLowerCase() + lab.slice(1), q: 'Talk deep about ' + lab }); });
+    chips.push({ label: 'Another big question', q: 'Ask me a big question' });
+    chips.push({ label: 'Back to small talk', q: 'Small talk' });
+    state.last = null; state.deepLast = T.id || title;
+    return { blocks: b, chips: chips.slice(0, 4), kind: 'deep', id: String(T.id || title), noBrief: true };
+  }
+  function deepIntro(state) {
+    var D = KB.deep, b = [];
+    var line = dPick(state, dget(D, ['intro_lines', 'intro', 'enter_replies', 'enter_lines', 'welcome', 'intros']));
+    b.push({ k: 'p', x: nameFill(line || 'Deep talk it is. Ask me a big question, like “what is love?”, “why do we fight with the people we love?” or “what makes a life meaningful?”, and we’ll look at it through philosophy, psychology and an autistic lens.', chatName(state)) });
+    var bq = D.big_questions || D.questions || [], ex = [];
+    (Array.isArray(bq) ? bq : Object.keys(bq).map(function (k) { return bq[k]; })).forEach(function (B) { var qq = B && dget(B, ['question', 'q', 'title']); if (typeof qq === 'string' && ex.length < 3) ex.push(qq); });
+    if (ex.length < 3) dTopics().slice(0, 3 - ex.length).forEach(function (T) { ex.push('Talk deep about ' + dTitle(T)); });
+    state.last = null;
+    return { blocks: b, chips: ex.map(function (x) { return { label: x.length > 40 ? x.slice(0, 38).replace(/\s+\S*$/, '') + '…' : x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
+  }
+  var DEEP_IN = /^(?:(?:lets|let s|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|go deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|big questions?|ask me a big question|ask me something deep)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
+  var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk) (?:about|on|into) (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
+  var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|exit deep(?: mode)?|leave deep(?: mode)?|end deep(?: mode| talk)?|stop deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|lighten up|keep it light|back to normal|normal please)(?: please| now)?$/;
+  function deepTurn(state, q, f) {
+    var D = KB && KB.deep; if (!D) return null;
+    var fs = stNorm(q);
+    var about = DEEP_ABOUT.exec(fs);
+    if (about) {
+      var h = deepFind(stNorm(about[1] || about[2] || ''), norm(about[1] || about[2] || ''));
+      setDeep(state, true);
+      return h ? deepReply(state, h) : deepIntro(state);
+    }
+    if (DEEP_IN.test(fs) || dPhraseRes(D.enter_phrases).some(function (re) { return re.test(fs); })) {
+      if (/big question|ask me (a big question|something deep)/.test(fs) && deepOn(state)) {
+        // already in: offer one we haven't looked at
+        var all = dTopics().filter(function (T) { return String(T.id || dTitle(T)) !== state.deepLast; });
+        if (all.length) return deepReply(state, { t: all[Math.floor(frand(state) * all.length) % all.length] });
+      }
+      setDeep(state, true);
+      return deepIntro(state);
+    }
+    if (!deepOn(state)) return null;
+    if (DEEP_OUT.test(fs) || dPhraseRes(D.exit_phrases).some(function (re) { return re.test(fs); })) {
+      setDeep(state, false);
+      var ol = dPick(state, dget(D, ['exit_lines', 'exit', 'exit_replies', 'leave_lines', 'outro']));
+      var nx = stPrompt(state);
+      if (nx) state.stAsk = state.turn || 0;
+      state.last = null;
+      return { blocks: [{ k: 'p', x: nameFill(ol || 'Back to the shallow end! Deep talk is off. We can paddle about anything now.', chatName(state)) }].concat(nx ? [{ k: 'p', x: nx }] : []),
+        chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', fun: 1 };
+    }
+    // someone's own situation ("my husband never listens") gets the usual help, even in deep mode
+    if (personalHit(f)) return null;
+    var hit = deepFind(fs, f);
+    return hit ? deepReply(state, hit) : null;
+  }
+  function personalHit(f) {
+    if (VERBAL.test(f) || FUN_UPSET.test(f) && /\b(i|i m|im|my|me)\b/.test(f)) return true;
+    var c = (IDX.first || []).some(function (x) { return CV_PERSONAL[x.id] && x.re.test(f) && !(x.notRe && x.notRe.test(f)); });
+    if (c) return true;
+    var s = detectSituation(f);
+    return !!(s.issue && s.score >= 4 && (s.personal || s.pronoun));
+  }
+  // after an ordinary answer on a topic deep talk covers: offer to go deeper (never after anything serious)
+  function deepChip(state, q, r) {
+    var D = KB && KB.deep;
+    if (!D || !r || !r.blocks || deepOn(state) || state.unsafe) return r;
+    var k = r.kind || 'search', never = dlist(D.never_on_kinds).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short']);
+    if (never.indexOf(k) !== -1) return r;
+    var f = norm(q);
+    if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
+    if (/\/safety\.html|\b988\b|\b911\b/.test(JSON.stringify(r.blocks))) return r;
+    var h = deepFind(stNorm(q), f);
+    if (!h) return r;
+    r.chips = (r.chips || []).filter(function (c) { return !/^Go deeper on this$/.test(c.label); }).slice(0, 4);
+    r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + dTitle(h.t) });
+    return r;
+  }
+
   // ---------- small talk: "how are you?", "what's your favourite food?", "my name is Sam", "let's just chat"
   // Only after the safety checks and the topic cards, and only when nothing about someone's life is in the message:
   // "how are you supposed to split chores" is still about chores. The name someone gives stays in this tab only.
@@ -1934,7 +2100,7 @@
     var lw = w.toLowerCase();
     // "I'm Tired" is a feeling, not a name: unless they said "my name is", the word must not be a known word
     if (STOP[lw] || /^(not|so|very|just|fine|good|ok|okay|here|back|sorry|tired|sad|bored|new|done|ready|lost|stuck|confused|hungry|busy|home|alone|scared|upset|angry|worried)$/.test(lw)) return false;
-    if (!named && (w.charAt(0) !== w.charAt(0).toUpperCase() || ROLE[stem(lw)] || (IDX && IDX.vocab[lw]) || english(lw) || FEELS.some(function (x) { return x[0].test(lw); }))) return false;
+    if (!named && (w.charAt(0) !== w.charAt(0).toUpperCase() || ROLE[stem(lw)] || english(lw) || FEELS.some(function (x) { return x[0].test(lw); }))) return false;
     return true;
   }
   function nameFrom(q) {
@@ -1966,7 +2132,7 @@
     if (!S || !S.intents) return null;
     for (var i = 0; i < S.intents.length; i++) {
       var it = S.intents[i];
-      if (ST_SKIP[it.id]) continue;
+      if (ST_SKIP[it.id] && !(it.id === 'talk_deep' && !(KB && KB.deep))) continue;   // the teaser stands in until deep talk exists
       var hit = (it.patterns || []).some(function (src) {
         var re = it._re && it._re[src]; if (!re) { try { re = new RegExp(src, 'i'); } catch (e) { re = /$^/; } (it._re = it._re || {})[src] = re; }
         return re.test(fs) || re.test(f);
@@ -1975,8 +2141,8 @@
     }
     return null;
   }
-  function smallTalk(state, q, f) {
-    var fs = stNorm(q), nm = nameFrom(q);
+  function smallTalk(state, q, f, q0) {
+    var fs = stNorm(q), nm = nameFrom(q0 || q);
     if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
     var hit = stIntent(f, fs);
     if (!hit && !nm && !JUST_CHAT.test(f)) return null;
@@ -2322,7 +2488,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) x = deepChip(state, q, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

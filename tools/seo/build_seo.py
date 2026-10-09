@@ -121,7 +121,7 @@ OVERRIDE = {
 
 # search-led titles and descriptions: what people type, in plain words (title without the site name)
 SEARCH = {
- 'index.html': ('Free Relationship Self-Help · Spread Love & Acceptance', 'Free tools for fair, kind relationships: share chores fairly, talk without fighting and calm down before hard talks, plus calm games and a cartoon for all ages.'),
+ 'index.html': ('Understand Yourself, Understand Each Other: Free Self-Help', 'Free, kind lessons and tools for self-help and healing: how communication, relationships and the mind work, and what to do about it. Private, no sign-up.'),
  'start-here.html': ('Start Here: Fairer, Kinder Relationships, Step by Step', 'New here? The one idea behind it all, the best first tools and a gentle six-week path to fairer chores and kinder conversations at home.'),
  'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole load, fix the setup not the person, read your state first, and tune how you talk.'),
  'relationships.html': ('Relationship Tools for Couples, Family and Roommates', 'Fair ways to share chores, kinder words and calmer check-ins for partners, families, co-parents, friends, roommates, coworkers and caregivers.'),

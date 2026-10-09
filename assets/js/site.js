@@ -2743,8 +2743,8 @@
     if (kind === 'page') { box.setAttribute('role', 'note'); box.setAttribute('aria-label', 'Focus mode'); }
     box.innerHTML = (outside ? '<span>This page is outside your focus <small>(' + esc(focusList()) + ')</small></span>'
         : '<span><strong>Focus:</strong> ' + esc(focusList()) + '</span>') +
-      '<span class="tol-focus-sep" aria-hidden="true">·</span><button type="button" data-open-focus>Change</button>' +
-      '<span class="tol-focus-sep" aria-hidden="true">·</span><button type="button" data-focus-off>Show everything</button>';
+      '<span class="tol-focus-acts"><button type="button" data-open-focus>Change</button>' +
+      '<span class="tol-focus-sep" aria-hidden="true">·</span><button type="button" data-focus-off>Show everything</button></span>';
     return box;
   }
   function renderPanelFocus() {

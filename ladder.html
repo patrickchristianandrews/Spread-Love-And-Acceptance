@@ -406,6 +406,7 @@
     if (!current) return;
     var d = R[current], text = 'Right now I’m ' + d.name.toLowerCase() + '. ' + d.short, url = linkFor(current);
     if (window.TOLShareKit && window.TOLShareKit.shareText) { window.TOLShareKit.shareText({ title: 'Where am I right now?', text: text, url: url, heading: 'Share your result' }); return; }
+    if (window.TOLShare && window.TOLShare.open) { window.TOLShare.open({ title: 'Where am I right now?', text: text, url: url, result: true }); return; }
     if (navigator.share) { navigator.share({ title: 'Where am I right now?', text: text, url: url }).catch(function () {}); return; }
     copy(text + ' ' + url).then(function (ok) { say(ok ? 'Copied. Paste it wherever you like.' : 'Sharing isn’t available here.'); });
   });

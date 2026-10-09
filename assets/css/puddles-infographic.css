@@ -44,6 +44,8 @@ html.tol-ig-open, html.tol-ig-open body{ overflow:hidden; }
   padding:0 .75rem 1.5rem;
 }
 .tol-ig-big-stage svg{ max-width:1080px; margin:0 auto; border-radius:14px; }
+.tol-ig-big-stage.is-zoom svg{ width:max(100%, 760px); max-width:none; }
+@media (min-width:720px){ .tol-ig-big-stage.is-zoom svg{ width:1080px; } }
 
 /* Larger text settings: give the buttons room */
 html:is(.tol-text-xl, .tol-text-xxl) .tol-ig-btn{ font-size:.8rem; }

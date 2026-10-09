@@ -3,26 +3,30 @@
    so it works on the locked-down workpaper pages too (no inline styles).
 
    What it adds
-   - More places in the share sheet: Messenger, Telegram, LinkedIn, Reddit, Bluesky, Threads and LINE.
-     They are plain links that open the chosen service only when tapped. Nothing is sent from this site.
+   - More places in the share sheet (behind "More places"): Messenger, Telegram, LinkedIn, Reddit, Bluesky,
+     Threads and LINE. They are plain links that open the chosen service only when tapped. Nothing is sent
+     from this site.
    - "Show a QR code": the link drawn as a QR code, so someone in the room can scan it with their phone.
-     The code is made here, on this device (byte mode, error correction M, versions 1-10).
-   - "Save as image": a short line drawn on a picture with the site's name, saved as a PNG.
-   - "More apps on this device": the device's own share menu, where there is one.
-   - "Share this line": a small button by each "Words you could use" line. It shares just that
-     sentence and a link to its part of the page. Hidden in Quiet mode, on print, and in Work mode.
+     The code is made here, on this device (byte mode, error correction M, versions 1-10). Checked against
+     reference encoders and a decoder (bit-for-bit for every mask, and the same mask choice as the standard).
+   - "Save as image": a short line (a script, a quote, an answer) drawn on a card with the site's name, saved as a PNG.
+   - "More apps on this device": the device's own share menu, first in the sheet, where there is one.
+   - "Share this line": a small button by each "Words you could use" line. It shares just that sentence and a
+     link to its part of the page. Seen on hover or focus with a mouse, small and always there on a phone;
+     hidden in Quiet mode and on print. <body data-no-line-share> or class="no-line-share" keeps them off.
 
    For other scripts (window.TOLShareKit)
      TOLShareKit.shareText({ title, text, url, heading })  open the sheet for a piece of text
        (url omitted → this page; false → the text alone). Professor Puddles can use this for an answer.
-     TOLShareKit.links(d)   the share links for { title, text, url, result } (used by the sheet; handy in tests)
+     TOLShareKit.links(d)   the extra share links for { title, text, url, result }
      TOLShareKit.qr.matrix(text[, mask]) → { version, size, mask, modules[y][x] } or null when too long
      TOLShareKit.qr.svg(text) → an <svg> element, or null
      TOLShareKit.saveImage({ text, title }) → Promise, downloads a PNG
      TOLShareKit.scan(root)  add "Share this line" buttons inside root (runs once on load for <main>)
 
-   It hooks into site.js through the 'tol-share-sheet' event, fired each time the sheet opens with
-   detail { data, box, fire, close }. */
+   How it finds the sheet: it watches site.js's sheet (.tol-sharesheet) open and reads what is being shared
+   back from it, so site.js only has to load this file. If site.js ever fires a 'tol-share-sheet' event on
+   document with detail { data, box, close } as the sheet opens, that is used instead. */
 (function () {
   'use strict';
   if (window.TOLShareKit) return;
@@ -591,7 +595,7 @@
         if (!/^(words you could use|for example|palabras que puedes usar)/i.test(hs[i].textContent.trim())) best = hs[i];
       } else break;
     }
-    return best ? best.textContent.replace(/\s+/g, ' ').trim() : '';
+    return best ? best.textContent.replace(/\s+/g, ' ').replace(/\s*[#¶§]$/, '').trim() : '';   // not a heading's own "#" link
   }
   // a small "share" arrow out of a box, drawn in the text colour
   function icon() {
@@ -607,7 +611,7 @@
   function scan(root) {
     var main = root || document.querySelector('main');
     if (!main || document.body.hasAttribute('data-no-share') || document.body.hasAttribute('data-no-line-share')) return 0;
-    var seen = [], n = 0;
+    var seen = [], n = 0, todo = [];
     Array.prototype.forEach.call(main.querySelectorAll(BOX_SEL), function (box) {
       if (/-say/.test(box.className) && !SAY_CLASS.test(box.className) && !box.matches('.tol-try, p.say, .script-line, .ci-script, blockquote')) return;
       if (box.closest('.tol-sharesheet, form, [contenteditable], .no-line-share, .ci-bad')) return;   // not the "how it can go wrong" examples
@@ -631,10 +635,20 @@
           var kids = Array.prototype.filter.call(p.children, function (c) { return c.tagName !== 'BUTTON' && QUOTE_TEST.test(c.textContent); });
           if (kids.length) host = kids[kids.length - 1];
         }
-        host.appendChild(b);
-        p.classList.add('tsk-has');
+        todo.push([p, host, b]);
         n++;
       });
+    });
+    // add them all at once; where an icon would push the line's last word onto a new line, it sits just
+    // past the words instead (taking no room), as long as it still fits inside the box
+    var h0 = todo.map(function (t) { return t[0].offsetHeight; });
+    todo.forEach(function (t) { t[1].appendChild(t[2]); t[0].classList.add('tsk-has'); });
+    var grew = todo.filter(function (t, i) { return t[0].offsetHeight > h0[i] + 1; });
+    grew.forEach(function (t) { t[2].classList.add('tsk-tight'); });
+    var vw = document.documentElement.clientWidth;
+    grew.forEach(function (t) {
+      var r = t[2].getBoundingClientRect(), box = t[0].getBoundingClientRect();
+      if (r.right > Math.min(box.right, vw) - 2) t[2].classList.remove('tsk-tight');
     });
     return n;
   }

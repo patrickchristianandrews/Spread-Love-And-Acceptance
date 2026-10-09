@@ -140,7 +140,13 @@
     var maxLines = o.lines || 3, size = o.size, min = o.min || o.size, lines;
     for (var s = size; s >= min; s -= 2) {
       lines = greedy(text, o, s, o.width);
-      if (lines.length <= maxLines) return done(lines, s);
+      if (lines.length <= maxLines) {
+        // "tight": shrink a little (up to 15%) when that saves a line, e.g. a lonely last word
+        if (o.tight && lines.length > 1) {
+          for (var t = s - 2; t >= Math.max(min, size * 0.85); t -= 2) { var l2 = greedy(text, o, t, o.width); if (l2.length < lines.length) return done(l2, t); }
+        }
+        return done(lines, s);
+      }
     }
     lines = greedy(text, o, min, o.width).slice(0, maxLines);
     var last = lines[lines.length - 1] || '';
@@ -507,7 +513,7 @@
     var cw = n === 5 ? 300 : n === 4 ? 360 : 400;
     var cards = items.map(function (it, i) {
       var a = T.acc[i % T.acc.length];
-      var lab = fit(clip(it.label || it.text, 50), { fam: F.title, weight: 600, size: 33, min: 28, lines: 3, width: cw - 48 });
+      var lab = fit(clip(it.label || it.text, 50), { fam: F.title, weight: 600, size: 33, min: 27, lines: 3, width: cw - 48, tight: true });
       var body = it.label && it.text ? fit(clip(it.text, 110), { fam: F.body, size: 28, min: 26, lines: 4, width: cw - 48 }) : null;
       return { a: a, lab: lab, body: body, h: lab.h + (body ? body.h + 8 : 0) + 44 };
     });
@@ -555,15 +561,13 @@
     var a = T.acc[variant === 1 ? 0 : variant === 2 ? 3 : 2], out = '', ic = b.icon || 'chat';
     var tw = INNER - 150;
     var lab = b.label ? b.label.toUpperCase() : '';
-    var f = fit(clip(b.text, 240), { fam: F.body, italic: variant === 1, weight: variant === 2 ? 600 : 400, size: variant === 0 ? 29 : 33, min: 26, lines: 5, width: tw });
+    var f = fit(variant === 1 ? '“' + clip(b.text, 236) + '”' : clip(b.text, 240), { fam: F.body, italic: variant === 1, weight: variant === 2 ? 600 : 400, size: variant === 0 ? 29 : 33, min: 26, lines: 5, width: tw });
     var ih = (lab ? 36 : 0) + f.h, h = Math.max(110, ih + 52);
     out += rect(PAD, y, INNER, h, 26, a.f, a.e, T.strong ? 2.5 : 2);
     out += circ(PAD + 70, y + h / 2, 38, T.panel, a.e, 2.5) + icon(ic, PAD + 70, y + h / 2, 40, a.d, 2.2);
     var ty = y + (h - ih) / 2;
     if (lab) { out += '<text x="' + (PAD + 132) + '" y="' + r(ty + 24) + '" font-family="' + esc(F.mono) + '" font-size="23" letter-spacing="2" fill="' + a.d + '">' + esc(lab) + '</text>'; ty += 36; }
-    var shown = variant === 1 ? { lines: f.lines.slice(), size: f.size, lh: f.lh, h: f.h, o: f.o } : f;
-    if (variant === 1) { shown.lines[0] = '“' + shown.lines[0]; shown.lines[shown.lines.length - 1] = shown.lines[shown.lines.length - 1] + '”'; }
-    out += txt(PAD + 132, ty, shown, { fill: T.ink });
+    out += txt(PAD + 132, ty, f, { fill: T.ink });
     return { s: out, h: h };
   }
   // one or two small cards side by side ("A question to sit with", "Try this")
@@ -604,9 +608,9 @@
     var out = '', y = 0, deco = '';
     // header
     y = 70;
-    var kick = clip(sp.kicker || KICKERS[sp.layout] || '', 40).toUpperCase();
+    var kick = clip(sp.kicker || (sp.layout === 'checklist' && sp.marker && sp.marker !== 'check' ? 'At a glance' : KICKERS[sp.layout]) || '', 40).toUpperCase();
     if (kick) { out += '<text x="' + PAD + '" y="' + (y + 22) + '" font-family="' + esc(F.mono) + '" font-size="24" letter-spacing="3" fill="' + T.kicker + '">' + esc(kick) + '</text>'; y += 46; }
-    var tf = fit(sp.title, { fam: F.title, weight: 600, size: 66, min: 46, lines: 3, width: INNER - 90, lh: 1.14 });
+    var tf = fit(sp.title, { fam: F.title, weight: 600, size: 66, min: 46, lines: 3, width: INNER - 90, lh: 1.14, tight: true });
     out += txt(PAD, y, tf, { fill: T.ink }); y += tf.h + 12;
     if (sp.subtitle) { var sf = fit(sp.subtitle, { fam: F.body, size: 33, min: 27, lines: 4, width: INNER - 40 }); out += txt(PAD, y, sf, { fill: T.soft }); y += sf.h + 8; }
     y += 22;
@@ -699,7 +703,14 @@
   function firstLink(links) { var l = arr(links)[0]; return l && l[1] && /^\//.test(l[1]) ? l[1] : ''; }
   function easyWanted(opts) { return (opts && opts.plain) || htmlHas('tol-easy'); }
 
+  // a card that touches fear or control keeps the way to help on the poster itself
+  var SAFETY = /not safe at home|\/safety\.html|scared of (them|him|her)|afraid of (them|him|her)|control(ling)? (you|me)/i;
   function fromCard(card, kind, opts) {
+    var s = fromCard0(card, kind, opts);
+    if (s && !s.note) { try { if (SAFETY.test(JSON.stringify(card))) s.note = 'If you ever feel afraid or controlled, there’s help at ' + SITE + '/safety'; } catch (e) {} }
+    return s;
+  }
+  function fromCard0(card, kind, opts) {
     if (!card) return null;
     if (kind && typeof kind === 'object') { opts = kind; kind = null; }
     opts = opts || {};
@@ -881,7 +892,7 @@
   var PRESET_WORDS = [
     ['fair-equal', /\b(fair(ness)? (vs\.?|versus|and|isn.?t|is not|not) equal|equal (vs\.?|versus|and|or) fair|50 ?\/ ?50|fifty.fifty|fair isn.?t (always )?equal)\b/],
     ['pursue-withdraw', /\b(pursu\w*|withdraw\w*|needs? (some )?space|talk (it out )?now|walks? away|shut ?down|stonewall\w*)\b/],
-    ['pause', /\b(pause|time ?out|cool(ing)? (down|off)|take a break|taking a break|break length|how long .*break|flooded)\b/],
+    ['pause', /\b(paus(e|es|ing)|time ?out|cool(ing)? (down|off)|take a break|taking a break|break length|how long .*break|flooded)\b/],
     ['mental-load', /\b(mental load|invisible (work|load|labou?r)|unseen work|work nobody sees|emotional labou?r|default parent)\b/]
   ];
   function preset(name) { var p = PRESETS[name]; return p ? JSON.parse(JSON.stringify(p)) : null; }
@@ -890,18 +901,24 @@
   var STOPW = /^(a|an|the|of|on|about|for|to|and|or|my|our|me|you|we|i|it|is|in|with|how|what|why|do|does|make|infographic|chart|poster|picture|visual|one|page|pager|cheat|sheet|please|can|could|would|some|this|that|thing|things)$/;
   function toks(s) { return String(s || '').toLowerCase().replace(/[’']/g, '').split(/[^a-z0-9]+/).filter(function (w) { return w.length > 1 && !STOPW.test(w); }); }
   function stem(w) { return w.replace(/(ings?|ed|es|s)$/, ''); }
+  function same(a, b) { return a === b || (a.length >= 5 && b.length >= 5 && a.slice(0, 5) === b.slice(0, 5)); }
   function overlap(q, s) {
     var a = toks(q).map(stem), b = toks(s).map(stem), n = 0;
-    a.forEach(function (w) { if (b.indexOf(w) >= 0) n++; });
+    a.forEach(function (w) { if (b.some(function (x) { return same(w, x); })) n++; });
     return n;
   }
+  function hasPhrase(q, a) { return new RegExp('(^|[^a-z0-9])' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z0-9])').test(q); }
   function fromKB(topic, KB, opts) {
     opts = opts || {};
     var q = String(topic || '').toLowerCase().trim();
     if (!q) return null;
     var lay = opts.layout || null;
     if (lay === 'split' || /\d+\s*(%|hours?|h\b|min|\/)/.test(q) && parseSplit(q)) { var s0 = fromSplit(q); if (s0) return s0; }
-    for (var i = 0; i < PRESET_WORDS.length; i++) if (PRESET_WORDS[i][1].test(q)) return preset(PRESET_WORDS[i][0]);
+    for (var i = 0; i < PRESET_WORDS.length; i++) if (PRESET_WORDS[i][1].test(q)) {
+      var pr = preset(PRESET_WORDS[i][0]);
+      if (!lay || lay === 'auto' || pr.layout === lay) return pr;
+      break; // they asked for another shape: build it from the cards instead
+    }
     KB = KB || window.TOL_CHAT_KB || {};
     var best = null;
     function consider(score, make) { if (score > 0 && (!best || score > best.score)) best = { score: score, make: make }; }
@@ -912,8 +929,8 @@
     arr(KB.cards).forEach(function (c) {
       if (c.kind === 'tool' && !/\b(tool|game|page|how to use)\b/.test(q) && !opts.tools) { /* tools still count, a little less */ }
       var sc = 0;
-      arr(c.keys).forEach(function (k) { if (k && q.indexOf(String(k).toLowerCase()) >= 0) sc = Math.max(sc, 3 + String(k).split(' ').length); });
-      sc += overlap(q, c.name) * 2 + overlap(q, (c.id || '').replace(/[-_]/g, ' '));
+      arr(c.keys).forEach(function (k) { if (k && hasPhrase(q, String(k).toLowerCase())) sc = Math.max(sc, 3 + String(k).split(' ').length); });
+      sc += overlap(q, c.name) * 2 + overlap(q, (c.id || '').replace(/[-_]/g, ' ')) + Math.min(2, overlap(q, arr(c.keys).join(' ')));
       if (!arr(c.how).length && !arr(c.script).length) sc -= 1;
       consider(sc, function () { return fromCard(c, lay && lay !== 'auto' ? lay : null, opts); });
     });
@@ -923,7 +940,7 @@
       arr(iss.match).forEach(function (m) {
         String(m && m[0] || '').split('|').forEach(function (alt) {
           var a = alt.replace(/[^a-z0-9 ]/gi, ' ').replace(/\s+/g, ' ').trim();
-          if (a.length > 3 && q.indexOf(a) >= 0) sc = Math.max(sc, 3 + a.split(' ').length);
+          if (a.length > 3 && hasPhrase(q, a.toLowerCase())) sc = Math.max(sc, 3 + a.split(' ').length);
         });
       });
       consider(sc, function () { var s = fromSituation(iss, opts); s.from = id; return s; });
@@ -946,7 +963,7 @@
   }
 
   // "make an infographic about the mental load" → { topic: 'the mental load', last: false, layout: null }
-  var VIS = '(?:infographic|info ?graphic|info-graphic|poster|cheat ?sheet|one[- ]?pager|visual(?:isation|ization)?|diagram|graphic|picture|chart|graph|flow ?chart|mind ?map)';
+  var VIS = '(?:infographic|info ?graphic|info-graphic|poster|cheat ?sheet|one[- ]?pager|visual(?:isation|ization)?|diagram|graphic|picture|chart|graph|flow ?chart|mind ?map|timeline)';
   var REQ = [
     new RegExp('\\b(?:make|create|draw|build|give|design|do|turn|put|sketch|whip up|generate)\\b(?:\\s+(?:me|us|it|this|that|out))?(?:\\s+(?:an?|the|some|one|into an?|as an?))?\\s+(?:(?:little|quick|simple|small|nice|printable|short)\\s+)*' + VIS + 's?\\b\\s*(?:of|about|on|for|showing|explaining|that shows|to show|with|from)?\\s*(.*)$', 'i'),
     new RegExp('\\b(?:can|could|would|will) you\\s+(?:please\\s+)?(?:draw|visuali[sz]e|sketch|map out|chart|picture|illustrate)\\s+(.*)$', 'i'),
@@ -975,8 +992,9 @@
     else if (/\b(timeline|before.{0,12}after)\b/i.test(t)) lay = 'timeline';
     else if (/\b(do.?s and don.?ts|instead of)\b/i.test(t)) lay = 'dos-donts';
     else if (/\b(compare|comparison|vs\.?|versus)\b/i.test(t)) lay = 'compare';
-    else if (/\b(words|scripts?|what to say|phrases)\b/i.test(t)) lay = 'words';
+    else if (/\b(words|scripts?|(what|things) to say|phrases)\b/i.test(t)) lay = 'words';
     else if (parseSplit(t) || /\b(donut|pie|bar) ?(chart|graph)?\b|\bsplit\b.*\d/i.test(t)) lay = 'split';
+    if (lay === 'split' && parseSplit(t)) { last = false; if (!topic) topic = t; }
     return { topic: last ? '' : topic, last: last, layout: lay };
   }
 
@@ -1118,9 +1136,13 @@
     var dlg = document.createElement('div'); dlg.className = 'tol-ig-big';
     dlg.setAttribute('role', 'dialog'); dlg.setAttribute('aria-modal', 'true'); dlg.setAttribute('aria-label', (svg.tolSpec && svg.tolSpec.title) || 'Infographic');
     var bar = document.createElement('div'); bar.className = 'tol-ig-big-bar';
-    var close = btn('Close', 'is-close'), save = btn('Save image', 'is-save');
-    bar.appendChild(save); bar.appendChild(close);
+    var close = btn('Close', 'is-close'), save = btn('Save image', 'is-save'), zoom = btn('Zoom in', 'is-zoom');
+    bar.appendChild(zoom); bar.appendChild(save); bar.appendChild(close);
     var stage = document.createElement('div'); stage.className = 'tol-ig-big-stage';
+    // on a phone the poster already fills the width, so start zoomed in (scroll to move around)
+    function setZoom(on) { stage.classList.toggle('is-zoom', on); zoom.textContent = on ? 'Fit to screen' : 'Zoom in'; zoom.setAttribute('aria-pressed', String(on)); }
+    setZoom(window.innerWidth < 720);
+    zoom.addEventListener('click', function () { setZoom(!stage.classList.contains('is-zoom')); });
     var c = render(svg.tolSpec || {}, { theme: svg.tolTheme });
     stage.appendChild(c);
     dlg.appendChild(bar); dlg.appendChild(stage);
@@ -1134,7 +1156,7 @@
     function onKey(e) {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); shut(); }
       else if (e.key === 'Tab') { // keep focus inside
-        var f = [save, close];
+        var f = [zoom, save, close];
         var i = f.indexOf(document.activeElement);
         if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
       }
