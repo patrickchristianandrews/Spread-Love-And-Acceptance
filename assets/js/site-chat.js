@@ -1930,14 +1930,28 @@
     return state.name || '';
   }
   var NAME_SAY = /^(?:hi|hello|hey|hiya)?[\s,!]*(?:my name is|my names|my name's|call me|i am|i'm|i’m|im|it's|it’s|this is)\s+([A-Za-z][a-z'-]{1,19})[\s.!]*(?:here)?[.!]*$/i;
+  function nameOk(w, named) {
+    var lw = w.toLowerCase();
+    // "I'm Tired" is a feeling, not a name: unless they said "my name is", the word must not be a known word
+    if (STOP[lw] || /^(not|so|very|just|fine|good|ok|okay|here|back|sorry|tired|sad|bored|new|done|ready|lost|stuck|confused|hungry|busy|home|alone|scared|upset|angry|worried)$/.test(lw)) return false;
+    if (!named && (w.charAt(0) !== w.charAt(0).toUpperCase() || ROLE[stem(lw)] || (IDX && IDX.vocab[lw]) || english(lw) || FEELS.some(function (x) { return x[0].test(lw); }))) return false;
+    return true;
+  }
   function nameFrom(q) {
-    var m = NAME_SAY.exec(String(q).trim()); if (!m) return '';
-    var w = m[1], lw = w.toLowerCase(), named = /my name|call me/i.test(q);
-    // "I'm tired" is a feeling, not a name: unless they said "my name is", the word must look like a name (a capital, not a known word)
-    if (!named && (w.charAt(0) !== w.charAt(0).toUpperCase() || STOP[lw] || ROLE[stem(lw)] || (IDX && IDX.vocab[lw]) || english(lw) || FEELS.some(function (x) { return x[0].test(lw); }))) return '';
-    if (STOP[lw] || /^(not|so|very|just|fine|good|ok|okay|here|back|sorry|tired|sad|bored|new|done|ready|lost|stuck|confused)$/.test(lw)) return '';
+    var raw = String(q).trim(), S = KB && KB.pers && KB.pers.smalltalk, pats = (S && S.name_capture) || [], m = null, named = false;
+    for (var i = 0; i < pats.length && !m; i++) {
+      var re = null; try { re = new RegExp(pats[i], i === 0 ? 'i' : ''); } catch (e) { re = null; }
+      m = re && re.exec(raw); if (m) named = i === 0;
+    }
+    if (!m) { m = NAME_SAY.exec(raw); named = !!m && /my name|call me/i.test(raw); }
+    if (!m || !m[1] || !nameOk(m[1], named)) return '';
+    var w = m[1].replace(/['’]s$/, '');
     return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
   }
+  // small talk is matched on its own plain form: lower case, apostrophes dropped ("i'm" is "im"), other punctuation as spaces
+  function stNorm(q) { return String(q).toLowerCase().replace(/[’‘`´']/g, '').replace(/[^a-z0-9\s]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+  // intents with their own handler elsewhere: the full help list, thanks, and the deep-talk switch
+  var ST_SKIP = { what_can_you_do: 1, who_are_you: 1, are_you_real: 1, thanks: 1, talk_deep: 1, joke: 1, another_joke: 1 };
   var JUST_CHAT = /^(lets|let s|can we|could we|i (just )?want to|i d like to|id like to)? ?(just )?(chat|talk|have a chat|have a natter|chit ?chat|hang out)( for a bit| for a while| with you| a bit)?( please)?$|^just chat$/;
   function stPrompt(state) {
     var S = KB.pers && KB.pers.smalltalk, list = S && S.chat_prompts ? S.chat_prompts : [];
@@ -1947,20 +1961,26 @@
     var x = fresh[Math.floor(frand(state) * fresh.length) % fresh.length]; seen.push(x);
     return nameFill(x, chatName(state));
   }
-  function smallTalk(state, q, f) {
-    var P = KB && KB.pers, S = P && P.smalltalk;
-    var fq = String(q).toLowerCase().replace(/[’‘`´]/g, "'").trim();
-    var nm = nameFrom(q);
-    if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
-    var hit = null;
-    if (S && S.intents) for (var i = 0; i < S.intents.length && !hit; i++) {
+  function stIntent(f, fs) {
+    var S = KB && KB.pers && KB.pers.smalltalk;
+    if (!S || !S.intents) return null;
+    for (var i = 0; i < S.intents.length; i++) {
       var it = S.intents[i];
-      (it.patterns || []).some(function (src) {
+      if (ST_SKIP[it.id]) continue;
+      var hit = (it.patterns || []).some(function (src) {
         var re = it._re && it._re[src]; if (!re) { try { re = new RegExp(src, 'i'); } catch (e) { re = /$^/; } (it._re = it._re || {})[src] = re; }
-        if (re.test(f) || re.test(fq)) { hit = it; return true; } return false;
+        return re.test(fs) || re.test(f);
       });
+      if (hit) return it;
     }
+    return null;
+  }
+  function smallTalk(state, q, f) {
+    var fs = stNorm(q), nm = nameFrom(q);
+    if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
+    var hit = stIntent(f, fs);
     if (!hit && !nm && !JUST_CHAT.test(f)) return null;
+    if (hit && hit.id === 'small_talk' && state.deep) setDeep(state, false);
     var name = chatName(state), b = [], chips = [];
     if (hit && hit.replies && hit.replies.length) {
       var rl = hit.replies.filter(function (x) { return (state.funSeen || []).indexOf(x) === -1; }); if (!rl.length) rl = hit.replies;
@@ -1969,12 +1989,14 @@
       (hit.chips || []).forEach(function (c) { if (Array.isArray(c)) chips.push({ label: c[0], q: c[1] || c[0] }); else if (c && c.label) chips.push({ label: c.label, q: c.q || c.label }); else if (typeof c === 'string') chips.push({ label: c, q: c }); });
     } else if (nm) b.push({ k: 'p', x: 'Lovely to meet you, ' + nm + '! I’ll remember your name while this tab is open (it never leaves your device).' });
     else b.push({ k: 'p', x: 'I’d love that. A professor needs a break from lecturing now and then.' });
-    // keep a casual chat going: sometimes ask one of the chat prompts back
-    var askBack = (!hit || JUST_CHAT.test(f) || frand(state) < 0.5) && stPrompt(state);
-    if (askBack) { b.push({ k: 'p', x: askBack }); state.stAsk = state.turn || 0; }
-    if (!chips.length) chips = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }];
+    // keep a casual chat going: sometimes ask one of the chat prompts back (never after hello or goodbye)
+    var noAsk = hit && /^(hello|bye|good_night|sorry|insult_mild)$/.test(hit.id);
+    var askBack = !noAsk && (!hit || /^(just_chat|small_talk|how_are_you|im_good|bored)$/.test(hit.id) || frand(state) < 0.4) && stPrompt(state);
+    if (askBack && !/\?\s*$/.test(b[0].x)) { b.push({ k: 'p', x: askBack }); state.stAsk = state.turn || 0; }
+    else if (/\?\s*$/.test(b[0].x)) state.stAsk = state.turn || 0;
+    if (!chips.length) chips = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }];
     state.last = null;
-    return { blocks: b, chips: chips.slice(0, 3), kind: 'chat', fun: 1 };
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'chat', id: hit ? hit.id : (nm ? 'name' : 'just_chat'), fun: 1 };
   }
   // a short answer to the question Puddles just asked back: a warm reply in character, not "I couldn't find that"
   function stAck(state, f) {

@@ -47,7 +47,7 @@ html[data-theme="dark"]:not(.tol-nodark) .tol-mp button svg{ filter:none !import
 .tol-book-audio{ margin:.2rem 0 1rem; }
 .read .tol-book-audio .tol-mp{ margin:.5rem 0 0; }
 .tol-listen-top[hidden]{ display:none !important; }
-.read .tol-listen.tol-listen-top{ margin:.1rem 0 0 !important; }
+.read .tol-listen.tol-listen-top{ margin:.5rem 0 0 !important; }
 .tol-listen-top .tol-listen-go{ min-height:52px !important; padding:.5rem 1.25rem !important; font-size:1.05rem !important; text-align:left; }
 .tol-listen-len{ font-weight:400; opacity:.92; white-space:nowrap; }
 @media (max-width:420px){ .tol-listen-top .tol-listen-go{ width:100%; justify-content:center; } }

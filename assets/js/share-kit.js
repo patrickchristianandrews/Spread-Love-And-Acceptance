@@ -556,7 +556,7 @@
   // p.say, script lines and blockquote.script
   var BOX_SEL = '.tol-try, [class*="-say"], p.say, .script-line, .ci-script, blockquote';
   var SAY_CLASS = /(^|\s)[a-z]+-say(\s|$)/;
-  var QUOTE = /“([^”]{3,})”|"([^"]{3,})"/g;
+  var QUOTE = /“([^”]{3,})”|"([^"]{3,})"/g, QUOTE_TEST = /“[^”]{3,}”|"[^"]{3,}"/;
   function lineText(p) {
     var c = p.cloneNode(true);
     Array.prototype.forEach.call(c.querySelectorAll('button, .tsk-line, script, style, .who'), function (n) { n.remove(); });
@@ -625,7 +625,13 @@
           if (window.TOLShare && window.TOLShare.open) window.TOLShare.open({ title: head.trim(), text: t, url: url, result: true });
           else shareText({ title: head, text: t, url: url });
         });
-        p.appendChild(b);
+        // in a row laid out side by side (a line with its own Copy button), the icon goes after the words
+        var host = p, disp = getComputedStyle(p).display;
+        if (/flex|grid/.test(disp)) {
+          var kids = Array.prototype.filter.call(p.children, function (c) { return c.tagName !== 'BUTTON' && QUOTE_TEST.test(c.textContent); });
+          if (kids.length) host = kids[kids.length - 1];
+        }
+        host.appendChild(b);
         p.classList.add('tsk-has');
         n++;
       });

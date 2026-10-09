@@ -1,0 +1,68 @@
+/* puddles-infographic.css — the frame and buttons around Professor Puddles' infographics
+   (assets/js/puddles-infographic.js). Linked by the script itself, so it works on pages whose
+   Content Security Policy doesn't allow inline styles. */
+
+.tol-ig{ margin:.6rem 0 .2rem; padding:0; max-width:100%; font-family:"Lora", Georgia, serif; }
+.tol-ig *{ box-sizing:border-box; }
+.tol-ig-art{ line-height:0; }
+.tol-ig-art svg, .tol-ig-big-stage svg, .tol-ig-print svg{ display:block; width:100%; height:auto; max-width:100%; }
+.tol-ig-art svg{ border-radius:12px; box-shadow:0 4px 14px -8px rgba(43,38,32,.35); }
+
+.tol-ig-actions{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.6rem 0 0; }
+.tol-ig-btn{
+  font:500 .86rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFDF8;
+  border:1.5px solid #D9CBA3; border-radius:999px; padding:.45rem .8rem; min-height:2.25rem;
+  cursor:pointer; text-align:center; letter-spacing:0;
+}
+.tol-ig-btn:hover{ background:#F3ECD9; border-color:#A8792F; }
+.tol-ig-btn:focus-visible{ outline:3px solid #2B5B8C; outline-offset:2px; }
+.tol-ig-btn.is-save{ background:#2B5B8C; border-color:#2B5B8C; color:#fff; }
+.tol-ig-btn.is-save:hover{ background:#234B74; }
+.tol-ig-status{ margin:.35rem 0 0 !important; font-size:.82rem; color:#5A5346; min-height:0; }
+.tol-ig-status:empty{ display:none; }
+
+.tol-ig-text{ margin:.5rem 0 0; font-size:.88rem; }
+.tol-ig-text summary{ cursor:pointer; color:#2B5B8C; text-decoration:underline; text-underline-offset:2px; }
+.tol-ig-text summary:focus-visible{ outline:3px solid #2B5B8C; outline-offset:2px; }
+.tol-ig-text ul{ margin:.4rem 0 0; padding-left:1.1rem; }
+.tol-ig-text li{ margin:.2rem 0; line-height:1.45; }
+.tol-ig-text li.is-title{ font-weight:600; list-style:none; margin-left:-1.1rem; }
+
+/* "Make it bigger": the poster on its own, filling the screen */
+html.tol-ig-open, html.tol-ig-open body{ overflow:hidden; }
+.tol-ig-big{
+  position:fixed; inset:0; z-index:2000; background:rgba(43,38,32,.78);
+  display:flex; flex-direction:column; align-items:center;
+}
+.tol-ig-big-bar{
+  flex:none; width:100%; display:flex; justify-content:flex-end; gap:.5rem;
+  padding:.6rem max(.75rem, env(safe-area-inset-right)) .6rem .75rem;
+}
+.tol-ig-big-bar .tol-ig-btn{ font-size:.95rem; min-height:2.6rem; padding:.5rem 1rem; }
+.tol-ig-big-stage{
+  flex:1 1 auto; width:100%; overflow:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  padding:0 .75rem 1.5rem;
+}
+.tol-ig-big-stage svg{ max-width:1080px; margin:0 auto; border-radius:14px; }
+
+/* Larger text settings: give the buttons room */
+html:is(.tol-text-xl, .tol-text-xxl) .tol-ig-btn{ font-size:.8rem; }
+
+/* Print just the poster */
+.tol-ig-print{ display:none; }
+@media print{
+  html.tol-ig-printing body > *:not(.tol-ig-print){ display:none !important; }
+  html.tol-ig-printing body::before, html.tol-ig-printing body::after{ display:none !important; content:none !important; }
+  html.tol-ig-printing, html.tol-ig-printing body{ background:#fff !important; filter:none !important; }
+  html.tol-ig-printing .tol-ig-print{ display:block !important; margin:0 auto; max-width:180mm; }
+  html.tol-ig-printing .tol-ig-print svg{ filter:none !important; box-shadow:none; break-inside:avoid; }
+  .tol-ig-print-text{
+    position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important;
+    clip:rect(0 0 0 0) !important; white-space:nowrap !important;
+  }
+  .tol-ig-actions, .tol-ig-text, .tol-ig-big{ display:none !important; }
+}
+@media (prefers-reduced-motion: no-preference){
+  .tol-ig-big{ animation:tol-ig-in .18s ease-out; }
+  @keyframes tol-ig-in{ from{ opacity:0; } to{ opacity:1; } }
+}

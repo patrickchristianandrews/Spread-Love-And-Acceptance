@@ -115,20 +115,60 @@
 
   .phase .principle strong{ color: var(--ink); }
 
+  .listen-here{ margin:0 0 28px; padding:18px 20px; border:1px solid var(--line, #D8CFBD); border-radius:var(--radius, 6px); background:#FFFDF7; }
+  .listen-here h2{ margin:0 0 8px; font-family:"Fraunces", serif; font-weight:600; font-size:1.3rem; }
+  .listen-here .fit-line{ margin:0 0 14px; font-size:.97rem; line-height:1.55; }
+  #album-player{ border-radius:8px; }
+  #album-player:focus{ outline:none; }
+  #album-player:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+  .embed-play{ font:inherit; font-weight:700; font-size:1.05rem; min-height:48px; padding:.55rem 1.4rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
+  .embed-play:hover{ background:#264E73; }
+  .embed-play:focus-visible, .track-play:focus-visible, .embed-load:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .embed-note{ font-size:.88rem !important; color:var(--ink-soft, #5A5346); }
+  .album-msg{ margin:10px 0 0; padding:8px 12px; border-radius:10px; background:#EEF4FB; font-size:.95rem; }
+  .album-msg[hidden]{ display:none; }
+  .open-app{ margin:14px 0 0; font-size:.95rem; }
+  .open-app a{ display:inline-flex; align-items:center; min-height:40px; font-weight:600; }
+  .embed-frame{ display:block; width:100%; border:0; border-radius:12px; }
+  .phase ol li{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px 10px; }
+  .track-play{ font:inherit; font-size:.85rem; font-weight:600; min-height:36px; padding:.2rem .85rem; border-radius:999px; border:1px solid #9DB8D6; background:#fff; color:#2B5B8C; cursor:pointer; }
+  .track-play:hover{ border-color:#2B5B8C; }
+  .site-calm{ margin:28px 0 0; }
+  .site-calm h2{ margin:0 0 6px; font-family:"Fraunces", serif; font-weight:600; font-size:1.2rem; }
+  .site-calm p{ margin:0 0 4px; font-size:.95rem; }
+
   @media (max-width: 700px){
     .embed-row{ flex-direction: column; }
   }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<link rel="stylesheet" href="/assets/css/mini-player.css">
+<script src="/assets/js/mini-player.js" defer></script>
 <script>
-  // click-to-load: a music player from Spotify or Apple loads only after you tap its button
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest && e.target.closest('.embed-load'); if (!b) return;
-    var gate = b.closest('.embed-gate'), f = document.createElement('iframe');
-    f.src = gate.getAttribute('data-src'); f.height = gate.getAttribute('data-h'); f.title = gate.getAttribute('data-title');
-    f.setAttribute('allow', gate.getAttribute('data-allow')); f.setAttribute('allowfullscreen', ''); f.setAttribute('frameborder', '0');
-    gate.replaceWith(f);
-  });
+  // click-to-load: Spotify's player loads only after you tap "Play here" (nothing from Spotify loads before that)
+  (function () {
+    function load(gate) {
+      var f = document.createElement('iframe');
+      f.src = gate.getAttribute('data-src'); f.height = gate.getAttribute('data-h'); f.title = gate.getAttribute('data-title');
+      f.setAttribute('allow', gate.getAttribute('data-allow')); f.setAttribute('allowfullscreen', ''); f.setAttribute('frameborder', '0');
+      f.className = 'embed-frame';
+      gate.replaceWith(f);
+      return f;
+    }
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('.embed-load');
+      if (b) { load(b.closest('.embed-gate')); return; }
+      // "Play here" beside a song: open the album player (once) and point to the song in its list
+      var t = e.target.closest && e.target.closest('[data-track]');
+      if (!t) return;
+      var box = document.getElementById('album-player'), gate = box && box.querySelector('.embed-gate');
+      if (gate) load(gate);
+      var msg = document.getElementById('album-player-msg');
+      if (msg) { msg.hidden = false; msg.textContent = 'The album player is open. Tap \u201c' + t.getAttribute('data-track') + '\u201d in its list to play it.'; }
+      var still = document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (box) { box.scrollIntoView({ block: 'center', behavior: still ? 'auto' : 'smooth' }); if (!box.hasAttribute('tabindex')) box.setAttribute('tabindex', '-1'); box.focus({ preventScroll: true }); }
+    });
+  })();
 </script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/echoes-of-gold.html">
@@ -189,36 +229,32 @@
         <p class="album-credit">Christian, performing as Loves Journey EP &middot; Released February 6, 2026 &middot; 11 songs, 41 minutes</p>
       </div>
 
+      <section class="listen-here" aria-labelledby="listen-h">
+        <h2 id="listen-h">Listen here</h2>
+        <p class="fit-line"><strong>How it fits the book:</strong> the album came first and the book, The Objective Ledger, came after. The book is the practical side: a plain, fair way to see who carries what and talk about it kindly. The songs carry the feelings behind the same ideas, in four parts: stepping out of a reactive loop, meeting each other where you are, working through friction, and protecting time that&rsquo;s just yours.</p>
+        <div class="embed-card" id="album-player">
+          <div class="embed-label">The whole album, on this page</div>
+          <div class="embed-gate" data-src="https://open.spotify.com/embed/album/3kjsd5IGXMHtW7GCTU9CsX?utm_source=generator" data-h="352" data-allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" data-title="Echoes of Gold: Spotify player">
+            <button type="button" class="embed-load embed-play">&#9654;&#xFE0E; Play here</button>
+            <p class="embed-note">This loads Spotify&rsquo;s player; Spotify&rsquo;s privacy policy applies. Nothing from Spotify loads until you tap.</p>
+          </div>
+        </div>
+        <p class="album-msg" id="album-player-msg" role="status" aria-live="polite" hidden></p>
+        <p class="open-app">Open in your app: <a href="https://open.spotify.com/album/3kjsd5IGXMHtW7GCTU9CsX" rel="noopener" target="_blank">Spotify &#8599;</a> &middot; <a href="https://music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" rel="noopener" target="_blank">Apple Music &#8599;</a></p>
+      </section>
+
       <p class="lede">Every system starts somewhere unrecorded. Before The Objective Ledger had a website, a workpaper, or a single formula, it had a soundtrack. This album was produced entirely by Christian, the same person who later built spreadloveandacceptance.com, and it came first. The math came after. The feeling came before the framework that tries to hold it.</p>
 
       <p>That order is the whole point of this project. The practical and the felt aren't two separate things running side by side, kept apart so neither embarrasses the other. They're meant to meet. The workpapers make the practical side easy to read: hours logged, ownership assigned, a number you can point to. This album carries what the numbers were never going to reach. The project only works when both sides reach toward the same point at once. This project calls that point, half seriously, the third eye: the moment the practical and the felt stop competing for attention and simply line up.</p>
 
-      <div class="embed-row">
-        <div class="embed-card">
-          <div class="embed-label">Listen on Spotify</div>
-          <div class="embed-gate" data-src="https://open.spotify.com/embed/album/3kjsd5IGXMHtW7GCTU9CsX?utm_source=generator" data-h="352" data-allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture" data-title="Echoes of Gold on Spotify">
-            <p>This loads a player from Spotify. Nothing from Spotify loads, and nothing plays, until you choose to. Spotify may set its own cookies.</p>
-            <button type="button" class="embed-load">Load the Spotify player</button>
-            <a href="https://open.spotify.com/album/3kjsd5IGXMHtW7GCTU9CsX" rel="noopener" target="_blank">Or open it on Spotify &#8599;</a>
-          </div>
-        </div>
-        <div class="embed-card">
-          <div class="embed-label">Listen on Apple Music</div>
-          <div class="embed-gate" data-src="https://embed.music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" data-h="450" data-allow="encrypted-media *;" data-title="Echoes of Gold on Apple Music">
-            <p>This loads a player from Apple Music. Nothing from Apple loads, and nothing plays, until you choose to. Apple may set its own cookies.</p>
-            <button type="button" class="embed-load">Load the Apple Music player</button>
-            <a href="https://music.apple.com/us/album/echoes-of-gold-the-christian-project-the/1876871973" rel="noopener" target="_blank">Or open it on Apple Music &#8599;</a>
-          </div>
-        </div>
-      </div>
 
       <div class="phase">
         <div class="phase-label">Phase I</div>
         <h3>The Boundary &amp; The Audit</h3>
         <ol>
-          <li>The Cooling Cycle</li>
-          <li>Higher Frequency</li>
-          <li>The Golden Ratio</li>
+          <li><span>The Cooling Cycle</span> <button type="button" class="track-play" data-track="The Cooling Cycle" aria-label="Play The Cooling Cycle here">Play here</button></li>
+          <li><span>Higher Frequency</span> <button type="button" class="track-play" data-track="Higher Frequency" aria-label="Play Higher Frequency here">Play here</button></li>
+          <li><span>The Golden Ratio</span> <button type="button" class="track-play" data-track="The Golden Ratio" aria-label="Play The Golden Ratio here">Play here</button></li>
         </ol>
         <p class="principle"><strong>The relational principle:</strong> stepping out of reactive cycles and checking the emotional ledger: reclaiming peace, closing loops that don't resolve, and refusing to run at a deficit.</p>
       </div>
@@ -227,8 +263,8 @@
         <div class="phase-label">Phase II</div>
         <h3>Alignment &amp; Arrival</h3>
         <ol>
-          <li>GPS (God's Perfect Setup)</li>
-          <li>The Wish</li>
+          <li><span>GPS (God's Perfect Setup)</span> <button type="button" class="track-play" data-track="GPS (God's Perfect Setup)" aria-label="Play GPS (God's Perfect Setup) here">Play here</button></li>
+          <li><span>The Wish</span> <button type="button" class="track-play" data-track="The Wish" aria-label="Play The Wish here">Play here</button></li>
         </ol>
         <p class="principle"><strong>The relational principle:</strong> trusting a detour as part of the route, and meeting someone else in mutual readiness rather than rushing to arrive.</p>
       </div>
@@ -237,9 +273,9 @@
         <div class="phase-label">Phase III</div>
         <h3>Resilience &amp; Devotion</h3>
         <ol>
-          <li>Seasonproof</li>
-          <li>The Rebirth</li>
-          <li>Keep Me Grounded</li>
+          <li><span>Seasonproof</span> <button type="button" class="track-play" data-track="Seasonproof" aria-label="Play Seasonproof here">Play here</button></li>
+          <li><span>The Rebirth</span> <button type="button" class="track-play" data-track="The Rebirth" aria-label="Play The Rebirth here">Play here</button></li>
+          <li><span>Keep Me Grounded</span> <button type="button" class="track-play" data-track="Keep Me Grounded" aria-label="Play Keep Me Grounded here">Play here</button></li>
         </ol>
         <p class="principle"><strong>The relational principle:</strong> a strength that bends without breaking: working through friction instead of walking away from it.</p>
       </div>
@@ -248,12 +284,19 @@
         <div class="phase-label">Phase IV</div>
         <h3>The Private Sanctum</h3>
         <ol>
-          <li>Ghostwriter</li>
-          <li>Airplane Mode</li>
-          <li>Carplay &amp; Chill x Slow Cooker</li>
+          <li><span>Ghostwriter</span> <button type="button" class="track-play" data-track="Ghostwriter" aria-label="Play Ghostwriter here">Play here</button></li>
+          <li><span>Airplane Mode</span> <button type="button" class="track-play" data-track="Airplane Mode" aria-label="Play Airplane Mode here">Play here</button></li>
+          <li><span>Carplay &amp; Chill x Slow Cooker</span> <button type="button" class="track-play" data-track="Carplay &amp; Chill x Slow Cooker" aria-label="Play Carplay &amp; Chill x Slow Cooker here">Play here</button></li>
         </ol>
         <p class="principle"><strong>The relational principle:</strong> keeping the outside noise outside: stepping back from the feed to let something real take its time.</p>
       </div>
+
+
+      <section class="site-calm" aria-labelledby="calm-h">
+        <h2 id="calm-h">Calm sounds from this site</h2>
+        <p>Two slow instrumental pieces made for this site. They play right here, and nothing loads until you press play.</p>
+        <div data-mini-player="Play here: calm sounds"></div>
+      </section>
 
     </section>
 

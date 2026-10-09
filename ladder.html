@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Am I Right Now? A Nervous System Ladder Check</title>
+<meta name="description" content="Four quick taps show if you’re calm and connected, revved up or running on empty, with what helps right now, a pause line to say and when to talk again.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<link rel="stylesheet" href="/assets/css/mini-player.css">
+<script src="/assets/js/mini-player.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .pg-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .pg-jump li{ margin:0 !important; max-width:none !important; }
+  .pg-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .pg-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .pg-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .pg-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .pg-links a:hover{ border-color:var(--credit); }
+  .pg-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .pg-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .pg-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .pg-say h3{ font-size:1.02rem !important; margin:.2rem 0 .3rem !important; }
+  .pg-say p{ margin:.4rem 0 !important; font-style:italic; }
+  .pg-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .pg-safe p{ margin:.4rem 0 !important; }
+
+  /* the check */
+  .ld-tool{ margin:1rem 0 1.5rem; }
+  .ld-q{ border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:.9rem 1rem 1rem; margin:0 0 .9rem; }
+  .ld-q legend{ font:600 1.08rem/1.35 "Fraunces", Georgia, serif; padding:0 .3rem; }
+  .ld-q .ld-n{ display:block; font:500 .78rem/1.2 "IBM Plex Mono", monospace; color:var(--ink-soft); margin:.2rem 0 .5rem; }
+  .ld-opts{ display:grid; gap:.5rem; }
+  .ld-opt{ display:block; width:100%; text-align:left; font:1.02rem/1.4 "Lora", Georgia, serif; min-height:52px; box-sizing:border-box; padding:.65rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); color:var(--ink); cursor:pointer; }
+  .ld-opt:hover{ border-color:var(--credit); }
+  .ld-opt[aria-pressed="true"]{ border:2px solid var(--credit); background:var(--paper); font-weight:600; }
+  .ld-opt[aria-pressed="true"]::before{ content:"\2713  "; color:var(--credit); }
+  .ld-opt:focus-visible, .ld-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ld-hint{ color:var(--ink-soft); font-size:.95rem; }
+  .ld-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.2rem; border-radius:999px; border:1px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; box-sizing:border-box; }
+  .ld-btn.is-main{ background:var(--ink); color:var(--paper); }
+  .ld-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 .3rem; }
+
+  /* the result */
+  .ld-result{ border:2px solid var(--credit); border-radius:16px; background:var(--paper); padding:1.1rem 1.1rem 1.2rem; margin:1.2rem 0 1.5rem; scroll-margin-top:80px; }
+  .ld-result h2{ margin-top:0 !important; }
+  .ld-shared{ margin:0 0 .8rem; padding:.6rem .8rem; border-radius:10px; background:var(--paper-deep, var(--paper)); font-size:.98rem; }
+  .ld-rungs{ display:flex; flex-direction:column; gap:.35rem; margin:.4rem 0 1rem; padding:0; list-style:none; }
+  .ld-rungs li{ margin:0 !important; max-width:none !important; padding:.5rem .8rem; border-radius:10px; border:1px dashed var(--line); color:var(--ink-soft); font-size:.98rem; }
+  .ld-rungs li.is-here{ border:2px solid var(--credit); color:var(--ink); font-weight:600; background:var(--paper-deep, var(--paper)); }
+  .ld-rungs li.is-here::after{ content:"  \2190  you, right now"; font-weight:400; color:var(--credit); }
+  .ld-result h3{ font-size:1.1rem; margin:1.2rem 0 .4rem; }
+  .ld-result ol{ padding-left:1.3rem; margin:.3rem 0 .8rem; }
+  .ld-result ol li{ margin:.35rem 0; }
+  .ld-line{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem; margin:.4rem 0; padding:.3rem 0 .3rem .9rem; border-left:3px solid var(--credit); }
+  .ld-line q{ quotes:none; font-style:italic; flex:1 1 14rem; }
+  .ld-small{ font-size:.95rem; color:var(--ink-soft); }
+  .ld-status{ min-height:1.4em; margin:.3rem 0 !important; font-size:.95rem; color:var(--ink-soft); }
+  .ld-share{ margin-top:1.2rem; padding-top:.9rem; border-top:1px solid var(--line); }
+  .ld-share canvas{ display:block; width:100%; max-width:360px; height:auto; border-radius:12px; border:1px solid var(--line); margin:.5rem 0; }
+  .ld-mp{ margin:.6rem 0; }
+  .ld-mp:empty{ display:none; }
+  @media print{ .ld-acts, .ld-share, .ld-mp{ display:none !important; } }
+</style>
+
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/ladder.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/ladder.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/ladder.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Where Am I Right Now? A Nervous System Ladder Check">
+<meta property="og:description" content="Four quick taps show if you’re calm and connected, revved up or running on empty, with what helps right now, a pause line to say and when to talk again.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/ladder.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09">
+<meta property="article:modified_time" content="2026-10-09">
+<meta property="article:author" content="https://spreadloveandacceptance.com/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Where Am I Right Now? A Nervous System Ladder Check">
+<meta name="twitter:description" content="Four quick taps show if you’re calm and connected, revved up or running on empty, with what helps right now, a pause line to say and when to talk again.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/ladder.html#page","name":"Where Am I Right Now? A Nervous System Ladder Check","headline":"Where Am I Right Now? A Nervous System Ladder Check","description":"Four quick taps show if you’re calm and connected, revved up or running on empty, with what helps right now, a pause line to say and when to talk again.","url":"https://spreadloveandacceptance.com/ladder.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-09","dateModified":"2026-10-09","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/ladder.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Where Am I Right Now? A Nervous System Ladder Check","item":"https://spreadloveandacceptance.com/ladder.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Quick check · The Nervous System Ladder</p><h1>Where am I right now?</h1></header>
+
+<p class="simple-lede">Four quick taps about your body, your thoughts and what you feel like doing. They place you on the Nervous System Ladder: calm and connected, revved up, or running on empty. Then you get what helps on that rung right now, words to say, and when to come back to a talk. It’s a best guess, not a reading. Nothing you tap leaves this device.</p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li><strong>Calm and connected:</strong> a good time to talk.</li>
+    <li><strong>Revved up:</strong> settle your body first, then come back in about twenty minutes.</li>
+    <li><strong>Running on empty:</strong> rest and the basics first. Talk another time, and say when.</li>
+    <li>The ladder is for checking yourself, never for labelling someone else.</li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="pg-jump no-bubble">
+  <li><a href="#check">Take the check</a></li>
+  <li><a href="#rungs">The three rungs</a></li>
+  <li><a href="#words">Words to say</a></li>
+  <li><a href="#safe">If you feel afraid</a></li>
+</ul>
+</nav>
+
+<h2 id="check">Four quick taps</h2>
+<p class="ld-hint">Pick the one closest to true right now. Hard to tell? That’s common. Pick the nearest one.</p>
+<div class="ld-tool tol-plain" id="ld-tool">
+  <fieldset class="ld-q" data-q="body">
+    <legend>How does your body feel right now?</legend><span class="ld-n">1 of 4</span>
+    <div class="ld-opts">
+      <button type="button" class="ld-opt" data-v="calm" aria-pressed="false">Breathing is easy, shoulders are loose</button>
+      <button type="button" class="ld-opt" data-v="revved" aria-pressed="false">Heart is quick, jaw or shoulders tight, hard to sit still</button>
+      <button type="button" class="ld-opt" data-v="empty" aria-pressed="false">Heavy, tired or flat, a bit far away</button>
+    </div>
+  </fieldset>
+  <fieldset class="ld-q" data-q="thoughts">
+    <legend>What are your thoughts like?</legend><span class="ld-n">2 of 4</span>
+    <div class="ld-opts">
+      <button type="button" class="ld-opt" data-v="calm" aria-pressed="false">Clear enough. I can think it through</button>
+      <button type="button" class="ld-opt" data-v="revved" aria-pressed="false">Racing. Small things feel urgent or personal</button>
+      <button type="button" class="ld-opt" data-v="empty" aria-pressed="false">Foggy. Words are hard to find</button>
+    </div>
+  </fieldset>
+  <fieldset class="ld-q" data-q="urge">
+    <legend>What do you feel like doing?</legend><span class="ld-n">3 of 4</span>
+    <div class="ld-opts">
+      <button type="button" class="ld-opt" data-v="calm" aria-pressed="false">Talking, or just getting on with things</button>
+      <button type="button" class="ld-opt" data-v="revved" aria-pressed="false">Snapping back, arguing, or fixing it right now</button>
+      <button type="button" class="ld-opt" data-v="empty" aria-pressed="false">Going quiet, hiding away or lying down</button>
+    </div>
+  </fieldset>
+  <fieldset class="ld-q" data-q="hear">
+    <legend>If someone said something hard to you now…</legend><span class="ld-n">4 of 4</span>
+    <div class="ld-opts">
+      <button type="button" class="ld-opt" data-v="calm" aria-pressed="false">I could probably hear it without getting defensive</button>
+      <button type="button" class="ld-opt" data-v="revved" aria-pressed="false">I’d probably bite back or defend myself</button>
+      <button type="button" class="ld-opt" data-v="empty" aria-pressed="false">I’d probably go blank or switch off</button>
+    </div>
+  </fieldset>
+  <p class="ld-hint" id="ld-left" role="status" aria-live="polite"></p>
+</div>
+
+<section class="ld-result" id="result" hidden aria-labelledby="ld-r-h" tabindex="-1">
+  <p class="ld-shared" id="ld-shared" hidden>Someone shared this result with you. Your own answers might be different. <a href="#check" id="ld-own">Check where you are →</a></p>
+  <h2 id="ld-r-h">Right now: <span id="ld-name">…</span></h2>
+  <ul class="ld-rungs no-bubble" aria-label="The ladder">
+    <li data-r="calm">Calm and connected</li>
+    <li data-r="revved">Revved up</li>
+    <li data-r="empty">Running on empty</li>
+  </ul>
+  <p id="ld-what"></p>
+  <p class="ld-small" id="ld-mixed" hidden></p>
+
+  <h3>What helps on this rung, right now</h3>
+  <ol id="ld-helps"></ol>
+  <p class="ld-acts"><a class="ld-btn is-main" href="/upset-right-now.html">Breathing pacer</a><a class="ld-btn" href="/night-garden.html">The Night Garden</a></p>
+  <div class="ld-mp" data-mini-player></div>
+
+  <h3>A pause line you could say</h3>
+  <p class="ld-line"><q id="ld-pause"></q> <button type="button" class="ld-btn" id="ld-copy-line">Copy</button></p>
+
+  <h3>When to come back to a talk</h3>
+  <p id="ld-when"></p>
+
+  <p class="ld-small">If you’re tense because you’re afraid of how someone will react, that is not just stress. Your body may be warning you. <a href="/safety.html">Not safe at home?</a> has free, private help.</p>
+
+  <div class="ld-share">
+    <h3>Save or share your result</h3>
+    <p class="ld-small">Only the rung goes in the link. Nothing is uploaded, and your answers aren’t kept.</p>
+    <canvas id="ld-card" width="1080" height="1080" aria-label="A picture of your result" role="img"></canvas>
+    <p class="ld-acts"><button type="button" class="ld-btn is-main" id="ld-save">Save image</button><button type="button" class="ld-btn" id="ld-link">Copy link</button><button type="button" class="ld-btn" id="ld-share">Share</button><button type="button" class="ld-btn" id="ld-again">Check again</button></p>
+    <p class="ld-status" id="ld-status" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<h2 id="rungs">The three rungs</h2>
+<p>How your body feels changes how you sound and how you hear. The book calls these three everyday states the <a href="/book/chapter-1-in-depth.html#state">Nervous System Ladder</a>:</p>
+<ul>
+  <li><strong>Calm and connected.</strong> Breathing is easy. You can hear something hard without getting defensive. Calm doesn’t mean happy: you can be calm and sad, or calm and firm.</li>
+  <li><strong>Revved up.</strong> You feel tense and fast. Your heart is quicker and thoughts move fast. Small things feel urgent or personal. Pace speeds up, and tone gets sharper.</li>
+  <li><strong>Running on empty.</strong> You feel tired and flat, and words are harder to find. Replies get slower and shorter, which the other person may read as not caring.</li>
+</ul>
+<p>The labels are loosely borrowed from polyvagal theory, whose main claims scientists still debate. Here they are only everyday words, not a medical model. The point is simple: when you are revved up or running on empty, you are more likely to send and hear signals off-key. If you check first, you can choose to wait, to warn (“I’m low, so I’ll be brief”), or to go ahead.</p>
+<p>Want the fuller daily version, with sleep, pressure and who you’ll be around? Try <a href="/quick-checks.html#ladder">Today’s Weather</a>. There, calm and connected is a clear sky, revved up is gusty, and running on empty is fogged in.</p>
+
+<h2 id="words">Words you could use</h2>
+<p>Say your state out loud. It changes how your words land, even if the other person never uses the ladder.</p>
+<div class="pg-say">
+  <p>“I’m revved up right now. Give me ten minutes and I’ll be easier to talk to.”</p>
+  <p>“I’m running low right now. It’s not about you. Can we talk after I’ve slept?”</p>
+  <p>“I’m in a decent place to talk. Is now good for you?”</p>
+</div>
+<p>One common mix-up: “You’re revved up” as a put-down. The ladder is for checking yourself. Don’t use it to label someone else. And if you feel like you’re running on empty most days for weeks, that’s a sign to rest and get support, not to stop talking forever.</p>
+
+<h2 id="safe">If you feel afraid</h2>
+<div class="pg-safe">
+  <p>If your body is tense because you are afraid of how someone will react, that is not a “state” to calm down from. It may be a warning. You don’t have to talk, pause politely or explain yourself to someone who frightens you.</p>
+  <p><a href="/safety.html">Not safe at home?</a> has free, private help and people to talk to.</p>
+</div>
+
+<h2 id="more">More for your situation</h2>
+<ul class="pg-links no-bubble">
+  <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>The breathing pacer, the pause line, and five steps for two upset people.</span></a></li>
+  <li><a href="/wp-11.html"><strong>The Calm-Down Kit</strong><span>Make a small plan before you need it: early signs, a pause signal, and what helps you settle.</span></a></li>
+  <li><a href="/refusals.html"><strong>Say no kindly</strong><span>Running on empty and asked for one more thing? Ready-made kind ways to say no.</span></a></li>
+  <li><a href="/book/chapter-1-in-depth.html#state"><strong>The book: how stress changes your frequency</strong><span>Where the ladder comes from, with examples and research notes.</span></a></li>
+</ul>
+
+<script>
+(function () {
+  'use strict';
+  // The ladder check. Everything happens on this device; only the rung goes into the link (#rung=…).
+  var R = {
+    calm: {
+      name: 'Calm and connected', sky: 'Clear',
+      what: 'Breathing is easy, and you can hear something hard without getting defensive. Calm doesn’t mean happy: you can be calm and sad, or calm and firm.',
+      helps: ['If there’s a talk you’ve been putting off, this is a good window. Keep it to one topic.', 'Try your opening line in the <a href="/signal-translator.html">Signal Translator</a> before you say it.', 'Notice what helped you get here today (sleep, food, a walk), so you can do more of it.'],
+      pause: 'I’m in a decent place to talk. Is now good for you?',
+      when: 'Now is a decent time, if the other person is ready too. Ask first, and keep it to one topic.',
+      short: 'A good time to talk, if they are ready too.'
+    },
+    revved: {
+      name: 'Revved up', sky: 'Gusty',
+      what: 'You feel tense and fast. Your heart is quicker and thoughts move fast, so small things feel urgent or personal. Your pace speeds up and your tone can get sharper, even when you don’t mean it to.',
+      helps: ['Breathe out slowly, longer than you breathe in, for one minute. The breathing pacer counts it for you.', 'Move: a short walk, the stairs, or a physical job like the dishes.', 'Write the thing down instead of saying it or sending it. Read it again later.'],
+      pause: 'I’m revved up right now, and it isn’t about you. Give me twenty minutes and I’ll come back to this.',
+      when: 'In about twenty minutes, once your breathing and heartbeat have slowed. Say a time and keep it. Leave big decisions, money and “you always” sentences for another day.',
+      short: 'Settle first. Come back in about twenty minutes.'
+    },
+    empty: {
+      name: 'Running on empty', sky: 'Fogged in',
+      what: 'You feel tired and flat, and words are harder to find. Replies get slower and shorter, which the other person may read as not caring. Here it just means ordinary, everyday tiredness.',
+      helps: ['Look after the basics first: water, something to eat, warmth, or a lie-down.', 'Do one small, finishable thing, or nothing at all for a while.', 'Tell someone a time rather than a reason: “Can we pick this up tomorrow?”'],
+      pause: 'I’m running low right now. It’s not about you. Can we talk after I’ve rested?',
+      when: 'Another time is kinder: after rest or food, often tomorrow. Name when, so the other person isn’t left guessing.',
+      short: 'Rest first. Talk another time, and say when.'
+    }
+  };
+  var ORDER = ['calm', 'revved', 'empty'];
+  var answers = {}, current = null;
+  var $ = function (id) { return document.getElementById(id); };
+  var qs = [].slice.call(document.querySelectorAll('.ld-q'));
+  var result = $('result'), statusEl = $('ld-status');
+  function say(t) { if (!statusEl) return; statusEl.textContent = ''; setTimeout(function () { statusEl.textContent = t; }, 30); }
+
+  function score() {
+    var c = { calm: 0, revved: 0, empty: 0 };
+    Object.keys(answers).forEach(function (k) { c[answers[k]]++; });
+    var max = Math.max(c.calm, c.revved, c.empty);
+    var tied = ORDER.filter(function (r) { return c[r] === max; });
+    var pick = tied.length === 1 ? tied[0] : (tied.indexOf(answers.body) >= 0 ? answers.body : (tied.indexOf('revved') >= 0 ? 'revved' : 'empty'));
+    var other = ORDER.filter(function (r) { return r !== pick && c[r] > 0; }).sort(function (a, b) { return c[b] - c[a]; })[0] || null;
+    return { rung: pick, other: other };
+  }
+
+  function linkFor(r) { return location.origin + location.pathname + '#rung=' + r; }
+
+  function show(r, opts) {
+    opts = opts || {};
+    var d = R[r]; if (!d) return;
+    current = r;
+    $('ld-name').textContent = d.name;
+    $('ld-what').textContent = d.what;
+    $('ld-helps').innerHTML = d.helps.map(function (h) { return '<li>' + h + '</li>'; }).join('');
+    $('ld-pause').textContent = '“' + d.pause + '”';
+    $('ld-when').textContent = d.when;
+    document.querySelectorAll('.ld-rungs li').forEach(function (li) { li.classList.toggle('is-here', li.getAttribute('data-r') === r); });
+    var mixed = $('ld-mixed');
+    if (opts.other) { mixed.hidden = false; mixed.textContent = 'Some of your answers pointed to ' + R[opts.other].name.toLowerCase() + ' too. That’s common. Go with the steps that feel most true right now.'; }
+    else mixed.hidden = true;
+    $('ld-shared').hidden = !opts.shared;
+    result.hidden = false;
+    draw(r);
+    try { history.replaceState(null, '', location.pathname + location.search + '#rung=' + r); } catch (e) {}
+    if (opts.scroll) { result.scrollIntoView({ behavior: 'smooth', block: 'start' }); try { result.focus({ preventScroll: true }); } catch (e) {} }
+  }
+
+  qs.forEach(function (fs, i) {
+    fs.addEventListener('click', function (e) {
+      var b = e.target.closest('.ld-opt'); if (!b) return;
+      fs.querySelectorAll('.ld-opt').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      answers[fs.getAttribute('data-q')] = b.getAttribute('data-v');
+      var left = qs.filter(function (q) { return !answers[q.getAttribute('data-q')]; });
+      if (!left.length) {
+        $('ld-left').textContent = '';
+        var s = score(); show(s.rung, { other: s.other, scroll: true });
+      } else {
+        $('ld-left').textContent = left.length === 1 ? 'One more to go.' : left.length + ' more to go.';
+        var next = qs[i + 1] && !answers[qs[i + 1].getAttribute('data-q')] ? qs[i + 1] : left[0];
+        var first = next.querySelector('.ld-opt');
+        if (first && window.innerWidth < 700) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (first) try { first.focus({ preventScroll: true }); } catch (x) {}
+      }
+    });
+  });
+
+  // ---------- the picture ----------
+  function wrap(ctx, t, maxW) {
+    var words = t.split(' '), lines = [], cur = '';
+    words.forEach(function (w) { var test = cur ? cur + ' ' + w : w; if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; } else cur = test; });
+    if (cur) lines.push(cur); return lines;
+  }
+  function draw(r) {
+    var cv = $('ld-card'); if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), W = cv.width, H = cv.height, d = R[r], SERIF = 'Georgia, "Times New Roman", serif';
+    ctx.fillStyle = '#F5EFDE'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#ECE2C4'; ctx.fillRect(0, 0, W, 14);
+    ctx.fillStyle = '#7A5620'; ctx.font = '500 30px "Courier New", monospace'; ctx.textAlign = 'left';
+    ctx.fillText('WHERE AM I RIGHT NOW?', 80, 110);
+    ctx.fillStyle = '#2B2620'; ctx.font = '700 76px ' + SERIF;
+    ctx.fillText(d.name, 80, 205);
+    // the ladder
+    var top = 270, rh = 92;
+    ctx.strokeStyle = '#A8792F'; ctx.lineWidth = 8;
+    ctx.beginPath(); ctx.moveTo(110, top - 20); ctx.lineTo(110, top + 3 * rh); ctx.moveTo(250, top - 20); ctx.lineTo(250, top + 3 * rh); ctx.stroke();
+    ORDER.forEach(function (k, i) {
+      var y = top + i * rh + 30, here = k === r;
+      ctx.strokeStyle = here ? '#3E6B4C' : '#D9CBA3'; ctx.lineWidth = here ? 14 : 8;
+      ctx.beginPath(); ctx.moveTo(110, y); ctx.lineTo(250, y); ctx.stroke();
+      ctx.fillStyle = here ? '#2B2620' : '#8A8170'; ctx.font = (here ? '700 ' : '400 ') + '40px ' + SERIF;
+      ctx.fillText(R[k].name + (here ? '  ← me' : ''), 290, y + 13);
+    });
+    var y = top + 3 * rh + 70;
+    ctx.fillStyle = '#3E6B4C'; ctx.font = '700 36px ' + SERIF; ctx.fillText('What helps', 80, y);
+    ctx.fillStyle = '#2B2620'; ctx.font = '400 34px ' + SERIF; y += 50;
+    wrap(ctx, d.short, W - 160).forEach(function (l) { ctx.fillText(l, 80, y); y += 46; });
+    y += 20;
+    ctx.fillStyle = '#3E6B4C'; ctx.font = '700 36px ' + SERIF; ctx.fillText('What I might say', 80, y);
+    ctx.fillStyle = '#2B2620'; ctx.font = 'italic 400 34px ' + SERIF; y += 50;
+    wrap(ctx, '“' + d.pause + '”', W - 160).slice(0, 3).forEach(function (l) { ctx.fillText(l, 80, y); y += 46; });
+    ctx.fillStyle = '#5A5346'; ctx.font = '400 26px ' + SERIF;
+    ctx.fillText('A best guess, not a reading. Check yours:', 80, H - 92);
+    ctx.font = '500 28px "Courier New", monospace'; ctx.fillStyle = '#7A5620';
+    ctx.fillText('spreadloveandacceptance.com/ladder.html', 80, H - 50);
+  }
+
+  // ---------- copy, save, share ----------
+  function copy(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallback(text); });
+    return Promise.resolve(fallback(text));
+  }
+  function fallback(text) {
+    var ta = document.createElement('textarea'), ok = false;
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+    document.body.appendChild(ta); ta.select();
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    ta.remove(); return ok;
+  }
+  $('ld-copy-line').addEventListener('click', function () {
+    if (!current) return;
+    var b = this;
+    copy(R[current].pause).then(function (ok) { if (ok) { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); say('Copied. Change any words so it sounds like you.'); } else say('Copying didn’t work here. Select the words and copy them by hand.'); });
+  });
+  $('ld-link').addEventListener('click', function () {
+    if (!current) return;
+    copy(linkFor(current)).then(function (ok) { say(ok ? 'Link copied. It opens on this result: ' + R[current].name.toLowerCase() + '.' : 'Copying didn’t work here. The link is: ' + linkFor(current)); });
+  });
+  $('ld-save').addEventListener('click', function () {
+    var cv = $('ld-card'); if (!cv || !cv.toBlob) { say('Saving a picture isn’t available here. Try a screenshot.'); return; }
+    cv.toBlob(function (blob) {
+      if (!blob) { say('Saving a picture isn’t available here. Try a screenshot.'); return; }
+      var url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = 'where-am-i-right-now.png'; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      say('Saved the picture. It stays on your device until you choose to send it.');
+    }, 'image/png');
+  });
+  $('ld-share').addEventListener('click', function () {
+    if (!current) return;
+    var d = R[current], text = 'Right now I’m ' + d.name.toLowerCase() + '. ' + d.short, url = linkFor(current);
+    if (window.TOLShareKit && window.TOLShareKit.shareText) { window.TOLShareKit.shareText({ title: 'Where am I right now?', text: text, url: url, heading: 'Share your result' }); return; }
+    if (navigator.share) { navigator.share({ title: 'Where am I right now?', text: text, url: url }).catch(function () {}); return; }
+    copy(text + ' ' + url).then(function (ok) { say(ok ? 'Copied. Paste it wherever you like.' : 'Sharing isn’t available here.'); });
+  });
+  $('ld-again').addEventListener('click', reset);
+  $('ld-own').addEventListener('click', function (e) { e.preventDefault(); reset(); });
+  function reset() {
+    answers = {}; current = null;
+    document.querySelectorAll('.ld-opt').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+    result.hidden = true; $('ld-left').textContent = '';
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    var c = $('check'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var f = document.querySelector('.ld-opt'); if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
+  }
+
+  // A shared link: #rung=calm | revved | empty
+  var m = /(?:^#|&)rung=(calm|revved|empty)\b/.exec(location.hash || '');
+  if (m) show(m[1], { shared: true, scroll: false });
+})();
+</script>
+</main>
+</body>
+</html>

@@ -736,7 +736,7 @@
     if (g.id === 'start') {
       if (mode === 'drop') { var fli = el('li', { class: 'tol-focus-li' }); fli.appendChild(focusLine('drop')); ul.appendChild(fli); }
       var pg = progress();
-      if (pg) ul.appendChild(el('li', { class: 'tol-prog-li' }, progressHTML(pg)));
+      if (pg) ul.appendChild(el('li', { class: 'tol-mine-li' }, progressHTML(pg)));
     }
     T.top.forEach(function (it) { ul.appendChild(link(it)); });
     var subBtns = [];
@@ -2913,8 +2913,8 @@
     var bits = [];
     if (pg.tried) bits.push(pg.tried + ' of ' + pg.of + ' core tools tried');
     if (pg.chapters) bits.push(pg.chapters + (pg.chapters === 1 ? ' chapter' : ' chapters') + ' read');
-    return '<span class="tol-prog"><span class="tol-prog-k">Your progress:</span> ' + esc(bits.join(' · ')) +
-      (pg.next ? '. <span class="tol-prog-nx">When you like: <a href="' + esc(pg.next[1]) + '">' + esc(pg.next[0]) + '</a></span>' : '') + '</span>';
+    return '<span class="tol-mine"><span class="tol-mine-k">Your progress:</span> ' + esc(bits.join(' · ')) +
+      (pg.next ? '. <span class="tol-mine-nx">When you like: <a href="' + esc(pg.next[1]) + '">' + esc(pg.next[0]) + '</a></span>' : '') + '</span>';
   }
   window.TOLProgress = { get: progress, html: function () { var p = progress(); return p ? progressHTML(p) : ''; } };
 

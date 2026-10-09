@@ -1172,9 +1172,29 @@
         ]
       },
       {
+        "id": "pets",
+        "patterns": [
+          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:do you|do u) (?:have|like|love|want) (?:a |any )?(?:pets?|dogs?|cats?|puppies|puppy|kittens?|kitty|fish|goldfish|animals|a dog|a cat|a pet)|(?:have you got|got) (?:a |any )?pets?|what pets do you have|do ducks have pets|(?:i|we) (?:have|ve got|have got|got) (?:a |an |two |three |some |lots of )?(?:dog|dogs|cat|cats|puppy|puppies|kitten|kittens|hamster|hamsters|rabbit|rabbits|bunny|bunnies|bird|birds|parrot|budgie|fish|goldfish|guinea pig|guinea pigs|tortoise|turtle|pet|pets|lizard|snake|horse|chickens|ducks|a duck)|ive got (?:a |an |two |three )?(?:dog|dogs|cat|cats|puppy|kitten|hamster|rabbit|bunny|parrot|budgie|goldfish|guinea pig|tortoise|turtle|pet|pets|lizard|horse|chickens|ducks)|(?:my|our) (?:dog|cat|puppy|kitten|hamster|rabbit|bunny|parrot|budgie|goldfish|guinea pig|tortoise|turtle|pet|horse|lizard) (?:is called|is named|s name is|name is) [a-z]+|(?:dogs or cats|cats or dogs)|do you like (?:dogs|cats|dogs or cats|cats or dogs)|are you a (?:dog|cat) (?:person|duck))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
+        ],
+        "replies": [
+          "Pets! Wonderful. What’s their name? I collect pet names like pebbles.",
+          "I don’t have a pet, but I have a pet snail. Well, he lives near me. He doesn’t know he’s my pet.",
+          "Dogs or cats? Both! Dogs because of my pals Tidbit and Sugarfoot, and cats because they nap like professionals.",
+          "Ooh, tell me about them! Are they fluffy, scaly, wiggly or very serious?",
+          "Animals make every home better. They’re wonderful listeners. Almost as good as ducks.",
+          "My best friends are pups, so I’m officially a dog duck. But I respect every cat. From a safe distance.",
+          "A pet! Lucky you. Give them a gentle pat from me. Unless it’s a fish. Then just wave."
+        ],
+        "chips": [
+          "Who are Tidbit and Sugarfoot?",
+          "Fun fact",
+          "Tell me a joke"
+        ]
+      },
+      {
         "id": "good_news",
         "patterns": [
-          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:i|we) (?:just |finally |actually )?(?:got|landed|have|ve got|got myself|bought|found|adopted) (?:a |the |my |our |an )?(?:new |first |dream |big )?(?:job|promotion|raise|pay rise|apartment|flat|house|home|puppy|kitten|dog|cat|degree|diploma|license|licence|driving licence|driving license|scholarship|award|prize|place|internship|new job)|(?:i|we) (?:just |finally )?got (?:promoted|hired|accepted|in|a yes|the job|the part|top marks|an a|full marks)|(?:i|we) (?:just |finally )?(?:passed|aced|smashed|nailed) (?:my |the |our |an |a )?(?:test|exam|exams|driving test|class|course|interview|audition|presentation|assessment)|(?:i|we) (?:just |finally )?(?:graduated|finished my degree|finished school|finished my exams|won|won a prize|won the game|finished my project|ran my first \\w+|finished a marathon|ran a marathon)|i have a new job|i ve got a new job|ive got a new job|new job|i start my new job (?:today|tomorrow|monday)|i got the job)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
+          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:i|we) (?:just |finally |actually )?(?:got|landed|ve got|got myself|bought|found|adopted) (?:a |the |my |our |an )?(?:new |first |dream |big )?(?:job|promotion|raise|pay rise|apartment|flat|house|home|puppy|kitten|dog|cat|degree|diploma|license|licence|driving licence|driving license|scholarship|award|prize|place|internship|new job)|(?:i|we) (?:just |finally )?got (?:promoted|hired|accepted|in|a yes|the job|the part|top marks|an a|full marks)|(?:i|we) (?:just |finally )?(?:passed|aced|smashed|nailed) (?:my |the |our |an |a )?(?:test|exam|exams|driving test|class|course|interview|audition|presentation|assessment)|(?:i|we) (?:just |finally )?(?:graduated|finished my degree|finished school|finished my exams|won|won a prize|won the game|finished my project|ran my first \\w+|finished a marathon|ran a marathon)|i have a new job|i ve got a new job|ive got a new job|new job|i start my new job (?:today|tomorrow|monday)|i got the job)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
           "WOOHOO! That’s wonderful news! *does three laps of the pond* You did it!",
@@ -1297,6 +1317,26 @@
         ]
       },
       {
+        "id": "love_you",
+        "patterns": [
+          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:i |we )?(?:love|luv|lov|wuv) (?:you|u|ya|yu|you puddles|you professor|this duck)(?: so much| lots| a lot| loads| too| tons)?|ily|i love you too|love you too|love ya too|i heart you)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
+        ],
+        "replies": [
+          "Aww! I love having you here. You’re one of my favourite visitors, and I don’t say that to everyone. Well, I say it to the fish.",
+          "That’s so kind! The pond feels warmer already. Big friendly wing hug!",
+          "Aww, right back at you, friend! Duck-friend love: the bread-sharing kind.",
+          "You’ve made a little duck very happy. I care about every visitor who stops by my pond, and that includes you.",
+          "Thank you! That’s lovely. Now, can I share some love back? You’re doing better than you think.",
+          "*happy flapping* That’s the nicest thing! Friends of the pond for life.",
+          "Aww! I’m just a scripted duck, but if I had a heart, it would be doing a little dance right now."
+        ],
+        "chips": [
+          "Tell me a joke",
+          "Let’s just chat",
+          "Thank you!"
+        ]
+      },
+      {
         "id": "compliment_general",
         "patterns": [
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:i (?:really |just )?(?:like|love|adore) (?:you|u|ya|this duck|talking to you|chatting with you|chatting to you|your (?:bow tie|bowtie|glasses|tie|feathers|style|pond|jokes|voice|hat|vibe|vibes|personality|outfit|smile|attitude|energy))|(?:nice|cool|great|lovely|love the|love your|nice bow|fancy) (?:bow tie|bowtie|glasses|tie|feathers|pond|outfit|hat|style)|you look (?:nice|great|smart|good|sharp|dapper|fancy|lovely|cool|wonderful|amazing)(?: today)?|(?:you re|youre|you are|ur|u r|u are|your|you) (?:so |very |really |such a |a )?(?:nice|kind|so kind|a good listener|good company|fun|so fun|fun to talk to|easy to talk to|a good friend|my friend|my buddy|my best friend|a nice duck|a kind duck|a friend)|this is fun|this is nice|this is lovely|i like this|i m having fun|im having fun|i am having fun)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
@@ -1315,26 +1355,6 @@
           "Ask me something",
           "Tell me a joke",
           "Fun fact"
-        ]
-      },
-      {
-        "id": "love_you",
-        "patterns": [
-          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:i |we )?(?:love|luv|lov|wuv) (?:you|u|ya|yu|you puddles|you professor|this duck)(?: so much| lots| a lot| loads| too| tons)?|ily|i love you too|love you too|love ya too|i heart you)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
-        ],
-        "replies": [
-          "Aww! I love having you here. You’re one of my favourite visitors, and I don’t say that to everyone. Well, I say it to the fish.",
-          "That’s so kind! The pond feels warmer already. Big friendly wing hug!",
-          "Aww, right back at you, friend! Duck-friend love: the bread-sharing kind.",
-          "You’ve made a little duck very happy. I care about every visitor who stops by my pond, and that includes you.",
-          "Thank you! That’s lovely. Now, can I share some love back? You’re doing better than you think.",
-          "*happy flapping* That’s the nicest thing! Friends of the pond for life.",
-          "Aww! I’m just a scripted duck, but if I had a heart, it would be doing a little dance right now."
-        ],
-        "chips": [
-          "Tell me a joke",
-          "Let’s just chat",
-          "Thank you!"
         ]
       },
       {
@@ -1560,26 +1580,6 @@
         ]
       },
       {
-        "id": "pets",
-        "patterns": [
-          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:do you|do u) (?:have|like|love|want) (?:a |any )?(?:pets?|dogs?|cats?|puppies|puppy|kittens?|kitty|fish|goldfish|animals|a dog|a cat|a pet)|(?:have you got|got) (?:a |any )?pets?|what pets do you have|do ducks have pets|(?:i|we) (?:have|ve got|have got|got) (?:a |an |two |three |some |lots of )?(?:dog|dogs|cat|cats|puppy|puppies|kitten|kittens|hamster|hamsters|rabbit|rabbits|bunny|bunnies|bird|birds|parrot|budgie|fish|goldfish|guinea pig|guinea pigs|tortoise|turtle|pet|pets|lizard|snake|horse|chickens|ducks|a duck)|ive got (?:a |an |two |three )?(?:dog|dogs|cat|cats|puppy|kitten|hamster|rabbit|bunny|parrot|budgie|goldfish|guinea pig|tortoise|turtle|pet|pets|lizard|horse|chickens|ducks)|(?:my|our) (?:dog|cat|puppy|kitten|hamster|rabbit|bunny|parrot|budgie|goldfish|guinea pig|tortoise|turtle|pet|horse|lizard) (?:is called|is named|s name is|name is) [a-z]+|(?:dogs or cats|cats or dogs)|do you like (?:dogs|cats|dogs or cats|cats or dogs)|are you a (?:dog|cat) (?:person|duck))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
-        ],
-        "replies": [
-          "Pets! Wonderful. What’s their name? I collect pet names like pebbles.",
-          "I don’t have a pet, but I have a pet snail. Well, he lives near me. He doesn’t know he’s my pet.",
-          "Dogs or cats? Both! Dogs because of my pals Tidbit and Sugarfoot, and cats because they nap like professionals.",
-          "Ooh, tell me about them! Are they fluffy, scaly, wiggly or very serious?",
-          "Animals make every home better. They’re wonderful listeners. Almost as good as ducks.",
-          "My best friends are pups, so I’m officially a dog duck. But I respect every cat. From a safe distance.",
-          "A pet! Lucky you. Give them a gentle pat from me. Unless it’s a fish. Then just wave."
-        ],
-        "chips": [
-          "Who are Tidbit and Sugarfoot?",
-          "Fun fact",
-          "Tell me a joke"
-        ]
-      },
-      {
         "id": "coffee_tea",
         "patterns": [
           "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:coffee or tea|tea or coffee|do you (?:like|drink|prefer|want) (?:coffee|tea|coffee or tea|tea or coffee|hot chocolate|cocoa|a cuppa|a cup of tea)|(?:are|r) (?:you|u) a (?:coffee|tea) (?:person|duck|drinker|fan)|(?:what is|whats|what s|what|which is|which|what are) (?:your|ur) (?:(?:fave|fav|favourite|favorite|favorit|favourit|top|best) )?(?:drink|tea|coffee|hot drink|beverage)|what (?:do|would) you (?:like to )?drink|i (?:love|like|need|want|could use) (?:a )?(?:coffee|tea|cup of tea|cup of coffee|cuppa|my coffee|my tea|caffeine)|(?:a )?(?:cup of tea|cuppa|nice cup of tea)|fancy a cuppa|want some (?:tea|coffee)|tea time|coffee time|coffee break|tea break|(?:im|i m|i am) (?:having|drinking|making) (?:a |some |my )?(?:coffee|tea|cup of tea|cuppa|hot chocolate))(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
@@ -1660,7 +1660,7 @@
       {
         "id": "ask_me",
         "patterns": [
-          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:ask|ask me) (?:me )?(?:something|a question|anything|a fun question|a silly question|a random question|stuff|something fun|something random|questions)|you ask me|your turn|you go|you pick|you choose|surprise me|lets play 20 questions|ask away)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
+          "^(?:(?:hi|hey|hello|hiya|heya|yo|ok|okay|so|well|oh|um|umm|hmm|and|anyway|right|ah|ooh|oi|quack)(?: there)?(?: puddles| professor| professor puddles| prof| mr puddles| duck)? )?(?:(?:professor puddles|professor|puddles|prof|mr puddles|dear puddles) )?(?:(?:ask|ask me) (?:me )?(?:something|a question|anything|a fun question|a silly question|a random question|stuff|something fun|something random|questions)|you ask me|your turn|you go|you pick|you choose|lets play 20 questions|ask away)(?: (?:puddles|professor|professor puddles|prof|mr puddles|duck|ducky|duckie|my friend|friend|buddy|pal|mate|then|today|tonight|now|again|lol|haha|hehe|please|pls|plz|thanks|thx|btw|xx|x)){0,2}$"
         ],
         "replies": [
           "Ooh, my turn! If you could have dinner with any animal, which would it be? Ducks are a valid answer.",
