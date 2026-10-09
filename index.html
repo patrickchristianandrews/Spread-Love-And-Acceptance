@@ -141,6 +141,33 @@
     .read .hh-more{ display:grid; grid-template-columns:1fr 1fr; gap:.4rem; }
     .read .hh-more a{ padding:.3rem .75rem; font-size:.9rem; }
   }
+  /* Professor Puddles, introduced on the first screen (the button opens his chat right here) */
+  .read .hh-pud{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.4rem .85rem; margin:0 0 1.1rem; padding:.7rem .9rem; border-radius:18px;
+    background:linear-gradient(135deg, rgba(232,243,253,.95), rgba(244,238,252,.95)); border:1px solid #CFE0F3; }
+  .read .hh-pud-art{ display:grid; place-items:center; width:52px; height:52px; border-radius:50%; background:#FFFFFF; box-shadow:0 2px 8px -3px rgba(43,91,140,.35); }
+  .read .hh-pud-art svg{ display:block; width:44px; height:44px; }
+  .read .hh .hh-pud-t{ margin:0; font-size:.95rem; line-height:1.45; color:#3F382E; }
+  .read .hh-pud-t strong{ font-family:"Fraunces", Georgia, serif; font-weight:600; color:var(--ink, #2B2620); }
+  .read a.hh-pud-go{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; box-sizing:border-box; padding:.4rem 1rem; border-radius:999px; white-space:nowrap;
+    font-weight:600; font-size:.95rem; color:#FFFDF7; background:#2B5B8C; text-decoration:none; }
+  .read a.hh-pud-go::after{ content:"\a0\2192"; }
+  .read a.hh-pud-go:hover{ background:#244E78; }
+  .read a.hh-pud-go:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+  @media (max-width:760px){
+    .read .hh-pud{ grid-template-columns:auto 1fr; padding:.65rem .75rem; }
+    .read .hh-pud-x{ display:none; }
+    .read a.hh-pud-go{ grid-column:1 / -1; }
+  }
+  @media (max-width:640px){
+    .read .hh-pud{ grid-template-columns:auto 1fr auto; gap:.3rem .6rem; }
+    .read .hh-pud-art{ width:40px; height:40px; }
+    .read .hh-pud-art svg{ width:34px; height:34px; }
+    .read .hh .hh-pud-t{ grid-column:2 / -1; font-size:.88rem; line-height:1.4; }
+    .read a.hh-pud-go{ grid-column:1 / -1; min-height:40px; font-size:.92rem; }
+  }
+  html.tol-quiet .read .hh-pud{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+  html.tol-quiet .read .hh-pud-art{ display:none; }
+  html.tol-quiet .read .hh-pud{ grid-template-columns:1fr auto; }
   /* How much time do you have? (come-back.js turns a choice into a short plan) */
   .read .hh-time{ margin:0 0 .9rem; }
   .read .hh .hh-time-q{ margin:0 0 .4rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; color:var(--ink, #2B2620); }
@@ -487,6 +514,11 @@
   <h1 id="hero-h" class="hh-h1">Less keeping score.<br> <span class="hh-accent">More being on the <span class="hh-nw">same side.</span></span></h1>
   <p class="hh-lede">Kind, practical help for the people you share life with, or just for you. Most tools take a minute or two, and nothing you type ever leaves your device.</p>
   <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>.</p>
+  <div class="hh-pud">
+    <span class="hh-pud-art"><svg viewBox="-4 -14 88 92" width="48" height="48" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg></span>
+    <p class="hh-pud-t"><strong>Meet Professor Puddles.</strong> Ask anything in your own words<span class="hh-pud-x">, about your relationship, family, roommates or work,</span> and get kind, practical steps. Private: nothing you type leaves your device.</p>
+    <a class="hh-pud-go" href="/ask.html" data-ask-puddles>Ask Professor Puddles</a>
+  </div>
   <h2 class="sr-only">Where to start</h2>
   <div class="hh-time" data-cb-time>
     <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
@@ -505,7 +537,6 @@
     <li><a class="hh-card" href="/upset-right-now.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">Upset right now?</span><span class="hh-card-n">Five minutes to pause, breathe and come back</span></span></a></li>
   </ul>
   <ul class="hh-more" aria-label="More ways in">
-    <li><a href="/ask.html" data-ask-puddles><span class="hh-more-k">Got a question?</span> Ask Professor Puddles</a></li>
     <li><a href="#start-where"><span class="hh-more-k">New baby, money, faith…?</span> See every situation</a></li>
     <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
     <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
