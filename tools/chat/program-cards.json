@@ -8757,7 +8757,7 @@
       "how": [
         "Lemonade Stand: under the names, “On two devices?” has “Send my side to my partner” (“Share your side (link)” is the main button) and “Add my partner’s side”, which shows a preview, merges by name and asks before replacing anything.",
         "Wavelength: “Share my Wave Code” sends a link that opens the comparison with your code already filled in.",
-        "Wiring Card: “Copy the card” includes a card code; your partner taps “Paste my partner’s card” to compare.",
+        "Wiring Card: “Copy the card” can end with a card code (on by default, off for a work card); the other person taps “Paste someone’s card” to compare.",
         "Worksheets: each of you saves your own draft or PDF and sends it; loading the second one offers to combine them instead of replacing.",
         "Carrier Wave Decoder: the Together tab gives a short code so you can each mark a moment that went sideways and reveal both at once.",
         "Household names: the Lemonade Stand can send your household list as a code, so names don’t have to be typed twice."

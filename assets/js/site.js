@@ -602,7 +602,6 @@
     '/workpapers/fill/suite.html': 'All the worksheets in one place (Workpaper Suite)'
   };
   function menuLabel(it) { return PLAIN_LABEL[it.href] || it.title; }
-  function groupLinks(g) { return g.items.filter(function (i) { return i.href && i.href !== '/index.html' && i.menu !== false; }); }
   // A group splits into the pages shown first (before its first { sub }) and small sub-menus
   function menuTree(g) {
     var top = [], subs = [], cur = null;
@@ -688,28 +687,9 @@
         sec = el('div', { class: 'tol-index-section', id: (opts.page ? 'contents-' : 'tol-sec-') + s.id });
         sec.appendChild(el(opts.h || 'h3', null, esc(s.title)));
       }
-      if (opts.accordion && opts.full && s.id === opts.open) {
-        // arrived from "All N pages in …": the whole list straight away
-        var whole = fullList(s, true); whole.classList.add('tol-picks'); sec.appendChild(whole); wrap.appendChild(sec); return;
-      }
       if (opts.accordion) {
-        // a few pages first, plain names only; "Show all" opens the full list with its headings and notes
-        var short = el('ol', { class: 'tol-picks' });
-        groupPicks(s).forEach(function (it) {
-          var pa = el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(menuLabel(it)) + '</span>');
-          if (it.href.split('#')[0] === current) pa.setAttribute('aria-current', 'page');
-          var pli = el('li'); pli.appendChild(pa); short.appendChild(pli);
-        });
-        var total = groupCount(s), rest = total - short.children.length;
-        sec.appendChild(short);
-        if (rest > 0) {
-          var moreB = el('button', { type: 'button', class: 'tol-more-btn tol-acc-all' }, 'Show all ' + total + ' pages');
-          moreB.addEventListener('click', function () {
-            var full = fullList(s, true); full.classList.add('tol-picks'); short.replaceWith(full); moreB.remove();
-            var fa = full.querySelector('a'); if (fa) fa.focus();
-          });
-          sec.appendChild(moreB);
-        }
+        // a few pages first, then small sub-menus; arriving from "Everything in …" opens them all
+        sec.appendChild(buildTree(s, 'panel', !!(opts.full && s.id === opts.open)));
         wrap.appendChild(sec);
         return;
       }
@@ -766,17 +746,7 @@
     var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
     if (hereGroup && hereGroup.id === id) btn.setAttribute('aria-current', 'true');
     var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
-    var ul = el('ul');
-    groupPicks(s).forEach(function (it) {
-      var a = el('a', { href: it.href }, esc(menuLabel(it)));
-      if (it.href.split('#')[0] === current) a.setAttribute('aria-current', 'page');
-      var li = el('li'); li.appendChild(a); ul.appendChild(li);
-    });
-    menu.appendChild(ul);
-    var n = groupCount(s);
-    var all = el('button', { type: 'button', class: 'tol-drop-all', 'aria-controls': 'tol-panel' }, 'All ' + n + ' pages in ' + esc(name) + ' &rarr;');
-    all.addEventListener('click', function () { openPanel(id, false, true); });
-    menu.appendChild(all);
+    menu.appendChild(buildTree(s, 'drop'));
     btn.addEventListener('click', function () {
       var wasOpen = openDrop && openDrop.btn === btn;
       closeDrop();
@@ -869,31 +839,6 @@
     var m = document.querySelector('main');
     if (m) m.insertBefore(line, m.firstChild); else bar.after(line);
   }
-  // a few small styles that belong to parts made here (site.css has the rest)
-  function addSiteStyles() {
-    if (document.getElementById('tol-site-js-css')) return;
-    var st = document.createElement('style'); st.id = 'tol-site-js-css';
-    st.textContent =
-      // the At work page on its own keeps Calm & play in the menus (only work mode, when chosen, hides it)
-      'html.tol-work-page .tol-nav-item:has(> button[data-sec="play"]), html.tol-work-page #tol-sec-play{ display:block !important; }' +
-      // "En español": a plain link in the top bar, the same size as the section buttons
-      '.tol-bar a.tol-es-link{ font:inherit; font-size:1rem; color:var(--ink); padding:.5rem .7rem; border:1px solid transparent; border-radius:var(--radius, 6px); text-decoration:none; white-space:nowrap; line-height:1.2; }' +
-      '.tol-bar a.tol-es-link:hover{ border-color:var(--line); background:var(--paper-deep); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }' +
-      '@media (max-width:980px){ .tol-bar a.tol-es-link{ padding:.5rem .5rem; } }' +
-      '.tol-panel-es{ margin:.5rem 0 0; font-size:.95rem; }' +
-      '.tol-panel-es a{ font-weight:600; }' +
-      // the print button beside "Share this guide"
-      '.tol-share-row .tol-print-btn{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem 1.05rem; box-sizing:border-box; font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }' +
-      '.tol-share-row .tol-print-btn:hover{ background:#F3EEF9; }' +
-      '.tol-print-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }' +
-      // "¿Prefieres español?": one quiet line under the bar
-      '.tol-es-hint{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; margin:.4rem auto .6rem; max-width:46rem; padding:.4rem .5rem .4rem .9rem; border:1px solid var(--line, #d8cfb8); border-radius:10px; font-size:.95rem; background:var(--paper, #fffaf0); color:var(--ink, #2a2530); box-sizing:border-box; }' +
-      '.tol-es-hint a{ font-weight:600; }' +
-      '.tol-es-hint button{ margin-left:auto; font:inherit; font-size:.9rem; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; min-height:36px; min-width:36px; padding:.15rem .7rem; cursor:pointer; }' +
-      '@media print{ .tol-es-hint, .tol-print-btn, .tol-panel-es{ display:none !important; } }';
-    document.head.appendChild(st);
-  }
-
   function buildChrome() {
     var body = document.body;
     var cs = getComputedStyle(body);
@@ -905,7 +850,6 @@
     // the "At work" page is plain itself, but that isn't choosing work mode: Calm & play stays in the menu,
     // and the pages it links to keep their usual look. Work mode (?work=1, or "Keep it on") hides them.
     if (!WORK && body.hasAttribute('data-work')) document.documentElement.classList.add('tol-work-page');
-    addSiteStyles();
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
