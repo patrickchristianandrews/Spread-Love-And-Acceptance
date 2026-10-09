@@ -74,7 +74,7 @@
   ],
   "verified": false,
   "verified_by": "https://d.lib.msu.edu/etd/29800/FULL_TEXT/view",
-  "note": "Citation details confirmed by reference lists, but no DOI or landing page was confirmed. Optional companion to the 1978 book; do not link until the DOI is checked."
+  "note": "Citation details confirmed by reference lists, but two targeted searches found no DOI or landing page. Optional companion to the 1978 book, which is verified; do not link until the DOI is checked."
  },
  {
   "id": "clark-mills-1979",
@@ -903,7 +903,7 @@
   ],
   "verified": false,
   "verified_by": "https://justice.gc.ca/eng/rp-pr/fl-lf/divorce/2004_1/p3.html ; https://link.springer.com/article/10.1007/BF00913797",
-  "note": "Citation (author, year, title, journal, volume, pages) confirmed from reference lists, but no DOI or landing page was confirmed. Likely DOI 10.1037/0033-2909.92.2.310 — check before linking."
+  "note": "Citation (author, year, title, journal, volume, pages) confirmed from reference lists, but two targeted searches found no DOI or landing page. Likely DOI 10.1037/0033-2909.92.2.310 — check before linking. Amato (2001) covers the same claim and is verified."
  },
  {
   "id": "pinquart-sorensen-2003",
@@ -1075,11 +1075,11 @@
   "year": 2001,
   "title": "The influence of in-laws on change in marital success",
   "venue": "Journal of Marriage and Family, 63(3), 614–626",
-  "doi": null,
-  "url": null,
+  "doi": "10.1111/j.1741-3737.2001.00614.x",
+  "url": "https://www.jstor.org/stable/3654637",
   "kind": "study",
-  "finding": "Longitudinal study of how relationships with in-laws relate to changes in marital success over time.",
-  "strength": "moderate — longitudinal; correlational",
+  "finding": "Following couples for several years, found that conflict and poorer relationships with in-laws predicted later declines in marital success (stability, satisfaction and commitment).",
+  "strength": "moderate — longitudinal US sample; correlational",
   "topics": [
    "in-laws",
    "family",
@@ -1089,9 +1089,9 @@
    "/library/life.html#in-laws",
    "/library/conflict.html#family-disagreements"
   ],
-  "verified": false,
-  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8133523",
-  "note": "Citation confirmed only from later reference lists; the paper’s own findings and a DOI/landing page were not confirmed. Candidate source for the site’s unattributed in-law claims — do not link until checked."
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8133523 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC5006754/",
+  "note": "JSTOR ID and DOI from one reference listing; findings as described by later citing papers, not the abstract. Representative source for the site’s unattributed in-law claims."
  },
  {
   "id": "greenhaus-beutell-1985",
@@ -1773,12 +1773,12 @@
   "authors": "Goodhart, C. A. E.",
   "year": 1975,
   "title": "Problems of monetary management: The U.K. experience",
-  "venue": "Papers in Monetary Economics, Vol. 1, Reserve Bank of Australia",
+  "venue": "Paper presented at the Conference in Monetary Economics, Sydney, July 1975; published in Papers in Monetary Economics, Vol. I (Reserve Bank of Australia, 1976); reprinted in Goodhart, Monetary Theory and Practice (Macmillan, 1984)",
   "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "url": "https://www.rba.gov.au/publications/rdp/1990/9013/conference-volumes.html",
+  "kind": "theory",
+  "finding": "The original source of “Goodhart’s law”: a statistical regularity tends to break down once authorities put pressure on it for control purposes.",
+  "strength": "moderate — an economist’s observation, later generalised; widely documented in practice",
   "topics": [
    "goodharts-law",
    "measurement"
@@ -1788,21 +1788,21 @@
    "/book/chapter-2-in-depth.html#nine-fields",
    "/library/teams.html#goodharts-law"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://www.centralbanking.com/awards/7807336/lifetime-achievement-charles-goodhart ; https://www.rba.gov.au/publications/rdp/1990/9013/conference-volumes.html ; https://www.springerprofessional.de/en/problems-of-monetary-management-the-uk-experience/7409134",
+  "note": "Presented in 1975; the RBA volume is dated 1976. The 1984 reprint chapter has DOI 10.1007/978-1-349-17295-5_4. The link is the RBA bibliography listing the paper."
  },
  {
   "id": "taylor-et-al-2014-pdsa",
   "authors": "Taylor, M. J., McNicholas, C., Nicolay, C., Darzi, A., Bell, D., & Reed, J. E.",
   "year": 2014,
   "title": "Systematic review of the application of the plan–do–study–act method to improve quality in healthcare",
-  "venue": "BMJ Quality & Safety, 23(4), 290–298 (likely DOI 10.1136/bmjqs-2013-001862)",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "venue": "BMJ Quality & Safety, 23(4), 290–298",
+  "doi": "10.1136/bmjqs-2013-001862",
+  "url": "https://qualitysafety.bmj.com/content/23/4/290",
+  "kind": "review",
+  "finding": "Of 73 healthcare articles reporting the use of plan–do–study–act cycles, most did not report key features of the method, such as iterative cycles, small tests of change and real-time data.",
+  "strength": "strong — systematic review; shows the method is often named but not fully followed",
   "topics": [
    "pdsa",
    "teams",
@@ -1812,21 +1812,20 @@
    "/book/chapter-4-in-depth.html#agreeing-examples",
    "/library/teams.html#plan-do-study-act"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://qualitysafety.bmj.com/content/23/4/290 ; https://spiral.imperial.ac.uk/entities/publication/2d92a31a-f8c7-4869-8651-2699eec032e0"
  },
  {
   "id": "tuckman-1965",
   "authors": "Tuckman, B. W.",
   "year": 1965,
   "title": "Developmental sequence in small groups",
-  "venue": "Psychological Bulletin, 63(6), 384–399 (likely DOI 10.1037/h0022100)",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "venue": "Psychological Bulletin, 63(6), 384–399",
+  "doi": "10.1037/h0022100",
+  "url": "https://doi.org/10.1037/h0022100",
+  "kind": "review",
+  "finding": "A review of about 50 studies of therapy, training, natural and laboratory groups proposed that groups pass through stages now known as forming, storming, norming and performing.",
+  "strength": "debated — widely taught, but later research finds many teams don’t follow a neat sequence",
   "topics": [
    "team-development",
    "teams"
@@ -1834,9 +1833,8 @@
   "mentioned_on": [
    "/library/teams.html#team-development"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/2118847637 ; https://en.wikipedia.org/wiki/Bruce_Tuckman"
  },
  {
   "id": "tuckman-jensen-1977",
@@ -1844,11 +1842,11 @@
   "year": 1977,
   "title": "Stages of small-group development revisited",
   "venue": "Group & Organization Studies, 2(4), 419–427",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "doi": "10.1177/105960117700200404",
+  "url": "https://doi.org/10.1177/105960117700200404",
+  "kind": "review",
+  "finding": "Reviewed 22 later studies of the stage model, noting that only one directly tested it, and added a fifth stage, adjourning.",
+  "strength": "debated — the stage model has limited direct testing",
   "topics": [
    "team-development",
    "teams"
@@ -1856,9 +1854,9 @@
   "mentioned_on": [
    "/library/teams.html#team-development"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://www.scinapse.io/papers/2100929472 ; https://socialsci.libretexts.org/Bookshelves/Communication/Public_Speaking/Public_Speaking_(Lumen_Learning)/14%3A_Small_Group_Communication/14.12%3A_The_Five_Development_Stages_of_Groups",
+  "note": "DOI from one reference list (Lumen Learning); volume, issue and pages confirmed by Scinapse."
  },
  {
   "id": "gersick-1988",
@@ -1867,10 +1865,10 @@
   "title": "Time and transition in work teams: Toward a new model of group development",
   "venue": "Academy of Management Journal, 31(1), 9–41",
   "doi": null,
-  "url": null,
+  "url": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Dynamics/Gersick_1988_Time_and_transition.pdf",
   "kind": "study",
-  "finding": "",
-  "strength": "",
+  "finding": "Following eight project teams from first meeting to deadline, found a “punctuated equilibrium” pattern: long stretches of inertia broken by a burst of change near the midpoint of the team’s time, prompted by awareness of the deadline.",
+  "strength": "moderate — small qualitative field study; an influential alternative to stage models",
   "topics": [
    "team-development",
    "teams"
@@ -1878,9 +1876,9 @@
   "mentioned_on": [
    "/library/teams.html#team-development"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Group_Dynamics/Gersick_1988_Time_and_transition.pdf ; https://explore.psychsafety.com/n/gersick-1988/",
+  "note": "DOI (10.2307/256496) shown only by a blog, so not used; link is the MIT-hosted copy."
  },
  {
   "id": "jehn-1995",
@@ -1888,11 +1886,11 @@
   "year": 1995,
   "title": "A multimethod examination of the benefits and detriments of intragroup conflict",
   "venue": "Administrative Science Quarterly, 40(2), 256–282",
-  "doi": null,
-  "url": null,
+  "doi": "10.2307/2393638",
+  "url": "https://doi.org/10.2307/2393638",
   "kind": "study",
-  "finding": "",
-  "strength": "",
+  "finding": "Distinguished relationship conflict (personal friction) from task conflict (disagreement about the work); relationship conflict was linked with lower satisfaction and performance, while task conflict could help on non-routine tasks.",
+  "strength": "moderate — influential distinction; later meta-analyses find task conflict is often less helpful than first thought",
   "topics": [
    "conflict",
    "teams",
@@ -1901,21 +1899,21 @@
   "mentioned_on": [
    "/library/conflict.html#work-disagreements"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://findanexpert.unimelb.edu.au/scholarlywork/1360216-a-multimethod-examination-of-the-benefits-and-detriments-of-intragroup-conflict ; https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Negotiation_and_Conflict_Management/Jehn-ASQ-1995.pdf",
+  "note": "Findings summary is from general knowledge (the search confirmed citation and DOI, not the abstract); issue number (2) also from general knowledge."
  },
  {
   "id": "maslach-jackson-1981",
   "authors": "Maslach, C., & Jackson, S. E.",
   "year": 1981,
   "title": "The measurement of experienced burnout",
-  "venue": "Journal of Occupational Behaviour, 2(2), 99–113",
+  "venue": "Journal of Occupational Behaviour (now Journal of Organizational Behavior), 2(2), 99–113",
   "doi": null,
-  "url": null,
+  "url": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4",
   "kind": "study",
-  "finding": "",
-  "strength": "",
+  "finding": "Developed the Maslach Burnout Inventory, with three subscales: emotional exhaustion, depersonalization, and reduced personal accomplishment.",
+  "strength": "strong — the standard burnout measure, though its overlap with depression is debated",
   "topics": [
    "burnout",
    "work",
@@ -1926,21 +1924,21 @@
    "/library/stress.html#burnout",
    "/tools/chat/deep.json#rest"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4 ; https://en.wikipedia.org/wiki/Maslach_Burnout_Inventory",
+  "note": "DOI not confirmed (likely 10.1002/job.4030020205); link is a ScienceOpen record."
  },
  {
   "id": "who-icd11-burnout-2019",
   "authors": "World Health Organization",
   "year": 2019,
-  "title": "Burn-out an “occupational phenomenon”: International Classification of Diseases (ICD-11)",
-  "venue": "WHO news release, May 2019",
+  "title": "Burn-out an “occupational phenomenon”: International Classification of Diseases",
+  "venue": "WHO news item, 28 May 2019",
   "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "url": "https://www.who.int/news-room/detail/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases",
+  "kind": "guideline",
+  "finding": "ICD-11 includes burn-out as an occupational phenomenon, not a medical condition: a syndrome from chronic workplace stress that has not been successfully managed, with exhaustion, mental distance or cynicism about one’s job, and reduced professional efficacy. WHO says the term should not be used for other areas of life.",
+  "strength": "strong — official classification statement",
   "topics": [
    "burnout",
    "work"
@@ -1949,9 +1947,8 @@
    "/book/understanding-12-helping-in-depth.html#burnout",
    "/library/stress.html#burnout"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://www.who.int/news-room/detail/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases"
  },
  {
   "id": "kluger-denisi-1996",
@@ -1960,10 +1957,10 @@
   "title": "The effects of feedback interventions on performance: A historical review, a meta-analysis, and a preliminary feedback intervention theory",
   "venue": "Psychological Bulletin, 119(2), 254–284",
   "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "url": "https://scholars.huji.ac.il/node/1802",
+  "kind": "meta-analysis",
+  "finding": "Across 607 effect sizes, feedback improved performance on average, but in more than a third of cases it made performance worse, especially when it drew attention to the self rather than the task.",
+  "strength": "strong — large meta-analysis",
   "topics": [
    "feedback",
    "work"
@@ -1971,21 +1968,21 @@
   "mentioned_on": [
    "/library/communication.html#feedback"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://scholars.huji.ac.il/node/1802 ; https://explore.psychsafety.com/n/kluger-denisi-1996/ ; https://swov.nl/nl/publicatie/effects-feedback-interventions-performance-historical-review-meta-analysis-and",
+  "note": "DOI not confirmed (likely 10.1037/0033-2909.119.2.254); link is the author’s university page."
  },
  {
   "id": "lind-tyler-1988",
   "authors": "Lind, E. A., & Tyler, T. R.",
   "year": 1988,
   "title": "The Social Psychology of Procedural Justice",
-  "venue": "Plenum Press",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "venue": "Plenum Press (Critical Issues in Social Justice series)",
+  "doi": "10.1007/978-1-4899-2115-4",
+  "url": "https://doi.org/10.1007/978-1-4899-2115-4",
+  "kind": "book",
+  "finding": "Reviews theory and research on procedural justice and its implications for legal, political, interpersonal and work settings.",
+  "strength": "strong — standard scholarly synthesis",
   "topics": [
    "procedural-justice",
    "fairness"
@@ -1993,21 +1990,21 @@
   "mentioned_on": [
    "/library/conflict.html#procedural-justice"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking. The site names Lind and Tyler without a specific work."
+  "verified": true,
+  "verified_by": "https://www.ojp.gov/ncjrs/virtual-library/abstracts/social-psychology-procedural-justice ; https://link.altmetric.com/details/11179059",
+  "note": "DOI from an Altmetric record. The site names Lind and Tyler without a specific work; this is the representative source."
  },
  {
   "id": "bls-atus",
-  "authors": "U.S. Bureau of Labor Statistics",
+  "authors": "U.S. Bureau of Labor Statistics (conducted by the U.S. Census Bureau)",
   "year": null,
-  "title": "American Time Use Survey",
-  "venue": "https://www.bls.gov/tus/ (expected URL, unconfirmed)",
+  "title": "American Time Use Survey (ATUS), annual since 2003",
+  "venue": "Federal survey",
   "doi": null,
-  "url": null,
+  "url": "https://www.census.gov/programs-surveys/atus.html",
   "kind": "study",
-  "finding": "",
-  "strength": "",
+  "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare; it has run every year since 2003.",
+  "strength": "strong — large national time-diary survey",
   "topics": [
    "time-use",
    "gender",
@@ -2016,21 +2013,21 @@
   "mentioned_on": [
    "/book/chapter-2-in-depth.html#balance"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking."
+  "verified": true,
+  "verified_by": "https://www.census.gov/programs-surveys/atus.html ; https://en.wikipedia.org/wiki/American_Time_Use_Survey",
+  "note": "The BLS home page (bls.gov/tus) did not appear in results, so the confirmed Census Bureau page is the link."
  },
  {
   "id": "deming-1986",
   "authors": "Deming, W. E.",
   "year": 1986,
   "title": "Out of the Crisis",
-  "venue": "MIT Press (Center for Advanced Engineering Study)",
+  "venue": "MIT Press (Center for Advanced Engineering Study), Cambridge, MA",
   "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "",
-  "strength": "",
+  "url": "https://eploes.lib2.uniwa.gr/Record/lib2_1%2F6426/Details?lng=el",
+  "kind": "book",
+  "finding": "Deming’s case for quality management, arguing that most problems come from the system people work in rather than from individual workers.",
+  "strength": "moderate — hugely influential management book, not a research study",
   "topics": [
    "pdsa",
    "systems",
@@ -2041,8 +2038,8 @@
    "/book/chapter-4-in-depth.html#agreeing-examples",
    "/library/teams.html#plan-do-study-act"
   ],
-  "verified": false,
-  "verified_by": null,
-  "note": "Not searched: the shared web-search budget ran out before this reference could be checked. Details are from general knowledge and must be verified before linking. The site attributes PDSA and “problems come from the system” to Deming without a specific work."
+  "verified": true,
+  "verified_by": "https://eploes.lib2.uniwa.gr/Record/lib2_1%2F6426/Details?lng=el ; https://biblio.co.uk/0262541157",
+  "note": "Link is a library catalogue record. The finding is a summary from general knowledge (search confirmed the publication only). The site attributes PDSA and “problems come from the system” to Deming without naming a work."
  }
 ]

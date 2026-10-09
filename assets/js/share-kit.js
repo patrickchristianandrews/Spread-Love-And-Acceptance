@@ -386,8 +386,9 @@
     // room left for the code: the card's width, and the height after the words and buttons
     var room = dlgBig ? Math.min(vw - 24, vh - 120) : Math.min(vw - 64, 380, vh - 300);
     room = Math.max(room, Math.min(vw - 24, 160));
-    var css = Math.floor(room / n) >= MIN_PX ? Math.floor(room / n) * n : room;   // whole CSS pixels per module when there is room
     var dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 4));
+    // on a plain (1x) screen, whole pixels per module keep every module the same size; a sharp phone screen can use all the room
+    var css = dpr < 2 && Math.floor(room / n) >= MIN_PX ? Math.floor(room / n) * n : Math.floor(room);
     var k = Math.max(MIN_PX, Math.round(css * dpr / n)), px = n * k;
     cv.width = px; cv.height = px;
     cv.style.width = css + 'px'; cv.style.height = css + 'px';

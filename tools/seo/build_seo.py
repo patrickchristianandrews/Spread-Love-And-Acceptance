@@ -332,6 +332,9 @@ SEARCH.update({
  'family-obligations.html': ('Supporting Family: Parents, Money Home and Duty', 'Free, even-handed help for couples who support parents and family: agree a monthly family-support amount, lead with your own family, and save alongside it.'),
  'long-distance.html': ('Long-Distance and Apart: Staying Close Across the Miles', 'Free, practical help for couples living apart: time zones, check-ins on video, a call rhythm you agree, small bids, short texts, and visits and goodbyes.'),
  'pursue-withdraw.html': ('One of You Wants to Talk Now, the Other Needs Space', 'Free, even-handed help when one partner wants to talk now and the other needs space: why it hurts on both sides, and a pause plan you can fill in and share.'),
+ # two hub guides
+ 'communication.html': ('Effective Communication: A Complete, Plain Guide', 'A free, plain guide to effective communication: listening, saying what you need, timing, hard talks, repair, and talking well at home, with friends and at work.'),
+ 'bonding.html': ('Bonding: How Closeness Grows, and Small Ways to Grow It', 'How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family, coworkers and you.'),
  # the book, Part Three: Understanding people, and two small tools
  'book/understanding-1-feelings.html': ('Chapter 1: How Feelings Work, and Naming What You Feel', 'How feelings work: signals from the body, why naming a feeling helps, layers and waves, and kind words to use alone, at home, with friends and at work.'),
  'book/understanding-1-feelings-in-depth.html': ('Chapter 1 in depth: How Feelings Work', 'Feelings in full: signals, the body, naming, finer words, layers, waves and urges, through psychology, philosophy and an autistic lens, with exercises.'),
@@ -871,7 +874,7 @@ def write_sitemap(report):
 
 GROUPS = [
     ('Start here', r'^(index|start-here|start-in-10|sent-this|about|how-it-works|is-this-for-you|ways-in|program\.html|contents|glossary|five-pillars|relationships|self-path|whats-new|membership)'),
-    ('Guides to common questions', r'^(complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
+    ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|calc01|full-path|snapshot)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
