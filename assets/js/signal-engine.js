@@ -1577,7 +1577,7 @@ function analyze(textIn, opts){
     feelingWord: feelingM ? feelingM[1] : "",
     safety,
     danger: !!found.menace,
-    apology: apology >= 0
+    apology: apology >= 0 && !found.menace
   };
 }
 /* Where a real apology starts, or -1. "Sorry, but…" as a lead-in, "sorry you feel that way" and "not sorry" don't count. */
@@ -2924,7 +2924,7 @@ function finish(main, list, log, an, W, opts){
   // The safest way to say it: the version least likely to land as an attack, whoever is listening.
   // No blame, the person kept separate from the problem, one plain ask, a choice, and room for their side.
   // Offered whenever the words carry static, an ask or a criticism; it sits right after the first choice.
-  const safe = vocOf(base0) ? "" : safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: !!(opts.work || WORK_REL.includes(opts.rel)), group: opts.channel==="group", coparent: opts.rel==="coparent"});
+  const safe = vocOf(base0) || opts.reframed ? "" : safestVersion(base0, {criticism, isAsk, flagged, unchanged, close: CLOSE_REL.includes(opts.rel) && opts.channel!=="group", work: !!(opts.work || WORK_REL.includes(opts.rel)), group: opts.channel==="group", coparent: opts.rel==="coparent"});
   if(safe && !variants.some(v=>v.text.toLowerCase()===safe.toLowerCase())) variants.splice(Math.min(1, variants.length), 0, {id:"safe", label:"Safest way to say it",
     why: (opts.work || WORK_REL.includes(opts.rel)) ? "The version least likely to land as blame or an order, whoever reads it: about the process, not a person, one clear ask, and room for what's getting in the way. Send it once." : "The version least likely to start a fight, whoever is listening: no blame, the person kept separate from the problem, one clear ask, a real choice, and room for their side. Send it when you’re both calm, and say it once.", text:safe});
   return {main: base, primary: variants[0], variants, changes, ask, list, unchanged};
@@ -3366,11 +3366,19 @@ function replyMissesHurt(an, prev){
   const pv = analyze(prev, {channel: an.channel});
   return HURT_IN.some(id=>pv.found[id]) && !ACK_RE.test(an.norm);
 }
+/* wording that's only a little loud or loose: "might hurt" would overstate it */
+const MILD_IDS = ["shout","intens","minim","period","dots","softno","hedge","vtime","nowhen","overhedge","long","questions","idiom","urgent","multi","vstd","reqmaybe"];
 function verdict(an, sc, rw, opts){
   const listener = (opts && String(opts.listener||"").trim()) || "them";
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
   const lvl = sc && sc.level ? sc.level[0] : "clear";
   const soft = rw && !rw.unchanged;
+  // a threat that would frighten or control the other person: said plainly, before anything else
+  if(an.danger || (an.found && an.found.menace)) return {id:"danger", text:"This is a threat, not a tone problem."};
+  const attack = ATTACK_IDS.concat(["swear","hostile","legal","kidsfirst","violent","threat","dxlabel"]).some(id=>an.found && an.found[id]);
+  // a calm boundary, or coming out: caring, never "a threat" or "might hurt"
+  if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")
+    return {id:"ok", care:true, text: an.found.boundary ? "This is a clear, caring boundary. It may still be hard to hear, and that's not your fault." : "This is a clear, caring way to share something important. It may still be hard for them to hear, and that's not your fault."};
   // a real apology in it: the headline says so, gently, for a listener who is sensitive to criticism too
   const sorry = an.apology && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
@@ -3380,12 +3388,21 @@ function verdict(an, sc, rw, opts){
     return {id:"fight", work:true, text: soft ? "This may land as blame or an order. Try the version below." : "This may land as blame or an order. The notes below show why."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
     return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
+  // blame said as a dig, or keeping score: never "probably okay"
+  if(an.found.jab || (an.found.motive && lvl!=="clear"))
+    return {id:"hurt", jab:true, text: "This may land as blame or a dig. "+(soft ? "Here's a kinder way to say it that keeps what you need." : "The notes below show why.")};
+  // "That is incorrect.": clear, and it may land cold
+  if(an.found.blunt && !attack)
+    return {id:"hurt", blunt:true, text: "This is clear, but it may land a bit cold. "+(soft ? "Here's a plain alternative." : "The notes below show why.")};
+  // "We'll decide ourselves": fair, and it can sound like a closed door
+  if(an.found.closer && !attack)
+    return {id:"hurt", closer:true, text: "This is fair, and it may still sound like a closed door. "+(soft ? "Here's a warmer way to say the same thing." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && fairConcern(an))
     return {id:"hurt", fair:true, text: "Your worry is fair and worth saying plainly. "+(soft ? "Here's a version that keeps your words direct and lands easier for "+listener+"." : "The notes below show which words may land hard.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && work)
     return {id:"hurt", work:true, text: "This may land as blame. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
-    return {id:"hurt", text: (an.safety ? "Your worry is fair, but this might hurt. " : "This might hurt. ")+(soft ? "Here's a softer way to say it." : "The notes below show why.")};
+    return {id:"hurt", mild: !attack && an.staticIds.every(id=>MILD_IDS.includes(id)), text: (an.safety ? "Your worry is fair, but this might hurt. " : !attack && an.staticIds.every(id=>MILD_IDS.includes(id)) ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (!attack && an.staticIds.every(id=>MILD_IDS.includes(id)) ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")};
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
     return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
   if(an.staticIds && an.staticIds.length)

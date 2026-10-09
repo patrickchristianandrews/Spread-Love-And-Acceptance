@@ -2103,7 +2103,7 @@
     if (pct >= 95) return 'nearly all';
     if (pct <= 5) return 'hardly any';
     var best = null;
-    [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5]].forEach(function (f) { var d = Math.abs(f[0] / f[1] * 100 - pct); if (!best || d < best.d - 2) best = { f: f, d: d }; });
+    [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 10], [9, 10]].forEach(function (f) { var d = Math.abs(f[0] / f[1] * 100 - pct); if (!best || d < best.d - 2) best = { f: f, d: d }; });
     return best.f[0] === 1 && best.f[1] === 2 ? 'about half' : 'about ' + best.f[0] + ' of every ' + best.f[1];
   }
   function plainShare() {
