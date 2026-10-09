@@ -2263,11 +2263,11 @@
   "year": 1974,
   "title": "Some evidence for heightened sexual attraction under conditions of high anxiety",
   "venue": "Journal of Personality and Social Psychology, 30(4), 510–517",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/h0037031",
+  "url": "https://doi.org/10.1037/h0037031",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In a field study, men approached by an attractive female interviewer on a high, swaying suspension bridge were more likely to call her afterwards than men approached on a low, sturdy bridge; the authors read this as arousal from fear being mislabelled as attraction.",
+  "strength": "debated: a famous classic, but a replication by Kenrick and colleagues (1979) did not reproduce the attraction effect.",
   "topics": [
    "emotions",
    "interoception"
@@ -2275,8 +2275,8 @@
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#body"
   ],
-  "verified": false,
-  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Candidate DOI 10.1037/h0037031 (not confirmed)."
+  "verified": true,
+  "verified_by": "https://forrt.org/flora-replication-atlas/doi/10.1037/h0037031/ ; https://www.straight.com/node/20060"
  },
  {
   "id": "barrett-2001-differentiation",
@@ -2284,11 +2284,11 @@
   "year": 2001,
   "title": "Knowing what you're feeling and knowing what to do about it: Mapping the relation between emotion differentiation and emotion regulation",
   "venue": "Cognition and Emotion, 15(6), 713–724",
-  "doi": null,
-  "url": null,
+  "doi": "10.1080/02699930143000239",
+  "url": "https://doi.org/10.1080/02699930143000239",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In a diary study where people rated their emotions several times a day, those who distinguished their negative emotions more finely reported using more emotion-regulation strategies when feelings were intense.",
+  "strength": "moderate: an influential study that started a large literature on emotional granularity; mostly correlational.",
   "topics": [
    "emotions",
    "emotional-granularity"
@@ -2296,8 +2296,8 @@
   "mentioned_on": [
    "/library/emotions.html#emotional-granularity"
   ],
-  "verified": false,
-  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed title, authors, volume and pages (third author is Tamlin Conner). Candidate DOI 10.1080/02699930143000239 returned no match in search."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Tamlin_Conner (lists the paper with DOI); scholarhub.vn Cognition and Emotion listing 15(6) 713-724"
  },
  {
   "id": "gottman-katz-hooven-1996",
@@ -2318,7 +2318,7 @@
    "/book/understanding-1-feelings-in-depth.html#layers"
   ],
   "verified": false,
-  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Candidate DOI 10.1037/0893-3200.10.3.243 returned no match in search."
+  "note": "NOT VERIFIED (re-checked by search): citation (Journal of Family Psychology 10(3) 243-268) confirmed in reference lists; no DOI or stable page shown in the search."
  },
  {
   "id": "siegel-1999",
@@ -2327,10 +2327,10 @@
   "title": "The developing mind: Toward a neurobiology of interpersonal experience",
   "venue": "Guilford Press",
   "doi": null,
-  "url": null,
+  "url": "https://catalog.library.nashville.org/Record/CARL0000114962",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A book linking attachment, memory and brain development; it introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
+  "strength": "theory: a widely used clinical metaphor rather than a tested construct.",
   "topics": [
    "stress",
    "window-of-tolerance",
@@ -2341,8 +2341,8 @@
    "/library/stress.html#window-of-tolerance",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed the 1999 book as the origin of \"window of tolerance\"; only a 2012 second-edition listing (Guilford) was seen, and the 1999 subtitle and publisher page were not confirmed."
+  "verified": true,
+  "verified_by": "https://cmu.marmot.org/Record/.b1416257x ; https://catalog.library.nashville.org/Record/CARL0000114962 (New York: Guilford Press, c1999)"
  },
  {
   "id": "porges-1995",
@@ -2365,7 +2365,7 @@
    "/library/stress.html#polyvagal-theory"
   ],
   "verified": false,
-  "note": "Citation details confirmed by search, but no working link (DOI or stable page) was confirmed, so do not publish a link yet. Search confirmed journal, volume 32, pages 301–318 and that it was his 1994 presidential address. Candidate DOI 10.1111/j.1469-8986.1995.tb01213.x returned no match."
+  "note": "NOT VERIFIED (re-checked by search): search found only Porges's lab page listing the 1995 paper; no DOI or journal page shown."
  },
  {
   "id": "hogeveen-grafman-2021",
@@ -2387,7 +2387,7 @@
    "/wired-differently-in-depth.html#alexithymia"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC8456171/ on wired-differently-in-depth.html; not re-checked."
+  "note": "NOT VERIFIED (re-checked by search): search did not find the Handbook chapter or PMC8456171; only related papers by the same group."
  },
  {
   "id": "west-2005",
@@ -2408,7 +2408,7 @@
    "/library/motivation.html#stages-of-change"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed author, year, title and journal (Addiction) via secondary coverage (thebehavioralscientist.com) but no DOI or paper page; candidate DOI 10.1111/j.1360-0443.2005.01139.x unconfirmed."
+  "note": "NOT VERIFIED (re-checked by search): search confirmed author, year, title and journal only via secondary coverage; no DOI or paper page."
  },
  {
   "id": "lewis-rook-1999",
@@ -2430,7 +2430,7 @@
    "/book/understanding-6-change-in-depth.html#others"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed authors, year, title, Health Psychology 18(1) 63-71 via a reference list, but no DOI or stable page; candidate DOI 10.1037/0278-6133.18.1.63 unconfirmed."
+  "note": "NOT VERIFIED (re-checked by search): citation (Health Psychology 18, 63-71) confirmed on Karen Rook's faculty publications list; no DOI or paper page shown."
  },
  {
   "id": "crocker-wolfe-2001",
@@ -2451,7 +2451,7 @@
    "/library/motivation.html#self-esteem"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed citation (Psychological Review 108(3), 593-623) via secondary sources but no DOI or stable page; candidate DOI 10.1037/0033-295X.108.3.593 unconfirmed."
+  "note": "NOT VERIFIED (re-checked by search): citation (Psychological Review 108(3), 593) confirmed in reference lists; no DOI or paper page shown."
  },
  {
   "id": "neff-vonk-2009",
@@ -2472,7 +2472,7 @@
    "/book/understanding-7-worth-in-depth.html#comparison"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: search confirmed the paper and its main finding via secondary sources but no DOI or stable page; DOI uncertain (10.1111/j.1467-6494.2008.00537.x or .00564.x), unconfirmed."
+  "note": "NOT VERIFIED (re-checked by search): citation (Journal of Personality 77(1), 23-50) and main finding confirmed via secondary sources; no DOI or paper page shown."
  },
  {
   "id": "bonanno-2009",
@@ -2481,10 +2481,10 @@
   "title": "The other side of sadness: What the new science of bereavement tells us about life after loss",
   "venue": "Basic Books",
   "doi": null,
-  "url": null,
+  "url": "https://www.publishersweekly.com/978-0-465-01360-9",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A book summarising bereavement research: most people are resilient after a loss, grief tends to come and go rather than follow fixed stages, and only a minority develop long-lasting, severe grief.",
+  "strength": "strong: draws on Bonanno's well-replicated research on grief trajectories; written for a general audience.",
   "topics": [
    "grief",
    "resilience"
@@ -2492,8 +2492,8 @@
   "mentioned_on": [
    "/book/understanding-8-loss-in-depth.html#support"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; publisher not checked."
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/978-0-465-01360-9 ; https://search.worldcat.org/oclc/316825674 (Basic Books, New York, 2009)"
  },
  {
   "id": "prolonged-grief-2022",
@@ -2513,7 +2513,7 @@
    "/book/understanding-8-loss-in-depth.html#support"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: official pages (APA, WHO ICD-11 6B42) not checked."
+  "note": "NOT VERIFIED (re-checked by search): search found ICD-11 code 6B42 and DSM-5-TR criteria only via secondary sources (e.g. PMC10291380, PMC10881750); no official APA or WHO page shown."
  },
  {
   "id": "milton-2012",
@@ -2549,7 +2549,7 @@
    "/wired-differently-in-depth.html#double-empathy"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/09687599.2012.710008."
+  "note": "NOT VERIFIED (re-checked by search): citation (Disability & Society 27(6), 883-887) confirmed in secondary sources; the DOI 10.1080/09687599.2012.710008 was not shown in any result."
  },
  {
   "id": "crompton-2020",
@@ -2557,11 +2557,11 @@
   "year": 2020,
   "title": "Autistic peer-to-peer information transfer is highly effective",
   "venue": "Autism, 24(7), 1704–1712",
-  "doi": null,
-  "url": null,
+  "doi": "10.1177/1362361320919286",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In \"diffusion chains\" where a story was passed along eight people (72 adults), all-autistic chains passed on as much detail as all-non-autistic chains, while mixed chains lost detail faster and reported lower rapport.",
+  "strength": "moderate: a careful experiment that supports the double empathy idea; modest sample and a single task.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2577,8 +2577,8 @@
    "/tools/chat/deep.json",
    "/wired-differently-in-depth.html#double-empathy"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361320919286; site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/ on wired-differently-in-depth.html (not re-checked)."
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656 ; https://nottingham-repository.worktribe.com/output/5141376 ; https://pure.qub.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/"
  },
  {
   "id": "sasson-2017",
@@ -2586,11 +2586,11 @@
   "year": 2017,
   "title": "Neurotypical peers are less willing to interact with those with autism based on thin slice judgments",
   "venue": "Scientific Reports, 7, 40700",
-  "doi": null,
-  "url": null,
+  "doi": "10.1038/srep40700",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5286449/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Across three studies, non-autistic observers formed less favourable first impressions of autistic children and adults from a few seconds of video, and were less willing to interact with them; the bias disappeared when they judged only transcripts of what was said.",
+  "strength": "moderate: three studies with consistent results; suggests style, not substance, drives the bias.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2601,8 +2601,8 @@
    "/book/understanding-9-minds-in-depth.html#autism",
    "/library/wiring.html#double-empathy"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1038/srep40700."
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5286449/ ; https://brainlab.sitehost.iu.edu/doc/srep40700.pdf"
  },
  {
   "id": "hull-2017",
@@ -2610,11 +2610,11 @@
   "year": 2017,
   "title": "\"Putting on my best normal\": Social camouflaging in adults with autism spectrum conditions",
   "venue": "Journal of Autism and Developmental Disorders, 47(8), 2519–2534",
-  "doi": null,
-  "url": null,
+  "doi": "10.1007/s10803-017-3166-5",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Interviews with 92 autistic adults described camouflaging as motivated by wanting to fit in and connect, done through masking and compensating techniques, and often followed by exhaustion and threats to self-perception.",
+  "strength": "moderate: a qualitative study that shaped later measurement work.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2629,8 +2629,8 @@
    "/tools/chat/deep.json",
    "/wired-differently-in-depth.html#autistic"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/s10803-017-3166-5; site already links https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ (not re-checked)."
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ ; https://discovery.ucl.ac.uk/id/eprint/10056287/"
  },
  {
   "id": "hull-2019-catq",
@@ -2638,11 +2638,11 @@
   "year": 2019,
   "title": "Development and validation of the Camouflaging Autistic Traits Questionnaire (CAT-Q)",
   "venue": "Journal of Autism and Developmental Disorders, 49(3), 819–833",
-  "doi": null,
-  "url": null,
+  "doi": "10.1007/s10803-018-3792-6",
+  "url": "https://doi.org/10.1007/s10803-018-3792-6",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Developed the 25-item Camouflaging Autistic Traits Questionnaire with 354 autistic and 478 non-autistic adults; it showed three factors, high internal consistency and links with autistic traits, anxiety, depression and wellbeing.",
+  "strength": "moderate: a widely used self-report measure; published online in 2018, in print in 2019.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2651,8 +2651,8 @@
   "mentioned_on": [
    "/library/wiring.html#masking"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1007/s10803-018-3792-6."
+  "verified": true,
+  "verified_by": "https://discovery-pp.ucl.ac.uk/id/eprint/10060398 ; https://neuroscience.cam.ac.uk/publications/development-and-validation-of-the-camouflaging-autistic-traits-questionnaire-catq"
  },
  {
   "id": "raymaker-2020",
@@ -2660,11 +2660,11 @@
   "year": 2020,
   "title": "\"Having all of your internal resources exhausted beyond measure and being left with no clean-up crew\": Defining autistic burnout",
   "venue": "Autism in Adulthood, 2(2), 132–143",
-  "doi": null,
-  "url": null,
+  "doi": "10.1089/aut.2019.0079",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/32851204/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "From 19 interviews and 19 public online accounts, analysed with autistic co-researchers, autistic burnout was defined as long-term exhaustion, loss of function and reduced tolerance to stimulus, arising from chronic life stress and a mismatch between expectations and abilities without enough support.",
+  "strength": "early: the first formal definition, from a qualitative community-based study; distinct from occupational burnout and depression in participants' accounts.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2678,8 +2678,8 @@
    "/book/understanding-9-minds-in-depth.html#masking",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1089/aut.2019.0079."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32851204/ ; https://pdxscholar.library.pdx.edu/socwork_fac/378"
  },
  {
   "id": "murray-lesser-lawson-2005",
@@ -2687,11 +2687,11 @@
   "year": 2005,
   "title": "Attention, monotropism and the diagnostic criteria for autism",
   "venue": "Autism, 9(2), 139–156",
-  "doi": null,
-  "url": null,
+  "doi": "10.1177/1362361305051398",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/15857859/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed \"monotropism\": autistic attention tends to be pulled strongly into a few interests at a time, and the authors argued this can explain the other diagnostic features of autism.",
+  "strength": "theory: an influential, autistic-led account; empirical testing is still limited.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2715,8 +2715,8 @@
    "/tools/chat/deep.json",
    "/wired-differently-in-depth.html#autistic"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361305051398."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15857859/ ; https://monotropism.org/murray-lesser-lawson/"
  },
  {
   "id": "miserandino-2003",
@@ -2725,10 +2725,10 @@
   "title": "The spoon theory",
   "venue": "ButYouDontLookSick.com (essay)",
   "doi": null,
-  "url": null,
+  "url": "https://en.wikipedia.org/wiki/Spoon_theory",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "A personal essay in which Christine Miserandino, who has lupus, used a handful of spoons to show a friend that each daily task costs some of a limited supply of energy.",
+  "strength": "theory: a community metaphor, not a research finding; widely adopted by people with chronic illness and disability.",
   "topics": [
    "neurodiversity",
    "energy"
@@ -2744,8 +2744,8 @@
    "/library/wiring.html#spoon-theory",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: online essay; original page not checked."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Spoon_theory ; https://butyoudontlooksick.com/press-releases/press-release-she-may-be-weak-but-her-website-is-still-going-strong-5-year-anniversary-of-butyoudontlooksick-com/"
  },
  {
   "id": "dunn-1997",
@@ -2753,11 +2753,11 @@
   "year": 1997,
   "title": "The impact of sensory processing abilities on the daily lives of young children and their families: A conceptual model",
   "venue": "Infants & Young Children, 9(4), 23–35",
-  "doi": null,
-  "url": null,
+  "doi": "10.1097/00001163-199704000-00005",
+  "url": "https://doi.org/10.1097/00001163-199704000-00005",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed a model of sensory processing in which people differ in their neurological thresholds (high or low) and in how they respond (going along with them or acting against them), giving four patterns that affect daily life.",
+  "strength": "theory: a widely used clinical model and the basis of the Sensory Profile measures.",
   "topics": [
    "neurodiversity",
    "sensory"
@@ -2768,8 +2768,8 @@
    "/library/wiring.html#sensory-profiles",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1097/00001163-199704000-00005."
+  "verified": true,
+  "verified_by": "https://ouci.dntb.gov.ua/works/4082G0p4 (reference list with DOI)"
  },
  {
   "id": "aron-aron-1997",
@@ -2777,11 +2777,11 @@
   "year": 1997,
   "title": "Sensory-processing sensitivity and its relation to introversion and emotionality",
   "venue": "Journal of Personality and Social Psychology, 73(2), 345–368",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.73.2.345",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/9248053/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Across seven studies, the authors identified a single core trait of sensory-processing sensitivity, partly independent of introversion and emotionality, and developed the 27-item Highly Sensitive Person Scale.",
+  "strength": "moderate: a widely used measure; later research supports the trait but debates its structure and overlap with neuroticism.",
   "topics": [
    "neurodiversity",
    "sensory",
@@ -2791,8 +2791,8 @@
    "/book/understanding-9-minds-in-depth.html#senses",
    "/library/wiring.html#sensory-processing-sensitivity"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.73.2.345."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9248053/ ; https://sensitivityresearch.com/publication/sensory-processing-sensitivity-and-its-relation-to-introversion-and-emotionality"
  },
  {
   "id": "belsky-pluess-2009",
@@ -2800,11 +2800,11 @@
   "year": 2009,
   "title": "Beyond diathesis stress: Differential susceptibility to environmental influences",
   "venue": "Psychological Bulletin, 135(6), 885–908",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/a0017376",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/19883141/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "A review arguing for \"differential susceptibility\": some people are more affected by their environment for better and for worse, being harmed more by adversity but also benefiting more from support.",
+  "strength": "moderate: influential and supported by many studies, though effects are often small.",
   "topics": [
    "highly-sensitive-person",
    "sensory"
@@ -2813,20 +2813,20 @@
    "/know-yourself-in-depth.html#temperament",
    "/library/wiring.html#sensory-processing-sensitivity"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0017376."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/19883141/ ; https://sensitivityresearch.com/publication/beyond-diathesis-stress-differential-susceptibility-to-environmental-influences"
  },
  {
   "id": "pluess-2018",
-  "authors": "Pluess, M., Assary, E., Lionetti, F., et al.",
+  "authors": "Pluess, M., Assary, E., Lionetti, F., Lester, K. J., Krapohl, E., Aron, E. N., & Aron, A.",
   "year": 2018,
   "title": "Environmental sensitivity in children: Development of the Highly Sensitive Child Scale and identification of sensitivity groups",
   "venue": "Developmental Psychology, 54(1), 51–70",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/dev0000406",
+  "url": "https://doi.org/10.1037/dev0000406",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Five studies with 3,581 UK children and adolescents developed the 12-item Highly Sensitive Child Scale and found that children fell into low, medium and high sensitivity groups.",
+  "strength": "moderate: large samples; self-report measure for ages 8 and up.",
   "topics": [
    "highly-sensitive-person",
    "sensory"
@@ -2834,8 +2834,8 @@
   "mentioned_on": [
    "/library/wiring.html#sensory-processing-sensitivity"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/dev0000406 (could instead be Lionetti et al. 2018, Translational Psychiatry, on adult sensitivity groups)."
+  "verified": true,
+  "verified_by": "https://sensitivityresearch.com/publication/environmental-sensitivity-in-children-development-of-the-highly-sensitive-child-scale-and-identification-of-sensitivity-groups/ ; https://ricerca.unich.it/handle/11564/711330"
  },
  {
   "id": "barkley-1997",
@@ -2843,11 +2843,11 @@
   "year": 1997,
   "title": "Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD",
   "venue": "Psychological Bulletin, 121(1), 65–94",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0033-2909.121.1.65",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+  "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
   "topics": [
    "neurodiversity",
    "adhd"
@@ -2856,8 +2856,8 @@
    "/book/understanding-9-minds-in-depth.html#adhd",
    "/library/wiring.html#adhd-basics"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-2909.121.1.65."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9000892/ ; https://sciences.ucf.edu/psychology/childrenslearningclinic/wp-content/uploads/sites/24/2013/08/Barkley-1997-Psych-Bulletin.pdf"
  },
  {
   "id": "downey-feldman-1996",
@@ -2865,11 +2865,11 @@
   "year": 1996,
   "title": "Implications of rejection sensitivity for intimate relationships",
   "venue": "Journal of Personality and Social Psychology, 70(6), 1327–1343",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.70.6.1327",
+  "url": "https://doi.org/10.1037/0022-3514.70.6.1327",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Three studies described rejection sensitivity: people who anxiously expect rejection read rejection into ambiguous behaviour, and in new couples this was linked with more relationship difficulty and less partner satisfaction.",
+  "strength": "strong: a well-established construct with a large later literature.",
   "topics": [
    "neurodiversity",
    "adhd",
@@ -2878,8 +2878,8 @@
   "mentioned_on": [
    "/library/wiring.html#rejection-sensitivity"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.70.6.1327."
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/BB346A21EA4867F1634B58516C64E8 ; https://psychology.columbia.edu/sites/default/files/2016-11/merp.pdf"
  },
  {
   "id": "kenny-2016",
@@ -2887,11 +2887,11 @@
   "year": 2016,
   "title": "Which terms should be used to describe autism? Perspectives from the UK autism community",
   "venue": "Autism, 20(4), 442–462",
-  "doi": null,
-  "url": null,
+  "doi": "10.1177/1362361315588200",
+  "url": "https://doi.org/10.1177/1362361315588200",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "A survey of 3,470 people in the UK autism community found no single preferred term: \"autism\" and \"on the autism spectrum\" were widely endorsed, and \"autistic\" was favoured by many autistic adults and families but much less by professionals.",
+  "strength": "moderate: large survey; preferences differ by group and country and change over time.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2900,20 +2900,20 @@
   "mentioned_on": [
    "/book/understanding-9-minds-in-depth.html#labels"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361315588200."
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1362361315588200 ; https://researchers.mq.edu.au/en/publications/which-terms-should-be-used-to-describe-autism-perspectives-from-t/"
  },
  {
   "id": "blackwell-2017",
   "authors": "Blackwell, A. G.",
   "year": 2017,
   "title": "The curb-cut effect",
-  "venue": "Stanford Social Innovation Review, Winter 2017",
+  "venue": "Stanford Social Innovation Review, 15(1), Winter 2017",
   "doi": null,
-  "url": null,
+  "url": "https://ssir.org/issue/winter-2017",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "An essay arguing that laws and programmes designed for disadvantaged groups, like kerb cuts made for wheelchair users, often end up benefiting everyone.",
+  "strength": "theory: a persuasive argument with examples, not a study.",
   "topics": [
    "neurodiversity",
    "accessibility"
@@ -2921,8 +2921,8 @@
   "mentioned_on": [
    "/book/understanding-9-minds-in-depth.html#meeting"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: magazine article; page not checked."
+  "verified": true,
+  "verified_by": "https://ssir.org/issue/winter-2017 ; https://ccf.ny.gov/wp-content/uploads/2024/11/The_Curb_Cut_Effect.pdf"
  },
  {
   "id": "singer-1998",
@@ -2942,19 +2942,19 @@
    "/library/wiring.html#neurodiversity"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: thesis; title and record not checked."
+  "note": "NOT VERIFIED (re-checked by search): search confirmed a 1998 UTS honours thesis titled \"Odd People In\", later reissued as a book (2016/2017); no stable record for the 1998 thesis or its full subtitle. Note: a 2024 letter in Autism (Botha et al.) argues the concept was developed collectively on the InLv list and the word was first printed by Harvey Blume (1998), so \"usually credited\" wording is right."
  },
  {
   "id": "kapp-2019",
-  "authors": "Kapp, S. K., Steward, R., Crane, L., et al.",
+  "authors": "Kapp, S. K., Steward, R., Crane, L., Elliott, D., Elphick, C., Pellicano, E., & Russell, G.",
   "year": 2019,
   "title": "\"People should be allowed to do what they like\": Autistic adults' views and experiences of stimming",
   "venue": "Autism, 23(7), 1782–1792",
-  "doi": null,
-  "url": null,
+  "doi": "10.1177/1362361319829628",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6728747/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Interviews and focus groups with 32 autistic adults described stimming as a way to regulate overwhelming emotions and sensations, and as something that becomes accepted through understanding; participants objected to efforts to stop harmless stimming.",
+  "strength": "moderate: a qualitative study centring autistic voices.",
   "topics": [
    "neurodiversity",
    "autism",
@@ -2963,8 +2963,8 @@
   "mentioned_on": [
    "/library/wiring.html#stimming"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1177/1362361319829628."
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6728747 ; https://discovery-pp.ucl.ac.uk/id/eprint/10066002"
  },
  {
   "id": "buckle-2021",
@@ -2972,11 +2972,11 @@
   "year": 2021,
   "title": "\"No way out except from external intervention\": First-hand accounts of autistic inertia",
   "venue": "Frontiers in Psychology, 12, 631596",
-  "doi": null,
-  "url": null,
+  "doi": "10.3389/fpsyg.2021.631596",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Focus groups with autistic adults described \"autistic inertia\", difficulty starting and stopping tasks in everyday life despite wanting to, shaped by both inner and outside factors and with broad effects on daily life and wellbeing.",
+  "strength": "early: the first study of its kind, led by an autistic researcher; qualitative.",
   "topics": [
    "neurodiversity",
    "autism"
@@ -2984,8 +2984,8 @@
   "mentioned_on": [
    "/library/wiring.html#autistic-inertia"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate details from memory (journal uncertain)."
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008 ; https://www.frontiersin.org/articles/10.3389/fpsyg.2021.631596/text"
  },
  {
   "id": "carleton-2016",
@@ -2993,11 +2993,11 @@
   "year": 2016,
   "title": "Fear of the unknown: One fear to rule them all?",
   "venue": "Journal of Anxiety Disorders, 41, 5–21",
-  "doi": null,
-  "url": null,
+  "doi": "10.1016/j.janxdis.2016.03.011",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/27067453/",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "A review arguing that fear of the unknown, closely related to intolerance of uncertainty, may be a fundamental fear underlying anxiety and neuroticism.",
+  "strength": "theory: an influential review; the \"fundamental fear\" claim is a proposal, not settled.",
   "topics": [
    "neurodiversity",
    "anxiety"
@@ -3005,8 +3005,8 @@
   "mentioned_on": [
    "/library/wiring.html#intolerance-of-uncertainty"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/j.janxdis.2016.03.011 (uncertain)."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27067453/ ; https://uregina.scholaris.ca/items/5d1d1960-6e1a-4cfd-8619-b9c46ef59ff9"
  },
  {
   "id": "ryan-deci-2001",
@@ -3014,11 +3014,11 @@
   "year": 2001,
   "title": "On happiness and human potentials: A review of research on hedonic and eudaimonic well-being",
   "venue": "Annual Review of Psychology, 52, 141–166",
-  "doi": null,
-  "url": null,
+  "doi": "10.1146/annurev.psych.52.1.141",
+  "url": "https://doi.org/10.1146/annurev.psych.52.1.141",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "Reviewed two traditions of well-being research: hedonic (pleasure and the absence of pain) and eudaimonic (meaning, self-realisation and full functioning), and how they diverge and complement each other.",
+  "strength": "strong: a highly cited review.",
   "topics": [
    "values",
    "meaning"
@@ -3026,8 +3026,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#flourishing"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1146/annurev.psych.52.1.141."
+  "verified": true,
+  "verified_by": "https://proquest.com/scholarly-journals/on-happiness-human-potentials-review-research/docview/205845157/se-2 (lists DOI) ; https://pure.ewha.ac.kr/en/publications/on-happiness-and-human-potentials-a-review-of-research-on-hedonic/"
  },
  {
   "id": "ryff-1989",
@@ -3035,11 +3035,11 @@
   "year": 1989,
   "title": "Happiness is everything, or is it? Explorations on the meaning of psychological well-being",
   "venue": "Journal of Personality and Social Psychology, 57(6), 1069–1081",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.57.6.1069",
+  "url": "https://doi.org/10.1037/0022-3514.57.6.1069",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed six dimensions of psychological well-being (self-acceptance, positive relations, autonomy, environmental mastery, purpose in life and personal growth) and tested them with 321 adults, finding that several were not captured by earlier happiness measures.",
+  "strength": "strong: the basis of the widely used Ryff scales; the six-factor structure is sometimes debated.",
   "topics": [
    "values",
    "meaning"
@@ -3047,8 +3047,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#flourishing"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.57.6.1069."
+  "verified": true,
+  "verified_by": "https://thefpr.org/wp-content/uploads/Ryff1989_happiness.pdf ; https://worlddatabaseofhappiness.eur.nl/publications/happiness-is-everything-or-is-it-explorations-on-the-meaning-of-psychological-well-being-3033/"
  },
  {
   "id": "steger-2006",
@@ -3056,11 +3056,11 @@
   "year": 2006,
   "title": "The Meaning in Life Questionnaire: Assessing the presence of and search for meaning in life",
   "venue": "Journal of Counseling Psychology, 53(1), 80–93",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-0167.53.1.80",
+  "url": "https://doi.org/10.1037/0022-0167.53.1.80",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Developed the 10-item Meaning in Life Questionnaire, which separately measures the presence of meaning and the search for meaning, and tested its reliability and validity across three studies.",
+  "strength": "strong: one of the most widely used meaning measures.",
   "topics": [
    "values",
    "meaning"
@@ -3068,8 +3068,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#meaning"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-0167.53.1.80."
+  "verified": true,
+  "verified_by": "https://emerge.ucsd.edu/r_2vxgbhk97jlisyj/ ; https://data.gesis.org/gesiskg/resource/zis-StegerFrazierOishiKaler2006The"
  },
  {
   "id": "martela-steger-2016",
@@ -3078,10 +3078,10 @@
   "title": "The three meanings of meaning in life: Distinguishing coherence, purpose, and significance",
   "venue": "Journal of Positive Psychology, 11(5), 531–545",
   "doi": null,
-  "url": null,
+  "url": "https://research.aalto.fi/en/publications/the-three-meanings-of-meaning-in-life-distinguishing-coherence-pu/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed that meaning in life has three parts: coherence (life makes sense), purpose (having core goals and direction) and significance (feeling that one's life has value).",
+  "strength": "theory: a conceptual paper that has shaped later measurement.",
   "topics": [
    "values",
    "meaning"
@@ -3089,8 +3089,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#meaning"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/17439760.2015.1137623."
+  "verified": true,
+  "verified_by": "https://research.aalto.fi/en/publications/the-three-meanings-of-meaning-in-life-distinguishing-coherence-pu/ ; https://researchportal.helsinki.fi/en/publications/the-three-meanings-of-meaning-in-life-distinguishing-coherence-pu/ (DOI not confirmed in search)"
  },
  {
   "id": "baumeister-2013-meaning",
@@ -3098,11 +3098,11 @@
   "year": 2013,
   "title": "Some key differences between a happy life and a meaningful life",
   "venue": "Journal of Positive Psychology, 8(6), 505–516",
-  "doi": null,
-  "url": null,
+  "doi": "10.1080/17439760.2013.830764",
+  "url": "https://doi.org/10.1080/17439760.2013.830764",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In surveys of about 400 adults, happiness and meaningfulness overlapped but differed: good health and an easy life went with happiness but not meaning, while thinking more about the past and future went with more meaning but less happiness.",
+  "strength": "moderate: correlational surveys; widely cited.",
   "topics": [
    "values",
    "meaning"
@@ -3110,8 +3110,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#meaning"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1080/17439760.2013.830764."
+  "verified": true,
+  "verified_by": "https://worlddatabaseofhappiness.eur.nl/publications/some-key-differences-between-a-happy-life-and-a-meanigful-life-7995 ; https://www.bps.org.uk/research-digest/whats-difference-between-happy-life-and-meaningful-one"
  },
  {
   "id": "markus-kitayama-1991",
@@ -3120,10 +3120,10 @@
   "title": "Culture and the self: Implications for cognition, emotion, and motivation",
   "venue": "Psychological Review, 98(2), 224–253",
   "doi": null,
-  "url": null,
+  "url": "https://sites.duke.edu/culturelab/files/2021/07/Culture_and_the_Self_Implications_for_Cognition_Em.pdf",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Argued that cultures differ in how they construe the self, as independent or interdependent with others, and that this shapes cognition, emotion and motivation.",
+  "strength": "debated: hugely influential; later work questions how neatly cultures fit the two types and notes a heavy reliance on US-East Asian comparisons.",
   "topics": [
    "values",
    "culture"
@@ -3131,8 +3131,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#different-values"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-295X.98.2.224."
+  "verified": true,
+  "verified_by": "https://sites.duke.edu/culturelab/files/2021/07/Culture_and_the_Self_Implications_for_Cognition_Em.pdf ; https://contemplativemind.org/archives/980 (DOI not shown in search)"
  },
  {
   "id": "schwartz-1992",
@@ -3141,10 +3141,10 @@
   "title": "Universals in the content and structure of values: Theoretical advances and empirical tests in 20 countries",
   "venue": "Advances in Experimental Social Psychology, 25, 1–65",
   "doi": null,
-  "url": null,
+  "url": "https://cris.huji.ac.il/en/publications/universals-in-the-content-and-structure-of-values-theoretical-adv/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Using data from 20 countries, found that the meaning of a set of basic value types was broadly similar across most groups, and that values are organised by two dimensions into a circle of compatible and conflicting motivations.",
+  "strength": "strong: one of the most cited and replicated models of values.",
   "topics": [
    "values"
   ],
@@ -3153,8 +3153,8 @@
    "/book/understanding-10-values-in-depth.html#different-values",
    "/book/understanding-10-values-in-depth.html#finding"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0065-2601(08)60281-6."
+  "verified": true,
+  "verified_by": "https://cris.huji.ac.il/en/publications/universals-in-the-content-and-structure-of-values-theoretical-adv/ ; https://publikationen.ub.uni-frankfurt.de/frontdoor/index/index/year/2009/docId/11504 (DOI not shown)"
  },
  {
   "id": "curry-2018",
@@ -3162,11 +3162,11 @@
   "year": 2018,
   "title": "Happy to help? A systematic review and meta-analysis of the effects of performing acts of kindness on the well-being of the actor",
   "venue": "Journal of Experimental Social Psychology, 76, 320–329",
-  "doi": null,
-  "url": null,
+  "doi": "10.1016/j.jesp.2018.02.014",
+  "url": "https://doi.org/10.1016/j.jesp.2018.02.014",
   "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
+  "finding": "A meta-analysis of 27 experiments found that performing acts of kindness had a small-to-medium positive effect on the giver's well-being (δ = 0.28).",
+  "strength": "moderate: the authors noted concerns about study quality and possible publication bias.",
   "topics": [
    "values",
    "kindness"
@@ -3175,8 +3175,8 @@
    "/book/understanding-10-values-in-depth.html#small-acts",
    "/library/connection.html#kindness"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/j.jesp.2018.02.014."
+  "verified": true,
+  "verified_by": "https://eprints.bournemouth.ac.uk/30561/ ; https://research.tilburguniversity.edu/en/publications/happy-to-help-a-systematic-review-and-meta-analysis-of-the-effect/"
  },
  {
   "id": "rotter-1966",
@@ -3184,11 +3184,11 @@
   "year": 1966,
   "title": "Generalized expectancies for internal versus external control of reinforcement",
   "venue": "Psychological Monographs: General and Applied, 80(1), 1–28",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/h0092976",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/5340840/",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Described individual differences in \"locus of control\", how far people believe outcomes depend on their own actions rather than outside forces, and introduced a scale to measure it.",
+  "strength": "strong: a foundational concept with a very large literature.",
   "topics": [
    "values",
    "control"
@@ -3196,8 +3196,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#control"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/h0092976."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/5340840/ ; https://verdi.cs.ucl.ac.uk/constructDB/publications/rotter-generalized-1966.html"
  },
  {
   "id": "house-1981",
@@ -3206,10 +3206,10 @@
   "title": "Work stress and social support",
   "venue": "Addison-Wesley",
   "doi": null,
-  "url": null,
+  "url": "https://libcat.library.tamu.edu/Record/in00000649568",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A book on how social support, especially at work, can reduce work stress and protect health.",
+  "strength": "moderate: a foundational framework in occupational health research.",
   "topics": [
    "helping",
    "social-support"
@@ -3217,8 +3217,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#ask"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; not checked."
+  "verified": true,
+  "verified_by": "https://libcat.library.tamu.edu/Record/in00000649568 ; https://econbiz.de/Record/work-stress-and-social-support-house-james/10004389064 (Addison-Wesley, Reading, MA, 1981)"
  },
  {
   "id": "cutrona-russell-1990",
@@ -3240,7 +3240,7 @@
    "/library/communication.html#advice-vs-support"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book chapter; not checked."
+  "note": "NOT VERIFIED (re-checked by search): chapter confirmed in reference lists (pp. 319-366, Wiley, New York); no stable page for the chapter."
  },
  {
   "id": "bolger-2000",
@@ -3248,11 +3248,11 @@
   "year": 2000,
   "title": "Invisible support and adjustment to stress",
   "venue": "Journal of Personality and Social Psychology, 79(6), 953–961",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.79.6.953",
+  "url": "https://doi.org/10.1037/0022-3514.79.6.953",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In a daily diary study of couples where one partner was preparing for the bar exam, support the stressed partner noticed was linked with feeling worse, while support the partner gave but the recipient did not notice was linked with better adjustment.",
+  "strength": "moderate: a well-known diary study; later work suggests the effect depends on how support is given.",
   "topics": [
    "helping",
    "social-support",
@@ -3263,8 +3263,8 @@
    "/book/understanding-6-change-in-depth.html#others",
    "/library/communication.html#advice-vs-support"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.79.6.953."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Invisible_support ; https://hcp.hms.harvard.edu/publication/invisible-support-and-adjustment-stress"
  },
  {
   "id": "helgeson-fritz-1998",
@@ -3272,11 +3272,11 @@
   "year": 1998,
   "title": "A theory of unmitigated communion",
   "venue": "Personality and Social Psychology Review, 2(3), 173–183",
-  "doi": null,
-  "url": null,
+  "doi": "10.1207/s15327957pspr0203_2",
+  "url": "https://doi.org/10.1207/s15327957pspr0203_2",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed \"unmitigated communion\", focusing on others to the exclusion of oneself, and distinguished it from healthy caring; unmitigated communion, not communion, was linked to psychological distress.",
+  "strength": "moderate: supported by a body of correlational research.",
   "topics": [
    "helping",
    "burnout"
@@ -3284,8 +3284,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#boundaries"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1207/s15327957pspr0203_2."
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/abs/10.1207/s15327957pspr0203_2 ; https://en.wikipedia.org/wiki/Unmitigated_communion"
  },
  {
   "id": "hobfoll-1989",
@@ -3293,11 +3293,11 @@
   "year": 1989,
   "title": "Conservation of resources: A new attempt at conceptualizing stress",
   "venue": "American Psychologist, 44(3), 513–524",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0003-066X.44.3.513",
+  "url": "https://doi.org/10.1037/0003-066X.44.3.513",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Proposed conservation of resources theory: stress arises when people's valued resources are threatened or lost, or when investing resources does not pay off, and people strive to protect what they have.",
+  "strength": "strong: one of the most used stress theories, especially in work and trauma research.",
   "topics": [
    "helping",
    "stress",
@@ -3306,8 +3306,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#boundaries"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0003-066X.44.3.513."
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Conservation_of_resources_theory ; https://www.scinapse.io/papers/2055723050"
  },
  {
   "id": "dazzi-2014",
@@ -3328,7 +3328,7 @@
    "/book/understanding-12-helping-in-depth.html#crisis"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1017/S0033291714001299."
+  "note": "NOT VERIFIED (re-checked by search): the review and its finding (no significant increase in suicidal ideation from asking) were confirmed, published online 7 July 2014 by Cambridge University Press; the DOI was not shown and no result was explicitly tied to the paper (candidate PubMed 24998511, unconfirmed)."
  },
  {
   "id": "darley-latane-1968",
@@ -3336,11 +3336,11 @@
   "year": 1968,
   "title": "Bystander intervention in emergencies: Diffusion of responsibility",
   "venue": "Journal of Personality and Social Psychology, 8(4), 377–383",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/h0025589",
+  "url": "https://doi.org/10.1037/h0025589",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Students who heard another participant apparently having a seizure over an intercom were slower and less likely to report it when they believed other listeners were present, showing diffusion of responsibility.",
+  "strength": "strong: classic and widely replicated, though weaker in dangerous emergencies.",
   "topics": [
    "helping",
    "bystander"
@@ -3354,8 +3354,8 @@
    "/library/teams.html#diffusion-of-responsibility",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/h0025589."
+  "verified": true,
+  "verified_by": "https://scinapse.io/papers/2171602877 ; https://stafforini.com/works/darley-1968-bystander-intervention-emergencies/"
  },
  {
   "id": "fischer-2011",
@@ -3363,11 +3363,11 @@
   "year": 2011,
   "title": "The bystander-effect: A meta-analytic review on bystander intervention in dangerous and non-dangerous emergencies",
   "venue": "Psychological Bulletin, 137(4), 517–537",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/a0023304",
+  "url": "https://doi.org/10.1037/a0023304",
   "kind": "meta-analysis",
-  "finding": null,
-  "strength": null,
+  "finding": "A meta-analysis of 105 effect sizes (over 7,700 participants) found that the bystander effect is real but weaker in dangerous emergencies, when a perpetrator is present, and when helping has physical costs.",
+  "strength": "strong: a large meta-analysis.",
   "topics": [
    "helping",
    "bystander"
@@ -3376,8 +3376,8 @@
    "/book/understanding-12-helping-in-depth.html#bystander",
    "/library/teams.html#diffusion-of-responsibility"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0023304."
+  "verified": true,
+  "verified_by": "https://pred.uni-regensburg.de/id/eprint/20599/ ; https://epub.uni-regensburg.de/64801/"
  },
  {
   "id": "philpot-2020",
@@ -3385,11 +3385,11 @@
   "year": 2020,
   "title": "Would I be helped? Cross-national CCTV footage shows that intervention is the norm in public conflicts",
   "venue": "American Psychologist, 75(1), 66–75",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/amp0000469",
+  "url": "https://doi.org/10.1037/amp0000469",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Analysing CCTV footage of real public conflicts in three countries, the researchers found that at least one bystander intervened in most incidents, at similar rates across countries, and that more bystanders made intervention more likely.",
+  "strength": "strong: real-world footage across three countries; published online in 2019.",
   "topics": [
    "helping",
    "bystander"
@@ -3397,8 +3397,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#bystander"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/amp0000469."
+  "verified": true,
+  "verified_by": "https://www.research.lancs.ac.uk/portal/en/publications/would-i-be-helped(f30d7b83-3a2a-4d9e-a1d8-214ea86924cf)/export.html ; https://www.psypost.org/cross-national-cctv-footage-reveals-that-bystanders-intervene-in-9-out-of-10-public-conflicts/"
  },
  {
   "id": "gouldner-1960",
@@ -3418,7 +3418,7 @@
    "/book/understanding-12-helping-in-depth.html#receiving"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.2307/2092623."
+  "note": "NOT VERIFIED (re-checked by search): citation (American Sociological Review 25(2), 161-178, April 1960) confirmed; DOI 10.2307/2092623 not shown and no JSTOR page in results."
  },
  {
   "id": "flynn-bohns-2008",
@@ -3426,19 +3426,19 @@
   "year": 2008,
   "title": "\"If you need help, just ask\": Underestimating compliance with direct requests for help",
   "venue": "Journal of Personality and Social Psychology, 95(1), 128–143",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0022-3514.95.1.128",
+  "url": "https://doi.org/10.1037/0022-3514.95.1.128",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In five studies, people asking for help underestimated how many others would agree to a direct request, by as much as 50%, partly because they overlooked how awkward it feels to say no.",
+  "strength": "strong: replicated in later work by Bohns and colleagues.",
   "topics": [
    "helping"
   ],
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#receiving"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.95.1.128 (Bohns published then as Vanessa Lake)."
+  "verified": true,
+  "verified_by": "https://ecommons.cornell.edu/entities/publication/9c0adbfb-985c-4f7d-aae3-96959822bc4c ; https://www.gsb.stanford.edu/faculty-research/publications/if-you-need-help-just-ask-underestimating-compliance-direct-requests"
  },
  {
   "id": "dunn-aknin-norton-2008",
@@ -3446,11 +3446,11 @@
   "year": 2008,
   "title": "Spending money on others promotes happiness",
   "venue": "Science, 319(5870), 1687–1688",
-  "doi": null,
-  "url": null,
+  "doi": "10.1126/science.1150952",
+  "url": "https://doi.org/10.1126/science.1150952",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Spending more of one's income on others predicted greater happiness in a nationally representative survey and in a field study of windfall spending, and people randomly assigned to spend money on others were happier than those assigned to spend it on themselves.",
+  "strength": "moderate: influential; later replications suggest a smaller effect.",
   "topics": [
    "helping",
    "kindness"
@@ -3459,8 +3459,8 @@
    "/book/understanding-12-helping-in-depth.html#receiving",
    "/library/connection.html#prosocial-spending"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1126/science.1150952."
+  "verified": true,
+  "verified_by": "https://stafforini.com/works/dunn-2008-spending-money-others/ ; https://worlddatabaseofhappiness.eur.nl/studies/dunn-et-al-2008-study-us-2008-1-1760 ; https://sciencedaily.com/releases/2008/03/080320150034.htm"
  },
  {
   "id": "brown-2003-giving",
@@ -3469,10 +3469,10 @@
   "title": "Providing social support may be more beneficial than receiving it: Results from a prospective study of mortality",
   "venue": "Psychological Science, 14(4), 320–327",
   "doi": null,
-  "url": null,
+  "url": "https://researchconnect.stonybrook.edu/en/publications/providing-social-support-may-be-more-beneficial-than-receiving-it/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "In a five-year study of older married adults, those who reported giving practical help to others or emotional support to their spouse had lower mortality, while receiving support was not linked to mortality once giving was accounted for.",
+  "strength": "moderate: a prospective study, but correlational.",
   "topics": [
    "helping",
    "kindness"
@@ -3480,8 +3480,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#receiving"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/1467-9280.14461."
+  "verified": true,
+  "verified_by": "https://researchconnect.stonybrook.edu/en/publications/providing-social-support-may-be-more-beneficial-than-receiving-it/ ; https://api.isr.umich.edu/?p=187086 (DOI not confirmed in search)"
  },
  {
   "id": "bloom-2016",
@@ -3490,10 +3490,10 @@
   "title": "Against empathy: The case for rational compassion",
   "venue": "Ecco",
   "doi": null,
-  "url": null,
+  "url": "https://wellcomecollection.org/works/c5q8eupq",
   "kind": "book",
-  "finding": null,
-  "strength": null,
+  "finding": "A book arguing that empathy, feeling what others feel, is biased toward people like us and can cloud judgment, and that reasoned compassion is a better guide to helping.",
+  "strength": "debated: a provocative argument; many researchers dispute how sharply empathy and compassion can be separated.",
   "topics": [
    "helping",
    "compassion-fatigue"
@@ -3501,8 +3501,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#compassion"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; not checked."
+  "verified": true,
+  "verified_by": "https://wellcomecollection.org/works/c5q8eupq ; https://catalog.saclibrary.org/Record/.b24510762 (Ecco, New York, 2016)"
  },
  {
   "id": "cohen-wills-1985",
@@ -3510,11 +3510,11 @@
   "year": 1985,
   "title": "Stress, social support, and the buffering hypothesis",
   "venue": "Psychological Bulletin, 98(2), 310–357",
-  "doi": null,
-  "url": null,
+  "doi": "10.1037/0033-2909.98.2.310",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/3901065/",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "A review concluding that social support helps in two ways: perceived available support buffers people against stress, and being part of a wider social network has a general benefit.",
+  "strength": "strong: a classic, highly cited review.",
   "topics": [
    "stress",
    "social-support",
@@ -3523,8 +3523,8 @@
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#self-care"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0033-2909.98.2.310."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/3901065/ ; https://en.wikipedia.org/wiki/Social_buffering"
  },
  {
   "id": "tedeschi-calhoun-1996",
@@ -3532,11 +3532,11 @@
   "year": 1996,
   "title": "The Posttraumatic Growth Inventory: Measuring the positive legacy of trauma",
   "venue": "Journal of Traumatic Stress, 9(3), 455–471",
-  "doi": null,
-  "url": null,
+  "doi": "10.1007/BF02103658",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/8827649/",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Developed the 21-item Posttraumatic Growth Inventory with five areas of reported growth: new possibilities, relating to others, personal strength, spiritual change and appreciation of life.",
+  "strength": "debated: widely used, but later studies question whether self-reported growth reflects real change.",
   "topics": [
    "trauma",
    "healing",
@@ -3545,8 +3545,8 @@
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#self-care"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1002/jts.2490090305."
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8827649/ ; https://springeropen.altmetric.com/details/689593"
  },
  {
   "id": "frazier-2009",
@@ -3554,11 +3554,11 @@
   "year": 2009,
   "title": "Does self-reported posttraumatic growth reflect genuine positive change?",
   "venue": "Psychological Science, 20(7), 912–919",
-  "doi": null,
-  "url": null,
+  "doi": "10.1111/j.1467-9280.2009.02381.x",
+  "url": "https://doi.org/10.1111/j.1467-9280.2009.02381.x",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Measuring 122 students before and after a trauma, the researchers found that self-reported growth was largely unrelated to actual measured change, and perceived growth went with more distress while actual growth went with less.",
+  "strength": "moderate: an important prospective test; later studies also find small links between reported and actual growth.",
   "topics": [
    "trauma",
    "healing"
@@ -3566,8 +3566,8 @@
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#self-care"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1111/j.1467-9280.2009.02381.x."
+  "verified": true,
+  "verified_by": "https://experts.umn.edu/en/publications/does-self-reported-posttraumatic-growth-reflect-genuine-positive-/ ; https://www.psychologicalscience.org/journals/psychological-science/j.1467-9280.2009.02381.x/"
  },
  {
   "id": "park-2010",
@@ -3589,7 +3589,7 @@
    "/book/understanding-11-healing-in-depth.html#without-them"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/a0018301."
+  "note": "NOT VERIFIED (re-checked by search): citation (Psychological Bulletin 136, 257-301) confirmed in reference lists; DOI not shown and no paper page found."
  },
  {
   "id": "felitti-1998",
@@ -3597,11 +3597,11 @@
   "year": 1998,
   "title": "Relationship of childhood abuse and household dysfunction to many of the leading causes of death in adults: The Adverse Childhood Experiences (ACE) Study",
   "venue": "American Journal of Preventive Medicine, 14(4), 245–258",
-  "doi": null,
-  "url": null,
+  "doi": "10.1016/S0749-3797(98)00017-8",
+  "url": "https://doi.org/10.1016/S0749-3797(98)00017-8",
   "kind": "study",
-  "finding": null,
-  "strength": null,
+  "finding": "Of 13,494 adults at a large health plan sent a questionnaire, 9,508 responded; the more categories of childhood adversity people reported, the higher their risk of many adult health problems, in a graded relationship.",
+  "strength": "strong: a landmark, widely replicated finding at the population level; it does not predict individual outcomes.",
   "topics": [
    "trauma"
   ],
@@ -3609,8 +3609,8 @@
    "/book/self-1-then-in-depth.html#timing",
    "/know-yourself-in-depth.html#adversity"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0749-3797(98)00017-8."
+  "verified": true,
+  "verified_by": "https://calio.dspacedirect.org/handle/11212/2151 ; https://scinapse.io/papers/2116839388"
  },
  {
   "id": "stark-2007",
@@ -3632,7 +3632,7 @@
    "/tools/chat/deep.json"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: book; OUP page not checked."
+  "note": "NOT VERIFIED (re-checked by search): confirmed as Oxford University Press, 2007 (Interpersonal Violence series, ISBN 9780195154276) via library and bookseller listings, but no stable publisher page for the 2007 edition (OUP page found is the 2nd edition: academic.oup.com/book/55149)."
  },
  {
   "id": "tronick-1978",
@@ -3657,7 +3657,7 @@
    "/tools/chat/deep.json"
   ],
   "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/S0002-7138(09)62273-1."
+  "note": "NOT VERIFIED (re-checked by search): citation (Journal of the American Academy of Child Psychiatry 17(1), 1-13) confirmed in reference lists (some give \"entrapments\"); no DOI or stable page shown."
  },
  {
   "id": "bakker-demerouti-2007",
@@ -3665,11 +3665,11 @@
   "year": 2007,
   "title": "The job demands-resources model: State of the art",
   "venue": "Journal of Managerial Psychology, 22(3), 309–328",
-  "doi": null,
-  "url": null,
+  "doi": "10.1108/02683940710733115",
+  "url": "https://doi.org/10.1108/02683940710733115",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "A review of the job demands-resources model: high job demands drive strain and burnout, while job resources such as support, control and feedback drive motivation and help buffer demands.",
+  "strength": "strong: one of the most widely used models in work psychology.",
   "topics": [
    "stress",
    "work"
@@ -3677,8 +3677,8 @@
   "mentioned_on": [
    "/book/understanding-2-stress-in-depth.html#demand"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1108/02683940710733115."
+  "verified": true,
+  "verified_by": "https://www.emerald.com/insight/content/doi/10.1108/02683940710733115/full/ris ; https://pure.uj.ac.za/en/publications/the-job-demands-resources-model-state-of-the-art/"
  },
  {
   "id": "kaplan-1995",
@@ -3686,11 +3686,11 @@
   "year": 1995,
   "title": "The restorative benefits of nature: Toward an integrative framework",
   "venue": "Journal of Environmental Psychology, 15(3), 169–182",
-  "doi": null,
-  "url": null,
+  "doi": "10.1016/0272-4944(95)90001-2",
+  "url": "https://doi.org/10.1016/0272-4944(95)90001-2",
   "kind": "theory",
-  "finding": null,
-  "strength": null,
+  "finding": "Set out attention restoration theory: effortful, directed attention gets fatigued, and environments such as nature, which hold attention effortlessly, help it recover; the paper links this with stress recovery.",
+  "strength": "moderate: supported by many studies, though effects vary and some measures replicate poorly.",
   "topics": [
    "stress",
    "rest"
@@ -3700,7 +3700,7 @@
    "/library/calm.html#attention-restoration",
    "/tools/chat/deep.json"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1016/0272-4944(95)90001-2."
+  "verified": true,
+  "verified_by": "https://deepblue.lib.umich.edu/items/52e9cfc7-5837-41db-92b3-a00d2421658b ; https://healthdesign.org/knowledge-repository/restorative-benefits-nature-toward-integrative-framework"
  }
 ]

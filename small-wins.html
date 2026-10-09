@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Small Wins, and Turning Hard Feelings Into Fuel</title>
+<meta name="description" content="Why small wins build momentum, and kind ways to turn anger, worry and complaints into requests and plans. With a free Flip it tool and a done list.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .sw-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .sw-jump li{ margin:0 !important; max-width:none !important; }
+  .sw-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .sw-jump a:hover{ border-color:var(--credit); }
+  .sw-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .sw-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .sw-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .sw-links a:hover{ border-color:var(--credit); }
+  .sw-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .sw-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .read h3{ font-size:1.08rem; }
+  .sw-tool [hidden]{ display:none !important; }
+  .sw-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .sw-safe p, .sw-safe ul{ margin:.4rem 0 !important; }
+  /* the two tools */
+  .sw-tool{ margin:1rem 0 2rem; padding:1rem 1.1rem 1.2rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); box-sizing:border-box; max-width:100%; }
+  .sw-tool h3{ margin-top:.2rem !important; }
+  .sw-tool label, .sw-tool legend{ font-weight:600; }
+  .sw-tool textarea, .sw-tool input[type="text"], .sw-tool select{ font:inherit; width:100%; max-width:100%; box-sizing:border-box; min-height:44px; padding:.5rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); }
+  .sw-tool textarea{ min-height:5.5rem; resize:vertical; }
+  .sw-tool :is(textarea, input, select, button, a):focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .sw-types{ border:0; padding:0; margin:.9rem 0 .4rem; min-width:0; }
+  .sw-types legend{ padding:0; margin-bottom:.4rem; }
+  .sw-chips{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .sw-chip{ position:relative; }
+  .sw-chip input{ position:absolute; opacity:0; width:1px; height:1px; }
+  .sw-chip span{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.4rem .95rem; border:1.5px solid var(--line); border-radius:999px; background:var(--paper); cursor:pointer; font-weight:500; }
+  .sw-chip input:checked + span{ border-color:var(--credit); background:var(--paper-deep, var(--paper)); font-weight:600; }
+  .sw-chip input:checked + span::before{ content:"\2713\00a0"; }
+  .sw-chip input:focus-visible + span{ outline:3px solid var(--focus); outline-offset:2px; }
+  .sw-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.8rem 0 .2rem; align-items:center; }
+  .sw-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.2rem; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; box-sizing:border-box; }
+  .sw-btn.is-quiet{ background:transparent; color:var(--ink); }
+  .sw-btn[hidden]{ display:none; }
+  .sw-small{ font:600 .88rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.3rem .85rem; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
+  .sw-out{ white-space:pre-line; overflow-wrap:anywhere; margin:.9rem 0 .3rem; padding:.85rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper-deep, var(--paper)); line-height:1.55; }
+  .sw-out:empty{ display:none; }
+  .sw-out strong{ font-family:"Fraunces", Georgia, serif; }
+  .sw-note{ font-size:.95rem; color:var(--ink-soft); }
+  .read p.sw-status{ min-height:1.4em; margin:.3rem 0 .2rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .sw-alert{ margin:.8rem 0; padding:.8rem 1rem; border-left:4px solid var(--debit, var(--credit)); border-radius:10px; background:var(--paper-deep, var(--paper)); }
+  .sw-alert[hidden]{ display:none; }
+  .sw-add{ display:grid; grid-template-columns:minmax(0, 1fr); gap:.35rem; }
+  @media (min-width:640px){ .sw-add-row{ display:grid; grid-template-columns:minmax(0, 2fr) minmax(0, 1fr); gap:.6rem; align-items:end; } }
+  .sw-add-row > div{ display:grid; gap:.3rem; min-width:0; }
+  .read ul.sw-list{ list-style:none; padding:0 !important; margin:.5rem 0 1rem !important; display:grid; gap:.45rem; }
+  .read ul.sw-list li{ margin:0 !important; max-width:none !important; display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .6rem; padding:.55rem .8rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
+  .sw-win{ flex:1 1 12rem; overflow-wrap:anywhere; }
+  .sw-meta{ display:block; font-size:.88rem; color:var(--ink-soft); }
+  .sw-week{ font-weight:600; margin:.9rem 0 .2rem !important; }
+  .sw-tool details summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/small-wins.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/small-wins.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/small-wins.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Small Wins, and Turning Hard Feelings Into Fuel">
+<meta property="og:description" content="Why small wins build momentum, and kind ways to turn anger, worry and complaints into requests and plans. With a free Flip it tool and a done list.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/small-wins.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Small Wins, and Turning Hard Feelings Into Fuel">
+<meta name="twitter:description" content="Why small wins build momentum, and kind ways to turn anger, worry and complaints into requests and plans. With a free Flip it tool and a done list.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<!-- seo:end -->
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · Small wins</p><h1>Small wins, and turning the hard stuff into fuel</h1></header>
+
+<p class="simple-lede">Big changes are made of small ones. And hard feelings, like anger, worry or regret, often carry useful information. This page is about both: how to build and notice small wins, and how to turn the hard stuff into a next step. It works on your own, and with a partner, friends, kids, housemates or people at work.</p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li>Make the next step tiny. Then notice, out loud, when it’s done.</li>
+    <li>Hard feelings are signals, not verdicts. Ask what each one is pointing at.</li>
+    <li>Turn a complaint into a kind, specific request, and a worry into a plan.</li>
+    <li>If it’s too heavy, a new way of looking at it is not the fix. Get support.</li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="sw-jump no-bubble">
+  <li><a href="#small-wins">Why small wins matter</a></li>
+  <li><a href="#how-to-use-small-wins">Using small wins</a></li>
+  <li><a href="#small-wins-together">Wins together</a></li>
+  <li><a href="#negativity">What hard feelings are for</a></li>
+  <li><a href="#turning-it-into-fuel">Turning it into fuel</a></li>
+  <li><a href="#in-relationships">In relationships</a></li>
+  <li><a href="#when-its-too-much">When it’s too much</a></li>
+  <li><a href="#tools">Flip it, and a done list</a></li>
+</ul>
+</nav>
+
+<h2 id="small-wins">Why small wins matter</h2>
+<p>Some goals are so big that there is no first step. “Be closer as a family.” “Stop fighting about money.” A small win is different. It is a piece you can finish, and see finished. Seeing progress is what keeps people going.</p>
+<ul>
+  <li><strong>Small wins.</strong> In 1984 the psychologist Karl Weick wrote about “small wins”. Huge problems can freeze people, he said. Cut them into small, concrete pieces and they feel doable. Each finished piece makes the next one easier to start.</li>
+  <li><strong>The progress principle.</strong> Teresa Amabile and Steven Kramer studied the daily diaries of people at work. Of everything that made a workday feel good, making progress on work that mattered stood out most, even when the progress was small.</li>
+  <li><strong>Starting tiny.</strong> In a study by Phillippa Lally and colleagues, new daily habits took weeks to months to feel automatic, and the time varied a lot from person to person. Missing a day now and then didn’t undo the progress.</li>
+  <li><strong>Tiny habits.</strong> BJ Fogg’s “Tiny Habits” is a practical method many people like: tie a very small step to something you already do, then give yourself a little “yes!” It is a coach’s method more than a tested finding.</li>
+</ul>
+<p><em>This site’s idea:</em> a small win counts double when someone else notices it too. Seeing progress together is part of what keeps a home, a friendship or a team going.</p>
+
+<h2 id="how-to-use-small-wins">How to use small wins</h2>
+<ul>
+  <li><strong>Make the next step tiny and concrete.</strong> Not “sort out the garage”, but “fill one box for the charity shop”. Not “talk more”, but “ten minutes on the sofa after dinner, phones down”.</li>
+  <li><strong>Keep a done list, not only a to-do list.</strong> A to-do list shows what’s missing. A done list shows how far you’ve come. There is one <a href="#done-list">further down this page</a>.</li>
+  <li><strong>Name wins out loud.</strong> “We did the check-in three weeks running.” Saying it makes it real for both of you.</li>
+  <li><strong>Celebrate the effort, not only the result.</strong> You can’t always control how things turn out. You can control showing up.</li>
+  <li><strong>Give each job one owner.</strong> When a job is shared vaguely, nobody gets to feel they did it. With <a href="/workpapers/wp-03-one-owner-per-job.html">one owner per job</a>, the thank-you has somewhere to land.</li>
+  <li><strong>After a setback, go smaller.</strong> If the plan fell apart, shrink the next step until it feels almost too easy. Then do it.</li>
+  <li><strong>Don’t turn wins into a scoreboard.</strong> A done list is for encouragement, not for proving who does more. If counting starts to feel like keeping score, stop counting and just say thanks.</li>
+</ul>
+<p class="tol-try" data-keep-steps><strong>Thoughts you could try:</strong> “I didn’t do all of it. I did the first part, and that counts.”</p>
+
+<h2 id="small-wins-together">Small wins together</h2>
+<ul>
+  <li><strong>Partners:</strong> try a weekly “what went right” minute. Each of you says one thing that went well and one thank-you. It is close to the “three good things” exercise studied by Martin Seligman and colleagues, where the effects were modest but encouraging.</li>
+  <li><strong>Housemates:</strong> tick off shared jobs on one list everyone can see. Empty bins are a win for the house, not a point for one person.</li>
+  <li><strong>Friends:</strong> “We actually met up twice this month!” is worth saying.</li>
+  <li><strong>Parents and kids:</strong> praise the effort and the way they tried. “You kept going when it got tricky” helps a child keep trying more than “You’re so clever”. Studies by Claudia Mueller and Carol Dweck pointed this way; later work suggests the effect is real but often modest. Let kids tick their own box.</li>
+  <li><strong>At work:</strong> tell someone when their small fix helped. A team meeting can start with one minute of “what got done” before “what’s late”. More in <a href="/appreciation-at-work.html">Appreciation at work</a>.</li>
+</ul>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Can I just say: we did the check-in three weeks running. I’m proud of us.”</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Thanks for sorting the bins this week. I noticed, and it helped.”</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use, with a child:</strong> “You kept trying when it was hard. That’s how people get good at things.”</p>
+
+<h2 id="negativity">What hard feelings are for</h2>
+<p>Anger, worry, sadness, envy, regret. Nobody enjoys them, but they are not mistakes. They point at something that matters to you, or something that needs care. A feeling is a signal, not a verdict. It tells you something is up. It doesn’t tell you who is wrong, or what will happen.</p>
+<ul>
+  <li><strong>Bad weighs more than good.</strong> Roy Baumeister and colleagues reviewed a large body of research in a paper called “Bad is stronger than good”. Paul Rozin and Edward Royzman described the same pattern as the negativity bias. One harsh comment can outweigh several kind ones. That is why small, frequent good moments matter so much, and why one bad day can feel like the whole picture when it isn’t.</li>
+  <li><strong>Fighting a feeling often makes it louder.</strong> In Daniel Wegner’s studies, people told not to think of a white bear thought of it more. James Gross and others found that hiding feelings tends to cost you, and the people around you.</li>
+  <li><strong>The goal is not toxic positivity.</strong> “Just look on the bright side” can feel like being told your feelings are wrong. This page is not about pretending. It is about using what the feeling is telling you.</li>
+</ul>
+<p class="tol-try" data-keep-steps><strong>Thoughts you could try:</strong> “I’m angry. That’s information. What is it pointing at?”</p>
+
+<h2 id="turning-it-into-fuel">Turning it into fuel</h2>
+<p>Here are some ways to put hard feelings to work. Pick the one that fits today.</p>
+<h3>Name it to tame it</h3>
+<p>Putting a feeling into words can turn its volume down a little. In brain-scanning studies by Matthew Lieberman and colleagues, labelling a feeling was linked to a calmer response. (The phrase “name it to tame it” comes from the psychiatrist Dan Siegel.) Try one precise word: not “bad”, but “left out”, “worried” or “embarrassed”.</p>
+<h3>Anger: what is it protecting?</h3>
+<p>Anger often shows up when something you care about gets stepped on: fairness, respect, your time, your limits. Ask, “What is this protecting?” Then turn it into a need you can say, once you have calmed down.</p>
+<h3>A complaint is a hidden request</h3>
+<p>John Gottman’s research separates a complaint (“I’m upset the dishes were left”) from criticism (“You’re so lazy”). Complaints are fine. Criticism hurts. Under most complaints is a request, so say the request.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> Instead of “You never help after dinner”, try “Could you do the dishes on weeknights? It would help me sit down by eight.”</p>
+<h3>Worry into a plan</h3>
+<p>Gabriele Oettingen’s research found that picturing a good outcome is not enough on its own. It works better to picture the obstacle too, and plan for it. Her method is called WOOP: Wish, Outcome, Obstacle, Plan. “If the obstacle happens, I’ll do this.”</p>
+<h3>Look again, without pretending</h3>
+<p>The psychologist James Gross calls this reappraisal: seeing the same moment in another way that is also true. “She’s ignoring me” might also be “she’s on a deadline.” It is not lying to yourself. If the hard version is true, you don’t have to talk yourself out of it.</p>
+<h3>If you expect the worst, and it helps</h3>
+<p>Julie Norem studied “defensive pessimism”. Some people cope by picturing what could go wrong, then getting ready. For them, being cheered up can make things worse. If this is you, it is a style, not a flaw. Let the worry write the checklist, then put it down.</p>
+<h3>Stress as energy</h3>
+<p>Some studies, such as those by Alia Crum and colleagues, suggest that seeing stress as energy for a challenge can change how it feels, and sometimes how you do. The evidence is still developing. It is not a reason to put up with stress that never stops.</p>
+<h3>Regret and envy as information</h3>
+<p><em>This site’s idea:</em> regret often points at something you value. “I wish I’d called Dad more” can become a call this week. Envy can show you what you want. If a friend’s news stings, ask what you would like more of in your own life. Neither feeling makes you a bad person.</p>
+<h3>Growth after hard times</h3>
+<p>Some people say a very hard time changed them in ways they value, like closer ties or clearer priorities. The researchers Richard Tedeschi and Lawrence Calhoun call this post-traumatic growth. It doesn’t happen for everyone, and it isn’t required. It never means you “had to” go through something. Getting through is enough.</p>
+<p class="tol-try" data-keep-steps><strong>Thoughts you could try:</strong> “This hurts because I care about ___. What’s one small thing I can do for that today?”</p>
+
+<h2 id="in-relationships">Turning the hard stuff into something useful, together</h2>
+<ul>
+  <li><strong>Turn a fight into an agreement.</strong> When things are calm, ask, “What did we each actually need?” Write down one line you both agree on. Next time, you have a plan instead of a repeat.</li>
+  <li><strong>Turn a frustration that keeps coming back into one small experiment.</strong> “Let’s try a list on the fridge for two weeks, then see.” An experiment can fail without anyone failing.</li>
+  <li><strong>Turn criticism you received into one useful thing.</strong> Ask, “Is one part of this true and useful?” Keep that part. If it is cruel, vague or about who you are rather than what you did, you can let it go.</li>
+  <li><strong>Notice instead of keeping score.</strong> Keeping score asks, “Who’s behind?” Noticing asks, “What’s working?” <a href="/lemonade-stand.html">The Lemonade Stand</a> helps you see the whole load without blame.</li>
+</ul>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “That last argument was rough. Can we each pick one thing we’d do differently next time?”</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Let’s try it for two weeks, then check in. If it doesn’t work, we change the plan, not blame each other.”</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use, at work:</strong> “Thanks for the feedback. Could you give me one example, so I know what to change?”</p>
+<div class="sw-safe" data-keep-steps role="note">
+  <p><strong>If you are afraid, it is not a reframing problem.</strong> If an argument leaves you scared, or one person controls the money, the phone or who you see, please put your safety first. See <a href="/safety.html">Not safe at home?</a></p>
+</div>
+
+<h2 id="when-its-too-much">When it’s too much</h2>
+<p>Sometimes the hard stuff is not a signal to act on. It is a weight. You may feel low most days for weeks. Nothing may feel good any more. Work may have worn you out in a way rest doesn’t fix. You may be grieving, or frightened. Then a new way of looking at it is not the fix, and nobody should ask you to “stay positive”. You deserve real support.</p>
+<ul class="sw-links no-bubble">
+  <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>Steps to calm down, on your own or together.</span></a></li>
+  <li><a href="/ladder.html"><strong>Where am I right now?</strong><span>A one-minute check on how your body is doing, with what tends to help at each step.</span></a></li>
+  <li><a href="/safety.html"><strong>Not safe at home?</strong><span>Free, private people to talk to, and a quick way to leave this site.</span></a></li>
+</ul>
+<div class="sw-safe" data-keep-steps>
+  <p><strong>Finding a counsellor:</strong> your doctor can suggest one. Many workplaces, colleges and universities offer free, private counselling (at work it may be called an employee assistance programme). Professional bodies in many countries keep a list of qualified counsellors and therapists.</p>
+  <p><strong>If you are thinking about ending your life or hurting yourself:</strong> in the US, call or text 988. Elsewhere, <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free lines by country. If you are in danger now, call your local emergency number.</p>
+</div>
+
+<h2 id="tools">Two small tools: Flip it, and a done list</h2>
+<p>Everything you type here stays in this browser. Nothing is uploaded or sent.</p>
+
+<section class="sw-tool" id="flip-it" aria-labelledby="flip-h" data-keep-steps>
+  <h3 id="flip-h">Flip it</h3>
+  <p class="sw-note">Type a complaint, a worry or a harsh thought. Pick what kind it is. You’ll get a suggested flip to start from. It is a simple set of rules, not a person, so change the words until they sound like you.</p>
+  <label for="sw-flip-text">What’s on your mind?</label>
+  <textarea id="sw-flip-text" maxlength="600" placeholder="For example: You never help with the dishes."></textarea>
+  <fieldset class="sw-types">
+    <legend>What kind is it?</legend>
+    <div class="sw-chips">
+      <label class="sw-chip"><input type="radio" name="sw-type" value="complaint" checked><span>A complaint about someone</span></label>
+      <label class="sw-chip"><input type="radio" name="sw-type" value="worry"><span>A worry</span></label>
+      <label class="sw-chip"><input type="radio" name="sw-type" value="self"><span>Being hard on myself</span></label>
+      <label class="sw-chip"><input type="radio" name="sw-type" value="anger"><span>Anger</span></label>
+    </div>
+  </fieldset>
+  <div class="sw-acts">
+    <button type="button" class="sw-btn" id="sw-flip-go">Flip it</button>
+    <button type="button" class="sw-btn is-quiet" id="sw-flip-clear">Clear</button>
+  </div>
+  <div class="sw-alert" id="sw-flip-alert" role="alert" hidden></div>
+  <div class="sw-out" id="sw-flip-out" tabindex="-1" aria-live="polite"></div>
+  <p class="sw-note" id="sw-flip-why" hidden></p>
+  <div class="sw-acts" id="sw-flip-acts" hidden>
+    <button type="button" class="sw-btn is-quiet" id="sw-flip-copy">Copy</button>
+    <a class="sw-btn is-quiet" id="sw-flip-check" href="/signal-translator.html">Check it in the Signal Translator</a>
+  </div>
+  <p class="sw-status" id="sw-flip-status" aria-live="polite"></p>
+</section>
+
+<section class="sw-tool" id="done-list" aria-labelledby="done-h" data-keep-steps>
+  <h3 id="done-h">Your done list</h3>
+  <p class="sw-note">Write down one small thing that went right, however small. Look back at the week when it feels like nothing is moving.</p>
+  <form id="sw-win-form" class="sw-add" autocomplete="off">
+    <div class="sw-add-row">
+      <div>
+        <label for="sw-win-text">A small win</label>
+        <input type="text" id="sw-win-text" maxlength="200" placeholder="For example: We did our check-in.">
+      </div>
+      <div>
+        <label for="sw-win-who">Who it was with (if anyone)</label>
+        <select id="sw-win-who">
+          <option value="">Just me</option>
+          <option value="partner">With a partner</option>
+          <option value="friend">With a friend</option>
+          <option value="family">With family</option>
+          <option value="kids">With the kids</option>
+          <option value="home">With housemates</option>
+          <option value="work">At work</option>
+        </select>
+      </div>
+    </div>
+    <div class="sw-acts">
+      <button type="submit" class="sw-btn">Add to my done list</button>
+    </div>
+  </form>
+  <p class="sw-status" id="sw-win-status" aria-live="polite"></p>
+  <p class="sw-week" id="sw-week-h">This week</p>
+  <ul class="sw-list no-bubble" id="sw-week-list" aria-labelledby="sw-week-h"></ul>
+  <p class="sw-note" id="sw-week-empty">Nothing yet this week. Something small counts: a message you finally sent, a walk, a thank-you.</p>
+  <details id="sw-earlier" hidden>
+    <summary>Earlier wins</summary>
+    <ul class="sw-list no-bubble" id="sw-earlier-list"></ul>
+  </details>
+  <div class="sw-acts">
+    <button type="button" class="sw-btn is-quiet" id="sw-share-week">Share a win</button>
+    <button type="button" class="sw-btn is-quiet" id="sw-erase">Erase my done list</button>
+  </div>
+  <p class="sw-note">Your done list is kept only in this browser, so you can come back to it. Erase it any time here, or see everything this site keeps on <a href="/on-this-device.html">What’s stored on this device</a>.</p>
+</section>
+
+<h2 id="more">More for your situation</h2>
+<ul class="sw-links no-bubble">
+  <li><a href="/book/understanding-6-change.html"><strong>Habits and change: how small steps work</strong><span>The longer chapter on why tiny steps stick.</span></a></li>
+  <li><a href="/book/understanding-1-feelings.html"><strong>How feelings work, and naming what you feel</strong><span>More on feelings as signals, and finding the right word.</span></a></li>
+  <li><a href="/book/understanding-7-worth.html"><strong>Self-worth, shame and self-compassion</strong><span>For when the harsh voice is your own.</span></a></li>
+  <li><a href="/communication.html"><strong>Effective communication</strong><span>Asks that land, listening, and repair after a fight.</span></a></li>
+  <li><a href="/check-ins.html"><strong>Check-ins</strong><span>A short, calm weekly talk. A good place for a “what went right” minute.</span></a></li>
+  <li><a href="/turning-toward.html"><strong>Turning toward</strong><span>Seven small habits for closer relationships.</span></a></li>
+  <li><a href="/bonding.html"><strong>Bonding</strong><span>How closeness grows, and small ways to grow it.</span></a></li>
+  <li><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>See who does what, as a plain picture, with no blame.</span></a></li>
+  <li><a href="/refusals.html"><strong>Say no kindly</strong><span>Calm words for a limit.</span></a></li>
+  <li><a href="/appreciation-at-work.html"><strong>Appreciation at work</strong><span>Five ways people like to be thanked.</span></a></li>
+</ul>
+
+<script>
+(function () {
+  'use strict';
+  // Two small tools. Rule-based, all on this device. The done list is kept in localStorage
+  // under 'tol-small-wins'; the Flip it text is never stored (only handed to the Signal Translator
+  // through this tab's sessionStorage, 'tol-st-text', when you tap that link).
+  var $ = function (id) { return document.getElementById(id); };
+  function say(el, msg) { if (!el) return; el.textContent = ''; setTimeout(function () { el.textContent = msg; }, 30); }
+  function copyText(text) {
+    function fallback() {
+      var ta = document.createElement('textarea'), ok = false;
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select();
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove(); return ok;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return fallback(); });
+    return Promise.resolve(fallback());
+  }
+
+  /* ---------------- Flip it ---------------- */
+  var CRISIS = /\b(kill(ing)? myself|end(ing)? (it all|my life)|want(ed)? to die|wish i (was|were) dead|suicid\w*|hurt(ing)? myself|better off without me|no (point|reason) (in )?(living|going on))\b/i;
+  var DANGER = /\b(hits? me|hitting me|hurts? me|pushed me|chok\w+ me|threaten\w*|scared of (him|her|them)|afraid of (him|her|them)|(won'?t|doesn'?t|don'?t|never) lets? me (see|go|leave|have|out)|checks? my phone|takes? my money|controls? (my|me|everything))\b/i;
+  var LABELS = /\b(stupid|an idiot|idiot|useless|a failure|failure|lazy|hopeless|pathetic|worthless|a mess|a loser|loser|terrible|awful|not good enough|a burden|a bad (mum|mom|dad|mother|father|parent|partner|friend|person|wife|husband|boss|son|daughter))\b/i;
+
+  function tidy(s) { return String(s || '').replace(/\s+/g, ' ').trim().replace(/[.!?…]+$/, '').trim(); }
+  function unthird(verb) {
+    var v = verb.toLowerCase();
+    var map = { does: 'do', has: 'have', is: 'be', goes: 'go', says: 'say' };
+    if (map[v]) return map[v];
+    if (/ies$/.test(v) && v.length > 4) return v.slice(0, -3) + 'y';
+    if (/(sh|ch|ss|x|z)es$/.test(v)) return v.slice(0, -2);
+    if (/[^s]s$/.test(v)) return v.slice(0, -1);
+    return v;
+  }
+  function toYou(rest, who, third) {
+    var words = rest.split(' ');
+    if (third && words.length) words[0] = unthird(words[0]);
+    var out = words.join(' ');
+    if (who === 'he') out = out.replace(/\bhis\b/gi, 'your').replace(/\bhimself\b/gi, 'yourself').replace(/\bhim\b/gi, 'you');
+    if (who === 'she') out = out.replace(/\bherself\b/gi, 'yourself').replace(/\bher\b/gi, 'your');
+    if (who === 'they') out = out.replace(/\btheir\b/gi, 'your').replace(/\bthemselves\b/gi, 'yourselves');
+    return out;
+  }
+  function complaintFlip(t) {
+    var neg = t.match(/\b(you|he|she|they)\s+(?:never(?:\s+ever)?|don'?t\s+ever|doesn'?t\s+ever|won'?t\s+ever|don'?t|do not|doesn'?t|does not|won'?t|will not|can'?t be bothered to|can'?t even|never even|didn'?t|did not)\s+(.+)$/i);
+    var alw = t.match(/\b(you|he|she|they)\s+(always|keeps?|constantly|forever)\s+(.+)$/i);
+    var lines, send;
+    if (neg) {
+      var who = neg[1].toLowerCase(), third = (who === 'he' || who === 'she') && /never/i.test(neg[0]) && !/doesn|does not/i.test(neg[0]);
+      var act = toYou(tidy(neg[2]), who, third);
+      send = 'Could you ' + act + ' by [when]? It would help me [what it gives you].';
+      lines = ['What you could say:', '“' + send + '”', '', 'Fill in the gaps: a day or time, and what it gives you (time to rest, less worry, feeling like a team).'];
+    } else if (alw) {
+      var who2 = alw[1].toLowerCase(), keep = /^keep/i.test(alw[2]);
+      var act2 = toYou(tidy(alw[3]), who2, !keep && (who2 === 'he' || who2 === 'she'));
+      if (keep) act2 = 'keep ' + act2;
+      send = 'When you ' + act2 + ', I feel [one feeling word]. Could you [what you’d like instead] by [when]? It would help me [what it gives you].';
+      lines = ['What you could say:', '“' + send + '”', '', 'Swap “always” for the one time that bothered you most. Then ask for what you’d like instead, not what you want them to stop.'];
+    } else {
+      send = 'I’d like to ask for one thing. Could you [one specific thing] by [when]? It would help me [what it gives you].';
+      lines = ['What happened, in plain words:', '“' + t + '”', '', 'What you could say:', '“' + send + '”', '', 'Ask yourself: what do I want to happen next time? Put that in the gap.'];
+    }
+    return { text: lines.join('\n'), send: send, why: 'Under most complaints is a request. One clear ask, with a time and a reason, is easier to say yes to than “you never”. (From John Gottman’s research on complaints versus criticism.)' };
+  }
+  function worryFlip(t) {
+    var m = t.match(/\bwhat if\s+(.+)$/i) || t.match(/\b(?:i'?m|i am|i feel)\s+(?:so\s+|really\s+|very\s+|a bit\s+)?(?:worried|scared|afraid|anxious|nervous|stressed)\s+(?:that|about|of)\s+(.+)$/i) || t.match(/\bworried\s+(?:that|about)\s+(.+)$/i);
+    var obstacle = m ? tidy(m[1]) : '';
+    var lines = [
+      'The best outcome would be: [what you hope for]',
+      'The main thing in the way: ' + (obstacle ? obstacle : '[what you fear could happen]'),
+      'If that happens, I’ll: [one small thing you could do]',
+      'One step today: [something that takes ten minutes or less]'
+    ];
+    return { text: lines.join('\n'), send: '', why: 'This is WOOP, from Gabriele Oettingen’s research: Wish, Outcome, Obstacle, Plan. The worry becomes the obstacle you plan for.' };
+  }
+  function selfFlip(t) {
+    var lab = t.match(LABELS), ev = t.match(/\bi\s+((?:forgot|missed|messed up|failed|lost|said|snapped|yelled|shouted|broke|ruined|didn'?t|did not|couldn'?t|could not|wasted|skipped|overslept|let)\b.*)$/i);
+    var event = ev ? tidy(ev[1].replace(/\bmy\b/gi, 'your').replace(/\bme\b/gi, 'you').replace(/\bmyself\b/gi, 'yourself').replace(/\bi\b/gi, 'you')) : '';
+    var label = lab ? lab[1].toLowerCase() : '';
+    var friend = event ? 'You ' + event + '. That’s one moment, not the whole of you.' : 'That sounds like a hard moment. One mistake is not the whole of you.';
+    if (label) friend += /^not /.test(label) ? ' You’re enough, even on a hard day.' : ' You’re not ' + (/^(idiot|failure|loser)$/.test(label) ? 'a ' + label : label) + '. You’re a person having a hard day.';
+    var lines = [
+      'What a good friend might say:',
+      '“' + friend + '”',
+      '',
+      'Kinder words for yourself:',
+      '“I ' + (ev ? tidy(ev[1]) : 'had a hard moment') + '. I’m human. Next time I’ll [one thing].”',
+      '',
+      'One next step: [one small thing, like a short sorry, a reminder on your phone, or some rest]'
+    ];
+    return { text: lines.join('\n'), send: '', why: 'Talking to yourself the way you’d talk to a friend is a simple form of self-compassion. Being harsh rarely makes the next try easier.' };
+  }
+  var VALUES = [
+    [/unfair|fair\b|always me|only one who|all the work|the load|chores?/i, 'fairness, and sharing the load'],
+    [/\blie[sd]?\b|lying|honest|behind my back|secret/i, 'honesty and trust'],
+    [/\blate\b|waiting|waited|cancel\w*|stood me up|forgot/i, 'being able to count on each other, and my time'],
+    [/ignor\w+|interrupt\w*|didn'?t listen|not listening|dismiss\w*|talked over/i, 'being heard'],
+    [/rude|disrespect\w*|shout\w*|yell\w*|mock\w*|laugh\w* at|sarcas\w*|belittl\w*|eye-?roll/i, 'respect'],
+    [/money|spent|spend\w*|bills?\b|debt/i, 'having a say in shared money'],
+    [/credit|boss|manager|meeting|took my idea/i, 'fair credit and clear roles'],
+    [/mess|dishes|tidy|clean\w*|laundry/i, 'a home that works for all of us']
+  ];
+  function angerFlip(t) {
+    var val = '';
+    for (var i = 0; i < VALUES.length; i++) if (VALUES[i][0].test(t)) { val = VALUES[i][1]; break; }
+    var send = 'This matters to me because I care about ' + (val || '[what this is protecting]') + '. What I need is [one specific thing]. Could you [one small ask] by [when]?';
+    var lines = [
+      'This matters to me because I care about: ' + (val || '[what this is protecting]'),
+      'What I need is: [one specific thing]',
+      'One thing I could ask for: “Could you [one small ask] by [when]?”',
+      'When I’ll say it: [a calm time, not in the heat of it]'
+    ];
+    return { text: lines.join('\n'), send: send, why: 'Anger is information about a value or a limit. Use it to find the request, then wait until your body has settled before you say it.' };
+  }
+
+  var fText = $('sw-flip-text'), fOut = $('sw-flip-out'), fWhy = $('sw-flip-why'), fActs = $('sw-flip-acts'), fAlert = $('sw-flip-alert'), fStatus = $('sw-flip-status'), fCheck = $('sw-flip-check');
+  var last = null;
+  function kind() { var r = document.querySelector('input[name="sw-type"]:checked'); return r ? r.value : 'complaint'; }
+  function resetFlip() { fOut.textContent = ''; fWhy.hidden = true; fActs.hidden = true; fAlert.hidden = true; fAlert.innerHTML = ''; last = null; }
+  function flip() {
+    var raw = fText.value, t = tidy(raw);
+    resetFlip();
+    if (!t) { say(fStatus, 'Type a sentence first. A rough one is fine.'); fText.focus(); return; }
+    if (CRISIS.test(raw)) {
+      fAlert.innerHTML = '<p><strong>It sounds like you might be in a lot of pain.</strong> You don’t have to carry this alone. In the US, call or text <strong>988</strong>. Elsewhere, <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free lines by country. If you are in danger now, call your local emergency number.</p>';
+      fAlert.hidden = false; say(fStatus, ''); return;
+    }
+    var k = kind();
+    last = k === 'worry' ? worryFlip(t) : k === 'self' ? selfFlip(t) : k === 'anger' ? angerFlip(t) : complaintFlip(t);
+    if (DANGER.test(raw)) {
+      fAlert.innerHTML = '<p><strong>If you feel afraid of someone, or they control you, a kinder request is not the answer.</strong> Please put your safety first: <a href="/safety.html">Not safe at home?</a></p>';
+      fAlert.hidden = false;
+    }
+    fOut.textContent = last.text;
+    fWhy.textContent = last.why + ' This is a starting point. Change any words you like.';
+    fWhy.hidden = false;
+    fActs.hidden = false;
+    fCheck.hidden = !last.send;
+    say(fStatus, 'Here is a flip to start from.');
+    try { fOut.focus({ preventScroll: true }); } catch (e) { fOut.focus(); }
+  }
+  $('sw-flip-go').addEventListener('click', flip);
+  fText.addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); flip(); } });
+  $('sw-flip-clear').addEventListener('click', function () { fText.value = ''; resetFlip(); say(fStatus, 'Cleared.'); fText.focus(); });
+  $('sw-flip-copy').addEventListener('click', function () {
+    if (!last) return;
+    var b = this;
+    copyText(last.text).then(function (ok) {
+      if (ok) { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); say(fStatus, 'Copied. Fill in the gaps in your own words.'); }
+      else say(fStatus, 'Copying didn’t work here. Select the words and copy them by hand.');
+    });
+  });
+  // The Signal Translator picks the words up from this tab's sessionStorage, so they never go in the address.
+  fCheck.addEventListener('click', function () {
+    var t = last && last.send ? last.send : tidy(fText.value);
+    if (!t) return;
+    try { sessionStorage.setItem('tol-st-text', t.slice(0, 1500)); } catch (x) {}
+  });
+
+  /* ---------------- Done list ---------------- */
+  var KEY = 'tol-small-wins', MAX = 300;
+  var WHO = { '': '', partner: 'With a partner', friend: 'With a friend', family: 'With family', kids: 'With the kids', home: 'With housemates', work: 'At work' };
+  function load() {
+    try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(a) ? a.filter(function (w) { return w && typeof w.t === 'string'; }) : []; } catch (e) { return []; }
+  }
+  function save(a) { try { localStorage.setItem(KEY, JSON.stringify(a.slice(-MAX))); return true; } catch (e) { return false; } }
+  function weekStart() { var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d.getTime(); }
+  function niceDate(ts) { try { return new Date(ts).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' }); } catch (e) { return ''; } }
+  var wStatus = $('sw-win-status'), wList = $('sw-week-list'), eList = $('sw-earlier-list'), wEmpty = $('sw-week-empty'), wEarlier = $('sw-earlier');
+  var memory = null; // when storage is blocked, keep the list for this visit only
+  function wins() { return memory || load(); }
+  function shareWin(text) {
+    var msg = text;
+    if (window.TOLShareKit && window.TOLShareKit.shareText) { window.TOLShareKit.shareText({ title: 'A small win', text: msg, heading: 'Share a win' }); return; }
+    if (navigator.share) { navigator.share({ title: 'A small win', text: msg }).catch(function () {}); return; }
+    copyText(msg).then(function (ok) { say(wStatus, ok ? 'Copied. Paste it into a message.' : 'Sharing didn’t work here. Select the words and copy them by hand.'); });
+  }
+  function item(w, idx) {
+    var li = document.createElement('li');
+    var span = document.createElement('span'); span.className = 'sw-win'; span.textContent = w.t;
+    var meta = document.createElement('span'); meta.className = 'sw-meta'; meta.textContent = [niceDate(w.ts), WHO[w.w] || ''].filter(Boolean).join(' · ');
+    span.appendChild(meta);
+    var sh = document.createElement('button'); sh.type = 'button'; sh.className = 'sw-small'; sh.textContent = 'Share'; sh.setAttribute('aria-label', 'Share: ' + w.t);
+    sh.addEventListener('click', function () { shareWin('A small win: ' + w.t); });
+    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'sw-small'; rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove: ' + w.t);
+    rm.addEventListener('click', function () {
+      var a = wins(); a.splice(idx, 1); memory = save(a) ? null : a; render(); say(wStatus, 'Removed.');
+      var f = $('sw-win-text'); if (f) f.focus();
+    });
+    li.appendChild(span); li.appendChild(sh); li.appendChild(rm);
+    return li;
+  }
+  function render() {
+    var a = wins(), ws = weekStart(), nw = 0, ne = 0;
+    wList.innerHTML = ''; eList.innerHTML = '';
+    for (var i = a.length - 1; i >= 0; i--) {
+      if ((a[i].ts || 0) >= ws) { wList.appendChild(item(a[i], i)); nw++; }
+      else if (ne < 60) { eList.appendChild(item(a[i], i)); ne++; }
+    }
+    $('sw-week-h').textContent = nw ? 'This week: ' + nw + ' small ' + (nw === 1 ? 'win' : 'wins') : 'This week';
+    wEmpty.hidden = nw > 0;
+    wList.hidden = nw === 0;
+    wEarlier.hidden = ne === 0;
+  }
+  $('sw-win-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = $('sw-win-text'), t = tidy(f.value).slice(0, 200);
+    if (!t) { say(wStatus, 'Write one small thing first. Small counts.'); f.focus(); return; }
+    var a = wins(); a.push({ t: t, w: $('sw-win-who').value, ts: Date.now() });
+    if (save(a)) { memory = null; say(wStatus, 'Added. Nice one.'); }
+    else { memory = a; say(wStatus, 'Added for this visit. This browser isn’t letting the page keep it after you leave.'); }
+    f.value = ''; render(); f.focus();
+  });
+  $('sw-share-week').addEventListener('click', function () {
+    var a = wins(), ws = weekStart(), mine = a.filter(function (w) { return (w.ts || 0) >= ws; });
+    if (!mine.length) { say(wStatus, 'Add a win first, then you can share it.'); $('sw-win-text').focus(); return; }
+    var text = mine.length === 1 ? 'A small win this week: ' + mine[0].t : 'Small wins this week:\n' + mine.map(function (w) { return '• ' + w.t; }).join('\n');
+    shareWin(text);
+  });
+  $('sw-erase').addEventListener('click', function () {
+    if (!wins().length) { say(wStatus, 'Your done list is already empty.'); return; }
+    if (!window.confirm('Erase your whole done list from this browser? This can’t be undone.')) return;
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    memory = null; render(); say(wStatus, 'Erased from this browser.');
+  });
+  render();
+})();
+</script>
+</main>
+</body>
+</html>

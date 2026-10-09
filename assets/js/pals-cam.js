@@ -1041,6 +1041,7 @@
     if (r.cape) P.cape(g, L, clock, r.cape, r.capeFly);
     else if (r.capePrev && r.prevA > 0) { g.save(); g.globalAlpha *= r.prevA; P.cape(g, L, clock, r.capePrev, false); g.restore(); }
     P.draw(g, L, r.pose, r.ph, Math.sin(r.wph) * (i ? 0.4 : 0.55), /* Sugarfoot's wag is gentler */ !!r.blink, clock, r.tilt, { ear: r.ear, noEar: r.noEar });
+    var hl = A.headL(i); r.headM = g.getTransform().translate(hl.x, hl.y); // where her head is (for the test pages)
     if (r.over) safeCall(r.over, i);
     if (r.overPrev && r.prevA > 0) { g.save(); g.globalAlpha *= r.prevA; safeCall(r.overPrev, i); g.restore(); }
     g.restore();
@@ -1594,6 +1595,7 @@
     playAct: function (id) { var a = BYID[id]; if (!isOpen || !a || MB.prev || a.ad) return false; if (a.where && a.where.indexOf(setting.id) < 0) { var st = settingById(a.where[0]); if (st) toSetting(st); } startTravel(a, {}); return true; },
     settingId: function () { return setting && setting.id; }, soundNote: function () { return noteOpen(); }, hideSoundNote: function () { hideNote(false); },
     frames: function () { return frames.slice(); }, resetFrames: function () { frames.length = 0; },
+    heads: function () { return R.map(function (r) { return r.hide || r.alpha < 0.3 ? null : r.headM || null; }); }, // for testing: each pal's head (canvas transform)
     state: function () {
       var r = cv ? cv.getBoundingClientRect() : { left: 0, top: 0 };
       function toClient(x, y) { return [r.left + OX + x * K, r.top + OY + y * K]; }
