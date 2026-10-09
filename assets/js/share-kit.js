@@ -209,16 +209,22 @@
             if (t < size && get(t) === get(t - 1)) r++;
             else { if (r >= 5) s += 3 + (r - 5); r = 1; }
           }
-          // 1:1:3:1:1 finder-like runs with four light modules on one side (outside counts as light)
-          for (t = -4; t < size; t++) {
-            var pat = [true, false, true, true, true, false, true];
-            var ok = true;
-            for (var u = 0; u < 7 && ok; u++) { var v = t + u; ok = v >= 0 && v < size && get(v) === pat[u]; }
-            if (!ok) continue;
-            var before = true, after = true;
-            for (u = 1; u <= 4; u++) { var bv = t - u, av = t + 6 + u; if (bv >= 0 && bv < size && get(bv)) before = false; if (av >= 0 && av < size && get(av)) after = false; }
-            if (before) s += 40;
-            if (after) s += 40;
+          // finder-like runs in the ratio 1:1:3:1:1 (dark, light, dark, light, dark) with a light run of
+          // four times the unit on one side; the outside of the code counts as light
+          var runs = [], col = get(0), len = 1;
+          for (t = 1; t <= size; t++) {
+            if (t < size && get(t) === col) len++;
+            else { runs.push([col, len]); if (t < size) { col = get(t); len = 1; } }
+          }
+          if (runs[0][0]) runs.unshift([false, size]); else runs[0][1] += size;
+          if (runs[runs.length - 1][0]) runs.push([false, size]); else runs[runs.length - 1][1] += size;
+          for (t = 1; t + 5 < runs.length; t += 1) {
+            if (!runs[t][0]) continue;
+            var n = runs[t][1];
+            if (runs[t + 1][1] !== n || runs[t + 2][1] !== 3 * n || runs[t + 3][1] !== n || runs[t + 4][1] !== n) continue;
+            var before = runs[t - 1][1], after = runs[t + 5][1];
+            if (before >= 4 * n && after >= n) s += 40;
+            if (after >= 4 * n && before >= n) s += 40;
           }
           return s;
         }

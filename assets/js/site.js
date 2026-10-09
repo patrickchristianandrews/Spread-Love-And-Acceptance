@@ -297,7 +297,7 @@
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors and coaches', note: 'Using these free pages with clients and groups' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Part One about yourself, and the book by topic' }
     ]},
-    { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games have their own place in Calm & play.', items: [
+    { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
       { sub: 'Just me', all: '/by-relationship.html#just-me', allLabel: 'All for just me' },
       { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
@@ -349,8 +349,6 @@
       { href: '/grief.html', title: 'Grief and later life', note: 'Loss, and a new chapter' },
       { sub: 'Miscellaneous', all: '/by-relationship.html#misc', allLabel: 'All the odds and ends' },
       { href: '/install.html', title: 'Get the app', note: 'Its own icon, works offline' },
-      { href: '/podcast-index.html', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
-      { href: '/echoes-of-gold.html', title: 'Echoes of Gold', note: 'The companion album' },
       { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps' }
     ]},
     { id: 'load', name: 'Share the load', title: 'Share the load', blurb: 'Split the work at home fairly, step by step. What you type stays on your device.', items: [
@@ -416,8 +414,6 @@
       { sub: 'Settle yourself' },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
-      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html', code: 'Audio', title: 'Soundscapes', note: 'Background audio for settling down' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
       { sub: 'Before you say it' },
       { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask, before you send' },
@@ -426,11 +422,10 @@
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session you can run alone, for when a talk goes sideways' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' }
     ]},
-    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, cartoons and sounds for a busy mind. No timers and no way to lose.', items: [
+    { id: 'play', name: 'Calm & play', title: 'Calm & play', blurb: 'Calm games, breathing and quiet tools for a busy mind. No timers and no way to lose. Cartoons and music are in Watch & listen.', items: [
       { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
-      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions' },
       { sub: 'Games' },
       { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games: a maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game' },
       { href: '/word-bloom.html', code: 'Game', title: 'Word Bloom', note: 'Swipe across the petals to spell words, in gentle levels' },
@@ -438,15 +433,33 @@
       { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
-      { sub: 'Breathe & sounds' },
-      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces from soft to cinematic, with a music visualizer and vibration' },
-      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
-      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' },
-      { sub: 'Cartoons' },
-      { href: '/frequency-buddies-music-video.html', code: 'New', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
+      { sub: 'Breathe & quiet' },
+      { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
+      { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
+      { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
+      { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
+      { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' }
+    ]},
+    { id: 'media', name: 'Watch & listen', title: 'Watch & listen', blurb: 'The pups’ cartoon, calm music and sounds, and the podcast. Every episode has captions.', items: [
+      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions' },
+      { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'Drop in on the episode playing now, or cast it to your TV' },
+      { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces from soft to cinematic, with a music visualizer' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
+      { sub: 'Frequency Buddies cartoon' },
+      { href: '/frequency-buddies.html', code: 'Cartoon', title: 'All the episodes', note: 'Five animated adventures with the two pals, with captions' },
+      { href: '/frequency-buddies-live.html', code: 'On air', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
+      { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Episodes on shuffle', note: 'Episode after episode in a random order' },
+      { href: '/frequency-buddies-music-video.html', code: 'Song', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
       { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
-      { href: '/frequency-buddies-season-2.html', code: 'Teaser', title: 'Season 2 teaser', note: 'Out now: new places, new friends, and five hidden secrets' },
+      { href: '/frequency-buddies-season-2.html', code: 'Teaser', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
+      { sub: 'Music and calm sounds' },
+      { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualizer and vibration' },
+      { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
+      { href: '/wp-11-sound-toolkit.html', code: 'Sounds', title: 'Calm-down sounds', note: 'Brown noise, a low hum and a soft flutter' },
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
+      { sub: 'Talks and the pups live' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library, guides and stories. Each page has a short version and a deeper one.', items: [
@@ -473,7 +486,6 @@
       { sub: 'Library and stories' },
       { href: '/learn/index.html', deep: true, code: 'Stories', title: 'Stories from Philosophy', note: 'Old stories with useful ideas inside' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from trusted sources' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
       { href: '/frequency-framework.html', deep: true, title: 'The Frequency Framework', note: 'Why two kind people fall out of step, and how to find the rhythm again' },
       { href: '/infographic.html', title: 'The whole idea on one page', note: 'A printable summary, easy to share' },
       { href: '/polymath.html', title: 'The polymath way', note: 'How thirteen fields of study became one program' },
@@ -845,7 +857,7 @@
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
-    var FOLD = { read: 1, new: 2, self: 3 };
+    var FOLD = { read: 1, media: 2, new: 3, self: 4 };
     RIBBON.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= RIBBON.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.appendChild(d); });
     // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
     var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
@@ -1128,7 +1140,7 @@
       // the size words really show at: the root size, times the page zoom the Text size setting adds
       var zoomed = parseFloat(getComputedStyle(document.body).zoom) || 1;
       html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) * zoomed >= 20);
-      bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
+      bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4', 'is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
       var name = bar.querySelector('.tol-brand span'), brand = bar.querySelector('.tol-brand'), logo = bar.querySelector('.tol-logo');
       function crowded() {
         var named = name && !bar.classList.contains('is-tighter'); // once the name is tucked away it can't be squeezed
@@ -1146,8 +1158,8 @@
       // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
       var es = bar.querySelector('.tol-es-link');
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
-      ['is-fold1', 'is-fold2', 'is-fold3'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
-      if (crowded()) bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3');
+      ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      if (crowded()) bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4');
       ['is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
     }

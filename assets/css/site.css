@@ -2577,8 +2577,8 @@ html.tol-work .tol-pud-fab::before{ content:"?"; font:700 1.15rem/1 system-ui, s
 html.tol-work .tol-simple .read-head::after, html.tol-work .tol-deep .read-head::after{ display:none !important; }
 html.tol-work .tol-wash i{ opacity:.35; }
 /* plain mode also drops the tip of the day, reading and cartoon suggestions, promos, garden levels, and the Calm & play menu */
-html.tol-work :is(.tol-tip, .tol-fp-note, .tol-read, .tol-fbs, .tol-pud-card, .tr-toast, .tr-card, #tol-sec-play, [data-work-hide]){ display:none !important; }
-html.tol-work .tol-nav-item:has(> button[data-sec="play"]){ display:none !important; }
+html.tol-work :is(.tol-tip, .tol-fp-note, .tol-read, .tol-fbs, .tol-pud-card, .tr-toast, .tr-card, #tol-sec-play, #tol-sec-media, [data-work-hide]){ display:none !important; }
+html.tol-work .tol-nav-item:has(> button:is([data-sec="play"], [data-sec="media"])){ display:none !important; }
 html.tol-work main .tol-work-note{ margin:0 0 1rem; }
 /* the home "Pick up where you left off" card now sits inside the opening block */
 html.tol-home .hh .tol-pickup-host{ margin:.8rem 0 1rem; }
@@ -2626,7 +2626,7 @@ html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-
 .tol-subm-all a{ font-weight:600; color:var(--focus, #2B5B8C) !important; }
 .tol-drop .tol-tree > li:first-child > .tol-subm-btn{ border-top:0; }
 /* the At work page on its own keeps Calm & play in the menus (only work mode, when chosen, hides it) */
-html.tol-work-page .tol-nav-item:has(> button[data-sec="play"]), html.tol-work-page #tol-sec-play{ display:block !important; }
+html.tol-work-page .tol-nav-item:has(> button:is([data-sec="play"], [data-sec="media"])), html.tol-work-page :is(#tol-sec-play, #tol-sec-media){ display:block !important; }
 /* "En español": a plain link in the top bar, the same size as the section buttons (it steps aside when the bar is full) */
 .tol-bar a.tol-es-link{ font:inherit; font-size:1rem; color:var(--ink); padding:.5rem .7rem; border:1px solid transparent; border-radius:var(--radius, 6px); text-decoration:none; white-space:nowrap; line-height:1.2; }
 .tol-bar a.tol-es-link:hover{ border-color:var(--line); background:var(--paper-deep); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
@@ -2645,6 +2645,6 @@ html.tol-work-page .tol-nav-item:has(> button[data-sec="play"]), html.tol-work-p
 .tol-es-hint button{ margin-left:auto; font:inherit; font-size:.9rem; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; min-height:36px; min-width:36px; padding:.15rem .7rem; cursor:pointer; }
 @media print{ .tol-es-hint, .tol-print-btn, .tol-panel-es{ display:none !important; } }
 /* a smaller laptop: the less-used sections fold into Menu one by one (site.js fitBar), and Menu shows so they stay one tap away */
-.tol-bar.is-fold1 .tol-nav-item[data-fold="1"], .tol-bar.is-fold2 .tol-nav-item[data-fold="2"], .tol-bar.is-fold2 .tol-nav-item[data-fold="1"],
-.tol-bar.is-fold3 .tol-nav-item[data-fold]{ display:none; }
-.tol-bar:is(.is-fold1, .is-fold2, .is-fold3) .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
+.tol-bar:is(.is-fold1, .is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="1"], .tol-bar:is(.is-fold2, .is-fold3, .is-fold4) .tol-nav-item[data-fold="2"],
+.tol-bar:is(.is-fold3, .is-fold4) .tol-nav-item[data-fold="3"], .tol-bar.is-fold4 .tol-nav-item[data-fold]{ display:none; }
+.tol-bar:is(.is-fold1, .is-fold2, .is-fold3, .is-fold4) .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }
