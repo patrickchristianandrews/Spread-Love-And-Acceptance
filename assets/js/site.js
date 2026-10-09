@@ -1386,7 +1386,7 @@
     espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol', ayuda: 'espanol', pareja: 'espanol', esposa: 'espanol', esposo: 'espanol', marido: 'espanol', cuidador: 'espanol', cuidadora: 'espanol', cuidadores: 'espanol', cuidar: 'espanol', gemelos: 'espanol', gemelas: 'espanol', hijos: 'espanol', hijo: 'espanol', hija: 'espanol', hijas: 'espanol', ninos: 'espanol', nino: 'espanol', bebe: 'espanol', pelea: 'espanol', peleas: 'espanol', pelean: 'espanol', peleamos: 'espanol', enojado: 'espanol', enojada: 'espanol', enojo: 'espanol', miedo: 'espanol', familia: 'espanol', divorcio: 'espanol', separados: 'espanol', suegra: 'espanol', suegro: 'espanol', abuela: 'espanol', abuelo: 'espanol', abuelos: 'espanol', trabajo: 'espanol', dinero: 'espanol', tareas: 'espanol', quehaceres: 'espanol', casa: 'espanol', ayudame: 'espanol', necesito: 'espanol', violencia: 'espanol', seguridad: 'espanol', calma: 'espanol', tranquilo: 'espanol', cansado: 'espanol', cansada: 'espanol', madre: 'espanol', padre: 'espanol', novio: 'espanol', novia: 'espanol', amor: 'espanol', relacion: 'espanol', matrimonio: 'espanol', discutir: 'espanol', gritar: 'espanol', grita: 'espanol', gritos: 'espanol', castellano: 'espanol', latino: 'espanol', latina: 'espanol',
     angerhelp: ['/parents.html#anger-help', '/upset-right-now.html', '/parents.html', '/wp-11.html'], temper: 'angerhelp',
     whenill: ['/when-one-is-ill.html', '/caregivers.html', '/share-the-load.html'], chronic: 'whenill', illness: 'whenill', ill: 'whenill', disability: 'whenill', disabled: 'whenill', disabilities: 'whenill', cfs: 'whenill', fibromyalgia: 'whenill', fibro: 'whenill', spoons: 'whenill', spoonie: 'whenill', burden: 'whenill', mecfs: 'whenill', lupus: 'whenill', 'ms': 'whenill', arthritis: 'whenill', cancer: 'whenill', chemo: 'whenill',
-    caregiving: ['/caregivers.html', '/when-one-is-ill.html', '/workpapers/wp-02-how-much-are-you-carrying.html'], carer: 'caregiving', carers: 'caregiving', caregiver: 'caregiving', caregivers: 'caregiving', caring: 'caregiving', respite: 'caregiving', parkinson: 'caregiving', parkinsons: 'caregiving', dementia: 'caregiving', alzheimers: 'caregiving', alzheimer: 'caregiving', stroke: 'caregiving', eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare',
+    caregiving: ['/caregivers.html', '/when-one-is-ill.html', '/library/stress.html'], carer: 'caregiving', carers: 'caregiving', caregiver: 'caregiving', caregivers: 'caregiving', caring: 'caregiving', respite: 'caregiving', parkinson: 'caregiving', parkinsons: 'caregiving', dementia: 'caregiving', alzheimers: 'caregiving', alzheimer: 'caregiving', stroke: 'caregiving', eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare',
     emptynest: ['/empty-nest.html', '/retired-together.html', '/turning-toward.html'], nest: 'emptynest',
     familyrift: ['/family-rifts.html', '/grief.html', '/teens.html#siblings'], brother: 'familyrift', sister: 'familyrift', brothers: 'familyrift', sisters: 'familyrift', sibling: 'familyrift', siblings: 'familyrift', estranged: 'familyrift', estrangement: 'familyrift', rift: 'familyrift', rifts: 'familyrift', feud: 'familyrift', feuding: 'familyrift', inheritance: 'familyrift', inherit: 'familyrift', inherited: 'familyrift', estate: 'familyrift', executor: 'familyrift', favourite: 'familyrift', favorite: 'familyrift', favouritism: 'familyrift', favoritism: 'familyrift', reconcile: 'familyrift', reconciliation: 'familyrift', reconciling: 'familyrift', reconnect: ['/family-rifts.html', '/turning-toward.html', '/recheck-drive.html', '/grief.html'],
     grandfather: ['/grandparents.html'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', nan: 'grandfather', nana: 'grandfather', nanna: 'grandfather', gran: 'grandfather', granny: 'grandfather', grandad: 'grandfather', granddad: 'grandfather', gramps: 'grandfather', abuelita: 'espanol',
@@ -1538,10 +1538,10 @@
   function searchPages(list, q, termsIn) {
     var terms = termsIn || searchTerms(q);
     if (!terms.length) return [];
-    var out = [], boost = {};
+    var out = [], boost = {}, first = {};
     terms.forEach(function (t) {
       var a = actFor(t) || (t.length > 4 && /s$/.test(t) && actFor(t.slice(0, -1)));
-      if (a) a.forEach(function (u, i) { boost[u] = Math.max(boost[u] || 0, 60 - i * 6); });
+      if (a) a.forEach(function (u, i) { boost[u] = Math.max(boost[u] || 0, 60 - i * 6); if (!i) first[u] = 1; });
     });
     // a situation word (from a phrase like "my ex" or "games all night") points to pages; it isn't in their text
     var need = terms.filter(function (t) { return !(actFor(t) && !(vocab && vocab[t])); }).length;
@@ -1559,14 +1559,15 @@
       if (/^\/brand\.html$/.test(p.u) && !terms.some(function (t) { return /^(brand|branding|logo|logos|colou?rs?|palette|fonts?|typeface|mascot)$/.test(t); })) return;
       if (/^\/legal\/(refund|terms)/.test(p.u) && !terms.some(function (t) { return /^(refunds?|terms|legal|cancel|cancell?ation|cancelling|canceling|subscriptions?|membership|charged?|charges|payment|billing|conditions|policy|policies)$/.test(t); })) return;
       if (!b && hits < need) return;                  // every word has to be there, unless it's a helpful tool
-      if (b && TOOL_URL.test(p.u)) b += 10;
+      if (b && TOOL_URL.test(p.u)) b += first[p.u] ? 10 : 4;   // a tool named first for a word leads; further down it only edges ahead
       score += b;
       // the simple page comes before its in-depth twin: most people want the short way in first
       if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) - (/^\/(telemetry|suite-index|roadmap|architecture|legal\/)/.test(p.u) ? 15 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
     });
-    Object.keys(EXTRA).forEach(function (u) { if (boost[u]) out.push({ p: EXTRA[u], score: boost[u] + 20 }); });
+    // a section of a page (or the breathing break) named first for a word leads; further down it sits with the pages
+    Object.keys(EXTRA).forEach(function (u) { if (boost[u]) out.push({ p: EXTRA[u], score: boost[u] + (first[u] ? 20 : 2) }); });
     // a newly written page that the index doesn't have yet still shows, from its line in FRESH
-    Object.keys(FRESH).forEach(function (u) { if (boost[u] && !indexed[u]) out.push({ p: { u: u, t: FRESH[u][0], d: FRESH[u][1], x: '' }, score: boost[u] + 20 }); });
+    Object.keys(FRESH).forEach(function (u) { if (boost[u] && !indexed[u]) out.push({ p: { u: u, t: FRESH[u][0], d: FRESH[u][1], x: '' }, score: boost[u] + (first[u] ? 8 : 2) }); });
     return out.sort(function (a, b) { return b.score - a.score; }).slice(0, 25);
   }
   function snippet(p, terms) {
@@ -1695,6 +1696,7 @@
     return box;
   }
   // for other pages (the 404 page, the glossary): TOLSearch.find('words', function (pages, fixedWords) {...})
+  if (/[?&]searchdebug=1\b/.test(location.search)) window.__tolSearchDebug = { terms: searchTerms, pages: function (q) { return searchPages(searchData, q).slice(0, 6).map(function (h) { return h.p.u + ' ' + Math.round(h.score); }); }, act: actFor };
   window.TOLSearch = { load: loadSearch, correct: function (w) { return correct(fold(w)) || null; },
     find: function (q, cb) { loadSearch(function (d) { if (!d) return cb([], q); var R; try { R = smartSearch(d, q); } catch (err) { return cb([], q); } cb(R.hits.map(function (x) { return x.p; }), R.used.join(' ')); }); } };
 

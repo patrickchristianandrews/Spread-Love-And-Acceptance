@@ -1883,7 +1883,7 @@
         var seen = home[i] - inv[i];
         return '<li><div class="ls-cat-top"><span>' + esc(nameOf(i)) + '</span><span class="ls-num">' + hrs(home[i]) + '</span></div>' +
           bar([{ v: seen, c: COLORS[i] }, { v: inv[i], c: COLORS[i], cls: 'is-inv' }]) +
-          '<p class="ls-mini">' + hrs(seen) + ' of jobs you can see · ' + hrs(inv[i]) + ' of thinking and emotional work' + (allInv > 0 && !wait.length ? ' (' + Math.round(inv[i] / allInv * 100) + '% of all the thinking and emotional work)' : '') + '</p></li>';
+          '<p class="ls-mini">' + hrs(seen) + ' of jobs you can see · ' + hrs(inv[i]) + ' of thinking and emotional work' + (allInv > 0 && !wait.length && inv[i] > 0 ? ' (' + Math.round(inv[i] / allInv * 100) + '% of all the thinking and emotional work)' : '') + '</p></li>';
       }).join('') + '</ul>' + (allInv > 0 ? '' : '<p class="ls-mini">No thinking or emotional work counted yet. Open “More” on a job, or add from “Planning & remembering” and “Emotional work”.</p>') + planTip(inv, wait);
     }
     var nc = noticeCounts(), nb = $('r-notice');

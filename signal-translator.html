@@ -334,6 +334,12 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .verdict .vfound{margin:0 0 10px;font-size:.95rem}
 .verdict .vplain{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.35;margin:0 0 10px;padding:8px 12px;border-radius:8px;border-left:4px solid #3E6B48;background:rgba(62,107,72,.09);overflow-wrap:anywhere}
 .verdict .vplain.v-hurt{border-left-color:#8A6116;background:rgba(138,97,22,.10)}.verdict .vplain.v-fight{border-left-color:#9A3B2E;background:rgba(154,59,46,.09)}
+.verdict .vplain.v-danger{border-left:6px solid #9A3B2E;background:rgba(154,59,46,.14)}
+.verdict.danger-card{border-left:5px solid #9A3B2E}
+.verdict .vhelp{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--sheet);border:1px solid var(--line);font-size:.98rem;line-height:1.5}
+#results[data-no-reward] ~ .cb-end{display:none!important}
+.relset{margin:0 0 10px;font-size:.98rem}
+.relset b{font-weight:600}
 .gloss{font-weight:400;font-style:normal;color:var(--muted)}
 .verdict .vlvl .gloss{display:block;font-family:inherit;font-size:.9rem;font-weight:400;margin-top:2px}
 .verdict .vlvl .vtech{display:block;font-family:var(--mono);font-size:.72rem;font-weight:400;color:var(--muted);margin-top:4px;letter-spacing:.02em}
@@ -440,6 +446,7 @@ html.tol-easy .sitebar .back{display:none}
     <h2 id="s3"><label for="phrase" id="phraseLab" class="no-bubble">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.</p>
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
+    <p class="relset small" id="relSet" hidden>Reading it for: <b id="relSetName"></b>. <button type="button" class="linkbtn" id="relSetChange">Change</button></p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
@@ -452,6 +459,7 @@ html.tol-easy .sitebar .back{display:none}
         <option value="roommate">A roommate</option>
         <option value="coworker">A coworker</option>
         <option value="manager">My manager, or someone on my team</option>
+        <option value="business">My business partner or co-owner</option>
         <option value="caregiver">Someone I care for, or who cares for me</option>
       </select>
     </div>
@@ -1005,7 +1013,7 @@ const WRITTEN = E.WRITTEN || ["text","chat","email","group"];
 const isWritten = ()=>WRITTEN.includes(channel);
 /* a close relationship (family, partner, friends) in a group chat is still a family chat, not work */
 const CLOSE_RELS = ["partner","family","friend","coparent","caregiver","roommate"];
-const isWork = ()=>relId==="coworker" || relId==="manager" || useId==="work" || envId==="work" || ((channel==="chat" || channel==="group") && !CLOSE_RELS.includes(relId));
+const isWork = ()=>relId==="coworker" || relId==="manager" || relId==="business" || useId==="work" || envId==="work" || ((channel==="chat" || channel==="group") && !CLOSE_RELS.includes(relId));
 
 /* ============================================================
    STATE + UI
@@ -1246,6 +1254,14 @@ const REL = {
     fallback:"From a manager, even a neutral sentence can land as an instruction or a mark against someone. A short message leaves room for the worst reading, because the reader can't easily ask.",
     say:"Put the topic, the ask, the deadline and how serious it is in the first line. Say \"nothing's wrong\" when nothing is. Keep feedback about the work, not the person.",
     care:"This is for writing clearer messages, not for evaluating anyone. Nothing here should become a performance record or HR note."
+  },
+  business:{
+    label:"Business partners or co-owners", anchor:"coworkers",
+    what:"Two or more people who own or run something together: co-founders, co-owners, partners in a shop, a practice or a small firm. Nobody is the boss of the other.",
+    why:"This dynamic exists because a shared business needs shared decisions, and because money, hours and the future of the business sit under the words. There is no manager to settle a disagreement, so an unspoken split of the work (who does the admin, who does the visible part) builds up quietly. A sharp line can sound like a judgment of someone's commitment.",
+    fallback:"Between co-owners, a neutral sentence can still land as a comment on who is pulling their weight. Without a boss to settle it, small edges add up.",
+    say:"Name the task, who owns it and by when. Talk about the split of the work, not each other's commitment. Agree it, write it down, and look at it again in a month.",
+    care:"This is for clearer messages between equals, not for building a case. If money or the business itself is in dispute, an accountant, mediator or lawyer may help more than a message."
   },
   caregiver:{
     label:"Caregivers", anchor:"caregivers",
@@ -1627,6 +1643,12 @@ function settleHTML(A, B){
   return h;
 }
 
+const REL_MORE = {
+  family:[["/family-rifts.html","Family rifts: reaching out after a long silence"],["/grown-up-children.html","Boundaries with a parent you love"]],
+  coparent:[["/co-parenting.html","Separated co-parents"]],
+  friend:[["/friends.html","Friends: when a friendship drifts"]],
+  business:[["/work.html#owner-list","One owner per job, at work and in a business"]]
+};
 function dynHTML(id, found, A, B, flagged){
   if(!id || !REL[id]){
     return '<div class="box"><h3>The relationship changes the read<span class="sub">OPTIONAL, PICK A RELATIONSHIP ABOVE</span></h3><p class="small">Wiring says how '+esc(B)+' may take the words in. The relationship says what those words threaten, or protect. The same sentence can be a loose plan between friends and a broken agreement between partners, because the cost of being direct is not the same in every arrangement. People often speak indirectly when they are not sure the other person agrees, to avoid a conflict that could strain the bond (<a href="'+SRC.achim[1]+'" target="_blank" rel="noopener">Achimova, Franke &amp; Butz, 2025</a>). Pick a relationship above to see how this phrase may land in that dynamic, what the dynamic is, and why it exists.</p></div>';
@@ -1658,6 +1680,7 @@ function dynHTML(id, found, A, B, flagged){
     return '<li><span class="who">'+esc(o.label)+'</span>'+esc(line)+'</li>';
   }).join("")+'</ul>';
   h+='<p class="small"><b>A limit.</b> '+esc(r.care)+'</p>';
+  if(REL_MORE[id]) h+='<p class="small"><b>More for this relationship:</b> '+REL_MORE[id].map(x=>'<a href="'+x[0]+'">'+esc(x[1])+'</a>').join(" &middot; ")+'</p>';
   h+='<p class="small"><a href="wired-differently.html#dynamics">The full note on these dynamics</a> · <a href="relationships.html#'+r.anchor+'">How the program fits '+esc(r.label.toLowerCase())+'</a></p>';
   h+='</div>';
   return h;
@@ -1862,7 +1885,12 @@ const SIMPLE = {
   already:"“I already told you” can sound like blame.",
   violent:"Violent words, even as a joke, can scare people.",
   dxlabel:"Using a medical condition as an insult hurts.",
-  safeask:"Your worry is fair. Ask for a habit that keeps everyone safe."
+  safeask:"Your worry is fair. Ask for a habit that keeps everyone safe.",
+  menace:"This is a threat. It would scare or control them. Say what you need, with no threat.",
+  jab:"This says the hurt as blame. Say the hurt, and what you need.",
+  motive:"“On purpose” guesses why they did it. Say what happened instead.",
+  blunt:"This is clear, but it can sound cold. Start with “Quick correction”.",
+  closer:"This can sound like a closed door. Start with something warm."
 };
 let simpleOn = false; try{ const v = localStorage.getItem("tol-st-simple"); simpleOn = v==="1" || (v===null && document.documentElement.classList.contains("tol-easy")); }catch(e){}
 /* the same words in short sentences, shown only while "simpler English" is on (and only when they differ) */
@@ -1922,6 +1950,8 @@ function run(){
   const an = E.analyze(text, {channel});
   const found = an.found, spans = an.spans, words = an.words;
   lastAn = an;
+  $("#results").removeAttribute("data-no-reward");
+  if(an.danger){ runDanger(text, an, B); return; }
   const fids = Object.keys(found);
   const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
   const general = !sel.B.size;
@@ -2221,6 +2251,38 @@ function run(){
 }
 
 /* ============================================================
+   A THREAT: not a tone problem. Said plainly, in both modes, with safety help.
+   No rewrite keeps the threat, no "looks okay", and no garden reward for it.
+   ============================================================ */
+const SAFETY_SELF = '<p class="vhelp"><b>If you&rsquo;re worried about your own anger,</b> that&rsquo;s a brave thing to notice, and help is free and private. See <a href="/safety.html">Not safe at home?</a> The National Domestic Violence Hotline (<a href="tel:18007997233">1-800-799-7233</a>, US) also talks with people who are worried about their own behaviour. If you might hurt someone right now, step away and call your local emergency number.</p>';
+const SAFETY_GOT = '<p class="vhelp"><b>If it frightens you, you deserve support.</b> See <a href="/safety.html">Not safe at home?</a> for free, private people to talk to. In the US, the National Domestic Violence Hotline is <a href="tel:18007997233">1-800-799-7233</a> (or text START to 88788), any time. If you&rsquo;re in danger now, call your local emergency number. If it&rsquo;s safe, save a copy with the date, somewhere the other person can&rsquo;t see.</p>';
+function noReward(R){
+  R.setAttribute("data-no-reward","");
+  // the "you tried a tool" reward is for kind words, never for a threat
+  const T = window.TOLRewards;
+  if(T && !T._stGuard && typeof T.earn==="function"){ const orig = T.earn; T._stGuard = true; T.earn = function(n, source){ const r=document.getElementById("results"); if(source==="come-back" && r && r.hasAttribute("data-no-reward")) return null; return orig.apply(T, arguments); }; }
+}
+function runDanger(text, an, B){
+  const rw = E.rewrite(an, {wirings:["general"], channel, rel:relId, work:isWork()});
+  const who = B && B!=="Person B" ? B : "the other person";
+  const need = rw.variants[0] ? rw.variants[0].text : "", pause = rw.variants[1] ? rw.variants[1].text : "";
+  lastChanged = true;
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">This is a threat</h2>';
+  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">This is a threat, not a tone problem.</p>';
+  h += '<p>This message would frighten or control '+esc(who)+'. Softer wording can&rsquo;t fix a threat, so there&rsquo;s no version here that keeps it. Please don&rsquo;t send it.</p>';
+  h += '<p class="vk">Say what you need, without a threat</p><p class="vbest" id="vbest">'+phHTML(need)+'</p>'+simpleLine(need);
+  h += '<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
+  if(pause) h += '<p class="vk" style="margin-top:12px">Or take a break first</p><p class="vbest">'+phHTML(pause)+'</p>';
+  h += '<p class="vk" style="margin-top:12px">Your words, with the threat marked</p><p class="vbest marked">'+markup(an.text, an.spans)+'</p>';
+  h += SAFETY_SELF;
+  h += '<p class="small">If someone sent this to you, choose &ldquo;Someone sent me this&rdquo; above.</p></div>';
+  const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R); paintSimple();
+  const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{ (navigator.clipboard?navigator.clipboard.writeText(need):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";}); });
+  R.focus({preventScroll:true});
+  R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
+}
+
+/* ============================================================
    SOMEONE SENT ME THIS: read it kindly, for the person who got it
    ============================================================ */
 let stMode = "send";
@@ -2288,25 +2350,26 @@ function fitReceived(an, rv){
 }
 function runReceived(text){
   const an = E.analyze(text, {channel});
-  const rv = fitReceived(an, E.receive(an));
+  const rv = fitReceived(an, E.receive(an, {rel:relId}));
+  $("#results").removeAttribute("data-no-reward");
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
-  const recvPlain = rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
+  const recvPlain = rv.head ? rv.head : rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : (rv.found && rv.found.length) ? ["hurt","This may sound harsher than they meant. Here are kinder ways to read it."]
     : ["ok","This looks okay. Nothing here needs decoding."];
-  h += '<div class="verdict recv" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>';
+  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.danger ? SAFETY_GOT : '');
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
-  if(rv.crossed) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
+  if(rv.crossed && !rv.danger) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
     + (rv.threat ? '<p><b>Save a copy, with the date.</b> A screenshot is fine. Keep it somewhere the other person can&rsquo;t see. You don&rsquo;t have to answer it. If it frightens you, see <a href="/safety.html">Not safe at home?</a> for free, private people to talk to.'+(rv.coparent ? ' After a breakup, see also <a href="/safety.html#after-separation">After a separation: when it&rsquo;s more than conflict</a>.' : '')+'</p>' : '')
     + '<p style="margin-bottom:0">How are you doing right now? If it hurt to read, that makes sense. Look after yourself first. The reply can wait.</p></div>';
   h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
   h += '<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" aria-expanded="'+simpleOn+'">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button></div>';
-  h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+phHTML(r.text)+'</p>'+simpleLine(r.text)+'<button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>';
+  h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+phHTML(r.text)+'</p>'+simpleLine(r.text)+'<button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : (rv.found && rv.found.length ? '<p>Answer the point itself, calmly. You don&rsquo;t have to match the sharper wording.</p>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>');
   if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer the logistics only. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
   h += '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
   h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
-  const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); paintSimple();
+  const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); if(rv.danger) noReward(R); paintSimple();
   R.querySelectorAll("[data-copyr]").forEach(b=>b.addEventListener("click",()=>{
     const t = rv.replies[+b.dataset.copyr].text;
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied";},()=>{b.textContent="Select and copy manually";});

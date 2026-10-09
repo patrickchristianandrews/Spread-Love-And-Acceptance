@@ -194,10 +194,10 @@
 <p class="pg-keep"><label><input type="checkbox" id="td-keep" checked> Keep our deal on this device</label> <span class="pg-keep-note">It stays in this browser only. <button type="button" class="pg-link" id="td-forget">Forget it</button></span></p>
 <p class="pg-acts">
   <button type="button" class="pg-btn" id="td-copy">Copy our deal</button>
-  <button type="button" class="pg-btn is-quiet" id="td-share" data-share data-share-from="#td-out" data-share-url="none" data-share-title="Our time-together deal" data-share-result data-no-clip>Share it</button>
+  <button type="button" class="pg-btn is-quiet" id="td-share" data-no-clip>Share it</button>
 </p>
 <p class="pg-status" id="td-status" role="status" aria-live="polite"></p>
-<p class="pg-keep-note">A link holds the deal as it is right now. If either of you changes something, send a new link.</p>
+<p class="pg-keep-note">Copy and Share add a link that opens this deal. A link holds the deal as it is right now: if either of you changes something, send a new link.</p>
 </section>
 
 <h2 id="more">More for your situation</h2>
@@ -240,7 +240,8 @@
     return lines.join('\n');
   }
   function full() { return dealText() + '\n\nOpen our deal: ' + link() + '\n(If you change anything, send a new link.)'; }
-  function render(save) { out.textContent = full(); if (save !== false) keep(); }
+  // the box shows the deal itself; the long link is added only to what you copy or share
+  function render(save) { out.textContent = dealText(); if (save !== false) keep(); }
   function fromLink(o) {
     // their "Your name" is your "Their name": swap the two, so each phone reads from its own side
     var who = typeof o['td-n1'] === 'string' ? o['td-n1'].trim() : '';
@@ -274,6 +275,12 @@
     try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
     ta.remove(); return ok;
   }
+  $('td-share').addEventListener('click', function () {
+    var text = full();
+    if (window.TOLShare && window.TOLShare.share) window.TOLShare.share({ title: 'Our time-together deal', text: text, url: false, result: true });
+    else if (navigator.share) navigator.share({ title: 'Our time-together deal', text: text }).catch(function () {});
+    else $('td-copy').click();
+  });
   $('td-copy').addEventListener('click', function () {
     var text = full();
     var done = function () { say('Copied. Paste it into a message to the other person.'); };
