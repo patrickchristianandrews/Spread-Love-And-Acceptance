@@ -1,0 +1,2653 @@
+{
+ "_about": "Professor Puddles' deep-chat bank. When a visitor asks to 'talk deep' (see rules.enter_phrases), Puddles slows down and answers by merging three lenses: a philosophical one (a named thinker or tradition, paraphrased fairly), a psychological one (real, well-known research, no invented numbers; the site's own ideas are marked 'this site's idea'), and an autistic one (a perspective, not a deficit: plain words, honesty as kindness, routines and sensory needs as real needs, the double empathy problem, 'say the rule out loud'). 'together' merges them into one practical insight; 'question' turns it back to the visitor; 'try' is one small step. Topics map to the site's pages; big_questions are open questions people ask in deep mode. Patterns are JavaScript regex sources matched against the chat's normalised text (lower case, punctuation turned into spaces, so \"don't\" arrives as \"don t\"). Every link is a real page in this repo. Rule-based and private, like the rest of the chat: no AI, nothing sent anywhere.",
+ "rules": {
+  "never_on_kinds": [
+   "safety",
+   "redflag",
+   "care",
+   "care-more",
+   "nohelp",
+   "lang",
+   "calc",
+   "crisis",
+   "danger",
+   "grief-urgent",
+   "urgent"
+  ],
+  "_kinds_note": "The first seven are exact reply kinds in assets/js/site-chat.js today: safety = danger, control and red-flag help; redflag = the red-flags list; care and care-more = feelings and hard moments; nohelp = 'that didn't help'; lang = the Spanish replies; calc = the visitor's own Battery score. Deep chat must never be added to, or replace, those replies, even while deep mode is on. crisis, danger, grief-urgent and urgent are reserved names, in case such kinds are added later. If a safety or care reply fires during deep mode, it wins, and deep mode should switch itself off for that turn.",
+  "enter_phrases": [
+   "talk deep",
+   "deep chat",
+   "deep talk",
+   "go deep",
+   "go deeper",
+   "let s go deep",
+   "lets go deep",
+   "deep mode",
+   "deep end",
+   "the deep end",
+   "philosophy",
+   "philosophical",
+   "get philosophical",
+   "philosopher",
+   "what would a philosopher say",
+   "what would the stoics say",
+   "the big picture",
+   "big picture",
+   "big question",
+   "big questions",
+   "why does this matter",
+   "why does it matter",
+   "think deeply",
+   "think deep",
+   "deeper meaning",
+   "talk about life",
+   "meaning of"
+  ],
+  "exit_phrases": [
+   "small talk",
+   "keep it light",
+   "keep it simple",
+   "back to normal",
+   "normal mode",
+   "just chat",
+   "lighter please",
+   "less deep",
+   "too deep",
+   "stop deep",
+   "exit deep",
+   "enough philosophy",
+   "no more philosophy",
+   "quick answer",
+   "just the steps",
+   "back to basics"
+  ],
+  "_phrase_note": "Phrases are plain lower-case text, matched against the normalised message (so \"let's\" arrives as \"let s\"; both spellings are listed). Two of them already mean something in site-chat.js: 'go deeper' / 'deeper' is in FU_MORE (after a situation reply it opens that page's deeper link), and 'philosophy' is an aspect word (ph). Suggested precedence: if the last reply was a situation, card or background note with its own deeper link, keep the existing 'go deeper' behaviour unless deep mode is already on; any other enter phrase switches deep mode on.",
+  "match_order": "Check big_questions first (they are more specific questions), then topics. Within each list, the first entry whose pattern matches wins. If nothing matches in deep mode, use the last deep topic if the message is a follow-up, otherwise a no_match line.",
+  "safety_topic_ids": [
+   "fear-and-control"
+  ],
+  "safety_aware_ids": [
+   "forgiveness",
+   "co-parenting",
+   "family-duty",
+   "boundaries",
+   "siblings-and-rifts",
+   "more-than-two",
+   "coming-out",
+   "money",
+   "anger",
+   "fear-and-control",
+   "can-people-change",
+   "what-we-owe-family",
+   "are-boundaries-selfish",
+   "forgive-and-forget",
+   "love-and-anger",
+   "what-is-acceptance",
+   "worth-working-on"
+  ],
+  "_safety_note": "safety_aware_ids name entries whose 'together' line points to /safety.html, because the subject can involve fear, control or harm. For those, always show 'together' and the links, even in a short reply. For safety_topic_ids, show 'together' and the /safety.html link first and skip the three lenses unless the visitor asks for them. None of these entries treats enduring harm as noble.",
+  "reply_shape": [
+   "philosophy",
+   "psychology",
+   "autistic_lens",
+   "together",
+   "question",
+   "try",
+   "links"
+  ],
+  "short_shape": [
+   "together",
+   "question",
+   "links"
+  ],
+  "lens_labels": {
+   "philosophy": "The philosopher’s view",
+   "psychology": "What the research says",
+   "autistic_lens": "Through an autistic lens",
+   "together": "Putting it together",
+   "question": "A question for you",
+   "try": "One small thing to try"
+  },
+  "style_notes": "Still Puddles: warm, curious, a little playful at the edges, but slower and more thoughtful than small talk. No jokes inside a deep answer; at most one light line in the intro. Short sentences in plain English that a second-language reader can follow. Name thinkers and researchers plainly and paraphrase them; never invent quotes or statistics. Mark the site's own ideas as 'this site's idea'. The autistic lens is a perspective Puddles holds, never a stereotype: say 'many autistic people', 'through an autistic lens', 'seen from an autistic point of view'; never claim all autistic people think one way, and never suggest that the visitor or anyone they mention is autistic. Never blame either person; look at the setup. Never preachy: offer, don't instruct. Anything touching fear, control or harm points to /safety.html and never romanticises putting up with it. Show one entry per reply, then offer two or three follow_ups as chips. Say 'keep it light' or 'small talk' to leave deep mode at any time."
+ },
+ "intro": [
+  "Ah, deep water. Let me swap my reading glasses for my thinking ones. I’ll look at this three ways: what philosophers have said, what psychology has found, and how it looks through an autistic lens.",
+  "Deep chat it is. I’ll go slower now. For each idea I’ll bring a philosopher, a bit of research and an autistic way of seeing it, then tie them together into something you can use.",
+  "Splendid. The deep end is my favourite part of the pond. Three lenses, then: the big thinkers, the research, and an autistic view that likes things said plainly.",
+  "Right, let’s wade in. I’ll offer a philosophical view, a psychological one and an autistic lens, then one small thing you could try. Say “keep it light” any time to paddle back.",
+  "Deep mode on. Short words, long thoughts. Philosophy, psychology and an autistic perspective, merged into one practical idea.",
+  "A question worth floating on. Let’s look through three lenses: what the old thinkers said, what the researchers found, and what an autistic lens makes clearer for everyone."
+ ],
+ "exit": [
+  "Back to the shallows! Small talk it is. Ask me anything, light or practical.",
+  "Paddling back to the surface. I’m still here for quick, practical help. Say “talk deep” if you want to dive again.",
+  "Glasses off, feet up. Let’s keep it light. What can I help with?"
+ ],
+ "no_match": [
+  "That’s a deep one, and I don’t have a ready lens for it yet. Which part of life does it touch most: home, family, friends, work, or yourself?",
+  "Hmm, I want to give that the care it deserves. Could you say it another way, or tell me who it’s about?",
+  "I don’t have all three lenses ready for that one. Would you like a big question to think about instead, or to try a different topic?",
+  "Let me think aloud with you. Is this more about fairness, about feeling understood, or about who you are?"
+ ],
+ "topics": [
+  {
+   "id": "invisible-work",
+   "title": "The work nobody sees",
+   "patterns": [
+    "\\b(mental load|invisible (work|labou?r|load)|cognitive (labou?r|load)|emotional labou?r|default parent|second shift)\\b",
+    "\\bi (do|carry|remember) (everything|it all)\\b",
+    "\\b(nobody|no one) (sees|notices) what i do\\b"
+   ],
+   "links": [
+    [
+     "Invisible labor and the mental load",
+     "/invisible-labor-mental-load.html"
+    ],
+    [
+     "Preface: the work nobody sees",
+     "/book/preface.html"
+    ],
+    [
+     "Cognitive labour, explained",
+     "/library/fairness.html#cognitive-labour"
+    ]
+   ],
+   "philosophy": "Iris Murdoch thought the moral life happens mostly in what we pay attention to, long before we act. Seen that way, noticing the milk is low or a birthday is close is real moral work, even though nobody claps for it. The care ethicist Joan Tronto split care into steps, and the first is ‘caring about’: spotting that a need exists at all.",
+   "psychology": "The sociologist Allison Daminger described cognitive labour in four parts: anticipating needs, finding options, deciding, and checking it got done. Arlie Hochschild’s ‘second shift’ named the unpaid work waiting after paid work ends. The thinking parts are the easiest to miss, because they happen inside one person’s head.",
+   "autistic_lens": "Many autistic people put it plainly: ‘If you need me to do something, tell me. I can’t read the list in your head.’ That isn’t laziness. ‘Just notice what needs doing’ is an unwritten rule, and unwritten rules are hard for everyone, only harder for some. Writing the whole load down turns a hidden test into a shared list.",
+   "together": "Murdoch says noticing is moral work, Daminger shows it is real work, and the autistic lens says: so put it where everyone can see it. One week of writing everything down, thinking jobs included, makes the invisible part countable without blaming anyone.",
+   "question": "Which job in your home exists only because one person noticed it first?",
+   "try": "Tonight, write down three ‘thinking jobs’ you did today that nobody saw. Just list them; no comparing yet."
+  },
+  {
+   "id": "fair-not-equal",
+   "title": "Fair isn’t always 50/50",
+   "patterns": [
+    "\\b(50 50|fifty fifty|half and half|split (it )?(evenly|equally|in half))\\b",
+    "\\b(fair share|equal share|fairness)\\b",
+    "\\b(is (it|this|that)|not) fair\\b"
+   ],
+   "links": [
+    [
+     "Chapter IV: two kinds of fair",
+     "/book/chapter-4.html"
+    ],
+    [
+     "Is the setup working for everyone?",
+     "/is-the-setup-working.html"
+    ],
+    [
+     "Equity theory, explained",
+     "/library/fairness.html#equity-theory"
+    ]
+   ],
+   "philosophy": "Aristotle drew a line between treating everyone the same and giving each person what fits their situation. John Rawls asked us to choose rules from behind a ‘veil of ignorance’, not knowing which person we would be. Susan Moller Okin later turned Rawls’s question on the family itself: would you agree to this split of housework if you didn’t know whose life you’d get?",
+   "psychology": "Equity theory (J. Stacy Adams, and later Elaine Walster and colleagues) found people feel uneasy both when they get too little and when they get too much. Margaret Clark and Judson Mills described ‘communal’ relationships, where people give by need rather than by tally. Research on procedural justice adds that people care a lot about how a split is decided, not only about the result.",
+   "autistic_lens": "Many autistic people describe a strong sense of fairness, and a strong dislike of rules that apply to one person but not another. Seen through that lens, the problem is rarely the numbers. It is a split that was never said out loud, so nobody can check it. Say the rule, and fairness becomes something you can both look at.",
+   "together": "Fair can mean equal time, equal effort, or each giving from what they have today, and all three can be fair. The test that ties them together: could you both say the rule out loud and agree to it, not knowing which side you’d be on?",
+   "question": "If you swapped lives with the other person for a month, would you still sign off on how things are split?",
+   "try": "Write your current split as one plain sentence (‘I do mornings, you do evenings’). Ask each other: does this sentence still feel fair?"
+  },
+  {
+   "id": "one-owner",
+   "title": "One owner per job",
+   "patterns": [
+    "\\b(one owner|owner per job|who owns|whose job|whose turn)\\b",
+    "\\b(nobody|no one) (does|did|takes|took) (it|the)\\b",
+    "\\bfalls? through the cracks\\b"
+   ],
+   "links": [
+    [
+     "WP-03: one owner per job",
+     "/wp-03.html"
+    ],
+    [
+     "Diffusion of responsibility",
+     "/library/teams.html#diffusion-of-responsibility"
+    ],
+    [
+     "Role ambiguity",
+     "/library/teams.html#role-ambiguity"
+    ]
+   ],
+   "philosophy": "Aristotle noticed that what belongs to everyone tends to get the least care, because each person expects someone else to look after it. Confucius taught the ‘rectification of names’: things go wrong when names don’t match reality. A job called ‘ours’ that is really nobody’s is a name that doesn’t match.",
+   "psychology": "John Darley and Bibb Latané’s research on diffusion of responsibility showed that the more people who could act, the less likely any one of them is to act. Teams use tools like RACI to name who is responsible. ‘One owner per job’ is this site’s idea, built on that research: the owner does the noticing, the planning and the doing, from start to finish.",
+   "autistic_lens": "From an autistic point of view, ‘we’ll both keep an eye on it’ is a vague rule, and vague rules breed worry and arguments. A clear owner is a kindness: you know exactly what is yours and what isn’t. Many people, autistic or not, relax when the edges of a job are drawn.",
+   "together": "Ownership turns a shared worry into a clear promise. The philosophers explain why shared jobs drift, the research shows it happens to good people, and the autistic lens shows the fix: name it plainly, and the drift stops being anyone’s fault.",
+   "question": "Which job in your life is ‘ours’ on paper but really nobody’s?",
+   "try": "Pick one drifting job and give it a single owner, from noticing to finishing. Write the owner’s name next to it."
+  },
+  {
+   "id": "keeping-score",
+   "title": "Keeping score without losing the person",
+   "patterns": [
+    "\\b(keep(ing)? score|score ?keeping|keep(ing)? (a )?tally|tit for tat|ledger)\\b",
+    "\\bcount(ing)? who does\\b"
+   ],
+   "links": [
+    [
+     "Stories from philosophy: the ethics of a ledger",
+     "/learn/index.html#part-ethics"
+    ],
+    [
+     "WP-01: who did what",
+     "/wp-01.html"
+    ],
+    [
+     "Communal and exchange relationships",
+     "/library/fairness.html#communal-exchange"
+    ]
+   ],
+   "philosophy": "Kant said we should treat people always as ends in themselves, never merely as means. A ledger that helps you see clearly respects the person; a ledger used to win treats them as a debt. Martin Buber would put it his way: keep the relationship ‘I–Thou’, even when the list is ‘I–It’.",
+   "psychology": "Clark and Mills found that strict tit-for-tat tallying can feel cold in close relationships. Yet Michael Ross and Fiore Sicoly (1979) found that partners each tend to overestimate their own share, because we remember our own efforts best. So some writing down helps, as long as it is for seeing, not for scoring.",
+   "autistic_lens": "Many autistic people like a written record, because memory and feelings can blur what really happened. That is a strength: facts on paper calm an argument. The autistic lens also asks a fair question back: what is the record for? Say the purpose out loud, ‘to see, not to win’, and everyone can trust it.",
+   "together": "Write it down to see the whole picture, then put the pen away and look at the person. The site’s own test: would you keep this list the same way if the other person could read every line?",
+   "question": "Is your list helping you understand, or helping you win?",
+   "try": "Before you write anything down this week, write its purpose at the top: ‘This list is for seeing, not scoring.’"
+  },
+  {
+   "id": "check-ins",
+   "title": "Check-ins as a small ritual",
+   "patterns": [
+    "\\b(check ?ins?|checking in|weekly (talk|chat|meeting)|state of the union|daily check)\\b"
+   ],
+   "links": [
+    [
+     "Relationship check-ins",
+     "/check-ins.html"
+    ],
+    [
+     "The 90-second daily check-in",
+     "/wp-13.html"
+    ],
+    [
+     "Rituals of connection",
+     "/library/connection.html#rituals-of-connection"
+    ]
+   ],
+   "philosophy": "Confucius gave great weight to li, ritual: small, repeated forms that shape how people treat each other. A ritual isn’t empty if it carries care. Aristotle said we become good at things by doing them again and again, and closeness may work the same way.",
+   "psychology": "John Gottman suggests a regular ‘state of the union’ meeting for couples. The family therapist William Doherty wrote about ‘rituals of connection’, small repeated moments that hold a family together. Regular, low-stakes talks catch drift before it turns into a fight.",
+   "autistic_lens": "Seen through an autistic lens, a check-in is predictability as care. You know when the talk will happen, how long it lasts and what it covers, so nothing big ambushes you on a Tuesday night. Many autistic people find a set time and a short written list of topics make hard subjects feel much safer.",
+   "together": "A check-in is a small ritual with clear edges. The philosophy says rituals shape character, the research says they catch drift early, and the autistic lens says the clear edges are what make people brave enough to speak.",
+   "question": "What would make a weekly talk feel safe enough that you’d look forward to it?",
+   "try": "Agree on one time, one length (ten minutes) and three questions. Put it in the calendar."
+  },
+  {
+   "id": "repair",
+   "title": "Repair after things go wrong",
+   "patterns": [
+    "\\b(repair|make up|making up|patch (it|things) up|reconnect)\\b",
+    "\\bafter (a|the|our) (fight|argument|row)\\b"
+   ],
+   "links": [
+    [
+     "Repair attempts",
+     "/library/relationships.html#repair-attempts"
+    ],
+    [
+     "The Conversation Reader",
+     "/conversation-reader.html"
+    ],
+    [
+     "How to stop fighting with your partner",
+     "/how-to-stop-fighting-with-your-partner.html"
+    ]
+   ],
+   "philosophy": "Hannah Arendt saw that we can’t undo what we have done. She called forgiving the remedy for that, and promising the remedy for an unknown future. Repair, then, is not pretending it didn’t happen. It is choosing to begin again, on purpose.",
+   "psychology": "Edward Tronick’s studies of parents and babies found that small mismatches happen often and get repaired often, and that repair is how trust grows. Gottman found that stable couples still have conflict; what differs is that their repair attempts get taken up. Small repairs count: a joke, a touch, ‘can we start again?’",
+   "autistic_lens": "Many autistic people find unspoken repair confusing. The other person acts normal again, but nobody said ‘we’re okay’, so you’re left guessing. Seen through an autistic lens, good repair is explicit: what happened, what I’m sorry for, what I’ll do next, and ‘are we okay now?’ Saying it aloud helps everyone stop guessing.",
+   "together": "Repair is a fresh start that both people can see. Arendt names why it matters, Tronick shows it is normal and builds trust, and the autistic lens adds the missing step: say the repair out loud so nobody has to guess.",
+   "question": "When a repair works between you, what exactly is said or done?",
+   "try": "Next time, end a repair with a plain question: ‘Are we okay now, or is there something left?’"
+  },
+  {
+   "id": "apology",
+   "title": "Saying sorry so it lands",
+   "patterns": [
+    "\\b(apolog\\w*|say(ing)? sorry|how to say sorry)\\b"
+   ],
+   "links": [
+    [
+     "Apology languages",
+     "/apology-languages.html"
+    ],
+    [
+     "What research says about apologies",
+     "/library/conflict.html#apology-research"
+    ],
+    [
+     "Intent and impact",
+     "/library/conflict.html#intent-impact"
+    ]
+   ],
+   "philosophy": "The philosopher Nick Smith, in a book on apologies, separates a full apology from the many partial ones we give. A full one names the wrong, takes responsibility and commits to change. Confucius said that making a mistake and not correcting it is the real mistake.",
+   "psychology": "A study by Roy Lewicki and colleagues (2016) looked at the parts of an apology. Owning responsibility and offering to repair mattered most. ‘Sorry you feel that way’ tends to land badly because it skips both.",
+   "autistic_lens": "Many autistic people value apologies that are specific and literal: ‘I’m sorry I interrupted you three times’ beats ‘sorry for everything’. The autistic lens also notices the other side: some autistic people are told they ‘don’t seem sorry’ because their face or tone doesn’t match what others expect. Clear words can carry the sorry even when the face is calm.",
+   "together": "A good apology is concrete: what I did, that it’s mine, what I’ll do now. That holds in philosophy and in the research, and the autistic lens gently adds: judge an apology by its words and actions, not by how sorry a face looks.",
+   "question": "What’s the difference, for you, between an apology and an explanation?",
+   "try": "Write a three-line apology: ‘I did ___. That was mine. Next time I’ll ___.’ Keep each line to one sentence."
+  },
+  {
+   "id": "forgiveness",
+   "title": "Forgiveness",
+   "patterns": [
+    "\\b(forgiv\\w*|grudges?|resent\\w*)\\b",
+    "\\b(let it go|move on from it)\\b"
+   ],
+   "links": [
+    [
+     "Forgiveness, explained",
+     "/library/conflict.html#forgiveness"
+    ],
+    [
+     "Stories from philosophy",
+     "/learn/index.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Arendt saw forgiving as a release, so that one act doesn’t define two people forever. Martha Nussbaum argues that anger at a wrong is understandable, but the healthiest anger turns towards the future: what would make things better? Forgiveness is a gift, not a debt, and it is not the same as staying.",
+   "psychology": "Researchers such as Everett Worthington and Robert Enright separate forgiveness (letting go of the wish for payback, inside you) from reconciliation (rebuilding trust, between you). You can forgive someone and still keep your distance. Going over the hurt again and again keeps it fresh; forgiving is usually slow, not one moment.",
+   "autistic_lens": "Many autistic people describe remembering hurts in exact detail, which can make ‘just let it go’ feel like being asked to forget a fact. Through that lens, forgiveness doesn’t have to mean pretending it didn’t happen. It can be: ‘I remember exactly, and I’m choosing not to make you pay for it.’ That is clear, honest and kind.",
+   "together": "Forgiveness is a release you choose; trust is rebuilt over time; and neither one asks you to forget, or to stay where you’re not safe. If the hurt involves fear or control, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What would forgiving look like if it didn’t have to mean forgetting?",
+   "try": "Write two lines: ‘What I remember’ and ‘What I want from now on’. Notice that both can be true."
+  },
+  {
+   "id": "pause-when-flooded",
+   "title": "Pausing when you’re flooded",
+   "patterns": [
+    "\\b(flooded|flooding|overwhelmed|overloaded|lose my temper|losing it|cool off|calm down)\\b",
+    "\\b(need|take|taking) (a )?(break|pause|time ?out|breather)\\b"
+   ],
+   "links": [
+    [
+     "WP-11: the Calm-Down Kit",
+     "/wp-11.html"
+    ],
+    [
+     "Managing flooding",
+     "/library/conflict.html#managing-flooding"
+    ],
+    [
+     "Upset right now?",
+     "/upset-right-now.html"
+    ]
+   ],
+   "philosophy": "Seneca wrote a whole book on anger, and his best remedy was delay: let the first heat pass before you act. The Stoics taught that the first jolt of feeling isn’t a choice, but what we do next can be. The Buddhist image of the second arrow fits too: the first hurt happens, and the story we add can hurt again.",
+   "psychology": "Gottman described ‘flooding’: when the heart races and the body goes into alarm, listening and problem-solving get much harder. He suggests a real break of at least twenty minutes, doing something calming, then coming back. Dan Siegel’s ‘window of tolerance’ describes the zone where we can think and feel at the same time.",
+   "autistic_lens": "Seen through an autistic lens, overload is a body event, not a mood or a choice. Many autistic people describe meltdowns or shutdowns as what happens when input goes past capacity. That makes the pause a need, not a sulk. A plain script helps both sides: ‘I’m overloaded. I need thirty minutes in a quiet room. I’ll come back at eight.’",
+   "together": "A pause is not leaving the talk; it is protecting it. Seneca, Gottman and many autistic people agree on the shape: stop, settle the body, and say exactly when you’ll return.",
+   "question": "What are the first signs in your body that you’re nearly too full to listen?",
+   "try": "Write your pause sentence now, while you’re calm: ‘I need ___ minutes. I’ll come back at ___.’ Share it before you need it."
+  },
+  {
+   "id": "pursue-withdraw",
+   "title": "One wants to talk, one needs space",
+   "patterns": [
+    "\\b(pursue|withdraw\\w*|shuts? down|shut down|stonewall\\w*|won t talk|needs? space|walks? away)\\b",
+    "\\bwants? to talk (now|right now|it out)\\b"
+   ],
+   "links": [
+    [
+     "One of you wants to talk now, the other needs space",
+     "/pursue-withdraw.html"
+    ],
+    [
+     "Pursue and withdraw, explained",
+     "/library/relationships.html#pursue-withdraw"
+    ],
+    [
+     "Attachment theory",
+     "/library/relationships.html#attachment-theory"
+    ]
+   ],
+   "philosophy": "Schopenhauer told a little story about porcupines on a cold day. They huddle for warmth, then pull back when the quills prick, until they find a middle distance. Neither the huddling nor the pulling back is wrong; the question is how two creatures talk about the distance.",
+   "psychology": "Andrew Christensen and others studied the ‘demand–withdraw’ pattern: the more one pushes, the more the other pulls away, and the more they pull away, the more the first one pushes. Attachment research suggests some people reach out when stressed, while others turn inward to settle. Both are ways of coping, not proof of not caring.",
+   "autistic_lens": "Many autistic people need processing time before they can talk about something hard, and being chased for an answer right now can push them into shutdown. Through an autistic lens, the fix isn’t ‘try harder to talk’; it’s ‘agree on the timing’. The person who needs space names when they’ll come back, and the person who wants to talk gets a real time, not a vague ‘later’.",
+   "together": "Space and closeness are both needs. Name the distance, name the time, and keep the promise; then the one who chases can rest, and the one who withdrew can return.",
+   "question": "When you go quiet, or when you push, what are you hoping will happen?",
+   "try": "Agree on one sentence: ‘I need until ___, then I’m ready.’ Use it the next time the pattern starts."
+  },
+  {
+   "id": "bids",
+   "title": "Small bids, big meaning",
+   "patterns": [
+    "\\b(bids?|turn(ing)? toward)\\b",
+    "\\b(ignored me|didn t look up|didn t notice|little things|small things)\\b"
+   ],
+   "links": [
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Bids for connection",
+     "/library/relationships.html#bids-for-connection"
+    ],
+    [
+     "Sharing good news (capitalization)",
+     "/library/connection.html#capitalization"
+    ]
+   ],
+   "philosophy": "Simone Weil thought attention, given fully, is a rare and pure kind of generosity. Buber said that real life is meeting: the moment one person truly turns to another as a ‘Thou’. Most of those meetings happen in small moments.",
+   "psychology": "Gottman’s lab studies found that couples who stayed together tended to ‘turn toward’ each other’s small bids for attention far more often than couples who split up. Shelly Gable’s research adds that how you respond to good news, warmly and with interest, builds closeness too.",
+   "autistic_lens": "Through an autistic lens, a bid may not look like the usual kind. Sharing a fact about trains, sending a link, sitting nearby in silence, or giving a small interesting object can all be bids. Many autistic people call info-dumping a way of saying ‘I want to share my world with you.’ Learning each other’s bid language means fewer missed moments, both ways.",
+   "together": "Love is often built in ten-second moments. The philosophy calls it attention, the research calls it turning toward, and the autistic lens reminds us that bids come in more shapes than we expect, so it’s worth learning the shapes.",
+   "question": "What does a bid from you look like, and would the other person recognise it?",
+   "try": "Today, notice three bids from someone close, in any shape, and turn toward each one for ten seconds."
+  },
+  {
+   "id": "wiring",
+   "title": "Different wiring, different signals",
+   "patterns": [
+    "\\b(wiring|wired differently|communication styles?|wave code|wavelengths?|frequenc(y|ies))\\b",
+    "\\bwe (talk|communicate) differently\\b"
+   ],
+   "links": [
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ],
+    [
+     "The Frequency Framework",
+     "/frequency-framework.html"
+    ],
+    [
+     "Make your Wiring Card",
+     "/wiring-card.html"
+    ]
+   ],
+   "philosophy": "Wittgenstein argued that, in many cases, the meaning of a word is its use inside a shared way of living. Two people can use the same word, like ‘fine’ or ‘soon’, in different ‘language games’. Neither is misusing it; they’re playing slightly different games.",
+   "psychology": "Research shows tone, pace and directness vary between people, families and cultures. Damian Milton’s double empathy problem describes how misunderstandings between people who think differently run both ways. ‘Wiring’ and ‘frequency’ are this site’s ideas: a mismatch is a tuning problem, not a moral failing.",
+   "autistic_lens": "Many autistic people know from experience that being misread isn’t the same as communicating badly. Studies by Catherine Crompton and colleagues found that autistic people passed information to each other about as well as non-autistic people did with each other; more got lost in mixed pairs. Seen this way, nobody is the broken radio. You tune together.",
+   "together": "Meaning lives in use, and use differs. Instead of asking ‘who’s right about what that meant?’, ask ‘how do we each use these words?’ A Wiring Card is one way to write your answer down.",
+   "question": "Which word or phrase do the two of you use in different ways?",
+   "try": "Each write what ‘fine’, ‘soon’ and ‘whatever’ mean when you say them. Compare."
+  },
+  {
+   "id": "say-what-you-mean",
+   "title": "Hints, and saying what you mean",
+   "patterns": [
+    "\\b(hints?|hinting|say what (you|i) mean|be(ing)? direct|directness|read my mind|should have known|literal(ly)?)\\b"
+   ],
+   "links": [
+    [
+     "Directness, explained",
+     "/library/communication.html#directness"
+    ],
+    [
+     "The mind-reading trap",
+     "/library/thinking.html#mind-reading"
+    ],
+    [
+     "WP-09: say it so it lands",
+     "/wp-09.html"
+    ]
+   ],
+   "philosophy": "The philosopher Paul Grice studied how we say more than our words: ‘the bin is full’ can mean ‘please take it out’. He called this implicature, and it only works when both people share the same background rules. Confucius’s ‘rectification of names’ points the other way: call things by their right names, and fewer things go wrong.",
+   "psychology": "Research on ‘mind reading’ as a thinking trap shows how often we assume others know what we feel. The ‘curse of knowledge’ makes it hard to imagine not knowing what we know. Hints can save face, but they also leave a lot of room for misreading.",
+   "autistic_lens": "Many autistic people put it plainly: ‘If you want me to take the bins out, say “please take the bins out”.’ Being literal isn’t rude; it’s precise. Seen through an autistic lens, a direct request is a gift: it removes the test and leaves the choice. Many non-autistic people find they like it too, once they try it.",
+   "together": "Hints rely on a shared rulebook that people often don’t actually share. Saying the request plainly, kindly and once is clear, respectful and fair to both.",
+   "question": "What’s one hint you keep giving that could become a plain, kind sentence?",
+   "try": "Turn one hint into a request with a ‘please’, a ‘what’ and a ‘when’: ‘Please take the bins out before nine.’"
+  },
+  {
+   "id": "tone-in-texts",
+   "title": "Tone in a text",
+   "patterns": [
+    "\\b(texts?|texting|texted|emoji|left on read|full stop|one word (reply|answer))\\b",
+    "\\b(his|her|their|your|the) tone\\b"
+   ],
+   "links": [
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ],
+    [
+     "Texting and tone",
+     "/library/communication.html#texting-and-tone"
+    ],
+    [
+     "The Carrier Wave Decoder",
+     "/carrier-wave-decoder.html"
+    ]
+   ],
+   "philosophy": "Wittgenstein noticed that the same words can do different jobs in different situations. A text strips away the face, the voice and the room, so the reader has to supply them. Kant’s idea of respect suggests a simple habit: read others as reasonable people with reasons, until you know otherwise.",
+   "psychology": "Research by Justin Kruger and colleagues found that people overestimate how clearly their tone comes across in writing. Without cues, readers fill the gaps with their own mood, and the negativity bias tips that reading towards the worse option.",
+   "autistic_lens": "Many autistic people write short, literal texts: ‘ok.’ just means okay. Seen through an autistic lens, the trouble isn’t the full stop; it’s the hidden rule that a full stop means anger. Asking ‘did you mean ___?’ instead of guessing is the double empathy problem solved in one line.",
+   "together": "A text carries less than we think. Read generously, ask before assuming, and if a message matters, put the feeling into words, because the reader can’t hear your voice.",
+   "question": "Which of your texts might sound colder than you mean?",
+   "try": "Next time a text stings, ask ‘Did you mean ___ or ___?’ before you reply to what you imagined."
+  },
+  {
+   "id": "their-side",
+   "title": "Seeing their side",
+   "patterns": [
+    "\\b(their side|other side|see it from|in (their|his|her) shoes|naive realism|perspective)\\b",
+    "\\bwhy would (they|he|she) (do|say)\\b"
+   ],
+   "links": [
+    [
+     "See it from their side",
+     "/perspective-shifter.html"
+    ],
+    [
+     "Naive realism",
+     "/library/thinking.html#naive-realism"
+    ],
+    [
+     "Stories from philosophy: seeing the other person",
+     "/learn/index.html#part-other"
+    ]
+   ],
+   "philosophy": "Iris Murdoch tells of a mother-in-law who thinks her son’s wife is common and silly. Over time, by choosing to look again, justly and lovingly, she comes to see her as fresh and sincere. Nothing outside changed; her attention did. The old parable of the blind men and the elephant says something similar: each has touched something real.",
+   "psychology": "Lee Ross called it naive realism: we tend to think we see the world as it is, so people who disagree must be uninformed or biased. The fundamental attribution error adds that we explain other people’s actions by their character, and our own by our circumstances.",
+   "autistic_lens": "The autistic lens adds a twist. Autistic people are often told they ‘lack perspective-taking’, but the double empathy problem shows non-autistic people often misread autistic people just as much. Perspective-taking is a two-way job. Asking ‘what is this like for you?’ works better than guessing, for everyone.",
+   "together": "Look again, on purpose, and assume you’ve touched only part of the elephant. The best perspective-taking tool is still a question asked with real interest.",
+   "question": "What would the other person say is the part of the elephant you haven’t touched?",
+   "try": "Write the other person’s side in their words, as fairly as you can, then ask them if you got it right."
+  },
+  {
+   "id": "appreciation",
+   "title": "Appreciation and being seen",
+   "patterns": [
+    "\\b(appreciat\\w*|gratitude|grateful|unappreciated|unthanked|recogni(tion|sed|zed))\\b",
+    "\\b(never|doesn t|don t) (says? )?thank(s)?\\b"
+   ],
+   "links": [
+    [
+     "Appreciation at work",
+     "/appreciation-at-work.html"
+    ],
+    [
+     "Gratitude: find, remind, bind",
+     "/library/connection.html#find-remind-bind"
+    ],
+    [
+     "Appreciation and recognition",
+     "/library/fairness.html#appreciation-and-recognition"
+    ]
+   ],
+   "philosophy": "Axel Honneth argued that people need recognition to flourish: to be loved, to be respected as equals, and to be valued for what they contribute. Feeling taken for granted is a recognition wound, not vanity. Hegel, before him, thought we only become fully ourselves through being recognised by others.",
+   "psychology": "Sara Algoe’s ‘find, remind, bind’ theory suggests gratitude helps us find good partners, reminds us of them, and binds us closer. Thanks that names the effort, not only the result, tends to feel more real.",
+   "autistic_lens": "Many autistic people prefer appreciation that is specific and sincere: ‘Thank you for booking the dentist; I know phone calls drain you’ lands far better than ‘you’re great’. Through an autistic lens, vague praise can feel like noise, and big public praise can feel like a spotlight. Ask how someone likes to be thanked, and do it their way.",
+   "together": "Recognition is a real need, and good thanks is concrete. Name what they did and what it cost them, in the way they like to receive it.",
+   "question": "What effort of yours do you most wish someone would name?",
+   "try": "Thank one person today for something specific, including the part they find hard."
+  },
+  {
+   "id": "complacency",
+   "title": "Complacency and drift",
+   "patterns": [
+    "\\b(complacen\\w*|drift(ed|ing)?|in a rut|on autopilot|grown apart|growing apart|stale|same old)\\b"
+   ],
+   "links": [
+    [
+     "Complacency",
+     "/complacency.html"
+    ],
+    [
+     "Complacency, explained",
+     "/library/connection.html#complacency"
+    ],
+    [
+     "Hedonic adaptation",
+     "/library/life.html#hedonic-adaptation"
+    ]
+   ],
+   "philosophy": "Heraclitus is remembered for the idea that you can’t step into the same river twice: the river and you both keep changing. Buddhist teaching calls this impermanence. A relationship that feels ‘the same’ has quietly changed; it just hasn’t been looked at.",
+   "psychology": "Hedonic adaptation means we get used to good things, so they fade into the background. Arthur Aron’s self-expansion research found that doing new things together can bring back some of the spark. This site’s idea is that complacency isn’t a lack of love; it’s a setup nobody has checked lately.",
+   "autistic_lens": "Through an autistic lens, routine can be love, and sameness isn’t the enemy. The risk is a routine nobody checks. Many autistic people solve this neatly: keep the routine, and add a scheduled check of it. ‘Every first Sunday, we ask: is this still working?’ Novelty on a plan is still novelty.",
+   "together": "Things change even when they look still. You don’t need to throw out your routines to stay close; you just need to look at them on purpose, now and then, together.",
+   "question": "What in your life has been running on autopilot that you’d like to look at again?",
+   "try": "Add one tiny new thing to an old routine this week, and say out loud that you’re doing it."
+  },
+  {
+   "id": "love-languages",
+   "title": "Love languages as a menu",
+   "patterns": [
+    "\\b(love languages?|acts of service|quality time|words of affirmation|physical touch|receiving gifts)\\b",
+    "\\bhow (i|we|they|you) show love\\b"
+   ],
+   "links": [
+    [
+     "Love languages: a menu, not a label",
+     "/love-languages.html"
+    ],
+    [
+     "How the languages of connection fit together",
+     "/languages-of-connection.html"
+    ],
+    [
+     "What research says about love languages",
+     "/library/relationships.html#love-languages"
+    ]
+   ],
+   "philosophy": "Erich Fromm, in The Art of Loving, described love as a practice that takes care, responsibility, respect and knowledge. bell hooks argued that love is something you do, not only something you feel. Both suggest that learning how the other person receives care is part of loving them.",
+   "psychology": "Gary Chapman’s five love languages are popular, but research support for them as fixed types is mixed. Reviews suggest people value all five, and that what matters most is responsiveness: noticing what the other person needs right now. That’s why this site treats them as a menu, not a label.",
+   "autistic_lens": "Many autistic people show love in ways the five categories don’t quite catch: sharing a deep interest, sending a song that made them think of you, ‘penguin pebbling’ (giving a small found treasure, the way a penguin offers a pebble), or quietly fixing the thing that bothered you. Through an autistic lens, the important step is saying it plainly: ‘This is how I show love. How do you?’",
+   "together": "Love is a practice, and the menu is bigger than five items. Ask, don’t assume, and translate generously when someone’s care arrives in an unfamiliar shape.",
+   "question": "How do you show care in ways others might not recognise as care?",
+   "try": "Ask: ‘What made you feel most cared for this week?’ Write down the answer exactly."
+  },
+  {
+   "id": "touchstones",
+   "title": "Touchstones and shared language",
+   "patterns": [
+    "\\b(touchstones?|inside jokes?|pet names?|shared language|our (song|word|phrase))\\b"
+   ],
+   "links": [
+    [
+     "Touchstones",
+     "/touchstones.html"
+    ],
+    [
+     "Shared language",
+     "/library/connection.html#shared-language"
+    ],
+    [
+     "Rituals of connection",
+     "/library/connection.html#rituals-of-connection"
+    ]
+   ],
+   "philosophy": "Wittgenstein said language lives inside a ‘form of life’. Two people who share private words have built a small form of life of their own. In Homer’s Odyssey, Penelope tests the returning Odysseus with a secret only they share: their bed is carved from a living olive tree. A touchstone is how two people know each other.",
+   "psychology": "Researchers have studied couples’ private words and pet names, sometimes called ‘personal idioms’, and found they tend to go along with feeling close. Shared rituals, like a goodnight phrase, give a sense of ‘us’ that survives busy weeks.",
+   "autistic_lens": "Seen through an autistic lens, a touchstone can be a beautifully clear signal: a code word that means ‘I’m overloaded’, a hand sign that means ‘I love you, no need to answer’. Many autistic people build their own scripts and phrases with the people they love, on purpose. Explicit shared language isn’t less romantic; it’s more reliable.",
+   "together": "A touchstone is a small private language that says ‘we’re us’, and it can also say ‘here’s what I need’ without a speech. Build some for joy and some for hard days.",
+   "question": "What word or phrase means something only your people would understand?",
+   "try": "Agree on one code word for ‘I’m too full to talk, and I still love you’."
+  },
+  {
+   "id": "grief",
+   "title": "Grief",
+   "patterns": [
+    "\\b(grief|grieving|grieve|bereave\\w*|mourning|passed away)\\b",
+    "\\b(lost|losing) (my|our) (mum|mom|dad|mother|father|wife|husband|partner|son|daughter|child|friend|brother|sister|baby)\\b"
+   ],
+   "links": [
+    [
+     "Grief and later life",
+     "/grief.html"
+    ],
+    [
+     "Grief and change, explained",
+     "/library/emotions.html#grief-and-change"
+    ],
+    [
+     "Ambiguous loss",
+     "/library/life.html#ambiguous-loss"
+    ]
+   ],
+   "philosophy": "Seneca wrote letters of consolation to grieving friends, and he did not tell them to stop feeling; he hoped that, in time, memory could become a comfort. C. S. Lewis, writing after his wife died, was surprised by how much grief felt like fear. Buddhist teaching on impermanence doesn’t say loss shouldn’t hurt; it says that everything we love changes.",
+   "psychology": "Margaret Stroebe and Henk Schut’s ‘dual process’ model describes grief as moving back and forth: facing the loss, then turning to everyday life, then back again. The ‘continuing bonds’ idea (Dennis Klass and colleagues) suggests many people stay connected to those who died, and that this can be healthy. Pauline Boss named ‘ambiguous loss’ for losses without a clear ending.",
+   "autistic_lens": "Many autistic people say grief can look different from the outside: calm, delayed, or shown through routines rather than tears. Seen through an autistic lens, that isn’t coldness. Many also prefer plain words, ‘died’ rather than ‘passed’, because soft phrases can confuse at a time when clarity is a comfort. Every way of grieving is a way of loving.",
+   "together": "Grief moves in waves, has no correct face, and often keeps a bond rather than ending one. Let each person grieve in their own shape, and ask what kind of company they want. If it feels too heavy to carry today, please talk to someone you trust or a doctor.",
+   "question": "What does your grief need from the people around you: company, quiet, practical help, or something else?",
+   "try": "Tell one person, in plain words, one thing that helps you on hard days."
+  },
+  {
+   "id": "caregiving",
+   "title": "Caring for someone you love",
+   "patterns": [
+    "\\b(caregiv\\w*|carers?|caring for (my|our|a))\\b",
+    "\\blook(ing)? after (my|our) (mum|mom|dad|mother|father|parents?|partner|wife|husband|child|son|daughter)\\b"
+   ],
+   "links": [
+    [
+     "Caring for someone you love",
+     "/caregivers.html"
+    ],
+    [
+     "Caregiver strain",
+     "/library/stress.html#caregiver-strain"
+    ],
+    [
+     "Compassion fatigue",
+     "/library/connection.html#compassion-fatigue"
+    ]
+   ],
+   "philosophy": "Care ethics, from Carol Gilligan and Nel Noddings to Virginia Held, puts care at the centre of moral life, not at the edges. Eva Kittay argued that everyone depends on others at some point, so those who do the work of caring deserve care too. Joan Tronto added that care has stages, including how the care is received.",
+   "psychology": "Research on caregiver strain shows that long-term caring can wear down sleep, health and mood, especially without breaks or help. Compassion fatigue is real, and it is not a failure of love. Respite and shared tasks protect both the carer and the person cared for.",
+   "autistic_lens": "Many autistic people are carers, many are cared for, and some are both. Through an autistic lens, care works best when it’s predictable and explicit: what’s needed, when, and by whom. Sensory needs count too: a carer who is worn down by noise and touch needs breaks that are quiet, not just ‘time off’.",
+   "together": "Care is central work, and the carer needs care too. Name the tasks, share them where you can, and plan rest as part of the job, not as a reward for finishing it.",
+   "question": "Who takes care of the carer in your situation?",
+   "try": "List the care tasks for one week, and mark one that someone else could own."
+  },
+  {
+   "id": "illness-and-energy",
+   "title": "Illness, energy and fairness",
+   "patterns": [
+    "\\b(illness|chronic(ally)? ill|chronic pain|disab\\w*|spoon theory|spoonie|fatigue)\\b",
+    "\\b(i m|i am|he s|she s|they re|is) (ill|sick)\\b",
+    "\\bspoons\\b"
+   ],
+   "links": [
+    [
+     "When one of you is ill or disabled",
+     "/when-one-is-ill.html"
+    ],
+    [
+     "Spoon theory",
+     "/library/wiring.html#spoon-theory"
+    ],
+    [
+     "Burnout",
+     "/library/stress.html#burnout"
+    ]
+   ],
+   "philosophy": "Alasdair MacIntyre called humans ‘dependent rational animals’: depending on others is part of every life, not a failure. Havi Carel, a philosopher who lives with illness, writes that illness changes how the whole world feels, not just the body. Fairness, then, can’t be measured only in hours.",
+   "psychology": "Christine Miserandino’s ‘spoon theory’ describes energy as a limited number of spoons each day. Research on couples living with chronic illness suggests that talking openly about limits, and sharing by capacity, helps both partners. ‘Sharing by energy’ is this site’s idea: fair can mean each gives from what they have today.",
+   "autistic_lens": "Many autistic people already use spoon language, because social and sensory demands use up energy too. Through an autistic lens, the key is saying the number out loud: ‘I have two spoons left today.’ Clear talk about capacity replaces guessing and guilt on both sides.",
+   "together": "When energy is uneven, fair means sharing by capacity, said plainly. Depending on others isn’t failure; it’s part of being human, and so is being trusted with someone else’s limits.",
+   "question": "If you each had a number of spoons today, what would yours be?",
+   "try": "Start each day this week by saying your spoon count, and plan jobs around both numbers."
+  },
+  {
+   "id": "co-parenting",
+   "title": "Co-parenting after separation",
+   "patterns": [
+    "\\b(co ?parent\\w*|custody|two homes|handovers?|parenting plan)\\b",
+    "\\bmy ex\\b"
+   ],
+   "links": [
+    [
+     "Separated co-parents",
+     "/co-parenting.html"
+    ],
+    [
+     "Co-parenting, explained",
+     "/library/life.html#coparenting"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Kant’s idea of persons as ends fits here: a child is never a messenger or a tool in a grown-up quarrel. Aristotle’s friendship of usefulness, a working partnership for a shared good, may be a fair model: you don’t have to be close to cooperate well for someone you both love.",
+   "psychology": "Research by Robert Emery, Paul Amato and others suggests that ongoing conflict between parents, more than the separation itself, is what tends to hurt children. When contact is tense, ‘parallel parenting’ (less direct contact, clear written plans) can lower the conflict.",
+   "autistic_lens": "Through an autistic lens, two homes can mean two sets of rules, which is hard for any child and especially for one who relies on predictability. Writing down shared routines, handover times and what travels with the child is a gift of predictability. Many autistic parents also find calm, business-like written messages easier than emotional phone calls, and that’s a fine way to co-parent.",
+   "together": "Treat co-parenting as a calm working partnership with written, predictable plans, and keep the child out of the middle. If dealing with your ex involves fear or control, please start with the “Not safe at home?” page (/safety.html) before anything else.",
+   "question": "What would your child say is the hardest part of moving between homes?",
+   "try": "Write one handover checklist both homes can use, and share it in writing."
+  },
+  {
+   "id": "parenting",
+   "title": "Raising kind, steady kids",
+   "patterns": [
+    "\\b(parenting|raising (kids|children)|new parents?|new baby|toddlers?)\\b",
+    "\\bmy (kids?|children|son|daughter|baby)\\b"
+   ],
+   "links": [
+    [
+     "For parents",
+     "/parents.html"
+    ],
+    [
+     "New baby, sharing the load",
+     "/new-parent.html"
+    ],
+    [
+     "Parenting styles",
+     "/library/life.html#parenting-styles"
+    ]
+   ],
+   "philosophy": "Aristotle thought character comes from practice: children become kind by doing kind things, many times, with help. Confucius placed the family at the root of a good society. Both point away from perfect parents and towards steady, repeated habits.",
+   "psychology": "Donald Winnicott’s idea of the ‘good enough’ parent says children don’t need perfection; they need someone who mostly responds, and repairs when they miss. Research on the transition to parenthood (such as Carolyn and Philip Cowan’s work) shows that strain between new parents is common, and that sharing the load openly helps.",
+   "autistic_lens": "Through an autistic lens, children feel safer when rules are said out loud and stay the same. Many autistic parents are especially good at this: clear routines, honest answers, and taking a child’s deep interests seriously. And when a child of any wiring melts down, the autistic lens asks first, ‘what’s too much right now?’, not ‘how do I stop this behaviour?’",
+   "together": "Good enough, repeated, and said out loud: that’s a kind and steady home. Children learn fairness by watching it, so the way the grown-ups share the load teaches as much as any lesson.",
+   "question": "What rule in your home exists but has never been said out loud?",
+   "try": "Say one family rule out loud this week, and explain why it exists."
+  },
+  {
+   "id": "growing-up",
+   "title": "Teens and growing up",
+   "patterns": [
+    "\\b(teens?|teenagers?|adolescen\\w*|growing up|grew up|childhood|how i was raised)\\b"
+   ],
+   "links": [
+    [
+     "For teens",
+     "/teens.html"
+    ],
+    [
+     "Where your lens came from",
+     "/growing-up.html"
+    ],
+    [
+     "Teenagers, explained",
+     "/library/life.html#teenagers"
+    ]
+   ],
+   "philosophy": "Existentialists such as Jean-Paul Sartre and Simone de Beauvoir stressed that we become ourselves through our choices, not only through what we’re given. De Beauvoir also argued that my freedom needs the freedom of others. The teenage years are when that becomes very real, at home.",
+   "psychology": "Erik Erikson described adolescence as a time of working out identity. Self-determination theory (Edward Deci and Richard Ryan) suggests everyone, teens included, needs autonomy, competence and connection. Families also hand us ‘scripts’ for how to argue, show love and handle feelings, which we often carry without noticing.",
+   "autistic_lens": "Many autistic teens describe the teenage social world as full of rules nobody explains. Through an autistic lens, the kindest thing an adult can do is make the rules visible and open to discussion: ‘Here’s the rule, here’s why, here’s how we could change it.’ That respects a teen’s growing freedom and their need to know where they stand.",
+   "together": "Growing up is learning to choose for yourself while staying connected. Say the rules, explain them, and leave room to change them together.",
+   "question": "Which family ‘script’ from growing up would you like to keep, and which would you like to rewrite?",
+   "try": "Write down one rule you grew up with. Next to it, write whether you still agree with it."
+  },
+  {
+   "id": "friendship",
+   "title": "Friendship",
+   "patterns": [
+    "\\b(friends?|friendships?|best friend|bestie)\\b"
+   ],
+   "links": [
+    [
+     "Friends: when a friendship drifts",
+     "/friends.html"
+    ],
+    [
+     "Friendship, explained",
+     "/library/connection.html#friendship"
+    ],
+    [
+     "Loneliness",
+     "/library/connection.html#loneliness"
+    ]
+   ],
+   "philosophy": "Aristotle described three kinds of friendship: for usefulness, for pleasure, and for each other’s good. He thought the deepest kind takes time; as the old saying goes, you have to share a lot of salt before you really know someone. Montaigne, writing of his closest friend, could only explain it this way: because it was him, because it was me.",
+   "psychology": "Research on friendship suggests closeness grows through time spent together and gradual sharing. Loneliness research (John Cacioppo and others) treats loneliness as a signal, like hunger, that we need connection, not as a personal flaw. Weak ties, like a friendly neighbour, matter more than we think.",
+   "autistic_lens": "Many autistic people describe friendships built on shared interests, honesty and low pressure: gaming side by side, talking about one topic for hours, or messaging instead of meeting. Through an autistic lens, a friendship doesn’t need constant contact or small talk to be real. Saying what you each want (‘Is it okay if we mostly text for a while?’) prevents a lot of hurt.",
+   "together": "Friendship comes in different kinds and shapes, and all of them can be good. Say plainly what kind of contact works for you, and ask what works for them.",
+   "question": "What kind of friend are you hoping to have, and what kind are you hoping to be?",
+   "try": "Send one friend a plain message: ‘I was thinking of you. No need to reply fast.’"
+  },
+  {
+   "id": "family-duty",
+   "title": "What we owe family",
+   "patterns": [
+    "\\b(family (obligations?|duty|duties)|filial|send(ing)? money home)\\b",
+    "\\bowe (my|our) (parents|family|mother|father|mum|mom|dad)\\b"
+   ],
+   "links": [
+    [
+     "Supporting family: parents, money home and duty",
+     "/family-obligations.html"
+    ],
+    [
+     "Family systems",
+     "/library/life.html#family-systems"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Confucian thought gives filial piety (xiao) a central place: honouring and caring for your parents. Ubuntu, from southern Africa, holds that a person is a person through other people. The philosopher Jane English argued that grown children don’t owe parents repayment of a debt; what they owe grows from the love and friendship that exist now.",
+   "psychology": "Murray Bowen’s family systems theory talks about ‘differentiation’: staying connected to family while still being your own person. Research on caring across generations shows that duty can bring meaning and strain at the same time. Both can be true.",
+   "autistic_lens": "Many autistic people find family duties easier when they’re named instead of implied. Through an autistic lens, ‘family comes first’ is too vague to follow; ‘I’ll call Mum every Sunday and visit once a month’ is a promise you can keep. Clear limits let you give generously without burning out.",
+   "together": "Duty and love can live together if the duty is named and sized to what you can truly give. If a family tie involves fear or control, your safety comes before any duty; please start with the “Not safe at home?” page (/safety.html).",
+   "question": "Which of your family duties feels like love, and which feels like a debt?",
+   "try": "Write one family duty as a specific promise: who, what, how often. Check it’s one you can keep."
+  },
+  {
+   "id": "boundaries",
+   "title": "Boundaries with people you love",
+   "patterns": [
+    "\\b(boundar(y|ies)|saying no|say no|overstep\\w*|intrusive)\\b"
+   ],
+   "links": [
+    [
+     "For grown-up children: boundaries with a parent you love",
+     "/grown-up-children.html"
+    ],
+    [
+     "Boundaries, explained",
+     "/library/communication.html#boundaries"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Aristotle placed each virtue as a ‘mean’ between too much and too little: generosity sits between meanness and giving yourself away. Kant held that respect includes self-respect. A boundary is often the mean in action: giving what you can, without erasing yourself.",
+   "psychology": "In communication research, a boundary is a statement about what you will do, not a rule about what someone else must do. Assertiveness, being clear and respectful at the same time, tends to protect relationships better than going quiet or blowing up.",
+   "autistic_lens": "Many autistic people learn boundaries the hard way, after years of masking and saying yes until burnout. Through an autistic lens, a boundary is just honest information: ‘I can visit for two hours. After that I need quiet.’ Said early and plainly, it isn’t rejection. It’s a map.",
+   "together": "A boundary is what you’ll do, said kindly and clearly, so you can keep showing up. If your ‘no’ is met with fear, threats or punishment, that’s a safety question: please start with the “Not safe at home?” page (/safety.html).",
+   "question": "Where are you saying yes when your honest answer is ‘yes, but only this much’?",
+   "try": "Write one boundary as an ‘I will’ sentence: ‘I’ll stay until four, then I’ll head home.’"
+  },
+  {
+   "id": "siblings-and-rifts",
+   "title": "Siblings and family rifts",
+   "patterns": [
+    "\\b(siblings?|estrang\\w*|rift|no contact|not speaking)\\b",
+    "\\bmy (brother|sister)\\b",
+    "\\bcut (me|us|them|him|her) off\\b"
+   ],
+   "links": [
+    [
+     "Adult siblings and family rifts",
+     "/family-rifts.html"
+    ],
+    [
+     "Family scripts",
+     "/library/life.html#family-scripts"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Arendt’s point about forgiving and promising applies here: a rift can be ended by a new beginning, but nobody can force one. Buddhist right speech asks whether words are true, helpful, kindly meant and well timed, which is a good test for a first message after years of silence.",
+   "psychology": "Karl Pillemer’s research on family estrangement found it is more common than people think, and that many people carry it quietly. Bowen’s family systems idea of roles (the ‘responsible one’, the ‘difficult one’) can keep siblings stuck in old parts long after childhood.",
+   "autistic_lens": "Many autistic adults describe being cast as the ‘difficult’ sibling for being direct, or for needing quiet at family events. Through an autistic lens, a rift may partly be an old double empathy problem: two people who never learned each other’s language. A plain, low-pressure message (‘I’d like to talk sometime. No reply needed yet.’) leaves room without demanding.",
+   "together": "You can reach out, or not yet; both can be wise. If you reach out, be true, brief and kind, and don’t require an answer. If contact would put you at risk, your distance is protecting you; please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What role were you cast in growing up, and does it still fit?",
+   "try": "Draft a message you won’t send yet. Read it again in a week and notice how it feels."
+  },
+  {
+   "id": "generations",
+   "title": "Family across generations",
+   "patterns": [
+    "\\b(grandparents?|grandma|grandpa|grandmother|grandfather|grandkids?|grandchild(ren)?|generations?|in ?laws?)\\b",
+    "\\b(ageing|aging|elderly|older) parents?\\b"
+   ],
+   "links": [
+    [
+     "For grandparents",
+     "/grandparents.html"
+    ],
+    [
+     "In-laws, explained",
+     "/library/life.html#in-laws"
+    ],
+    [
+     "Ageing parents",
+     "/library/life.html#ageing-parents"
+    ]
+   ],
+   "philosophy": "Confucian thought treats each generation as owing care both up and down the family line. Ubuntu’s ‘I am because we are’ stretches across time as well as across a room. Families are long conversations between people who were born into different worlds.",
+   "psychology": "Erik Erikson called a key later-life task ‘generativity’: caring for the next generation. Laura Carstensen’s socioemotional selectivity theory suggests that as people sense less time ahead, they focus more on close, meaningful ties. Research on grandparents suggests they help most when they back up the parents’ rules rather than replace them.",
+   "autistic_lens": "Through an autistic lens, generations often hold different hidden rules about manners, touch and talk. ‘Hug Grandma’ may be a hard rule for a child who finds touch painful. Making those rules explicit, and offering other ways (a wave, a high five, a drawing), honours both the grandparent’s love and the child’s body.",
+   "together": "Each generation has its own rulebook. Say the rules out loud, find the overlap, and let love be shown in more than one way.",
+   "question": "Which family rule did your generation learn that the next one might not share?",
+   "try": "Ask an older relative: ‘What was a rule in your house growing up?’ Share one of yours."
+  },
+  {
+   "id": "housemates",
+   "title": "Housemates and shared homes",
+   "patterns": [
+    "\\b(housemates?|roommates?|flatmates?|flat ?share|house ?share|dorm|shared (house|flat|kitchen))\\b"
+   ],
+   "links": [
+    [
+     "Sharing a room: a roommate agreement",
+     "/sharing-a-room.html"
+    ],
+    [
+     "Roommates and shared homes",
+     "/library/life.html#roommates-and-shared-homes"
+    ],
+    [
+     "The Lemonade Stand: who does what",
+     "/lemonade-stand.html"
+    ]
+   ],
+   "philosophy": "Social contract thinkers like Hobbes, Locke and Rousseau asked how strangers come to live by shared rules. A house agreement is a tiny social contract. Elinor Ostrom, the political economist who won a Nobel prize, showed that communities can look after shared resources well when the people affected make the rules together and have easy ways to settle disputes.",
+   "psychology": "Diffusion of responsibility and ‘social loafing’ help explain why shared kitchens get messy: when anyone could clean, each person waits a little longer. Clear owners, rotas and quick check-ins work better than notes on the fridge.",
+   "autistic_lens": "Many autistic people find shared housing easier when the rules are written down: quiet hours, guests, food shelves, cleaning days. Through an autistic lens, an agreement isn’t fussy; it’s how you avoid silent resentment. Sensory needs belong in it too: ‘Please no music after ten’ is a fair rule, not a strange request.",
+   "together": "A shared home runs on a small, written social contract made by everyone who lives there. Clear rules, clear owners and an easy way to talk things through prevent most fights.",
+   "question": "What’s one unwritten rule in your shared home that keeps causing friction?",
+   "try": "Suggest a ten-minute house meeting to write down three rules everyone agrees to."
+  },
+  {
+   "id": "work",
+   "title": "Fairness at work",
+   "patterns": [
+    "\\b(workplace|workload|coworkers?|co workers?|colleagues?)\\b",
+    "\\bmy (job|boss|manager|team)\\b",
+    "\\bat work\\b"
+   ],
+   "links": [
+    [
+     "At work: fair workloads and kind messages",
+     "/work.html"
+    ],
+    [
+     "Psychological safety",
+     "/library/teams.html#psychological-safety"
+    ],
+    [
+     "Workplace communication",
+     "/library/communication.html#workplace-communication"
+    ]
+   ],
+   "philosophy": "Kant’s rule to treat people as ends and not merely as means applies at work too: a colleague is a person, not a resource. Rawls’s veil of ignorance makes a good team test: would you agree to this workload split if you didn’t know which role you’d get?",
+   "psychology": "Amy Edmondson’s research on psychological safety found that teams learn better when people can raise problems without fear of punishment. Role ambiguity, not knowing exactly what’s yours, is a well-known source of work stress. Blameless reviews look at systems, not scapegoats.",
+   "autistic_lens": "Many autistic workers say the hardest part of a job isn’t the work; it’s the unwritten rules. Through an autistic lens, clear expectations, written instructions and honest feedback aren’t special favours. They make work fairer for everyone, including people who are new, tired, or working in a second language.",
+   "together": "A fair workplace makes the rules visible and makes it safe to speak. Write down who owns what, review problems without blame, and say expectations out loud.",
+   "question": "What’s one unwritten rule at your work that would be fairer if it were written down?",
+   "try": "Ask one colleague: ‘How do you like feedback: written or spoken, quick or detailed?’"
+  },
+  {
+   "id": "business-partners",
+   "title": "Business partners",
+   "patterns": [
+    "\\b(business partners?|co ?founders?|run(ning)? a business together)\\b",
+    "\\bour (business|company|shop|startup|firm)\\b"
+   ],
+   "links": [
+    [
+     "At work: fair workloads and kind messages",
+     "/work.html"
+    ],
+    [
+     "RACI: who does what",
+     "/library/teams.html#raci"
+    ],
+    [
+     "Interests, not positions",
+     "/library/conflict.html#interests-vs-positions"
+    ]
+   ],
+   "philosophy": "Aristotle said friendships based on usefulness are the easiest to break, because they end when the usefulness ends. That doesn’t make them bad; it makes them worth tending on purpose. Arendt’s idea of promising helps too: a partnership is a set of promises that make an uncertain future a little more solid.",
+   "psychology": "Negotiation research (Roger Fisher and William Ury’s ‘interests, not positions’) suggests partners do better talking about what each really needs than trading fixed demands. Clear roles and decision rules reduce conflict. Money and credit are common flashpoints, just as Ross and Sicoly’s work on over-counting our own share would predict.",
+   "autistic_lens": "Through an autistic lens, a partnership agreement isn’t a sign of mistrust; it’s honesty in advance. Many autistic people prefer to settle the ‘what ifs’ while things are calm: who decides what, how money is split, how someone could leave. Spelling it out protects the friendship as well as the business.",
+   "together": "Write the promises down while you still like each other. Clear roles, a fair split and an agreed way to disagree turn a useful partnership into a lasting one.",
+   "question": "What ‘what if’ have you and your partner never said out loud?",
+   "try": "Each list the decisions you make alone and the ones you make together. Compare the lists."
+  },
+  {
+   "id": "more-than-two",
+   "title": "More than two partners",
+   "patterns": [
+    "\\b(polyam\\w*|metamours?|throupl\\w*|open relationship|non ?monogam\\w*|multiple partners|more than two)\\b"
+   ],
+   "links": [
+    [
+     "More than two partners at home",
+     "/more-than-two.html"
+    ],
+    [
+     "Jealousy, explained",
+     "/library/relationships.html#jealousy"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Simone de Beauvoir and Jean-Paul Sartre famously tried to build an open partnership based on honesty, and their story shows both the hopes and the hurts. Whatever the shape, de Beauvoir’s ideal of reciprocity, each person free and each recognising the other’s freedom, is a useful test. Kant’s ‘ends, not means’ applies to every person in the circle.",
+   "psychology": "Research by Amy Moors, Terri Conley and others suggests that people in consensual non-monogamy can be about as satisfied, on average, as people in monogamous relationships when the arrangement is truly agreed. Jealousy is normal in any relationship shape; how it’s talked about matters more than whether it shows up.",
+   "autistic_lens": "Through an autistic lens, more partners means more unwritten rules, and that’s where hurt hides. Many autistic people in multi-partner homes swear by written agreements: shared calendars, house rules, what’s shared and what’s private. Explicit agreements aren’t cold; they’re how everyone gets to feel secure.",
+   "together": "More people means more need for clear, freely given agreement. Write the rules down, check them often, and make sure every ‘yes’ is a real yes. If anyone feels pressured or afraid, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "Is every agreement in your home one that everyone said yes to freely?",
+   "try": "Write down the shared calendar rules and ask each person: ‘Does this still work for you?’"
+  },
+  {
+   "id": "coming-out",
+   "title": "Coming out",
+   "patterns": [
+    "\\b(coming out|come out|came out|gay|lesbian|bisexual|transgender|queer|lgbt\\w*|non ?binary|asexual|closeted)\\b"
+   ],
+   "links": [
+    [
+     "Coming out as an adult",
+     "/coming-out.html"
+    ],
+    [
+     "Values",
+     "/library/motivation.html#values"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Charles Taylor argued that being recognised as who we are is a vital human need, and that misrecognition can do real harm. Existentialists prize authenticity: living from your own choices. But no philosopher says you owe anyone your story on their timeline. When, how and whom to tell is yours to choose.",
+   "psychology": "Ilan Meyer’s minority stress model describes the extra strain of hiding and of facing prejudice. Research from the Family Acceptance Project (Caitlin Ryan and colleagues) found that family acceptance is linked with better wellbeing for LGBTQ young people. Safety and support matter more than speed.",
+   "autistic_lens": "Many autistic people describe coming out as similar to unmasking: setting down a performance that costs energy. Some people are both autistic and LGBTQ, and some say coming out about one helped with the other. Through an autistic lens, a plain script can make it easier: ‘I want to tell you something about me. Please listen first, and ask questions after.’",
+   "together": "Being seen as you are matters deeply, and you get to choose when, how and with whom. If coming out could put you at risk at home, keep yourself safe first: please start with the “Not safe at home?” page (/safety.html).",
+   "question": "Who in your life feels safest to be fully yourself with, and what makes them safe?",
+   "try": "Write the first sentence you’d want to say, just for yourself, with no plan to send it."
+  },
+  {
+   "id": "faith-and-culture",
+   "title": "Faith, culture and two traditions",
+   "patterns": [
+    "\\b(faiths?|religio\\w*|church|mosque|temple|synagogue|interfaith|two faiths|two cultures|different cultures?)\\b"
+   ],
+   "links": [
+    [
+     "Two faiths or cultures, one family",
+     "/two-faiths.html"
+    ],
+    [
+     "Culture and conflict",
+     "/library/conflict.html#culture-and-conflict"
+    ],
+    [
+     "Values",
+     "/library/motivation.html#values"
+    ]
+   ],
+   "philosophy": "Kwame Anthony Appiah argues that people can often agree on what to do without agreeing on why: two traditions may both welcome a guest warmly, for different reasons. Abraham Joshua Heschel described the Sabbath as a ‘palace in time’, a reminder that ritual can shape time as well as space. Respect doesn’t require agreement; it requires curiosity.",
+   "psychology": "Kenneth Pargament’s research on religious coping shows that faith can be a deep source of comfort and meaning, and sometimes of strain. Couples from different backgrounds often do best when they talk early and specifically about rituals, holidays and how children will be raised.",
+   "autistic_lens": "Through an autistic lens, faith and culture are full of rich routine: set prayers, festivals, foods, songs. Many autistic people find deep comfort in those rhythms. The harder part can be a community’s unspoken rules. Asking ‘what will happen at this event, and what’s expected of me?’ is respectful, not ignorant.",
+   "together": "You don’t need to share a why to share a what. Name your practices, explain what they mean to you, and build some shared rhythms that honour both.",
+   "question": "Which of your traditions would you most like the other person to understand from the inside?",
+   "try": "Each explain one ritual you love: what happens, and what it means to you."
+  },
+  {
+   "id": "neurodiversity",
+   "title": "Neurodiversity",
+   "patterns": [
+    "\\b(neuro ?divers\\w*|neurodivergent|neurotypical|autis\\w*|adhd|dyslexi\\w*|on the spectrum)\\b"
+   ],
+   "links": [
+    [
+     "Neurodivergent relationships",
+     "/neurodivergent-relationships.html"
+    ],
+    [
+     "Neurodiversity, explained",
+     "/library/wiring.html#neurodiversity"
+    ],
+    [
+     "The double empathy problem",
+     "/library/wiring.html#double-empathy"
+    ]
+   ],
+   "philosophy": "The social model of disability, shaped by disabled thinkers such as Mike Oliver, says that much of what disables people is how the world is built, not only their bodies or minds. The sociologist Judy Singer helped bring the word ‘neurodiversity’ into wide use in the late 1990s: minds vary, as all of nature varies. Kant’s respect for persons is the moral root: different minds, equal dignity.",
+   "psychology": "Research has been moving from seeing autism and ADHD only as lists of deficits towards understanding different patterns of strength and need. Milton’s double empathy problem reframed ‘social difficulty’ as a two-way mismatch. Studies of masking show the real cost of hiding who you are.",
+   "autistic_lens": "Through an autistic lens, the site’s ideas get clearer for everyone: say the rule out loud, write the job down, agree on timing, name sensory needs. None of that is a special favour. It’s good communication with the guesswork taken out, and many non-autistic people find they need it too.",
+   "together": "Different wiring isn’t a flaw to fix; it’s a difference to translate. The more explicit you make the rules of your shared life, the fairer they become for every kind of mind.",
+   "question": "Which of your needs have you treated as a quirk to hide, rather than information to share?",
+   "try": "Make a Wiring Card: three lines on how you receive words best. Share it with one person."
+  },
+  {
+   "id": "masking",
+   "title": "Masking and unmasking",
+   "patterns": [
+    "\\b(masking|unmask\\w*|camouflag\\w*|fitting in|fit in|act(ing)? normal)\\b",
+    "\\bpretend(ing)? to be (normal|okay|ok|fine)\\b"
+   ],
+   "links": [
+    [
+     "Masking, explained",
+     "/library/wiring.html#masking"
+    ],
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ],
+    [
+     "Make your Wiring Card",
+     "/wiring-card.html"
+    ]
+   ],
+   "philosophy": "Charles Taylor’s ‘ethics of authenticity’ says that living true to yourself is a real good, and that we work out who we are in conversation with others. The sociologist Erving Goffman described everyday life as a kind of stage where we all manage how we come across. Some performance is ordinary; the question is what it costs.",
+   "psychology": "Research by Laura Hull and colleagues on ‘camouflaging’ found that many autistic people hide their traits to fit in, and that this is linked with exhaustion and poorer wellbeing. Winnicott wrote about a ‘false self’ built to please others at the cost of feeling real. Everyone adjusts a little; heavy, constant masking costs a lot.",
+   "autistic_lens": "Many autistic people describe unmasking as slowly letting yourself stim, rest, say no and speak plainly where it’s safe. It isn’t all-or-nothing, and it’s wise to start with people who have shown they can be trusted. Through an autistic lens, a home where nobody has to mask is a home where everyone can recover.",
+   "together": "Some adjusting is just manners; constant hiding is a heavy load. Build at least one place, and one relationship, where nobody has to perform.",
+   "question": "Where, and with whom, can you put the mask down?",
+   "try": "Tell one trusted person one small thing you usually hide, like needing quiet after work."
+  },
+  {
+   "id": "deep-interests",
+   "title": "Deep interests and info-dumping",
+   "patterns": [
+    "\\b(special interests?|info ?dump\\w*|hyper ?focus\\w*|monotrop\\w*)\\b",
+    "\\b(talks?|talking) about (it|one thing) for hours\\b"
+   ],
+   "links": [
+    [
+     "Monotropism",
+     "/library/wiring.html#monotropism"
+    ],
+    [
+     "Flow",
+     "/library/calm.html#flow"
+    ],
+    [
+     "Bids for connection",
+     "/library/relationships.html#bids-for-connection"
+    ]
+   ],
+   "philosophy": "Aristotle thought humans flourish by doing what they do well, with full effort and joy. Iris Murdoch wrote that close attention to something real, like a hovering kestrel or a hard language, draws us out of our own worries. Simone Weil’s idea of attention as generosity works both ways: deep focus on a subject is a kind of love, and listening to someone’s passion is a kind of gift.",
+   "psychology": "Monotropism, described by Dinah Murray, Mike Lesser and Wenn Lawson, suggests some minds gather attention into a few deep channels rather than spreading it widely. Mihaly Csikszentmihalyi’s ‘flow’ describes the deep absorption that comes with full focus. Gottman’s idea of bids helps explain info-dumping: sharing a passion is reaching out.",
+   "autistic_lens": "Many autistic people say info-dumping is one of their clearest ways of saying ‘I like you, and I want you in my world.’ Through an autistic lens, the loving reply isn’t to fake fascination; it’s to be honest and warm: ‘Tell me the best part’ or ‘I’ve got ten minutes, go!’ Deep interests are also a source of rest and joy, not just a habit to manage.",
+   "together": "Deep focus is a way of loving the world, and sharing it is a way of loving a person. Meet it with real attention, honest limits and a little curiosity.",
+   "question": "What could you talk about for an hour, and who would you love to tell?",
+   "try": "Ask someone close: ‘What are you into right now? Tell me the best part.’ Listen for five full minutes."
+  },
+  {
+   "id": "routines",
+   "title": "Routines and predictability",
+   "patterns": [
+    "\\b(routines?|predictab\\w*|change of plans?|plans? changed|last minute|spontaneous|spontaneity|surprises?)\\b"
+   ],
+   "links": [
+    [
+     "Intolerance of uncertainty",
+     "/library/wiring.html#intolerance-of-uncertainty"
+    ],
+    [
+     "Habits and cues",
+     "/library/motivation.html#habits-and-cues"
+    ],
+    [
+     "Different hours: shift work and time together",
+     "/different-hours.html"
+    ]
+   ],
+   "philosophy": "David Hume thought custom is the great guide of human life: much of what we do runs on habit, not fresh reasoning. William James called habit the ‘flywheel’ of society. Routines free attention for what matters. Spontaneity is lovely too, but neither one is the ‘grown-up’ choice.",
+   "psychology": "Research on intolerance of uncertainty shows that not knowing what’s coming can be truly stressful for many people, and studies often find it higher in autistic people. Habits and cues make good behaviour easier because they take decisions away. Predictability is a real need for some, not just a preference.",
+   "autistic_lens": "Many autistic people put it plainly: routine is how I stay regulated, and a change of plan is a change to my whole day. Through an autistic lens, warning someone early (‘Dinner moves to seven tonight’) is a kindness that costs almost nothing. People who love spontaneity can still have it: plan the surprise, or agree on a ‘spontaneous slot’.",
+   "together": "Routines are a quiet form of care: they make the day safe enough to rest in. When plans must change, say so early and plainly, and the change becomes something you face together.",
+   "question": "Which routine in your life is quietly holding everything together?",
+   "try": "This week, give advance notice of every plan change, even small ones, and notice what happens."
+  },
+  {
+   "id": "sensory-needs",
+   "title": "Sensory needs are real needs",
+   "patterns": [
+    "\\b(sensory|too loud|noisy|bright lights?|overstimulat\\w*|headphones|earplugs|stimm?ing|stims?)\\b"
+   ],
+   "links": [
+    [
+     "Sensory load",
+     "/library/stress.html#sensory-load"
+    ],
+    [
+     "Sensory profiles",
+     "/library/wiring.html#sensory-profiles"
+    ],
+    [
+     "Calm-down sounds",
+     "/wp-11-sound-toolkit.html"
+    ]
+   ],
+   "philosophy": "Maurice Merleau-Ponty argued that we meet the world first through the body, not through ideas. If that’s right, a noisy kitchen isn’t a small thing; it shapes someone’s whole evening. Care ethics adds that meeting needs, bodily needs included, is moral work.",
+   "psychology": "Winnie Dunn’s model describes how people differ in how strongly they notice sensory input and how they respond to it. Elaine Aron’s research on sensory processing sensitivity suggests some people are more deeply affected by their surroundings. Sensory load adds up across a day, like a battery draining.",
+   "autistic_lens": "Many autistic people describe some sensory input as painful, not just annoying: a hum others don’t hear, a label that scratches all day, a hug that is too much. Through an autistic lens, headphones, dim lights and stimming are tools, not rudeness. Naming them out loud (‘I need the TV lower so I can talk with you’) turns a mystery into a setup you can fix.",
+   "together": "Comfort is not a luxury; the body is where life happens. Name sensory needs as plainly as any other need, and shape the home around everyone’s senses.",
+   "question": "What sound, light or texture drains you most, and does anyone close to you know?",
+   "try": "Each name one sensory thing at home that drains you and one that soothes you. Fix one this week."
+  },
+  {
+   "id": "on-your-own",
+   "title": "Being on your own",
+   "patterns": [
+    "\\b(on my own|by myself|single again|lonely|loneliness|solitude|break ?up|broke up|divorc\\w*)\\b"
+   ],
+   "links": [
+    [
+     "On my own after a breakup or divorce",
+     "/on-my-own.html"
+    ],
+    [
+     "Your self-discovery path",
+     "/self-path.html"
+    ],
+    [
+     "Loneliness",
+     "/library/connection.html#loneliness"
+    ]
+   ],
+   "philosophy": "Montaigne advised keeping a ‘back room’ of your own, a private space inside yourself that no loss can take away. Hannah Arendt separated solitude, being good company for yourself, from loneliness, feeling cut off even from yourself. Being on your own can be either, and the difference matters.",
+   "psychology": "Loneliness research treats loneliness as a signal of unmet need, not a flaw. Studies of solitude suggest that time alone, when it’s chosen, can bring rest and creativity. After a breakup, rebuilding routines and small social ties helps the self settle again.",
+   "autistic_lens": "Many autistic people describe solitude as recharging, not sad. Through an autistic lens, ‘you must be lonely’ is a hidden assumption worth checking: time alone may be exactly what someone needs. The honest question isn’t ‘are you alone?’ but ‘do you have the connection you want?’",
+   "together": "Alone can be rest or ache, and only you can tell which. Build a good back room for yourself, and reach out by choice when the signal says you need people.",
+   "question": "Is your time alone feeling more like solitude or more like loneliness right now?",
+   "try": "Plan one hour of chosen solitude and one small contact with a person this week."
+  },
+  {
+   "id": "play",
+   "title": "Play",
+   "patterns": [
+    "\\b(play(ing|ful)?|having fun|fun together|board games?|laughter|silly)\\b"
+   ],
+   "links": [
+    [
+     "Calm games for a busy mind",
+     "/pause-and-play.html"
+    ],
+    [
+     "Play, explained",
+     "/library/connection.html#play"
+    ],
+    [
+     "Gaming, phones and time together",
+     "/gaming-and-time-together.html"
+    ]
+   ],
+   "philosophy": "Johan Huizinga argued in Homo Ludens that play is older than culture, and that much of culture grows out of it. Montaigne wondered, when playing with his cat, whether she was passing time with him more than he with her. Play isn’t the opposite of seriousness; it’s a different way of being together.",
+   "psychology": "Stuart Brown and other researchers argue that play matters for adults as well as children: it eases stress and builds bonds. Aron’s self-expansion research suggests new, fun activities together can renew closeness. Shared laughter tends to go with feeling close.",
+   "autistic_lens": "Through an autistic lens, play doesn’t have to be loud or chatty to count. Parallel play, two people doing their own thing side by side, is a well-loved way many autistic people share space. A game with clear rules can be a relief: everyone knows what’s expected, so the fun can flow.",
+   "together": "Play is a serious part of a good life, and it comes in many shapes. Find the kind that fits you both, even if it’s quiet and side by side.",
+   "question": "When did you last play with someone, just for the joy of it?",
+   "try": "Pick one game or silly thing to do together for fifteen minutes this week, phones away."
+  },
+  {
+   "id": "rest",
+   "title": "Rest",
+   "patterns": [
+    "\\b(rest|resting|burn(ed|t)? out|burnout|exhausted|downtime|recharg\\w*|doing nothing)\\b"
+   ],
+   "links": [
+    [
+     "Burnout",
+     "/library/stress.html#burnout"
+    ],
+    [
+     "Boredom and rest",
+     "/library/calm.html#boredom-and-rest"
+    ],
+    [
+     "Drift: calm visuals",
+     "/calm-visualizer.html"
+    ]
+   ],
+   "philosophy": "Josef Pieper argued in Leisure, the Basis of Culture that leisure is not laziness but a kind of open, receptive attention. Bertrand Russell’s essay In Praise of Idleness questioned the idea that more work is always more virtue. Many faith traditions build rest into the week, as with the Sabbath.",
+   "psychology": "Christina Maslach’s research describes burnout as exhaustion, cynicism and a sense of getting nowhere. Attention restoration theory (Rachel and Stephen Kaplan) suggests time in nature helps tired attention recover. Rest is part of how the body handles stress, not a reward for finishing everything.",
+   "autistic_lens": "Many autistic people describe ‘autistic burnout’, a deep exhaustion after long stretches of masking and overload, and researchers such as Dora Raymaker and colleagues have begun to describe it. Through an autistic lens, rest may look like a dark room, a deep interest or a familiar show, not a party. Fair sharing at home includes fair sharing of rest.",
+   "together": "Rest is a need, not a prize. Share it as fairly as you share the chores, and let each person rest in the way that actually restores them.",
+   "question": "What actually restores you, as opposed to what you think should?",
+   "try": "Put one hour of real rest in the calendar for each person this week, and protect it like an appointment."
+  },
+  {
+   "id": "money",
+   "title": "Money together",
+   "patterns": [
+    "\\b(money|finances?|budget\\w*|savings|debts?|joint account|bills)\\b"
+   ],
+   "links": [
+    [
+     "Money together",
+     "/money-together.html"
+    ],
+    [
+     "What money means to us",
+     "/library/life.html#money-meanings"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Aristotle saw money as a tool for living well, not the goal of life. Seneca, a very wealthy Stoic, argued that wealth should serve a good life, not rule it. Rawls’s fairness test works here too: would you agree to this money split not knowing whose pay you’d have?",
+   "psychology": "Research on ‘money meanings’ shows that money often stands for security, freedom, love or control, depending partly on how we grew up. Couples rarely fight about the numbers alone; they fight about what the numbers mean. Clear, regular money talks reduce conflict.",
+   "autistic_lens": "Through an autistic lens, money is a place where clear rules shine: a written budget, set dates for bills, plain amounts instead of ‘we should spend less’. Many autistic people find vague money talk stressful and precise money talk calming. The right to some private, no-questions money can be written in as a rule too.",
+   "together": "Money talks are really values talks. Name what money means to each of you, then write a plan precise enough that nobody has to guess. If money is being used to control or frighten you, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What did money mean in the home you grew up in?",
+   "try": "Each finish this sentence: ‘Money, to me, means ___.’ Compare before you talk numbers."
+  },
+  {
+   "id": "apart-and-home",
+   "title": "Apart, and coming home",
+   "patterns": [
+    "\\b(long distance|miles apart|deploy\\w*|work away|away for work|coming home|time apart|time zones?)\\b"
+   ],
+   "links": [
+    [
+     "Long-distance and apart",
+     "/long-distance.html"
+    ],
+    [
+     "Coming home after time apart",
+     "/coming-home.html"
+    ],
+    [
+     "Moving and transitions",
+     "/library/life.html#moving-and-transitions"
+    ]
+   ],
+   "philosophy": "Aristotle noted that distance doesn’t end a friendship, only its activity, though a long silence can make people forget. In Homer’s Odyssey, the long-awaited homecoming is tense: Penelope tests Odysseus before she trusts him. Return is a new meeting, not just a reset.",
+   "psychology": "Research on long-distance relationships suggests they can be as satisfying as close ones, partly because people share more deliberately. Coming home after deployment or long work trips is often harder than expected: roles have shifted, and both people have changed.",
+   "autistic_lens": "Through an autistic lens, a homecoming is a big change of routine for everyone in the house. Saying the plan out loud helps: ‘The first evening is quiet. We’ll talk about chores on Saturday.’ Many autistic people also find planned calls easier than surprise ones while apart.",
+   "together": "Distance pauses the activity, not the bond, and coming back is a new beginning to plan, not a switch to flip. Say the plan for being apart, and the plan for coming back.",
+   "question": "What has changed in each of you since you were last together every day?",
+   "try": "Plan the first three days after a homecoming in writing, including some quiet time."
+  },
+  {
+   "id": "different-hours",
+   "title": "Different hours, same home",
+   "patterns": [
+    "\\b(night shifts?|shift work|different hours|opposite (shifts|schedules)|night owl|morning person|chronotypes?)\\b",
+    "\\bnever see each other\\b"
+   ],
+   "links": [
+    [
+     "Different hours",
+     "/different-hours.html"
+    ],
+    [
+     "Chronotypes",
+     "/library/wiring.html#chronotypes"
+    ],
+    [
+     "Sleep and mood",
+     "/library/stress.html#sleep-and-mood"
+    ]
+   ],
+   "philosophy": "Aristotle thought friends need to share life, to ‘live together’ in some way. When hours don’t line up, shared life has to be built on purpose. The Stoic idea of focusing on what’s in our control fits: you can’t change the shift, but you can choose your moments.",
+   "psychology": "Research on chronotypes shows people really do differ in when they’re most alert. Shift work affects sleep, mood and family time. Couples on different schedules often do better with small, protected rituals, like a note or a shared breakfast, than with rare long talks.",
+   "autistic_lens": "Through an autistic lens, mismatched schedules are a planning puzzle, not a sign of drifting apart. Written handover notes, a shared calendar and fixed ‘together’ slots can make two different days feel like one life.",
+   "together": "Different hours call for a few fixed meeting points, kept like promises. You can’t share every hour, but you can share some on purpose.",
+   "question": "Where do your two days overlap, even for ten minutes?",
+   "try": "Start a handover note: one line each day on how you are, and one thing the other needs to know."
+  },
+  {
+   "id": "life-changes",
+   "title": "Big life changes",
+   "patterns": [
+    "\\b(empty nest|retire(d|ment)|both home now|new chapter|life changes?|moving house|moved house)\\b",
+    "\\bkids (have )?(left|moved out)\\b"
+   ],
+   "links": [
+    [
+     "Empty nest",
+     "/empty-nest.html"
+    ],
+    [
+     "Retired and both home now",
+     "/retired-together.html"
+    ],
+    [
+     "Lifespan priorities",
+     "/library/life.html#lifespan-priorities"
+    ]
+   ],
+   "philosophy": "Buddhist teaching on impermanence says change isn’t a problem to solve but the nature of things, and Heraclitus said much the same in his own way. The existentialists would add that each new chapter is a new chance to choose who you’ll be.",
+   "psychology": "Research on life transitions shows that even good changes, like retirement, can bring stress, because routines and roles shift. Carstensen’s work suggests later life often brings a sharper focus on what matters most. Couples who renegotiate roles openly tend to settle better.",
+   "autistic_lens": "Through an autistic lens, a big life change is many small changes at once: new routines, new sounds, new roles. Breaking it into a written list, and changing a few things at a time, makes it less overwhelming. That approach helps anyone facing a new chapter.",
+   "together": "Change is constant, and new chapters need new agreements. Write down what’s changing, decide together what to keep, and take the rest in small steps.",
+   "question": "What role has ended for you, and what would you like your new one to be?",
+   "try": "Write two lists: ‘What’s changed’ and ‘What we want to keep’. Talk about one item from each."
+  },
+  {
+   "id": "screens-and-attention",
+   "title": "Phones, games and attention",
+   "patterns": [
+    "\\b(phones?|screens?|scrolling|social media|gaming|video games?|phubbing)\\b"
+   ],
+   "links": [
+    [
+     "Gaming, phones and time together",
+     "/gaming-and-time-together.html"
+    ],
+    [
+     "Phones and presence",
+     "/library/calm.html#phones-and-presence"
+    ],
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ]
+   ],
+   "philosophy": "Simone Weil and Iris Murdoch both put attention at the heart of love. A phone at dinner isn’t a moral crime, but it does pull attention somewhere else. Aristotle might ask: is this an activity we share, or one that keeps us apart?",
+   "psychology": "Research on ‘phubbing’ (snubbing someone for your phone) by James Roberts and Meredith David linked it with lower relationship satisfaction. But shared gaming can also be a real bond. What matters is whether attention is shared or split.",
+   "autistic_lens": "Through an autistic lens, screens can be many things: rest, a deep interest, a social world, a buffer against overload. Gaming side by side or watching together can be true togetherness. The honest question isn’t ‘how much screen time?’ but ‘do we each get the attention we need from each other?’",
+   "together": "Attention is the gift that matters, and screens can steal it or share it. Agree on the times you’re fully present, and enjoy the times you’re happily side by side.",
+   "question": "When does a screen bring you closer, and when does it pull you apart?",
+   "try": "Agree on one phone-free half hour each day, and one screen thing you enjoy together."
+  },
+  {
+   "id": "anger",
+   "title": "Anger",
+   "patterns": [
+    "\\b(anger|angry|furious|rage|yell(ed|ing)?|shout(ed|ing)?|snap(ped)? at)\\b",
+    "\\bmad at\\b"
+   ],
+   "links": [
+    [
+     "Anger, explained",
+     "/library/emotions.html#anger"
+    ],
+    [
+     "Upset right now?",
+     "/upset-right-now.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Seneca thought anger was a brief madness and warned against acting on it. Aristotle took a more mixed view: being angry at the right person, for the right reason, in the right way and for the right time can be fitting, but it’s hard to get right. Martha Nussbaum adds that the useful part of anger is the signal that something is wrong; the wish for payback rarely helps.",
+   "psychology": "Anger often sits on top of other feelings, like hurt, fear or tiredness. Research suggests that venting (ranting, hitting pillows) tends to keep anger going rather than releasing it. Slowing down, naming the feeling and dealing with the problem later work better.",
+   "autistic_lens": "Many autistic people describe anger that is really overload, or a strong reaction to unfairness. Through an autistic lens, asking ‘what’s too much right now?’ or ‘what feels unfair?’ often gets closer to the root than ‘calm down’. A strong sense of justice is a value, even when it comes out loud.",
+   "together": "Anger carries a message; let it cool before you deliver it. If anyone feels afraid of someone’s anger, that’s about safety, not communication: please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What is your anger usually trying to protect?",
+   "try": "Next time you’re angry, finish this sentence before speaking: ‘Underneath this, I feel ___.’"
+  },
+  {
+   "id": "naming-feelings",
+   "title": "Naming what you feel",
+   "patterns": [
+    "\\b(alexithymi\\w*|emotional granularity|interocept\\w*|numb)\\b",
+    "\\b(don t|do not|can t) (know|name|tell) what i (feel|m feeling)\\b",
+    "\\b(name|naming|label(l)?ing) (my |the |our )?(feelings?|emotions?)\\b"
+   ],
+   "links": [
+    [
+     "Emotional granularity",
+     "/library/emotions.html#emotional-granularity"
+    ],
+    [
+     "Naming feelings (affect labeling)",
+     "/library/emotions.html#affect-labeling"
+    ],
+    [
+     "Interoception",
+     "/library/stress.html#interoception"
+    ]
+   ],
+   "philosophy": "Spinoza argued that a passion which rules us loses some of its grip once we understand it clearly. The Stoics, too, thought feelings carry judgments we can examine. Naming a feeling isn’t cold; it’s a way of making friends with what’s inside.",
+   "psychology": "Lisa Feldman Barrett’s research on emotional granularity suggests that people who can name feelings precisely (‘disappointed’ rather than just ‘bad’) tend to cope better. Matthew Lieberman’s work on ‘affect labeling’ found that putting feelings into words can calm the brain’s alarm response. Interoception, sensing the body’s inner signals, is part of knowing what you feel.",
+   "autistic_lens": "Many autistic people experience alexithymia, difficulty identifying or naming feelings, and some sense inner body signals differently. Through an autistic lens, it helps to start from the body: ‘my chest is tight and my jaw is clenched’ is real information. Others can help by asking simple, concrete questions instead of ‘how do you feel?’",
+   "together": "Feelings get easier to handle once they have names, and the body is a good place to start. Be patient with each other: some people find the words fast, and some need time and a map.",
+   "question": "Where in your body do you notice a feeling before you have a word for it?",
+   "try": "Three times today, write one body signal and one feeling word that might fit it."
+  },
+  {
+   "id": "read-your-state",
+   "title": "Reading your state first",
+   "patterns": [
+    "\\b(stressed|stress|battery|running on empty|frazzled|on edge|hangry|today s weather)\\b"
+   ],
+   "links": [
+    [
+     "Today’s Weather",
+     "/quick-checks.html"
+    ],
+    [
+     "WP-02: how full is your battery?",
+     "/wp-02.html"
+    ],
+    [
+     "Window of tolerance",
+     "/library/stress.html#window-of-tolerance"
+    ]
+   ],
+   "philosophy": "Epictetus taught that we are disturbed not by things, but by our judgments about things. A tired, hungry mind makes harsher judgments. Knowing your state first is a Stoic habit: check the lens before trusting the view.",
+   "psychology": "Stress research shows that the body’s state shapes how we read others: under stress, neutral faces and words can seem hostile. The old HALT check (hungry, angry, lonely, tired) is a simple way to catch this. ‘Read your state first’ and the Battery are this site’s ideas, built on that research.",
+   "autistic_lens": "Through an autistic lens, checking your state is often a daily skill: how many spoons, how much sensory load? Many autistic people learned to watch their battery because they had to, and that habit helps everyone. Saying it out loud (‘I’m at twenty per cent today’) helps the other person read your words fairly.",
+   "together": "Check the lens before you trust the view. Saying your state out loud lets both people adjust, so a tired moment doesn’t turn into a fight about something else.",
+   "question": "How full is your battery right now, honestly?",
+   "try": "Before your next hard talk, each give your energy a number from 1 to 10. If either is under 4, pick another time."
+  },
+  {
+   "id": "same-fight-again",
+   "title": "The same fight again",
+   "patterns": [
+    "\\b(same (fight|argument)|always (fight|argue)|keep (fighting|arguing)|perpetual problems?)\\b",
+    "\\b(fight|argue|arguing|fighting) about the same\\b"
+   ],
+   "links": [
+    [
+     "How to stop fighting with your partner",
+     "/how-to-stop-fighting-with-your-partner.html"
+    ],
+    [
+     "Perpetual problems",
+     "/library/relationships.html#perpetual-problems"
+    ],
+    [
+     "WP-04: what keeps coming back?",
+     "/wp-04.html"
+    ]
+   ],
+   "philosophy": "The Stoics would ask what is in your control here: not the other person’s nature, but your response and the setup you share. Wittgenstein thought some problems aren’t so much solved as dissolved, once we see them differently. A repeating fight may be a question asked the wrong way.",
+   "psychology": "Gottman found that many couple conflicts are ‘perpetual’: rooted in lasting differences of personality or need. Happy couples don’t solve them so much as learn to talk about them with humour and kindness. Andrew Christensen and Neil Jacobson’s acceptance-based approach suggests accepting some differences can ease a fight more than trying to change each other.",
+   "autistic_lens": "Through an autistic lens, a repeating fight is often a pattern asking to be written down: same trigger, same words, same ending. Many autistic people are skilled at spotting patterns, and that’s a gift here. Map the loop, then change one step on purpose, before the next round.",
+   "together": "A fight that keeps coming back is usually about a difference to manage, not a contest to win. See the pattern, accept the difference, and change the setup.",
+   "question": "If your repeating fight were a script, what would the first line be?",
+   "try": "Write down the last three times this fight happened: what started it, what was said, how it ended. Look for the loop."
+  },
+  {
+   "id": "fix-the-setup",
+   "title": "Fix the setup, not the person",
+   "patterns": [
+    "\\b(fix the setup|the setup|habits?|nag(ging)?|keeps forgetting)\\b",
+    "\\b(won t|will never|never) change\\b"
+   ],
+   "links": [
+    [
+     "The Five Pillars: fix the setup",
+     "/five-pillars.html"
+    ],
+    [
+     "Habit formation",
+     "/library/motivation.html#habit-formation"
+    ],
+    [
+     "Blameless reviews",
+     "/library/teams.html#blameless-reviews"
+    ]
+   ],
+   "philosophy": "Aristotle said we become just by doing just things: character follows practice. That means changing the practice slowly changes the person. The Stoics would add that you can’t control someone’s character, but you can help shape the setup you share.",
+   "psychology": "Research on habits shows that cues and surroundings drive much of what we do. Peter Gollwitzer’s ‘implementation intentions’ (‘when X happens, I’ll do Y’) make follow-through more likely. Nagging tends to make people defensive; changing the setup avoids the argument altogether.",
+   "autistic_lens": "Through an autistic lens, ‘try harder’ is not a plan. A visual reminder, a fixed time, a clear owner: those are plans. Many autistic and ADHD people rely on outside structure because memory and willpower aren’t reliable for anyone, and that structure helps everyone in the house.",
+   "together": "When something keeps going wrong, look at the setup before you look at the person. Clear cues and clear owners do more than criticism ever can.",
+   "question": "What keeps going wrong that you’ve been blaming on character instead of setup?",
+   "try": "Pick one slipping job and add a cue: a time, a place, an alarm or a note."
+  },
+  {
+   "id": "fear-and-control",
+   "title": "Fear, control and safety",
+   "patterns": [
+    "\\b(controlling|threaten\\w*|walking on eggshells|not safe|unsafe)\\b",
+    "\\b(afraid|scared|frightened) of (him|her|them|my)\\b",
+    "\\b(controls|tracks|watches) (me|my)\\b",
+    "\\b(hits|hurts|hit|hurt) me\\b"
+   ],
+   "links": [
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ],
+    [
+     "Emotional safety",
+     "/library/emotions.html#emotional-safety"
+    ],
+    [
+     "What’s stored on this device",
+     "/on-this-device.html"
+    ]
+   ],
+   "philosophy": "Kant held that every person must be treated as an end, never merely as a tool for someone else’s will. De Beauvoir argued that real love needs two free people. Neither tradition asks anyone to endure being controlled or frightened in the name of love or loyalty.",
+   "psychology": "Researchers such as Evan Stark describe ‘coercive control’: a pattern of controlling money, contact, movement or choices that can do serious harm even without physical violence. Feeling afraid of a partner or family member is an important signal, not an overreaction.",
+   "autistic_lens": "Many autistic people have been taught to doubt their own reading of situations, and to mask and go along. Through an autistic lens, it’s worth saying plainly: if you feel afraid, that feeling is real information. Clear rules are care; rules enforced by fear are not.",
+   "together": "Love doesn’t require fear, and being strong doesn’t mean staying put. Please start with the “Not safe at home?” page (/safety.html) now; it has calm, practical steps and a quick way to leave the page.",
+   "question": "Do you feel free to say no, change your mind, or leave, without being afraid?",
+   "try": "Open the “Not safe at home?” page on a device you trust, and read just the first part."
+  },
+  {
+   "id": "autistic-lens",
+   "title": "Why look through an autistic lens?",
+   "patterns": [
+    "\\b(autistic (lens|view|perspective|way of seeing)|why (an )?autistic|three lenses)\\b"
+   ],
+   "links": [
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ],
+    [
+     "The double empathy problem",
+     "/library/wiring.html#double-empathy"
+    ],
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ]
+   ],
+   "philosophy": "Philosophers have long used an outsider’s eye to see what insiders miss: Socrates asking questions everyone thought were obvious, or Wittgenstein asking what our words are really doing. An autistic lens often works like that. It asks: what is the actual rule here, and has anyone said it?",
+   "psychology": "The double empathy problem (Milton) and research on autistic communication suggest autistic ways of talking are different, not broken. Many autistic people value clear, literal messages, honesty, predictability and deep focus, and these line up closely with what research says helps any relationship: clear requests, repair, rituals and attention.",
+   "autistic_lens": "Puddles doesn’t speak for all autistic people; nobody can, and autistic people differ from each other as much as anyone. This is one perspective, drawn from what many autistic people say about themselves. It treats autistic traits as a way of seeing, not a problem, and it notices how often ‘say the rule out loud’ makes life fairer for everyone.",
+   "together": "Looking through an autistic lens is like turning on the lights in a room full of unspoken rules. Once you can see them, you can choose together which ones to keep.",
+   "question": "Which unspoken rule in your life would you most like to see in plain light?",
+   "try": "Pick one hint, one ‘you should know’, or one unwritten rule, and say it out loud this week."
+  },
+  {
+   "id": "quiet-togetherness",
+   "title": "Being together without talking",
+   "patterns": [
+    "\\b(parallel play|comfortable silence|quiet together|body doubl\\w*|side by side)\\b",
+    "\\b(don t|do not) (need|have) to talk\\b"
+   ],
+   "links": [
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Co-regulation",
+     "/library/stress.html#co-regulation"
+    ],
+    [
+     "The Night Garden",
+     "/night-garden.html"
+    ]
+   ],
+   "philosophy": "Martin Buber described two strangers sitting silently side by side on a bench, and suggested that real meeting can happen without a word. Quaker meetings and Zen sitting both treat shared silence as deep company. Being with someone doesn’t always mean talking to them.",
+   "psychology": "Mildred Parten described ‘parallel play’ in young children in the 1930s: playing near each other, side by side. Adults do it too. ‘Body doubling’, working alongside someone, is a well-known strategy among ADHD and autistic people for getting tasks done, and research on co-regulation shows that calm people near each other can help each other settle.",
+   "autistic_lens": "Many autistic people say the best company is someone you don’t have to talk to: reading on the same sofa, gaming side by side, each lost in their own thing but together. Through an autistic lens, that isn’t distance. It’s closeness without demands, and many non-autistic people find they love it too.",
+   "together": "Being near each other can be a full kind of connection, words optional. Make room for quiet togetherness as well as talk.",
+   "question": "Who do you feel comfortable being quiet with?",
+   "try": "Suggest an hour of side-by-side time: same room, separate activities, no need to talk."
+  },
+  {
+   "id": "chosen-and-blended-families",
+   "title": "Foster, adoptive, kinship and stepfamilies",
+   "patterns": [
+    "\\b(foster(ing)?|adopt(ed|ion|ive)|kinship|step ?(kids?|children|son|daughter|parents?|family|mum|mom|dad))\\b",
+    "\\braising (my )?(grandkids|grandchildren|niece|nephew)\\b"
+   ],
+   "links": [
+    [
+     "Foster, adoptive and kinship families",
+     "/foster-and-kinship.html"
+    ],
+    [
+     "Stepfamilies",
+     "/library/life.html#stepfamilies"
+    ],
+    [
+     "Adult attachment",
+     "/library/relationships.html#adult-attachment"
+    ]
+   ],
+   "philosophy": "Ubuntu holds that a person becomes a person through other people, which fits families built by choice and circumstance as well as by birth. Confucian thought sees family roles as practices you grow into. Care ethics says the work of caring creates real bonds, whatever the paperwork says.",
+   "psychology": "Attachment research (John Bowlby, Mary Ainsworth and those who followed) shows children need at least one steady, responsive adult, and that this bond can still be built later in childhood. Patricia Papernow’s work on stepfamilies suggests closeness takes years, not months, and that rushing it tends to backfire.",
+   "autistic_lens": "Through an autistic lens, a child joining a new home faces a flood of new rules, smells, voices and routines. Saying the house rules out loud, keeping some things from the old home the same, and warning before changes can make a huge difference. Predictability is a way of saying ‘you’re safe here’.",
+   "together": "Families made by care are real families, and trust grows slowly through steady, predictable care. Say the rules, keep the routines, and give it time.",
+   "question": "What could help a new member of your family feel safe sooner?",
+   "try": "Write down five house rules in plain words, for someone who has just arrived."
+  }
+ ],
+ "big_questions": [
+  {
+   "id": "what-is-love",
+   "title": "What is love?",
+   "patterns": [
+    "\\bwhat (is|s) (real |true )?love\\b",
+    "\\bwhat does love (really )?mean\\b",
+    "\\bmeaning of love\\b"
+   ],
+   "links": [
+    [
+     "Love languages: a menu, not a label",
+     "/love-languages.html"
+    ],
+    [
+     "Responsiveness",
+     "/library/relationships.html#responsiveness"
+    ],
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ]
+   ],
+   "philosophy": "Philosophers disagree, which is part of the fun. Plato’s Symposium offers many answers in one evening, from love as longing for what we lack to love as a ladder towards the good. Aristotle saw the best love as wanting good things for someone for their own sake. Erich Fromm and bell hooks both called love a practice, not only a feeling.",
+   "psychology": "Researchers often split love into parts. Robert Sternberg’s triangle names intimacy, passion and commitment. Attachment research describes love as a safe base you can return to. Harry Reis’s work on ‘perceived partner responsiveness’ suggests that feeling understood, valued and cared for sits close to the heart of it.",
+   "autistic_lens": "Many autistic people describe love very concretely: love is remembering how I take my tea, warning me before plans change, listening to me talk about my favourite thing, letting me be quiet. Through an autistic lens, love is less about grand words and more about reliable, specific care. That’s a definition anyone can use.",
+   "together": "Love may be best understood as what you do, again and again, for someone’s own good, in a way they can actually receive. The feeling matters, and the practice is how it lives.",
+   "question": "What’s one small, specific thing someone does that makes you feel loved?",
+   "try": "Tell someone one specific thing they do that feels like love to you."
+  },
+  {
+   "id": "is-fair-equal",
+   "title": "Is fairness always equal?",
+   "patterns": [
+    "\\bis (fair|fairness|being fair) (always )?(the same as )?equal\\b",
+    "\\bdoes fair (always )?mean equal\\b",
+    "\\bfair (vs|versus|or) equal\\b",
+    "\\bwhat (is|does) fair(ness)? (really )?mean\\b"
+   ],
+   "links": [
+    [
+     "Chapter IV: two kinds of fair",
+     "/book/chapter-4.html"
+    ],
+    [
+     "Is the setup working for everyone?",
+     "/is-the-setup-working.html"
+    ],
+    [
+     "Procedural justice",
+     "/library/conflict.html#procedural-justice"
+    ]
+   ],
+   "philosophy": "Aristotle said justice treats equals equally and unequals in proportion, which means fair isn’t always the same. Rawls’s difference principle allows unequal shares only when they help those who have least. Marx’s famous slogan, ‘from each according to ability, to each according to needs’, points to need rather than sameness.",
+   "psychology": "Research finds that people use different fairness rules in different settings: equality, equity (by contribution) or need. Close relationships lean towards need. What makes any rule feel fair is often the process: being heard, and having a say.",
+   "autistic_lens": "Many autistic people care deeply about fairness and consistency, and find it hard when the rules quietly change. Through an autistic lens, the answer is clear: any fair rule can work, as long as it is said out loud, agreed, and applied the same way to everyone.",
+   "together": "Fair can be equal, proportional or by need. The fairest choice is the one both people made with open eyes, and can check again later.",
+   "question": "In your home, which kind of fair are you using: equal, by effort, or by need?",
+   "try": "Name the fairness rule you use for one shared job, and ask whether the other person would choose the same."
+  },
+  {
+   "id": "why-we-fight",
+   "title": "Why do we fight with the people we love?",
+   "patterns": [
+    "\\bwhy do (we|i|people|couples) (always )?(fight|argue)\\b",
+    "\\bwhy do i (hurt|snap at) the (ones|people) i love\\b"
+   ],
+   "links": [
+    [
+     "How to stop fighting with your partner",
+     "/how-to-stop-fighting-with-your-partner.html"
+    ],
+    [
+     "Conflict is normal",
+     "/library/conflict.html#conflict-is-normal"
+    ],
+    [
+     "Chapter I: why we get out of tune",
+     "/book/chapter-1.html"
+    ]
+   ],
+   "philosophy": "The more we care, the more is at stake. The Stoics noticed that strong attachment brings strong reactions, and Buddhist teaching links clinging with suffering. Neither meant we should stop loving; they meant we should notice what we’re holding on to.",
+   "psychology": "Close people share more tasks, more space and more history, so there’s more to disagree about. We also feel safe enough to show our worst moods at home. Attachment research suggests that many fights carry a hidden question underneath: ‘Are you there for me?’",
+   "autistic_lens": "Through an autistic lens, many home fights are double empathy problems in miniature: two people following different rules, each sure their own are obvious. Saying ‘here’s the rule I thought we had’ often turns a fight into a puzzle you solve together.",
+   "together": "We fight with the people we love because we’re close enough to collide and care enough to mind. Look for the hidden question and the hidden rule, and the fight often softens.",
+   "question": "What’s the hidden question under your most common fight?",
+   "try": "In your next disagreement, ask: ‘What rule did you think we had?’ Then share yours."
+  },
+  {
+   "id": "can-people-change",
+   "title": "Can people change?",
+   "patterns": [
+    "\\bcan (people|someone|anyone|he|she|they|i) (really |ever )?change\\b",
+    "\\bdo people (really |ever )?change\\b",
+    "\\bwill (he|she|they) ever change\\b"
+   ],
+   "links": [
+    [
+     "Stages of change",
+     "/library/motivation.html#stages-of-change"
+    ],
+    [
+     "Growth mindset",
+     "/library/motivation.html#growth-mindset"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Aristotle believed character is formed by habit, so change is possible, but slow, and it comes through practice rather than promises. The Buddhist idea of impermanence says nothing about us is fixed. The existentialists went further: we are always, in part, choosing who we are.",
+   "psychology": "James Prochaska and Carlo DiClemente’s stages of change describe people moving from not considering change, to thinking about it, preparing, acting and keeping it up, often with slips along the way. Personality research shows traits can shift over a lifetime, especially when people want to change and practise. Lasting change usually comes from inside; pressure from outside rarely does it.",
+   "autistic_lens": "Through an autistic lens, ‘can they change?’ needs a clearer question: change what, exactly, and how would we know? Some things, like core wiring, aren’t meant to change. Habits and agreements can. Being specific protects both people from impossible hopes.",
+   "together": "People can change their habits, slowly, when they choose to and have a setup that helps. Be clear about which change you mean, and remember some differences are to be accepted, not fixed. Waiting for someone to stop frightening or controlling you is different; that’s a safety question, so please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What exactly would be different if the change you hope for happened?",
+   "try": "Write the change you hope for as one action you could see, not as a trait."
+  },
+  {
+   "id": "what-we-owe-family",
+   "title": "What do we owe our family?",
+   "patterns": [
+    "\\bwhat do (we|i|you) owe (my |our |your )?(family|parents|mother|father|mum|mom|dad|siblings?)\\b",
+    "\\bdo i (still )?owe my (family|parents)\\b"
+   ],
+   "links": [
+    [
+     "Supporting family: parents, money home and duty",
+     "/family-obligations.html"
+    ],
+    [
+     "For grown-up children",
+     "/grown-up-children.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Confucius put respect for parents at the root of a good life. Jane English argued that adult children owe their parents what love and friendship call for, not repayment of a debt. Ubuntu suggests we owe each other because we are made by each other. Few philosophers say we owe family our safety or our self.",
+   "psychology": "Research on families suggests duty can bring meaning, and too much of it brings strain. Bowen’s idea of ‘differentiation’ describes staying connected without losing yourself. Healthy families can hold both love and limits.",
+   "autistic_lens": "Through an autistic lens, ‘family first’ is too vague a rule to live by. It helps to name what you actually give and can give: time, money, care, visits. Many autistic people find that clear, kept promises feel more loving than vague, broken ones.",
+   "together": "We owe family care that grows from real relationship, given in a size we can keep up. Duty never requires accepting fear or harm; if that’s part of it, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "If you wrote down what you owe your family, what would be on the list, and what wouldn’t?",
+   "try": "Write one family promise you can keep fully, and one you’ve been making but can’t keep."
+  },
+  {
+   "id": "are-boundaries-selfish",
+   "title": "Is it selfish to have boundaries?",
+   "patterns": [
+    "\\b(is it|am i|isn t it) (being )?selfish\\b",
+    "\\bselfish to (have|set|keep|say no|want)\\b",
+    "\\bboundaries (are|feel) selfish\\b"
+   ],
+   "links": [
+    [
+     "Boundaries, explained",
+     "/library/communication.html#boundaries"
+    ],
+    [
+     "For grown-up children: boundaries with a parent",
+     "/grown-up-children.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Aristotle discussed self-love and split it in two: the grasping kind that takes the most for yourself, and the good kind that cares for your own character. Kant thought we have duties to ourselves as well as to others. Caring for yourself can be part of being good to others.",
+   "psychology": "Research on caregivers and burnout suggests that people without limits often end up able to give less, not more, over time. Clear boundaries tend to go with healthier, longer-lasting relationships. Guilt about a boundary is common, and it isn’t proof you did wrong.",
+   "autistic_lens": "Many autistic people have been told their needs are selfish: needing quiet, needing to leave early, needing plans in writing. Through an autistic lens, a boundary is honest information that lets you keep showing up. Hiding your limits until you collapse helps nobody.",
+   "together": "A boundary is selfish only if it takes from others what they truly need; most boundaries just tell others what you can give. If someone punishes you for having one, that’s worth a closer look: please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What would you be able to give more freely if your limits were clear?",
+   "try": "Notice one time this week when you say yes but mean no. Practise one honest ‘not today’."
+  },
+  {
+   "id": "good-friend",
+   "title": "What makes a good friend?",
+   "patterns": [
+    "\\bwhat (makes|is) a (good|true|real) friend\\b",
+    "\\bwhat is (true |real )?friendship\\b",
+    "\\bhow (to|do i|can i) be a (good|better) friend\\b"
+   ],
+   "links": [
+    [
+     "Friends: when a friendship drifts",
+     "/friends.html"
+    ],
+    [
+     "Friendship, explained",
+     "/library/connection.html#friendship"
+    ],
+    [
+     "Weak ties",
+     "/library/connection.html#weak-ties"
+    ]
+   ],
+   "philosophy": "Aristotle said a true friend wants your good for your own sake, and called a friend ‘another self’. Epicurus counted friendship among the greatest goods of a happy life. Confucius valued friends who are upright, sincere and well-informed, even when their honesty stings.",
+   "psychology": "Studies of friendship point to responsiveness, reliability and shared time. Small, regular contact keeps friendships alive more than big, rare events. Being a good friend also includes letting yourself be helped.",
+   "autistic_lens": "Many autistic people describe good friends simply: people who say what they mean, accept you as you are, and don’t punish you for missing social rules. Through an autistic lens, a good friend explains instead of withdrawing, and asks instead of assuming.",
+   "together": "A good friend wants your good, tells you the truth kindly, and accepts the shape of you. Say plainly what friendship looks like for you, and ask the same.",
+   "question": "Which friend accepts you most as you are, and have you told them?",
+   "try": "Tell one friend one specific reason you value them."
+  },
+  {
+   "id": "why-small-things-matter",
+   "title": "Why do small things matter so much?",
+   "patterns": [
+    "\\bwhy do (the )?(small|little) things matter\\b",
+    "\\bwhy (does|do) (such )?(a )?(small|little) things? (hurt|matter|bother|upset)\\b",
+    "\\b(it s|its) just a (small|little) thing\\b"
+   ],
+   "links": [
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ],
+    [
+     "Bids for connection",
+     "/library/relationships.html#bids-for-connection"
+    ],
+    [
+     "The peak-end rule",
+     "/library/thinking.html#peak-end-rule"
+    ]
+   ],
+   "philosophy": "Iris Murdoch thought moral life happens mostly in small moments of attention, not in big choices. Confucian ritual says small, everyday courtesies carry respect. Small things are where character lives.",
+   "psychology": "Gottman’s research on bids found that tiny daily responses say a lot about a relationship’s future. Small things also carry meaning: an unwashed cup can stand for ‘my effort doesn’t count’. The peak–end rule shows that brief moments can colour a whole memory.",
+   "autistic_lens": "Through an autistic lens, small things matter because details matter. Many autistic people notice small changes others miss, and a small broken promise can feel like a broken rule. Taking small things seriously, without turning them into tests, is a way of respecting each other.",
+   "together": "Small things matter because they carry big meanings and they happen every day. Ask what the small thing stands for, and you’ll usually find what really needs to be said.",
+   "question": "What does the small thing that bothers you stand for?",
+   "try": "Next time a little thing stings, finish this sentence: ‘This feels like it means ___.’"
+  },
+  {
+   "id": "what-makes-a-home",
+   "title": "What makes a home?",
+   "patterns": [
+    "\\bwhat makes (a |it a |a house a )?home\\b",
+    "\\bwhat is (a )?home\\b",
+    "\\b(doesn t|does not|never) feel(s)? like home\\b"
+   ],
+   "links": [
+    [
+     "Start here",
+     "/start-here.html"
+    ],
+    [
+     "Sharing a room: a roommate agreement",
+     "/sharing-a-room.html"
+    ],
+    [
+     "Rituals of connection",
+     "/library/connection.html#rituals-of-connection"
+    ]
+   ],
+   "philosophy": "Gaston Bachelard wrote that a house shelters daydreaming, so home is as much inside us as around us. Heidegger linked dwelling with looking after a place, not just living in it. Ubuntu reminds us that a home is made of people as well as walls.",
+   "psychology": "Research on ‘place attachment’ shows people bond with places that feel safe and familiar. A place feels like home when you can rest, be yourself and predict what will happen. Fair sharing helps; quiet resentment can make even a lovely house feel tense.",
+   "autistic_lens": "Through an autistic lens, home is the place where you don’t have to mask: the lights are right, the noise is bearable, the routines hold. Building a home around everyone’s senses and needs is one of the deepest kinds of care.",
+   "together": "Home is a place where you can rest, be known and predict what’s coming. Shared fairly and shaped around real needs, almost any space can become one.",
+   "question": "What one change would make your home feel more like home?",
+   "try": "Each name one thing that makes home feel safe to you. Protect it this week."
+  },
+  {
+   "id": "is-honesty-kind",
+   "title": "Is honesty always kind?",
+   "patterns": [
+    "\\bis (honesty|the truth|being honest) (always )?kind\\b",
+    "\\bshould i (always )?(be honest|tell the truth)\\b",
+    "\\bwhite lies?\\b",
+    "\\bbrutal(ly)? honest\\w*\\b"
+   ],
+   "links": [
+    [
+     "WP-09: say it so it lands",
+     "/wp-09.html"
+    ],
+    [
+     "Feedback",
+     "/library/communication.html#feedback"
+    ],
+    [
+     "Directness",
+     "/library/communication.html#directness"
+    ]
+   ],
+   "philosophy": "Kant famously held that lying is always wrong, even to spare feelings. Buddhist right speech adds conditions: speech should be true, helpful, kindly meant and well timed. Put together, they suggest: don’t lie, and don’t use the truth as a weapon either.",
+   "psychology": "Research on feedback shows that honest, specific, caring feedback helps people grow, while harsh criticism makes them defensive. In close relationships, many people say they would rather hear a kind truth than a comfortable lie.",
+   "autistic_lens": "Many autistic people experience honesty as a form of respect: I tell you the truth because I trust you to handle it. Through an autistic lens, ‘brutal’ is the problem, not ‘honest’. Directness with warmth (‘I love you, and I don’t like that shirt’) is one of the clearest gifts there is.",
+   "together": "Honesty is kind when it’s true, needed, gentle and well timed. You don’t have to choose between truth and kindness; you get to choose how you carry the truth.",
+   "question": "Is there something true you’ve been afraid to say kindly?",
+   "try": "Before sharing a hard truth, check three things: is it true, is it helpful, is this the right time?"
+  },
+  {
+   "id": "forgive-and-forget",
+   "title": "Does forgiving mean forgetting?",
+   "patterns": [
+    "\\bdoes forgiv\\w* mean (forget\\w*|staying|going back)\\b",
+    "\\bwhat is forgiveness\\b",
+    "\\bshould i forgive\\b",
+    "\\bforgive and forget\\b"
+   ],
+   "links": [
+    [
+     "Forgiveness, explained",
+     "/library/conflict.html#forgiveness"
+    ],
+    [
+     "Apology languages",
+     "/apology-languages.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Arendt saw forgiveness as freeing both people from being stuck in one act. Martha Nussbaum is wary of forgiveness that is really a demand for grovelling, and prefers a generous love that looks forward. Neither says forgiving means pretending the past didn’t happen.",
+   "psychology": "Researchers separate forgiveness, an inner letting go of payback, from reconciliation, rebuilding trust together. You can do one without the other. Forgiving often helps the forgiver’s own wellbeing, but it can’t be rushed.",
+   "autistic_lens": "Many autistic people say: I can forgive, but I can’t un-know. Through an autistic lens, that’s honest, not grudging. Forgiveness can sit alongside a clear memory and clear new rules.",
+   "together": "Forgiving means setting down the debt, not erasing the memory, and not necessarily going back. If going back would mean being unsafe, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What would you still need to remember, even after you forgive?",
+   "try": "Write: ‘I can forgive ___, and I still need ___.’"
+  },
+  {
+   "id": "knowing-what-they-mean",
+   "title": "How do we know what someone means?",
+   "patterns": [
+    "\\bhow (do|can) (we|i|you) (ever )?know what (someone|anyone|they|he|she|people) (really )?means?\\b",
+    "\\bwhat did (he|she|they) (really )?mean\\b"
+   ],
+   "links": [
+    [
+     "The Signal Translator",
+     "/signal-translator.html"
+    ],
+    [
+     "The Carrier Wave Decoder",
+     "/carrier-wave-decoder.html"
+    ],
+    [
+     "The mind-reading trap",
+     "/library/thinking.html#mind-reading"
+    ]
+   ],
+   "philosophy": "Wittgenstein argued that meaning lives in use: we understand words through shared practices. Grice showed how much we imply without saying. In a famous old exchange, Zhuangzi says the fish are happy, and his friend Huizi asks how he could know, since he isn’t a fish. We never fully stand inside another mind.",
+   "psychology": "Research suggests we’re less accurate at reading others than we think, especially over text. The ‘illusion of transparency’ makes us believe our own feelings show more than they do. Asking checks understanding far better than guessing.",
+   "autistic_lens": "Through an autistic lens, the honest answer is: often we don’t, and that’s fine, because we can ask. The double empathy problem reminds us both sides guess wrong. ‘Did you mean ___?’ isn’t awkward; it’s the most reliable tool we have.",
+   "together": "We know what someone means by asking, checking and learning how they use words, not by guessing harder. Make ‘did you mean...?’ a normal question in your home.",
+   "question": "When did you last guess someone’s meaning instead of asking?",
+   "try": "Use ‘Did you mean ___ or ___?’ three times this week, kindly."
+  },
+  {
+   "id": "why-change-is-hard",
+   "title": "Why is change so hard?",
+   "patterns": [
+    "\\bwhy is (change|changing) (so )?hard\\b",
+    "\\bwhy (can t|cant) i change\\b",
+    "\\bwhy is it (so )?hard to change\\b"
+   ],
+   "links": [
+    [
+     "Habit formation",
+     "/library/motivation.html#habit-formation"
+    ],
+    [
+     "Stages of change",
+     "/library/motivation.html#stages-of-change"
+    ],
+    [
+     "WP-04: what keeps coming back?",
+     "/wp-04.html"
+    ]
+   ],
+   "philosophy": "Hume said custom guides most of life, so changing a habit means going against our strongest guide. Aristotle saw that good habits take practice, and that it’s easier to start well than to unlearn. Buddhist teaching adds that we cling to what’s familiar, even when it hurts.",
+   "psychology": "Habits run on cues and rewards and don’t need our attention, which is why they’re hard to shift. Change usually involves slips; the stages-of-change model treats a slip as part of the process, not as failure. Small, specific steps beat big resolutions.",
+   "autistic_lens": "Many autistic people know this in their bones: even a good change can cost a lot of energy. Through an autistic lens, change is easier when it’s planned, explained and taken one piece at a time. That isn’t rigidity; it’s a sensible way for anyone to change.",
+   "together": "Change is hard because habit is powerful and the familiar feels safe. Make it small, specific and planned, and expect a few slips along the way.",
+   "question": "What’s the smallest version of the change you want?",
+   "try": "Write one ‘when X happens, I will do Y’ plan for the change you want."
+  },
+  {
+   "id": "what-is-enough",
+   "title": "What is enough?",
+   "patterns": [
+    "\\bwhat is enough\\b",
+    "\\bam i (doing )?enough\\b",
+    "\\bhow much is enough\\b",
+    "\\bnever (feels? )?enough\\b"
+   ],
+   "links": [
+    [
+     "Perfectionism",
+     "/library/motivation.html#perfectionism"
+    ],
+    [
+     "Self-compassion",
+     "/library/connection.html#self-compassion"
+    ],
+    [
+     "Hedonic adaptation",
+     "/library/life.html#hedonic-adaptation"
+    ]
+   ],
+   "philosophy": "Epicurus thought happiness needs little: friends, freedom and a thoughtful life. The Daoist classic attributed to Laozi says that knowing you have enough is itself a kind of wealth. Seneca warned that whoever always craves more is poor, whatever they own.",
+   "psychology": "Hedonic adaptation means more rarely feels like more for long. Research on perfectionism links ‘never enough’ standards with stress and burnout. Kristin Neff’s research on self-compassion suggests that treating yourself as you’d treat a friend helps people keep going.",
+   "autistic_lens": "Through an autistic lens, ‘enough’ needs a definition, or it never arrives. Many autistic people find relief in writing it down: ‘Enough cleaning today is the kitchen and one load of washing.’ A clear finish line is a kindness to yourself and to everyone else.",
+   "together": "Enough is a line you can draw on purpose. Name it clearly, honour it when you reach it, and let rest be part of a good day.",
+   "question": "What would ‘enough’ look like for today, in one sentence?",
+   "try": "Write tomorrow’s ‘enough’ list before bed. When it’s done, stop."
+  },
+  {
+   "id": "needing-routines",
+   "title": "Is it okay to need routines?",
+   "patterns": [
+    "\\b(ok|okay|alright|normal|bad|wrong) to need (a )?routines?\\b",
+    "\\bwhy do i need (a )?routines?\\b",
+    "\\bam i (too )?rigid\\b"
+   ],
+   "links": [
+    [
+     "Intolerance of uncertainty",
+     "/library/wiring.html#intolerance-of-uncertainty"
+    ],
+    [
+     "Habits and cues",
+     "/library/motivation.html#habits-and-cues"
+    ],
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ]
+   ],
+   "philosophy": "Hume thought custom is how humans get through life at all. Monasteries and many faiths have built whole lives around a daily rule: a set rhythm of work, prayer and rest. Routine has a long and honourable history.",
+   "psychology": "Habits free up attention and lower stress. Research on intolerance of uncertainty shows that some people find unpredictability truly distressing, and that predictability helps them cope. Needing routine isn’t a flaw; it’s information about how you work best.",
+   "autistic_lens": "Many autistic people say routine is how they stay regulated in a loud, unpredictable world. Through an autistic lens, needing routine is like needing glasses: you work better with it, and there’s no shame in that. The kind thing is to build routines that also leave the other person room to breathe.",
+   "together": "Yes, it’s okay to need routines. Say what yours protect, so others can respect them, and agree together on what to do when life changes the plan.",
+   "question": "Which of your routines would you protect first, and why?",
+   "try": "Tell someone close about one routine you need, and what happens for you when it breaks."
+  },
+  {
+   "id": "what-is-the-self",
+   "title": "Who am I, really?",
+   "patterns": [
+    "\\bwhat is the self\\b",
+    "\\bwho am i( really)?\\b",
+    "\\bwhat makes me me\\b",
+    "\\bknow (myself|yourself|thyself)\\b"
+   ],
+   "links": [
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ],
+    [
+     "Your self-discovery path",
+     "/self-path.html"
+    ],
+    [
+     "Know yourself, then: where your lens came from",
+     "/book/self-1-then.html"
+    ]
+   ],
+   "philosophy": "‘Know yourself’ was carved at the temple of Apollo at Delphi, and Socrates made the question his life’s work. Hume looked inward and found no fixed self, only a bundle of perceptions; Buddhist teaching on non-self says something similar. Ubuntu says the self is made in relationship.",
+   "psychology": "Psychologists such as Dan McAdams describe a ‘narrative identity’: the self as a story we tell, built from memory and shaped by the people around us. Our families, our wiring and our choices each write parts of it.",
+   "autistic_lens": "Many autistic people describe learning about their wiring as finding a missing piece of themselves. Through an autistic lens, knowing yourself includes knowing your senses, your energy and your way of communicating. It’s practical self-knowledge, the kind you can write on a card.",
+   "together": "The self is partly given, partly chosen and partly made with others. Knowing your own wiring, story and values is a gift to you and to everyone who shares life with you.",
+   "question": "Which part of yourself did you discover only recently?",
+   "try": "Write three lines: ‘I was shaped by ___. I’m wired to ___. I’m choosing to become ___.’"
+  },
+  {
+   "id": "wanting-time-alone",
+   "title": "Is it wrong to want time alone?",
+   "patterns": [
+    "\\b(wrong|bad|selfish|okay|ok|normal) to want (some )?(time )?alone\\b",
+    "\\bneed (some )?(time )?(alone|to myself)\\b",
+    "\\bneed my own space\\b"
+   ],
+   "links": [
+    [
+     "On my own",
+     "/on-my-own.html"
+    ],
+    [
+     "Introversion",
+     "/library/wiring.html#introversion"
+    ],
+    [
+     "One wants to talk, one needs space",
+     "/pursue-withdraw.html"
+    ]
+   ],
+   "philosophy": "Montaigne advised keeping a ‘back room’ of your own. Pascal suggested that much human trouble comes from not being able to sit quietly alone in a room. Arendt thought solitude, being with yourself, is where thinking happens.",
+   "psychology": "Research on introversion and solitude suggests chosen time alone helps many people recharge. Time alone is different from withdrawing in anger: one restores, the other avoids. Often the difference is in how it’s explained.",
+   "autistic_lens": "Many autistic people need alone time the way others need sleep. Through an autistic lens, the kind way to take it is to say it plainly: ‘I need an hour alone. It’s not about you. I’ll come and find you after.’ Said that way, alone time protects the relationship.",
+   "together": "Wanting time alone isn’t wrong; it’s often how people come back to each other well. Say why, say when you’ll be back, and keep that promise.",
+   "question": "How do you explain your need for time alone, and how does it land?",
+   "try": "Write your ‘time alone’ sentence: what you need, why, and when you’ll return."
+  },
+  {
+   "id": "guilty-resting",
+   "title": "Why do I feel guilty when I rest?",
+   "patterns": [
+    "\\bguilty (about |for |when (i )?)?rest\\w*\\b",
+    "\\bfeel (bad|guilty) (doing nothing|relaxing|sitting down|taking a break)\\b",
+    "\\bcan t (rest|relax)\\b"
+   ],
+   "links": [
+    [
+     "Burnout",
+     "/library/stress.html#burnout"
+    ],
+    [
+     "Boredom and rest",
+     "/library/calm.html#boredom-and-rest"
+    ],
+    [
+     "‘Should’ statements",
+     "/library/thinking.html#should-statements"
+    ]
+   ],
+   "philosophy": "Josef Pieper argued that leisure is the basis of culture, not a reward for work. Bertrand Russell questioned the belief that work is always a virtue. Many faith traditions command rest, as if they knew people wouldn’t take it otherwise.",
+   "psychology": "Guilt about rest is often driven by ‘should’ rules we learned early. Research links constant busyness with burnout. When the load at home is uneven, the person carrying more often finds rest hardest to take.",
+   "autistic_lens": "Through an autistic lens, rest is maintenance, like charging a phone. Many autistic people have learned that ignoring the battery leads to shutdown or burnout. Saying ‘I’m resting so I can keep going’ turns guilt into a plan.",
+   "together": "Guilt about rest often comes from an old rule or an uneven load. Check both: rewrite the rule, and share the load so everyone gets to rest.",
+   "question": "Whose voice says you haven’t earned rest yet?",
+   "try": "Take fifteen minutes of rest today, and say out loud: ‘This is part of the work.’"
+  },
+  {
+   "id": "love-and-anger",
+   "title": "Can you love someone and still be angry?",
+   "patterns": [
+    "\\b(can|could) (you|i|we) (love|care about) (someone|somebody|them|him|her) and (still )?be (angry|mad|furious)\\b",
+    "\\blove (them|him|her) but (i m|i am) (so )?(angry|mad)\\b",
+    "\\bangry (at|with) (someone|the people|the person) i love\\b"
+   ],
+   "links": [
+    [
+     "Anger, explained",
+     "/library/emotions.html#anger"
+    ],
+    [
+     "Complaints vs criticism",
+     "/library/communication.html#complaints-vs-criticism"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "Aristotle thought anger can be fitting when it’s about a real wrong and kept in proportion. Martha Nussbaum argues that anger in love works best when it turns into the question of how to make things better. Love and anger aren’t opposites; not caring at all is much further from love.",
+   "psychology": "Most people feel anger towards the people they love most, because those people matter most. What predicts harm isn’t anger itself but how it’s expressed: Gottman found contempt and harsh criticism wound, while a calm complaint about a specific thing can help.",
+   "autistic_lens": "Through an autistic lens, two feelings can be true at once, and saying both plainly is clearest: ‘I love you. I’m angry that the plan changed without anyone telling me.’ Many autistic people find that naming both stops the other person guessing which one is real.",
+   "together": "Yes, you can love someone and be angry. Say both, and aim the anger at the problem, not the person. If anger ever makes someone afraid, that’s a safety issue: please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What is your anger asking the person you love to understand?",
+   "try": "Try the two-part sentence: ‘I love you, and I’m angry about ___.’"
+  },
+  {
+   "id": "really-listening",
+   "title": "What does it mean to really listen?",
+   "patterns": [
+    "\\bwhat does it mean to (really |truly )?listen\\b",
+    "\\bhow (do i|to|can i) (really |truly |better )?listen\\b",
+    "\\b(nobody|no one) (ever )?listens\\b",
+    "\\bfeel heard\\b"
+   ],
+   "links": [
+    [
+     "Active listening",
+     "/library/communication.html#active-listening"
+    ],
+    [
+     "Reflective listening",
+     "/library/conflict.html#reflective-listening"
+    ],
+    [
+     "Advice vs support",
+     "/library/communication.html#advice-vs-support"
+    ]
+   ],
+   "philosophy": "Simone Weil thought that being able to give real attention to someone who is suffering is very rare, and very precious. Buber’s I–Thou describes meeting a person fully instead of using them. Real listening is a moral act, not just a skill.",
+   "psychology": "Carl Rogers described empathic listening as entering another person’s world without judging it. Research on active listening suggests reflecting back what you heard helps people feel understood. Listening to fix is different from listening to understand.",
+   "autistic_lens": "Many autistic people listen without eye contact, or while stimming or doodling, and get told they aren’t listening. Through an autistic lens, real listening is about attention, not performance. Asking ‘do you want ideas, or just someone to hear this?’ helps everyone.",
+   "together": "To really listen is to give full attention to someone’s world without rushing to fix it. Ask what kind of listening they want, and let them show attention in their own way too.",
+   "question": "Who really listens to you, and what do they do?",
+   "try": "Next time someone shares something, ask: ‘Do you want help, or do you want me to listen?’"
+  },
+  {
+   "id": "being-misunderstood",
+   "title": "Why does being misunderstood hurt so much?",
+   "patterns": [
+    "\\bwhy does being misunderstood hurt\\b",
+    "\\b(nobody|no one) understands me\\b",
+    "\\bi (always )?feel misunderstood\\b",
+    "\\balways (being )?misunderstood\\b"
+   ],
+   "links": [
+    [
+     "The double empathy problem",
+     "/library/wiring.html#double-empathy"
+    ],
+    [
+     "See it from their side",
+     "/perspective-shifter.html"
+    ],
+    [
+     "Make your Wiring Card",
+     "/wiring-card.html"
+    ]
+   ],
+   "philosophy": "Hegel, and Axel Honneth after him, argued that we become ourselves through being recognised by others, so being misread can feel like being erased. Wittgenstein suggested we understand each other within shared forms of life; where those differ, misunderstanding is natural, not anyone’s fault.",
+   "psychology": "Research on perceived partner responsiveness finds that feeling understood is central to closeness. Being misunderstood again and again tends to go with loneliness. Naive realism makes each side sure the other is the one misreading.",
+   "autistic_lens": "Many autistic people know this hurt well, after years of being misread. The double empathy problem gives a kinder frame: misunderstanding runs both ways, and nobody is the only cause. Through an autistic lens, the fix is translation, not blame: ‘Here’s what I meant. What did you hear?’",
+   "together": "Being misunderstood hurts because we need recognition, and it often comes from different wiring, not bad intent. Translate both ways, patiently, and say what you meant in plain words.",
+   "question": "What do you most wish people understood about you?",
+   "try": "Write one line for others: ‘When I ___, it usually means ___.’ Share it with someone."
+  },
+  {
+   "id": "what-we-owe-each-other",
+   "title": "What do we owe each other at home?",
+   "patterns": [
+    "\\bwhat do (we|partners|couples|housemates|roommates) owe each other\\b",
+    "\\bwhat do i owe (my )?(partner|wife|husband|housemate|roommate)\\b"
+   ],
+   "links": [
+    [
+     "The Five Pillars",
+     "/five-pillars.html"
+    ],
+    [
+     "WP-03: one owner per job",
+     "/wp-03.html"
+    ],
+    [
+     "Chapter II: is the split working?",
+     "/book/chapter-2.html"
+    ]
+   ],
+   "philosophy": "Arendt saw promises as islands of certainty in an uncertain future. Kant’s respect, de Beauvoir’s reciprocity and care ethics’ attention all suggest we owe each other honesty, fairness and care. Susan Moller Okin insisted that justice doesn’t stop at the front door.",
+   "psychology": "Research on equity, responsiveness and trust suggests people feel secure when effort is shared, needs are noticed and promises are kept. Small, repeated reliability builds trust more than grand gestures.",
+   "autistic_lens": "Through an autistic lens, what we owe each other should be written plainly enough to check: who does what, how we tell each other things, what we do when we disagree. Many autistic people find that clear agreements make love feel safe, not less romantic.",
+   "together": "At home we owe each other fairness, honesty, attention and kept promises. Say them out loud, write the practical ones down, and check them now and then.",
+   "question": "What’s one promise your household has never said out loud?",
+   "try": "Write three ‘we will’ sentences for your home and read them together."
+  },
+  {
+   "id": "okay-to-be-different",
+   "title": "Is it okay to be different?",
+   "patterns": [
+    "\\b(ok|okay|alright|fine) to be different\\b",
+    "\\bwhy am i (so )?different\\b",
+    "\\bi (just )?don t fit in\\b",
+    "\\bam i (weird|normal|too much)\\b"
+   ],
+   "links": [
+    [
+     "Wired Differently",
+     "/wired-differently.html"
+    ],
+    [
+     "Neurodiversity, explained",
+     "/library/wiring.html#neurodiversity"
+    ],
+    [
+     "Know your own wiring",
+     "/know-yourself.html"
+    ]
+   ],
+   "philosophy": "John Stuart Mill argued that people should be free to live by their own lights, as long as they don’t harm others, and that everyone gains from different ‘experiments in living’. Ubuntu holds that each person’s humanity is bound up with everyone else’s, differences included.",
+   "psychology": "Neurodiversity research and personality science both show that human minds vary widely. Research on belonging suggests feeling accepted matters a great deal for wellbeing, and that hiding differences costs energy. Being different is not the same as being wrong.",
+   "autistic_lens": "Many autistic people spent years being told they were ‘too much’ or ‘not enough’. Through an autistic lens, difference is just difference: another way of sensing, thinking and loving. Spreading acceptance starts with accepting yourself.",
+   "together": "Yes, it’s okay to be different. Difference makes life richer, and acceptance, of yourself and of others, is the ground every fair relationship grows from.",
+   "question": "What difference in you would you like to stop apologising for?",
+   "try": "Write one sentence about a difference of yours that begins: ‘I’m glad I ___.’"
+  },
+  {
+   "id": "what-is-acceptance",
+   "title": "What does acceptance mean?",
+   "patterns": [
+    "\\bwhat (is|does) acceptance( really)?( mean)?\\b",
+    "\\bhow (do i|to|can i) accept (them|him|her|myself|people|it)\\b",
+    "\\baccept (them|him|her|me|myself) (as|for who) (they|he|she|i)\\b"
+   ],
+   "links": [
+    [
+     "Acceptance and change",
+     "/library/conflict.html#acceptance-and-change"
+    ],
+    [
+     "The Five Pillars",
+     "/five-pillars.html"
+    ],
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ]
+   ],
+   "philosophy": "The Stoics taught acceptance of what we can’t control, alongside action on what we can. Buddhist teaching invites us to meet what is, without clinging. Kant’s idea of dignity says a person’s worth doesn’t depend on their usefulness or their agreeing with us.",
+   "psychology": "Carl Rogers described ‘unconditional positive regard’: valuing a person without having to approve of everything they do. Andrew Christensen and Neil Jacobson’s acceptance-based couple therapy found that accepting some differences can ease conflict more than trying to change them. Acceptance is not giving up on fairness.",
+   "autistic_lens": "Through an autistic lens, acceptance means letting people be the shape they are: the stimmer, the planner, the talker, the quiet one. Many autistic people say being accepted feels like finally being able to breathe. It doesn’t mean putting up with unfairness; it means not treating a difference as a defect.",
+   "together": "Acceptance means valuing who someone is while still being honest about what you need: accept the person, and talk about the setup. Acceptance never means accepting fear or harm; if that’s the question, please start with the “Not safe at home?” page (/safety.html).",
+   "question": "What would change if you accepted one difference instead of trying to fix it?",
+   "try": "Name one difference between you and someone close that you could stop arguing with, and one setup you could talk about instead."
+  },
+  {
+   "id": "taken-for-granted",
+   "title": "Why do we take people for granted?",
+   "patterns": [
+    "\\bwhy do (we|i|people) take (each other|people|them|him|her|me|everyone) for granted\\b",
+    "\\btaken for granted\\b",
+    "\\btake (me|us|her|him|them) for granted\\b"
+   ],
+   "links": [
+    [
+     "Complacency",
+     "/complacency.html"
+    ],
+    [
+     "Gratitude: find, remind, bind",
+     "/library/connection.html#find-remind-bind"
+    ],
+    [
+     "Hedonic adaptation",
+     "/library/life.html#hedonic-adaptation"
+    ]
+   ],
+   "philosophy": "Heraclitus and the Buddhists remind us that everything changes, yet we act as if the people we love will always be there. The Stoics practised imagining loss, not to be gloomy, but to feel grateful now. Murdoch would call taking someone for granted a failure of attention.",
+   "psychology": "Hedonic adaptation makes the good things in life fade into the background. Research on gratitude (Sara Algoe and others) suggests that noticing and naming what others do renews appreciation on both sides.",
+   "autistic_lens": "Through an autistic lens, taking someone for granted is often a routine that stopped being noticed, not a lack of love. Many autistic people would suggest a practical fix: build the noticing into the routine. ‘Every Friday, we each name one thing the other did.’",
+   "together": "We take people for granted because our minds get used to good things. Notice on purpose, say thanks specifically, and make that part of your routine.",
+   "question": "Who in your life have you stopped noticing?",
+   "try": "Tonight, name one specific thing someone close did this week that you hadn’t mentioned."
+  },
+  {
+   "id": "what-gives-meaning",
+   "title": "What makes life meaningful?",
+   "patterns": [
+    "\\bwhat (makes|gives) life (its )?(meaning|meaningful|worth living)\\b",
+    "\\bmeaning of life\\b",
+    "\\bwhat gives (my )?life meaning\\b"
+   ],
+   "links": [
+    [
+     "Values",
+     "/library/motivation.html#values"
+    ],
+    [
+     "Know yourself, next",
+     "/book/self-3-next.html"
+    ],
+    [
+     "Stories from philosophy",
+     "/learn/index.html"
+    ]
+   ],
+   "philosophy": "Aristotle thought a good life (eudaimonia) comes from using our best capacities, with friends, over a whole life. Susan Wolf argues that meaning arises when ‘subjective attraction meets objective attractiveness’: caring about something that is worth caring about. Ubuntu finds meaning in being with and for others.",
+   "psychology": "Research on meaning in life (Michael Steger and others) links it with having purpose, a sense that life hangs together, and a feeling that it matters. Viktor Frankl, a psychiatrist, wrote that meaning can be found in work, in love, and in the attitude we take to suffering. Close relationships are among the most common sources of meaning people name.",
+   "autistic_lens": "Many autistic people find deep meaning in their special interests, in justice, and in a few close bonds. Through an autistic lens, meaning doesn’t have to be grand or social. Loving one subject deeply, or caring for one person well, can be a full and meaningful life.",
+   "together": "Meaning grows where real care meets something worth caring about, often in ordinary days with the people we share life with. Small, fair, kind acts aren’t a distraction from meaning; they’re a big part of it.",
+   "question": "What do you care about that you’d still care about if nobody ever noticed?",
+   "try": "Write down one thing you did this week that mattered to someone, however small."
+  },
+  {
+   "id": "worth-working-on",
+   "title": "How do I know if a relationship is worth working on?",
+   "patterns": [
+    "\\b(is|was) (it|this|my relationship|our relationship) worth (it|saving|working on|fighting for)\\b",
+    "\\bhow do i know if (it|this|a relationship|my relationship) is worth\\b",
+    "\\bshould i (stay|leave)\\b",
+    "\\bstay or (go|leave)\\b"
+   ],
+   "links": [
+    [
+     "Not safe at home?",
+     "/safety.html"
+    ],
+    [
+     "Is this right for you?",
+     "/is-this-for-you.html"
+    ],
+    [
+     "The investment model",
+     "/library/relationships.html#investment-model"
+    ]
+   ],
+   "philosophy": "De Beauvoir thought love is real when both people stay free and help each other grow. Aristotle’s test for friendship, wanting each other’s good, works here too. No philosopher worth reading says you must endure fear to prove your love.",
+   "psychology": "Caryl Rusbult’s investment model explains why people stay: how satisfied they are, what their alternatives look like, and what they’ve already invested. Staying because of investment alone can keep people in unhappy places. Gottman’s research suggests contempt is one of the strongest warning signs, while repair and kindness are hopeful ones.",
+   "autistic_lens": "Through an autistic lens, it helps to ask several concrete questions instead of one huge one: Do I feel safe? Can I be myself here? Are we both trying? Is the load fair? Many autistic people find a written list of specifics clearer than a fog of feelings.",
+   "together": "A relationship is worth working on when both people are safe, both are trying, and both can be themselves. If fear or control is part of it, please start with the “Not safe at home?” page (/safety.html); working harder is not the answer to being unsafe.",
+   "question": "Do you feel safe, free and seen in this relationship, most of the time?",
+   "try": "Write four lines: ‘I feel safe when... I can be myself when... We both try when... It’s fair when...’"
+  },
+  {
+   "id": "needing-people",
+   "title": "Is it weak to need people?",
+   "patterns": [
+    "\\b(weak|needy|clingy|pathetic) to need (people|someone|help|others)\\b",
+    "\\bam i (too )?(needy|clingy)\\b",
+    "\\bhate (needing|asking for) help\\b"
+   ],
+   "links": [
+    [
+     "Social support",
+     "/library/connection.html#social-support"
+    ],
+    [
+     "Adult attachment",
+     "/library/relationships.html#adult-attachment"
+    ],
+    [
+     "When one of you is ill or disabled",
+     "/when-one-is-ill.html"
+    ]
+   ],
+   "philosophy": "Alasdair MacIntyre argued that dependence is part of every human life, so the virtues include receiving help well, not only giving it. Ubuntu says we become persons through others. Aristotle thought even the happiest person needs friends.",
+   "psychology": "Attachment research describes what some call ‘effective dependence’: people who can lean on others when needed tend to be more confident, not less. Social support is linked with better health and resilience. Asking for help is a skill, not a weakness.",
+   "autistic_lens": "Many autistic people were pushed to be ‘independent’ in ways that meant struggling alone. Through an autistic lens, needing support is like using a ramp: it’s how you get where you’re going. Saying exactly what help you need makes it easier for others to give it.",
+   "together": "Needing people is part of being human, and leaning well is a strength. Ask clearly for the help you need, and let yourself receive it.",
+   "question": "What help would you ask for if you were sure nobody would think less of you?",
+   "try": "Ask one person for one specific, small piece of help this week."
+  },
+  {
+   "id": "what-is-kindness",
+   "title": "What is kindness?",
+   "patterns": [
+    "\\bwhat is kindness\\b",
+    "\\bhow (do i|to|can i) be (more )?kind\\b",
+    "\\bwhat does (it mean to be )?kind(ness)? (really )?mean\\b"
+   ],
+   "links": [
+    [
+     "Kindness, explained",
+     "/library/connection.html#kindness"
+    ],
+    [
+     "About this site",
+     "/about.html"
+    ],
+    [
+     "Turning toward",
+     "/turning-toward.html"
+    ]
+   ],
+   "philosophy": "Confucius’s ren is often translated as humaneness: caring for others as people like yourself. Buddhist metta, loving-kindness, wishes others well without conditions. Kant would add that kindness should respect the other person’s own choices, not just do what we think is good for them.",
+   "psychology": "Research on kindness suggests small acts lift wellbeing for both the giver and the receiver. Elizabeth Dunn’s studies found that spending money on others tends to make people happier than spending it on themselves. Kindness that fits what the other person wants lands better than kindness we assume they want.",
+   "autistic_lens": "Many autistic people show kindness practically and honestly: fixing a problem, sharing useful information, telling the truth gently. Through an autistic lens, kindness doesn’t have to be smiley or chatty to be real. ‘What would actually help?’ is the kindest question.",
+   "together": "Kindness is caring for someone’s good in a way that respects who they are. The best kindness is asked about, not guessed.",
+   "question": "What’s the kindest thing anyone has done for you, and why did it land?",
+   "try": "Ask someone ‘What would actually help today?’ and do that one thing."
+  },
+  {
+   "id": "why-keep-score",
+   "title": "Why do we keep score?",
+   "patterns": [
+    "\\bwhy do (we|i|people|couples) keep score\\b",
+    "\\bwhy do i (keep )?count(ing)? (everything|who does)\\b"
+   ],
+   "links": [
+    [
+     "Stories from philosophy: the ethics of a ledger",
+     "/learn/index.html#part-ethics"
+    ],
+    [
+     "Communal and exchange relationships",
+     "/library/fairness.html#communal-exchange"
+    ],
+    [
+     "Taking more credit (egocentric bias)",
+     "/library/fairness.html#egocentric-bias"
+    ]
+   ],
+   "philosophy": "Adam Smith, before he wrote about markets, wrote about moral sentiments, including our deep wish to be seen fairly by others. Kant would warn against reducing a person to a balance sheet. Score-keeping is often a fairness instinct with nowhere else to go.",
+   "psychology": "Clark and Mills’s work suggests that people in close relationships tend to track who gives what more closely when the relationship feels less communal, less like ‘we look after each other’. Ross and Sicoly showed we each remember our own efforts more easily. So keeping score is often a sign of hidden unfairness or unseen work, not pettiness.",
+   "autistic_lens": "Through an autistic lens, score-keeping is often a symptom of rules nobody said out loud. If the split were agreed and visible, the tally in your head could stop. Many autistic people would say: write it down once, together, so neither of us has to carry it around.",
+   "together": "We keep score when we feel unseen or the split feels unfair. Put the whole load on one shared page, agree the rules, and the scoreboard in your head can rest.",
+   "question": "What is your score-keeping trying to tell you?",
+   "try": "Write down what you’ve been counting. Then ask: what rule would let me stop counting?"
+  }
+ ],
+ "follow_ups": [
+  "What would the Stoics say?",
+  "And through an autistic lens?",
+  "What does the research say?",
+  "How do I use this tonight?",
+  "What would Aristotle say?",
+  "What would a care ethicist say?",
+  "Say the rule out loud for me",
+  "Give me a question to ask them",
+  "What’s the fairest way to see this?",
+  "What’s the Buddhist view?",
+  "How does double empathy fit here?",
+  "What would Iris Murdoch notice?",
+  "What’s the kind and honest version?",
+  "How do I say this plainly?",
+  "What’s in my control here?",
+  "Is it the setup, not the person?",
+  "Give me a big question",
+  "What would Rawls ask?",
+  "What does Ubuntu teach here?",
+  "How might this look from their side?",
+  "What’s the smallest version of this?",
+  "What would repair look like?",
+  "How could this be more predictable?",
+  "Is there a sensory need hiding here?",
+  "Is this about fairness or feeling seen?",
+  "What would Hannah Arendt say?",
+  "One small thing to try",
+  "Show me a page to read",
+  "Another big question",
+  "Keep it light"
+ ]
+}
