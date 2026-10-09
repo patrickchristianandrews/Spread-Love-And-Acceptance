@@ -2081,12 +2081,25 @@
     return chips;
   }
   // only: one section key ("autistic_lens") for a follow-up like "and through an autistic lens?"
+  // the Part Three chapter ("Understanding people") that goes with a deep topic, added to its links
+  var PART3 = [[/naming-feelings|love-and-anger|^anger$/, '1-feelings', 'How feelings work'], [/read-your-state|pause-when-flooded|^rest$|guilty-resting|different-hours/, '2-stress', 'Stress and the nervous system'],
+    [/their-side|keeping-score|why-keep-score|being-misunderstood|taken-for-granted/, '3-seeing', 'How we see each other'], [/say-what-you-mean|tone-in-texts|pursue-withdraw|really-listening|knowing-what-they-mean|is-honesty-kind|why-we-fight/, '4-communication', 'How communication works'],
+    [/what-is-love|^bids$|friendship|good-friend|needing-people|more-than-two|chosen-and-blended|what-makes-a-home|quiet-togetherness/, '5-belonging', 'Attachment, trust and belonging'],
+    [/can-people-change|why-change-is-hard|complacency|same-fight-again|routines|needing-routines|fix-the-setup/, '6-change', 'Habits and change'],
+    [/what-is-the-self|what-is-enough|are-boundaries-selfish|^boundaries$|okay-to-be-different/, '7-worth', 'Self-worth, shame and self-compassion'], [/^grief$|life-changes|on-your-own|apart-and-home/, '8-loss', 'Loss, grief and big life changes'],
+    [/autistic-lens|neurodiversity|masking|^wiring$|deep-interests|sensory-needs/, '9-minds', 'Minds that work differently'], [/what-gives-meaning|what-is-kindness|what-we-owe|faith-and-culture|worth-working-on|what-is-acceptance|family-duty/, '10-values', 'Values, meaning and a good life'],
+    [/^repair$|^apology$|forgiv|siblings-and-rifts/, '11-healing', 'Healing after hurt'], [/caregiving|illness-and-energy|^parenting$|co-parenting/, '12-helping', 'Helping others well']];
+  function part3Link(id) {
+    for (var i = 0; i < PART3.length; i++) if (PART3[i][0].test(String(id || ''))) return ['Understanding people: ' + PART3[i][2], '/book/understanding-' + PART3[i][1] + '.html'];
+    return null;
+  }
   function deepReply(state, hit, only) {
     var T = hit.t, b = [], id = String(T.id || dTitle(T));
     var safetyTopic = dlist(dRule('safety_topic_ids')).indexOf(T.id) !== -1;
     if (!only) b.push({ k: 'p', x: dTitle(T).replace(/\?$/, '') === dTitle(T) ? 'Let’s think about ' + dTitle(T).charAt(0).toLowerCase() + dTitle(T).slice(1) + '.' : dTitle(T) });
     var keys = only === 'links' ? [] : only ? [only, 'together'] : safetyTopic ? ['together'] : DEEP_SECTIONS.map(function (S) { return S[0]; });
-    var links = dLinks(T);
+    var links = dLinks(T), p3 = part3Link(T.id);
+    if (p3 && !links.some(function (l) { return l[1] === p3[1]; })) links.splice(Math.min(2, links.length), 0, p3);
     // fear, control or harm: the safety page first, and no lenses unless asked
     if (safetyTopic && !only) { var sl = links.filter(function (l) { return /\/safety\.html/.test(l[1]); }); if (sl.length) b.push({ k: 'links', x: sl }); }
     (only ? DEEP_SECTIONS.slice().sort(function (a, c) { return keys.indexOf(a[0]) - keys.indexOf(c[0]); }) : DEEP_SECTIONS).forEach(function (S) {

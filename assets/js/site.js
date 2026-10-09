@@ -40,6 +40,7 @@
   var SECTIONS = [
     { id: 'new', title: 'What’s new', blurb: 'Newly added, newest first. Older pages live in their own sections.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work: feelings, stress, trust, change, grief, healing and helping' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, housemates, work and life changes' },
@@ -60,7 +61,7 @@
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
-      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Part One about yourself, and a guide to the book by topic' }
+      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now: yourself, between us, and understanding people, plus a guide to the book by topic' }
     ]},
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and the one best first step for you' },
@@ -169,7 +170,7 @@
       { href: '/caregivers.html', code: '', title: 'Caring for someone you love', note: 'When they can’t share the load back, who else can help, and where to find respite' },
       { href: '/en-espanol.html', code: '', title: 'En español', note: 'Pasos cortos para cuando los hijos pelean, cuando estás muy enojado, y si no estás a salvo en casa' }
     ]},
-    { id: 'book', title: 'The book', blurb: 'Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use.', items: [
+    { id: 'book', title: 'The book', blurb: 'Three parts. Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use. Part Three is understanding people: how feelings, stress, trust, change and healing work, for anyone, anywhere.', items: [
       { sub: 'Part One: The most important, yourself' },
       { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
       { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
@@ -181,6 +182,19 @@
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'How much of a reaction is leftover stress, and the seven angles people see things from', paid: true },
       { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both, and letting words land before you react', paid: true },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'A gentle monthly look back that catches what weekly check-ins miss', paid: true },
+      { sub: 'Part Three: Understanding people' },
+      { href: '/book/understanding-1-feelings.html', deep: true, code: '1', title: 'How feelings work', note: 'Signals from the body, naming what you feel, and feelings about feelings' },
+      { href: '/book/understanding-2-stress.html', deep: true, code: '2', title: 'Stress and the nervous system', note: 'The ladder, flooding, why stress adds up, and rest that helps' },
+      { href: '/book/understanding-3-seeing.html', deep: true, code: '3', title: 'How we see each other', note: 'Perception, bias, and the stories we tell about each other' },
+      { href: '/book/understanding-4-communication.html', deep: true, code: '4', title: 'How communication works', note: 'Meaning, listening, repair, and messages that land' },
+      { href: '/book/understanding-5-belonging.html', deep: true, code: '5', title: 'Attachment, trust and belonging', note: 'Why we need each other, and how trust grows and is rebuilt' },
+      { href: '/book/understanding-6-change.html', deep: true, code: '6', title: 'Habits and change', note: 'Why change is hard, and how small steps and a kind setup help' },
+      { href: '/book/understanding-7-worth.html', deep: true, code: '7', title: 'Self-worth, shame and self-compassion', note: 'Worth is not a score: guilt, shame and a kinder inner voice' },
+      { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Loss, grief and big life changes', note: 'Grief in waves, losses nobody sees, and staying connected' },
+      { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Minds that work differently', note: 'Autism, ADHD, sensory and learning differences, and meeting in the middle' },
+      { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Values, meaning and a good life', note: 'What matters to you, and what philosophy offers everyday life' },
+      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, apologies that land, forgiveness, and when to get help' },
+      { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, kind limits, and not burning out' },
       { sub: 'The book by topic' },
       { href: '/book/topic-start-here.html', code: 'Topic', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
@@ -277,6 +291,7 @@
       { href: '/install.html', code: 'App', title: 'Get the app', note: 'Install in a few taps: its own icon, full screen, works offline' }
     ]},
     { id: 'new', name: 'What’s new', title: 'What’s new', blurb: 'Newly added, newest first.', items: [
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
@@ -300,7 +315,7 @@
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors and coaches', note: 'Using these free pages with clients and groups' },
-      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Part One about yourself, and the book by topic' }
+      { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now, and the book by topic' }
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
@@ -484,6 +499,19 @@
       { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both' },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'Catch what weekly check-ins miss' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
+      { sub: 'Part Three: Understanding people', all: '/book/topic-start-here.html#ch-part3', allLabel: 'About Part Three' },
+      { href: '/book/understanding-1-feelings.html', deep: true, code: '1', title: 'How feelings work', note: 'Signals, the body, and naming what you feel' },
+      { href: '/book/understanding-2-stress.html', deep: true, code: '2', title: 'Stress and the nervous system', note: 'The ladder, flooding, rest and recovery' },
+      { href: '/book/understanding-3-seeing.html', deep: true, code: '3', title: 'How we see each other', note: 'Perception, bias and the stories we tell' },
+      { href: '/book/understanding-4-communication.html', deep: true, code: '4', title: 'How communication works', note: 'Listening, repair and messages that land' },
+      { href: '/book/understanding-5-belonging.html', deep: true, code: '5', title: 'Attachment, trust and belonging', note: 'How trust grows, and finding your people' },
+      { href: '/book/understanding-6-change.html', deep: true, code: '6', title: 'Habits and change', note: 'Why change is hard, and why small steps work' },
+      { href: '/book/understanding-7-worth.html', deep: true, code: '7', title: 'Self-worth, shame and self-compassion', note: 'Shame, guilt and a kinder inner voice' },
+      { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Loss, grief and big life changes', note: 'Grief in waves, and big life changes' },
+      { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Minds that work differently', note: 'Autism, ADHD, sensory and learning differences' },
+      { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Values, meaning and a good life', note: 'What philosophy offers everyday life' },
+      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, forgiveness, and when to get help' },
+      { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, and not burning out' },
       { sub: 'The book by topic' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
       { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
@@ -1311,7 +1339,9 @@
 
     // Pager: previous / next within the same section
     if (here && hereSection && ['book', 'workpapers', 'program'].indexOf(hereSection.id) !== -1) {
-      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false && (hereSection.id !== 'book' || isChapter(i)); });
+      // in the book, Parts One and Two page through their chapters; Part Three pages through its own twelve
+      var p3 = function (i) { return /^\/book\/understanding-\d+-[a-z]+\.html$/.test(i.href); };
+      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false && (hereSection.id !== 'book' || (p3(here) ? p3(i) : isChapter(i))); });
       var idx = list.indexOf(here);
       var prev = list[idx - 1], next = list[idx + 1];
       if (prev || next) {

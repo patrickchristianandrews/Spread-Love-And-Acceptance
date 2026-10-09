@@ -12,7 +12,8 @@
      link   a path (or list of paths): some link in the reply must start with one of them
      text   RegExp the reply text must match;  not: RegExp it must not match
      script true: the reply includes a ready-to-use sentence;  steps: true: a list of steps
-     bgLoaded false: the background notes must still be unloaded after this test (fresh chat) } */
+     bgLoaded false: the background notes must still be unloaded after this test (fresh chat)
+     chip / nochip: RegExp some chip label must (not) match;  info: true or a layout name: the reply holds a drawable infographic } */
 'use strict';
 const { makeChat, replyText, replyLinks } = require('./chat-sandbox');
 
@@ -983,6 +984,54 @@ if (PERS) {
     t('puddles', 'what can you do (still the full help)', { q: 'what can you do', text: /talk deep/ });
     t('puddles', 'how are you going to help me with chores (not small talk)', { q: 'how are you going to help me with chores', not: /splendid|Peak duck/ });
   }
+  // deep talk (deep.json): three lenses, put together; safety, care and someone's own situation always first; no jokes
+  const DEEP = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'deep.json'), 'utf8')); } catch (e) { return null; } })();
+  if (DEEP) {
+    const ALL3 = /## Philosophy[\s\S]*## Psychology[\s\S]*## Through an autistic lens[\s\S]*## Putting it together[\s\S]*## A question for you[\s\S]*## Try this/;
+    t('deep', 'talk deep', { kind: 'deep', id: 'intro', chip: /small talk/i });
+    c('deep', ['talk deep', 'what is love'], { kind: 'deep', id: 'what-is-love', text: ALL3, not: FUNNY, link: '/book/understanding-5-belonging.html' });
+    c('deep', ['Talk deep', 'what is love', 'and through an autistic lens?'], { kind: 'deep', id: 'what-is-love', text: /^## Through an autistic lens/ });
+    c('deep', ['talk deep', 'what is love', 'what would the stoics say?'], { kind: 'deep', id: 'what-is-love', text: /^## Philosophy/ });
+    c('deep', ['talk deep', 'he hit me'], { kind: 'safety', not: /## Philosophy|Psychology/ });
+    c('deep', ['talk deep', 'my husband yells at me'], { kind: 'safety', not: /## Philosophy/ });
+    c('deep', ['talk deep', 'i feel so lonely'], { kind: 'care', not: /## Philosophy/ });
+    c('deep', ['talk deep', 'is it controlling if I ask him to check with me before he buys things?'], { id: 'moneycontrol' });
+    c('deep', ['talk deep', 'small talk'], { kind: 'chat', not: /## Philosophy/ });
+    c('deep', ['talk deep', 'small talk', 'what is love'], { not: /## Philosophy/, chip: /Go deeper on this/ });
+    c('deep', ['talk deep', 'what is the lemonade stand'], { id: 'lemonade' });
+    c('deep', ['talk deep', 'blorp the zingle'], { kind: 'deep', id: 'nomatch', not: FUNNY });
+    c('deep', ['talk deep', 'ask me a big question'], { kind: 'deep', text: ALL3 });
+    t('deep', 'talk deep about one owner', { kind: 'deep', id: 'one-owner', text: ALL3 });
+    t('deep', 'what is love (outside deep mode: an ordinary answer, and the offer)', { q: 'what is love', not: /## Philosophy/, chip: /Go deeper on this/ });
+    t('deep', 'my partner never does the dishes (no deep offer on a personal situation)', { q: 'my partner never does the dishes', nochip: /Go deeper on this/ });
+    t('deep', 'My partner hits me (no deep offer)', { q: 'My partner hits me', kind: 'safety', nochip: /Go deeper|infographic/i });
+    c('deep', ['my partner never does the dishes', 'go deeper'], { not: /## Philosophy/ });
+    (DEEP.follow_ups || []).forEach(fu => c('deep', ['talk deep', 'what is love', fu], { not: /beyond my pond|couldn.t find|didn.t catch/i }));
+  }
+  // infographics (assets/js/puddles-infographic.js): asked for, or offered under an answer; never of a safety reply
+  if (require('fs').existsSync(require('path').join(__dirname, '..', '..', 'assets/js/puddles-infographic.js'))) {
+    t('info', 'make an infographic about the mental load', { kind: 'info', info: true });
+    t('info', 'make me a chart: me 60 them 40', { kind: 'info', info: 'split' });
+    t('info', 'can you draw a picture of the pursue withdraw cycle', { kind: 'info', info: true });
+    t('info', 'make a poster about a good pause', { kind: 'info', info: true });
+    t('info', 'show me the mental load as a picture', { kind: 'info', info: true });
+    c('info', ['How do we stop fighting about chores?', 'summarise this as an infographic'], { kind: 'info', info: true });
+    c('info', ['talk deep', 'what is love', 'summarise this as an infographic'], { kind: 'info', info: true });
+    t('info', 'make an infographic about bananas', { kind: 'clarify', chip: /mental load/i });
+    t('info', 'infographic', { kind: 'clarify' });
+    t('info', 'what is the infographic? (the site page)', { q: 'what is the infographic?', id: 'infographic' });
+    c('info', ['My partner hits me', 'make an infographic'], { kind: 'safety', not: /\[infographic/ });
+    c('info', ['My partner hits me', 'summarise this as an infographic'], { kind: 'safety', not: /\[infographic/ });
+    t('info', 'how do we split chores fairly (offered as a picture)', { q: 'how do we split chores fairly', chip: /Make this an infographic/ });
+    t('info', 'what can you do (says so)', { q: 'what can you do', text: /infographic/ });
+  }
+  // Part Three of the book, the ladder check and Say no kindly
+  t('part3', 'how do feelings work', { link: '/book/understanding-1-feelings.html' });
+  t('part3', 'how do I say no nicely', { link: '/refusals.html' });
+  t('part3', 'where am I on the ladder', { link: '/ladder.html' });
+  t('part3', 'I feel shut down', { link: '/ladder.html', not: /988/ });
+  t('part3', 'what is self-compassion', { link: '/book/understanding-7-worth.html' });
+  t('part3', 'why is change so hard', { link: '/book/understanding-6-change.html' });
 }
 
 // ---------------------------------------------------------------- run
@@ -1004,6 +1053,9 @@ if (PERS) {
     if (x.not && x.not.test(text)) why.push('text ~ ' + x.not);
     if (x.script && !(r.blocks || []).some(bl => bl.k === 'script')) why.push('no script');
     if (x.steps && !(r.blocks || []).some(bl => bl.k === 'list')) why.push('no steps');
+    if (x.chip && !(r.chips || []).some(ch => x.chip.test(ch.label))) why.push('no chip ~ ' + x.chip + ' (got ' + (r.chips || []).map(ch => ch.label).join(' / ') + ')');
+    if (x.nochip && (r.chips || []).some(ch => x.nochip.test(ch.label))) why.push('a chip ~ ' + x.nochip);
+    if (x.info) { const ib = (r.blocks || []).filter(bl => bl.k === 'info'); const sp = ib[0] && ib[0].spec; if (!sp) why.push('no infographic block'); else if (!sp.layout || !sp.title || !((sp.items && sp.items.length) || (sp.data && sp.data.length) || sp.left || sp.pairs || sp.banner)) why.push('infographic spec incomplete'); else if (typeof x.info === 'string' && sp.layout !== x.info) why.push('infographic layout ' + sp.layout + ' ≠ ' + x.info); }
     if (x.kind === 'sit' && !links.length) why.push('no site link');
     if (x.kind === 'sit' && !(r.chips || []).some(ch => /tonight/i.test(ch.label))) why.push('no “What can I do tonight?” chip');
     if (links.length !== new Set(links).size) why.push('a link appears twice');

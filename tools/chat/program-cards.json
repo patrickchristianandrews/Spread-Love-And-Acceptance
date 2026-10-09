@@ -10654,6 +10654,379 @@
         ]
       ],
       "chips": []
+    },
+    {
+      "id": "u1feelings",
+      "kind": "tool",
+      "name": "how feelings work (Part Three, chapter 1)",
+      "keys": [
+        "how do feelings work",
+        "how feelings work",
+        "what are feelings",
+        "what are emotions",
+        "how do emotions work",
+        "how emotions work",
+        "why do we have feelings",
+        "why do we have emotions",
+        "feelings about feelings"
+      ],
+      "what": "Chapter 1 of Part Three, “Understanding people”, explains how feelings work: they start as signals in the body, naming a feeling helps it settle a little, and we often have feelings about our feelings. It ends with kind words to use on your own, at home, with friends and at work.",
+      "how": [
+        "Notice where the feeling sits in your body first.",
+        "Put it into a word or two: “I’m feeling tense.” Naming it helps.",
+        "Ask what it is asking for: rest, help, a boundary, comfort.",
+        "Read the in-depth version for the research and exercises."
+      ],
+      "links": [
+        [
+          "Chapter 1: How feelings work",
+          "/book/understanding-1-feelings.html"
+        ],
+        [
+          "Chapter 1 in depth",
+          "/book/understanding-1-feelings-in-depth.html"
+        ]
+      ]
+    },
+    {
+      "id": "u2stress",
+      "kind": "tool",
+      "name": "stress and the nervous system (Part Three, chapter 2)",
+      "keys": [
+        "how does stress work",
+        "how stress works",
+        "what is stress",
+        "stress and the nervous system",
+        "why does stress add up",
+        "what is flooding"
+      ],
+      "what": "Chapter 2 of Part Three explains how stress works: your body getting ready, the calm, revved up and running on empty ladder, flooding, why stress adds up, and the kinds of rest that help you recover.",
+      "how": [
+        "Check where you are on the ladder: calm, revved up, or running on empty.",
+        "If you are flooded, pause first and talk later.",
+        "Pick the kind of rest that fits: sleep, quiet, movement, or company."
+      ],
+      "links": [
+        [
+          "Chapter 2: Stress and the nervous system",
+          "/book/understanding-2-stress.html"
+        ],
+        [
+          "Where am I right now? (the ladder check)",
+          "/ladder.html"
+        ]
+      ]
+    },
+    {
+      "id": "u3seeing",
+      "kind": "tool",
+      "name": "how we see each other (Part Three, chapter 3)",
+      "keys": [
+        "how we see each other",
+        "how do we see each other",
+        "why do we misjudge people",
+        "why do we assume the worst",
+        "stories we tell ourselves",
+        "how perception works"
+      ],
+      "what": "Chapter 3 of Part Three is about how we see each other: perception is a best guess, we fill gaps with stories, everyday bias creeps in, and asking beats guessing.",
+      "how": [
+        "Notice the story you are telling about why they did it.",
+        "Ask one curious question before deciding what it meant."
+      ],
+      "links": [
+        [
+          "Chapter 3: How we see each other",
+          "/book/understanding-3-seeing.html"
+        ]
+      ]
+    },
+    {
+      "id": "u4communication",
+      "kind": "tool",
+      "name": "how communication works (Part Three, chapter 4)",
+      "keys": [
+        "how does communication work",
+        "how communication works",
+        "why do messages get misunderstood",
+        "why do we misunderstand each other"
+      ],
+      "what": "Chapter 4 of Part Three explains how communication works: meaning is made between two people, so listening, checking and repairing mix-ups matter as much as the words.",
+      "how": [
+        "Say one thing at a time, then check: “What did you hear me say?”",
+        "Repair mix-ups early and lightly."
+      ],
+      "links": [
+        [
+          "Chapter 4: How communication works",
+          "/book/understanding-4-communication.html"
+        ],
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ]
+      ]
+    },
+    {
+      "id": "u5belonging",
+      "kind": "tool",
+      "name": "attachment, trust and belonging (Part Three, chapter 5)",
+      "keys": [
+        "what is attachment",
+        "attachment styles",
+        "how does trust grow",
+        "how is trust built",
+        "why do we need to belong",
+        "need to belong",
+        "finding my people"
+      ],
+      "what": "Chapter 5 of Part Three is about attachment, trust and belonging: why belonging is a basic need, how early bonds shape what we expect, how trust grows in small moments, and how to rebuild it.",
+      "how": [
+        "Trust grows from small promises kept.",
+        "Look for one place where the same people show up each week."
+      ],
+      "links": [
+        [
+          "Chapter 5: Attachment, trust and belonging",
+          "/book/understanding-5-belonging.html"
+        ]
+      ]
+    },
+    {
+      "id": "u6change",
+      "kind": "tool",
+      "name": "habits and change (Part Three, chapter 6)",
+      "keys": [
+        "why is change so hard",
+        "why is change hard",
+        "how do habits work",
+        "how habits work",
+        "how do i change a habit",
+        "how to build a habit"
+      ],
+      "what": "Chapter 6 of Part Three is about habits and change: why change is hard, how habits run on cues, and how tiny steps, a kinder setup and self-compassion after slips help change last.",
+      "how": [
+        "Make the step tiny and tie it to something you already do.",
+        "Change the setup, not just your willpower.",
+        "After a slip, be kind and start again the next day."
+      ],
+      "links": [
+        [
+          "Chapter 6: Habits and change",
+          "/book/understanding-6-change.html"
+        ]
+      ]
+    },
+    {
+      "id": "u7worth",
+      "kind": "tool",
+      "name": "self-worth, shame and self-compassion (Part Three, chapter 7)",
+      "keys": [
+        "what is self worth",
+        "what is self-worth",
+        "shame vs guilt",
+        "shame and guilt",
+        "difference between shame and guilt",
+        "inner critic",
+        "what is self compassion",
+        "what is self-compassion"
+      ],
+      "what": "Chapter 7 of Part Three is about self-worth, shame and self-compassion: worth is not a score, shame is different from guilt, and self-compassion helps you own mistakes and grow.",
+      "how": [
+        "Guilt says “I did a bad thing”; shame says “I am bad”. Aim for the first.",
+        "Talk to yourself the way you would talk to a friend."
+      ],
+      "links": [
+        [
+          "Chapter 7: Self-worth, shame and self-compassion",
+          "/book/understanding-7-worth.html"
+        ]
+      ]
+    },
+    {
+      "id": "u8loss",
+      "kind": "tool",
+      "name": "loss, grief and big life changes (Part Three, chapter 8)",
+      "keys": [
+        "how does grief work",
+        "how grief works",
+        "stages of grief",
+        "is grief in stages",
+        "what is grief"
+      ],
+      "what": "Chapter 8 of Part Three is about loss, grief and big life changes: grief comes in waves, not neat stages, it lives in the body, some losses nobody sees, and you can stay connected to who you lost.",
+      "how": [
+        "Expect waves, not a straight line.",
+        "Name the losses nobody else sees, too."
+      ],
+      "links": [
+        [
+          "Chapter 8: Loss, grief and big life changes",
+          "/book/understanding-8-loss.html"
+        ],
+        [
+          "Grief and loss",
+          "/grief.html"
+        ]
+      ]
+    },
+    {
+      "id": "u9minds",
+      "kind": "tool",
+      "name": "minds that work differently (Part Three, chapter 9)",
+      "keys": [
+        "what is neurodiversity",
+        "neurodiversity explained",
+        "what is neurodivergent",
+        "what does neurodivergent mean",
+        "minds that work differently"
+      ],
+      "what": "Chapter 9 of Part Three is a plain guide to neurodiversity: autism, ADHD, sensory and learning differences, masking and energy, and how to meet in the middle at home and at work.",
+      "how": [
+        "Different is not broken: ask what helps, rather than guessing.",
+        "Masking costs energy; plan rest after it."
+      ],
+      "links": [
+        [
+          "Chapter 9: Minds that work differently",
+          "/book/understanding-9-minds.html"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ]
+      ]
+    },
+    {
+      "id": "u10values",
+      "kind": "tool",
+      "name": "values, meaning and a good life (Part Three, chapter 10)",
+      "keys": [
+        "what are values",
+        "what are my values",
+        "how do i find my values",
+        "what makes a good life",
+        "values and meaning"
+      ],
+      "what": "Chapter 10 of Part Three is about values, meaning and a good life: what values are, how to find yours, what to do when two good things clash, and what old philosophy offers ordinary life today.",
+      "how": [
+        "Think of a time you felt proud: which value were you living?",
+        "When two good things clash, choose for this week, not forever."
+      ],
+      "links": [
+        [
+          "Chapter 10: Values, meaning and a good life",
+          "/book/understanding-10-values.html"
+        ]
+      ]
+    },
+    {
+      "id": "u11healing",
+      "kind": "tool",
+      "name": "healing after hurt (Part Three, chapter 11)",
+      "keys": [
+        "how does hurt heal",
+        "healing after hurt",
+        "how do i rebuild trust",
+        "rebuilding trust",
+        "what is forgiveness",
+        "what forgiveness is"
+      ],
+      "what": "Chapter 11 of Part Three is about healing after hurt: repair after small ruptures, apologies that land, what forgiveness is and is not, rebuilding trust, and when to get more help.",
+      "how": [
+        "Repair small ruptures soon: name it, own your part, say what you will do.",
+        "Forgiveness is yours to give or not; it is not the same as trusting again."
+      ],
+      "links": [
+        [
+          "Chapter 11: Healing after hurt",
+          "/book/understanding-11-healing.html"
+        ]
+      ]
+    },
+    {
+      "id": "u12helping",
+      "kind": "tool",
+      "name": "helping others well (Part Three, chapter 12)",
+      "keys": [
+        "how do i help someone",
+        "how to help someone",
+        "helping others well",
+        "how do i help without taking over",
+        "how to help without taking over"
+      ],
+      "what": "Chapter 12 of Part Three is about helping others well: ask what help is wanted, listen first, keep kind limits, help in a crisis, and look after yourself so you last.",
+      "how": [
+        "Ask: “Do you want help, ideas, or just someone to listen?”",
+        "Keep a kind limit, so you can keep helping."
+      ],
+      "links": [
+        [
+          "Chapter 12: Helping others well",
+          "/book/understanding-12-helping.html"
+        ]
+      ]
+    },
+    {
+      "id": "ladder",
+      "kind": "tool",
+      "name": "Where am I right now? (the ladder check)",
+      "keys": [
+        "where am i on the ladder",
+        "where am i right now",
+        "ladder check",
+        "nervous system ladder",
+        "am i revved up",
+        "am i running on empty"
+      ],
+      "what": "Where am I right now? is a four-tap check on the nervous system ladder. It shows if you’re calm and connected, revved up, or running on empty, with what helps right now, a pause line to say, and when to talk again.",
+      "how": [
+        "Open the ladder check and answer four quick taps.",
+        "Read what helps on your rung, right now.",
+        "If you’re revved up or shut down, use the pause line and pick a time to talk again."
+      ],
+      "links": [
+        [
+          "Where am I right now?",
+          "/ladder.html"
+        ],
+        [
+          "Chapter 2: Stress and the nervous system",
+          "/book/understanding-2-stress.html"
+        ]
+      ]
+    },
+    {
+      "id": "refusals",
+      "kind": "tool",
+      "name": "Say no kindly (refusal scripts)",
+      "keys": [
+        "how do i say no nicely",
+        "how do i say no kindly",
+        "how to say no nicely",
+        "how to say no kindly",
+        "say no kindly",
+        "say no nicely",
+        "ways to say no",
+        "refusal scripts",
+        "how do i turn someone down nicely"
+      ],
+      "what": "Say no kindly gives you copy-ready ways to say no. Pick a situation and a tone, and it offers three kind options, like “I’m full today”, “Not me, but let’s find who” or “Yes, just later”.",
+      "how": [
+        "Pick the situation (family, friends, work, home) and a tone.",
+        "Copy one of the three ways to say no, and make it sound like you.",
+        "Say it once, kindly, without a long list of reasons."
+      ],
+      "links": [
+        [
+          "Say no kindly",
+          "/refusals.html"
+        ],
+        [
+          "Kind ways to say no (WP-01)",
+          "/workpapers/wp-01.html"
+        ]
+      ]
     }
   ],
   "clarify": [
