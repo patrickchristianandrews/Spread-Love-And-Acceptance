@@ -280,5 +280,27 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   const rex = readOf(ex2, 'Sam'); ok(rex.turns.length === 10 && rex.turns.some(t => t.marks.some(m => m.kind === 'repair')), 'the example thread still reads, with a repair attempt');
 }
 
+// ---------- Threats, controlling lines and digs (shared with the Signal Translator) ----------
+{
+  ["If you tell anyone, you'll be sorry.", "If you go out with your friends again I'll make you regret it.", 'Pick up the kids or else.', "You'll pay for this.", "If you leave I'll make your life hell.", "If you leave me I'll take the kids."].forEach(t => {
+    ok(kinds(t).includes('threat'), `"${t}": expected a threat; got ${kinds(t).join(',')}`);
+    const r = readOf('Sam: can we talk about last night?\nAlex: ' + t + '\nSam: ok', 'Sam');
+    ok(r.safety && r.threat && r.drafts.length === 0, `pasted thread with "${t}" should show the safety card, not a neutral read`);
+  });
+  ["We could go Friday, or else Saturday.", "You'll regret not coming, the food was amazing!", "I'll pay for dinner tonight.", "You'll pay me back Friday?", "If you tell anyone happy birthday from me, they'll love it.", "If you can't make it, I'll pick up the kids.",
+   "If you can't respect my relationship, I'm going to leave for today. I love you and I'll call next week."].forEach(t => ok(!kinds(t).includes('threat') && !kinds(t).includes('control'), `"${t}": not a threat; got ${kinds(t).join(',')}`));
+  const b = readOf("Leila: If you can't respect my relationship, I'm going to leave for today. I love you and I'll call next week.\nMom: please don't go", 'Leila');
+  ok(!b.safety, 'a calm boundary in a thread is not a safety read');
+  [['I managed fine without you for 7 months.', 'without you'], ['It’s my money too, stop policing what I spend.', 'stop policing'], ['You treat me like the help. I have a job too.', 'treat me like'], ['I guess I’m only your friend when it suits you.', 'suits you'],
+   ['Stop making decisions without me.', 'decisions'], ['you’re not my mum so stop acting like it', 'not my mum'], ['So now you want to talk? After you took everything?', 'now you want'], ['I did it alone for 7 months, I know how bedtime works.', 'alone']].forEach(([t, w]) => {
+    const m = R.findMarks(t).filter(x => x.kind === 'dig');
+    ok(m.length && m.some(x => x.text.toLowerCase().replace(/’/g, "'").includes(w)), `"${t}": expected a dig on "${w}"; got ${kinds(t).join(',')}`);
+  });
+  ['Thanks for dinner, it was lovely.', 'I managed to finish the report.', 'Can you stop by the shop on your way home?', 'I did it! I passed!'].forEach(t => ok(!kinds(t).includes('dig'), `"${t}": not a dig; got ${kinds(t).join(',')}`));
+  const d = readOf('Kelly: welcome home!\nDan: thanks, I moved the bedtime routine around a bit\nKelly: I managed fine without you for 7 months, so stop changing everything.', 'Dan');
+  ok(d.level !== 'calm' && !d.safety, 'a scorekeeping line warms the read without a safety card: ' + d.level);
+  ok(!R.checkDraft("If you tell anyone, you'll be sorry.").checks.every(c => c.ok) || R.checkDraft("If you tell anyone, you'll be sorry.").unsafe, 'a threat draft never passes every check');
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

@@ -127,6 +127,10 @@
   .cv-paused{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:2; margin:0; padding:.6rem 1.2rem; border-radius:999px; background:rgba(20,18,46,.6);
     font-family:"Fraunces", Georgia, serif; font-size:1.1rem; color:#FFF6E8; pointer-events:none; }
   .cv-paused[hidden]{ display:none; }
+  .cv-or{ margin:0 0 .8rem !important; }
+  #cv-mine-ui{ max-width:32rem; margin:0 auto .4rem; }
+  .cv-mlive{ display:flex; align-items:center; justify-content:center; gap:.5rem; margin:0 0 .2rem; font-size:.86rem; color:#D9FBE8; text-align:center; }
+  .cv-mdot{ flex:none; width:.6rem; height:.6rem; border-radius:50%; background:#7EE2A8; box-shadow:0 0 0 3px rgba(126,226,168,.25); }
 
   .cv-links{ display:flex; flex-wrap:wrap; gap:.45rem; justify-content:center; margin:.4rem 0 0; padding:0; list-style:none; }
   .cv-links a{ font-size:.88rem; }
@@ -176,6 +180,7 @@
   .cv-next a:hover{ border-color:#C9B0E6; }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/your-music.js" defer></script>
 <script src="/assets/js/calm-visualizer.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/calm-visualizer.html">
@@ -235,7 +240,23 @@
         <p>Pick the closest one. There’s no wrong answer. Drift will meet you there with sound, color and a slow breath, and take its time with you.</p>
         <div class="cv-feels" id="cv-feels" role="group" aria-labelledby="cv-pick-h"></div>
         <noscript><p>Drift needs JavaScript to make its sound and pictures.</p></noscript>
+        <p class="cv-or"><button type="button" class="cv-btn" id="cv-mine-open"><span aria-hidden="true">&#127925;</span> Or visualize your own music</button></p>
         <p class="cv-small"><a href="#cv-about">What are binaural beats?</a> &middot; Everything is made right here on your device.</p>
+      </div>
+    </div>
+
+    <!-- 1b. Your own music (Spotify or any app), through the microphone or a shared tab -->
+    <div class="cv-card" id="cv-mine" hidden>
+      <div class="cv-box">
+        <button type="button" class="cv-btn cv-back" id="cv-mine-back"><span aria-hidden="true">&larr;</span> How I’m feeling</button>
+        <p class="cv-kick" aria-hidden="true">&#127925;</p>
+        <h2 id="cv-mine-h" tabindex="-1">Visualize your own music</h2>
+        <p>Play your music from Spotify or any app, and Drift’s slow pictures move with it. There are no tones in this mode, so you don’t need headphones.</p>
+        <div class="cv-fields">
+          <fieldset class="cv-field"><legend>Pictures</legend><div class="cv-chips" id="cv-mstyle"></div></fieldset>
+        </div>
+        <div id="cv-mine-ui"></div>
+        <p class="cv-safe">The pictures follow the music gently and never flash. Stop anytime if it doesn’t feel good.</p>
       </div>
     </div>
 
@@ -290,6 +311,15 @@
       <div class="cv-vol"><label for="cv-vol2">Volume</label><input type="range" id="cv-vol2" min="0" max="100" step="1" value="30"><output id="cv-vol-out" for="cv-vol2">30%</output></div>
     </div>
 
+    <!-- 3b. While Drift follows your own music -->
+    <div class="cv-ctrl" id="cv-mctrl" hidden role="group" aria-label="Your music controls">
+      <p class="cv-mlive"><span class="cv-mdot" aria-hidden="true"></span><span id="cv-mlive-t">Listening to your music. Nothing is recorded or sent.</span></p>
+      <div class="cv-row">
+        <button type="button" class="cv-btn" id="cv-mstop"><span aria-hidden="true">&#9632;</span> Stop listening</button>
+        <button type="button" class="cv-btn" id="cv-mlook"><span aria-hidden="true">&#127752;</span> <span id="cv-mlook-name">Tunnel</span></button>
+      </div>
+    </div>
+
     <!-- 4. Afterwards -->
     <div class="cv-card" id="cv-end" hidden>
       <div class="cv-box">
@@ -340,6 +370,7 @@
         <li>The pictures move slowly and never flash, and brightness is kept soft. If your device asks for reduced motion, or you turn on Keep the page still, Drift keeps the picture nearly still. You can also just close your eyes and listen.</li>
       </ul>
       <p><strong>Private by design.</strong> The sound and pictures are made right here in your browser. Drift remembers your last choices on this device only, so it’s ready next time.</p>
+      <p><strong>Your own music.</strong> If you choose “Or visualize your own music,” Drift listens through your microphone, or to a tab you choose to share on a computer, only to move the pictures. The sound is measured live on your device and is never recorded, saved or sent. It stops when you press Stop listening or leave the page. Drift can’t connect to a Spotify account, because Spotify doesn’t let websites read the sound it plays; these two ways work with Spotify and any other music app.</p>
     </details>
 
     <details id="cv-what">

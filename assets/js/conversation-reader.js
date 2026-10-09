@@ -20,7 +20,7 @@
   ].join('\n');
 
   var FORMS = [['text', 'Text or chat'], ['email', 'Email'], ['person', 'In person, from memory'], ['phone', 'Phone call, from memory']];
-  var ORDER = ['hostile', 'swear', 'verdict', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'defend', 'brushaside', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'need', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
+  var ORDER = ['hostile', 'swear', 'verdict', 'dig', 'contempt', 'sarcasm', 'passive', 'compare', 'absolute', 'dismiss', 'defend', 'brushaside', 'withdraw', 'pointed', 'hint', 'opener', 'demand', 'history', 'shouting', 'vague', 'short', 'turnaway', 'need', 'repair', 'pause', 'warmth', 'feeling', 'ask'];
   var GOOD = { repair: 1, pause: 1, warmth: 1, feeling: 1, ask: 1 };
   if (window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById('cr-lookfor'));
 

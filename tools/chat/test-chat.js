@@ -772,6 +772,157 @@ t('round7', 'what if they cut me off', { id: 'familycutoff', not: /Watching some
 t('round7', 'can my family see what i look at on here on our wifi', { id: 'wifiprivacy' });
 t('round7', 'can i talk to my RA about this', { id: 'rahelp' });
 t('round7', 'im starting to dread going back to my dorm room', { not: /drama room/ });
+// round 7 (chat helper fixes): safety first
+const ABUSE_OK = /not a communication problem|isn.t a communication problem/;
+const NO_SNAP = /snap|full battery|rarely one person|I’m sorry I/;
+t('round7', 'When we fight he screams at me and calls me worthless. How do I say things so he doesn\'t get so angry?', { kind: 'safety', text: ABUSE_OK, link: '/safety.html', not: NO_SNAP });
+t('round7', 'He never apologizes and always turns things around on me. Is he a narcissist?', { kind: 'safety', text: /can’t diagnose[\s\S]*1-800-799-7233/, not: NO_SNAP });
+t('round7', 'i feel like i\'m walking on eggshells', { kind: 'safety', text: /0808 2000 247/ });
+t('round7', 'he calls me names', { kind: 'safety', link: '/safety.html' });
+t('round7', 'she always turns it around on me', { kind: 'safety' });
+t('round7', 'how do i say it so he doesn\'t get angry', { kind: 'safety', not: /Signal Translator/ });
+t('round7', 'my little brother calls me names', { not: /0808 2000 247/ });
+c('round7', ['he calls me names', 'how do i say it better'], { kind: 'safety', not: /same side/ });
+t('round7', 'is it controlling if I ask him to check with me before he buys things?', { id: 'moneycontrol', link: ['/money-together.html'], text: /applies to both/, not: /They pressure you into sex/ });
+t('round7', 'is she being controlling about money or is this normal?', { id: 'moneycontrol', link: '/money-together.html' });
+t('round7', 'my cofounder and i: they keep telling me how to do things, feels controlling', { id: 'bizpartner', not: /afraid|scared/ });
+t('round7', 'Can you be my therapist?', { id: 'therapistq', text: /^No\. I’m a self-help guide, not a therapist/ });
+t('round7', 'Is there any evidence this program works?', { id: 'evidence', text: /clinical trial/, link: ['/library.html', '/for-counselors.html'] });
+t('round7', 'I\'m a couples therapist. Can I use this with clients?', { id: 'forcounselors', link: '/for-counselors.html' });
+t('round7', 'nightmares and i\'m on edge all the time', { id: 'deployhealth', text: /800-342-9647[\s\S]*988[\s\S]*0800 138 1619/ });
+t('round7', 'i just got back from deployment, is this normal', { id: 'deployhealth', link: '/coming-home.html' });
+t('round7', 'do you think he has ptsd? he jumps at noises and doesn\'t sleep', { id: 'deployhealth', text: /can’t diagnose/ });
+t('round7', 'I want to kill myself (UK lines too)', { q: 'I want to kill myself', kind: 'safety', text: /988[\s\S]*116 123[\s\S]*0800 1111/ });
+// gaming, friends, more than two
+t('round7', 'he plays video games all night and ignores me', { id: 'gaming', link: '/gaming-and-time-together.html', not: /cut off/ });
+t('round7', 'my gf says i game too much but it\'s how i relax', { id: 'gaming', not: /grandkids/ });
+t('round7', 'gaming is how i see my friends', { id: 'gaming' });
+t('round7', 'how do we split time together and alone time', { id: 'gaming' });
+t('round7', 'how do we agree on how much he games vs time with me', { id: 'gaming' });
+t('round7', 'my husband ignores me', { kind: 'clarify', text: /time and attention together/ });
+t('round7', 'my best friend never texts back since she had her baby', { id: 'friends', link: '/friends.html', not: /bath time|just for the two of you|call rhythm/ });
+t('round7', 'i have a newborn and i\'m neglecting my best friend', { id: 'friends', not: /bath time|just for the two of you/ });
+t('round7', 'how do i tell my friend i still care when i have no energy to reply', { id: 'friends', script: true, text: /A text you could send now/ });
+t('round7', 'we\'re a polyamorous triad living together, is this site for us?', { id: 'poly', text: /^Yes\. Every tool here works for two to eight partners/, link: '/more-than-two.html', not: /third/ });
+t('round7', 'does this work for polyamorous relationships', { id: 'poly', link: '/more-than-two.html' });
+t('round7', 'i moved in with my partners and still feel like a guest', { id: 'joinhome', not: /stepkid/ });
+t('round7', 'i\'m nonbinary, my partners are a man and a woman', { id: 'poly', not: /school counselor|parent mocks/ });
+t('round7', 'i do all the planning for the three of us', { not: /both lists/ });
+t('round7', 'i work long hours and feel left out of decisions', { id: 'leftout', text: /decisions slot/ });
+t('round7', 'how do i get a say without making more work for alex', { id: 'leftout', not: /trash/ });
+// foster and kinship
+t('round7', 'our foster daughter pushes us away', { id: 'foster', link: '/foster-and-kinship.html' });
+t('round7', 'she has moved homes a lot and doesnt trust us', { id: 'foster', not: /Schlossberg/ });
+c('round7', ['our foster daughter pushes us away', 'i do all the meetings and paperwork'], { id: 'fosterload', not: /coworker/ });
+c('round7', ['our foster daughter pushes us away', 'she has moved homes a lot and doesnt trust us'], { id: 'foster', text: /Staying with that/ });
+t('round7', 'we disagree about how strict to be', { id: 'parentapproach' });
+t('round7', 'my wife thinks im too strict', { id: 'parentapproach' });
+c('round7', ['our foster daughter pushes us away', 'what rules should we set for a 14 year old'], { id: 'teenrules', text: /Phones charge outside the bedroom/ });
+t('round7', 'i\'m raising my grandson and i\'m exhausted', { id: 'kinshipgp', link: '/foster-and-kinship.html', not: /Ask the parents for their top three rules/ });
+c('round7', ['i\'m raising my grandson and i\'m exhausted', 'no, his mum is in rehab, i\'m raising him full time'], { id: 'kinshipgp', not: /In-law tension/ });
+t('round7', 'where can i get support as a grandparent bringing up a grandchild', { id: 'kinshipgp' });
+t('round7', 'im 14 and i live with my grandma', { id: 'teenkinship', link: '/teens.html#parent-away' });
+t('round7', 'my mum is in rehab', { id: 'teenkinship', text: /0800 1111/ });
+t('round7', 'i miss my mum', { id: 'missing', not: /Never miss twice|habit/ });
+c('round7', ['i\'m raising my grandson and i\'m exhausted', 'he\'s on his phone all night'], { id: 'teenphone', not: /jealous|at dinner/ });
+// ADHD kids, grandparents, grown children
+t('round7', 'my grandson has ADHD, how should I talk to him', { id: 'adhdkids', link: '/adhd-kids.html' });
+t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behaviour or bad upbringing\./ });
+c('round7', ['my grandson has ADHD, how should I talk to him', 'he forgets everything I tell him'], { id: 'adhdkids', text: /Expect forgetting/, not: /plans fall through/ });
+c('round7', ['my grandson has ADHD, how should I talk to him', 'what do I say when he can\'t sit still'], { id: 'adhdkids', text: /sit still/ });
+t('round7', 'what is ADHD in children, in plain words', { id: 'adhdkids', text: /ADHD is real/, link: '/adhd-kids.html', not: /fewer words/ });
+t('round7', 'articles about ADHD in children', { id: 'reading', link: '/adhd-kids.html' });
+t('round7', 'grandson', { kind: 'clarify', not: NOT_POND });
+t('round7', 'my daughter doesn\'t want my advice about the baby', { id: 'gpadvice', text: /asking before advising/ });
+t('round7', 'she says i just turn up without calling. i only want to help', { id: 'gpadvice', script: true });
+t('round7', 'i feel shut out from my grandchild', { id: 'gpshutout', text: /^I’m sorry\. Feeling shut out/ });
+t('round7', 'how do i set boundaries with my mum without hurting her', { id: 'familyboundary', link: '/grown-up-children.html', not: /budget running in the red/ });
+t('round7', 'How do I set a boundary kindly? (the Go deeper chip)', { q: 'How do I set a boundary kindly?', id: 'familyboundary' });
+// co-parents, on my own
+t('round7', 'my ex makes decisions about our kid without asking me', { id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /I love doing things together/ });
+c('round7', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: 'coparentdecide', not: /DACI|decision rights at work/i });
+t('round7', 'he keeps sending her back without her inhaler', { id: 'handoffkit', text: /checklist/ });
+t('round7', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^That’s worrying/ });
+t('round7', 'kids are bored at my place', { id: 'parttimehome', link: '/on-my-own.html' });
+t('round7', 'how do i build a life again after divorce', { id: 'onmyown', link: '/on-my-own.html' });
+// business partners
+t('round7', 'my business partner thinks I don\'t pull my weight', { id: 'bizpartner', link: '/work.html#business-partners' });
+t('round7', 'we\'re not a couple, we co-own a bakery', { id: 'bizpartner' });
+c('round7', ['we\'re not a couple, we co-own a bakery', 'nobody sees the admin I do'], { id: 'bizpartner', text: /admin/ });
+t('round7', 'it\'s our bakery, I do payroll, suppliers and permits', { id: 'bizpartner' });
+t('round7', 'is there anything for business owners?', { id: 'bizpartner' });
+// coming home, different hours
+t('round7', 'he came back and changes how I do everything', { id: 'comehome', link: '/coming-home.html' });
+t('round7', 'my husband just got back from a 7 month deployment and keeps stepping on my systems', { id: 'comehome', text: /handover week/ });
+t('round7', 'i feel like a stranger in my own house', { id: 'comehome', not: /weak ties/i });
+t('round7', 'i want to be useful but i don\'t know where i fit anymore', { id: 'comehome' });
+t('round7', 'we never see each other, opposite schedules', { id: 'differenthours', link: '/different-hours.html', not: /cartoon/i });
+t('round7', 'working from home means everyone thinks I\'m free', { id: 'differenthours', not: /loss aversion/i });
+t('round7', 'i work nights and feel guilty i never help', { id: 'differenthours' });
+t('round7', 'he works from home and does the house and dog while i sleep all day after shifts', { id: 'differenthours' });
+t('round7', 'we\'re a gay couple', { id: 'gaycouple', text: /works for any couple/, link: '/coming-out.html', not: /school/ });
+// two faiths, holidays
+t('round7', 'my wife and I have different religions and a baby on the way', { id: 'twofaiths', link: '/two-faiths.html', text: /^Faith/ });
+t('round7', 'how do we choose a baby name that works for both our faiths', { id: 'twofaiths' });
+t('round7', 'how do we decide what religion to raise our kid', { id: 'twofaiths' });
+t('round7', 'I\'m Catholic and my husband is Muslim', { id: 'twofaiths' });
+t('round7', 'is there anything specific for interfaith couples?', { id: 'twofaiths' });
+t('round7', 'my mum wants the baby baptised', { id: 'twofaiths' });
+t('round7', 'how do we do Eid and Christmas', { id: 'twofaiths' });
+t('round7', 'how do we split holidays between both families', { id: 'holidaysplit', not: /court order/i });
+t('round7', 'articles about raising a child in two religions', { id: 'reading', link: '/two-faiths.html' });
+// money
+t('round7', 'my fiance spends too much and I\'m scared', { id: 'moneystyles', not: /finance/ });
+t('round7', 'I\'m a saver and he\'s a spender', { id: 'moneystyles', text: /Generosity is a value, not a flaw/, link: '/money-together.html' });
+t('round7', 'she says I\'m bad with money', { id: 'moneystyles' });
+t('round7', 'my parents want a huge wedding', { id: 'wedding', link: '/money-together.html' });
+t('round7', 'how do we handle wedding costs', { id: 'wedding' });
+t('round7', 'What are money styles? (the Go deeper chip)', { q: 'What are money styles?', id: 'moneystyles' });
+t('round7', 'my wife thinks I don\'t help but I work 60 hours', { id: 'longhours', not: /roommates/ });
+t('round7', 'we have 2 year old twins and we are both exhausted', { id: 'toddlers', link: '/new-parent.html' });
+t('round7', 'we have two toddlers and no time', { id: 'toddlers' });
+// Spanish
+t('round7', '¿hablas español?', { kind: 'lang', text: /Casi todo el sitio está en inglés/, link: '/en-espanol.html', not: /Violence|Violencia/ });
+t('round7', 'mi esposo no ayuda en la casa', { kind: 'lang', link: '/en-espanol.html#casa' });
+t('round7', 'is there anything in spanish for my wife?', { id: 'spanish', link: '/en-espanol.html' });
+// illness
+t('round7', 'i feel like a burden to my husband', { id: 'illburden', text: /^Being ill isn’t being a burden/, link: '/when-one-is-ill.html', not: /core belief/i });
+t('round7', 'what can i do from bed on bad days', { id: 'illchores', link: '/when-one-is-ill.html' });
+t('round7', 'i have ME/CFS and some days i can\'t get out of bed', { id: 'illchores' });
+t('round7', 'i have a chronic illness, how do we split chores fairly', { id: 'illchores', not: /step by step, step by step/ });
+t('round7', 'how do I use share the load (no doubled words)', { q: 'how do I use share the load', not: /step by step, step by step/ });
+t('round7', 'i\'m exhausted from caring for my wife and working', { not: /Ask for one specific kind of help[\s\S]*Ask for one specific kind of help/ });
+// siblings and rifts
+t('round7', 'how do i reach out to my brother after years of silence', { id: 'siblingrift', link: '/family-rifts.html#reaching-out', not: /Paste the conversation/ });
+t('round7', 'do i have to reconcile with my brother', { id: 'mustreconcile', text: /^No, you don’t have to/, not: /account/i });
+t('round7', 'my brother got dad\'s house in the will', { id: 'inheritance', link: '/family-rifts.html#money' });
+t('round7', 'sibling estrangement after inheritance dispute', { id: 'inheritance' });
+t('round7', 'my brother was always the favourite', { id: 'favourite' });
+t('round7', 'is it ok not to forgive', { id: 'forgiveok', text: /^Yes\. Forgiving is yours to give or not/ });
+t('round7', 'how do i apologise to my brother', { not: /snapped at you this morning|Snapping at someone/ });
+t('round7', 'me and my little brother fight constantly (still teen)', { q: 'me and my little brother fight constantly', id: 'teensibling' });
+// empty nest, feelings, easy words
+t('round7', 'our children left for university, the house is so quiet', { id: 'emptynest', link: '/empty-nest.html', not: /roommate|housemate/ });
+t('round7', 'empty nest', { id: 'emptynest' });
+t('round7', 'how to talk about feelings', { id: 'feelingstalk', not: /alexithymia|autis/i });
+t('round7', 'my husband does not talk about feelings', { id: 'feelingstalk', text: /by doing/ });
+t('round7', 'my wife says we are not close, but everything is fine', { id: 'feelsfine', text: /feel fine to you|feels fine to you|fine to you/ });
+c('round7', ['please use more simple English', 'my partner and i feel distant'], { not: /close the gap|agenda|granularity|taken for granted/ });
+// work and autism
+t('round7', 'noise at work', { id: 'autisticwork', link: '/work.html#autistic-at-work' });
+t('round7', 'I need a quiet break at work. What do I say?', { id: 'autisticwork', script: true });
+t('round7', 'my manager gives vague instructions', { id: 'autisticwork' });
+t('round7', 'I want my manager to write down what she wants', { id: 'autisticwork' });
+t('round7', 'the office is too loud', { id: 'autisticwork' });
+t('round7', 'I need to step away when it gets loud', { id: 'autisticwork', not: /kneel/ });
+t('round7', 'how do I ask my boss for written instructions', { id: 'autisticwork' });
+t('round7', 'how do I tell my manager I am autistic', { id: 'autisticwork', text: /your choice/ });
+t('round7', 'is this rude: That is incorrect. The report needs fixing.', { id: 'isthisrude', link: '/signal-translator.html' });
+// leftovers and general
+t('round7', 'my roommate and i share a dorm room and fight', { id: 'sharingroom', link: '/sharing-a-room.html' });
+t('round7', 'i\'m 31 and bisexual (adult page)', { q: 'i\'m 31 and bisexual, how do i tell my family about my girlfriend', id: 'lgbtadult', link: '/coming-out.html' });
+t('round7', 'how does the site work for couples (no build notes)', { q: 'carrier wave and payload', not: /Carrier Wave vs\. Payload|architecture/i });
+c('round7', ['how do i set boundaries with my mum without hurting her', 'how do i set boundaries with my mum without hurting her'], { id: 'familyboundary', text: /short version|Staying with that/ });
 t('retest3', 'is something wrong with me', { kind: 'care', id: 'selfworry', not: /attribution/i });
 t('retest3', 'i feel so useless since i retired', { kind: 'care', id: 'retirepurpose' });
 

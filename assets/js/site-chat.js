@@ -234,7 +234,7 @@
     IDX.bg = { docs: docs, df: df, tf: tf, len: len, avg: total / Math.max(1, docs.length), N: docs.length, byId: byId };
   }
   function bgSearch(q) {
-    var B = IDX.bg, base = tokens(q), terms = [], seen = {};
+    var B = IDX.bg, base = tokens(q).filter(function (t) { return !NAME_STOP[t]; }), terms = [], seen = {};
     base.forEach(function (t) { if (!seen[t]) { seen[t] = 1; terms.push({ t: t, w: 1, src: t }); } });
     base.forEach(function (t) { (IDX.syn[t] || []).forEach(function (s) { if (!seen[s]) { seen[s] = 1; terms.push({ t: s, w: 0.4, src: t }); } }); });
     function bidf(t) { var n = B.df[t] || 0; return Math.log(1 + (B.N - n + 0.5) / (n + 0.5)); }
@@ -264,10 +264,13 @@
     return -1;
   }
 
+  // the first names the book's worked examples use: someone's real "Alex" or "Sam" never pulls those examples up
+  var NAME_STOP = {};
+  'alex sam jo maya priya dani sarah ana taylor robin kim tasha marcus leo jordan'.split(' ').forEach(function (w) { NAME_STOP[w] = 1; });
   // Rank every passage for a query. Returns {hits:[{i,s,cov}], terms}
   function search(q, opts) {
     opts = opts || {};
-    var base = tokens(q), seen = {}, terms = [];
+    var base = tokens(q).filter(function (t) { return !NAME_STOP[t]; }), seen = {}, terms = [];
     base.forEach(function (t) { if (!seen[t]) { seen[t] = 1; terms.push({ t: t, w: 1, src: t }); } });
     base.forEach(function (t) {
       (IDX.syn[t] || []).forEach(function (s) { if (!seen[s]) { seen[s] = 1; terms.push({ t: s, w: 0.45, src: t }); } });
@@ -1788,6 +1791,11 @@
     b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] });
     return { blocks: b, chips: [{ label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care' };
   }
+  var AMBIG = [
+    ['interrupt', /\bignor\w* (me|us)\b/, /\b(talk\w*|speak\w*|said|say|says|finish|interrupt\w*|cut|cuts|meetings?|conversations?|listen\w*|ideas?|words?|heard|opinion)\b/,
+      'I want to get this right. Is it more about time and attention together, or about not being listened to when you talk?',
+      [['Time and attention together', 'How do we get more time together? We hardly spend time together'], ['Not listened to when I talk', 'I keep getting interrupted and not heard when I talk']]]
+  ];
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null && SELF_HARMFUL.test(f) && !/\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend|ex|dad|mum|mom|father|mother|stepdad|stepmom)) (says|said|calls|called|tells|told) (me )?(i m|im|i am)\b/.test(f)) { state.last = null; state.unsafe = false; return selfHarmfulReply(f); }
@@ -1856,7 +1864,14 @@
       if (road && sit.who && sit.who !== 'self' && sit.who !== 'other' && !card && (!sit.issue || sit.score < 3 || /^(which|what|where)\b/.test(f))) return roadReply(state, sit.who, sit.noun);
       var sitOk = sit.issue && sit.score >= 2 && sit.personal && !(defn && !/\b(my|our|i|we|me)\b/.test(norm(defn)));
       if (card && (!sitOk || asksAbout || sit.score < 3)) return cardReply(state, card, cardAspect(f));
-      if (sitOk) return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0, sit.actor);
+      if (sitOk) {
+        // a match that rests on one word that could mean two things ("ignores me"): ask, rather than answer the wrong one
+        for (var ai = 0; ai < AMBIG.length; ai++) {
+          var A = AMBIG[ai];
+          if (sit.issue === A[0] && A[1].test(f) && !A[2].test(f)) { state.last = null; return { blocks: [{ k: 'p', x: A[3] }], chips: A[4].map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify' }; }
+        }
+        return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0, sit.actor);
+      }
     }
     return respondSite(state, q, chipDoc);
   }

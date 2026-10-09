@@ -295,6 +295,48 @@
     return out.sort(function (a, b) { return a.start - b.start; });
   }
 
+  /* Threats and controlling lines ("you'll regret it", "or else", "if you tell anyone, you'll be sorry"), calm boundaries
+     that are not threats ("If you can't respect my relationship, I'll leave for today. I love you."), and blame said as a dig
+     ("I managed fine without you", "when it suits you"). Shared by the Signal Translator and the Conversation Reader. */
+  var THREAT_RE = /\byou(?:'ll| will| are going to|'re going to|'re gonna) (?:be sorry|regret (?:it|this|that|ever)|pay for (?:this|that|it)|pay\b(?! (?:me|you|us|them|him|her|the|for (?:the|your|my|our|dinner|lunch|it all)|back|half|rent|bills?)\b)|wish you (?:hadn't|had never|never|were dead))|\b(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) make (?:you|your life) (?:regret|pay\b|sorry|suffer|a (?:living )?hell|hell|miserable)|\b(?:i'll|i will|i'm going to|i'm gonna) make sure you (?:regret|pay\b|never|don't|can't|lose)|\bor else(?=\s*(?:[.!?…]|$))|\bor you'll (?:see|be sorry|regret)|\bwatch your back\b|\byou(?:'d| had) better not (?:tell|leave|go|say|talk|see|call|text|dare)\b|\bdon't you dare (?:tell|leave|go out|say|talk to|see|call|text)\b|\b(?:you're|you are) not (?:going anywhere|allowed to (?:go|leave|see|talk|have|text|call|spend|wear|go out))\b|\bi won't let you (?:leave|go out|see|talk to|have)\b|\bif you (?:ever )?(?:tell|leave|go out|go|see|talk to|text|call|try|walk out)\b[^.!?]{0,60}?,?\s*(?:i(?:'ll| will|'m going to| am going to|'m gonna)) (?:make you|hurt|kill|ruin|destroy|come after|find you|show (?:everyone|your|them)|post|send (?:everyone|your|them)|tell everyone|tell your|take the (?:kids|children)|take (?:the|your) (?:kids|children|phone|car|money|keys)|end you|make your life|throw you out|kick you out|kill myself|hurt myself|end it|leave you with nothing)|\bif you (?:ever )?tell (?:anyone|anybody|someone|your)\b[^.!?]{0,50}?,?\s*(?:you(?:'ll| will) (?:be (?:sorry|in trouble)|regret|pay\b|see|wish|lose|never)|i(?:'ll| will|'m going to) (?:make|hurt|kill|tell|show|post|ruin|end|leave|take|deny|say you))/i;
+  var BOUNDARY_RE = /\bif you (?:can't|cannot|won't|don't|keep|start|carry on)\b[^.!?]{1,90}?,?\s*(?:then )?(?:i'm going to|i am going to|i'll|i will|i'm gonna|we'll|we will|i need to|i'm)\s+(?:need to |have to |be )?(?:leave|leaving|go|going|head (?:home|out)|step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|end (?:the|this) (?:call|visit|conversation|chat)|hang up|go home|stay (?:home|away)|not (?:come|visit|stay)|leave the (?:room|conversation|call))\b[^.!?]*/i;
+  var BOUNDARY_CARE = /\b(?:for (?:today|tonight|now|the (?:day|night|evening|weekend)|a (?:bit|while|few (?:minutes|hours|days)))|early|this time|and (?:come back|call|try again)|i love you|love you|i'll call|i will call|talk (?:soon|tomorrow|next week)|call (?:you )?(?:next week|tomorrow|soon)|until (?:we|you|things))\b/i;
+  var BOUNDARY_SOFT = /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i;
+  var DIG_RES = [
+    /\b(?:i|we) (?:managed|coped|got by|survived|did (?:fine|okay|ok|well|great))(?: (?:just|perfectly|totally|absolutely))?(?: (?:fine|okay|ok|well|great))? without you\b/i,
+    /\bi (?:did|have done|handled|ran|managed|was doing|carried) (?:it|everything|this|that|all of it|it all|the (?:\w+ ?){1,2})(?: all)? (?:alone|on my own|by myself|single-handedly|solo)\b/i,
+    /\bi know how (?:[a-z' ]{1,25}) works\b/i,
+    /\byou treat(?:ed|s|ing)? me like (?:the |a |an |your |some |i'm |i am )?[a-z' -]{2,30}/i,
+    /\b(?:you're|you are) (?:treating me|acting) like (?:i'm|i am) (?:the |a |an |your )?(?:help|maid|servant|cleaner|nanny|babysitter|slave|child|kid|idiot|employee|staff|secretary|assistant|housekeeper|chauffeur|taxi|bank|atm)\b/i,
+    /\b(?:so )?stop (?:policing|nagging|controlling|micromanaging|monitoring|checking up on|lecturing|bossing|telling me (?:what|how)|changing (?:everything|things|it all|all of it)|making (?:decisions|plans|choices)|taking (?:decisions|choices)|acting like (?:you're|you are|my)|interfering|meddling|undermining)\b/i,
+    /\bwhen(?:ever)? it suits you\b|\bonly (?:when|if) (?:it's|it is) convenient(?: for you)?\b/i,
+    /\bi guess i'm (?:only|just) (?:your|a|the)\b/i,
+    /\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b/i,
+    /(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*/i,
+    /\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b/i
+];
+  // a step you take to look after yourself, said with care: a boundary, not a threat
+  function isBoundary(text) {
+    var t = prep(text), m = t.match(BOUNDARY_RE);
+    return !!m && !THREAT_RE.test(t) && (BOUNDARY_CARE.test(t) || BOUNDARY_SOFT.test(m[0]));
+  }
+  function findAll(re, text) {
+    var t = prep(text), rx = new RegExp(re.source, re.flags.replace('g', '') + 'g'), m, out = [];
+    while ((m = rx.exec(t))) {
+      if (!m[0].length) { rx.lastIndex++; continue; }
+      var lead = (m[0].match(/^[.!?]\s+/) || [''])[0].length, st = m.index + lead, en = m.index + m[0].replace(/[\s,.!?]+$/, '').length;
+      out.push({ start: st, end: en, text: String(text).slice(st, en) });
+    }
+    return out;
+  }
+  // -> [{start, end, text}] for each threat; none when the line is a calm boundary
+  function threats(text) { return isBoundary(text) ? [] : findAll(THREAT_RE, text); }
+  // -> [{start, end, text}] for each dig or scorecard, longest first where two overlap
+  function digs(text) {
+    var out = [];
+    DIG_RES.forEach(function (re) { findAll(re, text).forEach(function (x) { if (!out.some(function (y) { return x.start < y.end && y.start < x.end; })) out.push(x); }); });
+    return out.sort(function (a, b) { return a.start - b.start; });
+  }
   function prep(text) { return String(text == null ? '' : text).replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"').toLowerCase(); }
   // "Friday" is a time; "hey everyone" is not always/never; "you're so good at it though!!" isn't shouting (that's each tool's job)
   function hasTime(text) { return TIME_RE.test(prep(text)); }
@@ -365,6 +407,7 @@
   }
   function lookFor(el, opts) { if (el) el.innerHTML = lookForHTML(opts); }
 
-  var api = { IDIOMS: IDIOMS, idioms: idioms, LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep };
+  var api = { IDIOMS: IDIOMS, idioms: idioms, LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep,
+    THREAT_RE: THREAT_RE, BOUNDARY_RE: BOUNDARY_RE, BOUNDARY_CARE: BOUNDARY_CARE, DIG_RES: DIG_RES, threats: threats, digs: digs, isBoundary: isBoundary };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TOLPatterns = api;
 })(this);

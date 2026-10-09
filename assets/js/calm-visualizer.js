@@ -4,7 +4,10 @@
    Sound: WebAudio, two sine oscillators panned hard left/right, an optional soft noise or pad bed.
    Pictures: a WebGL fragment shader (five styles), with a 2D-canvas fallback.
    Safety: every visual change is slow (well under 3 changes a second at any point on screen),
-   brightness is capped, no strobing and no saturated red. Nothing is sent anywhere. */
+   brightness is capped, no strobing and no saturated red. Nothing is sent anywhere.
+   Your own music: "Or visualize your own music" lets the pictures follow Spotify or any app, heard through the microphone
+   or a shared tab (your-music.js). No tones play then; the music's loudness, smoothed so nothing flashes, takes the place of
+   the breath. That sound is only measured live on this device: never played back, recorded or sent. */
 (function () {
   'use strict';
 
@@ -228,10 +231,24 @@
     setTimeout(function () {
       try { g.oL.stop(); g.oR.stop(); (g.srcs || []).forEach(function (s) { s.stop(); }); } catch (e) {}
       g.nodes.concat([g.env, g.vol, g.mute]).forEach(function (n) { try { n.disconnect(); } catch (e) {} });
-      if (!A && ctx && ctx.state === 'running' && !testing) ctx.suspend().catch(function () {});
+      if (!A && ctx && ctx.state === 'running' && !testing && !M.on) ctx.suspend().catch(function () {});
     }, fade * 1000 + 150);
   }
   var testing = false;
+  // your own music: the analyser from your-music.js, and a smoothed loudness that stands in for the breath
+  var M = { on: false, an: null, f: null, lvl: 0 };
+  var MUSIC_PAL = ['#1E1640', '#F2A98A', '#B08BE6', '#8FD3E8'];
+  function musicLevel(dt) {
+    var an = M.an; if (!an) return M.lvl;
+    if (!M.f || M.f.length !== an.frequencyBinCount) M.f = new Uint8Array(an.frequencyBinCount);
+    an.getByteFrequencyData(M.f);
+    var hzBin = an.context.sampleRate / an.fftSize, top = Math.min(M.f.length - 1, Math.ceil(2500 / hzBin)), sum = 0;
+    for (var i = 1; i <= top; i++) sum += M.f[i];
+    var target = Math.min(1, sum / top / 255 * 1.7);
+    // rises over about a quarter of a second and settles over most of a second, so the light swells and never flashes
+    M.lvl += (target - M.lvl) * Math.min(1, dt / (target > M.lvl ? 0.25 : 0.8));
+    return M.lvl;
+  }
   // a short, soft chime in one ear only
   function earTest(side) {
     var c = ensureCtx(); if (!c) return false;
@@ -470,7 +487,7 @@
     step(dt, now);
     fit();
     var br = breathAt(V.breath, V.bt);
-    draw(now, br.b);
+    draw(now, M.on ? musicLevel(dt) : br.b);
     showWords(br);
     flyWords(dt);
     adapt(dt);
@@ -479,9 +496,9 @@
   function step(dt, now) {
     var target = S.gentle ? 1 : 0;
     V.gentleAmt += (target - V.gentleAmt) * Math.min(1, dt / 1.5);
-    var speed = Math.max(0.75, Math.min(1.05, 0.75 + V.beat * 0.02)) * (1 - 0.88 * V.gentleAmt);
+    var speed = (M.on ? 0.7 + 0.8 * M.lvl : Math.max(0.75, Math.min(1.05, 0.75 + V.beat * 0.02))) * (1 - 0.88 * V.gentleAmt);
     V.vt += dt * speed; V.bt += dt;
-    V.pulse += dt * Math.min(0.5, V.beat / 16) * (1 - V.gentleAmt); // a slow glow, a fraction of the beat, never above 0.5 a second
+    V.pulse += dt * (M.on ? 0.12 + 0.3 * M.lvl : Math.min(0.5, V.beat / 16)) * (1 - V.gentleAmt); // a slow glow, never above 0.5 a second
     if (run) {
       V.beat = beatAt(run.p, run.t);
       if (run.f.id === 'sleep') V.dim = 1 - 0.45 * smooth(run.t / run.p.total);
@@ -565,7 +582,7 @@
   }
   function say(t) { var s = $('cv-status'); s.textContent = ''; setTimeout(function () { s.textContent = t; }, 60); }
   function show(id) {
-    ['cv-pick', 'cv-setup', 'cv-end'].forEach(function (c) { $(c).hidden = c !== id; });
+    ['cv-pick', 'cv-setup', 'cv-end', 'cv-mine'].forEach(function (c) { $(c).hidden = c !== id; });
     var box = id && $(id).querySelector('.cv-box'); if (box) box.scrollTop = 0;
     var h = id && $(id).querySelector('h1, h2'); if (h) h.focus({ preventScroll: true });
   }
@@ -649,7 +666,7 @@
   var idleT = null;
   function poke() {
     stage.classList.remove('is-idle'); clearTimeout(idleT);
-    if (run && !run.paused) idleT = setTimeout(function () { if (run && !run.paused && !stage.querySelector('.cv-ctrl :focus-visible, .cv-top :focus-visible')) stage.classList.add('is-idle'); }, 6000);
+    if ((run && !run.paused) || M.on) idleT = setTimeout(function () { if (((run && !run.paused) || M.on) && !stage.querySelector('.cv-ctrl :focus-visible, .cv-top :focus-visible')) stage.classList.add('is-idle'); }, 6000);
   }
   ['pointermove', 'pointerdown', 'keydown', 'focusin'].forEach(function (ev) { stage.addEventListener(ev, poke, { passive: true }); });
 
@@ -665,6 +682,7 @@
   $('cv-after').innerHTML = AFTER.concat(FEEL).map(function (f) { return feelBtn(f, true); }).join('');
   $('cv-len').innerHTML = [5, 10, 15, 20].map(function (m) { return chip('cv-len', m, m + ' min', false); }).join('');
   $('cv-style').innerHTML = STYLES.map(function (s) { return chip('cv-style', s.id, '<span aria-hidden="true">' + s.ico + '</span> ' + s.name, false); }).join('');
+  $('cv-mstyle').innerHTML = STYLES.map(function (s) { return chip('cv-mstyle', s.id, '<span aria-hidden="true">' + s.ico + '</span> ' + s.name, false); }).join('');
   $('cv-bed').innerHTML = ['pink', 'brown', 'pad', 'none'].map(function (b) { return chip('cv-bed', b, BEDS[b], false); }).join('');
 
   function setRadio(name, v) { Array.prototype.forEach.call(document.querySelectorAll('input[name="' + name + '"]'), function (i) { i.checked = String(i.value) === String(v); }); }
@@ -719,6 +737,9 @@
     if ($('cv-gentle-btn')) $('cv-gentle-btn').setAttribute('aria-pressed', String(S.gentle));
     $('cv-vol').value = S.vol; $('cv-vol2').value = S.vol; $('cv-vol-out').textContent = S.vol + '%';
     $('cv-look-name').textContent = STYLES[styleIdx(S.style)].name;
+    $('cv-mlook-name').textContent = STYLES[styleIdx(S.style)].name;
+    $('cv-mlook').setAttribute('aria-label', 'Change the pictures. Now: ' + STYLES[styleIdx(S.style)].name);
+    setRadio('cv-mstyle', S.style);
     $('cv-look').setAttribute('aria-label', 'Change the pictures. Now: ' + STYLES[styleIdx(S.style)].name);
     var m = $('cv-mute'); m.removeAttribute('aria-pressed'); // the words say the state
     m.innerHTML = S.muted ? '<span aria-hidden="true">&#128263;</span> Sound: off' : '<span aria-hidden="true">&#128264;</span> Sound: on';
@@ -759,6 +780,42 @@
     });
   });
   $('cv-begin').addEventListener('click', begin);
+
+  // ---------- your own music ----------
+  var mine = window.TOLYourMusic ? window.TOLYourMusic.create({
+    context: ensureCtx,
+    onStart: function (an, kind) {
+      M.on = true; M.an = an; M.lvl = 0;
+      V.dim = 1; V.cap = 0.82; V.iri = 0.38; V.beat = 10;
+      setLook(MUSIC_PAL, S.style);
+      show(null);
+      $('cv-mctrl').hidden = false;
+      $('cv-mlive-t').textContent = kind === 'tab' ? 'Following the sound from the tab you shared. Nothing is recorded or sent.' : 'Listening to your music. Nothing is recorded or sent.';
+      $('cv-sub').textContent = 'Following your music';
+      wake(true); poke();
+      try { $('cv-mstop').focus({ preventScroll: true }); } catch (e) { $('cv-mstop').focus(); }
+      say('Drift is following your music. Nothing is recorded or sent.');
+    },
+    onStop: function (why) {
+      M.on = false; M.an = null; M.lvl = 0;
+      $('cv-mctrl').hidden = true; stage.classList.remove('is-idle'); clearTimeout(idleT);
+      $('cv-sub').textContent = 'A calm visualizer';
+      wake(false);
+      if (why === 'pagehide') return;
+      show('cv-mine');
+      if (ctx && ctx.state === 'running' && !A && !testing) ctx.suspend().catch(function () {});
+    }
+  }) : null;
+  if (mine) mine.ui($('cv-mine-ui'), { title: 'Choose how Drift hears it' });
+  else $('cv-mine-open').hidden = true;
+  $('cv-mine-open').addEventListener('click', function () { setLook(MUSIC_PAL, S.style); syncToggles(); show('cv-mine'); });
+  $('cv-mine-back').addEventListener('click', function () { if (mine) mine.stop('stop', ''); setLook(IDLE.pal, S.style); show('cv-pick'); });
+  $('cv-mstyle').addEventListener('change', function (e) { S.style = e.target.value; saved.style = S.style; save(); setLook(null, S.style); syncToggles(); });
+  $('cv-mstop').addEventListener('click', function () { if (mine) mine.stop('stop'); });
+  $('cv-mlook').addEventListener('click', function () {
+    var i = (styleIdx(S.style) + 1) % STYLES.length; S.style = STYLES[i].id; saved.style = S.style; save();
+    setLook(null, S.style); syncToggles(); say('Pictures: ' + STYLES[i].name + '.');
+  });
   $('cv-pause').addEventListener('click', function () { pause(!(run && run.paused)); });
   $('cv-stop').addEventListener('click', function () { finish(true); });
   $('cv-after').addEventListener('click', function (e) {
@@ -820,6 +877,7 @@
   window.TOLDrift = {
     presets: FEEL, styles: STYLES, plan: plan, beatAt: beatAt, breathAt: breathAt,
     graph: function () { return A ? { ctx: ctx && ctx.state, left: A.oL.frequency.value, right: A.oR.frequency.value, vol: A.vol.gain.value, env: A.env.gain.value, bed: !!A.srcs, panner: A.pL && A.pL.constructor && A.pL.constructor.name } : null; },
+    music: function () { return { on: M.on, level: M.lvl, kind: mine ? mine.kind() : '' }; },
     session: function () { return run ? { feel: run.f.id, t: run.t, total: run.p.total, paused: run.paused, beat: V.beat } : null; },
     // render the picture at visual time t with breath b and read back relative luminance on a grid
     sample: function (opts) {

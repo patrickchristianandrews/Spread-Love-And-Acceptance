@@ -195,6 +195,9 @@
                 hear: '“Not now,” “forget it” or a silent “…” can mean someone is flooded: too overwhelmed to keep going. It can also mean they’re hurt and want the other person to keep trying. Without a time to come back, the other person may hear “this is over.”',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
     contempt: { label: 'Eye-roll or put-down', heat: 3, tone: 'hot' },
+    dig:      { label: 'Blame or a dig', heat: 2.5, tone: 'hot',
+                hear: 'Keeping score (“I managed fine without you”), a dig (“when it suits you”) or a label (“you treat me like the help”) says the hurt as blame. The other person defends themselves instead of hearing the need.',
+                instead: 'Say the hurt and the real ask: “I’ve been feeling left out. Could we find ten minutes this week?”' },
     swear:    { label: 'Swearing', heat: 2.5, tone: 'hot' },
     hostile:  { label: 'Hostile or fed-up line', heat: 3, tone: 'hot' },
     hint:     { label: 'Hint instead of an ask', heat: 1.5, tone: 'tense' },
@@ -281,7 +284,7 @@
 
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
   var PATTERNS = {
-    threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them) (?:away|from you)", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
+    threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else(?=\\s*(?:[.!?…]|$))", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them) (?:away|from you)", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
     control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
     demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)", "asap", "immediately", "urgently", "right away"])],
@@ -325,6 +328,11 @@
     marks.forEach(function (m) { if (m.kind === 'dismiss' && /^(?:(?:fine|ok(?:ay)?|sure)[.,!]?\s*)?(?:whatever(?: works for you| works| you want| you like| you think| you say)?|i don['’]t care|do what you want)[.!…]*$/i.test(String(m.text).trim()) && /^\s*(?:fine|ok(?:ay)?|sure)?[.,!]?\s*(?:whatever|i don['’]t care|do what you want)/i.test(text)) m.resigned = true; });
     // "I'm always the one who reaches out": a pattern the speaker has noticed on their own side, not a verdict on the other person
     marks.forEach(function (m) { if (m.kind === 'absolute' && !m.whole && /\bi(?:['’]m| am)?\s+(?:always|never)\b|\bi(?:['’]m| am) (?:the (?:only )?one who) (?:always|never)\b/i.test(text.slice(Math.max(0, m.start - 22), m.end))) { m.pattern = true; m.kind = 'need'; } });
+    // threats and controlling lines the shared list knows ("if you tell anyone, you'll be sorry"), and digs or scorecards
+    if (P && P.threats) P.threats(text).forEach(function (x) { marks.push({ kind: 'threat', start: x.start, end: x.end, text: x.text }); });
+    if (P && P.digs) P.digs(text).forEach(function (x) { marks.push({ kind: 'dig', start: x.start, end: x.end, text: x.text }); });
+    // a calm boundary ("If you can't respect my relationship, I'll leave for today. I love you.") is not a threat
+    if (P && P.isBoundary && P.isBoundary(text)) marks = marks.filter(function (m) { return m.kind !== 'threat'; });
     if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
     var edgy = marks.some(function (m) { return KINDS[m.kind].heat > 0; });
     // Shouting: words in capitals (3+ letters, not common acronyms) and stacked punctuation
@@ -435,13 +443,13 @@
     out.level = endHeat >= 3 ? 'hot' : endHeat >= 1.2 ? 'warm' : 'calm';
     // an edge at the very end (sarcasm, a put-down, a passive jab) is never "calm", however short the message
     var lastT = n ? out.turns[n - 1] : null;
-    if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'opener', 'hint', 'short'].indexOf(m.kind) !== -1; })) out.level = 'warm';
+    if (lastT && out.level === 'calm' && lastT.marks.some(function (m) { return ['dig', 'contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'opener', 'hint', 'short'].indexOf(m.kind) !== -1; })) out.level = 'warm';
     // the same lines read the same way however long the thread is: an edge near the end is never "calm"
-    if (out.level === 'calm' && out.turns.slice(-3).some(function (t) { return t.marks.some(function (m) { return ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile'].indexOf(m.kind) !== -1; }); })) out.level = 'warm';
+    if (out.level === 'calm' && out.turns.slice(-3).some(function (t) { return t.marks.some(function (m) { return ['dig', 'contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile'].indexOf(m.kind) !== -1; }); })) out.level = 'warm';
     // swearing, a fed-up line or name-calling anywhere near the end: hot
     if (out.turns.slice(-2).some(function (t) { return t.marks.some(function (m) { return ['swear', 'hostile', 'verdict', 'contempt'].indexOf(m.kind) !== -1; }); }) && out.level !== 'hot' && peak >= 3) out.level = 'hot';
     // count the lines with an edge in each half: if they rise toward the end, it isn't calm, whatever the average
-    var EDGE = ['contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'absolute', 'defend', 'brushaside', 'demand', 'hint', 'opener', 'pointed', 'history', 'shouting'];
+    var EDGE = ['dig', 'contempt', 'sarcasm', 'passive', 'dismiss', 'verdict', 'withdraw', 'compare', 'swear', 'hostile', 'absolute', 'defend', 'brushaside', 'demand', 'hint', 'opener', 'pointed', 'history', 'shouting'];
     var edged = out.turns.map(function (t) { return t.marks.some(function (m) { return EDGE.indexOf(m.kind) !== -1; }) ? 1 : 0; });
     var half = Math.floor(n / 2), early = edged.slice(0, half).reduce(function (a, b) { return a + b; }, 0), late = edged.slice(half).reduce(function (a, b) { return a + b; }, 0);
     out.edgeEarly = early; out.edgeLate = late;
@@ -760,7 +768,7 @@
 
   // Each side's part: for every person with a line that may have added heat, the sharpest one, and a way to own it.
   // Even-handed on purpose: never only for the person who raised the issue.
-  var OWN_ORDER = ['hostile', 'swear', 'contempt', 'verdict', 'sarcasm', 'passive', 'dismiss', 'defend', 'compare', 'absolute', 'brushaside', 'withdraw', 'demand', 'history', 'shouting', 'hint', 'opener', 'pointed'];
+  var OWN_ORDER = ['hostile', 'swear', 'contempt', 'verdict', 'dig', 'sarcasm', 'passive', 'dismiss', 'defend', 'compare', 'absolute', 'brushaside', 'withdraw', 'demand', 'history', 'shouting', 'hint', 'opener', 'pointed'];
   function sentenceOf(text, m) {
     var st = text.lastIndexOf('.', m.start - 1), q = text.lastIndexOf('?', m.start - 1), x = text.lastIndexOf('!', m.start - 1), nl = text.lastIndexOf('\n', m.start - 1);
     var a = Math.max(st, q, x, nl) + 1, e = text.slice(m.end).search(/[.?!\n]/);

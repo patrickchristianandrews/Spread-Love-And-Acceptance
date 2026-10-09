@@ -709,7 +709,7 @@
       "first": true,
       "newTopic": true,
       "name": "being left out of household decisions",
-      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b",
+      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b|\\b(how do i|how can i|i want to|how to) (get|have) (a|more of a) say\\b",
       "notPat": "\\b(ex|coparent\\w*|co parent\\w*|custody|my boss|my manager|at work|my team)\\b",
       "keys": [],
       "what": [
