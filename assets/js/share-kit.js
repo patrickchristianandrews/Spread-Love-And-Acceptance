@@ -63,20 +63,32 @@
   }
 
   // =====================================================================================
-  // QR code: byte mode, error correction level M, versions 1-10. Follows ISO/IEC 18004.
+  // QR code: byte mode, versions 1-40, error correction M (or L for long links). Follows ISO/IEC 18004.
+  // Level M while the code fits in version 10 (up to 213 bytes, as before); longer links use level L,
+  // raised to M when M still fits in the same version. Checked bit-for-bit against python qrcode and
+  // segno for every mask, and decoded with zxing-cpp, for 1 to 2,953 bytes.
   // =====================================================================================
   var QR = (function () {
-    // per version (index 1-10), level M
-    var ECC_PER_BLOCK = [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26];
-    var NUM_BLOCKS = [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5];
-    var FORMAT_M = 0;   // level M's two format bits are 00
+    // per version (index 1-40): error correction codewords per block, and the number of blocks
+    var ECC = {
+      L: [0, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+      M: [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28]
+    };
+    var BLOCKS = {
+      L: [0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 7, 8, 8, 9, 9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25],
+      M: [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49]
+    };
+    var FORMAT = { L: 1, M: 0 };   // the two level bits in the format information
+    var M_UP_TO = 10;              // level M while it fits in this version
 
     function rawModules(ver) {
       var r = (16 * ver + 128) * ver + 64;
       if (ver >= 2) { var na = Math.floor(ver / 7) + 2; r -= (25 * na - 10) * na - 55; if (ver >= 7) r -= 36; }
       return r;
     }
-    function dataCodewords(ver) { return Math.floor(rawModules(ver) / 8) - ECC_PER_BLOCK[ver] * NUM_BLOCKS[ver]; }
+    function dataCodewords(ver, ecl) { return Math.floor(rawModules(ver) / 8) - ECC[ecl][ver] * BLOCKS[ecl][ver]; }
+    // how many bytes fit in a version at a level
+    function capacity(ver, ecl) { return Math.floor((dataCodewords(ver, ecl) * 8 - 4 - (ver < 10 ? 8 : 16)) / 8); }
     function alignPos(ver) {
       if (ver === 1) return [];
       var na = Math.floor(ver / 7) + 2, size = ver * 4 + 17;
@@ -113,18 +125,26 @@
       for (var i = 0; i < e.length; i++) out.push(e.charCodeAt(i));
       return out;
     }
-
-    function matrix(text, forceMask) {
-      var bytes = utf8(String(text)), ver, cap;
-      for (ver = 1; ver <= 10; ver++) {
-        cap = dataCodewords(ver) * 8;
-        if (4 + (ver < 10 ? 8 : 16) + bytes.length * 8 <= cap) break;
+    // the version and level for n bytes, or null when it is too long for any QR code
+    function pick(n, forceEcl) {
+      var ver;
+      if (forceEcl === 'L' || forceEcl === 'M') {
+        for (ver = 1; ver <= 40; ver++) if (capacity(ver, forceEcl) >= n) return { ver: ver, ecl: forceEcl };
+        return null;
       }
-      if (ver > 10) return null;
+      for (ver = 1; ver <= M_UP_TO; ver++) if (capacity(ver, 'M') >= n) return { ver: ver, ecl: 'M' };
+      for (ver = 1; ver <= 40; ver++) if (capacity(ver, 'L') >= n) return { ver: ver, ecl: capacity(ver, 'M') >= n ? 'M' : 'L' };
+      return null;
+    }
+
+    function matrix(text, forceMask, forceEcl) {
+      var bytes = utf8(String(text)), pv = pick(bytes.length, forceEcl);
+      if (!pv) return null;
+      var ver = pv.ver, ecl = pv.ecl, cap = dataCodewords(ver, ecl) * 8, cc = ver < 10 ? 8 : 16;
       // the bit stream: mode 0100, character count, the bytes, terminator, then pad bytes
       var bits = [];
       function put(v, n) { for (var i = n - 1; i >= 0; i--) bits.push((v >>> i) & 1); }
-      put(4, 4); put(bytes.length, ver < 10 ? 8 : 16);
+      put(4, 4); put(bytes.length, cc);
       bytes.forEach(function (b) { put(b, 8); });
       put(0, Math.min(4, cap - bits.length));
       put(0, (8 - bits.length % 8) % 8);
@@ -133,7 +153,7 @@
       for (var i = 0; i < bits.length; i += 8) { var b = 0; for (var k = 0; k < 8; k++) b = (b << 1) | bits[i + k]; data.push(b); }
 
       // split into blocks, add error correction, interleave
-      var nb = NUM_BLOCKS[ver], eccLen = ECC_PER_BLOCK[ver], raw = Math.floor(rawModules(ver) / 8);
+      var nb = BLOCKS[ecl][ver], eccLen = ECC[ecl][ver], raw = Math.floor(rawModules(ver) / 8);
       var nShort = nb - raw % nb, shortLen = Math.floor(raw / nb), div = rsDivisor(eccLen), blocks = [], at = 0;
       for (i = 0; i < nb; i++) {
         var dat = data.slice(at, at + shortLen - eccLen + (i < nShort ? 0 : 1)); at += dat.length;
@@ -165,7 +185,7 @@
         for (var ay = -2; ay <= 2; ay++) for (var ax = -2; ax <= 2; ax++) setF(ap[i] + ax, ap[j] + ay, Math.max(Math.abs(ax), Math.abs(ay)) !== 1);
       }
       function drawFormat(mask) {
-        var d = (FORMAT_M << 3) | mask, rem = d;
+        var d = (FORMAT[ecl] << 3) | mask, rem = d;
         for (var q = 0; q < 10; q++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
         var fb = ((d << 10) | rem) ^ 0x5412;
         function bit(n) { return ((fb >>> n) & 1) !== 0; }
@@ -259,7 +279,7 @@
         }
       }
       applyMask(mask); drawFormat(mask);
-      return { version: ver, size: size, mask: mask, modules: mods };
+      return { version: ver, ecl: ecl, size: size, mask: mask, modules: mods };
     }
 
     function svg(text) {

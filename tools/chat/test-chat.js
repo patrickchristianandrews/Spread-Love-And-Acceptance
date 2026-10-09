@@ -844,7 +844,7 @@ t('round7', 'How do I set a boundary kindly? (the Go deeper chip)', { q: 'How do
 t('round7', 'my ex makes decisions about our kid without asking me', { id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /I love doing things together/ });
 c('round7', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: 'coparentdecide', not: /DACI|decision rights at work/i });
 t('round7', 'he keeps sending her back without her inhaler', { id: 'handoffkit', text: /checklist/ });
-t('round7', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^That’s worrying/ });
+t('round7', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^It’s tiring/ });
 t('round7', 'kids are bored at my place', { id: 'parttimehome', link: '/on-my-own.html' });
 t('round7', 'how do i build a life again after divorce', { id: 'onmyown', link: '/on-my-own.html' });
 // business partners

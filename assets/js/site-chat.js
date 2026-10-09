@@ -1794,6 +1794,12 @@
       var ack = stAck(state, f);
       if (ack) return ack;
     }
+    // deep mode, and nothing found: a thoughtful "say more" rather than "outside my pond"
+    if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && KB.deep && deepOn(state) && !DANGER.test(f)) {
+      state.last = null;
+      return { blocks: [{ k: 'p', x: deepLine(state, 'no_match', 'That’s a deep one. Could you say it another way, or tell me who it’s about?') }],
+        chips: [{ label: 'Ask me a big question', q: 'Ask me a big question' }, { label: 'Back to small talk', q: 'Small talk' }], kind: 'deep', id: 'nomatch', noBrief: true };
+    }
     if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && !OFF_TOPIC.test(f)) {
       var alt = contextReply(state, prevLast, f) || softClarify(state, f);
       if (alt) return meant(alt, sp);
@@ -1959,112 +1965,132 @@
     return (D._all = all);
   }
   function dTitle(t) { return String(dget(t, ['title', 'name', 'label', 'topic', 'id']) || 'this'); }
-  function dById(id) { var s = stNorm(id); return dTopics().filter(function (t) { return stNorm(t.id || '') === s || stNorm(dTitle(t)) === s; })[0] || null; }
-  // the best deep topic (or big question) for a message, or null
+  function dById(id) { var s = stNorm(id); return dTopics().concat(dBig()).filter(function (t) { return t && (stNorm(t.id || '') === s || stNorm(dTitle(t)) === s); })[0] || null; }
+  function dBig() {
+    var D = KB && KB.deep, bq = (D && (D.big_questions || D.questions)) || [];
+    return Array.isArray(bq) ? bq : Object.keys(bq).map(function (k) { var x = bq[k]; if (x && typeof x === 'object' && !x.id) x.id = k; return x; });
+  }
+  function dRule(k) { var D = KB && KB.deep; return D && ((D.rules && D.rules[k] != null) ? D.rules[k] : D[k]); }
+  // the deep entry for a message: the big questions first (they are more specific), then the topics; first match wins
   function deepFind(fs, f) {
     var D = KB && KB.deep; if (!D || !fs) return null;
     var byName = dById(fs); if (byName) return { t: byName };
-    var bq = D.big_questions || D.questions || [];
-    if (!Array.isArray(bq)) bq = Object.keys(bq).map(function (k) { var x = bq[k]; if (x && typeof x === 'object' && !x.id) x.id = k; return x; });
-    for (var i = 0; i < bq.length; i++) {
-      var B = bq[i]; if (!B || typeof B !== 'object') continue;
-      var qs = dget(B, ['question', 'q', 'title']);
-      var hit = dRes(B).some(function (re) { return re.test(fs) || re.test(f); }) || (qs && stNorm(qs) === fs);
-      if (hit) { var tid = dget(B, ['topic', 'topic_id', 'answer_topic']); var T = tid ? dById(tid) : null; return T ? { t: T, bq: B } : { t: B, bq: B }; }
+    var lists = [dBig(), dTopics()];
+    for (var l = 0; l < lists.length; l++) for (var i = 0; i < lists[l].length; i++) {
+      var T = lists[l][i]; if (!T || typeof T !== 'object') continue;
+      if (dRes(T).some(function (re) { return re.test(fs) || re.test(f); }) || stNorm(dget(T, ['question', 'q', 'title']) || '') === fs) {
+        var tid = dget(T, ['topic', 'topic_id']); var R = tid ? dById(tid) : null;
+        return { t: R || T, bq: R ? T : null };
+      }
     }
-    var ts = dTopics(), best = null, bl = 0;
-    ts.forEach(function (T) { dRes(T).forEach(function (re) { var m = re.exec(fs) || re.exec(f); if (m && m[0].length > bl) { bl = m[0].length; best = T; } }); });
-    return best ? { t: best } : null;
+    return null;
   }
   var DEEP_SECTIONS = [
-    ['Philosophy', ['philosophy', 'philosophical', 'philosophers', 'phil']],
-    ['Psychology', ['psychology', 'psych', 'science', 'research']],
-    ['Through an autistic lens', ['autistic_lens', 'autistic', 'autism', 'autism_lens', 'through_an_autistic_lens', 'nd_lens', 'neurodivergent']],
-    ['Putting it together', ['together', 'putting_it_together', 'synthesis', 'bring_together', 'bringing_it_together', 'combined']]];
+    ['philosophy', 'Philosophy', ['philosophy', 'philosophical']],
+    ['psychology', 'Psychology', ['psychology', 'research']],
+    ['autistic_lens', 'Through an autistic lens', ['autistic_lens', 'autism_lens', 'autistic']],
+    ['together', 'Putting it together', ['together', 'putting_it_together']],
+    ['question', 'A question for you', ['question', 'reflective_question']],
+    ['try', 'Try this', ['try', 'try_this']]];
   function dParas(v) {
     var out = [];
     dlist(v).forEach(function (x) {
       if (typeof x === 'string') { if (x.trim()) out.push({ k: 'p', x: x }); }
-      else if (x && typeof x === 'object') {
-        var h = dget(x, ['h', 'heading', 'title', 'name', 'who']), tx = dget(x, ['x', 'text', 'body', 'idea', 'summary', 'p']);
-        if (tx) out.push({ k: 'p', x: (h && typeof h === 'string' ? h + ': ' : '') + dlist(tx).join(' ') });
-      }
+      else if (x && typeof x === 'object') { var tx = dget(x, ['x', 'text', 'body']); if (tx) out.push({ k: 'p', x: dlist(tx).join(' ') }); }
     });
     return out;
   }
-  function deepReply(state, hit, lead) {
-    var T = hit.t, b = [], title = dTitle(T);
-    var open = lead || dget(hit.bq || {}, ['answer_intro', 'intro', 'opener']) || dget(T, ['intro', 'opener', 'opening', 'summary', 'short']);
-    if (open) b.push({ k: 'p', x: dlist(open).join(' ') });
-    var secs = dget(T, ['sections', 'lenses', 'blocks']);
-    if (Array.isArray(secs)) secs.forEach(function (s) { var h = dget(s, ['h', 'heading', 'title', 'lens', 'name']); var ps = dParas(dget(s, ['x', 'text', 'body', 'paras', 'points'])); if (h && ps.length) { b.push({ k: 'h', x: h }); b = b.concat(ps); } });
-    else {
-      var src = secs && typeof secs === 'object' ? secs : T;
-      DEEP_SECTIONS.forEach(function (S) { var ps = dParas(dget(src, S[1])); if (ps.length) { b.push({ k: 'h', x: S[0] }); b = b.concat(ps); } });
-    }
-    var rq = dget(T, ['question', 'reflective_question', 'reflect', 'reflection', 'ask', 'question_to_sit_with']);
-    if (rq) { b.push({ k: 'h', x: 'A question to sit with' }); b.push({ k: 'p', x: dlist(rq).join(' ') }); }
-    var tr = dget(T, ['try_this', 'try', 'practice', 'exercise', 'tryit']);
-    if (tr) { b.push({ k: 'h', x: 'Try this' }); var tl = dlist(tr).filter(function (x) { return typeof x === 'string'; }); if (tl.length > 1) b.push({ k: 'list', x: tl }); else if (tl.length) b.push({ k: 'p', x: tl[0] }); }
-    var links = safeLinks(dlist(dget(T, ['links', 'read_more', 'pages'])).map(function (l) { return Array.isArray(l) ? l : l && (l.u || l.url || l.href) ? [l.t || l.title || l.label || l.u || l.url, l.u || l.url || l.href] : null; }).filter(Boolean)).slice(0, 4);
-    if (links.length) b.push({ k: 'links', x: links });
-    var chips = [];
-    dlist(dget(T, ['related', 'see', 'see_also', 'next'])).slice(0, 2).forEach(function (r) { var R = typeof r === 'string' ? dById(r) : null; var lab = R ? dTitle(R) : (typeof r === 'string' ? r : ''); if (lab) chips.push({ label: 'Go deeper: ' + lab.charAt(0).toLowerCase() + lab.slice(1), q: 'Talk deep about ' + lab }); });
+  function dLinks(T) {
+    return safeLinks(dlist(dget(T, ['links'])).map(function (l) { return Array.isArray(l) ? l : l && (l.u || l.url) ? [l.t || l.title || l.u || l.url, l.u || l.url] : null; }).filter(Boolean));
+  }
+  function dChips(state, T) {
+    var fu = dlist(dRule('follow_ups')).filter(function (x) { return typeof x === 'string'; }), chips = [];
+    for (var n = 0; n < 2 && fu.length; n++) { var x = fu.splice(Math.floor(frand(state) * fu.length) % fu.length, 1)[0]; chips.push({ label: x, q: x }); }
     chips.push({ label: 'Another big question', q: 'Ask me a big question' });
     chips.push({ label: 'Back to small talk', q: 'Small talk' });
-    state.last = null; state.deepLast = T.id || title;
-    return { blocks: b, chips: chips.slice(0, 4), kind: 'deep', id: String(T.id || title), noBrief: true };
+    return chips;
   }
+  // only: one section key ("autistic_lens") for a follow-up like "and through an autistic lens?"
+  function deepReply(state, hit, only) {
+    var T = hit.t, b = [], id = String(T.id || dTitle(T));
+    var safetyTopic = dlist(dRule('safety_topic_ids')).indexOf(T.id) !== -1;
+    if (!only) b.push({ k: 'p', x: dTitle(T).replace(/\?$/, '') === dTitle(T) ? 'Let’s think about ' + dTitle(T).charAt(0).toLowerCase() + dTitle(T).slice(1) + '.' : dTitle(T) });
+    var keys = only ? [only, 'together'] : safetyTopic ? ['together'] : DEEP_SECTIONS.map(function (S) { return S[0]; });
+    var links = dLinks(T);
+    // fear, control or harm: the safety page first, and no lenses unless asked
+    if (safetyTopic && !only) { var sl = links.filter(function (l) { return /\/safety\.html/.test(l[1]); }); if (sl.length) b.push({ k: 'links', x: sl }); }
+    DEEP_SECTIONS.forEach(function (S) {
+      if (keys.indexOf(S[0]) === -1) return;
+      var ps = dParas(dget(T, S[2])); if (!ps.length) return;
+      b.push({ k: 'h', x: S[1] }); b = b.concat(ps);
+    });
+    if (links.length) b.push({ k: 'links', x: links.slice(0, 4) });
+    state.last = null; state.deepLast = id;
+    return { blocks: b, chips: dChips(state, T), kind: 'deep', id: id, noBrief: true };
+  }
+  function deepLine(state, key, fallback) { return nameFill(dPick(state, dRule(key)) || fallback, chatName(state)); }
   function deepIntro(state) {
-    var D = KB.deep, b = [];
-    var line = dPick(state, dget(D, ['intro_lines', 'intro', 'enter_replies', 'enter_lines', 'welcome', 'intros']));
-    b.push({ k: 'p', x: nameFill(line || 'Deep talk it is. Ask me a big question, like “what is love?”, “why do we fight with the people we love?” or “what makes a life meaningful?”, and we’ll look at it through philosophy, psychology and an autistic lens.', chatName(state)) });
-    var bq = D.big_questions || D.questions || [], ex = [];
-    (Array.isArray(bq) ? bq : Object.keys(bq).map(function (k) { return bq[k]; })).forEach(function (B) { var qq = B && dget(B, ['question', 'q', 'title']); if (typeof qq === 'string' && ex.length < 3) ex.push(qq); });
-    if (ex.length < 3) dTopics().slice(0, 3 - ex.length).forEach(function (T) { ex.push('Talk deep about ' + dTitle(T)); });
+    var ex = [];
+    dBig().forEach(function (B) { var qq = B && dget(B, ['title', 'question', 'q']); if (typeof qq === 'string') ex.push(qq); });
+    var pickd = [];
+    for (var n = 0; n < 3 && ex.length; n++) pickd.push(ex.splice(Math.floor(frand(state) * ex.length) % ex.length, 1)[0]);
     state.last = null;
-    return { blocks: b, chips: ex.map(function (x) { return { label: x.length > 40 ? x.slice(0, 38).replace(/\s+\S*$/, '') + '…' : x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
+    return { blocks: [{ k: 'p', x: deepLine(state, 'intro', 'Deep talk it is. Ask me a big question, and we’ll look at it through philosophy, psychology and an autistic lens.') },
+      { k: 'p', x: 'Ask me a big question' + (pickd.length ? ', like “' + pickd[0] + '”' : '') + ', or name a part of life you’re thinking about. Say “small talk” whenever you want to come back up.' }],
+      chips: pickd.map(function (x) { return { label: x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
   }
-  var DEEP_IN = /^(?:(?:lets|let s|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|go deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|big questions?|ask me a big question|ask me something deep)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
-  var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk) (?:about|on|into) (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
-  var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|exit deep(?: mode)?|leave deep(?: mode)?|end deep(?: mode| talk)?|stop deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|lighten up|keep it light|back to normal|normal please)(?: please| now)?$/;
+  var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
+  var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk|get philosophical) (?:about|on|into) (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
+  var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|(?:exit|leave|end|stop) deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|keep it light|back to normal)(?: please| now)?$/;
+  // a follow-up about the last deep topic: which part they asked for
+  var DEEP_FU = [[/\b(autis\w*|neurodiverg\w*|nd lens)\b/, 'autistic_lens'], [/\b(research|science|psycholog\w*|studies|study|evidence)\b/, 'psychology'],
+    [/\b(stoics?|aristotle|plato|kant|philosoph\w*|confucius|buddh\w*|socrates|thinkers?)\b/, 'philosophy'], [/\b(tonight|use this|try|do about it|practical|in practice|what can i do)\b/, 'try'], [/\b(sum (it )?up|together|bottom line|so what)\b/, 'together']];
+  function phraseIn(list, fs) { return dPhraseRes(list).some(function (re) { return re.test(fs); }); }
   function deepTurn(state, q, f) {
     var D = KB && KB.deep; if (!D) return null;
-    var fs = stNorm(q);
+    var fs = stNorm(q), on = deepOn(state);
     var about = DEEP_ABOUT.exec(fs);
     if (about) {
-      var h = deepFind(stNorm(about[1] || about[2] || ''), norm(about[1] || about[2] || ''));
+      var ab = about[1] || about[2] || '', h = deepFind(stNorm(ab), norm(ab));
       setDeep(state, true);
       return h ? deepReply(state, h) : deepIntro(state);
     }
-    if (DEEP_IN.test(fs) || dPhraseRes(D.enter_phrases).some(function (re) { return re.test(fs); })) {
-      if (/big question|ask me (a big question|something deep)/.test(fs) && deepOn(state)) {
-        // already in: offer one we haven't looked at
-        var all = dTopics().filter(function (T) { return String(T.id || dTitle(T)) !== state.deepLast; });
-        if (all.length) return deepReply(state, { t: all[Math.floor(frand(state) * all.length) % all.length] });
+    // "go deeper" alone keeps its old meaning (that page's deeper link) unless deep mode is already on
+    var goDeeper = /^(go deeper|deeper|go deeper please)$/.test(fs);
+    if (DEEP_IN.test(fs) || (phraseIn(dRule('enter_phrases'), fs) && (!goDeeper || on))) {
+      if (on && /big question|something deep/.test(fs)) {
+        var bq = dBig().filter(function (B) { return String(B.id) !== state.deepLast; });
+        if (bq.length) return deepReply(state, { t: bq[Math.floor(frand(state) * bq.length) % bq.length] });
       }
+      if (on && state.deepLast && !DEEP_IN.test(fs)) { var fu0 = deepFollow(state, fs); if (fu0) return fu0; }
       setDeep(state, true);
       return deepIntro(state);
     }
-    if (!deepOn(state)) return null;
-    if (DEEP_OUT.test(fs) || dPhraseRes(D.exit_phrases).some(function (re) { return re.test(fs); })) {
+    if (!on) return null;
+    if (DEEP_OUT.test(fs) || phraseIn(dRule('exit_phrases'), fs)) {
       setDeep(state, false);
-      var ol = dPick(state, dget(D, ['exit_lines', 'exit', 'exit_replies', 'leave_lines', 'outro']));
       var nx = stPrompt(state);
       if (nx) state.stAsk = state.turn || 0;
       state.last = null;
-      return { blocks: [{ k: 'p', x: nameFill(ol || 'Back to the shallow end! Deep talk is off. We can paddle about anything now.', chatName(state)) }].concat(nx ? [{ k: 'p', x: nx }] : []),
+      return { blocks: [{ k: 'p', x: deepLine(state, 'exit', 'Back to the shallows! Deep talk is off. We can paddle about anything now.') }].concat(nx ? [{ k: 'p', x: nx }] : []),
         chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', fun: 1 };
     }
     // someone's own situation ("my husband never listens") gets the usual help, even in deep mode
     if (personalHit(f)) return null;
     var hit = deepFind(fs, f);
-    return hit ? deepReply(state, hit) : null;
+    if (hit) return deepReply(state, hit);
+    return deepFollow(state, fs);
+  }
+  // "what would the Stoics say?", "and through an autistic lens?", "how do I use this tonight?" after a deep answer
+  function deepFollow(state, fs) {
+    if (!state.deepLast || fs.split(' ').length > 12) return null;
+    var T = dById(state.deepLast); if (!T) return null;
+    for (var i = 0; i < DEEP_FU.length; i++) if (DEEP_FU[i][0].test(fs)) return deepReply(state, { t: T }, DEEP_FU[i][1]);
+    return null;
   }
   function personalHit(f) {
-    if (VERBAL.test(f) || FUN_UPSET.test(f) && /\b(i|i m|im|my|me)\b/.test(f)) return true;
-    var c = (IDX.first || []).some(function (x) { return CV_PERSONAL[x.id] && x.re.test(f) && !(x.notRe && x.notRe.test(f)); });
-    if (c) return true;
+    if (VERBAL.test(f) || (FUN_UPSET.test(f) && /\b(i|i m|im|my|me)\b/.test(f))) return true;
+    if ((IDX.first || []).some(function (x) { return CV_PERSONAL[x.id] && x.re.test(f) && !(x.notRe && x.notRe.test(f)); })) return true;
     var s = detectSituation(f);
     return !!(s.issue && s.score >= 4 && (s.personal || s.pronoun));
   }
@@ -2072,15 +2098,15 @@
   function deepChip(state, q, r) {
     var D = KB && KB.deep;
     if (!D || !r || !r.blocks || deepOn(state) || state.unsafe) return r;
-    var k = r.kind || 'search', never = dlist(D.never_on_kinds).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short']);
+    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more']);
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
     if (/\/safety\.html|\b988\b|\b911\b/.test(JSON.stringify(r.blocks))) return r;
     var h = deepFind(stNorm(q), f);
-    if (!h) return r;
-    r.chips = (r.chips || []).filter(function (c) { return !/^Go deeper on this$/.test(c.label); }).slice(0, 4);
-    r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + dTitle(h.t) });
+    if (!h || dlist(dRule('safety_topic_ids')).indexOf(h.t.id) !== -1) return r;
+    r.chips = (r.chips || []).slice(0, 4);
+    r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + (h.t.id || dTitle(h.t)) });
     return r;
   }
 
