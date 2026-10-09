@@ -2606,3 +2606,41 @@ html.tol-reading :is(.tol-breathe-btn, .tol-top):not(:focus-visible):not(:focus-
 .tol-picks .tol-code:empty{ display:none; }
 /* the first-visit offer sits above the floating Puddles button, so its buttons are never covered */
 .tol-offer{ position:relative; z-index:885; }
+
+/* ---------- Menu sub-menus (site.js buildTree): a few pages first, then small labelled lists that open on a tap ---------- */
+.tol-tree, .tol-subm-list{ list-style:none; margin:0; padding:0; }
+.tol-subm{ margin:0; }
+.tol-subm-btn{ display:flex; width:100%; align-items:center; justify-content:space-between; gap:.6rem; text-align:left; cursor:pointer;
+  font:600 .97rem/1.3 "Lora", Georgia, serif; color:var(--ink); background:none; border:0; border-top:1px solid var(--line); border-radius:0; min-height:44px; }
+.tol-bar .tol-drop .tol-subm-btn{ padding:.5rem .5rem; font-size:.97rem; border:0; border-top:1px solid var(--line); border-radius:0; }
+.tol-bar .tol-drop .tol-subm-btn:hover{ background:var(--paper-deep); text-decoration:none; }
+.tol-panel .tol-subm-btn{ padding:.7rem .4rem .7rem .55rem; font-size:1.02rem; }
+.tol-panel .tol-subm-btn:hover{ background:var(--paper-deep); }
+.tol-subm-btn:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+.tol-subm-btn::after{ content:""; flex:none; width:.42em; height:.42em; margin-right:.3rem; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(45deg); opacity:.6; }
+.tol-subm-btn[aria-expanded="true"]::after{ transform:rotate(225deg); }
+.tol-subm-btn[aria-expanded="true"]{ background:var(--paper-deep); }
+.tol-subm-n{ margin-left:auto; font:400 .74rem/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft); }
+.tol-subm-list{ margin:.15rem 0 .45rem .45rem; padding-left:.5rem; border-left:2px solid var(--line); }
+.tol-subm-list[hidden]{ display:none; }
+.tol-subm-all a{ font-weight:600; color:var(--focus, #2B5B8C) !important; }
+.tol-drop .tol-tree > li:first-child > .tol-subm-btn{ border-top:0; }
+/* the At work page on its own keeps Calm & play in the menus (only work mode, when chosen, hides it) */
+html.tol-work-page .tol-nav-item:has(> button[data-sec="play"]), html.tol-work-page #tol-sec-play{ display:block !important; }
+/* "En español": a plain link in the top bar, the same size as the section buttons (it steps aside when the bar is full) */
+.tol-bar a.tol-es-link{ font:inherit; font-size:1rem; color:var(--ink); padding:.5rem .7rem; border:1px solid transparent; border-radius:var(--radius, 6px); text-decoration:none; white-space:nowrap; line-height:1.2; }
+.tol-bar a.tol-es-link:hover{ border-color:var(--line); background:var(--paper-deep); text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
+.tol-bar a.tol-es-link[hidden]{ display:none; }
+.tol-panel-es{ margin:.5rem 0 0; font-size:.95rem; }
+.tol-panel-es a{ font-weight:600; }
+/* "Print this page" beside "Share this guide" */
+.tol-share-row .tol-print-btn{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:.4rem 1.05rem; box-sizing:border-box;
+  font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }
+.tol-share-row .tol-print-btn:hover{ background:#F3EEF9; }
+.tol-print-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+/* "¿Prefieres español?": one quiet line under the bar for a browser set to Spanish */
+.tol-es-hint{ display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .8rem; margin:.4rem auto .6rem; max-width:46rem; padding:.4rem .5rem .4rem .9rem; box-sizing:border-box;
+  border:1px solid var(--line, #d8cfb8); border-radius:10px; font-size:.95rem; background:var(--paper, #fffaf0); color:var(--ink, #2a2530); }
+.tol-es-hint a{ font-weight:600; }
+.tol-es-hint button{ margin-left:auto; font:inherit; font-size:.9rem; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; min-height:36px; min-width:36px; padding:.15rem .7rem; cursor:pointer; }
+@media print{ .tol-es-hint, .tol-print-btn, .tol-panel-es{ display:none !important; } }
