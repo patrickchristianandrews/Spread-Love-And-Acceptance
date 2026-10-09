@@ -270,7 +270,7 @@
       else if (others.length) {
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
-        else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and ' + road + ' people on your road.', note: 'Check the list of scores: one may be in twice.' });
+        else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });
         else {
           // plain words: "Your average: 0.55, medium. Go gently with each other today."
           var ra = r2(avg), band = ra < 0.30 ? 'low' : ra < 0.60 ? 'medium' : 'high';
