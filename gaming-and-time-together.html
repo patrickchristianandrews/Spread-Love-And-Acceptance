@@ -192,6 +192,7 @@
 <p class="pg-acts">
   <button type="button" class="pg-btn" id="td-copy">Copy our deal</button>
   <button type="button" class="pg-btn is-quiet" id="td-share" data-no-clip>Share it</button>
+  <button type="button" class="pg-btn is-quiet" id="td-qr">Show a QR code</button>
 </p>
 <p class="pg-status" id="td-status" role="status" aria-live="polite"></p>
 <p class="pg-keep-note">Copy and Share add a link that opens this deal. A link holds the deal as it is right now: if either of you changes something, send a new link.</p>
@@ -277,6 +278,15 @@
     if (window.TOLShare && window.TOLShare.share) window.TOLShare.share({ title: 'Our time-together deal', text: text, url: false, result: true });
     else if (navigator.share) navigator.share({ title: 'Our time-together deal', text: text }).catch(function () {});
     else $('td-copy').click();
+  });
+  // "Show a QR code": the same link, drawn big for the other phone in the room (share-kit.js, loaded at the tap if needed)
+  function qrShow(url, o) {
+    function go() { if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); }
+    if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
+    var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
+  }
+  $('td-qr').addEventListener('click', function () {
+    qrShow(link(), { title: 'Scan with the other phone', note: 'Your deal opens on their phone, with your names swapped round so it reads from their side.' });
   });
   $('td-copy').addEventListener('click', function () {
     var text = full();

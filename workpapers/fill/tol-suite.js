@@ -846,6 +846,8 @@
       try {
         new Response(new Blob([new TextEncoder().encode(j)]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer().then(function (buf) {
           suiteLink = { sig: j, url: suiteBase() + 'z' + b64u(new Uint8Array(buf)) };
+          // a road too long for a QR code: the QR button steps aside, the link still goes
+          var qb = $('ws-qr'); if (qb && global.TOLShareKit && global.TOLShareKit.qrFits) qb.hidden = !global.TOLShareKit.qrFits(suiteLink.url);
         }, function () {});
       } catch (e) {}
     }, 700);
@@ -2284,6 +2286,21 @@
       if (link.url.length > 60000) { e.stopPropagation(); e.preventDefault(); say('Your road is too big for one link. Use \u201cSave my progress\u201d and send the small file instead.'); return; }
       sendB.setAttribute('data-share-url', link.url);
       suiteSafe = j;
+    });
+    // "Show a QR code": the same link as "Send it to my partner", drawn big for the other phone in the room
+    // (share-kit.js; loaded at the tap if it isn't here yet)
+    var qrB = $('ws-qr');
+    if (qrB) qrB.addEventListener('click', function () {
+      if (!S.path || !S.stops.some(function (st) { return st.entries.some(filled); })) { say('Fill in a sheet first, then show the code.'); return; }
+      var j = suiteJson(), link = suiteLink.sig === j ? suiteLink : suiteLinkPlain();
+      function go() {
+        var K = global.TOLShareKit; if (!K || !K.showQR) return;
+        if (!K.qrFits(link.url)) { qrB.hidden = true; say('Your road is too long for a QR code. Use \u201cSend it to my partner as a link\u201d instead.'); return; }
+        suiteSafe = j;
+        K.showQR(link.url, { title: 'Scan with the other phone', note: 'Your road opens on their phone, in their Workpaper Suite. Each change needs a new code or link.' });
+      }
+      if (global.TOLShareKit && global.TOLShareKit.showQR) { go(); return; }
+      var sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = go; document.head.appendChild(sc);
     });
     document.addEventListener('tol:shared', function (e) { var u = e.detail && e.detail.url; if (u && u.indexOf(SUITE_HASH) >= 0) { S.dirty = false; say('Sent. If ' + (S.names.filter(function (x) { return String(x || '').trim(); }).length > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link.'); } });
     // "Include private notes in the link": off unless ticked, and only for this link

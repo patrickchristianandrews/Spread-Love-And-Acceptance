@@ -1061,7 +1061,7 @@
             (S.name.trim() ? '' : '<div class="wl-rname"><label class="wl-field" for="wl-rname">Your first name (optional)</label>' +
               '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
-            (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
+            (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button><button type="button" class="wl-btn ghost" id="wl-codeqr">Show a QR code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
             '<p class="wl-small wl-tocard">Make a one-page Wiring Card from your answers: <a href="/wiring-card.html?for=work">for work</a> or <a href="/wiring-card.html">for someone close</a>.</p>' +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
             (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. Keep them on this device, and a Wave Code link someone sends you will open with your result ready. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
@@ -1177,6 +1177,12 @@
       nn.innerHTML = '<p class="wl-small wl-mine">Add your first name above, so they know whose Wave Code it is? Then tap Share again. <button type="button" class="wl-linkbtn" id="wl-sharenoname">Share without a name</button></p>';
       rn2.focus();
       const sk = $('#wl-sharenoname'); if (sk) sk.onclick = () => { nn.innerHTML = ''; shareCode(); };
+    });
+    // the same comparison link as a QR code, for the other phone in the room (share-kit.js, loaded at the tap if needed)
+    on('#wl-codeqr', () => {
+      const url = absLink(compareLink(code, S.name.trim())), o = { title: 'Scan with the other phone', note: 'It opens the Wave Code quiz on their phone, ready to compare with yours once they’ve found theirs.' };
+      if (window.TOLShareKit && window.TOLShareKit.showQR) { window.TOLShareKit.showQR(url, o); return; }
+      const sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = () => { if (window.TOLShareKit) window.TOLShareKit.showQR(url, o); }; document.head.appendChild(sc);
     });
     if (window.TOLShareClip && window.TOLShareClip.mount) $$('#wl-share, #wl-sshare, #wl-sharecode').forEach(b => { try { window.TOLShareClip.mount(b); } catch (e) {} });
     on('#wl-scopy', () => copyText(stmtPlain(), '#wl-stoast', 'Copied. Paste it into a message, a note or a card.'));

@@ -202,7 +202,7 @@
     <h3>Save or share your result</h3>
     <p class="ld-small">Only the rung goes in the link. Nothing is uploaded, and your answers aren’t kept.</p>
     <canvas id="ld-card" width="1080" height="1080" aria-label="A picture of your result" role="img"></canvas>
-    <p class="ld-acts"><button type="button" class="ld-btn is-main" id="ld-save">Save image</button><button type="button" class="ld-btn" id="ld-link">Copy link</button><button type="button" class="ld-btn" id="ld-share">Share</button><button type="button" class="ld-btn" id="ld-again">Check again</button></p>
+    <p class="ld-acts"><button type="button" class="ld-btn is-main" id="ld-save">Save image</button><button type="button" class="ld-btn" id="ld-link">Copy link</button><button type="button" class="ld-btn" id="ld-share">Share</button><button type="button" class="ld-btn" id="ld-qr">Show a QR code</button><button type="button" class="ld-btn" id="ld-again">Check again</button></p>
     <p class="ld-status" id="ld-status" role="status" aria-live="polite"></p>
   </div>
 </section>
@@ -406,6 +406,13 @@
     if (window.TOLShare && window.TOLShare.open) { window.TOLShare.open({ title: 'Where am I right now?', text: text, url: url, result: true }); return; }
     if (navigator.share) { navigator.share({ title: 'Where am I right now?', text: text, url: url }).catch(function () {}); return; }
     copy(text + ' ' + url).then(function (ok) { say(ok ? 'Copied. Paste it wherever you like.' : 'Sharing isn’t available here.'); });
+  });
+  // "Show a QR code": the same link as Copy link, drawn big for a phone in the same room (share-kit.js, loaded at the tap if needed)
+  $('ld-qr').addEventListener('click', function () {
+    if (!current) return;
+    var url = linkFor(current), o = { title: 'Scan with the other phone', note: 'It opens this result on their phone: ' + R[current].name.toLowerCase() + '. Only the rung is in the link.' };
+    if (window.TOLShareKit && window.TOLShareKit.showQR) { window.TOLShareKit.showQR(url, o); return; }
+    var sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = function () { if (window.TOLShareKit) window.TOLShareKit.showQR(url, o); }; document.head.appendChild(sc);
   });
   $('ld-again').addEventListener('click', reset);
   $('ld-own').addEventListener('click', function (e) { e.preventDefault(); reset(); });

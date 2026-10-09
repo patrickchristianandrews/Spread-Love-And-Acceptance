@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bonding: How Closeness Grows, and Small Ways to Grow It</title>
+<meta name="description" content="How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family, coworkers and you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .bd-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .bd-jump li{ margin:0 !important; max-width:none !important; }
+  .bd-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .bd-jump a:hover{ border-color:var(--credit); }
+  .bd-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .bd-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .bd-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .bd-links a:hover{ border-color:var(--credit); }
+  .bd-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .bd-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  .read ul.bd-research li{ margin:.55rem 0 !important; }
+  .read h3.bd-h3{ font-size:1.1rem; margin:1.3rem 0 .3rem; }
+  .bd-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .bd-safe p{ margin:.4rem 0 !important; }
+  /* the idea picker */
+  .bd-picker{ margin:1rem 0 1.75rem; padding:1rem 1.1rem 1.1rem; border:1px solid var(--line); border-radius:16px; background:var(--paper-deep, var(--paper)); max-width:44rem; box-sizing:border-box; }
+  .bd-set{ border:0; padding:0; margin:0 0 .9rem; min-width:0; }
+  .bd-set legend{ font-weight:600; padding:0; margin:0 0 .45rem; font-family:"Fraunces", Georgia, serif; font-size:1.05rem; }
+  .bd-chips{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .bd-chip{ position:relative; display:inline-flex; margin:0; }
+  .bd-chip input{ position:absolute; opacity:0; width:1px; height:1px; margin:0; left:0; top:0; pointer-events:none; }
+  .bd-chip span{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.4rem .95rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); color:var(--ink); cursor:pointer; font-size:.98rem; line-height:1.2; }
+  .bd-chip:hover span{ border-color:var(--credit); }
+  .bd-chip input:checked + span{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .bd-chip input:focus-visible + span{ outline:3px solid var(--focus); outline-offset:2px; }
+  .bd-check{ display:flex; align-items:center; gap:.6rem; min-height:44px; margin:0 0 1rem; cursor:pointer; font-weight:600; }
+  .bd-check input{ width:1.35rem; height:1.35rem; margin:0; flex:0 0 auto; accent-color:var(--ink); }
+  .bd-check input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .bd-card{ padding:1rem 1.1rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); }
+  .read p.bd-idea{ font-family:"Fraunces", Georgia, serif; font-size:1.2rem; line-height:1.45; margin:0 !important; overflow-wrap:anywhere; }
+  .read p.bd-meta{ margin:.55rem 0 0 !important; font-size:.92rem; color:var(--ink-soft); }
+  .read p.bd-acts{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.9rem 0 .2rem !important; }
+  .bd-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer; }
+  .bd-btn.is-quiet{ background:transparent; color:var(--ink); }
+  .bd-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .read p.bd-status{ min-height:1.4em; margin:.3rem 0 0 !important; font-size:.95rem; color:var(--ink-soft); }
+  .bd-nojs{ font-style:italic; }
+  .bd-picker.is-ready .bd-nojs{ display:none; }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/bonding.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/bonding.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/bonding.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Bonding: How Closeness Grows, and Small Ways to Grow It">
+<meta property="og:description" content="How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family, coworkers and you.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://spreadloveandacceptance.com/bonding.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-10-09">
+<meta property="article:modified_time" content="2026-10-09">
+<meta property="article:author" content="https://spreadloveandacceptance.com/about.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bonding: How Closeness Grows, and Small Ways to Grow It">
+<meta name="twitter:description" content="How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family, coworkers and you.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/bonding.html#page","name":"Bonding: How Closeness Grows, and Small Ways to Grow It","headline":"Bonding: How Closeness Grows, and Small Ways to Grow It","description":"How closeness grows, from research on bids, responsiveness and play, plus a free idea picker for partners, kids, teens, friends, family, coworkers and you.","url":"https://spreadloveandacceptance.com/bonding.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-09","dateModified":"2026-10-09","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"Article","author":{"@type":"Person","@id":"https://spreadloveandacceptance.com/about.html#christian","name":"Christian","url":"https://spreadloveandacceptance.com/about.html"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://spreadloveandacceptance.com/bonding.html"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Bonding: How Closeness Grows, and Small Ways to Grow It","item":"https://spreadloveandacceptance.com/bonding.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · Bonding</p><h1>Bonding: how closeness grows, and small ways to grow it</h1></header>
+
+<p class="simple-lede">Closeness is rarely built in one big moment. It grows from many small ones: a look, a laugh, a cup of tea made the way you like it. This page explains what research says about how bonds grow, then gives small, low-cost ideas for partners, children, friends, family, housemates, coworkers and you.</p>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li><strong>Small and often</strong> beats big and rare.</li>
+    <li><strong>Notice and answer</strong> the small ways people reach for you.</li>
+    <li><strong>Do things side by side.</strong> Talking is optional.</li>
+    <li><strong>Go at their pace.</strong> Closeness can be offered, never demanded.</li>
+  </ul>
+  <p><a href="#ideas">Get a bonding idea now</a></p>
+</div>
+
+<nav aria-label="On this page">
+<ul class="bd-jump no-bubble">
+  <li><a href="#what-bonding-is">What bonding is</a></li>
+  <li><a href="#how-it-grows">What research says</a></li>
+  <li><a href="#partners">Partners</a></li>
+  <li><a href="#children">Children and teens</a></li>
+  <li><a href="#friends">Friends</a></li>
+  <li><a href="#family">Family</a></li>
+  <li><a href="#new-family">New families</a></li>
+  <li><a href="#work">Work</a></li>
+  <li><a href="#apart">Apart</a></li>
+  <li><a href="#autistic-and-sensory">Without small talk</a></li>
+  <li><a href="#when-it-feels-hard">When it feels hard</a></li>
+  <li><a href="#ideas">Idea picker</a></li>
+</ul>
+</nav>
+
+<h2 id="what-bonding-is">What bonding is</h2>
+<p>Bonding is the feeling that someone is “yours” in a good way. You can turn to them, and they will turn back. It is built from three everyday things: attention (I notice you), responsiveness (I answer you) and shared experience (we did this together).</p>
+<p>Underneath is safety. People open up when they trust they won’t be mocked, punished or left. That is why bonding takes time, and why it can’t be rushed or forced.</p>
+
+<h2 id="how-it-grows">How closeness grows: what research says</h2>
+<p>These are well-known findings, named so you can look them up. Most come from studies in Western countries, so treat them as a guide, not a rule.</p>
+<ul class="bd-research">
+  <li><strong>Small bids, turned toward (John Gottman).</strong> In his studies of couples, Gottman saw people make small reaches for attention, like “look at that bird.” He called them bids. Couples who stayed together turned toward these bids far more often than couples who later split up. More in <a href="/turning-toward.html">Turning toward</a>.</li>
+  <li><strong>Feeling understood (Harry Reis and Phillip Shaver).</strong> They described closeness as a cycle: one person shares something, the other responds with understanding and care. Feeling understood, valued and cared for, which researchers call “perceived responsiveness,” is one of the most reliable links to closeness.</li>
+  <li><strong>Good news, answered warmly (Shelly Gable).</strong> How people react to each other’s good news matters. Real interest and a follow-up question were linked to stronger relationships.</li>
+  <li><strong>New things together (Arthur and Elaine Aron).</strong> We feel close to people who help our world grow. In experiments, couples who did new, slightly challenging activities together felt better about their relationship afterwards.</li>
+  <li><strong>The “36 questions” (Arthur Aron and colleagues, 1997).</strong> Pairs of strangers took turns with questions that slowly became more personal. After about 45 minutes, they felt closer than pairs who made small talk. The lesson is not the exact questions. It is sharing a little more, in turns.</li>
+  <li><strong>Time together (Jeffrey Hall).</strong> Hall estimated that going from acquaintance to casual friend takes around 50 hours together, and a close friendship well over 200. Friendship is built in hours, not in a single great evening.</li>
+  <li><strong>Laughing and moving together.</strong> Laura Kurtz and Sara Algoe found that couples who laughed together felt closer. Other studies found that people who tapped, walked or sang in time with each other liked each other more afterwards and cooperated more.</li>
+  <li><strong>Rituals (Barbara Fiese).</strong> Regular family routines and rituals, like a weekly meal or a bedtime story, are linked to children’s wellbeing and a sense of belonging.</li>
+  <li><strong>Serve and return (Harvard Center on the Developing Child).</strong> When a baby babbles, looks or points, and an adult responds, back and forth, it helps build the brain’s foundations. It is the first kind of bonding.</li>
+  <li><strong>A safe base (John Bowlby and attachment research).</strong> People of every age explore more, and share more, when they know someone will be there if things go wrong.</li>
+</ul>
+<p><em>This site’s idea:</em> think of closeness like a savings jar. Many small deposits, made often, matter more than one big one. And a deposit only counts if it fits the person: a hug for one, a shared silence for another. <a href="/languages-of-connection.html">The languages of connection</a> can help you find what fits.</p>
+
+<h2 id="partners">Partners</h2>
+<p>Busy couples often become good co-workers and drift as partners. The fix is rarely a grand holiday. It is the small daily moments: a real greeting at the door, a question about their day that you remember tomorrow, ten minutes with no logistics.</p>
+<p>Try something new together now and then, even something small, like a new recipe or a new walk. And when they share a worry, ask whether they want help or company before you jump in.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “I miss just hanging out with you. Can we have ten minutes tonight with no to-do list?”</p>
+
+<h2 id="children">Children and teens</h2>
+<h3 class="bd-h3">Babies</h3>
+<p>Babies bond through serve and return. They coo, you coo back. They point, you look and name it. You don’t have to get it right every time. What matters is repair: noticing when you missed them, and coming back.</p>
+<h3 class="bd-h3">Kids</h3>
+<p>Children feel close through play, and through your full attention for short bursts. Ten minutes of play where they lead and you follow can do more than an expensive day out. Small rituals help too: the same song, the same goodnight, the same silly handshake.</p>
+<h3 class="bd-h3">Teens</h3>
+<p>Teens still need closeness, just on their own terms. Many talk best side by side: in the car, while cooking, late in the kitchen. Be curious about their world, keep the lectures short, and be easy to find. More in <a href="/teens.html">For teens</a> and <a href="/parents.html">For parents</a>.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Show me the thing you’re into. I want to understand why you like it.”</p>
+
+<h2 id="friends">Friends</h2>
+<p>Friendship needs time and repeated contact. Adults often lose both to work, children and moves. Make it easy: a regular walk, a standing call, a voice note instead of waiting for a perfect long chat. And when a friend goes quiet, assume a full life before a cooled heart. More in <a href="/friends.html">Friends</a>.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “I’d love to see you more. Want to make Thursday walks a regular thing?”</p>
+
+<h2 id="family">Family</h2>
+<p><strong>Siblings.</strong> Old roles can stick. Try meeting as the adults you are now, with one shared activity rather than a big family event. <strong>Grandparents and grandchildren.</strong> Time with just the two of you, and a regular call, go a long way. See <a href="/grandparents.html">For grandparents</a>. <strong>Grown-up children.</strong> Closeness grows when advice is offered, not given, and visits are planned together. See <a href="/grown-up-children.html">For grown-up children</a>. <strong>In-laws.</strong> Start small and practical: ask for a recipe, help with a job, learn one thing they care about.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Could you teach me how you make that? I’d love to cook it with you.”</p>
+
+<h2 id="new-family">Step, foster, adoptive and kinship families</h2>
+<p>When a family is new, trust has to come first. Go slowly. Keep routines predictable, so a child knows what comes next. Offer closeness without needing it back: a child may test you, push you away, or prefer someone else for a long time. That is normal, and it is not a verdict on you.</p>
+<p>Let the child set the pace for touch and for names. Small shared rituals, like the same breakfast on Saturday, build safety without pressure. More in <a href="/foster-and-kinship.html">Foster, adoptive and kinship families</a>.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “You don’t have to talk. I’ll be here, doing the crossword, if you want company.”</p>
+
+<h2 id="housemates">Housemates</h2>
+<p>Housemates don’t have to be best friends, but a little warmth makes a home easier. A hello, a shared pot of soup, a house playlist. Keep the chores fair and agreed, so resentment doesn’t crowd out the good bits. See <a href="/sharing-a-room.html">Sharing a room</a>.</p>
+
+<h2 id="work">Coworkers and teams</h2>
+<p>At work, trust grows from small, reliable things: credit given, help offered, a question remembered. Low-pressure shared tasks often bond a team better than forced fun. Make social things optional, include different diets and drinking choices, and never make joining in a test. More in <a href="/work.html">At work</a>.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “That fix you found saved me an hour. Thank you.”</p>
+
+<h2 id="apart">Apart: distance, different hours, coming home</h2>
+<p>When you live far apart or work different hours, aim for small, regular contact rather than long, rare calls. Do things “together, apart”: watch the same show, play the same game, cook the same meal. After time away, expect a settling-in period. Closeness comes back, but rarely on day one. See <a href="/long-distance.html">Long distance</a>, <a href="/different-hours.html">Different hours</a> and <a href="/coming-home.html">Coming home</a>.</p>
+
+<h2 id="on-your-own">On your own</h2>
+<p>Bonding isn’t only for couples and families. Being a regular somewhere, like a café, a class or a volunteer shift, slowly turns strangers into familiar faces. Pets are real company. And how you treat yourself matters too: speaking to yourself like a friend makes it easier to let others close.</p>
+
+<h2 id="autistic-and-sensory">Bonding without eye contact or small talk</h2>
+<p>Many autistic people, and plenty of others, bond in ways that look different and are just as real. Eye contact and small talk are not required.</p>
+<ul>
+  <li><strong>Parallel play.</strong> Each doing your own thing, in the same room, is togetherness.</li>
+  <li><strong>Shared special interests.</strong> Talking deeply about one subject can be the best part of the week.</li>
+  <li><strong>Info-dumping is a bid.</strong> Telling you everything about a topic often means “I want to share my world with you.”</li>
+  <li><strong>Routines as care.</strong> Keeping someone’s routine steady, or warning them about changes, is a loving act.</li>
+  <li><strong>Sensory-friendly time.</strong> Quiet walks, low light, headphones allowed, and leaving early without fuss.</li>
+</ul>
+<p>Researchers such as Damian Milton have described the “double empathy problem”: misunderstandings between autistic and non-autistic people run both ways. Neither style is wrong.</p>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Tell me everything about it. I’ve got time.”</p>
+
+<h2 id="when-it-feels-hard">When closeness feels hard</h2>
+<p><strong>After a rift.</strong> Start smaller than feels natural: one warm message, then time. <strong>After a baby.</strong> Exhaustion squeezes out closeness. Short moments count: a hand on the back during a night feed. <strong>When the kids leave.</strong> You may need to get to know each other again. See <a href="/empty-nest.html">Empty nest</a>. <strong>Depression or exhaustion.</strong> Wanting closeness and having energy for it are different things. Be gentle with yourself, and if low mood lasts, talk to a doctor or someone you trust.</p>
+<div class="bd-safe">
+  <p><strong>Closeness must be free.</strong> Nobody should be pressured, guilt-tripped or punished into closeness, touch or time together. Closeness used to control, like “if you loved me you would,” or being cut off from friends and family, is not bonding. If you feel afraid or controlled, <a href="/safety.html">read about safety and where to get help</a>.</p>
+</div>
+
+<h2 id="ideas">Get a bonding idea</h2>
+<p>Pick who, how much time and how much energy. You will get one small idea at a time. Nothing you choose leaves this device.</p>
+<div class="bd-picker no-bubble no-cheer" id="bd-picker">
+  <fieldset class="bd-set">
+    <legend>Who with?</legend>
+    <div class="bd-chips">
+      <label class="bd-chip"><input type="radio" name="bd-who" value="pa"><span>Partner</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="ch"><span>Child</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="te"><span>Teen</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="fr" checked><span>Friend</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="pr"><span>Parent</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="si"><span>Sibling</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="gr"><span>Grandparent or grandchild</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="ho"><span>Housemate</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="co"><span>Coworker</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-who" value="me"><span>Just me</span></label>
+    </div>
+  </fieldset>
+  <fieldset class="bd-set">
+    <legend>How much time?</legend>
+    <div class="bd-chips">
+      <label class="bd-chip"><input type="radio" name="bd-time" value="1"><span>1 minute</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-time" value="10" checked><span>10 minutes</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-time" value="eve"><span>An evening</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-time" value="wknd"><span>A weekend</span></label>
+    </div>
+  </fieldset>
+  <fieldset class="bd-set">
+    <legend>How much energy?</legend>
+    <div class="bd-chips">
+      <label class="bd-chip"><input type="radio" name="bd-energy" value="low" checked><span>Low</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-energy" value="some"><span>Some</span></label>
+      <label class="bd-chip"><input type="radio" name="bd-energy" value="lots"><span>Lots</span></label>
+    </div>
+  </fieldset>
+  <label class="bd-check"><input type="checkbox" id="bd-quiet"> Sensory-friendly, no talking needed</label>
+  <div class="bd-card" aria-live="polite" aria-atomic="true">
+    <p class="bd-idea" id="bd-idea"><span class="bd-nojs">The idea picker needs JavaScript. Until then: make them a drink the way they like it, and sit with them while they drink it.</span></p>
+    <p class="bd-meta" id="bd-meta"></p>
+  </div>
+  <p class="bd-acts">
+    <button type="button" class="bd-btn" id="bd-next">Another idea</button>
+    <button type="button" class="bd-btn is-quiet" id="bd-copy">Copy</button>
+    <button type="button" class="bd-btn is-quiet" id="bd-send">Send it</button>
+  </p>
+  <p class="bd-status" id="bd-status" role="status" aria-live="polite"></p>
+</div>
+<p><em>This site’s idea:</em> pick one idea and do it this week. Then do it again next week. Repeating a small thing is how it becomes yours.</p>
+
+<h2 id="more">More for your situation</h2>
+<ul class="bd-links no-bubble">
+  <li><a href="/turning-toward.html"><strong>Turning toward</strong><span>Notice and answer the small ways people reach for you.</span></a></li>
+  <li><a href="/languages-of-connection.html"><strong>The languages of connection</strong><span>How the different ways people connect fit together, and what to reach for when.</span></a></li>
+  <li><a href="/friends.html"><strong>Friends</strong><span>When a friendship drifts, from both sides.</span></a></li>
+  <li><a href="/parents.html"><strong>For parents</strong><span>Raising kind, steady kids.</span></a></li>
+  <li><a href="/teens.html"><strong>For teens</strong><span>When home, friends and feelings get loud.</span></a></li>
+  <li><a href="/grandparents.html"><strong>For grandparents</strong><span>Helping with the grandkids without taking over.</span></a></li>
+  <li><a href="/grown-up-children.html"><strong>For grown-up children</strong><span>Staying close to a parent you love, with kind boundaries.</span></a></li>
+  <li><a href="/foster-and-kinship.html"><strong>Foster, adoptive and kinship families</strong><span>Building trust at the child’s pace.</span></a></li>
+  <li><a href="/more-than-two.html"><strong>More than two partners at home</strong><span>Closeness and fairness when there are three or more of you.</span></a></li>
+  <li><a href="/long-distance.html"><strong>Long distance</strong><span>Staying close when you live far apart.</span></a></li>
+  <li><a href="/different-hours.html"><strong>Different hours</strong><span>Night shifts, shift work and passing in the hallway.</span></a></li>
+  <li><a href="/coming-home.html"><strong>Coming home</strong><span>Finding each other again after time apart.</span></a></li>
+  <li><a href="/empty-nest.html"><strong>Empty nest</strong><span>When the house is quiet between you.</span></a></li>
+  <li><a href="/work.html"><strong>At work</strong><span>Fair workloads and kind messages for teams.</span></a></li>
+  <li><a href="/sharing-a-room.html"><strong>Sharing a room</strong><span>Dorms, flats and housemates, with a room agreement.</span></a></li>
+  <li><a href="/book/understanding-5-belonging.html"><strong>The book, Chapter 5: belonging</strong><span>Attachment, trust and why we need each other.</span></a></li>
+</ul>
+<script src="/assets/js/bonding-ideas.js" defer></script>
+</main>
+</body>
+</html>

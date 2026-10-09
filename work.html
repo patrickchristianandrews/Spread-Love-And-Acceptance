@@ -216,6 +216,7 @@
     <div class="wk-btns">
       <button type="button" class="wk-btn wk-main wk-send" data-share data-share-title="Our one-owner list" data-share-text="Our one-owner list and check-in: open this to see it and add to it.">Send this list</button>
       <button type="button" class="wk-btn wk-copy">Copy the link</button>
+      <button type="button" class="wk-btn wk-qr">Show a QR code</button>
     </div>
     <p class="wk-resend" hidden>Changed something since you sent it? Send a new link: an old one won’t show the change.</p>
   </div>
@@ -259,6 +260,7 @@
     <div class="wk-btns">
       <button type="button" class="wk-btn wk-main wk-send" data-share data-share-title="Our weekly check-in" data-share-text="Our weekly check-in and one-owner list: open this to add your line.">Send this check-in</button>
       <button type="button" class="wk-btn wk-copy">Copy the link</button>
+      <button type="button" class="wk-btn wk-qr">Show a QR code</button>
     </div>
     <p class="wk-resend" hidden>Changed something since you sent it? Send a new link: an old one won’t show the change.</p>
   </div>
@@ -795,6 +797,19 @@
     b._tolShare = function () { var link = makeLink(); resendCheck(); return { url: link }; };
   });
   Array.prototype.forEach.call(document.querySelectorAll('.wk-copy'), function (b) { b.addEventListener('click', function () { copyLink(b); }); });
+  // "Show a QR code": the same link as "Send this list", drawn big for the other phone in the room
+  // (share-kit.js, loaded at the tap if it isn't here yet)
+  function qrShow(url, o) {
+    function go() { if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); }
+    if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
+    var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.wk-qr'), function (b) {
+    b.addEventListener('click', function () {
+      var link = makeLink(); resendCheck();
+      qrShow(link, { title: 'Scan with the other phone', note: 'The list and the check-in open on their phone, on this page. They choose to combine them with theirs or to replace them.' });
+    });
+  });
 
   // a shared list that came in: say whose and what, and let the person choose
   var incoming = null;

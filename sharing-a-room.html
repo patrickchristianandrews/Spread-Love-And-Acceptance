@@ -208,6 +208,7 @@
 <p class="rm-acts">
   <button type="button" class="rm-btn" id="ra-copy">Copy our agreement</button>
   <button type="button" class="rm-btn is-quiet" id="ra-share" data-share data-share-from="#ra-out" data-share-url="none" data-share-title="Our room agreement" data-share-result data-no-clip>Share it</button>
+  <button type="button" class="rm-btn is-quiet" id="ra-qr">Show a QR code</button>
 </p>
 <p class="rm-status" id="ra-status" role="status" aria-live="polite"></p>
 <p>Look at it again together after a month. Rules that don’t work can change.</p>
@@ -282,6 +283,15 @@
     var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
     ta.remove(); return ok;
   }
+  // "Show a QR code": the same link, drawn big for the other phone in the room (share-kit.js, loaded at the tap if needed)
+  function qrShow(url, o) {
+    function go() { if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); }
+    if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
+    var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
+  }
+  $('ra-qr').addEventListener('click', function () {
+    qrShow(link(), { title: 'Scan with your roommate’s phone', note: 'The agreement opens on their phone, with your names swapped round so it reads from their side.' });
+  });
   $('ra-copy').addEventListener('click', function () {
     var t = text() + '\n\nOpen our agreement: ' + link();
     var okMsg = 'Copied. Paste it into a message to your roommate.';
