@@ -410,6 +410,110 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   const lf = P.lookForHTML();
   chk(!/Dismissing a feeling<\/b> <span class="lf-ex">\([^)]*Whatever/.test(lf) && /Brush-off, or quiet hurt<\/b> <span class="lf-ex">\(“Fine\. Whatever\.”/.test(lf), '“Fine. Whatever.” is listed as a brush-off, not as dismissing');
 }
+// ---------- round 7 testers: threats, digs, boundaries, co-parents, family and work ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const W = rel => rel === 'coworker' || rel === 'manager' || rel === 'business';
+  const rw = (t, rel) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || 'partner', work: W(rel) });
+  const vd = (t, rel) => { const a = an(t); const r = rw(t, rel); return E.verdict(a, E.score(a, ['general'], 'text'), r, { work: W(rel) }); };
+  const rc = (t, rel) => E.receive(an(t), { rel: rel || '' });
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  const PLAIN = /plain message|looks okay|probably fine to take it at face value/i;
+  // 1. a threat, in both modes: named plainly, never "okay", never kept in a rewrite
+  ["If you tell anyone about this, you'll be sorry.", "If you go out with your friends again I'll make you regret it.", "Do that and you'll regret it.", 'Pick up the kids or else.', "You'll pay for this.", "If you leave I'll make your life hell.", "If you leave me I'll take the kids."].forEach(t => {
+    const v = vd(t), r = rw(t), g = rc(t);
+    chk(v.id === 'danger' && /^This is a threat, not a tone problem\.$/.test(v.text), '“' + t + '” send: threat named plainly: ' + v.id + ' ' + v.text);
+    chk(r.danger && all(r).every(x => !/regret|be sorry|or else|pay for|make your life|tell anyone|take the kids|\bhell\b/i.test(x)), '“' + t + '” rewrite keeps the threat: ' + all(r).join(' | '));
+    chk(g.danger && g.head[0] === 'danger' && /threat, not a tone problem/.test(g.head[1]) && !g.meanings.some(m => PLAIN.test(m)), '“' + t + '” received: threat named, never “looks okay”: ' + JSON.stringify(g.head));
+    chk(!g.replies.some(x => /sarcastic|not okay being spoken/i.test(x.text)), '“' + t + '” received: no escalating reply');
+  });
+  ["You'll regret not coming, the food was amazing!", "I'll pay for dinner tonight.", "You'll pay me back Friday?", "If you tell anyone happy birthday from me, they'll love it.", "If you can't make it, I'll pick up the kids."].forEach(t => chk(!an(t).danger, 'not a threat: “' + t + '”'));
+  // 2. blame, scorekeeping and digs: flagged in both modes, with a kind rewrite that keeps the real ask
+  [['partner', 'I managed fine without you for 7 months.', /^I got used to doing it my way while you were gone\. Can we pick which jobs you take back\?$/],
+   ['partner', 'I managed fine without you for 7 months, so stop changing everything.', /^I got used to doing it my way while you were gone\. Can we pick which jobs you take back\?$/],
+   ['partner', 'I did it alone for 7 months, I know how bedtime works.', /got used to my way\. Can we agree together how we do bedtime now\?$/],
+   ['partner', 'It’s my money too, stop policing what I spend.', /^I'd like some money that's just mine to spend, and I'm happy to agree a limit for big things together\.$/],
+   ['partner', 'You treat me like the help. I have a job too.', /^I'm working too, and when the house jobs default to me, I feel taken for granted\. Can we split \[one job, like the dog walks\]\?$/],
+   ['friend', 'I guess I’m only your friend when it suits you.', /^I miss you and I've been feeling a bit left out\. Could we find ten minutes this week\?$/],
+   ['coworker', 'Must be nice to just bake while I keep this whole place running.', /^I'm feeling stretched thin keeping this whole place running\. Could we look at the admin together and share some of it\?$/],
+   ['coparent', 'Stop making decisions without me.', /^For school, health and new activities, can we text each other first and decide together\?$/],
+   ['family', 'you’re not my mum so stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
+   ['family', 'You are not my mom so stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
+   ['family', 'ur not my mum stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
+   ['family', 'So now you want to talk? After you took everything?', /^I'm still hurt about what happened\./],
+   ['family', 'After you took everything you could.', /^I'm still hurt about what happened\./],
+   ['partner', 'You treat me like a maid.', /taken for granted/],
+   ['partner', 'Stop nagging me about the dishes.', /without reminders/],
+   ['partner', 'I did everything by myself.', /got used to my way/],
+   ['friend', 'Whenever it suits you, right?', /left out/]].forEach(([rel, t, want]) => {
+    const v = vd(t, rel), r = rw(t, rel), g = rc(t, rel), a = an(t);
+    chk(a.found.jab || a.found.sarcasm, '“' + t + '”: flagged as blame or a dig: ' + a.staticIds);
+    chk(v.id === 'hurt' && /blame or a dig|may land as blame/.test(v.text) && !/probably land okay/.test(v.text), '“' + t + '” send verdict: ' + v.id + ' ' + v.text);
+    chk(E.score(a, ['general'], 'text').level[0] !== 'clear', '“' + t + '”: never “clear” (the cue would say Go)');
+    chk(want.test(r.main), '“' + t + '” [' + rel + '] rewrite: ' + r.main);
+    chk(all(r).every(x => !/\[If you're sure|without you|policing|treat me like|when it suits|must be nice|not my m|stop changing|after you took|while you \w+ while/i.test(x)), '“' + t + '”: the jab stays in a version: ' + all(r).join(' | '));
+    chk(g.head[0] === 'hurt' && !g.meanings.some(m => PLAIN.test(m)) && g.replies.length, '“' + t + '” received: flagged, header and body agree: ' + JSON.stringify(g.head) + ' ' + g.meanings[0]);
+    chk(!g.replies.some(x => /sarcastic|literally/i.test(x.text)), '“' + t + '” received: no escalating reply');
+  });
+  chk(!/get a break/.test(rw('Must be nice to just bake while I keep this whole place running.', 'coworker').main), 'no invented ask (“a break”)');
+  chk(rc('Must be nice to just bake while I keep this whole place running.', 'coworker').replies.some(x => /Sounds like you're stretched\. What would help most this week\?/.test(x.text)), 'received sarcasm: a kind reply');
+  // 3. a hedge on an accusation is never turned into a plainer accusation
+  ['I guess I’m only your friend when it suits you.', 'I think you did that to annoy me.', 'I guess you were too busy for me.'].forEach(t => all(rw(t, 'friend')).forEach(x => chk(!/\[If you're sure/.test(x), '“' + t + '” got the hedge template: ' + x)));
+  // 4. "whenever" is not a deadline; family boundaries lead with warmth; received as a request about visits
+  {
+    const t = 'Mum, you can’t just turn up whenever you want. It’s our home.';
+    ['family', 'partner', ''].forEach(rel => all(rw(t, rel)).forEach(x => chk(!/by \[a time\]|turn up by/.test(x), '“whenever” became a deadline [' + rel + ']: ' + x)));
+    chk(rw(t, 'family').main === "Mum, I love seeing you. Could you text before you come over, so we can make sure it's a good time?", 'family visit boundary: ' + rw(t, 'family').main);
+    const g = rc(t, 'family');
+    chk(!JSON.stringify(g).match(/When do you need it by|timing is open/) && g.replies.some(x => x.text === "You're right, I'll text first. When suits you?"), 'received visit boundary: ' + JSON.stringify(g.replies));
+    chk(!an('Call me whenever you want!').found.vtime, '“whenever you want” is an open door, not vague timing');
+    chk(rw('Mum, we’ll decide about baptism ourselves.', 'family').main === "Mum, I know how much this means to you. We'll decide about baptism together, and tell you as soon as we do.", 'family decision: ' + rw('Mum, we’ll decide about baptism ourselves.', 'family').main);
+    chk(vd('Mum, we’ll decide about baptism ourselves.', 'family').id === 'hurt', 'a closed door to a parent is flagged gently');
+  }
+  // 7. co-parents: BIFF (the child's need, the ask, a time), never feelings about each other
+  {
+    const t = 'You forgot her inhaler AGAIN. Do you even care?';
+    const r = rw(t, 'coparent');
+    chk(/^\[Child\]'s inhaler wasn't in her bag on \[day\]\. Please pack it before the \[day\] handoff\.$/.test(r.main), 'co-parent inhaler: ' + r.main);
+    chk(rw('You forgot Lina’s inhaler again.', 'coparent').main.indexOf("Lina's inhaler wasn't in") === 0, 'co-parent inhaler, named child: ' + rw('You forgot Lina’s inhaler again.', 'coparent').main);
+    ['You forgot her inhaler AGAIN. Do you even care?', 'You never help with homework. Do you even care?', 'You always forget her coat.', 'You always schedule things on my weekends on purpose.', 'Stop making decisions without me.'].forEach(m => all(rw(m, 'coparent')).forEach(x => chk(!/not feeling cared about|I'd like to talk about it|how it looks to you/i.test(x), 'co-parent rewrite reopens feelings: “' + m + '” → ' + x)));
+    const wk = rw('You always schedule things on my weekends on purpose.', 'coparent');
+    chk(/check the calendar together/.test(wk.main) && all(wk).every(x => !/on purpose/i.test(x)), 'co-parent weekends: ' + wk.main);
+  }
+  // 8. work: "That is incorrect." is flagged as cold, with one plain alternative; the sections agree
+  {
+    const t = 'That is incorrect. The deadline is Friday, not Thursday.';
+    const v = vd(t, 'coworker'), r = rw(t, 'coworker');
+    chk(/may land a bit cold/.test(v.text) && r.main === 'Quick correction: the deadline is Friday, not Thursday.', 'blunt correction: ' + v.text + ' / ' + r.main);
+    const a = an(t); chk(!a.asks.length && a.found.blunt, 'blunt correction: no ask, the opener flagged');
+  }
+  // 9. intent words go; a calm boundary and coming out are caring; "maybe" never kept; "literally" has its own reason
+  {
+    ['You did that on purpose.', 'You deliberately left me out.', 'You always schedule things on my weekends on purpose.'].forEach(t => {
+      chk(an(t).found.motive, '“' + t + '”: guessing a motive is flagged');
+      all(rw(t, 'partner')).forEach(x => chk(!/on purpose|deliberately/i.test(x), '“' + t + '”: the motive stays in: ' + x));
+    });
+    const b = "If you can't respect my relationship, I'm going to leave for today. I love you and I'll call next week.";
+    chk(!an(b).found.threat && !an(b).danger && an(b).found.boundary && /caring boundary/.test(vd(b, 'family').text) && !rc(b, 'family').crossed, 'a calm boundary is not a threat: ' + vd(b, 'family').text);
+    chk(an("If you don't clean up, I'm leaving.").found.threat, 'an ultimatum is still an ultimatum');
+    const c = "Mom, Dad, I need to tell you something. I'm bisexual, and Dani isn't just my roommate, she's my girlfriend.";
+    chk(!an(c).found.ominous && an(c).found.disclose && !/might hurt/.test(vd(c, 'family').text) && /caring way to share/.test(vd(c, 'family').text), 'coming out is not “might hurt”: ' + vd(c, 'family').text);
+    const j = rw('Can your boyfriend maybe not stay over every night? I can’t sleep.', 'roommate');
+    chk(all(j).every(x => !/\bmaybe\b/i.test(x)) && /a few nights a week/.test(j.main), 'a flagged “maybe” never stays: ' + j.main);
+    const l = rw('Your boyfriend is here EVERY night?? I literally can’t sleep.', 'roommate');
+    chk(l.changes.every(c => !(c.from.includes('literally') && /Just/.test(c.why))), '“literally” gets its own reason');
+    const lit = rw('I literally told you twice.', 'partner');
+    chk(lit.changes.some(c => c.id === 'intens' && c.from.includes('literally') && /Literally/.test(c.why)), '“literally” reason: ' + JSON.stringify(lit.changes.map(c => [c.id, c.why.slice(0, 40)])));
+    chk(!/might hurt/.test(vd('Your boyfriend is here EVERY night?? I literally can’t sleep.', 'roommate').text), 'a mild message is not “This might hurt”: ' + vd('Your boyfriend is here EVERY night?? I literally can’t sleep.', 'roommate').text);
+    chk(/might hurt/.test(vd('You need to clean your room.', 'family').text), 'an order still says “might hurt”');
+  }
+  // 6. received: the header and the body always agree, and the escalating check is gone
+  M.map(m => m[1]).concat(['I guess I’m only your friend when it suits you.', 'Mum, you can’t just turn up whenever you want. It’s our home.']).forEach(t => {
+    const g = rc(t);
+    if (g.head[0] !== 'ok') chk(!g.meanings.some(m => /plain message/.test(m)), 'received “' + t + '”: header ' + g.head[0] + ' but body says plain message');
+    chk(!g.replies.some(x => /were you being sarcastic/i.test(x.text)), 'received “' + t + '”: escalating sarcasm check');
+  });
+}
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
 [['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/], ['Fine. Whatever works for you.', /dismiss/], ['Sure, go out with your friends, I’ll just sit here.', /sarcasm/], ['Don’t mind me.', /passive/]].forEach(([t, want]) => {
