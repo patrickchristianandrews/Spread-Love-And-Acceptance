@@ -37,11 +37,7 @@
    "interoception"
   ],
   "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#body",
-   "/book/understanding-3-seeing-in-depth.html#attention",
-   "/book/understanding-6-change-in-depth.html#loop",
-   "/book/understanding-9-minds-in-depth.html#adhd",
-   "/tools/chat/deep.json"
+   "/book/understanding-1-feelings-in-depth.html#body"
   ],
   "verified": true,
   "verified_by": "https://zenodo.org/record/1431811 ; https://psychclassics.yorku.ca/James/emotion.htm"
@@ -665,8 +661,7 @@
    "positive-emotions"
   ],
   "mentioned_on": [
-   "/library/emotions.html#positive-emotions",
-   "/library/thinking.html#peak-end-rule"
+   "/library/emotions.html#positive-emotions"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/11315248/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3122271/"
@@ -3265,10 +3260,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#not-fixing",
-   "/book/understanding-2-stress-in-depth.html#load",
    "/book/understanding-6-change-in-depth.html#others",
-   "/library/communication.html#advice-vs-support",
-   "/love-languages-in-depth.html#similar"
+   "/library/communication.html#advice-vs-support"
   ],
   "verified": false,
   "note": "NOT VERIFIED: the shared web-search budget ran out before this could be checked. Candidate details below are from memory and must be confirmed before publishing: candidate DOI 10.1037/0022-3514.79.6.953."
@@ -3705,7 +3698,6 @@
   "mentioned_on": [
    "/book/understanding-2-stress-in-depth.html#rest",
    "/library/calm.html#attention-restoration",
-   "/library/fairness.html#invisible-work",
    "/tools/chat/deep.json"
   ],
   "verified": false,
