@@ -785,6 +785,9 @@ const PRESET_GROUPS = [
 "partner",
 "Partners",
 [
+"I managed fine without you for 7 months.",
+"It's my money too, stop policing what I spend.",
+"You treat me like the help. I have a job too.",
 "You never listen to me.",
 "Why didn't you tell me?",
 "We need to talk.",
@@ -819,6 +822,8 @@ const PRESET_GROUPS = [
 "family",
 "Family and kids",
 [
+"Mum, you can't just turn up whenever you want. It's our home.",
+"Mum, we'll decide about baptism ourselves.",
 "You need to clean your room.",
 "Why is your room still a mess??",
 "Your sister always remembers my birthday.",
@@ -840,6 +845,8 @@ const PRESET_GROUPS = [
 "coparent",
 "Co-parents",
 [
+"You forgot her inhaler AGAIN. Do you even care?",
+"Stop making decisions without me.",
 "You need to pick up the kids at 5 rather than be late",
 "Pickup is at 5.",
 "You always forget their homework.",
@@ -856,6 +863,7 @@ const PRESET_GROUPS = [
 "friend",
 "Friends",
 [
+"I guess I'm only your friend when it suits you.",
 "lol ok whatever you say 🙄",
 "I guess I'll plan the trip again since nobody else will",
 "Must be nice.",
@@ -894,6 +902,7 @@ const PRESET_GROUPS = [
 "coworker",
 "Coworkers",
 [
+"That is incorrect. The deadline is Friday, not Thursday.",
 "Any update?",
 "Circling back on this.",
 "Just checking in.",
@@ -1117,7 +1126,16 @@ function sync(){
   $("#replyLab").textContent = "What "+nm("B")+" already said";
   $("#replyHint").textContent = "Only if "+nm("B")+" has already answered. One reply. After you translate, Try the reverse shows how "+aSay+" may read it.";
   $("#useNote").textContent = USE_NOTES[useId]||USE_NOTES.send;
+  paintRelSet();
 }
+/* the chosen relationship stays in view above the sentence box (set from ?rel=co-parents, or under Fine-tune) */
+function paintRelSet(){
+  const box=$("#relSet"); if(!box) return;
+  let got = false; try { got = stMode==="got"; } catch(e) {}
+  box.hidden = !relId || !REL[relId] || got;
+  $("#relSetName").textContent = REL[relId] ? REL[relId].label : "";
+}
+document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relSetChange")){ $("#fine").open = true; $("#relSel").focus(); } });
 function rerun(){ paintNotesRel(); if(!$("#results").hidden && $("#phrase").value.trim()) run(); }
 /* the talking notes fit the relationship: co-parents get notes about the children and the plan */
 /* which talking notes fit: co-parents, work, apart (long distance: by phone or text), or one home */
@@ -2314,7 +2332,7 @@ function setMode(m){
   document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = r.value===m; });
   const nt=$("#notes"); if(nt) nt.hidden = m==="got";
   if(m==="got") replyCtx = "";
-  paintReplyTo();
+  paintReplyTo(); paintRelSet();
   const R=$("#results"); R.hidden=true; R.innerHTML=""; $("#msg").textContent="";
 }
 /* "Check my reply before I send it": the message being answered stays in view, and the read of the reply takes it into account */
@@ -2450,7 +2468,7 @@ function applyDefaults(){
   relTouched=false; chTouched=false;
   $("#useSel").value=useId; $("#chSel").value=channel; $("#relSel").value=""; $("#stateSel").value="";
   ["#sitSel","#envSel","#needASel","#needBSel","#presetSel","#gotRelSel"].forEach(id=>$(id).value="");
-  paintNotesRel(); paintPresets();
+  paintNotesRel(); paintPresets(); paintRelSet();
 }
 applyDefaults();
 $("#presetSel").addEventListener("change",e=>{ if(!e.target.value) return; const [gi,ti]=e.target.value.split(":").map(Number); const g=PRESET_GROUPS[gi]; if(!g) return;
@@ -2722,6 +2740,13 @@ sync();
   // a sentence passed from the Perspective Shifter or a link goes straight into the box (see below)
   // ?use=work (the link from the At work page), or work mode: start on the work-message setting, and show it
   (function () { try { var u = new URLSearchParams(location.search).get('use'), sel = document.getElementById('useSel'); if (sel && (u === 'work' || document.documentElement.classList.contains('tol-work') || (sessionStorage.getItem('tol-work') === '1')) && [].some.call(sel.options, function (o) { return o.value === 'work'; })) { sel.value = 'work'; sel.dispatchEvent(new Event('change', { bubbles: true })); var fine = document.getElementById('fine'); if (fine) fine.open = true; } } catch (e) {} })();
+  // ?rel=co-parents (also family, friends, partners, coworkers, roommates, business): start with that relationship chosen, and show it
+  (function () { try {
+    var r = (new URLSearchParams(location.search).get('rel') || '').toLowerCase().replace(/[^a-z-]/g, '');
+    var MAP = { 'co-parents': 'coparent', 'coparents': 'coparent', 'co-parent': 'coparent', 'coparent': 'coparent', 'family': 'family', 'friends': 'friend', 'friend': 'friend', 'partners': 'partner', 'partner': 'partner', 'couples': 'partner', 'coworkers': 'coworker', 'co-workers': 'coworker', 'coworker': 'coworker', 'work': 'coworker', 'roommates': 'roommate', 'roommate': 'roommate', 'housemates': 'roommate', 'managers': 'manager', 'manager': 'manager', 'caregivers': 'caregiver', 'caregiver': 'caregiver', 'carers': 'caregiver', 'business': 'business', 'business-partners': 'business', 'co-owners': 'business', 'cofounders': 'business', 'co-founders': 'business' };
+    var v = MAP[r], sel = document.getElementById('relSel');
+    if (v && sel && [].some.call(sel.options, function (o) { return o.value === v; })) { sel.value = v; sel.dispatchEvent(new Event('change', { bubbles: true })); var fine = document.getElementById('fine'); if (fine) fine.open = true; }
+  } catch (e) {} })();
   // A sentence handed over from another page waits in sessionStorage ('tol-st-text'), so it never sits in the address.
   // An older ?text= link still works, but the words are taken out of the address bar straight away.
   (function () {
@@ -2731,9 +2756,10 @@ sync();
     if (!q && params) q = params.get('text');
     try { var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {}
     try {
-      if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work'; })) {
+      if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel'; })) {
         var keep = [];
         if (params.get('use') === 'work') keep.push('use=work');
+        if (/^[a-z-]{2,20}$/.test(params.get('rel') || '')) keep.push('rel=' + params.get('rel'));
         if (/^[01]$/.test(params.get('work') || '')) keep.push('work=' + params.get('work')); // site.js reads ?work= after this runs
         history.replaceState(null, '', location.pathname + (keep.length ? '?' + keep.join('&') : '') + location.hash);
       }

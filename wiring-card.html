@@ -69,6 +69,9 @@ input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);bo
 .sheet .emptycard{color:var(--muted);font-size:.95rem;margin:4px 0 0}
 details.aboutcard{margin:10px 0 4px;max-width:62ch}
 details.aboutcard > summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center;color:var(--ink)}
+details.aboutcard > summary::-webkit-details-marker{display:none}
+details.aboutcard > summary::before{content:"\25B8";margin-right:.45rem;display:inline-block;transition:transform .15s}
+details.aboutcard[open] > summary::before{transform:rotate(90deg)}
 details.aboutcard .tol-pillars{margin:10px 0 0}
 .forwho .chips button{background:#FFF8E6}
 .managernote{margin:8px 0 0}

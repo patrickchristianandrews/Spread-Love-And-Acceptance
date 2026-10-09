@@ -109,6 +109,17 @@
   .wk-tool textarea, .wk-tool input[type="date"]{ font:inherit; font-size:1rem; width:100%; box-sizing:border-box; min-height:44px; padding:.4rem .55rem; border:1px solid var(--ink-soft); border-radius:8px; background:var(--paper); color:var(--ink); }
   .wk-tool textarea:focus-visible, .wk-tool input[type="date"]:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .wk-tool .wk-hint{ display:block; color:var(--ink-soft); font-size:.92rem; }
+  /* Send this list, a list that came in, and what differs */
+  .wk-share{ margin:.9rem 0 0; padding:.7rem .9rem; border:1px solid var(--line); border-radius:var(--radius, 10px); background:var(--paper-deep); }
+  .wk-share p{ margin:.2rem 0 !important; max-width:none !important; }
+  .wk-share textarea.wk-link{ font:inherit; font-size:.9rem; width:100%; box-sizing:border-box; overflow-wrap:anywhere; border:1px solid var(--ink-soft); border-radius:8px; background:var(--paper); color:var(--ink); padding:.4rem .55rem; }
+  .wk-resend{ font-weight:600; }
+  .wk-in{ margin:.6rem 0 1rem; padding:.75rem .9rem; border:1.5px solid var(--credit); border-radius:var(--radius, 10px); background:var(--paper-deep); }
+  .wk-in p{ margin:.25rem 0 !important; max-width:none !important; overflow-wrap:anywhere; }
+  .wk-in:focus{ outline:3px solid var(--focus); outline-offset:2px; }
+  .wk-diff-row{ border-top:1px solid var(--line); padding-top:.4rem; margin-top:.4rem; }
+  html.tol-only-steps .wk-step-empty{ display:none !important; }
+  @media print{ .wk-share, .wk-in{ display:none !important; } }
   main.read > ul.wk-links.wk-links.wk-links, main.read > ul.wk-jump.wk-jump.wk-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
 </style>
 <!-- seo:start -->
@@ -173,7 +184,7 @@
 </ul>
 <p>When a job belongs to “everyone,” it often ends up belonging to no one, or to the same one person every time. The fix is not to blame anyone. It is to write the recurring jobs down and give each one a single owner, with a backup for holidays and busy weeks. Fix the setup, not the person.</p>
 
-<section class="wk-tool tol-plain" id="owner-list" aria-labelledby="owner-list-h">
+<section class="wk-tool tol-plain" data-keep-steps id="owner-list" aria-labelledby="owner-list-h">
   <h3 id="owner-list-h">Team one-owner list</h3>
   <p>List the jobs that come round again and again. Give each one an owner, a backup and how often it happens. This is the team version of the site’s <a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job</a> worksheet.</p>
 
@@ -220,7 +231,7 @@
 
 <p>A few tips. Start with the five jobs that cause the most “I thought you were doing that.” Agree the list together, rather than handing it out. Give the jobs nobody wants a rotation, so they don’t settle on one person. And look at the list again every month or two: owners change as work changes.</p>
 
-<section class="wk-tool tol-plain" id="check-in" aria-labelledby="check-in-h">
+<section class="wk-tool tol-plain" data-keep-steps id="check-in" aria-labelledby="check-in-h">
   <h3 id="check-in-h">Team check-in <span class="wk-time">10 minutes</span></h3>
   <p>Once a week, go round once. Each person says how full their week is, one thank-you, and one thing that slipped. Then name any job that needs a new owner. No debating, and nobody is rated: a full week is useful information, not a complaint. Print it, or keep it on a shared screen.</p>
 
@@ -358,7 +369,7 @@
 </div>
 
 <h2 id="neurodiversity">ADHD and neurodiversity at work</h2>
-<p>People focus and take in asks in different ways. One person catches every word in a meeting; another needs it written down; someone else loses a spoken ask by the time they’re back at their desk, however much they care. That is wiring, not effort, and a few small habits help everyone, not only the people who mention it.</p>
+<p>People focus and take in asks in different ways. One person catches every word in a meeting; another needs it written down; someone else loses a spoken ask by the time they’re back at their desk, however much they care. That is wiring, not effort, and a few small habits help everyone, not only the people who mention it. If you’re autistic, there are <a href="#autistic-at-work">words you could use</a> just below.</p>
 <ul data-keep-steps>
   <li><strong>Written asks after meetings.</strong> One line per action: what, who owns it, and by when. Send it the same day, so nobody has to rely on memory.</li>
   <li><strong>One ask per message.</strong> Put the deadline in the first line, and say plainly if something is urgent or can wait.</li>
@@ -431,6 +442,7 @@
   }
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify({ v: 1, team: state.team, rows: state.rows, ci: state.ci })); } catch (e) {}
+    resendCheck();
   }
   function names() {
     var seen = {}, out = [];
@@ -699,10 +711,229 @@
     say('Erased. Nothing from this list or the check-in is saved in this browser now.');
   });
 
+
+  /* ---------- Send this list: the list and the check-in travel inside a link, after the "#" ----------
+     A browser never sends the part after "#" to a website, so nothing is uploaded. The other person
+     opens the link on their own device and chooses to combine it with their list or replace it. */
+  var SHARE_HASH = '#team=';
+  var sentSig = '';
+  function clip(x, n) { return String(x == null ? '' : x).slice(0, n); }
+  function fold(x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().toLowerCase(); }
+  function payload() {
+    var rows = state.rows.filter(function (r) { return (r.task || '').trim() || r.owner || r.backup; })
+      .map(function (r) { var o = { task: (r.task || '').trim() }; if (r.owner) o.owner = r.owner; if (r.backup) o.backup = r.backup; if (r.often) o.often = r.often; return o; });
+    var people = {};
+    Object.keys(state.ci.people || {}).forEach(function (n) {
+      var p = state.ci.people[n] || {}, o = {};
+      ['full', 'thanks', 'slipped'].forEach(function (k) { if (p[k]) o[k] = p[k]; });
+      if (Object.keys(o).length) people[n] = o;
+    });
+    return { t: 'tol-team', v: 1, team: names().join(', '), rows: rows, ci: { date: state.ci.date || '', people: people, jobs: state.ci.jobs || '' } };
+  }
+  function enc(str) {
+    var bin = '', b = new TextEncoder().encode(str);
+    for (var i = 0; i < b.length; i++) bin += String.fromCharCode(b[i]);
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function dec(str) {
+    var t = String(str || '').replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    while (t.length % 4) t += '=';
+    var bin = atob(t), a = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(a);
+  }
+  function makeLink() {
+    var d = payload();
+    sentSig = JSON.stringify(d);
+    return location.origin + location.pathname + SHARE_HASH + enc(sentSig);
+  }
+  // read a shared list, keeping only plain, short values
+  function readShared(hash) {
+    var m = /#team=([A-Za-z0-9_-]+)/.exec(hash || ''), d = null;
+    if (!m || m[1].length > 100000) return null;
+    try { d = JSON.parse(dec(m[1])); } catch (e) { return null; }
+    if (!d || d.t !== 'tol-team') return null;
+    var out = { team: clip(typeof d.team === 'string' ? d.team : '', 600), rows: [], ci: { date: '', people: {}, jobs: '' } };
+    (Array.isArray(d.rows) ? d.rows : []).slice(0, 200).forEach(function (r) {
+      if (!r || typeof r !== 'object') return;
+      out.rows.push({ task: clip(r.task, 200), owner: clip(r.owner, 60), backup: clip(r.backup, 60), often: OFTEN.indexOf(r.often) > -1 ? r.often : '' });
+    });
+    var c = d.ci && typeof d.ci === 'object' ? d.ci : {};
+    out.ci.date = /^\d{4}-\d{2}-\d{2}$/.test(c.date || '') ? c.date : '';
+    out.ci.jobs = clip(c.jobs, 2000);
+    if (c.people && typeof c.people === 'object') Object.keys(c.people).slice(0, 40).forEach(function (n) {
+      var p = c.people[n]; if (!p || typeof p !== 'object') return;
+      out.ci.people[clip(n, 60)] = { full: FULL.indexOf(p.full) > -1 ? p.full : '', thanks: clip(p.thanks, 300), slipped: clip(p.slipped, 300) };
+    });
+    return out;
+  }
+  function resendCheck() {
+    var show = !!sentSig && JSON.stringify(payload()) !== sentSig;
+    Array.prototype.forEach.call(document.querySelectorAll('.wk-resend'), function (p) { p.hidden = !show; });
+  }
+  function copyLink(btn) {
+    var link = makeLink(), box = btn.closest('.wk-share');
+    var st = box.querySelector('.wk-copy-st');
+    if (!st) { st = document.createElement('p'); st.className = 'wk-status wk-copy-st'; st.setAttribute('role', 'status'); box.appendChild(st); }
+    function shown() {
+      var ta = box.querySelector('textarea.wk-link');
+      if (!ta) { ta = document.createElement('textarea'); ta.className = 'wk-link'; ta.rows = 3; ta.readOnly = true; ta.setAttribute('aria-label', 'The link to send'); box.insertBefore(ta, st); }
+      ta.value = link; ta.focus(); ta.select();
+      st.textContent = 'Couldn’t copy here. The link is selected: copy it by hand.';
+    }
+    resendCheck();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+        navigator.clipboard.writeText(link).then(function () { st.textContent = 'Link copied. Send it any way you like. Whoever opens it chooses to combine or replace.'; }, shown);
+        return;
+      }
+    } catch (e) {}
+    shown();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.wk-send'), function (b) {
+    // site.js opens its share sheet (text, email, WhatsApp, copy) with the link made at the tap
+    b._tolShare = function () { var link = makeLink(); resendCheck(); return { url: link }; };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.wk-copy'), function (b) { b.addEventListener('click', function () { copyLink(b); }); });
+
+  // a shared list that came in: say whose and what, and let the person choose
+  var incoming = null;
+  function takeShared(d, replace) {
+    var diffs = [];
+    if (replace) {
+      state.team = d.team; state.rows = d.rows.slice(); state.ci = { date: d.ci.date, people: d.ci.people, jobs: d.ci.jobs };
+    } else {
+      var have = names(), lower = have.map(function (n) { return n.toLowerCase(); });
+      d.team.split(/[,;\n]/).map(function (n) { return n.trim(); }).filter(Boolean).forEach(function (n) { if (lower.indexOf(n.toLowerCase()) < 0) { have.push(n); lower.push(n.toLowerCase()); } });
+      state.team = have.join(', ');
+      // a list here that is only one empty row gives way to the shared rows
+      state.rows = state.rows.filter(function (r) { return (r.task || '').trim() || r.owner || r.backup || r.often; });
+      d.rows.forEach(function (r) {
+        var hit = r.task ? state.rows.filter(function (x) { return fold(x.task) === fold(r.task); })[0] : null;
+        if (!hit) { state.rows.push(r); return; }
+        [['owner', 'owner'], ['backup', 'backup'], ['often', 'how often']].forEach(function (f) {
+          if (!r[f[0]]) return;
+          if (!hit[f[0]]) hit[f[0]] = r[f[0]];
+          else if (fold(hit[f[0]]) !== fold(r[f[0]])) diffs.push({ kind: 'row', task: hit.task, key: f[0], label: hit.task + ' (' + f[1] + ')', mine: hit[f[0]], theirs: r[f[0]] });
+        });
+      });
+      if (!state.ci.date) state.ci.date = d.ci.date;
+      if (d.ci.jobs && state.ci.jobs.indexOf(d.ci.jobs) < 0) state.ci.jobs = state.ci.jobs ? state.ci.jobs + '\n' + d.ci.jobs : d.ci.jobs;
+      Object.keys(d.ci.people).forEach(function (n) {
+        var mine = state.ci.people[n] || (state.ci.people[n] = {}), theirs = d.ci.people[n];
+        [['full', 'how full'], ['thanks', 'thank-you'], ['slipped', 'what slipped']].forEach(function (f) {
+          if (!theirs[f[0]]) return;
+          if (!mine[f[0]]) mine[f[0]] = theirs[f[0]];
+          else if (fold(mine[f[0]]) !== fold(theirs[f[0]])) diffs.push({ kind: 'ci', who: n, key: f[0], label: 'Check-in, ' + n + ' (' + f[1] + ')', mine: mine[f[0]], theirs: theirs[f[0]] });
+        });
+      });
+    }
+    team.value = state.team;
+    // what was combined is what both now hold, so no "send a new link" until something changes
+    sentSig = JSON.stringify(payload());
+    save(); render();
+    return diffs;
+  }
+  function inBox() {
+    var old = document.getElementById('wk-in'); if (old) old.remove();
+    if (!incoming) return;
+    var box = document.createElement('div'); box.id = 'wk-in'; box.className = 'wk-in'; box.tabIndex = -1;
+    box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'A shared list');
+    var n = incoming.rows.length, who = incoming.team || 'no names yet';
+    var empty = !state.rows.some(function (r) { return (r.task || '').trim() || r.owner || r.backup; }) && !state.team.trim();
+    box.innerHTML = '<p><strong>Someone sent you their list.</strong> <span class="wk-in-what"></span></p><p class="wk-hint"></p><div class="wk-btns"></div>';
+    box.querySelector('.wk-in-what').textContent = 'Names: ' + who + '. ' + n + (n === 1 ? ' job.' : ' jobs.');
+    box.querySelector('.wk-hint').textContent = empty ? 'Nothing is on this list yet, so either choice simply opens it.' : 'Combine keeps everything here and adds what is new. Where you both have something different, you choose. Replace swaps this list for theirs.';
+    var btns = box.querySelector('.wk-btns');
+    [['Combine with what’s here', 'combine', true], ['Replace what’s here', 'replace'], ['Not now', 'no']].forEach(function (b) {
+      var x = document.createElement('button'); x.type = 'button'; x.className = 'wk-btn' + (b[2] ? ' wk-main' : ''); x.textContent = b[0];
+      x.addEventListener('click', function () {
+        var d = incoming; incoming = null;
+        if (b[1] === 'no') { inBox(); say('Left as it was. Open the link again any time.'); return; }
+        if (b[1] === 'replace' && !empty && !window.confirm('Replace your list here with the one you were sent?')) { incoming = d; return; }
+        var diffs = takeShared(d, b[1] === 'replace');
+        inBox(); diffBox(diffs);
+        say((b[1] === 'replace' ? 'Opened the list you were sent.' : 'Combined.') + ' When you’ve made your changes, use “Send this list” to send it back.');
+        var f = document.querySelector('#wk-diff button') || team; if (f) f.focus();
+      });
+      btns.appendChild(x);
+    });
+    var sec = document.getElementById('owner-list');
+    sec.insertBefore(box, sec.querySelector('h3').nextSibling);
+  }
+  // after combining: each thing that is different, with a choice ("Payroll (owner): Ade here / Ben on the list you were sent")
+  function diffBox(diffs) {
+    var old = document.getElementById('wk-diff'); if (old) old.remove();
+    if (!diffs || !diffs.length) return;
+    var box = document.createElement('div'); box.id = 'wk-diff'; box.className = 'wk-in';
+    box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Different on the list you were sent');
+    var h = document.createElement('p'); h.innerHTML = '<strong></strong> Until you choose, this list keeps its own.';
+    h.firstChild.textContent = (diffs.length === 1 ? 'One thing is' : diffs.length + ' things are') + ' different on the list you were sent.';
+    box.appendChild(h);
+    diffs.forEach(function (df) {
+      var row = document.createElement('div'); row.className = 'wk-diff-row';
+      var q = document.createElement('p'); q.textContent = df.label + ': ' + df.mine + ' here / ' + df.theirs + ' on the list you were sent. Keep which?';
+      var bs = document.createElement('div'); bs.className = 'wk-btns';
+      [['Keep ' + df.mine, false], ['Use ' + df.theirs, true]].forEach(function (b) {
+        var x = document.createElement('button'); x.type = 'button'; x.className = 'wk-btn wk-small'; x.textContent = b[0];
+        x.addEventListener('click', function () {
+          if (b[1]) {
+            if (df.kind === 'row') { var r = state.rows.filter(function (x) { return fold(x.task) === fold(df.task); })[0]; if (r) r[df.key] = df.theirs; }
+            else { var p = state.ci.people[df.who] || (state.ci.people[df.who] = {}); p[df.key] = df.theirs; }
+            save(); render();
+          }
+          row.remove();
+          say(b[1] ? 'Changed to ' + df.theirs + '.' : 'Kept ' + df.mine + '.');
+          if (!box.querySelector('.wk-diff-row')) box.remove();
+          var f = document.querySelector('#wk-diff button') || document.querySelector('.wk-send'); if (f) f.focus();
+        });
+        bs.appendChild(x);
+      });
+      row.appendChild(q); row.appendChild(bs); box.appendChild(row);
+    });
+    var sec = document.getElementById('owner-list');
+    sec.insertBefore(box, sec.querySelector('h3').nextSibling);
+  }
+  function readHash() {
+    if (!/^#team=/.test(location.hash || '')) return;
+    incoming = readShared(location.hash);
+    try { history.replaceState(null, '', location.pathname + location.search + '#owner-list'); } catch (e) {}
+    if (!incoming) { say('That shared link looks incomplete. Ask for it again.'); return; }
+    inBox();
+    var b = document.getElementById('wk-in'); if (b) { b.scrollIntoView({ block: 'center' }); b.focus(); }
+  }
+  window.addEventListener('hashchange', readHash);
+
+  /* ---------- "Show me only the steps": no heading is left standing over nothing ---------- */
+  function tidySteps() {
+    var on = document.documentElement.classList.contains('tol-only-steps');
+    var main = document.getElementById('main'); if (!main) return;
+    Array.prototype.forEach.call(main.querySelectorAll('.wk-step-empty'), function (x) { x.classList.remove('wk-step-empty'); });
+    if (!on) return;
+    var heads = main.querySelectorAll('h2, h3');
+    // innermost headings first, so an h2 over only empty h3s goes too
+    Array.prototype.slice.call(heads).reverse().forEach(function (hd) {
+      if (hd.closest('[data-keep-steps]')) return;
+      var lvl = +hd.tagName[1], n = hd.nextElementSibling, seen = false;
+      // inside a box (a tool or a script box), the box itself is the section
+      var scope = hd.parentNode !== main ? hd.parentNode : null;
+      if (scope) { seen = Array.prototype.some.call(scope.children, function (c) { return c !== hd && !c.classList.contains('wk-step-empty') && c.getClientRects().length; }); }
+      else {
+        while (n && !(/^H[23]$/.test(n.tagName) && +n.tagName[1] <= lvl)) {
+          if (n.tagName !== 'SCRIPT' && !n.classList.contains('wk-step-empty') && n.getClientRects().length) { seen = true; break; }
+          n = n.nextElementSibling;
+        }
+      }
+      if (!seen) (scope && scope.children.length <= 2 ? scope : hd).classList.add('wk-step-empty');
+    });
+  }
+  new MutationObserver(tidySteps).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
   load();
   team.value = state.team;
   if (!state.rows.length && !state.team) state.rows.push({ task: '', owner: '', backup: '', often: '' });
   render();
+  readHash();
 
   // Names typed once in another tool (the household, /assets/js/household.js) are only offered here,
   // while the team field is empty. Using them fills the field; nothing else is copied.

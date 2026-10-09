@@ -1218,7 +1218,7 @@
   function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
   function reEsc(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   var STOP = { the: 1, and: 1, for: 1, with: 1, how: 1, what: 1, can: 1, you: 1, your: 1, are: 1, was: 1, when: 1, why: 1, who: 1, does: 1, just: 1, had: 1, have: 1, into: 1, from: 1, this: 1, that: 1, about: 1, get: 1, its: 1, too: 1, very: 1, some: 1, any: 1, all: 1, our: 1, out: 1, but: 1, not: 1, him: 1, her: 1, she: 1, they: 1, them: 1, his: 1, one: 1, did: 1, i: 1, me: 1, my: 1, to: 1, of: 1, in: 1, on: 1, at: 1, is: 1, it: 1, an: 1, a: 1, do: 1, be: 1, or: 1, so: 1, we: 1, us: 1, am: 1, im: 1,
-    he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, if: 1, as: 1, by: 1, than: 1, then: 1, were: 1, really: 1 };
+    he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, if: 1, as: 1, by: 1, now: 1, than: 1, then: 1, were: 1, really: 1 };
   var JOIN_RE = null;
   function searchTerms(q) {
     var f = fold(q).replace(/\s+·\s+spread love.*$/, '').replace(/[¿?¡!.,;:()"“”]+/g, ' ').trim();
@@ -1559,7 +1559,7 @@
       if (/^\/brand\.html$/.test(p.u) && !terms.some(function (t) { return /^(brand|branding|logo|logos|colou?rs?|palette|fonts?|typeface|mascot)$/.test(t); })) return;
       if (/^\/legal\/(refund|terms)/.test(p.u) && !terms.some(function (t) { return /^(refunds?|terms|legal|cancel|cancell?ation|cancelling|canceling|subscriptions?|membership|charged?|charges|payment|billing|conditions|policy|policies)$/.test(t); })) return;
       if (!b && hits < need) return;                  // every word has to be there, unless it's a helpful tool
-      if (b && TOOL_URL.test(p.u)) b += first[p.u] ? 10 : 4;   // a tool named first for a word leads; further down it only edges ahead
+      if (b && TOOL_URL.test(p.u)) b += first[p.u] ? 10 : 0;   // a tool named first for a word leads; further down it only edges ahead
       score += b;
       // the simple page comes before its in-depth twin: most people want the short way in first
       if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) - (/^\/(telemetry|suite-index|roadmap|architecture|legal\/)/.test(p.u) ? 15 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
@@ -1977,6 +1977,48 @@
     sc.onload = function () { if (window.TOLChat) window.TOLChat.open(o); };
     document.head.appendChild(sc);
   }
+  // The floating Puddles button never sits on top of something to press: a "Leave this site quickly" button
+  // above all, a link, a card, a form field, or a bar fixed at the bottom of the screen (a privacy note, a
+  // game's Full screen button). If it would, he drops his name and steps up just above it, and goes back
+  // down once the way is clear again.
+  function keepFabClear(fab) {
+    var PRESS = 'a[href], button, input, select, textarea, summary, label, [role="button"], [tabindex]:not([tabindex="-1"]), [data-tol-exit]';
+    var busy = false, strict = true;   // strict (first look, resize): anything to press; while scrolling, only quick-exit buttons and fixed bars
+    function under(r) {
+      var found = null, pts = [[r.left + 3, r.top + 3], [r.right - 3, r.top + 3], [r.left + 3, r.bottom - 3], [r.right - 3, r.bottom - 3], [(r.left + r.right) / 2, (r.top + r.bottom) / 2]];
+      var was = fab.style.pointerEvents; fab.style.pointerEvents = 'none';
+      pts.some(function (p) {
+        if (p[0] < 0 || p[1] < 0 || p[0] >= innerWidth || p[1] >= innerHeight) return false;
+        var n = document.elementFromPoint(p[0], p[1]);
+        if (!n || n === document.body || n === document.documentElement || fab.contains(n)) return false;
+        var hit = n.closest(strict ? PRESS : '[data-tol-exit]'), bar = null;
+        for (var x = n; x && x !== document.body; x = x.parentElement) { var pos = getComputedStyle(x).position; if (pos === 'fixed' || pos === 'sticky') { bar = x; break; } }
+        if (hit && hit.closest('.tol-panel, .tol-sharesheet, [role="dialog"]')) hit = null;   // an open dialog sits above him anyway
+        if (bar && /tol-(breathe-btn|top|cw|wx|bar)\b/.test(bar.className || '')) bar = null;  // the other little helpers keep their own places
+        if (hit || bar) { found = (bar && !hit) ? bar : hit; return true; }
+        return false;
+      });
+      fab.style.pointerEvents = was;
+      return found;
+    }
+    function check() {
+      busy = false;
+      if (!fab.isConnected || fab.getClientRects().length === 0) return;
+      fab.style.removeProperty('bottom');
+      var r = fab.getBoundingClientRect(), n = under(r);
+      if (n && fab.classList.contains('is-named')) { fab.classList.remove('is-named'); r = fab.getBoundingClientRect(); n = under(r); }
+      for (var i = 0; n && i < 3; i++) {
+        var top = n.getBoundingClientRect().top, lift = innerHeight - top + 8;
+        if (lift > innerHeight * 0.55) break;   // something tall (a long card): stay put rather than float mid-screen
+        fab.style.setProperty('bottom', lift + 'px', 'important');
+        r = fab.getBoundingClientRect(); n = under(r);
+      }
+    }
+    function soon(e) { strict = !(e && e.type === 'scroll'); if (!busy) { busy = true; requestAnimationFrame(check); } }
+    setTimeout(check, 60); setTimeout(check, 1200);
+    window.addEventListener('scroll', soon, { passive: true });
+    window.addEventListener('resize', soon);
+  }
   function buildPuddlesPop(body) {
     var game = body.classList.contains('is-game');   // games keep the screen to themselves: no floating button, just the note at the end
     if (/^\/(ask|offline|404)\.html$/.test(current) || body.hasAttribute('data-no-puddles') ||
@@ -1997,6 +2039,7 @@
       var unname = function () { fab.classList.remove('is-named'); window.removeEventListener('scroll', unname); };
       setTimeout(unname, 6000); setTimeout(function () { window.addEventListener('scroll', unname, { passive: true }); }, 400);
     } if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
+    if (!game) keepFabClear(fab);
     window.TOLPuddles = { open: function (topic) { openPud(opts(topic || '')); } };
     // any link marked data-ask-puddles (like the home page's "Ask Professor Puddles") opens him right here
     document.addEventListener('click', function (e) {

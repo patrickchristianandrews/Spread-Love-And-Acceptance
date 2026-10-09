@@ -1920,7 +1920,7 @@
         $('work-offer-use').textContent = 'Set a split together';
       } else if (wsg) {
         var wt = wsg.p.map(function (x) { return x / 100; }), hi = work[0] >= work[1] ? 0 : 1;
-        $('work-offer-t').textContent = nameOf(hi) + ' does fewer home jobs because of paid work: try ' + pctList(wt) + '?';
+        $('work-offer-t').textContent = nameOf(hi) + ' has more paid work, so fewer home jobs? Try ' + pctList(wt) + ' of the home jobs.';
         $('work-offer-d').textContent = (wsg.even ? 'With paid work counted, that gives each of you about the same week (' : 'With paid work counted, that brings your weeks closer (') +
           state.people.map(function (_, i) { return nameOf(i) + ' about ' + hrs(wsg.after[i]); }).join(', ') + ')' +
           (wsg.even ? '.' : '. They can’t come out the same here, and nobody’s share of the home jobs goes below ' + MIN_SHARE + '%.') +
