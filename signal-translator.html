@@ -1515,7 +1515,7 @@ const REL_ORDER = ["legal","kidsfirst","safeask","brushoff","again","guilt","hin
 function relHits(id, found){
   const lines=[];
   REL_ORDER.forEach(fid=>{
-    const land = REL_LAND[fid] && (REL_LAND[fid][id] || (id==="manager" ? REL_LAND[fid].coworker : null));
+    const land = REL_LAND[fid] && (REL_LAND[fid][id] || (id==="manager" ? REL_LAND[fid].coworker : id==="business" && REL_LAND[fid].coworker && !/\b(?:boss|manager)\b/i.test(REL_LAND[fid].coworker) ? REL_LAND[fid].coworker : null));
     if(found[fid] && land) lines.push({fid, text:land});
   });
   return lines;
@@ -1564,7 +1564,7 @@ const NEED_GIVE = {
 };
 
 function touchOk(){
-  if(envId==="work" || envId==="substances" || envId==="public" || envId==="kids" || relId==="coworker" || relId==="manager") return false;
+  if(envId==="work" || envId==="substances" || envId==="public" || envId==="kids" || relId==="coworker" || relId==="manager" || relId==="business") return false;
   if(channel!=="person") return false;
   return true;
 }
@@ -1633,7 +1633,7 @@ function settleHTML(A, B){
   if(envId==="substances") add("Stop the topic. Say you care and name the morning. Nothing decided now counts.");
   if(envId==="public") add("Leave the audience. 'Not here. Ten minutes, in the car or the other room.'");
   if(envId==="kids") add("One sentence to the children: 'You are not in trouble. The adults are going to talk and then come back.' Then leave the room.");
-  if(envId==="work" || relId==="coworker" || relId==="manager") add("At work, the settle is logistical: 'Let's take the task offline at [time], just the two of us.' No hug. No character read.");
+  if(envId==="work" || relId==="coworker" || relId==="manager" || relId==="business") add("At work, the settle is logistical: 'Let's take the task offline at [time], just the two of us.' No hug. No character read.");
   if(envId==="depleted" && !isWritten()) add("Before more words: water, a snack, sitting down, or a lower light. A depleted body hears every sentence as an attack.");
   if(envId==="apart" || channel!=="person") add("From a distance, the little thing is a return time in the message itself. 'I am not done with you. I will reply at 8.' Then do it.");
   if(bstate==="d") add(B+" is shut down. No questions, no list, no 'why.' Offer quiet and a later time. Guidance on shutdowns is to wait until the person has recovered.");

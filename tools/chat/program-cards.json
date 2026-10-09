@@ -383,6 +383,1646 @@
       ]
     },
     {
+      "id": "therapistq",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "whether I can be your therapist",
+      "pat": "\\b(can|could|will|would) you be (my|our) (therapist|counsel\\w*|psychologist|shrink|couples counsel\\w*)\\b|\\bare you (a |an )?(real )?(therapist|counsel\\w*|psychologist|doctor|professional)\\b|\\b(is this|is it|are you) (like )?(therapy|counsel\\w*)\\b|\\b(instead of|replace|replacing|substitute for) (a |my |our )?(therapist|therapy|counsel\\w*)\\b|\\b(how|where) (do|can|could) (i|we) find (a |an )?(good )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*)\\b",
+      "notPat": "\\b(anger|temper|yell\\w*|rage)\\b",
+      "keys": [],
+      "what": [
+        "No. I’m a self-help guide, not a therapist. I can point you to pages, tools and ideas, but I can’t assess you, diagnose anything, or give the kind of care a trained person can. Here’s how to find one."
+      ],
+      "how": [
+        "Ask your doctor for a referral: they often know local counsellors, and what is covered.",
+        "Use a therapist directory you can filter by cost, place and focus, such as Psychology Today (US and UK) or the BACP directory (UK).",
+        "Through work: an Employee Assistance Program (EAP) often gives a few free, confidential sessions.",
+        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits.",
+        "Lower cost: university training clinics and community centres often have sliding-scale fees."
+      ],
+      "plain": [
+        "No, I am not a therapist.",
+        "Ask your doctor who to see.",
+        "Look in a therapist directory.",
+        "Work may offer free sessions (EAP)."
+      ],
+      "links": [
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
+        ],
+        [
+          "For counsellors, coaches and group leaders",
+          "/for-counselors.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "forcounselors",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "using the program with clients or groups",
+      "pat": "\\b(i m|im|i am|we are|were) (a |an )?(couples |family |marriage |licensed |school |relationship )?(therapist|counsel\\w*|coach|social worker|psychologist|group leader|facilitator|mediator|psychotherapist|clinician)s?\\b|\\b(use|using|share|sharing|recommend|give) (this|it|the site|these tools?|the workpapers?|your tools?|this program)\\b.{0,20}\\b(with|for|to) (my )?(clients|patients|groups?|couples i see|students|members|congregation)\\b|\\bfor (counsel\\w*|therapists|coaches|professionals|clinicians|group leaders)\\b",
+      "keys": [],
+      "what": [
+        "Yes, you’re welcome to. Everything is free, needs no account, and stays on each person’s own device, so clients can use it between sessions without you collecting anything."
+      ],
+      "how": [
+        "The For counsellors page explains what the program is and isn’t, how it was built, and its honest limits.",
+        "It’s self-help, not a clinical tool: the scores start conversations; they don’t assess anyone.",
+        "Please don’t use the couples tools where there is fear or control in the relationship. The Not safe at home? page explains why.",
+        "Workpapers and the Lemonade Stand work well as homework: each person fills in their own side, then you look at it together."
+      ],
+      "links": [
+        [
+          "For counsellors, coaches and group leaders",
+          "/for-counselors.html"
+        ],
+        [
+          "Safety first: when not to use the couples tools",
+          "/for-counselors.html#safety"
+        ],
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "deployhealth",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "after deployment: nightmares, being on edge",
+      "pat": "\\bnightmares?\\b.{0,50}\\bon edge\\b|\\bon edge\\b.{0,50}\\bnightmares?\\b|\\bptsd\\b|\\bpost traumatic\\b|\\bjumps? at (every )?(noises?|sounds?|loud|bangs?)\\b|\\bhypervigilan\\w*\\b|\\b(back|home) from (a |the |his |her |my )?(\\w+ )?(deployment|tour|war|combat|service|the army|the navy)\\b.{0,40}\\b(normal|nightmares?|on edge|sleep|jumpy|angry|changed|different)\\b|\\b(since|after) (his |her |my |the )?(deployment|tour|combat)\\b.{0,50}\\b(nightmares?|on edge|sleep|jumpy|angry|changed|different|distant)\\b|\\b(veteran|military|army|navy|soldier|service member|marine)\\b.{0,40}\\b(nightmares?|on edge|cant sleep|doesnt sleep|jumpy)\\b",
+      "keys": [],
+      "what": [
+        "Thank you for telling me. What you’re describing (nightmares, being on edge, jumping at noises, poor sleep) is common after deployment or anything frightening, and for many people it eases over the first weeks home. I can’t diagnose anyone, so I can’t say whether it’s PTSD. A doctor can, and there is good help for it."
+      ],
+      "how": [
+        "See a doctor (or your unit’s medical team), especially if it lasts more than a month or gets in the way of sleep, work or home. Treatments for this work well.",
+        "In the US, Military OneSource is free and confidential, day or night: 800-342-9647. Veterans and service members can also dial 988 and then press 1 to talk to someone now.",
+        "In the UK, Combat Stress supports veterans and their families: 0800 138 1619.",
+        "At home: keep sleep and meals regular, go easy on alcohol, and agree a signal for “I need a few minutes” when it gets too much."
+      ],
+      "plain": [
+        "This is common after deployment.",
+        "I cannot diagnose it.",
+        "Please see a doctor.",
+        "Military OneSource: 800-342-9647."
+      ],
+      "links": [
+        [
+          "Coming home after time apart",
+          "/coming-home.html"
+        ],
+        [
+          "Not safe at home? (if anyone is scared)",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "comehome",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "coming home after time apart",
+      "pat": "\\b(back|home) from (a |the |his |her |my )?(\\d+ ?(month|week)s? |\\d+month |\\d+week )?(deployment|tour|rotation|posting|work away|working away|offshore|the rig|a contract abroad)\\b|\\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend)) (came|come|got|is|has come|has got) (back|home)\\b.{0,60}\\b(chang\\w*|systems?|routines?|how i do|steps? on|stepping on|taking over|takes over|my way|where (i|he|she) fits?)\\b|\\b(stepping|steps|treading) on my (systems?|routines?|toes)\\b|\\bstranger in my own (house|home|family)\\b|\\b(dont|don t|do not) know where i fit\\b|\\bwhere i fit (in )?(anymore|now|at home)\\b|\\b(feel|feeling) (useless|like a spare part|in the way)\\b.{0,30}\\b(home|house|back)\\b|\\bhandover week\\b",
+      "keys": [],
+      "what": [
+        "Coming home after time apart is a big change for everyone: the one who was away, and the one who kept things running. Feeling like a stranger, or feeling stepped on, is very common in the first weeks, and it doesn’t mean anyone is failing."
+      ],
+      "how": [
+        "Have a handover week: the one who held the fort shows how things run now, and the one coming back watches before changing anything.",
+        "Pick one or two jobs that are clearly the returning person’s, start to finish, so they have a real place, not leftover scraps.",
+        "Try changes as “let’s test it for two weeks”, not “the right way”.",
+        "Expect it to take weeks, not days. Check in once a week: what’s working, and what’s rubbing."
+      ],
+      "script": [
+        "I’m so glad you’re home. The systems I built kept us going, and when they change overnight I feel wiped out. Can we do a handover week before we change things?",
+        "I want to be useful here, and I don’t know where I fit yet. Which jobs could be mine, start to finish?"
+      ],
+      "scriptLabels": [
+        "If you kept things running",
+        "If you’re the one coming home"
+      ],
+      "links": [
+        [
+          "Coming home after time apart",
+          "/coming-home.html"
+        ],
+        [
+          "Who does what now (the Lemonade Stand)",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "differenthours",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "different hours and shift work",
+      "pat": "\\b(opposite|different|clashing|conflicting) (schedules?|shifts?|hours|rotas?)\\b|\\bnight ?shifts?\\b|\\b(i|he|she|they|we|my \\w+) (work|works|working) (nights|night shifts?|shifts|lates|earlies|evenings|weekends)\\b|\\bshift work\\w*\\b|\\bsleep\\w* (all day|during the day|in the day)\\b|\\b(working|work|works) from home\\b.{0,60}\\b(free|available|always around|do everything|does everything|house|chores|dog|errands|parcels)\\b|\\b(everyone|they|people|my family|my (partner|husband|wife)) (thinks?|assumes?) (i m|im|i am) (free|available|not working|not really working)\\b|\\bnever see each other\\b|\\bships (that pass|passing) in the night\\b",
+      "keys": [],
+      "what": [
+        "Different hours are hard on any home: you can love each other and still hardly overlap. What usually helps is planning around energy and handovers, not counting hours."
+      ],
+      "how": [
+        "Count the sleep after a night shift as part of the shift. Daytime sleep is recovery, not free time.",
+        "Share jobs by what each person can do in their awake, rested hours, not by equal hours.",
+        "If one of you works from home, being home isn’t being free: agree your working hours, and what can and can’t be asked during them.",
+        "Keep one fixed overlap a week, even 30 minutes, for something that isn’t logistics.",
+        "Use a shared list or note for handovers, so you don’t have to catch each other in person."
+      ],
+      "script": [
+        "I know I’m asleep when the house needs doing, and I don’t want you carrying it all. Can we pick two jobs that fit my awake hours?",
+        "When I’m working from home, I’m at work until five. Can we keep requests for after that, unless it’s urgent?"
+      ],
+      "scriptLabels": [
+        "If you work nights or shifts",
+        "If you work from home"
+      ],
+      "links": [
+        [
+          "Different hours: shifts, nights and working from home",
+          "/different-hours.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "gaming",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "gaming, phones and time together",
+      "pat": "\\bvideo ?games?\\b|\\bgaming\\b|\\bgamer\\b|\\b(plays?|playing) (games|on (his|her|their|the) (xbox|playstation|ps5|switch|console|pc))\\b|\\b(xbox|playstation|ps5|fortnite|call of duty|minecraft|warzone|valorant)\\b|\\b(game|games) (too much|all (night|day|weekend)|every (night|day))\\b|\\bhow much (he|she|they|my \\w+) (games|plays)\\b|\\b(time together|couple time|us time)\\b.{0,40}\\b(alone time|me time|time apart|time to (myself|ourselves)|time alone)\\b|\\b(alone time|me time|time apart|time to myself|time alone)\\b.{0,40}\\b(time together|couple time|together)\\b|\\bsplit (our )?time (together|between)\\b",
+      "notPat": "\\b(for two|two player|2 player|game for us|play together|games? to play)\\b",
+      "keys": [],
+      "what": [
+        "Gaming is a real way to rest and to see friends, and wanting time together is real too. Neither of you is wrong. What usually helps is a plan you both chose, rather than a running argument."
+      ],
+      "how": [
+        "Talk about the need underneath: rest and friends for one of you, feeling chosen for the other.",
+        "Make a small time-together deal: which evenings are together time, which are gaming or alone time, and how to say “I need you now”.",
+        "Agree a stop ritual, like finishing the current match, then stopping at an agreed time.",
+        "Try it for two weeks, then look again and adjust."
+      ],
+      "script": [
+        "I don’t want you to stop gaming. I miss you. Could we keep two evenings a week just for us, and the rest are yours?",
+        "Gaming is how I relax and see my friends. Can we plan our evenings together, so you know when I’m all yours?"
+      ],
+      "scriptLabels": [
+        "If you want more time together",
+        "If you’re the one gaming"
+      ],
+      "links": [
+        [
+          "Gaming, phones and time together",
+          "/gaming-and-time-together.html"
+        ],
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "friends",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a friendship that has drifted",
+      "pat": "\\b(best friend|bestie|bff|my friend|our friend|old friend|close friend|my mate|friendship)s?\\b.{0,60}\\b(never|doesnt|dont|stopped|barely|hardly|no longer|no energy|neglect\\w*|drift\\w*|baby|newborn|text\\w* back|reply|replies|replying|respond\\w*|reach\\w* out|distant|still care|ghost\\w*|lost touch)\\b|\\b(neglect\\w*|ignor\\w*|lost touch with|drift\\w* (apart )?from|ghost\\w*) (my )?(best |old |close )?friends?\\b|\\b(no energy|too tired) to (reply|text|answer|see|call) (to )?(my )?friends?\\b",
+      "notPat": "\\b(died|passed|funeral|dead|killed|cancer|hospital|cuts? (herself|himself|themselves)|hurt\\w* (herself|himself|themselves))\\b",
+      "keys": [],
+      "what": [
+        "Friendships drift most when life changes: a new baby, a move, a new job, or just low energy. It rarely means the friendship is over. It usually needs a smaller, kinder rhythm for a while."
+      ],
+      "how": [
+        "Send something that needs no reply: “Thinking of you. No need to answer.”",
+        "If you’re the one with no energy, say so plainly. Silence can read as not caring; one honest line doesn’t.",
+        "If you’re always the one reaching out, say it once, kindly, then let them come towards you for a while.",
+        "Suggest something easy: a walk with the pram, a ten-minute call, a voice note."
+      ],
+      "script": [
+        "I still care about you so much. I’m low on energy and slow to reply right now, and it’s not about you.",
+        "I miss you. I know life is full right now. No need to reply, I just wanted you to know I’m thinking of you."
+      ],
+      "scriptLabels": [
+        "A text you could send now",
+        "If you’re the one waiting"
+      ],
+      "links": [
+        [
+          "Friends: when a friendship drifts",
+          "/friends.html"
+        ],
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "joinhome",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "joining a home and feeling like a guest",
+      "pat": "\\b(moved in with|moving in with|joined|joining|live with) (my |our |his |her |their )?(partners|partner|boyfriend|girlfriend|husband|wife|them|him|her)\\b.{0,50}\\b(guest|outsider|visitor|dont belong|don t belong|not my home|their house|his house|her house)\\b|\\b(feel|feels|feeling) like a (guest|visitor|lodger)\\b",
+      "notPat": "\\b(kids?|children|stepkids?|step ?(son|daughter|children|child)|his son|her son|his daughter|her daughter)\\b",
+      "keys": [],
+      "what": [
+        "Moving into a home that already has its own rhythm often leaves the newest person feeling like a guest for a while. That’s about how the home runs, not about whether you’re wanted."
+      ],
+      "how": [
+        "Ask for one or two jobs and one space that are clearly yours, so you’re part of how things run.",
+        "Ask to be in on house decisions from now on, at a set time each week, with everyone.",
+        "Change one small thing so it feels like your home too: a shelf, a meal, where something lives.",
+        "Say how it feels, without blame: “I love being here, and I still feel like a guest.”"
+      ],
+      "script": [
+        "I love living with you, and I still feel like a guest. Could I take over the groceries and have a say in house decisions, so it feels like my home too?"
+      ],
+      "links": [
+        [
+          "More than two partners at home (and joining a home)",
+          "/more-than-two.html"
+        ],
+        [
+          "One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "poly",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "more than two partners",
+      "pat": "\\bpoly(amorous|amory|cule)?\\b|\\btriads?\\b|\\bthrouples?\\b|\\bmetamours?\\b|\\bnon ?monogam\\w*\\b|\\bopen relationships?\\b|\\b(my|our) (two |three )?partners (are|and|have|both)\\b|\\b(three|four|3|4) (partners|of us in a relationship|way relationship)\\b|\\bmore than (one|two) partners?\\b",
+      "keys": [],
+      "what": [
+        "Yes. Every tool here works for two to eight partners, and nothing here assumes there are only two of you. Where a page says “partner”, read it as “each partner”."
+      ],
+      "how": [
+        "The Lemonade Stand and One owner per job take up to eight names: each person fills in their own side on their own phone, and you merge them.",
+        "Watch for one person becoming the hub who plans and merges everything. Rotate who runs the monthly look-back.",
+        "Someone newer to the home often feels like a guest: give them clear jobs and a real say, not just a room.",
+        "Check-ins work for three too: each person gets a turn, and each pair can have its own time as well."
+      ],
+      "script": [
+        "Can we each fill in our own side this week, and then look at it together, all of us?"
+      ],
+      "links": [
+        [
+          "More than two partners at home",
+          "/more-than-two.html"
+        ],
+        [
+          "The Lemonade Stand (2 to 8 people)",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "leftout",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "being left out of household decisions",
+      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b",
+      "notPat": "\\b(ex|coparent\\w*|co parent\\w*|custody|my boss|my manager|at work|my team)\\b",
+      "keys": [],
+      "what": [
+        "Being out of the loop at home hurts, and long hours make it easy to happen without anyone meaning it. A small routine usually fixes it better than one big talk."
+      ],
+      "how": [
+        "Agree a short weekly decisions slot (15 minutes, same time each week) where anything that affects everyone gets decided.",
+        "Keep a shared “to decide” list in between, so things wait for the slot instead of being settled in passing.",
+        "Agree what anyone can decide alone (small, everyday things) and what needs everyone (money over an agreed amount, plans, guests).",
+        "If you can’t make the slot, send your view in writing beforehand, and it counts."
+      ],
+      "script": [
+        "I know I’m not around much with my hours, and I still want a say. Could we keep a 15-minute decisions slot on Sundays, and a list for things that can wait till then?"
+      ],
+      "links": [
+        [
+          "Check-ins: short, regular, kind",
+          "/check-ins.html"
+        ],
+        [
+          "More than two partners at home",
+          "/more-than-two.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "fosterload",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "the paperwork side of foster and kinship care",
+      "pat": "\\bfoster\\w*\\b.{0,80}\\b(meetings|paperwork|appointments|reviews|forms|contact visits)\\b|\\b(meetings|paperwork|appointments|reviews|forms|contact visits)\\b.{0,80}\\bfoster\\w*\\b",
+      "keys": [],
+      "what": [
+        "Foster and kinship care comes with a second, hidden job: meetings, reviews, forms, contact visits and calls. When one of you carries all of it, it wears you out, and it’s worth sharing on purpose."
+      ],
+      "how": [
+        "List the whole job for one month: every meeting, review, form, call and contact visit.",
+        "Give each regular task one owner, the noticing included: who books, who goes, who files.",
+        "Take turns going to reviews, or go together, so you both know the child’s plan.",
+        "Ask your social worker what support exists for carers: training, a break, support groups."
+      ],
+      "script": [
+        "I’m doing all the meetings and paperwork for her care, and I’m running low. Could you take the school reviews and the monthly forms?"
+      ],
+      "links": [
+        [
+          "Foster, adoptive and kinship families",
+          "/foster-and-kinship.html"
+        ],
+        [
+          "One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*|close to (us|me))\\b",
+          "foster"
+        ],
+        [
+          "\\b(strict|discipline|consequences|too soft)\\b",
+          "parentapproach"
+        ]
+      ]
+    },
+    {
+      "id": "foster",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "fostering and adoption: a child who pushes you away",
+      "pat": "\\bfoster\\w*\\b|\\bkinship (care|carers?|family|families)\\b|\\bspecial guardian\\w*\\b|\\b(our|my) (adopted|adoptive) (son|daughter|child|kid|kids|children)\\b|\\b(moved|been moved|moves) (homes|houses|placements|around|schools) (a lot|so much|so many times|many times)\\b|\\b(she|he|they) (has|have|s) (been in|had) (lots of|so many|many) (homes|placements)\\b",
+      "keys": [],
+      "what": [
+        "Children who have moved homes a lot often push away the people trying hardest, because getting close has felt risky before. It usually isn’t about you, and it isn’t a sign you’re failing."
+      ],
+      "how": [
+        "Aim for predictable, not perfect: the same routines, the same goodnight, the same “see you after school” every day.",
+        "Keep connection separate from behaviour: one small daily moment with her that she can’t lose for bad behaviour.",
+        "Name it without pressure: “You don’t have to trust us yet. We’re not going anywhere.”",
+        "Get support for you too: your social worker, a carers’ support group, and training on trauma and attachment."
+      ],
+      "script": [
+        "You don’t have to trust us yet. We’re staying, and we’ll keep showing up."
+      ],
+      "links": [
+        [
+          "Foster, adoptive and kinship families",
+          "/foster-and-kinship.html"
+        ],
+        [
+          "When a child has moved homes (for parents)",
+          "/parents.html#foster"
+        ]
+      ],
+      "chips": [
+        [
+          "We disagree about parenting",
+          "We disagree about how strict to be"
+        ],
+        [
+          "What rules should we set?",
+          "What rules should we set for a 14 year old?"
+        ]
+      ],
+      "follow": [
+        [
+          "\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker)\\b",
+          "fosterload"
+        ],
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*)\\b",
+          "foster"
+        ],
+        [
+          "\\b(strict|discipline|consequences|too soft|disagree)\\b",
+          "parentapproach"
+        ]
+      ]
+    },
+    {
+      "id": "parentapproach",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "disagreeing about how strict to be",
+      "pat": "\\b(we|my (wife|husband|partner)|she|he|they)\\b.{0,30}\\b(disagree|argue|fight|clash|row)\\w*\\b.{0,30}\\b(how strict|strict|discipline|rules|parenting|consequences|bedtime|screen time)\\b|\\b(thinks|says|feels) (i m|im|i am) (too|so) (strict|soft|lenient|harsh|easy)\\b|\\b(too strict|too soft|too lenient)\\b.{0,20}\\b(with|on) (the |our |my )?(kids?|children|son|daughter|her|him)\\b|\\bdisagree (about|on) parenting\\b|\\bhow strict (to be|should (we|i) be)\\b",
+      "keys": [],
+      "what": [
+        "Most parents disagree about how strict to be, and it usually comes from how each of you was raised. Children do best when the adults back a few rules together, not when both parents are exactly the same."
+      ],
+      "how": [
+        "Talk away from the children: each of you says why it matters to you, and what you’re worried about.",
+        "Agree three to five house rules you both back, and what happens if one is broken.",
+        "Outside those, allow different styles: one of you can be softer on some things.",
+        "Don’t overrule each other in front of the children. Talk about it later, in private."
+      ],
+      "script": [
+        "I know I come across as strict. I worry about her. Can we agree a few rules we both back, and let the rest be flexible?"
+      ],
+      "links": [
+        [
+          "House rules you both back",
+          "/parents.html#house-rules"
+        ],
+        [
+          "Foster, adoptive and kinship families",
+          "/foster-and-kinship.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teenrules",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "sample rules for a teenager",
+      "pat": "\\b(what|which|good|sample|example) (house )?(rules|limits|curfew)\\b.{0,40}\\b(1[0-9]|teen\\w*|year old|kid|child|son|daughter)\\b|\\b(rules|curfew|limits) for (a |our |my )?(1[0-9] ?year ?old|teen\\w*)\\b",
+      "keys": [],
+      "what": [
+        "A few clear rules work better than many. Here are rules many families use for a 13 to 16 year old. Pick the ones that fit, and agree them with your teen if you can: rules they helped make are easier to keep."
+      ],
+      "how": [
+        "Phones charge outside the bedroom at night (say from 9:30 on school nights).",
+        "Say where you’re going and who with, and text if plans change.",
+        "Home by an agreed time, which moves later as trust grows.",
+        "One or two jobs that are yours, like your own laundry and the dishes twice a week.",
+        "We can disagree without insults, and that goes for the adults too."
+      ],
+      "script": [
+        "Let’s agree a few rules together. Which of these feel fair to you, and what would you change?"
+      ],
+      "links": [
+        [
+          "House rules you both back",
+          "/parents.html#house-rules"
+        ],
+        [
+          "Talking with teenagers",
+          "/library/life.html#teenagers"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "kinshipgp",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "raising a grandchild",
+      "pat": "\\b(raising|bringing up|looking after|caring for|have custody of|got custody of) (my|our) (grandson|granddaughter|grandchild\\w*|grandkids?|niece|nephew|grandbaby)\\b|\\b(grandparent|grandma|grandmother|grandad|granddad|grandpa|grandfather|nan|nana|granny)s?\\b.{0,40}\\b(raising|bringing up|full time|custody|guardian\\w*)\\b|\\b(raising|bringing up|full time|custody of)\\b.{0,40}\\b(grandparent|grandson|granddaughter|grandchild\\w*|grandkids?)\\b|\\b(i m|im|i am) raising (him|her|them) (full time|on my own|myself|now)\\b|\\bkinship\\b",
+      "keys": [],
+      "what": [
+        "Raising a grandchild is a huge act of love, and it’s exhausting, often on top of worry and grief about their parent. You don’t have to do it alone, and there is help for exactly this."
+      ],
+      "how": [
+        "Look for kinship carer support: in the UK, the charity Kinship (kinship.org.uk) gives free advice; in the US, search “grandfamilies” or your state’s kinship navigator program.",
+        "Ask about money and legal help: you may be entitled to support, and a guardianship or custody order can make school and doctors easier.",
+        "Keep routines simple and predictable. Children who have been through upheaval settle with sameness.",
+        "Tell him what’s happening in words he can manage, and look after your own rest: one real break a week is part of caring for him."
+      ],
+      "script": [
+        "Mum is getting help to get well. You’re living with me now, and I’m not going anywhere."
+      ],
+      "links": [
+        [
+          "Foster, adoptive and kinship families",
+          "/foster-and-kinship.html"
+        ],
+        [
+          "For grandparents",
+          "/grandparents.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(phone|phones|screen|screens|tablet|ipad|gaming|games|up all night|wont sleep|doesnt sleep)\\b",
+          "teenphone"
+        ],
+        [
+          "\\b(rehab|raising (him|her|them)|full time|custody|support|help|exhausted|tired|money)\\b",
+          "kinshipgp"
+        ],
+        [
+          "\\badhd\\b",
+          "adhdkids"
+        ]
+      ]
+    },
+    {
+      "id": "teenkinship",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when a parent is away (for young people)",
+      "pat": "\\b(i m|im|i am) 1[0-7]\\b.{0,40}\\b(live|living|stay|staying) with (my )?(grandma|grandmother|nan|nana|granny|grandad|grandpa|grandparents|aunt|auntie|uncle|foster \\w+)\\b|\\b(my )?(mum|mom|dad|mother|father|parents?) (is|are|s|has gone|went) (in|into|to) (rehab|prison|jail|treatment|recovery)\\b",
+      "keys": [],
+      "what": [
+        "That’s a lot to carry. When a parent is away, in rehab, or not able to look after you, it’s normal to feel worried, angry, sad or even relieved, sometimes all at once. None of it is your fault."
+      ],
+      "how": [
+        "You’re allowed to ask questions about what’s happening, and to say when you don’t want to talk about it.",
+        "Pick one adult you trust (your grandparent, a teacher, a school counsellor) and tell them how you’re really doing.",
+        "If you want to talk to someone outside the family: in the UK, Childline is free on 0800 1111; in the US, you can text HOME to 741741.",
+        "It’s okay to love your parent and still be upset with them."
+      ],
+      "links": [
+        [
+          "For teens: when a parent is away",
+          "/teens.html#parent-away"
+        ],
+        [
+          "Foster, adoptive and kinship families",
+          "/foster-and-kinship.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "missing",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "missing someone",
+      "pat": "^(i )?(really |so |just |still )?miss (my|our) (mum|mom|mother|dad|father|parents?|grandma|grandmother|nan|nana|grandad|grandpa|brother|sister|son|daughter|kids|children|wife|husband|partner|boyfriend|girlfriend|friend|best friend|family|home|old life)( so much| a lot| loads)?$|^i (really |so |just |still )?miss (him|her|them)( so much| a lot)?$",
+      "keys": [],
+      "what": [
+        "Missing someone hurts because they matter to you. That ache is love with nowhere to go for a while."
+      ],
+      "how": [
+        "If you can reach them, tell them: a short message, a voice note, or a call.",
+        "If you can’t, it can help to write to them anyway, or to talk about them with someone who knows them.",
+        "Keep one small thing that connects you: a photo, a song, a ritual.",
+        "If missing them comes with worry (they’re ill, away or in treatment), tell someone you trust how you’re doing."
+      ],
+      "links": [
+        [
+          "For teens: when a parent is away",
+          "/teens.html#parent-away"
+        ],
+        [
+          "Grief and loss",
+          "/grief.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "teenphone",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a child or teen on their phone at night",
+      "pat": "\\b(my|our) (son|daughter|grandson|granddaughter|kid|kids|teen\\w*|child|children|1[0-9] ?year ?old)\\b.{0,40}\\b(phone|screen|tablet|ipad|games?|gaming)\\b.{0,40}\\b(all night|late|in bed|bedtime|sleep|night)\\b",
+      "keys": [],
+      "what": [
+        "Phones at night are one of the most common battles with children and teens, and sleep is worth protecting. A clear, calm house rule usually works better than nightly arguments."
+      ],
+      "how": [
+        "Agree a phone bedtime: phones charge outside the bedroom, say from 9:30 on school nights.",
+        "Explain the why (sleep, mood, school), not just the rule.",
+        "Make it a house rule for everyone, adults too if you can.",
+        "Use the phone’s built-in controls or a wifi schedule as backup, not instead of the talk."
+      ],
+      "script": [
+        "Phones sleep in the kitchen from 9:30. It’s not a punishment. Sleep matters for all of us."
+      ],
+      "links": [
+        [
+          "House rules you both back",
+          "/parents.html#house-rules"
+        ],
+        [
+          "Gaming, phones and time together",
+          "/gaming-and-time-together.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "adhdkids",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when a child has ADHD",
+      "pat": "\\b(my|our|his|her|their) (son|daughter|kid|kids|child|children|grandson|granddaughter|grandchild\\w*|grandkids?|stepson|stepdaughter|boy|girl|little one|nephew|niece|pupil|student)\\b.{0,40}\\b(adhd|add|attention deficit)\\b|\\b(adhd|add)\\b.{0,30}\\b(in )?(children|kids|child|boys|girls|toddlers?)\\b|\\bis adhd (real|made up|an excuse|just|a real)\\b|\\badhd\\b.{0,20}\\b(or|vs|versus|just) (just )?(bad|naughty|poor)? ?(behaviou?r|parenting|upbringing|discipline)\\b|\\b(what is|explain) adhd\\b",
+      "keys": [],
+      "what": [
+        "Yes, ADHD is real and well studied. It is not bad behaviour or bad upbringing. In plain words: a child with ADHD has a brain that finds it harder to keep attention on dull things, to wait, to sit still and to remember steps, even when they really want to."
+      ],
+      "how": [
+        "Talk in short, single steps, and get eye contact first: “Shoes on, then come back to me.”",
+        "Expect forgetting, and use reminders that don’t nag: a picture list by the door, a timer, one step at a time.",
+        "Give movement on purpose when he can’t sit still: let him stand, fidget or squeeze something while he listens.",
+        "Catch him doing well and say so, often. Many children with ADHD hear “no” all day.",
+        "Agree two or three rules with the parents that you all keep, so he hears the same thing in every home."
+      ],
+      "script": [
+        "I can see sitting still is hard right now. Want to stand up and help me stir, and tell me about it while we cook?",
+        "One thing at a time: shoes first. Then come and tell me, and we’ll do the next bit."
+      ],
+      "plain": [
+        "ADHD is real.",
+        "It is not bad behaviour.",
+        "Use short, single steps.",
+        "Let them move while they listen.",
+        "Praise often."
+      ],
+      "links": [
+        [
+          "When a child has ADHD",
+          "/adhd-kids.html"
+        ],
+        [
+          "For grandparents",
+          "/grandparents.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(forget\\w*|forgot|sit still|fidget\\w*|listen\\w*|focus\\w*|homework|meltdown\\w*|instructions?|remember\\w*|say when|talk to (him|her)|hyper|cant stop moving|wont stop moving)\\b",
+          "adhdkids"
+        ]
+      ]
+    },
+    {
+      "id": "gpadvice",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a grandparent’s help that isn’t wanted",
+      "pat": "\\b(my )?(daughter|son|daughterinlaw|soninlaw|daughter in law|son in law|kids|children)\\b.{0,30}\\b(doesnt|does not|dont|wont|will not|never)\\b.{0,10}\\b(want|like|take|listen to|ask for)\\b.{0,15}\\b(my )?(advice|help|opinion|input|ideas)\\b|\\b(turn|turning|show|showing|come|coming|pop|popping|drop|dropping) (up|round|over|by|in) (unannounced|without (calling|asking|warning|texting|ringing))\\b|\\bi (just )?(turn|show|pop) up\\b|\\bi (only|just) want(ed)? to help\\b",
+      "keys": [],
+      "what": [
+        "Wanting to help is love. It’s also normal for new parents to want to find their own way, and to need to plan around naps and sleep. What usually works best is asking before advising, and calling before visiting."
+      ],
+      "how": [
+        "Ask first: “Would you like my thoughts, or would you rather I just listen?” Then go with the answer.",
+        "Text before you visit, and let them pick the time. It isn’t a rule against you.",
+        "Offer help that’s easy to say yes to: a meal, a load of washing, an hour with the baby so they can sleep.",
+        "If you feel hurt, say it once, gently, then let it rest."
+      ],
+      "script": [
+        "I only want to help, and I can see I’ve been turning up without asking. From now on I’ll text first. What would actually help this week?"
+      ],
+      "links": [
+        [
+          "For grandparents: staying close",
+          "/grandparents.html"
+        ],
+        [
+          "Boundaries with a parent you love (their side)",
+          "/grown-up-children.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "gpshutout",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling shut out from a grandchild",
+      "pat": "\\b(shut|pushed|kept|cut) out (of|from) (my )?(grandchild\\w*|grandkids?|grandson|granddaughter|grandbaby|the baby|their lives|the kids lives)\\b|\\b(dont|do not|never|cant|not allowed to|wont let me) (get to )?see (my )?(grandchild\\w*|grandkids?|grandson|granddaughter|grandbaby)\\b|\\b(miss|missing) (my )?(grandchild\\w*|grandkids?|grandson|granddaughter|grandbaby)\\b",
+      "keys": [],
+      "what": [
+        "I’m sorry. Feeling shut out from a grandchild you love really hurts, and that hurt deserves to be named before anything else."
+      ],
+      "how": [
+        "Give the hurt somewhere to go first: talk to a friend, or write it down, before you talk to the parents.",
+        "Ask the parents, not the child, what would help: “I miss him. Is there a way I could see him that works for you?”",
+        "Keep to their rules for now, even if you’d do it differently. Trust comes back by keeping them.",
+        "Stay in touch in small ways they’re comfortable with: a card, a short video, a regular call."
+      ],
+      "script": [
+        "I miss him, and I miss you. Is there a way I could see him that works for you?"
+      ],
+      "links": [
+        [
+          "For grandparents: staying close",
+          "/grandparents.html"
+        ],
+        [
+          "For grown-up children (their side)",
+          "/grown-up-children.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "familyboundary",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "setting a kind boundary with family",
+      "pat": "\\b(set|setting|draw|hold|keep|have)\\b.{0,15}\\bboundar\\w*\\b.{0,40}\\b(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bboundar\\w*\\b.{0,30}\\bwith (my )?(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bset (a |some )?boundar\\w* (kindly|without hurting|gently|nicely)\\b|\\bboundar\\w*\\b.{0,30}\\bwithout hurting\\b",
+      "keys": [],
+      "what": [
+        "You can love someone and still say no to some things. A kind boundary is about what you will do, said warmly, not a rule for them."
+      ],
+      "how": [
+        "Pick the one thing that matters most, not everything at once.",
+        "Say it with love first, then the limit, then what you can offer: “I love seeing you. Please call before you come. Sunday afternoons are great.”",
+        "Expect a little hurt or pushback. That doesn’t mean you were unkind. Say it again, calmly.",
+        "Back it up with actions: if she drops in anyway, “It’s not a good time. Let’s do Sunday.”"
+      ],
+      "script": [
+        "I love you, and I want us to stay close. I need to make some decisions myself, and I’ll ask when I want advice."
+      ],
+      "links": [
+        [
+          "For grown-up children: boundaries with a parent you love",
+          "/grown-up-children.html"
+        ],
+        [
+          "Supporting family, and visits",
+          "/family-obligations.html#visits"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "coparentdecide",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a co-parent deciding without you",
+      "pat": "\\b(my |our |the kids |her |his )?ex\\b.{0,40}\\b(decides?|decisions?|decided|chose|signed (him|her|them) up|enrolled|changed (school|schools)|without (asking|telling|checking with|consulting) me)\\b|\\b(coparent\\w*|co parent\\w*|ex)\\b.{0,40}\\b(get|have|want) a say\\b",
+      "keys": [],
+      "what": [
+        "It’s frustrating to hear about decisions for your own child after they’re made. Most co-parents do better with a clear list of what needs both of you, and a simple way to ask."
+      ],
+      "how": [
+        "Agree which decisions are shared (school, health, big activities, travel) and which each home decides alone (bedtimes, meals, screens at your house).",
+        "Suggest a simple rule: shared decisions go by message, with 48 hours to reply.",
+        "Keep messages short, about the child, and in writing: “Before we sign her up, can we talk? I’d like a say in after-school clubs.”",
+        "If you have a parenting plan or court order, check what it says about decisions."
+      ],
+      "script": [
+        "I’d like us to decide school and health things together. Could you message me before signing her up for anything, and I’ll do the same?"
+      ],
+      "links": [
+        [
+          "Who decides what (co-parenting)",
+          "/co-parenting.html#who-decides"
+        ],
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(get a say|have a say|my say|decid\\w*|ask me|agree|tell me first)\\b",
+          "coparentdecide"
+        ]
+      ]
+    },
+    {
+      "id": "handoffkit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "things that don’t come back at handover",
+      "pat": "\\b(sends?|sent|sending|brings?|brought|drops? (her|him|them) off|comes? back|came back|returns?|returned)\\b.{0,40}\\bwithout (his|her|their|the) (inhaler|medicine|medication|meds|glasses|homework|uniform|kit|charger|bag|shoes|coat|epipen|retainer|book)\\b|\\b(my |our )?ex (never|doesnt|always forgets?|forgets|keeps forgetting)\\b|\\b(never|always) (remembers?|forgets?)\\b.{0,30}\\b(for (our|my|the) (daughter|son|kid|kids|child|children))\\b",
+      "notPat": "\\b(ex (husband|wife|partner|boyfriend|girlfriend)? ?(texts|messages|calls|harass\\w*))\\b",
+      "keys": [],
+      "what": [
+        "That’s worrying, especially with medicine, and tiring when you’re always the one who remembers. A checklist that travels with the bag usually works better than reminders."
+      ],
+      "how": [
+        "Make a handover checklist that lives in her bag: inhaler, medicines, glasses, homework, charger.",
+        "Better still, ask the doctor or pharmacy for a second inhaler, so each home has one.",
+        "Send one calm, factual message about the safety items only, in writing.",
+        "Keep the handover itself short and friendly. Sort the list by message, not at the door."
+      ],
+      "script": [
+        "Her inhaler needs to come back with her every time. I’ve put a list in her bag. Could you check it before drop-off?"
+      ],
+      "links": [
+        [
+          "The handover bag and checklist",
+          "/co-parenting.html#handoff-bag"
+        ],
+        [
+          "Calmer handovers",
+          "/co-parenting.html#handoff"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "parttimehome",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when the kids are with you some days",
+      "pat": "\\b(kids?|children|son|daughter)\\b.{0,20}\\b(are |is |get |gets |seem )?(bored|dont want to come|don t want to come|hate coming|dont like coming)\\b.{0,20}\\b(at my|at mine|my place|my flat|my house|my apartment|with me|here)\\b|\\b(my weekends|every other weekend|my days|my nights) with (the |my )?(kids|children)\\b.{0,30}\\b(bored|empty|flat|hard|ideas?)\\b",
+      "keys": [],
+      "what": [
+        "Weekends at a newer or smaller place can feel flat at first. Children usually don’t need big outings. They need it to feel like their place too."
+      ],
+      "how": [
+        "Give them a corner that’s theirs: a drawer, a shelf, their own mug, a poster they chose.",
+        "Build a few rituals they can count on: pancake Saturday, the same park, a film night.",
+        "Let them invite a friend over sometimes.",
+        "Leave room for ordinary, boring time. It often turns into the best talks."
+      ],
+      "script": [
+        "This is your home too. What would make your room feel more like yours?"
+      ],
+      "links": [
+        [
+          "On my own, and part-time parenting",
+          "/on-my-own.html"
+        ],
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "bizpartner",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "business partners",
+      "pat": "\\b(business partners?|cofounders?|co founders?|coown\\w*|co own\\w*|coowners?|co owners?)\\b|\\bwe (run|own|started) (a |the |our )?(business|bakery|shop|cafe|restaurant|company|startup|firm|salon|practice|studio|pub)\\b|\\b(our|my) (bakery|cafe|restaurant|startup|salon)\\b|\\b(anything|something|stuff|tools?|help) for (small )?business owners\\b|\\b(i do|doing|handle) (the )?(payroll|suppliers|permits|invoices|invoicing|bookkeeping)\\b",
+      "keys": [],
+      "what": [
+        "Business partners often end up with very different jobs, and each one mostly sees their own. The fix is the same as at home: see the whole load first, then give each job one owner."
+      ],
+      "how": [
+        "Each of you lists everything you do in a normal month, including the admin nobody sees: payroll, suppliers, permits, tax, ordering, the noticing.",
+        "Look at the lists side by side as facts, not a scorecard. Most partners are surprised by the other list.",
+        "Give every regular job one owner, and agree how you make decisions that affect you both.",
+        "If one of you feels told how to do things, agree who decides what in each area, and stick to it."
+      ],
+      "script": [
+        "I think we each see our own half. Can we both list everything we do for a month, then decide together who owns what?"
+      ],
+      "links": [
+        [
+          "Business partners",
+          "/work.html#business-partners"
+        ],
+        [
+          "One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(admin|payroll|suppliers?|permits?|invoic\\w*|paperwork|books|accounts|tax|pull my weight|controlling|telling me how|micromanag\\w*|bossy|not a couple|co ?own)\\b",
+          "bizpartner"
+        ]
+      ]
+    },
+    {
+      "id": "twofaiths",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "two faiths or cultures, one family",
+      "pat": "\\b(different|two|mixed|both our|our two) (religions?|faiths?|beliefs|cultures|traditions)\\b|\\binter ?faith\\b|\\binter ?religious\\b|\\b(catholic|christian|muslim|jewish|hindu|sikh|buddhist|protestant|orthodox|atheist|agnostic|mormon|pagan)\\b.{0,40}\\b(catholic|christian|muslim|jewish|hindu|sikh|buddhist|protestant|orthodox|atheist|agnostic|mormon|pagan)\\b|\\b(religions?|faiths?)\\b.{0,30}\\b(raise|raising|bring up|baby|kids?|child|children|names?)\\b|\\b(raise|raising|bring up|bringing up)\\b.{0,30}\\b(religions?|religious|faiths?|church|mosque|temple|synagogue)\\b|\\b(baptis\\w*|baptiz\\w*|christening|christen|bris|aqiqah|naming ceremony)\\b|\\b(eid|ramadan|diwali|hanukkah|passover|lunar new year)\\b.{0,30}\\b(christmas|easter)\\b|\\b(christmas|easter)\\b.{0,30}\\b(eid|ramadan|diwali|hanukkah|passover)\\b|\\bbaby names?\\b.{0,40}\\b(faiths?|religions?|cultures?|both)\\b|\\bnames? (that|which) works? for both\\b",
+      "keys": [],
+      "what": [
+        "Faith often carries family, memory and meaning, so it makes sense that this feels big. Many interfaith families find a way that honours both, and it usually starts with each of you saying what matters most to you, and why."
+      ],
+      "how": [
+        "Each of you names the one or two things that matter most (a ceremony, a holiday, a value, a name) and the things you can be flexible on.",
+        "Talk about what you want your child to feel and know, not only which label to choose.",
+        "Decide together first, then tell the grandparents as a team: “We’ve decided, and we’d love you to be part of it.”",
+        "Make room for both calendars: Eid and Christmas can both be family days, each with its own small traditions."
+      ],
+      "script": [
+        "Your faith matters to me because it matters to you. Can we each say the one thing we most want for our child, and build from there?"
+      ],
+      "links": [
+        [
+          "Two faiths or cultures, one family",
+          "/two-faiths.html"
+        ],
+        [
+          "Supporting family, and family expectations",
+          "/family-obligations.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "holidaysplit",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "splitting holidays between two families",
+      "pat": "\\b(split|share|divide|alternate|choose between|juggle)\\b.{0,30}\\b(holidays?|christmas|thanksgiving|easter|eid|diwali|hanukkah)\\b.{0,40}\\b(both|two|our|his|her|my|their) (families|family|sides|parents|in ?laws)\\b|\\b(both|two) (families|sides)\\b.{0,30}\\b(holidays?|christmas|thanksgiving|easter)\\b",
+      "notPat": "\\b(ex|exes|custody|coparent\\w*|co parent\\w*|separated|divorced|two homes)\\b",
+      "keys": [],
+      "what": [
+        "Splitting holidays between two families is one of the most common tugs-of-war for couples. It helps to decide as a team first, then tell both families together."
+      ],
+      "how": [
+        "Each of you says which day or tradition matters most to you, and why.",
+        "Pick a fair pattern: alternate years, split the day, or host both families once.",
+        "Tell both families early, as “we”: “This year we’re with my parents on Christmas Eve and yours on Christmas Day.”",
+        "Keep one small tradition that’s just yours."
+      ],
+      "script": [
+        "Which holiday matters most to you? Let’s plan around that, and then tell both families together."
+      ],
+      "links": [
+        [
+          "Supporting family, and family expectations",
+          "/family-obligations.html"
+        ],
+        [
+          "Two faiths or cultures, one family",
+          "/two-faiths.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "moneycontrol",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "money limits: normal, or controlling?",
+      "pat": "\\b(is it|is that|is this|is (he|she|they)( being)?|am i( being)?|are (we|you)|would it be)\\b.{0,40}\\bcontrolling\\b.{0,60}\\b(money|buy\\w*|bought|spend\\w*|purchases?|budget|bank|card|finances?)\\b|\\b(money|buy\\w*|spend\\w*|purchases?|budget|finances?)\\b.{0,60}\\bcontrolling\\b|\\bcontrolling (about|with|over) (money|spending|finances)\\b|\\b(check|ask) with me before (he|she|they) (buys?|spends?)\\b",
+      "keys": [],
+      "what": [
+        "Fair question. Agreeing limits on money is normal. Control is something different, and the difference is usually clear once you look at it."
+      ],
+      "how": [
+        "Normal: a limit you both agree, that applies to both of you, like “we check with each other before anything over $200.”",
+        "Normal: either of you can raise it, change it, or say no, without fear.",
+        "Not normal: it’s one-sided (only one of you has to ask), hidden, or punished, with anger, the silent treatment or a card taken away.",
+        "Not normal: you have to ask for money you need, explain every receipt, or aren’t allowed to work or see the accounts. If that sounds familiar, the Not safe at home? page lists the signs, and people you can talk to privately."
+      ],
+      "script": [
+        "Can we agree one amount where we both check with each other first? Same rule for both of us, and we look at it again in a month."
+      ],
+      "links": [
+        [
+          "Money together: styles, limits, and normal vs control",
+          "/money-together.html"
+        ],
+        [
+          "Not safe at home? The signs of control",
+          "/safety.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "moneystyles",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "saver and spender: different money styles",
+      "pat": "\\b(i m|im|i am|he|she|he is|she is|theyre|they are|my \\w+ is|were|we are|one of us is)( a| the)? (big |natural )?(saver|spender|tightwad|cheapskate)\\b|\\bsaver\\b.{0,30}\\bspender\\b|\\bspender\\b.{0,30}\\bsaver\\b|\\b(says|thinks|calls me|told me|tells me) (i m|im|i am) (bad with money|tight|cheap|stingy|irresponsible with money|a spender|too generous)\\b|\\bbad with money\\b|\\b(spends?|spending) (too much|so much|all our|all the|way too much)\\b|\\bmoney styles?\\b|\\b(different|opposite) (money|spending) (styles?|habits|personalities)\\b",
+      "keys": [],
+      "what": [
+        "Money fights are rarely only about money. Savers and spenders usually value different good things: security and freedom, planning and enjoying now. Generosity is a value, not a flaw, and so is caution. The goal is a plan you both chose."
+      ],
+      "how": [
+        "Each say what money means to you: safety, freedom, fun, looking after family.",
+        "Agree the big numbers together: what you save each month, and a fun amount each of you spends with no questions asked.",
+        "Pick a check-first limit that applies to both of you, like any single purchase over $200.",
+        "Look at it once a month for 20 minutes, not in the middle of an argument.",
+        "If you’re scared of them, not just worried about money, that’s different. The Not safe at home? page can help."
+      ],
+      "script": [
+        "I’m a saver; it helps me feel safe. I know you love enjoying life now. Can we agree a fun budget for each of us and a savings amount, and check in monthly?"
+      ],
+      "links": [
+        [
+          "Money together: saver and spender",
+          "/money-together.html"
+        ],
+        [
+          "Money disagreements (Library)",
+          "/library/conflict.html#money-disagreements"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "wedding",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "wedding costs and family hopes",
+      "pat": "\\bwedding\\b|\\bget(ting)? married\\b.{0,30}\\b(cost|costs|money|budget|parents|family)\\b",
+      "keys": [],
+      "what": [
+        "Weddings bring money, family hopes and two family cultures together all at once, so tension is very common. It helps to agree your own priorities as a couple first."
+      ],
+      "how": [
+        "Each of you lists your top three things for the day, and the most you want to spend.",
+        "Decide together what you can afford before talking to parents.",
+        "If parents want something bigger, they can help shape it if they help pay, within limits you set.",
+        "Speak as a team, and let each of you handle your own family."
+      ],
+      "script": [
+        "We’d love your ideas. Our budget is what we can afford; anything beyond that would need to come from you, and the guest list stays ours."
+      ],
+      "links": [
+        [
+          "Money together: wedding costs",
+          "/money-together.html"
+        ],
+        [
+          "Supporting family, and family expectations",
+          "/family-obligations.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "longhours",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "long hours and “you don’t help”",
+      "pat": "\\b(i|he|she) works? (\\d{2}|long|crazy|so many|60|70|50) ?(hours|hour weeks?|hrs)\\b.{0,60}\\b(help|chores|home|house|do enough|dont do|lazy)\\b|\\b(dont|doesnt|never) help\\b.{0,40}\\bwork\\w* (\\d{2}|long|crazy) (hours|hrs)\\b|\\b(thinks|says) (i|he|she) (dont|doesnt|never) help\\b.{0,40}\\bwork\\w*\\b",
+      "keys": [],
+      "what": [
+        "Both things can be true: long hours at work are a real load, and the home still has work that needs doing. The fair way to look at it is the whole load, paid work included, and who has energy for what."
+      ],
+      "how": [
+        "Count paid work, travel and home work together for each of you, for one ordinary week.",
+        "If the totals are close, the friction is probably about the invisible jobs. If they aren’t, look at what can move, be dropped, or be paid for.",
+        "Take one or two home jobs you fully own, start to finish, even with long hours: the weekly shop, Sunday dinner.",
+        "Ask what she most needs. Often it’s noticing and planning, not hours."
+      ],
+      "script": [
+        "I know I’m working long hours, and I don’t want you carrying home alone. Can we look at both our weeks, work included, and pick two jobs that are fully mine?"
+      ],
+      "links": [
+        [
+          "The Lemonade Stand (paid work counts too)",
+          "/lemonade-stand.html"
+        ],
+        [
+          "One owner per job (WP-03)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "toddlers",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "twins, toddlers and two tired parents",
+      "pat": "\\b(twins|toddlers|a toddler|our toddler|two under (two|2|three|3)|baby and a toddler|newborn and a toddler|\\d ?year ?old twins)\\b",
+      "keys": [],
+      "what": [
+        "Two little ones at once is one of the most tiring stages there is. Both of you being exhausted is normal, not a sign you’re doing it wrong."
+      ],
+      "how": [
+        "Protect sleep first: take turns on nights or early mornings, so each of you gets one longer stretch.",
+        "Lower the bar on everything else for now: simple meals, less tidying, more help.",
+        "Give each daily job one owner (bath time, the nursery bag, the night wake-up), so nobody has to ask.",
+        "Ask for specific help: “Could you take them to the park on Saturday morning?”"
+      ],
+      "script": [
+        "We’re both running on empty. Can we take turns on the early mornings, so each of us gets one lie-in this weekend?"
+      ],
+      "links": [
+        [
+          "New parents: tired, and sharing the baby jobs",
+          "/new-parent.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "spanish",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "something in Spanish",
+      "pat": "\\b(in |into )?spanish\\b|\\bespanol\\b|\\ben espanol\\b|\\bespañol\\b",
+      "keys": [],
+      "what": [
+        "Yes. There’s a short page in Spanish with the essentials: sharing the housework, when children fight, calming down when you’re angry, caring for someone, and staying safe. Most other pages can be read in Spanish with your browser’s Translate option (in Chrome: the ⋮ menu, then Translate)."
+      ],
+      "how": [
+        "Send her the page: it opens on any phone, with no account.",
+        "For tools like the Lemonade Stand, turn on the browser’s translate option; the buttons and labels translate too."
+      ],
+      "links": [
+        [
+          "En español",
+          "/en-espanol.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "illburden",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "feeling like a burden when you’re ill",
+      "pat": "\\bburden\\b.{0,40}\\b(my )?(husband|wife|partner|boyfriend|girlfriend|carer|caregiver|spouse)\\b|\\b(husband|wife|partner|boyfriend|girlfriend|carer|caregiver|spouse)\\b.{0,40}\\bburden\\b|\\b(ill|illness|sick|disabled|disability|chronic\\w*|chronically ill|pain|me cfs|mecfs|cfs|long covid|fibromyalgia|fibro|lupus|ms|crohns?|endometriosis|arthritis)\\b.{0,60}\\bburden\\b|\\bburden\\b.{0,60}\\b(ill|illness|sick|disabled|disability|chronic\\w*|chronically ill|pain|me cfs|mecfs|cfs|long covid|fibromyalgia|fibro|lupus|ms|crohns?|endometriosis|arthritis)\\b",
+      "notPat": "\\b(mum|mom|mother|dad|father|parents?) (made|makes|treated) me\\b",
+      "keys": [],
+      "what": [
+        "Being ill isn’t being a burden. You’re a partner who is ill, and what you bring to the relationship isn’t measured in chores. Feeling this way is very common, and it’s worth saying out loud to them."
+      ],
+      "how": [
+        "Tell them the feeling, not only the guilt: “I feel like a burden, and I hate it.” Most partners want to hear that.",
+        "Share by energy, not hours: each of you does what you can on the energy you have that day.",
+        "Keep a list of things you can own from bed or the sofa: planning meals, online orders, birthdays, calls.",
+        "Make sure the carer side has support too, so neither of you runs on empty.",
+        "If the feeling turns into thoughts that they’d be better off without you, tell your doctor or someone you trust today."
+      ],
+      "script": [
+        "I feel like a burden, and I hate it. Can we talk about what I can still own, so it feels more like a team?"
+      ],
+      "links": [
+        [
+          "When one of you is ill or disabled",
+          "/when-one-is-ill.html"
+        ],
+        [
+          "Caring for someone you love (their side)",
+          "/caregivers.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "illchores",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "sharing the load when one of you is ill",
+      "pat": "\\b(ill|illness|sick|disabled|disability|chronic\\w*|chronically ill|pain|me cfs|mecfs|cfs|long covid|fibromyalgia|fibro|lupus|ms|crohns?|endometriosis|arthritis)\\b.{0,60}\\b(chores|split|share|fair\\w*|housework|bed|energy|bad days?|do my part|help)\\b|\\bsome days i (cant|can t) get out of bed\\b|\\b(from|in) bed on (bad|my bad|low) days\\b|\\bfrom bed\\b.{0,30}\\b(bad days?|help|do)\\b|\\bbad days?\\b.{0,30}\\b(from bed|in bed|energy)\\b|\\bspoons?\\b.{0,20}\\b(theory|left|energy)\\b",
+      "notPat": "\\b(my (mum|mom|mother|dad|father|parents?|husband|wife|partner) (has|with|is ill|is sick)|caring for|looking after)\\b",
+      "keys": [],
+      "what": [
+        "When one of you is ill or disabled, a fair split is about energy, not hours. You still count, and there’s more you can own than you might think."
+      ],
+      "how": [
+        "Rate your energy each morning (good, low, bed day) and share it, so plans fit the day.",
+        "Own jobs you can do from bed or a chair on bad days: meal planning and online shopping, bills, booking appointments, birthdays and cards, calls and admin.",
+        "On good days, resist doing everything. Pacing protects tomorrow.",
+        "Agree what gets dropped or simplified on bad days, so it isn’t a fresh decision each time.",
+        "Count the carer’s load too, and find them some support."
+      ],
+      "script": [
+        "Today’s a bed day for me. I can do the online shop and the calls from here. Could you do the school run?"
+      ],
+      "links": [
+        [
+          "When one of you is ill or disabled",
+          "/when-one-is-ill.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "forgiveok",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "whether you have to forgive",
+      "pat": "\\b(is it|its|it is|is it ever) (ok|okay|alright|fine|wrong|bad) (to |if i )?(not|dont|don t|never) (to )?forgive\\w*\\b|\\bnot (ready|able|willing) to forgive\\b|\\b(cant|can t|dont want to|do not want to) forgive\\b",
+      "keys": [],
+      "what": [
+        "Yes. Forgiving is yours to give or not, and it can’t be rushed. Reconciling is a separate choice. You can let go of anger without letting someone back in, and you can be in touch without saying what happened was okay."
+      ],
+      "how": [
+        "Notice what you actually want: peace for yourself, a relationship again, an apology, or distance.",
+        "You can say “I’m not ready” and leave the door where it is, open or closed.",
+        "If anger is eating at you, talking it through with a counsellor or someone you trust helps, for you, not for them."
+      ],
+      "script": [
+        "I’m not ready to talk about it yet. I’ll let you know if that changes."
+      ],
+      "links": [
+        [
+          "“I’m not ready”, and “I don’t have to”",
+          "/family-rifts.html#not-ready"
+        ],
+        [
+          "Adult siblings and family rifts",
+          "/family-rifts.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "mustreconcile",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "whether you have to reconcile",
+      "pat": "\\b(do|must|should) i (have to |really have to |need to )?(reconcile|make up|forgive|make peace)\\b.{0,30}\\b(with )?(my )?(brother|sister|sibling\\w*|family|dad|father|mum|mom|mother|parents?|him|her|them)?\\b|\\bhave i got to (reconcile|forgive)\\b",
+      "notPat": "\\b(accounts?|bank|statements?|books|numbers|figures|spreadsheet|ledger|receipts)\\b",
+      "keys": [],
+      "what": [
+        "No, you don’t have to. Forgiving is yours to give or not, and reconciling is a separate choice. Some people reconnect, some keep a polite distance, and some stay apart. Each can be the right answer."
+      ],
+      "how": [
+        "Notice what you actually want: peace for yourself, a relationship again, an apology, or distance.",
+        "If you want to try, start small, with no demand attached: a card, a short message.",
+        "If you don’t, you can still let go of some of the anger, for your own sake."
+      ],
+      "script": [
+        "I’m not ready to talk about it yet. I’ll let you know if that changes."
+      ],
+      "links": [
+        [
+          "“I’m not ready”, and “I don’t have to”",
+          "/family-rifts.html#not-ready"
+        ],
+        [
+          "Reaching out after years of silence",
+          "/family-rifts.html#reaching-out"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "inheritance",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a will, an inheritance, and siblings",
+      "pat": "\\b(in the will|the will|his will|her will|their will|inheritance|inherit\\w*|the estate|executor|probate)\\b.{0,50}\\b(brother|sister|sibling\\w*|family|dispute|fight|unfair|fell out)\\b|\\b(brother|sister|sibling\\w*)\\b.{0,50}\\b(in the will|inherit\\w*|inheritance|the estate|got (dad|mum|mom|the) (house|money|everything))\\b|\\bgot (dad|mum|mom|our parents|my parents|grandma|grandad) (house|money|everything)\\b|\\binheritance (dispute|fight|row)\\b",
+      "keys": [],
+      "what": [
+        "Wills and inheritance can reopen old family wounds. It often feels like a final message about who mattered, so feeling hurt or angry makes sense."
+      ],
+      "how": [
+        "Separate the money from the meaning: what hurts most, the house itself, or what it seemed to say?",
+        "Get facts before conversations: ask the executor or a solicitor or lawyer what the will says and what your options are.",
+        "If you talk to your sibling, start with the feeling, not the verdict: “I was hurt by the will, and I don’t want it to end us.”",
+        "A family mediator can help you talk about an estate without going to court."
+      ],
+      "script": [
+        "I was hurt by the will, and I don’t want it to end us. Could we talk about it, with someone neutral if that helps?"
+      ],
+      "links": [
+        [
+          "When money and a will divide you",
+          "/family-rifts.html#money"
+        ],
+        [
+          "Adult siblings and family rifts",
+          "/family-rifts.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "favourite",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "the favourite child",
+      "pat": "\\b(was|is|were|always been) (always )?(the |mum |mom |dad |their |her |his )?(favou?rite|golden child|favou?red one|favou?red)\\b|\\bfavou?ritism\\b|\\bgolden child\\b",
+      "keys": [],
+      "what": [
+        "Growing up as the less-favoured child leaves a real mark, and it can come back hard as adults, especially around a parent getting older, a will, or a loss. Your feelings about it make sense."
+      ],
+      "how": [
+        "It wasn’t your sibling’s doing that a parent had a favourite, even if they benefited. Try to keep the two hurts apart.",
+        "Say what you needed, at least to yourself: “I needed to feel I mattered as much.”",
+        "If you talk to your parent or sibling, describe your experience, not their motives: “I often felt second.”",
+        "Old family roles return fast at family events. It’s okay to respond as the adult you are now."
+      ],
+      "script": [
+        "I often felt second growing up. I’m not blaming you. I’d just like us to be closer now."
+      ],
+      "links": [
+        [
+          "Old roles that come back",
+          "/family-rifts.html#old-roles"
+        ],
+        [
+          "Adult siblings and family rifts",
+          "/family-rifts.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "siblingrift",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "reaching out after a family rift",
+      "pat": "\\b(brother|sister|sibling\\w*|dad|father|mum|mom|mother|son|daughter|cousin)\\b.{0,50}\\b(years|silence|havent spoken|haven t spoken|not spoken|dont speak|don t speak|do not speak|estrang\\w*|fell out|falling out|no contact|cut (me |us )?off|reach out|reaching out|reconcil\\w*|rift)\\b|\\b(estrang\\w*|rift|fell out|falling out|no contact)\\b.{0,40}\\b(brother|sister|sibling\\w*|family|dad|father|mum|mom|mother)\\b|\\breconcil\\w* with (my )?(brother|sister|family|dad|mum|mom|father|mother|parents?|son|daughter)\\b|\\bsibling estrangement\\b",
+      "notPat": "\\b(little|younger|baby|big|older) (brother|sister)\\b|\\b(i m|im|i am) 1[0-7]\\b|\\bshare a room\\b|\\bmy (son|daughter) (and|is|has)\\b.{0,20}\\b(1[0-7]|teen\\w*)\\b",
+      "keys": [],
+      "what": [
+        "Years of silence can feel impossible to cross, and it’s rarely one person’s fault. Reaching out usually works best small, warm, and with no demand attached."
+      ],
+      "how": [
+        "Start with a short message that asks for nothing: “I’ve been thinking about you. I’d like to be in touch, if you would. No pressure.”",
+        "Don’t open with the old argument. If you want to talk about it, ask later: “Would you be willing to talk about what happened, one day?”",
+        "Expect a slow reply, or none. That’s their choice, and it isn’t the end of the story.",
+        "Decide in advance what you’d be happy with: cards at birthdays, a coffee, or more."
+      ],
+      "script": [
+        "I’ve been thinking about you, and I miss having you in my life. I’d like to be in touch, if you would. No pressure to reply."
+      ],
+      "links": [
+        [
+          "Reaching out after years of silence",
+          "/family-rifts.html#reaching-out"
+        ],
+        [
+          "“I’m not ready”, and “I don’t have to”",
+          "/family-rifts.html#not-ready"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "emptynest",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when the kids have grown and gone",
+      "pat": "\\bempty nest\\w*\\b|\\b(kids|children|son|daughter|youngest|last one|eldest|oldest)\\b.{0,30}\\b(left|moved out|gone|went|off) (for|to) (university|uni|college)\\b|\\b(kids|children)\\b.{0,20}\\b(have |all )?(left home|moved out|flown the nest|grown and gone)\\b|\\bhouse is (so )?(quiet|empty)\\b.{0,40}\\b(kids|children|university|uni|college)\\b|\\b(kids|children|university|uni|college)\\b.{0,40}\\bhouse is (so )?(quiet|empty)\\b",
+      "keys": [],
+      "what": [
+        "When the children leave, the house can go quiet in a way that’s surprisingly hard, and many couples find they’ve been talking mostly about the kids for years. It’s a normal stage, and a chance to rebuild what’s just yours."
+      ],
+      "how": [
+        "Name it together: “It’s so quiet. I miss them, and I don’t quite know what we do now.”",
+        "Start one small ritual for the two of you: a weekly walk, a new place to eat, cooking something new.",
+        "Ask each other a real question that isn’t about the kids: “What do you want the next ten years to look like?”",
+        "Stay close to the kids in a way that doesn’t lean on them: a weekly call, a visit each term."
+      ],
+      "script": [
+        "It’s so quiet without them. I miss them. Shall we try something new together this weekend, just us?"
+      ],
+      "links": [
+        [
+          "Kids grown and gone: when the house is quiet",
+          "/empty-nest.html"
+        ],
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "feelingstalk",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "talking about feelings",
+      "pat": "\\b(doesnt|does not|dont|wont|will not|never|cant|can t|cannot) (really )?(talk|speak|open up|share) about (his |her |their |my |our )?(feelings|emotions)\\b|\\bhow (to|do i|can i|do we|can we) (talk|speak) about (our |my |his |her )?(feelings|emotions)\\b|\\b(hard|difficult|awkward) to (talk|speak) about (my |our )?(feelings|emotions)\\b|\\b(never|doesnt|dont) (talks?|opens? up)\\b.{0,20}\\b(feelings|emotions)\\b",
+      "keys": [],
+      "what": [
+        "Lots of people were never taught to talk about feelings, and many show care by doing instead: fixing things, providing, turning up. That’s real care. You can build the words slowly, without a big talk."
+      ],
+      "how": [
+        "Notice care in actions and thank it out loud: “Thank you for sorting the car. That really helped.”",
+        "Start tiny: one fact and one feeling a day. “Work was long. I’m tired, and glad to be home.”",
+        "Talk side by side, not face to face: on a walk, in the car, while cooking.",
+        "Ask easy questions with choices: “Was today more good or more hard?”"
+      ],
+      "script": [
+        "I know you show love by doing things, and I see it. I’d also love to hear one thing about your day each evening, even just a sentence."
+      ],
+      "links": [
+        [
+          "Check-ins: short, regular, kind",
+          "/check-ins.html"
+        ],
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "feelsfine",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "when they feel distant and you feel fine",
+      "pat": "\\b(says|thinks|feels|told me) (we re|were|we are|we have|weve) (not close|distant|drifting|drifted|disconnected|grown apart|like roommates|not connected)\\b.{0,40}\\b(fine|ok|okay|good|happy|great)\\b|\\b(she|he|they|my \\w+) (says|thinks|feels)\\b.{0,50}\\bbut (i think |to me )?(everything|it|things|we) (is|s|are|seems?|seem|feel|feels)? ?(fine|ok|okay|good|great)\\b",
+      "keys": [],
+      "what": [
+        "It’s common for one partner to feel close and the other to feel far, at the same time. Her feeling is real information, even if things feel fine to you, and you don’t have to agree to listen."
+      ],
+      "how": [
+        "Ask before you explain: “What would feeling close look like for you this week?”",
+        "Listen for small, specific things (a question about her day, ten minutes without phones), not a big overhaul.",
+        "Try one turning-toward habit for a week: answer her small reaches for attention, a comment, a look, a question.",
+        "Check back in a week: “Has anything felt different?”"
+      ],
+      "script": [
+        "Things feel fine to me, and I don’t want to brush off how you feel. Can you tell me what would help you feel closer?"
+      ],
+      "links": [
+        [
+          "Turning Toward: seven small ways to connect",
+          "/turning-toward.html"
+        ],
+        [
+          "Check-ins",
+          "/check-ins.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "autisticwork",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "asking for what helps at work",
+      "pat": "\\b(noise|noisy|loud|too loud|sound)\\b.{0,30}\\b(at work|office|workplace|open plan|my desk)\\b|\\b(office|workplace|open plan|work)\\b.{0,20}\\b(is |s |gets )?(too |so |really )?(loud|noisy)\\b|\\bquiet (break|space|room|corner)\\b.{0,20}\\b(at work|work|office)\\b|\\b(need|want|take) a quiet break\\b|\\b(manager|boss|supervisor|team lead|line manager)\\b.{0,40}\\b(vague|unclear|write (it |things |them )?down|written|in writing|instructions)\\b|\\b(written|clear|clearer) instructions\\b|\\b(tell|telling|disclose|disclosing|say)\\b.{0,20}\\b(my )?(manager|boss|work|employer|hr|colleagues|team)\\b.{0,20}\\b(i m|im|i am|that i m|that im|that i am|about my|about being|im an?) (autistic|autism|adhd|neurodivergent|dyslexic|on the spectrum)\\b|\\bstep away when it (gets )?(loud|noisy|too much)\\b|\\b(reasonable )?adjustments\\b.{0,20}\\b(work|autism|autistic|adhd)\\b|\\baccommodations?\\b.{0,20}\\b(work|autism|autistic|adhd)\\b",
+      "keys": [],
+      "what": [
+        "Asking for what helps you work well is reasonable, and clear, specific asks usually land best. Many workplaces make changes like these, and in many countries autistic people have a legal right to reasonable adjustments."
+      ],
+      "how": [
+        "Noise: ask for a quieter spot, noise-cancelling headphones, or short quiet breaks: “When it gets loud I need ten minutes somewhere quiet, then I’m back and focused.”",
+        "Instructions: ask for tasks in writing, with what “done” looks like and the deadline.",
+        "Telling your manager you’re autistic is your choice. If you do, keep it practical: what it means for you at work, and two or three things that help.",
+        "Afterwards, put what you agreed in a short email, so it’s remembered."
+      ],
+      "script": [
+        "I work best with written instructions. Could you send tasks by email, with what done looks like and the deadline?",
+        "I’m autistic. For me that means noise drains me fast, and clear written steps help me do my best work. Could we try a quiet break and written tasks?"
+      ],
+      "scriptLabels": [
+        "Asking for written instructions",
+        "If you choose to tell your manager"
+      ],
+      "links": [
+        [
+          "Autistic at work",
+          "/work.html#autistic-at-work"
+        ],
+        [
+          "Different wiring at work",
+          "/work.html#neurodiversity"
+        ],
+        [
+          "The Signal Translator (work mode)",
+          "/signal-translator.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "isthisrude",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "checking whether a message sounds rude",
+      "pat": "^(is (this|that|it) (rude|too blunt|blunt|harsh|too harsh|mean|passive aggressive|ok to send|okay to send|too direct)|does (this|that|it) sound (rude|harsh|blunt|mean|passive aggressive|cold))\\b|\\bhow (does|will|would) (this|my message|my email|my text|that) (sound|come across|land)\\b",
+      "keys": [],
+      "what": [
+        "The Signal Translator is made for exactly this. Paste your sentence, choose the work setting, and it shows how it may land and a version that keeps your meaning."
+      ],
+      "how": [
+        "Open the Signal Translator and paste the sentence.",
+        "Choose work, and who it’s to (your manager, a colleague, the team).",
+        "Read how it may land, then pick or tweak a version.",
+        "Tip: blunt isn’t rude by itself. One line of warmth or reason often fixes it: “Thanks for this. One fix: the totals on page 2 don’t match.”"
+      ],
+      "links": [
+        [
+          "The Signal Translator",
+          "/signal-translator.html"
+        ],
+        [
+          "Messages at work",
+          "/work.html#messages"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "sharingroom",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "sharing a room",
+      "pat": "\\b(dorm|dorm room|share a room|sharing a room|shared room|room agreement|bunk beds?|halls of residence)\\b",
+      "notPat": "\\b(brother|sister|sibling|stepbrother|stepsister)\\b",
+      "keys": [],
+      "what": [
+        "Sharing a room is close quarters for anyone, and most of the friction is about small, daily things: sleep, guests, noise, mess. A short room agreement, made early and kindly, prevents most of it."
+      ],
+      "how": [
+        "Agree the basics together: quiet hours, guests and overnight visitors, lights out, cleaning, borrowing.",
+        "Write it down and check it after a month.",
+        "Raise small things early and privately, as “our room”, not “your mess”.",
+        "If it gets stuck, your RA or housing office can help you talk it through."
+      ],
+      "script": [
+        "Could we make a quick room agreement? Quiet hours, guests and cleaning, so neither of us has to guess."
+      ],
+      "links": [
+        [
+          "Sharing a room (with a room agreement)",
+          "/sharing-a-room.html"
+        ],
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "gaycouple",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "same-sex and queer couples",
+      "pat": "\\b(gay|lesbian|queer|same sex|samesex|two (men|women|dads|mums|moms))\\b.{0,20}\\b(couples?|partners|marriage|married|relationship|parents|family)\\b|\\b(we|were|we are)( a)? (gay|lesbian|queer)\\b|\\b(does|do|will|is|can) (this|it|the site|everything|the program)\\b.{0,30}\\b(gay|lesbian|same sex|lgbt\\w*|queer)\\b",
+      "keys": [],
+      "what": [
+        "Yes. Everything here works for any couple: same-sex, queer, trans or nonbinary partners, and more than two. Nothing here assumes a husband and a wife."
+      ],
+      "how": [
+        "Every tool lets you type your own names, so it says “Sam and Alex”, not “husband and wife”.",
+        "If you’re working through coming out as an adult, to family, at work or with a partner, there’s a page for that.",
+        "If a family reaction could put you at risk, the Not safe at home? page can help you plan."
+      ],
+      "links": [
+        [
+          "Coming out as an adult",
+          "/coming-out.html"
+        ],
+        [
+          "Start here",
+          "/start-here.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "longstay",
       "kind": "intent",
       "first": true,
@@ -1132,6 +2772,10 @@
       ],
       "links": [
         [
+          "Coming out as an adult",
+          "/coming-out.html"
+        ],
+        [
           "Not safe at home? (if a reaction could be dangerous)",
           "/safety.html"
         ],
@@ -1389,11 +3033,11 @@
       "first": true,
       "newTopic": true,
       "name": "is this backed by research",
-      "pat": "\\b(is|are) (this|it|the site|these|that|the wave code|wavelength|the program) (backed|based|grounded|supported) (by|on|in) (research|science|evidence|studies)\\b|\\b(where|what) are (the|your) (sources|references|citations)\\b|\\bwhat (evidence|research|science) is (this|it|the site) based on\\b|\\b(scientifically|clinically) (valid|proven|tested)\\b|\\bjust myers ?briggs\\b|\\bevidence based\\b",
+      "pat": "\\b(is|are) (this|it|the site|these|that|the wave code|wavelength|the program) (backed|based|grounded|supported) (by|on|in) (research|science|evidence|studies)\\b|\\b(where|what) are (the|your) (sources|references|citations)\\b|\\bwhat (evidence|research|science) is (this|it|the site) based on\\b|\\b(scientifically|clinically) (valid|proven|tested)\\b|\\bjust myers ?briggs\\b|\\bevidence based\\b|\\b(any|is there|what|where is the) (evidence|research|proof|studies)\\b.{0,40}\\b(works?|effective|helps?|program|site)\\b|\\bdoes (this|the program|the site|it) (actually |really )?work\\b$|\\b(clinically|scientifically) (tested|proven)\\b",
       "notPat": "",
       "keys": [],
       "what": [
-        "Fair question. The guides draw on published research and name it: each entry in the Professor’s Library has a “What the research says, and its limits” note with its sources, and says where the evidence is thin. Anything marked “This site’s idea” is ours, not established science."
+        "Fair question, and an honest answer: the program is built from published research, but the program itself hasn’t been tested in a clinical trial. The guides draw on published research and name it: each entry in the Professor’s Library has a “What the research says, and its limits” note with its sources, and says where the evidence is thin. Anything marked “This site’s idea” is ours, not established science."
       ],
       "how": [
         "Wavelength (Wave Codes) and the Wiring Card are ways to describe preferences, not tests that measure you. They aren’t validated psychometric instruments like a clinical assessment.",
@@ -1411,6 +3055,10 @@
         [
           "The Professor’s Library",
           "/library.html"
+        ],
+        [
+          "How it was built, and what it can’t claim",
+          "/for-counselors.html#evidence"
         ],
         [
           "Method and honest limits",
@@ -3857,7 +5505,7 @@
       "first": true,
       "newTopic": true,
       "name": "being on your own after a breakup or divorce",
-      "pat": "\\b(just |recently |finally )?(got |getting |going through (a |my )?)?divorc\\w*\\b.{0,40}\\b(lost|alone|lonely|empty|sad|lost myself|starting over|don t know who i am|rebuild\\w*)\\b|\\b(after|since) (my |the |our )?(divorce|breakup|break up|separation|split)\\b|\\b(broke|broken) up\\b.{0,40}\\b(lost|alone|lonely|sad|empty)\\b|\\b(my )?ex (texts|text|messages|calls|emails|contacts)\\b|\\b(texts|messages|calls) from (my )?ex\\b|\\bstarting over\\b|\\bon my own (again|now)\\b|\\bfind myself again\\b",
+      "pat": "\\b(just |recently |finally )?(got |getting |going through (a |my )?)?divorc\\w*\\b.{0,40}\\b(lost|alone|lonely|empty|sad|lost myself|starting over|don t know who i am|rebuild\\w*)\\b|\\b(after|since) (my |the |our )?(divorce|breakup|break up|separation|split)\\b|\\b(broke|broken) up\\b.{0,40}\\b(lost|alone|lonely|sad|empty)\\b|\\b(my )?ex (texts|text|messages|calls|emails|contacts)\\b|\\b(texts|messages|calls) from (my )?ex\\b|\\bstarting over\\b|\\bon my own (again|now)\\b|\\bfind myself again\\b|\\b(build|rebuild|start) (a |my )?life (again )?after (my |the |a )?(divorce|breakup|separation)\\b",
       "notPat": "\\b(kids?|children|son|daughter|custody|handoffs?|pick ?-? ?up|drop ?-? ?off|co ?-? ?parent\\w*)\\b",
       "keys": [],
       "what": [
@@ -3871,6 +5519,10 @@
       ],
       "script": "I’ll get back to you on that tomorrow.",
       "links": [
+        [
+          "On my own after a breakup or divorce",
+          "/on-my-own.html"
+        ],
         [
           "Your self-discovery path",
           "/self-path.html"

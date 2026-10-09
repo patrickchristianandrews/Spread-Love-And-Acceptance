@@ -25,7 +25,7 @@
   .br-jump li{ margin:0; max-width:none; }
   .br-jump a{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.45rem .95rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
   .br-jump a:hover, .br-jump a:focus-visible{ border-color:var(--credit); }
-  .br-filter{ position:sticky; top:0; z-index:5; margin:0 0 1.25rem; padding:.75rem 0 .5rem; background:var(--bg, var(--paper)); }
+  .br-filter{ margin:0 0 1.25rem; padding:.25rem 0 .5rem; }
   .br-filter label{ display:block; font-family:"Fraunces", Georgia, serif; font-weight:600; margin-bottom:.35rem; }
   .br-filter input{ display:block; width:100%; box-sizing:border-box; min-height:48px; padding:.6rem .9rem; font:inherit; font-size:1.05rem; color:inherit; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); }
   .br-filter input:focus{ outline:2px solid var(--credit); outline-offset:2px; }
@@ -95,10 +95,10 @@
   <p class="br-count" id="br-count" aria-live="polite"></p>
 </div>
 <p class="br-none" id="br-none" hidden>Nothing matches that yet. Try a shorter word, or <a href="/ask.html">ask Professor Puddles</a>.</p>
-<section class="br-group" id="just-me" aria-labelledby="just-me-h">
+<section class="br-group no-bubble" id="just-me" aria-labelledby="just-me-h">
 <h2 id="just-me-h"><span class="br-emoji" aria-hidden="true">🌱</span> Just me</h2>
 <p class="br-desc">For you, on your own. Nobody else has to join in.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Get to know yourself</h3>
 <ul class="br-links no-bubble">
   <li data-k="self solo alone"><a href="/self-path.html"><strong>Your self-discovery path</strong><span>Your battery, your wiring, what settles you and kind words, step by step</span></a></li>
@@ -112,7 +112,7 @@
   <li data-k="worksheet pdf"><a href="/workpapers/fill/suite.html?road=self"><strong>Workpapers for you</strong><span>The “Just me” worksheets, in order, fillable and printable</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>When it’s a lot right now</h3>
 <ul class="br-links no-bubble">
   <li data-k="mood check-in stress"><a href="/quick-checks.html#today"><strong>Today’s Weather</strong><span>One minute on how you are today, and what today is good for</span></a></li>
@@ -122,7 +122,7 @@
   <li data-k="calm down angry"><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>A five-minute page: a pause, a breathing pacer, and how to come back</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Your own season of life</h3>
 <ul class="br-links no-bubble">
   <li data-k="single divorce breakup separated"><a href="/on-my-own.html"><strong>On my own after a breakup or divorce</strong><span>Building a life again, and part-time parenting</span></a></li>
@@ -133,10 +133,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="couples" aria-labelledby="couples-h">
+<section class="br-group no-bubble" id="couples" aria-labelledby="couples-h">
 <h2 id="couples-h"><span class="br-emoji" aria-hidden="true">💞</span> Couples and partners</h2>
 <p class="br-desc">For partners, living together or apart, two of you or more.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Talking and fighting less</h3>
 <ul class="br-links no-bubble">
   <li data-k="argue arguing fight"><a href="/how-to-stop-fighting-with-your-partner.html"><strong>How to stop fighting with your partner</strong><span>Seven calm steps, from the first sign to fixing the setup behind repeat fights</span></a></li>
@@ -151,7 +151,7 @@
   <li data-k="adhd autism"><a href="/neurodivergent-relationships.html"><strong>Neurodivergent relationships</strong><span>Practical tips for ADHD, autistic and AuDHD couples</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Sharing the load and money</h3>
 <ul class="br-links no-bubble">
   <li data-k="chores bills"><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>List who did what this week and see the split as a plain fact</span></a></li>
@@ -162,7 +162,7 @@
   <li data-k="program"><a href="/prog-01.html"><strong>The six-week program</strong><span>A guided six weeks for fairer chores</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Your situation</h3>
 <ul class="br-links no-bubble">
   <li data-k="poly polyamory polyamorous triad throuple"><a href="/more-than-two.html"><strong>More than two partners</strong><span>Polyamorous homes and triads: sharing the load, and joining a home</span></a></li>
@@ -180,10 +180,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="friends" aria-labelledby="friends-h">
+<section class="br-group no-bubble" id="friends" aria-labelledby="friends-h">
 <h2 id="friends-h"><span class="br-emoji" aria-hidden="true">🤝</span> Friends</h2>
 <p class="br-desc">For friendships that drifted, went quiet, or need a kind word.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
   <li data-k="friendship"><a href="/friends.html"><strong>Friends</strong><span>When a friendship drifts, or you’re always the one reaching out</span></a></li>
   <li data-k="baby"><a href="/friends.html#after-baby"><strong>When a friend has a baby</strong><span>Staying close when life changes pull you apart</span></a></li>
@@ -197,10 +197,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="family" aria-labelledby="family-h">
+<section class="br-group no-bubble" id="family" aria-labelledby="family-h">
 <h2 id="family-h"><span class="br-emoji" aria-hidden="true">🏡</span> Family</h2>
 <p class="br-desc">Parents and kids, grandparents, grown-up children, siblings and the people you care for.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Parents and kids</h3>
 <ul class="br-links no-bubble">
   <li data-k="kids children mum dad mom"><a href="/parents.html"><strong>For parents</strong><span>Big feelings, siblings who fight, calm-down routines and teens</span></a></li>
@@ -213,7 +213,7 @@
   <li data-k="cartoon kids"><a href="/frequency-buddies.html"><strong>Frequency Buddies</strong><span>A kids’ cartoon about feelings to watch together</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Grandparents, grown-up children and in-laws</h3>
 <ul class="br-links no-bubble">
   <li data-k="grandma grandpa grandkids"><a href="/grandparents.html"><strong>For grandparents</strong><span>Help with the grandkids without taking over</span></a></li>
@@ -221,7 +221,7 @@
   <li data-k="in-law mother-in-law"><a href="/grown-up-children.html#in-laws"><strong>In-laws</strong><span>When your partner’s family has different ways</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Siblings, rifts and duty</h3>
 <ul class="br-links no-bubble">
   <li data-k="estranged siblings rift"><a href="/family-rifts.html"><strong>Family rifts and estrangement</strong><span>Adult siblings, a will, years of silence</span></a></li>
@@ -229,7 +229,7 @@
   <li data-k="religion"><a href="/two-faiths.html"><strong>Two faiths, one family</strong><span>Holidays, naming the baby and family expectations</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Caring and different needs</h3>
 <ul class="br-links no-bubble">
   <li data-k="carer caregiver"><a href="/caregivers.html"><strong>Caring for someone you love</strong><span>When they can’t share the load back, and where to find respite</span></a></li>
@@ -239,10 +239,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="co-parents" aria-labelledby="co-parents-h">
+<section class="br-group no-bubble" id="co-parents" aria-labelledby="co-parents-h">
 <h2 id="co-parents-h"><span class="br-emoji" aria-hidden="true">🔁</span> Separated and co-parents</h2>
 <p class="br-desc">For parents raising children across two homes.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
   <li data-k="coparent co-parenting divorce"><a href="/co-parenting.html"><strong>Separated co-parents</strong><span>Calmer handoffs, a tone check, and a parallel-parenting route</span></a></li>
   <li data-k="handover"><a href="/co-parenting.html#handoff"><strong>Calmer handoffs</strong><span>Four steps for the hand-over moment</span></a></li>
@@ -256,15 +256,15 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="housemates" aria-labelledby="housemates-h">
+<section class="br-group no-bubble" id="housemates" aria-labelledby="housemates-h">
 <h2 id="housemates-h"><span class="br-emoji" aria-hidden="true">🔑</span> Housemates and roommates</h2>
 <p class="br-desc">For people sharing a home, a flat or a room.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
-  <li data-k="dorm student flatmate"><a href="/sharing-a-room.html"><strong>Sharing a room</strong><span>Dorm or flat: a room agreement to fill in together</span></a></li>
-  <li data-k="flatmates housemates"><a href="/share-the-load.html#roommates"><strong>Share the load: roommates</strong><span>Splitting the jobs fairly when you share a home</span></a></li>
+  <li data-k="dorm student flatmate roommate housemate"><a href="/sharing-a-room.html"><strong>Sharing a room</strong><span>Dorm or flat: a room agreement to fill in together</span></a></li>
+  <li data-k="flatmates housemates roommate"><a href="/share-the-load.html#roommates"><strong>Share the load: roommates</strong><span>Splitting the jobs fairly when you share a home</span></a></li>
   <li data-k="chores"><a href="/chore-chart-for-couples.html#roommates"><strong>A chore chart for roommates</strong><span>Free and printable, one owner per job</span></a></li>
-  <li><a href="/relationships.html#roommates"><strong>Tools for roommates</strong><span>Which tools on this site work for housemates</span></a></li>
+  <li data-k="roommate"><a href="/relationships.html#roommates"><strong>Tools for roommates</strong><span>Which tools on this site work for housemates</span></a></li>
   <li data-k="chores bills"><a href="/lemonade-stand.html"><strong>The Lemonade Stand</strong><span>Who did what this week, as a plain fact</span></a></li>
   <li data-k="chores"><a href="/workpapers/wp-03-one-owner-per-job.html"><strong>One owner per job</strong><span>A free household chore agreement</span></a></li>
   <li data-k="calculator"><a href="/workpapers/calculators/is-the-setup-working-quick.html"><strong>Is the setup working for everyone?</strong><span>Add your numbers and see if the split is working</span></a></li>
@@ -273,10 +273,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="work" aria-labelledby="work-h">
+<section class="br-group no-bubble" id="work" aria-labelledby="work-h">
 <h2 id="work-h"><span class="br-emoji" aria-hidden="true">💼</span> Work and business partners</h2>
 <p class="br-desc">For teams, managers, colleagues and people who run a business together.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
   <li data-k="team colleagues manager office"><a href="/work.html"><strong>At work</strong><span>One owner per job, messages that land, and a 45-minute team session</span></a></li>
   <li data-k="cofounder co-founder business"><a href="/work.html#business-partners"><strong>Business partners</strong><span>When you run something together</span></a></li>
@@ -292,10 +292,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="life-changes" aria-labelledby="life-changes-h">
+<section class="br-group no-bubble" id="life-changes" aria-labelledby="life-changes-h">
 <h2 id="life-changes-h"><span class="br-emoji" aria-hidden="true">🌤️</span> Life changes</h2>
 <p class="br-desc">For the big shifts: a baby, a move, a loss, an illness, a quiet house.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
   <li data-k="baby newborn"><a href="/new-parent.html"><strong>New baby, sharing the load</strong><span>The baby jobs and the invisible ones</span></a></li>
   <li data-k="baby"><a href="/grown-up-children.html#baby"><strong>Grandparents and the new baby</strong><span>Advice, visits and the new baby, from both sides</span></a></li>
@@ -314,10 +314,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="safety" aria-labelledby="safety-h">
+<section class="br-group no-bubble" id="safety" aria-labelledby="safety-h">
 <h2 id="safety-h"><span class="br-emoji" aria-hidden="true">🛟</span> Safety and urgent help</h2>
 <p class="br-desc">If you feel afraid, controlled or not safe, start here. You don’t have to read anything else first.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <ul class="br-links no-bubble">
   <li data-k="abuse danger domestic violence help hotline"><a href="/safety.html"><strong>Not safe at home?</strong><span>Free hotlines, a quick way to leave this site, and how to clear what it keeps</span></a></li>
   <li data-k="calm angry"><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>A five-minute page for two upset people</span></a></li>
@@ -331,10 +331,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="play" aria-labelledby="play-h">
+<section class="br-group no-bubble" id="play" aria-labelledby="play-h">
 <h2 id="play-h"><span class="br-emoji" aria-hidden="true">🎮</span> Games, calm and play</h2>
 <p class="br-desc">Gentle games, calm corners, cartoons and music. No timers, nothing to lose.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Games</h3>
 <ul class="br-links no-bubble">
   <li data-k="arcade games"><a href="/frequency-journey.html"><strong>Tidbit and Sugarfoot’s Arcade</strong><span>Five gentle classic games, no game over</span></a></li>
@@ -348,7 +348,7 @@
   <li data-k="random"><a href="/surprise.html"><strong>Surprise me</strong><span>One button picks a game, a guide or something calm</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Calm corners</h3>
 <ul class="br-links no-bubble">
   <li data-k="breathing"><a href="/night-garden.html"><strong>The Night Garden</strong><span>Breathe and watch the flowers bloom</span></a></li>
@@ -359,7 +359,7 @@
   <li data-k="music album"><a href="/echoes-of-gold.html"><strong>Echoes of Gold</strong><span>The companion album, for settling first</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Cartoons</h3>
 <ul class="br-links no-bubble">
   <li data-k="cartoon kids"><a href="/frequency-buddies.html"><strong>Frequency Buddies</strong><span>Animated episodes with Tidbit and Sugarfoot</span></a></li>
@@ -372,10 +372,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="learn" aria-labelledby="learn-h">
+<section class="br-group no-bubble" id="learn" aria-labelledby="learn-h">
 <h2 id="learn-h"><span class="br-emoji" aria-hidden="true">📚</span> Reading and learning</h2>
 <p class="br-desc">The book, the library, the worksheets and the ideas behind them.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Start here</h3>
 <ul class="br-links no-bubble">
   <li data-k="begin"><a href="/start-here.html"><strong>Start here</strong><span>What this is in one minute, and one best first step</span></a></li>
@@ -392,7 +392,7 @@
   <li data-k="progress"><a href="/quest.html"><strong>Your quest map</strong><span>A map that lights up as you learn</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Big ideas</h3>
 <ul class="br-links no-bubble">
   <li data-k="pillars"><a href="/five-pillars.html"><strong>The Five Pillars</strong><span>How every part fits together</span></a></li>
@@ -404,7 +404,7 @@
   <li data-k="articles"><a href="/reading.html"><strong>Something to read</strong><span>Hand-picked articles from trusted sources</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>The book</h3>
 <ul class="br-links no-bubble">
   <li data-k="book"><a href="/book/topic-start-here.html"><strong>The book at a glance</strong><span>Where to start in the book</span></a></li>
@@ -423,7 +423,7 @@
   <li data-k="book self"><a href="/book/topic-know-yourself.html"><strong>The book on knowing yourself</strong><span>Every chapter’s part about you</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>The library</h3>
 <ul class="br-links no-bubble">
   <li data-k="research psychology"><a href="/library.html"><strong>The Professor’s Library</strong><span>Plain-language reading on psychology and conflict</span></a></li>
@@ -442,7 +442,7 @@
   <li data-k="library"><a href="/library/teams.html"><strong>Fair systems for teams and households</strong></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Worksheets and tools</h3>
 <ul class="br-links no-bubble">
   <li data-k="worksheets pdf"><a href="/workpapers/fill/suite.html"><strong>The Workpaper Suite</strong><span>Fillable, printable worksheets, with a plan for each week</span></a></li>
@@ -471,7 +471,7 @@
   <li data-k="visual"><a href="/tools/frequency-sync-visualizer.html"><strong>Watch two rhythms sync</strong><span>A moving picture of the daily check-in</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>The longer, “in depth” versions</h3>
 <p class="br-desc">Many pages have a fuller companion. Here they all are.</p>
 <ul class="br-chips no-bubble">
@@ -515,10 +515,10 @@
 </div>
 <p class="br-top"><a href="#main">Back to the top ↑</a></p>
 </section>
-<section class="br-group" id="misc" aria-labelledby="misc-h">
+<section class="br-group no-bubble" id="misc" aria-labelledby="misc-h">
 <h2 id="misc-h"><span class="br-emoji" aria-hidden="true">✨</span> Everything else</h2>
 <p class="br-desc">Extras, news and the pages about the site itself.</p>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Extras and news</h3>
 <ul class="br-links no-bubble">
   <li data-k="podcast audio"><a href="/podcast-index.html"><strong>The Podcast</strong><span>Friendly conversations with Kane and Christian</span></a></li>
@@ -534,7 +534,7 @@
   <li data-k="brand logo"><a href="/brand.html"><strong>Our logo</strong><span>The logo and how to use it</span></a></li>
 </ul>
 </div>
-<div class="br-sub">
+<div class="br-sub no-bubble">
 <h3>Site info</h3>
 <ul class="br-links no-bubble">
   <li data-k="about"><a href="/about.html"><strong>About the creator</strong><span>The person behind it, and why this exists</span></a></li>

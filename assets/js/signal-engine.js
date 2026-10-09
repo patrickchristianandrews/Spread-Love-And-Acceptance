@@ -2824,7 +2824,7 @@ function rewriteSentence(s, ctx, note, an, W){
 
 /* ---------- variants and the change list ---------- */
 const CLOSE_REL = ["partner","family","friend","coparent"];
-const WORK_REL = ["coworker","manager"];
+const WORK_REL = ["coworker","manager","business"];
 /* lines a brief version may leave out: courtesy, and notes to the speaker */
 const DROPPABLE = /^(?:no rush(?: before then)?|thanks?(?: you)?(?: so much)?|thank you(?: so much)?|it's urgent because \[the reason\]|it (?:matters|would (?:really )?(?:help|mean a lot to)) (?:a lot )?(?:to )?me|it would really help me|it would mean a lot to me|i was counting on that|\[[^\]]*\])[.!?]*$|^\[[^\]]*\]$/i;
 function explainChange(c, W){
