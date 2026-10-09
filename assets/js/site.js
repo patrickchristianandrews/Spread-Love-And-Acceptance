@@ -1543,7 +1543,7 @@
     if (ok(t)) return true;
     var ends = [[/'s$/, ''], [/s$/, ''], [/es$/, ''], [/ies$/, 'y'], [/ed$/, ''], [/ed$/, 'e'], [/d$/, ''], [/ing$/, ''], [/ing$/, 'e'], [/(.)\1(ing|ed|er|est)$/, '$1'],
       [/er$/, ''], [/er$/, 'e'], [/ers$/, ''], [/ers$/, 'e'], [/ier$/, 'y'], [/iest$/, 'y'], [/est$/, ''], [/ly$/, ''], [/ily$/, 'y'], [/ness$/, ''], [/ful$/, ''], [/less$/, ''], [/ment$/, ''], [/able$/, ''], [/able$/, 'e'], [/ings$/, ''], [/ings$/, 'e']];
-    return ends.some(function (e) { var w = t.replace(e[0], e[1]); return w !== t && ok(w); });
+    return ends.some(function (e) { var w = t.replace(e[0], e[1]); return w !== t && w.length > 3 && ok(w); });
   }
   // a spelling fix: only for a word that isn't a word at all (not on the site, not everyday English or Spanish)
   function correct(t) {
@@ -1556,10 +1556,14 @@
   function nearest(t) {
     if (/\d/.test(t) || t.length < 3 || !vocab) return null;
     var max = t.length <= 4 ? 1 : 2, st = sound(t), best = null, bestScore = -1e9;
-    for (var w in vocab) {
+    // the site's own words, and the everyday words its search understands ("polyamorous", "inheritance")
+    var pool = Object.create(null);
+    for (var v in vocab) pool[v] = vocab[v];
+    Object.keys(ACT).forEach(function (k) { if (!pool[k] && /^[a-z]+$/.test(k) && k.length > 3 && !/^(coparenting|onmyown|friendship|cominghome|diffhours|twofaiths|fostering|adhdkid|grownkids|moneytogether|comingout|sharedroom|bizpartner|ndwork|angerhelp|whenill|emptynest|familyrift|askeachother|eldercare|controlsafe|teenmiddle|rentlate|ndcouple|sentthis|holidayschedule|workpapersuite|fulltime|nightfeeds|longdistance|datenight|reachout|phonecalls|caregiving)$/.test(k)) pool[k] = 4; });
+    for (var w in pool) {
       if (Math.abs(w.length - t.length) > max) continue;
       var dist = editDist(t, w, max); if (dist > max) continue;
-      var score = -dist * 10 + (sound(w) === st ? 6 : 0) + (w[0] === t[0] ? 3 : 0) + Math.min(6, Math.log(vocab[w] + 1) * 1.5);
+      var score = -dist * 10 + (sound(w) === st ? 6 : 0) + (w[0] === t[0] ? 3 : 0) + Math.min(6, Math.log(pool[w] + 1) * 1.5);
       if (score > bestScore) { bestScore = score; best = w; }
     }
     return best;
