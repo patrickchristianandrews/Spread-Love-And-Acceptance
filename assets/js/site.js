@@ -857,7 +857,9 @@
       '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>Spread Love &amp; Acceptance</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
-    RIBBON.forEach(function (p, n) { nav.appendChild(buildDrop(p[0], p[1], n >= RIBBON.length - 3)); });
+    // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
+    var FOLD = { read: 1, new: 2, self: 3 };
+    RIBBON.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= RIBBON.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.appendChild(d); });
     // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
     var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
     if (current === '/en-espanol.html') esLink.setAttribute('aria-current', 'page');
@@ -1139,7 +1141,7 @@
       // the size words really show at: the root size, times the page zoom the Text size setting adds
       var zoomed = parseFloat(getComputedStyle(document.body).zoom) || 1;
       html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) * zoomed >= 20);
-      bar.classList.remove('is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
+      bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
       var name = bar.querySelector('.tol-brand span'), brand = bar.querySelector('.tol-brand'), logo = bar.querySelector('.tol-logo');
       function crowded() {
         var named = name && !bar.classList.contains('is-tighter'); // once the name is tucked away it can't be squeezed
@@ -1157,6 +1159,8 @@
       // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
       var es = bar.querySelector('.tol-es-link');
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
+      ['is-fold1', 'is-fold2', 'is-fold3'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      if (crowded()) bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3');
       ['is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
     }

@@ -284,6 +284,8 @@
     function cw(t) { return ROLE[t] ? 0.5 : 1; }
     var baseIdf = 0; base.forEach(function (t, j) { if (base.indexOf(t) === j) baseIdf += idf(t) * cw(t); });
     var wantTip = /\btips?\b/.test(fold(q));
+    // the site's own build notes ("Carrier Wave vs. Payload", "The site's architecture") only for questions about how it's built
+    var wantBuild = /\b(architecture|built|build|code|coded|tech|technical|technology|design|designed|framework|pillars?)\b/.test(fold(q));
     // the privacy policy and terms answer questions about data and the site, never everyday life questions
     var wantLegal = /\b(privacy|private|data|cookies?|track\w*|personal information|terms|legal|policy|gdpr|stored|saved|send\w*|share\w* (my|our) (data|info)|under 13|age limit|how old)\b/.test(fold(q));
     for (var i = 0; i < IDX.N; i++) {
@@ -302,6 +304,8 @@
       if (d.g) s *= opts.define ? 1.7 : 1.25;
       if (d.tip) s *= wantTip ? 1.6 : 0.55;
       if (!wantLegal && /^\/(legal\/|privacy|terms|accessibility|cookies?)/.test(d.u || '')) s *= 0.05;
+      if (!wantBuild && /^\/architecture\//.test(d.u || '')) s *= 0.03;
+      if (!wantBuild && /^\/library\.html#pillar/.test(d.u || '')) s *= 0.2;
       if (d.d) s *= 0.95;
       if (opts.prefer && preferRank(opts.prefer, d.u) >= 0) s *= 3 + 0.4 / (1 + preferRank(opts.prefer, d.u));
       // an everyday word whose site word is this passage's heading: a strong sign it's the right one
@@ -549,6 +553,21 @@
       { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The Not safe at home? page has one button to erase all of it and stop the page list.' },
       { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.', 'To leave fast, press Esc twice, or use “Leave this site quickly” in the menu.'] },
       { k: 'links', x: [['Not safe at home? (erase button and hotlines)', '/safety.html'], ['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
+  }
+
+  // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
+  // angry": from the person on the receiving end, that is a safety matter, not a wording problem. Never a script for them.
+  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?narcissis\w*\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b/;
+  // a sibling, a child, a classmate or a boss calling names is a different conversation
+  var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
+  function verbalReply(f) {
+    var b = [{ k: 'p', x: 'I’m really glad you asked. Being screamed at, called names or made to feel worthless, or having things turned around so it’s always your fault, is serious. It isn’t a communication problem you can fix by wording things better, and it is not your fault.' }];
+    if (/narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
+    b.push({ k: 'p', x: 'Some signs it has moved from ordinary conflict into control:' });
+    b.push({ k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] });
+    b.push({ k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247, and the Men’s Advice Line is 0808 801 0327. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.' });
+    b.push({ k: 'links', x: [['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] });
+    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }
 
   // ------------------------------------------------------------------ small calculators, worked out right here
@@ -1368,6 +1387,24 @@
   // "say it in simple English", "my English is not good": short sentences and everyday words from here on.
   // Cards that have a plain version use it; anything else gets the short version.
   var EASY_ASK = /\b(simpler|simple|easy|easier|plain|plainer|basic) (english|words|language)\b|\bmy english (is )?(not|isn t|no) (good|great|strong|very good|so good)\b|\benglish is (my )?(second|2nd|not my first) language\b|\bsay (it|that) (simply|more simply|easier|in easy words)\b/;
+  // In easy-words mode, everyday words for the harder words and sayings the answers use
+  var EASY_SWAP = [[/\bclose the gap\b/g, 'get closer'], [/\bwithout an agenda\b/g, 'with no plan'], [/\bagendas?\b/g, 'list of things to talk about'],
+    [/\bemotional granularity\b/gi, 'naming feelings more exactly'], [/\bgranularity\b/g, 'detail'], [/\btaken for granted\b/g, 'not noticed or thanked'],
+    [/\btak(e|es|ing) (\w+) for granted\b/g, 'stop noticing $2'], [/\bships passing in the night\b/g, 'hardly seeing each other'], [/\bon the same page\b/g, 'agreeing'],
+    [/\brunning on empty\b/g, 'very tired'], [/\bbandwidth\b/g, 'energy'], [/\bresentment\b/g, 'anger that builds up'], [/\breciprocat\w*\b/g, 'give back'],
+    [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 warmly to'],
+    [/\bbids? for (attention|connection)\b/g, 'small ways of reaching for you'], [/\bdynamics?\b/g, 'pattern'], [/\bhold(ing)? the fort\b/g, 'keep$1 things going'],
+    [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears? on\b/g, 'hurts'], [/\bloaded\b/g, 'tense'],
+    [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement']];
+  function easyText(x) { var o = String(x); EASY_SWAP.forEach(function (e) { o = o.replace(e[0], function () { var a = arguments, t = e[1].replace(/\$(\d)/g, function (m, d) { return a[+d] || ''; }); return t; }); }); return o; }
+  function easySwap(r) {
+    if (!r || !r.blocks) return r;
+    r.blocks.forEach(function (b) {
+      if (b.k === 'p' || b.k === 'note' || b.k === 'script') b.x = easyText(b.x);
+      else if ((b.k === 'list' || b.k === 'passage') && Array.isArray(b.x)) b.x = b.x.map(easyText);
+    });
+    return r;
+  }
   function easyBlocks(c) {
     var b = [{ k: 'list', x: c.plain }];
     (Array.isArray(c.script) ? c.script : c.script ? [c.script] : []).slice(0, 1).forEach(function (x) { b.push({ k: 'script', l: 'Words you could say', x: x }); });
@@ -1439,7 +1476,13 @@
     if (!f || DANGER.test(f)) return null;
     var ub = unBrief(state, f);
     if (ub) return ub;
-    if (EASY_ASK.test(f)) return easyWords(state);
+    if (EASY_ASK.test(f)) {
+      // "what is ADHD in children, in plain words": answer the question, simply; "please use simple English" on its own: switch modes
+      var rest0 = f.replace(EASY_ASK, ' ').replace(/\b(in|with|using|use|please|pls|can|could|would|you|say|it|that|this|explain|tell|me|more|a|bit|little|some|and|but|so|just|very|really|speak|talk|write|answer|answers|to|i|my|is|isnt|not|no|good|great|strong|english|language|second|first|keep|from|now|on|the|your)\b/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!rest0 || rest0.split(' ').filter(function (w) { return w.length > 2; }).length < 2) return easyWords(state);
+      state.easy = 1; state.brief = 1;
+      f = f.replace(EASY_ASK, ' ').replace(/\s+/g, ' ').trim(); n = f.split(' ').length;
+    }
     if (SHORTER.test(f)) return shorter(state);
     if (LEFT_OFF.test(f)) return leftOff(state);
     var L = state.last, n = f.split(' ').length;
@@ -1624,7 +1667,7 @@
     var topic = f.replace(ART_STOP, ' ').replace(/\s+/g, ' ').trim();
     var again = /\b(more|another|other|different|new)\b/.test(f) && !topic;
     if (again && state.art) topic = state.art.topic;
-    return { topic: topic };
+    return { topic: topic, f: f };
   }
   function artReply(state, aq) {
     var R = KB.read, seen = (state.art && state.art.seen) || {}, qs = aq.topic ? tokens(aq.topic) : [], scored = [];
@@ -1650,7 +1693,13 @@
     var b = [{ k: 'p', x: aq.topic ? 'Here are some good articles on “' + aq.topic + '”, hand-picked for this site from trusted sources. They open on the publisher’s own site.' :
       'Here are a few good articles from the site’s hand-picked reading list. Tell me a topic (“stress”, “apologies”, “ADHD”, “chores”) and I’ll find ones that fit.' }];
     b.push({ k: 'art', x: arts });
-    b.push({ k: 'links', x: [['Browse every article', '/reading.html']] });
+    // a page on this site about the same thing ("articles about ADHD in children" → When a child has ADHD)
+    var site = null;
+    (IDX.first || []).some(function (c) {
+      if (!c.newTopic || !CV_PERSONAL[c.id] || !c.links || !c.links.length || !c.re.test(aq.f || '') || (c.notRe && c.notRe.test(aq.f || ''))) return false;
+      site = safeLinks(c.links)[0] || null; return !!site;
+    });
+    b.push({ k: 'links', x: (site ? [['On this site: ' + site[0], site[1]]] : []).concat([['Browse every article', '/reading.html']]) });
     var chips = [{ label: 'More like these', q: aq.topic ? 'More articles about ' + aq.topic : 'More articles' }];
     var tagKeys = Object.keys(R.tags);
     for (var k = 0; chips.length < 3 && k < 6; k++) { var tk = tagKeys[Math.floor(Math.random() * tagKeys.length)], nm = R.tags[tk].split(/ [&,] /)[0]; if (!chips.some(function (c) { return c.label.indexOf(nm) >= 0; })) chips.push({ label: 'Articles on ' + nm.toLowerCase(), q: 'Articles about ' + nm.toLowerCase() }); }
@@ -1668,13 +1717,26 @@
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
       var es = String(q).toLowerCase();
+      if (/\bhabl\w*\b.{0,20}\bespa[nñ]ol\b|^\W*(en )?espa[nñ]ol\W*$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una p[aá]gina)\b.{0,30}\bespa[nñ]ol\b/.test(es)) return { blocks: [
+        { k: 'p', x: '¡Hola! Casi todo el sitio está en inglés, pero hay una página en español con lo esencial: repartir las tareas de la casa, cuando los hijos pelean, cuando estás muy enojado, cuidar a alguien que quieres, y si no estás seguro en casa.' },
+        { k: 'p', x: 'Muchas páginas y herramientas (como el Lemonade Stand y las fichas de trabajo) se pueden usar en español con el traductor del navegador: en Chrome, toca el menú ⋮ y luego “Traducir”. Yo solo puedo responder en inglés por ahora. (Most of the site is in English; there is a Spanish page, and the browser’s Translate works on the tools.)' },
+        { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
       if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es)) {
         if (/\b(cuid\w*|enferm\w*|agotad\w*|cansad\w*|parkinson|alzheimer|demencia|c[aá]ncer)\b/.test(es)) return { blocks: [
           { k: 'p', x: 'Hola. Cuidar a alguien que quieres, día tras día, es mucho trabajo, y es normal estar agotado, impaciente a veces, y luego sentir culpa. No es un fallo suyo.' },
           { k: 'p', x: 'Por ahora solo puedo responder en inglés, pero hay una parte en español para quien cuida, con ideas para pedir ayuda a los hijos y líneas de apoyo. (Sorry, I can only answer in English for now. There is a Spanish section for carers, and the full carer page in English.)' },
           { k: 'links', x: [['Cuando cuido a alguien que quiero (en español)', '/en-espanol.html#cuidar'], ['Caring for someone you love (English)', '/caregivers.html']] }], chips: [], kind: 'lang' };
+        var EST = [[/\b(casa|tareas|quehaceres|limpi\w*|platos|ropa|no ayuda|no hace nada)\b/, '#casa', 'Repartir las tareas de la casa es una de las peleas más comunes, y tiene arreglo: hagan una lista de todo lo que hay que hacer, también lo que nadie ve (recordar, planear), y den a cada tarea un solo dueño.', 'Las tareas de la casa'],
+          [/\b(hijos|ni[nñ]os|hermanos)\b.{0,30}\b(pelean|peleas|pelear|se pegan)\b/, '#hijos-pelean', 'Cuando los hijos pelean, ayuda separar primero, calmar, y después hablar con cada uno por turnos, sin buscar culpables.', 'Cuando los hijos pelean'],
+          [/\b(enojad\w*|enfadad\w*|rabia|grit\w*|furios\w*)\b/, '#enojado', 'Cuando estás muy enojado, primero calma el cuerpo (respira, sal un momento) y habla después, cuando los dos estén tranquilos.', 'Cuando estás muy enojado'],
+          [/\b(miedo|segur\w*|golpe\w*|pega|amenaz\w*)\b/, '#seguro', 'Si tienes miedo en casa, no es tu culpa. En EE. UU. puedes llamar gratis a la Línea Nacional contra la Violencia Doméstica al 1-800-799-7233 (atienden en español). Si estás en peligro ahora, llama al 911.', 'Si no estás seguro en casa']];
+        for (var ei = 0; ei < EST.length; ei++) if (EST[ei][0].test(es)) return { blocks: [{ k: 'p', x: 'Hola. ' + EST[ei][2] },
+          { k: 'p', x: 'Por ahora solo puedo responder en inglés, pero esta parte de la página en español habla de esto. (Sorry, I can only answer in English for now; here is the Spanish page on this.)' },
+          { k: 'links', x: [[EST[ei][3] + ' (en español)', '/en-espanol.html' + EST[ei][1]], ['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
         return { blocks: [{ k: 'p', x: 'Hola. Lo siento: por ahora solo puedo responder en inglés. Hay una página corta en español con pasos para cuando los hijos pelean, cuando estás muy enojado, y si no estás seguro en casa. (Sorry, I can only answer in English for now. Here is a short page in Spanish.)' }, { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
       }
+      var vf = norm(q);
+      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
       var cvf = norm(q), cv = !DANGER.test(cvf) && !HIDE.test(cvf) && convoTurn(state, cvf);
       if (cv) return meant(cv, sp);
       // a question about one of the thirteen fields, or two of them, gets that field's (or pair's) own answer, not the overview
@@ -2026,7 +2088,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); cb0(x); }
+    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

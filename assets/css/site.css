@@ -2644,3 +2644,7 @@ html.tol-work-page .tol-nav-item:has(> button[data-sec="play"]), html.tol-work-p
 .tol-es-hint a{ font-weight:600; }
 .tol-es-hint button{ margin-left:auto; font:inherit; font-size:.9rem; color:inherit; background:none; border:1px solid currentColor; border-radius:999px; min-height:36px; min-width:36px; padding:.15rem .7rem; cursor:pointer; }
 @media print{ .tol-es-hint, .tol-print-btn, .tol-panel-es{ display:none !important; } }
+/* a smaller laptop: the less-used sections fold into Menu one by one (site.js fitBar), and Menu shows so they stay one tap away */
+.tol-bar.is-fold1 .tol-nav-item[data-fold="1"], .tol-bar.is-fold2 .tol-nav-item[data-fold="2"], .tol-bar.is-fold2 .tol-nav-item[data-fold="1"],
+.tol-bar.is-fold3 .tol-nav-item[data-fold]{ display:none; }
+.tol-bar:is(.is-fold1, .is-fold2, .is-fold3) .tol-contents-btn{ display:inline-block; border-color:var(--ink-soft) !important; font-weight:600; }

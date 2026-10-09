@@ -93,7 +93,7 @@
     },
     "family": {
       "them": "your family member",
-      "nouns": "sister|brother|sibling|siblings|sis|bro|mom|mum|mother|dad|father|parents|parent|grandma|grandmother|grandpa|grandfather|aunt|uncle|cousin|in laws|inlaws|motherinlaw|fatherinlaw|mother in law|father in law|sisterinlaw|brotherinlaw|stepmom|stepdad|stepmother|stepfather|stepsister|stepbrother|family",
+      "nouns": "sister|brother|sibling|siblings|sis|bro|mom|mum|mother|dad|father|parents|parent|grandma|grandmother|grandpa|grandfather|aunt|uncle|cousin|in laws|inlaws|motherinlaw|fatherinlaw|mother in law|father in law|sisterinlaw|brotherinlaw|stepmom|stepdad|stepmother|stepfather|stepsister|stepbrother|grandson|granddaughter|grandchild|grandchildren|grandkid|grandkids|grandbaby|nan|nana|granny|grandad|granddad|niece|nephew|family",
       "cues": "my family|our family|family dinner|family group chat|at the holidays|at christmas|at thanksgiving",
       "fit": "Families often clash on tone and urgency more than on the task itself. Agree who owns what, so nobody has to guess, and test tricky messages before you send them.",
       "path": [
