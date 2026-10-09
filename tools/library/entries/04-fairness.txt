@@ -181,7 +181,7 @@ Several things seem to shape perceived fairness: whether the arrangement was dis
 
 This is why the program focuses less on hours and more on visibility, ownership and conversation. Seeing the full picture and agreeing it together are what make an arrangement feel fair.
 research:
-A long line of studies, in the United States and elsewhere, finds associations between perceived fairness in housework and marital satisfaction, conflict and wellbeing. Research by Sanjiv Gupta, Scott Coltrane, Paula England and others has explored how gender, income and time shape the division. A 2016 study by Daniel Carlson and colleagues found that egalitarian arrangements were associated with higher relationship and sexual satisfaction than they had been in older data. Most of this research is correlational.
+A long line of studies, in the United States and elsewhere, finds associations between perceived fairness in housework and marital satisfaction, conflict and wellbeing. Research by Sanjiv Gupta, Scott Coltrane, Paula England and others has explored how gender, income and time shape the division. A 2016 study by Daniel Carlson and colleagues, using newer data than an earlier study, found that couples who shared housework equally had sex as often, and were as satisfied with it, as couples with a traditional split. Most of this research is correlational.
 links:
 /book/chapter-2.html | Is the split working? (Chapter II)
 /workpapers/wp-03-one-owner-per-job.html | One owner per job (WP-03)

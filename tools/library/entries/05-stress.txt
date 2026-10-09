@@ -143,7 +143,7 @@ This is useful to know partly because hunger is so easy to miss, especially when
 
 The popular claim that low blood sugar directly reduces willpower (the glucose model of self-control) has not held up well in research, so the effect is probably more about mood and interpretation than about fuel running out.
 research:
-Jennifer MacCormack and Kristen Lindquist (2019) found that hungry people rated situations more negatively when they were not paying attention to their own feelings. Viren Swami and colleagues (2022) used an experience-sampling study and found that hunger was associated with greater anger and irritability in daily life. Research on the glucose model of willpower has had replication problems.
+Jennifer MacCormack and Kristen Lindquist (2018) found that hungry people rated situations more negatively when they were not paying attention to their own feelings. Viren Swami and colleagues (2022) used an experience-sampling study and found that hunger was associated with greater anger and irritability in daily life. Research on the glucose model of willpower has had replication problems.
 links:
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /quick-checks.html#today | Today’s Weather

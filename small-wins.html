@@ -38,7 +38,7 @@
   .sw-safe p, .sw-safe ul{ margin:.4rem 0 !important; }
   /* the two tools */
   .sw-tool{ margin:1rem 0 2rem; padding:1rem 1.1rem 1.2rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); box-sizing:border-box; max-width:100%; }
-  .sw-tool h3{ margin-top:.2rem !important; }
+  .read .sw-tool h3{ margin:.2rem 0 .5rem !important; font:600 1.25rem/1.3 "Fraunces", Georgia, serif; }
   .sw-tool label, .sw-tool legend{ font-weight:600; }
   .sw-tool textarea, .sw-tool input[type="text"], .sw-tool select{ font:inherit; width:100%; max-width:100%; box-sizing:border-box; min-height:44px; padding:.5rem .7rem; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); }
   .sw-tool textarea{ min-height:5.5rem; resize:vertical; }
@@ -66,7 +66,8 @@
   .sw-alert[hidden]{ display:none; }
   .sw-add{ display:grid; grid-template-columns:minmax(0, 1fr); gap:.35rem; }
   @media (min-width:640px){ .sw-add-row{ display:grid; grid-template-columns:minmax(0, 2fr) minmax(0, 1fr); gap:.6rem; align-items:end; } }
-  .sw-add-row > div{ display:grid; gap:.3rem; min-width:0; }
+  .sw-add-row > div{ display:grid; gap:.3rem; min-width:0; margin-bottom:.7rem; }
+  @media (min-width:640px){ .sw-add-row > div{ margin-bottom:0; } }
   .read ul.sw-list{ list-style:none; padding:0 !important; margin:.5rem 0 1rem !important; display:grid; gap:.45rem; }
   .read ul.sw-list li{ margin:0 !important; max-width:none !important; display:flex; flex-wrap:wrap; align-items:center; gap:.3rem .6rem; padding:.55rem .8rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); }
   .sw-win{ flex:1 1 12rem; overflow-wrap:anywhere; }
@@ -263,7 +264,7 @@
         <input type="text" id="sw-win-text" maxlength="200" placeholder="For example: We did our check-in.">
       </div>
       <div>
-        <label for="sw-win-who">Who it was with (if anyone)</label>
+        <label for="sw-win-who">Who it was with</label>
         <select id="sw-win-who">
           <option value="">Just me</option>
           <option value="partner">With a partner</option>

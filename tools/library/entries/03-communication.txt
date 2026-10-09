@@ -58,7 +58,7 @@ NVC also asks the listener to hear the feelings and needs behind the other perso
 
 Critics point out that when used rigidly, NVC can sound scripted or even manipulative, as if feelings language is being used to win. It can also underplay real disagreements about what is fair. Many people find it most useful as a way of thinking rather than a script.
 research:
-Rosenberg developed NVC from the 1960s and described it in *Nonviolent Communication: A Language of Life* (first published 1999). It is widely used in mediation, schools and workplaces. Reviews of the research have found few rigorous studies: many evaluations are small, uncontrolled or qualitative, although results are generally positive. So it is best described as a promising, widely used practice with a thin evidence base.
+Rosenberg developed NVC from the 1960s and described it in *Nonviolent Communication* (first published 1999; later editions subtitled *A Language of Life*). It is widely used in mediation, schools and workplaces. Reviews of the research have found few rigorous studies: many evaluations are small, uncontrolled or qualitative, although results are generally positive. So it is best described as a promising, widely used practice with a thin evidence base.
 links:
 /workpapers/wp-09-say-it-so-it-lands.html | Say it so it lands (WP-09)
 /signal-translator.html | The Signal Translator

@@ -56,7 +56,7 @@ These plans work partly because they hand control to the environment. You don’
 
 They can also be used for difficult moments: “If I notice I’m getting flooded, I’ll say ‘pause’ and go for a walk.” This is essentially what a calm-down plan made in advance does.
 research:
-Peter Gollwitzer introduced the concept in 1999. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behaviour change research, though effects vary by task and setting.
+Peter Gollwitzer introduced the concept in 1993 and summarized it in an influential 1999 review. A 2006 meta-analysis by Gollwitzer and Paschal Sheeran of 94 studies found a medium-to-large average effect on goal attainment. It is one of the more robust findings in behaviour change research, though effects vary by task and setting.
 links:
 /wp-11.html | The Calm-Down Kit: decide now, while you’re calm (WP-11)
 /workpapers/wp-13-daily-check-in.html | The daily check-in (WP-13)

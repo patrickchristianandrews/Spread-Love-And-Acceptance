@@ -1955,7 +1955,9 @@
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return null;
     var IG = window.TOLInfographic;
     if (!IG) { if (igTried) return null; return { needIG: true }; }
-    var rq = null; try { rq = IG.parseRequest(q); } catch (e) { rq = null; }
+    // "show fair vs equal as a picture", "draw fair vs equal as a diagram": the same as "make an infographic about …"
+    var asPic = /^\s*(?:can you |could you |please )?(?:show|draw|sketch|give)(?: me| us)? (.+?) (?:as|in) (?:an? )?(?:picture|diagram|chart|poster|infographic|graphic|visual|image)\s*(?:please)?[?.!]*\s*$/i.exec(String(q));
+    var rq = null; try { rq = IG.parseRequest(asPic ? 'make an infographic about ' + asPic[1] : q); } catch (e) { rq = null; }
     if (!rq) return null;
     // after a safety reply (or once someone has told us about danger), no pictures: privacy and safety come first
     if (state.unsafe || state.lastKind === 'safety' || state.lastKind === 'redflag') {
@@ -1979,6 +1981,8 @@
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify' };
         if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
         spec = IG.fromKB(tp, KB, { layout: rq.layout });
+        // nothing to draw from the cards: a deep topic on it ("the double empathy problem") can still make a picture
+        if (!spec && KB.deep) { var dh = deepFind(stNorm(tp), norm(tp)); if (dh && dh.t && (dh.t.philosophy || dh.t.psychology)) spec = IG.fromDeep(dh.t); }
         if (!spec) return { blocks: [{ k: 'p', x: 'I don’t have enough on “' + tp + '” to draw it well. I can make one about the mental load, fair vs equal, a good pause, or any tool or worry here. What would you like?' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
       }
@@ -2054,7 +2058,7 @@
       var T = lists[l][i]; if (!T || typeof T !== 'object') continue;
       if (dRes(T).some(function (re) { return re.test(fs) || re.test(f); }) || stNorm(dget(T, ['question', 'q', 'title']) || '') === fs) {
         var tid = dget(T, ['topic', 'topic_id']); var R = tid ? dById(tid) : null;
-        return { t: R || T, bq: R ? T : null };
+        return { t: R || T, bq: R ? T : null, big: l === 0 };
       }
     }
     return null;
@@ -2126,8 +2130,9 @@
       { k: 'p', x: 'Ask me a big question' + (pickd.length ? ', like “' + pickd[0] + '”' : '') + ', or name a part of life you’re thinking about. Say “small talk” whenever you want to come back up.' }],
       chips: pickd.map(function (x) { return { label: x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
   }
-  var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question)|another big question|one more big question(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
-  var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk|get philosophical) (?:about|on|into) (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
+  var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question|another big question|one more big question)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
+  // "talk deep about love", "talk deep: what is love?", "talk deep, is honesty always kind?", "deep: can people change?"
+  var DEEP_ABOUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay) )*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk|deep chat|get philosophical)(?: (?:about|on|into))? (?:the )?(.+)$|^go deeper on (?:the )?(.+)$/;
   var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|(?:exit|leave|end|stop) deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|keep it light|back to normal)(?: please| now)?$/;
   // a follow-up about the last deep topic: which part they asked for
   var DEEP_FU = [[/\b(autis\w*|neurodiverg\w*|double empathy|sensory|predictable|rule out loud|say (this|it) plainly|plainly)\b/, 'autistic_lens'],
@@ -2141,8 +2146,8 @@
   function deepTurn(state, q, f) {
     var D = KB && KB.deep; if (!D) return null;
     var fs = stNorm(q), on = deepOn(state);
-    var about = DEEP_ABOUT.exec(fs);
-    if (about) {
+    var about = DEEP_ABOUT.exec(fs) || (/^\s*deep\s*:/i.test(String(q)) && /^deep (.+)$/.exec(fs));
+    if (about && !DEEP_IN.test(fs)) {
       var ab = about[1] || about[2] || '', h = deepFind(stNorm(ab), norm(ab));
       setDeep(state, true);
       return h ? deepReply(state, h) : deepIntro(state);
@@ -2169,8 +2174,10 @@
     }
     // someone's own situation ("my husband never listens") gets the usual help, even in deep mode
     if (DEEP_FU_LEAD.test(fs) && fs.split(' ').length <= 9 && !/\b(he|she|him|her|husband|wife|partner|boyfriend|girlfriend|mum|mom|dad|boss)\b/.test(fs)) { var fu1 = deepFollow(state, fs); if (fu1) return fu1; }
-    if (personalHit(f)) return null;
     var hit = deepFind(fs, f);
+    // a big question ("is it selfish to have boundaries?") is answered as one, unless it's plainly about someone in their life
+    if (hit && hit.big && !VERBAL.test(f) && !/\b(my|he|she|him|her|husband|wife|partner|boyfriend|girlfriend|mum|mom|dad|boss)\b/.test(fs)) return deepReply(state, hit);
+    if (personalHit(f)) return null;
     if (hit) return deepReply(state, hit);
     return deepFollow(state, fs);
   }
@@ -2200,6 +2207,8 @@
     if (!h || dlist(dRule('safety_topic_ids')).indexOf(h.t.id) !== -1) return r;
     r.chips = (r.chips || []).slice(0, 4);
     r.chips.push({ label: 'Go deeper on this', q: 'Talk deep about ' + (h.t.id || dTitle(h.t)) });
+    // a big question answered from loose search hits: say plainly that deep talk is the better place for it
+    if (h.big && !/^(card|card-more|sit|sit-more|term)$/.test(k)) r.blocks.push({ k: 'p', x: 'That’s a big question. If you’d like, we can talk deep about it: what philosophers say, what research has found, and how it looks through an autistic lens. Tap “Go deeper on this”.' });
     return r;
   }
 
@@ -2290,7 +2299,7 @@
     // a real question after the chat prompt is answered as a question
     if (/^(what|whats|how|hows|why|where|when|which|who|can|could|should|is|are|do|does|tell me|explain|help)\b/.test(f) && f.split(' ').length >= 3) return null;
     var acks = (S && (S.acks || S.acknowledgements)) || [];
-    var a = acks.length ? acks[Math.floor(frand(state) * acks.length) % acks.length] : pick(['Ooh, I like that. Thank you for telling me.', 'That’s lovely. I’m writing it in my waterproof notebook.', 'Ha, wonderful. You’ve made my pond a little brighter.']);
+    var a = acks.length ? acks[Math.floor(frand(state) * acks.length) % acks.length] : pick(['Ooh, I like that. Thank you for telling me.', 'That’s lovely. I’m writing it in my waterproof notebook.', 'Ha, wonderful. You’ve made my puddle a little brighter.']);
     var b = [{ k: 'p', x: nameFill(a, chatName(state)) }];
     var nx = frand(state) < 0.6 && stPrompt(state);
     if (nx) { b.push({ k: 'p', x: nx }); state.stAsk = state.turn || 0; } else state.stAsk = null;
@@ -2972,6 +2981,7 @@
       me.busy = false;
       me.root.querySelector('.tolc-send').disabled = false;
       if (me.pending) { var nx = me.pending; me.pending = null; me.ask(nx); }
+      else if (me.queue && me.queue.length) me.ask(me.queue.shift());
     }, delay == null ? (REDUCED ? 250 : 650) : delay);
   };
 
@@ -3052,6 +3062,19 @@
       modal.root.hidden = true; scrim.hidden = true;
       document.documentElement.classList.remove('tolc-lock');
       if (lastFocus && lastFocus.focus && document.body.contains(lastFocus)) lastFocus.focus();
+    },
+    // For buttons on a page ("Try asking…"): ask as if typed and sent, in the inline chat if there is one, otherwise in
+    // the pop-up. opts.mode 'deep' or 'chat' switches deep talk on or off first, without an extra message. Queues while busy.
+    ask: function (text, opts) {
+      opts = opts || {};
+      text = String(text || '').trim().slice(0, 500);
+      if (!text) return;
+      var c = inline && document.body.contains(inline.root) ? inline : null;
+      if (c) { if (!c.started) c.start({}); c.root.scrollIntoView({ block: 'nearest', behavior: REDUCED ? 'auto' : 'smooth' }); }
+      else { api.open(); c = modal; }
+      if (opts.mode === 'deep' || opts.mode === 'chat') setDeep(c.state, opts.mode === 'deep');
+      if (c.busy || c.pending) { (c.queue = c.queue || []).push(text); return; }
+      c.ask(text);
     },
     mount: function (el, opts) {
       if (!el) return null;
