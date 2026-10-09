@@ -834,7 +834,7 @@
       checks: unsafe ? [] : [
         { ok: has('feeling') || has('ask') || /\bi need\b|\bi(?:[’']d| would) like\b|\bit landed\b|\bit made\b/i.test(text), label: 'Says what you need or how it landed (a feeling word is optional)' },
         { ok: has('ask'), label: 'Makes one clear ask (“Could you…?”)' },
-        { ok: !has('verdict') && !has('absolute') && !has('dismiss') && !has('sarcasm') && !has('contempt') && !has('passive') && !has('compare') && !has('pointed') && !has('withdraw'), label: 'No verdicts, always/never, dismissals, sarcasm, jabs, comparisons or shutting the door' },
+        { ok: !has('verdict') && !has('dig') && !has('absolute') && !has('dismiss') && !has('sarcasm') && !has('contempt') && !has('passive') && !has('compare') && !has('pointed') && !has('withdraw'), label: 'No verdicts, always/never, dismissals, sarcasm, jabs, comparisons or shutting the door' },
         { ok: !has('history'), label: 'Stays on one topic' }
       ]
     };

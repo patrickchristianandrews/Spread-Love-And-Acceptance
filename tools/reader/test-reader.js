@@ -299,7 +299,8 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   ['Thanks for dinner, it was lovely.', 'I managed to finish the report.', 'Can you stop by the shop on your way home?', 'I did it! I passed!'].forEach(t => ok(!kinds(t).includes('dig'), `"${t}": not a dig; got ${kinds(t).join(',')}`));
   const d = readOf('Kelly: welcome home!\nDan: thanks, I moved the bedtime routine around a bit\nKelly: I managed fine without you for 7 months, so stop changing everything.', 'Dan');
   ok(d.level !== 'calm' && !d.safety, 'a scorekeeping line warms the read without a safety card: ' + d.level);
-  ok(!R.checkDraft("If you tell anyone, you'll be sorry.").checks.every(c => c.ok) || R.checkDraft("If you tell anyone, you'll be sorry.").unsafe, 'a threat draft never passes every check');
+  ok(R.checkDraft("If you tell anyone, you'll be sorry.").unsafe, 'a threat draft is unsafe, never reworded');
+  ok(!R.checkDraft('I managed fine without you for 7 months.').checks.every(c => c.ok), 'a scorekeeping draft does not pass every check');
 }
 
 console.log(`${pass} passed, ${fail} failed`);

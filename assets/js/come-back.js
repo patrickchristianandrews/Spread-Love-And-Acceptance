@@ -96,9 +96,9 @@
 
   var TOOLS = {
     '/signal-translator.html': { t: 'Signal Translator', gain: 'You just found a kinder way to say it, before it was said.',
-      next: ['/conversation-reader.html', 'The Conversation Reader', 'for a talk that already went sideways'], result: function () { var r = doc.getElementById('results'); return r && !r.hidden && r.textContent.trim().length > 20 ? r : null; } },
+      next: ['/conversation-reader.html', 'The Conversation Reader', 'for a talk that already went sideways'], result: function () { var r = doc.getElementById('results'); return r && !r.hidden && !r.hasAttribute('data-no-reward') && r.textContent.trim().length > 20 ? r : null; } },
     '/conversation-reader.html': { t: 'Conversation Reader', gain: 'You just looked at a talk from both sides, without blaming anyone.',
-      next: ['/signal-translator.html', 'The Signal Translator', 'to test your next message before you send it'], result: function () { var r = doc.getElementById('cr-out'); return r && r.textContent.trim().length > 20 ? r : null; } },
+      next: ['/signal-translator.html', 'The Signal Translator', 'to test your next message before you send it'], result: function () { var r = doc.getElementById('cr-out'); return r && !r.querySelector('.cr-safety') && r.textContent.trim().length > 20 ? r : null; } },
     '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
       next: ['/check-ins.html', 'Check-ins', 'how to raise it once, calmly, at a good time'], result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
     '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
