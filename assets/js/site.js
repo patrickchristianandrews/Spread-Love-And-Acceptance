@@ -41,6 +41,8 @@
     { id: 'new', title: 'What’s new', blurb: 'Newly added, newest first. Older pages live in their own sections.', items: [
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work: feelings, stress, trust, change, grief, healing and helping' },
+      { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
+      { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, housemates, work and life changes' },
@@ -92,6 +94,8 @@
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
+      { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
+      { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'Both sides of the same fight, and a pause plan with a return time' },
       { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five, how to practice and talk about them, and ideas like them' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture, with what to reach for when' },
@@ -292,6 +296,8 @@
     ]},
     { id: 'new', name: 'What’s new', title: 'What’s new', blurb: 'Newly added, newest first.', items: [
       { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work' },
+      { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide' },
+      { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small ways to grow closeness with anyone' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
@@ -397,6 +403,7 @@
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' }
     ]},
     { id: 'talk', name: 'Talk it through', title: 'Talk it through', blurb: 'Say it kindly, hear it fully, and keep small things small. What you type stays on your device.', items: [
+      { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, timing, hard talks and repair' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'A pause plan you agree' },
       { href: '/check-ins.html', deep: true, title: 'Check-ins', note: 'How to have a tender conversation kindly' },
@@ -411,6 +418,7 @@
       { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { sub: 'Love, sorry and thanks' },
+      { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness, with an idea picker' },
       { href: '/love-languages.html', deep: true, code: 'New', title: 'Love languages', note: 'What’s healthy and unhealthy about each, how to practice them, and ideas like them' },
       { href: '/apology-languages.html', code: 'New', title: 'Apology languages', note: 'The parts of a sorry that help after a hurt, and what research says works' },
       { href: '/appreciation-at-work.html', code: 'New', title: 'Appreciation at work', note: 'Five ways people like to be thanked at work, as a menu, not a label' },
