@@ -4018,7 +4018,6 @@
     if ((current === '/index.html' || BB_PAGE.test(current)) && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
     // (the English "press ? for keyboard shortcuts" tip stays off the Spanish page: for this tab only, it counts as already seen)
-    if (esPage()) { try { sessionStorage.setItem('tol-keys-hint', '1'); } catch (e) {} }
     { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
     // a very faint local time and weather note in the corner, so nobody has to leave the page to check (clock-weather.js)
     if (!workMode()) { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }

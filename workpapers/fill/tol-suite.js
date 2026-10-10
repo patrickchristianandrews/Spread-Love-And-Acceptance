@@ -813,7 +813,7 @@
   function codeWord(code) { return phone() ? SP.nameOf(code) : code; }
   function loadWords(x) { x = Math.round(x * 100 + 1e-7) / 100; return x >= 0.8 ? 'very high load' : x >= 0.6 ? 'high load' : x >= 0.45 ? 'medium load, on the heavier side' : x >= 0.3 ? 'medium load, on the lighter side' : x >= 0.15 ? 'light load' : 'very light load'; }
   /* ------------------------------------------------------------ the whole road as a link (#suite=…) */
-  // "Send it to my partner as a link": the progress file, squeezed (deflate) where the browser can, after
+  // "Send it to the others as a link": the progress file, squeezed (deflate) where the browser can, after
   // the "#" of a link to this page. A browser never sends that part to any website. Opening the link
   // brings it in like a file. Each change needs a new link, made fresh when the button is tapped.
   var SUITE_HASH = '#suite=', suiteLink = { sig: '', url: '' }, suiteTimer = null;
@@ -2405,7 +2405,7 @@
       sendB.setAttribute('data-share-url', link.url);
       suiteSafe = j;
     });
-    // "Show a QR code": the same link as "Send it to my partner", drawn big for the other phone in the room
+    // "Show a QR code": the same link as "Send it to the others", drawn big for the other phone in the room
     // (share-kit.js; loaded at the tap if it isn't here yet)
     var qrB = $('ws-qr');
     if (qrB) qrB.addEventListener('click', function () {
@@ -2413,7 +2413,7 @@
       var j = suiteJson(), link = suiteLink.sig === j ? suiteLink : suiteLinkPlain();
       function go() {
         var K = global.TOLShareKit; if (!K || !K.showQR) return;
-        if (!K.qrFits(link.url)) { qrB.hidden = true; say('Your road is too long for a QR code. Use \u201cSend it to my partner as a link\u201d instead.'); return; }
+        if (!K.qrFits(link.url)) { qrB.hidden = true; say('Your road is too long for a QR code. Use \u201cSend it to the others as a link\u201d instead.'); return; }
         suiteSafe = j;
         K.showQR(link.url, { title: 'Scan with the other phone', note: 'Your road opens on their phone, in their Workpaper Suite. Each change needs a new code or link.' });
       }

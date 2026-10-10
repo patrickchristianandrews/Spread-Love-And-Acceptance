@@ -142,7 +142,7 @@
     // a one-time whisper that the shortcuts exist, for people with a keyboard
     // (once ever, not once a visit; never in the plain or work version, and never on top of another note)
     var seen = false; try { seen = localStorage.getItem('tol-keys-hint') === '1' || sessionStorage.getItem('tol-keys-hint') === '1'; } catch (e) {}
-    if (!seen && innerWidth >= 900 && !document.documentElement.classList.contains('tol-work')) {
+    if (!seen && !document.body.hasAttribute('data-no-tip') && innerWidth >= 900 && !document.documentElement.classList.contains('tol-work')) {
       var onKey = function () { document.removeEventListener('keydown', onKey); };
       setTimeout(function () {
         if (document.querySelector('.tr-toast.is-in, .tol-offer')) return;
