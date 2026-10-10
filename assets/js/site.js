@@ -3040,7 +3040,7 @@
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');
       lsSet('tol-comfort-offer', 'done');
-      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); applyReading(); announce('Larger text is on. Change it any time in Settings.'); }
+      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce('Larger text is on. Change it any time in Settings.'); }
       else if (what !== 'no') { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
       // focus goes to whatever came next (the page's first heading if nothing else), so a screen reader lands somewhere real
       var nx = box.nextElementSibling, m = document.getElementById('tol-main'); box.remove();

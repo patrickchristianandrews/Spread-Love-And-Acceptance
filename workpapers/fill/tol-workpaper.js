@@ -1422,7 +1422,10 @@
       var made = this.shareMade;
       if (made && made.error) p.appendChild(h('p', { className: 'wpf-share-msg', role: 'note', text: made.error }));
       else if (made) {
-        p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true), this.qrBtn()]));
+        var qb = this.qrBtn();
+        p.appendChild(h('div', { className: 'wpf-share-btns' }, [this.sendBtn('Send it: text, WhatsApp, email\u2026', true), qb]));
+        // too long for a QR code a phone can read: say so, rather than a button that quietly isn't there
+        if (qb.hidden) p.appendChild(h('p', { className: 'wpf-help wpf-share-noqr', text: 'This ' + what + ' is too long now for a QR code a phone can read. Send it as a link instead, or copy the link below.' }));
         p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time ' + (one || peopleCount(this.state.values) > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link: an old one won\u2019t show the change.' }));
         var lid = 'f' + (++this.uid);
         p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'Or copy the link yourself' }));
@@ -1577,7 +1580,7 @@
       if (dq.error) { this.status(dq.error); return; }
       this.shareMade = this.shareLink(dq); this.shareSig = JSON.stringify(this.state); this.sharedOnce = true;
       var oq = this.root.querySelector('[data-share-out]'); if (oq) oq.value = this.shareMade.link;
-      qrShow(this.shareMade.link, { title: 'Scan with the other phone', note: 'The ' + what + ' opens on the other phone, on this same page. They choose to combine it with theirs or to replace it.' });
+      qrShow(this.shareMade.link, { title: 'Scan with the other phone', note: 'The ' + what + ' opens on the other phone, on this same page. ' + (this.schema.people ? 'They choose to combine it with theirs or to replace it.' : 'Their own answers stay as they are.') });
       return;
     }
     function copyIt(text, ok) {
