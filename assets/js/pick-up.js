@@ -179,8 +179,7 @@
   function mount(host, where) {
     if (!host) return;
     host.innerHTML = '';
-    var c = card(where); if (c) host.appendChild(c);
-    host.appendChild(launcher(where));
+    host.appendChild(launcher(where)); // the "Pick up where you left off" card is no longer shown (card() stays for anything that asks for it)
   }
   // TIME is shared with the home page's time picker (come-back.js), so both offer the same ideas
   window.TOLPickUp = { mount: mount, card: card, launcher: launcher, time: TIME };

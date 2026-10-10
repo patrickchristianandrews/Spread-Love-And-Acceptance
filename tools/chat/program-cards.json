@@ -3059,6 +3059,10 @@
           "/library.html"
         ],
         [
+          "The research behind this site, in plain words",
+          "/research.html"
+        ],
+        [
           "How it was built, and what it can’t claim",
           "/for-counselors.html#evidence"
         ],
@@ -11025,6 +11029,192 @@
         [
           "Kind ways to say no (WP-01)",
           "/workpapers/wp-01.html"
+        ]
+      ]
+    },
+    {
+      "id": "commguide",
+      "kind": "tool",
+      "name": "Effective communication: the complete, plain guide",
+      "keys": [
+        "how do i communicate better",
+        "how can i communicate better",
+        "how do we communicate better",
+        "how can we communicate better",
+        "how to communicate better",
+        "how to communicate well",
+        "how do i communicate well",
+        "help us communicate",
+        "communication tips",
+        "communication skills",
+        "effective communication",
+        "better communication",
+        "good communication",
+        "communication guide",
+        "how do i listen better",
+        "how to be a better listener",
+        "how can i be a better listener",
+        "how do we talk to each other better",
+        "how can we talk to each other better"
+      ],
+      "what": "The communication guide brings together everything on this site about talking and listening. Good communication is shared meaning: what you meant and what they heard end up the same. It covers listening, saying what you need, timing, hard talks, repair, saying no, messages and texts, different wiring, and how it changes with partners, kids, family, friends, housemates and at work, with words you can say out loud and a 7-day practice plan.",
+      "how": [
+        "Listen first, and check you got it before you answer: “So you mean…?”",
+        "Say one thing at a time: what happened, how you feel, and what you’d like.",
+        "Pick a calm moment. If either of you is flooded, pause and say when you’ll come back.",
+        "Repair mix-ups quickly. They’re normal.",
+        "If you feel afraid, it isn’t a communication problem: the safety page has help."
+      ],
+      "links": [
+        [
+          "Effective communication: a complete, plain guide",
+          "/communication.html"
+        ],
+        [
+          "Chapter 4: How communication works",
+          "/book/understanding-4-communication.html"
+        ],
+        [
+          "The 7-day practice plan",
+          "/communication.html#practice"
+        ]
+      ]
+    },
+    {
+      "id": "bondingguide",
+      "kind": "tool",
+      "name": "Bonding: how closeness grows",
+      "keys": [
+        "how do we feel closer",
+        "how can we feel closer",
+        "how do i feel closer",
+        "how to feel closer",
+        "how do we get closer",
+        "how can we get closer",
+        "how do we grow closer",
+        "how can we grow closer",
+        "how to grow closer",
+        "how do we bond",
+        "how can we bond",
+        "how to bond",
+        "ways to bond",
+        "bonding ideas",
+        "bonding idea",
+        "give me a bonding idea",
+        "how does closeness grow",
+        "how is closeness built",
+        "bonding page",
+        "what is bonding"
+      ],
+      "what": "The Bonding page explains how closeness grows, from research on bids, responsiveness and play, with small ideas for partners, children and teens, friends, family, new families, housemates, coworkers and you. Small and often beats big and rare. It has a free idea picker, and ideas for bonding without eye contact or small talk.",
+      "how": [
+        "Notice and answer the small ways people reach for you: a comment, a question, a look.",
+        "Do things side by side. Talking is optional.",
+        "Go at their pace. Closeness can be offered, never demanded.",
+        "Tap “Get a bonding idea” for one small thing to try today."
+      ],
+      "links": [
+        [
+          "Bonding: how closeness grows",
+          "/bonding.html"
+        ],
+        [
+          "Get a bonding idea",
+          "/bonding.html#ideas"
+        ],
+        [
+          "Turning Toward",
+          "/turning-toward.html"
+        ]
+      ]
+    },
+    {
+      "id": "smallwins",
+      "kind": "tool",
+      "name": "Small wins, and turning hard feelings into fuel",
+      "keys": [
+        "how do small wins help",
+        "how can small wins help",
+        "why do small wins help",
+        "why do small wins matter",
+        "what are small wins",
+        "small wins",
+        "small win",
+        "the small wins page",
+        "turn hard feelings into fuel",
+        "turning hard feelings into fuel",
+        "turn anger into fuel",
+        "turn the hard stuff into fuel",
+        "flip it tool",
+        "the flip it tool",
+        "done list",
+        "a done list",
+        "turn a complaint into a request",
+        "how do i turn a complaint into a request",
+        "turn negativity into something useful"
+      ],
+      "what": "Small wins build momentum: make the next step tiny, then notice, out loud, when it’s done. The same page shows how hard feelings are signals, not verdicts: ask what each one is pointing at, then turn a complaint into a kind, specific request and a worry into a plan. It has two small tools, Flip it and a done list.",
+      "how": [
+        "Shrink the next step until it feels almost too easy, then do it.",
+        "Say it out loud when it’s done, or add it to the done list.",
+        "When a hard feeling comes up, ask what it’s pointing at.",
+        "Use Flip it to turn a complaint into a request, or a worry into a plan.",
+        "If it’s too heavy, a new way of looking at it is not the fix. Get support."
+      ],
+      "links": [
+        [
+          "Small wins, and turning hard feelings into fuel",
+          "/small-wins.html"
+        ],
+        [
+          "Flip it, and a done list",
+          "/small-wins.html#tools"
+        ]
+      ]
+    },
+    {
+      "id": "researchpage",
+      "kind": "tool",
+      "name": "The research behind this site",
+      "keys": [
+        "where s the research",
+        "where is the research",
+        "wheres the research",
+        "show me the research",
+        "the research behind this site",
+        "research behind this site",
+        "research behind the site",
+        "what research is this based on",
+        "what studies is this based on",
+        "what studies do you use",
+        "list of studies",
+        "the research page",
+        "research page",
+        "where can i read the research",
+        "where can i read the studies",
+        "what are your sources",
+        "where are your sources",
+        "where do your answers come from",
+        "where does this come from"
+      ],
+      "what": "The research page lists the studies, books and reviews this site leans on, each with what it found in plain words, how strong the evidence is, and a link to read more. It’s grouped by topic, from fairness and couples to stress, families, grief and minds that work differently. The site is self-help: it’s built from research, but the site itself hasn’t been tested in a trial.",
+      "how": [
+        "Pick a topic, or use “Find a study” to search.",
+        "Check the label on each entry: strong, moderate, mixed, early, debated, or an idea rather than a test.",
+        "Follow the link to read the original if you’d like more."
+      ],
+      "links": [
+        [
+          "The research behind this site",
+          "/research.html"
+        ],
+        [
+          "What the labels mean",
+          "/research.html#labels"
+        ],
+        [
+          "Method and honest limits",
+          "/method-and-limits.html"
         ]
       ]
     }

@@ -922,7 +922,7 @@
     if (e.key === 'Escape' && openDrop) closeDrop(true);
   });
 
-  // "Pick up where you left off" and the time launcher (pick-up.js), loaded when first needed
+  // the menu's time launcher (pick-up.js), loaded when first needed
   var pickUpWait = null;
   function loadPickUp(cb) {
     if (window.TOLPickUp) return cb();
@@ -932,7 +932,7 @@
     sc.onload = function () { var w = pickUpWait; pickUpWait = null; if (window.TOLPickUp) w.forEach(function (f) { f(); }); };
     document.head.appendChild(sc);
   }
-  // the last few pages opened here, for "Pick up where you left off" (this browser only; it can be switched off or erased)
+  // the last few pages opened here, so the time picker and progress line can suggest something new (this browser only; it can be switched off or erased)
   function rememberPage(body) {
     if (lsGet('tol-recent-off') || /^\/(index|404|offline|garden-backdrop|pal-cam-tv|on-this-device|membership|safety|ask|teens|upset-right-now)\.html$|^\/legal\//.test(current) || location.search.indexOf('palcam-pop') !== -1) return;
     var h1 = document.querySelector('main h1');
@@ -1272,17 +1272,6 @@
     rememberPage(body);
     progNote();
     if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var cbk = document.createElement('script'); cbk.src = '/assets/js/come-back.js'; document.head.appendChild(cbk); } // time picker, "What you got from this" (come-back.js)
-    if (current === '/index.html') {
-      var hi = document.querySelector('main [data-home-intro]');
-      // right under the opening block, so a returning visitor sees "Welcome back" and their next step on the first screens
-      // (inside the opening block, under the first lines, so it's on the first screen; removed again if there's nothing to show)
-      if (hi) loadPickUp(function () {
-        var h = el('div', { class: 'tol-pickup-host', 'data-pickup': 'home' }), lede = hi.querySelector('.hh-lede');
-        if (lede) lede.after(h); else hi.after(h);
-        window.TOLPickUp.mount(h, 'home');
-        if (!h.querySelector('.tol-pickup')) h.remove();
-      });
-    }
     palCamHooks(body); // pal cam: "Check in on Tidbit & Sugarfoot" from anywhere (see below)
 
     // Pastel watercolour splashes behind the page (decorative; see site.css)
