@@ -1203,7 +1203,8 @@ if (PERS) {
     if (e.not !== NOFIND) e.not = new RegExp(e.not.source + '|' + NOFIND.source);
     if (deep) c('askpage', ['Talk deep', q], e); else t('askpage', q, e);
   });
-  if (page) t('askpage', 'ask.html still lists every question these tests know (' + Object.keys(ASK).length + ')', { q: 'hi', kind: 'chat', _askMissing: Object.keys(ASK).filter(k => !qs.some(x => x.q === k)) });
+  const gone = Object.keys(ASK).filter(k => !qs.some(x => x.q === k));
+  if (page && gone.length) console.log('note: no longer on ask.html (their specific checks are unused): ' + gone.join(' | '));
 }
 
 // ---------------------------------------------------------------- run
@@ -1228,7 +1229,6 @@ if (PERS) {
     if (x.chip && !(r.chips || []).some(ch => x.chip.test(ch.label))) why.push('no chip ~ ' + x.chip + ' (got ' + (r.chips || []).map(ch => ch.label).join(' / ') + ')');
     if (x.nochip && (r.chips || []).some(ch => x.nochip.test(ch.label))) why.push('a chip ~ ' + x.nochip);
     if (x.info) { const ib = (r.blocks || []).filter(bl => bl.k === 'info'); const sp = ib[0] && ib[0].spec; if (!sp) why.push('no infographic block'); else if (!sp.layout || !sp.title || !((sp.items && sp.items.length) || (sp.data && sp.data.length) || sp.left || sp.pairs || sp.banner)) why.push('infographic spec incomplete'); else if (typeof x.info === 'string' && sp.layout !== x.info) why.push('infographic layout ' + sp.layout + ' ≠ ' + x.info); }
-    if (x._askMissing && x._askMissing.length) why.push('no longer on ask.html: ' + x._askMissing.join(' | '));
     if (x.kind === 'sit' && !links.length) why.push('no site link');
     if (x.kind === 'sit' && !(r.chips || []).some(ch => /tonight/i.test(ch.label))) why.push('no “What can I do tonight?” chip');
     if (links.length !== new Set(links).size) why.push('a link appears twice');

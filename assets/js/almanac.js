@@ -211,7 +211,7 @@
     host.appendChild(svg);
     var ax = $('al-axis');
     if (ax) {
-      ax.style.paddingLeft = LAB + 'px';
+      ax.style.paddingLeft = LAB + 'px'; ax.style.width = W + 'px';
       ax.innerHTML = '<span></span><span></span>';
       ax.firstChild.textContent = nice(show[0].d, show[0].d.slice(0, 4) !== dayKey(new Date()).slice(0, 4));
       ax.lastChild.textContent = show[n - 1].d === dayKey(new Date()) ? 'Today' : nice(show[n - 1].d);

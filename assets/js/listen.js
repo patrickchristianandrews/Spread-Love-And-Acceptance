@@ -306,7 +306,7 @@
     var lb = label || card.getAttribute('data-listen-card') || T('Listen', 'Escuchar');
     var b = button(lb);
     // the button says what it reads: "Listen to this step: Check your own weather"
-    var h = /^(LI|SECTION|ARTICLE|DIV)$/.test(card.tagName) && !/^(forecast|lq-res)$/.test(card.id) && card.querySelector('h2, h3, h4');
+    var h = /^(LI|SECTION|ARTICLE|DIV)$/.test(card.tagName) && !/^(forecast|lq-res)$/.test(card.id) && !card.getAttribute('data-listen-card') && card.querySelector('h2, h3, h4');
     if (h && h.textContent.trim()) b.setAttribute('aria-label', lb + ': ' + h.textContent.replace(PIC, '').replace(/\s+/g, ' ').trim().slice(0, 80));
     b.addEventListener('click', function () { readEl(card, b); });
     row.appendChild(b);

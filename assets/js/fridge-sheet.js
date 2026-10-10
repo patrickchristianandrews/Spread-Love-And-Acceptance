@@ -139,7 +139,8 @@
   function fit(inner, rows) {
     var mm = 3.7795, limit = 243 * mm;
     var tries = SIZES.map(function (z) { return [z, false]; });
-    if (rows > 12) tries.push(['s', true], ['xs', true]);
+    tries.push(['xxs', false]);
+    if (rows > 12) tries.push(['s', true], ['xs', true], ['xxs', true]);
     for (var i = 0; i < tries.length; i++) {
       inner.setAttribute('data-size', tries[i][0]);
       inner.classList.toggle('is-cols', tries[i][1]);

@@ -2514,8 +2514,9 @@
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
   // the Spanish page gets the Settings panel in Spanish: T('English', 'Español')
-  var ES = /^es\b/i.test(document.documentElement.lang || '');
-  function T(en, es) { return ES ? es : en; }
+  // (a function, so the bar and menu can use it too, wherever they're built)
+  function esPage() { return /^es\b/i.test(document.documentElement.lang || ''); }
+  function T(en, es) { return esPage() ? es : en; }
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.15, 1.35 or 1.6)
   var SIZE_NAMES = { md: T('Normal', 'Normal'), lg: T('Large', 'Grande'), xl: T('Extra large', 'Muy grande'), xxl: T('Largest', 'La más grande') }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
   var TINTS = { cream: T('Cream', 'Crema'), blue: T('Soft blue', 'Azul suave'), mint: T('Mint', 'Verde menta') };
@@ -2637,7 +2638,7 @@
   function settingsButton(cls, text) {
     var b = el('button', { type: 'button', class: 'tol-set-btn ' + (cls || ''), 'aria-haspopup': 'dialog' },
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/></svg>' +
-      '<span class="tol-set-name">' + (ES ? (text ? 'Ajustes: letra, contraste, modo tranquilo' : 'Ajustes') : (text || 'Settings')) + '</span>');
+      '<span class="tol-set-name">' + (esPage() ? (text ? 'Ajustes: letra, contraste, modo tranquilo' : 'Ajustes') : (text || 'Settings')) + '</span>');
     // the spoken name starts with the words on the button, so voice control ("click Settings") finds it
     if (!text) b.setAttribute('aria-label', T('Settings: text size, contrast and calm', 'Ajustes: tamaño de letra, contraste y calma'));
     b.title = T('Text size, high contrast, Quiet mode and more', 'Tamaño de letra, alto contraste, modo tranquilo y más');
@@ -2693,7 +2694,7 @@
         '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>' + T('Quiet mode', 'Modo tranquilo') + '</strong><small>' + T('A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.', 'Una página quieta y sencilla. Sin ayudantes, ventanas emergentes ni sonidos, y sin nada que se mueva.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
         '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>' + T('Easy reading', 'Lectura fácil') + '</strong><small>' + T('A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.', 'Una letra clara, más espacio entre letras y líneas, líneas más cortas, un fondo suave y una página quieta.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
       '</div>' +
-      (ES ? '' : '<h3 class="tol-set-k">Focus</h3><div class="tol-set-focus"></div>') +   // Focus mode picks English pages, so it stays off the Spanish panel
+      (esPage() ? '' : '<h3 class="tol-set-k">Focus</h3><div class="tol-set-focus"></div>') +   // Focus mode picks English pages, so it stays off the Spanish panel
       '<h3 class="tol-set-k">' + T('Calm', 'Calma') + '</h3>' +
       '<p class="tol-set-qnote" hidden>' + T('Quiet mode is looking after these. Turn it off above to change them one by one.', 'El modo tranquilo se encarga de esto. Apágalo arriba para cambiar cada opción.') + '</p>' +
       sw('still', T('Keep the page still', 'Página quieta'), T('No moving garden, bubbles, hearts or sliding in, here and in the Breathe break', 'Sin jardín en movimiento, burbujas, corazones ni cosas que se deslizan')) +
@@ -2709,7 +2710,7 @@
       sw('wxnote', T('Show the time and weather note', 'Mostrar la hora y el clima'), T('A very faint note in the corner of each page', 'Una nota muy suave en la esquina de cada página')) +
       sw('wxloc', T('Use my location for the weather', 'Usar mi ubicación para el clima'), T('Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it', 'Tu navegador te pregunta primero. Solo se guarda un lugar aproximado, en este dispositivo. Para buscar el clima, ese lugar aproximado se envía a Open-Meteo, un servicio gratis sin cuenta. A nosotros no nos llega nada. Apágalo para borrarlo')) +
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
-      '<p class="tol-set-foot">' + T('These choices stay in this browser only.', 'Estas opciones se quedan solo en este navegador.') + ' <button type="button" class="tol-set-reset">' + T('Back to the usual', 'Volver a lo de siempre') + '</button> <a href="/on-this-device.html"' + (ES ? ' hreflang="en"' : '') + '>' + T('What’s stored on this device', 'Qué se guarda en este dispositivo (en inglés)') + '</a></p>' +
+      '<p class="tol-set-foot">' + T('These choices stay in this browser only.', 'Estas opciones se quedan solo en este navegador.') + ' <button type="button" class="tol-set-reset">' + T('Back to the usual', 'Volver a lo de siempre') + '</button> <a href="/on-this-device.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + T('What’s stored on this device', 'Qué se guarda en este dispositivo (en inglés)') + '</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
       var i = e.target;

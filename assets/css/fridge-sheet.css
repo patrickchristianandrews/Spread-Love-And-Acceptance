@@ -122,6 +122,15 @@
 .tfs-in[data-size="xs"] .tfs-line{ height:6mm; }
 .tfs-in[data-size="xs"] .tfs-field{ margin-bottom:2.5mm; }
 .tfs-in[data-size="xs"] .tfs-foot{ font-size:10pt; margin-top:4mm; }
+.tfs-in[data-size="xxs"] .tfs-t{ font-size:16pt; }
+.tfs-in[data-size="xxs"] .tfs-sub{ font-size:10pt; margin-bottom:2mm; }
+.tfs-in[data-size="xxs"] .tfs-h{ font-size:11pt; margin:3mm 0 1mm; }
+.tfs-in[data-size="xxs"] .tfs-row{ font-size:9.5pt; padding:.8mm 0; gap:2mm; line-height:1.2; }
+.tfs-in[data-size="xxs"] .tfs-box{ width:3.8mm; height:3.8mm; border-width:.4mm; }
+.tfs-in[data-size="xxs"] .tfs-val, .tfs-in[data-size="xxs"] .tfs-lab{ font-size:10pt; }
+.tfs-in[data-size="xxs"] .tfs-line{ height:5.5mm; }
+.tfs-in[data-size="xxs"] .tfs-field{ margin-bottom:2mm; }
+.tfs-in[data-size="xxs"] .tfs-foot{ font-size:9pt; margin-top:3mm; padding-top:2mm; }
 .tfs-in.is-cols .tfs-rows{ columns:2; column-gap:8mm; }
 .tfs-in.is-cols .tfs-who{ max-width:32mm; }
 .tfs-in.is-cols .tfs-who.is-empty, .tfs-in.is-cols .tfs-row.is-blank .tfs-who.is-empty{ width:22mm; }
