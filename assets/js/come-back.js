@@ -476,7 +476,8 @@
     wp09: ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'a fact, a feeling and a kind ask'],
     kit: ['/wp-11.html', 'The Calm-Down Kit', 'what you notice first, and what settles you'],
     daily: ['/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in', 'a tiny daily habit to share'],
-    six: ['/prog-01.html', 'Six gentle weeks', 'one small session a week'],
+    six: ['/week-0.html', 'Six gentle weeks, starting with week 0', 'five minutes on what the six weeks are, alone or with anyone'],
+    examples: ['/examples.html', 'Made-up examples', 'small changes in different kinds of relationships'],
     pause: ['/pursue-withdraw.html', 'One wants to talk now, one needs space', 'both sides, and a pause plan'],
     turning: ['/turning-toward.html', 'Turning toward', 'seven small habits for staying close']
   };
@@ -495,9 +496,13 @@
     '/check-ins.html': { me: 'notes', with: 'daily' },
     '/pursue-withdraw.html': { me: 'kit', with: ['kit', 'agree a pause plan together'] },
     '/self-path.html': { me: 'wavelength', with: ['checkins', 'share one thing you learned about yourself'] },
-    '/five-pillars.html': { me: 'ten', with: 'ten' },
-    '/how-it-works.html': { me: 'ten', with: 'ten' },
-    '/is-this-for-you.html': { me: 'ten', with: 'ten' },
+    '/five-pillars.html': { me: 'ten', with: 'ten', alt: 'examples' },
+    '/how-it-works.html': { me: 'ten', with: 'ten', alt: 'examples' },
+    '/is-this-for-you.html': { me: 'ten', with: 'ten', alt: 'examples' },
+    '/examples.html': { me: 'ten', with: 'ten' },
+    '/someone-sent-you-this.html': { me: ['weather', 'one minute, just for you; nothing is shared'], with: ['weather', 'one minute, just for you; nothing is shared'] },
+    '/week-0.html': { me: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, at your own pace' }, with: { u: '/prog-01.html', t: 'Six gentle weeks: week 1', n: 'one small session, together or each on your own' } },
+    '/outside-help.html': { me: 'weather', with: 'weather' },
     '/is-the-setup-working.html': { me: 'wp02', with: 'wp03' },
     '/turning-toward.html': { me: 'weather', with: 'daily' },
     '/small-wins.html': { me: 'weather', with: 'turning' },
@@ -677,6 +682,7 @@
       if (e.target.closest('.cb-nx-done')) {
         var open = card.hidden;
         card.innerHTML = open ? doneHTML() : ''; card.hidden = !open;
+        var lr = card.previousElementSibling; if (lr && /tol-listen-cardrow/.test(lr.className)) lr.hidden = !open;
         e.target.closest('.cb-nx-done').setAttribute('aria-expanded', String(open));
         if (open) try { card.focus({ preventScroll: true }); card.scrollIntoView({ block: 'nearest', behavior: still() ? 'auto' : 'smooth' }); } catch (x) {}
         return;

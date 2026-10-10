@@ -263,11 +263,15 @@
     if (!host) return null;
     var box = mk('div', 'tfs-drift tol-plain no-print no-bubble'); box.setAttribute('role', 'note');
     box.hidden = true;
+    // listen.js gives it a Listen button, unless it sits inside a card that already has one
+    if (!(host.closest && host.closest('[data-listen-card]'))) box.setAttribute('data-listen-card', '');
     host.appendChild(box);
     var gone = false;
+    // empty it, but keep a Listen button listen.js may have put in
+    function clear() { Array.prototype.slice.call(box.children).forEach(function (c) { if (!/tol-listen/.test(c.className || '')) c.remove(); }); }
     function draw() {
       var h = H(), list = h && h.comingBack ? h.comingBack({ owned: false }) : [];
-      box.innerHTML = '';
+      clear();
       if (gone || !list.length) { box.hidden = true; return; }
       var names = list.map(function (x) { return x.name; }), least = list[list.length - 1].weeks, of = list[0].of;
       var p = mk('p', 'tfs-drift-q');
@@ -288,7 +292,7 @@
       var no = mk('button', 'tfs-drift-no', 'Not now'); no.type = 'button';
       no.addEventListener('click', function () {
         var hh = H(); if (hh && hh.dismissComingBack) hh.dismissComingBack(names);
-        gone = true; box.innerHTML = '';
+        gone = true; clear();
         var ok = mk('p', 'tfs-drift-why', 'Okay. They’ll stay quiet unless they keep coming back.'); ok.setAttribute('role', 'status');
         box.appendChild(ok); box.hidden = false;
         setTimeout(function () { box.hidden = true; }, 6000);

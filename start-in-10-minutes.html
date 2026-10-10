@@ -303,7 +303,7 @@
     <h2 data-me="Choose one thing to try" data-with="Agree one small change">Choose one thing to try</h2>
     <p class="ten-time">About 2 minutes</p>
     <p data-ten-show="me">One small thing, for this week. Tap an idea or write your own.</p>
-    <p data-ten-show="with" hidden>One small change you both say yes to, for one week. Small is the point: you can always change it next week.</p>
+    <p data-ten-show="with" hidden>One small change everyone involved says yes to, for one week. Small is the point: you can always change it next week.</p>
     <div class="ten-sugs" id="ten-sugs"></div>
     <label class="ten-l" for="ten-try"><span data-ten-show="me">One thing I&rsquo;ll try</span><span data-ten-show="with" hidden>Our one small change</span></label>
     <input type="text" id="ten-try" maxlength="160" autocomplete="off">
@@ -313,7 +313,7 @@
 
 <section class="ten-done tol-plain no-bubble no-dive" id="ten-done" tabindex="-1" aria-labelledby="ten-done-h">
   <h2 id="ten-done-h">I&rsquo;m done for now: here&rsquo;s what I got</h2>
-  <div class="ten-out" id="ten-out"></div>
+  <div class="ten-out-wrap" data-listen-card="Listen to what I got"><div class="ten-out" id="ten-out"></div></div>
   <div class="ten-row">
     <button type="button" class="ten-btn" id="ten-copy">Copy text</button>
     <button type="button" class="ten-btn is-quiet" id="ten-print">Print</button>
@@ -352,7 +352,7 @@
   var PATS = {
     quiet: ['I go quiet or pull away', 'Going quiet often protects you from saying something you’d regret. The cost is that others can’t tell what’s going on. A short “I need a pause” keeps the door open.',
       ['Say “I need ten minutes, then I’ll come back” instead of going silent', 'Write down one thing I wanted to say, and say it the next day']],
-    push: ['I push to sort it out right now', 'Wanting to sort it now often comes from caring a lot. The cost is that the other person may not be ready yet. Asking “now or later?” helps you both.',
+    push: ['I push to sort it out right now', 'Wanting to sort it now often comes from caring a lot. The cost is that the other person may not be ready yet. Asking “now or later?” helps everyone.',
       ['Ask “Is now a good time, or later today?” before I start', 'Wait twenty minutes and check my weather before I raise it']],
     yes: ['I say yes, then feel resentful later', 'Saying yes keeps the peace for now. The cost shows up later, as resentment. A short pause before yes gives you room to choose.',
       ['Say “Let me check and get back to you” before I say yes', 'Say no to one small thing this week, kindly']],
@@ -366,7 +366,7 @@
   var WITH_SUGS = ['Whoever cooks doesn’t wash up', 'A 20-minute check-in on Sunday evening', 'Say “Can we pause? Back in 20 minutes” instead of walking off', 'One person owns the bins, start to finish'];
   var NEXT = {
     me: { u: '/self-path.html', t: 'Your self path', n: 'six small steps on your own, at your own pace', alt: ['/wiring-card.html', 'Your Wiring Card'] },
-    with: { u: '/check-ins.html', t: 'Check-ins', n: 'in a week, look at how the small change went', alt: ['/prog-01.html', 'Six gentle weeks'] }
+    with: { u: '/check-ins.html', t: 'Check-ins', n: 'in a week, look at how the small change went', alt: ['/week-0.html', 'Six gentle weeks, starting with week 0'] }
   };
 
   /* ---- mode */

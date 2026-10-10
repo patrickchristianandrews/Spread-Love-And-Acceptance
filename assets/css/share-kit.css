@@ -47,6 +47,10 @@
 .tsk-qrd-big .tsk-qrd-note, .tsk-qrd-big .tsk-qrd-private{ display:none; }
 .tsk-qrd-big .tsk-qrd-head h2{ font-size:1.05rem; }
 .tsk-offscreen{ position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
+/* Dark mode: the site turns the page around with a filter on <html> and turns pictures and canvases back.
+   A native <dialog> sits in the top layer, outside that filter, so turning its canvas back would leave the
+   code light-on-dark (many cameras can't read that). The code is always dark on white. */
+dialog.tsk-qrd canvas{ filter:none !important; }
 @media print{ .tsk-qrd{ display:none !important; } }
 
 /* ---- "Share this line" ---- */

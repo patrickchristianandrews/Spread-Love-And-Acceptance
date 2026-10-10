@@ -914,12 +914,12 @@ window.TOL_DIVES = {
     x: 'Personality research has studied this under introversion and extraversion. Studies suggest that after sustained socializing, many people, not only introverts, report more fatigue a few hours later, and that the effect is stronger for some temperaments.\nWired Differently adds that some wirings spend more on each interaction: highly sensitive people take in more detail, and autistic people who mask spend extra effort monitoring eye contact, expressions and turn-taking. For them, people load can be the main reason an evening feels hard.\nIn the program’s numbers it’s one of the inputs that nudges the Today’s Weather reading up, and it often explains a battery score that looks higher than the day’s events alone would suggest.',
     u: '/quick-checks.html#h-people', l: 'Today’s Weather: people load', lt: 'The people-load step and how it feeds your forecast.' },
 
-  almanac: { t: 'Your 7-day log', m: ['almanac'],
-    s: 'One day of weather tells you about today. Seven days start to show your climate. That’s what the 7-day log is for.',
+  almanac: { t: 'Your weather almanac', m: ['almanac'],
+    s: 'One day of weather tells you about today. A few weeks of readings start to show your climate. That’s what the almanac is for.',
     f: 'For you, it can show which fronts keep coming back, like Monday money worries, and how often the heavy days follow a short night. It’s private: kept only in your browser, and you can erase it any time.',
-    w: 'Save a day’s reading and the log shows a week of skies and pressure bars. One entry is a mood; several are a pattern memory alone can’t show you. Nothing is uploaded, and no one else can see it.',
+    w: 'Save a day’s reading and the almanac shows your skies over time, one mark per reading, with a plain list underneath. After about six readings it may point out a pattern or two, with the counts. One entry is a mood; several are a pattern memory alone can’t show you. Nothing is uploaded, and no one else can see it.',
     x: 'Researchers use a similar method called experience sampling or daily diaries: short, repeated check-ins that capture patterns people can’t reliably recall later. Memory tends to be dominated by the most intense and the most recent moments (what Daniel Kahneman called the peak-end rule), so a daily record gives a fairer picture.\nThe privacy design is deliberate. The log uses your browser’s local storage, never a server, and the page warns that on a shared computer anyone using that browser could see it.\nIn the wider program, the same logic runs through REPORT-01: numbers recorded week by week so the picture builds up instead of resetting.',
-    u: '/quick-checks.html#almanac', l: 'Today’s Weather: your 7-day log', lt: 'The log, the pattern it shows, and how to erase it.' },
+    u: '/quick-checks.html#almanac', l: 'Today’s Weather: your almanac', lt: 'The almanac, the patterns it shows, and how to erase it.' },
 
   wired: { t: 'Wired differently', m: ['Wired Differently', 'neurotypes', 'neurotype'],
     s: 'You text “Fine.” and mean it literally. They read the full stop as a door slamming. Same word, two different receivers.',
