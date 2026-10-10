@@ -355,6 +355,9 @@
     try { var o = JSON.parse(sessionStorage.getItem(NAMES) || 'null'); return o && Array.isArray(o.people) && o.people.some(function (p) { return !placeholder(p); }) ? o : null; } catch (e) { return null; }
   }
   function loadMode() { try { var m = localStorage.getItem(MODE_KEY); return m === 'solo' || m === 'group' ? m : null; } catch (e) { return null; } }
+  // the site-wide "Just me / With someone" choice (home page, Start in 10 minutes): only a starting point, used
+  // when nothing is saved for the stand yet, and never written back here
+  function siteMode() { try { var m = localStorage.getItem('tol-mode-v1'); return m === 'me' ? 'solo' : m === 'with' ? 'group' : null; } catch (e) { return null; } }
   function saveMode(m) { try { localStorage.setItem(MODE_KEY, m); } catch (e) {} }
   // "you" and "them" read better than "Me" and "Them" inside a sentence
   function who(i) { var n = nameOf(i), l = n.toLowerCase(); return l === 'me' ? 'you' : l === 'them' ? 'them' : n; }
@@ -2660,7 +2663,7 @@
   })();
   $('keep-device').checked = keep;
   // the remembered choice, or the stand's own; a stand from before this choice existed was for a group
-  mode = loadMode() || (state.mode === 'solo' || state.mode === 'group' ? state.mode : null) || ((saved || (draft && !draft.example)) ? 'group' : null);
+  mode = loadMode() || (state.mode === 'solo' || state.mode === 'group' ? state.mode : null) || ((saved || (draft && !draft.example)) ? 'group' : siteMode());
   if (mode) setMode(mode, false); else renderAll();
 
   // After Back or Forward, the browser may put old values back into the boxes. Always redraw the

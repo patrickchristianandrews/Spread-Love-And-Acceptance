@@ -106,6 +106,7 @@
   'use strict';
   // Every key the site uses, in plain words. [key or prefix, name, what it is, group]
   var KNOWN = [
+    ['tol-jobs-log-v1', 'Jobs that keep coming back', 'The jobs you tapped as “slipped or came up again” on the weekly check-in card, and the week you tapped them (never who). After a few weeks it uses them to point out jobs that keep coming back. “Don’t keep them” on the card forgets it and turns it off.'],
     ['tol-member-email', 'Your sign-up', 'The email you signed up with, so every page stays open in this browser. Erasing it signs you out here.'],
     ['tol-join-pending', 'A sign-up to try again', 'The newsletter couldn’t be reached when you joined, so this reminds the page to offer another try.'],
     ['tol-theme', 'Dark or light', 'Your color choice from Settings.'],
@@ -213,6 +214,8 @@
     ['tol-puddles-hi-seen', 'Professor Puddles’ hello', 'That Professor Puddles has already said hello, so he stays small after that.']
   ];
   var SESSION = [
+    ['tol-checkin-card', 'This week’s check-in card', 'What you typed on the card, until you close the tab.'],
+    ['tol-fridge-carry', 'Jobs on their way to the fridge list', 'The jobs you chose to give an owner, carried to the Lemonade Stand’s fridge list and removed as soon as they arrive.'],
     ['tol-chat-v1', 'Your chat with Professor Puddles', 'The conversation so far. “Start over” in the chat erases it too.'],
     ['tol-roots-tab', 'Roots & Wings', 'Your answers in Roots & Wings, until you close the tab or press Erase my answers.'],
     ['tol-puddles-small', 'Professor Puddles’ hello', 'That you made his hello smaller.'],
