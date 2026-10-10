@@ -354,7 +354,7 @@
           <tr><td colspan="10" class="empty">No weeks recorded yet.</td></tr>
         </tbody>
       </table>
-      <p class="hint">Key: WB = workload balance (WP-01). OC = ownership clarity (WP-03). AS = leftover stress, how stretched you both are (WP-02). RF = retuning frequency (WP-09). Setup = the setup score, how well the setup holds up (CALC-01). &Delta; = change in the setup score since the week before. Overall = the setup score plus how well you repair after friction. Loops = daily check-ins done (WP-13).</p>
+      <p class="hint">Key: WB = workload balance (WP-01). OC = ownership clarity (WP-03). AS = leftover stress, how stretched everyone is (WP-02). RF = retuning frequency (WP-09). Setup = the setup score, how well the setup holds up (CALC-01). &Delta; = change in the setup score since the week before. Overall = the setup score plus how well you repair after friction. Loops = daily check-ins done (WP-13).</p>
     </div>
   </section>
 
@@ -480,7 +480,7 @@
     </table>
 
     <div class="privacy">
-      <p><strong>What this report will never contain:</strong> a judgment about either person, a comparison between the two of you, or advice about the relationship's future. It reads how your setup changes over time. That is all it does.</p>
+      <p><strong>What this report will never contain:</strong> a judgment about either person, a comparison between people, or advice about the relationship's future. It reads how your setup changes over time. That is all it does.</p>
       <p>None of it is a tested clinical or statistical tool. If a finding here is used to end a conversation instead of starting one, it is being misused.</p>
     </div>
   </section>
@@ -632,7 +632,7 @@
         var wbFlat = Math.abs(t[2].wb-t[0].wb)<0.08;
         if(asUp && wbFlat){
           out.push(finding("warn","the load isn't the driver \u00b7 WP-01 + WP-02",
-            "Leftover stress (how stretched you both are) has risen three weeks in a row, while the workload split has barely moved. Whatever is wearing you down isn't the chore setup, so reworking the job list won't touch it. It's worth naming what's going on outside the house before rebalancing what's inside it."));
+            "Leftover stress (how stretched everyone is) has risen three weeks in a row, while the workload split has barely moved. Whatever is wearing you down isn't the chore setup, so reworking the job list won't touch it. It's worth naming what's going on outside the house before rebalancing what's inside it."));
         }
       }
     }

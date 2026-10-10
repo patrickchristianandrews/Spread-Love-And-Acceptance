@@ -1139,6 +1139,14 @@ if (PERS) {
   t('chat4', 'build a life again after divorce', { link: '/on-my-own.html' });
   t('chat4', "i'm a saver and he's a spender", { link: '/money-together.html' });
   t('chat4', 'my roommate and i need some rules', { link: '/sharing-a-room.html' });
+  t('chat4', 'how long does the weather almanac keep my readings', { id: 'weatherlog', text: /120 days/, link: '/quick-checks.html#almanac' });
+  t('chat4', 'can i export my weather almanac', { id: 'weatherlog', text: /CSV or JSON/ });
+  t('chat4', 'how do I turn on high contrast', { id: 'textsize', text: /High contrast/ });
+  t('chat4', 'how do i make text bigger', { id: 'textsize', text: /Settings/ });
+  t('chat4', 'what is week 0', { id: 'week0', link: '/week-0.html' });
+  t('chat4', 'can i add reminders to my calendar', { id: 'week0', link: '/week-0.html' });
+  t('chat4', 'where else can i get help', { id: 'outsidehelp', link: '/outside-help.html' });
+  t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
 }
 
 // ---------------------------------------------------------------- ask.html: every "Try asking…" question gets a real answer

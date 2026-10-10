@@ -7,7 +7,7 @@
 */
 (function () {
   'use strict';
-  var KEY = 'tol-ten-trail', PAGES = { '/quick-checks.html': 1, '/book/preface.html': 2 };
+  var KEY = 'tol-ten-trail', PAGES = { '/quick-checks.html': 1, '/book/preface.html': 2, '/book/self-2-now.html': 2 };
   var t = null;
   try { t = JSON.parse(sessionStorage.getItem(KEY) || 'null'); } catch (e) { return; }
   if (!t || !t.step || PAGES[location.pathname] !== t.step || Date.now() - (t.at || 0) > 3 * 3600 * 1000) return;

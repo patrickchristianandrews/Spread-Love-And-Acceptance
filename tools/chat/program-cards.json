@@ -257,14 +257,15 @@
       "id": "textsize",
       "kind": "intent",
       "first": true,
-      "name": "bigger text",
-      "pat": "\\b(make|get|turn|change) (the |this )?(text|words|font|letters|writing|print|type|page)( size)? (bigger|larger|smaller|easier to read|more readable)\\b|\\b(text|font|letters|words|writing|print) (is |are )?(too |so |really )?(small|tiny)\\b|\\b(bigger|larger|smaller) (text|font|letters|words|writing)\\b|\\b(text|font) size\\b|\\bzoom in\\b|\\bcant (read|see) (the )?(text|words|small print)\\b",
+      "name": "bigger text and high contrast",
+      "pat": "\\b(make|get|turn|change) (the |this )?(text|words|font|letters|writing|print|type|page)( size)? (bigger|larger|smaller|easier to read|more readable)\\b|\\b(text|font|letters|words|writing|print) (is |are )?(too |so |really )?(small|tiny)\\b|\\b(bigger|larger|smaller) (text|font|letters|words|writing)\\b|\\b(text|font) size\\b|\\bzoom in\\b|\\bcant (read|see) (the )?(text|words|small print)\\b|\\b(high|higher|more|better|stronger) contrast\\b|\\bcontrast (mode|setting)\\b|\\b(make|turn) (the )?(colou?rs|page|text) (darker|stronger|easier to see)\\b|\\bhard to see the (text|words)\\b",
       "keys": [],
       "what": [
-        "You can make the text bigger in Settings, at the top of the page."
+        "You can make the text bigger, or switch on High contrast, in Settings at the top of the page."
       ],
       "how": [
         "Open Settings and choose a Text size: Larger, Largest or Extra large.",
+        "High contrast, in the same place, makes text and buttons stand out more strongly.",
         "Easy reading, in the same place, switches to a clearer font with more space between lines.",
         "Your browser’s zoom works too: Ctrl and + (⌘ and + on a Mac), or pinch to zoom on a phone.",
         "Your choices stay in this browser only."
@@ -3647,6 +3648,10 @@
           "/sent-this.html#hard-time"
         ],
         [
+          "Someone sent you this link? What it is, in three lines",
+          "/someone-sent-you-this.html"
+        ],
+        [
           "One wants to talk now, one needs space",
           "/pursue-withdraw.html"
         ]
@@ -4288,19 +4293,23 @@
       "id": "weatherlog",
       "kind": "intent",
       "first": true,
-      "name": "the 7-day log and the almanac",
-      "pat": "\\b(7|seven) ?day log\\b.*\\balmanac\\b|\\balmanac\\b.*\\b(7|seven) ?day log\\b|\\bdifference between\\b.*\\b(weather )?(log|almanac)\\b|\\bwhat is the (weather )?almanac\\b|\\bwhats the (weather )?almanac\\b",
+      "name": "the weather almanac (the old 7-day log)",
+      "pat": "\\b(7|seven) ?day log\\b.*\\balmanac\\b|\\balmanac\\b.*\\b(7|seven) ?day log\\b|\\bdifference between\\b.*\\b(weather )?(log|almanac)\\b|\\bwhat is the (weather )?almanac\\b|\\bwhats the (weather )?almanac\\b|\\b(weather )?log\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?)\\b|\\balmanac\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?|keep|keeps)\\b",
       "keys": [],
       "what": [
-        "They’re the same thing. “Your 7-day log” on Today’s Weather is what some pages call the almanac."
+        "They’re the same thing. The old “7-day log” on Today’s Weather is now its almanac: a record of the readings you choose to save."
       ],
       "how": [
         "It’s optional: it only keeps a reading when you press Save.",
-        "It stays in this browser only, never on a server.",
-        "It shows your last seven days as a simple strip, with a trend once you’ve logged three days.",
-        "“Erase my log” removes it any time."
+        "It keeps up to 120 days, in this browser only, never on a server.",
+        "After six or more readings it can point out patterns, like gusty days that often follow short sleep.",
+        "You can export it as a CSV or JSON file, or erase it any time."
       ],
       "links": [
+        [
+          "Your weather almanac",
+          "/quick-checks.html#almanac"
+        ],
         [
           "Today’s Weather",
           "/quick-checks.html#today"
@@ -7895,6 +7904,44 @@
         [
           "Find it by relationship",
           "/by-relationship.html"
+        ]
+      ]
+    },
+    {
+      "id": "week0",
+      "kind": "tool",
+      "name": "Week 0: a gentle start to the six weeks",
+      "keys": [
+        "week 0",
+        "week zero",
+        "week 0 page",
+        "gentle start",
+        "a gentle start",
+        "six week program",
+        "six weeks program",
+        "6 week program",
+        "the six weeks",
+        "how do i start the six weeks",
+        "before week one",
+        "before week 1",
+        "calendar reminders",
+        "add reminders to my calendar",
+        "program reminders"
+      ],
+      "what": "Week 0 is a gentle start before the six weeks: what the program is, how much time it takes, who it’s for, a pace that suits you, and how to add calendar reminders you set yourself. Nothing is sent anywhere.",
+      "how": [
+        "Read what the six weeks involve, and pick a pace that fits your life.",
+        "Add the reminders to your own calendar, if you like.",
+        "Start with the first small step when you feel ready, not before."
+      ],
+      "links": [
+        [
+          "Week 0: a gentle start",
+          "/week-0.html"
+        ],
+        [
+          "Start here",
+          "/start-here.html"
         ]
       ]
     },

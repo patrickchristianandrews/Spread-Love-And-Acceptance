@@ -1484,7 +1484,7 @@
   }
   function leftOff(state) {
     var L = state.last;
-    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: Today’s Weather keeps a 7-day log, the Carrier Wave Decoder keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
+    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: Today’s Weather keeps an almanac of the readings you save, the Carrier Wave Decoder keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
     if (L && (L.topic || L.q)) {
       var what = L.topic || '“' + String(L.q).slice(0, 60) + '”';
       return { blocks: [{ k: 'p', x: 'We were last talking about ' + what + '. Want to carry on with that, or start something new?' }, tail],
