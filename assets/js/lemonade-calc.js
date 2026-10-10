@@ -70,7 +70,7 @@
     { id: 'food', n: 'Food & meals', k: 'home', act: 'simplify', tip: 'Repeat a few easy meals, or cook once for two nights.' },
     { id: 'laundry', n: 'Laundry', k: 'home', act: 'handoff', tip: 'Older kids and adults can each own their own laundry.' },
     { id: 'kids', n: 'Kids & caring', k: 'home', act: 'handoff', tip: 'Trade whole routines, like bedtime on set nights.' },
-    { id: 'care', n: 'Care for my partner', k: 'home', act: 'handoff', tip: 'Share out what can be shared, and ask who else could carry a piece of it (family, friends, a service).' },
+    { id: 'care', n: 'Care for someone I look after', k: 'home', act: 'handoff', tip: 'Share out what can be shared, and ask who else could carry a piece of it (family, friends, a service).' },
     { id: 'baby', n: 'New baby', k: 'home', act: 'handoff', tip: 'Take whole nights or whole feeds in turns, so each of you gets a stretch of real sleep.' },
     { id: 'pets', n: 'Pets', k: 'home', act: 'handoff', tip: 'One person owns feeding, another owns walks.' },
     { id: 'money', n: 'Money & bills', k: 'home', act: 'schedule', tip: 'Set autopay where you can, and keep one money half hour a week.' },
@@ -127,7 +127,7 @@
     food: [['Meal planning & the grocery list', 30, 'week'], ['Grocery shopping', 60, 'week'], ['Putting groceries away', 15, 'week'], ['Cooking dinner', 45, 'day'], ['Breakfasts', 15, 'day'], ['Packing lunches', 15, 'wkd'], ['Clearing out the fridge', 20, 'week']],
     laundry: [['Washing & drying', 20, 'few'], ['Folding & putting away', 25, 'few'], ['Towels & bedding', 20, 'week'], ['Ironing & mending', 30, 'week']],
     kids: [['Getting kids up & ready', 30, 'day'], ['Daycare or nursery drop-off & pickup', 40, 'wkd'], ['School drop-off & pickup', 40, 'wkd'], ['Toddler meals, snacks & mess', 30, 'day'], ['Naps & settling', 20, 'day'], ['Night wakings', 20, 'few'], ['Potty training', 15, 'day'], ['Bedtime routine', 30, 'day'], ['Homework help', 30, 'day'], ['Bath time', 20, 'day'], ['Playing & reading together', 30, 'day'], ['Driving to activities', 60, 'week'], ['Helping a family member at home', 120, 'week'], [SOLO_KIDS, 8, 'wkd', 'h']],
-    care: [['Personal care (washing, dressing)', 30, 'day'], ['Medicines & refills', 10, 'day'], ['Health appointments & calls for my partner', 90, 'month'], ['Pacing support (planning the day around energy)', 15, 'day'], ['Being on call for a partner who is unwell', 4, 'few', 'h'], ['Meals in bed & bringing what is needed', 20, 'day']],
+    care: [['Personal care (washing, dressing)', 30, 'day'], ['Medicines & refills', 10, 'day'], ['Health appointments & calls for them', 90, 'month'], ['Pacing support (planning the day around energy)', 15, 'day'], ['Being on call for a partner who is unwell', 4, 'few', 'h'], ['Meals in bed & bringing what is needed', 20, 'day']],
     baby: [['Night feeds', 90, 'day'], ['On call at night (the one listening out)', 6, 'few', 'h'], [SOLO_CARE, 8, 'wkd', 'h'], ['Daytime feeds & pumping', 90, 'day'], ['Nappies & diapers', 30, 'day'], ['Bottles, pump parts & sterilizing', 20, 'day'], ['Settling, rocking & naps', 45, 'day'], ['Baby laundry', 20, 'few'], ['Baby appointments & check-ups', 60, 'month'], ['Tracking feeds, sleep & supplies', 10, 'day'], ['Ordering formula, nappies & wipes', 20, 'week']],
     pets: [['Feeding & fresh water', 10, 'day'], ['Dog walks', 30, 'day'], ['Litter, cage or tank cleaning', 15, 'few'], ['Grooming & baths', 30, 'month'], ['Vet visits & pet supplies', 60, 'month']],
     money: [['Paying bills', 20, 'week'], ['Budget & checking accounts', 30, 'week'], ['Splitting shared costs', 15, 'week'], ['Taxes & receipts', 90, 'month'], ['Comparing plans & renewals', 60, 'month']],
@@ -285,16 +285,16 @@
   // (a preview of a link with three or more people counts too, before it's added)
   function many() { return state.people.length > 2 || !!(pending && pending.d && pending.d.people.length > 2); }
   var W = {
-    send: function () { return many() ? 'Send my side to the others' : 'Send my side to my partner'; },
-    add: function () { return many() ? 'Add someone’s side' : 'Add my partner’s side'; },
-    them: function () { return many() ? 'the others' : 'your partner'; }
+    send: function () { return many() ? 'Send my side to the others' : 'Send my side to the other person'; },
+    add: function () { return many() ? 'Add someone’s side' : 'Add the other person’s side'; },
+    them: function () { return many() ? 'the others' : 'the other person'; }
   };
   function renderWords() {
     var set = function (id, t) { var e = $(id); if (e && e.textContent !== t) e.textContent = t; };
     set('send-side', W.send()); set('add-side', W.add());
     set('sides-h', many() ? 'On more than one device?' : 'On two devices?');
     set('sides-t', many() ? 'Each of you fills in your own side, then you bring them together here.' : 'Each of you fills in your own side, then you bring the two together here.');
-    set('add-code-q', many() ? 'Someone sent you their side? Paste it here' : 'Your partner sent you their side? Paste it here');
+    set('add-code-q', many() ? 'Someone sent you their side? Paste it here' : 'Someone sent you their side? Paste it here');
     set('other-ways-t', 'On the other device, open the Lemonade Stand, tap “' + W.add() + '” and paste the code, or open the file.');
     set('checked-who', many() ? 'Optional, and any of you can tick it.' : 'Optional, and either of you can tick it.');
     set('data-send-t', '“' + W.send() + '” makes a link, a code or a file on your device; it only goes where you send it yourself. In a link, your side sits after the “#”, which browsers never send to a server, and the page clears it from the address bar once it’s read.');
@@ -304,7 +304,7 @@
   function sideOf(d) {
     var ins = d ? sidesIn(d) : [];
     if (ins.length > 1) return ins.length === d.people.length ? 'everyone’s sides' : joinNames(ins.map(function (p) { return p + '’s'; })) + ' sides';
-    return d && d.by ? d.by + '’s side' : many() || (d && d.people.length > 2) ? 'their side' : 'your partner’s side';
+    return d && d.by ? d.by + '’s side' : many() || (d && d.people.length > 2) ? 'their side' : 'the other person’s side';
   }
   // the people whose numbers a side carries (a planner's link can hold everyone's)
   function sidesIn(d) {

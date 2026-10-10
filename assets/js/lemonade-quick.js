@@ -292,7 +292,7 @@
     ['bottles', 'baby', 'Bottles, pump parts & sterilizing', 'Bottles and sterilizing'],
     ['solobaby', 'baby', 'Looking after the baby on my own (while the other is at work)', 'Solo baby care (while the other is at work)'],
     ['meds', 'care', 'Medicines & refills', 'Medicines and refills'],
-    ['healthcalls', 'care', 'Health appointments & calls for my partner', 'Health appointments and calls'],
+    ['healthcalls', 'care', 'Health appointments & calls for them', 'Health appointments and calls'],
     ['oncallill', 'care', 'Being on call for a partner who is unwell'],
     ['personal', 'care', 'Personal care (washing, dressing)'],
     ['walks', 'pets', 'Dog walks'],
