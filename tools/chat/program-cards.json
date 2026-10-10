@@ -383,12 +383,49 @@
       ]
     },
     {
+      "id": "findcounsellor",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "finding a counsellor or therapist",
+      "pat": "\\b(how|where) (do|can|could|should) (i|we) (find|get|look for|see) (a |an |some )?(good |local |cheap |affordable |free )?(therapist|therapy|counsel\\w*|couples counsel\\w*|couples therapist|psychologist|professional help)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\b(i|we) (want|need|would like) (to see )?(a |an )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b",
+      "notPat": "\\b(anger|temper|yell\\w*|rage)\\b|\\b(can|could|will|would) you be\\b|\\bare you\\b",
+      "keys": [],
+      "what": [
+        "Good idea. A trained person can help in ways a self-help site can’t, and asking is a strong thing to do. Here’s how to find one."
+      ],
+      "how": [
+        "Ask your doctor for a referral: they often know local counsellors, and what is covered.",
+        "Use a therapist directory you can filter by cost, place and focus, such as Psychology Today (US and UK) or the BACP directory (UK).",
+        "Through work: an Employee Assistance Program (EAP) often gives a few free, confidential sessions.",
+        "For couples: look for someone trained in couples work (for example Gottman or Emotionally Focused Therapy). Many offer a free short call to see if it fits.",
+        "Lower cost: university training clinics and community centres often have sliding-scale fees."
+      ],
+      "plain": [
+        "Ask your doctor who to see.",
+        "Look in a therapist directory.",
+        "Work may offer free sessions (EAP).",
+        "Training clinics can cost less."
+      ],
+      "links": [
+        [
+          "Help beyond this site: finding a counsellor",
+          "/outside-help.html#counsellor"
+        ],
+        [
+          "For counsellors, coaches and group leaders",
+          "/for-counselors.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "therapistq",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "whether I can be your therapist",
-      "pat": "\\b(can|could|will|would) you be (my|our) (therapist|counsel\\w*|psychologist|shrink|couples counsel\\w*)\\b|\\bare you (a |an )?(real )?(therapist|counsel\\w*|psychologist|doctor|professional)\\b|\\bare you (like )?(therapy|counsel\\w*)\\b|\\b(instead of|replace|replacing|substitute for) (a |my |our )?(therapist|therapy|counsel\\w*)\\b|\\b(how|where) (do|can|could) (i|we) find (a |an )?(good )?(therapist|counsel\\w*|couples counsel\\w*|couples therapist|psychologist)\\b|\\bfind (a|an) (therapist|counsel\\w*|couples counsel\\w*)\\b",
+      "pat": "\\b(can|could|will|would) you be (my|our) (therapist|counsel\\w*|psychologist|shrink|couples counsel\\w*)\\b|\\bare you (a |an )?(real )?(therapist|counsel\\w*|psychologist|doctor|professional)\\b|\\bare you (like )?(therapy|counsel\\w*)\\b|\\b(instead of|replace|replacing|substitute for) (a |my |our )?(therapist|therapy|counsel\\w*)\\b",
       "notPat": "\\b(anger|temper|yell\\w*|rage)\\b",
       "keys": [],
       "what": [
@@ -415,6 +452,10 @@
         [
           "For counsellors, coaches and group leaders",
           "/for-counselors.html"
+        ],
+        [
+          "Help beyond this site: counsellors, helplines, groups",
+          "/outside-help.html"
         ]
       ],
       "chips": []
@@ -1153,7 +1194,7 @@
       "first": true,
       "newTopic": true,
       "name": "setting a kind boundary with family",
-      "pat": "\\b(set|setting|draw|hold|keep|have)\\b.{0,15}\\bboundar\\w*\\b.{0,40}\\b(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bboundar\\w*\\b.{0,30}\\bwith (my )?(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bset (a |some )?boundar\\w* (kindly|without hurting|gently|nicely)\\b|\\bboundar\\w*\\b.{0,30}\\bwithout hurting\\b",
+      "pat": "\\b(set|setting|draw|hold|keep|have)\\b.{0,15}\\bboundar\\w*\\b.{0,40}\\b(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bboundar\\w*\\b.{0,30}\\bwith (my )?(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|family|sister|brother|nan|grandma)\\b|\\bset (a |some )?boundar\\w* (kindly|without hurting|gently|nicely)\\b|\\bboundar\\w*\\b.{0,30}\\bwithout hurting\\b|\\b(tell|ask|get)\\b.{0,10}\\b(my )?(mum|mom|mother|dad|father|parents?|mil|motherinlaw|mother in law|inlaws|in laws|nan|grandma)\\b.{0,25}\\b(text|call|ring|phone|check|ask)\\w*\\b.{0,15}\\b(before|first)\\b.{0,20}\\b(visit\\w*|coming|comes|come over|dropping by|drops by|turning up|turns up)\\b",
       "keys": [],
       "what": [
         "You can love someone and still say no to some things. A kind boundary is about what you will do, said warmly, not a rule for them."
@@ -6163,7 +6204,13 @@
         "calmdown kit",
         "pause line",
         "workpaper 11",
-        "sound toolkit"
+        "sound toolkit",
+        "words to ask for a pause",
+        "give me words to ask for a pause",
+        "how do i ask for a pause",
+        "how to ask for a pause",
+        "ask for a pause",
+        "words for a pause"
       ],
       "what": "The Calm-Down Kit (WP-11) is a plan you make while calm for bringing your body back down in a heated moment, so you can finish the conversation or honestly put it off. It’s for you, never something to hand to the other person.",
       "how": [
@@ -6176,6 +6223,9 @@
       "results": "It uses your battery score from How much are you carrying? (WP-02) to decide when to go back: under 0.50, go back at the time you said; between 0.50 and 0.60, do another round; still 0.60 or more after two rounds, pick a new time and say when. When you go back, start with one small, simple task first.",
       "ex": "A pause line: “I’m getting too wound up to listen well. I’m going for a ten-minute walk, and I’ll be back at 7:30 to finish this.”",
       "pillar": "Pillar III, Read your state first.",
+      "script": [
+        "I’m getting too wound up to listen well. I need a short pause, and I’ll be back at 7:30 to finish this."
+      ],
       "links": [
         [
           "The Calm-Down Kit (WP-11)",
@@ -7724,6 +7774,127 @@
         [
           "The full map",
           "/relationships-in-depth.html#map"
+        ]
+      ]
+    },
+    {
+      "id": "byrelationship",
+      "kind": "tool",
+      "name": "Find it by relationship",
+      "keys": [
+        "find it by relationship",
+        "by relationship",
+        "by relationship page",
+        "the by relationship page",
+        "which pages are for my relationship",
+        "which pages are for me",
+        "pages sorted by relationship",
+        "pages by relationship",
+        "every page by relationship",
+        "pages for my relationship",
+        "what pages are for couples",
+        "what pages are for friends",
+        "what pages are for families",
+        "the book by relationship",
+        "which chapters are for me",
+        "what should i read for my relationship"
+      ],
+      "what": "Find it by relationship lists every page on the site in one place, sorted by who it’s for: just you, couples, friends, family, co-parents, housemates, work, life changes, safety, and games and things to watch. The book has its own version, with the best sections to read first for each kind of relationship.",
+      "how": [
+        "Open the list and jump to your group, like “Couples” or “Family”.",
+        "Start with the first one or two pages in that group, not all of them.",
+        "For reading, use the book’s version to pick the sections that matter most for you."
+      ],
+      "links": [
+        [
+          "Find it by relationship",
+          "/by-relationship.html"
+        ],
+        [
+          "The book by relationship: what to read first",
+          "/book/topic-by-relationship.html"
+        ],
+        [
+          "How it fits your relationships",
+          "/relationships.html"
+        ]
+      ]
+    },
+    {
+      "id": "outsidehelp",
+      "kind": "tool",
+      "name": "Help beyond this site",
+      "keys": [
+        "help beyond this site",
+        "outside help",
+        "help outside this site",
+        "where else can i get help",
+        "where can i get more help",
+        "where can i find a counsellor",
+        "where can i find a counselor",
+        "how do i find a counsellor",
+        "how do i find a counselor",
+        "how do i find a therapist",
+        "where can i find a therapist",
+        "support groups",
+        "support group for carers",
+        "support group for families",
+        "helplines",
+        "free helplines",
+        "books about relationships",
+        "what books do you recommend"
+      ],
+      "what": "Help beyond this site is a short, trusted list of outside help: how to find a counsellor in the US and the UK, free helplines, support groups for families and carers, and a few well-known books. This site is self-help; for anything bigger, a trained person is the right next step.",
+      "how": [
+        "Pick what you need: a counsellor, someone to talk to today, a group, or a book.",
+        "For a counsellor, start with your doctor or the directories on the page.",
+        "If you don’t feel safe at home, go to the safety page instead."
+      ],
+      "links": [
+        [
+          "Help beyond this site",
+          "/outside-help.html"
+        ],
+        [
+          "Finding a counsellor",
+          "/outside-help.html#counsellor"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ]
+      ]
+    },
+    {
+      "id": "examplespage",
+      "kind": "tool",
+      "name": "Examples: small changes in different relationships",
+      "keys": [
+        "examples page",
+        "the examples page",
+        "show me examples",
+        "real examples",
+        "examples of small changes",
+        "example stories",
+        "stories of small changes",
+        "examples for different relationships",
+        "do you have examples",
+        "case studies"
+      ],
+      "what": "The examples page shows small changes in many kinds of relationships: a couple, housemates, siblings, co-parents, friends, co-founders, a home with more than two partners, a kinship carer and someone on their own. They are made-up examples built from common patterns, not real people or testimonials.",
+      "how": [
+        "Find the example closest to your situation.",
+        "Notice the one small change in it, not the whole story.",
+        "Try that one change for a week."
+      ],
+      "links": [
+        [
+          "Examples: small changes in different relationships",
+          "/examples.html"
+        ],
+        [
+          "Find it by relationship",
+          "/by-relationship.html"
         ]
       ]
     },
@@ -10468,7 +10639,13 @@
         "say sorry so it lands",
         "~my apology didnt help",
         "~sorry did not help",
-        "~sorry didnt help"
+        "~sorry didnt help",
+        "how do i apologise so it lands",
+        "how do i apologize so it lands",
+        "apologise so it lands",
+        "apologize so it lands",
+        "how do i say sorry so it lands",
+        "sorry so it lands"
       ],
       "what": "Apology languages are five parts of a sorry that different people need: expressing regret, accepting responsibility, making it right, a plan to change, and asking for forgiveness (Chapman and Thomas). The idea is popular and little tested, so the page treats it as a menu. The better-supported finding is that acknowledging responsibility and offering to repair matter most. The guide has healthy and sideways versions of each, scripts, and a way to ask “what helps you most after a hurt?” on a calm day.",
       "how": [
@@ -10672,7 +10849,12 @@
         "how emotions work",
         "why do we have feelings",
         "why do we have emotions",
-        "feelings about feelings"
+        "feelings about feelings",
+        "chapter 1 of part three",
+        "chapter 1 of part 3",
+        "part three chapter 1",
+        "part 3 chapter 1",
+        "understanding people chapter 1"
       ],
       "what": "Chapter 1 of Part Three, “Understanding people”, explains how feelings work: they start as signals in the body, naming a feeling helps it settle a little, and we often have feelings about our feelings. It ends with kind words to use on your own, at home, with friends and at work.",
       "how": [
@@ -10702,7 +10884,12 @@
         "what is stress",
         "stress and the nervous system",
         "why does stress add up",
-        "what is flooding"
+        "what is flooding",
+        "chapter 2 of part three",
+        "chapter 2 of part 3",
+        "part three chapter 2",
+        "part 3 chapter 2",
+        "understanding people chapter 2"
       ],
       "what": "Chapter 2 of Part Three explains how stress works: your body getting ready, the calm, revved up and running on empty ladder, flooding, why stress adds up, and the kinds of rest that help you recover.",
       "how": [
@@ -10731,7 +10918,16 @@
         "why do we misjudge people",
         "why do we assume the worst",
         "stories we tell ourselves",
-        "how perception works"
+        "how perception works",
+        "why do i see things differently",
+        "why do we see things differently",
+        "why do we see things so differently",
+        "why do people see things differently",
+        "chapter 3 of part three",
+        "chapter 3 of part 3",
+        "part three chapter 3",
+        "part 3 chapter 3",
+        "understanding people chapter 3"
       ],
       "what": "Chapter 3 of Part Three is about how we see each other: perception is a best guess, we fill gaps with stories, everyday bias creeps in, and asking beats guessing.",
       "how": [
@@ -10753,7 +10949,12 @@
         "how does communication work",
         "how communication works",
         "why do messages get misunderstood",
-        "why do we misunderstand each other"
+        "why do we misunderstand each other",
+        "chapter 4 of part three",
+        "chapter 4 of part 3",
+        "part three chapter 4",
+        "part 3 chapter 4",
+        "understanding people chapter 4"
       ],
       "what": "Chapter 4 of Part Three explains how communication works: meaning is made between two people, so listening, checking and repairing mix-ups matter as much as the words.",
       "how": [
@@ -10782,7 +10983,12 @@
         "how is trust built",
         "why do we need to belong",
         "need to belong",
-        "finding my people"
+        "finding my people",
+        "chapter 5 of part three",
+        "chapter 5 of part 3",
+        "part three chapter 5",
+        "part 3 chapter 5",
+        "understanding people chapter 5"
       ],
       "what": "Chapter 5 of Part Three is about attachment, trust and belonging: why belonging is a basic need, how early bonds shape what we expect, how trust grows in small moments, and how to rebuild it.",
       "how": [
@@ -10806,7 +11012,12 @@
         "how do habits work",
         "how habits work",
         "how do i change a habit",
-        "how to build a habit"
+        "how to build a habit",
+        "chapter 6 of part three",
+        "chapter 6 of part 3",
+        "part three chapter 6",
+        "part 3 chapter 6",
+        "understanding people chapter 6"
       ],
       "what": "Chapter 6 of Part Three is about habits and change: why change is hard, how habits run on cues, and how tiny steps, a kinder setup and self-compassion after slips help change last.",
       "how": [
@@ -10833,7 +11044,12 @@
         "difference between shame and guilt",
         "inner critic",
         "what is self compassion",
-        "what is self-compassion"
+        "what is self-compassion",
+        "chapter 7 of part three",
+        "chapter 7 of part 3",
+        "part three chapter 7",
+        "part 3 chapter 7",
+        "understanding people chapter 7"
       ],
       "what": "Chapter 7 of Part Three is about self-worth, shame and self-compassion: worth is not a score, shame is different from guilt, and self-compassion helps you own mistakes and grow.",
       "how": [
@@ -10856,7 +11072,12 @@
         "how grief works",
         "stages of grief",
         "is grief in stages",
-        "what is grief"
+        "what is grief",
+        "chapter 8 of part three",
+        "chapter 8 of part 3",
+        "part three chapter 8",
+        "part 3 chapter 8",
+        "understanding people chapter 8"
       ],
       "what": "Chapter 8 of Part Three is about loss, grief and big life changes: grief comes in waves, not neat stages, it lives in the body, some losses nobody sees, and you can stay connected to who you lost.",
       "how": [
@@ -10883,7 +11104,12 @@
         "neurodiversity explained",
         "what is neurodivergent",
         "what does neurodivergent mean",
-        "minds that work differently"
+        "minds that work differently",
+        "chapter 9 of part three",
+        "chapter 9 of part 3",
+        "part three chapter 9",
+        "part 3 chapter 9",
+        "understanding people chapter 9"
       ],
       "what": "Chapter 9 of Part Three is a plain guide to neurodiversity: autism, ADHD, sensory and learning differences, masking and energy, and how to meet in the middle at home and at work.",
       "how": [
@@ -10910,7 +11136,12 @@
         "what are my values",
         "how do i find my values",
         "what makes a good life",
-        "values and meaning"
+        "values and meaning",
+        "chapter 10 of part three",
+        "chapter 10 of part 3",
+        "part three chapter 10",
+        "part 3 chapter 10",
+        "understanding people chapter 10"
       ],
       "what": "Chapter 10 of Part Three is about values, meaning and a good life: what values are, how to find yours, what to do when two good things clash, and what old philosophy offers ordinary life today.",
       "how": [
@@ -10934,7 +11165,12 @@
         "how do i rebuild trust",
         "rebuilding trust",
         "what is forgiveness",
-        "what forgiveness is"
+        "what forgiveness is",
+        "chapter 11 of part three",
+        "chapter 11 of part 3",
+        "part three chapter 11",
+        "part 3 chapter 11",
+        "understanding people chapter 11"
       ],
       "what": "Chapter 11 of Part Three is about healing after hurt: repair after small ruptures, apologies that land, what forgiveness is and is not, rebuilding trust, and when to get more help.",
       "how": [
@@ -10957,7 +11193,12 @@
         "how to help someone",
         "helping others well",
         "how do i help without taking over",
-        "how to help without taking over"
+        "how to help without taking over",
+        "chapter 12 of part three",
+        "chapter 12 of part 3",
+        "part three chapter 12",
+        "part 3 chapter 12",
+        "understanding people chapter 12"
       ],
       "what": "Chapter 12 of Part Three is about helping others well: ask what help is wanted, listen first, keep kind limits, help in a crisis, and look after yourself so you last.",
       "how": [
@@ -10981,7 +11222,14 @@
         "ladder check",
         "nervous system ladder",
         "am i revved up",
-        "am i running on empty"
+        "am i running on empty",
+        "what is the ladder",
+        "whats the ladder",
+        "what s the ladder",
+        "the ladder check",
+        "the ladder page",
+        "ladder",
+        "where am i on the ladder right now"
       ],
       "what": "Where am I right now? is a four-tap check on the nervous system ladder. It shows if you’re calm and connected, revved up, or running on empty, with what helps right now, a pause line to say, and when to talk again.",
       "how": [
@@ -11013,7 +11261,16 @@
         "say no nicely",
         "ways to say no",
         "refusal scripts",
-        "how do i turn someone down nicely"
+        "how do i turn someone down nicely",
+        "help me say no",
+        "how do i say no",
+        "how to say no",
+        "say no to extra work",
+        "how do i say no to extra work",
+        "how do i say no at work",
+        "how do i say no to my boss",
+        "how do i say no to my family",
+        "how do i say no without feeling guilty"
       ],
       "what": "Say no kindly gives you copy-ready ways to say no. Pick a situation and a tone, and it offers three kind options, like “I’m full today”, “Not me, but let’s find who” or “Yes, just later”.",
       "how": [
@@ -11055,7 +11312,12 @@
         "how to be a better listener",
         "how can i be a better listener",
         "how do we talk to each other better",
-        "how can we talk to each other better"
+        "how can we talk to each other better",
+        "how do i talk so people listen",
+        "how to talk so people listen",
+        "how do i get people to listen",
+        "talk so people listen",
+        "the communication page"
       ],
       "what": "The communication guide brings together everything on this site about talking and listening. Good communication is shared meaning: what you meant and what they heard end up the same. It covers listening, saying what you need, timing, hard talks, repair, saying no, messages and texts, different wiring, and how it changes with partners, kids, family, friends, housemates and at work, with words you can say out loud and a 7-day practice plan.",
       "how": [
@@ -11104,7 +11366,13 @@
         "how does closeness grow",
         "how is closeness built",
         "bonding page",
-        "what is bonding"
+        "what is bonding",
+        "what helps us feel connected",
+        "how do we feel more connected",
+        "how can we feel more connected",
+        "how do i bond",
+        "bonding",
+        "how closeness grows"
       ],
       "what": "The Bonding page explains how closeness grows, from research on bids, responsiveness and play, with small ideas for partners, children and teens, friends, family, new families, housemates, coworkers and you. Small and often beats big and rare. It has a free idea picker, and ideas for bonding without eye contact or small talk.",
       "how": [
@@ -11195,7 +11463,14 @@
         "what are your sources",
         "where are your sources",
         "where do your answers come from",
-        "where does this come from"
+        "where does this come from",
+        "where do the studies come from",
+        "where does the research come from",
+        "where do your studies come from",
+        "what studies",
+        "which studies",
+        "is there research behind this",
+        "is there research behind it"
       ],
       "what": "The research page lists the studies, books and reviews this site leans on, each with what it found in plain words, how strong the evidence is, and a link to read more. It’s grouped by topic, from fairness and couples to stress, families, grief and minds that work differently. The site is self-help: it’s built from research, but the site itself hasn’t been tested in a trial.",
       "how": [

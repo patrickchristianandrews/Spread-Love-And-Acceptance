@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/assets/css/tol-pages.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/fridge-sheet.js" defer></script>
 <style>
   :root{ --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3; --credit:#3E6B4C; --brass:#8A5E1E; --focus:#2B5B8C; --debit:#96412B; --radius:3px; }
   .read.is-wide{ max-width:52rem; }
@@ -364,6 +365,8 @@
     <p><span class="who">BOTH</span><br>"You need ___. I need ___. The move is ___. Owner: ___. By: ___. We look again on ___."</p>
     <p><span class="who">LEVERAGE</span><br>"The miss showed us ___. The positive we are keeping is ___. One thing you already did that counts: ___."</p>
   </div>
+  <div id="ci-script-fridge" class="no-print"></div>
+  <p class="ci-note">Want a card for the weekly check-in itself? <a href="/check-ins.html#card">This week&rsquo;s check-in card</a> has room for what went well, what felt heavy and one thing to try.</p>
   <p class="ci-note">Practice the card once on a small topic before you use it on a loaded one. The Family Institute notes that the speaker-listener order is easier in a tense talk if you have already used it when nothing is at stake. Trying it for the first time on your hardest topic is how good methods get abandoned.</p>
 
   <aside class="tol-warning" aria-labelledby="ci-limits">
@@ -371,5 +374,21 @@
     <p>It can't replace a clinician or a mediator. It can't make two unwilling people fair. It scores no one. If a check-in becomes a cross-examination with better manners, stop and return to the mirror, or stop for the day. The <a href="/signal-translator.html">Signal Translator</a> can show how a sentence may land. It cannot read the mood in the room, and it should not be used to win an argument.</p>
   </aside>
 </main>
+<script>
+// "Put it on the fridge" for the card above: each line as its own block, blanks left for writing by hand
+document.addEventListener('DOMContentLoaded', function () {
+  var host = document.getElementById('ci-script-fridge'), box = document.querySelector('#card ~ .ci-script');
+  if (!host || !box || !window.TOLFridge) return;
+  window.TOLFridge.button(host, function () {
+    var items = [];
+    box.querySelectorAll('p').forEach(function (p) {
+      var who = p.querySelector('.who'), lab = who ? who.textContent.trim() : '';
+      var text = p.textContent.replace(lab, '').trim();
+      if (lab) items.push({ label: lab.charAt(0) + lab.slice(1).toLowerCase(), text: text });
+    });
+    return { title: 'A card you can read from', sub: 'For a check-in on one topic', items: items, footer: 'One topic. We are on the same side. Either of us can pause.', file: 'check-in-card' };
+  }, { label: 'Print the card', note: 'The card as one clean page, big enough to read from the table. Fits A4 and US Letter.' });
+});
+</script>
 </body>
 </html>

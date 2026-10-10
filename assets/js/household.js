@@ -27,8 +27,14 @@
   household on this device, and is only called when someone taps a button that says so. transfer() is the
   small "Household on another phone?" piece of page for that.
 
+  Jobs that keep coming back: logJobs(source, names) keeps, for this week, the job names a tool was told
+  slipped or came up again (the weekly check-in card); comingBack() names the ones logged in three or more of
+  the last eight weeks, so a page can ask "Want to give each one an owner?". Job names and the week only, never
+  who; kept in 'tol-jobs-log-v1' in this browser; logOn(false) forgets it and stops it.
+
   window.TOLHousehold = { get, set, merge, clear, onChange, isLinked, link, unlink, realNames, writer, offer, remember,
-                          toCode, fromCode, importCode, fileName, transfer }
+                          toCode, fromCode, importCode, fileName, transfer,
+                          weekOf, logJobs, loggedJobs, jobLog, comingBack, dismissComingBack, forgetLog, logOn }
 */
 (function (global) {
   'use strict';
@@ -451,8 +457,124 @@
     return wrap;
   }
 
+  /* ------------------------------------------------------------ jobs that keep coming back */
+  // A small week-by-week log of the jobs someone tapped as "slipped or came up again" (the weekly check-in
+  // card does this). Only job names and the week they were tapped in, kept in this browser
+  // ('tol-jobs-log-v1'), never sent anywhere. After a few weeks, comingBack() names the jobs that show up again
+  // and again, so a page can gently ask "Want to give each one an owner?". It points at the setup, never at a
+  // person: the log never says who.
+  //   { v:1, w: { 'YYYY-MM-DD' (the Monday): { source: [job names] } }, off: { 'job lower case': 'YYYY-MM-DD' }, stop?: 1 }
+  var LOG = 'tol-jobs-log-v1', LOG_WEEKS = 12;
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  // the Monday of the week a date falls in, in this device's own time zone
+  function weekOf(when) {
+    var d = when ? new Date(when) : new Date();
+    if (isNaN(d)) d = new Date();
+    d = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+  function weeksBetween(a, b) {
+    var pa = a.split('-'), pb = b.split('-');
+    return Math.round((new Date(+pb[0], +pb[1] - 1, +pb[2]) - new Date(+pa[0], +pa[1] - 1, +pa[2])) / 6048e5);
+  }
+  function readLog() {
+    var raw = null;
+    try { raw = JSON.parse(global.localStorage.getItem(LOG) || 'null'); } catch (e) { raw = null; }
+    var out = { v: 1, w: {}, off: {} };
+    if (!raw || typeof raw !== 'object') return out;
+    if (raw.stop) out.stop = 1;
+    var wk = raw.w && typeof raw.w === 'object' ? raw.w : {};
+    Object.keys(wk).filter(function (k) { return /^\d{4}-\d\d-\d\d$/.test(k); }).sort().slice(-LOG_WEEKS).forEach(function (k) {
+      var src = wk[k] && typeof wk[k] === 'object' ? wk[k] : {}, keep = {};
+      Object.keys(src).forEach(function (s) {
+        if (!/^[a-z0-9-]{1,20}$/.test(s) || !Array.isArray(src[s])) return;
+        var seen = {}, list = [];
+        src[s].forEach(function (n) { n = str(n, 80); var lk = n.toLowerCase(); if (n && !seen[lk] && list.length < MAX_JOBS) { seen[lk] = 1; list.push(n); } });
+        if (list.length) keep[s] = list;
+      });
+      if (Object.keys(keep).length) out.w[k] = keep;
+    });
+    var off = raw.off && typeof raw.off === 'object' ? raw.off : {};
+    Object.keys(off).slice(0, 80).forEach(function (k) { if (typeof off[k] === 'string' && /^\d{4}-\d\d-\d\d$/.test(off[k])) out.off[str(k, 80).toLowerCase()] = off[k]; });
+    return out;
+  }
+  function writeLog(l) {
+    try {
+      if (!Object.keys(l.w).length && !Object.keys(l.off).length && !l.stop) global.localStorage.removeItem(LOG);
+      else global.localStorage.setItem(LOG, JSON.stringify(l));
+    } catch (e) { return false; }
+    try { document.dispatchEvent(new CustomEvent('tol-jobs-log', { detail: { log: l } })); } catch (e) {}
+    return true;
+  }
+  // Is the log on? (It is, until someone turns it off with logOn(false), which also forgets it.)
+  function logOn(on) {
+    var l = readLog();
+    if (on === undefined) return !l.stop;
+    if (on) { delete l.stop; return writeLog(l); }
+    return writeLog({ v: 1, w: {}, off: {}, stop: 1 });
+  }
+  // The jobs one tool logged for a week (this week unless a date is given): replaces that tool's list for it.
+  function logJobs(source, names, when) {
+    var l = readLog(); if (l.stop) return false;
+    source = /^[a-z0-9-]{1,20}$/.test(source || '') ? source : 'page';
+    var k = weekOf(when), list = [], seen = {};
+    (Array.isArray(names) ? names : []).forEach(function (n) { n = str(n, 80); var lk = n.toLowerCase(); if (n && !seen[lk] && list.length < MAX_JOBS) { seen[lk] = 1; list.push(n); } });
+    var wk = l.w[k] || {};
+    if (list.length) wk[source] = list; else delete wk[source];
+    if (Object.keys(wk).length) l.w[k] = wk; else delete l.w[k];
+    return writeLog(l);
+  }
+  // What a tool logged for a week (this week unless a date is given)
+  function loggedJobs(source, when) { var wk = readLog().w[weekOf(when)] || {}; return (wk[source] || []).slice(); }
+  // The weeks with anything logged, oldest first: [{ d: 'YYYY-MM-DD', jobs: [names] }]
+  function jobLog() {
+    var l = readLog();
+    return Object.keys(l.w).sort().map(function (k) {
+      var seen = {}, jobs = [];
+      Object.keys(l.w[k]).forEach(function (s) { l.w[k][s].forEach(function (n) { var lk = n.toLowerCase(); if (!seen[lk]) { seen[lk] = 1; jobs.push(n); } }); });
+      return { d: k, jobs: jobs };
+    });
+  }
+  // The jobs that keep coming back: logged in at least `min` (3) different weeks out of the last `span` (8).
+  // A job someone set aside with "Not now" only comes back after two more weeks of it. Each:
+  // { name, weeks, of (weeks with anything logged), owner (from the household, '' when it has none) }.
+  // { owned: false } leaves out the jobs that already have an owner.
+  function comingBack(opts) {
+    opts = opts || {};
+    var min = opts.min || 3, span = opts.span || 8, now = weekOf(), l = readLog();
+    if (l.stop) return [];
+    var hh = read(), owners = {};
+    (hh ? hh.jobs : []).forEach(function (j) { if (j.owner) owners[j.name.toLowerCase()] = j.owner; });
+    var weeks = jobLog().filter(function (w) { var g = weeksBetween(w.d, now); return g >= 0 && g < span; });
+    var count = {}, after = {}, name = {};
+    weeks.forEach(function (w) {
+      w.jobs.forEach(function (n) {
+        var k = n.toLowerCase();
+        count[k] = (count[k] || 0) + 1; name[k] = n;
+        if (l.off[k] && w.d > l.off[k]) after[k] = (after[k] || 0) + 1;
+      });
+    });
+    return Object.keys(count).filter(function (k) {
+      return count[k] >= min && (!l.off[k] || (after[k] || 0) >= 2) && (opts.owned !== false || !owners[k]);
+    }).sort(function (a, b) { return count[b] - count[a] || name[a].localeCompare(name[b]); }).map(function (k) {
+      return { name: name[k], weeks: count[k], of: weeks.length, owner: owners[k] || '' };
+    });
+  }
+  // "Not now": these jobs stay quiet until they come back again
+  function dismissComingBack(names) {
+    var l = readLog(), k = weekOf();
+    (Array.isArray(names) ? names : [names]).forEach(function (n) { n = str(n, 80).toLowerCase(); if (n) l.off[n] = k; });
+    return writeLog(l);
+  }
+  // Forget the whole log (keeps it switched on)
+  function forgetLog() { var l = readLog(); return writeLog(l.stop ? { v: 1, w: {}, off: {}, stop: 1 } : { v: 1, w: {}, off: {} }); }
+  try { global.addEventListener('storage', function (e) { if (e.key === LOG || e.key === null) { try { document.dispatchEvent(new CustomEvent('tol-jobs-log', { detail: {} })); } catch (er) {} } }); } catch (e) {}
+
   global.TOLHousehold = {
-    KEY: KEY, MAX_PEOPLE: MAX_PEOPLE,
+    KEY: KEY, MAX_PEOPLE: MAX_PEOPLE, LOG_KEY: LOG,
+    weekOf: weekOf, logJobs: logJobs, loggedJobs: loggedJobs, jobLog: jobLog, comingBack: comingBack,
+    dismissComingBack: dismissComingBack, forgetLog: forgetLog, logOn: logOn,
     get: get, set: set, merge: merge, clear: clear, onChange: onChange,
     isLinked: isLinked, link: link, unlink: unlink,
     realNames: realNames, isPlaceholder: isPlaceholder, addedLine: addedLine,

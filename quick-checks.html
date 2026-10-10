@@ -130,20 +130,58 @@
   .almanac{ margin:1.8rem 0 0; padding:1.15rem 1.25rem 1.3rem; background:var(--paper-deep); border-radius:var(--radius); }
   .read .almanac h2{ font-size:1.18rem; margin:0 0 .3rem; }
   .almanac p{ font-size:.94rem; margin:0 0 .5rem; max-width:62ch; }
-  .week{ list-style:none; display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; margin:.8rem 0 .4rem; padding:0; }
-  .week li{ display:grid; grid-template-rows:auto 64px auto; justify-items:center; gap:3px; margin:0; padding:0; }
-  .week .dn{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; color:var(--ink-soft); }
-  .week .bar{ width:100%; max-width:34px; height:64px; background:var(--paper); border:1px solid var(--line); border-radius:3px; display:flex; align-items:flex-end; overflow:hidden; }
-  .week .bar i{ display:block; width:100%; }
-  .week .bar i.s-clear{ background:#A9CDB1; } .week .bar i.s-gusty{ background:#E6CD8C; } .week .bar i.s-fog{ background:#C4B6E2; }
-  .week .ic{ font-size:1rem; min-height:1.3em; line-height:1.3; }
-  .week li.today .dn{ color:var(--ink); font-weight:600; }
-  .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft); display:flex; gap:1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
+  .al-fig{ margin:.7rem 0 0; }
+  .al-chart{ width:100%; max-width:720px; }
+  .al-chart svg{ display:block; max-width:100%; height:auto; overflow:visible; }
+  /* dark mode: the chart follows the page's colors like the words around it, instead of being turned back */
+  html .al-chart svg{ filter:none !important; }
+  .al-chart .al-grid{ stroke:var(--line); stroke-width:1; }
+  .al-chart .al-lab{ fill:var(--ink-soft); font:500 12px "IBM Plex Mono", ui-monospace, monospace; }
+  .al-chart .al-path{ fill:none; stroke:#B9A77A; stroke-width:1; stroke-dasharray:2 3; }
+  .al-chart .al-dot{ stroke:var(--paper-deep); stroke-width:1.5; }
+  .al-chart .al-clear, .strip-key .k-clear{ fill:#3E7A52; background:#3E7A52; }
+  .al-chart .al-gusty, .strip-key .k-gusty{ fill:#A0700F; background:#A0700F; }
+  .al-chart .al-fog, .strip-key .k-fog{ fill:#6A58A0; background:#6A58A0; }
+  .al-axis{ display:flex; justify-content:space-between; max-width:720px; margin:.15rem 0 0 !important; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--ink-soft); box-sizing:border-box; padding-right:10px; }
+  .al-cap{ font-size:.86rem; color:var(--ink-soft); margin:.35rem 0 .2rem; max-width:62ch; }
+  .strip-key{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--ink-soft); display:flex; gap:.4rem 1.1rem; flex-wrap:wrap; margin:0 0 .3rem; }
+  .strip-key span{ display:inline-flex; align-items:center; gap:.35rem; }
+  .strip-key i{ display:inline-block; width:.7rem; height:.7rem; }
+  .strip-key .k-clear{ border-radius:50%; } .strip-key .k-gusty{ transform:rotate(45deg) scale(.85); } .strip-key .k-fog{ border-radius:2px; }
+  .al-list{ margin:.6rem 0 0; }
+  .al-tablewrap{ max-width:100%; overflow-x:auto; }
+  .al-table{ width:100%; border-collapse:collapse; font-size:.88rem; margin:.3rem 0 .5rem; color:var(--ink); }
+  .al-table th, .al-table td{ text-align:left; padding:.35rem .5rem .35rem 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  .al-table thead th{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; font-weight:500; color:var(--ink-soft); }
+  .al-table tbody th{ font-weight:600; white-space:nowrap; }
+  .al-num{ color:var(--ink-soft); font-size:.8rem; }
+  @media (max-width:600px){ .al-table .al-more{ display:none; } }
+  .al-h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; margin:1.2rem 0 .3rem; }
+  .read .almanac .al-h3{ font-size:1.02rem; }
+  .al-soft{ color:var(--ink-soft); font-size:.9rem !important; }
+  .al-pats{ margin:.2rem 0 .5rem; padding-left:1.1rem; max-width:62ch; }
+  .al-pats li{ margin:.3rem 0; font-size:.97rem; line-height:1.55; }
+  .al-done{ list-style:none; margin:.2rem 0 .5rem; padding:0; max-width:62ch; }
+  .al-done li{ margin:.3rem 0; font-size:.95rem; line-height:1.5; padding-left:1.1rem; position:relative; overflow-wrap:anywhere; }
+  .al-done li::before{ content:"\2713"; position:absolute; left:0; color:var(--credit); }
+  .al-when{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.75rem; color:var(--ink-soft); margin-right:.3rem; }
+  .al-confirm{ margin:.7rem 0 0; padding:.8rem 1rem; background:var(--paper); border:1px solid var(--debit); border-radius:var(--radius); max-width:62ch; }
+  .al-confirm p{ margin:0 0 .2rem !important; }
+  .al-confirm .actions{ margin-top:.5rem; }
+  .btn.al-erase{ border-color:var(--debit); color:var(--debit); }
+  .btn.al-erase:hover{ background:var(--debit); color:var(--paper); }
   .trend{ font-weight:600; color:var(--ink); }
   .pattern{ border-left:3px solid var(--brass); padding-left:1rem; margin:.9rem 0 0; }
   .pattern p{ margin:0 0 .4rem; font-size:.97rem; }
   .why{ font-size:.92rem; color:var(--ink-soft); border-left:3px solid var(--line); padding-left:1rem; margin-top:1.4rem; max-width:62ch; }
-  @media print{ .steps, .actions, .see-fc, .almanac .actions, .tol-welcome{ display:none !important; } }
+  @media print{ .steps, .actions, .see-fc, .almanac .actions, .tol-welcome, #al-more, #al-done-more, .al-confirm{ display:none !important; } }
+  /* "Print" in the almanac prints only the almanac */
+  @media print{
+    html.al-print body > *:not(main), html.al-print main > *:not(#today), html.al-print #today > *:not(#almanac){ display:none !important; }
+    html.al-print .almanac{ background:none; padding:0; margin:0; }
+    html.al-print .al-list summary{ display:none; }
+    html.al-print .al-table .al-more{ display:table-cell !important; }
+  }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/quick-checks.html">
@@ -393,22 +431,62 @@
           <button class="btn" type="button" id="copy-say">Copy the sentence</button>
           <button class="btn" type="button" id="copy-share">Share my forecast</button>
           <button class="btn" type="button" id="copy-all">Copy the whole forecast</button>
-          <button class="btn is-primary" type="button" id="save">Save today to my 7-day log</button>
+          <button class="btn is-primary" type="button" id="save">Save today to my almanac</button>
           <button class="btn" type="button" id="reset">Start over</button>
         </div>
-        <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself; nothing is sent from this page. The 7-day log is optional: it keeps this reading in this browser only (in its local storage), never on a server, and you can erase it at any time.</p>
+        <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself; nothing is sent from this page. Saving is optional: your almanac keeps this reading in this browser only (in its local storage), never on a server, along with the readings from other days you saved (up to 120), and you can download it or erase it at any time.</p>
         <p class="msg" id="msg" role="status" aria-live="polite"></p>
       </div>
     </div>
 
     <section class="almanac" id="almanac" aria-labelledby="al-h" hidden>
-      <h2 id="al-h">Your 7-day log</h2>
-      <p id="al-intro">Kept in this browser only. Nothing is uploaded, and no one else can see it.</p>
-      <ol class="week" id="week"></ol>
-      <p class="strip-key" aria-hidden="true"><span>&#9728; Clear (calm)</span><span>&#127788; Gusty (revved up)</span><span>&#127787; Fogged in (running on empty)</span><span>Taller bar = heavier day</span><span>Blank = no reading that day</span></p>
-      <p class="trend" id="trend"></p>
-      <div class="pattern" id="pattern"></div>
-      <div class="actions"><button class="btn" type="button" id="erase">Erase my log</button></div>
+      <h2 id="al-h">Your weather almanac</h2>
+      <div id="al-weather">
+        <p id="al-intro">Kept in this browser only. Nothing is uploaded, and no one else can see it.</p>
+        <figure class="al-fig tol-plain">
+          <div class="al-chart" id="al-chart"></div>
+          <p class="al-axis" id="al-axis" aria-hidden="true" hidden></p>
+          <figcaption class="al-cap" id="al-cap"></figcaption>
+          <p class="strip-key" aria-hidden="true"><span><i class="k-clear"></i>Clear (calm)</span><span><i class="k-gusty"></i>Gusty (revved up)</span><span><i class="k-fog"></i>Fogged in (running on empty)</span></p>
+        </figure>
+        <details class="how al-list">
+          <summary>See every reading as a list</summary>
+          <div class="al-tablewrap tol-plain">
+            <table class="al-table no-bubble">
+              <caption class="sr-only">Your saved readings, newest first</caption>
+              <thead><tr><th scope="col">Day</th><th scope="col">Sky</th><th scope="col">Room in the day</th><th scope="col">Sleep</th><th scope="col" class="al-more">Also noted</th></tr></thead>
+              <tbody id="al-rows"></tbody>
+            </table>
+          </div>
+          <button class="btn" type="button" id="al-more" aria-controls="al-rows" hidden>Show all readings</button>
+        </details>
+        <p class="trend" id="trend"></p>
+        <h3 class="al-h3">Maybe a pattern</h3>
+        <div class="pattern" id="pattern"></div>
+      </div>
+      <p id="al-empty" class="al-soft" hidden>No weather readings saved yet. Save one above and it starts here.</p>
+
+      <h3 class="al-h3">Things you finished here, newest first</h3>
+      <ul class="al-done tol-plain" id="al-done"></ul>
+      <button class="btn" type="button" id="al-done-more" aria-controls="al-done" hidden>Show all</button>
+      <p class="al-soft" id="al-undated-h" hidden>Also marked done (no date kept):</p>
+      <ul class="al-done tol-plain" id="al-undated" hidden></ul>
+      <p class="al-soft" id="al-done-none" hidden>Nothing here yet. Chapters you read to the end, tools you get a result from, worksheets you keep and small wins you note will show up here.</p>
+      <p class="al-soft">Gathered from notes other pages already keep in this browser. See or erase each one on <a href="/on-this-device.html">What&#8217;s stored on this device</a>.</p>
+
+      <div id="al-export" hidden>
+        <div class="actions al-actions">
+          <button class="btn" type="button" id="al-csv">Download .csv</button>
+          <button class="btn" type="button" id="al-json">Download .json</button>
+          <button class="btn" type="button" id="al-print">Print</button>
+          <button class="btn al-erase" type="button" id="erase">Erase my almanac</button>
+        </div>
+        <div class="al-confirm" id="al-confirm" role="group" aria-labelledby="al-confirm-q" hidden>
+          <p id="al-confirm-q"><strong>Erase every saved weather reading from this browser?</strong> There&#8217;s no copy anywhere else, so this can&#8217;t be undone. (The things-finished list stays; it belongs to other pages.)</p>
+          <div class="actions"><button class="btn is-primary" type="button" id="al-yes">Yes, erase my readings</button><button class="btn" type="button" id="al-no">No, keep them</button></div>
+        </div>
+        <p class="save-note">Downloads are made right here on this device and go only where you save them. A .csv opens in any spreadsheet; a .json keeps every detail.</p>
+      </div>
       <p class="msg" id="al-msg" role="status" aria-live="polite"></p>
     </section>
 
@@ -420,9 +498,10 @@
 
 </main>
 
+<script src="/assets/js/almanac.js"></script>
 <script>
 (function(){
-  var KEY='tol-weather-v1', MAX_DAYS=7, NUMKEY='tol-wx-shownums', PAUSEKEY='tol-wx-pause';
+  var KEY='tol-weather-v1', MAX_DAYS=120, NUMKEY='tol-wx-shownums', PAUSEKEY='tol-wx-pause';
   var sky=null, load=null, sleep=null, people=null, rel=null;
   var body={}, front={}, need={};
   function $(id){ return document.getElementById(id); }
@@ -649,7 +728,7 @@
     $('fc-extra').hidden=false;
     $('msg').textContent='';
     var today=get().filter(function(e){ return e.d===localDay(); })[0];
-    $('save').disabled=false; $('save').textContent=today?'Update today in my log':'Save today to my 7-day log';
+    $('save').disabled=false; $('save').textContent=today?'Update today in my almanac':'Save today to my almanac';
     announce(i);
   }
 
@@ -673,7 +752,7 @@
     return t;
   }
 
-  // ---------- 7-day log (opt-in, this browser only) ----------
+  // ---------- the almanac: saved readings (opt-in, this browser only, the last 120 days you saved) ----------
   function get(){
     var a=[];
     try{ a=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){ a=[]; }
@@ -683,79 +762,8 @@
     return Object.keys(byDay).sort().map(function(k){ return byDay[k]; }).slice(-MAX_DAYS);
   }
   function put(a){ try{ localStorage.setItem(KEY, JSON.stringify(a.slice(-MAX_DAYS))); return true; }catch(e){ return false; } }
-  function bucket(h){ return h<12?'mornings':h<17?'afternoons':'evenings'; }
-
-  function lastSeven(a){
-    var days=[], now=new Date();
-    for(var k=6;k>=0;k--){ var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-k); days.push(d); }
-    var map={}; a.forEach(function(e){ map[e.d]=e; });
-    return days.map(function(d){ return {date:d, key:localDay(d), e:map[localDay(d)]||null}; });
-  }
-
-  function trend(a){
-    var wk=lastSeven(a).filter(function(x){ return x.e; }).map(function(x){ return x.e; });
-    if(wk.length<3) return wk.length ? 'Log on at least three different days this week to see a trend.' : 'No readings in the last seven days yet.';
-    var h=Math.floor(wk.length/2), avg=function(x){ return Math.round(x.reduce(function(s,e){ return s+(e.i||0); },0)/x.length); };
-    var first=avg(wk.slice(0,h)), second=avg(wk.slice(wk.length-h));
-    var c={clear:0,gusty:0,fog:0}; wk.forEach(function(e){ c[e.sky]++; });
-    var skies=[c.clear+' clear',c.gusty+' gusty',c.fog+' fogged in'].join(', ');
-    var nums=function(a,b){ return showNums()?' (tally about '+a+' to '+b+' of 100, higher = heavier)':''; };
-    if(second-first>=8) return 'This week: the days have been getting heavier'+nums(first,second)+'. ('+skies+'.) Worth lightening one thing before the weekend.';
-    if(first-second>=8) return 'This week: the days have been getting lighter'+nums(first,second)+'. ('+skies+'.) Whatever changed, it may be worth keeping.';
-    return 'This week: fairly steady, mostly '+band(avg(wk)).toLowerCase().replace(' today','')+(showNums()?' (tally around '+avg(wk)+' of 100)':'')+'. ('+skies+'.)';
-  }
-
-  function patterns(a){
-    var out=[];
-    if(a.length<2){ out.push('One reading is a mood. Come back on a few different days and the shape of your weeks starts to show.'); return out; }
-    var rough=a.filter(function(e){ return e.sky!=='clear'; });
-    var badSleep=rough.filter(function(e){ return e.sleep==='bad'||e.sleep==='short'; });
-    if(rough.length>=3 && badSleep.length/rough.length>=0.6){
-      out.push('Sleep seems to be doing a lot of the work here: '+badSleep.length+' of your '+rough.length+' rough days followed a short night. That makes bedtime a relationship tool, which is an odd sentence and a fair one.');
-    }
-    var heavy=a.filter(function(e){ return e.i>=60; });
-    if(heavy.length>=3){
-      var b={}; heavy.forEach(function(e){ var k=bucket(e.t); b[k]=(b[k]||0)+1; });
-      var bt=Object.keys(b).sort(function(x,y){ return b[y]-b[x]; })[0];
-      if(b[bt]>=2) out.push('Your heavier readings cluster in the '+bt+': '+b[bt]+' of '+heavy.length+'. Worth protecting that stretch, or at least not scheduling hard talks inside it.');
-    }
-    var fc={}; a.forEach(function(e){ (e.front||[]).forEach(function(k){ fc[k]=(fc[k]||0)+1; }); });
-    var ft=Object.keys(fc).sort(function(x,y){ return fc[y]-fc[x]; })[0];
-    if(ft && fc[ft]>=3 && FRONTTXT[ft]) out.push('The front that keeps returning is '+FRONTTXT[ft]+', '+fc[ft]+' times. A front that never clears is usually about the setup, not you: <a href="/workpapers/wp-04-what-keeps-coming-back.html">What keeps coming back? (WP-04)</a> is built for exactly that.');
-    var nc={}; a.forEach(function(e){ (e.need||[]).forEach(function(k){ nc[k]=(nc[k]||0)+1; }); });
-    var nt=Object.keys(nc).sort(function(x,y){ return nc[y]-nc[x]; })[0];
-    if(nt && nc[nt]>=3 && NEEDTXT[nt]) out.push('What you ask for most is '+NEEDTXT[nt]+', '+nc[nt]+' times. If nobody around you knows that, a <a href="/wiring-card.html">Wiring Card</a> says it once so you don’t have to keep saying it.');
-    var peoplish=a.filter(function(e){ return e.people==='lots'||e.people==='nonstop'; });
-    var peoplishRough=peoplish.filter(function(e){ return e.sky!=='clear'; });
-    if(peoplish.length>=3 && peoplishRough.length/peoplish.length>=0.6) out.push('Heavy people days and rough weather travel together for you: '+peoplishRough.length+' of '+peoplish.length+'. That’s a fact about your capacity, not an attitude problem.');
-    var avg=Math.round(a.reduce(function(s,e){ return s+(e.i||0); },0)/a.length);
-    out.push('Across '+a.length+' logged day'+(a.length===1?'':'s')+', most days read as '+band(avg).toLowerCase().replace(' today','')+(showNums()?' (an average tally of '+avg+' of 100, higher = heavier)':'')+'.'+(avg>=60?' That is a lot to be carrying. <a href="/workpapers/wp-02-how-much-are-you-carrying.html">How much are you carrying? (WP-02)</a> looks at it more closely, and <a href="/relationships.html">the relationships page</a> shows where the weight usually hides.':''));
-    return out;
-  }
-
-  var DAYN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  function draw(){
-    var a=get();
-    if(!a.length){ $('almanac').hidden=true; return; }
-    $('almanac').hidden=false;
-    var week=$('week'); week.innerHTML='';
-    var todayKey=localDay();
-    lastSeven(a).forEach(function(x){
-      var li=document.createElement('li'); if(x.key===todayKey) li.className='today';
-      var e=x.e, dn=DAYN[x.date.getDay()];
-      var label=x.date.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})+(e?': '+SKY[e.sky].name+' ('+SKY[e.sky].sub.toLowerCase()+'), '+band(e.i||0).toLowerCase().replace(' today',''):'');
-      li.innerHTML='<span class="dn" aria-hidden="true"></span><span class="bar" aria-hidden="true"><i></i></span><span class="ic" aria-hidden="true"></span><span class="sr-only"></span>';
-      li.querySelector('.dn').textContent=x.key===todayKey?'Today':dn;
-      li.querySelector('.sr-only').textContent=label;
-      var bar=li.querySelector('.bar i');
-      if(e){ bar.className='s-'+e.sky; bar.style.height=Math.max(6,e.i||0)+'%'; li.querySelector('.ic').textContent=SKY[e.sky].ico; }
-      week.appendChild(li);
-    });
-    $('al-intro').textContent=a.length+' day'+(a.length===1?'':'s')+' logged, kept in this browser only. Nothing is uploaded, and no one else can see it. The log keeps only the last seven days; older readings drop off on their own.';
-    $('trend').textContent=trend(a);
-    var p=$('pattern'); p.innerHTML='';
-    patterns(a).forEach(function(t){ var el=document.createElement('p'); el.innerHTML=t; p.appendChild(el); });
-  }
+  // The almanac (chart, list, patterns, things finished, export, erase) lives in /assets/js/almanac.js.
+  function draw(){ if(window.TOLAlmanac) window.TOLAlmanac.draw(); }
 
   // ---------- wiring ----------
   document.querySelectorAll('[data-sky]').forEach(function(b){
@@ -820,7 +828,7 @@
     if(!put(a)){ $('msg').textContent='This browser isn’t allowing saved data (a private window, perhaps), so nothing was saved.'; return; }
     draw();
     if (window.TOLGarden) window.TOLGarden.gift('weather');
-    $('msg').textContent=(had?'Updated today in your log':'Saved to your 7-day log')+', in this browser only. Erase it any time below.';
+    $('msg').textContent=(had?'Updated today in your almanac':'Saved to your almanac')+', in this browser only. See it, or erase it, just below.';
     $('save').textContent='Saved';
     $('save').disabled=true;
   });
@@ -838,24 +846,9 @@
     if(first){ first.focus({preventScroll:true}); first.scrollIntoView({block:'center'}); }
   });
 
-  var eraseArm=null;
-  $('erase').addEventListener('click', function(){
-    var b=$('erase');
-    if(!eraseArm){ b.textContent='Tap again to erase your log'; eraseArm=setTimeout(function(){ eraseArm=null; b.textContent='Erase my log'; },4000); return; }
-    clearTimeout(eraseArm); eraseArm=null; b.textContent='Erase my log';
-    try{ localStorage.removeItem(KEY); }catch(e){}
-    // The flowers a weather save planted in the Night Garden go too, so nothing from the log is left behind.
-    try{
-      var g=JSON.parse(localStorage.getItem('tol-garden-gifts')||'null');
-      if(g&&g.from&&g.from.weather){
-        g.count=Math.max(0,(g.count||0)-g.from.weather); delete g.from.weather;
-        if(!g.count&&!Object.keys(g.from).length) localStorage.removeItem('tol-garden-gifts'); else localStorage.setItem('tol-garden-gifts',JSON.stringify(g));
-      }
-    }catch(e){}
-    $('al-msg').textContent='';
-    $('almanac').hidden=true;
-    $('fc-status').textContent='Your 7-day log, and the flowers it planted, were erased from this browser.';
-    if(sky){ $('save').disabled=false; $('save').textContent='Save today to my 7-day log'; $('msg').textContent='Your 7-day log was erased from this browser.'; }
+  // after "Erase my almanac" (in almanac.js), today's reading can be saved again
+  document.addEventListener('tol-almanac-erased', function(){
+    if(sky){ $('save').disabled=false; $('save').textContent='Save today to my almanac'; $('msg').textContent='Your saved readings were erased from this browser.'; }
   });
 
   // ---------- show the numbers (off by default; remembered for this tab only) ----------

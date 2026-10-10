@@ -65,7 +65,7 @@
   .read .hh-kick a.hh-es:hover{ border-color:#2B5B8C; }
   .read .hh-kick a.hh-es:focus-visible, .read .hh-for a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
   /* Who it's for: one quiet row of small links under the lede */
-  .read .hh .hh-for{ margin:-.6rem 0 1.15rem; font-size:.92rem; line-height:1.75; color:var(--ink-soft, #5A5346); text-wrap:pretty; }
+  .read .hh .hh-for{ margin:0 0 1.15rem; font-size:.92rem; line-height:1.75; color:var(--ink-soft, #5A5346); text-wrap:pretty; }
   .read .hh-for a{ white-space:nowrap; color:var(--ink, #2B2620); font-weight:600; text-decoration:underline; text-decoration-color:#CDB8EA; text-decoration-thickness:1.5px; text-underline-offset:3px; }
   .read .hh-for a:hover{ text-decoration-color:currentColor; }
   /* the walking pups pass behind this button, so give it a solid face */
@@ -93,18 +93,49 @@
   .read .hh-card-k{ font-family:"Fraunces", Georgia, serif; font-style:italic; font-size:.86rem; line-height:1.3; color:#8A3F72; }
   html.tol-quiet .read .hh-card-k{ color:inherit; }
   .read .hh .hh-go-h{ margin:0 0 .5rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.3; color:var(--ink, #2B2620); }
-  .read .hh .hh-go li{ display:flex; flex-direction:column; gap:.3rem; }
+  .read .hh .hh-go li{ display:flex; flex-direction:column; }
+  .read .hh .hh-go li[hidden]{ display:none; }
   .read .hh .hh-go li > a.hh-card{ flex:1 1 auto; }
-  .read a.hh-also{ align-self:flex-start; display:inline-block; box-sizing:border-box; min-height:36px; padding:.45rem .3rem .3rem; font-size:.9rem; font-weight:600; line-height:1.3; color:#2B5B8C;
-    text-decoration:underline; text-decoration-color:#BFD2E6; text-decoration-thickness:1.5px; text-underline-offset:3px; }
-  .read a.hh-also::after{ content:"\a0\2192"; font-weight:400; }
-  .read a.hh-also:hover{ text-decoration-color:currentColor; }
-  .read a.hh-also:focus-visible, .read .hh-ten a:focus-visible, .read .hh-sub a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:4px; }
-  .read .hh .hh-ten{ margin:.1rem 0 1rem; font-size:.95rem; line-height:1.5; color:var(--ink-soft, #5A5346); }
-  .read .hh-ten a{ display:inline-flex; align-items:center; min-height:36px; padding:.1rem .8rem; border-radius:999px; font-weight:600; color:#4E3F6B; background:#F4ECFB; border:1px solid #D9C8F0; text-decoration:none; }
-  .read .hh-ten a:hover{ background:#EADCF8; }
-  html.tol-quiet .read .hh-ten a{ background:none; border:0; padding:0; text-decoration:underline; }
+  /* Just me / With someone (kept in tol-mode-v1; come-back.js reads it too) */
+  .read .hh-mode{ margin:0 0 .9rem; }
+  .read .hh .hh-mode-q{ margin:0 0 .4rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; color:var(--ink, #2B2620); }
+  .read .hh-mode-opts{ display:flex; flex-wrap:wrap; gap:.45rem; }
+  .read .hh-mode-opts button{ flex:0 1 auto; min-height:44px; padding:.35rem 1.1rem; border-radius:999px; cursor:pointer; font:600 1rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+  .read .hh-mode-opts button:hover{ border-color:#9A80C8; }
+  .read .hh-mode-opts button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+  .read .hh-mode-opts button[aria-pressed="true"]::before{ content:"\2713\a0"; }
+  .read .hh-mode-opts button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .read .hh .hh-mode-note{ margin:.4rem 0 0; font-size:.88rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
+  /* the one main first step */
+  .read a.hh-start{ display:flex; flex-direction:column; gap:.2rem; box-sizing:border-box; margin:0 0 1.1rem; padding:1rem 1.15rem 1.05rem; border-radius:20px; text-decoration:none;
+    color:#FFFDF7; background:linear-gradient(140deg, #5B3F82 0%, #2B5B8C 100%); box-shadow:0 14px 30px -14px rgba(43,91,140,.7); }
+  .read a.hh-start:hover{ background:linear-gradient(140deg, #4E3570 0%, #244E78 100%); }
+  .read a.hh-start:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+  .read .hh-start-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.07em; text-transform:uppercase; opacity:.9; }
+  .read .hh-start-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.35rem, 1.1rem + 1vw, 1.6rem); line-height:1.15; }
+  .read .hh-start-t::after{ content:"\a0\2192"; font-family:"Lora", Georgia, serif; font-weight:400; }
+  .read .hh-start-n{ font-size:.95rem; line-height:1.4; }
+  .read .hh-start-done{ font-size:.92rem; line-height:1.4; font-style:italic; opacity:.95; }
+  .read .hh-start-done[hidden]{ display:none; }
+  html.tol-quiet .read a.hh-start{ background:#FFFDF7; color:var(--ink, #2B2620); border:2px solid var(--ink, #2B2620); box-shadow:none; border-radius:10px; }
+  /* the two crisis routes stay in sight */
+  .read .hh .hh-help{ margin:-.2rem 0 1rem; font-size:.9rem; line-height:1.8; color:var(--ink-soft, #5A5346); }
+  .read .hh-help a{ font-weight:600; color:#2B5B8C; text-decoration:underline; text-decoration-color:#BFD2E6; text-underline-offset:3px; white-space:nowrap; }
+  .read .hh-help a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:4px; }
+  /* More ways in: everything else, one tap away */
+  .read .hh-ways{ margin:0; border-top:1px solid #E6DAF3; }
+  .read .hh-ways > summary{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.1rem .6rem; min-height:48px; box-sizing:border-box; padding:.75rem 0 .5rem; cursor:pointer; list-style:none; }
+  .read .hh-ways > summary::-webkit-details-marker{ display:none; }
+  .read .hh-ways > summary::before{ content:"+"; display:inline-grid; place-items:center; width:1.5rem; height:1.5rem; border-radius:50%; background:#F4ECFB; color:#4E3F6B; font-weight:700; }
+  .read .hh-ways[open] > summary::before{ content:"\2212"; }
+  .read .hh-ways-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; color:var(--ink, #2B2620); }
+  .read .hh-ways-n{ font-size:.86rem; color:var(--ink-soft, #5A5346); }
+  .read .hh-ways > summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:6px; }
+  .read .hh-ways[open] > summary{ margin-bottom:.4rem; }
+  .read .hh-ways .hh-more{ margin:.2rem 0 .9rem; }
+  .read .hh-ways .hh-for{ margin:0 0 .4rem; }
   .read .hh-go{ display:grid; grid-template-columns:repeat(3, 1fr); gap:.8rem; margin:0 0 1rem; padding:0; list-style:none; }
+  .read .hh-go.is-two{ grid-template-columns:repeat(2, 1fr); }
   .read .hh .hh-go li{ margin:0; padding:0; width:auto; }
   .read .hh-go li::before, .read .hh-more li::before{ content:none; }
   .read a.hh-card{ display:flex; flex-direction:column; align-items:flex-start; gap:.55rem; height:100%; box-sizing:border-box; min-height:64px; padding:1rem 1rem 1.05rem;
@@ -161,8 +192,11 @@
     .read .hh-kick{ margin-bottom:.7rem; }
     .read .hh .hh-go-h{ margin-bottom:.35rem; font-size:.98rem; }
     .read .hh-card-k{ font-size:.8rem; }
-    .read .hh .hh-go li{ gap:.1rem; }
-    .read a.hh-also{ min-height:32px; padding:.3rem .3rem .2rem; font-size:.86rem; }
+    .read .hh-go.is-two{ grid-template-columns:1fr; }
+    .read a.hh-start{ padding:.9rem 1rem .95rem; margin-bottom:.9rem; }
+    .read .hh-ways-n{ display:none; }
+    .read .hh .hh-help{ display:flex; flex-direction:column; align-items:flex-start; line-height:1.5; gap:.35rem; }
+    .read .hh-help > span{ display:none; }
     .read .hh .hh-go li > a.hh-card{ padding:.6rem .8rem; }
     .read .hh-card-n{ font-size:.86rem; line-height:1.35; }
     .read .hh .hh-for{ margin-bottom:1rem; font-size:.88rem; line-height:1.7; }
@@ -579,19 +613,36 @@
   <p class="hh-kick"><span>Free</span> <span>Private</span> <span>No sign-up</span> <a class="hh-es" href="/en-espanol.html" lang="es" hreflang="es">En español</a></p>
   <p class="hh-eyebrow">Learn &middot; Heal &middot; Grow together</p>
   <h1 id="hero-h" class="hh-h1">Understand yourself. <span class="hh-accent">Understand <span class="hh-nw">each other.</span></span></h1>
-  <p class="hh-lede">Free, kind lessons and tools for self-help and healing: how communication, relationships and the mind work, and what to do about it. For you on your own, and for couples, friends, families, housemates and coworkers. Most tools take a minute or two, and nothing you type leaves your device.</p>
-  <h2 class="hh-go-h" id="hh-go-h">What brings you here?</h2>
-  <ul class="hh-go" aria-labelledby="hh-go-h">
-    <li><a class="hh-card" href="/ladder.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">I need calm right now</span><span class="hh-card-n">Where am I right now? A one-minute check, then one calm step that fits.</span></span></a><a class="hh-also" href="/upset-right-now.html">Upset right now? Five minutes to pause</a></li>
-    <li><a class="hh-card" href="/lemonade-stand.html"><span class="hh-card-i" aria-hidden="true">&#127819;</span><span class="hh-card-b"><span class="hh-card-k">Less keeping score. More being on the same side.</span><span class="hh-card-t">I want to share the load or sort out a conflict</span><span class="hh-card-n">Chores, bills and who does what, added up fairly with no blame.</span></span></a><a class="hh-also" href="/how-to-stop-fighting-with-your-partner.html">Talk it through: seven calm steps</a></li>
-    <li><a class="hh-card" href="/book/topic-start-here.html"><span class="hh-card-i" aria-hidden="true">&#128214;</span><span class="hh-card-b"><span class="hh-card-t">I want to learn how it all works</span><span class="hh-card-n">The book at a glance: the whole idea in plain words.</span></span></a><a class="hh-also" href="/book/preface.html">Or start the book at the beginning</a></li>
+  <p class="hh-lede">Free, kind tools for understanding yourself and the people in your life. Most take a minute or two, and nothing you type leaves your device.</p>
+  <div class="hh-mode" data-tol-mode>
+    <p class="hh-mode-q" id="hh-mode-q">Who is this for today?</p>
+    <div class="hh-mode-opts" role="group" aria-labelledby="hh-mode-q">
+      <button type="button" data-mode="me" aria-pressed="false">Just me</button>
+      <button type="button" data-mode="with" aria-pressed="false">With someone</button>
+    </div>
+    <p class="hh-mode-note" data-mode-show="none">&ldquo;With someone&rdquo; means anyone: a partner, friend, family member, housemate or coworker. You can change this any time.</p>
+    <p class="hh-mode-note" data-mode-show="me" hidden>Everything here works on your own. You can change this any time.</p>
+    <p class="hh-mode-note" data-mode-show="with" hidden>A partner, friend, family member, housemate or coworker. You can change this any time.</p>
+  </div>
+  <a class="hh-start" href="/start-in-10-minutes.html">
+    <span class="hh-start-k">New here? Begin with this</span>
+    <span class="hh-start-t">Start in 10 minutes</span>
+    <span class="hh-start-n">Four small steps, one at a time. Stop whenever you like.</span>
+    <span class="hh-start-done" data-mode-show="none">Done when: you have one small thing to try.</span>
+    <span class="hh-start-done" data-mode-show="me" hidden>Done when: you know your own pattern and one thing to try.</span>
+    <span class="hh-start-done" data-mode-show="with" hidden>Done when: you each said one thing and agreed one small change.</span>
+  </a>
+  <h2 class="hh-go-h" id="hh-go-h">Or go straight to</h2>
+  <ul class="hh-go is-two" aria-labelledby="hh-go-h">
+    <li><a class="hh-card" href="/ladder.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">I need calm right now</span><span class="hh-card-n">A one-minute check, then one calm step that fits.</span></span></a></li>
+    <li data-mode-show="none with"><a class="hh-card" href="/lemonade-stand.html"><span class="hh-card-i" aria-hidden="true">&#127819;</span><span class="hh-card-b"><span class="hh-card-t">Share the load or sort out a conflict</span><span class="hh-card-n">Chores, bills and who does what, added up fairly with no blame.</span></span></a></li>
+    <li data-mode-show="me" hidden><a class="hh-card" href="/self-path.html"><span class="hh-card-i" aria-hidden="true">&#129517;</span><span class="hh-card-b"><span class="hh-card-t">Get to know yourself</span><span class="hh-card-n">Six small steps on your own: your battery, your wiring, what settles you.</span></span></a></li>
   </ul>
-  <p class="hh-ten">Not sure? <a href="/start-in-10-minutes.html">Start in 10 minutes</a>: one short, guided path. No sign-up.</p>
-  <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>, or just for you.</p>
+  <p class="hh-help"><a href="/upset-right-now.html">Upset right now? Five minutes to pause</a> <span aria-hidden="true">&middot;</span> <a href="/safety.html">Not safe at home? Get help</a></p>
   <div class="hh-pud">
     <span class="hh-pud-art"><svg viewBox="-4 -14 88 92" width="48" height="48" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg></span>
-    <p class="hh-pud-t"><strong>Meet Professor Puddles.</strong> Ask anything in your own words<span class="hh-pud-x">, about your relationship, family, roommates or work,</span> and get kind, practical steps. Small talk with him, talk deep, or ask him to make you an infographic. Private: nothing you type leaves your device.</p>
-    <a class="hh-pud-go" href="/ask.html" data-ask-puddles>Ask Professor Puddles</a>
+    <p class="hh-pud-t"><strong>Professor Puddles.</strong> Ask anything in your own words<span class="hh-pud-x">, about your relationship, family, roommates or work,</span> and get kind, practical steps. Private.</p>
+    <a class="hh-pud-go" href="/ask.html" data-ask-puddles>Ask him</a>
   </div>
   <script>
   (function () {
@@ -602,28 +653,57 @@
     }).observe(card);
   })();
   </script>
-  <div class="hh-time" data-cb-time>
-    <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
-    <div class="hh-time-opts" role="group" aria-labelledby="hh-time-q">
-      <button type="button" data-cb-min="1" aria-pressed="false" aria-controls="hh-time-plan">1 min<span class="hh-t-x">ute</span></button>
-      <button type="button" data-cb-min="5" aria-pressed="false" aria-controls="hh-time-plan">5 min<span class="hh-t-x">utes</span></button>
-      <button type="button" data-cb-min="10" aria-pressed="false" aria-controls="hh-time-plan">10 min<span class="hh-t-x">utes</span></button>
-      <button type="button" data-cb-min="15" aria-pressed="false" aria-controls="hh-time-plan">15 min<span class="hh-t-x">utes</span></button>
-      <button type="button" data-cb-min="30" aria-pressed="false" aria-controls="hh-time-plan">30+ min<span class="hh-t-x">utes</span></button>
+  <details class="hh-ways" id="more-ways">
+    <summary><span class="hh-ways-t">More ways in</span> <span class="hh-ways-n">time you have, your situation, the book, and more</span></summary>
+    <div class="hh-time" data-cb-time>
+      <p class="hh-time-q" id="hh-time-q">How much time do you have?</p>
+      <div class="hh-time-opts" role="group" aria-labelledby="hh-time-q">
+        <button type="button" data-cb-min="1" aria-pressed="false" aria-controls="hh-time-plan">1 min<span class="hh-t-x">ute</span></button>
+        <button type="button" data-cb-min="5" aria-pressed="false" aria-controls="hh-time-plan">5 min<span class="hh-t-x">utes</span></button>
+        <button type="button" data-cb-min="10" aria-pressed="false" aria-controls="hh-time-plan">10 min<span class="hh-t-x">utes</span></button>
+        <button type="button" data-cb-min="15" aria-pressed="false" aria-controls="hh-time-plan">15 min<span class="hh-t-x">utes</span></button>
+        <button type="button" data-cb-min="30" aria-pressed="false" aria-controls="hh-time-plan">30+ min<span class="hh-t-x">utes</span></button>
+      </div>
+      <div class="hh-time-plan" id="hh-time-plan" data-cb-plan aria-live="polite" hidden></div>
     </div>
-    <div class="hh-time-plan" id="hh-time-plan" data-cb-plan aria-live="polite" hidden></div>
-  </div>
-  <ul class="hh-more" aria-label="More ways in">
-    <li><a href="#focus" data-open-focus><span class="hh-more-k">Learning one thing?</span> Focus the site on it</a></li>
-    <li><a href="#start-where"><span class="hh-more-k">New baby, money, faith…?</span> See every situation</a></li>
-    <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
-    <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
-    <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
-    <li><a href="/safety.html"><span class="hh-more-k">Not safe at home?</span> Get help</a></li>
-    <li><a href="/sent-this.html"><span class="hh-more-k">Sent a link by someone?</span> Start here</a></li>
-    <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
-    <li><a href="/grief.html"><span class="hh-more-k">Lost someone?</span> Grief and later life</a></li>
-  </ul>
+    <ul class="hh-more" aria-label="More ways in">
+      <li><a href="/book/topic-start-here.html"><span class="hh-more-k">How it all works?</span> The book at a glance</a></li>
+      <li><a href="/how-to-stop-fighting-with-your-partner.html"><span class="hh-more-k">Talk it through?</span> Seven calm steps</a></li>
+      <li><a href="#start-where"><span class="hh-more-k">New baby, money, faith…?</span> See every situation</a></li>
+      <li><a href="#focus" data-open-focus><span class="hh-more-k">Learning one thing?</span> Focus the site on it</a></li>
+      <li><a href="/self-path.html"><span class="hh-more-k">On your own?</span> Your self path</a></li>
+      <li><a href="/sent-this.html"><span class="hh-more-k">Sent a link by someone?</span> Start here</a></li>
+      <li><a href="/teens.html"><span class="hh-more-k">A teen?</span> For you</a></li>
+      <li><a href="/work.html"><span class="hh-more-k">At work?</span> The plain version</a></li>
+      <li><a href="/grief.html"><span class="hh-more-k">Lost someone?</span> Grief and later life</a></li>
+      <li><a href="/night-garden.html"><span class="hh-more-k">Calm down now</span> Night Garden</a></li>
+      <li><a href="/book/preface.html"><span class="hh-more-k">Like to read?</span> The book from the start</a></li>
+    </ul>
+    <p class="hh-for">Made for <a href="/relationships.html#partners">couples and partners (two or more)</a>, <a href="/friends.html">friends</a>, <a href="/relationships.html#family">families across generations</a>, <a href="/co-parenting.html">co-parents in two homes</a>, <a href="/share-the-load.html#roommates">housemates</a>, <a href="/work.html">coworkers and business partners</a>, or just for you.</p>
+  </details>
+  <script>
+  /* Just me / With someone: one choice, kept on this device (tol-mode-v1), changeable any time.
+     It only changes which first steps are suggested and what "done" looks like. come-back.js reads the same key. */
+  (function () {
+    var KEY = 'tol-mode-v1', box = document.querySelector('[data-tol-mode]');
+    function get() { try { var m = localStorage.getItem(KEY); return m === 'me' || m === 'with' ? m : ''; } catch (e) { return ''; } }
+    function apply() {
+      var m = get() || 'none';
+      Array.prototype.forEach.call(document.querySelectorAll('.hh [data-mode-show]'), function (el) { el.hidden = (' ' + el.getAttribute('data-mode-show') + ' ').indexOf(' ' + m + ' ') === -1; });
+      if (box) Array.prototype.forEach.call(box.querySelectorAll('[data-mode]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
+    }
+    apply();
+    if (box) box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-mode]'); if (!b) return;
+      var m = b.getAttribute('data-mode'), now = get() === m ? '' : m;
+      try { if (now) localStorage.setItem(KEY, now); else localStorage.removeItem(KEY); } catch (x) {}
+      apply();
+      try { document.dispatchEvent(new CustomEvent('tol-mode', { detail: { mode: now } })); } catch (x) {}
+    });
+    document.addEventListener('tol-mode', apply);
+    window.addEventListener('storage', function (e) { if (e.key === KEY) apply(); });
+  })();
+  </script>
 </section>
 
     <section id="start-where" aria-labelledby="sw-h">

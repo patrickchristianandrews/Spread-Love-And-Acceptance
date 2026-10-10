@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Someone Sent You This Link? No Pressure, Here’s What It Is</title>
+<meta name="description" content="Someone sent you a link to Spread Love &amp; Acceptance? What it is in three lines. You don’t have to do anything, and nothing you type leaves your phone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  .ss-what{ margin:0 0 1.2rem !important; padding-left:1.1rem !important; }
+  .ss-what li{ margin:.25rem 0 !important; }
+  .ss-facts{ list-style:none; padding:0 !important; margin:1rem 0 1.5rem !important; display:grid; gap:.6rem; }
+  .ss-facts li{ margin:0 !important; max-width:none !important; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
+  .ss-facts strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+  .ss-facts span{ display:block; color:var(--ink-soft); font-size:.97rem; margin-top:.15rem; }
+  .ss-pick{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.6rem; }
+  .ss-pick li{ margin:0 !important; max-width:none !important; }
+  .ss-pick a{ display:block; min-height:44px; padding:.85rem 1rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); text-decoration:none; }
+  .ss-pick a:hover{ border-color:var(--credit); }
+  .ss-pick a.is-main{ border:2px solid #2F5F8A; background:#EEF4FB; }
+  .ss-pick a strong{ font-family:"Fraunces", Georgia, serif; font-size:1.06rem; text-decoration:underline; text-underline-offset:.15em; }
+  .ss-pick a .ss-k{ display:inline-block; margin:0 0 .25rem; padding:.05rem .55rem; border-radius:999px; background:#EAF6EF; color:#2F5A3C; font-size:.82rem; font-weight:600; }
+  .ss-pick a span.ss-d{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.2rem; }
+  .ss-safe{ font-size:.96rem; }
+  .ss-send{ margin:2.2rem 0 0; padding-top:1.2rem; border-top:1px solid var(--line); }
+  .ss-tips{ margin:.4rem 0 1rem !important; }
+  .ss-tips li{ margin:.2rem 0 !important; }
+  .ss-chips{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.6rem 0 .8rem; padding:0; border:0; }
+  .ss-chips legend{ font-weight:600; margin:0 0 .4rem; padding:0; }
+  .ss-chips label{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem .95rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); cursor:pointer; font-size:.97rem; }
+  .ss-chips input{ position:absolute; opacity:0; width:1px; height:1px; }
+  .ss-chips input:checked + span{ font-weight:600; }
+  .ss-chips label:has(input:checked){ border-color:#2F5F8A; background:#EEF4FB; color:#1F4466; }
+  .ss-chips label:has(input:focus-visible){ outline:3px solid var(--focus); outline-offset:2px; }
+  .ss-msgs{ display:grid; gap:1rem; }
+  .ss-msg{ margin:0; padding:1rem 1.05rem; border-radius:18px; border:1px solid #C6DFF4; background:#EEF4FB; }
+  .ss-msg h3{ margin:0 0 .45rem !important; font-size:1.05rem; }
+  .ss-msg textarea{ box-sizing:border-box; width:100%; font:1rem/1.55 "Lora", Georgia, serif; color:var(--ink); background:#fff; border:1px solid var(--ink-soft); border-radius:12px; padding:.6rem .8rem; resize:vertical; }
+  .ss-msg textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ss-row{ display:flex; flex-wrap:wrap; gap:.5rem .7rem; align-items:center; margin:.6rem 0 0; }
+  .ss-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
+  .ss-btn.is-quiet{ background:#FFFDF7; color:#2F5F8A; }
+  .ss-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ss-note{ min-height:1.4em; margin:.4rem 0 0 !important; font-size:.93rem; color:#2F5A3C; }
+  .js-ss .ss-msg[hidden]{ display:none; }
+  @media print{ .ss-send{ display:none; } }
+</style>
+<!-- seo:start -->
+<!-- seo:end -->
+</head>
+<body data-work data-sensitive data-private-note data-no-pillars>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Start here</p><h1>Someone sent you this</h1></header>
+
+<p class="simple-lede">Someone you know sent you this link. Here is what it is, in three lines:</p>
+<ul class="ss-what no-bubble">
+  <li>A free site of short reads and small tools for sharing everyday life more kindly.</li>
+  <li>It looks at the setup (who does what, how tired each person is, how words land), never at who is to blame.</li>
+  <li>It works for partners, friends, family, housemates, coworkers and people on their own.</li>
+</ul>
+
+<ul class="ss-facts no-bubble" data-no-bubble>
+  <li><strong>You don’t have to do anything.</strong><span>Reading this page is enough. “Not now” and “no thanks” are both fine answers.</span></li>
+  <li><strong>Nobody sees your answers.</strong><span>Anything you type stays on your phone, in this browser. Not the person who sent this, not us. There is no account and nothing to sign up for.</span></li>
+  <li><strong>You are not the problem.</strong><span>Sending this usually means “I’d like things to feel lighter for both of us”. The site is written for both of you.</span></li>
+</ul>
+
+<h2 id="one-thing">If you’d like to try one thing</h2>
+<ul class="ss-pick no-bubble">
+  <li><a class="is-main" href="/quick-checks.html#today"><span class="ss-k">About 2 minutes · just for you</span><br><strong>Today’s Weather</strong><span class="ss-d">A few taps on how you are doing today: sleep, stress, what would help. It reads you, never anyone else, and you don’t have to show it to anyone.</span></a></li>
+  <li><a href="/sent-this.html"><span class="ss-k">Just read · about 3 minutes</span><br><strong>What they can and can’t see</strong><span class="ss-d">The longer version of this page, with kind ways to say yes, not yet or no.</span></a></li>
+</ul>
+<p>That’s all. You can close this page now, or come back any time. Nothing here keeps track.</p>
+
+<p class="ss-safe"><strong>If you feel pressured, or you’re afraid of the person who sent this,</strong> you don’t owe them a yes, and these tools aren’t meant for that. <a href="/safety.html">Not safe at home?</a> has free, private helplines and a quick way to leave this site.</p>
+
+<section class="ss-send" id="send" aria-labelledby="send-h">
+  <h2 id="send-h">Sending this to someone?</h2>
+  <p>Pick a message, change the words so they sound like you, and send it from your own phone. Nothing is sent from here. The link in each one opens this page.</p>
+  <ul class="ss-tips no-bubble">
+    <li>Send it at a calm moment, not in the middle of an argument.</li>
+    <li>Ask for one small thing, not the whole site.</li>
+    <li>Let “not now” be a full answer. You can still try things on your own.</li>
+  </ul>
+
+  <div class="ss-msgs" id="ss-msgs" data-no-bubble>
+    <div class="ss-msg" id="m-partner" data-label="A partner">
+      <h3><label for="t-partner">For a partner</label></h3>
+      <textarea id="t-partner" rows="7">I found a free site about sharing the everyday stuff more kindly. No pressure at all. Would you want to look at one small thing together sometime? Nothing you type there is shared with me. This is what it is: https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-partner">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-partner" data-share-result data-share-url="none" data-share-title="A message for a partner">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-friend" data-label="A friend">
+      <h3><label for="t-friend">For a friend</label></h3>
+      <textarea id="t-friend" rows="7">I came across this and thought of us, in a good way. It’s free, short and private, and there’s no homework. If you’re curious, want to try one small thing together? Totally fine if not. https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-friend">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-friend" data-share-result data-share-url="none" data-share-title="A message for a friend">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-family" data-label="Family">
+      <h3><label for="t-family">For a family member</label></h3>
+      <textarea id="t-family" rows="7">I found something that might make the family stuff a bit easier to talk about. It doesn’t take sides, and nothing you type is shared with me. No pressure, and no need to answer. Here it is if you’re curious: https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-family">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-family" data-share-result data-share-url="none" data-share-title="A message for a family member">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-housemate" data-label="A housemate">
+      <h3><label for="t-housemate">For a housemate</label></h3>
+      <textarea id="t-housemate" rows="7">Found a free thing for sorting out who does which jobs in the house, without anyone being the bad guy. Want to do the three-minute version together this week? Fine if not. https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-housemate">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-housemate" data-share-result data-share-url="none" data-share-title="A message for a housemate">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-coworker" data-label="A coworker">
+      <h3><label for="t-coworker">For a coworker</label></h3>
+      <textarea id="t-coworker" rows="7">I came across a free tool for splitting up work more evenly and writing kinder messages. Could be useful for our next planning chat? No sign-up, and nothing is stored anywhere but your own device. https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-coworker">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-coworker" data-share-result data-share-url="none" data-share-title="A message for a coworker">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-coparent" data-label="A co-parent">
+      <h3><label for="t-coparent">For a co-parent</label></h3>
+      <textarea id="t-coparent" rows="7">I found a free site with simple tools for co-parents, like planning handovers and holidays. Nothing is shared unless one of us chooses to share it. No pressure. If it looks useful, we could try one small piece for the kids’ sake: https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-coparent">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-coparent" data-share-result data-share-url="none" data-share-title="A message for a co-parent">Share</button></div>
+    </div>
+    <div class="ss-msg" id="m-tense" data-label="Things are tense">
+      <h3><label for="t-tense">When things are tense</label></h3>
+      <textarea id="t-tense" rows="7">I know things have been hard between us lately. I’m not sending this to say you’re the problem. I found something that looks at how we share things, not at who’s to blame. You don’t need to answer now, or at all. If you ever feel like looking: https://spreadloveandacceptance.com/someone-sent-you-this.html</textarea>
+      <div class="ss-row"><button type="button" class="ss-btn" data-ss-copy="t-tense">Copy</button><button type="button" class="ss-btn is-quiet" data-share data-share-from="#t-tense" data-share-result data-share-url="none" data-share-title="A message for when things are tense">Share</button></div>
+    </div>
+  </div>
+  <p class="ss-note" id="ss-note" role="status" aria-live="polite"></p>
+  <p>If they say no or not yet, that’s an answer, not a door closing. Everything on this site also works for one person: <a href="/start-in-10-minutes.html">Start in 10 minutes</a> on your own.</p>
+</section>
+</main>
+<script>
+(function () {
+  'use strict';
+  var box = document.getElementById('ss-msgs'), note = document.getElementById('ss-note');
+  var cards = Array.prototype.slice.call(box.querySelectorAll('.ss-msg'));
+  // One message at a time: a row of choices above them (without this script, all of them show)
+  var fs = document.createElement('fieldset');
+  fs.className = 'ss-chips';
+  fs.innerHTML = '<legend>Who is it for?</legend>';
+  cards.forEach(function (c, i) {
+    var id = c.id.slice(2), l = document.createElement('label');
+    l.innerHTML = '<input type="radio" name="ss-who" value="' + id + '"' + (i === 0 ? ' checked' : '') + '><span></span>';
+    l.querySelector('span').textContent = c.getAttribute('data-label');
+    fs.appendChild(l);
+  });
+  box.parentNode.insertBefore(fs, box);
+  document.documentElement.classList.add('js-ss');
+  function show(id) {
+    cards.forEach(function (c) { c.hidden = c.id !== 'm-' + id; });
+    note.textContent = '';
+  }
+  // a link straight to one message: /someone-sent-you-this.html#m-coparent
+  var start = /^#m-([a-z]+)$/.exec(location.hash);
+  var first = start && document.getElementById('m-' + start[1]) ? start[1] : cards[0].id.slice(2);
+  fs.querySelector('input[value="' + first + '"]').checked = true;
+  show(first);
+  fs.addEventListener('change', function (e) { if (e.target.name === 'ss-who') show(e.target.value); });
+
+  function copied(ok) { note.textContent = ok ? 'Copied. Paste it into your own message whenever you’re ready.' : 'Select the text and copy it with your device’s copy command.'; }
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-ss-copy]');
+    if (!b) return;
+    var ta = document.getElementById(b.getAttribute('data-ss-copy'));
+    function fallback() { ta.focus(); ta.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (x) {} copied(ok); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(ta.value).then(function () { copied(true); }, fallback); else fallback();
+  });
+})();
+</script>
+</body>
+</html>

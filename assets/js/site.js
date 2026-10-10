@@ -2509,13 +2509,20 @@
   //   and listen for the 'tol-quiet' event on document.
   var THEME_KEY = 'tol-theme', SIZE_KEY = 'tol-text-size', HELP_KEY = 'tol-hide-helpers',
       QUIET_KEY = 'tol-quiet', EASY_KEY = 'tol-easy', FONT_KEY = 'tol-font', SPACE_KEY = 'tol-spacing',
-      TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', BUB_KEY = 'tol-nobubbles', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev';
+      TINT_KEY = 'tol-tint', RULER_KEY = 'tol-ruler', BUB_KEY = 'tol-nobubbles', SOUND_KEY = 'tol-sound-off', PREV_KEY = 'tol-comfort-prev',
+      CONTRAST_KEY = 'tol-contrast';
   // the sound switches the pal cam and the games keep for themselves
   var SOUND_KEYS = ['tol-pc-sound', 'tol-pc-music', 'tol-qw-sound', 'tol-xw-sound', 'tol-bloom-sound'];
+  // the Spanish page gets the Settings panel in Spanish: T('English', 'Español')
+  var ES = /^es\b/i.test(document.documentElement.lang || '');
+  function T(en, es) { return ES ? es : en; }
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.15, 1.35 or 1.6)
-  var SIZE_NAMES = { md: 'Standard', lg: 'Large', xl: 'Larger', xxl: 'Largest' }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
-  var TINTS = { cream: 'Cream', blue: 'Soft blue', mint: 'Mint' };
+  var SIZE_NAMES = { md: T('Normal', 'Normal'), lg: T('Large', 'Grande'), xl: T('Extra large', 'Muy grande'), xxl: T('Largest', 'La más grande') }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
+  var TINTS = { cream: T('Cream', 'Crema'), blue: T('Soft blue', 'Azul suave'), mint: T('Mint', 'Verde menta') };
   function quietOn() { return lsGet(QUIET_KEY) === '1'; }
+  // High contrast: black on white (or white on black in dark mode), solid backgrounds, a strong focus ring,
+  // and none of the soft washes, bubbles or drifting shapes behind the words
+  function contrastOn() { return lsGet(CONTRAST_KEY) === '1'; }
   function easyOn() { return lsGet(EASY_KEY) === '1'; }
   function soundAllowed() { return !quietOn() && lsGet(SOUND_KEY) !== '1'; }
   function setSounds(off) {
@@ -2541,13 +2548,14 @@
     h.classList.toggle('tol-easy', easyOn());
     h.classList.toggle('tol-font-easy', lsGet(FONT_KEY) === 'easy');
     h.classList.toggle('tol-space-wide', lsGet(SPACE_KEY) === 'wide');
-    h.classList.toggle('tol-nobubbles', lsGet(BUB_KEY) === '1');
+    h.classList.toggle('tol-contrast', contrastOn());
+    h.classList.toggle('tol-nobubbles', lsGet(BUB_KEY) === '1' || contrastOn());
     var tint = lsGet(TINT_KEY);
-    Object.keys(TINTS).forEach(function (k) { h.classList.toggle('tol-tint-' + k, tint === k); });
+    Object.keys(TINTS).forEach(function (k) { h.classList.toggle('tol-tint-' + k, tint === k && !contrastOn()); });
     if (lsGet(FONT_KEY) === 'easy') linkEasyFont();
     ruler(lsGet(RULER_KEY) === '1');
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', darkNow() ? '#1E1B24' : '#F5EFDE');
+    if (meta) meta.setAttribute('content', contrastOn() ? (darkNow() ? '#000000' : '#FFFFFF') : darkNow() ? '#1E1B24' : '#F5EFDE');
     document.querySelectorAll('.tol-dark-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(darkNow()));
       b.querySelector('.tol-still-state').textContent = darkNow() ? 'On' : 'Off';
@@ -2629,8 +2637,10 @@
   function settingsButton(cls, text) {
     var b = el('button', { type: 'button', class: 'tol-set-btn ' + (cls || ''), 'aria-haspopup': 'dialog' },
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="2"/></svg>' +
-      '<span class="tol-set-name">' + (text || 'Settings') + '</span>');
-    b.setAttribute('aria-label', 'Settings: calm and reading choices');
+      '<span class="tol-set-name">' + (ES ? (text ? 'Ajustes: letra, contraste, modo tranquilo' : 'Ajustes') : (text || 'Settings')) + '</span>');
+    // the spoken name starts with the words on the button, so voice control ("click Settings") finds it
+    if (!text) b.setAttribute('aria-label', T('Settings: text size, contrast and calm', 'Ajustes: tamaño de letra, contraste y calma'));
+    b.title = T('Text size, high contrast, Quiet mode and more', 'Tamaño de letra, alto contraste, modo tranquilo y más');
     b.addEventListener('click', function () { openSettings(b); });
     return b;
   }
@@ -2651,8 +2661,11 @@
     box.querySelectorAll('input[data-font-opt]').forEach(function (i) { i.checked = i.value === (lsGet(FONT_KEY) || 'usual'); });
     box.querySelectorAll('input[data-space-opt]').forEach(function (i) { i.checked = i.value === (lsGet(SPACE_KEY) || 'usual'); });
     box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.checked = i.value === (lsGet(TINT_KEY) || 'none'); });
-    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1', wxnote: lsGet('tol-clockwx-off') !== '1' && (lsGet('tol-clockwx-on') === '1' || !!lsGet('tol-pc-wx')), wxloc: !!lsGet('tol-pc-wx') || wxPending };
-    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; i.disabled = quietOn() && !/^(ruler|bubbles|wxnote|wxloc)$/.test(i.getAttribute('data-switch')); });
+    var map = { still: stillOn, helpers: helpersHidden(), sound: !soundAllowed(), ruler: lsGet(RULER_KEY) === '1', bubbles: lsGet(BUB_KEY) !== '1' && !contrastOn(), contrast: contrastOn(), wxnote: lsGet('tol-clockwx-off') !== '1' && (lsGet('tol-clockwx-on') === '1' || !!lsGet('tol-pc-wx')), wxloc: !!lsGet('tol-pc-wx') || wxPending };
+    box.querySelectorAll('input[data-switch]').forEach(function (i) { i.checked = !!map[i.getAttribute('data-switch')]; var sk = i.getAttribute('data-switch'); i.disabled = (quietOn() && !/^(ruler|bubbles|wxnote|wxloc|contrast)$/.test(sk)) || (sk === 'bubbles' && contrastOn()); });
+    // a page tint can't sit under high contrast: the tints wait until it's off
+    box.querySelectorAll('input[data-tint-opt]').forEach(function (i) { i.disabled = contrastOn(); });
+    var tn = box.querySelector('.tol-set-tintnote'); if (tn) tn.hidden = !contrastOn();
     box.querySelectorAll('[data-preset]').forEach(function (b) { b.setAttribute('aria-pressed', String(lsGet(PRESETS[b.getAttribute('data-preset')].key) === '1')); });
     var qn = box.querySelector('.tol-set-qnote'); if (qn) qn.hidden = !quietOn();
     var fo = box.querySelector('.tol-set-focus'); if (fo) { fo.innerHTML = ''; fo.appendChild(focusLine('settings')); }
@@ -2668,33 +2681,35 @@
     }
     var box = el('div', { class: 'tol-set', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': id + '-h', hidden: '' },
       '<div class="tol-set-card">' +
-      '<div class="tol-set-head"><h2 id="' + id + '-h">Settings</h2><button type="button" class="tol-set-close">Close</button></div>' +
-      '<p class="tol-set-intro">Make the site calmer, or easier to read. Your choices stay on this device only.</p>' +
+      '<div class="tol-set-head"><h2 id="' + id + '-h">' + T('Settings', 'Ajustes') + '</h2><button type="button" class="tol-set-close">' + T('Close', 'Cerrar') + '</button></div>' +
+      '<p class="tol-set-intro">' + T('Make the site easier to see, calmer, or easier to read. Your choices stay on this device only.', 'Haz que el sitio se vea mejor, más tranquilo o más fácil de leer. Lo que elijas se queda solo en este dispositivo.') + '</p>' +
+      // the two things people look for first: bigger words and stronger contrast
+      '<h3 class="tol-set-k tol-set-k1">' + T('Text and contrast', 'Letra y contraste') + '</h3>' +
+      '<fieldset class="tol-set-sizes"><legend>' + T('Text size', 'Tamaño de letra') + ' <small>' + T('(smallest to biggest)', '(de menor a mayor)') + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
+      sw('contrast', T('High contrast', 'Alto contraste'), T('Black text on plain white (white on black in dark mode), clear outlines and a strong focus ring. No soft colors or shapes behind the words.', 'Letra negra sobre blanco (blanca sobre negro en modo oscuro), bordes claros y un marco fuerte en lo que eliges. Sin colores suaves ni formas detrás del texto.')) +
+      '<fieldset><legend>' + T('Colors (dark mode)', 'Colores (modo oscuro)') + '</legend>' + radio('theme', 'data-theme-opt', 'auto', T('Follow my device', 'Como mi dispositivo')) + radio('theme', 'data-theme-opt', 'light', T('Light', 'Claro')) + radio('theme', 'data-theme-opt', 'dark', T('Dark', 'Oscuro')) + '</fieldset>' +
+      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">' + T('Listen to this page', 'Escuchar esta página') + '</button> <small>' + T('Your device reads the page aloud, with a speed control and “Read from where I am”.', 'Tu dispositivo lee la página en voz alta, con control de velocidad y “Leer desde aquí”.') + '</small></p>' +
       '<div class="tol-set-presets">' +
-        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>Quiet mode</strong><small>A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
-        '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>Easy reading</strong><small>A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
+        '<button type="button" class="tol-preset" data-preset="quiet" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#127769;</span><strong>' + T('Quiet mode', 'Modo tranquilo') + '</strong><small>' + T('A still page in plain text. No helpers, pop-ups or sounds, no boxes round every line, and no levels or petals.', 'Una página quieta y sencilla. Sin ayudantes, ventanas emergentes ni sonidos, y sin nada que se mueva.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
+        '<button type="button" class="tol-preset" data-preset="easy" aria-pressed="false"><span class="tol-preset-ico" aria-hidden="true">&#128214;</span><strong>' + T('Easy reading', 'Lectura fácil') + '</strong><small>' + T('A clear, roomy font, more space between letters and lines, shorter lines, a soft tint and a still page.', 'Una letra clara, más espacio entre letras y líneas, líneas más cortas, un fondo suave y una página quieta.') + '</small><span class="tol-preset-state" aria-hidden="true"></span></button>' +
       '</div>' +
-      '<h3 class="tol-set-k">Focus</h3>' +
-      '<div class="tol-set-focus"></div>' +
-      '<h3 class="tol-set-k">Calm</h3>' +
-      '<p class="tol-set-qnote" hidden>Quiet mode is looking after these. Turn it off above to change them one by one.</p>' +
-      sw('still', 'Keep the page still', 'No moving garden, bubbles, hearts or sliding in, here and in the Breathe break') +
-      sw('helpers', 'Hide the helpers', 'Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.') +
-      sw('sound', 'Keep site sounds off', 'When this is on, the pal cam, the games and the Breathe break start silent') +
-      '<h3 class="tol-set-k">Reading</h3>' +
-      '<p class="tol-set-listen" hidden><button type="button" class="tol-set-listen-go">Listen to this page</button> <small>Your device reads the page aloud, with a speed control and “Read from where I am”.</small></p>' +
-      '<fieldset class="tol-set-sizes"><legend>Text size <small>(smallest to biggest)</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
-      '<fieldset><legend>Font</legend>' + radio('font', 'data-font-opt', 'usual', 'The usual') + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">Easy to read</span>') + '</fieldset>' +
-      '<fieldset><legend>Spacing</legend>' + radio('space', 'data-space-opt', 'usual', 'The usual') + radio('space', 'data-space-opt', 'wide', 'Roomy') + '</fieldset>' +
-      '<fieldset><legend>Page tint</legend>' + radio('tint', 'data-tint-opt', 'none', 'None') + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
-      '<fieldset><legend>Colors (dark mode)</legend>' + radio('theme', 'data-theme-opt', 'auto', 'Follow my device') + radio('theme', 'data-theme-opt', 'light', 'Light') + radio('theme', 'data-theme-opt', 'dark', 'Dark') + '</fieldset>' +
-      sw('ruler', 'Reading ruler', 'A soft band that follows your pointer or finger, so you keep your place on the line') +
-      sw('bubbles', 'Text bubbles', 'Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page') +
-      '<h3 class="tol-set-k">Time and weather</h3>' +
-      sw('wxnote', 'Show the time and weather note', 'A very faint note in the corner of each page') +
-      sw('wxloc', 'Use my location for the weather', 'Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it') +
+      (ES ? '' : '<h3 class="tol-set-k">Focus</h3><div class="tol-set-focus"></div>') +   // Focus mode picks English pages, so it stays off the Spanish panel
+      '<h3 class="tol-set-k">' + T('Calm', 'Calma') + '</h3>' +
+      '<p class="tol-set-qnote" hidden>' + T('Quiet mode is looking after these. Turn it off above to change them one by one.', 'El modo tranquilo se encarga de esto. Apágalo arriba para cambiar cada opción.') + '</p>' +
+      sw('still', T('Keep the page still', 'Página quieta'), T('No moving garden, bubbles, hearts or sliding in, here and in the Breathe break', 'Sin jardín en movimiento, burbujas, corazones ni cosas que se deslizan')) +
+      sw('helpers', T('Hide the helpers', 'Ocultar los ayudantes'), T('Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.', 'Las tarjetas del Profesor Puddles, los amigos que animan, los perritos que aparecen mientras lees, los consejos y las invitaciones emergentes.')) +
+      sw('sound', T('Keep site sounds off', 'Sin sonidos'), T('When this is on, the pal cam, the games and the Breathe break start silent', 'Los juegos, la cámara de los perritos y la pausa para respirar empiezan en silencio')) +
+      '<h3 class="tol-set-k">' + T('Reading', 'Lectura') + '</h3>' +
+      '<fieldset><legend>' + T('Font', 'Letra') + '</legend>' + radio('font', 'data-font-opt', 'usual', T('The usual', 'La de siempre')) + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">' + T('Easy to read', 'Fácil de leer') + '</span>') + '</fieldset>' +
+      '<fieldset><legend>' + T('Spacing', 'Espacio') + '</legend>' + radio('space', 'data-space-opt', 'usual', T('The usual', 'El de siempre')) + radio('space', 'data-space-opt', 'wide', T('Roomy', 'Amplio')) + '</fieldset>' +
+      '<fieldset class="tol-set-tints"><legend>' + T('Page tint', 'Color de fondo') + ' <small class="tol-set-tintnote" hidden>' + T('(resting while high contrast is on)', '(en pausa con alto contraste)') + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', T('None', 'Ninguno')) + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
+      sw('ruler', T('Reading ruler', 'Regla de lectura'), T('A soft band that follows your pointer or finger, so you keep your place on the line', 'Una franja suave que sigue tu dedo o el puntero, para no perder la línea')) +
+      sw('bubbles', T('Text bubbles', 'Burbujas de texto'), T('Each piece of text sits in its own soft, round bubble. Turn this off for plain text on the page', 'Cada parte del texto va en su propia burbuja suave. Apágalo para ver el texto sencillo')) +
+      '<h3 class="tol-set-k">' + T('Time and weather', 'Hora y clima') + '</h3>' +
+      sw('wxnote', T('Show the time and weather note', 'Mostrar la hora y el clima'), T('A very faint note in the corner of each page', 'Una nota muy suave en la esquina de cada página')) +
+      sw('wxloc', T('Use my location for the weather', 'Usar mi ubicación para el clima'), T('Your browser asks first. Only a rounded spot is kept, on this device. To look up the weather, that rounded spot is sent to Open-Meteo, a free weather service with no account. Nothing is sent to us. Turn this off to forget it', 'Tu navegador te pregunta primero. Solo se guarda un lugar aproximado, en este dispositivo. Para buscar el clima, ese lugar aproximado se envía a Open-Meteo, un servicio gratis sin cuenta. A nosotros no nos llega nada. Apágalo para borrarlo')) +
       '<p class="tol-set-wxmsg" role="status" hidden></p>' +
-      '<p class="tol-set-foot">These choices stay in this browser only. <button type="button" class="tol-set-reset">Back to the usual</button> <a href="/on-this-device.html">What’s stored on this device</a></p>' +
+      '<p class="tol-set-foot">' + T('These choices stay in this browser only.', 'Estas opciones se quedan solo en este navegador.') + ' <button type="button" class="tol-set-reset">' + T('Back to the usual', 'Volver a lo de siempre') + '</button> <a href="/on-this-device.html"' + (ES ? ' hreflang="en"' : '') + '>' + T('What’s stored on this device', 'Qué se guarda en este dispositivo (en inglés)') + '</a></p>' +
       '</div>');
     box.addEventListener('change', function (e) {
       var i = e.target;
@@ -2708,19 +2723,20 @@
       if (s === 'helpers') { if (i.checked) lsSet(HELP_KEY, '1'); else lsDel(HELP_KEY); }
       if (s === 'sound') { setSounds(i.checked); quietEvent(); }
       if (s === 'ruler') { if (i.checked) lsSet(RULER_KEY, '1'); else lsDel(RULER_KEY); }
+      if (s === 'contrast') { if (i.checked) lsSet(CONTRAST_KEY, '1'); else lsDel(CONTRAST_KEY); announce(i.checked ? T('High contrast is on.', 'El alto contraste está activado.') : T('High contrast is off.', 'El alto contraste está desactivado.')); }
       if (s === 'bubbles') { if (i.checked) lsDel(BUB_KEY); else lsSet(BUB_KEY, '1'); }
       if (s === 'wxnote') { var cw = window.TOLClockWx; if (cw && cw.show) cw.show(i.checked); else if (i.checked) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); var cwl = document.createElement('script'); cwl.src = '/assets/js/clock-weather.js'; document.head.appendChild(cwl); } else { lsSet('tol-clockwx-off', '1'); lsDel('tol-clockwx-on'); } }
       if (s === 'wxloc') {
         var msg = box.querySelector('.tol-set-wxmsg'), cw2 = window.TOLClockWx;
         if (!i.checked) { if (cw2 && cw2.off) cw2.off(); else lsDel('tol-pc-wx'); if (msg) msg.hidden = true; }
         else {
-          if (msg) { msg.hidden = false; msg.textContent = 'Asking your browser… choose Allow when it asks.'; }
+          if (msg) { msg.hidden = false; msg.textContent = T('Asking your browser… choose Allow when it asks.', 'Preguntando a tu navegador… elige Permitir cuando te pregunte.'); }
           var go = function () { return window.TOLClockWx && window.TOLClockWx.ask ? window.TOLClockWx.ask() : Promise.resolve('unavailable'); };
           if (!window.TOLClockWx || !window.TOLClockWx.ask) { lsDel('tol-clockwx-off'); lsSet('tol-clockwx-on', '1'); }
           wxPending = true;
           go().then(function (r) {
             wxPending = false; var ok = r === 'ok'; i.checked = ok;
-            if (msg) { msg.hidden = ok; if (!ok) msg.textContent = r === 'denied' ? 'Your browser has location blocked for this site. Allow it in the browser’s site settings (the lock or tune icon next to the address), then switch this on again.' : 'The weather could not be found just now. Try again in a moment.'; }
+            if (msg) { msg.hidden = ok; if (!ok) msg.textContent = r === 'denied' ? T('Your browser has location blocked for this site. Allow it in the browser’s site settings (the lock or tune icon next to the address), then switch this on again.', 'Tu navegador tiene bloqueada la ubicación para este sitio. Permítela en los ajustes del sitio (el candado junto a la dirección) y vuelve a activar esta opción.') : T('The weather could not be found just now. Try again in a moment.', 'No se pudo encontrar el clima ahora. Inténtalo de nuevo en un momento.'); }
           });
         }
       }
@@ -2732,8 +2748,8 @@
       if (e.target.closest('.tol-set-close') || e.target === box) closeSettings();
       if (e.target.closest('.tol-set-listen-go')) { var lg = document.querySelector('.tol-listen-go'); closeSettings(); if (lg) { lg.scrollIntoView({ block: 'center' }); lg.click(); } }
       if (e.target.closest('.tol-set-reset')) {
-        [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY].forEach(lsDel);
-        setSounds(false); refreshStill(); after(); quietEvent(); announce('Everything is back to the usual.');
+        [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY, CONTRAST_KEY].forEach(lsDel);
+        setSounds(false); refreshStill(); after(); quietEvent(); announce(T('Everything is back to the usual.', 'Todo volvió a lo de siempre.'));
       }
     });
     box.addEventListener('keydown', function (e) {

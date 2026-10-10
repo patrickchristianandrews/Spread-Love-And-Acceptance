@@ -3,7 +3,10 @@
    "Ross and Sicoly (1979)", "Gottman (1994)", "Daminger 2019" or "Lieberman and colleagues (2007)",
    and turns the first mention in each section into a small link: Ross and Sicoly (1979) ↗.
    On the Professor's Library pages, each entry's "What the research says" part also gets a
-   "Sources" line listing the research that entry draws on.
+   "Sources" line listing the research that entry draws on. Other pages that draw on research get a
+   small closed box at the end, "The research behind this page", with a link to each plain summary and
+   to the source (unless the page already ends with its own list of sources).
+   Only checked research is in the index: anything that could not be verified is never linked.
    The map of studies comes from research-index.js (built by tools/research/build_research.py), which
    site.js loads first. Nothing is fetched over the network and nothing is stored. */
 (function () {
@@ -59,6 +62,17 @@
       '.read p.tol-rsrc{ font-size:.92rem; color:var(--ink-soft, #5A5346); margin-top:.4rem; overflow-wrap:anywhere; }' +
       '.tol-rsrc-k{ font-weight:600; color:var(--ink, #2B2620); }' +
       'html.tol-quiet .tol-rl-i{ display:none; }' +
+      '.tol-rbox{ margin:2rem 0 1rem; padding:.2rem 1rem; border:1px solid var(--line, #D9CBA3); border-radius:12px; background:var(--paper, #F5EFDE); max-width:100%; box-sizing:border-box; overflow-wrap:anywhere; }' +
+      '.tol-rbox summary{ cursor:pointer; min-height:44px; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem .6rem; font-weight:600; }' +
+      '.tol-rbox-n{ font:500 .8rem/1.4 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft, #5A5346); font-weight:400; }' +
+      'main .tol-rbox p, main .tol-rbox li{ max-width:none; font-size:.95rem; }' +
+      'main .tol-rbox p{ margin:.4rem 0 !important; }' +
+      '.tol-rbox-lede{ color:var(--ink-soft, #5A5346); }' +
+      'main .tol-rbox ul.tol-rbox-list{ list-style:none; padding:0 !important; margin:.5rem 0 !important; }' +
+      'main .tol-rbox .tol-rbox-list li{ width:auto !important; margin:0 0 .6rem; padding:0 0 .6rem; border-bottom:1px solid var(--line, #D9CBA3); }' +
+      '.tol-rbox-k{ display:block; white-space:nowrap; }' +
+      '.tol-rbox-k a, .tol-rbox-all a{ display:inline-block; padding:.35rem 0; }' +
+      '@media print{ .tol-rbox{ display:none; } }' +
       '@media print{ .tol-rl-i{ display:none; } a.tol-rl{ text-decoration:none; } }';
     document.head.appendChild(css);
   }
@@ -171,7 +185,18 @@
       }
       if (!hit) continue;
       var around = full.slice(Math.max(0, ns - 80), Math.min(full.length, ne + 120));
-      var id = pickId(hit.e.ids, around, sectionId);
+      // a co-author named right after ("Neff and Roos Vonk (2009)") must be one of the work's authors,
+      // otherwise it is a different paper by someone with the same surname and year, and is left alone
+      var nextCo = /^(?:’s|'s)?\s*(?:,\s*)?(?:and|&)\s+(?:[A-Z][A-Za-zÀ-ɏ'’.-]*\s+){0,2}?([A-Z][A-Za-zÀ-ɏ'’-]+)(?=\s*[(,]|\s+(?:and|&|et al|found|showed|in|\()|\s*$)/.exec(full.slice(ne, ne + 60));
+      var ids = hit.e.ids;
+      if (nextCo && nextCo[1] !== 'colleagues' && !/^(Colleagues|Others|Her|His|Their)$/.test(nextCo[1])) {
+        ids = ids.filter(function (id) {
+          var r = IDX.refs[id] || {};
+          return !r.c ? (r.a || '').indexOf(' and colleagues') !== -1 || (r.a || '').indexOf(nextCo[1]) !== -1 : r.c.indexOf(nextCo[1]) !== -1;
+        });
+        if (!ids.length) continue;
+      }
+      var id = pickId(ids, around, sectionId);
       // what to link: "Ross and Sicoly (1979)" when it is short and in one piece of text, otherwise the name
       var end = ne;
       if (hit.fwd && hit.ye - ns <= 48 && hit.ye <= tn.e && BETWEEN.test(full.slice(ne, hit.ys))) {
@@ -265,8 +290,75 @@
     }
   }
 
+  // ---------- "The research behind this page": a small closed box at the end of other pages ----------
+  // Lists the research this page draws on (from the checked list only), each with a link to its plain summary
+  // on /research.html and to the source itself. Not on the Library (it has its own "Sources" lines), and not
+  // on pages that already end with their own list of sources.
+  var boxed = 0;
+  function ownSources() {
+    if (main.querySelector('#sources, #references, .tol-rbox')) return true;
+    var hs = main.querySelectorAll('h2');
+    for (var i = 0; i < hs.length; i++) {
+      if (/^(\d+\.\s*)?(where this comes from|sources|references|the research behind this page)\b/i.test(hs[i].textContent.trim())) return true;
+    }
+    return false;
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  }
+  function researchBox() {
+    if (/^\/library(\/|\.html$)/.test(path) || path === '/for-counselors.html') return;
+    var ids = Object.keys(onPage).filter(function (id) { return IDX.refs[id] && IDX.refs[id].u; });
+    if (!ids.length || ownSources()) return;
+    ids.sort(function (a, b) {
+      var ra = IDX.refs[a], rb = IDX.refs[b];
+      return ra.a.localeCompare(rb.a) || (ra.y || 0) - (rb.y || 0);
+    });
+    var box = el('aside', 'tol-rbox no-bubble');
+    box.setAttribute('aria-label', 'The research behind this page');
+    box.setAttribute('data-no-bubble', '');
+    var d = el('details'), s = el('summary');
+    s.appendChild(el('span', 'tol-rbox-h', 'The research behind this page'));
+    s.appendChild(el('span', 'tol-rbox-n', ids.length === 1 ? '1 source' : ids.length + ' sources'));
+    d.appendChild(s);
+    d.appendChild(el('p', 'tol-rbox-lede', 'The studies, books and reviews this page draws on. “In plain words” says what each found and how strong the evidence is. “Source” opens the original in a new tab.'));
+    var ul = el('ul', 'tol-rbox-list');
+    ids.forEach(function (id) {
+      var r = IDX.refs[id], li = el('li');
+      li.appendChild(document.createTextNode(r.a + (r.y ? ' (' + r.y + ')' : '') + '. '));
+      li.appendChild(el('em', '', r.t));
+      li.appendChild(document.createTextNode(' '));
+      var lk = el('span', 'tol-rbox-k');
+      var a1 = el('a', '', 'In plain words');
+      a1.href = PAGE + encodeURIComponent(id);
+      var a2 = el('a', '', 'Source');
+      a2.href = r.u; a2.target = '_blank'; a2.rel = 'noopener';
+      a2.appendChild(el('span', 'tol-vh', ' (opens a new tab)'));
+      lk.appendChild(a1); lk.appendChild(document.createTextNode(' · ')); lk.appendChild(a2);
+      li.appendChild(lk);
+      ul.appendChild(li);
+    });
+    d.appendChild(ul);
+    var all = el('p', 'tol-rbox-all'), aa = el('a', '', 'All the research behind this site');
+    aa.href = '/research.html';
+    all.appendChild(aa);
+    d.appendChild(all);
+    box.appendChild(d);
+    // after the page's own last part, before anything the site adds at the end
+    var last = main.lastElementChild;
+    function added(e) { return /^(SCRIPT|STYLE|TEMPLATE)$/.test(e.tagName) || (typeof e.className === 'string' && /(^|\s)(tol-|bkb\b|bb-)/.test(e.className)); }
+    while (last && added(last) && last.previousElementSibling) last = last.previousElementSibling;
+    if (last) last.parentNode.insertBefore(box, last.nextSibling); else main.appendChild(box);
+    boxed = ids.length;
+  }
+
   try { run(); } catch (e) { /* the reading still works without the links */ }
   try { sourcesLines(); } catch (e) {}
+  try { researchBox(); } catch (e) {}
   window.TOLResearchLinks.linked = linked;
   window.TOLResearchLinks.sources = sources;
+  window.TOLResearchLinks.box = boxed;
 })();

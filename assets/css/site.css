@@ -2213,7 +2213,12 @@ html.tol-bigtext .tol-wx-go > span{ display:flex !important; position:static !im
 html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td){ cursor:pointer; }
 html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td):hover{ outline:2px solid rgba(47,95,138,.35); outline-offset:3px; border-radius:6px; }
 @media (max-width:560px){ .tol-listen-bar{ top:calc(var(--tol-bar-h, 58px) + 4px); gap:.3rem; padding:.35rem .4rem; } .tol-listen-bar button{ padding:.25rem .65rem; font-size:.9rem; } }
-@media print{ .tol-listen, .tol-listen-bar, .tol-listen-mini{ display:none !important; } }
+@media print{ .tol-listen, .tol-listen-bar, .tol-listen-mini, .tol-listen-cardrow{ display:none !important; } }
+/* "Listen" on a card: a small button under the card's heading */
+.read .tol-listen-cardrow, .tol-listen-cardrow{ display:block; margin:.25rem 0 .55rem !important; padding:0 !important; max-width:none !important; width:auto !important;
+  background:none !important; border:0 !important; box-shadow:none !important; line-height:1; }
+.tol-listen-cardrow .tol-listen-mini{ min-height:40px; max-width:100%; white-space:normal; text-align:left; }
+.tol-inshort .tol-listen-cardrow{ margin:.1rem 0 .4rem !important; }
 
 /* ---------- "Pick up where you left off" and "How much time do you have?" (pick-up.js) ---------- */
 .tol-pickup-host{ max-width:40rem; margin:0 auto; text-align:left; }
@@ -2703,3 +2708,82 @@ main .tol-focus-line.is-page{ margin-left:0; margin-right:0; }
 @media print{ .tol-focus-line, .tol-focus-dlg{ display:none !important; } }
 .tol-focus-acts{ display:inline-flex; align-items:center; gap:.35rem; flex-wrap:nowrap; }
 .tol-drop .tol-mine a, .tol-index .tol-mine a{ display:inline; padding:0; min-height:0; border:0; background:none; text-decoration:underline; }
+
+/* =====================================================================
+   Seeing the page clearly (Settings › Text and contrast)
+   - every focusable thing gets a visible ring unless the page drew its own
+   - High contrast (html.tol-contrast): black on plain white, or white on black in dark mode,
+     solid backgrounds, clear outlines, a strong focus ring, and nothing soft or drifting behind
+     the words. Pictures, video and drawings keep their own colors.
+   ===================================================================== */
+:where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tol-set-k1{ margin-top:1rem; }
+html[lang^="es"] .tol-preset-state::before{ content:"Apagado"; }
+html[lang^="es"] .tol-preset[aria-pressed="true"] .tol-preset-state::before{ content:"Activado \2713"; }
+.tol-set input[type=radio]:disabled + *{ opacity:.6; }
+
+html.tol-contrast{ --paper:#FFFFFF; --paper-deep:#FFFFFF; --ink:#000000; --ink-soft:#000000; --line:#000000;
+  --credit:#0B3D1E; --brass:#000000; --brass-ink:#000000; --focus:#0037B3; --debit:#6B1A0A; background:#FFFFFF !important; }
+html.tol-contrast body{ background:#FFFFFF !important; color:#000000 !important; }
+/* the soft garden, bubbles, hearts and page tint go away */
+html.tol-contrast :is(.tol-wash, .tol-garden-bg, .tol-garden-veil, .tol-heart, .tol-bub){ display:none !important; }
+html.tol-contrast body::before, html.tol-contrast body::after{ display:none !important; }
+/* everything with words: black on solid white, no washes, glows or see-through text */
+html.tol-contrast body *:not(svg, svg *, img, video, canvas, iframe, picture, picture *, .tol-hc-keep, .tol-hc-keep *){
+  color:#000000 !important; -webkit-text-fill-color:currentColor !important;
+  background-color:#FFFFFF !important; background-image:none !important;
+  text-shadow:none !important; box-shadow:none !important; border-color:#000000 !important; }
+html.tol-contrast body *:not(svg *)::before, html.tol-contrast body *:not(svg *)::after{
+  color:inherit !important; -webkit-text-fill-color:currentColor !important;
+  background-image:none !important; text-shadow:none !important; box-shadow:none !important; border-color:currentColor !important; }
+/* numbered circles drawn behind a number: white number on solid black */
+html.tol-contrast body :is(.ten-steps > li, ol.steps > li, .pt-step)::before{ background-color:#000000 !important; color:#FFFFFF !important; -webkit-text-fill-color:#FFFFFF !important; }
+/* the reading ruler, overlays and backdrops stay see-through, so they never cover the words */
+html.tol-contrast body :is(.tol-ruler, .tol-scrim, .tol-depth-opt a.tol-depth-name){ background-color:transparent !important; }
+html.tol-contrast body .tol-ruler{ border-top:3px solid #000 !important; border-bottom:3px solid #000 !important; }
+/* fills that show an amount (progress, meters, tracks) are solid black, so they still read */
+html.tol-contrast body :is([class*="fill"], [class*="-meter"] > *, [class*="progress"] > *, [class*="gauge"] > *, [role="progressbar"] > *, [role="meter"] > *){ background-color:#000000 !important; }
+html.tol-contrast body :is(progress, meter){ accent-color:#000; }
+/* links: dark blue and underlined */
+html.tol-contrast body a[href]:not(.hh-card, [role="button"]){ color:#0037B3 !important; text-decoration:underline !important; text-decoration-thickness:max(1px, .08em) !important; text-underline-offset:.15em; }
+html.tol-contrast body a[href] *{ color:inherit !important; }
+/* controls: a clear outline you can see without color */
+html.tol-contrast body :is(button, select, textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), [role="button"], summary, .hh-card){ border:2px solid #000000 !important; }
+html.tol-contrast body :is(input, select, textarea)::placeholder{ color:#3A3A3A !important; opacity:1 !important; }
+html.tol-contrast body :is(input[type="checkbox"], input[type="radio"], input[type="range"]){ accent-color:#000000; }
+html.tol-contrast body :is(button, [role="button"]):disabled{ border-style:dashed !important; }
+/* what's chosen or turned on: white on black */
+html.tol-contrast body :is([aria-pressed="true"], [aria-checked="true"], [aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-current="step"]){ background-color:#000000 !important; color:#FFFFFF !important; border-color:#000000 !important; }
+html.tol-contrast body :is([aria-pressed="true"], [aria-checked="true"], [aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-current="step"]) *:not(svg, svg *, img){ background-color:transparent !important; color:#FFFFFF !important; }
+html.tol-contrast body a[href]:is([aria-current="page"], [aria-current="true"], [aria-current="step"]){ color:#FFFFFF !important; }
+/* the Settings switches */
+html.tol-contrast body .tol-set-track{ background-color:#FFFFFF !important; border:2px solid #000 !important; }
+html.tol-contrast body .tol-set-track > span{ background-color:#000000 !important; }
+html.tol-contrast body .tol-set-sw input:checked + .tol-set-track{ background-color:#000000 !important; }
+html.tol-contrast body .tol-set-sw input:checked + .tol-set-track > span{ background-color:#FFFFFF !important; }
+html.tol-contrast body .tol-set-swatch{ border:2px solid #000 !important; }
+/* a strong focus ring everywhere, even where a page hid its own */
+html.tol-contrast body :focus-visible{ outline:3px solid #0037B3 !important; outline-offset:2px !important; box-shadow:0 0 0 5px #FFFFFF !important; }
+html.tol-contrast body .tol-set-sw input:focus-visible + .tol-set-track{ outline:3px solid #0037B3 !important; outline-offset:2px !important; }
+html.tol-contrast body :is(input, select, textarea):focus{ outline:3px solid #0037B3 !important; outline-offset:2px !important; }
+/* "Simple version / Full version": the one you're on gets a thick frame instead of a dark fill */
+html.tol-contrast body .tol-depth-opt a.tol-depth-name[aria-current], html.tol-contrast body .tol-depth-opt a.tol-depth-name[aria-current] *{ color:#000000 !important; background-color:transparent !important; }
+html.tol-contrast body .tol-depth-opt.is-here{ border:3px solid #000000 !important; }
+/* widgets that bring their own strong colors (the Brain Break card) */
+html.tol-contrast body section.bkb.bkb.bkb, html.tol-contrast body section.bkb.bkb.bkb *:not(svg, svg *, img, iframe){ color:#000000 !important; background:#FFFFFF !important; -webkit-text-fill-color:currentColor !important; box-shadow:none !important; }
+html.tol-contrast body section.bkb.bkb.bkb{ border:2px solid #000000 !important; }
+html.tol-contrast body section.bkb.bkb.bkb a[href]{ color:#0037B3 !important; }
+/* the sentence being read aloud */
+html.tol-contrast ::highlight(tol-listen){ background-color:#FFE500; color:#000000; }
+html.tol-contrast body .tol-listen-now{ outline:3px solid #000 !important; outline-offset:4px; }
+html.tol-contrast body :is(mark, ins){ background-color:#FFE500 !important; color:#000 !important; }
+/* thin grey rules become solid black lines */
+html.tol-contrast body :is(hr){ border:0 !important; border-top:2px solid #000 !important; background:none !important; }
+/* nothing slides, fades or drifts */
+html.tol-contrast *, html.tol-contrast *::before, html.tol-contrast *::after{ animation-duration:0s !important; animation-iteration-count:1 !important; transition:none !important; }
+/* dark mode with high contrast: a true white-on-black page (the whole page is turned around, pictures turned back) */
+html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rotate(180deg) !important; background:#FFFFFF !important; }
+@media (prefers-color-scheme: dark){
+  html.tol-contrast:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)){ filter:invert(1) hue-rotate(180deg) !important; background:#FFFFFF !important; }
+}
+@media print{ html.tol-contrast{ filter:none !important; } }

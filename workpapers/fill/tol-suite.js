@@ -1213,6 +1213,7 @@
     keep = false;
     if (WPK.keepOff) WPK.keepOff('suite', true);
     var box = $('ws-keep'); if (box) box.checked = false;
+    flowKeepSync();
     S.dirty = S.stops.some(function (st) { return st.entries.some(filled); });
     say(msg || 'Erased. Nothing from your suite is stored on this device. What is on the page stays until you close it.');
     var note = $('ws-erase-note');
@@ -1226,6 +1227,7 @@
     road.innerHTML = '';
     $('ws-step-road').classList.toggle('is-waiting', !S.path);
     empty.hidden = !!S.path;
+    renderFlow();
     if (!S.path) { renderProgress(); $('ws-view').hidden = true; $('ws-weeks').hidden = true; return; }
     $('ws-view').hidden = false;
     Array.prototype.forEach.call($('ws-view').querySelectorAll('[data-view]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === S.view)); });
@@ -1429,6 +1431,34 @@
   }
 
   // Week by week: this road's own plan, with its workpapers, reading and a small practice
+  // On the six-week program the weeks are the road's own groups, so a sheet that comes twice
+  // (Who did what, in week 1 and again in week 6) opens the right week's copy.
+  function weekStop(code, wi) {
+    var same = S.stops.filter(function (x) { return x.wp === code; });
+    if (S.path && S.path.id === 'program') { var mine = same.filter(function (x) { return x.gi === wi; })[0]; if (mine) return mine; }
+    return same[0] || null;
+  }
+  function weekSheets(codes, wi, plain) {
+    var row = h('div', { className: 'ws-sheets' });
+    (codes || []).forEach(function (code) {
+      var st = weekStop(code, wi);
+      if (!st) return;
+      if (perPerson(code)) {
+        // one button per person: everyone fills in their own
+        S.names.forEach(function (_, i) {
+          if (isChild(i)) return;
+          var theirs = st.entries.filter(function (en) { return personOf(en) === i; }), done1 = theirs.some(filled);
+          row.appendChild(h('button', { type: 'button', className: 'ws-sheet-btn' + (done1 ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': theirs[0] ? theirs[0].id : '', 'data-person': String(i) }, [
+            h('span', { className: 'ws-sheet-label', text: (plain || phone() ? '' : code + ' ') + SP.nameOf(code) + ' · ' + whoLabel(i) }), h('span', { className: 'ws-sheet-meta', text: done1 ? '✓' : '✎' })]));
+        });
+        return;
+      }
+      var done = st.entries.some(filled);
+      row.appendChild(h('button', { type: 'button', className: 'ws-sheet-btn' + (done ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': st.entries[0] ? st.entries[0].id : '' }, [
+        h('span', { className: 'ws-sheet-label', text: (plain || phone() ? '' : code + ' ') + SP.nameOf(code) }), h('span', { className: 'ws-sheet-meta', text: done ? '✓' : '✎' })]));
+    });
+    return row;
+  }
   function renderWeeks(el) {
     el.innerHTML = '';
     (S.path.weeks || []).forEach(function (w, i) {
@@ -1437,28 +1467,7 @@
         h('h3', { className: 'ws-week-h', text: w[0] }),
         w[3] ? h('p', { className: 'ws-week-do', text: w[3] }) : null
       ]);
-      if (w[1] && w[1].length) {
-        var row = h('div', { className: 'ws-sheets' });
-        w[1].forEach(function (code) {
-          var st = S.stops.filter(function (x) { return x.wp === code; })[0];
-          if (!st) return;
-          if (perPerson(code)) {
-            // one button per person: everyone fills in their own
-            S.names.forEach(function (_, i) {
-              if (isChild(i)) return;
-              var theirs = st.entries.filter(function (en) { return personOf(en) === i; }), done1 = theirs.some(filled);
-              row.appendChild(h('button', { type: 'button', className: 'ws-sheet-btn' + (done1 ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': theirs[0] ? theirs[0].id : '', 'data-person': String(i) }, [
-                h('span', { className: 'ws-sheet-label', text: (phone() ? '' : code + ' ') + SP.nameOf(code) + ' · ' + whoLabel(i) }), h('span', { className: 'ws-sheet-meta', text: done1 ? '\u2713' : '\u270E' })]));
-            });
-            return;
-          }
-          var done = st.entries.some(filled);
-          var b = h('button', { type: 'button', className: 'ws-sheet-btn' + (done ? ' is-filled' : ''), 'data-open': st.key, 'data-entry': st.entries[0] ? st.entries[0].id : '' }, [
-            h('span', { className: 'ws-sheet-label', text: (phone() ? '' : code + ' ') + SP.nameOf(code) }), h('span', { className: 'ws-sheet-meta', text: done ? '\u2713' : '\u270E' })]);
-          row.appendChild(b);
-        });
-        li.appendChild(row);
-      }
+      if (w[1] && w[1].length) li.appendChild(weekSheets(w[1], i));
       if (w[2] && w[2].length) {
         var al = h('div', { className: 'ws-along' }, [h('span', { className: 'ws-along-k', text: 'Read and try this week' })]);
         w[2].forEach(function (a) { if (a) al.appendChild(h('a', { className: 'ws-along-a', href: a[1], text: a[0] })); });
@@ -1467,6 +1476,108 @@
       el.appendChild(li);
     });
   }
+
+  /* ------------------------------------------------------------ Six gentle weeks: this week's pages */
+  // On the six-week program, the top of the page walks through one week at a time: that week's pages,
+  // what to read alongside, "Done for this week" and the next week. Which weeks are done is the same
+  // record as the tracker on /prog-01.html (tol-prog01-v1, this device only; erase it there), and it is
+  // only written when someone presses "Done for this week". What is typed on the pages is kept only when
+  // "Keep my pages on this device" (the same as "Keep a draft on this device") is ticked.
+  var PROG_KEY = 'tol-prog01-v1', flowFrom = null;
+  function progLoad() { try { var v = JSON.parse(global.localStorage.getItem(PROG_KEY) || 'null'); return v && v.on && Array.isArray(v.done) ? v : null; } catch (e) { return null; } }
+  function progSave(v) { try { global.localStorage.setItem(PROG_KEY, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function progToday() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function progDone(w) { var v = progLoad(); return !!v && v.done.indexOf(w) !== -1; }
+  function progNext(total) { var v = progLoad(); if (!v) return 1; for (var i = 1; i <= total; i++) if (v.done.indexOf(i) === -1) return i; return total; }
+  function flowOn() { return !!S.path && S.path.id === 'program' && !!$('ws-flow'); }
+  function flowUrl() {
+    if (!global.history || !global.history.replaceState) return;
+    try { global.history.replaceState(global.history.state, '', global.location.pathname + '?road=program&week=' + S.week + global.location.hash); } catch (e) {}
+  }
+  function renderFlow() {
+    var box = $('ws-flow');
+    if (!box) return;
+    if (!flowOn()) { box.hidden = true; box.innerHTML = ''; return; }
+    var weeks = S.path.weeks || [], total = weeks.length;
+    if (!S.week || S.week < 1 || S.week > total) S.week = progNext(total);
+    var wi = S.week - 1, w = weeks[wi], done = progDone(S.week);
+    box.hidden = false;
+    box.innerHTML = '';
+    box.appendChild(h('p', { className: 'ws-flow-k' }, ['Six gentle weeks · ', h('a', { href: '/prog-01.html', text: 'about the six weeks' }), ' · ', h('a', { href: '/week-0.html', text: 'Week 0' })]));
+    var pills = h('div', { className: 'ws-flow-weeks', role: 'group', 'aria-label': 'Choose a week' });
+    for (var i = 1; i <= total; i++) {
+      var d = progDone(i);
+      pills.appendChild(h('button', { type: 'button', className: 'ws-flow-pill' + (d ? ' is-done' : ''), 'data-flow-week': String(i), 'aria-pressed': String(i === S.week) }, [
+        h('span', { 'aria-hidden': 'true', text: d ? '✓' : String(i) }), h('span', { className: 'sr-only', text: 'Week ' + i + (d ? ', done' : '') })]));
+    }
+    box.appendChild(pills);
+    box.appendChild(h('h2', { id: 'ws-flow-h', tabindex: '-1', text: 'Week ' + S.week + ' of ' + total + ': ' + w[0] }));
+    if (w[3]) box.appendChild(h('p', { className: 'ws-flow-note', text: w[3] }));
+    if (w[1] && w[1].length) {
+      box.appendChild(h('p', { className: 'ws-flow-sub', text: w[1].length === 1 ? 'This week’s page' : 'This week’s pages' }));
+      box.appendChild(weekSheets(w[1], wi, true));
+    }
+    if (w[2] && w[2].length) {
+      var al = h('div', { className: 'ws-along' }, [h('span', { className: 'ws-along-k', text: 'Read and try this week' })]);
+      w[2].forEach(function (a) { if (a) al.appendChild(h('a', { className: 'ws-along-a', href: a[1], text: String(a[0]).replace(/^[A-Z]{2,8}-\d+:\s*/, '') })); });
+      box.appendChild(al);
+    }
+    box.appendChild(h('p', { className: 'ws-flow-small', text: 'Doing this on your own? Fill in just your own pages; the rest can wait, or stay empty. Each sheet opens here and saves on this page as you type.' }));
+    var row = h('div', { className: 'ws-flow-row' }, [
+      h('button', { type: 'button', className: 'ws-go ws-flow-done' + (done ? ' is-done' : ''), 'data-flow-done': '', 'aria-pressed': String(done) }, [h('span', { 'aria-hidden': 'true', text: done ? '✓ ' : '' }), 'Done for this week']),
+      S.week < total ? h('button', { type: 'button', className: 'wpf-add', 'data-flow-week': String(S.week + 1) }, ['Next: week ' + (S.week + 1) + ' →']) : h('a', { className: 'wpf-add ws-flow-a', href: '/prog-01.html#week-6' }, ['Back to the six weeks'])
+    ]);
+    box.appendChild(row);
+    box.appendChild(h('p', { className: 'ws-flow-status', id: 'ws-flow-status', role: 'status', 'aria-live': 'polite' }));
+    var keepL = h('label', { className: 'ws-flow-keep' }, [h('input', { type: 'checkbox', 'data-flow-keep': '', checked: keep ? true : null }), ' Keep my pages on this device']);
+    box.appendChild(h('div', { className: 'ws-flow-save' }, [
+      h('p', {}, [keepL]),
+      h('p', { className: 'ws-flow-small', text: 'So they’re here next time. This browser only, never sent; untick to erase. Best on your own device.' }),
+      h('p', { className: 'ws-flow-pdfs' }, [
+        h('button', { type: 'button', className: 'wpf-add', 'data-flow-pdf': 'report' }, ['A summary of all six weeks (PDF)']),
+        h('button', { type: 'button', className: 'wpf-add', 'data-flow-pdf': 'fillable' }, ['All six weeks’ pages to print (PDF)'])
+      ]),
+      h('p', { className: 'ws-flow-small', text: 'Both are made on this device, never sent anywhere. The summary reads what you’ve filled in so far, week by week; the pages print blank or with your answers.' })
+    ]));
+  }
+  function flowStatus(msg) { var el = $('ws-flow-status'); if (!el) return; el.textContent = ''; setTimeout(function () { el.textContent = msg; }, 30); }
+  function flowWire() {
+    var box = $('ws-flow');
+    if (!box) return;
+    box.addEventListener('click', function (e) {
+      var o = e.target.closest('[data-open]');
+      if (o) { flowFrom = { key: o.getAttribute('data-open'), person: o.getAttribute('data-person') }; openSheet(o.getAttribute('data-open'), o.getAttribute('data-entry'), o.getAttribute('data-person')); return; }
+      var wk = e.target.closest('[data-flow-week]');
+      if (wk) {
+        S.week = +wk.getAttribute('data-flow-week'); flowUrl(); renderFlow();
+        var hd = $('ws-flow-h'); if (hd) hd.focus();
+        if (box.scrollIntoView && box.getBoundingClientRect().top < 0) box.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+        return;
+      }
+      if (e.target.closest('[data-flow-done]')) {
+        var v = progLoad() || { on: true, start: progToday(), done: [] }, n = S.week, was = v.done.indexOf(n) !== -1;
+        v.done = v.done.filter(function (x) { return x !== n; });
+        if (!was) v.done.push(n);
+        v.done.sort(function (a, b) { return a - b; });
+        var ok = progSave(v);
+        renderFlow();
+        var db = box.querySelector('[data-flow-done]'); if (db) db.focus();
+        if (!ok) flowStatus('This browser won’t keep it (storage is off), so it’s only marked for now.');
+        else if (was) flowStatus('Week ' + n + ' is not marked done any more.');
+        else flowStatus('Week ' + n + ' is done. Lovely. ' + (n < (S.path.weeks || []).length ? 'Week ' + (n + 1) + ' is there whenever you’re ready, this week or later.' : 'That’s all six. Your summary is just below.') + ' Kept on this device only; you can change or erase it on the six weeks page.');
+        return;
+      }
+      var pdf = e.target.closest('[data-flow-pdf]');
+      if (pdf) { makePdf(pdf.getAttribute('data-flow-pdf')); flowStatus($('wpf-status').textContent || ''); setTimeout(function () { flowStatus($('wpf-status').textContent || ''); }, 80); }
+    });
+    box.addEventListener('change', function (e) {
+      if (!e.target.hasAttribute('data-flow-keep')) return;
+      var kb = $('ws-keep');
+      if (kb) { kb.checked = e.target.checked; kb.dispatchEvent(new Event('change', { bubbles: true })); }
+      flowStatus(e.target.checked ? 'Your pages are kept on this device. Untick to erase them.' : 'Not kept any more. Nothing from your pages is stored on this device.');
+    });
+  }
+  function flowKeepSync() { var c = $('ws-flow') && $('ws-flow').querySelector('[data-flow-keep]'); if (c) c.checked = !!keep; }
 
   function renderProgress() {
     var box = $('ws-progress');
@@ -1760,12 +1871,14 @@
     renderRoad();
     var now = SP.answers(ed.entry);
     var stopEl = document.querySelector('[data-stop="' + ed.stop.key + '"]');
-    if (quiet === true) return;
+    if (quiet === true) { flowFrom = null; return; }
     if (now > 0 && ed.before === 0) {
-      celebrate(stopEl, 'A new heart on your road');
+      celebrate(flowFrom && $('ws-flow') && !$('ws-flow').hidden ? $('ws-flow').querySelector('.ws-sheets') : stopEl, 'A new heart on your road');
       if (global.TOLGarden) try { global.TOLGarden.gift('workpapers'); } catch (e) {}
     } else if (now > ed.before) say('Saved on this page. ' + now + ' answers on that sheet.');
     var back = stopEl && stopEl.querySelector('[data-entry="' + ed.entry.id + '"]');
+    var ff = flowFrom, fbox = $('ws-flow'); flowFrom = null;
+    if (ff && fbox && !fbox.hidden) back = fbox.querySelector('[data-entry="' + ed.entry.id + '"]') || fbox.querySelector('[data-open="' + ff.key + '"]' + (ff.person != null && ff.person !== '' ? '[data-person="' + ff.person + '"]' : '')) || back;
     (back || lastFocus || document.body).focus && (back || lastFocus).focus();
   }
 
@@ -2100,6 +2213,9 @@
     hhSetup();
     renderPaths();
     var q = (global.location.search.match(/[?&]road=([a-z]+)/) || [])[1];
+    var qw = +((global.location.search.match(/[?&]week=(\d{1,2})/) || [])[1] || 0);
+    if (qw) S.week = qw;
+    flowWire();
     var qf = (global.location.search.match(/[?&]focus=([a-z]+)/) || [])[1] || null;
     var kept = readKept();
     if (kept) {
@@ -2123,6 +2239,8 @@
       syncAllNames(); syncRoadPeople();
       renderNames(); renderRoad();
       S.dirty = false;
+      // came from "Do this week's pages" on the six weeks: open that road, bringing the sheets along
+      if (q === 'program' && (!S.path || S.path.id !== 'program') && pathById('program')) { setPath('program', null); changed(); }
       say('Picked up the draft kept on this device. Press “Erase” to remove it.');
     } else if (q && pathById(q)) setPath(q, qf); else renderRoad();
 
@@ -2183,7 +2301,7 @@
     lemonRender();
     var keepBox = $('ws-keep');
     if (keepBox) keepBox.addEventListener('change', function () {
-      if (keepBox.checked) { keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); if (suiteAsk) suiteAsk(); }
+      if (keepBox.checked) { keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say('Kept on this device. It will be here next time you open this page. Press “Erase” to remove it.'); if (suiteAsk) suiteAsk(); flowKeepSync(); }
       else eraseKept('Not kept any more. Nothing from your suite is stored on this device.');
     });
     var eraseBtn = $('ws-erase');
@@ -2317,7 +2435,7 @@
         key: 'suite', bar: document.querySelector('.wpf-bar-inner'),
         want: function () { return !keep && !!S.path && (S.stops.some(function (st) { return st.entries.some(filled); }) || S.names.some(function (x) { return String(x || '').trim(); })); },
         auto: true,
-        onKeep: function (auto) { var kb2 = $('ws-keep'); if (kb2) kb2.checked = true; keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say(auto ? 'Kept on this device, like your other worksheets. To remove it, press \u201cErase\u201d.' : 'Kept on this device for next time. Press \u201cErase\u201d to remove it.'); if (suiteAsk) suiteAsk(); }
+        onKeep: function (auto) { var kb2 = $('ws-keep'); if (kb2) kb2.checked = true; keep = true; if (WPK.keepOff) WPK.keepOff('suite', false); if (keepNow()) say(auto ? 'Kept on this device, like your other worksheets. To remove it, press \u201cErase\u201d.' : 'Kept on this device for next time. Press \u201cErase\u201d to remove it.'); if (suiteAsk) suiteAsk(); flowKeepSync(); }
       });
       suiteAsk = askS.check;
       askS.check();

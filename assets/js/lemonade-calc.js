@@ -2692,20 +2692,55 @@
     toggleOwn(v); inp.value = ''; inp.focus();
   });
   $('own-new').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); $('own-add-go').click(); } });
-  $('own-copy').addEventListener('click', function () {
-    var t = fridgeText();
-    if (!t) { status('Pick a job or two first.'); return; }
-    var noNames = state.people.some(function (p) { return placeholder(p); });
-    copyText(t).then(function (ok) { status(ok ? 'Copied. Paste it into your group chat, or print it for the fridge.' + (noNames ? ' Tip: type your names above the list, so it says who owns what.' : '') : 'Couldn’t copy here. Try selecting the text by hand.'); });
-  });
-  $('own-print').addEventListener('click', function () {
-    if (!fridgeText()) { status('Pick a job or two first.'); return; }
-    document.body.classList.add('print-fridge');
-    var done = function () { document.body.classList.remove('print-fridge'); window.removeEventListener('afterprint', done); };
-    window.addEventListener('afterprint', done);
-    window.print();
-    setTimeout(done, 1500);
-  });
+  /* ---------- "Put it on the fridge" (assets/js/fridge-sheet.js): print, PDF, text, share or a picture ---------- */
+  // The jobs, each with its owner and how often (when the same job is on the hours list); no list yet prints a blank one
+  function fridgeData() {
+    var list = ownersList(), F = window.TOLFridge;
+    var items = list.map(function (o) {
+      var j = state.jobs.filter(function (x) { return !x.ex && low(x.name) === low(o.name); })[0];
+      return { job: o.name, who: o.who >= 0 ? nameOf(o.who) : '', when: j && F ? F.freqLabel(j.freq) : '' };
+    });
+    items.push({ blank: list.length ? 2 : 8 });
+    var names = state.people.filter(function (p) { return !placeholder(p); }).map(function (p) { return p.trim(); });
+    return {
+      title: 'Who owns what', sub: names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names.join(''), items: items,
+      footer: 'Owning a job means you do it, or you make sure it gets done. Swap by asking, not by quietly dropping it.', file: 'who-owns-what'
+    };
+  }
+  if (window.TOLFridge && $('own-fridge')) {
+    window.TOLFridge.button($('own-fridge'), fridgeData, {
+      note: 'One clean page: each job, its owner and a box to tick. Fits A4 and US Letter. With nothing picked yet, it prints a blank list to fill in together.',
+      before: function () {
+        var noNames = ownersList().length && state.people.some(function (p) { return placeholder(p); });
+        if (noNames) status('Tip: type your names above the list, so it says who owns what.');
+      }
+    });
+  }
+  // "These jobs keep coming back" (from the weekly check-in card): onto the fridge list here, no owner yet
+  function addOwnJobs(names) {
+    var list = ownersList(), added = [], waiting = [];
+    (names || []).forEach(function (nm) {
+      nm = String(nm || '').trim().slice(0, 60); if (!nm) return;
+      if (list.some(function (o) { return low(o.name) === low(nm); })) return;
+      if (list.length >= MAX_OWN) { waiting.push(nm); return; }
+      list.push({ name: nm, who: -1 }); added.push(nm);
+    });
+    if (state.compact) setCompact(false);
+    renderOwners(); save();
+    document.body.setAttribute('data-ls-fridge', '');
+    var o = $('owners'), h = $('owners-h'), st = $('own-status');
+    if (o) o.scrollIntoView({ block: 'start' });
+    if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+    var and = function (a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
+    if (st) st.textContent = (added.length ? 'Added ' + and(added) + ' to the fridge list. Tap who owns each one, together.' : 'Those jobs are already on the fridge list. Tap who owns each one, together.') +
+      (waiting.length ? ' The list holds five, so ' + and(waiting) + (waiting.length === 1 ? ' is' : ' are') + ' waiting: swap one out to add it.' : '');
+    return added.length;
+  }
+  if (window.TOLFridge) {
+    if ($('ls-drift')) window.TOLFridge.drift($('ls-drift'), { onGive: addOwnJobs, giveLabel: 'Put them on the fridge list' });
+    var carried = window.TOLFridge.takeCarry();
+    if (carried.length) setTimeout(function () { addOwnJobs(carried); }, 0);
+  }
 
   $('add-person').addEventListener('click', addPerson);
   $('add-row').addEventListener('click', function () {

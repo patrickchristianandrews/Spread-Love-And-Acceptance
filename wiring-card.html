@@ -610,13 +610,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
       }).join("");
       const body = rows ? '<dl>'+rows+'</dl>' : (wire || st.wave ? '' : '<p class="emptycard">Nothing on the card yet. Tap an answer in the form and it shows up here.</p>');
       return '<article class="sheet"><p class="ck">WIRING CARD &middot; NOT A DIAGNOSIS</p><h2>'+esc(name)+'</h2>'+(st.wave?'<p class="wavecode">Wave Code '+esc(waveLabel(st.wave))+'</p>':'')+(wire?'<p class="wire">'+esc(wire)+'</p>':'')+body+'<p class="fine">Applies more strictly when I am running low. Not a contract, and not a label. Change it when it stops being true. Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com/wiring-card.html</p></article>';
-    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copylink">Copy a link to my card</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div>' +
+    }).join("") + '<div class="actions"><button class="go" type="button" id="copy">Copy the card</button><button class="ghost" type="button" id="copylink">Copy a link to my card</button><button class="ghost" type="button" id="showqr">Show a QR code</button><button class="ghost" type="button" id="copymd">Copy as a team snippet (Markdown)</button><button class="ghost" type="button" id="pdf">Save as PDF</button><button class="ghost" type="button" id="print">Print</button><button class="ghost" type="button" id="printwallet">Print a wallet-size card</button></div>' +
       '<p class="privacy" id="copymsg" role="status" aria-live="polite"></p>' +
       '<label class="codeopt"><input type="checkbox" id="codeopt"'+(codeOn()?" checked":"")+'> <span>Add a card code at the end of &ldquo;Copy the card&rdquo;, so they can paste it into their own Wiring Card and compare</span></label>' +
       '<p class="hint managernote"><strong>How to give this to your manager:</strong> send it with one line, like &ldquo;'+esc(MANAGER_LINE)+'&rdquo;'+(forWho==="work" ? ' &ldquo;Copy the card&rdquo; starts with that line; change it as you like.' : '')+'</p>';
     $("#printwallet").addEventListener("click", printWallet);
     $("#copy").addEventListener("click", copyCard);
     $("#copylink").addEventListener("click", copyLink);
+    $("#showqr").addEventListener("click", showLinkQR);
     $("#copymd").addEventListener("click", copyMarkdown);
     $("#print").addEventListener("click", ()=>window.print());
     $("#pdf").addEventListener("click", savePdf);
@@ -814,6 +815,14 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
   function copyLink(){
     if(!hasContent("A") && !state.A.name.trim()){ const m = $("#copymsg"); if(m) m.textContent = "Fill in a line or two on your card first, then copy the link."; return; }
     copyText(cardLink("A"), $("#copylink"), "Link copied. Send it to them: it opens this page with your card next to theirs. Your card travels inside the link itself; nothing is stored or sent anywhere else.");
+  }
+  // "Show a QR code": the same link drawn big, so the other phone in the room can scan it (share-kit.js, loaded at the tap if needed)
+  function showLinkQR(){
+    if(!hasContent("A") && !state.A.name.trim()){ const m = $("#copymsg"); if(m) m.textContent = "Fill in a line or two on your card first, then show the QR code."; return; }
+    const url = cardLink("A"), o = { title: "Scan with the other phone", note: "It opens this page on their phone with your card next to theirs. Your card travels inside the link; nothing is uploaded." };
+    const go = ()=>{ if(window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(url, o); };
+    if(window.TOLShareKit && window.TOLShareKit.showQR){ go(); return; }
+    const sc = document.createElement("script"); sc.src = "/assets/js/share-kit.js"; sc.onload = go; document.head.appendChild(sc);
   }
   // Opened from someone's card link (wiring-card.html#card=WC1....): bring their card in, then take it out of the address bar.
   function readLink(){

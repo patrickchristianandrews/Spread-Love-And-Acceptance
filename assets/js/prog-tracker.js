@@ -2,8 +2,10 @@
    - On /prog-01.html and /prog-01-in-depth.html: a week bar ("Week N of 6"), and a small tracker
      that is OFF until someone turns it on. Once on, it keeps a start date and which weeks are done
      in this browser's storage (key tol-prog01-v1). "Erase" removes it completely and turns it off.
-   - Anywhere with <div data-prog-resume></div>: a "Pick up where you left off" card, shown only when
-     the tracker is on.
+     "Done for this week" in the Workpaper Suite's six-weeks flow ticks the same weeks.
+   - Any link marked data-pt-this-week points at the next week not yet ticked (when the tracker is on).
+   - The tracker card goes where the page puts <div data-pt-card></div> (else after the lede).
+   - There is no "Pick up where you left off" card any more: a leftover <div data-prog-resume> is emptied.
    - On the full guide, each week gets a small "Week N of 6 · previous · next" line.
    Nothing is ever sent anywhere. */
 (function () {
@@ -34,9 +36,9 @@
   function el(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
 
   var css = el('style', null,
-    '.pt-card,.pt-bar,.pt-resume{box-sizing:border-box;margin:0 0 1.4rem;padding:.9rem 1rem;border-radius:18px;border:1px solid #D9CBA3;background:rgba(255,251,242,.96);font-family:Lora,Georgia,serif;color:#2B2620}' +
-    '.pt-card h2,.pt-resume h2{margin:0 0 .3rem !important;font:600 1.15rem/1.3 Fraunces,Georgia,serif}' +
-    '.pt-card p,.pt-resume p,.pt-bar p{margin:0 0 .5rem !important;max-width:none}' +
+    '.pt-card,.pt-bar{box-sizing:border-box;margin:0 0 1.4rem;padding:.9rem 1rem;border-radius:18px;border:1px solid #D9CBA3;background:rgba(255,251,242,.96);font-family:Lora,Georgia,serif;color:#2B2620}' +
+    '.pt-card h2{margin:0 0 .3rem !important;font:600 1.15rem/1.3 Fraunces,Georgia,serif}' +
+    '.pt-card p,.pt-bar p{margin:0 0 .5rem !important;max-width:none}' +
     '.pt-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .9rem}' +
     '.pt-bar ol{display:flex;flex-wrap:wrap;gap:.3rem;list-style:none;margin:0 !important;padding:0 !important}.pt-bar li{margin:0 !important}' +
     '.read .pt-bar ol a,.pt-bar ol a{display:grid;place-items:center;min-width:2.3rem;height:2.3rem;border-radius:999px;border:1px solid #D9CBA3;background:#FFFDF7;color:#2B2620;text-decoration:none;font:600 .9rem/1 "IBM Plex Mono",monospace}' +
@@ -48,28 +50,22 @@
     '.pt-card input[type=date]{font:inherit;padding:.35rem .5rem;border:1px solid #8A7F6A;border-radius:8px;background:#fff;color:#2B2620;min-height:40px}' +
     '.pt-btn{font:600 .95rem/1.2 Lora,Georgia,serif;min-height:44px;padding:.45rem 1.05rem;border-radius:999px;border:1px solid #2F5F8A;background:#2F5F8A;color:#fff;cursor:pointer}' +
     '.pt-btn.is-quiet{background:#FFFDF7;color:#2F5F8A}.pt-btn.is-erase{background:#FFFDF7;color:#8A2F3C;border-color:#C98B94}' +
-    '.pt-btn:focus-visible,.pt-card :focus-visible,.pt-bar :focus-visible,.pt-resume :focus-visible{outline:3px solid #2B5B8C;outline-offset:2px}' +
+    '.pt-btn:focus-visible,.pt-card :focus-visible,.pt-bar :focus-visible{outline:3px solid #2B5B8C;outline-offset:2px}' +
     '.pt-small{font-size:.9rem;color:#5A5346}.pt-weeknav{display:flex;flex-wrap:wrap;gap:.3rem 1rem;align-items:center;margin:0 0 .8rem;font-size:.95rem}' +
     '.pt-weeknav b{font-weight:600}.pt-weeknav a{font-weight:600;min-height:36px;display:inline-flex;align-items:center}' +
-    '.read .pt-resume a.pt-go,.pt-resume a.pt-go{display:inline-flex;align-items:center;min-height:44px;padding:.4rem 1.05rem;border-radius:999px;background:#2F5F8A;color:#fff;text-decoration:none;font-weight:600}' +
-    '@media print{.pt-card,.pt-bar,.pt-resume,.pt-weeknav{display:none}}');
+        '@media print{.pt-card,.pt-bar,.pt-weeknav{display:none}}');
   document.head.appendChild(css);
 
-  // ---------- "Pick up where you left off" ----------
+  // ---------- no "Pick up where you left off" card; links to "this week's pages" follow the tracker ----------
   function resumeCards() {
-    var v = load();
-    Array.prototype.forEach.call(document.querySelectorAll('[data-prog-resume]'), function (host) {
-      host.innerHTML = '';
-      if (!v) return;
-      var n = nextWeek(v), cw = calendarWeek(v);
-      var box = el('section', 'pt-resume no-bubble');
-      box.setAttribute('aria-labelledby', 'pt-resume-h');
-      box.innerHTML = n
-        ? '<h2 id="pt-resume-h">Pick up where you left off</h2><p>You’re on <strong>week ' + n + ' of ' + WEEKS + '</strong> of six gentle weeks: ' + esc(NAMES[n - 1]) + '. You started on ' + esc(nice(v.start)) + (cw !== n ? '; by the calendar it’s week ' + cw + ', and going at your own pace is just fine.' : '.') + '</p>' +
-          '<p><a class="pt-go" href="/prog-01-in-depth.html#week-' + n + '">Open week ' + n + ' &rarr;</a></p>'
-        : '<h2 id="pt-resume-h">All six weeks done</h2><p>Every week is ticked. Week six’s before-and-after look is a lovely thing to repeat once a season.</p><p><a class="pt-go" href="/prog-01.html">See the six weeks &rarr;</a></p>';
-      box.appendChild(el('p', 'pt-small', 'Kept on this device only. <a href="/prog-01.html#pt-tracker">Change or erase it</a>.'));
-      host.appendChild(box);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-prog-resume]'), function (host) { host.innerHTML = ''; host.hidden = true; });
+    var v = load(), n = v ? nextWeek(v) : 0;
+    Array.prototype.forEach.call(document.querySelectorAll('a[data-pt-this-week]'), function (a) {
+      if (!a.hasAttribute('data-pt-label')) a.setAttribute('data-pt-label', a.textContent);
+      if (!v) { a.href = '/workpapers/fill/suite.html?road=program'; a.textContent = a.getAttribute('data-pt-label'); return; }
+      a.href = '/workpapers/fill/suite.html?road=program&week=' + (n || WEEKS);
+      var t = n ? 'Do week ' + n + '’s pages' : 'Look back at all six weeks', orig = a.getAttribute('data-pt-label') || '';
+      a.textContent = /^[a-z]/.test(orig) ? t.charAt(0).toLowerCase() + t.slice(1) : t; // mid-sentence links stay lower case
     });
   }
 
@@ -102,7 +98,7 @@
         '<ul class="pt-weeks" aria-label="Weeks done">' + items + '</ul>' +
         '<p class="pt-small" role="status" data-pt="status"></p>' +
         '<div class="pt-row"><button type="button" class="pt-btn is-erase" data-pt="erase">Erase and turn off</button></div>' +
-        '<p class="pt-small">Kept in this browser only. Erasing removes it completely.</p>';
+        '<p class="pt-small">Some weeks take longer than a week, and some get skipped. That’s fine: nothing here counts streaks. Kept in this browser only; erasing removes it completely.</p>';
     }
   }
   function redraw(msg) {
@@ -152,8 +148,9 @@
     var host = anchor ? anchor.parentNode : main;
     var after = anchor ? anchor.nextSibling : main.firstChild;
     host.insertBefore(bar, after);
-    var lede = main.querySelector('.simple-lede');
-    if (lede && lede.parentNode) lede.parentNode.insertBefore(card, lede.nextSibling); else host.insertBefore(card, bar.nextSibling);
+    var spot = main.querySelector('[data-pt-card]'), lede = main.querySelector('.simple-lede');
+    if (spot) spot.parentNode.replaceChild(card, spot);
+    else if (lede && lede.parentNode) lede.parentNode.insertBefore(card, lede.nextSibling); else host.insertBefore(card, bar.nextSibling);
     wire(); redraw();
     if (isFull) weekNavs();
   }

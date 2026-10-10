@@ -440,8 +440,8 @@
     },
     {
       id: 'program', label: 'The 6-week program', icon: '✦', color: '#FFF1C9',
-      blurb: 'PROG-01: one workpaper at a time, in order, over six gentle weeks.',
-      people: ['Partner A', 'Partner B'],
+      blurb: 'One workpaper at a time, in order, over six gentle weeks. On your own or with anyone you share a home or a load with.',
+      people: ['You', 'The other person'],
       groups: [
         { along: A('preface','ch1','weather'), title: 'Week 1 · See the work', note: 'Just observe. No fixing anything yet.', stops: [
           { wp: 'WP-01', why: "Log a week of who does what, before memory turns it into a story." }

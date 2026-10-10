@@ -82,7 +82,9 @@
   }
 
   // ---------- the occasional invitation on other pages ----------
-  var SKIP = /^\/(ask|offline|404|brand)\.html$|^\/legal\/|^\/workpapers\/fill\/|^\/frequency-journey|^\/calm-visualizer/;
+  // Also never on the pages for someone who was just sent a link (they promise "you don't have to do anything"),
+  // on the help and safety pages, or on the made-up examples.
+  var SKIP = /^\/(ask|offline|404|brand|someone-sent-you-this|sent-this|outside-help|safety|examples)\.html$|^\/legal\/|^\/workpapers\/fill\/|^\/frequency-journey|^\/calm-visualizer/;
   // never while a tool, the chat or a game is in use, while someone is typing, or after a heavy weather check
   // today (site.js decides: window.TOLSite.busy); reading pages only
   function busy() {

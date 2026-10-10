@@ -1047,6 +1047,163 @@ if (PERS) {
   t('part3', 'I feel shut down', { link: '/ladder.html', not: /988/ });
   t('part3', 'what is self-compassion', { link: '/book/understanding-7-worth.html' });
   t('part3', 'why is change so hard', { link: '/book/understanding-6-change.html' });
+
+  // round 7, chat4: small talk in his voice, never near anything serious; the two modes; the honest answer; the fallback question
+  if (PERS.smalltalk) {
+    t('chat4', "what's your favourite food", { kind: 'chat', id: 'fav_food' });
+    t('chat4', "what's your name", { kind: 'chat', id: 'your_name', text: /Professor Puddles|Puddles/ });
+    t('chat4', 'how old are you', { kind: 'chat', id: 'your_age' });
+    t('chat4', 'where do you live', { kind: 'chat', id: 'where_live' });
+    t('chat4', 'coffee or tea', { kind: 'chat', id: 'coffee_tea' });
+    t('chat4', 'sing me a song', { kind: 'chat', id: 'sing' });
+    t('chat4', 'good morning', { kind: 'chat', id: 'good_morning' });
+    t('chat4', "it's my birthday", { kind: 'chat', id: 'my_birthday' });
+    t('chat4', 'hi (says what he can do, in his voice)', { q: 'hi', kind: 'chat', text: /talk deep[\s\S]*infographic/i });
+    t('chat4', 'are you a duck (no: a raindrop)', { q: 'are you a duck', kind: 'chat', text: /raindrop/, not: /I’m a duck|I am a duck/ });
+    t('chat4', 'are you a raindrop', { kind: 'chat', id: 'are_you_real', not: /\bduck\b/i });
+    c('chat4', ['my name is Priya', "what's my name"], { kind: 'chat', id: 'my_name', text: /Priya/ });
+    t('chat4', "what's my name (not told yet)", { q: "what's my name", kind: 'chat', id: 'my_name', text: /haven’t told me/ });
+    t('chat4', "what's the weather like (small talk, not the tool)", { q: "what's the weather like", kind: 'chat', id: 'weather_talk' });
+    t('chat4', "what does my today's weather forecast mean (the tool)", { q: "what does my today's weather forecast mean", id: 'weather' });
+    t('chat4', 'my dog died (no joke)', { q: 'my dog died', not: FUNNY });
+    t('chat4', 'my mum has cancer (no joke)', { q: 'my mum has cancer', not: FUNNY });
+    t('chat4', 'he controls all our money (no joke)', { q: 'he controls all our money', kind: 'safety', not: FUNNY });
+    t('chat4', 'my son is self harming (no joke)', { q: 'my son is self harming', not: FUNNY });
+    t('chat4', 'i feel worthless (no joke)', { q: 'i feel worthless', not: FUNNY });
+    t('chat4', 'i have a chronic illness, how do we split chores fairly (no joke)', { q: 'i have a chronic illness, how do we split chores fairly', not: FUNNY });
+    c('chat4', ['tell me a joke', 'my dad died yesterday'], { not: FUNNY });
+    c('chat4', ["let's just chat", 'he screams at me and calls me worthless'], { kind: 'safety', not: FUNNY });
+    c('chat4', ['talk deep', 'my wife died'], { not: /## Philosophy/, nochip: /joke/i });
+    // the two modes
+    t('chat4', 'what modes do you have', { kind: 'about', id: 'modes', text: /Light mode[\s\S]*Deep mode[\s\S]*small talk/, chip: /Talk deep/ });
+    t('chat4', 'what is deep mode', { id: 'modes' });
+    c('chat4', ['talk deep', 'what modes do you have'], { id: 'modes', text: /deep mode right now/, chip: /small talk/i });
+    t('chat4', 'what modes of conflict are there (not the chat modes)', { q: 'what modes of conflict are there', not: /Two modes/ });
+    t('chat4', 'what can you do (two modes, infographics)', { q: 'what can you do', text: /Light mode[\s\S]*Deep mode[\s\S]*small talk[\s\S]*infographic/ });
+    t('chat4', "let's talk deep about love", { kind: 'deep', id: 'what-is-love' });
+    t('chat4', 'can we go deep', { kind: 'deep', id: 'intro' });
+    c('chat4', ['talk deep', 'what makes a good friend'], { kind: 'deep', id: 'good-friend', link: '/friends.html' });
+    // infographics, in his own words
+    t('chat4', 'can you make a chart of the mental load', { kind: 'info', info: true });
+    t('chat4', 'draw me a picture of love languages', { kind: 'info', info: true, link: '/love-languages.html' });
+    t('chat4', 'make an infographic about small wins', { kind: 'info', info: true, link: '/small-wins.html' });
+    t('chat4', 'make me a poster about the ladder', { kind: 'info', info: true, link: '/ladder.html' });
+    // the honest answer: rule-based, from the site's own checked pages, can pick the wrong topic, not a therapist
+    const HONEST = /I don’t make things up[\s\S]*checked by people[\s\S]*wrong topic[\s\S]*not a therapist[\s\S]*rule-based/;
+    ['do you make things up', 'are you an AI', 'can i trust you', 'do you hallucinate', 'are you chatgpt', 'is this real advice', 'do you make mistakes'].forEach(q =>
+      t('chat4', q, { kind: 'about', id: 'honest', text: HONEST, link: '/ask.html#how-he-answers' }));
+    t('chat4', 'can i trust your answers (research link)', { q: 'can i trust your answers', link: '/research.html' });
+    t('chat4', 'are you a therapist (still the scope answer)', { q: 'are you a therapist', id: 'therapistq' });
+    t('chat4', 'where can i find a counsellor (no “No.”)', { q: 'where can i find a counsellor', id: 'findcounsellor', not: /^No\./, link: '/outside-help.html' });
+    t('chat4', 'how do i find a couples therapist', { id: 'findcounsellor' });
+    // nothing matches: a clarifying question in his voice, naming likely topics, never a confident wrong answer
+    t('chat4', 'the cat sat on the mat', { kind: 'offtopic', text: /\?[\s\S]*(sharing the load|getting along)/, chip: /chores|everything|start/i });
+    t('chat4', 'purple elephants dancing', { text: /\?/, not: /^(Here’s|The site)/ });
+    t('chat4', 'fix my car engine', { kind: 'offtopic', text: /Is your question about/ });
+  }
+  // the new pages: the right questions reach them
+  t('chat4', 'how do I communicate better', { id: 'commguide', link: '/communication.html' });
+  t('chat4', 'how do I talk so people listen', { id: 'commguide', link: '/communication.html' });
+  t('chat4', 'how do we feel closer', { id: 'bondingguide', link: '/bonding.html' });
+  t('chat4', 'what helps us feel connected', { id: 'bondingguide', link: '/bonding.html' });
+  t('chat4', 'how do small wins help', { id: 'smallwins', link: '/small-wins.html' });
+  t('chat4', "where's the research", { id: 'researchpage', link: '/research.html' });
+  t('chat4', 'where do the studies come from', { id: 'researchpage', link: '/research.html' });
+  t('chat4', 'is this evidence based', { id: 'evidence', link: '/research.html' });
+  t('chat4', 'which pages are for my relationship', { id: 'byrelationship', link: '/by-relationship.html' });
+  t('chat4', "what's on the by relationship page", { id: 'byrelationship', link: '/by-relationship.html' });
+  t('chat4', 'what is the ladder', { id: 'ladder', link: '/ladder.html' });
+  t('chat4', 'what is chapter 8 of part three about', { id: 'u8loss', link: '/book/understanding-8-loss.html' });
+  t('chat4', 'part three chapter 4', { id: 'u4communication', link: '/book/understanding-4-communication.html' });
+  t('chat4', 'why do I see things differently from my partner', { id: 'u3seeing', link: '/book/understanding-3-seeing.html' });
+  t('chat4', 'how does hurt heal', { id: 'u11healing', link: '/book/understanding-11-healing.html' });
+  t('chat4', 'what is self-compassion', { id: 'u7worth' });
+  t('chat4', 'how do I help someone who is struggling', { id: 'u12helping' });
+  t('chat4', 'what is neurodiversity', { link: ['/book/understanding-9-minds.html', '/wired-differently.html', '/glossary.html'] });
+  t('chat4', 'Help me say no to extra work', { id: 'refusals', link: '/refusals.html' });
+  t('chat4', 'Give me words to ask for a pause', { id: 'wp11', script: true });
+  t('chat4', 'How do I apologise so it lands?', { id: 'apologylang', link: '/apology-languages.html' });
+  t('chat4', 'How do I tell my mum to text before visiting?', { id: 'familyboundary', link: '/grown-up-children.html' });
+  t('chat4', 'do you have examples', { id: 'examplespage', link: '/examples.html' });
+  t('chat4', 'someone sent me this link', { id: 'sentlink', link: '/sent-this.html' });
+  t('chat4', 'i have a chronic illness, how do we split chores fairly', { link: '/when-one-is-ill.html' });
+  t('chat4', 'my partner works nights and we never see each other', { link: '/different-hours.html' });
+  t('chat4', 'our children left for university, the house is so quiet', { link: '/empty-nest.html' });
+  t('chat4', 'is there anything for interfaith couples?', { link: '/two-faiths.html' });
+  t('chat4', 'does this work for polyamorous relationships', { link: '/more-than-two.html' });
+  t('chat4', 'he plays video games all night and ignores me', { link: '/gaming-and-time-together.html' });
+  t('chat4', "i'm raising my grandson and i'm exhausted", { link: '/foster-and-kinship.html' });
+  t('chat4', 'my grandson has ADHD, how should I talk to him', { link: '/adhd-kids.html' });
+  t('chat4', 'my brother got dad\'s house in the will', { link: '/family-rifts.html' });
+  t('chat4', 'i just got back from deployment, is this normal', { link: '/coming-home.html' });
+  t('chat4', 'build a life again after divorce', { link: '/on-my-own.html' });
+  t('chat4', "i'm a saver and he's a spender", { link: '/money-together.html' });
+  t('chat4', 'my roommate and i need some rules', { link: '/sharing-a-room.html' });
+}
+
+// ---------------------------------------------------------------- ask.html: every "Try asking…" question gets a real answer
+// (deep questions are asked after "Talk deep", as the page does; a question the page adds later is still checked: never a fallback)
+{
+  const ASK = {
+    'I feel like I do everything at home': { kind: 'sit', link: '/lemonade-stand.html' },
+    'My best friend never texts back since she had her baby': { id: 'friends', link: '/friends.html' },
+    'My housemate never does the dishes': { id: 'roommate+fairness' },
+    'My co-parent changes the schedule at the last minute': { id: 'coparent+reliability' },
+    'My coworker keeps interrupting me': { id: 'coworker+interrupt' },
+    'My teenager won’t talk to me': { id: 'kid+distance' },
+    'My partner works nights and we never see each other': { id: 'differenthours', link: '/different-hours.html' },
+    'What’s the Lemonade Stand?': { id: 'lemonade', link: '/lemonade-stand.html' },
+    'Which tool helps us split chores fairly?': { id: 'share-the-load' },
+    'How do I use the Battery Meter?': { id: 'wp02', steps: true },
+    'Is there a game we can play together?': { id: 'gamefortwo', link: '/recheck-drive.html' },
+    'I need to calm down right now': { id: 'calmnow' },
+    'Where do I start?': { id: 'start', link: '/start-here.html' },
+    'How do I tell my mum to text before visiting?': { id: 'familyboundary', link: '/grown-up-children.html' },
+    'Help me say no to extra work': { id: 'refusals', link: '/refusals.html' },
+    'How do I ask my partner for more help at home?': { kind: 'sit', script: true },
+    'Give me words to ask for a pause': { id: 'wp11', script: true },
+    'How do I apologise so it lands?': { id: 'apologylang' },
+    'How do I say sorry to my sister?': { id: 'family+repair', script: true },
+    'How are you, Professor?': { kind: 'chat', id: 'how_are_you' },
+    'Let’s just chat': { kind: 'chat' },
+    'Tell me a joke': { kind: 'fun' },
+    'Tell me a riddle': { kind: 'chat', id: 'riddle' },
+    'Tell me a fun fact': { kind: 'chat', id: 'fun_fact' },
+    'Who are you?': { text: /Professor Puddles/ },
+    '¿Hablas español?': { kind: 'lang', link: '/en-espanol.html', not: /1-800-799-7233/ },
+    'What is love?': { kind: 'deep', id: 'what-is-love' },
+    'Is honesty always kind?': { kind: 'deep', id: 'is-honesty-kind' },
+    'Can people change?': { kind: 'deep', id: 'can-people-change' },
+    'Why do we fight with the people we love?': { kind: 'deep', id: 'why-we-fight' },
+    'Is it okay to need routines?': { kind: 'deep', id: 'needing-routines' },
+    'Is it wrong to want time alone?': { kind: 'deep', id: 'wanting-time-alone' },
+    'What makes a good friend?': { kind: 'deep', id: 'good-friend' },
+    'Make an infographic about the mental load': { kind: 'info', info: true },
+    'Draw me a picture of fair vs equal': { kind: 'info', info: 'compare' },
+    'Make an infographic about taking a good pause': { kind: 'info', info: true },
+    'Make an infographic about one wants to talk and one needs space': { kind: 'info', info: 'cycle', link: '/pursue-withdraw.html' },
+    'Make an infographic about love languages': { kind: 'info', info: true, link: '/love-languages.html' },
+    'Make a checklist infographic about a calm check-in': { kind: 'info', info: 'checklist' },
+    'Make me a chart: me 60 them 40': { kind: 'info', info: 'split' },
+    'What is the double empathy problem?': { link: '/wired-differently' },
+    'What is the mental load?': { link: ['/glossary.html#load', '/book/preface.html'] },
+    'Why isn’t fair always 50/50?': { link: ['/library/', '/share-the-load.html'] },
+    'What is a bid for connection?': { link: '/glossary.html#bid' },
+    'What does flooded mean?': { link: '/glossary.html#flooded' },
+    'What does my battery score mean?': { id: 'wp02' },
+    'What is the Signal Translator for?': { id: 'signal', link: '/signal-translator.html' }
+  };
+  let page = '';
+  try { page = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'ask.html'), 'utf8'); } catch (e) { page = ''; }
+  const NOFIND = /beyond my puddle|couldn’t find|didn’t catch|isn’t covered here|outside my little/;
+  const ent = x => x.replace(/&rsquo;|&#8217;/g, '’').replace(/&amp;/g, '&').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const qs = [...page.matchAll(/<button[^>]*class="ap-q"[^>]*data-q([^>]*)>([\s\S]*?)<\/button>/g)].map(m => ({ q: ent(m[2]), deep: /data-deep/.test(m[1]) }));
+  qs.forEach(({ q, deep }) => {
+    const e = Object.assign({ not: NOFIND }, ASK[q] || {});
+    if (e.not !== NOFIND) e.not = new RegExp(e.not.source + '|' + NOFIND.source);
+    if (deep) c('askpage', ['Talk deep', q], e); else t('askpage', q, e);
+  });
+  if (page) t('askpage', 'ask.html still lists every question these tests know (' + Object.keys(ASK).length + ')', { q: 'hi', kind: 'chat', _askMissing: Object.keys(ASK).filter(k => !qs.some(x => x.q === k)) });
 }
 
 // ---------------------------------------------------------------- run
@@ -1071,6 +1228,7 @@ if (PERS) {
     if (x.chip && !(r.chips || []).some(ch => x.chip.test(ch.label))) why.push('no chip ~ ' + x.chip + ' (got ' + (r.chips || []).map(ch => ch.label).join(' / ') + ')');
     if (x.nochip && (r.chips || []).some(ch => x.nochip.test(ch.label))) why.push('a chip ~ ' + x.nochip);
     if (x.info) { const ib = (r.blocks || []).filter(bl => bl.k === 'info'); const sp = ib[0] && ib[0].spec; if (!sp) why.push('no infographic block'); else if (!sp.layout || !sp.title || !((sp.items && sp.items.length) || (sp.data && sp.data.length) || sp.left || sp.pairs || sp.banner)) why.push('infographic spec incomplete'); else if (typeof x.info === 'string' && sp.layout !== x.info) why.push('infographic layout ' + sp.layout + ' ≠ ' + x.info); }
+    if (x._askMissing && x._askMissing.length) why.push('no longer on ask.html: ' + x._askMissing.join(' | '));
     if (x.kind === 'sit' && !links.length) why.push('no site link');
     if (x.kind === 'sit' && !(r.chips || []).some(ch => /tonight/i.test(ch.label))) why.push('no “What can I do tonight?” chip');
     if (links.length !== new Set(links).size) why.push('a link appears twice');

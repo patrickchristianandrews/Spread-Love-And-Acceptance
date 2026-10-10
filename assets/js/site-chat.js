@@ -20,7 +20,11 @@
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var HONEST_LINE = 'I don’t make things up: every answer comes from this site’s own pages, written and checked by people. I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.';
   // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
-  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you say|this chat|puddles)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up)\b/;
+  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you say|this chat|puddles)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real))\b/;
+  // "what modes do you have?", "what is deep mode?": light and deep, explained
+  var MODES_Q = /\b(what|which) (modes?|ways (to|of) (chat|talk)\w*) (do you have|have you got|are there|can (i|we) (use|pick|choose))\b|^(what|which) modes( are there)?$|\bwhat (is|s|are) (the )?(deep mode|talk deep|deep talk|light mode|small talk mode)\b|\bdifference between (small talk|light mode|light talk|light) and (deep|talk deep|deep talk|deep mode)\b|\bhow (do|does) (talk deep|deep mode|deep talk|small talk mode) work\b|\b(explain|tell me about) (your|the) modes\b/;
+  // internal or structural headings never offered as a likely topic
+  var HIDE_TITLE = /\b(carrier wave vs\.? payload|architecture|pillar [ivx]+|in detail|sources?|references?|footnotes?)\b/i;
   var PRIVACY_LINE = 'Answers come from this site’s pages and the Professor’s notes. What you type stays on this device.';
 
   var DEFAULT_CHAR = {
@@ -1139,7 +1143,7 @@
   var MONEY_W = /\b(money|buy\w*|bought|spend\w*|purchases?|budget|bank|finances?|card)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { feelinglow: 1, therapistq: 1, forcounselors: 1, deployhealth: 1, comehome: 1, differenthours: 1, gaming: 1, friends: 1, joinhome: 1, poly: 1, leftout: 1, fosterload: 1, foster: 1, parentapproach: 1, teenrules: 1, kinshipgp: 1, teenkinship: 1, missing: 1, teenphone: 1, adhdkids: 1, gpadvice: 1, gpshutout: 1, familyboundary: 1, coparentdecide: 1, handoffkit: 1, parttimehome: 1, bizpartner: 1, twofaiths: 1, holidaysplit: 1, moneycontrol: 1, moneystyles: 1, wedding: 1, longhours: 1, toddlers: 1, spanish: 1, illburden: 1, illchores: 1, forgiveok: 1, mustreconcile: 1, inheritance: 1, favourite: 1, siblingrift: 1, emptynest: 1, feelingstalk: 1, feelsfine: 1, autisticwork: 1, isthisrude: 1, sharingroom: 1, gaycouple: 1, selfworry: 1, angerhelp: 1, yellpartner: 1, illnesscare: 1, lgbtadult: 1, familycutoff: 1, wifiprivacy: 1, rahelp: 1, feltsmall: 1, holidayboth: 1, savingworry: 1, caresiblings: 1, caremarriage: 1, rentlate: 1, supplies: 1, sitesafe: 1, cantsleep: 1, evidence: 1, adhdfriends: 1, adhdwork: 1, teenmiddle: 1, teensibling: 1, teentalk: 1, shiftwind: 1, roughweek: 1, teaminvisible: 1, ldtimezones: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { feelinglow: 1, therapistq: 1, findcounsellor: 1, forcounselors: 1, deployhealth: 1, comehome: 1, differenthours: 1, gaming: 1, friends: 1, joinhome: 1, poly: 1, leftout: 1, fosterload: 1, foster: 1, parentapproach: 1, teenrules: 1, kinshipgp: 1, teenkinship: 1, missing: 1, teenphone: 1, adhdkids: 1, gpadvice: 1, gpshutout: 1, familyboundary: 1, coparentdecide: 1, handoffkit: 1, parttimehome: 1, bizpartner: 1, twofaiths: 1, holidaysplit: 1, moneycontrol: 1, moneystyles: 1, wedding: 1, longhours: 1, toddlers: 1, spanish: 1, illburden: 1, illchores: 1, forgiveok: 1, mustreconcile: 1, inheritance: 1, favourite: 1, siblingrift: 1, emptynest: 1, feelingstalk: 1, feelsfine: 1, autisticwork: 1, isthisrude: 1, sharingroom: 1, gaycouple: 1, selfworry: 1, angerhelp: 1, yellpartner: 1, illnesscare: 1, lgbtadult: 1, familycutoff: 1, wifiprivacy: 1, rahelp: 1, feltsmall: 1, holidayboth: 1, savingworry: 1, caresiblings: 1, caremarriage: 1, rentlate: 1, supplies: 1, sitesafe: 1, cantsleep: 1, evidence: 1, adhdfriends: 1, adhdwork: 1, teenmiddle: 1, teensibling: 1, teentalk: 1, shiftwind: 1, roughweek: 1, teaminvisible: 1, ldtimezones: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1780,7 +1784,8 @@
       }
       var vf = norm(q);
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
-      if (!DANGER.test(vf) && TRUST_Q.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small guide to this site. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
+      if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
+      if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       var igr = igTurn(state, q0, vf);
       if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
@@ -1798,8 +1803,9 @@
       if (cf) return meant(cf, sp);
       var sf = norm(q);
       if (!state.unsafe && !DANGER.test(sf) && !VERBAL.test(sf) && !SELF_HARMFUL.test(sf) && !NOT_LIVE.test(sf) && !FUN_UPSET.test(sf) && sf.split(' ').length <= 12) {
-        var sit0 = detectSituation(sf), card0 = matchCard(sf);
-        if (!(sit0.issue && sit0.score >= 3) && !card0) { var stt = smallTalk(state, q, sf, q0); if (stt) return stt; }
+        var sit0 = detectSituation(sf), card0 = matchCard(sf), stw = card0 && stIntent(sf, stNorm(q));
+        var chatty = stw && stw.id === 'weather_talk' && !/\b(today s|todays|my|the) (weather|forecast)\b.*\b(tool|check|reading|mean|use|work)|\bforecast\b|\bweather (check|reading|tool)\b/.test(sf);
+        if ((!(sit0.issue && sit0.score >= 3) && !card0) || chatty) { var stt = smallTalk(state, q, sf, q0); if (stt) return stt; }
       }
     }
     var f = norm(q), prevLast = state.last;
@@ -2257,9 +2263,12 @@
     return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
   }
   // small talk is matched on its own plain form: lower case, apostrophes dropped ("i'm" is "im"), other punctuation as spaces
+  function S0() { return KB && KB.pers && KB.pers.smalltalk; }
   function stNorm(q) { return String(q).toLowerCase().replace(/[’‘`´']/g, '').replace(/[^a-z0-9\s]+/g, ' ').replace(/\s+/g, ' ').trim(); }
   // intents with their own handler elsewhere: the full help list, thanks, and the deep-talk switch
-  var ST_SKIP = { what_can_you_do: 1, who_are_you: 1, are_you_real: 1, thanks: 1, talk_deep: 1, joke: 1, another_joke: 1 };
+  var ST_SKIP = { what_can_you_do: 1, who_are_you: 1, thanks: 1, talk_deep: 1, joke: 1, another_joke: 1 };
+  // "what's my name?": the name they gave, kept only while this tab is open
+  var MY_NAME_Q = /^(?:(?:so|ok|okay|hey|and|um|puddles|professor) )*(?:whats|what s|what is|do you (?:know|remember)|can you remember|did you remember|have you forgotten|you remember|tell me) my name\b|^(?:do you know|remember) who i am$/;
   var JUST_CHAT = /^(lets|let s|can we|could we|i (just )?want to|i d like to|id like to)? ?(just )?(chat|talk|have a chat|have a natter|chit ?chat|hang out)( for a bit| for a while| with you| a bit)?( please)?$|^just chat$/;
   function stPrompt(state) {
     var S = KB.pers && KB.pers.smalltalk, list = S && S.chat_prompts ? S.chat_prompts : [];
@@ -2284,20 +2293,33 @@
     return null;
   }
   function smallTalk(state, q, f, q0) {
-    var fs = stNorm(q), nm = nameFrom(q0 || q);
+    var fs = stNorm(q);
+    if (MY_NAME_Q.test(fs)) {
+      var kn = chatName(state);
+      state.last = null;
+      if (kn) { state.stAsk = null; return { blocks: [{ k: 'p', x: 'You’re ' + kn + '! I wrote it in my waterproof notebook. It stays on this device, and I forget it when you close the tab.' }], chips: [{ label: 'How are you?', q: 'How are you?' }, { label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', id: 'my_name', fun: 1 }; }
+      state.stAsk = state.turn || 0;
+      return { blocks: [{ k: 'p', x: 'You haven’t told me yet! What should I call you? Say “my name is…”. It stays on this device, and I forget it when you close the tab.' }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', id: 'my_name', fun: 1 };
+    }
+    var nm = nameFrom(q0 || q);
     if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
     var hit = stIntent(f, fs);
     if (!hit && !nm && !JUST_CHAT.test(f)) return null;
     if (hit && hit.id === 'small_talk' && state.deep) setDeep(state, false);
     var name = chatName(state), b = [], chips = [];
     if (hit && hit.replies && hit.replies.length) {
-      var rl = hit.replies.filter(function (x) { return (state.funSeen || []).indexOf(x) === -1; }); if (!rl.length) rl = hit.replies;
+      var pool = hit.replies;
+      // "are you a duck?" gets the duck answer; "are you a raindrop?" never does
+      if (hit.id === 'are_you_real') { var dk = /\bduck/.test(fs), dl = pool.filter(function (x) { return /\bduck/i.test(x) === dk; }); if (dl.length) pool = dl; }
+      var rl = pool.filter(function (x) { return (state.funSeen || []).indexOf(x) === -1; }); if (!rl.length) rl = pool;
       var line = rl[Math.floor(frand(state) * rl.length) % rl.length]; (state.funSeen = state.funSeen || []).push(line);
       b.push({ k: 'p', x: nameFill(line, name) });
       (hit.chips || []).forEach(function (c) { if (Array.isArray(c)) chips.push({ label: c[0], q: c[1] || c[0] }); else if (c && c.label) chips.push({ label: c.label, q: c.q || c.label }); else if (typeof c === 'string') chips.push({ label: c, q: c }); });
     } else if (nm) b.push({ k: 'p', x: 'Lovely to meet you, ' + nm + '! I’ll remember your name while this tab is open (it never leaves your device).' });
     else b.push({ k: 'p', x: 'I’d love that. A professor needs a break from lecturing now and then.' });
     // keep a casual chat going: sometimes ask one of the chat prompts back (never after hello or goodbye)
+    var gls = S0() && S0().greeting_lines;
+    if (hit && hit.id === 'hello' && gls && gls.length && !state.greeted && !quietOn()) { state.greeted = 1; b.push({ k: 'p', x: gls[Math.floor(frand(state) * gls.length) % gls.length] + ' I can draw you an infographic, too.' }); }
     var noAsk = hit && /^(hello|bye|good_night|sorry|insult_mild)$/.test(hit.id);
     var askBack = !noAsk && (!hit || /^(just_chat|small_talk|how_are_you|im_good|bored)$/.test(hit.id) || frand(state) < 0.4) && stPrompt(state);
     if (askBack && !/\?\s*$/.test(b[0].x)) { b.push({ k: 'p', x: askBack }); state.stAsk = state.turn || 0; }
@@ -2305,6 +2327,15 @@
     if (!chips.length) chips = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Ask about the site', q: 'What can I ask?' }];
     state.last = null;
     return { blocks: b, chips: chips.slice(0, 3), kind: 'chat', id: hit ? hit.id : (nm ? 'name' : 'just_chat'), fun: 1 };
+  }
+  function modesReply(state) {
+    var on = deepOn(state);
+    return { blocks: [{ k: 'p', x: 'Two modes, one raindrop. ' + (on ? 'We’re in deep mode right now.' : 'We’re in light mode right now.') },
+      { k: 'list', x: ['Light mode, the usual one: ask about any tool, page or worry, and I’ll give you kind next steps, words you could use and the right page. Or just chat: jokes, riddles, fun facts.',
+        'Deep mode: say “talk deep”, or “talk deep: is honesty always kind?”, and we’ll think through a big question with philosophy, psychology and an autistic lens, tied back to the site. Say “small talk” to come back up.',
+        'In either mode I can make you an infographic, like “make an infographic about the mental load”.'] },
+      { k: 'p', x: 'Either way, safety comes first. If something sounds unsafe, I’ll say so plainly and point you to real help. ' + HONEST_LINE }],
+      chips: [on ? { label: 'Back to small talk', q: 'Small talk' } : { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }, { label: 'Tell me a joke', q: 'Tell me a joke' }], kind: 'about', id: 'modes' };
   }
   // a short answer to the question Puddles just asked back: a warm reply in character, not "I couldn't find that"
   function stAck(state, f) {
@@ -2422,7 +2453,7 @@
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
-          'Or just chat with me (“how are you?”, “tell me a joke”), or say “talk deep” to think through a big question, like what love is.',
+          'Two ways to talk with me. Light mode is the usual one: questions like these, or just chat (“how are you?”, “tell me a joke”). Deep mode: say “talk deep” and we’ll think through a big question, like what love is, with philosophy, psychology and an autistic lens, tied back to the site. Say “small talk” to come back up.',
           'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load”, or “summarise this as an infographic” after an answer.'] },
         { k: 'p', x: HONEST_LINE + ' When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
@@ -2508,11 +2539,18 @@
         return { blocks: blocks, chips: (more0.length ? more0 : STARTERS.slice(0, 2)).concat([{ label: 'Ask something else', q: 'What can I ask?' }]).slice(0, 3) };
       }
       state.last = null;
-      if (offTopic) return { blocks: [{ k: 'p', x: pick(['That one’s outside my little pond, I’m afraid!', 'Ooh, I’d only be guessing on that one, and I’d rather not.', 'That’s not something I know about, sorry!']) +
-        ' I stick to this program: sharing the load, getting along, check-ins, different wiring and calming down. Here are some things I can help with:' }], chips: STARTERS, kind: 'offtopic' };
+      if (offTopic) return { blocks: [{ k: 'p', x: pick(['That one’s outside my little puddle, I’m afraid!', 'Ooh, I’d only be guessing on that one, and I’d rather not.', 'That’s not something I know about, sorry!']) +
+        ' I stick to this program, and I won’t guess. Is your question about one of these: sharing the load at home, getting along with someone, check-ins, different wiring, or calming down? Pick one below, or tell me a bit more.' }], chips: STARTERS, kind: 'offtopic' };
+      // nothing answers it: ask, naming the likeliest topics, rather than answer the wrong one with certainty
+      var likely = [], likeSeen = {};
+      (res.hits || []).forEach(function (h) {
+        var d = KB.docs[h.i], t = String(d.h || '').split(':')[0].replace(/[.!?…]+$/, '').trim(), key = t.toLowerCase();
+        if (likely.length < 2 && !d.tip && !d.g && h.s >= 0.9 && t && t.length <= 60 && !likeSeen[key] && !HIDE_TITLE.test(t)) { likeSeen[key] = 1; likely.push({ t: t, i: h.i }); }
+      });
+      var ask = likely.length === 2 ? ' Is it closer to “' + likely[0].t + '”, or “' + likely[1].t + '”? Or one of these?' : likely.length ? ' Is it closer to “' + likely[0].t + '”? Or one of these?' : ' Is it about sharing the load, getting along with someone, or calming down?';
       return { blocks: [{ k: 'p', x: pick(['I looked through the site’s pages and my notes, and couldn’t find anything that really answers that.', 'I’m sorry, I couldn’t find that in the site’s pages or my notes.', 'That one isn’t covered here, as far as I can find.']) +
-        ' I’d rather not guess. You could tell me a bit more, or pick one of these:' }],
-        chips: STARTERS, kind: 'none' };
+        ' I’d rather not guess. You could tell me a bit more: who it’s about, and what happened.' + ask }],
+        chips: likely.map(function (l) { return { label: l.t.length > 40 ? l.t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : l.t, doc: l.i }; }).concat(STARTERS).slice(0, 5), kind: 'none' };
     }
     return answerFrom(state, hits, res.terms, true);
   }

@@ -19,6 +19,8 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/household.js" defer></script>
+<script src="/assets/js/fridge-sheet.js" defer></script>
 <style>
   .ci-card{ margin:1.6rem 0; padding:1rem 1.2rem; border-radius:18px; border:1px solid #C6DFF4; background:#EEF4FB; }
   .read .ci-card h2{ margin-top:0; font-size:1.2rem; }
@@ -108,6 +110,12 @@
     <a class="dig" href="/check-ins-in-depth.html#notes">Dig deeper: building your talking notes</a>
   </li>
 </ol>
+
+<section class="tfs-home tol-plain no-bubble" id="card" aria-labelledby="card-h">
+  <h2 id="card-h">This week&rsquo;s check-in card</h2>
+  <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
+  <div data-tfs-mount="checkin"></div>
+</section>
 
 <section class="ci-card no-bubble" id="different-hours" aria-labelledby="different-hours-h">
   <h2 id="different-hours-h">When you work different hours</h2>

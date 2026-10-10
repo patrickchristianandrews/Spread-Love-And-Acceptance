@@ -844,3 +844,35 @@ body.wpf-typing .wpf-bar{ transform: translateY(110%); }
 .wpf-conflicts .wpf-add{ min-height: 44px; }
 .wpf-lib-hint{ margin: .1em 0 .4em; }
 @media (max-width: 560px){ .wpf-bar-inner:has(.wpf-keepask) .wpf-saved{ display: none; } }
+
+/* ---------- Six gentle weeks: this week's pages, one week at a time (tol-suite.js renderFlow) ---------- */
+.ws-week, .ws-flow{ --c: #DDEFE3; }
+.ws-flow{ box-sizing: border-box; margin: 0 0 1.4em; padding: 1em 1.1em 1.1em; border-radius: 22px; background: #FFF8E6; border: 1.5px solid #EAD59E; }
+.ws-flow[hidden]{ display: none; }
+.ws .ws-flow p{ max-width: none; }
+.ws-flow-k{ margin: 0 0 .5em; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .76rem; letter-spacing: .06em; color: var(--brass-ink, #7A5620); }
+.ws-flow-k a{ color: inherit; }
+.ws-flow-weeks{ display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 .6em; }
+.ws-flow-pill{ display: grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border-radius: 999px; border: 1px solid #D9CBA3; background: #FFFDF7; color: #2B2620; font: 600 .95rem/1 "IBM Plex Mono", ui-monospace, monospace; cursor: pointer; }
+.ws-flow-pill.is-done{ background: #DDEFE3; border-color: #8CC7A5; }
+.ws-flow-pill[aria-pressed="true"]{ border: 2px solid #3C3350; background: #3C3350; color: #FFF8EE; }
+.ws .ws-flow h2{ margin: .1em 0 .25em; font-size: 1.3rem; line-height: 1.25; }
+.ws-flow h2:focus{ outline: none; }
+.ws-flow h2:focus-visible{ outline: 3px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+.ws-flow-note{ margin: 0 0 .6em; color: var(--ink-soft, #524B3E); }
+.ws-flow-sub{ margin: .3em 0 .35em; font-weight: 600; }
+.ws-flow .ws-sheets{ margin-bottom: .7em; }
+.ws-flow .ws-along{ margin: 0 0 .6em; }
+.ws-flow-small{ font-size: .9rem; color: var(--ink-soft, #524B3E); }
+.ws-flow-row{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: .5em 0 .2em; }
+.ws-flow-row .wpf-add, .ws-flow-pdfs .wpf-add{ min-height: 44px; border-radius: 999px; }
+.ws-flow-a{ display: inline-flex; align-items: center; text-decoration: none; }
+.ws-flow-done.is-done{ background: #3E6B4C; }
+.ws-flow-status{ min-height: 1.3em; margin: .2em 0 .4em; font-weight: 600; color: var(--credit, #3E6B4C); }
+.ws-flow-save{ margin-top: .4em; padding-top: .6em; border-top: 1px dashed #EAD59E; }
+.ws-flow-save p{ margin: .3em 0; }
+.ws-flow-keep{ display: inline-flex; align-items: center; gap: .45em; min-height: 44px; font-weight: 600; cursor: pointer; }
+.ws-flow-keep input{ width: 1.2rem; height: 1.2rem; accent-color: #3E6B4C; }
+.ws-flow-pdfs{ display: flex; flex-wrap: wrap; gap: 8px; }
+.ws-flow :focus-visible{ outline: 3px solid var(--focus, #2B5B8C); outline-offset: 2px; }
+@media print{ .ws-flow{ display: none !important; } }

@@ -1333,9 +1333,9 @@
  {
   "id": "maccormack-lindquist-2019",
   "authors": "MacCormack, J. K., & Lindquist, K. A.",
-  "year": 2019,
+  "year": 2018,
   "title": "Feeling hangry? When hunger is conceptualized as emotion",
-  "venue": "Emotion (published online June 2018)",
+  "venue": "Emotion (advance online publication, June 2018; DOI 10.1037/emo0000422)",
   "doi": "10.1037/emo0000422",
   "url": "https://doi.org/10.1037/emo0000422",
   "kind": "study",
@@ -1349,7 +1349,8 @@
    "/library/stress.html#hangry"
   ],
   "verified": true,
-  "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf"
+  "verified_by": "https://collegearchive.unc.edu/?p=25108 ; https://www.carolinaaffectivescience.com/s/MacCormackLindquist_inpress_Emotion-938x.pdf",
+  "note": "Year given as the online publication year (June 2018), which the search confirmed; the print issue year could not be confirmed."
  },
  {
   "id": "swami-2022",
@@ -1485,6 +1486,28 @@
   ],
   "verified": true,
   "verified_by": "https://api.crossref.org/works/10.1002/ejsp.674 ; https://repositorio.ispa.pt/handle/10400.12/3364 ; https://bps.org.uk/research-digest/how-form-habit"
+ },
+ {
+  "id": "gollwitzer-1993",
+  "authors": "Gollwitzer, P. M.",
+  "year": 1993,
+  "title": "Goal achievement: The role of intentions",
+  "venue": "European Review of Social Psychology, 4(1), 141–185",
+  "doi": "10.1080/14792779343000059",
+  "url": "https://doi.org/10.1080/14792779343000059",
+  "kind": "theory",
+  "finding": "Introduced implementation intentions: plans that link a goal-directed action to a situation you expect (\"when X happens, I will do Y\"). The paper reports experiments suggesting these plans make the chosen cue easier to notice and let the action start more automatically when the cue appears.",
+  "strength": "strong: the paper that introduced the idea; later reviews and meta-analyses found if-then plans help people act on their goals.",
+  "topics": [
+   "habits",
+   "change",
+   "implementation-intentions"
+  ],
+  "mentioned_on": [
+   "/library/motivation.html#implementation-intentions"
+  ],
+  "verified": true,
+  "verified_by": "https://kops.uni-konstanz.de/entities/publication/f2d833d5-63af-473b-9b0b-73c58e9f00c7 ; https://data.gesis.org/gesiskg/resource/zis-Gollwitzer1993Goal (search, research2 round)"
  },
  {
   "id": "gollwitzer-1999",

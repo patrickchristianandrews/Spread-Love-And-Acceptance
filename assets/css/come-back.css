@@ -1,5 +1,5 @@
-/* come-back.css — "What you got from this", "Next time" and "Today's tiny thing"
-   (come-back.js). The home page's time picker is styled in index.html, so it never jumps on load. */
+/* come-back.css — "What you got from this", "Next time", "Today's tiny thing", "Recommended next"
+   and "Done for now? See what you got" (come-back.js). The home page's time picker is styled in index.html, so it never jumps on load. */
 html.tol-no-helpers .cb-extra, html.tol-quiet .cb-extra{ display:none !important; }
 /* the home page uses this picker instead of the menu launcher's copy */
 html .tol-pickup-host[data-pickup="home"] .tol-time{ display:none !important; }
@@ -55,4 +55,56 @@ p.cb-k{ display:block; margin:0 0 .25rem !important; }
   html:not(.tol-still) .cb-end.cb-in{ animation:cb-in .6s ease-out both; }
   @keyframes cb-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
 }
-@media print{ .cb-end, .cb-path, .cb-tiny{ display:none !important; } }
+/* Recommended next: one step on, at the end of a page (stays with the helpers hidden, plain in Quiet mode) */
+.cb-nx{ box-sizing:border-box; max-width:40rem; margin:1.6rem 0 1.4rem; padding:.85rem 1rem .8rem; border-radius:18px; background:#F2F6FB; border:1.5px solid #C6DAEE;
+  color:var(--ink, #2B2620); font-size:.97rem; line-height:1.5; text-align:left; }
+.cb-end + .cb-nx{ margin-top:-.4rem; }
+.read .cb-nx p, .cb-nx p{ margin:0 0 .45rem; padding:0; max-width:none; background:none; box-shadow:none; border:0; }
+.cb-nx .cb-k{ color:#2B5B8C; }
+.cb-nx-main{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.15rem .55rem; }
+.read a.cb-nx-go, a.cb-nx-go{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.35rem 1.05rem; border-radius:999px; font-weight:600; text-decoration:none;
+  color:#FFFDF7; background:#2B5B8C; }
+.read a.cb-nx-go::after, a.cb-nx-go::after{ content:"\a0\2192"; }
+.read a.cb-nx-go:hover, a.cb-nx-go:hover{ background:#244E78; color:#FFFDF7; }
+.cb-nx-why{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.cb-nx-alt{ font-size:.93rem; }
+.cb-nx-alt a{ font-weight:600; }
+.cb-nx-foot{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.4rem .8rem; margin-top:.35rem; padding-top:.5rem; border-top:1px solid #D6E3F1; font-size:.88rem; }
+.cb-nx-for{ display:inline-flex; flex-wrap:wrap; align-items:center; gap:.3rem; color:var(--ink-soft, #5A5346); }
+.cb-nx-for button, .cb-nx-done, .cb-done-btns button{ min-height:36px; box-sizing:border-box; padding:.2rem .75rem; border-radius:999px; cursor:pointer; font:600 .86rem/1.2 "Lora", Georgia, serif;
+  color:#2B2620; background:#FFFDF7; border:1.5px solid #C6DAEE; }
+.cb-nx-for button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+.cb-nx-done{ color:#2B5B8C; }
+.cb-nx button:hover{ border-color:#2B5B8C; }
+.cb-nx :focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.cb-done:focus{ outline:none; }
+.cb-done{ margin:.7rem 0 .1rem; padding:.85rem .95rem .75rem; border-radius:14px; background:#FFFDF7; border:1.5px dashed #B9A8D6; }
+.read .cb-done p.cb-done-h, .cb-done-h{ margin:0 0 .3rem; font:600 1.15rem/1.3 "Fraunces", Georgia, serif; color:var(--ink, #2B2620); }
+.cb-done-mode{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.cb-done .cb-k{ display:block; margin:.6rem 0 .2rem; color:#6B4F8A; }
+.read .cb-done ul.cb-done-list, .cb-done-list{ margin:0 0 .3rem !important; padding:0 0 0 1.15rem !important; }
+.read .cb-done-list li, .cb-done-list li{ margin:0 0 .15rem !important; max-width:none; font-size:.95rem; }
+.cb-done-kept, .cb-done-none{ font-size:.93rem; }
+.cb-done-try{ box-sizing:border-box; width:100%; min-height:44px; padding:.45rem .7rem; border-radius:10px; border:1.5px solid #D9C8F0; background:#FFFFFF; color:#2B2620; font:1rem/1.4 "Lora", Georgia, serif; }
+.cb-done-next a{ font-weight:600; }
+.cb-done-next span{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.cb-done-btns{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.7rem !important; }
+.cb-done-btns button{ min-height:44px; padding:.3rem .95rem; font-size:.92rem; }
+.cb-done-say{ min-height:1.2em; font-size:.9rem; color:var(--credit, #3E6B4C); }
+.cb-done-foot{ font-size:.84rem; color:var(--ink-soft, #5A5346); }
+html.tol-quiet .cb-nx{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+html.tol-quiet .read a.cb-nx-go, html.tol-quiet a.cb-nx-go{ background:none; color:var(--focus, #2B5B8C); padding-left:0; text-decoration:underline; }
+@media (max-width:560px){
+  .cb-nx{ padding:.8rem .85rem .75rem; }
+  .cb-nx-foot{ flex-direction:column; align-items:flex-start; }
+}
+
+@media print{ .cb-end, .cb-path, .cb-tiny, .cb-nx{ display:none !important; } }
+/* printing the "What you got" card: only its copy, at the top */
+#cb-print-root{ display:none; }
+@media print{
+  html.cb-print body > *:not(#cb-print-root){ display:none !important; }
+  html.cb-print #cb-print-root{ display:block !important; padding:1rem; }
+  html.cb-print #cb-print-root .cb-done{ border:1px solid #888; }
+  html.cb-print #cb-print-root .cb-done-btns, html.cb-print #cb-print-root .cb-done-say{ display:none !important; }
+}

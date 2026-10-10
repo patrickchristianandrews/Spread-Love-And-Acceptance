@@ -21,48 +21,131 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
 <style>
-  .ten-steps{ list-style:none; counter-reset:ten; padding:0 !important; margin:1.4rem 0 2rem !important; display:grid; gap:1rem; }
-  .ten-steps > li{ counter-increment:ten; position:relative; margin:0 !important; max-width:none !important; padding:1.05rem 1.15rem 1.1rem 3.6rem;
+  /* Just me / With someone */
+  .ten-mode{ margin:1rem 0 1rem; padding:.9rem 1rem; border-radius:18px; background:#F6F0FB; border:1px solid #E1D3F2; }
+  .read .ten-mode p{ margin:0 0 .45rem; max-width:none; }
+  .read .ten-mode p:last-child{ margin-bottom:0; }
+  .ten-mode-q{ font:600 1.05rem/1.3 "Fraunces", Georgia, serif; }
+  .ten-mode-opts{ display:flex; flex-wrap:wrap; gap:.45rem; margin:0 0 .55rem; }
+  .ten-mode-opts button{ min-height:44px; padding:.35rem 1.1rem; border-radius:999px; cursor:pointer; font:600 1rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFBF2; border:1.5px solid #D9C8F0; }
+  .ten-mode-opts button:hover{ border-color:#9A80C8; }
+  .ten-mode-opts button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+  .ten-mode-opts button[aria-pressed="true"]::before{ content:"\2713\a0"; }
+  .ten-mode-note{ font-size:.93rem; line-height:1.45; }
+  .ten-mode-any{ font:400 .86rem/1.3 "Lora", Georgia, serif; color:var(--ink-soft, #5A5346); }
+  @media (max-width:560px){ .ten-mode{ padding:.75rem .85rem; } .ten-mode-any{ display:block; } }
+  [data-ten-show][hidden]{ display:none !important; }
+
+  /* the progress bar: slim, stays in view under the site's header */
+  .ten-bar{ position:sticky; top:var(--ten-top, 60px); z-index:30; margin:0 -.25rem 1.2rem; padding:.35rem .45rem; border-radius:16px; background:rgba(255,253,247,.97); border:1px solid #D9C8F0; box-shadow:0 4px 14px rgba(40,30,60,.08); }
+  .read .ten-bar ol{ display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:.25rem; margin:0 !important; padding:0 !important; list-style:none; counter-reset:none; }
+  .read .ten-bar li{ margin:0 !important; padding:0 !important; max-width:none !important; border:0; }
+  .read .ten-bar li::before{ content:none !important; }
+  .read .ten-bar a{ display:flex; align-items:center; justify-content:center; gap:.35rem; min-height:40px; box-sizing:border-box; padding:.2rem .3rem; border-radius:12px; text-decoration:none; color:var(--ink-soft, #5A5346); font-size:.86rem; line-height:1.1; }
+  .ten-dot{ display:inline-grid; place-items:center; flex:none; width:1.55rem; height:1.55rem; border-radius:50%; border:1.5px solid #B9A8D6; background:#FFFDF7; color:#4E3F6B; font:600 .8rem/1 "IBM Plex Mono", monospace; }
+  .read .ten-bar a.is-done .ten-dot{ background:#3E6B4C; border-color:#3E6B4C; color:#fff; }
+  .read .ten-bar a.is-done .ten-dot .n{ display:none; }
+  .read .ten-bar a.is-done .ten-dot::after{ content:"\2713"; }
+  .read .ten-bar a[aria-current="step"]{ background:#EDE4F8; color:var(--ink, #2B2620); font-weight:600; }
+  .read .ten-bar a[aria-current="step"] .ten-dot{ background:#4E3F6B; border-color:#4E3F6B; color:#fff; }
+  .read .ten-bar a:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+  .ten-bar-line{ height:4px; margin:.3rem .3rem 0; border-radius:4px; background:#EEE6F7; overflow:hidden; }
+  .ten-bar-line i{ display:block; height:100%; width:0; background:#3E6B4C; border-radius:4px; }
+  @media (prefers-reduced-motion: no-preference){ html:not(.tol-still) .ten-bar-line i{ transition:width .3s ease; } }
+  @media (max-width:560px){
+    .read .ten-bar a{ flex-direction:column; gap:.15rem; font-size:.74rem; padding:.2rem .1rem; }
+    .ten-dot{ width:1.4rem; height:1.4rem; }
+  }
+
+  /* the steps */
+  .ten-steps{ list-style:none; padding:0 !important; margin:0 0 2rem !important; display:grid; gap:1rem; }
+  .ten-steps > li{ position:relative; margin:0 !important; max-width:none !important; padding:1.05rem 1.15rem 1.1rem; scroll-margin-top:8.5rem;
     border-radius:20px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
-  .ten-steps > li::before{ content:counter(ten); position:absolute; left:1rem; top:1rem; display:grid; place-items:center; width:1.9rem; height:1.9rem; border-radius:50%;
-    background:#2F5F8A; color:#fff; font:600 .95rem/1 "IBM Plex Mono", monospace; }
-  .ten-steps h2{ margin:0 0 .2rem !important; font-size:1.2rem; }
-  @media (max-width:560px){ .ten-steps > li{ padding:1rem 1rem 1.05rem; } .ten-steps > li::before{ position:static; margin:0 0 .45rem; } .ten-card{ padding:.75rem .8rem; } }
-  .ten-time{ margin:0 0 .5rem !important; font-size:.9rem; color:var(--ink-soft); }
-  .ten-steps p{ margin:0 0 .6rem !important; }
+  .ten-steps > li::before{ content:none !important; }
+  .ten-steps > li.is-now{ border:2px solid #9A80C8; box-shadow:0 10px 26px -18px rgba(78,63,107,.6); }
+  .ten-steps > li.is-done{ background:rgba(246,250,245,.96); }
+  .ten-num{ display:inline-block; margin:0 0 .3rem; font:500 .74rem/1.2 "IBM Plex Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:#6B4F8A; }
+  .ten-steps > li.is-done .ten-num::after{ content:" · Done"; color:var(--credit, #3E6B4C); }
+  .read .ten-steps h2{ margin:0 0 .2rem !important; font-size:1.2rem; }
+  .read .ten-steps p{ margin:0 0 .6rem; max-width:none; }
+  .ten-time{ font-size:.9rem; color:var(--ink-soft); }
   .read .ten-go{ display:inline-flex; align-items:center; min-height:44px; padding:.4rem 1.1rem; border-radius:999px; background:#2F5F8A; color:#fff !important; text-decoration:none !important; font-weight:600; }
   .read .ten-go:hover{ background:#264E73; }
   .read .ten-go:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .read button.ten-go{ border:0; font:600 1rem/1.2 "Lora", Georgia, serif; cursor:pointer; }
   .ten-panel{ margin:.6rem 0 .4rem; padding:.9rem 1rem; border-radius:16px; background:var(--paper, #F5EFDE); border:1px solid var(--line, #D9CBA3); }
   .ten-panel:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .ten-ideas{ margin:.4rem 0 .6rem !important; padding-left:1.3rem !important; }
-  .ten-ideas li{ margin:0 0 .5rem !important; }
-  .ten-steps > li.is-done::after{ content:"Done"; position:absolute; top:1rem; right:1rem; font-size:.8rem; font-weight:600; color:var(--credit, #3E6B4C); }
+  .read .ten-ideas{ margin:.4rem 0 .6rem; padding-left:1.3rem; }
+  .read .ten-ideas li{ margin:0 0 .5rem; max-width:none; }
   .ten-card{ margin:.4rem 0 .6rem; padding:.85rem 1rem; border-radius:16px; background:#EEF4FB; border:1px solid #C6DFF4; }
-  .ten-card p{ margin:0 0 .45rem !important; }
+  .read .ten-card p{ margin:0 0 .45rem; }
   .ten-card .ten-before{ text-decoration:line-through; text-decoration-color:rgba(0,0,0,.35); color:var(--ink-soft); }
-  .ten-card label, .ten-log label{ display:block; font-weight:600; margin:.4rem 0 .25rem; }
-  .ten-card textarea, .ten-log input[type=text]{ box-sizing:border-box; width:100%; font:1rem/1.5 "Lora", Georgia, serif; color:var(--ink); background:#fff;
+  .ten-steps label.ten-l, .ten-log label{ display:block; font-weight:600; margin:.5rem 0 .25rem; }
+  .ten-steps textarea, .ten-steps input[type=text]{ box-sizing:border-box; width:100%; min-height:44px; font:1rem/1.5 "Lora", Georgia, serif; color:var(--ink); background:#fff;
     border:1px solid var(--ink-soft); border-radius:12px; padding:.55rem .75rem; }
-  .ten-card textarea:focus-visible, .ten-log input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
-  .ten-log{ margin:.4rem 0 0; }
+  .ten-steps textarea:focus-visible, .ten-steps input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .ten-row{ display:flex; flex-wrap:wrap; gap:.5rem .8rem; align-items:center; margin:.5rem 0 0; }
   .ten-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
   .ten-btn.is-quiet{ background:#FFFDF7; color:#2F5F8A; }
   .ten-btn.is-erase{ background:#FFFDF7; color:#8A2F3C; border-color:#C98B94; }
   .ten-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  /* your pattern: one choice */
+  .ten-pats{ display:grid; gap:.4rem; margin:.5rem 0 .4rem; padding:0; border:0; }
+  .ten-pat{ display:flex; gap:.6rem; align-items:center; min-height:44px; box-sizing:border-box; padding:.4rem .8rem; border-radius:14px; border:1.5px solid #D9C8F0; background:#FFFDF7; cursor:pointer; font-weight:400 !important; margin:0 !important; }
+  .ten-pat input{ width:1.15rem; height:1.15rem; flex:none; margin:0; accent-color:#4E3F6B; }
+  .ten-pat:has(input:checked){ border-color:#4E3F6B; background:#F4ECFB; }
+  .ten-pat:has(input:focus-visible){ outline:3px solid var(--focus); outline-offset:2px; }
+  .ten-reflect{ min-height:1.2em; padding:.6rem .8rem; border-radius:14px; background:#F3F7F1; border:1px solid #CFE0C6; font-size:.95rem; }
+  .ten-reflect:empty{ display:none; }
+  .ten-sugs{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.3rem 0 .2rem; }
+  .ten-sug{ min-height:40px; padding:.3rem .85rem; border-radius:14px; cursor:pointer; text-align:left; font:400 .92rem/1.3 "Lora", Georgia, serif; color:#2B2620; background:#FFFDF7; border:1.5px dashed #B9A8D6; }
+  .ten-sug:hover{ border-style:solid; }
+  .ten-sug:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  /* go deeper */
+  .ten-deeper{ margin:.7rem 0 0; border-top:1px dashed var(--line, #D9CBA3); }
+  .ten-deeper > summary{ display:flex; align-items:center; gap:.45rem; min-height:44px; cursor:pointer; list-style:none; font-weight:600; color:#2F5F8A; }
+  .ten-deeper > summary::-webkit-details-marker{ display:none; }
+  .ten-deeper > summary::before{ content:"+"; display:inline-grid; place-items:center; width:1.35rem; height:1.35rem; border-radius:50%; background:#EEF4FB; color:#2F5F8A; font-weight:700; }
+  .ten-deeper[open] > summary::before{ content:"\2212"; }
+  .ten-deeper > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; border-radius:6px; }
   .ten-keep{ display:flex !important; gap:.5rem; align-items:flex-start; font-weight:400 !important; }
   .ten-keep input{ width:1.2rem; height:1.2rem; margin-top:.2rem; flex:none; accent-color:#3E6B4C; }
-  .ten-list{ margin:.5rem 0 0 !important; padding-left:1.2rem !important; }
-  .ten-list li{ margin:.15rem 0 !important; }
+  .read .ten-list{ margin:.5rem 0 0; padding-left:1.2rem; }
+  .read .ten-list li{ margin:.15rem 0; }
   .ten-say{ min-height:1.4em; font-size:.93rem; color:#2F5A3C; }
+  .ten-safe{ font-size:.9rem; color:var(--ink-soft); }
+
+  /* I'm done for now: here's what I got */
+  .ten-done{ margin:0 0 2rem; padding:1.1rem 1.15rem 1rem; border-radius:20px; background:#FFFDF7; border:2px solid #3E6B4C; scroll-margin-top:8.5rem; }
+  .ten-done:focus{ outline:none; }
+  .read .ten-done h2{ margin:0 0 .5rem !important; font-size:1.3rem; }
+  .read .ten-done p{ margin:0 0 .5rem; max-width:none; }
+  .ten-out{ padding:.85rem .95rem; border-radius:14px; background:#F3F7F1; border:1px solid #CFE0C6; }
+  .read .ten-out p{ margin:0 0 .45rem; }
+  .ten-out .k{ display:block; font:500 .74rem/1.2 "IBM Plex Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:#2F5A3C; margin:.5rem 0 .15rem; }
+  .ten-out .k:first-child{ margin-top:0; }
+  .read .ten-out ul{ margin:0 0 .3rem; padding-left:1.15rem; }
+  .read .ten-out li{ margin:0 0 .1rem; max-width:none; }
+  .ten-met{ font-weight:600; color:#2F5A3C; }
+  .ten-out a{ font-weight:600; }
+  .ten-done .ten-row{ margin-top:.8rem; }
+  .ten-done .tol-remind{ margin:.4rem 0 0; }
   .ten-rm-own{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .7rem; margin:.4rem 0; }
   .ten-rm-own[hidden]{ display:none; }
   .ten-rm-own label{ font-weight:600; font-size:.95rem; }
   .ten-rm-own input{ min-height:44px; box-sizing:border-box; padding:.3rem .6rem; border-radius:10px; border:1.5px solid #D9C8F0; background:#FFFDF7; color:#2B2620; font:inherit; }
   .ten-rm-own input:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .read .tol-remind .ten-rm-hint{ margin:.2rem 0 .3rem !important; font-size:.92rem; color:var(--ink-soft); }
+  @media (max-width:560px){ .ten-steps > li{ padding:.95rem .9rem 1rem; } .ten-card{ padding:.75rem .8rem; } .ten-done{ padding:1rem .9rem .9rem; } }
+  /* Quiet mode: plain */
+  html.tol-quiet .ten-bar, html.tol-quiet .ten-mode, html.tol-quiet .ten-steps > li, html.tol-quiet .ten-done{ box-shadow:none; background:#FFFDF7; }
+  /* printing the summary: only it */
+  #ten-print-root{ display:none; }
+  @media print{
+    html.ten-printing body > *:not(#ten-print-root){ display:none !important; }
+    html.ten-printing #ten-print-root{ display:block !important; padding:1rem; font-family:Georgia, serif; }
+    .ten-bar{ display:none !important; }
+  }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/start-in-10-minutes.html">
@@ -102,63 +185,395 @@
 <main class="read">
 <header class="read-head"><p class="read-code">Start here</p><h1>Start in 10 minutes</h1></header>
 
-<p class="simple-lede">One short, straight path through the whole idea. Four small steps, in order. There’s nothing to sign up for.</p>
+<p class="simple-lede">Four small steps, one at a time. Stop whenever you like: your place is kept on this device.</p>
+
+<section class="ten-mode tol-plain no-bubble" aria-labelledby="ten-mode-q">
+  <p class="ten-mode-q" id="ten-mode-q">Who is this for today? <span class="ten-mode-any">You can change it any time.</span></p>
+  <div class="ten-mode-opts" role="group" aria-labelledby="ten-mode-q">
+    <button type="button" data-mode="me" aria-pressed="true">Just me</button>
+    <button type="button" data-mode="with" aria-pressed="false">With someone</button>
+  </div>
+  <p class="ten-mode-note" data-ten-show="me">On your own is complete as it is. <strong>Done when: you know your own pattern and one thing to try.</strong></p>
+  <p class="ten-mode-note" data-ten-show="with" hidden>Anyone counts: a partner, friend, family member, housemate or coworker. <strong>Done when: you each said one thing and agreed one small change.</strong></p>
+</section>
+
+<nav class="ten-bar tol-plain no-bubble no-dive" id="ten-bar" aria-label="Your progress">
+  <ol>
+    <li><a href="#step-1" data-bar="1"><span class="ten-dot"><span class="n">1</span></span><span>Weather</span></a></li>
+    <li><a href="#step-2" data-bar="2"><span class="ten-dot"><span class="n">2</span></span><span>Read</span></a></li>
+    <li><a href="#step-3" data-bar="3"><span class="ten-dot"><span class="n">3</span></span><span data-ten-show="me">Pattern</span><span data-ten-show="with" hidden>Say</span></a></li>
+    <li><a href="#step-4" data-bar="4"><span class="ten-dot"><span class="n">4</span></span><span data-ten-show="me">Try</span><span data-ten-show="with" hidden>Agree</span></a></li>
+    <li><a href="#ten-done" data-bar="5"><span class="ten-dot">&#9733;</span><span>What I got</span></a></li>
+  </ol>
+  <div class="ten-bar-line" aria-hidden="true"><i></i></div>
+  <p class="sr-only" id="ten-bar-say" aria-live="polite"></p>
+</nav>
+
 <p class="tol-private"><span aria-hidden="true">&#128274;</span><span><strong>Private by design.</strong> What you type or choose on this page stays on your device. It is never sent to us. <a href="/legal/privacy-policy.html#your-entries">More</a></span></p>
 
-<ol class="ten-steps no-bubble">
-  <li id="step-1">
+<ol class="ten-steps tol-plain no-bubble">
+  <li id="step-1" tabindex="-1">
+    <p class="ten-num">Step 1 of 4</p>
     <h2>Check your own weather</h2>
-    <p class="ten-time">About 1 minute · Pillar III, read your state first</p>
-    <p>Before anything else, see how you’re doing today. One required tap, and up to seven optional ones, give you a forecast and whether now is a good time for a hard talk.</p>
-    <p><a class="ten-go" href="/quick-checks.html#today" data-ten-step="1">Check today’s weather</a></p>
-    <p class="ten-time">It opens in this tab, with a bar at the top that brings you straight back to step 2 when you’re done.</p>
+    <p class="ten-time">About 1 minute</p>
+    <p data-ten-show="me">Before anything else, see how you&rsquo;re doing today. One tap gives you a forecast: what today is good for, and what can wait.</p>
+    <p data-ten-show="with" hidden>Each of you checks your own weather, on your own phone or one after the other. It shows whether now is a good time to talk, or whether a snack and a rest come first.</p>
+    <p class="ten-row"><a class="ten-go" href="/quick-checks.html#today" data-ten-step="1">Check today&rsquo;s weather</a> <button type="button" class="ten-btn is-quiet" data-ten-done="1">Done, next step</button></p>
+    <p class="ten-time">It opens in this tab, with a bar at the top that brings you straight back here.</p>
+    <details class="ten-deeper">
+      <summary>Go deeper: why start with yourself?</summary>
+      <p>Hard talks go better when you know your own state first. Hungry, tired or rushed? Then the problem can feel bigger than it is. Knowing that lets you say &ldquo;not now, later today&rdquo; instead of something you&rsquo;d regret.</p>
+    </details>
   </li>
 
-  <li id="step-2">
-    <h2>Read the Preface, the simple version</h2>
-    <p class="ten-time">About 4 minutes · Pillar I, see the whole load</p>
-    <p>The work nobody sees: the quiet, unseen jobs that keep a shared life running, and why they deserve to be noticed. A few short cards, one idea each.</p>
-    <p><button type="button" class="ten-go ten-open" id="ten-read" aria-expanded="false" aria-controls="ten-preface">Read it here</button> <a href="/book/preface.html" data-ten-step="2">or open the Preface page</a></p>
-    <div class="ten-panel" id="ten-preface" hidden tabindex="-1" aria-label="The Preface, simple version"></div>
+  <li id="step-2" tabindex="-1">
+    <p class="ten-num">Step 2 of 4</p>
+    <h2 data-me="Read: who you are today" data-with="Read: the work nobody sees">Read: who you are today</h2>
+    <p class="ten-time">About 4 minutes</p>
+    <p data-ten-show="me">Your wiring, your weather and your words: a few short cards on reading yourself before you speak.</p>
+    <p data-ten-show="with" hidden>The quiet, unseen jobs that keep a shared life running, and why they deserve to be noticed. Read it together, or each on your own.</p>
+    <p class="ten-row"><button type="button" class="ten-go ten-open" id="ten-read" aria-expanded="false" aria-controls="ten-read-panel">Read it here</button>
+      <a href="/book/self-2-now.html" data-ten-step="2" data-ten-show="me">or open the page</a><a href="/book/preface.html" data-ten-step="2" data-ten-show="with" hidden>or open the page</a></p>
+    <div class="ten-panel" id="ten-read-panel" hidden tabindex="-1" aria-label="The short version"></div>
+    <details class="ten-deeper">
+      <summary>Go deeper: log one thing you did today</summary>
+      <p>Just one. Something you did that kept things running, however small: packed a lunch, paid a bill, remembered a birthday.</p>
+      <form class="ten-log" id="ten-log">
+        <label for="ten-thing">One thing I did today</label>
+        <input type="text" id="ten-thing" maxlength="140" autocomplete="off" placeholder="e.g. Booked the dentist for everyone">
+        <label class="ten-keep"><input type="checkbox" id="ten-keep"> Keep my list on this device, so it&rsquo;s here next time (you can erase it any time)</label>
+        <div class="ten-row"><button type="submit" class="ten-btn">Log it</button></div>
+        <p class="ten-say" id="ten-say" role="status"></p>
+        <ol class="ten-list" id="ten-list" hidden></ol>
+        <div class="ten-row" id="ten-erase-row" hidden><button type="button" class="ten-btn is-erase" id="ten-erase">Erase my list</button></div>
+      </form>
+    </details>
   </li>
 
-  <li id="step-3">
-    <h2>Try one practice card</h2>
-    <p class="ten-time">About 3 minutes · Pillar IV, tune how you send and receive</p>
-    <p>Say it so it lands: turn a big feeling into a fact, a feeling and a kind ask.</p>
-    <div class="ten-card">
-      <p class="ten-before">“You never take the trash out.”</p>
-      <p><strong>Fact:</strong> The trash has gone out late three weeks running. <strong>Feeling:</strong> I feel worn out when I notice it every time. <strong>Ask:</strong> Could the trash be yours on Tuesdays?</p>
-      <label for="ten-try">Now try one of your own (it isn’t saved or sent)</label>
-      <textarea id="ten-try" rows="3" placeholder="Fact… Feeling… Ask…"></textarea>
+  <li id="step-3" tabindex="-1">
+    <p class="ten-num">Step 3 of 4</p>
+    <h2 data-me="Notice your pattern" data-with="Each say one thing">Notice your pattern</h2>
+    <div data-ten-show="me">
+      <p class="ten-time">About 2 minutes</p>
+      <p>When something gets hard, what do you usually do first? Pick the closest. There&rsquo;s no wrong answer, and none of these is a flaw.</p>
+      <fieldset class="ten-pats" id="ten-pats">
+        <legend class="sr-only">My pattern</legend>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="quiet"> I go quiet or pull away</label>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="push"> I push to sort it out right now</label>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="yes"> I say yes, then feel resentful later</label>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="sharp"> I get sharp when I&rsquo;m tired, hungry or rushed</label>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="all"> I do it all myself, so it&rsquo;s done right</label>
+        <label class="ten-pat"><input type="radio" name="ten-pat" value="other"> Something else</label>
+      </fieldset>
+      <div id="ten-other-row" hidden><label class="ten-l" for="ten-other">My pattern, in my own words</label><input type="text" id="ten-other" maxlength="120" autocomplete="off"></div>
+      <p class="ten-reflect" id="ten-reflect" aria-live="polite"></p>
+      <details class="ten-deeper">
+        <summary>Go deeper: say it so it lands</summary>
+        <p>When you&rsquo;re ready to say something, turn the big feeling into a fact, a feeling and a kind ask.</p>
+        <div class="ten-card">
+          <p class="ten-before">&ldquo;Nobody ever helps me.&rdquo;</p>
+          <p><strong>Fact:</strong> I did the dishes alone four nights this week. <strong>Feeling:</strong> I feel tired and a bit invisible. <strong>Ask:</strong> Could you take two of the nights?</p>
+          <label class="ten-l" for="ten-practice">Try one of your own (it isn&rsquo;t saved or sent)</label>
+          <textarea id="ten-practice" rows="3" placeholder="Fact&hellip; Feeling&hellip; Ask&hellip;"></textarea>
+        </div>
+        <p>The full worksheet is <a href="/workpapers/wp-09-say-it-so-it-lands.html">Say it so it lands</a>.</p>
+      </details>
     </div>
-    <p>Want more? The full worksheet is <a href="/workpapers/wp-09-say-it-so-it-lands.html">Say it so it lands</a>.</p>
+    <div data-ten-show="with" hidden>
+      <p class="ten-time">About 3 minutes</p>
+      <p>Take turns. Each of you says one small thing, using a fact, a feeling and a kind ask. The other just listens, then says back what they heard. No replies yet.</p>
+      <div class="ten-card">
+        <p class="ten-before">&ldquo;You never take the trash out.&rdquo;</p>
+        <p><strong>Fact:</strong> The trash has gone out late three weeks running. <strong>Feeling:</strong> I feel worn out when I notice it every time. <strong>Ask:</strong> Could the trash be yours on Tuesdays?</p>
+      </div>
+      <label class="ten-l" for="ten-said">What I said (optional, kept only on this device)</label>
+      <textarea id="ten-said" rows="2" maxlength="300" placeholder="Fact&hellip; Feeling&hellip; Ask&hellip;"></textarea>
+      <p class="ten-safe">If you feel afraid of how the other person may react, skip this step. <a href="/safety.html">Not safe at home? Get help</a>.</p>
+      <details class="ten-deeper">
+        <summary>Go deeper: how to listen and say it back</summary>
+        <p>Say back the fact and the feeling in your own words: &ldquo;So the trash has been late, and you&rsquo;re worn out by noticing it.&rdquo; Then ask: &ldquo;Did I get that right?&rdquo; You don&rsquo;t have to agree yet. You only have to hear it.</p>
+        <p>More on this in <a href="/check-ins.html">Check-ins</a>.</p>
+      </details>
+    </div>
+    <p class="ten-row"><button type="button" class="ten-btn is-quiet" data-ten-done="3">Done, next step</button></p>
   </li>
 
-  <li id="step-4">
-    <h2>Log one thing you did today</h2>
-    <p class="ten-time">About 1 minute · Pillar I, see the whole load</p>
-    <p>Just one. Something you did that kept things running, however small: packed a lunch, paid a bill, remembered a birthday.</p>
-    <form class="ten-log" id="ten-log">
-      <label for="ten-thing">One thing I did today</label>
-      <input type="text" id="ten-thing" maxlength="140" autocomplete="off" placeholder="e.g. Booked the dentist for everyone">
-      <label class="ten-keep"><input type="checkbox" id="ten-keep"> Keep my list on this device, so it’s here next time (you can erase it any time)</label>
-      <div class="ten-row"><button type="submit" class="ten-btn">Log it</button></div>
-      <p class="ten-say" id="ten-say" role="status"></p>
-      <ol class="ten-list" id="ten-list" hidden></ol>
-      <div class="ten-row" id="ten-erase-row" hidden><button type="button" class="ten-btn is-erase" id="ten-erase">Erase my list</button></div>
-    </form>
-    <p>That’s the whole idea in small: see the work, notice your state, and say things so they land. When you’re ready for more, the <a href="/lemonade-stand.html">Lemonade Stand</a> logs a whole week.</p>
+  <li id="step-4" tabindex="-1">
+    <p class="ten-num">Step 4 of 4</p>
+    <h2 data-me="Choose one thing to try" data-with="Agree one small change">Choose one thing to try</h2>
+    <p class="ten-time">About 2 minutes</p>
+    <p data-ten-show="me">One small thing, for this week. Tap an idea or write your own.</p>
+    <p data-ten-show="with" hidden>One small change you both say yes to, for one week. Small is the point: you can always change it next week.</p>
+    <div class="ten-sugs" id="ten-sugs"></div>
+    <label class="ten-l" for="ten-try"><span data-ten-show="me">One thing I&rsquo;ll try</span><span data-ten-show="with" hidden>Our one small change</span></label>
+    <input type="text" id="ten-try" maxlength="160" autocomplete="off">
+    <p class="ten-row"><button type="button" class="ten-go" id="ten-finish">I&rsquo;m done for now: see what I got</button></p>
   </li>
 </ol>
 
-<div class="try-this">
-  <p><strong>What next?</strong> If that felt useful, six gentle weeks walks you through the rest, one small step a week.</p>
-  <p><a href="/prog-01.html">See six gentle weeks &rarr;</a> <a href="/start-here.html">Back to Start here</a></p>
-</div>
-<div data-tol-remind data-remind-to="/start-in-10-minutes.html" data-remind-what="Ten minutes for you: today’s weather, one page and one small thing."></div>
+<section class="ten-done tol-plain no-bubble no-dive" id="ten-done" tabindex="-1" aria-labelledby="ten-done-h">
+  <h2 id="ten-done-h">I&rsquo;m done for now: here&rsquo;s what I got</h2>
+  <div class="ten-out" id="ten-out"></div>
+  <div class="ten-row">
+    <button type="button" class="ten-btn" id="ten-copy">Copy text</button>
+    <button type="button" class="ten-btn is-quiet" id="ten-print">Print</button>
+    <button type="button" class="ten-btn is-quiet" id="ten-img" hidden>Save as image</button>
+    <button type="button" class="ten-btn is-erase" id="ten-wipe">Erase my answers</button>
+  </div>
+  <p class="ten-say" id="ten-done-say" role="status"></p>
+  <p class="ten-time">No streaks, nothing to keep up. Come back to any step whenever you like.</p>
+  <details class="ten-deeper">
+    <summary>Come back gently: a reminder in your own calendar</summary>
+    <div data-tol-remind data-remind-to="/start-in-10-minutes.html" data-remind-what="Ten minutes for you: today’s weather, one page and one small thing."></div>
+  </details>
+</section>
 </main>
 <script>
+/* Start in 10 minutes: four steps, a progress bar, and "here's what I got".
+   Just me / With someone is kept in tol-mode-v1 (shared with the home page and come-back.js).
+   Your place and answers are kept in tol-ten-v1, on this device only; "Erase my answers" removes them.
+   The "One thing I did today" list is tol-ten-log-v1, kept only if you tick "Keep my list". */
+(function () {
+  'use strict';
+  var MODE_KEY = 'tol-mode-v1', KEY = 'tol-ten-v1';
+  var $ = function (id) { return document.getElementById(id); };
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+  function today() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function still() { return document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+
+  var T = {};
+  try { T = JSON.parse(lsGet(KEY) || 'null') || {}; } catch (e) { T = {}; }
+  if (!Array.isArray(T.done)) T.done = [];
+  function save() { T.day = today(); lsSet(KEY, JSON.stringify(T)); }
+  function mode() { var m = lsGet(MODE_KEY); return m === 'with' ? 'with' : 'me'; }
+
+  var PATS = {
+    quiet: ['I go quiet or pull away', 'Going quiet often protects you from saying something you’d regret. The cost is that others can’t tell what’s going on. A short “I need a pause” keeps the door open.',
+      ['Say “I need ten minutes, then I’ll come back” instead of going silent', 'Write down one thing I wanted to say, and say it the next day']],
+    push: ['I push to sort it out right now', 'Wanting to sort it now often comes from caring a lot. The cost is that the other person may not be ready yet. Asking “now or later?” helps you both.',
+      ['Ask “Is now a good time, or later today?” before I start', 'Wait twenty minutes and check my weather before I raise it']],
+    yes: ['I say yes, then feel resentful later', 'Saying yes keeps the peace for now. The cost shows up later, as resentment. A short pause before yes gives you room to choose.',
+      ['Say “Let me check and get back to you” before I say yes', 'Say no to one small thing this week, kindly']],
+    sharp: ['I get sharp when I’m tired, hungry or rushed', 'Most sharp words come from an empty tank, not from what you really think. Your weather is a good early warning.',
+      ['Eat or rest before a hard talk', 'Check my weather before I answer something tense']],
+    all: ['I do it all myself, so it’s done right', 'Doing it yourself gets it done, and it gets heavy. Letting one job go, fully, is how sharing starts.',
+      ['Hand over one job, start to finish, and let it be done their way', 'Write down one job I do that nobody sees']],
+    other: ['', 'Knowing your own pattern, in your own words, is the whole point. Write it down above.',
+      ['Notice it once this week, without judging it', 'Check my weather when it happens']]
+  };
+  var WITH_SUGS = ['Whoever cooks doesn’t wash up', 'A 20-minute check-in on Sunday evening', 'Say “Can we pause? Back in 20 minutes” instead of walking off', 'One person owns the bins, start to finish'];
+  var NEXT = {
+    me: { u: '/self-path.html', t: 'Your self path', n: 'six small steps on your own, at your own pace', alt: ['/wiring-card.html', 'Your Wiring Card'] },
+    with: { u: '/check-ins.html', t: 'Check-ins', n: 'in a week, look at how the small change went', alt: ['/prog-01.html', 'Six gentle weeks'] }
+  };
+
+  /* ---- mode */
+  function applyMode() {
+    var m = mode();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-ten-show]'), function (el) { el.hidden = el.getAttribute('data-ten-show') !== m; });
+    Array.prototype.forEach.call(document.querySelectorAll('.ten-steps h2[data-me]'), function (h) { h.textContent = h.getAttribute('data-' + m); });
+    Array.prototype.forEach.call(document.querySelectorAll('.ten-mode [data-mode]'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)); });
+    drawSugs(); drawOut();
+  }
+  document.querySelector('.ten-mode').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mode]'); if (!b) return;
+    lsSet(MODE_KEY, b.getAttribute('data-mode'));
+    applyMode();
+    try { document.dispatchEvent(new CustomEvent('tol-mode', { detail: { mode: mode() } })); } catch (x) {}
+  });
+  document.addEventListener('tol-mode', function () { applyMode(); });
+  window.addEventListener('storage', function (e) { if (e.key === MODE_KEY) applyMode(); });
+
+  /* ---- progress */
+  function isDone(n) { return T.done.indexOf(n) !== -1; }
+  function current() { for (var i = 1; i <= 4; i++) if (!isDone(i)) return i; return 5; }
+  function drawBar() {
+    var cur = current(), n = 0;
+    for (var i = 1; i <= 4; i++) {
+      var li = $('step-' + i), d = isDone(i); if (d) n++;
+      li.classList.toggle('is-done', d); li.classList.toggle('is-now', i === cur);
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.ten-bar [data-bar]'), function (a) {
+      var k = +a.getAttribute('data-bar');
+      a.classList.toggle('is-done', k <= 4 && isDone(k));
+      if (k === cur) a.setAttribute('aria-current', 'step'); else a.removeAttribute('aria-current');
+      var lab = a.textContent.replace(/\s+/g, ' ').trim();
+      a.setAttribute('aria-label', (k <= 4 ? 'Step ' + k + ': ' : '') + lab.replace(/^\d\s*/, '') + (k <= 4 && isDone(k) ? ', done' : k === cur ? ', you are here' : ''));
+    });
+    document.querySelector('.ten-bar-line i').style.width = (n / 4 * 100) + '%';
+    $('ten-bar-say').textContent = cur <= 4 ? 'Step ' + cur + ' of 4. ' + n + ' done.' : 'All four steps done.';
+  }
+  function mark(n, go) {
+    if (!isDone(n)) { T.done.push(n); T.done.sort(); }
+    save(); drawBar(); drawOut();
+    if (go) { var nx = n < 4 ? $('step-' + (n + 1)) : $('ten-done'); if (nx) { nx.scrollIntoView({ block: 'start', behavior: still() ? 'auto' : 'smooth' }); try { nx.focus({ preventScroll: true }); } catch (e) {} } }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-ten-done]');
+    if (b) mark(+b.getAttribute('data-ten-done'), true);
+  });
+  // today's weather already checked counts as step 1
+  try { var wx = JSON.parse(lsGet('tol-weather-v1') || 'null'), last = Array.isArray(wx) && wx[wx.length - 1]; if (last && last.d === today() && !isDone(1)) { T.done.push(1); save(); } } catch (e) {}
+  // coming back from a step's page: the steps before it are done
+  var hm = /^#step-([1-4])$/.exec(location.hash);
+  if (hm) { for (var k = 1; k < +hm[1]; k++) if (!isDone(k)) T.done.push(k); T.done.sort(); save(); try { sessionStorage.removeItem('tol-ten-trail'); } catch (e) {} }
+
+  // the bar sits just under the site's own header
+  var bar = $('ten-bar');
+  function setTop() { var h = document.querySelector('.tol-bar'); var px = h ? Math.round(h.getBoundingClientRect().height) : 0; bar.style.setProperty('--ten-top', (px + 6) + 'px'); }
+  setTop(); window.addEventListener('resize', setTop); window.addEventListener('load', setTop); setTimeout(setTop, 600);
+  bar.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); if (!a) return;
+    var t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); t.scrollIntoView({ block: 'start', behavior: still() ? 'auto' : 'smooth' });
+    try { t.focus({ preventScroll: true }); } catch (x) {}
+    if (history.replaceState) history.replaceState(null, '', a.getAttribute('href'));
+  });
+
+  /* ---- step 3: pattern (Just me) or what I said (With someone) */
+  var pats = $('ten-pats'), other = $('ten-other'), said = $('ten-said');
+  function drawPattern() {
+    var p = T.pattern && PATS[T.pattern];
+    Array.prototype.forEach.call(pats.querySelectorAll('input'), function (i) { i.checked = i.value === T.pattern; });
+    $('ten-other-row').hidden = T.pattern !== 'other';
+    other.value = T.other || '';
+    $('ten-reflect').textContent = p ? p[1] : '';
+  }
+  pats.addEventListener('change', function (e) {
+    if (e.target.name !== 'ten-pat') return;
+    T.pattern = e.target.value; save(); drawPattern(); drawSugs(); drawOut();
+    if (T.pattern === 'other') other.focus();
+  });
+  other.addEventListener('input', function () { T.other = other.value.slice(0, 120); save(); drawOut(); });
+  said.value = T.said || '';
+  said.addEventListener('input', function () { T.said = said.value.slice(0, 300); save(); drawOut(); });
+
+  /* ---- step 4: one thing to try / one small change */
+  var tryIn = $('ten-try');
+  tryIn.value = T.try || '';
+  tryIn.addEventListener('input', function () { T.try = tryIn.value.slice(0, 160); save(); drawOut(); });
+  function drawSugs() {
+    var list = mode() === 'with' ? WITH_SUGS : (PATS[T.pattern] || PATS.other)[2];
+    $('ten-sugs').innerHTML = list.map(function (s) { return '<button type="button" class="ten-sug" data-sug="' + esc(s) + '">' + esc(s) + '</button>'; }).join('');
+  }
+  $('ten-sugs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sug]'); if (!b) return;
+    tryIn.value = b.getAttribute('data-sug'); T.try = tryIn.value; save(); drawOut(); tryIn.focus();
+  });
+  $('ten-finish').addEventListener('click', function () {
+    T.fin = Date.now(); mark(4, true);
+    if (window.TOLGarden) try { window.TOLGarden.gift('ten-minutes'); } catch (e) {}
+  });
+
+  /* ---- here's what I got */
+  var STEP_NAMES = { me: ['Checked my weather', 'Read “Who you are today”', 'Noticed my pattern', 'Chose one thing to try'],
+    with: ['Checked our weather', 'Read “The work nobody sees”', 'Each said one thing', 'Agreed one small change'] };
+  function summary() {
+    var m = mode(), did = T.done.filter(function (n) { return n >= 1 && n <= 4; }).map(function (n) { return STEP_NAMES[m][n - 1]; });
+    var pat = T.pattern === 'other' ? (T.other || '').trim() : (PATS[T.pattern] ? PATS[T.pattern][0] : '');
+    var tr = (T.try || '').trim(), sd = (T.said || '').trim();
+    var met = m === 'me' ? !!(pat && tr) : !!(isDone(3) && tr);
+    return { m: m, did: did, pat: pat, said: sd, tr: tr, met: met, next: NEXT[m] };
+  }
+  var DONE_WHEN = { me: 'Done when: you know your own pattern and one thing to try.', with: 'Done when: you each said one thing and agreed one small change.' };
+  function drawOut() {
+    var s = summary();
+    $('ten-out').innerHTML =
+      '<span class="k">' + (s.m === 'me' ? 'Just me' : 'With someone') + '</span>' +
+      '<p>' + (s.met ? '<span class="ten-met">&#10003; ' + esc(DONE_WHEN[s.m].replace('Done when: ', 'Done: ')) + '</span>' : esc(DONE_WHEN[s.m]) + ' Not there yet? That’s fine. Any step on its own is worth it.') + '</p>' +
+      '<span class="k">What I did</span>' + (s.did.length ? '<ul>' + s.did.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '<p>Nothing yet. Step 1 takes about a minute.</p>') +
+      (s.m === 'me' && s.pat ? '<span class="k">My pattern</span><p>' + esc(s.pat) + '</p>' : '') +
+      (s.m === 'with' && s.said ? '<span class="k">What I said</span><p>' + esc(s.said) + '</p>' : '') +
+      '<span class="k">' + (s.m === 'me' ? 'One thing I’ll try' : 'Our one small change') + '</span><p>' + (s.tr ? esc(s.tr) : '<em>Not chosen yet.</em> <a href="#step-4">Step 4</a>') + '</p>' +
+      '<span class="k">My next step</span><p><a href="' + s.next.u + '">' + esc(s.next.t) + '</a>: ' + esc(s.next.n) + '. Or <a href="' + s.next.alt[0] + '">' + esc(s.next.alt[1]) + '</a>.</p>';
+  }
+  function asText(short) {
+    var s = summary(), L = [];
+    if (short) {
+      if (s.pat && s.m === 'me') L.push('My pattern: ' + s.pat);
+      if (s.tr) L.push((s.m === 'me' ? 'One thing I’ll try: ' : 'Our one small change: ') + s.tr);
+      L.push('Next: ' + s.next.t);
+      return L.join('\n').slice(0, 300);
+    }
+    L.push('Start in 10 minutes: what I got');
+    L.push((s.m === 'me' ? 'Just me. ' : 'With someone. ') + DONE_WHEN[s.m]);
+    L.push('');
+    L.push('What I did: ' + (s.did.length ? s.did.join('; ') : 'not started yet'));
+    if (s.m === 'me' && s.pat) L.push('My pattern: ' + s.pat);
+    if (s.m === 'with' && s.said) L.push('What I said: ' + s.said);
+    if (s.tr) L.push((s.m === 'me' ? 'One thing I’ll try: ' : 'Our one small change: ') + s.tr);
+    L.push('My next step: ' + s.next.t + ' (' + location.origin + s.next.u + ')');
+    return L.join('\n');
+  }
+  var say = function (t) { $('ten-done-say').textContent = t; };
+  $('ten-copy').addEventListener('click', function () {
+    var text = asText(false);
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+      say(ok ? 'Copied. Paste it anywhere you like.' : 'Copying didn’t work here. Select the words and copy them by hand.');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say('Copied. Paste it anywhere you like.'); }, fallback); else fallback();
+  });
+  $('ten-print').addEventListener('click', function () {
+    var old = $('ten-print-root'); if (old) old.remove();
+    var host = document.createElement('div'); host.id = 'ten-print-root';
+    host.innerHTML = '<h1 style="font-size:20pt;margin:0 0 .5rem">Start in 10 minutes: what I got</h1>' + $('ten-out').innerHTML + '<p style="margin-top:1rem;font-size:10pt">spreadloveandacceptance.com</p>';
+    document.body.appendChild(host); document.documentElement.classList.add('ten-printing');
+    function done() { document.documentElement.classList.remove('ten-printing'); host.remove(); window.removeEventListener('afterprint', done); }
+    window.addEventListener('afterprint', done);
+    try { window.print(); } catch (e) {}
+    setTimeout(function () { if (!window.matchMedia || !matchMedia('print').matches) done(); }, 1500);
+  });
+  var img = $('ten-img');
+  function kit() { return window.TOLShareKit && window.TOLShareKit.saveImage ? window.TOLShareKit : null; }
+  (function waitKit(n) { if (kit()) img.hidden = false; else if (n < 20) setTimeout(function () { waitKit(n + 1); }, 300); })(0);
+  img.addEventListener('click', function () {
+    var K = kit(); if (!K) return;
+    K.saveImage({ title: 'Start in 10 minutes: what I got', text: asText(true) }).then(function () { say('Saved as an image.'); }, function () { say('The image couldn’t be made here. Try Copy text instead.'); });
+  });
+  $('ten-wipe').addEventListener('click', function () {
+    T = { done: [] }; try { localStorage.removeItem(KEY); } catch (e) {}
+    tryIn.value = ''; said.value = ''; other.value = '';
+    drawPattern(); drawSugs(); drawBar(); drawOut();
+    say('Your answers and your place were erased from this device.');
+  });
+
+  /* ---- step 2: read here (the short cards from the page itself) */
+  var btn = $('ten-read'), panel = $('ten-read-panel'), loadedFor = '';
+  function plain(el) { var d = document.createElement('div'); d.textContent = (el && el.textContent || '').replace(/\s+/g, ' ').trim(); return d.innerHTML; }
+  function readUrl() { return mode() === 'with' ? '/book/preface.html' : '/book/self-2-now.html'; }
+  function fill(doc, url) {
+    var main = doc.querySelector('main'); if (!main) throw new Error('no main');
+    var h = '', lede = main.querySelector('.simple-lede');
+    if (lede) h += '<p>' + plain(lede) + '</p>';
+    var ideas = main.querySelectorAll('ol.ideas > li');
+    if (!ideas.length) throw new Error('no ideas');
+    h += '<ol class="ten-ideas">';
+    Array.prototype.forEach.call(ideas, function (li) { var t = li.querySelector('h2'), p = li.querySelector('p'); h += '<li><strong>' + plain(t) + '</strong> ' + plain(p) + '</li>'; });
+    h += '</ol><p class="ten-row"><button type="button" class="ten-go" data-ten-done="2">Done reading: on to step 3</button> <a href="' + url + '" data-ten-step="2">Read it on its own page</a></p>';
+    panel.innerHTML = h;
+  }
+  function closePanel() { panel.hidden = true; btn.setAttribute('aria-expanded', 'false'); btn.textContent = 'Read it here'; }
+  btn.addEventListener('click', function () {
+    var open = panel.hidden, url = readUrl();
+    panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Close it' : 'Read it here';
+    if (!open || loadedFor === url) { if (open) panel.focus(); return; }
+    panel.innerHTML = '<p>Opening it&hellip;</p>';
+    fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }).then(function (t) {
+      fill(new DOMParser().parseFromString(t, 'text/html'), url); loadedFor = url; panel.focus();
+    }).catch(function () {
+      panel.innerHTML = '<p>It couldn’t open here. <a href="' + url + '" data-ten-step="2">Open it on its own page</a>; a bar there brings you back.</p>';
+    });
+  });
+  document.addEventListener('tol-mode', closePanel);
+  document.querySelector('.ten-mode').addEventListener('click', function (e) { if (e.target.closest('[data-mode]')) closePanel(); });
+
+  drawPattern(); applyMode(); drawBar();
+})();
+// "One thing I did today": kept only if you tick "Keep my list" (tol-ten-log-v1)
 (function () {
   'use strict';
   var KEY = 'tol-ten-log-v1';
@@ -191,49 +606,12 @@
   });
   draw();
 })();
-// Steps that lead to another page leave a small trail for this tab, so that page can show a
-// "back to the next step" bar; the Preface opens right here, in a panel.
-(function () {
-  'use strict';
-  var TRAIL = 'tol-ten-trail';
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('[data-ten-step]');
-    if (a) try { sessionStorage.setItem(TRAIL, JSON.stringify({ step: +a.getAttribute('data-ten-step'), at: Date.now() })); } catch (e2) {}
-  });
-  // coming back from a step: mark the steps before it as done, and bring the next one into view
-  var m = /^#step-([1-4])$/.exec(location.hash);
-  if (m) {
-    var n = +m[1];
-    for (var k = 1; k < n; k++) { var li = document.getElementById('step-' + k); if (li) li.classList.add('is-done'); }
-    try { sessionStorage.removeItem(TRAIL); } catch (e) {}
-  }
-  var btn = document.getElementById('ten-read'), panel = document.getElementById('ten-preface'), loaded = false;
-  function plain(el) { var d = document.createElement('div'); d.textContent = (el && el.textContent || '').replace(/\s+/g, ' ').trim(); return d.innerHTML; }
-  function fill(doc) {
-    var main = doc.querySelector('main'); if (!main) throw new Error('no main');
-    var h = '', lede = main.querySelector('.simple-lede');
-    if (lede) h += '<p>' + plain(lede) + '</p>';
-    var ideas = main.querySelectorAll('ol.ideas > li');
-    if (!ideas.length) throw new Error('no ideas');
-    h += '<ol class="ten-ideas">';
-    Array.prototype.forEach.call(ideas, function (li) { var t = li.querySelector('h2'), p = li.querySelector('p'); h += '<li><strong>' + plain(t) + '</strong> ' + plain(p) + '</li>'; });
-    h += '</ol><p class="ten-row"><a class="ten-go" href="#step-3" id="ten-read-done">Done reading: on to step 3</a> <a href="/book/preface.html" data-ten-step="2">Read it on its own page</a></p>';
-    panel.innerHTML = h;
-    var done = document.getElementById('ten-read-done');
-    done.addEventListener('click', function () { document.getElementById('step-2').classList.add('is-done'); });
-  }
-  if (btn && panel) btn.addEventListener('click', function () {
-    var open = panel.hidden;
-    panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Close the Preface' : 'Read it here';
-    if (!open || loaded) { if (open) panel.focus(); return; }
-    panel.innerHTML = '<p>Opening the Preface…</p>';
-    fetch('/book/preface.html', { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }).then(function (t) {
-      fill(new DOMParser().parseFromString(t, 'text/html')); loaded = true; panel.focus();
-    }).catch(function () {
-      panel.innerHTML = '<p>The Preface couldn’t open here. <a href="/book/preface.html" data-ten-step="2">Open it on its own page</a>; a bar there brings you back to step 3.</p>';
-    });
-  });
-})();
+// Steps that lead to another page leave a small trail for this tab, so that page (ten-return.js) can show a
+// "back to the next step" bar.
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('[data-ten-step]');
+  if (a) try { sessionStorage.setItem('tol-ten-trail', JSON.stringify({ step: +a.getAttribute('data-ten-step'), at: Date.now() })); } catch (e2) {}
+});
 // "Come back gently": the reminder (remind.js) offers a few set times. Shift and night workers need others,
 // so this page adds more times through the day and night, plus "Another time" with a time box of their own.
 (function () {

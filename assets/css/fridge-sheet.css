@@ -1,0 +1,137 @@
+/* fridge-sheet.css: "Put it on the fridge" (assets/js/fridge-sheet.js adds this file itself).
+   Phone first: every button is at least 48px tall and the actions sit two to a row at 390px.
+   Dark mode needs nothing here: the site turns the whole page, and printing always comes out black on white. */
+
+/* ---------- the one button and its panel ---------- */
+.tfs{ margin:1rem 0 .4rem; font-family:var(--tol-sans, system-ui, -apple-system, "Segoe UI", sans-serif); }
+.tfs-go{ display:flex; align-items:center; justify-content:center; gap:.5rem; box-sizing:border-box; width:100%; max-width:26rem;
+  min-height:52px; padding:.7rem 1.2rem; font:600 1.05rem/1.25 var(--tol-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  color:#2B2620; background:#F8E08A; border:1.5px solid #2B2620; border-radius:999px; cursor:pointer; }
+.tfs-go::before{ content:""; flex:none; width:.85rem; height:1.15rem; border:2px solid currentColor; border-radius:3px;
+  background:linear-gradient(currentColor, currentColor) 0 38% / 100% 2px no-repeat; }
+.tfs-go:hover{ background:#F4D35E; }
+.tfs-go[aria-expanded="true"]{ background:#FFF3C4; }
+.tfs-go:focus-visible, .tfs-act:focus-visible, .tfs-drift a:focus-visible, .tfs-drift button:focus-visible, .tfs-chip:focus-visible, .tfs-linkbtn:focus-visible, .tfs-ci-addgo:focus-visible{
+  outline:3px solid var(--focus, #2F5A9E); outline-offset:2px; }
+.tfs-panel{ box-sizing:border-box; max-width:26rem; margin:.6rem 0 0; padding:.75rem; background:#FFFDF7; border:1px solid #D8CCAA; border-radius:16px; }
+.tfs-panel[hidden]{ display:none; }
+.tfs-note{ margin:0 0 .6rem !important; font-size:.92rem; line-height:1.4; color:var(--ink-soft, #5A5346); max-width:none; }
+.tfs-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+.tfs-acts.is-odd .tfs-act.is-main{ grid-column:1 / -1; }
+.tfs-act{ box-sizing:border-box; min-height:48px; padding:.55rem .6rem; font:500 1rem/1.2 var(--tol-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  color:#2B2620; background:#fff; border:1px solid #8C826E; border-radius:12px; cursor:pointer; }
+.tfs-act:hover{ background:#F5EFDE; }
+.tfs-act.is-main{ background:#FFF3C4; border-color:#C9A227; font-weight:600; }
+.tfs-act[hidden]{ display:none; }
+.tfs-status{ min-height:1.2em; margin:.5rem 0 0 !important; font-size:.92rem; line-height:1.4; color:#2F5A3C; max-width:none; }
+.tfs-offscreen{ position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
+
+/* ---------- "These jobs keep coming back" ---------- */
+.tfs-drift{ box-sizing:border-box; margin:.8rem 0; padding:.8rem .9rem; background:#F1F6EC; border:1px solid #BFD8B0; border-radius:16px; }
+.tfs-drift[hidden]{ display:none; }
+.tfs-drift p{ margin:0 0 .4rem !important; max-width:none; line-height:1.45; }
+.tfs-drift-q{ font-size:1rem; }
+.tfs-drift-why{ font-size:.9rem; color:var(--ink-soft, #5A5346); }
+.tfs-drift-acts{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .9rem; margin-top:.5rem; }
+.tfs-drift-go{ display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; min-height:48px; padding:.55rem 1rem;
+  font-family:inherit; font-size:1rem; font-weight:600; line-height:1.2; color:#2B2620 !important; text-decoration:none !important; background:#fff;
+  border:1.5px solid #4E8A66; border-radius:999px; cursor:pointer; }
+.tfs-drift-go:hover{ background:#E3F0DA; }
+.tfs-drift-no{ min-height:48px; padding:.4rem .6rem; font:inherit; font-size:.95rem; color:var(--ink, #2B2620); background:none; border:0; text-decoration:underline; cursor:pointer; }
+.tfs-drift-more{ font-size:.9rem; color:var(--ink-soft, #5A5346) !important; }
+
+/* ---------- page pieces ---------- */
+.tfs-home{ margin:1.4rem 0; padding:1rem 1.1rem; background:#FFFBEA; border:1px solid #E8D49A; border-radius:18px; }
+.read .tfs-home h2{ margin:0 0 .4rem; font-size:1.2rem; }
+.tfs-home > p{ margin:.4rem 0; max-width:none; }
+.tfs-home .tfs-more-links{ font-size:.92rem; }
+.tfs-hh-list{ list-style:none; margin:.4rem 0 .2rem !important; padding:0 !important; }
+.tfs-hh-list li{ box-sizing:border-box; width:100%; display:flex; flex-wrap:wrap; justify-content:space-between; gap:.1rem .8rem; margin:0 !important; padding:.45rem 0; border-bottom:1px dashed #D8CCAA; max-width:none; }
+.tfs-hh-job{ font-weight:600; overflow-wrap:anywhere; }
+.tfs-hh-who{ color:var(--ink-soft, #5A5346); }
+.tfs-hh-who.is-open{ font-style:italic; }
+.tfs-lb-own{ flex-basis:100%; font-size:.88rem; color:var(--ink-soft, #5A5346); }
+.tfs-hh-empty, .tfs-hh-more, .tfs-lb-note{ margin:.3rem 0 !important; font-size:.95rem; max-width:none; }
+
+/* the weekly check-in card */
+.tfs-ci{ display:grid; gap:.75rem; }
+.tfs-ci-f{ display:grid; gap:.25rem; }
+.tfs-ci-l{ font-weight:600; font-size:.98rem; }
+.tfs-ci input[type="text"], .tfs-ci textarea{ box-sizing:border-box; width:100%; min-height:48px; padding:.55rem .7rem; font-family:inherit; font-size:1rem; line-height:1.4;
+  color:var(--ink, #2B2620); background:#fff; border:1px solid #8C826E; border-radius:12px; }
+.tfs-ci textarea{ resize:vertical; }
+.tfs-ci-jobs{ margin:0; padding:0; border:0; min-width:0; }
+.tfs-ci-jobs legend{ padding:0; margin:0 0 .4rem; }
+.tfs-chips{ display:flex; flex-wrap:wrap; gap:.45rem; }
+.tfs-chip{ min-height:44px; padding:.4rem .85rem; font:inherit; font-size:.95rem; color:#2B2620; background:#fff; border:1px solid #8C826E; border-radius:999px; cursor:pointer; }
+.tfs-chip[aria-pressed="true"]{ background:#FFF3C4; border-color:#C9A227; font-weight:600; }
+.tfs-chip[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+.tfs-ci-add{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 0; }
+.tfs-ci-add input[type="text"]{ flex:1 1 12rem; width:auto; }
+.tfs-ci-addgo{ min-height:48px; padding:.4rem 1rem; font:inherit; color:#2B2620; background:#fff; border:1px solid #8C826E; border-radius:12px; cursor:pointer; }
+.tfs-ci-note{ margin:.5rem 0 0 !important; font-size:.88rem; line-height:1.45; color:var(--ink-soft, #5A5346); max-width:none; }
+.tfs-linkbtn{ min-height:44px; padding:0 .2rem; font:inherit; color:inherit; background:none; border:0; text-decoration:underline; cursor:pointer; }
+.tfs-ci-said{ color:#2F5A3C; }
+.tfs-btnbox{ margin:0; }
+
+/* ---------- the printed sheet ---------- */
+/* On screen it waits off to the side (it is measured there, at the printed width, so the type can fit one page). */
+.tfs-sheet{ position:absolute; left:-10000px; top:0; visibility:hidden; pointer-events:none; color:#000; background:#fff;
+  font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+.tfs-in{ box-sizing:border-box; width:184mm; }
+.tfs-t{ margin:0 0 2mm; font:700 30pt/1.15 Georgia, "Times New Roman", serif; color:#000; }
+.tfs-sub{ margin:0 0 6mm; font-size:15pt; color:#333; }
+.tfs-h{ margin:6mm 0 2mm; font:700 15pt/1.2 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color:#000; }
+.tfs-rows{ list-style:none; margin:0; padding:0; }
+.tfs-row{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:4mm; padding:3mm 0; border-bottom:.4mm solid #999; break-inside:avoid; font-size:20pt; line-height:1.25; }
+.tfs-box{ width:8mm; height:8mm; border:.6mm solid #000; border-radius:1.2mm; }
+.tfs-job{ font-weight:700; overflow-wrap:anywhere; }
+.tfs-when{ font-weight:400; font-size:.7em; color:#444; white-space:nowrap; }
+.tfs-who{ text-align:right; overflow-wrap:anywhere; max-width:70mm; }
+.tfs-who.is-empty{ width:45mm; height:1.1em; border-bottom:.4mm solid #666; }
+.tfs-row.is-blank .tfs-job{ height:1.1em; border-bottom:.4mm solid #666; }
+.tfs-row.is-blank .tfs-who.is-empty{ width:40mm; }
+.tfs-field{ margin:0 0 5mm; break-inside:avoid; }
+.tfs-lab{ margin:0 0 1mm; font-weight:700; font-size:14pt; color:#000; }
+.tfs-val{ margin:0; font-size:16pt; line-height:1.35; white-space:pre-wrap; overflow-wrap:anywhere; }
+.tfs-line{ display:block; height:10mm; border-bottom:.4mm solid #888; }
+.tfs-foot{ margin:7mm 0 0; padding-top:3mm; border-top:.4mm solid #bbb; font-size:12pt; line-height:1.4; color:#333; }
+
+/* smaller steps, so a long list still fits one page */
+.tfs-in[data-size="xl"] .tfs-row{ font-size:22pt; padding:3.5mm 0; }
+.tfs-in[data-size="xl"] .tfs-box{ width:9mm; height:9mm; }
+.tfs-in[data-size="m"] .tfs-t{ font-size:26pt; }
+.tfs-in[data-size="m"] .tfs-row{ font-size:16pt; padding:2.4mm 0; }
+.tfs-in[data-size="m"] .tfs-box{ width:6.5mm; height:6.5mm; }
+.tfs-in[data-size="m"] .tfs-line{ height:8mm; }
+.tfs-in[data-size="s"] .tfs-t{ font-size:22pt; }
+.tfs-in[data-size="s"] .tfs-sub{ font-size:12pt; margin-bottom:4mm; }
+.tfs-in[data-size="s"] .tfs-row{ font-size:13pt; padding:1.8mm 0; gap:3mm; }
+.tfs-in[data-size="s"] .tfs-box{ width:5.5mm; height:5.5mm; }
+.tfs-in[data-size="s"] .tfs-val{ font-size:13pt; }
+.tfs-in[data-size="s"] .tfs-lab{ font-size:12pt; }
+.tfs-in[data-size="s"] .tfs-line{ height:7mm; }
+.tfs-in[data-size="s"] .tfs-field{ margin-bottom:3.5mm; }
+.tfs-in[data-size="xs"] .tfs-t{ font-size:19pt; }
+.tfs-in[data-size="xs"] .tfs-sub{ font-size:11pt; margin-bottom:3mm; }
+.tfs-in[data-size="xs"] .tfs-h{ font-size:12pt; margin:4mm 0 1.5mm; }
+.tfs-in[data-size="xs"] .tfs-row{ font-size:11pt; padding:1.3mm 0; gap:2.5mm; }
+.tfs-in[data-size="xs"] .tfs-box{ width:4.5mm; height:4.5mm; }
+.tfs-in[data-size="xs"] .tfs-val{ font-size:11pt; }
+.tfs-in[data-size="xs"] .tfs-lab{ font-size:11pt; }
+.tfs-in[data-size="xs"] .tfs-line{ height:6mm; }
+.tfs-in[data-size="xs"] .tfs-field{ margin-bottom:2.5mm; }
+.tfs-in[data-size="xs"] .tfs-foot{ font-size:10pt; margin-top:4mm; }
+.tfs-in.is-cols .tfs-rows{ columns:2; column-gap:8mm; }
+.tfs-in.is-cols .tfs-who{ max-width:32mm; }
+.tfs-in.is-cols .tfs-who.is-empty, .tfs-in.is-cols .tfs-row.is-blank .tfs-who.is-empty{ width:22mm; }
+
+@page tfsfridge{ margin:0; }
+@media print{
+  .tfs, .tfs-drift, .tfs-sheet{ display:none !important; }
+  html.tfs-printing, html.tfs-printing body{ margin:0 !important; padding:0 !important; background:#fff !important; filter:none !important; min-height:0 !important; }
+  html.tfs-printing body::before, html.tfs-printing body::after{ display:none !important; content:none !important; }
+  html.tfs-printing body > *:not(#tol-fridge-print){ display:none !important; }
+  html.tfs-printing body > #tol-fridge-print{ display:block !important; position:static !important; left:auto !important; visibility:visible !important;
+    box-sizing:border-box; width:auto; padding:12mm 13mm; page:tfsfridge; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}

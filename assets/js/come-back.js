@@ -6,8 +6,12 @@
    - Home page: "Today's tiny thing" (one small practice a day).
    - Book chapters, tools, calm games and Frequency Buddies: a short "What you got from this" line
      at the natural end, and a "Next time" idea.
+   - Tool, workpaper, book and guide pages: ONE "Recommended next" step at the end (plus at most one
+     other idea), picked for "Just me" or "With someone" (tol-mode-v1, chosen on the home page or here),
+     and "Done for now? See what you got": what you did here today, in a card to copy, print or save.
    It mostly reads what the site already keeps here (recent pages, Check yourself petals, garden
-   levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest.
+   levels, episodes, tool drafts) and adds one small key, tol-come-back-v1, for the rest. It reads and
+   writes tol-mode-v1 (Just me / With someone) and the "one thing to try" in tol-ten-v1 (Start in 10 minutes).
    No streaks to keep, no timers, nothing to lose: pick up anytime. Nothing is sent anywhere.
    "Hide the helpers" and Quiet mode hide the extras (the time picker stays); a still page never moves.
    In Focus mode (site.js, window.TOLFocus) plans and "Next time" ideas keep to the chosen areas where they can. */
@@ -43,12 +47,12 @@
   if (SKIP.test(path) || (doc.body && doc.body.hasAttribute('data-sensitive')) || (doc.body && doc.body.hasAttribute('data-no-comeback'))) return;
 
   /* ---------------------------------------------------------------- our one small record */
-  var S = { time: null, sit: null, days: [], read: {}, did: {}, earned: {}, tiny: {}, visits: 0 };
+  var S = { time: null, sit: null, days: [], read: {}, did: {}, fin: {}, earned: {}, tiny: {}, visits: 0 };
   (function () { var o = json(KEY); if (o && typeof o === 'object') for (var k in o) S[k] = o[k]; })();
   // with "Stop remembering pages I visit" on, which pages were read or tried is never written down
   function save() {
     var o = S, off = false; try { off = !!localStorage.getItem('tol-recent-off'); } catch (e) {}
-    if (off) { o = {}; Object.keys(S).forEach(function (k) { o[k] = S[k]; }); o.read = {}; o.did = {}; }
+    if (off) { o = {}; Object.keys(S).forEach(function (k) { o[k] = S[k]; }); o.read = {}; o.did = {}; o.fin = {}; }
     lsSet(KEY, JSON.stringify(o));
   }
   (function markDay() {
@@ -97,20 +101,20 @@
 
   var TOOLS = {
     '/signal-translator.html': { t: 'Signal Translator', gain: 'You just found a kinder way to say it, before it was said.',
-      next: ['/conversation-reader.html', 'The Conversation Reader', 'for a talk that already went sideways'], result: function () { var r = doc.getElementById('results'); return r && !r.hidden && !r.hasAttribute('data-no-reward') && r.textContent.trim().length > 20 ? r : null; } },
+      result: function () { var r = doc.getElementById('results'); return r && !r.hidden && !r.hasAttribute('data-no-reward') && r.textContent.trim().length > 20 ? r : null; } },
     '/conversation-reader.html': { t: 'Conversation Reader', gain: 'You just looked at a talk from both sides, without blaming anyone.',
-      next: ['/signal-translator.html', 'The Signal Translator', 'to test your next message before you send it'], result: function () { var r = doc.getElementById('cr-out'); return r && !r.querySelector('.cr-safety') && r.textContent.trim().length > 20 ? r : null; } },
+      result: function () { var r = doc.getElementById('cr-out'); return r && !r.querySelector('.cr-safety') && r.textContent.trim().length > 20 ? r : null; } },
     '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
-      next: ['/check-ins.html', 'Check-ins', 'how to raise it once, calmly, at a good time'], result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
+      result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
     '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
-      next: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job (WP-03)', 'so nothing falls between you'], result: function () { var r = doc.getElementById('balance-line'); return r && (r.hasAttribute('data-ls-result') || (r.textContent.trim() && !/^(Add some hours|Waiting for)/i.test(r.textContent.trim()) && !/\bWaiting for\b/.test(r.textContent))) && !/\bWaiting for\b/.test(r.textContent) ? (doc.querySelector('.ls-tools') || r) : null; } },
+      result: function () { var r = doc.getElementById('balance-line'); return r && (r.hasAttribute('data-ls-result') || (r.textContent.trim() && !/^(Add some hours|Waiting for)/i.test(r.textContent.trim()) && !/\bWaiting for\b/.test(r.textContent))) && !/\bWaiting for\b/.test(r.textContent) ? (doc.querySelector('.ls-tools') || r) : null; } },
     '/quick-checks.html': { t: 'Today’s Weather', gain: 'You just checked in with yourself first. Knowing your weather makes the rest of the day easier to plan.',
-      next: ['/quick-checks.html#today', 'Check again tomorrow', 'a few days in, your own pattern starts to show'], result: function () {
+      result: function () {
         var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1]; return e && e.d === today() ? doc.getElementById('today') : null; } },
     '/wavelength.html': { t: 'Wavelength', gain: 'You just learned something about how you take things in, and how to say it to the people you love.',
-      next: ['/wiring-card.html', 'Your Wiring Card', 'to share it on one page'], result: function () { return lsGet('tol-wavelength-v1') ? doc.querySelector('main') : null; }, atEnd: true },
+      result: function () { return lsGet('tol-wavelength-v1') ? doc.querySelector('main') : null; }, atEnd: true },
     '/wiring-card.html': { t: 'Wiring Card', gain: 'You just put how you work into words someone else can read.',
-      next: ['/wavelength.html', 'Wavelength', 'to go deeper into how you think, talk and listen'], result: function () { return lsGet('tol-wiring-card') ? doc.querySelector('main') : null; }, atEnd: true }
+      result: function () { return lsGet('tol-wiring-card') ? doc.querySelector('main') : null; }, atEnd: true }
   };
   function toolTried(u) {
     if (S.did[u]) return true;
@@ -222,7 +226,7 @@
       15: [
         { t: 'Read all of ' + nc.code + ': ' + nc.t, u: nc.u, m: 12, why: nc.n, tag: 'book' },
         { t: 'Find your Wavelength', u: '/wavelength.html', m: 12, why: 'how you think, talk and listen', tag: 'self' },
-        { t: 'Fill in the Lemonade Stand with your partner', u: '/lemonade-stand.html', m: 10, why: 'jobs and hours side by side, together', tag: 'load' },
+        { t: (mode() === 'me' ? 'List your own jobs in the Lemonade Stand' : 'Fill in the Lemonade Stand together'), u: '/lemonade-stand.html', m: 10, why: mode() === 'me' ? 'see your own load, with no blame' : 'jobs and hours side by side, together', tag: 'load' },
         { t: 'Play a calm game level', u: '/pause-and-play.html', m: 8, why: 'no timers and no way to lose', tag: 'calm' }
       ],
       30: [
@@ -339,7 +343,7 @@
       var steps = plan(min, seed), total = 0;
       steps.forEach(function (s) { total += s.m; });
       out.innerHTML =
-        '<p class="cb-plan-h">' + (welcome ? 'Your ' + LABEL[min] + ' plan, fresh for today' : 'Your ' + LABEL[min] + ' plan') + '</p>' +
+        '<p class="cb-plan-h">' + 'Your ' + LABEL[min] + ' plan' + (welcome ? ', fresh for today' : '') + '</p>' +
         '<ol class="cb-steps">' + steps.map(function (s) {
           var link = !s.u ? '<span class="cb-step-t">' + esc(s.t) + '</span>'
             : '<a class="cb-step-t" href="' + esc(s.u === '#breathe' ? '/night-garden.html' : s.u) + '"' + (s.u === '#breathe' ? ' data-cb-breathe' : '') + (s.u.charAt(0) === '#' && s.u !== '#breathe' ? ' data-cb-jump="' + esc(s.u) + '"' : '') + '>' + esc(s.t) + '</a>';
@@ -371,7 +375,6 @@
     if (last && LABEL[last]) {
       var b = box.querySelector('[data-cb-min="' + last + '"]');
       if (b) {
-        if (q) { q.setAttribute('data-q', q.textContent); q.textContent = 'Welcome back. ' + NICE[last].replace(' or more', '+').replace(/^./, function (c) { return c.toUpperCase(); }) + ' again?'; }
         // wait briefly for the menu's ideas, so the plan draws on the full list
         var n = 0; (function go() { if (window.TOLPickUp || ++n > 10) choose(b, true); else setTimeout(go, 150); })();
       }
@@ -439,6 +442,278 @@
     return c.filter(function (x) { return fits(x[0]); })[0] || c[0];
   }
   function anything() { return chaptersRead() || toolsTried().length || Object.keys(gamesPlayed()).length || episodesWatched().length || petals(); }
+  /* ---------------------------------------------------------------- Just me / With someone */
+  // one choice, kept on this device; it only changes which steps are suggested and what "done" looks like
+  var MODE_KEY = 'tol-mode-v1', TEN_KEY = 'tol-ten-v1';
+  function mode() { var m = lsGet(MODE_KEY); return m === 'me' || m === 'with' ? m : ''; }
+  function setMode(m) {
+    if (m === 'me' || m === 'with') lsSet(MODE_KEY, m); else try { localStorage.removeItem(MODE_KEY); } catch (e) {}
+    try { doc.dispatchEvent(new CustomEvent('tol-mode', { detail: { mode: mode() } })); } catch (e) {}
+  }
+  function ten() { var t = json(TEN_KEY); return t && typeof t === 'object' ? t : {}; }
+  function tenDone() { return !!ten().fin; }
+
+  /* ---------------------------------------------------------------- "Recommended next" */
+  // [address, name, why]
+  var W = {
+    ten: ['/start-in-10-minutes.html', 'Start in 10 minutes', 'four small steps, one at a time'],
+    weather: ['/quick-checks.html#today', 'Check today’s weather', 'one minute on how you are doing'],
+    almanac: ['/quick-checks.html#almanac', 'Your weather over time', 'a few days in, your own pattern starts to show'],
+    wiring: ['/wiring-card.html', 'Your Wiring Card', 'how you work, in words someone else can read'],
+    wavelength: ['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen'],
+    selfpath: ['/self-path.html', 'Your self path', 'six small steps on your own, at your own pace'],
+    signal: ['/signal-translator.html', 'The Signal Translator', 'test one message before you send it'],
+    notes: ['/signal-translator.html#notes', 'Your talking notes', 'write down what you want to say, before the talk'],
+    reader: ['/conversation-reader.html', 'The Conversation Reader', 'look at a talk that went sideways, from both sides'],
+    decoder: ['/carrier-wave-decoder.html', 'The Carrier Wave Decoder', 'work out what slipped, not who started it'],
+    checkins: ['/check-ins.html', 'Check-ins', 'raise one thing at a calm, set time'],
+    lemon: ['/lemonade-stand.html', 'The Lemonade Stand', 'every job and its hours, where everyone can see them'],
+    setup: ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'a fair look at the split, never at a person'],
+    wp01: ['/workpapers/wp-01.html', 'Who did what', 'write down the jobs that keep a home running'],
+    wp02: ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a quick look at how full your battery is'],
+    wp03: ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'so nothing falls between you'],
+    wp04: ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back?', 'one short page, once a month'],
+    wp09: ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'a fact, a feeling and a kind ask'],
+    kit: ['/wp-11.html', 'The Calm-Down Kit', 'what you notice first, and what settles you'],
+    daily: ['/workpapers/wp-13-daily-check-in.html', 'The 90-second daily check-in', 'a tiny daily habit to share'],
+    six: ['/prog-01.html', 'Six gentle weeks', 'one small session a week'],
+    pause: ['/pursue-withdraw.html', 'One wants to talk now, one needs space', 'both sides, and a pause plan'],
+    turning: ['/turning-toward.html', 'Turning toward', 'seven small habits for staying close']
+  };
+  // page -> { me: next, with: next, alt: one other idea }. A next is a key of W, or [key, a better "why" for this page].
+  var NEXT = {
+    '/quick-checks.html': { me: 'wiring', with: ['checkins', 'now you know your weather, pick a good time to talk'], alt: 'almanac' },
+    '/ladder.html': { me: 'kit', with: ['kit', 'plan what settles each of you, before the next hard moment'], alt: 'weather' },
+    '/signal-translator.html': { me: 'wp09', with: 'checkins', alt: 'reader' },
+    '/conversation-reader.html': { me: ['signal', 'test your next message before you send it'], with: ['decoder', 'go through it together, without blame'], alt: 'pause' },
+    '/carrier-wave-decoder.html': { me: 'wp04', with: ['checkins', 'how to raise it once, calmly, at a good time'] },
+    '/lemonade-stand.html': { me: ['wp02', 'see how full your own battery is'], with: ['wp03', 'give every job one owner, together'], alt: 'setup' },
+    '/wavelength.html': { me: 'wiring', with: ['wiring', 'one page you can hand to someone, and swap'] },
+    '/wiring-card.html': { me: 'selfpath', with: ['checkins', 'swap cards in a short, calm talk'], alt: 'wavelength' },
+    '/wp-11.html': { me: 'weather', with: ['checkins', 'share your plan at a calm time'] },
+    '/wp-11-sound-toolkit.html': { me: 'kit', with: 'kit' },
+    '/check-ins.html': { me: 'notes', with: 'daily' },
+    '/pursue-withdraw.html': { me: 'kit', with: ['kit', 'agree a pause plan together'] },
+    '/self-path.html': { me: 'wavelength', with: ['checkins', 'share one thing you learned about yourself'] },
+    '/five-pillars.html': { me: 'ten', with: 'ten' },
+    '/how-it-works.html': { me: 'ten', with: 'ten' },
+    '/is-this-for-you.html': { me: 'ten', with: 'ten' },
+    '/is-the-setup-working.html': { me: 'wp02', with: 'wp03' },
+    '/turning-toward.html': { me: 'weather', with: 'daily' },
+    '/small-wins.html': { me: 'weather', with: 'turning' },
+    '/perspective-shifter.html': { me: 'signal', with: 'checkins' },
+    '/communication-style-quiz.html': { me: 'wiring', with: ['wiring', 'then swap cards'] },
+    '/heartprint.html': { me: 'wiring', with: 'wiring' }
+  };
+  var WP = { '01': { me: 'wp02', with: 'wp02' }, '02': { me: 'kit', with: 'wp03' }, '03': { me: 'wp04', with: 'wp04' }, '04': { me: 'wp09', with: 'wp09' },
+    '09': { me: 'signal', with: 'checkins' }, '11': { me: 'weather', with: 'checkins' }, '13': { me: 'weather', with: 'six' } };
+  // the rest go by what the page is about
+  var TAG_NEXT = [
+    [/lemonade|workpaper|wp-|chore|share-the-load|invisible|money|calc|setup|sharing-a-room|different-hours/, { me: ['lemon', 'see your own load, with no blame'], with: ['lemon', 'list the jobs side by side, together'] }],
+    [/communication|check-ins|apolog|pursue|fighting|conversation|signal|carrier|perspective|languages|love-languages|turning|touchstones|complacency/, { me: 'signal', with: 'checkins' }],
+    [/wavelength|wiring|know-yourself|wired-differently|self-|small-wins|growing-up|heartprint|pawprint|quiz|understanding-/, { me: 'wiring', with: 'wiring' }],
+    [/calm|breath|soundscape|upset|ladder|grief|empty-nest|when-one-is-ill/, { me: 'weather', with: 'weather' }]
+  ];
+  function wpRule() { var m = /\/wp-?(\d\d)\b/.exec(simplePath); return m && WP[m[1]] ? WP[m[1]] : null; }
+  function bookRule() {
+    var i = bookIdx(simplePath); if (i < 0) return null;
+    var nx = BOOK[i + 1], deep = simplePath !== path;
+    if (!nx) return { me: ['wp04', 'put it to work, once a month'], with: ['wp04', 'put it to work, once a month'] };
+    var o = { u: deep ? nx.u.replace(/\.html$/, '-in-depth.html') : nx.u, t: nx.code + ': ' + nx.t, n: nx.n };
+    return { me: o, with: o };
+  }
+  // Part Three chapters name their own next chapter: use that link
+  function partThreeRule(main) {
+    var m = /^\/book\/understanding-(\d+)-/.exec(simplePath); if (!m) return null;
+    var want = new RegExp('/book/understanding-' + (+m[1] + 1) + '-[a-z-]+\\.html$'), a = null;
+    Array.prototype.some.call(main.querySelectorAll('a[href*="understanding-"]'), function (x) { if (want.test(x.getAttribute('href').split('#')[0])) { a = x; return true; } return false; });
+    if (!a) return { me: 'selfpath', with: 'checkins' };
+    var t = a.textContent.replace(/\s+/g, ' ').replace(/^.*?:\s*/, '').replace(/[→\s]+$/, '').trim();
+    var o = { u: a.getAttribute('href'), t: 'Next chapter: ' + t, n: 'the next part of how people work' };
+    return { me: o, with: o };
+  }
+  function tagRule() {
+    for (var i = 0; i < TAG_NEXT.length; i++) if (TAG_NEXT[i][0].test(simplePath)) return TAG_NEXT[i][1];
+    // a page about one kind of relationship: say one thing well
+    return { me: ['signal', 'check a message before you send it'], with: 'checkins' };
+  }
+  function pick(spec) {
+    if (!spec) return null;
+    if (spec.u) return spec;
+    var k = typeof spec === 'string' ? spec : spec[0], w = W[k]; if (!w) return null;
+    return { u: w[0], t: w[1], n: typeof spec === 'string' ? w[2] : spec[1] };
+  }
+  var mainEl = null;
+  function recommend() {
+    var m = mode() || 'me';
+    var rule = NEXT[simplePath] || bookRule() || (mainEl && partThreeRule(mainEl)) || wpRule() || tagRule();
+    var nx = pick(rule[m] || rule.me), alt = pick(rule.alt);
+    if (nx && pathOf(nx.u) === simplePath && !/#/.test(nx.u)) nx = null;
+    if (!nx || (nx.u === W.ten[0] && tenDone())) nx = pick(m === 'with' ? 'checkins' : 'selfpath');
+    if (pathOf(nx.u) === simplePath) nx = pick(m === 'with' ? 'six' : 'weather');
+    // until the 10-minute path is done, it is the one other idea
+    if (!alt && nx.u !== W.ten[0] && !tenDone()) alt = pick('ten');
+    if (alt && (pathOf(alt.u) === pathOf(nx.u) || (pathOf(alt.u) === simplePath && !/#/.test(alt.u)))) alt = null;
+    return { next: nx, alt: alt };
+  }
+
+  /* ---------------------------------------------------------------- "Done for now? See what you got" */
+  var SKY_WORD = { clear: 'clear', gusty: 'gusty', fog: 'fogged in' };
+  function isToday(ts) { if (!ts) return false; var d = new Date(+ts); return !isNaN(d) && d.toDateString() === new Date().toDateString(); }
+  function keysLS() { var out = []; try { for (var i = 0; i < localStorage.length; i++) out.push(localStorage.key(i)); } catch (e) {} return out; }
+  // what the tools keep on this device, by name
+  var WP_TITLES = { 'WP-01': 'Who did what', 'WP-02': 'How much are you carrying?', 'WP-03': 'One owner per job', 'WP-04': 'What keeps coming back?',
+    'WP-09': 'Say it so it lands', 'WP-11': 'The Calm-Down Kit', 'WP-13': 'The 90-second daily check-in' };
+  function kept() {
+    var out = [];
+    keysLS().forEach(function (k) {
+      var m = /^tol-wpf-keep:(.+)$/.exec(k); if (!m) return;
+      var id = m[1];
+      if (id.indexOf('suite') === 0) out.push('The Workpaper Suite');
+      else if (id === 'fullpath') out.push('The workpaper package');
+      else { var code = id.split(':')[0].toUpperCase(); out.push(WP_TITLES[code] || 'A workpaper'); }
+    });
+    if (lsGet('tol-wiring-card')) out.push('Your Wiring Card');
+    if (lsGet('tol-wavelength-v1') || lsGet('tol-heartprint-v1')) out.push('Your Wavelength');
+    var lem = json('tol-lemonade-stand-v2'); if (lem && !lem.example && lem.jobs && lem.jobs.some(function (j) { return j && j.name; })) out.push('Your Lemonade Stand list');
+    if (lsGet('tol-ten-log-v1')) out.push('Your list of things you did');
+    if (lsGet('tol-calc01-full-v2')) out.push('Is the setup working for everyone?');
+    return out.filter(function (x, i) { return out.indexOf(x) === i; });
+  }
+  function didToday() {
+    var out = [], t = ten(), done = Array.isArray(t.done) ? t.done.length : 0;
+    if (t.day === today() && done) out.push(t.fin ? 'Finished Start in 10 minutes' : 'Start in 10 minutes: ' + done + ' of 4 steps');
+    var a = json('tol-weather-v1'), e = Array.isArray(a) && a[a.length - 1];
+    if (e && e.d === today()) out.push('Checked your weather' + (SKY_WORD[e.sky] ? ': ' + SKY_WORD[e.sky] : ''));
+    BOOK.forEach(function (b) { if (isToday(S.read[b.u])) out.push('Read ' + b.code + ': ' + b.t); });
+    Object.keys(S.did || {}).forEach(function (u) { if (isToday(S.did[u]) && TOOLS[u]) out.push('Tried the ' + TOOLS[u].t); });
+    Object.keys(S.fin || {}).forEach(function (u) { var f = S.fin[u]; if (f && isToday(f.at) && f.t) out.push('Read to the end: ' + f.t); });
+    if (S.tiny && S.tiny[today()]) out.push('Tried today’s tiny thing');
+    return out.filter(function (x, i) { return out.indexOf(x) === i; }).slice(0, 8);
+  }
+  var MODE_LINE = { me: 'Just me. On your own is complete as it is.', with: 'With someone. Share this card with them if you like.' };
+  function summary() {
+    var r = recommend(), m = mode();
+    return { did: didToday(), kept: kept(), tryIt: (ten().try || '').trim(), next: r.next, mode: m };
+  }
+  function summaryText(o, short) {
+    var L = [];
+    if (short) {
+      if (o.did.length) L.push('Did: ' + o.did.slice(0, 3).join('; ') + '.');
+      if (o.tryIt) L.push('Trying: ' + o.tryIt);
+      L.push('Next: ' + o.next.t);
+      return L.join('\n').slice(0, 300);
+    }
+    L.push('What I got today');
+    if (o.mode) L.push(MODE_LINE[o.mode]);
+    L.push('');
+    L.push('What I did:');
+    if (o.did.length) o.did.forEach(function (d) { L.push('- ' + d); }); else L.push('- Read and looked around. That counts.');
+    if (o.tryIt) { L.push(''); L.push('One thing I will try: ' + o.tryIt); }
+    L.push(''); L.push('My next step: ' + o.next.t + ' (' + location.origin + o.next.u + ')');
+    return L.join('\n');
+  }
+  function doneHTML() {
+    var o = summary();
+    return '<p class="cb-done-h">What you got today</p>' +
+      (o.mode ? '<p class="cb-done-mode">' + esc(MODE_LINE[o.mode]) + '</p>' : '') +
+      '<p class="cb-k">What you did</p>' +
+      (o.did.length ? '<ul class="cb-done-list">' + o.did.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>'
+        : '<p class="cb-done-none">Nothing written down yet, and that is fine. Reading and looking around count.</p>') +
+      (o.kept.length ? '<p class="cb-k">Kept on this device</p><p class="cb-done-kept">' + o.kept.map(esc).join(' · ') + '</p>' : '') +
+      '<label class="cb-k cb-done-l" for="cb-done-try">One thing I’ll try</label>' +
+      '<input type="text" id="cb-done-try" class="cb-done-try" maxlength="160" autocomplete="off" placeholder="Optional. Small is good." value="' + esc(o.tryIt) + '">' +
+      '<p class="cb-k">Your next step</p><p class="cb-done-next"><a href="' + esc(o.next.u) + '">' + esc(o.next.t) + '</a> <span>' + esc(o.next.n) + '</span></p>' +
+      '<p class="cb-done-btns"><button type="button" data-cb-copy>Copy text</button><button type="button" data-cb-print>Print</button>' +
+      (window.TOLShareKit && window.TOLShareKit.saveImage ? '<button type="button" data-cb-img>Save as image</button>' : '') + '</p>' +
+      '<p class="cb-done-say" role="status" aria-live="polite"></p>' +
+      '<p class="cb-done-foot">Only on this device. Nothing to keep up: come back whenever you like. <a href="/on-this-device.html">What’s kept here</a></p>';
+  }
+  function copyText(text, say) {
+    function fallback() {
+      var ta = el('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; doc.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = doc.execCommand('copy'); } catch (e) {} ta.remove();
+      say(ok ? 'Copied. Paste it anywhere you like.' : 'Copying didn’t work here. Select the words and copy them by hand.');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { say('Copied. Paste it anywhere you like.'); }, fallback); else fallback();
+  }
+  // print just the card: a copy of it on its own, the rest of the page hidden for the printer
+  function printCard(card) {
+    var old = doc.getElementById('cb-print-root'); if (old) old.remove();
+    var host = el('div', { id: 'cb-print-root' }), c = card.cloneNode(true);
+    c.hidden = false; c.removeAttribute('id');
+    Array.prototype.forEach.call(c.querySelectorAll('input'), function (i) { var p = el('p', { class: 'cb-done-tryp' }); p.textContent = i.value || '—'; i.replaceWith(p); });
+    host.appendChild(c); doc.body.appendChild(host); root.classList.add('cb-print');
+    function done() { root.classList.remove('cb-print'); host.remove(); window.removeEventListener('afterprint', done); }
+    window.addEventListener('afterprint', done);
+    try { window.print(); } catch (e) {}
+    setTimeout(function () { if (!window.matchMedia || !window.matchMedia('print').matches) done(); }, 1500);
+  }
+  function saveTry(v) {
+    var t = ten(); t.try = String(v || '').slice(0, 160); if (!t.try) delete t.try;
+    try { localStorage.setItem(TEN_KEY, JSON.stringify(t)); } catch (e) {}
+  }
+
+  var panel = null;
+  function drawPanel() {
+    if (!panel) return;
+    var r = recommend(), m = mode(), card = panel.querySelector('.cb-done'), open = !!(card && !card.hidden);
+    function mb(k, t) { return '<button type="button" data-cb-mode="' + k + '" aria-pressed="' + String(m === k) + '">' + t + '</button>'; }
+    panel.innerHTML = '<p class="cb-k" id="cb-nx-h">Recommended next</p>' +
+      '<p class="cb-nx-main"><a class="cb-nx-go" href="' + esc(r.next.u) + '">' + esc(r.next.t) + '</a> <span class="cb-nx-why">' + esc(r.next.n) + '</span></p>' +
+      (r.alt ? '<p class="cb-nx-alt">Or: <a href="' + esc(r.alt.u) + '">' + esc(r.alt.t) + '</a> <span class="cb-nx-why">' + esc(r.alt.n) + '</span></p>' : '') +
+      '<div class="cb-nx-foot"><span class="cb-nx-for" role="group" aria-labelledby="cb-nx-for-l"><span id="cb-nx-for-l">Ideas for</span> ' + mb('me', 'Just me') + mb('with', 'With someone') + '</span>' +
+      '<button type="button" class="cb-nx-done" aria-expanded="' + open + '" aria-controls="cb-done">Done for now? See what you got</button></div>' +
+      '<div class="cb-done" id="cb-done" tabindex="-1"' + (open ? '' : ' hidden') + '>' + (open ? doneHTML() : '') + '</div>';
+  }
+  function buildPanel(main) {
+    panel = el('aside', { class: 'cb-nx tol-plain no-bubble no-dive no-cheer', 'aria-labelledby': 'cb-nx-h' });
+    drawPanel();
+    placeAtEnd(main, panel);
+    panel.addEventListener('click', function (e) {
+      var mb = e.target.closest('[data-cb-mode]');
+      if (mb) { var k = mb.getAttribute('data-cb-mode'); setMode(k); var f = panel.querySelector('[data-cb-mode="' + k + '"]'); if (f) f.focus(); return; }
+      var card = panel.querySelector('.cb-done'), say = function (t) { var s = panel.querySelector('.cb-done-say'); if (s) s.textContent = t; };
+      if (e.target.closest('.cb-nx-done')) {
+        var open = card.hidden;
+        card.innerHTML = open ? doneHTML() : ''; card.hidden = !open;
+        e.target.closest('.cb-nx-done').setAttribute('aria-expanded', String(open));
+        if (open) try { card.focus({ preventScroll: true }); card.scrollIntoView({ block: 'nearest', behavior: still() ? 'auto' : 'smooth' }); } catch (x) {}
+        return;
+      }
+      if (e.target.closest('[data-cb-copy]')) { copyText(summaryText(summary()), say); return; }
+      if (e.target.closest('[data-cb-print]')) { printCard(card); return; }
+      if (e.target.closest('[data-cb-img]')) {
+        var K = window.TOLShareKit;
+        if (K && K.saveImage) K.saveImage({ title: 'What I got today', text: summaryText(summary(), true) }).then(function () { say('Saved as an image.'); }, function () { say('The image couldn’t be made here. Try Copy text instead.'); });
+      }
+    });
+    panel.addEventListener('input', function (e) { if (e.target.id === 'cb-done-try') saveTry(e.target.value); });
+    doc.addEventListener('tol-mode', drawPanel);
+    // reaching the end of a page counts as finishing it (shown only in "What you got today")
+    if ('IntersectionObserver' in window && bookIdx(simplePath) < 0 && !TOOLS[path]) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es.some(function (x) { return x.isIntersecting; })) return;
+        io.disconnect();
+        var h = doc.querySelector('main h1'), t = h ? h.textContent.replace(/\s+/g, ' ').trim().slice(0, 80) : '';
+        if (!t) return;
+        S.fin = S.fin || {}; S.fin[path] = { t: t, at: Date.now() };
+        var ks = Object.keys(S.fin); if (ks.length > 40) { ks.sort(function (a, b) { return S.fin[a].at - S.fin[b].at; }); delete S.fin[ks[0]]; }
+        save();
+      }, { threshold: 0.5 });
+      io.observe(panel);
+    }
+  }
+  // the end card of a tool or chapter keeps the recommended next right under it
+  function nextUnder(box) { if (panel && box && box.parentNode && box.nextElementSibling !== panel) box.after(panel); }
+
+  var NO_NEXT = /^\/(index|start-in-10-minutes|start-here|contents|by-relationship|library|whats-new|roadmap|brand|install|about|glossary|research|podcast-index|safety|upset-right-now|ask|ways-in|suite-index|program|program-overview|curriculum|prog-01|en-espanol|reading|surprise|quest|pause-and-play|infographic|search|frequency-buddies[a-z0-9-]*|pal-cam[a-z-]*|frequency-journey[a-z-]*)(-in-depth)?\.html$|^\/book\/topic-/;
+  function wantsNext(main) {
+    if (NO_NEXT.test(path) || !/^en/i.test(root.getAttribute('lang') || 'en')) return false;
+    if (GAME_PAGES.test(path) || doc.body.classList.contains('is-game')) return false;
+    return main.classList.contains('read') || main.classList.contains('sheet') || !!NEXT[simplePath] || /^\/(workpapers|book)\//.test(path);
+  }
+
   /* ---------------------------------------------------------------- end cards */
   function endCard(label) {
     return el('aside', { class: 'cb-end cb-extra no-bubble no-cheer', 'aria-label': label || 'What you got from this' });
@@ -457,12 +732,11 @@
 
   function bookPage(main) {
     var i = bookIdx(simplePath); if (i < 0) return;
-    var b = BOOK[i], deep = simplePath !== path, nx = BOOK[i + 1];
-    var next = nx ? [deep ? nx.u.replace(/\.html$/, '-in-depth.html') : nx.u, nx.code + ': ' + nx.t, '— ' + nx.n]
-      : ['/workpapers/wp-04-what-keeps-coming-back.html', 'Put it to work: What keeps coming back? (WP-04)', '— one short page, once a month'];
+    var b = BOOK[i];
     var box = endCard();
     placeAtEnd(main, box);
-    function draw() { fillEnd(box, b.gain, next, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters read.</span> '); }
+    nextUnder(box);
+    function draw() { fillEnd(box, b.gain, null, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters read.</span> '); }
     draw();
     // read: the end of the chapter came into view
     if ('IntersectionObserver' in window) {
@@ -485,7 +759,8 @@
       if (!box) {
         box = endCard();
         if (T.atEnd || anchor === main) placeAtEnd(main, box); else anchor.after(box);
-        fillEnd(box, T.gain, T.next, '');
+        fillEnd(box, T.gain, null, '');
+        nextUnder(box);
         if (!S.did[path]) { S.did[path] = Date.now(); save(); }
         celebrate('tool:' + path, 'You tried the ' + T.t, true);
       }
@@ -552,8 +827,11 @@
 
   var HUBS = /^\/(pause-and-play|contents|start-here|learn\/index|quest)\.html$/;
   function start() {
-    var main = doc.querySelector('main'); if (!main) return;
+    var main = doc.querySelector('main') || doc.querySelector('[role="main"]'); if (!main) return;
     if (isHome) return homePage(main);
+    mainEl = main;
+    // one recommended next step, also with the helpers hidden (it is the way on, not an extra)
+    if (wantsNext(main)) buildPanel(main);
     if (helpersOff()) return;
     if (bookIdx(simplePath) >= 0) return bookPage(main);
     if (TOOLS[path]) return toolPage(main);
@@ -562,5 +840,5 @@
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start); else start();
 
-  window.TOLComeBack = { plan: plan, state: function () { return JSON.parse(JSON.stringify(S)); } };
+  window.TOLComeBack = { plan: plan, state: function () { return JSON.parse(JSON.stringify(S)); }, mode: mode, setMode: setMode, recommend: recommend, didToday: didToday };
 })();
