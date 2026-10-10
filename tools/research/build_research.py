@@ -3,7 +3,7 @@
 
 Inputs (one entry per study, book or review; fields: id, authors, year, title, venue, doi, url,
 kind, finding, strength, topics, mentioned_on, verified, verified_by, note):
-    tools/research/refs-a.json, refs-b.json, refs-c.json
+    tools/research/refs-a.json, refs-b.json, refs-c.json, refs-d.json (calming supplements and herbs)
 
 Outputs:
     research.html                  "The research behind this site": every verified entry, grouped by topic
@@ -21,7 +21,7 @@ import sys
 from collections import OrderedDict, defaultdict
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
-SRC = [os.path.join(ROOT, 'tools', 'research', 'refs-%s.json' % k) for k in 'abc']
+SRC = [os.path.join(ROOT, 'tools', 'research', 'refs-%s.json' % k) for k in 'abcd']
 OUT_PAGE = os.path.join(ROOT, 'research.html')
 OUT_INDEX = os.path.join(ROOT, 'assets', 'js', 'research-index.js')
 COMMON_WORDS = os.path.join(ROOT, 'tools', 'chat', 'common-words.txt')
@@ -76,6 +76,10 @@ GROUPS = [
     ('stress', 'Stress, calm and rest',
      'What stress does to the body and mind, and what helps people settle.',
      'stress calm breathing sleep rest polyvagal allostatic-load window-of-tolerance resilience anxiety'),
+    ('supplements', 'Supplements, herbs and other approaches',
+     'What research says about calming supplements, herbs and other things people try for stress, sleep and low mood, '
+     'and how to use them safely.',
+     'supplements herbs supplement-safety regulation complementary-health'),
     ('helping', 'Helping, caring and burnout',
      'Caring for others without running dry, and why people do or don’t step in.',
      'burnout caregiving carer-burden compassion-fatigue helping kindness bystander limits'),
@@ -130,6 +134,7 @@ STRENGTH = OrderedDict([
 KIND = {
     'study': 'a study', 'book': 'a book', 'theory': 'a theory or model', 'review': 'a review of research',
     'meta-analysis': 'a meta-analysis (a study of many studies)', 'guideline': 'a guideline or official report',
+    'news': 'a news report',
 }
 
 STOP_FIRST = set()  # reserved

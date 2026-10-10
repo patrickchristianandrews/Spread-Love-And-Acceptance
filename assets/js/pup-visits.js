@@ -20,7 +20,7 @@
    pal cam), the calm visualizer, the fill-in workpapers, the legal pages, ask, 404 or offline.
    Placement: pinned in the page margin beside the section (at the height it was when they came),
    never over the text, on wide screens; on narrow screens they float just above the bottom edge,
-   above the Breathe button. Pinned to the screen, so the bubble stays readable while you scroll on.
+   above the Breathe button, and not while a field, a box you open or a tool card is in that strip. Pinned to the screen, so the bubble stays readable while you scroll on.
    The pups are decorative (aria-hidden). The bubble is never announced (it sits at the end of the
    reading order, and the pup's name is hidden from screen readers); the
    bubble never takes focus; its link is a real link and its × a real 44px button.
@@ -124,11 +124,29 @@
   }
   function busy() {
     if (D.hidden) return true;
-    if (D.querySelector('.tol-bar [aria-expanded="true"]')) return true;
+    // a menu open in the header (sub-menus inside a closed menu say "expanded" too, but can't be seen)
+    var ex = D.querySelectorAll('.tol-bar [aria-expanded="true"]');
+    for (var j = 0; j < ex.length; j++) if (shown(ex[j])) return true;
     // typing, a video or episode playing, the pal cam open, or a tender page (site.js decides)
     if (window.TOLSite && (window.TOLSite.busy() || (window.TOLSite.sensitive && window.TOLSite.sensitive()))) return true;
     var list = D.querySelectorAll(BUSY);
     for (var i = 0; i < list.length; i++) if (!list[i].closest('.tpv') && shown(list[i])) return true;
+    return coversWork();
+  }
+  // On a phone the pups float just above the bottom edge, over the page. They stay away (or head off)
+  // while something you'd type in, open or read closely sits in that strip: a field, a "Why this works"
+  // box, a tool card. Wide screens don't need this: there they sit in the margin, never over the page.
+  var COVER = 'textarea, input:not([type="hidden"]), select, [contenteditable="true"], details, .tt-card, .tt-msg, [data-no-pup-cover]';
+  function coversWork() {
+    var vw = H.clientWidth, mr = main.getBoundingClientRect();
+    if (Math.max(mr.left, vw - mr.right) >= 190 && vw >= 900) return false;
+    var vh = window.innerHeight, band = vh - 300;              // the pups (about 120px) and a bubble above them
+    var list = D.querySelectorAll(COVER);
+    for (var i = 0; i < list.length; i++) {
+      var n = list[i]; if (n.closest('.tpv')) continue;
+      var r = n.getBoundingClientRect();
+      if (r.bottom > band && r.top < vh && r.height && shown(n)) return true;
+    }
     return false;
   }
 

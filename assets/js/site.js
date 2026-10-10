@@ -49,6 +49,7 @@
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
+      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'Chamomile, magnesium, ashwagandha, St John’s wort, melatonin and more: what helps, side effects and what to check with a pharmacist' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page grouped by who it’s about: just you, couples, friends, family, co-parents, housemates, work and life changes' },
@@ -116,6 +117,7 @@
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step: your battery, your wiring, what settles you and kind words, on your own' },
       { href: '/workpapers/fill/suite.html?road=self', code: 'Workpapers', title: 'Workpapers for you', note: 'The “Just me” road: the worksheets for the self path, in order, fillable and printable' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'One minute on your own conditions: a forecast, a talk window, what today is good for, and an optional 7-day log of your patterns' },
+      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs: what the research says', note: 'What the research shows for common calming supplements, herbs and other approaches, with side effects, interactions and when to get help' },
       { href: '/know-yourself.html', deep: true, code: 'New', title: 'Know your own wiring', note: 'What’s you, what life taught you, and what’s just today, and how to explain each one to others' },
       { href: '/complacency.html', deep: true, code: 'New', title: 'Complacency', note: 'What you’ve stopped checking in yourself, and a small monthly way to look again' },
       { href: '/growing-up.html', deep: true, code: 'New', title: 'Where your lens came from', note: 'How each stage of growing up shapes what you expect of yourself and others, and how to choose which rules to keep' },
@@ -319,6 +321,7 @@
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
+      { href: '/calming-supplements.html', code: 'New', title: 'Calming supplements and herbs: what the research says', note: 'What helps, what doesn’t, and what to check first' },
       { href: '/by-relationship.html', code: 'New', title: 'Everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/ladder.html', code: 'New', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/refusals.html', code: 'New', title: 'Say no kindly', note: 'Kind, clear ways to turn something down, with words you could use' },
@@ -466,6 +469,7 @@
       { sub: 'Settle yourself' },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
+      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs', note: 'What the research says, side effects, and what to check with a pharmacist' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
       { sub: 'Before you say it' },
       { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask, before you send' },
@@ -612,7 +616,7 @@
   function workKept() { try { return localStorage.getItem('tol-work-keep') === '1'; } catch (e) { return false; } }
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
-  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|outside-help)\.html$/;
+  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|outside-help|calming-supplements)\.html$/;
   // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
   // The soft colour wash stays. Calm and play pages keep their garden.
   var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|perspective-shifter|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
@@ -1608,6 +1612,7 @@
     ['print this|print the page|print this page|printable|printing', 'print']
   ].forEach(function (r) { r[0].split('|').forEach(function (k) { JOIN[k] = r[1]; }); });
   var ACT_MORE = {
+    supplement: ['/calming-supplements.html', '/outside-help.html'], supplements: 'supplement', herb: 'supplement', herbs: 'supplement', herbal: 'supplement', ashwagandha: 'supplement', chamomile: 'supplement', valerian: 'supplement', kava: 'supplement', melatonin: 'supplement', magnesium: 'supplement', cbd: 'supplement', 'l-theanine': 'supplement', theanine: 'supplement', lavender: 'supplement', 'st-johns-wort': 'supplement', wort: 'supplement', homeopathy: 'supplement', saffron: 'supplement', rhodiola: 'supplement', 'lemon-balm': 'supplement', passionflower: 'supplement', inositol: 'supplement', 'fish-oil': 'supplement', omega: 'supplement',
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', nintendo: 'gaming', fortnite: 'gaming', minecraft: 'gaming', esports: 'gaming', screentime: 'gaming', tiktok: 'gaming', scrolling: 'gaming', doomscrolling: 'gaming',
     coparenting: ['/co-parenting.html', '/on-my-own.html', '/parents.html#stepfamilies'], 'co-parenting': 'coparenting', 'co-parent': 'coparenting', 'co-parents': 'coparenting', coparent: 'coparenting', coparents: 'coparenting', custody: 'coparenting', handoff: 'coparenting', handoffs: 'coparenting', 'ex-husband': 'coparenting', 'ex-wife': 'coparenting', 'ex-partner': 'coparenting', ex: 'coparenting', exes: 'coparenting', holidayschedule: 'coparenting', separated: 'coparenting', separation: 'coparenting',
     onmyown: ['/on-my-own.html', '/co-parenting.html', '/grief.html'], divorce: 'onmyown', divorced: 'onmyown', divorcing: 'onmyown', breakup: 'onmyown', 'break-up': 'onmyown', single: 'onmyown', 'part-time': 'onmyown', heartbreak: 'onmyown', heartbroken: 'onmyown', dumped: 'onmyown',
@@ -3338,7 +3343,7 @@
   // breathe.js and loads the first time someone taps it.
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
-    var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>Breathe</span>');
+    var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>' + T('Breathe', 'Respirar') + '</span>');
     btn.setAttribute('aria-label', 'Breathe: take a breathing break');
     body.appendChild(btn);
     keepBreatheClear(btn);

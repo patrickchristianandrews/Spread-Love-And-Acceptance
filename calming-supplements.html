@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calming Supplements and Herbs: What the Research Says</title>
+<meta name="description" content="Chamomile, lavender, magnesium, ashwagandha, kava, St John’s wort, melatonin, CBD and more: what each is used for, what the research shows, side effects and who should avoid it. Plain words, real sources, not medical advice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<style>
+  /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .cs-note{ margin:1rem 0 1.4rem !important; padding:.8rem 1rem; border:1px solid var(--line); border-left:4px solid var(--brass); border-radius:12px; background:var(--paper); font-size:.97rem; }
+  .cs-note p{ margin:.25rem 0 !important; max-width:none !important; }
+  .cs-checked{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--ink-soft); }
+  .cs-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .cs-jump li{ margin:0 !important; max-width:none !important; }
+  .cs-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
+  .cs-jump a:hover{ border-color:var(--credit); }
+  .cs-cards{ display:grid; gap:.8rem; margin:.8rem 0 1.6rem; grid-template-columns:repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); }
+  .cs-card{ border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:.85rem 1rem .7rem; min-width:0; scroll-margin-top:calc(var(--tol-bar-h, 60px) + 1rem); }
+  .cs-card h3{ margin:0 0 .3rem !important; font-size:1.12rem !important; }
+  .cs-aka{ font-weight:400; font-size:.9rem; color:var(--ink-soft); }
+  .cs-tags{ margin:0 0 .5rem !important; display:flex; flex-wrap:wrap; gap:.35rem; }
+  .cs-badge{ display:inline-block; padding:.05rem .55rem; border-radius:999px; font:500 .75rem/1.6 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.02em; border:1px solid var(--ink-soft); color:var(--ink); background:var(--paper-deep); white-space:nowrap; }
+  .cs-b-good{ border-color:var(--credit); color:var(--credit); }
+  .cs-b-some{ border-color:var(--brass); color:var(--brass-ink); }
+  .cs-b-early, .cs-b-weak{ border-style:dashed; }
+  .cs-b-mixed{ border-color:var(--debit); color:var(--debit); }
+  .cs-b-none{ border-color:var(--debit); color:var(--debit); border-style:dashed; }
+  .cs-b-warn{ border-color:var(--debit); background:var(--debit); color:#FFFDF7; }
+  .cs-dl{ margin:0 !important; }
+  .cs-dl dt{ font-weight:600; font-size:.88rem; color:var(--ink-soft); margin:.45rem 0 .05rem; }
+  .cs-dl dd{ margin:0; font-size:.97rem; line-height:1.5; }
+  .cs-card p{ margin:.3rem 0 !important; max-width:none !important; font-size:.97rem; }
+  .cs-src{ font-size:.86rem !important; color:var(--ink-soft); margin-top:.55rem !important; overflow-wrap:anywhere; }
+  .cs-more{ margin:.4rem 0 0; border-top:1px dashed var(--line); }
+  .cs-more > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; font-size:.93rem; color:var(--brass-ink); }
+  .cs-more > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .cs-more-body p{ font-size:.94rem; }
+  .cs-mini p{ font-size:.96rem; }
+  .cs-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+  .cs-say p{ margin:.45rem 0 !important; font-style:italic; }
+  .cs-help{ margin:1rem 0 1.4rem !important; padding:.9rem 1rem; border-radius:14px; border:1px solid var(--line); border-left:4px solid var(--debit); background:var(--paper-deep); }
+  .cs-help p, .cs-help li{ max-width:none !important; }
+  .cs-help ul{ margin:.4rem 0 .2rem; padding-left:1.2rem; }
+  .cs-studies{ padding-left:1.4rem; margin:.6rem 0 1.4rem; }
+  .cs-studies li{ margin:.55rem 0; max-width:none; }
+  .cs-studies a{ overflow-wrap:anywhere; }
+  .cs-st-who, .cs-st-why{ display:block; font-size:.93rem; }
+  .cs-st-who{ color:var(--ink-soft); font-size:.86rem; }
+  .cs-all{ font-size:.88rem; padding-left:1.1rem; }
+  .cs-all li{ margin:.35rem 0; max-width:none; overflow-wrap:anywhere; }
+  .cs-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+  .cs-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+  .cs-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+  .cs-links a:hover{ border-color:var(--credit); }
+  .cs-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .cs-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+  @media print{ .cs-jump, .cs-more > summary{ display:none; } .cs-more{ border:0; } .cs-card{ break-inside:avoid; } }
+</style>
+<!-- seo:start -->
+<!-- seo:end -->
+</head>
+<body data-no-offer data-no-learnplay data-no-cheer data-no-pillars data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Guide · Your health</p><h1>Calming supplements and herbs: what the research says</h1></header>
+
+<p class="simple-lede">Lots of people reach for chamomile tea, magnesium or an herbal capsule when life feels like too much. Some of these may help a little. A few can be risky, especially alongside prescribed medicines. Here is what the research actually shows, in plain words, with a link to every source.</p>
+
+<div class="cs-note no-bubble" role="note" data-no-bubble>
+  <p><strong>Not medical advice.</strong> This page is general information from published research. It can’t know your health, your medicines or your situation. Before you start, stop or mix anything, ask a pharmacist or doctor. Never stop a prescribed medicine without talking to whoever prescribed it.</p>
+  <p class="cs-checked">Last checked: October 2026</p>
+</div>
+
+<div class="try-this" data-in-short>
+  <p><strong>In short:</strong></p>
+  <ul>
+    <li>The things with the best evidence for stress and worry are free: sleep, movement, slow breathing, less caffeine and alcohol, and talking to someone.</li>
+    <li>A few supplements have some research behind them, but the effects are usually small and the studies small.</li>
+    <li>“Natural” doesn’t mean safe. Kava and ashwagandha have liver warnings, and St John’s wort clashes with many medicines, including antidepressants and birth control pills.</li>
+    <li>Tell your pharmacist or doctor everything you take. If anxiety or low mood is stopping your daily life, get help: see <a href="#get-help">when to get help</a>.</li>
+  </ul>
+</div>
+
+<nav aria-label="On this page">
+<ul class="cs-jump no-bubble">
+  <li><a href="#start">Start here</a></li>
+  <li><a href="#common">The common ones</a></li>
+  <li><a href="#lesser-known">Lesser-known options</a></li>
+  <li><a href="#other">Other approaches</a></li>
+  <li><a href="#safety">Staying safe</a></li>
+  <li><a href="#get-help">When to get help</a></li>
+  <li><a href="#together">Living with someone</a></li>
+  <li><a href="#words">Words to use</a></li>
+  <li><a href="#studies">Best studies</a></li>
+</ul>
+</nav>
+
+<h2 id="start">Start here: what a supplement can and can’t do</h2>
+<p>A supplement can’t fix what is causing the stress: too much on your plate, a hard relationship, money, grief, or poor sleep. At best, some may take the edge off for a while. The things with the strongest evidence cost nothing:</p>
+<ul>
+  <li><strong>Sleep.</strong> A regular bedtime and a wind-down hour do more than most pills. The NHS lists good sleep among its first self-help steps for anxiety.</li>
+  <li><strong>Movement.</strong> Hundreds of trials show regular activity eases anxiety and low mood. A brisk walk counts.</li>
+  <li><strong>Slow breathing.</strong> Breathing out slowly, longer than you breathe in, settles the body. <a href="/night-garden.html" data-breathe>Take a one-minute Breathe break</a>.</li>
+  <li><strong>Less caffeine and alcohol.</strong> Caffeine can speed up your heart and disturb sleep; alcohol can make anxiety worse afterwards.</li>
+  <li><strong>Talking to someone.</strong> A friend, a helpline or a counsellor. Being heard is calming in itself.</li>
+</ul>
+<p class="cs-src">Sources: <a href="https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/" target="_blank" rel="noopener">NHS anxiety self-help<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://doi.org/10.1136/bjsports-2022-106195" target="_blank" rel="noopener">Singh and colleagues, 2023<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://doi.org/10.3389/fnhum.2018.00353" target="_blank" rel="noopener">Zaccaro and colleagues, 2018<span class="sr-only"> (opens a new tab)</span></a></p>
+<p>Tools on this site that help, all free and private:</p>
+<ul class="cs-links no-bubble">
+  <li><a href="/ladder.html"><strong>Where am I right now?</strong><span>Four taps to see if you are calm, revved up or running on empty, and what helps.</span></a></li>
+  <li><a href="/quick-checks.html#today"><strong>Today’s Weather</strong><span>A one-minute check on sleep, stress and energy, and what today is good for.</span></a></li>
+  <li><a href="/soundscapes.html"><strong>Calm music and sounds</strong><span>Slow music and soft sounds for winding down.</span></a></li>
+  <li><a href="/small-wins.html"><strong>Small wins</strong><span>Tiny steps that build momentum on a heavy day.</span></a></li>
+  <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>A five-minute page to pause, breathe and come back.</span></a></li>
+</ul>
+
+<h2 id="common">The common ones, honestly</h2>
+<p>Each card says what people use it for, what the research shows, side effects, and who should be careful. The labels mean:</p>
+<ul>
+  <li><span class="cs-badge cs-b-good">Good evidence</span> many good studies agree.</li>
+  <li><span class="cs-badge cs-b-some">Some evidence</span> several decent studies, with limits.</li>
+  <li><span class="cs-badge cs-b-early">Early evidence</span> a few small studies: a maybe.</li>
+  <li><span class="cs-badge cs-b-mixed">Mixed evidence</span> studies disagree, or it depends how it’s used.</li>
+  <li><span class="cs-badge cs-b-weak">Weak evidence</span> little or poor-quality research.</li>
+  <li><span class="cs-badge cs-b-none">No good evidence</span> tested, and no benefit found.</li>
+</ul>
+<div class="cs-cards no-bubble" data-no-bubble>
+<article class="cs-card" id="chamomile">
+<h3>Chamomile</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Worry, feeling on edge, and winding down at night, usually as a tea.</dd>
+<dt>What research shows</dt><dd>A few small studies hint it may ease long-running worry (generalized anxiety). For sleep, no clear benefit has been found.</dd>
+<dt>Watch out</dt><dd>Allergy if you react to ragweed; may interact with warfarin.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/chamomile" target="_blank" rel="noopener">NCCIH chamomile fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Likely safe in tea amounts. Allergic reactions can happen, especially in people allergic to ragweed or related plants.</dd><dt>Avoid it, or ask first, if</dt><dd>you take warfarin or other medicines processed by the liver. Early studies suggest it might make birth control pills work less well.</dd></dl><p>In the largest trial, people with generalized anxiety took chamomile for 12 weeks. Those who improved were then given chamomile or a dummy pill for six months. Symptoms stayed lower on chamomile, but the difference in relapses was not statistically clear (<a href="https://pubmed.ncbi.nlm.nih.gov/27912875/" target="_blank" rel="noopener">Mao and colleagues, 2016<span class="sr-only"> (opens a new tab)</span></a>).</p></div></details>
+</article>
+<article class="cs-card" id="lavender">
+<h3>Lavender</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Anxiety, stress and sleep. There are two very different ways to use it: <strong>lavender oil capsules</strong> made to be swallowed, and <strong>smelling</strong> the oil (aromatherapy).</dd>
+<dt>What research shows</dt><dd>Capsules have the better research: a few trials in anxiety disorders, with promising but not fully clear results. For smelling lavender, it is unclear whether it helps anxiety, stress or sleep.</dd>
+<dt>Watch out</dt><dd>Only swallow products made to be swallowed.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/lavender" target="_blank" rel="noopener">NCCIH lavender fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Capsules: stomach upset, headache, nausea, burping. Smelling it: sometimes headache or coughing. On skin: allergic rashes in some people.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant or breastfeeding, or take other medicines. Only swallow products made to be swallowed.</dd></dl><p>Most capsule trials used one standard product (Silexan). A 2019 review of five trials found the higher dose looked best, but the differences were not statistically clear (<a href="https://doi.org/10.1038/s41598-019-54529-9" target="_blank" rel="noopener">Yap and colleagues, 2019<span class="sr-only"> (opens a new tab)</span></a>).</p></div></details>
+</article>
+<article class="cs-card" id="l-theanine">
+<h3>L-theanine</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Feeling wired or stressed. It is an amino acid found in tea.</dd>
+<dt>What research shows</dt><dd>Nine small trials suggest 200 to 400 mg a day may take the edge off stress and anxiety in people under pressure. The reviewers said bigger, longer studies are needed.</dd>
+<dt>Watch out</dt><dd>Little safety research yet.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1007/s11130-019-00771-5" target="_blank" rel="noopener">Williams and colleagues, 2020<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Little research so far.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant, breastfeeding or on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="magnesium">
+<h3>Magnesium</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-weak">Weak evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Stress, anxiety, sleep and muscle cramps.</dd>
+<dt>What research shows</dt><dd>Of eight studies on anxiety, four found a benefit. The reviewers called the evidence poor quality, though it may help people who are prone to anxiety.</dd>
+<dt>Watch out</dt><dd>Over 350 mg a day from supplements can cause diarrhea. Ask first if you have kidney problems.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.3390/nu9050429" target="_blank" rel="noopener">Boyle and colleagues, 2017<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Too much from supplements causes diarrhea, nausea and cramps. The adult upper limit from supplements and medicines is 350 mg a day (food doesn’t count). Very large amounts can cause heart problems.</dd><dt>Avoid it, or ask first, if</dt><dd>you have kidney problems (healthy kidneys are what clear the extra), or you already take antacids or laxatives that contain magnesium.</dd></dl><p>Upper limits and side effects: <a href="https://ods.od.nih.gov/factsheets/Magnesium-Consumer/" target="_blank" rel="noopener">NIH Office of Dietary Supplements, magnesium<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="ashwagandha">
+<h3>Ashwagandha</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span> <span class="cs-badge cs-b-warn">Safety warnings</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Stress, anxiety and sleep. It is a herb from Ayurvedic medicine.</dd>
+<dt>What research shows</dt><dd>Small trials, pooled together, show lower stress and anxiety scores than a dummy pill. The anxiety result did not hold up when one trial was left out.</dd>
+<dt>Watch out</dt><dd>Rare liver injury; may affect the thyroid; concerns in pregnancy.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/" target="_blank" rel="noopener">NIH Office of Dietary Supplements, ashwagandha<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Liver injury has been reported, usually 2 to 12 weeks after starting. Most people recovered, but rare cases of liver failure have been described. It may also change thyroid hormone levels.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant or breastfeeding, have a thyroid condition or take thyroid medicine, have liver problems, or take medicines for diabetes, blood pressure, sleep or anxiety (sedatives), or to calm the immune system. It seems safe for up to about three months; longer use hasn’t been studied well.</dd></dl><p>The liver reports: <a href="https://www.ncbi.nlm.nih.gov/books/NBK548536/" target="_blank" rel="noopener">LiverTox (NIH)<span class="sr-only"> (opens a new tab)</span></a>. The pooled trials: <a href="https://doi.org/10.1002/ptr.7598" target="_blank" rel="noopener">Akhgarjand and colleagues, 2022<span class="sr-only"> (opens a new tab)</span></a>.</p><p>Denmark banned ashwagandha in food supplements in 2023, after a risk assessment said no safe dose could be set, and other European countries have looked at the same concerns. Supplement makers and some researchers dispute the Danish assessment (<a href="https://nutraingredients.com/Article/2023/05/17/Growing-concerns-over-safety-of-ashwagandha-in-EU-member-states" target="_blank" rel="noopener">NutraIngredients news report, 2023<span class="sr-only"> (opens a new tab)</span></a>).</p></div></details>
+</article>
+<article class="cs-card" id="valerian">
+<h3>Valerian</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Sleep, and sometimes anxiety.</dd>
+<dt>What research shows</dt><dd>Studies on sleep disagree, and a 2017 sleep-medicine guideline advised against it for long-term insomnia. Nothing conclusive for anxiety.</dd>
+<dt>Watch out</dt><dd>Don’t mix with alcohol or sleeping pills.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/valerian" target="_blank" rel="noopener">NCCIH valerian fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Headache, upset stomach, vivid dreams. Short-term use seems safe for most adults; long-term safety is unknown.</dd><dt>Avoid it, or ask first, if</dt><dd>you take anything else that makes you sleepy, drink alcohol, or need to drive.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="passionflower">
+<h3>Passionflower</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Anxiety, including nerves before surgery or the dentist.</dd>
+<dt>What research shows</dt><dd>A small amount of research suggests it might ease anxiety, but nothing is definite.</dd>
+<dt>Watch out</dt><dd>Stop before surgery unless your care team agrees.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/passionflower" target="_blank" rel="noopener">NCCIH passionflower fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>May be safe as a tea for up to 7 nights, or as a daily extract for up to 8 weeks.</dd><dt>Avoid it, or ask first, if</dt><dd>you have surgery coming up: it might interact with some anesthesia drugs, so stop it beforehand unless your care team says otherwise.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="lemon-balm">
+<h3>Lemon balm</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Anxiety, low mood and sleep.</dd>
+<dt>What research shows</dt><dd>Pooled trials found lower anxiety and low-mood scores than a dummy pill, especially in the short term. The trials differed a lot, so the reviewers urged caution.</dd>
+<dt>Watch out</dt><dd>No serious side effects in trials. Ask first if pregnant or on medicines.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1002/ptr.7252" target="_blank" rel="noopener">Ghazizadeh and colleagues, 2021<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>No serious side effects were reported in the trials.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant, breastfeeding or on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="kava">
+<h3>Kava</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span> <span class="cs-badge cs-b-warn">Liver warning</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Anxiety. It is a plant from the Pacific islands, taken as a drink or supplement.</dd>
+<dt>What research shows</dt><dd>An older review of 12 trials found it eased anxiety a little more than a dummy pill, but the effect was small and not solid.</dd>
+<dt>Watch out</dt><dd>Rare but serious liver damage. Never with alcohol or sedatives.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/kava" target="_blank" rel="noopener">NCCIH kava fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Rare but serious liver injury, including deaths, from supplements and from drinks. Heavy long-term use can cause dry, scaly, yellowish skin.</dd><dt>Avoid it, or ask first, if</dt><dd>you drink alcohol, take sleeping pills or anxiety medicines such as benzodiazepines, have liver problems, or are pregnant or breastfeeding. Most people are better off choosing something safer.</dd></dl><p>The older trial review: <a href="https://doi.org/10.1002/14651858.CD003383" target="_blank" rel="noopener">Pittler and colleagues, 2003<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="st-johns-wort">
+<h3>St John’s wort</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span> <span class="cs-badge cs-b-warn">Many interactions</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood more than anxiety.</dd>
+<dt>What research shows</dt><dd>Not consistently effective for depression, and not approved as a medicine for it in the US.</dd>
+<dt>Watch out</dt><dd>Clashes with many medicines, including antidepressants and birth control pills.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/st-johns-wort" target="_blank" rel="noopener">NCCIH St John’s wort fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Stomach upset, dizziness, confusion, tiredness, and burning more easily in the sun. Rarely, it can trigger psychosis in people with bipolar disorder.</dd><dt>Avoid it, or ask first, if</dt><dd>you take <strong>any</strong> prescribed medicine. It changes how the body handles many of them: <strong>antidepressants</strong> such as SSRIs (the mix can cause serotonin syndrome, with shaking, confusion and stiffness, and it can be life-threatening), <strong>birth control pills</strong> (they can stop working), <strong>blood thinners</strong> such as warfarin, <strong>HIV medicines</strong>, <strong>transplant medicines</strong> such as cyclosporine, digoxin, and benzodiazepines.</dd></dl><p>The list of interactions: <a href="https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" target="_blank" rel="noopener">NCCIH<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="melatonin">
+<h3>Melatonin</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-some">Some evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Sleep timing: jet lag and shift work. It is a hormone the body makes at night, not an anxiety treatment.</dd>
+<dt>What research shows</dt><dd>May help jet lag and shift-work sleep problems. Guidelines advise against it for long-term insomnia.</dd>
+<dt>Watch out</dt><dd>Can make you drowsy. Children only with a doctor’s advice. Prescription-only in the UK.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know" target="_blank" rel="noopener">NCCIH melatonin fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Uncommon: drowsiness, headache, dizziness, nausea. Long-term safety is less studied. In the US, the amount in a product can differ a lot from the label.</dd><dt>Avoid it, or ask first, if</dt><dd>you have epilepsy or take a blood thinner, have liver or kidney problems or an autoimmune condition, or need to drive soon after. <strong>Children:</strong> talk to a doctor first; good sleep habits come first. <strong>The rules differ by country:</strong> in the UK it is a prescription medicine, mainly for adults 55 and over; in the US it is sold as a supplement.</dd></dl><p>UK guidance on who can take it: <a href="https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/" target="_blank" rel="noopener">NHS<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="cbd">
+<h3>CBD (cannabidiol)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-weak">Weak evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Stress, anxiety, sleep and pain.</dd>
+<dt>What research shows</dt><dd>Only one CBD medicine is approved in the US: a purified prescription form for seizures in two rare, severe forms of epilepsy. For everyday stress or anxiety, there is little good research so far.</dd>
+<dt>Watch out</dt><dd>Can harm the liver and change how other medicines work.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis" target="_blank" rel="noopener">FDA: what you need to know about CBD<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>The FDA warns CBD can cause liver injury.</dd><dt>Avoid it, or ask first, if</dt><dd>you take other medicines: CBD can change how they work, which can cause serious side effects. The law on CBD products differs between countries and US states.</dd></dl><p>The one approved CBD medicine: <a href="https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm611046.htm" target="_blank" rel="noopener">FDA, 2018<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="omega-3">
+<h3>Omega-3 (fish oil)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood and anxiety.</dd>
+<dt>What research shows</dt><dd>Across 19 trials, omega-3 was linked with less anxiety, more clearly in people with a medical or mental health condition. The authors said it is too early to call it a first choice.</dd>
+<dt>Watch out</dt><dd>High doses with a blood thinner may cause bleeding.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1001/jamanetworkopen.2018.2327" target="_blank" rel="noopener">Su and colleagues, 2018<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Usually mild, such as an upset stomach.</dd><dt>Avoid it, or ask first, if</dt><dd>you take warfarin or another blood thinner: high doses may cause bleeding problems.</dd></dl><p>Side effects and bleeding: <a href="https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/" target="_blank" rel="noopener">NIH Office of Dietary Supplements, omega-3<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="saffron">
+<h3>Saffron</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood and anxiety, as a supplement rather than the cooking spice.</dd>
+<dt>What research shows</dt><dd>Across 23 trials, saffron eased low mood and anxiety more than a dummy pill. But there were signs that unhelpful results may be missing, and most trials came from one region, so the real effect may be smaller.</dd>
+<dt>Watch out</dt><dd>Little long-term safety research.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1093/nutrit/nuz023" target="_blank" rel="noopener">Marx and colleagues, 2019<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Long-term safety: little research so far.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant, breastfeeding or on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="rhodiola">
+<h3>Rhodiola</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-weak">Weak evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Tiredness, stress and mood.</dd>
+<dt>What research shows</dt><dd>Not enough reliable evidence to show it helps anything; most studies are low to moderate quality.</dd>
+<dt>Watch out</dt><dd>Possibly safe for up to 12 weeks; an interaction with losartan has been reported.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/rhodiola" target="_blank" rel="noopener">NCCIH rhodiola fact sheet<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Dizziness, headache, trouble sleeping, dry mouth. May be safe for up to 12 weeks.</dd><dt>Avoid it, or ask first, if</dt><dd>you take losartan (a blood pressure medicine), or are pregnant or breastfeeding.</dd></dl></div></details>
+</article>
+</div>
+
+<h2 id="lesser-known">Lesser-known options with promising research</h2>
+<p>You may see these called “powerful” online. The honest picture is that each has only a few studies, sometimes just one small one. They are interesting maybes, not proven treatments, and none of them replaces treatment a doctor has prescribed.</p>
+<div class="cs-cards no-bubble" data-no-bubble>
+<article class="cs-card" id="curcumin">
+<h3>Curcumin (from turmeric)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood.</dd>
+<dt>What research shows</dt><dd>Six short trials (4 to 8 weeks) found a small improvement in low mood compared with a dummy pill. Nobody knows yet whether it lasts.</dd>
+<dt>Watch out</dt><dd>“High-absorption” supplements may harm the liver.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1016/j.jamda.2016.12.071" target="_blank" rel="noopener">Ng and colleagues, 2017<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Supplements made to be “highly absorbable”, often with black pepper extract (piperine), may harm the liver. Products vary in how much curcumin they contain.</dd><dt>Avoid it, or ask first, if</dt><dd>you have liver problems or take other medicines.</dd></dl><p>Safety and product quality: <a href="https://www.nccih.nih.gov/health/turmeric" target="_blank" rel="noopener">NCCIH turmeric fact sheet<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="inositol">
+<h3>Inositol</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Panic attacks.</dd>
+<dt>What research shows</dt><dd>One small 1995 study of 21 people found 12 grams a day (a large amount) cut panic attacks more than a dummy powder. A later review of small trials found no clear benefit for anxiety overall.</dd>
+<dt>Watch out</dt><dd>The study used a large dose; stomach upset.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://pubmed.ncbi.nlm.nih.gov/7793450/" target="_blank" rel="noopener">Benjamin and colleagues, 1995<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Stomach upset was a little more common than on the dummy pill.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant or on other medicines.</dd></dl><p>The later review: <a href="https://pubmed.ncbi.nlm.nih.gov/24424706/" target="_blank" rel="noopener">Mukai and colleagues, 2014<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="glycine">
+<h3>Glycine</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Sleep. It is an amino acid.</dd>
+<dt>What research shows</dt><dd>In a small study of poor sleepers, 3 grams before bed helped people feel they slept better and fell asleep sooner, and they were less sleepy the next day.</dd>
+<dt>Watch out</dt><dd>Little safety research yet.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1111/j.1479-8425.2007.00262.x" target="_blank" rel="noopener">Yamadera and colleagues, 2007<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Little research so far.</dd><dt>Avoid it, or ask first, if</dt><dd>you are pregnant or on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="tart-cherry">
+<h3>Tart cherry juice</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Sleep.</dd>
+<dt>What research shows</dt><dd>A pilot study of 15 older adults with insomnia, linked to a cherry industry group, found a modest drop in time awake at night.</dd>
+<dt>Watch out</dt><dd>Mind the sugar if you have diabetes.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3133468/" target="_blank" rel="noopener">Pigeon and colleagues, 2010<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>It is juice: think about the sugar if you have diabetes.</dd><dt>Avoid it, or ask first, if</dt><dd>you have diabetes.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="holy-basil">
+<h3>Holy basil (tulsi)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Stress. Often taken as a tea.</dd>
+<dt>What research shows</dt><dd>A review of 24 mostly small studies reported good results for stress, blood sugar and blood pressure, with no significant side effects. The reviewers asked for more research on dose and form.</dd>
+<dt>Watch out</dt><dd>May lower blood sugar: ask first if you take diabetes medicine.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1155/2017/9217567" target="_blank" rel="noopener">Jamshidi and colleagues, 2017<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>No significant side effects reported in the studies.</dd><dt>Avoid it, or ask first, if</dt><dd>you take diabetes medicine (it may lower blood sugar too), or are pregnant.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="zinc">
+<h3>Zinc</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood, sometimes alongside prescribed treatment.</dd>
+<dt>What research shows</dt><dd>A few small trials found zinc lowered depression scores, but a 2022 review found this only when zinc was taken on its own, not added to antidepressants. Earlier reviews disagreed. Never use it in place of prescribed treatment.</dd>
+<dt>Watch out</dt><dd>No more than 40 mg a day for adults. Never instead of prescribed treatment.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://pubmed.ncbi.nlm.nih.gov/32829928/" target="_blank" rel="noopener">Yosaee and colleagues, 2022<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>The adult upper limit is 40 mg a day. Too much causes nausea, vomiting and headaches, and over time can lower copper levels.</dd><dt>Avoid it, or ask first, if</dt><dd>you already take a multivitamin or cold remedy with zinc.</dd></dl><p>Upper limits and side effects: <a href="https://ods.od.nih.gov/factsheets/Zinc-Consumer/" target="_blank" rel="noopener">NIH Office of Dietary Supplements, zinc<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="probiotics">
+<h3>Probiotics (“psychobiotics”)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood and anxiety, through the gut.</dd>
+<dt>What research shows</dt><dd>Across 34 trials, prebiotics (fibre supplements) did no better than a dummy pill. Probiotics showed small effects, mostly in people with a diagnosed condition. The best strains and doses are unknown.</dd>
+<dt>Watch out</dt><dd>Ask first if you are unwell.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1016/j.neubiorev.2019.03.023" target="_blank" rel="noopener">Liu and colleagues, 2019<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Not covered by the review.</dd><dt>Avoid it, or ask first, if</dt><dd>you are unwell or on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="nac">
+<h3>N-acetylcysteine (NAC)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood.</dd>
+<dt>What research shows</dt><dd>Five trials (574 people, mostly with other conditions too) found it eased low mood a little more than a dummy pill.</dd>
+<dt>Watch out</dt><dd>Minor side effects in trials. Ask first if you take other medicines.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://pubmed.ncbi.nlm.nih.gov/27137430/" target="_blank" rel="noopener">Fernandes and colleagues, 2016<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Only minor side effects in the trials.</dd><dt>Avoid it, or ask first, if</dt><dd>you are on other medicines.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="vitamin-d">
+<h3>Vitamin D</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-none">No good evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood, especially in winter.</dd>
+<dt>What research shows</dt><dd>In a very large trial of 18,353 adults aged 50 and over, five years of vitamin D did not prevent depression or lift mood. Most of them were not low in vitamin D to begin with.</dd>
+<dt>Watch out</dt><dd>If a blood test shows you are low, that is a question for your doctor.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1001/jama.2020.10224" target="_blank" rel="noopener">Okereke and colleagues, 2020<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Not the issue here.</dd><dt>Avoid it, or ask first, if</dt><dd>a blood test shows you are low: that is a separate question for your doctor.</dd></dl></div></details>
+</article>
+</div>
+<h3 id="no-pill">Natural medicine without a pill</h3>
+<p>Some of the best-supported “natural” options don’t come in a bottle.</p>
+<div class="cs-cards no-bubble" data-no-bubble>
+<article class="cs-card" id="exercise">
+<h3>Movement</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-good">Good evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Low mood, anxiety and stress.</dd>
+<dt>What research shows</dt><dd>Hundreds of trials show physical activity eases depression, anxiety and distress. Walking or jogging, yoga and strength training did especially well.</dd>
+<dt>Watch out</dt><dd>Start gently. Ask what is safe if you have a heart condition.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1136/bjsports-2022-106195" target="_blank" rel="noopener">Singh and colleagues, 2023<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Aches; start gently if you have been inactive.</dd><dt>Avoid it, or ask first, if</dt><dd>you have a heart or other health condition: ask what is safe for you.</dd></dl><p>Which kinds of exercise helped most: <a href="https://jyx.jyu.fi/handle/123456789/93572" target="_blank" rel="noopener">Noetel and colleagues, 2024<span class="sr-only"> (opens a new tab)</span></a>.</p></div></details>
+</article>
+<article class="cs-card" id="nature">
+<h3>Time in nature (“forest bathing”)</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Stress, worry and low mood.</dd>
+<dt>What research shows</dt><dd>Twenty studies found time among trees eased anxiety, low mood and anger in the short term. Longer, stronger studies are still needed.</dd>
+<dt>Watch out</dt><dd>Low risk.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://repository.derby.ac.uk/item/93x3y/effects-of-shinrin-yoku-forest-bathing-and-nature-therapy-on-mental-health-a-systematic-review-and-meta-analysis" target="_blank" rel="noopener">Kotera and colleagues, 2022<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>None to speak of. Mind ticks and the weather.</dd><dt>Avoid it, or ask first, if</dt><dd>never: but go with someone if being alone outdoors feels unsafe.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="daylight">
+<h3>Daylight</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Winter low mood and sleep timing.</dd>
+<dt>What research shows</dt><dd>The NHS suggests getting as much natural daylight as you can. Light boxes help some people, but the NHS says there isn’t enough evidence to be sure.</dd>
+<dt>Watch out</dt><dd>Ask before using a light box if you have an eye condition.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/" target="_blank" rel="noopener">NHS: seasonal affective disorder treatment<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Light boxes can be a problem for some eyes.</dd><dt>Avoid it, or ask first, if</dt><dd>you have an eye condition or take medicine that makes you sensitive to light: check before using a light box.</dd></dl></div></details>
+</article>
+<article class="cs-card" id="connection">
+<h3>People</h3>
+<p class="cs-tags"><span class="cs-badge cs-b-good">Good evidence</span></p>
+<dl class="cs-dl">
+<dt>Used for</dt><dd>Everything. Feeling less alone.</dd>
+<dt>What research shows</dt><dd>Across 148 studies, people with stronger social ties were more likely to survive over the years studied. That shows a strong link, though it can’t prove cause.</dd>
+<dt>Watch out</dt><dd>Low risk.</dd>
+</dl>
+<p class="cs-src">Source: <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">Holt-Lunstad and colleagues, 2010<span class="sr-only"> (opens a new tab)</span></a></p>
+<details class="cs-more"><summary>Side effects and who should avoid it</summary><div class="cs-more-body"><dl class="cs-dl"><dt>Side effects</dt><dd>Some people drain you. Choose the ones who leave you calmer.</dd><dt>Avoid it, or ask first, if</dt><dd>never.</dd></dl></div></details>
+</article>
+</div>
+<details class="deeper">
+  <summary>Go deeper: what we left out, and why</summary>
+  <div class="deeper-body">
+    <p>We also looked at bacopa, echium (Persian borage) and magnolia bark. We left them out because the research we could check on calm or mood was too thin, or mostly about other things such as memory. Leaving something out doesn’t mean it is harmful; it means we couldn’t confirm enough to say anything useful.</p>
+  </div>
+</details>
+
+<h2 id="other">Other approaches, graded honestly</h2>
+<div class="cs-cards no-bubble" data-no-bubble>
+<article class="cs-card cs-mini" id="breathing"><h3>Slow breathing</h3><p class="cs-tags"><span class="cs-badge cs-b-some">Some evidence</span></p><p>Breathing out slowly and steadily is linked with feeling calmer and less wound up. Free, quick and safe. Try the <a href="/night-garden.html" data-breathe>Breathe break</a>.</p><p class="cs-src">Source: <a href="https://doi.org/10.3389/fnhum.2018.00353" target="_blank" rel="noopener">Zaccaro and colleagues, 2018<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="mindfulness"><h3>Mindfulness and meditation</h3><p class="cs-tags"><span class="cs-badge cs-b-some">Some evidence</span></p><p>Across 47 trials, mindfulness programs gave small improvements in anxiety, low mood and pain. They were not better than other active choices, such as exercise.</p><p class="cs-src">Source: <a href="https://pubmed.ncbi.nlm.nih.gov/24395196/" target="_blank" rel="noopener">Goyal and colleagues, 2014<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="yoga"><h3>Yoga</h3><p class="cs-tags"><span class="cs-badge cs-b-some">Some evidence</span></p><p>May ease anxiety and low mood symptoms; unclear for anxiety disorders. Generally safe with a qualified teacher.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety" target="_blank" rel="noopener">NCCIH yoga fact sheet<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="tai-chi"><h3>Tai chi</h3><p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p><p>Safe and gentle. Research on mood is limited, but it may lift mood and quality of life in people living with some long-term illnesses.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know" target="_blank" rel="noopener">NCCIH tai chi fact sheet<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="massage"><h3>Massage</h3><p class="cs-tags"><span class="cs-badge cs-b-mixed">Mixed evidence</span></p><p>May ease anxiety in some settings, but results are inconsistent, and it hasn’t been shown to treat generalized anxiety. Low risk.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know" target="_blank" rel="noopener">NCCIH massage fact sheet<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="acupuncture"><h3>Acupuncture</h3><p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p><p>Some studies are positive, but many are poor quality. Use a licensed practitioner with sterile, single-use needles.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science" target="_blank" rel="noopener">NCCIH: anxiety and complementary approaches<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="aromatherapy"><h3>Aromatherapy</h3><p class="cs-tags"><span class="cs-badge cs-b-weak">Weak evidence</span></p><p>It is unclear whether smelling lavender or other oils helps anxiety, stress or sleep. Pleasant and low risk if you don’t swallow the oils.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/lavender" target="_blank" rel="noopener">NCCIH lavender fact sheet<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="music"><h3>Music</h3><p class="cs-tags"><span class="cs-badge cs-b-early">Early evidence</span></p><p>Early research suggests music can ease anxiety, for example while waiting for surgery. Try the <a href="/soundscapes.html">calm music and sounds</a> here.</p><p class="cs-src">Source: <a href="https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know" target="_blank" rel="noopener">NCCIH music and health<span class="sr-only"> (opens a new tab)</span></a></p></article>
+<article class="cs-card cs-mini" id="homeopathy"><h3>Homeopathy</h3><p class="cs-tags"><span class="cs-badge cs-b-none">No good evidence</span></p><p>There is no good-quality evidence that homeopathy works for any health condition. If you use it, don’t let it replace treatment that works.</p><p class="cs-src">Source: <a href="https://www.nhs.uk/tests-and-treatments/homeopathy/" target="_blank" rel="noopener">NHS: homeopathy<span class="sr-only"> (opens a new tab)</span></a></p></article>
+</div>
+
+<h2 id="safety">Staying safe</h2>
+<ul>
+  <li><strong>“Natural” doesn’t mean safe.</strong> Plants contain active chemicals. That is why some can help, and why some can harm.</li>
+  <li><strong>Supplements aren’t checked like medicines before they are sold.</strong> In the US, the FDA does not approve supplements before they reach shops; makers are responsible for safety. In the UK, herbal medicines with a <strong>THR</strong> mark are registered for quality and safety, based on traditional use rather than trials.</li>
+  <li><strong>Quality varies.</strong> Products can contain more, less or something other than the label says. Look for an independent testing mark such as <strong>USP Verified</strong> or <strong>NSF</strong>. These check what is in the bottle, not whether it works.</li>
+  <li><strong>Tell your doctor and pharmacist what you take,</strong> including teas and gummies, every time a new medicine is started.</li>
+  <li><strong>Pregnancy and breastfeeding:</strong> ask first. Many herbs have not been well tested in pregnancy.</li>
+  <li><strong>Children and teens:</strong> talk to their doctor before giving any calming or sleep supplement, including melatonin.</li>
+  <li><strong>Liver or kidney problems:</strong> ask first. Several herbs on this page have liver warnings, and the kidneys clear minerals such as magnesium.</li>
+  <li><strong>Before surgery:</strong> tell the team everything you take. Some herbs, such as passionflower, may interact with anesthesia.</li>
+  <li><strong>Never mix sedating herbs</strong> (such as valerian, kava or passionflower) with alcohol, sleeping pills, opioid painkillers or benzodiazepines. Together they can slow breathing and make you dangerously drowsy.</li>
+  <li><strong>Don’t stop a prescribed medicine</strong> to switch to a herb without talking to the person who prescribed it. Some medicines need to be reduced slowly.</li>
+  <li><strong>Driving:</strong> if something makes you sleepy, don’t drive or use machines until you know how it affects you.</li>
+</ul>
+<p class="cs-src">Sources: <a href="https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements" target="_blank" rel="noopener">FDA: supplements Q&amp;A<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/" target="_blank" rel="noopener">NHS: herbal medicines<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://www.gov.uk/drug-safety-update/introduction-of-the-traditional-herbal-registration-certification-mark" target="_blank" rel="noopener">MHRA: the THR mark<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://www.usp.org/verification-services/dietary-supplements-verification-program" target="_blank" rel="noopener">USP Verified<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://www.nsf.org/testing/health/nutritional-supplements-cosmetics-personal-care-products/product-and-ingredient-certification" target="_blank" rel="noopener">NSF certification<span class="sr-only"> (opens a new tab)</span></a> · <a href="https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" target="_blank" rel="noopener">NCCIH: herb-drug interactions<span class="sr-only"> (opens a new tab)</span></a></p>
+
+<h2 id="get-help">When to get help instead</h2>
+<div class="cs-help no-bubble" role="note" data-no-bubble>
+  <p><strong>Please reach out to a doctor, a counsellor or a helpline if:</strong></p>
+  <ul>
+    <li>panic attacks don’t settle, or keep coming back;</li>
+    <li>anxiety or worry is stopping you working, sleeping, eating or seeing people;</li>
+    <li>you have felt low or numb most days for two weeks or more;</li>
+    <li>you are having thoughts of harming yourself.</li>
+  </ul>
+  <p>Free, any time: in the US, call or text <strong>988</strong> (the Suicide &amp; Crisis Lifeline). In the UK and Ireland, call Samaritans on <strong>116 123</strong>. In an emergency, call 911 or 999.</p>
+  <p><a href="/outside-help.html">Help beyond this site</a> lists counsellors, helplines and support groups. Afraid of someone at home? <a href="/safety.html">Not safe at home?</a> has private help.</p>
+</div>
+
+<h2 id="together">If you live with someone</h2>
+<p>Partners, family and housemates often have strong and different views about “natural” remedies. A few kind ground rules help:</p>
+<ul>
+  <li><strong>Don’t pressure anyone off their prescribed medicine</strong> in favour of herbs. That decision belongs to them and their prescriber.</li>
+  <li><strong>Share what you take.</strong> If you were ever unwell or confused, the person you live with could tell paramedics. A note on the fridge or in your phone works.</li>
+  <li><strong>Respect different views.</strong> One of you may love herbal teas and the other may trust only medicine. You don’t have to agree; you only need to be safe.</li>
+  <li><strong>Watch the shared shelf.</strong> Keep supplements, especially sweet gummies, away from children and pets.</li>
+</ul>
+
+<h2 id="words">Words you could use</h2>
+<div class="cs-say" data-keep-steps>
+  <p>To a pharmacist: “I take sertraline and I’m thinking of trying St John’s wort. Is that safe together?”</p>
+  <p>“I take [your medicine] every day. Is [the supplement] safe with it, and is there anything I should watch for?”</p>
+  <p>To your doctor: “I’ve been taking ashwagandha for stress. Should I keep going, and do I need a blood test?”</p>
+  <p>To someone you live with: “I’m trying a magnesium supplement for sleep. I’m telling you so you know what I take.”</p>
+  <p>If someone pushes a remedy on you: “Thanks for caring. I’ll ask my pharmacist before I try anything new.”</p>
+</div>
+
+<h2 id="studies">The most useful studies to read</h2>
+<p>If you want to read further, these are the best places to start. Each opens in a new tab.</p>
+<ol class="cs-studies no-bubble" data-no-bubble>
+<li><a href="https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science" target="_blank" rel="noopener"><strong>Anxiety and complementary health approaches: What the science says</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">NCCIH</span><span class="cs-st-why">The calmest, fairest overview of herbs and other approaches for anxiety, from the US health research agency.</span></li>
+<li><a href="https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches" target="_blank" rel="noopener"><strong>Stress, anxiety, and sleep problems: Considering complementary approaches</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">NCCIH</span><span class="cs-st-why">A free plain-language guide to stress, anxiety and sleep: what helps, and what is safe.</span></li>
+<li><a href="https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/" target="_blank" rel="noopener"><strong>Self-help: generalised anxiety disorder in adults</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">NHS</span><span class="cs-st-why">The NHS self-help steps for anxiety, which cost nothing.</span></li>
+<li><a href="https://doi.org/10.1136/bjsports-2022-106195" target="_blank" rel="noopener"><strong>Effectiveness of physical activity interventions for improving depression, anxiety and distress: an overview of systematic reviews</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Singh and colleagues, 2023</span><span class="cs-st-why">The biggest look yet at exercise for low mood and anxiety: about 1,000 trials.</span></li>
+<li><a href="https://jyx.jyu.fi/handle/123456789/93572" target="_blank" rel="noopener"><strong>Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Noetel and colleagues, 2024</span><span class="cs-st-why">Which kinds of exercise help depression most, and how they compare with therapy and medicine.</span></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/24395196/" target="_blank" rel="noopener"><strong>Meditation programs for psychological stress and well-being: A systematic review and meta-analysis</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Goyal and colleagues, 2014</span><span class="cs-st-why">A careful review of meditation that is honest about small effects.</span></li>
+<li><a href="https://doi.org/10.1001/jamanetworkopen.2018.2327" target="_blank" rel="noopener"><strong>Association of use of omega-3 polyunsaturated fatty acids with changes in severity of anxiety symptoms: A systematic review and meta-analysis</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Su and colleagues, 2018</span><span class="cs-st-why">The main review of omega-3 and anxiety.</span></li>
+<li><a href="https://doi.org/10.1093/nutrit/nuz023" target="_blank" rel="noopener"><strong>Effect of saffron supplementation on symptoms of depression and anxiety: A systematic review and meta-analysis</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Marx and colleagues, 2019</span><span class="cs-st-why">Saffron’s promising results, with the authors’ own warnings about bias.</span></li>
+<li><a href="https://doi.org/10.1002/ptr.7252" target="_blank" rel="noopener"><strong>The effects of lemon balm (Melissa officinalis L.) on depression and anxiety in clinical trials: A systematic review and meta-analysis</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Ghazizadeh and colleagues, 2021</span><span class="cs-st-why">Lemon balm trials pooled, with their limits.</span></li>
+<li><a href="https://doi.org/10.1002/14651858.CD003383" target="_blank" rel="noopener"><strong>Kava extract versus placebo for treating anxiety</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Pittler and colleagues, 2003</span><span class="cs-st-why">Kava’s small benefit, from the Cochrane collaboration. Read with the liver warning.</span></li>
+<li><a href="https://www.nccih.nih.gov/health/st-johns-wort" target="_blank" rel="noopener"><strong>St. John’s Wort: Usefulness and safety</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">NCCIH</span><span class="cs-st-why">Why St John’s wort and prescribed medicines often don’t mix.</span></li>
+<li><a href="https://doi.org/10.1001/jama.2020.10224" target="_blank" rel="noopener"><strong>Effect of long-term vitamin D3 supplementation vs placebo on risk of depression or clinically relevant depressive symptoms and on change in mood scores: A randomized clinical trial</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">Okereke and colleagues, 2020</span><span class="cs-st-why">A huge trial that found vitamin D did not prevent depression: a good reminder to test ideas.</span></li>
+<li><a href="https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements" target="_blank" rel="noopener"><strong>Questions and answers on dietary supplements</strong><span class="sr-only"> (opens a new tab)</span></a><span class="cs-st-who">FDA</span><span class="cs-st-why">How supplements are (and aren’t) checked in the US.</span></li>
+</ol>
+
+<details class="deeper" id="all-sources">
+  <summary>Every source on this page</summary>
+  <div class="deeper-body">
+<ul class="cs-all">
+<li>Akhgarjand, C., Asoudeh, F., Bagheri, A., et al. (2022). <a href="https://doi.org/10.1002/ptr.7598" target="_blank" rel="noopener">Does Ashwagandha supplementation have a beneficial effect on the management of anxiety and stress? A systematic review and meta-analysis of randomized controlled trials</a>. Phytotherapy Research, 36(11), 4115–4124.</li>
+<li>Benjamin, J., Levine, J., Fux, M., Aviv, A., Levy, D., &amp; Belmaker, R. H. (1995). <a href="https://pubmed.ncbi.nlm.nih.gov/7793450/" target="_blank" rel="noopener">Double-blind, placebo-controlled, crossover trial of inositol treatment for panic disorder</a>. American Journal of Psychiatry, 152(7), 1084–1086.</li>
+<li>Boyle, N. B., Lawton, C., &amp; Dye, L. (2017). <a href="https://doi.org/10.3390/nu9050429" target="_blank" rel="noopener">The effects of magnesium supplementation on subjective anxiety and stress: A systematic review</a>. Nutrients, 9(5), 429.</li>
+<li>Fernandes, B. S., et al. (2016). <a href="https://pubmed.ncbi.nlm.nih.gov/27137430/" target="_blank" rel="noopener">N-acetylcysteine in depressive symptoms and functionality: A systematic review and meta-analysis</a>. Journal of Clinical Psychiatry, 77(4), e457–e466.</li>
+<li>Ghazizadeh et al. (2021). <a href="https://doi.org/10.1002/ptr.7252" target="_blank" rel="noopener">The effects of lemon balm (Melissa officinalis L.) on depression and anxiety in clinical trials: A systematic review and meta-analysis</a>. Phytotherapy Research, 35(12), 6690–6705.</li>
+<li>Goyal, M., et al. (2014). <a href="https://pubmed.ncbi.nlm.nih.gov/24395196/" target="_blank" rel="noopener">Meditation programs for psychological stress and well-being: A systematic review and meta-analysis</a>. JAMA Internal Medicine, 174(3), 357–368.</li>
+<li>Holt-Lunstad, J., Smith, T. B., &amp; Layton, J. B. (2010). <a href="https://doi.org/10.1371/journal.pmed.1000316" target="_blank" rel="noopener">Social relationships and mortality risk: A meta-analytic review</a>. PLoS Medicine, 7(7), e1000316.</li>
+<li>Jamshidi, N., &amp; Cohen, M. M. (2017). <a href="https://doi.org/10.1155/2017/9217567" target="_blank" rel="noopener">The clinical efficacy and safety of tulsi in humans: A systematic review of the literature</a>. Evidence-Based Complementary and Alternative Medicine, 2017, 9217567.</li>
+<li>Kotera, Y., Richardson, M., &amp; Sheffield, D. (2022). <a href="https://repository.derby.ac.uk/item/93x3y/effects-of-shinrin-yoku-forest-bathing-and-nature-therapy-on-mental-health-a-systematic-review-and-meta-analysis" target="_blank" rel="noopener">Effects of shinrin-yoku (forest bathing) and nature therapy on mental health: A systematic review and meta-analysis</a>. International Journal of Mental Health and Addiction, 20, 337–361.</li>
+<li>Liu, R. T., Walsh, R. F. L., &amp; Sheehan, A. E. (2019). <a href="https://doi.org/10.1016/j.neubiorev.2019.03.023" target="_blank" rel="noopener">Prebiotics and probiotics for depression and anxiety: A systematic review and meta-analysis of controlled clinical trials</a>. Neuroscience &amp; Biobehavioral Reviews, 102, 13–23.</li>
+<li>LiverTox, National Institute of Diabetes and Digestive and Kidney Diseases (US) (web page, checked October 2026). <a href="https://www.ncbi.nlm.nih.gov/books/NBK548536/" target="_blank" rel="noopener">Ashwagandha</a>. LiverTox: Clinical and research information on drug-induced liver injury (NCBI Bookshelf).</li>
+<li>Mao, J. J., et al. (2016). <a href="https://pubmed.ncbi.nlm.nih.gov/27912875/" target="_blank" rel="noopener">Long-term chamomile (Matricaria chamomilla L.) treatment for generalized anxiety disorder: A randomized clinical trial</a>. Phytomedicine, 23(14), 1735–1742.</li>
+<li>Marx, W., et al. (2019). <a href="https://doi.org/10.1093/nutrit/nuz023" target="_blank" rel="noopener">Effect of saffron supplementation on symptoms of depression and anxiety: A systematic review and meta-analysis</a>. Nutrition Reviews, 77(8), 557–571.</li>
+<li>Medicines and Healthcare products Regulatory Agency (MHRA), UK (web page, checked October 2026). <a href="https://www.gov.uk/drug-safety-update/introduction-of-the-traditional-herbal-registration-certification-mark" target="_blank" rel="noopener">Introduction of the Traditional Herbal Registration certification mark</a>. Drug Safety Update (GOV.UK).</li>
+<li>Mukai, T., Kishi, T., Matsuda, Y., &amp; Iwata, N. (2014). <a href="https://pubmed.ncbi.nlm.nih.gov/24424706/" target="_blank" rel="noopener">A meta-analysis of inositol for depression and anxiety disorders</a>. Human Psychopharmacology, 29(1), 55–63.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/chamomile" target="_blank" rel="noopener">Chamomile: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/lavender" target="_blank" rel="noopener">Lavender: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/valerian" target="_blank" rel="noopener">Valerian: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/passionflower" target="_blank" rel="noopener">Passionflower: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/kava" target="_blank" rel="noopener">Kava: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/st-johns-wort" target="_blank" rel="noopener">St. John’s Wort: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science" target="_blank" rel="noopener">Herb-drug interactions: What the science says</a>. NCCIH Clinical Digest.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know" target="_blank" rel="noopener">Melatonin: What you need to know</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/rhodiola" target="_blank" rel="noopener">Rhodiola: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/turmeric" target="_blank" rel="noopener">Turmeric: Usefulness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety" target="_blank" rel="noopener">Yoga: Effectiveness and safety</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know" target="_blank" rel="noopener">Tai chi: What you need to know</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know" target="_blank" rel="noopener">Massage therapy: What you need to know</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science" target="_blank" rel="noopener">Anxiety and complementary health approaches: What the science says</a>. NCCIH Clinical Digest.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know" target="_blank" rel="noopener">Music and health: What you need to know</a>. NCCIH fact sheet.</li>
+<li>National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health (web page, checked October 2026). <a href="https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches" target="_blank" rel="noopener">Stress, anxiety, and sleep problems: Considering complementary approaches</a>. NCCIH eBook.</li>
+<li>Ng et al. (2017). <a href="https://doi.org/10.1016/j.jamda.2016.12.071" target="_blank" rel="noopener">Clinical use of curcumin in depression: A meta-analysis</a>. Journal of the American Medical Directors Association, 18(6), 503–508.</li>
+<li>NHS (National Health Service, England) (web page, checked October 2026). <a href="https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/" target="_blank" rel="noopener">Who can and cannot take melatonin</a>. NHS medicines information (nhs.uk).</li>
+<li>NHS (National Health Service, England) (web page, checked October 2026). <a href="https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/" target="_blank" rel="noopener">Treatment: Seasonal affective disorder (SAD)</a>. NHS website (nhs.uk).</li>
+<li>NHS (National Health Service, England) (web page, checked October 2026). <a href="https://www.nhs.uk/tests-and-treatments/homeopathy/" target="_blank" rel="noopener">Homeopathy</a>. NHS website (nhs.uk).</li>
+<li>NHS (National Health Service, England) (web page, checked October 2026). <a href="https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/" target="_blank" rel="noopener">Self-help: generalised anxiety disorder in adults</a>. NHS website (nhs.uk).</li>
+<li>NHS (National Health Service, England) (web page, checked October 2026). <a href="https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/" target="_blank" rel="noopener">Herbal medicines and complementary therapies</a>. NHS website (nhs.uk).</li>
+<li>Noetel, M., et al. (2024). <a href="https://jyx.jyu.fi/handle/123456789/93572" target="_blank" rel="noopener">Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials</a>. BMJ, 384, e075847.</li>
+<li>NSF (web page, checked October 2026). <a href="https://www.nsf.org/testing/health/nutritional-supplements-cosmetics-personal-care-products/product-and-ingredient-certification" target="_blank" rel="noopener">Product and ingredient certification (dietary supplements, NSF/ANSI 173)</a>. NSF website.</li>
+<li>NutraIngredients (2023). <a href="https://nutraingredients.com/Article/2023/05/17/Growing-concerns-over-safety-of-ashwagandha-in-EU-member-states" target="_blank" rel="noopener">Growing concerns over safety of ashwagandha in EU member states</a>. NutraIngredients (trade news report).</li>
+<li>Office of Dietary Supplements (ODS), US National Institutes of Health (web page, checked October 2026). <a href="https://ods.od.nih.gov/factsheets/Magnesium-Consumer/" target="_blank" rel="noopener">Magnesium: Fact sheet for consumers</a>. ODS fact sheet.</li>
+<li>Office of Dietary Supplements (ODS), US National Institutes of Health (web page, checked October 2026). <a href="https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/" target="_blank" rel="noopener">Ashwagandha: Fact sheet for consumers</a>. ODS fact sheet.</li>
+<li>Office of Dietary Supplements (ODS), US National Institutes of Health (web page, checked October 2026). <a href="https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/" target="_blank" rel="noopener">Omega-3 fatty acids: Fact sheet for consumers</a>. ODS fact sheet.</li>
+<li>Office of Dietary Supplements (ODS), US National Institutes of Health (web page, checked October 2026). <a href="https://ods.od.nih.gov/factsheets/Zinc-Consumer/" target="_blank" rel="noopener">Zinc: Fact sheet for consumers</a>. ODS fact sheet.</li>
+<li>Okereke et al. (2020). <a href="https://doi.org/10.1001/jama.2020.10224" target="_blank" rel="noopener">Effect of long-term vitamin D3 supplementation vs placebo on risk of depression or clinically relevant depressive symptoms and on change in mood scores: A randomized clinical trial</a>. JAMA, 324(5), 471–480.</li>
+<li>Pigeon et al. (2010). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3133468/" target="_blank" rel="noopener">Effects of a tart cherry juice beverage on the sleep of older adults with insomnia: A pilot study</a>. Journal of Medicinal Food.</li>
+<li>Pittler, M. H., &amp; Ernst, E. (2003). <a href="https://doi.org/10.1002/14651858.CD003383" target="_blank" rel="noopener">Kava extract versus placebo for treating anxiety</a>. Cochrane Database of Systematic Reviews, CD003383.</li>
+<li>Singh, B., et al. (2023). <a href="https://doi.org/10.1136/bjsports-2022-106195" target="_blank" rel="noopener">Effectiveness of physical activity interventions for improving depression, anxiety and distress: an overview of systematic reviews</a>. British Journal of Sports Medicine.</li>
+<li>Su, K.-P., Tseng, P.-T., Lin, P.-Y., et al. (2018). <a href="https://doi.org/10.1001/jamanetworkopen.2018.2327" target="_blank" rel="noopener">Association of use of omega-3 polyunsaturated fatty acids with changes in severity of anxiety symptoms: A systematic review and meta-analysis</a>. JAMA Network Open.</li>
+<li>United States Pharmacopeia (USP) (web page, checked October 2026). <a href="https://www.usp.org/verification-services/dietary-supplements-verification-program" target="_blank" rel="noopener">USP’s Dietary Supplement Verification Program</a>. USP website.</li>
+<li>US Food and Drug Administration (FDA) (web page, checked October 2026). <a href="https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis" target="_blank" rel="noopener">What you need to know (and what we’re working to find out) about products containing cannabis or cannabis-derived compounds, including CBD</a>. FDA Consumer Update.</li>
+<li>US Food and Drug Administration (FDA) (web page, checked October 2026). <a href="https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements" target="_blank" rel="noopener">Questions and answers on dietary supplements</a>. FDA website.</li>
+<li>US Food and Drug Administration (FDA) (2018). <a href="https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm611046.htm" target="_blank" rel="noopener">FDA approves first drug comprised of an active ingredient derived from marijuana to treat rare, severe forms of epilepsy</a>. FDA news release.</li>
+<li>Williams, J. L., Everett, J. M., et al. (2020). <a href="https://doi.org/10.1007/s11130-019-00771-5" target="_blank" rel="noopener">The effects of green tea amino acid L-theanine consumption on the ability to manage stress and anxiety levels: A systematic review</a>. Plant Foods for Human Nutrition, 75, 12–23.</li>
+<li>Yamadera et al. (2007). <a href="https://doi.org/10.1111/j.1479-8425.2007.00262.x" target="_blank" rel="noopener">Glycine ingestion improves subjective sleep quality in human volunteers, correlating with polysomnographic changes</a>. Sleep and Biological Rhythms.</li>
+<li>Yap et al. (2019). <a href="https://doi.org/10.1038/s41598-019-54529-9" target="_blank" rel="noopener">Efficacy and safety of lavender essential oil (Silexan) capsules among patients suffering from anxiety disorders: A network meta-analysis</a>. Scientific Reports, 9, 18042.</li>
+<li>Yosaee et al. (2022). <a href="https://pubmed.ncbi.nlm.nih.gov/32829928/" target="_blank" rel="noopener">Zinc in depression: From development to treatment: A comparative/dose response meta-analysis of observational studies and randomized controlled trials</a>. General Hospital Psychiatry, 74, 110–117.</li>
+<li>Zaccaro, A., Piarulli, A., Laurino, M., Garbella, E., Menicucci, D., Neri, B., &amp; Gemignani, A. (2018). <a href="https://doi.org/10.3389/fnhum.2018.00353" target="_blank" rel="noopener">How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing</a>. Frontiers in Human Neuroscience, 12, 353.</li>
+</ul>
+  </div>
+</details>
+
+<h2 id="more">More for your situation</h2>
+<ul class="cs-links no-bubble">
+  <li><a href="/wp-11.html"><strong>The Calm-Down Kit</strong><span>Decide ahead of time what settles you, before you need it.</span></a></li>
+  <li><a href="/self-path.html"><strong>Your self-discovery path</strong><span>Your battery, your wiring and what settles you, at your own pace.</span></a></li>
+  <li><a href="/library/stress.html"><strong>The Library: stress and the body</strong><span>How stress works, in plain words, with the research.</span></a></li>
+  <li><a href="/research.html"><strong>The research behind this site</strong><span>Every source the site leans on, with how strong it is.</span></a></li>
+</ul>
+
+<div class="cs-note no-bubble" role="note" data-no-bubble>
+  <p><strong>Not medical advice.</strong> This page is general information from published research. It can’t know your health, your medicines or your situation. Before you start, stop or mix anything, ask a pharmacist or doctor. Never stop a prescribed medicine without talking to whoever prescribed it.</p>
+  <p class="cs-checked">Last checked: October 2026</p>
+</div>
+</main>
+<script>
+/* "Breathe break" links open the site's own breathing break on this page (the link still goes to the Night Garden without it). */
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('a[data-breathe]');
+  if (!a) return;
+  var b = document.querySelector('.tol-breathe-btn');
+  if (b) { e.preventDefault(); b.click(); }
+});
+</script>
+</body>
+</html>

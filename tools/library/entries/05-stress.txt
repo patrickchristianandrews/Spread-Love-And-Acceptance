@@ -23,6 +23,7 @@ links:
 /workpapers/wp-02-how-much-are-you-carrying.html | How full is your battery? (WP-02)
 /book/chapter-3-in-depth.html#saturation | Chapter III in depth: saturation
 /quick-checks.html#today | Today’s Weather
+/calming-supplements.html | Calming supplements and herbs: what the research says
 talk:
 - What does stress feel like in your body before you notice it in your mind?
 - Is your usual stress response to fight, flee, freeze or reach for people?

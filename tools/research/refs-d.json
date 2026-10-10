@@ -1,0 +1,1303 @@
+[
+ {
+  "id": "nhs-gad-self-help",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Self-help: generalised anxiety disorder in adults",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/",
+  "kind": "guideline",
+  "finding": "The NHS self-help advice for anxiety includes regular exercise, relaxation and breathing exercises, good sleep, and cutting down on caffeine and alcohol, which can make anxiety and sleep worse.",
+  "strength": "moderate: official self-help advice built on research reviews; the advice is general, not tailored to one person.",
+  "topics": [
+   "supplements",
+   "anxiety",
+   "stress",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#start"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/ (search result, Oct 2026)"
+ },
+ {
+  "id": "singh-2023",
+  "authors": "Singh, B., et al.",
+  "year": 2023,
+  "title": "Effectiveness of physical activity interventions for improving depression, anxiety and distress: an overview of systematic reviews",
+  "venue": "British Journal of Sports Medicine",
+  "doi": "10.1136/bjsports-2022-106195",
+  "url": "https://doi.org/10.1136/bjsports-2022-106195",
+  "kind": "review",
+  "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
+  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "topics": [
+   "supplements",
+   "anxiety",
+   "stress",
+   "exercise"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#start",
+   "/calming-supplements.html#exercise"
+  ],
+  "verified": true,
+  "verified_by": "https://bjsm.bmj.com/content/bjsports/early/2023/07/11/bjsports-2022-106195.full.pdf ; https://www.unisa.edu.au/media-centre/Releases/2023/exercise-more-effective-than-medicines-to-manage-mental-health"
+ },
+ {
+  "id": "noetel-2024",
+  "authors": "Noetel, M., et al.",
+  "year": 2024,
+  "title": "Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials",
+  "venue": "BMJ, 384, e075847",
+  "doi": null,
+  "url": "https://jyx.jyu.fi/handle/123456789/93572",
+  "kind": "meta-analysis",
+  "finding": "Across 218 trials (about 14,000 people), exercise helped depression. Walking or jogging, yoga and strength training did best, especially at higher intensity, and yoga and strength training were well tolerated.",
+  "strength": "strong: many trials; the authors note most could not blind people to what they were doing, so expectations may add to the effect.",
+  "topics": [
+   "supplements",
+   "exercise"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#exercise",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://jyx.jyu.fi/handle/123456789/93572 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC11131084/ (correction notice)"
+ },
+ {
+  "id": "zaccaro-2018",
+  "authors": "Zaccaro, A., Piarulli, A., Laurino, M., Garbella, E., Menicucci, D., Neri, B., & Gemignani, A.",
+  "year": 2018,
+  "title": "How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing",
+  "venue": "Frontiers in Human Neuroscience, 12, 353",
+  "doi": "10.3389/fnhum.2018.00353",
+  "url": "https://doi.org/10.3389/fnhum.2018.00353",
+  "kind": "review",
+  "finding": "Slow breathing was linked with changes in heart-rate variability and with more comfort, relaxation and alertness and less arousal and anxiety.",
+  "strength": "moderate: consistent direction, but many included studies were small.",
+  "topics": [
+   "stress",
+   "calm",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#start"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/"
+ },
+ {
+  "id": "holt-lunstad-2010",
+  "authors": "Holt-Lunstad, J., Smith, T. B., & Layton, J. B.",
+  "year": 2010,
+  "title": "Social relationships and mortality risk: A meta-analytic review",
+  "venue": "PLoS Medicine, 7(7), e1000316",
+  "doi": "10.1371/journal.pmed.1000316",
+  "url": "https://doi.org/10.1371/journal.pmed.1000316",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
+  "strength": "strong — large meta-analysis of observational studies; causation not established",
+  "topics": [
+   "social-support",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#connection"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316"
+ },
+ {
+  "id": "nccih-anxiety-science",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Anxiety and complementary health approaches: What the science says",
+  "venue": "NCCIH Clinical Digest",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science",
+  "kind": "review",
+  "finding": "NCCIH found some evidence that meditation, music, relaxation techniques and melatonin may ease anxiety, especially around medical procedures, but no complementary approach has been proven to treat anxiety disorders. Acupuncture and massage studies are mixed and often of low quality.",
+  "strength": "moderate: a careful official summary of reviews; much of the underlying research is small.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#other",
+   "/calming-supplements.html#acupuncture",
+   "/calming-supplements.html#massage",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/providers/digest/anxiety-and-complementary-health-approaches-science (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-stress-ebook",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Stress, anxiety, and sleep problems: Considering complementary approaches",
+  "venue": "NCCIH eBook",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches",
+  "kind": "guideline",
+  "finding": "A free plain-language guide that goes through relaxation, meditation, music, yoga, melatonin and herbal supplements for stress, anxiety and sleep, with what is known about whether each helps and is safe.",
+  "strength": "moderate: an official summary for the public; it describes the evidence rather than adding new studies.",
+  "topics": [
+   "supplements",
+   "stress",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/stress-anxiety-and-sleep-problems-considering-complementary-approaches (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-chamomile",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Chamomile: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/chamomile",
+  "kind": "guideline",
+  "finding": "Studies have not produced enough reliable evidence to rate chamomile for specific conditions, though early studies hint at help for generalized anxiety. It is likely safe in tea amounts; people allergic to ragweed and related plants may react, and interactions with warfarin have been reported.",
+  "strength": "early: mostly small studies.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#chamomile"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/chamomile (search result, Oct 2026)"
+ },
+ {
+  "id": "mao-2016",
+  "authors": "Mao, J. J., et al.",
+  "year": 2016,
+  "title": "Long-term chamomile (Matricaria chamomilla L.) treatment for generalized anxiety disorder: A randomized clinical trial",
+  "venue": "Phytomedicine, 23(14), 1735–1742",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/27912875/",
+  "kind": "study",
+  "finding": "People with generalized anxiety who improved on chamomile were then given either chamomile or a dummy pill. Fewer relapsed on chamomile, but the difference was not statistically clear; symptoms stayed lower on chamomile.",
+  "strength": "early: one trial with 93 people in the randomized part.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#chamomile"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27912875/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC5646235/"
+ },
+ {
+  "id": "nccih-lavender",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Lavender: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/lavender",
+  "kind": "guideline",
+  "finding": "It is unclear whether lavender aromatherapy helps anxiety, stress, mood or sleep. Short-term use of oral lavender products at the doses studied for anxiety appears reasonably safe; side effects can include stomach upset, headache and burping.",
+  "strength": "mixed: oral lavender oil has better evidence than smelling it.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#lavender",
+   "/calming-supplements.html#aromatherapy"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/lavender (search result, Oct 2026)"
+ },
+ {
+  "id": "yap-2019",
+  "authors": "Yap et al.",
+  "year": 2019,
+  "title": "Efficacy and safety of lavender essential oil (Silexan) capsules among patients suffering from anxiety disorders: A network meta-analysis",
+  "venue": "Scientific Reports, 9, 18042",
+  "doi": "10.1038/s41598-019-54529-9",
+  "url": "https://doi.org/10.1038/s41598-019-54529-9",
+  "kind": "meta-analysis",
+  "finding": "Five trials of a standard lavender oil capsule (Silexan) for anxiety disorders were compared. The higher dose looked best, but the differences from the comparisons were not statistically clear.",
+  "strength": "early: few trials, and the differences were not statistically clear.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#lavender"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/31792285/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6889391/"
+ },
+ {
+  "id": "williams-everett-2020",
+  "authors": "Williams, J. L., Everett, J. M., et al.",
+  "year": 2020,
+  "title": "The effects of green tea amino acid L-theanine consumption on the ability to manage stress and anxiety levels: A systematic review",
+  "venue": "Plant Foods for Human Nutrition, 75, 12–23",
+  "doi": "10.1007/s11130-019-00771-5",
+  "url": "https://doi.org/10.1007/s11130-019-00771-5",
+  "kind": "review",
+  "finding": "Nine trials suggested 200–400 mg a day of L-theanine may help reduce stress and anxiety in people under stress. The authors said longer and larger studies are needed.",
+  "strength": "early: small, short studies.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#l-theanine"
+  ],
+  "verified": true,
+  "verified_by": "https://publications.aston.ac.uk/id/eprint/41068 ; https://researchprofiles.canberra.edu.au/en/publications/the-effects-of-green-tea-amino-acid-l-theanine-consumption-on-the/"
+ },
+ {
+  "id": "boyle-lawton-dye-2017",
+  "authors": "Boyle, N. B., Lawton, C., & Dye, L.",
+  "year": 2017,
+  "title": "The effects of magnesium supplementation on subjective anxiety and stress: A systematic review",
+  "venue": "Nutrients, 9(5), 429",
+  "doi": "10.3390/nu9050429",
+  "url": "https://doi.org/10.3390/nu9050429",
+  "kind": "review",
+  "finding": "Of eight studies of magnesium and anxiety, four found a benefit. The authors called the evidence suggestive for people prone to anxiety, but of poor quality.",
+  "strength": "early: poor-quality evidence, by the authors’ own judgement.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#magnesium"
+  ],
+  "verified": true,
+  "verified_by": "https://www.mdpi.com/2072-6643/9/5/429 ; https://eprints.whiterose.ac.uk/115878/"
+ },
+ {
+  "id": "ods-magnesium",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Magnesium: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/",
+  "kind": "guideline",
+  "finding": "The upper limit for adults is 350 mg a day from supplements and medicines (not food). Too much from supplements can cause diarrhea, nausea and cramps; extremely high amounts can cause serious heart problems.",
+  "strength": "strong: official intake guidance.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#magnesium"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Magnesium-Consumer/ ; https://ods.od.nih.gov/pdf/factsheets/magnesium-consumer.pdf"
+ },
+ {
+  "id": "ods-ashwagandha",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Ashwagandha: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/",
+  "kind": "guideline",
+  "finding": "Ashwagandha appears safe for up to about three months, but longer-term safety is unclear. It has been linked to liver injury in some people, may affect thyroid function and thyroid medicines, and may interact with diabetes, blood pressure, sedative and immune-suppressing drugs. There are concerns in pregnancy and breastfeeding.",
+  "strength": "moderate: official summary; the liver reports are case reports.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ashwagandha"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Ashwagandha-Consumer/?print=1 (search result, Oct 2026)"
+ },
+ {
+  "id": "livertox-ashwagandha",
+  "authors": "LiverTox, National Institute of Diabetes and Digestive and Kidney Diseases (US)",
+  "year": null,
+  "title": "Ashwagandha",
+  "venue": "LiverTox: Clinical and research information on drug-induced liver injury (NCBI Bookshelf)",
+  "doi": null,
+  "url": "https://www.ncbi.nlm.nih.gov/books/NBK548536/",
+  "kind": "review",
+  "finding": "Liver injury has been reported in people taking products labelled as ashwagandha, usually 2 to 12 weeks after starting. Most cases were mild to moderate and got better, but rare cases of liver failure have been described.",
+  "strength": "moderate: case reports show it can happen, not how often.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ashwagandha"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK548536/ (search result, Oct 2026)"
+ },
+ {
+  "id": "akhgarjand-2022",
+  "authors": "Akhgarjand, C., Asoudeh, F., Bagheri, A., et al.",
+  "year": 2022,
+  "title": "Does Ashwagandha supplementation have a beneficial effect on the management of anxiety and stress? A systematic review and meta-analysis of randomized controlled trials",
+  "venue": "Phytotherapy Research, 36(11), 4115–4124",
+  "doi": "10.1002/ptr.7598",
+  "url": "https://doi.org/10.1002/ptr.7598",
+  "kind": "meta-analysis",
+  "finding": "Pooling small trials, ashwagandha lowered stress and anxiety scores compared with a dummy pill, but the anxiety result was not robust when one trial was left out.",
+  "strength": "early: small, short trials.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ashwagandha"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.findlay.edu/index.php/gh/article/download/261/218 ; https://biolayne.com/reps/issue-14/ashwagandha-supplementation-for-stress-and-anxiety/"
+ },
+ {
+  "id": "nutraingredients-2023-ashwagandha",
+  "authors": "NutraIngredients",
+  "year": 2023,
+  "title": "Growing concerns over safety of ashwagandha in EU member states",
+  "venue": "NutraIngredients (trade news report)",
+  "doi": null,
+  "url": "https://nutraingredients.com/Article/2023/05/17/Growing-concerns-over-safety-of-ashwagandha-in-EU-member-states",
+  "kind": "news",
+  "finding": "Reports that Danish authorities, after a 2020 risk assessment found no safe dose could be set, moved against ashwagandha in supplements, and that other European countries were looking at the same concerns.",
+  "strength": "debated: industry groups and some researchers dispute the Danish assessment.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "regulation"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ashwagandha"
+  ],
+  "verified": true,
+  "verified_by": "https://nutraingredients.com/Article/2023/05/17/Growing-concerns-over-safety-of-ashwagandha-in-EU-member-states ; https://www.nutritioninsight.com/news/regulatory-update-spotlight-on-international-authorities-response-to-ashwagandha-safety-concerns.html"
+ },
+ {
+  "id": "nccih-valerian",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Valerian: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/valerian",
+  "kind": "guideline",
+  "finding": "Evidence on valerian for sleep is inconsistent, and a 2017 sleep-medicine guideline advised against it for long-term insomnia. There is little evidence for anxiety. Short-term use seems safe for most adults; side effects include headache, stomach upset and vivid dreams.",
+  "strength": "mixed: inconsistent studies for sleep.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#valerian"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/valerian (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-passionflower",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Passionflower: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/passionflower",
+  "kind": "guideline",
+  "finding": "A small amount of research suggests oral passionflower might ease anxiety, including before surgery or dental work, but conclusions are not definite. It might interact with some anesthesia drugs, so it is best avoided before surgery unless a clinician recommends it.",
+  "strength": "early: little research.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#passionflower"
+  ],
+  "verified": true,
+  "verified_by": "https://nccih.nih.gov/health/passionflower?nav=govd (search result, Oct 2026)"
+ },
+ {
+  "id": "ghazizadeh-2021",
+  "authors": "Ghazizadeh et al.",
+  "year": 2021,
+  "title": "The effects of lemon balm (Melissa officinalis L.) on depression and anxiety in clinical trials: A systematic review and meta-analysis",
+  "venue": "Phytotherapy Research, 35(12), 6690–6705",
+  "doi": "10.1002/ptr.7252",
+  "url": "https://doi.org/10.1002/ptr.7252",
+  "kind": "meta-analysis",
+  "finding": "Pooled trials found lemon balm lowered anxiety and depression scores compared with a dummy pill, with no serious side effects reported. The studies differed a lot, so the authors urged caution.",
+  "strength": "early: few, varied trials.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#lemon-balm"
+  ],
+  "verified": true,
+  "verified_by": "https://dro.deakin.edu.au/articles/journal_contribution/The_effects_of_lemon_balm_Melissa_officinalis_L_on_depression_and_anxiety_in_clinical_trials_A_systematic_review_and_meta-analysis/21021742 ; https://research.bond.edu.au/en/publications/the-effects-of-lemon-balm-melissa-officinalis-l-on-depression-and/"
+ },
+ {
+  "id": "nccih-kava",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Kava: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/kava",
+  "kind": "guideline",
+  "finding": "Kava has been linked to rare but serious liver injury, including deaths, with supplements and with drinks. It should not be combined with alcohol or sedatives such as benzodiazepines, and has special risks in pregnancy and breastfeeding.",
+  "strength": "strong: the liver warning is consistent across health agencies.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#kava"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/kava (search result, Oct 2026)"
+ },
+ {
+  "id": "pittler-ernst-2003",
+  "authors": "Pittler, M. H., & Ernst, E.",
+  "year": 2003,
+  "title": "Kava extract versus placebo for treating anxiety",
+  "venue": "Cochrane Database of Systematic Reviews, CD003383",
+  "doi": "10.1002/14651858.CD003383",
+  "url": "https://doi.org/10.1002/14651858.CD003383",
+  "kind": "meta-analysis",
+  "finding": "Across 12 trials, kava extract eased anxiety a little more than a dummy pill, but the effect was small and not robust. The review is now marked as out of date.",
+  "strength": "mixed: a small effect, and the review is old.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#kava"
+  ],
+  "verified": true,
+  "verified_by": "https://www.cochrane.org/evidence/CD003383_kava-extract-treating-anxiety ; https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003383/information/th"
+ },
+ {
+  "id": "nccih-st-johns-wort",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "St. John’s Wort: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/st-johns-wort",
+  "kind": "guideline",
+  "finding": "St John’s wort is not consistently effective for depression and is not approved as a medicine for it in the US. It interacts with many medicines, including birth control pills and some antidepressants, where the mix can cause a dangerous rise in serotonin.",
+  "strength": "moderate: official summary; trial results are mixed.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#st-johns-wort",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/st-johns-wort ; https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth (search results, Oct 2026)"
+ },
+ {
+  "id": "nccih-herb-drug",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Herb-drug interactions: What the science says",
+  "venue": "NCCIH Clinical Digest",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
+  "kind": "review",
+  "finding": "Lists clinically important interactions for St John’s wort, including cyclosporine (a transplant drug), indinavir (an HIV drug), birth control pills, warfarin, digoxin and benzodiazepines.",
+  "strength": "strong: interactions shown in studies of how the body handles drugs.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#st-johns-wort",
+   "/calming-supplements.html#safety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science (search result, Oct 2026) ; https://www.ncbi.nlm.nih.gov/books/NBK548880/"
+ },
+ {
+  "id": "nccih-melatonin",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Melatonin: What you need to know",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
+  "kind": "guideline",
+  "finding": "Melatonin may help jet lag and shift-work sleep problems, but guidelines advise against it for long-term insomnia. Short-term use seems safe for most people; long-term safety is less known. Amounts in products can differ from the label. People with epilepsy or on blood thinners should use it only with medical advice.",
+  "strength": "moderate: good for sleep timing, weak for insomnia.",
+  "topics": [
+   "supplements",
+   "sleep",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#melatonin"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know ; https://www.nccih.nih.gov/health/sleep-disorders-and-complementary-health-approaches (search results, Oct 2026)"
+ },
+ {
+  "id": "nhs-melatonin",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Who can and cannot take melatonin",
+  "venue": "NHS medicines information (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/",
+  "kind": "guideline",
+  "finding": "In the UK, melatonin is a prescribed medicine. Most adults aged 55 or over can take it for short-term sleep problems; younger adults and children can take it if a specialist recommends it. Tell a doctor first about liver or kidney problems or an autoimmune condition.",
+  "strength": "strong: official prescribing guidance.",
+  "topics": [
+   "supplements",
+   "sleep",
+   "regulation"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#melatonin"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/medicines/melatonin/who-can-and-cannot-take-melatonin/ (search result, Oct 2026)"
+ },
+ {
+  "id": "fda-cbd-consumer",
+  "authors": "US Food and Drug Administration (FDA)",
+  "year": null,
+  "title": "What you need to know (and what we’re working to find out) about products containing cannabis or cannabis-derived compounds, including CBD",
+  "venue": "FDA Consumer Update",
+  "doi": null,
+  "url": "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis",
+  "kind": "guideline",
+  "finding": "The FDA warns that CBD can cause liver injury and can change how other medicines work, which may cause serious side effects.",
+  "strength": "moderate: safety signals seen in the approved medicine’s trials.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis (search result, Oct 2026)"
+ },
+ {
+  "id": "fda-epidiolex-2018",
+  "authors": "US Food and Drug Administration (FDA)",
+  "year": 2018,
+  "title": "FDA approves first drug comprised of an active ingredient derived from marijuana to treat rare, severe forms of epilepsy",
+  "venue": "FDA news release",
+  "doi": null,
+  "url": "https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm611046.htm",
+  "kind": "guideline",
+  "finding": "In 2018 the FDA approved Epidiolex, a purified CBD medicine, for seizures in two rare, severe forms of childhood epilepsy, after three trials with 516 patients.",
+  "strength": "strong: an approval based on controlled trials, for epilepsy only.",
+  "topics": [
+   "supplements",
+   "regulation"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm611046.htm ; https://www.scientificamerican.com/article/fda-approves-countrys-first-marijuana-based-medicine"
+ },
+ {
+  "id": "su-2018",
+  "authors": "Su, K.-P., Tseng, P.-T., Lin, P.-Y., et al.",
+  "year": 2018,
+  "title": "Association of use of omega-3 polyunsaturated fatty acids with changes in severity of anxiety symptoms: A systematic review and meta-analysis",
+  "venue": "JAMA Network Open",
+  "doi": "10.1001/jamanetworkopen.2018.2327",
+  "url": "https://doi.org/10.1001/jamanetworkopen.2018.2327",
+  "kind": "meta-analysis",
+  "finding": "Across 19 trials (2,240 people), omega-3 was linked with less anxiety than control treatments, more clearly in people with a medical or psychiatric condition. The authors said it was too early to call it a first-line treatment.",
+  "strength": "early: promising, but trials vary.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#omega-3",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2702216 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6324500/"
+ },
+ {
+  "id": "ods-omega3",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Omega-3 fatty acids: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/",
+  "kind": "guideline",
+  "finding": "High doses of omega-3s may cause bleeding problems when taken with warfarin or other blood-thinning medicines.",
+  "strength": "strong: official guidance.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#omega-3"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/ (search result, Oct 2026)"
+ },
+ {
+  "id": "marx-2019",
+  "authors": "Marx, W., et al.",
+  "year": 2019,
+  "title": "Effect of saffron supplementation on symptoms of depression and anxiety: A systematic review and meta-analysis",
+  "venue": "Nutrition Reviews, 77(8), 557–571",
+  "doi": "10.1093/nutrit/nuz023",
+  "url": "https://doi.org/10.1093/nutrit/nuz023",
+  "kind": "meta-analysis",
+  "finding": "Across 23 trials, saffron eased depression and anxiety symptoms more than a dummy pill. The authors found signs that unhelpful results may be missing, and most trials came from one region.",
+  "strength": "early: large effects in small trials usually shrink with better studies.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#saffron",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://research.bond.edu.au/en/publications/effect-of-saffron-supplementation-on-symptoms-of-depression-and-a/ ; https://pure.bond.edu.au/ws/files/31402310/Effect_of_saffron_supplementation_on_symptoms_of_depression_and_anxiety.pdf"
+ },
+ {
+  "id": "nccih-rhodiola",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Rhodiola: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/rhodiola",
+  "kind": "guideline",
+  "finding": "There isn’t enough reliable evidence to show rhodiola helps any health problem, and most human research is low to moderate quality. It may be safe for up to 12 weeks; side effects include dizziness, headache, trouble sleeping and dry mouth.",
+  "strength": "early: little good research.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#rhodiola"
+  ],
+  "verified": true,
+  "verified_by": "https://nccih.nih.gov/health/rhodiola (search result, Oct 2026)"
+ },
+ {
+  "id": "ng-2017-curcumin",
+  "authors": "Ng et al.",
+  "year": 2017,
+  "title": "Clinical use of curcumin in depression: A meta-analysis",
+  "venue": "Journal of the American Medical Directors Association, 18(6), 503–508",
+  "doi": "10.1016/j.jamda.2016.12.071",
+  "url": "https://doi.org/10.1016/j.jamda.2016.12.071",
+  "kind": "meta-analysis",
+  "finding": "Six short trials (377 people, 4 to 8 weeks) found curcumin eased depression symptoms a little more than a dummy pill.",
+  "strength": "early: few, short trials.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#curcumin"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28236605/"
+ },
+ {
+  "id": "nccih-turmeric",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Turmeric: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/turmeric",
+  "kind": "guideline",
+  "finding": "There isn’t enough evidence to say turmeric or curcumin helps any health problem. Highly absorbable curcumin products may harm the liver, and products vary in how much curcumin they contain.",
+  "strength": "moderate: the liver warning rests on case reports.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#curcumin"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/turmeric (search result, Oct 2026)"
+ },
+ {
+  "id": "benjamin-1995",
+  "authors": "Benjamin, J., Levine, J., Fux, M., Aviv, A., Levy, D., & Belmaker, R. H.",
+  "year": 1995,
+  "title": "Double-blind, placebo-controlled, crossover trial of inositol treatment for panic disorder",
+  "venue": "American Journal of Psychiatry, 152(7), 1084–1086",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/7793450/",
+  "kind": "study",
+  "finding": "In 21 people with panic disorder, four weeks of high-dose inositol (12 g a day) cut the number and severity of panic attacks more than a dummy powder, with few side effects.",
+  "strength": "early: one small, short study.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#inositol"
+  ],
+  "verified": true,
+  "verified_by": "https://www.unboundmedicine.com/medline/citation/7793450/full_citation ; https://www.ovid.com/journals/ajps/abstract/00000465-199507000-00023"
+ },
+ {
+  "id": "mukai-2014",
+  "authors": "Mukai, T., Kishi, T., Matsuda, Y., & Iwata, N.",
+  "year": 2014,
+  "title": "A meta-analysis of inositol for depression and anxiety disorders",
+  "venue": "Human Psychopharmacology, 29(1), 55–63",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/24424706/",
+  "kind": "meta-analysis",
+  "finding": "Pooling the small trials, inositol did not clearly beat a dummy pill for depression, anxiety or obsessive-compulsive symptoms; there were weak hints of benefit in depression.",
+  "strength": "mixed: very few, small trials.",
+  "topics": [
+   "supplements",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#inositol"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24424706/ ; https://pure.fujita-hu.ac.jp/en/publications/a-meta-analysis-of-inositol-for-depression-and-anxiety-disorders/"
+ },
+ {
+  "id": "yamadera-2007",
+  "authors": "Yamadera et al.",
+  "year": 2007,
+  "title": "Glycine ingestion improves subjective sleep quality in human volunteers, correlating with polysomnographic changes",
+  "venue": "Sleep and Biological Rhythms",
+  "doi": "10.1111/j.1479-8425.2007.00262.x",
+  "url": "https://doi.org/10.1111/j.1479-8425.2007.00262.x",
+  "kind": "study",
+  "finding": "In a small study of poor sleepers, 3 g of glycine before bed improved how well people felt they slept, helped them fall asleep sooner, and lessened next-day sleepiness.",
+  "strength": "early: small studies from one research group.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#glycine"
+  ],
+  "verified": true,
+  "verified_by": "https://link.springer.com/article/10.1111/j.1479-8425.2007.00262.x"
+ },
+ {
+  "id": "pigeon-2010",
+  "authors": "Pigeon et al.",
+  "year": 2010,
+  "title": "Effects of a tart cherry juice beverage on the sleep of older adults with insomnia: A pilot study",
+  "venue": "Journal of Medicinal Food",
+  "doi": null,
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3133468/",
+  "kind": "study",
+  "finding": "In 15 older adults with insomnia, two weeks of tart cherry juice twice a day modestly reduced insomnia severity and time awake at night compared with a look-alike drink.",
+  "strength": "early: a 15-person pilot, linked to a cherry industry group.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#tart-cherry"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3133468 ; https://www.nutritionaloutlook.com/view/pilot-study-tart-cherry-may-help-insomniacs"
+ },
+ {
+  "id": "jamshidi-cohen-2017",
+  "authors": "Jamshidi, N., & Cohen, M. M.",
+  "year": 2017,
+  "title": "The clinical efficacy and safety of tulsi in humans: A systematic review of the literature",
+  "venue": "Evidence-Based Complementary and Alternative Medicine, 2017, 9217567",
+  "doi": "10.1155/2017/9217567",
+  "url": "https://doi.org/10.1155/2017/9217567",
+  "kind": "review",
+  "finding": "A review of 24 studies of holy basil (tulsi) reported good results for blood sugar, blood pressure and psychological stress, with no significant side effects. The studies were mostly small, and the authors asked for more research on dose and form.",
+  "strength": "early: small, varied studies.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#holy-basil"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28400848/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5376420/"
+ },
+ {
+  "id": "yosaee-2022",
+  "authors": "Yosaee et al.",
+  "year": 2022,
+  "title": "Zinc in depression: From development to treatment: A comparative/dose response meta-analysis of observational studies and randomized controlled trials",
+  "venue": "General Hospital Psychiatry, 74, 110–117",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/32829928/",
+  "kind": "meta-analysis",
+  "finding": "In a few small trials, zinc lowered depression scores in people with depression, but only when given on its own, not when added to antidepressants. People with more zinc in their diet had lower depression risk in observational studies.",
+  "strength": "early: few trials, and results differ from an earlier review.",
+  "topics": [
+   "supplements",
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#zinc"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32829928/"
+ },
+ {
+  "id": "ods-zinc",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Zinc: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Zinc-Consumer/",
+  "kind": "guideline",
+  "finding": "The upper limit for adults is 40 mg of zinc a day. Too much can cause nausea, vomiting, stomach upset and headaches, and over time can lower copper levels and immunity.",
+  "strength": "strong: official intake guidance.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#zinc"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Zinc-Consumer/ (search result, Oct 2026)"
+ },
+ {
+  "id": "liu-walsh-sheehan-2019",
+  "authors": "Liu, R. T., Walsh, R. F. L., & Sheehan, A. E.",
+  "year": 2019,
+  "title": "Prebiotics and probiotics for depression and anxiety: A systematic review and meta-analysis of controlled clinical trials",
+  "venue": "Neuroscience & Biobehavioral Reviews, 102, 13–23",
+  "doi": "10.1016/j.neubiorev.2019.03.023",
+  "url": "https://doi.org/10.1016/j.neubiorev.2019.03.023",
+  "kind": "meta-analysis",
+  "finding": "Across 34 trials, prebiotics did no better than a dummy pill for depression or anxiety. Probiotics showed small effects, mostly in people with a diagnosed condition.",
+  "strength": "mixed: small effects, and the best strains and doses are unknown.",
+  "topics": [
+   "supplements",
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#probiotics"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6584030 ; https://www.gutmicrobiotaforhealth.com/a-new-meta-analysis-of-controlled-clinical-trials-shows-the-antidepressant-and-anxiolytic-potential-of-probiotics"
+ },
+ {
+  "id": "okereke-2020",
+  "authors": "Okereke et al.",
+  "year": 2020,
+  "title": "Effect of long-term vitamin D3 supplementation vs placebo on risk of depression or clinically relevant depressive symptoms and on change in mood scores: A randomized clinical trial",
+  "venue": "JAMA, 324(5), 471–480",
+  "doi": "10.1001/jama.2020.10224",
+  "url": "https://doi.org/10.1001/jama.2020.10224",
+  "kind": "study",
+  "finding": "In 18,353 adults aged 50 and over followed for about five years, vitamin D3 (2,000 IU a day) did not lower the risk of depression or improve mood compared with a dummy pill.",
+  "strength": "strong: a very large, long trial; most people in it were not low in vitamin D.",
+  "topics": [
+   "supplements",
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#vitamin-d",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7403921/ ; https://read.qxmd.com/doi/10.1001/jama.2020.10224"
+ },
+ {
+  "id": "fernandes-2016",
+  "authors": "Fernandes, B. S., et al.",
+  "year": 2016,
+  "title": "N-acetylcysteine in depressive symptoms and functionality: A systematic review and meta-analysis",
+  "venue": "Journal of Clinical Psychiatry, 77(4), e457–e466",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/27137430/",
+  "kind": "meta-analysis",
+  "finding": "Five trials (574 people) found N-acetylcysteine eased depressive symptoms a little more than a dummy pill, with only minor side effects. The trials covered a mix of conditions.",
+  "strength": "early: few trials, mixed groups of people.",
+  "topics": [
+   "supplements",
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nac"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27137430/ ; https://www.psychiatrist.com/jcp/n-acetylcysteine-depressive-symptoms-functionality/"
+ },
+ {
+  "id": "kotera-2022",
+  "authors": "Kotera, Y., Richardson, M., & Sheffield, D.",
+  "year": 2022,
+  "title": "Effects of shinrin-yoku (forest bathing) and nature therapy on mental health: A systematic review and meta-analysis",
+  "venue": "International Journal of Mental Health and Addiction, 20, 337–361",
+  "doi": null,
+  "url": "https://repository.derby.ac.uk/item/93x3y/effects-of-shinrin-yoku-forest-bathing-and-nature-therapy-on-mental-health-a-systematic-review-and-meta-analysis",
+  "kind": "meta-analysis",
+  "finding": "Twenty studies found time in forests and nature therapy eased depression, anxiety and anger in the short term, with the biggest effect on anxiety. The authors asked for more rigorous, longer studies.",
+  "strength": "early: short-term effects, mixed study quality.",
+  "topics": [
+   "supplements",
+   "stress",
+   "nature"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nature"
+  ],
+  "verified": true,
+  "verified_by": "https://repository.derby.ac.uk/item/93x3y/effects-of-shinrin-yoku-forest-bathing-and-nature-therapy-on-mental-health-a-systematic-review-and-meta-analysis"
+ },
+ {
+  "id": "nhs-sad-treatment",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Treatment: Seasonal affective disorder (SAD)",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
+  "kind": "guideline",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS; check with a GP first if you have an eye condition or take medicines that make you sensitive to light.",
+  "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#daylight"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/ ; https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/ (search result, Oct 2026)"
+ },
+ {
+  "id": "goyal-2014",
+  "authors": "Goyal, M., et al.",
+  "year": 2014,
+  "title": "Meditation programs for psychological stress and well-being: A systematic review and meta-analysis",
+  "venue": "JAMA Internal Medicine, 174(3), 357–368",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/24395196/",
+  "kind": "meta-analysis",
+  "finding": "Across 47 trials (3,515 people), mindfulness programs gave small improvements in anxiety, depression and pain. They were not better than other active treatments such as exercise.",
+  "strength": "moderate: careful review; effects were small.",
+  "topics": [
+   "supplements",
+   "calm",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#mindfulness",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24395196/ ; https://stafforini.com/works/goyal-2014-meditation-programs-for/"
+ },
+ {
+  "id": "nccih-yoga",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Yoga: Effectiveness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety",
+  "kind": "guideline",
+  "finding": "Research suggests yoga may ease anxiety and depression symptoms, but it is unclear whether it helps anxiety disorders. It is generally safe for healthy people with a qualified teacher; sprains and strains can happen.",
+  "strength": "early: helpful for symptoms, unclear for disorders.",
+  "topics": [
+   "supplements",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#yoga"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/yoga-effectiveness-and-safety ; https://www.nccih.nih.gov/health/anxiety-and-complementary-health-approaches (search results, Oct 2026)"
+ },
+ {
+  "id": "nccih-tai-chi",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Tai chi: What you need to know",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know",
+  "kind": "guideline",
+  "finding": "Tai chi appears safe, with minor aches the most common problem. Research suggests it helps balance in older adults, and NCCIH notes it may improve mood and quality of life in some groups of people with long-term illness.",
+  "strength": "early: for mood, the research is limited.",
+  "topics": [
+   "supplements",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#tai-chi"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know ; https://www.nccih.nih.gov/health/tips/tips-what-you-should-know-about-tai-chi-for-health (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-massage",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Massage therapy: What you need to know",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know",
+  "kind": "guideline",
+  "finding": "Massage may ease anxiety in some settings, but results are inconsistent and it has not been shown to treat generalized anxiety disorder. Risks are low; rare serious problems have been reported, mostly with vigorous massage.",
+  "strength": "mixed: inconsistent results.",
+  "topics": [
+   "supplements",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#massage"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/massage-therapy-what-you-need-to-know (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-music",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Music and health: What you need to know",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know",
+  "kind": "guideline",
+  "finding": "Early research suggests music can ease anxiety, for example while waiting for surgery, and in people with cancer, though many studies had a risk of bias.",
+  "strength": "early: promising, with weaker studies.",
+  "topics": [
+   "supplements",
+   "calm",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#music"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-homeopathy",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Homeopathy",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/tests-and-treatments/homeopathy/",
+  "kind": "guideline",
+  "finding": "There is no good-quality evidence that homeopathy works for any health condition. NHS England stopped funding it in 2017.",
+  "strength": "strong: consistent across major reviews.",
+  "topics": [
+   "supplements",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#homeopathy"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/tests-and-treatments/homeopathy/ (search result, Oct 2026)"
+ },
+ {
+  "id": "fda-supplements-qa",
+  "authors": "US Food and Drug Administration (FDA)",
+  "year": null,
+  "title": "Questions and answers on dietary supplements",
+  "venue": "FDA website",
+  "doi": null,
+  "url": "https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements",
+  "kind": "guideline",
+  "finding": "In the US, the FDA does not approve dietary supplements before they are sold. Makers are responsible for safety and labels, and the FDA mostly acts after products are on the market.",
+  "strength": "strong: official description of the law.",
+  "topics": [
+   "supplements",
+   "regulation",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-herbal",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Herbal medicines and complementary therapies",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/",
+  "kind": "guideline",
+  "finding": "NHS advice is to look for the Traditional Herbal Registration (THR) mark and product code on herbal medicines, which show they meet UK standards for safety and quality.",
+  "strength": "strong: official guidance.",
+  "topics": [
+   "supplements",
+   "regulation",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/ (search result, Oct 2026)"
+ },
+ {
+  "id": "mhra-thr-mark",
+  "authors": "Medicines and Healthcare products Regulatory Agency (MHRA), UK",
+  "year": null,
+  "title": "Introduction of the Traditional Herbal Registration certification mark",
+  "venue": "Drug Safety Update (GOV.UK)",
+  "doi": null,
+  "url": "https://www.gov.uk/drug-safety-update/introduction-of-the-traditional-herbal-registration-certification-mark",
+  "kind": "guideline",
+  "finding": "The THR mark shows a herbal medicine is registered with the UK regulator. Registration needs evidence of safety, quality and long traditional use for minor conditions, not clinical trials showing it works.",
+  "strength": "strong: official description of the scheme.",
+  "topics": [
+   "supplements",
+   "regulation"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.gov.uk/drug-safety-update/introduction-of-the-traditional-herbal-registration-certification-mark ; https://www.gov.uk/apply-for-a-traditional-herbal-registration-thr"
+ },
+ {
+  "id": "usp-verification",
+  "authors": "United States Pharmacopeia (USP)",
+  "year": null,
+  "title": "USP’s Dietary Supplement Verification Program",
+  "venue": "USP website",
+  "doi": null,
+  "url": "https://www.usp.org/verification-services/dietary-supplements-verification-program",
+  "kind": "guideline",
+  "finding": "The USP Verified mark means a product was tested to contain what its label says, in the stated amounts, without harmful levels of specified contaminants, and was made under good manufacturing practice. It does not show that the product works.",
+  "strength": "strong: describes what the testing covers.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.usp.org/verification-services/dietary-supplements-verification-program ; https://www.usp.org/frequently-asked-questions/usp-verification-services"
+ },
+ {
+  "id": "nsf-173",
+  "authors": "NSF",
+  "year": null,
+  "title": "Product and ingredient certification (dietary supplements, NSF/ANSI 173)",
+  "venue": "NSF website",
+  "doi": null,
+  "url": "https://www.nsf.org/testing/health/nutritional-supplements-cosmetics-personal-care-products/product-and-ingredient-certification",
+  "kind": "guideline",
+  "finding": "NSF certification to its dietary supplement standard checks that a product contains what the label says and is screened for specified contaminants, with factory audits and retesting. It is not an approval that the product works.",
+  "strength": "strong: describes what the testing covers.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nsf.org/testing/health/nutritional-supplements-cosmetics-personal-care-products/product-and-ingredient-certification ; https://blog.ansi.org/ansi/nsf-ansi-173-2024-dietary-supplements/"
+ },
+ {
+  "id": "calabrese-2008-bacopa",
+  "authors": "Calabrese et al.",
+  "year": 2008,
+  "title": "Effects of a standardized Bacopa monnieri extract on cognitive performance, anxiety, and depression in the elderly",
+  "venue": "Journal of Alternative and Complementary Medicine",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": "Not used on the page.",
+  "strength": "early",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [],
+  "verified": false,
+  "verified_by": "Search found the record but not its anxiety results.",
+  "note": "Bacopa left out of the page: research is mostly about memory; anxiety evidence is thin and I could not confirm this trial’s anxiety result."
+ },
+ {
+  "id": "nhmrc-2015-homeopathy",
+  "authors": "National Health and Medical Research Council (Australia)",
+  "year": 2015,
+  "title": "NHMRC information paper: Evidence on the effectiveness of homeopathy for treating health conditions",
+  "venue": null,
+  "doi": null,
+  "url": null,
+  "kind": "review",
+  "finding": "Not used on the page.",
+  "strength": "debated",
+  "topics": [
+   "supplements",
+   "complementary-health"
+  ],
+  "mentioned_on": [],
+  "verified": false,
+  "verified_by": "Only news and partisan commentary found; the NHMRC page itself was not confirmed.",
+  "note": "Left out: the NHS homeopathy page covers the same point and was verified."
+ }
+]

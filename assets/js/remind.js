@@ -18,7 +18,9 @@
   if (!hosts.length) return;
   var SITE = 'https://spreadloveandacceptance.com';
   var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  var TIMES = [['07:30', '7:30 am'], ['12:30', '12:30 pm'], ['18:00', '6 pm'], ['19:30', '7:30 pm'], ['21:00', '9 pm']];
+  // times through the day and night (shift and night workers too), plus "Another time…" with a time box
+  var TIMES = [['06:00', '6 am'], ['07:30', '7:30 am'], ['10:00', '10 am'], ['12:30', '12:30 pm'], ['15:00', '3 pm'], ['16:30', '4:30 pm'],
+    ['18:00', '6 pm'], ['19:30', '7:30 pm'], ['21:00', '9 pm'], ['22:30', '10:30 pm'], ['23:30', '11:30 pm']];
   var TITLE = '10 minutes for me';
   var SIX_TITLE = 'My weekly half hour';
   function pad(n) { return (n < 10 ? '0' : '') + n; }
@@ -91,6 +93,7 @@
     '.tol-rm-row input[type=time]{min-height:44px;padding:.3rem .6rem;border-radius:10px;border:1.5px solid #D9C8F0;background:#FFFDF7;color:#2B2620;font:inherit}' +
     '.tol-rm-row input[type=time]:focus-visible{outline:3px solid var(--focus,#2B5B8C);outline-offset:2px}' +
     '.tol-rm-field{display:flex;flex-direction:column;gap:.15rem}' +
+    '.tol-remind .tol-rm-row[hidden]{display:none !important}' +
     '.tol-rm-dates{list-style:none;margin:.5rem 0 .6rem !important;padding:0 !important;display:flex;flex-wrap:wrap;gap:.3rem}' +
     '.tol-rm-dates li{margin:0 !important;padding:.2rem .6rem;border-radius:999px;background:#F3EEFA;font-size:.9rem;max-width:none}' +
     '.tol-rm-more{margin:.4rem 0 0}.tol-rm-more>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:.4rem;font-weight:600;list-style:none}' +
@@ -115,20 +118,30 @@
       '<p class="tol-rm-p">Pick a day and a time, and add a ten-minute reminder to your own calendar. It repeats every week and just says “' + TITLE + '”. Nothing is sent to us.</p>' +
       '<div class="tol-rm-row">' +
         '<label for="' + id + '-d">Day</label><select id="' + id + '-d">' + DAYS.map(function (d, i) { return '<option value="' + i + '"' + (i === 0 ? ' selected' : '') + '>' + d + '</option>'; }).join('') + '</select>' +
-        '<label for="' + id + '-t">Time</label><select id="' + id + '-t">' + TIMES.map(function (t, i) { return '<option value="' + t[0] + '"' + (i === 3 ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') + '</select>' +
+        '<label for="' + id + '-t">Time</label><select id="' + id + '-t" data-ten-more="1">' + TIMES.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === '19:30' ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') +
+          '<option value="own" data-own="1">Another time…</option></select>' +
       '</div>' +
+      '<div class="tol-rm-row" data-rm="own" hidden><label for="' + id + '-o">Your time</label><input type="time" id="' + id + '-o" value="14:00" step="300">' +
+        '<span class="tol-rm-small">Work nights or shifts? Pick a time when you’re usually awake and off work.</span></div>' +
       '<div class="tol-rm-row">' +
         '<button type="button" class="tol-rm-b" data-rm="ics">Add to my calendar</button>' +
         '<a class="tol-rm-b is-soft" data-rm="google" href="#" target="_blank" rel="noopener">Google Calendar<span class="sr-only"> (opens in a new tab)</span></a>' +
       '</div>' +
       '<p class="tol-rm-msg" role="status" aria-live="polite"></p>';
     var dSel = host.querySelector('#' + id + '-d'), tSel = host.querySelector('#' + id + '-t'), g = host.querySelector('[data-rm="google"]'), msg = host.querySelector('.tol-rm-msg');
-    function when() { return firstAt(+dSel.value, tSel.value); }
-    function refresh() { g.href = googleHref(TITLE, when(), 10, 'FREQ=WEEKLY', what + '\n' + to); }
-    dSel.addEventListener('change', refresh); tSel.addEventListener('change', refresh); refresh();
+    var ownRow = host.querySelector('[data-rm="own"]'), tIn = host.querySelector('#' + id + '-o');
+    function hm() {
+      if (tSel.value !== 'own') return tSel.value;
+      var m = /^(\d\d):(\d\d)/.exec(tIn.value || ''); return m ? m[1] + ':' + m[2] : '19:30';
+    }
+    function when() { return firstAt(+dSel.value, hm()); }
+    function refresh() { ownRow.hidden = tSel.value !== 'own'; g.href = googleHref(TITLE, when(), 10, 'FREQ=WEEKLY', what + '\n' + to); }
+    dSel.addEventListener('change', refresh);
+    tSel.addEventListener('change', function () { refresh(); if (tSel.value === 'own') tIn.focus(); });
+    tIn.addEventListener('change', refresh); tIn.addEventListener('input', refresh); refresh();
     host.querySelector('[data-rm="ics"]').addEventListener('click', function () {
       download(calendar('Weekly reminder', [event({ uid: uid(), start: when(), minutes: 10, rrule: 'FREQ=WEEKLY', title: TITLE, note: what + '\n' + to, url: to })]), 'ten-minutes-for-me.ics');
-      msg.textContent = 'Your calendar file is ready. Open it to add “' + TITLE + '”, every ' + DAYS[+dSel.value] + ' at ' + tSel.options[tSel.selectedIndex].text + '.';
+      msg.textContent = 'Your calendar file is ready. Open it to add “' + TITLE + '”, every ' + DAYS[+dSel.value] + ' at ' + niceTime(hm()) + '.';
     });
   }
 
