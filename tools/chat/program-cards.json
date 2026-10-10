@@ -384,6 +384,261 @@
       ]
     },
     {
+      "id": "herbshelp",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "calming supplements, when it is more than everyday stress",
+      "pat": "\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b.{0,60}\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|will not|does not|never) (stop|go away|end)|panic all the time|(low|down|depressed) for (weeks|months)|can t cope|cant cope|nothing helps|hopeless)\\b|\\b(panic (attacks? )?(that )?(won t|wont|doesn t|doesnt|never) (stop|go away)|(low|down|depressed) for (weeks|months))\\b.{0,60}\\b(herbs?|herbal|supplements?|natural remed\\w*|ashwagandha|kava|st johns? ?s? ?wort|saint johns? ?s? ?wort|chamomile|melatonin|magnesium|cbd|valerian|lavender|lemon balm|l ?theanine|passionflower|homeopath\\w*|rhodiola|saffron)\\b",
+      "keys": [],
+      "what": [
+        "I’m glad you asked. When panic won’t stop, or you’ve felt low for weeks, that’s more than a supplement can fix, and you deserve real help from a person.",
+        "In the US you can call or text 988 any time. In the UK and Ireland, Samaritans are free on 116 123. If you might be in danger right now, call 911 or 999. Your doctor can help too, and it’s worth telling them about any herbs or supplements you take."
+      ],
+      "links": [
+        [
+          "Getting help: when it’s more than everyday stress",
+          "/calming-supplements.html#get-help"
+        ],
+        [
+          "Help beyond this site",
+          "/outside-help.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbstjohns",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "St John’s wort and other medicines",
+      "pat": "\\b(st|saint) johns? ?s? ?wort\\b",
+      "keys": [],
+      "what": [
+        "Please don’t take it with an antidepressant without talking to your prescriber or pharmacist first. St John’s wort can clash with antidepressants such as SSRIs and cause serotonin syndrome, which can be dangerous.",
+        "It also stops birth control pills working properly, and affects blood thinners, HIV and transplant medicines. And never stop an antidepressant suddenly to switch. A pharmacist can check everything you take."
+      ],
+      "links": [
+        [
+          "St John’s wort: what the research says",
+          "/calming-supplements.html#st-johns-wort"
+        ],
+        [
+          "Safety: mixing supplements and medicines",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbashwagandha",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "ashwagandha",
+      "pat": "\\bashwagandha\\b",
+      "keys": [],
+      "what": [
+        "Small studies suggest ashwagandha may ease stress a little, but there are real safety warnings: rare liver injury has been reported, it may affect the thyroid, and there are concerns in pregnancy and breastfeeding. Denmark banned it in food supplements in 2023.",
+        "Please check with a pharmacist or doctor before taking it, especially alongside other medicines."
+      ],
+      "links": [
+        [
+          "Ashwagandha: what the research says",
+          "/calming-supplements.html#ashwagandha"
+        ],
+        [
+          "Supplement safety",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbkava",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "kava",
+      "pat": "\\bkava\\b",
+      "keys": [],
+      "what": [
+        "Kava may ease anxiety slightly, but it has been linked to rare, serious liver damage, including deaths. Never mix it with alcohol, or with sleeping or anxiety medicines. Most people are better off choosing something safer.",
+        "Please talk to a pharmacist or doctor first."
+      ],
+      "links": [
+        [
+          "Kava: what the research says",
+          "/calming-supplements.html#kava"
+        ],
+        [
+          "Supplement safety",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbmelatonin",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "melatonin",
+      "pat": "\\bmelatonin\\b",
+      "keys": [],
+      "what": [
+        "Melatonin is for sleep timing, such as jet lag or shift work, not for anxiety, and guidelines advise against it for long-term insomnia. In the UK it is a prescription medicine; in the US it is sold as a supplement, and the amount in the bottle can differ from the label.",
+        "I can’t advise on amounts. For children, talk to a doctor first; for adults, ask a pharmacist or doctor, especially alongside other medicines."
+      ],
+      "links": [
+        [
+          "Melatonin: what the research says",
+          "/calming-supplements.html#melatonin"
+        ],
+        [
+          "Supplement safety",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbchamomile",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "chamomile",
+      "pat": "\\bchamomile\\b",
+      "keys": [],
+      "what": [
+        "Maybe a little. A few small studies hint that chamomile may ease long-running worry, but the evidence is early, and it hasn’t been shown to help sleep.",
+        "As a tea it is likely safe, unless you are allergic to ragweed or related plants, or take warfarin. If you take other medicines, check with a pharmacist or doctor."
+      ],
+      "links": [
+        [
+          "Chamomile: what the research says",
+          "/calming-supplements.html#chamomile"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbmagnesium",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "magnesium",
+      "pat": "\\bmagnesium\\b",
+      "keys": [],
+      "what": [
+        "The research is weak: some small studies found a benefit for anxiety or sleep, but reviewers called the evidence poor quality. Too much from supplements causes diarrhea, and it isn’t right for everyone, for example with kidney problems.",
+        "Please check with a pharmacist or doctor before taking it, especially alongside other medicines."
+      ],
+      "links": [
+        [
+          "Magnesium: what the research says",
+          "/calming-supplements.html#magnesium"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbcbd",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "CBD",
+      "pat": "\\b(cbd|cannabidiol)\\b",
+      "keys": [],
+      "what": [
+        "There is little good research on CBD for everyday anxiety so far. The only approved CBD medicine in the US is for two rare forms of epilepsy. The FDA warns CBD can harm the liver and change how other medicines work.",
+        "Please check with a pharmacist or doctor first."
+      ],
+      "links": [
+        [
+          "CBD: what the research says",
+          "/calming-supplements.html#cbd"
+        ],
+        [
+          "Supplement safety",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbhomeopathy",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "homeopathy",
+      "pat": "\\bhomeopath\\w*\\b",
+      "keys": [],
+      "what": [
+        "There is no good-quality evidence that homeopathy works for any health condition. If you use it, please don’t let it replace treatment that works, and tell your doctor or pharmacist what you take."
+      ],
+      "links": [
+        [
+          "Homeopathy: what the research says",
+          "/calming-supplements.html#homeopathy"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbmix",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "are supplements and herbs safe, and mixing them with medicines",
+      "pat": "\\b(are|is) (supplements?|herbs?|herbal (remedies|supplements?|teas?)|natural remed\\w*|natural supplements?)\\b.{0,15}\\b(safe|dangerous|ok|okay|regulated|tested)\\b|\\b(mix|mixing|take|taking|combine|combining)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*)\\b.{0,25}\\b(with|and|alongside)\\b.{0,25}\\b(medication|medicine|meds|pills?|prescription|antidepressants?|sleeping pills?)\\b|\\bnatural (means|doesn t mean|does not mean) safe\\b",
+      "keys": [],
+      "what": [
+        "“Natural” doesn’t mean safe. Supplements aren’t checked like medicines before they are sold, and quality varies; a USP Verified or NSF mark means someone checked what is in the bottle.",
+        "Tell your pharmacist and doctor everything you take, and check with them before mixing anything with your medicines. Never mix sedating herbs with alcohol, sleeping pills, opioids or benzodiazepines."
+      ],
+      "links": [
+        [
+          "Supplement safety",
+          "/calming-supplements.html#safety"
+        ],
+        [
+          "Calming supplements and herbs: what the research says",
+          "/calming-supplements.html"
+        ]
+      ],
+      "chips": []
+    },
+    {
+      "id": "herbsanxiety",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "herbs and supplements for anxiety or stress",
+      "pat": "\\b(what|which|any|best|good|do|does|can)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*|vitamins?|teas?)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|worry|calm\\w*|nerves|relax\\w*|sleep)\\b|\\b(natural remed\\w*|herbal remed\\w*|calming (supplements?|herbs?|teas?)|herbs? for (anxiety|stress|sleep)|supplements? for (anxiety|stress|sleep)|(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b)",
+      "keys": [],
+      "what": [
+        "The things with the best evidence are free: sleep, movement, slow breathing, less caffeine and alcohol, and talking to someone.",
+        "A few supplements, such as lavender oil capsules, lemon balm and L-theanine, have small, early studies, with small effects. Check with a pharmacist or doctor before trying any, especially alongside other medicines, and get help if anxiety is stopping your daily life."
+      ],
+      "links": [
+        [
+          "Calming supplements and herbs: start here",
+          "/calming-supplements.html#start"
+        ],
+        [
+          "The common ones, and what the research says",
+          "/calming-supplements.html#common"
+        ],
+        [
+          "When it’s more than everyday stress",
+          "/calming-supplements.html#get-help"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "findcounsellor",
       "kind": "intent",
       "first": true,
@@ -11275,7 +11530,6 @@
         "what s the ladder",
         "the ladder check",
         "the ladder page",
-        "ladder",
         "where am i on the ladder right now"
       ],
       "what": "Where am I right now? is a four-tap check on the nervous system ladder. It shows if you’re calm and connected, revved up, or running on empty, with what helps right now, a pause line to say, and when to talk again.",
@@ -11310,14 +11564,8 @@
         "refusal scripts",
         "how do i turn someone down nicely",
         "help me say no",
-        "how do i say no",
-        "how to say no",
         "say no to extra work",
-        "how do i say no to extra work",
-        "how do i say no at work",
-        "how do i say no to my boss",
-        "how do i say no to my family",
-        "how do i say no without feeling guilty"
+        "how do i say no to extra work"
       ],
       "what": "Say no kindly gives you copy-ready ways to say no. Pick a situation and a tone, and it offers three kind options, like “I’m full today”, “Not me, but let’s find who” or “Yes, just later”.",
       "how": [
