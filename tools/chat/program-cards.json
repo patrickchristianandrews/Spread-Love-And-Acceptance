@@ -4294,7 +4294,7 @@
       "kind": "intent",
       "first": true,
       "name": "the weather almanac (the old 7-day log)",
-      "pat": "\\b(7|seven) ?day log\\b.*\\balmanac\\b|\\balmanac\\b.*\\b(7|seven) ?day log\\b|\\bdifference between\\b.*\\b(weather )?(log|almanac)\\b|\\bwhat is the (weather )?almanac\\b|\\bwhats the (weather )?almanac\\b|\\b(weather )?log\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?)\\b|\\balmanac\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?|keep|keeps)\\b",
+      "pat": "\\b(7|seven) ?day log\\b.*\\balmanac\\b|\\balmanac\\b.*\\b(7|seven) ?day log\\b|\\bdifference between\\b.*\\b(weather )?(log|almanac)\\b|\\bwhat is the (weather )?almanac\\b|\\bwhats the (weather )?almanac\\b|\\b(weather )?log\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?)\\b|\\balmanac\\b.{0,30}\\b(how long|how many days|export|download|csv|json|patterns?|keep|keeps)\\b|\\b(export|download|back up|backup|erase|delete|clear)\\w*\\b.{0,30}\\b(weather )?(almanac|weather log)\\b",
       "keys": [],
       "what": [
         "They’re the same thing. The old “7-day log” on Today’s Weather is now its almanac: a record of the readings you choose to save."
