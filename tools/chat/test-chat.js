@@ -1147,6 +1147,23 @@ if (PERS) {
   t('chat4', 'can i add reminders to my calendar', { id: 'week0', link: '/week-0.html' });
   t('chat4', 'where else can i get help', { id: 'outsidehelp', link: '/outside-help.html' });
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
+  // calming supplements and herbs: the research, never a dose, always "check with a pharmacist or doctor", crisis first, no jokes
+  const PHARM = /pharmacist|prescriber/;
+  const NODOSE = /\b\d+(\.\d+)? ?(mg|milligrams?|ml|mcg|g)\b|take (one|two|\d)/i;
+  [['is ashwagandha safe', 'herbashwagandha', '#ashwagandha'], ['ashwagandha side effects', 'herbashwagandha', '#ashwagandha'],
+   ["can I take st john's wort with my antidepressant", 'herbstjohns', '#st-johns-wort'], ['st johns wort and sertraline', 'herbstjohns', '#st-johns-wort'],
+   ['what herbs help anxiety', 'herbsanxiety', '#start'], ['natural remedies for anxiety', 'herbsanxiety', '#start'], ['best supplement for stress', 'herbsanxiety', '#start'],
+   ['does chamomile work', 'herbchamomile', '#chamomile'], ['chamomile tea for anxiety', 'herbchamomile', '#chamomile'],
+   ['is melatonin good for anxiety', 'herbmelatonin', '#melatonin'], ['melatonin for kids', 'herbmelatonin', '#melatonin'], ['how much melatonin should i take', 'herbmelatonin', '#melatonin'],
+   ['is kava safe', 'herbkava', '#kava'], ['does magnesium help anxiety', 'herbmagnesium', '#magnesium'], ['magnesium for sleep', 'herbmagnesium', '#magnesium'],
+   ['does CBD help anxiety', 'herbcbd', '#cbd'], ['does homeopathy work', 'herbhomeopathy', '#homeopathy'],
+   ['are supplements safe', 'herbmix', '#safety'], ['can I mix herbs with my medication', 'herbmix', '#safety'], ['does lavender help sleep', 'herbsanxiety', '#start']
+  ].forEach(([q, id, a]) => t('herbs', q, { id, link: '/calming-supplements.html' + a, text: id === 'herbhomeopathy' ? /doctor or pharmacist/ : PHARM, not: new RegExp(NODOSE.source + '|' + FUNNY.source, 'i') }));
+  t('herbs', "my panic won't stop, what herbs can i take (help first)", { q: "my panic won't stop, what herbs can i take", id: 'herbshelp', text: /988[\s\S]*116 123/, link: '/calming-supplements.html#get-help', not: FUNNY });
+  t('herbs', "i've felt low for weeks, would st john's wort help (help first)", { q: "i've felt low for weeks, would st john's wort help", id: 'herbshelp', text: /988/ });
+  t('herbs', 'i want to kill myself, should i take kava (crisis reply)', { q: 'i want to kill myself, should i take kava', kind: 'safety', text: /988/, not: /Kava may ease/ });
+  c('herbs', ['tell me a joke', 'is ashwagandha safe'], { id: 'herbashwagandha', not: FUNNY });
+  t('herbs', 'ashwagandha is not spell-corrected', { q: 'is ashwagandah safe', id: 'herbashwagandha' });
 }
 
 // ---------------------------------------------------------------- ask.html: every "Try asking…" question gets a real answer

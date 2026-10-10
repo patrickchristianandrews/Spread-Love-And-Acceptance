@@ -616,7 +616,7 @@
       "first": true,
       "newTopic": true,
       "name": "herbs and supplements for anxiety or stress",
-      "pat": "\\b(what|which|any|best|good|do|does|can)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*|vitamins?|teas?)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|worry|calm\\w*|nerves|relax\\w*|sleep)\\b|\\b(natural remed\\w*|herbal remed\\w*|calming (supplements?|herbs?|teas?)|herbs? for (anxiety|stress|sleep)|supplements? for (anxiety|stress|sleep)|(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b)",
+      "pat": "\\b(what|which|any|best|good|do|does|can)\\b.{0,25}\\b(herbs?|herbal \\w+|supplements?|natural remed\\w*|vitamins?|teas?)\\b.{0,30}\\b(anxiety|anxious|stress|stressed|worry|calm\\w*|nerves|relax\\w*|sleep)\\b|\\b(natural remed\\w*|herbal remed\\w*|calming (supplements?|herbs?|teas?)|herbs? for (anxiety|stress|sleep)|supplements? for (anxiety|stress|sleep))|\\b(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b.{0,30}\\b(help|helps|work|works|safe|anxiety|stress|sleep|calm\\w*|take|taking|oil|capsules?|tea|supplements?|pills?)\\b|\\b(take|taking|try|trying)\\b.{0,15}\\b(lavender|lemon balm|l ?theanine|valerian|passionflower|rhodiola|saffron)\\b",
       "keys": [],
       "what": [
         "The things with the best evidence are free: sleep, movement, slow breathing, less caffeine and alcohol, and talking to someone.",
