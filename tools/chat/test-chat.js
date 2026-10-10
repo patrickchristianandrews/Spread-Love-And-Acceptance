@@ -1097,7 +1097,7 @@ if (PERS) {
     t('chat4', 'where can i find a counsellor (no “No.”)', { q: 'where can i find a counsellor', id: 'findcounsellor', not: /^No\./, link: '/outside-help.html' });
     t('chat4', 'how do i find a couples therapist', { id: 'findcounsellor' });
     // nothing matches: a clarifying question in his voice, naming likely topics, never a confident wrong answer
-    t('chat4', 'the cat sat on the mat', { kind: 'offtopic', text: /\?[\s\S]*(sharing the load|getting along)/, chip: /chores|everything|start/i });
+    t('chat4', 'the cat sat on the mat', { kind: 'offtopic', text: /(sharing the load|getting along)[\s\S]*\?/, chip: /chores|everything|start/i });
     t('chat4', 'purple elephants dancing', { text: /\?/, not: /^(Here’s|The site)/ });
     t('chat4', 'fix my car engine', { kind: 'offtopic', text: /Is your question about/ });
   }

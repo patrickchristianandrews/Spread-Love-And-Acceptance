@@ -71,13 +71,13 @@
     d = norm(d);
     var out = [d.title.toUpperCase()];
     if (d.sub) out.push(d.sub);
-    var prev = '';
+    var prev = '', hasJobs = d.items.some(function (it) { return it.job; });
     d.items.forEach(function (it) {
       var kind = it.job || it.blank ? 'row' : it.head != null ? 'head' : 'field';
       if (kind !== 'row' || prev !== 'row') out.push('');
       if (it.head != null) out.push(it.head + ':');
       else if (it.job) out.push('☐ ' + it.job + (it.who ? ': ' + it.who : '') + (it.when ? ' (' + it.when.toLowerCase() + ')' : ''));
-      else if (it.blank) { for (var i = 0; i < Math.min(it.blank, 3); i++) out.push('☐ ____________'); }
+      else if (it.blank) { if (!hasJobs) for (var i = 0; i < Math.min(it.blank, 3); i++) out.push('☐ ____________'); else return; }
       else out.push(it.label + ': ' + (it.text || '____________'));
       prev = kind;
     });
@@ -274,14 +274,14 @@
       p.appendChild(mk('strong', '', (names.length === 1 ? 'This job keeps coming back: ' : 'These jobs keep coming back: ')));
       p.appendChild(doc.createTextNode(andList(names.slice(0, 5).map(function (n) { return '“' + n + '”'; })) + (names.length > 5 ? ' and ' + (names.length - 5) + ' more' : '') + '. Want to give ' + (names.length === 1 ? 'it' : 'each one') + ' an owner?'));
       box.appendChild(p);
-      box.appendChild(mk('p', 'tfs-drift-why', (names.length === 1 ? 'It came up' : 'Each came up') + ' in ' + least + (least < of ? ' or more' : '') + ' of your last ' + of + ' weekly check-ins. A job that keeps coming back is a gap in the setup, not anyone’s fault. One owner, the person who does it or makes sure it gets done, usually settles it.'));
+      box.appendChild(mk('p', 'tfs-drift-why', (names.length === 1 ? 'It came up' : 'Each came up') + (least >= of ? ' in each of your last ' + of : ' in ' + least + (list[0].weeks > least ? ' or more' : '') + ' of your last ' + of) + ' weekly check-ins. A job that keeps coming back is a gap in the setup, not anyone’s fault. One owner, the person who does it or makes sure it gets done, usually settles it.'));
       var row = mk('div', 'tfs-drift-acts');
       if (typeof opts.onGive === 'function') {
-        var give = mk('button', 'tfs-drift-go', opts.giveLabel || 'Put them on the fridge list'); give.type = 'button';
+        var give = mk('button', 'tfs-drift-go', opts.giveLabel || (names.length === 1 ? 'Put it on the fridge list' : 'Put them on the fridge list')); give.type = 'button';
         give.addEventListener('click', function () { opts.onGive(names.slice(0, 5)); });
         row.appendChild(give);
       } else {
-        var a = mk('a', 'tfs-drift-go', 'Give each one an owner'); a.href = '/lemonade-stand.html#owners';
+        var a = mk('a', 'tfs-drift-go', names.length === 1 ? 'Give it an owner' : 'Give each one an owner'); a.href = '/lemonade-stand.html#owners';
         a.addEventListener('click', function () { carry(names); });
         row.appendChild(a);
       }

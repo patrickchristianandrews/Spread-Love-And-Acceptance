@@ -92,6 +92,7 @@
 .tfs-row.is-blank .tfs-job{ height:1.1em; border-bottom:.4mm solid #666; }
 .tfs-row.is-blank .tfs-who.is-empty{ width:40mm; }
 .tfs-field{ margin:0 0 5mm; break-inside:avoid; }
+.tfs-rows + .tfs-field, .tfs-rows + .tfs-h{ margin-top:6mm; }
 .tfs-lab{ margin:0 0 1mm; font-weight:700; font-size:14pt; color:#000; }
 .tfs-val{ margin:0; font-size:16pt; line-height:1.35; white-space:pre-wrap; overflow-wrap:anywhere; }
 .tfs-line{ display:block; height:10mm; border-bottom:.4mm solid #888; }
@@ -100,6 +101,9 @@
 /* smaller steps, so a long list still fits one page */
 .tfs-in[data-size="xl"] .tfs-row{ font-size:22pt; padding:3.5mm 0; }
 .tfs-in[data-size="xl"] .tfs-box{ width:9mm; height:9mm; }
+.tfs-in[data-size="xl"] .tfs-val{ font-size:18pt; }
+.tfs-in[data-size="xl"] .tfs-lab{ font-size:15pt; }
+.tfs-in[data-size="xl"] .tfs-line{ height:12mm; }
 .tfs-in[data-size="m"] .tfs-t{ font-size:26pt; }
 .tfs-in[data-size="m"] .tfs-row{ font-size:16pt; padding:2.4mm 0; }
 .tfs-in[data-size="m"] .tfs-box{ width:6.5mm; height:6.5mm; }

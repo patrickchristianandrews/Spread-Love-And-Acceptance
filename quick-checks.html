@@ -149,7 +149,7 @@
   .strip-key i{ display:inline-block; width:.7rem; height:.7rem; }
   .strip-key .k-clear{ border-radius:50%; } .strip-key .k-gusty{ transform:rotate(45deg) scale(.85); } .strip-key .k-fog{ border-radius:2px; }
   .al-list{ margin:.6rem 0 0; }
-  .al-tablewrap{ max-width:100%; overflow-x:auto; }
+  .al-tablewrap{ width:100%; max-width:100%; overflow-x:auto; }
   .al-table{ width:100%; border-collapse:collapse; font-size:.88rem; margin:.3rem 0 .5rem; color:var(--ink); }
   .al-table th, .al-table td{ text-align:left; padding:.35rem .5rem .35rem 0; border-bottom:1px solid var(--line); vertical-align:top; }
   .al-table thead th{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; font-weight:500; color:var(--ink-soft); }
@@ -180,6 +180,7 @@
     html.al-print body > *:not(main), html.al-print main > *:not(#today), html.al-print #today > *:not(#almanac){ display:none !important; }
     html.al-print .almanac{ background:none; padding:0; margin:0; }
     html.al-print .al-list summary{ display:none; }
+    html.al-print #al-msg, html.al-print #al-export{ display:none !important; }
     html.al-print .al-table .al-more{ display:table-cell !important; }
   }
 </style>
@@ -439,7 +440,7 @@
       </div>
     </div>
 
-    <section class="almanac" id="almanac" aria-labelledby="al-h" hidden>
+    <section class="almanac" id="almanac" aria-labelledby="al-h" data-listen-card hidden>
       <h2 id="al-h">Your weather almanac</h2>
       <div id="al-weather">
         <p id="al-intro">Kept in this browser only. Nothing is uploaded, and no one else can see it.</p>

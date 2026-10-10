@@ -2737,7 +2737,7 @@
     return added.length;
   }
   if (window.TOLFridge) {
-    if ($('ls-drift')) window.TOLFridge.drift($('ls-drift'), { onGive: addOwnJobs, giveLabel: 'Put them on the fridge list' });
+    if ($('ls-drift')) window.TOLFridge.drift($('ls-drift'), { onGive: addOwnJobs });
     var carried = window.TOLFridge.takeCarry();
     if (carried.length) setTimeout(function () { addOwnJobs(carried); }, 0);
   }
