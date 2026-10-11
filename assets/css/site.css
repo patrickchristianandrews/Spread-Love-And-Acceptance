@@ -2280,6 +2280,10 @@ html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 .tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
 html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, [data-in-short], [data-in-short] *, [class*="-short"], [class*="-short"] *, [class*="-say"], [class*="-say"] *, p.q, .tol-try, .tol-try *, .cs-tags, .cs-tags *, .cs-dl, .cs-dl *, :is(h2, h3, h4) + ul, :is(h2, h3, h4) + ul *, :is(h2, h3, h4) + p + ul, :is(h2, h3, h4) + p + ul *, .tol-listen, .tol-listen *, [class*="tol-listen"], [class*="tol-listen"] *, .tol-depth, .tol-depth *){ display:none !important; }
 @media print{ .tol-steps-toggle{ display:none !important; } }
+/* the book's chapter strip runs straight through all three parts: a little gap before Part Three */
+.tol-chbar li.is-p3-start{ margin-left:.6rem; }
+/* work mode (?work=1): no music player on chapters */
+html.tol-work [data-mini-player]{ display:none !important; }
 /* steps only: the "Words you could use" lines, "In short", support lists and each card's key line stay (above);
    the extras around the reading step aside */
 html.tol-only-steps main :is(.tol-read-host, .tol-read-wrap, .tol-tip, .tol-fp-note, .tol-offer){ display:none !important; }

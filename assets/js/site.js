@@ -70,6 +70,7 @@
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love: visits, advice and the new baby' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
+      { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions, and permission to use them in class' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now: yourself, between us, and understanding people, plus a guide to the book by topic' }
     ]},
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
@@ -179,6 +180,7 @@
       { href: '/on-my-own.html', code: 'New', title: 'On my own after a breakup or divorce', note: 'Building a life again, and part-time parenting when the kids are with you some days' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors, coaches and group leaders', note: 'Using these free pages and tools with clients and groups' },
+      { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions, and permission to use them in class' },
       { href: '/examples.html', code: '', title: 'What small changes look like', note: 'Made-up examples: couples, housemates, siblings, co-parents, friends, co-founders and more' },
       { href: '/long-distance.html', code: '', title: 'Long-distance and apart', note: 'Time zones, check-ins on video, a call rhythm you agree, and reading short texts' },
       { href: '/retired-together.html', code: '', title: 'Retired and both home now', note: 'Sharing the house all day: routines, whole jobs, handing over kindly, and finding purpose' },
@@ -211,6 +213,9 @@
       { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Values, meaning and a good life', note: 'What matters to you, and what philosophy offers everyday life' },
       { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, apologies that land, forgiveness, and when to get help' },
       { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, kind limits, and not burning out' },
+      { href: '/book/understanding-13-anger.html', deep: true, code: '13', title: 'Anger: what it’s for and what to do with it', note: 'What anger does in the body, the hot minutes, repair, and when anger becomes harm' },
+      { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Personality, temperament and change', note: 'Dials, not boxes: the Big Five, temperament, and how people change with age' },
+      { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Closeness and love', note: 'Love in many forms, being known, and love across ages and relationship types' },
       { sub: 'The book by topic' },
       { href: '/book/topic-start-here.html', code: 'Topic', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
@@ -344,6 +349,7 @@
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
       { href: '/for-counselors.html', code: 'New', title: 'For counsellors and coaches', note: 'Using these free pages with clients and groups' },
+      { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now, and the book by topic' }
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
@@ -533,30 +539,32 @@
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words, with the evidence and its limits' },
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
-      { sub: 'The book' },
+      { sub: 'The book, in order', all: '/book/topic-start-here.html', allLabel: 'The book at a glance' },
       { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Part One: Where you came from', note: 'Growing up, old rules and what life taught you' },
       { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Part One: Who you are today', note: 'Your wiring, your weather and your words' },
       { href: '/book/self-3-next.html', deep: true, code: 'Next', title: 'Part One: Who you are becoming', note: 'What matters to you, and tiny steps' },
-      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Part Two: The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
+      { href: '/book/preface.html', deep: true, code: 'Preface', title: 'Preface to Part Two: The work nobody sees', note: 'The quiet, unseen work of running a shared life' },
       { href: '/book/chapter-1.html', deep: true, code: 'I', title: 'Why we get out of tune', note: 'How pace, tone and urgency nudge two people out of sync' },
       { href: '/book/chapter-2.html', deep: true, code: 'II', title: 'Is the split working?', note: 'Look at the arrangement, never at a person' },
       { href: '/book/chapter-3.html', deep: true, code: 'III', title: 'Full tanks and different angles', note: 'Why some reactions are bigger than their cause' },
       { href: '/book/chapter-4.html', deep: true, code: 'IV', title: 'Two kinds of fair', note: 'Agreeing on what fair means to you both' },
       { href: '/book/chapter-5.html', deep: true, code: 'V', title: 'The monthly look-back', note: 'Catch what weekly check-ins miss' },
+      { href: '/book/understanding-1-feelings.html', deep: true, code: '1', title: 'Part Three · Chapter 1: How feelings work', note: 'Signals, the body, and naming what you feel' },
+      { href: '/book/understanding-2-stress.html', deep: true, code: '2', title: 'Part Three · Chapter 2: Stress and the nervous system', note: 'The ladder, flooding, rest and recovery' },
+      { href: '/book/understanding-3-seeing.html', deep: true, code: '3', title: 'Part Three · Chapter 3: How we see each other', note: 'Perception, bias and the stories we tell' },
+      { href: '/book/understanding-4-communication.html', deep: true, code: '4', title: 'Part Three · Chapter 4: How communication works', note: 'Listening, repair and messages that land' },
+      { href: '/book/understanding-5-belonging.html', deep: true, code: '5', title: 'Part Three · Chapter 5: Attachment, trust and belonging', note: 'How trust grows, and finding your people' },
+      { href: '/book/understanding-6-change.html', deep: true, code: '6', title: 'Part Three · Chapter 6: Habits and change', note: 'Why change is hard, and why small steps work' },
+      { href: '/book/understanding-7-worth.html', deep: true, code: '7', title: 'Part Three · Chapter 7: Self-worth, shame and self-compassion', note: 'Shame, guilt and a kinder inner voice' },
+      { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Part Three · Chapter 8: Loss, grief and big life changes', note: 'Grief in waves, and big life changes' },
+      { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Part Three · Chapter 9: Minds that work differently', note: 'Autism, ADHD, sensory and learning differences' },
+      { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Part Three · Chapter 10: Values, meaning and a good life', note: 'What philosophy offers everyday life' },
+      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Part Three · Chapter 11: Healing after hurt', note: 'Repair, forgiveness, and when to get help' },
+      { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Part Three · Chapter 12: Helping others well', note: 'Support without fixing, and not burning out' },
+      { href: '/book/understanding-13-anger.html', deep: true, code: '13', title: 'Part Three · Chapter 13: Anger', note: 'What anger is for, the hot minutes, and repair' },
+      { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Part Three · Chapter 14: Personality and temperament', note: 'Dials, not boxes, and how people change' },
+      { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Part Three · Chapter 15: Closeness and love', note: 'Being known, and love in many forms' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
-      { sub: 'Part Three: Understanding people', all: '/book/topic-start-here.html#ch-part3', allLabel: 'About Part Three' },
-      { href: '/book/understanding-1-feelings.html', deep: true, code: '1', title: 'How feelings work', note: 'Signals, the body, and naming what you feel' },
-      { href: '/book/understanding-2-stress.html', deep: true, code: '2', title: 'Stress and the nervous system', note: 'The ladder, flooding, rest and recovery' },
-      { href: '/book/understanding-3-seeing.html', deep: true, code: '3', title: 'How we see each other', note: 'Perception, bias and the stories we tell' },
-      { href: '/book/understanding-4-communication.html', deep: true, code: '4', title: 'How communication works', note: 'Listening, repair and messages that land' },
-      { href: '/book/understanding-5-belonging.html', deep: true, code: '5', title: 'Attachment, trust and belonging', note: 'How trust grows, and finding your people' },
-      { href: '/book/understanding-6-change.html', deep: true, code: '6', title: 'Habits and change', note: 'Why change is hard, and why small steps work' },
-      { href: '/book/understanding-7-worth.html', deep: true, code: '7', title: 'Self-worth, shame and self-compassion', note: 'Shame, guilt and a kinder inner voice' },
-      { href: '/book/understanding-8-loss.html', deep: true, code: '8', title: 'Loss, grief and big life changes', note: 'Grief in waves, and big life changes' },
-      { href: '/book/understanding-9-minds.html', deep: true, code: '9', title: 'Minds that work differently', note: 'Autism, ADHD, sensory and learning differences' },
-      { href: '/book/understanding-10-values.html', deep: true, code: '10', title: 'Values, meaning and a good life', note: 'What philosophy offers everyday life' },
-      { href: '/book/understanding-11-healing.html', deep: true, code: '11', title: 'Healing after hurt', note: 'Repair, forgiveness, and when to get help' },
-      { href: '/book/understanding-12-helping.html', deep: true, code: '12', title: 'Helping others well', note: 'Support without fixing, and not burning out' },
       { sub: 'The book by topic' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
       { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
@@ -1419,8 +1427,7 @@
     // Pager: previous / next within the same section
     if (here && hereSection && ['book', 'workpapers', 'program'].indexOf(hereSection.id) !== -1) {
       // in the book, Parts One and Two page through their chapters; Part Three pages through its own twelve
-      var p3 = function (i) { return /^\/book\/understanding-\d+-[a-z]+\.html$/.test(i.href); };
-      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false && (hereSection.id !== 'book' || (p3(here) ? p3(i) : isChapter(i))); });
+      var list = hereSection.items.filter(function (i) { return i.href !== '/index.html' && i.menu !== false && (hereSection.id !== 'book' || isChapter(i)); });
       var idx = list.indexOf(here);
       var prev = list[idx - 1], next = list[idx + 1];
       if (prev || next) {
@@ -1722,6 +1729,7 @@
     ["roommate's boyfriend|roommates boyfriend|roommate's girlfriend|roommates girlfriend|roommate's partner|roommates partner|roomate's boyfriend|roomates boyfriend|boyfriend stays over|girlfriend stays over|partner stays over|always staying over|stays over every night|staying over every night|sleeps over every night|boyfriend is always here|girlfriend is always here", 'roomguest'],
     ['baby christened|baby baptised|baby baptized|christen the baby|baptise the baby|baptize the baby|baby christening|raise the baby muslim|raise the baby catholic|raise the baby christian|raise the baby jewish|raised muslim|raised catholic|raise him muslim|raise her muslim|raise them muslim|ramadan with a newborn', 'twofaiths'],
     ['moved in|just moved in|new in the house', 'polyguest'],
+    ['use this with my class|use it with my class|use this in class|use it in class|with my class|my students|my pupils|lesson plan|in the classroom|in my classroom|teach my class|teaching my class', 'teacher'],
     ['divorced dad|divorced mum|divorced mom|divorced father|divorced mother|divorced parent|weekend dad|weekend parent|every other weekend|kids every other weekend|see my kids at weekends|see the kids at weekends', 'parttime'],
     ['lonely after divorce|lonely after the divorce|lonely after my divorce|lonely since the divorce|alone after divorce|lonely after a breakup|lonely after the breakup|lonely since the breakup', 'onmyownlonely'],
     ['i yell at my kids|i yell at the kids|i shout at my kids|i shout at the kids|i scream at my kids|yell at my kids|shout at my kids|yelling at my kids|shouting at my kids|yelling at the kids|shouting at the kids|i keep yelling|i keep shouting', 'angerhelp'],
@@ -1753,6 +1761,7 @@
     yelling: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', shout: 'yelling', screaming: 'yelling',
     dad: ['/teens.html', '/grown-up-children.html', '/parents.html', '/caregivers.html'],
     eshoras: ['/en-espanol.html#horas', '/en-espanol.html'], trabaja: 'eshoras', trabajo: 'eshoras', trabajamos: 'eshoras', horas: 'eshoras', turno: 'eshoras', turnos: 'eshoras', construccion: 'eshoras', 'construcción': 'eshoras',
+    teacher: ['/for-teachers.html', '/groups.html#handouts', '/book/understanding-1-feelings.html'], teachers: 'teacher', teaching: 'teacher', classroom: 'teacher', lesson: 'teacher', lessons: 'teacher', students: 'teacher', pupils: 'teacher', pshe: 'teacher',
     escasa: ['/en-espanol.html#casa', '/en-espanol.html'], tareas: 'escasa', quehaceres: 'escasa', ayuda: 'escasa',
     espequenos: ['/en-espanol.html#pequenos', '/en-espanol.html'], gemelos: 'espequenos', gemelas: 'espequenos', bebe: 'espequenos', dormimos: 'espequenos',
     esenojado: ['/en-espanol.html#enojado', '/en-espanol.html'], peleamos: 'esenojado', peleas: 'esenojado', pelea: 'esenojado', enojado: 'esenojado', enojada: 'esenojado', gritos: 'esenojado',
@@ -1792,7 +1801,7 @@
   EXTRA['/friends.html#after-baby'] = { u: '/friends.html#after-baby', t: 'When a friend has a baby', d: 'Staying close when a friend’s life changes: small, low-energy ways to keep in touch, from both sides.', k: 'Guide' };
   EXTRA['/on-my-own.html#part-time-parent'] = { u: '/on-my-own.html#part-time-parent', t: 'Part-time with your kids', d: 'When the kids are with you some days: weekend ideas, your own home rules, and the Sunday goodbye.', k: 'Guide' };
   EXTRA['/workpapers/fill/wp-03.html'] = { u: '/workpapers/fill/wp-03.html', t: 'One owner per job: house rules and lists (fill in)', d: 'A fillable list with ready-made groups, including house rules for a family and two homes. Kept on this device; print or save a PDF.', k: 'Tool' };
-  EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. On any guide, “Share this guide” also has “Print this page”, or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
+  EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. Book chapters and guides have “Print this page” beside “Share”, or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
   [['/co-parenting.html#handoff-bag', 'A handoff-bag checklist (co-parents)', 'What travels with the children between homes: medicines and the inhaler with a note of the last dose, school things, the comfort toy. One list both homes use.', 'Guide'],
    ['/family-rifts.html#money', 'When grief and money get tangled', 'A parent has died, there’s a will or a house, and old roles come back. Keeping the money talk separate, and when a family mediator helps.', 'Guide'],
    ['/family-rifts.html#not-ready', '“I’m not ready”, or “I don’t have to”', 'Forgiving is not the same as reconciling. You can say not yet, yes with terms, or no for now.', 'Guide'],
@@ -2127,8 +2136,9 @@
     find: function (q, cb) { loadSearch(function (d) { if (!d) return cb([], q); var R; try { R = smartSearch(d, q); } catch (err) { return cb([], q); } cb(R.hits.map(function (x) { return x.p; }), R.used.join(' ')); }); } };
 
   // ---------- "Chapter N of 6": where you are in the book, with every chapter one tap away ----------
-  function isChapter(it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d)\.html$/.test(it.href); }
+  function isChapter(it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d|understanding-\d+-[a-z-]+)\.html$/.test(it.href); }
   function isSelfPart(it) { return /^\/book\/self-/.test(it.href); }
+  function isPartThree(it) { return /^\/book\/understanding-/.test(it.href); }
   function buildChapterBar() {
     if (!here || !isChapter(here)) return;
     var main = document.querySelector('main'); if (!main) return;
@@ -2136,16 +2146,18 @@
     var at = book.indexOf(here); if (at < 0) return;
     var nav = el('nav', { class: 'tol-chbar no-bubble', 'aria-label': 'Chapters of the book' });
     var items = book.map(function (it, i) {
-      var name = it.code === 'Preface' ? 'Preface' : isSelfPart(it) ? 'Part One, ' + it.code : 'Chapter ' + it.code;
+      var name = it.code === 'Preface' ? 'Preface to Part Two' : isSelfPart(it) ? 'Part One, ' + it.code : isPartThree(it) ? 'Part Three, Chapter ' + it.code : 'Part Two, Chapter ' + it.code;
       var href = inDepth && it.deep ? deepHref(it) : it.href;
-      return '<li' + (it.code === 'Preface' ? ' class="is-part2"' : isSelfPart(it) ? ' class="is-part1"' : '') + '><a href="' + href + '"' + (i === at ? ' aria-current="page"' : '') + ' title="' + esc(name + ': ' + it.title) + '">' +
+      var p3first = isPartThree(it) && !(i > 0 && isPartThree(book[i - 1]));
+      return '<li' + (it.code === 'Preface' ? ' class="is-part2"' : isSelfPart(it) ? ' class="is-part1"' : isPartThree(it) ? ' class="is-part3' + (p3first ? ' is-p3-start' : '') + '"' : '') + '><a href="' + href + '"' + (i === at ? ' aria-current="page"' : '') + ' title="' + esc(name + ': ' + it.title) + '">' +
         '<span aria-hidden="true">' + (it.code === 'Preface' ? 'P' : esc(it.code)) + '</span><span class="sr-only">' + esc(name + ': ' + it.title) + '</span></a></li>';
     }).join('');
     // the book's own way of counting: Part One (Then, Now, Next), then the Preface and Chapters I to V
     var last = book[book.length - 1].code;
-    nav.innerHTML = '<p class="tol-chbar-k">' + (isSelfPart(here) ? 'Part One: ' + esc(here.code) + '<span> · yourself</span>' : here.code === 'Preface' ? 'The Preface<span> · before Chapter I</span>' : 'Chapter ' + esc(here.code) + ' <span>of ' + esc(last) + '</span>') + '</p><ol>' + items + '</ol>' +
+    nav.innerHTML = '<p class="tol-chbar-k">' + (isSelfPart(here) ? 'Part One: ' + esc(here.code) + '<span> · yourself</span>' : here.code === 'Preface' ? 'Preface to Part Two<span> · before Chapter I</span>' :
+      isPartThree(here) ? 'Part Three · Chapter ' + esc(here.code) + ' <span>of ' + book.filter(isPartThree).length + '</span>' : 'Part Two · Chapter ' + esc(here.code) + ' <span>of V</span>') + '</p><ol>' + items + '</ol>' +
       '<p class="tol-chbar-nav">' + (at > 0 ? '<a href="' + (inDepth && book[at - 1].deep ? deepHref(book[at - 1]) : book[at - 1].href) + '" rel="prev">&larr; Previous</a>' : '') +
-      (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/prog-01.html">Next: six gentle weeks &rarr;</a>') + '</p>';
+      (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/contents.html">Back to the contents &rarr;</a>') + '</p>';
     var head = main.querySelector('.read-head');
     if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);
   }
@@ -3257,7 +3269,7 @@
     // (on the home page it stays in the first screen until it's answered)
     var seenBefore = lsGet('tol-comfort-offer') || '', visits = seenBefore === 'shown' ? 1 : (+(/^shown:(\d+)$/.exec(seenBefore) || [0, 0])[1] || 0);
     var onHome = !!document.querySelector('main [data-home-intro]');
-    if (seenBefore === 'done' || (!onHome && (visits >= 3 || ssGet('tol-offer-seen'))) || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
+    if (seenBefore === 'done' || workMode() || (!onHome && (visits >= 3 || ssGet('tol-offer-seen'))) || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     if (!ssGet('tol-offer-seen')) lsSet('tol-comfort-offer', 'shown:' + (visits + 1)); ssSet('tol-offer-seen', '1'); // once this visit; Settings at the top is always there
@@ -4129,7 +4141,9 @@
   // ---- where a "Share" button sits on its own: content pages, the tools (the link only), kids' pages and games ----
   var SHARE_BLURB = 'Free, kind tools for sharing the load at home.';
   var SHARE_PAGES = [
-    [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
+    [/^\/book\/(preface|chapter-\d|self-\d-[a-z]+|understanding-\d+-[a-z-]+)(-in-depth)?\.html$/, 'Share this chapter', 'A chapter from The Objective Ledger, a free, kind book about yourself, the people you share a life with, and how people work.'],
+    [/^\/communication\.html$/, 'Share this guide', 'A free, practical guide to listening and saying hard things kindly.'],
+    [/^\/for-teachers\.html$/, 'Share this page', 'Free lessons on feelings and communication, with printable handouts and permission to use them in class.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
     [/^\/(friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|empty-nest|family-rifts|when-one-is-ill)\.html$/, 'Share this guide', 'A free, kind guide with words you can use. It doesn’t blame anyone, and there’s nothing to sign up for.'],
     [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
