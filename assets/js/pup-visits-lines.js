@@ -178,7 +178,7 @@ window.TOL_PUP_LINES = {
       'Read slowly. The good bits stick better that way.',
       'Try one idea from this chapter before the next one.',
       ['Every chapter has a workpaper that puts it to use.', '/suite-index.html', 'The Suite Index'],
-      ['The book starts with the work nobody sees.', '/book/preface.html', 'The Preface'],
+      ['Part Two starts with the work nobody sees.', '/book/preface.html', 'Preface to Part Two'],
       ['There’s more than one kind of fair!', '/book/chapter-4.html', 'Chapter IV'],
       ['Once a month, a kind look back.', '/book/chapter-5.html', 'Chapter V'],
       ['Want more to read after this?', '/library.html', 'The Professor’s Library']

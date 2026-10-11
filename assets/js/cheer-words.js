@@ -205,7 +205,7 @@ window.TOL_CHEER = {
   topics: {
     book: [
       ['This chapter pairs with a workpaper that puts it to use.', '/suite-index.html', 'The Suite Index'],
-      ['The book begins with the work nobody sees.', '/book/preface.html', 'The Preface'],
+      ['Part One comes first. Then the Preface opens Part Two: the work nobody sees.', '/book/preface.html', 'Preface to Part Two'],
       ['When two kind people clash, it’s often just tuning.', '/book/chapter-1.html', 'Chapter I'],
       ['Can the way you share the load last?', '/book/chapter-2.html', 'Chapter II'],
       ['A full tank changes how everything lands.', '/book/chapter-3.html', 'Chapter III'],
