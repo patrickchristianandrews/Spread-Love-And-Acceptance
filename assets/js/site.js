@@ -1481,7 +1481,10 @@
   function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
   function reEsc(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   var STOP = { the: 1, and: 1, for: 1, with: 1, how: 1, what: 1, can: 1, you: 1, your: 1, are: 1, was: 1, when: 1, why: 1, who: 1, does: 1, just: 1, had: 1, have: 1, into: 1, from: 1, this: 1, that: 1, about: 1, get: 1, its: 1, too: 1, very: 1, some: 1, any: 1, all: 1, our: 1, out: 1, but: 1, not: 1, him: 1, her: 1, she: 1, they: 1, them: 1, his: 1, one: 1, did: 1, i: 1, me: 1, my: 1, to: 1, of: 1, in: 1, on: 1, at: 1, is: 1, it: 1, an: 1, a: 1, do: 1, be: 1, or: 1, so: 1, we: 1, us: 1, am: 1, im: 1,
-    he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, if: 1, as: 1, by: 1, now: 1, than: 1, then: 1, were: 1, really: 1 };
+    he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, if: 1, as: 1, by: 1, now: 1, than: 1, then: 1, were: 1, really: 1,
+    // "won't", "don't" and the rest, typed with or without the apostrophe: never "corrected" into another word
+    wont: 1, dont: 1, cant: 1, didnt: 1, doesnt: 1, isnt: 1, wasnt: 1, arent: 1, werent: 1, wouldnt: 1, couldnt: 1, shouldnt: 1, havent: 1, hasnt: 1, hadnt: 1, aint: 1,
+    youre: 1, youve: 1, youll: 1, id: 1, itll: 1, thats: 1, whats: 1, theres: 1, lets: 1, keeps: 1, says: 1, said: 1, tells: 1 };
   var JOIN_RE = null;
   function searchTerms(q) {
     var f = fold(q).replace(/\s+·\s+spread love.*$/, '').replace(/[¿?¡!.,;:()"“”]+/g, ' ').trim();
@@ -1684,6 +1687,57 @@
     ladder: ['/ladder.html', '/wp-11.html']
   };
   Object.keys(ACT_MORE).forEach(function (k) { ACT[k] = ACT_MORE[k]; });
+  // ---- round 12: what testers typed, and the page that was written for it ----
+  [
+    ['handover checklist|handover list|handoff checklist|handoff bag|hand over bag|kit bag|school bag|her inhaler|his inhaler|their inhaler|the inhaler|medicine bag|forgot the inhaler|forgets the inhaler', 'handoffbag'],
+    ['dad died|mum died|mom died|father died|mother died|parent died|parents died|dad passed|mum passed|mom passed|dad passed away|mum passed away|mom passed away|after dad died|after mum died|after mom died', 'parentdied'],
+    ['wont let me see|won\'t let me see|doesnt let me see|doesn\'t let me see|not letting me see|keeping the baby from me|keeps the baby from me|keeping my grandchild|see the baby|see my grandchild|see my grandson|see my granddaughter|see the grandkids|see my grandkids|see the grandchildren|my grandchild|my grandson|my granddaughter', 'grandaccess'],
+    ['mum turns up|mom turns up|mother turns up|dad turns up|mum shows up|mom shows up|turns up uninvited|shows up uninvited|turns up without asking|shows up without asking|drops round|pops round|comes round uninvited|just turns up', 'grownkids'],
+    ['game too much|games too much|gaming too much|plays too much|play too much|always gaming|always playing games|on the xbox|on the playstation|on discord|on his games|on her games|gamer boyfriend|gamer girlfriend|gamer partner|gamer husband|gamer wife', 'gaming'],
+    ['weekly schedule|work schedule|work schedules|sleep schedule|schedule sleep|shift pattern|shift patterns|different shifts|opposite hours|works late|work late|works weekends', 'diffhours'],
+    ['talking about feelings|talk about feelings|talk about my feelings|talking about my feelings|talk about his feelings|talk about her feelings|talk about their feelings|express feelings|expressing feelings|express my feelings|share feelings|sharing feelings|share my feelings|how feelings work|naming feelings|name my feelings', 'feelingsbook'],
+    ['miss my mum|miss my mom|miss my dad|miss my mother|miss my father|missing my mum|missing my mom|missing my dad|mum is away|mom is away|dad is away|mum in prison|mom in prison|dad in prison|mum in hospital|mom in hospital|dad in hospital|mum in rehab|dad in rehab', 'parentaway'],
+    ['my nan|my gran|my nana|my granny|live with my nan|live with my gran|live with my grandma|live with my grandparents|living with my nan|living with my grandma|living with grandparents|my grandma|my grandad|my grandpa', 'nanteen'],
+    ['guest in my own home|guest in my own house|a guest in my home|guest in my home|moved in with|new to the home|new to their home|joined their home|their home not mine', 'polyguest'],
+    ['left out of decisions|left out of the decisions|left out of plans|decisions without me|decide without me|plans without me|feel left out of', 'polylong'],
+    ["roommate's boyfriend|roommates boyfriend|roommate's girlfriend|roommates girlfriend|roommate's partner|roommates partner|roomate's boyfriend|roomates boyfriend|boyfriend stays over|girlfriend stays over|partner stays over|always staying over|stays over every night|staying over every night|sleeps over every night|boyfriend is always here|girlfriend is always here", 'roomguest'],
+    ['divorced dad|divorced mum|divorced mom|divorced father|divorced mother|divorced parent|weekend dad|weekend parent|every other weekend|kids every other weekend|see my kids at weekends|see the kids at weekends', 'parttime'],
+    ['lonely after divorce|lonely after the divorce|lonely after my divorce|lonely since the divorce|alone after divorce|lonely after a breakup|lonely after the breakup|lonely since the breakup', 'onmyownlonely'],
+    ['i yell at my kids|i yell at the kids|i shout at my kids|i shout at the kids|i scream at my kids|yell at my kids|shout at my kids|yelling at my kids|shouting at my kids|yelling at the kids|shouting at the kids|i keep yelling|i keep shouting', 'angerhelp'],
+    ['conservative parents|religious parents|strict parents|traditional parents|tell my parents|telling my parents|tell my mum|tell my mom|tell my dad|tell my family|telling my family|my parents find out|parents found out|come out to|coming out to|came out to|my girlfriend and my parents|my boyfriend and my parents', 'comingout']
+  ].forEach(function (r) { r[0].split('|').forEach(function (k) { JOIN[k] = r[1]; }); });
+  JOIN_RE = null;
+  var ACT_12 = {
+    handoffbag: ['/co-parenting.html#handoff-bag', '/co-parenting.html', '/workpapers/fill/wp-03.html'], inhaler: 'handoffbag', inhalers: 'handoffbag', medicine: 'handoffbag', medicines: 'handoffbag', medication: 'handoffbag',
+    handover: ['/co-parenting.html#handoff-bag', '/co-parenting.html', '/coming-home.html', '/work.html'], handovers: 'handover', handoff: 'handover', handoffs: 'handover', changeover: 'handover', changeovers: 'handover',
+    parentdied: ['/family-rifts.html#money', '/grief.html', '/family-rifts.html'],
+    inheritance: ['/family-rifts.html#money', '/family-rifts.html', '/grief.html'], inherit: 'inheritance', inherited: 'inheritance', estate: 'inheritance', executor: 'inheritance', probate: 'inheritance', wills: 'inheritance',
+    mediator: ['/family-rifts.html', '/co-parenting.html', '/outside-help.html'], mediators: 'mediator', mediation: 'mediator',
+    forgive: ['/family-rifts.html#not-ready', '/family-rifts.html', '/apology-languages.html', '/library/conflict.html'], forgiving: 'forgive', forgiveness: 'forgive', forgiven: 'forgive', reconcile: 'forgive', reconciling: 'forgive', reconciliation: 'forgive',
+    grandaccess: ['/grandparents.html', '/grown-up-children.html', '/family-rifts.html'],
+    grandfather: ['/grandparents.html', '/grown-up-children.html', '/teens.html#family-care'], grandpa: 'grandfather', grandmother: 'grandfather', grandma: 'grandfather', grandparent: 'grandfather', grandparents: 'grandfather', grandkids: 'grandfather', grandchildren: 'grandfather', grandchild: 'grandfather', grandson: 'grandfather', granddaughter: 'grandfather', grandad: 'grandfather', granddad: 'grandfather',
+    nanteen: ['/teens.html#family-care', '/foster-and-kinship.html#kinship', '/grandparents.html'], nan: 'nanteen', nana: 'nanteen', nanna: 'nanteen', gran: 'nanteen', granny: 'nanteen',
+    gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', gamers: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', discord: 'gaming', twitch: 'gaming', steam: 'gaming', console: 'gaming', consoles: 'gaming', videogames: 'gaming',
+    nag: ['/gaming-and-time-together.html', '/pursue-withdraw.html', '/share-the-load.html'], nags: 'nag', nagging: 'nag', nagged: 'nag', nagger: 'nag',
+    diffhours: ['/different-hours.html', '/share-the-load.html', '/check-ins.html'], shift: 'diffhours', shifts: 'diffhours', schedule: 'diffhours', schedules: 'diffhours', rota: 'diffhours', rotas: 'diffhours',
+    feelingsbook: ['/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
+    parentaway: ['/teens.html#parent-away', '/teens.html', '/foster-and-kinship.html#kinship'],
+    polyguest: ['/more-than-two.html#joining', '/more-than-two.html', '/check-ins.html'], guest: ['/more-than-two.html#joining', '/sharing-a-room.html#guests', '/coming-home.html'], guests: 'guest',
+    polylong: ['/more-than-two.html#long-hours', '/more-than-two.html', '/different-hours.html'],
+    roomguest: ['/sharing-a-room.html#guests', '/sharing-a-room.html', '/sharing-a-room.html#bring-it-up'],
+    lonely: ['/on-my-own.html#lonely', '/on-my-own.html', '/friends.html', '/library/connection.html', '/grief.html'], loneliness: 'lonely', isolated: 'lonely',
+    onmyownlonely: ['/on-my-own.html#lonely', '/on-my-own.html', '/friends.html'],
+    parttime: ['/on-my-own.html#part-time-parent', '/co-parenting.html', '/on-my-own.html'],
+    anger: 'angerhelp', angerhelp: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'],
+    yelling: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', shout: 'yelling', screaming: 'yelling',
+    dad: ['/teens.html', '/grown-up-children.html', '/parents.html', '/caregivers.html'],
+    comingout: ['/coming-out.html', '/teens.html#lgbtq', '/safety.html'], bi: 'comingout', gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', queer: 'comingout', trans: 'comingout', closeted: 'comingout', closet: 'comingout',
+    christening: 'twofaiths', christened: 'twofaiths', christen: 'twofaiths', baptism: 'twofaiths', baptised: 'twofaiths', baptized: 'twofaiths', ramadan: 'twofaiths', eid: 'twofaiths', diwali: 'twofaiths', hanukkah: 'twofaiths'
+  };
+  Object.keys(ACT_12).forEach(function (k) { ACT[k] = ACT_12[k]; });
+  ['adhd grandson|adhd granddaughter|adhd grandchild|adhd grandkids|adhd grandchildren|grandson has adhd|granddaughter has adhd|grandchild has adhd|grandson with adhd|granddaughter with adhd|grandchild with adhd|grandkids with adhd|adhd toddler|adhd teen|adhd teenager|adhd boy|adhd girl'].forEach(function (k) { k.split('|').forEach(function (w) { JOIN[w] = 'adhdkid'; }); });
+  // short words for a partner: they also find the partner pages
+  SAME.gf = ['girlfriend', 'partner']; SAME.bf = ['boyfriend', 'partner']; SAME.girlfriend = ['partner']; SAME.boyfriend = ['partner'];
   // a word chain ends in a list of pages; anything else (a loop, a missing name) is no list at all
   function actFor(t) { var v = ACT[t], n = 0; while (typeof v === 'string' && n++ < 6) v = ACT[v]; return Array.isArray(v) ? v : null; }
   // results that aren't pages
@@ -1714,6 +1768,19 @@
   EXTRA['/on-my-own.html#part-time-parent'] = { u: '/on-my-own.html#part-time-parent', t: 'Part-time with your kids', d: 'When the kids are with you some days: weekend ideas, your own home rules, and the Sunday goodbye.', k: 'Guide' };
   EXTRA['/workpapers/fill/wp-03.html'] = { u: '/workpapers/fill/wp-03.html', t: 'One owner per job: house rules and lists (fill in)', d: 'A fillable list with ready-made groups, including house rules for a family and two homes. Kept on this device; print or save a PDF.', k: 'Tool' };
   EXTRA['#print'] = { u: '#print', t: 'Print this page', d: 'Prints the page you’re on. On any guide, “Share this guide” also has “Print this page”, or press Ctrl+P (⌘P on a Mac). Worksheets and the chore chart have their own Print buttons.', k: 'Print' };
+  [['/co-parenting.html#handoff-bag', 'A handoff-bag checklist (co-parents)', 'What travels with the children between homes: medicines and the inhaler with a note of the last dose, school things, the comfort toy. One list both homes use.', 'Guide'],
+   ['/family-rifts.html#money', 'When grief and money get tangled', 'A parent has died, there’s a will or a house, and old roles come back. Keeping the money talk separate, and when a family mediator helps.', 'Guide'],
+   ['/family-rifts.html#not-ready', '“I’m not ready”, or “I don’t have to”', 'Forgiving is not the same as reconciling. You can say not yet, yes with terms, or no for now.', 'Guide'],
+   ['/teens.html#family-care', 'For teens: living with grandparents, family or foster carers', 'Living with your nan or grandad, an aunt or foster carers: house rules, phones, feeling understood, and missing your mum or dad.', 'Teens'],
+   ['/teens.html#parent-away', 'For teens: when a parent is away, ill, or in treatment', 'Missing your mum or dad, worrying about them, and who you can talk to.', 'Teens'],
+   ['/teens.html#lgbtq', 'For teens: being yourself at home', 'Coming out, or not yet, to parents and family, at your own pace and safely.', 'Teens'],
+   ['/foster-and-kinship.html#kinship', 'Raising a grandchild or a relative’s child', 'Kinship carers, grandparents raising grandchildren: the change in roles, the child’s parents, and support.', 'Guide'],
+   ['/more-than-two.html#long-hours', 'The partner who works long hours', 'In a home of three or more, when one partner works long hours and feels left out of plans and decisions.', 'Guide'],
+   ['/sharing-a-room.html#guests', 'Sharing a room: guests and overnight guests', 'When a roommate’s partner is always staying over: how often, how much notice, and how to say it kindly.', 'Guide'],
+   ['/sharing-a-room.html#bring-it-up', 'How to bring it up if you hate confrontation', 'Words for raising a guest, noise or sleep problem with a roommate, calmly and once.', 'Guide'],
+   ['/on-my-own.html#lonely', 'Loneliness and friends, after a breakup', 'Feeling lonely after a divorce or breakup, and small ways to rebuild friends and a week that feels like yours.', 'Guide'],
+   ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it becomes a safety issue, and getting support.', 'Guide']
+  ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
     '/ladder.html': ['Where am I right now?', 'Find where you are right now, and a next step that fits.'],
@@ -1863,6 +1930,8 @@
       var b = boost[p.u] || 0;
       // the site's own pages about itself only show when asked for: the logo page, and the policies (refunds, terms)
       if (/^\/brand\.html$/.test(p.u) && !terms.some(function (t) { return /^(brand|branding|logo|logos|colou?rs?|palette|fonts?|typeface|mascot)$/.test(t); })) return;
+      // the site's working pages (rollout status, roadmaps, how it's built, the suite index) are for the people who make it
+      if (/^\/(telemetry|roadmap|suite-index(-in-depth)?|dashboard|recheck-drive-admin)\.html$|^\/(architecture|infrastructure|notes|manuscript|samples|supabase|telemetry)\//.test(p.u) && !terms.some(function (t) { return /^(roadmap|architecture|telemetry|rollout|suite|index|dashboard|built|planned)$/.test(t); })) return;
       if (/^\/legal\/(refund|terms)/.test(p.u) && !terms.some(function (t) { return /^(refunds?|terms|legal|cancel|cancell?ation|cancelling|canceling|subscriptions?|membership|charged?|charges|payment|billing|conditions|policy|policies)$/.test(t); })) return;
       if (!b && hits < need) return;                  // every word has to be there, unless it's a helpful tool
       if (b && TOOL_URL.test(p.u)) b += first[p.u] ? 10 : 0;   // a tool named first for a word leads; further down it only edges ahead

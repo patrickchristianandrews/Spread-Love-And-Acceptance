@@ -705,6 +705,19 @@
     // "Use your household from before?" when this sheet has no names (or no jobs) yet
     var hhEl = this.hhOfferEl();
     if (hhEl) this.root.appendChild(hhEl);
+    // A day-by-day check-in (WP-13): "Just tonight" comes first and works on its own; the names box,
+    // the week's table and the rest fold away under it, open once the week has more than today in it.
+    var fold = null, realRoot = this.root;
+    if (s.foldWeek && s.people) {
+      s.sections.forEach(function (sec) { if (sec.personDays) { var tn = self.tonightEl(sec); if (tn) realRoot.appendChild(tn); } });
+      var dsec = s.sections.filter(function (x) { return x.personDays; })[0], tday = dsec ? todayIn(dsec.personDays) : '';
+      var more = dsec && (st.tables[dsec.id] || []).some(function (r) { return r && r.day !== tday && !rowIsEmpty(dsec, r); });
+      if (this.weekFold == null) this.weekFold = !!more;
+      fold = h('details', { className: 'wpf-weekfold', open: this.weekFold ? 'open' : null }, [h('summary', null, [h('span', { className: 'wpf-weekfold-t', text: 'The whole week (optional)' }), h('span', { className: 'wpf-weekfold-s', text: 'Every day\u2019s rows, the load this week, the weekly catch-up, and more people' })])]);
+      fold.addEventListener('toggle', function () { self.weekFold = fold.open; });
+      realRoot.appendChild(fold);
+      this.root = fold;
+    }
     if (metaDefs.length) {
       var grid = h('div', { className: 'wpf-meta' });
       var canEdit = s.people && !this.opts.fixedPeople;
@@ -729,14 +742,15 @@
 
     // A day-by-day check-in (WP-13): "Just tonight's check-in" first, the three questions for each
     // person. It writes into today's rows of the week's table below, so both always say the same.
-    s.sections.forEach(function (sec) { if (sec.personDays && s.people) { var tn = self.tonightEl(sec); if (tn) self.root.appendChild(tn); } });
+    if (!fold) s.sections.forEach(function (sec) { if (sec.personDays && s.people) { var tn = self.tonightEl(sec); if (tn) self.root.appendChild(tn); } });
+    var shareLater = null;
     // "Someone shared a list with you": the choice comes first, before anything else on the sheet
     // (and, once it is combined, "Send my changes back" in the same place)
     var inEl = this.shareInEl() || (this.sendBack === 'top' ? this.sendBackEl() : null);
     var cfEl = !this.sharedIn ? this.conflictsEl() : null;
     // what differs comes first: choose, then send the list back
-    if (inEl) this.root.insertBefore(inEl, this.root.firstChild);
-    if (cfEl) this.root.insertBefore(cfEl, this.root.firstChild);
+    if (inEl) realRoot.insertBefore(inEl, realRoot.firstChild);
+    if (cfEl) realRoot.insertBefore(cfEl, realRoot.firstChild);
     var lead = s.sections[0] && s.sections[0].type === 'note' ? s.sections[0] : null, howEl = null;
     s.sections.forEach(function (sec, k) {
       // a long note before the first part of the sheet folds into "How to fill it in", with the example
@@ -744,9 +758,12 @@
       if (sec === lead) { howEl = h('details', { className: 'wpf-example wpf-howto' }, [h('summary', { text: 'How to fill it in' }), self.renderSection(sec)]); return; }
       self.root.appendChild(self.renderSection(sec));
       if (k === (lead ? 1 : 0)) { if (howEl) self.root.appendChild(howEl); if (exampleEl) self.root.appendChild(exampleEl); }
-      if (self.opts.canShare && s.share && sec.id === s.share.after) self.root.appendChild(self.shareEl());
+      if (self.opts.canShare && s.share && sec.id === s.share.after) { if (fold) shareLater = self.shareEl(); else self.root.appendChild(self.shareEl()); }
     });
     if (exampleEl && !exampleEl.parentNode) this.root.appendChild(exampleEl);
+    // sending the week stays in view, below the fold
+    this.root = realRoot;
+    if (shareLater) realRoot.appendChild(shareLater);
     this.refresh();
     // someone else's own sheet, shown to read (the Workpaper Suite): nothing on it can be changed here
     this.root.classList.toggle('is-readonly', !!this.opts.readOnly);
@@ -765,16 +782,22 @@
     ['friction', 'Something that didn’t feel great'],
     ['ask', 'Something that would help tomorrow']
   ];
+  // the card that stands on its own asks just three: how full, one thank-you, one thing for tomorrow
+  // (the fourth, "didn't feel great", stays in the week's table)
+  var TONIGHT3 = ['load', 'thanks', 'ask'];
   // "Just tonight's check-in": the 90-second ritual itself, for each person, on top of the week's table.
   A.tonightEl = function (sec) {
     var self = this, ctx = this.ctx(), day = todayIn(sec.personDays), rows = this.state.tables[sec.id] || (this.state.tables[sec.id] = []);
-    var cols = TONIGHT.filter(function (q) { return sec.columns.some(function (c) { return c.id === q[0]; }); });
+    var three = !!this.schema.foldWeek, fw = this.forWords || {};
+    var cols = TONIGHT.filter(function (q) { return sec.columns.some(function (c) { return c.id === q[0]; }) && (!three || TONIGHT3.indexOf(q[0]) >= 0); });
     if (!cols.length) return null;
     var only = this.rowsFor && this.rowsFor[sec.id] && ctx.people().indexOf(this.rowsFor[sec.id]) >= 0 ? this.rowsFor[sec.id] : '';
     var hid = 'tonight-' + sec.id;
     var box = h('section', { className: 'wpf-tonight no-print tol-plain', 'aria-labelledby': hid });
-    box.appendChild(h('h2', { id: hid, text: 'Just tonight’s check-in' }));
-    box.appendChild(h('p', { className: 'wpf-help', text: 'About 90 seconds. Each person says how full today was (low, medium or high), then answers in a sentence, about their own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
+    box.appendChild(h('h2', { id: hid, text: three ? (fw.tonight || 'Just tonight: 3 questions') : 'Just tonight’s check-in' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: three
+      ? 'About 90 seconds, and nothing else on the page is needed. Each person says how full today was, one thing they appreciated, and one thing that would help tomorrow, in a sentence, about their own day. Then just listen: no debating, no solving.' + (fw.tonightNote ? ' ' + fw.tonightNote : '') + ' It\u2019s kept with today (' + day + ') in the week, folded away below.'
+      : 'About 90 seconds. Each person says how full today was (low, medium or high), then answers in a sentence, about their own day. Then just listen: no debating, no solving. It goes into today’s rows (' + day + ') in the week below.' }));
     // the same questions for a team (a short stand-up) or for housemates
     if (sec.others && sec.others.length) {
       var oth = h('details', { className: 'wpf-tonight-others' }, [h('summary', { text: 'Doing this as a team, or with housemates?' })]);
@@ -793,6 +816,11 @@
         rows.splice(at, 0, { day: day, who: code }); i = at;
       }
       var fs = h('fieldset', { className: 'wpf-tonight-one' }, [h('legend', { 'data-name-of': code, text: ctx.name(code) })]);
+      // no name yet: a box for it right here, so the card works without the rest of the page
+      if (three && !String(self.state.values['partner' + code] || '').trim()) {
+        var nc = self.control({ type: 'text', placeholder: 'First name' }, '', { key: 'partner' + code });
+        fs.appendChild(h('div', { className: 'wpf-field' }, [h('label', { for: nc.id, text: 'Name' }), nc.el]));
+      }
       cols.forEach(function (q) {
         var c = self.control(q[2] || { type: 'text' }, rows[i][q[0]], { table: sec.id, row: String(i), col: q[0] });
         c.el.setAttribute('data-tonight', '1');
@@ -801,7 +829,22 @@
       grid.appendChild(fs);
     });
     box.appendChild(grid);
+    if (three) box.appendChild(h('div', { className: 'wpf-share-btns' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'tonight-copy', 'data-table': sec.id, text: 'Copy tonight\u2019s answers' })]));
     return box;
+  };
+  // Tonight's answers as a few plain lines, for a message to someone in the next room or across town
+  A.tonightText = function (tid) {
+    var sec = this.schema.sections.filter(function (x) { return x.id === tid; })[0], ctx = this.ctx(), rows = this.state.tables[tid] || [];
+    if (!sec) return '';
+    var day = todayIn(sec.personDays), out = [];
+    ctx.people().forEach(function (c) {
+      var r = rows.filter(function (x) { return x && x.day === day && x.who === c; })[0] || {}, bits = [];
+      if (r.load) bits.push('Today was ' + String(r.load).toLowerCase() + '.');
+      if (r.thanks) bits.push('I appreciated: ' + r.thanks);
+      if (r.ask) bits.push('Would help tomorrow: ' + r.ask);
+      if (bits.length) out.push(ctx.name(c) + ': ' + bits.join(' '));
+    });
+    return out.length ? 'Tonight\u2019s check-in (' + day + ')\n' + out.join('\n') : '';
   };
 
   A.renderSection = function (sec) {
@@ -1066,9 +1109,16 @@
       opts.forEach(function (o) { var p = o.getAttribute('data-person'); o.textContent = ctx.name(p) + (p === 'Both' && note ? ' ' + note : ''); });
     });
     // a helper or backup is someone other than the owner: the owner isn't offered in that row's list
-    Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select][data-not-same]'), function (sel) {
-      var row = (self.state.tables[sel.getAttribute('data-table')] || [])[+sel.getAttribute('data-row')] || {}, own = row[sel.getAttribute('data-not-same')] || '';
-      Array.prototype.forEach.call(sel.querySelectorAll('option[data-person]'), function (o) { var off = !!own && o.getAttribute('data-person') === own; o.disabled = off; o.hidden = off; });
+    // and a place added but never named ("Person D") isn't offered once others have names, unless picked already
+    var anyNamed = ctx.people().some(function (c) { return String(self.state.values['partner' + c] || '').trim(); });
+    Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select]'), function (sel) {
+      var row = sel.getAttribute('data-table') ? (self.state.tables[sel.getAttribute('data-table')] || [])[+sel.getAttribute('data-row')] || {} : {};
+      var own = sel.getAttribute('data-not-same') ? row[sel.getAttribute('data-not-same')] || '' : '';
+      Array.prototype.forEach.call(sel.querySelectorAll('option[data-person]'), function (o) {
+        var p = o.getAttribute('data-person'), i = CODES.indexOf(p);
+        var unnamed = anyNamed && i >= minPeople && !String(self.state.values['partner' + p] || '').trim() && sel.value !== p;
+        var off = (!!own && p === own) || unnamed; o.disabled = off; o.hidden = off;
+      });
     });
     this.refreshDates();
     this.refreshExamples();
@@ -1177,6 +1227,7 @@
     } else if (t.getAttribute('data-key')) {
       if (t.type === 'radio' && !t.checked) return;
       this.state.values[t.getAttribute('data-key')] = val;
+      if (t.type !== 'radio' && t.type !== 'checkbox') Array.prototype.forEach.call(this.root.querySelectorAll('[data-key="' + t.getAttribute('data-key') + '"]'), function (o) { if (o !== t && o.value !== val) o.value = val; });
       if (/^partner[A-H]$/.test(t.getAttribute('data-key'))) this.hhAutoKeep();
       // the day the closing box was ticked, for the "Agreed on …" line
       if (t.getAttribute('data-key') === 'agreed') { if (val) { if (!this.state.values.agreedOn) this.state.values.agreedOn = today(); } else delete this.state.values.agreedOn; }
@@ -1479,9 +1530,22 @@
   A.shareData = function () {
     var st = this.state, v = st.values;
     if (!this.schema.people) return this.shareDataOne();
-    var n = peopleCount(v), names = CODES.slice(0, n).map(function (c) { return String(v['partner' + c] || '').trim(); });
-    if (names.some(function (x) { return !x; })) return { error: 'Give everyone a name at the top first, so the other device knows who is who.' };
-    var d = { t: 'tol-list', v: 1, wp: this.schema.code, p: names, m: {}, tb: {} }, rows = 0;
+    var n = peopleCount(v), names = CODES.slice(0, n).map(function (c) { return String(v['partner' + c] || '').trim(); }), self = this;
+    // an empty place nobody's rows use (a "Person D" added and never named) is simply left out; one that
+    // is used is named in the message, so it's clear what to fix
+    var used = {};
+    this.schema.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      (st.tables[s.id] || []).forEach(function (r) {
+        if (!r || rowIsEmpty(s, r) || isExampleRow(s, r)) return;
+        s.columns.forEach(function (c) { if (c.type === 'person' && !c.prefill && CODES.indexOf(r[c.id]) >= 0) used[r[c.id]] = rowName(s, r) || 'a row'; });
+      });
+    });
+    var blankUsed = CODES.slice(0, n).filter(function (c, i) { return !names[i] && used[c]; })[0];
+    if (blankUsed) return { error: self.ctx().name(blankUsed) + ' is picked for \u201c' + used[blankUsed] + '\u201d but has no name yet. Type their name at the top (or pick someone else there), so the other device knows who is who.' };
+    if (names.filter(Boolean).length < Math.min(2, n)) return { error: 'Type ' + (names.filter(Boolean).length ? 'the other name' : 'your names') + ' at the top first, so the other device knows who is who.' };
+    // the people sent, in order, without the empty places; rows point at them by name, so nothing shifts
+    var d = { t: 'tol-list', v: 1, wp: this.schema.code, p: names.filter(Boolean), m: {}, tb: {} }, rows = 0;
     (this.schema.meta || []).forEach(function (f) { if (!isBlank(v[f.id]) && typeof v[f.id] !== 'object') d.m[f.id] = v[f.id]; });
     this.schema.sections.forEach(function (s) {
       if (s.type !== 'table') return;
@@ -2015,6 +2079,12 @@
       var again0 = this.root.querySelector('[data-action="fans"][data-table="' + ft + '"]'); if (again0) again0.focus();
       return;
     }
+    if (act === 'tonight-copy') {
+      var tt = this.tonightText(b.getAttribute('data-table')), self3 = this;
+      if (!tt) { this.status('Answer one of the questions first, then copy.'); return; }
+      copyText(tt).then(function (ok) { self3.status(ok ? 'Copied. Paste it into a message if you\u2019re not in the same room.' : 'This browser wouldn\u2019t copy here.'); });
+      return;
+    }
     if (act === 'forget-kept') {
       this.eraseKept();
       var kb = document.getElementById('wpf-keep'); if (kb) kb.checked = false;
@@ -2513,6 +2583,20 @@
       app.autoKeep = !off;
       if (app.autoKeep && app.hasAnything()) app.startKeep();
     }
+    // The daily check-in, with no names yet, uses the grown-ups' names kept on this device (household.js),
+    // so nobody retypes them on a tired evening. Shown, and changeable, right on the card.
+    var namesMsg = '';
+    if (schema.foldWeek && schema.people && global.TOLHousehold && app.hhNamesEmpty()) {
+      var hh0 = global.TOLHousehold.get(), kids0 = (hh0 && hh0.kids || []).map(function (k) { return String(k).toLowerCase(); });
+      var grown = hh0 ? hh0.people.filter(function (n) { return kids0.indexOf(n.toLowerCase()) < 0; }).slice(0, MAX_PEOPLE) : [];
+      if (grown.length >= 2) {
+        grown.forEach(function (nm, i) { if (i >= peopleCount(app.state.values)) addPerson(schema, app.state); app.state.values['partner' + CODES[i]] = nm; });
+        syncPeople(schema, app.state);
+        app.safeSig = JSON.stringify(app.state);
+        app.hhUsed = true;
+        namesMsg = 'Using the names kept on ' + deviceWord() + ': ' + grown.slice(0, -1).join(', ') + ' and ' + grown[grown.length - 1] + '. Change them any time, under \u201cThe whole week\u201d.';
+      }
+    }
     // say plainly what happens by default, with a way to clear it now
     var keepP = keepBox && keepBox.closest('p');
     if (keepP && !document.getElementById('wpf-tabnote')) {
@@ -2583,6 +2667,7 @@
     if (sharedSay()) { /* said */ }
     else if (kept) app.status('Picked up what you saved on ' + deviceWord() + '. To remove it: “Erase”, under How saving works.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
+    else if (namesMsg) app.status(namesMsg);
     window.addEventListener('pageshow', function (e) { if (e.persisted) { if (keepBox) keepBox.checked = app.keep; app.render(); } });
     if (keepBox) keepBox.addEventListener('change', function () { app.setKeep(keepBox.checked); });
     if (eraseBtn) eraseBtn.addEventListener('click', function () { app.eraseKept(); if (keepBox) keepBox.checked = false; });

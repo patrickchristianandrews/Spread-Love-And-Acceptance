@@ -600,10 +600,13 @@
   var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?narcissis\w*\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
   // a sibling, a child, a classmate or a boss calling names is a different conversation
   var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
+  var VERBAL_DETAIL = /\b(scream\w*|yell\w*|shout\w*|swear\w*|swore|names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|eggshells|turns?|turned|twist\w*|flip\w*|darvo|apologi\w*|angry|mad|furious|blames?|gaslight\w*)\b/;
   function verbalReply(f) {
-    var b = [{ k: 'p', x: 'I’m really glad you asked. Being screamed at, called names or made to feel worthless, or having things turned around so it’s always your fault, is serious. It isn’t a communication problem you can fix by wording things better, and it is not your fault.' }];
-    if (/narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
-    b.push({ k: 'p', x: 'Some signs it has moved from ordinary conflict into control:' });
+    var detail = VERBAL_DETAIL.test(f);
+    var b = [detail ? { k: 'p', x: 'I’m really glad you asked. Being screamed at, called names or made to feel worthless, or having things turned around so it’s always your fault, is serious. It isn’t a communication problem you can fix by wording things better, and it is not your fault.' }
+      : { k: 'p', x: 'That’s a fair thing to wonder about. I can’t diagnose anyone, and nobody can from a chat. A label matters less than the pattern: what they do, and how you feel around them.' }];
+    if (detail && /narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
+    b.push({ k: 'p', x: detail ? 'Some signs it has moved from ordinary conflict into control:' : 'Whatever the label, these are signs that it’s more than ordinary conflict:' });
     b.push({ k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] });
     b.push({ k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247, and the Men’s Advice Line is 0808 801 0327. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.' });
     b.push({ k: 'links', x: [['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] });
@@ -1846,13 +1849,16 @@
       }
       var vf = norm(q);
       if (CV_RESTART.test(vf)) { state.fearSeen = false; state.coSeen = false; }
+      if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; return meant(childCrisisReply(), sp); }
+      if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
       if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && ANGER_NOW.test(vf) && !/\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|ex|dad|mum|mom|son|daughter|kid|boss))\b( s| is| gets| keeps)? (about to|going to|gonna|losing|loses)\b/.test(vf)) { state.last = null; return meant(angerNowReply(), sp); }
+      if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
       if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care)) return meant(conflictNotAbuse(state), sp);
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
-      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; return meant(verbalReply(vf), sp); }
+      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       var igr = igTurn(state, q0, vf);
@@ -1916,17 +1922,25 @@
   var SELF_HARMFUL = /\b(am i|i m|im|i am|i might be|i think i m|i think im|worried i m|worried im|scared i m|scared im|afraid i m|afraid im|could i be|maybe i m|maybe im)\b.{0,12}\b(an |the |a )?(abuser|abusive( one)?|toxic( one)?|the problem|emotionally abusive|a bad (dad|father|mom|mum|mother|parent|husband|wife|partner))\b|\bis (it|yelling|shouting|screaming|losing my temper)\b.{0,30}\b(abuse|abusive)\b|\bi (scared|frightened|terrified) my (son|daughter|kid|kids|child|children|wife|husband|partner|family)\b|\bmy (son|daughter|kid|child|wife|husband|partner)\b.{0,20}\b(flinch\w*|is scared of me|is afraid of me|was scared of me|cowered)\b|\b(am i|could i be|have i been|i m|im|i am|worried i m|worried im|scared i m|scared im)( (really|actually))? (damaging|traumati[sz]ing|ruining|scarring|harming|messing up|screwing up) (my|the|our) (kids|children|son|daughter|child|family|boys|girls)\b/;
   // "sometimes I slam doors and punch the wall", "I throw things when I'm angry": the person writing is the one doing it.
   // Take it seriously without shaming, keep everyone safe now, and real help for them. Never the victim script.
-  var OWN_AGG = /\b(i|i ve|ive|i have|i ll|i d)( (sometimes|often|always|keep|kept|just|end up|ended up|tend to|start|started|then|also|even|have|ve|get so (angry|mad) (that )?i|got so (angry|mad) (that )?i|get angry and|got angry and|lose it and|lost it and))* (slam\w* (doors?|things|stuff|the door|cupboards?)|punch\w* (the |a |holes? in the )?(wall|walls|door|doors|things|stuff|holes?)|hit (the |a )?(wall|walls|door|doors|table|things)|kick\w* (the |a )?(wall|walls|door|doors|things|stuff|furniture)|throw\w* (things|stuff|plates|my phone|it|whatever)|threw (things|stuff|my phone|plates|a plate|a glass|the remote)|smash\w* (things|stuff|plates|my|the|a)|break (things|stuff)|broke (things|stuff|a door|the door)|grab\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them) (by|and)|shov\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)|push\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them) (away|over|against|into|out)|hit (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them))\b|\bwhen i m (angry|mad|furious) i (slam|punch|hit|kick|throw|smash|break)\w*/;
+  var OWN_AGG = /\b(i|i ve|ive|i have|i ll|i d)( (sometimes|often|always|keep|kept|just|end up|ended up|tend to|start|started|then|also|even|have|ve|get so (angry|mad) (that )?i|got so (angry|mad) (that )?i|get angry and|got angry and|lose it and|lost it and|lose my temper and|lost my temper and|lose my rag and|snap and|snapped and|get physical and))* (slam\w* (doors?|things|stuff|the door|cupboards?)|punch\w* (the |a |holes? in the )?(wall|walls|door|doors|things|stuff|holes?)|hit (the |a )?(wall|walls|door|doors|table|things)|kick\w* (the |a )?(wall|walls|door|doors|things|stuff|furniture)|throw\w* (things|stuff|plates|my phone|it|whatever)|threw (things|stuff|my phone|plates|a plate|a glass|the remote)|smash\w* (things|stuff|plates|my|the|a)|break (things|stuff)|broke (things|stuff|a door|the door)|grab\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them) (by|and)|shov\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)|push\w* (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them) (away|over|against|into|out)|hit (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them))\b|\bwhen i m (angry|mad|furious) i (slam|punch|hit|kick|throw|smash|break)\w*|\bi (throw|threw|throwing) (things|stuff|\w+) at (my|him|her|them)\b/;
+  // "I'm so angry I want to hurt him": the person writing might hurt someone
+  var HURT_INTENT = /\b(i|i m|im|i am)( so| really| that)?( angry| mad| furious| livid| raging)?( (that|and))?( i)? (want|wanna|feel like i (could|want to|m going to)|m going to|am going to|m gonna|am gonna|could|might|need) (to )?(hurt|hit|punch|smack|slap|strangle|choke|beat( up)?|kill|attack) (him|her|them|someone|somebody|my (wife|husband|partner|boyfriend|girlfriend|ex|son|daughter|kid|kids|child|children|mum|mom|dad|brother|sister|roommate|boss))\b/;
   function ownAgg(f) {
+    if (HURT_INTENT.test(f)) return true;
     if (!OWN_AGG.test(f)) return false;
     // "I hit the wall at work, I'm exhausted": the tiredness idiom, not a fist
     if (/\bhit (the |a )?wall\b/.test(f) && !/\b(slam|punch|kick|throw|threw|smash|angry|mad|furious|rage|temper|fist|hand)\w*/.test(f) && /\b(tired|exhaust\w*|energy|burn\w*|social|people|marathon|running|run|work|study\w*|week|day|mile)\b/.test(f)) return false;
     return true;
   }
   function ownAggReply(f) {
-    var person = /\b(hit|grab\w*|shov\w*|push\w*) (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)\b/.test(f);
-    var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt. It isn’t a verdict on who you are, and it can change.' }];
-    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it’s important to get help today.' });
+    var person = /\b(hit|grab\w*|shov\w*|push\w*) (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)\b|\b(throw|threw|throwing) \w+ at (my|him|her|them)\b/.test(f), intent = HURT_INTENT.test(f);
+    if (intent) return { blocks: [
+      { k: 'p', x: 'Thank you for saying it instead of doing it. That matters. Right now, put distance between you: leave the room, or the house, and don’t go back until your body has calmed down. Nobody needs to be hurt, including you.' },
+      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.', 'If you think you might hurt someone, or anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.', 'When it has passed, get support today: your doctor, an anger-management group, or a counsellor. In the US, the National Domestic Violence Hotline (1-800-799-7233) also talks with people worried about their own behaviour. In the UK, the Respect Phoneline is on 0808 802 4040.'] },
+      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help'], ['When it’s your own behaviour', '/safety.html#own-behaviour']] }],
+      chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownagg' };
+    var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. ' + (person ? 'Throwing things at someone, or putting hands on them, is serious: it frightens them, and someone can get hurt.' : 'Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt.') + ' It isn’t a verdict on who you are, and it can change.' }];
+    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, that is abuse, and it’s important to get help today.' });
     b.push({ k: 'p', x: 'Right now, keep everyone safe:' });
     b.push({ k: 'list', x: ['When you feel it rising, step away first: leave the room, or go outside. Say “I’m getting too angry. I’m taking a break, and I’ll be back in twenty minutes.”',
       'Breathe in for 4 and out for 6 until your body slows down. Don’t go back until it has.',
@@ -1949,6 +1963,66 @@
       { k: 'note', x: 'If it happens most days, or comes with throwing things, threats, or someone being scared of you, get support for yourself: your doctor, an Employee Assistance Program, or an anger-management group.' },
       { k: 'links', x: [['When it’s you and your child: four steps', '/upset-right-now.html#parent-child'], ['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['The Calm-Down Kit', '/workpapers/fill/wp-11.html']] }],
       chips: [{ label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }, { label: 'Getting help for my anger', q: 'where can i find help for my anger' }], kind: 'care', id: 'angernow' };
+  }
+  // "we both yell and sometimes shove each other": physical fights are a safety matter, whoever starts them
+  var MUTUAL = /\b(we|we both|both of us)( (sometimes|often|always|end up|ended up|have|ve|get|got|just|even|kind of|kinda|started|start|both|then|also))* (shove|shoving|push|pushing|hit|hitting|slap|slapping|punch|punching|kick|kicking|grab|grabbing|scratch|scratching|bite|biting|get physical|got physical|physically fight|fight physically)\w*\b|\b(shove|push|hit|slap|punch|kick|grabb?|scratch|bite)\w* each other\b|\b(fights?|arguments?|rows?) (get|gets|got|getting|turn|turns|turned) physical\b|\bphysical fights?\b|\bwe (get|got) physical\b/;
+  function mutualReply() {
+    return { blocks: [
+      { k: 'p', x: 'Thank you for being honest about this. When fights get physical, even pushing or shoving, and even when it goes both ways, it’s a safety issue, not a communication one. Someone can get hurt quickly, and it tends to get worse, not better.' },
+      { k: 'list', x: ['For now, stop using the shared couples tools and talks on this site. They’re for two people who both feel safe.',
+        'Agree one stop rule today: the moment voices rise, one of you leaves the room, or the house, and the other doesn’t follow.',
+        'Each get support on your own first: your doctor, or your own counsellor or anger-management group. Couples counselling isn’t usually recommended while there’s violence.',
+        'If either of you is scared of the other, or someone has been hurt, that matters more than who started it.'] },
+      { k: 'p', x: 'In the US, the National Domestic Violence Hotline (1-800-799-7233, or text START to 88788) talks with anyone in a relationship like this, including people worried about their own behaviour. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247, and the Respect Phoneline (0808 802 4040) helps people worried about their own behaviour. If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.' },
+      { k: 'links', x: [['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html'], ['Getting help with anger', '/parents.html#anger-help']] }],
+      chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+  }
+  // A parent whose child said they want to die: what to do now, for the parent, not the DV paragraph
+  var CHILD_CRISIS = /\b(my|our) (teenage |teen |little |young |eldest |oldest |youngest |\d+ ?(year|yr) ?old )?(son|daughter|child|kid|teen|teenager|boy|girl|stepson|stepdaughter|stepkid|grandson|granddaughter)\b.{0,60}\b(wants? to die|wanted to die|want(s|ed)? to kill (himself|herself|themselves|themself)|suicid\w*|kill(ing)? (himself|herself|themselves|themself)|self ?harm\w*|hurt(ing|s)? (himself|herself|themselves|themself)|cut(s|ting)? (himself|herself|themselves|themself)|(doesn t|doesnt|does not|don t|dont) want to (live|be here|be alive|exist)|better off dead|end (his|her|their) life|no reason to live)/;
+  function childCrisisReply() {
+    return { blocks: [
+      { k: 'p', x: 'I’m so sorry. Hearing that from your child is frightening. Take it seriously every time, even if it came out in anger or they say they didn’t mean it. You did the right thing by not brushing it off.' },
+      { k: 'list', x: ['If you think they might act on it, stay with them, or make sure a safe adult is with them, now.',
+        'Ask directly and calmly: “Are you thinking about killing yourself?” Asking doesn’t put the idea in their head. It shows them they can tell you.',
+        'Listen more than you talk, and thank them for telling you. You don’t need the perfect words.',
+        'Make home safer today: lock away or remove medicines, blades and anything else they could use, and store any gun outside the home.',
+        'Call or text 988 together (the Suicide & Crisis Lifeline, US). In the UK, they can call Childline free on 0800 1111, Samaritans are on 116 123 for either of you, and Papyrus HOPELINE247 (0800 068 4141) supports parents of young people.',
+        'Get an urgent appointment with their doctor, and ask about mental health support for young people.',
+        'If they’re in immediate danger, or have hurt themselves, call 911 (US) or 999 (UK), or go to the emergency department.'] },
+      { k: 'links', x: [['For teens: when it’s more than a bad day (to read together)', '/teens.html#help'], ['Upset right now?', '/upset-right-now.html']] }],
+      chips: [], kind: 'safety', id: 'childcrisis' };
+  }
+  // "I cheated on my wife and she found out": an honest, non-shaming answer, and healing after hurt
+  var CHEATED_ME = /\b(i|i ve|ive|i have|i had)( (also|just|actually|recently|once))? (cheated on|been unfaithful|was unfaithful|had an affair|been having an affair|m having an affair|am having an affair|slept with someone else)\b|\bmy affair\b/;
+  var CHEATED_ON = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( (has|had|s))? (cheated|been cheating|was cheating|was unfaithful|been unfaithful|had an affair|been having an affair|slept with someone( else)?)\b|\bcheated on me\b|\bfound out about (his|her|their|the) affair\b|\b(his|her|their) affair\b/;
+  function infidelityReply(me) {
+    if (me) return { blocks: [
+      { k: 'p', x: 'Thank you for being honest. This is a really hard moment for both of you. An affair is a serious breach of trust, and repair is possible for many couples, but it takes time, full honesty, and can’t be rushed.' },
+      { k: 'list', x: ['Take full responsibility, with no “but”: “I did this. It was my choice, and it wasn’t your fault.”',
+        'End the affair completely, and be open about that. Answer their questions honestly, even the hard ones, without blaming them or the relationship.',
+        'Let them set the pace. Hurt, anger and questions often come in waves for months. That’s normal, not a sign it isn’t working.',
+        'Trust comes back through changed actions over time, not one big apology.',
+        'See a couples counsellor who works with affairs: there are well-studied approaches for exactly this. A counsellor for you alone can help you understand why it happened.'] },
+      { k: 'note', x: 'Whether to stay together is their choice as much as yours. You can’t earn forgiveness on a timetable.' },
+      { k: 'links', x: [['Healing after hurt: rebuilding trust', '/book/understanding-11-healing-in-depth.html#trust'], ['An apology that takes responsibility', '/apology-languages.html#responsibility'], ['Finding a counsellor', '/outside-help.html#counsellor']] }],
+      chips: [{ label: 'How do I apologise?', q: 'how do i say sorry so it lands' }], kind: 'care', id: 'infidelity' };
+    return { blocks: [
+      { k: 'p', x: 'I’m so sorry. Finding out about an affair is one of the most painful things that can happen in a relationship, and the shock can feel physical. What you’re feeling is a normal response to a real betrayal, and it isn’t your fault.' },
+      { k: 'list', x: ['You don’t have to decide anything today, whether that’s staying or leaving.',
+        'Look after the basics: sleep, food, and one person you trust to talk to.',
+        'Ask the questions you need answered when you’re ready. You deserve honest answers.',
+        'If you both want to try, a couples counsellor who works with affairs can help, and many couples do recover. A counsellor just for you can help either way.',
+        'If you’re worried about your sexual health, a sexual health clinic can test you confidentially.'] },
+      { k: 'links', x: [['Healing after hurt', '/book/understanding-11-healing-in-depth.html#hurt'], ['Forgiveness, and what it isn’t', '/book/understanding-11-healing-in-depth.html#forgiveness'], ['Finding a counsellor', '/outside-help.html#counsellor']] }],
+      chips: [], kind: 'care', id: 'infidelity' };
+  }
+  // "should I take ashwagandha instead of my anxiety meds?": never stop or swap prescribed medicine without the prescriber
+  var MEDS_SWAP = /\b(instead of|rather than|replace|replacing|swap|swapping|switch|switching|stop|stopping|come off|coming off|quit|quitting|get off|wean (myself )?off|ditch|go off|cut down)\b.{0,30}\b(my |the )?(meds|medication|medications|medicine|prescription|prescribed|antidepressants?|ssris?|sertraline|fluoxetine|citalopram|escitalopram|paroxetine|venlafaxine|prozac|zoloft|lexapro|anxiety (meds|medication|pills)|pills|tablets)\b/;
+  function medsFirst(q, x) {
+    if (!x || !x.blocks || x.kind === 'safety' || !MEDS_SWAP.test(norm(q))) return x;
+    if (/prescriber|without (talking to|asking) your doctor/.test(JSON.stringify(x.blocks))) return x;
+    x.blocks = [{ k: 'p', x: 'First, the important part: please don’t stop, cut down or swap a prescribed medicine without talking to your prescriber. Stopping suddenly can cause withdrawal and bring symptoms back, and some herbs interact with medicines. Your doctor or pharmacist can help you plan any change safely.' }].concat(x.blocks);
+    return x;
   }
   function selfHarmfulReply(f) {
     var hurt = /\b(hit|hits|slap\w*|punch\w*|shov\w*|push\w*|grab\w*|threat\w*|kick\w*|choke\w*|throw|threw)\b/.test(f);
@@ -2776,7 +2850,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

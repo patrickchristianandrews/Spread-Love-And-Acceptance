@@ -229,6 +229,9 @@ const F = [
   {id:"menace", name:"A threat (\"you'll regret it\")", kind:"static", re:null,
    what:"\"You'll regret it,\" \"or else\" or \"if you tell anyone…\" is a threat. It would frighten or control the other person. That isn't a tone problem a softer wording can fix.",
    fix:"Leave the threat out completely. Say what you feel and what you need, or take a break until you're calm."},
+  {id:"control", name:"Checking up or control", kind:"static", re:null,
+   what:"Demanding someone's location, their phone or who they were with, deciding who they can see, or telling them they're worth nothing or that nobody else would want them can work as control, even when it comes from worry or hurt. That isn't a tone problem a softer wording can fix.",
+   fix:"Say the worry or the hurt itself, not a check: \"I got worried when I couldn't reach you.\" Who someone sees, and their phone, are theirs."},
   {id:"jab", name:"Blame or a dig", kind:"static", re:null,
    what:"Keeping score (\"I managed fine without you\"), a dig (\"when it suits you\", \"must be nice\") or a label (\"you treat me like the help\") says the hurt as blame. The listener defends themselves instead of hearing what you need.",
    fix:"Say the hurt and the real ask: \"I've been feeling left out. Could we find ten minutes this week?\""},
@@ -1407,6 +1410,15 @@ function analyze(textIn, opts){
   { const mm = low.match(MENACE_RE);
     if(mm){ const st=mm.index, en=mm.index+mm[0].replace(/[\s,]+$/,"").length;
       drop("threat", h=>h.s<en+40 && st-60<h.e); drop("swear", h=>h.s<en && st<h.e); drop("impera", h=>h.s<en && st<h.e); drop("again"); push("menace", st, en); } }
+  // "If you leave me I'll kill myself": a threat to self-harm used as leverage is still a threat, and also a safety worry
+  const selfHarm = !!(SHARED && SHARED.selfHarm && SHARED.selfHarm(low));
+  if(selfHarm && !has("menace") && /\bif you (?:ever )?(?:leave|go|break up|walk out|don't|do not|won't|end)\b|\b(?:it'll|it will|it'd|it would) be (?:all )?your fault\b|\bbecause of you\b/i.test(low)){
+    const sm = low.match(SHARED.SELFHARM_RE); push("menace", sm.index, sm.index+sm[0].length); drop("threat"); }
+  // checking up, cutting someone off, or "nobody else would want you": signs of control, not a tone problem
+  let control = null;
+  { const cm = SHARED && SHARED.control ? SHARED.control(low) : null;
+    if(cm && !has("menace")){ control = {kind: cm.kind, kinds: cm.kinds, text: low.slice(cm.start, cm.end)};
+      drop("impera", h=>h.s<cm.end && cm.start<h.e); drop("urgent"); drop("label", h=>h.s<cm.end && cm.start<h.e); push("control", cm.start, cm.end); } }
   // a calm boundary ("If you can't respect my relationship, I'm going to leave for today. I love you."): caring, not a threat
   { const bm = low.match(BOUNDARY_RE);
     if(bm && !has("menace") && !["swear","hostile","label","contempt","violent","legal","dxlabel"].some(has) && (BOUNDARY_CARE.test(low) || /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i.test(bm[0]))){
@@ -1564,6 +1576,8 @@ function analyze(textIn, opts){
     },
     feelingWord: feelingM ? feelingM[1] : "",
     safety,
+    control,
+    selfHarm,
     danger: !!found.menace,
     apology: apology >= 0 && !found.menace
   };

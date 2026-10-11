@@ -310,6 +310,16 @@
   .read #start-where .sw-lead{ margin:0 0 .6rem; font-weight:600; }
   @media (min-width:641px){
     .read .hh-go.is-two{ grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:1fr; }
+    .read .hh{ padding-top:clamp(1.1rem, .6rem + 1.6vw, 1.7rem); }
+    .read .hh .hh-lede{ margin-bottom:1rem; }
+    .read .hh-h1{ margin-bottom:.6rem; }
+    .read .hh-chips a{ min-height:32px; }
+  }
+  /* laptops with a short screen: a slightly smaller headline keeps the first step and the calmer-page offer in view */
+  @media (min-width:641px) and (max-height:820px){
+    .read .hh-h1{ font-size:clamp(1.9rem, 1.1rem + 2.2vw, 2.4rem); }
+    .read .hh .hh-mode-q{ margin-bottom:.3rem; }
+    .read a.hh-start{ padding-top:.8rem; padding-bottom:.85rem; }
   }
   @media (max-width:640px){
     .read .hh-lede-y{ display:none; }
@@ -317,7 +327,9 @@
     .read .hh-kick{ margin-bottom:.35rem; }
     .read .hh-h1{ margin-bottom:.55rem; }
     .read .hh .hh-chips{ gap:.3rem; }
-    .read .hh-chips a{ min-height:32px; padding:.15rem .62rem; font-size:.86rem; }
+    .read .hh-chips a{ min-height:32px; padding:.15rem .58rem; font-size:.84rem; }
+    /* phones keep the chips to about three short rows; these stay one tap away under "More" and in Just me */
+    .read .hh-chips .hh-chip-wide, .read .hh-chip-x{ display:none; }
     .read a.hh-start{ margin-top:.75rem; }
     .read .hh-start-n{ font-size:.9rem; }
     /* while the first screen is in view the round helper buttons step aside, so they never cover its words */
@@ -651,12 +663,12 @@
       <li><a href="/friends.html">Friend</a></li>
       <li><a href="/by-relationship.html#family">Family</a></li>
       <li><a href="/foster-and-kinship.html#kinship">Raising a grandchild</a></li>
-      <li><a href="/co-parenting.html">Co-parent or ex</a></li>
+      <li><a href="/co-parenting.html" aria-label="Co-parent or ex">Co-parent<span class="hh-chip-x">&nbsp;or ex</span></a></li>
       <li><a href="/share-the-load.html#roommates">Housemates</a></li>
-      <li><a href="/work.html">Work or business</a></li>
-      <li><a href="/more-than-two.html">More than two of us</a></li>
+      <li><a href="/work.html" aria-label="Work or business">Work<span class="hh-chip-x">&nbsp;or business</span></a></li>
+      <li class="hh-chip-wide"><a href="/more-than-two.html">More than two of us</a></li>
       <li><a href="/teens.html">Under 18?</a></li>
-      <li><a href="/grief.html">Lost someone</a></li>
+      <li class="hh-chip-wide"><a href="/grief.html">Lost someone</a></li>
       <li class="hh-chip-more"><a href="#start-where">More&hellip;</a></li>
     </ul>
     <ul class="hh-chips" data-mode-show="me" hidden aria-label="Or go straight to what fits you">
@@ -775,12 +787,23 @@
     window.addEventListener('storage', function (e) { if (e.key === KEY) apply(); });
   })();
   </script>
+  <script>
+  /* the calmer-page offer (built by site.js) moves into the first screen, just under "Start in 10 minutes" */
+  (function () {
+    var slot = document.querySelector('[data-offer-slot]'), main = document.querySelector('main');
+    if (!slot || !main || !('MutationObserver' in window)) return;
+    function move() { var o = main.querySelector(':scope > .tol-offer'); if (o) { slot.appendChild(o); mo.disconnect(); } }
+    var mo = new MutationObserver(move);
+    mo.observe(main, { childList: true });
+    document.addEventListener('DOMContentLoaded', function () { move(); setTimeout(function () { mo.disconnect(); }, 4000); });
+  })();
+  </script>
 </section>
 
     <section id="start-where" aria-labelledby="sw-h">
       <h2 id="sw-h">Start where you are</h2>
       <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
-      <div data-tol-start data-first="same-fight,friends,separated,grandparents,more-than-two,child-teen,home-bills,work,not-safe" data-more="Something else? See every situation"></div>
+      <div data-tol-start data-first="same-fight,friends,family-rifts,raising-grandchild,separated,money,gaming,illness,two-faiths,widowed,more-than-two,sharing-a-room,coming-home,empty-nest,keep-good,coming-out,work,not-safe" data-first-me="know-myself,anxious,widowed,on-my-own,empty,illness,coming-out,grief,teen,give-too-much,anger,not-safe" data-more="Something else? See all situations"></div>
     </section>
 
     <section id="guides" aria-labelledby="guides-h">

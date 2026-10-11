@@ -96,7 +96,7 @@
         ['/foster-and-kinship.html#support','Where to get support','Groups, money help and a break for you.'],
         ['/teens.html','For the teen in your home','A page written for them, not about them.']
       ]},
-    { id:'grandparents', ico:'\uD83E\uDDD3', label:'A grandparent and a grown-up child finding new rules',
+    { id:'grandparents', ico:'\uD83E\uDDD3', label:'Grandparents: helping with the grandchildren, and new rules with a grown-up child',
       lead:['/foster-and-kinship.html#kinship','Raising your grandchild full-time? Start here \u2192'],
       say:'When a grown-up child has a home, and maybe a baby, of their own, everyone is learning new rules: visits, advice, and who decides what. Both sides usually mean well. Clear, kind words about what helps work better than hints.',
       picks:[
@@ -148,7 +148,7 @@
         ['/share-the-load.html#roommates','Roommates and housemates','Chores, bills and a house meeting.'],
         ['/signal-translator.html','Check a message first','Raise it kindly before it builds up.']
       ]},
-    { id:'coming-out', ico:'\uD83C\uDF08', label:'Coming out as an adult',
+    { id:'coming-out', ico:'\uD83C\uDF08', label:'Coming out, or telling family who I love',
       say:'Coming out as an adult, to family, at work or with a partner, is yours to share at your own pace. You choose who, when and how much. If someone threatens or controls you, your safety comes first.',
       picks:[
         ['/coming-out.html','Coming out as an adult','To family, at work or with a partner, with words you could use.'],

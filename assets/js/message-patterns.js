@@ -315,6 +315,50 @@
     /(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*/i,
     /\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b/i
 ];
+  /* Checking up, cutting someone off, or a put-down that says they're worth nothing: signs of control, not a tone problem.
+     "monitor": demands for a location, a phone or passwords, or who someone was with. "isolate": not letting them see people.
+     "degrade": "nobody else would want you", "you're worthless", "you're nothing without me".
+     A kind, one-off ask ("Can you send me your location when you get there, so I know you got home safe?",
+     "Who were you with at the party? Sounds fun!") is not flagged: a location or "who were you with" counts when it's
+     demanded (said as an order, or "now"), or when it comes with another check ("Where were you? Who were you with?"). */
+  var END = '(?=\\s*(?:[.!?,…;]|$|\\b(?:but|except|like|anyway|now|again|if|the way)\\b))';
+  var CONTROL_RES = {
+    // always a sign of control, however it's asked
+    phone: /\b(?:show|give|hand) me your (?:phone|passwords?|passcode|messages|texts|chats|dms)\b|\b(?:let me|i want to|i need to|i'm going to|i'll|i'm gonna) (?:see|check|look at|go through|read) your (?:phone|messages|texts|chats|dms|emails?)\b|\bunlock your phone\b|\bwhat(?:'s| is) your (?:password|passcode)\b|\bwhy (?:is|was|did you turn|have you turned) your location (?:off|turned off)\b|\b(?:turn|switch|put) (?:your )?location (?:back )?on\b/i,
+    // a location or a check on who they're with: counted when demanded, or with a second check
+    loc: /\b(?:send|share|give) me your (?:live )?location\b|\b(?:send|share) your (?:live )?location\b/i,
+    who: /\bwho (?:were|are) you (?:with|texting|talking to|messaging|seeing)\b|\bwho (?:was|is) that (?:texting|messaging|calling) you\b/i,
+    where: /\bwhere (?:were|are|have) you(?: been)?(?: really| actually)?\s*\?/i,
+    isolate: /\byou (?:can't|cannot|can not|aren't allowed to|are not allowed to|won't be allowed to|don't get to) (?:see|go out with|hang out with|talk to|visit|text|call|meet) (?:your (?:friends|family|mum|mom|dad|sister|brother|mates)|anyone|anybody|people)\b|\bi don't want you (?:seeing|talking to|going out with|hanging out with|texting) (?:your friends|your family|anyone|anybody|other people)\b|\byou(?:'re| are) not (?:going|allowed) (?:out|to see your (?:friends|family))\b|\b(?:it's|its) (?:them|your friends|your family) or me\b|\byou (?:don't|do not) need (?:anyone|anybody|friends|them) (?:else )?(?:but|except|apart from) me\b/i,
+    degrade: new RegExp("\\b(?:no ?one|nobody|no-one) (?:else )?(?:would|will|could) (?:ever )?(?:want|love|have|put up with|date|believe) you" + END + "|\\byou(?:'re| are|r| r) (?:so |completely |totally |utterly |just )?(?:worthless|nothing without me)\\b|\\byou(?:'re| are) lucky (?:i|anyone) (?:put up with|puts up with|stay with|stays with) you\\b|\\byou(?:'ll| will) never (?:find|get) (?:anyone|anybody|someone) (?:else|better)\\b|\\bwithout me you(?:'re| are|'d be| would be) nothing\\b", 'i')
+  };
+  // a location or "who were you with" said as an order, not a kind ask: "Send me your location now."
+  var POLITE_ASK = /\b(?:can|could|would|will) you (?:please )?(?:just )?$|\bplease $|\bif you (?:can|could|want|like),? $/;
+  function hit(t, re, text) { var m = t.match(re); if (!m) return null; var en = m.index + m[0].replace(/[\s,.!?]+$/, '').length; return { start: m.index, end: en, text: String(text).slice(m.index, en), m: m }; }
+  // -> {kind: 'monitor'|'isolate'|'degrade', start, end, text} for the first sign of control, or null
+  function control(text) {
+    var t = prep(text), found = [];
+    var ph = hit(t, CONTROL_RES.phone, text); if (ph) found.push(Object.assign(ph, { kind: 'monitor' }));
+    var lo = hit(t, CONTROL_RES.loc, text), wh = hit(t, CONTROL_RES.who, text), wr = hit(t, CONTROL_RES.where, text);
+    if (lo) {
+      var before = t.slice(Math.max(0, lo.start - 30), lo.start), after = t.slice(lo.end, lo.end + 40);
+      var demanded = /^\s*(?:right )?now\b|^\s*(?:immediately|asap|this (?:second|minute))\b/.test(after) || (!POLITE_ASK.test(before) && !/\b(?:when you get|once you|so i know|to let me know|if you want|for safety|so we can find)\b/.test(after));
+      if (demanded || wh || wr) found.push(Object.assign(lo, { kind: 'monitor' }));
+    }
+    // "Who were you with?" on its own, or with another check, said curtly: not "Who were you with at the party? Sounds fun!"
+    var bareWho = wh && /^\s*[?.!]*\s*(?:$|[a-z])/.test(t.slice(wh.end)) && !/^\s*[?.!]*\s*(?:at|on|in|for|last|today|tonight|yesterday)\b/.test(t.slice(wh.end)) && !/\b(?:fun|nice|lovely|great|glad|hope|cool|amazing|sounds|enjoy|xx?)\b|[!]\s*$|😊|🙂|😄|❤/.test(t);
+    if (wh && (lo || wr || ph || bareWho || /\b(?:tell me|answer me)\b/.test(t))) found.push(Object.assign(wh, { kind: 'monitor' }));
+    var is = hit(t, CONTROL_RES.isolate, text); if (is) found.push(Object.assign(is, { kind: 'isolate' }));
+    var dg = hit(t, CONTROL_RES.degrade, text); if (dg) found.push(Object.assign(dg, { kind: 'degrade' }));
+    if (!found.length) return null;
+    found.sort(function (a, b) { return a.start - b.start; });
+    var f = found[0];
+    return { kind: f.kind, start: f.start, end: f.end, text: f.text, kinds: found.map(function (x) { return x.kind; }) };
+  }
+  // "If you leave me I'll kill myself": a threat to self-harm used as leverage. Still a threat, and also a safety worry.
+  var SELFHARM_RE = /\b(?:i'll|i will|i'm going to|i am going to|i'm gonna|i swear i'll) (?:kill myself|hurt myself|end it all|end my life|take my (?:own )?life|not be here)\b|\bkill myself\b|\bend my life\b/i;
+  function selfHarm(text) { return SELFHARM_RE.test(prep(text)); }
+
   // a step you take to look after yourself, said with care: a boundary, not a threat
   function isBoundary(text) {
     var t = prep(text), m = t.match(BOUNDARY_RE);
@@ -408,6 +452,7 @@
   function lookFor(el, opts) { if (el) el.innerHTML = lookForHTML(opts); }
 
   var api = { IDIOMS: IDIOMS, idioms: idioms, LIST: LIST, BY: BY, SPELL: SPELL, SPELL_PHRASES: SPELL_PHRASES, spell: spell, scan: scan, has: has, hasTime: hasTime, hasAppreciation: hasAppreciation, isFlat: isFlat, TIME_RE: TIME_RE, lookFor: lookFor, lookForHTML: lookForHTML, prep: prep,
-    THREAT_RE: THREAT_RE, BOUNDARY_RE: BOUNDARY_RE, BOUNDARY_CARE: BOUNDARY_CARE, DIG_RES: DIG_RES, threats: threats, digs: digs, isBoundary: isBoundary };
+    THREAT_RE: THREAT_RE, BOUNDARY_RE: BOUNDARY_RE, BOUNDARY_CARE: BOUNDARY_CARE, DIG_RES: DIG_RES, threats: threats, digs: digs, isBoundary: isBoundary,
+    CONTROL_RES: CONTROL_RES, control: control, SELFHARM_RE: SELFHARM_RE, selfHarm: selfHarm };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TOLPatterns = api;
 })(this);

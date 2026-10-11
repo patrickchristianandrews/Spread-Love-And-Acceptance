@@ -876,3 +876,21 @@ body.wpf-typing .wpf-bar{ transform: translateY(110%); }
 .ws-flow-pdfs{ display: flex; flex-wrap: wrap; gap: 8px; }
 .ws-flow :focus-visible{ outline: 3px solid var(--focus, #2B5B8C); outline-offset: 2px; }
 @media print{ .ws-flow{ display: none !important; } }
+
+/* The daily check-in: the week, folded away under "Just tonight" (tol-workpaper.js, foldWeek) */
+.wpf-weekfold{ margin: 1.2rem 0 0; padding: 0 .9rem; border: 1px solid var(--line, #D9CBA3); border-radius: 14px; background: #FFFDF7; }
+.wpf-weekfold > summary{ cursor: pointer; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 .6em; padding: .45rem 0; font-weight: 600; color: var(--ink, #211D17); }
+.wpf-weekfold > summary:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; border-radius: 8px; }
+.wpf-weekfold-s{ font-weight: 400; font-size: .88em; color: var(--ink-soft, #524B3E); }
+.wpf-weekfold[open]{ padding-bottom: .8rem; }
+@media print{ .wpf-weekfold{ border: 0; padding: 0; } .wpf-weekfold > summary{ display: none; } }
+.wpf-tonight > .wpf-share-btns{ margin-top: .8em; }
+/* a date written out in words next to its box: "Sun 11 Oct 2026" */
+.wpf-date-say{ display: block; font-size: .85rem; color: var(--ink-soft, #524B3E); margin-top: .15em; }
+.wpf-date-say:empty{ display: none; }
+/* "✓ Saved on this phone · Forget it" in the save bar */
+.wpf-forget{ font: inherit; font-size: 1em; background: none; border: 0; padding: 0 .2em; min-height: 32px; color: var(--credit, #3E6B4C); text-decoration: underline; text-underline-offset: .15em; cursor: pointer; }
+.wpf-forget:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 2px; border-radius: 4px; }
+/* "Keep: [Ade] [Ben]" after combining a shared list */
+.wpf-conflict-k{ align-self: center; font-weight: 600; margin-right: .2em; }
+.wpf-fridge{ margin: 0 0 1rem; }

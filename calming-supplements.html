@@ -16,6 +16,13 @@
   .cs-note{ margin:1rem 0 1.4rem !important; padding:.8rem 1rem; border:1px solid var(--line); border-left:4px solid var(--brass); border-radius:12px; background:var(--paper); font-size:.97rem; }
   .cs-note p{ margin:.25rem 0 !important; max-width:none !important; }
   .cs-checked{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--ink-soft); }
+  .cs-find{ margin:1rem 0 1.2rem; }
+  .cs-find-h{ font-weight:600; margin:0 0 .45rem !important; }
+  .cs-find ul{ list-style:none; padding:0 !important; margin:0 !important; display:flex; flex-wrap:wrap; gap:.4rem; }
+  .cs-find li{ margin:0 !important; max-width:none !important; }
+  .cs-find a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.3rem .8rem; border:1px solid #C6DFF4; border-radius:999px; background:#EEF4FB; color:#1F4466; text-decoration:none; font-size:.93rem; }
+  .cs-find a:hover{ border-color:#2F5F8A; }
+  .cs-find a:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .cs-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .cs-jump li{ margin:0 !important; max-width:none !important; }
   .cs-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
@@ -60,7 +67,7 @@
   .cs-links a:hover{ border-color:var(--credit); }
   .cs-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
   .cs-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
-  @media print{ .cs-jump, .cs-more > summary{ display:none; } .cs-more{ border:0; } .cs-card{ break-inside:avoid; } }
+  @media print{ .cs-find, .cs-jump, .cs-more > summary{ display:none; } .cs-more{ border:0; } .cs-card{ break-inside:avoid; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/calming-supplements.html">
@@ -116,6 +123,11 @@
     <li>Tell your pharmacist or doctor everything you take. If anxiety or low mood is stopping your daily life, get help: see <a href="#get-help">when to get help</a>.</li>
   </ul>
 </div>
+
+<nav class="cs-find no-bubble" aria-labelledby="cs-find-h">
+<p class="cs-find-h" id="cs-find-h">Find a herb or supplement</p>
+<ul><li><a href="#chamomile">Chamomile</a></li><li><a href="#lavender">Lavender</a></li><li><a href="#l-theanine">L-theanine</a></li><li><a href="#magnesium">Magnesium</a></li><li><a href="#ashwagandha">Ashwagandha</a></li><li><a href="#valerian">Valerian</a></li><li><a href="#passionflower">Passionflower</a></li><li><a href="#lemon-balm">Lemon balm</a></li><li><a href="#kava">Kava</a></li><li><a href="#st-johns-wort">St John’s wort</a></li><li><a href="#melatonin">Melatonin</a></li><li><a href="#cbd">CBD</a></li><li><a href="#omega-3">Omega-3</a></li><li><a href="#saffron">Saffron</a></li><li><a href="#rhodiola">Rhodiola</a></li><li><a href="#curcumin">Curcumin</a></li><li><a href="#inositol">Inositol</a></li><li><a href="#glycine">Glycine</a></li><li><a href="#tart-cherry">Tart cherry</a></li><li><a href="#holy-basil">Holy basil</a></li><li><a href="#zinc">Zinc</a></li><li><a href="#probiotics">Probiotics</a></li><li><a href="#nac">NAC</a></li><li><a href="#vitamin-d">Vitamin D</a></li></ul>
+</nav>
 
 <nav aria-label="On this page">
 <ul class="cs-jump no-bubble">
@@ -644,12 +656,22 @@
 </div>
 </main>
 <script>
-/* "Breathe break" links open the site's own breathing break on this page (the link still goes to the Night Garden without it). */
+/* "Breathing pacer" / "Breathe break" links open the site's own Breathe break right here, starting on Calm breathing
+   (in 4, out 6) unless this person already picked a method there. Without it, the link still goes to the Night Garden. */
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[data-breathe]');
   if (!a) return;
   var b = document.querySelector('.tol-breathe-btn');
-  if (b) { e.preventDefault(); b.click(); }
+  if (!b) return;
+  e.preventDefault();
+  var had = null; try { had = localStorage.getItem('tol-br-method'); } catch (x) {}
+  b.click();
+  if (had !== null) return;
+  var tries = 0;
+  (function pick() {
+    var m = document.querySelector('[data-method="calm"]');
+    if (m && m.offsetParent !== null) m.click(); else if (++tries < 40) setTimeout(pick, 100);
+  })();
 });
 </script>
 </body>

@@ -187,7 +187,7 @@
 
   <h3>What helps on this rung, right now</h3>
   <ol id="ld-helps"></ol>
-  <p class="ld-acts"><a class="ld-btn is-main" href="/upset-right-now.html">Breathing pacer</a><a class="ld-btn" href="/night-garden.html">The Night Garden</a></p>
+  <p class="ld-acts"><a class="ld-btn is-main" href="/night-garden.html" data-breathe>Breathing pacer</a><a class="ld-btn" href="/night-garden.html">The Night Garden</a></p>
   <div class="ld-mp" data-mini-player></div>
 
   <h3>A pause line you could say</h3>
@@ -432,5 +432,24 @@
 })();
 </script>
 </main>
+<script>
+/* "Breathing pacer" / "Breathe break" links open the site's own Breathe break right here, starting on Calm breathing
+   (in 4, out 6) unless this person already picked a method there. Without it, the link still goes to the Night Garden. */
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('a[data-breathe]');
+  if (!a) return;
+  var b = document.querySelector('.tol-breathe-btn');
+  if (!b) return;
+  e.preventDefault();
+  var had = null; try { had = localStorage.getItem('tol-br-method'); } catch (x) {}
+  b.click();
+  if (had !== null) return;
+  var tries = 0;
+  (function pick() {
+    var m = document.querySelector('[data-method="calm"]');
+    if (m && m.offsetParent !== null) m.click(); else if (++tries < 40) setTimeout(pick, 100);
+  })();
+});
+</script>
 </body>
 </html>

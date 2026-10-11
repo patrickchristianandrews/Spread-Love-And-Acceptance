@@ -53,7 +53,7 @@
   if (!peopleEl || !rowsEl) return;
 
   var MIN = 2, MAX = 8;
-  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', NAMES = 'tol-lemonade-names', MODE_KEY = 'tol-lemonade-mode', MAX_OWN = 5, MAX_WEEKS = 26;
+  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', NAMES = 'tol-lemonade-names', MODE_KEY = 'tol-lemonade-mode', MAX_OWN = 10, MAX_WEEKS = 26;
   var COLORS = ['#BFE3CF', '#F8DC6E', '#F2B8C6', '#B9D3F0', '#D9C4F0', '#F6C99B', '#C8E6A0', '#A8DDE0'];
   var WAKING = 112; // about 16 waking hours a day, 7 days
 
@@ -149,6 +149,17 @@
   // the same job under its UK and US names (a UK phone and a US phone still match it up)
   var SAME_JOB = { 'trash & recycling': 'bins', 'rubbish, bins & recycling': 'bins' };
   function jobKey(n) { var l = low(n); return SAME_JOB[l] || l; }
+  // the fridge list's chips: one chip for one job, however it was written ("Trash and recycling" and
+  // "Trash & recycling", "Groceries" and "Grocery shopping", "Vacuuming" and "Vacuuming and floors")
+  var CHIP_SAME = { 'trash and recycling': 'bins', 'rubbish bins and recycling': 'bins', 'bins and recycling': 'bins', 'taking out the bins': 'bins', 'taking out the trash': 'bins',
+    'grocery shopping': 'groceries', 'food shopping': 'groceries', 'groceries': 'groceries', 'vacuuming': 'floors', 'vacuuming and floors': 'floors', 'hoovering': 'floors', 'floors': 'floors',
+    'dishes': 'dishes', 'dishes and kitchen reset': 'dishes', 'laundry': 'laundry', 'washing and drying': 'laundry', 'feeding the pets': 'petfeed', 'feeding and fresh water': 'petfeed',
+    'restocking supplies': 'supplies', 'restocking soap paper and supplies': 'supplies', 'loo roll and supplies': 'supplies', 'bedtime': 'bedtime', 'bedtime routine': 'bedtime',
+    'school or nursery runs': 'school', 'school drop off and pickup': 'school', 'planning the week': 'planweek', 'planning the week ahead': 'planweek', 'meal planning': 'mealplan', 'meal planning and the grocery list': 'mealplan' };
+  function chipKey(n) {
+    var k = low(n).replace(/&/g, ' and ').replace(/[^a-z0-9\u00C0-\u024F ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    return CHIP_SAME[k] || k;
+  }
   function libMatch(name) {
     var l = jobKey(name), hit = null;
     Object.keys(LIB).forEach(function (c) { LIB[c].forEach(function (t) { if (jobKey(t[0]) === l) hit = { cat: c, t: t }; }); });
@@ -435,6 +446,11 @@
     state.compact = !!state.compact;
     state.workNo = !!state.workNo;
     state.planning = !!state.planning;
+    state.ownMore = !!state.ownMore;
+    // the quick look's jobs, offered as fridge-list chips (name, and the owner it had there)
+    state.qchips = (Array.isArray(state.qchips) ? state.qchips : []).filter(function (c) { return c && typeof c.n === 'string' && c.n.trim(); }).slice(0, 80)
+      .map(function (c) { return { n: String(c.n).slice(0, 60), w: typeof c.w === 'number' && c.w >= 0 && c.w < n ? c.w : -1 }; });
+    state.owners.forEach(function (o) { if (typeof o.bk !== 'number' || o.bk >= n) o.bk = -1; o.dn = typeof o.dn === 'string' ? o.dn.slice(0, 80) : ''; });
     if (state.path !== 'fridge' && state.path !== 'count' && state.path !== 'money') delete state.path;
     if (!state.goal || typeof state.goal !== 'object') state.goal = { a: '', f: '' };
     state.goal = { a: String(state.goal.a == null ? '' : state.goal.a).slice(0, 12), f: String(state.goal.f || '').slice(0, 40) };
@@ -1386,7 +1402,7 @@
       list.push({ name: nm, who: -1 }); added++;
     });
     renderOwners(); save();
-    status(full ? 'The fridge list below has five jobs already. Take one off, then try again.' : added ? 'Added two night shifts to the fridge list below. Tap who owns each one, and swap a night by asking.' : 'The two night shifts are already on the fridge list below.');
+    status(full ? 'The fridge list below has ten jobs already. Take one off, then try again.' : added ? 'Added two night shifts to the fridge list below. Tap who owns each one, and swap a night by asking.' : 'The two night shifts are already on the fridge list below.');
     if (added) { var o = $('owners'); if (o) o.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
   }
   function addFromLib(cat, t) {
@@ -2387,23 +2403,27 @@
   function ownersList() { state.owners = (state.owners || []).slice(0, MAX_OWN); return state.owners; }
   function renderPicks() {
     var box = $('own-pick'); if (!box) return;
-    var picked = ownersList().map(function (o) { return o.name.trim().toLowerCase(); });
-    var names = [];
-    state.jobs.forEach(function (jb) { if (kindOf(jb) !== 'home') return; var nm = jb.name.trim(); if (nm && names.map(function (x) { return x.toLowerCase(); }).indexOf(nm.toLowerCase()) < 0) names.push(nm); });
+    var picked = ownersList().map(function (o) { return chipKey(o.name); });
+    var names = [], keys = [];
+    function addName(nm) { nm = String(nm || '').trim(); var k = chipKey(nm); if (nm && keys.indexOf(k) < 0) { keys.push(k); names.push(nm); } }
+    // every job from the quick look (its own words, custom jobs too), then the home jobs on the hours list
+    (state.qchips || []).forEach(function (c) { addName(c.n); });
+    state.jobs.forEach(function (jb) { if (!jb.ex && kindOf(jb) === 'home') addName(jb.name); });
     box.innerHTML = '';
     // nothing listed yet (the one-minute path): a few common jobs to tap, plus your own below
     var common = !names.length;
     if (common) {
-      names = UKISH ? ['Dishes', 'Bins & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Loo roll & supplies']
-        : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies'];
-      picked.forEach(function (k) { if (names.map(low).indexOf(k) < 0) { var o = ownersList().filter(function (x) { return low(x.name) === k; })[0]; if (o) names.push(o.name.trim()); } });
+      (UKISH ? ['Dishes', 'Bins & recycling', 'Laundry', 'Cleaning the bathroom', 'Food shopping', 'Hoovering', 'Cooking dinner', 'Loo roll & supplies']
+        : ['Dishes', 'Trash & recycling', 'Laundry', 'Cleaning the bathroom', 'Groceries', 'Vacuuming', 'Cooking dinner', 'Restocking supplies']).forEach(addName);
       var hint = document.createElement('p'); hint.className = 'ls-panel-note'; hint.style.flexBasis = '100%'; hint.style.margin = '0';
       hint.textContent = 'Common ones to start with (jobs you list above show up here too):';
       box.appendChild(hint);
     }
+    // jobs already on the list always have a chip (to take them off)
+    ownersList().forEach(function (o) { addName(o.name); });
     names.forEach(function (nm) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
-      var on = picked.indexOf(nm.toLowerCase()) >= 0;
+      var on = picked.indexOf(chipKey(nm)) >= 0;
       b.setAttribute('aria-pressed', String(on)); b.textContent = nm;
       b.addEventListener('click', function () { toggleOwn(nm); });
       box.appendChild(b);
@@ -2411,42 +2431,78 @@
   }
   function toggleOwn(nm) {
     var list = ownersList(), k = -1;
-    list.forEach(function (o, i) { if (o.name.trim().toLowerCase() === nm.trim().toLowerCase()) k = i; });
+    list.forEach(function (o, i) { if (chipKey(o.name) === chipKey(nm)) k = i; });
     if (k >= 0) { list.splice(k, 1); status('Took “' + nm + '” off the list.'); }
-    else if (list.length >= MAX_OWN) { status('That’s five, the most for one list. Swap one out to add another.'); return; }
-    else { list.push({ name: nm, who: -1 }); status('Added “' + nm + '”. Now tap who owns it.'); }
+    else if (list.length >= MAX_OWN) { status('That’s ten, the most for one list. Swap one out to add another.'); return; }
+    else {
+      // a job from the quick look comes with the owner it had there (still yours to change)
+      var qc = (state.qchips || []).filter(function (c) { return chipKey(c.n) === chipKey(nm); })[0];
+      var who = qc && typeof qc.w === 'number' && qc.w >= 0 && qc.w < state.people.length ? qc.w : -1;
+      list.push({ name: nm, who: who });
+      status('Added “' + nm + '”.' + (who >= 0 ? ' ' + nameOf(who) + ' owns it, as in the quick look: tap to change.' : ' Now tap who owns it.'));
+    }
     renderOwners(); save();
   }
   function renderOwners() {
     var ol = $('own-list'); if (!ol) return;
     renderPicks();
-    var list = ownersList();
+    var list = ownersList(), more = !!state.ownMore;
     ol.innerHTML = '';
     $('own-empty').hidden = list.length > 0;
+    var om = $('own-more'); if (om) { om.checked = more; var oml = om.closest('label'); if (oml) oml.hidden = !list.length; }
     list.forEach(function (o, idx) {
       if (o.who >= state.people.length) o.who = -1;
+      if (typeof o.bk !== 'number' || o.bk >= state.people.length) o.bk = -1;
       var li = document.createElement('li'); li.className = 'ls-own';
       var h = document.createElement('p'); h.className = 'ls-own-job'; h.textContent = o.name;
       var g = document.createElement('div'); g.className = 'ls-own-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', 'Who owns ' + o.name);
       state.people.forEach(function (p, i) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip';
-        b.style.setProperty('--pc', COLORS[i]);
+        b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'ow' + idx + '_' + i);
         b.setAttribute('aria-pressed', String(o.who === i)); b.textContent = nameOf(i);
-        b.addEventListener('click', function () { o.who = o.who === i ? -1 : i; renderOwners(); save(); status(o.who === i ? nameOf(i) + ' owns “' + o.name + '”.' : 'No owner for “' + o.name + '” yet.'); });
+        b.addEventListener('click', function () { o.who = o.who === i ? -1 : i; if (o.bk === o.who) o.bk = -1; renderOwners(); save(); status(o.who === i ? nameOf(i) + ' owns “' + o.name + '”.' : 'No owner for “' + o.name + '” yet.'); });
         g.appendChild(b);
       });
       var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
       rm.setAttribute('aria-label', 'Take ' + o.name + ' off the list');
       rm.addEventListener('click', function () { toggleOwn(o.name); });
       li.appendChild(h); li.appendChild(g); li.appendChild(rm);
+      if (more) {
+        // optional and light: who covers on a bad day or a time away, and what "done" looks like
+        var bkw = document.createElement('div'); bkw.className = 'ls-own-who ls-own-bk'; bkw.setAttribute('role', 'group'); bkw.setAttribute('aria-label', 'Bad-day backup for ' + o.name);
+        var bl = document.createElement('span'); bl.className = 'ls-mini'; bl.textContent = 'Backup on a bad day:'; bkw.appendChild(bl);
+        state.people.forEach(function (p, i) {
+          if (i === o.who) return;
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip'; b.style.setProperty('--pc', COLORS[i]); b.setAttribute('data-fk', 'ob' + idx + '_' + i);
+          b.setAttribute('aria-pressed', String(o.bk === i)); b.textContent = nameOf(i);
+          b.addEventListener('click', function () { o.bk = o.bk === i ? -1 : i; renderOwners(); save(); });
+          bkw.appendChild(b);
+        });
+        var dl = document.createElement('label'); dl.className = 'ls-own-done';
+        var ds = document.createElement('span'); ds.textContent = 'What “done” means (optional)';
+        var di = document.createElement('input'); di.type = 'text'; di.maxLength = 80; di.autocomplete = 'off'; di.value = o.dn || ''; di.setAttribute('data-fk', 'od' + idx);
+        di.placeholder = 'Like: sink empty, counters wiped';
+        di.addEventListener('input', function () { o.dn = di.value.slice(0, 80); var fl0 = $('fridge'); if (fl0) fl0.textContent = fridgeText(); save(); });
+        dl.appendChild(ds); dl.appendChild(di);
+        li.appendChild(bkw); li.appendChild(dl);
+      }
       ol.appendChild(li);
     });
-    // at five: say so where the box was, never just hide it
+    // at the most: say so where the box was, never just hide it
     $('own-add').hidden = list.length >= MAX_OWN;
     var full = $('own-full'); if (full) full.hidden = list.length < MAX_OWN;
+    // the printout's note matches what's picked
+    var fn = document.querySelector('#own-fridge .tfs-note');
+    if (fn) fn.textContent = list.length ? 'One clean page: each job, its owner and a box to tick, with a few blank lines for more. Fits A4 and US Letter.' : 'One clean page to fill in together. With nothing picked yet, it prints a blank list. Fits A4 and US Letter.';
     renderOwnNames();
     var fl = $('fridge'); if (fl) fl.textContent = fridgeText();
     renderKeepAsk();
+  }
+  function ownExtra(o) {
+    var bits = [];
+    if (o.bk >= 0 && o.bk < state.people.length) bits.push('bad days: ' + nameOf(o.bk));
+    if (o.dn && o.dn.trim()) bits.push('done means: ' + o.dn.trim());
+    return bits;
   }
   // No names yet (still "Me" and "Them"): ask for them right above the list, so the chips and the copied list
   // say who owns what. The boxes are the same names as at the top of the stand.
@@ -2473,7 +2529,7 @@
     var list = ownersList();
     if (!list.length) return '';
     var lines = ['Who owns what (our fridge list)', ''];
-    list.forEach(function (o) { lines.push('• ' + o.name + ': ' + (o.who >= 0 ? nameOf(o.who) : '(no owner yet)')); });
+    list.forEach(function (o) { var x = ownExtra(o); lines.push('• ' + o.name + ': ' + (o.who >= 0 ? nameOf(o.who) : '(no owner yet)') + (x.length ? ' (' + x.join('; ') + ')' : '')); });
     lines.push('', 'Owning a job means you do it, or you make sure it gets done. Swap by asking, not by quietly dropping it.');
     return lines.join('\n');
   }
@@ -2740,6 +2796,10 @@
     status('Cleared. The example is back, and nothing from before is kept in this tab.');
   });
 
+  if ($('own-more')) $('own-more').addEventListener('change', function (e) {
+    state.ownMore = e.target.checked; renderOwners(); save();
+    status(state.ownMore ? 'Each job now has an optional bad-day backup and a line for what “done” means.' : 'Back to one owner per job. Anything you typed is kept.');
+  });
   $('own-add-go').addEventListener('click', function () {
     var inp = $('own-new'), v = inp.value.trim();
     if (!v) { inp.focus(); return; }
@@ -2752,7 +2812,8 @@
     var list = ownersList(), F = window.TOLFridge;
     var items = list.map(function (o) {
       var j = state.jobs.filter(function (x) { return !x.ex && low(x.name) === low(o.name); })[0];
-      return { job: o.name, who: o.who >= 0 ? nameOf(o.who) : '', when: j && F ? F.freqLabel(j.freq) : '' };
+      var x = ownExtra(o);
+      return { job: o.name + (o.dn && o.dn.trim() ? ' (done: ' + o.dn.trim() + ')' : ''), who: (o.who >= 0 ? nameOf(o.who) : '') + (o.bk >= 0 && o.bk < state.people.length ? ' · bad days: ' + nameOf(o.bk) : ''), when: j && F ? F.freqLabel(j.freq) : '' };
     });
     items.push({ blank: list.length ? 2 : 8 });
     var names = state.people.filter(function (p) { return !placeholder(p); }).map(function (p) { return p.trim(); });
@@ -2775,7 +2836,7 @@
     var list = ownersList(), added = [], waiting = [];
     (names || []).forEach(function (nm) {
       nm = String(nm || '').trim().slice(0, 60); if (!nm) return;
-      if (list.some(function (o) { return low(o.name) === low(nm); })) return;
+      if (list.some(function (o) { return chipKey(o.name) === chipKey(nm); })) return;
       if (list.length >= MAX_OWN) { waiting.push(nm); return; }
       list.push({ name: nm, who: -1 }); added.push(nm);
     });
@@ -2787,7 +2848,7 @@
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
     var and = function (a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
     if (st) st.textContent = (added.length ? 'Added ' + and(added) + ' to the fridge list. Tap who owns each one, together.' : 'Those jobs are already on the fridge list. Tap who owns each one, together.') +
-      (waiting.length ? ' The list holds five, so ' + and(waiting) + (waiting.length === 1 ? ' is' : ' are') + ' waiting: swap one out to add it.' : '');
+      (waiting.length ? ' The list holds ten, so ' + and(waiting) + (waiting.length === 1 ? ' is' : ' are') + ' waiting: swap one out to add it.' : '');
     return added.length;
   }
   if (window.TOLFridge) {
@@ -3132,7 +3193,7 @@
       if (b.kind === 'own' && b.who >= 0 && idx.indexOf(b.who) >= 0) o.w = nm(b.who);
       return o;
     });
-    var own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); return x; });
+    var own = ownersList().map(function (o) { var x = { n: o.name }; if (o.who >= 0 && idx.indexOf(o.who) >= 0) x.w = nm(o.who); if (o.bk >= 0 && idx.indexOf(o.bk) >= 0) x.b = nm(o.bk); if (o.dn && o.dn.trim()) x.d = clean(o.dn, 80); return x; });
     if (own.length) d.own = own;
     return d;
   }
@@ -3178,7 +3239,7 @@
     var bills = list(raw.bills, 100).map(function (b) {
       return { n: clean(b.n, 120), k: BILL_KIND[b.k] ? b.k : 'shared', w: low(b.w), v: vals(b.v, 1e9) };
     }).filter(function (b) { return b.n || Object.keys(b.v).length; });
-    var own = list(raw.own, MAX_OWN).map(function (o) { return { n: clean(o.n, 60), w: low(o.w) }; }).filter(function (o) { return o.n; });
+    var own = list(raw.own, MAX_OWN).map(function (o) { return { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) }; }).filter(function (o) { return o.n; });
     if (!people.length && !jobs.length && !bills.length) return null;
     // "Money to my mum" typed on Amara's phone reads "Money to Amara’s mum" here: a "my" in a line's name
     // means the person who typed it (the sender, or else the one person with numbers on that line).
@@ -3378,8 +3439,10 @@
     if (d.cur && !state.curSet && d.cur !== state.cur) { state.cur = d.cur; state.curSet = true; out.cur = d.cur; }
     d.own.forEach(function (o) {
       var have = ownersList().filter(function (x) { return sameLine(x.name, o.n, plan.meName); })[0], w = o.w && map[o.w] != null ? map[o.w] : -1;
-      if (have) { if (have.who < 0 && w >= 0) { have.who = w; out.own = (out.own || 0) + 1; } }
-      else if (state.owners.length < MAX_OWN) { state.owners.push({ name: o.n, who: w }); out.own = (out.own || 0) + 1; }
+      var bk = o.b && map[o.b] != null ? map[o.b] : -1;
+      if (have) { if (have.who < 0 && w >= 0) { have.who = w; out.own = (out.own || 0) + 1; } if (!(have.bk >= 0) && bk >= 0) have.bk = bk; if (!have.dn && o.d) have.dn = o.d; }
+      else if (state.owners.length < MAX_OWN) { state.owners.push({ name: o.n, who: w, bk: bk, dn: o.d || '' }); out.own = (out.own || 0) + 1; }
+      if ((bk >= 0 || o.d) && !state.ownMore) state.ownMore = true;
     });
     state.example = false; state.checked = false;
     renderAll();
@@ -4156,7 +4219,7 @@
     state.path = 'fridge'; save(); renderPath(); renderOwners();
     var o = $('owners'); if (o) o.scrollIntoView({ block: 'start', behavior: 'smooth' });
     var f = document.querySelector('#own-pick .ls-chip') || $('own-new'); if (f) f.focus({ preventScroll: true });
-    status('The fridge list: tap up to five jobs, then one owner each. Your names go in at the top whenever you like.');
+    status('The fridge list: tap the jobs you want on it (up to ten), then one owner each. Your names go in at the top whenever you like.');
   });
   if ($('path-count')) $('path-count').addEventListener('click', function () {
     state.path = 'count'; save(); renderPath();
@@ -4241,7 +4304,7 @@
     var i = +b.getAttribute('data-take'), nm = b.getAttribute('data-take-n'), list = ownersList();
     var have = list.filter(function (o) { return low(o.name) === low(nm); })[0];
     if (have) have.who = i;
-    else if (list.length >= MAX_OWN) { status('The fridge list has five jobs already. Swap one out to add “' + nm + '”.'); return; }
+    else if (list.length >= MAX_OWN) { status('The fridge list has ten jobs already. Swap one out to add “' + nm + '”.'); return; }
     else list.push({ name: nm, who: i });
     renderOwners(); save();
     status(nameOf(i) + ' owns “' + nm + '” on the fridge list below, the remembering included.');
@@ -4316,12 +4379,17 @@
       } else if (m) j.pick = m;
       state.jobs.push(j); added++;
     });
+    // every quick-look job as a chip on the fridge list, with the owner it had there
+    if (Array.isArray(q.chips)) {
+      state.qchips = q.chips.map(function (c) { var w = typeof c.who === 'number' && c.who >= 0 && map[c.who] != null ? map[c.who] : -1; return { n: String(c.name || '').trim().slice(0, 60), w: w }; }).filter(function (c) { return c.n; });
+      if (!keep && state.qchips.length) { keep = true; $('keep-device').checked = true; }
+    }
     if (q.owners && q.owners.length) {
       var list = ownersList();
       q.owners.forEach(function (o) {
         var nm = String(o.name || '').trim().slice(0, 60); if (!nm) return;
         var who = typeof o.who === 'number' && o.who >= 0 && map[o.who] != null ? map[o.who] : -1;
-        var have = list.filter(function (x) { return low(x.name) === low(nm); })[0];
+        var have = list.filter(function (x) { return chipKey(x.name) === chipKey(nm); })[0];
         if (have) { if (have.who < 0) have.who = who; own++; return; }
         if (list.length >= MAX_OWN) return;
         list.push({ name: nm, who: who }); own++;
@@ -4338,7 +4406,7 @@
       if (q.mode !== false) { saveMode('group'); setMode('group', false); }
     }
     renderAll(); save();
-    return { added: added, owners: own, me: me };
+    return { added: added, owners: own, total: ownersList().length, max: MAX_OWN, me: me };
   }
 
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,

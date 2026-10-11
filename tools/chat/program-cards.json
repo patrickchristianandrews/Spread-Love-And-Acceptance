@@ -348,17 +348,22 @@
       "kind": "intent",
       "first": true,
       "name": "whether I can tell you about your wiring",
-      "pat": "\\b(am i|are you saying (i m|im)|i think (i m|im|i am|i might be|i may be|i could be)|i might be|i may be|could i be|might i be|maybe (i m|im|i am)|do i have|do you think (i m|im|i am|i have)|tell me (if|whether) (i m|im|i am|i have)|can you tell (me )?(if|whether) (i m|im|i am|i have)|can you tell me)\\b.*\\b(autis[a-z]*|adhd|add|audhd|dyslexi[a-z]*|dyspraxi[a-z]*|neurodivergent|on the spectrum|aspergers?|ocd|bipolar|depress[a-z]*|an anxiety disorder|a disorder|hsp|highly sensitive)\\b|\\bdiagnose (me|my|him|her|them|us)\\b|\\bgive me a diagnosis\\b|\\b(is|could) (my|our) [a-z]+ (be )?(autistic|adhd|on the spectrum|dyslexic|neurodivergent)\\b",
+      "pat": "\\b(am i|are you saying (i m|im)|i think (i m|im|i am|i might be|i may be|i could be)|i might be|i may be|could i be|might i be|maybe (i m|im|i am)|do i have|do you think (i m|im|i am|i have)|tell me (if|whether) (i m|im|i am|i have)|can you tell (me )?(if|whether) (i m|im|i am|i have)|can you tell me)\\b.*\\b(autis[a-z]*|adhd|add|audhd|dyslexi[a-z]*|dyspraxi[a-z]*|neurodivergent|on the spectrum|aspergers?|ocd|bipolar|bpd|borderline( personality disorder)?|a personality disorder|ptsd|cptsd|c ptsd|depress[a-z]*|an anxiety disorder|a disorder|hsp|highly sensitive)\\b|\\bdiagnose (me|my|him|her|them|us)\\b|\\bgive me a diagnosis\\b|\\b(is|could) (my|our) [a-z]+ (be )?(autistic|adhd|on the spectrum|dyslexic|neurodivergent)\\b",
       "keys": [],
       "what": [
-        "I can’t tell you that, and I won’t guess. I’m a small helper on a website, and nobody can tell that from a chat."
+        "I can’t tell you that, and I won’t guess. I can’t diagnose anyone, and nobody can tell from a chat. A clinician can, and asking is a sensible step, not a big drama."
       ],
       "how": [
-        "If you’d like to find out, a qualified professional can talk it through with you properly.",
+        "To find one, start with your doctor (GP or family doctor), who can listen, rule out other causes and refer you to the right specialist.",
+        "The Outside help page explains how to find a qualified counsellor, psychologist or psychiatrist, and what to ask.",
         "Whatever the answer, the Wiring Card helps anyone put how they’re wired, and what helps, into words.",
         "Wired Differently explains how different wiring can change the way words land, without labels."
       ],
       "links": [
+        [
+          "How to find a professional",
+          "/outside-help.html#counsellor"
+        ],
         [
           "The Wiring Card",
           "/wiring-card.html"
