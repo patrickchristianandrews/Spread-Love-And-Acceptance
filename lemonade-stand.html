@@ -79,6 +79,8 @@
   .ls-chip{ font:inherit; font-size:.95rem; min-height:44px; padding:.35rem .85rem; border-radius:999px; border:2px solid var(--pc, #EAD9A0); background:#FFFDF6; color:var(--ink); cursor:pointer; }
   .ls-chip[aria-pressed="true"]{ background:var(--pc, #F8E08A); border-color:var(--ink); font-weight:600; }
   .ls-chip[aria-pressed="true"]::before{ content:"\2713\00a0"; }
+  .ls-chip[aria-checked="true"]{ background:var(--pc, #F8E08A); border-color:var(--ink); font-weight:600; }
+  .ls-chip[aria-checked="true"]::before{ content:"\2713\00a0"; }
   .ls-pick{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.4rem 0 .8rem; }
   .ls-owners h2{ margin:0 0 .4rem; font-size:1.3rem; }
   .ls-owners ol{ list-style:none; margin:0; padding:0; }
@@ -708,7 +710,7 @@
       <button class="add-row ls-people-add" id="add-person" type="button">+ Add a person</button>
       <div class="ls-me">
         <p class="ls-mini" id="me-h">Who&rsquo;s filling in on this device right now?</p>
-        <div class="ls-pick" id="me-row" role="group" aria-labelledby="me-h"></div>
+        <div class="ls-pick" id="me-row" role="radiogroup" aria-labelledby="me-h"></div>
         <p class="ls-mini" id="me-note" hidden></p>
       </div>
       <section class="ls-sides group-only" id="sides" aria-labelledby="sides-h">

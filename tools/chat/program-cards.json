@@ -1243,6 +1243,39 @@
       ]
     },
     {
+      "id": "teenhouse",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "house rules with the adults you live with (for teens)",
+      "pat": "\\b(nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?|family)|aunt|auntie|uncle|mum|mom|dad|mother|father|parents?|stepmum|stepmom|stepdad)\\b.{0,30}\\b(takes?|took|taking|keeps taking|confiscat\\w*) (away )?my (phone|tablet|ipad|laptop|switch|xbox|playstation|ps5|console)\\b|\\b(nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?|family)|aunt|auntie|uncle)\\b.{0,40}\\b((so|too|really|very|super) strict|is strict|s strict|doesn t get me|doesnt get me|does not get me|don t get me|dont get me|doesn t understand me|doesnt understand me|old ?fashioned|too many rules|curfew|won t let me|wont let me|nags? me|nagging me)\\b|\\b(i m|im|i am) 1[0-7]\\b.{0,60}\\b(nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?|family)|aunt|auntie|uncle|mum|mom|dad|mother|father|parents?|stepmum|stepmom|stepdad)\\b.{0,40}\\b(strict|doesn t get me|doesnt get me|don t get me|dont get me|old ?fashioned|too many rules|curfew|won t let me|wont let me)\\b",
+      "keys": [],
+      "what": [
+        "That sounds frustrating. Clashing over rules with the adult you live with is really common, especially across two generations. It doesn’t mean either of you is doing it wrong, and it usually goes better as a deal than a fight."
+      ],
+      "how": [
+        "Ask for the reason behind the rule, calmly and at a good moment, not right after a row. There’s usually a worry underneath: sleep, school, or who you’re talking to.",
+        "Then suggest a deal that covers their worry: “10 on school nights, 11 at weekends?” or “The phone charges in the kitchen, and I get it back after homework.”",
+        "Say what you need too: “Messaging my friends after school is how we keep in touch.”",
+        "If they still say no, ask when you can try again, like in a month. Keeping a deal for a few weeks is the quickest way to more freedom.",
+        "If someone at home scares you, hurts you or cuts you off from everyone, that’s different, and it isn’t your fault. Tell a trusted adult, or call Childline free on 0800 1111 (UK) or Childhelp on 1-800-422-4453 (US)."
+      ],
+      "script": [
+        "I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea: 10 on school nights, 11 at weekends?"
+      ],
+      "links": [
+        [
+          "For teens: living with grandparents or other family",
+          "/teens.html#family-care"
+        ],
+        [
+          "For teens: when it’s tense with your parents or carers",
+          "/teens.html#parents"
+        ]
+      ],
+      "chips": []
+    },
+    {
       "id": "teenkinship",
       "kind": "intent",
       "first": true,
@@ -1326,8 +1359,8 @@
           "/parents.html#house-rules"
         ],
         [
-          "Gaming, phones and time together",
-          "/gaming-and-time-together.html"
+          "For teens: the other side of house rules",
+          "/teens.html#family-care"
         ]
       ],
       "chips": []
@@ -1704,8 +1737,8 @@
       ],
       "links": [
         [
-          "Money together: styles, limits, and normal vs control",
-          "/money-together.html"
+          "Money together: is it controlling, or normal?",
+          "/money-together.html#control"
         ],
         [
           "Not safe at home? The signs of control",
@@ -5415,15 +5448,23 @@
       "pat": "\\b(i feel|i m|im|i am|i ve been|ive been|been|feeling|feel) (so |really |kinda |kind of |pretty |very |a bit |a little |super )?(alone|lonely|isolated)\\b|\\b(so|really|kinda|very) lonely\\b|\\bno (one|body) to talk to\\b|\\bi (don t|dont|do not) have (any )?friends\\b",
       "keys": [],
       "what": [
-        "Thanks for saying it. Feeling lonely is really common, and it isn’t a flaw in you. It’s a signal, a bit like hunger, that you need more connection, and it tends to ease with small, regular contact rather than one big fix."
+        "That sounds really heavy, and I’m glad you said it. Is it more than a bad day? Feeling lonely is really common, and it isn’t a flaw in you. It’s a signal, a bit like hunger, that you need more connection, and it tends to ease with small, regular contact rather than one big fix."
       ],
       "how": [
         "Pick one person and send one easy message today, like “Saw this and thought of you”. Small, low-pressure contact counts.",
         "Put something regular in your week where the same people show up: a class, a club, volunteering, a faith group, or a walk at the same time each day.",
         "Loneliness can make other people seem less friendly than they are. Assume a bit more goodwill than your mind is telling you.",
-        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. In the US you can call or text 988 any time."
+        "If it’s been heavy for a long time, or you’re feeling hopeless, please talk to a doctor or counselor. If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
       ],
       "links": [
+        [
+          "Upset right now? A few minutes to settle",
+          "/upset-right-now.html"
+        ],
+        [
+          "For teens: when it’s more than a bad day",
+          "/teens.html#help"
+        ],
         [
           "Loneliness: what the research says",
           "/library/connection.html#loneliness"
@@ -5431,10 +5472,6 @@
         [
           "Turning toward: small ways to connect",
           "/turning-toward.html"
-        ],
-        [
-          "Your self path",
-          "/self-path.html"
         ]
       ],
       "chips": [
@@ -11103,18 +11140,18 @@
       "first": true,
       "newTopic": true,
       "name": "a sad or heavy day",
-      "pat": "\\b(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |a bit |kind of |kinda )?(sad|low|blue|miserable|hopeless|empty)( today| tonight| lately| right now| again)?$|^(im|i m|i am|feeling) (so |really |very |a bit )?(sad|miserable|hopeless)\\b|\\b(tired|sick|exhausted) of (everything|it all|life|all of it)\\b|\\b(having|had) (a|such a) (bad|awful|horrible|rough|terrible|sad) day\\b|\\bnothing (feels|seems) (worth it|good anymore)\\b",
+      "pat": "\\b(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |a bit |kind of |kinda )?(sad|low|blue|miserable|hopeless|empty)( today| tonight| lately| right now| again)?$|^(im|i m|i am|feeling) (so |really |very |a bit )?(sad|miserable|hopeless)\\b|\\b(tired|sick|exhausted) of (everything|it all|life|all of it)\\b|\\b(having|had) (a|such a) (bad|awful|horrible|rough|terrible|sad) day\\b|\\bnothing (feels|seems) (worth it|good anymore)\\b|\\b(low|down|sad|empty|flat) and (alone|lonely)\\b|\\b(alone|lonely) and (low|down|sad|empty)\\b|^(i feel like )?(nobody|no one|noone) (really )?(gets|understands|gets|cares about|listens to|likes) me\\b|\\bi (feel|m|am) (like )?(nobody|no one|noone) (really )?(gets|understands|cares about) me\\b|^(i|im|i m|i am) (feel|feeling|am feeling|m feeling)? ?(so |really |very |pretty |kind of |kinda )?(low|down)\\b",
       "notPat": "\\b(died|passed away|funeral|baby|retir\\w*|ex|breakup|broke up)\\b",
       "keys": [],
       "what": [
-        "I’m sorry you’re feeling this way. Heavy days happen to everyone, and you don’t need a reason, or to have it all worked out, to deserve some kindness."
+        "That sounds really heavy. Is it more than a bad day? Either way, you don’t need a reason, or to have it all worked out, to deserve some kindness."
       ],
       "how": [
         "Start with your body: a glass of water, something to eat, a few slow breaths, or a short walk outside.",
         "Tell one person you trust, even in one line: “I’m having a hard day.”",
         "Make the day smaller: pick one small thing to do, and let the rest wait.",
         "If you feel this way most days for more than two weeks, or it’s hard to get through the day, talk to your doctor. That’s a normal, sensible step.",
-        "If you ever feel you can’t go on, or think about ending your life, please reach out now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time."
+        "If it’s heavier than a bad day, or you feel you can’t go on, please talk to someone now: call or text 988 in the US, or call Samaritans free on 116 123 in the UK and Ireland, any time. Under 18 in the UK? Childline is free on 0800 1111, or text SHOUT to 85258."
       ],
       "script": [
         "I’m having a hard day. I don’t need you to fix it. Could you just keep me company for a bit?"
@@ -11124,12 +11161,16 @@
         "Drink some water and eat something.",
         "Tell one person you trust.",
         "If it lasts more than two weeks, see your doctor.",
-        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK)."
+        "If you feel you can’t go on, call or text 988 (US) or 116 123 (UK). Under 18 in the UK: Childline, 0800 1111."
       ],
       "links": [
         [
-          "Upset right now?",
+          "Upset right now? A few minutes to settle",
           "/upset-right-now.html"
+        ],
+        [
+          "For teens: when it’s more than a bad day",
+          "/teens.html#help"
         ],
         [
           "Your self path",

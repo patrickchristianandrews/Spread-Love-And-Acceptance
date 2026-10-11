@@ -597,6 +597,55 @@
     return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }
 
+  // Fear of a person ("he shouts at me at handover and I'm scared", "I'm scared when my husband drinks") is important
+  // information, not a communication problem: never "it means the relationship matters", never an apology script.
+  // Fear words + someone shouting, threatening, grabbing or following; or fear words aimed at an ex, co-parent or partner.
+  var FEAR_W = /\b(scared|afraid|frightened|terrified|petrified|fearful|unsafe|intimidated)\b|\b(scares|frightens|terrifies|intimidates) me\b|\bwalk\w* on egg ?shells\b|\bin fear\b/;
+  var FEAR_AGG = /\b(shout\w*|yell\w*|scream\w*|threat\w*|hits?|hitting|grabb?\w*|follow(s|ed|ing)? me|punch\w*|shov\w*|push(es|ed|ing)? me|corner(s|ed|ing)? me|smash\w*|throws?|threw|throwing|explod\w*|rag(es|ed|ing)|swears? at me|swore at me|turns? up|turned up|turning up|shows? up|showed up|showing up|bang\w* on)\b/;
+  var FEAR_WHO = /\b(ex|exes|ex (husband|wife|partner|boyfriend|girlfriend)|exhusband|exwife|expartner|co ?parent\w*|coparent\w*|partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fianc\w*|babys (dad|mum|mom)|baby s (dad|mum|mom)|kids (dad|mum|mom)|children s (father|mother))\b/;
+  // the person writing is the one shouting ("I yell", "we both scream"): not a reason on its own
+  var SELF_AGG = /\b(i|we|we both|both of us)( (always|often|sometimes|keep|kept|just|end up|ended up|tend to|can|might|will|ll|would|d|get|got|start|started))*( (shout|yell|scream|snap|threaten|explod|rage|swear|lose it|throw|threw|smash|grab|push|hit))\w*/g;
+  // someone else is the scared one ("he's afraid of commitment")
+  var OTHER_SCARED = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex))( is| s| are| re| was| gets| got| feels| felt| seems| looks| has been| s been| becomes)( (so|really|very|a bit|quite|too|always|often|sometimes|getting|just))* (scared|afraid|frightened|terrified|petrified|fearful)\b/g;
+  // a fear about an outcome or a thing, not of a person ("scared he'll leave me", "afraid of commitment", "scared to come out")
+  var FEAR_OUTCOME = /\b(scared|afraid|frightened|terrified|petrified|fearful)( (that|of|about))? (he|she|they|my \w+|it|this|the relationship)( will| ll| might| may| is going to| s going to| is gonna| s gonna| would| d| could| wont| won t| doesnt| doesn t| does not| isnt| isn t| is not| s| is| are| re| has| has been| don t| dont)?( (not|never|actually|really|just|eventually|secretly|already|still|be|get|stop|start|going to))* (leave|leaving|left|cheat\w*|lose|losing|lost|break(ing)? up|dump\w*|fall\w* out of love|love|loves|loving|find(s|ing)? out|see (what|this|that|my (messages|texts|phone|history|searches|chat))|read\w*|know\w*|sick|ill|die|dying|depressed|lying|lie|judge\w*|laugh\w*|reject\w*|say no|bored|move on|moving on|regret\w*|resent\w*|upset|disappointed|wrong|good enough|ruin\w*|mess\w*|fail\w*|drift\w*|grow\w* apart|attracted|interested|forget\w*|miss\w*|tired|ready|want|wants|like|likes|understand|think|thinks|feel|happy|unhappy|okay|ok|fine|pregnant|spend\w*|afford|broke|in debt)\b|\b(scared|afraid|frightened|terrified) (of|about) (losing|being|getting|ending|making|having|not|messing|ruining|hurting|saying|doing|commitment|intimacy|marriage|conflict|confrontation|the future|change|rejection|failure|failing|money|debt|spending|bills|dogs?|spiders|flying|heights|the dark|needles|doctors?|dentists?|public speaking|it|that|this|what (people|others))\b|\b(scared|afraid|frightened|terrified|petrified) for (him|her|them|my \w+)\b|\b(scared|afraid|frightened|terrified) to (tell|ask|bring (it )?up|talk|admit|say|raise|mention|come out|open up|commit|get married|have (a )?(baby|kids|children)|move in|propose|start|try|lose)\b|\b(not|no longer|never|wasnt|wasn t) (really |so |that )?(scared|afraid|frightened)\b|\bi m afraid (so|not|i|we|that i|that we)\b|\b(scared|afraid|frightened|terrified|petrified) (i|we) /g;
+  function fearOf(f) {
+    if (!f || !FEAR_W.test(f)) return false;
+    var g = f.replace(OTHER_SCARED, ' ');
+    if (!FEAR_W.test(g)) return false;
+    var h = g.replace(FEAR_OUTCOME, ' ');
+    if (!FEAR_W.test(h)) return false;
+    if (FEAR_AGG.test(f.replace(SELF_AGG, ' '))) return true;
+    // "my fiance spends too much and I'm scared": a money worry, unless the fear is of them
+    if (/\b(money|spend\w*|debt|bills?|budget|savings|afford|bank)\b/.test(f) && !/\b(scared|afraid|frightened|terrified) (of|around) (him|her|them|my \w+)\b/.test(f)) return false;
+    return FEAR_WHO.test(f);
+  }
+  var EX_W = /\b(ex|exes|exhusband|exwife|expartner|ex (husband|wife|partner|boyfriend|girlfriend)|co ?parent\w*|coparent\w*|handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|custody|separat\w*|divorc\w*|contact (visits?|days?))\b/;
+  function fearReply(f) {
+    var ex = EX_W.test(f), kids = /\b(son|daughter|kids?|child|children|baby|toddler|our boy|our girl)\b/.test(f);
+    var b = [{ k: 'p', x: 'I’m really glad you told me. Being scared of someone is important information, not a communication problem. It isn’t something you can fix by choosing better words or staying calmer, and it is not your fault.' }];
+    if (kids) b.push({ k: 'p', x: 'It matters that it happens in front of your child, too. Children feel fear in the room even when nobody is touched, so getting support is also looking after them.' });
+    b.push({ k: 'p', x: 'Some signs it’s more than ordinary conflict:' });
+    b.push({ k: 'list', x: ex ? ['They shout at you or threaten you at handovers, or in front of the children.', 'They threaten you about the children, money or court.', 'They keep messaging after you’ve asked them to stop, or at all hours.', 'They turn up at your home or work uninvited, follow you, or ask others to watch you.', 'They use the children to carry messages, or to find out what you’re doing.', 'You change your plans, or what you say, to avoid their anger.']
+      : ['You feel scared of them, or change what you say and do to avoid their anger.', 'Shouting, threats or name-calling, especially in front of the children.', 'They grab, push, block your way or break things.', 'They check your phone, follow you, or turn up when you didn’t invite them.', 'They control the money, or who you see.', 'You’re always the one to blame.'] });
+    if (ex) b.push({ k: 'p', x: 'Things that can help now: hand over in a public place (a busy shop entrance or car park, or at school or nursery so you don’t meet at all), or with a calm adult you trust there. Keep it short. Keep copies of every message, with dates, and write a few lines after any handover that goes wrong. A family lawyer or advocate can help you ask for safer handover arrangements.' });
+    b.push({ k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247, day or night. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
+    b.push({ k: 'links', x: (ex ? [['After a separation: when it’s more than conflict', '/safety.html#after-separation']] : []).concat([['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']]) });
+    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+  }
+  // "is this abuse?" after only everyday complaints (forgets things, does nothing): answer honestly that it sounds like
+  // conflict, and say what would be different. Once fear, threats or control came up, the safety answer stays.
+  var ABUSE_Q = /^(but |so |ok |okay |and |honestly |seriously |wait |hmm |um |then )*(is|isnt|is not|would|could|does|do|are|was|so is)( (this|that|it|he|she|they|what (he|she|they) (does|do|did)|(this|that|his|her|their) behaviou?r))?( (be|being|count|counts|count as|considered|classed as|called|a form of|a kind of|a type of|kind of|sort of|technically|actually|really|you think|emotional|financial|verbal|domestic|psychological))* ?(abuse|abusive)( (to me|me))?( or (not|am i overreacting|is it just (normal|conflict))| though| really| then)?$|^(would you call (this|that|it)|do you think (this|that|it) is|do you think (he|she) is( being)?) (abuse|abusive)$/;
+  function conflictNotAbuse(state) {
+    var co = !!state.coSeen;
+    var b = [{ k: 'p', x: 'From what you’ve told me, this sounds like ' + (co ? 'co-parenting' : 'household') + ' conflict, not abuse. Forgetting things, or leaving the work to you, is frustrating and unfair, and it’s worth sorting out, but on its own it isn’t abuse.' },
+      { k: 'p', x: 'These are signs that would be different, and would make it a safety matter rather than a conflict to work on:' },
+      { k: 'list', x: ['You feel scared of them, or of how they’ll react.', 'They shout, threaten, grab, push or corner you, or break things.', 'They check your phone, follow you, or turn up when you didn’t invite them.', 'They control the money, or who you see.', co ? 'They threaten you about the children, money or court, or use the children to carry messages.' : 'They threaten to hurt you, themselves, the children or a pet.', 'You’re always the one to blame, and you’ve started to doubt your own memory.'] },
+      { k: 'p', x: 'If any of these fit, or you’re not sure, the Not safe at home? page has the signs and people you can talk to privately. If none of them fit, the steps I gave still apply.' },
+      { k: 'links', x: [['Not safe at home? The signs, and people to talk to', '/safety.html']] }];
+    return { blocks: b, chips: [{ label: 'What should I do first?', q: 'What should I do first?' }, { label: 'Something else', q: 'Start over' }], kind: 'redflag' };
+  }
+
   // ------------------------------------------------------------------ small calculators, worked out right here
   function numList(s) {
     return (s.match(/\d*\.?\d+%?/g) || []).map(function (n) { return n.slice(-1) === '%' ? parseFloat(n) / 100 : parseFloat(n); });

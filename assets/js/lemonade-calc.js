@@ -262,7 +262,7 @@
       return kind === 'bills' ? state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; })
         : state.jobs.some(function (j) { return !j.ex && (num(j.v[i]) > 0 || num((j.t || [])[i]) > 0); });
     }), withData = adults.filter(function (i) { return have[i]; }).length;
-    if (!withData || (adults.length > 2 && withData > 1)) return [];
+    if (!withData) return [];
     return adults.filter(function (i) { return !have[i]; });
   }
   function waitNames(w) { return w.filter(function (i) { return !placeholder(state.people[i]); }).map(nameOf); }
@@ -541,6 +541,20 @@
     return state.people.map(function (_, i) {
       return sum(state.jobs.filter(function (j) { return kindOf(j) === kind; }).map(function (j) { return (fn || jobH)(j, i); }));
     });
+  }
+  // A work line with no hours yet (added with "Pick who", or left empty): whose work hours aren't in yet.
+  // While any are missing, no paid-hours comparison is made ("Chris 0 h", "Jamal does most of the paid
+  // hours"): the result says "Chris's work hours aren't in yet" instead.
+  function workGap() {
+    if (solo()) return [];
+    var blank = state.jobs.some(function (j) { return !j.ex && kindOf(j) === 'work' && (j.pick || j.name.trim()) && !state.people.some(function (_, i) { return num(j.v[i]) > 0; }); });
+    if (!blank) return [];
+    var w = peopleTotals('work');
+    return state.people.map(function (_, i) { return i; }).filter(function (i) { return !state.kid[i] && w[i] <= 0; });
+  }
+  function workGapText(g) {
+    var named = g.filter(function (i) { return !placeholder(state.people[i]); }).map(function (i) { return nameOf(i) + '’s'; });
+    return (named.length === g.length && named.length ? joinNames(named) : g.length > 1 ? 'Some' : 'One person’s') + ' work hours aren’t in yet: tap who does the work line above, or type the hours';
   }
   // the household split: doing plus thinking time on home jobs (work and rest are shown beside it)
   function totals(list) {
@@ -1405,9 +1419,12 @@
       state.people.map(function (_, i) { return i; }).concat([-2]).forEach(function (i) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'ls-chip'; b.setAttribute('data-fk', 'me' + i);
         if (i >= 0) b.style.setProperty('--pc', COLORS[i]);
-        b.setAttribute('aria-pressed', String(state.me === i)); b.textContent = i < 0 ? (state.people.length > 2 ? 'All of us, together' : 'Both of us, together') : nameOf(i);
+        b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', String(state.me === i));
+        b.textContent = i < 0 ? (state.people.length > 2 ? 'All of us, together' : 'Both of us, together') : nameOf(i);
         b.addEventListener('click', function () {
-          state.me = state.me === i ? -1 : i; cued = {}; firstSide = -1;
+          // a radio: tapping the chosen name again keeps it chosen (it never quietly resets whose time library tasks fill in)
+          if (state.me === i) { status('This device is set to ' + (i === -2 ? 'filling it in together' : nameOf(i) + '’s side') + '. Tap another name to change it.'); return; }
+          state.me = i; cued = {}; firstSide = -1;
           renderMeRow(); renderAsRow(); renderSend(); renderRows(); recalc();
           status(state.me === -1 ? 'Okay. Nobody picked.' : state.me === -2 ? 'Filling it in together. Each of you checks your own numbers.' : 'Thanks, ' + nameOf(i) + '. ' + (addAs() === i ? 'Jobs you add from the library fill in your time. ' : '') + 'Other people’s columns are shaded as theirs; you can still type there if you need to.');
         });
@@ -1899,13 +1916,13 @@
     }
     var nc = noticeCounts(), nb = $('r-notice');
     nb.textContent = noticeLine(nc);
-    var work = peopleTotals('work'), rest = peopleTotals('rest'), pers = peopleTotals('personal'), ctx = [], differ = workDiffers(work);
-    var zeroPaid = state.people.length === 2 && sum(work) > 0 && work.some(function (x) { return x <= 0; });
+    var work = peopleTotals('work'), rest = peopleTotals('rest'), pers = peopleTotals('personal'), ctx = [], gap = workGap(), differ = !gap.length && workDiffers(work);
+    var zeroPaid = !gap.length && state.people.length === 2 && sum(work) > 0 && work.some(function (x) { return x <= 0; });
     // the whole week side by side, for seeing only: it never changes the home split. When paid hours differ,
     // it sits right under the glasses, where the split is read, not far below.
     var careSolo = state.jobs.filter(function (j) { return isSoloCare(j) && kindOf(j) === 'home' && state.people.some(function (_, i) { return jobH(j, i) > 0; }); });
     var soloCare = careSolo.length > 0, soloWho = careSolo.some(isBabySolo) ? 'the baby' : 'the kids';
-    var wholeLead = sum(work) > 0 && sum(home) > 0 ? 'Across home and paid work' + (soloCare ? ' (time on your own with ' + soloWho + ' included)' : '') + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '.' : '';
+    var wholeLead = !gap.length && sum(work) > 0 && sum(home) > 0 ? 'Across home and paid work' + (soloCare ? ' (time on your own with ' + soloWho + ' included)' : '') + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + hrs(home[i] + work[i]); }).join(', ') + '.' : '';
     var wholeMore = (soloCare ? 'Looking after ' + soloWho + ' on your own counts as work here, the same as paid work. ' : '') + 'This doesn’t change the home split; it shows the whole week.' +
       (zeroPaid ? ' Hours don’t show energy, health or caring, so a smaller number here is never a measure of a person.' : '');
     var whole = wholeLead ? wholeLead + ' ' + wholeMore : '';
@@ -1940,7 +1957,11 @@
       }
     }
     var wl = function (arr) { return state.people.map(function (_, i) { return wait.indexOf(i) >= 0 ? nameOf(i) + ' pending' : nameOf(i) + ' ' + hrs(arr[i]); }).join(', '); };
-    if (sum(work) > 0) {
+    if (gap.length) {
+      var wk = state.people.map(function (_, i) { return i; }).filter(function (i) { return gap.indexOf(i) < 0 && wait.indexOf(i) < 0 && work[i] > 0; });
+      ctx.push((wk.length ? 'Paid work and school, kept out of the split: ' + wk.map(function (i) { return nameOf(i) + ' ' + hrs(work[i]); }).join(', ') + '. ' : '') + workGapText(gap) + '. Until then, paid hours aren’t compared.');
+      var nl0 = nightLine(); if (nl0) ctx.push(nl0);
+    } else if (sum(work) > 0) {
       ctx.push('Paid work and school, kept out of the split: ' + wl(work) + '.' + (differ && !state.agreed.on ? ' These differ quite a bit, so a split you set together may be fairer than an even one, as Chapter II says.' : ''));
       var nl = nightLine(); if (nl) ctx.push(nl);
       if (whole && !wwOn && !wait.length) ctx.push(whole);
@@ -2053,7 +2074,7 @@
   function suggestSplit() {
     if (state.people.length !== 2 || anyBad(state.jobs)) return null;
     var home = totals(state.jobs), work = peopleTotals('work'), H = sum(home), W = sum(work);
-    if (H <= 0 || W <= 0 || work.some(function (w) { return w <= 0; })) return null;
+    if (H <= 0 || W <= 0 || work.some(function (w) { return w <= 0; }) || workGap().length) return null;
     var each = (H + W) / 2, want = work.map(function (w) { return Math.max(0, each - w); }), ws = sum(want);
     if (ws <= 0) return null;
     var r = wholePcts(want);
@@ -2129,7 +2150,7 @@
       txt = nameOf(order[0]) + ' does the biggest share of the home hours (about ' + Math.round(p[order[0]]) + '%), then ' + joinNames(order.slice(1).map(function (i) { return nameOf(i) + ' (' + Math.round(p[i]) + '%)'; }));
     }
     var w = peopleTotals('work'), ws = sum(w);
-    if (ws > 0) {
+    if (ws > 0 && !workGap().length) {
       var tw = 0; w.forEach(function (x, i) { if (x > w[tw]) tw = i; });
       if (w[tw] / ws >= 0.6) txt += '; ' + nameOf(tw) + (tw === top ? ' also does' : ' does') + ' most of the paid hours';
     }
@@ -2927,7 +2948,7 @@
     if (wait.length) {
       rows2.push({ h: 'Home jobs', t: 'Waiting for ' + joinNames(wait.map(nameOf)) + '’s side' });
     } else {
-      var hl = cardLean(t), il = cardLean(peopleTotals('home', invH)), wl = cardLean(peopleTotals('work'));
+      var hl = cardLean(t), il = cardLean(peopleTotals('home', invH)), wl = workGap().length ? null : cardLean(peopleTotals('work'));
       if (hl) rows2.push({ h: 'Home jobs, the doing and the thinking', t: hl.t, c: hl.c });
       if (il) rows2.push({ h: 'Planning and remembering (the thinking work)', t: il.t, c: il.c, hl: true });
       if (wl) rows2.push({ h: 'Paid work and school', t: wl.t, c: wl.c });
