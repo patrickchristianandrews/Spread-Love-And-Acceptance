@@ -1061,7 +1061,7 @@
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
-    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html' },
+    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html', 'aria-label': 'Spread Love & Acceptance: home' },
       '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>Spread Love &amp; Acceptance</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
@@ -1279,7 +1279,7 @@
     // "Put it all together": a short pointer to the full path package and report on the self, relationship,
     // workpaper and program pages, just above the end of the reading
     var fpMain = document.querySelector('main.read');
-    if (fpMain && hereSection && /^(self|relationships|workpapers|program|book)$/.test(hereSection.id) && !/^\/(full-path|self-path)\.html$|^\/workpapers\/fill\//.test(current) &&
+    if (fpMain && hereSection && !body.hasAttribute('data-no-fullpath') && /^(self|relationships|workpapers|program|book)$/.test(hereSection.id) && !/^\/(full-path|self-path)\.html$|^\/workpapers\/fill\//.test(current) &&
         !WORKSPACE.test(current) && !/^\/(teens|sharing-a-room|gaming-and-time-together|en-espanol|friends|grief|coming-out|check-ins|foster-and-kinship|family-rifts|co-parenting|on-my-own)\.html$/.test(current) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var solo = hereSection.id === 'self';
       var fpBox = el('aside', { class: 'tol-fp-note', 'aria-label': 'The full path package' },
@@ -1370,8 +1370,9 @@
       // the size words really show at: the root size, times the page zoom the Text size setting adds
       var zoomed = parseFloat(getComputedStyle(document.body).zoom) || 1;
       html.classList.toggle('tol-bigtext', parseFloat(getComputedStyle(html).fontSize) * zoomed >= 20);
-      bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4', 'is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest');
+      bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4', 'is-narrow', 'is-tight', 'is-snug', 'is-shortname', 'is-tighter', 'is-tightest');
       var name = bar.querySelector('.tol-brand span'), brand = bar.querySelector('.tol-brand'), logo = bar.querySelector('.tol-logo');
+      if (name) name.textContent = 'Spread Love & Acceptance';
       function crowded() {
         var named = name && !bar.classList.contains('is-tighter'); // once the name is tucked away it can't be squeezed
         if (bar.scrollWidth > bar.clientWidth + 1 || (named && name.scrollWidth > name.clientWidth + 1)) return true;
@@ -1390,7 +1391,12 @@
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
       ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
       if (crowded()) bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4');
-      ['is-narrow', 'is-tight', 'is-snug', 'is-tighter', 'is-tightest'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      // on a phone the name shortens to "Spread Love" before it steps aside altogether
+      ['is-narrow', 'is-tight', 'is-snug', 'is-shortname', 'is-tighter', 'is-tightest'].forEach(function (c) {
+        if (!crowded()) return;
+        bar.classList.add(c);
+        if (c === 'is-shortname' && name) name.textContent = 'Spread Love';
+      });
       if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
     }
     function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
@@ -1442,7 +1448,7 @@
  (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">Every part of this program grows from the same few roots, seen across thirteen fields. <a href="/polymath.html">The polymath way &rarr;</a></p>') +
       '<nav class="tol-foot-guides" aria-label="Guides">' +
         '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
-        '<a href="/chore-chart-for-couples.html">Chore chart for couples</a>' +
+        '<a href="/chore-chart-for-couples.html">Fair chore chart</a>' +
         '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
         '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
         '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
@@ -3278,7 +3284,12 @@
     if (slot) slot.appendChild(box);                             // a page can say where it goes (the home page: on its first screen)
     else if (intro) homeSlot(intro).after(box);
     else if (firstPart && !toolish(firstPart) && !toolish(firstPart.nextElementSibling)) firstPart.after(box);
-    else if (firstPart) firstPart.before(box);
+    else if (firstPart) {
+      // before the whole tool: the first block of the page with something to fill in or press
+      var lead = firstPart;
+      for (var k = firstPart.parentNode.firstElementChild; k && k !== firstPart; k = k.nextElementSibling) if (toolish(k) && !k.matches('.tol-private, .tol-es-hint, .read-head, nav')) { lead = k; break; }
+      lead.before(box);
+    }
     else if (head && head.parentNode === main) head.after(box);
     else main.insertBefore(box, main.firstChild);
   }
@@ -4120,7 +4131,7 @@
   var SHARE_PAGES = [
     [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
-    [/^\/(friends|teens|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|empty-nest|family-rifts|when-one-is-ill)\.html$/, 'Share this guide', 'A free, kind guide with words you can use. It doesn’t blame anyone, and there’s nothing to sign up for.'],
+    [/^\/(friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|empty-nest|family-rifts|when-one-is-ill)\.html$/, 'Share this guide', 'A free, kind guide with words you can use. It doesn’t blame anyone, and there’s nothing to sign up for.'],
     [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
     [/^\/(how-to-stop-fighting-with-your-partner|pursue-withdraw)\.html$/, 'Share this page', 'A free, calm guide for when we keep ending up in the same fight. It doesn’t blame either of us.'],
     [/^\/check-ins\.html$/, 'Share this guide', 'A free guide to talking about something tender, kindly, at a time that suits us both.'],

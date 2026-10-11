@@ -151,7 +151,7 @@
   var SIT_PAGE = {
     coparent: /co-?parent|separat|divorc|stepfam|blended|two homes|on-my-own/,
     eldercare: /caregiv|carer|caring for|dementia|elderly|ageing|aging|eldercare|family-obligations/,
-    parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting|\bchild(ren)?\b|\bkids\b/,
+    parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting|co-parent|foster|kinship|grandparents/,
     family: /famil|parent|grand|sibling|brother|sister|teen|kinship|foster|in-law|\bmum\b|\bmom\b|\bdad\b|relative/,
     adhd: /\badhd\b|neurodiver|wired-differently|wired differently|wiring/,
     autism: /autis|neurodiver|wired-differently|wired differently|wiring|sensory/,

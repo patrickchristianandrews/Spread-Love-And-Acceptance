@@ -38,7 +38,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#body",
-   "/book/understanding-1-feelings.html"
+   "/book/understanding-1-feelings.html",
+   "/book/understanding-13-anger.html"
   ],
   "verified": true,
   "verified_by": "https://zenodo.org/record/1431811 ; https://psychclassics.yorku.ca/James/emotion.htm"
@@ -356,7 +357,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#urges",
-   "/library/emotions.html#reappraisal-suppression"
+   "/library/emotions.html#reappraisal-suppression",
+   "/book/understanding-13-anger.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12916575/"
@@ -401,7 +403,8 @@
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#urges",
    "/library/emotions.html#anger",
-   "/book/understanding-1-feelings.html"
+   "/book/understanding-1-feelings.html",
+   "/book/understanding-13-anger.html"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/0146167202289002 ; https://public.websites.umich.edu/~bbushman/PSPB02.pdf"
@@ -423,7 +426,8 @@
    "calm"
   ],
   "mentioned_on": [
-   "/library/emotions.html#anger"
+   "/library/emotions.html#anger",
+   "/book/understanding-13-anger.html"
   ],
   "verified": true,
   "verified_by": "https://news.osu.edu/breathe-dont-vent-turning-down-the-heat-is-key-to-managing-anger/ ; https://www.psypost.org/effective-anger-reduction-techniques-revealed-in-comprehensive-review-of-154-studies"
@@ -1072,7 +1076,8 @@
    "relationships"
   ],
   "mentioned_on": [
-   "/library/stress.html#sleep-and-mood"
+   "/library/stress.html#sleep-and-mood",
+   "/book/understanding-13-anger.html"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/1948550613488952 ; https://news.fit.edu/?p=36479"
@@ -3807,5 +3812,134 @@
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/5542557/ ; https://doi.org/10.1037/h0030377",
   "note": "PMID 5542557; DOI confirmed via the PubMed record (no abstract there; the method is summarised from secondary sources)."
+ },
+ {
+  "id": "mccrae-costa-1987",
+  "authors": "McCrae, R. R., & Costa, P. T., Jr.",
+  "year": 1987,
+  "title": "Validation of the five-factor model of personality across instruments and observers",
+  "venue": "Journal of Personality and Social Psychology, 52(1), 81–90",
+  "doi": "10.1037/0022-3514.52.1.81",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/3820081/",
+  "kind": "study",
+  "finding": "Ratings of 275 adults by their peers showed the same five broad trait factors found in self-reports, and peers and the people themselves agreed moderately well. This helped establish the “Big Five” as a common map of personality.",
+  "strength": "strong: a foundational, widely replicated finding; the five factors are a description of how traits cluster, not a full theory of personality.",
+  "topics": [
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/3820081/ (PMID 3820081; title, journal, volume and pages matched by search, 2026-10-11)"
+ },
+ {
+  "id": "roberts-walton-viechtbauer-2006",
+  "authors": "Roberts, B. W., Walton, K. E., & Viechtbauer, W.",
+  "year": 2006,
+  "title": "Patterns of mean-level change in personality traits across the life course: A meta-analysis of longitudinal studies",
+  "venue": "Psychological Bulletin, 132(1), 1–25",
+  "doi": "10.1037/0033-2909.132.1.1",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/16435954/",
+  "kind": "meta-analysis",
+  "finding": "Pooling 92 long-term studies, people on average became more confident in social settings, more conscientious and more emotionally stable, especially between about 20 and 40, and traits kept changing in middle and old age.",
+  "strength": "strong: a large meta-analysis of longitudinal studies; averages hide big differences between individuals.",
+  "topics": [
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/16435954/ (PMID 16435954; matched by search, 2026-10-11)"
+ },
+ {
+  "id": "roberts-2017-intervention",
+  "authors": "Roberts, B. W., Luo, J., Briley, D. A., Chow, P. I., Su, R., & Hill, P. L.",
+  "year": 2017,
+  "title": "A systematic review of personality trait change through intervention",
+  "venue": "Psychological Bulletin, 143(2), 117–141",
+  "doi": "10.1037/bul0000088",
+  "url": "https://doi.org/10.1037/bul0000088",
+  "kind": "meta-analysis",
+  "finding": "Across 207 studies, personality trait scores changed noticeably during therapy and other interventions over about six months, mostly toward more emotional stability, and the changes lasted in follow-ups.",
+  "strength": "moderate: many studies, but most were not randomized and most were clinical samples.",
+  "topics": [
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://experts.illinois.edu/en/publications/a-systematic-review-of-personality-trait-change-through-intervent/ ; https://iro.uiowa.edu/esploro/outputs/journalArticle/A-systematic-review-of-personality-trait/9984380533702771"
+ },
+ {
+  "id": "hudson-fraley-2015",
+  "authors": "Hudson, N. W., & Fraley, R. C.",
+  "year": 2015,
+  "title": "Volitional personality trait change: Can people choose to change their personality traits?",
+  "venue": "Journal of Personality and Social Psychology, 109(3), 490–507",
+  "doi": "10.1037/pspp0000021",
+  "url": "https://doi.org/10.1037/pspp0000021",
+  "kind": "study",
+  "finding": "In two 16-week studies, people who wanted to change a trait tended to shift a little in that direction, especially when they set concrete plans to act differently.",
+  "strength": "moderate: randomized designs, but the changes were small and self-reported.",
+  "topics": [
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://bps.org.uk/research-digest/you-can-change-your-personality-will (cites the DOI); DOI confirmed by secondary sources only",
+  "note": "DOI confirmed only via a secondary source (BPS Research Digest), not the publisher page."
+ },
+ {
+  "id": "bleidorn-2022",
+  "authors": "Bleidorn, W., Schwaba, T., Zheng, A., Hopwood, C. J., Sosa, S. S., Roberts, B. W., & Briley, D. A.",
+  "year": 2022,
+  "title": "Personality stability and change: A meta-analysis of longitudinal studies",
+  "venue": "Psychological Bulletin, 148(7–8), 588–619",
+  "doi": "10.1037/bul0000365",
+  "url": "https://doi.org/10.1037/bul0000365",
+  "kind": "meta-analysis",
+  "finding": "Who is more or less of a trait compared with others becomes steadier through childhood and levels off by about 25, while average levels keep shifting gently across life, with emotional stability rising most.",
+  "strength": "strong: a large, recent meta-analysis; it describes averages, not any one person.",
+  "topics": [
+   "personality"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://ifp.nyu.edu/?p=1657972 (journal citation with DOI) ; https://experts.illinois.edu/en/publications/personality-stability-and-change-a-meta-analysis-of-longitudinal-"
+ },
+ {
+  "id": "thomas-chess-1977",
+  "authors": "Thomas, A., & Chess, S.",
+  "year": 1977,
+  "title": "Temperament and Development",
+  "venue": "New York: Brunner/Mazel",
+  "doi": null,
+  "url": "https://wellcomecollection.org/works/epddh966",
+  "kind": "book",
+  "finding": "From the New York Longitudinal Study, which followed children from infancy, the authors described inborn differences in temperament, such as activity, regularity, adaptability and mood, and argued that how well a child’s temperament fits their surroundings matters (“goodness of fit”).",
+  "strength": "moderate: a classic, influential long-term study; later research refined the temperament dimensions.",
+  "topics": [
+   "personality",
+   "temperament"
+  ],
+  "mentioned_on": [
+   "/book/understanding-14-personality.html",
+   "/book/understanding-14-personality-in-depth.html"
+  ],
+  "verified": true,
+  "verified_by": "https://wellcomecollection.org/works/epddh966 ; https://lib.ecu.edu/catalog-preview/catalog/111191 (ISBN 0876301391)",
+  "note": "Link is a library catalogue record (Wellcome Collection)."
  }
 ]
