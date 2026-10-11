@@ -1624,7 +1624,7 @@ function readings(an, ids, ch){
   return out;
 }
 
-const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace"];
+const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace","control"];
 /* a static score: sum of the loudest reading per feature, minus a little for what's worth keeping */
 function score(an, ids, ch, state){
   let sc=0; const top=[];
@@ -1918,6 +1918,15 @@ function rewrite(an, opts){
     const variants = [{id:"main", label:"Say what you need, without a threat", why:"No threat, no condition: your feeling and your need, in your own words.", text:need},
       {id:"pause", label:"Take a break first", why:"If you're too angry to say it calmly, a break is the safest thing you can send.", text:pause}];
     return {main:need, primary:variants[0], variants, changes:log.map(c=>explainChange(c, W)), ask:null, list:"", unchanged:false, danger:true};
+  }
+  // checking up, cutting someone off, "nobody else would want you": no rewrite keeps the check. What's left is the feeling
+  if(an.control){
+    log.push({id:"control", from:[an.control.text], to:[], extra:""});
+    const k = an.control.kind;
+    const out = k==="monitor" ? "I got worried when I couldn't reach you. Next time you're running late, could you send me a quick text?"
+      : k==="isolate" ? "I feel [one feeling word] about [the plan]. Can we talk about what's worrying me? Who you see is your choice."
+      : "I'm really hurt and angry right now. I'm going to take a break, and come back to this when I can say it kindly.";
+    return finish(out, "", log, an, W, Object.assign({}, opts, {reframed:true}));
   }
   // whole-message shapes testers met most ("I managed fine without you", "stop policing what I spend",
   // "you can't just turn up whenever you want"): the jab goes, the real ask stays
@@ -3113,9 +3122,17 @@ const DIG_READ = {
  hsp:{menace:[3,"Danger.","A threat registers strongly."], jab:[3,"That stung, and I'll keep thinking about it.","Digs land hard and stay."]},
  trauma:{menace:[3,"I'm not safe.","A threat can go straight to the alarm."], jab:[3,"I'm being attacked.","Blame can register as threat."]}
 };
+/* checking up, cutting someone off, "nobody else would want you": heard as control, whoever is listening */
+[["nt","I'm being watched, or told who I can be.","Checks, demands and put-downs like these are heard as control, even when they come from worry."],
+ ["anxiety","I'm in trouble, and I have to prove myself.","A demand to account for yourself goes straight to fear."],
+ ["adhd","I've done something wrong again, and now I'm being checked on.","Being checked on lands on old shame, fast."],
+ ["autistic","I have to do exactly what they say, now.","A demand may be taken literally, as a rule that has to be followed."],
+ ["hsp","I'm not trusted, and it hurts.","Being checked on, or put down, is felt strongly and for a long time."],
+ ["trauma","I'm not safe, and I'm not free.","Checking and put-downs can echo control, which registers as danger."]].forEach(([w,h,why])=>{ DIG_READ[w] = DIG_READ[w]||{}; DIG_READ[w].control = [3,h,why]; });
 Object.keys(DIG_READ).forEach(w=>{ if(NT[w]) Object.keys(DIG_READ[w]).forEach(f=>{ if(!NT[w].receive[f]) NT[w].receive[f]=DIG_READ[w][f]; }); });
 Object.assign(CHECK, {
   menace:"\"That sounded like a threat. I'm not going to talk about it while it's said like that.\"",
+  control:"\"I'm not going to share that. If you're worried about something, can you tell me what it is?\"",
   jab:"\"That sounds like it's been building up. What's the one thing you'd like to change?\"",
   motive:"\"It wasn't on purpose. Can we look at what happened, and what would help next time?\"",
   blunt:"\"Thanks for the correction.\"",
@@ -3123,6 +3140,7 @@ Object.assign(CHECK, {
 });
 Object.assign(CHANGE_WHY, {
   menace:{g:"A threat would frighten or control the other person. No wording makes a threat okay, so it's left out completely. What's left is what you feel and what you need."},
+  control:{g:"Checking up on someone, deciding who they can see, or telling them they're worth nothing can work as control, even when it comes from worry or hurt. No softer wording fixes that, so the check is left out. What's left is the feeling underneath, said as your own."},
   jab:{g:"A dig or a scorecard says the hurt as blame, so the listener defends themselves. The rewrite says the hurt plainly and keeps the real ask."},
   motive:{g:"\"On purpose\" guesses at their reasons, so they argue about intent instead of the problem. Without it, what happened and what you'd like can be answered."},
   blunt:{g:"\"That is incorrect\" is clear, and it can still land cold. \"Quick correction\" keeps the same fact and sounds like help."},
@@ -3221,7 +3239,15 @@ const RECEIVE_MEANS = [
 const RECEIVE_GOOD = {boundary:"They're setting a calm limit, with care in it. It's about what they need, not a threat to you.", disclose:"They're trusting you with something important about who they are. That's a reach toward you.", repair:"They're owning their part. That's a reach toward you.", appreciation:"There's warmth in it: thanks, or care.", istate:"They're telling you how it is for them, not a verdict on you.", clearask:"There's a clear request you can say yes, no or not yet to.", pause:"They want a pause, and they've said when they'll come back."};
 const CROSSED = ["label","dxlabel","contempt","hostile","swear","violent","threat","legal","menace"];
 /* their words, turned to face the person answering: "send me your notes" → "send you my notes" */
-function turnAround(t){ const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",you:"me",myself:"yourself",yourself:"myself"}; return String(t).replace(/\b(me|my|mine|your|yours|you|myself|yourself)\b/gi, w=>SW[w.toLowerCase()]); }
+function turnAround(t){
+  const SW={me:"you",my:"your",mine:"yours",your:"my",yours:"mine",myself:"yourself",yourself:"myself",i:"you","i'm":"you're","i've":"you've","i'll":"you'll","i'd":"you'd","you're":"I'm","you've":"I've","you'll":"I'll","you'd":"I'd"};
+  // "you" after "when", "if", "so"… is the one doing it ("when you get there" → "when I get there"); otherwise it's "me"
+  const out = String(t).replace(/[’‘]/g,"'").replace(/\b(?:(when|if|before|after|once|until|so|that|because|and|while|as|where|unless)\s+)?(you're|you've|you'll|you'd|i'm|i've|i'll|i'd|me|my|mine|your|yours|you|myself|yourself|i)\b/gi, (m, lead, w)=>{
+    const low = w.toLowerCase(); const to = low==="you" ? (lead ? "I" : "me") : SW[low];
+    return (lead ? lead+" " : "")+to; });
+  // the ask sits mid-sentence ("you'd like me to send…"), so it starts in lower case
+  return out.replace(/^([A-Z])(?![A-Z'])(?=[a-z])/, c=>c.toLowerCase()).replace(/^(I)(?=[a-z])/, "i");
+}
 function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
 function receive(an, opts){
   opts = opts||{};
@@ -3231,8 +3257,26 @@ function receive(an, opts){
   if(an.danger) return {crossed:true, danger:true, threat:true, head:["danger","This is a threat, not a tone problem."],
     meanings:["It's worded as a threat. That isn't okay, whatever was meant, and it isn't your job to fix how it was said.",
       "You don't have to answer it, and you don't have to do what it asks to keep the peace.",
-      "If it frightens you, or it's part of a pattern (checking up on you, cutting you off from friends, threats), you deserve support. Free, private people can help, any time."],
+      "If it frightens you, or it's part of a pattern (checking up on you, cutting you off from friends, threats), you deserve support. Free, private people can help, any time."]
+      .concat(an.selfHarm ? ["If you think they might act on it, call 988 (US) or your local emergency number for them. It's not your job to stay to keep them safe."] : []),
+    selfHarm: !!an.selfHarm,
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
+  // checking up, cutting someone off, or a put-down that says they're worth nothing: control, not tone.
+  // No "kinder way to read it", and no reply that does what it demands.
+  if(an.control) return {crossed:true, danger:true, control:true, head:["danger","This can be a sign of control, not a tone problem."],
+    meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
+      : an.control.kind==="isolate" ? "Deciding who you can see, or cutting you off from friends or family, isn't okay, whatever was meant. Who you see is your choice."
+      : "Messages that demand your location, your phone or who you were with can be signs of control, even when they're said as worry.",
+      an.control.kind==="degrade" ? "You don't have to answer it, or argue with it. A put-down like this says nothing true about you."
+      : an.control.kind==="isolate" ? "You don't have to give up your friends or family to keep the peace, and you don't have to answer right away."
+      : "You don't have to share your location, your phone or your passwords to prove anything, and you don't have to answer right away.",
+      "If this is part of a pattern (checking up on you, cutting you off from friends, put-downs, threats), or it frightens you, you deserve support. Free, private people can help, any time."],
+    literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
+  // "I want to kill myself": not a tone question. Their safety comes first, and so does yours
+  if(an.selfHarm) return {crossed:false, danger:true, selfHarm:true, head:["danger","They may be in real pain. Their safety comes first."],
+    meanings:["They may be thinking about ending their life. Take it seriously: ask them directly, stay with them or keep talking if you can, and call or text 988 (US), or your local emergency number if they might act on it now.",
+      "You don't have to handle this alone, and it isn't your fault."],
+    literal:[], replies:[{label:"Reach out now", text:"I'm really glad you told me. Are you safe right now? I'm here, and I'd like us to call or text 988 together."}], found};
   const crossed = CROSSED.some(has);
   const meanings = [];
   // the shapes testers met most: what it may mean, and a reply to the need underneath
@@ -3376,7 +3420,7 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
-const ATTACK_IDS = ["menace","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
+const ATTACK_IDS = ["menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
 function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
@@ -3398,6 +3442,12 @@ function verdict(an, sc, rw, opts){
   const soft = rw && !rw.unchanged;
   // a threat that would frighten or control the other person: said plainly, before anything else
   if(an.danger || (an.found && an.found.menace)) return {id:"danger", text:"This is a threat, not a tone problem."};
+  // "I want to kill myself": the person writing it comes first
+  if(an.selfHarm) return {id:"danger", selfHarm:true, text:"If you're thinking about ending your life, please talk to someone now: call or text 988 (US), or your local emergency number. You deserve support."};
+  // checking up, cutting someone off, or "nobody else would want you": can work as control, whatever was meant
+  if(an.control) return {id:"fight", control:true, text: an.control.kind==="degrade" ? "This would hurt badly. Telling someone they're worth nothing, or that nobody else would want them, can work as control, not just a sharp word."
+    : an.control.kind==="isolate" ? "This can come across as control: deciding who they can see. That isn't a tone problem."
+    : "This can come across as checking up on them, even if it comes from worry. That isn't a tone problem."};
   const attack = ATTACK_IDS.concat(["swear","hostile","legal","kidsfirst","violent","threat","dxlabel"]).some(id=>an.found && an.found[id]);
   // a calm boundary, or coming out: caring, never "a threat" or "might hurt"
   if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")

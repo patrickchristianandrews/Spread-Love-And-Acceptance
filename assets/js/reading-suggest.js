@@ -133,6 +133,59 @@
     return keys.filter(function (k) { return score[k] >= Math.max(2, top * 0.5); }).slice(0, 3);
   }
 
+  /* ---------- does an article's situation fit this page? ---------- */
+  // Some articles are about one situation (co-parents, caring for ageing parents, a new baby, ADHD or autism,
+  // roommates, the workplace, romantic couples). They are only offered on a page about that situation; a page
+  // with nothing that fits shows no card at all, rather than something off-topic.
+  var SIT_ITEM = {
+    coparent: /co-?parent|blended famil|stepfamil/i,
+    eldercare: /elderly|aging parent|ageing parent|caring for (aging|ageing|elderly)|caregiv|adult children on the front lines|caring for the carers/i,
+    parenthood: /parenthood|new parents?\b|\bbab(y|ies)\b|toddler|parenting/i,
+    adhd: /\badhd\b/i,
+    autism: /autis/i,
+    roommates: /roommate|housemate/i,
+    work: /workplace|coworker|co-worker|work buddy|colleague/i,
+    couple: /couples?\b|marriage|married|marital|spouse|in love\b|your relationship|romantic|loving someone/i
+  };
+  var SIT_PAGE = {
+    coparent: /co-?parent|separat|divorc|stepfam|blended|two homes|on-my-own/,
+    eldercare: /caregiv|carer|caring for|dementia|elderly|ageing|aging|eldercare|family-obligations/,
+    parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting/,
+    adhd: /\badhd\b|neurodiver|wired-differently|wired differently|wiring/,
+    autism: /autis|neurodiver|wired-differently|wired differently|wiring|sensory/,
+    roommates: /roommate|housemate|sharing-a-room|flatmate|share-the-load/,
+    work: /\/work\.html|at work|workplace|cowork|appreciation-at-work|business|wiring-card|groups/,
+    couple: /partner|couple|marri|spouse|husband|wife|love|relationship|dating|romantic|together|empty-nest|money-together|two-faiths|long-distance|different-hours|when-one-is-ill|coming-home|more-than-two|how-to-stop-fighting/
+  };
+  // pages about one kind of relationship that isn't a romantic couple
+  var NOT_COUPLE = /\/(teens|friends|foster-and-kinship|grandparents|grown-up-children|family-rifts|parents|adhd-kids|co-parenting|on-my-own|grief|sharing-a-room|work|appreciation-at-work|groups|caregivers|family-obligations|en-espanol)\.html/;
+  var pageSits = null;
+  function pageText() {
+    var t = (window.location && window.location.pathname || '') + ' ' + (document.title || '');
+    try {
+      var m = document.querySelector('meta[name="description"]'), main = document.querySelector('main') || document.body;
+      var h = main && main.querySelector('h1'), lede = main && main.querySelector('.simple-lede, .lede, .read-head p');
+      t += ' ' + (m ? m.getAttribute('content') || '' : '') + ' ' + (h ? h.textContent : '') + ' ' + (lede ? lede.textContent : '');
+    } catch (e) { }
+    return t.toLowerCase();
+  }
+  function sitsOfPage() {
+    if (pageSits) return pageSits;
+    var t = pageText(), path = (window.location && window.location.pathname) || '';
+    pageSits = {};
+    Object.keys(SIT_PAGE).forEach(function (k) { if (SIT_PAGE[k].test(t)) pageSits[k] = 1; });
+    if (NOT_COUPLE.test(path)) delete pageSits.couple;
+    return pageSits;
+  }
+  // pages the list has nothing for yet (coming out, the Spanish page): no card
+  var NONE = /\/(coming-out|en-espanol|safety|grief)(-in-depth)?\.html$/;
+  function fitsPage(it) {
+    if (NONE.test((window.location && window.location.pathname) || '')) return false;
+    var txt = (it.title || '') + ' ' + (it.summary || ''), have = sitsOfPage();
+    for (var k in SIT_ITEM) if (SIT_ITEM[k].test(txt) && !have[k]) return false;
+    return true;
+  }
+
   /* ---------- choosing ---------- */
   function fitsAudience(it, aud) {
     if (aud !== 'self' && aud !== 'others') return true;
@@ -152,8 +205,7 @@
       var inPillar = all.filter(function (it) { return (it.pillars || []).some(function (p) { return opts.pillars.indexOf(p) !== -1; }); });
       if (inPillar.length) all = inPillar;
     }
-    var pool = all.filter(function (it) { return fitsAudience(it, aud); });
-    if (!pool.length) pool = all.slice();
+    var pool = all.filter(function (it) { return fitsAudience(it, aud) && (typeof document === 'undefined' || fitsPage(it)); });
     var page = normPath(opts.page != null ? opts.page : (window.location && window.location.pathname));
     var topics = (opts.topics || []).slice();
     if (opts._scanned) opts._scanned.forEach(function (t) { if (topics.indexOf(t) === -1) topics.push(t); });
@@ -162,7 +214,8 @@
     var focus = opts.topics && opts.topics.length ? opts.topics : (opts._scanned || []);
     var onPageFocus = focus.length ? onPage.filter(function (it) { return hasAny(it, focus); }) : [];
     var byTopic = topics.length ? pool.filter(function (it) { return hasAny(it, topics); }) : [];
-    return [onPageFocus, onPage, byTopic, pool];
+    // nothing on this page's topics: no card, rather than an article about something else
+    return [onPageFocus, onPage, byTopic];
   }
 
   function suggest(opts) {
@@ -183,8 +236,8 @@
       fresh = t[i].filter(function (it) { return ok(it) && !openedSet[it.id]; });
       if (fresh.length) return pick(fresh);
     }
-    // 3) they have opened the lot: anything but the one on screen
-    var last = t[t.length - 1];
+    // 3) they have opened the lot: anything on topic but the one on screen
+    var last = t[0].concat(t[1], t[2]);
     return pick(last.filter(ok)) || pick(last);
   }
 

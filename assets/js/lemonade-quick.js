@@ -313,7 +313,39 @@
     ['recovery', 'work', 'Recovery sleep after a night shift', 'Sleep after night shifts'],
     ['commute', 'work', 'Commute', 'A long commute']
   ];
-  var STARTERS = ['dishes', 'laundry', 'bathroom', 'cooking', 'groceries', 'bills', 'appts', 'bedtime', 'school', 'petfeed', 'lowstock', 'planweek', 'dates', 'kidstuff'];
+  var STARTERS = ['dishes', 'laundry', 'bathroom', 'cooking', 'groceries', 'bills', 'appts', 'bedtime', 'school', 'petfeed', 'walks', 'lowstock', 'planweek', 'dates', 'kidstuff'];
+  // the kids' jobs on the starter list show only after "We have kids" (a home without children never sees them)
+  var KID_STARTERS = ['bedtime', 'school', 'kidstuff'];
+  function isKidJob(id) { var g = (JOB[id] || {}).g; return g === 'kids' || g === 'baby' || id === 'kidstuff' || id === 'backup'; }
+  function starters(kids) { return STARTERS.filter(function (id) { return kids || KID_STARTERS.indexOf(id) < 0; }); }
+
+  /* ---------- en español (the quick look only): from /en-espanol.html or a browser set to Spanish ---------- */
+  var ES_AUTO = (function () {
+    try { if (/\/en-espanol\.html/.test(document.referrer || '')) return 'ref'; } catch (e) {}
+    try { if (/^es\b/i.test(navigator.language || '')) return 'nav'; } catch (e) {}
+    return '';
+  })();
+  function isEs() { return q && q.lang ? q.lang === 'es' : !!ES_AUTO; }
+  function L(en, es) { return isEs() ? es : en; }
+  var ES_JOB = {
+    dishes: 'Platos', laundry: 'Ropa (lavar y secar)', bathroom: 'Limpiar el baño', cooking: 'Hacer la cena', groceries: 'Hacer las compras', bills: 'Pagar las cuentas',
+    appts: 'Hacer citas', bedtime: 'La hora de dormir', school: 'Llevar y recoger de la escuela o guardería', petfeed: 'Dar de comer a las mascotas', walks: 'Pasear al perro',
+    lowstock: 'Quién se acuerda de lo que falta', planweek: 'Planear la semana', dates: 'Acordarse de fechas y citas', kidstuff: 'Estar pendiente de las cosas de los niños',
+    tidy: 'Ordenar', floors: 'Aspirar y limpiar pisos', bins: 'Sacar la basura y el reciclaje', sheets: 'Cambiar las sábanas', folding: 'Doblar y guardar la ropa', mealplan: 'Planear las comidas',
+    lunches: 'Preparar almuerzos', supplies: 'Reponer jabón, papel y cosas de la casa', fixes: 'Arreglos pequeños en casa', garden: 'Plantas y jardín', budget: 'Presupuesto y cuentas del banco',
+    taxes: 'Impuestos y recibos', mail: 'Correo y emails de la casa', calls: 'Llamadas y servicio al cliente', insurance: 'Seguros y documentos', renewals: 'Renovar y cambiar planes',
+    car: 'El carro', gifts: 'Regalos y tarjetas', kidsup: 'Levantar y alistar a los niños', homework: 'Ayudar con la tarea', bath: 'La hora del baño', activities: 'Llevar a actividades',
+    nightwake: 'Despertares de noche', forms: 'Formularios e inscripciones de la escuela', solokids: 'Cuidar a los niños a solas (mientras el otro trabaja)', parties: 'Juegos y fiestas de los niños',
+    nightfeeds: 'Tomas de noche', oncall: 'De guardia de noche (quien escucha al bebé)', nappies: 'Pañales', bottles: 'Biberones y esterilizar', solobaby: 'Cuidar al bebé a solas (mientras el otro trabaja)',
+    meds: 'Medicinas y recetas', healthcalls: 'Citas médicas y llamadas', oncallill: 'Estar pendiente de quien está enfermo', personal: 'Cuidado personal (bañar, vestir)',
+    litter: 'Arenero, jaula o pecera', vet: 'Veterinario y cosas de las mascotas', inlaws: 'Mantener el contacto con las dos familias', birthdays: 'Cumpleaños y fiestas',
+    hosting: 'Recibir visitas', friends: 'Planear tiempo con amigos', calendar: 'Llevar el calendario de la familia', backup: 'Cuidado de niños y planes de respaldo',
+    checking: 'Revisar que las cosas se hicieron', trips: 'Planear viajes y vacaciones', checkin: 'Preguntar cómo está cada uno', peace: 'Mantener la paz',
+    paid: 'Trabajo pagado', nightshift: 'Turnos de noche', recovery: 'Dormir después del turno de noche', commute: 'Un trayecto largo al trabajo'
+  };
+  var ES_GROUP = { home: 'Casa y comida', admin: 'Dinero y trámites', kids: 'Niños y cuidado', baby: 'Bebé', care: 'Cuidar a la pareja', pets: 'Mascotas', family: 'Familia y amigos',
+    think: 'El trabajo de pensar', work: 'Trabajo, noches y descanso', own: 'Sus propias tareas' };
+  var ES_GROUP_SUB = { think: 'notar, planear, acordarse', work: 'se cuenta aparte, no con las tareas de la casa' };
   var JOB = {}, LIBX = {};
   JOBS.forEach(function (r) { JOB[r[0]] = { id: r[0], g: r[1], lib: r[2], label: r[3] || null, x: r[4] || null }; });
   function low(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim().toLowerCase(); }
@@ -328,10 +360,14 @@
   function label(id) {
     if (isCustom(id)) return id.slice(2);
     var j = JOB[id]; if (!j) return id;
+    if (isEs() && ES_JOB[id]) return ES_JOB[id];
     if (j.label) return j.label;
     var li = libInfo(id); if (li) return li.n;
     return Array.isArray(j.lib) ? j.lib[0] : j.lib;
   }
+  function labelEn(id) { var l = q.lang; q.lang = 'en'; var t = label(id); q.lang = l; if (l === undefined) delete q.lang; return t; }
+  function groupName(g) { return isEs() && ES_GROUP[g[0]] ? ES_GROUP[g[0]] : g[1]; }
+  function groupSub(g) { return isEs() && ES_GROUP_SUB[g[0]] ? ES_GROUP_SUB[g[0]] : g[2]; }
   function groupOf(id) { return isCustom(id) ? 'own' : (JOB[id] || {}).g || 'own'; }
   var THINK_WORDS = /plan|remember|notic|keep(?:ing)? track|calendar|organi[sz]|schedul|deadline|worry|check(?:ing)? (?:in|that)/;
   function kindOf(id) {
@@ -344,12 +380,18 @@
   function known(id) { return typeof id === 'string' && (isCustom(id) ? id.length > 2 && id.length <= 62 : !!JOB[id]); }
 
   /* ---------- the quick look's own state ---------- */
-  function fresh() { return { v: 1, people: ['', ''], list: STARTERS.slice(), ans: { 0: {} }, me: 0, ill: false, peek: {} }; }
-  var q = load() || fresh(), undoQ = null, ready = false;
+  function fresh() { return { v: 1, people: ['', ''], list: starters(false), ans: { 0: {} }, me: 0, ill: false, away: false, kids: false, hrs: {}, split: '', peek: {} }; }
+  var q = null;
+  q = load() || fresh();
+  var undoQ = null, ready = false;
+  // arrived from the Spanish page: remember it with the quick look (English stays one tap away)
+  if (!q.lang && ES_AUTO === 'ref') q.lang = 'es';
   function tidy(o) {
     if (!o || typeof o !== 'object' || !Array.isArray(o.people)) return null;
     var n = Math.min(MAX_P, Math.max(2, o.people.length));
-    var t = { v: 1, people: [], list: [], ans: {}, me: 0, ill: !!o.ill, peek: {} };
+    var t = { v: 1, people: [], list: [], ans: {}, me: 0, ill: !!o.ill, away: !!o.away, hrs: {}, split: '', peek: {} };
+    if (o.lang === 'es' || o.lang === 'en') t.lang = o.lang;
+    if (typeof o.split === 'string' && /^\d{1,2}$/.test(o.split) && +o.split >= 10 && +o.split <= 90) t.split = o.split;
     for (var i = 0; i < n; i++) t.people.push(String(o.people[i] || '').slice(0, 40));
     (Array.isArray(o.list) ? o.list : []).forEach(function (id) { if (known(id) && t.list.indexOf(id) < 0) t.list.push(id); });
     var a = o.ans && typeof o.ans === 'object' ? o.ans : {};
@@ -359,6 +401,10 @@
       if (Object.keys(out).length || p === 0) t.ans[p] = out;
     }
     t.me = typeof o.me === 'number' && o.me >= 0 && o.me < n ? o.me : 0;
+    if (o.hrs && typeof o.hrs === 'object') Object.keys(o.hrs).forEach(function (k) { var x = +o.hrs[k]; if (+k >= 0 && +k < n && isFinite(x) && x >= 0 && x <= 168) t.hrs[k] = Math.round(x * 10) / 10; });
+    // "We have kids": said, or (a quick look from before the choice) any kids' job on the list or answered
+    t.kids = typeof o.kids === 'boolean' ? o.kids : t.list.some(function (id) { return isKidJob(id) && Object.keys(t.ans).some(function (p) { return t.ans[p][id] != null; }); });
+    if (!t.kids && typeof o.kids !== 'boolean') t.list = t.list.filter(function (id) { return KID_STARTERS.indexOf(id) < 0; });
     if (o.peek && typeof o.peek === 'object') Object.keys(o.peek).forEach(function (k) { if (/^\d>\d$/.test(k)) t.peek[k] = 1; });
     if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply, f: typeof o.from.f === 'number' ? o.from.f : -1, t: typeof o.from.t === 'number' ? o.from.t : -1, replaced: !!o.from.replaced };
     return t;
@@ -369,20 +415,27 @@
   function hasAny(p) { var v = q.ans[p]; return !!v && q.list.some(function (id) { return v[id] != null; }); }
   function typed(i) { return String(q.people[i] || '').trim(); }
   // the name on a button: a typed name, or "Me" for whoever is answering on this device, "Them" for the other
-  function nm(i) { return typed(i) || (i === q.me ? 'Me' : q.people.length === 2 ? 'Them' : 'Person ' + (i + 1)); }
+  function personN(i) { return L('Person ', 'Persona ') + (i + 1); }
+  function nm(i) { return typed(i) || (i === q.me ? L('Me', 'Yo') : q.people.length === 2 ? L('Them', 'Otra persona') : personN(i)); }
   // inside a sentence: "you" for whoever is answering here, "them" for an unnamed other
-  function say(i) { return typed(i) || (i === q.me ? 'you' : q.people.length === 2 ? 'them' : 'Person ' + (i + 1)); }
+  function say(i) { return typed(i) || (i === q.me ? L('you', 'tú') : q.people.length === 2 ? L('them', 'la otra persona') : personN(i)); }
   function Say(i) { var s = say(i); return s.charAt(0).toUpperCase() + s.slice(1); }
   // "Sam says", "they say", "you say"
-  function says(i) { return i === q.me ? 'you say' : typed(i) ? typed(i) + ' says' : (q.people.length === 2 ? 'they say' : 'Person ' + (i + 1) + ' says'); }
+  function says(i) { return i === q.me ? L('you say', 'tú dices') : typed(i) ? typed(i) + L(' says', ' dice') : (q.people.length === 2 ? L('they say', 'la otra persona dice') : personN(i) + L(' says', ' dice')); }
   function Says(i) { var s = says(i); return s.charAt(0).toUpperCase() + s.slice(1); }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function poss(i) { return i === q.me ? 'your' : typed(i) ? typed(i) + '’s' : q.people.length === 2 ? 'their' : 'Person ' + (i + 1) + '’s'; }
+  // "Sam’s view" / "la vista de Sam"
+  function viewOf(i) {
+    if (!isEs()) return poss(i) + ' view';
+    return i === q.me ? 'tu vista' : 'la vista de ' + (typed(i) || (q.people.length === 2 ? 'la otra persona' : personN(i)));
+  }
   function joinA(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
   function lc(s) { return /^[A-Z][a-z]/.test(s) && !/^(I|I’m)\b/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function both() { return q.people.length === 2 ? 'Both' : 'Shared'; }
-  function everyone() { return q.people.length === 2 ? 'both of you' : 'all of you'; }
+  function both() { return q.people.length === 2 ? L('Both', 'Los dos') : L('Shared', 'Compartido'); }
+  function everyone() { return q.people.length === 2 ? 'both of you' : q.people.length === 3 ? 'the three of you' : 'all of you'; }
+  function feelsAsk() { return L('Does this match how it feels to ' + everyone() + '?', q.people.length === 2 ? '¿Así lo sienten los dos?' : '¿Así lo sienten todos?'); }
   function calm() {
     try { return document.documentElement.classList.contains('tol-quiet') || window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
   }
@@ -401,11 +454,11 @@
     box.innerHTML = '';
     q.people.forEach(function (_, i) {
       var l = document.createElement('label'); l.className = 'lq-name'; l.style.setProperty('--pc', COLORS[i]);
-      var sp = document.createElement('span'); sp.textContent = i === q.me ? 'Your name' : q.people.length === 2 ? 'Their name' : 'Name ' + (i + 1);
+      var sp = document.createElement('span'); sp.textContent = i === q.me ? L('Your name', 'Tu nombre') : q.people.length === 2 ? L('Their name', 'Su nombre') : L('Name ', 'Nombre ') + (i + 1);
       var row = document.createElement('span'); row.className = 'lq-name-in';
       var dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden', 'true');
       var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.autocomplete = 'off'; inp.value = q.people[i];
-      inp.placeholder = i === q.me ? 'Me' : q.people.length === 2 ? 'Them' : 'Person ' + (i + 1);
+      inp.placeholder = nm(i);
       inp.setAttribute('data-lq-name', String(i));
       inp.addEventListener('input', function () { q.people[i] = inp.value.slice(0, 40); save(); relabel(); renderResult(); });
       row.appendChild(dot); row.appendChild(inp);
@@ -418,8 +471,7 @@
       l.appendChild(sp); l.appendChild(row); box.appendChild(l);
     });
     if (q.people.length < MAX_P) {
-      var add = document.createElement('button'); add.type = 'button'; add.className = 'lq-btn-link'; add.id = 'lq-add-person'; add.textContent = '+ person';
-      add.setAttribute('aria-label', 'Add a person');
+      var add = document.createElement('button'); add.type = 'button'; add.className = 'lq-btn-link'; add.id = 'lq-add-person'; add.textContent = L('+ Add a person', '+ Añadir a una persona');
       add.addEventListener('click', function () {
         q.people.push(''); save(); renderAll();
         var ins = box.querySelectorAll('input'); if (ins.length) ins[ins.length - 1].focus();
@@ -448,10 +500,10 @@
       var w = b.getAttribute('data-w'), id = b.closest('.lq-row').getAttribute('data-id');
       var t = w === 'b' ? both() : nm(+w);
       if (b.textContent !== t) b.textContent = t;
-      b.setAttribute('aria-label', label(id) + ': ' + (w === 'b' ? (q.people.length === 2 ? 'both' : 'shared') : 'mostly ' + nm(+w)));
+      b.setAttribute('aria-label', label(id) + ': ' + ansWords(w === 'b' ? 'b' : +w));
     });
     document.querySelectorAll('#lq-names .lq-name').forEach(function (l, i) {
-      var inp = l.querySelector('input'); if (inp) inp.placeholder = i === q.me ? 'Me' : q.people.length === 2 ? 'Them' : 'Person ' + (i + 1);
+      var inp = l.querySelector('input'); if (inp && !typed(i)) inp.placeholder = i === q.me ? L('Me', 'Yo') : q.people.length === 2 ? L('Them', 'Otra persona') : personN(i);
     });
     renderAsRow(); renderSend(); renderFrom();
   }
@@ -463,10 +515,10 @@
     box.hidden = !multiView();
     if (box.hidden) { box.innerHTML = ''; return; }
     box.innerHTML = '';
-    var t = document.createElement('span'); t.textContent = 'Whose view:'; box.appendChild(t);
+    var t = document.createElement('span'); t.textContent = L('Whose view:', '¿De quién es esta vista?'); box.appendChild(t);
     q.people.forEach(function (_, i) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'lq-w'; b.style.setProperty('--pc', COLORS[i]);
-      b.textContent = typed(i) || 'Person ' + (i + 1);
+      b.textContent = typed(i) || personN(i);
       b.setAttribute('aria-pressed', String(q.me === i));
       b.addEventListener('click', function () { setMe(i, true); });
       box.appendChild(b);
@@ -475,7 +527,8 @@
   function setMe(i, say0) {
     if (i === q.me) return;
     q.me = i; save(); renderAll();
-    if (say0) status('This is ' + (typed(i) || 'Person ' + (i + 1)) + '’s view now. ' + (hasAny(i) ? '' : 'Tap who mostly does each job, as ' + (typed(i) || 'they') + ' see' + (typed(i) ? 's' : '') + ' it. The other answers stay hidden until then.'));
+    if (say0) status(L('This is ' + (typed(i) || 'Person ' + (i + 1)) + '’s view now. ' + (hasAny(i) ? '' : 'Tap who mostly does each job, as ' + (typed(i) || 'they') + ' see' + (typed(i) ? 's' : '') + ' it. The other answers stay hidden until then.'),
+      'Ahora es la vista de ' + (typed(i) || personN(i)) + '. ' + (hasAny(i) ? '' : 'Toca quién hace casi siempre cada tarea, como lo ve ' + (typed(i) || 'esa persona') + '. Las otras respuestas quedan ocultas hasta entonces.')));
   }
 
   /* ---------- the list ---------- */
@@ -492,7 +545,7 @@
       if (!ids.length) return;
       var sec = document.createElement('div'); sec.className = 'lq-group';
       var h = document.createElement('h3'); h.className = 'lq-group-h';
-      h.innerHTML = esc(g[1]) + (g[2] ? ' <small>(' + esc(g[2]) + ')</small>' : '');
+      h.innerHTML = esc(groupName(g)) + (g[2] ? ' <small>(' + esc(groupSub(g)) + ')</small>' : '');
       sec.appendChild(h);
       ids.forEach(function (id) { sec.appendChild(rowEl(id)); });
       box.appendChild(sec);
@@ -509,12 +562,11 @@
     var top = document.createElement('div'); top.className = 'lq-row-top';
     var p = document.createElement('p'); p.className = 'lq-job'; p.id = rowHtmlId(id); p.textContent = label(id);
     top.appendChild(p);
-    if (STARTERS.indexOf(id) < 0) {
-      var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
-      rm.setAttribute('aria-label', 'Take ' + label(id) + ' off the list');
-      rm.addEventListener('click', function () { dropJob(id); });
-      top.appendChild(rm);
-    }
+    // every job can come off (a starter goes back under "Show more jobs")
+    var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
+    rm.setAttribute('aria-label', L('Take ' + label(id) + ' off the list', 'Quitar ' + label(id) + ' de la lista'));
+    rm.addEventListener('click', function () { dropJob(id); });
+    top.appendChild(rm);
     r.appendChild(top);
     var g = document.createElement('div'); g.className = 'lq-who'; g.setAttribute('role', 'group'); g.setAttribute('aria-labelledby', p.id);
     var order = q.people.length === 2 ? [0, 'b', 1] : q.people.map(function (_, i) { return i; }).concat(['b']);
@@ -523,7 +575,7 @@
       b.setAttribute('data-w', String(w));
       if (w !== 'b') b.style.setProperty('--pc', COLORS[w]);
       b.textContent = w === 'b' ? both() : nm(w);
-      b.setAttribute('aria-label', label(id) + ': ' + (w === 'b' ? (q.people.length === 2 ? 'both' : 'shared') : 'mostly ' + nm(w)));
+      b.setAttribute('aria-label', label(id) + ': ' + ansWords(w));
       b.addEventListener('click', function () { answer(id, w); });
       g.appendChild(b);
     });
@@ -543,7 +595,7 @@
     var c = r.querySelector('.lq-cmp'), bits = [], same = true;
     shownOthers().forEach(function (o) {
       var x = (q.ans[o] || {})[id]; if (x == null) return;
-      if (v != null && x === v) bits.push(Says(o) + ' the same');
+      if (v != null && x === v) bits.push(Says(o) + L(' the same', ' lo mismo'));
       else { same = false; bits.push(Says(o) + ' ' + ansWords(x)); }
     });
     c.hidden = !bits.length; c.textContent = bits.join('. ') + (bits.length ? '.' : '');
@@ -561,14 +613,15 @@
     var k = q.list.indexOf(id); if (k < 0) return;
     q.list.splice(k, 1); save();
     renderList(); renderMore(); renderResult();
-    status('Took “' + label(id) + '” off the list.');
+    status(L('Took “' + label(id) + '” off the list. It’s under “Show more jobs” if you want it back.', 'Se quitó «' + label(id) + '». Está en «Mostrar más tareas» si la quieres de vuelta.'));
     var n = $('lq-new'); if (n) n.focus({ preventScroll: true });
   }
   function addJob(id, quiet) {
     if (q.list.indexOf(id) >= 0) return false;
     q.list.push(id); save();
     renderList(); renderMore(); renderResult();
-    if (!quiet) status('Added “' + label(id) + '” to the list. Tap who mostly does it.');
+    if (isKidJob(id) && !q.kids) { q.kids = true; save(); renderKids(); }
+    if (!quiet) status(L('Added “' + label(id) + '” to the list. Tap who mostly does it.', 'Se añadió «' + label(id) + '». Toca quién la hace casi siempre.'));
     return true;
   }
   function addCustom() {
@@ -576,14 +629,14 @@
     if (!v) { inp.focus(); return; }
     // a job that's already in the catalogue is that job, so it travels and counts the same way
     var hit = null;
-    JOBS.forEach(function (r) { if (!hit && (low(label(r[0])) === low(v) || (r[2] && (Array.isArray(r[2]) ? r[2] : [r[2]]).some(function (x) { return low(x) === low(v); })))) hit = r[0]; });
+    JOBS.forEach(function (r) { if (!hit && (low(label(r[0])) === low(v) || low(labelEn(r[0])) === low(v) || (r[2] && (Array.isArray(r[2]) ? r[2] : [r[2]]).some(function (x) { return low(x) === low(v); })))) hit = r[0]; });
     var id = hit || 'c:' + v;
     var have = q.list.filter(function (x) { return low(x) === low(id); })[0];
-    if (have) { status('“' + label(have) + '” is already on the list.'); var r0 = document.querySelector('#lq-list .lq-row[data-id="' + cssq(have) + '"] .lq-w'); if (r0) { goTo(r0, 'center'); r0.focus({ preventScroll: true }); } return; }
+    if (have) { status(L('“' + label(have) + '” is already on the list.', '«' + label(have) + '» ya está en la lista.')); var r0 = document.querySelector('#lq-list .lq-row[data-id="' + cssq(have) + '"] .lq-w'); if (r0) { goTo(r0, 'center'); r0.focus({ preventScroll: true }); } return; }
     addJob(id, true); inp.value = '';
     var r = document.querySelector('#lq-list .lq-row[data-id="' + cssq(id) + '"] .lq-w');
     if (r) { goTo(r, 'center'); r.focus({ preventScroll: true }); }
-    status('Added “' + label(id) + '”. Tap who mostly does it.');
+    status(L('Added “' + label(id) + '”. Tap who mostly does it.', 'Se añadió «' + label(id) + '». Toca quién la hace casi siempre.'));
   }
 
   /* ---------- "Show more jobs" ---------- */
@@ -592,11 +645,11 @@
     var act = document.activeElement, fid = act && act.getAttribute && act.getAttribute('data-more');
     box.innerHTML = '';
     GROUPS.forEach(function (g) {
-      var ids = JOBS.filter(function (r) { return r[1] === g[0] && STARTERS.indexOf(r[0]) < 0; }).map(function (r) { return r[0]; });
+      var ids = JOBS.filter(function (r) { return r[1] === g[0] && (STARTERS.indexOf(r[0]) < 0 || q.list.indexOf(r[0]) < 0); }).map(function (r) { return r[0]; });
       if (!ids.length) return;
       var d = document.createElement('div'); d.className = 'lq-more-g';
-      var h = document.createElement('p'); h.innerHTML = esc(g[1]) + (g[2] ? ' <small>(' + esc(g[2]) + ')</small>' : ''); d.appendChild(h);
-      var pk = document.createElement('div'); pk.className = 'lq-pick'; pk.setAttribute('role', 'group'); pk.setAttribute('aria-label', g[1]);
+      var h = document.createElement('p'); h.innerHTML = esc(groupName(g)) + (g[2] ? ' <small>(' + esc(groupSub(g)) + ')</small>' : ''); d.appendChild(h);
+      var pk = document.createElement('div'); pk.className = 'lq-pick'; pk.setAttribute('role', 'group'); pk.setAttribute('aria-label', groupName(g));
       ids.forEach(function (id) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'lq-chip'; b.setAttribute('data-more', id);
         var on = q.list.indexOf(id) >= 0;
@@ -626,11 +679,12 @@
   function lean(t, p) {
     if (!t.n) return null;
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
-    if (alone && max > t.both) return { one: top, words: (max / t.n >= 0.6 ? 'mostly ' : 'a little more often ') + say(top) };
-    if (t.both > 0 && t.both >= max) return { shared: true, words: 'mostly shared' };
-    return { even: true, words: 'spread between ' + (q.people.length === 2 ? 'you' : 'you all') };
+    if (alone && max > t.both) return { one: top, words: (max / t.n >= 0.6 ? L('mostly ', 'sobre todo ') : L('a little more often ', 'un poco más ')) + say(top) };
+    if (t.both > 0 && t.both >= max) return { shared: true, words: L('mostly shared', 'casi siempre compartido') };
+    return { even: true, words: L('spread between ' + (q.people.length === 2 ? 'you' : 'you all'), 'repartido entre ustedes') };
   }
-  var SECTIONS = [['home', 'Everyday jobs'], ['think', 'Planning and remembering'], ['work', 'Paid work and nights']];
+  var SECTIONS = [['home', 'Everyday jobs', 'Tareas de cada día'], ['think', 'Planning and remembering', 'Planear y acordarse'], ['work', 'Paid work and nights', 'Trabajo pagado y noches']];
+  function secName(s) { return isEs() ? s[2] : s[1]; }
   function barHtml(t) {
     var segs = '', key = '';
     var order = q.people.length === 2 ? [0, 'b', 1] : q.people.map(function (_, i) { return i; }).concat(['b']);
@@ -646,41 +700,138 @@
     var t = tally(q.me, 'work'), l = lean(t, q.me);
     return !!(l && l.one != null);
   }
+  function fairWords() {
+    if (q.away) return L('One of you has been away (deployment, work away, a hospital stay). The one at home carried more because they had to, so a list that leans one way is about the time apart, not about either of you. Use it to plan the hand-back together. More on <a href="/coming-home.html">coming home after time apart</a>.',
+      'Uno de ustedes estuvo lejos (despliegue, trabajo fuera, hospital). Quien se quedó en casa cargó más porque no había otra opción, así que una lista que se inclina hacia un lado habla del tiempo separados, no de ninguno de los dos. Úsenla para planear juntos cómo repartir de nuevo.');
+    return L('Fair isn’t always ' + (q.people.length === 2 ? '50/50' : 'an even split') + '. When ' + (q.people.length === 2 ? 'one of you' : 'someone') + ' works long hours or nights, or is ill, a list that leans one way at home can be just right. What matters is that it feels fair to ' + everyone() +
+      ', and that the thinking work is seen too. More on <a href="/when-one-is-ill.html">when one of you is ill</a> and <a href="/different-hours.html">different hours</a>.',
+      'Justo no siempre es mitad y mitad. Cuando alguien trabaja muchas horas o de noche, o está enfermo, que la casa se incline hacia un lado puede estar bien. Lo importante es que se sienta justo para ' + (q.people.length === 2 ? 'los dos' : 'todos') + ', y que también se vea el trabajo de pensar.');
+  }
   function renderResult() {
     var out = $('lq-out'); if (!out) return;
     var all = tally(q.me), html = '';
     if (!all.n) {
-      html = '<p>Tap who mostly does each job. The picture builds here as you go.</p>' +
-        '<p class="lq-mini">No hours, no numbers. Leave out any job that doesn’t happen in your home.</p>';
+      html = '<p>' + esc(L('Tap who mostly does each job. The picture builds here as you go.', 'Toca quién hace casi siempre cada tarea. La imagen se arma aquí mientras avanzas.')) + '</p>' +
+        '<p class="lq-mini">' + esc(L('No hours, no numbers. Leave out any job that doesn’t happen in your home.', 'Sin horas ni números. Deja fuera cualquier tarea que no pase en su casa.')) + '</p>';
     } else {
-      html += '<p>Here’s how it looks' + (multiView() ? ' from ' + poss(q.me) + ' side' : '') + ', ' + all.n + (all.n === 1 ? ' job' : ' jobs') + ' so far.</p>';
+      html += '<p>' + esc(isEs() ? 'Así se ve' + (multiView() ? ' desde ' + (q.me === q.me && typed(q.me) ? 'el lado de ' + typed(q.me) : 'tu lado') : '') + ', ' + all.n + (all.n === 1 ? ' tarea' : ' tareas') + ' hasta ahora.'
+        : 'Here’s how it looks' + (multiView() ? ' from ' + poss(q.me) + ' side' : '') + ', ' + all.n + (all.n === 1 ? ' job' : ' jobs') + ' so far.') + '</p>';
       var lines = [];
       SECTIONS.forEach(function (s) {
         var t = tally(q.me, s[0]); if (!t.n) return;
         var l = lean(t);
-        html += '<div class="lq-sec"><p class="lq-sec-h"><span>' + esc(s[1]) + ': ' + esc(l.words) + '</span><small>' + t.n + (t.n === 1 ? ' job' : ' jobs') + '</small></p>' + barHtml(t) + '</div>';
+        html += '<div class="lq-sec"><p class="lq-sec-h"><span>' + esc(secName(s)) + ': ' + esc(l.words) + '</span><small>' + t.n + (t.n === 1 ? L(' job', ' tarea') : L(' jobs', ' tareas')) + '</small></p>' + barHtml(t) + '</div>';
         lines.push({ k: s[0], l: l, t: t });
       });
       var th = lines.filter(function (x) { return x.k === 'think'; })[0], hm = lines.filter(function (x) { return x.k === 'home'; })[0];
       var words = [];
-      if (th && th.l.one != null && th.t.n >= 2) words.push('The thinking work is easy to miss, because nobody sees it happen. Saying it out loud is a good start.');
-      else if (!th) words.push('Add a job or two from “The thinking work” too: the noticing, planning and remembering often sit with one person without anyone saying so.');
-      if (hm && th && hm.l.one != null && th.l.one != null && hm.l.one !== th.l.one) words.push('The doing and the thinking sit with different people. That can work well, as long as both are seen.');
+      if (th && th.l.one != null && th.t.n >= 2) words.push(L('The thinking work is easy to miss, because nobody sees it happen. Saying it out loud is a good start.', 'El trabajo de pensar es fácil de pasar por alto, porque nadie lo ve. Decirlo en voz alta es un buen comienzo.'));
+      else if (!th) words.push(L('Add a job or two from “The thinking work” too: the noticing, planning and remembering often sit with one person without anyone saying so.', 'Añade también una o dos tareas de «El trabajo de pensar»: notar, planear y acordarse muchas veces le toca a una sola persona sin que nadie lo diga.'));
+      if (hm && th && hm.l.one != null && th.l.one != null && hm.l.one !== th.l.one) words.push(L('The doing and the thinking sit with different people. That can work well, as long as both are seen.', 'El hacer y el pensar están en manos de personas distintas. Eso puede funcionar bien, siempre que se vean los dos.'));
       if (words.length) html += '<p class="lq-words">' + esc(words.join(' ')) + '</p>';
-      html += '<p class="lq-ask">Does this match how it feels to ' + everyone() + '?</p>';
+      html += '<p class="lq-ask">' + esc(feelsAsk()) + '</p>';
     }
-    var fair = q.ill || (all.n && workLeans());
-    html += '<p class="lq-fair"' + (fair ? '' : ' hidden') + '>Fair isn’t always 50/50. When one of you works long hours or nights, or is ill, a list that leans one way at home can be just right. What matters is that it feels fair to ' + everyone() +
-      ', and that the thinking work is seen too. More on <a href="/when-one-is-ill.html">when one of you is ill</a> and <a href="/different-hours.html">different hours</a>.</p>';
+    var fair = q.ill || q.away || (all.n && workLeans());
+    html += '<p class="lq-fair"' + (fair ? '' : ' hidden') + '>' + fairWords() + '</p>';
     if (out.getAttribute('data-h') !== html) { out.setAttribute('data-h', html); out.innerHTML = html; }
     var ill = $('lq-ill'); if (ill) ill.setAttribute('aria-pressed', String(!!q.ill));
-    renderCompare(); renderSend(); renderMini();
+    var aw = $('lq-away'); if (aw) aw.setAttribute('aria-pressed', String(!!q.away));
+    renderExtra(); renderCompare(); renderSend(); renderMini();
     if (cardP) { if (!all.n && cardP.open) cardP.show(false); else cardP.later(); }
     document.querySelectorAll('#lq-list .lq-row').forEach(paintRow);
+    stickSoon();
   }
+
+  /* ---------- long hours or illness: paid work beside the picture, nights, and a fair split ---------- */
+  function hrsOf(i) { var x = q.hrs && q.hrs[i]; return typeof x === 'number' && x > 0 ? x : 0; }
+  // the home and thinking jobs as answered on this side: each person's share, a shared job counted half each
+  function homeShares() {
+    var v = q.ans[q.me] || {}, per = q.people.map(function () { return 0; }), n = 0;
+    q.list.forEach(function (id) {
+      var k = kindOf(id); if (k === 'work') return;
+      var x = v[id]; if (x == null) return;
+      n++;
+      if (x === 'b') per.forEach(function (_, i) { per[i] += 1 / q.people.length; }); else per[x]++;
+    });
+    return n ? per.map(function (x) { return Math.round(x / n * 100); }) : null;
+  }
+  var extraSig = '';
+  function renderExtra() {
+    var box = $('lq-extra'); if (!box) return;
+    box.hidden = !q.ill;
+    if (!q.ill) { extraSig = ''; return; }
+    var two = q.people.length === 2;
+    var sig = [q.people.length, q.people.join('|'), q.me, isEs() ? 'es' : 'en', q.split].join('/');
+    if (sig !== extraSig || !box.firstChild) {
+      var foc = document.activeElement && box.contains(document.activeElement) ? document.activeElement.getAttribute('data-x') : null;
+      extraSig = sig;
+      var h = '<p><strong>' + esc(L('Paid work + travel per week', 'Trabajo pagado + traslados por semana')) + '</strong> ' + esc(L('(optional, rough is fine)', '(opcional, aproximado está bien)')) + '</p><div class="lq-hrs">' +
+        q.people.map(function (_, i) { return '<label><span>' + esc(nm(i)) + L(' (hours)', ' (horas)') + '</span><input type="number" min="0" max="168" step="1" inputmode="decimal" autocomplete="off" data-x="h' + i + '" data-lq-hrs="' + i + '" value="' + (hrsOf(i) || '') + '"></label>'; }).join('') + '</div>' +
+        '<p class="lq-mini" id="lq-hrs-line" aria-live="polite"></p>' +
+        '<p><button type="button" class="lq-btn-link" data-x="nights" data-lq-nights>' + esc(L('Work nights? Add night shifts and recovery sleep', '¿Trabajo de noche? Añadir turnos de noche y el sueño de después')) + '</button></p>';
+      if (two) {
+        var opts = [['50', L('Even (50/50)', 'Mitad y mitad (50/50)')], ['60'], ['40'], ['70'], ['30']];
+        h += '<p><strong>' + esc(L('Pick a fair split for the home jobs', 'Elijan un reparto justo de la casa')) + '</strong> ' + esc(L('(what each of you can do, on good days and bad)', '(lo que cada uno puede hacer, en días buenos y malos)')) + '</p><div class="lq-pick" role="group" aria-label="' + esc(L('A fair split', 'Un reparto justo')) + '">' +
+          opts.map(function (o) {
+            var t = o[1] || nm(0) + ' ' + o[0] + ' · ' + nm(1) + ' ' + (100 - +o[0]);
+            return '<button type="button" class="lq-w" data-x="s' + o[0] + '" data-lq-split="' + o[0] + '" aria-pressed="' + (q.split === o[0]) + '">' + esc(t) + '</button>';
+          }).join('') + '</div><p class="lq-mini" id="lq-split-line" aria-live="polite"></p>';
+      } else {
+        h += '<p class="lq-mini">' + esc(L('A split you choose (like 40/35/25) is in “Go deeper: count the hours”, below.', 'Un reparto que elijan (como 40/35/25) está en «Go deeper», abajo.')) + '</p>';
+      }
+      box.innerHTML = h;
+      if (foc) { var f = box.querySelector('[data-x="' + foc + '"]'); if (f) f.focus({ preventScroll: true }); }
+    }
+    // the lines that change as you go (the boxes themselves stay put while you type)
+    var hl = $('lq-hrs-line'), withH = q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; });
+    if (hl) hl.textContent = withH.length ? L('Paid work and travel: ' + withH.map(function (i) { return nm(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + ' a week. That’s part of the week too: the home jobs above are only one side of it.',
+      'Trabajo pagado y traslados: ' + withH.map(function (i) { return nm(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + ' por semana. Eso también es parte de la semana: las tareas de la casa son solo un lado.') : '';
+    var nb = box.querySelector('[data-lq-nights]'); if (nb) nb.parentNode.hidden = q.list.indexOf('nightshift') >= 0 && q.list.indexOf('recovery') >= 0;
+    var sl = $('lq-split-line');
+    if (sl) {
+      var sh = homeShares(), want = q.split ? +q.split : 0, txt = '';
+      if (want && sh) {
+        var d = sh[0] - want, pick = nm(0) + ' ' + want + ' · ' + nm(1) + ' ' + (100 - want);
+        txt = L('As you see it, the home jobs come to about ' + nm(0) + ' ' + sh[0] + ' · ' + nm(1) + ' ' + sh[1] + ' (a shared job counts half each). ', 'Como lo ves, las tareas de la casa quedan más o menos ' + nm(0) + ' ' + sh[0] + ' · ' + nm(1) + ' ' + sh[1] + ' (una tarea compartida cuenta la mitad para cada uno). ') +
+          (Math.abs(d) <= 10 ? L('That’s close to the split you picked (' + pick + ').', 'Eso está cerca del reparto que eligieron (' + pick + ').')
+            : L(nm(d > 0 ? 0 : 1) + ' does more than the split you picked (' + pick + '). Worth a kind look together: which job could move?', nm(d > 0 ? 0 : 1) + ' hace más que el reparto que eligieron (' + pick + '). Vale la pena mirarlo juntos con calma: ¿qué tarea podría cambiar de manos?'));
+      } else if (want) txt = L('Tap who does a job or two, and you’ll see how it compares.', 'Toca quién hace una o dos tareas y verás cómo se compara.');
+      sl.textContent = txt;
+    }
+  }
+  document.addEventListener('input', function (e) {
+    var t = e.target.closest && e.target.closest('[data-lq-hrs]'); if (!t) return;
+    var i = +t.getAttribute('data-lq-hrs'), x = parseFloat(t.value);
+    q.hrs = q.hrs || {};
+    if (isFinite(x) && x > 0 && x <= 168) q.hrs[i] = Math.round(x * 10) / 10; else delete q.hrs[i];
+    save(); renderExtra(); renderSend(); if (cardP) cardP.later();
+  });
+  document.addEventListener('click', function (e) {
+    var sb = e.target.closest && e.target.closest('[data-lq-split]');
+    if (sb) { var v = sb.getAttribute('data-lq-split'); q.split = q.split === v ? '' : v; save(); renderExtra(); renderSend(); var f = document.querySelector('[data-lq-split="' + v + '"]'); if (f) f.focus({ preventScroll: true }); return; }
+    var nb = e.target.closest && e.target.closest('[data-lq-nights]');
+    if (nb) {
+      var added = ['nightshift', 'recovery'].filter(function (id) { if (q.list.indexOf(id) >= 0) return false; q.list.push(id); return true; });
+      save(); renderList(); renderMore(); renderResult();
+      status(added.length ? L('Added night shifts and the sleep after them, under “Work, nights & recovery”. They count as work, not rest. Tap who works nights; “Go deeper” counts the hours.', 'Se añadieron los turnos de noche y el sueño de después, en «Trabajo, noches y descanso». Cuentan como trabajo, no como descanso.') : L('Night shifts are already on the list.', 'Los turnos de noche ya están en la lista.'));
+      var r = document.querySelector('#lq-list .lq-row[data-id="nightshift"] .lq-w'); if (r) { goTo(r, 'center'); r.focus({ preventScroll: true }); }
+    }
+  });
+  // a tall result panel on a wide screen sticks by its foot, so its last button is never cut off
+  var stickT = 0;
+  function stickSoon() { cancelAnimationFrame(stickT); stickT = requestAnimationFrame(stick); }
+  function stick() {
+    var r = $('lq-res'); if (!r) return;
+    var wide = false; try { wide = window.matchMedia('(min-width: 900px)').matches; } catch (e) {}
+    if (!wide) { r.style.top = ''; return; }
+    var bar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tol-bar-h')) || 58;
+    var room = window.innerHeight - bar - 26, h = r.offsetHeight;
+    r.style.top = h > room ? Math.round(window.innerHeight - h - 13) + 'px' : '';
+  }
+  window.addEventListener('resize', stickSoon);
   function ansWords(x) {
-    if (x === 'b') return q.people.length === 2 ? 'both' : 'shared';
-    return 'mostly ' + say(x);
+    if (x === 'b') return q.people.length === 2 ? L('both', 'los dos') : L('shared', 'compartido');
+    return L('mostly ', 'sobre todo ') + say(x);
   }
 
   /* ---------- where you agree, and where you see it differently ---------- */
@@ -688,49 +839,70 @@
   function pendingFor(o) { var mine = q.ans[q.me] || {}, th = q.ans[o] || {}; return q.list.filter(function (id) { return th[id] != null && mine[id] == null; }); }
   function shown(o) { return !!q.peek[q.me + '>' + o] || (hasAny(q.me) && !pendingFor(o).length); }
   function shownOthers() { return others().filter(shown); }
+  function groupWord() { return q.people.length === 3 ? L('the three of you', 'los tres') : L('all of you', 'todos ustedes'); }
   function renderCompare() {
     var box = $('lq-cmp'); if (!box) return;
     var html = '';
+    var shownO = [];
     others().forEach(function (o) {
       var mine = q.ans[q.me] || {}, th = q.ans[o] || {};
       var theirN = q.list.filter(function (id) { return th[id] != null; }).length;
       if (!shown(o)) {
         var done = theirN - pendingFor(o).length;
-        html += '<div class="lq-cmpbox"><h4>' + esc(cap(poss(o)) + ' view is in') + '</h4>' +
-          '<p class="lq-pend">' + esc(typed(o) || 'They') + ' answered ' + theirN + (theirN === 1 ? ' job' : ' jobs') + '. Tap your own answers first, so you’re not swayed: ' + done + ' of ' + theirN + ' done. Then you’ll see where you agree.</p>' +
-          '<div class="lq-tools"><button type="button" data-lq-peek="' + o + '">Show ' + esc(poss(o)) + ' view now</button></div></div>';
+        html += '<div class="lq-cmpbox"><h4>' + esc(isEs() ? 'Llegó ' + viewOf(o) : cap(viewOf(o)) + ' is in') + '</h4>' +
+          '<p class="lq-pend">' + esc(L((typed(o) || 'They') + ' answered ' + theirN + (theirN === 1 ? ' job' : ' jobs') + '. Tap your own answers first, so you’re not swayed: ' + done + ' of ' + theirN + ' done. Then you’ll see where you agree.',
+            (typed(o) || 'La otra persona') + ' respondió ' + theirN + (theirN === 1 ? ' tarea' : ' tareas') + '. Toca primero tus respuestas, para que no te influya: ' + done + ' de ' + theirN + ' listas. Luego verán en qué coinciden.')) + '</p>' +
+          '<div class="lq-tools"><button type="button" data-lq-peek="' + o + '">' + esc(L('Show ' + viewOf(o) + ' now', 'Ver ' + viewOf(o) + ' ahora')) + '</button></div></div>';
         return;
       }
+      shownO.push(o);
       var same = [], diff = [];
       q.list.forEach(function (id) {
         if (mine[id] == null || th[id] == null) return;
         if (mine[id] === th[id]) same.push(id); else diff.push(id);
       });
-      var who = q.people.length === 2 ? 'You' : 'You and ' + (typed(o) || 'Person ' + (o + 1));
-      html += '<div class="lq-cmpbox"><h4>' + esc(q.people.length === 2 ? 'Where you agree, and where you don’t' : 'You and ' + (typed(o) || 'Person ' + (o + 1))) + '</h4>';
-      if (!same.length && !diff.length) html += '<p class="lq-pend">No jobs answered by both yet.</p>';
+      var oName = typed(o) || personN(o);
+      var who = q.people.length === 2 ? L('You', 'Ustedes') : L('You and ' + oName, 'Tú y ' + oName);
+      html += '<div class="lq-cmpbox"><h4>' + esc(q.people.length === 2 ? L('Where you agree, and where you don’t', 'En qué coinciden, y en qué no') : L('You and ' + oName, 'Tú y ' + oName)) + '</h4>';
+      if (!same.length && !diff.length) html += '<p class="lq-pend">' + esc(L('No jobs answered by both yet.', 'Todavía no hay tareas respondidas por los dos.')) + '</p>';
       else {
-        html += '<p>' + esc(who + ' agree on ' + same.length + (same.length === 1 ? ' job' : ' jobs') + (diff.length ? ', and see ' + diff.length + ' differently.' : '.')) + '</p>';
+        html += '<p>' + esc(isEs() ? who + ' coinciden en ' + same.length + (same.length === 1 ? ' tarea' : ' tareas') + (diff.length ? ' y ven ' + diff.length + ' distinto.' : '.')
+          : who + ' agree on ' + same.length + (same.length === 1 ? ' job' : ' jobs') + (diff.length ? ', and see ' + diff.length + ' differently.' : '.')) + '</p>';
         // "You both say mostly Alex: planning the week and dishes."
         var by = {};
         same.forEach(function (id) { var k = String(mine[id]); (by[k] = by[k] || []).push(lc(label(id))); });
         var agreeLis = Object.keys(by).map(function (k) {
-          var w = k === 'b' ? 'it’s shared' : 'it’s mostly ' + say(+k);
-          return '<li>' + esc('You both say ' + w + ': ' + joinA(by[k]) + '.') + '</li>';
+          var w = k === 'b' ? L('it’s shared', 'es compartida') : L('it’s mostly ', 'la hace sobre todo ') + say(+k);
+          return '<li>' + esc(L('You both say ' + w + ': ' + joinA(by[k]) + '.', 'Los dos dicen que ' + w + ': ' + joinA(by[k]).replace(/ and /g, ' y ') + '.')) + '</li>';
         });
         if (agreeLis.length) html += '<ul>' + agreeLis.join('') + '</ul>';
         if (diff.length) {
-          html += '<p><strong>You see these differently:</strong></p><ul>' + diff.map(function (id) {
-            return '<li>' + esc(label(id) + ': you say ' + ansWords(mine[id]) + ', ' + says(o) + ' ' + ansWords(th[id]) + '.') + '</li>';
-          }).join('') + '</ul><p class="lq-mini">These are the good ones to talk about. Not to settle who’s right: each of you may see work the other misses.</p>';
+          html += '<p><strong>' + esc(L('You see these differently:', 'Esto lo ven distinto:')) + '</strong></p><ul>' + diff.map(function (id) {
+            return '<li>' + esc(label(id) + ': ' + L('you say ', 'tú dices ') + ansWords(mine[id]) + ', ' + says(o) + ' ' + ansWords(th[id]) + '.') + '</li>';
+          }).join('') + '</ul><p class="lq-mini">' + esc(L('These are the good ones to talk about. Not to settle who’s right: each of you may see work the other misses.', 'Estas son las buenas para conversar. No para decidir quién tiene razón: cada uno puede ver trabajo que el otro no ve.')) + '</p>';
         }
       }
       // their whole picture in one line
       var bits = [];
-      SECTIONS.forEach(function (s) { var t = tally(o, s[0]), l = lean(t); if (l) bits.push(lc(s[1]) + ' ' + l.words); });
-      if (bits.length) html += '<p class="lq-mini">' + esc(cap(poss(o)) + ' view: ' + bits.join('; ') + '.') + '</p>';
+      SECTIONS.forEach(function (s) { var t = tally(o, s[0]), l = lean(t); if (l) bits.push(lc(secName(s)) + ' ' + l.words); });
+      if (bits.length) html += '<p class="lq-mini">' + esc(cap(viewOf(o)) + ': ' + bits.join('; ') + '.') + '</p>';
       html += '</div>';
     });
+    // three or more, with two or more views shown: one line for the whole house
+    if (shownO.length >= 2) {
+      var ids = [q.me].concat(shownO), allSame = [], allDiff = [];
+      q.list.forEach(function (id) {
+        var vals = ids.map(function (p) { return (q.ans[p] || {})[id]; });
+        if (vals.some(function (x) { return x == null; })) return;
+        var uniq = vals.filter(function (x, k) { return vals.indexOf(x) === k; });
+        if (uniq.length === 1) allSame.push(lc(label(id))); else if (uniq.length === vals.length) allDiff.push(lc(label(id)));
+      });
+      var gw = ids.length === 3 ? L('the three of you', 'los tres') : L('all ' + ids.length + ' of you', 'los ' + ids.length);
+      var top = '<div class="lq-cmpbox lq-cmp-all"><h4>' + esc(L('Where ' + gw + ' agree', 'En qué coinciden ' + gw)) + '</h4>';
+      top += allSame.length ? '<p>' + esc(L(cap(gw) + ' agree on ' + joinA(allSame) + '.', cap(gw) + ' coinciden en ' + joinA(allSame).replace(/ and /g, ' y ') + '.')) + '</p>' : '<p>' + esc(L('No job yet where ' + gw + ' say the same.', 'Todavía no hay una tarea en la que ' + gw + ' digan lo mismo.')) + '</p>';
+      if (allDiff.length) top += '<p>' + esc(L((ids.length === 3 ? 'All three of you' : 'Each of you') + ' see ' + joinA(allDiff) + ' differently. A good one to talk about together.', (ids.length === 3 ? 'Los tres' : 'Cada uno') + ' ven ' + joinA(allDiff).replace(/ and /g, ' y ') + ' de forma distinta. Buena para conversarla juntos.')) + '</p>';
+      html = top + '</div>' + html;
+    }
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
   }
   document.addEventListener('click', function (e) {
@@ -750,7 +922,7 @@
     var order = q.people.length === 2 ? [0, 'b', 1] : q.people.map(function (_, i) { return i; }).concat(['b']);
     order.forEach(function (w) { var c = w === 'b' ? all.both : all.per[w]; if (c) bits.push((w === 'b' ? both() : nm(w)) + ' ' + c); });
     var th = lean(tally(q.me, 'think'));
-    var txt = bits.join(' · ') + (th ? ' · Thinking: ' + th.words : '');
+    var txt = bits.join(' · ') + (th ? L(' · Thinking: ', ' · Pensar: ') + th.words : '');
     if (t.textContent !== txt) t.textContent = txt;
   }
 
@@ -758,7 +930,8 @@
   function b64u(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function unb64u(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
   function packed(to) {
-    var ids = q.list.slice(), a = {};
+    // a kids' job nobody has answered stays home (a home without children never gets them on the other phone)
+    var ids = q.list.filter(function (id) { return !isKidJob(id) || Object.keys(q.ans).some(function (p) { return (q.ans[p] || {})[id] != null; }); }), a = {};
     Object.keys(q.ans).forEach(function (p) {
       if (!hasAny(+p)) return;
       var v = q.ans[p];
@@ -766,24 +939,32 @@
     });
     var d = { v: 1, p: q.people.map(function (x) { return String(x || '').trim(); }), l: ids, a: a, f: q.me, t: typeof to === 'number' ? to : -1 };
     if (q.ill) d.i = 1;
+    if (q.away) d.aw = 1;
+    if (ids.some(isKidJob)) d.k = 1;
+    var hs = {}; q.people.forEach(function (_, i) { if (hrsOf(i)) hs[i] = hrsOf(i); }); if (Object.keys(hs).length) d.h = hs;
+    if (q.split) d.s = q.split;
     return b64u(JSON.stringify(d));
   }
   function linkFor(to) { return location.origin + '/lemonade-stand.html#q=' + packed(to); }
+  function touchy() { try { return window.matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } }
   function renderSend() {
     var box = $('lq-send'); if (!box) return;
     var n = tally(q.me).n, html = '';
     if (n) {
+      // three or more: one message for the group chat, with each person's own link
+      if (q.people.length > 2) html += '<button type="button" class="lq-main" data-lq-all>' + esc(L('Send to everyone (one message)', 'Enviar a todos (un mensaje)')) + '</button>';
       q.people.forEach(function (_, o) {
         if (o === q.me) return;
-        var t = 'Send to ' + (typed(o) || (q.people.length === 2 ? 'them' : 'Person ' + (o + 1)));
+        var t = L('Send to ', 'Enviar a ') + (typed(o) || (q.people.length === 2 ? L('them', 'la otra persona') : personN(o)));
         html += '<button type="button" class="' + (html ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
         // the same link as a QR code, for a phone in the same room
-        html += '<button type="button" data-lq-qr="' + o + '">' + esc(q.people.length === 2 ? 'Show a QR code' : 'QR code for ' + (typed(o) || 'Person ' + (o + 1))) + '</button>';
+        html += '<button type="button" data-lq-qr="' + o + '">' + esc(q.people.length === 2 ? L('Show a QR code', 'Mostrar un código QR') : L('QR code for ', 'Código QR para ') + (typed(o) || personN(o))) + '</button>';
       });
-      html += '<button type="button" data-lq-chat>Copy for the group chat</button>';
-      html += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">Share your result as an image</button>';
-      var next = nextTurn();
-      if (next >= 0) html += '<button type="button" data-lq-turn="' + next + '">' + esc('Pass this phone to ' + (typed(next) || (q.people.length === 2 ? 'them' : 'Person ' + (next + 1)))) + '</button>';
+      html += '<button type="button" data-lq-chat>' + esc(L('Copy for the group chat', 'Copiar para el chat del grupo')) + '</button>';
+      html += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">' + esc(L('Share your result as an image', 'Compartir el resultado como imagen')) + '</button>';
+      var next = nextTurn(), nn = next >= 0 ? (typed(next) || (q.people.length === 2 ? L('them', 'la otra persona') : personN(next))) : '';
+      // "Pass this phone" on a phone or tablet; on a computer, "Hand over"
+      if (next >= 0) html += '<button type="button" data-lq-turn="' + next + '">' + esc(touchy() ? L('Pass this phone to ', 'Pasarle el teléfono a ') + nn : L('Hand over to ', 'Ahora le toca a ') + nn + L(' (same device)', ' (mismo aparato)')) + '</button>';
     }
     if (box.getAttribute('data-h') !== html) {
       var f = document.activeElement && box.contains(document.activeElement) ? Array.prototype.indexOf.call(box.children, document.activeElement) : -1;
@@ -814,10 +995,21 @@
     if (s) {
       var o = +s.getAttribute('data-lq-send'), url = linkFor(o), me = q.me;
       var reply = hasAny(o);
-      var text = reply ? 'Here’s my side of our quick look at who does what at home. Tap the link to see where we agree, and where we see it differently.'
-        : 'Here’s my quick look at who does what at home. Tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.';
-      share('Our quick look', text, url);
-      status((typed(o) ? 'Made a link for ' + typed(o) + '.' : 'Made the link.') + ' It opens their quick look with the same jobs.' + (typed(me) && typed(o) ? '' : ' Tip: type your names first, so it says who’s who.'));
+      var text = reply ? L('Here’s my side of our quick look at who does what at home. Tap the link to see where we agree, and where we see it differently.', 'Aquí está mi lado de nuestro vistazo a quién hace qué en casa. Toca el enlace para ver en qué coincidimos y en qué no.')
+        : L('Here’s my quick look at who does what at home. Tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.', 'Aquí está mi vistazo a quién hace qué en casa. Toca quién hace casi siempre cada tarea, como tú lo ves. Mis respuestas quedan ocultas hasta que hagas las tuyas. No se sube nada.');
+      share(L('Our quick look', 'Nuestro vistazo'), text, url);
+      status(L((typed(o) ? 'Made a link for ' + typed(o) + '.' : 'Made the link.') + ' It opens their quick look with the same jobs.' + (typed(me) && typed(o) ? '' : ' Tip: type your names first, so it says who’s who.'),
+        (typed(o) ? 'Listo el enlace para ' + typed(o) + '.' : 'Listo el enlace.') + ' Abre su vistazo con las mismas tareas.' + (typed(me) && typed(o) ? '' : ' Consejo: escriban primero sus nombres.')));
+      return;
+    }
+    if (e.target.closest && e.target.closest('[data-lq-all]')) {
+      // one group-chat message, a personal link for each person (so each answers as themselves)
+      var ls = [L('Here’s my quick look at who does what at home. Each of you has your own link: tap yours and tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.', 'Aquí está mi vistazo a quién hace qué en casa. Cada uno tiene su propio enlace: toca el tuyo y marca quién hace casi siempre cada tarea, como tú lo ves. Mis respuestas quedan ocultas hasta que hagas las tuyas. No se sube nada.'), ''];
+      q.people.forEach(function (_, o) { if (o !== q.me) ls.push((typed(o) || personN(o)) + ': ' + linkFor(o)); });
+      var all = ls.join('\n');
+      if (window.TOLShare && window.TOLShare.share) { try { window.TOLShare.share({ title: L('Our quick look', 'Nuestro vistazo'), text: all, url: false, result: true }); } catch (err) { copy(all); } }
+      else copy(all).then(function (ok) { status(ok ? L('Copied one message with a link for each person. Paste it into your group chat.', 'Se copió un mensaje con un enlace para cada persona. Pégalo en el chat del grupo.') : L('Couldn’t copy here.', 'No se pudo copiar aquí.')); });
+      status(L('One message, with a link for each person. Paste it into your group chat.', 'Un mensaje, con un enlace para cada persona. Pégalo en el chat del grupo.') + (q.people.every(function (_, i) { return typed(i); }) ? '' : L(' Tip: type everyone’s names first, so each link says who it’s for.', ' Consejo: escriban primero los nombres de todos.')));
       return;
     }
     var qb = e.target.closest && e.target.closest('[data-lq-qr]');
@@ -835,34 +1027,41 @@
     if (t) {
       var nx = +t.getAttribute('data-lq-turn'), was = q.me;
       setMe(nx, false);
-      status('Now it’s ' + (typed(nx) || 'the next person') + '’s turn. ' + (typed(was) || 'The first') + '’s answers stay hidden until ' + (typed(nx) ? typed(nx) + ' has' : 'you’ve') + ' answered, so nobody is swayed.');
+      status(L('Now it’s ' + (typed(nx) || 'the next person') + '’s turn. ' + (typed(was) || 'The first') + '’s answers stay hidden until ' + (typed(nx) ? typed(nx) + ' has' : 'you’ve') + ' answered, so nobody is swayed.',
+        'Ahora le toca a ' + (typed(nx) || 'la siguiente persona') + '. Las respuestas de ' + (typed(was) || 'la primera') + ' quedan ocultas hasta que ' + (typed(nx) || 'responda') + (typed(nx) ? ' responda' : '') + ', para que nadie se deje influir.'));
       var q0 = $('quick-h'); if (q0) { goTo($('lq-asrow') || q0); }
       var f = document.querySelector('#lq-list .lq-w'); if (f) f.focus({ preventScroll: true });
     }
   });
   function chatText(noLink) {
     var all = tally(q.me), lines = [];
-    var whoView = multiView() && typed(q.me) ? ' (' + typed(q.me) + '’s view)' : '';
-    lines.push('Our quick look at who does what at home' + whoView + '. A way to talk, not a score:');
+    var whoView = multiView() && typed(q.me) ? L(' (' + typed(q.me) + '’s view)', ' (la vista de ' + typed(q.me) + ')') : '';
+    lines.push(L('Our quick look at who does what at home' + whoView + '. A way to talk, not a score:', 'Nuestro vistazo a quién hace qué en casa' + whoView + '. Para conversar, no para llevar la cuenta:'));
     SECTIONS.forEach(function (s) {
       var t = tally(q.me, s[0]); if (!t.n) return;
       var parts = [];
       q.people.forEach(function (_, i) { if (t.per[i]) parts.push(chatName(i) + ' ' + t.per[i]); });
-      if (t.both) parts.push((q.people.length === 2 ? 'both of us ' : 'shared ') + t.both);
-      lines.push('• ' + s[1] + ': ' + parts.join(', ') + '.');
+      if (t.both) parts.push((q.people.length === 2 ? L('both of us ', 'los dos ') : L('shared ', 'compartido ')) + t.both);
+      lines.push('• ' + secName(s) + ': ' + parts.join(', ') + '.');
     });
+    var withH = q.ill ? q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; }) : [];
+    if (withH.length) lines.push('• ' + L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(function (i) { return chatName(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + '.');
+    if (q.ill && q.split && q.people.length === 2) lines.push('• ' + L('The split we’re aiming for at home: ', 'El reparto que buscamos en casa: ') + chatName(0) + ' ' + q.split + ' · ' + chatName(1) + ' ' + (100 - +q.split) + '.');
     others().filter(shown).forEach(function (o) {
       var mine = q.ans[q.me] || {}, th = q.ans[o] || {}, same = 0, diff = [];
       q.list.forEach(function (id) { if (mine[id] == null || th[id] == null) return; if (mine[id] === th[id]) same++; else diff.push(lc(label(id))); });
-      if (same + diff.length) lines.push('• ' + (q.people.length === 2 ? 'We' : chatName(q.me) + ' and ' + chatName(o)) + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + (diff.length ? ', and see ' + joinA(diff) + ' differently. Worth a kind chat.' : '.'));
+      var we = q.people.length === 2 ? L('We', 'Coincidimos') : chatName(q.me) + L(' and ', ' y ') + chatName(o);
+      if (same + diff.length) lines.push('• ' + (isEs() ? (q.people.length === 2 ? 'Coincidimos en ' : we + ' coinciden en ') + same + (same === 1 ? ' tarea' : ' tareas') + (diff.length ? ', y vemos distinto ' + joinA(diff).replace(/ and /g, ' y ') + '. Vale la pena hablarlo con calma.' : '.')
+        : we + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + (diff.length ? ', and see ' + joinA(diff) + ' differently. Worth a kind chat.' : '.')));
     });
-    if (q.ill || (all.n && workLeans())) lines.push('• Fair isn’t always 50/50 for us: long hours, nights or illness count too.');
-    lines.push('Does this match how it feels to everyone?');
-    if (!all.n) lines = ['Our quick look at who does what at home. Tap who mostly does each job, as you see it:'];
-    if (!noLink) lines.push('', 'Add your own view (nothing is uploaded): ' + linkFor(-1));
+    if (q.away) lines.push('• ' + L('One of us has been away, so the list leans: it’s about the time apart, not about either of us.', 'Uno de nosotros estuvo lejos, por eso la lista se inclina: habla del tiempo separados, no de ninguno de los dos.'));
+    else if (q.ill || (all.n && workLeans())) lines.push('• ' + L('Fair isn’t always ' + (q.people.length === 2 ? '50/50' : 'an even split') + ' for us: long hours, nights or illness count too.', 'Para nosotros justo no siempre es mitad y mitad: las horas largas, las noches o una enfermedad también cuentan.'));
+    lines.push(L('Does this match how it feels to everyone?', '¿Así lo sienten todos?'));
+    if (!all.n) lines = [L('Our quick look at who does what at home. Tap who mostly does each job, as you see it:', 'Nuestro vistazo a quién hace qué en casa. Toca quién hace casi siempre cada tarea, como tú lo ves:')];
+    if (!noLink) lines.push('', L('Add your own view (nothing is uploaded): ', 'Añade tu propia vista (no se sube nada): ') + linkFor(-1));
     return lines.join('\n');
   }
-  function chatName(i) { return typed(i) || (i === q.me ? 'Me' : 'Person ' + (i + 1)); }
+  function chatName(i) { return typed(i) || (i === q.me ? L('Me', 'Yo') : personN(i)); }
 
   /* ---------- the result as a picture, and printed ---------- */
   var cardP = null;
@@ -929,7 +1128,10 @@
     });
     var list = []; ids.forEach(function (id) { if (known(id) && list.indexOf(id) < 0) list.push(id); });
     var f = typeof d.f === 'number' && d.f >= 0 && d.f < n ? d.f : -1, t = typeof d.t === 'number' && d.t >= 0 && d.t < n ? d.t : -1;
-    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i };
+    var hrs = {};
+    if (d.h && typeof d.h === 'object') Object.keys(d.h).forEach(function (k) { var x = +d.h[k]; if (+k >= 0 && +k < n && isFinite(x) && x > 0 && x <= 168) hrs[k] = Math.round(x * 10) / 10; });
+    var split = typeof d.s === 'string' && /^\d{1,2}$/.test(d.s) && +d.s >= 10 && +d.s <= 90 ? d.s : '';
+    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split };
   }
   function receive(h) {
     var d = decode(h);
@@ -953,10 +1155,16 @@
         q.ans[p] = d.ans[p];
       });
       if (d.ill) q.ill = true;
+      if (d.away) q.away = true;
+      if (d.kids) q.kids = true;
+      q.hrs = q.hrs || {}; Object.keys(d.hrs).forEach(function (k) { if (!q.hrs[k]) q.hrs[k] = d.hrs[k]; });
+      if (!q.split && d.split) q.split = d.split;
       q.me = me;
     } else {
       if (localAny) { undoQ = JSON.parse(JSON.stringify(q)); replaced = true; }
-      q = { v: 1, people: d.people, list: d.list.length ? d.list : STARTERS.slice(), ans: d.ans, me: me, ill: d.ill, peek: {} };
+      var lang0 = q.lang;
+      q = { v: 1, people: d.people, list: d.list.length ? d.list : starters(d.kids), ans: d.ans, me: me, ill: d.ill, away: d.away, kids: d.kids, hrs: d.hrs, split: d.split, peek: {} };
+      if (lang0) q.lang = lang0;
       if (!q.ans[me]) q.ans[me] = {};
     }
     var by = d.f >= 0 ? typed(d.f) : '';
@@ -972,17 +1180,21 @@
     var box = $('lq-from'); if (!box) return;
     var f = q.from;
     if (!f) { box.hidden = true; box.innerHTML = ''; return; }
-    var by = f.by || (f.f >= 0 && typed(f.f)) || 'Someone';
-    var html = '<p>' + (f.reply
-      ? esc(by + ' added their view. Below: where you agree, and where you see it differently.')
-      : esc(by + ' sent you their quick look. Tap who mostly does each job, as you see it. ' + (f.by ? f.by + '’s' : 'Their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.')) + '</p>';
-    if (q.people.length > 2 || f.t < 0) {
-      html += '<p class="lq-mini">Which one are you?</p><div class="lq-pick" role="group" aria-label="Which one are you?">' + q.people.map(function (_, i) {
-        return '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" aria-pressed="' + (q.me === i) + '" data-lq-iam="' + i + '">' + esc(typed(i) || 'Person ' + (i + 1)) + '</button>';
+    var by = f.by || (f.f >= 0 && typed(f.f)) || L('Someone', 'Alguien');
+    // once you've answered and the comparison shows, the "stays hidden until you've done yours" note has done its job
+    var answered = !f.reply && f.f >= 0 && f.f !== q.me && hasAny(q.me) && shown(f.f);
+    if (answered && !f.replaced) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
+    var html = answered ? '' : '<p>' + esc(f.reply
+      ? L(by + ' added their view. Below: where you agree, and where you see it differently.', by + ' añadió su vista. Abajo: en qué coinciden y en qué lo ven distinto.')
+      : L(by + ' sent you their quick look. Tap who mostly does each job, as you see it. ' + (f.by ? f.by + '’s' : 'Their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.',
+        by + ' te envió su vistazo. Toca quién hace casi siempre cada tarea, como tú lo ves. Sus respuestas quedan ocultas hasta que hagas las tuyas, para que no te influyan.')) + '</p>';
+    if (!answered && (q.people.length > 2 || f.t < 0)) {
+      html += '<p class="lq-mini">' + esc(L('Which one are you?', '¿Quién eres?')) + '</p><div class="lq-pick" role="group" aria-label="' + esc(L('Which one are you?', '¿Quién eres?')) + '">' + q.people.map(function (_, i) {
+        return '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" aria-pressed="' + (q.me === i) + '" data-lq-iam="' + i + '">' + esc(typed(i) || personN(i)) + '</button>';
       }).join('') + '</div>';
     }
-    if (f.replaced) html += '<p class="lq-mini">The quick look that was on this device before was set aside. <button type="button" class="lq-btn-link" data-lq-undo>Bring it back</button></p>';
-    html += '<p class="lq-mini"><button type="button" class="lq-btn-link" data-lq-from-ok>Okay, hide this</button></p>';
+    if (f.replaced) html += '<p class="lq-mini">' + esc(L('The quick look that was on this device before was set aside.', 'El vistazo que había antes en este aparato quedó guardado aparte.')) + ' <button type="button" class="lq-btn-link" data-lq-undo>' + esc(L('Bring it back', 'Recuperarlo')) + '</button></p>';
+    html += '<p class="lq-mini"><button type="button" class="lq-btn-link" data-lq-from-ok>' + esc(L('Okay, hide this', 'Listo, ocultar esto')) + '</button></p>';
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
     box.hidden = false;
   }

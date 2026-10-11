@@ -639,6 +639,29 @@
       return out.concat(left);
     };
   }
+  // The pause plan as a few plain lines, and as a link to the site's simpler pause plan
+  // (/pursue-withdraw.html#plan), which opens it on the other phone, ready to change and send back.
+  function wp11PlanText(v) {
+    function g(k) { return String(v[k] == null ? '' : v[k]).trim(); }
+    var out = ['Our pause plan'];
+    if (g('planWord')) out.push('Pause word or signal: ' + g('planWord'));
+    if (g('planMin')) out.push('Shortest break: ' + g('planMin'));
+    if (g('planBack')) out.push('Coming back: ' + g('planBack'));
+    if (g('planFirst')) out.push('When we come back, we start with: \u201c' + g('planFirst').replace(/^[\u201c"]+|[\u201d"]+$/g, '') + '\u201d');
+    return out.length > 1 ? out.join('\n') : '';
+  }
+  function wp11PlanLink(v, origin) {
+    function g(k) { return String(v[k] == null ? '' : v[k]).trim().slice(0, 200); }
+    var o = {};
+    if (g('planWord')) o['pp-word'] = g('planWord');
+    var m = /^(20 minutes|30 minutes|45 minutes|1 hour)$/i.exec(g('planMin'));
+    if (m) o['pp-min'] = m[1].toLowerCase();
+    if (g('planBack')) o['pp-late'] = g('planBack');
+    if (g('planFirst')) o['pp-first'] = g('planFirst');
+    if (!Object.keys(o).length) return '';
+    var enc = ''; try { enc = btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, ''); } catch (e) { return ''; }
+    return (origin || '') + '/pursue-withdraw.html#plan=' + enc;
+  }
   W['wp-11'] = {
     code: 'WP-11',
     title: 'The Calm-Down Kit',
@@ -648,6 +671,8 @@
     people: false,
     perPerson: true,
     privateNote: 'Your kit is private; the pause plan is made to share.',
+    // kept on this device as soon as something is typed (with "Forget it" in the save bar), like the shared lists
+    keepByDefault: true,
     meta: [
       { id: 'name', label: 'Whose kit is this? (your name)', type: 'text' },
       { id: 'date', label: 'Date', type: 'date' }
@@ -691,7 +716,9 @@
           { id: 'planMin', label: 'The shortest break we take', type: 'text', placeholder: 'e.g. 20 minutes' },
           { id: 'planBack', label: 'How we set the time to come back', type: 'text', placeholder: 'e.g. Whoever pauses names a time, within the day' },
           { id: 'planFirst', label: 'The first sentence when we come back', type: 'text', placeholder: 'e.g. Thanks for waiting. I\'m ready to listen now.' }
-        ]
+        ],
+        // "Send our pause plan": only these four boxes, never the rest of the kit (tol-workpaper.js, sendEl)
+        send: { title: 'Our pause plan', text: wp11PlanText, link: wp11PlanLink }
       },
       {
         type: 'note', pdf: true,

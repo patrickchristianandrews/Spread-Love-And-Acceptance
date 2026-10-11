@@ -2264,8 +2264,11 @@ html.tol-home .tol-pickup-host{ margin-top:.2rem; }
 .tol-steps-toggle button[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
 .tol-steps-toggle button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .tol-steps-note{ font-size:.92rem; color:var(--ink-soft); }
-html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, .tol-listen, .tol-listen *, [class*="tol-listen"], [class*="tol-listen"] *, .tol-depth, .tol-depth *){ display:none !important; }
+html.tol-only-steps main :is(p, ul, blockquote, figure, .tol-table-scroll, table, dl, details, aside, .scene, .tol-pud-card, .tol-cheer, .lp-card, pre):not(ol *, [data-keep-steps], [data-keep-steps] *, .try-this, .try-this *, .read-head, .read-head *, .tol-steps-toggle, .tol-inshort, .tol-inshort *, [data-in-short], [data-in-short] *, [class*="-short"], [class*="-short"] *, [class*="-say"], [class*="-say"] *, p.q, .tol-try, .tol-try *, .cs-tags, .cs-tags *, .cs-dl, .cs-dl *, :is(h2, h3, h4) + ul, :is(h2, h3, h4) + ul *, :is(h2, h3, h4) + p + ul, :is(h2, h3, h4) + p + ul *, .tol-listen, .tol-listen *, [class*="tol-listen"], [class*="tol-listen"] *, .tol-depth, .tol-depth *){ display:none !important; }
 @media print{ .tol-steps-toggle{ display:none !important; } }
+/* steps only: the "Words you could use" lines, "In short", support lists and each card's key line stay (above);
+   the extras around the reading step aside */
+html.tol-only-steps main :is(.tol-read-host, .tol-read-wrap, .tol-tip, .tol-fp-note, .tol-offer){ display:none !important; }
 
 /* ---------- Big text on a phone: the title uses the card's full width ---------- */
 @media (max-width:700px){
@@ -2355,6 +2358,22 @@ body.tol-gaming .tol-wx, body.tol-gaming .tol-toast, body.tol-gaming .tol-keys-t
   /* the home page's centred Puddles pill steps right of the time note, so the two sit side by side on the bottom edge */
   /* (the home page uses the same corner as every page) */
 }
+/* Professor Puddles never sits on words (site.js keepFabClear): over text he first shows just his face (is-face),
+   then tucks into the screen edge as a small tab (is-peek); hover, a tap or keyboard focus brings him out */
+.tol-pud-fab.is-wait{ opacity:0 !important; pointer-events:none !important; }
+.tol-pud-fab{ transition:opacity .25s ease, transform .3s ease; }
+html body .tol-pud-fab.is-face{ padding:.3rem !important; gap:0 !important; }
+html body .tol-pud-fab.is-face .tol-pud-fab-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+html body .tol-pud-fab.is-peek{ left:0 !important; padding:.3rem 4px .3rem .3rem !important; gap:0 !important; border-left:0; border-radius:0 24px 24px 0;
+  transform:translateX(calc(-100% + 13px)); box-shadow:0 2px 8px rgba(36,66,94,.18); background:#BFDDF5; }
+html body .tol-pud-fab.is-peek .tol-pud-fab-t{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+html body .tol-pud-fab.is-peek:is(:hover, :focus-visible){ transform:none; }
+@media (prefers-reduced-motion: reduce){ .tol-pud-fab{ transition:opacity .15s linear; } }
+html.tol-still .tol-pud-fab{ transition:none; }
+/* the Breathe tab on a phone does the same at the right edge */
+html body .tol-breathe-btn.is-peek{ transform:translateX(calc(100% - 13px)) !important; }
+html body .tol-breathe-btn.is-peek.is-left{ transform:translateX(calc(-100% + 13px)) !important; }
+html body .tol-breathe-btn.is-peek:is(:hover, :focus-visible){ transform:none !important; }
 /* the two choices in every mini dive: wade in deeper, or chat it out with Professor Puddles */
 .tol-dive-wade{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
 .tol-dive-ask{ flex-basis:100%; font-size:.86rem; color:#4E6377; }

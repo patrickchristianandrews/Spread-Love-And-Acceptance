@@ -1261,7 +1261,8 @@
    "/book/chapter-4-in-depth.html#owner-research",
    "/book/preface-in-depth.html#who-for",
    "/library/teams.html#diffusion-of-responsibility",
-   "/tools/chat/deep.json#one-owner"
+   "/tools/chat/deep.json#one-owner",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://scinapse.io/papers/2171602877 ; https://stafforini.com/works/darley-1968-bystander-intervention-emergencies/"
@@ -1922,7 +1923,8 @@
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#burnout",
    "/library/stress.html#burnout",
-   "/tools/chat/deep.json#rest"
+   "/tools/chat/deep.json#rest",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://scienceopen.com/document/vid/19d4ed76-9f31-47eb-93e2-81f08d26f4d4 ; https://en.wikipedia.org/wiki/Maslach_Burnout_Inventory",

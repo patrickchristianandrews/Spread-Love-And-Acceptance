@@ -13,6 +13,16 @@
   const root = document.querySelector('[data-wavelength]');
   const KEY = 'tol-wavelength-v1', OLD_KEYS = ['tol-heartprint-v1', 'tol-pawprint-v1'];
   // this tab's own copy (so a reload never loses a result), and the other people who took it on this device
+  // how this visit arrived, read before a ?compare= link is taken out of the address bar:
+  // ?rel=friends (or from the Friends page) uses friend wording in the comparison and carries it in the compare link;
+  // ?quick=1, or arriving from the Friends or Empty Nest pages, puts "Just my Wave Code" first
+  const ARRIVE = (function () {
+    let q = null, ref = ''; try { q = new URLSearchParams(location.search); } catch (e) {}
+    try { ref = document.referrer ? new URL(document.referrer).pathname : ''; } catch (e) {}
+    const rel = q ? (q.get('rel') || '').toLowerCase() : '';
+    return { friends: rel === 'friends' || rel === 'friend' || ref === '/friends.html',
+      quick: !!(q && q.get('quick') === '1') || /^\/(friends|empty-nest)\.html$/.test(ref) || rel === 'friends' || rel === 'friend' };
+  })();
   const TAB_KEY = 'tol-wavelength-tab-v1', PEOPLE_KEY = 'tol-wavelength-people-v1', PEOPLE_TAB_KEY = 'tol-wavelength-people-tab-v1', MAX_OTHERS = 3;
 
   /* ---------- wiring ---------- */
@@ -555,7 +565,7 @@
   function extractFrom(text) { const m = String(text || '').match(/[?&]from=([^&\s#]+)/); if (!m) return ''; try { return cleanName(decodeURIComponent(m[1].replace(/\+/g, ' '))); } catch (e) { return ''; } }
   // "an STDE", "a QFNA": the article follows how the first letter sounds
   function article(w) { return /^[AEFHILMNORSX]/i.test(w) ? 'an' : 'a'; }
-  function compareLink(code, name) { return '/wavelength.html?compare=' + code + (name ? '&from=' + encodeURIComponent(name) : ''); }
+  function compareLink(code, name) { return '/wavelength.html?compare=' + code + (name ? '&from=' + encodeURIComponent(name) : '') + (ARRIVE.friends ? '&rel=friends' : ''); }
   function absLink(rel) { try { return /^https?:$/.test(location.protocol) ? new URL(rel, location.href).href : 'https://spreadloveandacceptance.com' + rel; } catch (e) { return 'https://spreadloveandacceptance.com' + rel; } }
 
   /* ---------- helpers ---------- */
@@ -699,7 +709,9 @@
       '<section class="wl-hero">' +
         '<h2>Find your wavelength</h2>' + waveSVG('QFNA', false) +
         '<p>Find out how you think, how you share and how you take things in. Then share your Wave Code so the people close to you can tune in.</p>' +
-        '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all. The last part, your statement, is optional. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
+        (ARRIVE.quick && !codeDone() ? '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
+          '<p class="wl-small">Twelve either/or taps for your four letters. The rest stays optional, and you can add it after your result.</p>' : '') +
+        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, your statement, is optional. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
         (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of Wavelength. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
         (NOTICE ? '<p class="wl-mine" role="status">' + NOTICE + '</p>' : '') +
@@ -707,9 +719,11 @@
         '<label class="wl-field" for="wl-nm">Your first name (optional)</label>' +
         '<input type="text" id="wl-nm" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
         keepBox('wl-keep-intro') +
-        '<div class="wl-nav"><span></span><button type="button" class="wl-btn" id="wl-go">Start</button></div>' +
+        (ARRIVE.quick && !codeDone()
+          ? '<div class="wl-nav"><span></span><button type="button" class="wl-btn ghost" id="wl-go">The full version (about 10 minutes)</button></div>'
+          : '<div class="wl-nav"><span></span><button type="button" class="wl-btn" id="wl-go">Start</button></div>' +
         (codeDone() ? '' : '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn ghost" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
-          '<p class="wl-small">Twelve either/or taps for your four letters first. Parts 5 to 7 stay optional, and you can add them after your result.</p>') +
+          '<p class="wl-small">Twelve either/or taps for your four letters first. Parts 5 to 7 stay optional, and you can add them after your result.</p>')) +
         (hasHp || codeDone() ? '<div class="wl-nav wl-nav-quiet">' + (hasHp ? '<button type="button" class="wl-linkbtn" id="wl-tostmt">Go to my statement</button>' : '') + (codeDone() ? '<button type="button" class="wl-linkbtn" id="wl-tores">See my results</button>' : '') + '</div>' : '') +
         (started(S) && OTHERS.length < MAX_OTHERS ? '<div class="wl-nav wl-nav-quiet"><button type="button" class="wl-linkbtn" id="wl-other">' + (S.name ? 'Not ' + esc(S.name) + '? ' : 'Sharing this device? ') + 'Start someone else’s turn</button></div>' : '') +
         (OTHERS.length ? '<div class="wl-sect"><h3>Also on this device</h3>' + othersList(false) + '</div>' : '') +
@@ -762,6 +776,7 @@
     $('#wl-next').onclick = () => go(2);
   }
 
+  const TRIED = {}; // sections where Continue was tapped before every question had an answer
   function renderSection(sec) {
     const mine = banksFor(), others = BANKS.filter(b => mine.indexOf(b) < 0), open = !!S.showAll[sec.id];
     const chipGroup = bank => '<div class="wl-group"><h4>' + BANK_NAMES[bank] + '</h4><div class="wl-chips">' +
@@ -781,14 +796,23 @@
         '<p class="wl-chiphint">' + (sec.axis === null ? 'Pick as many as you like.' : 'Optional, but these make your profile sound like you.') + (S.nts.length ? '' : ' Picked your wiring? You’ll see the options most common for it first.') + '</p>' +
         mine.map(chipGroup).join('') +
         (others.length ? '<button type="button" class="wl-linkbtn" id="wl-more" aria-expanded="' + open + '">' + (open ? 'Hide other options' : 'Show options from other wiring types') + '</button>' + (open ? others.map(chipGroup).join('') : '') : '')) +
-        '<p class="wl-needs" id="wl-need">' + (ready ? '' : 'Answer the questions above to continue.') + '</p>' +
-        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' disabled') + '>' + (quickNow() && S.step === 5 ? 'See my Wave Code' : 'Continue') + '</button></div>' +
+        '<p class="wl-needs" id="wl-need"' + (ready || !TRIED[sec.id] ? ' hidden' : '') + '>' + (ready ? '' : 'Answer the questions above to continue.') + '</p>' +
+        '<div class="wl-nav wl-nav-sticky"><button type="button" class="wl-btn ghost" id="wl-back">Back</button><button type="button" class="wl-btn" id="wl-next"' + (ready ? '' : ' aria-disabled="true"') + '>' + (quickNow() && S.step === 5 ? 'See my Wave Code' : 'Continue') + '</button></div>' +
       '</section>';
     $$('.wl-opt').forEach(b => { b.onclick = () => { S.answers[sec.id][+b.dataset.q] = b.dataset.v; save(); redraw(() => renderSection(sec), '.wl-opt[data-q="' + b.dataset.q + '"][data-v="' + b.dataset.v + '"]'); }; });
     $$('.wl-chip').forEach(b => { b.onclick = () => { const id = b.dataset.chip, i = S.chips.indexOf(id); if (i >= 0) S.chips.splice(i, 1); else S.chips.push(id); b.setAttribute('aria-pressed', S.chips.indexOf(id) >= 0); save(); }; });
     const more = $('#wl-more'); if (more) more.onclick = () => { S.showAll[sec.id] = !open; save(); redraw(() => renderSection(sec), '#wl-more'); };
     $('#wl-back').onclick = () => go(quickNow() && S.step === 2 ? 0 : S.step - 1);
-    $('#wl-next').onclick = () => go(quickNow() && S.step === 5 ? RESULTS : S.step + 1);
+    $('#wl-next').onclick = () => {
+      if (!ready) { // say what's missing only once someone tries to go on
+        TRIED[sec.id] = true;
+        const nd = $('#wl-need'); if (nd) { nd.hidden = false; nd.textContent = 'Answer the questions above to continue.'; }
+        const miss = ans ? ans.indexOf(null) : -1, q = miss >= 0 ? $('.wl-opt[data-q="' + miss + '"]') : null;
+        if (q) { try { q.focus({ preventScroll: false }); } catch (e) { q.focus(); } }
+        return;
+      }
+      go(quickNow() && S.step === 5 ? RESULTS : S.step + 1);
+    };
   }
 
   function renderInputs(sec) {
@@ -893,14 +917,21 @@
   /* ---------- comparing two Wave Codes ---------- */
   const COUNT_WORDS = ['none', 'one', 'two', 'three', 'all four'];
   const CMP_NEXT = 'Each of you makes a one-page card about what helps words reach you (it can start from your Wavelength answers), copies it and sends it to the other. Pasting each other’s shows your two cards side by side, with a bridge to try wherever they differ. It all stays on your own devices.';
-  const CMP_FRAME = 'Different letters mean different defaults, not a bad match. Most couples and close pairs differ on at least one or two lines, and knowing where saves a lot of guessing.';
+  const CMP_FRAME = ARRIVE.friends
+    ? 'Different letters mean different defaults, nothing more. Most friends differ on at least one or two lines, and knowing where saves a lot of guessing.'
+    : 'Different letters mean different defaults, not a bad match. Most couples and close pairs differ on at least one or two lines, and knowing where saves a lot of guessing.';
   function countLine(mine, theirs) {
     const same = AXES.filter((ax, i) => mine[i] === theirs[i]).length;
     if (same === 4) return 'You’re on the same wavelength on all four lines, so a lot will feel easy. Your differences will be smaller ones, in the details.';
     if (same === 0) return 'You differ on all four lines. That’s more common than it sounds, and it means each of you brings something the other doesn’t. The tips below show where to tune in on purpose.';
     return 'You line up on ' + COUNT_WORDS[same] + ' of the four lines and differ on ' + COUNT_WORDS[4 - same] + '. The differences are where a little tuning goes a long way.';
   }
-  function pairTip(mine, theirs, i) { return mine[i] === theirs[i] ? 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[mine[i]].tune : PAIR_TIPS[i]; }
+  function pairTip(mine, theirs, i) {
+    if (mine[i] !== theirs[i]) return PAIR_TIPS[i];
+    // two Nuanced senders with different Receiving letters: the hints can get missed
+    if (i === 2 && mine[i] === 'N' && mine[3] !== theirs[3]) return 'Same wavelength on how you send, but one of you reads hints and the other needs it said plainly. Say the main point out loud, kindly, once. ' + LETTERS.N.tune;
+    return 'Same wavelength here, so this usually runs smoothly. ' + LETTERS[mine[i]].tune;
+  }
   function who2(myName, theirName) { return { me: myName ? myName : 'You', them: theirName ? theirName : 'Them' }; }
   function compareHTML(mine, theirs, myName, theirName) {
     const n = who2(myName, theirName);
@@ -910,7 +941,9 @@
       '<p>' + countLine(mine, theirs) + '</p>' +
       AXES.map((ax, i) => '<div class="wl-pairrow"><strong>' + AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '</strong><br>' + pairTip(mine, theirs, i) + '</div>').join('') +
       '<p class="wl-combo"><strong>Next: <a href="/wiring-card.html">make your Wiring Cards and paste each other’s</a>.</strong> ' + CMP_NEXT + '</p>' +
-      '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second daily check-in together</a>, or pick one small habit from <a href="/turning-toward.html">Turning Toward</a>.</p>' +
+      (ARRIVE.friends
+        ? '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> agree one small ritual, like a monthly call or a voice note on Sundays. <a href="/friends.html#both">Ideas for friends</a>.</p>'
+        : '<p class="wl-small wl-together"><strong>One small thing to try together:</strong> <a href="/workpapers/fill/wp-13.html">Try the 90-second daily check-in together</a>, or pick one small habit from <a href="/turning-toward.html">Turning Toward</a>.</p>') +
       '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-ccopy">Copy this comparison</button><button type="button" class="wl-btn ghost" id="wl-cdl">Save as a text file</button><button type="button" class="wl-btn ghost" id="wl-cprint">Print</button></div>' +
       '<p class="wl-toast" id="wl-ctoast" role="status"></p></div>';
   }
@@ -919,7 +952,8 @@
     return ['Our Wave Codes, side by side', n.me + ': ' + mine + ', ' + lower(ARCHETYPES[mine][0]), n.them + ': ' + theirs + ', ' + lower(ARCHETYPES[theirs][0]), '', CMP_FRAME, countLine(mine, theirs), '']
       .concat(AXES.map((ax, i) => AXIS_NAMES[i] + ': ' + mine[i] + ' and ' + theirs[i] + '. ' + pairTip(mine, theirs, i)))
       .concat(['', 'Next: make your Wiring Cards and paste each other’s (spreadloveandacceptance.com/wiring-card.html). ' + CMP_NEXT,
-        'One small thing to try together: the 90-second daily check-in (spreadloveandacceptance.com/workpapers/fill/wp-13.html), or one small habit from Turning Toward (spreadloveandacceptance.com/turning-toward.html).']).join('\n');
+        (ARRIVE.friends ? 'One small thing to try together: agree one small ritual, like a monthly call or a voice note on Sundays (spreadloveandacceptance.com/friends.html).'
+          : 'One small thing to try together: the 90-second daily check-in (spreadloveandacceptance.com/workpapers/fill/wp-13.html), or one small habit from Turning Toward (spreadloveandacceptance.com/turning-toward.html).')]).join('\n');
   }
   function wireCompare(mine, theirs, myName, theirName) {
     const text = () => compareText(mine, theirs, myName, theirName) + '\n\nMade with Wavelength from Spread Love & Acceptance: spreadloveandacceptance.com/wavelength.html';

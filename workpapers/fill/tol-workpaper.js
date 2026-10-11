@@ -920,9 +920,30 @@
       wrap.appendChild(h('dl', { id: 'cmp-' + sec.id, 'aria-live': 'polite' }));
     }
 
+    if (sec.send) wrap.appendChild(this.sendEl(sec));
     if (sec.type === 'table' && sec.ready && !this.schema.readyFirst) wrap.appendChild(this.readyEl(sec));
     if (sec.type === 'table') wrap.appendChild(this.renderTable(sec));
     return wrap;
+  };
+
+  // "Send our pause plan" (WP-11): just this part of the sheet, as text or as a link that opens it on the
+  // other phone. The rest of the kit stays private. On screen only.
+  A.sendEl = function (sec) {
+    return h('div', { className: 'wpf-share wpf-send no-print tol-plain', role: 'group', 'aria-label': 'Send ' + sec.send.title.toLowerCase() }, [
+      h('p', { className: 'wpf-share-h', text: 'Send it to the other person' }),
+      h('p', { className: 'wpf-help', text: 'Only these four boxes go, never the rest of your kit. The link opens it on their phone as the site\u2019s pause plan, ready to change and send back. Nothing is uploaded: the plan travels inside the link.' }),
+      h('div', { className: 'wpf-share-btns' }, [
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'send-copy', 'data-sec': sec.id, text: 'Copy as text' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'send-share', 'data-sec': sec.id, 'data-share': '', 'data-share-title': sec.send.title, 'data-share-text': '', 'data-share-url': 'none', 'data-share-result': '', text: 'Share it' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'send-qr', 'data-sec': sec.id, text: 'Show a QR code' })
+      ])
+    ]);
+  };
+  A.sendParts = function (id) {
+    var sec = this.schema.sections.filter(function (x) { return x.id === id; })[0];
+    if (!sec || !sec.send) return null;
+    var text = sec.send.text(this.state.values), link = sec.send.link ? sec.send.link(this.state.values, global.location.origin) : '';
+    return { text: text, link: link, title: sec.send.title };
   };
 
   // "Ready-made no's to copy": one tap copies the words, to paste into a message. On screen only.
@@ -1685,7 +1706,7 @@
     list.forEach(function (cf, i) {
       // short answers (a name, "Weekly") go on the buttons themselves; longer ones are quoted above them
       var lab = cf.label || cf.what || 'Answer', short = String(cf.mine).length <= 28 && String(cf.theirs).length <= 28;
-      var q = lab.charAt(0).toUpperCase() + lab.slice(1) + ' for \u201c' + cf.name + '\u201d: on this device ' + (short ? cf.mine : '\u201c' + cf.mine + '\u201d') + ', on the shared ' + what + ' ' + (short ? cf.theirs : '\u201c' + cf.theirs + '\u201d') + '.';
+      var q = lab.charAt(0).toUpperCase() + lab.slice(1) + (cf.day ? ' for' : ' of') + ' \u201c' + cf.name + '\u201d: on this device ' + (short ? cf.mine : '\u201c' + cf.mine + '\u201d') + ', on the shared ' + what + ' ' + (short ? cf.theirs : '\u201c' + cf.theirs + '\u201d') + '.';
       ul.appendChild(h('li', null, [
         h('p', { className: 'wpf-conflict-q', text: q }),
         h('div', { className: 'wpf-share-btns', role: 'group', 'aria-label': 'Keep which ' + lab.toLowerCase() + ' for ' + cf.name }, [
@@ -1729,16 +1750,19 @@
       }
     }
     // the other choices about the same job may now point at the same person: those go too
-    var self2 = this;
+    var self2 = this, filled = '';
     this.conflicts = (this.conflicts || []).filter(function (c) {
       if (!c.key || c.tbl !== cf.tbl) return true;
       var r = (self2.state.tables[c.tbl] || []).filter(function (x) { var k = self2.schema.share && self2.schema.share.keys ? self2.schema.share.keys[c.tbl] : null; return x && k && fold(x[k]) === c.key; })[0], def = null;
       var s3 = self2.schema.sections.filter(function (x) { return x.id === c.tbl; })[0];
       (s3 ? s3.columns : []).forEach(function (cc) { if (cc.id === c.col) def = cc; });
-      return !(r && def && def.notSameAs && r[def.notSameAs] === c.value);
+      if (r && def && def.notSameAs && r[def.notSameAs] === c.value) return false;
+      // its place here was just emptied (the owner was the helper too): the shared answer simply fills it
+      if (r && def && isBlank(r[c.col])) { r[c.col] = c.value; filled = c.theirs; self2.changed(); return false; }
+      return true;
     });
     this.render();
-    this.status((theirs ? 'Changed to ' + cf.theirs + ' for ' + cf.name + '.' : 'Kept ' + cf.mine + ' for ' + cf.name + '.') + (theirs && fixed ? ' ' + fixed : ''));
+    this.status((theirs ? 'Changed to ' + cf.theirs + ' for ' + cf.name + '.' : 'Kept ' + cf.mine + ' for ' + cf.name + '.') + (theirs && fixed ? ' ' + fixed : '') + (filled ? ' ' + filled + ' from the shared list fills that place now.' : ''));
     var next = this.root.querySelector('#wpf-conflicts [data-action="conflict-mine"]') || this.root.querySelector('.wpf-sendback [data-action="share-fresh"]');
     if (next) next.focus();
   };
@@ -2077,6 +2101,15 @@
       this.fansOn[ft] = b.getAttribute('aria-expanded') !== 'true';
       var y0 = global.scrollY; this.render(); global.scrollTo(0, y0);
       var again0 = this.root.querySelector('[data-action="fans"][data-table="' + ft + '"]'); if (again0) again0.focus();
+      return;
+    }
+    if (act === 'send-copy' || act === 'send-share' || act === 'send-qr') {
+      var sp = this.sendParts(b.getAttribute('data-sec')), self4 = this;
+      if (!sp || !sp.text) { if (act === 'send-share') { e.stopPropagation(); e.preventDefault(); } this.status('Fill in at least one box of the plan first.'); return; }
+      var full = sp.text + (sp.link ? '\n\nOpen it: ' + sp.link : '');
+      if (act === 'send-share') { b.setAttribute('data-share-text', sp.text); b.setAttribute('data-share-url', sp.link || 'none'); return; }
+      if (act === 'send-qr') { if (sp.link) qrShow(sp.link, { title: 'Scan with the other phone', note: 'Your pause plan opens on their phone, ready to look over together.' }); return; }
+      copyText(full).then(function (ok) { self4.status(ok ? 'Copied. Paste it into a message to the other person.' : 'This browser wouldn\u2019t copy here. Try \u201cShare it\u201d.'); });
       return;
     }
     if (act === 'tonight-copy') {
@@ -2435,7 +2468,7 @@
   // The guides link here with ?for=…, so the sheet starts in the right words with the right example jobs.
   // Only words and starter examples change: the saved list, the share links and the PDF are the same sheet.
   // Without ?for=, a link from one of those guides on this site does the same.
-  var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts' };
+  var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts', '/caregivers.html': 'care', '/en-espanol.html': 'care' };
   var D = 'Daily', Wk = 'Weekly', Mo = 'Monthly', AN = 'As needed';
   var FOR = {
     'wp-03': {
@@ -2452,6 +2485,21 @@
         note: 'Start with the jobs that come with a child in care, then add the everyday ones from the task library below. Agreeing house rules with a young person? Add them from \u201cHouse rules for us\u201d: each needs someone who keeps to it, but rules aren\u2019t counted as load. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
         fridge: 'Who owns what',
         rows: [['Social worker visits', Mo], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', Mo]]
+      },
+      care: {
+        h1: 'One owner per job: sharing the care', title: 'One owner per job: sharing the care',
+        lede: 'Who owns each part of the care when one of you looks after the other: medicines, appointments, paperwork, the nights, and a break for the main carer. Give each one an owner (grown-up children and friends can own jobs too), so nobody has to ask twice.',
+        note: 'Fill it in together with whoever shares the care. This is about who owns each job, not medical advice: for medicines and health, follow the care team. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
+        fridge: 'Who owns what in the care',
+        rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main carer', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
+        // the same, in Spanish, for a carer who reads Spanish (from /en-espanol.html, ?lang=es, or a Spanish browser)
+        es: {
+          h1: 'Una persona a cargo de cada tarea: repartir el cuidado', title: 'Repartir el cuidado: una persona a cargo de cada tarea',
+          lede: 'Quién se encarga de cada parte del cuidado: medicinas, citas, papeles, las noches y un descanso para quien cuida. Cada tarea tiene una persona a cargo, que la hace o se asegura de que se haga (los hijos mayores y los amigos también pueden encargarse de alguna). Así nadie tiene que volver a pedirlo.',
+          note: 'Llénenla juntos, con quienes comparten el cuidado. Esto no es consejo médico: para medicinas y salud, sigan al equipo médico. Las tareas de ejemplo no cuentan hasta que les pongan una persona a cargo o las cambien. Los botones de la hoja están en inglés: \u201cAdd a job\u201d a\u00f1ade una tarea, \u201cShare this list\u201d la env\u00eda a otro tel\u00e9fono y \u201cPut it on the fridge\u201d la imprime.',
+          fridge: 'Qui\u00e9n se encarga de qu\u00e9', share: 'Nuestra lista para repartir el cuidado',
+          rows: [['Medicinas y pastillero (seg\u00fan indique el equipo m\u00e9dico)', Wk], ['Pedir citas m\u00e9dicas y acompa\u00f1ar', AN], ['Seguro y papeles', Mo], ['Cuidado de noche y llamadas nocturnas', D], ['Llamada del domingo con la familia', Wk], ['Pedir un descanso (relevo) para quien cuida', Mo], ['Recoger recetas en la farmacia', AN], ['Compras y comidas', Wk]]
+        }
       },
       ill: {
         h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',
@@ -2472,9 +2520,19 @@
     return f;
   }
   // The sheet in that situation's words: a copy of the schema, and the page's title and opening line
+  function wantsSpanish() {
+    try {
+      if (/[?&]lang=es\b/.test(global.location.search || '')) return true;
+      var r = document.referrer ? new URL(document.referrer) : null;
+      if (r && r.origin === global.location.origin && r.pathname === '/en-espanol.html') return true;
+      return /^es\b/i.test((global.navigator && (global.navigator.language || '')) || '');
+    } catch (e) { return false; }
+  }
   function applyFor(schema, wp, which, app) {
     var o = FOR[wp] && FOR[wp][which];
     if (!o) return schema;
+    var es = !!(o.es && wantsSpanish());
+    if (es) { var o2 = {}; Object.keys(o).forEach(function (k) { o2[k] = o[k]; }); Object.keys(o.es).forEach(function (k) { o2[k] = o.es[k]; }); o = o2; }
     var out = {}; Object.keys(schema).forEach(function (k) { out[k] = schema[k]; });
     out.sections = schema.sections.map(function (sec) {
       var c = {}; Object.keys(sec).forEach(function (k) { c[k] = sec[k]; });
@@ -2491,6 +2549,7 @@
       if (o.title) document.title = o.title + ' \u00b7 Spread Love & Acceptance';
       var h1 = document.querySelector('main .read-head h1'); if (h1 && o.h1) h1.textContent = o.h1;
       var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)'); if (lede && o.lede) lede.textContent = o.lede;
+      if (es) { if (h1) h1.setAttribute('lang', 'es'); if (lede) lede.setAttribute('lang', 'es'); }
     } catch (e) {}
     return out;
   }
@@ -2578,7 +2637,7 @@
     if (keepBox) keepBox.checked = app.keep;
     // a list or week two people keep together is kept on this device as soon as something is typed,
     // unless the person turned keeping off or erased it here before
-    if (schema.share && schema.people && !app.keep) {
+    if (((schema.share && schema.people) || schema.keepByDefault) && !app.keep) {
       var off = false; try { off = !!global.localStorage.getItem(OFF_PREFIX + app.keepKey()); } catch (e) { off = true; }
       app.autoKeep = !off;
       if (app.autoKeep && app.hasAnything()) app.startKeep();

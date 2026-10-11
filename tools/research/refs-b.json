@@ -20,7 +20,8 @@
    "/book/understanding-11-healing-in-depth.html#telling",
    "/book/understanding-4-communication-in-depth.html#hard-things",
    "/library/conflict.html#soft-startup",
-   "/library/relationships.html#accepting-influence"
+   "/library/relationships.html#accepting-influence",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1545-5300.1999.00293.x ; https://pubmed.ncbi.nlm.nih.gov/10526767/"
@@ -207,7 +208,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-4-communication-in-depth.html#listening",
-   "/library/communication.html#active-listening"
+   "/library/communication.html#active-listening",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://www.tandfonline.com/doi/pdf/10.1080/10904018.2013.813234"
@@ -233,7 +235,8 @@
    "/book/understanding-4-communication-in-depth.html#messages",
    "/communication.html#research",
    "/library/communication.html#texting-and-tone",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/16393025/"
@@ -325,7 +328,8 @@
    "/book/understanding-11-healing-in-depth.html#apology",
    "/book/understanding-5-belonging-in-depth.html#rebuilding",
    "/library/conflict.html#apology-research",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/ncmr.12073 ; https://news.osu.edu/the-6-elements-of-an-effective-apology-according-to-science/"
@@ -368,7 +372,8 @@
    "repair"
   ],
   "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#apology"
+   "/book/understanding-11-healing-in-depth.html#apology",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://psycnet.apa.org/record/2004-10572-008 ; https://pubmed.ncbi.nlm.nih.gov/14769123/"
@@ -389,7 +394,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#forgiveness",
-   "/library/conflict.html#forgiveness"
+   "/library/conflict.html#forgiveness",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24364794/"
@@ -410,7 +416,8 @@
    "limits"
   ],
   "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#forgiveness"
+   "/book/understanding-11-healing-in-depth.html#forgiveness",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/0146167211407077"
@@ -570,7 +577,8 @@
   "mentioned_on": [
    "/book/self-1-then-in-depth.html#lens",
    "/book/understanding-5-belonging-in-depth.html#patterns",
-   "/library/relationships.html#adult-attachment"
+   "/library/relationships.html#adult-attachment",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://psycnet.apa.org/doiLanding?doi=10.1037%2F0022-3514.52.3.511"
@@ -632,7 +640,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-5-belonging-in-depth.html#patterns",
-   "/library/relationships.html#adult-attachment"
+   "/library/relationships.html#adult-attachment",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in citing references (e.g. https://psycnet.apa.org/manuscript/2017-33746-001.pdf)"
@@ -660,7 +669,8 @@
    "/growing-up-in-depth.html#research",
    "/know-yourself-in-depth.html#shaping",
    "/library/relationships.html#attachment-theory",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://works.www.wellcomecollection.org/works/wu7gxjkb ; https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp (Hogarth Press / Basic Books, 1969)"
@@ -686,7 +696,8 @@
    "/know-yourself-in-depth.html#shaping",
    "/library/relationships.html#attachment-theory",
    "/library/relationships.html#adult-attachment",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://search.worldcat.org/title/4194069"
@@ -709,7 +720,8 @@
   "mentioned_on": [
    "/book/understanding-2-stress-in-depth.html#shared",
    "/book/understanding-5-belonging-in-depth.html#safe-haven",
-   "/library/stress.html#co-regulation"
+   "/library/stress.html#co-regulation",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in citing references on journals.sagepub.com (e.g. https://journals.sagepub.com/doi/10.1177/1948550616646427)"
@@ -1238,7 +1250,8 @@
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#trust",
    "/book/understanding-5-belonging-in-depth.html#trust",
-   "/library/relationships.html#trust"
+   "/library/relationships.html#trust",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://synapsesocial.com/papers/W2034235631 (DOI shown) ; https://www.yorku.ca/rokada/psyctest/trust.pdf"
@@ -1311,7 +1324,8 @@
    "/library.html#pillar-v",
    "/library/thinking.html#pillars",
    "/library/thinking.html#fundamental-attribution-error",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "https://www.sciencedirect.com/science/article/pii/S0065260108603573"
@@ -1355,7 +1369,8 @@
    "/book/chapter-3-in-depth.html#vectors",
    "/book/self-1-then-in-depth.html#rules",
    "/book/understanding-3-seeing-in-depth.html#reasons",
-   "/library/thinking.html#actor-observer"
+   "/library/thinking.html#actor-observer",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "https://krimdok.uni-tuebingen.de/Record/1098932900 ; https://en.wikipedia.org/wiki/Edward_E._Jones"
@@ -1406,7 +1421,8 @@
    "/library/thinking.html#pillars",
    "/library/thinking.html#naive-realism",
    "/library/thinking.html#false-consensus",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "https://www.taylorfrancis.com/chapters/edit/10.4324/9780203773772-6/naive-realism-everyday-life-lee-ross-andrew-ward"
@@ -1428,7 +1444,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-3-seeing-in-depth.html#realism",
-   "/library/thinking.html#naive-realism"
+   "/library/thinking.html#naive-realism",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in search results citing the paper (e.g. https://journals.sagepub.com/doi/full/10.1177/23970022221094523)"
@@ -1455,7 +1472,8 @@
    "/library/thinking.html#pillars",
    "/library/thinking.html#mind-reading",
    "/library/thinking.html#spotlight-effect",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9731312/"
@@ -1478,7 +1496,8 @@
    "/book/chapter-1-in-depth.html#almost",
    "/book/understanding-4-communication-in-depth.html#checking",
    "/book/understanding-4-communication-in-depth.html#faq",
-   "/communication.html#research"
+   "/communication.html#research",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://www.sciencedirect.com/science/article/abs/pii/S0022103110002118"
@@ -1518,7 +1537,8 @@
    "perspective-taking"
   ],
   "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#asking"
+   "/book/understanding-3-seeing-in-depth.html#asking",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "https://www.publishersweekly.com/9780307595911 ; https://casbs.stanford.edu/mindwise-how-we-understand-what-others-think-believe-feel-and-want"
@@ -1538,7 +1558,8 @@
    "naive-realism"
   ],
   "mentioned_on": [
-   "/book/understanding-3-seeing-in-depth.html#realism"
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/book/understanding-3-seeing.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in search result reference (psycnet citing documents)"
@@ -1560,7 +1581,8 @@
   "mentioned_on": [
    "/bonding.html#how-it-grows",
    "/book/understanding-5-belonging-in-depth.html#building",
-   "/library/connection.html#friendship"
+   "/library/connection.html#friendship",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/0265407518761225"
@@ -1583,7 +1605,8 @@
   "mentioned_on": [
    "/book/understanding-5-belonging-in-depth.html#belonging",
    "/library/connection.html#loneliness",
-   "/library/connection.html#social-support"
+   "/library/connection.html#social-support",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316"
@@ -1882,7 +1905,8 @@
    "/book/understanding-2-stress-in-depth.html#load",
    "/book/understanding-6-change-in-depth.html#others",
    "/library/communication.html#advice-vs-support",
-   "/love-languages-in-depth.html#similar"
+   "/love-languages-in-depth.html#similar",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in reference lists of PubMed-indexed citing studies (e.g. https://pubmed.ncbi.nlm.nih.gov/35373659/)"
@@ -1922,7 +1946,8 @@
    "social-support"
   ],
   "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#ask"
+   "/book/understanding-12-helping-in-depth.html#ask",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://libcat.library.tamu.edu/Record/in00000649568 ; https://econbiz.de/Record/work-stress-and-social-support-house-james/10004389064"
@@ -1965,7 +1990,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-5-belonging-in-depth.html",
-   "/book/understanding-5-belonging-in-depth.html#belonging"
+   "/book/understanding-5-belonging-in-depth.html#belonging",
+   "/book/understanding-5-belonging.html"
   ],
   "verified": true,
   "verified_by": "DOI shown in search result references (e.g. https://pubmed.ncbi.nlm.nih.gov/27134325/)"
@@ -2187,7 +2213,8 @@
    "communication"
   ],
   "mentioned_on": [
-   "/book/understanding-4-communication-in-depth.html#repair"
+   "/book/understanding-4-communication-in-depth.html#repair",
+   "/book/understanding-4-communication.html"
   ],
   "verified": true,
   "verified_by": "https://muse.jhu.edu/article/453740/summary"

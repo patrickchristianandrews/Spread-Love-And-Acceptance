@@ -67,6 +67,7 @@
   .wl-app .wl-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid var(--wl-ink); border-radius: 999px; padding: 11px 22px;
     background: var(--wl-ink); color: var(--wl-paper); font-weight: 600; cursor: pointer; min-height: 48px; text-align: center; }
   .wl-app .wl-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .wl-app .wl-btn[aria-disabled="true"] { opacity: .55; }
   .wl-app .wl-btn.ghost { background: var(--wl-card); color: var(--wl-ink); border-color: var(--wl-line); }
   .wl-app .wl-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
   .wl-app .wl-nav-quiet { margin-top: 8px; justify-content: flex-end; }
@@ -81,6 +82,9 @@
   .wl-app .wl-linkbtn { background: none; border: 0; padding: 8px 0; min-height: 44px; color: var(--wl-wave); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: .97rem; text-align: left; }
   .wl-app input[type=text], .wl-app textarea { width: 100%; font: inherit; padding: 12px 14px; border: 1.5px solid var(--wl-line); border-radius: 12px; background: var(--wl-card); color: var(--wl-ink); }
   .wl-app textarea { min-height: 96px; font-size: 1rem; resize: vertical; }
+  /* a text box should look like somewhere to type, not like another text bubble */
+  main .wl-app label.wl-field { background: none; border: 0; border-radius: 0; padding: 0; margin: 14px 0 6px; font-weight: 600; }
+  .wl-app input[type=text], .wl-app textarea { border: 2px solid #8C826C; border-radius: 8px; background: #FFFFFF; box-shadow: inset 0 1px 3px rgba(43,38,32,.12); min-height: 44px; box-sizing: border-box; }
   .wl-app input[type=text]:focus, .wl-app textarea:focus { border-color: var(--wl-wave); outline: none; box-shadow: 0 0 0 3px var(--wl-wave-soft); }
   .wl-app .wl-keep { display: flex; gap: .6rem; align-items: flex-start; font-size: .93rem; margin: 14px 0; padding: 10px 14px; background: var(--wl-card); border: 1.5px dashed var(--wl-line); border-radius: 18px 18px 18px 6px; cursor: pointer; }
   .wl-app .wl-keep input { width: 22px; height: 22px; flex: none; margin: 1px 0 0; }
@@ -277,7 +281,7 @@
 <header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you think, talk and listen</h1></header>
 <p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through seven short parts (the last one is optional), and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
 <details class="wl-howto">
-  <summary><span><strong>How it works:</strong> about ten minutes, nothing is sent anywhere.</span> <span class="wl-howto-more">details</span></summary>
+  <summary><span><strong>How it works:</strong> about ten minutes, or two for just your Wave Code. Nothing is sent anywhere.</span> <span class="wl-howto-more">details</span></summary>
   <p>Mostly tapping. Want only your four letters? “Just my Wave Code” takes about two minutes, and the rest stays optional. The last part, your statement, is optional too. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime.</p>
   <p>Nothing you type or choose is sent anywhere. Your answers stay in this tab until you close it, so a reload won’t lose them. They stay on this device after that only if you tick the box (you can also do it from your results), and “Erase everything” removes them.</p>
 </details>

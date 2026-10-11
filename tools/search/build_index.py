@@ -35,12 +35,17 @@ throuple throuples triad triads polyamory polyamorous polycule metamour metamour
 fiance fiancee fiancé fiancée prenup prenuptial spender spenders saver savers dorm dorms roommate roommates housemate flatmate cofounder cofounders coparent coparenting
 nan nana nanna gran granny grandad granddad grandpa grandma gramps grandson granddaughter grandkids stepmum stepmom stepdad stepkids toddler toddlers twins triplets newborn
 deployment deployed veteran veterans homecoming reintegration fifo offshore nightshift wfh adhd autistic dyslexic dyspraxia fidgeting fidgety parkinson parkinsons dementia alzheimers fibromyalgia covid carer carers caregiver respite rehab kinship
+christen christened christening christenings baptise baptised baptize baptized aqiqah naming-ceremony bris godparent godparents godmother godfather
+boyfriend boyfriends girlfriend girlfriends befriend gf bf bff hubby wifey fiances fiancees inhaler inhalers handover handovers mediator mediators inheritance probate executor
+wont dont cant didnt doesnt isnt wasnt arent werent wouldnt couldnt shouldnt havent hasnt hadnt youre theyre thats whats
+construccion construcción obra horas trabaja trabajamos cansadas turnos turno noches
 ayuda ayudar pareja parejas esposa esposo marido mujer hombre hijos hijo hija hijas ninos nino nina ninas bebe bebes gemelos gemelas cuidador cuidadora cuidadores cuidar cuidado familia casa trabajo dinero tareas quehaceres pelea peleas pelean peleamos discutir discusion enojado enojada enojo miedo calma tranquilo tranquila cansado cansada divorcio separados separacion suegra suegro suegros abuela abuelo abuelos abuelita madre padre mama papa novio novia amor relacion matrimonio gritar grita gritos violencia seguridad necesito tengo tiene somos estoy esta como que por para con sin mas muy bien mal ayudame hablar hablamos escuchar tiempo noche dia semana escuela salud enfermedad enferma enfermo parkinson demencia hogar juntos solo sola soltero soltera mudanza boda dinero ahorro gasto deuda dios iglesia fe navidad pascua bautizo espanol castellano latino latina hispano gracias hola donde cuando porque quien puedo quiero siento triste feliz celoso celosa respeto confianza
 '''
 
 OUT = os.path.join(ROOT, 'assets', 'js', 'search-index.js')
 TEXT_CHARS = 2400   # how much body text is kept per page
-SKIP = re.compile(r'^(tools|supabase|_|node_modules)/|(^|/)(garden-backdrop|offline|404|pal-cam-tv)\.html$')
+# the site's own working pages (rollout status, roadmap, how it's built) are for the people who make it, not for search
+SKIP = re.compile(r'^(tools|supabase|_|node_modules|architecture|infrastructure|notes|manuscript|samples|telemetry)/|(^|/)(garden-backdrop|offline|404|pal-cam-tv)\.html$|^(telemetry|roadmap|suite-index|suite-index-in-depth|dashboard)\.html$')
 
 
 class Page(HTMLParser):

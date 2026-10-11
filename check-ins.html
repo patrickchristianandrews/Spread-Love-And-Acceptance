@@ -11,7 +11,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Relationship Check-Ins: A Kind Weekly Ritual for Couples</title>
+<title>Check-Ins: A Kind Weekly Talk for Couples, Families and Housemates</title>
 <meta name="description" content="A short, kind weekly relationship check-in for couples, families and housemates: what went well, what felt heavy, and one small change to try next week.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +26,23 @@
   .read .ci-card h2{ margin-top:0; font-size:1.2rem; }
   .ci-card ul{ margin:.4rem 0 .6rem; }
   .ci-card p{ margin:.4rem 0; }
+  .ci-jump{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.4rem 0 1.2rem !important; }
+  .ci-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid #2F5F8A; border-radius:999px; background:var(--paper); color:#2F5F8A; text-decoration:none; font-weight:600; }
+  .ci-safe{ font-size:.95rem; color:var(--ink-soft); }
+  .ci-send{ font-size:.95rem; }
+  .ci-pick{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 .8rem; padding:0; border:0; }
+  .ci-pick[hidden]{ display:none; }
+  .ci-pick legend{ font-weight:600; margin:0 0 .4rem; padding:0; }
+  .ci-pick label{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.3rem .95rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); cursor:pointer; }
+  .ci-pick label:has(input:checked){ border-color:#2F5F8A; background:#EEF4FB; font-weight:600; }
+  .ci-fam .ci-f{ display:block; margin:.6rem 0; }
+  .ci-fam .ci-f span{ display:block; font-weight:600; margin-bottom:.2rem; }
+  .ci-fam input, .ci-fam textarea{ box-sizing:border-box; width:100%; min-height:44px; padding:.45rem .7rem; font:1rem/1.5 "Lora", Georgia, serif; border:1px solid var(--ink-soft); border-radius:10px; background:#FFFDF7; color:var(--ink); }
+  .ci-row{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; align-items:center; margin:.8rem 0 .3rem !important; }
+  .ci-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
+  .ci-btn.is-quiet{ background:var(--paper); color:#2F5F8A; }
+  .ci-btn:focus-visible, .ci-jump a:focus-visible, .ci-fam input:focus-visible, .ci-fam textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .ci-small{ font-size:.9rem; color:var(--ink-soft); }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/check-ins.html">
@@ -66,11 +83,12 @@
 </head>
 <body>
 <main class="read">
-<header class="read-head"><p class="read-code">Guide</p><h1>Check-ins: a kind weekly relationship check-in</h1></header>
+<header class="read-head"><p class="read-code">Guide</p><h1>Check-ins: a kind weekly check-in for couples, families and housemates</h1></header>
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/check-ins-in-depth.html">Read the full guide</a></p>
 
-<p class="simple-lede">A check-in is a short, agreed talk about one hard topic, at a time that works for everyone taking part. The topic can wait for that time, and it goes much better when it gets one.</p>
-<p class="pillar-note"><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> check how full your battery is before a hard talk. <strong>Between you and others:</strong> agree on the timing, pause and come back when you need to, and say it so it lands.</p>
+<p class="simple-lede">A check-in is a short, agreed talk about one hard topic, at a time that works for everyone taking part: a couple, a family, housemates or a team. The topic can wait for that time, and it goes much better when it gets one.</p>
+<p class="ci-jump no-bubble"><a href="#card">Weekly house meeting card &rarr;</a> <a href="?for=family#card">Family plan card &rarr;</a></p>
+<p class="pillar-note" data-ci-not-family><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> check how full your battery is before a hard talk. <strong>Between you and others:</strong> agree on the timing, pause and come back when you need to, and say it so it lands.</p>
 
 <div class="scene">
   <p class="scene-when">Wednesday, 10:50 p.m.</p>
@@ -113,8 +131,29 @@
 
 <section class="tfs-home tol-plain no-bubble" id="card" aria-labelledby="card-h">
   <h2 id="card-h">This week&rsquo;s check-in card</h2>
+  <p class="ci-safe">For relationships where everyone feels safe. If anyone is afraid or controlled, see <a href="/safety.html">Not safe at home?</a></p>
+  <fieldset class="ci-pick" id="ci-pick" hidden>
+    <legend>Who is checking in?</legend>
+    <label><input type="radio" name="ci-who" value="home" checked> <span>Partners or housemates</span></label>
+    <label><input type="radio" name="ci-who" value="family"> <span>Family</span></label>
+  </fieldset>
+  <div id="ci-home">
   <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
+  <p class="ci-send">To send it to the other person’s phone: tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
   <div data-tfs-mount="checkin"></div>
+  </div>
+  <div id="ci-family" class="ci-fam" hidden>
+    <p>A plan for the family, not a list of chores: visits, advice, the little one’s routines and a regular job for a grandparent. Fill in what fits, skip the rest, then send it to each other.</p>
+    <label class="ci-f"><span>Who’s in this plan (optional)</span><input type="text" id="cf-names" maxlength="80" autocomplete="off" placeholder="Amy, Mum and Dad"></label>
+    <label class="ci-f"><span>Visits</span><textarea id="cf-visits" rows="2" maxlength="300" placeholder="Sunday lunch every other week, 12 to 3. Text the day before."></textarea></label>
+    <label class="ci-f"><span>Advice</span><textarea id="cf-advice" rows="2" maxlength="300" placeholder="Ask first: “Do you want ideas, or just to talk?”"></textarea></label>
+    <label class="ci-f"><span>The baby’s or children’s routines</span><textarea id="cf-baby" rows="2" maxlength="300" placeholder="Nap at 1. No sweets before dinner. Ask us before anything new."></textarea></label>
+    <label class="ci-f"><span>A regular job for a grandparent or relative</span><textarea id="cf-job" rows="2" maxlength="300" placeholder="Grandma does Tuesday pickup and tea."></textarea></label>
+    <label class="ci-f"><span>We’ll look at this again on</span><input type="text" id="cf-review" maxlength="80" autocomplete="off" placeholder="The first Sunday of next month"></label>
+    <p class="ci-row"><button type="button" class="ci-btn" id="cf-copy">Copy to send</button> <button type="button" class="ci-btn is-quiet" id="cf-share" data-share data-share-url="none" data-share-result data-share-title="Our family plan">Share to their phone</button> <span id="cf-note" role="status"></span></p>
+    <div id="cf-fridge"></div>
+    <p class="ci-small">Nothing here is saved or sent until you copy or share it. It stays on this device.</p>
+  </div>
 </section>
 
 <section class="ci-card no-bubble" id="different-hours" aria-labelledby="different-hours-h">
@@ -135,5 +174,53 @@
   <p>A grandparent talking with your grown children about the grandkids? See the <a href="/grandparents.html#rules">page for grandparents</a>.</p>
 </div>
 </main>
+<script>
+(function () {
+  'use strict';
+  // The family version of the weekly card: chosen with "Family", or opened from a family guide (or ?for=family).
+  var pick = document.getElementById('ci-pick'), home = document.getElementById('ci-home'), fam = document.getElementById('ci-family');
+  if (!pick || !fam) return;
+  pick.hidden = false;
+  var FAMILY_PAGES = /^\/(grandparents|grown-up-children|family-rifts|family-obligations|two-faiths|foster-and-kinship|teens|parents|caregivers|new-parent|retired-together|empty-nest)\.html$/;
+  var ref = ''; try { ref = document.referrer ? new URL(document.referrer).pathname : ''; } catch (e) {}
+  var startFamily = /[?&](for|rel)=family\b/.test(location.search) || FAMILY_PAGES.test(ref);
+  function show(which) {
+    var f = which === 'family';
+    fam.hidden = !f; home.hidden = f;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-ci-not-family]'), function (el) { el.hidden = f; });
+    pick.querySelector('input[value="' + (f ? 'family' : 'home') + '"]').checked = true;
+  }
+  pick.addEventListener('change', function (e) { if (e.target.name === 'ci-who') show(e.target.value); });
+  show(startFamily ? 'family' : 'home');
+
+  var F = [['cf-visits', 'Visits'], ['cf-advice', 'Advice'], ['cf-baby', 'The children’s routines'], ['cf-job', 'A regular job for a grandparent or relative'], ['cf-review', 'We’ll look at this again on']];
+  function v(id) { return (document.getElementById(id).value || '').trim(); }
+  function text() {
+    var lines = ['Our family plan' + (v('cf-names') ? ' (' + v('cf-names') + ')' : '')];
+    F.forEach(function (f) { if (v(f[0])) lines.push(f[1] + ': ' + v(f[0])); });
+    return lines.length > 1 ? lines.join('\n') : '';
+  }
+  var note = document.getElementById('cf-note'), share = document.getElementById('cf-share');
+  share._tolShare = function () { return { text: text() || 'Our family plan' }; };
+  fam.addEventListener('input', function () { note.textContent = ''; });
+  document.getElementById('cf-copy').addEventListener('click', function () {
+    var t = text();
+    if (!t) { note.textContent = 'Fill in a line or two first.'; return; }
+    function done(ok) { note.textContent = ok ? 'Copied. Paste it into a message to the others.' : 'Select the words and copy them.'; }
+    function fallback() { var ta = document.createElement('textarea'), ok = false; ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); done(ok); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { done(true); }, fallback); else fallback();
+  });
+  // a printable page, using the site's fridge sheet when it has loaded
+  var tries = 0;
+  (function fridge() {
+    if (window.TOLFridge && window.TOLFridge.button) {
+      window.TOLFridge.button(document.getElementById('cf-fridge'), function () {
+        var items = F.map(function (f) { return { label: f[1], text: v(f[0]), lines: f[0] === 'cf-review' ? 1 : 2 }; });
+        return { title: 'Our family plan', sub: v('cf-names'), items: items, footer: 'One topic at a time. We’re on the same side.', file: 'family-plan' };
+      }, { label: 'Print or save it', note: 'Your plan as one clean page, with room to write by hand where it’s blank. Fits A4 and US Letter.' });
+    } else if (++tries < 50) setTimeout(fridge, 200);
+  })();
+})();
+</script>
 </body>
 </html>

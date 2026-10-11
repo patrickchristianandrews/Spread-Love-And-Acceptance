@@ -514,6 +514,47 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
     chk(!g.replies.some(x => /were you being sarcastic/i.test(x.text)), 'received “' + t + '”: escalating sarcasm check');
   });
 }
+// ---------- re-test round 12: control, checking up and threats to self-harm are safety, never tone ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const rw = (t, rel) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || 'partner' });
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  const vd = (t, rel) => { const a = an(t); return E.verdict(a, E.score(a, ['general'], 'text'), E.rewrite(a, { wirings: ['general'], channel: 'text', rel: rel || 'partner' }), { rel: rel || 'partner' }); };
+  const CONTROL = ['Where were you? Send me your location now. Who were you with?', 'Who were you with?', 'Send me your location.', 'Show me your phone.',
+    'Give me your password.', 'You can’t see your friends anymore.', 'Nobody else would ever want you.', 'You are worthless and nobody else would ever want you.',
+    'You’re nothing without me.', 'I want to see your messages. Now.', 'Why is your location off?'];
+  CONTROL.forEach(t => {
+    const a = an(t), g = E.receive(a, {}), gc = E.receive(a, { rel: 'coparent' });
+    chk(a.control && a.found.control, '“' + t + '”: control is flagged');
+    chk(g.control && g.danger && /sign of control/.test(g.head[1]), '“' + t + '” received: the head names control: ' + g.head[1]);
+    chk(!g.meanings.some(m => /usually a request|kinder|upset about something specific/.test(m)), '“' + t + '” received: no kind reading of control: ' + g.meanings.join(' / '));
+    chk(g.replies.length === 1 && !g.replies.some(r => /you'd like me to|location|phone|password|by when|what's the specific thing/i.test(r.text)), '“' + t + '” received: no compliant reply: ' + JSON.stringify(g.replies));
+    chk(gc.control && gc.replies.length === 1, '“' + t + '” received from a co-parent: still control');
+    chk(E.score(a, ['general'], 'text').level[0] === 'heavy', '“' + t + '”: control is heavy static');
+    const v = vd(t);
+    chk(v.control && /control|checking up/.test(v.text), '“' + t + '” sent: the verdict names checking up or control: ' + v.text);
+    all(rw(t)).forEach(x => chk(!/send me your location|show me your phone|password|who were you with|worthless|nobody else|can't see your friends|can’t see your friends|nothing without me/i.test(x), '“' + t + '”: the check stays in a rewrite: ' + x));
+  });
+  // a kind, one-off ask is not control
+  ['Can you send me your location when you get there? Just so I know you got home safe.', 'Who were you with at the party? Sounds fun!',
+    'Could you share your location so we can find you at the festival?', 'I want to see your new phone!', 'You can’t see the screen from there.',
+    'Nobody would believe you could run that fast.', 'Where are you? The film starts in 5.'].forEach(t => chk(!an(t).control, '“' + t + '”: a kind ask is not control'));
+  // the "Check the ask" reply turns the words round properly: no "me to Send", no "when me get there"
+  const ask = E.receive(an('Can you send me your location when you get there? Just so I know you got home safe.'), {}).replies.map(r => r.text).join(' ');
+  chk(/send you my location when I get there/.test(ask) && !/\bme to Send\b|when me get/.test(ask), 'the ask is turned round cleanly: ' + ask);
+  const ask2 = E.receive(an('Send me your notes.'), {}).replies.map(r => r.text).join(' ');
+  chk(/you'd like me to send you my notes/.test(ask2), 'the ask starts in lower case: ' + ask2);
+  // a threat to self-harm used as leverage: still a threat, plus 988 for them, and it's not their job to stay
+  ['If you leave me I’ll kill myself and it’ll be your fault.', 'I’ll kill myself if you leave.', 'If you break up with me I will hurt myself.'].forEach(t => {
+    const a = an(t), g = E.receive(a, {});
+    chk(a.danger && a.selfHarm, '“' + t + '”: a threat, and a self-harm worry');
+    chk(g.threat && g.meanings.some(m => /988/.test(m) && /not your job to stay/.test(m)), '“' + t + '” received: 988 for them, not your job to stay: ' + g.meanings.join(' / '));
+  });
+  // "I want to kill myself": not a tone question in either direction
+  { const a = an('I want to kill myself'), g = E.receive(a, {}), v = vd('I want to kill myself');
+    chk(a.selfHarm && !a.danger && g.selfHarm && g.danger && g.meanings.some(m => /988/.test(m)), 'a crisis message received: 988 first');
+    chk(v.id === 'danger' && /988/.test(v.text), 'a crisis message sent: 988 first: ' + v.text); }
+}
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
 [['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/], ['Fine. Whatever works for you.', /dismiss/], ['Sure, go out with your friends, I’ll just sit here.', /sarcasm/], ['Don’t mind me.', /passive/]].forEach(([t, want]) => {

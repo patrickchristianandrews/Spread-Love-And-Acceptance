@@ -1982,6 +1982,7 @@ function run(){
   lastAn = an;
   $("#results").removeAttribute("data-no-reward");
   if(an.danger){ runDanger(text, an, B); return; }
+  if(an.selfHarm){ runCrisis(text); return; }
   const fids = Object.keys(found);
   const Bids = sel.B.size ? [...sel.B] : ["general"], Aids=[...sel.A];
   const general = !sel.B.size;
@@ -2175,6 +2176,7 @@ function run(){
   }
   if(relId==="family" && LONG_GAP.test(text)) vtop+='<p class="small"><b>After a long gap,</b> short and no-pressure works best: name the rift, own your part, and make the invite easy to decline. More in <a href="/family-rifts.html">Family rifts</a>.</p>';
   if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
+  if(an.control) vtop+=CONTROL_SELF;
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   // Easy reading: the words to send come straight after the plain line, the simpler English first
   let vdetail = '';
@@ -2288,12 +2290,27 @@ function run(){
    No rewrite keeps the threat, no "looks okay", and no garden reward for it.
    ============================================================ */
 const SAFETY_SELF = '<p class="vhelp"><b>If you&rsquo;re worried about your own anger,</b> that&rsquo;s a brave thing to notice, and help is free and private. See <a href="/safety.html">Not safe at home?</a> The National Domestic Violence Hotline (<a href="tel:18007997233">1-800-799-7233</a>, US) also talks with people who are worried about their own behaviour. If you might hurt someone right now, step away and call your local emergency number.</p>';
+const CRISIS_SELF = '<p class="vhelp"><b>If you&rsquo;re thinking about ending your life,</b> please talk to someone now. In the US, call or text <a href="tel:988">988</a> (the Suicide &amp; Crisis Lifeline), any time. Elsewhere, call your local emergency number or a local crisis line. More free, private help is on <a href="/outside-help.html">Help beyond this site</a>.</p>';
+const CONTROL_GOT = '<p class="vhelp"><b>Checking up on you, cutting you off, or putting you down can be signs of control.</b> That&rsquo;s not a tone problem, and it isn&rsquo;t yours to fix. See <a href="/safety.html">Not safe at home?</a> for free, private people to talk to. In the US, the National Domestic Violence Hotline is <a href="tel:18007997233">1-800-799-7233</a> (or text START to 88788), any time. If you&rsquo;re in danger now, call your local emergency number.</p>';
+const CONTROL_SELF = '<p class="vhelp"><b>This can come across as checking up on them, or control.</b> Asking where someone is, who they were with, to see their phone, or telling them who they can see can feel like control, even when it comes from worry or hurt. Try saying the worry itself. If you notice you often need to check, or you&rsquo;re worried about your own anger, see <a href="/safety.html">Not safe at home?</a>: the National Domestic Violence Hotline (<a href="tel:18007997233">1-800-799-7233</a>, US) also talks with people worried about their own behaviour.</p>';
 const SAFETY_GOT = '<p class="vhelp"><b>If it frightens you, you deserve support.</b> See <a href="/safety.html">Not safe at home?</a> for free, private people to talk to. In the US, the National Domestic Violence Hotline is <a href="tel:18007997233">1-800-799-7233</a> (or text START to 88788), any time. If you&rsquo;re in danger now, call your local emergency number. If it&rsquo;s safe, save a copy with the date, somewhere the other person can&rsquo;t see.</p>';
 function noReward(R){
   R.setAttribute("data-no-reward","");
   // the "you tried a tool" reward is for kind words, never for a threat
   const T = window.TOLRewards;
   if(T && !T._stGuard && typeof T.earn==="function"){ const orig = T.earn; T._stGuard = true; T.earn = function(n, source){ const r=document.getElementById("results"); if(source==="come-back" && r && r.hasAttribute("data-no-reward")) return null; return orig.apply(T, arguments); }; }
+}
+/* "I want to kill myself" in your own message: not a tone question. Help first, and no rewrite */
+function runCrisis(text){
+  lastChanged = false;
+  let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">You deserve support</h2>';
+  h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">You deserve support right now.</p>';
+  h += CRISIS_SELF;
+  h += '<p>If you want to tell someone close to you, your words are fine as they are. You could add one line: &ldquo;I&rsquo;m not okay, and I need you to stay with me or call me.&rdquo;</p>';
+  h += '<p class="small">If someone sent this to you, choose &ldquo;Someone sent me this&rdquo; above.</p></div>';
+  const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R);
+  R.focus({preventScroll:true});
+  R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
 }
 function runDanger(text, an, B){
   const rw = E.rewrite(an, {wirings:["general"], channel, rel:relId, work:isWork()});
@@ -2307,7 +2324,7 @@ function runDanger(text, an, B){
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
   if(pause) h += '<p class="vk" style="margin-top:12px">Or take a break first</p><p class="vbest">'+phHTML(pause)+'</p>';
   h += '<p class="vk" style="margin-top:12px">Your words, with the threat marked</p><p class="vbest marked">'+markup(an.text, an.spans)+'</p>';
-  h += SAFETY_SELF;
+  h += an.selfHarm ? CRISIS_SELF + SAFETY_SELF : SAFETY_SELF;
   h += '<p class="small">If someone sent this to you, choose &ldquo;Someone sent me this&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R); paintSimple();
   const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{ (navigator.clipboard?navigator.clipboard.writeText(need):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";}); });
@@ -2371,7 +2388,8 @@ function fitReceived(an, rv){
     .map(m=>/^It's worded as an ultimatum/.test(m) ? "It's worded as a threat. Threats aren't okay, whatever was meant. You don't have to answer it on the spot." : m);
   rv.meanings = rv.meanings.map(m=>m.replace(/\s*It shows how much this matters to them right now\./, ""));
   rv.coparent = relId==="coparent";
-  if(rv.coparent){
+  // control, a threat to self-harm, or a crisis: no co-parent logistics replies on top
+  if(rv.coparent && !rv.control && !rv.selfHarm){
     if(an.found.brushoff || an.found.minimal) rv.meanings.push("Between co-parents, \u201cwhatever works for you\u201d can be real flexibility, or a tired \u201cI\u2019ve stopped arguing.\u201d Answering with the specific plan settles it either way.");
     if(an.found.legal) rv.meanings.push("Between co-parents, keep your reply to the children\u2019s schedule and the facts. You don\u2019t have to answer the threat itself.");
     const keep = rv.replies.filter(r=>["Answer the need underneath","Check the ask","Agree on a habit","Keep the kids out of it"].includes(r.label));
@@ -2389,7 +2407,7 @@ function runReceived(text){
   const recvPlain = rv.head ? rv.head : rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : (rv.found && rv.found.length) ? ["hurt","This may sound harsher than they meant. Here are kinder ways to read it."]
     : ["ok","This looks okay. Nothing here needs decoding."];
-  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.danger ? SAFETY_GOT : '');
+  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.control ? CONTROL_GOT : rv.danger && !(rv.selfHarm && !an.danger) ? SAFETY_GOT : '');
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
   if(rv.crossed && !rv.danger) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
@@ -2399,7 +2417,8 @@ function runReceived(text){
   h += '<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" aria-expanded="'+simpleOn+'">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button></div>';
   h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+phHTML(r.text)+'</p>'+simpleLine(r.text)+'<button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : (rv.found && rv.found.length ? '<p>Answer the point itself, calmly. You don&rsquo;t have to match the sharper wording.</p>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>');
   if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer the logistics only. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
-  h += '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
+  h += rv.selfHarm && !an.danger ? '<p class="small">If they might act on it now, call your local emergency number. You don&rsquo;t have to find perfect words. Being there, and getting help, matters most.</p>'
+    : '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
   h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); if(rv.danger) noReward(R); paintSimple();

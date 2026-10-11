@@ -62,6 +62,7 @@
   .wk-tool td.wk-del::before, .wk-tool td.wk-empty::before{ content:none; }
   .wk-tool tr.wk-none{ display:block; border-style:dashed; }
   .wk-btns{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.5rem 0; }
+  .wk-keep-k{ align-self:center; font-weight:600; }
   .wk-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.5rem 1.1rem; border-radius:999px; border:1.5px solid var(--credit); background:var(--paper); color:var(--ink); cursor:pointer; }
   .wk-btn.wk-main{ background:var(--credit); color:var(--paper); }
   .wk-btn.wk-small{ font-size:.92rem; padding:.4rem .85rem; border-color:var(--line); }
@@ -456,6 +457,8 @@
   // Team one-owner list. Kept only in this browser (localStorage), never sent anywhere.
   var KEY = 'tol-work-owners-v1';
   var OFTEN = ['Daily', 'Weekly', 'Every two weeks', 'Monthly', 'Quarterly', 'As needed'];
+  // rough times a month, only to say whose jobs come round more often ("As needed" can't be counted)
+  var PER_MONTH = { 'Daily': 21, 'Weekly': 4.3, 'Every two weeks': 2.2, 'Monthly': 1, 'Quarterly': 0.33 };
   var team = document.getElementById('wk-team');
   var body = document.getElementById('wk-rows');
   var status = document.getElementById('wk-status');
@@ -523,14 +526,25 @@
     sel.appendChild(o);
     return o;
   }
-  function personSelect(value, list) {
+  // not: a name left out of the choices (the backup list leaves out the job's owner)
+  function personSelect(value, list, not) {
     var sel = document.createElement('select');
+    fillPeople(sel, value, list, not);
+    return sel;
+  }
+  function fillPeople(sel, value, list, not) {
+    sel.textContent = '';
     opt(sel, '', list.length ? 'Choose…' : 'Add team members above');
-    list.forEach(function (n) { opt(sel, n, n); });
+    list.forEach(function (n) { if (n !== not) opt(sel, n, n); });
     // keep a saved name even if it was taken out of the team field, so nothing is lost silently
     if (value && list.indexOf(value) === -1) opt(sel, value, value + ' (not in team list)');
     sel.value = value || '';
-    return sel;
+  }
+  // A backup who is also the owner can't cover for them: that backup place is emptied. Returns how many.
+  function noSameBackup() {
+    var n = 0;
+    state.rows.forEach(function (r) { if (r.owner && r.backup && r.owner === r.backup) { r.backup = ''; n++; } });
+    return n;
   }
   function cell(label, control) {
     var td = document.createElement('td');
@@ -551,8 +565,16 @@
       task.addEventListener('input', function () { r.task = task.value; save(); tally(); });
       var owner = personSelect(r.owner, list);
       owner.setAttribute('aria-label', 'Owner, row ' + n);
-      owner.addEventListener('change', function () { r.owner = owner.value; save(); warnRow(tr, r); tally(); });
-      var backup = personSelect(r.backup, list);
+      owner.addEventListener('change', function () {
+        r.owner = owner.value;
+        // the new owner was the backup: that place is empty again, and the backup list leaves them out
+        var was = r.owner && r.backup === r.owner;
+        if (was) r.backup = '';
+        fillPeople(backup, r.backup, list, r.owner);
+        save(); warnRow(tr, r); tally();
+        if (was) say(r.owner + ' owns ' + ((r.task || '').trim() ? '“' + r.task.trim() + '”' : 'it') + ' now, so the backup is empty again. Pick someone else to cover.');
+      });
+      var backup = personSelect(r.backup, list, r.owner);
       backup.setAttribute('aria-label', 'Backup, row ' + n);
       backup.addEventListener('change', function () { r.backup = backup.value; save(); warnRow(tr, r); tally(); });
       var often = document.createElement('select');
@@ -560,7 +582,7 @@
       OFTEN.forEach(function (f) { opt(often, f, f); });
       often.value = OFTEN.indexOf(r.often) > -1 ? r.often : '';
       often.setAttribute('aria-label', 'How often, row ' + n);
-      often.addEventListener('change', function () { r.often = often.value; save(); });
+      often.addEventListener('change', function () { r.often = often.value; save(); tally(); });
       var del = document.createElement('button');
       del.type = 'button'; del.className = 'wk-btn wk-small'; del.textContent = 'Remove';
       del.setAttribute('aria-label', 'Remove row ' + n);
@@ -614,9 +636,11 @@
     if (!box) return;
     var jobs = state.rows.filter(function (r) { return (r.task || '').trim() || r.owner || r.backup; });
     var people = names(), count = {};
-    function add(n, k) { if (!n) return; if (!count[n]) { count[n] = { owner: 0, backup: 0 }; if (people.indexOf(n) === -1) people.push(n); } count[n][k]++; }
-    people.forEach(function (n) { count[n] = { owner: 0, backup: 0 }; });
-    jobs.forEach(function (r) { add(r.owner, 'owner'); add(r.backup, 'backup'); });
+    function add(n, k, r) { if (!n) return; if (!count[n]) { count[n] = { owner: 0, backup: 0, often: {}, times: 0, known: 0 }; if (people.indexOf(n) === -1) people.push(n); } count[n][k]++;
+      // how often each owned job comes round, so a daily job isn't counted like a quarterly one
+      if (k === 'owner') { var f = r.often || ''; if (f) { count[n].often[f] = (count[n].often[f] || 0) + 1; if (PER_MONTH[f]) { count[n].times += PER_MONTH[f]; count[n].known++; } } } }
+    people.forEach(function (n) { count[n] = { owner: 0, backup: 0, often: {}, times: 0, known: 0 }; });
+    jobs.forEach(function (r) { add(r.owner, 'owner', r); add(r.backup, 'backup', r); });
     var any = jobs.some(function (r) { return r.owner || r.backup; });
     box.hidden = !any;
     if (!any) return;
@@ -626,15 +650,25 @@
       var li = document.createElement('li'), b = document.createElement('strong');
       b.textContent = n + ':';
       li.appendChild(b);
-      li.appendChild(document.createTextNode(' ' + c.owner + ' owner, ' + c.backup + ' backup'));
+      var fq = OFTEN.filter(function (f) { return c.often[f]; }).map(function (f) { return c.often[f] + ' ' + f.toLowerCase(); }).join(', ');
+      li.appendChild(document.createTextNode(' owner of ' + c.owner + (fq ? ' (' + fq + ')' : '') + ', backup for ' + c.backup + (c.known && c.known === c.owner ? '. Roughly ' + Math.round(c.times) + (Math.round(c.times) === 1 ? ' time' : ' times') + ' a month as owner.' : '')));
       list.appendChild(li);
     });
     var owned = jobs.filter(function (r) { return r.owner; }).length, open = jobs.filter(function (r) { return (r.task || '').trim() && !r.owner; }).length;
     var top = null;
     people.forEach(function (n) { if (count[n] && (!top || count[n].owner > count[top].owner)) top = n; });
     var bits = [];
-    if (top && owned >= 3 && people.length > 1 && count[top].owner / owned > 0.5) bits.push(top + ' owns ' + (count[top].owner === owned ? 'all ' + owned : count[top].owner + ' of the ' + owned) + ' jobs with an owner. It’s worth asking which one they’d hand over first.');
+    // the busiest by how often their jobs come round, when everyone's jobs say how often
+    var allKnown = people.every(function (n) { return !count[n] || count[n].known === count[n].owner; }), busy = null;
+    if (allKnown) people.forEach(function (n) { if (count[n] && (!busy || count[n].times > count[busy].times)) busy = n; });
+    if (top && owned >= 3 && people.length > 1 && count[top].owner / owned > 0.5) {
+      if (busy && busy !== top) bits.push(top + ' owns ' + count[top].owner + ' of the ' + owned + ' jobs, but ' + busy + '’s jobs come round more often. Count how often, not only how many, before deciding anything moves.');
+      else bits.push(top + ' owns ' + (count[top].owner === owned ? 'all ' + owned : count[top].owner + ' of the ' + owned) + ' jobs with an owner' + (allKnown ? ', and they come round most often' : '') + '. It’s worth asking which one they’d hand over first.');
+    }
     if (open) bits.push(open === 1 ? 'One job still needs an owner.' : open + ' jobs still need an owner.');
+    var noFreq = jobs.filter(function (r) { return r.owner && !r.often; }).length;
+    if (noFreq) bits.push('Add how often to ' + (noFreq === 1 ? 'the job' : 'the ' + noFreq + ' jobs') + ' without it, so a daily job isn’t counted like a quarterly one.');
+    bits.push('A way to see the load, not a scorecard.');
     note.textContent = bits.join(' ');
   }
 
@@ -684,6 +718,7 @@
       ciBox.appendChild(fs);
     });
     var d = document.getElementById('ci-date'); if (d && d.value !== state.ci.date) d.value = state.ci.date;
+    dateSay();
     var j = document.getElementById('ci-jobs'); if (j && j.value !== state.ci.jobs) j.value = state.ci.jobs;
     if (actId) { var back = document.getElementById(actId); if (back) back.focus(); }
   }
@@ -705,7 +740,17 @@
   }
   document.getElementById('wk-print').addEventListener('click', function () { printOnly('owner-list'); });
   document.getElementById('ci-print').addEventListener('click', function () { printOnly('check-in'); });
-  document.getElementById('ci-date').addEventListener('input', function (e) { state.ci.date = e.target.value; save(); });
+  document.getElementById('ci-date').addEventListener('input', function (e) { state.ci.date = e.target.value; save(); dateSay(); });
+  // the date box shows the browser's own format (often 10/11/2026, which reads two ways), so the date is
+  // written out next to it too: "Mon 5 Oct 2026"
+  function dateSay() {
+    var d = document.getElementById('ci-date'); if (!d) return;
+    var o = document.getElementById('ci-date-say');
+    if (!o) { o = document.createElement('span'); o.id = 'ci-date-say'; o.className = 'wk-hint'; o.setAttribute('aria-hidden', 'true'); d.parentNode.insertBefore(o, d.nextSibling); }
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d.value || ''), t = '';
+    if (m) { var x = new Date(+m[1], +m[2] - 1, +m[3]); t = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][x.getDay()] + ' ' + x.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][x.getMonth()] + ' ' + x.getFullYear(); }
+    o.textContent = t; o.hidden = !t;
+  }
   document.getElementById('ci-jobs').addEventListener('input', function (e) { state.ci.jobs = e.target.value; save(); });
   document.getElementById('ci-add-jobs').addEventListener('click', function () {
     var have = {};
@@ -862,7 +907,7 @@
         [['owner', 'owner'], ['backup', 'backup'], ['often', 'how often']].forEach(function (f) {
           if (!r[f[0]]) return;
           if (!hit[f[0]]) hit[f[0]] = r[f[0]];
-          else if (fold(hit[f[0]]) !== fold(r[f[0]])) diffs.push({ kind: 'row', task: hit.task, key: f[0], label: hit.task + ' (' + f[1] + ')', mine: hit[f[0]], theirs: r[f[0]] });
+          else if (fold(hit[f[0]]) !== fold(r[f[0]])) diffs.push({ kind: 'row', task: hit.task, key: f[0], label: f[1].charAt(0).toUpperCase() + f[1].slice(1) + ' of “' + hit.task + '”', mine: hit[f[0]], theirs: r[f[0]] });
         });
       });
       if (!state.ci.date) state.ci.date = d.ci.date;
@@ -872,10 +917,14 @@
         [['full', 'how full'], ['thanks', 'thank-you'], ['slipped', 'what slipped']].forEach(function (f) {
           if (!theirs[f[0]]) return;
           if (!mine[f[0]]) mine[f[0]] = theirs[f[0]];
-          else if (fold(mine[f[0]]) !== fold(theirs[f[0]])) diffs.push({ kind: 'ci', who: n, key: f[0], label: 'Check-in, ' + n + ' (' + f[1] + ')', mine: mine[f[0]], theirs: theirs[f[0]] });
+          else if (fold(mine[f[0]]) !== fold(theirs[f[0]])) diffs.push({ kind: 'ci', who: n, key: f[0], label: n + '’s ' + f[1] + ' in the check-in', mine: mine[f[0]], theirs: theirs[f[0]] });
         });
       });
     }
+    // a backup who is also the owner can't cover: emptied, and the choices about it go too
+    var same = noSameBackup();
+    diffs = diffs.filter(function (df) { if (df.kind !== 'row' || df.key !== 'backup') return true; var r = state.rows.filter(function (x) { return fold(x.task) === fold(df.task); })[0]; return !(r && r.owner === df.theirs); });
+    diffs.same = same;
     team.value = state.team;
     // what was combined is what both now hold, so no "send a new link" until something changes
     sentSig = JSON.stringify(payload());
@@ -901,7 +950,7 @@
         if (b[1] === 'replace' && !empty && !window.confirm('Replace your list here with the one you were sent?')) { incoming = d; return; }
         var diffs = takeShared(d, b[1] === 'replace');
         inBox(); diffBox(diffs);
-        say((b[1] === 'replace' ? 'Opened the list you were sent.' : 'Combined.') + ' When you’ve made your changes, use “Send this list” to send it back.');
+        say((b[1] === 'replace' ? 'Opened the list you were sent.' : 'Combined.') + (diffs.same ? ' ' + (diffs.same === 1 ? 'On one job the owner was also the backup, so that backup place is empty now.' : 'On ' + diffs.same + ' jobs the owner was also the backup, so those backup places are empty now.') : '') + ' When you’ve made your changes, use “Send this list” to send it back.');
         var f = document.querySelector('#wk-diff button') || team; if (f) f.focus();
       });
       btns.appendChild(x);
@@ -909,7 +958,8 @@
     var sec = document.getElementById('owner-list');
     sec.insertBefore(box, sec.querySelector('h3').nextSibling);
   }
-  // after combining: each thing that is different, with a choice ("Payroll (owner): Ade here / Ben on the list you were sent")
+  // after combining: each thing that is different, with a choice
+  // ("Owner of “Payroll”: on this device Ade, on the list you were sent Ben. Keep: [Ade] [Ben]")
   function diffBox(diffs) {
     var old = document.getElementById('wk-diff'); if (old) old.remove();
     if (!diffs || !diffs.length) return;
@@ -920,23 +970,40 @@
     box.appendChild(h);
     diffs.forEach(function (df) {
       var row = document.createElement('div'); row.className = 'wk-diff-row';
-      var q = document.createElement('p'); q.textContent = df.label + ': ' + df.mine + ' here / ' + df.theirs + ' on the list you were sent. Keep which?';
+      // short answers (a name, "Weekly") go on the buttons; longer ones (a thank-you) are quoted above them
+      var short = String(df.mine).length <= 28 && String(df.theirs).length <= 28;
+      var q = document.createElement('p'); q.textContent = df.label + ': on this device ' + (short ? df.mine : '“' + df.mine + '”') + ', on the list you were sent ' + (short ? df.theirs : '“' + df.theirs + '”') + '.';
       var bs = document.createElement('div'); bs.className = 'wk-btns';
-      [['Keep ' + df.mine, false], ['Use ' + df.theirs, true]].forEach(function (b) {
-        var x = document.createElement('button'); x.type = 'button'; x.className = 'wk-btn wk-small'; x.textContent = b[0];
+      bs.setAttribute('role', 'group'); bs.setAttribute('aria-label', 'Keep which: ' + df.label);
+      var k = document.createElement('span'); k.className = 'wk-keep-k'; k.textContent = 'Keep:'; bs.appendChild(k);
+      [[short ? df.mine : 'This device’s', false, 'Keep ' + df.mine + ' (on this device)'], [short ? df.theirs : 'The one you were sent', true, 'Use ' + df.theirs + ' (on the list you were sent)']].forEach(function (b) {
+        var x = document.createElement('button'); x.type = 'button'; x.className = 'wk-btn wk-small'; x.textContent = b[0]; x.setAttribute('aria-label', b[2]);
         x.addEventListener('click', function () {
+          var extra = '';
           if (b[1]) {
-            if (df.kind === 'row') { var r = state.rows.filter(function (x) { return fold(x.task) === fold(df.task); })[0]; if (r) r[df.key] = df.theirs; }
+            if (df.kind === 'row') {
+              var r = state.rows.filter(function (x) { return fold(x.task) === fold(df.task); })[0];
+              if (r) {
+                r[df.key] = df.theirs;
+                // never owner and backup at once: the backup place is emptied (and its own choice goes)
+                if (r.owner && r.owner === r.backup) {
+                  if (df.key === 'owner') { r.backup = ''; extra = ' ' + r.owner + ' was the backup too, so the backup is empty now.'; }
+                  else { r.backup = ''; extra = ' ' + df.theirs + ' already owns it, so the backup stays empty.'; }
+                  Array.prototype.forEach.call(box.querySelectorAll('.wk-diff-row'), function (o) { if (o !== row && o.getAttribute('data-task') === fold(df.task) && o.getAttribute('data-key') === 'backup') o.remove(); });
+                }
+              }
+            }
             else { var p = state.ci.people[df.who] || (state.ci.people[df.who] = {}); p[df.key] = df.theirs; }
             save(); render();
           }
           row.remove();
-          say(b[1] ? 'Changed to ' + df.theirs + '.' : 'Kept ' + df.mine + '.');
+          say((b[1] ? 'Changed to ' + df.theirs + '.' : 'Kept ' + df.mine + '.') + extra);
           if (!box.querySelector('.wk-diff-row')) box.remove();
           var f = document.querySelector('#wk-diff button') || document.querySelector('.wk-send'); if (f) f.focus();
         });
         bs.appendChild(x);
       });
+      if (df.kind === 'row') { row.setAttribute('data-task', fold(df.task)); row.setAttribute('data-key', df.key); }
       row.appendChild(q); row.appendChild(bs); box.appendChild(row);
     });
     var sec = document.getElementById('owner-list');

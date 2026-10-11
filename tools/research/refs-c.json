@@ -37,7 +37,8 @@
    "interoception"
   ],
   "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#body"
+   "/book/understanding-1-feelings-in-depth.html#body",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://zenodo.org/record/1431811 ; https://psychclassics.yorku.ca/James/emotion.htm"
@@ -102,7 +103,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#body",
-   "/library/emotions.html#what-emotions-are"
+   "/library/emotions.html#what-emotions-are",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5390700/ ; https://www.ovid.com/journals/scan/fulltext/10.1093/scan/nsw154"
@@ -127,7 +129,8 @@
    "/book/chapter-4-in-depth.html#steps-one",
    "/book/self-2-now-in-depth.html#state",
    "/book/understanding-1-feelings-in-depth.html#naming",
-   "/library/emotions.html#affect-labeling"
+   "/library/emotions.html#affect-labeling",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17576282/"
@@ -196,7 +199,8 @@
    "/book/understanding-1-feelings-in-depth.html#naming",
    "/book/understanding-11-healing-in-depth.html#without-them",
    "/book/understanding-8-loss-in-depth.html#support",
-   "/library/emotions.html#expressive-writing"
+   "/library/emotions.html#expressive-writing",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://pubpeer.com/publications/0003309D2A9A1CBBA6AF364BBCC9B2 (PMID 3745650)"
@@ -219,7 +223,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#without-them",
-   "/library/emotions.html#expressive-writing"
+   "/library/emotions.html#expressive-writing",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073523/"
@@ -241,7 +246,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#words",
-   "/library/emotions.html#emotional-granularity"
+   "/library/emotions.html#emotional-granularity",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://www.psychologicalscience.org/journals/current-directions/0963721414550708/ ; https://www.affective-science.org/pubs/2015/kashdan-et-all-unpacking-emotion-differentiation-2015.pdf"
@@ -262,7 +268,8 @@
    "thought-suppression"
   ],
   "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#layers"
+   "/book/understanding-1-feelings-in-depth.html#layers",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://dtg.sites.fas.harvard.edu/DANWEGNER/pub/Wegner,Schneider,Carter,&White%201987.pdf ; https://brainblogger.com/2009/12/09/white-bears-the-paradox-of-mental-suppression (cites DOI)"
@@ -305,7 +312,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#spread",
-   "/library/emotions.html#emotional-contagion"
+   "/library/emotions.html#emotional-contagion",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://search.ub.tum.de/vufind/Record/DE-604.BV009636515 ; https://catalogue.bnf.fr/ark:/12148/cb37435416b"
@@ -392,7 +400,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#urges",
-   "/library/emotions.html#anger"
+   "/library/emotions.html#anger",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/0146167202289002 ; https://public.websites.umich.edu/~bbushman/PSPB02.pdf"
@@ -503,7 +512,8 @@
    "/book/understanding-1-feelings-in-depth.html#naming",
    "/book/understanding-9-minds-in-depth.html#autism",
    "/signal-translator.html#lookfor",
-   "/wired-differently-in-depth.html#alexithymia"
+   "/wired-differently-in-depth.html#alexithymia",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3731793/ ; https://openaccess.city.ac.uk/4531"
@@ -526,7 +536,8 @@
   "mentioned_on": [
    "/book/understanding-7-worth-in-depth.html#hiding",
    "/book/understanding-7-worth-in-depth.html#shame-guilt",
-   "/library/emotions.html#shame-and-guilt"
+   "/library/emotions.html#shame-and-guilt",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://www.guilford.com/re/9781572307155 ; https://metapsychology.net/?p=1826"
@@ -619,7 +630,8 @@
    "/book/understanding-8-loss-in-depth.html#support",
    "/grief.html#grief",
    "/library/emotions.html#grief-and-change",
-   "/library/emotions.html#resilience"
+   "/library/emotions.html#resilience",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/14736317/"
@@ -702,7 +714,8 @@
    "emotions"
   ],
   "mentioned_on": [
-   "/library/emotions.html#what-emotions-are"
+   "/library/emotions.html#what-emotions-are",
+   "/book/understanding-1-feelings.html"
   ],
   "verified": true,
   "verified_by": "https://eprints.gla.ac.uk/178385 ; https://www.psychologicalscience.org/publications/emotional-expressions-reconsidered-challenges-to-inferring-emotion-from-human-facial-movements.html"
@@ -791,7 +804,8 @@
    "/book/understanding-1-feelings-in-depth.html#spread",
    "/book/understanding-12-helping-in-depth.html#compassion",
    "/library/communication.html#empathy-vs-sympathy",
-   "/library/connection.html#compassion-fatigue"
+   "/library/connection.html#compassion-fatigue",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://pure.mpg.de/pubman/item/item_2036548_8"
@@ -814,7 +828,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#compassion",
-   "/library/connection.html#compassion-fatigue"
+   "/library/connection.html#compassion-fatigue",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://www.ojp.gov/ncjrs/virtual-library/abstracts/compassion-fatigue-coping-secondary-traumatic-stress-disorder-those ; https://identity.wellcomecollection.org/works/hbkt3xdu"
@@ -859,7 +874,8 @@
    "/book/self-3-next-in-depth.html#control",
    "/book/understanding-10-values-in-depth.html#control",
    "/book/understanding-2-stress-in-depth.html#demand",
-   "/library/stress.html#appraisal"
+   "/library/stress.html#appraisal",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://wellcomecollection.org/works/b5zr7tvm ; https://krimdok.uni-tuebingen.de/Record/1617692433"
@@ -922,7 +938,8 @@
    "flooding"
   ],
   "mentioned_on": [
-   "/book/understanding-2-stress-in-depth.html#flooding"
+   "/book/understanding-2-stress-in-depth.html#flooding",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/19455173/"
@@ -943,7 +960,8 @@
    "allostatic-load"
   ],
   "mentioned_on": [
-   "/book/understanding-2-stress-in-depth.html#load"
+   "/book/understanding-2-stress-in-depth.html#load",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8379800/ (DOI not confirmed in search)"
@@ -1030,7 +1048,8 @@
   "mentioned_on": [
    "/book/chapter-1-in-depth.html#state",
    "/book/understanding-2-stress-in-depth.html#load",
-   "/library/stress.html#sleep-and-mood"
+   "/library/stress.html#sleep-and-mood",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17956744 ; https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml"
@@ -1075,7 +1094,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-2-stress-in-depth.html#settle",
-   "/library/calm.html#slow-breathing"
+   "/library/calm.html#slow-breathing",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/"
@@ -1122,7 +1142,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-2-stress-in-depth.html#rest",
-   "/library/calm.html#breaks"
+   "/library/calm.html#breaks",
+   "/book/understanding-2-stress.html"
   ],
   "verified": true,
   "verified_by": "https://kops.uni-konstanz.de/entities/publication/901f4299-e3f5-46af-99cb-a27bdd4bca71 ; https://www.sowi.uni-mannheim.de/en/sonnentag/research/measures-and-tools"
@@ -1433,7 +1454,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-6-change-in-depth.html#why-hard",
-   "/library/motivation.html#habits-and-cues"
+   "/library/motivation.html#habits-and-cues",
+   "/book/understanding-6-change.html"
   ],
   "verified": true,
   "verified_by": "https://dornsife.usc.edu/wendy-wood/wp-content/uploads/sites/183/2023/10/Wood.Quinn_.Kashy_.2002_Habits_in_everyday_life.pdf ; https://www.scinapse.io/papers/2099800158 (DOI not confirmed)"
@@ -1482,7 +1504,8 @@
    "/book/understanding-6-change-in-depth.html#faq",
    "/book/understanding-6-change-in-depth.html#slips",
    "/book/understanding-6-change-in-depth.html#small",
-   "/library/motivation.html#habit-formation"
+   "/library/motivation.html#habit-formation",
+   "/book/understanding-6-change.html"
   ],
   "verified": true,
   "verified_by": "https://api.crossref.org/works/10.1002/ejsp.674 ; https://repositorio.ispa.pt/handle/10400.12/3364 ; https://bps.org.uk/research-digest/how-form-habit"
@@ -1533,7 +1556,8 @@
    "/book/understanding-10-values-in-depth.html#small-acts",
    "/book/understanding-6-change-in-depth.html#small",
    "/library/motivation.html#implementation-intentions",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-6-change.html"
   ],
   "verified": true,
   "verified_by": "https://www.socmot.uni-konstanz.de/publications/implementation-intentions-strong-effects-simple-plans ; https://kops.uni-konstanz.de/entities/publication/cd4fd110-827b-4d7d-b857-3ed414c7f0f0"
@@ -1649,7 +1673,8 @@
    "change"
   ],
   "mentioned_on": [
-   "/book/understanding-6-change-in-depth.html#setup"
+   "/book/understanding-6-change-in-depth.html#setup",
+   "/book/understanding-6-change.html"
   ],
   "verified": true,
   "verified_by": "https://catalog.saclibrary.org/Record/.b1896347x ; https://identity.wellcomecollection.org/works/usu4u2um (Yale University Press, New Haven, 2008)"
@@ -1692,7 +1717,8 @@
   "mentioned_on": [
    "/book/understanding-6-change-in-depth.html#ready",
    "/library/motivation.html#stages-of-change",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-6-change.html"
   ],
   "verified": true,
   "verified_by": "https://digitalcommons.uri.edu/psy_facpubs/572 (DOI not confirmed)"
@@ -1716,7 +1742,9 @@
    "/book/understanding-12-helping-in-depth.html#listening",
    "/book/understanding-6-change-in-depth.html#ready",
    "/library/communication.html#asking-questions",
-   "/library/motivation.html#stages-of-change"
+   "/library/motivation.html#stages-of-change",
+   "/book/understanding-6-change.html",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://motivationalinterviewing.org/motivational-interviewing-preparing-people-change-addictive-behavior ; https://library.usi.edu/record/155252 (Guilford, New York, 1991)"
@@ -1764,7 +1792,9 @@
    "/book/understanding-6-change-in-depth.html#slips",
    "/book/understanding-7-worth-in-depth.html#self-compassion",
    "/complacency-in-depth.html#sources",
-   "/library/connection.html#self-compassion"
+   "/library/connection.html#self-compassion",
+   "/book/understanding-6-change.html",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22645164/"
@@ -1871,7 +1901,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#directions",
-   "/library/motivation.html#values"
+   "/library/motivation.html#values",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://contextualscience.org/publications/hayes_strosahl_wilson_1999 ; https://search.ub.tum.de/vufind/Record/DE-604.BV026513694 (Guilford, New York, 1999)"
@@ -1903,7 +1934,8 @@
    "/library/life.html#teenagers",
    "/library/motivation.html#pillars",
    "/library/motivation.html#self-determination-theory",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/11392867/ ; https://www.deepdyve.com/lp/doc/40grO70c00"
@@ -1930,7 +1962,8 @@
    "/book/understanding-7-worth-in-depth.html#comparison",
    "/book/understanding-7-worth-in-depth.html#self-compassion",
    "/library/connection.html#self-compassion",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://www.scinapse.io/papers/1969977883 ; https://aassjournal.com/article-1-823-fa.html (reference list gives DOI)"
@@ -1972,7 +2005,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-7-worth-in-depth.html#comparison",
-   "/library/motivation.html#self-esteem"
+   "/library/motivation.html#self-esteem",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://www.slideshare.net/slideshow/does-high-selfesteem-cause-better-performance/12141104 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9310667/ (reference list with DOI)"
@@ -1994,7 +2028,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-7-worth-in-depth.html#shields",
-   "/library/motivation.html#perfectionism"
+   "/library/motivation.html#perfectionism",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://eprints.lse.ac.uk/101352 ; https://researchportal.bath.ac.uk/en/publications/perfectionism-is-increasing-over-time-a-meta-analysis-of-birth-co/"
@@ -2037,7 +2072,8 @@
    "parenting"
   ],
   "mentioned_on": [
-   "/book/understanding-7-worth-in-depth.html#others"
+   "/book/understanding-7-worth-in-depth.html#others",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://www.scinapse.io/papers/1972987799 ; https://www.columbia.edu/cu/psychology/courses/3615/Readings/Mueller_Dweck.pdf"
@@ -2060,7 +2096,8 @@
    "/book/understanding-7-worth-in-depth.html#comparison",
    "/growing-up-in-depth.html#research",
    "/growing-up-in-depth.html#world",
-   "/library/life.html#social-comparison"
+   "/library/life.html#social-comparison",
+   "/book/understanding-7-worth.html"
   ],
   "verified": true,
   "verified_by": "https://www.scinapse.io/papers/2157300266 ; https://www2.psych.ubc.ca/%7Eschaller/528Readings/Festinger1954.pdf"
@@ -2125,7 +2162,8 @@
   "mentioned_on": [
    "/book/understanding-8-loss-in-depth.html#waves",
    "/grief.html#grief",
-   "/library/emotions.html#grief-and-change"
+   "/library/emotions.html#grief-and-change",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://search.worldcat.org/title/4238 ; https://adams.marmot.org/Record/.b1000175x (New York: Macmillan, 1969)"
@@ -2148,7 +2186,8 @@
    "/book/understanding-8-loss-in-depth.html#waves",
    "/grief.html#grief",
    "/library/emotions.html#grief-and-change",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://research-portal.uu.nl/en/publications/the-dual-process-model-of-coping-with-bereavement-rationale-and-d/ ; https://www.suicideinfo.ca/resource/siecno-19990100/ (Death Studies 23(3), 197-224; DOI not confirmed)"
@@ -2191,7 +2230,8 @@
   "mentioned_on": [
    "/book/understanding-8-loss-in-depth.html#unseen",
    "/library/life.html#ambiguous-loss",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://bookshare.org/browse/book/2050897 (Harvard University Press, 1999)"
@@ -2211,7 +2251,8 @@
    "grief"
   ],
   "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#unseen"
+   "/book/understanding-8-loss-in-depth.html#unseen",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://openlibrary.org/books/OL354418M ; https://ebsco.com/research-starters/psychology/disenfranchised-grief (Lexington Books, 1989)"
@@ -2254,7 +2295,8 @@
    "/book/understanding-8-loss-in-depth.html#bonds",
    "/grief.html#grief",
    "/library/emotions.html#grief-and-change",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://www.routledge.com/Continuing-Bonds-New-Understandings-of-Grief/Klass-Nickman-Silverman/p/book/9781560323396 ; https://catalog.flo.org/Record/095c71de-f776-4196-80d5-e5b88798efef (Washington, DC: Taylor & Francis, 1996)"
@@ -2275,7 +2317,8 @@
    "change"
   ],
   "mentioned_on": [
-   "/book/understanding-8-loss-in-depth.html#changes"
+   "/book/understanding-8-loss-in-depth.html#changes",
+   "/book/understanding-8-loss.html"
   ],
   "verified": true,
   "verified_by": "https://narrativestudies.lib.unb.ca/bibcite/reference/16554 (Reading, MA: Addison-Wesley, 1980)"
@@ -2598,7 +2641,9 @@
    "/library/wiring.html#double-empathy",
    "/signal-translator.html#lookfor",
    "/tools/chat/deep.json",
-   "/wired-differently-in-depth.html#double-empathy"
+   "/wired-differently-in-depth.html#double-empathy",
+   "/book/understanding-4-communication.html",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656 ; https://nottingham-repository.worktribe.com/output/5141376 ; https://pure.qub.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/"
@@ -2622,7 +2667,8 @@
   "mentioned_on": [
    "/book/understanding-3-seeing-in-depth.html#reasons",
    "/book/understanding-9-minds-in-depth.html#autism",
-   "/library/wiring.html#double-empathy"
+   "/library/wiring.html#double-empathy",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5286449/ ; https://brainlab.sitehost.iu.edu/doc/srep40700.pdf"
@@ -2650,7 +2696,8 @@
    "/book/understanding-9-minds-in-depth.html#masking",
    "/library/wiring.html#masking",
    "/tools/chat/deep.json",
-   "/wired-differently-in-depth.html#autistic"
+   "/wired-differently-in-depth.html#autistic",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ ; https://discovery.ucl.ac.uk/id/eprint/10056287/"
@@ -2699,7 +2746,8 @@
    "/book/understanding-2-stress-in-depth.html#ladder",
    "/book/understanding-6-change-in-depth.html#slips",
    "/book/understanding-9-minds-in-depth.html#masking",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32851204/ ; https://pdxscholar.library.pdx.edu/socwork_fac/378"
@@ -2812,7 +2860,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-9-minds-in-depth.html#senses",
-   "/library/wiring.html#sensory-processing-sensitivity"
+   "/library/wiring.html#sensory-processing-sensitivity",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9248053/ ; https://sensitivityresearch.com/publication/sensory-processing-sensitivity-and-its-relation-to-introversion-and-emotionality"
@@ -2877,7 +2926,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-9-minds-in-depth.html#adhd",
-   "/library/wiring.html#adhd-basics"
+   "/library/wiring.html#adhd-basics",
+   "/book/understanding-9-minds.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9000892/ ; https://sciences.ucf.edu/psychology/childrenslearningclinic/wp-content/uploads/sites/24/2013/08/Barkley-1997-Psych-Bulletin.pdf"
@@ -3068,7 +3118,8 @@
    "meaning"
   ],
   "mentioned_on": [
-   "/book/understanding-10-values-in-depth.html#flourishing"
+   "/book/understanding-10-values-in-depth.html#flourishing",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://thefpr.org/wp-content/uploads/Ryff1989_happiness.pdf ; https://worlddatabaseofhappiness.eur.nl/publications/happiness-is-everything-or-is-it-explorations-on-the-meaning-of-psychological-well-being-3033/"
@@ -3089,7 +3140,8 @@
    "meaning"
   ],
   "mentioned_on": [
-   "/book/understanding-10-values-in-depth.html#meaning"
+   "/book/understanding-10-values-in-depth.html#meaning",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://emerge.ucsd.edu/r_2vxgbhk97jlisyj/ ; https://data.gesis.org/gesiskg/resource/zis-StegerFrazierOishiKaler2006The"
@@ -3110,7 +3162,8 @@
    "meaning"
   ],
   "mentioned_on": [
-   "/book/understanding-10-values-in-depth.html#meaning"
+   "/book/understanding-10-values-in-depth.html#meaning",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://research.aalto.fi/en/publications/the-three-meanings-of-meaning-in-life-distinguishing-coherence-pu/ ; https://researchportal.helsinki.fi/en/publications/the-three-meanings-of-meaning-in-life-distinguishing-coherence-pu/ (DOI not confirmed in search)"
@@ -3174,7 +3227,8 @@
   "mentioned_on": [
    "/book/understanding-10-values-in-depth.html#clashes",
    "/book/understanding-10-values-in-depth.html#different-values",
-   "/book/understanding-10-values-in-depth.html#finding"
+   "/book/understanding-10-values-in-depth.html#finding",
+   "/book/understanding-10-values.html"
   ],
   "verified": true,
   "verified_by": "https://cris.huji.ac.il/en/publications/universals-in-the-content-and-structure-of-values-theoretical-adv/ ; https://publikationen.ub.uni-frankfurt.de/frontdoor/index/index/year/2009/docId/11504 (DOI not shown)"
@@ -3339,19 +3393,21 @@
   "title": "Does asking about suicide and related behaviours induce suicidal ideation? What is the evidence?",
   "venue": "Psychological Medicine, 44(16), 3361–3363",
   "doi": null,
-  "url": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/24998511/",
   "kind": "review",
-  "finding": null,
-  "strength": null,
+  "finding": "A review of published studies in adults and adolescents, in the general population and in groups at higher risk. None found a significant rise in suicidal thoughts after people were asked about suicide; talking about it may even lower them.",
+  "strength": "moderate: a short review of a small number of studies that measured thoughts, not deaths; a 2018 meta-analysis reached a similar conclusion.",
   "topics": [
    "helping",
    "crisis"
   ],
   "mentioned_on": [
-   "/book/understanding-12-helping-in-depth.html#crisis"
+   "/book/understanding-12-helping-in-depth.html#crisis",
+   "/book/understanding-12-helping.html"
   ],
-  "verified": false,
-  "note": "NOT VERIFIED (re-checked by search): the review and its finding (no significant increase in suicidal ideation from asking) were confirmed, published online 7 July 2014 by Cambridge University Press; the DOI was not shown and no result was explicitly tied to the paper (candidate PubMed 24998511, unconfirmed)."
+  "verified": true,
+  "note": "Re-checked 2026-10-11: a title search returned the PubMed record 24998511 and the Cambridge (Psychological Medicine) abstract. DOI not confirmed, so the PubMed record is the link.",
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24998511/ (title, authors and abstract matched by search, 2026-10-11)"
  },
  {
   "id": "darley-latane-1968",
@@ -3480,7 +3536,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#receiving",
-   "/library/connection.html#prosocial-spending"
+   "/library/connection.html#prosocial-spending",
+   "/book/understanding-12-helping.html"
   ],
   "verified": true,
   "verified_by": "https://stafforini.com/works/dunn-2008-spending-money-others/ ; https://worlddatabaseofhappiness.eur.nl/studies/dunn-et-al-2008-study-us-2008-1-1760 ; https://sciencedaily.com/releases/2008/03/080320150034.htm"
@@ -3566,7 +3623,8 @@
    "resilience"
   ],
   "mentioned_on": [
-   "/book/understanding-11-healing-in-depth.html#self-care"
+   "/book/understanding-11-healing-in-depth.html#self-care",
+   "/book/understanding-11-healing.html"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/8827649/ ; https://springeropen.altmetric.com/details/689593"
@@ -3725,5 +3783,28 @@
   ],
   "verified": true,
   "verified_by": "https://deepblue.lib.umich.edu/items/52e9cfc7-5837-41db-92b3-a00d2421658b ; https://healthdesign.org/knowledge-repository/restorative-benefits-nature-toward-integrative-framework"
+ },
+ {
+  "id": "ekman-friesen-1971",
+  "authors": "Ekman, P., & Friesen, W. V.",
+  "year": 1971,
+  "title": "Constants across cultures in the face and emotion",
+  "venue": "Journal of Personality and Social Psychology, 17(2), 124–129",
+  "doi": "10.1037/h0030377",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/5542557/",
+  "kind": "study",
+  "finding": "In the Fore people of Papua New Guinea, who had seen little Western media, adults and children mostly matched short emotion stories to the same facial expressions that Western people chose. This was taken as evidence that a few facial expressions of emotion are shared across cultures.",
+  "strength": "debated: a classic, widely cited study; later critics (Russell 1994; Barrett and colleagues 2019) argue the method inflated agreement, and basic-emotion researchers dispute those critiques.",
+  "topics": [
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#body",
+   "/library/emotions.html#what-emotions-are",
+   "/book/understanding-1-feelings.html"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/5542557/ ; https://doi.org/10.1037/h0030377",
+  "note": "PMID 5542557; DOI confirmed via the PubMed record (no abstract there; the method is summarised from secondary sources)."
  }
 ]

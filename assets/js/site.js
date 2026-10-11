@@ -1267,7 +1267,8 @@
     // "Put it all together": a short pointer to the full path package and report on the self, relationship,
     // workpaper and program pages, just above the end of the reading
     var fpMain = document.querySelector('main.read');
-    if (fpMain && hereSection && /^(self|relationships|workpapers|program|book)$/.test(hereSection.id) && !/^\/(full-path|self-path)\.html$|^\/workpapers\/fill\//.test(current) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+    if (fpMain && hereSection && /^(self|relationships|workpapers|program|book)$/.test(hereSection.id) && !/^\/(full-path|self-path)\.html$|^\/workpapers\/fill\//.test(current) &&
+        !WORKSPACE.test(current) && !/^\/(teens|sharing-a-room|gaming-and-time-together|en-espanol|friends|grief|coming-out|check-ins|foster-and-kinship|family-rifts|co-parenting|on-my-own)\.html$/.test(current) && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
       var solo = hereSection.id === 'self';
       var fpBox = el('aside', { class: 'tol-fp-note', 'aria-label': 'The full path package' },
         '<p class="tol-fp-k">Put it all together</p>' +
@@ -1299,7 +1300,7 @@
           if (!window.TOLReading) return;
           var host = el('div', { class: 'tol-read-host' });
           readMain.appendChild(host);
-          try { if (!window.TOLReading.mount(host, { heading: 'none' })) host.remove(); } catch (e) { host.remove(); }
+          try { var rc = window.TOLReading.mount(host, { heading: 'none' }); if (!rc || rc.hidden) host.remove(); } catch (e) { host.remove(); }   // nothing that fits this page: no card
         };
         document.head.appendChild(rs);
       };
@@ -2212,13 +2213,23 @@
     book: ['connection', 'talking', 'home', 'kindness'], workpapers: ['home', 'talking', 'work', 'connection'], program: ['home', 'talking', 'work'],
     tools: ['focus', 'calm', 'talking', 'mind'], media: ['rest', 'calm', 'outdoors', 'sleep'], start: null, about: null
   };
+  var PAGE_TIPS = [
+    [/^\/(gaming-and-time-together|money-together|different-hours|long-distance|empty-nest|two-faiths|when-one-is-ill|how-to-stop-fighting-with-your-partner|more-than-two|coming-home|retired-together|new-parent|pursue-withdraw|neurodivergent-relationships)\.html$/, ['connection', 'talking', 'home', 'calm']],
+    [/^\/friends\.html$/, ['friends', 'connection', 'talking']],
+    [/^\/teens\.html$/, ['friends', 'calm', 'selftalk', 'body']],
+    [/^\/(parents|grandparents|grown-up-children|foster-and-kinship|family-rifts|adhd-kids|co-parenting|family-obligations|on-my-own|caregivers|coming-out)\.html$/, ['family', 'talking', 'calm', 'selftalk']],
+    [/^\/(work|appreciation-at-work|wiring-card|groups)\.html$/, ['work', 'talking', 'focus']],
+    [/^\/(sharing-a-room|share-the-load|lemonade-stand|chore-chart-for-couples|invisible-labor-mental-load)\.html$/, ['home', 'talking', 'calm']],
+    [/^\/(calming-supplements|ladder|upset-right-now|wp-11|soundscapes)\.html$/, ['calm', 'body', 'sleep', 'rest']],
+    [/^\/grief\.html$/, ['selftalk', 'rest', 'body']]
+  ];
   var tipLib = null, tipWaiting = [];
   window.TOLTips = {
     // cb([title, body, topicLabel]) with a tip from the library, preferring the given topics
     get: function (topics, cb, seed) {
       function pick() {
         var L = tipLib, list = L.tips, pool = topics ? list.filter(function (t) { return topics.indexOf(t[0]) !== -1; }) : list;
-        if (!pool.length || (topics && Math.random() < 0.25 && seed == null)) pool = list;
+        if (!pool.length) pool = list;   // (a page with topics only ever gets tips on those topics)
         var t = pool[seed != null ? seed % pool.length : Math.floor(Math.random() * pool.length)];
         cb([t[1], t[2], L.cats[t[0]] || '']);
       }
@@ -2233,10 +2244,14 @@
   };
   function addTip(body) {
     if (body.hasAttribute('data-no-tip') || NO_TIPS.indexOf(current) !== -1 || /^\/legal\//.test(current)) return;
+    // someone sent to a tool sees the tool: no tip under it
+    if (WORKSPACE.test(current) || /^\/(check-ins|pursue-withdraw|en-espanol)\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     var d = new Date(), seed = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate();
     for (var i = 0; i < current.length; i++) seed = (seed * 31 + current.charCodeAt(i)) % 100003;
     var sec = body.getAttribute('data-sec'), topics = TIP_TOPICS[sec] || null;
+    // the guides about one situation get tips that fit it (no "check on a neighbour" on a page about gaming)
+    for (var pt = 0; pt < PAGE_TIPS.length; pt++) if (PAGE_TIPS[pt][0].test(current)) { topics = PAGE_TIPS[pt][1]; break; }
     var card = el('aside', { class: 'tol-tip', 'aria-label': 'A little tip for today' },
       '<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="52" height="52">' +
       '<div><p class="tol-tip-k">Little tip for today<span class="tol-tip-topic"></span></p><p class="tol-tip-h"></p><p class="tol-tip-b"></p>' +
@@ -2376,6 +2391,46 @@
   // above all, a link, a card, a form field, or a bar fixed at the bottom of the screen (a privacy note, a
   // game's Full screen button). If it would, he drops his name and steps up just above it, and goes back
   // down once the way is clear again.
+  // Is any text someone could be reading (or an "In short" box) under this floating button's box? Samples a grid
+  // of points over the box, and for each element found there checks where its words really are on screen.
+  var INSHORT = '.tol-inshort, [data-in-short], .pc-short, [aria-label="In short"]';
+  function wordsUnder(r, self) {
+    if (!r || !r.width) return false;
+    var R = { left: r.left - 3, right: r.right + 3, top: r.top - 3, bottom: r.bottom + 3 }, seen = [], rng = document.createRange();
+    function hits(q) { return q.width && q.height && q.left < R.right && q.right > R.left && q.top < R.bottom && q.bottom > R.top; }
+    function skip(n) {
+      return !n || n === document.body || n === document.documentElement || n === self || self.contains(n) || n.tagName === 'MAIN' ||
+        !!n.closest('.tol-pud-fab, .tol-breathe-btn, .tol-top, .tol-cw, .tol-cw-card, .tol-wx, .tol-bar, .tol-panel, .tol-sharesheet, [role="dialog"], [aria-hidden="true"], .tol-toast, .tol-planted, svg, canvas, video, img');
+    }
+    var was = self.style.pointerEvents; self.style.pointerEvents = 'none';
+    var found = false;
+    try {
+      var stepX = Math.max(8, Math.min(14, r.width / 3)), stepY = Math.max(8, Math.min(14, r.height / 3));
+      for (var y = r.top + 2; y <= r.bottom - 1 && !found; y += stepY) {
+        for (var x = r.left + 2; x <= r.right - 1 && !found; x += stepX) {
+          if (x < 0 || y < 0 || x >= innerWidth || y >= innerHeight) continue;
+          var n = document.elementFromPoint(x, y);
+          if (skip(n) || seen.indexOf(n) !== -1) continue;
+          seen.push(n);
+          var box = n.closest(INSHORT);
+          if (box && hits(box.getBoundingClientRect())) { found = true; break; }
+          // the words inside this element (a few hundred text pieces at most)
+          var w = document.createTreeWalker(n, NodeFilter.SHOW_TEXT, null), t, k = 0;
+          while ((t = w.nextNode()) && k++ < 300) {
+            if (!/\S/.test(t.nodeValue)) continue;
+            rng.selectNodeContents(t);
+            var rs = rng.getClientRects();
+            for (var j = 0; j < rs.length; j++) if (hits(rs[j])) { found = true; break; }
+            if (found) break;
+          }
+        }
+      }
+      // an "In short" box right beside him counts even where there are no words under him
+      if (!found) Array.prototype.some.call(document.querySelectorAll(INSHORT), function (b) { var q = b.getBoundingClientRect(); return (found = !!(q.width && q.left < R.right + 12 && q.right > R.left - 12 && q.top < R.bottom + 12 && q.bottom > R.top - 12)); });
+    } catch (e) { found = false; }
+    self.style.pointerEvents = was;
+    return found;
+  }
   function keepFabClear(fab) {
     var PRESS = 'a[href], button, input, select, textarea, summary, label, [role="button"], [tabindex]:not([tabindex="-1"]), [data-tol-exit]';
     var busy = false, strict = true;   // strict (first look, resize): anything to press; while scrolling, only quick-exit buttons and fixed bars
@@ -2399,6 +2454,10 @@
     function check() {
       busy = false;
       if (!fab.isConnected || fab.getClientRects().length === 0) return;
+      // measure where he would be with nothing tucked away (no visible jump while measuring), then settle
+      var had = { peek: fab.classList.contains('is-peek'), face: fab.classList.contains('is-face') };
+      fab.style.transition = 'none';
+      fab.classList.remove('is-peek', 'is-face');
       fab.style.removeProperty('bottom');
       var r = fab.getBoundingClientRect(), n = under(r);
       if (n && fab.classList.contains('is-named')) { fab.classList.remove('is-named'); r = fab.getBoundingClientRect(); n = under(r); }
@@ -2408,9 +2467,24 @@
         fab.style.setProperty('bottom', lift + 'px', 'important');
         r = fab.getBoundingClientRect(); n = under(r);
       }
+      // never over words someone is reading: first he drops his name, then just his face, then he tucks into
+      // the edge of the screen as a small tab (a tap or a keyboard focus still opens him), and comes back out
+      // as soon as the space beside the words is clear again. Beside an "In short" box he always tucks away.
+      var face = false, peek = false;
+      if (wordsUnder(r, fab)) {
+        if (fab.classList.contains('is-named')) { fab.classList.remove('is-named'); r = fab.getBoundingClientRect(); }
+        if (innerWidth > 560 && wordsUnder(r, fab)) { fab.classList.add('is-face'); face = true; r = fab.getBoundingClientRect(); }
+        if (wordsUnder(r, fab)) peek = true;
+      }
+      fab.classList.toggle('is-peek', had.peek); fab.classList.toggle('is-face', had.face);
+      void fab.offsetWidth;
+      fab.style.transition = '';
+      fab.classList.toggle('is-face', face); fab.classList.toggle('is-peek', peek);
+      fab.classList.remove('is-wait');
     }
     function soon(e) { strict = !(e && e.type === 'scroll'); if (!busy) { busy = true; requestAnimationFrame(check); } }
-    setTimeout(check, 60); setTimeout(check, 1200);
+    setTimeout(check, 60); setTimeout(check, 1200); setTimeout(check, 3000);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { soon(); });
     window.addEventListener('scroll', soon, { passive: true });
     window.addEventListener('resize', soon);
   }
@@ -2424,8 +2498,8 @@
       return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
         greeting: 'Hello! I’m Professor Puddles. Curious about something on “' + title.slice(0, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
     }
-    var fab = el('button', { type: 'button', class: 'tol-pud-fab', 'aria-label': 'Ask Professor Puddles about this page', title: 'Ask Professor Puddles' },
-      '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">Ask Professor Puddles</span>');
+    var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': T('Ask Professor Puddles about this page', 'Pregúntale al Profesor Puddles (responde sobre todo en inglés)'), title: T('Ask Professor Puddles', '¿Hablamos? (sobre todo en inglés)') },
+      '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + T('Ask Professor Puddles', '¿Hablamos?') + '</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
     if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); }
     // on a phone he is a slim tab at the edge; for the first few seconds he shows his name, so people know he's there
@@ -2446,8 +2520,10 @@
     if (!main.querySelector('.tol-pud-end')) {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
+        (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Por ahora responde sobre todo en inglés, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +
+        '<button type="button" class="tol-pud-card-go">💧 Pregúntale al Profesor Puddles</button>' :
         '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
-        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(title.replace(/[?.!:]+$/, '').slice(0, 60)) + '”' : 'Ask Professor Puddles') + '</button>');
+        '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(title.replace(/[?.!:]+$/, '').slice(0, 60)) + '”' : 'Ask Professor Puddles') + '</button>'));
       endBox.querySelector('button').addEventListener('click', function () { openPud(opts(title && current !== '/index.html' ? 'Tell me more about ' + title.replace(/[?.!:]+$/, '') : '')); /* the home page's headline isn't a topic: just say hello */ });
       main.appendChild(endBox);
     }
@@ -2466,7 +2542,7 @@
   ];
   function buildPuddlesCards(body) {
     var main = document.querySelector('main.read');
-    if (!main || body.classList.contains('is-game') || body.hasAttribute('data-no-pudcards') || workMode() || sensitivePage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
+    if (!main || body.classList.contains('is-game') || body.hasAttribute('data-no-pudcards') || workMode() || sensitivePage() || esPage() || /^\/(index|ask|whats-new|pause-and-play)\.html$/.test(current) ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]')) return;
     var sec = body.getAttribute('data-sec') || '', course = /^\/(book|workpapers|learn)\//.test(current) || /^(book|workpapers|program|self|relationships|start|tools)$/.test(sec);
     if (!course) return;
@@ -3130,11 +3206,14 @@
   }
 
   // ---- a gentle offer on the first visit: Quiet mode, Easy reading or larger text, one tap each ----
+  // Shown once per visit (on the first page of the visit where it fits), on up to three visits, and never again
+  // once someone picks an option or says No thanks. Never inside a tool, between its button and its result.
   function comfortOffer(body) {
-    if (lsGet('tol-comfort-offer') || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
+    var seenBefore = lsGet('tol-comfort-offer') || '', visits = seenBefore === 'shown' ? 1 : (+(/^shown:(\d+)$/.exec(seenBefore) || [0, 0])[1] || 0);
+    if (seenBefore === 'done' || visits >= 3 || ssGet('tol-offer-seen') || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
-    lsSet('tol-comfort-offer', 'shown'); // offered once; Settings at the top is always there
+    lsSet('tol-comfort-offer', 'shown:' + (visits + 1)); ssSet('tol-offer-seen', '1'); // once this visit; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
       '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
       '<p class="tol-offer-row"><button type="button" data-offer="quiet">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
@@ -3149,11 +3228,16 @@
       var tgt = (nx && nx.matches && nx.matches('h1, h2, h3, p, section, header') ? nx : null) || document.querySelector('main h1, main h2');
       if (tgt) { if (!tgt.hasAttribute('tabindex')) tgt.setAttribute('tabindex', '-1'); tgt.focus({ preventScroll: true }); } else if (m) m.focus({ preventScroll: true });
     });
-    var intro = main.querySelector('[data-home-intro]'), head = main.querySelector('.read-head');
+    var intro = main.querySelector('[data-home-intro]'), head = main.querySelector('.read-head'), slot = main.querySelector('[data-offer-slot]');
+    // a tool (a form with a button and a result below it) is never split: the offer goes before it, not inside or after it
+    var TOOLISH = 'input:not([type=hidden]), textarea, select, button.go, [aria-live], form';
+    function toolish(n) { return !!(n && n.nodeType === 1 && (n.matches(TOOLISH) || n.querySelector(TOOLISH))); }
     // someone arriving from a link (a partner sent it, a search) sees the page first, and the offer after its opening part
     var fromOutside = !intro && document.referrer.indexOf(location.origin) !== 0, firstPart = fromOutside && main.querySelector('main > section, .read-head ~ section');
-    if (intro) homeSlot(intro).after(box);
-    else if (firstPart) firstPart.after(box);                   // home: after the approved opening, so its order stays as it is
+    if (slot) slot.appendChild(box);                             // a page can say where it goes (the home page: on its first screen)
+    else if (intro) homeSlot(intro).after(box);
+    else if (firstPart && !toolish(firstPart) && !toolish(firstPart.nextElementSibling)) firstPart.after(box);
+    else if (firstPart) firstPart.before(box);
     else if (head && head.parentNode === main) head.after(box);
     else main.insertBefore(box, main.firstChild);
   }
@@ -3492,6 +3576,18 @@
     function place() {
       queued = false;
       if (btn.classList.contains('is-away')) return;
+      var wasPeek = btn.classList.contains('is-peek');
+      place2();
+      // on a phone, over words someone is reading, the little tab tucks into the screen edge (a tap still opens it)
+      var peek = false;
+      if (window.innerWidth <= 560 && !btn.classList.contains('is-hiding') && !btn.classList.contains('is-high')) {
+        btn.classList.remove('is-peek'); btn.style.transition = 'none';
+        peek = wordsUnder(btn.getBoundingClientRect(), btn);
+        btn.classList.toggle('is-peek', wasPeek); void btn.offsetWidth; btn.style.transition = '';
+      }
+      btn.classList.toggle('is-peek', peek);
+    }
+    function place2() {
       btn.classList.remove('is-hiding');
       // on a phone it's a small round button (just the moon), so it covers as little of the page as possible
       var phone = window.innerWidth <= 560;

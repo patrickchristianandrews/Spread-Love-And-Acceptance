@@ -347,6 +347,9 @@
     all.appendChild(aa);
     d.appendChild(all);
     box.appendChild(d);
+    // a page can say where the box goes (book chapters: before the chapter strip)
+    var spot = main.querySelector('[data-research-box]');
+    if (spot) { spot.appendChild(box); boxed = ids.length; return; }
     // after the page's own last part, before anything the site adds at the end
     var last = main.lastElementChild;
     function added(e) { return /^(SCRIPT|STYLE|TEMPLATE)$/.test(e.tagName) || (typeof e.className === 'string' && /(^|\s)(tol-|bkb\b|bb-)/.test(e.className)); }
