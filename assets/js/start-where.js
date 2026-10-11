@@ -321,31 +321,13 @@
   }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+  // data-first="id,…" picks the few shown first; data-first-me="id,…" is used instead after "Just me" (tol-mode-v1)
+  function modeNow() { try { return localStorage.getItem('tol-mode-v1') || ''; } catch (e) { return ''; } }
+
   document.querySelectorAll('[data-tol-start]').forEach(function (host) {
     var compact = host.hasAttribute('data-compact');
     var wrap = el('div', { class: 'sw' + (compact ? ' is-compact' : '') });
     var opts = el('div', { class: 'sw-opts', role: 'group', 'aria-label': 'What is going on right now' });
-    // data-first="id,id,…" shows those few first and tucks the rest behind "More situations"
-    var first = (host.getAttribute('data-first') || '').split(',').filter(Boolean), list = S.slice(), extra = [];
-    if (first.length) {
-      list = first.map(function (id) { return S.filter(function (s) { return s.id === id; })[0]; }).filter(Boolean);
-      S.forEach(function (s) { if (list.indexOf(s) === -1) list.push(s); });
-    }
-    // Focus mode (site.js TOLFocus): situations that fit the chosen areas come first; the rest stay one tap away
-    try {
-      var F = window.TOLFocus;
-      if (F && F.isOn && F.isOn() && F.allows) {
-        var fit = list.filter(function (s) { return (s.picks || []).some(function (p) { return p[0] && p[0].charAt(0) === '/' && F.allows(p[0]); }); });
-        if (fit.length) { list = fit.concat(list.filter(function (s) { return fit.indexOf(s) === -1; })); first = fit.slice(0, 9).map(function (s) { return s.id; }); }
-      }
-    } catch (e) {}
-    list.forEach(function (s, i) {
-      var b = el('button', { type: 'button', class: 'sw-opt', 'aria-pressed': 'false', 'data-id': s.id },
-        '<span class="sw-ico" aria-hidden="true">' + s.ico + '</span><span class="sw-label">' + esc(s.label) + '</span>');
-      b.addEventListener('click', function () { choose(s, b); });
-      if (first.length && i >= first.length) { b.hidden = true; extra.push(b); }
-      opts.appendChild(b);
-    });
     var out = el('div', { class: 'sw-out', 'aria-live': 'polite', tabindex: '-1', hidden: '' });
     out.style.scrollMarginTop = '5rem';
     out.style.outline = 'none';
@@ -354,24 +336,60 @@
       var btn = document.querySelector('.tol-breathe-btn');
       if (a && btn) { e.preventDefault(); btn.click(); }
     });
+    var buttons = {}, more = null;
+    S.forEach(function (s) {
+      var b = el('button', { type: 'button', class: 'sw-opt', 'aria-pressed': 'false', 'data-id': s.id },
+        '<span class="sw-ico" aria-hidden="true">' + s.ico + '</span><span class="sw-label">' + esc(s.label) + '</span>');
+      b.addEventListener('click', function () { choose(s, b); });
+      buttons[s.id] = b;
+    });
     wrap.appendChild(opts);
-    if (extra.length) {
-      var more = el('button', { type: 'button', class: 'sw-showmore', 'aria-expanded': 'false' }, esc(host.getAttribute('data-more') || 'More situations') + ' (' + extra.length + ')');
-      more.addEventListener('click', function () {
-        extra.forEach(function (b) { b.hidden = false; });
-        more.remove(); extra[0].focus();
-      });
-      wrap.appendChild(more);
-    }
     wrap.appendChild(out);
     host.appendChild(wrap);
 
-    function choose(s, btn) {
+    // order the tiles: the chosen few first, the rest one tap away behind "See all"
+    function order(keepOpen) {
+      var attr = (modeNow() === 'me' && host.getAttribute('data-first-me')) || host.getAttribute('data-first') || '';
+      var first = attr.split(',').filter(Boolean), list = S.slice();
+      if (first.length) {
+        list = first.map(function (id) { return S.filter(function (s) { return s.id === id; })[0]; }).filter(Boolean);
+        S.forEach(function (s) { if (list.indexOf(s) === -1) list.push(s); });
+      }
+      // Focus mode (site.js TOLFocus): situations that fit the chosen areas come first; the rest stay one tap away
+      try {
+        var F = window.TOLFocus;
+        if (F && F.isOn && F.isOn() && F.allows) {
+          var fit = list.filter(function (s) { return (s.picks || []).some(function (p) { return p[0] && p[0].charAt(0) === '/' && F.allows(p[0]); }); });
+          if (fit.length) { list = fit.concat(list.filter(function (s) { return fit.indexOf(s) === -1; })); first = fit.slice(0, 9).map(function (s) { return s.id; }); }
+        }
+      } catch (e) {}
+      var extra = [];
+      list.forEach(function (s, i) {
+        var b = buttons[s.id];
+        b.hidden = !keepOpen && first.length > 0 && i >= first.length;
+        if (b.hidden) extra.push(b);
+        opts.appendChild(b);
+      });
+      if (more) { more.remove(); more = null; }
+      if (extra.length) {
+        // "(31 more)", so the count never reads as the total
+        more = el('button', { type: 'button', class: 'sw-showmore', 'aria-expanded': 'false' }, esc(host.getAttribute('data-more') || 'See more situations') + ' (' + extra.length + ' more)');
+        more.addEventListener('click', function () {
+          extra.forEach(function (b) { b.hidden = false; });
+          var f = extra[0]; more.remove(); more = null; host.setAttribute('data-sw-all', ''); f.focus();
+        });
+        opts.after(more);
+      }
+    }
+    order(false);
+    document.addEventListener('tol-mode', function () { order(host.hasAttribute('data-sw-all')); });
+
+    function choose(s, btn, quiet) {
       var was = btn.getAttribute('aria-pressed') === 'true';
       opts.querySelectorAll('.sw-opt').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-      if (was) { out.hidden = true; out.innerHTML = ''; return; }
+      if (was && !quiet) { out.hidden = true; out.innerHTML = ''; return; }
       btn.setAttribute('aria-pressed', 'true');
-      var h = '<p class="sw-say">' + esc(s.say) + '</p><ol class="sw-picks">';
+      var h = (s.lead ? '<p class="sw-lead"><a href="' + s.lead[0] + '">' + esc(s.lead[1]) + '</a></p>' : '') + '<p class="sw-say">' + esc(s.say) + '</p><ol class="sw-picks">';
       s.picks.forEach(function (p) {
         // '#breathe' opens the site's Breathe break (the Night Garden if that button is missing)
         var link = p[0] === '#breathe' ? 'href="/night-garden.html" data-breathe="1"' : 'href="' + p[0] + '"';
@@ -385,5 +403,19 @@
       try { out.focus({ preventScroll: true }); } catch (e) { out.focus(); }
       out.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
     }
+    // a link elsewhere on the page with data-sw-open="id" opens that situation here (it stays a normal link without this script)
+    host.tolOpen = function (id) {
+      var s = S.filter(function (x) { return x.id === id; })[0], b = buttons[id];
+      if (!s || !b) return false;
+      if (b.hidden) b.hidden = false;
+      choose(s, b, true);
+      return true;
+    };
+  });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-sw-open]');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    var host = document.querySelector('[data-tol-start]');
+    if (host && host.tolOpen && host.tolOpen(a.getAttribute('data-sw-open'))) e.preventDefault();
   });
 })();

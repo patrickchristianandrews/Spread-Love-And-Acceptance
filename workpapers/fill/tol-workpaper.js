@@ -213,7 +213,8 @@
   function isExampleRow(section, row) {
     if (!section || !section.examples || !row || !row.task) return false;
     var keys = { task: 1, freq: 1 };
-    return (section.defaultRows || []).some(function (d) {
+    // (a page opened for one situation starts with its own examples; the usual ones still count as examples)
+    return (section.defaultRows || []).concat(section.otherExamples || []).some(function (d) {
       if (!d.task || d.task !== row.task || (row.freq || '') !== (d.freq || '')) return false;
       return section.columns.every(function (c) { return keys[c.id] || c.prefill || c.type === 'computed' || isBlank(row[c.id]) || row[c.id] === d[c.id]; });
     });
@@ -1087,6 +1088,22 @@
     });
   };
 
+  // A date box shows the date the way the browser likes (often 10/11/2026, which reads two ways), so the
+  // date is also written out next to it in words: "Sun 11 Oct 2026".
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], WDAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  function dateWords(v) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v || '')) return '';
+    var p = v.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return isNaN(d) ? '' : WDAY[d.getDay()] + ' ' + d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  A.refreshDates = function () {
+    Array.prototype.forEach.call(this.root.querySelectorAll('input[type="date"]'), function (t) {
+      var say = t.nextElementSibling && t.nextElementSibling.classList.contains('wpf-date-say') ? t.nextElementSibling : null, w = dateWords(t.value);
+      if (!say) { say = h('span', { className: 'wpf-date-say', 'aria-hidden': 'true' }); t.parentNode.insertBefore(say, t.nextSibling); }
+      say.textContent = w;
+    });
+  };
+
   // Starter rows that nobody has changed carry an "Example" tag; it goes as soon as the row is edited.
   A.refreshExamples = function () {
     var self = this, any = {};
@@ -1202,10 +1219,27 @@
     this.savedNote();
   };
   // A quiet word that stays in view: "Saved on this phone", or "Kept in this tab only"
+  // (a list two people keep together says it will be saved here as soon as something is typed), and,
+  // while it is kept, a one-tap "Forget it" in the save bar
   A.savedNote = function () {
-    var t = this.keep ? 'Saved on ' + deviceWord() : 'Kept in this tab only, until you close it';
-    var sv = document.getElementById('wpf-saved'); if (sv) sv.textContent = this.keep ? '\u2713 ' + t : '';
+    var t = this.keep ? 'Saved on ' + deviceWord() : this.autoKeep ? 'Saved on ' + deviceWord() + ' once you start' : 'Kept in this tab only, until you close it';
+    var sv = document.getElementById('wpf-saved');
+    if (sv) {
+      sv.textContent = '';
+      if (this.keep && !this.opts.statusEl) {
+        sv.appendChild(document.createTextNode('\u2713 ' + t + ' '));
+        sv.appendChild(h('button', { type: 'button', className: 'wpf-forget', 'data-action': 'forget-kept', 'aria-label': 'Forget it: erase what is saved on ' + deviceWord(), text: 'Forget it' }));
+      }
+    }
     var hs = document.querySelector('.wpf-how-s'); if (hs) hs.textContent = t;
+  };
+  // "Save": keeps the sheet in this browser (no file to find in Downloads). "Draft file" is the file.
+  A.saveHere = function () {
+    var box = document.getElementById('wpf-keep');
+    if (!this.keep) { this.setKeep(true); if (box) box.checked = this.keep; }
+    else this.keepNow();
+    if (!this.keep) { this.saveDraft(); return; }
+    this.status('Saved on ' + deviceWord() + ', in this browser. It\u2019s here when you come back, and keeps saving as you type. Want a copy elsewhere, or to send? Use \u201cDraft file\u201d' + (document.getElementById('wpf-more') ? ' under More' : '') + '.');
   };
 
   /* ---------- the household: names and jobs typed once, offered in every tool (/assets/js/household.js) ---------- */
@@ -1333,6 +1367,74 @@
     return HH.addedLine(names, jobs);
   };
 
+
+  /* ---------- "Put it on the fridge": the list on this page, as one clean sheet (/assets/js/fridge-sheet.js) ---------- */
+  // It is drawn from the list shown here, whether it was typed here, opened from a shared link or
+  // combined with one, so every device that has the list can print it. Jobs owned together show both names.
+  A.togetherWord = function () {
+    var ctx = this.ctx(), n = ctx.count();
+    return n > 2 ? 'Everyone together' : ctx.name('A') + ' and ' + ctx.name('B') + ' together';
+  };
+  A.fridgeItems = function () {
+    var sec = this.hhJobTable(), out = { jobs: [], rules: [] };
+    if (!sec) return out;
+    var ctx = this.ctx(), self = this, helpCol = sec.columns.filter(function (c) { return c.notSameAs; })[0];
+    var isRule = global.TOL_IS_HOUSE_RULE || function () { return false; };
+    this.hhOwnRows(sec).forEach(function (r) {
+      var job = String(r.task || '').trim();
+      if (!job) return;
+      var who = r.r === 'Both' ? self.togetherWord() : r.r ? ctx.name(r.r) : '';
+      if (helpCol && r[helpCol.id] && r[helpCol.id] !== r.r) who += (who ? ' ' : '') + '(' + (self.helpWord || 'helper') + ': ' + ctx.name(r[helpCol.id]) + ')';
+      (isRule(job) ? out.rules : out.jobs).push({ job: job, who: who, when: r.freq || '' });
+    });
+    return out;
+  };
+  A.fridgeData = function () {
+    var f = this.fridgeItems(), items = f.jobs.slice(), n = f.jobs.length + f.rules.length, ctx = this.ctx();
+    if (f.rules.length) { if (f.jobs.length) items.push({ head: 'House rules we agreed' }); items = items.concat(f.rules); }
+    var left = Math.max(0, 10 - n);
+    if (left) items.push({ blank: n ? Math.min(left, 4) : 10 });
+    var named = ctx.people().filter(function (c) { return String(ctx.value('partner' + c)).trim(); }).map(function (c) { return ctx.name(c); });
+    return {
+      title: this.fridgeTitle || 'Who owns what',
+      sub: named.length ? named.slice(0, -1).join(', ') + (named.length > 1 ? ' and ' : '') + named[named.length - 1] : '',
+      items: items,
+      footer: 'Owning a job means you do it, or you make sure it gets done. Swap by asking, not by quietly dropping it.',
+      file: 'who-owns-what'
+    };
+  };
+  A.fridgeMount = function (host) {
+    var F = global.TOLFridge, self = this;
+    if (!host || !F || !this.hhJobTable()) return;
+    var driftBox = h('div'), list = h('div', { className: 'tfs-hh' }), btnBox = h('div', { className: 'tfs-btnbox' }), last = null;
+    host.appendChild(driftBox); host.appendChild(list); host.appendChild(btnBox);
+    this.fridgeDraw = function () {
+      var f = self.fridgeItems(), all = f.jobs.concat(f.rules), sig = JSON.stringify(all);
+      if (sig === last) return;
+      last = sig; list.innerHTML = '';
+      if (!all.length) { list.appendChild(h('p', { className: 'tfs-hh-empty', text: 'Your list shows here as you add jobs below. Or print a blank one and fill it in together.' })); return; }
+      var ul = h('ul', { className: 'tfs-hh-list' });
+      all.slice(0, 12).forEach(function (j) {
+        ul.appendChild(h('li', null, [h('span', { className: 'tfs-hh-job', text: j.job }), h('span', { className: 'tfs-hh-who' + (j.who ? '' : ' is-open'), text: j.who || 'no owner yet' })]));
+      });
+      list.appendChild(ul);
+      if (all.length > 12) list.appendChild(h('p', { className: 'tfs-hh-more', text: 'And ' + (all.length - 12) + ' more on the printed sheet.' }));
+    };
+    this.fridgeDraw();
+    F.button(btnBox, function () { return self.fridgeData(); }, { note: 'One clean page of the list on this page: each job, its owner and a box to tick. Fits A4 and US Letter. With no list yet, it prints a blank one.' });
+    // "These jobs keep coming back" (from the weekly check-in card): straight onto this list
+    if (F.drift) F.drift(driftBox, { noAbout: true, giveLabel: 'Add them to the list below', onGive: function (names) {
+      var sec = self.hhJobTable(), rows = self.state.tables[sec.id], added = 0;
+      names.forEach(function (nm) {
+        if (rows.some(function (r) { return r && r.task && jobKey(r.task) === jobKey(nm); })) return;
+        var slot = rows.filter(function (r) { return r && rowIsEmpty(sec, r); })[0];
+        if (slot) slot.task = nm; else rows.push({ task: nm });
+        added++;
+      });
+      self.changed(); self.render();
+      self.status(added ? 'Added ' + (added === 1 ? '\u201c' + names[0] + '\u201d' : added + ' jobs') + ' to the list. Give ' + (added === 1 ? 'it' : 'each one') + ' an owner next to it.' : 'Those jobs are already on the list.');
+    } });
+  };
 
   /* ---------- "Share this list": a link or code with the sheet inside it, after the # ---------- */
   // For a sheet two people keep together (One owner per job, the daily check-in): one phone shares its
@@ -1480,7 +1582,7 @@
   // A button for the site's share sheet (Text, WhatsApp, Email, …, or the phone's own share menu). The
   // link is made fresh at the tap, from the sheet as it is then (see onClick, "share-fresh").
   A.sendBtn = function (label, main) {
-    var what = this.shareWhat(), title = 'Our ' + String(this.schema.plain || this.schema.title).replace(/^the /i, '').replace(/^./, function (c) { return c.toLowerCase(); });
+    var what = this.shareWhat(), title = this.schema.shareTitle || 'Our ' + String(this.schema.plain || this.schema.title).replace(/^the /i, '').replace(/^./, function (c) { return c.toLowerCase(); });
     var made = this.shareMade && !this.shareMade.error ? this.shareMade.link : '';
     return h('button', { type: 'button', className: 'wpf-add' + (main ? ' wpf-share-main' : ''), 'data-action': 'share-fresh', 'data-share': '', 'data-share-title': title,
       'data-share-text': title + ': open this to see ' + (what === 'week' ? 'the week' : 'the ' + what) + ' and add to it.', 'data-share-url': made || 'none', 'data-share-result': '', text: label });
@@ -1913,6 +2015,12 @@
       var again0 = this.root.querySelector('[data-action="fans"][data-table="' + ft + '"]'); if (again0) again0.focus();
       return;
     }
+    if (act === 'forget-kept') {
+      this.eraseKept();
+      var kb = document.getElementById('wpf-keep'); if (kb) kb.checked = false;
+      this.status('Forgotten: nothing from this worksheet is saved on ' + deviceWord() + ' now. What is on the page stays until you close it.');
+      return;
+    }
     if (act === 'conflict-mine' || act === 'conflict-theirs') { this.resolveConflict(+b.getAttribute('data-i'), act === 'conflict-theirs'); return; }
     if (act === 'conflict-all-mine') { this.conflicts = []; this.render(); this.status('Kept everything as it is here.'); return; }
     if (act === 'nudge-no') { this.sharedOnce = false; this.nudge(); return; }
@@ -2253,6 +2361,70 @@
     return { check: check, hide: hide };
   }
 
+  /* ---------- a page opened for one situation (?for=coparents, foster, ill, shifts) ---------- */
+  // The guides link here with ?for=…, so the sheet starts in the right words with the right example jobs.
+  // Only words and starter examples change: the saved list, the share links and the PDF are the same sheet.
+  // Without ?for=, a link from one of those guides on this site does the same.
+  var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts' };
+  var D = 'Daily', Wk = 'Weekly', Mo = 'Monthly', AN = 'As needed';
+  var FOR = {
+    'wp-03': {
+      coparents: {
+        h1: 'One owner per job: a list for two homes', title: 'One owner per job: a list for two homes',
+        lede: 'Who owns which job across two homes: the handoffs, school, health and the big decisions. Give every regular job one owner, or mark it \u201cBoth (decide together)\u201d, so nobody has to re-decide or ask twice. Send it to the other home as a link: names are matched, and nothing is uploaded.',
+        note: 'List what moves between the two homes and what needs one person to see it through. Mark the ones you decide together as \u201cBoth (decide together)\u201d. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Handoffs between homes, School and Health.',
+        road: 'coparents', fridge: 'Who owns what, in both homes', share: 'Our list for two homes',
+        rows: [['Pack the handoff bag', Wk], ['Send medicine and chargers with the bag', Wk], ['School forms and permission slips', AN], ['Reply to school emails and apps', Wk], ['Homework help', D], ['Kids\u2019 doctor and dentist visits', AN], ['Activities and sign-ups', AN], ['Buy clothes as they outgrow them', AN], ['Big decisions (school, health, new activities)', AN]]
+      },
+      foster: {
+        h1: 'One owner per job: caring for a child in care', title: 'One owner per job: caring for a child in care',
+        lede: 'Who owns which job when you care for a child or young person: the meetings, the logs, contact and the being-there afterwards, as well as the everyday jobs. Give each one an owner, or decide it together, so the hidden work is on the list too.',
+        note: 'Start with the jobs that come with a child in care, then add the everyday ones from the task library below. Agreeing house rules with a young person? Add them from \u201cHouse rules for us\u201d: each needs someone who keeps to it, but rules aren\u2019t counted as load. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
+        fridge: 'Who owns what',
+        rows: [['Social worker visits', Mo], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', Mo]]
+      },
+      ill: {
+        h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',
+        lede: 'Share the load by energy, not hours. Give each job an owner for good days and, if you like, a backup for bad days. Jobs done from bed or the sofa count: phoning, booking, paying, planning. Being ill isn\u2019t being a burden.',
+        note: 'Give each job one owner for good days. The backup column is for bad days: who covers it then, or write \u201ccan wait\u201d in Notes for the things that are allowed to wait. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
+        help: 'Bad-day backup (optional)', helpWord: 'bad-day backup',
+        rows: [['Pay the bills', Mo], ['Book appointments', AN], ['Pick up prescriptions', AN], ['Plan the week', Wk], ['Groceries', Wk], ['Cook dinner', D], ['Dishes', D], ['Laundry', Wk]]
+      }
+    },
+    'wp-13': {
+      shifts: { lede: 'Once a day, at the shift change or in the evening, each of you answers three short prompts in a sentence: small, steady corrections instead of occasional big ones. No debating, no solving, no arguing back.', tonight: 'At the shift change: 3 questions' },
+      ill: { tonightNote: 'Fine to do lying down, or by message from the next room.' }
+    }
+  };
+  function forWhich() {
+    var f = ((global.location && global.location.search || '').match(/[?&]for=([a-z]+)/) || [])[1] || '';
+    if (!f) { try { var r = document.referrer ? new URL(document.referrer) : null; if (r && r.origin === global.location.origin) f = FOR_REF[r.pathname] || ''; } catch (e) {} }
+    return f;
+  }
+  // The sheet in that situation's words: a copy of the schema, and the page's title and opening line
+  function applyFor(schema, wp, which, app) {
+    var o = FOR[wp] && FOR[wp][which];
+    if (!o) return schema;
+    var out = {}; Object.keys(schema).forEach(function (k) { out[k] = schema[k]; });
+    out.sections = schema.sections.map(function (sec) {
+      var c = {}; Object.keys(sec).forEach(function (k) { c[k] = sec[k]; });
+      if (o.note && sec.type === 'note' && sec.pdf === false) c.text = o.note;
+      if (o.rows && sec.library === 'owner') { c.otherExamples = sec.defaultRows; c.defaultRows = o.rows.map(function (r) { return { task: r[0], freq: r[1] }; }); }
+      if (o.help && sec.columns) c.columns = sec.columns.map(function (col) { if (!col.notSameAs) return col; var x = {}; Object.keys(col).forEach(function (k) { x[k] = col[k]; }); x.label = o.help; return x; });
+      return c;
+    });
+    if (o.share) out.shareTitle = o.share;
+    app.forWords = o;
+    if (o.helpWord) app.helpWord = o.helpWord;
+    if (o.fridge) app.fridgeTitle = o.fridge;
+    try {
+      if (o.title) document.title = o.title + ' \u00b7 Spread Love & Acceptance';
+      var h1 = document.querySelector('main .read-head h1'); if (h1 && o.h1) h1.textContent = o.h1;
+      var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)'); if (lede && o.lede) lede.textContent = o.lede;
+    } catch (e) {}
+    return out;
+  }
+
   // The page around the sheet, for "Kind ways to say no" on its own: its own title and opening line, and a
   // way to the whole Who did what sheet.
   function focusPartB(schema) {
@@ -2296,7 +2468,10 @@
         }
       }
     }
-    var app = new App(root, schema, { road: road, canShare: !!schema.share });
+    var forWho = !road && !partB ? forWhich() : '', forRoad = forWho && FOR[wp] && FOR[wp][forWho] ? FOR[wp][forWho].road || '' : '';
+    var app = new App(root, schema, { road: road || forRoad, canShare: !!schema.share });
+    if (forWho) app.schema = schema = applyFor(schema, wp, forWho, app);
+    if (!app.opts.state) app.state = blankState(schema);
     // A list shared through a link (#list=…): it is read here, on this device, and the address is tidied
     // straight away so it doesn't stay in the address bar or the history. Nothing is opened until the person chooses.
     var sharedMsg = '';
@@ -2356,6 +2531,8 @@
     }
     foldHow();
     app.render();
+    // "Put it on the fridge", from the list on this page (One owner per job)
+    app.fridgeMount(document.getElementById('wpf-fridge'));
     if (app.hhWrite) app.hhWrite.baseline();
     // "Keep this on this device so it's here tomorrow?": once something is typed, while nothing is kept
     var ask = keepAsk({
@@ -2430,9 +2607,18 @@
 
     var fileInput = document.getElementById('wpf-file');
     document.getElementById('wpf-pdf').addEventListener('click', function () { app.savePdf(); });
+    // "Save" keeps it in this browser; the draft file (to keep elsewhere or send) is its own button
     var saveBtn = document.getElementById('wpf-save');
-    if (saveBtn && !saveBtn.title) saveBtn.title = 'A small file to keep, or to send to the other people on this sheet so they can add their part';
-    saveBtn.addEventListener('click', function () { app.saveDraft(); });
+    if (saveBtn) {
+      saveBtn.textContent = 'Save';
+      saveBtn.title = 'Keep it in this browser, on this device, so it\u2019s here when you come back';
+      saveBtn.addEventListener('click', function () { app.saveHere(); });
+      if (!document.getElementById('wpf-savefile')) {
+        var fileBtn = h('button', { type: 'button', id: 'wpf-savefile', className: 'wpf-btn-quiet', title: 'A small file to keep somewhere else, or to send to the other people on this sheet so they can add their part', text: 'Draft file' });
+        saveBtn.parentNode.insertBefore(fileBtn, saveBtn.nextSibling);
+        fileBtn.addEventListener('click', function () { app.saveDraft(); });
+      }
+    }
     document.getElementById('wpf-open').addEventListener('click', function () { fileInput.click(); });
     document.getElementById('wpf-clear').addEventListener('click', function () { app.clear(); });
     var fill = document.getElementById('wpf-fillable');

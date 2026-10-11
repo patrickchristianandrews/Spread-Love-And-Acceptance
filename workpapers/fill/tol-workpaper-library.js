@@ -187,7 +187,7 @@
     if (code === 'WP-03') {
       if (road === 'self' || road === 'friends') return null;
       var r3 = (EX03[road] || EX03.partners).map(function (r) { return [r[0], r[1], who(r[2]), who(r[3])]; });
-      return { intro: 'Part of a list where every job has one owner, and sometimes a helper.', parts: [{ head: ['Job', 'How often', 'Owner', 'Helper (optional)'], rows: r3 }, { title: 'Ways to hand a job over', lines: SCRIPTS.handover.slice(0, 4) }], note: 'Watch the spread, not only the names: if one person holds most of the list, the sheet says so.' };
+      return { intro: 'Part of a list where every job has one owner, and sometimes a helper.', parts: [{ head: ['Job', 'How often', 'Owner', 'Helper or backup (optional)'], rows: r3 }, { title: 'Ways to hand a job over', lines: SCRIPTS.handover.slice(0, 4) }], note: 'Watch the spread, not only the names: if one person holds most of the list, the sheet says so.' };
     }
     if (code === 'WP-04') return { intro: 'A month where one thing kept coming back.', parts: [{ head: ['Task', 'Weeks it slipped', 'Kind of gap', 'Action'], rows: [['Trash out on time', '1, 2, 3', 'Structural gap', 'One owner, with a Sunday reminder'], ['Birthday card for Grandma', '2', 'One-off', 'None'], ['Grocery list', '1, 3', 'Capacity issue', 'Talk on Sunday about what comes off the list']] }, { title: 'Pillar V: thanked, or only noticed when missed?', lines: PILLAR_V.slice(0, 3) }], note: 'A job with no owner is a gap in the setup, not a verdict on the person who kept covering it.' };
     if (code === 'WP-09') return { intro: 'Worked examples: the raw reaction, then the same thing as fact, feeling and ask.',

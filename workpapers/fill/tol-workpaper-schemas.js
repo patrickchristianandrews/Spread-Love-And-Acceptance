@@ -997,6 +997,7 @@
   }
 
   global.TOL_WORKPAPERS = W;
+  global.TOL_IS_HOUSE_RULE = isHouseRule;
   global.TOL_WORKPAPER_VARIANT = variant;
   global.TOL_WORKPAPER_SOLO = solo;
 })(typeof window !== 'undefined' ? window : globalThis);

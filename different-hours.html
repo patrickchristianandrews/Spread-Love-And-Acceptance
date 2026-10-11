@@ -48,6 +48,17 @@
   .pc-script{ margin:.6rem 0 1.4rem; padding:.9rem 1.1rem; border-radius:16px; border:1px solid #D9C8F0; background:#F6F1FC; }
   .read .pc-script h3{ margin:0 0 .35rem !important; font-size:1.05rem; }
   .pc-script p{ margin:.35rem 0 !important; max-width:none !important; }
+  .dh-week label{ display:block; font-weight:600; margin:.6rem 0 .2rem; font-size:.96rem; }
+  .dh-week input, .dh-week textarea{ box-sizing:border-box; width:100%; min-height:44px; padding:.45rem .7rem; font:1rem/1.5 "Lora", Georgia, serif; border:1px solid var(--ink-soft); border-radius:10px; background:var(--paper); color:var(--ink); }
+  .dh-week textarea{ resize:vertical; }
+  .dh-week #dh-out{ background:#FFFDF7; }
+  .dh-two{ display:grid; gap:0 1rem; }
+  @media (min-width:640px){ .dh-two{ grid-template-columns:1fr 1fr; } }
+  .dh-row{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; align-items:center; margin:.7rem 0 .2rem !important; }
+  .dh-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
+  .dh-btn.is-quiet{ background:var(--paper); color:#2F5F8A; }
+  .dh-btn:focus-visible, .dh-week input:focus-visible, .dh-week textarea:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .dh-small{ font-size:.9rem; color:var(--ink-soft); }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/different-hours.html">
@@ -105,7 +116,8 @@
   <li><a href="#sleep-is-work">Sleep is part of the work</a></li>
   <li><a href="#home-not-free">Home isn’t free</a></li>
   <li><a href="#protected-sleep">Protected sleep</a></li>
-  <li><a href="#shift-change">Shift-change check-in</a></li>
+  <li><a href="#shift-change">Check in at the shift change</a></li>
+  <li><a href="#our-week">Our week on one page</a></li>
   <li><a href="#talking">Talking when you’re tired</a></li>
   <li><a href="#together">Together time</a></li>
   <li><a href="#bonding">Bonding tips</a></li>
@@ -208,6 +220,25 @@
   <li>Share the home jobs around the hours each of you is actually awake and home. The one at home in the day might take deliveries; the one on nights might take the big shop or batch cooking on days off.</li>
 </ol>
 <p>Look at it again whenever the rota changes. It takes ten minutes and saves a week of crossed wires.</p>
+<div class="pc-script dh-week no-bubble" id="our-week" data-keep-steps>
+  <h3>Our week on one page</h3>
+  <p>Fill it in together, or fill in your side and send it. Then copy it or share it as a text, so you both have the same week.</p>
+  <div class="dh-two">
+    <div><label for="dh-n1">Name</label><input id="dh-n1" type="text" placeholder="Jamie" autocomplete="off">
+      <label for="dh-r1">Their shifts or work hours this week</label><textarea id="dh-r1" rows="2" placeholder="Nights Mon–Wed, 7 pm to 7:30 am"></textarea></div>
+    <div><label for="dh-n2">Name</label><input id="dh-n2" type="text" placeholder="Sam" autocomplete="off">
+      <label for="dh-r2">Their shifts or work hours this week</label><textarea id="dh-r2" rows="2" placeholder="Home office, 9 to 5 weekdays"></textarea></div>
+  </div>
+  <label for="dh-sleep">Protected sleep</label><input id="dh-sleep" type="text" placeholder="9 am to 4 pm after a night. Urgent? Call twice." autocomplete="off">
+  <label for="dh-over">Where we overlap</label><input id="dh-over" type="text" placeholder="7:30 to 8:30 am, and Thursday evening" autocomplete="off">
+  <label for="dh-together">Our one together time</label><input id="dh-together" type="text" placeholder="Thursday breakfast after the last night" autocomplete="off">
+  <label for="dh-check">Check in at the shift change</label><input id="dh-check" type="text" placeholder="Two minutes at the door, or a voice note if we miss each other" autocomplete="off">
+  <label for="dh-jobs">Home jobs that fit our hours (optional)</label><input id="dh-jobs" type="text" placeholder="Deliveries and the dog walk: Sam. Big shop and batch cooking: Jamie" autocomplete="off">
+  <label for="dh-out">Our week, as a text</label>
+  <textarea id="dh-out" rows="7" readonly></textarea>
+  <p class="dh-row"><button type="button" class="dh-btn" id="dh-copy">Copy our week</button> <button type="button" class="dh-btn is-quiet" data-share data-share-from="#dh-out" data-share-url="none" data-share-result data-share-title="Our week on one page">Share it</button> <span id="dh-note" role="status"></span></p>
+  <p class="dh-small">Nothing is saved or sent from here. Copy or share it before you close the page.</p>
+</div>
 
 <h2 id="fair">Counting it fairly in the Lemonade Stand</h2>
 <p>The <a href="/lemonade-stand.html">Lemonade Stand</a> shows who does which home jobs, as a plain picture with no blame. To make it fair when you work different hours:</p>
@@ -237,5 +268,33 @@
   <p>Being home isn’t the same as being free. Say your work hours out loud, agree which jobs fit in a break, and write the rest down so each one has an owner.</p>
 </section>
 </main>
+<script>
+(function () {
+  'use strict';
+  var box = document.getElementById('our-week'); if (!box) return;
+  function v(id) { return (document.getElementById(id).value || '').trim(); }
+  var out = document.getElementById('dh-out'), note = document.getElementById('dh-note');
+  function build() {
+    var n1 = v('dh-n1') || 'One of us', n2 = v('dh-n2') || 'The other';
+    var lines = ['Our week on one page'];
+    if (v('dh-r1')) lines.push(n1 + ': ' + v('dh-r1'));
+    if (v('dh-r2')) lines.push(n2 + ': ' + v('dh-r2'));
+    [['dh-sleep', 'Protected sleep'], ['dh-over', 'Where we overlap'], ['dh-together', 'Our together time'], ['dh-check', 'Check in at the shift change'], ['dh-jobs', 'Home jobs']].forEach(function (p) {
+      if (v(p[0])) lines.push(p[1] + ': ' + v(p[0]));
+    });
+    out.value = lines.length > 1 ? lines.join('\n') : '';
+    return out.value;
+  }
+  box.addEventListener('input', function (e) { if (e.target !== out) { build(); note.textContent = ''; } });
+  build();
+  document.getElementById('dh-copy').addEventListener('click', function () {
+    var t = build();
+    if (!t) { note.textContent = 'Fill in a line or two first.'; return; }
+    function done(ok) { note.textContent = ok ? 'Copied. Paste it into a message to each other.' : 'Select the text above and copy it.'; }
+    function fallback() { out.focus(); out.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} done(ok); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { done(true); }, fallback); else fallback();
+  });
+})();
+</script>
 </body>
 </html>

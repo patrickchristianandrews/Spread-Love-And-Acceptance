@@ -3779,10 +3779,18 @@
   // scroll there again once the page has settled (fonts, the bar above and late pieces can move it),
   // unless the person has scrolled in the meantime
   function settle(el) {
-    var moved = false;
-    function mark() { moved = true; }
-    ['wheel', 'touchmove', 'keydown'].forEach(function (ev) { window.addEventListener(ev, mark, { once: true, passive: true }); });
-    [120, 500, 1200].forEach(function (ms) { setTimeout(function () { if (!moved) el.scrollIntoView({ block: 'start' }); }, ms); });
+    var moved = false, until = Date.now() + 7000, ro = null;
+    function mark() { moved = true; if (ro) { ro.disconnect(); ro = null; } }
+    ['wheel', 'touchmove', 'keydown', 'pointerdown'].forEach(function (ev) { window.addEventListener(ev, mark, { once: true, passive: true }); });
+    // kept in place while the page is still settling (a late stylesheet, the bar above, pieces moved on a phone)
+    function fix() {
+      if (moved || Date.now() > until || !el.isConnected) return;
+      var want = parseFloat(getComputedStyle(el).scrollMarginTop) || 0, top = el.getBoundingClientRect().top;
+      if (Math.abs(top - want) > 6) el.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+    [60, 250, 600, 1200, 2500].forEach(function (ms) { setTimeout(fix, ms); });
+    if (document.readyState !== 'complete') window.addEventListener('load', function () { fix(); setTimeout(fix, 300); }, { once: true });
+    try { ro = new ResizeObserver(fix); ro.observe(document.body); setTimeout(function () { if (ro) { ro.disconnect(); ro = null; } }, 7000); } catch (e) {}
   }
   function fromHash() {
     var h = location.hash || '';
@@ -3812,7 +3820,7 @@
       if (!tab) return;
       var spot = tab.closest('.ls-tabs') || tab;
       if (!solo()) tab.focus({ preventScroll: true });
-      spot.scrollIntoView({ block: 'start' });
+      spot.scrollIntoView({ block: 'start', behavior: 'instant' });
       // once more after the page settles (fonts and the bar above can move it)
       settle(spot);
     }

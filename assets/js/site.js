@@ -101,7 +101,7 @@
     ]},
     { id: 'guides', title: 'Guides', blurb: 'Plain, practical guides to the questions people ask most, each linked to the free tools that help.', items: [
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What the mental load is, everyday examples, and five calm steps to share it fairly' },
-      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
+      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'A free, printable chore chart with one owner per job, for couples, families and roommates' },
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
       { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
@@ -349,6 +349,8 @@
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/examples.html', code: 'Stories', title: 'What small changes look like', note: 'Made-up examples for ten kinds of situation' },
+      { href: '/friends.html', title: 'Friends', note: 'When a friendship drifts, or you’re always the one reaching out' },
+      { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
       { sub: 'Just me', all: '/by-relationship.html#just-me', allLabel: 'All for just me' },
       { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/wavelength.html', title: 'Find your Wavelength', note: 'How you think, talk and listen' },
@@ -360,8 +362,13 @@
       { href: '/share-the-load.html', title: 'Share the load, step by step', note: 'Which tool to use first' },
       { href: '/money-together.html', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
       { href: '/gaming-and-time-together.html', title: 'Gaming, phones and time together', note: 'A calm talk and a time-together deal' },
+      { href: '/when-one-is-ill.html', title: 'When one of you is ill', note: 'Chronic illness or disability' },
+      { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and family expectations' },
       { href: '/long-distance.html', title: 'Long-distance and apart', note: 'Calls, time zones and short texts' },
       { href: '/different-hours.html', title: 'Different hours', note: 'Night shifts and opposite schedules' },
+      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
+      { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment or time away' },
+      { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
       { href: '/more-than-two.html', title: 'More than two partners', note: 'Polyamorous homes and triads' },
       { sub: 'Friends', all: '/by-relationship.html#friends', allLabel: 'All for friends' },
       { href: '/friends.html', title: 'Friends: when a friendship drifts', note: 'Always the one reaching out, or life pulling you apart' },
@@ -375,6 +382,8 @@
       { href: '/grown-up-children.html', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/foster-and-kinship.html', title: 'Foster, adoptive and kinship families', note: 'Including grandparents raising grandchildren' },
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
+      { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and what to tell the grandparents' },
+      { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care' },
       { sub: 'Separated & co-parents', all: '/by-relationship.html#co-parents', allLabel: 'All for co-parents' },
       { href: '/co-parenting.html', title: 'Separated co-parents', note: 'Calmer handoffs and a tone check' },
       { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
@@ -565,7 +574,7 @@
       { href: '/love-languages.html', deep: true, code: 'Guide', title: 'Love languages: a menu, not a label', note: 'What is healthy and unhealthy about each of the five' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Practical tips for ADHD, autistic and AuDHD couples and families' },
       { href: '/complacency.html', deep: true, code: 'Guide', title: 'Complacency', note: 'Why “it’s fine” stops being checked' },
-      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart for couples', note: 'Free and printable, one owner per job' }
+      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job, for any home' }
     ]},
     { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what this is, and the site’s policies.', items: [
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
@@ -632,14 +641,31 @@
   // Menu entries take their members lock from SECTIONS, so the lock is still set in one place
   var PAID = {};
   SECTIONS.forEach(function (s) { s.items.forEach(function (it) { if (it.paid) PAID[it.href.split('#')[0]] = true; }); });
+  // the section a page is "in" (highlighted in the top bar): the one it's listed under. When it's listed in
+  // more than one, a section that names it at its top level wins over one that has it in a sub-menu; the
+  // topic sections win over the cross-cutting ones (By relationship, then What's new and Start here); and
+  // when someone came here from a page in one of those sections, that section wins.
   var hereGroup = null;
-  MENU.forEach(function (g) {
-    g.items.forEach(function (it) {
-      if (!it.href) return;
-      if (PAID[it.href.split('#')[0]]) it.paid = true;
-      if (!hereGroup && it.href.split('#')[0] === current) hereGroup = g;
+  (function () {
+    var ref = '';
+    try { if (document.referrer && document.referrer.indexOf(location.origin) === 0) { ref = new URL(document.referrer).pathname; if (/\/$/.test(ref)) ref += 'index.html'; ref = ref.replace(/-in-depth\.html$/, '.html'); } } catch (e) {}
+    var best = -1e9;
+    MENU.forEach(function (g) {
+      var inSub = false, score = null, hasRef = false;
+      g.items.forEach(function (it) {
+        if (it.sub) { inSub = true; return; }
+        if (!it.href) return;
+        if (PAID[it.href.split('#')[0]]) it.paid = true;
+        var p = it.href.split('#')[0];
+        if (p === current && score === null) score = inSub ? 2 : 3;
+        if (ref && p === ref && ref !== current) hasRef = true;
+      });
+      if (score === null) return;
+      if (g.id === 'rel') score -= 1.5; else if (g.id === 'new' || g.id === 'start') score -= 3;
+      if (hasRef) score += 5;
+      if (score > best) { best = score; hereGroup = g; }
     });
-  });
+  })();
 
   // ===== Focus mode: "Focus on what I'm learning" =====
   // Someone can pick one or more areas (who it's about, or what they're working on). While it's on, the menus,
@@ -843,6 +869,7 @@
   // ---------- Index (panel + home page) ----------
   function buildIndex(opts) {
     var wrap = el('div', { class: 'tol-index' + (opts.page ? ' is-page' : '') + (isMember ? ' is-member' : '') });
+    if (opts.accordion && esPage()) wrap.setAttribute('lang', 'en');   // the section and page names stay English (they lead to English pages)
     // the menu panel shows the grouped MENU; the Contents page lists every page in SECTIONS
     (opts.accordion ? menuNow() : SECTIONS).forEach(function (s) {
       if (opts.page && s.id === 'about' && !opts.all) return;
@@ -852,7 +879,7 @@
         // The panel shows section names only; open one to see its pages
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
-        var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here">you are here</span>' : '';
+        var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here"' + (esPage() ? ' lang="es"' : '') + '>' + T('you are here', 'estás aquí') + '</span>' : '';
         sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span>'));
         // One section open at a time keeps the list short
         sec.addEventListener('toggle', function () {
@@ -1028,7 +1055,8 @@
     if (workMode()) document.documentElement.classList.add('tol-work');
     // the "At work" page is plain itself, but that isn't choosing work mode: Calm & play stays in the menu,
     // and the pages it links to keep their usual look. Work mode (?work=1, or "Keep it on") hides them.
-    if (!WORK && body.hasAttribute('data-work')) document.documentElement.classList.add('tol-work-page');
+    // the serious plain pages (grief, safety, someone sent you this…) keep the same menu as every other page, too
+    if (!WORK && (body.hasAttribute('data-work') || PLAIN.test(current))) document.documentElement.classList.add('tol-work-page');
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
@@ -1076,7 +1104,7 @@
     head.appendChild(close);
     panel.appendChild(head);
     panel.appendChild(buildSearch());
-    panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">Not safe at home?</a> <button type="button" data-tol-exit>Leave this site quickly</button>'));
+    panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a> <button type="button" data-tol-exit>' + T('Leave this site quickly', 'Salir rápido de este sitio') + '</button>'));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     panel.appendChild(buildIndex({ accordion: true }));
@@ -1903,9 +1931,9 @@
   })();
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
-      '<label for="tol-find-q">Search the site</label>' +
-      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="A word or two, like “chores” or “calm down”" aria-describedby="tol-find-note">' +
-      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">Searches every page, on your device. Spelling can be rough.</p>' +
+      '<label for="tol-find-q">' + T('Search the site', 'Buscar en el sitio') + '</label>' +
+      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + T('A word or two, like “chores” or “calm down”', 'Una o dos palabras, como “tareas” o “calma”') + '" aria-describedby="tol-find-note">' +
+      '<p class="tol-find-note" id="tol-find-note" aria-live="polite">' + T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.') + '</p>' +
       '<ol class="tol-find-results" hidden></ol>');
     var input = box.querySelector('input'), note = box.querySelector('.tol-find-note'), list = box.querySelector('.tol-find-results'), timer = null;
     var shownFor = null;   // the words the list on screen is for
@@ -1913,7 +1941,7 @@
     runSearch = function (q, then) {
       q = String(q || '').trim();
       var idx = panel && panel.querySelector('.tol-index');
-      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; note.textContent = 'Searches every page, on your device. Spelling can be rough.'; if (idx) idx.hidden = false; return; }
+      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; note.textContent = T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.'); if (idx) idx.hidden = false; return; }
       loadSearch(function (data) {
         if (input.value.trim() !== q) return;
         if (!data) { note.textContent = 'Search isn’t available just now. The full list of pages is below.'; if (idx) idx.hidden = false; return; }
