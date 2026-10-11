@@ -559,7 +559,39 @@
     // until the 10-minute path is done, it is the one other idea
     if (!alt && nx.u !== W.ten[0] && !tenDone()) alt = pick('ten');
     if (alt && (pathOf(alt.u) === pathOf(nx.u) || (pathOf(alt.u) === simplePath && !/#/.test(alt.u)))) alt = null;
+    // friends, family, co-parents, kinship carers and teens: no couple-sized daily or weekly rituals
+    var k = relKind();
+    if (k) { nx = relSwap(nx, k); alt = relSwap(alt, k); if (alt && pathOf(alt.u) === pathOf(nx.u) && alt.u === nx.u) alt = null; }
     return { next: nx, alt: alt };
+  }
+  // which kind of relationship this page (or its ?rel= / ?who=) is about; '' for partners or anything general
+  function relKind() {
+    var q = '';
+    try { var sp = new URLSearchParams(location.search); q = (sp.get('rel') || sp.get('who') || sp.get('for') || '').toLowerCase(); } catch (e) {}
+    if (/^friends?$/.test(q) || simplePath === '/friends.html') return 'friends';
+    if (/^co-?parents?$/.test(q) || simplePath === '/co-parenting.html') return 'coparent';
+    if (/kinship|foster/.test(q) || simplePath === '/foster-and-kinship.html') return 'kinship';
+    if (/^teens?$/.test(q) || simplePath === '/teens.html') return 'teen';
+    if (/^family$/.test(q) || /^\/(grandparents|grown-up-children|family-rifts)\.html$/.test(simplePath)) return 'family';
+    return '';
+  }
+  // the couple-sized steps, and what fits each relationship instead
+  var COUPLE_STEPS = ['daily', 'checkins', 'setup'];
+  var REL_STEP = {
+    friends: { u: '/friends.html#both', t: 'One small friend ritual', n: 'a monthly call, or a voice note on Sundays: whatever suits you both' },
+    family: { u: '/grown-up-children.html#plan', t: 'A shared family plan', n: 'visits, advice and who decides, written down once, kindly' },
+    coparent: { u: '/co-parenting.html#handoff-bag', t: 'A handoff-bag checklist', n: 'the same short list in both homes, so the kids aren’t the messengers' },
+    kinship: { u: '/foster-and-kinship.html#rules', t: 'House rules, with the why written in', n: 'a few rules everyone can see, and the reason for each' },
+    teen: { u: '/teens.html#talking', t: 'Getting heard, and hearing them', n: 'how to say what you need to the adults at home' }
+  };
+  function relSwap(x, k) {
+    if (!x || !x.u) return x;
+    var hit = COUPLE_STEPS.some(function (key) { return W[key] && pathOf(W[key][0]) === pathOf(x.u); });
+    if (!hit) return x;
+    var r = REL_STEP[k];
+    // on the family pages themselves, point to the page that fits rather than back to the same section
+    if (k === 'family' && simplePath === '/grown-up-children.html') r = { u: '/signal-translator.html?rel=family', t: 'Check a family message first', n: 'see how it may land before you send it' };
+    return r;
   }
 
   /* ---------------------------------------------------------------- "Done for now? See what you got" */

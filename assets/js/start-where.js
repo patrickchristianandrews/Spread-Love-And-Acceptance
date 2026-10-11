@@ -28,7 +28,7 @@
     { id:'home-bills', ico:'\uD83C\uDFE0', label:'We share a home and the bills',
       say:'Shared homes run more smoothly when everyone sees the same list. Put every job and every bill on one page, agree how the rent and bills are split, and talk about money at a set time, starting with the numbers rather than with who is late. This works with three or more people, too.',
       picks:[
-        ['/relationships-in-depth.html#roommates','Roommates: rent, bills and three or more people','A shared-expenses note, fair splits, and how to talk about money without a fight.'],
+        ['/share-the-load.html#roommates','Roommates: rent, bills and three or more people','A shared-expenses note, fair splits, and how to talk about money without a fight.'],
         ['/lemonade-stand.html','The Lemonade Stand','Jobs and hours side by side. Works with more than two people.'],
         ['/signal-translator.html','The Signal Translator','Test your opening line about money before the house meeting.']
       ]},
@@ -74,7 +74,7 @@
         ['/lemonade-stand.html','The Lemonade Stand','Paid work and home jobs in one picture.'],
         ['/turning-toward.html','Turning toward','Small ways to stay close when you\u2019re rarely awake at the same time.']
       ]},
-    { id:'two-faiths', ico:'\uD83D\uDD6F\uFE0F', label:'Two faiths or cultures, one family',
+    { id:'two-faiths', ico:'\uD83D\uDD6F\uFE0F', label:'Two faiths or cultures, maybe a baby on the way',
       say:'Two faiths or cultures in one family can be a gift, and a lot to work out: holidays, food, names, raising children and what each family expects. You don\u2019t have to settle everything at once. Start with what matters most to each of you, and why.',
       picks:[
         ['/two-faiths.html','Two faiths or cultures, one family','Holidays, rituals, children and family expectations, with words you could use.'],
@@ -88,7 +88,16 @@
         ['/parents.html','For parents','Big feelings, coming back after you yell, and teens.'],
         ['/caregivers.html','Looking after you, too','Where carers can find a break and support.']
       ]},
-    { id:'grandparents', ico:'\uD83D\uDC75', label:'A grandparent and a grown-up child finding new rules',
+    { id:'raising-grandchild', ico:'\uD83D\uDC75', label:'I\u2019m raising my grandchild (or a relative\u2019s child)',
+      say:'Stepping in to raise a grandchild or a relative\u2019s child is a big, loving thing, and it often comes with grief, tiredness and a lot of new rules at once. You don\u2019t have to get it all right. Calm routines, a few clear house rules, and support for you matter most.',
+      picks:[
+        ['/foster-and-kinship.html#kinship','Raising a grandchild or a relative\u2019s child','Being the grown-up now, the child\u2019s parents, and the rest of the family.'],
+        ['/foster-and-kinship.html#rules','House rules, with the why written in','A few rules everyone can see, and the reason for each.'],
+        ['/foster-and-kinship.html#support','Where to get support','Groups, money help and a break for you.'],
+        ['/teens.html','For the teen in your home','A page written for them, not about them.']
+      ]},
+    { id:'grandparents', ico:'\uD83E\uDDD3', label:'A grandparent and a grown-up child finding new rules',
+      lead:['/foster-and-kinship.html#kinship','Raising your grandchild full-time? Start here \u2192'],
       say:'When a grown-up child has a home, and maybe a baby, of their own, everyone is learning new rules: visits, advice, and who decides what. Both sides usually mean well. Clear, kind words about what helps work better than hints.',
       picks:[
         ['/grandparents.html','For grandparents','Being close to the grandchildren, offering help, and when to hold back.'],
@@ -101,6 +110,22 @@
         ['/family-rifts.html','Family rifts','Reaching out, what to say first, and \u201CI\u2019m not ready\u201D or \u201CI don\u2019t have to\u201D.'],
         ['/grief.html','Grief and later life','Family after a loss, and reconnecting.'],
         ['/signal-translator.html','Check a first message','See how it might land before you send it.']
+      ]},
+    { id:'widowed', ico:'\uD83D\uDD6F', label:'I\u2019ve lost my husband, wife or partner',
+      say:'I\u2019m sorry. Grief after losing a partner has no timetable, and there is no right way to do it. Go gently. Nothing here has to be done today, and you don\u2019t have to do it alone.',
+      picks:[
+        ['/grief.html#grief','Grief has no timetable','What grief can feel like, and what helps a little.'],
+        ['/grief.html#new-chapter','A new chapter on your own','Running a home alone, and finding your feet, slowly.'],
+        ['/grief.html#hard-evening-h','For a hard evening','A few small things to do when the evening is long.'],
+        ['/grief.html#help','When to get more help','Who to talk to, and when.']
+      ]},
+    { id:'anxious', ico:'\uD83C\uDF3F', label:'Anxious or on edge today',
+      say:'Anxiety is your body trying to keep you safe, a bit too hard. Start with your body, not your thoughts: one minute to see where you are, then one small step that fits.',
+      picks:[
+        ['/ladder.html','Where am I right now?','Four quick taps, then one calm step that fits.'],
+        ['#breathe','Breathe for a minute','A short pause, right here.'],
+        ['/calming-supplements.html','Calming herbs and supplements','What the research says, honestly, and what to watch out for.'],
+        ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready next time.']
       ]},
     { id:'on-my-own', ico:'\uD83E\uDEB4', label:'On my own after a breakup',
       say:'After a breakup or divorce, the house, the week and the jobs all change at once. Go gently. Start with your own energy, then build a simple routine that is yours, including the days the kids are with you if you share them.',
@@ -137,7 +162,7 @@
         ['/parents.html','For parents','Big feelings, siblings, and coming back after you yell.'],
         ['/neurodivergent-relationships.html','Neurodivergent families','When the grown-ups are wired differently too.']
       ]},
-    { id:'illness', ico:'\uD83E\uDEF6', label:'One of us lives with an illness or disability',
+    { id:'illness', ico:'\uD83E\uDEF6', label:'Illness, disability or low energy',
       say:'When one of you is ill or disabled, the load is better shared by energy than by hours. Nobody here is a burden. Plan around good days and bad days, and let whoever has more energy that day carry more, without keeping score.',
       picks:[
         ['/when-one-is-ill.html','When one of you is ill','Sharing the load by energy, not hours, with ideas for bad days.'],
@@ -270,7 +295,8 @@
       picks:[
         ['/co-parenting.html','Separated co-parents','Calmer handoffs, short messages, and what to do when the other parent won\u2019t cooperate.'],
         ['/signal-translator.html','Check a message first','See how a message may land before you send it.'],
-        ['/safety.html#after-separation','When it\u2019s more than conflict','Messages that won\u2019t stop, threats, or using the kids: what helps.']
+        ['/safety.html#after-separation','When it\u2019s more than conflict','Messages that won\u2019t stop, threats, or using the kids: what helps.'],
+        ['/on-my-own.html#part-time-parent','Part-time with your kids','Weekend ideas, the Sunday goodbye, and staying close in between.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',
       say:'Fair. It fits some situations and not others, and it is better to find that out now than after three worksheets. Nothing here costs anything while it is being built.',

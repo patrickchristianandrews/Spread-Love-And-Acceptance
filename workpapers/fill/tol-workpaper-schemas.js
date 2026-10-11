@@ -343,8 +343,11 @@
     // how the owners are spread: clarity can read 1.00 with one person holding everything. "Both (decide
     // together)" counts as owned, and for nobody's share. No verdict against an even split: two homes, a
     // weekday/weekend schedule or very different hours can make another split the fair one.
-    var people = ctx.people(), byR = people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).length; });
-    var together = rows.filter(function (r) { return r.r === 'Both'; }).length;
+    // house rules ("Phone time", "Homework before games") need someone who keeps to them, but they aren't
+    // load: they stay out of who owns more
+    var rules = rows.filter(function (r) { return isHouseRule(r.task); }), load = rows.filter(function (r) { return !isHouseRule(r.task); });
+    var people = ctx.people(), byR = people.map(function (p) { return load.filter(function (r) { return r.r === p; }).length; });
+    var together = load.filter(function (r) { return r.r === 'Both'; }).length;
     var c = concentrationOf(byR, 3), named = byR.reduce(function (a, b) { return a + b; }, 0);
     var share = clear.length / rows.length;
     var words = share === 1 ? (examples ? 'Every job you’ve set has an owner. ' + examples + ' example ' + (examples === 1 ? 'job is' : 'jobs are') + ' still on the list: give ' + (examples === 1 ? 'it' : 'them') + ' an owner, or remove ' + (examples === 1 ? 'it' : 'them') + ' if you don’t need ' + (examples === 1 ? 'it' : 'them') + '.' : 'Every job has an owner.') : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
@@ -355,15 +358,38 @@
     // an optional size on each job (Small 1, Medium 2, Big 3; no size counts as Medium), so a weekly
     // meeting doesn't weigh the same as a quick email
     var SIZE = { Small: 1, Medium: 2, Big: 3 }, sized = rows.some(function (r) { return SIZE[r.size]; });
-    var weighted = sized ? people.map(function (p) { return rows.filter(function (r) { return r.r === p; }).reduce(function (a, r) { return a + (SIZE[r.size] || 2); }, 0); }) : null;
-    var spread = people.map(function (p, i) { return ctx.name(p) + ' ' + byR[i]; }).join(', ') + (together ? ', ' + (people.length > 2 ? 'everyone' : 'both') + ' together ' + together : '') + ' (jobs owned).';
+    var weighted = sized ? people.map(function (p) { return load.filter(function (r) { return r.r === p; }).reduce(function (a, r) { return a + (SIZE[r.size] || 2); }, 0); }) : null;
+    // how often each person's jobs come round, next to the count: a daily job isn't a monthly one
+    function often(p) { return freqBits(load.filter(function (r) { return r.r === p; })); }
+    var spread = people.map(function (p, i) { var f = often(p); return ctx.name(p) + ' ' + byR[i] + (f ? ' (' + f + ')' : ''); }).join(', ') + (together ? ', ' + (people.length > 2 ? 'everyone' : 'both') + ' together ' + together : '') + ' (jobs owned).';
+    var rulesNote = rules.length ? ' ' + plural(rules.length, 'house rule') + ' on the list ' + (rules.length === 1 ? 'isn’t' : 'aren’t') + ' counted here: a rule needs someone who keeps to it, but it isn’t load.' : '';
+    var notScore = ' Counting jobs isn’t counting the work: a daily job comes round far more often than a monthly one. It’s a starting point for a talk, not a scorecard.';
     var weighNote = weighted ? 'Counting size (Big 3, Medium 2, Small 1, no size counts as Medium): ' + people.map(function (p, i) { return ctx.name(p) + ' ' + weighted[i]; }).join(', ') + '.' : 'Some jobs are bigger than others. Give jobs a size (optional) and this counts a big one for more than a quick one.';
     var agreed = String(ctx.value('split') || '').trim(), tgt = ctx.target ? ctx.target() : null;
     var ask = agreed ? 'You wrote down the split you agreed: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
     if (tgt && c.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[c.top]) + ' about ' + fmt(tgt.t[c.top] * 100, 0) + '%.';
-    if (c.flag) out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner.' + (together ? ' ' + together + ' decided together.' : ''), note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote });
-    else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: spread, note: (agreed ? ask + ' ' : '') + weighNote });
+    if (c.flag) { var tf = often(people[c.top]); out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner' + (tf ? ' (' + tf + ')' : '') + '.' + (together ? ' ' + together + ' decided together.' : '') + rulesNote, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote + notScore }); }
+    else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: spread + rulesNote, note: (agreed ? ask + ' ' : '') + weighNote + notScore });
     return out;
+  }
+  // "3 daily, 1 weekly": how often a set of jobs comes round (jobs with no how-often left out)
+  function freqBits(list) {
+    var order = [], n = {};
+    list.forEach(function (r) { var f = r.freq; if (!f) return; if (!n[f]) { n[f] = 0; order.push(f); } n[f]++; });
+    var rank = ['Daily', 'Each meeting', 'Weekly', 'Monthly', 'Ongoing', 'As needed'];
+    order.sort(function (a, b) { return rank.indexOf(a) - rank.indexOf(b); });
+    return order.map(function (f) { return n[f] + ' ' + f.toLowerCase(); }).join(', ');
+  }
+  // A job from the task library's "House rules for us" group (or one written like it)
+  var RULES = null;
+  function isHouseRule(task) {
+    if (RULES === null) {
+      RULES = {};
+      var lib = global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY('family', 'owner') : null;
+      (lib && lib.groups ? lib.groups : []).forEach(function (g) { if (/house rules/i.test(g.name)) g.items.forEach(function (it) { RULES[String(it[0]).toLowerCase()] = 1; }); });
+    }
+    var t = String(task || '').trim().toLowerCase();
+    return !!t && (!!RULES[t] || /^(house )?rule:/.test(t));
   }
   // The jobs that still have no owner (untouched examples left out), for the closing's gentle note.
   function wp03Unowned(ctx) {
@@ -376,7 +402,7 @@
     slug: 'One-owner-per-job',
     // "Share this list" / "Open a shared list" (tol-workpaper.js): jobs are matched by their name
     share: { what: 'list', after: 'treaty', keys: { treaty: 'task' } },
-    purpose: 'A living agreement about who owns which job, for a household, a team, or a family sharing someone\'s care. Every regular job gets one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper who pitches in or notices if it slips. The helper is optional.',
+    purpose: 'A living agreement about who owns which job, for a household, a team, or a family sharing someone\'s care. Every regular job gets one owner: the person who does it and sees it through. That way nobody has to re-decide who owns what every week. If you like, add a helper or backup: someone who pitches in, notices if it slips, or covers it on a bad day or a busy week. That is optional.',
     people: true,
     meta: [
       { id: 'reviewDate', label: 'Date of this list', type: 'date' },
@@ -396,7 +422,7 @@
           { id: 'task', label: 'Job', type: 'text', w: 2.3 },
           { id: 'freq', label: 'How often', type: 'select', options: ['Daily', 'Weekly', 'Monthly', 'As needed', 'Ongoing'], w: 1.1 },
           { id: 'r', label: 'Owner', type: 'person', both: true, bothNote: '(decide together)', w: 1.1 },
-          { id: 'a', label: 'Helper (optional)', type: 'person', w: 1.1 },
+          { id: 'a', label: 'Helper or backup (optional)', type: 'person', notSameAs: 'r', w: 1.1 },
           { id: 'size', label: 'Size (optional)', type: 'select', options: ['Small', 'Medium', 'Big'], w: 1 },
           { id: 'notes', label: 'Notes', type: 'text', w: 2 }
         ],
@@ -717,6 +743,8 @@
     slug: 'The-90-second-daily-check-in',
     // "Share this week" / "Open a shared week": each person's rows are matched by day and name
     share: { what: 'week', after: 'daily', keys: { resync: 'item' } },
+    // the week's table and the rest fold away under "Just tonight", which works on its own
+    foldWeek: true,
     purpose: 'A 90-second daily check-in that keeps everyone in step with small, steady corrections instead of occasional big ones. Each person answers each prompt in one sentence, about their own day. No debating, no solving, no arguing back.',
     people: true,
     meta: [
@@ -725,7 +753,7 @@
     sections: [
       {
         id: 'daily', type: 'table', title: 'Each day',
-        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. If you can, do the evening one face to face or on a call, and kindly.',
+        intro: 'Each person fills in only their own rows: yours are the ones with your name under Person. Load: "Today I was at about low / medium / high capacity." Appreciation: one specific thing you appreciated today about someone you share your days with (a partner, a housemate, a teammate). The other two columns are optional. Anything that needs a real discussion waits for the weekly catch-up. When you can, do it face to face or on a call (in the evening, or at the shift change), and kindly.',
         addLabel: 'Add a row',
         personDays: DAYS,
         // shown under "Just tonight's check-in": the same questions, for a team or for housemates

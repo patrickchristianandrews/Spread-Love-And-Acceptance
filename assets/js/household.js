@@ -10,9 +10,11 @@
   - Unticking that box, "Erase" on the On this device page, or "Erase everything" removes it.
   - A tool never fills itself in from it: it only offers ("Use your household from before?"), and
     "Use them" never overwrites a name someone already typed. (One small exception: the Lemonade Stand swaps
-    its untouched example labels, "Me" and "Them", for the kept names, and says so.)
+    its untouched example labels, "Me" and "Them", for the kept names, and says so. The 90-second check-in
+    does the same with its empty "Person A / Person B" boxes, so a tired person doesn't retype names.)
 
   Stored as { v:1, people:[names], jobs:[{ name, owner?, f? }], at: timestamp, links:[tools that keep it up to date],
+  (owner is one of the people, or 'Both' / 'Everyone' for a job they decided to own together)
   split?, nights?, kids? }.
   The last three are optional, and only there when a tool set them (the Lemonade Stand does): split is the
   share each person agreed, { name: percent } adding up to 100; nights is how many nights out of 14 someone
@@ -67,13 +69,19 @@
       var name = str(j && typeof j === 'object' ? j.name : j, 80), k = name.toLowerCase();
       if (!name || seen[k] || out.length >= MAX_JOBS) return;
       seen[k] = 1;
-      var job = { name: name }, owner = j && typeof j === 'object' ? findName(people, j.owner) : '';
+      var job = { name: name }, owner = j && typeof j === 'object' ? findName(people, j.owner) || together(people, j.owner) : '';
       if (owner) job.owner = owner;
       var f = j && typeof j === 'object' ? cleanFreq(j.f) : '';
       if (f) job.f = f;
       out.push(job);
     });
     return out;
+  }
+  // A job everyone owns together ("Both (decide together)" on One owner per job): kept as 'Both' (two
+  // people) or 'Everyone' (more), so a list shows who owns it instead of "no owner yet". A tool that
+  // matches owners to its own names simply finds no one person for it, as before.
+  function together(people, o) {
+    return people.length > 1 && /^(both|everyone|\*)$/i.test(str(o)) ? (people.length > 2 ? 'Everyone' : 'Both') : '';
   }
   // how often a job happens: a short word like 'day' or 'week' (the tools know what each one means)
   function cleanFreq(f) { return typeof f === 'string' && /^[a-z]{2,8}$/.test(f) ? f : ''; }

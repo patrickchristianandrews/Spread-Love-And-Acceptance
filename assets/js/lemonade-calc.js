@@ -345,9 +345,15 @@
     // the names and the "who is this for" choice on their own too, for this tab only (nothing more)
     try { sessionStorage.setItem(NAMES, JSON.stringify({ people: state.people.map(function (p) { return String(p || '').slice(0, 40); }), mode: mode })); } catch (e) {}
     if (hhWrite) hhWrite.soon();
+    // kept on this device on its own, like the quick look, once something real is entered ("Forget it" stops it for this tab)
+    var auto = false;
+    if (!keep && autoKeepOk()) { keep = true; auto = true; var kd = $('keep-device'); if (kd) kd.checked = true; }
     if (!keep) return;
-    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: stay in-tab only */ }
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: stay in-tab only */ if (auto) { keep = false; var kd2 = $('keep-device'); if (kd2) kd2.checked = false; } }
   }
+  var KEEP_NO = 'tol-lemonade-keep-no';
+  function keepDismissed() { try { return sessionStorage.getItem(KEEP_NO) === '1'; } catch (e) { return false; } }
+  function autoKeepOk() { return !!state && !state.example && !!mode && !keepDismissed() && entered(); }
   function loadDraft() {
     try { var raw = sessionStorage.getItem(DRAFT); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
   }
@@ -366,8 +372,9 @@
     try { localStorage.removeItem(KEY); localStorage.removeItem(MODE_KEY); localStorage.removeItem('tol-lemonade-quick'); } catch (e) {}
     try { document.dispatchEvent(new CustomEvent('tol-lemonade-erased')); } catch (e) {}
     keep = false;
+    try { sessionStorage.setItem(KEEP_NO, '1'); } catch (e) {}
     $('keep-device').checked = false;
-    status('Erased. Nothing from the stand is kept on this device now.');
+    status('Erased. Nothing from the stand is kept on this device now. What’s on the page stays in this tab until you close it.');
     renderKeepAsk(); renderTrend();
   }
 
@@ -1168,7 +1175,29 @@
     rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;'; rm.setAttribute('aria-label', 'Remove this bill');
     rm.addEventListener('click', function () { state.bills.splice(state.bills.indexOf(item), 1); renderRows(); recalc(); });
     top.appendChild(ta); top.appendChild(rm);
+    // Planning a shared bill: one "Total each month" box. The summary splits it by the shares you set (or evenly);
+    // the total is kept spread evenly over everyone's boxes, so it reads the same on the other device.
+    var planTot = state.planning && (item.kind || 'shared') === 'shared';
+    if (planTot) {
+      var tl = document.createElement('label'); tl.className = 'ls-sel-wide ls-plan-tot';
+      var tsp = document.createElement('span'); tsp.textContent = 'Total each month (' + state.cur + ')';
+      var tin = document.createElement('input');
+      tin.type = 'number'; tin.min = '0'; tin.step = '0.01'; tin.inputMode = 'decimal'; tin.autocomplete = 'off'; tin.setAttribute('data-fk', 'bt-' + idx);
+      tin.setAttribute('aria-label', (item.name.trim() || 'This bill') + ', total each month (' + state.cur + ')');
+      if (item.ex) { tin.placeholder = String(sum(item.ex.v.map(num))); }
+      else { tin.placeholder = '0'; var tt = billTotal(item); tin.value = item.raw && item.raw[0] != null ? item.raw[0] : tt ? String(Math.round(tt * 100) / 100) : ''; }
+      if (item.raw && Object.keys(item.raw).length) tin.setAttribute('aria-invalid', 'true');
+      tin.addEventListener('input', function () {
+        own();
+        var sv = tin.value, n = parseFloat(sv), np = state.people.length;
+        if (sv !== '' && (!isFinite(n) || n < 0)) { item.raw = { 0: sv }; item.v = item.v.map(function () { return 0; }); tin.setAttribute('aria-invalid', 'true'); }
+        else { delete item.raw; tin.removeAttribute('aria-invalid'); item.v = state.people.map(function () { return sv === '' ? 0 : n / np; }); }
+        showNote(); markEdited(); recalc();
+      });
+      tl.appendChild(tsp); tl.appendChild(tin); amts.appendChild(tl);
+    }
     state.people.forEach(function (p, i) {
+      if (planTot) return;
       var lab = document.createElement('label'); lab.style.setProperty('--pc', COLORS[i]);
       var sp = document.createElement('span'); sp.className = 'pname'; sp.dataset.i = i; sp.dataset.k = 'b';
       sp.textContent = billWho(item, i);
@@ -1199,13 +1228,13 @@
     var kindNote = document.createElement('p'); kindNote.className = 'ls-mini ls-kind-note';
     function showKind() {
       wLab.hidden = item.kind !== 'own';
-      kindNote.textContent = item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'An agreed amount, like family support: kept on the list so it’s seen, but not split and not owed.'
+      kindNote.textContent = planTot ? 'The whole bill each month. The plan below splits it by the shares you set, or evenly.' : item.kind === 'own' ? 'Left out of the settle-up: it’s one person’s own cost.' : item.kind === 'agreed' ? 'An agreed amount, like family support: kept on the list so it’s seen, but not split and not owed.'
         : item.kind === 'savings' ? 'A savings goal: kept on the list and in each person’s total, never split and never owed between you. Like “Our savings, 200 a month”.'
         : item.kind === 'income' ? 'Pay or other money coming in, not a cost. Optional: with money coming in listed, the summary shows what’s left after the costs.' : '';
       kindNote.hidden = !kindNote.textContent;
       amts.querySelectorAll('.pname[data-k="b"]').forEach(function (sp) { sp.textContent = billWho(item, +sp.dataset.i); var bi = sp.parentNode.querySelector('input'); if (bi) bi.setAttribute('aria-label', billAria(item, +sp.dataset.i)); });
     }
-    ks.addEventListener('change', function () { own(); item.kind = ks.value; showKind(); markEdited(); recalc(); });
+    ks.addEventListener('change', function () { own(); var was = item.kind; item.kind = ks.value; showKind(); markEdited(); recalc(); if (state.planning && (was === 'shared') !== (item.kind === 'shared')) renderRows(); });
     ws.addEventListener('change', function () { own(); item.who = +ws.value; markEdited(); recalc(); });
     showKind();
     row.appendChild(top); row.appendChild(amts); row.appendChild(kindNote); row.appendChild(cue); row.appendChild(note);
@@ -2704,6 +2733,7 @@
     delete b.dataset.armed; b.textContent = 'Clear';
     try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); sessionStorage.removeItem('tol-lemonade-pending'); } catch (e) {}
     if (keep) erase();
+    try { sessionStorage.removeItem(KEEP_NO); } catch (e) {}
     state = clone(EXAMPLE); state.example = true; state.owners = []; state.mode = mode;
     renderAll();
     try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); } catch (e) {}
@@ -2978,8 +3008,9 @@
   });
   $('keep-device').addEventListener('change', function (e) {
     keep = e.target.checked;
-    if (keep) { save(); status('Kept on this device only. Press “Erase” any time to remove it.'); }
-    else { try { localStorage.removeItem(KEY); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now.'); }
+    if (keep) { try { sessionStorage.removeItem(KEEP_NO); } catch (err) {} save(); status('Kept on this device only. Press “Erase” any time to remove it.'); }
+    else { try { localStorage.removeItem(KEY); sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {} status('No longer kept. Nothing from the stand is on this device now; it stays in this tab until you close it.'); }
+    renderKeepAsk();
     renderKeepAsk(); renderTrend();
   });
   $('erase-device').addEventListener('click', erase);
@@ -3070,6 +3101,7 @@
     if (state.me >= 0 && !placeholder(state.people[state.me])) d.by = nm(state.me);
     if (state.curSet || state.cur !== '$') d.cur = state.cur;
     if (state.planning) d.plan = 1;
+    if (num(state.goal.a) || state.goal.f.trim()) { d.goal = {}; if (num(state.goal.a)) d.goal.a = num(state.goal.a); if (state.goal.f.trim()) d.goal.f = state.goal.f.trim().slice(0, 40); }
     var half = idx.filter(function (i) { return state.part[i] === 0.5; }).map(nm); if (half.length) d.half = half;
     var pn = byName(function (i) { return state.part[i] < 1 && state.part[i] !== 0.5 ? nightsOf(i) : 0; }); if (pn) d.pn = pn;
     var kids = idx.filter(function (i) { return state.kid[i]; }).map(nm); if (kids.length) d.kids = kids;
@@ -3167,7 +3199,7 @@
     }
     return { by: clean(raw.by), cur: clean(raw.cur, 4), people: people, half: (Array.isArray(raw.half) ? raw.half : []).map(low),
       pn: raw.pn && typeof raw.pn === 'object' ? vals(raw.pn, 13) : null, kids: (Array.isArray(raw.kids) ? raw.kids : []).map(low),
-      plan: !!raw.plan, full: !!raw.full, agreed: raw.agreed && typeof raw.agreed === 'object' ? vals(raw.agreed, 100) : null, asrc: SPLIT_SRC[raw.asrc] ? raw.asrc : '', jobs: jobs, bills: bills, own: own, household: !!raw.household };
+      plan: !!raw.plan, full: !!raw.full, goal: raw.goal && typeof raw.goal === 'object' ? { a: num(raw.goal.a) <= 1e9 ? num(raw.goal.a) : 0, f: clean(raw.goal.f, 40) } : null, agreed: raw.agreed && typeof raw.agreed === 'object' ? vals(raw.agreed, 100) : null, asrc: SPLIT_SRC[raw.asrc] ? raw.asrc : '', jobs: jobs, bills: bills, own: own, household: !!raw.household };
   }
   // "Call my mum" as Amara's line: "Call Amara’s mum". Library tasks keep their names (their columns
   // already say whose time it is, and both phones' times belong on the one line).
@@ -3329,6 +3361,8 @@
       }
     }
     if (d.plan && !state.planning) { state.planning = true; out.plan = true; }
+    // a savings goal: taken when this device has none (never replaces one set here)
+    if (d.goal && (d.goal.a || d.goal.f) && !num(state.goal.a) && !state.goal.f.trim()) { state.goal = { a: d.goal.a ? String(d.goal.a) : '', f: d.goal.f || '' }; out.goal = d.goal.f || 'the savings goal'; }
     // nights here and children: for people new here, and for people already here where this device hasn't set them
     d.people.forEach(function (nm) {
       var li = map[low(nm)]; if (li == null || li >= state.people.length) return;
@@ -3359,6 +3393,7 @@
     if (out.own) bits.push(out.own + ' fridge-list job' + (out.own === 1 ? '' : 's') + ' with ' + (out.own === 1 ? 'its owner' : 'their owners'));
     if (out.split) bits.push('the split set on ' + fromWord(d) + ' (' + out.split + '), so you both see the same “who puts in what”');
     if (out.plan) bits.push('“We’re planning, not settling up”, as on their device');
+    if (out.goal) bits.push('the goal “' + out.goal + '”');
     return (bits.length ? 'Done: ' + bits.join(', ') + '.' : 'Everything from ' + fromWord(d) + ' was already here.') +
       (out.offer && state.agreedOffer ? ' ' + offerWords(state.agreedOffer) + ' “Use it?” is just under the result.' : '') + (out.cur ? ' Money is shown in ' + out.cur + ', as on their device.' : '') +
       (plan.skip.length ? ' There was no room for ' + joinNames(plan.skip) + ' (eight people is the most).' : '') +
@@ -3801,8 +3836,7 @@
 
 
   /* ---------- "Keep this on this device so it's here tomorrow?" (shown once something is entered) ---------- */
-  var KEEP_NO = 'tol-lemonade-keep-no', keptSaid = 0;
-  function keepDismissed() { try { return sessionStorage.getItem(KEEP_NO) === '1'; } catch (e) { return false; } }
+  var keptSaid = 0;
   function storageOk() { try { localStorage.setItem('tol-lemonade-test', '1'); localStorage.removeItem('tol-lemonade-test'); return true; } catch (e) { return false; } }
   // something worth keeping: a job or a bill, or in "Me and others" the names typed on this device
   function entered() { return !!state && (realJobs().some(function (j) { return j.v.some(function (x) { return num(x) > 0; }) || j.name.trim(); }) || realBills().length > 0 || ownersList().length > 0 ||
@@ -3816,22 +3850,23 @@
     var sendOpen = !$('send-box').hidden || !$('add-box').hidden;
     return $(sendOpen || keepZone === 'sides' ? 'keepask-sides' : 'keepask-res');
   }
+  // No question to answer: the stand keeps itself on this device once something is entered (like the quick
+  // look), and one quiet line says so, with "Forget it". After "Forget it", the line offers to keep it again.
   function renderKeepAsk() {
     var boxes = document.querySelectorAll('[data-keepask]'); if (!boxes.length || !state) return;
-    var ask = !keep && !keepDismissed() && entered() && storageOk(), said = keep && Date.now() - keptSaid < 8000;
-    // in "Me and others", once kept, a quiet line stays with a plain way to erase it
-    var kept = keep && !solo() && !said, mine = keepBoxFor();
+    var kept = keep && entered(), off = !keep && entered() && storageOk(), mine = keepBoxFor();
     boxes.forEach(function (b) {
       var me = b === mine;
-      b.hidden = !me || (!ask && !said && !kept);
+      b.hidden = !me || (!kept && !off);
       var q = b.querySelector('.ls-keepask-q'), btns = b.querySelector('.ls-keepask-btns'), done = b.querySelector('.ls-keepask-done');
-      if (q) q.hidden = !ask; if (btns) btns.hidden = !ask;
+      if (q) q.hidden = true; if (btns) btns.hidden = true;
       if (done) {
-        done.hidden = !said && !kept;
-        var t = said ? 'Kept on this device, so it’s here tomorrow. Nothing is sent anywhere.' : kept ? 'Kept on this device only.' : '';
-        if (done.getAttribute('data-t') !== t) {
-          done.setAttribute('data-t', t);
-          done.innerHTML = t ? esc(t) + ' <button type="button" class="ls-link-btn" data-keep-erase>Erase it</button>' : '';
+        done.hidden = !kept && !off;
+        var t = kept ? 'Kept on this device so it’s here next time. Never sent anywhere.' : off ? 'Kept in this tab only, until you close it.' : '';
+        var key = t + (kept ? 'k' : 'o');
+        if (done.getAttribute('data-t') !== key) {
+          done.setAttribute('data-t', key);
+          done.innerHTML = t ? esc(t) + ' ' + (kept ? '<button type="button" class="ls-link-btn" data-keep-forget>Forget it</button>' : '<button type="button" class="ls-link-btn" data-keep-yes>Keep it on this device</button>') : '';
         }
       }
     });
@@ -3850,7 +3885,16 @@
   }
   document.addEventListener('click', function (e) {
     var y = e.target.closest && e.target.closest('[data-keep-yes]'), n = e.target.closest && e.target.closest('[data-keep-no]');
-    if (y) { var box = y.closest('[data-keepask]'); keepOn(); var d = box && box.querySelector('.ls-keepask-done'); if (d) { d.setAttribute('tabindex', '-1'); d.focus({ preventScroll: true }); } }
+    if (y) { var box = y.closest('[data-keepask]'); try { sessionStorage.removeItem(KEEP_NO); } catch (err) {} keepOn(); var d = box && box.querySelector('.ls-keepask-done'); if (d) { d.setAttribute('tabindex', '-1'); d.focus({ preventScroll: true }); } }
+    else if (e.target.closest && e.target.closest('[data-keep-forget]')) {
+      // the full stand only (the quick look keeps its own "Erase the quick look")
+      try { localStorage.removeItem(KEY); sessionStorage.setItem(KEEP_NO, '1'); } catch (err) {}
+      keep = false; $('keep-device').checked = false;
+      var fb = e.target.closest('[data-keepask]');
+      renderKeepAsk(); renderTrend();
+      status('Forgotten. Nothing from the full stand is kept on this device now. It stays in this tab until you close it.');
+      var fd = fb && fb.querySelector('.ls-keepask-done'); if (fd) { fd.setAttribute('tabindex', '-1'); fd.focus({ preventScroll: true }); }
+    }
     else if (e.target.closest && e.target.closest('[data-keep-erase]')) {
       erase(); renderKeepAsk();
     }
@@ -4015,7 +4059,45 @@
     var json = JSON.stringify(d);
     return chatLink.json === json && chatLink.url ? chatLink.url : sideLink('j' + b64url(new TextEncoder().encode(json)));
   }
+  // Planning, not settling up: "Our monthly plan", with the split figures only (no "this week", no "who paid",
+  // no per-person amounts typed before a split was chosen)
+  function planChatLines() {
+    var real = state.bills.filter(function (b) { return !b.ex && billTotal(b) > 0 && !(b.raw && Object.keys(b.raw).length); });
+    var costs = real.filter(function (b) { return b.kind !== 'income'; });
+    if (!costs.length || anyBad(state.bills)) return null;
+    var shared = costs.filter(function (b) { return b.kind === 'shared'; }), others = costs.filter(function (b) { return b.kind !== 'shared'; });
+    var pS = sum(shared.map(billTotal)), tg = target(); if (tg.error) tg = evenTarget();
+    var lines = ['Our monthly plan (a friendly look, not a score):'];
+    var put = function (t) { return state.people.map(function (_, i) { return t[i] * pS + sum(others.map(function (b) { return num(b.v[i]); })); }); };
+    if (shared.length) {
+      lines.push('', 'Shared bills each month:');
+      shared.forEach(function (b) { lines.push('- ' + billName(b) + ': ' + cash(billTotal(b))); });
+      var how = tg.mode === 'agreed' ? 'split ' + splitShort(tg.t) + ', the shares we ' + agreedWord() : tg.mode === 'part' ? 'split by the nights each of us is here' : 'split evenly';
+      lines.push('', 'Together that’s ' + cash(pS) + ' a month, ' + how + ': ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(tg.t[i] * pS); }).join(', ') + '.');
+      var is = tg.mode === 'even' && !state.agreed.on ? incomeSplit() : null;
+      if (is) { var ip = is.p.map(function (x) { return x / 100; }); lines.push('Or split by income (' + splitShort(ip) + '): ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(ip[i] * pS); }).join(', ') + '. We can pick whichever feels fair.'); }
+    }
+    if (others.length) {
+      lines.push('', 'On top of that, each month:');
+      others.forEach(function (b) {
+        var per = state.people.map(function (_, i) { return num(b.v[i]) > 0 ? nameOf(i) + ' ' + cash(num(b.v[i])) : ''; }).filter(Boolean).join(', ');
+        lines.push('- ' + billName(b) + ': ' + (b.kind === 'own' ? (b.who >= 0 ? nameOf(b.who) + '’s own, ' : 'own cost, ') + cash(billTotal(b)) : per + (b.kind === 'savings' ? ' (savings, kept)' : b.kind === 'agreed' ? ' (agreed, not split)' : '')));
+      });
+      var all = put(tg.t);
+      lines.push('', 'All in, each month: ' + state.people.map(function (_, i) { return nameOf(i) + ' puts in ' + cash(all[i]); }).join(', ') + '.');
+    }
+    var gt = goalText(); if (gt && !/^Add a line/.test(gt)) lines.push('', gt);
+    return lines;
+  }
   function chatText() {
+    var pl = state.planning ? planChatLines() : null;
+    if (pl) {
+      if (ownersList().length) { pl.push('', 'Who owns what (our fridge list):'); ownersList().forEach(function (o) { pl.push('- ' + o.name + ': ' + (o.who >= 0 ? nameOf(o.who) : 'no owner yet')); }); }
+      var purl = chatUrl();
+      if (purl) pl.push('', 'Add your side here (it shows a preview first, and nothing is uploaded):', purl);
+      pl.push('', 'Made with the Lemonade Stand at Spread Love & Acceptance.');
+      return pl.join('\n');
+    }
     var lines = ['Our home this week (a friendly look, not a score):'];
     var bills = state.bills.filter(function (b) { return !b.ex && b.kind !== 'income' && billTotal(b) > 0 && !(b.raw && Object.keys(b.raw).length); });
     if (bills.length) {
@@ -4104,13 +4186,22 @@
     if (a && document.activeElement !== a) a.value = state.goal.a;
     if (f && document.activeElement !== f) f.value = state.goal.f;
     line.textContent = goalText();
+    // a goal that's set (here or from the other device) shows itself, folded open once
+    var gb = $('goal-box'); if (gb && !gb.dataset.shown && (num(state.goal.a) || state.goal.f.trim())) { gb.dataset.shown = '1'; gb.open = true; }
     var add = $('goal-add-sav'); if (add) add.hidden = savingsMonthly() > 0 || state.bills.some(function (b) { return !b.ex && b.kind === 'savings'; });
   }
   if ($('goal-amt')) $('goal-amt').addEventListener('input', function () { state.goal.a = this.value; renderGoal(); save(); });
-  if ($('goal-for')) $('goal-for').addEventListener('input', function () { state.goal.f = this.value; renderGoal(); save(); });
+  if ($('goal-for')) $('goal-for').addEventListener('input', function () {
+    var was = state.goal.f.trim();
+    state.goal.f = this.value;
+    // the savings line made for this goal follows its name ("Our wedding")
+    var sv = state.bills.filter(function (b) { return !b.ex && b.kind === 'savings' && (b.name === 'Our savings, each month' || (was && b.name === was)); });
+    if (sv.length === 1 && this.value.trim()) { sv[0].name = this.value.trim(); var ta = moneyEl.querySelector('.row[data-bidx="' + state.bills.indexOf(sv[0]) + '"] textarea'); if (ta) { ta.value = sv[0].name; autoGrow(ta); } recalc(); }
+    renderGoal(); save();
+  });
   if ($('goal-add-sav')) $('goal-add-sav').addEventListener('click', function () {
     state.bills = state.bills.filter(function (b) { return !b.ex; });
-    state.bills.push({ name: 'Our savings, each month', v: zeros(), kind: 'savings', who: -1 });
+    state.bills.push({ name: state.goal.f.trim() || 'Our savings, each month', v: zeros(), kind: 'savings', who: -1 });
     markEdited(); renderRows(); recalc();
     var me0 = state.me >= 0 ? state.me : 0, f0 = moneyEl.querySelector('input[data-fk="b' + me0 + '-' + (state.bills.length - 1) + '"]');
     if (f0) { f0.scrollIntoView({ block: 'center', behavior: 'smooth' }); f0.focus({ preventScroll: true }); }
@@ -4149,7 +4240,7 @@
   });
   // "We're planning, not settling up"
   if ($('planning-on')) $('planning-on').addEventListener('change', function (e) {
-    state.planning = e.target.checked; relabel(); recalc();
+    state.planning = e.target.checked; renderRows(); relabel(); recalc();
     status(state.planning ? 'Planning: the summary says what each of you puts in, with no “paid” or “owes”.' : 'Settling up: the summary says who paid what, and who owes whom.');
   });
   // Nothing typed is ever sent anywhere, but a tab closed before "Keep it" loses the stand: say so first. The draft
@@ -4163,7 +4254,7 @@
   window.addEventListener('beforeunload', function (e) {
     save();
     if (leavingInside || keep || !mode || !entered()) return;
-    e.preventDefault(); e.returnValue = 'Your stand is only in this tab. Keep it on this device first, under “Keep it”, or it’s gone when the tab closes.';
+    e.preventDefault(); e.returnValue = 'Your stand is only in this tab. Tap “Keep it on this device” first, or it’s gone when the tab closes.';
     return e.returnValue;
   });
 

@@ -609,7 +609,7 @@
       el = h('textarea', Object.assign(base, { rows: data.table ? 2 : 3, spellcheck: 'true' }));
       el.value = value || '';
     } else if (def.type === 'select' || def.type === 'person') {
-      el = h('select', Object.assign(base, { 'data-person-select': def.type === 'person' ? (def.both ? 'both' : 'one') : null, 'data-both-note': def.bothNote || null }));
+      el = h('select', Object.assign(base, { 'data-person-select': def.type === 'person' ? (def.both ? 'both' : 'one') : null, 'data-both-note': def.bothNote || null, 'data-not-same': def.notSameAs || null }));
       el.appendChild(h('option', { value: '', text: '—' }));
       var opts = def.type === 'person'
         ? personOptions(self.ctx(), def)
@@ -1064,8 +1064,15 @@
       var note = sel.getAttribute('data-both-note') || '';
       opts.forEach(function (o) { var p = o.getAttribute('data-person'); o.textContent = ctx.name(p) + (p === 'Both' && note ? ' ' + note : ''); });
     });
+    // a helper or backup is someone other than the owner: the owner isn't offered in that row's list
+    Array.prototype.forEach.call(this.root.querySelectorAll('select[data-person-select][data-not-same]'), function (sel) {
+      var row = (self.state.tables[sel.getAttribute('data-table')] || [])[+sel.getAttribute('data-row')] || {}, own = row[sel.getAttribute('data-not-same')] || '';
+      Array.prototype.forEach.call(sel.querySelectorAll('option[data-person]'), function (o) { var off = !!own && o.getAttribute('data-person') === own; o.disabled = off; o.hidden = off; });
+    });
+    this.refreshDates();
     this.refreshExamples();
     this.refreshClosing();
+    if (this.fridgeDraw) this.fridgeDraw();
     Array.prototype.forEach.call(this.root.querySelectorAll('.wpf-person-x'), function (b) {
       var i = +b.getAttribute('data-person');
       b.setAttribute('aria-label', 'Remove ' + ctx.name(CODES[i]));
@@ -1129,7 +1136,18 @@
     var val = t.type === 'checkbox' ? t.checked : t.value;
     var tbl = t.getAttribute('data-table');
     if (tbl && t.getAttribute('data-col')) {
-      this.state.tables[tbl][+t.getAttribute('data-row')][t.getAttribute('data-col')] = val;
+      var row0 = this.state.tables[tbl][+t.getAttribute('data-row')], col0 = t.getAttribute('data-col');
+      row0[col0] = val;
+      // the owner is now the person who was the helper or backup: that place is empty again, and says so
+      var sec0 = this.schema.sections.filter(function (x) { return x.id === tbl; })[0], self1 = this, same = '';
+      (sec0 && sec0.columns || []).forEach(function (c) {
+        if (c.notSameAs === col0 && val && row0[c.id] === val) {
+          same = c.label.replace(/\s*\(optional\)$/i, '').toLowerCase(); delete row0[c.id];
+          var o2 = self1.root.querySelector('select[data-table="' + tbl + '"][data-row="' + t.getAttribute('data-row') + '"][data-col="' + c.id + '"]'); if (o2) o2.value = '';
+        }
+      });
+      if (same) this.status(this.ctx().name(val) + ' owns ' + (rowName(sec0, row0) ? '\u201c' + rowName(sec0, row0) + '\u201d' : 'it') + ' now, so the ' + same + ' place is empty again. Pick someone else, if you like.');
+      else if (this.libSaid && col0 === 'r' && val) { this.libSaid = ''; var stx = this.opts.statusEl || document.getElementById('wpf-status'); if (stx && /^Added \u201c/.test(stx.textContent)) stx.textContent = ''; }
       // the same box can be on the page twice (tonight's check-in and the week's table): keep them in step
       Array.prototype.forEach.call(this.root.querySelectorAll('[data-table="' + tbl + '"][data-row="' + t.getAttribute('data-row') + '"][data-col="' + t.getAttribute('data-col') + '"]'), function (o) {
         if (o !== t && o.type !== 'checkbox' && o.value !== val) o.value = val;
@@ -1224,7 +1242,7 @@
     var v = this.state.values, sec = this.hhJobTable(), out = { people: this.hhNames() };
     if (sec) {
       var jobs = this.hhOwnRows(sec).filter(function (r) { return r.task && String(r.task).trim(); }).map(function (r) {
-        return { name: String(r.task).trim(), owner: r.r && CODES.indexOf(r.r) >= 0 ? String(v['partner' + r.r] || '').trim() : '' };
+        return { name: String(r.task).trim(), owner: r.r === 'Both' ? 'Both' : r.r && CODES.indexOf(r.r) >= 0 ? String(v['partner' + r.r] || '').trim() : '' };
       });
       if (jobs.length) out.jobs = jobs; // none written here yet: the household keeps its own
     }
@@ -1301,7 +1319,7 @@
         var k = j.name.toLowerCase();
         if (have[k]) return;
         have[k] = 1;
-        var r = { task: j.name }, c = j.owner ? self.hhCode(j.owner) : '';
+        var r = { task: j.name }, c = j.owner ? (/^(both|everyone)$/i.test(j.owner) && peopleCount(v) > 1 ? 'Both' : self.hhCode(j.owner)) : '';
         if (c) r.r = c;
         fresh.push(r); jobs++;
       });
@@ -1490,7 +1508,7 @@
     ]);
   };
   // After a combine: each thing that differs, in the page, with a choice.
-  // "Reply to school emails: Noor here / Sami on the shared list. Keep which?"
+  // "Owner of “Reply to school emails”: on this device Noor, on the shared list Sami. Keep: [Noor] [Sami]"
   A.conflictsEl = function () {
     var list = this.conflicts || [];
     if (!list.length) return null;
@@ -1499,17 +1517,34 @@
     box.appendChild(h('p', {}, [h('strong', { text: (list.length === 1 ? 'One thing is' : list.length + ' things are') + ' different on the shared ' + what + '. ' }), 'Until you choose, this page keeps its own.']));
     var ul = h('ul', { className: 'wpf-conflict-list' });
     list.forEach(function (cf, i) {
+      // short answers (a name, "Weekly") go on the buttons themselves; longer ones are quoted above them
+      var lab = cf.label || cf.what || 'Answer', short = String(cf.mine).length <= 28 && String(cf.theirs).length <= 28;
+      var q = lab.charAt(0).toUpperCase() + lab.slice(1) + ' for \u201c' + cf.name + '\u201d: on this device ' + (short ? cf.mine : '\u201c' + cf.mine + '\u201d') + ', on the shared ' + what + ' ' + (short ? cf.theirs : '\u201c' + cf.theirs + '\u201d') + '.';
       ul.appendChild(h('li', null, [
-        h('p', { className: 'wpf-conflict-q' }, [h('strong', { text: cf.name + (cf.what ? ' (' + cf.what + ')' : '') + ': ' }), cf.mine + ' here / ' + cf.theirs + ' on the shared ' + what + '. Keep which?']),
-        h('div', { className: 'wpf-share-btns' }, [
-          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'conflict-mine', 'data-i': String(i), text: 'Keep ' + cf.mine }),
-          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'conflict-theirs', 'data-i': String(i), text: 'Use ' + cf.theirs })
+        h('p', { className: 'wpf-conflict-q', text: q }),
+        h('div', { className: 'wpf-share-btns', role: 'group', 'aria-label': 'Keep which ' + lab.toLowerCase() + ' for ' + cf.name }, [
+          h('span', { className: 'wpf-conflict-k', text: 'Keep:' }),
+          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'conflict-mine', 'data-i': String(i), 'aria-label': 'Keep ' + cf.mine + ' (on this device)', text: short ? cf.mine : 'This device\u2019s' }),
+          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'conflict-theirs', 'data-i': String(i), 'aria-label': 'Use ' + cf.theirs + ' (on the shared ' + what + ')', text: short ? cf.theirs : 'The shared one' })
         ])
       ]));
     });
     box.appendChild(ul);
     if (list.length > 1) box.appendChild(h('div', { className: 'wpf-share-btns' }, [h('button', { type: 'button', className: 'wpf-add', 'data-action': 'conflict-all-mine', text: 'Keep everything as it is here' })]));
     return box;
+  };
+  // A helper or backup who is also the owner (after a combine, say): that place is emptied. Returns a
+  // short line saying so, or ''.
+  A.noSamePerson = function () {
+    var self = this, n = 0, one = '';
+    this.schema.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      s.columns.forEach(function (c) {
+        if (!c.notSameAs) return;
+        (self.state.tables[s.id] || []).forEach(function (r) { if (r && r[c.id] && r[c.id] === r[c.notSameAs]) { delete r[c.id]; n++; one = rowName(s, r); } });
+      });
+    });
+    return !n ? '' : n === 1 ? 'On \u201c' + one + '\u201d the owner was also the helper or backup, so that place is empty again.' : 'On ' + n + ' jobs the owner was also the helper or backup, so those places are empty again.';
   };
   A.resolveConflict = function (i, theirs) {
     var cf = (this.conflicts || [])[i];
@@ -1519,10 +1554,25 @@
       var rows = this.state.tables[cf.tbl] || [], sec = this.schema.sections.filter(function (x) { return x.id === cf.tbl; })[0];
       var keyCol = this.schema.share && this.schema.share.keys ? this.schema.share.keys[cf.tbl] : null;
       var row = rows.filter(function (x) { return x && (cf.day ? x.day === cf.day && x.who === cf.who : keyCol && fold(x[keyCol]) === cf.key); })[0];
-      if (row && sec) { row[cf.col] = cf.value; this.changed(); }
+      if (row && sec) {
+        row[cf.col] = cf.value;
+        // a helper or backup who would now be the owner too: that place is emptied, never both
+        var fixed = this.noSamePerson();
+        if (!fixed) sec.columns.forEach(function (c) { if (c.notSameAs && c.id === cf.col && row[c.notSameAs] === cf.value) { delete row[c.id]; fixed = 'They already own it, so the ' + c.label.replace(/\s*\(optional\)$/i, '').toLowerCase() + ' place is empty.'; } });
+        this.changed();
+      }
     }
+    // the other choices about the same job may now point at the same person: those go too
+    var self2 = this;
+    this.conflicts = (this.conflicts || []).filter(function (c) {
+      if (!c.key || c.tbl !== cf.tbl) return true;
+      var r = (self2.state.tables[c.tbl] || []).filter(function (x) { var k = self2.schema.share && self2.schema.share.keys ? self2.schema.share.keys[c.tbl] : null; return x && k && fold(x[k]) === c.key; })[0], def = null;
+      var s3 = self2.schema.sections.filter(function (x) { return x.id === c.tbl; })[0];
+      (s3 ? s3.columns : []).forEach(function (cc) { if (cc.id === c.col) def = cc; });
+      return !(r && def && def.notSameAs && r[def.notSameAs] === c.value);
+    });
     this.render();
-    this.status(theirs ? 'Changed to ' + cf.theirs + ' for ' + cf.name + '.' : 'Kept ' + cf.mine + ' for ' + cf.name + '.');
+    this.status((theirs ? 'Changed to ' + cf.theirs + ' for ' + cf.name + '.' : 'Kept ' + cf.mine + ' for ' + cf.name + '.') + (theirs && fixed ? ' ' + fixed : ''));
     var next = this.root.querySelector('#wpf-conflicts [data-action="conflict-mine"]') || this.root.querySelector('.wpf-sendback [data-action="share-fresh"]');
     if (next) next.focus();
   };
@@ -1549,7 +1599,9 @@
     var d = this.sharedIn;
     if (!d) return null;
     var what = this.shareWhat(), n = this.sharedCount(d), names = d.p.filter(Boolean);
-    var empty = answered(this.schema, this.state) === 0;
+    var empty = answered(this.schema, this.state) === 0, self = this;
+    // only the starter example jobs on the page: they make way for the shared ones either way
+    var onlyEx = empty && this.schema.sections.some(function (s) { return s.examples && (self.state.tables[s.id] || []).some(function (r) { return isExampleRow(s, r); }); });
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
     if (!this.schema.people) {
       box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
@@ -1564,7 +1616,7 @@
     }
     box.appendChild(h('p', {}, [h('strong', { text: 'Someone shared ' + (what === 'week' ? 'a week' : 'a list') + ' with you. ' }),
       (names.length ? 'Names: ' + names.join(', ') + '. ' : '') + n + (what === 'week' ? (n === 1 ? ' row.' : ' rows.') : (n === 1 ? ' job.' : ' jobs.'))]));
-    box.appendChild(h('p', { className: 'wpf-help', text: empty ? 'Nothing is on this page yet, so either choice simply opens it.' : 'Combine keeps everything here and adds what is new, matching people by name. Where both have something different, this page keeps its own and tells you. Replace swaps this page for the shared ' + what + '.' }));
+    box.appendChild(h('p', { className: 'wpf-help', text: onlyEx ? 'Only the example jobs are on this page so far, so either choice opens the shared ' + what + ' in their place.' : empty ? 'Nothing of yours is on this page yet, so either choice simply opens it.' : 'Combine keeps everything here and adds what is new, matching people by name. Where both have something different, this page keeps its own and tells you. Replace swaps this page for the shared ' + what + '.' }));
     box.appendChild(h('div', { className: 'wpf-share-btns' }, [
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Combine with what’s here' }),
       h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-replace', text: 'Replace what’s here' }),
@@ -1723,7 +1775,7 @@
               var rowName0 = s.personDays ? r.day + ', ' + show({ type: 'person' }, r.who) : String(hit[key] || r[key] || '');
               differ.push(rowName0 + ': ' + c.label.replace(/\s*\(optional\)$/i, '').toLowerCase() + ' is ' + show(c, r[c.id]) + ' there, ' + show(c, hit[c.id]) + ' here');
               conflicts.push({ tbl: s.id, key: key && !s.personDays ? fold(r[key]) : '', day: s.personDays ? r.day : '', who: s.personDays ? r.who : '', col: c.id, name: rowName0,
-                what: c.type === 'person' ? '' : c.label.replace(/\s*\(optional\)$/i, '').toLowerCase(), mine: show(c, hit[c.id]), theirs: show(c, r[c.id]), value: r[c.id] });
+                what: c.type === 'person' ? '' : c.label.replace(/\s*\(optional\)$/i, '').toLowerCase(), label: c.label.replace(/\s*\(optional\)$/i, ''), mine: show(c, hit[c.id]), theirs: show(c, r[c.id]), value: r[c.id] });
             }
           });
           if (took) added.filled++;
@@ -1737,7 +1789,10 @@
     });
     this.state = sanitize(sc, st);
     syncPeople(sc, this.state);
+    var sameFixed = this.noSamePerson();
     this.changed();
+    // the names that came with it are offered in the site's other tools, as if they had been typed here
+    this.hhAutoKeep();
     if (this.hhWrite) this.hhWrite.soon();
     var unit = what === 'week' ? ['row', 'rows'] : ['job', 'jobs'];
     if (replace) return 'Opened the shared ' + what + ': ' + d.p.filter(Boolean).join(', ') + '. ' + (dropped.length ? 'There was no room for ' + dropped.join(', ') + ' (eight people at most). ' : '') + 'Nothing was sent anywhere.';
@@ -1750,6 +1805,7 @@
     this.conflicts = conflicts.slice(0, 40);
     if (differ.length) msg += ' ' + (differ.length === 1 ? 'One thing is' : differ.length + ' things are') + ' different on the shared ' + what + '. Choose which to keep, at the top of the sheet.';
     if (dropped.length) msg += ' There was no room for ' + dropped.join(', ') + ' (eight people at most).';
+    if (sameFixed) msg += ' ' + sameFixed;
     return msg;
   };
 
@@ -1905,6 +1961,7 @@
       var again = this.root.querySelector('[data-lib="' + tid + '"] [data-task="' + task.replace(/"/g, '\\"') + '"]');
       if (again) again.focus();
       this.status('Added “' + task + '” to the list. Fill in ' + (hasFreq ? 'who owns it' : 'who did it and rough minutes') + ' next to it.');
+      this.libSaid = task;
       return;
     }
     if (act === 'add-person') {

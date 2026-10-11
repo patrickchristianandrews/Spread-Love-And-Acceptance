@@ -17,6 +17,9 @@
   .tn-jump li{ margin:0 !important; max-width:none !important; }
   .tn-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
   .tn-jump a:hover{ border-color:var(--credit); }
+  .tn-share{ margin:-.9rem 0 1.5rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .tn-share-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:var(--paper); color:#2F5F8A; cursor:pointer; margin-right:.4rem; }
+  .tn-share-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .tn-who{ margin:-.6rem 0 1.25rem !important; font-size:.98rem; color:var(--ink-soft); }
   .tn-private{ margin:.5rem 0 1.25rem !important; padding:.7rem 1rem; border:1px dashed var(--line); border-radius:12px; background:var(--paper-deep); font-size:.98rem; }
   .tn-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
@@ -86,10 +89,10 @@
 <p class="tn-who">Live with a grandparent, an aunt or uncle, foster carers or another family? This page is for you too. Wherever it says “parents”, read it as the adults looking after you.</p>
 
 <ul class="tn-jump" aria-label="On this page">
-  <li><a href="#parents">Parents and carers</a></li>
-  <li><a href="#family-care">Living with grandparents or family</a></li>
-  <li><a href="#talking">Getting heard</a></li>
+  <li><a href="#family-care">Living with grandparents, family or foster carers</a></li>
   <li><a href="#parent-away">A parent who’s away</a></li>
+  <li><a href="#parents">Parents and carers</a></li>
+  <li><a href="#talking">Getting heard</a></li>
   <li><a href="#middle">Adults at home fighting</a></li>
   <li><a href="#siblings">Brothers and sisters</a></li>
   <li><a href="#friends">Friends and group chats</a></li>
@@ -100,6 +103,7 @@
   <li><a href="#help">More than a bad day</a></li>
   <li><a href="#fun">Need a break</a></li>
 </ul>
+<p class="tn-share no-bubble"><button type="button" class="tn-share-btn" data-share data-share-title="For teens: when home, friends and feelings get loud" data-share-text="A free, private page for teens about home, family, friends and feelings. Nothing is sent anywhere.">Share this guide</button> <small>Sends the link only, never anything you typed.</small></p>
 
 <h2 id="parents">When it’s tense with your parents or carers</h2>
 <p>You’re becoming your own person. You want more say over your time, your space and your choices. That’s supposed to happen.</p>
@@ -136,9 +140,10 @@
   <li><a href="/library/life.html#teenagers"><strong>What research says about teens and parents</strong><span>Written for adults, so it reads that way. Useful if you’re curious why the adults at home act how they do.</span></a></li>
 </ul>
 
-<h3 id="family-care">Living with grandparents or other family</h3>
+<h3 id="family-care">Living with grandparents, family or foster carers</h3>
 <p>Lots of teens live with a nan or grandad, an aunt, an older sibling or foster carers. Sometimes for a while, sometimes for good. It can feel like a mix of things at once: grateful, annoyed, homesick, safe.</p>
 <ul>
+  <li><strong>New home, new school, new rules, all at once?</strong> If you’ve moved placements or changed schools, it’s normal to feel on guard for a while. You don’t have to settle in fast, or pretend it’s fine.</li>
   <li><strong>Their rules may feel old-fashioned.</strong> That’s normal across two generations. Ask for the reason behind a rule, then suggest a deal: “10 on school nights, 11 on weekends?”</li>
   <li><strong>They’re learning too.</strong> Raising a teen again, years later, is a lot. Neither of you is doing it wrong.</li>
   <li><strong>You can say what you miss.</strong> Missing your old home or your parent isn’t ungrateful.</li>
@@ -148,7 +153,7 @@
   <p>“I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea.”</p>
   <p>“I’m not angry at you. I’m just missing Mum today.”</p>
 </div>
-<p>In foster or kinship care, you can also ask your social worker, or an advocate, about things you want to change. For the adults, there’s <a href="/foster-and-kinship.html">a page for foster and kinship carers</a> you could show them.</p>
+<p>In foster or kinship care, you can also ask your social worker, or an advocate, about things you want to change, like seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again. For the adults, there’s <a href="/foster-and-kinship.html">a page for foster and kinship carers</a> you could show them.</p>
 
 <h2 id="talking">Talking about it: getting heard, and hearing them</h2>
 <p>It’s hard to feel heard when adults decide most things. It’s easy to go quiet, or loud. Both make sense, and neither usually gets you what you want. These work with parents, carers, brothers and sisters, and friends.</p>
@@ -358,11 +363,10 @@
 <div class="tn-help">
   <p><strong>If you’re thinking about hurting yourself or ending your life:</strong></p>
   <ul>
-    <li>Call or text <a href="tel:988">988</a> (US), any time, day or night. You can just text if talking feels like too much.</li>
-    <li>In the UK: call <strong>Childline</strong> free on <a href="tel:08001111">0800 1111</a>, any time. It won’t show on the phone bill.</li>
-    <li>Crisis Text Line: text <strong>HOME</strong> to <a href="sms:741741">741741</a> (US).</li>
-    <li>In danger right now: call <a href="tel:911">911</a>.</li>
-    <li>Outside the US: find a free line near you at <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a>.</li>
+    <li><strong>UK:</strong> call <strong>Childline</strong> free on <a href="tel:08001111">0800 1111</a>, any time. It won’t show on the phone bill. Or text <strong>SHOUT</strong> to <a href="sms:85258">85258</a>, free, any time, if talking feels like too much.</li>
+    <li><strong>US:</strong> call or text <a href="tel:988">988</a>, any time, day or night. Or text <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line).</li>
+    <li>In danger right now: call <a href="tel:999">999</a> in the UK or <a href="tel:911">911</a> in the US.</li>
+    <li>Somewhere else: find a free line near you at <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a>.</li>
   </ul>
 </div>
 
