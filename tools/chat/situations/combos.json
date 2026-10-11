@@ -34,7 +34,7 @@
     "coparent+tone": {
       "going": "This is Pillar IV, Tune how you send and receive. After a separation, old hurts ride along on every message, so a neutral text can read as an attack. Short, factual, friendly and about the kids’ logistics is the safest shape for co-parenting messages.",
       "steps": ["Keep messages brief, factual and friendly, about the kids’ logistics only.", "Before sending, check it: would it read the same to a neutral stranger?", "Don’t answer a heated message right away. Wait, settle, then reply to the logistics only."],
-      "scripts": ["Thanks for letting me know. I’ll have Maya ready at 5 on Friday with her school bag.", "Got it. For the dentist on the 12th, could you take her? If not, I can move my shift."]
+      "scripts": ["Thanks for letting me know. I’ll have our child ready at 5 on Friday with their school bag.", "Got it. For the dentist on the 12th, could you take them? If not, I can move my shift."]
     },
     "coworker+group": {
       "reflect": "Things falling through the cracks on a team is so common, and it’s rarely because anyone isn’t trying.",
