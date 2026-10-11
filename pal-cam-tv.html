@@ -63,9 +63,13 @@
   html.tv-quiet.tv-fine .tv-ctl { opacity: 0; pointer-events: none; }
   .pc-ov.is-tv .tv-hint { position: absolute; top: 26vh; bottom: auto; right: auto; left: 50%; transform: translateX(-50%); max-width: min(90vw, 34rem); text-align: center; font-size: 1rem; z-index: 3; }
   /* local time and weather, big enough to read from the couch */
-  .pc-ov.is-tv .pc-time, .pc-ov.is-tv .pc-wx, .pc-ov.is-tv .pc-rec { font-size: clamp(.9rem, .55rem + 1.1vw, 1.7rem); padding: .3rem .9rem; top: max(10px, 2vh); }
-  .pc-ov.is-tv .pc-wx { top: calc(max(10px, 2vh) + clamp(2rem, 1.6rem + 1.6vw, 3rem)); min-height: 44px; }
-  .pc-ov.is-tv .pc-time { right: 1.2rem; } .pc-ov.is-tv .pc-rec, .pc-ov.is-tv .pc-wx { left: 1.2rem; }
+  /* time and weather together in the bottom-left corner, like Frequency Buddies, so they're easy to find on a TV */
+  .pc-ov.is-tv .pc-time, .pc-ov.is-tv .pc-wx, .pc-ov.is-tv .pc-rec { font-size: clamp(.9rem, .55rem + 1.1vw, 1.7rem); padding: .3rem .9rem; }
+  .pc-ov.is-tv .pc-rec { top: max(10px, 2vh); left: 1.2rem; }
+  .pc-ov.is-tv .pc-time { top: auto; right: auto; left: 1.2rem; bottom: calc(max(10px, 3vh) + clamp(3rem, 1.9rem + 1.8vw, 3.6rem)); }
+  .pc-ov.is-tv .pc-wx { top: auto; left: 1.2rem; bottom: max(10px, 3vh); min-height: 44px; }
+  @media (min-width: 700px) { .pc-ov.is-tv .pc-cap { max-width: 56vw; } }
+  @media (max-width: 699px) { .pc-ov.is-tv .pc-cap { max-width: 90vw; bottom: calc(max(10px, 3vh) + 2 * clamp(3rem, 1.9rem + 1.8vw, 3.6rem) + .6rem); } }
   @media (max-width: 420px) { .tv-ctl button { padding: .45rem .75rem; font-size: .95rem; } }
 </style>
 <!-- seo:start -->

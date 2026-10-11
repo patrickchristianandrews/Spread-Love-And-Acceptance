@@ -953,13 +953,13 @@
 
   draw();
 
-  // A gentle welcome back, from this browser's own log. No streaks, no "you missed".
+  // Your last reading, from this browser’s own log, as a gentle starting point. No streaks, no "you missed", no "welcome back".
   (function(){
     var a=get(); if(!a.length) return;
     var last=a[a.length-1];
     if(last.d===localDay() || !SKY[last.sky]) return;
     var p=document.createElement('p'); p.className='tol-welcome';
-    p.innerHTML='<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="40" height="40"><span>Welcome back. Last time it was <strong></strong>. How’s today looking?</span>';
+    p.innerHTML='<img src="/assets/img/mascots/bubble-buddy.svg" alt="" width="40" height="40"><span>Your last reading was <strong></strong>. How’s today looking?</span>';
     p.querySelector('strong').textContent=SKY[last.sky].name.toLowerCase();
     var h=document.querySelector('.read-head'); if(h) h.parentNode.insertBefore(p,h.nextSibling);
   })();
