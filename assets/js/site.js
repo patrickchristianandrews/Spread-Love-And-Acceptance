@@ -2247,7 +2247,7 @@
   var TIP_TOPICS = {
     self: ['calm', 'body', 'mind', 'selftalk', 'rest', 'sleep'], relationships: ['connection', 'talking', 'family', 'friends', 'kindness'],
     book: ['connection', 'talking', 'home', 'kindness'], workpapers: ['home', 'talking', 'work', 'connection'], program: ['home', 'talking', 'work'],
-    tools: ['focus', 'calm', 'talking', 'mind'], media: ['rest', 'calm', 'outdoors', 'sleep'], start: null, about: null
+    tools: ['focus', 'calm', 'talking', 'mind'], media: ['rest', 'calm', 'outdoors', 'sleep'], guides: ['talking', 'connection', 'calm', 'home'], new: ['talking', 'connection', 'calm', 'home'], start: null, about: null
   };
   var PAGE_TIPS = [
     [/^\/(gaming-and-time-together|money-together|different-hours|long-distance|empty-nest|two-faiths|when-one-is-ill|how-to-stop-fighting-with-your-partner|more-than-two|coming-home|retired-together|new-parent|pursue-withdraw|neurodivergent-relationships)\.html$/, ['connection', 'talking', 'home', 'calm']],

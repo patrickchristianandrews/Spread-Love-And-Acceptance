@@ -120,6 +120,8 @@
     $w('pp-tonight').addEventListener('click', function () { back = this; wd.hidden = false; document.documentElement.style.overflow = 'hidden'; show(0); });
     $w('pp-wd-next').addEventListener('click', function () { if (step >= 2) close(); else show(step + 1); });
     $w('pp-wd-stop').addEventListener('click', close);
+    // opened from a link that asks for tonight's wind-down (e.g. When one of you is ill): start it straight away
+    if (/[?&]tonight=1\b/.test(location.search)) setTimeout(function () { var b = $w('pp-tonight'); if (b) b.click(); }, 300);
     wd.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   }
 

@@ -559,6 +559,31 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
     chk(a.selfHarm && !a.danger && g.selfHarm && g.danger && g.meanings.some(m => /988/.test(m)), 'a crisis message received: 988 first');
     chk(v.id === 'danger' && /988/.test(v.text), 'a crisis message sent: 988 first: ' + v.text); }
 }
+// ---------- re-test round 12: co-parents get BIFF, facts beat "Lately it's felt like", notes tell the truth ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const rw = (t, rel, facts) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || 'partner', facts });
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  const t = 'You ALWAYS forget his inhaler. Typical.';
+  chk(rw(t, 'coparent').main === "His inhaler wasn't in the bag on [the day]. Can we both check the list before handover?", 'co-parent BIFF, no facts: ' + rw(t, 'coparent').main);
+  chk(rw(t, 'coparent', "His inhaler wasn't in the bag on Sunday.").main === "His inhaler wasn't in the bag on Sunday. Can we both check the list before handover?", 'co-parent BIFF, with the day from the facts: ' + rw(t, 'coparent', "His inhaler wasn't in the bag on Sunday.").main);
+  chk(rw('You keep forgetting Mia’s coat.', 'coparent').main.indexOf("Mia's coat wasn't in the bag") === 0, 'co-parent BIFF, named child: ' + rw('You keep forgetting Mia’s coat.', 'coparent').main);
+  all(rw(t, 'coparent')).forEach(x => chk(!/Lately it's felt like|say the one thing|typical|always/i.test(x), 'co-parent version still blames: ' + x));
+  const g = E.receive(an(t), { rel: 'coparent' });
+  chk(g.replies.some(r => /inhaler/.test(r.text)), 'co-parent received: a reply that answers the inhaler: ' + JSON.stringify(g.replies));
+  chk(E.receive(an('You forgot her inhaler AGAIN. Do you even care?'), { rel: 'coparent' }).meanings.some(m => /do you even care/.test(m)), 'the “why didn’t you” reading names “do you even care?”');
+  // a co-parent blank ask becomes one shared plan
+  all(rw('You never reply about pickups.', 'coparent')).forEach(x => chk(!/say the one thing/.test(x), 'co-parent blank ask: ' + x));
+  // a plain fact replaces "Lately it's felt like you…"; a fact that blames is not used
+  const f = rw('You never take the bins out.', 'partner', 'The bins went out late on Tuesday.');
+  chk(/^The bins went out late on Tuesday\./.test(f.main) && !/Lately/.test(f.main) && f.changes.some(c => c.id === 'usefact'), 'facts used: ' + f.main);
+  chk(/Lately it's felt like/.test(rw('You never take the bins out.', 'partner', 'You always forget the bins.').main), 'a blaming “fact” is not used');
+  // "Must be nice…": the note never claims no ask was added
+  const n = rw('Must be nice to just bake all day while I do the admin.', 'business');
+  chk(n.changes.every(c => !/doesn't add an ask/.test(c.why || '')), 'the “no ask added” note is gone: ' + n.changes.map(c => c.why).join(' / '));
+  // family: "you're not my dad" keeps the feeling with the right word
+  chk(/missing Dad today/.test(rw('You’re not my dad.', 'family').main), '“not my dad” → missing Dad: ' + rw('You’re not my dad.', 'family').main);
+}
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));
 [['fine. whatever you want', /dismiss/], ['i don’t care', /dismiss/], ['whatevs', /dismiss/], ['Nobody asked you.', /contempt/], ['You are so autistic.', /verdict/], ['this is why nobody wants to deal with you', /contempt/], ['You are getting on my last fucking nerve', /swear|hostile/], ['You’re a total nightmare', /verdict/], ['It would be nice if someone helped around here.', /hint/], ['We need to talk.', /opener/], ['of course you did. I have to do everything around here', /sarcasm/], ['Fine. Whatever works for you.', /dismiss/], ['Sure, go out with your friends, I’ll just sit here.', /sarcasm/], ['Don’t mind me.', /passive/]].forEach(([t, want]) => {

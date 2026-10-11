@@ -36,8 +36,8 @@
       say:'Friendships often drift without anyone choosing it: a move, a new baby, a busy year. It is fine to be the one who reaches out first, and it is fine to ask for a little more back. A short, warm message with no guilt in it usually does more than a long one.',
       picks:[
         ['/friends.html','Friends: when a friendship drifts','Always the one reaching out, big life changes, and low-energy ways to stay close.'],
-        ['/signal-translator.html','Check a message first','See how a short text might land before you send it.'],
-        ['/turning-toward.html','Turning toward','Small, easy ways to stay in touch.']
+        ['/signal-translator.html?rel=friends','Check a message first','See how a short text might land before you send it.'],
+        ['/turning-toward.html?who=friend','Turning toward','Small, easy ways to stay in touch.']
       ]},
     { id:'more-than-two', ico:'\uD83D\uDC9E', label:'More than two partners at home',
       say:'Most of the tools here work for three or more people: one list, one owner per job, and a regular time to talk. Feeling like a guest in a home you joined is common, and it usually eases once you own a few whole jobs and have a say in decisions.',

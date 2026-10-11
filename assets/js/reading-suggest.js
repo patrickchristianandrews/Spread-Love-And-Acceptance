@@ -139,18 +139,20 @@
   // with nothing that fits shows no card at all, rather than something off-topic.
   var SIT_ITEM = {
     coparent: /co-?parent|blended famil|stepfamil/i,
-    eldercare: /elderly|aging parent|ageing parent|caring for (aging|ageing|elderly)|caregiv|adult children on the front lines|caring for the carers/i,
-    parenthood: /parenthood|new parents?\b|\bbab(y|ies)\b|toddler|parenting/i,
+    eldercare: /elderly|aging parent|ageing parent|caring for (aging|ageing|elderly)|caring for (my|your|a|an|our) ?(dad|mum|mom|father|mother|parents?)|caregiv|adult children on the front lines|caring for the carers/i,
+    parenthood: /parenthood|new parents?\b|for parents|parents to\b|\bbab(y|ies)\b|toddler|parenting|your child|children’s|children's/i,
+    family: /\bfamil(y|ies)\b/i,
     adhd: /\badhd\b/i,
     autism: /autis/i,
     roommates: /roommate|housemate/i,
     work: /workplace|coworker|co-worker|work buddy|colleague/i,
-    couple: /couples?\b|marriage|married|marital|spouse|in love\b|your relationship|romantic|loving someone/i
+    couple: /couples?\b|marriage|married|marital|spouse|in love\b|your relationship|romantic|loving someone|your partner|with a partner/i
   };
   var SIT_PAGE = {
     coparent: /co-?parent|separat|divorc|stepfam|blended|two homes|on-my-own/,
     eldercare: /caregiv|carer|caring for|dementia|elderly|ageing|aging|eldercare|family-obligations/,
-    parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting/,
+    parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting|\bchild(ren)?\b|\bkids\b/,
+    family: /famil|parent|grand|sibling|brother|sister|teen|kinship|foster|in-law|\bmum\b|\bmom\b|\bdad\b|relative/,
     adhd: /\badhd\b|neurodiver|wired-differently|wired differently|wiring/,
     autism: /autis|neurodiver|wired-differently|wired differently|wiring|sensory/,
     roommates: /roommate|housemate|sharing-a-room|flatmate|share-the-load/,
