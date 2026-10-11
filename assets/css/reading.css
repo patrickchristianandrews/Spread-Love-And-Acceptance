@@ -76,7 +76,7 @@ body{
 .read nav.p3-nav a[rel="next"]{ margin-left:auto; font-weight:600; border-color:var(--brass); }
 @media (max-width:560px){ .read nav.p3-nav a{ flex:1 1 100%; } .read nav.p3-nav a[rel="next"]{ margin-left:0; } }
 .read p.last-updated{ margin:1rem 0 .5rem; font-size:.9rem; color:var(--ink-soft); }
-.read ol.book-order{ padding-left:0; list-style:none; }
+.read ol.book-order{ list-style:none; padding:.6rem 1.1rem .9rem !important; background:var(--paper); border:1px solid var(--line); border-radius:18px; }
 .read ol.book-order > li{ margin:.9rem 0 0; }
 .read ol.book-order > li > strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
 .read ol.book-order ol{ margin:.2rem 0 0; padding-left:1.3rem; }

@@ -391,6 +391,7 @@
     var n = Math.min(MAX_P, Math.max(2, o.people.length));
     var t = { v: 1, people: [], list: [], ans: {}, me: 0, ill: !!o.ill, away: !!o.away, hrs: {}, split: '', peek: {} };
     if (o.lang === 'es' || o.lang === 'en') t.lang = o.lang;
+    if (o.hhNo) t.hhNo = true;
     if (typeof o.split === 'string' && /^\d{1,2}$/.test(o.split) && +o.split >= 10 && +o.split <= 90) t.split = o.split;
     for (var i = 0; i < n; i++) t.people.push(String(o.people[i] || '').slice(0, 40));
     (Array.isArray(o.list) ? o.list : []).forEach(function (id) { if (known(id) && t.list.indexOf(id) < 0) t.list.push(id); });
@@ -460,7 +461,7 @@
       var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.autocomplete = 'off'; inp.value = q.people[i];
       inp.placeholder = nm(i);
       inp.setAttribute('data-lq-name', String(i));
-      inp.addEventListener('input', function () { q.people[i] = inp.value.slice(0, 40); save(); relabel(); renderResult(); });
+      inp.addEventListener('input', function () { q.people[i] = inp.value.slice(0, 40); save(); relabel(); renderResult(); offerNames(); });
       row.appendChild(dot); row.appendChild(inp);
       if (i >= 2) {
         var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'remove'; rm.innerHTML = '&times;';
@@ -479,6 +480,16 @@
       box.appendChild(add);
     }
     if (focusIdx != null) { var f = box.querySelector('[data-lq-name="' + focusIdx + '"]'); if (f) f.focus(); }
+  }
+  // two or more names typed: offered to the other tools on this device (WP-03, WP-13…), unless someone unticked
+  // "Use these names in the other tools" in the full stand
+  var namesT = 0;
+  function offerNames() {
+    clearTimeout(namesT);
+    namesT = setTimeout(function () {
+      var api = window.TOLLemonade, real = q.people.map(function (_, i) { return typed(i); }).filter(Boolean);
+      if (api && api.quickNames && real.length >= 2 && !q.hhNo) api.quickNames(real);
+    }, 900);
   }
   function removePerson(k) {
     q.people.splice(k, 1);
@@ -1301,16 +1312,19 @@
       'lq-res-h': $('lq-res-h'), 'lq-ill': $('lq-ill'), 'lq-away': $('lq-away'), 'lq-next-h': g('#lq-res .lq-next h4'), 'lq-fridge-t': g('#lq-fridge .t'), 'lq-fridge-d': g('#lq-fridge .d'),
       'lq-deeper-t': g('#lq-deeper .t'), 'lq-deeper-d': g('#lq-deeper .d'), 'lq-talk-t': talkT, 'lq-talk-d': talk, 'lq-keep-t': keep && keep.firstChild, 'lq-erase': $('lq-erase'), 'lq-mini-go': $('lq-mini-go') };
   }
+  // an element's own words, leaving anything added inside it (like a heading's "#" link) in place
+  function ownText(el) { return el.nodeType === 1 && el.children.length && el.firstChild && el.firstChild.nodeType === 3 ? el.firstChild : el; }
   function applyLang() {
     var els = uiEls();
-    if (!EN0) { EN0 = {}; Object.keys(els).forEach(function (k) { if (els[k]) EN0[k] = els[k].textContent; }); }
+    if (!EN0) { EN0 = {}; Object.keys(els).forEach(function (k) { if (els[k]) EN0[k] = ownText(els[k]).textContent; }); }
     var es = isEs();
     Object.keys(els).forEach(function (k) {
       var el = els[k]; if (!el || EN0[k] == null) return;
       var t = es && ES_UI[k] ? (k === 'lq-keep-t' ? ES_UI[k] + ' ' : ES_UI[k]) : EN0[k];
       // three or more: not "when you're both rested"
       if (!es && k === 'lq-talk-d' && q.people.length > 2) t = 'A calm way to bring it up, when you’re all rested.';
-      if (el.textContent !== t && !(k === 'lq-erase' && el.dataset.armed)) el.textContent = t;
+      var tn = ownText(el);
+      if (tn.textContent !== t && !(k === 'lq-erase' && el.dataset && el.dataset.armed)) tn.textContent = t;
     });
     var inp = $('lq-new'); if (inp) inp.placeholder = es ? '+ añadir una tarea' : '+ add a job';
     var lb = $('lq-lang'); if (lb) { lb.textContent = es ? 'In English' : 'En español'; lb.setAttribute('lang', es ? 'en' : 'es'); }
@@ -1385,6 +1399,7 @@
       q = fresh(); undoQ = null; if (cardP) cardP.show(false); renderAll();
       status('Erased. Nothing from the quick look is kept on this device now.');
     });
+    document.addEventListener('tol-lemonade-hhno', function (e) { if (e.detail) q.hhNo = true; else delete q.hhNo; save(); });
     document.addEventListener('tol-lemonade-erased', function () { q = fresh(); undoQ = null; renderAll(); });
     try {
       var io = new IntersectionObserver(function (es) { es.forEach(function (en) { resInView = en.isIntersecting; }); renderMini(); }, { rootMargin: '-60px 0px 0px 0px' });

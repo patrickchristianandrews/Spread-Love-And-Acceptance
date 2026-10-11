@@ -384,6 +384,7 @@
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
       { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and what to tell the grandparents' },
       { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care' },
+      { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To parents and family, at your own pace' },
       { sub: 'Separated & co-parents', all: '/by-relationship.html#co-parents', allLabel: 'All for co-parents' },
       { href: '/co-parenting.html', title: 'Separated co-parents', note: 'Calmer handoffs and a tone check' },
       { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
@@ -2944,6 +2945,7 @@
       sw('helpers', T('Hide the helpers', 'Ocultar los ayudantes'), T('Professor Puddles’ cards, the cheering buddies, the pups popping in while you read, tips, petals and pop-up invitations. The “Check in on Tidbit & Sugarfoot” button stays, for when you want them.', 'Las tarjetas del Profesor Puddles, los amigos que animan, los perritos que aparecen mientras lees, los consejos y las invitaciones emergentes.')) +
       sw('sound', T('Keep site sounds off', 'Sin sonidos'), T('When this is on, the pal cam, the games and the Breathe break start silent', 'Los juegos, la cámara de los perritos y la pausa para respirar empiezan en silencio')) +
       '<h3 class="tol-set-k">' + T('Reading', 'Lectura') + '</h3>' +
+      '<p class="tol-set-aloud"><small>' + T('Read pages aloud: tap “Listen” near the top of any chapter or guide. Your device’s own voice reads it, nothing is sent anywhere.', 'Leer en voz alta: toca “Escuchar” cerca del principio de un capítulo o una guía. Lo lee la voz de tu propio dispositivo.') + '</small></p>' +
       '<fieldset><legend>' + T('Font', 'Letra') + '</legend>' + radio('font', 'data-font-opt', 'usual', T('The usual', 'La de siempre')) + radio('font', 'data-font-opt', 'easy', '<span class="tol-set-easyfont">' + T('Easy to read', 'Fácil de leer') + '</span>') + '</fieldset>' +
       '<fieldset><legend>' + T('Spacing', 'Espacio') + '</legend>' + radio('space', 'data-space-opt', 'usual', T('The usual', 'El de siempre')) + radio('space', 'data-space-opt', 'wide', T('Roomy', 'Amplio')) + '</fieldset>' +
       '<fieldset class="tol-set-tints"><legend>' + T('Page tint', 'Color de fondo') + ' <small class="tol-set-tintnote" hidden>' + T('(resting while high contrast is on)', '(en pausa con alto contraste)') + '</small></legend>' + radio('tint', 'data-tint-opt', 'none', T('None', 'Ninguno')) + Object.keys(TINTS).map(function (k) { return radio('tint', 'data-tint-opt', k, '<span class="tol-set-swatch is-' + k + '" aria-hidden="true"></span>' + TINTS[k]); }).join('') + '</fieldset>' +
@@ -3633,16 +3635,20 @@
     function place() {
       queued = false;
       if (btn.classList.contains('is-away')) return;
-      var wasPeek = btn.classList.contains('is-peek');
+      var wasPeek = btn.classList.contains('is-peek'), wasCompact = btn.classList.contains('is-compact');
+      btn.style.transition = 'none';
+      btn.classList.remove('is-peek');
       place2();
-      // on a phone, over words someone is reading, the little tab tucks into the screen edge (a tap still opens it)
+      // over words someone is reading it first shrinks to just the moon, then tucks into the screen edge as a
+      // small tab (a tap, hover or keyboard focus still opens it), and comes back out once the space is clear
       var peek = false;
-      if (window.innerWidth <= 560 && !btn.classList.contains('is-hiding') && !btn.classList.contains('is-high')) {
-        btn.classList.remove('is-peek'); btn.style.transition = 'none';
-        peek = wordsUnder(btn.getBoundingClientRect(), btn);
-        btn.classList.toggle('is-peek', wasPeek); void btn.offsetWidth; btn.style.transition = '';
+      if (!btn.classList.contains('is-hiding') && !btn.classList.contains('is-high') && wordsUnder(btn.getBoundingClientRect(), btn)) {
+        btn.classList.add('is-compact');
+        if (wordsUnder(btn.getBoundingClientRect(), btn)) peek = true;
       }
-      btn.classList.toggle('is-peek', peek);
+      var nowCompact = btn.classList.contains('is-compact');
+      btn.classList.toggle('is-peek', wasPeek); btn.classList.toggle('is-compact', wasCompact); void btn.offsetWidth; btn.style.transition = '';
+      btn.classList.toggle('is-compact', nowCompact); btn.classList.toggle('is-peek', peek);
     }
     function place2() {
       btn.classList.remove('is-hiding');
@@ -4114,7 +4120,7 @@
   var SHARE_PAGES = [
     [/^\/book\/(preface|chapter-\d)\.html$/, 'Share this chapter', 'A chapter from a free, kind guide to sharing the mental load at home.'],
     [/^\/grandparents\.html$/, 'Share this guide', 'A free, kind guide for grandparents who help with the grandkids.'],
-    [/^\/(friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|empty-nest|family-rifts|when-one-is-ill)\.html$/, 'Share this guide', 'A free, kind guide with words you can use. It doesn’t blame anyone, and there’s nothing to sign up for.'],
+    [/^\/(friends|teens|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|empty-nest|family-rifts|when-one-is-ill)\.html$/, 'Share this guide', 'A free, kind guide with words you can use. It doesn’t blame anyone, and there’s nothing to sign up for.'],
     [/^\/chore-chart-for-couples\.html$/, 'Share this guide', 'A free, printable chore chart with one owner per job.', { pin: true }],
     [/^\/(how-to-stop-fighting-with-your-partner|pursue-withdraw)\.html$/, 'Share this page', 'A free, calm guide for when we keep ending up in the same fight. It doesn’t blame either of us.'],
     [/^\/check-ins\.html$/, 'Share this guide', 'A free guide to talking about something tender, kindly, at a time that suits us both.'],

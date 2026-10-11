@@ -223,6 +223,85 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(eo.first && eo.beforeDetail, `${tag}: Easy reading: simpler English, then the clearer version, then the details`);
     await ctxE.close();
   }
+  // ---------- re-test round 12: who it's for, co-parents, family rifts, control, and the Perspective Shifter ----------
+  for(const [w,h] of [[390,844],[1280,800]]){
+    const tag='r12 '+w+'x'+h;
+    const ctx = await b.newContext({viewport:{width:w,height:h}, colorScheme: w<500 ? 'dark' : 'light'});
+    const p = await ctx.newPage();
+    const errs=[]; p.on('pageerror',e=>errs.push('pageerror: '+e.message)); p.on('console',m=>{ if(m.type()==='error' && !/Failed to load resource/.test(m.text())) errs.push('console: '+m.text()); });
+    const go = async (q)=>{ await p.goto(URL+(q||'')); await p.waitForLoadState('load'); };
+    const read = async (t, got, rel)=>{ await p.evaluate(()=>{ const r=document.querySelector('#results'); r.hidden=true; r.innerHTML=''; });
+      if(got){ await p.check('input[name="stmode"][value="got"]'); if(rel) await p.selectOption('#gotRelSel', rel); } else await p.check('input[name="stmode"][value="send"]');
+      await p.fill('#phrase', t); await p.click('#go'); await p.waitForSelector('#vplain'); await p.evaluate(()=>document.querySelectorAll('#results details').forEach(d=>d.open=true)); await p.waitForTimeout(80);
+      return p.evaluate(()=>({all:document.querySelector('#results').innerText, html:document.querySelector('#results').innerHTML})); };
+    const notes = ()=>p.evaluate(()=>[...document.querySelectorAll('#notes [data-rel]')].filter(e=>!e.hidden).map(e=>e.innerText).join(' | '));
+    // 1. no ?rel: never a blank "Reading it for: ."
+    await go('');
+    const rs = await p.evaluate(()=>{ const r=document.querySelector('#relSet'); return {hidden:r.hidden, name:document.querySelector('#relSetName').textContent}; });
+    ok(!rs.hidden && rs.name==='someone close', `${tag}: no ?rel should read "someone close", got ${JSON.stringify(rs)}`);
+    // 2. "Mum," is Mum, never "Person B"; the "Just the answer" line is not an empty card
+    let r = await read("Mum, you can't just turn up whenever you want. It's our home.");
+    ok(!/Person B/.test(r.all) && /How it may land for Mum/.test(r.all), `${tag}: the listener should be Mum, not Person B`);
+    ok(/It's our home/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: the rewrite should keep "It's our home"`);
+    const card = await p.evaluate(()=>{ const e=document.querySelector('.st-brief-row'); const cs=getComputedStyle(e); return {tag:e.tagName, shadow:cs.boxShadow, bg:cs.backgroundColor}; });
+    ok(card.tag==='P' && card.shadow==='none', `${tag}: "Just the answer" should be a plain line, not a card: ${JSON.stringify(card)}`);
+    ok(!/One room|headphones/i.test(await notes()), `${tag}: talking notes for a text shouldn't say "One room" or headphones`);
+    // 3. co-parents: a BIFF rewrite from the facts, replies that answer the inhaler, and notes for parents who only text
+    await go('?rel=co-parents');
+    await p.evaluate(()=>{ document.querySelector('#facts').value="His inhaler wasn't in the bag on Sunday."; });
+    r = await read('You ALWAYS forget his inhaler. Typical.');
+    const best = await p.$eval('#vbest', e=>e.innerText);
+    ok(/^His inhaler wasn't in the bag on Sunday\. Can we both check the list before handover\?$/.test(best), `${tag}: co-parent BIFF rewrite: ${best}`);
+    ok(!/Lately it's felt like|say the one thing/.test(best), `${tag}: co-parent rewrite still blames or has a blank`);
+    const cn = await notes();
+    ok(!/One room|headphones|Sit down/i.test(cn) && /By text is fine/.test(cn), `${tag}: co-parent notes should fit parents who only text: ${cn.slice(0,160)}`);
+    await p.evaluate(()=>{ document.querySelector('#facts').value=''; });
+    r = await read('You ALWAYS forget his inhaler. Typical.', true);
+    ok(/inhaler/.test(r.all.split('Ways to answer')[1]||'') && !/I'll be there at \[the time\]/.test(r.all), `${tag}: co-parent replies should answer the inhaler, not pickup times`);
+    // 4. family: a rift gets "own your part, easy to say no"; "not my mum" is very sharp, with the grief note, and keeps the feeling
+    await go('?rel=family');
+    r = await read("I know things got ugly about Dad's house. I'd like you at the christening.");
+    ok(/Reaching out after a long silence/.test(r.all) && /family-rifts\.html#reaching-out/.test(r.html), `${tag}: a family rift should get the reaching-out note`);
+    r = await read("you're not my mum so stop acting like it");
+    ok(/very sharp/.test(r.all) && /Often this is grief talking/.test(r.all) && /missing Mum today/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: "not my mum" should be very sharp, with the grief note`);
+    r = await read('So now you want to talk? After you took everything?');
+    ok(!/feeling left out/.test(r.all), `${tag}: a family "Try:" example should not be the partner "left out" line`);
+    // 6. friends: no broken fragment chip
+    await go('?rel=friends');
+    r = await read("I guess I'm only your friend when it suits you.");
+    const vf = await p.$eval('.vfound', e=>e.innerText);
+    ok(!/only your\b/.test(vf) && /when it suits you/.test(vf), `${tag}: "What stands out" fragment: ${vf}`);
+    // 7. ?use=work: business partners one tap away
+    await go('?use=work');
+    const wq = await p.evaluate(()=>{ const q=document.querySelector('#relQuick'); return q && !q.hidden ? q.innerText : ''; });
+    ok(/Business partners or co-owners/.test(wq), `${tag}: ?use=work should offer business partners: ${wq}`);
+    await p.click('[data-relq="business"]'); await p.waitForTimeout(80);
+    ok(await p.$eval('#relSetName', e=>e.textContent)==='Business partners or co-owners', `${tag}: the quick pick should set business partners`);
+    r = await read('Must be nice to just bake all day while I do the admin.');
+    ok(!/doesn't add an ask you didn't make/.test(r.all), `${tag}: the "no ask added" note must not sit on a rewrite that adds one`);
+    // safety: control is never read kindly, and never gets a compliant reply
+    await go('');
+    r = await read('Where were you? Send me your location now. Who were you with?', true);
+    ok(/sign of control/.test(r.all) && /safety\.html/.test(r.html) && /1-800-799-7233/.test(r.all), `${tag}: control received: safety note first`);
+    ok(!/kinder ways to read it|usually a request|you'd like me to|Check the ask/i.test(r.all), `${tag}: control received: no kind reading or compliant reply`);
+    r = await read('Where were you? Send me your location now. Who were you with?');
+    ok(/checking up on them/.test(r.all) && !/Send me your location/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: control sent: the check is named and left out`);
+    r = await read("If you leave me I'll kill myself and it'll be your fault.", true);
+    ok(/988/.test(r.all) && /not your job to stay/.test(r.all), `${tag}: a self-harm threat received: 988 for them`);
+    ok(await overflow(p)<=0, `${tag}: overflow on round-12 reads`);
+    ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
+    // 8. the Perspective Shifter: a family rift gets rift options, no "your day" or deadline, no roommates, no stray pup names
+    await p.goto(URL.replace('signal-translator','perspective-shifter')); await p.waitForLoadState('load'); await p.waitForTimeout(600);
+    for(const [g,id] of [['who','family'],['history','sore'],['history','fair'],['state','unsure']]) await p.evaluate(([g,id])=>TOLPerspective._pick(g,id),[g,id]);
+    const ps = await p.evaluate(()=>({main:document.querySelector('main').innerText, out:document.querySelector('[data-out]').innerText,
+      rift:['will','grief','favour'].every(id=>!document.querySelector('.ps-chip[data-id="'+id+'"]').hidden), deadline:!document.querySelector('.ps-chip[data-id="deadline"]').hidden}));
+    ok(ps.rift && !ps.deadline, `${tag}: Shifter: rift options should show and the deadline should hide`);
+    ok(!/How was your day|deadline only/.test(ps.out) && /all this time/.test(ps.out), `${tag}: Shifter: rift questions: ${ps.out.slice(0,200)}`);
+    ok(!/\b(?:Mochi|Marmalade|Bean|Nightlight|Cocoa|Sparky|Dewdrop|Luna)\b/.test(ps.main), `${tag}: Shifter: stray pup names in the main text`);
+    await p.evaluate(()=>TOLPerspective._pick('who','partner'));
+    ok(await p.evaluate(()=>document.querySelector('.ps-chip[data-id="will"]').hidden && !document.querySelector('.ps-chip[data-id="deadline"]').hidden), `${tag}: Shifter: partner hides the rift options again`);
+    await ctx.close();
+  }
   await b.close();
   console.log(`UI: ${pass} checks passed, ${fail} failed`);
   if(fail){ console.log(errsOut.join('\n')); process.exit(1); }

@@ -2006,7 +2006,7 @@ function paintBrief(){
   if(cb) cb.checked = briefOn;
 }
 /* a <p>, not a <div>: the site's card style is for blocks, and this is one line, so it never shows as an empty white card */
-function briefRow(){ return '<p class="st-brief-row st-brief-keep"><label><input type="checkbox" id="briefOn"'+(briefOn?' checked':'')+'> Just the answer</label></p>'; }
+function briefRow(){ return '<p class="st-brief-row st-brief-keep no-bubble"><label><input type="checkbox" id="briefOn"'+(briefOn?' checked':'')+'> Just the answer</label></p>'; }
 document.addEventListener("change", e=>{ if(e.target && e.target.id==="briefOn"){ briefOn = e.target.checked; try{ localStorage.setItem("tol-st-brief", briefOn?"1":"0"); }catch(x){} paintBrief(); } });
 document.addEventListener("click", e=>{
   if(e.target.closest && e.target.closest(".st-simple-btn")) toggleSimple();

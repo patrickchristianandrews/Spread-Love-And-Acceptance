@@ -360,9 +360,10 @@
     var auto = false;
     if (!keep && autoKeepOk()) { keep = true; auto = true; var kd = $('keep-device'); if (kd) kd.checked = true; }
     if (!keep) return;
+    if (!state.example && !HH_SKIP) { try { hhAutoLink(); } catch (e) {} }
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage blocked: stay in-tab only */ if (auto) { keep = false; var kd2 = $('keep-device'); if (kd2) kd2.checked = false; } }
   }
-  var KEEP_NO = 'tol-lemonade-keep-no';
+  var KEEP_NO = 'tol-lemonade-keep-no', HH_SKIP = false;
   function keepDismissed() { try { return sessionStorage.getItem(KEEP_NO) === '1'; } catch (e) { return false; } }
   function autoKeepOk() { return !!state && !state.example && !!mode && !keepDismissed() && entered(); }
   function loadDraft() {
@@ -447,6 +448,7 @@
     state.workNo = !!state.workNo;
     state.planning = !!state.planning;
     state.ownMore = !!state.ownMore;
+    state.hhNo = !!state.hhNo;
     // the quick look's jobs, offered as fridge-list chips (name, and the owner it had there)
     state.qchips = (Array.isArray(state.qchips) ? state.qchips : []).filter(function (c) { return c && typeof c.n === 'string' && c.n.trim(); }).slice(0, 80)
       .map(function (c) { return { n: String(c.n).slice(0, 60), w: typeof c.w === 'number' && c.w >= 0 && c.w < n ? c.w : -1 }; });
@@ -3708,7 +3710,23 @@
   window.addEventListener('load', shareHint);
 
   /* ---------- the household, typed once for the other tools (assets/js/household.js) ---------- */
-  var HH = window.TOLHousehold, hhHost = null, hhOffer = null, hhNo = false;
+  var HH = window.TOLHousehold, hhHost = null, hhOffer = null, hhNo = false, hhKeepEl = null;
+  // Names typed here are offered to the other tools by default (WP-03, WP-13 and the rest), once two or more
+  // real names are in and the stand is kept on this device; unticking "Use these names in the other tools" stops it.
+  function hhAutoLink(names) {
+    if (!HH || !HH.link || state.hhNo || solo()) return false;
+    // the same "no" said on the quick look's side (it keeps its own copy, so the choice outlives an unkept stand)
+    try { if ((JSON.parse(localStorage.getItem('tol-lemonade-quick') || 'null') || {}).hhNo) return false; } catch (e) {}
+    var real = (names || state.people).filter(function (p) { return !placeholder(p); });
+    if (real.length < 2 || HH.isLinked('lemonade')) return false;
+    var h = HH.get();
+    // a household someone else kept (another tool's names) is never overwritten from here
+    if (h && h.people.length && !h.people.every(function (p) { return real.map(low).indexOf(low(p)) >= 0; })) return false;
+    if (!HH.link('lemonade')) return false;
+    if (names) HH.set({ people: real }); else if (hhWrite) hhWrite.now(true);
+    if (hhKeepEl && hhKeepEl.sync) hhKeepEl.sync();
+    return true;
+  }
   function hhNamesEmpty() { return state.people.every(function (p) { return !String(p || '').trim() || HH.isPlaceholder(p); }); }
   // The names, and the home jobs with their owner when the fridge list gives one (never the hours)
   function hhCollect() {
@@ -3812,7 +3830,9 @@
     peopleBox.insertBefore(hhHost, peopleBox.firstChild);
     hhWrite = HH.writer('lemonade', hhCollect);
     // the tick sits right under the names, where they're typed, with one plain line on what it's for
-    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite, hint: 'Saves retyping your names in the worksheets, the Signal Translator and the Wiring Card.' });
+    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite, hint: 'On by default once your names are in: saves retyping them in the worksheets, the Signal Translator and the Wiring Card. Untick to keep them here only.',
+      onChange: function (on) { state.hhNo = !on; save(); try { document.dispatchEvent(new CustomEvent('tol-lemonade-hhno', { detail: !on })); } catch (e) {} } });
+    hhKeepEl = hhKeep;
     hhKeep.classList.add('ls-hh-keep');
     var meBox = peopleBox.querySelector('.ls-me');
     peopleBox.insertBefore(hhKeep, meBox || null);
@@ -4452,5 +4472,5 @@
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
     sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); },
-    fromQuick: fromQuick, hasStand: function () { return !!state && !state.example && (realJobs().length > 0 || realBills().length > 0); } };
+    fromQuick: fromQuick, quickNames: function (names) { try { return hhAutoLink(names); } catch (e) { return false; } }, hasStand: function () { return !!state && !state.example && (realJobs().length > 0 || realBills().length > 0); } };
 })();

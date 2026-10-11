@@ -286,7 +286,9 @@
   @media print{
     html.ps-short main#main > :not(.read-head):not(.tol-inshort):not(.ps-keep):not(.gp-say):not([data-print-short]){ display:none !important; }
     html.ps-short main#main .ps-row{ display:none !important; }
-    html.ps-short main#main{ font-size:13pt; }
+    html.ps-short main#main{ font-size:11.5pt; }
+    html.ps-short main#main > *{ margin-top:.3rem !important; margin-bottom:.3rem !important; padding-top:0 !important; padding-bottom:0 !important; }
+    html.ps-short main#main h2{ font-size:14pt !important; margin-top:.7rem !important; }
     html.ps-short .gp-say{ break-inside:avoid; }
   }
 </style>

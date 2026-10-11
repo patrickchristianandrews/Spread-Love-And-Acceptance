@@ -387,6 +387,8 @@
         clear();
         say('Forgotten. Your household isn’t kept on this device any more.');
       }
+      // the page can remember the choice (so names it offers by default aren't offered again after an untick)
+      if (typeof opts.onChange === 'function') { try { opts.onChange(box.checked); } catch (e) {} }
     });
     wrap.sync = function () { box.checked = isLinked(opts.tool); };
     return wrap;

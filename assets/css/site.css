@@ -2385,8 +2385,8 @@ html body .tol-pud-fab.is-peek:is(:hover, :focus-visible){ transform:none; }
 @media (prefers-reduced-motion: reduce){ .tol-pud-fab{ transition:opacity .15s linear; } }
 html.tol-still .tol-pud-fab{ transition:none; }
 /* the Breathe tab on a phone does the same at the right edge */
-html body .tol-breathe-btn.is-peek{ transform:translateX(calc(100% - 13px)) !important; }
-html body .tol-breathe-btn.is-peek.is-left{ transform:translateX(calc(-100% + 13px)) !important; }
+html body .tol-breathe-btn.is-peek{ right:0 !important; left:auto !important; border-radius:24px 0 0 24px; transform:translateX(calc(100% - 13px)) !important; }
+html body .tol-breathe-btn.is-peek.is-left{ left:0 !important; right:auto !important; border-radius:0 24px 24px 0; transform:translateX(calc(-100% + 13px)) !important; }
 html body .tol-breathe-btn.is-peek:is(:hover, :focus-visible){ transform:none !important; }
 /* the two choices in every mini dive: wade in deeper, or chat it out with Professor Puddles */
 .tol-dive-wade{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
@@ -2785,6 +2785,9 @@ html.tol-contrast body :is(button, select, textarea, input:not([type="checkbox"]
 html.tol-contrast body :is(input, select, textarea)::placeholder{ color:#3A3A3A !important; opacity:1 !important; }
 html.tol-contrast body :is(input[type="checkbox"], input[type="radio"], input[type="range"]){ accent-color:#000000; }
 html.tol-contrast body :is(button, [role="button"]):disabled{ border-style:dashed !important; }
+/* the water-drop words inside a sentence stay words: a strong dotted underline, no box and no empty space after them */
+html.tol-contrast body button.tol-dive{ border:0 !important; padding:0 !important; background:none !important; text-decoration:underline dotted !important; text-decoration-thickness:2px !important; text-underline-offset:.18em; }
+html.tol-contrast body .tol-dive .tol-dive-i{ display:none !important; }
 /* what's chosen or turned on: white on black */
 html.tol-contrast body :is([aria-pressed="true"], [aria-checked="true"], [aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-current="step"]){ background-color:#000000 !important; color:#FFFFFF !important; border-color:#000000 !important; }
 html.tol-contrast body :is([aria-pressed="true"], [aria-checked="true"], [aria-selected="true"], [aria-current="page"], [aria-current="true"], [aria-current="step"]) *:not(svg, svg *, img){ background-color:transparent !important; color:#FFFFFF !important; }

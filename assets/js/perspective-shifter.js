@@ -44,11 +44,16 @@
       o: [['before', 'This has come up before', 'If this has come up before, they may have been answering the last five times, not just today.'],
           ['family', 'They grew up with it done differently', 'In the home they grew up in, this may have been handled another way. What feels normal to them may be different from what feels normal to you.'],
           ['sore', 'It’s a sore topic for them', 'Some topics carry old hurts. A small mention can touch something much bigger.'],
-          ['fair', 'They may feel it’s unfair', 'They may have been seeing it through fairness: who usually does this, and whether that’s been noticed.']] }
+          ['fair', 'They may feel it’s unfair', 'They may have been seeing it through fairness: who usually does this, and whether that’s been noticed.'],
+          // family only: the things that sit under a long rift (shown when "Family" is picked)
+          ['will', 'A will, money or a house', 'A will, money or a family house is rarely only about money. It can feel like a verdict on who mattered, and who was trusted.', 'family'],
+          ['grief', 'Grief for a parent', 'Grief can come out as anger, or as silence. Some of what you saw may have been them missing someone, not a judgment of you.', 'family'],
+          ['favour', 'Felt like the less-favoured one', 'If they grew up feeling like the less-favoured one, an old hurt may have been speaking. Even a small slight can echo years of it.', 'family']] }
   ];
   var SEE = [
-    { id: 'theysaw', t: 'They may have seen or known things you didn’t', o: [['load', 'their whole day and workload'], ['msg', 'a message, call or news you didn’t see'], ['planned', 'something they had already planned or done'], ['where', 'how it looked from where they stood'], ['promise', 'a promise someone else made them'], ['feel', 'how they were feeling inside']] },
-    { id: 'yousaw', t: 'You may have seen or known things they didn’t', o: [['plan', 'the planning you had already done', 'the planning I had already done'], ['why', 'the reason behind your timing', 'the reason behind my timing'], ['meant', 'what you actually meant', 'what I actually meant'], ['tired', 'how tired or stretched you were', 'how tired or stretched I was'], ['done', 'the part already done', 'the part already done'], ['deadline', 'a deadline only you knew about', 'a deadline only I knew about']] },
+    { id: 'theysaw', t: 'They may have seen or known things you didn’t', o: [['load', 'their whole day and workload', '', 'norift'], ['carry', 'what they were carrying at the time', '', 'rift'], ['told', 'what someone else told them about it', '', 'rift'], ['msg', 'a message, call or news you didn’t see'], ['planned', 'something they had already planned or done'], ['where', 'how it looked from where they stood'], ['promise', 'a promise someone else made them'], ['feel', 'how they were feeling inside']] },
+    { id: 'yousaw', t: 'You may have seen or known things they didn’t', o: [['plan', 'the planning you had already done', 'the planning I had already done'], ['why', 'the reason behind your timing', 'the reason behind my timing'], ['meant', 'what you actually meant', 'what I actually meant'], ['tired', 'how tired or stretched you were', 'how tired or stretched I was'], ['done', 'the part already done', 'the part already done', 'norift'], ['deadline', 'a deadline only you knew about', 'a deadline only I knew about', 'norift'],
+      ['reached', 'the times you thought about reaching out', 'the times I thought about reaching out', 'rift'], ['part', 'your own part in what happened', 'my own part in what happened', 'rift']] },
     { id: 'neither', t: 'Neither of you could fully see', o: [['tone', 'each other’s tone, in writing'], ['intent', 'what was going on in the other’s head'], ['next', 'what would happen next'], ['others', 'what other people had said to each of you']] }
   ];
   var S = {}; function sel(g) { return S[g] || (S[g] = []); }
@@ -58,6 +63,19 @@
   function label(groups, g, id) { var G = groups.filter(function (x) { return x.id === g; })[0]; var o = G && G.o.filter(function (x) { return x[0] === id; })[0]; return o; }
   function joinList(a) { return a.length <= 1 ? a.join('') : a.slice(0, -1).join(', ') + (a.length > 2 ? ',' : '') + ' and ' + a[a.length - 1]; }
 
+  // a chip; one marked 'family', 'rift' or 'norift' shows only in that context (see fitChips)
+  function chip(G) { return function (o) { var c = o[3] || ''; return '<button type="button" class="ps-chip" data-g="' + G.id + '" data-id="' + o[0] + '" aria-pressed="false"' + (c ? ' data-ctx="' + c + '"' + (c === 'norift' ? '' : ' hidden') : '') + '>' + esc(o[1]) + '</button>'; }; }
+  // a family rift (Family, and a sore topic, unfairness, a will, grief or favouritism): questions about a deadline or "your day" don't fit
+  function riftMode() { return on('who', 'family') && ['sore', 'fair', 'will', 'grief', 'favour'].some(function (id) { return on('history', id); }); }
+  function fitChips() {
+    var fam = on('who', 'family'), rift = riftMode();
+    Array.prototype.forEach.call(root.querySelectorAll('.ps-chip[data-ctx]'), function (c) {
+      var x = c.getAttribute('data-ctx'), show = x === 'family' ? fam : x === 'rift' ? rift : !rift;
+      c.hidden = !show;
+      // a hidden choice no longer counts
+      if (!show && on(c.getAttribute('data-g'), c.getAttribute('data-id'))) { var l = sel(c.getAttribute('data-g')); l.splice(l.indexOf(c.getAttribute('data-id')), 1); c.classList.remove('is-on'); c.setAttribute('aria-pressed', 'false'); }
+    });
+  }
   function build() {
     var html = '<div class="ps-grid"><div class="ps-in">';
     html += '<section class="ps-box"><h2 id="ps-what">1. What happened?</h2><p class="ps-q">In a line, if you like. It stays on this device.</p>' +
@@ -65,11 +83,11 @@
       '<label class="ps-lbl">The words that were said, if you want to test a reply later (optional)<input type="text" maxlength="300" data-said placeholder="For example: Are you going to do the dishes?"></label></section>';
     GROUPS.forEach(function (G, i) {
       html += '<section class="ps-box"><h2>' + (i + 2) + '. ' + esc(G.t) + '</h2>' + (G.angle ? '<p class="ps-angle">One of the seven angles: ' + esc(G.angle) + '</p>' : '') +
-        '<div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(function (o) { return '<button type="button" class="ps-chip" data-g="' + G.id + '" data-id="' + o[0] + '" aria-pressed="false">' + esc(o[1]) + '</button>'; }).join('') + '</div></section>';
+        '<div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(chip(G)).join('') + '</div></section>';
     });
     html += '<section class="ps-box"><h2>' + (GROUPS.length + 2) + '. What could each of you see?</h2><p class="ps-q">This is the part people miss most. Two people in the same moment rarely have the same information.</p>';
     SEE.forEach(function (G) {
-      html += '<h3 class="ps-h3">' + esc(G.t) + '</h3><div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(function (o) { return '<button type="button" class="ps-chip" data-g="' + G.id + '" data-id="' + o[0] + '" aria-pressed="false">' + esc(o[1]) + '</button>'; }).join('') + '</div>';
+      html += '<h3 class="ps-h3">' + esc(G.t) + '</h3><div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(chip(G)).join('') + '</div>';
     });
     html += '</section></div><aside class="ps-out" aria-live="polite" aria-labelledby="ps-out-h"><h2 id="ps-out-h">🔭 Through their eyes</h2><div data-out></div></aside></div>';
     root.innerHTML = html;
@@ -84,7 +102,8 @@
       return;
     }
     var h = '<p class="ps-lead">Seen from ' + esc(who) + '’s side, here’s how the moment may have looked. These are possibilities to check, not facts about them.</p>';
-    if (picks.length) h += '<h3>How it may have looked to them</h3><ul>' + picks.map(function (p) { return '<li><strong>' + esc(p.o[1]) + ':</strong> ' + esc(p.o[2]) + '</li>'; }).join('') + '</ul>';
+    var RIFT_TEXT = { fair: 'They may have been seeing it through fairness: who was treated how, who was trusted, and whether that has ever been said out loud.', before: 'If this has come up before, they may have been answering the whole history, not just this moment.' };
+    if (picks.length) h += '<h3>How it may have looked to them</h3><ul>' + picks.map(function (p) { var t = riftMode() && p.g.id === 'history' && RIFT_TEXT[p.o[0]] ? RIFT_TEXT[p.o[0]] : p.o[2]; return '<li><strong>' + esc(p.o[1]) + ':</strong> ' + esc(t) + '</li>'; }).join('') + '</ul>';
     if (seen.theysaw.length || seen.yousaw.length || seen.neither.length) {
       h += '<h3>What each of you could see</h3><div class="ps-vis">' +
         '<div><b>Only they could see</b>' + (seen.theysaw.length ? '<ul>' + seen.theysaw.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '<p class="ps-empty">Nothing picked yet.</p>') + '</div>' +
@@ -96,19 +115,29 @@
         'So the same moment can be true for both of you and still look completely different. Nobody has to be wrong; you were looking from different places.</p>';
     }
     // questions to check, instead of guessing
-    var qs = [];
-    if (on('state', 'unsure') || on('state', 'revved') || on('state', 'empty')) qs.push('How was your day, before this came up?');
+    var qs = [], rift = riftMode();
+    if (rift) {
+      qs.push('What has this been like for you, all this time?');
+      if (on('history', 'will')) qs.push('What did the will, or the house, mean to you?');
+      if (on('history', 'grief')) qs.push('How have you been, since we lost them?');
+      if (on('history', 'favour')) qs.push('Did it feel to you like one of us was treated differently?');
+      qs.push('Is there a part of what happened that still hurts most for you?');
+    }
+    else if (on('state', 'unsure') || on('state', 'revved') || on('state', 'empty')) qs.push('How was your day, before this came up?');
     if (sel('around').length) qs.push('Was there anything else going on for you at the time?');
     if (on('wired', 'literal') || on('wired', 'hint')) qs.push('When I said it, what did you hear me asking for?');
     if (on('wired', 'process')) qs.push('Would it help to think about it and come back to it later?');
-    if (sel('history').length) qs.push('Has this felt like it keeps coming up for you?');
+    if (sel('history').length && !rift) qs.push('Has this felt like it keeps coming up for you?');
     if (seen.theysaw.length) qs.push('Is there something you knew that I didn’t?');
     if (seen.yousaw.length) qs.push('Can I tell you what was going on on my side?');
     if (!qs.length) qs.push('How did that moment look from where you were?');
     h += '<h3>Questions to check, instead of guessing</h3><ul>' + qs.slice(0, 4).map(function (q) { return '<li>“' + esc(q) + '”</li>'; }).join('') + '</ul>';
     // a sentence to bridge the gap
     var mineId = sel('yousaw')[0], mineO = mineId ? label(SEE, 'yousaw', mineId) : null, mine = mineO ? (mineO[2] || mineO[1]) : '', theirs = (picks.filter(function (p) { return p.g.id === 'around' || p.g.id === 'state'; })[0] || {}).o;
-    var bridge = 'I think we may have been seeing this from different places.' +
+    var bridge = rift
+      ? 'I think we may have been seeing what happened from different places.' + (on('yousaw', 'part') ? ' I know I played a part in it.' : '') +
+        ' I’d like to understand how it looked to you, whenever you’re ready. No pressure to answer.'
+      : 'I think we may have been seeing this from different places.' +
       (mine ? ' On my side, I knew about ' + mine + ', and I’m not sure that came across.' : '') +
       (theirs ? ' I’m wondering whether, for you, ' + theirsPhrase(theirs[0]) + '.' : '') +
       ' Could we compare notes? I’d like to understand how it looked to you.';
@@ -116,6 +145,7 @@
       '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button><a class="ps-b is-main" href="/signal-translator.html" data-st-text="' + escA(bridge) + '">Check how it may land in the Signal Translator →</a></p>';
     var said = (root.querySelector('[data-said]') || {}).value;
     if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html" data-st-text="' + escA(said.trim()) + '">See how the words that were said may have been heard →</a></p>';
+    if (rift) h += '<p class="ps-why"><strong>After a long rift:</strong> old roles often come back into the room, and reaching out is optional, on both sides. <a href="/family-rifts.html#old-roles">Family rifts: old roles at the table</a> and <a href="/family-rifts.html#reaching-out">reaching out after a long silence</a> go further.</p>';
     h += '<p class="ps-tag">Built on the seven angles in <a href="/book/chapter-3.html">Chapter III</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. For how different wiring changes what’s heard, see <a href="/wired-differently.html">Wired Differently</a>.</p>';
     out.innerHTML = h;
   }
@@ -139,7 +169,7 @@
       var g = b.getAttribute('data-g'), id = b.getAttribute('data-id'), G = GROUPS.filter(function (x) { return x.id === g; })[0], list = sel(g), i = list.indexOf(id);
       if (i >= 0) list.splice(i, 1); else { if (G && G.one) list.length = 0; list.push(id); }
       Array.prototype.forEach.call(root.querySelectorAll('.ps-chip[data-g="' + g + '"]'), function (c) { var x = on(g, c.getAttribute('data-id')); c.classList.toggle('is-on', x); c.setAttribute('aria-pressed', String(x)); });
-      render(); return;
+      fitChips(); render(); return;
     }
     if (e.target.closest('[data-copy]')) {
       var t = (root.querySelector('.ps-bridge') || {}).textContent || '', st = e.target.closest('[data-copy]');
