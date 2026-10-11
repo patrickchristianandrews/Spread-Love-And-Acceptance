@@ -2469,6 +2469,8 @@
   // Only words and starter examples change: the saved list, the share links and the PDF are the same sheet.
   // Without ?for=, a link from one of those guides on this site does the same.
   var FOR_REF = { '/co-parenting.html': 'coparents', '/foster-and-kinship.html': 'foster', '/when-one-is-ill.html': 'ill', '/different-hours.html': 'shifts', '/caregivers.html': 'care', '/en-espanol.html': 'care' };
+  // other names the guides use for the same situations
+  var FOR_ALIAS = { 'good-bad-days': 'ill', 'two-homes': 'coparents', 'co-parents': 'coparents', 'shift': 'shifts', 'carers': 'care', 'kinship': 'foster' };
   var D = 'Daily', Wk = 'Weekly', Mo = 'Monthly', AN = 'As needed';
   var FOR = {
     'wp-03': {
@@ -2485,6 +2487,13 @@
         note: 'Start with the jobs that come with a child in care, then add the everyday ones from the task library below. Agreeing house rules with a young person? Add them from \u201cHouse rules for us\u201d: each needs someone who keeps to it, but rules aren\u2019t counted as load. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
         fridge: 'Who owns what',
         rows: [['Social worker visits', Mo], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', Mo]]
+      },
+      'house-rules': {
+        h1: 'House rules for us', title: 'House rules for us: one owner per job',
+        lede: 'Rules you agree together, written down so nobody has to argue them again. Each one has someone who keeps to it, or \u201cBoth (decide together)\u201d. Write why it matters to each of you in Notes, and let everyone suggest changes. Send it to the other phone with \u201cShare this list\u201d, so they can send their version back.',
+        note: 'Start with the rules below, change the words until they sound like you, and remove any that don\u2019t fit. A rule needs someone who keeps to it, but rules aren\u2019t counted as load. The starter rules are examples: they don\u2019t count until you give one an owner or change it.',
+        fridge: 'Our house rules', share: 'Our house rules',
+        rows: [['Phone time: where phones go at night', D], ['Homework before games', D], ['Bedtime on school nights', D], ['Bedtime and curfew at weekends', Wk], ['Chores for everyone (who does which)', Wk], ['Friends over: when and how many', AN], ['Say where you are going and when you\u2019ll be back', AN], ['Screen time', D], ['Family meal together', Wk]]
       },
       care: {
         h1: 'One owner per job: sharing the care', title: 'One owner per job: sharing the care',
@@ -2515,7 +2524,8 @@
     }
   };
   function forWhich() {
-    var f = ((global.location && global.location.search || '').match(/[?&]for=([a-z]+)/) || [])[1] || '';
+    var f = ((global.location && global.location.search || '').match(/[?&]for=([a-z-]+)/) || [])[1] || '';
+    f = FOR_ALIAS[f] || f;
     if (!f) { try { var r = document.referrer ? new URL(document.referrer) : null; if (r && r.origin === global.location.origin) f = FOR_REF[r.pathname] || ''; } catch (e) {} }
     return f;
   }

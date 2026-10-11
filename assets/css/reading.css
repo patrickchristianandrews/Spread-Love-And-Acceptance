@@ -68,3 +68,19 @@ body{
 .read .two-col h3{ margin:.1rem 0 .4rem; font-size:1.05rem; }
 .read .two-col ul{ margin:0; padding-left:1.1rem; }
 .read p.tol-try{ padding:.7rem 1rem; border-left:4px solid #E3B15C; background:rgba(255,241,207,.5); border-radius:8px; }
+
+/* the book: Back / Contents / Next under each Part Three chapter, the "Last updated" line,
+   and the whole book in reading order (contents pages and the book at a glance) */
+.read nav.p3-nav{ display:flex; flex-wrap:wrap; gap:.6rem; margin:1.6rem 0 1rem; padding:.9rem 0 0; border-top:1px solid var(--line); }
+.read nav.p3-nav a{ display:inline-flex; align-items:center; min-height:44px; padding:.35rem .9rem; border:1px solid var(--line); border-radius:999px; background:var(--paper-deep, rgba(0,0,0,.03)); text-decoration:none; line-height:1.3; max-width:100%; overflow-wrap:anywhere; }
+.read nav.p3-nav a[rel="next"]{ margin-left:auto; font-weight:600; border-color:var(--brass); }
+@media (max-width:560px){ .read nav.p3-nav a{ flex:1 1 100%; } .read nav.p3-nav a[rel="next"]{ margin-left:0; } }
+.read p.last-updated{ margin:1rem 0 .5rem; font-size:.9rem; color:var(--ink-soft); }
+.read ol.book-order{ padding-left:0; list-style:none; }
+.read ol.book-order > li{ margin:.9rem 0 0; }
+.read ol.book-order > li > strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
+.read ol.book-order ol{ margin:.2rem 0 0; padding-left:1.3rem; }
+.read ol.book-order ol li{ margin:.15rem 0; }
+@media print{ .read nav.p3-nav{ display:none; } }
+.read p.book-start{ font-size:.95rem; }
+.read p.book-next{ font-weight:600; }

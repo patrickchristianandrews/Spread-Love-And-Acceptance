@@ -77,7 +77,7 @@
     <li><strong>Elige una frase de “Palabras que puedes usar”</strong> y dila en voz alta una vez, para ti. Así te sale más fácil cuando la necesites.</li>
     <li><strong>Prueba una sola cosa pequeña esta semana.</strong> Si no sale, no pasa nada. Puedes volver a empezar cuando quieras.</li>
   </ol>
-  <p class="es-note">¿Prefieres escuchar? Usa el botón “Escuchar esta página”, arriba, si tu dispositivo lo muestra. ¿La letra se ve pequeña? En “Ajustes”, arriba, puedes agrandarla o usar alto contraste.</p>
+  <p class="es-note"><span id="es-listen-hint">¿Prefieres escuchar? Usa el botón “Escuchar esta página”, arriba, si tu navegador lo permite.</span> ¿La letra se ve pequeña? En “Ajustes”, arriba, puedes agrandarla o usar alto contraste.</p>
 </section>
 
 <ul class="es-jump" aria-label="En esta página">
@@ -151,7 +151,11 @@
   <p>A tus hijos: “Ya no puedo con todo solo. ¿Podrías encargarte de las llamadas al seguro y llamar a mamá cada domingo a las seis?”</p>
   <p>A ti mismo: “Estoy cansado, no soy una mala persona. Hoy hice lo que pude.”</p>
 </div>
-<p><strong>Dónde pedir apoyo (EE. UU.):</strong> Parkinson’s Foundation, línea de ayuda 1-800-473-4636 (hay atención en español). Alzheimer’s Association, 1-800-272-3900, las 24 horas, con intérpretes. Eldercare Locator, 1-800-677-1116, para encontrar servicios cerca de ti. En otros países: <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a>.</p>
+<p><strong>Dónde pedir apoyo (EE. UU.):</strong> Parkinson’s Foundation, línea de ayuda <a href="tel:18004734636">1-800-473-4636</a> (hay atención en español). Alzheimer’s Association, <a href="tel:18002723900">1-800-272-3900</a>, las 24 horas, con intérpretes. Eldercare Locator, <a href="tel:18006771116">1-800-677-1116</a>, para encontrar servicios cerca de ti. En otros países: <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a>.</p>
+<ul>
+  <li><strong>Para una noche difícil:</strong> <a href="/night-garden.html">el Jardín de noche</a>, para respirar despacio unos minutos, sin relojes ni puntos.</li>
+  <li><strong>Una lista para repartir el cuidado con tus hijos:</strong> <a href="/workpapers/fill/wp-03.html?for=care">quién se encarga de cada cosa</a> (la página está en inglés, pero es fácil de llenar).</li>
+</ul>
 <p>La página completa en inglés: <a href="/caregivers.html">Caring for someone you love</a>.</p>
 
 <h2 id="casa">Cuando siento que hago todo en la casa</h2>
@@ -236,5 +240,9 @@
 <p>Si alguien revisa tu teléfono o te controla, lee primero <a href="#seguro">Si no estás a salvo en casa</a>.</p>
 <p>Esta página comparte ideas generales. No es consejo médico, legal ni psicológico.</p>
 </main>
+<script>
+/* the read-aloud hint only shows where this browser can read aloud */
+(function () { var h = document.getElementById('es-listen-hint'); if (h && !('speechSynthesis' in window)) h.hidden = true; })();
+</script>
 </body>
 </html>

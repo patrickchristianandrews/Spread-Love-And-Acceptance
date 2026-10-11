@@ -1164,6 +1164,17 @@
       var wrap = el('div', { class: 'tol-table-scroll' }); tb.parentNode.insertBefore(wrap, tb); wrap.appendChild(tb);
     });
     addPrivateNote(body);
+    // in Quiet mode, reading pages say what's tucked away, with one tap to bring it back for this visit
+    var qMain = document.querySelector('main.read');
+    if (qMain && !body.classList.contains('is-game')) {
+      var qx = el('p', { class: 'tol-quiet-extras no-bubble' }, '<button type="button" aria-pressed="false"></button>');
+      var qb = qx.querySelector('button');
+      var qSync = function () { var on = ssGet('tol-quiet-extras') === '1'; qb.setAttribute('aria-pressed', String(on)); qb.textContent = on ? T('Hide the extras again', 'Ocultar los extras') : T('Quiet mode: extras are tucked away. Show extras', 'Modo tranquilo: los extras están ocultos. Mostrar extras'); };
+      qb.addEventListener('click', function () { ssSet('tol-quiet-extras', ssGet('tol-quiet-extras') === '1' ? '' : '1'); applyReading(); qSync(); });
+      qSync();
+      var qHead = qMain.querySelector('.read-head');
+      if (qHead && qHead.parentNode === qMain) qHead.after(qx); else qMain.insertBefore(qx, qMain.firstChild);
+    }
     addTip(body);
     placeShare(body);
     loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
@@ -1485,7 +1496,7 @@
     he: 1, hes: 1, shes: 1, has: 1, been: 1, would: 1, could: 1, should: 1, there: 1, their: 1, theyre: 1, ive: 1, if: 1, as: 1, by: 1, now: 1, than: 1, then: 1, were: 1, really: 1,
     // "won't", "don't" and the rest, typed with or without the apostrophe: never "corrected" into another word
     wont: 1, dont: 1, cant: 1, didnt: 1, doesnt: 1, isnt: 1, wasnt: 1, arent: 1, werent: 1, wouldnt: 1, couldnt: 1, shouldnt: 1, havent: 1, hasnt: 1, hadnt: 1, aint: 1,
-    youre: 1, youve: 1, youll: 1, id: 1, itll: 1, thats: 1, whats: 1, theres: 1, lets: 1, keeps: 1, says: 1, said: 1, tells: 1 };
+    youre: 1, youve: 1, youll: 1, id: 1, before: 1, itll: 1, thats: 1, whats: 1, theres: 1, lets: 1, keeps: 1, says: 1, said: 1, tells: 1 };
   var JOIN_RE = null;
   function searchTerms(q) {
     var f = fold(q).replace(/\s+·\s+spread love.*$/, '').replace(/[¿?¡!.,;:()"“”]+/g, ' ').trim();
@@ -1692,7 +1703,7 @@
   [
     ['handover checklist|handover list|handoff checklist|handoff bag|hand over bag|kit bag|school bag|her inhaler|his inhaler|their inhaler|the inhaler|medicine bag|forgot the inhaler|forgets the inhaler', 'handoffbag'],
     ['dad died|mum died|mom died|father died|mother died|parent died|parents died|dad passed|mum passed|mom passed|dad passed away|mum passed away|mom passed away|after dad died|after mum died|after mom died', 'parentdied'],
-    ['wont let me see|won\'t let me see|doesnt let me see|doesn\'t let me see|not letting me see|keeping the baby from me|keeps the baby from me|keeping my grandchild|see the baby|see my grandchild|see my grandson|see my granddaughter|see the grandkids|see my grandkids|see the grandchildren|my grandchild|my grandson|my granddaughter', 'grandaccess'],
+    ['wont let me see the baby|wont let me see baby|won\'t let me see the baby|won\'t let me see baby|doesnt let me see the baby|doesn\'t let me see the baby|let me see the baby|let me see baby|wont let me see|won\'t let me see|doesnt let me see|doesn\'t let me see|not letting me see|keeping the baby from me|keeps the baby from me|keeping my grandchild|see the baby|see my grandchild|see my grandson|see my granddaughter|see the grandkids|see my grandkids|see the grandchildren|my grandchild|my grandson|my granddaughter', 'grandaccess'],
     ['mum turns up|mom turns up|mother turns up|dad turns up|mum shows up|mom shows up|turns up uninvited|shows up uninvited|turns up without asking|shows up without asking|drops round|pops round|comes round uninvited|just turns up', 'grownkids'],
     ['game too much|games too much|gaming too much|plays too much|play too much|always gaming|always playing games|on the xbox|on the playstation|on discord|on his games|on her games|gamer boyfriend|gamer girlfriend|gamer partner|gamer husband|gamer wife', 'gaming'],
     ['weekly schedule|work schedule|work schedules|sleep schedule|schedule sleep|shift pattern|shift patterns|different shifts|opposite hours|works late|work late|works weekends', 'diffhours'],
@@ -1702,6 +1713,8 @@
     ['guest in my own home|guest in my own house|a guest in my home|guest in my home|moved in with|new to the home|new to their home|joined their home|their home not mine', 'polyguest'],
     ['left out of decisions|left out of the decisions|left out of plans|decisions without me|decide without me|plans without me|feel left out of', 'polylong'],
     ["roommate's boyfriend|roommates boyfriend|roommate's girlfriend|roommates girlfriend|roommate's partner|roommates partner|roomate's boyfriend|roomates boyfriend|boyfriend stays over|girlfriend stays over|partner stays over|always staying over|stays over every night|staying over every night|sleeps over every night|boyfriend is always here|girlfriend is always here", 'roomguest'],
+    ['baby christened|baby baptised|baby baptized|christen the baby|baptise the baby|baptize the baby|baby christening|raise the baby muslim|raise the baby catholic|raise the baby christian|raise the baby jewish|raised muslim|raised catholic|raise him muslim|raise her muslim|raise them muslim|ramadan with a newborn', 'twofaiths'],
+    ['moved in|just moved in|new in the house', 'polyguest'],
     ['divorced dad|divorced mum|divorced mom|divorced father|divorced mother|divorced parent|weekend dad|weekend parent|every other weekend|kids every other weekend|see my kids at weekends|see the kids at weekends', 'parttime'],
     ['lonely after divorce|lonely after the divorce|lonely after my divorce|lonely since the divorce|alone after divorce|lonely after a breakup|lonely after the breakup|lonely since the breakup', 'onmyownlonely'],
     ['i yell at my kids|i yell at the kids|i shout at my kids|i shout at the kids|i scream at my kids|yell at my kids|shout at my kids|yelling at my kids|shouting at my kids|yelling at the kids|shouting at the kids|i keep yelling|i keep shouting', 'angerhelp'],
@@ -1732,6 +1745,10 @@
     anger: 'angerhelp', angerhelp: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'],
     yelling: ['/parents.html#anger-help', '/parents.html#is-yelling-abuse', '/upset-right-now.html', '/wp-11.html'], yell: 'yelling', yelled: 'yelling', shouting: 'yelling', shout: 'yelling', screaming: 'yelling',
     dad: ['/teens.html', '/grown-up-children.html', '/parents.html', '/caregivers.html'],
+    eshoras: ['/en-espanol.html#horas', '/en-espanol.html'], trabaja: 'eshoras', trabajo: 'eshoras', trabajamos: 'eshoras', horas: 'eshoras', turno: 'eshoras', turnos: 'eshoras', construccion: 'eshoras', 'construcción': 'eshoras',
+    escasa: ['/en-espanol.html#casa', '/en-espanol.html'], tareas: 'escasa', quehaceres: 'escasa', ayuda: 'escasa',
+    espequenos: ['/en-espanol.html#pequenos', '/en-espanol.html'], gemelos: 'espequenos', gemelas: 'espequenos', bebe: 'espequenos', dormimos: 'espequenos',
+    esenojado: ['/en-espanol.html#enojado', '/en-espanol.html'], peleamos: 'esenojado', peleas: 'esenojado', pelea: 'esenojado', enojado: 'esenojado', enojada: 'esenojado', gritos: 'esenojado',
     comingout: ['/coming-out.html', '/teens.html#lgbtq', '/safety.html'], bi: 'comingout', gay: 'comingout', lesbian: 'comingout', bisexual: 'comingout', queer: 'comingout', trans: 'comingout', closeted: 'comingout', closet: 'comingout',
     christening: 'twofaiths', christened: 'twofaiths', christen: 'twofaiths', baptism: 'twofaiths', baptised: 'twofaiths', baptized: 'twofaiths', ramadan: 'twofaiths', eid: 'twofaiths', diwali: 'twofaiths', hanukkah: 'twofaiths'
   };
@@ -1780,6 +1797,10 @@
    ['/sharing-a-room.html#guests', 'Sharing a room: guests and overnight guests', 'When a roommate’s partner is always staying over: how often, how much notice, and how to say it kindly.', 'Guide'],
    ['/sharing-a-room.html#bring-it-up', 'How to bring it up if you hate confrontation', 'Words for raising a guest, noise or sleep problem with a roommate, calmly and once.', 'Guide'],
    ['/on-my-own.html#lonely', 'Loneliness and friends, after a breakup', 'Feeling lonely after a divorce or breakup, and small ways to rebuild friends and a week that feels like yours.', 'Guide'],
+   ['/en-espanol.html#horas', 'En español: cuando uno trabaja muchas horas', 'Pasos cortos, en español, para cuando uno de los dos trabaja muchas horas y el otro lleva la casa.', 'Español'],
+   ['/en-espanol.html#casa', 'En español: las tareas de la casa', 'Pasos cortos, en español, para repartir el trabajo de la casa sin pelear.', 'Español'],
+   ['/en-espanol.html#pequenos', 'En español: con niños pequeños', 'Pasos cortos, en español, para las noches sin dormir y los niños pequeños.', 'Español'],
+   ['/en-espanol.html#enojado', 'En español: cuando estás muy enojado', 'Pasos cortos, en español, para calmarse antes de hablar.', 'Español'],
    ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it becomes a safety issue, and getting support.', 'Guide']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // pages that are newly written: if the search index was built before a page existed, its result still shows
@@ -1913,9 +1934,12 @@
     var terms = termsIn || searchTerms(q);
     if (!terms.length) return [];
     var out = [], boost = {}, first = {};
+    // a situation named by a phrase ("won't let me see the baby", "dad died") leads over a single everyday word beside it
+    var anySit = terms.some(function (t) { return actFor(t) && !(vocab && vocab[t]); });
     terms.forEach(function (t) {
       var a = actFor(t) || (t.length > 4 && /s$/.test(t) && actFor(t.slice(0, -1)));
-      if (a) a.forEach(function (u, i) { boost[u] = Math.max(boost[u] || 0, 60 - i * 6); if (!i) first[u] = 1; });
+      var sit = a && !(vocab && vocab[t]) ? 15 : (anySit ? -12 : 0);
+      if (a) a.forEach(function (u, i) { boost[u] = Math.max(boost[u] || 0, 60 + sit - i * 6); if (!i) first[u] = 1; });
     });
     // a situation word (from a phrase like "my ex" or "games all night") points to pages; it isn't in their text
     var need = terms.filter(function (t) { return !(actFor(t) && !(vocab && vocab[t])); }).length;
@@ -2133,8 +2157,19 @@
       if (current !== '/night-garden.html') plantedNote();
     }
   };
+  // the note sits in the page, just under whatever was pressed, so it never covers the words someone is reading
+  // (with nothing pressed in the page, a small note at the very bottom edge of the screen)
   function plantedNote() {
     var n = el('a', { class: 'tol-planted', href: '/night-garden.html', role: 'status' }, '<span aria-hidden="true">&#127800;</span> A flower was planted in your Night Garden');
+    var a = document.activeElement, main = document.querySelector('main');
+    var spot = a && a !== document.body && main && main.contains(a) ? (a.closest('p, li, .tol-offer-row, div, section, form') || a) : null;
+    if (spot && spot !== main) {
+      n.classList.add('is-inline');
+      spot.after(n);
+      requestAnimationFrame(function () { n.classList.add('is-in'); });   // it stays, as a small link to the garden
+      return;
+    }
+    n.classList.add('is-edge');
     document.body.appendChild(n);
     requestAnimationFrame(function () { n.classList.add('is-in'); });
     setTimeout(function () { n.classList.remove('is-in'); setTimeout(function () { n.remove(); }, 600); }, 4200);
@@ -2751,6 +2786,8 @@
     // pages that draw on a canvas (the games) grow their words with the root size instead of a zoom
     h.classList.toggle('tol-nozoom', !!(document.body && (document.body.classList.contains('is-game') || document.body.hasAttribute('data-no-zoom'))));
     h.classList.toggle('tol-quiet', quietOn());
+    // Quiet mode is truly plain: no paint splashes, music players, pillar strips, quizzes or extra cards (one tap shows them, this visit)
+    h.classList.toggle('tol-quiet-plain', quietOn() && ssGet('tol-quiet-extras') !== '1');
     h.classList.toggle('tol-no-helpers', lsGet(HELP_KEY) === '1' || quietOn());
     h.classList.toggle('tol-easy', easyOn());
     h.classList.toggle('tol-font-easy', lsGet(FONT_KEY) === 'easy');
@@ -3209,11 +3246,13 @@
   // Shown once per visit (on the first page of the visit where it fits), on up to three visits, and never again
   // once someone picks an option or says No thanks. Never inside a tool, between its button and its result.
   function comfortOffer(body) {
+    // (on the home page it stays in the first screen until it's answered)
     var seenBefore = lsGet('tol-comfort-offer') || '', visits = seenBefore === 'shown' ? 1 : (+(/^shown:(\d+)$/.exec(seenBefore) || [0, 0])[1] || 0);
-    if (seenBefore === 'done' || visits >= 3 || ssGet('tol-offer-seen') || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
+    var onHome = !!document.querySelector('main [data-home-intro]');
+    if (seenBefore === 'done' || (!onHome && (visits >= 3 || ssGet('tol-offer-seen'))) || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
-    lsSet('tol-comfort-offer', 'shown:' + (visits + 1)); ssSet('tol-offer-seen', '1'); // once this visit; Settings at the top is always there
+    if (!ssGet('tol-offer-seen')) lsSet('tol-comfort-offer', 'shown:' + (visits + 1)); ssSet('tol-offer-seen', '1'); // once this visit; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
       '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
       '<p class="tol-offer-row"><button type="button" data-offer="quiet">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
@@ -3518,6 +3557,24 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     timer = setTimeout(go, 60000 + Math.random() * 30000);
   }
+
+  // A Breathe link next to "slow breathing" or "breathe out longer" opens the break with Calm breathing (in 4 · out 6)
+  // picked, since that is the one the advice describes. (Only the starting choice: the person's own pick is kept.)
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-breathe], a[href="#breathe"]');
+    if (!a) return;
+    var ctx = ((a.closest('li, p, article, .cs-card, section') || a).textContent || '') + ' ' + (a.getAttribute('data-breathe') || '');
+    if (!/slow(ly)? breath|breath(e|ing)? out (slow|long)|out (for )?(6|six)|longer than you breathe in|calm breathing/i.test(ctx)) return;
+    var before = lsGet('tol-br-method');
+    lsSet('tol-br-method', 'calm');
+    // put back their usual choice once the break has opened with Calm breathing
+    if (before && before !== 'calm') {
+      var tries = 0, t = setInterval(function () {
+        var ov = document.querySelector('.tol-breathe:not([hidden])');
+        if (ov || ++tries > 40) { clearInterval(t); setTimeout(function () { if (lsGet('tol-br-method') === 'calm') lsSet('tol-br-method', before); }, 300); }
+      }, 100);
+    }
+  }, true);
 
   // ---------- Breathe ----------
   // The button is on every page; the break itself (methods, guidance and soundscapes) lives in
@@ -3969,11 +4026,15 @@
       x: msg.length <= 260 ? 'https://x.com/intent/post?text=' + enc(d.text || d.title || '') + (d.url ? '&url=' + enc(d.url) : '') : '',
       pinterest: d.url && d.pin && img ? 'https://www.pinterest.com/pin/create/button/?url=' + enc(d.url) + '&media=' + enc(img) + '&description=' + enc(d.text || d.title || '') : ''
     };
+    // something private (a deal, a list, a check-in card, a result, or a link that carries what someone typed)
+    // goes to one person: Text, WhatsApp, Email, Copy and a QR code, never the public places
+    var priv = !!(d.result || d.private || (d.url && /[#?&][\w-]+=/.test(d.url)));
+    box.toggleAttribute('data-private', priv);
     Array.prototype.forEach.call(box.querySelectorAll('[data-act]'), function (a) {
       var act = a.getAttribute('data-act'), show;
       if (act === 'copy') show = !!d.url;
       else if (act === 'copy-text') show = !!(d.result && d.text);
-      else if (act === 'facebook' || act === 'pinterest') show = !d.result && !!links[act];
+      else if (act === 'facebook' || act === 'pinterest' || act === 'x') show = !priv && !!links[act];
       else if (act === 'print') show = !d.result && !!d.url && d.url.split('#')[0] === location.origin + location.pathname;   // this page, not something typed
       else show = !!links[act];
       a.hidden = !show;
@@ -3993,7 +4054,7 @@
   }
   function shareNow(o) {
     o = o || {};
-    var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin };
+    var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private };
     if (navigator.share && !(window.TOLShareKit && window.TOLShareKit.sheetFirst)) {
       var data = {}; if (d.title) data.title = d.title; if (d.text) data.text = d.text; if (d.url) data.url = d.url;
       var can = true; try { if (navigator.canShare) can = navigator.canShare(data); } catch (e) { can = true; }
@@ -4041,7 +4102,7 @@
   }
   window.TOLShare = {
     share: shareNow,
-    open: function (o) { o = o || {}; openShareSheet({ title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin }); },
+    open: function (o) { o = o || {}; openShareSheet({ title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private }); },
     close: closeShareSheet,
     copy: shareCopy,
     // TOLShare.button('Share', { title, text, url } or function () { return {...}; }) → a ready button

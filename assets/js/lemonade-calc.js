@@ -3479,6 +3479,10 @@
       var pick = mi >= 0 && mi !== snd ? mi : cand.length === 1 ? cand[0] : -1;
       if (pick >= 0) { state.me = pick; cued = {}; firstSide = -1; said = ' This device is set to ' + nameOf(pick) + '’s side now.'; renderMeRow(); renderAsRow(); renderSend(); renderRows(); recalc(); }
     }
+    // not sure who's on this device (three or more, say): ask first, before any box is filled in
+    if (state.me < 0) { setTimeout(function () { askWho($('add-msg')); }, 0); said += ' Tap your name just below, so your boxes are the ones to fill in.'; }
+    // one button to send your side straight back to whoever sent theirs
+    sendBack = snd >= 0 && !placeholder(state.people[snd]) ? snd : -1; renderSendBack();
     var onlyBills = !d.jobs.length && d.bills.length > 0, me = state.me;
     showTab(onlyBills ? 1 : 0);
     var el = null;
@@ -3493,6 +3497,29 @@
       else if (onlyBills) said += ' Their side was bills only, so the Money tab is open.';
     }
     return said;
+  }
+  var sendBack = -1;
+  function renderSendBack() {
+    var box = $('add-box'); if (!box) return;
+    var p = $('send-back-p');
+    if (sendBack < 0 || sendBack >= state.people.length || sendBack === state.me) { if (p) p.hidden = true; return; }
+    if (!p) {
+      p = document.createElement('div'); p.className = 'ls-tools ls-main-act'; p.id = 'send-back-p';
+      p.innerHTML = '<button type="button" class="ls-main-btn" id="send-back"></button>';
+      var m = $('add-msg'); m.parentNode.insertBefore(p, m.nextSibling);
+      $('send-back').addEventListener('click', function () {
+        if (state.me < 0) { askWho($('add-msg')); sideStatus('add-msg', 'Tap your name first, so it goes back as your side.'); return; }
+        var d = sideData(); if (d.error) { sideStatus('add-msg', d.error); return; }
+        var url = sideLink('j' + b64url(new TextEncoder().encode(JSON.stringify(d))));
+        var line = 'Here’s my side, back to you. Tap to add it to your Lemonade Stand (a preview comes first, and nothing is uploaded)';
+        if (ES) line += '. Aquí está mi parte. Toca el enlace y luego «Add to my stand».';
+        if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
+        else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
+        else copyText(line + '\n' + url).then(function (ok) { sideStatus('add-msg', ok ? 'Copied the link. Paste it into a message to ' + nameOf(sendBack) + '.' : 'Couldn’t share here.'); });
+      });
+    }
+    p.hidden = false;
+    $('send-back').textContent = 'Send my side back to ' + nameOf(sendBack);
   }
   function sideStatus(id, msg) { var el = $(id); if (!el) return; el.textContent = ''; setTimeout(function () { el.textContent = msg; }, 30); }
   function renderSend() {
@@ -4379,6 +4406,19 @@
       } else if (m) j.pick = m;
       state.jobs.push(j); added++;
     });
+    // paid work + travel typed in the quick look ("Someone works long hours or is ill"): one "Paid work" line, hours a week
+    if (Array.isArray(q.work) && q.work.some(function (x) { return num(x) > 0; })) {
+      var pw = state.jobs.filter(function (j) { return !j.ex && kindOf(j) === 'work' && /^paid work/.test(low(j.name)); })[0];
+      if (!pw) { pw = { name: 'Paid work', v: zeros(), t: zeros(), cat: 'work', freq: 'week', unit: 'h', nm: zeros() }; state.jobs.push(pw); added++; }
+      q.work.forEach(function (x, qi) { var k = map[qi]; if (k != null && k >= 0 && num(x) > 0 && !num(pw.v[k]) && num(x) <= 168) { if (pw.unit === 'm') pw.v[k] = Math.round(num(x) * 60 / mult(pw, k)); else pw.v[k] = Math.round(num(x) / mult(pw, k) * 10) / 10; } });
+      delete pw.pick;
+    }
+    // a fair split picked in the quick look, when none is set here
+    if (Array.isArray(q.split) && q.split.length === 2 && !state.agreed.on) {
+      var sp = zeros().map(function () { return ''; });
+      q.split.forEach(function (x, qi) { var k = map[qi]; if (k != null && k >= 0) sp[k] = String(x); });
+      if (sum(sp.map(function (x) { return parseFloat(x) || 0; })) === 100) { state.agreed.on = true; state.agreed.p = sp; delete state.agreed.src; }
+    }
     // every quick-look job as a chip on the fridge list, with the owner it had there
     if (Array.isArray(q.chips)) {
       state.qchips = q.chips.map(function (c) { var w = typeof c.who === 'number' && c.who >= 0 && map[c.who] != null ? map[c.who] : -1; return { n: String(c.name || '').trim().slice(0, 60), w: w }; }).filter(function (c) { return c.n; });

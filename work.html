@@ -22,6 +22,10 @@
 <script src="/assets/js/site.js" defer></script>
 <style>
   /* Only the site's own color tokens are used here, so dark mode follows site.css. */
+  .wk-autistic-card{ margin:.6rem 0 .4rem !important; }
+  .wk-autistic-card a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; border:1px solid #C6DFF4; border-radius:14px; background:#EEF4FB; text-decoration:none; }
+  .wk-autistic-card a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+  .wk-autistic-card a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
   .wk-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .wk-jump li{ margin:0 !important; max-width:none !important; }
   .wk-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
@@ -163,14 +167,17 @@
 
 <p class="simple-lede">Most friction at work is not about people being difficult. It comes from jobs nobody clearly owns, messages that land harder than they were meant, and thanks that doesn’t fit. This page gathers simple, free tools for all three. It is written so a team lead or HR manager can share it with a team as it is. There is also a section for <a href="#business-partners">running a business together</a>, and one for <a href="#autistic-at-work">anyone who is autistic at work</a>.</p>
 
+<p class="wk-autistic-card no-bubble"><a href="#autistic-at-work"><strong>If you’re autistic at work</strong><span>Clear asks, noise, small talk and choosing what to share. Plain words you can use.</span></a></p>
+
 <ul class="wk-jump" aria-label="On this page">
   <li><a href="#workload">Fair workloads</a></li>
+  <li><a href="#business-partners">Running a business together</a></li>
+  <li><a href="#owner-list">Team one-owner list</a></li>
+  <li><a href="#check-in">Team check-in</a></li>
   <li><a href="#messages">Messages that land</a></li>
   <li><a href="#appreciation">Appreciation that counts</a></li>
   <li><a href="#bonding">Getting on as a team</a></li>
   <li><a href="#team-session">A 45-minute team session</a></li>
-  <li><a href="#check-in">Team check-in</a></li>
-  <li><a href="#business-partners">Running a business together</a></li>
   <li><a href="#one-to-ones">Better one-to-ones</a></li>
   <li><a href="#talking">Feedback and hard talks</a></li>
   <li><a href="#neurodiversity">ADHD and neurodiversity</a></li>
@@ -187,6 +194,25 @@
 </ul>
 <p>When a job belongs to “everyone,” it often ends up belonging to no one, or to the same one person every time. The fix is not to blame anyone. It is to write the recurring jobs down and give each one a single owner, with a backup for holidays and busy weeks. Fix the setup, not the person.</p>
 
+<h2 id="business-partners">Running a business together</h2>
+<p>Co-founders, co-owners and partners in a small business have the same setup problem as any team, with more riding on it: the business and the friendship share one table. The work customers see (the baking, the selling, the clients) tends to get the credit. The admin that keeps the doors open (payroll, suppliers, permits, tax) is invisible until something goes wrong.</p>
+<ul>
+  <li><strong>One owner and a backup for every recurring job.</strong> Fill in the <a href="#owner-list">one-owner list</a> together, then send it to each other so you both have the same list.</li>
+  <li><strong>Agree who owns <em>how</em>, not just who does it.</strong> The owner decides how their job is done. If you think it should change, bring it to them; don’t quietly redo it your way.</li>
+  <li><strong>A weekly check-in, ten minutes.</strong> How full was the week, one thank-you, one thing that slipped. The <a href="#check-in">team check-in</a> works just as well for two.</li>
+  <li><strong>Thank the admin out loud.</strong> It rarely gets noticed unless it goes wrong, so name it when it goes right.</li>
+  <li><strong>Equal hours aren’t the goal.</strong> Different jobs take different hours. The real question is whether the split matches what you agreed, and whether you’d both agree to it again.</li>
+</ul>
+<div class="wk-say" data-keep-steps>
+  <h3>Words you could use</h3>
+  <p>“Can we each list everything we did this week, the admin too? I want us both to see the whole picture.”</p>
+  <p>“You own the supplier orders. If I think something should change, I’ll bring it to you instead of doing it my way.”</p>
+  <p>“Thanks for sorting the VAT return. I know it took your whole Sunday.”</p>
+  <p>“I’m the only one who knows how payroll works. Could you be my backup, so the business isn’t stuck if I’m ill?”</p>
+</div>
+<p>If a disagreement is about money, ownership or the partnership agreement itself, that is a conversation for an accountant or a lawyer, not this page. If one of you feels pushed around rather than just out of step, <a href="/safety.html">this page on safety and control</a> can help you tell the difference.</p>
+
+<h2 id="team-tools">Team tools: one owner per job, and a weekly check-in</h2>
 <section class="wk-tool tol-plain" data-keep-steps id="owner-list" aria-labelledby="owner-list-h">
   <h3 id="owner-list-h">Team one-owner list</h3>
   <p>List the jobs that come round again and again. Give each one an owner, a backup and how often it happens. This is the team version of the site’s <a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job</a> worksheet.</p>
@@ -269,24 +295,6 @@
   </div>
   <p class="wk-privacy">Private: kept only in this browser, on this device, with the one-owner list. Nothing is sent anywhere unless you send a link yourself. “Erase what’s saved” above removes both.</p>
 </section>
-
-<h2 id="business-partners">Running a business together</h2>
-<p>Co-founders, co-owners and partners in a small business have the same setup problem as any team, with more riding on it: the business and the friendship share one table. The work customers see (the baking, the selling, the clients) tends to get the credit. The admin that keeps the doors open (payroll, suppliers, permits, tax) is invisible until something goes wrong.</p>
-<ul>
-  <li><strong>One owner and a backup for every recurring job.</strong> Fill in the <a href="#owner-list">one-owner list</a> together, then send it to each other so you both have the same list.</li>
-  <li><strong>Agree who owns <em>how</em>, not just who does it.</strong> The owner decides how their job is done. If you think it should change, bring it to them; don’t quietly redo it your way.</li>
-  <li><strong>A weekly check-in, ten minutes.</strong> How full was the week, one thank-you, one thing that slipped. The <a href="#check-in">team check-in</a> works just as well for two.</li>
-  <li><strong>Thank the admin out loud.</strong> It rarely gets noticed unless it goes wrong, so name it when it goes right.</li>
-  <li><strong>Equal hours aren’t the goal.</strong> Different jobs take different hours. The real question is whether the split matches what you agreed, and whether you’d both agree to it again.</li>
-</ul>
-<div class="wk-say" data-keep-steps>
-  <h3>Words you could use</h3>
-  <p>“Can we each list everything we did this week, the admin too? I want us both to see the whole picture.”</p>
-  <p>“You own the supplier orders. If I think something should change, I’ll bring it to you instead of doing it my way.”</p>
-  <p>“Thanks for sorting the VAT return. I know it took your whole Sunday.”</p>
-  <p>“I’m the only one who knows how payroll works. Could you be my backup, so the business isn’t stuck if I’m ill?”</p>
-</div>
-<p>If a disagreement is about money, ownership or the partnership agreement itself, that is a conversation for an accountant or a lawyer, not this page. If one of you feels pushed around rather than just out of step, <a href="/safety.html">this page on safety and control</a> can help you tell the difference.</p>
 
 <h2 id="messages">Messages that land</h2>
 <p>At work, a short message carries more than its words. Pay, reviews and reputation sit underneath it, so a quick line can read as a criticism, an order or a hidden note about someone’s competence, even when it wasn’t meant that way. A little extra clarity costs a few seconds and saves a lot of second-guessing.</p>
@@ -907,7 +915,7 @@
         [['owner', 'owner'], ['backup', 'backup'], ['often', 'how often']].forEach(function (f) {
           if (!r[f[0]]) return;
           if (!hit[f[0]]) hit[f[0]] = r[f[0]];
-          else if (fold(hit[f[0]]) !== fold(r[f[0]])) diffs.push({ kind: 'row', task: hit.task, key: f[0], label: f[1].charAt(0).toUpperCase() + f[1].slice(1) + ' of “' + hit.task + '”', mine: hit[f[0]], theirs: r[f[0]] });
+          else if (fold(hit[f[0]]) !== fold(r[f[0]])) diffs.push({ kind: 'row', task: hit.task, key: f[0], shared: r, label: f[1].charAt(0).toUpperCase() + f[1].slice(1) + ' of “' + hit.task + '”', mine: hit[f[0]], theirs: r[f[0]] });
         });
       });
       if (!state.ci.date) state.ci.date = d.ci.date;
@@ -987,7 +995,13 @@
                 r[df.key] = df.theirs;
                 // never owner and backup at once: the backup place is emptied (and its own choice goes)
                 if (r.owner && r.owner === r.backup) {
-                  if (df.key === 'owner') { r.backup = ''; extra = ' ' + r.owner + ' was the backup too, so the backup is empty now.'; }
+                  if (df.key === 'owner') {
+                    r.backup = '';
+                    // the list you were sent has its own backup for this job: it fills the empty place
+                    var sb = df.shared && df.shared.backup;
+                    if (sb && sb !== r.owner) { r.backup = sb; extra = ' ' + r.owner + ' was the backup here, so the backup is now ' + sb + ', as on the list you were sent.'; }
+                    else extra = ' ' + r.owner + ' was the backup too, so the backup is empty now.';
+                  }
                   else { r.backup = ''; extra = ' ' + df.theirs + ' already owns it, so the backup stays empty.'; }
                   Array.prototype.forEach.call(box.querySelectorAll('.wk-diff-row'), function (o) { if (o !== row && o.getAttribute('data-task') === fold(df.task) && o.getAttribute('data-key') === 'backup') o.remove(); });
                 }

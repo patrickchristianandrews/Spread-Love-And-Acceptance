@@ -607,7 +607,7 @@
     else v[id] = w === 'b' ? 'b' : +w;
     save();
     var r = document.querySelector('#lq-list .lq-row[data-id="' + cssq(id) + '"]'); if (r) paintRow(r);
-    renderResult(); renderAsRow();
+    renderResult(); renderAsRow(); renderFrom();
   }
   function dropJob(id) {
     var k = q.list.indexOf(id); if (k < 0) return;
@@ -900,7 +900,7 @@
       var gw = ids.length === 3 ? L('the three of you', 'los tres') : L('all ' + ids.length + ' of you', 'los ' + ids.length);
       var top = '<div class="lq-cmpbox lq-cmp-all"><h4>' + esc(L('Where ' + gw + ' agree', 'En qué coinciden ' + gw)) + '</h4>';
       top += allSame.length ? '<p>' + esc(L(cap(gw) + ' agree on ' + joinA(allSame) + '.', cap(gw) + ' coinciden en ' + joinA(allSame).replace(/ and /g, ' y ') + '.')) + '</p>' : '<p>' + esc(L('No job yet where ' + gw + ' say the same.', 'Todavía no hay una tarea en la que ' + gw + ' digan lo mismo.')) + '</p>';
-      if (allDiff.length) top += '<p>' + esc(L((ids.length === 3 ? 'All three of you' : 'Each of you') + ' see ' + joinA(allDiff) + ' differently. A good one to talk about together.', (ids.length === 3 ? 'Los tres' : 'Cada uno') + ' ven ' + joinA(allDiff).replace(/ and /g, ' y ') + ' de forma distinta. Buena para conversarla juntos.')) + '</p>';
+      if (allDiff.length) top += '<p>' + esc(L((ids.length === 3 ? 'All three of you' : 'Each of you') + ' see ' + joinA(allDiff) + ' differently. ' + (allDiff.length > 1 ? 'Good ones' : 'A good one') + ' to talk about together.', (ids.length === 3 ? 'Los tres' : 'Cada uno') + ' ven ' + joinA(allDiff).replace(/ and /g, ' y ') + ' de forma distinta. ' + (allDiff.length > 1 ? 'Buenas para conversarlas juntos.' : 'Buena para conversarla juntos.'))) + '</p>';
       html = top + '</div>' + html;
     }
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
@@ -1069,34 +1069,38 @@
   function cardLean(t) {
     if (!t.n) return null;
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
-    if (alone && max > t.both) return { t: (max / t.n >= 0.6 ? 'Mostly ' : 'A little more often ') + cardName(top), c: COLORS[top] };
-    if (t.both > 0 && t.both >= max) return { t: 'Mostly shared', c: 'both' };
-    return { t: 'Spread between ' + (q.people.length === 2 ? 'the two of us' : 'all of us'), c: 'both' };
+    if (alone && max > t.both) return { t: (max / t.n >= 0.6 ? L('Mostly ', 'Sobre todo ') : L('A little more often ', 'Un poco más ')) + cardName(top), c: COLORS[top] };
+    if (t.both > 0 && t.both >= max) return { t: L('Mostly shared', 'Casi siempre compartido'), c: 'both' };
+    return { t: L('Spread between ' + (q.people.length === 2 ? 'the two of us' : 'all of us'), 'Repartido entre ' + (q.people.length === 2 ? 'los dos' : 'todos')), c: 'both' };
   }
   function cardData() {
     var all = tally(q.me); if (!all.n) return null;
     var rows = [], notes = [];
-    var HEADS = { home: 'Everyday jobs', think: 'Planning and remembering (the thinking work)', work: 'Paid work and nights' };
+    var HEADS = isEs() ? { home: 'Tareas de cada día', think: 'Planear y acordarse (el trabajo de pensar)', work: 'Trabajo pagado y noches' } : { home: 'Everyday jobs', think: 'Planning and remembering (the thinking work)', work: 'Paid work and nights' };
     SECTIONS.forEach(function (s) {
       var t = tally(q.me, s[0]), l = cardLean(t); if (!l) return;
       rows.push({ h: HEADS[s[0]], t: l.t, c: l.c, hl: s[0] === 'think' });
     });
     var th = tally(q.me, 'think'), tl = lean(th);
-    if (tl && tl.one != null && th.n >= 2) notes.push('The thinking work is easy to miss, because nobody sees it happen.');
+    if (tl && tl.one != null && th.n >= 2) notes.push(L('The thinking work is easy to miss, because nobody sees it happen.', 'El trabajo de pensar es fácil de pasar por alto, porque nadie lo ve.'));
     shownOthers().forEach(function (o) {
       var mine = q.ans[q.me] || {}, ot = q.ans[o] || {}, same = 0, diff = 0;
       q.list.forEach(function (id) { if (mine[id] == null || ot[id] == null) return; if (mine[id] === ot[id]) same++; else diff++; });
       if (!same && !diff) return;
-      var whoW = q.people.length === 2 ? 'We' : cardName(q.me) + ' and ' + cardName(o);
-      notes.push(diff ? whoW + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + ' and see ' + diff + ' differently. Those are the good ones to talk about.' : whoW + ' see it the same way.');
+      var whoW = q.people.length === 2 ? L('We', 'Nosotros') : cardName(q.me) + L(' and ', ' y ') + cardName(o);
+      notes.push(isEs() ? (diff ? whoW + ' coincidimos en ' + same + (same === 1 ? ' tarea' : ' tareas') + ' y vemos ' + diff + ' distinto. Esas son las buenas para conversar.' : whoW + ' lo vemos igual.')
+        : diff ? whoW + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + ' and see ' + diff + ' differently. Those are the good ones to talk about.' : whoW + ' see it the same way.');
     });
-    if (q.ill || workLeans()) notes.push('Fair isn’t always 50/50: long hours, nights or illness count too.');
+    var withH = q.ill ? q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; }) : [];
+    if (withH.length) notes.push(L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(function (i) { return cardName(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + '.');
+    if (q.away) notes.push(L('One of us has been away: the lean is about the time apart, not about either of us.', 'Uno de nosotros estuvo lejos: la inclinación habla del tiempo separados, no de ninguno.'));
+    else if (q.ill || workLeans()) notes.push(L('Fair isn’t always ' + (q.people.length === 2 ? '50/50' : 'an even split') + ': long hours, nights or illness count too.', 'Justo no siempre es mitad y mitad: las horas largas, las noches o una enfermedad también cuentan.'));
     return {
-      title: 'Who does what at home',
-      sub: multiView() && typed(q.me) ? 'As ' + typed(q.me) + ' sees it' : 'Our quick look',
+      title: L('Who does what at home', '¿Quién hace qué en casa?'),
+      sub: multiView() && typed(q.me) ? L('As ' + typed(q.me) + ' sees it', 'Como lo ve ' + typed(q.me)) : L('Our quick look', 'Nuestro vistazo'),
       people: q.people.map(function (_, i) { return { n: cardName(i), c: COLORS[i] }; }),
       rows: rows, notes: notes,
-      ask: 'Does this match how it feels to ' + (q.people.length === 2 ? 'both of us' : 'all of us') + '?'
+      ask: L('Does this match how it feels to ' + (q.people.length === 2 ? 'both of us' : 'all of us') + '?', q.people.length === 2 ? '¿Así lo sentimos los dos?' : '¿Así lo sentimos todos?')
     };
   }
   function printQuick() {
@@ -1212,24 +1216,28 @@
   /* ---------- next steps ---------- */
   // the names as the full stand should see them: typed, or "Me" for whoever answered here and "Them" for the other
   function namesOut() { return q.people.map(function (_, i) { return typed(i) || (i === q.me ? 'Me' : q.people.length === 2 ? 'Them' : 'Person ' + (i + 1)); }); }
+  // every job on the quick look (custom ones too), as fridge-list chips with the owner each had here
+  function chipList() {
+    var mine = q.ans[q.me] || {};
+    return q.list.filter(function (id) { return kindOf(id) !== 'work'; }).map(function (id) { var w = mine[id]; return { name: label(id), who: typeof w === 'number' ? w : -1 }; });
+  }
   function fridge() {
     var mine = q.ans[q.me] || {};
-    var ids = q.list.filter(function (id) { return mine[id] != null && kindOf(id) !== 'work'; });
-    if (!ids.length) { status('Tap who does a job or two first. Then the fridge list fills itself in.'); return; }
+    var ids = q.list.filter(function (id) { return kindOf(id) !== 'work'; });
+    if (!ids.some(function (id) { return mine[id] != null; })) { status(L('Tap who does a job or two first. Then the fridge list fills itself in.', 'Primero toca quién hace una o dos tareas. Luego la lista para el refri se llena sola.')); return; }
     var api = window.TOLLemonade;
     if (!api || !api.fromQuick) { status('The fridge list didn’t load. Try reloading the page.'); return; }
-    // five at most: the ones you see differently first, then the shared ones (an owner helps most there), then the thinking work
-    var diff = {}; shownOthers().forEach(function (o) { var th = q.ans[o] || {}; ids.forEach(function (id) { if (th[id] != null && th[id] !== mine[id]) diff[id] = 1; }); });
-    var score = function (id) { return (diff[id] ? 0 : mine[id] === 'b' ? 1 : kindOf(id) === 'think' ? 2 : 3); };
-    var pick = ids.map(function (id, k) { return { id: id, k: k }; }).sort(function (a, b) { return score(a.id) - score(b.id) || a.k - b.k; }).slice(0, 5);
-    var r = api.fromQuick({ people: namesOut(), me: q.me, owners: pick.map(function (x) { var w = mine[x.id]; return { name: label(x.id), who: diff[x.id] || w === 'b' ? -1 : w }; }) });
+    // nothing chosen for you, except the jobs you share or see differently (an owner helps most there); every other job is a chip to tap
+    var diff = {}; shownOthers().forEach(function (o) { var th = q.ans[o] || {}; ids.forEach(function (id) { if (mine[id] != null && th[id] != null && th[id] !== mine[id]) diff[id] = 1; }); });
+    var pre = ids.filter(function (id) { return diff[id] || mine[id] === 'b'; }).slice(0, 10);
+    var r = api.fromQuick({ people: namesOut(), me: q.me, chips: chipList(), owners: pre.map(function (id) { return { name: label(id), who: -1 }; }) });
     body.setAttribute('data-ls-fridge', '');
     var o = $('owners'), h = $('owners-h'), st = $('own-status');
     goTo(o);
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
-    var open = pick.filter(function (x) { return diff[x.id] || mine[x.id] === 'b'; }).length;
-    var msg = (r && r.owners ? 'Your fridge list is below, with ' + r.owners + (r.owners === 1 ? ' job' : ' jobs') + '.' : 'The fridge list below is full (five jobs). Swap one out to add another.') +
-      (open ? ' The ones you share or see differently have no owner yet: pick one together.' : '') + ' Owning a job means you do it, or make sure it gets done.';
+    var tot = r && typeof r.total === 'number' ? r.total : pre.length;
+    var msg = L('Every job from your quick look is a chip below: tap the ones you want on the list. ' + (tot ? (tot === 1 ? '1 job is' : tot + ' jobs are') + ' on it so far' + (pre.length ? ' (the ones you share or see differently, with no owner yet: pick one together).' : '.') : 'Nothing is picked for you.') + ' Owning a job means you do it, or make sure it gets done.',
+      'Cada tarea de tu vistazo está abajo: toca las que quieran en la lista. ' + (tot ? 'Ya hay ' + tot + (tot === 1 ? ' tarea' : ' tareas') + (pre.length ? ' (las que comparten o ven distinto, sin dueño todavía: elíjanlo juntos).' : '.') : 'No se eligió nada por ustedes.') + ' Ser dueño de una tarea es hacerla, o asegurarse de que se haga.');
     if (st) { st.textContent = msg; }
   }
   function deeper() {
@@ -1237,9 +1245,10 @@
     if (!api || !api.fromQuick) { setView('deep'); return; }
     var jobs = q.list.filter(function (id) { return mine[id] != null; }).map(function (id) {
       var j = JOB[id], li = libInfo(id), x = j && j.x;
-      return { name: li ? li.n : label(id), cat: li ? li.cat : x ? x.cat : undefined, m: li ? li.m : x ? x.m : 0, f: li ? li.f : x ? x.f : undefined, u: li ? li.u : 'm', who: mine[id] === 'b' ? -1 : mine[id] };
+      return { name: li ? li.n : labelEn(id), cat: li ? li.cat : x ? x.cat : undefined, m: li ? li.m : x ? x.m : 0, f: li ? li.f : x ? x.f : undefined, u: li ? li.u : 'm', who: mine[id] === 'b' ? -1 : mine[id] };
     });
-    var r = api.fromQuick({ people: namesOut(), me: q.me, jobs: jobs });
+    var work = q.ill ? q.people.map(function (_, i) { return hrsOf(i); }) : null;
+    var r = api.fromQuick({ people: namesOut(), me: q.me, jobs: jobs, work: work && work.some(Boolean) ? work : null, split: q.ill && q.split && q.people.length === 2 ? [+q.split, 100 - +q.split] : null });
     setView('deep');
     var bar = $('ls-deep-bar'), msg = $('ls-deep-msg');
     goTo(bar);
@@ -1257,7 +1266,55 @@
     if (k) k.hidden = !(api && api.hasStand && api.hasStand());
   }
   function renderAll() {
-    renderNames(); renderAsRow(); renderFrom(); renderList(); renderMore(); renderResult(); renderKept();
+    applyLang(); renderKids(); renderNames(); renderAsRow(); renderFrom(); renderList(); renderMore(); renderResult(); renderKept();
+  }
+  /* ---------- "We have kids", and the page's own words in Spanish ---------- */
+  function renderKids() {
+    var b = $('lq-kids-t'); if (!b) return;
+    b.setAttribute('aria-pressed', String(!!q.kids));
+    b.textContent = L('We have kids', 'Tenemos hijos');
+  }
+  function setKids(on) {
+    q.kids = !!on;
+    if (q.kids) starters(true).forEach(function (id) { if (q.list.indexOf(id) < 0 && KID_STARTERS.indexOf(id) >= 0) q.list.push(id); });
+    else q.list = q.list.filter(function (id) { return !isKidJob(id); });
+    save(); renderAll();
+    status(q.kids ? L('Added the kids’ jobs: bedtime, school or nursery runs, and keeping track of their stuff. More are under “Show more jobs”.', 'Se añadieron las tareas de los niños: la hora de dormir, llevar a la escuela y estar pendiente de sus cosas. Hay más en «Mostrar más tareas».')
+      : L('The kids’ jobs are off the list.', 'Las tareas de los niños salieron de la lista.'));
+  }
+  var EN0 = null;
+  var ES_UI = {
+    'quick-h': 'Vistazo rápido: ¿quién hace qué en casa?',
+    'lq-lede': 'Toca quién hace casi siempre cada tarea. La imagen se arma mientras avanzas, también el trabajo de pensar. Unos dos minutos, y nada sale de este aparato.',
+    'lq-names-h': 'Sus nombres (opcional)', 'lq-new-go': 'Añadir', 'lq-more-s': 'Mostrar más tareas',
+    'lq-more-p': 'Toca para poner una tarea en la lista de arriba. Aquí también hay bebé, cuidados, mascotas, trámites y trabajo de noche.',
+    'lq-res-h': 'Cómo se ve', 'lq-ill': 'Alguien trabaja muchas horas o está enfermo', 'lq-away': 'Uno de nosotros estuvo lejos (despliegue, trabajo fuera, hospital)',
+    'lq-next-h': 'Próximos pasos', 'lq-fridge-t': 'Hacer una lista para el refri (un dueño por tarea)', 'lq-fridge-d': 'Cada tarea de tu vistazo está para elegir. Elijan a quién le toca cada una, y luego imprímanla o envíenla como texto.',
+    'lq-deeper-t': 'Ir más a fondo: contar las horas (en inglés)', 'lq-deeper-d': 'La versión completa, con horas, cuentas y el lado de cada persona. Sus nombres y tareas pasan con ustedes.',
+    'lq-talk-t': 'Hablarlo', 'lq-talk-d': 'Una forma tranquila de sacar el tema, cuando estén descansados.',
+    'lq-keep-t': 'Se guarda en este aparato para la próxima vez. Nunca se envía a ningún lado.', 'lq-erase': 'Borrar el vistazo', 'lq-mini-go': 'Verlo ↓'
+  };
+  function uiEls() {
+    var g = function (sel) { return document.querySelector(sel); };
+    var talk = $('lq-talk-d'), talkT = talk && talk.parentNode.querySelector('.t'), keep = g('#quick .lq-keep');
+    return { 'quick-h': $('quick-h'), 'lq-lede': g('#quick .lq-lede'), 'lq-names-h': $('lq-names-h'), 'lq-new-go': $('lq-new-go'), 'lq-more-s': g('#lq-more > summary'), 'lq-more-p': g('#lq-more > .lq-mini'),
+      'lq-res-h': $('lq-res-h'), 'lq-ill': $('lq-ill'), 'lq-away': $('lq-away'), 'lq-next-h': g('#lq-res .lq-next h4'), 'lq-fridge-t': g('#lq-fridge .t'), 'lq-fridge-d': g('#lq-fridge .d'),
+      'lq-deeper-t': g('#lq-deeper .t'), 'lq-deeper-d': g('#lq-deeper .d'), 'lq-talk-t': talkT, 'lq-talk-d': talk, 'lq-keep-t': keep && keep.firstChild, 'lq-erase': $('lq-erase'), 'lq-mini-go': $('lq-mini-go') };
+  }
+  function applyLang() {
+    var els = uiEls();
+    if (!EN0) { EN0 = {}; Object.keys(els).forEach(function (k) { if (els[k]) EN0[k] = els[k].textContent; }); }
+    var es = isEs();
+    Object.keys(els).forEach(function (k) {
+      var el = els[k]; if (!el || EN0[k] == null) return;
+      var t = es && ES_UI[k] ? (k === 'lq-keep-t' ? ES_UI[k] + ' ' : ES_UI[k]) : EN0[k];
+      // three or more: not "when you're both rested"
+      if (!es && k === 'lq-talk-d' && q.people.length > 2) t = 'A calm way to bring it up, when you’re all rested.';
+      if (el.textContent !== t && !(k === 'lq-erase' && el.dataset.armed)) el.textContent = t;
+    });
+    var inp = $('lq-new'); if (inp) inp.placeholder = es ? '+ añadir una tarea' : '+ add a job';
+    var lb = $('lq-lang'); if (lb) { lb.textContent = es ? 'In English' : 'En español'; lb.setAttribute('lang', es ? 'en' : 'es'); }
+    var sec = $('quick'); if (sec) { if (es) sec.setAttribute('lang', 'es'); else sec.removeAttribute('lang'); }
   }
   function init() {
     var api = window.TOLLemonade;
@@ -1272,16 +1329,39 @@
     }
     var cb = $('lq-card');
     if (cb) cardP = Card.panel(cb, { card: cardData, link: function () { return linkFor(-1); }, text: function () { return chatText(true); }, print: printQuick, title: 'Our quick look', file: 'who-does-what.png' });
+    // "We have kids" just above the list, and English or Spanish beside the intro
+    var lw = document.querySelector('#quick .lq-list-wrap');
+    if (lw && !$('lq-kids-t')) {
+      var kd = document.createElement('div'); kd.className = 'lq-kids';
+      kd.innerHTML = '<button type="button" class="lq-toggle" id="lq-kids-t" aria-pressed="false">We have kids</button>';
+      lw.insertBefore(kd, lw.firstChild);
+      $('lq-kids-t').addEventListener('click', function () { setKids(!q.kids); var b = $('lq-kids-t'); if (b) b.focus({ preventScroll: true }); });
+    }
+    var lede = document.querySelector('#quick .lq-lede');
+    if (lede && !$('lq-lang')) {
+      var lp = document.createElement('p'); lp.className = 'lq-mini lq-lang';
+      lp.innerHTML = '<button type="button" class="lq-btn-link" id="lq-lang" lang="es">En español</button>';
+      lede.parentNode.insertBefore(lp, lede.nextSibling);
+      $('lq-lang').addEventListener('click', function () { q.lang = isEs() ? 'en' : 'es'; save(); renderAll(); var b = $('lq-lang'); if (b) b.focus({ preventScroll: true }); status(L('Back to English.', 'Ahora en español. Los nombres de las tareas, el resultado y el mensaje para compartir.')); });
+    }
     ready = true;
     renderAll();
     if (/^#q=/.test(location.hash || '')) receive(location.hash);
-    else if (/^#owners(-h)?$/.test(location.hash || '')) { var o = $('owners'); if (o) setTimeout(function () { o.scrollIntoView({ block: 'start' }); }, 50); }
+    else if (/^#owners(-h)?$/.test(location.hash || '')) {
+      // the fridge list from another page (like the check-in card): the names typed here come along, and every job here is a chip
+      if (api && api.fromQuick && q.people.some(function (_, i) { return typed(i); })) { try { api.fromQuick({ people: namesOut(), me: q.me, chips: hasAny(q.me) ? chipList() : undefined, mode: false }); } catch (e) {} }
+      var o = $('owners'); if (o) setTimeout(function () { o.scrollIntoView({ block: 'start' }); }, 50);
+    }
 
     $('lq-new-go').addEventListener('click', addCustom);
     $('lq-new').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addCustom(); } });
     $('lq-ill').addEventListener('click', function () {
       q.ill = !q.ill; save(); renderResult();
-      status(q.ill ? 'The words now allow for long hours, nights or illness. The counting stays the same.' : 'Back to the usual words.');
+      status(q.ill ? L('The words now allow for long hours, nights or illness. Add paid work hours and a fair split just below, if you like.', 'Las palabras ahora tienen en cuenta horas largas, noches o enfermedad. Si quieren, añadan abajo las horas de trabajo y un reparto justo.') : L('Back to the usual words.', 'De vuelta a las palabras de siempre.'));
+    });
+    $('lq-away').addEventListener('click', function () {
+      q.away = !q.away; save(); renderResult();
+      status(q.away ? L('The words now allow for time apart: the lean is about the time away, not about either of you.', 'Las palabras ahora tienen en cuenta el tiempo separados.') : L('Back to the usual words.', 'De vuelta a las palabras de siempre.'));
     });
     $('lq-fridge').addEventListener('click', fridge);
     $('lq-deeper').addEventListener('click', deeper);

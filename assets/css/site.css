@@ -960,6 +960,12 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
   transition:opacity .5s var(--ease-out), transform .5s var(--ease-out); white-space:nowrap; max-width:calc(100% - 2rem); }
 .tol-planted.is-in{ opacity:1; transform:translate(-50%, 0); }
 @media (prefers-reduced-motion: reduce){ .tol-planted{ transition:none; } }
+/* in the page, under the button that was pressed: it takes its own space instead of covering anything */
+.tol-planted.is-inline{ position:static; display:flex; width:max-content; max-width:100%; white-space:normal; margin:.7rem 0; transform:translateY(-4px); box-shadow:none; }
+.tol-planted.is-inline.is-in{ transform:none; }
+/* with nothing pressed in the page: a small note on the bottom edge, between the floating buttons */
+.tol-planted.is-edge{ top:auto; bottom:max(.6rem, env(safe-area-inset-bottom)); transform:translate(-50%, 10px); max-width:calc(100% - 7rem); white-space:normal; }
+.tol-planted.is-edge.is-in{ transform:translate(-50%, 0); }
 .tol-tip-topic{ text-transform:none; letter-spacing:.02em; }
 .tol-tip .tol-tip-h, .tol-tip .tol-tip-b{ transition:opacity .22s var(--ease-out), transform .22s var(--ease-out); }
 .tol-tip .is-swap .tol-tip-h, .tol-tip .is-swap .tol-tip-b{ opacity:0; transform:translateY(4px); }
@@ -2102,6 +2108,14 @@ html[data-theme="dark"] body::after{ display:none; }
 html:is(.tol-no-helpers, .tol-quiet) :is(.lp-trail, .lp-petals, .tr-chip, [data-rewards-chip], .lp-spark, .lp-quest-state){ display:none !important; }
 html.tol-quiet :is(.tr-toast, .tr-confetti, .tol-planted, .tol-poplet, .tol-join-pop, .tol-invite, .pci, .tol-wx, .tol-offer){ display:none !important; }
 html.tol-quiet .pc-launch .pc-dot{ display:none; }
+/* Quiet mode, plain: the decorations and extras step aside so the first real sentence is on screen ("Show extras" brings them back) */
+html.tol-quiet-plain :is(.tol-wash, [data-mini-player], .tol-mp, .tol-pillars, .lp-card, .tol-read-host, .tol-read-wrap, .tol-tip, .tol-fp-note, .tol-pud-card, .tol-buddies, .tol-fbs, .tol-fbs-wrap){ display:none !important; }
+html.tol-quiet-plain body:has(main.read) .tol-breathe-btn{ display:none !important; }
+.tol-quiet-extras{ display:none; }
+html.tol-quiet .tol-quiet-extras{ display:block; margin:.2rem 0 1rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; }
+.tol-quiet-extras button{ font:inherit; font-size:.88rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; border:1px dashed var(--line, #d8cfb8); background:none; color:var(--ink-soft, #5A5346); cursor:pointer; }
+.tol-quiet-extras button:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+@media print{ .tol-quiet-extras{ display:none !important; } }
 
 /* Keep the page still, everywhere: the Breathe break's drifting light, bubbles and hearts, the toasts and pop-ups */
 html.tol-still .tol-breathe-aurora, html.tol-still .tol-breathe-bg, html.tol-still .tol-breathe-ripples{ display:none !important; }

@@ -450,6 +450,7 @@
       line: linkOnly ? 'https://social-plugins.line.me/lineit/share?url=' + enc(url) : (msg ? 'https://line.me/R/share?text=' + enc(msg) : '')
     };
   }
+  var PRIVATE_OK = { messenger: 1, telegram: 1, line: 1 };
   var PLACES = [['messenger', 'Messenger'], ['telegram', 'Telegram'], ['linkedin', 'LinkedIn'], ['reddit', 'Reddit'], ['bluesky', 'Bluesky'], ['threads', 'Threads'], ['line', 'LINE']];
 
   // =====================================================================================
@@ -603,7 +604,8 @@
     card.insertBefore(root, before && before.parentNode === card ? before : null);
 
     // the device's own share menu goes first in the sheet, where the device has one
-    var nat = mk('button', { type: 'button', class: 'tol-share-act tsk-native', 'data-kit': 'native' }, 'More apps on this device');
+    var nat = mk('button', { type: 'button', class: 'tol-share-act tsk-native', 'data-kit': 'native' }, 'More apps (LINE, WeChat, Signal…)');
+    nat.setAttribute('aria-label', 'More apps on this device, like LINE, WeChat or Signal');
     nat.addEventListener('click', function () {
       var d = cur, done = ctl; if (!d) return;
       try {
@@ -650,8 +652,12 @@
     qb.hidden = !s && !qb._qrText;
     ib.hidden = !imageText(d);
     var anyPlace = false;
+    // something private goes to one person: the private messengers only, never the public places
+    var priv = !!(d.private || d.result || (d.url && /[#?&][\w-]+=/.test(d.url)) || (det.box && det.box.hasAttribute('data-private')));
     Array.prototype.forEach.call(places.querySelectorAll('[data-place]'), function (a) {
-      var u = L[a.getAttribute('data-place')];
+      var pl = a.getAttribute('data-place'), u = L[pl];
+      if (priv && !PRIVATE_OK[pl]) u = '';
+      if (priv && pl === 'messenger' && !/^fb-messenger:/.test(u || '')) u = '';   // on a computer Messenger means Facebook's page
       a.hidden = !u; if (u) { a.setAttribute('href', u); anyPlace = true; } else a.removeAttribute('href');
     });
     pb.hidden = !anyPlace;
@@ -668,7 +674,7 @@
     var hasUrl = shown('[data-act="copy"]'), url = '', text = msg;
     if (hasUrl) { var i = msg.lastIndexOf('\n'); url = i < 0 ? msg : msg.slice(i + 1); text = i < 0 ? '' : msg.slice(0, i); }
     var h = box.querySelector('#tol-share-h');
-    return { title: title, text: text, url: url, result: shown('.tol-share-preview') || shown('[data-act="copy-text"]') || (!!h && h.textContent === 'Share what you made') };
+    return { title: title, text: text, url: url, result: shown('.tol-share-preview') || shown('[data-act="copy-text"]') || (!!h && h.textContent === 'Share what you made'), private: box.hasAttribute('data-private') };
   }
   function watchSheet(box) {
     if (box._tskWatched) return; box._tskWatched = true;

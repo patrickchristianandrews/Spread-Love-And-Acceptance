@@ -437,9 +437,9 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
    ['friend', 'I guess I’m only your friend when it suits you.', /^I miss you and I've been feeling a bit left out\. Could we find ten minutes this week\?$/],
    ['coworker', 'Must be nice to just bake while I keep this whole place running.', /^I'm feeling stretched thin keeping this whole place running\. Could we look at the admin together and share some of it\?$/],
    ['coparent', 'Stop making decisions without me.', /^For school, health and new activities, can we text each other first and decide together\?$/],
-   ['family', 'you’re not my mum so stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
-   ['family', 'You are not my mom so stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
-   ['family', 'ur not my mum stop acting like it', /^I know you're trying\. I need some space right now, can we talk later\?$/],
+   ['family', 'you’re not my mum so stop acting like it', /^I'm not angry at you\. I'm just missing Mum today\. I need some space right now, can we talk later\?$/],
+   ['family', 'You are not my mom so stop acting like it', /^I'm not angry at you\. I'm just missing Mom today\. I need some space right now, can we talk later\?$/],
+   ['family', 'ur not my mum stop acting like it', /^I'm not angry at you\. I'm just missing Mum today\./],
    ['family', 'So now you want to talk? After you took everything?', /^I'm still hurt about what happened\./],
    ['family', 'After you took everything you could.', /^I'm still hurt about what happened\./],
    ['partner', 'You treat me like a maid.', /taken for granted/],
@@ -448,7 +448,9 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
    ['friend', 'Whenever it suits you, right?', /left out/]].forEach(([rel, t, want]) => {
     const v = vd(t, rel), r = rw(t, rel), g = rc(t, rel), a = an(t);
     chk(a.found.jab || a.found.sarcasm, '“' + t + '”: flagged as blame or a dig: ' + a.staticIds);
-    chk(v.id === 'hurt' && /blame or a dig|may land as blame/.test(v.text) && !/probably land okay/.test(v.text), '“' + t + '” send verdict: ' + v.id + ' ' + v.text);
+    // "you're not my mum" cuts deeper than a dig: it says so, and that it's often grief
+    if (/not my m/i.test(t)) chk(v.id === 'fight' && /hurt them a lot.*grief/.test(v.text) && E.score(a, ['general'], 'text').level[0] === 'heavy', '“' + t + '” send verdict (not my mum): ' + v.id + ' ' + v.text);
+    else chk(v.id === 'hurt' && /blame or a dig|may land as blame/.test(v.text) && !/probably land okay/.test(v.text), '“' + t + '” send verdict: ' + v.id + ' ' + v.text);
     chk(E.score(a, ['general'], 'text').level[0] !== 'clear', '“' + t + '”: never “clear” (the cue would say Go)');
     chk(want.test(r.main), '“' + t + '” [' + rel + '] rewrite: ' + r.main);
     chk(all(r).every(x => !/\[If you're sure|without you|policing|treat me like|when it suits|must be nice|not my m|stop changing|after you took|while you \w+ while/i.test(x)), '“' + t + '”: the jab stays in a version: ' + all(r).join(' | '));
@@ -463,7 +465,9 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   {
     const t = 'Mum, you can’t just turn up whenever you want. It’s our home.';
     ['family', 'partner', ''].forEach(rel => all(rw(t, rel)).forEach(x => chk(!/by \[a time\]|turn up by/.test(x), '“whenever” became a deadline [' + rel + ']: ' + x)));
-    chk(rw(t, 'family').main === "Mum, I love seeing you. Could you text before you come over, so we can make sure it's a good time?", 'family visit boundary: ' + rw(t, 'family').main);
+    // the point Amy cared about ("It's our home.") stays, said softly
+    chk(rw(t, 'family').main === "Mum, I love seeing you. It's our home, so we'd like a heads-up first. Could you text before you come over?", 'family visit boundary: ' + rw(t, 'family').main);
+    chk(rw('Mum, you can’t just turn up whenever you want.', 'family').main === "Mum, I love seeing you. Could you text before you come over, so we can make sure it's a good time?", 'family visit boundary, no “our home”: ' + rw('Mum, you can’t just turn up whenever you want.', 'family').main);
     const g = rc(t, 'family');
     chk(!JSON.stringify(g).match(/When do you need it by|timing is open/) && g.replies.some(x => x.text === "You're right, I'll text first. When suits you?"), 'received visit boundary: ' + JSON.stringify(g.replies));
     chk(!an('Call me whenever you want!').found.vtime, '“whenever you want” is an open door, not vague timing');

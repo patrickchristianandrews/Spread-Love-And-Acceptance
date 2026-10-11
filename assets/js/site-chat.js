@@ -2917,8 +2917,16 @@
     // tablets: a taller answer area
     '@media (min-width:720px) and (min-height:900px){.tolc.is-modal{height:min(860px,calc(100vh - 48px));width:440px}}',
     // Larger text zooms the page body: keep the whole panel (and its Leave quickly button) on screen
+    // (the page zoom multiplies the panel's own size, so each cap divides the screen height by that zoom; on tablets and
+    // computers the panel floats 24px above the bottom, so the cap leaves that much room above it too)
     'html.tol-text-lg:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.15 - 12px);max-height:calc(100dvh / 1.15 - 12px)}',
     'html.tol-text-xl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.35 - 12px);max-height:calc(100dvh / 1.35 - 12px)}',
+    'html.tol-text-xxl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.6 - 12px);max-height:calc(100dvh / 1.6 - 12px)}',
+    '@media (min-width:720px){html.tol-text-lg:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.15 - 48px);max-height:calc(100dvh / 1.15 - 48px)}',
+    ' html.tol-text-xl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.35 - 48px);max-height:calc(100dvh / 1.35 - 48px)}',
+    ' html.tol-text-xxl:not(.tol-nozoom) .tolc.is-modal{max-height:calc(100vh / 1.6 - 48px);max-height:calc(100dvh / 1.6 - 48px)}}',
+    // at every size the header (with × and Leave quickly) stays put and only the answers scroll
+    '.tolc.is-modal{max-height:100vh;max-height:100dvh}.tolc.is-modal .tolc-head{flex:0 0 auto}.tolc.is-modal .tolc-log{min-height:0}',
     '.tolc-hbtn{white-space:nowrap;flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:none;border-radius:12px;color:var(--ink-soft);font:inherit;font-size:.85rem;cursor:pointer;padding:0 .55rem}',
     '.tolc-hbtn:hover{background:var(--paper2);color:var(--ink)}',
     '.tolc-x{font-size:1.5rem;line-height:1}',

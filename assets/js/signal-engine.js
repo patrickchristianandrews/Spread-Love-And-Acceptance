@@ -1192,7 +1192,11 @@ function vocOf(text){ const m = String(text||"").match(/^\s*(?:(?:hi|hey|hello),
 const REFRAMES = [
   {id:"visits", re:/\b(?:you can't|you cannot|you can not|stop|please don't|don't|you shouldn't|you need to stop)\s+(?:just\s+)?(?:turn(?:ing)? up|show(?:ing)? up|com(?:e|ing) (?:over|round|around|by)|drop(?:ping)? (?:by|in|round)|pop(?:ping)? (?:by|in|round|over)|visit(?:ing)?|let(?:ting)? yourself in)(?: (?:here|at ours|at our place|at the house))?\s*(?:whenever|any ?time|when(?:ever)? you (?:want|like|feel like it|please)|unannounced|without (?:asking|calling|texting|warning|telling us|a heads-up))/i,
    why:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and it keeps the door open.",
-   send:(m,c)=>(c.voc ? c.voc+", " : "")+(c.family ? "I love seeing you. Could you" : c.voc ? "could you" : "Could you")+" text before you come over, so we can make sure it's a good time?",
+   send:(m,c)=>{ const home = (c.text.match(/\b(?:it's|it is|this is) (our|my) (home|house|place|flat|space)\b/i)||[]);
+     const lead = (c.voc ? c.voc+", " : "")+(c.family ? "I love seeing you. " : "");
+     // the point they care about ("It's our home.") stays, said softly
+     if(home[0]) return lead+capFirst("it's "+home[1].toLowerCase()+" "+home[2].toLowerCase()+", so we'd like a heads-up first. Could you text before you come over?");
+     return lead+(c.family || !c.voc ? "Could you" : "could you")+" text before you come over, so we can make sure it's a good time?"; },
    recv:{mean:"They're asking for a heads-up before visits. It's a request about timing, not a rejection of you.", reply:"You're right, I'll text first. When suits you?"}},
   {id:"closer", re:CLOSER_RE,
    why:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing. Leading with warmth says the same thing and keeps them close.",
@@ -1202,6 +1206,12 @@ const REFRAMES = [
    why:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. A question like \"do you even care?\" starts a fight about the past.",
    send:(m)=>{ const who=m[1].toLowerCase(); const named = /^[A-Z][a-z]+'s$/.test(m[1]); const pro = who==="his" ? "his" : who==="her" ? "her" : "their"; const child = named ? m[1].replace(/'s$/,"") : "[Child]"; return child+"'s "+m[2].trim()+" wasn't in "+pro+" bag on [day]. Please pack it before the [day] handoff."; },
    recv:{mean:"Under the frustration is a practical worry about what the child needs.", reply:"Thanks for telling me. I'll make sure it's packed for the [day] handoff."}},
+  {id:"forgets", rel:["coparent"], re:/\byou (?:always |keep |constantly |never |often )?(?:forget(?:s|ting)?|keep forgetting|never (?:pack|remember|send|bring)|don't (?:pack|remember|send|bring)) (?:to (?:pack|send|bring) )?(his|her|their|the kids'?|the children's|[A-Z][a-z]+'s) ([a-z][a-z ]{1,24}?)(?:\s+(?:again|every (?:time|week|weekend)|at (?:handover|handoff|pickup)))?(?=[.!?,]|$)/i,
+   why:"With a co-parent, short and factual works best: the plain fact, and one shared fix. \"Always\" and \"typical\" turn a missing item into a verdict on the other parent.",
+   send:(m,c)=>{ const who=m[1].toLowerCase(), named = /^[A-Z][a-z]+'s$/.test(m[1]);
+     const pro = named ? m[1] : who==="his" ? "His" : who==="her" ? "Her" : who==="their" ? "Their" : capFirst(who);
+     return pro+" "+m[2].trim()+" wasn't in the bag "+(c.day || "on [the day]")+". Can we both check the list before handover?"; },
+   recv:{mean:"Under the frustration is a practical worry about what the child needs. You can answer that, and leave the \"always\".", reply:(m)=>"Thanks for letting me know. I'll make sure the "+m[2].trim()+" is in the bag for the next handover. Could we both use a checklist?"}},
   {id:"weekends", re:/\byou (?:always |keep |constantly |just )?(?:schedule|book|plan|arrange|put|sign (?:her|him|them) up for) ([a-z ]{2,30}?) (?:on|for|during) my (weekends?|days|time|nights|week)\b/i,
    why:"\"On purpose\" guesses at their motive, and \"always\" invites an argument about the exceptions. The plain pattern and one ask can actually be answered.",
    send:(m,c)=>c.coparent ? "The kids' plans have landed on my "+m[2]+" a few times. Can we check the calendar together before booking things on my "+m[2]+"?" : "Plans have landed on my "+m[2]+" a few times lately. Can we check the calendar together before booking things then?",
@@ -1227,7 +1237,7 @@ const REFRAMES = [
    send:(m,c)=>c.work ? "I've been feeling a bit left out of things lately. Could we find ten minutes this week to catch up?" : "I miss you and I've been feeling a bit left out. Could we find ten minutes this week?",
    recv:{mean:"This sounds like they're hurt and feel left out. Underneath, they probably miss you.", reply:"I'm sorry you've felt left out. I miss you too. Are you free for a call this week?"}},
   {id:"nice", re:/(?:^|[.!?]\s+)(?:it )?must be nice(?: to (?:just )?(.+?))?(?: while (?:i|we) (.+?))?(?=[.!?]|$)/i,
-   why:"Sarcasm carries the real message in the tone, and it lands as a dig. Saying you're stretched, and asking to share the load, can actually be answered. (It doesn't add an ask you didn't make.)",
+   why:"Sarcasm carries the real message in the tone, and it lands as a dig. Saying you're stretched, and asking to share the load, can actually be answered. The ask at the end is a suggestion: keep it only if it's what you want.",
    send:(m)=>{ const y = m[2] ? m[2].trim() : ""; const admin = /\b(?:running|place|business|office|shop|bakery|store|house|home|team|company)\b/i.test(y);
      return "I'm feeling stretched thin"+(y ? " "+ingForm(y.replace(/^(?:have to|having to|need to) /i,"")) : "")+". Could we look at "+(admin ? "the admin" : "what's on my plate")+" together and share some of it?"; },
    recv:{mean:"Sarcasm like this usually means they're stretched and feel the load isn't shared.", reply:"Sounds like you're stretched. What would help most this week?"}},
@@ -1245,9 +1255,11 @@ const REFRAMES = [
      return /nag/.test(v) ? "I'd like to sort out "+what+" without reminders. Could we agree who does what, and by when?" : /lectur|boss|micro/.test(v) ? "I'd like to do "+what+" my way. If something matters to you, could you tell me once, and then trust me with it?" : "I'd like to make my own choices about "+what+". Can we talk about where we each need a say?"; },
    recv:{mean:"They feel watched or told what to do. Underneath is usually a wish for trust and room to do it their way.", reply:"I don't want you to feel watched. What would help you feel trusted with it?"}},
   {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
-   why:"\"You're not my mum\" hurts, and it hides what you need. Saying you need some space, and that you'll talk later, keeps the door open.",
-   send:()=>"I know you're trying. I need some space right now, can we talk later?",
-   recv:{mean:"This hurts to hear. Often it means they feel crowded or told what to do and need some space. It doesn't mean you don't matter to them.", reply:"Okay. I'll give you some space. I'm here when you want to talk."}},
+   why:"\"You're not my mum\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
+   send:(m)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
+     const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mum or Dad]";
+     return "I'm not angry at you. I'm just missing "+who+" today. I need some space right now, can we talk later?"; },
+   recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:"Okay. I'll give you some space. I'm here when you want to talk."}},
   {id:"nowyou", re:/(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*[.!?]*(?:\s*after (?:you|everything you|all you|what you) [^.!?]*[.!?]*)?|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b[^.!?]*/i,
    why:"A sharp question or an \"after you…\" says the hurt as blame, so the listener defends the past. Saying the hurt plainly, and what you need before you talk, can actually be heard.",
    send:()=>"I'm still hurt about what happened. If we talk, I need us to start there.",
@@ -1265,7 +1277,9 @@ const REFRAME_BY = Object.fromEntries(REFRAMES.map(r=>[r.id, r]));
 function reframeOf(an, opts){
   opts = opts||{};
   const text = an.norm.trim(), voc = vocOf(text);
-  const c = {text, voc, rel: opts.rel||"", coparent: opts.rel==="coparent", work: !!(opts.work || WORK_REL.includes(opts.rel)),
+  const dm = (text+" "+(opts.facts||"")).match(/\b(?:on |last |this )?(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b|\b(yesterday|today|this morning|last night|at the weekend)\b/i);
+  const day = dm ? (dm[1] ? "on "+capFirst(dm[1].toLowerCase()) : dm[2].toLowerCase()) : "";
+  const c = {text, voc, day, rel: opts.rel||"", coparent: opts.rel==="coparent", work: !!(opts.work || WORK_REL.includes(opts.rel)),
     family: opts.rel==="family" || (voc && FAMILY_VOC.test(voc))};
   for(const r of REFRAMES){
     if(!r.re) continue;
@@ -1626,6 +1640,7 @@ function readings(an, ids, ch){
 
 const HOT_IDS = ["swear","hostile","label","contempt","threat","dxlabel","violent","legal","kidsfirst","menace","control"];
 /* a static score: sum of the loudest reading per feature, minus a little for what's worth keeping */
+const NOT_PARENT_RE = /\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b/i;
 function score(an, ids, ch, state){
   let sc=0; const top=[];
   const fids = Object.keys(an.found);
@@ -1648,6 +1663,8 @@ function score(an, ids, ch, state){
   sc = sc*mult + (state==="d"?1:0) + (state==="s"&&sc>0?0.3:0);
   // swearing, a fed-up line, name-calling, contempt or a threat: always heavy static, however short
   if(an.staticIds.some(id=>HOT_IDS.includes(id)) || an.allCaps) sc = Math.max(sc, 4.6);
+  // "you're not my mum/dad" cuts deep, whoever says it: never "a little sharp"
+  if(an.found.jab && NOT_PARENT_RE.test(an.norm||"")) sc = Math.max(sc, 4.6);
   let level = sc<1.5?["clear","Clear signal"]:sc<4.5?["some","Some static"]:["heavy","Heavy static"];
   // the headline never says "clear" while something is flagged
   if(level[0]==="clear" && an.staticIds.length) level = ["some","A little static"];
@@ -2145,8 +2162,16 @@ function rewrite(an, opts){
     main = main.replace(/\b(?<!(?:'ll|will|would|'d|won't|can't|could) )(always|never)\b/gi, (w)=>{ note("absolute", w.toLowerCase(), /always/i.test(w)?"often":"rarely"); return /^A/.test(w)?"Often":/^N/.test(w)?"Rarely":/always/i.test(w)?"often":"rarely"; });
   }
   if(laterLine) main = endP(main.replace(/\s+$/,""))+" "+laterLine;
+  // the plain facts, when given ("His inhaler wasn't in the bag on Sunday."), say what happened better than "Lately it's felt like you…"
+  { const fact = cleanFact(opts.facts);
+    if(fact && /\bLately it's felt like you\b[^.!?]*[.!?]/.test(main)){
+      main = main.replace(/\bLately it's felt like you\b[^.!?]*[.!?]/, fact);
+      note("usefact", "lately it's felt like…", fact);
+    } }
   // co-parents: brief and factual (the child's need, the ask, a time). No feelings about each other, no "let's talk about it"
   if(opts.rel==="coparent"){
+    // a blank ask becomes one shared plan, said BIFF style
+    if(main.indexOf(ASK_PROMPT) !== -1){ main = main.replace(/\bCould you \(say the one thing you'd like\)(?: going forward| by \[a time\])?\?/, "Can we agree [one plan] for next time?"); note("coparent","(no ask)","one shared plan"); }
     const before = main;
     main = main.replace(/\s*I'm not feeling cared about right now, and I'd like to talk about it\./g,"").replace(/\s*I'd like to hear how it looks to you, too\./g,"").replace(/,? and I'd like to talk about it\./g,".").replace(/^\s+/,"");
     if(main!==before) note("coparent","feelings about each other","");
@@ -2160,6 +2185,15 @@ function rewrite(an, opts){
   return finish(main, list, log, an, W, opts);
 }
 
+/* "What happened", typed under Fine-tune: used in the rewrite only when it's a plain fact (no blame, no "always", no name-calling) */
+function cleanFact(f){
+  const t = String(f||"").replace(/\s+/g," ").trim(); if(!t) return "";
+  const first = (t.match(/^[^.!?]+[.!?]?/)||[""])[0].trim();
+  if(!first || first.split(/\s+/).length > 25) return "";
+  const a = analyze(first, {channel:"text"});
+  if(a.staticIds.some(id=>!["period","nowhen","long","passive"].includes(id)) || /\byou\b/i.test(first)) return "";
+  return capFirst(first).replace(/([^.!?])$/,"$1.");
+}
 /* The ask, when a complaint says plainly what it's about. Otherwise the rewrite uses a plain-language prompt. */
 const ASK_PROMPT = "(say the one thing you'd like)";
 const KID_RE = /\b(?:baby|babies|kids?|children|child|son|daughter|toddler|newborn|bedtime|feeding|feeds|nap|naps|nappy|nappies|diaper|diapers|bath|bathtime|bottle|parenting)\b/i;
@@ -3147,7 +3181,8 @@ Object.assign(CHANGE_WHY, {
   closer:{g:"Leading with warmth keeps someone close while you still make the decision yourselves."},
   visits:{g:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and keeps the door open."},
   coparent:{g:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. Feelings about each other are better kept for a calmer place, or a mediator."},
-  reqmaybe:{g:"\"Maybe\" in a request makes it sound optional, so it's easy to shrug off. A plain, kind ask is clearer."}
+  reqmaybe:{g:"\"Maybe\" in a request makes it sound optional, so it's easy to shrug off. A plain, kind ask is clearer."},
+  usefact:{g:"The plain fact you typed under \"What happened\" says the event without a verdict on the person, so it can be answered instead of argued with."}
 });
 REFRAMES.forEach(r=>{ CHANGE_WHY["rf_"+r.id] = {g:r.why}; });
 /* "Not sure" of the listener's wiring: a general reading. For each pattern it
@@ -3218,7 +3253,7 @@ const RECEIVE_MEANS = [
   [["absolute"], "\"Always\" and \"never\" usually mean \"this has happened more than once, and it's getting to me.\" They're rarely meant as an exact count."],
   [["brushoff","minimal"], "A short \"fine\" or \"whatever\" can mean \"really, it's okay\" or \"I'm upset and don't want to talk right now.\" The words alone can't tell you which."],
   [["sarcasm"], "Sarcasm usually means the opposite of the words. They're probably annoyed or let down about something."],
-  [["blameq","cannot","shouldhave"], "A \"why didn't you\" question is usually a complaint more than a question. Underneath, there's often a request for next time."],
+  [["blameq","cannot","shouldhave"], "A question like \"why didn't you…?\" or \"do you even care?\" is usually a complaint more than a question. Underneath, there's often a request for next time."],
   [["oblig","impera","should","urgent"], "It's worded as an order, but underneath it's usually a request."],
   [["hint","passiveag"], "There may be a request under the politeness. They might be hoping you'll offer to help."],
   [["ominous"], "An opener like this doesn't say the topic. It doesn't have to mean bad news, and it's fine to ask what it's about."],
@@ -3291,7 +3326,7 @@ function receive(an, opts){
   const literal = SHARED && SHARED.idioms ? SHARED.idioms(an.text).map(x=>({text:x.text, means:x.means})) : [];
   const replies = [];
   const push = (label, text)=>{ if(text && !replies.some(r=>r.text===text)) replies.push({label, text}); };
-  if(rf && rf.r.recv) push("Answer the need underneath", rf.r.recv.reply);
+  if(rf && rf.r.recv) push("Answer the need underneath", typeof rf.r.recv.reply==="function" ? rf.r.recv.reply(rf.m, rf.c) : rf.r.recv.reply);
   if(crossed && has("legal") && !["label","dxlabel","contempt","hostile","swear","violent"].some(has)){
     push("Answer calmly, without the threat", "I've read this. I'd like us to sort out [the specific thing] between us first. Can we talk about it at [a time]?");
     push("Take time before you answer", "I've read this. I'm going to take some time before I reply.");
@@ -3457,6 +3492,9 @@ function verdict(an, sc, rw, opts){
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   const work = !!(opts && (opts.work || WORK_REL.includes(opts.rel)));
+  // "you're not my mum": it cuts deep, and it's often grief talking
+  if(an.found.jab && NOT_PARENT_RE.test(an.norm||"") && !["swear","hostile","label","legal","violent","threat"].some(id=>an.found[id]))
+    return {id:"fight", jab:true, notParent:true, text: "This may hurt them a lot. "+(soft ? "Often it's grief talking. Here's a way to say the feeling instead." : "The notes below show why.")};
   if((an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy") && work && !an.found.legal && !an.found.kidsfirst && !an.found.violent)
     return {id:"fight", work:true, text: soft ? "This may land as blame or an order. Try the version below." : "This may land as blame or an order. The notes below show why."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")

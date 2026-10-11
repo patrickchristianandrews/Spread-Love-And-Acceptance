@@ -894,3 +894,7 @@ body.wpf-typing .wpf-bar{ transform: translateY(110%); }
 /* "Keep: [Ade] [Ben]" after combining a shared list */
 .wpf-conflict-k{ align-self: center; font-weight: 600; margin-right: .2em; }
 .wpf-fridge{ margin: 0 0 1rem; }
+.wpf-weekfold > summary{ list-style: none; }
+.wpf-weekfold > summary::-webkit-details-marker{ display: none; }
+.wpf-weekfold-t::before{ content: "\25B8\00a0"; display: inline-block; }
+.wpf-weekfold[open] .wpf-weekfold-t::before{ content: "\25BE\00a0"; }

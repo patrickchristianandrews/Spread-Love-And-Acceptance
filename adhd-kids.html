@@ -89,6 +89,8 @@
 
 <p class="simple-lede">This page is for parents, grandparents and anyone who looks after a child with ADHD, or a child who might have it. It gives plain words for the moments that come up most: the fidgeting, the forgetting, and the “I told you three times.”</p>
 
+<p class="ps-row no-bubble"><button type="button" class="ps-btn" id="ps-print">Print a short version</button> <small>Just the main points and the words to use, on a page or two.</small></p>
+
 <nav aria-label="On this page">
 <ul class="gp-jump no-bubble">
   <li><a href="#real">Is ADHD real?</a></li>
@@ -102,8 +104,8 @@
 </ul>
 </nav>
 
-<h2 id="real">Is ADHD real?</h2>
-<p><strong>Yes, ADHD is real and well studied. It is not bad behaviour or bad upbringing.</strong></p>
+<h2 id="real" data-print-short>Is ADHD real?</h2>
+<p data-keep-steps data-print-short><strong>Yes, ADHD is real and well studied. It is not bad behaviour or bad upbringing.</strong></p>
 <p>Some children’s brains find sitting still, waiting and remembering harder than other children’s do. It’s a bit like trying to listen to the radio while three other stations play at once. The child usually wants to get it right. Their brain just has to work harder to do it.</p>
 <p>That doesn’t mean anything goes. Children with ADHD still learn rules and manners. They just need more reminders, more patience, and a setup that helps them succeed. Only a doctor or specialist can say whether a child has ADHD.</p>
 
@@ -213,5 +215,41 @@
 </ul>
 <p>This page shares general ideas, not medical advice. Your child’s doctor can tell you what fits your child.</p>
 </main>
+<style>
+  .ps-row{ margin:.2rem 0 1.2rem !important; }
+  .ps-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:var(--paper); color:#2F5F8A; cursor:pointer; }
+  .ps-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media print{
+    html.ps-short main#main > :not(.read-head):not(.tol-inshort):not(.ps-keep):not(.gp-say):not([data-print-short]){ display:none !important; }
+    html.ps-short main#main .ps-row{ display:none !important; }
+    html.ps-short main#main{ font-size:13pt; }
+    html.ps-short .gp-say{ break-inside:avoid; }
+  }
+</style>
+<script>
+/* "Print a short version": just the In short points and the "Words you could use" lines, with the section names
+   above them. A print-only class is added for the print window, then taken off again. */
+(function () {
+  'use strict';
+  var b = document.getElementById('ps-print'); if (!b) return;
+  var main = document.getElementById('main');
+  function mark() {
+    var heading = null;
+    Array.prototype.forEach.call(main.children, function (el) {
+      el.classList.remove('ps-keep');
+      if (/^H2$/.test(el.tagName)) heading = el;
+      else if (el.classList.contains('gp-say') && heading) heading.classList.add('ps-keep');
+    });
+  }
+  function done() { document.documentElement.classList.remove('ps-short'); }
+  b.addEventListener('click', function () {
+    mark();
+    document.documentElement.classList.add('ps-short');
+    window.print();
+    setTimeout(done, 800);
+  });
+  window.addEventListener('afterprint', done);
+})();
+</script>
 </body>
 </html>

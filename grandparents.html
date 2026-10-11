@@ -83,6 +83,8 @@
 
 <p class="simple-lede">Helping with the grandkids is one of the biggest gifts in a family. It goes best when everyone knows who decides what, and how much help is really being asked for. This page gathers the free tools on this site that help with that. It is for grandparents, and for great-aunts, great-uncles and other older relatives who often care for children in the family.</p>
 
+<p class="ps-row no-bubble"><button type="button" class="ps-btn" id="ps-print">Print a short version</button> <small>Just the main points and the words to use, on a page or two.</small></p>
+
 <p class="pillar-note"><strong>Where this fits:</strong> Most family friction is not about love. It is about rules nobody said out loud, and help nobody measured. This page uses two simple ideas from this site: <a href="/five-pillars.html#fix-the-setup">fix the setup, not the person</a>, and <a href="/five-pillars.html#tune-signals">tune how you send and receive</a>.</p>
 
 <div class="try-this gp-track" data-keep-steps>
@@ -150,7 +152,7 @@
   <li><a href="/wavelength.html"><strong>Wavelength</strong><span>How each of you thinks, talks and listens. One of you may love a phone call, another a short text.</span></a></li>
   <li><a href="/perspective-shifter.html"><strong>The Perspective Shifter</strong><span>See a tense moment from your grown child’s side: their day, their worries, what they could see.</span></a></li>
   <li><a href="/signal-translator.html"><strong>The Signal Translator</strong><span>Type a tricky text before you send it, and see how it may land.</span></a></li>
-  <li><a href="/check-ins.html"><strong>Check-ins</strong><span>A short, calm talk about one topic, at a time that suits you both.</span></a></li>
+  <li><a href="/check-ins.html?for=family#card"><strong>Make our family plan</strong><span>Visits, advice, the little one’s routines and a regular job for you, on one card. Send it to each other’s phones.</span></a></li>
 </ul>
 
 <h2 id="scripts">Words for common moments</h2>
@@ -277,5 +279,41 @@
   <p>Yes. The tools, the calm games and the cartoon are free to use, and nothing asks you to sign up. What you type into the tools stays on your own device.</p>
 </section>
 </main>
+<style>
+  .ps-row{ margin:.2rem 0 1.2rem !important; }
+  .ps-btn{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1px solid #2F5F8A; background:var(--paper); color:#2F5F8A; cursor:pointer; }
+  .ps-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  @media print{
+    html.ps-short main#main > :not(.read-head):not(.tol-inshort):not(.ps-keep):not(.gp-say):not([data-print-short]){ display:none !important; }
+    html.ps-short main#main .ps-row{ display:none !important; }
+    html.ps-short main#main{ font-size:13pt; }
+    html.ps-short .gp-say{ break-inside:avoid; }
+  }
+</style>
+<script>
+/* "Print a short version": just the In short points and the "Words you could use" lines, with the section names
+   above them. A print-only class is added for the print window, then taken off again. */
+(function () {
+  'use strict';
+  var b = document.getElementById('ps-print'); if (!b) return;
+  var main = document.getElementById('main');
+  function mark() {
+    var heading = null;
+    Array.prototype.forEach.call(main.children, function (el) {
+      el.classList.remove('ps-keep');
+      if (/^H2$/.test(el.tagName)) heading = el;
+      else if (el.classList.contains('gp-say') && heading) heading.classList.add('ps-keep');
+    });
+  }
+  function done() { document.documentElement.classList.remove('ps-short'); }
+  b.addEventListener('click', function () {
+    mark();
+    document.documentElement.classList.add('ps-short');
+    window.print();
+    setTimeout(done, 800);
+  });
+  window.addEventListener('afterprint', done);
+})();
+</script>
 </body>
 </html>

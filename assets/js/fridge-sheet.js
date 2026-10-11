@@ -205,11 +205,15 @@
     panel.appendChild(mk('p', 'tfs-note', opts.note || 'One clean page with big type and a box to tick by each job. Fits A4 and US Letter.'));
     var acts = mk('div', 'tfs-acts');
     var B = {};
-    [['print', 'Print it'], ['pdf', 'Save as PDF'], ['copy', 'Copy as text'], ['share', 'Share'], ['image', 'Save as image']].forEach(function (a) {
+    // on a phone, sharing and a picture come first (most people send it, not print it)
+    var phone = false; try { phone = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(max-width: 700px)').matches; } catch (e) {}
+    var ACTS = [['print', 'Print it'], ['pdf', 'Save as PDF'], ['copy', 'Copy as text'], ['share', 'Share'], ['image', 'Save as image']];
+    if (phone) ACTS = [ACTS[3], ACTS[4], ACTS[2], ACTS[0], ACTS[1]];
+    ACTS.forEach(function (a) {
       var b = mk('button', 'tfs-act', a[1]); b.type = 'button'; b.setAttribute('data-tfs', a[0]);
       B[a[0]] = b; acts.appendChild(b);
     });
-    B.print.classList.add('is-main');
+    B[phone && canShare() ? 'share' : 'print'].classList.add('is-main');
     panel.appendChild(acts);
     var st = mk('p', 'tfs-status'); st.setAttribute('role', 'status'); st.setAttribute('aria-live', 'polite');
     panel.appendChild(st);

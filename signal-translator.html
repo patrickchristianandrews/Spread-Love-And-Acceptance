@@ -503,8 +503,8 @@ html.tol-easy .sitebar .back{display:none}
           </div>
           <div class="swapcol"><button class="swap" id="swap" type="button" title="Swap you and the other person">&#8646; Swap speaker and listener</button></div>
           <div class="person pb" id="personB">
-            <div class="who"><h4 id="whoB">Person B</h4><span class="role">THE LISTENER &middot; RECEIVES THE MESSAGE</span></div>
-            <div class="field"><label for="nameB">Their name (optional)</label><input type="text" id="nameB" maxlength="24" placeholder="Person B" autocomplete="off"></div>
+            <div class="who"><h4 id="whoB">The other person</h4><span class="role">THE LISTENER &middot; RECEIVES THE MESSAGE</span></div>
+            <div class="field"><label for="nameB">Their name (optional)</label><input type="text" id="nameB" maxlength="24" placeholder="Their name" autocomplete="off"></div>
             <p class="small">How their brain works is set above, under "How their brain works".</p>
           </div>
         </div>
@@ -528,7 +528,7 @@ html.tol-easy .sitebar .back{display:none}
             <select id="needASel"></select>
           </div>
           <div class="field">
-            <label for="needBSel" id="needBLab">What Person B needs in a hard moment</label>
+            <label for="needBSel" id="needBLab">What the other person needs in a hard moment</label>
             <select id="needBSel"></select>
           </div>
         </div>
@@ -579,8 +579,9 @@ html.tol-easy .sitebar .back{display:none}
       <span class="sheet-k">1. OPEN</span>
       <p data-rel="default">"We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now."</p>
       <p data-rel="apart" hidden>On your next call: ten minutes, both on headphones, no other tabs. Start with: "We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we pick a time to call back now."</p>
+      <p data-rel="text" hidden>If it's a text: send the one sentence, then stop. Don't add a second message while you wait for the reply. If you'd rather talk, ask: "Could we talk about this at [a time]?"</p>
       <p data-rel="work" hidden>"Thanks for making time. I'd like to talk about one thing. This is about the process, not you. If we need to stop, we'll pick a time to pick it up."</p>
-      <p data-rel="coparent" hidden>"Thanks for making time. I'd like to keep this to the kids and the plan: one topic, the facts, and what each of us will do. If we need a pause, we'll pick a time to come back to it."</p>
+      <p data-rel="coparent" hidden>By text or face to face: "I'd like to keep this to the kids and the plan: one topic, the facts, and what each of us will do. If we need a pause, I'll come back to you by [a time]."</p>
       <p>Return time, if you need it: _______________</p>
     </div>
     <p class="hint" id="agendaEmpty">No sentences yet. Translate one above, add it, then use Write the next sentence for the one after that.</p>
@@ -599,7 +600,7 @@ html.tol-easy .sitebar .back{display:none}
       </ol>
       <p>More on <a href="/co-parenting.html">co-parenting</a>, including what to do when it may end up in court.</p>
     </div>
-    <div class="sheet-card" data-rel="default apart work">
+    <div class="sheet-card" data-rel="default apart work text">
       <span class="sheet-k">3. HEAR BOTH SIDES</span>
       <p>A productive conversation is two people heard, not one person convinced. Acknowledgement is not agreement. Hearing how it landed does not cancel your fact, and your fact does not cancel how it landed.</p>
       <ol>
@@ -616,7 +617,9 @@ html.tol-easy .sitebar .back{display:none}
       <article>
         <h3>Check-in</h3>
         <ul>
-          <li data-rel="default coparent work">Named time. Both of you settled. One room.</li>
+          <li data-rel="default work">Named time. Both of you settled. One room.</li>
+          <li data-rel="text" hidden>By text: one sentence per message. Then wait for the reply.</li>
+          <li data-rel="coparent" hidden>By text is fine. One topic per message: the facts, the plan, a time.</li>
           <li data-rel="apart" hidden>Named call time. Both of you settled. Headphones on, other tabs closed.</li>
           <li>Start with sentence 1. Stop.</li>
           <li>Mirror before any answer.</li>
@@ -656,6 +659,8 @@ html.tol-easy .sitebar .back{display:none}
       <p data-rel="default"><b>Stop</b> when you repeat yourself, you go blank, they shut down or stop replying, the room is not safe, or a note on this page says Stop. Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Do not finish the point.</p>
       <p data-rel="apart" hidden><b>Redirect</b> when it gets heated (a raised voice on the call, or sharp replies), a second topic shows up to win, or they heard a verdict you did not mean. Say once: "That's real. We are still on this sentence. I am not against you." Then say the chosen sentence again, and stop.</p>
       <p data-rel="apart" hidden><b>Stop</b> when you repeat yourself, you go blank, they go quiet or stop replying, the call isn't private, or a note on this page says Stop. Say: "I need a pause. I am not leaving this. Can we call again at [time]?" Do not finish the point by text afterwards.</p>
+      <p data-rel="text" hidden><b>Redirect</b> when the replies get sharp, a second topic shows up to win, or they read a verdict you did not mean. Send once: "That's real. I'm still on this one thing. I'm not against you." Then send the chosen sentence again, and stop.</p>
+      <p data-rel="text" hidden><b>Stop</b> when you're writing a third message before they've answered, it turns personal, or a note on this page says Stop. Send: "I need a pause. I'm not leaving this. Can we pick it up at [time]?" Then put the phone down.</p>
       <p data-rel="work" hidden><b>Redirect</b> when it gets heated, a second topic shows up, or they heard blame you did not mean. Say once: "That's fair. We are still on this one thing. This is about the process, not you." Then say the chosen sentence again, and stop.</p>
       <p data-rel="work" hidden><b>Stop</b> when you repeat yourself, it turns personal, or a note on this page says Stop. Say: "I'd like to pick this up at [time], when I can give it proper attention."</p>
       <p data-rel="coparent" hidden><b>Redirect</b> when it turns to the past, to blame, or to a second topic. Say once: "I hear you. For now I'd like to keep this to the plan for the kids." Then say the plan again, and stop.</p>
@@ -667,9 +672,12 @@ html.tol-easy .sitebar .back{display:none}
       <p data-rel="default">Say: "I need a pause. I am not leaving this. We are okay. I will come back at [time]." Say "we are okay" only if it's true. At work: "I'd like to pick this up at [time]."</p>
       <p data-rel="apart" hidden>Say: "I need a pause. I am not leaving this. Can we call again at [time]?" Say "we are okay" too, if it's true.</p>
       <p data-rel="work" hidden>Say: "I'd like to pick this up at [time], when I can give it proper attention." Then come back at that time, to the same one thing.</p>
+      <p data-rel="text" hidden>Send: "I need a pause. I'm not leaving this. Can we pick it up at [time]?" Add "we're okay" too, if it's true.</p>
       <p data-rel="coparent" hidden>Say, or send: "I'd like to pause here. I'll come back to you about the plan by [time]." Then reply once, about the children and the plan, at the time you said.</p>
       <p>Someone who is flooded often needs at least 20 minutes, and the return should not slip past the next day (<a href="https://www.gottman.com/blog/flooding-and-conflict-avoidance/">Gottman Institute</a>). Come back to the same topic. Do not open with what happened during the pause.</p>
-      <p data-rel="default coparent">Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
+      <p data-rel="default">Care does not require a solution. Lower your voice. Sit down. Get water. Put the phones away. If they asked for space, do not follow them, and do not send a stack of messages. One line is the signal. The return is the care.</p>
+      <p data-rel="text" hidden>Care does not require a solution. If they asked for space, don't send a stack of messages, and don't read silence as an answer. One line is the signal: "I'm here when you're ready." The return is the care.</p>
+      <p data-rel="coparent" hidden>Keep it to one message about the children and the plan. If they asked for time, give it, and reply when you said you would. You don't have to answer every message, or a message about the past.</p>
       <p data-rel="apart" hidden>Care does not require a solution. Lower your voice. Get water. Close the other tabs. If they asked for space, don't call straight back, and don't send a stack of messages. One line is the signal: "I'm here. Call at [time]?" The return is the care.</p>
       <p data-rel="work" hidden>Keep it to the task. If they asked for time, give it, and come back when you said you would. One line is enough: "Thanks. Let's pick this up at [time]."</p>
     </div>
@@ -1073,7 +1081,24 @@ function paintWiring(who){
   $("#add"+who).hidden = ![...host.querySelectorAll(".extra")].some(x=>x.hidden);
 }
 /* the listener, when no name is typed: in a group channel it's "your team" at work, or "the group" */
-function nm(who){ const v=$("#name"+who).value.trim(); if(v) return v; if(who==="A") return "You"; return channel==="group" ? (isWork() ? "your team" : "the group") : "Person B"; }
+/* the listener, when no name is typed: "Mum" when the message starts "Mum,", the relationship ("your friend"), or "the other person" */
+const KIN_VOC = /^\s*(?:(?:hi|hey|hello|oh),?\s+)?(mum|mom|mommy|mummy|mam|ma|mother|dad|daddy|father|nan|nana|nanna|gran|granny|grandma|grandpa|grandad|granddad|auntie|aunty|aunt|uncle)\b\s*[,!.:-]/i;
+const REL_NOUN = {partner:"your partner", family:"your family member", coparent:"your co-parent", friend:"your friend", roommate:"your roommate", coworker:"your coworker", business:"your business partner"};
+function listenerDefault(){
+  let send = true; try { send = stMode==="send"; } catch(e) {}
+  const m = send ? ($("#phrase").value||"").match(KIN_VOC) : null;
+  if(m) return m[1].charAt(0).toUpperCase()+m[1].slice(1).toLowerCase();
+  return REL_NOUN[relId] || "the other person";
+}
+function nm(who){ const v=$("#name"+who).value.trim(); if(v) return v; if(who==="A") return "You"; return channel==="group" ? (isWork() ? "your team" : "the group") : listenerDefault(); }
+/* a lower-case listener ("your partner", "the other person") starts a sentence with a capital, and is never "you're your partner" */
+function listenerFix(h){
+  const B = nm("B"); if(groupB() || !/^[a-z]/.test(B)) return h;
+  const esc2 = B.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  return String(h)
+    .replace(new RegExp("\\bIf you're "+esc2+":","g"), "If you're the one hearing it:")
+    .replace(new RegExp("(^|[.!?]\\s+|<(?:p|li|h\\d|b|dt|dd)(?: [^>]*)?>\\s*)"+esc2+"\\b","g"), (m,p)=>p+B.charAt(0).toUpperCase()+B.slice(1));
+}
 const groupB = ()=>/^(?:your team|the group)$/.test(nm("B"));
 /* "If your team is ADHD" reads wrong: a group is many people, so it's "someone on your team" */
 function teamFix(h){
@@ -1096,7 +1121,7 @@ function youFix(h){
     .replace(/\bYou's\b/g,"your").replace(/\bOnly You knows\b/g,"Only you know").replace(/\bWhat You (may|might)\b/g,"What you $1")
     .replace(/\bType what You might\b/g,"Type what you might").replace(/\bYou needs\b/g,"You need").replace(/\bFor You:/g,"For you:")
     .replace(/\bIf You is\b/g,"If you're").replace(/\bpick You\b/g,"pick you")
-    .replace(/(^|[.!?]\s+|>\s*)your\b/g,(m,p)=>p+"Your");
+    .replace(/(^|[.!?]\s+|>\s*)your\b(?! (?:partner|family member|co-parent|friend|roommate|coworker|business partner)\b(?! can\b))/g,(m,p)=>p+"Your");
 }
 function listNames(set){
   const arr=[...set].map(id=>NT[id].name);
@@ -1119,7 +1144,7 @@ function sync(){
     $("#picked"+w).innerHTML = s.size ? "Reading for: <b>"+esc(listNames(s))+"</b>"+(s.has("autistic")&&s.has("adhd")?" (AuDHD)":"") : (w==="B" ? "Not sure: you'll get a general reading for most listeners." : "Not sure: that's fine.");
   });
   $("#whoA").textContent = nm("A");
-  $("#whoB").textContent = groupB() ? nm("B").charAt(0).toUpperCase()+nm("B").slice(1) : nm("B");
+  $("#whoB").textContent = nm("B").charAt(0).toUpperCase()+nm("B").slice(1);
   $("#needALab").textContent = (nm("A")==="You" ? "What you need" : "What "+nm("A")+" needs")+" in a hard moment";
   $("#needBLab").textContent = "What "+nm("B")+" needs in a hard moment";
   const aSay = nm("A")==="You" ? "you" : nm("A");
@@ -1132,24 +1157,36 @@ function sync(){
 function paintRelSet(){
   const box=$("#relSet"); if(!box) return;
   let got = false; try { got = stMode==="got"; } catch(e) {}
-  box.hidden = !relId || !REL[relId] || got;
-  $("#relSetName").textContent = REL[relId] ? REL[relId].label : "";
+  box.hidden = got;
+  // nothing chosen yet: a plain default, never a blank ("Reading it for: . Change")
+  $("#relSetName").textContent = REL[relId] && REL[relId].label ? REL[relId].label : "someone close";
+  $("#relSetChange").textContent = REL[relId] ? "Change" : "Choose who";
+  // a work message: coworkers, a manager, or a business partner, one tap each
+  let q = $("#relQuick");
+  if(!q){ q = document.createElement("span"); q.id = "relQuick"; q.className = "relquick"; box.appendChild(q); }
+  const work = isWork() || ["coworker","manager","business"].includes(relId);
+  q.hidden = !work;
+  if(work) q.innerHTML = ' Or: '+["coworker","manager","business"].filter(k=>k!==relId).map(k=>'<button type="button" class="linkbtn" data-relq="'+k+'">'+esc(REL[k].label)+'</button>').join(' &middot; ');
 }
 document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest("#relSetChange")){ $("#fine").open = true; $("#relSel").focus(); } });
+document.addEventListener("click", e=>{ const b = e.target.closest && e.target.closest("[data-relq]"); if(!b) return; const sel=$("#relSel"); sel.value = b.getAttribute("data-relq"); sel.dispatchEvent(new Event("change", {bubbles:true})); });
 function rerun(){ paintNotesRel(); if(!$("#results").hidden && $("#phrase").value.trim()) run(); }
 /* the talking notes fit the relationship: co-parents get notes about the children and the plan */
 /* which talking notes fit: co-parents, work, apart (long distance: by phone or text), or one home */
 function notesMode(){
   if(relId==="coparent") return "coparent";
   if(isWork()) return "work";
-  if(envId==="apart" || channel==="phone" || (channel==="text" && chTouched)) return "apart";
+  // long distance, by phone or video: call wording (headphones only belong on a call)
+  if(envId==="apart" || channel==="phone") return "apart";
+  // a text, a chat or an email: no "one room", no headphones. A planned talk keeps the room, unless the channel was chosen
+  if(["text","chat","email","group"].includes(channel) && (chTouched || !["checkin","talk"].includes(useId))) return "text";
   return "default";
 }
 function paintNotesRel(){
   const mode = notesMode();
   document.querySelectorAll('#notes [data-rel]').forEach(el=>{ el.hidden = !el.dataset.rel.split(/\s+/).includes(mode); });
   const st = document.querySelector('#notes > .step');
-  if(st) st.textContent = mode==="apart" ? "KEEP THIS BESIDE YOU ON THE CALL" : mode==="work" ? "TAKE THIS INTO THE MEETING" : "TAKE THIS INTO THE ROOM";
+  if(st) st.textContent = mode==="apart" ? "KEEP THIS BESIDE YOU ON THE CALL" : mode==="work" ? "TAKE THIS INTO THE MEETING" : mode==="text" ? "KEEP THIS BESIDE YOU AS YOU WRITE" : mode==="coparent" ? "KEEP THIS BESIDE YOU" : "TAKE THIS INTO THE ROOM";
 }
 
 /* ============================================================
@@ -1662,6 +1699,8 @@ function settleHTML(A, B){
 }
 
 const LONG_GAP = /\b(?:it's been (?:a (?:long|while)|so long|years|months|ages)|long time no|haven't (?:spoken|talked|seen each other|been in touch)|(?:years|months) since|since (?:the funeral|the wedding|we fell out|everything happened)|reach(?:ing)? out after|out of the blue|i know (?:it's been|we haven't))\b/i;
+const RIFT = /\b(?:things got (?:ugly|bad|messy|nasty|heated|out of hand)|what happened (?:with|about|over|at) (?:dad|mum|mom|the|our)|(?:dad|mum|mom|father|mother|gran|nan|grandma|grandad)'s (?:house|will|estate|money|funeral|things|stuff)|the (?:will|inheritance|estate)\b|since the funeral|(?:we|you and i) (?:fell out|haven't spoken|stopped talking)|(?:fell|falling) out\b|after everything (?:that happened|with)|(?:years|months) of (?:silence|not speaking|not talking))/i;
+const NOT_PARENT = /\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b/i;
 const ONLY_ONE = /\b(?:always (?:me|the one) (?:who )?(?:reach|text|call|message|make)|only one (?:who )?(?:reach|text|call|make|tries)|i always have to (?:text|call|reach|message)|never (?:text|call|reach out|message) (?:me )?first)\w*/i;
 const REL_MORE = {
   family:[["/family-rifts.html","Family rifts: reaching out after a long silence"],["/grown-up-children.html","Boundaries with a parent you love"]],
@@ -1833,9 +1872,32 @@ function cueFor(lvlId){
 function drop(title, count, body, open, key){
   return '<details class="cr-drop'+(key?' is-key':'')+'"'+(open?' open':'')+'><summary><span class="cr-drop-t">'+title+'</span>'+(count?'<span class="cr-drop-n">'+esc(count)+'</span>':'')+'</summary><div class="cr-drop-b">'+body+'</div></details>';
 }
+/* "Try:" examples that fit the relationship: a dishes or "left out" example under a family rift, a co-parent text or a
+   work message reads as if the tool didn't listen. Only the quoted example changes; the advice stays the same. */
+const FIX_EX = {
+  family:{jab:"I'm still hurt about what happened. If we talk, I need us to start there.", motive:"Plans have clashed a few times. Can we check with each other first?", impera:"Could you call me back this week?", cannot:"Could you let me know before you visit?", passiveag:"Could you take one of the calls to Dad this week?", guilt:"I'm stretched thin. Could you take one thing this week?"},
+  coparent:{jab:"The handover was late twice this month. Can we agree a time that works?", motive:"The kids' plans have landed on my weekends a few times. Can we check the calendar first?", impera:"Could you pack her coat for Sunday's handover?", cannot:"Could you send the school form by Friday?", passiveag:"Could you take the dentist appointment this month?", guilt:"I'm stretched thin this week. Could you do Thursday's pickup?"},
+  friend:{impera:"Could you let me know by Friday if you can come?", cannot:"Could you text if you're running late?", passiveag:"Could you book the table this time?"},
+  roommate:{jab:"I've been doing most of the bins lately. Can we set up a rota?", motive:"The kitchen's been left a few times when I've had people over. Can we agree a plan?"},
+  work:{jab:"I've been carrying most of the admin lately. Could we look at the split this week?", motive:"A few deadlines have moved without notice. Can we flag changes in the channel first?", impera:"Could you send the numbers by 3 today?", cannot:"Could you update the shared doc instead?", passiveag:"Could you take the supplier calls this week?", guilt:"I'm stretched this week. Could you take one task off my list?", passive:"I noticed the invoice wasn't sent. Could you check it today?"},
+  caregiver:{jab:"I've been doing most of the appointments. Could you take two this month?", motive:"The appointments keep landing on me. Can we split them?", passiveag:"Could you take Thursday's appointment?"}
+};
+function fixFor(id, fix, text){
+  const fam = relId==="family" || (!relId && /^\s*(?:mum|mom|dad|nan|gran)\b|\b(?:dad|mum|mom)'s (?:house|will|funeral)|\bthe will\b/i.test(text||""));
+  const key = isWork() || ["coworker","manager","business"].includes(relId) ? "work" : fam ? "family" : relId;
+  const ex = key && FIX_EX[key] && FIX_EX[key][id];
+  if(!ex || !/"[^"]+"/.test(fix)) return fix;
+  return fix.replace(/"[^"]+"(?![^"]*")/, '"'+ex+'"');
+}
 function quoteWords(list){
   const seen=new Set();
-  return (list||[]).filter(w=>w && !seen.has(w.toLowerCase()) && seen.add(w.toLowerCase())).slice(0,4).map(w=>'<q class="w">'+esc(String(w).replace(/[.,;:]+$/,""))+'</q>').join(" ");
+  let ws = (list||[]).map(w=>String(w||"").trim()).filter(w=>w && !seen.has(w.toLowerCase()) && seen.add(w.toLowerCase()));
+  // a match that stops mid-phrase ("I guess I'm only your") reads as broken: show the whole ones only
+  const DANGLING = /\b(?:your|my|our|their|his|her|the|a|an|only|just|to|of|for|and|but|so|i'm|you're)\s*$/i;
+  const whole = ws.filter(w=>!DANGLING.test(w));
+  if(whole.length) ws = whole;
+  ws = ws.filter(w=>!ws.some(o=>o!==w && o.toLowerCase().includes(w.toLowerCase())));
+  return ws.slice(0,4).map(w=>'<q class="w">'+esc(String(w).replace(/[.,;:]+$/,""))+'</q>').join(" ");
 }
 const WIRING_SHORT = id=>NT[id] ? NT[id].short : id;
 /* A pattern's heading, in words. A safety worry names its thing in the title ("A safety worry about the stove,
@@ -1943,7 +2005,8 @@ function paintBrief(){
   if(N) N.classList.toggle("is-brief", briefOn);
   if(cb) cb.checked = briefOn;
 }
-function briefRow(){ return '<div class="st-brief-row st-brief-keep"><label><input type="checkbox" id="briefOn"'+(briefOn?' checked':'')+'> Just the answer</label></div>'; }
+/* a <p>, not a <div>: the site's card style is for blocks, and this is one line, so it never shows as an empty white card */
+function briefRow(){ return '<p class="st-brief-row st-brief-keep"><label><input type="checkbox" id="briefOn"'+(briefOn?' checked':'')+'> Just the answer</label></p>'; }
 document.addEventListener("change", e=>{ if(e.target && e.target.id==="briefOn"){ briefOn = e.target.checked; try{ localStorage.setItem("tol-st-brief", briefOn?"1":"0"); }catch(x){} paintBrief(); } });
 document.addEventListener("click", e=>{
   if(e.target.closest && e.target.closest(".st-simple-btn")) toggleSimple();
@@ -1990,7 +2053,7 @@ function run(){
   const lvl = sc.level, pct = sc.pct;
   const strongest = sc.top;                       // readings with weight >= 1, loudest first
   const perB = E.readings(an, Bids, channel);
-  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond"}));
+  const rw = dropBlame(E.rewrite(an, {wirings:Bids, channel, rel:relId, work:isWork(), bond: needB==="bond"||sitId==="bond", facts:$("#facts").value.trim()}));
   lastChanged = !rw.unchanged;
 
   const chName={person:"in person",phone:"by phone or video",text:"by text or chat",chat:"on a work chat",group:"in a group channel",email:"by email or long note"}[channel];
@@ -2019,7 +2082,7 @@ function run(){
     p1 += '<h3>What may add static</h3><ol class="finds">'+staticIds.map(id=>{
       const f=FBY[id];
       const ws = id==="multi" ? found.multi : (found[id]||[]).filter(Boolean);
-      return '<li>'+fLabel(id, ws, "span")+'<p>'+esc(f.what||"")+'</p><p class="small"><b>Try:</b> '+esc(f.fix)+'</p></li>';
+      return '<li>'+fLabel(id, ws, "span")+'<p>'+esc(f.what||"")+'</p><p class="small"><b>Try:</b> '+esc(fixFor(id, f.fix, text))+'</p></li>';
     }).join("")+'</ol>';
   } else {
     p1 += '<p>No known trouble spots in the structure. Tone, timing and history can still add static the words don\'t show.</p>';
@@ -2157,10 +2220,10 @@ function run(){
   // the verdict first: how it may land, what was found (with the words), and the clearest way to say it
   const HOTF = ["swear","hostile","label","contempt","threat"];
   const foundList = staticIds.filter(id=>!["nowhen","long","period","sorrybut"].includes(id)).sort((a,b)=>(HOTF.includes(b)-HOTF.includes(a))).slice(0,4).map(id=>{
-    const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0,2));
+    const ws=(found[id]||[]).filter(Boolean); return fLabel(id, ws.slice(0, id==="jab" ? 1 : 2));
   });
   // one plain line first, for anyone who just wants to know: is my sentence okay?
-  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() ? nm("B") : ""), work:isWork(), replyTo: replyCtx}) : null;
+  const plain = E.verdict ? E.verdict(an, sc, rw, {listener: $("#nameB").value.trim() || (groupB() || /^[A-Z]/.test(nm("B")) && nm("B")!=="You" ? nm("B") : ""), work:isWork(), replyTo: replyCtx}) : null;
   let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   const little = /little/i.test(lvl[1]);
   // a real apology: the plain line stays as gentle as the headline above it
@@ -2174,7 +2237,11 @@ function run(){
   if(found.legal || found.kidsfirst){
     vtop+='<p class="vwarn"><b>Likely to escalate.</b> '+(found.legal?'A threat about court, a lawyer or custody':'Telling the children first')+(found.legal&&found.kidsfirst?', and telling the children first,':'')+' usually turns a disagreement into a fight about the kids. The versions below leave '+(found.legal&&found.kidsfirst?'them':'it')+' out.'+(relId==="coparent"?' Between co-parents, messages like this are often saved and shown later. If there is a real legal step, take it through the proper channel. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.':'')+'</p>';
   }
-  if(relId==="family" && LONG_GAP.test(text)) vtop+='<p class="small"><b>After a long gap,</b> short and no-pressure works best: name the rift, own your part, and make the invite easy to decline. More in <a href="/family-rifts.html">Family rifts</a>.</p>';
+  // a family message that names a rift ("I know things got ugly about Dad's house"): own your part, and make it easy to say no
+  if((relId==="family" || (!relId && RIFT.test(text))) && (LONG_GAP.test(text) || RIFT.test(text))) vtop+='<p class="small st-rift"><b>Reaching out after a long silence?</b> Two gentle checks: does it own your part, not just that &ldquo;things got ugly&rdquo;? And is it easy for them to say no, or not yet? A line like &ldquo;I know I played a part in it&rdquo; and &ldquo;No pressure to answer&rdquo; can help. More in <a href="/family-rifts.html#reaching-out">Family rifts: reaching out after a long silence</a>.</p>';
+  // "you're not my mum": often grief talking
+  if(NOT_PARENT.test(text)){ const pw = (text.match(/\bnot my (?:real )?(mum|mom|mother|dad|father)\b/i)||["","Mum"])[1].toLowerCase(); const who = pw==="mom" ? "Mom" : /dad|father/.test(pw) ? "Dad" : "Mum";
+    vtop+='<p class="small st-grief"><b>Often this is grief talking.</b> Try: &ldquo;I&rsquo;m not angry at you. I&rsquo;m just missing '+who+' today.&rdquo; Living with grandparents or family? The <a href="/teens.html">teen page</a> has more.</p>'; }
   if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
   if(an.control) vtop+=CONTROL_SELF;
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
@@ -2237,7 +2304,7 @@ function run(){
   h += '<p class="small pillars">Stuck on the wording? <a href="ask.html">Ask Professor Puddles</a>.</p>';
   h += '<div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="again">Try the reverse</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div>';
 
-  const R=$("#results"); R.innerHTML=teamFix(youFix(h)); R.hidden=false;
+  const R=$("#results"); R.innerHTML=listenerFix(teamFix(youFix(h))); R.hidden=false;
   paintSimple(); paintBrief();
   requestAnimationFrame(()=>{ const f=R.querySelector(".fill"); if(f) f.style.width=f.dataset.w+"%"; });
   R.querySelectorAll('input[name="saypick"]').forEach(inp=>inp.addEventListener("change",()=>{
@@ -2314,7 +2381,7 @@ function runCrisis(text){
 }
 function runDanger(text, an, B){
   const rw = E.rewrite(an, {wirings:["general"], channel, rel:relId, work:isWork()});
-  const who = B && B!=="Person B" ? B : "the other person";
+  const who = B || "the other person";
   const need = rw.variants[0] ? rw.variants[0].text : "", pause = rw.variants[1] ? rw.variants[1].text : "";
   lastChanged = true;
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">This is a threat</h2>';
@@ -2393,9 +2460,15 @@ function fitReceived(an, rv){
     if(an.found.brushoff || an.found.minimal) rv.meanings.push("Between co-parents, \u201cwhatever works for you\u201d can be real flexibility, or a tired \u201cI\u2019ve stopped arguing.\u201d Answering with the specific plan settles it either way.");
     if(an.found.legal) rv.meanings.push("Between co-parents, keep your reply to the children\u2019s schedule and the facts. You don\u2019t have to answer the threat itself.");
     const keep = rv.replies.filter(r=>["Answer the need underneath","Check the ask","Agree on a habit","Keep the kids out of it"].includes(r.label));
+    // pickup-time replies only when the message is about times; otherwise a brief, factual answer to what it says
+    const aboutTimes = /\b(?:pick ?up|drop ?off|hand ?over|hand-?off|late|early|time|o'clock|\d)\b/i.test(an.text);
+    const item = (an.text.match(/\b(?:forg[eo]t\w*|pack\w*|left|leave|send|bring)\b[^.!?]{0,20}?\b(?:his|her|their|the kids'?|the children's|[A-Z][a-z]+'s) ([a-z][a-z ]{1,20}?)(?=[.!?,]|$|\s+(?:again|every|at)\b)/i)||[])[1];
+    const brief = item ? [{label:"Brief and factual", text:"Thanks for letting me know. The "+item.trim()+" will be in the bag for the next handover."}]
+      : aboutTimes ? COPARENT_REPLIES.slice(0,1) : [{label:"Brief and factual", text:"Thanks for letting me know. I'll [the one thing you'll do] by [the day]."}];
+    const rest = aboutTimes ? COPARENT_REPLIES.slice(1) : [{label:"Hold it for now", text:"I've read this. I'll reply about it by [a time]."}];
     rv.replies = rv.crossed
       ? COPARENT_REPLIES.slice(1,2).concat([{label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}])
-      : keep.concat(an.found.brushoff ? [{label:"Name the plan", text:"Thanks. Then let's go with [the plan]: [the day] at [the time]. Tell me by [a time] if that doesn't work."}] : []).concat(COPARENT_REPLIES).slice(0,3);
+      : keep.concat(an.found.brushoff ? [{label:"Name the plan", text:"Thanks. Then let's go with [the plan]: [the day] at [the time]. Tell me by [a time] if that doesn't work."}] : []).concat(keep.length && item ? [] : brief).concat(rest).slice(0,3);
   }
   return rv;
 }
@@ -2416,7 +2489,7 @@ function runReceived(text){
   h += '<div class="verdict"><p class="vk">Ways to answer calmly</p>';
   h += '<div class="simple-wrap"><button type="button" class="linkbtn st-simple-btn" aria-expanded="'+simpleOn+'">'+(simpleOn?'Hide the simpler English':'Say it in simpler English')+'</button></div>';
   h += rv.replies.length ? '<ul class="replies">'+rv.replies.map((r,i)=>'<li><b>'+esc(r.label)+'</b><p class="vbest">'+phHTML(r.text)+'</p>'+simpleLine(r.text)+'<button class="ghost" type="button" data-copyr="'+i+'">Copy</button></li>').join('')+'</ul>' : (rv.found && rv.found.length ? '<p>Answer the point itself, calmly. You don&rsquo;t have to match the sharper wording.</p>' : '<p>Answer the way you normally would. Nothing here needs decoding.</p>');
-  if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer the logistics only. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
+  if(rv.coparent && rv.replies.length) h += '<p class="small">With a co-parent or an ex, keep it Brief, Informative, Friendly and Firm. Answer what the message is about, plainly. You don&rsquo;t have to agree with, or argue about, a pattern in writing. Fill in the parts in brackets. More on <a href="/co-parenting.html#court">co-parenting when it may end up in court</a>.</p>';
   h += rv.selfHarm && !an.danger ? '<p class="small">If they might act on it now, call your local emergency number. You don&rsquo;t have to find perfect words. Being there, and getting help, matters most.</p>'
     : '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
@@ -2557,11 +2630,12 @@ function sheetLines(){
   lines.push("Talking notes");
   lines.push(USE_LABEL[useId]||"Preparation");
   lines.push(nm("A")+" speaking to "+nm("B")+(relId&&REL[relId]?" · "+REL[relId].label:""));
-  lines.push(notesMode()==="apart" ? "Keep this page next to you on the call. The score stays home. Do not read a reading out loud." : "This page goes into the room. The score stays home. Do not read a reading out loud.");
+  lines.push(notesMode()==="apart" ? "Keep this page next to you on the call. The score stays home. Do not read a reading out loud." : ["text","coparent"].includes(notesMode()) ? "Keep this page beside you as you write. The score stays here. Do not send a reading." : "This page goes into the room. The score stays home. Do not read a reading out loud.");
   lines.push("");
   const cp = relId==="coparent", mode = notesMode();
   lines.push("1. Open");
-  lines.push(cp ? "Say: Thanks for making time. I'd like to keep this to the kids and the plan: one topic, the facts, and what each of us will do. If we need a pause, we'll pick a time to come back to it."
+  lines.push(cp ? "By text or face to face: I'd like to keep this to the kids and the plan: one topic, the facts, and what each of us will do. If we need a pause, I'll come back to you by [a time]."
+                : mode==="text" ? "If it's a text: send the one sentence, then stop. Don't add a second message while you wait. If you'd rather talk, ask: Could we talk about this at [a time]?"
                 : mode==="work" ? "Say: Thanks for making time. I'd like to talk about one thing. This is about the process, not you. If we need to stop, we'll pick a time to pick it up."
                 : mode==="apart" ? "On your next call: ten minutes, both on headphones, no other tabs. Say: We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we pick a time to call back now."
                 : "Say: We will start with one sentence. I am not against you. I do not think you meant harm. If we pause, we come back at a time we name now.");
@@ -2619,7 +2693,7 @@ function sheetLines(){
   lines.push("");
   }
   lines.push("Cheat sheet");
-  lines.push(mode==="apart" ? "Check-in: named call time, both of you settled, headphones on, other tabs closed, start with sentence 1, mirror before any answer, then their turn, one owner, one time." : "Check-in: named time, both of you settled, start with sentence 1, mirror before any answer, then their turn, one owner, one time.");
+  lines.push(mode==="text" ? "Check-in by text: one sentence per message, then wait for the reply. One owner, one time." : cp ? "Check-in: by text is fine. One topic per message: the facts, the plan, a time." : mode==="apart" ? "Check-in: named call time, both of you settled, headphones on, other tabs closed, start with sentence 1, mirror before any answer, then their turn, one owner, one time." : "Check-in: named time, both of you settled, start with sentence 1, mirror before any answer, then their turn, one owner, one time.");
   lines.push("Conflict: the event, not the person. No always, no never. Hearing them is not losing. If the voice rises, pause, name a return, do not build the case, come back to the same sentence.");
   lines.push("Any conversation: one clear ask. Check what they heard if it matters. A text gets the matching sentence, not the score. Do not read this page at them. If it is already a fight, close this.");
   lines.push("");
@@ -2629,13 +2703,17 @@ function sheetLines(){
   lines.push("");
   lines.push("5. If it starts to derail");
   lines.push("Stop the topic. Do not finish the point.");
-  lines.push(cp ? "Say: I'd like to pause here. I'll come back to you about the plan by [time]." : mode==="work" ? "Say: I'd like to pick this up at [time], when I can give it proper attention." : mode==="apart" ? "Say: I need a pause. I am not leaving this. Can we call again at [time]?" : "Say: I need a pause. I am not leaving this. We are okay. I will come back at [time].");
+  lines.push(cp ? "Say: I'd like to pause here. I'll come back to you about the plan by [time]." : mode==="work" ? "Say: I'd like to pick this up at [time], when I can give it proper attention." : mode==="apart" ? "Say: I need a pause. I am not leaving this. Can we call again at [time]?" : mode==="text" ? "Send: I need a pause. I'm not leaving this. Can we pick it up at [time]?" : "Say: I need a pause. I am not leaving this. We are okay. I will come back at [time].");
   lines.push("Often at least 20 minutes. Come back to the same topic. Do not open with the pause.");
   if(mode==="apart"){
     lines.push("Care does not require a solution. Lower your voice. Water. Other tabs closed.");
     lines.push("If they asked for space, don't call straight back, and do not send a stack of messages.");
   } else if(mode==="work"){
     lines.push("Keep it to the task. If they asked for time, give it, and come back when you said.");
+  } else if(cp){
+    lines.push("One message about the children and the plan. If they asked for time, give it, and reply when you said.");
+  } else if(mode==="text"){
+    lines.push("If they asked for space, don't send a stack of messages, and don't read silence as an answer.");
   } else {
     lines.push("Care does not require a solution. Lower your voice. Sit. Water. Phones away.");
     lines.push("If they asked for space, do not follow, and do not send a stack of messages.");
