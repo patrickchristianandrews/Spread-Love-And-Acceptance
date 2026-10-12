@@ -457,11 +457,12 @@
 
   // ---------------------------------------------------------------- run on the page
   function apply() {
-    if (!Object.keys(ON).length || busyPage()) return;
+    if (!Object.keys(ON).length || busyPage() || path === PAGE) return;
     literal(); shortSteps(); oneThing(); checklist(); pictures(); reassure(); expect(); noTimer(); askHint();
   }
   function start() {
-    if (!Object.keys(ON).length || busyPage()) return;
+    // the picker page shows the look (the classes) but none of the page changes, so it stays whole while choosing
+    if (!Object.keys(ON).length || busyPage() || path === PAGE) return;
     apply();
     placeLink();
     // some parts arrive a moment later (the "In short" box and the steps switch from in-short.js, the Listen buttons)

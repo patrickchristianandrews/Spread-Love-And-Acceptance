@@ -75,6 +75,10 @@
   .ld-mp{ margin:.6rem 0; }
   .ld-mp:empty{ display:none; }
   @media print{ .ld-acts, .ld-share, .ld-mp{ display:none !important; } }
+  .ld-who{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .5rem; margin:.4rem 0 .2rem !important; font-size:.95rem; }
+  .ld-chip{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.4rem .95rem; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
+  .ld-chip[aria-pressed="true"]{ border:2px solid var(--credit); font-weight:700; }
+  .ld-chip:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 </style>
 
 <!-- seo:start -->
@@ -182,6 +186,7 @@
     <li data-r="revved">Revved up</li>
     <li data-r="empty">Running on empty</li>
   </ul>
+  <p class="ld-who" role="group" aria-label="Who is around today"><span>Today I’m:</span> <button type="button" class="ld-chip" data-solo="0" aria-pressed="true">With other people</button><button type="button" class="ld-chip" data-solo="1" aria-pressed="false">Mostly on my own</button></p>
   <p id="ld-what"></p>
   <p class="ld-small" id="ld-mixed" hidden></p>
 
@@ -190,10 +195,10 @@
   <p class="ld-acts"><a class="ld-btn is-main" href="/night-garden.html" data-breathe>Breathing pacer</a><a class="ld-btn" href="/night-garden.html">The Night Garden</a></p>
   <div class="ld-mp" data-mini-player></div>
 
-  <h3>A pause line you could say</h3>
+  <h3 id="ld-pause-h">A pause line you could say</h3>
   <p class="ld-line"><q id="ld-pause"></q> <button type="button" class="ld-btn" id="ld-copy-line">Copy</button></p>
 
-  <h3>When to come back to a talk</h3>
+  <h3 id="ld-when-h">When to come back to a talk</h3>
   <p id="ld-when"></p>
 
   <p class="ld-small">If you’re tense because you’re afraid of how someone will react, that is not just stress. Your body may be warning you. <a href="/safety.html">Not safe at home?</a> has free, private help.</p>
@@ -271,6 +276,25 @@
       short: 'Rest first. Talk another time, and say when.'
     }
   };
+  // a day mostly on your own: the same rungs, with words about pace instead of talks
+  var SOLO = {
+    calm: { what: 'Breathing is easy, and your head feels steady. Calm doesn’t mean happy: you can be calm and sad, or calm and firm.',
+      helps: ['A good window for the thing you’ve been putting off. Pick one.', 'Write down what’s on your mind, before a busy day buries it.', 'Notice what helped you get here today (sleep, food, a walk), so you can do more of it.'],
+      pause: 'I’m having a decent day. Fancy a call or a coffee this week?',
+      when: 'Good for one thing that matters, or for getting in touch with someone you’ve been meaning to call.',
+      short: 'A good window for one thing that matters.' },
+    revved: { helps: ['Breathe out slowly, longer than you breathe in, for one minute. The breathing pacer counts it for you.', 'Move: a short walk, the stairs, or a physical job like the dishes.', 'Write the thing down instead of acting on it. Read it again later.'],
+      pause: 'I’m a bit wound up today, so I’ll keep replies short. It isn’t about you.',
+      when: 'Settle for about twenty minutes before anything big. Leave big decisions, money and sharp replies for another day.',
+      short: 'Settle first, for about twenty minutes.' },
+    empty: { what: 'You feel tired and flat, and words are harder to find. Here it just means ordinary, everyday tiredness.',
+      helps: ['Look after the basics first: water, something to eat, warmth, or a lie-down.', 'Do one small, finishable thing, or nothing at all for a while.', 'Meant to see or call someone? A short message is enough: “Low on words today. Can we do tomorrow?”'],
+      pause: 'I’m running low today, so I’m keeping things small. I’ll get back to you tomorrow.',
+      when: 'Keep today small. Anything big can wait until after rest or food, often tomorrow.',
+      short: 'Rest first. Keep today small.' }
+  };
+  var solo = /[#&]solo\b/.test(location.hash) || /[?&]solo=1\b/.test(location.search);
+  function D(r) { var d = R[r], o = solo && SOLO[r], x = {}; Object.keys(d).forEach(function (k) { x[k] = o && o[k] ? o[k] : d[k]; }); return x; }
   var ORDER = ['calm', 'revved', 'empty'];
   var answers = {}, current = null;
   var $ = function (id) { return document.getElementById(id); };
@@ -292,8 +316,12 @@
 
   function show(r, opts) {
     opts = opts || {};
-    var d = R[r]; if (!d) return;
+    if (!R[r]) return;
+    var d = D(r);
     current = r;
+    document.querySelectorAll('.ld-chip').forEach(function (c) { c.setAttribute('aria-pressed', (c.getAttribute('data-solo') === '1') === solo ? 'true' : 'false'); });
+    $('ld-pause-h').textContent = solo ? 'A line you could send someone' : 'A pause line you could say';
+    $('ld-when-h').textContent = solo ? 'What today is good for' : 'When to come back to a talk';
     $('ld-name').textContent = d.name;
     $('ld-what').textContent = d.what;
     $('ld-helps').innerHTML = d.helps.map(function (h) { return '<li>' + h + '</li>'; }).join('');
@@ -310,6 +338,9 @@
     if (opts.scroll) { result.scrollIntoView({ behavior: 'smooth', block: 'start' }); try { result.focus({ preventScroll: true }); } catch (e) {} }
   }
 
+  document.querySelectorAll('.ld-chip').forEach(function (c) {
+    c.addEventListener('click', function () { solo = c.getAttribute('data-solo') === '1'; if (current) show(current, { other: score().other }); });
+  });
   qs.forEach(function (fs, i) {
     fs.addEventListener('click', function (e) {
       var b = e.target.closest('.ld-opt'); if (!b) return;
@@ -402,7 +433,7 @@
   });
   $('ld-share').addEventListener('click', function () {
     if (!current) return;
-    var d = R[current], text = 'Right now I’m ' + d.name.toLowerCase() + '. ' + d.short, url = linkFor(current);
+    var d = D(current), text = 'Right now I’m ' + d.name.toLowerCase() + '. ' + d.short, url = linkFor(current);
     if (window.TOLShareKit && window.TOLShareKit.shareText) { window.TOLShareKit.shareText({ title: 'Where am I right now?', text: text, url: url, heading: 'Share your result' }); return; }
     if (window.TOLShare && window.TOLShare.open) { window.TOLShare.open({ title: 'Where am I right now?', text: text, url: url, result: true }); return; }
     if (navigator.share) { navigator.share({ title: 'Where am I right now?', text: text, url: url }).catch(function () {}); return; }

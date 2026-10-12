@@ -178,9 +178,14 @@
   // ---------------------------------------------------------------- "What I heard": their ask, turned to face you
   var SWAP = { me: 'you', my: 'your', mine: 'yours', myself: 'yourself', i: 'you', "i'm": "you're", "i've": "you've", "i'll": "you'll", "i'd": "you'd",
     you: 'me', your: 'my', yours: 'mine', yourself: 'myself', "you're": "I'm", "you've": "I've", "you'll": "I'll", "you'd": "I'd" };
+  // "you" doing something ("and you take Tuesdays") becomes "I"; "you" being done to ("for you") becomes "me"
+  var SUBJ_BEFORE = /(?:^|[,:;]\s*|\b(?:and|but|or|so|if|when|then|while|because|that|before|after|until|unless|once|where)\s+)$/i;
   function swap(t) {
-    return String(t).replace(/[’‘]/g, "'").replace(/\b(you're|you've|you'll|you'd|i'm|i've|i'll|i'd|myself|yourself|mine|yours|me|my|your|you|i)\b/gi, function (w) {
-      var to = SWAP[w.toLowerCase()]; return to || w;
+    var s = String(t).replace(/[’‘]/g, "'");
+    return s.replace(/\b(you're|you've|you'll|you'd|i'm|i've|i'll|i'd|myself|yourself|mine|yours|me|my|your|you|i)\b/gi, function (w, _x, at) {
+      var low = w.toLowerCase();
+      if (low === 'you' && SUBJ_BEFORE.test(s.slice(0, at))) return 'I';
+      return SWAP[low] || w;
     }).replace(/'/g, '’');
   }
   function heardFrom(ask) {
