@@ -284,7 +284,9 @@
   // what: 'bills' for the Money tab. Never asks anyone to send a code to themselves: on the phone of the
   // person still to fill in ("Who's filling in"), it asks for their own side instead.
   function waitText(w, what) {
-    var see = what === 'bills' ? 'to see who owes whom' : 'to see the split';
+    var see = what === 'bills' ? (state.planning ? 'to see the plan' : 'to see who owes whom') : 'to see the split';
+    // a side just added on a new device, and nobody has said who's holding it yet: that question first
+    if (state.me < 0 && document.getElementById('who-ask')) return 'First, tap your name under “Who are you?”, so this device knows whose side it holds.';
     var me = state.me, mine = me >= 0 && w.indexOf(me) >= 0, rest = w.filter(function (i) { return i !== me; }), restNamed = waitNames(rest);
     if (mine) {
       return 'Waiting for your side' + (placeholder(state.people[me]) ? '' : ', ' + nameOf(me)) + '. Fill in your own ' + (what === 'bills' ? 'amounts' : 'hours') + ' above ' + see +
@@ -1970,7 +1972,7 @@
     }
     var nc = noticeCounts(), nb = $('r-notice');
     nb.textContent = noticeLine(nc);
-    var work = peopleTotals('work'), rest = peopleTotals('rest'), pers = peopleTotals('personal'), ctx = [], gap = workGap(), differ = !gap.length && workDiffers(work);
+    var work = peopleTotals('work'), rest = peopleTotals('rest'), pers = peopleTotals('personal'), ctx = [], gap = workGap(), differ = !gap.length && !wait.length && workDiffers(work);
     var zeroPaid = !gap.length && state.people.length === 2 && sum(work) > 0 && work.some(function (x) { return x <= 0; });
     // the whole week side by side, for seeing only: it never changes the home split. When paid hours differ,
     // it sits right under the glasses, where the split is read, not far below.
@@ -4138,6 +4140,8 @@
       g.appendChild(b);
     });
     anchor.parentNode.insertBefore(box, anchor.nextSibling);
+    // the result waits for the name ("Waiting for Sam's and Jo's sides" would be about the wrong people)
+    recalc();
     var first = g.querySelector('button'); if (first) setTimeout(function () { first.focus({ preventScroll: true }); box.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 80);
   }
 

@@ -83,10 +83,21 @@
     return words(s).filter(function (w) { return !/^(the|a|an|your|my|our)$/.test(w); }).map(stem).join(' ');
   }
   function wc(s) { return (String(s).match(/\S+/g) || []).length; }
+  // A sentence ends at . ! ? or … followed by a space (so "alz.org" stays one word), and never inside a “quote”
+  // (“Thanks. We’ve got it covered.” is one piece, so an excerpt never starts halfway through someone's words)
   function sentences(s) {
-    return String(s).split(/\n+/).reduce(function (acc, para) {
-      return acc.concat(para.match(/[^.!?…]+(?:[.!?…]+[”"’)]*|$)/g) || [para]);
-    }, []).map(function (x) { return x.trim(); }).filter(Boolean);
+    var acc = [];
+    String(s).split(/\n+/).forEach(function (para) {
+      var re = /[.!?…]+[”"’)]*(?=\s|$)/g, m, last = 0, buf = '';
+      while ((m = re.exec(para))) {
+        buf += para.slice(last, m.index + m[0].length); last = m.index + m[0].length;
+        var open = (buf.match(/“/g) || []).length - (buf.match(/”/g) || []).length;
+        if (open <= 0 && !/(^|\s)(e\.g|i\.e|Dr|Mr|Mrs|Ms|vs)\.$/.test(buf.trim())) { acc.push(buf.trim()); buf = ''; }
+      }
+      buf += para.slice(last);
+      if (buf.trim()) acc.push(buf.trim());
+    });
+    return acc.filter(Boolean);
   }
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
   function safePath(u) { return typeof u === 'string' && /^\/[A-Za-z0-9._\-\/]*(\?[a-z]+=[A-Za-z0-9._\-]+(&[a-z]+=[A-Za-z0-9._\-]+)*)?(#[A-Za-z0-9._\-:]*)?$/.test(u) && u.indexOf('//') === -1; }
@@ -384,7 +395,8 @@
     while (end + 1 < ss.length && n + wc(ss[end + 1]) <= 90) { end++; n += wc(ss[end]); }
     if (start > 0 && n < 60 && n + wc(ss[start - 1]) <= 90) { start--; }
     var text = ss.slice(start, end + 1).join(' ');
-    return [(start > 0 ? '… ' : '') + text + (end < ss.length - 1 ? ' …' : '')];
+    // it starts at the start of a sentence, so no leading “…” (that reads as if it began mid-sentence)
+    return [text + (end < ss.length - 1 ? ' …' : '')];
   }
 
   var LEAD_FIRST = ['Here’s what the site says:', 'Here’s the gist, from the site:', 'This part of the site fits:'];
@@ -879,7 +891,11 @@
   function spellFix(q) {
     // names are never "corrected": any capitalised word that isn't the first word ("Marcus", "Leo") is left alone
     var NAMES = {};
-    String(q).replace(/[’‘`´]/g, "'").split(/\s+/).forEach(function (w, i) { var m = /^([A-Z][a-z]+)/.exec(w); if (m && i > 0 && m[1] !== 'I') NAMES[m[1].toLowerCase()] = 1; });
+    String(q).replace(/[’‘`´]/g, "'").split(/\s+/).forEach(function (w, i) { var m = /^([A-Z][a-z]+)/.exec(w); if (m && (i > 0 || /^[A-Z][a-z]+,/.test(w)) && m[1] !== 'I') NAMES[m[1].toLowerCase()] = 1; });
+    // a name typed in lower case sits where a person goes: "she signed lina up", "our son leo", "in front of mia"
+    var slot = /\b(?:signed|signs?|enrol(?:l?ed|s)?|registered|booked|put|took|takes?|picked|picks?|dropped|drops?|brought|brings?|sent|sends?|told|tells?|asked|asks?|let|lets|with|named|called|front of|son|daughter|kid|child|boy|girl|baby|brother|sister|ex|husband|wife|partner|boyfriend|girlfriend|friend|mum|mom|dad|nan|carer)\s+([a-z]{3,})(?=\s+(?:up|in|into|for|off|to|from|at|and|about|is|was|has|had|s|keeps|said|says|wants|doesnt|dont|won|wont|never|always|on|over|home|back)\b|\s*$)/g, sm;
+    var lowQ = String(q).toLowerCase().replace(/[’‘`´']/g, '');
+    while ((sm = slot.exec(lowQ))) { if (!STOP[sm[1]] && !ROLE[stem(sm[1])] && !/^(the|them|him|her|his|their|our|your|my|all|this|that|it|me|us|everything|anything|nothing|money|work|school|football|swimming|dance|clubs?|camp|piano|lessons?|dinner|food|stuff|things|time|kids|children|someone|people)$/.test(sm[1])) NAMES[sm[1]] = 1; }
     var low = String(q).replace(/[’‘`´]/g, "'").toLowerCase(), fixes = [], known = 0, unknown = 0;
     (KB.spellp || []).forEach(function (p) {
       var rx; try { rx = new RegExp(p[0], 'g'); } catch (e) { return; }
@@ -1624,9 +1640,15 @@
       }
       if (best) path = best;
     }
+    function cardFor(u) { return (KB.cards || []).filter(function (c) { return c.page === u && c.first; })[0] || null; }
+    // a page opened for a situation (?for=co-parent) takes that situation's topic when it has none of its own
+    if (P.forPage && !cardFor(path)) path = P.forPage;
+    // the topic we were on before this page, when this page has none of its own
+    var R0 = state.restore; state.restore = null;
+    if (R0 && !cardFor(path) && cardById(R0.id)) state.topic = { id: R0.id, root: R0.root && cardById(R0.root) ? R0.root : R0.id, side: R0.side, turn: 0, v: 0 };
     if (!path || path === '/ask.html') { state.page = about ? { u: '', about: about } : null; return; }
     state.page = { u: path, about: about, es: path === '/en-espanol.html' };
-    var pc = (KB.cards || []).filter(function (c) { return c.page === path && c.first; })[0];
+    var pc = cardFor(path);
     if (pc) { state.pageTopic = { id: pc.id, root: pc.id }; state.page.chips = (pc.pageChips || []).map(function (x) { return { label: x[0], q: x[1] }; }); }
   }
   function setTopic(state, c, root, side) { var T0 = state.topic; state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: T0 && T0.id === c.id ? (T0.v || 0) : 0, side: side != null ? side : (T0 && T0.root === (root || c.id) ? T0.side : null) }; }
@@ -3143,7 +3165,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -3227,6 +3249,7 @@
     '.tolc-msg{max-width:92%;padding:.65rem .85rem;border-radius:18px;word-wrap:break-word;overflow-wrap:anywhere}',
     '.tolc-msg p{margin:0 0 .5rem;max-width:none}',
     '.tolc-msg p:last-child{margin-bottom:0}',
+    '.tolc-ctx{align-self:center;max-width:92%;text-align:center}.tolc-ctx p{margin:0;font-size:.8rem;font-style:italic;color:var(--ink-soft)}',
     '.tolc-bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:6px}',
     '.tolc-me{align-self:flex-end;background:var(--c-soft);border:1px solid var(--c);border-bottom-right-radius:6px}',
     '.tolc-card{margin:.5rem 0 .6rem;padding:.6rem .75rem;border-radius:12px;background:var(--paper);border-left:3px solid var(--c)}',
@@ -3301,11 +3324,23 @@
   var send_svg = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12l15-7-5 15-2.5-6.2L4 12z" fill="currentColor"/></svg>';
 
   // where the chat was opened: this page, or the page named by /ask.html?about=…; and whether to say hello in Spanish
+  // ?for=co-parent (the co-parent invite on /someone-sent-you-this.html) and the like name the situation the page is open for
+  var FOR_PAGE = { 'co-parent': '/co-parenting.html', 'co-parents': '/co-parenting.html', coparent: '/co-parenting.html', coparents: '/co-parenting.html',
+    foster: '/foster-and-kinship.html', kinship: '/foster-and-kinship.html', friend: '/friends.html', friends: '/friends.html' };
   function pageCtxNow() {
-    var about = '';
+    var about = '', fr = '';
     try { about = (location.search.match(/[?&]about=([^&]*)/) || [])[1] || ''; about = about ? decodeURIComponent(about.replace(/\+/g, ' ')).slice(0, 120) : ''; } catch (e) { about = ''; }
-    return { path: (location.pathname || ''), about: about };
+    try { fr = ((location.search.match(/[?&]for=([a-z-]+)/) || [])[1] || '').toLowerCase(); } catch (e) { fr = ''; }
+    return { path: (location.pathname || ''), about: about, forPage: FOR_PAGE[fr] || '' };
   }
+  // the topic we were on, kept for this tab only (sessionStorage, like the conversation itself), so opening Professor
+  // Puddles on the next page carries on where we were ("how do i get a say" after a co-parent answer on another page)
+  var TOPIC_KEY = 'tol-chat-topic';
+  function saveTopic(state) {
+    if (!state || !state.keepTopic) return;
+    try { var T = state.topic; sessionStorage.setItem(TOPIC_KEY, T ? JSON.stringify({ id: T.id, root: T.root, side: T.side == null ? null : T.side }) : ''); } catch (e) { /* fine */ }
+  }
+  function loadTopic() { try { var o = JSON.parse(sessionStorage.getItem(TOPIC_KEY) || 'null'); return o && typeof o.id === 'string' ? o : null; } catch (e) { return null; } }
   function spanishHere() {
     var P = pageCtxNow();
     if (/\/en-espanol(\.html)?$/.test(P.path) || /espa[nñ]ol/i.test(P.about)) return true;
@@ -3316,8 +3351,8 @@
   function Chat(mode, host) {
     var me = this;
     this.mode = mode;
-    this.state = { last: null, pageCtx: pageCtxNow() };
     this.msgs = load() || [];
+    this.state = { last: null, pageCtx: pageCtxNow(), keepTopic: true, restore: this.msgs.length ? loadTopic() : null };
     this.busy = false;
     injectCSS();
     var root = this.root = document.createElement('div');
@@ -3402,6 +3437,12 @@
 
   Chat.prototype.render = function (m, isNew) {
     var el = document.createElement('div');
+    if (m.r === 'c') {
+      el.className = 'tolc-ctx' + (isNew ? ' is-new' : '');
+      var pc = document.createElement('p'); pc.textContent = 'Talking about: ' + (m.l || m.x); el.appendChild(pc);
+      this.log.appendChild(el);
+      return el;
+    }
     el.className = 'tolc-msg ' + (m.r === 'u' ? 'tolc-me' : 'tolc-bot') + (isNew ? ' is-new' : '');
     if (m.r === 'u') {
       var p = document.createElement('p'); p.textContent = m.x; el.appendChild(p);
@@ -3528,17 +3569,20 @@
       me.busy = false;
       me.root.querySelector('.tolc-send').disabled = false;
       if (me.pending) { var nx = me.pending; me.pending = null; me.ask(nx); }
-      else if (me.queue && me.queue.length) me.ask(me.queue.shift());
+      else if (me.queue && me.queue.length) { var nq = me.queue.shift(); if (nq && nq.t) me.ask(nq.t, null, nq.c); else me.ask(nq); }
     }, delay == null ? (REDUCED ? 250 : 650) : delay);
   };
 
-  Chat.prototype.ask = function (text, doc) {
+  Chat.prototype.ask = function (text, doc, ctx) {
     var me = this;
     this.asked = true;
-    var m = { r: 'u', x: text };
+    // a topic the chat was opened with (/ask.html?about=…, "Ask him about this page") is shown as what we're talking
+    // about, not as a message the person typed
+    var m = ctx ? { r: 'c', x: text, l: ctx } : { r: 'u', x: text };
     this.msgs.push(m); save(this.msgs);
     this.setChips([]);
     this.scrollTo(this.render(m, true));
+    this.busy = true;  // until the answer is shown: a second question waits its turn
     loadKB(function (ok) {
       if (!ok) { me.say([{ k: 'p', x: 'Sorry, I couldn’t open the site’s pages just now. Please try again in a moment.' }], [], 300); return; }
       reply(me.state, text, doc, function (r) {
@@ -3550,13 +3594,20 @@
 
   Chat.prototype.greet = function (text, then) {
     var me = this, es = this.es;
+    // the hello shows at once, before the pages have loaded, so it is always the first thing in the chat, even when
+    // someone types straight away (and a phone's sheet never opens blank)
+    var m = { r: 'b', b: [{ k: 'p', x: text }], n: me.char.name };
+    me.msgs.push(m); save(me.msgs);
+    me.render(m, true);
+    var asked0 = me.msgs.length;
+    me.setChips(es ? ES_CHIPS : GREET_CHIPS);
     // opened from a page with its own questions (coming out, co-parenting…): those first, never "We keep arguing about chores"
     loadKB(function (ok) {
       var st = me.state, chips = es ? ES_CHIPS : GREET_CHIPS;
       if (ok && st.pageCtx && !st.pageDone) pageInit(st);
       if (!es && st.page && st.page.chips && st.page.chips.length) chips = st.page.chips.concat([{ label: 'Talk deep', q: 'Talk deep' }]);
       else if (!es && st.page && (st.page.u || st.page.about)) chips = [{ label: 'Tell me about this page', q: 'Tell me more about ' + (st.page.about || pageTitle(st.page.u) || 'this page') }, STARTERS[3], STARTERS[1], { label: 'Just chat', q: 'Let’s just chat' }];
-      me.say([{ k: 'p', x: text }], chips, REDUCED ? 150 : 450);
+      if (me.msgs.length === asked0 && !me.busy) { me.setChips(chips); me.lastChips = chips; }
       if (then) then();
     });
   };
@@ -3585,14 +3636,16 @@
       if (this.msgs.length) { this.setChips(STARTERS.slice(0, 3)); this.scrollTo(); }
     }
     var topic = typeof opts.topic === 'string' ? opts.topic.trim().slice(0, 300) : '', me2 = this;
-    var askTopic = function () { if (!topic || (lastUser && lastUser.x === topic)) return; if (me2.busy) (me2.queue = me2.queue || []).push(topic); else me2.ask(topic); };
+    // a page's own topic (/ask.html?about=…, "Tell me more about <the page>") is context, not something the person typed
+    var about0 = pageCtxNow().about, ctxLabel = topic && ((about0 && topic === about0) ? topic : (/^Tell me more about (.{2,120})$/.exec(topic) || [])[1] || '');
+    var askTopic = function () { if (!topic || (lastUser && lastUser.x === topic)) return; if (me2.busy) (me2.queue = me2.queue || []).push(ctxLabel ? { t: topic, c: ctxLabel } : topic); else me2.ask(topic, null, ctxLabel || null); };
     // the hello first, then the page's topic (the hello waits for the page's own questions to be ready)
     if (!this.msgs.length || (changed && opts.greeting)) this.greet(this.char.greeting, askTopic); else askTopic();
     loadKB(function () {});
   };
 
   Chat.prototype.reset = function () {
-    this.msgs = []; save(this.msgs); this.state.last = null; this.state.lastReply = null; this.state.recent = [];
+    this.msgs = []; save(this.msgs); this.state.last = null; this.state.lastReply = null; this.state.recent = []; this.state.topic = null; saveTopic(this.state);
     this.log.textContent = ''; this.setChips([]);
     this.greet(this.char.greeting);
     this.input.focus();

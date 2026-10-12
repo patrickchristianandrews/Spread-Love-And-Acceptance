@@ -408,6 +408,7 @@
     if (!t.kids && typeof o.kids !== 'boolean') t.list = t.list.filter(function (id) { return KID_STARTERS.indexOf(id) < 0; });
     if (o.peek && typeof o.peek === 'object') Object.keys(o.peek).forEach(function (k) { if (/^\d>\d$/.test(k)) t.peek[k] = 1; });
     if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply, f: typeof o.from.f === 'number' ? o.from.f : -1, t: typeof o.from.t === 'number' ? o.from.t : -1, replaced: !!o.from.replaced };
+    if (t.from && o.from && Array.isArray(o.from.conf)) t.from.conf = o.from.conf.filter(function (c) { return c && (/^h\d$/.test(c.k) || c.k === 's'); }).slice(0, 8).map(function (c) { return { k: c.k, a: c.k === 's' ? String(c.a) : +c.a || 0, b: c.k === 's' ? String(c.b) : +c.b || 0 }; });
     return t;
   }
   function load() { try { return tidy(JSON.parse(localStorage.getItem(KEY) || 'null')); } catch (e) { return null; } }
@@ -1175,7 +1176,7 @@
     var me = d.t >= 0 ? d.t : -1;
     if (me < 0) { for (var i = 0; i < d.people.length; i++) if (i !== d.f && !(d.ans[i] && Object.keys(d.ans[i]).length)) { me = i; break; } }
     if (me < 0) me = d.f === 0 ? 1 : 0;
-    var replaced = false;
+    var replaced = false, conf = [];
     if (localAny && same) {
       q.people = q.people.map(function (p, i) { return String(p || '').trim() ? p : d.people[i]; });
       d.list.forEach(function (id) { if (q.list.indexOf(id) < 0) q.list.push(id); });
@@ -1187,8 +1188,9 @@
       if (d.ill) q.ill = true;
       if (d.away) q.away = true;
       if (d.kids) q.kids = true;
-      q.hrs = q.hrs || {}; Object.keys(d.hrs).forEach(function (k) { if (!q.hrs[k]) q.hrs[k] = d.hrs[k]; });
-      if (!q.split && d.split) q.split = d.split;
+      // where the two devices disagree (paid hours, the split), say so and let them pick, never quietly keep one
+      q.hrs = q.hrs || {}; Object.keys(d.hrs).forEach(function (k) { if (!q.hrs[k]) q.hrs[k] = d.hrs[k]; else if (Math.abs(q.hrs[k] - d.hrs[k]) >= 0.5) conf.push({ k: 'h' + k, a: q.hrs[k], b: d.hrs[k] }); });
+      if (!q.split && d.split) q.split = d.split; else if (q.split && d.split && q.split !== d.split) conf.push({ k: 's', a: q.split, b: d.split });
       q.me = me;
     } else {
       if (localAny) { undoQ = JSON.parse(JSON.stringify(q)); replaced = true; }
@@ -1201,6 +1203,7 @@
     q.from = { by: by, reply: hasAny(me) && d.f >= 0 && d.f !== me, t: d.t, f: d.f };
     if (q.from.reply && d.f >= 0) q.peek[me + '>' + d.f] = 1;
     q.from.replaced = replaced;
+    if (conf.length) q.from.conf = conf;
     save(); renderAll();
     var fr = $('lq-from');
     if (q.from.reply) { var c = $('lq-cmp'); goTo($('lq-res')); if (c) { c.setAttribute('tabindex', '-1'); c.focus({ preventScroll: true }); } }
@@ -1213,9 +1216,10 @@
     var by = f.by || (f.f >= 0 && typed(f.f)) || L('Someone', 'Alguien');
     // once you've answered and the comparison shows, the "stays hidden until you've done yours" note has done its job
     var answered = !f.reply && f.f >= 0 && f.f !== q.me && hasAny(q.me) && shown(f.f);
-    if (answered && !f.replaced) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
+    var conf = (f.conf || []).filter(function (c) { return c.k === 's' ? q.people.length === 2 : +c.k.slice(1) < q.people.length; });
+    if (answered && !f.replaced && !conf.length) { box.hidden = true; box.innerHTML = ''; box.removeAttribute('data-h'); return; }
     var html = answered ? '' : '<p>' + esc(f.reply
-      ? L(by + ' added their view. Below: where you agree, and where you see it differently.', by + ' añadió su vista. Abajo: en qué coinciden y en qué lo ven distinto.')
+      ? L(by + '’s view is in. Below: where you agree, and where you see it differently.', 'Llegó la vista de ' + by + '. Abajo: en qué coinciden y en qué lo ven distinto.')
       : L(by + ' sent you their quick look. Tap who mostly does each job, as you see it. ' + (f.by ? f.by + '’s' : 'Their') + ' answers stay hidden until you’ve done yours, so you’re not swayed.',
         by + ' te envió su vistazo. Toca quién hace casi siempre cada tarea, como tú lo ves. Sus respuestas quedan ocultas hasta que hagas las tuyas, para que no te influyan.')) + '</p>';
     if (!answered && (q.people.length > 2 || f.t < 0)) {
@@ -1223,12 +1227,34 @@
         return '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" aria-pressed="' + (q.me === i) + '" data-lq-iam="' + i + '">' + esc(typed(i) || personN(i)) + '</button>';
       }).join('') + '</div>';
     }
+    if (conf.length) {
+      var dev = f.by ? L(f.by + '’s device', 'el aparato de ' + f.by) : L('the other device', 'el otro aparato');
+      html += '<div class="lq-conf"><p><strong>' + esc(L('Your devices say different things here. Which is right?', 'Sus aparatos dicen cosas distintas aquí. ¿Cuál está bien?')) + '</strong></p><ul>' + conf.map(function (c, x) {
+        var what = c.k === 's' ? L('The fair split', 'El reparto justo') : L(nm(+c.k.slice(1)) + '’s paid work + travel', 'Trabajo pagado y traslados de ' + nm(+c.k.slice(1)));
+        var w = function (v) { return c.k === 's' ? nm(0) + ' ' + v + ' · ' + nm(1) + ' ' + (100 - +v) : v + ' h'; };
+        return '<li>' + esc(what + ': ' + w(c.a) + L(' here, ', ' aquí, ') + w(c.b) + L(' on ', ' en ') + dev + '.') +
+          ' <button type="button" class="lq-btn-link" data-lq-conf="' + x + '" data-use="b">' + esc(L('Use ', 'Usar ') + w(c.b)) + '</button> · <button type="button" class="lq-btn-link" data-lq-conf="' + x + '" data-use="a">' + esc(L('Keep ', 'Dejar ') + w(c.a)) + '</button></li>';
+      }).join('') + '</ul></div>';
+    }
     if (f.replaced) html += '<p class="lq-mini">' + esc(L('The quick look that was on this device before was set aside.', 'El vistazo que había antes en este aparato quedó guardado aparte.')) + ' <button type="button" class="lq-btn-link" data-lq-undo>' + esc(L('Bring it back', 'Recuperarlo')) + '</button></p>';
     html += '<p class="lq-mini"><button type="button" class="lq-btn-link" data-lq-from-ok>' + esc(L('Okay, hide this', 'Listo, ocultar esto')) + '</button></p>';
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
     box.hidden = false;
   }
   document.addEventListener('click', function (e) {
+    var cf = e.target.closest && e.target.closest('[data-lq-conf]');
+    if (cf && q.from && q.from.conf) {
+      var c = q.from.conf[+cf.getAttribute('data-lq-conf')];
+      if (c) {
+        var use = cf.getAttribute('data-use') === 'b' ? c.b : c.a;
+        if (c.k === 's') q.split = String(use); else { q.hrs = q.hrs || {}; q.hrs[c.k.slice(1)] = +use; }
+        q.from.conf.splice(q.from.conf.indexOf(c), 1);
+        if (!q.from.conf.length) delete q.from.conf;
+        save(); renderExtra(); renderSend(); renderFrom();
+        status(L('Done. Both devices can match now: send it back if you changed anything.', 'Listo. Si cambiaste algo, envíalo de vuelta para que los dos aparatos coincidan.'));
+      }
+      return;
+    }
     var t = e.target.closest && e.target.closest('[data-lq-iam], [data-lq-undo], [data-lq-from-ok]'); if (!t) return;
     if (t.hasAttribute('data-lq-iam')) { setMe(+t.getAttribute('data-lq-iam'), true); return; }
     if (t.hasAttribute('data-lq-undo')) {
