@@ -1,0 +1,383 @@
+[
+ {
+  "id": "levant-2009-alexithymia",
+  "authors": "Levant, R. F., Hall, R. J., Williams, C. M., & Hasan, N. T.",
+  "year": 2009,
+  "title": "Gender differences in alexithymia",
+  "venue": "Psychology of Men & Masculinity, 10(3), 190–203",
+  "doi": "10.1037/a0015652",
+  "url": "https://doi.org/10.1037/a0015652",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 41 samples found that men scored slightly higher than women on alexithymia (difficulty identifying and describing feelings), but the difference was small.",
+  "strength": "moderate — a meta-analysis with a consistent but small effect; self-report measures",
+  "topics": [
+   "emotions",
+   "alexithymia",
+   "gender",
+   "men"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#not-brought-up"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ovid.com/journals/pmema/fulltext/10.1037/a0015652~gender-differences-in-alexithymia ; https://durham-repository.worktribe.com/output/1480517"
+ },
+ {
+  "id": "matsumoto-2008-culture-regulation",
+  "authors": "Matsumoto, D., Yoo, S. H., & Nakagawa, S.",
+  "year": 2008,
+  "title": "Culture, emotion regulation, and adjustment",
+  "venue": "Journal of Personality and Social Psychology, 94(6), 925–937",
+  "doi": "10.1037/0022-3514.94.6.925",
+  "url": "https://doi.org/10.1037/0022-3514.94.6.925",
+  "kind": "study",
+  "finding": "Across 23 countries, cultures that placed more value on social order and hierarchy tended to report more suppression of emotions; cultures valuing individual autonomy and egalitarianism reported less.",
+  "strength": "moderate — large cross-cultural survey; country-level correlations, self-report",
+  "topics": [
+   "emotions",
+   "culture",
+   "emotion-regulation"
+  ],
+  "mentioned_on": [
+   "/book/understanding-1-feelings-in-depth.html#not-brought-up"
+  ],
+  "verified": true,
+  "verified_by": "https://cris.haifa.ac.il/en/publications/culture-emotion-regulation-and-adjustment/ ; https://worlddatabaseofhappiness.eur.nl/publications/culture-emotion-regulation-and-adjustment-12629",
+  "note": "Some records list the 'Multinational Study of Cultural Display Rules' as a collective co-author."
+ },
+ {
+  "id": "ben-simon-walker-2018",
+  "authors": "Ben Simon, E., & Walker, M. P.",
+  "year": 2018,
+  "title": "Sleep loss causes social withdrawal and loneliness",
+  "venue": "Nature Communications",
+  "doi": "10.1038/s41467-018-05377-0",
+  "url": "https://doi.org/10.1038/s41467-018-05377-0",
+  "kind": "study",
+  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
+  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+  "topics": [
+   "sleep",
+   "stress",
+   "loneliness",
+   "connection"
+  ],
+  "mentioned_on": [
+   "/book/understanding-2-stress.html#sleep",
+   "/book/understanding-2-stress-in-depth.html#sleep"
+  ],
+  "verified": true,
+  "verified_by": "https://doaj.org/article/a67c34b95f3a473fbbe300fc81111391 ; https://news.berkeley.edu/2018/08/14/sleep-viral-loneliness"
+ },
+ {
+  "id": "phung-2021-bims",
+  "authors": "Phung, J., Penner, M., Pirlot, C., & Welch, C.",
+  "year": 2021,
+  "title": "What I wish you knew: Insights on burnout, inertia, meltdown, and shutdown from autistic youth",
+  "venue": "Frontiers in Psychology, 12, 741421",
+  "doi": "10.3389/fpsyg.2021.741421",
+  "url": "https://doi.org/10.3389/fpsyg.2021.741421",
+  "kind": "study",
+  "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
+  "strength": "early — small qualitative study; builds on earlier work with autistic adults",
+  "topics": [
+   "autism",
+   "meltdown",
+   "shutdown",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds.html#meltdowns",
+   "/book/understanding-9-minds-in-depth.html#meltdowns"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8595127/ ; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.741421/pdf"
+ },
+ {
+  "id": "grove-2018-special-interests",
+  "authors": "Grove, R., Hoekstra, R. A., Wierda, M., & Begeer, S.",
+  "year": 2018,
+  "title": "Special interests and subjective wellbeing in autistic adults",
+  "venue": "Autism Research, 11(5), 766–775",
+  "doi": null,
+  "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
+  "kind": "study",
+  "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
+  "strength": "moderate — large survey, cross-sectional and self-report",
+  "topics": [
+   "autism",
+   "special-interests",
+   "wellbeing",
+   "monotropism"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds.html#interests",
+   "/book/understanding-9-minds-in-depth.html#interests",
+   "/book/understanding-14-personality-in-depth.html#gifts-costs"
+  ],
+  "verified": true,
+  "verified_by": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/ ; https://opus.lib.uts.edu.au/handle/10453/128415",
+  "note": "DOI (likely 10.1002/aur.1931) given by one secondary source only, so not used."
+ },
+ {
+  "id": "leedham-2020-late-diagnosis",
+  "authors": "Leedham, A., Thompson, A. R., Smith, R., & Freeth, M.",
+  "year": 2020,
+  "title": "‘I was exhausted trying to figure it out’: The experiences of females receiving an autism diagnosis in middle to late adulthood",
+  "venue": "Autism, 24(1), 135–146",
+  "doi": "10.1177/1362361319853442",
+  "url": "https://doi.org/10.1177/1362361319853442",
+  "kind": "study",
+  "finding": "Interviews with eleven autistic women diagnosed at 40 or older explored how they made sense of a lifetime of feeling different and how the diagnosis changed their understanding of themselves.",
+  "strength": "early — small qualitative (IPA) study",
+  "topics": [
+   "autism",
+   "diagnosis",
+   "adulthood",
+   "women"
+  ],
+  "mentioned_on": [
+   "/book/understanding-9-minds.html#late-diagnosis",
+   "/book/understanding-9-minds-in-depth.html#late-diagnosis",
+   "/book/understanding-14-personality-in-depth.html#change"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/1362361319853442 ; https://eprints.whiterose.ac.uk/146721"
+ },
+ {
+  "id": "mischkowski-kross-bushman-2012",
+  "authors": "Mischkowski, D., Kross, E., & Bushman, B. J.",
+  "year": 2012,
+  "title": "Flies on the wall are less aggressive: Self-distancing “in the heat of the moment” reduces aggressive thoughts, angry feelings and aggressive behavior",
+  "venue": "Journal of Experimental Social Psychology",
+  "doi": "10.1016/j.jesp.2012.03.012",
+  "url": "https://doi.org/10.1016/j.jesp.2012.03.012",
+  "kind": "study",
+  "finding": "After being provoked, people who reflected on the moment from a distanced, “fly on the wall” view felt less angry and behaved less aggressively than people who relived it from their own point of view.",
+  "strength": "moderate — lab experiments with students",
+  "topics": [
+   "anger",
+   "emotion-regulation",
+   "self-distancing"
+  ],
+  "mentioned_on": [
+   "/book/understanding-13-anger.html",
+   "/book/understanding-13-anger-in-depth.html#step-back"
+  ],
+  "verified": true,
+  "verified_by": "https://bps.org.uk/research-digest/beat-anger-imagining-youre-fly-wall ; https://news.osu.edu/self-distancing-can-help-people-calm-aggressive-reactions-study-finds---ohio-state-research-and-innovation-communications/"
+ },
+ {
+  "id": "carver-harmon-jones-2009",
+  "authors": "Carver, C. S., & Harmon-Jones, E.",
+  "year": 2009,
+  "title": "Anger is an approach-related affect: Evidence and implications",
+  "venue": "Psychological Bulletin, 135, 183–204",
+  "doi": "10.1037/a0013965",
+  "url": "https://doi.org/10.1037/a0013965",
+  "kind": "review",
+  "finding": "A review of evidence that anger is usually an “approach” emotion: like eagerness, it moves people toward a goal or obstacle rather than away from it.",
+  "strength": "moderate — influential review; the approach view is debated (see replies in the same journal issue)",
+  "topics": [
+   "anger",
+   "emotions",
+   "motivation"
+  ],
+  "mentioned_on": [
+   "/book/understanding-13-anger-in-depth.html#signal"
+  ],
+  "verified": true,
+  "verified_by": "https://scholarship.miami.edu/esploro/outputs/journalArticle/Anger-and-Approach-Reply-to-Watson/991031613335302976 ; https://ouci.dntb.gov.ua/works/406E8N39"
+ },
+ {
+  "id": "saini-2009-anger-treatment",
+  "authors": "Saini, M.",
+  "year": 2009,
+  "title": "A meta-analysis of the psychological treatment of anger: Developing guidelines for evidence-based practice",
+  "venue": "Journal of the American Academy of Psychiatry and the Law, 37(4), 473–488",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/20018996/",
+  "kind": "meta-analysis",
+  "finding": "Across 96 studies and 139 treatment effects, psychological treatments for anger (such as CBT, skills training and relaxation) were generally effective, with considerable variation between treatments and studies.",
+  "strength": "moderate — large meta-analysis; varied study quality and settings",
+  "topics": [
+   "anger",
+   "therapy",
+   "anger-management"
+  ],
+  "mentioned_on": [
+   "/book/understanding-13-anger-in-depth.html#harm",
+   "/book/understanding-13-anger-in-depth.html#faq"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/20018996/ ; https://jaapl.org/node/7480"
+ },
+ {
+  "id": "laurenceau-1998-intimacy",
+  "authors": "Laurenceau, J.-P., Barrett, L. F., & Pietromonaco, P. R.",
+  "year": 1998,
+  "title": "Intimacy as an interpersonal process: The importance of self-disclosure, partner disclosure, and perceived partner responsiveness in interpersonal exchanges",
+  "venue": "Journal of Personality and Social Psychology, 74(5), 1238–1251",
+  "doi": "10.1037/0022-3514.74.5.1238",
+  "url": "https://doi.org/10.1037/0022-3514.74.5.1238",
+  "kind": "study",
+  "finding": "Diary studies of everyday social interactions supported Reis and Shaver’s model: disclosing feelings, and feeling that the other person responded with understanding, both contributed to how intimate an interaction felt.",
+  "strength": "moderate — two diary studies with students",
+  "topics": [
+   "intimacy",
+   "responsiveness",
+   "self-disclosure",
+   "love"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#known"
+  ],
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/E54ED8572DB4F3BFA38EF4D1BBE704 ; https://nmr.mgh.harvard.edu/publications/journal_articles/2791"
+ },
+ {
+  "id": "aron-1997-closeness",
+  "authors": "Aron, A., Melinat, E., Aron, E. N., Vallone, R. D., & Bator, R. J.",
+  "year": 1997,
+  "title": "The experimental generation of interpersonal closeness: A procedure and some preliminary findings",
+  "venue": "Personality and Social Psychology Bulletin, 23(4), 363–377",
+  "doi": null,
+  "url": "https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness",
+  "kind": "study",
+  "finding": "Pairs of strangers who spent about 45 minutes on gradually deepening self-disclosure tasks (the “36 questions”) felt closer afterwards than pairs given small-talk tasks; matching on attitudes or expecting to like each other made no significant difference.",
+  "strength": "moderate — lab studies with students; creates temporary closeness, not lasting relationships",
+  "topics": [
+   "closeness",
+   "self-disclosure",
+   "love",
+   "small-talk"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#steps",
+   "/book/understanding-15-love-in-depth.html#faq",
+   "/bonding.html#how-it-grows"
+  ],
+  "verified": true,
+  "verified_by": "https://stafforini.com/works/aron-1997-experimental-generation-interpersonal/ ; https://ggia.berkeley.edu/practice/practice_as_pdf/36_questions_for_increasing_closeness",
+  "note": "Link is the Greater Good in Action (UC Berkeley) page for the practice, which cites the study; the DOI (probably 10.1177/0146167297234003) was not shown directly in a search result. Must NOT be confused with aron-aron-1997 in the research index: the site links the in-text name directly."
+ },
+ {
+  "id": "acevedo-aron-2009",
+  "authors": "Acevedo, B. P., & Aron, A.",
+  "year": 2009,
+  "title": "Does a long-term relationship kill romantic love?",
+  "venue": "Review of General Psychology, 13(1), 59–65",
+  "doi": "10.1037/a0014226",
+  "url": "https://doi.org/10.1037/a0014226",
+  "kind": "review",
+  "finding": "Reviewing studies of short- and long-term relationships, the authors concluded that romantic love without obsession can last in long-term relationships and is linked with greater satisfaction and well-being.",
+  "strength": "moderate — review and meta-analysis of mostly self-report studies",
+  "topics": [
+   "love",
+   "long-term-relationships",
+   "romance"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#over-time",
+   "/book/understanding-15-love-in-depth.html#faq"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1037/a0014226 ; https://www.sciencedaily.com/releases/2009/03/090317153039.htm"
+ },
+ {
+  "id": "carstensen-1999-ses",
+  "authors": "Carstensen, L. L., Isaacowitz, D. M., & Charles, S. T.",
+  "year": 1999,
+  "title": "Taking time seriously: A theory of socioemotional selectivity",
+  "venue": "American Psychologist, 54(3), 165–181",
+  "doi": "10.1037/0003-066X.54.3.165",
+  "url": "https://doi.org/10.1037/0003-066X.54.3.165",
+  "kind": "theory",
+  "finding": "Proposes that perceived time left shapes social goals: when time feels open-ended people seek new information and contacts; when it feels limited they focus on fewer, emotionally meaningful relationships.",
+  "strength": "strong — widely supported theory, though causal tests are harder",
+  "topics": [
+   "ageing",
+   "relationships",
+   "love",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#ages"
+  ],
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/Laura_L._Carstensen (citation with DOI and PMID 10199217) ; https://profiles.wustl.edu/en/publications/taking-time-seriously-a-theory-of-socioemotional-selectivity/"
+ },
+ {
+  "id": "kardas-kumar-epley-2022",
+  "authors": "Kardas, M., Kumar, A., & Epley, N.",
+  "year": 2022,
+  "title": "Overly shallow?: Miscalibrated expectations create a barrier to deeper conversation",
+  "venue": "Journal of Personality and Social Psychology, 122(3), 367–398",
+  "doi": null,
+  "url": null,
+  "kind": "study",
+  "finding": "People expected deep conversations with strangers to be more awkward and less enjoyable than they turned out to be; deeper talks created more connection and happiness than predicted.",
+  "strength": "moderate — a series of experiments",
+  "topics": [
+   "small-talk",
+   "conversation",
+   "connection"
+  ],
+  "mentioned_on": [
+   "/book/understanding-4-communication-in-depth.html#small-talk"
+  ],
+  "verified": false,
+  "verified_by": "https://www.lib.uchicago.edu/research/help/bibliographies/busfac/epley/ ; https://www.chicagobooth.edu/faculty/directory/e/nicholas-epley",
+  "note": "Authors, title, year, journal, volume and pages confirmed; no DOI or publisher page appeared in search results, so no link. The site names it in text without a link."
+ },
+ {
+  "id": "malinowski-1923-phatic",
+  "authors": "Malinowski, B.",
+  "year": 1923,
+  "title": "The problem of meaning in primitive languages",
+  "venue": "Supplement I in C. K. Ogden & I. A. Richards, The Meaning of Meaning. Kegan Paul / Harcourt, Brace",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": "Coined “phatic communion”: everyday talk whose main purpose is social bonding rather than passing on information.",
+  "strength": "foundational idea in linguistics and anthropology, not an empirical study",
+  "topics": [
+   "small-talk",
+   "communication"
+  ],
+  "mentioned_on": [
+   "/book/understanding-4-communication.html#small-talk",
+   "/book/understanding-4-communication-in-depth.html#small-talk"
+  ],
+  "verified": false,
+  "verified_by": "https://www.benjamins.com/catalog/hl.21.1-2.07gor ; https://user.keio.ac.jp/~rhotta/hellog/2014-03-03.html",
+  "note": "The essay and the coinage are confirmed, but page numbers differ by edition and no stable publisher link was found. Named in text without a link."
+ },
+ {
+  "id": "reis-clark-holmes-2004",
+  "authors": "Reis, H. T., Clark, M. S., & Holmes, J. G.",
+  "year": 2004,
+  "title": "Perceived partner responsiveness as an organizing construct in the study of intimacy and closeness",
+  "venue": "In D. J. Mashek & A. Aron (Eds.), Handbook of Closeness and Intimacy (pp. 201–225). Lawrence Erlbaum",
+  "doi": null,
+  "url": null,
+  "kind": "theory",
+  "finding": "Argues that feeling understood, valued and cared for by a partner (perceived responsiveness) is central to intimacy and closeness.",
+  "strength": "influential theoretical chapter",
+  "topics": [
+   "responsiveness",
+   "intimacy",
+   "love"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love-in-depth.html#understood"
+  ],
+  "verified": false,
+  "verified_by": "https://metapsychology.net/?p=2560 ; https://clarkrelationshiplab.yale.edu/sites/default/files/files/Close%20relationships.pdf",
+  "note": "Chapter and pages confirmed via a review and later citations; no stable link to the chapter itself. Named in text without a link (wrapped in .no-research)."
+ }
+]

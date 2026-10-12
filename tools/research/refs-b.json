@@ -70,7 +70,7 @@
   "mentioned_on": [
    "/library/relationships.html#bids-for-connection",
    "/turning-toward-in-depth.html#sources",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love-in-depth.html#doing"
   ],
   "verified": true,
   "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1545-5300.2004.00024.x ; https://pubmed.ncbi.nlm.nih.gov/15386956/"
@@ -580,7 +580,8 @@
    "/book/understanding-5-belonging-in-depth.html#patterns",
    "/library/relationships.html#adult-attachment",
    "/book/understanding-5-belonging.html",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#maps"
   ],
   "verified": true,
   "verified_by": "https://psycnet.apa.org/doiLanding?doi=10.1037%2F0022-3514.52.3.511"
@@ -644,7 +645,7 @@
    "/book/understanding-5-belonging-in-depth.html#patterns",
    "/library/relationships.html#adult-attachment",
    "/book/understanding-5-belonging.html",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love-in-depth.html#maps"
   ],
   "verified": true,
   "verified_by": "DOI shown in citing references (e.g. https://psycnet.apa.org/manuscript/2017-33746-001.pdf)"
@@ -889,7 +890,7 @@
   ],
   "mentioned_on": [
    "/library/connection.html#find-remind-bind",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love-in-depth.html#understood"
   ],
   "verified": true,
   "verified_by": "https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1475-6811.2010.01273.x"
@@ -981,7 +982,9 @@
    "/love-languages-in-depth.html#similar",
    "/turning-toward-in-depth.html#good-news",
    "/turning-toward-in-depth.html#sources",
-   "/tools/chat/deep.json"
+   "/tools/chat/deep.json",
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#understood"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15301629/"
@@ -1075,7 +1078,8 @@
    "/library/relationships.html#pillars",
    "/library/relationships.html#self-expansion",
    "/tools/chat/deep.json",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love.html",
+   "/book/understanding-15-love-in-depth.html#over-time"
   ],
   "verified": true,
   "verified_by": "DOI 10.1037/0022-3514.78.2.273 shown in citing reference lists; cited in https://pubmed.ncbi.nlm.nih.gov/42193579/"
@@ -1096,7 +1100,7 @@
   ],
   "mentioned_on": [
    "/library/relationships.html#self-expansion",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love-in-depth.html#over-time"
   ],
   "verified": true,
   "verified_by": "https://www.lib.sophia.ac.jp/opac/opac_link/bibid/1000353200 ; https://libcat.library.tamu.edu/Record/in00000408876"
@@ -1845,7 +1849,9 @@
   "mentioned_on": [
    "/book/understanding-5-belonging-in-depth.html#building",
    "/library/connection.html#weak-ties",
-   "/book/understanding-5-belonging.html"
+   "/book/understanding-5-belonging.html",
+   "/book/understanding-4-communication.html#small-talk",
+   "/book/understanding-4-communication-in-depth.html#small-talk"
   ],
   "verified": true,
   "verified_by": "DOI shown in citing reference (https://journals.sagepub.com/doi/full/10.1177/09637214211002538)"
@@ -1867,7 +1873,8 @@
   ],
   "mentioned_on": [
    "/book/understanding-5-belonging-in-depth.html#building",
-   "/library/connection.html#weak-ties"
+   "/library/connection.html#weak-ties",
+   "/book/understanding-4-communication-in-depth.html#small-talk"
   ],
   "verified": true,
   "verified_by": "DOI shown in citing references in search result (e.g. https://pubmed.ncbi.nlm.nih.gov/34618536/)"
@@ -1999,7 +2006,7 @@
    "/book/understanding-5-belonging-in-depth.html",
    "/book/understanding-5-belonging-in-depth.html#belonging",
    "/book/understanding-5-belonging.html",
-   "/book/understanding-15-love.html"
+   "/book/understanding-15-love-in-depth.html#forms"
   ],
   "verified": true,
   "verified_by": "DOI shown in search result references (e.g. https://pubmed.ncbi.nlm.nih.gov/27134325/)"
@@ -2064,7 +2071,8 @@
   "mentioned_on": [
    "/book/chapter-1-in-depth.html#going-back",
    "/book/understanding-4-communication-in-depth.html#hard-things",
-   "/library/communication.html#i-statements"
+   "/library/communication.html#i-statements",
+   "/book/understanding-13-anger-in-depth.html#say-it"
   ],
   "verified": true,
   "verified_by": "https://en.wikipedia.org/wiki/Parent_Effectiveness_Training ; https://en.wikipedia.org/wiki/I-message ; https://www.kirkusreviews.com/book-reviews/thomas-gordon/pet-in-action/"
@@ -2091,7 +2099,8 @@
    "/communication.html#research",
    "/library.html#pillar-v",
    "/library/communication.html#pillars",
-   "/library/communication.html#nonviolent-communication"
+   "/library/communication.html#nonviolent-communication",
+   "/book/understanding-13-anger-in-depth.html#say-it"
   ],
   "verified": true,
   "verified_by": "Bookseller and library records: 1999 PuddleDancer first edition titled 'A Language of Compassion' (https://www.abebooks.com/first-edition/Nonviolent-Communication-Language-Compassion-Marshall-Rosenberg/31730622023/bd); later editions 'A Language of Life' (2003 2nd ed.; 3rd ed. https://www.harvard.com/book/9781892005281)"
@@ -2181,7 +2190,7 @@
   ],
   "mentioned_on": [
    "/book/understanding-11-healing-in-depth.html#telling",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-13-anger-in-depth.html#step-back"
   ],
   "verified": true,
   "verified_by": "DOI 10.1037/0022-3514.59.5.994 shown in reference lists in search results (e.g. https://psycnet.apa.org/fulltext/1994-98807-000-BKM.pdf)"

@@ -3,6 +3,7 @@
 
    const { makeChat } = require('./chat-sandbox');
    const chat = makeChat();                    // a fresh chat, nothing loaded yet
+   makeChat({ path: '/co-parenting.html' })    // opened from a page (or { about: 'Separated co-parents' }, as /ask.html?about=…)
    chat.ask('what is WP-02?').then(r => …);    // r = { blocks, chips }, same as the widget gets
    chat.loaded()                               // which script files have been fetched so far
 */
@@ -13,7 +14,7 @@ const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-function makeChat() {
+function makeChat(page) {
   const loaded = [];
   const store = {};
   const noop = function () {};
@@ -56,7 +57,7 @@ function makeChat() {
   });
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'assets/js/site-chat.js'), 'utf8'), ctx, { filename: 'site-chat.js' });
   const api = window.TOLChat;
-  const session = api._session();
+  const session = api._session(page ? { path: page.path || '', about: page.about || '' } : null);
   return {
     api,
     loaded: () => loaded.slice(),

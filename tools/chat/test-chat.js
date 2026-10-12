@@ -13,7 +13,8 @@
      text   RegExp the reply text must match;  not: RegExp it must not match
      script true: the reply includes a ready-to-use sentence;  steps: true: a list of steps
      bgLoaded false: the background notes must still be unloaded after this test (fresh chat)
-     chip / nochip: RegExp some chip label must (not) match;  info: true or a layout name: the reply holds a drawable infographic } */
+     chip / nochip: RegExp some chip label must (not) match;  info: true or a layout name: the reply holds a drawable infographic
+     page '/co-parenting.html' | about 'Separated co-parents': the chat was opened from that page (or /ask.html?about=…) } */
 'use strict';
 const { makeChat, replyText, replyLinks } = require('./chat-sandbox');
 
@@ -1356,7 +1357,7 @@ if (PERS) {
   const tests = only ? T.filter(x => x.g.includes(only)) : T;
   let pass = 0; const fails = [], groups = {};
   for (const x of tests) {
-    const chat = makeChat();
+    const chat = makeChat(x.page || x.about ? { path: x.page, about: x.about } : null);
     const qs = x.convo || [x.q];
     let r;
     for (const q of qs) r = await chat.ask(q);

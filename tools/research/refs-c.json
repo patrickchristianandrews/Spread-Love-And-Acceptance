@@ -39,7 +39,7 @@
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#body",
    "/book/understanding-1-feelings.html",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-13-anger-in-depth.html#body"
   ],
   "verified": true,
   "verified_by": "https://zenodo.org/record/1431811 ; https://psychclassics.yorku.ca/James/emotion.htm"
@@ -201,7 +201,8 @@
    "/book/understanding-11-healing-in-depth.html#without-them",
    "/book/understanding-8-loss-in-depth.html#support",
    "/library/emotions.html#expressive-writing",
-   "/book/understanding-11-healing.html"
+   "/book/understanding-11-healing.html",
+   "/book/understanding-1-feelings-in-depth.html#not-brought-up"
   ],
   "verified": true,
   "verified_by": "https://pubpeer.com/publications/0003309D2A9A1CBBA6AF364BBCC9B2 (PMID 3745650)"
@@ -358,7 +359,8 @@
   "mentioned_on": [
    "/book/understanding-1-feelings-in-depth.html#urges",
    "/library/emotions.html#reappraisal-suppression",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-13-anger-in-depth.html#venting",
+   "/book/understanding-13-anger-in-depth.html#step-back"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12916575/"
@@ -404,7 +406,8 @@
    "/book/understanding-1-feelings-in-depth.html#urges",
    "/library/emotions.html#anger",
    "/book/understanding-1-feelings.html",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-13-anger.html",
+   "/book/understanding-13-anger-in-depth.html#venting"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/0146167202289002 ; https://public.websites.umich.edu/~bbushman/PSPB02.pdf"
@@ -427,7 +430,8 @@
   ],
   "mentioned_on": [
    "/library/emotions.html#anger",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-13-anger.html",
+   "/book/understanding-13-anger-in-depth.html#hot-minutes"
   ],
   "verified": true,
   "verified_by": "https://news.osu.edu/breathe-dont-vent-turning-down-the-heat-is-key-to-managing-anger/ ; https://www.psypost.org/effective-anger-reduction-techniques-revealed-in-comprehensive-review-of-154-studies"
@@ -491,7 +495,8 @@
    "autism"
   ],
   "mentioned_on": [
-   "/library/emotions.html#alexithymia"
+   "/library/emotions.html#alexithymia",
+   "/book/understanding-13-anger-in-depth.html#underneath"
   ],
   "verified": true,
   "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/"
@@ -1054,7 +1059,9 @@
    "/book/chapter-1-in-depth.html#state",
    "/book/understanding-2-stress-in-depth.html#load",
    "/library/stress.html#sleep-and-mood",
-   "/book/understanding-2-stress.html"
+   "/book/understanding-2-stress.html",
+   "/book/understanding-2-stress.html#sleep",
+   "/book/understanding-2-stress-in-depth.html#sleep"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17956744 ; https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml"
@@ -1077,7 +1084,9 @@
   ],
   "mentioned_on": [
    "/library/stress.html#sleep-and-mood",
-   "/book/understanding-13-anger.html"
+   "/book/understanding-2-stress.html#sleep",
+   "/book/understanding-2-stress-in-depth.html#sleep",
+   "/book/understanding-13-anger-in-depth.html#underneath"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/1948550613488952 ; https://news.fit.edu/?p=36479"
@@ -2649,7 +2658,8 @@
    "/tools/chat/deep.json",
    "/wired-differently-in-depth.html#double-empathy",
    "/book/understanding-4-communication.html",
-   "/book/understanding-9-minds.html"
+   "/book/understanding-9-minds.html",
+   "/book/understanding-13-anger-in-depth.html#step-back"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656 ; https://nottingham-repository.worktribe.com/output/5141376 ; https://pure.qub.ac.uk/en/publications/autistic-peer-to-peer-information-transfer-is-highly-effective/"
@@ -2703,7 +2713,8 @@
    "/library/wiring.html#masking",
    "/tools/chat/deep.json",
    "/wired-differently-in-depth.html#autistic",
-   "/book/understanding-9-minds.html"
+   "/book/understanding-9-minds.html",
+   "/book/understanding-14-personality-in-depth.html#situations"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5509825/ ; https://discovery.ucl.ac.uk/id/eprint/10056287/"
@@ -2753,7 +2764,9 @@
    "/book/understanding-6-change-in-depth.html#slips",
    "/book/understanding-9-minds-in-depth.html#masking",
    "/tools/chat/deep.json",
-   "/book/understanding-9-minds.html"
+   "/book/understanding-9-minds.html",
+   "/book/understanding-9-minds.html#burnout",
+   "/book/understanding-9-minds-in-depth.html#burnout"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/32851204/ ; https://pdxscholar.library.pdx.edu/socwork_fac/378"
@@ -2790,7 +2803,9 @@
    "/library/wiring.html#pillars",
    "/signal-translator.html#lookfor",
    "/tools/chat/deep.json",
-   "/wired-differently-in-depth.html#autistic"
+   "/wired-differently-in-depth.html#autistic",
+   "/book/understanding-9-minds.html#interests",
+   "/book/understanding-9-minds-in-depth.html#interests"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15857859/ ; https://monotropism.org/murray-lesser-lawson/"
@@ -3040,7 +3055,10 @@
    "stimming"
   ],
   "mentioned_on": [
-   "/library/wiring.html#stimming"
+   "/library/wiring.html#stimming",
+   "/book/understanding-9-minds.html#stimming",
+   "/book/understanding-9-minds-in-depth.html#stimming",
+   "/book/understanding-13-anger-in-depth.html#venting"
   ],
   "verified": true,
   "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6728747 ; https://discovery-pp.ucl.ac.uk/id/eprint/10066002"

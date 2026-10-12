@@ -917,7 +917,7 @@
   }
   function cardReply(state, c, aspect) {
     var b = [], chips = [];
-    if (c.kind === 'intent') aspect = 'about';
+    if (c.kind === 'intent') { aspect = 'about'; c = sideOf(c, state.curF); }
     if (aspect === 'math' && !c.math) aspect = c.results ? 'results' : 'about';
     if (aspect === 'results' && !c.results) aspect = 'about';
     if (aspect === 'how' && !(c.how && c.how.length)) aspect = 'about';
@@ -928,7 +928,8 @@
       // the same answer twice in a row reads like a machine: the second time, just the words to use and where to read more
       if (state.easy && c.plain && c.plain.length) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name }; return { blocks: easyBlocks(c), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'card', id: c.id, noBrief: 1 }; }
       var again = c.kind === 'intent' && state.last && state.last.card === c.id && alike(state.prevF, state.curF) >= 0.5;
-      var same = !again && c.kind === 'intent' && state.last && state.last.card === c.id && c.how && c.how.length > 1;
+      var clearQ = /^(is|are|does|do|can|could|should|what|whats|why|how|when|where|which|who|will|would)\b/.test(state.curF || '') && (state.curF || '').split(' ').length >= 4;
+      var same = !again && !clearQ && c.kind === 'intent' && state.last && state.last.card === c.id && c.how && c.how.length > 1;
       if (again) b.push({ k: 'p', x: 'That’s the same thing we just looked at, so here’s the short version. The page below has the rest.' });
       else if (same) {
         // the same topic card for a follow-up ("he forgets everything I tell him"): the steps that fit it, not the whole answer again
@@ -938,7 +939,7 @@
         b.push({ k: 'p', x: fit.length ? 'Staying with that, this part fits what you said:' : 'Staying with that, here are two more things to try:' });
         b.push({ k: 'list', x: fit.length ? fit.slice(0, 2).map(function (o) { return o.x; }) : c.how.slice(1, 3) });
         var sc2 = Array.isArray(c.script) ? c.script : c.script ? [c.script] : [];
-        if (sc2.length) { var si = sc2.length > 1 ? 1 : 0; b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
+        if (sc2.length) { var si = sc2.length > 1 ? ((state.topic && state.topic.id === c.id ? (state.topic.v = (state.topic.v || 0) + 1) : 1) % sc2.length) : 0; b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
         var lk2 = safeLinks(c.links).slice(0, 1);
         if (lk2.length) b.push({ k: 'links', x: lk2 });
         state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk2[0] && lk2[0][1] };
@@ -1220,7 +1221,7 @@
   function convoTurn(state, f) {
     var L = state.last;
     if (CV_THANKS.test(f)) return { blocks: [{ k: 'p', x: 'You’re welcome.' }, { k: 'p', x: 'Ask me something else whenever you like.' }], chips: [{ label: 'Surprise me', q: 'Surprise me' }, { label: 'Give me a little tip', q: 'Give me a tip' }], kind: 'thanks' };
-    if (CV_RESTART.test(f)) { state.last = null; state.care = null; return { blocks: [{ k: 'p', x: 'Sure, a fresh start. What’s on your mind? A few words is plenty.' }], chips: STARTERS, kind: 'restart' }; }
+    if (CV_RESTART.test(f)) { state.last = null; state.care = null; state.topic = null; return { blocks: [{ k: 'p', x: 'Sure, a fresh start. What’s on your mind? A few words is plenty.' }], chips: STARTERS, kind: 'restart' }; }
     if (CV_REDFLAG.test(f) && !(/\bcontrolling\b/.test(f) && MONEY_W.test(f))) {
       var b = [];
       var I0 = L && L.kind === 'sit' && IDX.sit.issues[L.issue];
@@ -1567,6 +1568,144 @@
     for (k in B) if (!A[k]) u++;
     return u ? n / u : 0;
   }
+  // ------------------------------------------------------------------ the topic we're on
+  // The last caring topic card we answered with (friends, coming home, two faiths…), or the page the chat was opened
+  // from. Short follow-ups ("i'm so tired of it", "what do i actually text her", "can i print this") are answered from it,
+  // before anything else is searched, for a few turns.
+  var TOPIC_TTL = 5;
+  function topicCard(state) {
+    var T = state.topic, t = state.turn || 0;
+    if (T && t - T.turn <= TOPIC_TTL && cardById(T.id)) return cardById(T.id);
+    if (state.pageTopic && cardById(state.pageTopic.id)) return cardById(state.pageTopic.id);
+    return null;
+  }
+  function topicRoot(state) {
+    var T = state.topic, t = state.turn || 0;
+    var R = T && t - T.turn <= TOPIC_TTL ? T.root : state.pageTopic && state.pageTopic.id;
+    return (R && cardById(R)) || null;
+  }
+  // the page the chat was opened from (its path, or /ask.html?about=<the page's heading>): its topic card, if it has one,
+  // is the topic until another one comes up, and its own questions are the first chips
+  function pageInit(state) {
+    var P = state.pageCtx; state.pageDone = 1;
+    if (!P) return;
+    var path = String(P.path || '').replace(/\/index\.html$/, '/').replace(/\.html?$/, '.html'), about = String(P.about || '').trim();
+    if (path && !/\.html$/.test(path) && path !== '/') path = path.replace(/\/$/, '') + '.html';
+    if (about) {
+      var a = stNorm(about).replace(/^tell me more about /, ''), best = '';
+      for (var i = 0; i < KB.docs.length && !best; i++) {
+        var d = KB.docs[i]; if (d.tip || d.g) continue;
+        var t = stNorm(pageName(d.t)), h = stNorm(d.h);
+        if (t === a || (h === a && /#main$|^[^#]*$/.test(d.u)) || (a.length > 12 && t.indexOf(a) === 0)) best = d.u.split('#')[0];
+      }
+      if (best) path = best;
+    }
+    if (!path || path === '/ask.html') { state.page = about ? { u: '', about: about } : null; return; }
+    state.page = { u: path, about: about, es: path === '/en-espanol.html' };
+    var pc = (KB.cards || []).filter(function (c) { return c.page === path && c.first; })[0];
+    if (pc) { state.pageTopic = { id: pc.id, root: pc.id }; state.page.chips = (pc.pageChips || []).map(function (x) { return { label: x[0], q: x[1] }; }); }
+  }
+  function setTopic(state, c, root) { state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: state.topic && state.topic.id === c.id ? (state.topic.v || 0) : 0 }; }
+  // the page a topic card is about: its own "page", else its first link that isn't a general tool
+  var GENERIC_PAGE = /^\/(lemonade-stand|turning-toward|signal-translator|check-ins|safety|start-here|outside-help|upset-right-now|wp-11|wiring-card|night-garden|soundscapes|self-path|conversation-reader)\.html|^\/(workpapers|library|tools)\//;
+  function topicPage(c) {
+    if (!c) return '';
+    if (c.page) return c.page;
+    var l = (c.links || []).filter(function (x) { return x && x[1] && !GENERIC_PAGE.test(x[1]); })[0];
+    return l ? l[1].split('#')[0] : '';
+  }
+  function pageTitle(u) {
+    for (var i = 0; i < KB.docs.length; i++) if (KB.docs[i].u.split('#')[0] === u) return pageName(KB.docs[i].t);
+    return '';
+  }
+  // a card can answer for one side of a two-sided topic: "she says I'm bad with money" (the spender), "i work nights and
+  // feel guilty" (the night worker). Its "sides" list [{re, what, how, script, scriptLabels}] replaces those fields.
+  function sideOf(c, f) {
+    if (!c || !c.sides || !f) return c;
+    for (var i = 0; i < c.sides.length; i++) {
+      var S = c.sides[i], re = null;
+      try { re = new RegExp(S.re); } catch (e) { re = null; }
+      if (re && re.test(f)) { var o = {}; Object.keys(c).forEach(function (k) { o[k] = c[k]; }); Object.keys(S).forEach(function (k) { if (k !== 're') o[k] = S[k]; }); o.side = i; return o; }
+    }
+    return c;
+  }
+  var TF_SAY = /^(so |ok |okay |but |and |right |then |um |hmm |well )*(what (do|should|can|could|would) i (actually |even |really |possibly |then )?(say|text|write|send|tell)\b|what (words|do i text|should i text)\b|how (do|should|can|could|would) i (actually )?(say|word|phrase|put|text|write|tell|bring) (it|this|that|her|him|them|up|my)\b|(give me|any|some|got any) (the )?words\b|what to (say|text|write)\b|how (do|should) i (start|open) (the|that|this) (conversation|talk|chat)|how (do|should) we word (it|this|that|texts?|things|messages?))/;
+  var TF_DO = /\b(what (can|could|should) (i|we) (actually |really )?do (this week|today|tonight|this weekend|right now|now|first)|something (simple|small|easy|practical)|(one|a) (small |simple |easy |little )?thing (i|we) (can|could) (do|try)|what s (a|one|the) (first|small|next) step)\b/;
+  var TF_FEEL = /^(but |and |so |honestly |tbh |i guess |ok |okay |still |yeah |yes )*(i (still )?(feel|m|am) (so |really |just |still |a bit |kind of |pretty |very )*(guilty|bad|awful|terrible|tired|exhausted|drained|worn out|fed up|done|sad|stuck|lost|hurt|angry|annoyed|frustrated|resentful|overwhelmed|helpless|alone|useless|ashamed|left out)|(i m|im|i am) (so |really |just )*(tired|sick|fed up) of (it|this|that|all (of )?(this|it))|(this|it) (is|s) (so |really )?(hard|exhausting|a lot))\b/;
+  var TF_PRINT = /\b(print|printable|printing|print out|printed|printer)\b/;
+  var TF_SOURCE = /\b(source|sources|cite|citation|reference|references|who (came up with|invented|said|discovered|found) (that|this|it)|where (does|did) (that|this|it) come from|is there (any )?(research|evidence|a study|science)|what (research|study|studies))\b/;
+  function printReply(state, f, TC) {
+    var u = '', t = '';
+    var ab = f.match(/\b(?:page|guide|one|bit|part|section|handout|sheet)?\s*(?:about|on|for)\s+(.+?)(?:\s+(?:page|guide))?$/);
+    if (ab && !/^(this|that|it|me|my|the page|this page)$/.test(ab[1])) {
+      var tf = ab[1], cc = null;
+      for (var i = 0; i < (IDX.first || []).length && !cc; i++) if (IDX.first[i].re.test(tf) || IDX.first[i].re.test('my son has ' + tf) || IDX.first[i].re.test('what is ' + tf)) cc = IDX.first[i];
+      if (cc) u = topicPage(cc);
+      if (!u) { var h0 = search(tf).hits.filter(function (h) { return !KB.docs[h.i].tip && !KB.docs[h.i].g; })[0]; if (h0) u = KB.docs[h0.i].u.split('#')[0]; }
+    }
+    if (!u && TC) u = topicPage(TC);
+    if (!u && state.page && state.page.u && state.page.u !== '/ask.html') u = state.page.u;
+    if (u) t = pageTitle(u);
+    var b = [{ k: 'p', x: u ? 'Yes. To print ' + (t ? '“' + t + '”' : 'that page') + ', open it, then tap Share at the top of the page and choose Print this page. Your browser’s own Print works too (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout.' :
+      'Yes. Every page can be printed: open it, tap Share at the top and choose Print this page, or use your browser’s own Print (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout. Which page would you like?' }];
+    if (u && /^\/(adhd-kids|grandparents)\.html$/.test(u)) b.push({ k: 'p', x: 'That page also has a short printable summary near the top.' });
+    if (u) b.push({ k: 'links', x: [[t || 'The page', u]] });
+    return { blocks: b, chips: [], kind: 'care', id: 'print' };
+  }
+  // A follow-up while we're on a topic: words to say, one small thing to do, how to print it, where it comes from, or
+  // the part of the topic's page that fits what was just said. Null when it's really a new question.
+  function topicFollow(state, f, q, TC, TR) {
+    var n = f.split(' ').length, T = state.topic && state.topic.id === TC.id ? state.topic : null;
+    var c = sideOf(TC, f), pg = topicPage(TC), pgT = pg && pageTitle(pg), v = T ? (T.v || 0) + 1 : 1;
+    function done(r) { if (T) T.v = v; state.topic = state.topic && state.topic.id === TC.id ? Object.assign(state.topic, { turn: state.turn || 0 }) : { id: TC.id, turn: state.turn || 0, root: (TR || TC).id, v: v }; state.care = { id: TC.id, turn: state.turn || 0, f: f }; state.last = { kind: 'card', card: TC.id, q: TC.name, topic: TC.name, u: pg }; r.kind = r.kind || 'care'; r.id = r.id || TC.id; return r; }
+    var scripts = (Array.isArray(c.script) ? c.script : c.script ? [c.script] : []);
+    var link = pg ? [[pgT || TC.name, pg]] : safeLinks(TC.links).slice(0, 1);
+    if (TF_PRINT.test(f)) return printReply(state, f, TC);
+    if (TF_SOURCE.test(f) && n <= 16) {
+      return done({ blocks: [{ k: 'p', x: 'Yes. Every source this site uses is listed, with what it found in plain words, on The research behind this site.' + (pg ? ' The page on ' + (pgT || TC.name) + ' links its own sources at the bottom, under “More”.' : '') },
+        { k: 'links', x: [['The research behind this site', '/research.html']].concat(pg ? [[pgT || TC.name, pg + '#more']] : []) }], chips: [] });
+    }
+    // only for a message that doesn't start a new story ("my brother got dad's house in the will" is its own topic)
+    var sit = detectSituation(f);
+    var fresh = (sit.score >= 5 && sit.who && sit.who !== 'self' && sit.who !== 'other' && n > 8) || (matchCard(f) && (matchCard(f).kind === 'tool')) || /^(what|whats|who) (is|are|does) (a |an |the )?\w+( \w+)?( mean)?$/.test(f);
+    if (TF_SAY.test(f) && n <= 16 && scripts.length) {
+      var sb = [{ k: 'p', x: c.sayLead || ('Here are some words you could use. Change any of them so they sound like you.') }];
+      scripts.forEach(function (x, i) { sb.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[i]) || (i ? 'Or' : 'Words you could use'), x: x }); });
+      if (c.sayMore) sb.push({ k: 'p', x: c.sayMore });
+      sb.push({ k: 'links', x: c.sayLink ? safeLinks([c.sayLink]) : link });
+      return done({ blocks: sb, chips: [{ label: 'One small thing to do', q: 'What can I do this week, something simple?' }] });
+    }
+    if (TF_DO.test(f) && n <= 16 && c.how && c.how.length) {
+      var step = c.how[(v - 1) % c.how.length];
+      var db = [{ k: 'p', x: 'One small thing, this week: ' + lc1(step) }];
+      if (scripts.length) db.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[0]) || 'Words you could use', x: scripts[(v - 1) % scripts.length] });
+      db.push({ k: 'p', x: 'That’s plenty for one week. Small and done beats big and planned.' });
+      db.push({ k: 'links', x: link });
+      return done({ blocks: db, chips: [{ label: 'Another small thing', q: 'Something else simple we can do this week' }] });
+    }
+    if (fresh || n > 16) return null;
+    // the part of the topic's page that fits what was just said
+    var pages = [pg].concat(TR && TR.id !== TC.id ? [topicPage(TR)] : []).concat(c.alsoPages || []).filter(function (x, i, a) { return x && a.indexOf(x) === i; });
+    if (pages.length) {
+      var res = search(q), qt = (res.base || []).filter(function (t, j, a) { return a.indexOf(t) === j && !ROLE[t] && !STOP[t]; });
+      var hits = res.hits.filter(function (h) { var d = KB.docs[h.i], u = d.u.split('#')[0]; return !d.tip && !d.g && pages.indexOf(u) !== -1 && d.u !== u + '#main' && d.u !== u + '#more'; });
+      var top = hits[0];
+      if (top && qt.length && top.cov >= 0.3 && top.s >= 1.0) {
+        var pb = passageBlock(top.i, res.terms);
+        var fl0 = TF_FEEL.test(f) ? (c.fuFeel || 'That makes sense, and a lot of people in your spot feel the same.') + ' ' : '';
+        return done({ blocks: [{ k: 'p', x: fl0 + 'Staying with ' + (pgT || TC.name) + ', this part fits:' }, pb], chips: [{ label: 'What could I say?', q: 'What do I actually say?' }] });
+      }
+    }
+    if (TF_FEEL.test(f) && n <= 12) {
+      var fb = [{ k: 'p', x: (c.fuFeel || 'That makes sense. Feeling like that is common, and it isn’t a sign you’re doing it wrong.') }];
+      var st2 = c.how && c.how.length ? c.how[v % c.how.length] : '';
+      if (st2) fb.push({ k: 'p', x: 'One thing that often helps: ' + lc1(st2) });
+      if (scripts.length) fb.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[v % scripts.length]) || 'Words you could use', x: scripts[v % scripts.length] });
+      fb.push({ k: 'links', x: link });
+      return done({ blocks: fb, chips: [{ label: 'What could I say?', q: 'What do I actually say?' }] });
+    }
+    return null;
+  }
   function careFirst(state, q) {
     var f = norm(q);
     state.prevF = state.curF; state.curF = f;
@@ -1593,23 +1732,41 @@
           'Answer the person as well as the plan: if they asked “are we still on tonight?”, answer that first.'] },
         { k: 'links', x: safeLinks((ld && ld.links) || []).slice(0, 2) }], chips: [], kind: 'care', id: 'longdistance' };
     }
-    // a short follow-up just after a topic card ("i do all the meetings and paperwork" after fostering, "how do i get a say"
-    // after a co-parent answer) stays with that topic: a card names, in "follow", the card that answers a follow-up's words
-    var C1 = state.care, cc1 = C1 && CV_PERSONAL[C1.id] && (state.turn || 0) - C1.turn <= 2 && n <= 20 ? cardById(C1.id) : null;
-    var roots = cc1 ? [cc1].concat(C1.root && C1.root !== cc1.id && cardById(C1.root) ? [cardById(C1.root)] : []) : [];
+    // a short follow-up while we're on a topic ("i do all the meetings and paperwork" after fostering, "how do i get a say"
+    // after a co-parent answer, "what do i actually text her" after a friendship one) stays with that topic: a card names,
+    // in "follow", the card that answers a follow-up's words, and a vague follow-up is answered from the topic's own page
+    var TC = n <= 22 && !state.unsafe ? topicCard(state) : null, TR = TC ? topicRoot(state) : null;
+    var roots = TC ? [TC].concat(TR && TR.id !== TC.id ? [TR] : []) : [];
     for (var ri = 0; ri < roots.length; ri++) {
       var fl = roots[ri].follow || [];
       for (var fi = 0; fi < fl.length; fi++) {
         var fre = null; try { fre = new RegExp(fl[fi][0]); } catch (e) { fre = null; }
         var tcard = fre && fre.test(f) && cardById(fl[fi][1]);
-        if (tcard) { var rf = cardReply(state, tcard, 'about'); rf.kind = 'care'; state.care = { id: tcard.id, turn: state.turn || 0, f: f, root: C1.root || C1.id }; return rf; }
+        if (tcard) {
+          var rf = cardReply(state, tcard, 'about'); rf.kind = 'care';
+          state.care = { id: tcard.id, turn: state.turn || 0, f: f, root: (TR || TC).id };
+          setTopic(state, tcard, (TR || TC).id);
+          return rf;
+        }
       }
     }
+    // which care card would answer this on its own? A word that only hints at another topic ("christening" in a talk
+    // about a brother, "will" about a parent who died) doesn't pull us off the topic we're on
+    var cm = null;
     for (var i = 0; i < (IDX.first || []).length; i++) {
-      var c = IDX.first[i];
-      if (!c.re.test(f) || (c.notRe && c.notRe.test(f))) continue;
-      if (c.id === 'nextstep' && L && L.kind === 'sit') continue;   // "what next?" after a playbook: its own next step
-      if (c.id === 'fault' && n > 18) continue;
+      var c0 = IDX.first[i];
+      if (!c0.re.test(f) || (c0.notRe && c0.notRe.test(f))) continue;
+      if (c0.id === 'nextstep' && L && L.kind === 'sit') continue;   // "what next?" after a playbook: its own next step
+      if (c0.id === 'fault' && n > 18) continue;
+      if (TC && c0.id !== TC.id && (!TR || c0.id !== TR.id) && c0.weak && n <= 18) {
+        var wre = null; try { wre = new RegExp(c0.weak, 'g'); } catch (e) { wre = null; }
+        if (wre && !c0.re.test(f.replace(wre, ' ').replace(/\s+/g, ' '))) continue;
+      }
+      cm = c0; break;
+    }
+    if (TC && !cm) { var tfu = topicFollow(state, f, q, TC, TR); if (tfu) return tfu; }
+    if (cm) {
+      var c = cm;
       var r = cardReply(state, c, 'about');
       if (c.id === 'fault') {
         var H = IDX.sit.issues.hurtbythem;
@@ -1620,11 +1777,14 @@
       }
       r.kind = 'care';
       state.care = { id: c.id, turn: state.turn || 0, f: f };
+      if (CV_PERSONAL[c.id]) setTopic(state, c, c.newTopic || !TC ? c.id : (TR || TC).id);
       if (c.id === 'brief') state.brief = 1;
       // a question about the chat or a feeling keeps the topic we were on; a new topic (a meltdown, "I have ADHD") takes over
       if (!c.newTopic) state.last = L || state.last;
       return r;
     }
+    // "how do I print the page about ADHD", "can I print this out": how to print, for the page we're on
+    if (TF_PRINT.test(f) && n <= 16) return printReply(state, f, TC);
     return null;
   }
   function unclearReply() {
@@ -1821,13 +1981,14 @@
   function respond(state, q, chipDoc) {
     var sp = null, q0 = q;
     state.turn = (state.turn || 0) + 1;
+    if (state.pageCtx && !state.pageDone) pageInit(state);
     if (chipDoc == null) {
       sp = spellFix(q);
       // a spelling fix must never hide a safety concern ("it's my fault" read as "it is my fault")
       if (sp.fixes.length && !(DANGER.test(norm(q)) && !DANGER.test(norm(sp.q)))) q = sp.q; else if (sp.fixes.length) sp = { q: q, fixes: [], known: sp.known, unknown: sp.unknown };
       // "different question: …", "by the way, …": a new topic, so nothing from the last one carries over
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
-      if (sw0) { state.last = null; state.care = null; q = sw0[sw0.length - 1]; }
+      if (sw0) { state.last = null; state.care = null; state.topic = null; q = sw0[sw0.length - 1]; }
       var es = String(q).toLowerCase();
       if (/\bhabl\w*\b.{0,20}\bespa[nñ]ol\b|^\W*(en )?espa[nñ]ol\W*$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una p[aá]gina)\b.{0,30}\bespa[nñ]ol\b/.test(es)) return { blocks: [
         { k: 'p', x: '¡Hola! Casi todo el sitio está en inglés, pero hay una página en español con lo esencial: repartir las tareas de la casa, cuando los hijos pelean, cuando estás muy enojado, cuidar a alguien que quieres, y si no estás seguro en casa.' },
@@ -1849,16 +2010,16 @@
       }
       var vf = norm(q);
       if (CV_RESTART.test(vf)) { state.fearSeen = false; state.coSeen = false; }
-      if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; return meant(childCrisisReply(), sp); }
-      if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
-      if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
+      if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; state.topic = null; return meant(childCrisisReply(), sp); }
+      if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
+      if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && ANGER_NOW.test(vf) && !/\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|ex|dad|mum|mom|son|daughter|kid|boss))\b( s| is| gets| keeps)? (about to|going to|gonna|losing|loses)\b/.test(vf)) { state.last = null; return meant(angerNowReply(), sp); }
-      if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
-      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
+      if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; state.topic = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
+      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
       if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care)) return meant(conflictNotAbuse(state), sp);
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
-      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
+      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       var igr = igTurn(state, q0, vf);
@@ -2536,7 +2697,7 @@
     if (chipDoc == null && state.unsafe && !DANGER.test(f) && !HIDE.test(f) && AFTER_SAFE.test(f)) { state.last = null; return afterSafeReply(f); }
     if (chipDoc == null) {
       if (DANGER.test(f)) {
-        state.last = null;
+        state.last = null; state.topic = null; state.pageTopic = null;
         if (!(PARENT_PHONE.test(f) && !HARD.test(f)) && !OTHER_HARM.test(f) && !NOT_LIVE.test(f)) state.unsafe = true;
         if (OTHER_HARM.test(f) && !/\b(i|me|my ?self)\b.{0,20}\b(cut|hurt|harm|kill|die)\b/.test(f)) return otherHarmReply();
         var thc = !HARD.test(f) && cardByIdF('teenhouse');
@@ -2850,7 +3011,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { x = tidy(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -3007,10 +3168,23 @@
 
   var send_svg = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12l15-7-5 15-2.5-6.2L4 12z" fill="currentColor"/></svg>';
 
+  // where the chat was opened: this page, or the page named by /ask.html?about=…; and whether to say hello in Spanish
+  function pageCtxNow() {
+    var about = '';
+    try { about = (location.search.match(/[?&]about=([^&]*)/) || [])[1] || ''; about = about ? decodeURIComponent(about.replace(/\+/g, ' ')).slice(0, 120) : ''; } catch (e) { about = ''; }
+    return { path: (location.pathname || ''), about: about };
+  }
+  function spanishHere() {
+    var P = pageCtxNow();
+    if (/\/en-espanol(\.html)?$/.test(P.path) || /espa[nñ]ol/i.test(P.about)) return true;
+    try { return /^es\b/i.test(document.documentElement.getAttribute('lang') || '') || (/^es\b/i.test(navigator.language || '') && !/^en\b/i.test((navigator.languages || [])[0] || '')); } catch (e) { return false; }
+  }
+  var ES_GREETING = 'Hola, soy el Profesor Puddles. Cuéntame qué pasa, en tus palabras. Te respondo en español con lo esencial y te llevo a la página en español; casi todo lo demás del sitio está en inglés.';
+  var ES_CHIPS = [{ label: 'Hago todo en la casa', q: 'Siento que hago todo en la casa' }, { label: 'Estoy muy cansado', q: 'Estoy muy cansado, cuido a mi esposa' }, { label: 'Peleamos mucho', q: 'Peleamos mucho' }, { label: 'Necesito calma', q: 'Es una noche difícil, necesito calma' }];
   function Chat(mode, host) {
     var me = this;
     this.mode = mode;
-    this.state = { last: null };
+    this.state = { last: null, pageCtx: pageCtxNow() };
     this.msgs = load() || [];
     this.busy = false;
     injectCSS();
@@ -3243,7 +3417,15 @@
   };
 
   Chat.prototype.greet = function (text) {
-    this.say([{ k: 'p', x: text }], GREET_CHIPS, REDUCED ? 150 : 450);
+    var me = this, es = this.es;
+    // opened from a page with its own questions (coming out, co-parenting…): those first, never "We keep arguing about chores"
+    loadKB(function (ok) {
+      var st = me.state, chips = es ? ES_CHIPS : GREET_CHIPS;
+      if (ok && st.pageCtx && !st.pageDone) pageInit(st);
+      if (!es && st.page && st.page.chips && st.page.chips.length) chips = st.page.chips.concat([{ label: 'Talk deep', q: 'Talk deep' }]);
+      else if (!es && st.page && (st.page.u || st.page.about)) chips = [{ label: 'Tell me about this page', q: 'Tell me more about ' + (st.page.about || pageTitle(st.page.u) || 'this page') }, STARTERS[3], STARTERS[1], { label: 'Just chat', q: 'Let’s just chat' }];
+      me.say([{ k: 'p', x: text }], chips, REDUCED ? 150 : 450);
+    });
   };
 
   Chat.prototype.start = function (opts) {
@@ -3255,6 +3437,12 @@
     var prevName = this.char ? this.char.name : (lastBot && lastBot.n) || DEFAULT_CHAR.name;
     this.setChar(opts);
     var changed = this.char.name !== prevName;
+    // from the Spanish page (or a Spanish browser): the hello, and the box, in Spanish
+    this.es = spanishHere();
+    if (this.es && this.char.name === DEFAULT_CHAR.name || this.es && /Professor Puddles/.test(this.char.name)) {
+      this.char.greeting = ES_GREETING; this.input.placeholder = 'Escribe aquí, en español…';
+      var lb = this.root.querySelector('label'); if (lb) lb.textContent = 'Pregúntale al Profesor Puddles';
+    }
     if (!this.started) {
       this.started = true;
       var me = this;
@@ -3326,7 +3514,7 @@
     // for tests and tooling: rank passages without showing anything
     _ask: function (q, cb) { loadKB(function () { reply({ last: null }, q, null, cb); }); },
     // a conversation that remembers the last topic, for testing follow-ups
-    _session: function () { var st = { last: null }; return { ask: function (q, cb) { loadKB(function () { reply(st, q, null, cb); }); }, state: st }; },
+    _session: function (ctx) { var st = { last: null, pageCtx: ctx || null }; return { ask: function (q, cb) { loadKB(function () { reply(st, q, null, cb); }); }, state: st }; },
     _bgLoaded: function () { return !!(IDX && IDX.bg); },
     _search: function (q, cb) { loadKB(function () { cb(search(q).hits.slice(0, 6).map(function (h) { return [KB.docs[h.i].h, +h.s.toFixed(2), +h.cov.toFixed(2)]; })); }); }
   };
