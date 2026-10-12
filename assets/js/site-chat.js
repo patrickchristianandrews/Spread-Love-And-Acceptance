@@ -1351,7 +1351,9 @@
         if (gk) { var rg = cardReply(state, gk, 'about'); rg.kind = 'care'; state.care = { id: 'grownkids', turn: state.turn || 0 }; return rg; }
       }
       var sw = detectSituation(f);
-      if (c && sw.who && sw.who !== 'self' && !(sw.issue && sw.score >= 3)) {
+      // "and my husband just wants stricter rules": the topic has its own answer for that, so that one comes instead
+      var fol = c && (c.follow || []).some(function (x) { try { return new RegExp(x[0]).test(f); } catch (e) { return false; } });
+      if (c && !fol && sw.who && sw.who !== 'self' && !(sw.issue && sw.score >= 3)) {
         var r = cardReply(state, c, 'about');
         var who = sw.noun ? 'your ' + sw.noun.replace(/^(my|our|the|a|an)\s+/, '') : whoCtx(sw.who).them;
         r.blocks.unshift({ k: 'p', x: 'Yes, the same goes with ' + who + '. Each person carries it a little differently, so go gently and ask, rather than guess.' });
@@ -1689,6 +1691,7 @@
   var TF_SAY = /^(so |ok |okay |but |and |right |then |um |hmm |well )*(what (do|should|can|could|would) i (actually |even |really |possibly |then )?(say|text|write|send|tell)\b|what (words|do i text|should i text)\b|how (do|should|can|could|would) i (actually )?(say|word|phrase|put|text|write|tell|bring) (it|this|that|her|him|them|up|my)\b|(give me|any|some|got any) (the )?words\b|what to (say|text|write)\b|how (do|should) i (start|open) (the|that|this) (conversation|talk|chat)|how (do|should) we word (it|this|that|texts?|things|messages?))/;
   var TF_DO = /\b(what (can|could|should) (i|we) (actually |really )?do (this week|today|tonight|this weekend|right now|now|first)|something (simple|small|easy|practical)|(one|a) (small |simple |easy |little )?thing (i|we) (can|could) (do|try)|what s (a|one|the) (first|small|next) step)\b/;
   var TF_FEEL = /^(but |and |so |honestly |tbh |i guess |ok |okay |still |yeah |yes )*(i (still )?(feel|m|am) (so |really |just |still |a bit |kind of |pretty |very )*(guilty|bad|awful|terrible|tired|exhausted|drained|worn out|fed up|done|sad|stuck|lost|hurt|angry|annoyed|frustrated|resentful|overwhelmed|helpless|alone|useless|ashamed|left out)|(i m|im|i am) (so |really |just )*(tired|sick|fed up) of (it|this|that|all (of )?(this|it))|(this|it) (is|s) (so |really )?(hard|exhausting|a lot))\b/;
+  var TEEN_CUE = /\b(i m|im|i am) 1[0-7]( years old| yrs old| year old)?\b|\b(i m|im|i am|i ve been|ive been) (in|into) (foster care|care|a foster home|a placement)\b|\bmy (foster )?carers\b|\bmy foster (mum|mom|dad|parents|family|carer)\b|\bmy (nan|nana|nanna|gran|granny|grandma|grandad)\b.{0,30}\b(took|takes|taking|wont let|won t let|doesnt get|dont get|strict|rules|my phone|curfew)\b|\b(in|at) (year (7|8|9|10|11|12|13)|grade (6|7|8|9|10|11|12)|high school|middle school|secondary school|sixth form)\b/;
   var TF_PRINT = /\b(print|printable|printing|print out|printed|printer)\b/;
   var TF_SOURCE = /\b(source|sources|cite|citation|reference|references|who (came up with|invented|said|discovered|found) (that|this|it)|where (does|did) (that|this|it) come from|is there (any )?(research|evidence|a study|science)|what (research|study|studies))\b/;
   function printReply(state, f, TC) {
@@ -1807,6 +1810,10 @@
       }
       cm = c0; break;
     }
+    // a young person speaking (on the teens page, or "i'm 15", "my carers", "i'm in foster care"): their side, never the carers'
+    if (TEEN_CUE.test(f) || (state.page && state.page.u === '/teens.html')) state.teen = true;
+    if (/\b(i m|im|i am) (an adult|a grown ?up|[2-9]\d)\b|\bnot a (teen|teenager|kid|child)\b|\b(my|our) (foster|kinship) (son|daughter|child|kid|teen|grandson|granddaughter)\b|\bwe (foster|are fostering|re fostering)\b/.test(f)) state.teen = false;
+    if (cm && state.teen && cm.teenAlt && cardByIdF(cm.teenAlt)) cm = cardByIdF(cm.teenAlt);
     // anything that might be about harm or control, or a card that answers those, is never bent to fit the topic
     var risky = VERBAL.test(f) || SELF_HARMFUL.test(f) || NOT_LIVE.test(f) || HARD.test(f.replace(/\b(scared|afraid|frightened|terrified)\b/g, ' ')) || CONTROL.test(f.replace(/\bcontrolling\b/g, ' '));
     // and a card about the chat itself or a feeling (bigger text, "is it my fault?") answers as usual, keeping the topic
@@ -1820,6 +1827,7 @@
       for (var fi = 0; fi < fl.length; fi++) {
         var fre = null; try { fre = new RegExp(fl[fi][0]); } catch (e) { fre = null; }
         var tcard = fre && fre.test(f) && cardById(fl[fi][1]);
+        if (tcard && state.teen && tcard.teenAlt && cardById(tcard.teenAlt)) tcard = cardById(tcard.teenAlt);
         if (tcard) {
           var side0 = state.topic && state.topic.side != null && (state.topic.id === tcard.id || state.topic.root === tcard.id) ? state.topic.side : null;
           var rf = cardReply(state, tcard, 'about', side0); rf.kind = 'care';

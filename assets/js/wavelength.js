@@ -1,4 +1,4 @@
-/* wavelength.js — Wavelength: how you think, talk and listen.
+/* wavelength.js — Wavelength: how you talk and listen.
    Pick your wiring (optional, select all that apply), answer seven short parts with either/or taps and tap-to-select
    statements, choose the inputs you learn through and what helps you, and (if you like) build a personal statement.
    Then read your four-letter Wave Code, your archetype, what each letter means, and sixteen self-discovery chapters:
@@ -57,7 +57,7 @@
     { id: 'pace', axis: 0, title: 'How my brain gets going', lede: 'Pace: how quickly thoughts form, and how you handle shifts.',
       qs: [
         { q: 'Someone asks you a big question. You…', a: 'Answer right away and figure it out as I talk', b: 'Need a moment, or a day, to think first' },
-        { q: 'Your thoughts usually feel like…', a: 'Popcorn: lots popping at once', b: 'A slow cooker: one thing, simmering deep' },
+        { q: 'Your thoughts usually feel like…', a: 'Lots of thoughts at once, all popping up', b: 'One thought at a time, slowly and deeply' },
         { q: 'A sudden change of plans feels…', a: 'Fine, maybe even fun', b: 'Jarring. I need a heads-up or a transition' }],
       chips: {
         general: [['I think best by talking it out', 1], ['I like to sleep on big decisions', -1], ['My energy changes a lot through the day', 0]],
@@ -711,7 +711,7 @@
         '<p>Find out how you think, how you share and how you take things in. Then share your Wave Code so the people close to you can tune in.</p>' +
         (ARRIVE.quick && !codeDone() ? '<div class="wl-nav wl-quickrow"><span></span><button type="button" class="wl-btn" id="wl-quick">Just my Wave Code (about 2 minutes)</button></div>' +
           '<p class="wl-small">Twelve either/or taps for your four letters. The rest stays optional, and you can add it after your result.</p>' : '') +
-        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, your statement, is optional. Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you. Afterward, sixteen self-discovery chapters open up: seven for your Wave Code and nine for the ways you take things in and learn.</p>' +
+        (ARRIVE.quick && !codeDone() ? '<p class="wl-small"><strong>Just your Wave Code takes about two minutes.</strong> The full version, if you want it later, is seven short parts, mostly tapping, about ten minutes in all.' : '<p class="wl-small">Seven short parts, mostly tapping, about ten minutes in all.') + ' The last part, a short note about you, is optional. Your Wave Code is four letters: a simple way to describe what you prefer, not a test that measures you. Afterward there are short chapters to read about your answers, if you like.</p>' +
         '<p class="wl-small">Fill it in about yourself. If you want to understand someone else, ask them to take it too, then compare.</p>' +
         (S.moved && hasHp ? '<p class="wl-mine"><strong>Welcome back.</strong> Your Heartprint is now part of Wavelength. Your answers came with you: they’re in Part 7, Your statement.</p>' : '') +
         (NOTICE ? '<p class="wl-mine" role="status">' + NOTICE + '</p>' : '') +
@@ -915,6 +915,7 @@
   }
 
   /* ---------- comparing two Wave Codes ---------- */
+  let MORE_OPEN = false; // "More you can do" on the results: folded until someone opens it (kept while this page is open)
   const COUNT_WORDS = ['none', 'one', 'two', 'three', 'all four'];
   const CMP_NEXT = 'Each of you makes a one-page card about what helps words reach you (it can start from your Wavelength answers), copies it and sends it to the other. Pasting each other’s shows your two cards side by side, with a bridge to try wherever they differ. It all stays on your own devices.';
   const CMP_FRAME = ARRIVE.friends
@@ -1018,11 +1019,6 @@
       '<section class="wl-incoming">' +
         '<h2>Compare with ' + them + ' Wave Code</h2>' +
         '<p>' + (t.from ? esc(t.from) + ' shared their' : 'Someone shared their') + ' Wave Code with you. Two codes side by side show where you’re alike and where you’ll want to tune in on purpose, and nobody has to be wrong.</p>' +
-        (done ? '' :
-          '<div class="wl-sect wl-knowcode"><h3>Know your code? Type it here</h3>' +
-            '<p class="wl-small">Your four letters, or paste the message you saved. No need to take the quiz again.</p>' +
-            '<div class="wl-pairbox"><label class="wl-sr" for="wl-ic-mine">Your Wave Code</label><input type="text" id="wl-ic-mine" class="wl-codein" placeholder="Your code, e.g. STDE" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="wl-btn" id="wl-ic-cmp">Compare</button></div>' +
-            '<div id="wl-ic-out" aria-live="polite"></div></div>') +
         '<label class="wl-field" for="wl-ic-them">' + cap(them) + ' Wave Code</label>' +
         '<input type="text" id="wl-ic-them" class="wl-codein" value="' + t.code + '" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
         '<p class="wl-small" id="wl-ic-arch">' + t.code + ' is ' + lower(ARCHETYPES[t.code][0]) + ': ' + ARCHETYPES[t.code][1] + '</p>' +
@@ -1030,12 +1026,16 @@
           ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
             '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
             '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
-          : '<h3>Don’t know your code yet?</h3>' +
+          : '<h3>Find your own Wave Code</h3>' +
             '<label class="wl-field" for="wl-ic-name">Your first name (optional)</label>' +
             '<input type="text" id="wl-ic-name" maxlength="30" autocomplete="given-name" value="' + esc(S.name) + '">' +
             '<p class="wl-small">' + (t.from ? esc(t.from) : 'They') + ' will see it when you share your Wave Code back, so they know it’s you.</p>' +
-            '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-ic-quiz">' + (inQuiz ? 'Carry on with the quiz' : 'Take the quiz first (about 10 minutes)') + '</button>' + (inQuiz ? '' : '<button type="button" class="wl-btn ghost" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button>') + '</div>' +
-            '<p class="wl-small">When you finish, your comparison shows up with your results. Tick “Keep” on your results, and the next Wave Code link you open will use your result straight away.</p>') +
+            '<div class="wl-actions">' + (inQuiz ? '<button type="button" class="wl-btn" id="wl-ic-quiz">Carry on with the quiz</button>' : '<button type="button" class="wl-btn" id="wl-ic-quick">Just my Wave Code (about 2 minutes)</button><button type="button" class="wl-btn ghost" id="wl-ic-quiz">The full version (about 10 minutes)</button>') + '</div>' +
+            '<p class="wl-small">Twelve quick either/or taps. When you finish, your comparison shows up with your results.</p>' +
+          '<div class="wl-sect wl-knowcode"><h3>Already know your code?</h3>' +
+            '<p class="wl-small">Type your four letters, or paste the message you saved. No need to take it again.</p>' +
+            '<div class="wl-pairbox"><label class="wl-sr" for="wl-ic-mine">Your Wave Code</label><input type="text" id="wl-ic-mine" class="wl-codein" placeholder="Your code, e.g. STDE" autocomplete="off" autocapitalize="characters" spellcheck="false"><button type="button" class="wl-btn ghost" id="wl-ic-cmp">Compare</button></div>' +
+            '<div id="wl-ic-out" aria-live="polite"></div></div>') +
         '<p class="wl-note">Nothing you type or choose is sent anywhere. The code came in the link you opened, and it stays in this browser.</p>' +
       '</section>';
     const themIn = $('#wl-ic-them'), out = $('#wl-ic-out');
@@ -1081,7 +1081,7 @@
     const groups = [['pace', 'How I think and process'], ['lens', 'How I see things'], ['send', 'How I communicate'], ['recv', 'How I take things in']]
       .map(g => { const w = chosenWords(g[0]); return w.length ? '<div class="wl-wordgroup"><h4>' + g[1] + '</h4><ul class="wl-words">' + w.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>' : ''; }).join('');
     const helps = chosenWords('helps');
-    const chList = [['code', 'Your Wave Code'], ['inputs', 'The 9 inputs of learning']].map(g =>
+    const chList = [['code', 'Your Wave Code'], ['inputs', 'How you learn best']].map(g =>
       '<p class="wl-chgroup">' + g[1] + '</p><div class="wl-chlist">' + CHAPTERS.map((c, i) => c.group !== g[0] ? '' : '<button type="button" class="wl-chitem" data-ch="' + i + '"><span class="wl-chnum">' + (i + 1) + '</span><span><strong>' + c.title + '</strong><span class="wl-s">' + c.sub + '</span></span>' + (S.done.indexOf(c.id) >= 0 ? '<span class="wl-tick">✓ Done</span>' : '') + '</button>').join('') + '</div>').join('');
     const unlock = '<div class="wl-sect"><h3>Finish your Wave Code first</h3><p>Your four letters come from Parts 1 to 4. A few questions there aren’t answered yet.</p><div class="wl-actions"><button type="button" class="wl-btn" id="wl-finish">Find my Wave Code</button></div></div>';
     root.innerHTML =
@@ -1096,9 +1096,8 @@
               '<input type="text" id="wl-rname" maxlength="30" autocomplete="given-name">' +
               '<p class="wl-small">' + (S.their && S.their.from ? esc(S.their.from) + ' will see it' : 'It goes in your share link') + ', so ' + (S.their && S.their.from ? 'they know' : 'they’ll know') + ' whose Wave Code it is.</p></div>') +
             (window.TOLShare ? '<div class="wl-actions"><button type="button" class="wl-btn ghost tol-share-btn" id="wl-sharecode">Share my Wave Code</button><button type="button" class="wl-btn ghost" id="wl-codeqr">Show a QR code</button></div><div id="wl-namenudge" role="status"></div>' : '') +
-            '<p class="wl-small wl-tocard">Make a one-page Wiring Card from your answers: <a href="/wiring-card.html?for=work">for work</a> or <a href="/wiring-card.html">for someone close</a>.</p>' +
+            '<p class="wl-small wl-tocard wl-nextline"><strong>Next:</strong> <a href="/wiring-card.html?for=work">Make your Wiring Card for work</a> · <a href="/signal-translator.html">Check a message</a> · <a href="/work.html#autistic-at-work">Scripts for autistic people at work</a></p>' +
             (S.their ? '<p class="wl-combo">Your comparison with ' + (S.their.from ? esc(S.their.from) + '’s' : 'their') + ' Wave Code (' + S.their.code + ') is ready. <button type="button" class="wl-linkbtn" id="wl-tocmp">See how you compare</button></p>' : '') +
-            (S.keep ? '' : '<p class="wl-mine wl-small" id="wl-keepoffer">Your results are kept in this tab until you close it. Keep them on this device, and a Wave Code link someone sends you will open with your result ready. <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>') +
             '<p class="wl-small"><strong>At your best:</strong> ' + code.split('').map(L => lower(LETTERS[L].gift.replace(/\.$/, ''))).join('; ') + '. <strong>Watch for:</strong> ' + code.split('').map(L => LETTERS[L].watch).join('; ') + '.</p>' +
           '</div>' +
           (S.quick ? '<div class="wl-sect wl-more-parts" id="wl-moreparts"><h3>Want more? Parts 5 to 7 are optional</h3><p class="wl-small">How you take things in and learn, what helps you feel understood, and a short statement to share. Each adds to your results below, and you can stop anytime.</p>' +
@@ -1110,7 +1109,7 @@
         (groups ? '<div class="wl-sect"><h3>In my own words</h3>' + groups + '</div>' : '') +
         '<div class="wl-sect" id="wl-inputs-sect"><h3>How I take things in</h3>' +
           (S.inputs.length ? '<p>' + (S.topInput ? '<strong>Strongest:</strong> ' + IN[S.topInput].icon + ' ' + IN[S.topInput].name + '. ' : '') + '<strong>All my inputs:</strong> ' + esc(inputsLabel()) + '.</p>' + (S.topInput ? '<p class="wl-tune"><strong>To reach me:</strong> ' + IN[S.topInput].send + '</p>' : '') : '<p>You skipped the learning inputs. You can add them with Change answers, or explore all nine below.</p>') +
-          '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-conn">Explore how the 9 inputs connect</button></div></div>' +
+          '<div class="wl-actions"><button type="button" class="wl-btn" id="wl-conn">See how the ways you learn connect</button></div></div>' +
         (helps.length ? '<div class="wl-sect"><h3>What helps me feel understood</h3><ul class="wl-words">' + helps.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>' : '') +
         '<div class="wl-sect" id="wl-stmt-sect"><h3>My statement</h3>' +
           (lines.length ? stmtCard(lines) +
@@ -1118,6 +1117,7 @@
             (ins.length ? '<details class="wl-insd"><summary>🔎 Things you might not have noticed (' + ins.length + ')</summary>' + insightList(ins) + '</details>' : '')
             : '<p>You skipped the statement. It’s a short, warm note about how you work best, in nine quick steps, and it shows connections between your choices you may not have noticed.</p><div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-sedit">Write my statement</button></div>') +
           '<p class="wl-toast" id="wl-stoast" role="status"></p></div>' +
+        '<details class="wl-moredo" id="wl-moredo"' + (MORE_OPEN ? ' open' : '') + '><summary>More you can do <span>' + (done ? 'compare, share this device, chapters' : 'share this device') + '</span></summary>' +
         (done ?
           '<div class="wl-sect" id="wl-compare"><h3>' + (S.their && S.their.from ? 'Compare with ' + esc(S.their.from) : 'Compare with someone') + '</h3>' +
             '<div id="wl-pcbox"' + (S.their ? ' hidden' : '') + '><p class="wl-small">Have them take Wavelength too, then enter their Wave Code, or paste the message they sent you, to see where you’ll want to tune in on purpose.</p>' +
@@ -1134,6 +1134,7 @@
           '<div class="wl-sect" id="wl-chapters"><h3>Self-discovery chapters</h3>' +
             '<p class="wl-chcount">' + S.done.filter(id => CHAPTERS.some(c => c.id === id)).length + ' of ' + CHAPTERS.length + ' explored. Each one has a short reading written for you, a few journal prompts, and one thing to try this week.</p>' + chList +
             '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-copyj">Copy my journal</button></div><p class="wl-toast" id="wl-jtoast" role="status"></p></div>' : '') +
+        '</details>' +
         '<div class="wl-sect"><h3>Keep, share or start again</h3>' +
           '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase">Erase everything</button></div>' +
           '<p class="wl-toast" id="wl-toast" role="status"></p>' + keepBox('wl-keep-res') + '</div>' +
@@ -1170,8 +1171,15 @@
     const pc = $('#wl-pc');
     if (pc) { pc.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#wl-cmp').click(); } }; codeField(pc, (c, from) => { pastedFrom = from || ''; }); }
     if (done && S.their) wireCompare(code, S.their.code, S.name, S.their.from);
-    on('#wl-tocmp', () => { const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } });
-    on('#wl-keepnow', () => { S.keep = true; save(); keepChanged(); });
+    const md = $('#wl-moredo'); if (md) md.addEventListener('toggle', () => { MORE_OPEN = md.open; });
+    on('#wl-tocmp', () => { if (md) { md.open = true; MORE_OPEN = true; } const el = $('#wl-compare'); if (el) { el.scrollIntoView({ block: 'start' }); const h = el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } } });
+    // after sharing: offer to keep the result on this device, so the comparison link they send back opens ready
+    const offerKeep = () => {
+      if (S.keep) return;
+      const nn = $('#wl-namenudge'); if (!nn) return;
+      nn.innerHTML = '<p class="wl-mine wl-small" id="wl-keepoffer">Keep your result on this device, so when they send their Wave Code back it opens ready to compare? <button type="button" class="wl-linkbtn" id="wl-keepnow">Keep this on my device</button></p>';
+      on('#wl-keepnow', () => { S.keep = true; save(); keepChanged(); });
+    };
     const rn = $('#wl-rname');
     if (rn) rn.oninput = () => {
       S.name = cleanName(rn.value); save();
@@ -1195,7 +1203,7 @@
     on('#wl-copy', () => copyText(profileText(), '#wl-toast', 'Copied. Paste it into a text or a note to share.'));
     // Share: only what the person chose to share, through the site's share (their own app, or a small sheet)
     const share = o => { if (window.TOLShare) window.TOLShare.share(o); };
-    on('#wl-share', () => share({ title: 'My Wavelength', text: profileText(), url: false, result: true }));
+    on('#wl-share', () => { share({ title: 'My Wavelength', text: profileText(), url: false, result: true }); offerKeep(); });
     on('#wl-sshare', () => share({ title: 'My Wavelength statement', text: stmtPlain(), url: false, result: true }));
     // every way of sharing carries the code: the link opens a ready-made comparison on their side
     // the link sits inside the message itself, so "Copy message", a text, an email or the phone's own share
@@ -1203,7 +1211,7 @@
     const codeMessage = () => 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine: ' + absLink(compareLink(code, S.name.trim()));
     // no name yet? ask once (it's optional), so the comparison on their side says who it's from
     let askedName = false;
-    const shareCode = () => share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true });
+    const shareCode = () => { share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true }); offerKeep(); };
     on('#wl-sharecode', () => {
       const nn = $('#wl-namenudge'), rn2 = $('#wl-rname');
       if (S.name.trim() || askedName || !rn2 || !nn) { if (nn) nn.innerHTML = ''; shareCode(); return; }
@@ -1214,6 +1222,7 @@
     });
     // the same comparison link as a QR code, for the other phone in the room (share-kit.js, loaded at the tap if needed)
     on('#wl-codeqr', () => {
+      offerKeep();
       const url = absLink(compareLink(code, S.name.trim())), o = { title: 'Scan with the other phone', note: 'It opens the Wave Code quiz on their phone, ready to compare with yours once they’ve found theirs.' };
       if (window.TOLShareKit && window.TOLShareKit.showQR) { window.TOLShareKit.showQR(url, o); return; }
       const sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = () => { if (window.TOLShareKit) window.TOLShareKit.showQR(url, o); }; document.head.appendChild(sc);
@@ -1236,7 +1245,7 @@
     });
   }
   function openChapter(n) { S.view = null; S.ch = n; render(); toTop(); }
-  function backToResults(anchor) { S.ch = null; S.view = null; render(); const el = $(anchor); if (el) el.scrollIntoView({ block: 'start' }); const h = el && el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
+  function backToResults(anchor) { S.ch = null; S.view = null; if (/^#wl-(chapters|compare|people)$/.test(anchor || '')) MORE_OPEN = true; render(); const el = $(anchor); if (el) el.scrollIntoView({ block: 'start' }); const h = el && el.querySelector('h3'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
 
   function renderChapter(i) {
     const c = CHAPTERS[i], code = score().code, ans = S.journal[c.id] || ['', '', ''], isDone = S.done.indexOf(c.id) >= 0;
@@ -1251,7 +1260,7 @@
     root.innerHTML =
       '<section class="wl-chapter">' +
         '<button type="button" class="wl-linkbtn" id="wl-toresults">← Back to my results</button>' +
-        '<p class="wl-kick">' + (c.group === 'inputs' ? 'The 9 inputs of learning' : 'Your Wave Code') + ': chapter ' + (i + 1) + ' of ' + CHAPTERS.length + '</p>' +
+        '<p class="wl-kick">' + (c.group === 'inputs' ? 'How you learn best' : 'Your Wave Code') + ': chapter ' + (i + 1) + ' of ' + CHAPTERS.length + '</p>' +
         '<h2>' + c.title + '</h2>' +
         '<div class="wl-read">' + c.intro.map(p => '<p>' + p + '</p>').join('') + '</div>' +
         '<p class="wl-yours">' + esc(c.yours(code)) + '</p>' + ntBlock +
@@ -1315,7 +1324,7 @@
     root.innerHTML =
       '<section class="wl-conn">' +
         '<button type="button" class="wl-linkbtn" id="wl-toresults">← Back to my results</button>' +
-        '<h2>How the 9 inputs connect</h2>' +
+        '<h2>How the ways you learn connect</h2>' +
         '<p>Nobody learns through just one input. Every message you send or receive travels through several at once, and the way they link explains a lot about why some conversations land and others don’t. The connections below start with the obvious ones and climb to the most hidden.</p>' +
         (mine.length ? '<p class="wl-mine"><strong>Your inputs:</strong> ' + mine.map(nm).join(', ') + '.' + (top ? ' Your strongest is ' + nm(top.id) + '.' : '') + (myPairs.length ? ' They link to each other in ' + myPairs.length + ' way' + (myPairs.length > 1 ? 's' : '') + ', listed under “Your connections” further down.' : '') + '</p>'
           : '<p class="wl-mine">You haven’t picked your inputs yet. You can still explore everything here, or go back and choose them with Change answers.</p>') +

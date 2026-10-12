@@ -319,6 +319,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(!/Soft no/.test(r.all), `${tag}: "maybe" in a request is not called a soft no`);
     // phones: the answer first, the talking notes and print folded; the settings stay closed with ?rel and ?use=work
     r = await read('Can you clean up a bit when you get a chance?');
+    await p.click('#go'); await p.waitForSelector('#rMore'); await p.waitForTimeout(80);   // a fresh read, with nothing opened by the test
     const lay = await p.evaluate(()=>({more:document.querySelector('#rMore').open, notes:document.querySelector('#writeNext').checkVisibility(), again:document.querySelector('#again').checkVisibility(),
       order:document.querySelector('#vbest').getBoundingClientRect().top < document.querySelector('.vlvl').getBoundingClientRect().top}));
     if(w<641) ok(!lay.more && !lay.notes && lay.again && lay.order, `${tag}: phone layout: ${JSON.stringify(lay)}`);

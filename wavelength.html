@@ -242,6 +242,22 @@
   main.read details.wl-howto[open] .wl-howto-more { display: none; }
   main.read details.wl-howto p { margin: 6px 0 0; }
   .wl-app .wl-quickrow { margin-top: 8px; }
+
+  /* Quiet mode (and "no bubbles"): the results read as plain text, without a box round every line */
+  html:is(.tol-quiet, .tol-nobubbles) main .wl-app :is(p, label.wl-field, .wl-lt, .wl-group h4, .wl-wordgroup h4, .wl-prompt label):not(.wl-mine, .wl-combo, .wl-needs, .wl-yours) {
+    background: none !important; border: 0 !important; border-radius: 0 !important; padding: 0 !important; margin: .55rem 0 !important; }
+  html:is(.tol-quiet, .tol-nobubbles) main .wl-app :is(h2, h3) { display: block; background: none !important; border: 0 !important; padding: 0 !important; }
+  html:is(.tol-quiet, .tol-nobubbles) main .wl-app :is(ul.wl-words, ul.wl-blist, ul.wl-ins-list) { background: none !important; border: 0 !important; padding: 0 0 0 1.3rem !important; }
+  html:is(.tol-quiet, .tol-nobubbles) main .wl-app :is(.wl-mine, .wl-combo) { border-width: 0 0 0 4px !important; border-radius: 0 !important; }
+  /* "More you can do": comparing, sharing this device and the chapters, folded into one place */
+  .wl-app details.wl-moredo { margin: 18px 0; border: 1.5px solid var(--wl-line); border-radius: 20px 20px 20px 8px; background: var(--wl-card); padding: 0 14px; }
+  .wl-app details.wl-moredo > summary { cursor: pointer; min-height: 48px; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: .6rem; padding: .45rem 0; font: 600 1.15rem/1.3 Fraunces, Georgia, serif; list-style: none; }
+  .wl-app details.wl-moredo > summary::-webkit-details-marker { display: none; }
+  .wl-app details.wl-moredo > summary::after { content: "›"; grid-column: 2; grid-row: 1 / span 2; font-size: 1.5rem; transition: transform .2s; }
+  .wl-app details.wl-moredo[open] > summary::after { transform: rotate(90deg); }
+  .wl-app details.wl-moredo > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 10px; }
+  .wl-app details.wl-moredo > summary span { grid-column: 1; grid-row: 2; font: 400 .9rem/1.3 Lora, Georgia, serif; color: var(--wl-soft); }
+  .wl-app .wl-nextline a { white-space: nowrap; }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/wavelength.html">
@@ -279,28 +295,27 @@
 </head>
 <body class="wl-page">
 <main class="read wl-page" id="main">
-<header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you think, talk and listen</h1></header>
-<p class="simple-lede">Wavelength helps you understand how you think and how you communicate, both giving and receiving. Pick your wiring if you like, tap through seven short parts (the last one is optional), and get your four-letter Wave Code and archetype. Then read sixteen self-discovery chapters written for your answers, explore how the nine inputs of learning connect, and build a warm personal statement to share.</p>
+<header class="read-head"><p class="read-code">Know yourself</p><h1>Wavelength: how you talk and listen</h1></header>
+<p class="simple-lede">Wavelength shows how you like to talk and listen, so the people around you don’t have to guess. Answer twelve quick either/or questions and get your Wave Code: four letters for how fast you think, whether you start with the big picture or the details, how you say things, and how you take things in. It isn’t a test, and there are no wrong answers.</p>
 <details class="wl-howto">
-  <summary><span><strong>How it works:</strong> about ten minutes, or two for just your Wave Code. Nothing is sent anywhere.</span> <span class="wl-howto-more">details</span></summary>
-  <p>Mostly tapping. Want only your four letters? “Just my Wave Code” takes about two minutes, and the rest stays optional. The last part, your statement, is optional too. Your wiring step is optional and you can select more than one. Every part shows options that are common for the wiring you picked, and you can open the rest anytime.</p>
+  <summary><span><strong>How it works:</strong> about two minutes for your Wave Code, or ten for the full version. Nothing is sent anywhere.</span> <span class="wl-howto-more">details</span></summary>
+  <p>Mostly tapping. “Just my Wave Code” takes about two minutes. The full version adds how you learn best, what helps you feel understood, and a short note about you to share; all of that is optional. You can also say how your brain works (for example ADHD, autistic or dyslexic), which only changes which options you see first.</p>
   <p>Nothing you type or choose is sent anywhere. Your answers stay in this tab until you close it, so a reload won’t lose them. They stay on this device after that only if you tick the box (you can also do it from your results), and “Erase everything” removes them.</p>
 </details>
-<div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and archetype.</p></noscript></div>
+<div class="wl-app no-bubble" data-wavelength aria-live="polite"><noscript><p>Wavelength needs JavaScript to build your Wave Code. The guide below explains every letter and nickname.</p></noscript></div>
 
 <section aria-labelledby="wl-about">
 <h2 id="wl-about">What’s in Wavelength</h2>
 <ul>
-  <li><strong>Your wiring (optional).</strong> Neurotypical, ADHD, Autistic, Dyslexic, Highly sensitive, Not sure yet, or Something else, in any combination. ADHD and Autistic together is often called AuDHD. It only decides which options you see first. It’s self-identified, and it isn’t a diagnosis: a doctor or psychologist can do a formal assessment if you want one.</li>
-  <li><strong>Your Wave Code.</strong> Four parts, each with three either/or questions and tap-to-select statements: how your brain gets going (pace), how you think things through (lens), how you send what you mean, and how you take things in.</li>
-  <li><strong>The 9 inputs of learning.</strong> Words, logic and numbers, pictures and space, hands and movement, sound and rhythm, people, inner reflection, nature and patterns, and big questions and meaning. Pick the ones that help things click, then your strongest.</li>
-  <li><strong>What helps me feel understood,</strong> and <strong>your statement</strong> (optional): a short, warm note about how you work best, with connections between your choices you may not have noticed.</li>
-  <li><strong>Sixteen self-discovery chapters:</strong> seven for your Wave Code (your speed, your lens, your voice, how you listen, your energy and your senses, masks and scripts, asking for what helps) and nine, one for each input. Each has a reading written for you, journal prompts and one thing to try this week.</li>
-  <li><strong>How the 9 inputs connect:</strong> a map from the obvious links to the most hidden, three flowcharts, and a nine-point check before a hard conversation.</li>
+  <li><strong>Your Wave Code.</strong> Four parts, each with three either/or questions: how your brain gets going (pace), how you think things through, how you say what you mean, and how you take things in. Each code also has a nickname, like “the Owl” or “the Otter”.</li>
+  <li><strong>How your brain works (optional).</strong> Neurotypical, ADHD, autistic, dyslexic, highly sensitive, not sure yet, or something else, in any mix. It only decides which options you see first. It’s your own description, not a diagnosis: a doctor or psychologist can do a formal assessment if you want one.</li>
+  <li><strong>How you learn best (optional).</strong> Nine ways things can click for you: words, numbers and logic, pictures, hands and movement, sound and rhythm, other people, quiet thinking, nature and patterns, and big questions. Pick the ones that help, then your strongest.</li>
+  <li><strong>What helps you feel understood,</strong> and <strong>a short note about you</strong> (optional): a warm few lines about how you work best, to share if you want to.</li>
+  <li><strong>More to read, if you like:</strong> sixteen short chapters written for your answers, each with a few journal questions and one thing to try this week.</li>
 </ul>
 
 <h2 id="wl-letters">The four Wave Code letters</h2>
-<p>Your Wave Code is four letters, a bit like the four-letter personality types you may have seen. It’s a fun way to describe your preferences, not a test that measures you, and everyone uses both ends of each line sometimes.</p>
+<p>Your Wave Code is four letters. It’s a simple way to describe what you prefer, not a test that measures you, and everyone uses both ends of each line sometimes.</p>
 <ul>
   <li><strong>Pace: Q or S.</strong> Q is Quick Spark: you think fast and out loud, and talking is part of thinking. S is Slow Simmer: you process inside first, and your best thoughts often arrive later.</li>
   <li><strong>Lens: F or T.</strong> F is Forest: the big picture, patterns and the why come first. T is Trees: the specifics, the steps and the exact details come first.</li>
@@ -308,7 +323,7 @@
   <li><strong>Receiving: E or A.</strong> E is Explicit: you take words at face value and want things spelled out. A is Attuned: you read tone, mood and what’s under the words.</li>
 </ul>
 
-<h2 id="wl-archetypes">The 16 Wavelength archetypes</h2>
+<h2 id="wl-archetypes">The 16 Wave Code nicknames</h2>
 <ul class="wl-arch-list">
   <li><strong>QFDE, the Comet:</strong> fast, visionary and straight-talking.</li>
   <li><strong>QFDA, the Sunflare:</strong> big ideas, said bluntly, yet feels every shift in tone.</li>

@@ -898,3 +898,17 @@ body.wpf-typing .wpf-bar{ transform: translateY(110%); }
 .wpf-weekfold > summary::-webkit-details-marker{ display: none; }
 .wpf-weekfold-t::before{ content: "\25B8\00a0"; display: inline-block; }
 .wpf-weekfold[open] .wpf-weekfold-t::before{ content: "\25BE\00a0"; }
+
+/* Big tap buttons for the owner and the bad-day backup (?for=good-bad-days): one tap, no drop-down */
+.wpf-tap{ display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 0; }
+.wpf-tap-b{ font: inherit; font-size: .95rem; min-height: 44px; min-width: 44px; padding: 6px 14px; border-radius: 999px; border: 2px solid #C9B6DA; background: #fff; color: #3A2E52; cursor: pointer; }
+.wpf-tap-b[aria-pressed="true"]{ background: #E6DAF3; border-color: #3A2E52; font-weight: 600; }
+.wpf-tap-b[aria-pressed="true"]::before{ content: "\2713\0020"; }
+.wpf-tap-b:focus-visible{ outline: 3px solid #2F6FB0; outline-offset: 2px; }
+.wpf-tap-b[hidden]{ display: none; }
+select.wpf-tap-sel{ position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden; clip: rect(0 0 0 0); opacity: 0; pointer-events: none; }
+/* the raw link and code, folded under the share buttons */
+.wpf-share-raw{ margin: 8px 0 0; }
+.wpf-share-raw > summary{ cursor: pointer; min-height: 40px; display: inline-flex; align-items: center; color: #2F6FB0; text-decoration: underline; }
+.wpf-share-raw[open] > summary{ margin-bottom: 6px; }
+.wpf-safe{ margin: 4px 0 10px; color: #5B4A6E; }

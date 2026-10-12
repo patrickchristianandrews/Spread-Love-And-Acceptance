@@ -149,7 +149,7 @@
     couple: /couples?\b|marriage|married|marital|spouse|in love\b|your relationship|romantic|loving someone|your partner|with a partner/i
   };
   var SIT_PAGE = {
-    coparent: /co-?parent|separat|divorc|stepfam|blended|two homes|on-my-own/,
+    coparent: /co-?parent|separat|divorc|stepfam|blended|two homes/,
     eldercare: /caregiv|carer|caring for|dementia|elderly|ageing|aging|eldercare|family-obligations/,
     parenthood: /new-parent|\bbab(y|ies)\b|toddler|parents\.html|for parents|newborn|adhd-kids|parenting|co-parent|foster|kinship|grandparents/,
     family: /famil|parent|grand|sibling|brother|sister|teen|kinship|foster|in-law|\bmum\b|\bmom\b|\bdad\b|relative/,
@@ -159,8 +159,32 @@
     work: /\/work\.html|at work|workplace|cowork|appreciation-at-work|business|wiring-card|groups/,
     couple: /partner|couple|marri|spouse|husband|wife|love|relationship|dating|romantic|together|empty-nest|money-together|two-faiths|long-distance|different-hours|when-one-is-ill|coming-home|more-than-two|how-to-stop-fighting/
   };
-  // pages about one kind of relationship that isn't a romantic couple
-  var NOT_COUPLE = /\/(teens|friends|foster-and-kinship|grandparents|grown-up-children|family-rifts|parents|adhd-kids|co-parenting|on-my-own|grief|sharing-a-room|work|appreciation-at-work|groups|caregivers|family-obligations|en-espanol)\.html/;
+  // pages about one kind of relationship that isn't a romantic couple, and pages for someone on their own
+  var NOT_COUPLE = /\/(teens|friends|foster-and-kinship|grandparents|grown-up-children|family-rifts|parents|adhd-kids|co-parenting|on-my-own|grief|sharing-a-room|work|appreciation-at-work|groups|caregivers|family-obligations|en-espanol|self-path|know-yourself|growing-up|wired-differently|wavelength|wiring-card|quick-checks|ladder|calming-supplements|for-teachers|for-counselors|outside-help)(-in-depth)?\.html|\/book\/(self-|understanding-)/;
+  // on a page about one kind of relationship, an article has to be about that too (or about looking after
+  // yourself, which fits anyone); otherwise the card stays away rather than suggest something off-topic
+  var PAGE_NEED = [
+    [/\/friends(-in-depth)?\.html/, /friend/i],
+    [/\/sharing-a-room(-in-depth)?\.html/, /roommate|housemate|flatmate|dorm/i],
+    [/\/(family-rifts|grown-up-children|grandparents)(-in-depth)?\.html/, /estrang|rift|sibling|adult child|grown(-| )up|grandparent|grandchild|elderly parent|ageing parent|aging parent|in-law/i],
+    [/\/on-my-own(-in-depth)?\.html/, /divorce|breakup|break-up|single|lonel|on your own|by yourself/i],
+    [/\/teens(-in-depth)?\.html/, /teen|adolescen|young people/i],
+    [/\/foster-and-kinship(-in-depth)?\.html/, /foster|adopt|kinship|grandparent|trauma/i],
+    [/\/co-parenting(-in-depth)?\.html/, /co-?parent|divorce|separat|two homes|blended|stepfam/i],
+    [/\/(work|appreciation-at-work|groups)(-in-depth)?\.html/, /workplace|work buddy|colleague|co-?worker|\bteams?\b|manager|at work|feedback/i],
+    [/\/caregivers(-in-depth)?\.html/, /caregiv|carer|caring for/i],
+    [/\/(parents|adhd-kids|new-parent)(-in-depth)?\.html/, /\bchild|parent|\bkids?\b|teen|toddler|\bbab(y|ies)\b/i]
+  ];
+  // about looking after yourself (no relationship in it): fits any page
+  var SOLO_TOPICS = { calm: 1, stress: 1, anxiety: 1, 'self-compassion': 1, habits: 1, gratitude: 1 };
+  function soloItem(it) { return (it.topics || []).length && it.topics.every(function (t) { return SOLO_TOPICS[t]; }); }
+  // the Gottman Institute writes for couples: its articles count as couple articles unless they name another situation
+  function coupleItem(it) {
+    var txt = (it.title || '') + ' ' + (it.summary || '');
+    if (SIT_ITEM.couple.test(txt)) return true;
+    if (it.source !== 'gottman') return false;
+    return !['coparent', 'eldercare', 'parenthood', 'family', 'roommates', 'work'].some(function (k) { return SIT_ITEM[k].test(txt); });
+  }
   var pageSits = null;
   function pageText() {
     var t = (window.location && window.location.pathname || '') + ' ' + (document.title || '');
@@ -180,11 +204,14 @@
     return pageSits;
   }
   // pages the list has nothing for yet (coming out, the Spanish page): no card
-  var NONE = /\/(coming-out|en-espanol|safety|grief)(-in-depth)?\.html$/;
+  var NONE = /\/(coming-out|en-espanol|safety|grief|ask|upset-right-now|someone-sent-you-this)(-in-depth)?\.html$/;
   function fitsPage(it) {
-    if (NONE.test((window.location && window.location.pathname) || '')) return false;
+    var path = (window.location && window.location.pathname) || '';
+    if (NONE.test(path)) return false;
     var txt = (it.title || '') + ' ' + (it.summary || ''), have = sitsOfPage();
+    if (!have.couple && coupleItem(it)) return false;
     for (var k in SIT_ITEM) if (SIT_ITEM[k].test(txt) && !have[k]) return false;
+    for (var i = 0; i < PAGE_NEED.length; i++) if (PAGE_NEED[i][0].test(path)) return PAGE_NEED[i][1].test(txt) || (soloItem(it) && !coupleItem(it));
     return true;
   }
 
@@ -216,8 +243,12 @@
     var focus = opts.topics && opts.topics.length ? opts.topics : (opts._scanned || []);
     var onPageFocus = focus.length ? onPage.filter(function (it) { return hasAny(it, focus); }) : [];
     var byTopic = topics.length ? pool.filter(function (it) { return hasAny(it, topics); }) : [];
+    // on a page about one kind of relationship, an article that names it comes next (a friendship article on Friends)
+    var path = (window.location && window.location.pathname) || '', need = null;
+    PAGE_NEED.forEach(function (n) { if (n[0].test(path)) need = n[1]; });
+    var named = need ? pool.filter(function (it) { return need.test((it.title || '') + ' ' + (it.summary || '')); }) : [];
     // nothing on this page's topics: no card, rather than an article about something else
-    return [onPageFocus, onPage, byTopic];
+    return [onPageFocus, onPage, named, byTopic];
   }
 
   function suggest(opts) {
@@ -239,7 +270,7 @@
       if (fresh.length) return pick(fresh);
     }
     // 3) they have opened the lot: anything on topic but the one on screen
-    var last = t[0].concat(t[1], t[2]);
+    var last = t[0].concat(t[1], t[2], t[3]);
     return pick(last.filter(ok)) || pick(last);
   }
 
@@ -298,6 +329,11 @@
     return e;
   }
 
+  // the article's topic in plain words, shown above its title
+  var PLAIN_TOPIC = { 'invisible-work': 'invisible work and fair shares', stress: 'stress and burnout', calm: 'calming down', connection: 'small moments of connection',
+    conflict: 'arguments and taking a break', repair: 'making up and saying sorry', communication: 'listening and saying it well', anxiety: 'anxiety and worry',
+    attachment: 'attachment and trust', boundaries: 'boundaries and saying no', neurodiversity: 'minds that work differently', autism: 'autism', adhd: 'ADHD',
+    'self-compassion': 'being kind to yourself', family: 'family life', teams: 'housemates and coworkers', habits: 'habits and small changes', gratitude: 'gratitude and kindness' };
   /* ---------- the card ---------- */
   function card(opts) {
     opts = opts || {};
@@ -357,13 +393,9 @@
         src.textContent = sname; src.setAttribute('data-src', it.source);
         title.textContent = it.title;
         pil.innerHTML = '';
-        // the article's main pillar, linked to where the Five Pillars are explained
-        var pk = (it.pillars || [])[0], pd = pk && d.pillars[pk];
-        if (pd) {
-          var a = el('a', '', 'Pillar ' + pk + ': ' + pd.name);
-          a.href = '/five-pillars.html#' + pd.anchor;
-          pil.appendChild(a);
-        }
+        // what the article is about, in plain words (no pillar numbers)
+        var tk = (it.topics || [])[0], tn = tk && d.tags[tk];
+        if (tn) pil.appendChild(document.createTextNode('About: ' + (PLAIN_TOPIC[tk] || tn)));
         pil.hidden = !pil.firstChild;
         by.textContent = it.author ? 'By ' + it.author : ''; by.hidden = !it.author;
         sum.textContent = it.summary || '';

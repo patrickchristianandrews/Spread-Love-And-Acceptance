@@ -1278,6 +1278,158 @@
       ]
     },
     {
+      "id": "gamingchores",
+      "name": "doing the chores while they game",
+      "what": [
+        "That’s a second thing on top of feeling ignored: the house. It’s fair to want the jobs shared, whatever anyone does to relax."
+      ],
+      "how": [
+        "List the regular jobs, then give each one an owner, so nobody has to remind anyone.",
+        "Agree once which jobs are done before a session starts.",
+        "Keep the two talks apart: one about time together, one about the chores.",
+        "Look at it again in two weeks, and swap jobs if it isn’t working."
+      ],
+      "script": [
+        "I’m doing most of the cleaning, and I don’t want to be the one who reminds. Can we split the jobs once, each own a few, and then I’ll stop asking?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "One owner per job: a shared chore list in about a minute",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ],
+        [
+          "Small habits that help both of you",
+          "/gaming-and-time-together.html#habits"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
+          "gamingchores"
+        ],
+        [
+          "\\b(addict\\w*|disorder|overreact\\w*|too much is too much|is it normal how much)\\b",
+          "gamingaddiction"
+        ],
+        [
+          "\\b(defensive|getting (mad|angry|upset|annoyed)|without (a |it turning into a |starting a |it becoming a )?(fight|row|argument)|good time to (talk|bring)|when (should|do) i (bring|raise|say)|bring it up|raise it)\\b",
+          "gamingtalk"
+        ]
+      ]
+    },
+    {
+      "id": "gamingaddiction",
+      "name": "is gaming addiction real?",
+      "pat": "\\b(gaming|game|video game|phone|screen)s? (addiction|addict\\w*|disorder)\\b|\\baddict\\w* to (gaming|games|video games|his games|her games|the game|his phone|her phone|fortnite|the xbox|the playstation)\\b|\\boverreact\\w*\\b.{0,40}\\b(gam\\w*|games?|xbox|playstation)\\b|\\b(gam\\w*|games?|xbox|playstation)\\b.{0,40}\\boverreact\\w*\\b|\\b(game|games|gaming) (problem|issue)\\b.{0,20}\\b(real|addict\\w*|serious)\\b",
+      "what": [
+        "It can be, for a small number of people. The gaming guide’s line is: if gaming or a phone is crowding out sleep, work, money or friends, and cutting back is hard even when you want to, that’s worth talking about with a doctor. It isn’t a character flaw, and help is there. For most couples, though, it’s about timing, not the hours."
+      ],
+      "how": [
+        "Check the four: sleep, work or school, money, friends. Is any of them being crowded out?",
+        "Ask yourself honestly whether cutting back is hard even when you want to.",
+        "If neither fits, it’s probably a timing problem: agree when game time is, and when time together is.",
+        "Before deciding whether she’s overreacting, ask what she’s worried about, and say it back."
+      ],
+      "script": [
+        "I don’t think I’m addicted, but I hear that you’re worried. Can we look at when I play, and pick evenings that are ours?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Small habits that help both of you (and when to see a doctor)",
+          "/gaming-and-time-together.html#habits"
+        ],
+        [
+          "Talking about it: timing and tone",
+          "/gaming-and-time-together.html#talking"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
+          "gamingchores"
+        ],
+        [
+          "\\b(addict\\w*|disorder|overreact\\w*|too much is too much|is it normal how much)\\b",
+          "gamingaddiction"
+        ],
+        [
+          "\\b(defensive|getting (mad|angry|upset|annoyed)|without (a |it turning into a |starting a |it becoming a )?(fight|row|argument)|good time to (talk|bring)|when (should|do) i (bring|raise|say)|bring it up|raise it)\\b",
+          "gamingtalk"
+        ]
+      ]
+    },
+    {
+      "id": "gamingtalk",
+      "name": "raising gaming without a fight",
+      "what": [
+        "Talks about gaming go wrong mostly because of timing. Raise it mid-match and it sounds like an attack while they can’t stop; wait until you’re fed up and it comes out as “You’re always on that thing.”"
+      ],
+      "how": [
+        "Pick a set time when you’re both calm, not the moment you’ve had enough.",
+        "Start by saying back what the game gives them: friends, a way to switch off, being good at something.",
+        "Make one clear ask with a day and a time, not “more time together”.",
+        "If it gets heated, stop and come back to it. A short pause beats a fight about a game."
+      ],
+      "script": [
+        "Can we talk about the weekend tonight after dinner? It’s nothing bad.",
+        "So the game is where you see your friends, and it helps you switch off after work. Did I get that? I’d love Thursday evenings to be ours."
+      ],
+      "scriptLabels": [
+        "To pick the time",
+        "When you talk"
+      ],
+      "links": [
+        [
+          "Talking about it: timing and tone",
+          "/gaming-and-time-together.html#talking"
+        ],
+        [
+          "A pause plan for when a talk gets heated",
+          "/pursue-withdraw.html#plan"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
+          "gamingchores"
+        ],
+        [
+          "\\b(addict\\w*|disorder|overreact\\w*|too much is too much|is it normal how much)\\b",
+          "gamingaddiction"
+        ],
+        [
+          "\\b(defensive|getting (mad|angry|upset|annoyed)|without (a |it turning into a |starting a |it becoming a )?(fight|row|argument)|good time to (talk|bring)|when (should|do) i (bring|raise|say)|bring it up|raise it)\\b",
+          "gamingtalk"
+        ]
+      ]
+    },
+    {
       "id": "gaming",
       "kind": "intent",
       "first": true,
@@ -1347,6 +1499,36 @@
               "/gaming-and-time-together.html"
             ]
           ]
+        },
+        {
+          "re": "\\b(ignores?|ignoring|ignored) me\\b|\\b(plays?|playing|games?|gaming|on (his|her|their) (xbox|playstation|ps5|switch|console|pc|phone))\\b.{0,30}\\b(all night|all day|all weekend|every night|every evening|whole (night|evening|weekend))\\b|\\bi feel (ignored|alone|lonely|second|invisible)\\b|\\b(come|comes) second to (a|his|her|their) (game|screen|console|phone)\\b",
+          "what": [
+            "That sounds lonely, sitting next to someone who’s somewhere else. Wanting more time together is fair, and it’s worth saying, without making the game the bad guy. Gaming is also how many people rest and see friends, so a plan you both chose usually works better than a running argument."
+          ],
+          "how": [
+            "Say what you miss, not what they do wrong: “I miss you on weeknights” lands better than “You’re always on that game.”",
+            "Use the breaks: ask between matches, after a round or on a loading screen, not mid-fight.",
+            "Ask for something specific: an evening, a walk, dinner together.",
+            "Then make a small time-together deal you both choose: which evenings are ours, which are for gaming."
+          ],
+          "script": [
+            "I’m not asking you to stop gaming. I miss us. Could Thursday be ours?",
+            "Can I grab you between matches? Just five minutes."
+          ],
+          "scriptLabels": [
+            "Words you could use",
+            "In the moment"
+          ],
+          "links": [
+            [
+              "If you feel ignored during a session",
+              "/gaming-and-time-together.html#ignored"
+            ],
+            [
+              "Our time-together deal",
+              "/gaming-and-time-together.html#deal"
+            ]
+          ]
         }
       ],
       "pageChips": [
@@ -1365,6 +1547,20 @@
         [
           "Nagged about chores",
           "She nags me about chores the second I log on"
+        ]
+      ],
+      "follow": [
+        [
+          "\\b(i (also |even |still )?(do|did|end up doing) (all|most|everything)|all the (cleaning|chores|housework|dishes|cooking|laundry)|do everything (at|around) (home|the house)|(cleaning|chores|housework|dishes)\\b.{0,20}\\b(on me|all me|myself))\\b",
+          "gamingchores"
+        ],
+        [
+          "\\b(addict\\w*|disorder|overreact\\w*|too much is too much|is it normal how much)\\b",
+          "gamingaddiction"
+        ],
+        [
+          "\\b(defensive|getting (mad|angry|upset|annoyed)|without (a |it turning into a |starting a |it becoming a )?(fight|row|argument)|good time to (talk|bring)|when (should|do) i (bring|raise|say)|bring it up|raise it)\\b",
+          "gamingtalk"
         ]
       ]
     },
@@ -1729,6 +1925,127 @@
       "chips": []
     },
     {
+      "id": "teenfoster",
+      "name": "a teen in foster or kinship care",
+      "pat": "\\b(i m|im|i am|i ve been|ive been|i have been|i live|i m living|im living|i got put|i was put) (in|into|with) (foster care|care|a foster (family|home|carer|placement)|my foster (carers?|family|mum|mom|dad|parents)|a placement)\\b|\\bmy (foster )?(carers|foster (carers?|mum|mom|dad|parents|family|home))\\b.{0,50}\\b(rules?|strict|dont get|don t get|do not get|wont let|won t let|took|take|hate|unfair|annoying|shout\\w*|treat)\\b|\\b(hate|hating) (the|their|all the) rules\\b.{0,30}\\b(foster|placement|carers?)\\b|\\bmy (social worker|placement)\\b.{0,40}\\b(rules?|move|moving|family|mum|mom|dad|school|friends|hate)\\b",
+      "what": [
+        "That sounds hard. A new home often means new rules all at once, and it’s normal to feel on guard, or angry, for a while. You don’t have to settle in fast, or pretend it’s fine."
+      ],
+      "how": [
+        "Ask for the reason behind one rule, at a calm moment, then suggest a deal: “10 on school nights, 11 on weekends?”",
+        "You can say what you miss. Missing your old home or your family isn’t ungrateful.",
+        "You can ask your social worker, or an advocate, about things you want to change: seeing your family, keeping your old school or friends, or a house rule. You’re allowed to ask, and to ask again.",
+        "If you want to talk to someone outside the house, Childline (UK) is free on 0800 1111, any time."
+      ],
+      "script": [
+        "I know you’re doing a lot for me. Can we talk about the phone rule? I’ve got an idea.",
+        "I’m not angry at you. I’m just missing home today."
+      ],
+      "scriptLabels": [
+        "To ask about a rule",
+        "When it’s a hard day"
+      ],
+      "links": [
+        [
+          "For teens: living with grandparents, family or foster carers",
+          "/teens.html#family-care"
+        ],
+        [
+          "Getting heard at home",
+          "/teens.html#talking"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(i )?(really |so |just |still )?miss (my )?(mum|mom|mother|dad|father|parents?|mam|mummy|mommy)\\b",
+          "teenmissparent"
+        ],
+        [
+          "\\b(doesnt|don t|dont|does not|never) (get|understand|listen to) me\\b",
+          "teennotgetme"
+        ],
+        [
+          "\\b(took|takes|taking|confiscat\\w*) my (phone|tablet|ipad|laptop|switch|xbox|console)\\b|\\b(phone|curfew|rules?)\\b",
+          "teenhouse"
+        ]
+      ]
+    },
+    {
+      "id": "fostertwocarers",
+      "name": "two carers, firm and warm",
+      "pat": "\\bfoster\\w*\\b.{0,80}\\b(stricter|too strict|too soft|firmer|softer|disagree about (rules|discipline))\\b|\\b(stricter|too soft|firmer)\\b.{0,80}\\bfoster\\w*\\b",
+      "what": [
+        "It’s very common for one carer to be firmer and the other warmer. Both are care: one wants safety and predictability, the other wants the child to feel heard. The trouble starts when the child hears two different rulebooks."
+      ],
+      "how": [
+        "On a calm evening, without the child, each of you writes your top three non-negotiable rules. Only three.",
+        "Compare. Keep the ones you share, and agree which ones the child will hear.",
+        "Agree who holds each rule: one of you leads on bedtime, the other on homework, and the other backs them up.",
+        "Disagree in private. In front of the child, you’re on the same side. Look again in two weeks."
+      ],
+      "script": [
+        "I worry she’ll feel unsafe without clear limits. Can we pick three rules we both hold?",
+        "I’ll back you up on the phone rule. Can you take the lead on it?"
+      ],
+      "scriptLabels": [
+        "Instead of “you’re too soft”",
+        "Backing each other up"
+      ],
+      "links": [
+        [
+          "Two carers, one approach",
+          "/foster-and-kinship.html#two-carers"
+        ],
+        [
+          "House rules, with the why written in",
+          "/foster-and-kinship.html#rules"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
+        ],
+        [
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
+        ],
+        [
+          "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
+          "teenrules"
+        ],
+        [
+          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
+          "fosterload"
+        ],
+        [
+          "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(rules?)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*)\\b",
+          "foster"
+        ]
+      ],
+      "teenAlt": "teenhouse"
+    },
+    {
       "id": "fosterload",
       "kind": "intent",
       "first": true,
@@ -1766,18 +2083,90 @@
       "chips": [],
       "follow": [
         [
-          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*|close to (us|me))\\b",
-          "foster"
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
         ],
         [
-          "\\b(strict|stricter|discipline|consequences|too soft)\\b",
-          "parentapproach"
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
+        ],
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*|close to (us|me))\\b",
+          "foster"
         ],
         [
           "\\b(rules?|curfew|phone|come home|on time)\\b",
           "teencurfew"
         ]
-      ]
+      ],
+      "teenAlt": "teenfoster"
+    },
+    {
+      "id": "teenlaughs",
+      "name": "a consequence that isn’t landing",
+      "pat": "\\b(laughs?|laughing|laughed|shrugs?|smirks?|doesnt care|dont care|does not care|couldnt care less)\\b.{0,30}\\b(when|if) (i|we) (take|took|confiscate\\w*|ground\\w*|say no|punish\\w*|tell (her|him|them) off|remove)\\b|\\b(consequences?|punishments?|taking (her|his|their) phone( away)?|grounding)\\b.{0,30}\\b(dont|doesnt|don t|never|not|isnt|aren t|arent) (work|working|matter|bother|landing)\\b",
+      "what": [
+        "When a consequence gets a laugh, it usually isn’t landing, and a bigger one rarely fixes that. Laughing can be a young person’s way of saying “you can’t get to me”, especially if they’ve had a lot of adults come and go."
+      ],
+      "how": [
+        "Stay calm and don’t argue about the laugh. Say what happens, once, and then do it.",
+        "Tie the consequence to the rule and its reason: phone downstairs at 10, because sleep makes everything easier. Give it back at the time you said.",
+        "Keep connection separate from consequences: one small daily moment with them that they can’t lose.",
+        "Agree the rules with any other carer first, so they hear one plan, and look again in two weeks. If they’re in care, your social worker can help with a plan that fits their history."
+      ],
+      "script": [
+        "I’m not going to argue about it. The phone stays downstairs tonight, and you’ll have it back at 7 tomorrow. I still want to hear about your day."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "House rules, with the why written in",
+          "/foster-and-kinship.html#rules"
+        ],
+        [
+          "Two carers, one approach",
+          "/foster-and-kinship.html#two-carers"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
+        ],
+        [
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
+        ],
+        [
+          "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
+          "teenrules"
+        ],
+        [
+          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
+          "fosterload"
+        ],
+        [
+          "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(rules?)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*)\\b",
+          "foster"
+        ]
+      ],
+      "teenAlt": "teenhouse"
     },
     {
       "kind": "intent",
@@ -1814,14 +2203,19 @@
       ],
       "follow": [
         [
-          "\\b(strict|too soft|disagree|consequences?|punish\\w*)\\b",
-          "parentapproach"
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
+        ],
+        [
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
         ],
         [
           "\\b(rules?|curfew|phone)\\b",
           "teenrules"
         ]
-      ]
+      ],
+      "teenAlt": "teenhouse"
     },
     {
       "id": "foster",
@@ -1865,6 +2259,14 @@
       ],
       "follow": [
         [
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
+        ],
+        [
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
+        ],
+        [
           "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
           "teenrules"
         ],
@@ -1875,10 +2277,6 @@
         [
           "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
           "teencurfew"
-        ],
-        [
-          "\\b(strict|stricter|discipline|consequences|too soft|disagree)\\b",
-          "parentapproach"
         ],
         [
           "\\b(rules?)\\b",
@@ -1907,7 +2305,8 @@
           "We disagree about rules",
           "We disagree about how strict to be"
         ]
-      ]
+      ],
+      "teenAlt": "teenfoster"
     },
     {
       "id": "parentapproach",
@@ -1945,7 +2344,8 @@
           "\\b(rules?|curfew|phone|come home)\\b",
           "teencurfew"
         ]
-      ]
+      ],
+      "teenAlt": "teenhouse"
     },
     {
       "id": "teenrules",
@@ -1978,7 +2378,38 @@
           "/library/life.html#teenagers"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
+          "fostertwocarers"
+        ],
+        [
+          "\\b(laughs?|laughing|laughed|shrugs?|doesnt care|dont care|not working|isnt working)\\b",
+          "teenlaughs"
+        ],
+        [
+          "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
+          "teenrules"
+        ],
+        [
+          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
+          "fosterload"
+        ],
+        [
+          "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(rules?)\\b",
+          "teencurfew"
+        ],
+        [
+          "\\b(trust|push\\w* (us|me) away|moved (homes|around|a lot)|attach\\w*)\\b",
+          "foster"
+        ]
+      ],
+      "teenAlt": "teenhouse"
     },
     {
       "id": "kinshipgp",
@@ -2024,6 +2455,57 @@
           "\\badhd\\b",
           "adhdkids"
         ]
+      ],
+      "teenAlt": "teenkinship"
+    },
+    {
+      "id": "teennotgetme",
+      "name": "a teen who feels the adult at home doesn’t get them",
+      "pat": "\\b(nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?)|aunt|auntie|uncle)\\b.{0,40}\\b(doesnt|don t|dont|does not|do not|never|wont|won t) (get|understand|listen to|hear) me\\b",
+      "what": [
+        "Feeling like the person you live with doesn’t get you is lonely, even when they’re trying. It’s really common across two generations, and it isn’t your fault."
+      ],
+      "how": [
+        "Pick one thing you wish she understood, and say just that one thing, at a calm moment.",
+        "Ask what she worries about, too. A rule is often a worry in disguise.",
+        "Find one other adult who does get you (a teacher, a school counsellor, an aunt) and talk to them as well.",
+        "If things at home are more than clashing, Childline (UK) is free on 0800 1111, any time."
+      ],
+      "script": [
+        "Can I tell you one thing I wish you got about me? I’m not having a go."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "For teens: living with grandparents, family or foster carers",
+          "/teens.html#family-care"
+        ],
+        [
+          "Getting heard at home",
+          "/teens.html#talking"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(i )?(really |so |just |still )?miss (my )?(mum|mom|mother|dad|father|parents?|mam|mummy|mommy)\\b",
+          "teenmissparent"
+        ],
+        [
+          "\\b(doesnt|don t|dont|does not|never) (get|understand|listen to) me\\b",
+          "teennotgetme"
+        ],
+        [
+          "\\b(took|takes|taking|confiscat\\w*) my (phone|tablet|ipad|laptop|switch|xbox|console)\\b|\\b(phone|curfew|rules?)\\b",
+          "teenhouse"
+        ]
       ]
     },
     {
@@ -2058,7 +2540,17 @@
         ]
       ],
       "chips": [],
-      "safety": true
+      "safety": true,
+      "follow": [
+        [
+          "\\b(i )?(really |so |just |still )?miss (my )?(mum|mom|mother|dad|father|parents?|mam|mummy|mommy)\\b",
+          "teenmissparent"
+        ],
+        [
+          "\\b(doesnt|don t|dont|does not|never) (get|understand|listen to) me\\b",
+          "teennotgetme"
+        ]
+      ]
     },
     {
       "id": "teenkinship",
@@ -2087,7 +2579,69 @@
           "/foster-and-kinship.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(i )?(really |so |just |still )?miss (my )?(mum|mom|mother|dad|father|parents?|mam|mummy|mommy)\\b",
+          "teenmissparent"
+        ],
+        [
+          "\\b(doesnt|don t|dont|does not|never) (get|understand|listen to) me\\b",
+          "teennotgetme"
+        ],
+        [
+          "\\b(took|takes|taking|confiscat\\w*) my (phone|tablet|ipad|laptop|switch|xbox|console)\\b|\\b(phone|curfew|rules?)\\b",
+          "teenhouse"
+        ]
+      ]
+    },
+    {
+      "id": "teenmissparent",
+      "name": "missing a parent who is away",
+      "what": [
+        "Missing your mum makes sense, even when things are complicated. It’s okay to love her and still be upset with her, and it isn’t your fault that she’s away."
+      ],
+      "how": [
+        "All of it is allowed: missing her, being angry with her, feeling relieved, or all three in one day.",
+        "You choose who knows. One friend or one adult is enough.",
+        "Tell the adult you live with when it’s a missing-her day. It helps them not take it personally.",
+        "Free people to talk to: Childline (UK) 0800 1111, any time. If a parent drinks, Nacoa (UK) and Alateen (US) are there for you."
+      ],
+      "script": [
+        "I’m not angry at you. I’m just missing Mum today.",
+        "Can we talk about Mum? I keep thinking about her."
+      ],
+      "scriptLabels": [
+        "To the adult you live with",
+        "Or"
+      ],
+      "links": [
+        [
+          "For teens: when a parent is away, ill, or in treatment",
+          "/teens.html#parent-away"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(i )?(really |so |just |still )?miss (my )?(mum|mom|mother|dad|father|parents?|mam|mummy|mommy)\\b",
+          "teenmissparent"
+        ],
+        [
+          "\\b(doesnt|don t|dont|does not|never) (get|understand|listen to) me\\b",
+          "teennotgetme"
+        ],
+        [
+          "\\b(took|takes|taking|confiscat\\w*) my (phone|tablet|ipad|laptop|switch|xbox|console)\\b|\\b(phone|curfew|rules?)\\b",
+          "teenhouse"
+        ]
+      ]
     },
     {
       "id": "missing",
@@ -3592,7 +4146,263 @@
           "/appreciation-at-work.html#words"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
+        [
+          "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
+          "bizthanks"
+        ],
+        [
+          "\\b(controlling|control|telling me how|tells me how|how i do (things|it|my \\w+)|micromanag\\w*|bossy|redo\\w*|re do\\w*|my way|her way|his way|(my|our) (bakery|business|shop|cafe|company) too)\\b",
+          "bizhow"
+        ],
+        [
+          "\\b(admin|payroll|suppliers?|permits?|invoic\\w*|paperwork|bookkeeping|accounts|tax|nobody sees|no one sees)\\b",
+          "bizadmin"
+        ],
+        [
+          "\\b(pull my weight|not a couple|co ?own\\w*)\\b",
+          "bizpartner"
+        ]
+      ]
+    },
+    {
+      "id": "bizcontrolling",
+      "name": "being called controlling by a business partner",
+      "pat": "\\b(says|said|thinks|calls me|called me|told me|tells me|accuses me of being|accused me of being)\\b.{0,15}\\b(i m|im|i am|i was|being|im being|i m being)? ?(so |too |really )?(controlling|a control freak|micromanag\\w*|bossy)\\b.{0,100}\\b(business|company|bakery|shop|cafe|restaurant|startup|firm|salon|studio|cofounders?|co founders?|business partners?|coown\\w*|co own\\w*|permits?|payroll|suppliers|vat|invoices?|accounts|bookkeeping)\\b|\\b(business|company|bakery|shop|cafe|restaurant|startup|firm|salon|studio|cofounders?|co founders?|business partners?|coown\\w*|co own\\w*|permits?|payroll|suppliers|vat|invoices?|accounts|bookkeeping)\\b.{0,100}\\b(says|said|thinks|calls me|told me|tells me|accuses me of being)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too |really )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+      "what": [
+        "It’s hard to hear “controlling” when you check because something important could go wrong. Often both things are true: the checks matter, and the way they happen feels like being watched."
+      ],
+      "how": [
+        "Name the risk, not the person: “If the permits lapse, we can’t open.”",
+        "Agree who owns how: the owner of a job decides how it’s done. If a job is theirs, agree one check you both accept, like a shared deadline list, instead of checking everything.",
+        "Make the checks visible and scheduled: ten minutes a week where you both look at the deadlines, so nobody is checking behind anyone’s back.",
+        "Give every recurring job one owner and a backup, written down."
+      ],
+      "script": [
+        "I check because I’m worried the permits will lapse, not because I don’t trust you. Can we put the deadlines on one list and look at it together on Mondays, so I can stop checking behind you?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Running a business together",
+          "/work.html#business-partners"
+        ],
+        [
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
+        [
+          "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
+          "bizthanks"
+        ],
+        [
+          "\\b(controlling|control|telling me how|tells me how|how i do (things|it|my \\w+)|micromanag\\w*|bossy|redo\\w*|re do\\w*|my way|her way|his way|(my|our) (bakery|business|shop|cafe|company) too)\\b",
+          "bizhow"
+        ],
+        [
+          "\\b(admin|payroll|suppliers?|permits?|invoic\\w*|paperwork|bookkeeping|accounts|tax|nobody sees|no one sees)\\b",
+          "bizadmin"
+        ],
+        [
+          "\\b(pull my weight|not a couple|co ?own\\w*)\\b",
+          "bizpartner"
+        ]
+      ]
+    },
+    {
+      "id": "bizsplit",
+      "name": "splitting work fairly: the visible side",
+      "pat": "\\b(my job|my part|my side|mine|i do|i m|im|i handle|i run)\\b( is| s)?( the)? (baking|cooking|selling|sales|the (customers|clients|kitchen|shop floor|front|counter|making|creative))\\b.{0,60}\\b(their|his|her|theirs|they do|he does|she does|the other)\\b.{0,20}\\b(admin|paperwork|payroll|books|accounts|finances|ordering)\\b",
+      "what": [
+        "A good first step is to ask what the admin involves right now. When admin is done well it’s invisible, so the person doing the visible work often doesn’t know how much is in it."
+      ],
+      "how": [
+        "Each of you lists everything you did this month, the admin included: payroll, suppliers, permits, tax.",
+        "Ask: “What does the admin involve at the moment? What takes the most time?” Listen before comparing.",
+        "Equal hours aren’t the goal. The question is whether the split matches what you both agreed, and whether you’d both agree to it again.",
+        "Give every recurring job one owner and a backup, and thank the admin out loud when it goes right."
+      ],
+      "script": [
+        "I see the baking side every day, and I don’t see all the admin. Can you walk me through what it involves this month? Then let’s look at the split together."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "sides": [
+        {
+          "re": "\\b(my job|my part|my side|mine|i do|i handle)\\b( is| s)?( the| all the)? (admin|paperwork|payroll|books|accounts|finances|ordering)\\b",
+          "what": [
+            "That’s a lonely kind of work: when the admin is done well, nobody sees it. It’s real work, and it’s worth making visible before you talk about fair."
+          ],
+          "how": [
+            "List everything the admin involved this month, with rough times: payroll, suppliers, permits, tax.",
+            "Share the list as a fact, not a scorecard, and ask what their side involved too.",
+            "Equal hours aren’t the goal. Agree whether the split still matches what you both signed up for.",
+            "Ask for a backup on the jobs only you know, so the business isn’t stuck if you’re ill."
+          ],
+          "script": [
+            "Can we each list everything we did this month, the admin too? I want us both to see the whole picture before we talk about the split."
+          ],
+          "links": [
+            [
+              "Running a business together",
+              "/work.html#business-partners"
+            ],
+            [
+              "One owner per job (the team list)",
+              "/work.html#owner-list"
+            ]
+          ]
+        }
+      ],
+      "links": [
+        [
+          "Running a business together",
+          "/work.html#business-partners"
+        ],
+        [
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
+        [
+          "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
+          "bizthanks"
+        ],
+        [
+          "\\b(controlling|control|telling me how|tells me how|how i do (things|it|my \\w+)|micromanag\\w*|bossy|redo\\w*|re do\\w*|my way|her way|his way|(my|our) (bakery|business|shop|cafe|company) too)\\b",
+          "bizhow"
+        ],
+        [
+          "\\b(admin|payroll|suppliers?|permits?|invoic\\w*|paperwork|bookkeeping|accounts|tax|nobody sees|no one sees)\\b",
+          "bizadmin"
+        ],
+        [
+          "\\b(pull my weight|not a couple|co ?own\\w*)\\b",
+          "bizpartner"
+        ]
+      ]
+    },
+    {
+      "id": "bizburnout",
+      "name": "burnout and thinking of leaving the business",
+      "pat": "\\b(walk(ing)? away from|quit(ting)?|leav(e|ing)|giv(e|ing) up( on)?|close|closing|shut(ting)? down|sell(ing)? up|get(ting)? out of)\\b.{0,25}\\b(the|our|my) (business|company|bakery|shop|cafe|partnership|startup|salon|restaurant|firm)\\b|\\b(burn(ed|t)? out|so tired|exhausted|running on empty|cant keep (going|doing this))\\b.{0,60}\\b(business|partnership|cofounder|co founder|business partner)\\b",
+      "what": [
+        "That sounds like real burnout, not just a bad week. Thinking about walking away is a sign of how much you’ve been carrying, and it deserves to be taken seriously."
+      ],
+      "how": [
+        "Before any big decision, get some real rest if you can. Even a few days off can change how it looks.",
+        "Tell your co-founder how tired you are, as a fact, not a verdict: “I’m running on empty, and I need us to change something.”",
+        "Look at the load together: one owner and a backup for every recurring job, so it isn’t all on you.",
+        "If you’re thinking about leaving, the money, ownership or partnership agreement are a conversation for an accountant or a lawyer.",
+        "If the tiredness doesn’t lift, or you feel low most days, talk to your doctor."
+      ],
+      "script": [
+        "I’m running on empty, and I’ve even thought about walking away. I don’t want to decide anything this tired. Can we sit down this week and look at who carries what?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Running a business together (and when to ask an accountant or lawyer)",
+          "/work.html#business-partners"
+        ],
+        [
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
+        [
+          "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
+          "bizthanks"
+        ],
+        [
+          "\\b(controlling|control|telling me how|tells me how|how i do (things|it|my \\w+)|micromanag\\w*|bossy|redo\\w*|re do\\w*|my way|her way|his way|(my|our) (bakery|business|shop|cafe|company) too)\\b",
+          "bizhow"
+        ],
+        [
+          "\\b(admin|payroll|suppliers?|permits?|invoic\\w*|paperwork|bookkeeping|accounts|tax|nobody sees|no one sees)\\b",
+          "bizadmin"
+        ],
+        [
+          "\\b(pull my weight|not a couple|co ?own\\w*)\\b",
+          "bizpartner"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -3621,11 +4431,25 @@
           "/work.html#business-partners"
         ],
         [
-          "One owner per job (the list)",
-          "/workpapers/wp-03-one-owner-per-job.html"
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -3655,11 +4479,23 @@
           "/work.html#business-partners"
         ],
         [
-          "One owner per job (the list)",
-          "/workpapers/wp-03-one-owner-per-job.html"
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
         ]
       ],
       "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
         [
           "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
           "bizthanks"
@@ -3696,12 +4532,24 @@
           "/work.html#business-partners"
         ],
         [
-          "One owner per job (WP-03)",
-          "/workpapers/wp-03-one-owner-per-job.html"
+          "One owner per job (the team list)",
+          "/work.html#owner-list"
         ]
       ],
       "chips": [],
       "follow": [
+        [
+          "\\b(says|said|thinks|calls me|told me|tells me|accuses me)\\b.{0,15}\\b(i m|im|i am|being)? ?(so |too )?(controlling|a control freak|micromanag\\w*|bossy)\\b",
+          "bizcontrolling"
+        ],
+        [
+          "\\b(walk(ing)? away|quit(ting)?|leav(e|ing) (the|our)|give up|close (the|our)|so tired|burn(ed|t)? out|exhausted|running on empty)\\b",
+          "bizburnout"
+        ],
+        [
+          "\\b(my job|my part|mine)\\b( is| s)?( the)? (baking|cooking|selling|sales|admin|paperwork|payroll)\\b",
+          "bizsplit"
+        ],
         [
           "\\b(thank|thanks|thanking|appreciat\\w*|sound(ing)? fake|without (it )?sounding)\\b",
           "bizthanks"
@@ -3872,7 +4720,7 @@
         "Plan an easy way to leave if it gets too much. And if you’re not ready to go, that’s allowed too."
       ],
       "script": [
-        "I’ll come to the christening. I’m not ready to talk about Dad’s house there. Can we keep that day about Mia?",
+        "I’ll come to the christening. I’m not ready to talk about Dad’s house there. Can we keep that day about the baby?",
         "Thank you for asking me. I’m not ready yet. I’ll let you know when I am."
       ],
       "links": [
@@ -3900,7 +4748,7 @@
             "Afterwards, one short message is enough. Then stop."
           ],
           "script": [
-            "Mia’s christening is on the 14th. No pressure to reply, but I’d really like you there.",
+            "The christening is on [the date]. No pressure to reply, but I’d really like you there.",
             "We missed you on Sunday. No hard feelings. The door is still open."
           ],
           "scriptLabels": [
@@ -15661,6 +16509,46 @@
         [
           "A family member",
           "I feel guilty about my mum and I don’t know what to say to her"
+        ]
+      ],
+      "plain": true
+    },
+    {
+      "id": "meetingspaper",
+      "pat": "^(and |but |so |honestly )*(i|i m|im) (do|doing|handle|deal with|sort|organi[sz]e) (all|most|all of|most of) (the )?(meetings|paperwork|admin|appointments|forms|emails|calls|phone calls)( and (all )?(the )?(meetings|paperwork|admin|appointments|forms|emails|calls|phone calls))*$",
+      "x": "That’s a lot of invisible work. Is this at home or at work?",
+      "chips": [
+        [
+          "At home, for a child we care for",
+          "I do all the meetings and paperwork for our foster child"
+        ],
+        [
+          "At home, the household",
+          "I do all the admin at home and nobody sees it"
+        ],
+        [
+          "At work",
+          "I do all the meetings and paperwork at work and nobody sees it"
+        ],
+        [
+          "In our business",
+          "Nobody sees the admin I do in our business"
+        ]
+      ],
+      "plain": true
+    },
+    {
+      "id": "bizwhich",
+      "pat": "\\bsplit\\b.{0,40}\\b(baking|selling|kitchen|cooking|sales)\\b.{0,30}\\b(and|or|vs|versus)\\b.{0,10}\\badmin\\b|\\badmin\\b.{0,15}\\b(and|or|vs|versus)\\b.{0,15}\\b(baking|selling|kitchen|cooking|sales)\\b",
+      "x": "Happy to help with that. Which part is yours?",
+      "chips": [
+        [
+          "The visible work (baking, selling)",
+          "My job is baking and theirs is admin. How do we split the work fairly?"
+        ],
+        [
+          "The admin",
+          "My job is the admin and theirs is baking. How do we split the work fairly?"
         ]
       ],
       "plain": true

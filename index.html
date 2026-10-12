@@ -299,6 +299,25 @@
   .read .hh-chips .hh-chip-more a{ color:var(--ink-soft, #5A5346); background:none; border-style:dashed; font-weight:500; }
   html.tol-quiet .read .hh-chips a{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }
   .read a.hh-start{ margin-top:.85rem; }
+  /* "Partner" and "More situations": short chip lists that open in place */
+  .read .hh-chips a[data-hh-xp]::after{ content:"\a0\25BE"; font-size:.8em; }
+  .read .hh-chips a[data-hh-xp][aria-expanded="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+  .read .hh-chips a[data-hh-xp][aria-expanded="true"]::after{ content:"\a0\25B4"; }
+  .read .hh-xp{ margin:.55rem 0 0; padding:.6rem .7rem .7rem; border-radius:16px; background:rgba(246,240,251,.92); border:1px solid #E1D3F2; }
+  .read .hh-xp[hidden]{ display:none; }
+  .read .hh .hh-xp-h{ margin:0 0 .1rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:#6B4F8A; }
+  .read .hh .hh-xp .hh-chips{ margin-top:.35rem; }
+  .read .hh-xp .hh-chips a{ white-space:normal; text-align:left; }
+  .read .hh-chips .hh-chip-all a{ background:none; border-style:dashed; color:#2B5B8C; }
+  /* "Under 18?": a warmer chip, easy to spot on a phone */
+  .read .hh-chips .hh-chip-teen a{ background:#FFF1CF; border-color:#E3B15C; color:#5A3E10; }
+  .read .hh-chips .hh-chip-teen a::before{ content:"\1F3A7\a0"; }
+  html.tol-quiet .read .hh-chips .hh-chip-teen a::before{ content:none; }
+  html.tol-quiet .read .hh-xp{ background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+  /* "Prefer to read?": one quiet line for readers */
+  .read .hh .hh-read{ margin:-.35rem 0 .6rem; font-size:.92rem; color:var(--ink-soft, #5A5346); }
+  .read .hh-read a{ font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+  .read .hh-read a::after{ content:"\a0\2192"; }
   /* the calmer-page offer (site.js) sits here on the home page, small, so it shows on the first screen */
   .read .hh-offer-slot:empty{ display:none; }
   .read .hh-offer-slot .tol-offer{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; margin:-.35rem 0 1rem; max-width:none; padding:.5rem .7rem; border-radius:14px; box-shadow:none; font-size:.9rem; line-height:1.35; }
@@ -306,6 +325,7 @@
   .read .hh-offer-slot .tol-offer > p:first-child strong{ font-size:.92rem; }
   .read .hh-offer-slot .tol-offer .tol-offer-row{ margin:0; gap:.3rem; }
   .read .hh-offer-slot .tol-offer button{ min-height:34px; padding:.2rem .7rem; font-size:.86rem; }
+  .read .hh-offer-slot .tol-offer.is-done > p:first-child{ font-size:.88rem; }
   /* "Start where you are": the line for grandparents raising a grandchild */
   .read #start-where .sw-lead{ margin:0 0 .6rem; font-weight:600; }
   @media (min-width:641px){
@@ -328,8 +348,8 @@
     .read .hh-h1{ margin-bottom:.55rem; }
     .read .hh .hh-chips{ gap:.3rem; }
     .read .hh-chips a{ min-height:32px; padding:.15rem .58rem; font-size:.84rem; }
-    /* phones keep the chips to about three short rows; these stay one tap away under "More" and in Just me */
-    .read .hh-chips .hh-chip-wide, .read .hh-chip-x{ display:none; }
+    /* phones keep the chips to about three short rows; the rest open in place under "More situations" */
+    .read .hh-chip-x{ display:none; }
     .read a.hh-start{ margin-top:.75rem; }
     .read .hh-start-n{ font-size:.9rem; }
     /* while the first screen is in view the round helper buttons step aside, so they never cover its words */
@@ -615,7 +635,10 @@
   html.tol-quiet .read .hh-quiet a{ font-weight:600; text-underline-offset:3px; }
   html.tol-quiet .read .hh-quiet button{ min-height:44px; padding:.3rem 1rem; border-radius:10px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid var(--line, #D9CBA3); }
   html.tol-quiet .read .hh-quiet button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  html.tol-quiet:not(.hh-all) .read .hh :is(.hh-offer-slot, .hh-go-h, .hh-go, .hh-app, .hh-ways),
+  /* (the calm way in stays: "I need calm right now", plus Breathe and Today's weather) */
+  html.tol-quiet:not(.hh-all) .read .hh .hh-go > li:not(:first-child),
+  html.tol-quiet .read .hh .hh-read,
+  html.tol-quiet:not(.hh-all) .read .hh :is(.hh-offer-slot, .hh-app, .hh-ways),
   html.tol-quiet:not(.hh-all) .read > :is(#start-where, #guides, #explore, [data-app-ad], .cb-panel, .cb-extra){ display:none !important; }
   html.tol-quiet.hh-all .read .hh-quiet button{ display:none; }
 </style>
@@ -669,17 +692,16 @@
       <button type="button" data-mode="with" aria-pressed="false">With someone</button>
     </div>
     <ul class="hh-chips" data-mode-show="none with" aria-label="Or go straight to the people it's about">
-      <li><a href="/by-relationship.html#couples">Partner</a></li>
+      <li><a href="/by-relationship.html#couples" data-hh-xp="hh-xp-couples" aria-controls="hh-xp-couples" aria-expanded="false">Partner</a></li>
       <li><a href="/friends.html">Friend</a></li>
       <li><a href="/by-relationship.html#family">Family</a></li>
-      <li><a href="/foster-and-kinship.html#kinship">Raising a grandchild</a></li>
       <li><a href="/co-parenting.html" aria-label="Co-parent or ex">Co-parent<span class="hh-chip-x">&nbsp;or ex</span></a></li>
       <li><a href="/share-the-load.html#roommates">Housemates</a></li>
       <li><a href="/work.html" aria-label="Work or business">Work<span class="hh-chip-x">&nbsp;or business</span></a></li>
-      <li class="hh-chip-wide"><a href="/more-than-two.html">More than two of us</a></li>
-      <li><a href="/teens.html">Under 18?</a></li>
-      <li class="hh-chip-wide"><a href="/grief.html">Lost someone</a></li>
-      <li class="hh-chip-more"><a href="#start-where">More&hellip;</a></li>
+      <li><a href="/more-than-two.html">More than two of us</a></li>
+      <li><a href="/grief.html">Lost someone</a></li>
+      <li class="hh-chip-teen"><a href="/teens.html">Under 18?</a></li>
+      <li class="hh-chip-more"><a href="#start-where" data-hh-xp="hh-xp-more" aria-controls="hh-xp-more" aria-expanded="false" aria-label="More situations">More&hellip;</a></li>
     </ul>
     <ul class="hh-chips" data-mode-show="me" hidden aria-label="Or go straight to what fits you">
       <li><a href="/book/self-1-then.html">Understand myself</a></li>
@@ -687,9 +709,50 @@
       <li><a href="/ladder.html" data-sw-open="anxious">Anxious today</a></li>
       <li><a href="/when-one-is-ill.html">Living with illness</a></li>
       <li><a href="/on-my-own.html">After a breakup</a></li>
-      <li><a href="/teens.html">Under 18?</a></li>
-      <li class="hh-chip-more"><a href="#start-where">More&hellip;</a></li>
+      <li><a href="/book/index.html">Read the book</a></li>
+      <li class="hh-chip-teen"><a href="/teens.html">Under 18?</a></li>
+      <li class="hh-chip-more"><a href="#start-where" data-hh-xp="hh-xp-more" aria-controls="hh-xp-more" aria-expanded="false" aria-label="More situations">More&hellip;</a></li>
     </ul>
+    <!-- "Partner" opens a short list of common couple situations right here; "More situations" opens the rest -->
+    <div class="hh-xp" id="hh-xp-couples" hidden>
+      <p class="hh-xp-h">For couples: what&rsquo;s going on?</p>
+      <ul class="hh-chips" aria-label="Common couple situations">
+        <li><a href="/how-to-stop-fighting-with-your-partner.html">The same fight, again</a></li>
+        <li><a href="/empty-nest.html">Kids grown and gone</a></li>
+        <li><a href="/complacency.html">It feels flat, or taken for granted</a></li>
+        <li><a href="#start-where" data-sw-open="long-hours">One works long hours, one runs the home</a></li>
+        <li><a href="/different-hours.html">We work different hours</a></li>
+        <li><a href="/gaming-and-time-together.html">Gaming, phones and us-time</a></li>
+        <li><a href="/money-together.html">Money</a></li>
+        <li><a href="/share-the-load.html">Chores and who does what</a></li>
+        <li><a href="/two-faiths.html">Two faiths or cultures</a></li>
+        <li><a href="/new-parent.html">A new baby</a></li>
+        <li class="hh-chip-all"><a href="/by-relationship.html#couples">See all for couples &rarr;</a></li>
+      </ul>
+    </div>
+    <div class="hh-xp" id="hh-xp-more" hidden>
+      <p class="hh-xp-h">More situations</p>
+      <ul class="hh-chips" aria-label="More situations">
+        <li><a href="/foster-and-kinship.html">Foster or kinship carer</a></li>
+        <li><a href="/foster-and-kinship.html#kinship">Raising a grandchild</a></li>
+        <li><a href="/grandparents.html">Grandparent who helps out</a></li>
+        <li><a href="/grown-up-children.html">Grown-up child and parent</a></li>
+        <li><a href="/family-rifts.html">A family rift</a></li>
+        <li><a href="/sharing-a-room.html">Roommate or dorm</a></li>
+        <li><a href="/coming-home.html">Someone came home after months away</a></li>
+        <li><a href="/empty-nest.html">Kids grown and gone</a></li>
+        <li><a href="#start-where" data-sw-open="long-hours">One works long hours, one runs the home</a></li>
+        <li><a href="/different-hours.html">We work different hours</a></li>
+        <li><a href="/upset-right-now.html#parent-child">I yell and want to stop</a></li>
+        <li><a href="/when-one-is-ill.html">Illness or low energy</a></li>
+        <li><a href="/on-my-own.html">On my own after a breakup</a></li>
+        <li><a href="/coming-out.html">Coming out, LGBTQ+</a></li>
+        <li><a href="/new-parent.html">A new baby</a></li>
+        <li><a href="/for-teachers.html">Teacher or group leader</a></li>
+        <li><a href="/book/index.html">Read the book</a></li>
+        <li class="hh-chip-all"><a href="#start-where" data-sw-all>Something else? Every situation &rarr;</a></li>
+      </ul>
+    </div>
   </div>
   <a class="hh-start" href="/start-in-10-minutes.html">
     <span class="hh-start-k">New here? Begin with this</span>
@@ -704,9 +767,10 @@
   <ul class="hh-go is-two" aria-labelledby="hh-go-h">
     <li><a class="hh-card" href="/ladder.html"><span class="hh-card-i" aria-hidden="true">&#127807;</span><span class="hh-card-b"><span class="hh-card-t">I need calm right now</span><span class="hh-card-n">A one-minute check, then one calm step that fits.</span></span></a></li>
     <li data-mode-show="none with"><a class="hh-card" href="/lemonade-stand.html"><span class="hh-card-i" aria-hidden="true">&#127819;</span><span class="hh-card-b"><span class="hh-card-t">Share the load or sort out a conflict</span><span class="hh-card-n">Chores, bills and who does what, added up fairly with no blame.</span></span></a></li>
-    <li data-mode-show="me" hidden><a class="hh-card" href="/on-my-own.html"><span class="hh-card-i" aria-hidden="true">&#129716;</span><span class="hh-card-b"><span class="hh-card-t">On my own after a breakup</span><span class="hh-card-n">The first weeks, building a life again, and time with the kids.</span></span></a></li>
+    <li data-mode-show="none me"><a class="hh-card" href="/on-my-own.html"><span class="hh-card-i" aria-hidden="true">&#129716;</span><span class="hh-card-b"><span class="hh-card-t">On my own after a breakup</span><span class="hh-card-n">The first weeks, building a life again, and time with the kids.</span></span></a></li>
     <li data-mode-show="me" hidden><a class="hh-card" href="/self-path.html"><span class="hh-card-i" aria-hidden="true">&#129517;</span><span class="hh-card-b"><span class="hh-card-t">Get to know yourself</span><span class="hh-card-n">Six small steps on your own: your battery, your wiring, what settles you.</span></span></a></li>
   </ul>
+  <p class="hh-read">Prefer to read? <a href="/book/index.html">The book, from the beginning</a></p>
   <p class="hh-help"><a href="/upset-right-now.html">Upset right now? Five minutes to pause</a> <span aria-hidden="true">&middot;</span> <a href="/safety.html">Not safe at home? Get help</a></p>
   <div class="hh-pud">
     <span class="hh-pud-art"><svg viewBox="-4 -14 88 92" width="48" height="48" aria-hidden="true" focusable="false"><path d="M40 8C33 22 14 36 14 50c0 14 12 22 26 22s26-8 26-22C66 36 47 22 40 8z" fill="#CFE6FA" stroke="#7FB2E0" stroke-width="2.6"/><ellipse cx="30" cy="30" rx="5" ry="3" fill="#fff" opacity=".6" transform="rotate(-25 30 30)"/><circle cx="31" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><circle cx="49" cy="46" r="6.2" fill="rgba(255,255,255,.35)" stroke="#3A3350" stroke-width="1.8"/><path d="M37.2 46h5.6" stroke="#3A3350" stroke-width="1.8"/><circle cx="31" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="49" cy="46.5" r="2.4" fill="#2B2620"/><circle cx="31.9" cy="45.6" r=".8" fill="#fff"/><circle cx="49.9" cy="45.6" r=".8" fill="#fff"/><path d="M35 56 Q40 60.5 45 56" fill="none" stroke="#2B2620" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="23" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><ellipse cx="57" cy="55" rx="3.6" ry="2.2" fill="#F2A3B6" opacity=".85"/><path d="M18 10 L40 1 L62 10 L40 19 Z" fill="#3A3350"/><path d="M29 14.5v6c3 3 19 3 22 0v-6l-11 4.5z" fill="#4A4266"/><path d="M60 10 v11" stroke="#F4D26B" stroke-width="1.6"/><circle cx="60" cy="22.5" r="2.3" fill="#F4D26B"/></svg></span>
@@ -714,7 +778,7 @@
     <a class="hh-pud-go" href="/ask.html" data-ask-puddles>Ask him</a>
   </div>
   <div class="hh-quiet" data-hh-quiet>
-    <p><a href="/book/topic-start-here.html#introduction">Read the book</a></p>
+    <p><a href="/book/index.html">Read the book</a> <span aria-hidden="true">&middot;</span> <a href="/quick-checks.html#today">Today&rsquo;s weather</a></p>
     <button type="button" aria-expanded="false" data-hh-all>Show everything</button>
   </div>
   <script>
@@ -812,6 +876,35 @@
   })();
   </script>
   <script>
+  /* "Partner" and "More situations…" open their short lists right here, one at a time (the links still work without this) */
+  (function () {
+    var box = document.querySelector('[data-tol-mode]'); if (!box) return;
+    function set(id, open) {
+      var p = document.getElementById(id); if (!p) return;
+      p.hidden = !open;
+      Array.prototype.forEach.call(box.querySelectorAll('[data-hh-xp="' + id + '"]'), function (a) { a.setAttribute('aria-expanded', String(open)); });
+    }
+    box.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('[data-hh-xp]');
+      if (a) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+        e.preventDefault();
+        var id = a.getAttribute('data-hh-xp'), open = a.getAttribute('aria-expanded') !== 'true';
+        ['hh-xp-couples', 'hh-xp-more'].forEach(function (x) { set(x, x === id && open); });
+        return;
+      }
+      // "Every situation": the list further down opens in full
+      if (e.target.closest && e.target.closest('[data-sw-all]')) setTimeout(function () { var m = document.querySelector('#start-where .sw-showmore'); if (m) m.click(); }, 0);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var open = box.querySelector('.hh-xp:not([hidden])'); if (!open) return;
+      set(open.id, false);
+      var b = box.querySelector('[data-hh-xp="' + open.id + '"]:not([hidden])'); if (b && b.offsetParent) b.focus();
+    });
+  })();
+  </script>
+  <script>
   /* the calmer-page offer (built by site.js) moves into the first screen, just under "Start in 10 minutes" */
   (function () {
     var slot = document.querySelector('[data-offer-slot]'), main = document.querySelector('main');
@@ -827,7 +920,7 @@
     <section id="start-where" aria-labelledby="sw-h">
       <h2 id="sw-h">Start where you are</h2>
       <p class="lede">Tap whatever is closest to true right now. We&rsquo;ll point you to the two or three pages that help most.</p>
-      <div data-tol-start data-first="same-fight,friends,family-rifts,raising-grandchild,separated,money,gaming,illness,two-faiths,widowed,more-than-two,sharing-a-room,coming-home,empty-nest,keep-good,coming-out,work,not-safe" data-first-me="know-myself,anxious,widowed,on-my-own,empty,illness,coming-out,grief,teen,give-too-much,anger,not-safe" data-more="Something else? See all situations"></div>
+      <div data-tol-start data-first="same-fight,illness,friends,family-rifts,raising-grandchild,grandparents,foster,separated,money,long-hours,different-hours,gaming,two-faiths,widowed,more-than-two,sharing-a-room,coming-home,empty-nest,child-teen,coming-out,work,not-safe" data-first-me="know-myself,anxious,widowed,on-my-own,empty,illness,read-book,coming-out,grief,teen,give-too-much,anger,not-safe" data-more="Something else? See all situations"></div>
     </section>
 
     <section id="guides" aria-labelledby="guides-h">

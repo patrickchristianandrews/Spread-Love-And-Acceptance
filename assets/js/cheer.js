@@ -103,20 +103,24 @@
   var facts = [];
   function gatherFacts() {
     var G = window.TOL_DIVES; if (!G) return;
-    var text = (main.textContent || '').toLowerCase(), onPage = [], other = [];
+    // the page's own reading text (not its menus, link lists, boxes from elsewhere or the friends themselves)
+    var text = Array.prototype.map.call(main.querySelectorAll('p, li, h2, h3, blockquote, dd'), function (n) {
+      return n.closest('nav, aside, footer, .tol-cheer, .tol-tip, .tol-read-wrap, .tol-pud-card, .tol-fp-note, .no-cheer, [class*="related"], [class*="more-"]') ? '' : n.textContent;
+    }).join(' ').toLowerCase(), onPage = [], other = [];
     Object.keys(G).forEach(function (k) {
       var d = G[k]; if (!d.s) return;
       var hit = (d.m || []).some(function (m) { return m.length > 3 && text.indexOf(m.toLowerCase()) !== -1; });
       (hit ? onPage : other).push(k);
     });
-    facts = shuffle(onPage).concat(shuffle(other).slice(0, 4));
+    // only facts about something this page talks about: a fact from another part of the site reads as off-topic
+    facts = shuffle(onPage);
   }
   var factAt = 0;
   function nextFact() {
     if (!facts.length) gatherFacts();
     if (!facts.length) return null;
     var k = facts[factAt++ % facts.length], d = window.TOL_DIVES[k];
-    return { key: k, t: d.t, s: d.s };
+    return { key: k, t: String(d.t).replace(/\s*\((WP|CALC|PROG)-[0-9A-Z]+\)/g, ''), s: d.s };
   }
 
   // ---------- where they sit ----------
@@ -169,9 +173,11 @@
     w.className = 'tol-cheer ' + (idx % 2 ? 'is-right' : 'is-left') + (kind === 'end' ? ' is-end' : '') + ' is-' + role;
     w.setAttribute('aria-hidden', 'true'); // decoration: not read aloud, and nothing inside is a tab stop
     w.innerHTML = '<button type="button" class="tol-cheer-b" tabindex="-1" title="Tap for another">' + buddy(who, c, dz) + '</button>' +
-      '<div class="tol-cheer-say"><span class="tol-cheer-name">' + esc(name) + (dz && !titled ? ' <em>' + esc(DISGUISES[dz].title) + '</em>' : '') + '</span><span class="tol-cheer-line"></span></div>';
+      // on reading pages they don't give a name nobody has met: the bubble is just what they say
+      '<div class="tol-cheer-say">' + (SERIOUS ? '' : '<span class="tol-cheer-name">' + esc(name) + (dz && !titled ? ' <em>' + esc(DISGUISES[dz].title) + '</em>' : '') + '</span>') + '<span class="tol-cheer-line"></span></div>';
     s.el.parentNode.insertBefore(w, s.el.nextSibling);
     var o = { el: w, kind: kind, role: role, name: name, who: who, c: c, dz: dz };
+    say(o);   // a line is there from the start, so a bubble is never empty
     w.querySelector('.tol-cheer-b').addEventListener('click', function () { cheer(o, true); });
     w.addEventListener('click', function (e) {
       var d = e.target.closest('[data-cheer-dive]'); if (d && window.TOLDives) { e.preventDefault(); window.TOLDives.open(d.getAttribute('data-cheer-dive'), d); }
@@ -197,6 +203,7 @@
   }
   var used = {};
   function say(o) {
+    if (!used) used = {};   // (say runs as each friend is placed, before the line below has set this)
     var line = o.el.querySelector('.tol-cheer-line');
     if (o.role === 'fact') {
       var f = nextFact();

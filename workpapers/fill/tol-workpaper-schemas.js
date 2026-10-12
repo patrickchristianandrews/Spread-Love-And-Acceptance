@@ -352,25 +352,52 @@
     var share = clear.length / rows.length;
     var words = share === 1 ? (examples ? 'Every job you’ve set has an owner. ' + examples + ' example ' + (examples === 1 ? 'job is' : 'jobs are') + ' still on the list: give ' + (examples === 1 ? 'it' : 'them') + ' an owner, or remove ' + (examples === 1 ? 'it' : 'them') + ' if you don’t need ' + (examples === 1 ? 'it' : 'them') + '.' : 'Every job has an owner.') : !clear.length ? 'No job has an owner yet.' : share >= 0.7 ? 'Most jobs have an owner.' : 'Some jobs have an owner.';
     // plain words first; the number, and where it goes, folded under "What's this number?"
-    var out = [{ label: 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
+    var sc = ctx.schema || {};
+    var out = [{ label: sc.rulesOnly ? 'Rules with someone who keeps them' : 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
       note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. “' + ctx.name('Both') + ' (decide together)” counts as an owner. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
-    if (missing.length) out.push({ label: 'Still needs an owner', value: missing.join(', ') });
-    // an optional size on each job (Small 1, Medium 2, Big 3; no size counts as Medium), so a weekly
-    // meeting doesn't weigh the same as a quick email
-    var SIZE = { Small: 1, Medium: 2, Big: 3 }, sized = rows.some(function (r) { return SIZE[r.size]; });
-    var weighted = sized ? people.map(function (p) { return load.filter(function (r) { return r.r === p; }).reduce(function (a, r) { return a + (SIZE[r.size] || 2); }, 0); }) : null;
+    if (sc.rulesOnly) out[0].value = out[0].value.replace(/an owner/g, 'someone who keeps it').replace(/jobs/g, 'rules').replace(/job/g, 'rule');
+    if (missing.length) out.push({ label: sc.rulesOnly ? 'Still needs someone who keeps it' : 'Still needs an owner', value: missing.join(', ') });
+    // a list of house rules: rules need someone who keeps them, but they aren't load, so no "who does more"
+    if (sc.rulesOnly) return out;
+    // Weighed by how often each job comes round (a daily job about five times a weekly one, a monthly one a
+    // quarter, "as needed" a little), and by its size (Small, Medium, Big) or the hours it takes each time,
+    // where given. The same figure for everyone on the sheet, never one person's number on its own.
+    var FREQW = { Daily: 5, 'Each meeting': 1, Weekly: 1, Monthly: 0.25, 'As needed': 0.1, Ongoing: 1 }, SIZEW = { Small: 0.5, Medium: 1, Big: 2 };
+    function wOf(r) { var f = FREQW[r.freq] != null ? FREQW[r.freq] : 1, hr = parseFloat(r.hrs); return hr > 0 && hr <= 200 ? f * hr / 0.5 : f * (SIZEW[r.size] || 1); }
+    var anyFreq = load.some(function (r) { return FREQW[r.freq] != null; }), anyLen = load.some(function (r) { return parseFloat(r.hrs) > 0; }), sized = load.some(function (r) { return SIZEW[r.size]; });
+    var wper = people.map(function (p) { return load.filter(function (r) { return r.r === p; }).reduce(function (a, r) { return a + wOf(r); }, 0); });
+    var wtog = load.filter(function (r) { return r.r === 'Both'; }).reduce(function (a, r) { return a + wOf(r); }, 0);
+    var wsum = wper.reduce(function (a, b) { return a + b; }, 0) + wtog;
+    var homes = !!sc.homes;
+    function who(p) { return homes ? ctx.name(p) + '’s home' : ctx.name(p); }
+    var wpct = wsum > 0 ? wholePct(people.map(function (_, i) { return wper[i] + (homes ? 0 : wtog / people.length); }).concat(homes ? [wtog] : [])) : null;
+    var weighLine = wpct && (anyFreq || sized || anyLen) ? 'Counted by how often each job comes round (a daily job about five times a weekly one, a monthly one a quarter)' + (sized || anyLen ? ', and by size or time where you gave it' : '') + ': ' +
+      people.map(function (p, i) { return who(p) + ' ' + wpct[i] + '%'; }).join(' · ') + (homes ? (wtog ? ' · Together ' + wpct[people.length] + '%' : '') : wtog ? ' (a job you decide together counts the same for each of you)' : '') + '.' : '';
     // how often each person's jobs come round, next to the count: a daily job isn't a monthly one
     function often(p) { return freqBits(load.filter(function (r) { return r.r === p; })); }
-    var spread = people.map(function (p, i) { var f = often(p); return ctx.name(p) + ' ' + byR[i] + (f ? ' (' + f + ')' : ''); }).join(', ') + (together ? ', ' + (people.length > 2 ? 'everyone' : 'both') + ' together ' + together : '') + ' (jobs owned).';
+    var spread = homes
+      ? people.map(function (p, i) { var f = often(p); return who(p) + ' ' + byR[i] + (f ? ' (' + f + ')' : ''); }).join(' · ') + (together ? ' · Together ' + together : '') + ' (jobs owned).'
+      : people.map(function (p, i) { var f = often(p); return ctx.name(p) + ' ' + byR[i] + (f ? ' (' + f + ')' : ''); }).join(', ') + (together ? ', ' + (people.length > 2 ? 'everyone' : 'both') + ' together ' + together : '') + ' (jobs owned).';
     var rulesNote = rules.length ? ' ' + plural(rules.length, 'house rule') + ' on the list ' + (rules.length === 1 ? 'isn’t' : 'aren’t') + ' counted here: a rule needs someone who keeps to it, but it isn’t load.' : '';
     var notScore = ' Counting jobs isn’t counting the work: a daily job comes round far more often than a monthly one. It’s a starting point for a talk, not a scorecard.';
-    var weighNote = weighted ? 'Counting size (Big 3, Medium 2, Small 1, no size counts as Medium): ' + people.map(function (p, i) { return ctx.name(p) + ' ' + weighted[i]; }).join(', ') + '.' : 'Some jobs are bigger than others. Give jobs a size (optional) and this counts a big one for more than a quick one.';
+    var weighNote = weighLine ? (homes ? '' : 'Counting how often each job comes round changes the picture: a few daily jobs can outweigh many monthly ones. ') + 'Give a job a size, or the hours it takes each time, and this counts a big one for more than a quick one.' : 'Some jobs come round more often, or are bigger, than others. Give each job how often it comes round (and a size, if you like), and this counts a daily job for more than a monthly one.';
     var agreed = String(ctx.value('split') || '').trim(), tgt = ctx.target ? ctx.target() : null;
     var ask = agreed ? 'You wrote down the split you agreed: “' + agreed + '”. Does this match it?' : 'Does this match what you agreed? An even split isn’t always the goal: two homes, weekdays and weekends, or very different hours can make another split fair.';
-    if (tgt && c.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[c.top]) + ' about ' + fmt(tgt.t[c.top] * 100, 0) + '%.';
-    if (c.flag) { var tf = often(people[c.top]); out.push({ label: 'Who’s carrying more right now', value: ctx.name(people[c.top]) + ' owns ' + c.count + ' of the ' + named + ' jobs with one owner' + (tf ? ' (' + tf + ')' : '') + '.' + (together ? ' ' + together + ' decided together.' : '') + rulesNote, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote + notScore }); }
-    else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: spread + rulesNote, note: (agreed ? ask + ' ' : '') + weighNote + notScore });
+    // who carries more: by the weighed jobs once how often is given, otherwise by the count
+    var cw = anyFreq || sized || anyLen ? concentrationOf(wper, 0) : c;
+    if (cw.flag && named < 3) cw = { flag: false };
+    if (tgt && cw.top != null) ask += ' The split you agreed elsewhere on this site gives ' + ctx.name(people[cw.top]) + ' about ' + fmt(tgt.t[cw.top] * 100, 0) + '%.';
+    // two homes: the jobs as they sit across the homes, never a score for one parent
+    if (homes && people.length >= 2 && named + together >= 1) { out.push({ label: 'How the jobs sit across the homes', value: (weighLine || spread) + rulesNote, note: (weighLine ? spread + ' ' : '') + (agreed ? ask + ' ' : '') + 'Two homes rarely split evenly, and that can be fair: weekdays and weekends, distance and work all play a part.' }); return out; }
+    if (cw.flag) { var tf = often(people[cw.top]); out.push({ label: 'Who’s carrying more right now', value: (weighLine ? weighLine + ' ' + ctx.name(people[cw.top]) + ' owns ' + byR[cw.top] + ' of the ' + named + ' jobs with one owner' : ctx.name(people[cw.top]) + ' owns ' + cw.count + ' of the ' + named + ' jobs with one owner') + (tf ? ' (' + tf + ')' : '') + '.' + (together ? ' ' + together + ' decided together.' : '') + rulesNote, note: ask + ' If it doesn’t match, ask which job could move first. ' + weighNote + notScore }); }
+    else if (people.length >= 2 && named + together >= 3) out.push({ label: 'How the jobs are spread', value: (weighLine ? weighLine + ' ' : '') + spread + rulesNote, note: (agreed ? ask + ' ' : '') + weighNote + notScore });
     return out;
+  }
+  // whole percentages that add up to 100
+  function wholePct(w) {
+    var s = w.reduce(function (a, b) { return a + b; }, 0) || 1, raw = w.map(function (x) { return x / s * 100; }), r = raw.map(Math.floor), left = 100 - r.reduce(function (a, b) { return a + b; }, 0);
+    raw.map(function (x, i) { return { i: i, f: x - Math.floor(x) }; }).sort(function (a, b) { return b.f - a.f; }).forEach(function (o) { if (left > 0) { r[o.i]++; left--; } });
+    return r;
   }
   // "3 daily, 1 weekly": how often a set of jobs comes round (jobs with no how-often left out)
   function freqBits(list) {

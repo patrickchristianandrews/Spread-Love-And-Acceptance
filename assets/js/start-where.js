@@ -18,7 +18,7 @@
         ['/quick-checks.html#today','Today\u2019s Weather','One minute, and it tells you what today is actually good for.'],
         ['/wp-11.html','The Calm-Down Kit','Decide now what settles you, so it is ready when it is needed.']
       ]},
-    { id:'caring', ico:'\uD83E\uDD1D', label:'I\u2019m looking after someone I love',
+    { id:'caring', ico:'\uD83D\uDC9B', label:'I\u2019m looking after someone I love',
       say:'Caring for a parent, or for a husband, wife or partner after surgery or an illness, can get heavy quietly. Start with your own battery, because you matter here too. Then try one small thing today: a one-minute break, or asking one person for one specific help, like \u201cCould you do Thursday\u2019s drive?\u201d',
       picks:[
         ['/caregivers.html','Caring for someone you love','When they can\u2019t share the load back, who else can help, and where to find respite.'],
@@ -74,10 +74,26 @@
         ['/lemonade-stand.html','The Lemonade Stand','Paid work and home jobs in one picture.'],
         ['/turning-toward.html','Turning toward','Small ways to stay close when you\u2019re rarely awake at the same time.']
       ]},
-    { id:'two-faiths', ico:'\uD83D\uDD6F\uFE0F', label:'Two faiths or cultures, maybe a baby on the way',
+    { id:'long-hours', ico:'\u23F0', label:'One of us works long hours, the other runs the home',
+      say:'Long paid hours and running a home and children are both real work, and both people are usually tired. The trouble starts when one kind of work is counted and the other is invisible. Put both in one picture, then agree what the long-hours partner owns at home, even if it is small.',
+      picks:[
+        ['/lemonade-stand.html','Who does what (the Lemonade Stand)','Paid hours and home jobs side by side, with a switch for long hours, so nobody keeps score.'],
+        ['/invisible-labor-mental-load.html','The work nobody sees','Planning, remembering and noticing count too.'],
+        ['/different-hours.html','When you are rarely home at the same time','Protecting rest, and staying close on busy weeks.'],
+        ['/turning-toward.html','Turning toward','Small daily moments that keep you close when time is short.']
+      ]},
+    { id:'read-book', ico:'\uD83D\uDCD6', label:'I\u2019d rather read: the book',
+      say:'The whole book is free to read, one short chapter at a time. Part One is about you, Part Two about sharing a home and its work, and Part Three about how people work: feelings, stress, trust, change and love.',
+      picks:[
+        ['/book/index.html','The book, from the beginning','Every part and chapter in order.'],
+        ['/book/self-1-then.html','Part One, Chapter 1: Where you came from','A gentle start on your own.'],
+        ['/book/understanding-1-feelings.html','Part Three, Chapter 1: How feelings work','Naming what you feel, even if you were never taught.']
+      ]},
+    { id:'two-faiths', ico:'\uD83E\uDD1D', label:'Two faiths or cultures, maybe a baby on the way',
       say:'Two faiths or cultures in one family can be a gift, and a lot to work out: holidays, food, names, raising children and what each family expects. You don\u2019t have to settle everything at once. Start with what matters most to each of you, and why.',
       picks:[
         ['/two-faiths.html','Two faiths or cultures, one family','Holidays, rituals, children and family expectations, with words you could use.'],
+        ['/new-parent.html','A new baby: sharing the load','Nights, feeds and the new jobs, shared so neither of you runs on empty.'],
         ['/family-obligations.html','Supporting family','Each of you leads with your own family.'],
         ['/check-ins.html','Check-ins','Hear each other out before you decide.']
       ]},
@@ -108,7 +124,8 @@
       say:'After a loss, a will, or years of silence, a family rift can hurt for a long time. You can reach out, and you can also decide you are not ready. Both are allowed. Start small, and look after yourself whichever you choose.',
       picks:[
         ['/family-rifts.html','Family rifts','Reaching out, what to say first, and \u201CI\u2019m not ready\u201D or \u201CI don\u2019t have to\u201D.'],
-        ['/grief.html','Grief and later life','Family after a loss, and reconnecting.'],
+        ['/grown-up-children.html','For grown-up children and parents','When a parent and an adult child need new, kinder rules: visits, advice and space.'],
+        ['/grief.html','Grief and loss','Family after a loss, and reconnecting.'],
         ['/signal-translator.html','Check a first message','See how it might land before you send it.']
       ]},
     { id:'widowed', ico:'\uD83D\uDD6F', label:'I\u2019ve lost my husband, wife or partner',
@@ -257,7 +274,7 @@
       say:'Retirement, a loss, a parent who needs more care, a quiet house: big changes rearrange who does what and how people talk. Go gently; none of this has to be fixed today.',
       picks:[
         ['/retired-together.html','Retired and both home now','Sharing the house all day, handing over whole jobs, and finding your feet after work.'],
-        ['/grief.html','Grief and later life','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
+        ['/grief.html','Grief and loss','Loss, family after a loss, reconnecting, and starting a new chapter, with places to get help.'],
         ['/relationships-in-depth.html#caregivers','Looking after someone','When caring for someone you love becomes most of the week.'],
         ['#breathe','Breathe for a minute','A short pause, right here.']
       ]},

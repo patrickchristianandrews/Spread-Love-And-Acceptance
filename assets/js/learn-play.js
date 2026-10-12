@@ -503,10 +503,8 @@
     }
     return { parent: last.parentNode, before: last.nextSibling };
   }
-  function isLocked(node) {
-    var l = node.closest('.locked-section');
-    return !!(l && !doc.body.classList.contains('unlocked') && getComputedStyle(l).display === 'none');
-  }
+  // Nothing on the site is locked any more (no sign-up, no paid version), so every moment counts as open.
+  function isLocked() { return false; }
 
   /* ---------------------------------------------------------------- a reading page */
   function mountPage(D, main) {
@@ -619,13 +617,13 @@
         if (locked && !d[i]) lockedN++; else openTotal++;
         a.className = 'lp-dot' + (d[i] ? ' is-done' : '') + (locked && !d[i] ? ' is-locked' : '');
         a.textContent = d[i] ? '🌸' : locked ? '🔒' : String(i + 1);
-        a.setAttribute('aria-label', 'Moment ' + (i + 1) + ', ' + (KIND[c.m.k] || 'moment').toLowerCase() + (d[i] ? ', found' : locked ? ', opens when you sign up free' : ', not found yet'));
+        a.setAttribute('aria-label', 'Moment ' + (i + 1) + ', ' + (KIND[c.m.k] || 'moment').toLowerCase() + (d[i] ? ', found' : ', not found yet'));
         if (locked && !d[i]) a.removeAttribute('href'); else a.setAttribute('href', '#lp-m' + (i + 1));
       });
       trail.querySelector('.lp-trail-n').textContent = n + ' of ' + total + ' moments found';
       trail.querySelector('.lp-trail-bar i').style.width = Math.max(4, n / total * 100) + '%';
       var note = trail.querySelector('.lp-note');
-      note.hidden = !lockedN; note.textContent = lockedN ? lockedN + (lockedN === 1 ? ' more moment opens' : ' more moments open') + ' when you sign up free and open the full page.' : '';
+      note.hidden = true; note.textContent = '';
       var L = level(), pet = trail.querySelector('.lp-petals');
       pet.innerHTML = '<span aria-hidden="true">🌸</span> ' + (S.petals || 0) + ' · ' + esc(L.name);
       pet.setAttribute('aria-label', (S.petals || 0) + ' petals. Explorer level: ' + L.name + '. Open your quest map.');
@@ -649,7 +647,7 @@
     }
 
     // the learning-trail ribbon was taken off the pages; progress still lights the quest map
-    // membership can open the full page after we've loaded: keep the count honest
+    // refresh the count if the page's classes change after load
     try { new MutationObserver(function () { refresh(); }).observe(doc.body, { attributes: true, attributeFilter: ['class'] }); } catch (e) {}
 
     // "Explain it like I'm new"

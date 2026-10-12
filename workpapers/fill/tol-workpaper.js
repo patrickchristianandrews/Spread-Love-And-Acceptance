@@ -233,6 +233,7 @@
     var byId = {};
     schema.sections.forEach(function (s) { if (s.id) byId[s.id] = s; });
     return {
+      schema: schema,
       value: function (id) { var v = state.values[id]; return v == null ? '' : v; },
       rows: function (tableId) {
         var s = byId[tableId];
@@ -528,7 +529,7 @@
         // "For number fans" columns only go in when someone filled them in
         var pcols = s.columns.filter(function (c) { return !c.fans || filled.some(function (r) { return !isBlank(r[c.id]) || (c.type === 'computed' && c.compute(r)); }); });
         cells = filled.map(function (r) { return pcols.map(function (c) { return displayCell(c, r, ctx); }); });
-        R.table(pcols, cells);
+        R.table(pcols.map(function (c) { return c.nameOf ? Object.assign({}, c, { label: c.label + ' ' + ctx.name(c.nameOf) }) : c; }), cells);
         return;
       }
 
@@ -663,6 +664,22 @@
     return msg;
   };
 
+  // One person column as a row of big buttons (names, and "Both"), pressing one sets the hidden drop-down
+  A.tapEl = function (c, value, sel, i) {
+    var ctx = this.ctx(), g = h('div', { className: 'wpf-tap', role: 'group', 'aria-label': c.label + ', row ' + (i + 1) });
+    sel.classList.add('wpf-tap-sel'); sel.setAttribute('tabindex', '-1'); sel.setAttribute('aria-hidden', 'true');
+    personOptions(ctx, c).forEach(function (o) {
+      g.appendChild(h('button', { type: 'button', className: 'wpf-tap-b', 'data-tap': o.v, 'aria-pressed': String(value) === o.v ? 'true' : 'false' }, [h('span', { 'data-name-of': o.person, text: ctx.name(o.person) })]));
+    });
+    g.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-tap]'); if (!b) return;
+      var v = b.getAttribute('data-tap'); if (sel.value === v) v = '';
+      sel.value = v;
+      Array.prototype.forEach.call(g.querySelectorAll('[data-tap]'), function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-tap') === v && !!v)); });
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    return g;
+  };
   A.road = function () { return this.opts.road || this.schema.road || (this.schema.solo ? 'self' : ''); };
 
   A.render = function () {
@@ -1008,7 +1025,7 @@
     if (sec.fixedRows) headRow.appendChild(h('th', { scope: 'col' }, [h('span', { className: 'visually-hidden', text: 'Person' })]));
     var totalW = cols.reduce(function (a, c) { return a + (c.w || 1); }, 0) + (sec.fixedRows ? 1.6 : 0);
     cols.forEach(function (c) {
-      var th = h('th', { scope: 'col', text: c.label });
+      var th = c.nameOf ? h('th', { scope: 'col' }, [c.label + ' ', h('span', { 'data-name-of': c.nameOf, text: ctx.name(c.nameOf) })]) : h('th', { scope: 'col', text: c.label });
       th.style.width = ((c.w || 1) / totalW * 94).toFixed(1) + '%'; // set through CSSOM so the page's CSP allows it
       headRow.appendChild(th);
     });
@@ -1022,13 +1039,15 @@
       else if (foldDay && r && r.day !== foldDay) { tr.hidden = true; folded++; }
       if (sec.fixedRows) tr.appendChild(h('th', { scope: 'row', className: 'wpf-rowlabel', 'data-fixed': fixed[i], text: rowLabel(fixed[i], ctx) }));
       cols.forEach(function (c, ci) {
-        var td = h('td', { 'data-label': c.label });
+        var td = h('td', { 'data-label': c.nameOf ? c.label + ' ' + ctx.name(c.nameOf) : c.label });
         if (c.type === 'computed') {
           td.appendChild(h('output', { 'data-computed': sec.id + ':' + i + ':' + c.id, text: c.compute(r) }));
         } else {
           var ctl = self.control(c, r[c.id], { table: sec.id, row: String(i), col: c.id });
-          ctl.el.setAttribute('aria-label', c.label + ', row ' + (i + 1));
+          ctl.el.setAttribute('aria-label', (c.nameOf ? c.label + ' ' + ctx.name(c.nameOf) : c.label) + ', row ' + (i + 1));
           td.appendChild(ctl.el);
+          // big tap buttons in place of a drop-down (easier on a bad day): the drop-down stays, hidden, as the answer
+          if (self.tap && c.type === 'person') td.appendChild(self.tapEl(c, r[c.id], ctl.el, i));
         }
         // starter rows are marked as examples until someone changes them
         if (sec.examples && ci === 0) td.appendChild(h('span', { className: 'wpf-ex-tag', text: 'Example', title: 'An example job. It isn’t counted until you give it an owner or change it.' }));
@@ -1058,9 +1077,9 @@
       box.appendChild(actions);
     }
     // The task library: common jobs for this road, including the invisible ones, one tap to add
-    var lib = sec.library && global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY(this.road(), sec.library) : null;
+    var lib = sec.library && !sec.noLibUI && global.TOL_TASK_LIBRARY ? global.TOL_TASK_LIBRARY(this.road(), sec.library) : null;
     // with the household's own jobs first, once this sheet is using the household's names
-    var hhg = this.hhLibGroup(sec);
+    var hhg = sec.noLibUI ? null : this.hhLibGroup(sec);
     // the household's own jobs first; a library job that is the same job under another name isn't shown twice
     var libCount = lib ? lib.count : 0, hhCount = 0;
     if (hhg) {
@@ -1139,6 +1158,13 @@
         var p = o.getAttribute('data-person'), i = CODES.indexOf(p);
         var unnamed = anyNamed && i >= minPeople && !String(self.state.values['partner' + p] || '').trim() && sel.value !== p;
         var off = (!!own && p === own) || unnamed; o.disabled = off; o.hidden = off;
+      });
+    });
+    Array.prototype.forEach.call(this.root.querySelectorAll('.wpf-tap'), function (g) {
+      var sel = g.parentNode.querySelector('select.wpf-tap-sel'); if (!sel) return;
+      Array.prototype.forEach.call(g.querySelectorAll('[data-tap]'), function (b) {
+        var o = sel.querySelector('option[value="' + b.getAttribute('data-tap') + '"]');
+        b.hidden = !!(o && o.hidden); b.setAttribute('aria-pressed', String(sel.value === b.getAttribute('data-tap')));
       });
     });
     this.refreshDates();
@@ -1457,7 +1483,10 @@
       if (!job) return;
       var who = r.r === 'Both' ? self.togetherWord() : r.r ? ctx.name(r.r) : '';
       if (helpCol && r[helpCol.id] && r[helpCol.id] !== r.r) who += (who ? ' ' : '') + '(' + (self.helpWord || 'helper') + ': ' + ctx.name(r[helpCol.id]) + ')';
-      (isRule(job) ? out.rules : out.jobs).push({ job: job, who: who, when: r.freq || '' });
+      // house rules: why each rule matters to each of you goes on the fridge sheet too
+      var why = ['A', 'B'].filter(function (c) { return String(r['why' + c] || '').trim(); }).map(function (c) { return ctx.name(c) + ': ' + String(r['why' + c]).trim(); });
+      if (why.length) job += ' (why: ' + why.join('; ') + ')';
+      (isRule(job) || self.schema.rulesOnly ? out.rules : out.jobs).push({ job: job, who: who, when: r.freq || '' });
     });
     return out;
   };
@@ -1632,14 +1661,19 @@
         // too long for a QR code a phone can read: say so, rather than a button that quietly isn't there
         if (qb.hidden) p.appendChild(h('p', { className: 'wpf-help wpf-share-noqr', text: 'This ' + what + ' is too long now for a QR code a phone can read. Send it as a link instead, or copy the link below.' }));
         p.appendChild(h('p', { className: 'wpf-help wpf-share-new', text: 'A link holds the ' + what + ' as it is right now. Each time ' + (one || peopleCount(this.state.values) > 2 ? 'anyone' : 'either of you') + ' changes something, send a new link: an old one won\u2019t show the change.' }));
+        // what travels: the jobs someone wrote or gave an owner, never the untouched examples
+        if (!one && this.hhJobTable()) p.appendChild(h('p', { className: 'wpf-help', text: 'Only the jobs you added or gave an owner travel in the link. The untouched example jobs stay here.' }));
+        // the raw link (a long string of letters) is folded away: the share sheet above is the way to send it
         var lid = 'f' + (++this.uid);
-        p.appendChild(h('label', { for: lid, className: 'wpf-share-l', text: 'Or copy the link yourself' }));
         var ta = h('textarea', { id: lid, rows: '3', readonly: 'readonly', className: 'wpf-share-code', 'data-share-out': 'link', spellcheck: 'false' });
         ta.value = made.link;
-        p.appendChild(ta);
-        p.appendChild(h('div', { className: 'wpf-share-btns' }, [
-          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-link', text: 'Copy the link' }),
-          h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-code', text: 'Copy it as a code instead' })
+        p.appendChild(h('details', { className: 'wpf-share-raw' }, [
+          h('summary', { text: 'Other ways: copy the link or a code' }),
+          h('label', { for: lid, className: 'wpf-share-l', text: 'The link' }), ta,
+          h('div', { className: 'wpf-share-btns' }, [
+            h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-link', text: 'Copy the link' }),
+            h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-copy-code', text: 'Copy it as a code instead' })
+          ])
         ]));
         p.appendChild(h('p', { className: 'wpf-help', text: 'The ' + what + ' travels inside the link, after the # sign. Browsers never send that part to a website, so it doesn\u2019t reach this site or any server. Anyone with the link can read it, so send it only to the people on it.' }));
       }
@@ -1701,7 +1735,7 @@
     if (!list.length) return null;
     var what = this.shareWhat();
     var box = h('div', { className: 'wpf-share-in wpf-conflicts no-print tol-plain', role: 'group', 'aria-label': 'Different on the shared ' + what, id: 'wpf-conflicts', tabindex: '-1' });
-    box.appendChild(h('p', {}, [h('strong', { text: (list.length === 1 ? 'One thing is' : list.length + ' things are') + ' different on the shared ' + what + '. ' }), 'Until you choose, this page keeps its own.']));
+    box.appendChild(h('p', {}, [h('strong', { text: this.cfRestored ? 'You still have ' + (list.length === 1 ? '1 choice' : list.length + ' choices') + ' to make. ' : (list.length === 1 ? 'One thing is' : list.length + ' things are') + ' different on the shared ' + what + '. ' }), (this.cfRestored ? 'From the shared ' + what + ' you combined earlier. ' : '') + 'Until you choose, this page keeps its own.']));
     var ul = h('ul', { className: 'wpf-conflict-list' });
     list.forEach(function (cf, i) {
       // short answers (a name, "Weekly") go on the buttons themselves; longer ones are quoted above them
@@ -1733,10 +1767,15 @@
     });
     return !n ? '' : n === 1 ? 'On \u201c' + one + '\u201d the owner was also the helper or backup, so that place is empty again.' : 'On ' + n + ' jobs the owner was also the helper or backup, so those places are empty again.';
   };
+  // the choices still to make are saved with the sheet (this tab, and this device when it's kept)
+  A.saveChoices = function () { this.cfRestored = false; this.tabNow(); if (this.keep) { clearTimeout(this.keepTimer); this.keepNow(); } };
   A.resolveConflict = function (i, theirs) {
     var cf = (this.conflicts || [])[i];
     if (!cf) return;
     this.conflicts.splice(i, 1);
+    // keeping this page's answer means the other device has a different one: worth sending back
+    if (!theirs && this.schema.people) this.sendBack = 'top';
+    this.saveChoices();
     if (theirs) {
       var rows = this.state.tables[cf.tbl] || [], sec = this.schema.sections.filter(function (x) { return x.id === cf.tbl; })[0];
       var keyCol = this.schema.share && this.schema.share.keys ? this.schema.share.keys[cf.tbl] : null;
@@ -1822,7 +1861,7 @@
       if (dq.error) { this.status(dq.error); return; }
       this.shareMade = this.shareLink(dq); this.shareSig = JSON.stringify(this.state); this.sharedOnce = true;
       var oq = this.root.querySelector('[data-share-out]'); if (oq) oq.value = this.shareMade.link;
-      qrShow(this.shareMade.link, { title: 'Scan with the other phone', note: 'The ' + what + ' opens on the other phone, on this same page. ' + (this.schema.people ? 'They choose to combine it with theirs or to replace it.' : 'Their own answers stay as they are.') });
+      qrShow(this.shareMade.link, { title: 'Scan with a phone', note: 'The ' + what + ' opens on that phone, on this same page. ' + (this.schema.people ? 'They choose to combine it with theirs or to replace it.' : 'Their own answers stay as they are.') + ' Sending it to a laptop? Use \u201cSend it\u201d or copy the link instead.' });
       return;
     }
     function copyIt(text, ok) {
@@ -1854,13 +1893,13 @@
       if (!got) { this.status('That doesn’t look like a shared ' + what + '. Copy the whole link, or the code starting with TOLLIST1:'); if (paste) paste.focus(); return; }
       if (got.wp !== this.schema.code) { this.status('That is a shared ' + got.wp + '. Open it on the ' + got.wp + ' page.'); return; }
       var msg = this.takeShared(got, act === 'share-replace');
-      if (msg) { this.sharePaste = ''; this.shareOpen = ''; this.sendBack = this.schema.people ? 'top' : ''; this.sharedOnce = true; this.shareSig = JSON.stringify(this.state); this.render(); this.status(msg); var t0 = this.root.querySelector('#wpf-conflicts [data-action="conflict-mine"]') || this.root.querySelector('.wpf-sendback [data-action="share-fresh"]') || this.root.querySelector('[data-action="share-open"]'); if (t0) t0.focus(); }
+      if (msg) { this.sharePaste = ''; this.shareOpen = ''; this.sendBack = this.schema.people && this.backNeeded ? 'top' : ''; this.sharedOnce = true; this.shareSig = JSON.stringify(this.state); this.render(); this.status(msg); var t0 = this.root.querySelector('#wpf-conflicts [data-action="conflict-mine"]') || this.root.querySelector('.wpf-sendback [data-action="share-fresh"]') || this.root.querySelector('[data-action="share-open"]'); if (t0) t0.focus(); }
       return;
     }
     if (act === 'share-in-combine' || act === 'share-in-replace') {
       var m = this.takeShared(this.sharedIn, act === 'share-in-replace');
       if (!m) return;
-      this.sharedIn = null; this.sendBack = this.schema.people ? 'top' : ''; this.sharedOnce = true; this.shareSig = JSON.stringify(this.state); this.render(); this.status(m);
+      this.sharedIn = null; this.sendBack = this.schema.people && this.backNeeded ? 'top' : ''; this.sharedOnce = true; this.shareSig = JSON.stringify(this.state); this.render(); this.status(m);
       var first = this.root.querySelector('#wpf-conflicts [data-action="conflict-mine"]') || this.root.querySelector('.wpf-sendback [data-action="share-fresh"]') || this.root.querySelector('[data-key="partnerA"]'); if (first) first.focus();
       return;
     }
@@ -1933,7 +1972,17 @@
     (sc.meta || []).forEach(function (f) { var x = d.m[f.id]; if (x != null && typeof x !== 'object' && isBlank(v[f.id])) v[f.id] = x; });
     function personVal(x) { return x === '*' ? 'Both' : map[fold(x)] || ''; }
     function show(c, x) { return c.type === 'person' ? (x === 'Both' ? makeCtx(sc, st).name('Both') + (c.bothNote ? ' ' + c.bothNote : '') : makeCtx(sc, st).name(x)) : String(x); }
-    var conflicts = [];
+    var conflicts = [], localOnly = 0;
+    // anything this page has that the shared one doesn't: only then is sending it back worth asking about
+    if (!replace) sc.sections.forEach(function (s) {
+      if (s.type !== 'table') return;
+      var inc0 = Array.isArray(d.tb[s.id]) ? d.tb[s.id] : [], key0 = sc.share && sc.share.keys ? sc.share.keys[s.id] : null;
+      (st.tables[s.id] || []).forEach(function (x) {
+        if (!x || rowIsEmpty(s, x) || isExampleRow(s, x)) return;
+        var there = s.personDays ? inc0.some(function (y) { return y && y.day === x.day; }) : key0 ? inc0.some(function (y) { return y && fold(y[key0]) === fold(x[key0]); }) : true;
+        if (!there) localOnly++;
+      });
+    });
     sc.sections.forEach(function (s) {
       var inc = Array.isArray(d.tb[s.id]) ? d.tb[s.id] : null;
       if (s.type !== 'table' || !inc) return;
@@ -1985,6 +2034,7 @@
     this.hhAutoKeep();
     if (this.hhWrite) this.hhWrite.soon();
     var unit = what === 'week' ? ['row', 'rows'] : ['job', 'jobs'];
+    this.backNeeded = false;
     if (replace) return 'Opened the shared ' + what + ': ' + d.p.filter(Boolean).join(', ') + '. ' + (dropped.length ? 'There was no room for ' + dropped.join(', ') + ' (eight people at most). ' : '') + 'Nothing was sent anywhere.';
     var bits = [];
     if (added.rows) bits.push(added.rows + ' ' + (added.rows === 1 ? unit[0] : unit[1]) + ' added');
@@ -1992,7 +2042,8 @@
     if (added.people.length) bits.push(added.people.join(', ') + ' added to the names');
     var msg = 'Combined with the shared ' + what + (bits.length ? ': ' + bits.join('; ') + '.' : ': everything in it was already here.');
     // what differs is shown in the page, each with a choice (see conflictsEl), not only in this message
-    this.conflicts = conflicts.slice(0, 40);
+    this.conflicts = conflicts.slice(0, 40); this.cfRestored = false;
+    this.backNeeded = localOnly > 0 || conflicts.length > 0;
     if (differ.length) msg += ' ' + (differ.length === 1 ? 'One thing is' : differ.length + ' things are') + ' different on the shared ' + what + '. Choose which to keep, at the top of the sheet.';
     if (dropped.length) msg += ' There was no room for ' + dropped.join(', ') + ' (eight people at most).';
     if (sameFixed) msg += ' ' + sameFixed;
@@ -2009,6 +2060,8 @@
   };
   A.tabNow = function () {
     var rec = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, state: this.state };
+    // choices still to make after combining a shared list come back after a reload
+    if (this.conflicts && this.conflicts.length) rec.cf = this.conflicts;
     // whether this state was already kept, saved, downloaded or sent, so a reload doesn't start asking again
     if (this.safeSig && JSON.stringify(this.state) === this.safeSig) rec.safe = 1;
     try { global.sessionStorage.setItem(this.tabKey(), JSON.stringify(rec)); } catch (e) {}
@@ -2031,7 +2084,9 @@
   A.keepNow = function () {
     if (!this.keep) return false;
     try {
-      global.localStorage.setItem(this.keepKey(), JSON.stringify({ format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state }));
+      var rec = { format: DRAFT_FORMAT, version: DRAFT_VERSION, workpaper: this.schema.code, saved: new Date().toISOString(), state: this.state };
+      if (this.conflicts && this.conflicts.length) rec.cf = this.conflicts;
+      global.localStorage.setItem(this.keepKey(), JSON.stringify(rec));
       this.markSafe();
       return true;
     } catch (e) {
@@ -2125,7 +2180,7 @@
       return;
     }
     if (act === 'conflict-mine' || act === 'conflict-theirs') { this.resolveConflict(+b.getAttribute('data-i'), act === 'conflict-theirs'); return; }
-    if (act === 'conflict-all-mine') { this.conflicts = []; this.render(); this.status('Kept everything as it is here.'); return; }
+    if (act === 'conflict-all-mine') { this.conflicts = []; if (this.schema.people) this.sendBack = 'top'; this.saveChoices(); this.render(); this.status('Kept everything as it is here.'); return; }
     if (act === 'nudge-no') { this.sharedOnce = false; this.nudge(); return; }
     if (act === 'share-back-no') { this.sendBack = ''; this.render(); this.status('No problem. \u201cShare this ' + this.shareWhat() + '\u201d makes a new link whenever you\u2019re ready.'); return; }
     if (act.indexOf('share-') === 0) { this.onShare(act); return; }
@@ -2478,14 +2533,21 @@
         h1: 'One owner per job: a list for two homes', title: 'One owner per job: a list for two homes',
         lede: 'Who owns which job across two homes: the handoffs, school, health and the big decisions. Give every regular job one owner, or mark it \u201cBoth (decide together)\u201d, so nobody has to re-decide or ask twice. Send it to the other home as a link: names are matched, and nothing is uploaded.',
         note: 'List what moves between the two homes and what needs one person to see it through. Mark the ones you decide together as \u201cBoth (decide together)\u201d. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Handoffs between homes, School and Health.',
-        road: 'coparents', fridge: 'Who owns what, in both homes', share: 'Our list for two homes',
+        road: 'coparents', fridge: 'Who owns what, in both homes', share: 'Our list for two homes', homes: true,
+        // ?for=coparents&preset=handoff-bag: the bag that goes between the homes, ready to share
+        presets: { 'handoff-bag': {
+          h1: 'Our handoff bag: a shared list for two homes', title: 'Our handoff bag: a shared list for two homes', fridge: 'Our handoff bag', share: 'Our handoff bag',
+          lede: 'What goes in the bag between the two homes, and who packs each part, so nothing is left behind and nobody has to ask twice. Send it to the other home as a link: names are matched, and nothing is uploaded.',
+          note: 'Give each part of the bag an owner, or mark it \u201cBoth (decide together)\u201d. Write the time of the last dose next to any medicine in Notes. The starter items are examples: they don\u2019t count until you give one an owner or change it.',
+          rows: [['Medicines and inhaler (note the time of the last dose)', Wk], ['Reading folder and homework', Wk], ['PE or sports kit', Wk], ['Glasses, chargers and the comfort toy', Wk], ['One line about anything new (sleep, worries, school news)', Wk]]
+        } },
         rows: [['Pack the handoff bag', Wk], ['Send medicine and chargers with the bag', Wk], ['School forms and permission slips', AN], ['Reply to school emails and apps', Wk], ['Homework help', D], ['Kids\u2019 doctor and dentist visits', AN], ['Activities and sign-ups', AN], ['Buy clothes as they outgrow them', AN], ['Big decisions (school, health, new activities)', AN]]
       },
       foster: {
         h1: 'One owner per job: caring for a child in care', title: 'One owner per job: caring for a child in care',
         lede: 'Who owns which job when you care for a child or young person: the meetings, the logs, contact and the being-there afterwards, as well as the everyday jobs. Give each one an owner, or decide it together, so the hidden work is on the list too.',
         note: 'Start with the jobs that come with a child in care, then add the everyday ones from the task library below. Agreeing house rules with a young person? Add them from \u201cHouse rules for us\u201d: each needs someone who keeps to it, but rules aren\u2019t counted as load. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
-        fridge: 'Who owns what',
+        fridge: 'Who owns what', hrsCol: true,
         rows: [['Social worker visits', Mo], ['Reviews and meetings', AN], ['Daily log and placement paperwork', D], ['Contact visits and calls with their family', Wk], ['School liaison (designated teacher, plans)', AN], ['Being there after contact', AN], ['Health and therapy appointments', AN], ['Training and support group', Mo]]
       },
       'house-rules': {
@@ -2493,13 +2555,21 @@
         lede: 'Rules you agree together, written down so nobody has to argue them again. Each one has someone who keeps to it, or \u201cBoth (decide together)\u201d. Write why it matters to each of you in Notes, and let everyone suggest changes. Send it to the other phone with \u201cShare this list\u201d, so they can send their version back.',
         note: 'Start with the rules below, change the words until they sound like you, and remove any that don\u2019t fit. A rule needs someone who keeps to it, but rules aren\u2019t counted as load. The starter rules are examples: they don\u2019t count until you give one an owner or change it.',
         fridge: 'Our house rules', share: 'Our house rules',
-        rows: [['Phone time: where phones go at night', D], ['Homework before games', D], ['Bedtime on school nights', D], ['Bedtime and curfew at weekends', Wk], ['Chores for everyone (who does which)', Wk], ['Friends over: when and how many', AN], ['Say where you are going and when you\u2019ll be back', AN], ['Screen time', D], ['Family meal together', Wk]]
+        // a rule, who keeps it, and why it matters to each of you (no size, how often or split: a rule isn't load)
+        rulesOnly: true, noLib: true, hideMeta: ['split'], addLabel: 'Add a rule',
+        lede2: 'Rules you agree together, written down so nobody has to argue them again. Each one has someone who keeps it, or \u201cBoth (decide together)\u201d, and a line on why it matters to each of you. Send it to the other phone with \u201cShare this list\u201d, so they can send their version back.',
+        cols: function (cols) {
+          var task = cols.filter(function (c) { return c.id === 'task'; })[0], own = cols.filter(function (c) { return c.id === 'r'; })[0];
+          return [Object.assign({}, task, { label: 'Rule', w: 2.2 }), Object.assign({}, own, { label: 'Who keeps it', w: 1.2 }),
+            { id: 'whyA', label: 'Why it matters to', nameOf: 'A', type: 'text', w: 1.7 }, { id: 'whyB', label: 'Why it matters to', nameOf: 'B', type: 'text', w: 1.7 }];
+        },
+        rows: [['Phone time: where phones go at night', D], ['Homework before games', D], ['Bedtime on school nights', D], ['Say where you are going and when you\u2019ll be back', AN], ['Family meal together', Wk]]
       },
       care: {
         h1: 'One owner per job: sharing the care', title: 'One owner per job: sharing the care',
         lede: 'Who owns each part of the care when one of you looks after the other: medicines, appointments, paperwork, the nights, and a break for the main carer. Give each one an owner (grown-up children and friends can own jobs too), so nobody has to ask twice.',
         note: 'Fill it in together with whoever shares the care. This is about who owns each job, not medical advice: for medicines and health, follow the care team. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Caring for a husband, wife or partner.',
-        fridge: 'Who owns what in the care',
+        fridge: 'Who owns what in the care', hrsCol: true,
         rows: [['Medicines and the pill box (as the care team directs)', Wk], ['Book and go along to medical appointments', AN], ['Insurance and paperwork', Mo], ['Night care and night-time calls', D], ['Sunday call with the family', Wk], ['Book respite: a break for the main carer', Mo], ['Pick up prescriptions', AN], ['Groceries and meals', Wk]],
         // the same, in Spanish, for a carer who reads Spanish (from /en-espanol.html, ?lang=es, or a Spanish browser)
         es: {
@@ -2514,7 +2584,7 @@
         h1: 'One owner per job, with a bad-day backup', title: 'One owner per job, with a bad-day backup',
         lede: 'Share the load by energy, not hours. Give each job an owner for good days and, if you like, a backup for bad days. Jobs done from bed or the sofa count: phoning, booking, paying, planning. Being ill isn\u2019t being a burden.',
         note: 'Give each job one owner for good days. The backup column is for bad days: who covers it then, or write \u201ccan wait\u201d in Notes for the things that are allowed to wait. The starter jobs are examples: they don\u2019t count until you give one an owner or change it.',
-        help: 'Bad-day backup (optional)', helpWord: 'bad-day backup',
+        help: 'Bad-day backup (optional)', helpWord: 'bad-day backup', tap: true, hrsCol: true,
         rows: [['Pay the bills', Mo], ['Book appointments', AN], ['Pick up prescriptions', AN], ['Plan the week', Wk], ['Groceries', Wk], ['Cook dinner', D], ['Dishes', D], ['Laundry', Wk]]
       }
     },
@@ -2543,12 +2613,26 @@
     if (!o) return schema;
     var es = !!(o.es && wantsSpanish());
     if (es) { var o2 = {}; Object.keys(o).forEach(function (k) { o2[k] = o[k]; }); Object.keys(o.es).forEach(function (k) { o2[k] = o.es[k]; }); o = o2; }
+    var pre = ((global.location && global.location.search || '').match(/[?&]preset=([a-z-]+)/) || [])[1] || '';
+    if (pre && o.presets && o.presets[pre]) { var o3 = {}; Object.keys(o).forEach(function (k) { o3[k] = o[k]; }); Object.keys(o.presets[pre]).forEach(function (k) { o3[k] = o.presets[pre][k]; }); o = o3; }
+    if (o.lede2) o = Object.assign({}, o, { lede: o.lede2 });
     var out = {}; Object.keys(schema).forEach(function (k) { out[k] = schema[k]; });
+    if (o.hideMeta && schema.meta) out.meta = schema.meta.filter(function (f) { return o.hideMeta.indexOf(f.id) < 0; });
+    if (o.rulesOnly) out.rulesOnly = true;
+    if (o.homes) out.homes = true;
+    if (o.tap) app.tap = true;
     out.sections = schema.sections.map(function (sec) {
       var c = {}; Object.keys(sec).forEach(function (k) { c[k] = sec[k]; });
       if (o.note && sec.type === 'note' && sec.pdf === false) c.text = o.note;
-      if (o.rows && sec.library === 'owner') { c.otherExamples = sec.defaultRows; c.defaultRows = o.rows.map(function (r) { return { task: r[0], freq: r[1] }; }); }
-      if (o.help && sec.columns) c.columns = sec.columns.map(function (col) { if (!col.notSameAs) return col; var x = {}; Object.keys(col).forEach(function (k) { x[k] = col[k]; }); x.label = o.help; return x; });
+      if (sec.library === 'owner') {
+        if (o.cols) c.columns = o.cols(sec.columns);
+        // "Roughly how long?" beside how often, where the guide is about long hours, illness or care
+        else if (o.hrsCol) { c.columns = []; sec.columns.forEach(function (col) { c.columns.push(col); if (col.id === 'freq') c.columns.push({ id: 'hrs', label: 'Roughly how long? (hours each time, optional)', type: 'number', min: 0, max: 200, step: 0.25, w: 1 }); }); }
+        if (o.noLib) c.noLibUI = true;
+        if (o.addLabel) c.addLabel = o.addLabel;
+      }
+      if (o.rows && sec.library === 'owner') { c.otherExamples = sec.defaultRows; c.defaultRows = o.rows.map(function (r) { return o.rulesOnly ? { task: r[0] } : { task: r[0], freq: r[1] }; }); }
+      if (o.help && c.columns) c.columns = c.columns.map(function (col) { if (!col.notSameAs) return col; var x = {}; Object.keys(col).forEach(function (k) { x[k] = col[k]; }); x.label = o.help; return x; });
       return c;
     });
     if (o.share) out.shareTitle = o.share;
@@ -2642,6 +2726,8 @@
       if (keepBox) keepBox.checked = true;
     }
     if (kept) app.safeSig = JSON.stringify(app.state);
+    var cf0 = (tabbed && Array.isArray(tabbed.cf) ? tabbed.cf : kept && Array.isArray(kept.cf) ? kept.cf : []).filter(function (c) { return c && typeof c === 'object' && typeof c.tbl === 'string' && typeof c.col === 'string'; }).slice(0, 40);
+    if (cf0.length) { app.conflicts = cf0; app.cfRestored = true; }
     // this tab's own copy is the newest, kept or not (and it knows whether it was already saved or sent)
     if (tabbed && JSON.stringify(sanitize(schema, tabbed.state)) !== JSON.stringify(blankState(schema))) { app.state = sanitize(schema, tabbed.state); app.dirty = true; if (tabbed.safe) app.safeSig = JSON.stringify(app.state); }
     if (keepBox) keepBox.checked = app.keep;
@@ -2734,6 +2820,7 @@
       if (app.sendBack) { app.sendBack = ''; var sb = root.querySelector('.wpf-sendback'); if (sb) sb.remove(); }
     });
     if (sharedSay()) { /* said */ }
+    else if (app.cfRestored) app.status('You still have ' + (app.conflicts.length === 1 ? '1 choice' : app.conflicts.length + ' choices') + ' to make about the shared list, at the top of the sheet.');
     else if (kept) app.status('Picked up what you saved on ' + deviceWord() + '. To remove it: “Erase”, under How saving works.');
     else if (tabbed && app.dirty) app.status('Your answers from earlier in this tab are back.');
     else if (namesMsg) app.status(namesMsg);

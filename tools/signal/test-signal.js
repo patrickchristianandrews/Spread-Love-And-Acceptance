@@ -65,7 +65,13 @@ const FIX = [
   {t:"Let's get pizza tonight.", not:["impera"], unchanged:true},
   {t:"If you can't make it, I'll pick up the kids.", not:["threat"], unchanged:true},
   {t:"Can we talk about the trip on Sunday?", not:["ominous"], unchanged:true},
-  {t:"Never mind, it's okay.", not:["absolute"], unchanged:true}
+  {t:"Never mind, it's okay.", not:["absolute"], unchanged:true},
+  // re-test 2: hurt said by pulling back, "in my day", and "maybe" inside a request
+  {t:"I suppose I'm not wanted anymore.", has:["withdraw"], gone:["not wanted"]},
+  {t:"Fine. I won't bother coming round then.", has:["withdraw"], keep:["That stung a bit"], gone:["won't bother"]},
+  {t:"In my day we just popped round.", has:["olddays","minim"], keep:["new to me"], gone:["in my day","just"]},
+  {t:"Could you maybe take the bins out tonight?", has:["reqmaybe"], not:["softno"], keep:["take the bins out tonight"], gone:["maybe"]},
+  {t:"Maybe we could get pizza on Saturday?", not:["softno","reqmaybe"], unchanged:true}
 ];
 
 let pass=0, fail=0; const errs=[];

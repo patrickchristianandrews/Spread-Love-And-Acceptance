@@ -241,14 +241,17 @@
   // "Low-energy version": shows only the In short box, the jobs from bed and the words to say. Nothing is kept.
   var b = document.getElementById('il-low'), note = document.getElementById('il-low-note'); if (!b) return;
   var long = note.textContent;
-  b.addEventListener('click', function () {
-    var on = b.getAttribute('aria-pressed') !== 'true';
+  function set(on, jump) {
     b.setAttribute('aria-pressed', String(on));
     b.textContent = on ? 'Show the whole page' : 'Low-energy version';
     note.textContent = on ? 'Showing just the short bits.' : long;
     document.documentElement.classList.toggle('il-low', on);
-    if (on) { try { b.scrollIntoView({ block: 'start' }); } catch (e) {} }
-  });
+    if (on && jump) { try { b.scrollIntoView({ block: 'start' }); } catch (e) {} }
+  }
+  b.addEventListener('click', function () { set(b.getAttribute('aria-pressed') !== 'true', true); });
+  // with Easy reading switched on (Settings), the short version is where the page starts; one tap shows it all
+  var easy = false; try { easy = localStorage.getItem('tol-easy') === '1'; } catch (e) {}
+  if (easy && !location.hash) set(true, false);
 })();
 </script>
 </body>

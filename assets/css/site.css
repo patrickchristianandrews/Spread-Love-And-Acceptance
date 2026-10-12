@@ -2110,7 +2110,7 @@ html.tol-quiet :is(.tr-toast, .tr-confetti, .tol-planted, .tol-poplet, .tol-join
 html.tol-quiet .pc-launch .pc-dot{ display:none; }
 /* Quiet mode, plain: the decorations and extras step aside so the first real sentence is on screen ("Show extras" brings them back) */
 html.tol-quiet-plain :is(.tol-wash, [data-mini-player], .tol-mp, .tol-pillars, .lp-card, .tol-read-host, .tol-read-wrap, .tol-tip, .tol-fp-note, .tol-pud-card, .tol-buddies, .tol-fbs, .tol-fbs-wrap){ display:none !important; }
-html.tol-quiet-plain body:has(main.read) .tol-breathe-btn{ display:none !important; }
+/* (Quiet mode keeps the Breathe button: it is one of the calm ways in, so it never hides with the extras) */
 .tol-quiet-extras{ display:none; }
 html.tol-quiet .tol-quiet-extras{ display:block; margin:.2rem 0 1rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; }
 .tol-quiet-extras button{ font:inherit; font-size:.88rem; min-height:40px; padding:.35rem .9rem; border-radius:999px; border:1px dashed var(--line, #d8cfb8); background:none; color:var(--ink-soft, #5A5346); cursor:pointer; }
@@ -2867,3 +2867,6 @@ html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rota
 .tol-offer.is-done{ padding:.5rem 1rem; box-shadow:none; }
 .tol-offer .tol-offer-done{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
 .tol-offer .tol-offer-done:focus{ outline:none; }
+/* the little reading friends: never an empty speech bubble, and none at all while the page is kept still */
+.tol-cheer-say:has(> .tol-cheer-line:empty){ display:none !important; }
+html.tol-still .tol-cheer{ display:none !important; }
