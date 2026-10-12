@@ -4572,6 +4572,8 @@
     return { added: added, owners: own, total: ownersList().length, max: maxOwn(), me: me };
   }
 
+  // a fridge list made earlier stays open on the quick look after a reload
+  try { if (state && !state.example && ownersList().length) document.body.setAttribute('data-ls-fridge', ''); } catch (e) {}
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,
     sideData: sideData, sideCode: function () { var d = sideData(); return d.error ? '' : SIDE + b64enc(JSON.stringify(d)); }, readSide: readSide,
     sideLink: function () { var d = sideData(); return d.error ? Promise.resolve('') : packSide(JSON.stringify(d)).then(sideLink); },

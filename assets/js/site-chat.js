@@ -1826,6 +1826,7 @@
     if (cm) {
       var c = cm;
       var r = cardReply(state, c, 'about');
+      if (state.unsafe && c.childSafe) r.blocks.unshift({ k: 'p', x: 'I can still help with things about ' + (state.kidName || 'your child') + '.' });
       if (c.id === 'fault') {
         var H = IDX.sit.issues.hurtbythem;
         var hurt = (L && L.kind === 'sit' && L.issue === 'hurtbythem') || (H && H.res.some(function (x) { return x[1] >= 5 && x[0].test(f); }));
@@ -2078,6 +2079,8 @@
       if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care)) return meant(conflictNotAbuse(state), sp);
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
+      // shouted at during a handoff (often in front of the child): handoff safety first, and the child questions stay open
+      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && HANDOFF_SHOUT.test(vf) && (EX_W.test(vf) || /\bin front of\b/.test(vf))) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; state.kidName = kidNameIn(q0) || state.kidName || ''; return meant(handoffReply(vf, state.kidName), sp); }
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
@@ -2190,6 +2193,20 @@
   // Once someone has told us about control or danger, later questions in the same chat never get couples tips
   // ("you're on the same side", talk it through calmly, conflict is normal): those could put them at risk.
   var AFTER_SAFE = /\b(he|him|his|she|her|they|them|partner|boyfriend|girlfriend|husband|wife|bf|gf|normal|overreact\w*|too sensitive|my fault|talk to|talk with|stop|friends?|money|phone|argue|argument|fight\w*|calm|leave|stay|love|counts?|is it|am i|what do i do|how do i)\b/;
+  // "he shouts at me at the handover in front of Leo": safer handoffs first, the helplines, and a promise that questions
+  // about the child are still welcome (never ways to talk the shouting parent round)
+  var HANDOFF_SHOUT = /\b(he|she|they|my ex|ex|his dad|her dad|their dad|her mum|his mum|their mum|her mom|his mom|their mom|the other parent)\b.{0,25}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|screaming|swears?|swore|swearing|kicks off|kicked off|goes off|went off)\b( at me)?.{0,60}\b(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|exchanges?|in front of)\b|\b(at|during) (the )?(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?)\b.{0,40}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|swears?|swore)\b/;
+  function kidNameIn(q) { var m = /\b(?:in front of|our (?:son|daughter|boy|girl|kid|child)|my (?:son|daughter|boy|girl|kid|child)|tell)\s+([A-Z][a-z]{1,14})\b/.exec(String(q || '')); return m && !/^(Me|Him|Her|Them|The|My|Our|His|Their|Mum|Mom|Dad)$/.test(m[1]) ? m[1] : ''; }
+  function handoffReply(f, kid) {
+    var k = kid || 'your child';
+    var b = [{ k: 'p', x: 'I’m sorry. Being shouted at during a handoff isn’t okay, and it isn’t something you can fix by choosing better words. It matters that ' + k + ' sees it, too: children feel it, even when nobody is touched.' },
+      { k: 'p', x: 'Things that help at handoffs:' },
+      { k: 'list', x: ['Hand over in a public place, like a busy shop entrance or car park, or through school or nursery, so you don’t meet at all.', 'Keep it short: times and bags only. Anything else goes by message, later.', 'If you can, have a calm adult you trust there.', 'Keep copies of every message, with dates, and write a few lines after any handoff that goes wrong.', 'A family lawyer, mediator or advocate can help you ask for safer handoff arrangements.'] },
+      { k: 'p', x: 'If it’s more than shouting, or you’re ever scared of them, you can talk it through privately with an advocate, even if you’re not sure it counts. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines. In danger right now, call 911 (US), 999 (UK) or your local emergency number.' },
+      { k: 'p', x: 'I can still help with things about ' + (kid || 'your child') + ', like how to explain a new handoff plan.' },
+      { k: 'links', x: [['After a separation: when it’s more than conflict', '/safety.html#after-separation'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel'], ['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] }];
+    return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety', id: 'handoff' };
+  }
   function afterSafeReply(f) {
     var b = [{ k: 'p', x: 'Because of what you told me earlier, I won’t suggest ways to talk them round or keep the peace. When someone is checking, limiting or frightening you, that isn’t a communication problem, and it isn’t yours to fix by saying things better.' }];
     if (/\b(normal|overreact\w*|too sensitive|counts?|is it (that )?bad|am i (being )?(dramatic|silly|crazy))\b/.test(f)) b.push({ k: 'p', x: 'What you described isn’t a normal part of disagreeing, and you’re not overreacting by asking about it. You don’t need to be hit for it to count.' });

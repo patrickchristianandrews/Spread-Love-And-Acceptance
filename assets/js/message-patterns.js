@@ -329,6 +329,12 @@
     loc: /\b(?:send|share|give) me your (?:live )?location\b|\b(?:send|share) your (?:live )?location\b/i,
     who: /\bwho (?:were|are) you (?:with|texting|talking to|messaging|seeing)\b|\bwho (?:was|is) that (?:texting|messaging|calling) you\b/i,
     where: /\bwhere (?:were|are|have) you(?: been)?(?: really| actually)?\s*\?/i,
+    // "I'll know if you do", "I'm watching you", "I checked your phone": watching someone, said as a warning
+    watch: /\bi(?:'ll| will) (?:know|find out)(?: (?:if|when|where|who|what|whether) you\b| about it\b|(?=\s*[.!?]|$))|\bi(?:'m| am) (?:always )?watching (?:you|what you|where you|who you|your)\b|\bi can see (?:where you are|where you've been|who you(?:'re| are) (?:with|texting|talking to)|your location|your messages)\b|\bi (?:checked|went through|read|looked (?:at|through)|have been (?:checking|reading|going through)|'ve been (?:checking|reading|going through)) your (?:phone|messages|texts|emails?|dms|chats|search history|browser|bank)\b|\b(?:send|show) me (?:a )?screenshots? of (?:your|the) (?:messages|chats|texts|dms|conversation)\b/i,
+    // "Where were you? Prove it.": a demand to account for yourself
+    prove: /\bprove it\b|\bprove (?:to me )?(?:where|who|that you|you were)\b/i,
+    // "If you go out with your friends, don't bother coming home": an ultimatum that cuts someone off
+    shut: /\b(?:don't|do not|dont) (?:bother )?(?:coming|come) (?:back )?home\b(?=(?: (?:tonight|then|at all|again|ever))?\s*(?:[.!?…]|$))|\bif you (?:go|go out|see|leave|meet)\b[^.!?]{0,60}?,?\s*(?:don't|do not|dont) (?:bother )?(?:coming|come) (?:back )?home\b/i,
     isolate: /\byou (?:can't|cannot|can not|aren't allowed to|are not allowed to|won't be allowed to|don't get to) (?:see|go out with|hang out with|talk to|visit|text|call|meet) (?:your (?:friends|family|mum|mom|dad|sister|brother|mates)|anyone|anybody|people)\b|\bi don't want you (?:seeing|talking to|going out with|hanging out with|texting) (?:your friends|your family|anyone|anybody|other people)\b|\byou(?:'re| are) not (?:going|allowed) (?:out|to see your (?:friends|family))\b|\b(?:it's|its) (?:them|your friends|your family) or me\b|\byou (?:don't|do not) need (?:anyone|anybody|friends|them) (?:else )?(?:but|except|apart from) me\b/i,
     degrade: new RegExp("\\b(?:no ?one|nobody|no-one) (?:else )?(?:would|will|could) (?:ever )?(?:want|love|have|put up with|date|believe) you" + END + "|\\byou(?:'re| are|r| r) (?:so |completely |totally |utterly |just )?(?:worthless|nothing without me)\\b|\\byou(?:'re| are) lucky (?:i|anyone) (?:put up with|puts up with|stay with|stays with) you\\b|\\byou(?:'ll| will) never (?:find|get) (?:anyone|anybody|someone) (?:else|better)\\b|\\bwithout me you(?:'re| are|'d be| would be) nothing\\b", 'i')
   };
@@ -348,6 +354,9 @@
     // "Who were you with?" on its own, or with another check, said curtly: not "Who were you with at the party? Sounds fun!"
     var bareWho = wh && /^\s*[?.!]*\s*(?:$|[a-z])/.test(t.slice(wh.end)) && !/^\s*[?.!]*\s*(?:at|on|in|for|last|today|tonight|yesterday)\b/.test(t.slice(wh.end)) && !/\b(?:fun|nice|lovely|great|glad|hope|cool|amazing|sounds|enjoy|xx?)\b|[!]\s*$|😊|🙂|😄|❤/.test(t);
     if (wh && (lo || wr || ph || bareWho || /\b(?:tell me|answer me)\b/.test(t))) found.push(Object.assign(wh, { kind: 'monitor' }));
+    var wa = hit(t, CONTROL_RES.watch, text); if (wa) found.push(Object.assign(wa, { kind: 'monitor' }));
+    var pv = hit(t, CONTROL_RES.prove, text); if (pv && (wr || wh || lo || /\b(?:where|who|what) (?:were|was|did) you\b/.test(t))) found.push(Object.assign(pv, { kind: 'monitor' }));
+    var sh = hit(t, CONTROL_RES.shut, text); if (sh) found.push(Object.assign(sh, { kind: 'isolate' }));
     var is = hit(t, CONTROL_RES.isolate, text); if (is) found.push(Object.assign(is, { kind: 'isolate' }));
     var dg = hit(t, CONTROL_RES.degrade, text); if (dg) found.push(Object.assign(dg, { kind: 'degrade' }));
     if (!found.length) return null;

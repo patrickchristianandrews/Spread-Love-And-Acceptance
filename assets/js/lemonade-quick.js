@@ -1362,22 +1362,31 @@
     return q.list.filter(function (id) { return kindOf(id) !== 'work'; }).map(function (id) { var w = mine[id]; return { name: label(id), who: typeof w === 'number' ? w : -1 }; });
   }
   function fridge() {
-    var mine = q.ans[q.me] || {};
+    var mine = q.ans[q.me] || {}, so = shownOthers();
     var ids = q.list.filter(function (id) { return kindOf(id) !== 'work'; });
-    if (!ids.some(function (id) { return mine[id] != null; })) { status(L('Tap who does a job or two first. Then the fridge list fills itself in.', 'Primero toca quién hace una o dos tareas. Luego la lista para el refri se llena sola.')); return; }
     var api = window.TOLLemonade;
     if (!api || !api.fromQuick) { status('The fridge list didn’t load. Try reloading the page.'); return; }
-    // nothing chosen for you, except the jobs you share or see differently (an owner helps most there); every other job is a chip to tap
-    var diff = {}; shownOthers().forEach(function (o) { var th = q.ans[o] || {}; ids.forEach(function (id) { if (mine[id] != null && th[id] != null && th[id] !== mine[id]) diff[id] = 1; }); });
-    var pre = ids.filter(function (id) { return diff[id] || mine[id] === 'b'; }).slice(0, 10);
-    var r = api.fromQuick({ people: namesOut(), me: q.me, chips: chipList(), owners: pre.map(function (id) { return { name: label(id), who: -1 }; }) });
+    // every job someone answered goes on the list, with its owner where it's known: the one person you said
+    // (and, with other views shown, the one everyone said). Shared jobs, and ones you see differently, wait for an owner.
+    var cap = q.people.length >= 3 ? 16 : 10, known0 = 0;
+    var owners = ids.filter(function (id) { return mine[id] != null || so.some(function (o) { return (q.ans[o] || {})[id] != null; }); }).map(function (id) {
+      var vs = [q.me].concat(so).map(function (p) { return (q.ans[p] || {})[id]; }).filter(function (x) { return x != null; });
+      var who = vs.length && typeof vs[0] === 'number' && vs.every(function (x) { return x === vs[0]; }) ? vs[0] : -1;
+      if (who >= 0) known0++;
+      return { name: label(id), who: who };
+    });
+    // owned jobs first, so a long list keeps the settled ones
+    owners.sort(function (a, b) { return (b.who >= 0) - (a.who >= 0); });
+    var r = api.fromQuick({ people: namesOut(), me: q.me, chips: chipList(), owners: owners.slice(0, cap) });
     body.setAttribute('data-ls-fridge', '');
     var o = $('owners'), h = $('owners-h'), st = $('own-status');
     goTo(o);
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
-    var tot = r && typeof r.total === 'number' ? r.total : pre.length;
-    var msg = L('Every job from your quick look is a chip below: tap the ones you want on the list. ' + (tot ? (tot === 1 ? '1 job is' : tot + ' jobs are') + ' on it so far' + (pre.length ? ' (the ones you share or see differently, with no owner yet: pick one together).' : '.') : 'Nothing is picked for you.') + ' Owning a job means you do it, or make sure it gets done.',
-      'Cada tarea de tu vistazo está abajo: toca las que quieran en la lista. ' + (tot ? 'Ya hay ' + tot + (tot === 1 ? ' tarea' : ' tareas') + (pre.length ? ' (las que comparten o ven distinto, sin dueño todavía: elíjanlo juntos).' : '.') : 'No se eligió nada por ustedes.') + ' Ser dueño de una tarea es hacerla, o asegurarse de que se haga.');
+    var tot = r && typeof r.total === 'number' ? r.total : owners.length, open = tot - known0;
+    var msg = !owners.length ? L('Nothing answered in the quick look yet, so nothing is picked for you. Every job from it is a chip above, under “1. Pick the jobs”: tap the ones you want on the list.',
+        'Todavía no hay respuestas en el vistazo, así que no se eligió nada. Cada tarea está arriba, en «1. Elegir las tareas»: toquen las que quieran en la lista.')
+      : L(tot + (tot === 1 ? ' job is' : ' jobs are') + ' on the list, each with the owner from your quick look' + (open > 0 ? '. ' + open + (open === 1 ? ' has' : ' have') + ' no owner yet (shared, or seen differently): pick one together.' : '.') + (owners.length > tot ? ' The list holds ' + cap + ', so the rest are chips above to swap in.' : '') + ' Owning a job means you do it, or make sure it gets done.',
+        'Hay ' + tot + (tot === 1 ? ' tarea' : ' tareas') + ' en la lista, cada una con el dueño de su vistazo' + (open > 0 ? '. ' + open + (open === 1 ? ' no tiene' : ' no tienen') + ' dueño todavía (compartidas, o vistas distinto): elíjanlo juntos.' : '.') + ' Ser dueño de una tarea es hacerla, o asegurarse de que se haga.');
     if (st) { st.textContent = msg; }
   }
   function deeper() {

@@ -307,6 +307,11 @@
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'Today’s weather, the Preface, one card and one thing logged' },
       { href: '/someone-sent-you-this.html', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
       { href: '/relationships.html', deep: true, code: 'All', title: 'Where to start in your relationship', note: 'Partners, family, co-parents, friends, roommates, coworkers and caregivers' },
+      { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'From the beginning, one short chapter at a time' },
+      { href: '/for-teachers.html', code: 'Class', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
+      { href: '/groups.html', code: 'Group', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
+      { href: '/for-counselors.html', code: 'Pro', title: 'For counsellors and coaches', note: 'Using the free pages and tools with clients' },
+      { href: '/method-and-limits.html', code: 'Limits', title: 'Method and limits', note: 'What this site is, what it isn’t, and when to get other help' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
       { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
@@ -568,6 +573,15 @@
       { href: '/book/understanding-14-personality.html', deep: true, code: '14', title: 'Part Three · Chapter 14: Personality and temperament', note: 'Dials, not boxes, and how people change' },
       { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Part Three · Chapter 15: Closeness and love', note: 'Being known, and love in many forms' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
+      { sub: 'Autism and neurodivergence' },
+      { href: '/book/understanding-9-minds.html', code: '9', title: 'Minds that work differently (Part Three, Chapter 9)', note: 'Autism, ADHD, dyslexia and more, in plain words' },
+      { href: '/wired-differently.html', title: 'Wired Differently', note: 'How differently wired minds take in words, plans and noise' },
+      { href: '/neurodivergent-relationships.html', title: 'Neurodivergent relationships', note: 'ADHD and autistic couples, families and friends' },
+      { href: '/adhd-kids.html', title: 'When a child has ADHD', note: 'Routines, reminders and calm, for parents and grandparents' },
+      { sub: 'For teachers and groups' },
+      { href: '/for-teachers.html', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
+      { href: '/groups.html', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
+      { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using the pages and tools with clients' },
       { sub: 'The book by topic' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
       { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
@@ -637,7 +651,7 @@
   function workKept() { try { return localStorage.getItem('tol-work-keep') === '1'; } catch (e) { return false; } }
   // Serious pages are always plain too, with no pups, cartoons, tips or promos beside them: grief, safety,
   // the honest limits, "is this for you?" and the page for someone who was sent a link.
-  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|outside-help|calming-supplements)\.html$/;
+  var PLAIN = /^\/(grief|safety|method-and-limits|is-this-for-you|sent-this|someone-sent-you-this|outside-help|calming-supplements|for-counselors)\.html$/;
   // Working pages (the tools and worksheets) are a calm workspace: no moving garden, pups or drifting bubbles beside a form.
   // The soft colour wash stays. Calm and play pages keep their garden.
   var WORKSPACE = /^\/(lemonade-stand|signal-translator|conversation-reader|carrier-wave-decoder|wiring-card|wavelength|quick-checks|perspective-shifter|chore-chart-for-couples|pursue-withdraw|family-obligations)\.html$|^\/workpapers\/|^\/wp-11(-in-depth)?\.html$|^\/tools\//;
@@ -677,6 +691,10 @@
       if (hasRef) score += 5;
       if (score > best) { best = score; hereGroup = g; }
     });
+    // a few pages belong to one section whatever else lists them: the work page is By relationship > Work,
+    // "Someone sent you this?" is Start here, and the Spanish page sits outside the English sections
+    var HERE_FIX = { '/work.html': 'rel', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start', '/en-espanol.html': '' };
+    if (Object.prototype.hasOwnProperty.call(HERE_FIX, current)) hereGroup = MENU.filter(function (g) { return g.id === HERE_FIX[current]; })[0] || null;
   })();
 
   // ===== Focus mode: "Focus on what I'm learning" =====
@@ -851,10 +869,13 @@
       sm.items.forEach(function (it, n) { var r = link(it); if (many && n >= MAX - 1) r.hidden = true; list.appendChild(r); });
       if (many) {
         var moreLi = el('li'), more = el('button', { type: 'button', class: 'tol-more-btn' }, 'Show all ' + sm.items.length);
-        more.addEventListener('click', function () {
+        more.addEventListener('click', function (e) {
+          // the button is removed, so this click must not reach the "click outside closes the menu" listener
+          e.stopPropagation();
           var first = null;
           Array.prototype.forEach.call(list.children, function (c) { if (c.hidden) { c.hidden = false; if (!first) first = c.querySelector('a'); } });
-          moreLi.remove(); if (first) first.focus();
+          if (first) first.focus();
+          moreLi.remove();
         });
         moreLi.appendChild(more); list.appendChild(moreLi);
       }
@@ -972,13 +993,17 @@
       openDrop = { btn: btn, menu: menu };
     });
     item.addEventListener('focusout', function (e) {
-      if (openDrop && openDrop.btn === btn && !item.contains(e.relatedTarget)) closeDrop();
+      if (openDrop && openDrop.btn === btn && !item.contains(e.relatedTarget) && !(e.relatedTarget === null && item.contains(document.activeElement))) {
+        // a focused button that disappears (like "Show all") moves focus nowhere: wait a moment and look again
+        setTimeout(function () { if (openDrop && openDrop.btn === btn && !item.contains(document.activeElement)) closeDrop(); }, 0);
+      }
     });
     item.appendChild(btn); item.appendChild(menu);
     return item;
   }
   document.addEventListener('click', function (e) {
-    if (openDrop && !(e.target.closest && e.target.closest('.tol-nav-item'))) closeDrop();
+    // (a click on something that has just been removed, like "Show all", isn't a click outside)
+    if (openDrop && document.contains(e.target) && !(e.target.closest && e.target.closest('.tol-nav-item'))) closeDrop();
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && openDrop) closeDrop(true);
@@ -1859,7 +1884,9 @@
     [/\b(what|does|do|is|where)\b.*\b(site|app|website|this|you|it)\b.*\b(keep|keeps|store|stores|save|saves|collect|collects|track|tracks|remember|remembers|know about me|record)\b|\b(my data|cookies|clear (my )?(history|data)|delete (my )?data|what'?s stored|whats stored|what is stored)\b/, 'r13stored'],
     // ADHD in a grown-up (the child's page leads otherwise)
     [/\b(i have adhd|i'?ve got adhd|i think i have adhd|adult adhd|adhd adults?|adhd (at|and) work|my adhd|adhd me|late diagnos\w*)\b/, 'r13adhdadult'],
-    [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk']
+    [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk'],
+    // control, fear and abuse: the safety page's signs first, never a dead end
+    [/\b(gaslight\w*|coercive|coercion|narciss\w*|controlling|abus\w*|domestic violence|dv|intimate partner violence|manipulat\w*|isolat\w* me|threaten\w*|stalk\w*|walking on eggshells|afraid of (him|her|them|my)|scared of (him|her|them|my))\b/, 'r13abuse']
   ];
   var ACT_13 = {
     r13cpdecide: ['/co-parenting.html#who-decides', '/co-parenting.html', '/co-parenting.html#parallel'],
@@ -1879,6 +1906,7 @@
     r13stored: ['/on-this-device.html', '/safety.html#traces', '/legal/privacy-policy.html'],
     adhd: ['/adhd-kids.html', '/neurodivergent-relationships.html', '/wired-differently.html', '/wiring-card.html'],
     r13adhdadult: ['/wired-differently.html', '/neurodivergent-relationships.html', '/work.html#neurodiversity', '/wiring-card.html'],
+    r13abuse: ['/safety.html#signs', '/safety.html', '/money-together.html#control', '/outside-help.html'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
     r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
     emotions: ['/book/understanding-1-feelings.html', '/library/emotions.html', '/communication.html'], emotion: 'emotions', emotional: 'emotions'
   };
@@ -1891,6 +1919,7 @@
    ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
    ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
    ['/bonding.html#ideas', 'Get a bonding idea: something to do together', 'Pick who, how much time and how much energy, and get one small idea at a time, including games for two.', 'Tool'],
+   ['/safety.html#signs', 'Signs of control or abuse (gaslighting, coercive control)', 'Being told you imagined things, checked on, cut off from friends or money, or afraid of how they’ll react: the signs, and free, private people to talk to.', 'Safety'],
    ['/safety.html#traces', 'Clearing your traces on a shared device', 'What this site keeps on your device, how to erase it, and leaving quickly.', 'Safety'],
    ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
    ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book']
