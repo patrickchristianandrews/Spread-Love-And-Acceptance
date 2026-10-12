@@ -18,6 +18,14 @@
   .ss-facts li{ margin:0 !important; max-width:none !important; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line); background:rgba(255,251,242,.96); }
   .ss-facts strong{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.08rem; }
   .ss-facts span{ display:block; color:var(--ink-soft); font-size:.97rem; margin-top:.15rem; }
+  .ss-tour{ list-style:none; padding:0 !important; margin:.75rem 0 1.6rem !important; display:grid; gap:.6rem; }
+  @media (min-width:640px){ .ss-tour{ grid-template-columns:1fr 1fr; } }
+  .ss-tour li{ margin:0 !important; max-width:none !important; }
+  .ss-tour a{ display:block; height:100%; box-sizing:border-box; padding:.8rem 1rem; border-radius:16px; border:1px solid var(--line); background:rgba(255,251,242,.96); color:inherit; text-decoration:none; }
+  .ss-tour a:hover, .ss-tour a:focus-visible{ border-color:currentColor; }
+  .ss-tour .ss-ico{ font-size:1.3rem; margin-right:.35rem; }
+  .ss-tour strong{ font-family:"Fraunces", Georgia, serif; font-size:1.05rem; }
+  .ss-tour .ss-d{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.2rem; }
   .ss-pick{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.6rem; }
   .ss-pick li{ margin:0 !important; max-width:none !important; }
   .ss-pick a{ display:block; min-height:44px; padding:.85rem 1rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); text-decoration:none; }
@@ -89,11 +97,11 @@
 <header class="read-head"><p class="read-code">Start here</p><h1>Someone sent you this</h1></header>
 
 <p class="simple-lede" data-ss-for="co-parent" hidden>Your child’s other parent sent you this link. It’s about handovers and messages, not about who was right. Here is what it is, in three lines:</p>
-<p class="simple-lede" data-ss-for="any">Someone you know sent you this link. Here is what it is, in three lines:</p>
+<p class="simple-lede" data-ss-for="any">Someone you know sent you this link. Here is what this site is, in three lines:</p>
 <ul class="ss-what no-bubble">
-  <li>A free site of short reads and small tools for sharing everyday life more kindly.</li>
-  <li>It looks at the setup (who does what, how tired each person is, how words land), never at who is to blame.</li>
-  <li>It works for partners, co-parents, friends, family, housemates, coworkers and people on their own.</li>
+  <li>A free, private place to understand yourself and the people in your life: short guides, a book, small tools and a friendly helper you can ask anything.</li>
+  <li>It looks at the setup and how each person is wired (who does what, how tired each person is, how words land), never at who is to blame.</li>
+  <li>It works for partners, co-parents, friends, family, housemates, coworkers and people on their own. No account, nothing to sign up for.</li>
 </ul>
 
 <ul class="ss-facts no-bubble" data-no-bubble>
@@ -101,6 +109,19 @@
   <li><strong>Nobody sees your answers.</strong><span>Anything you type stays on this device, in this browser. Not the person who sent this, not us. There is no account and nothing to sign up for.</span></li>
   <li data-ss-for="any"><strong>You are not the problem.</strong><span>Sending this usually means “I’d like things to feel lighter for both of us”. The site is written for both of you.</span></li>
   <li data-ss-for="co-parent" hidden><strong>Nobody is the problem.</strong><span>Sending this usually means “I’d like handovers and messages to go more smoothly, for the kids’ sake”. The co-parenting guide is written for both homes, and it never asks who was right.</span></li>
+</ul>
+
+<h2 id="whats-here">What you’ll find here</h2>
+<p>A quick look around, so you know what’s on offer. Open anything, or nothing.</p>
+<ul class="ss-tour no-bubble" data-no-bubble>
+  <li><a href="/ask.html"><span class="ss-ico" aria-hidden="true">&#128167;</span><strong>Professor Puddles</strong><span class="ss-d">Ask anything in your own words, about a person, a feeling or a tricky message. He answers from the site’s own checked pages, and he’s honest when he doesn’t know.</span></a></li>
+  <li><a href="/by-relationship.html"><span class="ss-ico" aria-hidden="true">&#129309;</span><strong>Guides for your situation</strong><span class="ss-d">Short, kind guides for couples, friends, family, co-parents, housemates and work, and for grief, illness, coming out, a family rift or a quiet house.</span></a></li>
+  <li><a href="/book/topic-start-here.html#introduction"><span class="ss-ico" aria-hidden="true">&#128214;</span><strong>A free book</strong><span class="ss-d">Read it like a regular book: about yourself, about life together, and how people work (feelings, stress, communication, attachment, change).</span></a></li>
+  <li><a href="/signal-translator.html"><span class="ss-ico" aria-hidden="true">&#9993;&#65039;</span><strong>Check a message before you send it</strong><span class="ss-d">Paste a text and see how it might land, with a calmer way to say the same thing.</span></a></li>
+  <li><a href="/upset-right-now.html"><span class="ss-ico" aria-hidden="true">&#127788;&#65039;</span><strong>Calm down, right now</strong><span class="ss-d">A few steps and a breathing guide for when you’re upset, on your own or with someone.</span></a></li>
+  <li><a href="/wavelength.html?quick=1"><span class="ss-ico" aria-hidden="true">&#128225;</span><strong>Know how you’re wired</strong><span class="ss-d">A two-minute quiz on how you take in words and how you like to be told things. Compare with someone if you both want to.</span></a></li>
+  <li><a href="/lemonade-stand.html"><span class="ss-ico" aria-hidden="true">&#127819;</span><strong>Share the load fairly</strong><span class="ss-d">A two-minute look at who does what at home, so it can be talked about without keeping score.</span></a></li>
+  <li><a href="/pause-and-play.html"><span class="ss-ico" aria-hidden="true">&#127769;</span><strong>Unwind</strong><span class="ss-d">Calm games, soundscapes and a cartoon puppy cam, for a breather with or without anyone else.</span></a></li>
 </ul>
 
 <h2 id="one-thing">If you’d like to try one thing</h2>
