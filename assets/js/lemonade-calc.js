@@ -270,12 +270,16 @@
     var adults = state.people.map(function (_, i) { return i; }).filter(function (i) { return !state.kid[i]; });
     if (adults.length < 2) return [];
     var have = state.people.map(function (_, i) {
-      return kind === 'bills' ? state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; })
-        : state.jobs.some(function (j) { return !j.ex && (num(j.v[i]) > 0 || num((j.t || [])[i]) > 0); });
+      return kind === 'bills' ? state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; }) : sideIn(i);
     }), withData = adults.filter(function (i) { return have[i]; }).length;
     if (!withData) return [];
     return adults.filter(function (i) { return !have[i]; });
   }
+  // A person's own side is in: a time on any line, except a number someone else typed in for them from the
+  // quick look (their paid hours, say), which never counts as their side until it's changed or their own
+  // side arrives. So "Everything was done by Chris (100%)" or "Try Jamal 20%" never shows on one side alone.
+  function typedFor(j, i) { return !!(j.qv && num(j.qv[i]) > 0 && near(num(j.qv[i]), num(j.v[i]))); }
+  function sideIn(i) { return state.jobs.some(function (j) { return !j.ex && ((num(j.v[i]) > 0 && !typedFor(j, i)) || num((j.t || [])[i]) > 0); }); }
   function waitNames(w) { return w.filter(function (i) { return !placeholder(state.people[i]); }).map(nameOf); }
   // what: 'bills' for the Money tab. Never asks anyone to send a code to themselves: on the phone of the
   // person still to fill in ("Who's filling in"), it asks for their own side instead.
@@ -319,6 +323,7 @@
   }
   // the people whose numbers a side carries (a planner's link can hold everyone's)
   function sidesIn(d) {
+    if (Array.isArray(d.in)) return d.people.filter(function (p) { return d.in.indexOf(low(p)) >= 0 || (d.by && low(p) === low(d.by)); });
     var has = {};
     d.jobs.concat(d.bills).forEach(function (l) { Object.keys(l.v || {}).concat(Object.keys(l.t || {})).forEach(function (k) { has[k] = 1; }); });
     return d.people.filter(function (p) { return has[low(p)]; });
@@ -420,6 +425,8 @@
       j.nm = fit(Array.from(j.nm), n, 0).map(function (x) { return x ? 1 : 0; });
       delete j.nf;
       if (j.fa && (typeof j.fa !== 'object' || j.fa.who >= n)) delete j.fa;
+      // numbers the quick look typed in for someone else on this device (not their own side yet)
+      if (Array.isArray(j.qv)) j.qv = fit(j.qv.slice(), n, 0).map(function (x) { return num(x); }); else delete j.qv;
     });
     state.bills.forEach(function (b) {
       b.name = b.name || ''; b.v = fit(b.v, n, 0);
@@ -651,7 +658,7 @@
   function addPerson() {
     if (state.people.length >= MAX) return;
     state.people.push('');
-    state.jobs.forEach(function (j) { j.v.push(0); j.t.push(0); if (j.nm) j.nm.push(0); if (j.fq) j.fq.push(j.freq); });
+    state.jobs.forEach(function (j) { j.v.push(0); j.t.push(0); if (j.nm) j.nm.push(0); if (j.fq) j.fq.push(j.freq); if (j.qv) j.qv.push(0); });
     state.bills.forEach(function (b) { b.v.push(0); });
     state.agreed.p.push('');
     delete state.agreedOffer;
@@ -675,7 +682,7 @@
     if (state.people.length <= MIN) return;
     var gone = nameOf(i);
     state.people.splice(i, 1);
-    state.jobs.forEach(function (j) { j.v.splice(i, 1); j.t.splice(i, 1); shiftRaw(j, i); if (j.nm) j.nm.splice(i, 1); if (j.fq) j.fq.splice(i, 1); });
+    state.jobs.forEach(function (j) { j.v.splice(i, 1); j.t.splice(i, 1); shiftRaw(j, i); if (j.nm) j.nm.splice(i, 1); if (j.fq) j.fq.splice(i, 1); if (j.qv) j.qv.splice(i, 1); });
     state.bills.forEach(function (b) { b.v.splice(i, 1); shiftRaw(b, i); });
     state.agreed.p.splice(i, 1);
     delete state.agreedOffer;
@@ -2121,7 +2128,7 @@
   function suggestSplit() {
     if (state.people.length !== 2 || anyBad(state.jobs)) return null;
     var home = totals(state.jobs), work = peopleTotals('work'), H = sum(home), W = sum(work);
-    if (H <= 0 || W <= 0 || work.some(function (w) { return w <= 0; }) || workGap().length) return null;
+    if (H <= 0 || W <= 0 || work.some(function (w) { return w <= 0; }) || workGap().length || waitingFor().length) return null;
     var each = (H + W) / 2, want = work.map(function (w) { return Math.max(0, each - w); }), ws = sum(want);
     if (ws <= 0) return null;
     var r = wholePcts(want);
@@ -2147,10 +2154,10 @@
     var np = nightParts(), bits = [];
     np.forEach(function (o, i) {
       if (o.shift + o.sleep <= 0 || (solo() && i)) return;
-      var w = [];
-      if (o.shift > 0) w.push(hrs(o.shift) + ' of night shifts');
-      if (o.sleep > 0) w.push(hrs(o.sleep) + ' of recovery sleep');
-      bits.push((solo() ? 'You' : nameOf(i)) + ': ' + w.join(' plus '));
+      // "Jamal: 36 h nights + 21 h recovery sleep = 57 h work"
+      var w = o.shift > 0 && o.sleep > 0 ? hrs(o.shift) + ' nights + ' + hrs(o.sleep) + ' recovery sleep = ' + hrs(o.shift + o.sleep) + ' work'
+        : o.shift > 0 ? hrs(o.shift) + ' of night shifts' : hrs(o.sleep) + ' of recovery sleep';
+      bits.push((solo() ? 'You' : nameOf(i)) + ': ' + w);
     });
     return bits.length ? 'Night work, counted as part of the work week (not rest): ' + bits.join('; ') + '.' : '';
   }
@@ -3162,6 +3169,10 @@
     function byName(f) { var o = {}, any = false; idx.forEach(function (i) { var v = f(i); if (v) { o[nm(i)] = v; any = true; } }); return any ? o : null; }
     var d = { app: 'lemonade', v: 1, people: idx.map(nm) };
     if (state.me >= 0 && !placeholder(state.people[state.me])) d.by = nm(state.me);
+    // whose own sides this carries (not a number typed in for someone else), so the other device says
+    // "Jamal sent you their side", never "everyone's sides"
+    var ins = idx.filter(function (i) { return sideIn(i) || state.bills.some(function (b) { return !b.ex && num(b.v[i]) > 0; }); }).map(nm);
+    if (ins.length < idx.length) d.in = ins;
     if (state.curSet || state.cur !== '$') d.cur = state.cur;
     if (state.planning) d.plan = 1;
     if (num(state.goal.a) || state.goal.f.trim()) { d.goal = {}; if (num(state.goal.a)) d.goal.a = num(state.goal.a); if (state.goal.f.trim()) d.goal.f = state.goal.f.trim().slice(0, 40); }
@@ -3260,7 +3271,7 @@
       bills.forEach(function (b) { var w = whose(Object.keys(b.v)); if (w) myName(b, w); });
       own.forEach(function (o) { var w = sender || (o.w ? whose([o.w]) : ''); if (w) myName(o, w); });
     }
-    return { by: clean(raw.by), cur: clean(raw.cur, 4), people: people, half: (Array.isArray(raw.half) ? raw.half : []).map(low),
+    return { by: clean(raw.by), cur: clean(raw.cur, 4), people: people, in: Array.isArray(raw.in) ? raw.in.map(function (x) { return low(clean(x)); }).filter(Boolean) : null, half: (Array.isArray(raw.half) ? raw.half : []).map(low),
       pn: raw.pn && typeof raw.pn === 'object' ? vals(raw.pn, 13) : null, kids: (Array.isArray(raw.kids) ? raw.kids : []).map(low),
       plan: !!raw.plan, full: !!raw.full, goal: raw.goal && typeof raw.goal === 'object' ? { a: num(raw.goal.a) <= 1e9 ? num(raw.goal.a) : 0, f: clean(raw.goal.f, 40) } : null, agreed: raw.agreed && typeof raw.agreed === 'object' ? vals(raw.agreed, 100) : null, asrc: SPLIT_SRC[raw.asrc] ? raw.asrc : '', jobs: jobs, bills: bills, own: own, household: !!raw.household };
   }
@@ -3446,6 +3457,8 @@
       else if (state.owners.length < MAX_OWN) { state.owners.push({ name: o.n, who: w, bk: bk, dn: o.d || '' }); out.own = (out.own || 0) + 1; }
       if ((bk >= 0 || o.d) && !state.ownMore) state.ownMore = true;
     });
+    // their own side has arrived: a number typed in for them here (from the quick look) now counts as theirs
+    sidesIn(d).forEach(function (nm) { var li = map[low(nm)]; if (li == null) return; state.jobs.forEach(function (j) { if (j.qv && li < j.qv.length) j.qv[li] = 0; }); });
     state.example = false; state.checked = false;
     renderAll();
     var bits = [];

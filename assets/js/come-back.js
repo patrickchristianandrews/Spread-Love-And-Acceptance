@@ -775,7 +775,7 @@
     var box = endCard();
     placeAtEnd(main, box);
     nextUnder(box);
-    function draw() { fillEnd(box, b.gain, null, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters read.</span> '); }
+    function draw() { fillEnd(box, b.gain, null, '<span>' + chaptersRead() + ' of ' + BOOK.length + ' chapters of Parts One and Two read.</span> '); }
     draw();
     // read: the end of the chapter came into view
     if ('IntersectionObserver' in window) {

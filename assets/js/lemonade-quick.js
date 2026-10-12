@@ -766,6 +766,18 @@
     });
     return n ? per.map(function (x) { return Math.round(x / n * 100); }) : null;
   }
+  // someone who works nights (as answered here): their paid hours are the night shifts, plus the sleep after them
+  // (12-hour shifts, about 7 hours' sleep after each), the same way "Go deeper" counts them
+  function nightsFor(i) { var v = q.ans[q.me] || {}, x = v.nightshift; return q.list.indexOf('nightshift') >= 0 && (x === i || x === 'b'); }
+  function recFor(i) { var v = q.ans[q.me] || {}, x = v.recovery; return q.list.indexOf('recovery') >= 0 && (x === i || x === 'b'); }
+  function recH(i) { return Math.round(hrsOf(i) / 12 * 7 * 10) / 10; }
+  function hrsWords(i) {
+    var h = hrsOf(i);
+    if (!nightsFor(i)) return nm(i) + ' ' + h + ' h';
+    if (!recFor(i)) return L(nm(i) + ' ' + h + ' h of nights', nm(i) + ' ' + h + ' h de noche');
+    return L(nm(i) + ': ' + h + ' h nights + ' + recH(i) + ' h recovery sleep = ' + Math.round((h + recH(i)) * 10) / 10 + ' h work',
+      nm(i) + ': ' + h + ' h de noche + ' + recH(i) + ' h de sueño después = ' + Math.round((h + recH(i)) * 10) / 10 + ' h de trabajo');
+  }
   var extraSig = '';
   function renderExtra() {
     var box = $('lq-extra'); if (!box) return;
@@ -795,8 +807,11 @@
     }
     // the lines that change as you go (the boxes themselves stay put while you type)
     var hl = $('lq-hrs-line'), withH = q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; });
-    if (hl) hl.textContent = withH.length ? L('Paid work and travel: ' + withH.map(function (i) { return nm(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + ' a week. That’s part of the week too: the home jobs above are only one side of it.',
-      'Trabajo pagado y traslados: ' + withH.map(function (i) { return nm(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + ' por semana. Eso también es parte de la semana: las tareas de la casa son solo un lado.') : '';
+    if (hl) {
+      var anyN = withH.some(function (i) { return nightsFor(i); });
+      hl.textContent = withH.length ? L('Paid work and travel: ' + withH.map(hrsWords).join(', ') + ' a week.' + (anyN ? ' Night shifts are the paid hours here, never counted twice.' : '') + ' That’s part of the week too: the home jobs above are only one side of it.',
+        'Trabajo pagado y traslados: ' + withH.map(hrsWords).join(', ') + ' por semana.' + (anyN ? ' Los turnos de noche son esas horas pagadas, sin contarlas dos veces.' : '') + ' Eso también es parte de la semana: las tareas de la casa son solo un lado.') : '';
+    }
     var nb = box.querySelector('[data-lq-nights]'); if (nb) nb.parentNode.hidden = q.list.indexOf('nightshift') >= 0 && q.list.indexOf('recovery') >= 0;
     var sl = $('lq-split-line');
     if (sl) {
@@ -1056,7 +1071,7 @@
       lines.push('• ' + secName(s) + ': ' + parts.join(', ') + '.');
     });
     var withH = q.ill ? q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; }) : [];
-    if (withH.length) lines.push('• ' + L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(function (i) { return chatName(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + '.');
+    if (withH.length) lines.push('• ' + L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(hrsWords).join(', ') + '.');
     if (q.ill && q.split && q.people.length === 2) lines.push('• ' + L('The split we’re aiming for at home: ', 'El reparto que buscamos en casa: ') + chatName(0) + ' ' + q.split + ' · ' + chatName(1) + ' ' + (100 - +q.split) + '.');
     others().filter(shown).forEach(function (o) {
       var mine = q.ans[q.me] || {}, th = q.ans[o] || {}, same = 0, diff = [];
@@ -1103,7 +1118,7 @@
         : diff ? whoW + ' agree on ' + same + (same === 1 ? ' job' : ' jobs') + ' and see ' + diff + ' differently. Those are the good ones to talk about.' : whoW + ' see it the same way.');
     });
     var withH = q.ill ? q.people.map(function (_, i) { return i; }).filter(function (i) { return hrsOf(i) > 0; }) : [];
-    if (withH.length) notes.push(L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(function (i) { return cardName(i) + ' ' + hrsOf(i) + ' h'; }).join(', ') + '.');
+    if (withH.length) notes.push(L('Paid work and travel each week: ', 'Trabajo pagado y traslados por semana: ') + withH.map(hrsWords).join(', ') + '.');
     if (q.away) notes.push(L('One of us has been away: the lean is about the time apart, not about either of us.', 'Uno de nosotros estuvo lejos: la inclinación habla del tiempo separados, no de ninguno.'));
     else if (q.ill || workLeans()) notes.push(L('Fair isn’t always ' + (q.people.length === 2 ? '50/50' : 'an even split') + ': long hours, nights or illness count too.', 'Justo no siempre es mitad y mitad: las horas largas, las noches o una enfermedad también cuentan.'));
     return {
