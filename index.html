@@ -608,6 +608,16 @@
   .read .fit-callout a.cta-button:focus-visible{ outline: 2px solid var(--focus, #2B5B8C); outline-offset: 3px; }
   [hidden]{ display: none !important; }
   .dir-blurb{ margin: .15rem 0 .5rem; font-size: .95rem; color: var(--ink-soft, #524B3E); max-width: 62ch; }
+  /* Quiet mode: the home page comes down to the first steps. "Show everything" brings the rest back (this visit only). */
+  .read .hh-quiet{ display:none; }
+  html.tol-quiet .read .hh-quiet{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1rem; margin:.9rem 0 0; }
+  html.tol-quiet .read .hh .hh-quiet p{ margin:0; }
+  html.tol-quiet .read .hh-quiet a{ font-weight:600; text-underline-offset:3px; }
+  html.tol-quiet .read .hh-quiet button{ min-height:44px; padding:.3rem 1rem; border-radius:10px; cursor:pointer; font:600 .95rem/1.2 "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid var(--line, #D9CBA3); }
+  html.tol-quiet .read .hh-quiet button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  html.tol-quiet:not(.hh-all) .read .hh :is(.hh-offer-slot, .hh-go-h, .hh-go, .hh-app, .hh-ways),
+  html.tol-quiet:not(.hh-all) .read > :is(#start-where, #guides, #explore, [data-app-ad], .cb-panel, .cb-extra){ display:none !important; }
+  html.tol-quiet.hh-all .read .hh-quiet button{ display:none; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/start-where.js" defer></script>
@@ -703,6 +713,20 @@
     <p class="hh-pud-t"><strong>Professor Puddles.</strong> Ask anything in your own words<span class="hh-pud-x">, about your relationship, family, roommates or work,</span> and get kind, practical steps. Private.</p>
     <a class="hh-pud-go" href="/ask.html" data-ask-puddles>Ask him</a>
   </div>
+  <div class="hh-quiet" data-hh-quiet>
+    <p><a href="/book/topic-start-here.html#introduction">Read the book</a></p>
+    <button type="button" aria-expanded="false" data-hh-all>Show everything</button>
+  </div>
+  <script>
+  /* Quiet mode keeps the home page short; "Show everything" (or a link to a section further down) opens the rest */
+  (function () {
+    var h = document.documentElement, b = document.querySelector('[data-hh-all]');
+    function all() { h.classList.add('hh-all'); if (b) b.setAttribute('aria-expanded', 'true'); }
+    if (b) b.addEventListener('click', function () { all(); var n = document.getElementById('start-where'); if (n) { if (!n.hasAttribute('tabindex')) n.setAttribute('tabindex', '-1'); n.focus(); } });
+    document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a && /^#(start-where|guides|explore|more-ways|open-free)$/.test(a.getAttribute('href'))) all(); }, true);
+    if (/^#(start-where|guides|explore|more-ways|open-free)$/.test(location.hash)) all();
+  })();
+  </script>
   <script>
   (function () {
     var card = document.querySelector('.hh-pud');

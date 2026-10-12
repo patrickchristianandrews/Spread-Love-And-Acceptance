@@ -154,6 +154,7 @@
   // the garden: "Level 4 · 2 more levels until Koi in the pond arrive"
   function gardenLine() {
     var R = window.TOLRewards; if (!R || !R.state) return '';
+    if (R.tender && R.tender()) return '';   // tender pages and messages: no level line
     var st = R.state();
     var s = 'Level ' + st.level + ' in <a href="/keepsakes.html">your garden</a>';
     if (st.next && st.next.kind === 'garden' && st.next.id.indexOf('garden-flies') !== 0) s += '. ' + (st.toNext <= 1 ? 'One more level' : st.toNext + ' more levels') + ' until ' + esc(st.next.name.charAt(0).toLowerCase() + st.next.name.slice(1)) + ' arrives';

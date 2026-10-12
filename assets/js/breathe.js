@@ -72,6 +72,53 @@
     bowls: { name: 'Singing bowls', note: 'Slow, ringing bowls over a soft drone.' }
   };
 
+  // ---------- En español ----------
+  // On a Spanish page (html lang="es", the same test site.js uses) the whole break is in Spanish.
+  var ES = typeof document !== 'undefined' && /^es\b/i.test(document.documentElement.lang || '');
+  function L(en, es) { return ES ? es : en; }
+  if (ES) {
+    PATTERNS.box.name = 'Respiración en caja';
+    PATTERNS.box.how = 'Cuatro lados iguales: inhala en 4, mantén en 4, exhala en 4, mantén en 4. Sigue el punto alrededor del cuadrado.';
+    PATTERNS.calm.name = 'Respiración tranquila';
+    PATTERNS.calm.how = 'Inhala en 4, exhala en 6. Soltar el aire más despacio es la forma más sencilla de decirle a tu cuerpo que puede calmarse.';
+    PATTERNS.sleep.name = '4-7-8 para dormir';
+    PATTERNS.sleep.how = 'Inhala por la nariz en 4, mantén en 7, exhala por la boca en 8. Ideal antes de dormir. Si sostener el aire se siente largo, cuenta más rápido y mantén el ritmo.';
+    WORD = { in: 'Inhala', top: 'Mantén', out: 'Exhala', bottom: 'Mantén' };
+    GUIDE = {
+      in: ['Inhala despacio por la nariz.', 'Deja que suba primero tu barriga y luego tu pecho.', 'Llénate con calma, como cuando sirves agua en un vaso.', 'Siente el aire fresco en la punta de la nariz.'],
+      top: ['Mantén el aire con suavidad. Sin apretar, sin forzar.', 'Descansa arriba y nota la quietud.', 'Deja los hombros sueltos mientras sostienes el aire.', 'Solo haz una pausa. No hay nada que hacer.'],
+      out: ['Suelta el aire despacio por la boca.', 'Siente cómo bajan tus hombros mientras sale el aire.', 'Exhala lento y tibio, como si empañaras un espejo.', 'Deja que todo tu cuerpo se sienta un poco más pesado.'],
+      bottom: ['Descansa abajo, sin aire y sin prisa.', 'Nota el silencio antes de la próxima respiración.', 'Quédate en calma. La próxima respiración llega sola.', 'Haz una pausa y deja que tu barriga se relaje.']
+    };
+    BODY = [
+      ['¿Hasta dónde llega tu respiración?', 'Nota si se mueve más tu barriga o tu pecho. Cualquiera está bien. Solo nótalo.'],
+      ['Nota tu latido.', 'Tu corazón va un poco más lento cada vez que exhalas. Ve si puedes sentirlo.'],
+      ['Recorre tu cara.', 'Frente, ojos, mandíbula, lengua. Deja que cada parte se afloje al exhalar.'],
+      ['Nota tus pensamientos.', 'Si tu mente se va a otro lado, es normal. Nota a dónde se fue y vuelve a la cuenta.'],
+      ['Siente tus manos.', 'Mucha gente nota que sus manos se sienten más tibias o pesadas al relajarse.'],
+      ['Escucha los sonidos a tu alrededor.', 'Sonidos cercanos, sonidos lejanos. Déjalos ir y venir sin seguirlos.'],
+      ['Nota tus hombros.', '¿Están más abajo que al empezar? Déjalos bajar un poquito más.'],
+      ['Ponle nombre a lo que sientes.', 'Cansancio, preocupación, calma, lo que sea. Nómbralo con cariño. Ahora no hay nada que arreglar.'],
+      ['Siente el suelo debajo de ti.', 'Tus pies, tu asiento, tu espalda. Deja que sostengan tu peso.'],
+      ['Nota el espacio entre un pensamiento y otro.', 'En las pausas puede aparecer un momento de calma. Descansa ahí.'],
+      ['Revisa cómo está tu estómago.', '¿Tenso o suelto? Respira hacia él y deja que se afloje.'],
+      ['Nota cómo tu respiración se vuelve más fácil.', 'No tienes que forzarlo. Deja que el ritmo te lleve.']
+    ];
+    WHY = [
+      'Respirar lento y parejo activa el lado de tu cuerpo que descansa y repara, lo contrario de pelear o huir.',
+      'Exhalar despacio ayuda a bajar tu ritmo cardíaco. Por eso la exhalación importa tanto.',
+      'Contar le da a una mente ocupada una sola tarea sencilla, y a las preocupaciones les queda menos espacio.',
+      'Las pausas hacen más lento todo tu ritmo, así cada respiración es más profunda y tranquila.',
+      'Personal de enfermería, deportistas y rescatistas usan la respiración en caja para calmarse bajo presión.',
+      'Prestar atención a tu cuerpo, sin juzgarlo, es una habilidad. Cada ronda es práctica.'
+    ];
+    SCAPES.beneath.note = 'La pista original del sitio: lenta, profunda y grave. Se escucha mejor con audífonos.';
+    SCAPES.deep.name = 'Profundo'; SCAPES.deep.note = 'Al estilo de The Breath Beneath: tonos graves y cálidos con un pulso lento, como un latido, y notas que florecen de vez en cuando.';
+    SCAPES.ocean.name = 'Océano'; SCAPES.ocean.note = 'Olas suaves que suben cuando inhalas y bajan cuando exhalas.';
+    SCAPES.rain.name = 'Lluvia suave'; SCAPES.rain.note = 'Lluvia suave en una tarde tranquila, con un zumbido cálido de fondo.';
+    SCAPES.bowls.name = 'Cuencos tibetanos'; SCAPES.bowls.note = 'Cuencos lentos que resuenan sobre un tono suave y continuo.';
+  }
+
   function Engine() {
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
     unlockMediaAudio();
@@ -222,27 +269,28 @@
       }).join('') + '</div>';
     }
     ov = document.createElement('div');
-    ov.className = 'tol-breathe br'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Breathing break'); ov.hidden = true;
+    ov.className = 'tol-breathe br'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', L('Breathing break', 'Pausa para respirar')); ov.hidden = true;
+    if (ES) ov.setAttribute('lang', 'es');
     ov.innerHTML =
       '<div class="tol-breathe-aurora" aria-hidden="true"><i></i><i></i><i></i></div>' +
       '<div class="tol-breathe-bg" aria-hidden="true">' + floaters + '</div>' +
       // choose
       '<section class="br-pick">' +
-        '<h2>Take a breather</h2>' +
-        '<p class="br-lede">Pick a way to breathe. The screen will guide you the whole way.</p>' +
+        '<h2>' + L('Take a breather', 'Respira un momento') + '</h2>' +
+        '<p class="br-lede">' + L('Pick a way to breathe. The screen will guide you the whole way.', 'Elige una forma de respirar. La pantalla te guía todo el tiempo.') + '</p>' +
         '<div class="br-methods">' +
           Object.keys(PATTERNS).map(function (k) {
             var p = PATTERNS[k];
             return '<button type="button" class="br-method" data-method="' + k + '" aria-pressed="false"><strong>' + esc(p.name) + '</strong><small>' +
-              p.steps.map(function (s) { return (s[0] === 'in' ? 'in ' : s[0] === 'out' ? 'out ' : 'hold ') + s[1]; }).join(' · ') + '</small></button>';
+              p.steps.map(function (s) { return (s[0] === 'in' ? L('in ', 'inhala ') : s[0] === 'out' ? L('out ', 'exhala ') : L('hold ', 'mantén ')) + s[1]; }).join(' · ') + '</small></button>';
           }).join('') +
         '</div>' +
         '<p class="br-how"></p>' +
-        '<p class="br-label">How long</p>' + chips('min', [['1', '1 min'], ['3', '3 min'], ['5', '5 min']], get('tol-br-min', '1')) +
-        '<p class="br-label">Sound</p>' + chips('scape', [['beneath', 'The Breath Beneath'], ['deep', 'Deep'], ['ocean', 'Ocean'], ['rain', 'Soft rain'], ['bowls', 'Singing bowls'], ['off', 'Silence']], get('tol-br-scape', 'deep')) +
+        '<p class="br-label">' + L('How long', 'Cuánto tiempo') + '</p>' + chips('min', [['1', '1 min'], ['3', '3 min'], ['5', '5 min']], get('tol-br-min', '1')) +
+        '<p class="br-label">' + L('Sound', 'Sonido') + '</p>' + chips('scape', [['beneath', SCAPES.beneath.name], ['deep', SCAPES.deep.name], ['ocean', SCAPES.ocean.name], ['rain', SCAPES.rain.name], ['bowls', SCAPES.bowls.name], ['off', L('Silence', 'Silencio')]], get('tol-br-scape', 'deep')) +
         '<p class="br-scape-note" aria-live="polite"></p>' +
-        '<p class="br-phones"><span aria-hidden="true">&#127911;</span> Soundscapes sound best with headphones, so the deep, low tones and the gentle left-to-right movement come through fully.</p>' +
-        '<div class="tol-breathe-row"><button type="button" class="br-begin" data-act="begin">Begin</button><button type="button" data-act="close">Not now</button></div>' +
+        '<p class="br-phones"><span aria-hidden="true">&#127911;</span> ' + L('Soundscapes sound best with headphones, so the deep, low tones and the gentle left-to-right movement come through fully.', 'Los sonidos se escuchan mejor con audífonos, así te llegan completos los tonos graves y el suave movimiento de un lado a otro.') + '</p>' +
+        '<div class="tol-breathe-row"><button type="button" class="br-begin" data-act="begin">' + L('Begin', 'Empezar') + '</button><button type="button" data-act="close">' + L('Not now', 'Cerrar') + '</button></div>' +
       '</section>' +
       // breathe
       '<section class="br-run" hidden>' +
@@ -258,17 +306,24 @@
         '<p class="br-guide"></p>' +
         '<p class="br-why"></p>' +
         '<div class="br-progress" aria-hidden="true"><i></i></div>' +
-        '<div class="tol-breathe-row"><button type="button" data-act="close">I’m done</button><button type="button" data-act="mute" aria-pressed="false">&#127925; Sound on</button></div>' +
+        '<div class="tol-breathe-row"><button type="button" data-act="close">' + L('I’m done', 'Parar') + '</button><button type="button" data-act="mute" aria-pressed="false">&#127925; ' + L('Sound on', 'Con sonido') + '</button></div>' +
       '</section>' +
       // done
       '<section class="br-done" hidden>' +
         '<p class="br-heart" aria-hidden="true">&#9829;</p>' +
+        (ES ?
+        '<h2>Bien hecho.</h2>' +
+        '<p class="br-lede">Antes de irte, tómate un momento para notar:</p>' +
+        '<ul class="br-reflect"><li>¿Tu respiración va más lenta que al empezar?</li><li>¿Tus hombros están más abajo y tu mandíbula más suelta?</li><li>¿Tu mente está un poco más tranquila, aunque sea un poquito?</li></ul>' +
+        '<p class="br-lede">Lo que notes está bien. Volver a esto seguido es lo que hace que funcione.</p>' +
+        '<div class="tol-breathe-row"><button type="button" data-act="again">Otra vez</button><button type="button" data-act="change">Cambiar de forma</button><button type="button" data-act="close">Cerrar</button></div>'
+      :
         '<h2>Well done.</h2>' +
         '<p class="br-lede">Before you go, take a moment to notice:</p>' +
         '<ul class="br-reflect"><li>Is your breathing slower than when you started?</li><li>Are your shoulders lower, your jaw softer?</li><li>Is your mind a little quieter, even by a notch?</li></ul>' +
         '<p class="br-lede">Whatever you notice is fine. Coming back to this often is what makes it work.</p>' +
         '<p class="br-tip" hidden></p>' +
-        '<div class="tol-breathe-row"><button type="button" data-act="again">Again</button><button type="button" data-act="change">Change method</button><button type="button" data-act="close">I’m done</button><a href="/night-garden.html">Visit the Night Garden</a></div>' +
+        '<div class="tol-breathe-row"><button type="button" data-act="again">Again</button><button type="button" data-act="change">Change method</button><button type="button" data-act="close">I’m done</button><a href="/night-garden.html">Visit the Night Garden</a></div>') +
       '</section>';
     document.body.appendChild(ov);
     wire();
@@ -291,7 +346,7 @@
     ov.querySelectorAll('[data-min]').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.getAttribute('data-min') === minutes)); });
     ov.querySelectorAll('[data-scape]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-scape') === scape)); });
     $('.br-how').textContent = PATTERNS[method].how;
-    $('.br-scape-note').textContent = scape === 'off' ? 'Just the guide on screen, in silence.' : 'This will play sound. ' + SCAPES[scape].note;
+    $('.br-scape-note').textContent = scape === 'off' ? L('Just the guide on screen, in silence.', 'Solo la guía en pantalla, en silencio.') : L('This will play sound. ', 'Esto va a reproducir sonido. ') + SCAPES[scape].note;
   }
 
   // the path the dot follows: a square for box breathing, a circle otherwise
@@ -302,7 +357,7 @@
     if (P.shape === 'box') {
       var d = 'M30 170 L30 30 L170 30 L170 170 Z';
       track.setAttribute('d', d); trail.setAttribute('d', d);
-      [['Breathe in', 16, 100, -90], ['Hold', 100, 18, 0], ['Breathe out', 184, 100, 90], ['Hold', 100, 188, 0]].forEach(function (l) {
+      [[WORD.in, 16, 100, -90], [WORD.top, 100, 18, 0], [WORD.out, 184, 100, 90], [WORD.bottom, 100, 188, 0]].forEach(function (l) {
         var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         t.setAttribute('x', l[1]); t.setAttribute('y', l[2]); t.setAttribute('text-anchor', 'middle'); t.setAttribute('dominant-baseline', 'middle');
         if (l[3]) t.setAttribute('transform', 'rotate(' + l[3] + ' ' + l[1] + ' ' + l[2] + ')');
@@ -321,9 +376,9 @@
     run.cycle = P.steps.reduce(function (s, x) { return s + x[1]; }, 0);
     run.rounds = Math.max(2, Math.round(minutes * 60 / run.cycle));
     show('run'); ov.scrollTop = 0; drawShape();
-    $('.br-method-name').textContent = P.name; $('.br-round').textContent = 'Getting ready';
-    soft($('.tol-breathe-focus span'), 'Sit comfortably, and let your eyes soften.'); soft($('.tol-breathe-focus small'), P.how);
-    soft($('.tol-breathe-word'), 'Get ready…'); $('.br-guide').textContent = 'Breathe out fully first, to make room.'; $('.br-why').textContent = '';
+    $('.br-method-name').textContent = P.name; $('.br-round').textContent = L('Getting ready', 'Preparándote');
+    soft($('.tol-breathe-focus span'), L('Sit comfortably, and let your eyes soften.', 'Siéntate con comodidad y relaja la mirada.')); soft($('.tol-breathe-focus small'), P.how);
+    soft($('.tol-breathe-word'), L('Get ready…', 'Prepárate…')); $('.br-guide').textContent = L('Breathe out fully first, to make room.', 'Primero suelta todo el aire, para hacer espacio.'); $('.br-why').textContent = '';
     $('.tol-breathe-count').textContent = ''; $('.br-progress i').style.width = '0';
     var orb = $('.tol-breathe-orb'); orb.style.transition = 'transform 2s ease'; orb.style.transform = 'scale(.7)';
     if (scape !== 'off') {
@@ -343,11 +398,11 @@
     var s = P.steps[step], k = s[0], secs = s[1];
     cur = { round: round, step: step, stepStart: performance.now(), stepLen: secs * 1000, k: k };
     if (step === 0) {
-      $('.br-round').textContent = 'Round ' + (round + 1) + ' of ' + run.rounds;
+      $('.br-round').textContent = L('Round ', 'Ronda ') + (round + 1) + L(' of ', ' de ') + run.rounds;
       var b = BODY[round % BODY.length];
-      if (round === run.rounds - 1) b = ['Notice how you feel now.', 'Compare it with when you started. Even a little calmer counts.'];
+      if (round === run.rounds - 1) b = L(['Notice how you feel now.', 'Compare it with when you started. Even a little calmer counts.'], ['Nota cómo te sientes ahora.', 'Compáralo con cómo empezaste. Aunque sea un poquito más de calma, cuenta.']);
       soft($('.tol-breathe-focus span'), b[0]); soft($('.tol-breathe-focus small'), b[1]);
-      soft($('.br-why'), round % 2 === 1 ? 'What’s happening: ' + WHY[((round - 1) / 2) % WHY.length] : '');
+      soft($('.br-why'), round % 2 === 1 ? L('What’s happening: ', 'Lo que está pasando: ') + WHY[((round - 1) / 2) % WHY.length] : '');
       ripple();
     }
     soft($('.tol-breathe-word'), WORD[k]);
@@ -381,7 +436,7 @@
 
   function finish() {
     var tipEl = $('.br-tip');
-    if (tipEl && window.TOLTips) window.TOLTips.get(['calm', 'rest', 'body', 'mind', 'selftalk'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + esc(t[0]) + ' ' + esc(t[1]); tipEl.hidden = false; });
+    if (tipEl && !ES && window.TOLTips) window.TOLTips.get(['calm', 'rest', 'body', 'mind', 'selftalk'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + esc(t[0]) + ' ' + esc(t[1]); tipEl.hidden = false; });
     if (window.TOLGarden) window.TOLGarden.gift('breathe');
     if (window.TOLRewards) window.TOLRewards.earn(6, 'breathe', 'A breathing break');
     stopAll(); cur.k = ''; ov.classList.remove('is-in', 'is-out'); show('done');
@@ -392,7 +447,7 @@
   }
   function muteUI() {
     var b = $('.br-run [data-act="mute"]'); b.hidden = scape === 'off';
-    b.setAttribute('aria-pressed', String(muted)); b.innerHTML = muted ? '&#127925; Sound off' : '&#127925; Sound on';
+    b.setAttribute('aria-pressed', String(muted)); b.innerHTML = '&#127925; ' + (muted ? L('Sound off', 'Sin sonido') : L('Sound on', 'Con sonido'));
   }
 
   function open() {

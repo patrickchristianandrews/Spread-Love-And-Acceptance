@@ -72,7 +72,7 @@
     var res = { level: level(), unlocked: fresh, next: nextUnlock() };
     // Quiet mode, Easy reading, "Keep the page still" and work mode: progress is still kept,
     // but nothing pops up or slides in about it (My garden lists everything that has arrived)
-    var hush = hushed();
+    var hush = hushed() || tender();
     // A level from a reading page or a tool (come-back, learn-play): never a floating note on top of
     // the page or a result. It is one small line in the flow, at the end of the "What you got from
     // this" box or the end of the page. Only the games use the small floating line at the bottom.
@@ -81,7 +81,7 @@
     if (fresh.length && !opts.noCard && !hush) {
       // From a "Check yourself" card (learn-play) or a tool: a small line that doesn't block the page,
       // and it waits until the reader has finished with the card. The games keep the full card.
-      if (soft) whenCalm(function () { if (!hushed()) inlineNote(unlockLine(fresh[0])); });
+      if (soft) whenCalm(function () { if (!hushed() && !tender()) inlineNote(unlockLine(fresh[0])); });
       else setTimeout(function () { unlockCard(fresh[0]); }, opts.cardDelay || 1400);
     }
     renderChips();
@@ -132,6 +132,25 @@
     if (h.contains('tol-easy') || h.contains('tol-still') || h.contains('tol-work') || h.contains('tol-quiet')) return true;
     if (window.TOLQuiet && window.TOLQuiet.on && window.TOLQuiet.on()) return true;
     try { if (localStorage.getItem('tol-easy') === '1' || localStorage.getItem('tol-quiet') === '1') return true; } catch (e) {}
+    return false;
+  }
+  // Tender pages and moments: progress is still kept, but no level line, toast or card appears.
+  // That is any page marked data-sensitive, data-no-garden or data-no-cheer (outside the games), the
+  // pages below, and the Signal Translator while it reads a message to family or a co-parent, or a
+  // coming-out (or other personal news) message.
+  var TENDER = /^\/(safety|coming-out|grief|someone-sent-you-this|outside-help|calming-supplements|upset-right-now|growing-up|know-yourself|family-rifts|co-parenting)(-in-depth)?\.html$/;
+  var DISCLOSE = /\bi(?:'|\u2019)?m (?:(?:actually|really|also|finally ready to say i(?:'|\u2019)?m) )?(?:bi|bisexual|gay|lesbian|queer|trans|transgender|non-?binary|pan|pansexual|asexual|ace|aromantic|a trans (?:man|woman)|intersex)\b|\bi am (?:(?:actually|really|also) )?(?:bi|bisexual|gay|lesbian|queer|trans|transgender|non-?binary|pan|pansexual|asexual|ace|aromantic|intersex)\b|\bcom(?:e|ing) out\b|\bi(?:'ve| have) been diagnosed\b|\bi(?:'|\u2019)?m pregnant\b|\bi am pregnant\b/i;
+  function tender() {
+    if (typeof document === 'undefined' || !document.body) return false;
+    var b = document.body, path = (location.pathname || '/').replace(/\/$/, '/index.html');
+    if (b.hasAttribute('data-sensitive') || b.hasAttribute('data-no-garden') || document.documentElement.classList.contains('tol-sensitive')) return true;
+    if (b.hasAttribute('data-no-cheer') && !b.classList.contains('is-game')) return true;
+    if (TENDER.test(path)) return true;
+    if (/^\/signal-translator(-in-depth)?\.html$/.test(path)) {
+      var rel = document.getElementById('relSel'), got = document.getElementById('gotRelSel'), ph = document.getElementById('phrase');
+      if ((rel && /^(family|coparent)$/.test(rel.value)) || (got && /^(family|coparent)$/.test(got.value))) return true;
+      if (ph && DISCLOSE.test(ph.value || '')) return true;
+    }
     return false;
   }
   function levelLine(res, why) {
@@ -270,7 +289,7 @@
   }
 
   window.TOLRewards = {
-    earn: earn, record: record, stat: stat, setTiles: setTiles, renderChips: renderChips, unlockCard: unlockCard,
+    earn: earn, record: record, tender: tender, stat: stat, setTiles: setTiles, renderChips: renderChips, unlockCard: unlockCard,
     has: function (id) { return id === 'tiles-petal' || S.unlocked.indexOf(id) !== -1; },
     // in the background: arrived, and not switched off on "My garden"
     garden: function (id) { return S.unlocked.indexOf(id) !== -1 && S.garden[id] !== false; },
