@@ -354,7 +354,8 @@
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/examples.html', code: 'Stories', title: 'What small changes look like', note: 'Made-up examples for ten kinds of situation' },
-      { href: '/friends.html', title: 'Friends', note: 'When a friendship drifts, or you’re always the one reaching out' },
+      { href: '/parents.html', title: 'For parents', note: 'Big feelings, coming back after you yell, siblings and teens' },
+      { href: '/teens.html', title: 'For teens', note: 'Written for you: home, family, friends and feelings' },
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
       { sub: 'Just me', all: '/by-relationship.html#just-me', allLabel: 'All for just me' },
       { href: '/self-path.html', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
@@ -365,16 +366,16 @@
       { sub: 'Couples & partners', all: '/by-relationship.html#couples', allLabel: 'All for couples' },
       { href: '/how-to-stop-fighting-with-your-partner.html', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/share-the-load.html', title: 'Share the load, step by step', note: 'Which tool to use first' },
+      { href: '/more-than-two.html', title: 'More than two partners', note: 'Polyamorous homes and triads' },
+      { href: '/different-hours.html', title: 'Different hours', note: 'Night shifts and opposite schedules' },
       { href: '/money-together.html', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
       { href: '/gaming-and-time-together.html', title: 'Gaming, phones and time together', note: 'A calm talk and a time-together deal' },
       { href: '/when-one-is-ill.html', title: 'When one of you is ill', note: 'Chronic illness or disability' },
+      { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
       { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and family expectations' },
       { href: '/long-distance.html', title: 'Long-distance and apart', note: 'Calls, time zones and short texts' },
-      { href: '/different-hours.html', title: 'Different hours', note: 'Night shifts and opposite schedules' },
       { href: '/caregivers.html', title: 'Caring for someone you love', note: 'When they can’t share the load back' },
       { href: '/coming-home.html', title: 'Coming home after time apart', note: 'After deployment or time away' },
-      { href: '/empty-nest.html', title: 'When the kids have left home', note: 'Finding each other again' },
-      { href: '/more-than-two.html', title: 'More than two partners', note: 'Polyamorous homes and triads' },
       { sub: 'Friends', all: '/by-relationship.html#friends', allLabel: 'All for friends' },
       { href: '/friends.html', title: 'Friends: when a friendship drifts', note: 'Always the one reaching out, or life pulling you apart' },
       { href: '/turning-toward.html', title: 'Turning toward', note: 'Seven small, everyday ways to connect' },
@@ -420,6 +421,7 @@
       { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what this week, and see the split plainly' },
       { href: '/workpapers/wp-03-one-owner-per-job.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'So nobody has to keep asking' },
+      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'Check', title: 'How much are you carrying?', note: 'A two-minute load check: how full your days are, before you split anything' },
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
       { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
@@ -508,6 +510,7 @@
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/ladder.html', code: 'Now', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
+      { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements and herbs', note: 'What the research says, honestly, and what to watch out for' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { href: '/keepsakes.html', code: 'Garden', title: 'My garden', note: 'Your keepsakes from the calm games' },
       { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
@@ -1515,6 +1518,8 @@
   function searchTerms(q) {
     var f = fold(q).replace(/\s+·\s+spread love.*$/, '').replace(/[¿?¡!.,;:()"“”]+/g, ' ').trim();
     // one word on its own that means something else in a longer sentence ("will" as in a will, "my partners")
+    // a whole question that names a situation (round 13): the situation's own pages lead
+    for (var pi = 0; pi < PRE.length; pi++) if (PRE[pi][0].test(f)) { f = PRE[pi][1]; break; }
     if (/^(a |the )?will$/.test(f)) f = 'inheritance';
     if (/^(my |our )?partners$/.test(f)) f = 'polyamory';
     if (!JOIN_RE) JOIN_RE = Object.keys(JOIN).map(function (k) { return [new RegExp('\\b' + reEsc(k).replace(/ /g, '\\s+') + '\\b', 'g'), JOIN[k]]; });
@@ -1749,7 +1754,7 @@
     gaming: ['/gaming-and-time-together.html', '/turning-toward.html', '/check-ins.html'], gamer: 'gaming', gamers: 'gaming', xbox: 'gaming', playstation: 'gaming', ps5: 'gaming', ps4: 'gaming', discord: 'gaming', twitch: 'gaming', steam: 'gaming', console: 'gaming', consoles: 'gaming', videogames: 'gaming',
     nag: ['/gaming-and-time-together.html', '/pursue-withdraw.html', '/share-the-load.html'], nags: 'nag', nagging: 'nag', nagged: 'nag', nagger: 'nag',
     diffhours: ['/different-hours.html', '/share-the-load.html', '/check-ins.html'], shift: 'diffhours', shifts: 'diffhours', schedule: 'diffhours', schedules: 'diffhours', rota: 'diffhours', rotas: 'diffhours',
-    feelingsbook: ['/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
+    feelingsbook: ['/book/understanding-1-feelings.html', '/book/understanding-1-feelings.html#not-brought-up', '/communication.html', '/know-yourself.html'],
     parentaway: ['/teens.html#parent-away', '/teens.html', '/foster-and-kinship.html#kinship'],
     polyguest: ['/more-than-two.html#joining', '/more-than-two.html', '/check-ins.html'], guest: ['/more-than-two.html#joining', '/sharing-a-room.html#guests', '/coming-home.html'], guests: 'guest',
     polylong: ['/more-than-two.html#long-hours', '/more-than-two.html', '/different-hours.html'],
@@ -1819,6 +1824,88 @@
    ['/en-espanol.html#enojado', 'En español: cuando estás muy enojado', 'Pasos cortos, en español, para calmarse antes de hablar.', 'Español'],
    ['/parents.html#is-yelling-abuse', 'Is yelling abuse?', 'Yelling now and then, followed by a real repair, is not abuse. When it becomes a safety issue, and getting support.', 'Guide']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
+  // ---- round 13: whole questions people typed. Each rule reads the whole query first (before the word joins),
+  // so "my ex makes decisions without me" means co-parenting, not the triad page. r13* names are internal only.
+  var PRE = [
+    // co-parents: decisions made without the other parent
+    [/\b(ex|exes|ex-\w+|co-?parents?|other parent|kids'? (mum|mom|dad)|their (mum|mom|dad)|baby'?s (mum|mom|dad|father|mother))\b.*\b(decid\w*|decisions?|without (asking|telling|me)|signed (him|her|them) up)\b|\b(decid\w*|decisions?)\b.*\b(my ex|co-?parent|other parent)\b/, 'r13cpdecide'],
+    // a will, an estate or the family house: a family rift, not a partner fight
+    [/\b(fight\w*|row\w*|argu\w*|dispute\w*|falling out|fell out|feud\w*|contest\w*|split\w*|share\w*)\b.*\b(over|about|on)\b.*\b(the |a |my |our |his |her |their |dad'?s |mum'?s |mom'?s |father'?s |mother'?s |gran'?s |nan'?s )?(will|wills|inheritance|estate|house|money he left|money she left)\b|\b(dad'?s|mum'?s|mom'?s|father'?s|mother'?s|parents'?) (will|estate|house)\b/, 'inheritance'],
+    // back home after time away, and sleep, nightmares or being on edge
+    [/\b(sleep\w*|nightmares?|bad dreams|on edge|jumpy|jump at|startl\w*|wired)\b.*\b(since|after|now) (i|he|she|they|we|you) (got|came|come|am|is|are|was) (back|home)\b|\b(since|after) (i|he|she|they|we) (got|came) (back|home)\b.*\b(sleep\w*|nightmares?|on edge|jumpy)\b/, 'r13homesleep'],
+    [/^(i (have|get|keep having) )?(nightmares?|bad dreams)$|^(always |so |i'?m |feel |feeling )*on edge( all the time)?$|^jumpy$|^hypervigilan\w*$/, 'r13homesleep'],
+    // a couple who feel like housemates (never grief first)
+    [/^(?!.*\b(friend|friends|friendship|mate|bestie)\b).*\b(not close|no longer close|not as close|drift\w* apart|grown apart|growing apart|like (room|house|flat)mates|(room|house|flat)mates? (marriage|relationship)|(marriage|relationship) (like )?(room|house|flat)mates?|married (a |for a |for )?(long time|years|decades|\d+ years)|long marriage|(married|together) too long)\b/, 'r13apart'],
+    // long working hours
+    [/\b(\d{2,3}|long|longer|crazy|silly|late|insane|huge) ?(hour|hours|hrs|hr)( a week| weeks| days)?\b|\b(works?|working) (all the time|every hour|late every|nights and weekends)\b|\b(always working|never home|workaholic|works too much)\b/, 'r13longhours'],
+    // calm without medicine
+    [/\b(natural|herbal|herbs?|supplements?|vitamins?|magnesium|ashwagandha|chamomile|cbd|lavender|valerian)\b.*\b(anxi\w*|calm\w*|stress\w*|sleep|nerves|panic)\b|\b(anxi\w*|calm\w*|stress\w*|sleep|nerves|panic)\b.*\b(natural\w*|herbal|herbs?|supplements?|vitamins?)\b/, 'r13herbs'],
+    // feelings, for people who were never taught the words
+    [/\b(men|man|guys?|blokes?|boys?|husband|dad|father|never learn\w*|never taught|not taught|weren'?t taught|wasn'?t taught|not brought up|wasn'?t brought up|weren'?t brought up|brought up not|struggle|hard|can'?t|cannot|don'?t know how)\b.*\b(feelings|emotions)\b|\b(feelings|emotions)\b.*\b(men|man|guys?|blokes?)\b/, 'r13feelings'],
+    // a co-parent handover list
+    [/\b(hand ?over|hand ?off|changeover|between homes|two homes)\b.*\b(check ?list|list|bag|kit|packing)\b/, 'handoffbag'],
+    // something to do together
+    [/\b(fun|play|games?|activities|activity|things to do|something to do)\b.*\btogether\b|\b(two|2)[ -]?players?\b|\bco-?op\b|\bplay together\b/, 'r13fun'],
+    // a house or family meeting, a weekly check-in
+    [/\b(house|household|family|flat|home|weekly|monthly|regular|sunday)\b.*\b(meeting|meetings|check[ -]?ins?|catch[ -]?ups?)\b|^(a |our )?check[ -]?ins?$/, 'r13checkin'],
+    // a rota for chores (a shift rota at work stays with different hours)
+    [/\b(shift|work|nurse|hospital|night) ?(rota|rotas|roster|rosters)\b/, 'diffhours'],
+    [/^(?!.*\b(shift|work|nurse|hospital)\b).*\b(rota|rotas|cleaning rota|chore rota|roster|chore wheel|chore chart)\b/, 'r13rota'],
+    // the book itself
+    [/^(the |read |reading |read the |open the )?(book|ebook|the book)( from the (start|beginning))?$|^(read|start) the book\b/, 'r13book'],
+    // parents who don't accept a partner, or who you are
+    [/\b(parents?|mum|mom|dad|family|father|mother)\b.*\b(accept\w*|reject\w*|homophobic|transphobic|disown\w*|cut me off|kick(ed)? me out|disapprov\w*|don'?t approve|won'?t approve)\b|\b(accept\w*|reject\w*|disapprov\w*)\b.*\b(my )?(girlfriend|boyfriend|partner|wife|husband)\b.*\b(parents?|mum|mom|dad|family)\b/, 'comingout'],
+    // what the site keeps
+    [/\b(what|does|do|is|where)\b.*\b(site|app|website|this|you|it)\b.*\b(keep|keeps|store|stores|save|saves|collect|collects|track|tracks|remember|remembers|know about me|record)\b|\b(my data|cookies|clear (my )?(history|data)|delete (my )?data|what'?s stored|whats stored|what is stored)\b/, 'r13stored'],
+    // ADHD in a grown-up (the child's page leads otherwise)
+    [/\b(i have adhd|i'?ve got adhd|i think i have adhd|adult adhd|adhd adults?|adhd (at|and) work|my adhd|adhd me|late diagnos\w*)\b/, 'r13adhdadult'],
+    [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk']
+  ];
+  var ACT_13 = {
+    r13cpdecide: ['/co-parenting.html#who-decides', '/co-parenting.html', '/co-parenting.html#parallel'],
+    r13homesleep: ['/coming-home.html#sleep', '/coming-home.html#support', '/coming-home.html'],
+    nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
+    r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
+    r13longhours: ['/different-hours.html', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
+    anxiety: ['#breathe', '/calming-supplements.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
+    r13herbs: ['/calming-supplements.html', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
+    r13feelings: ['/book/understanding-1-feelings.html#not-brought-up', '/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
+    handoffbag: ['/co-parenting.html#handoff-bag', '/workpapers/fill/wp-03.html?for=coparents', '/co-parenting.html'],
+    r13fun: ['/bonding.html#ideas', '/gaming-and-time-together.html', '/turning-toward.html', '/pause-and-play.html'],
+    r13checkin: ['/check-ins.html', '/workpapers/wp-13-daily-check-in.html', '/share-the-load.html#roommates'],
+    r13rota: ['/workpapers/wp-03-one-owner-per-job.html', '/chore-chart-for-couples.html', '/share-the-load.html#roommates', '/share-the-load.html'], rota: 'r13rota', rotas: 'r13rota', roster: 'r13rota',
+    r13book: ['/book/index.html', '/book/topic-start-here.html', '/book/self-1-then.html'], book: 'r13book', ebook: 'r13book',
+    comingout: ['/coming-out.html', '/teens.html#lgbtq', '/family-rifts.html', '/safety.html'], homophobic: 'comingout', transphobic: 'comingout', lgbt: 'comingout', lgbtq: 'comingout',
+    r13stored: ['/on-this-device.html', '/safety.html#traces', '/legal/privacy-policy.html'],
+    adhd: ['/adhd-kids.html', '/neurodivergent-relationships.html', '/wired-differently.html', '/wiring-card.html'],
+    r13adhdadult: ['/wired-differently.html', '/neurodivergent-relationships.html', '/work.html#neurodiversity', '/wiring-card.html'],
+    r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
+    emotions: ['/book/understanding-1-feelings.html', '/library/emotions.html', '/communication.html'], emotion: 'emotions', emotional: 'emotions'
+  };
+  Object.keys(ACT_13).forEach(function (k) { ACT[k] = ACT_13[k]; });
+  [['/co-parenting.html#who-decides', 'Co-parents: who decides what', 'When the other parent decides without you, or you feel shut out: name the joint decisions, agree a reply-by window, and keep it to one written channel.', 'Guide'],
+   ['/co-parenting.html#parallel', 'When the other parent won’t cooperate', 'Parallel parenting: fewer joint decisions, short written messages, and your own calm home.', 'Guide'],
+   ['/coming-home.html#sleep', 'Sleep, nightmares and feeling on edge after coming home', 'Trouble sleeping since getting back, jumping at noises, feeling wired: what is common, what helps, and when to talk to someone.', 'Guide'],
+   ['/coming-home.html#support', 'Coming home: where to get support', 'Who to talk to after a deployment, work away or a hospital stay, for you and for the family.', 'Guide'],
+   ['/book/understanding-1-feelings.html#not-brought-up', 'If you weren’t brought up to talk about feelings', 'Part Three, Chapter 1. Many people, often men, were never taught the words. Short, plain lines you could use, and why it’s never too late.', 'Book'],
+   ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
+   ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
+   ['/bonding.html#ideas', 'Get a bonding idea: something to do together', 'Pick who, how much time and how much energy, and get one small idea at a time, including games for two.', 'Tool'],
+   ['/safety.html#traces', 'Clearing your traces on a shared device', 'What this site keeps on your device, how to erase it, and leaving quickly.', 'Safety'],
+   ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
+   ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book']
+  ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
+  // a grandparent asking about support groups means the kinship support section first
+  PRE.push([/\bgrand(parent|parents|ma|pa|mother|father|kids?|child|children|son|daughter)s?\b.*\b(support|group|groups|help|benefits?|allowance|money)\b|\bkinship (support|carers?|group)\b/, 'r13kin']);
+  ACT.r13kin = ['/foster-and-kinship.html#support', '/foster-and-kinship.html#kinship', '/grandparents.html', '/outside-help.html'];
+  // these pages only show when they're asked for: the album, the crossword, the podcast
+  var ONLY_ASKED = [
+    [/^\/echoes-of-gold\.html$/, /^(album|albums|music|song|songs|echoes|gold|listen|listening|track|tracks)$/],
+    [/^\/(daily-ledger-crossword|quiet-crossword)\.html$/, /^(crosswords?|puzzles?|games?|clues?|words?|play)$/],
+    [/^\/podcast-index\.html$/, /^(podcasts?|episodes?|listen|listening|audio|talks?)$/]
+  ];
+  // how the check-ins page reads in the results (it's for anyone who shares a home)
+  var RETITLE = { '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
     '/ladder.html': ['Where am I right now?', 'Find where you are right now, and a next step that fits.'],
@@ -1858,6 +1945,7 @@
     String((window.TOL_SEARCH && window.TOL_SEARCH.w) || '').split(' ').forEach(function (w) { if (w) REAL[w] = 1; });
     list.forEach(function (p) {
       indexed[p.u] = 1;
+      if (RETITLE[p.u]) { p.t = RETITLE[p.u][0]; p.d = RETITLE[p.u][1]; }
       p.t = String(p.t || '').replace(/\s*[·|–—-]\s*Spread Love (&|&amp;|and) Acceptance\s*$/i, '');
       var strong = fold(p.t + ' ' + (p.h || '') + ' ' + (p.s || []).join(' ') + ' ' + (p.d || '')), weak = fold(p.x || '');
       strong.split(/[^a-z0-9'-]+/).forEach(function (w) { if (w.length > 2) vocab[w] = (vocab[w] || 0) + 5; });
@@ -1970,6 +2058,7 @@
       });
       var b = boost[p.u] || 0;
       // the site's own pages about itself only show when asked for: the logo page, and the policies (refunds, terms)
+      if (ONLY_ASKED.some(function (o) { return o[0].test(p.u) && !terms.some(function (t) { return o[1].test(t); }); })) return;
       if (/^\/brand\.html$/.test(p.u) && !terms.some(function (t) { return /^(brand|branding|logo|logos|colou?rs?|palette|fonts?|typeface|mascot)$/.test(t); })) return;
       // the site's working pages (rollout status, roadmaps, how it's built, the suite index) are for the people who make it
       if (/^\/(telemetry|roadmap|suite-index(-in-depth)?|dashboard|recheck-drive-admin)\.html$|^\/(architecture|infrastructure|notes|manuscript|samples|supabase|telemetry)\//.test(p.u) && !terms.some(function (t) { return /^(roadmap|architecture|telemetry|rollout|suite|index|dashboard|built|planned)$/.test(t); })) return;
@@ -2054,7 +2143,7 @@
       if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; note.textContent = T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.'); if (idx) idx.hidden = false; return; }
       loadSearch(function (data) {
         if (input.value.trim() !== q) return;
-        if (!data) { note.textContent = 'Search isn’t available just now. The full list of pages is below.'; if (idx) idx.hidden = false; return; }
+        if (!data) { note.textContent = T('Search isn’t available just now. The full list of pages is below.', 'La búsqueda no está disponible ahora. Abajo está la lista de páginas.'); if (idx) idx.hidden = false; return; }
         var R;
         try { R = smartSearch(data, q); } catch (err) {
           // never a blank box: say so, and keep the full list of pages in view
@@ -2084,12 +2173,13 @@
             '<span class="tol-find-s">' + markTerms(act ? p.d : snippet(p, used), used) + '</span></a></li>';
         }).join('');
         var said = '“' + (auto ? R.said : q) + '”';
-        var head = hits.length ? (hits.length === 25 ? 'The 25 best matches for ' + said + '.' : hits.length + (hits.length === 1 ? ' result for ' : ' results for ') + said + '.')
-          : 'Nothing matches “' + q + '” yet. Try a shorter or different word, browse the sections below, or ask Professor Puddles in your own words.';
+        var head = hits.length ? (hits.length === 25 ? T('The 25 best matches for ', 'Los 25 mejores resultados para ') + said + '.' : hits.length + (hits.length === 1 ? T(' result for ', ' resultado para ') : T(' results for ', ' resultados para ')) + said + '.')
+          : T('Nothing matches “' + q + '” yet. Try a shorter or different word, browse the sections below, or ask Professor Puddles in your own words.', 'Nada coincide con “' + q + '” todavía. Prueba con otra palabra más corta, mira las secciones de abajo o pregúntale al Profesor Puddles con tus propias palabras.');
         note.innerHTML = '';
-        if (auto) note.appendChild(document.createTextNode('Showing results for “' + R.said + '” (you typed “' + q + '”). '));
-        note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? 'The 25 best matches.' : hits.length + (hits.length === 1 ? ' result.' : ' results.')) : head));
-        if (!hits.length || hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, 'Ask Professor Puddles')); }
+        if (auto) note.appendChild(document.createTextNode(T('Showing results for “' + R.said + '” (you typed “' + q + '”). ', 'Resultados para “' + R.said + '” (escribiste “' + q + '”). ')));
+        note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? T('The 25 best matches.', 'Los 25 mejores resultados.') : hits.length + (hits.length === 1 ? T(' result.', ' resultado.') : T(' results.', ' resultados.'))) : head));
+        if (hits.length && esPage()) note.appendChild(document.createTextNode(' La mayoría de las páginas están en inglés.'));
+        if (!hits.length || hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'))); }
         if (outside) {
           note.appendChild(document.createTextNode(focusNone ? ' Nothing in your focus matches, so here is everything. ' : searchAll ? ' Your focus first, then everything else. ' : ' Showing your focus (' + focusList() + '). '));
           if (!focusNone) {
@@ -2099,7 +2189,7 @@
           }
         }
         if (changed && !auto) {
-          var dym = el('button', { type: 'button', class: 'tol-find-dym' }, 'Did you mean “' + esc(R.said) + '”?');
+          var dym = el('button', { type: 'button', class: 'tol-find-dym' }, T('Did you mean “', '¿Quisiste decir “') + esc(R.said) + '”?');
           dym.addEventListener('click', function () { input.value = R.said; runSearch(input.value); input.focus(); });
           note.appendChild(document.createTextNode(' ')); note.appendChild(dym);
         }
@@ -2122,7 +2212,8 @@
       if (e.key === 'Enter') {
         e.preventDefault();
         // typed fast and pressed Enter before the list caught up: search now, then go to the first result
-        var go = function () { var first = list.querySelector('a'); if (first) first.focus(); };
+        // Enter opens the first result (a page, or the Breathe break / Settings right here)
+        var go = function () { var first = list.querySelector('a'); if (first) first.click(); };
         if (shownFor !== input.value.trim()) { clearTimeout(timer); runSearch(input.value, go); } else go();
       }
       // Escape clears the box and, in the menu or search panel, closes it too: one press is enough

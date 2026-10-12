@@ -131,6 +131,62 @@
 <script src="/assets/js/calm-music.js" defer></script>
 <script src="/assets/js/rewards.js" defer></script>
 <script src="/assets/js/night-garden.js" defer></script>
+<script>
+/* En español: someone arriving from the Spanish page (/night-garden.html?lang=es) gets the welcome card and the
+   breathing instructions in Spanish. The games' other words stay English for now. */
+(function () {
+  'use strict';
+  var es = /[?&]lang=es\b/.test(location.search);
+  try { if (!es && /\/en-espanol\.html/.test(document.referrer || '')) es = true; } catch (e) {}
+  if (!es) return;
+  function $(id) { return document.getElementById(id); }
+  function txt(sel, html) { var n = document.querySelector(sel); if (n) { n.innerHTML = html; n.setAttribute('lang', 'es'); } }
+  var W = { in: 'toma aire', hold: 'aguanta', out: 'suelta', rest: 'descansa' };
+  var SHAPE = { 'a circle': 'un círculo', 'a triangle': 'un triángulo', 'a square': 'un cuadrado', 'a small square': 'un cuadrado pequeño' };
+  function steps(en) { return en.split('·').map(function (x) { var m = /(in|hold|out|rest)\s+(\d+)/.exec(x); return m ? W[m[1]] + ' ' + m[2] : x.trim(); }).join(' · '); }
+  function welcome() {
+    var back = $('ng-welcome-h') && /back/i.test($('ng-welcome-h').textContent);
+    txt('#ng-welcome-h', back ? 'Qué bueno verte otra vez' : 'Bienvenido al Jardín de noche');
+    txt('#ng-welcome-p', 'Un lugar tranquilo para respirar, jugar y calmar la mente. No hay relojes ni forma de perder. Todo se queda en tu dispositivo.');
+    txt('.ng-pick-h', '¿Qué te gustaría hacer?');
+    txt('[data-enter="breathe"]', '<span class="ng-ico">&#127800;</span><strong>Respirar</strong><small>Lo más fácil. Respira con una luz que crece y se suaviza. La primera vez es la respiración en caja (toma aire 4, aguanta 4, suelta 4, descansa 4); otras veces trae otro ritmo tranquilo, como 4 para entrar y 6 para salir. Con cada vuelta se abre una flor.</small>');
+    txt('[data-enter="fireflies"]', '<span class="ng-ico">&#10024;</span><strong>Luciérnagas</strong><small>Une las estrellas para formar dibujos que cantan. (Las instrucciones de este juego están en inglés.)</small>');
+    txt('[data-enter="pond"]', '<span class="ng-ico">&#128167;</span><strong>Estanque de lirios</strong><small>Un rompecabezas lento: acomoda las hojas en filas y florecen. No se puede perder. (Instrucciones en inglés.)</small>');
+    txt('#ng-welcome .ng-small', 'El jardín está en silencio, a menos que actives el sonido. Puedes cambiar de actividad con los botones de abajo. Algunas palabras del juego siguen en inglés.');
+  }
+  // the breathing help card and the line at the top are written by night-garden.js: put them in Spanish as they appear
+  function helpEs() {
+    var h = $('ng-help-h'); if (!h || !/in the garden$/i.test(h.textContent)) return;
+    var short = $('ng-help-short'), b = short && short.querySelector('strong'), sh = short && /around (a small square|a circle|a triangle|a square)/.exec(short.textContent);
+    h.textContent = 'Respirar en el jardín'; h.setAttribute('lang', 'es');
+    if (short) { short.setAttribute('lang', 'es'); short.innerHTML = 'Una estrellita recorre ' + (sh ? SHAPE[sh[1]] : 'su camino') + (b ? ': <strong>' + steps(b.textContent) + '</strong>' : '') + '. Respira con ella; el número en la luz cuenta cada parte por ti.'; }
+    var st = $('ng-help-steps'); if (st) { st.setAttribute('lang', 'es'); st.innerHTML = '<li>Toma aire mientras la estrella sube, y suéltalo mientras baja. Si hay una pausa, quédate quieto y tranquilo.</li><li>El jardín trae un ritmo tranquilo distinto casi cada vez. En todos sueltas el aire por lo menos tanto tiempo como lo tomas. Si un ritmo te cuesta, respira a tu manera y mira la luz.</li><li>Cada vuelta completa planta una flor.</li>'; }
+    var sm = document.querySelector('#ng-help-more summary'); if (sm) sm.textContent = 'Más sobre cómo funciona';
+    ['ng-help-ok', 'ng-help-ok-top'].forEach(function (id) { var x = $(id); if (x) { x.textContent = id === 'ng-help-ok' ? 'Entendido' : 'Entendido, empezar'; x.setAttribute('lang', 'es'); } });
+  }
+  var PH = { 'Breathe in…': ['Toma aire…', 'Despacio, por la nariz'], 'Hold…': ['Aguanta…', 'Suave, sin forzar'], 'Breathe out…': ['Suelta el aire…', 'Lento y tibio, por la boca'], 'Rest…': ['Descansa…', 'Vacío y tranquilo'], 'Four calm rounds. Lovely.': ['Cuatro vueltas tranquilas. Muy bien.', 'Sigue todo lo que quieras.'] };
+  function sayEs() {
+    var s = $('ng-say'), sm = s && s.querySelector('small'); if (!sm) return;
+    var head = s.firstChild && s.firstChild.nodeType === 3 ? s.firstChild.textContent : '';
+    if (PH[head]) {
+      var r = /(\d+) rounds? tonight/.exec(sm.textContent);
+      s.setAttribute('lang', 'es');
+      s.innerHTML = PH[head][0] + '<small>' + PH[head][1] + (r ? ' · ' + r[1] + (r[1] === '1' ? ' vuelta' : ' vueltas') + ' esta noche' : '') + '</small>';
+      return;
+    }
+    if (!/Follow the star around/.test(sm.textContent)) return;
+    var sh = /around (a small square|a circle|a triangle|a square)/.exec(sm.textContent), d = sm.textContent.split('.')[0];
+    s.setAttribute('lang', 'es');
+    s.innerHTML = 'Respira con la luz<small>' + steps(d.toLowerCase()) + '. Sigue la estrella alrededor de ' + (sh ? SHAPE[sh[1]] : 'su camino') + '.</small>';
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    welcome();
+    var help = $('ng-help'), say = $('ng-say');
+    if (help) new MutationObserver(helpEs).observe(help, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['hidden'] });
+    if (say) new MutationObserver(sayEs).observe(say, { childList: true, subtree: true });
+  });
+})();
+</script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/night-garden.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/night-garden.html">
@@ -202,7 +258,7 @@
         <p id="ng-welcome-p">A quiet place to breathe, play and let your mind settle. There are no timers and no way to lose. Everything here stays on your device.</p>
         <p class="ng-pick-h">What would you like to do?</p>
         <div class="ng-pick">
-          <button type="button" class="ng-choice" data-enter="breathe"><span class="ng-ico">&#127800;</span><strong>Breathe</strong><small>The easiest. Breathe with a glowing light: a box, a triangle, a slow wave or a long breath out, a different calm pattern most visits. Gentle words from the sky keep you company, and a flower blooms with every round.</small></button>
+          <button type="button" class="ng-choice" data-enter="breathe"><span class="ng-ico">&#127800;</span><strong>Breathe</strong><small>The easiest. Breathe with a glowing light. Your first visit is box breathing (in 4, hold 4, out 4, rest 4); later visits bring other calm patterns, like the long breath out used across this site (in 4, out 6). A flower blooms with every round.</small></button>
           <button type="button" class="ng-choice" data-enter="fireflies"><span class="ng-ico">&#10024;</span><strong>Fireflies</strong><small>Connect the stars into pictures that sing. No puzzle comes back the same: collect the pictures, find wild constellations, catch shooting stars, and dedicate each new one to someone you love.</small></button>
           <button type="button" class="ng-choice" data-enter="pond"><span class="ng-ico">&#128167;</span><strong>Lily pond</strong><small>A slow, gentle puzzle. Fit lily pads into rows and they bloom. Most nights, old lilies are waiting with gaps to fill. You can’t lose.</small></button>
         </div>
@@ -253,7 +309,7 @@
     <h2 id="ng-about-h">Why a garden?</h2>
     <p>The Night Garden is a gentle place to land at the end of a day: a few quiet things to do, with nothing to win and nothing to lose. It isn’t a treatment, and it doesn’t replace talking to someone.</p>
     <ul>
-      <li><strong>Slow breathing.</strong> The garden brings a different calm pattern on most visits: box breathing (in, hold, out, hold, four counts each), a triangle, a slow wave or a long breath out. Each one breathes out for at least as long as it breathes in, at a few unhurried breaths a minute. The light in the garden keeps the count for you, so all you have to do is follow it.</li>
+      <li><strong>Slow breathing.</strong> Your first visit is box breathing (in, hold, out, rest, four counts each). After that the garden brings a different calm pattern on most visits: a triangle, a slow wave, or the long breath out used across the rest of this site (in for 4, out for 6). The help card names the pattern each time. Each one breathes out for at least as long as it breathes in, at a few unhurried breaths a minute. The light in the garden keeps the count for you, so all you have to do is follow it.</li>
       <li><strong>Gentle play.</strong> Fireflies to guide and lilies to fit together, at your own pace. There’s no score to chase here and nothing to lose.</li>
       <li><strong>Busy hands.</strong> Fitting shapes together gives your attention one small, absorbing thing to hold, if your thoughts feel busy.</li>
       <li><strong>Soft, natural movement.</strong> Slowly moving light, water and leaves, to watch for as long as you like.</li>

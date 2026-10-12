@@ -1249,7 +1249,7 @@ const REFRAMES = [
    recv:{mean:"This sounds like hurt said as scorekeeping. They carried a lot on their own, and changes may feel like criticism.", reply:"You carried a lot on your own. I'd like to learn your way. Can we agree together how we do it now?"}},
   {id:"money", re:/\bstop (?:policing|monitoring|checking|controlling|questioning|judging) (?:what i spend|my spending|how i spend|my money|every (?:purchase|penny|thing i buy))|\bit's my money too\b[^.!?]*/i,
    why:"\"Stop policing\" is a charge, and the listener defends themselves. Asking for some money that's just yours, and offering a shared limit for big things, keeps what you need.",
-   send:()=>"I'd like some money that's just mine to spend, and I'm happy to agree a limit for big things together.",
+   send:()=>"I'd like some money that's just mine to spend. [If you want to offer it: I'm happy to agree a limit for big things together.]",
    recv:{mean:"They want some say over their own spending. Underneath is usually a wish for trust and a bit of freedom, not a fight about every purchase.", reply:"Fair. How about some money each that's just ours, and we agree a limit for big things together?"}},
   {id:"treat", re:/\byou treat(?:ed|s|ing)? me like (?:the |a |an |your |some )?(help|maid|servant|cleaner|nanny|babysitter|slave|housekeeper|staff|employee|secretary|assistant|skivvy|doormat|child|kid|idiot|[a-z]+)\b/i,
    why:"\"You treat me like the help\" is a label, so the listener argues with the label. The feeling (taken for granted) and one fair split can actually be answered.",
@@ -1279,12 +1279,12 @@ const REFRAMES = [
    recv:{mean:"They feel watched or told what to do. Underneath is usually a wish for trust and room to do it their way.", reply:"I don't want you to feel watched. What would help you feel trusted with it?"}},
   {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
    why:"\"You're not my mum\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
-   send:(m)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
+   send:(m,c)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
      const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mum or Dad]";
      // "so stop acting like it", "stop treating me like a kid": the ask stays, said as what they'd like
      if(NOT_PARENT_ASK.test(c.text)) return "I know you're looking after me. I miss "+(who==="[Mum or Dad]" ? "[Mum or Dad]" : who)+", and I'd like to be treated more like my age. Can we talk about it?";
      return "I'm not angry at you. I'm just missing "+who+" today. I need some space right now, can we talk later?"; },
-   recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:"Okay. I'll give you some space. I'm here when you want to talk."}},
+   recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:(m,c)=>NOT_PARENT_ASK.test(c.text) ? "I'm not trying to replace your mum or dad. Can we talk about what would feel fair for your age?" : "Okay. I'll give you some space. I'm here when you want to talk."}},
   {id:"nowyou", re:/(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*[.!?]*(?:\s*after (?:you|everything you|all you|what you) [^.!?]*[.!?]*)?|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b[^.!?]*/i,
    why:"A sharp question or an \"after you…\" says the hurt as blame, so the listener defends the past. Saying the hurt plainly, and what you need before you talk, can actually be heard.",
    send:(m,c)=>"I'm still hurt "+grievanceOf(c.text)+". If we talk, I need us to start there.",
@@ -2017,7 +2017,7 @@ function rewrite(an, opts){
   { const rf = reframeOf(an, opts);
     if(rf){
       log.push({id:"rf_"+rf.r.id, from:[rf.m[0].replace(/^[.!?\s]+|[.!?\s]+$/g,"")], to:[rf.send], extra:""});
-      ["motive","absolute","again","shout","hedge","softno","intens","minim"].forEach(id=>{ if(an.found[id] && id!=="shout") log.push({id, from:(an.found[id]||[]).filter(Boolean).slice(0,2), to:[], extra:""}); });
+      ["motive","absolute","again","shout","hedge","softno","reqmaybe","intens","minim"].forEach(id=>{ if(an.found[id] && id!=="shout") log.push({id, from:(an.found[id]||[]).filter(Boolean).slice(0,2), to:[], extra:""}); });
       return finish(rf.send, "", log, an, W, Object.assign({}, opts, {reframed:true}));
     } }
 
@@ -2025,7 +2025,7 @@ function rewrite(an, opts){
   // "on purpose" guesses at their reasons: it goes
   if(has("motive")) text = text.replace(/\s*,?\s*\b(?:on purpose|deliberately|intentionally|just to (?:annoy|spite|hurt|upset|punish|wind up|get at) (?:me|us)|to spite me|to get back at me|to punish me)\b/gi, mm=>{ note("motive", mm.trim().replace(/^,\s*/,""), ""); return ""; }).replace(/\s+([.,!?])/g,"$1");
   // "Can your boyfriend maybe not…": "maybe" in a request makes it sound optional
-  if(has("softno")) text = text.replace(/\b((?:can|could|would|will) (?:you|u|your \w+)\b[^.?!]{0,30}?)\s+\b(?:maybe|perhaps)\b\s*/gi, (mm,a)=>{ note("reqmaybe","maybe",""); return a+" "; });
+  if(has("softno")||has("reqmaybe")) text = text.replace(/\b((?:can|could|would|will) (?:you|u|your \w+)\b[^.?!]{0,30}?)\s+\b(?:maybe|perhaps)\b\s*/gi, (mm,a)=>{ note("reqmaybe","maybe",""); return a+" "; });
   if(an.allCaps){
     const before = text;
     text = text.toLowerCase().replace(/(^|[.!?]\s+)([a-z])/g, (m,a,c)=>a+c.toUpperCase()).replace(/\bi\b/g,"I");
@@ -2699,7 +2699,7 @@ function rewriteSentence(s, ctx, note, an, W){
     ["feelingq",/\bwhat's wrong\?+/gi, "Would space or company help more right now?"],
     ["feellike",/^i feel (?:like|that) you (.+?)[.!?]*$/gi, "I've been feeling [your feeling]. When [what happened], it seemed to me like you $1."],
     ["softno",/(?<!\b(?:i|we) (?:said|told you|meant|answered),? ["“]?)\bwe'll see\b(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)[.!]*/gi, "[If it's a no, say no kindly. If it's a real maybe, say when you'll decide.]"],
-    ["softno",/\bi'll think about it\b/gi, "I'll think about it and tell you by [a time]"],
+    ["softno",/\bi'll think about it\b/gi, "I'll think about it [and tell you by when]"],
     ["urgent",/\bhurry(?: up)?\b[.!]*/gi, "Could we leave by [a time]?"]
   ];
   OLD.forEach(([id,re,rep])=>{ re.lastIndex=0; if(re.test(t)){ re.lastIndex=0; const mm=(t.match(re)||[""])[0]; t=t.replace(re,rep); note(id, mm.replace(/[.!?]+$/,""), rep); if(["tone","vemo","calm","invalid"].includes(id)) ctx.critical = ctx.critical || id==="vemo"; } });
@@ -2746,7 +2746,7 @@ function rewriteSentence(s, ctx, note, an, W){
 
   // --- hindsight ("you should have")
   m = t.match(/^(.*?)\byou (?:should|could)(?: have|'ve| of) (?:known|realized|realised|seen|noticed|guessed|figured)\b.*$/i);
-  if(m){ const rep=pre(m[1])+"I'll say it plainly next time: [what you'd like]."; note("shouldhave", t.replace(/[.!?]+$/,""), rep); t=rep; ctx.critical=true; }
+  if(m){ const rep=pre(m[1])+"Here's what I'd like, plainly: [what you'd like]."; note("shouldhave", t.replace(/[.!?]+$/,""), rep); t=rep; ctx.critical=true; }
   m = t.match(/^(.*?)\byou (?:should|could)(?: have|'ve| of) (\w+)(.*?)([.!?]*)$/i);
   if(m){ const rep=pre(m[1])+"Next time, could you "+baseVerb(m[2])+m[3]+"? It would really help me."; note("shouldhave","you should have "+m[2], "Next time, could you "+baseVerb(m[2])+"…?"); t=rep; ctx.converted=true; }
   m = t.match(/^(.*?)\byou (?:shouldn't|should not)(?: have|'ve) (\w+)(.*?)([.!?]*)$/i);
@@ -2969,7 +2969,7 @@ function safestVersion(base, o){
     : o.group ? "I'd like us to sort this out together. "
     : "I'm not upset with you as a person. I'd like us to sort this out together. ";
   const close = /\b(?:how it looks to you|your side|what do you think|does that work|is that okay|getting in the way)\b/i.test(t) ? "" :
-    o.work ? (o.isAsk ? " If something is getting in the way, say so, and we'll fix the process together." : " I'd like to hear how it looks from your side, too.") :
+    o.work ? (o.isAsk ? " If something is getting in the way, say so, and we can look at the process together." : " I'd like to hear how it looks from your side, too.") :
     o.coparent ? (o.isAsk ? " Does that work for you?" : "") :
     (o.isAsk ? " Is that okay, or would something else work better for you?" : " I'd like to hear how it looks to you, too.");
   return tidy(lead + t + close);
@@ -3198,29 +3198,34 @@ Object.assign(CHECK, CHECK_ADD);
 
 /* Threats, digs, guessed motives, blunt openers and closed doors; boundaries and disclosures worth keeping */
 const DIG_READ = {
- nt:{menace:[3,"They're threatening me.","A threat is heard as a threat, whatever was meant. It frightens, or it controls, and the point is lost."],
+ nt:{withdraw:[2,"They're hurt, and now I'm the bad guy.","Pulling back (\"I won't bother then\") is often heard as guilt, so the listener defends themselves or gives in, and the hurt underneath is missed."],
+     olddays:[2,"They think the way we do things is wrong.","A comparison with how it used to be is often heard as criticism, even when it only means it's new to them."],
+     menace:[3,"They're threatening me.","A threat is heard as a threat, whatever was meant. It frightens, or it controls, and the point is lost."],
      jab:[2,"They're keeping score, and I'm losing.","A dig or a scorecard is heard as blame, so the listener defends themselves instead of hearing the need."],
      motive:[2,"They think I did it to hurt them.","Being told your motive invites an argument about intent, not a fix."],
      blunt:[2,"They're telling me off.","A flat \"That is incorrect\" is often heard as cold, even when the fact is fair."],
      closer:[1,"I'm being shut out.","A closed door can sting, even when the decision is fair."],
      boundary:[0,"They're looking after themselves, and they still care.","A calm limit with care in it is usually understood, even when it's hard to hear."],
      disclose:[0,"They trust me with something important.","Sharing who you are is a reach toward someone."]},
- anxiety:{menace:[3,"I'm not safe.","A threat goes straight to fear."],
+ anxiety:{withdraw:[3,"I've upset them, and I have to fix it right now.","Guilt goes straight to worry about the relationship."], olddays:[2,"I'm letting them down.","A comparison can sound like quiet disapproval."],
+     menace:[3,"I'm not safe.","A threat goes straight to fear."],
      jab:[3,"I've failed them, and they resent me.","A dig leaves an anxious listener replaying it, and looking for proof."],
      motive:[2,"They think I'm a bad person.","Being accused of meaning harm is hard to put down."],
      blunt:[2,"I've got it wrong, and now they're annoyed.","A blunt correction can feel like a judgment."],
      closer:[2,"They don't want me involved any more.","A closed door is filled in with the worst case."]},
- adhd:{menace:[3,"This is out of control.","A threat lands fast and loud."],
+ adhd:{withdraw:[2,"I've messed up again, and now they're hurt.","Guilt lands on old shame, fast."], olddays:[2,"Nothing I do is the right way.","A comparison echoes years of being told to do it properly."],
+     menace:[3,"This is out of control.","A threat lands fast and loud."],
      jab:[2,"Nothing I do is ever enough.","A scorecard echoes years of being told they didn't try hard enough."],
      motive:[3,"I didn't mean it. Why do they think I did?","Being accused of intent hurts when the miss was forgetting, not malice."],
      blunt:[2,"I've messed up again.","A blunt correction can land on old rejection sensitivity."],
      closer:[1,"I'm out of the loop.","A closed door can feel like being left out."]},
- autistic:{menace:[3,"Will they really do that?","A threat may be taken literally, as a plan."],
+ autistic:{withdraw:[2,"Okay, they won't come. Is that what they want?","\"I won't bother\" may be taken at its word, so the hurt and the wish to help underneath can be missed."], olddays:[1,"That's how it was then. What do they want now?","A comparison may be read as information about the past, and the feeling in it missed."],
+     menace:[3,"Will they really do that?","A threat may be taken literally, as a plan."],
      jab:[2,"Is that a fact or a complaint? What do they want?","A dig hides the request, so the listener may answer the words instead of the need."],
      motive:[2,"That's not true. I didn't plan that.","A guessed motive may be answered as a factual error."],
      blunt:[0,"Okay, Friday. Thanks.","Many autistic listeners prefer a plain correction."],
      closer:[0,"Understood: they decide.","Likely taken at its word."]},
- hsp:{menace:[3,"Danger.","A threat registers strongly."], jab:[3,"That stung, and I'll keep thinking about it.","Digs land hard and stay."]},
+ hsp:{menace:[3,"Danger.","A threat registers strongly."], jab:[3,"That stung, and I'll keep thinking about it.","Digs land hard and stay."], withdraw:[3,"I've hurt them, and it's on me to fix it.","Guilt is felt strongly, and for a long time."]},
  trauma:{menace:[3,"I'm not safe.","A threat can go straight to the alarm."], jab:[3,"I'm being attacked.","Blame can register as threat."]}
 };
 /* checking up, cutting someone off, "nobody else would want you": heard as control, whoever is listening */
@@ -3237,7 +3242,9 @@ Object.assign(CHECK, {
   jab:"\"That sounds like it's been building up. What's the one thing you'd like to change?\"",
   motive:"\"It wasn't on purpose. Can we look at what happened, and what would help next time?\"",
   blunt:"\"Thanks for the correction.\"",
-  closer:"\"I understand it's your decision. I'm here if you want to talk it through.\""
+  closer:"\"I understand it's your decision. I'm here if you want to talk it through.\"",
+  withdraw:"\"It sounds like that stung. You are wanted. Can we find a time that suits us both?\"",
+  olddays:"\"I know it was different then. Can I tell you what works for us now?\""
 });
 Object.assign(CHANGE_WHY, {
   menace:{g:"A threat would frighten or control the other person. No wording makes a threat okay, so it's left out completely. What's left is what you feel and what you need."},
@@ -3249,6 +3256,8 @@ Object.assign(CHANGE_WHY, {
   visits:{g:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and keeps the door open."},
   coparent:{g:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. Feelings about each other are better kept for a calmer place, or a mediator."},
   reqmaybe:{g:"\"Maybe\" in a request makes it sound optional, so it's easy to shrug off. A plain, kind ask is clearer."},
+  withdraw:{g:"Pulling back (\"I won't bother then\") says the hurt sideways, so it may land as guilt. Saying the feeling plainly keeps the door open."},
+  olddays:{g:"\"In my day\" can sound like their way is wrong. Saying it's new to you, and asking what suits them, keeps the feeling without the comparison."},
   usefact:{g:"The plain fact you typed under \"What happened\" says the event without a verdict on the person, so it can be answered instead of argued with."}
 });
 REFRAMES.forEach(r=>{ CHANGE_WHY["rf_"+r.id] = {g:r.why}; });
@@ -3333,6 +3342,8 @@ const RECEIVE_MEANS = [
   [["selfput"], "They're being hard on themselves. A kind word may help more than agreeing or arguing."],
   [["vtime","nowhen"], "The timing is open. If you need to know when, it's okay to ask."],
   [["jab"], "This sounds like hurt or frustration said as blame. Underneath, there's usually something they need."],
+  [["withdraw"], "This sounds like hurt, said by pulling back. Underneath, they probably want to be close, or to help."],
+  [["olddays"], "They're comparing this with how things used to be. Often that means it feels new to them, more than a judgment on you."],
   [["motive"], "\"On purpose\" is their guess about your reasons. You can answer what happened without arguing about intent."],
   [["blunt"], "It's a correction, said bluntly. It's about the fact, not about you."],
   [["closer"], "They're saying this decision is theirs to make. It doesn't mean your view doesn't matter to them."],
@@ -3384,7 +3395,7 @@ function receive(an, opts){
   // the shapes testers met most: what it may mean, and a reply to the need underneath
   const rf = !crossed ? reframeOf(an, opts) : null;
   if(rf && rf.r.recv) meanings.push(typeof rf.r.recv.mean==="function" ? rf.r.recv.mean(rf.m, rf.c) : rf.r.recv.mean);
-  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm"].includes(id)))) meanings.push(line); });
+  RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm","withdraw","olddays","minim"].includes(id)))) meanings.push(line); });
   const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
   if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
@@ -3413,11 +3424,12 @@ function receive(an, opts){
     push("Check the ask", "Just to check: you'd like me to "+turnAround(ask).replace(/[.?!]+$/,"")+(hasWhen ? "?" : ". By when?"));
   }
   if(has("brushoff")||has("minimal")) push("Ask which one they mean", "Do you mean it's really okay, or are you upset? Either is okay to say.");
-  const order = ["jab","motive","blunt","closer","absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
-  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab","closer","blunt","sarcasm"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
+  const order = ["withdraw","olddays","jab","motive","blunt","closer","absolute","sarcasm","blameq","ominous","hint","passiveag","vemo","vtime","softno","stonewall","demand","guilt","critic","again","past","compare","madefeel","selfput"];
+  if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab","closer","blunt","sarcasm","withdraw","olddays"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
   if(crossed && replies.length<4 && (has("label")||has("dxlabel")||has("contempt"))) push("Ask for the real thing", "What's the specific thing that's bothering you?");
   const mild = found.length && an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
   const head = crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
+    : found.length && (has("withdraw") || has("olddays")) && !["jab","label","absolute","critic","sarcasm","passiveag","guilt"].some(has) ? ["hurt","This may carry some hurt. Here\u2019s a kind way to read it."]
     : found.length ? ["hurt", mild ? "This may sound a little sharper than they meant. Here\u2019s how to read it." : "This may sound harsher than they meant. Here are kinder ways to read it."]
     : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."]
     : ["ok","This looks okay. Nothing here needs decoding."];
@@ -3461,7 +3473,7 @@ defend:"explaining yourself before they've blamed you", stopask:"\"stop asking\"
   dxlabel:"a diagnosis used as an insult", violent:"violent words, even as a joke",
   selfput:"you put yourself down", legal:"a threat about court or the children",
   kidsfirst:"the children were told before the adults talked", overhedge:"so soft the request gets lost",
-  count:"counting how many times it happened", excuse:"it asks them to accept the miss, so fixing it becomes their job"
+  count:"counting how many times it happened", withdraw:"hurt said by stepping back, which can make them feel guilty", olddays:"comparing them with how things used to be", reqmaybe:"a \"maybe\" that makes your ask sound optional", excuse:"it asks them to accept the miss, so fixing it becomes their job"
 };
 /* The heading for one pattern, in words: never a name with a stray quoted word stuck on the end.
    A safety worry names the thing it is about: "A safety worry about the stove, with no plan for next time". */
@@ -3522,13 +3534,13 @@ function simpler(text){
 /* A reassurance that names "you" only to say it isn't about them: never taken out, never left as a dangling "not" */
 const NEG_REASSURE = /\b(?:not|isn't|wasn't|never|nothing to do with)\s+(?:(?:because|about|due to)\s+(?:of\s+)?)?(?:you|your fault)\b|\bit's not (?:you|your fault)\b|\bnot your fault\b/i;
 /* Patterns that make a message an attack, not just a fair worry said directly */
-const ATTACK_IDS = ["menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
+const ATTACK_IDS = ["withdraw","olddays","menace","control","jab","motive","label","contempt","swear","hostile","sarcasm","compare","dxlabel","violent","threat","legal","kidsfirst","guilt","madefeel","passiveag","heat","shout","blameq","critq","shouldhave","vemo","feellike","invalid","calm"];
 /* A fair concern at the core (a safety worry), with no put-down, threat or heat around it.
    A direct sender said it plainly on purpose: the headline says so, and doesn't make the directness the problem. */
 function fairConcern(an){ return !!(an && an.safety && !ATTACK_IDS.some(id=>an.found && an.found[id])); }
 /* A reply to a message that may carry hurt ("Fine. Whatever works for you."), with nothing in it that shows the hurt
    was heard: the words can be clear and still miss. */
-const HURT_IN = ["jab","brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"];
+const HURT_IN = ["withdraw","olddays","jab","brushoff","minimal","guilt","sarcasm","passiveag","absolute","critic","label","stonewall","again","hostile","contempt","vemo","madefeel","blameq"];
 const ACK_RE = /\b(?:i hear you|i get (?:it|that|why)|it sounds like|sounds like you|i'm sorry|i am sorry|sorry|you're right|that's fair|fair enough|makes sense|i understand|i miss (?:you|our|it|talking)|i know you|i can tell|i can see)\b/i;
 function replyMissesHurt(an, prev){
   if(!prev || !an) return false;
@@ -3555,7 +3567,7 @@ function verdict(an, sc, rw, opts){
   if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")
     return {id:"ok", care:true, text: an.found.boundary ? "This is a clear, caring boundary. It may still be hard to hear, and that's not your fault." : "This is a clear, caring way to share something important. It may still be hard for them to hear, and that's not your fault."};
   // a real apology in it: the headline says so, gently, for a listener who is sensitive to criticism too
-  const sorry = an.apology && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
+  const sorry = an.apology && !an.found.withdraw && !an.found.legal && !an.found.kidsfirst && !an.found.violent && !an.found.threat;
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   const work = !!(opts && (opts.work || WORK_REL.includes(opts.rel)));
@@ -3566,6 +3578,9 @@ function verdict(an, sc, rw, opts){
     return {id:"fight", work:true, text: soft ? "This may land as blame or an order. Try the version below." : "This may land as blame or an order. The notes below show why."};
   if(an.found.legal || an.found.kidsfirst || an.found.violent || an.found.threat || lvl==="heavy")
     return {id:"fight", text: soft ? "This will likely start a fight. Try the softer version below." : "This will likely start a fight. The notes below show why."};
+  // "I won't bother then", "I'm not wanted", "in my day": hurt said sideways. Never "probably okay"
+  if((an.found.withdraw || an.found.olddays) && !an.found.jab)
+    return {id:"hurt", guilt:true, text: "This may land as hurt or guilt. "+(soft ? "Here's a way to keep the feeling and leave the door open." : "The notes below show why.")};
   // blame said as a dig, or keeping score: never "probably okay"
   if(an.found.jab || (an.found.motive && lvl!=="clear"))
     return {id:"hurt", jab:true, text: "This may land as blame or a dig. "+(soft ? "Here's a kinder way to say it that keeps what you need." : "The notes below show why.")};
@@ -3589,6 +3604,14 @@ function verdict(an, sc, rw, opts){
   return {id:"ok", text:"This will probably land okay."};
 }
 
-const api = {replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+/* "It's my money too, stop policing what I spend": a money fight, and sometimes a sign of control.
+   The page adds a short note and a link (money-together.html#control, safety.html#signs) */
+const MONEY_CONTROL_RE = /\bstop (?:policing|monitoring|checking|controlling|questioning|tracking) (?:what i spend|my spending|how i spend|my money|every (?:purchase|penny|pound|dollar|thing i buy)|my (?:card|account|bank))|\b(?:account for|explain|justify|ask (?:you )?(?:about|before)) every (?:purchase|penny|pound|dollar|coffee|thing i buy|receipt)\b|\bit's my money too\b|\b(?:won't|doesn't|don't|will not) let me (?:have|see|use|touch) (?:my own |any |the |our )?(?:money|card|cards|account|bank)\b/i;
+function moneyControl(text){ return MONEY_CONTROL_RE.test(norm(text)); }
+/* "So now you want to talk? After you took everything?": an answer from the side that isn't ready yet */
+const NOT_READY_RE = /(?:^|[.!?]\s+)(?:so )?now you (?:want|need|decide) to (?:talk|meet|see me|be in touch|make up|fix (?:it|things))\b|(?:^|[.!?]\s+)(?:so )?now you (?:care|remember|have time)\b|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied)\b/i;
+function notReady(text){ return NOT_READY_RE.test(norm(text)); }
+
+const api = {moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

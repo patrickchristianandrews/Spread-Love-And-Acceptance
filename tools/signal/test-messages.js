@@ -432,16 +432,18 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   [['partner', 'I managed fine without you for 7 months.', /^I got used to doing it my way while you were gone\. Can we pick which jobs you take back\?$/],
    ['partner', 'I managed fine without you for 7 months, so stop changing everything.', /^I got used to doing it my way while you were gone\. Can we pick which jobs you take back\?$/],
    ['partner', 'I did it alone for 7 months, I know how bedtime works.', /got used to my way\. Can we agree together how we do bedtime now\?$/],
-   ['partner', 'It’s my money too, stop policing what I spend.', /^I'd like some money that's just mine to spend, and I'm happy to agree a limit for big things together\.$/],
+   ['partner', 'It’s my money too, stop policing what I spend.', /^I'd like some money that's just mine to spend\. \[If you want to offer it: I'm happy to agree a limit for big things together\.\]$/],
    ['partner', 'You treat me like the help. I have a job too.', /^I'm working too, and when the house jobs default to me, I feel taken for granted\. Can we split \[one job, like the dog walks\]\?$/],
    ['friend', 'I guess I’m only your friend when it suits you.', /^I miss you and I've been feeling a bit left out\. Could we find ten minutes this week\?$/],
    ['coworker', 'Must be nice to just bake while I keep this whole place running.', /^I'm feeling stretched thin keeping this whole place running\. Could we look at the admin together and share some of it\?$/],
    ['coparent', 'Stop making decisions without me.', /^For school, health and new activities, can we text each other first and decide together\?$/],
-   ['family', 'you’re not my mum so stop acting like it', /^I'm not angry at you\. I'm just missing Mum today\. I need some space right now, can we talk later\?$/],
-   ['family', 'You are not my mom so stop acting like it', /^I'm not angry at you\. I'm just missing Mom today\. I need some space right now, can we talk later\?$/],
-   ['family', 'ur not my mum stop acting like it', /^I'm not angry at you\. I'm just missing Mum today\./],
-   ['family', 'So now you want to talk? After you took everything?', /^I'm still hurt about what happened\./],
-   ['family', 'After you took everything you could.', /^I'm still hurt about what happened\./],
+   ['family', 'you’re not my mum so stop acting like it', /^I know you're looking after me\. I miss Mum, and I'd like to be treated more like my age\. Can we talk about it\?$/],
+   ['family', 'You are not my mom so stop acting like it', /^I know you're looking after me\. I miss Mom, and I'd like to be treated more like my age\. Can we talk about it\?$/],
+   ['family', 'ur not my mum stop acting like it', /^I know you're looking after me\. I miss Mum, and I'd like to be treated more like my age\./],
+   ['family', 'You’re not my mum!', /^I'm not angry at you\. I'm just missing Mum today\./],
+   ['family', 'So now you want to talk? After you took everything?', /^I'm still hurt that you took everything\. If we talk, I need us to start there\.$/],
+   ['family', 'After you took everything you could.', /^I'm still hurt that you took everything you could\./],
+   ['family', 'So now you want to talk?', /^I'm still hurt about what happened\./],
    ['partner', 'You treat me like a maid.', /taken for granted/],
    ['partner', 'Stop nagging me about the dishes.', /without reminders/],
    ['partner', 'I did everything by myself.', /got used to my way/],
@@ -471,7 +473,7 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
     const g = rc(t, 'family');
     chk(!JSON.stringify(g).match(/When do you need it by|timing is open/) && g.replies.some(x => x.text === "You're right, I'll text first. When suits you?"), 'received visit boundary: ' + JSON.stringify(g.replies));
     chk(!an('Call me whenever you want!').found.vtime, '“whenever you want” is an open door, not vague timing');
-    chk(rw('Mum, we’ll decide about baptism ourselves.', 'family').main === "Mum, I know how much this means to you. We'll decide about baptism together, and tell you as soon as we do.", 'family decision: ' + rw('Mum, we’ll decide about baptism ourselves.', 'family').main);
+    chk(rw('Mum, we’ll decide about baptism ourselves.', 'family').main === "Mum, I know how much this means to you. We'll decide about baptism together [and tell you when we do].", 'family decision: ' + rw('Mum, we’ll decide about baptism ourselves.', 'family').main);
     chk(vd('Mum, we’ll decide about baptism ourselves.', 'family').id === 'hurt', 'a closed door to a parent is flagged gently');
   }
   // 7. co-parents: BIFF (the child's need, the ask, a time), never feelings about each other
@@ -583,6 +585,58 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   chk(n.changes.every(c => !/doesn't add an ask/.test(c.why || '')), 'the “no ask added” note is gone: ' + n.changes.map(c => c.why).join(' / '));
   // family: "you're not my dad" keeps the feeling with the right word
   chk(/missing Dad today/.test(rw('You’re not my dad.', 'family').main), '“not my dad” → missing Dad: ' + rw('You’re not my dad.', 'family').main);
+}
+// ---------- re-test 2 (round 13): guilt and pulling back, "not ready", no added promises, the teen's ask, "maybe" in a request, money ----------
+{
+  const an = t => E.analyze(t, { channel: 'text' });
+  const rw = (t, rel) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || '' });
+  const vd = (t, rel) => { const a = an(t); return E.verdict(a, E.score(a, ['general'], 'text'), rw(t, rel), { rel }); };
+  const rc = (t, rel) => E.receive(an(t), { rel: rel || '' });
+  const all = r => [r.main].concat((r.variants || []).map(v => v.text));
+  // 1. guilt, pulling back and "in my day": never "will probably land okay"; the rewrite keeps the feeling
+  [['Fine. I won’t bother coming round then. I was only trying to help with the baby.', /^That stung a bit, but I understand\. I'd love to help with the baby\. When would suit you\?$/],
+   ['I suppose I’m not wanted anymore.', /^I've been feeling a bit left out lately, and it stings\. Could we find a time that suits us both\?$/],
+   ['In my day we just popped round, nobody minded.', /^Things were different when I was younger, so this feels new to me\. I miss popping round\. What would suit you\?$/],
+   ['I know when I’m not wanted.', /left out/],
+   ['Sorry for caring.', /That stung a bit/],
+   ['Mum, I won’t bother asking again then.', /^Mum, that stung a bit, but I understand\./]].forEach(([t, want]) => {
+    const a = an(t), v = vd(t, 'family'), r = rw(t, 'family'), g = rc(t, 'family');
+    chk(a.found.withdraw || a.found.olddays, '“' + t + '”: guilt or pulling back flagged: ' + a.staticIds);
+    chk(E.score(a, ['general'], 'text').level[0] !== 'clear', '“' + t + '”: never “clear”');
+    chk(v.id === 'hurt' && v.guilt && /^This may land as hurt or guilt\./.test(v.text), '“' + t + '” verdict: ' + v.id + ' ' + v.text);
+    chk(want.test(r.main), '“' + t + '” rewrite: ' + r.main);
+    all(r).forEach(x => chk(!/won't bother|not wanted|only trying to help|in my day|sorry for caring|\bjust\b/i.test(x), '“' + t + '”: the guilt line stays: ' + x));
+    chk(g.head[0] === 'hurt' && !g.meanings.some(m => /plain message|face value/.test(m)) && g.replies.length, '“' + t + '” received kindly: ' + JSON.stringify(g.head) + ' ' + g.meanings[0]);
+  });
+  chk(an('In my day we just popped round, nobody minded.').found.minim, '“we just popped round”: the “just” is flagged');
+  // kind lines that look close are not flagged
+  ['I won’t bother you tonight, you need your rest.', 'I’m not needed at work tomorrow, so I can help.', 'Sorry I asked so late, could you still come?', 'Thanks for trying to help, it meant a lot.'].forEach(t => chk(!an(t).found.withdraw && !an(t).found.olddays, 'not guilt: “' + t + '” got ' + an(t).staticIds));
+  // 2. "So now you want to talk? After you took everything?": the not-ready side, and the grievance kept
+  chk(E.notReady('So now you want to talk? After you took everything?') && E.notReady('After you walked out, now you care?') && !E.notReady('Hi Dad, it’s been a long time. I’d like to talk if you’re open to it.') && !E.notReady('Now you know where the keys are.'), 'not-ready answers are recognised');
+  chk(/that you took everything/.test(rw('So now you want to talk? After you took everything?', 'family').main), 'the real grievance stays in the rewrite');
+  // 3. no rewrite adds a promise the speaker didn't make (an offered one is a bracketed blank)
+  const BANK = ['Mum, we’ll decide about baptism ourselves.', 'It’s my money too, stop policing what I spend.', 'You should have known.', 'I’ll think about it.', 'Guys, the timesheets were missed again. Sort it out.', 'Mum, you can’t just turn up whenever you want.', 'Stop making decisions without me.', 'You forgot her inhaler AGAIN. Do you even care?', 'You never help.', 'Fine. I won’t bother coming round then.', 'In my day we just popped round.'];
+  const PROMISE = /\b(?:I'll|I will|we'll|we will|I promise|as soon as|next time I|from now on I)\b/i;
+  BANK.forEach(t => ['', 'family', 'partner', 'coworker'].forEach(rel => {
+    const r = E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel, work: rel === 'coworker' });
+    all(r).forEach(x => { const out = x.replace(/\[[^\]]*\]/g, ''); const typed = an(t).norm; (out.match(new RegExp(PROMISE.source, 'gi')) || []).forEach(p => chk(new RegExp('\\b' + p.replace(/'/g, "'") + '\\b', 'i').test(typed) || /^we'll$/i.test(p) && /we'll decide/i.test(typed) && /We'll decide/.test(out), '“' + t + '” [' + (rel || 'no rel') + ']: added promise “' + p + '” in: ' + x)); });
+  }));
+  chk(!/as soon as we do/.test(rw('Mum, we’ll decide about baptism ourselves.', 'family').main) && /\[and tell you when we do\]/.test(rw('Mum, we’ll decide about baptism ourselves.', 'family').main), 'the offer to tell them is optional, in brackets');
+  // 4. the teen's ask stays; a bare "you're not my mum" keeps the grief line
+  const nm = rw('you’re not my mum so stop acting like it', 'family').main;
+  chk(/I miss Mum/.test(nm) && /treated more like my age/.test(nm) && /talk about it\?$/.test(nm), '“not my mum, stop acting like it” keeps the ask: ' + nm);
+  chk(/treated more like my age/.test(rw('You’re not my dad. You can’t tell me what to do.', 'family').main), '“you can’t tell me what to do” keeps the ask');
+  chk(/fair for your age/.test(rc('you’re not my mum so stop acting like it', 'family').replies[0].text), 'received: the carer gets a reply to the ask');
+  chk(!vd('Can I have my phone back?', 'family').text.match(/hurt|fight|blame/i), 'a plain teen ask is fine: ' + vd('Can I have my phone back?', 'family').text);
+  // 5. "maybe" inside a request is a hedge, not a soft no; a "maybe" answer is still a soft no
+  const mb = an('Can your boyfriend maybe not stay over EVERY night??');
+  chk(!mb.found.softno && mb.found.reqmaybe, '“maybe” in a request: ' + mb.staticIds);
+  chk(!rc('Can your boyfriend maybe not stay over EVERY night??', 'roommate').found.includes('Soft no'), 'received: no “Soft no” label on a request');
+  chk(!an('Maybe we could get pizza on Saturday?').found.softno && !an('Maybe we could get pizza on Saturday?').found.reqmaybe, 'a suggestion with “maybe” is fine');
+  chk(an('Maybe.').found.softno && an('Maybe, I’ll see how I feel.').found.softno && an('We’ll see.').found.softno, 'a “maybe” answer is still a soft no');
+  chk(all(rw('Could you maybe tidy the kitchen tonight?')).every(x => !/\bmaybe\b/i.test(x)), 'the request “maybe” goes in the rewrite');
+  // 7. money: "stop policing what I spend" is flagged for the control note and link
+  chk(E.moneyControl('It’s my money too, stop policing what I spend') && E.moneyControl('I have to account for every purchase.') && !E.moneyControl('Can you send your share of the rent by the 1st?'), 'money control lines are recognised');
 }
 // the shared list: the same line gets the same marks in the Conversation Reader
 const R = require(path.join(__dirname, '../../assets/js/conversation-reader-engine.js'));

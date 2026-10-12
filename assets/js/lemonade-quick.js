@@ -225,7 +225,15 @@
   (function () {
     var h = location.hash || '', pend = !!ssGet('tol-lemonade-pending');
     var fridge = /^#owners(-h)?$/.test(h), qlink = /^#q=/.test(h);
-    var deep = DEEP_HASH.test(h) || (!qlink && !fridge && (pend || ssGet(VIEW) === 'deep'));
+    // coming back with a full stand kept on this device and no quick look: the full stand opens (with "Back to the quick look")
+    var standOnly = false;
+    try {
+      var qs = JSON.parse(localStorage.getItem(KEY) || 'null'), st = JSON.parse(localStorage.getItem('tol-lemonade-stand-v2') || 'null');
+      var qAny = qs && qs.ans && Object.keys(qs.ans).some(function (p) { return qs.ans[p] && Object.keys(qs.ans[p]).length; });
+      var real = function (a) { return Array.isArray(a) && a.some(function (r) { return r && !r.ex && Array.isArray(r.v) && r.v.some(function (x) { return +x > 0; }); }); };
+      standOnly = !qAny && !!st && !st.example && (real(st.jobs) || real(st.bills));
+    } catch (e) {}
+    var deep = DEEP_HASH.test(h) || (!qlink && !fridge && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
     setView(deep ? 'deep' : 'quick');
     if (fridge) body.setAttribute('data-ls-fridge', '');
   })();
@@ -695,20 +703,30 @@
   }
 
   /* ---------- the picture ---------- */
+  // jobs counted once each (per, both, n), and, with "Someone works long hours or is ill" on, weighed by how often
+  // they come round and how long they take (w), which is what the words go by then
   function tally(p, kind) {
-    var v = q.ans[p] || {}, per = q.people.map(function () { return 0; }), b = 0, n = 0;
+    var v = q.ans[p] || {}, per = q.people.map(function () { return 0; }), b = 0, n = 0, wper = per.slice(), wb = 0, wn = 0, on = weighted();
     q.list.forEach(function (id) {
       if (kind && kindOf(id) !== kind) return;
       var x = v[id]; if (x == null) return;
-      n++; if (x === 'b') b++; else per[x]++;
+      var w = on && kindOf(id) !== 'work' ? weightOf(id) : 1;
+      n++; wn += w;
+      if (x === 'b') { b++; wb += w; } else { per[x]++; wper[x] += w; }
     });
-    return { per: per, both: b, n: n };
+    return { per: per, both: b, n: n, w: { per: wper, both: wb, n: wn } };
   }
   // "mostly Alex", "mostly shared", "spread between you", in words (never a score)
+  // "mostly": 60% or more of the jobs, or at least twice as many as the next person (7 against 3 is never "a little more")
+  function strong(t, max, top) {
+    var next = Math.max.apply(null, t.per.filter(function (_, i) { return i !== top; }).concat([0]));
+    return max / t.n >= 0.6 || max >= 2 * next;
+  }
   function lean(t, p) {
     if (!t.n) return null;
+    if (t.w && weighted()) t = { per: t.w.per, both: t.w.both, n: t.w.n };
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
-    if (alone && max > t.both) return { one: top, words: (max / t.n >= 0.6 ? L('mostly ', 'sobre todo ') : L('a little more often ', 'un poco más ')) + say(top) };
+    if (alone && max > t.both) return { one: top, words: (strong(t, max, top) ? L('mostly ', 'sobre todo ') : L('a little more often ', 'un poco más ')) + say(top) };
     if (t.both > 0 && t.both >= max) return { shared: true, words: L('mostly shared', 'casi siempre compartido') };
     return { even: true, words: L('spread between ' + (q.people.length === 2 ? 'you' : 'you all'), 'repartido entre ustedes') };
   }
@@ -1159,7 +1177,8 @@
   function cardLean(t) {
     if (!t.n) return null;
     var max = Math.max.apply(null, t.per), top = t.per.indexOf(max), alone = t.per.filter(function (c) { return c === max; }).length === 1;
-    if (alone && max > t.both) return { t: (max / t.n >= 0.6 ? L('Mostly ', 'Sobre todo ') : L('A little more often ', 'Un poco más ')) + cardName(top), c: COLORS[top] };
+    if (t.w && weighted()) { t = { per: t.w.per, both: t.w.both, n: t.w.n }; max = Math.max.apply(null, t.per); top = t.per.indexOf(max); alone = t.per.filter(function (c) { return c === max; }).length === 1; }
+    if (alone && max > t.both) return { t: (strong(t, max, top) ? L('Mostly ', 'Sobre todo ') : L('A little more often ', 'Un poco más ')) + cardName(top), c: COLORS[top] };
     if (t.both > 0 && t.both >= max) return { t: L('Mostly shared', 'Casi siempre compartido'), c: 'both' };
     return { t: L('Spread between ' + (q.people.length === 2 ? 'the two of us' : 'all of us'), 'Repartido entre ' + (q.people.length === 2 ? 'los dos' : 'todos')), c: 'both' };
   }

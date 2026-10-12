@@ -32,6 +32,16 @@
   .read #scripts h3, .read #faq h3{ font-size:1.08rem; margin-top:1.4rem; }
   .gp-week ol{ margin:.4rem 0 .8rem; padding-left:1.2rem; }
   .gp-week li{ margin:.35rem 0; }
+  /* phone fold: secondary sections start closed on small screens (all content kept) */
+  .pg-fold > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+  .pg-fold > summary::-webkit-details-marker{ display:none; }
+  .pg-fold > summary > :is(h2, h3){ margin:0 !important; }
+  .pg-fold[open] > summary{ margin-bottom:.6rem; }
+  .pg-fold > summary::after{ content:"Show"; flex:none; font:600 .9rem/1 "Lora", Georgia, serif; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:.5rem .9rem; min-height:44px; box-sizing:border-box; display:inline-flex; align-items:center; }
+  .pg-fold[open] > summary::after{ content:"Hide"; }
+  .pg-fold > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  html.tol-only-steps main details.pg-fold.pg-fold.pg-fold{ display:block !important; }
+  @media print{ .pg-fold > summary::after{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/foster-and-kinship.html">
@@ -85,18 +95,45 @@
 
 <nav aria-label="On this page">
 <ul class="gp-jump no-bubble">
-  <li><a href="#kinship">Raising a grandchild, on your own or together</a></li>
-  <li><a href="#rules">House rules</a></li>
+  <li><a href="#kinship">Raising a grandchild or relative’s child</a></li>
   <li><a href="#testing">Pushing you away</a></li>
   <li><a href="#two-carers">Two carers, one approach</a></li>
+  <li><a href="#rules">House rules</a></li>
   <li><a href="#jobs">Meetings and paperwork</a></li>
   <li><a href="#contact">Contact visits</a></li>
   <li><a href="#talking">Talking it through</a></li>
   <li><a href="#bonding">Bonding</a></li>
   <li><a href="#you">Looking after you</a></li>
   <li><a href="#support">Where to get support</a></li>
+  <li><a href="/teens.html#family-care">For the young person</a></li>
 </ul>
 </nav>
+
+<h2 id="kinship">Raising a grandchild or a relative’s child</h2>
+<p>If you are raising your grandchild, niece, nephew or a younger brother or sister full-time, on your own or with a partner, <strong>you are the parent figure now.</strong> You set the house rules. Advice written for babysitting grandparents (“their house, their rules”) does not fit you.</p>
+<p>It is a lot to hold. You may be a grandparent and a parent at once. You may be grieving the retirement you planned, and worrying about your own child at the same time. You can love your child and still be angry with them. All of that can be true together.</p>
+
+<h3>Talking about a parent who can’t be there</h3>
+<p>If the child’s parent is ill, in prison, or in treatment for drinking or drugs, children often wonder if it was their fault. Tell them the truth in words that fit their age. Say again and again that it was not because of them.</p>
+<ul>
+  <li><strong>It’s not their fault,</strong> and they can’t fix it.</li>
+  <li><strong>It’s okay to miss their parent and be angry with them,</strong> sometimes in the same hour.</li>
+  <li><strong>Speak kindly about the parent,</strong> even when you are hurt. “Mum is ill and getting help” is honest and kind.</li>
+  <li><strong>Only promise what you can keep.</strong> “I don’t know when Mum will be home. I do know I’ll be here.”</li>
+</ul>
+<div class="gp-say" data-keep-steps>
+  <p><strong>Words you could use</strong></p>
+  <p class="q">“Mum’s getting help for an illness that makes it hard to stop drinking. It’s not because of anything you did.”</p>
+  <p class="q">“You can miss her and be cross with her. Both are allowed here.”</p>
+  <p class="q">“I’m your nan, and right now I’m also the one who sets the rules. I’ll always tell you why.”</p>
+</div>
+<p>Doing this on your own? The <a href="#rules">house rules list</a> works for one carer and one young person, and <a href="#you">Looking after the carer</a> and <a href="#support">Where to get support</a> are written for you too.</p>
+<p>If a teen says something like “You’re not my mum,” try not to take the bait. It is usually grief talking. “No, I’m not. I’m the one who’s here, and I love you” is enough.</p>
+
+<details class="pg-fold" data-fold-phone open>
+<summary><h3 id="kinship-money">Money and practical help</h3></summary>
+<p>Many relatives start caring in a hurry, with no plan and no money set aside. Ask early about financial help, school support and legal arrangements. The rules differ by country and area, so ask a kinship advice service or your local children’s services. You don’t have to work it all out alone.</p>
+</details>
 
 <h2 id="testing">When a child pushes you away</h2>
 <p>A child who has moved homes before has often learned that adults leave. So they may test you: break rules, say hurtful things, or act as if they don’t care. <strong>Pushing you away is often a test of whether you’ll stay.</strong> It is not a sign that you are failing.</p>
@@ -166,7 +203,8 @@
   <p class="q">“Visits can bring up a lot. You don’t have to talk about it. I’m around if you want to.”</p>
 </div>
 
-<h2 id="talking">Talking about it: with the child, the team and each other</h2>
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="talking">Talking about it: with the child, the team and each other</h2></summary>
 <p>A child who has been hurt may hear a raised voice as danger, or a question as a test. And you talk with far more people than most parents do: social workers, teachers, therapists and the child’s family. It is a lot of talking, often on little sleep.</p>
 <ul>
   <li><strong>Talk side by side, and briefly.</strong> In the car or while cooking. Short and calm beats a big sit-down talk.</li>
@@ -181,32 +219,10 @@
   <p class="q">At a meeting: “I’ve written down three things I’ve noticed this month. Could we agree who follows up on each one?”</p>
 </div>
 <p>Before a hard talk, check your own state with <a href="/ladder.html">Where am I right now?</a> To see a moment from the child’s side, or a birth parent’s, try the <a href="/perspective-shifter.html">Perspective Shifter</a>. More: <a href="/communication.html#with-foster-and-kinship">Effective communication: foster and kinship →</a> · <a href="/communication.html#with-professionals">with professionals →</a></p>
+</details>
 
-<h2 id="kinship">Raising a grandchild or a relative’s child</h2>
-<p>If you are raising your grandchild, niece, nephew or a younger brother or sister full-time, on your own or with a partner, <strong>you are the parent figure now.</strong> You set the house rules. Advice written for babysitting grandparents (“their house, their rules”) does not fit you.</p>
-<p>It is a lot to hold. You may be a grandparent and a parent at once. You may be grieving the retirement you planned, and worrying about your own child at the same time. You can love your child and still be angry with them. All of that can be true together.</p>
-
-<h3>Talking about a parent who can’t be there</h3>
-<p>If the child’s parent is ill, in prison, or in treatment for drinking or drugs, children often wonder if it was their fault. Tell them the truth in words that fit their age. Say again and again that it was not because of them.</p>
-<ul>
-  <li><strong>It’s not their fault,</strong> and they can’t fix it.</li>
-  <li><strong>It’s okay to miss their parent and be angry with them,</strong> sometimes in the same hour.</li>
-  <li><strong>Speak kindly about the parent,</strong> even when you are hurt. “Mum is ill and getting help” is honest and kind.</li>
-  <li><strong>Only promise what you can keep.</strong> “I don’t know when Mum will be home. I do know I’ll be here.”</li>
-</ul>
-<div class="gp-say" data-keep-steps>
-  <p><strong>Words you could use</strong></p>
-  <p class="q">“Mum’s getting help for an illness that makes it hard to stop drinking. It’s not because of anything you did.”</p>
-  <p class="q">“You can miss her and be cross with her. Both are allowed here.”</p>
-  <p class="q">“I’m your nan, and right now I’m also the one who sets the rules. I’ll always tell you why.”</p>
-</div>
-<p>Doing this on your own? The <a href="#rules">house rules list</a> works for one carer and one young person, and <a href="#you">Looking after the carer</a> and <a href="#support">Where to get support</a> are written for you too.</p>
-<p>If a teen says something like “You’re not my mum,” try not to take the bait. It is usually grief talking. “No, I’m not. I’m the one who’s here, and I love you” is enough.</p>
-
-<h3>Money and practical help</h3>
-<p>Many relatives start caring in a hurry, with no plan and no money set aside. Ask early about financial help, school support and legal arrangements. The rules differ by country and area, so ask a kinship advice service or your local children’s services. You don’t have to work it all out alone.</p>
-
-<h2 id="bonding">Bonding tips, at the child’s pace</h2>
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="bonding">Bonding tips, at the child’s pace</h2></summary>
 <p>A child who has been let down may not trust closeness at first, and hugs or “I love you” can feel like too much, too soon. Bonding often grows best through steady, low-pressure time, where the child decides how close to come.</p>
 <ul>
   <li><strong>Be predictable before you try to be close.</strong> The same breakfast, the same goodnight words, doing what you said you would. Feeling safe comes first, and warmth grows from it.</li>
@@ -222,8 +238,10 @@
 </div>
 <p>Closeness is offered, never demanded. A child doesn’t owe you affection or thanks, and trust often grows faster once they know that.</p>
 <p>More ideas: <a href="/bonding.html#new-family">Bonding, how closeness grows →</a> · <a href="/bonding.html#ideas">Get an idea now</a></p>
+</details>
 
-<h2 id="you">Looking after the carer</h2>
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="you">Looking after the carer</h2></summary>
 <p>You can’t pour from an empty cup. Being steady for a child who tests you is tiring, and so is being the one who does the feelings work.</p>
 <ul>
   <li><strong>Take turns being “on”.</strong> One evening off each a week, even just an hour.</li>
@@ -231,20 +249,30 @@
   <li><strong>Find people who get it:</strong> a carers’ group, a support line, or another family like yours.</li>
   <li><strong>Check your own tank</strong> before a hard day with <a href="/quick-checks.html#today">Today’s Weather</a>.</li>
 </ul>
+</details>
 
 <h2 id="support">Where to get support</h2>
+<p><strong>Your social worker or agency</strong> is the first place to ask about training, respite, support groups and money.</p>
+<h3 id="support-uk">In the UK</h3>
 <ul>
-  <li><strong>Your social worker or agency</strong> is the first place to ask about training, respite, support groups and money.</li>
-  <li><strong>US:</strong> ask your local child welfare agency about <strong>kinship navigator programs</strong>, or dial <strong>211</strong> for local help. AARP has free guides for grandfamilies. If a parent is struggling with drink or drugs, <strong>Al-Anon</strong> and <strong>Nar-Anon</strong> support families, <strong>Alateen</strong> is for teens, and the SAMHSA National Helpline is free and open any time: <a href="tel:18006624357">1-800-662-4357</a>.</li>
-  <li><strong>UK:</strong> <strong>Kinship</strong> (<a href="https://kinship.org.uk/" rel="noopener">kinship.org.uk</a>) for relatives raising children; <strong>The Fostering Network</strong> (<a href="https://www.thefosteringnetwork.org.uk/" rel="noopener">thefosteringnetwork.org.uk</a>) for foster carers; <strong>Adoption UK</strong> (<a href="https://www.adoptionuk.org/" rel="noopener">adoptionuk.org</a>); <strong>Adfam</strong> (<a href="https://adfam.org.uk/" rel="noopener">adfam.org.uk</a>) for families affected by drugs or alcohol. Young people can call <strong>Childline</strong> on <a href="tel:08001111">0800 1111</a>.</li>
-  <li><strong>Anywhere:</strong> <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free helplines in your country.</li>
+  <li><strong>Kinship</strong> (<a href="https://kinship.org.uk/" rel="noopener">kinship.org.uk</a>) for relatives raising children.</li>
+  <li><strong>The Fostering Network</strong> (<a href="https://www.thefosteringnetwork.org.uk/" rel="noopener">thefosteringnetwork.org.uk</a>) for foster carers, and <strong>Adoption UK</strong> (<a href="https://www.adoptionuk.org/" rel="noopener">adoptionuk.org</a>) for adoptive families.</li>
+  <li><strong>Adfam</strong> (<a href="https://adfam.org.uk/" rel="noopener">adfam.org.uk</a>) for families affected by drugs or alcohol.</li>
+  <li><strong>For the young person:</strong> Childline <a href="tel:08001111">0800 1111</a>, or text SHOUT to <a href="sms:85258">85258</a>. In danger: <a href="tel:999">999</a>.</li>
 </ul>
+<h3 id="support-us">In the US</h3>
+<ul>
+  <li>Ask your local child welfare agency about <strong>kinship navigator programs</strong>, or dial <strong>211</strong> for local help. AARP has free guides for grandfamilies.</li>
+  <li>If a parent is struggling with drink or drugs: <strong>Al-Anon</strong> and <strong>Nar-Anon</strong> support families, <strong>Alateen</strong> is for teens, and the SAMHSA National Helpline is free and open any time: <a href="tel:18006624357">1-800-662-4357</a>.</li>
+  <li><strong>For the young person:</strong> call or text <a href="tel:988">988</a>, or Childhelp <a href="tel:18004224453">1-800-422-4453</a>. In danger: <a href="tel:911">911</a>.</li>
+</ul>
+<p><strong>Anywhere else:</strong> <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free helplines in your country.</p>
 <p>If anyone in your home is frightened or not safe, see <a href="/safety.html">Not safe at home?</a></p>
 
 <h2 id="more">More for your situation</h2>
 <ul class="gp-links no-bubble">
   <li><a href="/parents.html#teens"><strong>Talking with teens</strong><span>Talking side by side, listening first, and rules with a reason.</span></a></li>
-  <li><a href="/teens.html#family-care"><strong>For teens: living with grandparents or family</strong><span>A page written to the young person, with private places to get help.</span></a></li>
+  <li><a href="/teens.html#family-care"><strong>For teens: living with grandparents, family or foster carers</strong><span>A page written to the young person, with private places to get help. You could show it to them.</span></a></li>
   <li><a href="/adhd-kids.html"><strong>When a child has ADHD</strong><span>Plain words for fidgeting, forgetting and one instruction at a time.</span></a></li>
   <li><a href="/perspective-shifter.html"><strong>The Perspective Shifter</strong><span>See a hard moment from the other person’s side, without deciding who was right.</span></a></li>
   <li><a href="/upset-right-now.html"><strong>Upset right now?</strong><span>A five-minute page for when it’s heated.</span></a></li>
@@ -252,5 +280,24 @@
 </ul>
 <p>This page shares general ideas, not legal, medical or psychological advice. Your social worker or a kinship advice service can tell you what applies where you live.</p>
 </main>
+<script>
+/* phone fold: on small screens, sections marked data-fold-phone start closed; a jump link or #hash opens its section */
+(function () {
+  var F = [].slice.call(document.querySelectorAll('details[data-fold-phone]'));
+  if (!F.length) return;
+  try { if (window.matchMedia('(max-width: 700px)').matches) F.forEach(function (d) { d.open = false; }); } catch (e) {}
+  function openFor(h) {
+    if (!h || h.charAt(0) !== '#' || h.length < 2) return;
+    var t = null; try { t = document.getElementById(decodeURIComponent(h.slice(1))); } catch (e) {}
+    var d = t && t.closest('details[data-fold-phone]'); if (d) d.open = true;
+  }
+  openFor(location.hash);
+  window.addEventListener('hashchange', function () { openFor(location.hash); });
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) openFor(a.getAttribute('href')); }, true);
+  function steps() { if (document.documentElement.classList.contains('tol-only-steps')) F.forEach(function (d) { d.open = true; }); }
+  if (window.MutationObserver) new MutationObserver(steps).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  steps();
+})();
+</script>
 </body>
 </html>

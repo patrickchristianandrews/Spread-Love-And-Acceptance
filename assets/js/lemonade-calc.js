@@ -53,7 +53,7 @@
   if (!peopleEl || !rowsEl) return;
 
   var MIN = 2, MAX = 8;
-  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', NAMES = 'tol-lemonade-names', MODE_KEY = 'tol-lemonade-mode', MAX_OWN = 10, MAX_WEEKS = 26;
+  var KEY = 'tol-lemonade-stand-v2', DRAFT = 'tol-lemonade-draft', NAMES = 'tol-lemonade-names', MODE_KEY = 'tol-lemonade-mode', MAX_OWN_ANY = 16, MAX_WEEKS = 26;
   var COLORS = ['#BFE3CF', '#F8DC6E', '#F2B8C6', '#B9D3F0', '#D9C4F0', '#F6C99B', '#C8E6A0', '#A8DDE0'];
   var WAKING = 112; // about 16 waking hours a day, 7 days
 
@@ -456,6 +456,7 @@
     state.compact = !!state.compact;
     state.workNo = !!state.workNo;
     state.planning = !!state.planning;
+    if (!Array.isArray(state.billSplit) || state.billSplit.length !== n) delete state.billSplit;
     state.ownMore = !!state.ownMore;
     state.hhNo = !!state.hhNo;
     // the quick look's jobs, offered as fridge-list chips (name, and the owner it had there)
@@ -663,7 +664,7 @@
     state.jobs.forEach(function (j) { j.v.push(0); j.t.push(0); if (j.nm) j.nm.push(0); if (j.fq) j.fq.push(j.freq); if (j.qv) j.qv.push(0); });
     state.bills.forEach(function (b) { b.v.push(0); });
     state.agreed.p.push('');
-    delete state.agreedOffer;
+    delete state.agreedOffer; delete state.billSplit;
     state.part.push(1); state.kid.push(false);
     renderAll();
     var inputs = peopleEl.querySelectorAll('input');
@@ -687,7 +688,7 @@
     state.jobs.forEach(function (j) { j.v.splice(i, 1); j.t.splice(i, 1); shiftRaw(j, i); if (j.nm) j.nm.splice(i, 1); if (j.fq) j.fq.splice(i, 1); if (j.qv) j.qv.splice(i, 1); });
     state.bills.forEach(function (b) { b.v.splice(i, 1); shiftRaw(b, i); });
     state.agreed.p.splice(i, 1);
-    delete state.agreedOffer;
+    delete state.agreedOffer; delete state.billSplit;
     state.part.splice(i, 1); state.kid.splice(i, 1);
     state.bills.forEach(function (b) { if (b.who === i) b.who = -1; else if (b.who > i) b.who--; });
     if (state.me === i) state.me = -1; else if (state.me > i) state.me--;
@@ -724,6 +725,8 @@
     el.hidden = false;
   }
 
+  // the box was cleared again: the "This is Sophie's side" note goes too (and can come back if they type again)
+  function unCue(i, el) { if (el && !el.hidden && el.textContent.indexOf('This is ') === 0) { el.hidden = true; el.textContent = ''; delete cued[i]; } }
   /* ---------- job rows ---------- */
   function autoGrow(t) { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; }
   function unitWord(j) { return j.unit === 'm' ? 'min' : 'hours'; }
@@ -933,7 +936,7 @@
         if (item.pick != null) { delete item.pick; if (pickBox) pickBox.hidden = true; }
         item.raw = item.raw || {}; item.raw[k] = inp.value;
         if (checkVal(item, k)) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
-        if (inp.value !== '' && inp.value !== '0') sideCue(i, cue);
+        if (inp.value !== '' && inp.value !== '0') sideCue(i, cue); else unCue(i, cue);
         markEdited(); row._refresh(); recalc();
       });
       lab.appendChild(sp); lab.appendChild(inp);
@@ -1238,7 +1241,7 @@
         own();
         item.raw = item.raw || {}; item.raw[i] = inp.value;
         if (checkVal(item, String(i))) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
-        if (inp.value !== '' && inp.value !== '0') sideCue(i, cue);
+        if (inp.value !== '' && inp.value !== '0') sideCue(i, cue); else unCue(i, cue);
         showNote(); markEdited(); recalc();
       });
       lab.appendChild(sp); lab.appendChild(inp); amts.appendChild(lab);
@@ -1409,7 +1412,7 @@
     var list = ownersList(), added = 0, full = false;
     NIGHT_SHIFTS.forEach(function (nm) {
       if (list.some(function (o) { return low(o.name) === low(nm); })) return;
-      if (list.length >= MAX_OWN) { full = true; return; }
+      if (list.length >= maxOwn()) { full = true; return; }
       list.push({ name: nm, who: -1 }); added++;
     });
     renderOwners(); save();
@@ -1574,6 +1577,13 @@
     var w = state.part.slice(0, n), ws = sum(w) || n;
     return { t: w.map(function (x) { return x / ws; }), mode: w.some(function (x) { return x !== 1; }) ? 'part' : 'even' };
   }
+  // The split for the shared bills: by income when someone tapped "Split shared bills by income" (that one is for
+  // the money only, unless they ticked "Use it for the home hours too"), otherwise the same split as the hours.
+  function moneyTarget() {
+    var bs = state.billSplit;
+    if (bs && !state.agreed.on) { var p = bs.map(function (x) { return parseFloat(x) || 0; }), ps = sum(p); if (p.length === state.people.length && Math.abs(ps - 100) <= 0.5) return { t: p.map(function (x) { return x / ps; }), mode: 'agreed', money: true }; }
+    return target();
+  }
   function evenTarget() { var n = state.people.length; return { t: state.people.map(function () { return 1 / n; }), mode: 'even' }; }
   function halfNames() { return joinNames(state.part.map(function (x, i) { return x !== 1 ? nameOf(i) + ' (' + nightsWord(nightsOf(i)) + ')' : ''; }).filter(Boolean)); }
   // a share as people say it: 71, or 28.6 when whole numbers can't keep two identical people identical
@@ -1713,7 +1723,7 @@
     // Planning, not settling up: nothing's been paid yet, so no "paid", "over" or "owes", just what each person
     // puts in under the split ("Sophie puts in $1,196 a month")
     if (state.planning && costs.length) {
-      var pS = sum(shared.map(billTotal)), ptg = target(), pfb = !!ptg.error; if (pfb) ptg = evenTarget();
+      var pS = sum(shared.map(billTotal)), ptg = moneyTarget(), pfb = !!ptg.error; if (pfb) ptg = evenTarget();
       var putIn = function (tt) { return state.people.map(function (_, i) { return tt.t[i] * pS + sum(costs.filter(function (b) { return b.kind !== 'shared'; }).map(function (b) { return num(b.v[i]); })); }); };
       var pIn = putIn(ptg), sayIn = function (arr) { return joinNames(state.people.map(function (_, i) { return (i ? nameOf(i) + ' ' : nameOf(i) + ' puts in ') + cash(arr[i]); })) + ' a month'; };
       var pl = 'We’re planning, not settling up. ' + sayIn(pIn) + (pS > 0 ? ' (shared bills ' + cash(pS) + ', ' + (ptg.mode === 'agreed' ? 'split by the ' + splitShort(ptg.t) + ' you ' + agreedWord() : ptg.mode === 'part' ? 'split by the nights each person is here' : 'split evenly') + ')' : '') + '.';
@@ -1749,7 +1759,7 @@
     if (s > 0 && wait.length) {
       out.push('Shared bills listed so far: ' + cash(s) + '. ' + waitText(wait, 'bills'));
     } else if (s > 0) {
-      var tg = target(), fallback = !!tg.error;
+      var tg = moneyTarget(), fallback = !!tg.error;
       if (fallback) tg = evenTarget();
       var fair = tg.t.map(function (x) { return x * s; });
       var how = tg.mode === 'agreed' ? 'Split by the shares you ' + agreedWord() + ' (' + pctList(tg.t) + '), that’s ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
@@ -2073,7 +2083,8 @@
     var adults = state.people.map(function (_, i) { return i; }).filter(function (i) { return !state.kid[i]; });
     if (adults.length < 2 || adults.some(function (i) { return !(inc[i] > 0); })) return null;
     var p = wholePcts(inc);
-    var same = state.agreed.on && p.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.05; });
+    var same = (state.agreed.on && p.every(function (x, i) { return Math.abs((parseFloat(state.agreed.p[i]) || 0) - x) < 0.05; })) ||
+      (!state.agreed.on && Array.isArray(state.billSplit) && p.every(function (x, i) { return Math.abs((parseFloat(state.billSplit[i]) || 0) - x) < 0.05; }));
     return { p: p, same: same };
   }
   function renderIncome() {
@@ -2196,14 +2207,15 @@
   }
   function plainShare() {
     var t = totals(state.jobs), s = sum(t); if (s <= 0) return '';
-    var p = t.map(function (x) { return x / s * 100; }), top = 0; p.forEach(function (x, i) { if (x > p[top]) top = i; });
+    // the same whole percentages as the glasses and the headline (never "about 60%" here and "59%" there)
+    var p = shares(t), top = 0; p.forEach(function (x, i) { if (x > p[top]) top = i; });
     var txt;
     if (t.length === 2) {
       var fw = fracWords(p[top]);
       txt = fw === 'about half' ? nameOf(0) + ' and ' + nameOf(1) + ' each do about half of the home hours' : nameOf(top) + ' does ' + fw + ' home hours';
     } else {
       var order = state.people.map(function (_, i) { return i; }).sort(function (a, b) { return p[b] - p[a]; });
-      txt = nameOf(order[0]) + ' does the biggest share of the home hours (about ' + Math.round(p[order[0]]) + '%), then ' + joinNames(order.slice(1).map(function (i) { return nameOf(i) + ' (' + Math.round(p[i]) + '%)'; }));
+      txt = nameOf(order[0]) + ' does the biggest share of the home hours (about ' + pctNum(p[order[0]]) + '%), then ' + joinNames(order.slice(1).map(function (i) { return nameOf(i) + ' (' + pctNum(p[i]) + '%)'; }));
     }
     var w = peopleTotals('work'), ws = sum(w);
     if (ws > 0 && !workGap().length) {
@@ -2394,6 +2406,7 @@
         : (wn.length === wait.length && wn.length ? joinNames(wn) + (wn.length === 1 ? ' has' : ' have') : 'The other side has') + ' nothing to add this week? Show the split anyway';
     }
     $('money-line').textContent = moneySentence();
+    var nx = $('next-money'); if (nx) nx.textContent = state.planning ? 'what each of you puts in' : 'who owes whom';
     // per-category hours beside each group heading
     var vp = visiblePeople();
     rowsEl.querySelectorAll('.ls-group-h [data-cat]').forEach(function (sp) {
@@ -2411,7 +2424,10 @@
   }
 
   /* ---------- chores with one owner each (no week of logging needed) ---------- */
-  function ownersList() { state.owners = (state.owners || []).slice(0, MAX_OWN); return state.owners; }
+  // a fridge list holds ten jobs for two people, sixteen for three or more (a shared house has more jobs to go round)
+  function maxOwn() { return state && state.people && state.people.length >= 3 ? MAX_OWN_ANY : 10; }
+  function ownWord() { return maxOwn() === 10 ? 'ten' : 'sixteen'; }
+  function ownersList() { state.owners = (state.owners || []).slice(0, Math.max(maxOwn(), state.owners ? Math.min(state.owners.length, MAX_OWN_ANY) : 0)); return state.owners; }
   function renderPicks() {
     var box = $('own-pick'); if (!box) return;
     var picked = ownersList().map(function (o) { return chipKey(o.name); });
@@ -2444,7 +2460,7 @@
     var list = ownersList(), k = -1;
     list.forEach(function (o, i) { if (chipKey(o.name) === chipKey(nm)) k = i; });
     if (k >= 0) { list.splice(k, 1); status('Took “' + nm + '” off the list.'); }
-    else if (list.length >= MAX_OWN) { status('That’s ten, the most for one list. Swap one out to add another.'); return; }
+    else if (list.length >= maxOwn()) { status('That’s ' + ownWord() + ', the most for one list. Swap one out to add another.'); return; }
     else {
       // a job from the quick look comes with the owner it had there (still yours to change)
       var qc = (state.qchips || []).filter(function (c) { return chipKey(c.n) === chipKey(nm); })[0];
@@ -2500,8 +2516,8 @@
       ol.appendChild(li);
     });
     // at the most: say so where the box was, never just hide it
-    $('own-add').hidden = list.length >= MAX_OWN;
-    var full = $('own-full'); if (full) full.hidden = list.length < MAX_OWN;
+    $('own-add').hidden = list.length >= maxOwn();
+    var full = $('own-full'); if (full) full.hidden = list.length < maxOwn();
     // the printout's note matches what's picked
     var fn = document.querySelector('#own-fridge .tfs-note');
     if (fn) fn.textContent = list.length ? 'One clean page: each job, its owner and a box to tick, with a few blank lines for more. Fits A4 and US Letter.' : 'One clean page to fill in together. With nothing picked yet, it prints a blank list. Fits A4 and US Letter.';
@@ -2848,7 +2864,7 @@
     (names || []).forEach(function (nm) {
       nm = String(nm || '').trim().slice(0, 60); if (!nm) return;
       if (list.some(function (o) { return chipKey(o.name) === chipKey(nm); })) return;
-      if (list.length >= MAX_OWN) { waiting.push(nm); return; }
+      if (list.length >= maxOwn()) { waiting.push(nm); return; }
       list.push({ name: nm, who: -1 }); added.push(nm);
     });
     if (state.compact) setCompact(false);
@@ -2859,7 +2875,7 @@
     if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
     var and = function (a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; };
     if (st) st.textContent = (added.length ? 'Added ' + and(added) + ' to the fridge list. Tap who owns each one, together.' : 'Those jobs are already on the fridge list. Tap who owns each one, together.') +
-      (waiting.length ? ' The list holds ten, so ' + and(waiting) + (waiting.length === 1 ? ' is' : ' are') + ' waiting: swap one out to add it.' : '');
+      (waiting.length ? ' The list holds ' + ownWord() + ', so ' + and(waiting) + (waiting.length === 1 ? ' is' : ' are') + ' waiting: swap one out to add it.' : '');
     return added.length;
   }
   if (window.TOLFridge) {
@@ -2955,12 +2971,32 @@
       return;
     }
     var sg = incomeSplit(); if (!sg) return;
-    state.agreed.on = true; state.agreed.p = sg.p.map(String); state.agreed.src = 'income';
-    renderAgreed(); recalc();
+    // the money only: the home hours keep their own split unless you tick the box below
+    state.billSplit = sg.p.map(String);
+    recalc();
     var t = sg.p.map(function (x) { return x / 100; });
     var w = $('income-why');
-    if (w) { w.textContent = 'Shared bills are split by what each of you brings in now: ' + pctList(t) + '. The same split is used for the hours under “Hours”; change it under the result any time.'; w.hidden = false; }
-    status('Shared bills are split by income now (' + splitShort(t) + ').');
+    if (w) {
+      w.innerHTML = esc('Shared bills are split by what each of you brings in now: ' + pctList(t) + '. This is for the money only: the home hours under “Hours” still compare with ' + (state.agreed.on ? 'the split you set there' : 'an even share') + '.') +
+        ' <label class="ls-check"><input type="checkbox" id="income-hours" autocomplete="off"> Use this split for the home hours too (optional)</label> <button type="button" class="ls-link-btn" id="income-undo">Split the bills evenly again</button>';
+      w.hidden = false;
+    }
+    status('Shared bills are split by income now (' + splitShort(t) + '). The home hours are unchanged.');
+  });
+  document.addEventListener('change', function (e) {
+    if (!e.target || e.target.id !== 'income-hours') return;
+    var bs = state.billSplit || (incomeSplit() || { p: [] }).p.map(String);
+    if (e.target.checked && bs.length === state.people.length) { state.agreed.on = true; state.agreed.p = bs.slice(); state.agreed.src = 'income'; status('The home hours now compare with the same split (' + splitShort(bs.map(function (x) { return (parseFloat(x) || 0) / 100; })) + ').'); }
+    else if (!e.target.checked && state.agreed.src === 'income') { state.agreed.on = false; delete state.agreed.src; state.billSplit = bs; status('The home hours compare with an even share again. The bills stay split by income.'); }
+    renderAgreed(); recalc();
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target || e.target.id !== 'income-undo') return;
+    delete state.billSplit; if (state.agreed.src === 'income') { state.agreed.on = false; delete state.agreed.src; }
+    renderAgreed(); recalc();
+    var w = $('income-why'); if (w) { w.textContent = ''; w.hidden = true; }
+    status('Shared bills are split evenly again.');
+    var b = $('income-split'); if (b && b.offsetParent) b.focus();
   });
   if ($('baby-steps-on')) $('baby-steps-on').addEventListener('click', function () {
     setCompact(true); save();
@@ -3254,7 +3290,7 @@
     var bills = list(raw.bills, 100).map(function (b) {
       return { n: clean(b.n, 120), k: BILL_KIND[b.k] ? b.k : 'shared', w: low(b.w), v: vals(b.v, 1e9) };
     }).filter(function (b) { return b.n || Object.keys(b.v).length; });
-    var own = list(raw.own, MAX_OWN).map(function (o) { return { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) }; }).filter(function (o) { return o.n; });
+    var own = list(raw.own, MAX_OWN_ANY).map(function (o) { return { n: clean(o.n, 60), w: low(o.w), b: low(o.b), d: clean(o.d, 80) }; }).filter(function (o) { return o.n; });
     if (!people.length && !jobs.length && !bills.length) return null;
     // "Money to my mum" typed on Amara's phone reads "Money to Amara’s mum" here: a "my" in a line's name
     // means the person who typed it (the sender, or else the one person with numbers on that line).
@@ -3456,7 +3492,7 @@
       var have = ownersList().filter(function (x) { return sameLine(x.name, o.n, plan.meName); })[0], w = o.w && map[o.w] != null ? map[o.w] : -1;
       var bk = o.b && map[o.b] != null ? map[o.b] : -1;
       if (have) { if (have.who < 0 && w >= 0) { have.who = w; out.own = (out.own || 0) + 1; } if (!(have.bk >= 0) && bk >= 0) have.bk = bk; if (!have.dn && o.d) have.dn = o.d; }
-      else if (state.owners.length < MAX_OWN) { state.owners.push({ name: o.n, who: w, bk: bk, dn: o.d || '' }); out.own = (out.own || 0) + 1; }
+      else if (state.owners.length < maxOwn()) { state.owners.push({ name: o.n, who: w, bk: bk, dn: o.d || '' }); out.own = (out.own || 0) + 1; }
       if ((bk >= 0 || o.d) && !state.ownMore) state.ownMore = true;
     });
     // their own side has arrived: a number typed in for them here (from the quick look) now counts as theirs
@@ -3812,7 +3848,7 @@
       });
       // the fridge list, when it is empty: jobs that already have an owner in the household
       if (!ownersList().length) {
-        h.jobs.filter(function (hj) { return hj.owner; }).slice(0, MAX_OWN).forEach(function (hj) {
+        h.jobs.filter(function (hj) { return hj.owner; }).slice(0, maxOwn()).forEach(function (hj) {
           var who = -1;
           state.people.forEach(function (p, i) { if (String(p || '').trim().toLowerCase() === hj.owner.toLowerCase()) who = i; });
           state.owners.push({ name: hj.name, who: who });
@@ -4201,7 +4237,7 @@
     var costs = real.filter(function (b) { return b.kind !== 'income'; });
     if (!costs.length || anyBad(state.bills)) return null;
     var shared = costs.filter(function (b) { return b.kind === 'shared'; }), others = costs.filter(function (b) { return b.kind !== 'shared'; });
-    var pS = sum(shared.map(billTotal)), tg = target(); if (tg.error) tg = evenTarget();
+    var pS = sum(shared.map(billTotal)), tg = moneyTarget(); if (tg.error) tg = evenTarget();
     var lines = ['Our monthly plan (a friendly look, not a score):'];
     var put = function (t) { return state.people.map(function (_, i) { return t[i] * pS + sum(others.map(function (b) { return num(b.v[i]); })); }); };
     if (shared.length) {
@@ -4257,7 +4293,7 @@
     }
     var shared = bills.filter(function (b) { return b.kind === 'shared'; }), st = sum(shared.map(billTotal));
     if (st > 0) {
-      var tg = target(); if (tg.error) tg = evenTarget();
+      var tg = moneyTarget(); if (tg.error) tg = evenTarget();
       lines.push('', 'Shared bills come to ' + cash(st) + (tg.mode === 'even' ? ', about ' + cash(st / state.people.length) + ' each if we split them evenly.' : ', split by the shares we set: ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(tg.t[i] * st); }).join(', ') + '.'));
     }
     // the thinking and emotional work too, not only the hours you can see
@@ -4283,7 +4319,7 @@
     state.path = 'fridge'; save(); renderPath(); renderOwners();
     var o = $('owners'); if (o) o.scrollIntoView({ block: 'start', behavior: 'smooth' });
     var f = document.querySelector('#own-pick .ls-chip') || $('own-new'); if (f) f.focus({ preventScroll: true });
-    status('The fridge list: tap the jobs you want on it (up to ten), then one owner each. Your names go in at the top whenever you like.');
+    status('The fridge list: tap the jobs you want on it (up to ' + ownWord() + '), then one owner each. Your names go in at the top whenever you like.');
   });
   if ($('path-count')) $('path-count').addEventListener('click', function () {
     state.path = 'count'; save(); renderPath();
@@ -4368,7 +4404,7 @@
     var i = +b.getAttribute('data-take'), nm = b.getAttribute('data-take-n'), list = ownersList();
     var have = list.filter(function (o) { return low(o.name) === low(nm); })[0];
     if (have) have.who = i;
-    else if (list.length >= MAX_OWN) { status('The fridge list has ten jobs already. Swap one out to add “' + nm + '”.'); return; }
+    else if (list.length >= maxOwn()) { status('The fridge list has ' + ownWord() + ' jobs already. Swap one out to add “' + nm + '”.'); return; }
     else list.push({ name: nm, who: i });
     renderOwners(); save();
     status(nameOf(i) + ' owns “' + nm + '” on the fridge list below, the remembering included.');
@@ -4495,7 +4531,7 @@
         var who = typeof o.who === 'number' && o.who >= 0 && map[o.who] != null ? map[o.who] : -1;
         var have = list.filter(function (x) { return chipKey(x.name) === chipKey(nm); })[0];
         if (have) { if (have.who < 0) have.who = who; own++; return; }
-        if (list.length >= MAX_OWN) return;
+        if (list.length >= maxOwn()) return;
         list.push({ name: nm, who: who }); own++;
       });
       // the quick look keeps itself on this device, so the fridge list made from it does too
@@ -4510,7 +4546,7 @@
       if (q.mode !== false) { saveMode('group'); setMode('group', false); }
     }
     renderAll(); save();
-    return { added: added, owners: own, total: ownersList().length, max: MAX_OWN, me: me };
+    return { added: added, owners: own, total: ownersList().length, max: maxOwn(), me: me };
   }
 
   window.TOLLemonade = { recalc: recalc, state: function () { return state; }, mode: function () { return mode; }, setMode: setMode, resultText: resultText, chatText: chatText, fridgeText: fridgeText, hoursSentence: hoursSentence, moneySentence: moneySentence, balance: balance, saveWeek: saveWeek, library: LIB, categories: CATS,

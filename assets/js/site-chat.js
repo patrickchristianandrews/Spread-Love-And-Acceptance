@@ -175,6 +175,7 @@
       });
       (c.keys || []).concat([c.name || '']).forEach(function (k) { tokens(k).forEach(function (t) { domain[t] = 1; }); });
       if (c.pat) { try { c.re = new RegExp(c.pat); } catch (e) { c.re = null; } }
+      if (c.topic) CV_PERSONAL[c.id] = 1;  // a caring topic card: it stays the topic for a few turns
     });
     cardKeys.sort(function (a, b) { return b.n - a.n; });
     // cards that answer before anything else (who can see this chat, something calming, "is it my fault?")
@@ -1629,7 +1630,8 @@
   function pageInit(state) {
     var P = state.pageCtx; state.pageDone = 1;
     if (!P) return;
-    var path = String(P.path || '').replace(/\/index\.html$/, '/').replace(/\.html?$/, '.html'), about = String(P.about || '').trim();
+    var forPage = P.forPage || FOR_PAGE[((/[?&]for=([a-z-]+)/.exec(P.path || '') || [])[1] || '').toLowerCase()] || '';
+    var path = String(P.path || '').split('?')[0].replace(/\/index\.html$/, '/').replace(/\.html?$/, '.html'), about = String(P.about || '').trim();
     if (path && !/\.html$/.test(path) && path !== '/') path = path.replace(/\/$/, '') + '.html';
     if (about) {
       var a = stNorm(about).replace(/^tell me more about /, ''), best = '';
@@ -1642,7 +1644,7 @@
     }
     function cardFor(u) { return (KB.cards || []).filter(function (c) { return c.page === u && c.first; })[0] || null; }
     // a page opened for a situation (?for=co-parent) takes that situation's topic when it has none of its own
-    if (P.forPage && !cardFor(path)) path = P.forPage;
+    if (forPage && !cardFor(path)) path = forPage;
     // the topic we were on before this page, when this page has none of its own
     var R0 = state.restore; state.restore = null;
     if (R0 && !cardFor(path) && cardById(R0.id)) state.topic = { id: R0.id, root: R0.root && cardById(R0.root) ? R0.root : R0.id, side: R0.side, turn: 0, v: 0 };

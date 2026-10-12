@@ -1594,7 +1594,7 @@
       "first": true,
       "newTopic": true,
       "name": "being left out of household decisions",
-      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b|\\b(how do i|how can i|i want to|how to) (get|have) (a|more of a) say\\b",
+      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b",
       "notPat": "\\b(ex|coparent\\w*|co parent\\w*|custody|my boss|my manager|at work|my team)\\b",
       "keys": [],
       "what": [
@@ -2377,6 +2377,22 @@
       "pat": "\\b(told|tells|tell|let|lets) me\\b.{0,40}\\b(school|trip|party|dentist|doctor|appointment|parents evening|play ?date|club|match|recital)\\b.{0,30}\\b(night before|last minute|day before|on the day|same day|that morning)\\b",
       "follow": [
         [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
         ],
@@ -2445,6 +2461,22 @@
       ],
       "follow": [
         [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
         ],
@@ -2510,6 +2542,22 @@
       ],
       "pat": "\\b(my )?(ex|co ?parent)\\b.{0,15}\\b(is|s) (honestly |so |completely |totally )?(useless|hopeless|no help)\\b",
       "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
         [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
@@ -2582,6 +2630,22 @@
       ],
       "follow": [
         [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
         ],
@@ -2647,6 +2711,22 @@
         ]
       ],
       "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
         [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
@@ -2738,6 +2818,368 @@
       ],
       "follow": [
         [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
+          "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
+          "coparentdecide"
+        ],
+        [
+          "\\b(last minute|night before|day before|short notice|on the day|told me late|tells me late|at the last)\\b",
+          "coparentlate"
+        ],
+        [
+          "\\b(shut out|left out|visitor|as a (dad|father|mum|mom|mother))\\b",
+          "coparentshutout"
+        ],
+        [
+          "\\b(useless|does nothing|do nothing|never (remembers|helps|does)|forgets everything|i do (all|everything|it all))\\b",
+          "coparentuseless"
+        ],
+        [
+          "\\b(word|wording|phrase|text|texts|texting|message|messages|email)\\b",
+          "coparenttext"
+        ],
+        [
+          "\\b(inhaler|bag|kit|medicine|medication|school (shoes|uniform|bag)|sends? (him|her|them) back)\\b",
+          "handoffkit"
+        ],
+        [
+          "\\b(books?|booked|plans?) (things|stuff|trips?|activities)?\\b.{0,20}\\bmy (weekend|weekends|time|days)\\b",
+          "exweekends"
+        ],
+        [
+          "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
+          "exschedule"
+        ]
+      ]
+    },
+    {
+      "id": "coparentsay",
+      "name": "getting a say as a co-parent",
+      "what": [
+        "You can ask for a say without starting a fight. What usually works is agreeing once, in writing, which decisions are joint, and how you ask each other."
+      ],
+      "how": [
+        "Name the joint decisions: usually school, health and anything new and regular, like a club, a sport or a camp. Day-to-day things belong to whoever has the kids that day.",
+        "Suggest a reply-by window: one of you asks by message, the other answers within 3 days. If there’s no answer by then, the one who asked can go ahead.",
+        "Keep it to one written channel, so you can both find what was agreed.",
+        "Check your parenting plan. If it says nothing, or you can’t agree, a mediator or a family-law professional can help you write it down."
+      ],
+      "script": [
+        "I’d like us both to have a say in the big things. Could we agree that school, health and new activities are joint, and that we text first and reply within 3 days?"
+      ],
+      "scriptLabels": [
+        "Asking for a say"
+      ],
+      "links": [
+        [
+          "Who decides what (co-parenting)",
+          "/co-parenting.html#who-decides"
+        ],
+        [
+          "If this may end up in court",
+          "/co-parenting.html#court"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
+          "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
+          "coparentdecide"
+        ],
+        [
+          "\\b(last minute|night before|day before|short notice|on the day|told me late|tells me late|at the last)\\b",
+          "coparentlate"
+        ],
+        [
+          "\\b(shut out|left out|visitor|as a (dad|father|mum|mom|mother))\\b",
+          "coparentshutout"
+        ],
+        [
+          "\\b(useless|does nothing|do nothing|never (remembers|helps|does)|forgets everything|i do (all|everything|it all))\\b",
+          "coparentuseless"
+        ],
+        [
+          "\\b(word|wording|phrase|text|texts|texting|message|messages|email)\\b",
+          "coparenttext"
+        ],
+        [
+          "\\b(inhaler|bag|kit|medicine|medication|school (shoes|uniform|bag)|sends? (him|her|them) back)\\b",
+          "handoffkit"
+        ],
+        [
+          "\\b(books?|booked|plans?) (things|stuff|trips?|activities)?\\b.{0,20}\\bmy (weekend|weekends|time|days)\\b",
+          "exweekends"
+        ],
+        [
+          "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
+          "exschedule"
+        ]
+      ]
+    },
+    {
+      "id": "coparentafter",
+      "name": "a co-parent who already booked something",
+      "what": [
+        "It’s frustrating to hear about it once it’s already booked. You can answer this one on its own, and ask for a simple system for next time."
+      ],
+      "how": [
+        "Reply about the activity itself, briefly and kindly. If you’re happy with it, say so: it shows your ask is about being included, not about blocking.",
+        "Then ask for the system: new activities are joint, asked by message first, with a reply within 3 days.",
+        "Offer the same in return, so it doesn’t read as a telling-off.",
+        "Keep it in writing and about your child, not about who was right."
+      ],
+      "script": [
+        "I’m glad to talk about the club itself. Next time, before anything new is booked, can you text me first so we decide together? I’ll do the same.",
+        "For new activities, can we agree to text each other first and reply within 3 days?"
+      ],
+      "scriptLabels": [
+        "About this one",
+        "For next time"
+      ],
+      "links": [
+        [
+          "Who decides what (co-parenting)",
+          "/co-parenting.html#who-decides"
+        ],
+        [
+          "Talking between two homes",
+          "/co-parenting.html#talking"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
+          "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
+          "coparentdecide"
+        ],
+        [
+          "\\b(last minute|night before|day before|short notice|on the day|told me late|tells me late|at the last)\\b",
+          "coparentlate"
+        ],
+        [
+          "\\b(shut out|left out|visitor|as a (dad|father|mum|mom|mother))\\b",
+          "coparentshutout"
+        ],
+        [
+          "\\b(useless|does nothing|do nothing|never (remembers|helps|does)|forgets everything|i do (all|everything|it all))\\b",
+          "coparentuseless"
+        ],
+        [
+          "\\b(word|wording|phrase|text|texts|texting|message|messages|email)\\b",
+          "coparenttext"
+        ],
+        [
+          "\\b(inhaler|bag|kit|medicine|medication|school (shoes|uniform|bag)|sends? (him|her|them) back)\\b",
+          "handoffkit"
+        ],
+        [
+          "\\b(books?|booked|plans?) (things|stuff|trips?|activities)?\\b.{0,20}\\bmy (weekend|weekends|time|days)\\b",
+          "exweekends"
+        ],
+        [
+          "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
+          "exschedule"
+        ]
+      ]
+    },
+    {
+      "id": "coparentnoreply",
+      "name": "a co-parent who doesn’t reply",
+      "what": [
+        "If the reply-by window passes with no answer, you don’t have to keep chasing. That’s what the window is for: many co-parents agree that the one who asked can then go ahead."
+      ],
+      "how": [
+        "Send one short reminder with a date: what, when, and by when you need an answer.",
+        "If the date passes, do what you said, calmly, and keep the message thread as your record.",
+        "For the big things (school, health), don’t go ahead on silence: check your parenting plan, or ask a mediator.",
+        "Answer only the question asked, and skip any digs. If talking keeps going badly, parallel parenting (less contact, one written channel) can help."
+      ],
+      "script": [
+        "Just checking you saw my message about swimming. Can you let me know by Friday? If I don’t hear back, I’ll go ahead and book it."
+      ],
+      "scriptLabels": [
+        "One reminder, with a date"
+      ],
+      "links": [
+        [
+          "Who decides what (co-parenting)",
+          "/co-parenting.html#who-decides"
+        ],
+        [
+          "When the other parent won’t cooperate",
+          "/co-parenting.html#parallel"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
+          "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
+          "coparentdecide"
+        ],
+        [
+          "\\b(last minute|night before|day before|short notice|on the day|told me late|tells me late|at the last)\\b",
+          "coparentlate"
+        ],
+        [
+          "\\b(shut out|left out|visitor|as a (dad|father|mum|mom|mother))\\b",
+          "coparentshutout"
+        ],
+        [
+          "\\b(useless|does nothing|do nothing|never (remembers|helps|does)|forgets everything|i do (all|everything|it all))\\b",
+          "coparentuseless"
+        ],
+        [
+          "\\b(word|wording|phrase|text|texts|texting|message|messages|email)\\b",
+          "coparenttext"
+        ],
+        [
+          "\\b(inhaler|bag|kit|medicine|medication|school (shoes|uniform|bag)|sends? (him|her|them) back)\\b",
+          "handoffkit"
+        ],
+        [
+          "\\b(books?|booked|plans?) (things|stuff|trips?|activities)?\\b.{0,20}\\bmy (weekend|weekends|time|days)\\b",
+          "exweekends"
+        ],
+        [
+          "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
+          "exschedule"
+        ]
+      ]
+    },
+    {
+      "id": "coparentdecider",
+      "name": "being told you decide everything",
+      "pat": "\\b(he|she|they|my ex|my (husband|wife|partner|coparent|co parent))\\b.{0,20}\\b(says|said|thinks|complains|tells me|told me|accuses me of|keeps saying)\\b.{0,12}\\b(that )?(i|i m|im)( always)? (make|making|made|take|taking|decide|deciding|decided|call|calling)\\b.{0,20}\\b(all |every |the |most )?(decisions?|choices|calls|everything)\\b|\\bi (make|made|take) all the decisions\\b",
+      "what": [
+        "That can be hard to hear, especially if you make the calls because someone has to. The useful question is usually which decisions they’d like to share, not who is right."
+      ],
+      "how": [
+        "Ask which decisions matter most to them: school, health, new activities, money.",
+        "For those, offer a simple rule: you message first, and they reply within a few days. If there’s no reply, you go ahead.",
+        "Small, everyday things can stay with whoever is handling them that day.",
+        "Say what would help you too, like quicker replies, so it’s a deal and not a telling-off."
+      ],
+      "script": [
+        "I don’t want you to feel left out. Which decisions matter most to you? For those, I’ll message first, and if you can reply within 3 days, we’ll decide together."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Who decides what (co-parenting)",
+          "/co-parenting.html#who-decides"
+        ],
+        [
+          "Check-ins: short, regular, kind",
+          "/check-ins.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
+        [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
         ],
@@ -2805,8 +3247,20 @@
       "chips": [],
       "follow": [
         [
-          "\\b(get a say|have a say|my say|decid\\w*|ask me|agree|tell me first)\\b",
-          "coparentdecide"
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
         ],
         [
           "\\b(last minute|night before|day before|short notice|told me late)\\b",
@@ -2823,6 +3277,10 @@
         [
           "\\b(word|wording|text|texts|message|messages)\\b",
           "coparenttext"
+        ],
+        [
+          "\\b(decid\\w*|ask me|agree|tell me first)\\b",
+          "coparentsay"
         ]
       ]
     },
@@ -2836,29 +3294,41 @@
       "notPat": "\\b(ex (husband|wife|partner|boyfriend|girlfriend)? ?(texts|messages|calls|harass\\w*))\\b",
       "keys": [],
       "what": [
-        "It’s tiring to always be the one who remembers, and worrying when it’s medicine. A checklist that travels with the bag usually works better than reminders."
+        "It’s tiring to always be the one who remembers. A checklist that travels with the bag usually works better than reminders."
       ],
       "how": [
-        "Make a handover checklist that lives in your child’s bag: inhaler, medicines, glasses, homework, charger.",
-        "Better still, ask the doctor or pharmacy for a second inhaler, so each home has one.",
-        "Send one calm, factual message about the safety items only, in writing.",
-        "Keep the handover itself short and friendly. Sort the list by message, not at the door."
+        "Make a handoff checklist that lives in your child’s bag: school things, clothes, charger, and any medicine or glasses.",
+        "For anything medical, ask the doctor or pharmacy for a second one, so each home has its own.",
+        "Send one calm, factual message about the things that matter most, in writing.",
+        "Keep the handoff itself short and friendly. Sort the list by message, not at the door."
       ],
       "script": [
-        "The inhaler needs to come back in their bag every time. I’ve put a list in the bag. Could you check it before drop-off?"
+        "I’ve put a list in the bag of what goes back and forth. Could you check it before drop-off?"
       ],
       "links": [
         [
-          "The handover bag and checklist",
+          "The handoff-bag checklist",
           "/co-parenting.html#handoff-bag"
-        ],
-        [
-          "Calmer handovers",
-          "/co-parenting.html#handoff"
         ]
       ],
       "chips": [],
       "follow": [
+        [
+          "\\b(ignores?|ignoring|ignored|doesnt (reply|answer|respond|get back)|does not (reply|answer|respond)|dont (reply|answer|respond)|no (reply|answer|response)|wont (reply|answer|respond|agree)|never (replies|answers|responds|gets back)|(3|three) days? (thing|rule|window)|the (3|three) days|reply by|the window|leaves? me on read)\\b",
+          "coparentnoreply"
+        ],
+        [
+          "\\b(get a say|have a say|my say|any say|a say in)\\b",
+          "coparentsay"
+        ],
+        [
+          "\\b(says|said|thinks|tells me|told me|accuses me)\\b.{0,12}\\b(i|i m|im)( always)? (make|making|made|take|decide|deciding|decided)\\b",
+          "coparentdecider"
+        ],
+        [
+          "\\b(signed|signs|enrolled|booked|registered|put) (him|her|them|\\w+) (up|in|on|for|into)\\b|\\b(signed|booked|enrolled) (him|her|them|\\w+)\\b.{0,30}\\bwithout (asking|telling|checking|consulting)\\b|\\balready (booked|signed|paid|enrolled)\\b",
+          "coparentafter"
+        ],
         [
           "\\b(decid\\w*|decision\\w*|without (asking|telling|checking with) me|get a say|have a say|my say|sign\\w* (him|her|them) up|enrol\\w*)\\b",
           "coparentdecide"
@@ -2891,6 +3361,14 @@
           "\\b(holiday|holidays|christmas|summer|schedule|rota)\\b",
           "exschedule"
         ]
+      ],
+      "sides": [
+        {
+          "re": "\\b(inhaler|medicine|medication|meds|epipen|insulin|tablets|pills)\\b",
+          "what": [
+            "It’s tiring to always be the one who remembers, and worrying when it’s medicine. A checklist that travels with the bag usually works better than reminders."
+          ]
+        }
       ]
     },
     {
@@ -14702,6 +15180,29 @@
         [
           "A coworker doesn’t pull their weight",
           "My coworker doesn’t pull their weight"
+        ]
+      ]
+    },
+    {
+      "id": "getasay",
+      "pat": "^(so |but |and |ok |okay )*(how (do|can|could|should) i|i want to|how to|i need to|how do we|how can we) (get|have) (a|more of a|any|more) say( in (things|this|it|decisions|anything))?$",
+      "x": "Happy to help you get more of a say. Who is it with?",
+      "chips": [
+        [
+          "My ex or co-parent",
+          "My ex makes decisions about our kids without asking me"
+        ],
+        [
+          "My partner, at home",
+          "Decisions at home get made without me"
+        ],
+        [
+          "My family",
+          "My family makes decisions without asking me"
+        ],
+        [
+          "At work",
+          "Decisions at work get made without me"
         ]
       ]
     }
