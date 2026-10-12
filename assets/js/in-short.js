@@ -51,7 +51,7 @@
     '/relationships-in-depth.html': ['Every chapter, worksheet and tool works for any two people, not just couples.', 'Each kind of relationship has a suggested place to start.', 'Start with yourself, then bring in the other person when you’re both ready.'],
     '/suite-index-in-depth.html': ['An honest list of what’s live in the program today.', 'The workpapers work best in the order listed.', 'If something isn’t on this list, it isn’t built yet.'],
     '/turning-toward-in-depth.html': ['Connection is built in small moments: noticing bids and answering them.', 'Specific thanks, celebrating good news and small rituals keep people close.', 'It works in every kind of relationship, and can be adjusted for different wiring.'],
-    '/ways-in-in-depth.html': ['Some pages are open to everyone with no sign-up.', 'Everything is open to everyone, with no sign-up, while the program is being built.', 'Paid membership comes later, and the page says what each level shares.'],
+    '/ways-in-in-depth.html': ['Everything here is free, for everyone.', 'There is no sign-up, no account and no paid version.', 'Email updates are optional, and the page says exactly what each part shares.'],
     '/wired-differently-in-depth.html': ['People wired differently can hear the same sentence in very different ways.', 'Misunderstanding runs in both directions; nobody is the broken one.', 'Clear, kind, direct words, and asking how someone likes to receive them, help everyone.'],
     '/wp-11-in-depth.html': ['Make your calm-down plan before you need it.', 'In the moment, settle your body first, then talk. Name a time to come back.', 'Coming back to the talk is part of the plan, not an afterthought.']
   };

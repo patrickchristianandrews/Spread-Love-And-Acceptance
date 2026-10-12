@@ -299,7 +299,7 @@
         ['/on-my-own.html#part-time-parent','Part-time with your kids','Weekend ideas, the Sunday goodbye, and staying close in between.']
       ]},
     { id:'unsure', ico:'\uD83E\uDD14', label:'I am not sure this is for me',
-      say:'Fair. It fits some situations and not others, and it is better to find that out now than after three worksheets. Nothing here costs anything while it is being built.',
+      say:'Fair. It fits some situations and not others, and it is better to find that out now than after three worksheets. Nothing here costs anything, and there is no paid version.',
       picks:[
         ['/is-this-for-you.html','Is this right for you?','What it is, what it is not, and who it does not suit.'],
         ['/how-it-works.html','How it works','The whole idea in plain language, in about four minutes.'],

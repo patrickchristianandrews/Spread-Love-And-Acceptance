@@ -114,7 +114,7 @@ OVERRIDE = {
         'lifetime of wondering how people work, and a free, growing suite of tools for kinder relationships.'),
     'legal/privacy-policy.html': ('Privacy Policy', 'How Spread Love & Acceptance handles your information: what you type in the tools stays on your device.'),
     'legal/terms-of-service.html': ('Terms of Service', 'The terms for using Spread Love & Acceptance and The Objective Ledger.'),
-    'legal/refund-policy.html': ('Cancellation & Refund Policy', 'Cancellation and refund terms for Spread Love & Acceptance.'),
+    'legal/refund-policy.html': ('Refund Policy: Nothing Is Sold, Nothing to Refund', 'Everything on Spread Love & Acceptance is free, with no paid version, so there is nothing to refund. What to do if anyone charged you.'),
     'architecture/architecture.html': ('The site’s architecture, in detail', 'The full technical picture of how The Objective Ledger is put together: pages, tools, privacy and how it all connects.'),
     'architecture/index.html': ('How the site is built', 'How The Objective Ledger is designed and built, and why.'),
 }
@@ -200,7 +200,7 @@ SEARCH.update({
  'how-it-works.html': ('How It Works: An Outside Look at Yourself', 'How the program works: a calm, outside view of your life situation, your wiring and what you notice, like an honest auditor with no verdict on your worth.'),
  'contents.html': ('Contents: Every Free Tool, Guide and Chapter', 'Everything in the program in three parts: tools for understanding yourself, tools for any two people, and where to start in your kind of relationship.'),
  'is-this-for-you.html': ('Is This Right for You? What It Is and Isn’t', 'A free self-help program for your own stress and reactions, and a fair way for two people to see what each carries at home. Education, not counseling.'),
- 'ways-in.html': ('Ways In: Everything Is Free and Open', 'Everything here is free and open to everyone while it is being built, with no sign-up. Email updates are optional.'),
+ 'ways-in.html': ('Ways In: Everything Is Free and Open', 'Everything here is free, with no account, no sign-up and no paid version. Email updates are optional.'),
  'glossary.html': ('Glossary: The Words, in Plain English', 'Every word this site uses, from battery to talk window, in one plain sentence with an example, plus the older names some tools used to have.'),
  'roadmap.html': ('Content Roadmap: What’s Live and What’s Planned', 'What is live today, what is being written and what is planned: the Preface and Chapters I to V are live now, with Chapters VI to XII still to come.'),
  # relationship tools
@@ -588,7 +588,7 @@ def plain(s):
     return re.sub(r'\s+', ' ', text_of(s)).strip()
 
 
-# Everything is open while the site is being built (CONFIG.openAll in assets/js/site.js): no part of any page is
+# Everything is free and open (CONFIG.openAll in assets/js/site.js): no part of any page is
 # behind the sign-up, so nothing is marked as paid. Set to False if the sign-up gate comes back.
 OPEN_ALL = True
 

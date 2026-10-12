@@ -8,22 +8,20 @@
    then shows a "Dig deeper" link to it, and the in-depth page shares the simple page's
    menu entry, members lock and previous/next links.
 
-   FREE PREVIEW: while the program is being built, freePreview (below) is true.
-   Every "paid: true" page then opens for anyone who signs up with an email
-   address. The address goes to Buttondown (the newsletter list) and the page
-   unlocks in that browser right away. To start charging later, set
-   freePreview to false: the Gumroad members-list check comes back unchanged. */
+   EVERYTHING IS FREE: openAll (below) is true, so no page is locked, there is
+   no sign-up and no paid version. The email list is only an optional way to
+   hear about new pages. The old lock code (paid: true, freePreview, the
+   members check) is kept dormant and does nothing while openAll is true. */
 
 (function () {
   'use strict';
 
   // ===== Settings you edit =====
   var CONFIG = {
-    // true = everything is free with an email sign-up (unless openAll); paid membership is "coming soon"
+    // dormant: only used if openAll were false
     freePreview: true,
-    // true = everything is open to everyone while the program is being built: no sign-up, no locked
-    // sections; the email list stays as an optional way to get updates. Set to false to bring the
-    // sign-up gate (and later paid membership) back.
+    // true = everything is free and open to everyone: no sign-up, no account, no locked sections and
+    // no paid version; the email list stays as an optional way to get updates.
     openAll: true,
     signupUrl: 'https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance',
     price: '$27/month',
@@ -91,7 +89,7 @@
       { href: '/five-pillars.html', deep: true, code: '', title: 'The Five Pillars', note: 'The five ideas under everything here, how each works inside you and between you and others, and where each one shows up' },
       { href: '/how-it-works.html', deep: true, code: '', title: 'How it works', note: 'A friendly tour of what the program looks at, and why you can skip the technical bits' },
       { href: '/contents.html', deep: true, code: '', title: 'Contents', note: 'Everything in the program, in three parts, plus the full site directory' },
-      { href: '/ways-in.html', deep: true, code: '', title: 'Ways in', note: 'Free while it’s being built: what each level opens, and what it shares' },
+      { href: '/ways-in.html', deep: true, code: '', title: 'Ways in', note: 'Everything is free: no account, no paid version, and what each part shares' },
       { href: '/is-this-for-you.html', deep: true, code: '', title: 'Is this right for you?', note: 'What the program is and isn’t, who it helps, and a guide to every section' },
       { href: '/relationships.html', deep: true, code: '', title: 'How it fits your relationships', note: 'How every part of the program connects to yourself, partners, family, friends, roommates, co-parents, coworkers and caregivers' },
       { href: '/quick-checks.html', code: '', title: 'Today’s Weather', note: 'A one-minute read on your own conditions today, and what today is good for' },
@@ -282,7 +280,7 @@
       { href: '/on-this-device.html', code: '', title: 'What’s stored on this device', note: 'Everything this site keeps in your browser, in plain words, with a button to erase each one' },
       { href: '/legal/privacy-policy.html', code: '', title: 'Privacy policy', note: 'What’s collected, who holds it, and your rights' },
       { href: '/legal/terms-of-service.html', code: '', title: 'Terms of service', note: 'The rules for using the site' },
-      { href: '/legal/refund-policy.html', code: '', title: 'Refund policy', note: 'How cancellations and refunds will work once paid membership launches' }
+      { href: '/legal/refund-policy.html', code: '', title: 'Refund policy', note: 'Nothing is sold here, so there is nothing to refund' }
     ]}
   ];
 
@@ -594,7 +592,7 @@
       { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
       { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
       { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score, formula and cut-off, written out' },
-      { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Free while it’s being built: what each level opens' },
+      { href: '/ways-in.html', deep: true, title: 'Ways in', note: 'Everything is free: no account, no paid version' },
       { href: '/membership.html', title: 'Email updates', note: 'Optional: a short note when something new ships' },
       { sub: 'Policies' },
       { href: '/legal/privacy-policy.html', title: 'Privacy policy' },
@@ -3825,8 +3823,8 @@
     var g = el('div', { class: 'tol-gate', role: 'region', 'aria-label': 'Members-only content' });
     if (CONFIG.freePreview) {
       g.innerHTML =
-        '<h2>Free while it’s being built</h2>' +
-        '<p>Everything on this site is free during development. Enter your email to open every chapter, workpaper and tool. You’ll also get a short note when something new ships. Paid membership is coming later; nothing is charged now.</p>' +
+        '<h2>Everything is free</h2>' +
+        '<p>Everything on this site is free. Enter your email to open every chapter, workpaper and tool. You’ll also get a short note when something new ships. Nothing is charged now.</p>' +
         (compact ? '' : '<div class="tol-actions"><a class="tol-btn is-quiet" href="/is-this-for-you.html">Is this right for you?</a></div>') +
         '<form class="tol-signin" novalidate>' +
           '<label for="tol-email-' + Math.random().toString(36).slice(2, 7) + '">Email address</label>' +
