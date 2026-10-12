@@ -4426,12 +4426,32 @@
       } else if (m) j.pick = m;
       state.jobs.push(j); added++;
     });
-    // paid work + travel typed in the quick look ("Someone works long hours or is ill"): one "Paid work" line, hours a week
+    // paid work + travel typed in the quick look ("Someone works long hours or is ill"): one "Paid work" line, hours a week.
+    // Someone who works nights: their paid hours ARE the night shifts (never a third line on top), and the
+    // sleep after them follows from the number of shifts (12-hour shifts, 7 hours' sleep after each).
+    // A number typed for someone else on this device is marked (qv), so it never counts as their side.
     if (Array.isArray(q.work) && q.work.some(function (x) { return num(x) > 0; })) {
-      var pw = state.jobs.filter(function (j) { return !j.ex && kindOf(j) === 'work' && /^paid work/.test(low(j.name)); })[0];
-      if (!pw) { pw = { name: 'Paid work', v: zeros(), t: zeros(), cat: 'work', freq: 'week', unit: 'h', nm: zeros() }; state.jobs.push(pw); added++; }
-      q.work.forEach(function (x, qi) { var k = map[qi]; if (k != null && k >= 0 && num(x) > 0 && !num(pw.v[k]) && num(x) <= 168) { if (pw.unit === 'm') pw.v[k] = Math.round(num(x) * 60 / mult(pw, k)); else pw.v[k] = Math.round(num(x) / mult(pw, k) * 10) / 10; } });
-      delete pw.pick;
+      var nightsOf = function (re) { var r = state.jobs.filter(function (j) { return !j.ex && kindOf(j) === 'work' && re(j); })[0]; return r || null; };
+      var ns = nightsOf(isNightShift), rs = nightsOf(isNightSleep);
+      var nightWho = function (nameRe) { var x = (q.jobs || []).filter(function (o) { return nameRe.test(low(o.name)); })[0]; return x && typeof x.who === 'number' ? x.who : null; };
+      var nsWho = nightWho(/^night shifts?$/), rsWho = nightWho(/recovery sleep|sleep after/);
+      var toWeek = function (j) { if (!j || (j.freq === 'week' && j.unit === 'h' && !j.fq)) return; state.people.forEach(function (_, i) { var h = rawH(j, i); j.v[i] = h ? Math.round(h * 10) / 10 : 0; }); j.freq = 'week'; j.unit = 'h'; delete j.fq; };
+      var mark = function (j, k, x) { j.v[k] = x; if (k !== me) { j.qv = fit(j.qv, state.people.length, 0); j.qv[k] = x; } };
+      var pw = null;
+      q.work.forEach(function (x, qi) {
+        var k = map[qi], h = num(x); if (k == null || k < 0 || !h || h > 168) return;
+        var nights = ns && nsWho != null && (nsWho === qi || nsWho === -1);
+        if (nights) {
+          toWeek(ns); mark(ns, k, h);
+          if (rs && rsWho != null && (rsWho === qi || rsWho === -1)) { toWeek(rs); mark(rs, k, Math.round(h / 12 * 7 * 10) / 10); }
+          return;
+        }
+        if (!pw) pw = state.jobs.filter(function (j) { return !j.ex && kindOf(j) === 'work' && /^paid work/.test(low(j.name)); })[0];
+        if (!pw) { pw = { name: 'Paid work', v: zeros(), t: zeros(), cat: 'work', freq: 'week', unit: 'h', nm: zeros() }; state.jobs.push(pw); added++; }
+        if (num(pw.v[k])) return;
+        mark(pw, k, pw.unit === 'm' ? Math.round(h * 60 / mult(pw, k)) : Math.round(h / mult(pw, k) * 10) / 10);
+        delete pw.pick;
+      });
     }
     // a fair split picked in the quick look, when none is set here
     if (Array.isArray(q.split) && q.split.length === 2 && !state.agreed.on) {

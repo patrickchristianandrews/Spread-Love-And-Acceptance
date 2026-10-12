@@ -195,9 +195,9 @@
   <h3 id="both-families">What we’ll tell both families</h3>
   <p>Write one message together, then each of you sends it to your own family, in your own words.</p>
   <label for="pc-decision">What you decided</label>
-  <input id="pc-decision" type="text" placeholder="Eid at ours, Christmas with your parents, and both grandmothers at the naming day">
+  <input id="pc-decision" type="text" autocomplete="off" placeholder="Eid at ours, Christmas with your parents, and both grandmothers at the naming day">
   <label for="pc-msg">The message (change any of it)</label>
-  <textarea id="pc-msg" rows="6">We’ve thought about this a lot, and we’ve decided together: [your decision]. Both of our families and both of our traditions matter to us, and we want the children to know and love both. We’d love your support, and we want you close.</textarea>
+  <textarea id="pc-msg" rows="6" autocomplete="off">We’ve thought about this a lot, and we’ve decided together: [your decision]. Both of our families and both of our traditions matter to us, and we want the children to know and love both. We’d love your support, and we want you close.</textarea>
   <p class="pc-row"><button type="button" class="pc-btn" id="pc-check">Check it in the Signal Translator</button> <button type="button" class="pc-btn is-quiet" id="pc-copy">Copy</button> <span id="pc-note" role="status"></span></p>
   <p class="pc-small">Your words stay on this device. The Translator opens with them filled in, set to Family.</p>
 </div>
@@ -292,15 +292,32 @@
     function fallback() { var ta = document.createElement('textarea'), ok = false; ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); done(ok); }
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { done(true); }, fallback); else fallback();
   }
-  // What we'll tell both families: the decision drops into the message
+  // What we'll tell both families: the decision drops into the message.
+  // The slot is tracked by position (not by searching for the old text), so
+  // typing never touches any other words, and edits elsewhere move it along.
   var dec = $('pc-decision'), msg = $('pc-msg'), note = $('pc-note');
   if (dec && msg) {
-    var tpl = msg.value, last = '[your decision]';
+    var PH = '[your decision]';
+    var slotAt = msg.value.indexOf(PH), slotLen = PH.length, prev = msg.value;
+    msg.addEventListener('input', function () {
+      var v = msg.value;
+      if (slotAt >= 0) {
+        var cp = 0, max = Math.min(prev.length, v.length);
+        while (cp < max && prev.charAt(cp) === v.charAt(cp)) cp++;
+        var cs = 0;
+        while (cs < max - cp && prev.charAt(prev.length - 1 - cs) === v.charAt(v.length - 1 - cs)) cs++;
+        var oldEnd = prev.length - cs, delta = v.length - prev.length;
+        if (oldEnd <= slotAt) slotAt += delta;             // edit before the slot
+        else if (cp >= slotAt + slotLen) { /* edit after the slot */ }
+        else slotAt = -1;                                  // they rewrote that part themselves
+      }
+      prev = v;
+    });
     dec.addEventListener('input', function () {
-      var d = dec.value.trim().replace(/[.]+$/, '') || '[your decision]';
-      if (msg.value.indexOf(last) !== -1) msg.value = msg.value.replace(last, d);
-      else if (msg.value === tpl) msg.value = tpl.replace('[your decision]', d);
-      last = d; note.textContent = '';
+      var d = dec.value.trim().replace(/[.]+$/, '') || PH;
+      if (slotAt < 0) { note.textContent = 'You changed that part of the message, so add your decision to it in your own words.'; return; }
+      msg.value = msg.value.slice(0, slotAt) + d + msg.value.slice(slotAt + slotLen);
+      slotLen = d.length; prev = msg.value; note.textContent = '';
     });
     $('pc-copy').addEventListener('click', function () { copyText(msg.value, note); });
     $('pc-check').addEventListener('click', function () {

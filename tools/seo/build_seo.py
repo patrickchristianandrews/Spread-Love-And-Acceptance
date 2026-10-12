@@ -250,6 +250,9 @@ SEARCH.update({
  'frequency-buddies-season-2.html': ('Frequency Buddies Season 2: Watch the Teaser', 'Frequency Buddies Season 2 is coming: watch the two-minute teaser with Tidbit and Sugarfoot, spot the five hidden secrets and pick the new place you can’t wait to see.'),
  'pal-cam-tv.html': ('Pal Cam TV: A Cozy Cartoon Puppy Cam for Your TV', 'Leave two cartoon pups playing and napping on your TV all day, with calm music and light that follows the time of day. Free, no sign-up, ready to cast.'),
  # the book
+ 'book/index.html': ('The Book: The Objective Ledger, Free to Read Online', 'Read the whole free book in order, like any book: 24 chapters in three parts on yourself, sharing a life, and understanding people. Short and full versions, or all of it on one page to print.'),
+ 'book/whole.html': ('The Whole Book on One Page (Short Versions)', 'Every chapter of The Objective Ledger, in order, on one page: read straight through, search it, or print it or save it as a PDF. Free, no sign-up.'),
+ 'book/whole-in-depth.html': ('The Whole Book on One Page (Full Versions)', 'Every chapter of The Objective Ledger in its full version, in order, on one page, ready to read straight through or print. Free, no sign-up.'),
  'book/preface.html': ('Preface: The work nobody sees', 'The Preface: the planning, remembering and noticing that keeps a home running, why this invisible work goes unseen, and how seeing it changes everything.'),
  'book/chapter-1.html': ('Chapter I: Why we get out of tune', 'Chapter I: why kind people still end up resentful at home, and how small mismatches in pace, tone and what we expect add up, plus how to get back in tune.'),
  'book/chapter-2.html': ('Chapter II: Is the split working?', 'Chapter II: a fair way to ask whether the division of labor at home is working for everyone, counting time, effort and the invisible jobs, never blame.'),

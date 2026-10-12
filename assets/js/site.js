@@ -187,6 +187,7 @@
       { href: '/en-espanol.html', code: '', title: 'En español', note: 'Pasos cortos para cuando los hijos pelean, cuando estás muy enojado, y si no estás a salvo en casa' }
     ]},
     { id: 'book', title: 'The book', blurb: 'Three parts. Part One is the most important: yourself. Part Two is between us, one idea per chapter, each paired with a workpaper that puts it to use. Part Three is understanding people: how feelings, stress, trust, change and healing work, for anyone, anywhere.', items: [
+      { href: '/book/index.html', code: 'Book', title: 'The book: contents and start reading', note: 'Read it like any book, from the first page: every chapter in order, the whole book on one page, and a printable copy' },
       { sub: 'Part One: The most important, yourself' },
       { href: '/book/self-1-then.html', deep: true, code: 'Then', title: 'Where you came from', note: 'Where your lens came from: growing up, old rules and what life taught you' },
       { href: '/book/self-2-now.html', deep: true, code: 'Now', title: 'Who you are today', note: 'Your wiring, your weather and your words, and what is fair to you' },
@@ -534,6 +535,7 @@
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library, guides and stories. Each page has a short version and a deeper one.', items: [
+      { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'The whole book in order, from the first page, or on one page to print' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words, with the evidence and its limits' },
       { href: '/glossary.html', code: 'Words', title: 'Glossary', note: 'Every word the site uses, in plain English' },
@@ -2155,7 +2157,24 @@
     nav.innerHTML = '<p class="tol-chbar-k">' + (isSelfPart(here) ? 'Part One: ' + esc(here.code) + '<span> · yourself</span>' : here.code === 'Preface' ? 'Preface to Part Two<span> · before Chapter I</span>' :
       isPartThree(here) ? 'Part Three · Chapter ' + esc(here.code) + ' <span>of ' + book.filter(isPartThree).length + '</span>' : 'Part Two · Chapter ' + esc(here.code) + ' <span>of V</span>') + '</p><ol>' + items + '</ol>' +
       '<p class="tol-chbar-nav">' + (at > 0 ? '<a href="' + (inDepth && book[at - 1].deep ? deepHref(book[at - 1]) : book[at - 1].href) + '" rel="prev">&larr; Previous</a>' : '') +
-      (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/contents.html">Back to the contents &rarr;</a>') + '</p>';
+      (at < book.length - 1 ? '<a href="/book/" class="tol-chbar-home">Contents</a>' : '') +
+      (at < book.length - 1 ? '<a href="' + (inDepth && book[at + 1].deep ? deepHref(book[at + 1]) : book[at + 1].href) + '" rel="next">Next &rarr;</a>' : '<a href="/book/">The book&rsquo;s contents &rarr;</a>') + '</p>';
+    // Book view (the default on chapters): just the text and the way on, like a printed book.
+    // "Show the extras" brings back the music, cartoons, quizzes, tips and reading cards; remembered on this device.
+    var root = document.documentElement;
+    var extrasOn = function () { return lsGet('tol-book-extras') === '1'; };
+    var xb = el('button', { type: 'button', class: 'tol-chbar-x no-bubble' });
+    var syncX = function () {
+      root.classList.toggle('tol-bookview', !extrasOn());
+      xb.setAttribute('aria-pressed', String(extrasOn()));
+      xb.textContent = extrasOn() ? T('Just the text', 'Solo el texto') : T('Show the extras', 'Mostrar los extras');
+      xb.title = extrasOn() ? T('Hide the music, cartoons, quizzes and tips so the chapter reads like a book', 'Ocultar música, dibujos y juegos') : T('Bring back the music, cartoons, quizzes and tips', 'Volver a mostrar los extras');
+    };
+    xb.addEventListener('click', function () { lsSet('tol-book-extras', extrasOn() ? '' : '1'); syncX(); });
+    syncX();
+    if (here.deep) nav.querySelector('.tol-chbar-nav').appendChild(el('a', { class: 'tol-chbar-ver', href: inDepth ? here.href : deepHref(here) },
+      inDepth ? T('Short version', 'Versión corta') : T('Full version', 'Versión completa')));
+    nav.querySelector('.tol-chbar-nav').appendChild(xb);
     var head = main.querySelector('.read-head');
     if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);
   }
