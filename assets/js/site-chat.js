@@ -20,7 +20,7 @@
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var HONEST_LINE = 'I don’t make things up: every answer comes from this site’s own pages, written and checked by people. I can still pick the wrong topic, so if I miss, tell me “that’s not it”. I’m not a therapist and can’t diagnose.';
   // "can I trust your answers?", "do you hallucinate?", "are you AI?": where the answers come from, honestly
-  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you say|this chat|puddles)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real))\b/;
+  var TRUST_Q = /\b(can i (trust|believe|rely on) (you|your answers?|what you (say|tell me|tell|write)|anything you (say|tell me)|this chat|puddles|the professor)|do you (ever )?(hallucinate|make (things|stuff|it) up|invent (things|stuff|answers)|lie|guess)|are you (an? )?(ai|a\.i|chat ?bot|chatgpt|chat gpt|gpt|llm|language model|bot|robot|real|human|real person)|is this (an? )?(ai|chatgpt|chat gpt|bot|chatbot|real person)|are your answers (true|real|reliable|accurate|right|correct|checked|made up)|where do (your|you get your) answers come from|where do you get (your|the) (answers|information|info)|how do you know (all )?(this|that|things)|are you (making|making this|making that) up|is this made up|is (this|that|it) (real|professional|proper|good|reliable|trustworthy) advice|can i trust (this|this site|it|the answers?)|are you (rule ?based|scripted|generative|a generative ai|accurate|reliable|always right)|do you (ever )?(get (things|it|stuff) wrong|make mistakes)|is puddles (an? )?(ai|bot|chatbot|real))\b/;
   // "what modes do you have?", "what is deep mode?": light and deep, explained
   var MODES_Q = /\b(what|which) (modes?|ways (to|of) (chat|talk)\w*) (do you have|have you got|are there|can (i|we) (use|pick|choose))\b|^(what|which) modes( are there)?$|\bwhat (is|s|are) (the )?(deep mode|talk deep|deep talk|light mode|small talk mode)\b|\bdifference between (small talk|light mode|light talk|light) and (deep|talk deep|deep talk|deep mode)\b|\bhow (do|does) (talk deep|deep mode|deep talk|small talk mode) work\b|\b(explain|tell me about) (your|the) modes\b/;
   // internal or structural headings never offered as a likely topic
@@ -89,7 +89,7 @@
     }, []).map(function (x) { return x.trim(); }).filter(Boolean);
   }
   function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
-  function safePath(u) { return typeof u === 'string' && /^\/[A-Za-z0-9._\-\/]*(#[A-Za-z0-9._\-:]*)?$/.test(u) && u.indexOf('//') === -1; }
+  function safePath(u) { return typeof u === 'string' && /^\/[A-Za-z0-9._\-\/]*(\?[a-z]+=[A-Za-z0-9._\-]+(&[a-z]+=[A-Za-z0-9._\-]+)*)?(#[A-Za-z0-9._\-:]*)?$/.test(u) && u.indexOf('//') === -1; }
 
   var ROLE = {};
   'partner partners husband wife spouse boyfriend girlfriend mom mum dad mother father parent parents son daughter kid kids child children brother sister sibling family friend friends roommate roommates flatmate housemate boss coworker coworkers colleague manager team people person he she they him her them we'
@@ -387,7 +387,7 @@
     return [(start > 0 ? '… ' : '') + text + (end < ss.length - 1 ? ' …' : '')];
   }
 
-  var LEAD_FIRST = ['Here’s what the site says:', 'The site puts it like this:', 'Here’s the gist, from the site:', 'This part of the site fits:'];
+  var LEAD_FIRST = ['Here’s what the site says:', 'Here’s the gist, from the site:', 'This part of the site fits:'];
   var LEAD_MORE = ['Related, and worth knowing:', 'It also connects to this:', 'Another page adds:'];
   var LEAD_NEXT = ['Here’s a bit more on that:', 'Another part of the site on this:', 'There’s more here too:'];
 
@@ -405,9 +405,16 @@
     var s = String(t || '').replace(/\s*[—|–·-]\s*(Spread Love (&|and) Acceptance|The Objective Ledger)\b.*$/, '').trim();
     return s || String(t || '');
   }
+  // page furniture that slips into a passage ("Then test your ask in the Signal Translator →", "What’s this?") reads as noise in a chat
+  function dechrome(x) {
+    return String(x).replace(/[^.!?…”]*→\.?/g, ' ').replace(/\s*What’s this\?[^.]*\.?/g, ' ').replace(/\s*(Goes with Chapter [IVX]+[^.·]*[.·]?|Do all your sheets in one place\.?|On the full version and on the PDF[^.]*\.)/g, ' ').replace(/\s+/g, ' ').trim();
+  }
   function passageBlock(i, qterms) {
     var d = KB.docs[i];
-    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : pageName(unshout(d.h)), src: d.tip ? '' : pageName(d.t), x: excerpt(d, qterms).map(unshout), u: safePath(d.u) ? d.u : '', l: d.l || '' };
+    var x = excerpt(d, qterms).map(unshout).map(dechrome).filter(Boolean);
+    // the coming-out page's example partner is “Dani”; in a chat that reads as if he got someone's partner's name wrong
+    if (/^\/coming-out/.test(d.u || '')) x = x.map(function (t) { return t.replace(/\bDani\b/g, '[their name]'); });
+    return { k: 'passage', i: i, h: d.tip ? 'A little tip' : pageName(unshout(d.h)), src: d.tip ? '' : pageName(d.t), x: x.length ? x : excerpt(d, qterms), u: safePath(d.u) ? d.u : '', l: d.l || '' };
   }
 
   // Follow-up chips: glossary terms mentioned in what was shown, then headings of other good hits.
@@ -424,7 +431,7 @@
     (hits || []).slice(0, 12).forEach(function (h) {
       if (out.length >= limit) return;
       var d = KB.docs[h.i], p = d.u.split('#')[0];
-      if (used[h.i] || d.tip || pages[p] || h.cov < 0.3) return;
+      if (used[h.i] || d.tip || pages[p] || h.cov < 0.3 || /^\/(about\.html|architecture\/)/.test(d.u)) return;
       used[h.i] = 1; pages[p] = 1;
       out.push({ label: d.h.length > 48 ? d.h.slice(0, 46).replace(/\s+\S*$/, '') + '…' : d.h, doc: h.i });
     });
@@ -882,8 +889,9 @@
         return to;
       });
     });
-    low = low.replace(/[a-z][a-z']*/g, function (w) {
-      var key = w.replace(/'/g, ''), to = (KB.spell || {})[w] || (KB.spell || {})[key];
+    low = low.replace(/[a-zà-öø-ÿ][a-zà-öø-ÿ']*/g, function (w) {
+      var key = esFold(w.replace(/'/g, '')).replace(/\s+/g, ''), to = (KB.spell || {})[w] || (KB.spell || {})[key];
+      if (/[à-öø-ÿ]/.test(w)) { known++; return w; }  // a word with an accent (fiancé, construcción) is a real word, typed carefully
       if (to) { to = to.toLowerCase(); if (fold(to) !== fold(w)) fixes.push([w, to]); known++; return to; }
       if (knownWord(key) || NAMES[key]) { known++; return w; }
       // contractions are real words: "we've" is not a typo for "wave"
@@ -915,9 +923,18 @@
     });
     return best ? (KB.cards || [])[best.c] : null;
   }
-  function cardReply(state, c, aspect) {
+  function cardReply(state, c, aspect, side0) {
     var b = [], chips = [];
-    if (c.kind === 'intent') { aspect = 'about'; c = sideOf(c, state.curF); }
+    // "what does STDE mean?", "who is the Comet?": that one archetype, not all sixteen
+    if (c.id === 'wl-archetypes' && !/\b(all|every|list|sixteen|16)\b/.test(state.curF || '')) {
+      var one = (c.how || []).filter(function (x) { var m = /^([A-Z]{4}), the ([^:]+):/.exec(x); return m && (new RegExp('\\b' + m[1].toLowerCase() + '\\b').test(state.curF || '') || new RegExp('\\bthe ' + m[2].toLowerCase() + '\\b').test(state.curF || '')); });
+      if (one.length === 1) {
+        state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name };
+        return { blocks: [{ k: 'p', x: one[0] }, { k: 'p', x: 'Each of the four letters is one dial of how you take in and share things. An archetype is a picture of how someone tends to think, talk and listen, not a box.' }, { k: 'links', x: safeLinks(c.links).slice(0, 2) }],
+          chips: [{ label: 'What do the letters mean?', q: 'What do the Wave Code letters mean?' }, { label: 'All sixteen archetypes', q: 'List all 16 Wavelength archetypes' }], kind: 'card', id: c.id };
+      }
+    }
+    if (c.kind === 'intent') { aspect = 'about'; c = sideOf(c, state.curF, side0); }
     if (aspect === 'math' && !c.math) aspect = c.results ? 'results' : 'about';
     if (aspect === 'results' && !c.results) aspect = 'about';
     if (aspect === 'how' && !(c.how && c.how.length)) aspect = 'about';
@@ -928,7 +945,7 @@
       // the same answer twice in a row reads like a machine: the second time, just the words to use and where to read more
       if (state.easy && c.plain && c.plain.length) { state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name }; return { blocks: easyBlocks(c), chips: [{ label: 'Tell me more', q: 'Tell me more' }], kind: 'card', id: c.id, noBrief: 1 }; }
       var again = c.kind === 'intent' && state.last && state.last.card === c.id && alike(state.prevF, state.curF) >= 0.5;
-      var clearQ = /^(is|are|does|do|can|could|should|what|whats|why|how|when|where|which|who|will|would)\b/.test(state.curF || '') && (state.curF || '').split(' ').length >= 4;
+      var clearQ = (/^(is|are|does|do|can|could|should|what|whats|why|how|when|where|which|who|will|would)\b/.test(state.curF || '') && (state.curF || '').split(' ').length >= 4) || /^(no|nope|wrong|not that)\b|\b(thats|that s) not (it|right|what i)\b|\bnot a teen\b|\b(i m|im|i am) an adult\b/.test(state.curF || '');
       var same = !again && !clearQ && c.kind === 'intent' && state.last && state.last.card === c.id && c.how && c.how.length > 1;
       if (again) b.push({ k: 'p', x: 'That’s the same thing we just looked at, so here’s the short version. The page below has the rest.' });
       else if (same) {
@@ -943,7 +960,7 @@
         var lk2 = safeLinks(c.links).slice(0, 1);
         if (lk2.length) b.push({ k: 'links', x: lk2 });
         state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk2[0] && lk2[0][1] };
-        return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id };
+        return { blocks: b, chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id, side: c.side };
       }
       else {
         (Array.isArray(c.what) ? c.what : [c.what]).forEach(function (x) { if (x) b.push({ k: 'p', x: x }); });
@@ -964,7 +981,7 @@
     (c.chips || []).forEach(function (x) { chips.push({ label: x[0], q: x[1] }); });
     if (c.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
     state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: links[0] && links[0][1] };
-    return { blocks: b, chips: chips.slice(0, 3), kind: 'card', id: c.id };
+    return { blocks: b, chips: chips.slice(0, 3), kind: 'card', id: c.id, side: c.side };
   }
   function cardById(id) { var cs = KB.cards || []; for (var i = 0; i < cs.length; i++) if (cs[i].id === id) return cs[i]; return null; }
 
@@ -1209,7 +1226,7 @@
   var MONEY_W = /\b(money|buy\w*|bought|spend\w*|purchases?|budget|bank|finances?|card)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
   var CV_RESTART = /^(start over|start again|new topic|change of subject|different (topic|question|thing)|something else|never ?mind|forget (it|that)|lets talk about something else)$/;
-  var CV_PERSONAL = { teenhouse: 1, feelinglow: 1, therapistq: 1, findcounsellor: 1, herbshelp: 1, herbstjohns: 1, herbashwagandha: 1, herbkava: 1, herbmelatonin: 1, herbchamomile: 1, herbmagnesium: 1, herbcbd: 1, herbhomeopathy: 1, herbmix: 1, herbsanxiety: 1, forcounselors: 1, deployhealth: 1, comehome: 1, differenthours: 1, gaming: 1, friends: 1, joinhome: 1, poly: 1, leftout: 1, fosterload: 1, foster: 1, parentapproach: 1, teenrules: 1, kinshipgp: 1, teenkinship: 1, missing: 1, teenphone: 1, adhdkids: 1, gpadvice: 1, gpshutout: 1, familyboundary: 1, coparentdecide: 1, handoffkit: 1, parttimehome: 1, bizpartner: 1, twofaiths: 1, holidaysplit: 1, moneycontrol: 1, moneystyles: 1, wedding: 1, longhours: 1, toddlers: 1, spanish: 1, illburden: 1, illchores: 1, forgiveok: 1, mustreconcile: 1, inheritance: 1, favourite: 1, siblingrift: 1, emptynest: 1, feelingstalk: 1, feelsfine: 1, autisticwork: 1, isthisrude: 1, sharingroom: 1, gaycouple: 1, selfworry: 1, angerhelp: 1, yellpartner: 1, illnesscare: 1, lgbtadult: 1, familycutoff: 1, wifiprivacy: 1, rahelp: 1, feltsmall: 1, holidayboth: 1, savingworry: 1, caresiblings: 1, caremarriage: 1, rentlate: 1, supplies: 1, sitesafe: 1, cantsleep: 1, evidence: 1, adhdfriends: 1, adhdwork: 1, teenmiddle: 1, teensibling: 1, teentalk: 1, shiftwind: 1, roughweek: 1, teaminvisible: 1, ldtimezones: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
+  var CV_PERSONAL = { riftnoreply: 1, riftevent: 1, bizthanks: 1, bizhow: 1, bizadmin: 1, coparentlate: 1, coparentshutout: 1, coparentuseless: 1, coparenttext: 1, exweekends: 1, coparenting: 1, teencurfew: 1, friendsguilt: 1, friendsstop: 1, housegroupchat: 1, housefair: 1, housechores: 1, roombringup: 1, roomguests: 1, heldfort: 1, comehomeedge: 1, comehomesleep: 1, nightguilt: 1, rentincome: 1, twofamilies: 1, bothfamilies: 1, lovebydoing: 1, gcbaby: 1, familyplan: 1, seenheard: 1, divorcelonely: 1, sundaygoodbye: 1, autisticself: 1, smalltalkwork: 1, smalltalkwhy: 1, whenchance: 1, teachers: 1, lgbtsafety: 1, devicekeep: 1, inheritance: 1, siblingrift: 1, teenhouse: 1, feelinglow: 1, therapistq: 1, findcounsellor: 1, herbshelp: 1, herbstjohns: 1, herbashwagandha: 1, herbkava: 1, herbmelatonin: 1, herbchamomile: 1, herbmagnesium: 1, herbcbd: 1, herbhomeopathy: 1, herbmix: 1, herbsanxiety: 1, forcounselors: 1, deployhealth: 1, comehome: 1, differenthours: 1, gaming: 1, friends: 1, joinhome: 1, poly: 1, leftout: 1, fosterload: 1, foster: 1, parentapproach: 1, teenrules: 1, kinshipgp: 1, teenkinship: 1, missing: 1, teenphone: 1, adhdkids: 1, gpadvice: 1, gpshutout: 1, familyboundary: 1, coparentdecide: 1, handoffkit: 1, parttimehome: 1, bizpartner: 1, twofaiths: 1, holidaysplit: 1, moneycontrol: 1, moneystyles: 1, wedding: 1, longhours: 1, toddlers: 1, spanish: 1, illburden: 1, illchores: 1, forgiveok: 1, mustreconcile: 1, inheritance: 1, favourite: 1, siblingrift: 1, emptynest: 1, feelingstalk: 1, feelsfine: 1, autisticwork: 1, isthisrude: 1, sharingroom: 1, gaycouple: 1, selfworry: 1, angerhelp: 1, yellpartner: 1, illnesscare: 1, lgbtadult: 1, familycutoff: 1, wifiprivacy: 1, rahelp: 1, feltsmall: 1, holidayboth: 1, savingworry: 1, caresiblings: 1, caremarriage: 1, rentlate: 1, supplies: 1, sitesafe: 1, cantsleep: 1, evidence: 1, adhdfriends: 1, adhdwork: 1, teenmiddle: 1, teensibling: 1, teentalk: 1, shiftwind: 1, roughweek: 1, teaminvisible: 1, ldtimezones: 1, teensay: 1, stepdiscipline: 1, notenough: 1, raisegently: 1, toosensitive: 1, getstay: 1, backmeup: 1, sendamount: 1, planrecall: 1, gamefortwo: 1, retirepurpose: 1, notrealdad: 1, parttimechild: 1, textmeaning: 1, handover: 1, paidwork: 1, disagreenumbers: 1, longstay: 1, ndcouple: 1, sharelist: 1, breaklength: 1, comeback: 1, sentlink: 1, reconnect: 1, pursuewithdraw: 1, familyduty: 1, retired: 1, longdistance: 1, bioparent: 1, outsider: 1, exschedule: 1, carehelp: 1, careadultkids: 1, careresent: 1, yellkids: 1, exharass: 1, exmessages: 1, exbadmouth: 1, lgbtq: 1, parentphone: 1, parentsfight: 1, teamowners: 1, grownkids: 1, phonetrust: 1, lonely: 1, leave: 1, atwork: 1, grief: 1, overgive: 1, burden: 1, parentsblame: 1, onmyown: 1, teens: 1, raisekids: 1, fightnow: 1, judged: 1, sensitive: 1, overload: 1, meltdown: 1, 'upset-right-now': 1 };
   var CV_YEAH = /^(yeah|yes|yep|yup|ya|ok|okay|sure|mhm|uh huh|go on|i guess|kind of|kinda|true)$/;
   // the caring answer we gave a turn or two ago (grief, giving too much…), if any
   function careCard(state) {
@@ -1470,10 +1487,12 @@
       if (b.k === 'bg') paras.push((b.x || []).join(' '));
       if (b.k === 'links' && !link && b.x && b.x[0]) link = b.x[0];
     });
-    var ss = paras.length ? sentences(paras[0]) : [], first = ss[0] || '';
+    // a sentence is never cut inside a quote: “Thank you for sorting the car. That really helped.” stays whole
+    function whole(t, ss0) { var ss1 = ss0 || sentences(t), acc = ''; for (var i = 0; i < ss1.length; i++) { acc += (acc ? ' ' : '') + ss1[i]; if ((acc.match(/“/g) || []).length <= (acc.match(/”/g) || []).length) return acc; } return t; }
+    var ss = paras.length ? sentences(paras[0]) : [], first = ss.length ? whole(paras[0], ss) : '';
     if (first && wc(first) < 5 && ss[1]) first += ' ' + ss[1];  // "I’m sorry." alone is too short to stand as the gist
     if (!bullets.length && paras.length) bullets = sentences(paras.join(' ')).slice(1, 3);
-    bullets = bullets.map(function (t) { return sentences(t)[0] || t; }).slice(0, script ? 2 : 3);
+    bullets = bullets.map(function (t) { return whole(t); }).slice(0, script ? 2 : 3);
     if (!first && !bullets.length) return null;
     var out = [];
     if (first) out.push({ k: 'p', x: 'In short: ' + first });
@@ -1493,7 +1512,12 @@
     [/\bvalidat(e|es|ing)\b/g, 'show you understand'], [/\bvalidation\b/g, 'showing you understand'], [/\bturn(ing)? toward\b/g, 'respond$1 to'],
     [/\bbids? for (attention|connection)\b/g, 'small ways of reaching for you'], [/\bdynamics?\b/g, 'pattern'], [/\bhold(ing)? the fort\b/g, 'keep$1 things going'],
     [/\bpitch in\b/g, 'help'], [/\bin the loop\b/g, 'told'], [/\bout of the loop\b/g, 'not told'], [/\bwears on\b/g, 'hurts'], [/\bwear on\b/g, 'hurt'], [/\bloaded\b/g, 'tense'],
-    [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement']];
+    [/\bthe noticing\b/g, 'noticing what needs doing'], [/\bscorecard\b/g, 'score'], [/\bat a calm moment\b/g, 'when you are both calm'], [/\bverdict\b/g, 'final judgement'],
+    [/\bsorting (out )?the\b/g, 'fixing the'], [/\bsort(ing)? out\b/g, 'fix$1'], [/\bturning up\b/g, 'being there'], [/\bturn up\b/g, 'come'], [/\bproviding\b/g, 'earning money for the family'],
+    [/\blow[- ]pressure\b/g, 'easy'], [/\bunwind\b/g, 'relax'], [/\bwind down\b/g, 'relax'], [/\bflooded\b/g, 'too upset to think'], [/\bstart to finish\b/g, 'from start to end'],
+    [/\bside by side\b/g, 'next to each other'], [/\brhythm\b/g, 'habit'], [/\bcheck in\b/g, 'talk for a few minutes'], [/\bcheck-ins?\b/g, 'short talks'],
+    [/\bbig talk\b/g, 'long serious talk'], [/\bthe load\b/g, 'the work'], [/\binvisible work\b/g, 'work nobody sees'], [/\bmental load\b/g, 'thinking and planning work'],
+    [/\bpush back\b/g, 'say no'], [/\bfollow through\b/g, 'do what you said'], [/\bin the moment\b/g, 'right then'], [/\bopen up\b/g, 'talk about feelings']];
   function easyText(x) { var o = String(x); EASY_SWAP.forEach(function (e) { o = o.replace(e[0], function () { var a = arguments, t = e[1].replace(/\$(\d)/g, function (m, d) { return a[+d] || ''; }); return t; }); }); return o; }
   function easySwap(r) {
     if (!r || !r.blocks) return r;
@@ -1605,7 +1629,7 @@
     var pc = (KB.cards || []).filter(function (c) { return c.page === path && c.first; })[0];
     if (pc) { state.pageTopic = { id: pc.id, root: pc.id }; state.page.chips = (pc.pageChips || []).map(function (x) { return { label: x[0], q: x[1] }; }); }
   }
-  function setTopic(state, c, root) { state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: state.topic && state.topic.id === c.id ? (state.topic.v || 0) : 0 }; }
+  function setTopic(state, c, root, side) { var T0 = state.topic; state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: T0 && T0.id === c.id ? (T0.v || 0) : 0, side: side != null ? side : (T0 && T0.root === (root || c.id) ? T0.side : null) }; }
   // the page a topic card is about: its own "page", else its first link that isn't a general tool
   var GENERIC_PAGE = /^\/(lemonade-stand|turning-toward|signal-translator|check-ins|safety|start-here|outside-help|upset-right-now|wp-11|wiring-card|night-garden|soundscapes|self-path|conversation-reader)\.html|^\/(workpapers|library|tools)\//;
   function topicPage(c) {
@@ -1620,14 +1644,16 @@
   }
   // a card can answer for one side of a two-sided topic: "she says I'm bad with money" (the spender), "i work nights and
   // feel guilty" (the night worker). Its "sides" list [{re, what, how, script, scriptLabels}] replaces those fields.
-  function sideOf(c, f) {
-    if (!c || !c.sides || !f) return c;
-    for (var i = 0; i < c.sides.length; i++) {
-      var S = c.sides[i], re = null;
-      try { re = new RegExp(S.re); } catch (e) { re = null; }
-      if (re && re.test(f)) { var o = {}; Object.keys(c).forEach(function (k) { o[k] = c[k]; }); Object.keys(S).forEach(function (k) { if (k !== 're') o[k] = S[k]; }); o.side = i; return o; }
+  function sideOf(c, f, keep) {
+    if (!c || !c.sides) return c;
+    function as(i) { var S = c.sides[i], o = {}; Object.keys(c).forEach(function (k) { o[k] = c[k]; }); Object.keys(S).forEach(function (k) { if (k !== 're') o[k] = S[k]; }); o.side = i; return o; }
+    for (var i = 0; f && i < c.sides.length; i++) {
+      var re = null;
+      try { re = new RegExp(c.sides[i].re); } catch (e) { re = null; }
+      if (re && re.test(f)) return as(i);
     }
-    return c;
+    // a follow-up keeps the side we were on ("what do i text her" after "my friend never texts back")
+    return keep != null && c.sides[keep] ? as(keep) : c;
   }
   var TF_SAY = /^(so |ok |okay |but |and |right |then |um |hmm |well )*(what (do|should|can|could|would) i (actually |even |really |possibly |then )?(say|text|write|send|tell)\b|what (words|do i text|should i text)\b|how (do|should|can|could|would) i (actually )?(say|word|phrase|put|text|write|tell|bring) (it|this|that|her|him|them|up|my)\b|(give me|any|some|got any) (the )?words\b|what to (say|text|write)\b|how (do|should) i (start|open) (the|that|this) (conversation|talk|chat)|how (do|should) we word (it|this|that|texts?|things|messages?))/;
   var TF_DO = /\b(what (can|could|should) (i|we) (actually |really )?do (this week|today|tonight|this weekend|right now|now|first)|something (simple|small|easy|practical)|(one|a) (small |simple |easy |little )?thing (i|we) (can|could) (do|try)|what s (a|one|the) (first|small|next) step)\b/;
@@ -1656,7 +1682,7 @@
   // the part of the topic's page that fits what was just said. Null when it's really a new question.
   function topicFollow(state, f, q, TC, TR) {
     var n = f.split(' ').length, T = state.topic && state.topic.id === TC.id ? state.topic : null;
-    var c = sideOf(TC, f), pg = topicPage(TC), pgT = pg && pageTitle(pg), v = T ? (T.v || 0) + 1 : 1;
+    var c = sideOf(TC, f, T && T.side), pg = topicPage(TC), pgT = pg && pageTitle(pg), v = T ? (T.v || 0) + 1 : 1;
     function done(r) { if (T) T.v = v; state.topic = state.topic && state.topic.id === TC.id ? Object.assign(state.topic, { turn: state.turn || 0 }) : { id: TC.id, turn: state.turn || 0, root: (TR || TC).id, v: v }; state.care = { id: TC.id, turn: state.turn || 0, f: f }; state.last = { kind: 'card', card: TC.id, q: TC.name, topic: TC.name, u: pg }; r.kind = r.kind || 'care'; r.id = r.id || TC.id; return r; }
     var scripts = (Array.isArray(c.script) ? c.script : c.script ? [c.script] : []);
     var link = pg ? [[pgT || TC.name, pg]] : safeLinks(TC.links).slice(0, 1);
@@ -1667,15 +1693,15 @@
     }
     // only for a message that doesn't start a new story ("my brother got dad's house in the will" is its own topic)
     var sit = detectSituation(f);
-    var fresh = (sit.score >= 5 && sit.who && sit.who !== 'self' && sit.who !== 'other' && n > 8) || (matchCard(f) && (matchCard(f).kind === 'tool')) || /^(what|whats|who) (is|are|does) (a |an |the )?\w+( \w+)?( mean)?$/.test(f);
-    if (TF_SAY.test(f) && n <= 16 && scripts.length) {
+    var fresh = /\b(after i (asked|told) (him|her|them) to stop|at all hours|wont leave me alone|won t leave me alone|keeps (turning|showing) up)\b/.test(f) || (sit.score >= 5 && sit.who && sit.who !== 'self' && sit.who !== 'other' && n > 8) || (matchCard(f) && (matchCard(f).kind === 'tool')) || /^(what|whats|who) (is|are|does) (a |an |the )?\w+( \w+)?( mean)?$/.test(f);
+    if (TF_SAY.test(f) && n <= 16 && scripts.length && !fresh) {
       var sb = [{ k: 'p', x: c.sayLead || ('Here are some words you could use. Change any of them so they sound like you.') }];
       scripts.forEach(function (x, i) { sb.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[i]) || (i ? 'Or' : 'Words you could use'), x: x }); });
       if (c.sayMore) sb.push({ k: 'p', x: c.sayMore });
       sb.push({ k: 'links', x: c.sayLink ? safeLinks([c.sayLink]) : link });
       return done({ blocks: sb, chips: [{ label: 'One small thing to do', q: 'What can I do this week, something simple?' }] });
     }
-    if (TF_DO.test(f) && n <= 16 && c.how && c.how.length) {
+    if (TF_DO.test(f) && n <= 16 && c.how && c.how.length && !fresh) {
       var step = c.how[(v - 1) % c.how.length];
       var db = [{ k: 'p', x: 'One small thing, this week: ' + lc1(step) }];
       if (scripts.length) db.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[0]) || 'Words you could use', x: scripts[(v - 1) % scripts.length] });
@@ -1736,20 +1762,6 @@
     // after a co-parent answer, "what do i actually text her" after a friendship one) stays with that topic: a card names,
     // in "follow", the card that answers a follow-up's words, and a vague follow-up is answered from the topic's own page
     var TC = n <= 22 && !state.unsafe ? topicCard(state) : null, TR = TC ? topicRoot(state) : null;
-    var roots = TC ? [TC].concat(TR && TR.id !== TC.id ? [TR] : []) : [];
-    for (var ri = 0; ri < roots.length; ri++) {
-      var fl = roots[ri].follow || [];
-      for (var fi = 0; fi < fl.length; fi++) {
-        var fre = null; try { fre = new RegExp(fl[fi][0]); } catch (e) { fre = null; }
-        var tcard = fre && fre.test(f) && cardById(fl[fi][1]);
-        if (tcard) {
-          var rf = cardReply(state, tcard, 'about'); rf.kind = 'care';
-          state.care = { id: tcard.id, turn: state.turn || 0, f: f, root: (TR || TC).id };
-          setTopic(state, tcard, (TR || TC).id);
-          return rf;
-        }
-      }
-    }
     // which care card would answer this on its own? A word that only hints at another topic ("christening" in a talk
     // about a brother, "will" about a parent who died) doesn't pull us off the topic we're on
     var cm = null;
@@ -1764,6 +1776,28 @@
       }
       cm = c0; break;
     }
+    // anything that might be about harm or control, or a card that answers those, is never bent to fit the topic
+    var risky = VERBAL.test(f) || SELF_HARMFUL.test(f) || NOT_LIVE.test(f) || HARD.test(f.replace(/\b(scared|afraid|frightened|terrified)\b/g, ' ')) || CONTROL.test(f.replace(/\bcontrolling\b/g, ' '));
+    // and a card about the chat itself or a feeling (bigger text, "is it my fault?") answers as usual, keeping the topic
+    if (risky || (cm && (cm.safety || !cm.newTopic))) TC = TR = null;
+    // a short follow-up while we're on a topic ("i do all the meetings and paperwork" after fostering, "how do i get a say"
+    // after a co-parent answer, "what do i actually text her" after a friendship one) stays with that topic: a card names,
+    // in "follow", the card that answers a follow-up's words, and a vague follow-up is answered from the topic's own page
+    var roots = TC ? [TC].concat(TR && TR.id !== TC.id ? [TR] : []) : [];
+    for (var ri = 0; ri < roots.length; ri++) {
+      var fl = roots[ri].follow || [];
+      for (var fi = 0; fi < fl.length; fi++) {
+        var fre = null; try { fre = new RegExp(fl[fi][0]); } catch (e) { fre = null; }
+        var tcard = fre && fre.test(f) && cardById(fl[fi][1]);
+        if (tcard) {
+          var side0 = state.topic && state.topic.side != null && (state.topic.id === tcard.id || state.topic.root === tcard.id) ? state.topic.side : null;
+          var rf = cardReply(state, tcard, 'about', side0); rf.kind = 'care';
+          state.care = { id: tcard.id, turn: state.turn || 0, f: f, root: (TR || TC).id };
+          setTopic(state, tcard, (TR || TC).id, rf.side);
+          return rf;
+        }
+      }
+    }
     if (TC && !cm) { var tfu = topicFollow(state, f, q, TC, TR); if (tfu) return tfu; }
     if (cm) {
       var c = cm;
@@ -1777,7 +1811,7 @@
       }
       r.kind = 'care';
       state.care = { id: c.id, turn: state.turn || 0, f: f };
-      if (CV_PERSONAL[c.id]) setTopic(state, c, c.newTopic || !TC ? c.id : (TR || TC).id);
+      if (CV_PERSONAL[c.id] && c.newTopic) setTopic(state, c, c.id, r.side);
       if (c.id === 'brief') state.brief = 1;
       // a question about the chat or a feeling keeps the topic we were on; a new topic (a meltdown, "I have ADHD") takes over
       if (!c.newTopic) state.last = L || state.last;
@@ -1785,7 +1819,24 @@
     }
     // "how do I print the page about ADHD", "can I print this out": how to print, for the page we're on
     if (TF_PRINT.test(f) && n <= 16) return printReply(state, f, TC);
+    // "who came up with that, is there a source I can cite?": the source behind what we just talked about
+    if (TF_SOURCE.test(f) && n <= 18 && (state.last || state.lastQ) && /\b(that|this|it|cite|source|sources)\b/.test(f)) return sourceReply(state);
     return null;
+  }
+  function sourceReply(state) {
+    var lq = (state.last && state.last.q) || state.lastQ || '', b = [], links = [];
+    var refs = lq ? search(lq).hits.filter(function (h) { return /^\/research\.html#ref-/.test(KB.docs[h.i].u); }) : [];
+    var top = refs[0] && refs[0].cov >= 0.3 ? refs.filter(function (h) { return h.s >= refs[0].s * 0.7; }).slice(0, 2) : [];
+    if (top.length) {
+      b.push({ k: 'p', x: 'Yes. Here’s the research behind that, with what it found in plain words:' });
+      top.forEach(function (h) { b.push(passageBlock(h.i, search(lq).terms)); });
+    } else b.push({ k: 'p', x: 'Every source the site uses is listed, with what it found in plain words, on The research behind this site. You can search it by name or topic.' });
+    var pu = state.last && state.last.u && !/^\/research\.html/.test(state.last.u) ? state.last.u.split('#')[0] : '';
+    if (pu) b.push({ k: 'p', x: 'The page that answer came from also names its sources at the bottom.' });
+    links.push(['The research behind this site', '/research.html']);
+    if (pu) links.push([pageTitle(pu) || 'The page it came from', pu + '#more']);
+    b.push({ k: 'links', x: links });
+    return { blocks: b, chips: [], kind: 'care', id: 'source' };
   }
   function unclearReply() {
     return { blocks: [{ k: 'p', x: 'I didn’t catch that. Could you say it another way? A few words is plenty, like “chores” or “my partner snapped at me”.' }], chips: STARTERS, kind: 'unclear' };
@@ -1795,7 +1846,7 @@
     var parts = String(q).split(/(?<=[.?!])\s+/), noEx = /\b(not|no|without|skip) (an |any |the )?examples?\b|\bdefinition only\b|\bjust (the|a) definition\b/.test(fold(q));
     for (var i = 0; i < parts.length; i++) {
       var f = norm(parts[i]).replace(/\b(exactly|actually|really|precisely|literally|please|plainly|simply)\b/g, ' ')
-        .replace(/\b(on|in) (this|the) (site|website|program|page|chat)$|\bhere$/g, ' ').replace(/\s+/g, ' ').trim();
+        .replace(/\b(on|in) (this|the) (site|website|program|page|chat)$|\bhere$/g, ' ').replace(/\b(in|using|with) (plain|simple|easy|everyday|simpler|plainer) (words|english|terms|language)$/g, ' ').replace(/\s+/g, ' ').trim();
       var m = f.match(/^(?:so |ok |okay |and )?(?:what|whats|wat) (?:is|are|does|do|s) (?:a |an |the )?(?:word |term |idea )?(.+?)(?: mean| means| stand for| refer to)?(?: on this site| here)?$/) ||
               f.match(/^(?:what do you mean by|what does the site mean by|what is meant by|define|definition of|meaning of|explain|give me a definition of|give a definition of|whats the definition of|what is the definition of|what s the definition of) (?:a |an |the )?(?:word |term )?(.+)$/) ||
               f.match(/^(.+?) (?:meaning|definition|means what)$/);
@@ -1983,31 +2034,15 @@
     state.turn = (state.turn || 0) + 1;
     if (state.pageCtx && !state.pageDone) pageInit(state);
     if (chipDoc == null) {
+      // a message in Spanish gets a Spanish answer, before any English spelling fix ("triste" is not "trust")
+      var esr = spanishReply(state, q);
+      if (esr) return esr;
       sp = spellFix(q);
       // a spelling fix must never hide a safety concern ("it's my fault" read as "it is my fault")
       if (sp.fixes.length && !(DANGER.test(norm(q)) && !DANGER.test(norm(sp.q)))) q = sp.q; else if (sp.fixes.length) sp = { q: q, fixes: [], known: sp.known, unknown: sp.unknown };
       // "different question: …", "by the way, …": a new topic, so nothing from the last one carries over
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; state.topic = null; q = sw0[sw0.length - 1]; }
-      var es = String(q).toLowerCase();
-      if (/\bhabl\w*\b.{0,20}\bespa[nñ]ol\b|^\W*(en )?espa[nñ]ol\W*$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una p[aá]gina)\b.{0,30}\bespa[nñ]ol\b/.test(es)) return { blocks: [
-        { k: 'p', x: '¡Hola! Casi todo el sitio está en inglés, pero hay una página en español con lo esencial: repartir las tareas de la casa, cuando los hijos pelean, cuando estás muy enojado, cuidar a alguien que quieres, y si no estás seguro en casa.' },
-        { k: 'p', x: 'Muchas páginas y herramientas (como el Lemonade Stand y las fichas de trabajo) se pueden usar en español con el traductor del navegador: en Chrome, toca el menú ⋮ y luego “Traducir”. Yo solo puedo responder en inglés por ahora. (Most of the site is in English; there is a Spanish page, and the browser’s Translate works on the tools.)' },
-        { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
-      if (/[¿¡ñ]|\b(qu[eé]|c[oó]mo|mis|hijos?|esposo|esposa|ayuda|estoy|pelean|tengo|por qu[eé]|necesito|mi pareja|hola)\b/.test(es) && (es.match(/\b(que|qué|como|cómo|mis|mi|hijos|hijo|esposo|esposa|ayuda|estoy|pelean|tengo|necesito|pareja|hola|por|no|se|me|con|los|las|el|la|de|y)\b/g) || []).length >= 3 && !/\b(the|and|my|is|are|i)\b/.test(es)) {
-        if (/\b(cuid\w*|enferm\w*|agotad\w*|cansad\w*|parkinson|alzheimer|demencia|c[aá]ncer)\b/.test(es)) return { blocks: [
-          { k: 'p', x: 'Hola. Cuidar a alguien que quieres, día tras día, es mucho trabajo, y es normal estar agotado, impaciente a veces, y luego sentir culpa. No es un fallo suyo.' },
-          { k: 'p', x: 'Por ahora solo puedo responder en inglés, pero hay una parte en español para quien cuida, con ideas para pedir ayuda a los hijos y líneas de apoyo. (Sorry, I can only answer in English for now. There is a Spanish section for carers, and the full carer page in English.)' },
-          { k: 'links', x: [['Cuando cuido a alguien que quiero (en español)', '/en-espanol.html#cuidar'], ['Caring for someone you love (English)', '/caregivers.html']] }], chips: [], kind: 'lang' };
-        var EST = [[/\b(casa|tareas|quehaceres|limpi\w*|platos|ropa|no ayuda|no hace nada)\b/, '#casa', 'Repartir las tareas de la casa es una de las peleas más comunes, y tiene arreglo: hagan una lista de todo lo que hay que hacer, también lo que nadie ve (recordar, planear), y den a cada tarea un solo dueño.', 'Las tareas de la casa'],
-          [/\b(hijos|ni[nñ]os|hermanos)\b.{0,30}\b(pelean|peleas|pelear|se pegan)\b/, '#hijos-pelean', 'Cuando los hijos pelean, ayuda separar primero, calmar, y después hablar con cada uno por turnos, sin buscar culpables.', 'Cuando los hijos pelean'],
-          [/\b(enojad\w*|enfadad\w*|rabia|grit\w*|furios\w*)\b/, '#enojado', 'Cuando estás muy enojado, primero calma el cuerpo (respira, sal un momento) y habla después, cuando los dos estén tranquilos.', 'Cuando estás muy enojado'],
-          [/\b(miedo|segur\w*|golpe\w*|pega|amenaz\w*)\b/, '#seguro', 'Si tienes miedo en casa, no es tu culpa. En EE. UU. puedes llamar gratis a la Línea Nacional contra la Violencia Doméstica al 1-800-799-7233 (atienden en español). Si estás en peligro ahora, llama al 911.', 'Si no estás seguro en casa']];
-        for (var ei = 0; ei < EST.length; ei++) if (EST[ei][0].test(es)) return { blocks: [{ k: 'p', x: 'Hola. ' + EST[ei][2] },
-          { k: 'p', x: 'Por ahora solo puedo responder en inglés, pero esta parte de la página en español habla de esto. (Sorry, I can only answer in English for now; here is the Spanish page on this.)' },
-          { k: 'links', x: [[EST[ei][3] + ' (en español)', '/en-espanol.html' + EST[ei][1]], ['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
-        return { blocks: [{ k: 'p', x: 'Hola. Lo siento: por ahora solo puedo responder en inglés. Hay una página corta en español con pasos para cuando los hijos pelean, cuando estás muy enojado, y si no estás seguro en casa. (Sorry, I can only answer in English for now. Here is a short page in Spanish.)' }, { k: 'links', x: [['En español', '/en-espanol.html']] }], chips: [], kind: 'lang' };
-      }
       var vf = norm(q);
       if (CV_RESTART.test(vf)) { state.fearSeen = false; state.coSeen = false; }
       if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; state.topic = null; return meant(childCrisisReply(), sp); }
@@ -2025,6 +2060,7 @@
       var igr = igTurn(state, q0, vf);
       if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
+      if (dt && dt.redo) { q = q0 = dt.redo; vf = norm(q); state.deepRedo = state.turn; dt = null; }
       if (dt) return dt;
       var ft = !DANGER.test(vf) && !state.unsafe && funTurn(state, vf);
       if (ft) return ft;
@@ -2060,13 +2096,72 @@
     if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && KB.deep && deepOn(state) && !DANGER.test(f)) {
       state.last = null;
       return { blocks: [{ k: 'p', x: deepLine(state, 'no_match', 'That’s a deep one. Could you say it another way, or tell me who it’s about?') }],
-        chips: [{ label: 'Ask me a big question', q: 'Ask me a big question' }, { label: 'Back to small talk', q: 'Small talk' }], kind: 'deep', id: 'nomatch', noBrief: true };
+        chips: [{ label: 'Ask me a big question', q: 'Ask me a big question' }, { label: 'Keep it light', q: 'Keep it light' }], kind: 'deep', id: 'nomatch', noBrief: true };
     }
     if (chipDoc == null && r && (r.kind === 'offtopic' || r.kind === 'none') && !OFF_TOPIC.test(f)) {
       var alt = contextReply(state, prevLast, f) || softClarify(state, f);
       if (alt) return meant(alt, sp);
     }
     return r;
+  }
+
+  // ------------------------------------------------------------------ en español
+  // A Spanish message gets a short answer in Spanish and the matching part of /en-espanol.html, never an English fallback
+  var ES_WORDS = ('estoy esta esto este triste cansado cansada agotado agotada noche dificil necesito calma calmarme tranquilo tranquila ayuda ayudar ayudame hijos hijas hijo hija ' +
+    'mi peleamos pelean peleas pelear mucho mucha muy gemelos gemelas dormimos duermo dormir esposo esposa marido mujer trabaja trabajo horas construccion tenemos tengo anos mis ' +
+    'con los las del que como pido una son por para todo nada casa hago hace pareja ninos nino nina bebe bebes enojado enojada enfadado enfadada miedo cuido cuidar cuidando ' +
+    'mama papa madre padre discutimos discusion gritos grita grito sola hola gracias quiero puedo siento cuando donde porque pero tambien nunca siempre espanol hablas habla ' +
+    'ayudan cuidadora cuidador enfermo enferma demencia quehaceres tareas platos ropa limpiar novio novia familia abuela abuelo suegra hermanos hermano hermana ' +
+    'necesitamos podemos quieres tienes puedes sabes soy eres somos estamos estan dias semana fin mañana manana hoy siempre vez veces llorar lloro sueño sueno').split(' ');
+  var ES_SET = {}; ES_WORDS.forEach(function (w) { ES_SET[w] = 1; });
+  var EN_SET = {}; 'the and my is are i you he she it to of in with what how do does can not but on at this that we they am was have has'.split(' ').forEach(function (w) { EN_SET[w] = 1; });
+  function esFold(s) { return String(s || '').toLowerCase().replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e').replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o').replace(/[úùü]/g, 'u').replace(/ñ/g, 'n').replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function isSpanish(q) {
+    var raw = String(q || ''), f = esFold(raw), ws = f.split(' '), es = 0, en = 0;
+    ws.forEach(function (w) { if (ES_SET[w]) es++; if (EN_SET[w]) en++; });
+    if (/[¿¡ñ]/.test(raw) && es >= 1) return true;
+    if (/[áéíóú]/.test(raw) && es >= 1 && en === 0) return true;
+    return es >= 2 && es > en * 2 && !/\b(the|and|my|is|are|you|what|how)\b/.test(f);
+  }
+  function spanishReply(state, q) {
+    var f = esFold(q);
+    var hablas = /\bhabl\w*\b.{0,20}\bespanol\b|^(en )?espanol$|\b(se puede|puedo|hay algo|tienes algo|tienen algo|hay una pagina|hay)\b.{0,30}\bespanol\b|\bin spanish\b.{0,10}$/.test(f) && !/\b(for my|para mi)\b.{0,15}\b(wife|husband|mum|mom)\b/.test(f);
+    if (!hablas && !isSpanish(q)) return null;
+    state.es = 1; state.last = null;
+    var L = '/en-espanol.html', chips = ES_CHIPS;
+    function ans(id, lead, list, script, links, note) {
+      var b = [{ k: 'p', x: lead }];
+      if (list && list.length) b.push({ k: 'list', x: list });
+      if (script) b.push({ k: 'script', l: 'Palabras que puedes usar', x: script });
+      if (note) b.push({ k: 'p', x: note });
+      b.push({ k: 'links', x: links });
+      return { blocks: b, chips: chips, kind: 'lang', id: 'es-' + id, noBrief: true };
+    }
+    if (hablas) return { blocks: [
+      { k: 'p', x: '¡Hola! Sí: te respondo en español con lo esencial y te llevo a la página en español: repartir las tareas de la casa, cuando uno trabaja muchas horas, con gemelos o niños pequeños, cuando los hijos pelean, cuando estás muy enojado, cuidar a alguien que quieres, y si no estás seguro en casa.' },
+      { k: 'p', x: 'Casi todo el sitio está en inglés. Muchas páginas y herramientas (como el Lemonade Stand y las fichas de trabajo) se pueden leer en español con el traductor del navegador: en Chrome, toca el menú ⋮ y luego “Traducir”.' },
+      { k: 'links', x: [['Ayuda para tu familia, en español', L]] }], chips: chips, kind: 'lang', id: 'es-hola' };
+    // safety first, as everywhere
+    if (/\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f))
+      return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama o escribe al 988 (EE. UU.). Cuando oigas “Presione 2”, marca el 2 para hablar en español.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
+    if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
+      return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
+    if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
+      return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
+    if (/\b(gemel[oa]s|bebes?|ninos pequenos|nino pequeno|panal\w*|siestas?|no dormimos|no duermo|no dormimos nada|recien nacido)\b/.test(f))
+      return ans('pequenos', 'Con gemelos o niños pequeños el trabajo no para, y es normal que los dos estén agotados y que haya más discusiones. No quiere decir que la relación va mal: es una etapa muy pesada.', ['Las noches también cuentan: túrnense, una noche cada uno, o uno hasta las dos de la mañana y el otro después.', 'Bajen la meta por ahora: comer, ropa limpia y dormir. Lo demás puede esperar.', 'Un descanso para cada uno, todos los días si se puede, aunque sean veinte minutos.'], 'Esta noche me levanto yo con los niños. Mañana te toca a ti.', [['Con gemelos o niños pequeños', L + '#pequenos']]);
+    if (/\b(trabaja|trabajo|trabajamos)\b.{0,30}\b(mucho|muchas horas|horas|todo el dia|turnos?|noches?)\b|\b\d+ horas\b|\bconstruccion\b|\bmuchas horas\b/.test(f))
+      return ans('horas', 'Cuando uno trabaja muchas horas fuera, es fácil que los dos se sientan solos: uno trabaja sin parar y siente que nadie lo nota, y el otro se queda con la casa y los niños. Los dos trabajos cuentan, y los dos cansan.', ['Cuenten las horas de los dos: el trabajo pagado y el viaje, y también las horas con los niños y la casa.', 'Lo justo no tiene que ser mitad y mitad. Hablen de qué reparto es justo para ustedes en esta etapa.', 'Algunos trabajos pueden ser de quien trabaja fuera: los de la noche o del fin de semana, como bañar a los niños o las compras del sábado.'], 'Sé que trabajas muchísimo, y te lo agradezco. Yo también llego al final del día sin fuerzas. ¿Qué parte de la casa podrías tomar tú, aunque sea en la noche?', [['Cuando uno trabaja muchas horas', L + '#horas']]);
+    if (/\b(casa|tareas|quehaceres|limpi\w*|platos|ropa|no me ayuda|no ayuda|hago todo|hago casi todo|no hace nada|todo yo)\b/.test(f) && !/\b(cuid\w*|enferm\w*)\b/.test(f))
+      return ans('casa', 'Muchas veces una sola persona carga con casi todo, y además con el trabajo de pensar en todo. Casi nunca es culpa de nadie: lo más común es que nunca hablaron de quién hace qué.', ['Hagan una lista de todos los trabajos de la casa, también los que no se ven: planear las comidas, pedir citas, pagar las cuentas.', 'Un dueño para cada trabajo, de principio a fin: no solo hacerlo, también acordarse de hacerlo.', 'Diez minutos a la semana para mirar la lista juntos. Empiecen con un “gracias”.'], 'No quiero pelear. Quiero que hagamos juntos una lista de todo lo que hay que hacer en la casa, para ver cómo lo repartimos.', [['Cuando siento que hago todo en la casa', L + '#casa']]);
+    if (/\b(peleamos|peleas|pelear|pelea|discutimos|discusion\w*|enojad[oa]s?|enfadad[oa]s?|rabia|grit\w*|furios[oa])\b/.test(f))
+      return ans('enojado', 'Cuando los dos están muy enojados, nada de lo que se dice sale bien. Esto es para dos personas que están seguras.', ['Pide una pausa y di cuándo vuelves. Una pausa con hora de regreso no es irse.', 'Respira: suelta el aire más despacio de lo que lo tomas, 4 para entrar y 6 para salir.', 'Vuelve a la hora que dijiste, y hablen de un solo tema.'], 'Quiero hacerlo bien y estoy muy alterado. ¿Lo hablamos a las ocho?', [['Cuando estoy muy enojado ahora mismo', L + '#enojado'], ['Si no estás a salvo en casa', L + '#seguro']], 'Si tienes miedo de tu pareja, eso no es un problema de comunicación y no es tu culpa: la página tiene ayuda gratis y confidencial.');
+    if (/\b(mis hijos|mis hijas|a mis hijos|los hijos)\b.{0,40}\b(ayud\w*|pido|pedir|ayuden)\b|\b(ayud\w*|pido|pedir)\b.{0,30}\b(mis hijos|mis hijas|a mis hijos)\b/.test(f))
+      return ans('cuidar-hijos', 'Pedir ayuda a tus hijos no es ser una carga: es dejarles cuidar contigo. Funciona mejor si pides algo concreto, con día y hora.', ['Elige una tarea para cada uno: las llamadas al seguro, los papeles, las citas, una llamada fija cada domingo.', 'Los que viven lejos también pueden ayudar: pagar unas horas de cuidado, o venir unos días.', 'Hagan una lista de quién se encarga de cada cosa, y compártanla.'], 'Ya no puedo con todo solo. ¿Podrías encargarte de las llamadas al seguro y llamar a mamá cada domingo a las seis?', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Una lista para repartir el cuidado', '/workpapers/fill/wp-03.html?for=care&lang=es']]);
+    if (/\b(triste|tristeza|cansad[oa]s?|agotad[oa]s?|noche dificil|dificil|calma|calmarme|tranquil\w*|no puedo mas|llor\w*|nervios\w*|ansiedad|cuid\w*|enferm\w*|parkinson|alzheimer|demencia|cancer)\b/.test(f))
+      return ans('cuidar', 'Lo siento, suena muy pesado. Vamos paso a paso. Primero, un momento de calma:', ['Respira despacio: toma aire contando hasta 4 y suéltalo contando hasta 6. Hazlo cinco veces.', 'Toma un vaso de agua y siéntate unos minutos en un lugar tranquilo.', 'Si cuidas a alguien, estar agotado o triste es normal. No es un fallo tuyo: es una señal de que necesitas más apoyo. Mañana pide una ayuda concreta, con día y hora.'], 'Estoy cansado, no soy una mala persona. Hoy hice lo que pude.', [['Cuando cuido a alguien que quiero', L + '#cuidar'], ['El Jardín de noche, para respirar despacio', '/night-garden.html']], 'Si la tristeza no se va, o piensas en hacerte daño, llama o escribe al 988 y marca el 2 para hablar en español.');
+    return { blocks: [{ k: 'p', x: 'Hola. Te respondo en español con lo esencial. ¿De qué se trata? Elige uno, o cuéntame un poco más en tus palabras:' },
+      { k: 'links', x: [['Siento que hago todo en la casa', L + '#casa'], ['Cuando uno trabaja muchas horas', L + '#horas'], ['Con gemelos o niños pequeños', L + '#pequenos'], ['Cuando estoy muy enojado', L + '#enojado'], ['Cuando cuido a alguien que quiero', L + '#cuidar'], ['Si no estás a salvo en casa', L + '#seguro']] }], chips: chips, kind: 'lang', id: 'es-menu' };
   }
   // Once someone has told us about control or danger, later questions in the same chat never get couples tips
   // ("you're on the same side", talk it through calmly, conflict is normal): those could put them at risk.
@@ -2255,7 +2350,7 @@
       var b0 = r.blocks[0];
       if (k === 'thanks' && b0.k === 'p') b0.x = line0;
       else if ((k === 'none' || k === 'offtopic' || k === 'unclear') && b0.k === 'p') {
-        var tail = b0.x.match(/(You could tell me[\s\S]*|I stick to this program[\s\S]*|Could you say it another way[\s\S]*)$/);
+        var tail = b0.x.match(/(I don’t have a page on that yet[\s\S]*|You could tell me[\s\S]*|I stick to this program[\s\S]*|Could you say it another way[\s\S]*)$/);
         b0.x = line0 + (tail ? ' ' + tail[1] : '');
       } else if (k === 'clarify' && r.amb) r.blocks.unshift({ k: 'p', x: line0, fun: 1 });
       else return r;
@@ -2327,6 +2422,16 @@
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify' };
         if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
         spec = IG.fromKB(tp, KB, { layout: rq.layout });
+        // a Library theme card only describes the Library: draw from the entry on the topic itself ("active listening")
+        if (!spec || /^lib-/.test(spec.from || '')) {
+          var tk = stNorm(tp).replace(/^(the|a|an) /, ''), gd = glossaryFor(tp), dsrc = gd >= 0 ? gd : -1;
+          if (dsrc < 0) search(tp).hits.slice(0, 12).some(function (h) { var d = KB.docs[h.i]; if (!d.tip && stNorm(d.h).indexOf(tk) !== -1 && h.cov >= 0.6) { dsrc = h.i; return true; } return false; });
+          if (dsrc >= 0) {
+            var dd = KB.docs[dsrc], sp2 = null;
+            try { sp2 = IG.fromAnswer([{ k: 'passage', h: pageName(dd.h), x: [dd.x] }], { title: pageName(dd.h), source: safePath(dd.u) ? dd.u : '' }); } catch (e) { sp2 = null; }
+            if (sp2) { sp2.from = 'doc-' + dsrc; spec = sp2; }
+          }
+        }
         // nothing to draw from the cards: a deep topic on it ("the double empathy problem") can still make a picture
         if (!spec && KB.deep) {
           var tpn = stNorm(tp).replace(/^(the|a|an) /, ''), dh = deepFind(stNorm(tp), norm(tp)) || deepLoose(stNorm(tp));
@@ -2356,7 +2461,7 @@
     return r;
   }
 
-  // ---------- deep talk (tools/chat/deep.json → KB.deep): "talk deep" switches it on for this tab, "small talk" switches it off.
+  // ---------- deep talk (tools/chat/deep.json → KB.deep): "talk deep" switches it on for this tab, "keep it light" switches it off.
   // In deep mode a big question ("what is love?") gets philosophy, psychology and an autistic lens, put together, with a
   // question to sit with and one thing to try. Safety, danger and someone's own hard situation always come first, and
   // deep replies never carry a joke. Outside deep mode, an ordinary answer on a deep topic offers "Go deeper on this".
@@ -2445,7 +2550,7 @@
     var fu = dlist(dRule('follow_ups')).filter(function (x) { return typeof x === 'string' && !/keep it light|big question/i.test(x); }), chips = [];
     for (var n = 0; n < 2 && fu.length; n++) { var x = fu.splice(Math.floor(frand(state) * fu.length) % fu.length, 1)[0]; chips.push({ label: x, q: x }); }
     chips.push({ label: 'Another big question', q: 'Ask me a big question' });
-    chips.push({ label: 'Back to small talk', q: 'Small talk' });
+    chips.push({ label: 'Keep it light', q: 'Keep it light' });
     return chips;
   }
   // only: one section key ("autistic_lens") for a follow-up like "and through an autistic lens?"
@@ -2487,8 +2592,8 @@
     for (var n = 0; n < 3 && ex.length; n++) pickd.push(ex.splice(Math.floor(frand(state) * ex.length) % ex.length, 1)[0]);
     state.last = null;
     return { blocks: [{ k: 'p', x: deepLine(state, 'intro', 'Deep talk it is. Ask me a big question, and we’ll look at it through philosophy, psychology and an autistic lens.') },
-      { k: 'p', x: 'Ask me a big question' + (pickd.length ? ', like “' + pickd[0] + '”' : '') + ', or name a part of life you’re thinking about. Say “small talk” whenever you want to come back up.' }],
-      chips: pickd.map(function (x) { return { label: x, q: x }; }).concat([{ label: 'Back to small talk', q: 'Small talk' }]), kind: 'deep', id: 'intro', noBrief: true };
+      { k: 'p', x: 'Ask me a big question' + (pickd.length ? ', like “' + pickd[0] + '”' : '') + ', or name a part of life you’re thinking about. Say “keep it light” whenever you want to come back up.' }],
+      chips: pickd.map(function (x) { return { label: x, q: x }; }).concat([{ label: 'Keep it light', q: 'Keep it light' }]), kind: 'deep', id: 'intro', noBrief: true };
   }
   var DEEP_IN = /^(?:(?:lets|let s|let us|can we|could we|shall we|i want to|i wanna|id like to|i d like to|please|ok|okay|so) )*(?:talk deep|go deep|get deep|talk deeper|deep talk|deep mode|deep chat|deep conversation|get philosophical|talk philosophy|think deep|think deeply|ask me a big question|ask me something deep|give me a big question|another big question|one more big question)(?: (?:please|now|with me|for a bit|puddles|professor))*$/;
   // "talk deep about love", "talk deep: what is love?", "talk deep, is honesty always kind?", "deep: can people change?"
@@ -2496,7 +2601,7 @@
   var DEEP_OUT = /^(?:(?:lets|let s|can we|could we|please|ok|okay|i want to|id like to) )*(?:(?:back to )?(?:small talk|light talk|normal mode|normal chat|light mode)|stop (?:being )?deep|(?:exit|leave|end|stop) deep(?: mode| talk)?|too deep|less deep|something lighter|lighter please|keep it light|back to normal)(?: please| now)?$/;
   // a follow-up about the last deep topic: which part they asked for
   var DEEP_FU = [[/\b(autis\w*|neurodiverg\w*|double empathy|sensory|predictable|rule out loud|say (this|it) plainly|plainly)\b/, 'autistic_lens'],
-    [/\b(research|science|psycholog\w*|studies|study|evidence)\b/, 'psychology'],
+    [/\b(research|science|psycholog\w*|studies|study|evidence|source|sources|cite|citation|who came up with)\b/, 'psychology'],
     [/\b(stoics?|aristotle|plato|kant|philosoph\w*|confucius|buddh\w*|socrates|thinkers?|care ethic\w*|iris murdoch|murdoch|rawls|ubuntu|arendt|hannah arendt)\b/, 'philosophy'],
     [/\b(question to ask)\b/, 'question'], [/\b(page to read|something to read|read more)\b/, 'links'],
     [/\b(tonight|use this|one small thing|smallest version|try|repair look like|in my control|do about it|practical|in practice|what can i do)\b/, 'try'],
@@ -2510,7 +2615,11 @@
     if (about && !DEEP_IN.test(fs)) {
       var ab = about[1] || about[2] || '', h = deepFind(stNorm(ab), norm(ab)) || deepLoose(stNorm(ab));
       setDeep(state, true);
-      return h ? deepReply(state, h) : deepIntro(state);
+      if (h) return deepReply(state, h);
+      // "talk deep: why is small talk so hard?": deep talk on, and the question still gets its answer
+      var raw = String(q).replace(/^\s*(?:(?:let'?s|let us|can we|could we|please|ok|okay)\s+)*(?:talk deep|go deep|go deeper|get deep|think deep|deep talk|deep chat|get philosophical|deep)\s*(?:about|on|into)?\s*[:\-–—,]?\s*/i, '').trim();
+      if (raw && stNorm(raw).split(' ').length >= 2 && !/^(mode|please|now|with me|for a bit)$/.test(stNorm(raw))) return { redo: raw };
+      return deepIntro(state);
     }
     // "go deeper" alone keeps its old meaning (that page's deeper link) unless deep mode is already on
     var goDeeper = /^(go deeper|deeper|go deeper please)$/.test(fs);
@@ -2672,10 +2781,10 @@
     var on = deepOn(state);
     return { blocks: [{ k: 'p', x: 'Two modes, one raindrop. ' + (on ? 'We’re in deep mode right now.' : 'We’re in light mode right now.') },
       { k: 'list', x: ['Light mode, the usual one: ask about any tool, page or worry, and I’ll give you kind next steps, words you could use and the right page. Or just chat: jokes, riddles, fun facts.',
-        'Deep mode: say “talk deep”, or “talk deep: is honesty always kind?”, and we’ll think through a big question with philosophy, psychology and an autistic lens, tied back to the site. Say “small talk” to come back up.',
+        'Deep mode: say “talk deep”, or “talk deep: is honesty always kind?”, and we’ll think through a big question with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
         'In either mode I can make you an infographic, like “make an infographic about the mental load”.'] },
       { k: 'p', x: 'Either way, safety comes first. If something sounds unsafe, I’ll say so plainly and point you to real help. ' + HONEST_LINE }],
-      chips: [on ? { label: 'Back to small talk', q: 'Small talk' } : { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }, { label: 'Tell me a joke', q: 'Tell me a joke' }], kind: 'about', id: 'modes' };
+      chips: [on ? { label: 'Keep it light', q: 'Keep it light' } : { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }, { label: 'Tell me a joke', q: 'Tell me a joke' }], kind: 'about', id: 'modes' };
   }
   // a short answer to the question Puddles just asked back: a warm reply in character, not "I couldn't find that"
   function stAck(state, f) {
@@ -2795,7 +2904,7 @@
         { k: 'list', x: ['Tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind steps, words you could use, and a short path on the site.',
           'Type your Battery Meter answers (like “my battery answers are 3, 2, 4, 1, 2”) or your CALC-01 numbers, and I’ll work out the score with you.',
           'Ask “what is…” about any term, and say “tell me more” or “give me an example” to keep going.',
-          'Two ways to talk with me. Light mode is the usual one: questions like these, or just chat (“how are you?”, “tell me a joke”). Deep mode: say “talk deep” and we’ll think through a big question, like what love is, with philosophy, psychology and an autistic lens, tied back to the site. Say “small talk” to come back up.',
+          'Two ways to talk with me. Light mode is the usual one: questions like these, or just chat (“how are you?”, “tell me a joke”). Deep mode: say “talk deep” and we’ll think through a big question, like what love is, with philosophy, psychology and an autistic lens, tied back to the site. Say “keep it light” to come back up.',
           'I can also make you an infographic on anything here: just ask, like “make an infographic about the mental load”, or “summarise this as an infographic” after an answer.'] },
         { k: 'p', x: HONEST_LINE + ' When the site doesn’t cover something, I have some background notes, and I’ll always say when an answer comes from them. Everything happens in your browser: what you type stays on this device.' }],
         chips: STARTERS, fun: KB.pers && !quietOn() ? 1 : 0 };
@@ -2862,14 +2971,14 @@
     if (weak) {
       // No direct answer. If a passage still shares a real part of the question, show the closest one or two,
       // clearly labelled as the nearest match rather than an answer; otherwise say so and offer starters.
-      var near = offTopic ? [] : res.hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.4 && h.s >= 1.4; }).slice(0, 8);  // the full ranking, before the short-question filter above
+      var near = offTopic ? [] : res.hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.5 && h.s >= 1.4 && !/^\/(about\.html|architecture\/)/.test(KB.docs[h.i].u); }).slice(0, 8);  // the full ranking, before the short-question filter above
       var closest = [], seenKey = {};
       near.forEach(function (h) {
         var d = KB.docs[h.i], key = d.u.split('#')[0] + '|' + d.h.split(':')[0];
         if (closest.length < 2 && !seenKey[key] && (!closest.length || h.s >= near[0].s * 0.6)) { seenKey[key] = 1; closest.push(h.i); }
       });
       if (closest.length) {
-        var blocks = [{ k: 'p', x: pick(['I couldn’t find an exact answer to that, but here’s the closest I have:', 'I don’t have a page that answers that directly. This is the nearest thing I found:', 'Nothing here answers that exactly, but this part of the site comes closest:']) }];
+        var blocks = [{ k: 'p', x: pick(['I don’t have a page on exactly that yet. This is the nearest thing I found:', 'I don’t have a page that answers that directly yet. This part comes closest:']) }];
         closest.forEach(function (i, n) {
           state.last.shown[i] = 1;
           if (n > 0) blocks.push({ k: 'p', x: 'This may be related too:' });
@@ -2890,8 +2999,7 @@
         if (likely.length < 2 && !d.tip && !d.g && h.s >= 0.9 && t && t.length <= 60 && !likeSeen[key] && !HIDE_TITLE.test(t)) { likeSeen[key] = 1; likely.push({ t: t, i: h.i }); }
       });
       var ask = likely.length === 2 ? ' Is it closer to “' + likely[0].t + '”, or “' + likely[1].t + '”? Or one of these?' : likely.length ? ' Is it closer to “' + likely[0].t + '”? Or one of these?' : ' Is it about sharing the load, getting along with someone, or calming down?';
-      return { blocks: [{ k: 'p', x: pick(['I looked through the site’s pages and my notes, and couldn’t find anything that really answers that.', 'I’m sorry, I couldn’t find that in the site’s pages or my notes.', 'That one isn’t covered here, as far as I can find.']) +
-        ' I’d rather not guess. You could tell me a bit more: who it’s about, and what happened.' + ask }],
+      return { blocks: [{ k: 'p', x: 'I don’t have a page on that yet, and I’d rather not guess.' + (likely.length ? ask.replace(/ Or one of these\?$/, '') + ' Or tell me a bit more: who it’s about, and what happened.' : ' You could tell me a bit more: who it’s about, and what happened.' + ask) }],
         chips: likely.map(function (l) { return { label: l.t.length > 40 ? l.t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : l.t, doc: l.i }; }).concat(STARTERS).slice(0, 5), kind: 'none' };
     }
     return answerFrom(state, hits, res.terms, true);
@@ -2915,6 +3023,8 @@
       var key = d.u.split('#')[0] + '|' + d.h;
       if (pages[key]) continue;
       if (picked.length && d.tip) continue;
+      // a second passage never comes from the site's own about page, build notes or worksheets unless they were asked about
+      if (picked.length && /^\/(about\.html|architecture\/|workpapers\/|library\.html#pillar|prog-01|report-01|wp-\d)/.test(d.u) && !/\b(wp ?\d+|workpapers?|worksheets?|calc ?\d+|report ?\d+|prog ?\d+|about|who made|creator|founder|pillars?)\b/.test(fold((state.last && state.last.q) || ''))) continue;
       // a glossary entry and a page passage pair well; two long passages are plenty
       pages[key] = 1; pages[d.u.split('#')[0] + '|' + d.h] = 1;
       picked.push(h.i);
@@ -3008,10 +3118,32 @@
     return r;
   }
 
+
+  // The program's own labels (Pillar IV, WP-09, REPORT-01, Person A) mean nothing to someone asking about their life:
+  // they stay out of everyday answers, and only show when someone asks about the program itself
+  var INTERNAL_Q = /\b(wp ?\d+|workpapers?|worksheets?|calc ?\d+|report ?\d+|prog ?\d+|pillars?|the program|architecture|how (is|was) (it|this|the site) (built|made))\b/;
+  function dejargon(r, q) {
+    if (!r || !r.blocks || INTERNAL_Q.test(fold(q)) || /^(calc|safety|lang)$/.test(r.kind || '') || (r.kind === 'card' && cardById(r.id) && cardById(r.id).kind === 'tool')) return r;
+    function clean(t) {
+      return String(t).replace(/\s*\((?:that’s|that's|this is|see) Pillars? [IVX]+[^)]*\)/g, '')
+        .replace(/(^|\s)This (?:is|touches|is part of) Pillars? [IVX]+[^.]*\.(?=\s|$)/g, '$1')
+        .replace(/\s*\((?:(?:WP|CALC|REPORT|PROG)-\d+(?:,\s*|\s+and\s+)?)+\)/g, '')
+        .replace(/\bPerson A\b/g, 'one person').replace(/\bPerson B\b/g, 'the other person')
+        .replace(/[ \t]{2,}/g, ' ').replace(/\s+([.,;:])/g, '$1').trim();
+    }
+    r.blocks = r.blocks.filter(function (b) {
+      if (b.k === 'p' || b.k === 'note' || b.k === 'script') { b.x = clean(b.x); return !!b.x; }
+      if ((b.k === 'list' || b.k === 'passage' || b.k === 'bg') && Array.isArray(b.x)) { b.x = b.x.map(clean).filter(Boolean); return b.x.length > 0; }
+      if (b.k === 'links' && Array.isArray(b.x)) b.x = b.x.map(function (l) { return [clean(l[0]) || l[0], l[1]]; });
+      return true;
+    });
+    r.chips = (r.chips || []).filter(function (c) { return !/^(WP|CALC|REPORT|PROG)-\d+\b/.test(c.label); }).map(function (c) { var l = clean(c.label); return l === c.label ? c : Object.assign({}, c, { label: l }); });
+    return r;
+  }
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -3416,7 +3548,7 @@
     });
   };
 
-  Chat.prototype.greet = function (text) {
+  Chat.prototype.greet = function (text, then) {
     var me = this, es = this.es;
     // opened from a page with its own questions (coming out, co-parenting…): those first, never "We keep arguing about chores"
     loadKB(function (ok) {
@@ -3425,6 +3557,7 @@
       if (!es && st.page && st.page.chips && st.page.chips.length) chips = st.page.chips.concat([{ label: 'Talk deep', q: 'Talk deep' }]);
       else if (!es && st.page && (st.page.u || st.page.about)) chips = [{ label: 'Tell me about this page', q: 'Tell me more about ' + (st.page.about || pageTitle(st.page.u) || 'this page') }, STARTERS[3], STARTERS[1], { label: 'Just chat', q: 'Let’s just chat' }];
       me.say([{ k: 'p', x: text }], chips, REDUCED ? 150 : 450);
+      if (then) then();
     });
   };
 
@@ -3439,6 +3572,8 @@
     var changed = this.char.name !== prevName;
     // from the Spanish page (or a Spanish browser): the hello, and the box, in Spanish
     this.es = spanishHere();
+    // the home page's headline isn't a page topic: the usual hello there
+    if (/^\/(index\.html)?$/.test(pageCtxNow().path) && /Curious about something on/.test(this.char.greeting || '')) this.char.greeting = DEFAULT_CHAR.greeting;
     if (this.es && this.char.name === DEFAULT_CHAR.name || this.es && /Professor Puddles/.test(this.char.name)) {
       this.char.greeting = ES_GREETING; this.input.placeholder = 'Escribe aquí, en español…';
       var lb = this.root.querySelector('label'); if (lb) lb.textContent = 'Pregúntale al Profesor Puddles';
@@ -3449,9 +3584,10 @@
       this.msgs.forEach(function (m) { me.render(m, false); });
       if (this.msgs.length) { this.setChips(STARTERS.slice(0, 3)); this.scrollTo(); }
     }
-    if (!this.msgs.length || (changed && opts.greeting)) this.greet(this.char.greeting);
-    var topic = typeof opts.topic === 'string' ? opts.topic.trim().slice(0, 300) : '';
-    if (topic && !(lastUser && lastUser.x === topic)) this.ask(topic);
+    var topic = typeof opts.topic === 'string' ? opts.topic.trim().slice(0, 300) : '', me2 = this;
+    var askTopic = function () { if (!topic || (lastUser && lastUser.x === topic)) return; if (me2.busy) (me2.queue = me2.queue || []).push(topic); else me2.ask(topic); };
+    // the hello first, then the page's topic (the hello waits for the page's own questions to be ready)
+    if (!this.msgs.length || (changed && opts.greeting)) this.greet(this.char.greeting, askTopic); else askTopic();
     loadKB(function () {});
   };
 

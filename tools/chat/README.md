@@ -94,6 +94,18 @@ more". An **intent** card answers a common question (`what`, optional `how` list
 common word ("battery", "drift", "the library"): then it only counts when the question has nothing else
 in it. `clarify` holds the clarifying prompts: a `pat`, a line `x`, and 2–4 `chips` as [label, question].
 
+**Staying on a topic.** A caring topic card (in `CV_PERSONAL` in site-chat.js) stays the topic for five turns,
+and a page that names it in `"page"` makes it the topic when the chat is opened from that page (the pop-up,
+or `/ask.html?about=<the page's heading>`); its `pageChips` are then the first chips. While a topic is on:
+`follow` ([pattern, card id] pairs) answers a follow-up with a narrower card; "what do I actually say?",
+"what can I do this week?", "can I print this?" and "is there a source?" are answered from the topic card;
+any other short follow-up gets the part of the topic's page that fits. A card's `weak` pattern names words
+that alone must not pull a conversation off another topic ("christening" in a talk about a brother).
+`"safety": true` cards (harm, control, a crisis) always answer as themselves, and anything that may be about
+harm or control is never bent to fit the topic. `sides` ([{re, what, how, script, scriptLabels, links}])
+give each side of a two-sided topic its own answer (the saver and the spender, the night worker and the
+partner at home); a follow-up keeps the side it started on.
+
 ## Adding a situation playbook
 
 `situations/who.json` lists the kinds of relationship (`nouns` are captured, so "my sister" becomes

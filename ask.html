@@ -157,7 +157,7 @@
   <p><strong>He doesn’t make things up.</strong> Professor Puddles isn’t a generative AI that writes new text. He is a small scripted helper that runs right here in your browser.</p>
   <ul>
     <li>Every answer is drawn from this site’s own pages, cards and library, written and checked by people, with a link to read more. When an answer comes from his background notes rather than a page, he says so.</li>
-    <li>Research he mentions is named honestly, and the site is adding a page of checked sources.</li>
+    <li>Research he mentions is named honestly, and every source is listed, with what it found in plain words, on <a href="/research.html">The research behind this site</a>.</li>
     <li>He can still pick the wrong topic. If he misses, tell him “that’s not it” or say it another way.</li>
     <li>He isn’t a therapist and can’t diagnose. For anything about safety, he points you to real help.</li>
   </ul>
@@ -233,7 +233,7 @@
   </details>
   <details class="ap-group">
     <summary><span class="ap-ico t-lilac" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-3.6 10.8c.7.6 1.1 1.3 1.1 2.2h5c0-.9.4-1.6 1.1-2.2A6 6 0 0012 3z"/></svg></span>Talk deep</summary>
-    <p class="ap-note">These switch on deep talk first. Say “small talk” any time to come back.</p>
+    <p class="ap-note">These switch on deep talk first. Say “keep it light” any time to come back.</p>
     <ul class="ap-qs">
       <li><button type="button" class="ap-q" data-q data-deep>What is love?</button></li>
       <li><button type="button" class="ap-q" data-q data-deep>Is honesty always kind?</button></li>
@@ -289,7 +289,7 @@
   </div>
   <div>
     <h3>Starting over</h3>
-    <p>Tap <strong>Start over</strong> at the top of the chat for a fresh conversation. Closing the tab clears it too. In deep talk, say “small talk” to come back to lighter chat.</p>
+    <p>Tap <strong>Start over</strong> at the top of the chat for a fresh conversation. Closing the tab clears it too. In deep talk, say “keep it light” to come back to lighter chat.</p>
   </div>
 </div>
 </section>
@@ -346,7 +346,7 @@
         return new Promise(function (done) {
           idle(function () {
             // deep talk answers a big question with philosophy; "Learn something" wants the plain answer
-            var sw = deep && !deepOn() ? 'Talk deep' : (light && deepOn() ? 'Small talk' : '');
+            var sw = deep && !deepOn() ? 'Talk deep' : (light && deepOn() ? 'Keep it light' : '');
             if (sw) { send(sw); idle(function () { send(q); done(); }); }
             else { send(q); done(); }
           });

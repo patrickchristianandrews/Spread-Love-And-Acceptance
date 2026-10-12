@@ -272,7 +272,7 @@ c('followups', ['What is the Lemonade Stand?', 'give me an example'], { text: /r
 c('followups', ['What is WP-13?', 'what about for roommates?'], { kind: 'road', id: 'roommate' });
 c('followups', ['My sister always makes plans without asking me.', 'tell me more'], { link: '/library/' });
 c('followups', ['What is the Journey?', 'tell me more'], { text: /pal cam|quicker|steadier/ });
-c('followups', ['What is active listening?', 'tell me more'], { not: /couldn’t find/ });
+c('followups', ['What is active listening?', 'tell me more'], { not: /couldn’t find|don’t have a page/ });
 // conversation turns: keep the topic, plain thanks, red flags, "that didn't help", topic switches
 c('followups', ['My partner never does the dishes', 'ok and then what?'], { kind: 'sit-more', text: /calm conversation/ });
 c('followups', ['My partner never does the dishes', 'ok and then what?', 'and then what'], { kind: 'sit-more', text: /one ordinary week/ });
@@ -324,7 +324,7 @@ t('pages', 'What is habit stacking?', { link: '/library/', not: /background note
 t('pages', 'What is triangulation in families?', { link: '/library/life.html', not: /background notes/ });
 t('pages', 'What is the mental load?', { link: ['/library/fairness.html', '/book/preface', '/lemonade'] });
 t('pages', 'Why do I react this way?', { link: ['/know-yourself'] });
-t('pages', 'Surprise me', { not: /couldn’t find/ });
+t('pages', 'Surprise me', { not: /couldn’t find|don’t have a page/ });
 
 // ---------------------------------------------------------------- a first-time tester's questions
 // in-scope, short or feeling-led messages never get "outside my little pond"
@@ -354,7 +354,7 @@ t('tester', 'when my partner raises his voice i freeze', { kind: 'sit', id: 'par
 t('tester', 'how do i say no to my mom', { kind: 'sit', id: 'family+peoplepleasing', not: /Make it easy for your mom to say no/ });
 t('tester', 'my mom needs more care and my brother does nothing', { kind: 'sit', id: 'family+siblingcare', text: /your brother/, not: /between you and your mom/ });
 t('tester', 'my mom needs more care and my brother does nothing (both sides)', { q: 'my mom needs more care and my brother does nothing', text: /I love helping you|sorting out a plan/ });
-t('tester', "my roommate's boyfriend is always over", { kind: 'sit', id: 'roommate+guests' });
+t('tester', "my roommate's boyfriend is always over", { id: 'roomguests', link: '/sharing-a-room.html#guests' });  // round 8: the shared-room answer, not house and bills
 // follow-ups keep the topic and the person
 c('tester', ['my partner texts me one word answers', "he just writes 'ok.' or 'fine'"], { kind: 'sit', id: 'partner+shorttexts' });
 c('tester', ['my partner texts me one word answers', "he just writes 'ok.' or 'fine'", 'give me an example'], { kind: 'sit-more', text: /ok/ });
@@ -589,7 +589,7 @@ c('followups', ['my gf and i keep fighting about her phone', 'is that a red flag
 // round 5: teens, identity, co-parents, caregivers, parents, Spanish
 t('safety', 'my friend cuts themselves what do i do', { kind: 'safety', text: /trusted adult[\s\S]*988/ });
 t('care', 'my dad makes fun of my pronouns', { id: 'lgbtq', text: /Trevor Project/ });
-t('care', 'im gay and scared to come out', { id: 'lgbtq' });
+t('care', 'im gay and scared to come out', { id: 'lgbtadult' });  // round 8: adult unless they say they're under 18
 t('care', 'is my mom allowed to read my texts', { id: 'parentphone', not: /Domestic Violence/ });
 t('care', 'my parents fight all the time', { id: 'parentsfight' });
 t('care', 'is it harassment if my ex texts me 30 times a day', { id: 'exharass', link: '/safety.html#after-separation' });
@@ -852,7 +852,7 @@ t('round7', 'how do i build a life again after divorce', { id: 'onmyown', link: 
 // business partners
 t('round7', 'my business partner thinks I don\'t pull my weight', { id: 'bizpartner', link: '/work.html#business-partners' });
 t('round7', 'we\'re not a couple, we co-own a bakery', { id: 'bizpartner' });
-c('round7', ['we\'re not a couple, we co-own a bakery', 'nobody sees the admin I do'], { id: 'bizpartner', text: /admin/ });
+c('round7', ['we\'re not a couple, we co-own a bakery', 'nobody sees the admin I do'], { id: /bizpartner|bizadmin/, text: /admin/ });
 t('round7', 'it\'s our bakery, I do payroll, suppliers and permits', { id: 'bizpartner' });
 t('round7', 'is there anything for business owners?', { id: 'bizpartner' });
 // coming home, different hours
@@ -1062,6 +1062,167 @@ t('safety8', 'i had an affair and my husband knows', { id: 'infidelity', text: /
 t('safety8', 'my husband cheated on me', { id: 'infidelity', text: /isn’t your fault/, link: '/book/understanding-11-healing-in-depth.html' });
 t('safety8', 'i found out about her affair', { id: 'infidelity' });
 
+// ---------------------------------------------------------------- round 8 re-test: the topic carries across follow-ups, each side gets its own words
+{
+  const NOLABEL = /\bPillar [IVX]+\b|\bWP-\d+|REPORT-01|CALC-01|Person [AB]\b|The site puts it like this/;
+  // siblings and rifts: a word like "christening" doesn't pull a talk about a brother into two faiths
+  c('chat8', ['how do i reach out to my brother after years of silence', "what if he doesn't reply before the christening"], { id: 'riftnoreply', link: '/family-rifts.html#reaching-out', text: /weeks, not days/, not: /Eid|interfaith|faith/i });
+  c('chat8', ['how do i reach out to my brother after years of silence', 'what do i say at the christening'], { link: '/family-rifts.html', not: /Eid and Christmas/ });
+  t('chat8', "should i mention dad's will", { id: 'inheritance', link: '/family-rifts.html#money', not: /make plans without asking|clash on tone/ });
+  t('chat8', 'my sister wants the baby christened (still two faiths on its own)', { q: 'how do we decide about christening our baby when we have two faiths', id: 'twofaiths' });
+  // business partners
+  c('chat8', ["my business partner thinks I don't pull my weight", 'how do I thank her without it sounding fake'], { id: 'bizthanks', link: ['/work.html#business-partners', '/appreciation-at-work.html'], not: /compassion|Paul Gilbert/ });
+  c('chat8', ["my business partner thinks I don't pull my weight", "she's so controlling about how I do things, it's my bakery too"], { id: 'bizhow', text: /owns how/, not: /Staying with that|afraid|Not safe/ });
+  t('chat8', 'nobody sees the admin I do', { id: 'bizadmin', text: /^That’s a lonely kind of work/, link: '/work.html#business-partners', not: /Faith and culture work/ });
+  // co-parents, with and without the page they came from
+  t('chat8', 'she makes decisions without asking me (opened from the co-parenting page)', { q: 'she makes decisions without asking me', about: 'Separated co-parents', id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /I love doing things together/ });
+  t('chat8', 'she makes decisions without asking me (pop-up on co-parenting.html)', { q: 'she makes decisions without asking me', page: '/co-parenting.html', id: 'coparentdecide', text: /within 3 days/, not: /48 hours/ });
+  c('chat8', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /DACI|48 hours/ });
+  t('chat8', 'she told me about the school trip the night before', { id: 'coparentlate', link: '/co-parenting.html' });
+  t('chat8', 'i feel shut out as a dad', { id: 'coparentshutout', link: '/co-parenting.html#who-decides', not: /window of tolerance/i });
+  t('chat8', "he's honestly useless (co-parenting page)", { q: "he's honestly useless", page: '/co-parenting.html', id: 'coparentuseless', not: /retir/i });
+  t('chat8', "he's honestly useless (no context: ask who)", { q: "he's honestly useless", kind: 'clarify', not: /retir/i });
+  t('chat8', 'we only text, how should we word things', { id: 'coparenttext', link: ['/signal-translator.html?rel=co-parents', '/co-parenting.html#talking'] });
+  t('chat8', 'my ex books things on my weekends', { id: 'exweekends', link: '/co-parenting.html#who-decides' });
+  t('chat8', 'co-parent page chips', { q: 'Separated co-parents', about: 'Separated co-parents', chip: /decide without me|Last-minute/, nochip: /arguing about chores/ });
+  c('chat8', ['my ex never remembers anything for our daughter', 'i do all the school, doctor and birthday party stuff and he does nothing', 'is this abuse?'], { kind: 'redflag', text: /not abuse/, link: '/safety.html' });
+  // foster and kinship: rules, the emotional work
+  t('chat8', 'she wont come home on time and laughs when we say no phone', { id: 'teencurfew', link: '/foster-and-kinship.html#rules', not: /mom’s request|Cooking is yours/ });
+  t('chat8', 'our foster teen ignores every rule', { id: 'teencurfew', not: /moved homes a lot often push away/ });
+  t('chat8', 'how do we share the emotional work of fostering', { id: 'fosterload', link: '/foster-and-kinship.html#jobs', not: /moved homes a lot often push away/ });
+  c('chat8', ['our foster daughter pushes us away', 'i also do all the emotional stuff, my husband just wants stricter rules'], { id: 'fosterload', link: '/foster-and-kinship.html', not: /closest to one of these/ });
+  c('chat8', ['our foster daughter pushes us away', 'how do we split the jobs'], { id: 'fosterload', text: /meetings/, not: /chore fights/ });
+  c('chat8', ['our foster daughter pushes us away', 'what rules should we set?'], { id: /teenrules|teencurfew/, not: /ground rules/i });
+  t('chat8', 'what rules should we set? (no context: which kind)', { q: 'what rules should we set?', kind: 'clarify', chip: /House rules/ });
+  t('chat8', 'foster chip adds no age', { q: 'our foster daughter pushes us away', nochip: /14/ });
+  // friends: each side, and follow-ups that stay with the friendship
+  c('chat8', ["i have a newborn and i'm neglecting my best friend", 'i feel so guilty'], { id: 'friendsguilt', link: '/friends.html', not: /Am I a bad partner|resenting/ });
+  c('chat8', ["i have a newborn and i'm neglecting my best friend", 'what do i actually text her'], { link: '/friends.html', script: true, text: /underwater with the baby|still care about you/, not: /couldn’t find|don’t have a page/ });
+  c('chat8', ["i have a newborn and i'm neglecting my best friend", 'should i just stop texting her and see if she notices'], { link: '/friends.html', not: /fight over text|Partner/ });
+  t('chat8', 'my best friend never texts back since she had her baby (the waiting friend first)', { q: 'my best friend never texts back since she had her baby', id: 'friends', text: /^It hurts to feel like the only one/, script: true, not: /low on energy and slow to reply/ });
+  c('chat8', ['my best friend never texts back since she had her baby', 'what do i actually text her'], { text: /I miss you and I’ve been feeling a bit left out/, not: /slow to reply/ });
+  t('chat8', "i have a newborn and i'm neglecting my best friend (the quiet friend)", { q: "i have a newborn and i'm neglecting my best friend", id: 'friends', text: /underwater with the baby/ });
+  // gaming: the partner being reminded gets their own words
+  t('chat8', 'she nags me about chores the second i log on', { id: 'gaming', link: '/gaming-and-time-together.html', text: /being reminded|before I log on/ });
+  t('chat8', 'my gf says i game too much', { id: 'gaming', link: '/gaming-and-time-together.html' });
+  t('chat8', 'my gamer boyfriend ignores me (no spelling fix)', { q: 'my gamer boyfriend ignores me', id: 'gaming', not: /I think you mean/ });
+  // housemates and a shared room
+  t('chat8', 'the bins never get taken out in our flat and I end up doing it every time', { id: 'housechores', link: '/share-the-load.html#roommates', text: /any of you/, not: /what state you were both in|either of us is the problem/ });
+  c('chat8', ['the bins never get taken out in our flat and I end up doing it every time', 'there are three of us, how do I bring it up without it turning into a fight in the group chat'], { id: 'housegroupchat', text: /any of you/, not: /Friday or Saturday/ });
+  t('chat8', "one of us does way more hours at the lab, does that change what's fair", { id: 'housefair', link: '/library/conflict.html#fairness-rules' });
+  t('chat8', 'my roommates boyfriend is always here', { id: 'roomguests', link: '/sharing-a-room.html#guests', not: /bills|our kitchen/ });
+  c('chat8', ['my roommates boyfriend is always here', 'i hate confrontation', 'can i talk to my RA about this', 'what do i actually say to her'], { link: '/sharing-a-room.html', script: true, not: /Emotional labor|Hochschild|WP-09|CALC-01/ });
+  t('chat8', 'RA answer keeps the roommate setting', { q: 'can i talk to my RA about this', link: '/signal-translator.html?rel=roommates' });
+  // coming home after a deployment
+  c('chat8', ['nightmares since deployment', 'im on edge all the time and snap at the kids'], { id: 'comehomeedge', link: '/coming-home.html#sleep', text: /800-342-9647/, not: /Stepfamilies|stepkids/ });
+  c('chat8', ['he came back and changes how I do everything', "i'm so tired of it honestly"], { id: 'heldfort', link: '/coming-home.html#held-the-fort', not: /capacity issue|WP-0/ });
+  c('chat8', ['i feel like a stranger in my own house', "i can't sleep since i got back"], { id: 'comehomesleep', link: '/coming-home.html#sleep', text: /800-342-9647/ });
+  t('chat8', 'ptsd answer: no Not safe at home? link unless fear', { q: 'nightmares and i\'m on edge all the time', id: 'deployhealth', not: /Not safe at home/ });
+  // different hours: each side
+  t('chat8', 'i work nights and feel guilty i never help', { id: 'differenthours', text: /^Feeling guilty is common/, link: '/different-hours.html#sleep-is-work', not: /not counting hours/ });
+  t('chat8', "working from home means everyone thinks I'm free", { id: 'differenthours', text: /^Being home isn’t the same as being free/, link: '/different-hours.html#home-not-free' });
+  c('chat8', ['i work nights and feel guilty i never help', 'but i still feel bad, he does the dog and the house and i just sleep'], { id: 'nightguilt', text: /Thank you for doing the dog/, not: /Sleep, mood and conflict/ });
+  t('chat8', 'my husband sleeps all day and I do everything for the dog', { id: 'differenthours', text: /dog/, script: true });
+  // money: the spender's side, rent by income
+  t('chat8', "she says I'm bad with money (the spender's words)", { q: "she says I'm bad with money", id: 'moneystyles', text: /Spending on friends and fun is how I enjoy life/, not: /I’m a saver; it helps me feel safe/ });
+  t('chat8', "my fiance spends too much and I'm scared (the saver's words)", { q: "my fiance spends too much and I'm scared", id: 'moneystyles', text: /I’m a saver/, not: /finance/ });
+  t('chat8', 'how do we split rent if he earns more than me', { id: 'rentincome', text: /by income/, link: '/money-together.html#moving-in' });
+  t('chat8', 'my fiancé spends too much (accented, never corrected)', { q: 'my fiancé spends too much', id: 'moneystyles', not: /I think you mean|finance/ });
+  // two faiths: elders advise, the couple decides
+  t('chat8', 'my mum keeps saying the baby must be raised muslim', { id: 'twofaiths', text: /elders advise, the two of you decide/, link: '/two-faiths.html#elders', not: /bath time|new baby brings/i });
+  t('chat8', 'should we raise the baby Catholic', { id: 'twofaiths', not: /bath time/ });
+  t('chat8', 'his mum wants us to raise the baby Muslim', { id: 'twofaiths', link: '/two-faiths.html#elders', not: /with your mum|every other Sunday/ });
+  t('chat8', 'what do we tell both families (two-faiths page)', { q: 'what do we tell both families', page: '/two-faiths.html', link: '/two-faiths.html#both-families', not: /Papernow|Stepfamilies/ });
+  t('chat8', 'two-faiths page chips', { q: 'Two faiths or cultures, one family', page: '/two-faiths.html', chip: /both families|grandparent/i, nochip: /I feel like I do everything|good article/ });
+  // culture, feelings, simpler English
+  t('chat8', "chinese family, we don't say love out loud", { id: 'lovebydoing', link: '/empty-nest.html#doing', not: /make plans without asking/ });
+  c('chat8', ['our children left for university, the house is so quiet', 'what can I do this week, something simple'], { id: 'emptynest', link: '/empty-nest.html', not: /resync|REPORT-01|WP-0/ });
+  c('chat8', ['our children left for university, the house is so quiet', 'I am not good with words'], { id: 'lovebydoing', link: '/empty-nest.html#doing' });
+  c('chat8', ['my husband does not talk about feelings', 'can you say it in simpler English please'], { text: /fixing the car|fixing things/, not: /sorting|turning up|“Thank you for (fixing|sorting) the car\.\s*$/m });
+  t('chat8', "why can't I talk about my feelings", { id: 'feelingstalk', link: ['/book/self-1-then.html', '/book/understanding-1-feelings.html'], script: true, text: /I wasn’t brought up to say this/, not: /Have fun|I love a good report/ });
+  c('chat8', ['my wife died last year', "why can't I talk about my feelings"], { link: '/grief.html', not: /Have fun/ });
+  // grown children and grandparents
+  c('chat8', ['how do i set boundaries with my mum without hurting her', "she gets upset and says i'm keeping the baby from her"], { id: 'gcbaby', link: '/grown-up-children.html', not: /bath time every night|Pillar|WP-02/ });
+  t('chat8', 'can we make a plan for visits together', { id: 'familyplan', link: ['/grown-up-children.html#plan', '/check-ins.html?for=family#card'] });
+  t('chat8', "my daughter doesn't want my advice about the baby", { id: 'gpadvice', not: /turning up without asking/ });
+  t('chat8', 'i feel shut out from my grandchild', { id: 'gpshutout', not: /\bmiss him\b|see him\b/ });
+  t('chat8', 'I was brought up that children should be seen and not heard. Am I doing it wrong?', { id: 'seenheard', link: '/grandparents.html', not: /cut off|interrupt/i });
+  c('chat8', ['my grandson has ADHD, how should I talk to him', 'is ADHD real or just bad behaviour'], { id: 'adhdkids', text: /^Yes, ADHD is real/, not: /Staying with that/ });
+  t('chat8', 'how do I print the page about ADHD', { id: 'print', text: /Print this page/, link: '/adhd-kids.html', not: /Wiring Card/ });
+  t('chat8', 'can I print this out (on the ADHD page)', { q: 'can I print this out', page: '/adhd-kids.html', id: 'print', link: '/adhd-kids.html', not: /chore chart/i });
+  // divorce, part-time parenting
+  t('chat8', "i'm lonely since the divorce", { id: 'divorcelonely', link: '/on-my-own.html#lonely' });
+  t('chat8', 'the flat is so quiet after they leave on sunday', { id: 'sundaygoodbye', link: '/on-my-own.html#part-time-parent', not: /look-back|WP-01/ });
+  t('chat8', 'what can we do this weekend that doesnt cost much', { link: '/on-my-own.html#part-time-parent', not: /Invisible Cost|about\.html/ });
+  // work: plain answers, no autism scripts unless it was mentioned
+  t('chat8', 'I am autistic. is something wrong with me', { id: 'autisticself', text: /^No\. Autism is a different way of being wired, not a fault\./, link: ['/wired-differently.html', '/work.html#autistic-at-work'], not: /retir/i });
+  t('chat8', 'I hate small talk at work. what do I say', { id: 'smalltalkwork', text: /one exchange/, script: true, not: /RACI|one owner per job/i });
+  t('chat8', 'my manager said do it when you get a chance. what deadline does that mean', { id: 'whenchance', text: /no deadline[\s\S]*end of day Friday/, not: /RACI/ });
+  t('chat8', 'how do I ask my boss for written instructions (no autism assumed)', { q: 'how do I ask my boss for written instructions', id: 'autisticwork', not: /I’m autistic|legal right/ });
+  t('chat8', 'I need a quiet break at work, how do I say it', { id: 'autisticwork', script: true, not: /I’m autistic|legal right/ });
+  t('chat8', 'what does STDE mean', { id: 'wl-archetypes', text: /^STDE, the Compass/, not: /QFDE/ });
+  // coming out as an adult
+  const ADULT_OK = /1-888-843-4564[\s\S]*0800 0119 100/;
+  t('chat8', 'how do i come out to my conservative parents', { id: 'lgbtadult', text: ADULT_OK, link: '/coming-out.html', not: /GSA|school counselor/ });
+  t('chat8', 'lgbtq support line', { id: 'lgbtadult', text: ADULT_OK });
+  t('chat8', 'is it safe to come out if my dad has a temper', { id: 'lgbtadult', link: '/coming-out.html#safety-first' });
+  t('chat8', 'how do i tell my mom i have a girlfriend', { id: 'lgbtadult', not: /let your girlfriend say it back/ });
+  c('chat8', ['im 15 and gay and scared to come out', "that's not it, i'm an adult not a teen"], { id: 'lgbtadult', link: '/coming-out.html', not: /parenting teenagers|GSA/ });
+  t('chat8', 'my parents are really religious and i’m scared (from the coming-out page)', { q: "my parents are really religious and i'm scared", about: 'Coming out as an adult', id: 'lgbtsafety', link: '/coming-out.html#safety-first' });
+  t('chat8', 'coming-out page chips', { q: 'Coming out as an adult', about: 'Coming out as an adult', chip: /tell my parents|cut me off/, nochip: /arguing about chores/ });
+  t('chat8', 'no example name in his words', { q: "i'm 31 and bisexual, how do i tell my family about my girlfriend", not: /Dani/ });
+  t('chat8', 'what does this site keep on my phone', { id: 'devicekeep', link: '/on-this-device.html', not: /phubbing|Phones and presence/i });
+  t('chat8', 'teens still get the teen answer', { q: 'im 15 and gay and scared to come out', id: 'lgbtq' });
+  // calm, naturally
+  t('chat8', 'what natural things actually help anxiety', { id: 'herbsanxiety', text: /sleep, movement, slow breathing/, link: '/calming-supplements.html#start', not: /Masking/ });
+  t('chat8', 'what helps anxiety naturally', { id: 'herbsanxiety', link: '/calming-supplements.html#start', not: /Masking/ });
+  // talk deep: <question> answers the question; "keep it light" comes back up
+  c('chat8', ['talk deep: why is small talk so hard for some people?'], { id: 'smalltalkwhy', text: /Deep talk is on[\s\S]*unwritten/, not: /post-traumatic/i });
+  t('chat8', 'talk deep: what is the double empathy problem?', { link: '/wired-differently', not: /^Deep mode on\. Short words/ });
+  t('chat8', 'talk deep: I find small talk exhausting', { not: /^Deep mode on\. Short words/ });
+  c('chat8', ['talk deep: are emotions universal? like the ekman faces thing', 'who came up with that, is there a source i can cite'], { id: 'source', link: '/research.html', text: /Ekman/, not: /Coltrane/ });
+  c('chat8', ['talk deep', 'keep it light'], { kind: 'chat', not: /## Philosophy/ });
+  t('chat8', 'why do some people find chatting about the weather so hard?', { id: 'smalltalkwhy', not: /foster|Open-Meteo/i });
+  t('chat8', 'why do people not say what they mean?', { id: 'notsaywhatmean', not: /Highly sensitive/i });
+  t('chat8', 'what is autistic burnout?', { link: '/book/understanding-9-minds.html#burnout', text: /exhaustion/, not: /Masking and camouflaging/ });
+  t('chat8', 'is autism a disorder?', { id: 'autismdisorder', text: /autism spectrum disorder[\s\S]*difference/ });
+  // honest answers about Puddles himself, teachers, infographics, definitions
+  t('chat8', 'can I trust what you tell me?', { id: 'honest', not: /bonding|Rempel/i });
+  t('chat8', 'can I use this with my class?', { id: 'teachers', text: /^Yes\. You may print and share pages and handouts for non-commercial teaching and group use, with credit/, link: '/for-teachers.html', not: /clients|between sessions/ });
+  t('chat8', "I'm a teacher. Can I use this material with my students in class?", { id: 'teachers', link: '/for-teachers.html', not: /clients|between sessions/ });
+  t('chat8', "I'm a couples therapist (still counsellors)", { q: "I'm a couples therapist. Can I use this with clients?", id: 'forcounselors' });
+  t('chat8', 'make me an infographic about active listening', { kind: 'info', info: true, link: '/library/communication.html#active-listening', not: /\(the Library\)/ });
+  t('chat8', 'what is attachment theory in plain words? i need it for a uni seminar', { text: /Bowlby[\s\S]*secure base/, link: '/library/relationships.html#attachment-theory', not: /I think you mean/ });
+  t('chat8', 'chapter 13 on anger', { q: 'what is chapter 13 of part three about', link: '/book/understanding-13-anger.html' });
+  t('chat8', 'chapter 14', { q: 'part three chapter 14', link: '/book/understanding-14-personality.html' });
+  t('chat8', 'chapter 15', { q: 'chapter 15 of part three', link: '/book/understanding-15-love.html' });
+  // Spanish: a Spanish answer to a Spanish message, never an English-only fallback, never an English spelling fix
+  const ES_NOT = /solo puedo responder en inglés|I think you mean|only answer in English|outside my little puddle|beyond my puddle/;
+  t('chat8', 'estoy triste y cansado', { kind: 'lang', link: '/en-espanol.html#cuidar', text: /Respira despacio/, not: ES_NOT });
+  t('chat8', 'noche dificil, necesito calma', { kind: 'lang', link: '/en-espanol.html#cuidar', not: ES_NOT });
+  t('chat8', 'es una noche difícil, necesito calmarme', { kind: 'lang', link: '/en-espanol.html#cuidar', not: ES_NOT });
+  t('chat8', 'como pido ayuda a mis hijos', { kind: 'lang', id: 'es-cuidar-hijos', script: true, not: ES_NOT });
+  t('chat8', 'él trabaja 60 horas en construcción', { kind: 'lang', link: '/en-espanol.html#horas', not: ES_NOT });
+  t('chat8', 'estoy muy cansada con los gemelos', { kind: 'lang', link: '/en-espanol.html#pequenos', not: ES_NOT });
+  t('chat8', 'mi esposo no me ayuda', { kind: 'lang', link: '/en-espanol.html#casa', not: ES_NOT });
+  t('chat8', 'tenemos gemelos de dos años y no dormimos', { kind: 'lang', link: '/en-espanol.html#pequenos', not: ES_NOT });
+  t('chat8', 'peleamos mucho', { kind: 'lang', link: '/en-espanol.html#enojado', not: ES_NOT });
+  c('chat8', ['¿hablas español?', 'peleamos mucho'], { kind: 'lang', link: '/en-espanol.html#enojado', not: ES_NOT });
+  t('chat8', 'tengo miedo de mi esposo (safety first, in Spanish)', { q: 'tengo miedo de mi esposo', kind: 'lang', id: 'es-seguro', text: /1-800-799-7233[\s\S]*911/ });
+  t('chat8', 'Spanish page chips', { q: 'Ayuda para tu familia, en español', page: '/en-espanol.html', kind: 'lang', chip: /casa|cansado|calma/ });
+  // no internal labels in everyday answers
+  t('chat8', 'we are like roommates now', { not: NOLABEL });
+  t('chat8', 'my partner never notices what i do', { not: NOLABEL });
+  c('chat8', ['how do i set boundaries with my mum without hurting her', "she gets upset and says i'm keeping the baby from her"], { not: NOLABEL });
+  t('chat8', 'the five pillars still name themselves', { q: 'what are the five pillars', id: 'pillars', text: /\(V\)/ });
+  // safety still wins over the topic
+  c('chat8', ['she makes decisions without asking me', 'he shouts at me at handover and i\'m scared'], { kind: 'safety', link: '/safety.html' });
+  c('chat8', ['my business partner thinks I don\'t pull my weight', 'she threatens me when i do things my way'], { kind: 'safety' });
+  c('chat8', ['my best friend never texts back since she had her baby', 'i want to die'], { kind: 'safety', text: /988/ });
+  c('chat8', ['the bins never get taken out in our flat and I end up doing it every time', 'my housemate checks my phone and reads my messages'], { kind: 'safety' });
+  t('chat8', 'co-parent topic never hides harassment', { q: 'he keeps messaging me at all hours after i asked him to stop', page: '/co-parenting.html', id: 'exharass', link: '/safety.html', not: /Texting is often the calmest way|Bonding tips/ });
+}
+
 // ---------------------------------------------------------------- Professor Puddles' voice (personality.json): light lines only where they belong
 const PERS = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'personality.json'), 'utf8')); } catch (e) { return null; } })();
 if (PERS) {
@@ -1111,7 +1272,7 @@ if (PERS) {
   const DEEP = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'deep.json'), 'utf8')); } catch (e) { return null; } })();
   if (DEEP) {
     const ALL3 = /## Philosophy[\s\S]*## Psychology[\s\S]*## Through an autistic lens[\s\S]*## Putting it together[\s\S]*## A question for you[\s\S]*## Try this/;
-    t('deep', 'talk deep', { kind: 'deep', id: 'intro', chip: /small talk/i });
+    t('deep', 'talk deep', { kind: 'deep', id: 'intro', chip: /keep it light/i });
     c('deep', ['talk deep', 'what is love'], { kind: 'deep', id: 'what-is-love', text: ALL3, not: FUNNY, link: '/book/understanding-5-belonging.html' });
     c('deep', ['Talk deep', 'what is love', 'and through an autistic lens?'], { kind: 'deep', id: 'what-is-love', text: /^## Through an autistic lens/ });
     c('deep', ['talk deep', 'what is love', 'what would the stoics say?'], { kind: 'deep', id: 'what-is-love', text: /^## Philosophy/ });
@@ -1194,11 +1355,11 @@ if (PERS) {
     c('chat4', ["let's just chat", 'he screams at me and calls me worthless'], { kind: 'safety', not: FUNNY });
     c('chat4', ['talk deep', 'my wife died'], { not: /## Philosophy/, nochip: /joke/i });
     // the two modes
-    t('chat4', 'what modes do you have', { kind: 'about', id: 'modes', text: /Light mode[\s\S]*Deep mode[\s\S]*small talk/, chip: /Talk deep/ });
+    t('chat4', 'what modes do you have', { kind: 'about', id: 'modes', text: /Light mode[\s\S]*Deep mode[\s\S]*keep it light/, chip: /Talk deep/ });
     t('chat4', 'what is deep mode', { id: 'modes' });
-    c('chat4', ['talk deep', 'what modes do you have'], { id: 'modes', text: /deep mode right now/, chip: /small talk/i });
+    c('chat4', ['talk deep', 'what modes do you have'], { id: 'modes', text: /deep mode right now/, chip: /keep it light/i });
     t('chat4', 'what modes of conflict are there (not the chat modes)', { q: 'what modes of conflict are there', not: /Two modes/ });
-    t('chat4', 'what can you do (two modes, infographics)', { q: 'what can you do', text: /Light mode[\s\S]*Deep mode[\s\S]*small talk[\s\S]*infographic/ });
+    t('chat4', 'what can you do (two modes, infographics)', { q: 'what can you do', text: /Light mode[\s\S]*Deep mode[\s\S]*keep it light[\s\S]*infographic/ });
     t('chat4', "let's talk deep about love", { kind: 'deep', id: 'what-is-love' });
     t('chat4', 'can we go deep', { kind: 'deep', id: 'intro' });
     c('chat4', ['talk deep', 'what makes a good friend'], { kind: 'deep', id: 'good-friend', link: '/friends.html' });
@@ -1339,7 +1500,7 @@ if (PERS) {
   };
   let page = '';
   try { page = require('fs').readFileSync(require('path').join(__dirname, '..', '..', 'ask.html'), 'utf8'); } catch (e) { page = ''; }
-  const NOFIND = /beyond my puddle|couldn’t find|didn’t catch|isn’t covered here|outside my little/;
+  const NOFIND = /beyond my puddle|couldn’t find|didn’t catch|isn’t covered here|outside my little|don’t have a page/;
   const ent = x => x.replace(/&rsquo;|&#8217;/g, '’').replace(/&amp;/g, '&').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   const qs = [...page.matchAll(/<button[^>]*class="ap-q"[^>]*data-q([^>]*)>([\s\S]*?)<\/button>/g)].map(m => ({ q: ent(m[2]), deep: /data-deep/.test(m[1]) }));
   qs.forEach(({ q, deep }) => {

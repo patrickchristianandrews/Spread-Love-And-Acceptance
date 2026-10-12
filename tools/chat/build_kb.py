@@ -10,6 +10,7 @@ Python 3 standard library only. Run from anywhere:
     python3 tools/chat/build_kb.py
 """
 import json
+import unicodedata
 import os
 import re
 import sys
@@ -1080,7 +1081,7 @@ def check_js_regex(src, where):
 
 
 def link_ok(u):
-    path = u.split('#')[0]
+    path = u.split('#')[0].split('?')[0]
     if not path.startswith('/'):
         return False
     fp = os.path.join(ROOT, path.lstrip('/'))
@@ -1544,6 +1545,16 @@ def main():
     # real English words the spelling fixer leaves alone ("melts" is not a typo for "meets")
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'common-words.txt'), encoding='utf-8') as f:
         eng = ' '.join(w.strip() for w in f if w.strip() and not w.startswith('#'))
+    # and the site search's own allow-list (tools/search/build_index.py, REAL_EXTRA): faiths and holidays (christened,
+    # aqiqah, Eid), family words, fiancé, gamer, and everyday Spanish, so neither ever "corrects" them into a site word
+    try:
+        src = open(os.path.join(ROOT, 'tools', 'search', 'build_index.py'), encoding='utf-8').read()
+        m = re.search(r"REAL_EXTRA = '''(.*?)'''", src, re.S)
+        if m:
+            extra = sorted(set(unicodedata.normalize('NFKD', w).encode('ascii', 'ignore').decode().lower() for w in m.group(1).split()))
+            eng += ' ' + ' '.join(w for w in extra if len(w) >= 4 and re.fullmatch(r"[a-z][a-z'-]*", w))  # short ones would make "biger" look like "big" + -er
+    except OSError:
+        pass
     nine = load_nine(cards)
     reading = load_reading()
     kb = {'v': 2, 'docs': docs, 'syn': SYN, 'cards': cards, 'clar': clar, 'sit': sit, 'bgi': bgi,
