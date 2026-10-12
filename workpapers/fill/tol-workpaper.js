@@ -785,7 +785,31 @@
     // someone else's own sheet, shown to read (the Workpaper Suite): nothing on it can be changed here
     this.root.classList.toggle('is-readonly', !!this.opts.readOnly);
     if (this.opts.readOnly) Array.prototype.forEach.call(this.root.querySelectorAll('input, select, textarea, button'), function (el) { el.disabled = true; });
+    if (this.es) esPass(this.root);
   };
+  // The sheet in Spanish (?for=care&lang=es, or from the Spanish page): its own words are already Spanish;
+  // this turns the sheet's labels, choices and buttons into Spanish too, by exact match (anything not
+  // listed stays as it is). The PDF keeps the same answers.
+  var ES_W = {
+    'Job': 'Tarea', 'How often': 'Cada cuánto', 'Owner': 'Quién se encarga', 'Helper or backup (optional)': 'Ayuda o respaldo (opcional)', 'Size (optional)': 'Tamaño (opcional)', 'Notes': 'Notas',
+    'Roughly how long? (hours each time, optional)': '¿Cuánto tarda? (horas cada vez, opcional)', 'Daily': 'Cada día', 'Weekly': 'Cada semana', 'Monthly': 'Cada mes', 'As needed': 'Cuando haga falta', 'Ongoing': 'Siempre',
+    'Small': 'Pequeña', 'Medium': 'Mediana', 'Big': 'Grande', 'Add a job': 'Añadir una tarea', 'Remove the example jobs': 'Quitar las tareas de ejemplo', 'Who owns each job': 'Quién se encarga de cada tarea',
+    'Does every job have an owner?': '¿Cada tarea tiene a alguien a cargo?', 'Changes to the list': 'Cambios en la lista', 'Add a change': 'Añadir un cambio', 'Date': 'Fecha', 'What changed': 'Qué cambió', 'Who': 'Quién',
+    'How to fill it in': 'Cómo llenarla', 'Share this list': 'Compartir esta lista', 'Open a shared list': 'Abrir una lista compartida', 'Keeping this list together?': '¿Llevan esta lista entre varios?',
+    'Combine with what’s here': 'Juntarla con lo que hay aquí', 'Replace what’s here': 'Reemplazar lo que hay aquí', 'Not now': 'Ahora no', 'Show a QR code': 'Mostrar un código QR',
+    'Copy the link': 'Copiar el enlace', 'Copy it as a code instead': 'Copiarlo como código', 'Other ways: copy the link or a code': 'Otras formas: copiar el enlace o un código',
+    'Your names': 'Sus nombres', 'Add a person': 'Añadir a una persona', 'Jobs with an owner': 'Tareas con alguien a cargo', 'Still needs an owner': 'Todavía sin nadie a cargo', 'What’s this number?': '¿Qué es este número?',
+    'Date of this list': 'Fecha de esta lista', 'The split you agreed (optional)': 'El reparto que acordaron (opcional)', 'Download PDF': 'Descargar PDF', 'Save': 'Guardar', 'Open': 'Abrir', 'Draft file': 'Archivo borrador',
+    'Fillable PDF': 'PDF para llenar', 'More ▾': 'Más ▾', 'Less ▴': 'Menos ▴', 'Put it on the fridge': 'Ponerla en el refri', 'Clear': 'Borrar', 'Erase': 'Borrar todo'
+  };
+  function esPass(root) {
+    if (!root || !root.querySelectorAll) return;
+    Array.prototype.forEach.call(root.querySelectorAll('th, button, summary, label, option, dt, .wpf-share-h, .wpf-lib-h, h2, h3'), function (el) {
+      if (el.children.length) { var t0 = el.firstChild; if (t0 && t0.nodeType === 3 && ES_W[t0.textContent.trim()]) t0.textContent = t0.textContent.replace(t0.textContent.trim(), ES_W[t0.textContent.trim()]); return; }
+      var t = el.textContent.trim(); if (ES_W[t]) el.textContent = ES_W[t];
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-label]'), function (el) { var t = el.getAttribute('data-label'); if (ES_W[t]) el.setAttribute('data-label', ES_W[t]); });
+  }
 
   // Today's name in a day-by-day table ("Thu"), and the Monday of this week (2026-10-05)
   function todayIn(days) { return days[(new Date().getDay() + 6) % 7]; }
@@ -2643,7 +2667,13 @@
       if (o.title) document.title = o.title + ' \u00b7 Spread Love & Acceptance';
       var h1 = document.querySelector('main .read-head h1'); if (h1 && o.h1) h1.textContent = o.h1;
       var lede = document.querySelector('main > .wpf-lede:not(.pillar-note)'); if (lede && o.lede) lede.textContent = o.lede;
-      if (es) { if (h1) h1.setAttribute('lang', 'es'); if (lede) lede.setAttribute('lang', 'es'); }
+      if (es) {
+        if (h1) h1.setAttribute('lang', 'es'); if (lede) lede.setAttribute('lang', 'es');
+        app.es = true;
+        var rootEl = document.getElementById('wpf-root'); if (rootEl) rootEl.setAttribute('lang', 'es');
+        // the save bar and the fridge button too
+        setTimeout(function () { esPass(document.querySelector('.wpf-bar')); esPass(document.getElementById('wpf-fridge')); var fr = document.getElementById('wpf-fridge'); if (fr) fr.setAttribute('lang', 'es'); try { document.dispatchEvent(new CustomEvent('tol-lang')); } catch (e) {} }, 0);
+      }
     } catch (e) {}
     return out;
   }
