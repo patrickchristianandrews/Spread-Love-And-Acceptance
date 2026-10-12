@@ -45,8 +45,14 @@
   .cs-card p{ margin:.3rem 0 !important; max-width:none !important; font-size:.97rem; }
   .cs-src{ font-size:.86rem !important; color:var(--ink-soft); margin-top:.55rem !important; overflow-wrap:anywhere; }
   .cs-more{ margin:.4rem 0 0; border-top:1px dashed var(--line); }
-  .cs-more > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:600; font-size:.93rem; color:var(--brass-ink); }
-  .cs-more > summary:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .cs-more > summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; gap:.55rem; list-style:none; font-weight:600; font-size:.93rem; color:var(--brass-ink); border-radius:8px; padding:0 .3rem; margin:0 -.3rem; }
+  .cs-more > summary::-webkit-details-marker{ display:none; }
+  .cs-more > summary::before{ content:""; flex:none; width:1.35rem; height:1.35rem; border-radius:50%; border:1.5px solid currentColor; box-sizing:border-box;
+    background:linear-gradient(currentColor, currentColor) center / .62rem 2px no-repeat, linear-gradient(currentColor, currentColor) center / 2px .62rem no-repeat; transition:transform .2s; }
+  .cs-more[open] > summary::before{ background:linear-gradient(currentColor, currentColor) center / .62rem 2px no-repeat; transform:rotate(180deg); }
+  .cs-more > summary:hover{ text-decoration:underline; text-underline-offset:3px; }
+  .cs-more > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; background:color-mix(in srgb, var(--focus) 10%, transparent); }
+  @media (prefers-reduced-motion: reduce){ .cs-more > summary::before{ transition:none; } }
   .cs-more-body p{ font-size:.94rem; }
   .cs-mini p{ font-size:.96rem; }
   .cs-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }

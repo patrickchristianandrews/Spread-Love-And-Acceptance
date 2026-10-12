@@ -344,6 +344,43 @@
       ]
     },
     {
+      "id": "diagnoseother",
+      "name": "is my partner (a diagnosis)?",
+      "pat": "\\b(is|could|might|does|do you think) (my|our|her|his) (wife|husband|partner|boyfriend|girlfriend|bf|gf|spouse|mum|mom|dad|mother|father|son|daughter|kid|child|teen|teenager|brother|sister|friend|boss|manager|coworker|colleague|roommate|housemate|ex|fiance|fiancee|mil|mother in law|father in law)\\b( be| have| has)?( got)?( a| an)? (bipolar|psychopath\\w*|sociopath\\w*|autis\\w*|adhd|add|depress\\w*|borderline|bpd|ocd|ptsd|aspergers?|on the spectrum|mentally ill|neurodivergent|dyslexic|schizo\\w*|a personality disorder|a disorder)\\b|\\b(do you think|could|is) (he|she|they) (is |are |be |has |have |s )?(a |an )?(bipolar|psychopath\\w*|sociopath\\w*|borderline|bpd|ocd|ptsd|on the spectrum|mentally ill)\\b",
+      "what": [
+        "I can’t diagnose anyone, and nobody can from a chat, least of all someone who isn’t here to speak for themselves. A label also matters less than what actually happens between you."
+      ],
+      "how": [
+        "Look at the pattern, not the label: what do they do, how often, and how do you feel around them?",
+        "Notice whether it’s new or has always been there, and whether it’s getting worse.",
+        "If you’re worried about their health, say so kindly and suggest they see their doctor. A doctor or psychologist is the right person to assess it.",
+        "If you feel scared, controlled or put down, that matters more than any label: the Not safe at home? page lists the signs, and people to talk to.",
+        "For yourself, a counsellor can help you think it through, whatever the answer turns out to be."
+      ],
+      "script": [
+        "I’ve noticed you’ve seemed really up and down lately, and I’m worried about you. Would you talk to your doctor about it? I’ll come with you if you like."
+      ],
+      "scriptLabels": [
+        "If you’re worried about them"
+      ],
+      "links": [
+        [
+          "How to find a professional",
+          "/outside-help.html#counsellor"
+        ],
+        [
+          "When it’s more than a rough patch",
+          "/safety.html#signs"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
       "id": "diagnose",
       "kind": "intent",
       "first": true,
@@ -1332,6 +1369,56 @@
       ]
     },
     {
+      "id": "friendsvoice",
+      "name": "voice notes for a friend",
+      "pat": "\\bvoice (notes?|messages?|memos?)\\b.{0,40}\\b(friend|baby|newborn|instead|rather than|better than)\\b|\\b(friend|baby|newborn)\\b.{0,60}\\bvoice (notes?|messages?)\\b",
+      "what": [
+        "Yes. After a baby, voice notes often beat texts: you can send one during a feed, one-handed, and they carry your tone better than text."
+      ],
+      "how": [
+        "Keep it short. Thirty seconds is plenty.",
+        "Say why you’ve been quiet, and that you miss them.",
+        "Offer one easy next thing: a call while you walk, or them coming over while you’re in pajamas.",
+        "Ask about their life too: “Tell me something from outside the baby bubble.”"
+      ],
+      "script": [
+        "Hey, it’s me, one-handed during a feed. I miss you and I’m not ignoring you. Tell me something from outside the baby bubble?"
+      ],
+      "scriptLabels": [
+        "A voice note you could send"
+      ],
+      "links": [
+        [
+          "Friendships after a baby",
+          "/friends.html#after-baby"
+        ],
+        [
+          "If you’re the one who went quiet",
+          "/friends.html#gone-quiet"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\bvoice (notes?|messages?|memos?)\\b",
+          "friendsvoice"
+        ],
+        [
+          "\\b(guilt\\w*|bad friend|terrible friend|awful friend|ashamed)\\b",
+          "friendsguilt"
+        ],
+        [
+          "\\b(stop (texting|messaging|reaching out|trying)|give up|see if (she|he|they) (notices?|cares?)|wait for (her|him|them) to|test (her|him|them))\\b",
+          "friendsstop"
+        ]
+      ]
+    },
+    {
       "kind": "intent",
       "first": true,
       "newTopic": true,
@@ -1361,7 +1448,13 @@
           "/friends.html#gone-quiet"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\bvoice (notes?|messages?|memos?)\\b",
+          "friendsvoice"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -1388,7 +1481,13 @@
           "/friends.html#reaching-out"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\bvoice (notes?|messages?|memos?)\\b",
+          "friendsvoice"
+        ]
+      ]
     },
     {
       "id": "friends",
@@ -1491,6 +1590,10 @@
         }
       ],
       "follow": [
+        [
+          "\\bvoice (notes?|messages?|memos?)\\b",
+          "friendsvoice"
+        ],
         [
           "\\b(guilt\\w*|bad friend|terrible friend|awful friend|ashamed)\\b",
           "friendsguilt"
@@ -2868,6 +2971,43 @@
       ]
     },
     {
+      "id": "kidnewplan",
+      "name": "telling your child about a new plan",
+      "childSafe": true,
+      "pat": "\\b(tell|explain\\w*|talk to|prepare|break it to)\\b.{0,30}\\b(my |our |the )?(son|daughter|kids?|child|children|boy|girl|[a-z]{2,12})\\b.{0,20}\\babout (the |a |our |my )?(new )?(plan|arrangement|arrangements|schedule|handoffs?|handovers?|change|changes|move|moving|routine|custody|living arrangements?|two homes)\\b|\\b(how (do|should|can) (i|we) (tell|explain to))\\b.{0,30}\\b(kids?|children|son|daughter)\\b.{0,30}\\b(handoff|handover|new plan|schedule|two homes|separat\\w*)\\b",
+      "what": [
+        "Children usually cope best with a change when they hear it early, simply, and from a calm parent."
+      ],
+      "how": [
+        "Keep it short and concrete: what changes, when, and what stays the same.",
+        "Make it clear it isn’t their fault, and they don’t need to fix anything or choose a side.",
+        "Leave out adult reasons and blame: “We’ve worked out a new way to do handoffs.”",
+        "Leave room for questions, now and later, and expect a few wobbles in the first weeks."
+      ],
+      "script": [
+        "From next week, I’ll pick you up from school on Fridays instead of at the door. Everything else stays the same. You can ask me anything about it."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Four steps for calmer handoffs",
+          "/co-parenting.html#handoff"
+        ],
+        [
+          "Separated co-parents",
+          "/co-parenting.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
       "id": "coparentsay",
       "name": "getting a say as a co-parent",
       "what": [
@@ -3651,6 +3791,321 @@
       ]
     },
     {
+      "id": "riftmention",
+      "name": "what to leave out of a first message",
+      "pat": "\\b(should i|do i|can i|is it ok to|is it okay to|shall i)\\b.{0,10}\\b(mention|bring up|talk about|raise|say (anything )?about|put)\\b.{0,30}\\b(dads?|mums?|moms?|the|his|her|our)? ?(house|will|inheritance|money|estate|what happened|the argument|the fight|the past)\\b.{0,30}\\b(message|text|letter|card|first|email)\\b",
+      "what": [
+        "Not in a first message. The family rifts page suggests leaving out who was right, the details of the will, and anything that needs a quick answer. A first message has one job: to open a door."
+      ],
+      "how": [
+        "Name the rift, own your part, and make it easy to say no.",
+        "Keep the house for a later talk, once you’re back in touch: “Would you be willing to talk about Dad’s house, one day?”",
+        "If something about the will needs sorting soon for legal reasons, that’s a separate, practical conversation. A solicitor, lawyer or family mediator can help with it.",
+        "Before you send, check your draft in the Signal Translator, set to Family, and read it once more as if you were them, on a bad day."
+      ],
+      "script": [
+        "I keep thinking about Dad, and about us. I don’t want the house to be the last thing we ever talked about.",
+        "I know it’s been a long time, and I’m sorry for my part in it. I’d really like to be in touch again. No need to answer now."
+      ],
+      "scriptLabels": [
+        "A first message that leaves the house out",
+        "Or"
+      ],
+      "links": [
+        [
+          "Reaching out after a long silence",
+          "/family-rifts.html#reaching-out"
+        ],
+        [
+          "When grief and money get tangled",
+          "/family-rifts.html#money"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
+        ],
+        [
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
+          "riftevent"
+        ],
+        [
+          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|doesnt|dont|wont|ignores)\\b",
+          "riftnoreply"
+        ],
+        [
+          "\\b(will|wills|house|inherit\\w*|estate|money|executor|probate)\\b",
+          "inheritance"
+        ],
+        [
+          "\\b(forgive\\w*|forgiveness)\\b",
+          "forgiveok"
+        ],
+        [
+          "\\b(have to|must|should i) (reconcile|make up|make peace)\\b|\\breconcil\\w*\\b",
+          "mustreconcile"
+        ]
+      ]
+    },
+    {
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "keys": [],
+      "chips": [],
+      "id": "riftevent",
+      "name": "a family event after a rift",
+      "what": [
+        "A christening, a wedding, a funeral or a holiday can be a way back in, or a hard day. You can go and still keep some things off the table, and you can also say “not yet”."
+      ],
+      "how": [
+        "Decide what you’re happy to do (come, stay for the meal) and what you’re not ready to talk about yet.",
+        "Say it before the day, kindly and briefly, so nobody is ambushed.",
+        "Keep the day about the person it’s for.",
+        "Plan an easy way to leave if it gets too much. And if you’re not ready to go, that’s allowed too."
+      ],
+      "script": [
+        "I’ll come to the christening. I’m not ready to talk about Dad’s house there. Can we keep that day about Mia?",
+        "Thank you for asking me. I’m not ready yet. I’ll let you know when I am."
+      ],
+      "links": [
+        [
+          "Setting terms for a family event",
+          "/family-rifts.html#not-ready"
+        ],
+        [
+          "Adult siblings and family rifts",
+          "/family-rifts.html"
+        ]
+      ],
+      "pat": "\\b(brother|sister|sibling\\w*|bro|sis)\\b.{0,60}\\b(christening|naming day|wedding|funeral|birthday party|baby shower|family (event|party|do))\\b|\\b(christening|naming day|wedding|funeral|birthday party|baby shower)\\b.{0,60}\\b(brother|sister|sibling\\w*)\\b|\\b(dads?|mums?|moms?|fathers?|mothers?|parents) (house|will|estate|money)\\b.{0,80}\\b(christening|wedding|funeral|party)\\b|\\b(christening|wedding|funeral|party)\\b.{0,80}\\b(dads?|mums?|moms?|parents) (house|will|estate)\\b|\\blike nothing (ever )?happened\\b.{0,60}\\b(christening|wedding|party|funeral)\\b|\\b(christening|wedding|party|funeral)\\b.{0,60}\\blike nothing (ever )?happened\\b|\\b(should|do) i (go|attend|go to|turn up|show up)\\b.{0,25}\\b(the |his |her |their |my \\w+s? )?(christening|naming day|wedding|funeral|party)\\b",
+      "notPat": "\\b(faiths?|religio\\w*|interfaith|muslim|catholic|christian|jewish|hindu|sikh|buddhist|our baby|our son s|our daughter s|my wife|my husband|her family|his family)\\b",
+      "sides": [
+        {
+          "re": "\\b(my|our) (daughter|son|baby|kids?|child|children)s? (christening|naming day|birthday|wedding|party)\\b|\\bi (invited|asked|want|d like|would like) (him|her|them|my (brother|sister))\\b|\\bwhat if (he|she|they) (doesnt|dont|does not|do not|wont|will not|never) (come|turn up|show up|reply|answer)\\b|\\b(he|she|they) (might not|may not|wont|won t|isnt|is not) (come|coming|turn up|show)\\b",
+          "what": [
+            "If he doesn’t come, that’s his choice, and it doesn’t undo your invitation. The day can still be a good one for your child, and the door can stay open."
+          ],
+          "how": [
+            "Invite once, warmly, with no pressure, and say the day is about the child.",
+            "Decide in advance how you’ll be okay if he doesn’t come: who’s with you on the day, and that the door stays open.",
+            "Leave the old argument out of the invitation.",
+            "Afterwards, one short message is enough. Then stop."
+          ],
+          "script": [
+            "Mia’s christening is on the 14th. No pressure to reply, but I’d really like you there.",
+            "We missed you on Sunday. No hard feelings. The door is still open."
+          ],
+          "scriptLabels": [
+            "The invitation, once",
+            "If he doesn’t come"
+          ],
+          "links": [
+            [
+              "Reaching out after a long silence",
+              "/family-rifts.html#reaching-out"
+            ],
+            [
+              "Adult siblings and family rifts",
+              "/family-rifts.html"
+            ]
+          ]
+        }
+      ],
+      "scriptLabels": [
+        "Yes, with terms",
+        "Not yet"
+      ],
+      "topic": true,
+      "follow": [
+        [
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
+        ],
+        [
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
+          "riftevent"
+        ],
+        [
+          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|doesnt|dont|wont|ignores)\\b",
+          "riftnoreply"
+        ],
+        [
+          "\\b(will|wills|house|inherit\\w*|estate|money|executor|probate)\\b",
+          "inheritance"
+        ],
+        [
+          "\\b(forgive\\w*|forgiveness)\\b",
+          "forgiveok"
+        ],
+        [
+          "\\b(have to|must|should i) (reconcile|make up|make peace)\\b|\\breconcil\\w*\\b",
+          "mustreconcile"
+        ]
+      ]
+    },
+    {
+      "id": "inheritance",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "a will, an inheritance, and siblings",
+      "pat": "\\b(in the will|the will|his will|her will|their will|inheritance|inherit\\w*|the estate|executor|probate)\\b.{0,50}\\b(brother|sister|sibling\\w*|family|dispute|fight|unfair|fell out)\\b|\\b(brother|sister|sibling\\w*)\\b.{0,50}\\b(in the will|inherit\\w*|inheritance|the estate|got (dad|mum|mom|the) (house|money|everything))\\b|\\bgot (dads?|mums?|moms?|our parents|my parents|grandma|grandad) (house|money|everything)\\b|\\binheritance (dispute|fight|row)\\b|\\b(mention|bring up|raise|talk about|ask about|discuss|contest\\w*|challenge|read)\\b.{0,15}\\b(the|dad|mum|mom|father|mother|parents|grandad|grandma|his|her|their) will\\b|\\b(in|under|from|about|over) (the|dad|mum|mom|father|mother|parents|his|her|their) will\\b",
+      "keys": [],
+      "what": [
+        "Wills and inheritance can reopen old family wounds. It often feels like a final message about who mattered, so feeling hurt or angry makes sense."
+      ],
+      "how": [
+        "Separate the money from the meaning: what hurts most, the house itself, or what it seemed to say?",
+        "Get facts before conversations: ask the executor or a solicitor or lawyer what the will says and what your options are.",
+        "If you talk to your sibling, start with the feeling, not the verdict: “I was hurt by the will, and I don’t want it to end us.”",
+        "A family mediator can help you talk about an estate without going to court."
+      ],
+      "script": [
+        "I was hurt by the will, and I don’t want it to end us. Could we talk about it, with someone neutral if that helps?"
+      ],
+      "links": [
+        [
+          "When money and a will divide you",
+          "/family-rifts.html#money"
+        ],
+        [
+          "Adult siblings and family rifts",
+          "/family-rifts.html"
+        ]
+      ],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
+        ],
+        [
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
+          "riftevent"
+        ],
+        [
+          "\\b(doesnt|does not|wont|never|dont|not) (reply|respond\\w*|answer\\w*|write back|get back)\\b|\\bno (reply|answer)\\b",
+          "riftnoreply"
+        ],
+        [
+          "\\b(forgive\\w*)\\b",
+          "forgiveok"
+        ]
+      ]
+    },
+    {
+      "id": "faithnames",
+      "name": "a baby name for two faiths or families",
+      "pat": "\\bnames?\\b.{0,60}\\b(muslim|catholic|christian|jewish|hindu|sikh|saints?|islamic|biblical|arabic|faith|religio\\w*|traditions?|both (families|sides|faiths|cultures))\\b|\\b(muslim|catholic|christian|jewish|hindu|sikh|saints?|islamic|biblical|arabic)\\b.{0,30}\\bnames?\\b|\\b(choose|pick|agree on|decide on) (a |the )?(baby )?name\\b.{0,40}\\b(both|families|parents|in laws|faiths?)\\b",
+      "notPat": "\\bcall(s|ed|ing)? me names\\b|\\bname ?calling\\b",
+      "what": [
+        "Names carry family, faith and memory, so it makes sense that both families care. Many two-faith families find a name that honours both."
+      ],
+      "how": [
+        "A name from each tradition: a first name from one and a middle name from the other.",
+        "A name that works in both languages or traditions.",
+        "Decide the name first, just the two of you. Then each of you tells your own parents.",
+        "Elders can advise, and their hopes usually come from love. The two of you decide."
+      ],
+      "script": [
+        "Let’s decide the name first, just the two of us. Then we’ll each tell our own parents.",
+        "We love that the name matters to you. We’ve chosen a first name from one side and a middle name from the other, so the baby carries both families."
+      ],
+      "scriptLabels": [
+        "To each other",
+        "To the families"
+      ],
+      "links": [
+        [
+          "Decide the big things together (names)",
+          "/two-faiths.html#decide"
+        ],
+        [
+          "Elders advise, the couple decides",
+          "/two-faiths.html#elders"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\bnames?\\b",
+          "faithnames"
+        ],
+        [
+          "\\b(celebrate|celebrating|holidays?|festivals?|eid|christmas|easter|diwali|hanukkah|passover|calendar)\\b",
+          "faithholidays"
+        ],
+        [
+          "\\b(tell|say to|message|text|telling)\\b.{0,20}\\b(both|our|the|each of our) (families|family|parents|in laws)\\b|\\bboth families\\b",
+          "twofamilies"
+        ]
+      ]
+    },
+    {
+      "id": "faithholidays",
+      "name": "festivals from two traditions",
+      "pat": "\\b(how (do|can|should|could) we|ideas for|help us|tips for|how to)\\b.{0,30}\\b(celebrate|do|plan|manage|handle|split|share|juggle|fit in)\\b.{0,40}\\b(eid|christmas|easter|diwali|hanukkah|passover|ramadan|lunar new year|nowruz|vaisakhi|both (holidays|festivals)|festivals)\\b",
+      "notPat": "\\b(ex|exes|custody|coparent\\w*|co parent\\w*|separated|divorced|two homes|kids dad|kids mum|kids mom)\\b",
+      "what": [
+        "Two traditions can mean a full calendar, and some dates move every year. A shared plan for the year helps, so nobody feels their festival came second."
+      ],
+      "how": [
+        "Put every festival for the year on one shared calendar, from both traditions, with this year’s dates.",
+        "For each one, decide: do we host, visit, or keep it small at home?",
+        "Share the work: cooking, presents, travel, cards. Give each job one owner.",
+        "Tell both families the plan early, in one go, and keep a few traditions that are just yours."
+      ],
+      "script": [
+        "This year we’ll host Eid at ours and go to your parents for Christmas. Next year we’ll swap who travels. Does that feel fair to you?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Holidays and festivals on one calendar (Our festival year)",
+          "/two-faiths.html#holidays"
+        ],
+        [
+          "What we’ll tell both families",
+          "/two-faiths.html#both-families"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\bnames?\\b",
+          "faithnames"
+        ],
+        [
+          "\\b(celebrate|celebrating|holidays?|festivals?|eid|christmas|easter|diwali|hanukkah|passover|calendar)\\b",
+          "faithholidays"
+        ],
+        [
+          "\\b(tell|say to|message|text|telling)\\b.{0,20}\\b(both|our|the|each of our) (families|family|parents|in laws)\\b|\\bboth families\\b",
+          "twofamilies"
+        ]
+      ]
+    },
+    {
       "id": "twofaiths",
       "kind": "intent",
       "first": true,
@@ -3665,7 +4120,7 @@
         "Each of you names the one or two things that matter most (a ceremony, a holiday, a value, a name) and the things you can be flexible on.",
         "Talk about what you want your child to feel and know, not only which label to choose.",
         "Decide together first, then tell the grandparents as a team: “We’ve decided, and we’d love you to be part of it.”",
-        "Make room for both calendars: Eid and Christmas can both be family days, each with its own small traditions."
+        "Make room for both calendars: each tradition’s festivals can be family days, each with its own small traditions."
       ],
       "script": [
         "Your faith matters to me because it matters to you. Can we each say the one thing we most want for our child, and build from there?"
@@ -3691,7 +4146,7 @@
           ],
           "how": [
             "Decide together first, just the two of you, one decision at a time, at a calm agreed time.",
-            "Ask for their advice on the things you’d value it, and say when you’ll decide.",
+            "Ask for their advice on the things where you’d value it, and say when you’ll decide.",
             "Then each of you tells your own family, and says you decided together. You protect your partner with your family.",
             "Make room for both: a blessing, a name, a holiday from each tradition can honour both families."
           ],
@@ -3721,6 +4176,14 @@
       ],
       "follow": [
         [
+          "\\bnames?\\b",
+          "faithnames"
+        ],
+        [
+          "\\b(celebrate|celebrating|holidays?|festivals?|eid|christmas|easter|diwali|hanukkah|passover|calendar)\\b",
+          "faithholidays"
+        ],
+        [
           "\\b(tell|say to|message|text|telling)\\b.{0,20}\\b(both|our|the|each of our) (families|family|parents|in laws)\\b|\\bboth families\\b",
           "twofamilies"
         ]
@@ -3742,7 +4205,8 @@
           "Eid and Christmas",
           "How do we do Eid and Christmas?"
         ]
-      ]
+      ],
+      "notPat": "^(?!.*\\b(faiths?|religio\\w*|interfaith|muslim|catholic|christian|jewish|hindu|sikh|buddhist|islam\\w*|church|mosque|temple|synagogue|eid|ramadan|raise|raising|our baby|baby names?)\\b).*\\b(brother|sister|sibling\\w*|nephew|niece|dads? (house|will)|mums? (house|will)|moms? (house|will)|the will|inheritance|nothing happened|invited me|invite me|should i go|years|silence|not spoken)\\b"
     },
     {
       "id": "holidaysplit",
@@ -4162,70 +4626,25 @@
       "chips": []
     },
     {
-      "id": "inheritance",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "a will, an inheritance, and siblings",
-      "pat": "\\b(in the will|the will|his will|her will|their will|inheritance|inherit\\w*|the estate|executor|probate)\\b.{0,50}\\b(brother|sister|sibling\\w*|family|dispute|fight|unfair|fell out)\\b|\\b(brother|sister|sibling\\w*)\\b.{0,50}\\b(in the will|inherit\\w*|inheritance|the estate|got (dad|mum|mom|the) (house|money|everything))\\b|\\bgot (dad|mum|mom|our parents|my parents|grandma|grandad) (house|money|everything)\\b|\\binheritance (dispute|fight|row)\\b|\\b(mention|bring up|raise|talk about|ask about|discuss|contest\\w*|challenge|read)\\b.{0,15}\\b(the|dad|mum|mom|father|mother|parents|grandad|grandma|his|her|their) will\\b|\\b(in|under|from|about|over) (the|dad|mum|mom|father|mother|parents|his|her|their) will\\b",
-      "keys": [],
-      "what": [
-        "Wills and inheritance can reopen old family wounds. It often feels like a final message about who mattered, so feeling hurt or angry makes sense."
-      ],
-      "how": [
-        "Separate the money from the meaning: what hurts most, the house itself, or what it seemed to say?",
-        "Get facts before conversations: ask the executor or a solicitor or lawyer what the will says and what your options are.",
-        "If you talk to your sibling, start with the feeling, not the verdict: “I was hurt by the will, and I don’t want it to end us.”",
-        "A family mediator can help you talk about an estate without going to court."
-      ],
-      "script": [
-        "I was hurt by the will, and I don’t want it to end us. Could we talk about it, with someone neutral if that helps?"
-      ],
-      "links": [
-        [
-          "When money and a will divide you",
-          "/family-rifts.html#money"
-        ],
-        [
-          "Adult siblings and family rifts",
-          "/family-rifts.html"
-        ]
-      ],
-      "chips": [],
-      "follow": [
-        [
-          "\\b(doesnt|does not|wont|never|dont|not) (reply|respond\\w*|answer\\w*|write back|get back)\\b|\\bno (reply|answer)\\b",
-          "riftnoreply"
-        ],
-        [
-          "\\b(christening|wedding|funeral|family (event|party)|the event)\\b",
-          "riftevent"
-        ],
-        [
-          "\\b(forgive\\w*)\\b",
-          "forgiveok"
-        ]
-      ]
-    },
-    {
       "id": "favourite",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "the favourite child",
-      "pat": "\\b(was|is|were|always been) (always )?(the |mum |mom |dad |their |her |his )?(favou?rite|golden child|favou?red one|favou?red)\\b|\\bfavou?ritism\\b|\\bgolden child\\b",
+      "pat": "\\b(was|is|were|always been) (always )?(the |mum |mom |dad |their |her |his )?(favou?rite|golden child|favou?red one|favou?red)\\b|\\bfavou?ritism\\b|\\bgolden child\\b|\\b(dad|mum|mom|father|mother|parents?)\\b.{0,25}\\b(always )?(loved|liked|preferred|favou?red|spoiled|spoilt) (him|her|them|my (brother|sister)) (more|best|better)\\b|\\b(loved|liked|preferred) (him|her|my (brother|sister)) (more|best)\\b",
       "keys": [],
       "what": [
         "Growing up as the less-favoured child leaves a real mark, and it can come back hard as adults, especially around a parent getting older, a will, or a loss. Your feelings about it make sense."
       ],
       "how": [
-        "It wasn’t your sibling’s doing that a parent had a favourite, even if they benefited. Try to keep the two hurts apart.",
+        "It can help to keep two hurts apart: what your parent did, and how things are with your sibling now.",
         "Say what you needed, at least to yourself: “I needed to feel I mattered as much.”",
         "If you talk to your parent or sibling, describe your experience, not their motives: “I often felt second.”",
-        "Old family roles return fast at family events. It’s okay to respond as the adult you are now."
+        "Old family roles return fast at family events. It’s okay to respond as the adult you are now, and it’s okay to want contact, or not yet."
       ],
       "script": [
-        "I often felt second growing up. I’m not blaming you. I’d just like us to be closer now."
+        "I often felt second growing up. I’m not blaming you. I’d like us to talk about it one day.",
+        "I’m not ready to talk about it yet. I’ll let you know when I am."
       ],
       "links": [
         [
@@ -4237,7 +4656,38 @@
           "/family-rifts.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
+        ],
+        [
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
+          "riftevent"
+        ],
+        [
+          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|doesnt|dont|wont|ignores)\\b",
+          "riftnoreply"
+        ],
+        [
+          "\\b(will|wills|house|inherit\\w*|estate|money|executor|probate)\\b",
+          "inheritance"
+        ],
+        [
+          "\\b(forgive\\w*|forgiveness)\\b",
+          "forgiveok"
+        ],
+        [
+          "\\b(have to|must|should i) (reconcile|make up|make peace)\\b|\\breconcil\\w*\\b",
+          "mustreconcile"
+        ]
+      ],
+      "scriptLabels": [
+        "If you want contact",
+        "If you don’t, for now"
+      ],
+      "topic": true
     },
     {
       "kind": "intent",
@@ -4274,39 +4724,18 @@
           "/family-rifts.html#not-ready"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
-    },
-    {
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "keys": [],
-      "chips": [],
-      "id": "riftevent",
-      "name": "a family event after a rift",
-      "what": [
-        "A christening, a wedding, a funeral or a holiday can be a way back in, or a hard day. You can go and still keep some things off the table."
-      ],
-      "how": [
-        "Decide what you’re happy to do (come, stay for the meal) and what you’re not ready to talk about yet.",
-        "Say it before the day, kindly and briefly, so nobody is ambushed.",
-        "Keep the day about the person it’s for.",
-        "Plan an easy way to leave if it gets too much."
-      ],
-      "script": [
-        "I’ll come to the christening. I’m not ready to talk about Dad’s house there. Can we keep that day about Mia?"
-      ],
-      "links": [
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "topic": true,
+      "follow": [
         [
-          "Setting terms for a family event",
-          "/family-rifts.html#not-ready"
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
         ],
         [
-          "Reaching out after a long silence",
-          "/family-rifts.html#reaching-out"
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
+          "riftevent"
         ]
-      ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      ]
     },
     {
       "id": "siblingrift",
@@ -4343,11 +4772,11 @@
       "page": "/family-rifts.html",
       "follow": [
         [
-          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|doesnt|dont|wont|ignores)\\b",
-          "riftnoreply"
+          "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
+          "riftmention"
         ],
         [
-          "\\b(christening|wedding|funeral|naming day|birthday party|family (event|party|do)|the event|the party|christmas|holiday)\\b",
+          "\\b(christening|naming day|wedding|funeral|birthday party|family (event|party|do)|the event|the party|the day)\\b",
           "riftevent"
         ],
         [
@@ -4361,6 +4790,10 @@
         [
           "\\b(have to|must|should i) (reconcile|make up|make peace)\\b|\\breconcil\\w*\\b",
           "mustreconcile"
+        ],
+        [
+          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|ignores)\\b",
+          "riftnoreply"
         ]
       ],
       "pageChips": [
@@ -4867,7 +5300,8 @@
           "/work.html#messages"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "notPat": "\\bvoice (notes?|messages?|memos?)\\b"
     },
     {
       "kind": "intent",
@@ -15204,7 +15638,32 @@
           "At work",
           "Decisions at work get made without me"
         ]
-      ]
+      ],
+      "plain": true
+    },
+    {
+      "id": "guiltysay",
+      "pat": "^(i (feel|m|am) (so |really |just |very )*(guilty|bad|awful|terrible))( and)?,? (i )?(dont|don t|do not) (even )?know what to (say|text|write)( to (her|him|them))?$",
+      "x": "That sounds heavy, and it shows you care. Who is it with, so I can help with the right words?",
+      "chips": [
+        [
+          "A friend I’ve gone quiet on",
+          "I’ve gone quiet on my best friend and I feel guilty"
+        ],
+        [
+          "My partner",
+          "I feel guilty about how I treated my partner. What do I say?"
+        ],
+        [
+          "Someone I care for",
+          "I feel guilty for resenting caring for her"
+        ],
+        [
+          "A family member",
+          "I feel guilty about my mum and I don’t know what to say to her"
+        ]
+      ],
+      "plain": true
     }
   ],
   "_about_terms": "terms: the site’s own words, defined plainly. The chat reads every term on /glossary.html (its plain definition, example and first link); entries here add terms or override one by id. idioms: sayings explained literally for “what does X mean?” questions. p lists the normalised phrases (lowercase, no apostrophes), lit what the words do not mean, m what people usually mean, tone how it usually sounds, plain a plain way to say it.",

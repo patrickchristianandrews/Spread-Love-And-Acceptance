@@ -285,9 +285,7 @@ If something bigger comes up at a handoff, park it.
   var b = document.querySelector('[data-cp-copy]'), ul = document.getElementById('cp-bag-list'), st = document.querySelector('.cp-copied');
   if (!b || !ul) return;
   b.addEventListener('click', function () {
-    var text = 'Handoff bag
-' + [].map.call(ul.querySelectorAll('li'), function (li) { return '- ' + li.textContent.trim(); }).join('
-');
+    var text = 'Handoff bag\n' + [].map.call(ul.querySelectorAll('li'), function (li) { return '- ' + li.textContent.trim(); }).join('\n');
     function ok() { st.textContent = 'Copied. Paste it into a note or a message.'; }
     function fallback() { var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok(); } catch (e) { st.textContent = 'Copy didn’t work here. Press and hold the list to copy it.'; } t.remove(); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();

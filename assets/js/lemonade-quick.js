@@ -423,6 +423,8 @@
     if (o.jw && typeof o.jw === 'object') Object.keys(o.jw).forEach(function (id) { var x = o.jw[id]; if (!known(id) || !x || typeof x !== 'object') return; var y = {}; if (OFTEN_W[x.f]) y.f = x.f; if (+x.h > 0 && +x.h <= 80) y.h = +x.h; if (Object.keys(y).length) { t.jw = t.jw || {}; t.jw[id] = y; } });
     if (o.solo && typeof o.solo === 'object') Object.keys(o.solo).forEach(function (k) { var x = +o.solo[k]; if (+k >= 0 && +k < n && x > 0 && x <= 168) { t.solo = t.solo || {}; t.solo[k] = x; } });
     if (o.soloAuto) t.soloAuto = 1;
+    if (o.askMe) t.askMe = 1;
+    if (typeof o.st === 'number' && o.st >= 0 && o.st < n) t.st = o.st;
     if (o.peek && typeof o.peek === 'object') Object.keys(o.peek).forEach(function (k) { if (/^\d>\d$/.test(k)) t.peek[k] = 1; });
     if (o.from && typeof o.from === 'object') t.from = { by: String(o.from.by || '').slice(0, 40), reply: !!o.from.reply, f: typeof o.from.f === 'number' ? o.from.f : -1, t: typeof o.from.t === 'number' ? o.from.t : -1, replaced: !!o.from.replaced };
     if (t.from && o.from && Array.isArray(o.from.conf)) t.from.conf = o.from.conf.filter(function (c) { return c && (/^h\d$/.test(c.k) || c.k === 's'); }).slice(0, 8).map(function (c) { return { k: c.k, a: c.k === 's' ? String(c.a) : +c.a || 0, b: c.k === 's' ? String(c.b) : +c.b || 0 }; });
@@ -471,9 +473,15 @@
     var box = $('lq-names'); if (!box) return;
     var act = document.activeElement, focusIdx = act && act.getAttribute && act.getAttribute('data-lq-name');
     box.innerHTML = '';
+    if (q.askMe) {
+      var ask = document.createElement('div'); ask.className = 'lq-askme'; ask.setAttribute('role', 'group'); ask.setAttribute('aria-labelledby', 'lq-askme-h');
+      ask.innerHTML = '<p id="lq-askme-h"><strong>' + esc(L('Which of you is using this?', '¿Quién de ustedes lo está usando?')) + '</strong> ' + esc(L('These names were kept on this device. Tap your own, so the right one says “Your name”.', 'Estos nombres estaban guardados en este aparato. Toca el tuyo.')) + '</p><div class="lq-pick">' +
+        q.people.map(function (_, i) { return typed(i) ? '<button type="button" class="lq-w" style="--pc:' + COLORS[i] + '" data-lq-askme="' + i + '">' + esc(typed(i)) + '</button>' : ''; }).join('') + '</div>';
+      box.appendChild(ask);
+    }
     q.people.forEach(function (_, i) {
       var l = document.createElement('label'); l.className = 'lq-name'; l.style.setProperty('--pc', COLORS[i]);
-      var sp = document.createElement('span'); sp.textContent = i === q.me ? L('Your name', 'Tu nombre') : q.people.length === 2 ? L('Their name', 'Su nombre') : L('Name ', 'Nombre ') + (i + 1);
+      var sp = document.createElement('span'); sp.textContent = q.askMe ? L('Name ', 'Nombre ') + (i + 1) : i === q.me ? L('Your name', 'Tu nombre') : q.people.length === 2 ? L('Their name', 'Su nombre') : L('Name ', 'Nombre ') + (i + 1);
       var row = document.createElement('span'); row.className = 'lq-name-in';
       var dot = document.createElement('span'); dot.className = 'dot'; dot.setAttribute('aria-hidden', 'true');
       var inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.autocomplete = 'off'; inp.value = q.people[i];
@@ -1006,7 +1014,23 @@
       var top = '<div class="lq-cmpbox lq-cmp-all"><h4>' + esc(L('Where ' + gw + ' agree', 'En qué coinciden ' + gw)) + '</h4>';
       top += allSame.length ? '<p>' + esc(L(cap(gw) + ' agree on ' + joinA(allSame) + '.', cap(gw) + ' coinciden en ' + joinA(allSame).replace(/ and /g, ' y ') + '.')) + '</p>' : '<p>' + esc(L('No job yet where ' + gw + ' say the same.', 'Todavía no hay una tarea en la que ' + gw + ' digan lo mismo.')) + '</p>';
       if (allDiff.length) top += '<p>' + esc(L((ids.length === 3 ? 'All three of you' : 'Each of you') + ' see ' + joinA(allDiff) + ' differently. ' + (allDiff.length > 1 ? 'Good ones' : 'A good one') + ' to talk about together.', (ids.length === 3 ? 'Los tres' : 'Cada uno') + ' ven ' + joinA(allDiff).replace(/ and /g, ' y ') + ' de forma distinta. ' + (allDiff.length > 1 ? 'Buenas para conversarlas juntos.' : 'Buena para conversarla juntos.'))) + '</p>';
-      html = top + '</div>' + html;
+      // the one who set it up isn't always the hub: next time someone else can start it
+      var starter = typeof q.st === 'number' ? q.st : q.from && q.from.f >= 0 ? q.from.f : q.me, rest = q.people.map(function (_, i) { return i; }).filter(function (i) { return i !== starter; });
+      var restN = rest.map(function (i) { return typed(i) || personN(i); });
+      top += '<p class="lq-role">' + esc(L('Next time, let ' + restN.join(' or ') + ' start it, so ' + (starter === q.me ? 'you’re' : (typed(starter) || personN(starter)) + ' is') + ' not always the one who sets it up and sends it round.',
+        'La próxima vez, que lo empiece ' + restN.join(' o ') + ', para que no sea siempre ' + (starter === q.me ? 'tu tarea' : 'la tarea de ' + (typed(starter) || personN(starter))) + ' organizarlo y enviarlo.')) + '</p>';
+      // a compact grid, one line per job and one column per person; the pair-by-pair words fold away under it
+      var cols = ids, rowsH = '';
+      q.list.forEach(function (id) {
+        var vals = cols.map(function (p) { return (q.ans[p] || {})[id]; });
+        if (vals.every(function (x) { return x == null; })) return;
+        var have = vals.filter(function (x) { return x != null; }), diff = have.some(function (x) { return x !== have[0]; });
+        rowsH += '<tr' + (diff ? ' class="is-diff"' : '') + '><th scope="row">' + esc(label(id)) + '</th>' + vals.map(function (x) { return '<td>' + esc(x == null ? '–' : x === 'b' ? L('Shared', 'Compartido') : nm(x)) + '</td>'; }).join('') + '</tr>';
+      });
+      var grid = '<table class="lq-grid"><caption class="sr-only">' + esc(L('Who each person says mostly does each job', 'Quién dice cada uno que hace cada tarea')) + '</caption><thead><tr><th scope="col">' + esc(L('Job', 'Tarea')) + '</th>' +
+        cols.map(function (p) { return '<th scope="col">' + esc(L((typed(p) || personN(p)) + ' says', (typed(p) || personN(p)) + ' dice')) + '</th>'; }).join('') + '</tr></thead><tbody>' + rowsH + '</tbody></table>' +
+        '<p class="lq-mini">' + esc(L('Shaded rows are the ones you see differently: good ones to talk about.', 'Las filas sombreadas son las que ven distinto: buenas para conversar.')) + '</p>';
+      html = top + grid + '</div><details class="lq-cmpdet"><summary>' + esc(L('Show details', 'Ver detalles')) + '</summary>' + html + '</details>';
     }
     if (box.getAttribute('data-h') !== html) { box.setAttribute('data-h', html); box.innerHTML = html; }
   }
@@ -1048,6 +1072,8 @@
     if (ids.some(isKidJob)) d.k = 1;
     var hs = {}; q.people.forEach(function (_, i) { if (hrsOf(i)) hs[i] = hrsOf(i); }); if (Object.keys(hs).length) d.h = hs;
     if (q.split) d.s = q.split;
+    // who started this quick look (so "Next time, let someone else start it" names the right people)
+    d.o = typeof q.st === 'number' && q.st < q.people.length ? q.st : q.me;
     // how often / how long, where someone set it (so both devices weigh the jobs the same way)
     if (q.jw && ids.some(function (id) { return q.jw[id]; })) d.w = ids.map(function (id) { var o = q.jw[id]; return o ? (o.f || '') + (o.h ? ':' + o.h : '') : ''; }).join('|');
     var cs = {}; q.people.forEach(function (_, i) { if (q.solo && q.solo[i]) cs[i] = q.solo[i]; }); if (Object.keys(cs).length) d.c = cs;
@@ -1055,29 +1081,40 @@
   }
   function linkFor(to) { return location.origin + '/lemonade-stand.html#q=' + packed(to); }
   function touchy() { try { return window.matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } }
+  // One main way to send (to everyone in one message with three or more, or to the other person), and the rest
+  // folded under "Other ways to share", so the result isn't a wall of buttons
+  var sendOpen = false;
   function renderSend() {
     var box = $('lq-send'); if (!box) return;
-    var n = tally(q.me).n, html = '';
+    var n = tally(q.me).n, main = '', more = '';
+    if (n && q.askMe) {
+      var h0 = '<p class="lq-mini">' + esc(L('To send it, first tap your own name under “Which of you is using this?”, above.', 'Para enviarlo, primero toca tu nombre arriba, en «¿Quién de ustedes lo está usando?».')) + '</p>';
+      if (box.getAttribute('data-h') !== h0) { box.setAttribute('data-h', h0); box.innerHTML = h0; }
+      return;
+    }
     if (n) {
-      // three or more: one message for the group chat, with each person's own link
-      if (q.people.length > 2) html += '<button type="button" class="lq-main" data-lq-all>' + esc(L('Send to everyone (one message)', 'Enviar a todos (un mensaje)')) + '</button>';
+      if (q.people.length > 2) main = '<button type="button" class="lq-main" data-lq-all>' + esc(L('Send to everyone (one message)', 'Enviar a todos (un mensaje)')) + '</button>';
       q.people.forEach(function (_, o) {
         if (o === q.me) return;
         var t = L('Send to ', 'Enviar a ') + (typed(o) || (q.people.length === 2 ? L('them', 'la otra persona') : personN(o)));
-        html += '<button type="button" class="' + (html ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
+        var b = '<button type="button" class="' + (main ? '' : 'lq-main') + '" data-lq-send="' + o + '">' + esc(t) + '</button>';
+        if (!main) main = b; else more += b;
         // the same link as a QR code, for a phone in the same room
-        html += '<button type="button" data-lq-qr="' + o + '">' + esc(q.people.length === 2 ? L('Show a QR code', 'Mostrar un código QR') : L('QR code for ', 'Código QR para ') + (typed(o) || personN(o))) + '</button>';
+        more += '<button type="button" data-lq-qr="' + o + '">' + esc(q.people.length === 2 ? L('Show a QR code', 'Mostrar un código QR') : L('QR code for ', 'Código QR para ') + (typed(o) || personN(o))) + '</button>';
       });
-      html += '<button type="button" data-lq-chat>' + esc(L('Copy for the group chat', 'Copiar para el chat del grupo')) + '</button>';
-      html += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">' + esc(L('Share your result as an image', 'Compartir el resultado como imagen')) + '</button>';
+      more += '<button type="button" data-lq-chat>' + esc(L('Copy for the group chat', 'Copiar para el chat del grupo')) + '</button>';
+      more += '<button type="button" data-lq-card aria-controls="lq-card" aria-expanded="' + !!(cardP && cardP.open) + '">' + esc(L('Share your result as an image', 'Compartir el resultado como imagen')) + '</button>';
       var next = nextTurn(), nn = next >= 0 ? (typed(next) || (q.people.length === 2 ? L('them', 'la otra persona') : personN(next))) : '';
       // "Pass this phone" on a phone or tablet; on a computer, "Hand over"
-      if (next >= 0) html += '<button type="button" data-lq-turn="' + next + '">' + esc(touchy() ? L('Pass this phone to ', 'Pasarle el teléfono a ') + nn : L('Hand over to ', 'Ahora le toca a ') + nn + L(' (same device)', ' (mismo aparato)')) + '</button>';
+      if (next >= 0) more += '<button type="button" data-lq-turn="' + next + '">' + esc(touchy() ? L('Pass this phone to ', 'Pasarle el teléfono a ') + nn : L('Hand over to ', 'Ahora le toca a ') + nn + L(' (same device)', ' (mismo aparato)')) + '</button>';
     }
+    var html = main ? main + '<details class="lq-moreshare"' + (sendOpen ? ' open' : '') + '><summary>' + esc(L('Other ways to share', 'Otras formas de compartir')) + '</summary><div class="lq-tools">' + more + '</div></details>' : '';
     if (box.getAttribute('data-h') !== html) {
-      var f = document.activeElement && box.contains(document.activeElement) ? Array.prototype.indexOf.call(box.children, document.activeElement) : -1;
+      var a = document.activeElement, key = null;
+      if (a && box.contains(a)) { key = a.tagName === 'SUMMARY' ? 'summary' : (Array.prototype.filter.call(a.attributes, function (x) { return /^data-lq-/.test(x.name); }).map(function (x) { return '[' + x.name + (x.value ? '="' + x.value + '"' : '') + ']'; })[0] || null); }
       box.setAttribute('data-h', html); box.innerHTML = html;
-      if (f >= 0 && box.children[f]) box.children[f].focus({ preventScroll: true });
+      var d = box.querySelector('details'); if (d) d.addEventListener('toggle', function () { sendOpen = d.open; });
+      if (key) { var f = box.querySelector(key); if (f) f.focus({ preventScroll: true }); }
     }
   }
   // on one phone: the next person who hasn't answered yet
@@ -1112,8 +1149,15 @@
     }
     if (e.target.closest && e.target.closest('[data-lq-all]')) {
       // one group-chat message, a personal link for each person (so each answers as themselves)
-      var ls = [L('Here’s my quick look at who does what at home. Each of you has your own link: tap yours and tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.', 'Aquí está mi vistazo a quién hace qué en casa. Cada uno tiene su propio enlace: toca el tuyo y marca quién hace casi siempre cada tarea, como tú lo ves. Mis respuestas quedan ocultas hasta que hagas las tuyas. No se sube nada.'), ''];
-      q.people.forEach(function (_, o) { if (o !== q.me) ls.push((typed(o) || personN(o)) + ': ' + linkFor(o)); });
+      // who's in already: the message says whose answers it carries, and only asks the others to add theirs
+      var inN = q.people.map(function (_, i) { return i; }).filter(function (i) { return hasAny(i); });
+      var todo = q.people.map(function (_, i) { return i; }).filter(function (i) { return i !== q.me && !hasAny(i); });
+      var ls = [groupHead(), ''];
+      if (todo.length) ls.push(L(joinA(todo.map(function (o) { return typed(o) || personN(o); })) + ': tap your own link and tap who mostly does each job, as you see it. The answers already in stay hidden until you’ve done yours.',
+        joinA(todo.map(function (o) { return typed(o) || personN(o); })).replace(/ and /g, ' y ') + ': toquen su propio enlace y marquen quién hace casi siempre cada tarea, como lo ven. Las respuestas que ya están quedan ocultas hasta que hagan las suyas.'));
+      if (inN.length > 1) ls.push(L('Already in: tap your link to see where we all agree.', 'Ya respondieron: toquen su enlace para ver en qué coincidimos.'));
+      ls.push(L('Nothing is uploaded.', 'No se sube nada.'), '');
+      q.people.forEach(function (_, o) { if (o !== q.me) ls.push((typed(o) || personN(o)) + (hasAny(o) ? L(' (your answers are in)', ' (tus respuestas ya están)') : '') + ': ' + linkFor(o)); });
       var all = ls.join('\n');
       if (window.TOLShare && window.TOLShare.share) { try { window.TOLShare.share({ title: L('Our quick look', 'Nuestro vistazo'), text: all, url: false, result: true }); } catch (err) { copy(all); } }
       else copy(all).then(function (ok) { status(ok ? L('Copied one message with a link for each person. Paste it into your group chat.', 'Se copió un mensaje con un enlace para cada persona. Pégalo en el chat del grupo.') : L('Couldn’t copy here.', 'No se pudo copiar aquí.')); });
@@ -1122,7 +1166,7 @@
     }
     var qb = e.target.closest && e.target.closest('[data-lq-qr]');
     if (qb) {
-      var qo = +qb.getAttribute('data-lq-qr'), qurl = linkFor(qo), qo2 = { title: 'Scan with ' + (typed(qo) ? typed(qo) + '’s' : 'the other') + ' phone', note: 'It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs.' };
+      var qo = +qb.getAttribute('data-lq-qr'), qurl = linkFor(qo), qo2 = { title: L('Scan with ' + (typed(qo) ? typed(qo) + '’s' : 'the other') + ' phone', 'Escanéalo con el teléfono de ' + (typed(qo) || 'la otra persona')), note: L('It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs. On a laptop? Use “Send” to copy the link instead.', 'Abre su vistazo con las mismas tareas. Tus respuestas quedan ocultas hasta que haga las suyas.') };
       if (window.TOLShareKit && window.TOLShareKit.showQR) window.TOLShareKit.showQR(qurl, qo2);
       else { var sc = document.createElement('script'); sc.src = '/assets/js/share-kit.js'; sc.onload = function () { if (window.TOLShareKit) window.TOLShareKit.showQR(qurl, qo2); }; document.head.appendChild(sc); }
       return;
@@ -1141,8 +1185,16 @@
       var f = document.querySelector('#lq-list .lq-w'); if (f) f.focus({ preventScroll: true });
     }
   });
+  // "From Ella · Kofi’s and Ella’s answers are in (2 of 3)": who sent it and how many views it carries
+  function groupHead() {
+    var inN = q.people.map(function (_, i) { return i; }).filter(function (i) { return hasAny(i); }), from = typed(q.me);
+    var names = joinA(inN.map(function (i) { return (typed(i) || personN(i)) + '’s'; }));
+    if (isEs()) return (from ? 'De ' + from + ' · ' : '') + 'Nuestro vistazo a quién hace qué en casa. ' + (inN.length ? 'Respuestas que ya están: ' + inN.length + ' de ' + q.people.length + '.' : '');
+    return (from ? 'From ' + from + ' · ' : '') + 'Our quick look at who does what at home. ' + (inN.length ? (inN.length === 1 ? names + ' answers are in' : names + ' answers are in') + ' (' + inN.length + ' of ' + q.people.length + ').' : '');
+  }
   function chatText(noLink) {
     var all = tally(q.me), lines = [];
+    if (q.people.length > 2 || multiView()) lines.push(groupHead());
     var whoView = multiView() && typed(q.me) ? L(' (' + typed(q.me) + '’s view)', ' (la vista de ' + typed(q.me) + ')') : '';
     lines.push(L('Our quick look at who does what at home' + whoView + '. A way to talk, not a score:', 'Nuestro vistazo a quién hace qué en casa' + whoView + '. Para conversar, no para llevar la cuenta:'));
     SECTIONS.forEach(function (s) {
@@ -1243,12 +1295,13 @@
     var f = typeof d.f === 'number' && d.f >= 0 && d.f < n ? d.f : -1, t = typeof d.t === 'number' && d.t >= 0 && d.t < n ? d.t : -1;
     var hrs = {};
     if (d.h && typeof d.h === 'object') Object.keys(d.h).forEach(function (k) { var x = +d.h[k]; if (+k >= 0 && +k < n && isFinite(x) && x > 0 && x <= 168) hrs[k] = Math.round(x * 10) / 10; });
+    var st0 = typeof d.o === 'number' && d.o >= 0 && d.o < n ? d.o : f;
     var split = typeof d.s === 'string' && /^\d{1,2}$/.test(d.s) && +d.s >= 10 && +d.s <= 90 ? d.s : '';
     var jw = {};
     if (typeof d.w === 'string') d.w.split('|').forEach(function (x, j) { var id = ids[j]; if (!known(id) || !x) return; var pr = x.split(':'), y = {}; if (OFTEN_W[pr[0]]) y.f = pr[0]; if (+pr[1] > 0 && +pr[1] <= 80) y.h = +pr[1]; if (Object.keys(y).length) jw[id] = y; });
     var solo = {};
     if (d.c && typeof d.c === 'object') Object.keys(d.c).forEach(function (k) { var x = +d.c[k]; if (+k >= 0 && +k < n && x > 0 && x <= 168) solo[k] = x; });
-    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split, jw: jw, solo: solo };
+    return { people: people, list: list, ans: ans, f: f, t: t, ill: !!d.i, away: !!d.aw, kids: !!d.k || list.some(isKidJob), hrs: hrs, split: split, jw: jw, solo: solo, st: st0 };
   }
   function receive(h) {
     var d = decode(h);
@@ -1291,6 +1344,8 @@
     q.from = { by: by, reply: hasAny(me) && d.f >= 0 && d.f !== me, t: d.t, f: d.f };
     if (q.from.reply && d.f >= 0) q.peek[me + '>' + d.f] = 1;
     q.from.replaced = replaced;
+    delete q.askMe;
+    if (d.st >= 0 && typeof q.st !== 'number') q.st = d.st;
     if (conf.length) q.from.conf = conf;
     save(); renderAll();
     var fr = $('lq-from');
@@ -1341,6 +1396,19 @@
         save(); renderExtra(); renderSend(); renderFrom();
         status(L('Done. Both devices can match now: send it back if you changed anything.', 'Listo. Si cambiaste algo, envíalo de vuelta para que los dos aparatos coincidan.'));
       }
+      return;
+    }
+    var am = e.target.closest && e.target.closest('[data-lq-askme]');
+    if (am) {
+      var ai = +am.getAttribute('data-lq-askme'); delete q.askMe;
+      if (ai !== q.me) {
+        // their own answers come with them (answers made before saying who you are were yours)
+        var mineNow = q.ans[q.me]; if (mineNow && !hasAny(ai)) { q.ans[ai] = mineNow; q.ans[q.me] = {}; }
+        q.me = ai;
+      }
+      save(); renderAll();
+      status(L('Thanks, ' + typed(ai) + '. Your answers are yours on this device now.', 'Gracias, ' + typed(ai) + '.'));
+      var f0 = document.querySelector('#lq-names [data-lq-name="' + ai + '"]'); if (f0) f0.focus({ preventScroll: true });
       return;
     }
     var t = e.target.closest && e.target.closest('[data-lq-iam], [data-lq-undo], [data-lq-from-ok]'); if (!t) return;
@@ -1477,6 +1545,34 @@
     var inp = $('lq-new'); if (inp) inp.placeholder = es ? '+ añadir una tarea' : '+ add a job';
     var lb = $('lq-lang'); if (lb) { lb.textContent = es ? 'In English' : 'En español'; lb.setAttribute('lang', es ? 'en' : 'es'); }
     var sec = $('quick'); if (sec) { if (es) sec.setAttribute('lang', 'es'); else sec.removeAttribute('lang'); }
+    // "Talk about it": in Spanish, the words to use on the Spanish page
+    var talkA = $('lq-talk-d') && $('lq-talk-d').closest('a'); if (talkA) talkA.setAttribute('href', es ? '/en-espanol.html#casa' : '/check-ins.html');
+    fridgeLang(es);
+  }
+  // The fridge list, made from the quick look in Spanish, speaks Spanish too (its own words and its buttons)
+  var FR0 = null;
+  function fridgeLang(es) {
+    var own = $('owners'); if (!own) return;
+    var g = function (sel) { return own.querySelector(sel); };
+    var els = { h: $('owners-h'), lede: g('.ls-panel-note'), p1: g('#own-pick') && g('#own-pick').previousElementSibling, p2: $('own-add-person') && $('own-add-person').parentNode,
+      add: $('own-add-go'), addp: $('own-add-person'), empty: $('own-empty'), namesH: $('own-names-h'), more: g('.ls-own-more-l') };
+    var ES_F = { h: 'Sin proyecto: un dueño para cada tarea', lede: 'Sin anotar una semana entera. Elijan las tareas que más discuten, denle un dueño a cada una con un toque, y pongan la lista en el refri: imprímanla, guárdenla como PDF o envíenla como texto. Ser dueño de una tarea es hacerla, o asegurarse de que se haga.',
+      p1: '1. Elegir las tareas (toca para poner o quitar)', p2: '2. Un dueño para cada una', add: 'Añadir', addp: '+ Añadir a una persona', empty: 'Todavía no hay nada elegido.',
+      namesH: '¿De quién es la lista? Escriban sus nombres, para que diga quién se encarga de qué.', more: 'Añadir un respaldo para los días malos y qué significa «hecho» (opcional)' };
+    if (!FR0) { FR0 = {}; Object.keys(els).forEach(function (k) { if (els[k]) FR0[k] = k === 'p2' ? els[k].firstChild.textContent : els[k].textContent; }); }
+    Object.keys(els).forEach(function (k) {
+      var el = els[k]; if (!el || FR0[k] == null) return;
+      var t = es ? ES_F[k] : FR0[k];
+      if (k === 'p2') { var st = el.querySelector('strong'); if (st) st.textContent = es ? ES_F.p2 : '2. One owner each'; return; }
+      if (k === 'p1') { el.innerHTML = es ? '<strong>1. Elegir las tareas</strong> (toca para poner o quitar)' : '<strong>1. Pick the jobs</strong> (tap to add or take off)'; return; }
+      if (k === 'namesH') { el.innerHTML = es ? '<strong>¿De quién es la lista?</strong> Escriban sus nombres, para que diga quién se encarga de qué.' : '<strong>Whose list is it?</strong> Type your names, so the list says who owns what (not &ldquo;Me&rdquo; and &ldquo;Them&rdquo;).'; return; }
+      if (k === 'more') { var cb = el.querySelector('input'); el.textContent = ''; if (cb) el.appendChild(cb); el.appendChild(document.createTextNode(' ' + t.replace(/^\s+/, ''))); return; }
+      if (el.textContent !== t) el.textContent = t;
+    });
+    var nn = $('own-new'); if (nn) nn.placeholder = es ? 'O escribe otra tarea' : 'Or type another job';
+    var on = document.body.getAttribute('data-ls-lang') === 'es';
+    if (es) { own.setAttribute('lang', 'es'); document.body.setAttribute('data-ls-lang', 'es'); } else { own.removeAttribute('lang'); document.body.removeAttribute('data-ls-lang'); }
+    if (on !== es) { try { document.dispatchEvent(new CustomEvent('tol-lang')); } catch (e) {} var api = window.TOLLemonade; if (api && api.renderOwners) api.renderOwners(); }
   }
   function init() {
     var api = window.TOLLemonade;
@@ -1488,6 +1584,8 @@
     var H = window.TOLHousehold, hh = H && H.get ? H.get() : null;
     if (hh && hh.people && hh.people.length >= 2 && q.people.every(function (p) { return !String(p || '').trim(); }) && !Object.keys(q.ans).some(function (p) { return hasAny(+p); })) {
       q.people = hh.people.slice(0, MAX_P).map(function (p) { return String(p || '').slice(0, 40); });
+      // names kept on this device may have come from someone else's list: ask who's holding it before "Your name"
+      q.askMe = 1;
     }
     var cb = $('lq-card');
     if (cb) cardP = Card.panel(cb, { card: cardData, link: function () { return linkFor(-1); }, text: function () { return chatText(true); }, print: printQuick, title: 'Our quick look', file: 'who-does-what.png' });

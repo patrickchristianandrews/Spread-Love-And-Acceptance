@@ -1107,13 +1107,18 @@
     // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
     var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
     if (current === '/en-espanol.html') esLink.setAttribute('aria-current', 'page');
+    // the book, one tap from every page: on a laptop the less-used sections fold into Menu before it goes
+    var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, T('Read the book', 'Leer el libro'));
+    if (esPage()) bookLink.setAttribute('lang', 'es');
+    if (current === '/book/index.html') bookLink.setAttribute('aria-current', 'page');
+    nav.appendChild(bookLink);
     nav.appendChild(esLink);
     // the section buttons (built again when Focus mode changes)
     ribbonHook = function () {
       closeDrop();
       Array.prototype.forEach.call(nav.querySelectorAll('.tol-nav-item'), function (n) { n.remove(); });
       var R = ribbon();
-      R.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= R.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.insertBefore(d, esLink); });
+      R.forEach(function (p, n) { var d = buildDrop(p[0], p[1], n >= R.length - 3); if (FOLD[p[0]]) d.setAttribute('data-fold', FOLD[p[0]]); nav.insertBefore(d, bookLink); });
       if (typeof barHeightHook === 'function') barHeightHook();
     };
     ribbonHook();
@@ -1142,6 +1147,7 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a> <button type="button" data-tol-exit>' + T('Leave this site quickly', 'Salir rápido de este sitio') + '</button>'));
+    panel.appendChild(el('p', { class: 'tol-panel-es tol-panel-book' }, '<span aria-hidden="true">&#128214;</span> <a href="/book/index.html">' + T('Read the book', 'Leer el libro') + '</a>' + T(', from the beginning', ' (en inglés), desde el principio')));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     panel.appendChild(buildIndex({ accordion: true }));
@@ -1423,12 +1429,17 @@
       }
       // is-snug: Search folds into Menu (the menu panel opens with its own search box), so Settings keeps its word
       // is-tightest (only on the very smallest screens at the biggest text): Settings shows just its picture
-      var es = bar.querySelector('.tol-es-link');
+      var es = bar.querySelector('.tol-es-link:not(.tol-book-link)');
+      var bk = bar.querySelector('.tol-book-link');
+      if (bk) bk.hidden = false;
       if (es) { es.hidden = false; if (crowded()) es.hidden = true; }   // the Spanish link steps aside before the sections fold away
       ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); });
+      // still too full: "Read the book" steps aside too (it is first in the menu panel), and the sections try again
+      if (crowded() && bk) { bk.hidden = true; bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'); ['is-fold1', 'is-fold2', 'is-fold3', 'is-fold4'].forEach(function (c) { if (crowded()) bar.classList.add(c); }); }
       if (crowded()) bar.classList.remove('is-fold1', 'is-fold2', 'is-fold3', 'is-fold4');
-      // on a phone the name shortens to "Spread Love" before it steps aside altogether
-      ['is-narrow', 'is-tight', 'is-snug', 'is-shortname', 'is-tighter', 'is-tightest'].forEach(function (c) {
+      // on a phone the name shortens to "Spread Love" before it steps aside altogether (only when even two small lines won't fit)
+      // (on a phone, Settings shows just its picture before the name is shortened, so the full name fits on two lines)
+      ['is-narrow', 'is-tight', 'is-snug', 'is-tightest', 'is-shortname', 'is-tighter'].forEach(function (c) {
         if (!crowded()) return;
         bar.classList.add(c);
         if (c === 'is-shortname' && name) name.textContent = 'Spread Love';
@@ -1885,6 +1896,7 @@
     // ADHD in a grown-up (the child's page leads otherwise)
     [/\b(i have adhd|i'?ve got adhd|i think i have adhd|adult adhd|adhd adults?|adhd (at|and) work|my adhd|adhd me|late diagnos\w*)\b/, 'r13adhdadult'],
     [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk'],
+    [/\b(yell\w*|shout\w*|scream\w*)\b.*\babus\w*|\babus\w*\b.*\b(yell\w*|shout\w*|scream\w*)\b/, 'r13yellabuse'],
     // control, fear and abuse: the safety page's signs first, never a dead end
     [/\b(gaslight\w*|coercive|coercion|narciss\w*|controlling|abus\w*|domestic violence|dv|intimate partner violence|manipulat\w*|isolat\w* me|threaten\w*|stalk\w*|walking on eggshells|afraid of (him|her|them|my)|scared of (him|her|them|my))\b/, 'r13abuse']
   ];
@@ -1906,6 +1918,7 @@
     r13stored: ['/on-this-device.html', '/safety.html#traces', '/legal/privacy-policy.html'],
     adhd: ['/adhd-kids.html', '/neurodivergent-relationships.html', '/wired-differently.html', '/wiring-card.html'],
     r13adhdadult: ['/wired-differently.html', '/neurodivergent-relationships.html', '/work.html#neurodiversity', '/wiring-card.html'],
+    r13yellabuse: ['/parents.html#is-yelling-abuse', '/safety.html#signs', '/parents.html#anger-help'],
     r13abuse: ['/safety.html#signs', '/safety.html', '/money-together.html#control', '/outside-help.html'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
     r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
     emotions: ['/book/understanding-1-feelings.html', '/library/emotions.html', '/communication.html'], emotion: 'emotions', emotional: 'emotions'
@@ -2693,12 +2706,8 @@
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + T('Ask Professor Puddles', '¿Hablamos?') + '</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
     if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); }
-    // on a phone he is a slim tab at the edge; for the first few seconds he shows his name, so people know he's there
-    if (!game && window.matchMedia && matchMedia('(max-width:560px)').matches && !main.querySelector('[data-home-intro]')) {
-      fab.classList.add('is-named');
-      var unname = function () { fab.classList.remove('is-named'); window.removeEventListener('scroll', unname); };
-      setTimeout(unname, 6000); setTimeout(function () { window.addEventListener('scroll', unname, { passive: true }); }, 400);
-    } if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
+    // on a phone he is a small round button in the corner (site.css), with no name pill that could cover the first words
+    if (main.querySelector('[data-home-intro]')) body.classList.add('is-home-pud'); // the home page centres it
     if (!game) keepFabClear(fab);
     window.TOLPuddles = { open: function (topic) { openPud(opts(topic || '')); } };
     // any link marked data-ask-puddles (like the home page's "Ask Professor Puddles") opens him right here
@@ -3400,25 +3409,47 @@
   }
 
   // ---- a gentle offer on the first visit: Quiet mode, Easy reading or larger text, one tap each ----
-  // Shown once per visit (on the first page of the visit where it fits), on up to three visits, and never again
-  // once someone picks an option or says No thanks. Never inside a tool, between its button and its result.
+  // Shown once on this device (on the first page where it fits, and again only if that same page is reloaded
+  // in the same visit), and never again once someone picks an option or says No thanks. Settings at the top
+  // always has the same choices. Never inside a tool, between its button and its result.
   function comfortOffer(body) {
-    // (on the home page it stays in the first screen until it's answered)
-    var seenBefore = lsGet('tol-comfort-offer') || '', visits = seenBefore === 'shown' ? 1 : (+(/^shown:(\d+)$/.exec(seenBefore) || [0, 0])[1] || 0);
-    var onHome = !!document.querySelector('main [data-home-intro]');
-    if (seenBefore === 'done' || workMode() || (!onHome && (visits >= 3 || ssGet('tol-offer-seen'))) || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
+    var seenBefore = lsGet('tol-comfort-offer') || '', seenHere = ssGet('tol-offer-seen');
+    var again = seenHere && seenHere === location.pathname;   // the same page, reloaded this visit
+    if (seenBefore === 'done' || (seenBefore && !again) || workMode() || quietOn() || easyOn() || body.classList.contains('is-game') || body.hasAttribute('data-no-offer') ||
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
-    if (!ssGet('tol-offer-seen')) lsSet('tol-comfort-offer', 'shown:' + (visits + 1)); ssSet('tol-offer-seen', '1'); // once this visit; Settings at the top is always there
+    lsSet('tol-comfort-offer', 'shown:1'); ssSet('tol-offer-seen', location.pathname); // once on this device; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
       '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
-      '<p class="tol-offer-row"><button type="button" data-offer="quiet">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
+      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="biggest">Biggest text, and keep still</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');
       lsSet('tol-comfort-offer', 'done');
+      if (what === 'no') {
+        // No thanks: the card folds down to one line where it is, so nothing on the page jumps. It goes
+        // quietly once it has scrolled out of view (and the page is moved back by its height if it was above).
+        var h0 = box.offsetHeight;
+        box.innerHTML = '<p class="tol-offer-done">Okay. These are always in <em>Settings</em> at the top.</p>';
+        box.classList.add('is-done');
+        var h1 = box.offsetHeight, still = document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+        if (!still && h0 > h1) { box.style.height = h0 + 'px'; box.style.overflow = 'hidden'; void box.offsetHeight; box.style.transition = 'height .35s ease'; box.style.height = h1 + 'px'; }
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (es) {
+            if (es[0].isIntersecting) return;
+            io.disconnect();
+            var r = box.getBoundingClientRect(), above = r.bottom <= 0, hh = box.offsetHeight + (parseFloat(getComputedStyle(box).marginTop) || 0) + (parseFloat(getComputedStyle(box).marginBottom) || 0);
+            box.remove();
+            if (above) window.scrollBy(0, -hh);
+          });
+          setTimeout(function () { io.observe(box); }, 400);
+        }
+        var foc = box.querySelector('p'); foc.setAttribute('tabindex', '-1'); foc.focus({ preventScroll: true });
+        return;
+      }
       if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce('Larger text is on. Change it any time in Settings.'); }
-      else if (what !== 'no') { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
+      else if (what === 'biggest') { lsSet(SIZE_KEY, 'xxl'); setStill(true); after(); announce('The biggest text is on, and the page is kept still. Change it any time in Settings.'); }
+      else { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
       // focus goes to whatever came next (the page's first heading if nothing else), so a screen reader lands somewhere real
       var nx = box.nextElementSibling, m = document.getElementById('tol-main'); box.remove();
       var tgt = (nx && nx.matches && nx.matches('h1, h2, h3, p, section, header') ? nx : null) || document.querySelector('main h1, main h2');

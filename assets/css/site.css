@@ -2827,3 +2827,43 @@ html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rota
   html.tol-contrast:not([data-theme="light"]):not(.tol-nodark):not(:has(> body.is-game)){ filter:invert(1) hue-rotate(180deg) !important; background:#FFFFFF !important; }
 }
 @media print{ html.tol-contrast{ filter:none !important; } }
+
+/* ---- chrome9 (re-test 2) ---- */
+/* phones: the full name on two small lines ("Spread Love &" / "Acceptance"), never cut to "Spread Love" unless even that won't fit */
+@media (max-width:640px){
+  .tol-bar.is-tightest:not(.is-shortname) .tol-brand span{ font-size:.8rem !important; line-height:1.08; letter-spacing:-.01em; overflow-wrap:normal; word-break:normal; }
+}
+/* "Read the book" in the top bar: a plain link like "En español", a touch tighter so the sections keep their room */
+.tol-bar a.tol-book-link{ padding-left:.45rem; padding-right:.45rem; font-weight:600; }
+.tol-bar a.tol-book-link[aria-current="page"]{ text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:4px; }
+/* Phones: the floating helpers are small round buttons, fully on screen with a safe inset (never a half-hidden tab
+   at the edge): Professor Puddles bottom left, Breathe bottom right, Back to top just above Breathe. While someone
+   reads down the page they all step aside (html.tol-reading), and the end of the page has room so nothing sits under them. */
+@media (max-width:560px){
+  html body .tol-pud-fab, html body .tol-pud-fab:is(.is-peek, .is-face, .is-named){
+    left:max(5px, env(safe-area-inset-left)) !important; right:auto !important; bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+    width:38px !important; height:38px !important; min-height:0 !important; padding:0 !important; gap:0 !important;
+    justify-content:center !important; border:1px solid #A9CBE8 !important; border-radius:50% !important; transform:none !important;
+    background:rgba(226,240,252,.97) !important; box-shadow:0 4px 14px rgba(36,66,94,.22) !important; }
+  html body .tol-pud-fab .tol-pud-fab-art{ width:32px; height:32px; }
+  html body .tol-pud-fab .tol-pud-fab-art svg{ width:28px; height:28px; }
+  html body .tol-pud-fab .tol-pud-fab-t{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; }
+  html body .tol-breathe-btn, html body .tol-breathe-btn:is(.is-compact, .is-peek, .is-left):not(.is-high){
+    right:max(5px, env(safe-area-inset-right)) !important; left:auto !important; bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+    width:38px !important; height:38px !important; padding:0 !important; gap:0 !important; justify-content:center !important;
+    border:1px solid #BFD0EA !important; border-radius:50% !important; transform:none !important; box-shadow:0 4px 14px rgba(47,58,92,.2) !important; }
+  /* (when something to tap sits in the right corner, Breathe sits beside Professor Puddles instead) */
+  html body .tol-breathe-btn.is-left:not(.is-high){ left:calc(max(5px, env(safe-area-inset-left)) + 46px) !important; right:auto !important; }
+  html body .tol-breathe-btn > span{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; }
+  html body .tol-breathe-btn svg{ width:1.2rem !important; height:1.2rem !important; }
+  html body .tol-top{ right:max(5px, env(safe-area-inset-right)) !important; bottom:calc(58px + env(safe-area-inset-bottom, 0px)) !important; width:38px !important; height:38px !important; font-size:1.05rem !important; }
+  html.tol-reading .tol-pud-fab:not(:focus-visible){ opacity:0 !important; pointer-events:none !important; }
+  body:has(.tol-pud-fab, .tol-breathe-btn){ padding-bottom:calc(5rem + env(safe-area-inset-bottom, 0px)); }
+  main.read{ scroll-padding-bottom:5rem; }
+}
+/* the calmer-page offer: Quiet mode is the first and boldest choice; after "No thanks" it folds to one quiet line */
+.tol-offer button.is-main{ background:#4E3F6B; border-color:#4E3F6B; box-shadow:0 0 0 2px #FFFDF7, 0 0 0 4px #9A80C8; }
+.tol-offer:not(.is-done) button:not(.is-main):not(.is-quiet){ background:#FFFDF7; color:#2F5F8A; }
+.tol-offer.is-done{ padding:.5rem 1rem; box-shadow:none; }
+.tol-offer .tol-offer-done{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.tol-offer .tol-offer-done:focus{ outline:none; }

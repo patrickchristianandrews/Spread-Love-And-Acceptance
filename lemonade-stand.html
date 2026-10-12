@@ -86,6 +86,8 @@
   .ls-pick{ display:flex; flex-wrap:wrap; gap:.45rem; margin:.4rem 0 .8rem; }
   .ls-owners h2{ margin:0 0 .4rem; font-size:1.3rem; }
   .ls-owners ol{ list-style:none; margin:0; padding:0; }
+  .ls-own-alt{ grid-column:1 / -1; margin:.2rem 0 0 !important; }
+  .ls-own-send{ margin-top:.8rem; }
   .ls-own{ display:grid; grid-template-columns:1fr auto; gap:.3rem .6rem; align-items:start; padding:.7rem .4rem; border-bottom:1px dotted #EFD27A; }
   .ls-own-addp{ margin-left:.4rem; min-height:36px; }
   .ls-own-unowned{ margin:.6rem 0 0 !important; padding:.5rem .7rem; border-radius:10px; background:#FFF6D8; border:1px dashed #E2B94B; }
@@ -454,6 +456,8 @@
   .lq-from p{ margin:0 !important; }
   .lq-from .lq-pick{ margin:.45rem 0 0; }
   .lq-from .lq-conf{ margin:.5rem 0 0; }
+  .lq-askme{ flex:1 1 100%; margin:0 0 .5rem; padding:.6rem .7rem; border-radius:12px; background:#EEF3FA; border:2px solid #C9D8EC; }
+  .lq-askme p{ margin:0 0 .4rem !important; }
   .lq-from .lq-conf ul{ margin:.3rem 0 0; padding-left:1.1rem; }
   .lq-from .lq-conf li{ margin:.25rem 0; }
   .lq-asrow{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .5rem; margin:.4rem 0 .2rem; font-size:.92rem; }
@@ -563,6 +567,17 @@
   .lq-tools button{ font:inherit; min-height:44px; padding:.45rem .95rem; border-radius:999px; border:2px solid var(--ink); background:#FFFDF6; color:var(--ink); cursor:pointer; }
   .lq-tools button:hover{ background:#F8E08A; }
   .lq-tools .lq-main{ background:#F8E08A; font-weight:600; }
+  .lq-moreshare{ flex:1 1 100%; margin:.1rem 0 0; }
+  .lq-moreshare > summary{ cursor:pointer; min-height:44px; display:inline-flex; align-items:center; font-size:.95rem; color:var(--focus); text-decoration:underline; }
+  .lq-moreshare > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .lq-moreshare .lq-tools{ margin:.3rem 0 0; }
+  .lq-grid{ width:100%; border-collapse:collapse; font-size:.88rem; margin:.4rem 0 .2rem; table-layout:fixed; }
+  .lq-grid th, .lq-grid td{ padding:.3rem .25rem; border-bottom:1px dotted #EFD27A; text-align:left; vertical-align:top; overflow-wrap:break-word; hyphens:auto; -webkit-hyphens:auto; }
+  .lq-grid thead th{ font-size:.8rem; color:var(--ink-soft); }
+  .lq-grid th:first-child{ width:38%; }
+  .lq-grid tr.is-diff td{ background:rgba(242,184,198,.25); }
+  .lq-cmpdet > summary{ cursor:pointer; min-height:40px; display:inline-flex; align-items:center; color:var(--focus); text-decoration:underline; }
+  .lq-role{ margin:.5rem 0 0 !important; font-size:.92rem; }
   .lq-linkbox{ margin:.5rem 0 0; }
   .lq-linkbox input{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; min-height:40px; }
   .lq-status{ min-height:1.3em; margin:.4rem 0 0 !important; font-size:.9rem !important; color:var(--credit); }
@@ -601,7 +616,7 @@
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) main > *:not(#quick),
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #quick > *:not(.lq-grid),
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) .lq-grid > *:not(#lq-res),
-    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #lq-res :is(button, .lq-tools, .lq-linkbox, .lq-status, .lq-next, .ls-card, .lq-mini-sum){ display:none !important; }
+    body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #lq-res :is(button, .lq-tools, .lq-linkbox, .lq-status, .lq-next, .ls-card, .lq-mini-sum, .lq-moreshare){ display:none !important; }
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #quick{ border:0 !important; background:none !important; box-shadow:none !important; padding:0 !important; margin:0 !important; }
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) .lq-grid{ display:block !important; margin:0 !important; }
     body[data-ls-view="quick"]:not(.print-fridge):not(.print-summary) #lq-res{ position:static !important; max-height:none !important; overflow:visible !important; border:0 !important; padding:0 !important; font-size:11.5pt; }
@@ -1015,6 +1030,7 @@
   <p class="ls-panel-note" id="own-empty">Nothing picked yet.</p>
   <ol id="own-list"></ol>
   <p class="ls-panel-note ls-own-unowned" id="own-unowned" role="status" hidden></p>
+  <div class="ls-tools ls-own-send" id="own-send" hidden></div>
   <div class="ls-own-fridge" id="own-fridge"></div>
   <div class="ls-keepask" data-keepask id="keepask-own" hidden><p class="ls-keepask-q">Keep this list on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
   <p class="ls-status ls-own-status" id="own-status" role="status" aria-live="polite"></p>

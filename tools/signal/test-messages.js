@@ -528,11 +528,14 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   const vd = (t, rel) => { const a = an(t); return E.verdict(a, E.score(a, ['general'], 'text'), E.rewrite(a, { wirings: ['general'], channel: 'text', rel: rel || 'partner' }), { rel: rel || 'partner' }); };
   const CONTROL = ['Where were you? Send me your location now. Who were you with?', 'Who were you with?', 'Send me your location.', 'Show me your phone.',
     'Give me your password.', 'You can’t see your friends anymore.', 'Nobody else would ever want you.', 'You are worthless and nobody else would ever want you.',
-    'You’re nothing without me.', 'I want to see your messages. Now.', 'Why is your location off?'];
+    'You’re nothing without me.', 'I want to see your messages. Now.', 'Why is your location off?',
+    // re-test 2 (a counsellor's report): ultimatums that cut someone off, watching, and "prove it"
+    'If you go out with your friends tonight don’t bother coming home. I’ll know if you do.', 'Don’t bother coming home.', 'I’ll know if you go out.',
+    'I’ll find out if you lie.', 'I’m watching you.', 'I can see where you are.', 'I checked your phone.', 'Where were you? Prove it.', 'Send me a screenshot of your messages.'];
   CONTROL.forEach(t => {
     const a = an(t), g = E.receive(a, {}), gc = E.receive(a, { rel: 'coparent' });
     chk(a.control && a.found.control, '“' + t + '”: control is flagged');
-    chk(g.control && g.danger && /sign of control/.test(g.head[1]), '“' + t + '” received: the head names control: ' + g.head[1]);
+    chk(g.control && g.danger && /^This may be about control, not communication\.$/.test(g.head[1]), '“' + t + '” received: the head names control: ' + g.head[1]);
     chk(!g.meanings.some(m => /usually a request|kinder|upset about something specific/.test(m)), '“' + t + '” received: no kind reading of control: ' + g.meanings.join(' / '));
     chk(g.replies.length === 1 && !g.replies.some(r => /you'd like me to|location|phone|password|by when|what's the specific thing/i.test(r.text)), '“' + t + '” received: no compliant reply: ' + JSON.stringify(g.replies));
     chk(gc.control && gc.replies.length === 1, '“' + t + '” received from a co-parent: still control');
@@ -544,7 +547,15 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   // a kind, one-off ask is not control
   ['Can you send me your location when you get there? Just so I know you got home safe.', 'Who were you with at the party? Sounds fun!',
     'Could you share your location so we can find you at the festival?', 'I want to see your new phone!', 'You can’t see the screen from there.',
-    'Nobody would believe you could run that fast.', 'Where are you? The film starts in 5.'].forEach(t => chk(!an(t).control, '“' + t + '”: a kind ask is not control'));
+    'Nobody would believe you could run that fast.', 'Where are you? The film starts in 5.',
+    'Text me when you land so I’ll know you’re safe.', 'I’m watching your show tonight!', 'I checked your phone, it’s charged.', 'Don’t bother coming home early, I’ll be out.',
+    'I’ll find out if you can come on Friday.', 'Where were you? I missed you!', 'I’m watching the kids tonight.'].forEach(t => chk(!an(t).control, '“' + t + '”: a kind ask is not control'));
+  // threats and control are never "looks okay" in either mode
+  ['If you go out with your friends tonight don’t bother coming home. I’ll know if you do.', 'You’re not allowed to go out.', 'If you leave I’ll make you regret it.', 'Do it or else.', 'You’ll regret it.', 'I’ll kill myself if you leave.', 'Give me your password.', 'Where were you? Prove it.', 'You can’t see your friends.'].forEach(t => {
+    const a = an(t), g = E.receive(a, {}), v = vd(t);
+    chk(g.danger && g.head[0] === 'danger' && !/looks okay/i.test(g.head[1]) && !g.meanings.some(m => /plain message|face value/.test(m)), '“' + t + '” received: never “looks okay”: ' + g.head[1]);
+    chk(v.id === 'danger' || v.id === 'fight', '“' + t + '” sent: named as a threat or control: ' + v.id + ' ' + v.text);
+  });
   // the "Check the ask" reply turns the words round properly: no "me to Send", no "when me get there"
   const ask = E.receive(an('Can you send me your location when you get there? Just so I know you got home safe.'), {}).replies.map(r => r.text).join(' ');
   chk(/send you my location when I get there/.test(ask) && !/\bme to Send\b|when me get/.test(ask), 'the ask is turned round cleanly: ' + ask);

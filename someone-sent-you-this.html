@@ -28,6 +28,8 @@
   .ss-tour .ss-d{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.2rem; }
   .ss-pick{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.6rem; }
   .ss-pick li{ margin:0 !important; max-width:none !important; }
+  [data-ss-for][hidden]{ display:none !important; }
+  .ss-stung{ margin:-.6rem 0 1.4rem !important; }
   .ss-pick a{ display:block; min-height:44px; padding:.85rem 1rem; border:1px solid var(--line); border-radius:14px; background:var(--paper); text-decoration:none; }
   .ss-pick a:hover{ border-color:var(--credit); }
   .ss-pick a.is-main{ border:2px solid #2F5F8A; background:#EEF4FB; }
@@ -126,10 +128,12 @@
 
 <h2 id="one-thing">If you’d like to try one thing</h2>
 <ul class="ss-pick no-bubble" data-ss-for="co-parent" hidden>
-  <li><a class="is-main" href="/co-parenting.html#handoff-bag"><span class="ss-k">About 3 minutes · for co-parents</span><br><strong>A handoff-bag checklist</strong><span class="ss-d">What goes in the bag between homes, so fewer things get missed and fewer messages start with “you forgot”.</span></a></li>
+  <li><a class="is-main" href="/workpapers/fill/wp-03.html?for=coparents"><span class="ss-k">About 3 minutes · for co-parents</span><br><strong>Open our shared list</strong><span class="ss-d">One owner per job across two homes: school forms, doctor visits, the bag. Fill in your side; only what you choose to send travels.</span></a></li>
+  <li><a href="/co-parenting.html#handoff-bag"><span class="ss-k">About 3 minutes · for co-parents</span><br><strong>A handoff-bag checklist</strong><span class="ss-d">What goes in the bag between homes, so fewer things get missed and fewer messages start with “you forgot”.</span></a></li>
   <li><a href="/co-parenting.html#who-decides"><span class="ss-k">About 3 minutes · for co-parents</span><br><strong>Who decides what</strong><span class="ss-d">A short way to agree which choices you make together, which each home makes alone, and how quickly to reply.</span></a></li>
   <li><a href="/sent-this.html#coparent"><span class="ss-k">Just read · about 3 minutes</span><br><strong>What they can and can’t see</strong><span class="ss-d">The longer version of this page, with kind ways to say yes, not yet or no to a co-parent.</span></a></li>
 </ul>
+<p class="ss-stung" data-ss-for="co-parent" hidden><strong>Got a message that stung?</strong> <a href="/signal-translator.html?rel=co-parents&amp;mode=got">Read it slowly before you answer →</a></p>
 <ul class="ss-pick no-bubble" data-ss-for="any">
   <li><a class="is-main" href="/quick-checks.html#today"><span class="ss-k">About 2 minutes · just for you</span><br><strong>Today’s Weather</strong><span class="ss-d">A few taps on how you are doing today: sleep, stress, what would help. It reads you, never anyone else, and you don’t have to show it to anyone.</span></a></li>
   <li><a href="/sent-this.html"><span class="ss-k">Just read · about 3 minutes</span><br><strong>What they can and can’t see</strong><span class="ss-d">The longer version of this page, with kind ways to say yes, not yet or no.</span></a></li>

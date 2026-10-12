@@ -263,7 +263,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     r = await read("I know things got ugly about Dad's house. I'd like you at the christening.");
     ok(/Reaching out after a long silence/.test(r.all) && /family-rifts\.html#reaching-out/.test(r.html), `${tag}: a family rift should get the reaching-out note`);
     r = await read("you're not my mum so stop acting like it");
-    ok(/very sharp/.test(r.all) && /Often this is grief talking/.test(r.all) && /missing Mum today/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: "not my mum" should be very sharp, with the grief note`);
+    ok(/very sharp/.test(r.all) && /Often this is grief talking/.test(r.all) && /I miss Mum, and I'd like to be treated more like my age/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: "not my mum" should be very sharp, with the grief note, and keep the ask`);
     r = await read('So now you want to talk? After you took everything?');
     ok(!/feeling left out/.test(r.all), `${tag}: a family "Try:" example should not be the partner "left out" line`);
     // 6. friends: no broken fragment chip
@@ -282,13 +282,54 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     // safety: control is never read kindly, and never gets a compliant reply
     await go('');
     r = await read('Where were you? Send me your location now. Who were you with?', true);
-    ok(/sign of control/.test(r.all) && /safety\.html/.test(r.html) && /1-800-799-7233/.test(r.all), `${tag}: control received: safety note first`);
+    ok(/control, not communication/.test(r.all) && /safety\.html#signs/.test(r.html) && /1-800-799-7233/.test(r.all), `${tag}: control received: safety note first`);
     ok(!/kinder ways to read it|usually a request|you'd like me to|Check the ask/i.test(r.all), `${tag}: control received: no kind reading or compliant reply`);
     r = await read('Where were you? Send me your location now. Who were you with?');
     ok(/checking up on them/.test(r.all) && !/Send me your location/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: control sent: the check is named and left out`);
     r = await read("If you leave me I'll kill myself and it'll be your fault.", true);
     ok(/988/.test(r.all) && /not your job to stay/.test(r.all), `${tag}: a self-harm threat received: 988 for them`);
     ok(await overflow(p)<=0, `${tag}: overflow on round-12 reads`);
+    // ---------- re-test 2 (round 13) ----------
+    // a counsellor's report: control received is never "looks okay", and never gets a garden level
+    r = await read("If you go out with your friends tonight don't bother coming home. I'll know if you do.", true);
+    ok(/This may be about control, not communication/.test(r.all) && /safety\.html#signs/.test(r.html) && /1-800-799-7233/.test(r.all) && !/looks okay|Nothing here needs decoding/i.test(r.all), `${tag}: "don't bother coming home" received: control card`);
+    ok(await p.$eval('#results', e=>e.hasAttribute('data-no-reward')), `${tag}: control received: no garden reward`);
+    r = await read("If you go out with your friends tonight don't bother coming home. I'll know if you do.");
+    ok(/control, not communication/.test(r.all) && await p.$eval('#results', e=>e.hasAttribute('data-no-reward')), `${tag}: control sent: card, and no garden reward`);
+    // guilt and pulling back: never "Likely to land"
+    await go('?rel=family');
+    r = await read("Fine. I won't bother coming round then. I was only trying to help with the baby.");
+    ok(/This may land as hurt or guilt/.test(r.all) && !/Likely to land the way you mean it/.test(r.all) && /That stung a bit, but I understand/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: guilt line: hurt or guilt, with a rewrite that keeps the feeling`);
+    ok(await p.$eval('#results', e=>e.hasAttribute('data-quiet-garden')), `${tag}: a tense family message: no garden line`);
+    // the not-ready side gets its own card, and the grievance stays
+    r = await read('So now you want to talk? After you took everything?');
+    ok(/Not ready\?/.test(r.all) && /I.m not ready to talk yet/.test(r.all) && /family-rifts\.html#not-ready/.test(r.html) && /that you took everything/.test(await p.$eval('#vbest', e=>e.innerText)), `${tag}: not-ready card and grievance kept`);
+    // a kind rift opener: no big green all-clear
+    r = await read("Hi Dad, it's been a long time. I'd like to talk if you're open to it.");
+    ok(/History can change how/.test(r.all) && !/Likely to land the way you mean it/.test(r.all), `${tag}: a rift opener gets the gentle history note`);
+    // severity: the headline follows the level
+    await go('');
+    r = await read('Hey, can you literally just send the file?');
+    ok(/A little sharp in places/.test(r.all) && /How it may sound: a little sharp/.test(r.all) && !/Some words may hurt/.test(r.all), `${tag}: a mild message: headline and level agree`);
+    // money: the control note and link
+    r = await read("It's my money too, stop policing what I spend");
+    ok(/account for every purchase/.test(r.all) && /money-together\.html#control/.test(r.html) && /safety\.html#signs/.test(r.html), `${tag}: money: control note and link`);
+    // "maybe" inside a request is not a soft no
+    r = await read('Can your boyfriend maybe not stay over EVERY night??', true);
+    ok(!/Soft no/.test(r.all), `${tag}: "maybe" in a request is not called a soft no`);
+    // phones: the answer first, the talking notes and print folded; the settings stay closed with ?rel and ?use=work
+    r = await read('Can you clean up a bit when you get a chance?');
+    const lay = await p.evaluate(()=>({more:document.querySelector('#rMore').open, notes:document.querySelector('#writeNext').checkVisibility(), again:document.querySelector('#again').checkVisibility(),
+      order:document.querySelector('#vbest').getBoundingClientRect().top < document.querySelector('.vlvl').getBoundingClientRect().top}));
+    if(w<641) ok(!lay.more && !lay.notes && lay.again && lay.order, `${tag}: phone layout: ${JSON.stringify(lay)}`);
+    else ok(lay.more && lay.notes && lay.again, `${tag}: desktop layout: ${JSON.stringify(lay)}`);
+    for(const q of ['?use=work','?rel=family']){ await go(q); ok(!(await p.$eval('#fine', e=>e.open)), `${tag}: ${q} should not open More options before Translate`); }
+    await go('?use=work');
+    ok(!(await p.$eval('header.top .kicker', e=>e.checkVisibility())) && !/Pairs with|Chapter I/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: work mode: no reading link in the header`);
+    r = await read('Could you send me the Q3 numbers by 3 today?');
+    ok(await p.$eval('#results', e=>e.hasAttribute('data-quiet-garden')), `${tag}: work mode: no garden line`);
+    await go('');
+    ok(/Want to understand why messages land differently\?/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: plain reading link in the header`);
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     // 8. the Perspective Shifter: a family rift gets rift options, no "your day" or deadline, no roommates, no stray pup names
     await p.goto(URL.replace('signal-translator','perspective-shifter')); await p.waitForLoadState('load'); await p.waitForTimeout(600);

@@ -517,9 +517,11 @@
   var DANGER = new RegExp([
     '\\b(hits?|hitting|slapp?(s|ed|ing)?|punch(es|ed|ing)?|chok(e|es|ed|ing)|kick(s|ed|ing)?|strangl\\w*|grabb?(ed|ing) me by) (me|us|my (kids?|children|son|daughter|baby))\\b',
     '\\b(shoved|shoves|pushed|pushes) me (down|over|into|against|around)\\b', '\\bbeats? me up\\b',
+    '\\b(he|she|they|my \\w+|partner|husband|wife|boyfriend|girlfriend|bf|gf)( only| just| once| sometimes| even| actually)* (pushed|pushes|shoved|shoves|grabbed|grabs|slapped|slaps|hit|hits|kicked|kicks|choked|chokes|strangled|strangles|bit|bites|restrained|restrains|pinned|pins|spat on|shook|shakes) (me|my (arm|arms|wrist|wrists|neck|throat|hair|face|shoulders?))\\b',
+    '\\b(wouldn.?t|wouldnt|would not|didn.?t|didnt|did not) let me (leave|go|get out|out|past|call|use my phone)\\b', '\\b(took|takes|grabbed|hid|hides|smashed) my (phone|keys|car keys)\\b.{0,30}\\b(so (that )?i (couldn.?t|couldnt|could not|can.?t|cant)|call|leave)\\b', '\\b(held|holds|hold|pinned|pins) me (down|against)\\b',
     '\\babus(e|es|ed|ive|er|ers|ing)\\b', '\\bdomestic (violence|abuse)\\b', '\\bviolen(t|ce)\\b',
     '\\bsuicid\\w*', '\\bkill (my ?self|me|him|her|them|everyone)\\b', '\\bkilling (my ?self|him|her|them|everyone)\\b', '\\b(he|she|they|someone|my \\w+) (is |s |are )?(going to |gonna |will |ll |wants to |threatened to |tried to )?kill(ing)? me\\b', '\\b(want|wants|wanted|going) to die\\b',
-    '\\bend (it all|my life)\\b', '\\bself ?harm\\w*', '\\b(hurt|hurting|harm|harming|cut|cutting) my ?self\\b', '\\bno reason to (live|go on)\\b',
+    '\\bend (it all|my life)\\b', '\\bending (it all|my life|it)\\b', '\\b(feel|felt|feeling) like ending\\b', '\\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|anything|being here)\\b', '\\bno point (in )?(anything|carrying on|trying anymore|being here)\\b', '\\b(would|d) be better off (dead|without me)\\b', '\\bkill (himself|herself|themselves|themself)\\b', '\\bself ?harm\\w*', '\\b(hurt|hurting|harm|harming|cut|cutting) my ?self\\b', '\\bno reason to (live|go on)\\b',
     '\\bthreat(en|ens|ened|ening)\\w* (to )?(hurt|kill|harm)\\b', '\\b(threatens|threatened) me\\b',
     '\\b(afraid|scared|frightened|terrified) (of|for) (him|her|my (life|safety)|my (partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother|stepdad|stepmom))\\b',
     '\\bnot safe (at home|with (him|her|them|my))\\b', '\\bfeel unsafe\\b', '\\b(rape|raped|sexual(ly)? assault\\w*|assault(ed|s)? me)\\b',
@@ -550,7 +552,7 @@
     '\\bthrew (a|the|my|his|her) \\w+ (across|against|at)\\b', '\\b(stands?|stood|standing) (in|at|across) the (door|doorway)\\b', '\\b(block|blocks|blocked|blocking) (the |my )?(door|doorway|way out|way)\\b', '\\bso i can.?t (get out|leave)\\b'
   ].join('|'));
   // the words people use when they may not want to live: these also get the 988 line
-  var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
+  var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bending (it all|my life)\b|\b(feel|felt|feeling) like ending\b|\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|being here)\b|\bno point (in )?(carrying on|being here)\b|\b(would|d) be better off (dead|without me)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
   // These get a plainer answer with the difference between agreed sharing and control, the hotline, and a way to keep talking.
   var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bgaslight\w*|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\b(angry|mad|furious|upset|jealous|sulks?|sulky|cold|silent) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\b|\b(gives|give) me (an |a )?(allowance|pocket money)\b|\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\b|\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\b|\b(get|make) (him|her|them|my \w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\b|\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\b|\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\b|\b(see|check\w*|go(es)? through|look(s)? at|look(s)? through|read\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\b|\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\b|\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\b|\bcontrolling\b|\bcoercive\b/;
@@ -590,10 +592,15 @@
         'Look after yourself too. Supporting someone who self-harms is heavy; talk to someone about how you’re doing.'] },
       { k: 'links', x: [['For teens: when it’s more than a bad day', '/teens.html']] }], chips: [], kind: 'safety' };
   }
+  // hands on you, or being kept from leaving: never "a normal part of arguments", however small it's made to sound
+  var PHYS = /\b(push\w*|shov\w*|grabb?\w*|slap\w*|hit|hits|hitting|kick\w*|chok\w*|strangl\w*|bit|bites|restrain\w*|pinned|pins|held me|holds me|shook|spat|throws? things|threw \w+ at me|block\w* the (door|doorway|way)|let me (leave|go|get out|out|past)|took my (phone|keys)|beats? me)\b/;
+  var STRANGLE = /\b(chok\w*|strangl\w*|throat|neck|couldn.?t breathe|cant breathe|can t breathe)\b/;
   function safetyReply(f) {
     var live = f && NOT_LIVE.test(f), self = live && !/\b(he|she|they|partner|husband|wife|boyfriend|girlfriend|spouse|ex|dad|father|mom|mum|mother)\b/.test(f);
     var blocks = [
       { k: 'p', x: 'I’m really glad you said something. What you’re describing sounds serious, and it’s beyond what a small helper like me can help with. You deserve real support from a person.' }];
+    if (!self && f && PHYS.test(f)) blocks.push({ k: 'p', x: 'Pushing, grabbing, slapping, throwing things or stopping someone from leaving isn’t a normal part of arguments, even once, and even if it seems small next to everything else. It isn’t something better communication can fix.' });
+    if (!self && f && STRANGLE.test(f) && PHYS.test(f)) blocks.push({ k: 'p', x: 'Being choked or strangled is very serious, even if it was quick and left no marks: it can cause injuries you can’t see. Please get a medical check soon, and tell the doctor what happened. A hotline advocate can help you plan for that.' });
     if (!self) blocks.push(
       { k: 'p', x: 'If someone is hurting, threatening, watching or controlling you, that is not your fault, and it isn’t something better wording or staying calmer can fix. The tips on this site are for two people who are both safe, so please don’t use them to manage someone who frightens you.' },
       { k: 'p', x: 'In the US you can call the National Domestic Violence Hotline at 1-800-799-7233, or text START to 88788, any time. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines in your country. If you’re in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
@@ -617,7 +624,7 @@
 
   // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
   // angry": from the person on the receiving end, that is a safety matter, not a wording problem. Never a script for them.
-  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?narcissis\w*\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
+  var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?(narcissis\w*|psychopath\w*|sociopath\w*)\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*|psychopath\w*|sociopath\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
   // a sibling, a child, a classmate or a boss calling names is a different conversation
   var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
   var VERBAL_DETAIL = /\b(scream\w*|yell\w*|shout\w*|swear\w*|swore|names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|eggshells|turns?|turned|twist\w*|flip\w*|darvo|apologi\w*|angry|mad|furious|blames?|gaslight\w*)\b/;
@@ -2069,7 +2076,11 @@
       var sw0 = norm(q).match(/^(anyway|anyways|by the way|btw|on another note|new question|different question|another question|other question|unrelated|separate question|changing (the )?subject|switching (topics?|gears))\b\s*(.{6,})$/);
       if (sw0) { state.last = null; state.care = null; state.topic = null; q = sw0[sw0.length - 1]; }
       var vf = norm(q);
-      if (CV_RESTART.test(vf)) { state.fearSeen = false; state.coSeen = false; }
+      if (CV_RESTART.test(vf)) { state.fearSeen = false; state.coSeen = false; state.crisis = 0; }
+      // after a crisis reply, we stay with the person: "I don't want to call anyone, just talk to me" is never a page excerpt
+      if (state.crisis && (state.turn || 0) - state.crisis <= 8 && !CV_RESTART.test(vf) && !(DANGER.test(vf) && !NOT_LIVE.test(vf)) && (CRISIS_STAY.test(vf) || NOT_LIVE.test(vf) || vf.split(' ').length <= 6)) { state.crisis = state.turn; state.last = null; state.topic = null; return crisisStayReply(); }
+      if (SAFETY_TERM.test(vf)) { state.last = null; state.care = null; state.topic = null; return safetyTermReply(vf); }
+      if (!NOT_LIVE.test(vf) && OWN_VIOLENT.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownViolentReply(vf), sp); }
       if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; state.topic = null; return meant(childCrisisReply(), sp); }
       if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
       if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
@@ -2206,6 +2217,60 @@
       { k: 'p', x: 'I can still help with things about ' + (kid || 'your child') + ', like how to explain a new handoff plan.' },
       { k: 'links', x: [['After a separation: when it’s more than conflict', '/safety.html#after-separation'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel'], ['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] }];
     return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety', id: 'handoff' };
+  }
+  // "he says he'll kill himself if I leave": a pressure sign, and their safety is not yours to carry by staying
+  var THREAT_SELF = /\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b.{0,40}\b(if|unless|when) (i|we) (leave|left|go|went|break up|broke up|end (it|things)|split|stop|say no|see|tell)\b|\b(if|unless|when) (i|we) (leave|left|go|break up|end (it|things)|split|stop seeing)\b.{0,50}\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b|\b(threaten\w*|says|said|keeps saying|tells me|told me) (that )?(he|she|they)( will| ll| would| d| is going to| s going to| s gonna| is gonna)? (kill|hurt|harm) (himself|herself|themselves|themself)\b.{0,40}\b(leave|break up|go|split|end)\b/;
+  function threatSelfReply(f) {
+    var he = /\b(he|him|himself|his|boyfriend|husband)\b/.test(f) ? 'he' : /\b(she|her|herself|girlfriend|wife)\b/.test(f) ? 'she' : 'they';
+    var young = /\b(i m|im|i am) 1[0-7]\b|\b(school|my parents|my mum|my mom|my dad|year \d+|grade \d+)\b/.test(f);
+    var b = [{ k: 'p', x: 'That’s a frightening thing to hear, and a lot to carry. I’m glad you told me.' },
+      { k: 'p', x: 'Threatening to hurt themselves if you leave is one of the pressure signs that the Not safe at home? page lists, because it puts the weight of their safety on you. You are not responsible for keeping them alive by staying. Their safety matters, and it belongs with people who can help them.' },
+      { k: 'list', x: ['If ' + he + '’s in immediate danger, call 911 (US), 999 (UK) or your local emergency number.', 'In the US, ' + he + ' can call or text 988 any time, and so can you, to ask how to help someone. In the UK and Ireland, Samaritans are free on 116 123.', 'For you: an advocate can help you think it through privately. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines.'] }];
+    if (young) b.push({ k: 'p', x: 'If you’re under 18, please tell an adult you trust today (a parent, a teacher or a school counsellor). In the UK, Childline is free on 0800 1111; in the US, you can text HOME to 741741.' });
+    b.push({ k: 'links', x: [['Not safe at home? The signs, people to talk to, and leaving this site quickly', young ? '/safety.html#teens' : '/safety.html#signs']] });
+    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety', id: 'threatself' };
+  }
+  // "I'm the one who gets violent", "how do I stop hitting": the person writing is the one doing it
+  var OWN_VIOLENT = /\b(i m|im|i am|i)( (the one|the one who|who|that))?( (always|sometimes|often|can|keep|kept|tend to|just))* (get|gets|getting|got|become|became|can get|can be|am|m) (so )?violent\b|\bi m the violent one\b|\bmy (own )?(violence|violent (side|streak|temper))\b|\bhow (do|can) i stop (being violent|hitting|hurting|pushing|grabbing|shoving) (him|her|them|my \w+|people)?\b/;
+  function ownViolentReply(f) {
+    var kids = /\b(son|daughter|kids?|child|children|baby|toddler)\b/.test(f);
+    var b = [{ k: 'p', x: 'Thank you for being honest. Saying it out loud is the first step to stopping it, and it can change. Violence is never okay, and it’s important to get help today, for the people around you and for you.' },
+      { k: 'list', x: ['Right now: when you feel it rising, leave the room or the house, and don’t go back until your body has calmed down. Distance first, words later.',
+        'Breathe in for 4 and out for 6 until it eases. Cold water on your face helps.',
+        'Get support this week: your doctor, a counsellor, or a programme for people who want to stop being violent or abusive at home.',
+        'In the US, the National Domestic Violence Hotline (1-800-799-7233) also talks with people worried about their own behaviour. In the UK, the Respect Phoneline is on 0808 802 4040.',
+        'If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.'] },
+      { k: 'links', x: [['Worried about your own anger or behaviour?', '/safety.html#own-behaviour']].concat(kids ? [['Getting help with anger (for parents)', '/parents.html#anger-help']] : []) }];
+    return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownviolent' };
+  }
+  // after a crisis reply: "I don't want to call anyone, just talk to me" gets a warm reply that stays, never a page excerpt
+  function crisisStayReply() {
+    return { blocks: [
+      { k: 'p', x: 'I’m here, and I’m glad you’re still talking to me. You don’t have to call anyone if that feels like too much. You can text instead: in the US, text 988, or text HOME to 741741; in the UK, text SHOUT to 85258. It’s free, any time, and it’s a real person.' },
+      { k: 'p', x: 'I’m a small helper, not a counsellor, but here’s what might help right now:' },
+      { k: 'list', x: ['Put your feet flat on the floor, and breathe out slowly, longer than you breathe in. Do that five times.', 'Look around and name five things you can see, four you can hear, and three you can touch.', 'If you can, go where there are other people, or message someone you trust: “I’m having a really hard time. Can you stay with me for a bit?”', 'Put away anything you might use to hurt yourself, or ask someone to hold onto it for now.'] },
+      { k: 'p', x: 'If you might act on these feelings, or you’re not safe right now, please call 911 (US), 999 (UK) or your local emergency number. In the UK and Ireland, Samaritans are also free on 116 123, day or night.' }],
+      chips: [{ label: 'Tell me something calming', q: 'Tell me something calming' }], kind: 'safety', id: 'crisis-stay' };
+  }
+  var CRISIS_STAY = /\b(talk to me|just talk|stay with me|don.?t want to (call|talk to|text|ring)|dont want to (call|talk to|text|ring)|can.?t call|cant call|no one|nobody|anyone|alone|lonely|i m scared|im scared|help me|what do i do|i don.?t know|i dont know|please|listen|why|tired|can.?t|cant|hurts?|pointless|worthless|no one cares|nobody cares|i m fine|im fine|it s fine|its fine|whatever|ok|okay|yes|no|maybe|i guess)\b/;
+  // "gaslighting", "coercive control", "narcissist" typed on their own: what it means, plainly, then the signs and people to talk to
+  var SAFETY_TERM = /^(what is |what s |whats |what does |define |meaning of |is it |signs of |am i being )?(a |an )?(gaslighting|gaslight|gaslighted|gaslit|coercive control|coercive|narcissists?|narcissism|narcissistic( abuse| personality| behaviou?r)?|love bombing|lovebombing|trauma bond(ing)?)( mean| meaning| means)?$/;
+  var TERM_DEF = {
+    gaslighting: 'Gaslighting is when someone keeps making you doubt your own memory or sense of what happened, for example by insisting that things you remember never happened, until you trust them more than yourself.',
+    coercive: 'Coercive control is a pattern that takes away someone’s freedom bit by bit: watching them, limiting money or friends, threats, or rules they have to follow to avoid trouble. It can happen without any physical violence.',
+    narcissist: '“Narcissist” is often used for someone who seems self-centred and short on empathy. Narcissistic personality disorder is a real diagnosis, but only a clinician can make it, and nobody can from a chat. What they do, and how you feel around them, matters more than the label.',
+    love: 'Love bombing is a rush of intense attention, gifts and promises early on, which can later be used to pull someone close and then control them.',
+    trauma: 'A trauma bond is a strong attachment to someone who hurts you, often built from cycles of harm followed by kindness. It can make leaving or even seeing the pattern very hard, and it is not a sign of weakness.'
+  };
+  function safetyTermReply(f) {
+    var m = SAFETY_TERM.exec(f), w = m ? m[3] : '';
+    var def = /^gasl/.test(w) ? TERM_DEF.gaslighting : /^coerc/.test(w) ? TERM_DEF.coercive : /^narc/.test(w) ? TERM_DEF.narcissist : /^love/.test(w) ? TERM_DEF.love : TERM_DEF.trauma;
+    return { blocks: [{ k: 'p', x: def },
+      { k: 'p', x: 'Some signs it has moved from ordinary conflict into control:' },
+      { k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] },
+      { k: 'p', x: 'If any of this sounds familiar, you can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines.' },
+      { k: 'links', x: [['When it’s more than a rough patch: the signs', '/safety.html#signs'], ['Not safe at home? People to talk to, and leaving this site quickly', '/safety.html']] }],
+      chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety', id: 'safetyterm' };
   }
   function afterSafeReply(f) {
     var b = [{ k: 'p', x: 'Because of what you told me earlier, I won’t suggest ways to talk them round or keep the peace. When someone is checking, limiting or frightening you, that isn’t a communication problem, and it isn’t yours to fix by saying things better.' }];
@@ -2848,13 +2913,15 @@
     if (chipDoc == null) {
       if (DANGER.test(f)) {
         state.last = null; state.topic = null; state.pageTopic = null;
+        if (THREAT_SELF.test(f)) { state.unsafe = true; return threatSelfReply(f); }
+        if (NOT_LIVE.test(f) && !OTHER_HARM.test(f)) state.crisis = state.turn || 1;
         if (!(PARENT_PHONE.test(f) && !HARD.test(f)) && !OTHER_HARM.test(f) && !NOT_LIVE.test(f)) state.unsafe = true;
         if (OTHER_HARM.test(f) && !/\b(i|me|my ?self)\b.{0,20}\b(cut|hurt|harm|kill|die)\b/.test(f)) return otherHarmReply();
         var thc = !HARD.test(f) && cardByIdF('teenhouse');
         if (thc && thc.re.test(f) && !/\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fianc\w*)\b/.test(f)) { state.unsafe = false; var rth = cardReply(state, thc, 'about'); rth.kind = 'care'; return rth; }
         var pc = PARENT_PHONE.test(f) && !HARD.test(f) && cardByIdF('parentphone');
         if (pc) { var rp = cardReply(state, pc, 'about'); rp.kind = 'care'; return rp; }
-        return CONTROL.test(f) && !HARD.test(f) ? controlReply(f) : safetyReply(f);
+        return CONTROL.test(f) && !HARD.test(f) && !/\bso (that )?i (couldn.?t|couldnt|could not|can.?t|cant)\b/.test(f) ? controlReply(f) : safetyReply(f);
       }
       if (HIDE.test(f)) { state.last = null; return hideReply(); }
       f = roommatesFigure(f);
@@ -2893,7 +2960,7 @@
       if (wo && !(detectSituation(f).score >= 5)) return clarifyWho(state, wo.who, wo.noun);
       for (var ci = 0; ci < (KB.clar || []).length; ci++) {
         var cl = KB.clar[ci];
-        if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify', amb: 1 }; }
+        if (cl.re.test(f)) { state.last = null; return { blocks: [{ k: 'p', x: cl.x }], chips: cl.chips.map(function (c) { return { label: c[0], q: c[1] }; }), kind: 'clarify', amb: cl.plain ? 0 : 1, id: cl.id || '' }; }
       }
       var sit = detectSituation(f);
       // "he", "she", "they" after a playbook about someone: the same person, unless someone new is named

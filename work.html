@@ -23,9 +23,6 @@
 <style>
   /* Only the site's own color tokens are used here, so dark mode follows site.css. */
   .wk-autistic-card{ margin:.6rem 0 .4rem !important; }
-  .wk-autistic-card a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; border:1px solid #C6DFF4; border-radius:14px; background:#EEF4FB; text-decoration:none; }
-  .wk-autistic-card a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
-  .wk-autistic-card a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
   .wk-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .wk-jump li{ margin:0 !important; max-width:none !important; }
   .wk-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); text-decoration:none; font-size:.98rem; }
@@ -125,6 +122,14 @@
   .wk-diff-row{ border-top:1px solid var(--line); padding-top:.4rem; margin-top:.4rem; }
   html.tol-only-steps .wk-step-empty{ display:none !important; }
   @media print{ .wk-share, .wk-in{ display:none !important; } }
+  .wk-autistic-card .wk-say{ margin:.5rem 0 .2rem !important; }
+  .wk-autistic-card > p{ margin:.2rem 0 !important; max-width:none !important; }
+  div.wk-autistic-card{ padding:.75rem 1rem; border:1px solid #C6DFF4; border-radius:14px; background:#EEF4FB; }
+  .wk-biz-bar{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin:.4rem 0 1rem !important; }
+  .wk-biz-bar button{ font:600 .95rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.45rem 1.05rem; border-radius:999px; border:1.5px solid #2F5F8A; background:var(--paper); color:#1F4466; cursor:pointer; }
+  .wk-biz-bar button[aria-pressed="true"]{ background:#2F5F8A; color:#fff; }
+  .wk-biz-bar button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  [data-wk-biz-hidden]{ display:none !important; }
   main.read > ul.wk-links.wk-links.wk-links, main.read > ul.wk-jump.wk-jump.wk-jump{ --bb-pl:var(--bb-px); padding-left:var(--bb-px) !important; } /* the list cards sit evenly inside their bubble */
 </style>
 <!-- seo:start -->
@@ -167,7 +172,15 @@
 
 <p class="simple-lede">Most friction at work is not about people being difficult. It comes from jobs nobody clearly owns, messages that land harder than they were meant, and thanks that doesn’t fit. This page gathers simple, free tools for all three. It is written so a team lead or HR manager can share it with a team as it is. There is also a section for <a href="#business-partners">running a business together</a>, and one for <a href="#autistic-at-work">anyone who is autistic at work</a>.</p>
 
-<p class="wk-autistic-card no-bubble"><a href="#autistic-at-work"><strong>If you’re autistic at work</strong><span>Clear asks, noise, small talk and choosing what to share. Plain words you can use.</span></a></p>
+<div class="wk-autistic-card no-bubble" id="autistic-words">
+<p><strong>If you’re autistic at work:</strong> three things you could say. <a href="#autistic-at-work">More on telling people and asking for adjustments ↓</a></p>
+<div class="wk-say" data-keep-steps>
+  <h3>Words you could use</h3>
+  <p><strong>Asking for it in writing:</strong> “Could you send that to me in writing, with the deadline? I take things in better that way.”</p>
+  <p><strong>Taking a quiet break:</strong> “I need 15 minutes somewhere quiet. I’ll be back at 2:15.”</p>
+  <p><strong>When someone says you came across as rude:</strong> “Thanks for telling me. I’m direct because I want to be clear, not unkind. If something lands badly, tell me and I’ll rephrase it.”</p>
+</div>
+</div>
 
 <ul class="wk-jump" aria-label="On this page">
   <li><a href="#workload">Fair workloads</a></li>
@@ -195,6 +208,7 @@
 <p>When a job belongs to “everyone,” it often ends up belonging to no one, or to the same one person every time. The fix is not to blame anyone. It is to write the recurring jobs down and give each one a single owner, with a backup for holidays and busy weeks. Fix the setup, not the person.</p>
 
 <h2 id="business-partners">Running a business together</h2>
+<p class="wk-biz-bar no-bubble"><button type="button" id="wk-biz" aria-pressed="false">Just the business-partner bits</button></p>
 <p>Co-founders, co-owners and partners in a small business have the same setup problem as any team, with more riding on it: the business and the friendship share one table. The work customers see (the baking, the selling, the clients) tends to get the credit. The admin that keeps the doors open (payroll, suppliers, permits, tax) is invisible until something goes wrong.</p>
 <ul>
   <li><strong>One owner and a backup for every recurring job.</strong> Fill in the <a href="#owner-list">one-owner list</a> together, then send it to each other so you both have the same list.</li>
@@ -210,7 +224,11 @@
   <p>“Thanks for sorting the VAT return. I know it took your whole Sunday.”</p>
   <p>“I’m the only one who knows how payroll works. Could you be my backup, so the business isn’t stuck if I’m ill?”</p>
 </div>
-<p>If a disagreement is about money, ownership or the partnership agreement itself, that is a conversation for an accountant or a lawyer, not this page. If one of you feels pushed around rather than just out of step, <a href="/safety.html">this page on safety and control</a> can help you tell the difference.</p>
+<div class="wk-note" id="business-advice">
+  <p><strong>Money, ownership, or thinking of walking away?</strong> If a disagreement is about money, ownership or the partnership agreement itself, or you’re so tired you’ve thought about leaving the business, that is a conversation for an accountant or a lawyer, not this page. Being worn out is real; it’s worth getting proper advice before deciding anything.</p>
+  <p>If one of you feels pushed around rather than just out of step, <a href="/safety.html">this page on safety and control</a> can help you tell the difference.</p>
+</div>
+<p><strong>Got a message from your partner that stung?</strong> <a href="/signal-translator.html?use=work&amp;mode=got">Read it slowly before you answer →</a></p>
 
 <h2 id="team-tools">Team tools: one owner per job, and a weekly check-in</h2>
 <section class="wk-tool tol-plain" data-keep-steps id="owner-list" aria-labelledby="owner-list-h">
@@ -427,12 +445,7 @@
 
 <h2 id="autistic-at-work">If you’re autistic at work</h2>
 <p>A lot of work friction for autistic people comes from rules nobody writes down: vague asks, noise, small talk, and being read as rude when you are being clear. You don’t owe anyone an explanation. A few plain sentences can still get you what you need.</p>
-<div class="wk-say" data-keep-steps>
-  <h3>Words you could use</h3>
-  <p><strong>Asking for it in writing:</strong> “Could you send that to me in writing, with the deadline? I take things in better that way.”</p>
-  <p><strong>Taking a quiet break:</strong> “I need 15 minutes somewhere quiet. I’ll be back at 2:15.”</p>
-  <p><strong>When someone says you came across as rude:</strong> “Thanks for telling me. I’m direct because I want to be clear, not unkind. If something lands badly, tell me and I’ll rephrase it.”</p>
-</div>
+<p>Three things you could say, for written asks, a quiet break, and being told you came across as rude, are <a href="#autistic-words">at the top of this page ↑</a>.</p>
 <h3>Telling people, and asking for adjustments</h3>
 <ul data-keep-steps>
   <li><strong>You don’t have to disclose.</strong> You can ask for what helps (written asks, a quieter desk, headphones, short breaks) without naming a diagnosis.</li>
@@ -458,6 +471,24 @@
 </div>
 <p>This page shares general ideas about how teams work. It is not legal, HR or medical advice, and it is not a tool for evaluating anyone’s performance.</p>
 </main>
+<script>
+/* "Just the business-partner bits": hides the team-only sections for now (nothing is kept) */
+(function () {
+  var b = document.getElementById('wk-biz'), main = document.getElementById('main'); if (!b || !main) return;
+  var KEEP = { 'business-partners': 1, 'team-tools': 1, 'messages': 1, 'more': 1 };
+  function apply(on) {
+    var cur = null;
+    [].forEach.call(main.children, function (n) {
+      if (n.tagName === 'H2' && n.id) cur = n.id;
+      var hide = on && ((cur && !KEEP[cur]) || (!cur && n.classList.contains('wk-jump')));
+      if (hide) n.setAttribute('data-wk-biz-hidden', ''); else n.removeAttribute('data-wk-biz-hidden');
+    });
+    b.setAttribute('aria-pressed', String(on));
+    b.textContent = on ? 'Show the whole page' : 'Just the business-partner bits';
+  }
+  b.addEventListener('click', function () { var on = b.getAttribute('aria-pressed') !== 'true'; apply(on); var h = document.getElementById('business-partners'); if (h) h.scrollIntoView({ block: 'start' }); });
+})();
+</script>
 <script src="/assets/js/household.js"></script>
 <script>
 (function () {

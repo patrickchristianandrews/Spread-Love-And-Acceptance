@@ -54,6 +54,7 @@
   .rm-btn.is-quiet{ background:transparent; color:var(--ink); }
   .rm-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
   .read p.rm-status{ min-height:1.4em; margin:.3rem 0 .4rem !important; font-size:.95rem; color:var(--ink-soft); }
+  .read p.rm-linknote{ font-size:.92rem; color:var(--ink-soft); margin-top:0 !important; }
   .rm-from{ margin:.4rem 0; font-weight:600; }
   .read #faq h3{ font-size:1.05rem; margin-top:1.4rem; }
   .rm-start{ margin:1rem 0 1.4rem; padding:1rem 1.15rem; border-radius:18px; border:1px solid #C6DFF4; background:#EEF4FB; }
@@ -65,6 +66,16 @@
   .rm-msg{ font-style:italic; }
   .rm-copy{ font:600 .9rem/1.2 "Lora", Georgia, serif; font-style:normal; min-height:44px; padding:.35rem .95rem; border-radius:999px; border:1px solid #2F5F8A; background:var(--paper); color:#2F5F8A; cursor:pointer; }
   .rm-copy:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  /* phone fold: secondary sections start closed on small screens (all content kept) */
+  .pg-fold > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+  .pg-fold > summary::-webkit-details-marker{ display:none; }
+  .pg-fold > summary > :is(h2, h3){ margin:0 !important; }
+  .pg-fold[open] > summary{ margin-bottom:.6rem; }
+  .pg-fold > summary::after{ content:"Show"; flex:none; font:600 .9rem/1 "Lora", Georgia, serif; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:.5rem .9rem; min-height:44px; box-sizing:border-box; display:inline-flex; align-items:center; }
+  .pg-fold[open] > summary::after{ content:"Hide"; }
+  .pg-fold > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  html.tol-only-steps main details.pg-fold.pg-fold.pg-fold{ display:block !important; }
+  @media print{ .pg-fold > summary::after{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/sharing-a-room.html">
@@ -119,98 +130,8 @@
   <p>Say it once, early, about the room and not the person. Then write it down together.</p>
   <p class="rm-start-q">“Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?”</p>
   <p class="rm-start-q">“I like having them around sometimes. Could we agree on two nights a week, with a text the day before?”</p>
-  <p class="rm-start-go"><a class="rm-go" href="#agreement">Make our room agreement (5 min) &rarr;</a> <a class="rm-go is-quiet" href="/signal-translator.html?rel=roommates">Check my text first</a></p>
+  <p class="rm-start-go"><a class="rm-go" href="#agreement">Make our room agreement (5&nbsp;min)&nbsp;&darr;</a> <a class="rm-go is-quiet" href="/signal-translator.html?rel=roommates">Check my text first</a></p>
 </div>
-
-<nav aria-label="On this page">
-<ul class="rm-jump no-bubble">
-  <li><a href="#guests">Guests</a></li>
-  <li><a href="#sleep">Quiet hours and sleep</a></li>
-  <li><a href="#cleaning">Cleaning</a></li>
-  <li><a href="#borrowing">Borrowing</a></li>
-  <li><a href="#lights">Lights and temperature</a></li>
-  <li><a href="#bonding">Getting on</a></li>
-  <li><a href="#bring-it-up">Bringing it up</a></li>
-  <li><a href="#ra">Talking to your RA</a></li>
-  <li><a href="#agreement">Room agreement</a></li>
-</ul>
-</nav>
-
-<h2 id="guests">Guests and overnight guests</h2>
-<p>This is the most common sore spot. One roommate’s partner or friend starts staying over, and slowly the room has three people in it. The roommate who didn’t invite them often says nothing, because it feels rude to ask. Then they dread going home.</p>
-<p>It helps to agree three things: how many nights a week someone can stay, how much notice you give, and whether a guest can be in the room when their host isn’t there. Both of you have a right to a home you feel easy in.</p>
-<div class="rm-say">
-  <h3>Words you could use</h3>
-  <p>“Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?”</p>
-  <p>“I like having them around sometimes. Could we agree on two nights a week, with a text the day before?”</p>
-</div>
-
-<h2 id="sleep">Quiet hours and sleep</h2>
-<p>Different schedules are normal. One of you has an 8am class, the other works late. Pick quiet hours together, and say what “quiet” means: headphones on, calls outside the room, a small lamp instead of the big light.</p>
-<p>Little things help a lot: earplugs and an eye mask, phones on silent at night, and getting ready for bed with the door shut softly.</p>
-<div class="rm-say">
-  <h3>Words you could use</h3>
-  <p>“I’m not sleeping well, and I think it’s the late calls. Could we keep calls outside the room after 11?”</p>
-</div>
-
-<h2 id="cleaning">Cleaning</h2>
-<p>A simple rule works for most rooms: <strong>your side is yours, shared space is shared.</strong> Then give each shared job one owner, like the bin, the floor, the fridge and the bathroom if you have one. Swap jobs every week if you like. A ten-minute tidy on the same day each week stops small mess from turning into a fight.</p>
-<p>For a flat with more people, the <a href="/share-the-load.html#roommates">roommates guide</a> and the <a href="/workpapers/fill/wp-03.html">one owner per job list</a> help the whole house.</p>
-
-<h2 id="borrowing">Borrowing</h2>
-<p>Agree which things are shared and which are not. Some people are happy to say “help yourself”. Others need to be asked every time. Neither is wrong, but guessing causes trouble. Food is the usual one, so say which shelf, or which snacks, are shared.</p>
-<div class="rm-say">
-  <h3>Words you could use</h3>
-  <p>“I don’t mind sharing, I just want to be asked first. Is that okay with you?”</p>
-</div>
-
-<h2 id="lights">Lights, alarms and temperature</h2>
-<p>Window open or shut, heating up or down, the big light on or off, and how many times the alarm goes off. These sound small, but they happen every day. Pick a middle ground, like a fan for one of you and a blanket for the other, and one alarm with no more than one snooze.</p>
-
-<h2 id="bonding">Bonding tips: getting on with a roommate</h2>
-<p>You don’t have to be best friends. But a little friendliness early on makes the room feel safer, and it makes the hard talks much easier later.</p>
-<ul>
-  <li><strong>Have one easy chat in the first week</strong> that isn’t about rules: where you’re from, what you’re studying, what you do to relax.</li>
-  <li><strong>Learn their routine, not just yours.</strong> Early riser or night owl? Exam weeks? Knowing their week stops small things feeling personal.</li>
-  <li><strong>Share something small.</strong> Snacks, a phone charger, a heads-up about a free event. Small kindness builds goodwill fast.</li>
-  <li><strong>Do one thing together now and then,</strong> like going to dinner in the dining hall or a show on a laptop. Once in a while is plenty.</li>
-  <li><strong>Respect alone time.</strong> Headphones on can mean “not now”, and that is fine. Agree a signal so neither of you has to guess.</li>
-</ul>
-<div class="rm-say" data-keep-steps>
-  <h3>Words you could use</h3>
-  <p>“I’m heading to dinner in ten minutes. Want to come? Totally fine if you’d rather not.”</p>
-</div>
-<p>More ideas: <a href="/bonding.html#housemates">Bonding, how closeness grows →</a> · <a href="/bonding.html#ideas">Get an idea now</a></p>
-
-<h2 id="bring-it-up">How to bring it up if you hate confrontation</h2>
-<p>Lots of people would rather put up with something for months than have one awkward talk. But a small, calm talk early is much kinder, to both of you, than a big one later.</p>
-<ul>
-  <li><strong>Pick a calm time.</strong> Not when they walk in with their guest, and not late at night.</li>
-  <li><strong>A text is fine</strong> to start: “Can we talk about something small tonight?”</li>
-  <li><strong>One topic, and one clear ask.</strong> Say what you need and ask what works for them.</li>
-  <li><strong>Talk about the room, not the person.</strong> “The room is getting crowded” lands better than “You’re so inconsiderate.”</li>
-</ul>
-<p>Not sure how your message sounds? Paste it into the <a href="/signal-translator.html?rel=roommates">Signal Translator</a> before you send it. Rather start by text? Here is a calm opener you can copy and change:</p>
-<p class="rm-msg"><q id="rm-opener">Hey, can we find ten minutes this week to agree a few room things, like guests staying over? Nothing’s wrong, I’d just rather we sort it early than let it get awkward.</q> <button type="button" class="rm-copy" id="rm-opener-copy">Copy</button> <span id="rm-opener-note" role="status"></span></p>
-<div class="rm-say">
-  <h3>Words you could use</h3>
-  <p>“This is a bit awkward, but I’d rather say it now than let it build up. Can we agree on a few room rules?”</p>
-  <p>“I’m not upset with you. I just think we never talked about this.”</p>
-</div>
-<p>When they bring something up with you, listen first and say back what you heard before you explain: “So the light after midnight keeps you awake?” If a talk over text went badly, the <a href="/conversation-reader.html">Conversation Reader</a> shows where it turned. For kind ways to say no to a guest or a loan, see <a href="/refusals.html">Say no kindly</a>. More: <a href="/communication.html#with-housemates">Effective communication: with housemates →</a></p>
-
-<h2 id="ra">Talking to your RA</h2>
-<p>If you live in student housing, your RA (resident assistant) is there for exactly this. Helping roommates agree on rules, and sitting in on a hard talk, is part of their job. Asking them is not snitching.</p>
-<ul>
-  <li><strong>Usually, try talking to your roommate first,</strong> if it feels safe. Then go to your RA if nothing changes, or if you can’t agree.</li>
-  <li><strong>Go to your RA straight away</strong> if you feel unsafe, if someone won’t leave when asked, if your things are being taken, or if a guest makes you uncomfortable.</li>
-  <li><strong>In a rented flat,</strong> your tenancy agreement or landlord may have rules about guests. Check those first.</li>
-</ul>
-<div class="rm-say">
-  <h3>Words you could use</h3>
-  <p>To your RA: “My roommate’s boyfriend stays most nights and I’m not sleeping. I’ve tried to talk about it. Could you help us make a room agreement?”</p>
-</div>
-<p>If anyone threatens you, scares you or won’t let you be, that is not a roommate problem. Tell residence staff or campus security, and see <a href="/safety.html">Not safe at home?</a> for people to talk to.</p>
 
 <section class="rm-plan tol-plain" id="agreement" aria-labelledby="agreement-h">
 <h2 id="agreement-h">Our room agreement</h2>
@@ -244,8 +165,105 @@
   <button type="button" class="rm-btn is-quiet" id="ra-qr">Show a QR code</button>
 </p>
 <p class="rm-status" id="ra-status" role="status" aria-live="polite"></p>
+<p class="rm-linknote">Copy, Share and the QR code add a link that opens this agreement on their phone, ready for them to change.</p>
 <p>Look at it again together after a month. Rules that don’t work can change.</p>
 </section>
+
+<nav aria-label="On this page">
+<ul class="rm-jump no-bubble">
+  <li><a href="#guests">Guests</a></li>
+  <li><a href="#sleep">Quiet hours and sleep</a></li>
+  <li><a href="#cleaning">Cleaning</a></li>
+  <li><a href="#borrowing">Borrowing</a></li>
+  <li><a href="#lights">Lights and temperature</a></li>
+  <li><a href="#bonding">Getting on</a></li>
+  <li><a href="#bring-it-up">Bringing it up</a></li>
+  <li><a href="#ra">Talking to your RA</a></li>
+</ul>
+</nav>
+
+<h2 id="guests">Guests and overnight guests</h2>
+<p>This is the most common sore spot. One roommate’s partner or friend starts staying over, and slowly the room has three people in it. The roommate who didn’t invite them often says nothing, because it feels rude to ask. Then they dread going home.</p>
+<p>It helps to agree three things: how many nights a week someone can stay, how much notice you give, and whether a guest can be in the room when their host isn’t there. Both of you have a right to a home you feel easy in.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“Can we talk about guests? I need the room to myself by 11 on weeknights. What works for you?”</p>
+  <p>“I like having them around sometimes. Could we agree on two nights a week, with a text the day before?”</p>
+</div>
+
+<h2 id="sleep">Quiet hours and sleep</h2>
+<p>Different schedules are normal. One of you has an 8am class, the other works late. Pick quiet hours together, and say what “quiet” means: headphones on, calls outside the room, a small lamp instead of the big light.</p>
+<p>Little things help a lot: earplugs and an eye mask, phones on silent at night, and getting ready for bed with the door shut softly.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“I’m not sleeping well, and I think it’s the late calls. Could we keep calls outside the room after 11?”</p>
+</div>
+
+<h2 id="cleaning">Cleaning</h2>
+<p>A simple rule works for most rooms: <strong>your side is yours, shared space is shared.</strong> Then give each shared job one owner, like the bin, the floor, the fridge and the bathroom if you have one. Swap jobs every week if you like. A ten-minute tidy on the same day each week stops small mess from turning into a fight.</p>
+<p>For a flat with more people, the <a href="/share-the-load.html#roommates">roommates guide</a> and the <a href="/workpapers/fill/wp-03.html">one owner per job list</a> help the whole house.</p>
+
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="borrowing">Borrowing</h2></summary>
+<p>Agree which things are shared and which are not. Some people are happy to say “help yourself”. Others need to be asked every time. Neither is wrong, but guessing causes trouble. Food is the usual one, so say which shelf, or which snacks, are shared.</p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“I don’t mind sharing, I just want to be asked first. Is that okay with you?”</p>
+</div>
+</details>
+
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="lights">Lights, alarms and temperature</h2></summary>
+<p>Window open or shut, heating up or down, the big light on or off, and how many times the alarm goes off. These sound small, but they happen every day. Pick a middle ground, like a fan for one of you and a blanket for the other, and one alarm with no more than one snooze.</p>
+</details>
+
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="bonding">Bonding tips: getting on with a roommate</h2></summary>
+<p>You don’t have to be best friends. But a little friendliness early on makes the room feel safer, and it makes the hard talks much easier later.</p>
+<ul>
+  <li><strong>Have one easy chat in the first week</strong> that isn’t about rules: where you’re from, what you’re studying, what you do to relax.</li>
+  <li><strong>Learn their routine, not just yours.</strong> Early riser or night owl? Exam weeks? Knowing their week stops small things feeling personal.</li>
+  <li><strong>Share something small.</strong> Snacks, a phone charger, a heads-up about a free event. Small kindness builds goodwill fast.</li>
+  <li><strong>Do one thing together now and then,</strong> like going to dinner in the dining hall or a show on a laptop. Once in a while is plenty.</li>
+  <li><strong>Respect alone time.</strong> Headphones on can mean “not now”, and that is fine. Agree a signal so neither of you has to guess.</li>
+</ul>
+<div class="rm-say" data-keep-steps>
+  <h3>Words you could use</h3>
+  <p>“I’m heading to dinner in ten minutes. Want to come? Totally fine if you’d rather not.”</p>
+</div>
+<p>More ideas: <a href="/bonding.html#housemates">Bonding, how closeness grows →</a> · <a href="/bonding.html#ideas">Get an idea now</a></p>
+</details>
+
+<h2 id="bring-it-up">How to bring it up if you hate confrontation</h2>
+<p>Lots of people would rather put up with something for months than have one awkward talk. But a small, calm talk early is much kinder, to both of you, than a big one later.</p>
+<ul>
+  <li><strong>Pick a calm time.</strong> Not when they walk in with their guest, and not late at night.</li>
+  <li><strong>A text is fine</strong> to start: “Can we talk about something small tonight?”</li>
+  <li><strong>One topic, and one clear ask.</strong> Say what you need and ask what works for them.</li>
+  <li><strong>Talk about the room, not the person.</strong> “The room is getting crowded” lands better than “You’re so inconsiderate.”</li>
+</ul>
+<p>Not sure how your message sounds? Paste it into the <a href="/signal-translator.html?rel=roommates">Signal Translator</a> before you send it. Rather start by text? Here is a calm opener you can copy and change:</p>
+<p class="rm-msg"><q id="rm-opener">Hey, can we find ten minutes this week to agree a few room things, like guests staying over? Nothing’s wrong, I’d just rather we sort it early than let it get awkward.</q> <button type="button" class="rm-copy" id="rm-opener-copy">Copy</button> <span id="rm-opener-note" role="status"></span></p>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>“This is a bit awkward, but I’d rather say it now than let it build up. Can we agree on a few room rules?”</p>
+  <p>“I’m not upset with you. I just think we never talked about this.”</p>
+</div>
+<p>When they bring something up with you, listen first and say back what you heard before you explain: “So the light after midnight keeps you awake?” If a talk over text went badly, the <a href="/conversation-reader.html">Conversation Reader</a> shows where it turned. For kind ways to say no to a guest or a loan, see <a href="/refusals.html">Say no kindly</a>. More: <a href="/communication.html#with-housemates">Effective communication: with housemates →</a></p>
+
+<h2 id="ra">Talking to your RA</h2>
+<p>If you live in student housing, your RA (resident assistant) is there for exactly this. Helping roommates agree on rules, and sitting in on a hard talk, is part of their job. Asking them is not snitching.</p>
+<ul>
+  <li><strong>Usually, try talking to your roommate first,</strong> if it feels safe. Then go to your RA if nothing changes, or if you can’t agree.</li>
+  <li><strong>Go to your RA straight away</strong> if you feel unsafe, if someone won’t leave when asked, if your things are being taken, or if a guest makes you uncomfortable.</li>
+  <li><strong>In a rented flat,</strong> your tenancy agreement or landlord may have rules about guests. Check those first.</li>
+</ul>
+<div class="rm-say">
+  <h3>Words you could use</h3>
+  <p>To your RA: “My roommate’s boyfriend stays most nights and I’m not sleeping. I’ve tried to talk about it. Could you help us make a room agreement?”</p>
+</div>
+<p>If anyone threatens you, scares you or won’t let you be, that is not a roommate problem. Tell residence staff or campus security, and see <a href="/safety.html">Not safe at home?</a> for people to talk to.</p>
+
 
 <section id="faq">
   <h2>Questions roommates often ask</h2>
@@ -289,14 +307,16 @@
   }
   function enc(o) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, ''); } catch (e) { return ''; } }
   function dec(t) { try { return JSON.parse(decodeURIComponent(escape(atob(t)))); } catch (e) { return null; } }
-  function link() { return location.origin + location.pathname + '#room=' + enc(fields()); }
+  // nothing changed from the starting text: a plain link to the agreement (no empty '#room=e30')
+  function link() { var o = fields(); return location.origin + location.pathname + (Object.keys(o).length ? '#room=' + enc(o) : '#agreement'); }
   function text() {
     var me = val('ra-me'), them = val('ra-them');
     var head = 'Our room agreement' + (me && them ? ' (' + me + ' and ' + them + ')' : '');
     return head + '\n' + rows.map(function (r) { return r[1] + ': ' + (val(r[0]) || 'not decided yet'); }).join('\n') +
       '\nWe’ll look at it again together in a month.';
   }
-  function render() { out.textContent = text() + '\n\nOpen our agreement: ' + link(); }
+  // the long link stays out of sight: Copy, Share and the QR code carry it
+  function render() { out.textContent = text(); $('ra-share').setAttribute('data-share-url', link()); }
   function fromLink() {
     var m = /#room=([A-Za-z0-9+\/_-]+)/.exec(location.hash), o = m && dec(m[1]);
     if (!o) return false;
@@ -335,6 +355,25 @@
 })();
 </script>
 </main>
+<script>
+/* phone fold: on small screens, sections marked data-fold-phone start closed; a jump link or #hash opens its section */
+(function () {
+  var F = [].slice.call(document.querySelectorAll('details[data-fold-phone]'));
+  if (!F.length) return;
+  try { if (window.matchMedia('(max-width: 700px)').matches) F.forEach(function (d) { d.open = false; }); } catch (e) {}
+  function openFor(h) {
+    if (!h || h.charAt(0) !== '#' || h.length < 2) return;
+    var t = null; try { t = document.getElementById(decodeURIComponent(h.slice(1))); } catch (e) {}
+    var d = t && t.closest('details[data-fold-phone]'); if (d) d.open = true;
+  }
+  openFor(location.hash);
+  window.addEventListener('hashchange', function () { openFor(location.hash); });
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) openFor(a.getAttribute('href')); }, true);
+  function steps() { if (document.documentElement.classList.contains('tol-only-steps')) F.forEach(function (d) { d.open = true; }); }
+  if (window.MutationObserver) new MutationObserver(steps).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  steps();
+})();
+</script>
 <script>
 (function () {
   'use strict';

@@ -193,6 +193,16 @@
   }
 
   /* ---------- the one button ---------- */
+  // In Spanish when the part of the page it sits in says lang="es" (the Lemonade Stand's quick look in Spanish);
+  // a page that switches language fires 'tol-lang' on the document and the words follow.
+  var ES_T = { 'Put it on the fridge': 'Ponerla en el refri', 'Print it': 'Imprimir', 'Save as PDF': 'Guardar como PDF', 'Copy as text': 'Copiar como texto', 'Share': 'Compartir', 'Save as image': 'Guardar como imagen',
+    'In the print window, choose “Save as PDF” as the printer. On an iPhone: tap Share in the print window, then Save to Files.': 'En la ventana de imprimir, elige «Guardar como PDF» como impresora. En un iPhone: toca Compartir en esa ventana y luego Guardar en Archivos.',
+    'A blank sheet, with lines to fill in by hand.': 'Una hoja en blanco, con líneas para llenar a mano.', 'One page, ready for the fridge.': 'Una página, lista para el refri.',
+    'Copied. Paste it into your group chat or a note.': 'Copiado. Pégalo en el chat del grupo o en una nota.', 'Couldn’t copy here. Try “Print it” instead.': 'No se pudo copiar aquí. Prueba «Imprimir».',
+    'Saved the picture to your downloads.': 'La imagen se guardó en tus descargas.', 'Couldn’t make the picture here. Try “Copy as text” instead.': 'No se pudo hacer la imagen aquí. Prueba «Copiar como texto».' };
+  var buttons = [];
+  function esAt(el) { var l = el && el.closest ? el.closest('[lang]') : null; return !!l && /^es\b/i.test(l.getAttribute('lang') || ''); }
+  doc.addEventListener('tol-lang', function () { buttons.forEach(function (f) { try { f(); } catch (e) {} }); });
   function button(host, getData, opts) {
     opts = opts || {};
     if (!host) return null;
@@ -219,6 +229,15 @@
     panel.appendChild(st);
     wrap.appendChild(go); wrap.appendChild(panel);
     host.appendChild(wrap);
+    function T(t) { return esAt(wrap) && ES_T[t] ? ES_T[t] : t; }
+    var noteEl = panel.querySelector('.tfs-note'), label0 = opts.label || 'Put it on the fridge', note0 = noteEl.textContent;
+    function relabel() {
+      var es = esAt(wrap);
+      go.textContent = T(label0); panel.setAttribute('aria-label', T(label0));
+      noteEl.textContent = es && opts.noteEs ? opts.noteEs : note0;
+      Object.keys(B).forEach(function (k) { var en = { print: 'Print it', pdf: 'Save as PDF', copy: 'Copy as text', share: 'Share', image: 'Save as image' }[k]; B[k].textContent = T(en); });
+    }
+    buttons.push(relabel); relabel();
 
     function data() { var d = null; try { d = getData ? getData() : null; } catch (e) { d = null; } return d || { items: [] }; }
     function say(m) { st.textContent = ''; setTimeout(function () { st.textContent = m; }, 30); }
@@ -238,21 +257,21 @@
       var what = b.getAttribute('data-tfs'), d = data(), empty = !rowCount(norm(d)) && !norm(d).items.some(function (it) { return it.text; });
       if (typeof opts.before === 'function') { try { opts.before(what); } catch (er) {} }
       if (what === 'print' || what === 'pdf') {
-        say(what === 'pdf' ? 'In the print window, choose “Save as PDF” as the printer. On an iPhone: tap Share in the print window, then Save to Files.'
-          : empty ? 'A blank sheet, with lines to fill in by hand.' : 'One page, ready for the fridge.');
+        say(T(what === 'pdf' ? 'In the print window, choose “Save as PDF” as the printer. On an iPhone: tap Share in the print window, then Save to Files.'
+          : empty ? 'A blank sheet, with lines to fill in by hand.' : 'One page, ready for the fridge.'));
         setTimeout(function () { print(d); }, 60);
         return;
       }
       if (what === 'copy') {
-        copy(toText(d)).then(function (ok) { say(ok ? 'Copied. Paste it into your group chat or a note.' : 'Couldn’t copy here. Try “Print it” instead.'); });
+        copy(toText(d)).then(function (ok) { say(T(ok ? 'Copied. Paste it into your group chat or a note.' : 'Couldn’t copy here. Try “Print it” instead.')); });
         return;
       }
       if (what === 'share') { share(d); return; }
       if (what === 'image') {
-        saveImage(d).then(function () { say('Saved the picture to your downloads.'); }, function () { say('Couldn’t make the picture here. Try “Copy as text” instead.'); });
+        saveImage(d).then(function () { say(T('Saved the picture to your downloads.')); }, function () { say(T('Couldn’t make the picture here. Try “Copy as text” instead.')); });
       }
     });
-    return { el: wrap, button: go, refresh: refresh, say: say };
+    return { el: wrap, button: go, refresh: refresh, say: say, relabel: relabel };
   }
 
   /* ---------- "These jobs keep coming back" ---------- */

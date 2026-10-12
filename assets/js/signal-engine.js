@@ -3376,7 +3376,7 @@ function receive(an, opts){
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // checking up, cutting someone off, or a put-down that says they're worth nothing: control, not tone.
   // No "kinder way to read it", and no reply that does what it demands.
-  if(an.control) return {crossed:true, danger:true, control:true, head:["danger","This can be a sign of control, not a tone problem."],
+  if(an.control) return {crossed:true, danger:true, control:true, head:["danger","This may be about control, not communication."],
     meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
       : an.control.kind==="isolate" ? "Deciding who you can see, or cutting you off from friends or family, isn't okay, whatever was meant. Who you see is your choice."
       : "Messages that demand your location, your phone or who you were with can be signs of control, even when they're said as worry.",

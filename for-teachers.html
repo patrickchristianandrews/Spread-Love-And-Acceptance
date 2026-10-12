@@ -33,6 +33,57 @@
   .ft-plan li{ margin:.45rem 0; }
   .read #faq h3{ font-size:1.08rem; margin-top:1.4rem; }
   @media print{ .ft-jump{ display:none !important; } .ft-links li{ border:0 !important; padding:.2rem 0 !important; } }
+  /* Handout 7: the same one-page format as the group guide's handouts (groups.html) */
+  .gr-row{ display:flex; flex-wrap:wrap; gap:.6rem 1.1rem; align-items:center; margin:.4rem 0 1.4rem !important; }
+  .gr-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.55rem 1.15rem; border-radius:999px; cursor:pointer; border:1.5px solid var(--line); background:var(--paper); color:var(--ink); }
+  .gr-btn:hover{ border-color:var(--brass); }
+  .gr-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .gr-msg{ min-height:1.2rem; margin:0 !important; font-size:.95rem; }
+  .gr-handout{ margin:1.6rem 0; padding:1.2rem 1.3rem .6rem; border:1px solid var(--ink); border-radius:var(--radius); background:var(--paper); scroll-margin-top:1rem; }
+  .read .gr-handout h3{ margin:.1rem 0 .5rem; font-size:1.35rem; font-weight:600; }
+  .read .gr-h-kicker{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--brass-ink, #7A5620); margin:0 !important; }
+  .read .gr-h-goal{ font-style:italic; margin:0 0 .8rem; }
+  .read .gr-h-label{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; margin:.9rem 0 .25rem; }
+  .read .gr-h-ideas li, .read .gr-h-qs li{ margin:.2rem 0; }
+  .gr-h-take{ padding:.3rem 1rem .2rem !important; border:1.5px solid var(--ink) !important; border-radius:var(--radius); margin:.9rem 0 .8rem; }
+  .read .gr-h-take .gr-h-label{ margin-top:.4rem; }
+  .read .gr-h-take p{ margin-bottom:.5rem; }
+  .read .gr-h-teens{ margin:.6rem 0 .7rem; padding:.1rem 0 .1rem .9rem; border-left:3px solid var(--brass, #B8892B); }
+  .read .gr-h-teens p{ margin:.2rem 0 .4rem; }
+  .read .gr-h-foot{ font-size:.85rem; color:var(--ink-soft); line-height:1.5; margin-bottom:.4rem; max-width:none; }
+  .read .gr-h-url{ font-size:.9rem; margin-bottom:.8rem; overflow-wrap:anywhere; }
+  @media (max-width:480px){ .gr-handout{ padding:1rem .9rem .4rem; } .read .gr-h-ideas, .read .gr-h-qs{ padding-left:1.15rem; } }
+  @media print{
+    @page{ margin:.5in .6in; }
+    .gr-row, .gr-noprint, .gr-msg{ display:none !important; }
+    #handout-7{ background:#fff !important; box-shadow:none !important; border:0 !important; border-radius:0 !important; padding:0 !important; margin:0 !important; break-inside:avoid; page-break-inside:avoid; font-size:11.5pt; line-height:1.4; }
+    #handout-7, #handout-7 *{ color:#000 !important; background:transparent !important; box-shadow:none !important; }
+    #handout-7 > *{ width:auto !important; max-width:none !important; padding:0 !important; margin-left:0 !important; margin-right:0 !important; border:0 !important; border-radius:0 !important; min-height:0 !important; }
+    #handout-7 > *::before, #handout-7 > *::after, #handout-7 li::before, #handout-7 li::after, #handout-7 p::before, #handout-7 p::after{ display:none !important; }
+    #handout-7 li, #handout-7 p{ padding:0 !important; border:0 !important; border-radius:0 !important; width:auto !important; }
+    #handout-7 ol.gr-h-ideas, #handout-7 ol.gr-h-qs{ padding-left:.28in !important; }
+    #handout-7 h3{ font-size:20pt !important; margin:.1in 0 .08in !important; }
+    #handout-7 .gr-h-kicker{ font-size:8.5pt !important; }
+    #handout-7 .gr-h-label{ font-size:13pt !important; margin:.18in 0 .04in !important; }
+    #handout-7 li, #handout-7 p{ max-width:none !important; }
+    #handout-7 ol{ margin:0 0 .06in !important; padding-left:.28in !important; }
+    #handout-7 li{ margin:.06in 0 !important; }
+    #handout-7 .gr-h-take{ border:1.5pt solid #000 !important; border-radius:4pt !important; padding:.02in .16in .04in !important; margin:.2in 0 .16in !important; }
+    #handout-7 .gr-h-foot{ font-size:8.5pt !important; }
+    #handout-7 .gr-h-teens{ font-size:9.5pt !important; padding-left:.12in !important; border-left:1.5pt solid #000 !important; }
+    #handout-7 .gr-h-teens .gr-h-label{ font-size:11pt !important; margin:0 0 .02in !important; }
+    #handout-7 .gr-h-url{ font-size:9.5pt !important; }
+    html.gr-printing body > :not(main){ display:none !important; }
+    html.gr-printing main.read > :not(#handout-7){ display:none !important; }
+    html.gr-printing main.read{ max-width:none !important; padding:0 !important; margin:0 !important; }
+    html.gr-printing, html.gr-printing body{ padding:0 !important; margin:0 !important; background:#fff !important; }
+    #handout-7 p{ margin:.04in 0 !important; }
+    #handout-7 .gr-h-goal{ margin-bottom:.1in !important; }
+    #handout-7 li{ margin:.035in 0 !important; line-height:1.35; }
+    #handout-7 .gr-h-label{ margin:.14in 0 .03in !important; }
+    #handout-7 .gr-h-teens{ margin:.06in 0 .08in !important; }
+    #handout-7 .gr-h-take{ margin:.14in 0 .12in !important; }
+  }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/for-teachers.html">
@@ -78,6 +129,7 @@
   <li><a href="#permission">Can I use this?</a></li>
   <li><a href="#start">Best pages for a lesson</a></li>
   <li><a href="#handouts">Handouts</a></li>
+  <li><a href="#part-three">Reading order</a></li>
   <li><a href="#lesson">A 50-minute lesson</a></li>
   <li><a href="#projector">On a projector</a></li>
   <li><a href="#safe">Keeping it safe</a></li>
@@ -102,8 +154,8 @@
 </ul>
 <p>Related chapters if your class wants more: <a href="/book/understanding-2-stress.html">Stress and the nervous system</a>, <a href="/book/understanding-3-seeing.html">How we see each other</a>, <a href="/book/understanding-9-minds.html">Minds that work differently</a> and <a href="/book/understanding-11-healing.html">Healing after hurt</a>. Each one names the research behind it, with links to <a href="/research.html">plain summaries of every source</a>.</p>
 
-<h2 id="handouts">Six printable handouts, each with a Teens version</h2>
-<p>The <a href="/groups.html">group guide</a> has six one-page handouts. Each has three key ideas, discussion questions, one thing to try this week, and a short <strong>Teens version</strong> with school examples. Every printed handout ends with help lines for the US, the UK and elsewhere.</p>
+<h2 id="handouts">Seven printable handouts, each with a Teens version</h2>
+<p>Each handout fits on one page: three key ideas, discussion questions, one thing to try this week, and a short <strong>Teens version</strong> with school examples. Every printed handout ends with help lines for the US, the UK and elsewhere. Handouts 1 to 6 are in the <a href="/groups.html">group guide</a>; handout 7 is just below, and goes with the lesson on this page.</p>
 <ol>
   <li><a href="/groups.html#handout-1">Turning toward the small moments</a></li>
   <li><a href="/groups.html#handout-2">Check-ins: hear it back before you answer</a></li>
@@ -111,16 +163,52 @@
   <li><a href="/groups.html#handout-4">Repair: saying sorry so it lands</a></li>
   <li><a href="/groups.html#handout-5">When it gets heated: pause, settle, come back</a></li>
   <li><a href="/groups.html#handout-6">Your circle of control, and sharing the load</a></li>
+  <li><a href="#handout-7">How feelings work: naming what you feel</a></li>
 </ol>
-<p>On the group guide, <em>Print this handout</em> prints one handout on its own page, and <em>Print all handouts</em> prints all six.</p>
+<p>On the group guide, <em>Print this handout</em> prints one handout on its own page, and <em>Print all handouts</em> prints all six there.</p>
+
+<section class="gr-handout" id="handout-7" aria-labelledby="handout-7-h">
+<p class="gr-h-kicker">For teachers · Handout 7</p>
+<h3 id="handout-7-h">How feelings work: naming what you feel</h3>
+<p class="gr-h-goal">Treat a feeling as a signal, notice it in your body, and put a word to it, so you can choose what to do next.</p>
+<p class="gr-h-label">Three key ideas</p>
+<ol class="gr-h-ideas">
+  <li>A feeling is a signal, not a verdict. It tells you something matters, but it can be wrong about the details, like a smoke alarm going off for burnt toast.</li>
+  <li>Feelings often start in the body: a racing heart, a hot face, a knot in the stomach. Hunger, tiredness and pain can feel a lot like being upset.</li>
+  <li>Naming a feeling helps you hold it. A guess is fine (“something like worried”), and a more exact word than “bad” or “fine” points to what would help.</li>
+</ol>
+<p class="gr-h-label">Talk it over</p>
+<ol class="gr-h-qs">
+  <li>Where in your body do you tend to notice a strong feeling first?</li>
+  <li>“Is this the fire, or the toast?” When has a feeling been right about something mattering, but wrong about the details?</li>
+  <li>Anger is often a cover for hurt or worry. Why might anger feel easier to show?</li>
+  <li>What’s the difference between feeling angry and acting on it? What helps you wait before you act?</li>
+  <li>Some families and cultures don’t talk much about feelings. How else do people show what they feel?</li>
+</ol>
+<div class="gr-h-take"><p class="gr-h-label">Try this week</p><p>Once a day, name one feeling, out loud or on paper. Try one word more exact than “bad” or “fine”: “left out”, “let down”, “nervous”. A guess still counts. You don’t have to share it with anyone.</p></div>
+<div class="gr-h-teens"><p class="gr-h-label">Teens version</p><p>Before a test, your stomach knots. Is it fear, or did you skip breakfast? After a group chat goes quiet, you feel “annoyed”. Underneath, is it feeling left out? Try: “I think what I’m feeling is…” and finish it with one word. Nobody else needs to see it.</p></div>
+<p class="gr-h-foot">No one has to share, and passing is always fine. If a feeling is too big to handle, or you are afraid of someone at home, tell a trusted adult or see spreadloveandacceptance.com/safety.html. In the US, call or text 988, or call 1-800-799-7233 (text START to 88788) about abuse. In the UK, call Childline on 0800 1111 (under 19s) or Samaritans on 116 123. Anywhere else: findahelpline.com.</p>
+<p class="gr-h-url">Free, no sign-up: <strong>spreadloveandacceptance.com/book/understanding-1-feelings.html</strong></p>
+<div class="gr-row gr-noprint no-bubble"><button type="button" class="gr-btn" data-ft-print>Print this handout</button><a href="#lesson">See the lesson plan</a></div>
+<p class="gr-msg gr-noprint" role="status" aria-live="polite"></p>
+</section>
+
+<h2 id="part-three">Part Three for schools: a reading order</h2>
+<p>Part Three of the book, “Understanding people”, has chapters that work well as a short unit. Read them in this order; each builds on the one before.</p>
+<ol>
+  <li><a href="/book/understanding-1-feelings.html">How feelings work</a> (Chapter 1): feelings as signals, the body, and naming what you feel. Handout 7 goes with it.</li>
+  <li><a href="/book/understanding-2-stress.html">Stress and the nervous system</a> (Chapter 2): what stress does to the body and how to settle it.</li>
+  <li><a href="/book/understanding-4-communication.html">How communication works</a> (Chapter 4): listening, checking instead of guessing, and repairing mix-ups.</li>
+  <li><a href="/book/understanding-13-anger.html">Anger</a> (Chapter 13): what anger protects, and handling it without hurting anyone. Handout 5 goes with it.</li>
+</ol>
 
 <h2 id="lesson">A simple 50-minute lesson</h2>
-<p>One way to use <a href="/book/understanding-1-feelings.html">How feelings work</a>. Swap in any chapter.</p>
+<p>One way to use <a href="/book/understanding-1-feelings.html">How feelings work</a>, with <a href="#handout-7">handout 7</a>. Swap in any chapter.</p>
 <ol class="ft-plan">
   <li><strong>Opener (5 minutes).</strong> “Think of a time your body reacted before you knew why: a racing heart, a hot face. Just think, no need to share.”</li>
   <li><strong>Read one idea together (10 minutes).</strong> Show one idea card, such as “Naming a feeling helps you hold it.” Read it aloud, including the example.</li>
   <li><strong>Practise in pairs (15 minutes).</strong> One person describes a made-up situation. The other says back what they heard and guesses one feeling word: “So you felt left out?” Swap.</li>
-  <li><strong>Talk it over (15 minutes).</strong> Use two questions from the matching handout. Anyone can pass.</li>
+  <li><strong>Talk it over (15 minutes).</strong> Use two questions from <a href="#handout-7">handout 7</a>. Anyone can pass.</li>
   <li><strong>Exit line (5 minutes).</strong> Each student writes one feeling word they could use this week, privately.</li>
 </ol>
 
@@ -162,5 +250,21 @@
   <li><a href="/book/topic-start-here.html">The book at a glance</a></li>
 </ul>
 </main>
+<script>
+(function () {
+  'use strict';
+  // "Print this handout": only handout 7 on the page, then everything comes back
+  var root = document.documentElement, msg = document.querySelector('#handout-7 .gr-msg');
+  window.addEventListener('afterprint', function () { root.classList.remove('gr-printing'); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-ft-print]'); if (!b) return;
+    if (typeof window.print !== 'function') { if (msg) msg.textContent = 'This browser can’t print from the page. Try your browser’s Share or Print menu.'; return; }
+    root.classList.add('gr-printing');
+    if (msg) msg.textContent = 'Opening the print dialog for handout 7.';
+    window.print();
+    setTimeout(function () { if (!window.matchMedia || !matchMedia('print').matches) root.classList.remove('gr-printing'); }, 1500);
+  });
+})();
+</script>
 </body>
 </html>

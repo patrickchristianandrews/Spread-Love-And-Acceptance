@@ -39,6 +39,14 @@
   .pc-script{ margin:.6rem 0 1.4rem; padding:.9rem 1.1rem; border-radius:16px; border:1px solid #D9C8F0; background:#F6F1FC; }
   .read .pc-script h3{ margin:0 0 .35rem !important; font-size:1.05rem; }
   .pc-script p{ margin:.35rem 0 !important; max-width:none !important; }
+  /* "Leave this site quickly": the same button as on Not safe at home? (site.js handles [data-tol-exit] and Esc twice) */
+  .sf-exit{ position:fixed; right:max(.75rem, env(safe-area-inset-right)); bottom:max(.75rem, env(safe-area-inset-bottom)); z-index:990; display:flex; justify-content:flex-end; margin:0 !important; }
+  .sf-exit button{ box-shadow:0 6px 18px rgba(60,20,10,.28); font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.5rem 1.15rem; border-radius:999px; cursor:pointer; border:1.5px solid #96412B; background:#96412B; color:#fff; }
+  .sf-exit button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  main{ padding-bottom:4.5rem; }
+  @media (max-width:700px){ .sf-exit{ right:calc(max(5px, env(safe-area-inset-right)) + 46px); bottom:max(10px, env(safe-area-inset-bottom)); } } /* beside the back-to-top button */
+  @media print{ .sf-exit{ display:none; } }
+  .gp-jump a.co-private{ border:2px solid #96412B; font-weight:600; }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/coming-out.html">
@@ -76,6 +84,7 @@
 </head>
 <body>
 <main class="read" id="main">
+<div class="sf-exit no-bubble"><button type="button" data-tol-exit>Leave this site quickly</button></div>
 <header class="read-head"><p class="read-code">Guide · Coming out</p><h1>Coming out as an adult</h1></header>
 
 <p class="simple-lede">You might be 25, 40 or 65. You might be telling your parents, your grown children, your coworkers or your faith community. You might be gay, lesbian, bi, pan, trans, nonbinary, asexual, or still finding the words. Coming out as an adult is common, and it is yours to do in your own way and your own time.</p>
@@ -96,10 +105,12 @@
 
 <nav aria-label="On this page">
 <ul class="gp-jump no-bubble">
+  <li><a class="co-private" href="/safety.html#traces">Private on a shared phone or Wi-Fi?</a></li>
   <li><a href="#timing">Your timing</a></li>
   <li><a href="#safety-first">Safety and money first</a></li>
   <li><a href="#family">Telling family</a></li>
   <li><a href="#words">Words to use</a></li>
+  <li><a href="#parent-boundary">A parent who won’t accept your partner</a></li>
   <li><a href="#cut-off">If they cut me off</a></li>
   <li><a href="#work">At work</a></li>
   <li><a href="#partner">With a partner</a></li>
@@ -158,6 +169,13 @@
   <h3>A question you don’t want to answer</h3>
   <p class="q">“That’s a fair question, but I’m not ready to talk about that part yet.”</p>
 </div>
+
+<h2 id="parent-boundary">A parent who won’t accept your partner</h2>
+<ul>
+  <li><strong>You can love them and still hold a line.</strong> Decide before the visit what you’ll do if your partner is ignored or put down, then do it calmly, like the boundary in <a href="#words">Words you could use</a>.</li>
+  <li><strong>Keep your partner out of the crossfire.</strong> Talk to your parent yourself, one to one. It isn’t your partner’s job to win them over.</li>
+  <li><strong>Leave the door open, on your terms.</strong> Shorter visits with a set end time, and a leaving line you and your partner agree beforehand.</li>
+</ul>
 
 <h2 id="cut-off">What if they cut me off?</h2>
 <p>It’s one of the most common fears, and for some people it happens. If it does:</p>
@@ -253,7 +271,7 @@
 <ul class="gp-links no-bubble">
   <li><a href="/signal-translator.html?rel=family"><strong>Check your opening line</strong><span>Paste the first thing you plan to say into the Signal Translator, set to Family.</span></a></li>
   <li><a href="/safety.html#traces"><strong>Clear what this site keeps</strong><span>If someone else uses this device, erase what’s kept here first, in one tap.</span></a></li>
-  <li><a href="/grown-up-children.html"><strong>Boundaries with a parent you love</strong><span>Visits, advice and what to do when a talk goes badly.</span></a></li>
+  <li><a href="#parent-boundary"><strong>Boundaries with a parent you love</strong><span>When a parent won’t accept your partner: holding a line, kindly.</span></a></li>
 </ul>
 </main>
 </body>
