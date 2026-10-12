@@ -800,6 +800,7 @@
     'Copy the link': 'Copiar el enlace', 'Copy it as a code instead': 'Copiarlo como código', 'Other ways: copy the link or a code': 'Otras formas: copiar el enlace o un código',
     'Your names': 'Sus nombres', 'Add a person': 'Añadir a una persona', 'Jobs with an owner': 'Tareas con alguien a cargo', 'Still needs an owner': 'Todavía sin nadie a cargo', 'What’s this number?': '¿Qué es este número?',
     'Date of this list': 'Fecha de esta lista', 'The split you agreed (optional)': 'El reparto que acordaron (opcional)', 'Download PDF': 'Descargar PDF', 'Save': 'Guardar', 'Open': 'Abrir', 'Draft file': 'Archivo borrador',
+    '+ Add a person': '+ Añadir a una persona', 'Remove': 'Quitar', 'Undo': 'Deshacer', 'Add it here': 'Añadirla aquí', 'Send my changes back': 'Enviar mis cambios de vuelta', 'Keep everything as it is here': 'Dejar todo como está aquí',
     'Fillable PDF': 'PDF para llenar', 'More ▾': 'Más ▾', 'Less ▴': 'Menos ▴', 'Put it on the fridge': 'Ponerla en el refri', 'Clear': 'Borrar', 'Erase': 'Borrar todo'
   };
   function esPass(root) {
