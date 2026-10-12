@@ -152,6 +152,11 @@ const SAFE_RE = new RegExp("\\b(?:(?:left|leave|leaving|forgot to (?:turn off|lo
 const SAFE_HABIT_RE = /\b(?:every time|each time|every night|every morning|before (?:bed|you leave|we leave|leaving)|going forward|from now on|next time|a (?:note|reminder|checklist|timer|sign)|could we (?:find|set|put|make)|can we (?:find|set|put|make))\b/i;
 const WHY_RE = /\b(?:because|since (?:i|we|you|it|the|my|our)|so (?:that|we|i|you|it)|the reason|as (?:i|we)'m|as (?:i|we) (?:have|need|want)|which (?:means|helps)|that way|it (?:helps|would help) (?:me|us)|it matters (?:to me )?because|it means a lot)\b/i;
 
+/* Hurt said by pulling back ("Fine. I won't bother coming round then.", "I suppose I'm not wanted anymore.",
+   "I was only trying to help"), and "in my day" comparisons: the feeling is real, and it may still land as guilt */
+const WITHDRAW_RE = /\bi (?:won't|wont|will not|shan't) bother\b(?! (?:you|them|him|her|anyone|anybody|y'all|everyone|with (?:that|it|the details))\b)(?: (?:coming|calling|asking|helping|visiting|trying|texting|offering|popping|dropping|again|then|anymore|any more)\b[^.!?]{0,30})?|\bi (?:know|can tell|can see|get it) when i(?:'m| am) not wanted\b|\bi(?:'m| am) not (?:wanted|welcome)(?: (?:anymore|any more|here|around|now|then))?\b|\bi(?:'m| am) not needed (?:anymore|any more|here|around)\b|\b(?:nobody|no one|no-one) (?:wants|needs) me\b|\byou (?:clearly |obviously )?(?:don't|do not) (?:want|need) me (?:around|there|here|anymore|any more)\b|\bi (?:was|am|'m) (?:only|just) trying to help\b|\bi only (?:wanted|meant|tried) to help\b|\bsorry (?:for caring|for trying|for offering|i (?:bothered|cared|offered))\b|\bsorry i (?:asked|said anything)(?=\s*[.!…]|\s*$)|\bforget i (?:said|asked|offered) anything\b|\bi won't (?:ask|offer|say anything|bring it up) again\b|\bi'll (?:just )?(?:stay away|keep (?:out of it|out of your way|my (?:opinions|thoughts|mouth shut|nose out)(?: to myself)?))(?: then| from now on)?\b/i;
+const OLDDAYS_RE = /\b(?:back )?in (?:my|our) (?:day|days|time|generation)\b|\bwhen i was your age\b|\bin my young(?:er)? days\b/i;
+
 /* ============================================================
    FEATURES
    kind: "static" = may add static, "good" = worth keeping
@@ -244,11 +249,17 @@ const F = [
    fix:"Keep the fact and soften the opener: \"Quick correction: the deadline is Friday, not Thursday.\""},
   {id:"closer", name:"Closes the topic", kind:"static", re:null,
    what:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing on someone who cares.",
-   fix:"Lead with warmth, then say the same thing: \"I know how much this means to you. We'll decide together and tell you as soon as we do.\""},
+   fix:"Lead with warmth, then say the same thing: \"I know how much this means to you. We'll decide together.\""},
   {id:"guilt", name:"Guilt framing", kind:"static",
    re:/\bafter (?:all|everything) (?:i(?:'ve)? (?:do|did|done|have done)|i've done|that i do|i've given)(?: for you)?|\bi do everything\b|\bthe least you (?:could|can) do\b|\byou owe me\b|\bi gave up [^.!?]{0,30}for you\b|\bi(?:'ve| have) sacrificed\b|\bdo you (?:know|have any idea) how (?:hard|much|long) i\b|\bi guess i (?:just )?don't matter\b|\bi work (?:all day|so hard)\b[^.!?]{0,40}?\b(?:and|but) you\b|\bdon't worry about me\b|\bi'll just (?:sit|wait) here(?=(?:,? then)?\s*[.!…🙄😒🙃]*\s*$)|\bi'll just do everything\b|\bafter all i've done\b|\bi guess i'll just (?:be|stay|sit)\b/gi,
    what:"Guilt framing asks for payment for past effort. The task may get done, but it leaves resentment, and the real ask is buried under the account of what you have given.",
    fix:"Say the load plainly and ask for one thing: \"I'm stretched thin. Could you take…?\""},
+  {id:"withdraw", name:"Hurt said by pulling back", kind:"static", re:null,
+   what:"\"I won't bother then,\" \"I'm not wanted\" or \"I was only trying to help\" says the hurt by stepping back. The listener is likely to feel guilty, or pushed to make it right, and the real feeling underneath gets missed.",
+   fix:"Say the feeling plainly and keep the door open: \"That stung a bit, but I understand. When would suit you?\""},
+  {id:"olddays", name:"\"In my day\" comparison", kind:"static", re:null,
+   what:"\"In my day\" compares them with how things used to be. It can sound like their way is wrong, so it may land as guilt or criticism, even when you only mean it's new to you.",
+   fix:"Say it's new to you, and ask what works for them: \"Things were different when I was younger, so this feels new to me. What would suit you?\""},
   {id:"passive", name:"Blame with no name (passive voice)", kind:"static",
    re:/\b(?:mistakes|errors|things|promises|decisions) (?:were|have been|got) (?:made|broken|missed)\b|\b(?:the|my|our|your) [a-z]+(?: [a-z]+)? (?:was|were|got|has been|have been) (?:left|broken|forgotten|ignored|missed|lost|ruined|damaged|dropped|spilled|scratched|thrown out|eaten|used up|not (?:done|cleaned|fixed|paid|washed|put away|returned|locked))\b|\b(?:it|this|that|nothing|the [a-z]+) (?:didn't|never|still hasn't|hasn't|wasn't) (?:get|got|gets|been) (?:done|fixed|cleaned|paid|washed|finished|sent|put away|locked)\b/gi,
    what:"Passive voice (\"mistakes were made,\" \"the door was left open\") hides who did what. It can sound like a quiet accusation, or like it might not be about the listener at all.",
@@ -384,6 +395,9 @@ const F = [
   {id:"softno", name:"Soft no", kind:"static", re:/\b(?:we'll see(?! (?:you|them|him|her|the|it|each|y'all|everyone)\b)|maybe|i'll think about it|perhaps|we can talk about it)\b/gi,
    what:"\"We'll see\" can mean no, or a real maybe. The listener picks one, and may pick wrong.",
    fix:"If it's a no, say no kindly. If it's a real maybe, say when you'll decide."},
+  {id:"reqmaybe", name:"\"Maybe\" inside a request", kind:"static", re:null,
+   what:"\"Maybe\" inside a request makes the ask sound optional, so it's easy to shrug off, or to miss how much it matters to you. It's a hedge here, not a soft no.",
+   fix:"Ask plainly and kindly: \"Could you…?\" It's still a request they can say no to."},
   {id:"stopask", name:"\"Stop asking\"", kind:"static", re:/\b(?:stop asking(?: me)?|you already asked(?: me)?|i already answered|not this again)\b/gi,
    what:"It ends the question without settling it, so the worry behind it stays.",
    fix:"Use a kind, agreed-on script for repeat questions instead of shutting them down."},
@@ -1189,6 +1203,15 @@ function vocOf(text){ const m = String(text||"").match(/^\s*(?:(?:hi|hey|hello),
 
 /* Whole-message rewrites for the shapes testers met most: each keeps the real ask and drops the jab.
    send(m, ctx) -> the new words; recv: what it may mean, and a calm reply, for "Someone sent me this". */
+/* "you're not my mum, so stop acting like it": the ask in it (to be treated their age) */
+const NOT_PARENT_ASK = /\bstop (?:acting like (?:it|you are|you're|my \w+)|treating me like (?:a |an )?(?:kid|child|baby|little kid|five-year-old)|bossing me(?: around)?|telling me what to do|mothering me|babying me)\b|\b(?:you )?can't tell me what to do\b/i;
+/* "After you took everything": the grievance, kept and said as hurt ("I'm still hurt that you took everything") */
+function grievanceOf(t){
+  const m = String(t||"").match(/\bafter (everything you|all you|what you|you) ((?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to me)[^.!?]{0,40}?)\s*(?=[.!?]|$)/i);
+  if(!m) return "about what happened";
+  const what = m[2].trim().replace(/\s+(?:and|but|so)$/i,"");
+  return /^you$/i.test(m[1]) ? "that you "+what : "by "+m[1].toLowerCase()+" "+what;
+}
 const REFRAMES = [
   {id:"visits", re:/\b(?:you can't|you cannot|you can not|stop|please don't|don't|you shouldn't|you need to stop)\s+(?:just\s+)?(?:turn(?:ing)? up|show(?:ing)? up|com(?:e|ing) (?:over|round|around|by)|drop(?:ping)? (?:by|in|round)|pop(?:ping)? (?:by|in|round|over)|visit(?:ing)?|let(?:ting)? yourself in)(?: (?:here|at ours|at our place|at the house))?\s*(?:whenever|any ?time|when(?:ever)? you (?:want|like|feel like it|please)|unannounced|without (?:asking|calling|texting|warning|telling us|a heads-up))/i,
    why:"\"You can't just turn up\" sounds like a rule and a telling-off. Asking for a text first says the same boundary as a plan, and it keeps the door open.",
@@ -1200,7 +1223,7 @@ const REFRAMES = [
    recv:{mean:"They're asking for a heads-up before visits. It's a request about timing, not a rejection of you.", reply:"You're right, I'll text first. When suits you?"}},
   {id:"closer", re:CLOSER_RE,
    why:"\"We'll decide ourselves\" is fair, and it can still sound like a door closing. Leading with warmth says the same thing and keeps them close.",
-   send:(m,c)=>{ const about = (m[0].match(/\b(?:about|on) ([^.!?]{1,40}?) (?:ourselves|on our own|by ourselves|without)/i)||[])[1]; return (c.voc ? c.voc+", " : "")+"I know how much this means to you. We'll decide"+(about ? " about "+about : "")+" together, and tell you as soon as we do."; },
+   send:(m,c)=>{ const about = (m[0].match(/\b(?:about|on) ([^.!?]{1,40}?) (?:ourselves|on our own|by ourselves|without)/i)||[])[1]; return (c.voc ? c.voc+", " : "")+"I know how much this means to you. We'll decide"+(about ? " about "+about : "")+" together [and tell you when we do]."; },
    recv:{mean:"They're saying this decision is theirs to make together. It doesn't mean your view doesn't matter to them.", reply:"I understand it's your decision. I'm here if you ever want to talk it through."}},
   {id:"inhaler", rel:["coparent"], re:/\byou (?:forgot|didn't pack|did not pack|didn't send|left out|forgot to pack|forgot to send) (her|his|their|the kids'?|the children's|[A-Z][a-z]+'s) ([a-z][a-z ]{1,24}?)(?:\s+(?:again|AGAIN|once again))?(?=[.!?,]|$)/i,
    why:"With a co-parent, short and factual works best: what the child needs, the ask, and a time. A question like \"do you even care?\" starts a fight about the past.",
@@ -1258,12 +1281,34 @@ const REFRAMES = [
    why:"\"You're not my mum\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
    send:(m)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
      const who = w==="mum"||w==="mother" ? "Mum" : w==="mom" ? "Mom" : w==="dad"||w==="father" ? "Dad" : "[Mum or Dad]";
+     // "so stop acting like it", "stop treating me like a kid": the ask stays, said as what they'd like
+     if(NOT_PARENT_ASK.test(c.text)) return "I know you're looking after me. I miss "+(who==="[Mum or Dad]" ? "[Mum or Dad]" : who)+", and I'd like to be treated more like my age. Can we talk about it?";
      return "I'm not angry at you. I'm just missing "+who+" today. I need some space right now, can we talk later?"; },
    recv:{mean:"This hurts to hear. Often it's grief talking, or missing a parent, or feeling crowded and told what to do. It doesn't mean you don't matter to them.", reply:"Okay. I'll give you some space. I'm here when you want to talk."}},
   {id:"nowyou", re:/(?:^|[.!?]\s+)(?:so )?now you (?:want|need|care|remember|have time|decide)\b[^.!?]*[.!?]*(?:\s*after (?:you|everything you|all you|what you) [^.!?]*[.!?]*)?|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied|did to)\b[^.!?]*/i,
    why:"A sharp question or an \"after you…\" says the hurt as blame, so the listener defends the past. Saying the hurt plainly, and what you need before you talk, can actually be heard.",
-   send:()=>"I'm still hurt about what happened. If we talk, I need us to start there.",
+   send:(m,c)=>"I'm still hurt "+grievanceOf(c.text)+". If we talk, I need us to start there.",
    recv:{mean:"They're still hurt about what happened before. The edge is the hurt; it doesn't have to mean the door is shut for good.", reply:"You're right to be hurt. I'm not asking you to talk before you're ready. I'm here when you are."}},
+  {id:"hurtguilt", re:new RegExp(WITHDRAW_RE.source+"|"+OLDDAYS_RE.source, "i"),
+   why:"Pulling back (\"I won't bother then\") or \"in my day\" says the hurt sideways, so it may land as guilt and the listener gets defensive. Saying the feeling plainly, and asking what would suit them, keeps you close.",
+   send:(m,c)=>{
+     const t = c.text, old = OLDDAYS_RE.test(t);
+     const help = t.match(/\b(?:trying|wanted|meant|tried) to help(?: (?:out )?(?:with|around) ([^.!?,]{2,30}?))?(?=\s*[.!?,…]|\s+(?:and|but|then|so)\b|\s*$)/i);
+     const visit = /\b(?:com(?:e|ing) (?:round|around|over|by)|visit(?:ing)?|pop(?:ping|ped)? (?:round|over|in|by)|drop(?:ping|ped)? (?:by|in|round)|turn(?:ing|ed)? up)\b/i.test(t);
+     const unwanted = /\bnot (?:wanted|welcome|needed)\b|\b(?:wants|needs|want|need) me\b/i.test(t);
+     let out;
+     if(old){
+       const did = (t.match(/\b(?:we|i|you|people) (?:just )?(popped|dropped|came|turned|showed|went|knocked|called|visited|walked) ?(round|over|in|by|up|around)?\b/i)||[]);
+       const ING = {popped:"popping", dropped:"dropping", came:"coming", turned:"turning", showed:"showing", went:"going", knocked:"knocking", called:"calling", visited:"visiting", walked:"walking"};
+       out = "Things were different when I was younger, so this feels new to me."+(did[1] ? " I miss "+ING[did[1].toLowerCase()]+(did[2] ? " "+did[2].toLowerCase() : "")+"." : "")+" What would suit you?";
+     } else {
+       out = unwanted && !help && !visit ? "I've been feeling a bit left out lately, and it stings." : "That stung a bit, but I understand.";
+       if(help) out += " I'd love to help"+(help[1] ? " with "+help[1].trim() : "")+".";
+       out += visit || help ? " When would suit you?" : " Could we find a time that suits us both?";
+     }
+     return c.voc ? c.voc+", "+lowerFirst(out) : out; },
+   recv:{mean:(m,c)=>OLDDAYS_RE.test(c.text) ? "They're comparing this with how things used to be. Often that means it feels new or strange to them, more than a judgment on you." : "This sounds like hurt, said by pulling back. They may feel pushed out, or that their help isn't wanted. Underneath, they probably want to be close.",
+     reply:(m,c)=>OLDDAYS_RE.test(c.text) ? "I know it was different then. It's not about you, it's just what works for us now. Could we find a way that suits us both?" : "I'm sorry that stung. You are wanted. Could we find a time that suits us both?"}},
   {id:"guests", re:/\b(?:can|could|would) (?:your|you(?:r)?) (boyfriend|girlfriend|partner|friend|bf|gf)\s+(?:maybe |please |just |possibly )*(?:not|stop) (?:stay(?:ing)?|sleep(?:ing)?|com(?:e|ing)) over (?:every|each) night\b|\b(?:your|ur) (boyfriend|girlfriend|partner|bf|gf) is (?:here|over|staying (?:here|over)) (?:every|each) (?:single )?night\b/i,
    why:"A plain, kind ask about how many nights, with a heads-up, gives them something to agree to. \"Maybe\" and shouting both make it easy to shrug off.",
    send:()=>"Could we agree on a few nights a week for overnight guests, with a heads-up text? I'm not sleeping well.",
@@ -1449,6 +1494,18 @@ function analyze(textIn, opts){
   { const bm = low.match(BLUNT_RE); if(bm){ const st = bm.index + (bm[0].length - bm[0].replace(/^\s+/,"").length), en = bm.index+bm[0].replace(/[\s.!]+$/,"").length; push("blunt", st, en); drop("critic", h=>inside(h,"blunt")); } }
   // "We'll decide about it ourselves": fair, and it can sound like a closed door
   { const cm = low.match(CLOSER_RE); if(cm && !hits.some(h=>["hostile","contempt","swear"].includes(h.id) && h.s<cm.index+cm[0].length && cm.index<h.e)) push("closer", cm.index, cm.index+cm[0].length); }
+  // "Fine. I won't bother coming round then.", "I suppose I'm not wanted anymore.": hurt said by pulling back.
+  // "In my day we just popped round": a comparison with how it used to be, and the "just" makes it sound easy
+  if(!["menace","control"].some(has)){
+    const wm = low.match(WITHDRAW_RE);
+    if(wm && !hits.some(h=>["guilt","jab","sarcasm"].includes(h.id) && h.s<wm.index+wm[0].length && wm.index<h.e)){
+      push("withdraw", wm.index, wm.index+wm[0].replace(/[\s,.!?]+$/,"").length);
+      drop("impera", h=>inside(h,"withdraw")); drop("minim", h=>inside(h,"withdraw")); drop("again", h=>inside(h,"withdraw")); }
+    const om = low.match(OLDDAYS_RE);
+    if(om){ push("olddays", om.index, om.index+om[0].length);
+      const se = sentOf({s:om.index}), jr = /\bjust\b/g; let jm2;
+      while((jm2 = jr.exec(low.slice(se.s, se.e)))!==null){ const js = se.s+jm2.index; if(!hits.some(h=>h.id==="minim" && h.s===js)) push("minim", js, js+4); } }
+  }
   if(has("butc") && has("sarcasm")){ drop("sarcasm", h=>hits.some(b=>b.id==="butc" && h.s>=b.s && h.e<=b.e)); }
   if(has("vstd") && has("idiom") && hits.some(h=>h.id==="vstd" && /pull your weight/i.test(h.match))) drop("vstd");
   if(has("critic") && has("again")) drop("critic", h=>/again/i.test(h.match));
@@ -1475,6 +1532,16 @@ function analyze(textIn, opts){
       drop("softno", h=>h.s>=se.s && h.e<=se.e); drop("hedge", h=>h.s>=se.s && h.e<=se.e);
     }
   });
+  // "Can your boyfriend maybe not stay over?": "maybe" inside a request is a hedge, not a soft no (a soft no is an answer).
+  // In a question or a suggestion ("Maybe we could go Saturday?") it isn't flagged at all
+  for(let i=hits.length-1;i>=0;i--){
+    const h = hits[i]; if(h.id!=="softno" || !/^(?:maybe|perhaps)$/i.test(h.match)) continue;
+    const se = sentOf(h), st = low.slice(se.s, se.e), at = h.s-se.s;
+    const req = /\b(?:can|could|would|will) (?:you|u|your \w+)\b[^.?!]{0,30}?\s(?:maybe|perhaps)\b/i.exec(st);
+    if(req && req.index+req[0].length>=at+h.match.length && req.index<=at){ h.id = "reqmaybe"; continue; }
+    if(/^(?:maybe|perhaps)[\s.!?…]*$/i.test(st.trim())) continue;
+    if(/\?\s*$/.test(st) || /\b(?:maybe|perhaps) (?:we|you|i) (?:could|can|should|might|try)\b/i.test(st)) hits.splice(i,1);
+  }
   // "now" at the end of an ask is time pressure too
   const hasWhy = WHY_RE.test(low);
   const askSent = new Set();
@@ -3316,7 +3383,7 @@ function receive(an, opts){
   const meanings = [];
   // the shapes testers met most: what it may mean, and a reply to the need underneath
   const rf = !crossed ? reframeOf(an, opts) : null;
-  if(rf && rf.r.recv) meanings.push(rf.r.recv.mean);
+  if(rf && rf.r.recv) meanings.push(typeof rf.r.recv.mean==="function" ? rf.r.recv.mean(rf.m, rf.c) : rf.r.recv.mean);
   RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm"].includes(id)))) meanings.push(line); });
   const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");

@@ -145,3 +145,7 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .tol-chbar .tol-chbar-x{ font:inherit; font-size:.88rem; min-height:2.2rem; padding:.2rem .75rem; border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--ink-soft); cursor:pointer; }
 .tol-chbar .tol-chbar-x:hover{ color:var(--ink); border-color:var(--brass); }
 @media (max-width:560px){ .tol-chbar-nav{ flex-wrap:wrap; gap:.5rem 1rem; } }
+/* "The book at a glance": the version switch stays in place (it covered the reading-order list when sticky),
+   and the reading order shows the book's own chapter labels without extra list numbers ("2. Chapter I") */
+.read .bt-switch{ position:static; }
+.read ol.book-order ol{ list-style:none; padding-left:.4rem; }

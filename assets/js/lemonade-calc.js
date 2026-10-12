@@ -139,7 +139,7 @@
     social: [['Keeping in touch with family', 30, 'week'], ['Keeping up with both families & in-laws', 20, 'week'], ['Birthdays & holidays', 60, 'month'], ['Thank-you notes & messages', 15, 'week'], ['Hosting & visitors', 120, 'month'], ['Planning time with friends', 20, 'week'], ['Kids’ playdates & parties', 60, 'month']],
     mental: [['Keeping the family calendar', 15, 'few'], ['Noticing what’s running low', 10, 'day'], ['Planning the week ahead', 30, 'week'], ['Remembering dates & deadlines', 10, 'day'], ['Childcare & backup plans', 30, 'week'], ['Checking that things got done', 10, 'day'], ['Trips & holiday planning', 120, 'month']],
     emotional: [['Keeping the peace', 15, 'day'], ['Checking in on how people are', 15, 'day'], ['Calming a hard moment', 20, 'few'], ['Listening & support', 30, 'few'], ['Smoothing things over with family', 30, 'week']],
-    work: [['Paid work', 40, 'week', 'h'], [NIGHT_SHIFT, 12, 'few', 'h'], [NIGHT_SLEEP, 7, 'few', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['A side job', 5, 'week', 'h']],
+    work: [['Paid work', 40, 'week', 'h'], [NIGHT_SHIFT, 12, 'few', 'h'], [NIGHT_SLEEP, 7, 'few', 'h'], ['Commute', 30, 'wkd'], ['School or classes', 15, 'week', 'h'], ['Study & homework (my own)', 5, 'week', 'h'], ['Work messages after hours', 20, 'wkd'], ['Home but on call (deliveries, repairs, dog)', 4, 'week', 'h'], ['A side job', 5, 'week', 'h']],
     rest: [['Time to myself', 30, 'day'], ['A walk or moving my body', 30, 'few'], ['Hobbies', 60, 'week'], ['Time with friends', 120, 'week'], ['Quiet time doing nothing', 20, 'day'], ['A full day off', 8, 'month', 'h'], [PACING, 2, 'day', 'h']]
   };
   // Library jobs that start as each person's own (their own family, their own life), not shared home work
@@ -4469,6 +4469,13 @@
         mark(pw, k, pw.unit === 'm' ? Math.round(h * 60 / mult(pw, k)) : Math.round(h / mult(pw, k) * 10) / 10);
         delete pw.pick;
       });
+    }
+    // time on your own with the kids while the other works, as typed in the quick look: hours a week
+    if (Array.isArray(q.solo) && q.solo.some(function (x) { return num(x) > 0; })) {
+      var sk = state.jobs.filter(function (j) { return !j.ex && low(j.name) === low(SOLO_KIDS); })[0];
+      if (!sk) { sk = { name: SOLO_KIDS, v: zeros(), t: zeros(), cat: 'kids', freq: 'week', unit: 'h', nm: zeros() }; state.jobs.push(sk); added++; }
+      if (sk.freq !== 'week' || sk.unit !== 'h' || sk.fq) { state.people.forEach(function (_, i) { var h0 = rawH(sk, i); sk.v[i] = h0 ? Math.round(h0 * 10) / 10 : 0; }); sk.freq = 'week'; sk.unit = 'h'; delete sk.fq; }
+      q.solo.forEach(function (x, qi) { var k = map[qi], h = num(x); if (k == null || k < 0 || !h || h > 168) return; sk.v[k] = h; if (k !== me) { sk.qv = fit(sk.qv, state.people.length, 0); sk.qv[k] = h; } });
     }
     // a fair split picked in the quick look, when none is set here
     if (Array.isArray(q.split) && q.split.length === 2 && !state.agreed.on) {
