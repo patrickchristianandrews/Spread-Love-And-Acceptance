@@ -37,6 +37,27 @@
   .sx-pace output{ display:block; font:500 1.5rem/1.3 "Fraunces", Georgia, serif; min-height:2.6em; }
   .sx-btn{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:48px; padding:.5rem 1.3rem; border-radius:999px; border:1px solid #2F5F8A; background:#2F5F8A; color:#fff; cursor:pointer; }
   .sx-btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .cp-acts{ list-style:none; padding:0 !important; margin:.4rem 0 .6rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
+  .cp-acts li{ margin:0 !important; max-width:none !important; }
+  .cp-act{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.5rem 1.1rem; border-radius:999px; border:1.5px solid #2F5F8A; background:#FFFDF7; color:#1F4466 !important; text-decoration:none; font-weight:600; }
+  .cp-act.is-main{ background:#2F5F8A; color:#fff !important; }
+  .cp-act:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .cp-more{ font-size:.95rem; color:var(--ink-soft); margin:.2rem 0 1.2rem !important; }
+  .cp-bag-acts{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; }
+  .cp-bag-acts .sx-btn{ min-height:44px; }
+  .cp-copied{ font-size:.92rem; color:var(--ink-soft); }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .cp-act:not(.is-main){ background:transparent; color:#BFD8F0 !important; border-color:#7FA9D1; } }
+  :root[data-theme="dark"] .cp-act:not(.is-main){ background:transparent; color:#BFD8F0 !important; border-color:#7FA9D1; }
+  /* phone fold: secondary sections start closed on small screens (all content kept) */
+  .pg-fold > summary{ list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+  .pg-fold > summary::-webkit-details-marker{ display:none; }
+  .pg-fold > summary > :is(h2, h3){ margin:0 !important; }
+  .pg-fold[open] > summary{ margin-bottom:.6rem; }
+  .pg-fold > summary::after{ content:"Show"; flex:none; font:600 .9rem/1 "Lora", Georgia, serif; color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:.5rem .9rem; min-height:44px; box-sizing:border-box; display:inline-flex; align-items:center; }
+  .pg-fold[open] > summary::after{ content:"Hide"; }
+  .pg-fold > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  html.tol-only-steps main details.pg-fold.pg-fold.pg-fold{ display:block !important; }
+  @media print{ .pg-fold > summary::after{ display:none; } }
 </style>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/co-parenting.html">
@@ -75,8 +96,13 @@
 <body data-no-cheer data-no-wash data-no-pupvisits data-no-reading>
 <main class="read">
 <header class="read-head"><p class="read-code">For your situation</p><h1>Separated co-parents</h1></header>
-<nav class="cp-jump no-bubble" aria-label="Jump to">
-<p><strong>Jump to:</strong> <a href="#who-decides">Who decides what</a> · <a href="#handoff-bag">A handoff-bag checklist</a> · <a href="#handoff">Calmer handoffs</a> · <a href="/on-my-own.html#part-time-parent">Every other weekend? Part-time with your kids →</a></p>
+<nav class="cp-jump no-bubble" aria-label="Start with">
+<ul class="cp-acts">
+<li><a class="cp-act" href="#handoff-bag">Handoff-bag checklist</a></li>
+<li><a class="cp-act" href="#who-decides">Who decides what</a></li>
+<li><a class="cp-act is-main" href="/workpapers/fill/wp-03.html?for=coparents">Make your two-home job list</a></li>
+</ul>
+<p class="cp-more">Also: <a href="#handoff">Calmer handoffs</a> · <a href="/on-my-own.html#part-time-parent">Every other weekend? Part-time with your kids →</a></p>
 </nav>
 
 <p class="simple-lede">After a separation, the goal is calm, brief, child-focused contact. You can’t control the other parent, only your side of the exchange. This page gives you scripts for a cooperative co-parent, and a different route for when cooperating isn’t possible.</p>
@@ -135,13 +161,15 @@ If something bigger comes up at a handoff, park it.
   <p>“Before Sam is signed up for anything new, can you text me first so we can decide together?”</p>
   <p>“Swimming lessons on Saturdays, starting March 2. Are you okay with that? Can you let me know by Friday?”</p>
 </div>
+<p><strong>Put it in writing together:</strong> <a href="/workpapers/fill/wp-03.html?for=coparents">One owner per job, two homes →</a></p>
 </div>
 
 <p><strong>Seeing your kids every other weekend, or less often than you’d like?</strong> It can feel like being a visitor in their lives. You are still their parent full time. <a href="/on-my-own.html#part-time-parent">Part-time with your kids</a> has ideas for weekends, the Sunday goodbye and staying close in between.</p>
 
 <p><strong>Your ex’s new partner is parenting your children at the other house?</strong> That is hard, and very common. See <a href="/parents.html#stepfamilies">stepfamilies and blended families</a> for what helps.</p>
 
-<h2 id="bonding">Bonding tips: closeness with your child in your home</h2>
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="bonding">Bonding tips: closeness with your child in your home</h2></summary>
 <p>Moving between two homes is a lot for a child. What helps them feel close to you is a calm, predictable home of your own, not a contest with the other house.</p>
 <ul>
   <li><strong>Give them time to land after a handoff.</strong> A snack, a quiet hour, their own space. Many kids are flat or grumpy for a while after a change. It isn’t about you.</li>
@@ -157,8 +185,11 @@ If something bigger comes up at a handoff, park it.
 <p>Closeness with your child is offered, never demanded. A child who is quiet with you after a handoff isn’t choosing a side, and doesn’t need to prove they missed you.</p>
 <p>More ideas: <a href="/bonding.html#children">Bonding, how closeness grows →</a> · <a href="/bonding.html#ideas">Get an idea now</a></p>
 
-<div class="sx-safe no-bubble" role="note">
-<h2 id="court">If this may end up in court</h2>
+<details class="pg-fold sx-safe no-bubble" data-fold-phone open>
+<summary>
+</details>
+
+<h2 id="court">If this may end up in court</h2></summary>
 <ul>
 <li><strong>Treat every message as a record.</strong> A judge may read it one day. Write as if they will.</li>
 <li><strong>Use BIFF:</strong> Brief, Informative, Friendly, Firm. For example:
@@ -167,9 +198,10 @@ If something bigger comes up at a handoff, park it.
 <li><strong>Keep copies</strong> of every message, with the date.</li>
 </ul>
 <p>If the messages feel like more than conflict, see <a href="/safety.html#after-separation">After a separation: when it’s more than conflict</a>.</p>
-</div>
+</details>
 
-<h2 id="holidays">Holidays and special days</h2>
+<details class="pg-fold" data-fold-phone open>
+<summary><h2 id="holidays">Holidays and special days</h2></summary>
 <div class="no-split">
 <p>Holidays are one of the most common sore spots between separated parents. A simple rule that stays the same each year usually works better than arguing it out every time.</p>
 <ul>
@@ -185,6 +217,7 @@ If something bigger comes up at a handoff, park it.
   <p>“To keep it fair: this year the kids are with you for Thanksgiving and with me for Christmas, and we swap next year. Can you confirm by November 15?”</p>
 </div>
 </div>
+</details>
 
 <h2 id="parallel">When the other parent won’t cooperate</h2>
 <div class="no-split">
@@ -200,13 +233,14 @@ If something bigger comes up at a handoff, park it.
 
 <h2 id="handoff-bag">A handoff-bag checklist</h2>
 <p>Most handoff arguments are about one forgotten thing. A short list, the same in both homes, stops that. Copy it, change it, and keep it by the door or in the bag.</p>
-<ul>
+<ul id="cp-bag-list">
 <li>Medicines and the inhaler, with a note of the last dose</li>
 <li>The reading folder, homework and anything to sign</li>
 <li>School or sports kit for the next few days</li>
 <li>Glasses, chargers and the comfort toy</li>
 <li>One line about anything new: sleep, health, or a test coming up</li>
 </ul>
+<p class="cp-bag-acts no-bubble"><button type="button" class="sx-btn" data-cp-copy>Copy this list</button> <a class="cp-act" href="/workpapers/fill/wp-03.html?for=coparents&amp;preset=handoff-bag">Make it our shared list</a> <span class="cp-copied" role="status" aria-live="polite"></span></p>
 <div class="pr-say">
   <h3>Words you could use</h3>
   <p>“Her inhaler wasn’t in the bag on Sunday. Can we both check the list before handoff?”</p>
@@ -228,5 +262,39 @@ If something bigger comes up at a handoff, park it.
   <p><a href="/signal-translator.html?rel=co-parents">Open the Signal Translator &rarr;</a> <a href="/start-here.html">Back to Start here</a></p>
 </div>
 </main>
+<script>
+/* phone fold: on small screens, sections marked data-fold-phone start closed; a jump link or #hash opens its section */
+(function () {
+  var F = [].slice.call(document.querySelectorAll('details[data-fold-phone]'));
+  if (!F.length) return;
+  try { if (window.matchMedia('(max-width: 700px)').matches) F.forEach(function (d) { d.open = false; }); } catch (e) {}
+  function openFor(h) {
+    if (!h || h.charAt(0) !== '#' || h.length < 2) return;
+    var t = null; try { t = document.getElementById(decodeURIComponent(h.slice(1))); } catch (e) {}
+    var d = t && t.closest('details[data-fold-phone]'); if (d) d.open = true;
+  }
+  openFor(location.hash);
+  window.addEventListener('hashchange', function () { openFor(location.hash); });
+  document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('a[href^="#"]'); if (a) openFor(a.getAttribute('href')); }, true);
+  function steps() { if (document.documentElement.classList.contains('tol-only-steps')) F.forEach(function (d) { d.open = true; }); }
+  if (window.MutationObserver) new MutationObserver(steps).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  steps();
+})();
+</script>
+<script>
+/* "Copy this list" for the handoff bag: copies the list as plain lines. Nothing is kept or sent. */
+(function () {
+  var b = document.querySelector('[data-cp-copy]'), ul = document.getElementById('cp-bag-list'), st = document.querySelector('.cp-copied');
+  if (!b || !ul) return;
+  b.addEventListener('click', function () {
+    var text = 'Handoff bag
+' + [].map.call(ul.querySelectorAll('li'), function (li) { return '- ' + li.textContent.trim(); }).join('
+');
+    function ok() { st.textContent = 'Copied. Paste it into a note or a message.'; }
+    function fallback() { var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); ok(); } catch (e) { st.textContent = 'Copy didn’t work here. Press and hold the list to copy it.'; } t.remove(); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
+  });
+})();
+</script>
 </body>
 </html>

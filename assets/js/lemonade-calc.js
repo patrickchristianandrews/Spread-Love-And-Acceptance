@@ -2508,7 +2508,7 @@
         var dl = document.createElement('label'); dl.className = 'ls-own-done';
         var ds = document.createElement('span'); ds.textContent = 'What “done” means (optional)';
         var di = document.createElement('input'); di.type = 'text'; di.maxLength = 80; di.autocomplete = 'off'; di.value = o.dn || ''; di.setAttribute('data-fk', 'od' + idx);
-        di.placeholder = 'Like: sink empty, counters wiped';
+        di.placeholder = 'Like: ' + donePh(o.name);
         di.addEventListener('input', function () { o.dn = di.value.slice(0, 80); var fl0 = $('fridge'); if (fl0) fl0.textContent = fridgeText(); save(); });
         dl.appendChild(ds); dl.appendChild(di);
         li.appendChild(bkw); li.appendChild(dl);
@@ -2517,7 +2517,9 @@
     });
     // at the most: say so where the box was, never just hide it
     $('own-add').hidden = list.length >= maxOwn();
-    var full = $('own-full'); if (full) full.hidden = list.length < maxOwn();
+    var full = $('own-full'); if (full) { full.hidden = list.length < maxOwn(); full.textContent = 'That’s ' + ownWord() + ', the most for one list. Swap one out to add another.'; }
+    var un = $('own-unowned'); if (un) { un.textContent = unownedText(); un.hidden = !un.textContent; }
+    var ap = $('own-add-person'); if (ap) ap.hidden = solo() || state.people.length >= MAX;
     // the printout's note matches what's picked
     var fn = document.querySelector('#own-fridge .tfs-note');
     if (fn) fn.textContent = list.length ? 'One clean page: each job, its owner and a box to tick, with a few blank lines for more. Fits A4 and US Letter.' : 'One clean page to fill in together. With nothing picked yet, it prints a blank list. Fits A4 and US Letter.';
@@ -2525,6 +2527,16 @@
     var fl = $('fridge'); if (fl) fl.textContent = fridgeText();
     renderKeepAsk();
   }
+  // what "done" could look like, by the kind of job (only a hint in the box)
+  var DONE_PH = [[/dish|kitchen|wash.?up/, 'sink empty, counters wiped'], [/laundr|washing|folding|iron|sheets|towel/, 'washed, dried and put away'], [/bin|trash|rubbish|recycl/, 'out on bin night, new bag in'],
+    [/bathroom|loo|toilet|shower/, 'sink, loo and shower wiped'], [/grocer|shopping|food shop/, 'the fridge stocked from the list'], [/cook|dinner|meal|lunch|breakfast/, 'food on the table, pans soaking'],
+    [/bill|budget|tax|receipt|insur|renew/, 'paid or filed by the due date'], [/vacuum|hoover|floor|tidy|clean/, 'floors clear in every room'], [/appoint|calendar|dates|deadline/, 'booked, and in the shared calendar'],
+    [/pet|feed|litter|vet/, 'bowls full, water fresh'], [/walk|dog/, 'two walks, bags restocked'], [/garden|plant|lawn|mow|weed/, 'watered and tidy'], [/school|kids|bedtime|homework|bath/, 'done, and the next day’s things ready'],
+    [/supplies|running low|restock|loo roll|toilet paper/, 'spares in the cupboard'], [/car|repair|fix/, 'booked or fixed, and said so']];
+  function donePh(name) { var l = low(name); for (var k = 0; k < DONE_PH.length; k++) if (DONE_PH[k][0].test(l)) return DONE_PH[k][1]; return 'what it looks like when it’s finished'; }
+  // jobs on the list with nobody's name yet: said before anyone shares, prints or copies it
+  function unowned() { return ownersList().filter(function (o) { return !(o.who >= 0 && o.who < state.people.length); }).map(function (o) { return o.name; }); }
+  function unownedText() { var u = unowned(); return u.length ? joinNames(u.slice(0, 4).map(function (n) { return '“' + n + '”'; })) + (u.length > 4 ? ' and ' + (u.length - 4) + ' more' : '') + (u.length === 1 ? ' has' : ' have') + ' no owner yet. Tap a name beside ' + (u.length === 1 ? 'it' : 'each') + ', or share it as it is and decide together.' : ''; }
   function ownExtra(o) {
     var bits = [];
     if (o.bk >= 0 && o.bk < state.people.length) bits.push('bad days: ' + nameOf(o.bk));
@@ -2533,9 +2545,10 @@
   }
   // No names yet (still "Me" and "Them"): ask for them right above the list, so the chips and the copied list
   // say who owns what. The boxes are the same names as at the top of the stand.
+  var ownAsk = false;
   function renderOwnNames() {
     var box = $('own-names'), row = $('own-names-row'); if (!box || !row || solo()) { if (box) box.hidden = true; return; }
-    var ask = ownersList().length > 0 && state.people.some(function (p) { return placeholder(p); });
+    var ask = (ownersList().length > 0 || ownAsk) && state.people.some(function (p) { return placeholder(p); });
     if (!ask && !box.contains(document.activeElement)) { box.hidden = true; return; }
     box.hidden = false;
     if (row.children.length === state.people.length && box.contains(document.activeElement)) return;
@@ -2854,7 +2867,9 @@
       note: 'One clean page: each job, its owner and a box to tick. Fits A4 and US Letter. With nothing picked yet, it prints a blank list to fill in together.',
       before: function () {
         var noNames = ownersList().length && state.people.some(function (p) { return placeholder(p); });
-        if (noNames) status('Tip: type your names above the list, so it says who owns what.');
+        var ut = unownedText();
+        if (ut) status(ut);
+        else if (noNames) status('Tip: type your names above the list, so it says who owns what.');
       }
     });
   }
@@ -2885,6 +2900,14 @@
   }
 
   $('add-person').addEventListener('click', addPerson);
+  // "+ Add a person" right in the fridge list (a housemate who moved in): their name box opens just above the list
+  if ($('own-add-person')) $('own-add-person').addEventListener('click', function () {
+    if (state.people.length >= MAX) return;
+    ownAsk = true; addPerson();
+    var row = $('own-names-row'), ins = row ? row.querySelectorAll('input') : [];
+    if (ins.length) { ins[ins.length - 1].focus(); ins[ins.length - 1].scrollIntoView({ block: 'center' }); }
+    status('Added a person. Type their name just above the list, then tap them beside the jobs they own.');
+  });
   $('add-row').addEventListener('click', function () {
     // always "Other jobs" to start (never the library tab that happened to be open), then a guess from the name
     // you type, and the "Area" choice is right on the row (not folded away on a phone)

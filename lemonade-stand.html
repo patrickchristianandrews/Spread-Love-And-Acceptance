@@ -87,6 +87,9 @@
   .ls-owners h2{ margin:0 0 .4rem; font-size:1.3rem; }
   .ls-owners ol{ list-style:none; margin:0; padding:0; }
   .ls-own{ display:grid; grid-template-columns:1fr auto; gap:.3rem .6rem; align-items:start; padding:.7rem .4rem; border-bottom:1px dotted #EFD27A; }
+  .ls-own-addp{ margin-left:.4rem; min-height:36px; }
+  .ls-own-unowned{ margin:.6rem 0 0 !important; padding:.5rem .7rem; border-radius:10px; background:#FFF6D8; border:1px dashed #E2B94B; }
+  .ls-own-unowned[hidden]{ display:none !important; }
   .ls-own-job{ margin:0 !important; font-weight:600; overflow-wrap:break-word; hyphens:auto; -webkit-hyphens:auto; }
   .ls-own .remove{ grid-column:2; grid-row:1; }
   .ls-own-who{ grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:.4rem; }
@@ -994,7 +997,7 @@
 
 <section class="stand ls-owners" id="owners" aria-labelledby="owners-h">
   <h2 id="owners-h">No project needed: one owner per job</h2>
-  <p class="ls-panel-note">Skip the week of logging. Pick the jobs you go back and forth about most (up to ten), give each one an owner with one tap, then put the list on the fridge: print it, save a PDF, or send it as text. Owning a job means you do it, or you make sure it gets done.</p>
+  <p class="ls-panel-note">Skip the week of logging. Pick the jobs you go back and forth about most (up to ten, or sixteen with three or more people), give each one an owner with one tap, then put the list on the fridge: print it, save a PDF, or send it as text. Owning a job means you do it, or you make sure it gets done.</p>
   <div class="ls-own-names" id="own-names" role="group" aria-labelledby="own-names-h" hidden>
     <p id="own-names-h"><strong>Whose list is it?</strong> Type your names, so the list says who owns what (not &ldquo;Me&rdquo; and &ldquo;Them&rdquo;).</p>
     <div class="ls-own-names-row" id="own-names-row"></div>
@@ -1007,10 +1010,11 @@
     <button type="button" class="add-row" id="own-add-go" style="margin:0">Add it</button>
   </div>
   <p class="ls-panel-note ls-own-full" id="own-full" role="status" hidden>That&rsquo;s ten, the most for one list. Swap one out to add another.</p>
-  <p class="ls-panel-note" style="margin-top:1rem !important"><strong>2. One owner each</strong></p>
+  <p class="ls-panel-note" style="margin-top:1rem !important"><strong>2. One owner each</strong> <button type="button" class="ls-link-btn ls-own-addp" id="own-add-person">+ Add a person</button></p>
   <label class="ls-check ls-own-more-l" hidden><input type="checkbox" id="own-more" autocomplete="off"> Add a backup for bad days or time away, and what &ldquo;done&rdquo; means (optional)</label>
   <p class="ls-panel-note" id="own-empty">Nothing picked yet.</p>
   <ol id="own-list"></ol>
+  <p class="ls-panel-note ls-own-unowned" id="own-unowned" role="status" hidden></p>
   <div class="ls-own-fridge" id="own-fridge"></div>
   <div class="ls-keepask" data-keepask id="keepask-own" hidden><p class="ls-keepask-q">Keep this list on this device so it&rsquo;s here tomorrow?</p><div class="ls-keepask-btns"><button type="button" data-keep-yes>Keep it</button><button type="button" data-keep-no>Not now</button></div><p class="ls-keepask-done" role="status" aria-live="polite" hidden></p></div>
   <p class="ls-status ls-own-status" id="own-status" role="status" aria-live="polite"></p>
