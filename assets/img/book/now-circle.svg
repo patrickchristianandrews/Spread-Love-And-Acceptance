@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 691" width="540" height="691" role="img" aria-labelledby="fig-now-circle-t fig-now-circle-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-now-circle-t">Your circle of control: three rings</title>
+<desc id="fig-now-circle-d">Three rings, one inside the other. In the centre, in your hands: your words, effort, tone, rest, limits and what you ask for. Around it, what you can influence but not decide: you can ask, explain, invite and offer. Outside, what is not yours: their mood, their past, their pace, whether they agree. Most exhaustion comes from pouring energy into the outer ring.</desc>
+
+<rect x="1" y="1" width="538" height="689" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Your circle of control</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Spend your energy from the middle out.</text>
+<circle cx="270" cy="334" r="228" fill="#F3EEE2" stroke="#5A5346" stroke-width="1.5" stroke-dasharray="6 6"/>
+<circle cx="270" cy="334" r="156" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<circle cx="270" cy="334" r="86" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2.5"/>
+<text x="270" y="316" font-size="21" font-weight="bold" fill="#3E6B4C" text-anchor="middle">In your</text>
+<text x="270" y="340" font-size="21" font-weight="bold" fill="#3E6B4C" text-anchor="middle">hands</text>
+<text x="270" y="368" font-size="18" text-anchor="middle">words, tone,</text>
+<text x="270" y="390" font-size="18" text-anchor="middle">rest, limits</text>
+<text x="270" y="212" font-size="20" font-weight="bold" fill="#7A5620" text-anchor="middle">You can influence</text>
+<text x="270" y="236" font-size="18" font-style="italic" text-anchor="middle">ask, explain, offer</text>
+<text x="270" y="446" font-size="18" font-style="italic" text-anchor="middle">they still choose</text>
+<text x="270" y="138" font-size="20" font-weight="bold" fill="#5A5346" text-anchor="middle">Not yours to decide</text>
+<text x="270" y="162" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">their mood, past, pace</text>
+<text x="270" y="518" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">whether they agree</text>
+<rect x="28" y="582" width="484" height="62" rx="12" fill="#ECE2C4"/>
+<text x="270" y="608" font-size="19" font-style="italic" text-anchor="middle">Most exhaustion comes from pouring</text>
+<text x="270" y="632" font-size="19" font-style="italic" text-anchor="middle">energy into the outer ring.</text>
+<text x="28" y="665" font-size="18" font-style="italic" fill="#5A5346">Illustration.</text>
+</svg>

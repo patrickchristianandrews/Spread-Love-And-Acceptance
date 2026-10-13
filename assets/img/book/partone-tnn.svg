@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 503.28" width="540" height="503.28" role="img" aria-labelledby="fig-partone-tnn-t fig-partone-tnn-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-partone-tnn-t">Then, Now and Next: the three chapters of Part One</title>
+<desc id="fig-partone-tnn-d">A timeline with three stops. Then: where your lens came from, the rules you learned at home. Now: your wiring and today’s weather, how you run and what you need. Next: who you are becoming, small steps toward what matters. An arrow carries forward only what you choose. The past is not yours to change; what you carry forward is.</desc>
+
+<rect x="1" y="1" width="538" height="501.28" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Then, Now, Next</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">The three chapters of Part One, about you.</text>
+<line x1="40" y1="148" x2="500" y2="148" stroke="#D9CBA3" stroke-width="6" stroke-linecap="round"/>
+<line x1="470" y1="148" x2="506" y2="148" stroke="#D9CBA3" stroke-width="6" stroke-linecap="round"/>
+<path d="M496 136.0 L514 148.0 L496 160.0 Z" fill="#D9CBA3"/>
+<circle cx="108.667" cy="148" r="34" fill="#FCF9F1" stroke="#2F5F8A" stroke-width="3"/>
+<circle cx="102.667" cy="142" r="20" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="3"/>
+<line x1="116.667" y1="156" x2="132.667" y2="172" stroke="#2F5F8A" stroke-width="5" stroke-linecap="round"/>
+<text x="108.667" y="218" font-size="23" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Then</text>
+<text x="108.667" y="246" font-size="19" font-weight="bold" text-anchor="middle"><tspan x="108.667" dy="0">Where your</tspan><tspan x="108.667" dy="24.32">lens came</tspan><tspan x="108.667" dy="24.32">from</tspan></text>
+<text x="108.667" y="320.64" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle"><tspan x="108.667" dy="0">the rules you</tspan><tspan x="108.667" dy="24.32">learned</tspan><tspan x="108.667" dy="24.32">growing up</tspan></text>
+<circle cx="270" cy="148" r="34" fill="#FCF9F1" stroke="#7A5620" stroke-width="3"/>
+<circle cx="262" cy="140" r="13" fill="#F3D9A0" stroke="#A8792F" stroke-width="2"/>
+<line x1="280" y1="140" x2="285" y2="140" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="274.728" y1="152.728" x2="278.263" y2="156.263" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="262" y1="158" x2="262" y2="163" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="249.272" y1="152.728" x2="245.737" y2="156.263" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="244" y1="140" x2="239" y2="140" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="249.272" y1="127.272" x2="245.737" y2="123.737" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="262" y1="122" x2="262" y2="117" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<line x1="274.728" y1="127.272" x2="278.263" y2="123.737" stroke="#A8792F" stroke-width="2" stroke-linecap="round"/>
+<path d="M256.0 166.0 h34 a10 10 0 0 0 0 -20 a13 13 0 0 0 -24 -3 a9 9 0 0 0 -10 23 z" fill="#FCF9F1" stroke="#7A5620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="218" font-size="23" font-weight="bold" fill="#7A5620" text-anchor="middle">Now</text>
+<text x="270" y="246" font-size="19" font-weight="bold" text-anchor="middle"><tspan x="270" dy="0">Your wiring</tspan><tspan x="270" dy="24.32">and today’s</tspan><tspan x="270" dy="24.32">weather</tspan></text>
+<text x="270" y="320.64" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle"><tspan x="270" dy="0">how you run,</tspan><tspan x="270" dy="24.32">and what you</tspan><tspan x="270" dy="24.32">need</tspan></text>
+<circle cx="431.333" cy="148" r="34" fill="#FCF9F1" stroke="#3E6B4C" stroke-width="3"/>
+<circle cx="431.333" cy="148" r="22" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="3"/>
+<path d="M431.33333333333337 132.0 L437.33333333333337 148.0 L431.33333333333337 164.0 L425.33333333333337 148.0 Z" fill="#3E6B4C"/>
+<circle cx="431.333" cy="148" r="3" fill="#FCF9F1"/>
+<text x="431.333" y="218" font-size="23" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Next</text>
+<text x="431.333" y="246" font-size="19" font-weight="bold" text-anchor="middle"><tspan x="431.333" dy="0">Who you are</tspan><tspan x="431.333" dy="24.32">becoming</tspan></text>
+<text x="431.333" y="296.32" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle"><tspan x="431.333" dy="0">small steps</tspan><tspan x="431.333" dy="24.32">toward what</tspan><tspan x="431.333" dy="24.32">matters</tspan></text>
+<rect x="28" y="395.28" width="484" height="86" rx="14" fill="#ECE2C4"/>
+<text x="270" y="429.28" font-size="20" font-weight="bold" text-anchor="middle">The past isn’t yours to change.</text>
+<text x="270" y="457.28" font-size="20" font-style="italic" text-anchor="middle">What you carry forward is.</text>
+</svg>

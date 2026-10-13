@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 833.32" width="540" height="833.32" role="img" aria-labelledby="fig-next-steps-t fig-next-steps-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-next-steps-t">Shaping who you are becoming: a kind plan in seven steps</title>
+<desc id="fig-next-steps-d">Seven stepping stones in a loop. Start with what matters: two or three plain words. Pick one small goal. Name what gets in the way. Make the step tiny and repeatable. Decide ahead: if this happens, then I do that, with a smaller backup for bad days. Ask for support. Look back kindly once a month, then go round again. If the plan isn’t working, change the plan, not your opinion of yourself.</desc>
+<defs><marker id="fig-next-steps-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker><marker id="fig-next-steps-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
+<rect x="1" y="1" width="538" height="831.32" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">A kind plan for change</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Seven small steps, and round again.</text>
+<rect x="28" y="98" width="430" height="98.32" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<circle cx="58" cy="147.16" r="17" fill="#3E6B4C"/>
+<text x="58" y="154.16" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">1</text>
+<text x="88" y="129" font-size="21" font-weight="bold">What matters to me?</text>
+<text x="88" y="154" font-size="19" fill="#5A5346"><tspan x="88" dy="0">two or three plain words: calm,</tspan><tspan x="88" dy="24.32">close, rested</tspan></text>
+<line x1="58" y1="198.32" x2="58" y2="212.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="216.32" width="430" height="74" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="253.32" r="17" fill="#7A5620"/>
+<text x="58" y="260.32" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>
+<text x="88" y="247.32" font-size="21" font-weight="bold">One small goal</text>
+<text x="88" y="272.32" font-size="19" fill="#5A5346">in plain words</text>
+<line x1="58" y1="292.32" x2="58" y2="306.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="310.32" width="430" height="49" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="334.82" r="17" fill="#7A5620"/>
+<text x="58" y="341.82" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">3</text>
+<text x="88" y="341.32" font-size="21" font-weight="bold">What gets in the way?</text>
+<line x1="58" y1="361.32" x2="58" y2="375.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="379.32" width="430" height="74" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="416.32" r="17" fill="#7A5620"/>
+<text x="58" y="423.32" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">4</text>
+<text x="88" y="410.32" font-size="21" font-weight="bold">A tiny, repeatable step</text>
+<text x="88" y="435.32" font-size="19" fill="#5A5346">smaller than feels useful</text>
+<line x1="58" y1="455.32" x2="58" y2="469.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="473.32" width="430" height="74" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="510.32" r="17" fill="#7A5620"/>
+<text x="58" y="517.32" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">5</text>
+<text x="88" y="504.32" font-size="21" font-weight="bold">If ___, then I ___</text>
+<text x="88" y="529.32" font-size="19" fill="#5A5346">plus a backup for bad days</text>
+<line x1="58" y1="549.32" x2="58" y2="563.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="567.32" width="430" height="74" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="604.32" r="17" fill="#7A5620"/>
+<text x="58" y="611.32" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">6</text>
+<text x="88" y="598.32" font-size="21" font-weight="bold">Ask for support</text>
+<text x="88" y="623.32" font-size="19" fill="#5A5346">as information, not a demand</text>
+<line x1="58" y1="643.32" x2="58" y2="657.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-next-steps-ar-5a5346)"/>
+<rect x="28" y="661.32" width="430" height="74" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<circle cx="58" cy="698.32" r="17" fill="#2F5F8A"/>
+<text x="58" y="705.32" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">7</text>
+<text x="88" y="692.32" font-size="21" font-weight="bold">Look back kindly</text>
+<text x="88" y="717.32" font-size="19" fill="#5A5346">once a month</text>
+<path d="M460 698.3199999999999 H492 V128.0 H468" fill="none" stroke="#3E6B4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-next-steps-ar-3e6b4c)"/>
+<text x="514" y="398.16" font-size="18" font-style="italic" fill="#3E6B4C" text-anchor="middle" transform="rotate(-90 514 398.16)">round again</text>
+<rect x="28" y="749.32" width="484" height="62" rx="12" fill="#ECE2C4"/>
+<text x="270" y="775.32" font-size="19" font-style="italic" text-anchor="middle">If a plan isn’t working, change the plan,</text>
+<text x="270" y="799.32" font-size="19" font-style="italic" text-anchor="middle">not your opinion of yourself.</text>
+</svg>

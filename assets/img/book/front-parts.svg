@@ -11,7 +11,7 @@
 <text x="90" y="131.8" font-size="20" font-style="italic">How do I work?</text>
 <text x="90" y="160.7" font-size="19" fill="#5A5346"><tspan x="90" dy="0">Then, Now and Next: where your</tspan><tspan x="90" dy="24.32">lens came from, how you run today,</tspan><tspan x="90" dy="24.32">and who you are becoming.</tspan></text>
 <line x1="60" y1="236.64" x2="60" y2="282.64" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-front-parts-ar-5a5346)"/>
-<text x="84" y="266.64" font-size="19" font-style="italic" fill="#5A5346"><tspan x="84" dy="0">You bring yourself into every shared</tspan><tspan x="84" dy="24.32">life.</tspan></text>
+<text x="84" y="266.64" font-size="19" font-style="italic" fill="#5A5346">You bring yourself into it.</text>
 <rect x="28" y="292.64" width="428" height="186.96" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
 <circle cx="60" cy="326.64" r="18" fill="#7A5620"/>
 <text x="60" y="333.64" font-size="20" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>

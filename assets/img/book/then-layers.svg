@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 631.36" width="540" height="631.36" role="img" aria-labelledby="fig-then-layers-t fig-then-layers-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-then-layers-t">Three layers in every reaction</title>
+<desc id="fig-then-layers-d">Three stacked layers, like ground. Bottom: your wiring (temperament, senses, pace), which changes very little; the move is to work with it. Middle: patterns life taught you (family, culture, school, old hurts), which change often but slowly; the move is to work on them, kindly. Top: today’s conditions (sleep, stress, hunger, load), which change hour to hour; the move is to work around them. Most reactions are a mix of all three.</desc>
+
+<rect x="1" y="1" width="538" height="629.36" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">You’re not one thing</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Three layers in every reaction. Ask which one is</tspan><tspan x="28" dy="24.32">doing most of the work.</tspan></text>
+<rect x="28" y="122.32" width="484" height="131.32" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<text x="46" y="155.32" font-size="21" font-weight="bold">Today’s conditions</text>
+<text x="46" y="181.32" font-size="19" fill="#5A5346"><tspan x="46" dy="0">Sleep, stress, hunger, the load</tspan><tspan x="46" dy="24.32">you carry, the room</tspan></text>
+<text x="46" y="233.64" font-size="19" font-style="italic" fill="#2F5F8A">Changes: hour to hour</text>
+<rect x="348" y="153.23" width="150" height="69.5" rx="16" fill="#FCF9F1" stroke="#2F5F8A" stroke-width="2"/>
+<text x="423" y="180.23" font-size="19" font-weight="bold" fill="#2F5F8A" text-anchor="middle"><tspan x="423" dy="0">Work</tspan><tspan x="423" dy="24.32">around it</tspan></text>
+<rect x="28" y="261.64" width="484" height="131.32" rx="6" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="46" y="294.64" font-size="21" font-weight="bold">Patterns life taught you</text>
+<text x="46" y="320.64" font-size="19" fill="#5A5346"><tspan x="46" dy="0">Settings left by family, culture,</tspan><tspan x="46" dy="24.32">school and old hurts</tspan></text>
+<text x="46" y="372.96" font-size="19" font-style="italic" fill="#7A5620">Changes: often, slowly</text>
+<rect x="348" y="292.55" width="150" height="69.5" rx="16" fill="#FCF9F1" stroke="#7A5620" stroke-width="2"/>
+<text x="423" y="319.55" font-size="19" font-weight="bold" fill="#7A5620" text-anchor="middle"><tspan x="423" dy="0">Work on it,</tspan><tspan x="423" dy="24.32">kindly</tspan></text>
+<rect x="28" y="400.96" width="484" height="131.32" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="46" y="433.96" font-size="21" font-weight="bold">Your wiring</text>
+<text x="46" y="459.96" font-size="19" fill="#5A5346"><tspan x="46" dy="0">Temperament, senses, pace,</tspan><tspan x="46" dy="24.32">how you take things in</tspan></text>
+<text x="46" y="512.28" font-size="19" font-style="italic" fill="#3E6B4C">Changes: very little</text>
+<rect x="348" y="431.87" width="150" height="69.5" rx="16" fill="#FCF9F1" stroke="#3E6B4C" stroke-width="2"/>
+<text x="423" y="458.87" font-size="19" font-weight="bold" fill="#3E6B4C" text-anchor="middle"><tspan x="423" dy="0">Work with</tspan><tspan x="423" dy="24.32">it</tspan></text>
+<text x="28" y="559.28" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. A rule of thumb from this book: change</tspan><tspan x="28" dy="23.04">the conditions today, work with the wiring always,</tspan><tspan x="28" dy="23.04">and work on the patterns over time.</tspan></text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 736.68" width="540" height="736.68" role="img" aria-labelledby="fig-now-check-t fig-now-check-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-now-check-t">Where is this feeling coming from? A four-step self-check</title>
+<desc id="fig-now-check-d">Four steps going down. One: name it, even roughly; if words are hard, start with where you feel it in your body. Two: is it about now, or does it feel older? Three: which layer is it, wiring, an old pattern, or today’s conditions? Four: what does it need, such as food, rest, space, a heads-up, a fact check, or a talk later. Do it once the first wave has passed.</desc>
+<defs><marker id="fig-now-check-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="734.68" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">Where is this feeling coming</tspan><tspan x="28" dy="32">from?</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Four small questions, once the first wave has</tspan><tspan x="28" dy="24.32">passed.</tspan></text>
+<rect x="28" y="154.32" width="484" height="98.32" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<circle cx="58" cy="203.48" r="17" fill="#2F5F8A"/>
+<text x="58" y="210.48" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">1</text>
+<text x="88" y="185.32" font-size="21" font-weight="bold">Name it</text>
+<text x="88" y="210.32" font-size="19" fill="#5A5346"><tspan x="88" dy="0">A word or two is enough. Or start with</tspan><tspan x="88" dy="24.32">the body: where do you feel it?</tspan></text>
+<line x1="58" y1="255.64" x2="58" y2="279.64" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-now-check-ar-5a5346)"/>
+<rect x="28" y="284.64" width="484" height="98.32" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<circle cx="58" cy="333.8" r="17" fill="#2F5F8A"/>
+<text x="58" y="340.8" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>
+<text x="88" y="315.64" font-size="21" font-weight="bold">Now, or older?</text>
+<text x="88" y="340.64" font-size="19" fill="#5A5346"><tspan x="88" dy="0">Is the feeling the size of the moment, or is</tspan><tspan x="88" dy="24.32">something left over?</tspan></text>
+<line x1="58" y1="385.96" x2="58" y2="409.96" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-now-check-ar-5a5346)"/>
+<rect x="28" y="414.96" width="484" height="98.32" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="464.12" r="17" fill="#7A5620"/>
+<text x="58" y="471.12" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">3</text>
+<text x="88" y="445.96" font-size="21" font-weight="bold">Which layer?</text>
+<text x="88" y="470.96" font-size="19" fill="#5A5346"><tspan x="88" dy="0">Wiring, an old pattern, or today’s</tspan><tspan x="88" dy="24.32">conditions. Pick the biggest part.</tspan></text>
+<line x1="58" y1="516.28" x2="58" y2="540.28" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-now-check-ar-5a5346)"/>
+<rect x="28" y="545.28" width="484" height="98.32" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<circle cx="58" cy="594.44" r="17" fill="#3E6B4C"/>
+<text x="58" y="601.44" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">4</text>
+<text x="88" y="576.28" font-size="21" font-weight="bold">What does it need?</text>
+<text x="88" y="601.28" font-size="19" fill="#5A5346"><tspan x="88" dy="0">Food, rest or space. A heads-up. A fact</tspan><tspan x="88" dy="24.32">check. A talk later, once settled.</tspan></text>
+<text x="28" y="664.6" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">This book’s own four steps. Finding words for</tspan><tspan x="28" dy="23.04">feelings is hard for many people; the body is a good</tspan><tspan x="28" dy="23.04">place to start.</tspan></text>
+</svg>
