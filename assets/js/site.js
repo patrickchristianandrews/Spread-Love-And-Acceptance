@@ -728,11 +728,11 @@
   ];
   // the groups on /by-relationship.html (page names without .html); the menu's own groups are added below
   var FOCUS_PAGES = {
-    'just-me': 'self-path know-yourself wavelength communication-style-quiz wiring-card growing-up wired-differently tools/frequency-calibration workpapers/fill/suite quick-checks workpapers/wp-02-how-much-are-you-carrying library/stress wp-11 on-my-own coming-out teens ladder',
-    'couples': 'how-to-stop-fighting-with-your-partner pursue-withdraw check-ins workpapers/wp-13-daily-check-in love-languages apology-languages turning-toward complacency touchstones neurodivergent-relationships lemonade-stand chore-chart-for-couples invisible-labor-mental-load share-the-load money-together prog-01 more-than-two gaming-and-time-together different-hours long-distance coming-home when-one-is-ill two-faiths family-obligations new-parent empty-nest retired-together refusals',
+    'just-me': 'how-you-take-things-in self-path know-yourself wavelength communication-style-quiz wiring-card growing-up wired-differently tools/frequency-calibration workpapers/fill/suite quick-checks workpapers/wp-02-how-much-are-you-carrying library/stress wp-11 on-my-own coming-out teens ladder',
+    'couples': 'new-relationship write-it-through how-to-stop-fighting-with-your-partner pursue-withdraw check-ins workpapers/wp-13-daily-check-in love-languages apology-languages turning-toward complacency touchstones neurodivergent-relationships lemonade-stand chore-chart-for-couples invisible-labor-mental-load share-the-load money-together prog-01 more-than-two gaming-and-time-together different-hours long-distance coming-home when-one-is-ill two-faiths family-obligations new-parent empty-nest retired-together refusals',
     'friends': 'friends teens relationships signal-translator conversation-reader apology-languages sent-this turning-toward refusals',
-    'family': 'parents teens adhd-kids foster-and-kinship new-parent frequency-buddies grandparents grown-up-children family-rifts family-obligations two-faiths caregivers neurodivergent-relationships',
-    'co-parents': 'co-parenting on-my-own parents teens signal-translator',
+    'family': 'stepfamily parents teens adhd-kids foster-and-kinship new-parent frequency-buddies grandparents grown-up-children family-rifts family-obligations two-faiths caregivers neurodivergent-relationships',
+    'co-parents': 'co-parenting stepfamily on-my-own parents teens signal-translator write-it-through',
     'housemates': 'sharing-a-room share-the-load chore-chart-for-couples relationships lemonade-stand workpapers/wp-03-one-owner-per-job workpapers/calculators/is-the-setup-working-quick is-the-setup-working',
     'work': 'work appreciation-at-work workpapers/wp-09-say-it-so-it-lands library/teams coming-out different-hours groups for-counselors wiring-card',
     'life-changes': 'new-parent grown-up-children money-together coming-home when-one-is-ill caregivers empty-nest retired-together grief on-my-own coming-out library/life',
@@ -857,13 +857,17 @@
   var treeN = 0;
   function buildTree(g, mode, openAll) {
     var T = menuTree(g), ul = el('ul', { class: 'tol-tree' + (mode === 'panel' ? ' tol-picks' : '') });
+    // each page shows its one-line note under its name, so people can see what it is before they tap
     function link(it) {
-      var a = mode === 'panel' ? el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(menuLabel(it)) + '</span>')
-        : el('a', { href: it.href }, esc(menuLabel(it)));
+      var note = it.note ? '<small class="tol-mi-n">' + esc(it.note) + '</small>' : '';
+      var a = mode === 'panel' ? el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(menuLabel(it)) + note + '</span>')
+        : el('a', { href: it.href }, '<span class="tol-mi"><span class="tol-mi-t">' + esc(menuLabel(it)) + '</span>' + note + '</span>');
       if (it.lang) a.setAttribute('lang', it.lang);
       if (isHere(it)) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); return li;
     }
+    // the top bar's list opens with a line saying what this section holds
+    if (mode === 'drop' && g.blurb) ul.appendChild(el('li', { class: 'tol-drop-blurb', role: 'presentation' }, esc(g.blurb)));
     // Start here opens with "Focus on what I'm learning" (the top bar) and a small, kind progress line
     if (g.id === 'start') {
       if (mode === 'drop') { var fli = el('li', { class: 'tol-focus-li' }); fli.appendChild(focusLine('drop')); ul.appendChild(fli); }
@@ -907,6 +911,14 @@
       if (openAll || sm.items.some(isHere)) set(true);
       li.appendChild(btn); li.appendChild(list); ul.appendChild(li);
     });
+    // never a dead end: every section ends with the explorer, already filtered to this section
+    var EXPLORE_IN = { start: '', 'new': '?sort=new', rel: '', load: '?need=load', talk: '?need=talk', self: '?need=self', play: '?need=calm', media: '?need=play', read: '?need=read', about: '' };
+    if (g.id !== 'about') {
+      var ex = el('li', { class: 'tol-explore-li' });
+      ex.appendChild(el('a', { href: '/explore.html' + (EXPLORE_IN[g.id] || ''), class: 'tol-explore-a' + (mode === 'panel' ? ' tol-row' : '') },
+        (mode === 'panel' ? '<span class="tol-title">' : '<span class="tol-mi"><span class="tol-mi-t">') + esc(g.id === 'start' || g.id === 'new' ? 'Everything on this site, with filters' : 'See everything in ' + (g.name || g.title)) + ' →' + (mode === 'panel' ? '</span>' : '</span></span>')));
+      ul.appendChild(ex);
+    }
     return ul;
   }
 
@@ -926,7 +938,7 @@
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
         var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here"' + (esPage() ? ' lang="es"' : '') + '>' + T('you are here', 'estás aquí') + '</span>' : '';
-        sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span>'));
+        sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span>' + (s.blurb ? '<span class="tol-acc-blurb">' + esc(s.blurb) + '</span>' : '')));
         // One section open at a time keeps the list short
         sec.addEventListener('toggle', function () {
           if (!sec.open) return;
@@ -1160,10 +1172,19 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a> <button type="button" data-tol-exit>' + T('Leave this site quickly', 'Salir rápido de este sitio') + '</button>'));
-    panel.appendChild(el('p', { class: 'tol-panel-es tol-panel-book' }, '<span aria-hidden="true">&#128214;</span> <a href="/book/index.html">' + T('Read the book', 'Leer el libro') + '</a>' + T(', from the beginning', ' (en inglés), desde el principio')));
+    // the pages most people come for, one tap each (the sections below hold everything else)
+    panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('Popular pages', 'Páginas más usadas') },
+      '<p class="tol-panel-quick-h">' + T('Popular', 'Lo más usado') + '</p><ul>' +
+      [['/explore.html', '&#129517;', T('Everything on this site', 'Todo el sitio (en inglés)')],
+       ['/book/index.html', '&#128214;', T('Read the book', 'Leer el libro')],
+       ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
+       ['/ladder.html', '&#127807;', T('Calm down now', 'Calmarte ahora')],
+       ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
+       ['/by-relationship.html', '&#128101;', T('Guides by relationship', 'Guías por relación')]
+      ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === current ? ' aria-current="page"' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
-    panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     panel.appendChild(buildIndex({ accordion: true }));
+    panel.appendChild(el('div', { class: 'tol-panel-focus' }));
     // after the sections: where you left off, then settings in one button (Quiet mode, dark mode and the rest live there)
     panel.appendChild(el('div', { class: 'tol-panel-pickup', 'data-pickup': 'menu' }));
     var tools = el('div', { class: 'tol-panel-tools' });
@@ -1231,6 +1252,7 @@
       var qHead = qMain.querySelector('.read-head');
       if (qHead && qHead.parentNode === qMain) qHead.after(qx); else qMain.insertBefore(qx, qMain.firstChild);
     }
+    onThisPage(body);
     addTip(body);
     placeShare(body);
     loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
@@ -1515,6 +1537,7 @@
       '</nav>' +
       '<span class="tol-foot-links">' +
         '<a href="/safety.html">Not safe at home?</a>' +
+        '<a href="/explore.html">Everything on this site</a>' +
         '<a href="/contents.html">All pages</a>' +
         '<a href="/membership.html">' + (CONFIG.openAll ? 'Email updates' : 'Membership') + '</a>' +
         '<a href="/roadmap.html">Roadmap</a>' +
@@ -2278,6 +2301,8 @@
   }
   // for other pages (the 404 page, the glossary): TOLSearch.find('words', function (pages, fixedWords) {...})
   if (/[?&]searchdebug=1\b/.test(location.search)) window.__tolSearchDebug = { terms: searchTerms, pages: function (q) { return searchPages(searchData, q).slice(0, 6).map(function (h) { return h.p.u + ' ' + Math.round(h.score); }); }, act: actFor };
+  // the menu's own lists, for pages that show the whole site (/explore.html): read-only copies of what the menu uses
+  window.TOLSiteMap = { sections: SECTIONS, menu: MENU, areasOf: areasOf, focusAreas: FOCUS_AREAS, isTool: function (u) { return TOOL_URL.test(String(u || '').split(/[?#]/)[0]); }, plainLabel: function (u) { return PLAIN_LABEL[u] || ''; } };
   window.TOLSearch = { load: loadSearch, correct: function (w) { return correct(fold(w)) || null; },
     find: function (q, cb) { loadSearch(function (d) { if (!d) return cb([], q); var R; try { R = smartSearch(d, q); } catch (err) { return cb([], q); } cb(R.hits.map(function (x) { return x.p; }), R.used.join(' ')); }); } };
 
@@ -2324,6 +2349,63 @@
     var head = main.querySelector('.read-head');
     if (head) head.appendChild(nav); else main.insertBefore(nav, main.firstChild);
   }
+
+  // ---------- "What's on this page": long guides say what they hold, right under the title ----------
+  // A small box that opens to the page's sections (from its own h2 headings). It names the first few even while
+  // closed. On a wide screen the outline beside the text (wide-screens.js) does the same job, so the box steps aside.
+  function onThisPage(body) {
+    var main = document.querySelector('main.read');
+    if (!main || current === '/index.html' || /^\/(book|workpapers\/fill|legal)\//.test(current) || body.classList.contains('is-game') || main.querySelector('.tol-onpage')) return;
+    // a page that already lists its parts near the top keeps its own list
+    if (main.querySelector('nav[aria-label="On this page"], .gp-jump, .jump, .jump-links, [data-jump], .tol-jump, .toc, .page-toc')) return;
+    var hs = Array.prototype.filter.call(main.querySelectorAll('h2'), function (h) {
+      return h.textContent.trim().length > 2 && h.getClientRects().length && !h.closest('aside, nav, details, .tol-pud-card, .tol-read-wrap, .tol-fp-note, .no-onpage, [hidden]');
+    });
+    if (hs.length < 4 || (main.textContent || '').length < 3500) return;
+    var used = {};
+    function slug(t) { var b = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'part', id = b, n = 2; while (used[id] || document.getElementById(id)) id = b + '-' + n++; used[id] = 1; return id; }
+    var items = hs.slice(0, 20).map(function (h) { if (!h.id) h.id = slug(h.textContent); return { id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, '') }; });
+    var peek = items.slice(0, 3).map(function (i) { return i.t; }).join(' · ') + (items.length > 3 ? ' · +' + (items.length - 3) + T(' more', ' más') : '');
+    var box = el('details', { class: 'tol-onpage no-bubble no-cheer no-dive' },
+      '<summary><span class="tol-onpage-k">' + T('What’s on this page', 'Lo que hay en esta página') + '</span><span class="tol-onpage-peek">' + esc(peek) + '</span></summary>' +
+      '<ol>' + items.map(function (i) { return '<li><a href="#' + esc(i.id) + '">' + esc(i.t) + '</a></li>'; }).join('') + '</ol>');
+    box.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+      var t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
+      e.preventDefault();
+      var reduce = document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+      t.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      try { history.replaceState(null, '', '#' + t.id); } catch (er) {}
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+      try { t.focus({ preventScroll: true }); } catch (er) {}
+    });
+    var head = main.querySelector(':scope > .read-head'), h1 = main.querySelector('h1'), lede = main.querySelector(':scope > .simple-lede, :scope > .lede');
+    var after = lede || head || (h1 && h1.parentNode === main ? h1 : null);
+    if (after) after.after(box); else main.insertBefore(box, main.firstChild);
+  }
+
+  // ---------- "Print a short version" (pages with a #ps-print button add html.ps-short, then print) ----------
+  // The short printout also carries the site's name and the page's address, and keeps the tips (the "try this"
+  // boxes and the step lists) with their headings, not only the words to use. Everything is put back after printing.
+  (function () {
+    var added = [];
+    window.addEventListener('beforeprint', function () {
+      var h = document.documentElement, main = document.querySelector('main');
+      if (!h.classList.contains('ps-short') || !main) return;
+      function keep(n) { if (n && !n.hasAttribute('data-print-short')) { n.setAttribute('data-print-short', ''); added.push(n); } }
+      Array.prototype.forEach.call(main.children, function (n) {
+        if (!n.matches('[data-keep-steps], .try-this, .tol-try, .gp-say, .tip, .ps-tip')) return;
+        keep(n);
+        for (var p = n.previousElementSibling; p; p = p.previousElementSibling) { if (/^H2$/.test(p.tagName)) { keep(p); break; } }
+      });
+      var head = el('p', { class: 'tol-print-head', 'data-print-short': '' }, 'Spread Love &amp; Acceptance · ' + esc(location.host + location.pathname) + ' · free, kind self-help');
+      main.insertBefore(head, main.firstChild); added.push(head);
+    });
+    window.addEventListener('afterprint', function () {
+      added.forEach(function (n) { if (n.classList.contains('tol-print-head')) n.remove(); else n.removeAttribute('data-print-short'); });
+      added = [];
+    });
+  })();
 
   // ---------- Breathe with me ----------
   // Six slow breaths, in for 4 seconds and out for 6 (about six a minute). Nothing is saved.

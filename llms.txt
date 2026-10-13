@@ -3,7 +3,7 @@
 > Spread Love & Acceptance is a young, independent start-up building The Objective Ledger: a free, growing suite of self-help tools for understanding yourself and sharing life kindly with the people around you. It brings together practical relationship tools, gentle games, calm breathing and sound spaces, and a plain-language library, with new tools and content added all the time. Everything you type stays on your device.
 
 Key facts:
-- Website: https://spreadloveandacceptance.com/ . Free to use; everything opens with a free email sign-up, and much of it needs nothing at all.
+- Website: https://spreadloveandacceptance.com/ . Free to use: every page, tool and chapter is open to everyone, with no sign-up, no account and no paid version. Email updates are optional.
 - Who it is for: anyone who wants to understand themselves and get along more kindly and fairly with others: partners, families, co-parents, friends, roommates, coworkers and caregivers, and people exploring on their own.
 - Themes: self-help, relationships, love, kindness, appreciation, acceptance, reconciliation and repair, calm, peace, harmony, breathing and quiet moments, connection, fairness and the invisible "mental load", and differences in how people are wired.
 - The Five Pillars: see the whole load; fix the setup, not the person; read your state first; tune how you send and receive; notice the quiet incentives.
@@ -143,8 +143,8 @@ Key facts:
 - [Chapter 10: Values, meaning and a good life](https://spreadloveandacceptance.com/book/understanding-10-values.html): What values are, how to find yours, what to do when two good things clash, and what old philosophy offers a busy, ordinary life today.
 - [Chapter 11: Healing after hurt](https://spreadloveandacceptance.com/book/understanding-11-healing.html): How hurt heals: repair after small ruptures, apologies that land, what forgiveness is and is not, rebuilding trust, and when to get more help.
 - [Chapter 12: Helping others well](https://spreadloveandacceptance.com/book/understanding-12-helping.html): How to help without taking over: ask what help is wanted, listen first, keep kind limits, help in a crisis, and look after yourself so you last.
-- [Part Three, Chapter 13](https://spreadloveandacceptance.com/book/understanding-13-anger.html): What anger is for, what it does in the body, steps for the hot minutes, why venting backfires, how to repair, and when anger becomes harm.
-- [Part Three, Chapter 14](https://spreadloveandacceptance.com/book/understanding-14-personality.html): Personality as dials, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.
+- [Part Three, Chapter 13: Anger, What It’s For and What to Do With It](https://spreadloveandacceptance.com/book/understanding-13-anger.html): What anger is for, what it does in the body, steps for the hot minutes, why venting backfires, how to repair, and when anger becomes harm.
+- [Part Three, Chapter 14: Personality, Temperament and Change](https://spreadloveandacceptance.com/book/understanding-14-personality.html): Personality as dials, not boxes: the Big Five, temperament, introverts and extraverts, how people change with age, and living with different people.
 - [Part Three, Chapter 15: Closeness and Love](https://spreadloveandacceptance.com/book/understanding-15-love.html): How closeness grows: love in many forms, intimacy as being known, feeling understood, attachment in adult love, and love across ages and relationship types.
 
 ## The book
@@ -181,7 +181,7 @@ Key facts:
 - [Fair Systems for Teams and Households](https://spreadloveandacceptance.com/library/teams.html): How fair systems work for teams and households: clear owners, blameless reviews, checklists, and why shared jobs slip when everyone owns them at once.
 - [Common Thinking Traps, Explained](https://spreadloveandacceptance.com/library/thinking.html): Plain-language guides to common thinking traps: why we jump to conclusions, expect the worst, remember selectively and misread each other, and what helps.
 - [Neurodiversity Explained: Autism, ADHD and Sensitivity](https://spreadloveandacceptance.com/library/wiring.html): Plain-language entries on differences in wiring: autism, ADHD, the double empathy problem, high sensitivity, sensory overload, personality and chronotype.
-- [Observational Podcast: The Kane and Christian Experience](https://spreadloveandacceptance.com/podcast-index.html): The Objective Ledger podcast series: episodes exploring workpapers, chapters, and real-world applications of the framework with Kane and Christian.
+- [The Podcast with Kane and Christian (Planned)](https://spreadloveandacceptance.com/podcast-index.html): A planned podcast with Kane and Christian on the ideas behind this site. No episodes are published yet; this page lists what is recorded and planned.
 - [Further Reading](https://spreadloveandacceptance.com/reading.html): Hand-picked articles from Psychology Today, Greater Good Magazine, The Gottman Institute and other trusted sources, sorted by topic and by the Five Pillars.
 
 ## Optional

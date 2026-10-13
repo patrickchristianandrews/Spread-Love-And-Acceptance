@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NKC6CQ9S66"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-NKC6CQ9S66', { page_location: location.origin + location.pathname }); // the address only: never a ?query or #part
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Everything on This Site: Every Page and Tool, With Filters</title>
+<meta name="description" content="Every free page, guide, tool, worksheet, game and book chapter on one page. Filter by what you need, who it is about, how long you have, and what kind of page it is.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/reading.css">
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/explore.js" defer></script>
+<style>
+  /* Everything on this site: filters, then a grid of small cards (built by explore.js from the menu's own lists) */
+  .read .ex-intro{ max-width:44rem; }
+  .ex-filters{ position:relative; margin:1rem 0 1.1rem; padding:.9rem 1rem 1rem; border:1px solid var(--line, #D9CBA3); border-radius:18px; background:var(--paper, #FFFBF2); }
+  .ex-filters label, .ex-k{ display:block; margin:0 0 .3rem; font:600 .74rem/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.07em; text-transform:uppercase; color:#6B4F8A; }
+  .ex-q{ width:100%; box-sizing:border-box; min-height:48px; padding:.55rem .9rem; font:1rem "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid #CDBDE6; border-radius:999px; }
+  .ex-q:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .ex-row{ margin:.85rem 0 0; }
+  .read .ex-chips{ display:flex; flex-wrap:wrap; gap:.4rem; margin:0 !important; padding:0 !important; list-style:none; }
+  .read .ex-chips li{ margin:0 !important; padding:0 !important; max-width:none !important; background:none !important; box-shadow:none !important; border:0 !important; }
+  .read .ex-chips li::before{ content:none !important; }
+  .ex-chips button{ min-height:44px; padding:.3rem .9rem; border-radius:999px; cursor:pointer; font:600 .92rem/1.2 "Lora", Georgia, serif; color:#3C2F58; background:#FFFDF7; border:1.5px solid #D9C8F0; }
+  .ex-chips button:hover{ border-color:#9A80C8; }
+  .ex-chips button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+  .ex-chips button:focus-visible, .ex-sel select:focus-visible, .ex-reset:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .ex-sel{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.6rem; margin:.85rem 0 0; }
+  .ex-sel select{ width:100%; min-height:44px; padding:.35rem .6rem; font:.95rem "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid #CDBDE6; border-radius:12px; }
+  .ex-status{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .9rem; margin:.9rem 0 0 !important; font-size:.95rem; }
+  .ex-reset{ min-height:44px; padding:.3rem .9rem; border-radius:999px; cursor:pointer; font:600 .9rem "Lora", Georgia, serif; color:#2B5B8C; background:none; border:1px dashed #8FB0D3; }
+  .ex-reset[hidden]{ display:none; }
+  .read .ex-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(15.5rem, 1fr)); gap:.7rem; margin:0 0 1.5rem !important; padding:0 !important; list-style:none; }
+  .read .ex-grid > li{ margin:0 !important; padding:0 !important; max-width:none !important; background:none !important; box-shadow:none !important; border:0 !important; }
+  .read .ex-grid > li::before{ content:none !important; }
+  .read .ex-grid > li[hidden]{ display:none !important; }
+  .read a.ex-card{ display:flex; flex-direction:column; gap:.3rem; height:100%; box-sizing:border-box; min-height:44px; padding:.8rem .95rem .85rem; border-radius:16px; text-decoration:none; color:var(--ink, #2B2620);
+    background:#FFFFFF; border:1px solid #E6DAF3; box-shadow:0 8px 20px -16px rgba(78,63,107,.55); }
+  .read a.ex-card:hover{ border-color:#B9A2DD; }
+  .read a.ex-card:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .ex-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; line-height:1.25; text-decoration:underline; text-decoration-color:#CDB8EA; text-underline-offset:3px; }
+  .ex-n{ font-size:.9rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+  .ex-m{ display:flex; flex-wrap:wrap; gap:.3rem; margin-top:auto; padding-top:.25rem; }
+  .ex-m span{ display:inline-block; padding:.1rem .5rem; border-radius:999px; font:500 .72rem/1.4 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.02em; color:#4E3F6B; background:#F4ECFB; }
+  .ex-m .ex-new{ color:#2F5E3E; background:#E3F2E7; }
+  .ex-m .ex-time{ color:#6B4A12; background:#FFF0D9; }
+  .ex-empty{ padding:1rem; border:1px dashed var(--line, #D9CBA3); border-radius:14px; }
+  .ex-empty[hidden]{ display:none; }
+  .ex-more{ margin:.2rem 0 2rem !important; text-align:center; }
+  .ex-more button{ min-height:48px; padding:.4rem 1.3rem; border-radius:999px; cursor:pointer; font:600 1rem "Lora", Georgia, serif; color:#FFFDF7; background:#4E3F6B; border:0; }
+  .ex-more[hidden]{ display:none; }
+  @media (max-width:640px){
+    .ex-filters{ margin-left:-4px; margin-right:-4px; padding:.75rem .75rem .85rem; }
+    .ex-sel{ grid-template-columns:1fr 1fr; }
+    .ex-sel > :first-child{ grid-column:1 / -1; }
+    .ex-chips button{ padding:.25rem .75rem; font-size:.88rem; }
+    .read .ex-grid{ grid-template-columns:1fr; gap:.5rem; }
+    .read a.ex-card{ padding:.7rem .8rem .75rem; }
+  }
+  html.tol-quiet .read a.ex-card{ box-shadow:none; background:#FFFDF7; border-color:var(--line, #D9CBA3); }
+  @media (prefers-color-scheme: dark){ html:not([data-theme="light"]):not(.tol-nodark) .ex-m span{ filter:invert(1) hue-rotate(180deg); } }
+  html[data-theme="dark"]:not(.tol-nodark) .ex-m span{ filter:invert(1) hue-rotate(180deg); }
+  @media print{ .ex-filters, .ex-more{ display:none !important; } .read .ex-grid > li[hidden]{ display:block !important; } }
+</style>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/explore.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/explore.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/explore.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Everything on This Site: Every Page and Tool, With Filters">
+<meta property="og:description" content="Every free page, guide, tool, worksheet, game and book chapter on one page. Filter by what you need, who it is about, how long you have, and what kind of page it is.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/explore.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Everything on This Site: Every Page and Tool, With Filters">
+<meta name="twitter:description" content="Every free page, guide, tool, worksheet, game and book chapter on one page. Filter by what you need, who it is about, how long you have, and what kind of page it is.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<!-- seo:end -->
+</head>
+<body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath>
+<main class="read" id="main">
+<header class="read-head"><p class="read-code">Start here · Everything on this site</p><h1>Everything on this site</h1></header>
+<p class="simple-lede ex-intro">Every guide, tool, worksheet, game and book chapter, in one place. Pick what you need, who it&rsquo;s about, or how long you have, and the list narrows as you choose. Everything is free, and nothing you choose here is saved or sent.</p>
+
+<section class="ex-filters no-bubble no-cheer" aria-label="Filters">
+  <label for="ex-q">Filter by words</label>
+  <input class="ex-q" id="ex-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Like &ldquo;sleep&rdquo;, &ldquo;money&rdquo; or &ldquo;teen&rdquo;">
+  <div class="ex-row">
+    <p class="ex-k" id="ex-need-k">What do you need?</p>
+    <ul class="ex-chips" role="group" aria-labelledby="ex-need-k" data-ex-need>
+      <li><button type="button" data-v="" aria-pressed="true">Anything</button></li>
+      <li><button type="button" data-v="talk" aria-pressed="false">Talk it through</button></li>
+      <li><button type="button" data-v="load" aria-pressed="false">Share the load</button></li>
+      <li><button type="button" data-v="calm" aria-pressed="false">Calm down</button></li>
+      <li><button type="button" data-v="self" aria-pressed="false">Know yourself</button></li>
+      <li><button type="button" data-v="family" aria-pressed="false">Family</button></li>
+      <li><button type="button" data-v="work" aria-pressed="false">Work</button></li>
+      <li><button type="button" data-v="health" aria-pressed="false">Health and body</button></li>
+      <li><button type="button" data-v="read" aria-pressed="false">Read and learn</button></li>
+      <li><button type="button" data-v="play" aria-pressed="false">Play</button></li>
+    </ul>
+  </div>
+  <div class="ex-sel">
+    <div><label for="ex-rel">Who it&rsquo;s about</label>
+      <select id="ex-rel">
+        <option value="">Anyone</option>
+        <option value="just-me">Just me</option>
+        <option value="couples">Couples and partners</option>
+        <option value="friends">Friends</option>
+        <option value="family">Family</option>
+        <option value="co-parents">Separated and co-parents</option>
+        <option value="housemates">Housemates</option>
+        <option value="work">Work and business</option>
+        <option value="life-changes">Life changes</option>
+      </select></div>
+    <div><label for="ex-time">How long you have</label>
+      <select id="ex-time">
+        <option value="">Any time</option>
+        <option value="1">About a minute</option>
+        <option value="10">Up to 10 minutes</option>
+        <option value="30">Half an hour or more</option>
+      </select></div>
+    <div><label for="ex-type">Kind of page</label>
+      <select id="ex-type">
+        <option value="">Any kind</option>
+        <option value="guide">Guide</option>
+        <option value="tool">Tool</option>
+        <option value="worksheet">Worksheet</option>
+        <option value="game">Game</option>
+        <option value="book">Book chapter</option>
+        <option value="media">Watch or listen</option>
+      </select></div>
+  </div>
+  <p class="ex-status" aria-live="polite"><span data-ex-count>Loading the list&hellip;</span> <button type="button" class="ex-reset" data-ex-reset hidden>Clear the filters</button></p>
+</section>
+
+<ul class="ex-grid no-bubble no-cheer" data-ex-grid aria-label="Pages"></ul>
+<p class="ex-empty" data-ex-empty hidden>Nothing fits all of those at once. Try fewer filters, <a href="/ask.html">ask Professor Puddles in your own words</a>, or <a href="/contents.html">see the plain list of every page</a>.</p>
+<p class="ex-more" data-ex-more hidden><button type="button">Show more</button></p>
+<noscript><p>This list needs JavaScript. The plain list of every page is on <a href="/contents.html">All pages</a>.</p></noscript>
+<p>Times are rough guides. Can&rsquo;t find something? Try <a href="/contents.html">the plain list of every page</a>, the search in the menu, or <a href="/ask.html">Professor Puddles</a>.</p>
+</main>
+</body>
+</html>

@@ -123,6 +123,7 @@
   <li><a href="#new-family">New families</a></li>
   <li><a href="#work">Work</a></li>
   <li><a href="#apart">Apart</a></li>
+  <li><a href="#without-talking">Close without much talking</a></li>
   <li><a href="#autistic-and-sensory">Without small talk</a></li>
   <li><a href="#when-it-feels-hard">When it feels hard</a></li>
   <li><a href="#ideas">Idea picker</a></li>
@@ -188,6 +189,17 @@
 
 <h2 id="on-your-own">On your own</h2>
 <p>Bonding isn’t only for couples and families. Being a regular somewhere, like a café, a class or a volunteer shift, slowly turns strangers into familiar faces. Pets are real company. And how you treat yourself matters too: speaking to yourself like a friend makes it easier to let others close.</p>
+
+<h2 id="without-talking">Close without much talking</h2>
+<p>Not everyone bonds through long talks, and that’s fine. Plenty of people feel closest side by side rather than face to face: a long-married couple, a dad and his teenage son, two friends who’ve known each other for years.</p>
+<ul>
+  <li><strong>Do something side by side.</strong> Cook, garden, fix the bike, do the crossword. The task carries the time, and talk comes if it comes.</li>
+  <li><strong>Share a car ride or a walk.</strong> Looking at the road ahead makes it easier to say things than looking at each other.</li>
+  <li><strong>Keep a small ritual.</strong> The morning tea, the Sunday walk, the same show every Thursday.</li>
+  <li><strong>Small acts say a lot.</strong> Warming their side of the car, saving them the last biscuit, a hand on the shoulder in passing.</li>
+  <li><strong>A few words still count.</strong> “I like doing this with you” is enough.</li>
+</ul>
+<p class="tol-try" data-keep-steps><strong>Words you could use:</strong> “Fancy a walk? No agenda.”</p>
 
 <h2 id="autistic-and-sensory">Bonding without eye contact or small talk</h2>
 <p>Many autistic people, and plenty of others, bond in ways that look different and are just as real. Eye contact and small talk are not required.</p>
@@ -276,6 +288,26 @@
   <li><a href="/book/understanding-5-belonging.html"><strong>The book, Chapter 5: belonging</strong><span>Attachment, trust and why we need each other.</span></a></li>
 </ul>
 <script src="/assets/js/bonding-ideas.js" defer></script>
+<script>
+/* ?who=partner (or friend, child, teen, parent, sibling, grandparent, housemate, coworker, me): the idea picker
+   starts on that person, so a link from a couple's page lands on partner ideas. Nothing is stored by this. */
+(function () {
+  'use strict';
+  var m = /[?&]who=([a-z-]+)/i.exec(location.search); if (!m) return;
+  var MAP = { partner: 'pa', partners: 'pa', couple: 'pa', pa: 'pa', child: 'ch', children: 'ch', kids: 'ch', ch: 'ch', teen: 'te', teens: 'te', te: 'te',
+    friend: 'fr', friends: 'fr', fr: 'fr', parent: 'pr', parents: 'pr', family: 'pr', pr: 'pr', sibling: 'si', siblings: 'si', si: 'si', grandparent: 'gr', grandchild: 'gr', gr: 'gr',
+    housemate: 'ho', housemates: 'ho', roommate: 'ho', ho: 'ho', coworker: 'co', coworkers: 'co', co: 'co', me: 'me', self: 'me', solo: 'me' };
+  var v = MAP[m[1].toLowerCase()]; if (!v) return;
+  function pick() {
+    var r = document.querySelector('#bd-picker input[name="bd-who"][value="' + v + '"]');
+    if (!r || r.checked) return;
+    r.checked = true;
+    r.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pick); else pick();
+})();
+</script>
+<p class="last-updated no-bubble" style="font-size:.88rem;color:var(--ink-soft)">Last updated: October 2026</p>
 </main>
 </body>
 </html>

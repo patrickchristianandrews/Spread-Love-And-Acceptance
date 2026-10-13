@@ -75,7 +75,7 @@ html.wit-literal .wit-help .wit-soft{ display:none; }
 .wit-sug-l{ font-weight:600; }
 .wit-ok{ color:var(--credit); font-weight:600; }
 
-.wit-safety{ margin:.6rem 0 1rem; padding:.7rem .95rem; border:2px solid var(--debit); border-radius:12px; background:var(--paper); }
+.wit-safety{ margin:.6rem 0 1rem; padding:.7rem .95rem; border:2px solid var(--debit) !important; border-radius:12px; background:var(--paper); }
 .wit-safety p{ margin:.3rem 0 !important; }
 
 .wit-acts{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin:.7rem 0 .3rem !important; }
@@ -153,3 +153,5 @@ html.wit-literal .wit-help .wit-soft{ display:none; }
 
 /* anything switched off stays off, whatever display a class gives it */
 .wit-tool [hidden], .wit-thread [hidden], .wit-inbox [hidden], .wit-tool[hidden], .wit-thread[hidden], .wit-inbox[hidden], .wit-turnbar[hidden], .wit-agreed[hidden]{ display:none !important; }
+/* the safety note keeps its red frame inside the site's soft bubbles */
+#main .wit-safety{ border:2px solid var(--debit) !important; }

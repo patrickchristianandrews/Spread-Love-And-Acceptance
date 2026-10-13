@@ -1393,7 +1393,7 @@
         if (c.k === 's') q.split = String(use); else { q.hrs = q.hrs || {}; q.hrs[c.k.slice(1)] = +use; }
         q.from.conf.splice(q.from.conf.indexOf(c), 1);
         if (!q.from.conf.length) delete q.from.conf;
-        save(); renderExtra(); renderSend(); renderFrom();
+        extraSig = ''; save(); renderExtra(); renderSend(); renderFrom();
         status(L('Done. Both devices can match now: send it back if you changed anything.', 'Listo. Si cambiaste algo, envíalo de vuelta para que los dos aparatos coincidan.'));
       }
       return;

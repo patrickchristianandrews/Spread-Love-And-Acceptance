@@ -52,6 +52,11 @@
   .dh-week input, .dh-week textarea{ box-sizing:border-box; width:100%; min-height:44px; padding:.45rem .7rem; font:1rem/1.5 "Lora", Georgia, serif; border:1px solid var(--ink-soft); border-radius:10px; background:var(--paper); color:var(--ink); }
   .dh-week textarea{ resize:vertical; }
   .dh-week #dh-out{ background:#FFFDF7; }
+  .dh-me{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem; margin:.3rem 0 .5rem; }
+  .dh-pick{ font:inherit; font-size:.92rem; min-height:40px; padding:.2rem .8rem; border-radius:999px; border:2px solid #C9D8EC; background:#fff; cursor:pointer; }
+  .dh-pick[aria-pressed="true"]{ background:#DCE8F6; border-color:var(--ink); font-weight:600; }
+  .dh-paste{ margin:.6rem 0; } .dh-paste > summary{ cursor:pointer; min-height:40px; display:inline-flex; align-items:center; color:var(--focus); text-decoration:underline; }
+  .dh-link{ font:inherit; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; min-height:32px; }
   .dh-two{ display:grid; gap:0 1rem; }
   @media (min-width:640px){ .dh-two{ grid-template-columns:1fr 1fr; } }
   .dh-row{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; align-items:center; margin:.7rem 0 .2rem !important; }
@@ -241,6 +246,7 @@
 <div class="pc-script dh-week no-bubble" id="our-week" data-keep-steps>
   <h3>Our week on one page</h3>
   <p>Fill it in together, or fill in your side and send it. Then copy it or share it as a text, so you both have the same week.</p>
+  <p class="dh-me" role="group" aria-label="Which one is you?"><span>Which one is you?</span> <button type="button" class="dh-pick" data-dh-me="0" aria-pressed="false">The first</button> <button type="button" class="dh-pick" data-dh-me="1" aria-pressed="false">The second</button></p>
   <div class="dh-two">
     <div><label for="dh-n1">Name</label><input id="dh-n1" type="text" placeholder="Jamie" autocomplete="off">
       <label for="dh-r1">Their shifts or work hours this week</label><textarea id="dh-r1" rows="2" placeholder="Nights Mon–Wed, 7 pm to 7:30 am"></textarea></div>
@@ -255,7 +261,11 @@
   <label for="dh-out">Our week, as a text</label>
   <textarea id="dh-out" rows="7" readonly></textarea>
   <p class="dh-row"><button type="button" class="dh-btn" id="dh-copy">Copy our week</button> <button type="button" class="dh-btn is-quiet" data-share data-share-from="#dh-out" data-share-url="none" data-share-result data-share-title="Our week on one page">Share it</button> <span id="dh-note" role="status"></span></p>
-  <p class="dh-small">Nothing is saved or sent from here. Copy or share it before you close the page.</p>
+  <details class="dh-paste"><summary>They sent you their week? Paste it here</summary>
+    <label for="dh-in">Paste the text they sent</label><textarea id="dh-in" rows="4" placeholder="Our week on one page&#10;Sam: Home office, 9 to 5 weekdays"></textarea>
+    <p class="dh-row"><button type="button" class="dh-btn is-quiet" id="dh-import">Fill it in from this</button></p>
+  </details>
+  <p class="dh-small">Kept on this device as you type, so it&rsquo;s here next time. Never sent anywhere unless you copy or share it. <button type="button" class="dh-link" id="dh-forget">Forget it on this device</button></p>
 </div>
 
 <h2 id="fair">Counting it fairly in the Lemonade Stand</h2>
@@ -285,6 +295,7 @@
   <h3>I work from home and end up doing everything. What can we do?</h3>
   <p>Being home isn’t the same as being free. Say your work hours out loud, agree which jobs fit in a break, and write the rest down so each one has an owner.</p>
 </section>
+<p class="last-updated no-bubble" style="font-size:.88rem;color:var(--ink-soft)">Last updated: October 2026</p>
 </main>
 <script>
 (function () {
@@ -303,7 +314,50 @@
     out.value = lines.length > 1 ? lines.join('\n') : '';
     return out.value;
   }
-  box.addEventListener('input', function (e) { if (e.target !== out) { build(); note.textContent = ''; } });
+  // kept on this device (localStorage 'tol-our-week'), so the week is here next time
+  var KEY = 'tol-our-week', IDS = ['dh-n1', 'dh-r1', 'dh-n2', 'dh-r2', 'dh-sleep', 'dh-over', 'dh-together', 'dh-check', 'dh-jobs'], me = -1;
+  function el(id) { return document.getElementById(id); }
+  function keep() { try { var o = { me: me }, any = false; IDS.forEach(function (id) { var x = v(id); if (x) { o[id] = x; any = true; } }); if (any) localStorage.setItem(KEY, JSON.stringify(o)); else localStorage.removeItem(KEY); } catch (e) {} }
+  // "Your shifts" on your own row, "Their shifts" on the other, once you say which one is you
+  function labels() {
+    [0, 1].forEach(function (i) {
+      var l = box.querySelector('label[for="dh-r' + (i + 1) + '"]'), nm = v('dh-n' + (i + 1));
+      if (l) l.textContent = me === i ? 'Your shifts or work hours this week' : me >= 0 ? (nm ? nm + '\u2019s' : 'Their') + ' shifts or work hours this week' : 'Their shifts or work hours this week';
+      var b = box.querySelector('[data-dh-me="' + i + '"]'); if (b) { b.setAttribute('aria-pressed', String(me === i)); b.textContent = nm || (i ? 'The second' : 'The first'); }
+    });
+  }
+  try { var kept = JSON.parse(localStorage.getItem(KEY) || 'null'); if (kept && typeof kept === 'object') { IDS.forEach(function (id) { if (typeof kept[id] === 'string') el(id).value = kept[id].slice(0, 300); }); me = kept.me === 0 || kept.me === 1 ? kept.me : -1; } } catch (e) {}
+  // no names yet: the grown-ups' names kept on this device by the other tools (household.js), if any
+  if (!v('dh-n1') && !v('dh-n2')) {
+    var useHH = function () { var H = window.TOLHousehold, hh = H && H.get ? H.get() : null, kids = (hh && hh.kids || []).map(function (k) { return String(k).toLowerCase(); }), ppl = hh ? (hh.people || []).filter(function (n) { return kids.indexOf(String(n).toLowerCase()) < 0; }) : [];
+      if (ppl.length >= 2 && !v('dh-n1') && !v('dh-n2')) { el('dh-n1').value = ppl[0]; el('dh-n2').value = ppl[1]; note.textContent = 'Using the names kept on this device: ' + ppl[0] + ' and ' + ppl[1] + '. Change them any time.'; labels(); build(); } };
+    if (window.TOLHousehold) useHH(); else { var sc = document.createElement('script'); sc.src = '/assets/js/household.js'; sc.onload = useHH; document.head.appendChild(sc); }
+  }
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-dh-me]'); if (!b) return;
+    var i = +b.getAttribute('data-dh-me'); me = me === i ? -1 : i; labels(); keep();
+  });
+  box.addEventListener('input', function (e) { if (e.target !== out && e.target.id !== 'dh-in') { build(); labels(); keep(); note.textContent = ''; } });
+  el('dh-forget').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} IDS.forEach(function (id) { el(id).value = ''; }); me = -1; labels(); build(); note.textContent = 'Forgotten. Nothing from this week is kept on this device now.'; });
+  // their week, pasted from a message: "Sam: Home office…", "Protected sleep: …"
+  var LAB = { 'protected sleep': 'dh-sleep', 'where we overlap': 'dh-over', 'our together time': 'dh-together', 'our one together time': 'dh-together', 'check in at the shift change': 'dh-check', 'home jobs': 'dh-jobs' };
+  el('dh-import').addEventListener('click', function () {
+    var lines = String(el('dh-in').value || '').split(/\r?\n/), got = 0;
+    lines.forEach(function (ln) {
+      var m = /^\s*([^:]{1,40}):\s*(.+)$/.exec(ln); if (!m) return;
+      var k = m[1].trim(), t = m[2].trim().slice(0, 300), id = LAB[k.toLowerCase()];
+      if (id) { el(id).value = t; got++; return; }
+      if (/^our week/i.test(k)) return;
+      // a person's hours: their row by name, or the first empty row
+      var row = [1, 2].filter(function (i) { return v('dh-n' + i).toLowerCase() === k.toLowerCase(); })[0] || [1, 2].filter(function (i) { return !v('dh-n' + i) && !v('dh-r' + i); })[0] || [1, 2].filter(function (i) { return me !== i - 1; })[0];
+      if (!row) return;
+      if (!v('dh-n' + row) && !/^(one of us|the other)$/i.test(k)) el('dh-n' + row).value = k;
+      el('dh-r' + row).value = t; got++;
+    });
+    build(); labels(); keep();
+    note.textContent = got ? 'Filled in ' + got + (got === 1 ? ' line' : ' lines') + ' from what they sent. Check it over, then send it back.' : 'Nothing to fill in from that. Paste the whole message, with lines like \u201cSam: nights Mon to Wed\u201d.';
+  });
+  labels();
   build();
   document.getElementById('dh-copy').addEventListener('click', function () {
     var t = build();

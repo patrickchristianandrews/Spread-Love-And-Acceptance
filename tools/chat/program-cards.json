@@ -485,6 +485,72 @@
       ]
     },
     {
+      "id": "sarcasm",
+      "name": "understanding sarcasm",
+      "pat": "\\b(dont|don t|do not|cant|can t|cannot|never|struggle to|hard to|how (do i|to|can i)) (understand|get|spot|tell|recogni[sz]e|pick up on|detect|read)\\b.{0,20}\\bsarcas\\w*\\b|\\bwhat (is|does) sarcasm( mean)?\\b|\\bhow (do|can) i (tell|know) (if|when) (someone|they|people|he|she) (is|are|s) (being )?sarcastic\\b|\\bi (dont|don t|do not) (understand|get) sarcasm\\b",
+      "what": [
+        "Sarcasm is saying the opposite of what you mean, usually as a joke or to show annoyance. The words say one thing and the tone says another: “Oh great, that’s just perfect” after something goes wrong means it isn’t great."
+      ],
+      "how": [
+        "Look for a mismatch: positive words about something that has just gone badly.",
+        "Listen for the tone: flatter, slower or extra bright, sometimes with an eye-roll.",
+        "Use the context: if the thing just went wrong, “great” probably isn’t praise.",
+        "If you can’t tell, it’s fair to ask. Many autistic people find sarcasm confusing, and asking is a good skill, not a failing."
+      ],
+      "script": [
+        "Sorry, I take words at face value. Was that a joke, or do you mean it?"
+      ],
+      "scriptLabels": [
+        "If you can’t tell"
+      ],
+      "links": [
+        [
+          "Three channels, tuned differently (tone, words and context)",
+          "/wired-differently-in-depth.html#channels"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
+      "id": "meltdowntantrum",
+      "name": "a meltdown or a tantrum?",
+      "pat": "\\b(difference|different|differ)\\b.{0,30}\\bmeltdowns?\\b.{0,25}\\btantrums?\\b|\\b(difference|different)\\b.{0,30}\\btantrums?\\b.{0,25}\\bmeltdowns?\\b|\\bmeltdowns?\\b.{0,20}\\b(and|or|vs|versus)\\b.{0,10}\\b(a )?tantrums?\\b|\\bis (a |it a )?meltdown (just )?(a )?tantrum\\b|\\bare meltdowns (just )?tantrums\\b",
+      "what": [
+        "A tantrum is usually aimed at getting something, and it can stop when that happens. A meltdown has no goal: it’s an overwhelmed nervous system losing control, and it stops when the overwhelm passes. A meltdown is closer to something that happens to a person than something they do."
+      ],
+      "how": [
+        "A meltdown is outward: crying, shouting, running or lashing out. A shutdown is the quiet version: going still or silent.",
+        "A meltdown needs safety, quiet and time, not consequences.",
+        "A tantrum often eases when an adult stays calm and close, without giving in.",
+        "Afterwards, look for the cause: noise, tiredness, a change, or too much at once."
+      ],
+      "links": [
+        [
+          "Meltdowns and shutdowns (Part Three, Chapter 9)",
+          "/book/understanding-9-minds-in-depth.html#meltdowns"
+        ],
+        [
+          "Chapter 9: Different minds",
+          "/book/understanding-9-minds.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
       "id": "diagnose",
       "kind": "intent",
       "first": true,
@@ -526,6 +592,47 @@
         [
           "Is this therapy?",
           "Is this therapy?"
+        ]
+      ]
+    },
+    {
+      "id": "calmnow",
+      "kind": "intent",
+      "first": true,
+      "name": "something calming",
+      "pat": "\\b(tell me|say|give me|share|send me|i need|i want|i could use|i d like|id like) (something|anything|some words|a few words|a thought|words|a little something)? ?(calming|calm|comforting|soothing|gentle|reassuring|peaceful|nice|kind)\\b|\\bcalm me( down)?\\b|\\bhelp me (calm|settle|relax|breathe|slow down)\\b|\\bi (need|want|have) to (calm down|settle down|relax|breathe)\\b|\\bi need (some )?(calm|peace|a moment|a breather)\\b|\\bsoothe me\\b|\\bcomfort me\\b|\\bi cant (calm down|relax|settle)\\b|\\bsomething to (calm|settle|soothe) me\\b|\\bcalm (places?|spaces?|spots?|corners?)\\b|\\bi feel (so )?(panicky|shaky|wound up|keyed up)\\b|\\bcalm (down|myself) (fast|quick|quickly|now|right now)\\b|\\bhow (do|can) i (calm|settle) (down|myself)\\b|\\b(keyed|wound|worked|amped) up\\b|\\bmy heart (is )?(racing|pounding)\\b|\\bcool (off|down) (fast|quickly|now)\\b|\\bpanic(ked|king)? attacks?\\b|\\bpanicking\\b|\\bcan t (stop )?breath(e|ing)\\b|\\b(i feel|i m|im|i am|feeling|i ve been|ive been)( really| so| very| super| a bit| quite| really really)* (anxious|panicky|panicked|panicking)( right now| now| today| tonight| all day)?$|\\banxiety attack\\b|^(so |really )?anxious( right now)?$|\\bi m having (a |an )?(panic|anxiety)\\b",
+      "keys": [],
+      "what": [
+        "Of course. Let’s slow down together for a moment."
+      ],
+      "how": [
+        "Let your shoulders drop, and unclench your jaw.",
+        "Breathe in gently for a count of four, then out slowly for a count of six. Do that three times.",
+        "Nothing needs deciding in the next few minutes. You’re allowed to just be here.",
+        "For a guided breathing break, the breathing pacer on Upset right now? breathes with you, in for 4 and out for 6."
+      ],
+      "links": [
+        [
+          "Breathe with the pacer (Upset right now?)",
+          "/upset-right-now.html"
+        ],
+        [
+          "Slow breathing, explained",
+          "/library/calm.html#slow-breathing"
+        ],
+        [
+          "The Night Garden",
+          "/night-garden.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Make a calm-down plan",
+          "What is WP-11?"
+        ],
+        [
+          "A calm game",
+          "What games are there?"
         ]
       ]
     },
@@ -731,6 +838,40 @@
           "/calming-supplements.html#homeopathy"
         ]
       ],
+      "chips": []
+    },
+    {
+      "id": "herbwords",
+      "name": "what to tell your doctor or pharmacist about supplements",
+      "pat": "\\b(what|how) (should|do|can|could) i (tell|say to|ask) (my |the |a )?(doctor|gp|pharmacist|prescriber|nurse)\\b.{0,40}\\b(supplements?|herbs?|herbal|vitamins?|cbd|ashwagandha|st johns|magnesium|melatonin|kava|valerian)\\b|\\b(tell|ask) (my |the |a )?(doctor|pharmacist|gp)\\b.{0,15}\\babout (my |the )?(supplements?|herbs?|vitamins?)\\b",
+      "what": [
+        "Tell them everything you take, including teas, gummies and vitamins, and ask before starting anything new. Here are words from the supplements page."
+      ],
+      "script": [
+        "I take [your medicine] every day. Is [the supplement] safe with it, and is there anything I should watch for?",
+        "I take sertraline and I’m thinking of trying St John’s wort. Is that safe together?",
+        "I’ve been taking ashwagandha for stress. Should I keep going, and do I need a blood test?"
+      ],
+      "scriptLabels": [
+        "To a pharmacist",
+        "An example",
+        "To your doctor"
+      ],
+      "links": [
+        [
+          "Words you could use (supplements)",
+          "/calming-supplements.html#words"
+        ],
+        [
+          "Staying safe",
+          "/calming-supplements.html#safety"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
       "chips": []
     },
     {
@@ -2909,6 +3050,158 @@
       "chips": []
     },
     {
+      "id": "adhdforget",
+      "name": "a child with ADHD who forgets",
+      "what": [
+        "Forgetting is one of the most frustrating parts, for everyone. It usually isn’t laziness or not caring: their short-term memory drops things more easily, so put the memory outside their head."
+      ],
+      "how": [
+        "Write it down where they’ll see it: a list on the fridge, a picture checklist by the door.",
+        "Same place, every time: shoes, bag and coat live in one spot.",
+        "Remind without the sigh. A calm reminder works better than “How many times…?”"
+      ],
+      "script": [
+        "I’ll write it on the fridge so we both remember.",
+        "Check your door list: shoes, bag, lunch. What’s missing?"
+      ],
+      "scriptLabels": [
+        "Words you could use",
+        "Or"
+      ],
+      "links": [
+        [
+          "When they forget",
+          "/adhd-kids.html#forget"
+        ],
+        [
+          "When a child has ADHD",
+          "/adhd-kids.html"
+        ]
+      ],
+      "pat": "\\bmy (grandson|granddaughter|grandchild|son|daughter)\\b.{0,30}\\b(forgets|forgot|keeps forgetting|never remembers|cant remember|can t remember)\\b",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(forget\\w*|forgot|remember\\w*|memory)\\b",
+          "adhdforget"
+        ],
+        [
+          "\\b(sit still|stay still|fidget\\w*|wriggl\\w*|move about|moving around|hyper)\\b",
+          "adhdfidget"
+        ],
+        [
+          "\\b(wrong thing|saying the wrong|what (do|should) i say|how (do|should) i (talk|speak|tell))\\b",
+          "adhdtalkto"
+        ]
+      ]
+    },
+    {
+      "id": "adhdfidget",
+      "name": "a child with ADHD who can’t sit still",
+      "what": [
+        "Moving often helps a child with ADHD think. Telling them to “sit still” can use up all their focus on keeping still, with nothing left for the task."
+      ],
+      "how": [
+        "Build in movement: a short break every 10 to 15 minutes, or a job that means walking.",
+        "Give their hands something to do: a squishy toy, a bit of modelling clay.",
+        "Pick your battles. Wriggling at the table is fine. Running in the road is not."
+      ],
+      "script": [
+        "Let’s take a wiggle break, then back to it.",
+        "You can hold the squishy ball while we read. Your hands can move, your ears listen."
+      ],
+      "scriptLabels": [
+        "Words you could use",
+        "Or"
+      ],
+      "links": [
+        [
+          "When they can’t sit still",
+          "/adhd-kids.html#fidget"
+        ],
+        [
+          "When a child has ADHD",
+          "/adhd-kids.html"
+        ]
+      ],
+      "pat": "\\bmy (grandson|granddaughter|grandchild|son|daughter|boy|girl)\\b.{0,30}\\b(cant|can t|cannot|wont|won t) (sit still|stay still|keep still|focus|concentrate)\\b|\\bmy (grandson|granddaughter|grandchild)\\b.{0,30}\\b(fidget\\w*|hyper|wriggl\\w*)\\b",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(forget\\w*|forgot|remember\\w*|memory)\\b",
+          "adhdforget"
+        ],
+        [
+          "\\b(sit still|stay still|fidget\\w*|wriggl\\w*|move about|moving around|hyper)\\b",
+          "adhdfidget"
+        ],
+        [
+          "\\b(wrong thing|saying the wrong|what (do|should) i say|how (do|should) i (talk|speak|tell))\\b",
+          "adhdtalkto"
+        ]
+      ]
+    },
+    {
+      "id": "adhdtalkto",
+      "name": "what to say to a child with ADHD",
+      "what": [
+        "You’re probably not saying anything wrong. With ADHD, how you say it matters more than the exact words: one thing at a time, and lots of noticing what goes right."
+      ],
+      "how": [
+        "Get their attention first: say their name, get close, wait for their eyes.",
+        "Give one short instruction, then ask them to say it back: “What are you off to do?”",
+        "Praise the effort, specifically: “You remembered your bag all by yourself.”",
+        "Ask the parents what works at home, and do the same at yours."
+      ],
+      "script": [
+        "I saw you stop and think before you answered. That was hard, and you did it."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "One instruction at a time",
+          "/adhd-kids.html#one"
+        ],
+        [
+          "For grandparents",
+          "/adhd-kids.html#grandparents"
+        ]
+      ],
+      "pat": "\\b(am i|i m|im) (saying|doing) (the )?wrong (thing|things)\\b.{0,20}\\b(to|with) (him|her|my (grandson|granddaughter|son|daughter|grandchild))\\b",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(forget\\w*|forgot|remember\\w*|memory)\\b",
+          "adhdforget"
+        ],
+        [
+          "\\b(sit still|stay still|fidget\\w*|wriggl\\w*|move about|moving around|hyper)\\b",
+          "adhdfidget"
+        ],
+        [
+          "\\b(wrong thing|saying the wrong|what (do|should) i say|how (do|should) i (talk|speak|tell))\\b",
+          "adhdtalkto"
+        ]
+      ]
+    },
+    {
       "id": "adhdkids",
       "kind": "intent",
       "first": true,
@@ -2950,8 +3243,16 @@
       "chips": [],
       "follow": [
         [
-          "\\b(forget\\w*|forgot|sit still|fidget\\w*|listen\\w*|focus\\w*|homework|meltdown\\w*|instructions?|remember\\w*|say when|talk to (him|her)|hyper|cant stop moving|wont stop moving)\\b",
-          "adhdkids"
+          "\\b(forget\\w*|forgot|remember\\w*|memory)\\b",
+          "adhdforget"
+        ],
+        [
+          "\\b(sit still|stay still|fidget\\w*|wriggl\\w*|move about|moving around|hyper)\\b",
+          "adhdfidget"
+        ],
+        [
+          "\\b(wrong thing|saying the wrong|what (do|should) i say|how (do|should) i (talk|speak|tell))\\b",
+          "adhdtalkto"
         ]
       ]
     },
@@ -3217,6 +3518,42 @@
           "gptextback"
         ]
       ]
+    },
+    {
+      "id": "lgbtboundary",
+      "name": "a parent who is homophobic about your partner",
+      "pat": "\\b(homophob\\w*|transphob\\w*|biphob\\w*|anti gay|nasty|rude|horrible|mean|awful)\\b.{0,40}\\b(about|to) (my )?(girlfriend|boyfriend|partner|wife|husband|gf|bf)\\b|\\b(dad|mum|mom|father|mother|parents?|family|brother|sister)\\b.{0,40}\\b(homophob\\w*|transphob\\w*|biphob\\w*)\\b",
+      "what": [
+        "You can love them and still hold a line. Hearing that about someone you love hurts, and you don’t have to sit through it."
+      ],
+      "how": [
+        "Decide before the next visit what you’ll do if it happens: say your line once, calmly, and leave if it carries on.",
+        "Keep your partner out of the crossfire. Talk to your parent yourself, one to one. It isn’t your partner’s job to win them over.",
+        "Leave the door open on your terms: shorter visits, with a set end time and a leaving line you agree beforehand.",
+        "If you rely on them for a home or money, plan your safety first."
+      ],
+      "script": [
+        "I want you in my life, and I need you to treat [her name] with respect. If that can’t happen today, I’ll head home, and I’ll call you next week."
+      ],
+      "scriptLabels": [
+        "A caring boundary"
+      ],
+      "links": [
+        [
+          "A parent who won’t accept your partner",
+          "/coming-out.html#parent-boundary"
+        ],
+        [
+          "Words you could use",
+          "/coming-out.html#words"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
     },
     {
       "id": "familyboundary",
@@ -5695,6 +6032,92 @@
       "chips": []
     },
     {
+      "id": "showwhatido",
+      "name": "showing your partner what you do, without a fight",
+      "pat": "\\bhow (do|can|could) i (show|make) (her|him|them|my (wife|husband|partner))\\b.{0,10}\\b(see )?(what i do|everything i do|how much i do)\\b",
+      "what": [
+        "Showing the whole picture usually works better than arguing about it. When you both look at the same page, it stops being your word against theirs."
+      ],
+      "how": [
+        "Write down one ordinary week: paid work, the children, the house, and the thinking jobs, with rough times.",
+        "Put it in the Lemonade Stand quick look, so you both see the same picture, as a fact rather than a verdict.",
+        "Pick a calm time to look at it together, and ask what her week looks like too.",
+        "Start with one ask, not the whole list."
+      ],
+      "script": [
+        "I don’t want a fight about who does more. Can we each write down one week, and look at it together on Sunday?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "Share the load, step by step",
+          "/share-the-load.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
+      "id": "nobodynotices",
+      "name": "nobody notices what I do",
+      "pat": "\\b(nobody|no one|noone)\\b.{0,10}\\b(notices|sees|appreciates|thanks me for|counts)\\b.{0,10}\\b(what|all|anything) (i do|that i do)\\b|\\b(doesnt|does not|dont|never) (notice|see|appreciate|count)\\b.{0,10}\\b(anything |all )?(what|that) i do\\b",
+      "notPat": "\\b(admin|paperwork|payroll|bookkeeping|business)\\b",
+      "what": [
+        "Feeling unseen is one of the heaviest parts of this. What goes unnoticed might be the thinking work (remembering, planning), the physical jobs, or your paid work. Often it’s a mix of all three."
+      ],
+      "how": [
+        "Write down one week of everything: the jobs, the thinking, and any paid work, with rough times.",
+        "Share it as a fact, not a scorecard: “I want us both to see the whole picture.”",
+        "Ask for one specific thing: a thank-you, or one job they take over.",
+        "The Lemonade Stand shows the split in plain numbers."
+      ],
+      "script": [
+        "I don’t need a medal. I’d just like us both to see everything that gets done. Can we look at one week together?"
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "The Lemonade Stand",
+          "/lemonade-stand.html"
+        ],
+        [
+          "Share the load, step by step",
+          "/share-the-load.html"
+        ]
+      ],
+      "chips": [
+        [
+          "The thinking work",
+          "What is the mental load?"
+        ],
+        [
+          "The housework",
+          "I do most of the housework and nobody sees it"
+        ],
+        [
+          "My paid work",
+          "My partner doesn’t count my paid work"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": []
+    },
+    {
       "id": "toddlers",
       "kind": "intent",
       "first": true,
@@ -5724,7 +6147,13 @@
           "/lemonade-stand.html"
         ]
       ],
-      "chips": []
+      "chips": [],
+      "follow": [
+        [
+          "\\b(show (her|him|them) what i do|what i do all day|see what i do|without a fight|how much i do)\\b",
+          "showwhatido"
+        ]
+      ]
     },
     {
       "id": "spanish",
@@ -6569,7 +6998,7 @@
         ],
         [
           "The Signal Translator (work mode)",
-          "/signal-translator.html"
+          "/signal-translator.html?use=work"
         ]
       ],
       "chips": [],
@@ -6595,6 +7024,42 @@
           ]
         }
       ]
+    },
+    {
+      "id": "saysrude",
+      "name": "being told you’re rude when you’re direct",
+      "pat": "\\b(they|people|everyone|my (boss|manager|team|coworkers?|colleagues?|partner))\\b.{0,15}\\b(say|says|said|think|thinks|tell me|told me|complain)\\b.{0,10}\\b(that )?(i m|im|i am|i was|i come across( as)?|i sound)\\b.{0,10}\\b(rude|blunt|too direct|harsh|cold|abrupt|unfriendly)\\b",
+      "what": [
+        "Being direct isn’t the same as being rude, and you don’t have to change your whole style. A short line that explains your style often clears it up."
+      ],
+      "how": [
+        "Say it once, plainly: you’re direct because you want to be clear.",
+        "Ask for specifics: which message, which words? Then you can decide what, if anything, to change.",
+        "If you like, add one line of thanks or a reason to a short message. That’s optional, not a fix for you.",
+        "If you’re autistic, you can ask for adjustments, like instructions in writing. The law in many places asks employers to consider reasonable adjustments."
+      ],
+      "script": [
+        "Thanks for telling me. I’m direct because I want to be clear, not unkind. If something lands badly, tell me and I’ll rephrase it."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "If you’re autistic at work",
+          "/work.html#autistic-at-work"
+        ],
+        [
+          "The Signal Translator (work mode)",
+          "/signal-translator.html?use=work"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
     },
     {
       "id": "isthisrude",
@@ -6659,7 +7124,21 @@
           "/signal-translator.html?rel=roommates"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(rota|rotation|rotate|take turns|chore wheel)\\b",
+          "houserota"
+        ],
+        [
+          "\\b(three of us|four of us|all of us|group chat|bring it up|raise it|without (it )?(turning into|starting|becoming) a (fight|row|argument))\\b",
+          "housegroupchat"
+        ],
+        [
+          "\\b(more hours|longer hours|works? (more|longer)|at the lab|busier|exams?|deadline)\\b",
+          "housefair"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -6691,7 +7170,121 @@
           "/share-the-load.html#roommates"
         ]
       ],
-      "pat": "\\b(one of us|she|he|my (housemate|flatmate|roommate))\\b.{0,40}\\b(more|longer|way more|lots more) hours\\b.{0,40}\\b(lab|uni|university|studying|exams?|fair|split|chores|jobs)\\b"
+      "pat": "\\b(one of us|she|he|my (housemate|flatmate|roommate))\\b.{0,40}\\b(more|longer|way more|lots more) hours\\b.{0,40}\\b(lab|uni|university|studying|exams?|fair|split|chores|jobs)\\b",
+      "follow": [
+        [
+          "\\b(rota|rotation|rotate|take turns|chore wheel)\\b",
+          "houserota"
+        ],
+        [
+          "\\b(three of us|four of us|all of us|group chat|bring it up|raise it|without (it )?(turning into|starting|becoming) a (fight|row|argument))\\b",
+          "housegroupchat"
+        ],
+        [
+          "\\b(more hours|longer hours|works? (more|longer)|at the lab|busier|exams?|deadline)\\b",
+          "housefair"
+        ]
+      ]
+    },
+    {
+      "id": "houserota",
+      "name": "a rota instead of one owner",
+      "pat": "\\b(rota|rotation|rotate|take turns|taking turns|chore wheel)\\b.{0,40}\\b(instead|rather than|or|vs|versus)\\b.{0,30}\\b(one owner|an owner|owners?|one person)\\b|\\b(can|could|should) we (do|use|have|make) a (rota|rotation|chore wheel)\\b|\\b(is a|does a) rota (work|ok|okay|better)\\b",
+      "what": [
+        "Yes, a rota is fine, and lots of shared houses use one. The key is that each job still has one clear owner each week, so nothing falls between people."
+      ],
+      "how": [
+        "Give each job one owner for a set stretch, then rotate: weekly or monthly, whatever suits the house.",
+        "Write the rota where everyone sees it: the fridge, or pinned in the group chat.",
+        "Agree a clear handover when it rotates: who’s on bins from Monday.",
+        "Look at it in the weekly house meeting. If someone keeps missing a turn, talk about the job, not the person."
+      ],
+      "script": [
+        "Can we do a rota where each of us owns a few jobs for a month, then we swap? I’ll put it on the fridge."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Roommates and housemates",
+          "/share-the-load.html#roommates"
+        ],
+        [
+          "One owner per job (the fridge list)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(rota|rotation|rotate|take turns|chore wheel)\\b",
+          "houserota"
+        ],
+        [
+          "\\b(three of us|four of us|all of us|group chat|bring it up|raise it|without (it )?(turning into|starting|becoming) a (fight|row|argument))\\b",
+          "housegroupchat"
+        ],
+        [
+          "\\b(more hours|longer hours|works? (more|longer)|at the lab|busier|exams?|deadline)\\b",
+          "housefair"
+        ]
+      ]
+    },
+    {
+      "id": "housethree",
+      "name": "splitting cleaning between three or more",
+      "pat": "\\b(split|share|divide|sort out)\\b.{0,30}\\b(cleaning|chores|jobs|housework)\\b.{0,30}\\b(three|four|five|3|4|5) (people|of us|housemates|flatmates|roommates)\\b|\\b(three|four|five|3|4|5) (people|of us|housemates|flatmates|roommates)\\b.{0,40}\\b(split|share|divide|fair\\w*)\\b.{0,30}\\b(cleaning|chores|jobs|housework)\\b",
+      "what": [
+        "With three of you, give each cleaning job one owner, and rotate monthly if you like, so nobody is stuck with the worst one for good."
+      ],
+      "how": [
+        "List every shared job: bathroom, kitchen, bins, hoovering, the fridge clear-out.",
+        "Weigh them roughly, so each person ends up with a similar amount, not the same number of jobs.",
+        "Give each job one owner, put the list on the fridge, and rotate every month if you want.",
+        "A ten-minute house meeting once a week: start with the list, not with who forgot."
+      ],
+      "script": [
+        "Can we each take a few jobs for a month, then swap? I’ll write the list up and put it on the fridge."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Roommates and housemates",
+          "/share-the-load.html#roommates"
+        ],
+        [
+          "One owner per job (the fridge list)",
+          "/workpapers/wp-03-one-owner-per-job.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "follow": [
+        [
+          "\\b(rota|rotation|rotate|take turns|chore wheel)\\b",
+          "houserota"
+        ],
+        [
+          "\\b(three of us|four of us|all of us|group chat|bring it up|raise it|without (it )?(turning into|starting|becoming) a (fight|row|argument))\\b",
+          "housegroupchat"
+        ],
+        [
+          "\\b(more hours|longer hours|works? (more|longer)|at the lab|busier|exams?|deadline)\\b",
+          "housefair"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -6727,6 +7320,10 @@
         ]
       ],
       "follow": [
+        [
+          "\\b(rota|rotation|rotate|take turns|chore wheel)\\b",
+          "houserota"
+        ],
         [
           "\\b(three of us|four of us|all of us|group chat|bring it up|raise it|without (it )?(turning into|starting|becoming) a (fight|row|argument))\\b",
           "housegroupchat"
@@ -6772,7 +7369,79 @@
           "/signal-translator.html?rel=roommates"
         ]
       ],
-      "pat": "\\b(zzqx_never_matches)\\b"
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(gets?|got) (mad|angry|upset) at me\\b",
+          "roommad"
+        ],
+        [
+          "\\b(confront\\w*|awkward|bring it up|raise it|hate (conflict|arguments|arguing)|scared to say|nervous)\\b",
+          "roombringup"
+        ],
+        [
+          "\\b(ra|r a|resident (assistant|advisor)|housing office|residence (staff|life))\\b",
+          "rahelp"
+        ],
+        [
+          "\\b(agreement|rules)\\b",
+          "sharingroom"
+        ]
+      ]
+    },
+    {
+      "id": "roommad",
+      "name": "if your roommate reacts badly",
+      "what": [
+        "If she gets annoyed when you bring it up, that doesn’t mean you were wrong to ask. A bit of defensiveness at first is common, and it often settles after a day."
+      ],
+      "how": [
+        "Stay calm and repeat your one ask. You don’t have to argue every point.",
+        "Say you’re not attacking her: it’s about the room, not about her as a person.",
+        "If it gets heated, pause and pick it up tomorrow: “Let’s leave it for tonight and talk tomorrow.”",
+        "If nothing changes, your RA or housing office can help you both write a room agreement."
+      ],
+      "script": [
+        "I’m not saying you’re a bad roommate. I just need the room to myself some nights. Can we find something that works for both of us?"
+      ],
+      "scriptLabels": [
+        "If she gets defensive"
+      ],
+      "links": [
+        [
+          "How to bring it up if you hate confrontation",
+          "/sharing-a-room.html#bring-it-up"
+        ],
+        [
+          "Talking to your RA",
+          "/sharing-a-room.html#ra"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(gets?|got) (mad|angry|upset) at me\\b",
+          "roommad"
+        ],
+        [
+          "\\b(confront\\w*|awkward|bring it up|raise it|hate (conflict|arguments|arguing)|scared to say|nervous)\\b",
+          "roombringup"
+        ],
+        [
+          "\\b(ra|r a|resident (assistant|advisor)|housing office|residence (staff|life))\\b",
+          "rahelp"
+        ],
+        [
+          "\\b(agreement|rules)\\b",
+          "sharingroom"
+        ]
+      ]
     },
     {
       "kind": "intent",
@@ -6828,6 +7497,10 @@
       ],
       "follow": [
         [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(gets?|got) (mad|angry|upset) at me\\b",
+          "roommad"
+        ],
+        [
           "\\b(confront\\w*|awkward|bring it up|raise it|hate (conflict|arguments|arguing)|scared to say|nervous)\\b",
           "roombringup"
         ],
@@ -6874,6 +7547,10 @@
       ],
       "chips": [],
       "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(gets?|got) (mad|angry|upset) at me\\b",
+          "roommad"
+        ],
         [
           "\\b(what|how) (do|should|can|could|would) i (actually |even |really )?(say|text|write|word|tell|put)\\b|\\bwhat (words|to say)\\b",
           "roombringup"
@@ -7549,6 +8226,93 @@
       "chips": []
     },
     {
+      "id": "angerstop",
+      "name": "stopping losing your temper",
+      "safety": true,
+      "pat": "\\bhow (do|can|could) i (stop|quit) (losing|lose) (my temper|it|my cool|my rag)\\b|\\bi (keep|always|still) (losing|lose|lost) (it|my temper|my cool|my rag)\\b|^(i (keep )?(losing|lose|lost) (it|my temper))$|^my temper$|\\b(i have|i ve got|ive got|got) (a |an )?(bad |terrible |short |quick )?(temper|anger (problem|issue|issues)|anger management (problem|issue))\\b|^(an )?anger (problem|issue|issues)$|\\bmy anger (problem|issue|issues|is out of control|scares me)\\b|\\b(control|manage) my (temper|anger)\\b|\\bshort fuse\\b",
+      "notPat": "\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|dad|mum|mom|son|daughter|boss))\\b.{0,15}\\b(temper|anger|loses it)\\b",
+      "what": [
+        "Wanting to change it is the biggest step, and it can change."
+      ],
+      "how": [
+        "Stop and step back as soon as you notice your voice going up.",
+        "Say what’s happening: “I’m getting too loud. I’m going to take a breath.”",
+        "Breathe for one minute, in for 4 and out for 6, and don’t go back until your body has slowed down.",
+        "Make it right: “I’m sorry I yelled. That wasn’t fair to you.” Then say what you’ll do differently.",
+        "Get support for yourself too: your doctor, an Employee Assistance Program, or an anger-management group or counsellor."
+      ],
+      "script": [
+        "I’m sorry I lost my temper. That wasn’t fair to you, and it wasn’t your fault. I’m working on stepping away before I get loud."
+      ],
+      "scriptLabels": [
+        "Repair words"
+      ],
+      "links": [
+        [
+          "Getting help for your anger",
+          "/parents.html#anger-help"
+        ],
+        [
+          "When you yell",
+          "/parents.html#yelling"
+        ],
+        [
+          "When it’s you and your child: four steps",
+          "/upset-right-now.html#parent-child"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
+      "id": "yellpartner",
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "name": "yelling at your partner",
+      "pat": "\\bi (yell|yelled|shout|shouted|scream|screamed|snap|snapped|lost my temper|lose my temper|swore) (at|with) (my )?(wife|husband|partner|girlfriend|boyfriend|spouse|fiance|fiancee)\\b|\\bi (keep |always )?(lose|losing) my temper with (my )?(wife|husband|partner|girlfriend|boyfriend)\\b",
+      "notPat": "",
+      "keys": [],
+      "what": [
+        "Noticing it is the first step, and wanting to change matters. Yelling usually comes when stress is already high and there’s no pause plan, but it still hurts the person on the other end, so it’s worth working on."
+      ],
+      "how": [
+        "Agree a pause word together on a calm day: either of you can say it, and you step away for twenty minutes, then come back at a time you name.",
+        "When you feel it rising, say “I’m getting too loud, I’m going to take a breath,” and step away before the words come out.",
+        "Afterwards, apologise for the specific thing, without a “but”, and say what you’ll do differently.",
+        "If it happens most days, or anyone at home is afraid of you, get support for yourself: your doctor or a counsellor who does anger management."
+      ],
+      "script": [
+        "I yelled at you. That wasn’t fair, and it wasn’t about you. Next time I’ll step away when I feel it rising, and come back in twenty minutes."
+      ],
+      "plain": [
+        "Agree a pause word.",
+        "Step away before you shout.",
+        "Say sorry for the specific thing.",
+        "Get help if it happens a lot."
+      ],
+      "links": [
+        [
+          "Making it right with your partner",
+          "/parents.html#repair-partner"
+        ],
+        [
+          "A pause plan for two",
+          "/pursue-withdraw.html#plan"
+        ],
+        [
+          "Getting help for your anger",
+          "/parents.html#anger-help"
+        ]
+      ],
+      "chips": [],
+      "safety": true
+    },
+    {
       "id": "angerhelp",
       "kind": "intent",
       "first": true,
@@ -7587,50 +8351,6 @@
         [
           "When it’s you and your child",
           "/upset-right-now.html#parent-child"
-        ]
-      ],
-      "chips": [],
-      "safety": true
-    },
-    {
-      "id": "yellpartner",
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "name": "yelling at your partner",
-      "pat": "\\bi (yell|shout|scream|snap) at (my )?(wife|husband|partner|girlfriend|boyfriend|spouse)\\b|\\bi (keep |always )?(lose|losing) my temper with (my )?(wife|husband|partner|girlfriend|boyfriend)\\b",
-      "notPat": "",
-      "keys": [],
-      "what": [
-        "Noticing it is the first step, and wanting to change matters. Yelling usually comes when stress is already high and there’s no pause plan, but it still hurts the person on the other end, so it’s worth working on."
-      ],
-      "how": [
-        "Agree a pause word together on a calm day: either of you can say it, and you step away for twenty minutes, then come back at a time you name.",
-        "When you feel it rising, say “I’m getting too loud, I’m going to take a breath,” and step away before the words come out.",
-        "Afterwards, apologise for the specific thing, without a “but”, and say what you’ll do differently.",
-        "If it happens most days, or anyone at home is afraid of you, get support for yourself: your doctor or a counsellor who does anger management."
-      ],
-      "script": [
-        "I yelled at you last night. That wasn’t fair, and it wasn’t about you. Next time I’ll step away when I feel it rising, and come back in twenty minutes."
-      ],
-      "plain": [
-        "Agree a pause word.",
-        "Step away before you shout.",
-        "Say sorry for the specific thing.",
-        "Get help if it happens a lot."
-      ],
-      "links": [
-        [
-          "Making it right with your partner",
-          "/parents.html#repair-partner"
-        ],
-        [
-          "A pause plan for two",
-          "/pursue-withdraw.html#plan"
-        ],
-        [
-          "Getting help for your anger",
-          "/parents.html#anger-help"
         ]
       ],
       "chips": [],
@@ -7712,12 +8432,50 @@
       "pat": "\\b(zzqx_never_matches)\\b"
     },
     {
+      "id": "comeoutpartner",
+      "name": "a partner who wants you to come out sooner",
+      "pat": "\\b(girlfriend|boyfriend|partner|wife|husband|gf|bf)\\b.{0,30}\\b(wants|pressur\\w*|pushing|pushes|keeps asking|is asking)\\b.{0,20}\\b(me )?to (come out|tell (my )?(parents|family))\\b|\\bcome out sooner\\b",
+      "what": [
+        "It’s hard when your partner is out and you aren’t yet. They may feel hidden, and you may feel pushed. Both feelings are fair, and neither of you is the bad guy. It’s still your decision."
+      ],
+      "how": [
+        "Talk about what each of you needs, not about who is braver.",
+        "Agree small steps: who knows now, who’s next, and roughly when.",
+        "Agree what you’ll each say if someone asks, so nobody is caught off guard.",
+        "A partner who threatens to out you, or uses it to control you, is crossing a line. The Not safe at home? page can help."
+      ],
+      "script": [
+        "I want to be out with you. I’m scared about my parents, and I need to do it in my own time. Can we agree a first step together, like telling my sister by the summer?",
+        "Sometimes I feel hidden, and it hurts. I’m not trying to rush you. Can we make a plan together?"
+      ],
+      "scriptLabels": [
+        "If you need more time",
+        "For the partner who’s out"
+      ],
+      "links": [
+        [
+          "When a partner wants you to come out sooner",
+          "/coming-out.html#partner"
+        ],
+        [
+          "Coming out as an adult",
+          "/coming-out.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
       "id": "lgbtadult",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "coming out as an adult",
-      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b|\\b(i m|im|i am) (\\d{2}|an adult|a grown (up|woman|man)|grown up|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b.{0,40}\\b(come|coming) out\\b|\\b(come|coming) out\\b.{0,30}\\b(at work|to my (boss|manager|coworkers?|colleagues?|team)|as an adult|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b|\\b(come|coming|came) out\\b(?! of\\b)|\\blgbt\\w* (support |help )?(line|helpline|number|hotline)\\b|\\b(conservative|religious|traditional|strict)\\b.{0,25}\\b(parents|family|mum|mom|dad)\\b.{0,40}\\b(gay|queer|bi|bisexual|lesbian|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\btell my (mom|mum|dad|parents|family|mother|father) (i have|i ve got|ive got|im|i m|i am|about my|that i m|that im|that i have) (a )?(girlfriend|boyfriend|gay|bi|bisexual|queer|lesbian|trans|same sex partner)\\b",
+      "pat": "\\b(i m|im|i am) (\\d{2}|an adult|grown)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|nonbinary|non binary|pan|pansexual|lgbt\\w*)\\b|\\b(gay|lesbian|bi|bisexual|queer|trans|lgbt\\w*)\\b.{0,60}\\b(my (girlfriend|boyfriend|partner|wife|husband))\\b|\\b(come|coming) out\\b.{0,40}\\b(my )?(conservative|religious|traditional|strict)? ?(parents|family|mum|mom|dad)\\b.{0,40}\\b(girlfriend|boyfriend|partner|wife|husband|adult|\\d{2})\\b|\\blgbt\\w* (support|help)? ?(line|hotline|support)? ?for adults\\b|\\b(girlfriend|boyfriend|partner|wife|husband)\\b.{0,30}\\b(wants|pressur\\w*|pushing)\\b.{0,20}\\b(me )?to come out\\b|\\b(i m|im|i am) (\\d{2}|an adult|a grown (up|woman|man)|grown up|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b.{0,40}\\b(come|coming) out\\b|\\b(come|coming) out\\b.{0,30}\\b(at work|to my (boss|manager|coworkers?|colleagues?|team)|as an adult|in my (twenties|thirties|forties|fifties|sixties|\\d0s))\\b|\\b(come|coming|came) out\\b(?! of\\b)|\\blgbt\\w* (support |help )?(line|helpline|number|hotline)\\b|\\b(conservative|religious|traditional|strict)\\b.{0,25}\\b(parents|family|mum|mom|dad)\\b.{0,40}\\b(gay|queer|bi|bisexual|lesbian|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\btell my (mom|mum|dad|parents|family|mother|father) (i have|i ve got|ive got|im|i m|i am|about my|that i m|that im|that i have) (a )?(girlfriend|boyfriend|gay|bi|bisexual|queer|lesbian|trans|same sex partner)\\b|\\b(i m|im|i am) (gay|lesbian|bi|bisexual|queer|pan|pansexual|trans|nonbinary|non binary|ace|asexual)\\b.{0,60}\\b(tell|telling|come out to|coming out to)\\b.{0,15}\\b(my )?(parents|family|mum|mom|dad|mother|father)\\b|\\b(parents|family|mum|mom|dad)\\b.{0,30}\\b(religious|conservative|traditional|strict|christian|muslim|catholic)\\b.{0,40}\\b(gay|lesbian|bi|bisexual|queer|trans|girlfriend|boyfriend|partner|come out|coming out)\\b|\\b(i m|im|i am) (1[89]|[2-9]\\d)\\b.{0,80}\\b(my (partner|girlfriend|wife) is a woman|my (partner|boyfriend|husband) is a man|same sex|conservative|religious)\\b",
       "notPat": "\\b(i m|im|i am) 1[0-7]\\b|\\b1[0-7] (years old|yo|year old)\\b|\\b(teen|teenager|school|year \\d+|grade \\d+|pronouns?|misgender\\w*|deadnam\\w*|my teacher|gsa|homeroom|middle school|high school)\\b",
       "keys": [],
       "what": [
@@ -7844,7 +8602,7 @@
       "chips": [],
       "id": "devicekeep",
       "name": "what this site keeps on your device",
-      "pat": "\\bwhat (does|do|will|is) (this|the) (site|app|website|page|chat)\\b.{0,10}\\b(keep|keeps|store|stores|save|saves|remember|remembers|kept|stored|saved)\\b|\\b(keep|keeps|store|stores|save|saves|kept|stored|saved)\\b.{0,10}\\bon my (phone|device|computer|laptop|tablet|browser)\\b|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone) (see|tell|find out) (that )?i (was|ve been|have been|visited|used) (on |here|this)",
+      "pat": "\\bwhat (does|do|will|is) (this|the) (site|app|website|page|chat)\\b.{0,10}\\b(keep|keeps|store|stores|save|saves|remember|remembers|kept|stored|saved)\\b|\\b(keep|keeps|store|stores|save|saves|kept|stored|saved)\\b.{0,10}\\bon my (phone|device|computer|laptop|tablet|browser)\\b|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone) (see|tell|find out) (that )?i (was|ve been|have been|visited|used) (on |here|this)|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone|they|people) (see|tell|find out|know) (what|which|that) i (look at|read|visit|search|type|do|ve been)\\b|\\b(share|sharing|same|use (their|the|our)) (the )?wi ?fi\\b",
       "what": [
         "Nothing you type is sent anywhere. This site keeps a few small things in your browser on this device only, like your settings, and this chat until you close the tab or press Start over."
       ],
@@ -7860,8 +8618,8 @@
           "/on-this-device.html"
         ],
         [
-          "Not safe at home? (clearing what this site keeps)",
-          "/safety.html"
+          "Clearing what this site keeps",
+          "/safety.html#traces"
         ]
       ]
     },
@@ -7940,6 +8698,10 @@
       ],
       "chips": [],
       "follow": [
+        [
+          "\\bwhat if (she|he|they) (gets?|is|are|goes?|got) (mad|angry|upset|annoyed|cross|defensive|offended|weird)\\b|\\b(react\\w*|takes? it) (badly|the wrong way)\\b|\\b(gets?|got) (mad|angry|upset) at me\\b",
+          "roommad"
+        ],
         [
           "\\b(what|how) (do|should|can|could|would) i (actually |even |really )?(say|text|write|word|tell|put)\\b|\\bwhat (words|to say)\\b",
           "roombringup"
@@ -8119,6 +8881,47 @@
           "/about.html"
         ]
       ],
+      "chips": []
+    },
+    {
+      "id": "autisticfriends",
+      "name": "making friends as an autistic adult",
+      "pat": "\\b(make|making|find|finding|keep|keeping) (new )?friends\\b.{0,40}\\b(autis\\w*|aspergers?|asd|neurodivergent|adhd|audhd)\\b|\\b(autis\\w*|aspergers?|neurodivergent|audhd)\\b.{0,40}\\b(make|making|find|finding|keep|keeping) (new )?friends\\b",
+      "what": [
+        "Lots of autistic adults find friendship easier around a shared interest than through small talk. Regular beats big: the same faces, in the same place, again and again."
+      ],
+      "how": [
+        "Start from an interest: a club, a class, a game night, an online group or a volunteering shift. The activity does the talking.",
+        "Go regularly. A weekly thing with the same people builds friendships faster than one big night out.",
+        "Choose what suits you: one-to-one or small groups, quieter places, plans made ahead.",
+        "Say what works for you: “I’m better at texting than calls.” The right friends will be glad to know.",
+        "Look for other autistic or neurodivergent people too. Many find it a relief to be understood without translating."
+      ],
+      "script": [
+        "I really enjoyed that. Would you like to come again next week? I like making plans ahead."
+      ],
+      "scriptLabels": [
+        "Words you could use"
+      ],
+      "links": [
+        [
+          "Loneliness and friends (regular beats big)",
+          "/on-my-own.html#lonely"
+        ],
+        [
+          "Bonding tips for friends",
+          "/friends.html#bonding"
+        ],
+        [
+          "Wired Differently",
+          "/wired-differently.html"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
       "chips": []
     },
     {
@@ -8997,47 +9800,6 @@
         ]
       ],
       "chips": []
-    },
-    {
-      "id": "calmnow",
-      "kind": "intent",
-      "first": true,
-      "name": "something calming",
-      "pat": "\\b(tell me|say|give me|share|send me|i need|i want|i could use|i d like|id like) (something|anything|some words|a few words|a thought|words|a little something)? ?(calming|calm|comforting|soothing|gentle|reassuring|peaceful|nice|kind)\\b|\\bcalm me( down)?\\b|\\bhelp me (calm|settle|relax|breathe|slow down)\\b|\\bi (need|want|have) to (calm down|settle down|relax|breathe)\\b|\\bi need (some )?(calm|peace|a moment|a breather)\\b|\\bsoothe me\\b|\\bcomfort me\\b|\\bi cant (calm down|relax|settle)\\b|\\bsomething to (calm|settle|soothe) me\\b|\\bcalm (places?|spaces?|spots?|corners?)\\b|\\bi feel (so )?(panicky|shaky|wound up|keyed up)\\b|\\bcalm (down|myself) (fast|quick|quickly|now|right now)\\b|\\bhow (do|can) i (calm|settle) (down|myself)\\b|\\b(keyed|wound|worked|amped) up\\b|\\bmy heart (is )?(racing|pounding)\\b|\\bcool (off|down) (fast|quickly|now)\\b|\\bpanic(ked|king)? attacks?\\b|\\bpanicking\\b|\\bcan t (stop )?breath(e|ing)\\b",
-      "keys": [],
-      "what": [
-        "Of course. Let’s slow down together for a moment."
-      ],
-      "how": [
-        "Let your shoulders drop, and unclench your jaw.",
-        "Breathe in gently for a count of four, then out slowly for a count of six. Do that three times.",
-        "Nothing needs deciding in the next few minutes. You’re allowed to just be here.",
-        "The Breathe button, on any page, gives you a one-minute breathing break."
-      ],
-      "links": [
-        [
-          "The Night Garden",
-          "/night-garden.html"
-        ],
-        [
-          "Drift, the calm visualizer",
-          "/calm-visualizer.html"
-        ],
-        [
-          "Brain Breakers",
-          "/soundscapes.html"
-        ]
-      ],
-      "chips": [
-        [
-          "Make a calm-down plan",
-          "What is WP-11?"
-        ],
-        [
-          "A calm game",
-          "What games are there?"
-        ]
-      ]
     },
     {
       "id": "judged",
@@ -9960,6 +10722,51 @@
       ]
     },
     {
+      "id": "yellkidsrepair",
+      "name": "making it right with your child after yelling",
+      "safety": true,
+      "what": [
+        "Making it right teaches more than never getting it wrong. Come back once you’ve both calmed down, and go first."
+      ],
+      "how": [
+        "Say sorry for the specific thing, without a “but”.",
+        "If they were frightened, tell them it wasn’t their fault, and what you’ll change.",
+        "Give them a way out next time: “If I start getting loud, you can go to your room, and I’ll come and find you when I’m calm.”",
+        "Then keep the promise, and give them a little extra easy time together over the next few days."
+      ],
+      "script": [
+        "I scared you when I yelled. That wasn’t okay, and it wasn’t your fault. I’m working on stopping before I get loud.",
+        "I’m sorry I yelled. That wasn’t fair to you. Let’s try again."
+      ],
+      "scriptLabels": [
+        "If they were frightened",
+        "For a smaller moment"
+      ],
+      "links": [
+        [
+          "If your child was frightened",
+          "/parents.html#repair-scared"
+        ],
+        [
+          "When you yell",
+          "/parents.html#yelling"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b",
+      "follow": [
+        [
+          "\\b(help|support|therapist|counsel\\w*|anger management)\\b",
+          "angerhelp"
+        ]
+      ]
+    },
+    {
       "id": "yellkids",
       "kind": "intent",
       "first": true,
@@ -9990,7 +10797,13 @@
         ]
       ],
       "chips": [],
-      "safety": true
+      "safety": true,
+      "follow": [
+        [
+          "\\b(make it right|repair|apologi[sz]e|say sorry|fix it|make up)\\b",
+          "yellkidsrepair"
+        ]
+      ]
     },
     {
       "id": "grief",
@@ -10971,6 +11784,35 @@
           "How do I ask my parents for more freedom?"
         ]
       ]
+    },
+    {
+      "id": "identityok",
+      "name": "is this site okay for us?",
+      "pat": "\\b(i m|im|i am) (nonbinary|non binary|enby|trans|genderqueer|genderfluid|agender|poly|polyamorous)\\b.{0,100}\\b(site|this|ok|okay|for us|for me|work for)\\b|\\b(they ?them|she ?they|he ?they|ze ?zir)\\b.{0,100}\\b(site|ok for|okay for|for us|for me)\\b|\\bmy partners are\\b.{0,60}\\b(site|ok|okay|for us)\\b",
+      "what": [
+        "Thanks for telling me. Everything here works for your family as it is, and you can type your own names and pronouns into the tools, so nobody is “Person 3”."
+      ],
+      "how": [
+        "Every tool works for more than two people: the Lemonade Stand, One owner per job, the check-ins.",
+        "Use each person’s name and pronouns, every time, including in shared lists and the group chat.",
+        "Describe your relationship in your own words: partners, triad, polycule, family."
+      ],
+      "links": [
+        [
+          "Names, pronouns and your own words",
+          "/more-than-two.html#respect"
+        ],
+        [
+          "Every tool here works for more than two",
+          "/more-than-two.html#tools"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
     },
     {
       "id": "lgbtq",

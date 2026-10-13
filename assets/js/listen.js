@@ -27,6 +27,8 @@
   var SKIP = '.tol-listen, .tol-listen-bar, .tol-listen-mini, .tol-listen-cardrow, .tol-cheer, .lp-card, .lp-trail, .tol-pillars, nav, .tol-chbar, .tol-depth, .depth-bar, .tol-tip, .tol-read-host, .tol-pud-card, ' +
     '.tol-private, .tol-fp-note, .tol-gate, form, .tol-offer, .tol-pickup, .tol-dive-box, .no-listen, [aria-hidden="true"], .sr-only, ' +
     'script, style, noscript, .tol-join, .tol-puddles-hi, .pc-launch-row, .tol-steps-toggle, ' +
+    // the site's own controls and notes are not part of the page's words ("Quiet mode: extras are tucked away. Show extras")
+    'button, [role="button"], .tol-quiet-extras, .tol-es-hint, .ps-row, .tol-share-row, .tol-print-head, .tol-read-wrap, .tol-onpage, .tol-outline, .tol-work-note, .tol-cw, .tol-toast, .tol-focus-pill, ' +
     // the breadcrumb ("Self-discovery · Where your lens came from") isn't read: the title comes first
     '.read-code, .breadcrumb, .crumbs, [aria-label="Breadcrumb"], [aria-label="breadcrumb"]';
   var BLOCK = 'h1, h2, h3, h4, h5, p, li, dt, dd, blockquote, figcaption, td, th, summary, .scene-line';

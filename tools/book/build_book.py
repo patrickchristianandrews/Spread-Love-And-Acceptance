@@ -185,7 +185,7 @@ def patch_chapter(i, deep):
 
 
 # ---------- 2. the whole book on one page ----------
-def clean_for_whole(inner, slug, deep):
+def clean_for_whole(inner, slug, deep, here=None):
     s = inner
     s = drop_element(s, r'<div class="tol-listen-top', 'div')
     s = drop_element(s, r'<div class="tol-book-audio', 'div')
@@ -209,7 +209,7 @@ def clean_for_whole(inner, slug, deep):
     # links to other chapters stay on this page
     def inbook(m):
         target, dp, frag = m.group(1), m.group(2), m.group(3)
-        if target not in SLUGS or bool(dp) != deep:
+        if target not in (here or SLUGS) or bool(dp) != deep:
             return m.group(0)
         return 'href="#%s"' % ((target + '--' + frag[1:]) if frag else target)
     s = re.sub(r'href="/book/([a-z0-9-]+?)(-in-depth)?\.html(#[^"]*)?"', inbook, s)
@@ -218,45 +218,107 @@ def clean_for_whole(inner, slug, deep):
     return s
 
 
-def build_whole(deep):
+# The packages: the whole book, and smaller books for one person or for people together.
+# name -> (parts, title, who it's for). Each is built in the short and the full versions.
+PACKAGES = [
+    ('whole', (1, 2, 3), 'The Whole Book', 'Every chapter, all three parts.'),
+    ('for-yourself', (1, 3), 'The Book for One Person', 'Part One (yourself) and Part Three (understanding people): everything you can read and use on your own.'),
+    ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, housemates, co-parents or coworkers.'),
+    ('understanding', (3,), 'Understanding People', 'Part Three on its own: how feelings, stress, trust, change, grief and love work.'),
+]
+
+
+def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
+    here = set(e[0] for e in ORDER if e[1] in parts)
     parts_html, toc = [], []
-    for part in (1, 2, 3):
-        name, sub, _ = PARTS[part]
-        toc.append('<li><strong>%s: %s</strong><ol>' % (name, sub))
-        parts_html.append('<h2 class="whole-part" id="part-%d">%s: %s</h2>' % (part, name, sub))
+    for part in parts:
+        pname, sub, _ = PARTS[part]
+        toc.append('<li><strong>%s: %s</strong><ol>' % (pname, sub))
+        parts_html.append('<h2 class="whole-part" id="part-%d">%s: %s</h2>' % (part, pname, sub))
         for e in [x for x in ORDER if x[1] == part]:
             src = read(os.path.join(BOOK, e[0] + ('-in-depth' if deep else '') + '.html'))
-            body = clean_for_whole(main_inner(src), e[0], deep)
+            body = clean_for_whole(main_inner(src), e[0], deep, here)
             toc.append('<li><a href="#%s">%s: %s</a></li>' % (e[0], html.escape(chapter_name(e)), html.escape(TITLES[e[0]])))
             parts_html.append('<article class="whole-ch" id="%s">%s<p class="whole-top no-print"><a href="#contents">Contents</a> · <a href="%s">Open this chapter on its own page</a></p></article>' % (
                 e[0], body, href(e[0], deep)))
         toc.append('</ol></li>')
-    other = '/book/whole.html' if deep else '/book/whole-in-depth.html'
-    title = 'The Whole Book on One Page' + (' (Full Version)' if deep else '')
-    lede = ('Every chapter of <em>The Objective Ledger</em>, in order, on one page%s. Read straight through, use your browser’s find, or print it or save it as a PDF.'
-            % (', in the full versions' if deep else ', in the short versions'))
-    page = HEAD_TMPL.replace('{TITLE}', title).replace('{DESC}', 'The whole book on one page.')
+    fname = name + ('-in-depth' if deep else '')
+    other = '/book/%s.html' % (name if deep else name + '-in-depth')
+    base = title or 'The Whole Book'
+    title = base + (' on One Page' if name == 'whole' else '') + (' (Full Version)' if deep else '')
+    lede = ('%s<em>The Objective Ledger</em>, in order, on one page%s. Read straight through, use your browser’s find, or print it.'
+            % ((html.escape(who) + ' From ') if who else 'Every chapter of ', ', in the full versions' if deep else ', in the short versions'))
+    page = HEAD_TMPL.replace('{TITLE}', title).replace('{DESC}', 'The book on one page.')
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-pudcards data-no-dives data-no-reading class="whole-book">
 <main class="read whole" id="main">
 <header class="read-head"><p class="read-code">The book</p><h1>%s</h1></header>
 <p class="simple-lede">%s</p>
-<p class="whole-actions no-print no-bubble"><button type="button" class="tol-btn" onclick="window.print()">Print or save as PDF</button> <a class="tol-btn is-quiet" href="%s">%s</a> <a class="tol-btn is-quiet" href="/book/">The book’s home</a></p>
+<p class="whole-actions no-print no-bubble"><a class="tol-btn" href="/book/download.html#%s">Download the PDF</a> <button type="button" class="tol-btn is-quiet" onclick="window.print()">Print</button> <a class="tol-btn is-quiet" href="%s">%s</a> <a class="tol-btn is-quiet" href="/book/">The book’s home</a></p>
 <p class="whole-note no-print">About %d minutes of reading in all. Your browser keeps your place if you come back to this page.</p>
 <nav class="whole-toc no-bubble" id="contents" aria-label="Contents"><h2>Contents</h2><ol>%s</ol></nav>
 %s
 <p class="last-updated no-bubble">Last updated: October 2026. From spreadloveandacceptance.com. Free to read and share for personal and non-commercial teaching use, with credit.</p>
 </main>
 <script>
-// /book/whole.html?print=1 (from the book's home) opens the print dialog once the page has loaded
-if (/[?&]print=1\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 400); });
+// /book/whole.html?print=1 opens the print dialog once the page has loaded
+if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', function () { setTimeout(function () { window.print(); }, 400); });
 </script>
 </body>
 </html>
-''' % (title.replace(' (Full Version)', ': the full version'), lede, other,
+''' % (title.replace(' (Full Version)', ': the full version'), lede, fname, other,
        'Switch to the short versions' if deep else 'Switch to the full versions',
-       round(sum(WORDS[(e[0], deep)] for e in ORDER) / 220 / 5) * 5,
+       round(sum(WORDS[(e[0], deep)] for e in ORDER if e[0] in here) / 220 / 5) * 5,
        ''.join(toc), '\n'.join(parts_html))
-    write(os.path.join(BOOK, 'whole%s.html' % ('-in-depth' if deep else '')), page)
+    write(os.path.join(BOOK, fname + '.html'), page)
+
+
+# ---------- 2b. the PDF downloads (made by tools/book/build_pdfs.js, which writes book/pdf/manifest.json) ----------
+def build_download():
+    try:
+        import json
+        man = json.load(open(os.path.join(BOOK, 'pdf', 'manifest.json'), encoding='utf-8'))
+    except Exception:
+        man = {}
+    cards = []
+    for name, parts, title, who in PACKAGES:
+        rows = []
+        for deep in (False, True):
+            fname = name + ('-in-depth' if deep else '')
+            m = man.get(fname, {})
+            meta = ''
+            if m:
+                meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
+            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a></li>' % (
+                fname, fname, 'Full version' if deep else 'Short version', meta, fname))
+        chs = sum(1 for e in ORDER if e[1] in parts)
+        cards.append('<section class="bk-dl-card" id="%s"><h2>%s</h2><p>%s %d chapters.</p><ul class="bk-dl-list">%s</ul></section>' % (
+            name, html.escape(title), html.escape(who), chs, ''.join(rows)))
+    page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
+    page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>
+<main class="read bk-home bk-dl" id="main">
+<header class="read-head"><p class="read-code">The book</p><h1>Download the book as a PDF</h1></header>
+<p class="simple-lede">Keep the book on your phone, tablet or computer, or print it. Pick the whole book or a smaller book that fits you, in the short or the full version.</p>
+<div class="bk-dl-gate no-bubble" data-no-bubble id="get">
+<h2>Your email, then your download</h2>
+<p>To download a PDF, enter your email address. It goes to Buttondown, our email service, so we can send you a short note when something new is added to the book or the site. You can unsubscribe from any email in one tap. Reading the book here on the site never needs an email.</p>
+<form class="bk-dl-form" novalidate>
+<label for="bk-dl-email">Email address</label>
+<div class="bk-dl-row"><input type="email" id="bk-dl-email" name="email" autocomplete="email" placeholder="name@example.com" required><button type="submit" class="tol-btn">Unlock the downloads</button></div>
+<p class="bk-dl-msg" role="status" aria-live="polite"></p>
+</form>
+<p class="bk-dl-small">This device remembers that you unlocked the downloads (not your address), so you won’t be asked again here. <a href="/legal/privacy-policy.html">Privacy policy</a>.</p>
+</div>
+<div class="bk-dl-cards no-bubble" data-no-bubble>
+%s
+</div>
+<p>Prefer to read online? <a href="/book/">The book’s home</a> has every chapter, free, with no email.</p>
+<p class="last-updated no-bubble">Last updated: October 2026</p>
+</main>
+<script src="/assets/js/book-download.js" defer></script>
+</body>
+</html>
+''' % '\n'.join(cards)
+    write(os.path.join(BOOK, 'download.html'), page)
 
 
 # ---------- 3. the book's home ----------
@@ -279,7 +341,7 @@ def build_home():
 <div class="bk-start no-bubble" data-no-bubble>
 <a class="tol-btn bk-go" href="/book/self-1-then.html">Start reading: Part One, Then</a>
 <a class="tol-btn is-quiet" href="/book/whole.html">The whole book on one page</a>
-<a class="tol-btn is-quiet" href="/book/whole.html?print=1">Print or save as PDF</a>
+<a class="tol-btn is-quiet" href="/book/download.html">Download as PDF</a>
 </div>
 <ul class="bk-how no-bubble" data-no-bubble>
 <li><strong>Read it in order, like any book.</strong> %d chapters in three parts. Every chapter ends with a link to the next one.</li>
@@ -351,8 +413,10 @@ if __name__ == '__main__':
     for i in range(len(ORDER)):
         patch_chapter(i, False)
         patch_chapter(i, True)
-    build_whole(False)
-    build_whole(True)
+    for name, parts, title, who in PACKAGES:
+        for deep in (False, True):
+            build_whole(deep, name, parts, title, who if name != 'whole' else '')
+    build_download()
     build_home()
     patch_glance()
     print('book: %d chapters, home, whole book (short %d words, full %d words)' % (

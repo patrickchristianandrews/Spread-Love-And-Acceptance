@@ -843,7 +843,7 @@
   "title": "For Better or For Worse: Divorce Reconsidered",
   "venue": "W. W. Norton",
   "doi": null,
-  "url": "https://www.publishersweekly.com/978-0-393-04862-9",
+  "url": "https://wwnorton.co.uk/books/9780393324136-for-better-or-for-worse",
   "kind": "book",
   "finding": "Drawing on long-term studies of about 1,400 families, argues that most children of divorce and remarriage turn out reasonably well, with outcomes varying widely.",
   "strength": "moderate — large longitudinal programme; popular book that drew some controversy",
@@ -856,8 +856,8 @@
    "/library/life.html#stepfamilies"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/978-0-393-04862-9 ; https://search.ub.tum.de/vufind/Record/DE-604.BV014461251",
-  "note": "The site names Hetherington without a specific work; this book is the representative source."
+  "verified_by": "https://www.publishersweekly.com/978-0-393-04862-9 ; https://search.ub.tum.de/vufind/Record/DE-604.BV014461251 ; https://wwnorton.co.uk/books/9780393324136-for-better-or-for-worse",
+  "note": "The site names Hetherington without a specific work; this book is the representative source. Publisher page (W. W. Norton UK, paperback edition); replaces a trade-magazine listing."
  },
  {
   "id": "amato-2001",
@@ -1172,7 +1172,7 @@
   "title": "The 5 Languages of Appreciation in the Workplace: Empowering Organizations by Encouraging People",
   "venue": "Northfield Publishing (Moody)",
   "doi": null,
-  "url": "https://www.publishersweekly.com/9780802461988",
+  "url": "https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
   "kind": "book",
   "finding": "Applies the love-languages idea to work: words of affirmation, quality time, acts of service, tangible gifts and appropriate physical touch, with an assessment tool.",
   "strength": "early — popular, very little independent testing (as the site says)",
@@ -1187,7 +1187,7 @@
    "/tools/chat/program-cards.json"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/9780802461988 ; https://resourcecentre.tourism.gov.my/webopac/Record/0000008380/TOC",
+  "verified_by": "https://www.publishersweekly.com/9780802461988 ; https://resourcecentre.tourism.gov.my/webopac/Record/0000008380/TOC ; https://class.unt.edu/communication/publications/5-languages-appreciation-workplace-empowering-organizations-encouraging-people.html",
   "note": "First published 2011 (Publishers Weekly review June 2011; library catalogues 2011). The site cites it as 2012 — see fixnotes."
  },
  {
@@ -1357,7 +1357,8 @@
    "/library/communication.html#workplace-communication",
    "/library/teams.html#psychological-safety",
    "/library/emotions.html#emotional-safety",
-   "/tools/chat/deep.json#work"
+   "/tools/chat/deep.json#work",
+   "/book/understanding-17-groups-in-depth.html#stay-yourself"
   ],
   "verified": true,
   "verified_by": "https://dash.harvard.edu/entities/publication/13a7b031-0fdd-45ec-a7e0-2b80e2bc679f ; https://www.citedrive.com/en/discovery/psychological-safety-and-learning-behavior-in-work-teams/"

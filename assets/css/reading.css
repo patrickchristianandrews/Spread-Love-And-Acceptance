@@ -149,3 +149,23 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
    and the reading order shows the book's own chapter labels without extra list numbers ("2. Chapter I") */
 .read .bt-switch{ position:static; }
 .read ol.book-order ol{ list-style:none; padding-left:.4rem; }
+
+/* the book's PDF downloads (/book/download.html) */
+.bk-dl .bk-dl-gate{ margin:1.2rem 0 1.6rem; padding:1rem 1.15rem; border:2px solid var(--brass); border-radius:16px; background:var(--paper-deep, rgba(0,0,0,.03)); }
+.bk-dl .bk-dl-gate h2{ margin-top:.1rem; }
+.bk-dl .bk-dl-form label{ display:block; font-weight:600; margin:.6rem 0 .3rem; }
+.bk-dl .bk-dl-row{ display:flex; flex-wrap:wrap; gap:.5rem; }
+.bk-dl .bk-dl-row input{ flex:1 1 14rem; min-height:44px; font:inherit; padding:.4rem .7rem; border:1px solid var(--line); border-radius:10px; background:#fff; color:#2B2620; }
+.bk-dl .bk-dl-msg{ min-height:1.2em; margin:.5rem 0 0; font-size:.95rem; }
+.bk-dl .bk-dl-msg.is-error{ color:#8B2B1E; } .bk-dl .bk-dl-msg.is-warn{ color:#7A5620; } .bk-dl .bk-dl-msg.is-ok{ color:var(--credit); }
+.bk-dl .bk-dl-small{ font-size:.88rem; color:var(--ink-soft); }
+.bk-dl .bk-dl-cards{ display:grid; gap:1rem; }
+@media (min-width:760px){ .bk-dl .bk-dl-cards{ grid-template-columns:1fr 1fr; } }
+.bk-dl .bk-dl-card{ padding:.9rem 1.1rem; border:1px solid var(--line); border-radius:16px; background:var(--paper); }
+.bk-dl .bk-dl-card h2{ margin:.1rem 0 .3rem; font-size:1.25rem; }
+.bk-dl ul.bk-dl-list{ list-style:none; padding:0 !important; margin:.5rem 0 0; display:grid; gap:.5rem; }
+.bk-dl ul.bk-dl-list li{ margin:0; max-width:none; }
+.bk-dl a.bk-dl-file{ display:inline-flex; flex-direction:column; min-height:44px; padding:.45rem .9rem; border:2px solid var(--brass); border-radius:12px; text-decoration:none; color:var(--ink); font-weight:600; }
+.bk-dl a.bk-dl-file .bk-dl-m{ font-weight:400; font-size:.85rem; color:var(--ink-soft); }
+.bk-dl a.bk-dl-file[aria-disabled="true"]::after{ content:" (enter your email above)"; font-weight:400; font-size:.8rem; color:var(--ink-soft); }
+.bk-dl a.bk-dl-read{ font-size:.9rem; margin-left:.4rem; }

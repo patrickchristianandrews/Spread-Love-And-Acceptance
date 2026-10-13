@@ -336,7 +336,9 @@
    "emotion-regulation"
   ],
   "mentioned_on": [
-   "/library/emotions.html#emotion-regulation"
+   "/library/emotions.html#emotion-regulation",
+   "/book/understanding-13-anger.html",
+   "/book/understanding-13-anger-in-depth.html#step-back"
   ],
   "verified": true,
   "verified_by": "https://www.scinapse.io/papers/2096423181 ; https://data.gesis.org/gesiskg/resource/zis-Gross1998The"
@@ -640,7 +642,8 @@
    "/grief.html#grief",
    "/library/emotions.html#grief-and-change",
    "/library/emotions.html#resilience",
-   "/book/understanding-8-loss.html"
+   "/book/understanding-8-loss.html",
+   "/book/understanding-16-worry-in-depth.html#trauma"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/14736317/"
@@ -992,7 +995,8 @@
    "allostatic-load"
   ],
   "mentioned_on": [
-   "/library/stress.html#allostatic-load"
+   "/library/stress.html#allostatic-load",
+   "/book/understanding-16-worry-in-depth.html#alarm"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9428819/ ; https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/1260946"
@@ -2562,7 +2566,7 @@
   "title": "The other side of sadness: What the new science of bereavement tells us about life after loss",
   "venue": "Basic Books",
   "doi": null,
-  "url": "https://www.publishersweekly.com/978-0-465-01360-9",
+  "url": "https://www.hachettebookgroup.com/titles/george-a-bonanno/the-other-side-of-sadness/9781541699373/",
   "kind": "book",
   "finding": "A book summarising bereavement research: most people are resilient after a loss, grief tends to come and go rather than follow fixed stages, and only a minority develop long-lasting, severe grief.",
   "strength": "strong: draws on Bonanno's well-replicated research on grief trajectories; written for a general audience.",
@@ -2574,7 +2578,8 @@
    "/book/understanding-8-loss-in-depth.html#support"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/978-0-465-01360-9 ; https://search.worldcat.org/oclc/316825674 (Basic Books, New York, 2009)"
+  "verified_by": "https://www.publishersweekly.com/978-0-465-01360-9 ; https://search.worldcat.org/oclc/316825674 (Basic Books, New York, 2009) ; https://www.hachettebookgroup.com/titles/george-a-bonanno/the-other-side-of-sadness/9781541699373/",
+  "note": "Publisher page (Basic Books / Hachette) for the 2019 revised edition; replaces a trade-magazine listing."
  },
  {
   "id": "prolonged-grief-2022",
@@ -2948,7 +2953,8 @@
   "mentioned_on": [
    "/book/understanding-9-minds-in-depth.html#adhd",
    "/library/wiring.html#adhd-basics",
-   "/book/understanding-9-minds.html"
+   "/book/understanding-9-minds.html",
+   "/book/understanding-9-minds-in-depth.html#executive-function"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9000892/ ; https://sciences.ucf.edu/psychology/childrenslearningclinic/wp-content/uploads/sites/24/2013/08/Barkley-1997-Psych-Bulletin.pdf"
@@ -2992,7 +2998,8 @@
    "language"
   ],
   "mentioned_on": [
-   "/book/understanding-9-minds-in-depth.html#labels"
+   "/book/understanding-9-minds-in-depth.html#labels",
+   "/book/understanding-9-minds-in-depth.html#community"
   ],
   "verified": true,
   "verified_by": "https://journals.sagepub.com/doi/10.1177/1362361315588200 ; https://researchers.mq.edu.au/en/publications/which-terms-should-be-used-to-describe-autism-perspectives-from-t/"
@@ -3100,7 +3107,8 @@
    "anxiety"
   ],
   "mentioned_on": [
-   "/library/wiring.html#intolerance-of-uncertainty"
+   "/library/wiring.html#intolerance-of-uncertainty",
+   "/book/understanding-16-worry-in-depth.html#alarm"
   ],
   "verified": true,
   "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27067453/ ; https://uregina.scholaris.ca/items/5d1d1960-6e1a-4cfd-8619-b9c46ef59ff9"
@@ -3229,7 +3237,8 @@
    "culture"
   ],
   "mentioned_on": [
-   "/book/understanding-10-values-in-depth.html#different-values"
+   "/book/understanding-10-values-in-depth.html#different-values",
+   "/book/understanding-17-groups-in-depth.html#culture"
   ],
   "verified": true,
   "verified_by": "https://sites.duke.edu/culturelab/files/2021/07/Culture_and_the_Self_Implications_for_Cognition_Em.pdf ; https://contemplativemind.org/archives/980 (DOI not shown in search)"
@@ -3427,7 +3436,9 @@
   ],
   "mentioned_on": [
    "/book/understanding-12-helping-in-depth.html#crisis",
-   "/book/understanding-12-helping.html"
+   "/book/understanding-12-helping.html",
+   "/book/understanding-16-worry.html#mix-ups",
+   "/book/understanding-16-worry-in-depth.html#helping"
   ],
   "verified": true,
   "note": "Re-checked 2026-10-11: a title search returned the PubMed record 24998511 and the Cambridge (Psychological Medicine) abstract. DOI not confirmed, so the PubMed record is the link.",
@@ -3712,7 +3723,8 @@
   ],
   "mentioned_on": [
    "/book/self-1-then-in-depth.html#timing",
-   "/know-yourself-in-depth.html#adversity"
+   "/know-yourself-in-depth.html#adversity",
+   "/book/understanding-16-worry-in-depth.html#trauma"
   ],
   "verified": true,
   "verified_by": "https://calio.dspacedirect.org/handle/11212/2151 ; https://scinapse.io/papers/2116839388"

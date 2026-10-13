@@ -29,6 +29,9 @@
   .ci-jump{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.4rem 0 1.2rem !important; }
   .ci-jump a{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; padding:.45rem 1rem; border:1px solid #2F5F8A; border-radius:999px; background:var(--paper); color:#2F5F8A; text-decoration:none; font-weight:600; }
   .ci-safe{ font-size:.95rem; color:var(--ink-soft); }
+  .ci-from{ margin:.4rem 0 .6rem; padding:.6rem .8rem; border-radius:12px; background:#EEF3FA; border:2px solid #C9D8EC; }
+  .ci-from[hidden]{ display:none; }
+  .ci-linkbtn{ font:inherit; background:none; border:0; padding:0; color:var(--focus); text-decoration:underline; cursor:pointer; min-height:32px; }
   .ci-send{ font-size:.95rem; }
   .ci-pick{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 .8rem; padding:0; border:0; }
   .ci-pick[hidden]{ display:none; }
@@ -87,6 +90,7 @@
 <p class="depth-bar"><span>Simple version</span><a class="dig" href="/check-ins-in-depth.html">Read the full guide</a></p>
 
 <p class="simple-lede">A check-in is a short, agreed talk about one hard topic, at a time that works for everyone taking part: a couple, a family, housemates or a team. The topic can wait for that time, and it goes much better when it gets one.</p>
+<p class="ci-safe">For relationships where everyone feels safe. If anyone is afraid or controlled, see <a href="/safety.html">Not safe at home?</a></p>
 <p class="ci-jump no-bubble"><a href="#card">Weekly house meeting card &rarr;</a> <a href="?for=family#card">Family plan card &rarr;</a></p>
 <p class="pillar-note" data-ci-not-family><strong>Where this fits:</strong> This page belongs to <a href="/five-pillars.html#read-your-state">Pillar III, Read your state first</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>, part of the <a href="/five-pillars.html">Five Pillars</a>. <strong>In you:</strong> check how full your battery is before a hard talk. <strong>Between you and others:</strong> agree on the timing, pause and come back when you need to, and say it so it lands.</p>
 
@@ -131,7 +135,6 @@
 
 <section class="tfs-home tol-plain no-bubble" id="card" aria-labelledby="card-h">
   <h2 id="card-h">This week&rsquo;s check-in card</h2>
-  <p class="ci-safe">For relationships where everyone feels safe. If anyone is afraid or controlled, see <a href="/safety.html">Not safe at home?</a></p>
   <fieldset class="ci-pick" id="ci-pick" hidden>
     <legend>Who is checking in?</legend>
     <label><input type="radio" name="ci-who" value="home" checked> <span>Partners or housemates</span></label>
@@ -140,19 +143,21 @@
   <div id="ci-home">
   <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
   <p class="ci-send">To send it to the other person’s phone: tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
+  <p class="ci-small">Three or more of you? Go round in turn: each person says one fact and how it landed, the next person says back what they heard, then it moves on. Everyone gets a turn before anyone answers.</p>
   <div data-tfs-mount="checkin"></div>
   </div>
   <div id="ci-family" class="ci-fam" hidden>
     <p>A plan for the family, not a list of chores: visits, advice, the little one’s routines and a regular job for a grandparent. Fill in what fits, skip the rest, then send it to each other.</p>
+    <p class="ci-from" id="cf-from" role="status" hidden></p>
     <label class="ci-f"><span>Who’s in this plan (optional)</span><input type="text" id="cf-names" maxlength="80" autocomplete="off" placeholder="Amy, Mum and Dad"></label>
     <label class="ci-f"><span>Visits</span><textarea id="cf-visits" rows="2" maxlength="300" placeholder="Sunday lunch every other week, 12 to 3. Text the day before."></textarea></label>
     <label class="ci-f"><span>Advice</span><textarea id="cf-advice" rows="2" maxlength="300" placeholder="Ask first: “Do you want ideas, or just to talk?”"></textarea></label>
     <label class="ci-f"><span>The baby’s or children’s routines</span><textarea id="cf-baby" rows="2" maxlength="300" placeholder="Nap at 1. No sweets before dinner. Ask us before anything new."></textarea></label>
     <label class="ci-f"><span>A regular job for a grandparent or relative</span><textarea id="cf-job" rows="2" maxlength="300" placeholder="Grandma does Tuesday pickup and tea."></textarea></label>
     <label class="ci-f"><span>We’ll look at this again on</span><input type="text" id="cf-review" maxlength="80" autocomplete="off" placeholder="The first Sunday of next month"></label>
-    <p class="ci-row"><button type="button" class="ci-btn" id="cf-copy">Copy to send</button> <button type="button" class="ci-btn is-quiet" id="cf-share" data-share data-share-url="none" data-share-result data-share-title="Our family plan">Share to their phone</button> <span id="cf-note" role="status"></span></p>
+    <p class="ci-row"><button type="button" class="ci-btn" id="cf-link">Send as a link</button> <button type="button" class="ci-btn is-quiet" id="cf-copy">Copy as text</button> <span id="cf-note" role="status"></span></p>
     <div id="cf-fridge"></div>
-    <p class="ci-small">Nothing here is saved or sent until you copy or share it. It stays on this device.</p>
+    <p class="ci-small">Kept on this device so it’s here next time, and never sent anywhere unless you send it yourself. A link opens this card, filled in, on their phone, where they can change it and send it back. <button type="button" class="ci-linkbtn" id="cf-forget">Forget it on this device</button></p>
   </div>
 </section>
 
@@ -200,16 +205,52 @@
     F.forEach(function (f) { if (v(f[0])) lines.push(f[1] + ': ' + v(f[0])); });
     return lines.length > 1 ? lines.join('\n') : '';
   }
-  var note = document.getElementById('cf-note'), share = document.getElementById('cf-share');
-  share._tolShare = function () { return { text: text() || 'Our family plan' }; };
-  fam.addEventListener('input', function () { note.textContent = ''; });
+  var note = document.getElementById('cf-note');
+  // kept on this device (localStorage 'tol-family-plan'), so it's here next time
+  var KEY = 'tol-family-plan', IDS = ['cf-names'].concat(F.map(function (f) { return f[0]; }));
+  function read() { var o = {}; IDS.forEach(function (id) { var x = v(id); if (x) o[id.slice(3)] = x; }); return o; }
+  function fill(o) { IDS.forEach(function (id) { var x = o && o[id.slice(3)]; document.getElementById(id).value = typeof x === 'string' ? x.slice(0, 300) : ''; }); }
+  function keep() { try { var o = read(); if (Object.keys(o).length) localStorage.setItem(KEY, JSON.stringify(o)); else localStorage.removeItem(KEY); } catch (e) {} }
+  try { var kept = JSON.parse(localStorage.getItem(KEY) || 'null'); if (kept && typeof kept === 'object') fill(kept); } catch (e) {}
+  fam.addEventListener('input', function () { note.textContent = ''; keep(); });
+  document.getElementById('cf-forget').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} fill({}); note.textContent = 'Forgotten. Nothing from the family plan is kept on this device now.'; });
+  // "Send as a link": the plan rides after the # (never sent to a server); it opens filled in on their phone
+  function b64(o) { var b = new TextEncoder().encode(JSON.stringify(o)), s = ''; for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function unb64(t) { t = t.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; var bin = atob(t), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return JSON.parse(new TextDecoder().decode(a)); }
+  document.getElementById('cf-link').addEventListener('click', function () {
+    var o = read(); if (!Object.keys(o).filter(function (k) { return k !== 'names'; }).length) { note.textContent = 'Fill in a line or two first.'; return; }
+    var url = location.origin + '/check-ins.html?for=family#plan=' + b64(o);
+    var t = 'Our family plan' + (o.names ? ' (' + o.names + ')' : '') + '. Open it to see it filled in, change anything, and send it back. Nothing is uploaded.';
+    if (window.TOLShare && window.TOLShare.share) { try { window.TOLShare.share({ title: 'Our family plan', text: t, url: url, result: true }); return; } catch (e) {} }
+    copyIt(t + '\n' + url, 'Copied the link. Paste it into a message to the others.');
+  });
+  var m = /^#plan=([A-Za-z0-9_-]+)$/.exec(location.hash || ''), got = null;
+  if (m) { try { got = unb64(m[1]); } catch (e) { got = null; } try { history.replaceState(null, '', location.pathname + location.search + '#card'); } catch (e) {} }
+  if (got && typeof got === 'object') {
+    show('family'); fill(got); keep();
+    var fr = document.getElementById('cf-from');
+    fr.textContent = (got.names ? 'The plan for ' + got.names + ' is here' : 'Someone sent you this plan') + ', filled in. Change anything, then tap “Send as a link” to send it back.';
+    fr.hidden = false;
+  }
+  function copyIt(t, okMsg) {
+    function done(ok) { note.textContent = ok ? okMsg : 'Select the words and copy them.'; }
+    function fallback() { var ta = document.createElement('textarea'), ok = false; ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); done(ok); }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { done(true); }, fallback); else fallback();
+  }
   document.getElementById('cf-copy').addEventListener('click', function () {
     var t = text();
     if (!t) { note.textContent = 'Fill in a line or two first.'; return; }
-    function done(ok) { note.textContent = ok ? 'Copied. Paste it into a message to the others.' : 'Select the words and copy them.'; }
-    function fallback() { var ta = document.createElement('textarea'), ok = false; ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { ok = document.execCommand('copy'); } catch (e) {} ta.remove(); done(ok); }
-    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(function () { done(true); }, fallback); else fallback();
+    copyIt(t, 'Copied. Paste it into a message to the others.');
   });
+  // #card from another page: content above it loads and grows after the first jump (a tablet lands
+  // too high or too low), so land on the card again once the page has settled
+  if (/^#card$/.test(location.hash || '') || got) {
+    var card = document.getElementById('card');
+    var land = function () { if (card && Math.abs(card.getBoundingClientRect().top) > 80) card.scrollIntoView({ block: 'start' }); };
+    window.addEventListener('load', function () { land(); setTimeout(land, 400); setTimeout(land, 1200); });
+    var userMoved = false; ['wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, function () { userMoved = true; }, { once: true, passive: true }); });
+    var land0 = land; land = function () { if (!userMoved) land0(); };
+  }
   // a printable page, using the site's fridge sheet when it has loaded
   var tries = 0;
   (function fridge() {

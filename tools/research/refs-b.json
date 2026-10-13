@@ -657,7 +657,7 @@
   "title": "Attachment and Loss, Vol. 1: Attachment",
   "venue": "Hogarth Press and the Institute of Psycho-Analysis (London) / Basic Books (New York)",
   "doi": null,
-  "url": "https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp",
+  "url": "https://vufind.lboro.ac.uk/Record/194760",
   "kind": "book",
   "finding": "The first volume of Bowlby's trilogy, setting out attachment theory: children's bond with caregivers is an evolved system for seeking safety and comfort.",
   "strength": "strong — foundational theory, extensively supported in later research",
@@ -677,7 +677,8 @@
    "/book/understanding-5-belonging.html"
   ],
   "verified": true,
-  "verified_by": "https://works.www.wellcomecollection.org/works/wu7gxjkb ; https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp (Hogarth Press / Basic Books, 1969)"
+  "verified_by": "https://works.www.wellcomecollection.org/works/wu7gxjkb ; https://www.abebooks.com/9780465005390/Attachment-Loss-Vol-1-John-046500539X/plp (Hogarth Press / Basic Books, 1969) ; https://vufind.lboro.ac.uk/Record/194760",
+  "note": "Library catalogue record (Loughborough University) for the 1982 second edition; replaces a bookshop link."
  },
  {
   "id": "ainsworth-1978",
@@ -1539,7 +1540,7 @@
   "title": "Mindwise: How We Understand What Others Think, Believe, Feel, and Want",
   "venue": "Alfred A. Knopf (New York)",
   "doi": null,
-  "url": "https://www.publishersweekly.com/9780307595911",
+  "url": "https://wellcomecollection.org/works/zh83qear",
   "kind": "book",
   "finding": "A book reviewing research on how people infer others' thoughts and feelings, and why this 'sixth sense' is more error-prone than we believe.",
   "strength": "moderate — popular book summarizing peer-reviewed research",
@@ -1551,7 +1552,8 @@
    "/book/understanding-3-seeing.html"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/9780307595911 ; https://casbs.stanford.edu/mindwise-how-we-understand-what-others-think-believe-feel-and-want"
+  "verified_by": "https://www.publishersweekly.com/9780307595911 ; https://casbs.stanford.edu/mindwise-how-we-understand-what-others-think-believe-feel-and-want ; https://wellcomecollection.org/works/zh83qear",
+  "note": "Library catalogue record (Wellcome Collection); replaces a trade-magazine listing."
  },
  {
   "id": "hastorf-cantril-1954",
@@ -1616,7 +1618,8 @@
    "/book/understanding-5-belonging-in-depth.html#belonging",
    "/library/connection.html#loneliness",
    "/library/connection.html#social-support",
-   "/book/understanding-5-belonging.html"
+   "/book/understanding-5-belonging.html",
+   "/book/understanding-16-worry-in-depth.html#basics"
   ],
   "verified": true,
   "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316"
@@ -1648,7 +1651,7 @@
   "title": "Loneliness: Human Nature and the Need for Social Connection",
   "venue": "W. W. Norton (New York)",
   "doi": null,
-  "url": "https://www.publishersweekly.com/9780393061703",
+  "url": "https://wellcomecollection.org/works/wp45vzsp",
   "kind": "book",
   "finding": "A book arguing that loneliness is a biological signal, like hunger, that we need connection, and that chronic loneliness can trap people in isolation and harm health.",
   "strength": "moderate — popular book summarizing the authors' and others' research",
@@ -1663,7 +1666,8 @@
    "/tools/chat/deep.json"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306"
+  "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306 ; https://wellcomecollection.org/works/wp45vzsp",
+  "note": "Library catalogue record (Wellcome Collection, 2009 printing); replaces a trade-magazine listing."
  },
  {
   "id": "russell-peplau-ferguson-1978",
@@ -2006,7 +2010,8 @@
    "/book/understanding-5-belonging-in-depth.html",
    "/book/understanding-5-belonging-in-depth.html#belonging",
    "/book/understanding-5-belonging.html",
-   "/book/understanding-15-love-in-depth.html#forms"
+   "/book/understanding-15-love-in-depth.html#forms",
+   "/book/understanding-17-groups-in-depth.html#pull"
   ],
   "verified": true,
   "verified_by": "DOI shown in search result references (e.g. https://pubmed.ncbi.nlm.nih.gov/27134325/)"
@@ -2084,7 +2089,7 @@
   "title": "Nonviolent Communication: A Language of Compassion (later editions: A Language of Life)",
   "venue": "PuddleDancer Press (Encinitas, CA); 2nd ed. 2003, 3rd ed. 2015",
   "doi": null,
-  "url": "https://www.harvard.com/book/9781892005281",
+  "url": "https://vufind.lboro.ac.uk/Record/562413",
   "kind": "book",
   "finding": "Describes Nonviolent Communication: expressing observations, feelings, needs and requests, and listening for the same in others.",
   "strength": "early — widely used practice; few rigorous studies",
@@ -2103,7 +2108,8 @@
    "/book/understanding-13-anger-in-depth.html#say-it"
   ],
   "verified": true,
-  "verified_by": "Bookseller and library records: 1999 PuddleDancer first edition titled 'A Language of Compassion' (https://www.abebooks.com/first-edition/Nonviolent-Communication-Language-Compassion-Marshall-Rosenberg/31730622023/bd); later editions 'A Language of Life' (2003 2nd ed.; 3rd ed. https://www.harvard.com/book/9781892005281)"
+  "verified_by": "Bookseller and library records: 1999 PuddleDancer first edition titled 'A Language of Compassion' (https://www.abebooks.com/first-edition/Nonviolent-Communication-Language-Compassion-Marshall-Rosenberg/31730622023/bd); later editions 'A Language of Life' (2003 2nd ed.; 3rd ed. https://www.harvard.com/book/9781892005281) ; https://vufind.lboro.ac.uk/Record/562413",
+  "note": "Library catalogue record (Loughborough University); replaces a bookshop link."
  },
  {
   "id": "stone-patton-heen-1999",
@@ -2112,7 +2118,7 @@
   "title": "Difficult Conversations: How to Discuss What Matters Most",
   "venue": "Viking (New York); 10th-anniversary edition, Penguin 2010",
   "doi": null,
-  "url": "https://www.publishersweekly.com/978-0-670-88339-4",
+  "url": "https://www.penguinrandomhouse.com/books/331191/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/",
   "kind": "book",
   "finding": "A practitioner book from the Harvard Negotiation Project describing three conversations inside every hard conversation (what happened, feelings, identity) and the gap between intent and impact.",
   "strength": "moderate — practice framework grounded in negotiation experience, not controlled studies",
@@ -2126,7 +2132,8 @@
    "/library/conflict.html#three-conversations"
   ],
   "verified": true,
-  "verified_by": "https://www.publishersweekly.com/978-0-670-88339-4 ; https://bemis2.marmot.org/Record/.b10989559"
+  "verified_by": "https://www.publishersweekly.com/978-0-670-88339-4 ; https://bemis2.marmot.org/Record/.b10989559 ; https://www.penguinrandomhouse.com/books/331191/difficult-conversations-by-douglas-stone-bruce-patton-and-sheila-heen-foreword-by-roger-fisher/",
+  "note": "Publisher page (Penguin Random House); replaces a trade-magazine listing."
  },
  {
   "id": "markman-stanley-blumberg-1994",

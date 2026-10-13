@@ -625,6 +625,8 @@
   // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
   // angry": from the person on the receiving end, that is a safety matter, not a wording problem. Never a script for them.
   var VERBAL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))\b.{0,40}\b(calls|called|calling) me (names|worthless|stupid|useless|pathetic|fat|ugly|crazy|psycho|an idiot|a (bitch|slut|whore|loser|failure|idiot))\b|\bcalls me names\b|\bname ?calling\b|\b(puts|put|putting) me down\b|\bbelittl\w* me\b|\b(makes|made) me feel (worthless|small|stupid|like nothing|like im nothing|like i m nothing)\b|\b(says|said|tells me|told me) (i m|im|i am) (worthless|useless|stupid|pathetic|nothing|crazy|a failure)\b|\bwalk\w* on eggshells\b|\b(turns|turned|twists|twisted|flips|flipped) (it|things|everything|this|that|it all) (around|back|round) (on|onto) me\b|\bdarvo\b|\b(is|could) (he|she|my \w+) (be )?(a )?(narcissis\w*|psychopath\w*|sociopath\w*)\b|\b(he|she|my \w+) (is|s) (a )?(narcissis\w*|gaslight\w*|psychopath\w*|sociopath\w*)\b|\b(screams|screamed|screaming|yells|yelled|yelling|shouts|shouted|shouting|swears|swore) at me\b.{0,60}\b(names|worthless|stupid|every day|all the time|constantly|always|scared|afraid|so he|so she)\b|\b(say|word|phrase|put|ask) (it|things|anything|stuff|this|that|everything) so (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\b(he|she|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( always| constantly| often| still| keeps)? (yells|screams|shouts|swears|yelling|screaming|shouting) at me\b/;
+  // the same, without a bare "he yells at me": names, put-downs, eggshells, always/every day, fear
+  var VERBAL_STRONG = new RegExp(VERBAL.source.replace(/\|\\b\(he\|she\|my \(partner[^]*$/, ''));
   // a sibling, a child, a classmate or a boss calling names is a different conversation
   var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
   var VERBAL_DETAIL = /\b(scream\w*|yell\w*|shout\w*|swear\w*|swore|names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|eggshells|turns?|turned|twist\w*|flip\w*|darvo|apologi\w*|angry|mad|furious|blames?|gaslight\w*)\b/;
@@ -977,10 +979,17 @@
         var qt = {}; tokens(state.curF || '').forEach(function (t) { if (t.length > 2 && !ROLE[t] && !ASPECT[t]) qt[t] = 1; });
         var fit = c.how.map(function (x, i) { var sc = 0, seen = {}; tokens(x).forEach(function (t) { if (qt[t] && !seen[t]) { seen[t] = 1; sc++; } }); return { x: x, i: i, sc: sc }; })
           .filter(function (o) { return o.sc > 0; }).sort(function (a2, b2) { return b2.sc - a2.sc || a2.i - b2.i; });
-        b.push({ k: 'p', x: fit.length ? 'Staying with that, this part fits what you said:' : 'Staying with that, here are two more things to try:' });
-        b.push({ k: 'list', x: fit.length ? fit.slice(0, 2).map(function (o) { return o.x; }) : c.how.slice(1, 3) });
+        var SH = state.shown || {}, fresh2 = fit.filter(function (o) { return !SH[norm(o.x)]; }), rest2 = c.how.filter(function (x) { return !SH[norm(x)]; });
+        var pickL = fresh2.length ? fresh2.slice(0, 2).map(function (o) { return o.x; }) : rest2.slice(0, 2);
+        if (!pickL.length) {
+          var lk0 = safeLinks(c.links).slice(0, 2);
+          state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk0[0] && lk0[0][1] };
+          return { blocks: [{ k: 'p', x: 'I’ve shared the main steps for this already, so I won’t repeat them. The page has the rest, or tell me a bit more about what’s happening and I’ll look for the part that fits.' }, { k: 'links', x: lk0 }], chips: [{ label: 'Something else', q: 'Start over' }], kind: 'card', id: c.id, side: c.side };
+        }
+        b.push({ k: 'p', x: fresh2.length ? 'Staying with that, this part fits what you said:' : 'Staying with that, here are ' + (pickL.length > 1 ? 'two more things' : 'one more thing') + ' to try:' });
+        b.push({ k: 'list', x: pickL });
         var sc2 = Array.isArray(c.script) ? c.script : c.script ? [c.script] : [];
-        if (sc2.length) { var si = sc2.length > 1 ? ((state.topic && state.topic.id === c.id ? (state.topic.v = (state.topic.v || 0) + 1) : 1) % sc2.length) : 0; b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
+        if (sc2.length) { var si = sc2.length > 1 ? ((state.topic && state.topic.id === c.id ? (state.topic.v = (state.topic.v || 0) + 1) : 1) % sc2.length) : 0; if (SH[norm(sc2[si])]) { var sj = sc2.map(function (x) { return !SH[norm(x)]; }).indexOf(true); si = sj; } if (si >= 0) b.push({ k: 'script', l: (c.scriptLabels && c.scriptLabels[si]) || 'Words you could use', x: sc2[si] }); }
         var lk2 = safeLinks(c.links).slice(0, 1);
         if (lk2.length) b.push({ k: 'links', x: lk2 });
         state.last = { kind: 'card', card: c.id, q: c.name, topic: c.name, u: lk2[0] && lk2[0][1] };
@@ -1662,6 +1671,32 @@
     var pc = cardFor(path);
     if (pc) { state.pageTopic = { id: pc.id, root: pc.id }; state.page.chips = (pc.pageChips || []).map(function (x) { return { label: x[0], q: x[1] }; }); }
   }
+  // Opened from a page ("Tell me more about <the page>", or /ask.html?about=<its heading>): a short overview of that page,
+  // what it covers, and a choice of where to start, never a random passage from somewhere else
+  function pageOverview(state, vf) {
+    var P = state.page, u = P && P.u;
+    if (!u) return null;
+    var title = pageTitle(u), tn = stNorm(title), m = /^tell me (more )?about (.+)$/.exec(vf), asked = m ? stNorm(m[2]) : stNorm(vf);
+    var about = stNorm(P.about || '');
+    if (!asked || !(asked === tn || (about && asked === about) || (asked.length > 12 && tn.indexOf(asked) === 0) || (m && /^(this|this page|the page)$/.test(asked)))) return null;
+    var docs = KB.docs.filter(function (d) { return !d.tip && !d.g && d.u.split('#')[0] === u; });
+    if (!docs.length) return null;
+    var intro = docs.filter(function (d) { return /^in short$/i.test(d.h); })[0] || docs.filter(function (d) { return /#main$/.test(d.u); })[0] || docs[0];
+    var seen = {}, secs = [];
+    docs.forEach(function (d, i) {
+      var a = d.u.split('#')[1] || '';
+      if (!a || a === 'main' || a === 'more' || a === 'faq' || seen[a]) return;
+      seen[a] = 1; var h = pageName(d.h).split(':')[0].trim();
+      if (h && !/^(words you could use|more for your situation|go deeper|ask professor puddles)$/i.test(h)) secs.push({ h: h, i: KB.docs.indexOf(d) });
+    });
+    var pc = state.pageTopic && cardById(state.pageTopic.id);
+    var b = [{ k: 'p', x: 'Here’s what “' + title + '” covers, in short:' }, passageBlock(KB.docs.indexOf(intro), [])];
+    if (secs.length) { b.push({ k: 'p', x: 'It has sections on:' }); b.push({ k: 'list', x: secs.slice(0, 8).map(function (x) { return x.h; }) }); }
+    b.push({ k: 'p', x: 'Which part would you like? Or tell me what’s going on, in your own words.' });
+    state.last = { kind: 'card', q: title, topic: title, u: u };
+    var chips = pc && pc.pageChips && pc.pageChips.length ? pc.pageChips.map(function (x) { return { label: x[0], q: x[1] }; }) : secs.slice(0, 3).map(function (x) { return { label: x.h.length > 40 ? x.h.slice(0, 38).replace(/\s+\S*$/, '') + '…' : x.h, doc: x.i }; });
+    return { blocks: b, chips: chips.slice(0, 4), kind: 'page', id: 'overview' };
+  }
   function setTopic(state, c, root, side) { var T0 = state.topic; state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: T0 && T0.id === c.id ? (T0.v || 0) : 0, side: side != null ? side : (T0 && T0.root === (root || c.id) ? T0.side : null) }; }
   // the page a topic card is about: its own "page", else its first link that isn't a general tool
   var GENERIC_PAGE = /^\/(lemonade-stand|turning-toward|signal-translator|check-ins|safety|start-here|outside-help|upset-right-now|wp-11|wiring-card|night-garden|soundscapes|self-path|conversation-reader)\.html|^\/(workpapers|library|tools)\//;
@@ -1691,6 +1726,17 @@
   var TF_SAY = /^(so |ok |okay |but |and |right |then |um |hmm |well )*(what (do|should|can|could|would) i (actually |even |really |possibly |then )?(say|text|write|send|tell)\b|what (words|do i text|should i text)\b|how (do|should|can|could|would) i (actually )?(say|word|phrase|put|text|write|tell|bring) (it|this|that|her|him|them|up|my)\b|(give me|any|some|got any) (the )?words\b|what to (say|text|write)\b|how (do|should) i (start|open) (the|that|this) (conversation|talk|chat)|how (do|should) we word (it|this|that|texts?|things|messages?))/;
   var TF_DO = /\b(what (can|could|should) (i|we) (actually |really )?do (this week|today|tonight|this weekend|right now|now|first)|something (simple|small|easy|practical)|(one|a) (small |simple |easy |little )?thing (i|we) (can|could) (do|try)|what s (a|one|the) (first|small|next) step)\b/;
   var TF_FEEL = /^(but |and |so |honestly |tbh |i guess |ok |okay |still |yeah |yes )*(i (still )?(feel|m|am) (so |really |just |still |a bit |kind of |pretty |very )*(guilty|bad|awful|terrible|tired|exhausted|drained|worn out|fed up|done|sad|stuck|lost|hurt|angry|annoyed|frustrated|resentful|overwhelmed|helpless|alone|useless|ashamed|left out)|(i m|im|i am) (so |really |just )*(tired|sick|fed up) of (it|this|that|all (of )?(this|it))|(this|it) (is|s) (so |really )?(hard|exhausting|a lot))\b/;
+  var DOSE_Q = /\b(what|which|how much|how many|right|safe|best|max\w*|recommended) (dose|dosage|amount|mg|milligrams?)\b|\b(dose|dosage) (of|for)\b|\bhow (much|many)\b.{0,25}\b(should|can|do|could) i (take|have|give)\b|\bhow (much|many) (mg|milligrams?|tablets?|capsules?|pills?|drops?)\b/;
+  var MEDS_W = /\b(sertraline|fluoxetine|citalopram|escitalopram|paroxetine|venlafaxine|duloxetine|mirtazapine|prozac|zoloft|lexapro|celexa|paxil|effexor|cymbalta|ssris?|snris?|antidepressants?|anti depressants?|my (meds|medication|medicine|pills|tablets|prescription))\b/;
+  var HERB_SSRI = {
+    herbstjohns: 'With an antidepressant such as an SSRI, St John’s wort can cause serotonin syndrome (shaking, confusion, stiffness), which can be life-threatening. Please don’t take it with yours unless your prescriber says so.',
+    herbcbd: 'CBD can change how other medicines work, including antidepressants and blood thinners, and it can harm the liver. Ask your pharmacist before taking it with yours.',
+    herbashwagandha: 'The supplements page doesn’t list a known clash between ashwagandha and SSRIs, but it has its own warnings (rare liver injury, possible thyroid effects), so check it with a pharmacist alongside your medicine.',
+    herbkava: 'Kava has rare but serious liver warnings, and it should never be mixed with alcohol or sedatives. Check with your pharmacist before taking it with any medicine.',
+    herbmelatonin: 'Melatonin can make you drowsy, and in the UK it’s prescription-only. Check with your pharmacist before taking it alongside your medicine.',
+    herbmagnesium: 'The page’s warnings for magnesium are about too much (over 350 mg a day from supplements can cause diarrhea) and kidney problems. Check with your pharmacist about taking it with your medicine.',
+    herbchamomile: 'Chamomile may interact with warfarin, and some people are allergic. Ask your pharmacist if you take any medicine.'
+  };
   var TEEN_CUE = /\b(i m|im|i am) 1[0-7]( years old| yrs old| year old)?\b|\b(i m|im|i am|i ve been|ive been) (in|into) (foster care|care|a foster home|a placement)\b|\bmy (foster )?carers\b|\bmy foster (mum|mom|dad|parents|family|carer)\b|\bmy (nan|nana|nanna|gran|granny|grandma|grandad)\b.{0,30}\b(took|takes|taking|wont let|won t let|doesnt get|dont get|strict|rules|my phone|curfew)\b|\b(in|at) (year (7|8|9|10|11|12|13)|grade (6|7|8|9|10|11|12)|high school|middle school|secondary school|sixth form)\b/;
   var TF_PRINT = /\b(print|printable|printing|print out|printed|printer)\b/;
   var TF_SOURCE = /\b(source|sources|cite|citation|reference|references|who (came up with|invented|said|discovered|found) (that|this|it)|where (does|did) (that|this|it) come from|is there (any )?(research|evidence|a study|science)|what (research|study|studies))\b/;
@@ -1798,10 +1844,10 @@
     var TC = n <= 22 && !state.unsafe ? topicCard(state) : null, TR = TC ? topicRoot(state) : null;
     // which care card would answer this on its own? A word that only hints at another topic ("christening" in a talk
     // about a brother, "will" about a parent who died) doesn't pull us off the topic we're on
-    var cm = null;
+    var cm = null, fNot = f.replace(/\bnot an? (teen|teenager|kid|child)\b/g, ' ');
     for (var i = 0; i < (IDX.first || []).length; i++) {
       var c0 = IDX.first[i];
-      if (!c0.re.test(f) || (c0.notRe && c0.notRe.test(f))) continue;
+      if (!c0.re.test(f) || (c0.notRe && c0.notRe.test(fNot))) continue;
       if (c0.id === 'nextstep' && L && L.kind === 'sit') continue;   // "what next?" after a playbook: its own next step
       if (c0.id === 'fault' && n > 18) continue;
       if (TC && c0.id !== TC.id && (!TR || c0.id !== TR.id) && c0.weak && n <= 18) {
@@ -1842,6 +1888,18 @@
       var c = cm;
       var r = cardReply(state, c, 'about');
       if (state.unsafe && c.childSafe) r.blocks.unshift({ k: 'p', x: 'I can still help with things about ' + (state.kidName || 'your child') + '.' });
+      // anger: the honest line between losing your temper and abuse, right after the first line
+      if (c.id === 'angerstop' || c.id === 'angerhelp') r.blocks.splice(1, 0, { k: 'p', x: 'The honest line: losing your temper now and then, followed by a real repair, isn’t the same as abuse. It becomes a safety issue if people at home are afraid of you, if it comes with threats, name-calling, breaking or throwing things, or if it happens most days.' });
+      // supplements: never a dose, and never “stop your medicine”
+      if (/^herb/.test(c.id)) {
+        if (DOSE_Q.test(f)) r.blocks = [{ k: 'p', x: 'I can’t give doses. A pharmacist can tell you what’s safe with what you already take, and so can your doctor.' }].concat(r.blocks.filter(function (b) { return b.k === 'links'; }));
+        if (MEDS_W.test(f)) {
+          var mx = HERB_SSRI[c.id] || 'Some herbs and supplements change how prescribed medicines work, so check this one with a pharmacist first.';
+          var li = -1; r.blocks.forEach(function (b, bi) { if (b.k === 'links' && li < 0) li = bi; });
+          var add = [{ k: 'p', x: mx }, { k: 'p', x: (/\b(better than|instead of|rather than|replace|swap|switch|come off|stop (taking )?my)\b/.test(f) ? 'There’s no good evidence that a supplement works better than prescribed medicine. ' : '') + 'Never stop, swap or change a prescribed medicine without talking to your prescriber, and ask a pharmacist before adding anything to it. Some medicines need to be reduced slowly.' }];
+          if (li < 0) r.blocks = r.blocks.concat(add); else r.blocks.splice.apply(r.blocks, [li, 0].concat(add));
+        }
+      }
       if (c.id === 'fault') {
         var H = IDX.sit.issues.hurtbythem;
         var hurt = (L && L.kind === 'sit' && L.issue === 'hurtbythem') || (H && H.res.some(function (x) { return x[1] >= 5 && x[0].test(f); }));
@@ -2099,10 +2157,13 @@
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
       // shouted at during a handoff (often in front of the child): handoff safety first, and the child questions stay open
-      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && HANDOFF_SHOUT.test(vf) && (EX_W.test(vf) || /\bin front of\b/.test(vf))) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; state.kidName = kidNameIn(q0) || state.kidName || ''; return meant(handoffReply(vf, state.kidName), sp); }
+      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && HANDOFF_SHOUT.test(vf) && (EX_W.test(vf) || /\bin front of\b/.test(vf)) && !VERBAL_STRONG.test(vf)) { state.last = null; state.care = null; state.fearSeen = true; state.coSeen = true; state.kidName = kidNameIn(q0) || state.kidName || ''; var hc = cardById('coparenting'); if (hc) setTopic(state, hc, 'coparenting'); return meant(handoffReply(vf, state.kidName), sp); }
+      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && YELLED_AT.test(vf) && !VERBAL_STRONG.test(vf) && !VERBAL_NOT.test(vf)) { state.last = null; state.care = null; state.fearSeen = true; return meant(yelledAtReply(vf), sp); }
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
+      var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
+      if (ovr) return ovr;
       var igr = igTurn(state, q0, vf);
       if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
@@ -2218,14 +2279,23 @@
   function kidNameIn(q) { var m = /\b(?:in front of|our (?:son|daughter|boy|girl|kid|child)|my (?:son|daughter|boy|girl|kid|child)|tell)\s+([A-Z][a-z]{1,14})\b/.exec(String(q || '')); return m && !/^(Me|Him|Her|Them|The|My|Our|His|Their|Mum|Mom|Dad)$/.test(m[1]) ? m[1] : ''; }
   function handoffReply(f, kid) {
     var k = kid || 'your child';
-    var b = [{ k: 'p', x: 'I’m sorry. Being shouted at during a handoff isn’t okay, and it isn’t something you can fix by choosing better words. It matters that ' + k + ' sees it, too: children feel it, even when nobody is touched.' },
-      { k: 'p', x: 'Things that help at handoffs:' },
-      { k: 'list', x: ['Hand over in a public place, like a busy shop entrance or car park, or through school or nursery, so you don’t meet at all.', 'Keep it short: times and bags only. Anything else goes by message, later.', 'If you can, have a calm adult you trust there.', 'Keep copies of every message, with dates, and write a few lines after any handoff that goes wrong.', 'A family lawyer, mediator or advocate can help you ask for safer handoff arrangements.'] },
-      { k: 'p', x: 'If it’s more than shouting, or you’re ever scared of them, you can talk it through privately with an advocate, even if you’re not sure it counts. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines. In danger right now, call 911 (US), 999 (UK) or your local emergency number.' },
-      { k: 'p', x: 'I can still help with things about ' + (kid || 'your child') + ', like how to explain a new handoff plan.' },
-      { k: 'links', x: [['After a separation: when it’s more than conflict', '/safety.html#after-separation'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel'], ['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] }];
-    return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety', id: 'handoff' };
+    var b = [{ k: 'p', x: 'That sounds really stressful, and it isn’t something you can fix by choosing better words. It’s worth changing how handoffs work, for you and for ' + k + '.' },
+      { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or nursery, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterwards, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get cross. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, a mediator or family lawyer can help you set up calmer handoffs.'] },
+      { k: 'script', l: 'At the door', x: 'I’m not going to talk about this now. Message me later. Bye, ' + (kid || 'sweetheart') + ', see you Friday.' },
+      { k: 'p', x: 'If you ever feel afraid of them, private help is here: in the US 1-800-799-7233 (or text START to 88788), in the UK 0808 2000 247, and the Not safe at home? page.' },
+      { k: 'links', x: [['Four steps for calmer handoffs', '/co-parenting.html#handoff'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel'], ['After a separation: when it’s more than conflict', '/safety.html#after-separation']] }];
+    return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How should we word texts?', q: 'We only text, how should we word things?' }], kind: 'care', id: 'handoff' };
   }
+  // "my husband yells at me" (no fear, no names, no threats): the ordinary question first, warmly, and one gentle line
+  var YELLED_AT = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( sometimes| often| still| just| really)? (yells|screams|shouts|swears|snaps|raises (his|her|their) voice) at me\b/;
+  function yelledAtReply(f) {
+    return { blocks: [{ k: 'p', x: 'Being yelled at hurts, even when it comes from stress, and it’s fair to want it to stop.' },
+      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, comes with names or threats, or you feel scared, that’s more than a communication problem.'] },
+      { k: 'p', x: 'If you ever feel afraid of them, private help is here: in the US 1-800-799-7233 (or text START to 88788), in the UK 0808 2000 247, and the Not safe at home? page.' },
+      { k: 'links', x: [['A pause plan for two', '/pursue-withdraw.html#plan'], ['When it’s more than a rough patch', '/safety.html#signs']] }],
+      chips: [{ label: 'What do I say?', q: 'What do I actually say?' }], kind: 'care', id: 'yelledat' };
+  }
+
   // "he says he'll kill himself if I leave": a pressure sign, and their safety is not yours to carry by staying
   var THREAT_SELF = /\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b.{0,40}\b(if|unless|when) (i|we) (leave|left|go|went|break up|broke up|end (it|things)|split|stop|say no|see|tell)\b|\b(if|unless|when) (i|we) (leave|left|go|break up|end (it|things)|split|stop seeing)\b.{0,50}\b(kill|hurt|harm|end) (himself|herself|themselves|themself|his life|her life|their life|it all)\b|\b(threaten\w*|says|said|keeps saying|tells me|told me) (that )?(he|she|they)( will| ll| would| d| is going to| s going to| s gonna| is gonna)? (kill|hurt|harm) (himself|herself|themselves|themself)\b.{0,40}\b(leave|break up|go|split|end)\b/;
   function threatSelfReply(f) {
@@ -3217,6 +3287,18 @@
       }
       return true;
     });
+    // the same words never twice in one reply: a "Words you could use" box drops a quote a bullet already holds, and a
+    // bullet that is only that quote goes
+    var scr = r.blocks.filter(function (b) { return b.k === 'script'; }).map(function (b) { return norm(b.x); });
+    if (scr.length) {
+      r.blocks = r.blocks.filter(function (b) {
+        if (b.k !== 'list') return true;
+        b.x = b.x.filter(function (t) { var nt = norm(t); return !scr.some(function (sx) { return sx.length > 20 && nt.replace(/^(say|try|ask|tell them|words)\b ?/, '') === sx; }); });
+        return b.x.length > 0;
+      });
+      var seenS = {};
+      r.blocks = r.blocks.filter(function (b) { if (b.k !== 'script') return true; var ns = norm(b.x); if (seenS[ns]) return false; seenS[ns] = 1; return true; });
+    }
     if (r.kind !== 'short') state.lastReply = { blocks: r.blocks };
     var recent = state.recent || (state.recent = []);
     var asked = norm(q);
@@ -3238,6 +3320,29 @@
   // The program's own labels (Pillar IV, WP-09, REPORT-01, Person A) mean nothing to someone asking about their life:
   // they stay out of everyday answers, and only show when someone asks about the program itself
   var INTERNAL_Q = /\b(wp ?\d+|workpapers?|worksheets?|calc ?\d+|report ?\d+|prog ?\d+|pillars?|the program|architecture|how (is|was) (it|this|the site) (built|made))\b/;
+  function sigOf(r) { return (r && r.blocks || []).filter(function (b) { return b.k !== 'links' && b.k !== 'note'; }).map(function (b) { return norm(b.x && b.x.join ? b.x.join(' ') : b.k === 'passage' ? (b.x || []).join(' ') : b.x || ''); }).join('|'); }
+  function markShown(state, r) {
+    var S = state.shown || (state.shown = {});
+    (r && r.blocks || []).forEach(function (b) {
+      if (b.k === 'list') b.x.forEach(function (t) { S[norm(t)] = 1; });
+      if (b.k === 'script') S[norm(b.x)] = 1;
+      if (b.k === 'passage' && b.i != null) S['#doc' + b.i] = 1;
+    });
+  }
+  function noRepeat(state, q, r) {
+    if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info)$/.test(r.kind || '')) return r;
+    var sig = sigOf(r);
+    if (!sig || sig !== state.lastSig) return r;
+    // the same again: the next part of that page, or a question, never a copy
+    var u = '', TC = topicCard(state);
+    (r.blocks || []).some(function (b) { if (b.k === 'links' && b.x[0]) { u = b.x[0][1].split('#')[0]; return true; } if (b.u) { u = b.u.split('#')[0]; return true; } return false; });
+    if (!u && TC) u = topicPage(TC);
+    var S = state.shown || {}, res = search(q), alt = null;
+    if (u) res.hits.some(function (h) { var d = KB.docs[h.i]; if (!d.tip && !d.g && d.u.split('#')[0] === u && !S['#doc' + h.i] && !/#(main|more)$/.test(d.u)) { alt = h.i; return true; } return false; });
+    if (alt == null && u) KB.docs.some(function (d, i) { if (!d.tip && !d.g && d.u.split('#')[0] === u && !S['#doc' + i] && !/#(main|more)$/.test(d.u) && !/^words you could use$/i.test(d.h)) { alt = i; return true; } return false; });
+    if (alt != null) return { blocks: [{ k: 'p', x: 'I’ve given you my main answer on that just now, so here’s the next part of the page:' }, passageBlock(alt, res.terms)], chips: [{ label: 'What could I say?', q: 'What do I actually say?' }, { label: 'Something else', q: 'Start over' }], kind: r.kind, id: r.id };
+    return { blocks: [{ k: 'p', x: 'That’s the same answer I just gave, so I won’t repeat it. Could you tell me a bit more about what’s different this time, or which part didn’t fit?' }], chips: r.chips || [], kind: 'clarify', id: 'norepeat' };
+  }
   function dejargon(r, q) {
     if (!r || !r.blocks || INTERNAL_Q.test(fold(q)) || /^(calc|safety|lang)$/.test(r.kind || '') || (r.kind === 'card' && cardById(r.id) && cardById(r.id).kind === 'tool')) return r;
     function clean(t) {
@@ -3259,7 +3364,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = noRepeat(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) { markShown(state, x); state.lastSig = sigOf(x); } if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
