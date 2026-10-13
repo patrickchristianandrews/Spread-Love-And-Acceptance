@@ -4473,7 +4473,7 @@
     [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
     [/^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words)\.html$/, 'Share this game', 'A calm word game I like.'],
     [/^\/frequency-journey\.html$/, 'Share this game', 'A calm puzzle journey with two pups. Free.'],
-    [/^\/night-garden\.html$/, 'Share the garden', 'A calm place to breathe and play. Free, with no timers.']
+    [/^\/night-garden\.html$/, T('Share the garden', 'Compartir el jardín'), T('A calm place to breathe and play. Free, with no timers.', 'Un lugar tranquilo para respirar y jugar. Gratis y sin relojes.')]
   ];
   function shareTitle() {
     var h = document.querySelector('main h1');

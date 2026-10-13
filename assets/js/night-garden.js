@@ -2755,6 +2755,7 @@
     put('#ng-canvas', 'Un jardín de acuarela de noche, con estrellas, una luna, luciérnagas y un estanque.', 'aria-label');
     var title = document.querySelector('.ng-title'); if (title && title.firstChild && title.firstChild.nodeType === 3) title.firstChild.textContent = 'El Jardín de noche';
     put('#ng-help-btn', '? Cómo jugar');
+    put('#ng-full', '<span aria-hidden="true">&#10530;</span> <span class="ng-long">Pantalla completa</span><span class="ng-short">Ampliar</span>');
     put('#ng-pad', 'Controles del estanque', 'aria-label');
     [['ArrowLeft', 'Mover a la izquierda'], ['ArrowUp', 'Girar'], ['ArrowRight', 'Mover a la derecha'], [' ', 'Bajar flotando']].forEach(function (k) { put('#ng-pad [data-key="' + k[0] + '"]', k[1], 'aria-label'); });
     put('.ng-bar', 'Jardín', 'aria-label');

@@ -79,9 +79,9 @@
     var full = '/signal-translator.html' + (rel ? '?rel=' + encodeURIComponent(rel) : '');
     host.innerHTML =
       '<section class="mcm no-bubble" aria-labelledby="' + id + 'h">' +
-        '<h2 id="' + id + 'h">' + esc(heading) + '</h2>' +
-        '<p class="mcm-sub">See how it may land, and get a clearer version that keeps your ask. It stays on your device.</p>' +
-        '<label class="mcm-sub" for="' + id + 't" style="display:block;margin:0 0 4px;font-weight:600;color:inherit">Your message</label>' +
+        '<h2 class="no-bubble" id="' + id + 'h">' + esc(heading) + '</h2>' +
+        '<p class="mcm-sub no-bubble">See how it may land, and get a clearer version that keeps your ask. It stays on your device.</p>' +
+        '<label class="mcm-sub no-bubble" for="' + id + 't" style="display:block;margin:0 0 4px;font-weight:600;color:inherit">Your message</label>' +
         '<textarea id="' + id + 't" maxlength="1500" placeholder="Type or paste it the way you would send it."></textarea>' +
         '<div class="mcm-row"><button type="button" class="mcm-go">Check it</button>' +
         '<a class="mcm-full" href="' + full + '">Open the full checker &rarr;</a></div>' +
@@ -96,29 +96,29 @@
 
     function check() {
       var text = box.value.trim();
-      if (!text) { out.innerHTML = '<p class="mcm-note">Type a message first.</p>'; box.focus(); return; }
+      if (!text) { out.innerHTML = '<p class="mcm-note no-bubble">Type a message first.</p>'; box.focus(); return; }
       go.disabled = true; go.textContent = 'Checking…';
       engine().then(function (E) {
         var an = E.analyze(text, { channel: 'text' });
         var sc = E.score(an, ['general'], 'text');
         var rw = E.rewrite(an, { wirings: ['general'], channel: 'text', rel: rel });
         var v = E.verdict ? E.verdict(an, sc, rw, { rel: rel }) : { id: 'ok', text: '' };
-        var h = '<p class="mcm-v ' + esc(v.id) + '">' + esc(v.text) + '</p>';
+        var h = '<p class="mcm-v no-bubble ' + esc(v.id) + '">' + esc(v.text) + '</p>';
         if (an.selfHarm) {
-          h += '<p class="mcm-note">In the US, call or text 988. In the UK and Ireland, Samaritans: 116 123. If someone may act on it now, call your local emergency number.</p>';
+          h += '<p class="mcm-note no-bubble">In the US, call or text 988. In the UK and Ireland, Samaritans: 116 123. If someone may act on it now, call your local emergency number.</p>';
         } else if (!an.danger && !an.control && rw && !rw.unchanged && rw.main && !rw.danger) {
-          h += '<p class="mcm-k">A clearer way to say it</p><p class="mcm-say">' + blanks(rw.main) + '</p>' +
+          h += '<p class="mcm-k no-bubble">A clearer way to say it</p><p class="mcm-say no-bubble">' + blanks(rw.main) + '</p>' +
             '<button type="button" class="mcm-copy">Copy</button>' +
-            (/\[/.test(rw.main) ? '<p class="mcm-note">Words in dashed boxes are blanks for your own words.</p>' : '');
+            (/\[/.test(rw.main) ? '<p class="mcm-note no-bubble">Words in dashed boxes are blanks for your own words.</p>' : '');
         }
-        h += '<p class="mcm-note">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The full checker shows why, and more ways to say it.</p>';
+        h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The full checker shows why, and more ways to say it.</p>';
         out.innerHTML = h;
         var cp = out.querySelector('.mcm-copy');
         if (cp) cp.addEventListener('click', function () {
           (navigator.clipboard ? navigator.clipboard.writeText(rw.main) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }, function () { cp.textContent = 'Select and copy manually'; });
         });
       }).catch(function () {
-        out.innerHTML = '<p class="mcm-note">The checker couldn&rsquo;t load just now. <a href="' + full + '">Open the full checker</a> instead.</p>';
+        out.innerHTML = '<p class="mcm-note no-bubble">The checker couldn&rsquo;t load just now. <a href="' + full + '">Open the full checker</a> instead.</p>';
       }).then(function () { go.disabled = false; go.textContent = 'Check it'; });
     }
     go.addEventListener('click', check);

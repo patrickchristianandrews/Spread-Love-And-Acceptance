@@ -269,8 +269,7 @@
       var s0 = cmp.setup.startBand, s1 = cmp.setup.endBand;
       head = 'The setup went from <span class="pill ' + s0.cls + '">' + esc(s0.short) + '</span> to <span class="pill ' + s1.cls + '">' + esc(s1.short) + "</span>" + (nums ? " (" + f2(cmp.setup.start) + " to " + f2(cmp.setup.end) + ")" : "") + ". ";
     } else head = "";
-    var nb = cmp.shifted.filter(function(x){ return x.status === "better"; }).length, nw = cmp.shifted.length - nb;
-    var plain = (cmp.shifted.length ? cmp.shifted.length + " of " + (cmp.shifted.length + cmp.steady.length) + " parts shifted" + (nb && nw ? " (" + nb + " for the better, " + nw + " the other way)" : nw ? ", the other way" : ", for the better") + "." : "Nothing shifted much this month.");
+    var plain = (K.summaryLine(cmp));
     $("headline").innerHTML = head + esc(plain);
     function li(x){ return "<li>" + esc(x.text) + (x.status === "better" ? ' <span class="tag better">better</span>' : x.status === "worse" ? ' <span class="tag worse">the other way</span>' : "") + "</li>"; }
     $("shifted").innerHTML = cmp.shifted.length ? cmp.shifted.map(li).join("") : "<li>Nothing moved by enough to count. That's useful to know too.</li>";
@@ -309,17 +308,17 @@
     if (names.every(function(x){ return !String(x).trim(); }) && d.names.length >= 2){ n = Math.max(2, Math.min(8, d.names.length)); names = d.names.slice(0, n); }
     var weeks = [0, 1, 2, 3].map(function(){ return K.blankWeek(n); });
     K.apply(weeks, d.facts, n, names);
-    var got = [];
+    var got = [], LABEL = { rescues: "rescues", jobsTotal: "jobs on the list", jobsOwned: "jobs with an owner", hours: "hours", loads: "load scores" };
     function take(w, side, order){
-      ["rescues", "jobsTotal", "jobsOwned"].forEach(function(f){ if (T[side][f] !== "") return; order.some(function(s){ if (weeks[s][f] !== ""){ T[side][f] = weeks[s][f]; got.push(f); return true; } return false; }); });
+      ["rescues", "jobsTotal", "jobsOwned"].forEach(function(f){ if (T[side][f] !== "") return; order.some(function(s){ if (weeks[s][f] !== ""){ T[side][f] = weeks[s][f]; got.push(SIDE[side].toLowerCase() + ": " + LABEL[f]); return true; } return false; }); });
       ["hours", "loads"].forEach(function(f){
         if (T[side][f].some(function(x){ return x !== ""; })) return;
-        order.some(function(s){ if (weeks[s][f].some(function(x){ return x !== ""; })){ T[side][f] = weeks[s][f].slice(); got.push(f); return true; } return false; });
+        order.some(function(s){ if (weeks[s][f].some(function(x){ return x !== ""; })){ T[side][f] = weeks[s][f].slice(); got.push(SIDE[side].toLowerCase() + ": " + LABEL[f]); return true; } return false; });
       });
     }
     take(weeks, 0, [0, 1]); take(weeks, 1, [3, 2]);
     render(); recalc();
-    $("device-status").textContent = got.length ? "Filled in from this device (only empty boxes): " + d.sources.join(", ") + ". Check the numbers before you read them." : "What's kept on this device had nothing new for the empty boxes" + (d.facts.some(function(f){ return f.kind === "scores"; }) ? " (your fair-split trend log keeps scores, which the full look-back can use)" : "") + ".";
+    $("device-status").textContent = got.length ? "Filled in from this device, only where boxes were empty: " + got.join("; ") + "." + (d.facts.some(function(f){ return f.kind === "scores"; }) ? " Your fair-split trend log keeps scores, which only the full look-back can use." : "") + " Check the numbers before you read them." : "What's kept on this device had nothing new for the empty boxes" + (d.facts.some(function(f){ return f.kind === "scores"; }) ? " (your fair-split trend log keeps scores, which the full look-back can use)" : "") + ".";
   }
 
   document.addEventListener("click", function(e){

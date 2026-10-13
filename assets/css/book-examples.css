@@ -88,7 +88,7 @@
 /* what the tool prints back */
 .bk-ex-out{ margin:.85rem 0 .35rem; padding:.6rem .75rem .45rem; border:1px dashed var(--bkx-line); border-radius:3px; break-inside:avoid; }
 .bk-ex-ok{
-  font:500 .68rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase;
+  font:500 .64rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase;
   color:var(--bkx-soft); margin:0 0 .4rem !important;
 }
 .bk-ex-out dl{ margin:0; }
@@ -102,6 +102,11 @@
 .bk-ex-link{ margin:0 !important; font-size:.84rem; }
 .bk-ex-link a{ color:var(--bkx-ink); text-decoration:underline; text-decoration-color:var(--brass, #A8792F); text-underline-offset:3px; }
 .bk-ex-link a:focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; }
+
+/* the site gives blocks inside some page sections a tinted border colour; keep the card's own lines */
+figure.bk-ex.no-bubble :is(p, ul, ol, li, dl, dt, dd, hr){ border-color:var(--bkx-line) !important; }
+figure.bk-ex.no-bubble .bk-ex-chips li{ border-color:transparent !important; }
+figure.bk-ex.no-bubble .bk-ex-chips li.is-on{ border-color:var(--bkx-hand) !important; }
 
 .bk-ex-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 

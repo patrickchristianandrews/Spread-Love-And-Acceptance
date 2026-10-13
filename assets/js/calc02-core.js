@@ -210,10 +210,10 @@
       var heavy = people.filter(function (p) { return p.high; });
       items.push({ key: 'as', label: 'How much each person is carrying', status: sa, start: start.as, end: end.as, change: da, people: people,
         watch: heavy.length > 0, heavy: heavy,
-        text: (sa === 'better' ? 'Load came down on average: from ' + loadWords(start.as) + nb(start.as) + ' to ' + loadWords(end.as) + nb(end.as) + '.'
-          : sa === 'worse' ? 'Load went up on average: from ' + loadWords(start.as) + nb(start.as) + ' to ' + loadWords(end.as) + nb(end.as) + '.'
-          : 'Load stayed about the same on average: ' + loadWords(end.as) + nb(end.as) + '.') +
-          (people.length ? ' ' + people.map(function (p) { return p.name + ': ' + (p.status === 'better' ? 'lighter' : p.status === 'worse' ? 'heavier' : 'about the same') + ', now ' + loadWords(p.end) + nb(p.end) ; }).join('; ') + '.' : '') });
+        text: (sa === 'better' ? 'Load came down on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
+          : sa === 'worse' ? 'Load went up on average: from a ' + loadWords(start.as) + nb(start.as) + ' to a ' + loadWords(end.as) + nb(end.as) + '.'
+          : 'Load stayed about the same on average, at a ' + loadWords(end.as) + nb(end.as) + '.') +
+          (people.length ? ' ' + people.map(function (p) { return p.name + ': ' + (p.status === 'better' ? 'lighter' : p.status === 'worse' ? 'heavier' : 'about the same') + ', now at a ' + loadWords(p.end) + nb(p.end); }).join('; ') + '.' : '') });
     } else items.push({ key: 'as', label: 'How much each person is carrying', status: 'na', people: people });
 
     // the setup read (CALC-01's score), when both ends have all three parts
@@ -227,6 +227,14 @@
     var steady = items.filter(function (x) { return x.status === 'steady'; });
     var missing = items.filter(function (x) { return x.status === 'na'; });
     return { items: items, shifted: shifted, steady: steady, missing: missing, setup: setup, next: nextStep(items, end, names, setup), enough: shifted.length + steady.length > 0 };
+  }
+
+  // One plain line for the top of the read: how many parts shifted, and which way.
+  function summaryLine(cmp) {
+    var total = cmp.shifted.length + cmp.steady.length, nb = cmp.shifted.filter(function (x) { return x.status === 'better'; }).length, nw = cmp.shifted.length - nb;
+    if (!cmp.shifted.length) return total === 1 ? 'The one part filled in at both ends didn’t shift much this month.' : 'Nothing shifted much this month.';
+    var way = nb && nw ? ' (' + nb + ' for the better, ' + nw + ' the other way)' : nw ? ', the other way' : ', for the better';
+    return (total === 1 ? 'The one part filled in at both ends shifted' : cmp.shifted.length + ' of ' + total + ' parts shifted') + way + '.';
   }
 
   /* ---------- one next step ---------- */
@@ -243,10 +251,10 @@
     var pick = null, why = '';
     if (worse.length) {
       pick = worse.slice().sort(function (a, b) { return Math.abs(b.change) / SHIFT[b.key] - Math.abs(a.change) / SHIFT[a.key]; })[0];
-      why = by[pick.key].label + ' moved the wrong way this month, so start there.';
+      why = by[pick.key].label + ': this moved the wrong way this month, so start there.';
     } else {
       ORDER.some(function (k) { if (by[k] && by[k].status !== 'na' && by[k].watch) { pick = by[k]; return true; } return false; });
-      if (pick) why = by[pick.key].label + (pick.status === 'better' ? ' got better, and is still the part most worth a look.' : ' didn’t shift, and is still worth a look.');
+      if (pick) why = by[pick.key].label + (pick.status === 'better' ? ': better than at the start, and still the part most worth a look.' : ': no real change, and still worth a look.');
     }
     if (!items.some(function (x) { return x.status !== 'na'; })) return { key: 'none', why: '', text: 'Fill in at least one week near the start of the month and one near the end, for the same thing, to see what shifted.', link: null };
     if (!pick) return { key: 'keep', why: 'Nothing that was filled in needs a change right now.', text: 'Keep the same rhythm of check-ins, and look back again in 30 days.', link: ['Check-ins', '/check-ins.html'] };
@@ -455,7 +463,7 @@
   global.TOLCalc02 = {
     SHIFT: SHIFT, WATCH: WATCH,
     slots: slots, slotOf: slotOf, blankWeek: blankWeek, fitWeek: fitWeek,
-    readWeek: readWeek, avgReads: avgReads, compare: compare, running: running,
+    readWeek: readWeek, avgReads: avgReads, compare: compare, summaryLine: summaryLine, running: running,
     device: device, apply: apply, days: days, dayKey: dayKey, fromKey: fromKey, nice: nice
   };
 })(window);

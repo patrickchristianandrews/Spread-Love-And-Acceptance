@@ -293,3 +293,9 @@ h1 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-si
 .pe-bc-site { position: absolute; bottom: 12mm; left: 0; right: 0; margin: 0; font-size: 9.6pt; }
 .pe-bc-by { position: absolute; bottom: 4mm; left: 0; right: 0; margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
 .pe-backcover a { color: inherit; }
+
+/* filled-in examples (their own look is /assets/css/book-examples.css): the static print typefaces, and the part colour on the tab */
+.bk-ex, .bk-ex .bk-ex-v { font-family: "Lora Print", "Lora", Georgia, serif !important; }
+.bk-ex .bk-ex-title, .bk-ex .bk-ex-h, .bk-ex h3, .bk-ex h4 { font-family: "Fraunces Print", "Fraunces", Georgia, serif !important; }
+.bk-ex { font-size: 8.8pt !important; line-height: 1.42 !important; margin: 4mm 0 5mm !important; padding: 4mm 4mm 2.4mm !important; border-top: 2pt solid var(--pc) !important; }
+.bk-ex .bk-ex-k { color: var(--pc) !important; }

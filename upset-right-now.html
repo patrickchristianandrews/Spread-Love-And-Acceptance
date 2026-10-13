@@ -261,6 +261,8 @@ Say sorry for the yelling, plainly. You can still keep the rule.
   // and the rest of the page stays English, marked lang="en".
   function spanishPage() {
     document.documentElement.setAttribute('lang', 'es');
+    // the English-only "Show me only the steps" switch (in-short.js) stays off, as on /en-espanol.html
+    if (!window.TOLInShort) window.TOLInShort = { has: false, steps: 0, off: true };
     var main = document.querySelector('main'); if (!main) return;
     Array.prototype.forEach.call(main.children, function (n) { if (n !== esBox && !n.hasAttribute('lang')) n.setAttribute('lang', 'en'); });
     var head = main.querySelector('.read-head');

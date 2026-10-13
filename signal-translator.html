@@ -327,8 +327,9 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .st-modes .mode span{display:flex;flex-direction:column;gap:4px;min-width:0}
 .st-modes .mode small{font-weight:400;font-size:.88rem;color:var(--muted);line-height:1.4}
 .st-modes .mode:has(input:checked){background:color-mix(in srgb,var(--b) 8%,var(--sheet));border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
-@media (max-width:560px){.st-modes{grid-template-columns:1fr}.st-modes .mode{min-height:0}}
-.tryrow{margin:4px 0 10px}
+@media (max-width:560px){.st-modes{gap:8px}.st-modes .mode{min-height:0;padding:10px 12px;gap:8px;font-size:1rem}.st-modes .mode small{display:none}}
+html.tol-easy .tol-what,html.tol-easy header.top .lede,html.tol-easy .st-modes .mode small{display:none}
+.tryrow{margin:14px 0 4px}
 .tryk{font-family:var(--display);font-weight:600;font-size:.95rem;margin:0 0 6px}
 .trylist{display:flex;flex-wrap:wrap;gap:8px}
 .tryex{display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:100%;min-height:44px;padding:7px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--sheet);font-family:var(--display);font-size:.92rem;line-height:1.35;text-align:left;overflow-wrap:anywhere}
@@ -478,17 +479,6 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.</p>
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <p class="relset small" id="relSet" hidden>Reading it for: <b id="relSetName"></b>. <button type="button" class="linkbtn" id="relSetChange">Change</button></p>
-    <div class="tryrow" id="tryRow">
-      <p class="tryk" id="tryK">Try an example</p>
-      <div class="trylist" role="group" aria-labelledby="tryK">
-        <button type="button" class="tryex" data-mode="send" data-t="You never help with anything around here."><span class="tryw">To send</span>You never help with anything around here.</button>
-        <button type="button" class="tryex" data-mode="send" data-t="Per my last email, the report is due Friday."><span class="tryw">To send, at work</span>Per my last email, the report is due Friday.</button>
-        <button type="button" class="tryex" data-mode="send" data-t="Can you pick the kids up at 5? I'm stuck at work."><span class="tryw">To send</span>Can you pick the kids up at 5? I&rsquo;m stuck at work.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="k."><span class="tryw">I got</span>k.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="Fine. Do what you want."><span class="tryw">I got</span>Fine. Do what you want.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="you're the worst 😂"><span class="tryw">I got</span>you&rsquo;re the worst 😂</button>
-      </div>
-    </div>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
@@ -514,14 +504,25 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
       <button class="ghost" id="reset" type="button">Start over</button>
       <span class="msg" id="msg" role="alert"></span>
     </div>
+    <div class="tryrow" id="tryRow">
+      <p class="tryk no-bubble" id="tryK">Try an example</p>
+      <div class="trylist" role="group" aria-labelledby="tryK">
+        <button type="button" class="tryex" data-mode="send" data-t="You never help with anything around here."><span class="tryw">To send</span>You never help with anything around here.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Per my last email, the report is due Friday."><span class="tryw">To send, at work</span>Per my last email, the report is due Friday.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Can you pick the kids up at 5? I'm stuck at work."><span class="tryw">To send</span>Can you pick the kids up at 5? I&rsquo;m stuck at work.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="k."><span class="tryw">I got</span>k.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="Fine. Do what you want."><span class="tryw">I got</span>Fine. Do what you want.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="you're the worst 😂"><span class="tryw">I got</span>you&rsquo;re the worst 😂</button>
+      </div>
+    </div>
 
 
     <details class="st-acc" id="stAcc">
       <summary>How accurate is this?</summary>
       <div class="st-acc-b">
-        <p>It&rsquo;s a rule-based reader. It looks for patterns in the words (&ldquo;always,&rdquo; a bare order, a hint, a joke marker, a threat) and reads them the way a careful person might. It can&rsquo;t hear a tone of voice, see a face, or know your history together.</p>
-        <p><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labelled by hand, between partners, co-parents, housemates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
-        <p>So use it as a second opinion, not a verdict. Check what it says against what you know about the person.</p>
+        <p class="no-bubble">It&rsquo;s a rule-based reader. It looks for patterns in the words (&ldquo;always,&rdquo; a bare order, a hint, a joke marker, a threat) and reads them the way a careful person might. It can&rsquo;t hear a tone of voice, see a face, or know your history together.</p>
+        <p class="no-bubble"><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labelled by hand, between partners, co-parents, housemates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
+        <p class="no-bubble">So use it as a second opinion, not a verdict. Check what it says against what you know about the person.</p>
       </div>
     </details>
 
@@ -2605,6 +2606,8 @@ function runReceived(text){
 document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) setMode(r.value); }));
 // ?mode=got opens "Someone sent me this" (the co-parent and work pages link here for a message that stung)
 try { if (new URLSearchParams(location.search).get("mode") === "got") setMode("got"); } catch (e) {}
+/* the share-target code further down switches the mode and reads a shared message */
+window.TOLSignalPage = { setMode: m=>setMode(m), run: ()=>run() };
 /* "Try an example": one tap picks the right mode, fills the box and reads it */
 document.querySelectorAll("#tryRow .tryex").forEach(b=>b.addEventListener("click",()=>{
   const m = b.getAttribute("data-mode")==="got" ? "got" : "send";
@@ -2968,9 +2971,10 @@ sync();
     if (params && params.get('from') === 'share') shared = true;
     try {
       var box = document.getElementById('phrase');
-      if (shared && typeof setMode === 'function') setMode('got');
+      var SP = window.TOLSignalPage;
+      if (shared && SP) SP.setMode('got');
       if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); }
-      if (shared && q && typeof run === 'function') setTimeout(function () { try { run(); } catch (e) {} }, 0);
+      if (shared && q && SP) setTimeout(function () { try { SP.run(); } catch (e) {} }, 0);
     } catch (e) {}
     try {
       if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel' && k !== 'mode'; })) {

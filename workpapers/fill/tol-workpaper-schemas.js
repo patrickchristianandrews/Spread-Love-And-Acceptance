@@ -1060,7 +1060,7 @@
     if (!rows.length) return [{ label: 'Your rituals', value: 'List a few, and mark how each one is doing, to see where they stand.' }];
     var c = {};
     rows.forEach(function (r) { if (WP15_STATE.indexOf(r.state) >= 0) c[r.state] = (c[r.state] || 0) + 1; });
-    var out = [{ label: 'Your rituals', value: plural(rows.length, 'ritual') + ' listed. ' + (WP15_STATE.filter(function (k) { return c[k]; }).map(function (k) { return k + ': ' + c[k]; }).join(' · ') || 'Mark how each one is doing.') }];
+    var out = [{ label: 'Your rituals', value: plural(rows.length, 'ritual') + ' listed. ' + (WP15_STATE.filter(function (k) { return c[k]; }).map(function (k) { return k + ': ' + c[k]; }).join(' · ').replace(/.$/, '$&.') || 'Mark how each one is doing.') }];
     var stopped = rows.filter(function (r) { return r.state === 'Stopped' || r.state === 'Fading'; }).map(function (r) { return String(r.ritual).trim(); });
     if (stopped.length) out.push({ label: 'Fading or stopped', value: stopped.join(', ') + '.', note: 'Rituals lapse for ordinary reasons: a new job, a baby, a move, an illness, a hard year. A stopped one isn’t a failure. Pick one to restart below, or let it go on purpose.' });
     var fresh = rows.filter(function (r) { return r.state === 'New idea'; }).map(function (r) { return String(r.ritual).trim(); });

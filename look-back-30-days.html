@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Look Back Over 30 Days: The Full 30-Day Look-Back</title>
+<meta name="description" content="Four weeks of who did what, last-minute rescues, everyone's load and jobs with an owner, read side by side: the running imbalance, what shifted, what didn't, and one next step. Free, on your device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  /*
+    CALC-02, the full 30-Day Look-Back. The arithmetic lives in /assets/js/calc02-core.js
+    (shared with the quick look-back), which builds on /assets/js/calc01-core.js.
+  */
+  :root{
+    --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E;
+    --line:#D9CBA3; --credit:#3E6B4C; --credit-soft:#E4EDE3; --debit:#96412B; --debit-soft:#F2E2DB;
+    --brass:#A8792F; --brass-ink:#7A5720; --focus:#2B5B8C; --radius:3px;
+  }
+  *{ box-sizing:border-box; }
+  @page{ size:letter portrait; margin:0.5in; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Lora", Georgia, serif; font-size:16px; line-height:1.6; }
+  h1,h2,h3,h4{ font-family:"Fraunces","Lora",serif; font-weight:600; line-height:1.2; margin:0 0 0.5em 0; }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  code,.mono{ font-family:"IBM Plex Mono", monospace; }
+  code{ font-size:0.84em; background:var(--paper-deep); padding:1px 5px; border-radius:var(--radius); }
+  a{ color:var(--focus); }
+  p{ max-width:74ch; }
+  .sr-only{ position:absolute; left:0; top:0; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+  .print-bar{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; max-width:9in; margin:20px auto; padding:12px 18px;
+    background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--ink-soft); }
+  .sheet{ max-width:9in; margin:0 auto 60px auto; padding:0.5in 0.6in; background:var(--paper); border:1px solid var(--line); }
+  .sheet-header{ text-align:center; border-bottom:2px solid var(--brass); padding-bottom:16px; margin-bottom:26px; }
+  .wp-num{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--brass-ink); letter-spacing:0.08em; margin:0 0 4px 0; }
+  .sheet-mark{ font-size:1.6rem; margin:0; }
+  .sheet-mark small{ display:block; font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.66rem; letter-spacing:0.08em; color:var(--brass-ink); margin-top:6px; }
+  .sheet-tagline{ font-size:0.92rem; color:var(--ink-soft); margin:10px auto 0 auto; max-width:68ch; }
+  .toc{ display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; font-family:"IBM Plex Mono", monospace; font-size:0.76rem; margin-top:14px; }
+  .toc a{ color:var(--brass-ink); display:inline-block; padding:10px 4px; }
+
+  .section-head{ margin:46px 0 22px 0; padding-top:24px; border-top:3px double var(--brass); }
+  .section-head .part-label{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--brass-ink); margin:0 0 4px 0; }
+  .section-head h2{ font-size:1.35rem; margin:0; }
+
+  input[type="text"], input[type="number"], input[type="date"], select{
+    font-family:inherit; font-size:0.9rem; color:var(--ink); background:#FFFDF6; border:1px solid #8F8468;
+    border-radius:var(--radius); padding:6px 8px; width:100%; min-height:44px; }
+  input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; }
+  input[type="checkbox"]{ width:22px; height:22px; accent-color:var(--credit); margin:0; flex:none; }
+  input[aria-invalid="true"]{ border-color:var(--debit) !important; background:#FFF4F1 !important; }
+  .check{ display:flex; align-items:center; gap:10px; min-height:44px; font-size:0.9rem; cursor:pointer; }
+  .btn{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:var(--radius); background:transparent; color:var(--ink); cursor:pointer; }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn-solid{ background:var(--ink); color:var(--paper); }
+  .btn-solid:hover{ background:var(--ink-soft); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; align-items:center; }
+
+  .panel{ border:1px solid var(--line); border-radius:var(--radius); background:var(--paper-deep); padding:20px 22px; margin:22px 0; }
+  .panel-head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:14px; }
+  .panel-head h3{ margin:0; font-size:1.08rem; }
+  .panel-head .src-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--brass-ink); }
+  .panel-note{ font-size:0.88rem; color:var(--ink-soft); margin:0 0 12px 0; }
+  .people-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; margin-top:12px; }
+  .people-grid label, .row-grid label{ font-size:0.8rem; color:var(--ink-soft); display:block; }
+  .row-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px; margin-top:12px; }
+
+  .weeks{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .week{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; min-width:0; }
+  .week h3{ font-size:1.02rem; margin:0; }
+  .week .dates{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--brass-ink); margin:0 0 8px; }
+  .pp{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr); gap:6px 8px; align-items:center; }
+  .pp .hd{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; text-transform:uppercase; color:var(--brass-ink); }
+  .pp .rl{ font-size:0.88rem; overflow-wrap:anywhere; }
+  .week details{ margin-top:10px; border:1px dashed var(--line); border-radius:var(--radius); padding:0 10px; background:transparent; }
+  .week summary{ font-size:0.78rem; }
+  .wk-work{ font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--ink-soft); margin-top:10px; overflow-wrap:anywhere; }
+  .wk-work .err{ color:var(--debit); }
+
+  .scroll-x{ overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%; }
+  table{ width:100%; border-collapse:collapse; font-size:0.86rem; }
+  th{ text-align:left; font-family:"IBM Plex Mono", monospace; font-size:0.68rem; letter-spacing:0.04em; text-transform:uppercase; color:var(--brass-ink); border-bottom:2px solid var(--line); padding:4px 8px 8px 0; vertical-align:bottom; }
+  td{ border-bottom:1px solid var(--line); padding:6px 8px 6px 0; vertical-align:middle; }
+  td.num, th.num{ text-align:right; font-family:"IBM Plex Mono", monospace; }
+
+  .read-card{ border:2px solid var(--brass); border-radius:var(--radius); background:#FFFDF6; padding:24px 26px; margin:22px 0; }
+  .read-card:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+  .read-card h3{ font-size:1rem; margin:18px 0 4px; }
+  .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--brass-ink); display:block; margin-bottom:4px; }
+  .headline{ font-family:"Fraunces", serif; font-size:1.25rem; line-height:1.35; margin:4px 0 0; }
+  .pill{ display:inline-block; padding:1px 10px; border-radius:99px; background:#D6EBDA; font-size:0.95em; }
+  .pill.mid{ background:#F6E8C4; } .pill.low{ background:#E4DDF2; }
+  .num-toggle{ display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:0.9rem; cursor:pointer; }
+  .num-toggle input{ width:20px; height:20px; }
+  body:not(.show-nums) .nums-only{ display:none !important; }
+  .list{ padding-left:20px; font-size:0.93rem; margin:4px 0; } .list li{ margin-bottom:6px; }
+  .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; padding:1px 6px; border-radius:99px; background:var(--paper-deep); color:var(--ink-soft); margin-left:4px; white-space:nowrap; }
+  .tag.better{ background:#D6EBDA; color:#24432F; } .tag.worse{ background:#E4DDF2; color:#3D3160; }
+  .next-box{ border-left:4px solid var(--credit); background:var(--credit-soft); border-radius:var(--radius); padding:16px 20px; margin-top:18px; }
+  .next-box p{ margin:0 0 8px 0; font-size:0.93rem; } .next-box p:last-child{ margin-bottom:0; }
+  .status{ font-size:0.85rem; color:var(--credit); min-height:1.4em; margin:6px 0 0; }
+  .copy-out{ width:100%; min-height:180px; font-family:"IBM Plex Mono", monospace; font-size:0.78rem; margin-top:10px; padding:10px; border:1px solid #8F8468; border-radius:var(--radius); background:#FFFDF6; }
+  .gap-bar{ display:inline-block; height:10px; border-radius:2px; vertical-align:middle; margin-left:6px; background:var(--brass); }
+  .keep{ border:1px dashed var(--line); border-radius:var(--radius); padding:10px 14px; margin-top:14px; background:#FFFDF6; }
+
+  .spec-block{ margin-bottom:30px; }
+  .spec-block h3{ font-size:1.08rem; border-bottom:1px solid var(--brass); padding-bottom:7px; margin-bottom:14px; }
+  pre{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; line-height:1.7; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; overflow-x:auto; margin:0 0 14px 0; }
+  details{ border:1px solid var(--line); border-radius:var(--radius); padding:4px 16px; background:var(--paper-deep); margin:16px 0; }
+  summary{ cursor:pointer; font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--brass-ink); min-height:44px; display:flex; align-items:center; }
+  .warn-box{ border-left:4px solid var(--debit); background:var(--debit-soft); border-radius:var(--radius); padding:16px 20px; margin:18px 0; }
+  .warn-box p{ margin:0 0 10px 0; font-size:0.9rem; } .warn-box p:last-child{ margin-bottom:0; }
+  ul.plain{ padding-left:20px; max-width:74ch; font-size:0.93rem; } ul.plain li{ margin-bottom:7px; }
+  .sheet-footer{ margin-top:34px; border-top:1px solid var(--line); padding-top:14px; text-align:center; font-family:"IBM Plex Mono", monospace; font-size:0.7rem; color:var(--ink-soft); }
+
+  @media (max-width:760px){
+    .sheet{ padding:20px 16px; border-left:0; border-right:0; }
+    .print-bar{ margin:12px 16px; }
+    .weeks{ grid-template-columns:1fr; }
+    .panel{ padding:16px 12px; }
+    .read-card{ padding:18px 14px; }
+    table{ font-size:0.8rem; }
+  }
+  @media print{
+    .print-bar, .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; }
+    body{ background:#fff; font-size:11pt; }
+    .sheet{ margin:0; padding:0; max-width:100%; border:none; }
+    .panel, .read-card, .spec-block, .week{ break-inside:avoid; }
+    #spec{ break-before:page; }
+    input, select{ border:none; background:none; min-height:0; padding:0; }
+    .scroll-x{ overflow:visible; }
+  }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calc01-core.js"></script>
+<script src="/assets/js/calc02-core.js"></script>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/look-back-30-days.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/look-back-30-days.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/look-back-30-days.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, fairness at home, mental load, invisible work, free self-help tools, chore chart, fair division of labor, household workload, monthly review, 30-day review, running imbalance, progress check, free worksheets">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Look Back Over 30 Days: The Full 30-Day Look-Back">
+<meta property="og:description" content="Four weeks of who did what, last-minute rescues, everyone's load and jobs with an owner, read side by side: the running imbalance, what shifted, what didn't, and one next step. Free, on your device.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/look-back-30-days.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Look Back Over 30 Days: The Full 30-Day Look-Back">
+<meta name="twitter:description" content="Four weeks of who did what, last-minute rescues, everyone's load and jobs with an owner, read side by side: the running imbalance, what shifted, what didn't, and one next step. Free, on your device.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/look-back-30-days.html#page","name":"Look Back Over 30 Days: The Full 30-Day Look-Back","headline":"Look Back Over 30 Days: The Full 30-Day Look-Back","description":"Four weeks of who did what, last-minute rescues, everyone's load and jobs with an owner, read side by side: the running imbalance, what shifted, what didn't, and one next step. Free, on your device.","url":"https://spreadloveandacceptance.com/look-back-30-days.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-13","dateModified":"2026-10-13","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Look Back Over 30 Days: What Shifted, What Didn't","item":"https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html"},{"@type":"ListItem","position":3,"name":"Look Back Over 30 Days: The Full 30-Day Look-Back","item":"https://spreadloveandacceptance.com/look-back-30-days.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span>Runs in your browser. Nothing is sent, and nothing is saved unless you choose to keep it.</span>
+  <button type="button" class="btn" id="print-top">Print or save as PDF</button>
+</div>
+
+<main class="sheet" id="main">
+
+  <header class="sheet-header">
+    <p class="wp-num">CALC-02 &middot; THE FULL LOOK-BACK</p>
+    <h1 class="sheet-mark">Look back over 30 days
+      <small>The 30-Day Look-Back &middot; for 2 to 8 people</small>
+    </h1>
+    <p class="sheet-tagline">Put four weeks side by side: who did what, last-minute rescues, how much each person is carrying, and whether each job has an owner. You get the running imbalance, what shifted, what didn't, and one next step.</p>
+    <p class="sheet-tagline"><strong>A place to start a conversation, not a verdict.</strong> It reads the setup, never a person. Only have a rough "then and now"? Try the <a href="/workpapers/calculators/look-back-30-days-quick.html">quick look-back</a>.</p>
+    <details class="no-print">
+      <summary>More about this look-back</summary>
+      <p class="sheet-tagline">One week can be a fluke: someone was ill, a deadline landed, a visit took over. Thirty days is long enough to see whether what you changed is changing anything. It is the look-back that week four of the <a href="/prog-01-in-depth.html">6-week program</a> asks for: who did what, how many last-minute rescues, and the running imbalance.</p>
+      <p class="sheet-tagline pillar-note"><small>CALC-02 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work over a month. In you: you see whether what you tried is helping. Between you and others: one calm picture of the month, never a score on anyone.</small></p>
+    </details>
+    <nav class="toc no-print" aria-label="On this page">
+      <a href="#setup">Who and when</a>
+      <a href="#weeks">The four weeks</a>
+      <a href="#running">Running imbalance</a>
+      <a href="#read">The read</a>
+      <a href="#own-days">Your own days</a>
+      <a href="#spec">How it's worked out</a>
+    </nav>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <section id="setup" aria-labelledby="setup-h">
+    <div class="section-head"><p class="part-label">Set up</p><h2 id="setup-h">Who's looking back, and from when?</h2></div>
+    <div class="panel">
+      <label for="people-count" style="font-weight:600;">How many people?</label>
+      <select id="people-count" style="max-width:140px;display:block;margin-top:6px;"></select>
+      <div class="people-grid" id="people-names"></div>
+      <div class="row-grid">
+        <div><label for="end-date">Look back from (the last day)</label><input type="date" id="end-date"></div>
+      </div>
+      <p class="panel-note" style="margin-top:16px;margin-bottom:4px;">Or load a made-up example to see how it works:</p>
+      <div class="btn-row no-print" style="margin-top:4px;">
+        <button type="button" class="btn" data-example="sam">Sam and Alex (made up)</button>
+        <button type="button" class="btn" data-example="three">Three roommates (made up)</button>
+        <button type="button" class="btn" data-example="blank">Start blank</button>
+      </div>
+      <div id="device-box" class="no-print" hidden>
+        <p class="panel-note" style="margin-top:16px;margin-bottom:4px;">This device keeps some of your own entries from the last 30 days: <span id="device-found"></span>.</p>
+        <button type="button" class="btn btn-solid" id="from-device">Fill in from this device</button>
+      </div>
+      <p class="status" id="setup-status" role="status"></p>
+      <label class="check" style="margin-top:8px;"><input type="checkbox" id="agreed"> Compare the hours with a split we agreed on, instead of an even share</label>
+      <div class="row-grid" id="targets" hidden></div>
+    </div>
+  </section>
+
+  <!-- ================= WEEKS ================= -->
+  <section id="weeks" aria-labelledby="weeks-h">
+    <div class="section-head"><p class="part-label">The entries</p><h2 id="weeks-h">The four weeks</h2></div>
+    <p>Fill in what you tracked. Blank is fine: each part is read from the weeks that have it. Week 1 is the first 10 days, so the four weeks cover all 30.</p>
+    <ul class="plain" style="font-size:0.88rem;color:var(--ink-soft);">
+      <li><strong>Hours:</strong> each person's hours that week, from <a href="/workpapers/fill/wp-01.html">Who did what (WP-01)</a>. Count planning and remembering too.</li>
+      <li><strong>Load:</strong> each person's own score from <a href="/workpapers/fill/wp-02.html">How much are you carrying? (WP-02)</a>, 0 to 1, higher is heavier. Everyone fills in their own.</li>
+      <li><strong>Rescues:</strong> times that week a job was caught at the last minute, or slipped. For the whole household, not by person.</li>
+      <li><strong>Jobs:</strong> the regular jobs on your <a href="/workpapers/fill/wp-03.html">One owner per job (WP-03)</a> list, and how many have an owner.</li>
+    </ul>
+    <div class="weeks" id="week-cards"></div>
+  </section>
+
+  <!-- ================= RUNNING ================= -->
+  <section id="running" aria-labelledby="running-h">
+    <div class="section-head"><p class="part-label">Who did what, added up</p><h2 id="running-h">The running imbalance</h2></div>
+    <p>Each person's hours over or under their share of everyone's hours, added up week by week. A gap that keeps growing in the same direction is the setup leaning, not a bad week.</p>
+    <div class="panel">
+      <div class="scroll-x" tabindex="0" role="region" aria-label="Running imbalance by week">
+        <table><thead id="run-head"></thead><tbody id="run-rows"></tbody></table>
+      </div>
+      <p id="run-text" style="margin:12px 0 0;font-size:0.93rem;">Add hours to at least one week to see it.</p>
+    </div>
+  </section>
+
+  <!-- ================= THE READ ================= -->
+  <section id="read" aria-labelledby="read-h">
+    <div class="section-head"><p class="part-label">Output</p><h2 id="read-h">The read</h2></div>
+    <div class="read-card" id="read-card" tabindex="-1">
+      <span class="lbl">Your 30 days, in plain words</span>
+      <p class="headline" id="headline">Fill in at least one part near the start and near the end to see what shifted.</p>
+      <label class="num-toggle no-print"><input type="checkbox" id="show-nums"> Show the numbers</label>
+      <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+      <div id="details" hidden>
+        <h3>What shifted</h3>
+        <ul class="list" id="shifted"></ul>
+        <h3>What didn't shift</h3>
+        <ul class="list" id="steady"></ul>
+        <p class="panel-note" id="missing"></p>
+        <div class="nums-only">
+          <h3>Week by week</h3>
+          <div class="scroll-x" tabindex="0" role="region" aria-label="Week by week numbers">
+            <table><thead><tr><th>Week</th><th class="num">Balance</th><th class="num">Rescues</th><th class="num">Avg load</th><th class="num">Ownership</th><th class="num">Setup</th></tr></thead><tbody id="wk-rows"></tbody></table>
+          </div>
+          <p class="panel-note" style="margin-top:8px;">Start = the average of weeks 1 and 2 (the ones filled in). End = the average of weeks 3 and 4. Setup is <a href="/is-the-setup-working.html">CALC-01</a>'s setup score, when balance, ownership and everyone's load are all there.</p>
+        </div>
+        <div class="next-box" id="next-box"><span class="lbl">One next step</span><div id="next"></div></div>
+      </div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn btn-solid" id="copy">Copy a summary</button>
+        <button type="button" class="btn" id="print">Print or save as PDF</button>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+      <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
+    </div>
+  </section>
+
+  <!-- ================= OWN DAYS ================= -->
+  <section id="own-days" aria-labelledby="days-h">
+    <div class="section-head"><p class="part-label">Just you &middot; optional</p><h2 id="days-h">Your own days</h2></div>
+    <p>If you save <a href="/quick-checks.html">Today's Weather</a> check-ins, or keep a <a href="/workpapers/fill/wp-13.html">daily check-in</a> draft, on this device, this part reads them for the same 30 days. It's about how the days felt, so it sits beside the read and never changes it.</p>
+    <div class="panel" id="days-panel"><p class="panel-note" id="days-text" style="margin:0;">Nothing from this device has been read. Press “Fill in from this device” above, if it shows.</p></div>
+    <div class="keep no-print">
+      <label class="check"><input type="checkbox" id="keep"> Keep my entries on this device</label>
+      <p style="font-size:0.84rem;color:var(--ink-soft);margin:4px 0 8px;">Off by default. When it's on, your names and the four weeks are stored in this browser only, never sent anywhere. On a shared computer, everyone who uses this browser could see them. Turning it off, or pressing Erase, deletes them. Reading the other worksheets above never changes them.</p>
+      <button type="button" class="btn" id="erase">Erase what's kept on this device</button>
+      <p class="status" id="keep-status" role="status"></p>
+    </div>
+  </section>
+
+  <!-- ================= SPEC ================= -->
+  <section id="spec" aria-labelledby="spec-h">
+    <div class="section-head"><p class="part-label">Reference</p><h2 id="spec-h">How it's worked out</h2></div>
+
+    <div class="spec-block">
+      <h3>Start and end</h3>
+      <p>Each part is read twice. <strong>Start</strong> is the average of weeks 1 and 2, using whichever of them you filled in. <strong>End</strong> is the average of weeks 3 and 4, the same way. A part needs at least one week at each end, or it isn't read. Averaging two weeks keeps one odd week from deciding the read.</p>
+      <div class="scroll-x">
+      <table>
+        <thead><tr><th>Part</th><th>One week's value</th><th>Counts as shifted when</th><th>Still worth a look at the end when</th></tr></thead>
+        <tbody>
+          <tr><td>How the hours split</td><td>CALC-01's balance, <code>1 &minus; moved &divide; most</code>, 0 to 1. Higher is more even.</td><td>it moves by 0.10 or more</td><td>under 0.70</td></tr>
+          <tr><td>Last-minute rescues</td><td>the count for the week</td><td>it moves by 1 a week or more</td><td>2 or more a week</td></tr>
+          <tr><td>How much each person is carrying</td><td>each person's WP-02 score, and their average (only when everyone's own score is there)</td><td>the average moves by 0.10 or more (each person's own line uses the same 0.10)</td><td>anyone at 0.60 or more (a high load on WP-02)</td></tr>
+          <tr><td>Jobs with an owner</td><td><code>jobs with an owner &divide; jobs on the list</code></td><td>it moves by 0.10 or more</td><td>under 0.70</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p>The cut-offs are round numbers chosen to be easy to read, not research findings. A move of 0.09 and a move of 0.10 are really the same month.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>The running imbalance</h3>
+<pre>gap(person, after week k) = &Sigma; over weeks 1..k of ( their hours &minus; their share &times; everyone's hours )
+hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
+      <p>Their share is an even share (1 &divide; people), or the split you agreed on. Weeks with no hours are skipped, so a blank week never counts as an even one. With two people, the hours to change hands is simply how far one person is over.</p>
+      <p><strong>Made-up example:</strong> Sam and Alex log 14 and 6 hours, then 13 and 7, then 11 and 9, then 10 and 10. Sam's running gap is +4, +7, +8, +8 hours. Over the month, 8 hours would have to change hands to even it out, and all of it built up in the first three weeks. The last week was even, which is the change working; the 8 hours already done stay done.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>The one next step</h3>
+      <ul class="plain">
+        <li>If a part moved the wrong way, the step goes to it. If two did, the one that moved furthest past its cut-off.</li>
+        <li>Otherwise, the first part still worth a look at the end, in this order: jobs without an owner, uneven hours, rescues, a high load. Ownership comes first because it is usually the easiest thing to change, and it often settles the other three.</li>
+        <li>If nothing needs a look, the step is to keep the same rhythm and look back again in 30 days.</li>
+      </ul>
+    </div>
+
+    <div class="spec-block">
+      <h3>Reading this device</h3>
+      <p>“Fill in from this device” reads, without changing them: the long fair-split calculator's kept trend log, the Workpaper Suite draft and single worksheet drafts (Who did what, How much are you carrying?, the daily check-in), and the jobs your weekly check-in card was told slipped. It only fills boxes that are still empty, and says what it used. A “week beginning” date is placed by its middle day. Where two entries fall in the same week, the later one is used. Rescues taken from the weekly check-in are the jobs it was told slipped, which is close to, but not the same as, every rescue: check the number.</p>
+    </div>
+
+    <div class="warn-box">
+      <p><strong>What this look-back will never use.</strong> Tone of voice, messages, how fast someone replies, or anything about a person that they didn't help enter themselves. A load score is never filled in for someone else.</p>
+    </div>
+
+    <div class="spec-block">
+      <h3>What it is not</h3>
+      <ul class="plain">
+        <li>Not a verdict on who is the better partner, parent or housemate.</li>
+        <li>Not a tested clinical or statistical tool. It predicts nothing; it describes what you typed in.</li>
+        <li>Not a reason to decide a relationship's future. “The look-back says…” is a misuse. Its job is to give you a calm place to start.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="sheet-footer">
+    Spread Love &amp; Acceptance &middot; CALC-02 &middot; A rule-of-thumb worksheet, not a tested tool &middot; Runs in your browser
+  </footer>
+</main>
+
+<script src="/assets/js/household.js"></script>
+<script>
+(function(){
+  "use strict";
+  var C = window.TOLCalc01, K = window.TOLCalc02, f2 = C.f2, f1 = C.f1;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  var STORE = "tol-calc02-v1";
+
+  // Made-up households, labelled as made up, so the page can be tried before anything is filled in.
+  function wk(h, r, l, t, o){ return { hours: h.map(String), rescues: String(r), loads: l.map(String), jobsTotal: String(t), jobsOwned: String(o), wbScore: "", ocScore: "", asScore: "" }; }
+  var EXAMPLES = {
+    sam: { names: ["Sam", "Alex"], weeks: [wk([14, 6], 4, [0.65, 0.30], 10, 6), wk([13, 7], 3, [0.65, 0.30], 10, 7), wk([11, 9], 2, [0.60, 0.30], 10, 9), wk([10, 10], 1, [0.60, 0.35], 10, 9)] },
+    three: { names: ["Jordan", "Priya", "Lee"], weeks: [wk([12, 6, 2], 3, [0.40, 0.60, 0.20], 8, 6), wk([12, 5, 3], 4, [0.45, 0.65, 0.20], 8, 6), wk([11, 6, 3], 4, [0.45, 0.65, 0.25], 8, 6), wk([12, 6, 2], 5, [0.50, 0.70, 0.20], 8, 5)] },
+    blank: { names: ["", ""], weeks: null }
+  };
+
+  var S = { names: ["", ""], weeks: [], agreed: false, targets: ["", ""], end: "" };
+  var keepOn = false, copyText = "", hasRead = false, dev = null;
+  function n(){ return S.names.length; }
+  function nameOf(i){ return (S.names[i] || "").trim() || ("Person " + (i + 1)); }
+  function names(){ return S.names.map(function(_, i){ return nameOf(i); }); }
+  function endDate(){ return K.fromKey(S.end) || new Date(); }
+  function fresh(){ S.weeks = [0, 1, 2, 3].map(function(){ return K.blankWeek(n()); }); }
+  function resize(k){
+    k = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, k));
+    while (S.names.length < k){ S.names.push(""); S.targets.push(""); }
+    S.names = S.names.slice(0, k); S.targets = S.targets.slice(0, k);
+    S.weeks = S.weeks.map(function(w){ return K.fitWeek(w, k); });
+  }
+
+  /* ---------- rendering ---------- */
+  function renderAll(){
+    var cnt = $("people-count");
+    if (!cnt.options.length) for (var i = C.MIN_PEOPLE; i <= C.MAX_PEOPLE; i++) cnt.insertAdjacentHTML("beforeend", '<option value="' + i + '">' + i + ' people</option>');
+    cnt.value = String(n());
+    $("end-date").value = K.dayKey(endDate());
+    $("people-names").innerHTML = S.names.map(function(p, i){ return '<div><label for="pname-' + i + '">Person ' + (i + 1) + '</label><input type="text" id="pname-' + i + '" data-name="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(p) + '"></div>'; }).join("");
+    $("agreed").checked = !!S.agreed; $("targets").hidden = !S.agreed;
+    $("targets").innerHTML = S.targets.map(function(v, i){ return '<div><label for="tg-' + i + '" data-lab="' + i + '" data-suffix=", agreed %">' + esc(nameOf(i)) + ', agreed %</label><input type="number" id="tg-' + i + '" data-target="' + i + '" min="0" max="100" step="1" inputmode="decimal" value="' + esc(v) + '"></div>'; }).join("");
+    var sl = K.slots(endDate());
+    $("week-cards").innerHTML = S.weeks.map(function(w, k){
+      var h = '<div class="week" id="week-' + k + '"><h3>' + sl[k].label + '</h3><p class="dates">' + esc(sl[k].dates) + '</p>' +
+        '<div class="pp"><span class="hd">Person</span><span class="hd">Hours</span><span class="hd">Load (0&ndash;1)</span>';
+      for (var i = 0; i < n(); i++){
+        h += '<span class="rl" data-lab="' + i + '" data-suffix="">' + esc(nameOf(i)) + '</span>' +
+          '<input type="number" data-w="' + k + '" data-f="hours" data-i="' + i + '" min="0" step="0.5" inputmode="decimal" value="' + esc(w.hours[i]) + '" aria-label="' + esc(nameOf(i)) + ', hours, week ' + (k + 1) + '">' +
+          '<input type="number" data-w="' + k + '" data-f="loads" data-i="' + i + '" min="0" max="1" step="0.05" inputmode="decimal" value="' + esc(w.loads[i]) + '" aria-label="' + esc(nameOf(i)) + ', load score, week ' + (k + 1) + '">';
+      }
+      h += '</div><div class="row-grid">' +
+        '<div><label for="r-' + k + '">Rescues</label><input type="number" id="r-' + k + '" data-w="' + k + '" data-f="rescues" min="0" step="1" inputmode="numeric" value="' + esc(w.rescues) + '"></div>' +
+        '<div><label for="jt-' + k + '">Jobs on the list</label><input type="number" id="jt-' + k + '" data-w="' + k + '" data-f="jobsTotal" min="0" step="1" inputmode="numeric" value="' + esc(w.jobsTotal) + '"></div>' +
+        '<div><label for="jo-' + k + '">Jobs with an owner</label><input type="number" id="jo-' + k + '" data-w="' + k + '" data-f="jobsOwned" min="0" step="1" inputmode="numeric" value="' + esc(w.jobsOwned) + '"></div></div>' +
+        '<details' + (w.wbScore !== "" || w.ocScore !== "" || w.asScore !== "" ? " open" : "") + '><summary>Only have scores? (from the fair-split calculator)</summary>' +
+        '<p class="panel-note" style="font-size:0.8rem;">Used only where the boxes above are blank. Each runs from 0 to 1, as <a href="/is-the-setup-working.html#trend">its trend log</a> keeps them.</p><div class="row-grid" style="margin-top:0;margin-bottom:10px;">' +
+        '<div><label for="ws-' + k + '">Balance score</label><input type="number" id="ws-' + k + '" data-w="' + k + '" data-f="wbScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.wbScore) + '"></div>' +
+        '<div><label for="os-' + k + '">Ownership score</label><input type="number" id="os-' + k + '" data-w="' + k + '" data-f="ocScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.ocScore) + '"></div>' +
+        '<div><label for="as-' + k + '">Average load</label><input type="number" id="as-' + k + '" data-w="' + k + '" data-f="asScore" min="0" max="1" step="0.01" inputmode="decimal" value="' + esc(w.asScore) + '"></div></div></details>' +
+        '<div class="wk-work" id="wk-work-' + k + '" aria-live="polite"></div></div>';
+      return h;
+    }).join("");
+  }
+  function relabel(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){ l.textContent = nameOf(+l.dataset.lab) + (l.dataset.suffix || ""); });
+    Array.prototype.forEach.call(document.querySelectorAll("input[data-i]"), function(el){ el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + (el.dataset.f === "hours" ? "hours" : "load score") + ", week " + (+el.dataset.w + 1)); });
+  }
+
+  /* ---------- the read ---------- */
+  function targets(){ return S.agreed ? S.targets : null; }
+  function recalc(){
+    var nums = $("show-nums").checked, nm = names(), tg = targets();
+    var R = S.weeks.map(function(w){ return K.readWeek(w, n(), tg); });
+    R.forEach(function(r, k){
+      var bits = [];
+      Array.prototype.forEach.call(document.querySelectorAll('#week-' + k + ' input[data-f]'), function(el){ el.removeAttribute("aria-invalid"); });
+      r.problems.forEach(function(p){
+        bits.push('<span class="err">' + esc(p.list ? p.list.map(function(x){ return nm[x.i] + ": " + x.msg; }).join(" ") : p.msg) + "</span>");
+        var sel = p.key === "jobs" ? '[data-f="jobsTotal"],[data-f="jobsOwned"]' : '[data-f="' + p.key + '"]';
+        Array.prototype.forEach.call(document.querySelectorAll('#week-' + k + ' input' + sel.split(",").join(',#week-' + k + ' input')), function(el){ el.setAttribute("aria-invalid", "true"); });
+      });
+      if (r.wb !== null) bits.push((r.bal ? r.bal.shares.map(function(s, i){ return esc(nm[i]) + " " + C.pct(s); }).join(", ") + ": " : "Balance: ") + C.shareWords(r.wb) + (nums ? " (" + f2(r.wb) + ")" : ""));
+      if (r.loads.some(function(x){ return x !== null; }) && r.as === null) bits.push("The average load waits for everyone's own score.");
+      $("wk-work-" + k).innerHTML = bits.join("<br>");
+    });
+
+    // running imbalance
+    var run = K.running(S.weeks, n(), tg);
+    $("run-head").innerHTML = "<tr><th>After</th>" + nm.map(function(x){ return '<th class="num">' + esc(x) + "</th>"; }).join("") + '<th class="num">To change hands</th></tr>';
+    if (!run){ $("run-rows").innerHTML = '<tr><td colspan="' + (n() + 2) + '" style="color:var(--ink-soft);">No hours yet.</td></tr>'; $("run-text").textContent = "Add hours to at least one week to see it."; }
+    else {
+      $("run-rows").innerHTML = run.rows.map(function(r){
+        if (r.skip) return "<tr><td>Week " + (r.i + 1) + '</td><td colspan="' + (n() + 1) + '" style="color:var(--ink-soft);">no hours, skipped</td></tr>';
+        return "<tr><td>Week " + (r.i + 1) + "</td>" + r.gaps.map(function(g){ return '<td class="num">' + (g > 0.05 ? "+" : "") + f1(Math.abs(g) < 0.05 ? 0 : g) + " h</td>"; }).join("") + '<td class="num">' + f1(r.moved) + " h</td></tr>";
+      }).join("");
+      var over = run.gaps.map(function(g, i){ return { i: i, g: g }; }).filter(function(x){ return x.g > 0.05; }).sort(function(a, b){ return b.g - a.g; });
+      var lines = [];
+      lines.push("Over " + run.weeks + " week" + (run.weeks === 1 ? "" : "s") + " with hours, " + f1(run.sumHours) + " hours in all: " + nm.map(function(x, i){ return x + " " + f1(run.total[i]); }).join(", ") + ".");
+      if (run.moved < 0.05) lines.push("Against " + (tg && run.bal.mode === "agreed" ? "your agreed split" : "an even share") + ", nothing would need to change hands. The month came out even.");
+      else {
+        lines.push("To even out the month against " + (run.bal.mode === "agreed" ? "your agreed split" : "an even share") + ", about " + f1(run.moved) + " hours would have to change hands" + (over.length ? ", mostly from " + nm[over[0].i] : "") + ".");
+        var prev = null, grew = 0, shrank = 0;
+        run.rows.forEach(function(r){ if (r.skip) return; if (prev !== null){ if (r.moved > prev + 0.05) grew++; else if (r.moved < prev - 0.05) shrank++; } prev = r.moved; });
+        if (run.weeks >= 2) lines.push(grew === run.weeks - 1 ? "The gap grew every week it was measured: the setup is leaning, not just one bad week." : shrank ? "The gap shrank in " + shrank + " week" + (shrank === 1 ? "" : "s") + ": something you changed is working." : grew ? "The gap grew at first, then stopped growing: the later weeks were close to even." : "The gap held steady after the first week.");
+        if (run.overEvery.length) lines.push(run.overEvery.map(function(i){ return nm[i]; }).join(" and ") + " did more than their share in every week with hours. That's a pattern in the setup worth naming together.");
+      }
+      $("run-text").textContent = lines.join(" ");
+    }
+
+    // halves, then and now
+    var A = K.avgReads([R[0], R[1]], n()), B = K.avgReads([R[2], R[3]], n());
+    var cmp = K.compare(A, B, nm, nums);
+    $("wk-rows").innerHTML = R.map(function(r, k){
+      var s = r.wb !== null && r.oc !== null && r.as !== null ? C.solvency(r.wb, r.oc, r.as).value : null;
+      return "<tr><td>Week " + (k + 1) + '</td><td class="num">' + f2(r.wb) + '</td><td class="num">' + (r.rescues === null ? "—" : r.rescues) + '</td><td class="num">' + f2(r.as) + '</td><td class="num">' + f2(r.oc) + '</td><td class="num">' + f2(s) + "</td></tr>";
+    }).join("") + '<tr><td><strong>Start</strong></td><td class="num">' + f2(A.wb) + '</td><td class="num">' + (A.rescues === null ? "—" : f1(A.rescues)) + '</td><td class="num">' + f2(A.as) + '</td><td class="num">' + f2(A.oc) + '</td><td class="num">' + (cmp.setup ? f2(cmp.setup.start) : "—") + "</td></tr>" +
+      '<tr><td><strong>End</strong></td><td class="num">' + f2(B.wb) + '</td><td class="num">' + (B.rescues === null ? "—" : f1(B.rescues)) + '</td><td class="num">' + f2(B.as) + '</td><td class="num">' + f2(B.oc) + '</td><td class="num">' + (cmp.setup ? f2(cmp.setup.end) : "—") + "</td></tr>";
+
+    if (!cmp.enough){
+      hasRead = false; $("details").hidden = true;
+      $("headline").textContent = "Fill in at least one part near the start (week 1 or 2) and near the end (week 3 or 4) to see what shifted.";
+      setText($("headline").textContent); save(); return;
+    }
+    hasRead = true; $("details").hidden = false;
+    var head = "";
+    if (cmp.setup){
+      var s0 = cmp.setup.startBand, s1 = cmp.setup.endBand;
+      head = 'The setup went from <span class="pill ' + s0.cls + '">' + esc(s0.short) + '</span> to <span class="pill ' + s1.cls + '">' + esc(s1.short) + "</span>" + (nums ? " (" + f2(cmp.setup.start) + " to " + f2(cmp.setup.end) + ")" : "") + ". ";
+    }
+    var plain = K.summaryLine(cmp);
+    $("headline").innerHTML = head + esc(plain);
+    function li(x){ return "<li>" + esc(x.text) + (x.status === "better" ? ' <span class="tag better">better</span>' : x.status === "worse" ? ' <span class="tag worse">the other way</span>' : "") + "</li>"; }
+    $("shifted").innerHTML = cmp.shifted.length ? cmp.shifted.map(li).join("") : "<li>Nothing moved by enough to count. That's useful to know too.</li>";
+    $("steady").innerHTML = cmp.steady.length ? cmp.steady.map(li).join("") : "<li>Everything you filled in moved.</li>";
+    $("missing").textContent = cmp.missing.length ? "Not filled in at both ends, so not read: " + cmp.missing.map(function(x){ return x.label.toLowerCase(); }).join(", ") + "." : "";
+    var nx = cmp.next;
+    $("next").innerHTML = (nx.why ? "<p>" + esc(nx.why) + "</p>" : "") + "<p><strong>" + esc(nx.text) + "</strong>" + (nx.link ? ' <a href="' + nx.link[1] + '">' + esc(nx.link[0]) + "</a>" : "") + "</p>" + (nx.extra ? "<p>" + esc(nx.extra) + "</p>" : "");
+    setText(head.replace(/<[^>]+>/g, "") + plain);
+
+    var sl = K.slots(endDate()), C2 = K.compare(A, B, nm, true);
+    var L = ["Look back over 30 days (CALC-02, Spread Love & Acceptance)", "People: " + nm.join(", "), "From " + K.nice(sl[0].from) + " to " + K.nice(sl[3].to), ""];
+    if (cmp.setup) L.push("The setup: " + cmp.setup.startBand.short + " (" + f2(cmp.setup.start) + ") at the start, " + cmp.setup.endBand.short + " (" + f2(cmp.setup.end) + ") at the end", "");
+    if (run) L.push("Running imbalance: " + $("run-text").textContent, "");
+    L.push("What shifted:"); (C2.shifted.length ? C2.shifted : [{ text: "Nothing moved by enough to count." }]).forEach(function(x){ L.push("- " + x.text); }); L.push("");
+    L.push("What didn't shift:"); (C2.steady.length ? C2.steady : [{ text: "Everything filled in moved." }]).forEach(function(x){ L.push("- " + x.text); }); L.push("");
+    L.push("One next step: " + (nx.why ? nx.why + " " : "") + nx.text, "", "This reads the setup, not any person. A place to start a conversation, not a verdict.");
+    copyText = L.join("\n");
+    save();
+  }
+  var last = "", timer = null;
+  function setText(t){ if (t === last) return; last = t; clearTimeout(timer); timer = setTimeout(function(){ $("announce").textContent = "Your 30 days: " + t; }, 600); }
+
+  /* ---------- this device ---------- */
+  function readDevice(){ try { dev = K.device(endDate()); } catch (e) { dev = null; } return dev; }
+  function showDevice(){
+    var d = readDevice(), any = d && (d.facts.length || d.days);
+    $("device-box").hidden = !(d && d.facts.length);
+    if (d && d.facts.length) $("device-found").textContent = d.sources.join(", ");
+    return any;
+  }
+  function renderDays(){
+    var d = dev, bits = [];
+    if (d && d.days) bits.push("<p style=\"margin:0 0 8px;\">" + esc(d.days.text) + "</p>");
+    if (d) d.facts.filter(function(f){ return f.kind === "high"; }).forEach(function(f){
+      var nm = names();
+      bits.push("<p style=\"margin:0 0 8px;\">From the daily check-in, week " + (f.slot + 1) + ": " + esc(f.high.map(function(c, i){ return (nm[i] || ("Person " + (i + 1))) + " at a high load on " + c + " day" + (c === 1 ? "" : "s"); }).join(", ")) + ".</p>");
+    });
+    if (bits.length) $("days-panel").innerHTML = bits.join("");
+    else $("days-panel").innerHTML = '<p class="panel-note" style="margin:0;">Nothing from your own days is kept on this device for these 30 days. That\'s fine: this part is optional.</p>';
+  }
+  function fromDevice(){
+    var d = readDevice();
+    if (!d || !d.facts.length){ $("setup-status").textContent = "There's nothing kept on this device from these 30 days to fill in."; renderDays(); return; }
+    if (S.names.every(function(x){ return !String(x).trim(); }) && d.names.length >= 2){ resize(d.names.length); S.names = d.names.slice(0, n()); }
+    var used = K.apply(S.weeks, d.facts, n(), S.names);
+    renderAll(); recalc(); renderDays();
+    $("setup-status").textContent = used.length ? "Filled in from this device (only empty boxes). " + used.join(". ") + ". Check the numbers before you read them." : "What's kept on this device had nothing new for the empty boxes.";
+  }
+
+  /* ---------- keeping ---------- */
+  function save(){ if (!keepOn) return; try { localStorage.setItem(STORE, JSON.stringify({ v: 1, names: S.names, weeks: S.weeks, agreed: S.agreed, targets: S.targets, end: S.end })); } catch (e) {} }
+  function erase(){ try { localStorage.removeItem(STORE); } catch (e) {} }
+
+  /* ---------- events ---------- */
+  document.addEventListener("input", function(e){
+    var t = e.target;
+    if (t.dataset.name !== undefined){ S.names[+t.dataset.name] = t.value; relabel(); recalc(); renderDays(); }
+    else if (t.dataset.target !== undefined){ S.targets[+t.dataset.target] = t.value; recalc(); }
+    else if (t.dataset.w !== undefined){ var w = S.weeks[+t.dataset.w]; if (t.dataset.i !== undefined) w[t.dataset.f][+t.dataset.i] = t.value; else w[t.dataset.f] = t.value; recalc(); }
+    else if (t.id === "show-nums"){ document.body.classList.toggle("show-nums", t.checked); try { if (t.checked) sessionStorage.setItem("tol-calc-nums", "1"); else sessionStorage.removeItem("tol-calc-nums"); } catch (err) {} recalc(); }
+  });
+  document.addEventListener("change", function(e){
+    var t = e.target;
+    if (t.id === "people-count"){ resize(+t.value); renderAll(); recalc(); }
+    else if (t.id === "end-date"){ S.end = K.fromKey(t.value) ? t.value : ""; renderAll(); recalc(); showDevice(); }
+    else if (t.id === "agreed"){
+      S.agreed = t.checked;
+      if (t.checked && S.targets.every(function(x){ return x === ""; })){ var ev = Math.floor(100 / n()); S.targets = S.names.map(function(_, i){ return String(i === 0 ? 100 - ev * (n() - 1) : ev); }); }
+      renderAll(); recalc();
+    }
+    else if (t.id === "keep"){
+      keepOn = t.checked;
+      if (keepOn){ save(); $("keep-status").textContent = "Kept in this browser only. Untick this, or press Erase, to remove it."; }
+      else { erase(); $("keep-status").textContent = "Not kept any more. Nothing from this look-back is stored on this device."; }
+    }
+  });
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.example){
+      var ex = EXAMPLES[t.dataset.example];
+      S.names = ex.names.slice(); S.targets = S.names.map(function(){ return ""; }); S.agreed = false;
+      if (ex.weeks) S.weeks = ex.weeks.map(function(w){ return JSON.parse(JSON.stringify(w)); }); else fresh();
+      renderAll(); recalc();
+      $("setup-status").textContent = ex.weeks ? "Loaded a made-up example. The names and numbers are invented." : "Cleared. Start with the names.";
+      if (ex.weeks) $("read-card").focus();
+    } else if (t.id === "from-device") fromDevice();
+    else if (t.id === "print" || t.id === "print-top") window.print();
+    else if (t.id === "erase"){ erase(); keepOn = false; $("keep").checked = false; $("keep-status").textContent = "Erased. Nothing from this look-back is stored on this device."; }
+    else if (t.id === "copy"){
+      var ta = $("copy-out"), st = $("copy-status");
+      if (!hasRead){ st.textContent = "There's no read to copy yet."; return; }
+      var fb = function(){ ta.value = copyText; ta.hidden = false; ta.focus(); ta.select(); st.textContent = "Your browser blocked copying. The summary is selected below: copy it from there."; };
+      try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(copyText).then(function(){ st.textContent = "Copied. Paste it into a message or your notes."; ta.hidden = true; }, fb); else fb(); } catch (err){ fb(); }
+    }
+  });
+
+  /* ---------- start ---------- */
+  fresh();
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORE) || "null");
+    if (saved && saved.v === 1 && Array.isArray(saved.names) && saved.names.length >= 2 && Array.isArray(saved.weeks) && saved.weeks.length === 4){
+      S.names = saved.names.slice(0, 8); S.targets = (saved.targets || []).slice(0, S.names.length); S.agreed = !!saved.agreed; S.end = saved.end || "";
+      while (S.targets.length < S.names.length) S.targets.push("");
+      S.weeks = saved.weeks.map(function(w){ return K.fitWeek(w, S.names.length); });
+      keepOn = true; $("keep").checked = true; $("keep-status").textContent = "Your kept entries were loaded from this device.";
+    }
+  } catch (e) {}
+  try { if (sessionStorage.getItem("tol-calc-nums") === "1"){ $("show-nums").checked = true; document.body.classList.add("show-nums"); } } catch (e) {}
+  renderAll(); recalc();
+  if (showDevice()) renderDays();
+
+  // The household kept on this device: offer its names, one tap. Never fills in by itself.
+  var HH = window.TOLHousehold, hh = HH && HH.get ? HH.get() : null;
+  if (hh && hh.people.length && HH.offer && S.names.every(function(x){ return !String(x || "").trim(); })){
+    var offer = HH.offer({
+      names: hh.people, question: "Use your household from before?",
+      status: $("setup-status"),
+      onUse: function(){ resize(hh.people.length); S.names = hh.people.slice(0, n()); while (S.names.length < n()) S.names.push(""); renderAll(); recalc(); return HH.addedLine(Math.min(hh.people.length, n()), 0); },
+      focus: function(){ return $("pname-0"); }
+    });
+    $("people-names").parentNode.insertBefore(offer, $("people-names"));
+  }
+})();
+</script>
+</body>
+</html>
