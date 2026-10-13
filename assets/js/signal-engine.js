@@ -1676,6 +1676,10 @@ function analyze(textIn, opts){
     addIf("absolute", /\b(?:you|u) only ever\b|\bhappens every (?:time|day|week|night|weekend|month)\b|\bthe only one (?:who|that) ever\b/);
     addIf("guilt", /\bif you (?:really |truly |actually )?(?:loved|cared about|respected) me,? you(?:'d| would)\b|\bi gave up (?:my (?:career|job|life|twenties|dreams)|everything) for (?:this family|you|us|the kids|this)\b|\bdespu[eé]s de todo lo que (?:hice|he hecho|hago) por ti\b/);
     addIf("withdraw", /\bwhatever,? (?:mum|mom|dad|mother|father)\b/);
+    if(!["swear","hostile","label","contempt","violent","legal","dxlabel","menace","sarcasm","jab","guilt","threat"].some(has)){
+      const bm2 = /\bi(?:'m| am) not (?:okay|ok|comfortable|happy) (?:with (?:you |people |anyone |that|this|being)|having)\b|\bi(?:'m| am) not going to (?:discuss|talk about|argue about|lend|sign|keep (?:doing|having))\b|\bi (?:don't|do not) want to (?:talk|hear) about [^.!?]{1,30}? (?:anymore|any more)\b|\bi(?:'m| am) only going to (?:discuss|talk about|reply|answer|communicate|message)\b|\bi (?:won't|will not) (?:sign|discuss|lend|be discussing|keep)\b[^.!?]{0,40}\b(?:until|unless|anymore|any more|without)\b|\bi (?:don't|do not) (?:check|answer|reply to|read) (?:work )?(?:messages|emails|texts|my phone) (?:after|before|on|at)\b|\bplease (?:don't|do not) (?:comment on|bring up|mention)\b/.exec(low);
+      if(bm2){ push("boundary", bm2.index, bm2.index+bm2[0].length); drop("stonewall", h=>inside(h,"boundary")); drop("threat"); }
+    }
     // Spanish basics: the most common sharp and kind phrases (the rewrite stays in your words)
     addIf("absolute", /(?:^|[\s¿¡])(?:siempre|nunca|jam[aá]s)\s+(?!te (?:quiero|amo)|gracias)\w+/);
     addIf("label", /(?:^|[\s¿¡])eres (?:un |una |muy |tan |lo )?(?:ego[ií]sta|idiota|vag[oa]|in[uú]til|imb[eé]cil|est[uú]pid[oa]|tont[oa]|desastre|mentiros[oa]|pesad[oa]|peor)(?=$|[\s.,!?😂🤣])/);
@@ -2072,6 +2076,9 @@ function rewrite(an, opts){
     return {main:g, primary:{id:"main", label:"Nothing to read yet", why:"It looks like random letters, so there's nothing to translate. Try the words you'd actually use.", text:g}, variants:[{id:"main", label:"Nothing to read yet", why:"It looks like random letters, so there's nothing to translate. Try the words you'd actually use.", text:g}], changes:[], ask:null, list:"", unchanged:true, gibberish:true};
   }
 
+  // Spanish is read at a basic level: the notes show what may land hard, and the words stay the writer's own
+  if(an.lang==="es"){ const v = {id:"main", label:"Your words", why:"The checker reads Spanish at a basic level, so it doesn't rewrite it. The notes above show what may land hard.", text:an.text.trim()};
+    return {main:v.text, primary:v, variants:[v], changes:[], ask:an.asks[0]||null, list:"", unchanged:true, lang:"es"}; }
   // a silent "…" on its own: say one short line instead
   if(/^\s*(?:\.{3,}|…)\s*$/.test(text)){
     const out0 = "[Say one short line, even \"I need a minute. I'll reply tonight.\"]";
@@ -3482,6 +3489,11 @@ function receive(an, opts){
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // checking up, cutting someone off, or a put-down that says they're worth nothing: control, not tone.
   // No "kinder way to read it", and no reply that does what it demands.
+  if(an.control && an.control.kind==="fear") return {crossed:false, danger:true, control:true, fear:true, head:["danger","They may be telling you they feel afraid or controlled."],
+    meanings:["Take it seriously. This is about how safe they feel, not about the wording.",
+      "Listen first, and ask what they need from you right now. Arguing with it, or explaining it away, can make it harder for them to say more.",
+      "If someone is afraid of a partner or a family member, free and private support can help them, any time."],
+    literal:[], replies:[{label:"A first answer", text:"Thank you for telling me. I believe you. What would help most right now?"}], found};
   if(an.control) return {crossed:true, danger:true, control:true, head:["danger","This may be about control, not communication."],
     meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
       : an.control.kind==="isolate" ? "Deciding who you can see, or cutting you off from friends or family, isn't okay, whatever was meant. Who you see is your choice."
@@ -3497,6 +3509,11 @@ function receive(an, opts){
       "You don't have to handle this alone, and it isn't your fault."],
     literal:[], replies:[{label:"Reach out now", text:"I'm really glad you told me. Are you safe right now? I'm here, and I'd like us to call or text 988 together."}], found};
   const crossed = CROSSED.some(has);
+  // teasing: say so, and leave room for the day it stings
+  if(an.banter && !crossed) return {crossed:false, banter:true, head:["ok", an.banterPoint ? "This reads as teasing, with a real point inside it." : "This reads as playful teasing."],
+    meanings:[an.banterPoint ? "It's probably a joke, and there may be a real wish in it too. It's okay to laugh and answer the point." : "It's probably a joke between people who joke like this. If it stung anyway, it's okay to say so.",
+      "Text loses the grin and the voice, so a tease can land harder in writing than it was meant."],
+    literal:[], replies:[{label:"If it stung", text:"Ha, I know you're joking, but that one stung a bit today."}], found};
   const meanings = [];
   // the shapes testers met most: what it may mean, and a reply to the need underneath
   const rf = !crossed ? reframeOf(an, opts) : null;
@@ -3534,7 +3551,12 @@ function receive(an, opts){
   if(!crossed) order.filter(has).forEach(id=>{ if(CHECK[id] && replies.length<(rf ? 2 : 4) && !(rf && ["vtime","hint","softno","jab","closer","blunt","sarcasm","withdraw","olddays"].includes(id))) push(id==="blunt"||id==="closer" ? "A calm answer" : "Check what they meant", unq(CHECK[id])); });
   if(crossed && replies.length<4 && (has("label")||has("dxlabel")||has("contempt"))) push("Ask for the real thing", "What's the specific thing that's bothering you?");
   const mild = found.length && an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
-  const head = crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
+  // the headline agrees with how sharp the words are: a small gap ("no time given", a joke marker, "are you mad at me?")
+  // doesn't make a message sound harsh
+  const lv = score(an, ["general"], an.channel);
+  const light = !crossed && (lv.level[0]==="clear" || /little/i.test(lv.level[1])) && !["withdraw","olddays","sarcasm","jab","guilt","passiveag","brushoff","minimal","stonewall"].some(has);
+  const head = light ? (found.length ? ["ok","This looks mostly plain. One small part may be worth a second look."] : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."] : ["ok","This looks okay. Nothing here needs decoding."])
+    : crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : found.length && (has("withdraw") || has("olddays")) && !["jab","label","absolute","critic","sarcasm","passiveag","guilt"].some(has) ? ["hurt","This may carry some hurt. Here\u2019s a kind way to read it."]
     : found.length ? ["hurt", mild ? "This may sound a little sharper than they meant. Here\u2019s how to read it." : "This may sound harsher than they meant. Here are kinder ways to read it."]
     : (has("boundary") || has("disclose")) ? ["ok","This reads as a clear, caring message. It may still be hard to read, and that\u2019s okay."]
@@ -3665,6 +3687,7 @@ function verdict(an, sc, rw, opts){
   // "I want to kill myself": the person writing it comes first
   if(an.selfHarm) return {id:"danger", selfHarm:true, text:"If you're thinking about ending your life, please talk to someone now: call or text 988 (US), or your local emergency number. You deserve support."};
   // checking up, cutting someone off, or "nobody else would want you": can work as control, whatever was meant
+  if(an.control && an.control.kind==="fear") return {id:"fight", control:true, fear:true, text:"This says someone feels afraid or controlled. That matters much more than the wording, and it isn't something a better wording can fix."};
   if(an.control) return {id:"fight", control:true, text: an.control.kind==="degrade" ? "This would hurt badly. Telling someone they're worth nothing, or that nobody else would want them, can work as control, not just a sharp word."
     : an.control.kind==="isolate" ? "This can come across as control: deciding who they can see. That isn't a tone problem."
     : "This can come across as checking up on them, even if it comes from worry. That isn't a tone problem."};
@@ -3703,11 +3726,16 @@ function verdict(an, sc, rw, opts){
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
   { const mild = an.staticIds.every(id=>MILD_IDS.includes(id));
     return {id:"hurt", mild, text: (an.safety ? "Your worry is fair, but this might hurt. " : mild ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (mild ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")}; }
+  // teasing between people who joke like this: fine, with a note about the days it isn't
+  if(an.banter && !attack && lvl!=="heavy")
+    return {id:"ok", banter:true, mild: !!an.banterPoint, text: an.banterPoint
+      ? "This reads as teasing with a real point inside it. If the point matters to you, say it plainly too, so it doesn't get lost in the joke."
+      : "This reads as playful teasing. It usually lands fine with someone who jokes with you like this. On a hard day, or with someone who reads words literally, a tease can sting, so add a kind word if you're not sure."};
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
     return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
   if(an.staticIds && an.staticIds.length)
-    return {id:"ok", text: "This will probably land okay."+(soft ? " A small change below could make it even clearer." : "")};
-  return {id:"ok", text:"This will probably land okay."};
+    return {id:"ok", text: (an.warm && lvl==="clear" ? "This reads as warm and clear." : "This will probably land okay.")+(soft ? " A small change below could make it even clearer." : "")};
+  return {id:"ok", warm: !!an.warm, text: an.warm ? "This reads as warm and clear. It will probably land well." : "This will probably land okay."};
 }
 
 /* "It's my money too, stop policing what I spend": a money fight, and sometimes a sign of control.
