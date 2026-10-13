@@ -2584,6 +2584,11 @@
   // "summarise this as an infographic" (the last answer). Never of a safety reply, and never in place of one.
   var IG_ASK = /\b(infographic|info ?graphic|poster|cheat ?sheet|one ?pager|visuali[sz]\w*|diagram|graphic|picture|chart|graph|mind ?map|timeline|draw|sketch|illustrate|map out)s?\b/;
   function igTurn(state, q, f) {
+    // "make another": a new topic, never a picture of my own last reply
+    if (/^(please )?(make|draw|do|create)( me| us)? another( one| infographic| picture| poster| graphic)?( please)?$/.test(f) || (state.lastKind === 'info' && /^(another|another one|one more)$/.test(f))) {
+      return { blocks: [{ k: 'p', x: 'Happy to! What should the next one be about? For example “the mental load”, “active listening” or “a good pause”.' }],
+        chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Active listening', q: 'Make a step by step infographic about active listening' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify', id: 'ig-next' };
+    }
     if (!IG_ASK.test(f)) return null;
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return null;
     var IG = window.TOLInfographic;
@@ -2599,6 +2604,7 @@
     }
     var spec = null, src = '';
     try {
+      if (rq.last && state.lastKind === 'info') return { blocks: [{ k: 'p', x: 'Happy to make another! What should it be about?' }], chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Active listening', q: 'Make a step by step infographic about active listening' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify', id: 'ig-next' };
       if (rq.last) {
         var L = state.last, LR = state.lastReply;
         if (state.deepLast && state.lastKind === 'deep' && dById(state.deepLast)) spec = IG.fromDeep(dById(state.deepLast));
@@ -2609,7 +2615,11 @@
         if (!spec) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }], kind: 'clarify' };
       } else {
-        var tp = String(rq.topic || '').trim();
+        var tp = String(rq.topic || '').trim(), aud = '';
+        // the topic wins over the audience: "the steps of active listening for teenagers" is active listening, made for teens
+        var am = /^(.{3,}?)\s+(?:for|aimed at|suitable for)\s+((?:my |our |the )?(?:teen\w*|kids?|children|class(?:room)?|students|pupils|parents|couples|famil(?:y|ies)|grandparents|team|staff|colleagues|adults|older people|young people|beginners))$/i.exec(tp);
+        if (am) { tp = am[1]; aud = am[2].replace(/^(my|our|the) /i, ''); }
+        tp = tp.replace(/^(?:the |a |some )?(?:(?:simple|easy|basic|main|key|five|four|three|\d+) )?(?:steps?|stages?|tips?|rules?) (?:of|for|to|in)\s+/i, '').trim() || tp;
         if (!tp) return { blocks: [{ k: 'p', x: 'Happy to! What should it be about? For example “the mental load”, “fair isn’t always equal” or “me 60 them 40”.' }],
           chips: [{ label: 'The mental load', q: 'Make an infographic about the mental load' }, { label: 'Fair vs equal', q: 'Make an infographic about fair vs equal' }, { label: 'A good pause', q: 'Make an infographic about taking a good pause' }], kind: 'clarify' };
         if (DANGER.test(norm(tp)) || VERBAL.test(norm(tp))) return null;
@@ -2636,10 +2646,11 @@
       }
     } catch (e) { spec = null; }
     if (!spec) return null;
+    if (typeof aud === 'string' && aud && !spec.kicker) spec.kicker = 'For ' + aud.toLowerCase();
     src = spec.source && safePath(spec.source) ? spec.source : '';
     var b = [{ k: 'p', x: spec.sensitive ? 'Here it is as a picture. To keep it private, it has no save or share button.' : 'Here’s a little picture of it. You can save it, share it or print it.' }, { k: 'info', spec: spec }];
     if (src) b.push({ k: 'links', x: [['Read the page this comes from', src]] });
-    var igc = [{ label: 'Make another', q: 'Make an infographic' }];
+    var igc = [{ label: 'Make another', q: 'Make another infographic' }];
     if (!/^(split|checklist)$/.test(spec.layout) && !spec.sensitive && spec.items && spec.items.length >= 3) igc.unshift({ label: 'Make it a checklist', q: 'Make a checklist infographic of ' + (spec.title || 'this') });
     return { blocks: b, chips: igc, kind: 'info', id: spec.from || spec.layout || 'info', noBrief: true };
   }

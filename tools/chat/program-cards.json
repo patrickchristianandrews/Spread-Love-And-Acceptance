@@ -17557,6 +17557,41 @@
           "/method-and-limits.html"
         ]
       ]
+    },
+    {
+      "id": "activelistening",
+      "name": "active listening",
+      "first": false,
+      "newTopic": false,
+      "topic": false,
+      "what": [
+        "Active listening means following what the other person is trying to say, and letting them know you got it, before you add anything."
+      ],
+      "how": [
+        "Give them your full attention: phone down, eyes up.",
+        "Say back what you heard, in your own words, without your opinion added.",
+        "Ask if you got it right. “Not quite” is good news: you’re getting closer.",
+        "Ask open questions: “What was the hardest part?”",
+        "Ask what they want: “Do you want ideas, or do you want me to just listen?”",
+        "Only then add your view. Understanding first, agreeing is optional."
+      ],
+      "script": [
+        "So what I’m hearing is that you felt left to sort it on your own. Did I get that?",
+        "Do you want ideas, or do you want me to just listen?"
+      ],
+      "links": [
+        [
+          "Active listening (the Library)",
+          "/library/communication.html#active-listening"
+        ],
+        [
+          "Listening: the half we forget",
+          "/communication.html#listening"
+        ]
+      ],
+      "kind": "intent",
+      "keys": [],
+      "chips": []
     }
   ],
   "clarify": [
