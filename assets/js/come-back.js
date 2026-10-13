@@ -746,7 +746,7 @@
   // the end card of a tool or chapter keeps the recommended next right under it
   function nextUnder(box) { if (panel && box && box.parentNode && box.nextElementSibling !== panel) box.after(panel); }
 
-  var NO_NEXT = /^\/(index|start-in-10-minutes|start-here|contents|by-relationship|library|whats-new|roadmap|brand|install|about|glossary|research|podcast-index|safety|upset-right-now|ask|ways-in|suite-index|program|program-overview|curriculum|prog-01|en-espanol|reading|surprise|quest|pause-and-play|infographic|search|frequency-buddies[a-z0-9-]*|pal-cam[a-z-]*|frequency-journey[a-z-]*)(-in-depth)?\.html$|^\/book\/topic-/;
+  var NO_NEXT = /^\/(index|start-in-10-minutes|start-here|find-your-start|why-this-site|contents|by-relationship|library|whats-new|roadmap|brand|install|about|glossary|research|podcast-index|safety|upset-right-now|ask|ways-in|suite-index|program|program-overview|curriculum|prog-01|en-espanol|reading|surprise|quest|pause-and-play|infographic|search|frequency-buddies[a-z0-9-]*|pal-cam[a-z-]*|frequency-journey[a-z-]*)(-in-depth)?\.html$|^\/book\/topic-/;
   function wantsNext(main) {
     if (NO_NEXT.test(path) || !/^en/i.test(root.getAttribute('lang') || 'en')) return false;
     if (GAME_PAGES.test(path) || doc.body.classList.contains('is-game')) return false;

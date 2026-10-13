@@ -9,6 +9,10 @@
   var grid = document.querySelector('[data-ex-grid]');
   if (!grid) return;
   var M = window.TOLSiteMap;
+  // the tools registry (tools-registry.js): a tool here gets the same plain name, type, time and who-for as on /tools.html
+  var TT = {}, NEED_OF = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'family', work: 'work', health: 'health', learn: 'read', play: 'play', plan: 'load' };
+  (window.TOLTools || []).forEach(function (t) { var p = t.href.split(/[?#]/)[0]; if (!TT[p]) TT[p] = t; if (!TT[t.href]) TT[t.href] = t; });
+  function ttOf(e) { return TT[e.u] || TT[e.p] || null; }
   var countEl = document.querySelector('[data-ex-count]'), resetBtn = document.querySelector('[data-ex-reset]'),
     emptyEl = document.querySelector('[data-ex-empty]'), moreEl = document.querySelector('[data-ex-more]'),
     qEl = document.getElementById('ex-q'), relEl = document.getElementById('ex-rel'), timeEl = document.getElementById('ex-time'), typeEl = document.getElementById('ex-type'),
@@ -33,6 +37,8 @@
       list.push(e);
     }
     if (!e.t || from === 'menu') e.t = (M.plainLabel && M.plainLabel(it.href)) || it.title || e.t;
+    var tt0 = TT[e.u] || (!hash && TT[p]);
+    if (tt0 && (tt0.href === e.u || tt0.href.split(/[?#]/)[0] === e.u)) { e.t = tt0.name + (tt0.brand ? ' (' + tt0.brand.replace(/^the /, '') + ')' : ''); e.n = tt0.does; e.tool = tt0; }
     if (it.note && (!e.n || (from === 'menu' && it.note.length > 40))) e.n = it.note;
     if (it.code && !e.code) e.code = it.code;
     if (it.code === 'New') e.isNew = true;
@@ -40,6 +46,8 @@
   (M.menu || []).forEach(function (g) { if (g.id !== 'about') g.items.forEach(function (it) { if (!it.sub) add(it, 'menu'); }); });
   (M.sections || []).forEach(function (s) { s.items.forEach(function (it) { add(it, 'sections'); }); });
   (M.menu || []).forEach(function (g) { if (g.id === 'about') g.items.forEach(function (it) { if (!it.sub) add(it, 'menu'); }); });
+  // every tool in the registry is here too, even one the menu doesn't name
+  (window.TOLTools || []).forEach(function (t) { add({ href: t.href, title: t.name, note: t.does }, 'tools'); });
 
   // ---------- what each page is
   var GAME = /^\/(frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|pause-and-play|surprise|keepsakes|quest)\.html$/;
@@ -47,6 +55,7 @@
   var INFO = /^\/(about|is-this-for-you|method-and-limits|how-it-works|five-pillars|ways-in|on-this-device|contents|whats-new|install|research|brand|legal\/[a-z-]+)\.html$|^\/legal\//;
   function typeOf(e) {
     var p = e.p, c = e.code || '';
+    if (e.tool) return e.tool.type === 'play' ? 'game' : /^\/workpapers\/(?!calculators)|^\/wp-\d|^\/(prog-01|full-path|chore-chart-for-couples|week-0)\.html$/.test(p) ? 'worksheet' : 'tool';
     if (/^\/book\//.test(p)) return 'book';
     if (MEDIA.test(p) || /^(Cartoon|On air|Shuffle|Song|Make|Teaser|Music|Drift|Sounds|Album|Podcast|Live)$/.test(c)) return 'media';
     if (GAME.test(p) || c === 'Game') return 'game';
@@ -59,6 +68,7 @@
   var DEFAULT_MIN = { guide: 10, tool: 5, worksheet: 10, game: 5, book: 15, media: 5, info: 5 };
   var WORDNUM = { one: 1, two: 2, three: 3, four: 4, five: 5, ten: 10, fifteen: 15, twenty: 20, thirty: 30, ninety: 1.5 };
   function minutesOf(e) {
+    if (e.tool && e.tool.mins) return { m: e.tool.mins, known: true };
     var t = fold(e.t + ' ' + e.n), m;
     if ((m = /\b(\d{1,3})\s*(?:-|to|or)\s*(\d{1,3})[ -]?(?:minutes?|mins?)\b/.exec(t))) return { m: +m[2], known: true };
     if ((m = /\b(\d{1,3}|one|two|three|four|five|ten|fifteen|twenty|thirty)[ -]?(?:minutes?|mins?|min)\b/.exec(t))) return { m: WORDNUM[m[1]] || +m[1], known: true };
@@ -86,6 +96,7 @@
     if (/listen|say it|message|conversation|apolog|check-in|talk|fight|argu/.test(txt) && e.type !== 'game') n.talk = 1;
     if (/parent|teen|grand|family|kinship|foster|sibling|stepfam|child/.test(txt)) n.family = 1;
     if (/\bwork\b|cowork|colleague|business|team/.test(txt)) n.work = 1;
+    if (e.tool) [e.tool.type].concat(e.tool.also || []).forEach(function (k) { if (NEED_OF[k]) n[NEED_OF[k]] = 1; });
     return n;
   }
   list.forEach(function (e) {
@@ -94,13 +105,17 @@
     e.rels = Object.keys(areas).filter(function (a) { return REL_IDS[a]; });
     e.needs = needsOf(e, areas);
     var tm = minutesOf(e); e.min = tm.m; e.minKnown = tm.known;
-    e.hay = fold(e.t + ' ' + e.n + ' ' + e.p.replace(/[\/.-]/g, ' ') + ' ' + TYPE_NAME[e.type] + ' ' + e.rels.map(function (r) { return REL_NAME[r]; }).join(' '));
+    if (e.tool && e.tool.who) {
+      var w = e.tool.who; e.who = w.indexOf('solo') !== -1 && w.length === 1 ? 'On your own' : w.indexOf('solo') === -1 ? 'Together' : 'Alone or together';
+      if (w.indexOf('solo') !== -1 && e.rels.indexOf('just-me') === -1) e.rels.push('just-me');
+    }
+    e.hay = fold(e.t + ' ' + e.n + ' ' + e.p.replace(/[\/.-]/g, ' ') + ' ' + TYPE_NAME[e.type] + ' ' + e.rels.map(function (r) { return REL_NAME[r]; }).join(' ') + (e.tool ? ' ' + (e.tool.kw || '') + ' ' + (e.tool.brand || '') + ' ' + (e.who || '') : ''));
   });
 
   // ---------- the cards (built once; filtering only shows and hides them)
   function timeLabel(e) { var m = e.min < 1.5 ? 'about a minute' : (e.minKnown ? '' : 'about ') + Math.round(e.min) + ' min'; return m; }
   grid.innerHTML = list.map(function (e, i) {
-    var tags = '<span>' + esc(TYPE_NAME[e.type]) + '</span>' + '<span class="ex-time">' + esc(timeLabel(e)) + '</span>' +
+    var tags = '<span>' + esc(TYPE_NAME[e.type]) + '</span>' + '<span class="ex-time">' + esc(timeLabel(e)) + '</span>' + (e.who ? '<span>' + esc(e.who) + '</span>' : '') +
       (e.isNew ? '<span class="ex-new">New</span>' : '') + e.rels.slice(0, 2).map(function (r) { return '<span>' + esc(REL_NAME[r]) + '</span>'; }).join('');
     return '<li data-i="' + i + '"><a class="ex-card" href="' + esc(e.u) + '"><span class="ex-t">' + esc(e.t) + '</span>' +
       (e.n ? '<span class="ex-n">' + esc(e.n) + '</span>' : '') + '<span class="ex-m">' + tags + '</span></a></li>';
