@@ -96,7 +96,7 @@
     'Most jobs have an owner.': 'Casi todas las tareas tienen a alguien a cargo.', 'Some jobs have an owner.': 'Algunas tareas tienen a alguien a cargo.',
     'e.g. weekdays here, weekends there': 'p. ej., entre semana aquí, los fines de semana allá', 'e.g. Sam and Jordan': 'p. ej., Ana y Luis',
     'An example job. It isn’t counted until you give it an owner or change it.': 'Una tarea de ejemplo. No cuenta hasta que le pongan a alguien a cargo o la cambien.',
-    'Remove this row': 'Quitar esta fila', 'Share this list': 'Compartir esta lista',
+    'Remove this row': 'Quitar esta fila', 'Clear': 'Borrar', 'Share this list': 'Compartir esta lista',
     'Keep it in this browser, on this device, so it’s here when you come back': 'Guardarla en este navegador, en este dispositivo, para que esté aquí cuando vuelvas',
     'A small file to keep somewhere else, or to send to the other people on this sheet so they can add their part': 'Un archivo pequeño para guardar en otro lugar, o para enviar a las demás personas de esta hoja y que añadan su parte',
     'Job': 'Tarea', 'How often': 'Cada cuánto', 'Owner': 'Quién se encarga', 'Helper or backup (optional)': 'Ayuda o respaldo (opcional)', 'Size (optional)': 'Tamaño (opcional)', 'Notes': 'Notas',
@@ -105,6 +105,8 @@
   };
   function word(k) { return MAP[k] || k; }
   var RX = [
+    [/^Saved on this (phone|device) as you type \(the box below\), so closing the tab won’t lose it\. On a shared device, untick it or press Erase when you’re done\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes (la casilla de abajo), así que no se pierde si cierras la pestaña. En un dispositivo compartido, desmárcala o pulsa “Borrar todo” cuando termines.'; }],
+    [/^Kept in this tab until you close it, so a reload or Back won’t lose your answers\.$/, function () { return 'Se guarda en esta pestaña hasta que la cierres, así que no se pierde si recargas la página o vas hacia atrás.'; }],
     [/^Add from the task library \((\d+) common jobs, including the ones nobody sees\)$/, function (m) { return 'Añadir desde la lista de tareas (' + m[1] + ' tareas comunes en inglés, incluidas las que nadie ve)'; }],
     [/^(.+) · often unseen$/, function (m) { return MAP[m[1]] ? MAP[m[1]] + ' · a menudo no se ven' : null; }],
     [/^(\d+) example jobs from the starter list aren’t counted until you give them an owner or change them\.$/, function (m) { return m[1] + ' tareas de ejemplo de la lista inicial no cuentan hasta que les pongan a alguien a cargo o las cambien.'; }],

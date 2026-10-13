@@ -2717,7 +2717,7 @@
       var oneBtn = '<button type="button" class="fb-b' + (P.oneFirst ? ' is-main' : '') + ' fb-onech">' + (P.oneFirst ? '▶ ' : '') + oneLabel(ch) + '</button>';
       startOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">Season ' + (ep.season || 1) + ' · Episode ' + (ep.number || 1) + ' · about ' + mins(est.total) + ' · ' + ep.chapters.length + ' chapters</p>' +
         '<h3>' + esc(ep.title) + '</h3><p class="fb-hide-s">' + esc(ep.blurb) + '</p>' +
-        (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) +  + soundLine() + '</p>' : '') +
+        (note ? '<p class="fb-cn"><b>Before you watch:</b> ' + esc(note) + soundLine() + '</p>' : '') +
         '<div class="fb-row">' +
         (P.oneFirst ? oneBtn : '') +
         '<button type="button" class="fb-b' + (P.oneFirst ? '' : ' is-main') + ' fb-begin">▶ Play the episode</button>' +

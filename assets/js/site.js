@@ -1265,7 +1265,7 @@
     loadScript('/assets/js/share-kit.js').catch(function () {}); // more places, QR, save as image, share this line
     // Kip stays away from careful reading: not with Easy reading, larger text, a still page, hidden helpers or on the working pages
     var kipOk = !helpersHidden() && !WORKSPACE.test(current) && !/\btol-(easy|still|text-(lg|xl|xxl))\b/.test(document.documentElement.className);
-    if (kipOk && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
+    if (kipOk && !esPage() && (document.querySelector('.tol-share-btn, [data-share]') || current === '/frequency-buddies-season-2.html')) loadScript('/assets/js/share-clip.js').catch(function () {}); // Kip the Paperclip, by the Share buttons
     revealOnScroll();
 
     // The Night Garden, softly alive behind every page, under a see-through veil.
@@ -4600,7 +4600,7 @@
     if ((current === '/index.html' || BB_PAGE.test(current)) && !workMode() && !document.querySelector('meta[http-equiv="Content-Security-Policy"]')) { var bbs = document.createElement('script'); bbs.src = '/assets/js/brain-breaks.js'; bbs.defer = true; document.head.appendChild(bbs); }
     // tablets, laptops and desktops: an "On this page" outline, keyboard shortcuts, roomier touch targets (wide-screens.js)
     // (the English "press ? for keyboard shortcuts" tip stays off the Spanish page: for this tab only, it counts as already seen)
-    { var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
+    { if (esPage()) ssSet('tol-keys-hint', '1'); var wsc = document.createElement('script'); wsc.src = '/assets/js/wide-screens.js'; wsc.defer = true; document.head.appendChild(wsc); }
     // a very faint local time and weather note in the corner, so nobody has to leave the page to check (clock-weather.js)
     if (!workMode()) { var cwx = document.createElement('script'); cwx.src = '/assets/js/clock-weather.js'; cwx.defer = true; document.head.appendChild(cwx); }
     // phones: a "turn sideways" hint under big pictures, and full screen asks for landscape
