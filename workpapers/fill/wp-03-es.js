@@ -96,7 +96,9 @@
     'Most jobs have an owner.': 'Casi todas las tareas tienen a alguien a cargo.', 'Some jobs have an owner.': 'Algunas tareas tienen a alguien a cargo.',
     'e.g. weekdays here, weekends there': 'p. ej., entre semana aquí, los fines de semana allá', 'e.g. Sam and Jordan': 'p. ej., Ana y Luis',
     'An example job. It isn’t counted until you give it an owner or change it.': 'Una tarea de ejemplo. No cuenta hasta que le pongan a alguien a cargo o la cambien.',
-    'Remove this row': 'Quitar esta fila', 'Clear': 'Borrar', 'Share this list': 'Compartir esta lista',
+    'Remove this row': 'Quitar esta fila', 'Clear': 'Borrar',
+    'Jobs with an owner': 'Tareas con alguien a cargo', 'Still needs an owner': 'Todavía sin nadie a cargo', 'What’s this number?': '¿Qué es este número?',
+    'Who’s carrying more right now': '¿Quién carga más ahora?', 'How the jobs are spread': 'Cómo se reparten las tareas', 'Share this list': 'Compartir esta lista',
     'Keep it in this browser, on this device, so it’s here when you come back': 'Guardarla en este navegador, en este dispositivo, para que esté aquí cuando vuelvas',
     'A small file to keep somewhere else, or to send to the other people on this sheet so they can add their part': 'Un archivo pequeño para guardar en otro lugar, o para enviar a las demás personas de esta hoja y que añadan su parte',
     'Job': 'Tarea', 'How often': 'Cada cuánto', 'Owner': 'Quién se encarga', 'Helper or backup (optional)': 'Ayuda o respaldo (opcional)', 'Size (optional)': 'Tamaño (opcional)', 'Notes': 'Notas',
@@ -105,6 +107,8 @@
   };
   function word(k) { return MAP[k] || k; }
   var RX = [
+    [/^Saved on this (phone|device) as you type, so it’s here when you come back\. To remove it: “Erase”, under How saving works\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes, así que estará aquí cuando vuelvas. Para quitarlo: “Borrar todo”, en Cómo se guarda.'; }],
+    [/^(\d+) of (\d+)\. Every job you’ve set has an owner\. (\d+) example (?:job is|jobs are) still on the list: give (?:it|them) an owner, or remove (?:it|them) if you don’t need (?:it|them)\.$/, function (m) { var one = m[3] === '1'; return m[1] + ' de ' + m[2] + '. Cada tarea que pusieron tiene a alguien a cargo. ' + (one ? 'Todavía queda 1 tarea de ejemplo en la lista: pónganle a alguien a cargo, o quítenla si no la necesitan.' : 'Todavía quedan ' + m[3] + ' tareas de ejemplo en la lista: pónganles a alguien a cargo, o quítenlas si no las necesitan.'); }],
     [/^Saved on this (phone|device) as you type \(the box below\), so closing the tab won’t lose it\. On a shared device, untick it or press Erase when you’re done\.$/, function (m) { return 'Se guarda en ' + (m[1] === 'phone' ? 'este teléfono' : 'este dispositivo') + ' mientras escribes (la casilla de abajo), así que no se pierde si cierras la pestaña. En un dispositivo compartido, desmárcala o pulsa “Borrar todo” cuando termines.'; }],
     [/^Kept in this tab until you close it, so a reload or Back won’t lose your answers\.$/, function () { return 'Se guarda en esta pestaña hasta que la cierres, así que no se pierde si recargas la página o vas hacia atrás.'; }],
     [/^Add from the task library \((\d+) common jobs, including the ones nobody sees\)$/, function (m) { return 'Añadir desde la lista de tareas (' + m[1] + ' tareas comunes en inglés, incluidas las que nadie ve)'; }],
@@ -117,6 +121,9 @@
   function tr(t) {
     var k = t.replace(/\s+/g, ' ').trim(); if (!k) return null;
     if (MAP[k]) return MAP[k];
+    // the score and its "What's this number?" share one line
+    var more = ' · What’s this number?';
+    if (k.length > more.length && k.slice(-more.length) === more) { var head = tr(k.slice(0, -more.length)); return head == null ? null : head + ' · ¿Qué es este número?'; }
     for (var i = 0; i < RX.length; i++) { var m = RX[i][0].exec(k); if (m) { var v = RX[i][1](m); if (v) return v; } }
     return null;
   }

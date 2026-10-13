@@ -2791,6 +2791,7 @@
       var row = cl.querySelector('.ng-row');
       if (row) {
         Array.prototype.forEach.call(row.querySelectorAll('a'), function (x) { x.setAttribute('hreflang', 'en'); x.setAttribute('lang', 'en'); });
+        var home = row.querySelector('a[href="/index.html"]'); if (home) { home.textContent = 'Ir al inicio del sitio'; home.setAttribute('lang', 'es'); }
         var back = document.createElement('a'); back.href = '/en-espanol.html'; back.textContent = 'Volver a la página en español';
         var stayBtn = document.getElementById('ng-stay'); if (stayBtn) stayBtn.after(back); else row.insertBefore(back, row.firstChild);
         var note = document.createElement('p'); note.className = 'ng-small'; note.textContent = 'Los demás enlaces llevan a páginas en inglés.'; row.after(note);
