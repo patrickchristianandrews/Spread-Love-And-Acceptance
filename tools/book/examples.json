@@ -1,0 +1,546 @@
+[
+ {
+  "id": "ex-rulebook-nadia",
+  "chapter": "self-1-then",
+  "after_id": null,
+  "after_heading": "Write down the rulebook from home.",
+  "after_id_full": "rulebook",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-rulebook-nadia.html",
+  "tool": "/growing-up.html#home",
+  "title": "The rulebook from home",
+  "who": "Nadia, on her own",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-weather-joel",
+  "chapter": "self-2-now",
+  "after_id": null,
+  "after_heading": "Check your weather before you speak.",
+  "after_id_full": "state",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-weather-joel.html",
+  "tool": "/quick-checks.html#today",
+  "title": "Today’s Weather",
+  "who": "Joel, on his own, after a short night",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wiring-ife",
+  "chapter": "self-2-now",
+  "after_id": null,
+  "after_heading": "Know how you like to be spoken to.",
+  "after_id_full": "wiring",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wiring-ife.html",
+  "tool": "/wiring-card.html",
+  "title": "Wiring Card",
+  "who": "Ife, made on her own to give to a friend",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-selfpath-sam",
+  "chapter": "self-3-next",
+  "after_id": "program",
+  "after_heading": null,
+  "after_id_full": "program",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-selfpath-sam.html",
+  "tool": "/self-path.html#steps",
+  "title": "The self path, step by step",
+  "who": "Sam, on their own, two weeks in",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp11-nell",
+  "chapter": "self-3-next",
+  "after_id": null,
+  "after_heading": "Decide ahead with a simple if-then.",
+  "after_id_full": "if-then",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp11-nell.html",
+  "tool": "/workpapers/fill/wp-11.html?road=self",
+  "title": "The Calm-Down Kit, just for me",
+  "who": "Nell, on her own",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp01-marcus-theo",
+  "chapter": "preface",
+  "after_id": null,
+  "after_heading": "Writing it down isn’t keeping score.",
+  "after_id_full": "not-scorekeeping",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp01-marcus-theo.html",
+  "tool": "/workpapers/fill/wp-01.html",
+  "title": "Who did what",
+  "who": "Marcus and Theo, a couple",
+  "relationship": "a couple (two men)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp13-priya-dev",
+  "chapter": "chapter-1",
+  "after_id": null,
+  "after_heading": "Small daily check-ins keep you in tune.",
+  "after_id_full": "daily",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp13-priya-dev.html",
+  "tool": "/workpapers/fill/wp-13.html?for=shifts",
+  "title": "The 90-second daily check-in",
+  "who": "Priya and Dev, a couple on different shifts",
+  "relationship": "a couple on different shifts",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-setup-rosemary-ken",
+  "chapter": "chapter-2",
+  "after_id": null,
+  "after_heading": "One number comes out, from 0 to 1.",
+  "after_id_full": "formula",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-setup-rosemary-ken.html",
+  "tool": "/workpapers/calculators/is-the-setup-working-quick.html",
+  "title": "Is the setup working for everyone?",
+  "who": "Rosemary and Ken, retired, married 41 years",
+  "relationship": "an older couple",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-lemonade-housemates",
+  "chapter": "chapter-2",
+  "after_id": null,
+  "after_heading": "Balance: how the hours split.",
+  "after_id_full": "balance",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-lemonade-housemates.html",
+  "tool": "/lemonade-stand.html#quick-h",
+  "title": "The Lemonade Stand: quick look",
+  "who": "Wren, Josh and Mei, housemates (Wren’s view)",
+  "relationship": "housemates (three)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-room-kayla-bea",
+  "chapter": "chapter-2",
+  "after_id": "real-life",
+  "after_heading": null,
+  "after_id_full": "ownership",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-room-kayla-bea.html",
+  "tool": "/sharing-a-room.html#agreement",
+  "title": "Our room agreement",
+  "who": "Kayla and Bea, first-year roommates",
+  "relationship": "roommates sharing a room",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp02-rosa",
+  "chapter": "chapter-3",
+  "after_id": null,
+  "after_heading": "Check your stress tank in a minute.",
+  "after_id_full": "battery",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp02-rosa.html",
+  "tool": "/workpapers/fill/wp-02.html",
+  "title": "How much are you carrying?",
+  "who": "Rosa, who shares her mum’s care with her brother",
+  "relationship": "adult siblings caring for a parent",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-perspective-hana",
+  "chapter": "chapter-3",
+  "after_id": null,
+  "after_heading": "There are seven angles on the same moment.",
+  "after_id_full": "vectors",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-perspective-hana.html",
+  "tool": "/perspective-shifter.html",
+  "title": "The Perspective Shifter",
+  "who": "Hana, about her friend Lou",
+  "relationship": "friends",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp03-foster",
+  "chapter": "chapter-4",
+  "after_id": null,
+  "after_heading": "Once a job has an owner, look to the owner.",
+  "after_id_full": "owner",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp03-foster.html",
+  "tool": "/workpapers/fill/wp-03.html?for=foster",
+  "title": "One owner per job",
+  "who": "Dee and Mark, foster carers",
+  "relationship": "foster carers",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-lemonade-money-grace-ruth",
+  "chapter": "chapter-4",
+  "after_id": null,
+  "after_heading": "Fair by results.",
+  "after_id_full": "outcomes",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-lemonade-money-grace-ruth.html",
+  "tool": "/lemonade-stand.html",
+  "title": "The Lemonade Stand: the Money tab",
+  "who": "Grace and Ruth, a couple with different incomes",
+  "relationship": "a couple (two women)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp09-carla",
+  "chapter": "chapter-4",
+  "after_id": null,
+  "after_heading": "Notice, name, decide.",
+  "after_id_full": "gating-steps",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp09-carla.html",
+  "tool": "/workpapers/fill/wp-09.html",
+  "title": "Say it so it lands",
+  "who": "Carla, who runs a café with her business partner Femi",
+  "relationship": "business partners",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp04-triad",
+  "chapter": "chapter-5",
+  "after_id": null,
+  "after_heading": "Sort each repeat into one of three kinds.",
+  "after_id_full": "sort",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp04-triad.html",
+  "tool": "/workpapers/fill/wp-04.html",
+  "title": "What keeps coming back?",
+  "who": "Ash, Robin and Jules, a triad sharing a home",
+  "relationship": "a triad (three partners)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp03-coparents",
+  "chapter": "chapter-5",
+  "after_id": null,
+  "after_heading": "A problem that keeps coming back usually has no real owner.",
+  "after_id_full": "deficit",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp03-coparents.html",
+  "tool": "/workpapers/fill/wp-03.html?for=coparents",
+  "title": "One owner per job: a list for two homes",
+  "who": "Laura and Dan, co-parents in two homes",
+  "relationship": "co-parents (two homes)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-checkin-linda-jordan",
+  "chapter": "chapter-5",
+  "after_id": null,
+  "after_heading": "Keep it short and kind.",
+  "after_id_full": "how-to-talk",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-checkin-linda-jordan.html",
+  "tool": "/check-ins.html#card",
+  "title": "This week’s check-in card",
+  "who": "Linda and her grown-up son Jordan, who live together",
+  "relationship": "a parent and adult child",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-ladder-mike",
+  "chapter": "understanding-2-stress",
+  "after_id": null,
+  "after_heading": "The ladder: three everyday states.",
+  "after_id_full": "ladder",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-ladder-mike.html",
+  "tool": "/quick-checks.html#ladder",
+  "title": "The ladder (the sky, in Today’s Weather)",
+  "who": "Mike, who cares for his wife, Ann",
+  "relationship": "a partner caring for a partner",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-signal-zoe",
+  "chapter": "understanding-3-seeing",
+  "after_id": null,
+  "after_heading": "Ask, don’t guess.",
+  "after_id_full": "asking",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-signal-zoe.html",
+  "tool": "/signal-translator.html",
+  "title": "The Signal Translator",
+  "who": "Zoe, texting her oldest friend, who moved abroad",
+  "relationship": "long-distance friends",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-reader-dana-raj",
+  "chapter": "understanding-4-communication",
+  "after_id": null,
+  "after_heading": "Messages lose their tone on the way.",
+  "after_id_full": "messages",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-reader-dana-raj.html",
+  "tool": "/conversation-reader.html",
+  "title": "The Conversation Reader",
+  "who": "Dana and Raj, coworkers on the same project",
+  "relationship": "coworkers",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-pauseplan-imani-kwame",
+  "chapter": "understanding-5-belonging",
+  "after_id": null,
+  "after_heading": "Patterns, not boxes.",
+  "after_id_full": "patterns",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-pauseplan-imani-kwame.html",
+  "tool": "/pursue-withdraw.html#plan",
+  "title": "Our pause plan",
+  "who": "Imani and Kwame, married ten years",
+  "relationship": "a married couple",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-smallwins-bernie",
+  "chapter": "understanding-6-change",
+  "after_id": null,
+  "after_heading": "Start smaller than feels useful.",
+  "after_id_full": "small",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-smallwins-bernie.html",
+  "tool": "/small-wins.html#done-h",
+  "title": "Your done list",
+  "who": "Bernie, 71, living on his own",
+  "relationship": "someone on their own (older)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wiring-tom",
+  "chapter": "understanding-9-minds",
+  "after_id": null,
+  "after_heading": "Meet in the middle, out loud.",
+  "after_id_full": "meeting",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wiring-tom.html",
+  "tool": "/wiring-card.html",
+  "title": "Wiring Card for work",
+  "who": "Tom, autistic, for his new manager",
+  "relationship": "a coworker and his manager",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-write-carys-owen",
+  "chapter": "understanding-11-healing",
+  "after_id": null,
+  "after_heading": "Telling someone they hurt you.",
+  "after_id_full": "telling",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-write-carys-owen.html",
+  "tool": "/write-it-through.html#write",
+  "title": "Talk it through in writing",
+  "who": "Carys, writing to her brother Owen",
+  "relationship": "adult siblings",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp03-care",
+  "chapter": "understanding-12-helping",
+  "after_id": null,
+  "after_heading": "Let other people help you too.",
+  "after_id_full": "receiving",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp03-care.html",
+  "tool": "/workpapers/fill/wp-03.html?for=care",
+  "title": "One owner per job: sharing the care",
+  "who": "Margaret and Alan, with their daughter Sue",
+  "relationship": "an older couple and their grown-up daughter",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp11-pat",
+  "chapter": "understanding-13-anger",
+  "after_id": null,
+  "after_heading": "In the hot minutes: slow the body first.",
+  "after_id_full": "hot-minutes",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp11-pat.html",
+  "tool": "/workpapers/fill/wp-11.html",
+  "title": "The Calm-Down Kit",
+  "who": "Pat, a grandmother raising her grandson Jay, 13",
+  "relationship": "a kinship carer and a teen",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wavelength-mo",
+  "chapter": "understanding-14-personality",
+  "after_id": null,
+  "after_heading": "Differences are about fit, not fault.",
+  "after_id_full": "fit",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wavelength-mo.html",
+  "tool": "/wavelength.html#find-your-wavelength",
+  "title": "Wavelength",
+  "who": "Mo, before moving in with his friend Callum",
+  "relationship": "friends moving in together",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-deal-jamal-tess",
+  "chapter": "understanding-15-love",
+  "after_id": null,
+  "after_heading": "Love is something you do.",
+  "after_id_full": "doing",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-deal-jamal-tess.html",
+  "tool": "/gaming-and-time-together.html#deal",
+  "title": "Our time-together deal",
+  "who": "Jamal and Tess, a couple; Jamal games most evenings",
+  "relationship": "a young couple",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-wp02-eli",
+  "chapter": "understanding-16-worry",
+  "after_id": "basics",
+  "after_heading": null,
+  "after_id_full": "basics",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-wp02-eli.html",
+  "tool": "/workpapers/fill/wp-02.html?road=self",
+  "title": "How much are you carrying? (just me)",
+  "who": "Eli, on his own, in a low week",
+  "relationship": "someone on their own",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-houserules-shona-kai",
+  "chapter": "understanding-17-groups",
+  "after_id": "norms",
+  "after_heading": null,
+  "after_id_full": "norms",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-houserules-shona-kai.html",
+  "tool": "/workpapers/fill/wp-03.html?for=house-rules",
+  "title": "House rules for us",
+  "who": "Shona and her son Kai, 15",
+  "relationship": "a parent and teen",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-familyplan-amaka",
+  "chapter": "understanding-17-groups",
+  "after_id": "family-culture",
+  "after_heading": null,
+  "after_id_full": "family-culture",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-familyplan-amaka.html",
+  "tool": "/check-ins.html?for=family#card",
+  "title": "Family plan card",
+  "who": "Amaka and Chris, new parents, with Chris’s parents",
+  "relationship": "new parents and grandparents",
+  "versions": [
+   "short",
+   "full"
+  ]
+ }
+]

@@ -1,0 +1,135 @@
+/* book-examples.css: "Filled-in example" cards in the book (tools/book/examples/*.html).
+   A paper card with a tab, field labels in ordinary type, and the person's own answers in a
+   handwritten-feeling serif italic (brass ink). What the tool prints back sits in a dashed box
+   in ordinary type. Light colours only: the site's dark mode inverts the page, so these follow it.
+   Print: no shadow, no background, never split across pages where it can be helped. */
+
+.bk-ex{
+  --bkx-paper:#FFFDF7; --bkx-line:var(--line, #D9CBA3); --bkx-ink:var(--ink, #2B2620);
+  --bkx-soft:var(--ink-soft, #5A5346); --bkx-hand:var(--brass-ink, #7A5620); --bkx-tab:var(--paper-deep, #ECE2C4);
+  position:relative; margin:2.4rem 0 2rem; padding:1.5rem 1.15rem 1rem;
+  scroll-margin-top:1.5rem;
+  max-width:40rem; box-sizing:border-box;
+  background:var(--bkx-paper); color:var(--bkx-ink);
+  border:1px solid var(--bkx-line); border-radius:4px;
+  box-shadow:3px 3px 0 var(--bkx-tab);
+  font-family:"Lora", Georgia, serif; font-size:.94rem; line-height:1.5;
+  break-inside:avoid; page-break-inside:avoid;
+}
+.bk-ex *{ box-sizing:border-box; }
+.bk-ex p, .bk-ex li{ max-width:none; }
+
+/* caption: the tab, the tool's name, and who it is about */
+.bk-ex > figcaption{ margin:0 0 .85rem; line-height:1.3; }
+.bk-ex-k{
+  position:absolute; top:-.78rem; left:.9rem;
+  font:500 .68rem/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--bkx-hand); background:var(--bkx-tab);
+  border:1px solid var(--bkx-line); border-radius:3px; padding:.36rem .6rem .32rem;
+}
+.bk-ex-title{ display:block; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; color:var(--bkx-ink); }
+.bk-ex-who{ display:block; font-style:italic; color:var(--bkx-soft); font-size:.92rem; margin-top:.1rem; }
+
+/* the sheet itself */
+.bk-ex-sheet{ border-top:1px solid var(--bkx-line); padding-top:.75rem; }
+.bk-ex-h{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1rem; margin:0 0 .15rem !important; color:var(--bkx-ink); }
+.bk-ex-hsub, .bk-ex-intro{ font-size:.84rem; color:var(--bkx-soft); margin:0 0 .55rem !important; }
+.bk-ex-part{
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.92rem; margin:1rem 0 .3rem !important;
+  padding-bottom:.15rem; border-bottom:1px solid var(--bkx-line);
+}
+
+/* label + handwritten value */
+.bk-ex-f{ margin:.35rem 0 .5rem; padding:0; }
+.bk-ex-f > div{ margin:0 0 .45rem; break-inside:avoid; }
+.bk-ex-f dt{ font-size:.8rem; color:var(--bkx-soft); margin:0; line-height:1.35; }
+.bk-ex-f dd{ margin:.05rem 0 0; padding:0 0 .12rem; border-bottom:1px dotted var(--bkx-line); min-height:1.5em; }
+.bk-ex-f.is-2{ display:grid; grid-template-columns:repeat(auto-fit, minmax(12.5rem, 1fr)); column-gap:1.2rem; }
+.bk-ex-v{ font-family:"Lora", Georgia, serif; font-style:italic; color:var(--bkx-hand); font-size:1.04em; }
+.bk-ex-blank{ display:inline-block; min-width:2.5em; }
+.bk-ex-printed{ font-style:normal; color:var(--bkx-soft); font-size:.92em; }
+.bk-ex-say{ margin:.2rem 0 .6rem !important; }
+
+/* tap-to-pick questions: the chosen answers are ringed, like circled in pen */
+.bk-ex-q{ margin:.35rem 0 .6rem; break-inside:avoid; }
+.bk-ex-ql{ font-size:.82rem; color:var(--bkx-soft); margin:0 0 .25rem !important; }
+.bk-ex-qn{ font-size:.8rem; color:var(--bkx-soft); margin:.2rem 0 0 !important; }
+.bk-ex-chips{ list-style:none; margin:0 !important; padding:0 !important; display:flex; flex-wrap:wrap; gap:.3rem .35rem; }
+.bk-ex-chips li{
+  margin:0; padding:.12rem .55rem; font-size:.8rem; line-height:1.45;
+  color:var(--bkx-soft); border:1px solid transparent; border-radius:999px; opacity:.72;
+}
+.bk-ex-chips li.is-on{
+  opacity:1; color:var(--bkx-hand); font-style:italic; font-size:.86rem;
+  border:1.5px solid var(--bkx-hand); border-radius:1.1em 0.9em 1.2em 0.85em;
+}
+
+/* tick boxes */
+.bk-ex-tick{ margin:.55rem 0 .3rem !important; font-size:.88rem; }
+.bk-ex-box{
+  display:inline-block; width:1.05em; height:1.05em; line-height:1; text-align:center; vertical-align:-.12em;
+  border:1px solid var(--bkx-soft); border-radius:2px; font-style:italic; color:var(--bkx-hand); font-weight:600;
+}
+
+/* worksheet tables */
+.bk-ex-tw{ margin:.35rem 0 .7rem; }
+.bk-ex-t{ width:100%; border-collapse:collapse; font-size:.84rem; }
+.bk-ex-t th{
+  text-align:left; vertical-align:bottom; font-weight:600; font-size:.74rem; line-height:1.3; color:var(--bkx-soft);
+  padding:.25rem .4rem; border-bottom:1px solid var(--bkx-line);
+}
+.bk-ex-t td{ vertical-align:top; padding:.3rem .4rem; border-bottom:1px dotted var(--bkx-line); }
+.bk-ex-t tr{ break-inside:avoid; }
+.bk-ex-thread{
+  margin:.3rem 0 .6rem; padding:.55rem .7rem; white-space:pre-wrap; overflow-wrap:anywhere;
+  font:inherit; background:none; border:1px dotted var(--bkx-line); border-radius:3px; line-height:1.55;
+}
+
+/* what the tool prints back */
+.bk-ex-out{ margin:.85rem 0 .35rem; padding:.6rem .75rem .45rem; border:1px dashed var(--bkx-line); border-radius:3px; break-inside:avoid; }
+.bk-ex-ok{
+  font:500 .68rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--bkx-soft); margin:0 0 .4rem !important;
+}
+.bk-ex-out dl{ margin:0; }
+.bk-ex-out dl > div{ margin:0 0 .4rem; }
+.bk-ex-out dt{ font-weight:600; font-size:.86rem; margin:0; }
+.bk-ex-out dd{ margin:0; font-size:.88rem; }
+.bk-ex-out p{ margin:0 0 .4rem !important; font-size:.88rem; }
+
+/* under the card */
+.bk-ex-note{ margin:.75rem 0 .15rem !important; font-size:.8rem; font-style:italic; color:var(--bkx-soft); }
+.bk-ex-link{ margin:0 !important; font-size:.84rem; }
+.bk-ex-link a{ color:var(--bkx-ink); text-decoration:underline; text-decoration-color:var(--brass, #A8792F); text-underline-offset:3px; }
+.bk-ex-link a:focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; }
+
+.bk-ex-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+/* inside an idea card (li) in the short chapters, keep the card full width of the text */
+li > .bk-ex{ margin-left:0; }
+
+/* phones: tables become one small card per row, each cell labelled */
+@media (max-width:600px){
+  .bk-ex{ padding:1.35rem .85rem .85rem; font-size:.92rem; }
+  .bk-ex-t thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+  .bk-ex-t, .bk-ex-t tbody, .bk-ex-t tr, .bk-ex-t td{ display:block; width:100%; }
+  .bk-ex-t tr{ padding:.35rem 0 .4rem; border-bottom:1px solid var(--bkx-line); }
+  .bk-ex-t td{ display:grid; grid-template-columns:minmax(6.5rem, 38%) 1fr; gap:.5rem; padding:.12rem 0; border:0; }
+  .bk-ex-t td::before{ content:attr(data-label); font-size:.74rem; line-height:1.4; color:var(--bkx-soft); padding-top:.12rem; }
+  .bk-ex-t td[data-label=""]::before{ content:""; }
+  /* the first cell names the row; blank optional cells are left out on a phone */
+  .bk-ex-t td:first-child{ display:block; padding:.1rem 0 .15rem; }
+  .bk-ex-t td:first-child::before{ display:none; }
+  .bk-ex-t td:first-child .bk-ex-v{ font-weight:600; }
+  .bk-ex-t td.is-empty{ display:none; }
+}
+
+@media print{
+  .bk-ex{ box-shadow:none; background:#fff; border-color:#9a8f78; margin:1.2rem 0; max-width:none; }
+  .bk-ex-k{ background:#fff; border-color:#9a8f78; }
+  .bk-ex-chips li{ opacity:1; }
+  .bk-ex-chips li:not(.is-on){ color:#77705f; }
+  .bk-ex-link a{ text-decoration:none; }
+  .bk-ex-link a::after{ content:" (spreadloveandacceptance.com" attr(href) ")"; font-size:.8em; color:#5A5346; }
+  .bk-ex-out, .bk-ex-thread{ border-color:#9a8f78; }
+}

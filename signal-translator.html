@@ -328,7 +328,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .st-modes .mode small{font-weight:400;font-size:.88rem;color:var(--muted);line-height:1.4}
 .st-modes .mode:has(input:checked){background:color-mix(in srgb,var(--b) 8%,var(--sheet));border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
 @media (max-width:560px){.st-modes{grid-template-columns:1fr}.st-modes .mode{min-height:0}}
-.tryrow{margin-top:12px}
+.tryrow{margin:4px 0 10px}
 .tryk{font-family:var(--display);font-weight:600;font-size:.95rem;margin:0 0 6px}
 .trylist{display:flex;flex-wrap:wrap;gap:8px}
 .tryex{display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:100%;min-height:44px;padding:7px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--sheet);font-family:var(--display);font-size:.92rem;line-height:1.35;text-align:left;overflow-wrap:anywhere}
@@ -478,6 +478,17 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.</p>
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <p class="relset small" id="relSet" hidden>Reading it for: <b id="relSetName"></b>. <button type="button" class="linkbtn" id="relSetChange">Change</button></p>
+    <div class="tryrow" id="tryRow">
+      <p class="tryk" id="tryK">Try an example</p>
+      <div class="trylist" role="group" aria-labelledby="tryK">
+        <button type="button" class="tryex" data-mode="send" data-t="You never help with anything around here."><span class="tryw">To send</span>You never help with anything around here.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Per my last email, the report is due Friday."><span class="tryw">To send, at work</span>Per my last email, the report is due Friday.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Can you pick the kids up at 5? I'm stuck at work."><span class="tryw">To send</span>Can you pick the kids up at 5? I&rsquo;m stuck at work.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="k."><span class="tryw">I got</span>k.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="Fine. Do what you want."><span class="tryw">I got</span>Fine. Do what you want.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="you're the worst 😂"><span class="tryw">I got</span>you&rsquo;re the worst 😂</button>
+      </div>
+    </div>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
@@ -493,17 +504,6 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
         <option value="business">My business partner or co-owner</option>
         <option value="caregiver">Someone I care for, or who cares for me</option>
       </select>
-    </div>
-    <div class="tryrow" id="tryRow">
-      <p class="tryk" id="tryK">Try an example</p>
-      <div class="trylist" role="group" aria-labelledby="tryK">
-        <button type="button" class="tryex" data-mode="send" data-t="You never help with anything around here."><span class="tryw">To send</span>You never help with anything around here.</button>
-        <button type="button" class="tryex" data-mode="send" data-t="Per my last email, the report is due Friday."><span class="tryw">To send, at work</span>Per my last email, the report is due Friday.</button>
-        <button type="button" class="tryex" data-mode="send" data-t="Can you pick the kids up at 5? I'm stuck at work."><span class="tryw">To send</span>Can you pick the kids up at 5? I&rsquo;m stuck at work.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="k."><span class="tryw">I got</span>k.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="Fine. Do what you want."><span class="tryw">I got</span>Fine. Do what you want.</button>
-        <button type="button" class="tryex" data-mode="got" data-t="you're the worst 😂"><span class="tryw">I got</span>you&rsquo;re the worst 😂</button>
-      </div>
     </div>
     <div class="field presetrow">
       <label for="presetSel">More examples</label>
@@ -2605,6 +2605,13 @@ function runReceived(text){
 document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) setMode(r.value); }));
 // ?mode=got opens "Someone sent me this" (the co-parent and work pages link here for a message that stung)
 try { if (new URLSearchParams(location.search).get("mode") === "got") setMode("got"); } catch (e) {}
+/* "Try an example": one tap picks the right mode, fills the box and reads it */
+document.querySelectorAll("#tryRow .tryex").forEach(b=>b.addEventListener("click",()=>{
+  const m = b.getAttribute("data-mode")==="got" ? "got" : "send";
+  if(stMode!==m) setMode(m);
+  $("#phrase").value = b.getAttribute("data-t")||""; $("#phrase").dispatchEvent(new Event("input",{bubbles:true}));
+  run();
+}));
 /* "Someone sent me this" in the intro is a real button: it switches the mode and goes to the box */
 { const lg=$("#ledeGot"); if(lg) lg.addEventListener("click",()=>{ setMode("got"); const box=$("#sentenceBox"); if(box) box.scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); $("#phrase").focus({preventScroll:true}); }); }
 /* "What you got from this" (added by come-back.js): words that fit the mode */
@@ -2949,10 +2956,22 @@ sync();
   // An older ?text= link still works, but the words are taken out of the address bar straight away.
   (function () {
     var params = null; try { params = new URLSearchParams(location.search); } catch (e) {}
-    var q = null;
+    var q = null, shared = false;
     try { q = sessionStorage.getItem('tol-st-text'); if (q != null) sessionStorage.removeItem('tol-st-text'); } catch (e) {}
-    if (!q && params) q = params.get('text');
-    try { var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {}
+    // Shared from another app (the installed app's share target sends ?text=, ?title=, ?url=), or ?from=share:
+    // it's a message someone got, so it opens in "Help me read a message I got" and reads it straight away
+    if (!q && params && (params.get('text') || params.get('title') || params.get('url'))) {
+      var st = (params.get('text') || '').trim(), sti = (params.get('title') || '').trim(), su = (params.get('url') || '').trim();
+      q = [st || sti, su && st.indexOf(su) === -1 ? su : ''].filter(Boolean).join(' ');
+      shared = true;
+    }
+    if (params && params.get('from') === 'share') shared = true;
+    try {
+      var box = document.getElementById('phrase');
+      if (shared && typeof setMode === 'function') setMode('got');
+      if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); }
+      if (shared && q && typeof run === 'function') setTimeout(function () { try { run(); } catch (e) {} }, 0);
+    } catch (e) {}
     try {
       if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel' && k !== 'mode'; })) {
         var keep = [];

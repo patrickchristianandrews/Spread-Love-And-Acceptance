@@ -191,7 +191,8 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .read figure.book-fig figcaption{ max-width:600px; margin:.5rem auto 0; font-size:.9rem; line-height:1.45; color:var(--ink-soft); }
 .read .book-fig-n{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass-ink); margin-right:.35rem; }
 @media (max-width:560px){
-  .read .ideas > li figure.book-fig{ margin-left:calc(-1 * var(--bb-px, 1rem)); margin-right:calc(-1 * var(--bb-px, 1rem)); }
+  /* the figure takes the phone's whole width (16px each side), even inside an idea card */
+  .read figure.book-fig{ width:calc(100vw - 32px); margin-left:calc((100% - (100vw - 32px)) / 2); margin-right:0; }
   .read figure.book-fig figcaption{ padding:0 .2rem; }
 }
 

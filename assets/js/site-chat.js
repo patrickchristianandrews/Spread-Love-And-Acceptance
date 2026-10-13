@@ -3442,6 +3442,18 @@
     if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info)$/.test(r.kind || '')) return r;
     var sig = sigOf(r);
     if (!sig || sig !== state.lastSig) return r;
+    // a playbook again ("he just writes 'ok.'"): one thing for tonight and another way to say it, not the whole answer
+    var L0 = state.last;
+    if (r.kind === 'sit' && L0 && L0.kind === 'sit' && IDX.sit.issues[L0.issue]) {
+      var P0 = sitParts(L0.issue, L0.who, L0.noun, L0.actor), cx0 = P0.ctx, v0 = (L0.v || 0) + 1;
+      var sb0 = [{ k: 'p', x: 'Staying with what you told me' + (P0.tonight ? ', here’s one thing for tonight: ' + lc1(fill(P0.tonight, cx0)) : ', here’s another way to put it.') }];
+      if (P0.scripts.length) sb0.push({ k: 'script', l: 'Another way to say it', x: fill(P0.scripts[v0 % P0.scripts.length], cx0) });
+      if (P0.path.length) sb0.push({ k: 'links', x: P0.path });
+      L0.v = v0;
+      return { blocks: sb0, chips: r.chips || [], kind: 'sit', id: r.id };
+    }
+    // a clear new question that the same card answers: its first line answers it; then the next part, not a copy
+    var clearQ0 = /^(is|are|does|do|can|could|should|what|whats|why|how|when|where|which|who|will|would)\b/.test(norm(q)) && r.blocks[0] && r.blocks[0].k === 'p';
     // the same again: the next part of that page, or a question, never a copy
     var u = '', TC = topicCard(state);
     (r.blocks || []).some(function (b) { if (b.k === 'links' && b.x[0]) { u = b.x[0][1].split('#')[0]; return true; } if (b.u) { u = b.u.split('#')[0]; return true; } return false; });
@@ -3449,7 +3461,7 @@
     var S = state.shown || {}, res = search(q), alt = null;
     if (u) res.hits.some(function (h) { var d = KB.docs[h.i]; if (!d.tip && !d.g && d.u.split('#')[0] === u && !S['#doc' + h.i] && !/#(main|more)$/.test(d.u)) { alt = h.i; return true; } return false; });
     if (alt == null && u) KB.docs.some(function (d, i) { if (!d.tip && !d.g && d.u.split('#')[0] === u && !S['#doc' + i] && !/#(main|more)$/.test(d.u) && !/^words you could use$/i.test(d.h)) { alt = i; return true; } return false; });
-    if (alt != null) return { blocks: [{ k: 'p', x: 'I’ve given you my main answer on that just now, so here’s the next part of the page:' }, passageBlock(alt, res.terms)], chips: [{ label: 'What could I say?', q: 'What do I actually say?' }, { label: 'Something else', q: 'Start over' }], kind: r.kind, id: r.id };
+    if (alt != null) return { blocks: (clearQ0 ? [r.blocks[0], { k: 'p', x: 'The rest is what I said just now, so here’s the next part of the page:' }] : [{ k: 'p', x: 'I’ve given you my main answer on that just now, so here’s the next part of the page:' }]).concat([passageBlock(alt, res.terms)]), chips: (r.chips && r.chips.length ? r.chips : [{ label: 'What could I say?', q: 'What do I actually say?' }, { label: 'Something else', q: 'Start over' }]), kind: r.kind, id: r.id };
     return { blocks: [{ k: 'p', x: 'That’s the same answer I just gave, so I won’t repeat it. Could you tell me a bit more about what’s different this time, or which part didn’t fit?' }], chips: r.chips || [], kind: 'clarify', id: 'norepeat' };
   }
   function dejargon(r, q) {
@@ -3473,7 +3485,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = noRepeat(state, q, x); if (x && x.blocks) state.lastSig = sigOf(x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = noRepeat(state, q, x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }

@@ -98,9 +98,9 @@ ORDER = [
 
 # short names for running footers, the connection lists and the index of the print edition
 SHORT = {
-    'self-1-then': 'Then: where your lens came from',
-    'self-2-now': 'Now: your wiring, weather and words',
-    'self-3-next': 'Next: who you are becoming',
+    'self-1-then': 'Where your lens came from',
+    'self-2-now': 'Your wiring, weather and words',
+    'self-3-next': 'Who you are becoming',
     'preface': 'The work nobody sees',
     'chapter-1': 'Why we get out of tune',
     'chapter-2': 'Is the split working?',
@@ -554,6 +554,21 @@ def place_idea(s, n, block):
     return s[:e] + '\n' + block + '\n' + s[e:], True
 
 
+def place_heading(s, text, block):
+    """After the heading whose text is `text`: at the end of its idea card, or of its section."""
+    want = re.sub(r'\s+', ' ', text).strip().rstrip('.').lower()
+    for m in re.finditer(r'<h([2-4])\b[^>]*>(.*?)</h\1>', s, re.S):
+        if re.sub(r'\s+', ' ', strip_tags(m.group(2))).strip().rstrip('.').lower() == want:
+            i = m.start()
+            li = s.rfind('<li', 0, i)
+            if li >= 0 and re.fullmatch(r'<li[^>]*>\s*', s[li:i]):
+                k = element_end(s, li) - len('</li>')
+            else:
+                k = section_end(s, i)
+            return s[:k] + '\n' + block + '\n' + s[k:], True
+    return s, False
+
+
 def place(s, after_id, block):
     """Put a generated block after the element with id=after_id (after a heading: at the end of its section;
     after a list item: inside it, at its end). Returns s unchanged when the id is missing."""
@@ -592,15 +607,24 @@ def insert_generated(s, slug, deep):
         if not ok:
             MISSING.append('figure %s: #%s not found in %s%s' % (f['src'], aid, slug, '-in-depth' if deep else ''))
     for x in EXS:
-        if x['chapter'] != slug:
+        if x['chapter'] != slug or ver not in (x.get('versions') or ['short', 'full']):
             continue
         aid = x.get('after_id_full') if deep else x.get('after_id')
-        if not aid:
+        head = x.get('after_heading_full') if deep else x.get('after_heading')
+        if aid:
+            s, ok = place(s, aid, ex_html(x))
+        elif head:
+            s, ok = place_heading(s, head, ex_html(x))
+            aid = '“%s”' % head
+        else:
             continue
-        s, ok = place(s, aid, ex_html(x))
         if not ok:
-            MISSING.append('example %s: #%s not found in %s%s' % (x['id'], aid, slug, '-in-depth' if deep else ''))
+            MISSING.append('example %s: %s not found in %s%s' % (x['id'], aid, slug, '-in-depth' if deep else ''))
     return s
+
+
+def ex_where(x, deep):
+    return (x.get('after_id_full') or x.get('after_heading_full')) if deep else (x.get('after_id') or x.get('after_heading'))
 
 
 EX_CSS = '<link rel="stylesheet" href="/assets/css/book-examples.css">'
@@ -1048,7 +1072,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     if name == 'whole':
         here.add('afterword')
     figs = [f for f in FIGS if (f['chapter'] in here or f['chapter'] == 'front') and ('full' if deep else 'short') in (f.get('versions') or ['short', 'full'])]
-    exs = [x for x in EXS if x['chapter'] in here and (x.get('after_id_full') if deep else x.get('after_id'))]
+    exs = [x for x in EXS if x['chapter'] in here and ex_where(x, deep) and ('full' if deep else 'short') in (x.get('versions') or ['short', 'full'])]
     parts_html, toc, ptoc = [], [], []
     ptoc.append(toc_row('how', '', 'How to use this book', 'is-front'))
     if any(f['chapter'] == 'front' for f in FIGS):

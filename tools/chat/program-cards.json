@@ -397,9 +397,9 @@
     {
       "id": "diagnoseother",
       "name": "is my partner (a diagnosis)?",
-      "pat": "\\b(is|could|might|does|do you think) (my|our|her|his) (wife|husband|partner|boyfriend|girlfriend|bf|gf|spouse|mum|mom|dad|mother|father|son|daughter|kid|child|teen|teenager|brother|sister|friend|boss|manager|coworker|colleague|roommate|housemate|ex|fiance|fiancee|mil|mother in law|father in law)\\b( be| have| has)?( got)?( a| an)? (bipolar|psychopath\\w*|sociopath\\w*|autis\\w*|adhd|add|depress\\w*|borderline|bpd|ocd|ptsd|aspergers?|on the spectrum|mentally ill|neurodivergent|dyslexic|schizo\\w*|a personality disorder|a disorder)\\b|\\b(do you think|could|is) (he|she|they) (is |are |be |has |have |s )?(a |an )?(bipolar|psychopath\\w*|sociopath\\w*|borderline|bpd|ocd|ptsd|on the spectrum|mentally ill)\\b",
+      "pat": "\\b(is|could|might|does|do you think) (my|our|her|his) (wife|husband|partner|boyfriend|girlfriend|bf|gf|spouse|mum|mom|dad|mother|father|son|daughter|kid|child|teen|teenager|brother|sister|friend|boss|manager|coworker|colleague|roommate|housemate|ex|fiance|fiancee|mil|mother in law|father in law)\\b( be| have| has)?( got)?( a| an)? (bipolar|psychopath\\w*|sociopath\\w*|autis\\w*|adhd|add|depress\\w*|borderline|bpd|ocd|aspergers?|on the spectrum|mentally ill|neurodivergent|dyslexic|schizo\\w*|a personality disorder|a disorder)\\b|\\b(do you think|could|is) (he|she|they) (is |are |be |has |have |s )?(a |an )?(bipolar|psychopath\\w*|sociopath\\w*|borderline|bpd|ocd|on the spectrum|mentally ill)\\b",
       "what": [
-        "I can’t diagnose anyone, and nobody can from a chat, least of all someone who isn’t here to speak for themselves. A label also matters less than what actually happens between you."
+        "I can’t tell you that, and I won’t guess. I can’t diagnose anyone, and nobody can from a chat, least of all someone who isn’t here to speak for themselves. A label also matters less than what actually happens between you."
       ],
       "how": [
         "Look at the pattern, not the label: what do they do, how often, and how do you feel around them?",
@@ -434,7 +434,7 @@
     {
       "id": "ptsdq",
       "name": "do I have PTSD?",
-      "pat": "\\b(do i have|have i got|is (this|it)|could (this|it) be|am i|might i have|maybe i have)\\b.{0,25}\\b(ptsd|post traumatic|c ptsd|cptsd)\\b|\\bptsd\\b.{0,80}\\b(waking up|wake up|nightmares?|jump\\w* at|noises|on edge|since i got back|deploy\\w*|tour)\\b",
+      "pat": "\\b(do i have|have i got|is (this|it)|could (this|it) be|am i|might i have|maybe i have)\\b.{0,25}\\b(ptsd|post traumatic|c ptsd|cptsd)\\b.{0,100}\\b(waking|wake up|nightmares?|jump\\w*|noises|on edge|since i got back|deploy\\w*|tour|military|army|navy|service|sleep\\w*)\\b|\\bptsd\\b.{0,80}\\b(waking up|wake up|nightmares?|jump\\w* at|noises|on edge|since i got back|deploy\\w*|tour)\\b",
       "what": [
         "I can’t tell you that, and I won’t guess: nobody can diagnose PTSD from a chat. What you describe, waking up and jumping at noises, is common after a deployment or anything frightening. It isn’t a weakness, and it’s worth raising with a doctor. Help tends to work better when it starts early."
       ],
@@ -2229,7 +2229,7 @@
       "first": true,
       "newTopic": true,
       "name": "being left out of household decisions",
-      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b",
+      "pat": "\\b(left out of|not included in|out of the loop (on|about|with)|no say in|dont get a say in|never get a say in|not part of) (the |our |house |household |family |big )?(decisions?|plans?|planning|what happens|choices)\\b|\\b(decisions?|plans?|choices) (get|are|were|got) made without me\\b|\\b(decide|decides|decided|deciding) (everything|things) without me\\b|\\b(how do i|how can i|i want to|how to) (get|have) (a|more of a) say\\b(?=.{4,})",
       "notPat": "\\b(ex|coparent\\w*|co parent\\w*|custody|my boss|my manager|at work|my team)\\b",
       "keys": [],
       "what": [
@@ -2502,7 +2502,8 @@
           "foster"
         ]
       ],
-      "teenAlt": "teenhouse"
+      "teenAlt": "teenhouse",
+      "notPat": "\\b(come home|coming home|curfew|on time|late home)\\b"
     },
     {
       "kind": "intent",
@@ -2595,6 +2596,10 @@
       ],
       "follow": [
         [
+          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
+          "fosterload"
+        ],
+        [
           "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
           "fostertwocarers"
         ],
@@ -2605,10 +2610,6 @@
         [
           "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
           "teenrules"
-        ],
-        [
-          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
-          "fosterload"
         ],
         [
           "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
@@ -2755,6 +2756,10 @@
       "chips": [],
       "follow": [
         [
+          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
+          "fosterload"
+        ],
+        [
           "\\b(strict|stricter|firmer|firm|too soft|softer|discipline|disagree)\\b",
           "fostertwocarers"
         ],
@@ -2765,10 +2770,6 @@
         [
           "\\b(what|which|sample|example|good|some) (house )?rules\\b|\\byear old\\b",
           "teenrules"
-        ],
-        [
-          "\\b(emotional|feelings) (work|stuff|load|side)\\b|\\b(i do (all|most)|im doing (all|most)|i handle (all|most)|meetings|paperwork|appointments|reviews|forms|social worker|split the jobs|share the jobs|who does what|divide)\\b",
-          "fosterload"
         ],
         [
           "\\b(come home|on time|curfew|laughs|ignores? (every|all|the) rules?|no phone)\\b",
@@ -3288,7 +3289,7 @@
     {
       "id": "gcturnsup",
       "name": "a parent who turns up and judges",
-      "pat": "\\b(she|he|they|my (mum|mom|mother|dad|father|parents|mil|mother in law|motherinlaw|in laws|inlaws))\\b.{0,30}\\b(turns? up|shows? up|drops? (in|by|round)|comes? (round|over))\\b.{0,40}\\b(no warning|without (warning|calling|asking|texting|ringing)|unannounced|uninvited|whenever (she|he|they) (likes?|wants?))\\b",
+      "pat": "\\b(she|he|they|my (mum|mom|mother|dad|father|parents|mil|mother in law|motherinlaw|in laws|inlaws))\\b.{0,30}\\b(turns? up|shows? up|drops? (in|by|round)|comes? (round|over))\\b.{0,40}\\b(no warning|without (warning|calling|asking|texting|ringing)|unannounced|uninvited)\\b.{0,60}\\b(wrong|criticis\\w*|criticiz\\w*|judg\\w*|comments?|advice|tells me (how|what)|lectur\\w*)\\b",
       "what": [
         "That sounds draining: a visit you didn’t expect, and then feeling judged in your own home. You’re allowed to ask for both to change, kindly."
       ],
@@ -6485,6 +6486,10 @@
       "page": "/family-rifts.html",
       "follow": [
         [
+          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|ignores)\\b",
+          "riftnoreply"
+        ],
+        [
           "\\b(mention|bring up|raise|talk about|say anything about|put)\\b.{0,30}\\b(house|will|inheritance|money|estate)\\b",
           "riftmention"
         ],
@@ -6503,10 +6508,6 @@
         [
           "\\b(have to|must|should i) (reconcile|make up|make peace)\\b|\\breconcil\\w*\\b",
           "mustreconcile"
-        ],
-        [
-          "\\b(doesnt|does not|wont|will not|never|dont|do not|hasnt|has not|didnt|did not|not) (reply|replied|respond\\w*|answer\\w*|write back|get back|text back|message back)\\b|\\bno (reply|answer|response)\\b|\\bignor\\w* (it|me|my (message|text|letter|card))\\b|\\bwhat if (he|she|they) (says no|ignores)\\b",
-          "riftnoreply"
         ]
       ],
       "pageChips": [
@@ -7057,7 +7058,7 @@
     {
       "id": "saysrude",
       "name": "being told you’re rude when you’re direct",
-      "pat": "\\b(they|people|everyone|my (boss|manager|team|coworkers?|colleagues?|partner))\\b.{0,15}\\b(say|says|said|think|thinks|tell me|told me|complain)\\b.{0,10}\\b(that )?(i m|im|i am|i was|i come across( as)?|i sound)\\b.{0,10}\\b(rude|blunt|too direct|harsh|cold|abrupt|unfriendly)\\b",
+      "pat": "\\b(they|people|everyone|my (boss|manager|team|coworkers?|colleagues?))\\b.{0,15}\\b(say|says|said|think|thinks|tell me|told me|complain)\\b.{0,10}\\b(that )?(i m|im|i am|i was|i come across( as)?|i sound)\\b.{0,10}\\b(rude|blunt|too direct|harsh|cold|abrupt|unfriendly)\\b",
       "what": [
         "Being direct isn’t the same as being rude, and you don’t have to change your whole style. A short line that explains your style often clears it up."
       ],
@@ -8303,7 +8304,7 @@
       "first": true,
       "newTopic": true,
       "name": "yelling at your partner",
-      "pat": "\\bi (yell|yelled|shout|shouted|scream|screamed|snap|snapped|lost my temper|lose my temper|swore) (at|with) (my )?(wife|husband|partner|girlfriend|boyfriend|spouse|fiance|fiancee)\\b|\\bi (keep |always )?(lose|losing) my temper with (my )?(wife|husband|partner|girlfriend|boyfriend)\\b",
+      "pat": "\\bi (yell|yelled|shout|shouted|scream|screamed|lost my temper|lose my temper|swore) (at|with) (my )?(wife|husband|partner|girlfriend|boyfriend|spouse|fiance|fiancee)\\b|\\bi (keep |always )?(lose|losing) my temper with (my )?(wife|husband|partner|girlfriend|boyfriend)\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -8624,41 +8625,12 @@
       "safety": true
     },
     {
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "keys": [],
-      "chips": [],
-      "id": "devicekeep",
-      "name": "what this site keeps on your device",
-      "pat": "\\bwhat (does|do|will|is) (this|the) (site|app|website|page|chat)\\b.{0,10}\\b(keep|keeps|store|stores|save|saves|remember|remembers|kept|stored|saved)\\b|\\b(keep|keeps|store|stores|save|saves|kept|stored|saved)\\b.{0,10}\\bon my (phone|device|computer|laptop|tablet|browser)\\b|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone) (see|tell|find out) (that )?i (was|ve been|have been|visited|used) (on |here|this)|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone|they|people) (see|tell|find out|know) (what|which|that) i (look at|read|visit|search|type|do|ve been)\\b|\\b(share|sharing|same|use (their|the|our)) (the )?wi ?fi\\b",
-      "what": [
-        "Nothing you type is sent anywhere. This site keeps a few small things in your browser on this device only, like your settings, and this chat until you close the tab or press Start over."
-      ],
-      "how": [
-        "“On this device” shows exactly what’s kept right now, and erases it in one tap.",
-        "Your browser’s history can show which pages you opened. A private window, or clearing your history, keeps the visit off this device.",
-        "Whoever runs the Wi-Fi can usually see the names of sites a device visits, though not what you read or type. Mobile data avoids that.",
-        "The Leave quickly button, or Esc twice, takes you off this site fast."
-      ],
-      "links": [
-        [
-          "What’s stored on this device",
-          "/on-this-device.html"
-        ],
-        [
-          "Clearing what this site keeps",
-          "/safety.html#traces"
-        ]
-      ]
-    },
-    {
       "id": "wifiprivacy",
       "kind": "intent",
       "first": true,
       "newTopic": true,
       "name": "can people on my Wi-Fi see this",
-      "pat": "\\b(wifi|wi fi|router|network|internet provider|isp)\\b.{0,40}\\b(see|know|track|tell|show)\\b|\\b(see|know|track)\\b.{0,40}\\b(on|through|via) (our|the|my|their) (wifi|wi fi|router|network)\\b",
+      "pat": "\\b(wifi|wi fi|router|network|internet provider|isp)\\b.{0,40}\\b(see|know|track|tell|show)\\b|\\b(see|know|track)\\b.{0,40}\\b(on|through|via) (our|the|my|their) (wifi|wi fi|router|network)\\b|\\b(share|sharing|same|use (their|the|our)) (the )?wi ?fi\\b",
       "notPat": "",
       "keys": [],
       "what": [
@@ -8682,11 +8654,40 @@
           "/on-this-device.html"
         ],
         [
-          "Not safe at home? (clearing what this site keeps)",
-          "/safety.html"
+          "Clearing what this site keeps",
+          "/safety.html#traces"
         ]
       ],
       "chips": []
+    },
+    {
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "keys": [],
+      "chips": [],
+      "id": "devicekeep",
+      "name": "what this site keeps on your device",
+      "pat": "\\bwhat (does|do|will|is) (this|the) (site|app|website|page|chat)\\b.{0,10}\\b(keep|keeps|store|stores|save|saves|remember|remembers|kept|stored|saved)\\b|\\b(keep|keeps|store|stores|save|saves|kept|stored|saved)\\b.{0,10}\\bon my (phone|device|computer|laptop|tablet|browser)\\b|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone) (see|tell|find out) (that )?i (was|ve been|have been|visited|used) (on |here|this)|\\bcan (my )?(family|parents|mum|mom|dad|partner|husband|wife|someone|anyone|they|people) (see|tell|find out|know) (what|which|that) i (look at|read|visit|search|type|do|ve been)\\b",
+      "what": [
+        "Nothing you type is sent anywhere. This site keeps a few small things in your browser on this device only, like your settings, and this chat until you close the tab or press Start over."
+      ],
+      "how": [
+        "“On this device” shows exactly what’s kept right now, and erases it in one tap.",
+        "Your browser’s history can show which pages you opened. A private window, or clearing your history, keeps the visit off this device.",
+        "Whoever runs the Wi-Fi can usually see the names of sites a device visits, though not what you read or type. Mobile data avoids that.",
+        "The Leave quickly button, or Esc twice, takes you off this site fast."
+      ],
+      "links": [
+        [
+          "What’s stored on this device",
+          "/on-this-device.html"
+        ],
+        [
+          "Clearing what this site keeps",
+          "/safety.html#traces"
+        ]
+      ]
     },
     {
       "id": "rahelp",

@@ -62,3 +62,6 @@
 @media (min-width:700px){ .sf-more{ grid-template-columns:1fr 1fr; gap:1rem; } }
 @media (prefers-reduced-motion:reduce){ .sf-chip span{ transition:none; } }
 @media print{ .sf-form{ display:none; } .sf-res{ box-shadow:none; } .sf-go{ background:none; color:inherit !important; border:1px solid; } }
+/* the site's text bubbles stay off inside the finder */
+.sf :is(p, li, legend, label){ width:auto; }
+.sf .sf-chip{ width:auto; }

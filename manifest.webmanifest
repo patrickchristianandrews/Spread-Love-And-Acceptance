@@ -136,5 +136,14 @@
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
-  "handle_links": "preferred"
+  "handle_links": "preferred",
+  "share_target": {
+    "action": "/signal-translator.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
 }

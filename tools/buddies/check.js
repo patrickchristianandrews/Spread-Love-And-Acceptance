@@ -14,6 +14,10 @@
    in sight). A line that talks about something on purpose out of sight (it's lost, it's at home, it's a plan)
    says so with `offscreen: ['toolbox']`.
 
+   Season 2 episodes are not recorded yet: the player's CATALOG marks them clips: false, so they play with the
+   device's own voice (or captions) and the recordings check is skipped for them. Every episode file must have
+   its CATALOG entry, with the same title, season and number.
+
    Usage: node tools/buddies/check.js [file ...]      (no files: every episode)
    Exit code 1 if anything is wrong. */
 'use strict';
@@ -39,7 +43,7 @@ const SEE = {
   kite: [/\bkites?\b/i, ['kite', 'soggykite', 'flykite', 'skykites', 'constellations']],
   page: [/\bpages?\b/i, ['page', 'pages', 'paperboat']],
   blanket: [/\bblanket\b/i, ['blanket', 'picnic', 'checklist']],
-  lantern: [/\blantern\b/i, ['lantern']],
+  lantern: [/\blantern\b/i, ['lantern', 'lanterns', 'lumi']], // Lumi always carries hers
   bone: [/\bbone\b/i, ['bone']],
   drum: [/\bdrum\b/i, ['drum', 'constellations']],
   ukulele: [/\bukulele\b/i, ['ukulele']],
@@ -52,7 +56,7 @@ const SEE = {
   sign: [/\bsign\b/i, ['sign', 'starsign']],
   bell: [/\bbell\b/i, ['bell']],
   lens: [/\b(magnifying glass|lens)\b/i, ['lens']],
-  boat: [/\b(row)?boat\b/i, ['paperboat', 'rowboat']],
+  boat: [/\b(row|sail)?boat\b/i, ['paperboat', 'rowboat', 'boat']],
   rope: [/\brope\b(?! bridge)/i, ['rope', 'rowboat']], // (the rope bridge comes up in plans and memories; it's only ever crossed where it's drawn)
   stones: [/\bstepping stones?\b/i, ['creek']],
   stick: [/\bstick\b/i, ['stick', 'kite', 'soggykite']]
@@ -115,6 +119,11 @@ for (const file of files) {
     }
   });
   if (ep.id !== want) errs.push('id is "' + ep.id + '" but the file is ' + want);
+  // the catalog in the player lists it (that is what shows its card), with the same title, season and number
+  { const ce = (P.catalog() || []).reduce((f, s) => f || (s.eps.find(e => e.id === want) ? { s, e: s.eps.find(e => e.id === want) } : null), null);
+    if (!ce) errs.push('the player\'s CATALOG has no entry for ' + want + ' (so no card, no shuffle, no next-episode button)');
+    else { if (ce.e.title !== ep.title) errs.push('catalog title "' + ce.e.title + '" differs from "' + ep.title + '"');
+      if (ce.s.season !== ep.season || ce.e.n !== ep.number) errs.push('catalog says season ' + ce.s.season + ' episode ' + ce.e.n + ', the file says ' + ep.season + '/' + ep.number); } }
   // optional `energy` on a say beat: how big the delivery is (0.6 very soft … 1.0 normal … 1.4 very big)
   (ep.chapters || []).forEach((c, ci) => (c.beats || []).forEach((b, bi) => {
     if (!('energy' in b)) return;
@@ -147,7 +156,11 @@ for (const file of files) {
   words.forEach(w => errs.push('content: ' + w));
   // every spoken line has its recording (assets/audio/buddies/<ep>/<key>.mp3, listed in index.json);
   // skip with --no-clips while a new recording is still being made
-  if (!NOCLIPS) {
+  // an episode the catalog marks as not recorded yet (clips: false) plays with the device's own voice: no clips to check
+  const centry = (P.catalog() || []).reduce((f, s) => f || s.eps.find(e => e.id === want), null);
+  const unrecorded = centry && centry.clips === false;
+  if (unrecorded) r.warnings.push('not recorded yet: it plays with the device\'s own voice, or captions');
+  if (!NOCLIPS && !unrecorded) {
     const idxF = path.join(ROOT, 'assets/audio/buddies', want, 'index.json');
     let idx = null; try { idx = JSON.parse(fs.readFileSync(idxF, 'utf8')); } catch (e) { errs.push('no recordings index at ' + path.relative(ROOT, idxF)); }
     if (idx) {

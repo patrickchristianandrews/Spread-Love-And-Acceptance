@@ -295,7 +295,7 @@
     var out = [], carried = { tidbit: null, sugarfoot: null }, flying = { tidbit: false, sugarfoot: false }, ground = [], scen = {};
     var STOP = { walk: 1, run: 1, carry: 1, drop: 1, hug: 1, highfive: 1, nuzzle: 1, sit: 1, lie: 1, sleep: 1, dig: 1, build: 1 };
     function take(it) { for (var i = 0; i < ground.length; i++) if (fam(ground[i].it) === fam(it)) { ground.splice(i, 1); return; } }
-    var rider = {};
+    var rider = {}, guests = {}; // guests on stage count as in sight too (Lumi's lantern is hers)
     function props(p) {
       if (!p) return;
       for (var k in p) {
@@ -303,7 +303,7 @@
         if (ITEMS.indexOf(itemOf(k)) >= 0) { ground = ground.filter(function (g2) { return g2.k !== k; }); if (v !== false && v !== null) ground.push({ k: k, it: itemOf(k) }); }
         else if (k === 'treehouse') scen.treehouse = v !== 'none';
         else if (k === 'shooting' || k === 'glow') { /* moments and light, not things */ }
-        else scen[k] = v !== false;
+        else scen[k] = v !== false && v !== null;
       }
     }
     (ep.chapters || []).forEach(function (c, ci) {
@@ -311,6 +311,7 @@
         var k = kindOf(b), ids = whoList(b.who).filter(function (id) { return id in carried; });
         if (k === 'scene') { ground = []; scen = {}; if (b.scene === 'treehouse') scen.treehouse = true; flying.tidbit = flying.sugarfoot = false; props(b.props); }
         else if (k === 'place') props(b.props);
+        else if (k === 'guest') { if (b.exit) delete guests[b.guest]; else guests[b.guest] = 1; }
         else if (k === 'act') {
           ids.forEach(function (id) {
             if (b.act === 'drop' && flying[id] && !carried[id]) { flying[id] = false; return; } // a kite let go of: it tumbles away
@@ -325,6 +326,7 @@
         } else if (k === 'say') {
           var seen = {}; ground.forEach(function (g2) { seen[g2.it] = 1; }); for (var s in scen) if (scen[s]) seen[s] = 1;
           for (var id2 in carried) { if (carried[id2]) seen[carried[id2]] = 1; if (flying[id2]) seen.kite = 1; if (rider[id2]) seen.snailrider = 1; }
+          for (var gid in guests) seen[gid] = 1;
           out.push({ ch: ci, beat: bi, b: b, seen: Object.keys(seen) });
         }
       });
@@ -743,6 +745,7 @@
     function groundDy(px) {
       if (S.props.bridge) { var s = bridgeSpan(); if (px > s.a && px < s.b) { var q = (px - s.a) / (s.b - s.a), sway = S.weather === 'wind' || S.weather === 'storm' ? Math.sin(S.t * 1.3) * 2.5 : 0; return Math.sin(q * Math.PI) * (13 + sway); } }
       if (S.props.creek) { var c = { a: X(0.4), b: X(0.6) }; if (px > c.a && px < c.b) return 4; }
+      if (S.props.boat != null && S.scene === 'sea') { var bs = boatSpan(); if (px > bs.a - 10 && px < bs.b + 10) return boatBob(px); }
       return 0;
     }
 
@@ -848,6 +851,7 @@
       if (S.scene !== 'blank' && PC2 && PC2.paintScene) {
         try { geo = PC2.paintScene(b, S.scene, w, h, S.hour, { env: { bare: S.scene === 'treehouse', noMoon: !!S.guests.moon }, reduced: S.reduced }); } catch (e) { geo = null; }
       }
+      if (S.scene === 'sea') { geo = geoFor(w, h); paintSea(b, w, h, geo); }
       if (!geo) { geo = geoFor(w, h); paintBlank(b, w, h, geo); geo.env = { x0: geo.x0 - 4, x1: geo.x1 + 4, y0: geo.y0 - 4, y1: geo.y1 + 4, dark: 0 }; }
       S.sp = SP * clamp((geo.LW || 533) / 520, 0.66, 1); // a little smaller on narrow stages, so the pals have room
       S.geo = geo; S.info = PC2 && PC2.sceneInfo ? PC2.sceneInfo(S.scene) : null;
@@ -863,6 +867,111 @@
       var gg = b.createLinearGradient(0, G - 20, 0, geo.y1); gg.addColorStop(0, 'rgba(255,255,255,.55)'); gg.addColorStop(1, 'rgba(255,255,255,.2)');
       b.fillStyle = gg; b.fillRect(geo.x0 - 4, G - 16, geo.x1 - geo.x0 + 8, geo.y1 - G + 20);
       b.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    // the open sea (Season 2): sky by the clock, a far, flat horizon and water all the way to the front
+    var SEA_H = G - 66;
+    function paintSea(b, w, h, geo) {
+      var PC2 = window.TOLPalsCam, sky = PC2 && PC2.skyAt ? PC2.skyAt(S.hour) : { top: '#7FB5E6', bot: '#CFE6F5', light: 1 };
+      var dark = clamp(1 - sky.light * 1.6, 0, 1), env = { x0: geo.x0 - 4, x1: geo.x1 + 4, y0: geo.y0 - 4, y1: geo.y1 + 4, dark: dark };
+      geo.dark = dark; geo.env = env;
+      b.setTransform(geo.k, 0, 0, geo.k, geo.ox, geo.oy);
+      var gr = b.createLinearGradient(0, env.y0, 0, SEA_H); gr.addColorStop(0, sky.top); gr.addColorStop(1, sky.bot);
+      b.fillStyle = gr; b.fillRect(env.x0, env.y0, env.x1 - env.x0, SEA_H - env.y0 + 1);
+      if (dark > 0.1) for (var i = 0; i < 70; i++) circ(b, mix(env.x0, env.x1, rnd(i + 7)), mix(env.y0, SEA_H - 20, rnd(i + 207)), i % 5 === 0 ? 1.3 : 0.8, 'rgba(255,250,230,' + (dark * (0.45 + (i % 3) * 0.2)).toFixed(2) + ')');
+      var sunP = (S.hour - 5.8) / (20.2 - 5.8), sx = 0, sy = 0, glowCol = null;
+      if (sunP > 0 && sunP < 1) { sx = mix(env.x0 + 40, env.x1 - 40, sunP); sy = SEA_H - 16 - Math.sin(sunP * Math.PI) * 150; glowCol = '255,240,190';
+        var sg = b.createRadialGradient(sx, sy, 4, sx, sy, 46); sg.addColorStop(0, 'rgba(255,248,210,.95)'); sg.addColorStop(1, 'rgba(255,240,190,0)'); b.fillStyle = sg; b.fillRect(sx - 46, sy - 46, 92, 92);
+        circ(b, sx, sy, 15, sunP < 0.12 || sunP > 0.88 ? '#FFC98A' : '#FFE9A0'); }
+      else if (dark > 0.3 && !S.guests.moon) { sx = mix(env.x0, env.x1, 0.78); sy = env.y0 + 52; glowCol = '255,248,215';
+        var mg = b.createRadialGradient(sx, sy, 4, sx, sy, 40); mg.addColorStop(0, 'rgba(255,248,215,.45)'); mg.addColorStop(1, 'rgba(255,248,215,0)'); b.fillStyle = mg; b.fillRect(sx - 40, sy - 40, 80, 80); circ(b, sx, sy, 12, '#FBF3D5'); }
+      // a few soft clouds by day
+      if (dark < 0.5) for (var c = 0; c < 4; c++) { var cx = mix(env.x0 + 30, env.x1 - 60, rnd(c + 41)), cy = env.y0 + 30 + rnd(c + 43) * 60, cs = 0.8 + rnd(c + 45) * 0.6, cc = 'rgba(255,255,255,' + (0.75 - dark).toFixed(2) + ')';
+        circ(b, cx, cy, 11 * cs, cc); circ(b, cx + 13 * cs, cy - 5 * cs, 14 * cs, cc); circ(b, cx + 28 * cs, cy, 10 * cs, cc); }
+      // the water: lighter at the horizon, deeper in front
+      var day = ['#7CC3E3', '#3E8DBF', '#2C6F9E'], night = ['#3A5277', '#203553', '#16263F'];
+      var sg2 = b.createLinearGradient(0, SEA_H, 0, env.y1);
+      [0, 0.45, 1].forEach(function (q, k) { sg2.addColorStop(q, mixCol(day[k], night[k], dark)); });
+      b.fillStyle = sg2; b.fillRect(env.x0, SEA_H, env.x1 - env.x0, env.y1 - SEA_H);
+      line(b, env.x0, SEA_H, env.x1, SEA_H, 'rgba(255,255,255,' + (0.5 - dark * 0.3).toFixed(2) + ')', 1);
+      if (glowCol) for (var r = 0; r < 9; r++) { var ry = SEA_H + 4 + r * 7, rw = 10 + r * 3; line(b, sx - rw / 2 + (rnd(r + 61) - 0.5) * 8, ry, sx + rw / 2, ry, 'rgba(' + glowCol + ',' + (0.5 - r * 0.045).toFixed(2) + ')', 1.4); }
+      b.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    function mixCol(a, b2, p) { var x = parseInt(a.slice(1), 16), y = parseInt(b2.slice(1), 16), o = [16, 8, 0].map(function (sh) { return Math.round(mix((x >> sh) & 255, (y >> sh) & 255, p)); }); return 'rgb(' + o.join(',') + ')'; }
+    // little waves rolling across the open sea (drawn live, in front of the far water)
+    function drawSeaWaves(g, front) {
+      if (S.scene !== 'sea') return;
+      var gg = S.geo, dk = gg.dark || 0, sp = S.reduced ? 4 : 14, rows = front ? [G + 22, G + 40] : [SEA_H + 14, SEA_H + 34, G - 18];
+      rows.forEach(function (y, r) {
+        var len = 10 + r * 6 + (front ? 10 : 0), gap = 46 + r * 18 + (front ? 20 : 0), off = (S.t * sp * (1 + r * 0.3) + r * 37) % gap;
+        g.strokeStyle = 'rgba(255,255,255,' + ((front ? 0.42 : 0.3) - dk * 0.15).toFixed(2) + ')'; g.lineWidth = front ? 1.6 : 1.1; g.beginPath();
+        for (var x = gg.x0 - gap + off; x < gg.x1 + gap; x += gap) { var yy = y + Math.sin(x * 0.05 + S.t) * (S.reduced ? 0.5 : 1.5); g.moveTo(x, yy); g.quadraticCurveTo(x + len / 2, yy - 3, x + len, yy); }
+        g.stroke();
+      });
+    }
+    // a far-off island on the horizon: a sandy hump, a palm tree, and a tiny lighthouse
+    function drawIsland(g) {
+      if (S.props.island == null) return;
+      var x = X(S.props.island), y = S.scene === 'sea' ? SEA_H + 1 : G - 60, dk = S.geo.dark || 0;
+      ell(g, x, y, 62, 13, mixCol('#D9C08A', '#4E4A5E', dk)); ell(g, x - 12, y - 4, 34, 10, mixCol('#7FB06A', '#36465A', dk));
+      line(g, x + 18, y - 6, x + 22, y - 34, mixCol('#8A6340', '#3A3446', dk), 2);
+      [[-1, -0.3], [1, 0.3], [-0.6, 0.6], [0.6, -0.5]].forEach(function (f) { ell(g, x + 22 + f[0] * 9, y - 35 + f[1] * 2, 10, 2.6, mixCol('#5E9E58', '#334456', dk), f[0] * 0.5); });
+      rr(g, x - 30, y - 30, 7, 26, 1.5, mixCol('#FFFDF6', '#8C8AA0', dk)); rr(g, x - 30, y - 22, 7, 4, 0, '#E4566E'); rr(g, x - 30, y - 12, 7, 4, 0, '#E4566E');
+      circ(g, x - 26.5, y - 32, 3.4, dk > 0.3 ? '#FFE9A0' : '#FFF3C4');
+      if (dk > 0.3) { var lg = g.createRadialGradient(x - 26.5, y - 32, 1, x - 26.5, y - 32, 22); lg.addColorStop(0, 'rgba(255,233,160,.6)'); lg.addColorStop(1, 'rgba(255,233,160,0)'); g.fillStyle = lg; g.fillRect(x - 50, y - 56, 48, 48); }
+    }
+    // the pals' little sailboat: a mast and a sail behind them, the hull in front, bobbing on the waves
+    function boatSpan() { var c = X(S.props.boat), half = Math.max(120, (S.geo.x1 - S.geo.x0) * 0.3); return { a: c - half, b: c + half, c: c }; }
+    function boatBob(px) { if (S.scene !== 'sea') return 0; var bs = boatSpan(), amp = S.reduced ? 0.8 : 2.6; return Math.sin(S.t * 1.3) * amp + Math.sin(S.t * 0.9 + 1) * amp * 0.4 * ((px - bs.c) / (bs.b - bs.c)); }
+    function drawBoatBack(g) {
+      if (S.props.boat == null) return;
+      var bs = boatSpan(), y = G + boatBob(bs.c), mx = bs.c + (bs.b - bs.a) * 0.08, sw = S.reduced ? 0 : Math.sin(S.t * 1.1) * 3;
+      line(g, mx, y - 12, mx, y - 190, '#8A6340', 3.4);
+      g.fillStyle = '#FFF8EA'; g.beginPath(); g.moveTo(mx + 4, y - 184); g.quadraticCurveTo(mx + 70 + sw, y - 110, mx + 82 + sw, y - 34); g.lineTo(mx + 4, y - 34); g.closePath(); g.fill();
+      g.strokeStyle = 'rgba(160,130,100,.5)'; g.lineWidth = 1; g.stroke();
+      g.fillStyle = '#F2C14E'; g.beginPath(); g.moveTo(mx - 4, y - 160); g.quadraticCurveTo(mx - 46 - sw, y - 100, mx - 54 - sw, y - 40); g.lineTo(mx - 4, y - 40); g.closePath(); g.fill();
+      g.fillStyle = '#E4566E'; g.beginPath(); g.moveTo(mx, y - 190); g.lineTo(mx + 18, y - 185 + sw * 0.5); g.lineTo(mx, y - 180); g.closePath(); g.fill();
+      rr(g, bs.a + 14, y - 22, bs.b - bs.a - 28, 4, 2, '#7A5636'); // the far rail
+    }
+    function drawBoatFront(g) {
+      if (S.props.boat == null) return;
+      var bs = boatSpan(), y = G + boatBob(bs.c), a = bs.a, b = bs.b, top = y - 16;
+      g.fillStyle = '#C9784A'; g.beginPath(); g.moveTo(a - 10, top - 6); g.lineTo(b + 14, top - 8); g.quadraticCurveTo(b + 2, y + 26, b - 30, y + 30); g.lineTo(a + 24, y + 30); g.quadraticCurveTo(a, y + 22, a - 10, top - 6); g.closePath(); g.fill();
+      rr(g, a - 12, top - 9, b - a + 28, 7, 3, '#8A4E2E');
+      g.strokeStyle = 'rgba(255,240,220,.35)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(a + 2, top + 10); g.lineTo(b + 4, top + 9); g.stroke();
+      // her name, painted on the side
+      g.save(); g.fillStyle = '#FFF3D6'; g.font = '600 13px Fraunces, Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('Buttercup', (a + b) / 2, top + 20); g.restore();
+      if (S.scene === 'sea') { // the water lapping at the hull
+        g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 1.6; g.beginPath();
+        for (var x = a - 6; x <= b + 10; x += 4) { var yy = y + 24 + Math.sin(x * 0.12 + S.t * 2.2) * (S.reduced ? 0.6 : 2); if (x === a - 6) g.moveTo(x, yy); else g.lineTo(x, yy); } g.stroke();
+        var wg = g.createLinearGradient(0, y + 24, 0, y + 40); wg.addColorStop(0, 'rgba(62,141,191,.75)'); wg.addColorStop(1, 'rgba(44,111,158,.95)'); g.fillStyle = wg; g.fillRect(a - 20, y + 24, b - a + 50, 22);
+      }
+    }
+    // a string of paper lanterns across the top: the lit ones glow (a new one lights up with a little bloom)
+    function drawLanterns(g) {
+      var n = S.props.lanterns; if (n == null) return;
+      var gg = S.geo, x0 = gg.x0 + 20, x1 = gg.x1 - 20, y0 = gg.y0 + 26, sag = 26, N = 8, cols = ['#E4566E', '#F2C14E', '#7FB8F0', '#8FD694', '#F7A8C2', '#B79CEB', '#E8913F', '#7FE3C4'];
+      g.strokeStyle = 'rgba(70,55,45,.7)'; g.lineWidth = 1; g.beginPath();
+      for (var i = 0; i <= 30; i++) { var q = i / 30, px = mix(x0, x1, q), py = y0 + Math.sin(q * Math.PI) * sag; if (i) g.lineTo(px, py); else g.moveTo(px, py); } g.stroke();
+      for (var k = 0; k < N; k++) {
+        var q2 = (k + 0.5) / N, lx = mix(x0, x1, q2), ly = y0 + Math.sin(q2 * Math.PI) * sag + 4, lit = k < n, sway = S.reduced ? 0 : Math.sin(S.t * 1.2 + k) * 0.05;
+        g.save(); g.translate(lx, ly); g.rotate(sway); line(g, 0, -4, 0, 2, 'rgba(70,55,45,.7)', 1);
+        if (lit) { var bloom = k === n - 1 && S.lanternT != null ? clamp(1 - (S.t - S.lanternT) / 1.6, 0, 1) : 0, rad = 22 + bloom * 26;
+          var lg = g.createRadialGradient(0, 12, 1, 0, 12, rad); lg.addColorStop(0, 'rgba(255,214,140,' + (0.55 + bloom * 0.3).toFixed(2) + ')'); lg.addColorStop(1, 'rgba(255,214,140,0)'); g.fillStyle = lg; g.fillRect(-rad, 12 - rad, rad * 2, rad * 2); }
+        ell(g, 0, 12, 9, 10, lit ? cols[k] : 'rgba(240,232,220,.85)'); if (lit) ell(g, 0, 12, 5, 7, 'rgba(255,240,200,.75)');
+        rr(g, -5, 1, 10, 3, 1, '#5A4A3A'); rr(g, -4, 21, 8, 2.4, 1, '#5A4A3A'); g.restore();
+      }
+    }
+    // sea fog: a soft wash over everything far away, and slow bands drifting low across the front
+    function fogBack(g) {
+      if (S.weather !== 'fog') return; var gg = S.geo, d = S.reduced ? 2 : 7;
+      g.fillStyle = 'rgba(226,232,240,.5)'; g.fillRect(gg.x0 - 4, gg.y0 - 4, gg.x1 - gg.x0 + 8, gg.y1 - gg.y0 + 8);
+      for (var i = 0; i < 7; i++) { var w2 = gg.x1 - gg.x0 + 240, x = gg.x0 - 120 + ((rnd(i + 3) * w2 + S.t * d * (0.6 + rnd(i) * 0.6)) % w2), y = gg.y0 + 40 + rnd(i + 11) * (G - gg.y0 - 30);
+        ell(g, x, y, 90 + rnd(i + 5) * 70, 18 + rnd(i + 7) * 12, 'rgba(240,244,248,.45)'); }
+    }
+    function fogFront(g) {
+      if (S.weather !== 'fog') return; var gg = S.geo, d = S.reduced ? 3 : 10;
+      for (var i = 0; i < 4; i++) { var w2 = gg.x1 - gg.x0 + 300, x = gg.x0 - 150 + ((rnd(i + 31) * w2 + S.t * d * (0.7 + rnd(i + 2) * 0.5)) % w2), y = G - 6 + rnd(i + 33) * 34;
+        ell(g, x, y, 120 + rnd(i + 35) * 60, 12 + rnd(i + 37) * 8, 'rgba(242,246,250,.38)'); }
     }
     function thX() { return (S.geo.env ? S.geo.env.x0 : S.geo.x0) + 64; }
 
@@ -1224,6 +1333,27 @@
         g.restore(); ell(g, 0, -6, 1.8, 7, '#4A3F63'); circ(g, 0, -14, 2.4, '#4A3F63'); line(g, 0, -15, -3, -21, '#4A3F63', 0.8); line(g, 0, -15, 3, -21, '#4A3F63', 0.8);
         if (talk > 0.05) circ(g, 0, -12.8, 0.8 + talk * 0.5, '#F7A8C2');
       },
+      lumi: function (g, t, talk, blink) { // Lumi the red panda: round and fluffy, a curl on top, a rose scarf, and her little lantern
+        var sw = S.reduced ? 0 : Math.sin(t * 2.2) * 0.18, dk = S.geo ? S.geo.dark || 0 : 0;
+        // the big striped tail, swishing
+        g.save(); g.translate(-12, -14); g.rotate(-0.5 + sw); ell(g, -10, -10, 9, 20, '#C8613A', 0.3); [0, 1, 2].forEach(function (k) { ell(g, -10 + k * 1.6, -22 + k * 9, 8.6, 2.4, '#8E3F26', 0.3); }); g.restore();
+        ell(g, -6, -2, 4.5, 2.4, '#4A2A22'); ell(g, 6, -2, 4.5, 2.4, '#4A2A22'); // paws
+        ell(g, 0, -15, 13, 14, '#D9773F'); ell(g, 2, -12, 7, 8, '#4A2A22'); // body, dark tummy
+        // the scarf
+        ell(g, 1, -26, 12, 3.6, '#D65A6E'); g.fillStyle = '#D65A6E'; g.beginPath(); g.moveTo(-6, -25); g.quadraticCurveTo(-10, -18 + sw * 6, -8, -12); g.lineTo(-3, -13); g.quadraticCurveTo(-4, -19, -1, -24); g.fill();
+        // the head: round ears with pale rims, a curl, cream cheeks and eyebrows
+        [-9, 9].forEach(function (ex) { circ(g, ex, -45, 6, '#D9773F'); circ(g, ex, -45, 3.4, '#FFF1DE'); circ(g, ex, -44.4, 2, '#8E3F26'); });
+        circ(g, 0, -36, 12.5, '#D9773F');
+        g.strokeStyle = '#C8613A'; g.lineWidth = 2.2; g.lineCap = 'round'; g.beginPath(); g.moveTo(-1, -48); g.quadraticCurveTo(3, -55, 6, -51); g.quadraticCurveTo(7, -48, 4, -48); g.stroke();
+        ell(g, 3, -31, 7.5, 5.5, '#FFF1DE'); ell(g, -6, -42, 3, 1.6, '#FFF1DE', -0.3); ell(g, 8, -42, 3, 1.6, '#FFF1DE', 0.3);
+        eye(g, -3.5, -37, 2.6, blink); eye(g, 7, -37, 2.6, blink);
+        circ(g, 7.5, -32.5, 1.7, '#3A2418'); gmouth(g, 5, -28.5, 4, talk, '#6B2A33');
+        ell(g, -6, -31, 2.6, 1.5, 'rgba(242,140,150,.7)'); ell(g, 12, -31, 2.2, 1.4, 'rgba(242,140,150,.7)');
+        // the lantern, held out in one paw (it glows when it's dim out)
+        g.save(); g.translate(14, -22); g.rotate(sw * 0.5); line(g, -4, 2, 2, -2, '#4A2A22', 3); line(g, 2, -2, 2, 4, '#5A4A3A', 1);
+        if (dk > 0.15 || S.weather === 'fog') { var lg = g.createRadialGradient(2, 12, 1, 2, 12, 26); lg.addColorStop(0, 'rgba(255,214,140,.6)'); lg.addColorStop(1, 'rgba(255,214,140,0)'); g.fillStyle = lg; g.fillRect(-24, -14, 52, 52); }
+        rr(g, -3, 4, 10, 13, 3, '#FFD98A'); rr(g, -4, 3, 12, 2.4, 1, '#5A4A3A'); rr(g, -4, 16, 12, 2.4, 1, '#5A4A3A'); rr(g, -0.5, 7, 5, 7, 2, 'rgba(255,248,220,.9)'); g.restore();
+      },
       squirrel: function (g, t, talk, blink) {
         g.fillStyle = '#B5652F'; g.beginPath(); g.moveTo(-6, -4); g.bezierCurveTo(-30, -2, -30, -44, -12, -44); g.bezierCurveTo(-2, -44, -8, -30, -14, -26); g.bezierCurveTo(-18, -18, -12, -8, -6, -4); g.fill();
         ell(g, 0, -12, 9, 12, '#C8733A'); ell(g, 2, -10, 5, 8, '#F0D2A8'); circ(g, 4, -27, 8, '#C8733A');
@@ -1388,8 +1518,8 @@
       g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy);
       var PC2 = window.TOLPalsCam, env = gg.env;
       if (S.info && S.info.ambient && PC2 && PC2.paintAmbient) PC2.paintAmbient(g, S.scene, env, S.t * 1000, 'back');
-      weatherBack(g); drawConstellations(g); drawShoots(g, S.lastDt); drawSkyKites(g);
-      drawCarousel(g); drawChimney(g); drawTreehouse(g); drawBridgeBack(g); drawCreek(g); drawGround(g);
+      weatherBack(g); drawConstellations(g); drawShoots(g, S.lastDt); drawSkyKites(g); drawIsland(g); drawSeaWaves(g, false); fogBack(g); drawLanterns(g);
+      drawCarousel(g); drawChimney(g); drawTreehouse(g); drawBridgeBack(g); drawCreek(g); drawBoatBack(g); drawGround(g);
       S.itemQ = [];
       var list = [];
       for (var id in S.guests) if (GUESTS[id].where !== 'ground' && GUESTS[id].where !== 'hover') list.push(S.guests[id]);
@@ -1399,7 +1529,7 @@
       order.sort(function (a, b) { return (a.guest ? 1 : 0) - (b.guest ? 1 : 0) || (passing(b) - passing(a)) || (a.id === 'tidbit' ? -1 : 1); });
       order.forEach(function (c) { if (S.hidden && S.hidden[c.id]) return; if (c.guest) drawGuest(g, c); else drawPal(g, c); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy); });
       drawCarried(g); g.setTransform(gg.k, 0, 0, gg.k, gg.ox + S.shift, gg.oy);
-      drawBridgeFront(g);
+      drawBridgeFront(g); drawBoatFront(g); drawSeaWaves(g, true); fogFront(g);
       drawParts(g);
       if (S.info && S.info.ambient && PC2 && PC2.paintAmbient) PC2.paintAmbient(g, S.scene, env, S.t * 1000, 'front');
       weatherFront(g);
@@ -1643,7 +1773,7 @@
     beach: [['waves', .55]], lighthouse: [['waves', .45], ['wind', .28]], bonfire: [['waves', .4], ['fire', .45]], snow: [['wind', .42]], cabin: [['fire', .5], ['wind', .18]],
     pond: [['stream', .38], ['birds', .3]], dock: [['boat', .5], ['birds', .18]], citypark: [['city', .28], ['birds', .3]], rooftop: [['city', .28], ['wind', .22]],
     festival: [['city', .28]], carnival: [['carnival', .28]], campsite: [['fire', .45], ['birds', .25]], rainy: [['rain', .5]], bakery: [['cafe', .32]], library: [['cafe', .1]],
-    underwater: [['underwater', .45]], aquarium: [['underwater', .38]], studio: [['cafe', .12]], theater: [['cafe', .08]], space: [['underwater', .12]]
+    sea: [['waves', .5], ['wind', .15]], underwater: [['underwater', .45]], aquarium: [['underwater', .38]], studio: [['cafe', .12]], theater: [['cafe', .08]], space: [['underwater', .12]]
   };
   var AMBP = { bufs: {}, cur: [], gen: 0, key: '' };
   function ambLoad(n) {
@@ -1769,6 +1899,8 @@
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function clipMap(ep) {
+    var ce = catalogEntry(ep);
+    if (ce && ce.clips === false) { CL.ready[ep] = false; return Promise.resolve(null); } // not recorded yet: the device's voice reads it
     if (!CL.maps[ep]) CL.maps[ep] = fetch(CL.base + ep + '/index.json?v=' + REC, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (m) { CL.ready[ep] = m || false; return m; });
     return CL.maps[ep];
   }
@@ -2659,7 +2791,7 @@
     CATALOG.forEach(function (s) {
       html += '<div class="fb-season"><div class="fb-season-h"><span class="fb-badge">Season ' + s.season + '</span><h3>' + esc(s.name.replace(/^Season \d+: /, '')) + '</h3></div><ol class="fb-cards">';
       s.eps.forEach(function (e) { html += '<li data-ep="' + e.id + '"></li>'; });
-      html += '</ol><p class="fb-more">More seasons are on the way. Each episode runs about 16 to 17 minutes, in short chapters of about 2 to 4 minutes, with captions and gentle voices. You can watch one chapter at a time.</p></div>';
+      html += '</ol><p class="fb-more">' + (s.more ? esc(s.more) + ' ' : '') + 'Each episode runs about 16 to 17 minutes, in short chapters of about 2 to 4 minutes, with captions and gentle voices. You can watch one chapter at a time.</p></div>';
     });
     host.innerHTML = html;
     function card(e) {

@@ -146,7 +146,7 @@
     if (root.getAttribute('data-sf-done')) return;
     root.setAttribute('data-sf-done', '1');
     var id = 'sf' + (++n), compact = root.getAttribute('data-start-finder') === 'compact';
-    root.classList.add('sf', 'no-bubble', 'no-cheer', 'no-dive');
+    root.classList.add('sf', 'tol-plain', 'no-bubble', 'no-cheer', 'no-dive');
     if (compact) root.classList.add('sf-compact');
     root.innerHTML =
       '<form class="sf-form" novalidate>' +

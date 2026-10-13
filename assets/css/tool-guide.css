@@ -65,3 +65,5 @@
 @media (prefers-reduced-motion:reduce){ .tg > .tg-sum::after{ transition:none; } }
 html.tol-still .tg > .tg-sum::after{ transition:none; }
 @media print{ .tg-wrap{ display:none !important; } }
+/* the site's text bubbles stay off inside the panel (it is one card already) */
+.tg :is(p, li, h3, ul, ol){ width:auto; }

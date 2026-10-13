@@ -432,7 +432,7 @@ t('care', 'is my data private (the site-wide answer)', { q: 'is my data private'
 t('care', 'can you just tell me something calming', { kind: 'care', id: 'calmnow', link: ['/night-garden.html', '/calm-visualizer.html'] });
 t('care', 'I feel judged by this site', { kind: 'care', id: 'judged', text: /welcome here exactly as you are/, not: /[Ss]hame and guilt/ });
 t('care', 'I think I am autistic, can you tell me?', { kind: 'care', id: 'diagnose', text: /can’t tell you that/ });
-t('care', 'is my husband on the spectrum', { kind: 'care', id: 'diagnose', text: /can’t tell you that/ });
+t('care', 'is my husband on the spectrum', { kind: 'care', id: /^diagnose/, text: /can’t tell you that/ });  // chat9: someone else's diagnosis has its own card
 t('care', 'is this a diagnosis? (the therapy card)', { q: 'is this a diagnosis', kind: 'card', id: 'therapy' });
 t('care', 'asdfgh', { kind: 'unclear', text: /didn’t catch that/, not: /pond/ });
 t('care', 'what’s the difference between the 7-day log and the almanac', { kind: 'care', id: 'weatherlog', text: /same thing/ });
@@ -771,7 +771,7 @@ t('round7', 'my wife has Parkinson', { id: 'illnesscare', not: /Parkinson.s law/
 t('round7', 'cuido a mi esposa enferma y estoy agotado', { text: /agotado/, link: '/en-espanol.html#cuidar' });
 t('round7', 'sometimes I am impatient with my wife and then I feel guilty', { id: 'careresent' });
 t('round7', 'i\'m 31 and bisexual, how do i tell my family about my girlfriend', { id: 'lgbtadult', not: /school counselor|GSA/ });
-t('round7', 'my girlfriend is pressuring me to come out to my family before i\'m ready', { id: 'lgbtadult' });
+t('round7', 'my girlfriend is pressuring me to come out to my family before i\'m ready', { id: /lgbtadult|comeoutpartner/ });  // chat9: the guide's partner section
 t('round7', 'what if they cut me off', { id: 'familycutoff', not: /Watching someone you care about/ });
 t('round7', 'can my family see what i look at on here on our wifi', { id: 'wifiprivacy' });
 t('round7', 'can i talk to my RA about this', { id: 'rahelp' });
@@ -832,8 +832,8 @@ c('round7', ['i\'m raising my grandson and i\'m exhausted', 'he\'s on his phone 
 // ADHD kids, grandparents, grown children
 t('round7', 'my grandson has ADHD, how should I talk to him', { id: 'adhdkids', link: '/adhd-kids.html' });
 t('round7', 'is ADHD real or just bad behaviour', { id: 'adhdkids', text: /^Yes, ADHD is real and well studied\. It is not bad behaviour or bad upbringing\./ });
-c('round7', ['my grandson has ADHD, how should I talk to him', 'he forgets everything I tell him'], { id: 'adhdkids', text: /Expect forgetting/, not: /plans fall through/ });
-c('round7', ['my grandson has ADHD, how should I talk to him', 'what do I say when he can\'t sit still'], { id: 'adhdkids', text: /sit still/ });
+c('round7', ['my grandson has ADHD, how should I talk to him', 'he forgets everything I tell him'], { id: /^adhd/, link: '/adhd-kids.html', not: /plans fall through/ });  // chat9: the page's own “When they forget”
+c('round7', ['my grandson has ADHD, how should I talk to him', 'what do I say when he can\'t sit still'], { id: /^adhd/, text: /sit still/ });  // chat9: the page's own “When they can’t sit still”
 t('round7', 'what is ADHD in children, in plain words', { id: 'adhdkids', text: /ADHD is real/, link: '/adhd-kids.html', not: /fewer words/ });
 t('round7', 'articles about ADHD in children', { id: 'reading', link: '/adhd-kids.html' });
 t('round7', 'grandson', { kind: 'clarify', not: NOT_POND });
@@ -1001,7 +1001,7 @@ t('safety8', 'my nan takes my phone', { id: 'teenhouse', text: /10 on school nig
 t('safety8', 'my gran took my phone away', { id: 'teenhouse', not: NO_DV });
 t('safety8', 'my foster carer takes my phone at night', { id: 'teenhouse', not: NO_DV });
 t('safety8', 'my mum takes my phone every night', { id: 'teenhouse', not: NO_DV });
-t('safety8', "i live with my nan and she doesn't get me", { id: 'teenhouse', not: NO_DV, nochip: /They make plans without asking|Holidays get tense|We clash on tone/ });
+t('safety8', "i live with my nan and she doesn't get me", { id: /teenhouse|teennotgetme/, not: NO_DV, nochip: /They make plans without asking|Holidays get tense|We clash on tone/ });
 t('safety8', "i'm 14 and my gran is so strict", { id: 'teenhouse', link: '/teens.html#family-care' });
 t('safety8', 'my grandma is so old fashioned', { id: 'teenhouse' });
 t('safety8', 'my boyfriend takes my phone', { kind: 'safety', link: '/safety.html' });
@@ -1177,7 +1177,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   t('chat8', 'what natural things actually help anxiety', { id: 'herbsanxiety', text: /sleep, movement, slow breathing/, link: '/calming-supplements.html#start', not: /Masking/ });
   t('chat8', 'what helps anxiety naturally', { id: 'herbsanxiety', link: '/calming-supplements.html#start', not: /Masking/ });
   // talk deep: <question> answers the question; "keep it light" comes back up
-  c('chat8', ['talk deep: why is small talk so hard for some people?'], { id: 'smalltalkwhy', text: /Deep talk is on[\s\S]*unwritten/, not: /post-traumatic/i });
+  c('chat8', ['talk deep: why is small talk so hard for some people?'], { id: /smalltalkwhy|small-talk/, text: /unwritten/, not: /post-traumatic/i });  // chat9: small talk is a deep topic now
   t('chat8', 'talk deep: what is the double empathy problem?', { link: '/wired-differently', not: /^Deep mode on\. Short words/ });
   t('chat8', 'talk deep: I find small talk exhausting', { not: /^Deep mode on\. Short words/ });
   c('chat8', ['talk deep: are emotions universal? like the ekman faces thing', 'who came up with that, is there a source i can cite'], { id: 'source', link: '/research.html', text: /Ekman/, not: /Coltrane/ });
@@ -1252,7 +1252,7 @@ if (PERS) {
     t('puddles', 'i\'m tired', { kind: 'chat' });
     t('puddles', 'i\'m tired of everything (not small talk)', { q: 'i\'m tired of everything', not: FUNNY });
     t('puddles', 'i\'m exhausted from caring for my mum (not small talk)', { q: 'i\'m exhausted from caring for my mum', not: FUNNY });
-    t('puddles', 'hi my husband yells at me', { kind: 'safety', not: FUNNY });
+    t('puddles', 'hi my husband yells at me', { id: 'yelledat', not: FUNNY });  // chat9: ordinary help first, one gentle line
     t('puddles', 'my name is Sam', { kind: 'chat', text: /Sam/ });
     c('puddles', ['let\'s just chat', 'pizza'], { kind: 'chat' });
     t('puddles', "i'm tired of everything goes to care", { q: "i'm tired of everything", kind: 'care', id: 'feelinglow', text: /988/ });
@@ -1277,7 +1277,7 @@ if (PERS) {
     c('deep', ['Talk deep', 'what is love', 'and through an autistic lens?'], { kind: 'deep', id: 'what-is-love', text: /^## Through an autistic lens/ });
     c('deep', ['talk deep', 'what is love', 'what would the stoics say?'], { kind: 'deep', id: 'what-is-love', text: /^## Philosophy/ });
     c('deep', ['talk deep', 'he hit me'], { kind: 'safety', not: /## Philosophy|Psychology/ });
-    c('deep', ['talk deep', 'my husband yells at me'], { kind: 'safety', not: /## Philosophy/ });
+    c('deep', ['talk deep', 'my husband yells at me'], { id: 'yelledat', not: /## Philosophy/ });
     c('deep', ['talk deep', 'i feel so lonely'], { kind: 'care', not: /## Philosophy/ });
     c('deep', ['talk deep', 'is it controlling if I ask him to check with me before he buys things?'], { id: 'moneycontrol' });
     c('deep', ['talk deep', 'small talk'], { kind: 'chat', not: /## Philosophy/ });
@@ -1578,7 +1578,7 @@ if (PERS) {
   t('chat9', 'what to tell my doctor about supplements', { q: 'what should i tell my doctor about supplements', id: 'herbwords', script: true, link: '/calming-supplements.html#words' });
   t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|For teens|misgender/i });
   t('chat9', 'states an adult age: adult coming out', { q: "i'm 31, not a teen. my partner is a woman and my parents are conservative christians", id: /lgbtadult|lgbtsafety/, not: /Talking with teenagers|Parenting styles/ });
-  t('chat9', 'shared wifi: device privacy', { q: 'can my parents see what i look at on here? we share wifi', id: 'devicekeep', link: '/safety.html#traces' });
+  t('chat9', 'shared wifi: device privacy', { q: 'can my parents see what i look at on here? we share wifi', id: /wifiprivacy|devicekeep/, link: '/safety.html#traces' });
   t('chat9', 'homophobic dad: the boundary script', { q: 'my dad says homophobic stuff about my girlfriend, how do i set a boundary', id: 'lgbtboundary', text: /I’ll head home/ });
   t('chat9', 'articles: nothing on it, so the guide', { q: 'find me articles about coming out to religious parents', not: /aging|Caring for/i });
   t('chat9', 'partner wants me to come out sooner', { q: "my girlfriend wants me to come out sooner than i'm ready", page: '/coming-out.html', id: 'comeoutpartner', link: '/coming-out.html#partner' });

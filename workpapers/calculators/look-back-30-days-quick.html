@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Look Back Over 30 Days: What Shifted, What Didn't</title>
+<meta name="description" content="Type in how things were about a month ago and how they are this week: who did what, last-minute rescues, everyone's load and jobs with an owner. Get a plain read of what shifted, what didn't, and one next step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/site.css">
+<style>
+  :root{
+    --paper:#F5EFDE; --paper-deep:#ECE2C4; --ink:#211D17; --ink-soft:#524B3E; --line:#D9CBA3;
+    --credit:#3E6B4C; --credit-soft:#E4EDE3; --debit:#96412B; --debit-soft:#F2E2DB;
+    --brass:#A8792F; --brass-ink:#7A5720; --focus:#2B5B8C; --radius:3px;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Lora", Georgia, serif; font-size:16px; line-height:1.6; }
+  h1,h2,h3{ font-family:"Fraunces", serif; font-weight:600; line-height:1.2; }
+  a{ color:var(--focus); }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .calc-wrap{ display:block; padding:40px 16px 60px; }
+  .calc-wrap > *{ max-width:720px; margin-left:auto; margin-right:auto; }
+  .card{ max-width:720px; width:100%; min-width:0; background:var(--paper-deep); border:1px solid var(--line); border-radius:var(--radius); padding:28px; }
+  .kicker{ font-family:"IBM Plex Mono", monospace; font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--brass-ink); }
+  .card h1{ font-size:1.7rem; margin:4px 0 2px; }
+  .card h1 small{ display:block; font-family:"IBM Plex Mono", monospace; font-weight:400; font-size:0.7rem; letter-spacing:0.06em; color:var(--brass-ink); margin-top:6px; }
+  .step{ background:#FFFDF6; border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin:18px 0; }
+  .step h2{ font-size:1.1rem; margin:0 0 4px; }
+  .hint{ color:var(--ink-soft); font-size:0.86rem; margin:4px 0 10px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:10px; }
+  .grid label{ display:block; font-size:0.82rem; color:var(--ink-soft); }
+  input[type="text"], input[type="number"], select{ font-family:inherit; font-size:0.95rem; color:var(--ink); background:#fff; border:1px solid #8F8468; border-radius:var(--radius); padding:6px 8px; width:100%; min-height:44px; }
+  input[type="number"]{ font-family:"IBM Plex Mono", monospace; text-align:right; }
+  input[aria-invalid="true"]{ border-color:var(--debit); background:#FFF4F1; }
+  /* then-and-now rows: a label, then two boxes */
+  .tn{ display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr); gap:8px 10px; align-items:center; }
+  .tn .hd{ font-family:"IBM Plex Mono", monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--brass-ink); align-self:end; }
+  .tn .rl{ font-size:0.9rem; overflow-wrap:anywhere; }
+  .work{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; color:var(--ink-soft); margin-top:10px; overflow-wrap:anywhere; }
+  .work .err{ color:var(--debit); }
+  .btn{ font-family:"IBM Plex Mono", monospace; font-size:0.8rem; min-height:44px; padding:8px 16px; border:1px solid var(--ink); border-radius:var(--radius); background:transparent; color:var(--ink); cursor:pointer; }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn-solid{ background:var(--ink); color:var(--paper); }
+  .btn-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .readout{ margin-top:24px; padding:20px; background:#FFFDF6; border:2px solid var(--brass); border-radius:var(--radius); }
+  .readout:focus{ outline:3px solid var(--focus); outline-offset:3px; }
+  .readout .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.06em; color:var(--brass-ink); text-transform:uppercase; }
+  .readout h3{ font-size:1rem; margin:16px 0 4px; }
+  .headline{ font-family:"Fraunces", serif; font-size:1.25rem; line-height:1.35; margin:4px 0 0; }
+  .pill{ display:inline-block; padding:1px 10px; border-radius:99px; background:#D6EBDA; font-size:0.95em; }
+  .pill.mid{ background:#F6E8C4; } .pill.low{ background:#E4DDF2; }
+  .num-toggle{ display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:0.9rem; cursor:pointer; }
+  .num-toggle input{ width:20px; height:20px; accent-color:var(--credit); }
+  .list{ padding-left:20px; font-size:0.93rem; margin:4px 0; } .list li{ margin-bottom:6px; }
+  .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; padding:1px 6px; border-radius:99px; background:var(--paper-deep); color:var(--ink-soft); margin-left:4px; white-space:nowrap; }
+  .tag.better{ background:#D6EBDA; color:#24432F; } .tag.worse{ background:#E4DDF2; color:#3D3160; }
+  .next-box{ border-left:4px solid var(--credit); background:var(--credit-soft); border-radius:var(--radius); padding:14px 18px; margin-top:16px; }
+  .next-box p{ margin:0 0 8px; font-size:0.94rem; } .next-box p:last-child{ margin-bottom:0; }
+  .status{ font-size:0.86rem; color:var(--credit); min-height:1.4em; margin:6px 0 0; }
+  .copy-out{ width:100%; min-height:160px; font-family:"IBM Plex Mono", monospace; font-size:0.78rem; margin-top:8px; padding:8px; }
+  .disclaimer{ font-size:0.84rem; color:var(--ink-soft); margin-top:20px; border-top:1px solid var(--line); padding-top:14px; }
+  @media (max-width:600px){ .card{ padding:18px 14px; } .step{ padding:14px 12px; } }
+  @media print{ .no-print, .tol-bar, .tol-breathe-btn{ display:none !important; } body{ background:#fff; } .card{ border:0; } input, select{ border:0; min-height:0; } }
+</style>
+<script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/calc01-core.js"></script>
+<script src="/assets/js/calc02-core.js"></script>
+<script src="/assets/js/household.js"></script>
+<!-- seo:start -->
+<link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html">
+<link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html">
+<link rel="alternate" hreflang="x-default" href="https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="self-help, relationships, fairness at home, mental load, invisible work, free self-help tools, chore chart, fair division of labor, household workload, monthly review, 30-day review, look back, progress check, free worksheets">
+<meta name="author" content="Christian, Spread Love &amp; Acceptance">
+<meta name="application-name" content="Spread Love &amp; Acceptance">
+<meta name="theme-color" content="#F5EFDE">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta property="og:site_name" content="Spread Love &amp; Acceptance">
+<meta property="og:title" content="Look Back Over 30 Days: What Shifted, What Didn't">
+<meta property="og:description" content="Type in how things were about a month ago and how they are this week: who did what, last-minute rescues, everyone's load and jobs with an owner. Get a plain read of what shifted, what didn't, and one next step.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html">
+<meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Look Back Over 30 Days: What Shifted, What Didn't">
+<meta name="twitter:description" content="Type in how things were about a month ago and how they are this week: who did what, last-minute rescues, everyone's load and jobs with an owner. Get a plain read of what shifted, what didn't, and one next step.">
+<meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
+<meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html#page","name":"Look Back Over 30 Days: What Shifted, What Didn't","headline":"Look Back Over 30 Days: What Shifted, What Didn't","description":"Type in how things were about a month ago and how they are this week: who did what, last-minute rescues, everyone's load and jobs with an owner. Get a plain read of what shifted, what didn't, and one next step.","url":"https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html","inLanguage":"en-US","isAccessibleForFree":true,"publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-13","dateModified":"2026-10-13","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Which part of the program to use","item":"https://spreadloveandacceptance.com/program.html"},{"@type":"ListItem","position":3,"name":"Look Back Over 30 Days: What Shifted, What Didn't","item":"https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html"}]}]}</script>
+<!-- seo:end -->
+</head>
+<body>
+<main class="calc-wrap" id="main">
+  <div class="card">
+    <div class="kicker">CALC-02 &middot; The quick look-back</div>
+    <h1>Look back over 30 days<small>The 30-Day Look-Back</small></h1>
+    <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> you type in how things were about a month ago, and how they are this week. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain read of what shifted, what didn't, and one next step. It reads the setup, never a person. <span aria-hidden="true">&middot;</span> About 5 minutes</p>
+    <p>Fill in what you have, for 2 to 8 people. Leave out anything you didn't track: each part is read on its own. The numbers can come from your worksheets, or be your best honest guess together.</p>
+    <p style="font-size:0.9rem;">Kept a few weeks of numbers? <a href="/look-back-30-days.html">The full look-back</a> takes all four weeks, adds up the running imbalance, and can fill itself in from the worksheets kept on this device.</p>
+
+    <div class="step">
+      <h2><label for="people-count">Who's looking back?</label></h2>
+      <select id="people-count" style="max-width:140px;"></select>
+      <div class="grid" id="names" style="margin-top:10px;"></div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn" data-example="sam">Try a made-up example</button>
+        <button type="button" class="btn" data-example="clear">Clear</button>
+        <button type="button" class="btn btn-solid" id="from-device" hidden>Fill in from this device</button>
+      </div>
+      <p class="hint" id="device-status" role="status" style="margin-top:6px;"></p>
+    </div>
+
+    <div class="step">
+      <h2>1. Who did what</h2>
+      <p class="hint">Each person's hours for one week, from <a href="/workpapers/fill/wp-01.html">Who did what (WP-01)</a> or the <a href="/lemonade-stand.html">Lemonade Stand</a>. Count the planning and remembering too. Rough is fine: the split is what matters.</p>
+      <div class="tn" id="hours"></div>
+      <div class="work" id="hours-work" aria-live="polite"></div>
+    </div>
+
+    <div class="step">
+      <h2>2. Last-minute rescues</h2>
+      <p class="hint">How many times in a week a job was caught at the last minute, or slipped: the forgotten form, the late dash to the shop. Count them for the whole household, not by person.</p>
+      <div class="tn">
+        <span class="hd" aria-hidden="true"></span><span class="hd" aria-hidden="true">About a month ago</span><span class="hd" aria-hidden="true">This week</span>
+        <span class="rl">Rescues in the week</span>
+        <input type="number" data-w="0" data-f="rescues" min="0" step="1" inputmode="numeric" aria-label="Rescues in a week, about a month ago">
+        <input type="number" data-w="1" data-f="rescues" min="0" step="1" inputmode="numeric" aria-label="Rescues this week">
+      </div>
+      <div class="work" id="rescues-work" aria-live="polite"></div>
+    </div>
+
+    <div class="step">
+      <h2>3. How much each person is carrying</h2>
+      <p class="hint">Each person's own score from <a href="/workpapers/fill/wp-02.html">How much are you carrying? (WP-02)</a>: their five 0&ndash;4 answers added up and divided by 20. It runs from 0 to 1, and higher means heavier. Everyone fills in their own; nobody guesses for someone else.</p>
+      <div class="tn" id="loads"></div>
+      <div class="work" id="loads-work" aria-live="polite"></div>
+    </div>
+
+    <div class="step">
+      <h2>4. Does each job have a name?</h2>
+      <p class="hint">From <a href="/workpapers/fill/wp-03.html">One owner per job (WP-03)</a>: the regular jobs on your list, and how many of them have an owner.</p>
+      <div class="tn">
+        <span class="hd" aria-hidden="true"></span><span class="hd" aria-hidden="true">About a month ago</span><span class="hd" aria-hidden="true">This week</span>
+        <span class="rl">Jobs on the list</span>
+        <input type="number" data-w="0" data-f="jobsTotal" min="0" step="1" inputmode="numeric" aria-label="Jobs on the list, about a month ago">
+        <input type="number" data-w="1" data-f="jobsTotal" min="0" step="1" inputmode="numeric" aria-label="Jobs on the list, this week">
+        <span class="rl">Jobs with an owner</span>
+        <input type="number" data-w="0" data-f="jobsOwned" min="0" step="1" inputmode="numeric" aria-label="Jobs with an owner, about a month ago">
+        <input type="number" data-w="1" data-f="jobsOwned" min="0" step="1" inputmode="numeric" aria-label="Jobs with an owner, this week">
+      </div>
+      <div class="work" id="jobs-work" aria-live="polite"></div>
+    </div>
+
+    <div class="readout" id="readout" tabindex="-1">
+      <div class="lbl">Your 30 days, in plain words</div>
+      <p class="headline" id="headline">Fill in at least one part, then and now, to see what shifted.</p>
+      <label class="num-toggle no-print"><input type="checkbox" id="show-nums"> Show the numbers</label>
+      <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+      <div id="details" hidden>
+        <h3>What shifted</h3>
+        <ul class="list" id="shifted"></ul>
+        <h3>What didn't shift</h3>
+        <ul class="list" id="steady"></ul>
+        <p class="hint" id="missing"></p>
+        <div class="next-box" id="next-box"><span class="lbl">One next step</span><div id="next"></div></div>
+      </div>
+      <div class="btn-row no-print">
+        <button type="button" class="btn btn-solid" id="copy">Copy a summary</button>
+        <button type="button" class="btn" id="print">Print or save as PDF</button>
+      </div>
+      <p class="status" id="copy-status" role="status"></p>
+      <textarea class="copy-out no-print" id="copy-out" readonly hidden aria-label="Summary text to copy"></textarea>
+    </div>
+
+    <p class="disclaimer"><strong>How it decides what shifted:</strong> a part counts as shifted when it moved by at least 0.10 on its 0 to 1 scale (how evenly the hours split, jobs with an owner, load), or by at least 1 rescue a week. Smaller moves count as no shift: one week can be a fluke. The next step goes to whatever moved the wrong way; if nothing did, to the first part still worth a look (jobs without an owner, then uneven hours, then rescues, then a high load). This is a rule-of-thumb worksheet, not a tested model. It only reflects what you enter. Nothing you type here is saved or sent.</p>
+    <p class="disclaimer pillar-note"><small>CALC-02 puts <a href="/five-pillars.html#see-the-load">Pillar I (“See the whole load”)</a> and <a href="/five-pillars.html#fix-the-setup">Pillar II (“Fix the setup, not the person”)</a> to work over a month instead of a week. In you: you see whether what you tried is changing anything. Between you and others: you get one calm picture of the month, never a score on anyone.</small></p>
+    <p class="disclaimer">It goes with week four of the <a href="/prog-01-in-depth.html">6-week program</a>, <a href="/workpapers/report-01.html">Your progress, week by week (REPORT-01)</a> and <a href="/workpapers/calculators/is-the-setup-working-quick.html">Is the setup working for everyone? (CALC-01)</a>.</p>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var C = window.TOLCalc01, K = window.TOLCalc02, f2 = C.f2, f1 = C.f1;
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ var d = document.createElement("div"); d.textContent = s == null ? "" : String(s); return d.innerHTML; }
+  var n = 2, names = ["", ""], T = [K.blankWeek(2), K.blankWeek(2)], copyText = "", hasRead = false;
+  var SIDE = ["About a month ago", "This week"];
+
+  // A made-up household, so the page can be tried before anything is filled in.
+  var EX = {
+    sam: { names: ["Sam", "Alex"], weeks: [
+      { hours: ["14", "6"], rescues: "4", loads: ["0.65", "0.30"], jobsTotal: "10", jobsOwned: "6" },
+      { hours: ["11", "9"], rescues: "1", loads: ["0.60", "0.35"], jobsTotal: "10", jobsOwned: "9" } ] },
+    clear: { names: ["", ""], weeks: [K.blankWeek(2), K.blankWeek(2)] }
+  };
+
+  function nameOf(i){ return (names[i] || "").trim() || ("Person " + (i + 1)); }
+  function fit(a, fill){ a = a.slice(0, n); while (a.length < n) a.push(fill); return a; }
+  function pairRows(field, step, unit){
+    var h = '<span class="hd" aria-hidden="true"></span><span class="hd" aria-hidden="true">' + SIDE[0] + '</span><span class="hd" aria-hidden="true">' + SIDE[1] + '</span>';
+    for (var i = 0; i < n; i++){
+      h += '<span class="rl" data-lab="' + i + '">' + esc(nameOf(i)) + '</span>';
+      for (var w = 0; w < 2; w++) h += '<input type="number" data-w="' + w + '" data-f="' + field + '" data-i="' + i + '" min="0" ' + (field === "loads" ? 'max="1" ' : '') + 'step="' + step + '" inputmode="decimal" value="' + esc(T[w][field][i]) + '" aria-label="' + esc(nameOf(i)) + ', ' + unit + ', ' + SIDE[w].toLowerCase() + '">';
+    }
+    return h;
+  }
+  function render(){
+    var sel = $("people-count");
+    if (!sel.options.length) for (var i = C.MIN_PEOPLE; i <= C.MAX_PEOPLE; i++) sel.insertAdjacentHTML("beforeend", '<option value="' + i + '">' + i + ' people</option>');
+    sel.value = String(n);
+    names = fit(names, ""); T = T.map(function(w){ return K.fitWeek(w, n); });
+    $("names").innerHTML = names.map(function(v, i){ return '<div><label for="nm-' + i + '">Person ' + (i + 1) + ' (optional)</label><input type="text" id="nm-' + i + '" data-name="' + i + '" autocomplete="off" placeholder="Person ' + (i + 1) + '" value="' + esc(v) + '"></div>'; }).join("");
+    $("hours").innerHTML = pairRows("hours", "0.5", "hours");
+    $("loads").innerHTML = pairRows("loads", "0.05", "load score");
+    Array.prototype.forEach.call(document.querySelectorAll('.tn input[data-f="rescues"], .tn input[data-f^="jobs"]'), function(el){ el.value = T[+el.dataset.w][el.dataset.f]; });
+  }
+  function relabel(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-lab]"), function(l){ l.textContent = nameOf(+l.dataset.lab); });
+    Array.prototype.forEach.call(document.querySelectorAll(".tn input[data-i]"), function(el){ var unit = el.dataset.f === "hours" ? "hours" : "load score"; el.setAttribute("aria-label", nameOf(+el.dataset.i) + ", " + unit + ", " + SIDE[+el.dataset.w].toLowerCase()); });
+  }
+  function mark(field, w, bad){ Array.prototype.forEach.call(document.querySelectorAll('.tn input[data-f="' + field + '"][data-w="' + w + '"]'), function(el){ if (bad) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid"); }); }
+
+  function recalc(){
+    var nums = $("show-nums").checked, nm = names.map(function(_, i){ return nameOf(i); });
+    var R = T.map(function(w){ return K.readWeek(w, n, null); });
+    // work lines, one per step
+    function probs(r, key){ return r.problems.filter(function(p){ return p.key === key; }); }
+    var hw = [], rw = [], lw = [], jw = [];
+    R.forEach(function(r, w){
+      var ph = probs(r, "hours"); mark("hours", w, ph.length > 0);
+      if (ph.length) hw.push(SIDE[w] + ': <span class="err">' + esc(ph.map(function(p){ return p.list ? p.list.map(function(x){ return nm[x.i] + ": " + x.msg; }).join(" ") : p.msg; }).join(" ")) + "</span>");
+      else if (r.bal) hw.push(SIDE[w] + ": " + r.bal.shares.map(function(s, i){ return esc(nm[i]) + " " + C.pct(s); }).join(", ") + ", " + C.shareWords(r.wb) + (nums ? " (balance " + f2(r.wb) + ")" : "") + ".");
+      var pr = probs(r, "rescues"); mark("rescues", w, pr.length > 0);
+      if (pr.length) rw.push(SIDE[w] + ': <span class="err">' + esc(pr[0].msg) + "</span>");
+      else if (r.rescues !== null) rw.push(SIDE[w] + ": " + r.rescues + " rescue" + (r.rescues === 1 ? "" : "s") + ".");
+      var pl = probs(r, "loads"); mark("loads", w, pl.length > 0);
+      if (pl.length) lw.push(SIDE[w] + ': <span class="err">' + esc(pl[0].msg) + "</span>");
+      else if (r.loads.some(function(x){ return x !== null; })) lw.push(SIDE[w] + ": " + r.loads.map(function(x, i){ return x === null ? esc(nm[i]) + " not filled in" : esc(nm[i]) + " " + C.wp02Band(x).label + (nums ? " (" + f2(x) + ")" : ""); }).join(", ") + (r.as === null ? ". The average waits for everyone's own score." : "."));
+      var pj = probs(r, "jobs"); mark("jobsTotal", w, pj.length > 0); mark("jobsOwned", w, pj.length > 0);
+      if (pj.length) jw.push(SIDE[w] + ': <span class="err">' + esc(pj[0].msg) + "</span>");
+      else if (r.own) jw.push(SIDE[w] + ": " + r.own.owned + " of " + r.own.total + " jobs have an owner" + (nums ? " (" + f2(r.oc) + ")" : "") + ".");
+    });
+    $("hours-work").innerHTML = hw.join("<br>"); $("rescues-work").innerHTML = rw.join("<br>"); $("loads-work").innerHTML = lw.join("<br>"); $("jobs-work").innerHTML = jw.join("<br>");
+
+    var A = K.avgReads([R[0]], n), B = K.avgReads([R[1]], n), cmp = K.compare(A, B, nm, nums);
+    if (!cmp.enough){
+      hasRead = false; $("details").hidden = true;
+      setText("Fill in at least one part, then and now, to see what shifted.");
+      return;
+    }
+    hasRead = true; $("details").hidden = false;
+    var head;
+    if (cmp.setup){
+      var s0 = cmp.setup.startBand, s1 = cmp.setup.endBand;
+      head = 'The setup went from <span class="pill ' + s0.cls + '">' + esc(s0.short) + '</span> to <span class="pill ' + s1.cls + '">' + esc(s1.short) + "</span>" + (nums ? " (" + f2(cmp.setup.start) + " to " + f2(cmp.setup.end) + ")" : "") + ". ";
+    } else head = "";
+    var nb = cmp.shifted.filter(function(x){ return x.status === "better"; }).length, nw = cmp.shifted.length - nb;
+    var plain = (cmp.shifted.length ? cmp.shifted.length + " of " + (cmp.shifted.length + cmp.steady.length) + " parts shifted" + (nb && nw ? " (" + nb + " for the better, " + nw + " the other way)" : nw ? ", the other way" : ", for the better") + "." : "Nothing shifted much this month.");
+    $("headline").innerHTML = head + esc(plain);
+    function li(x){ return "<li>" + esc(x.text) + (x.status === "better" ? ' <span class="tag better">better</span>' : x.status === "worse" ? ' <span class="tag worse">the other way</span>' : "") + "</li>"; }
+    $("shifted").innerHTML = cmp.shifted.length ? cmp.shifted.map(li).join("") : "<li>Nothing moved by enough to count. That's useful to know too.</li>";
+    $("steady").innerHTML = cmp.steady.length ? cmp.steady.map(li).join("") : "<li>Everything you filled in moved.</li>";
+    $("missing").textContent = cmp.missing.length ? "Not filled in at both ends, so not read: " + cmp.missing.map(function(x){ return x.label.toLowerCase(); }).join(", ") + "." : "";
+    var nx = cmp.next;
+    $("next").innerHTML = (nx.why ? "<p>" + esc(nx.why) + "</p>" : "") + "<p><strong>" + esc(nx.text) + "</strong>" + (nx.link ? ' <a href="' + nx.link[1] + '">' + esc(nx.link[0]) + "</a>" : "") + "</p>" + (nx.extra ? "<p>" + esc(nx.extra) + "</p>" : "");
+    setText((head ? head.replace(/<[^>]+>/g, "") : "") + plain);
+
+    var L = ["Look back over 30 days (CALC-02, Spread Love & Acceptance)", "People: " + nm.join(", "), ""];
+    if (cmp.setup) L.push("The setup: " + cmp.setup.startBand.short + " (" + f2(cmp.setup.start) + ") a month ago, " + cmp.setup.endBand.short + " (" + f2(cmp.setup.end) + ") this week", "");
+    var C2 = K.compare(A, B, nm, true);
+    L.push("What shifted:"); (C2.shifted.length ? C2.shifted : [{ text: "Nothing moved by enough to count." }]).forEach(function(x){ L.push("- " + x.text); }); L.push("");
+    L.push("What didn't shift:"); (C2.steady.length ? C2.steady : [{ text: "Everything filled in moved." }]).forEach(function(x){ L.push("- " + x.text); }); L.push("");
+    L.push("One next step: " + (nx.why ? nx.why + " " : "") + nx.text, "", "This reads the setup, not any person. A place to start a conversation, not a verdict.");
+    copyText = L.join("\n");
+  }
+  var last = "", timer = null;
+  function setText(t){ if (t === last) return; last = t; clearTimeout(timer); timer = setTimeout(function(){ $("announce").textContent = "Your 30 days: " + t; }, 600); }
+
+  document.addEventListener("input", function(e){
+    var t = e.target;
+    if (t.dataset.name !== undefined){ names[+t.dataset.name] = t.value; relabel(); recalc(); }
+    else if (t.dataset.w !== undefined){ var w = T[+t.dataset.w]; if (t.dataset.i !== undefined) w[t.dataset.f][+t.dataset.i] = t.value; else w[t.dataset.f] = t.value; recalc(); }
+    else if (t.id === "show-nums"){ try { if (t.checked) sessionStorage.setItem("tol-calc-nums", "1"); else sessionStorage.removeItem("tol-calc-nums"); } catch (err) {} recalc(); }
+  });
+  $("people-count").addEventListener("change", function(){ n = +this.value; render(); recalc(); });
+
+  // What this device already holds (read-only): the four weeks are filled, then "a month ago" takes
+  // the earliest week with a value and "this week" the latest, field by field.
+  var dev = null;
+  function deviceData(){ try { dev = K.device(new Date()); } catch (err) { dev = null; } return dev && dev.facts.length ? dev : null; }
+  function fromDevice(){
+    var d = deviceData();
+    if (!d){ $("device-status").textContent = "There's nothing kept on this device from the last 30 days to fill in."; return; }
+    if (names.every(function(x){ return !String(x).trim(); }) && d.names.length >= 2){ n = Math.max(2, Math.min(8, d.names.length)); names = d.names.slice(0, n); }
+    var weeks = [0, 1, 2, 3].map(function(){ return K.blankWeek(n); });
+    K.apply(weeks, d.facts, n, names);
+    var got = [];
+    function take(w, side, order){
+      ["rescues", "jobsTotal", "jobsOwned"].forEach(function(f){ if (T[side][f] !== "") return; order.some(function(s){ if (weeks[s][f] !== ""){ T[side][f] = weeks[s][f]; got.push(f); return true; } return false; }); });
+      ["hours", "loads"].forEach(function(f){
+        if (T[side][f].some(function(x){ return x !== ""; })) return;
+        order.some(function(s){ if (weeks[s][f].some(function(x){ return x !== ""; })){ T[side][f] = weeks[s][f].slice(); got.push(f); return true; } return false; });
+      });
+    }
+    take(weeks, 0, [0, 1]); take(weeks, 1, [3, 2]);
+    render(); recalc();
+    $("device-status").textContent = got.length ? "Filled in from this device (only empty boxes): " + d.sources.join(", ") + ". Check the numbers before you read them." : "What's kept on this device had nothing new for the empty boxes" + (d.facts.some(function(f){ return f.kind === "scores"; }) ? " (your fair-split trend log keeps scores, which the full look-back can use)" : "") + ".";
+  }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("button"); if (!t) return;
+    if (t.dataset.example){
+      var ex = EX[t.dataset.example];
+      n = ex.names.length; names = ex.names.slice(); T = ex.weeks.map(function(w){ return JSON.parse(JSON.stringify(w)); });
+      render(); recalc();
+      if (t.dataset.example !== "clear"){ $("device-status").textContent = "A made-up example: Sam and Alex, a month apart."; $("readout").focus(); }
+      else $("device-status").textContent = "";
+    } else if (t.id === "from-device") fromDevice();
+    else if (t.id === "print") window.print();
+    else if (t.id === "copy"){
+      var ta = $("copy-out"), st = $("copy-status");
+      if (!hasRead){ st.textContent = "There's no read to copy yet."; return; }
+      var fb = function(){ ta.value = copyText; ta.hidden = false; ta.focus(); ta.select(); st.textContent = "Your browser blocked copying. The summary is selected below: copy it from there."; };
+      try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(copyText).then(function(){ st.textContent = "Copied. Paste it into a message or your notes."; ta.hidden = true; }, fb); else fb(); } catch (err){ fb(); }
+    }
+  });
+
+  try { if (sessionStorage.getItem("tol-calc-nums") === "1") $("show-nums").checked = true; } catch (err) {}
+  render(); recalc();
+  if (deviceData()) $("from-device").hidden = false;
+
+  // The household kept on this device: offer its names, one tap. Never fills in by itself.
+  var HH = window.TOLHousehold, hh = HH && HH.get ? HH.get() : null;
+  if (hh && hh.people.length && HH.offer && names.every(function(x){ return !String(x || "").trim(); })){
+    var offer = HH.offer({
+      names: hh.people, question: "Use your household from before?",
+      status: $("device-status"),
+      onUse: function(){
+        n = Math.max(C.MIN_PEOPLE, Math.min(C.MAX_PEOPLE, hh.people.length));
+        names = hh.people.slice(0, n); while (names.length < n) names.push("");
+        render(); recalc();
+        return HH.addedLine(Math.min(hh.people.length, n), 0);
+      },
+      focus: function(){ return $("nm-0"); }
+    });
+    $("names").parentNode.insertBefore(offer, $("names"));
+  }
+})();
+</script>
+</body>
+</html>

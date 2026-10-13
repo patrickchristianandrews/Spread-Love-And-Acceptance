@@ -29,6 +29,10 @@
   // Backdrop mode (garden-backdrop.html, behind Pause & Play): silent, no buttons, and it
   // never changes the visitor's saved garden.
   var AMBIENT = document.documentElement.hasAttribute('data-ambient');
+  // En español: on /night-garden.html?lang=es (or arriving from /en-espanol.html) the page sets lang="es" on <html>
+  // before this runs, and every word the garden writes comes in Spanish: L('English', 'Español')
+  var ES = !AMBIENT && /^es\b/i.test(document.documentElement.lang || '');
+  function L(en, es) { return ES ? es : en; }
   var ambLastInput = Date.now();
   if (AMBIENT) (function () {
     var mark = function () { ambLastInput = Date.now(); };
@@ -101,9 +105,11 @@
   var plantedLine = '';
   if (!AMBIENT && planted && planted.count > 0) {
     for (var pg = 0; pg < Math.min(24, planted.count); pg++) addFlower(true);
-    var NAMES = { breathe: ['breathing break', 'breathing breaks'], words: ['Quiet Words puzzle', 'Quiet Words puzzles'], kindness: ['kind moment', 'kind moments'], weather: ['weather check-in', 'weather check-ins'] };
-    var bits = Object.keys(planted.from || {}).filter(function (k) { return NAMES[k]; }).map(function (k) { var n = planted.from[k]; return n + ' from ' + (n === 1 ? 'a ' + NAMES[k][0] : 'your ' + NAMES[k][1]); });
-    plantedLine = planted.count + (planted.count === 1 ? ' new flower' : ' new flowers') + ' grew from your calm moments' + (bits.length ? ': ' + bits.join(', ') : '') + '. ';
+    var NAMES = ES ? { breathe: ['una pausa para respirar', 'pausas para respirar'], words: ['un rompecabezas de Quiet Words', 'rompecabezas de Quiet Words'], kindness: ['un momento amable', 'momentos amables'], weather: ['un vistazo a tu clima de hoy', 'vistazos a tu clima de hoy'] }
+      : { breathe: ['breathing break', 'breathing breaks'], words: ['Quiet Words puzzle', 'Quiet Words puzzles'], kindness: ['kind moment', 'kind moments'], weather: ['weather check-in', 'weather check-ins'] };
+    var bits = Object.keys(planted.from || {}).filter(function (k) { return NAMES[k]; }).map(function (k) { var n = planted.from[k]; return ES ? n + ' por ' + (n === 1 ? NAMES[k][0] : 'tus ' + NAMES[k][1]) : n + ' from ' + (n === 1 ? 'a ' + NAMES[k][0] : 'your ' + NAMES[k][1]); });
+    plantedLine = ES ? planted.count + (planted.count === 1 ? ' flor nueva creció' : ' flores nuevas crecieron') + ' de tus momentos de calma' + (bits.length ? ': ' + bits.join(', ') : '') + '. '
+      : planted.count + (planted.count === 1 ? ' new flower' : ' new flowers') + ' grew from your calm moments' + (bits.length ? ': ' + bits.join(', ') : '') + '. ';
     persist();
     try { localStorage.removeItem('tol-garden-gifts'); } catch (e) {}
   }
@@ -124,12 +130,12 @@
   var NIGHT_SEED = hashStr(todayKey + (AMBIENT ? QS.scene || '' : ''));
   // and a different kind of night on each visit, never the same as the last two
   var TONIGHTS = [
-    { id: 'clear', line: 'Tonight the sky is clear and full of stars.' },
-    { id: 'mist', line: 'Tonight a soft mist is resting over the meadow.' },
-    { id: 'motes', line: 'Tonight little lights are drifting up from the grass.' },
-    { id: 'twinkle', line: 'Tonight the stars are twinkling brightly.' },
-    { id: 'meteors', line: 'Tonight is a night for shooting stars. Keep an eye on the sky.' },
-    { id: 'breeze', line: 'Tonight a gentle breeze is carrying petals across the garden.' }
+    { id: 'clear', line: L('Tonight the sky is clear and full of stars.', 'Esta noche el cielo está despejado y lleno de estrellas.') },
+    { id: 'mist', line: L('Tonight a soft mist is resting over the meadow.', 'Esta noche una neblina suave descansa sobre el prado.') },
+    { id: 'motes', line: L('Tonight little lights are drifting up from the grass.', 'Esta noche unas lucecitas suben flotando desde el pasto.') },
+    { id: 'twinkle', line: L('Tonight the stars are twinkling brightly.', 'Esta noche las estrellas brillan mucho.') },
+    { id: 'meteors', line: L('Tonight is a night for shooting stars. Keep an eye on the sky.', 'Esta noche es noche de estrellas fugaces. Mira el cielo de vez en cuando.') },
+    { id: 'breeze', line: L('Tonight a gentle breeze is carrying petals across the garden.', 'Esta noche una brisa suave lleva pétalos por el jardín.') }
   ];
   var TONIGHT = AMBIENT && (SCENE !== 'garden' || TOD !== 'night') ? TONIGHTS[0] : pickFresh(TONIGHTS, 'a', function (x) { return x.id; }, 2);
   if (!AMBIENT) markSeen('a', TONIGHT.id, 12);
@@ -687,9 +693,17 @@
     clearTimeout(sayTimer); if (ms) sayTimer = setTimeout(function () { sayEl.style.opacity = 0; }, ms);
   }
   var HELP = {
-    breathe: { ico: '&#127800;', h: 'Breathing in the garden', short: 'Follow the little star around its path and breathe with it. The number in the light counts each part for you.', steps: [
-      'Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.'] },
-    fireflies: { ico: '&#10024;', h: 'How to play Fireflies', short: 'Trace the numbered stars in order, 1, 2, 3…, with your finger or mouse. Each star sings a note, and the finished picture plays its song.', steps: [
+    breathe: { ico: '&#127800;', h: L('Breathing in the garden', 'Respirar en el jardín'), short: L('Follow the little star around its path and breathe with it. The number in the light counts each part for you.', 'Sigue a la estrellita en su camino y respira con ella. El número en la luz cuenta cada parte por ti.'), steps: [
+      L('Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.', 'Las palabras bajan del cielo para acompañarte. Cada vuelta completa planta una flor, y los animalitos del estanque saltan contigo.')] },
+    fireflies: ES ? { ico: '&#10024;', h: 'Cómo jugar a Luciérnagas', short: 'Sigue las estrellas numeradas en orden, 1, 2, 3…, con el dedo o el mouse. Cada estrella canta una nota, y el dibujo terminado toca su canción.', steps: [
+      'Aparece en el cielo un dibujo tenue, hecho de círculos con números.',
+      'Mueve el dedo (o el mouse) hasta el círculo <strong>1</strong> y quédate ahí. Una luciérnaga lo enciende, y canta una nota.',
+      'Ve al número siguiente, y al siguiente. Cada uno se une a la línea y canta la nota que sigue de una melodía.',
+      'Termina el dibujo para oír su canción completa y saber qué significa. Hay {N} para coleccionar, y puedes dedicar cada uno nuevo a alguien que quieres. Ningún dibujo vuelve exactamente igual: cada vez aparece girado, estirado o empieza desde otra estrella.',
+      'Cuando hayas encontrado unos cuantos, aparecen también <strong>constelaciones salvajes</strong>: formas nuevas que el cielo hace solo para ti, cada una con su nombre.',
+      'De vez en cuando cruza el cielo una <strong>estrella fugaz</strong>. Atrápala para pedir un deseo y ganar una flor nueva.'],
+      keys: 'Con teclado, las flechas mueven tu luz.' } :
+      { ico: '&#10024;', h: 'How to play Fireflies', short: 'Trace the numbered stars in order, 1, 2, 3…, with your finger or mouse. Each star sings a note, and the finished picture plays its song.', steps: [
       'A faint picture appears in the sky, made of numbered circles.',
       'Drag your finger (or move your mouse) to circle <strong>1</strong> and rest there. A firefly lights it, and it sings a note.',
       'Go to the next number, and the next. Each one joins the line and sings the next note of a little tune.',
@@ -697,7 +711,14 @@
       'Once you have found a few, <strong>wild constellations</strong> appear too: new shapes the sky makes just for you, each with its own name.',
       'Now and then a <strong>shooting star</strong> crosses the sky. Catch it for a wish and a new flower.'],
       keys: 'On a keyboard, the arrow keys move your light.' },
-    pond: { ico: '&#128167;', h: 'How to play the lily pond', short: 'Slide each lily pad left or right, tap to turn it, and let it settle. Fill a row and it blooms. You can’t lose.', steps: [
+    pond: ES ? { ico: '&#128167;', h: 'Cómo jugar al estanque de lirios', short: 'Desliza cada hoja de lirio a la izquierda o a la derecha, tócala para girarla y deja que se acomode. Llena una fila y florece. No se puede perder.', steps: [
+      'Las hojas de lirio bajan despacio por el estanque. La silueta tenue muestra dónde van a caer.',
+      'En el teléfono, <strong>arrastra</strong> la hoja con el dedo a la izquierda o a la derecha, <strong>toca</strong> para girarla y <strong>desliza hacia abajo</strong> para soltarla. O usa los botones: mantén &#9664; &#9654; para moverla.',
+      'La cajita muestra qué hoja viene <strong>después</strong>. Cuando una hoja cae, tienes un momento para acomodarla.',
+      'Llena una fila completa, de lado a lado, y se cubre de flores. Dos filas a la vez son una <strong>doble floración</strong>, y un raro <strong>loto dorado</strong> brilla en oro.',
+      'Si el estanque se llena, simplemente se calma y vuelve a empezar. No se puede perder.'],
+      keys: 'Con teclado: las flechas para mover y girar, la barra espaciadora para soltar.' } :
+      { ico: '&#128167;', h: 'How to play the lily pond', short: 'Slide each lily pad left or right, tap to turn it, and let it settle. Fill a row and it blooms. You can’t lose.', steps: [
       'Lily pads drift slowly down the pond. The faint outline shows where they’ll land.',
       'On a phone, <strong>drag</strong> the pad left or right with your finger, <strong>tap</strong> to turn it, and <strong>flick down</strong> to drop it. Or use the buttons: hold &#9664; &#9654; to slide.',
       'The little box shows which pad is coming <strong>next</strong>. When a pad lands, you have a moment to slide it into place.',
@@ -711,12 +732,13 @@
     if ((m || mode) === 'breathe') {
       var bp = chooseBreath();
       // the words always name the shape that is actually drawn (see drawBreath)
-      h = { ico: HELP.breathe.ico, h: bp.name + ' in the garden',
-        short: 'A little star travels around ' + breathShape(bp) + ': <strong>' + breathDesc(bp) + '</strong>. Breathe along with it; the number in the light counts each part for you.',
+      h = { ico: HELP.breathe.ico, h: bName(bp) + L(' in the garden', ' en el jardín'),
+        short: L('A little star travels around ', 'Una estrellita recorre ') + breathShape(bp) + ': <strong>' + breathDesc(bp) + '</strong>. ' + L('Breathe along with it; the number in the light counts each part for you.', 'Respira con ella; el número en la luz cuenta cada parte por ti.'),
         steps: [
         breathPath(bp),
-        'The garden has several calm patterns and brings a different one on most visits. Every one breathes out for at least as long as it breathes in, and any holds are short and easy. If a pattern ever feels like a strain, just breathe your own way and watch the light.',
-        'Words drift down from the sky to keep you company. Each full round plants a flower, and the animals by the pond hop along with you.'] };
+        L('The garden has several calm patterns and brings a different one on most visits. Every one breathes out for at least as long as it breathes in, and any holds are short and easy. If a pattern ever feels like a strain, just breathe your own way and watch the light.',
+          'El jardín tiene varios ritmos tranquilos y trae uno distinto casi cada vez. En todos sueltas el aire por lo menos tanto tiempo como lo tomas, y las pausas son cortas y fáciles. Si un ritmo te cuesta, respira a tu manera y mira la luz.'),
+        HELP.breathe.steps[0]] };
     }
     document.getElementById('ng-help-ico').innerHTML = h.ico;
     document.getElementById('ng-help-h').textContent = h.h;
@@ -755,9 +777,9 @@
     padEl.hidden = m !== 'pond';
     stage.classList.toggle('is-play', m === 'pond' || m === 'fireflies'); // the page doesn't scroll while you play
     flies.forEach(function (f) { f.home = null; });
-    if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bp.name, breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + '. Follow the star around ' + breathShape(bp) + '.', 0); }
-    if (m === 'fireflies') { newShape(); say('Connect the stars', 'Start at 1 and follow the numbers. Each star sings a note.', 6000); }
-    if (m === 'pond') { pondReset(); say('Float the lily pads', layout ? 'Old lilies are waiting at the bottom tonight, with gaps to fill. The first pads to drift in fit them.' : 'Drag a pad with your finger, tap to turn it, flick down to drop it. Fill a row and it blooms.', 6000); }
+    if (m === 'breathe') { var bp = chooseBreath(); breath.start = performance.now() + 1500; breath.count = 0; breath.phase = ''; skyWords = []; wordAt = 0; say(bName(bp), breathDesc(bp).replace(/^./, function (c) { return c.toUpperCase(); }) + L('. Follow the star around ', '. Sigue la estrella alrededor de ') + breathShape(bp) + '.', 0); }
+    if (m === 'fireflies') { newShape(); say(L('Connect the stars', 'Une las estrellas'), L('Start at 1 and follow the numbers. Each star sings a note.', 'Empieza en el 1 y sigue los números. Cada estrella canta una nota.'), 6000); }
+    if (m === 'pond') { pondReset(); say(L('Float the lily pads', 'Haz flotar las hojas de lirio'), layout ? L('Old lilies are waiting at the bottom tonight, with gaps to fill. The first pads to drift in fit them.', 'Esta noche hay lirios viejos esperando en el fondo, con huecos para llenar. Las primeras hojas que lleguen encajan en ellos.') : L('Drag a pad with your finger, tap to turn it, flick down to drop it. Fill a row and it blooms.', 'Arrastra una hoja con el dedo, tócala para girarla y desliza hacia abajo para soltarla. Llena una fila y florece.'), 6000); }
     hud();
     updateCount();
     // The first time in each activity, show how it works
@@ -771,34 +793,44 @@
   // and holds are short and easy.
   var breath = { start: 0, count: 0, phase: '' };
   var BREATHS = [
-    { id: 'box', name: 'Box breathing', shape: 'a square', steps: [['in', 4], ['top', 4], ['out', 4], ['bottom', 4]] },
-    { id: 'box3', name: 'A gentle box', shape: 'a small square', steps: [['in', 3], ['top', 3], ['out', 3], ['bottom', 3]] },
-    { id: 'long-out', name: 'The long breath out', shape: 'a circle', steps: [['in', 4], ['out', 6]] },
-    { id: 'triangle', name: 'Triangle breathing', shape: 'a triangle', steps: [['in', 4], ['top', 4], ['out', 4]] },
-    { id: 'wave', name: 'The slow wave', shape: 'a square', steps: [['in', 4], ['top', 2], ['out', 6], ['bottom', 2]] },
-    { id: 'even', name: 'Even breathing', shape: 'a circle', steps: [['in', 5], ['out', 5]] },
-    { id: 'rest-triangle', name: 'The resting triangle', shape: 'a triangle', steps: [['in', 4], ['out', 6], ['bottom', 2]] },
-    { id: 'three-five', name: 'In three, out five', shape: 'a circle', steps: [['in', 3], ['out', 5]] },
-    { id: 'tide', name: 'The tide', shape: 'a triangle', steps: [['in', 5], ['top', 2], ['out', 7]] }
+    { id: 'box', name: 'Box breathing', es: 'Respiración en caja', shape: 'a square', steps: [['in', 4], ['top', 4], ['out', 4], ['bottom', 4]] },
+    { id: 'box3', name: 'A gentle box', es: 'Una caja suave', shape: 'a small square', steps: [['in', 3], ['top', 3], ['out', 3], ['bottom', 3]] },
+    { id: 'long-out', name: 'The long breath out', es: 'La exhalación larga', shape: 'a circle', steps: [['in', 4], ['out', 6]] },
+    { id: 'triangle', name: 'Triangle breathing', es: 'Respiración en triángulo', shape: 'a triangle', steps: [['in', 4], ['top', 4], ['out', 4]] },
+    { id: 'wave', name: 'The slow wave', es: 'La ola lenta', shape: 'a square', steps: [['in', 4], ['top', 2], ['out', 6], ['bottom', 2]] },
+    { id: 'even', name: 'Even breathing', es: 'Respiración pareja', shape: 'a circle', steps: [['in', 5], ['out', 5]] },
+    { id: 'rest-triangle', name: 'The resting triangle', es: 'El triángulo que descansa', shape: 'a triangle', steps: [['in', 4], ['out', 6], ['bottom', 2]] },
+    { id: 'three-five', name: 'In three, out five', es: 'Tres para entrar, cinco para salir', shape: 'a circle', steps: [['in', 3], ['out', 5]] },
+    { id: 'tide', name: 'The tide', es: 'La marea', shape: 'a triangle', steps: [['in', 5], ['top', 2], ['out', 7]] }
   ];
   var BREATH = null;
   // The shape drawn follows the number of parts in the breath (drawBreath): two parts go round a circle,
   // three round a triangle, four round a square. The words use the same rule, so they always match.
-  function breathShape(bp) { var n = bp.steps.length; return n === 2 ? 'a circle' : n === 3 ? 'a triangle' : 'a square'; }
+  function breathShape(bp) { var n = bp.steps.length; return n === 2 ? L('a circle', 'un círculo') : n === 3 ? L('a triangle', 'un triángulo') : L('a square', 'un cuadrado'); }
+  function bName(bp) { return ES ? bp.es : bp.name; }
   function breathPath(bp) {
-    var w = { in: 'breathe in', out: 'breathe out', top: 'hold', bottom: 'rest' }, n = bp.steps.length;
+    var n = bp.steps.length;
+    if (ES) {
+      var we = { in: 'toma aire', out: 'suelta el aire', top: 'aguanta', bottom: 'descansa' };
+      var pe = n === 2 ? ['Subiendo por el lado izquierdo del círculo', 'bajando por el lado derecho'] : n === 3 ? ['Subiendo por el lado izquierdo del triángulo', 'bajando por el lado derecho', 'por la base'] : ['Subiendo por el lado izquierdo del cuadrado', 'por arriba', 'bajando por el lado derecho', 'por abajo'];
+      return bp.steps.map(function (st, i) { return pe[i] + ', <strong>' + we[st[0]] + '</strong> contando hasta ' + st[1]; }).join('; ') + '.';
+    }
+    var w = { in: 'breathe in', out: 'breathe out', top: 'hold', bottom: 'rest' };
     var parts = n === 2 ? ['Up the left side of the circle', 'down the right side'] : n === 3 ? ['Up the left side of the triangle', 'down the right side', 'along the bottom'] : ['Up the left side of the square', 'along the top', 'down the right side', 'along the bottom'];
     return bp.steps.map(function (st, i) { return parts[i] + ', <strong>' + w[st[0]] + '</strong> for ' + st[1]; }).join('; ') + '.';
   }
-  function breathDesc(bp) { return bp.steps.map(function (st) { return (st[0] === 'in' ? 'in ' : st[0] === 'out' ? 'out ' : st[0] === 'top' ? 'hold ' : 'rest ') + st[1]; }).join(' · '); }
+  function breathDesc(bp) {
+    var w = ES ? { in: 'toma aire ', out: 'suelta ', top: 'aguanta ', bottom: 'descansa ' } : { in: 'in ', out: 'out ', top: 'hold ', bottom: 'rest ' };
+    return bp.steps.map(function (st) { return (w[st[0]] || w.bottom) + st[1]; }).join(' · ');
+  }
   function chooseBreath() {
     if (BREATH) return BREATH;
     BREATH = seenList('b').length || AMBIENT ? pickFresh(BREATHS, 'b', function (x) { return x.id; }, 4) : BREATHS[0];
     markSeen('b', BREATH.id, 20);
     return BREATH;
   }
-  var BOX_SAY = { in: 'Breathe in…', top: 'Hold…', out: 'Breathe out…', bottom: 'Rest…' };
-  var BOX_SUB = { in: 'Slowly, through your nose', top: 'Gently. No strain.', out: 'Slow and warm, through your mouth', bottom: 'Rest, empty and easy' };
+  var BOX_SAY = ES ? { in: 'Toma aire…', top: 'Aguanta…', out: 'Suelta el aire…', bottom: 'Descansa…' } : { in: 'Breathe in…', top: 'Hold…', out: 'Breathe out…', bottom: 'Rest…' };
+  var BOX_SUB = ES ? { in: 'Despacio, por la nariz', top: 'Suave, sin forzar.', out: 'Lento y tibio, por la boca', bottom: 'Descansa, sin aire y en calma' } : { in: 'Slowly, through your nose', top: 'Gently. No strain.', out: 'Slow and warm, through your mouth', bottom: 'Rest, empty and easy' };
   // words that drift down from the sky, one each round: a large, shuffled set, least recently seen first
   var SKY_WORDS = [
     'Slow, even breaths are a quiet signal that you can ease off.',
@@ -844,6 +876,50 @@
     'Tomorrow can wait until tomorrow.',
     'Picture the pond: still, and a little silver.'
   ];
+  if (ES) SKY_WORDS = [
+    'Respirar lento y parejo es una señal tranquila de que puedes aflojar.',
+    'Deja que cada exhalación sea suave y sin prisa.',
+    'Las pausas alargan cada respiración, y todo tu ritmo se calma.',
+    'Contar le da a una mente ocupada una sola tarea sencilla.',
+    'Deja que tu cuerpo se acomode para descansar.',
+    'Deja caer los hombros. Afloja la mandíbula.',
+    'Fíjate en tus manos. ¿Más tibias? ¿Más pesadas? Es tu cuerpo relajándose.',
+    'Si un pensamiento te lleva, está bien. Vuelve a contar.',
+    'Lo estás haciendo. Una vuelta tranquila a la vez.',
+    'Aquí no hay nada que hacer bien. Solo sigue la luz.',
+    'Deja que la exhalación sea un poco más larga, como un suspiro.',
+    'Tus pies están en el suelo. El suelo te sostiene.',
+    'Este momento solo necesita esta respiración.',
+    'Deja que tu frente se suavice.',
+    'Abre las manos, un dedo a la vez.',
+    'Lo que hoy cargaste, puedes dejarlo un momento mientras respiras.',
+    'Darte cuenta de cómo te sientes es el primer paso, y lo estás dando.',
+    'Tu batería se llena un poco con cada vuelta lenta.',
+    'Respirar despacio es algo que puedes llevar contigo a todas partes.',
+    'Deja que tu barriga suba cuando tomas aire.',
+    'Siente el aire: fresco al entrar, tibio al salir.',
+    'La luz te espera. No hay prisa.',
+    'Relaja la mirada. Mira el brillo, no a través de él.',
+    'Si pierdes la cuenta, vuelve a empezar en uno.',
+    'Algunas vueltas se sienten fáciles y otras inquietas. Las dos están bien.',
+    'Esta noche no tienes que arreglar nada.',
+    'Que la próxima respiración sea amable.',
+    'Descansar también es parte del ritmo.',
+    'Si tú estás en calma, después las conversaciones pueden ser más tranquilas.',
+    'Cómo estás cambia cómo te llegan las palabras del día. Esto te ayuda a asentarte.',
+    'Imagina que pones la lista de hoy en un estante. Mañana seguirá ahí.',
+    'Deja la lengua descansar suave detrás de los dientes.',
+    'Toma aire pensando en algo que te alegra. Suelta algo que puedes dejar.',
+    'Cada flor del jardín es una respiración que tomaste.',
+    'Ir despacio también es avanzar.',
+    'Tienes derecho a ocupar este espacio y este tiempo.',
+    'Siente tu espalda contra la silla, el piso o la cama.',
+    'Deja que los sonidos a tu alrededor vengan y se vayan.',
+    'Nada necesita respuesta ahora mismo.',
+    'Amable contigo, una respiración a la vez.',
+    'Mañana puede esperar hasta mañana.',
+    'Imagina el estanque: quieto, y un poco plateado.'
+  ];
   var wordOrder = null;
   function nextWord() {
     if (!wordOrder || !wordOrder.length) {
@@ -857,7 +933,7 @@
   }
   var skyWords = [], wordAt = 0;
   function dropWord(t) {
-    var bp = chooseBreath(), text = wordAt === 0 ? bp.name + ': ' + breathDesc(bp) + '.' : nextWord();
+    var bp = chooseBreath(), text = wordAt === 0 ? bName(bp) + ': ' + breathDesc(bp) + '.' : nextWord();
     skyWords.push({ text: text, born: t, x: 0.5 + (Math.random() - 0.5) * 0.08 }); wordAt++;
   }
   function drawSkyWords(t) {
@@ -892,8 +968,8 @@
       breath.phase = phKey;
       if (step === 0 && n > 0 && n > breath.count) { breath.count = n; bloom(); }
       if (step === 0) { dropWord(t); hopAll(); }
-      if (breath.count >= 4 && breath.count % 4 === 0 && step === 0) say('Four calm rounds. Lovely.', 'Keep going as long as you like.', 0);
-      else say(BOX_SAY[ph], BOX_SUB[ph] + (breath.count ? ' · ' + breath.count + (breath.count === 1 ? ' round' : ' rounds') + ' tonight' : ''), 0);
+      if (breath.count >= 4 && breath.count % 4 === 0 && step === 0) say(L('Four calm rounds. Lovely.', 'Cuatro vueltas tranquilas. Muy bien.'), L('Keep going as long as you like.', 'Sigue todo lo que quieras.'), 0);
+      else say(BOX_SAY[ph], BOX_SUB[ph] + (breath.count ? ' · ' + breath.count + (ES ? (breath.count === 1 ? ' vuelta' : ' vueltas') + ' esta noche' : (breath.count === 1 ? ' round' : ' rounds') + ' tonight') : ''), 0);
       padSwell(ph === 'bottom' ? 'bottom' : ph);
     }
     var cx = W * 0.5, cy = H * 0.36, R = Math.min(W, H) * 0.075 * (0.7 + 0.5 * k);
@@ -1699,7 +1775,7 @@
   function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
   function bloom() {
     var f = addFlower(false); addLantern(f.x * W); save.breaths++; persist(); chime(Math.floor(Math.random() * 5), 0.1); updateCount();
-    if (window.TOLRewards && save.breaths % 4 === 0) window.TOLRewards.earn(5, 'breathe', 'Four calm breaths', { quiet: true, soft: true }); // nothing pops up while you breathe
+    if (window.TOLRewards && save.breaths % 4 === 0) window.TOLRewards.earn(5, 'breathe', L('Four calm breaths', 'Cuatro respiraciones tranquilas'), { quiet: true, soft: true }); // nothing pops up while you breathe
   }
 
   // Fireflies: constellations
@@ -1832,9 +1908,64 @@
     pup: ['The Pup', 'Be as glad to see someone as a dog is.'],
     hotair: ['The Hot-Air Balloon', 'Rise slowly. The view is worth it.']
   };
+  // the same, in Spanish (shown on the Spanish page; My garden keeps the English names)
+  var MEANING_ES = {
+    heart: ['El Corazón', 'Por todas las personas que llevas contigo.'],
+    star: ['La Estrella de los Deseos', 'Pide un deseo esta noche, por otra persona.'],
+    moon: ['La Luna Creciente', 'Descansar también es parte del ritmo.'],
+    flower: ['La Flor', 'Las cosas pequeñas crecen cuando las cuidas.'],
+    leaf: ['La Hoja', 'Suelta una preocupación, y mírala irse flotando.'],
+    house: ['La Casa', 'Por las personas que se sienten como un hogar.'],
+    wave: ['La Ola', 'Los sentimientos suben, y los sentimientos pasan.'],
+    kite: ['La Cometa', 'Está bien sentirse ligero.'],
+    butterfly: ['La Mariposa', 'El cambio puede ser suave.'],
+    paw: ['Las Huellitas', 'Por los pequeños compañeros que nos quieren sin palabras.'],
+    tree: ['El Pino', 'Algunas cosas se mantienen firmes en todas las estaciones.'],
+    cloud: ['La Nube', 'Los pensamientos pasan. No tienes que seguir a cada uno.'],
+    bird: ['La Golondrina', 'Puedes viajar lejos y aun así volver a casa.'],
+    fish: ['El Pez', 'Ve con la corriente cuando puedas.'],
+    cup: ['La Taza Caliente', 'Una pequeña pausa, sostenida con las dos manos.'],
+    bell: ['La Campana', 'Una palabra clara y amable llega muy lejos.'],
+    umbrella: ['El Paraguas', 'No puedes parar la lluvia, pero puedes compartir el refugio.'],
+    boat: ['El Velero', 'Cambia las velas, no todo el mar.'],
+    mountain: ['La Montaña', 'La vista se abre, un paso a la vez.'],
+    candle: ['La Vela', 'Una luz pequeña sigue siendo luz.'],
+    feather: ['La Pluma', 'Esta noche, sostén tus preocupaciones con ligereza.'],
+    snail: ['El Caracol', 'Ir despacio también es avanzar.'],
+    sun: ['El Sol', 'La mañana siempre vuelve.'],
+    rainbow: ['El Arcoíris', 'Después de la lluvia suele llegar algo brillante.'],
+    raindrop: ['La Gota de Lluvia', 'Las cosas pequeñas suman un río entero.'],
+    mushroom: ['El Hongo', 'Lo que crece en silencio crece donde nadie mira.'],
+    twohearts: ['Los Dos Corazones', 'Dos corazones de oro, lado a lado, como Tidbit y Sugarfoot.'],
+    infinity: ['El Lazo', 'La bondad siempre regresa.'],
+    gem: ['La Gema', 'Te fijas en lo que importa. Eso es un regalo.'],
+    teapot: ['La Tetera', 'Prepara té para dos, y pregunta cómo le fue en el día.'],
+    bridge: ['El Puente', 'Tiende la mano a través de la distancia. Quizás alguien también te la está tendiendo.'],
+    lantern: ['El Farol', 'Ilumina los próximos pasos. Con eso basta.'],
+    cat: ['El Gato Dormilón', 'Descansar no es un premio. Es una necesidad.'],
+    acorn: ['La Bellota', 'Las cosas grandes empiezan muy pequeñas.'],
+    crown: ['La Corona de Margaritas', 'Todos merecen que se les celebre por algo.'],
+    bone: ['El Hueso', 'Tidbit y Sugarfoot compartirían este. Probablemente.'],
+    sprout: ['El Brote', 'Lo nuevo empieza pequeño y verde. Dale tiempo.'],
+    apple: ['La Manzana', 'Algo sencillo y bueno, compartido, es suficiente.'],
+    balloon: ['El Globo', 'Sostén con suavidad. Algunas cosas son más bonitas cuando flotan.'],
+    key: ['La Llave', 'Una pregunta amable puede abrir muchas puertas.'],
+    letter: ['La Carta', 'Escríbele a alguien unas palabras cálidas esta semana.'],
+    snowflake: ['El Copo de Nieve', 'No hay dos iguales, y cada uno es precioso.'],
+    owl: ['El Pequeño Búho', 'Esta noche, escucha el doble de lo que hablas.'],
+    mitten: ['El Guante', 'Manos tibias, corazón tibio. Toma una mano esta noche si puedes.'],
+    note: ['La Nota', 'Una notita puede empezar toda una canción.'],
+    pup: ['El Cachorro', 'Alégrate de ver a alguien como se alegra un perro.'],
+    hotair: ['El Globo Aerostático', 'Sube despacio. La vista vale la pena.']
+  };
+  function meaningOf(id) { return (ES && MEANING_ES[id]) || MEANING[id]; }
   // wild constellations: new every time, drawn from the night itself, with a name and a kind thought
   var WILD_ADJ = ['Quiet', 'Gentle', 'Wandering', 'Sleepy', 'Patient', 'Brave', 'Little', 'Silver', 'Faithful', 'Hopeful', 'Humming', 'Dancing', 'Kindly', 'Steady', 'Dreaming', 'Curious', 'Lantern-lit', 'Midnight', 'Morning', 'Laughing', 'Listening', 'Golden'];
   var WILD_NOUN = ['Heron', 'Path', 'River', 'Kettle', 'Harp', 'Fox', 'Owl', 'Garden Gate', 'Ladder', 'Kite String', 'Hedgehog', 'Willow', 'Map', 'Staircase', 'Firefly', 'Violin', 'Swan', 'Walking Stick', 'Hill Path', 'Wren', 'Comet Tail', 'Pebble Trail', 'Dragonfly', 'Otter', 'Moth', 'Signpost'];
+  // in Spanish the describing word follows the noun and matches it: [masculine, feminine]
+  var WILD_ADJ_ES = [['Tranquilo', 'Tranquila'], ['Suave', 'Suave'], ['Errante', 'Errante'], ['Dormilón', 'Dormilona'], ['Paciente', 'Paciente'], ['Valiente', 'Valiente'], ['Pequeño', 'Pequeña'], ['Plateado', 'Plateada'], ['Fiel', 'Fiel'], ['Esperanzado', 'Esperanzada'], ['que Tararea', 'que Tararea'], ['Bailarín', 'Bailarina'], ['Amable', 'Amable'], ['Firme', 'Firme'], ['Soñador', 'Soñadora'], ['Curioso', 'Curiosa'], ['Alumbrado', 'Alumbrada'], ['de Medianoche', 'de Medianoche'], ['de la Mañana', 'de la Mañana'], ['Risueño', 'Risueña'], ['que Escucha', 'que Escucha'], ['Dorado', 'Dorada']];
+  var WILD_NOUN_ES = [['Garza', 1], ['Sendero', 0], ['Río', 0], ['Tetera', 1], ['Lira', 1], ['Zorro', 0], ['Búho', 0], ['Portón del Jardín', 0], ['Escalera', 1], ['Hilo de Cometa', 0], ['Erizo', 0], ['Sauce', 0], ['Mapa', 0], ['Escalinata', 1], ['Luciérnaga', 1], ['Violín', 0], ['Cisne', 0], ['Bastón', 0], ['Camino del Cerro', 0], ['Reyezuelo', 0], ['Cola de Cometa', 1], ['Senda de Piedritas', 1], ['Libélula', 1], ['Nutria', 1], ['Polilla', 1], ['Letrero', 0]];
+  var WILD_THOUGHT_ES = ['Nadie había dibujado esta antes. Y nunca hubo nadie igual a ti.', 'Un camino hecho de lucecitas. Así son también casi todos los días buenos.', 'Algunas formas solo aparecen cuando vas lo bastante despacio para verlas.', 'Cada estrella ya brillaba. Tú solo las uniste.', 'El cielo sigue haciendo dibujos nuevos. Siempre hay más por encontrar.', 'Ponle el nombre de alguien que te hace sentir en casa.', 'Unir una cosa pequeña con la siguiente es como se hace mucho trabajo bueno.', 'Mira cuánto avanzaste, una estrella a la vez.', 'Las estrellas no se apuran, y aun así cruzan todo el cielo.', 'El cielo de esta noche hizo esto solo para ti.', 'Una línea con curvas también es una línea que llega.', 'Viste algo que nadie más vio esta noche.'];
   var WILD_THOUGHT = [
     'Nobody has ever drawn this one before. Neither has anyone ever been quite like you.',
     'A path made of small lights. Most good days are, too.',
@@ -1909,8 +2040,10 @@
       var closed = n >= 7 && r() < 0.35;
       if (closed) { var L2 = pts.length - 1; for (var j = 1; j + 1 < L2; j++) if (segHit(pts[j], pts[j + 1], pts[L2], pts[0])) closed = false; }
       fitUnit(pts);
-      var name = 'The ' + WILD_ADJ[Math.floor(r() * WILD_ADJ.length)] + ' ' + WILD_NOUN[Math.floor(r() * WILD_NOUN.length)];
-      return { id: 'wild', wild: true, name: name, meaning: WILD_THOUGHT[Math.floor(r() * WILD_THOUGHT.length)], pts: pts, parts: [{ start: 0, len: pts.length, closed: closed }], key: 'wild:' + name };
+      var ai = Math.floor(r() * WILD_ADJ.length), ni = Math.floor(r() * WILD_NOUN.length), nes = WILD_NOUN_ES[ni % WILD_NOUN_ES.length];
+      var name = ES ? (nes[1] ? 'La ' : 'El ') + nes[0] + ' ' + WILD_ADJ_ES[ai % WILD_ADJ_ES.length][nes[1]] : 'The ' + WILD_ADJ[ai] + ' ' + WILD_NOUN[ni];
+      var ti = Math.floor(r() * WILD_THOUGHT.length);
+      return { id: 'wild', wild: true, name: name, meaning: ES ? WILD_THOUGHT_ES[ti % WILD_THOUGHT_ES.length] : WILD_THOUGHT[ti], pts: pts, parts: [{ start: 0, len: pts.length, closed: closed }], key: 'wild:' + name };
     }
     return null;
   }
@@ -1991,7 +2124,8 @@
     if (!shapeDone) {
       var lit = targets.filter(function (p) { return p.done; }).length, lowest = Math.max.apply(null, targets.map(function (p) { return p.y; }));
       ctx.fillStyle = 'rgba(255,246,224,0.85)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = '500 14px Lora, Georgia, serif';
-      ctx.fillText('\u2728 ' + lit + ' of ' + targets.length + ' lit  \u00b7  ' + (shape.wild ? 'a wild one, never seen before' : save.consts.length + ' of ' + SHAPE_IDS.length + ' pictures found'), W / 2, lowest + 34);
+      ctx.fillText('\u2728 ' + (ES ? lit + ' de ' + targets.length + ' encendidas  \u00b7  ' + (shape.wild ? 'una salvaje, nunca vista' : save.consts.length + ' de ' + SHAPE_IDS.length + ' dibujos encontrados')
+        : lit + ' of ' + targets.length + ' lit  \u00b7  ' + (shape.wild ? 'a wild one, never seen before' : save.consts.length + ' of ' + SHAPE_IDS.length + ' pictures found')), W / 2, lowest + 34);
     }
     if (mode === 'fireflies' && wand.active) {
       var wg = ctx.createRadialGradient(wand.x, wand.y, 0, wand.x, wand.y, 30); wg.addColorStop(0, 'rgba(255,255,230,0.25)'); wg.addColorStop(1, 'rgba(255,255,230,0)');
@@ -2037,8 +2171,8 @@
     if (wand.active && Math.hypot(wand.x - x, wand.y - y) < 44) {
       burst(x, y, 40, 50); [0, 2, 4, 5, 6].forEach(function (n, k) { setTimeout(function () { chime(n, 0.09); }, k * 110); });
       save.wishes = (save.wishes || 0) + 1; addFlower(false); addLantern(); persist(); updateCount();
-      if (window.TOLRewards) window.TOLRewards.earn(4, 'fireflies', 'You caught a shooting star', { soft: true });
-      say('You caught a shooting star!', 'Make a wish for someone you love. A new flower opened in your garden.', 4000);
+      if (window.TOLRewards) window.TOLRewards.earn(4, 'fireflies', L('You caught a shooting star', 'Atrapaste una estrella fugaz'), { soft: true });
+      say(L('You caught a shooting star!', '¡Atrapaste una estrella fugaz!'), L('Make a wish for someone you love. A new flower opened in your garden.', 'Pide un deseo por alguien que quieres. Se abrió una flor nueva en tu jardín.'), 4000);
       shooting = null; nextShoot = t + 30000 + Math.random() * 25000;
     }
   }
@@ -2059,11 +2193,11 @@
         // the finished picture sings its whole tune back to you
         targets.forEach(function (p, k) { setTimeout(function () { chime(k, 0.06); burst(p.x, p.y, 6); }, 250 + k * 120); });
         if (audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(true); }, 350 + targets.length * 120);
-        var first = !shape.wild && save.consts.indexOf(shape.id) === -1, m = shape.wild ? [shape.name, shape.meaning] : MEANING[shape.id] || ['A new constellation', ''];
-        if (first) { save.consts.push(shape.id); save.cnames = save.cnames || {}; save.cnames[shape.id] = m[0]; persist(); }
+        var first = !shape.wild && save.consts.indexOf(shape.id) === -1, m = shape.wild ? [shape.name, shape.meaning] : meaningOf(shape.id) || [L('A new constellation', 'Una constelación nueva'), ''];
+        if (first) { save.consts.push(shape.id); save.cnames = save.cnames || {}; save.cnames[shape.id] = (MEANING[shape.id] || m)[0]; persist(); }
         if (shape.wild) { save.wild = (save.wild || 0) + 1; persist(); }
-        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? 'A new constellation' : shape.wild ? 'A wild constellation' : 'A constellation sang', { soft: true });
-        say(m[0] + (first ? ' \u2728 New!' : shape.wild ? ' \u2728' : ''), m[1] + (first ? '  ' + save.consts.length + ' of ' + SHAPE_IDS.length + ' found.' : shape.wild ? '  Wild constellations found: ' + save.wild + '.' : ''), 5200);
+        if (window.TOLRewards) window.TOLRewards.earn(first ? 15 : shape.wild ? 8 : 6, 'fireflies', first ? L('A new constellation', 'Una constelación nueva') : shape.wild ? L('A wild constellation', 'Una constelación salvaje') : L('A constellation sang', 'Una constelación cantó'), { soft: true });
+        say(m[0] + (first ? L(' \u2728 New!', ' \u2728 ¡Nueva!') : shape.wild ? ' \u2728' : ''), m[1] + (first ? '  ' + save.consts.length + L(' of ', ' de ') + SHAPE_IDS.length + L(' found.', ' encontradas.') : shape.wild ? L('  Wild constellations found: ', '  Constelaciones salvajes encontradas: ') + save.wild + '.' : ''), 5200);
         updateCount();
         if (first) setTimeout(function () { askDedication(shape.id, m[0]); }, 2600);
       }
@@ -2173,7 +2307,8 @@
       settleAt = performance.now();
       var best = pondRows > pondBest; pondBest = Math.max(pondBest, pondRows);
       if (window.TOLRewards && pondRows) window.TOLRewards.record('pond', 'best', pondRows, 'max');
-      say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Keep going whenever you like.', 3600);
+      if (ES) say('El estanque se calma.', pondRows ? pondRows + (pondRows === 1 ? ' fila floreció' : ' filas florecieron') + ' en ese estanque' + (best ? ', ¡tu mejor marca!' : '.') + ' Agua nueva.' : 'Agua nueva. Sigue cuando quieras.', 3600);
+      else say('The pond settles.', pondRows ? pondRows + (pondRows === 1 ? ' row' : ' rows') + ' bloomed in that pond' + (best ? ', your best yet!' : '.') + ' Fresh water now.' : 'Fresh water. Keep going whenever you like.', 3600);
       for (var r = 0; r < ROWS; r++) board[r].fill(0);
       pondRows = 0; layout = null; queue = [];
     }
@@ -2219,7 +2354,7 @@
   }
   var ripples = [];
   var hudEl = document.getElementById('ng-pond-hud');
-  function hud() { if (hudEl) hudEl.textContent = mode === 'pond' ? 'Rows ' + pondRows + (pondBest ? ' · best ' + pondBest : '') : ''; }
+  function hud() { if (hudEl) hudEl.textContent = mode === 'pond' ? L('Rows ', 'Filas ') + pondRows + (pondBest ? L(' · best ', ' · récord ') + pondBest : '') : ''; }
   function drawPond(t) {
     if (!piece) return;
     if (clearing && t - clearing.t > 800) {
@@ -2227,16 +2362,16 @@
       clearing.rows.slice().sort(function (a, b) { return a - b; }).forEach(function (r) { board.splice(r, 1); board.unshift(new Array(COLS).fill(0)); });
       for (var i = 0; i < n; i++) { addFlower(false); addLantern(); }
       pondRows += n; save.lilies += n; persist(); updateCount();
-      var names = ['', 'A row bloomed.', 'Double bloom!', 'Triple bloom!', 'A whole garden bloomed!'];
-      say(names[Math.min(4, n)] + (clearing.gold ? ' ✨' : ''), clearing.gold ? 'The golden lotus opened. How lovely.' : 'New flowers opened in your garden.', 2400);
+      var names = ES ? ['', 'Floreció una fila.', '¡Doble floración!', '¡Triple floración!', '¡Floreció todo un jardín!'] : ['', 'A row bloomed.', 'Double bloom!', 'Triple bloom!', 'A whole garden bloomed!'];
+      say(names[Math.min(4, n)] + (clearing.gold ? ' ✨' : ''), clearing.gold ? L('The golden lotus opened. How lovely.', 'Se abrió el loto dorado. Qué bonito.') : L('New flowers opened in your garden.', 'Se abrieron flores nuevas en tu jardín.'), 2400);
       if (n > 1 && audio && audio.music && save.sound) setTimeout(function () { audio.music.reward(n > 2); }, 300);
-      if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/[.!]$/, ''), { quiet: true, soft: true });
+      if (window.TOLRewards) window.TOLRewards.earn([0, 2, 5, 9, 14][Math.min(4, n)] + (clearing.gold ? 4 : 0), 'pond', names[Math.min(4, n)].replace(/^¡|[.!]$/g, ''), { quiet: true, soft: true });
       clearing = null;
       if (layout && !layout.cleared && !board.some(function (row) { return row.some(function (v) { return Math.abs(v) === OLD; }); })) {
         layout.cleared = true; addFlower(false); addLantern();
         save.variety.ponds = (save.variety.ponds || 0) + 1; persist();
-        setTimeout(function () { say('The old lilies all bloomed.', 'Every gap is filled. The pond is yours now.', 3200); }, 2500);
-        if (window.TOLRewards) window.TOLRewards.earn(6, 'pond', 'The old lilies bloomed', { quiet: true, soft: true });
+        setTimeout(function () { say(L('The old lilies all bloomed.', 'Florecieron todos los lirios viejos.'), L('Every gap is filled. The pond is yours now.', 'Ya no queda ningún hueco. El estanque es tuyo.'), 3200); }, 2500);
+        if (window.TOLRewards) window.TOLRewards.earn(6, 'pond', L('The old lilies bloomed', 'Florecieron los lirios viejos'), { quiet: true, soft: true });
       }
       spawn(); hud();
     }
@@ -2273,7 +2408,7 @@
     if (nextK != null) {
       var nk = nextK < 0 ? 0 : nextK, cells = PIECES[nk], s = cell * 0.5, nx = bx + w + 18, ny = by + 6;
       ctx.fillStyle = 'rgba(28,31,58,0.45)'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(nx - 6, ny - 6, s * 4 + 12, s * 4 + 26, 12) : ctx.rect(nx - 6, ny - 6, s * 4 + 12, s * 4 + 26); ctx.fill();
-      ctx.fillStyle = 'rgba(220,214,240,0.8)'; ctx.font = '11px Lora, Georgia, serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText('Next', nx, ny - 2);
+      ctx.fillStyle = 'rgba(220,214,240,0.8)'; ctx.font = '11px Lora, Georgia, serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'; ctx.fillText(L('Next', 'Sigue'), nx, ny - 2);
       var saved = cell; cell = s;
       cells.forEach(function (c) { lily(nx + c[0] * s, ny + 14 + c[1] * s, nextK < 0 ? GOLD : nk + 1, nextK < 0, 1, false, t); });
       cell = saved;
@@ -2366,10 +2501,10 @@
   }
 
   function updateCount() {
-    var parts = [save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers')];
-    if (save.consts.length) parts.push(save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations'));
-    if (save.lilies) parts.push(save.lilies + ' lily ' + (save.lilies === 1 ? 'row' : 'rows'));
-    countEl.textContent = 'Your garden: ' + parts.join(' · ');
+    var parts = [save.flowers.length + (save.flowers.length === 1 ? L(' flower', ' flor') : L(' flowers', ' flores'))];
+    if (save.consts.length) parts.push(save.consts.length + (save.consts.length === 1 ? L(' constellation', ' constelación') : L(' constellations', ' constelaciones')));
+    if (save.lilies) parts.push(save.lilies + (save.lilies === 1 ? L(' lily row', ' fila de lirios') : L(' lily rows', ' filas de lirios')));
+    countEl.textContent = L('Your garden: ', 'Tu jardín: ') + parts.join(' · ');
   }
 
   // ---------- Input ----------
@@ -2455,8 +2590,8 @@
   var soundBtn = document.getElementById('ng-sound');
   var soundWelcome = document.getElementById('ng-sound-welcome');
   function soundLabel() {
-    soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? '&#127925; Sound: on' : '&#128263; Sound: off';
-    if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? '&#127925; Soft sound: on' : '&#128263; Soft sound: off'; }
+    soundBtn.setAttribute('aria-pressed', String(!!save.sound)); soundBtn.innerHTML = save.sound ? L('&#127925; Sound: on', '&#127925; Sonido: sí') : L('&#128263; Sound: off', '&#128263; Sonido: no');
+    if (soundWelcome) { soundWelcome.setAttribute('aria-pressed', String(!!save.sound)); soundWelcome.innerHTML = save.sound ? L('&#127925; Soft sound: on', '&#127925; Sonido suave: sí') : L('&#128263; Soft sound: off', '&#128263; Sonido suave: no'); }
   }
   function setSound(on) {
     save.sound = !!on && !quietNow(); save.snd = save.sound ? 'on' : 'off'; persist(); soundLabel();
@@ -2469,7 +2604,7 @@
   if (soundWelcome) soundWelcome.addEventListener('click', function () { setSound(!save.sound); });
   soundBtn.addEventListener('click', function () {
     setSound(!save.sound);
-    if (save.sound && !cardUp()) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say('Sound on', 'If you can’t hear anything, turn your volume up' + (/iphone|ipad/i.test(navigator.userAgent) ? ' and check the silent switch.' : '.'), 3500); }
+    if (save.sound && !cardUp()) { startAudio(); setTimeout(function () { chime(2, 0.12); }, 150); say(L('Sound on', 'Sonido activado'), L('If you can’t hear anything, turn your volume up', 'Si no oyes nada, sube el volumen') + (/iphone|ipad/i.test(navigator.userAgent) ? L(' and check the silent switch.', ' y revisa el interruptor de silencio.') : '.'), 3500); }
   });
   // Quiet mode switched on elsewhere: the garden falls silent at once
   document.addEventListener('tol-quiet', function () { if (quietNow() && save.sound) { save.sound = false; soundLabel(); stopAudio(); } });
@@ -2506,13 +2641,45 @@
     'You did more today than anyone saw.',
     'Hold your plans lightly and your people closely.'
   ];
+  if (ES) QUOTES = [
+    'Esta noche no tienes que arreglarlo todo.',
+    'Ir despacio también es avanzar.',
+    'Fíjate hoy en un momento pequeño, y acércate a él.',
+    'Tu respiración siempre está ahí para volver a ella.',
+    'Sé tan amable contigo como lo serías con un amigo.',
+    'Descansar también es parte del trabajo.',
+    'Antes de dormir, da las gracias por algo concreto.',
+    'Los sentimientos son como el clima. Pasan.',
+    'Mañana es una página nueva.',
+    'Hoy cargaste mucho. Está bien dejarlo ahora.',
+    'Alguien se alegra de que existas. Seguramente más de una persona.',
+    'Los pasos pequeños y constantes también te llevan.',
+    'No hace falta tener todo listo. Basta con tener ganas.',
+    'Esta noche, que lo suficiente sea suficiente.',
+    'Di lo que necesitas con claridad, y con cariño. Casi siempre ayuda.',
+    'Las personas que te quieren querrían que descanses.',
+    'Una pausa no es un final. Es un respiro antes de lo que sigue.',
+    'Fíjate en lo que salió bien hoy, aunque sea pequeño.',
+    'Puedes volver a lo difícil mañana, con la batería más llena.',
+    'La amabilidad cuenta doble cuando es contigo.',
+    'El jardín va a estar aquí. Y tú también.',
+    'Casi toda la vida son martes comunes. Haz uno un poco más amable.',
+    'Tienes permiso para pedir ayuda.',
+    'Suelta una preocupación esta noche. Ya encontrará sola el camino a casa.',
+    'Mañana, dale las gracias a una persona por algo concreto.',
+    'El cansancio es información, no un fracaso.',
+    'Ve lo bastante despacio para oír lo que de verdad piensas.',
+    'Una mente tranquila crece de minutos tranquilos.',
+    'Hoy hiciste más de lo que nadie vio.',
+    'Sostén tus planes con suavidad y a tu gente con fuerza.'
+  ];
   // Full screen: hide the site header (and use the browser's full screen where it has one)
   var fullBtn = document.getElementById('ng-full');
   function setFull(on) {
     document.documentElement.classList.toggle('ng-full', on);
     fullBtn.setAttribute('aria-pressed', String(on));
-    fullBtn.innerHTML = on ? '<span aria-hidden="true">&#10530;</span> <span class="ng-long">Show the menu</span><span class="ng-short">Menu</span>'
-      : '<span aria-hidden="true">&#10530;</span> <span class="ng-long">Full screen</span><span class="ng-short">Full</span>';
+    fullBtn.innerHTML = on ? '<span aria-hidden="true">&#10530;</span> <span class="ng-long">' + L('Show the menu', 'Mostrar el menú') + '</span><span class="ng-short">' + L('Menu', 'Menú') + '</span>'
+      : '<span aria-hidden="true">&#10530;</span> <span class="ng-long">' + L('Full screen', 'Pantalla completa') + '</span><span class="ng-short">' + L('Full', 'Ampliar') + '</span>';
     window.scrollTo(0, 0); resize(); fitBar();
   }
   // Professor Puddles' button (site-chat.js) floats at the bottom left. If it would cover the garden's buttons, the bar
@@ -2553,14 +2720,14 @@
   var dedCard = document.getElementById('ng-dedicate');
   function askDedication(id, title) {
     if (!dedCard || mode !== 'fireflies') return;
-    document.getElementById('ng-ded-title').textContent = title + ' is in your sky now.';
+    document.getElementById('ng-ded-title').textContent = title + L(' is in your sky now.', ' ya está en tu cielo.');
     var inp = document.getElementById('ng-ded-name'); inp.value = '';
     dedCard.hidden = false; dedCard.setAttribute('data-id', id); try { inp.focus({ preventScroll: true }); } catch (e) {}
   }
   if (dedCard) {
     var dedDone = function (keep) {
       var id = dedCard.getAttribute('data-id'), name = document.getElementById('ng-ded-name').value.trim().slice(0, 30);
-      if (keep && name) { save.dedic = save.dedic || {}; save.dedic[id] = name; persist(); say('For ' + name + ' \u2665', 'Look for it in your sky whenever you visit.', 3500); }
+      if (keep && name) { save.dedic = save.dedic || {}; save.dedic[id] = name; persist(); say(L('For ', 'Para ') + name + ' \u2665', L('Look for it in your sky whenever you visit.', 'Búscala en tu cielo cada vez que vengas.'), 3500); }
       dedCard.hidden = true;
     };
     document.getElementById('ng-ded-save').addEventListener('click', function () { dedDone(true); });
@@ -2573,12 +2740,73 @@
     var qi = pickFresh(QUOTES.map(function (_, i) { return i; }), 'q', function (x) { return x; }, 20); markSeen('q', qi, 40);
     document.getElementById('ng-quote').textContent = QUOTES[qi];
     var tipEl = document.getElementById('ng-tip');
-    if (tipEl && window.TOLTips) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
+    if (tipEl && window.TOLTips && !ES) window.TOLTips.get(['sleep', 'rest', 'calm', 'kindness'], function (t) { tipEl.innerHTML = '<strong>A little tip:</strong> ' + t[0] + ' ' + t[1]; tipEl.hidden = false; });
     closeCard.hidden = false; stopAudio(); try { document.getElementById('ng-stay').focus({ preventScroll: true }); } catch (e) {}
   });
   function stay() { closeCard.hidden = true; soundIfClear(); document.getElementById('ng-leave').focus(); }
   document.getElementById('ng-stay').addEventListener('click', stay);
   closeCard.addEventListener('keydown', function (e) { if (e.key === 'Escape') stay(); });
+
+  // The page's own words in Spanish (the welcome card, the buttons, the cards and "Why a garden?")
+  if (ES) (function () {
+    function put(sel, html, attr) { var n = typeof sel === 'string' ? document.querySelector(sel) : sel; if (!n) return; if (attr) n.setAttribute(attr, html); else n.innerHTML = html; }
+    put('main h1', 'El Jardín de noche: un juego tranquilo para respirar');
+    put('#ng-stage', 'El Jardín de noche', 'aria-label');
+    put('#ng-canvas', 'Un jardín de acuarela de noche, con estrellas, una luna, luciérnagas y un estanque.', 'aria-label');
+    var title = document.querySelector('.ng-title'); if (title && title.firstChild && title.firstChild.nodeType === 3) title.firstChild.textContent = 'El Jardín de noche';
+    put('#ng-help-btn', '? Cómo jugar');
+    put('#ng-pad', 'Controles del estanque', 'aria-label');
+    [['ArrowLeft', 'Mover a la izquierda'], ['ArrowUp', 'Girar'], ['ArrowRight', 'Mover a la derecha'], [' ', 'Bajar flotando']].forEach(function (k) { put('#ng-pad [data-key="' + k[0] + '"]', k[1], 'aria-label'); });
+    put('.ng-bar', 'Jardín', 'aria-label');
+    put('.ng-bar [data-mode="breathe"]', '&#127800; Respirar');
+    put('.ng-bar [data-mode="fireflies"]', '&#10024; Luciérnagas');
+    put('.ng-bar [data-mode="pond"]', '&#128167; <span class="ng-long">Estanque de lirios</span><span class="ng-short">Estanque</span>');
+    put('#ng-leave', '&#127769; Despedirse con calma');
+    put('#ng-welcome-h', 'Bienvenido al Jardín de noche');
+    put('#ng-welcome-p', 'Un lugar tranquilo para respirar, jugar y calmar la mente. No hay relojes ni forma de perder. Todo se queda en tu dispositivo.');
+    put('.ng-pick-h', '¿Qué te gustaría hacer?');
+    put('[data-enter="breathe"]', '<span class="ng-ico">&#127800;</span><strong>Respirar</strong><small>Lo más fácil. Respira con una luz que crece y se suaviza. La primera vez es la respiración en caja (toma aire 4, aguanta 4, suelta 4, descansa 4); otras veces trae otro ritmo tranquilo, como 4 para entrar y 6 para salir. Con cada vuelta se abre una flor.</small>');
+    put('[data-enter="fireflies"]', '<span class="ng-ico">&#10024;</span><strong>Luciérnagas</strong><small>Une las estrellas para formar dibujos que cantan. Ningún rompecabezas vuelve igual: colecciona los dibujos, encuentra constelaciones salvajes, atrapa estrellas fugaces y dedica cada una nueva a alguien que quieres.</small>');
+    put('[data-enter="pond"]', '<span class="ng-ico">&#128167;</span><strong>Estanque de lirios</strong><small>Un rompecabezas lento y tranquilo. Acomoda las hojas de lirio en filas y florecen. Casi todas las noches hay lirios viejos esperando, con huecos para llenar. No se puede perder.</small>');
+    put('#ng-welcome .ng-small', 'El jardín está en silencio, a menos que actives el sonido, y puedes apagarlo cuando quieras con el botón Sonido de abajo. Si te gusta el sonido, con audífonos es muy agradable. Puedes cambiar entre las tres actividades cuando quieras con los botones de abajo. Toca <strong>Cómo jugar</strong> siempre que necesites un recordatorio.');
+    put('#ng-help-ok-top', 'Entendido, empezar');
+    put('#ng-help-ok', 'Entendido');
+    put('#ng-help-more summary', 'Más sobre cómo funciona');
+    put('#ng-ded-title', 'Una constelación nueva');
+    var ded = document.getElementById('ng-dedicate');
+    if (ded) {
+      put(ded.querySelector('h2 + p'), '¿Quieres dedicarla a alguien? Su nombre brillará debajo, en tu cielo. Se queda solo en este dispositivo.');
+      put('label[for="ng-ded-name"]', '¿Para quién es esta?');
+      put('#ng-ded-name', 'Un nombre, o “yo”', 'placeholder');
+      put('#ng-ded-save', 'Añadir a mi cielo');
+      put('#ng-ded-skip', 'Ahora no');
+    }
+    var cl = document.getElementById('ng-close');
+    if (cl) {
+      put(cl.querySelector('h2'), 'Algo para llevarte');
+      put('#ng-close-p', 'Vuelve cuando quieras. El jardín va a estar aquí, y sigue creciendo.');
+      put('#ng-stay', 'Quedarme un poco más');
+      // the pages these lead to are in English; the Spanish page comes first
+      var row = cl.querySelector('.ng-row');
+      if (row) {
+        Array.prototype.forEach.call(row.querySelectorAll('a'), function (x) { x.setAttribute('hreflang', 'en'); x.setAttribute('lang', 'en'); });
+        var back = document.createElement('a'); back.href = '/en-espanol.html'; back.textContent = 'Volver a la página en español';
+        var stayBtn = document.getElementById('ng-stay'); if (stayBtn) stayBtn.after(back); else row.insertBefore(back, row.firstChild);
+        var note = document.createElement('p'); note.className = 'ng-small'; note.textContent = 'Los demás enlaces llevan a páginas en inglés.'; row.after(note);
+      }
+    }
+    put('#ng-about-h', '¿Por qué un jardín?');
+    put('#ng-about-text', '<p>El Jardín de noche es un lugar suave para aterrizar al final del día: unas pocas cosas tranquilas para hacer, sin nada que ganar ni nada que perder. No es un tratamiento, y no reemplaza hablar con alguien.</p>' +
+      '<ul><li><strong>Respirar despacio.</strong> La primera vez es la respiración en caja (tomar aire, aguantar, soltar y descansar, contando cuatro en cada parte). Después, casi cada vez el jardín trae otro ritmo tranquilo: un triángulo, una ola lenta o la exhalación larga que se usa en el resto del sitio (4 para entrar, 6 para salir). La tarjeta de ayuda dice el nombre de cada ritmo. En todos sueltas el aire por lo menos tanto tiempo como lo tomas, con pocas respiraciones por minuto y sin prisa. La luz del jardín lleva la cuenta por ti, así que solo tienes que seguirla.</li>' +
+      '<li><strong>Juego tranquilo.</strong> Luciérnagas para guiar y lirios para acomodar, a tu ritmo. Aquí no hay puntos que perseguir ni nada que perder.</li>' +
+      '<li><strong>Manos ocupadas.</strong> Acomodar formas le da a tu atención una cosa pequeña y entretenida en la que fijarse, si tienes la mente muy ocupada.</li>' +
+      '<li><strong>Movimiento suave y natural.</strong> Luz, agua y hojas que se mueven despacio, para mirar todo lo que quieras.</li></ul>' +
+      '<p>El jardín crece con tus visitas: las flores que abres se quedan, la luna sigue a la luna de verdad, las estaciones cambian con el calendario y cada noche tiene su propio cielo. Los dibujos, los estanques y los ritmos que ya viste se recuerdan, para que no se repitan muy pronto. Faltar un día no cuesta nada. Todo se guarda solo en este navegador, en este dispositivo.</p>');
+    // "About this tool" below is written in English for every tool page: it says so
+    var tg = document.querySelector('[data-tool-guide="night-garden"]');
+    if (tg) { tg.setAttribute('lang', 'en'); var tn = document.createElement('p'); tn.className = 'ng-es-note'; tn.textContent = 'Más abajo, “About this tool” explica la herramienta en inglés: cuándo usarla, en qué se basa y qué se guarda.'; tg.parentNode.insertBefore(tn, tg); }
+    try { document.title = 'El Jardín de noche: un juego tranquilo para respirar · Spread Love & Acceptance'; } catch (e) {}
+  })();
 
   // Welcome, then into the garden
   var welcome = document.getElementById('ng-welcome');
@@ -2586,11 +2814,13 @@
   // (opening the page and reloading it on the first visit isn't a return)
   var cameBefore = save.days.some(function (d) { return d !== todayKey; }) || (save.seen && Object.keys(save.seen).length > 0) || save.breaths > 0 || save.consts.length > 0;
   if (cameBefore) {
-    document.getElementById('ng-welcome-h').textContent = 'Welcome back';
-    document.getElementById('ng-welcome-p').textContent = plantedLine + (gifted ? 'While you were away, ' + gifted + (gifted === 1 ? ' new flower' : ' new flowers') + ' opened on their own. ' : '') +
+    document.getElementById('ng-welcome-h').textContent = L('Welcome back', 'Qué bueno verte otra vez');
+    if (ES) document.getElementById('ng-welcome-p').textContent = plantedLine + (gifted ? 'Mientras no estabas, ' + gifted + (gifted === 1 ? ' flor nueva se abrió sola. ' : ' flores nuevas se abrieron solas. ') : '') +
+      'Tu jardín tiene ' + save.flowers.length + (save.flowers.length === 1 ? ' flor' : ' flores') + (save.consts.length ? ' y ' + save.consts.length + (save.consts.length === 1 ? ' constelación' : ' constelaciones') + ' en su cielo' : '') + '. Quédate todo lo que quieras.';
+    else document.getElementById('ng-welcome-p').textContent = plantedLine + (gifted ? 'While you were away, ' + gifted + (gifted === 1 ? ' new flower' : ' new flowers') + ' opened on their own. ' : '') +
       'Your garden has ' + save.flowers.length + (save.flowers.length === 1 ? ' flower' : ' flowers') + (save.consts.length ? ' and ' + save.consts.length + (save.consts.length === 1 ? ' constellation' : ' constellations') + ' in its sky' : '') + '. Stay as long as you like.';
   }
-  else if (plantedLine) document.getElementById('ng-welcome-p').textContent = plantedLine + 'Your garden has ' + save.flowers.length + ' flowers to start with. Stay as long as you like.';
+  else if (plantedLine) document.getElementById('ng-welcome-p').textContent = plantedLine + L('Your garden has ' + save.flowers.length + ' flowers to start with. Stay as long as you like.', 'Tu jardín empieza con ' + save.flowers.length + ' flores. Quédate todo lo que quieras.');
   var wp = document.getElementById('ng-welcome-p');
   if (wp && !AMBIENT) wp.textContent += ' ' + TONIGHT.line;
   document.querySelectorAll('[data-enter]').forEach(function (b) {
@@ -2615,7 +2845,7 @@
   // Expose a tiny hook for testing
   window.__nightGarden = {
     // variety, for tests: the current puzzle, a new one, solving it with the light as a visitor would
-    puzzle: function () { return shape ? { key: shape.key, id: shape.id, wild: shape.wild, name: shape.wild ? shape.name : (MEANING[shape.id] || [''])[0], stars: targets.length, done: shapeDone > 0, fits: targets.every(function (p) { return p.x > 0 && p.x < W && p.y > 0 && p.y < H; }) } : null; },
+    puzzle: function () { return shape ? { key: shape.key, id: shape.id, wild: shape.wild, name: shape.wild ? shape.name : (meaningOf(shape.id) || [''])[0], stars: targets.length, done: shapeDone > 0, fits: targets.every(function (p) { return p.x > 0 && p.x < W && p.y > 0 && p.y < H; }) } : null; },
     nextPuzzle: function () { newShape(); return this.puzzle(); },
     solvePuzzle: function () {
       var t = performance.now() + 1000, guard = 0;
@@ -2624,7 +2854,7 @@
     },
     pondLayout: function () { return layout ? { key: layout.key, rows: layout.rows.length, pads: layout.plan.length, solvable: layoutSolvable(layout) } : null; },
     newPond: function () { pondReset(); return this.pondLayout(); },
-    breath: function () { var b = chooseBreath(); return { id: b.id, name: b.name, desc: breathDesc(b) }; },
+    breath: function () { var b = chooseBreath(); return { id: b.id, name: bName(b), desc: breathDesc(b) }; },
     tonight: function () { return TONIGHT.id; },
     variety: function () { return JSON.parse(JSON.stringify(save.variety)); },
     shapes: SHAPE_IDS.length,

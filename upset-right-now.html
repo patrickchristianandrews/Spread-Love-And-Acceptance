@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-es>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -256,9 +256,27 @@ Say sorry for the yelling, plainly. You can still keep the rule.
     if (!on) pacers.forEach(function (o) { if (esBox.contains(o.btn)) o.stop(); });
     if (on && scroll) esBox.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
+  // Opened in Spanish (#es or ?lang=es, from the Spanish page): a Spanish page, so the bar, menu and footer come in
+  // Spanish too (site.js reads lang="es" on <html>). The Spanish steps open at the top; the heading is in Spanish,
+  // and the rest of the page stays English, marked lang="en".
+  function spanishPage() {
+    document.documentElement.setAttribute('lang', 'es');
+    var main = document.querySelector('main'); if (!main) return;
+    Array.prototype.forEach.call(main.children, function (n) { if (n !== esBox && !n.hasAttribute('lang')) n.setAttribute('lang', 'en'); });
+    var head = main.querySelector('.read-head');
+    if (head) {
+      head.removeAttribute('lang');
+      var code = head.querySelector('.read-code'), h1 = head.querySelector('h1'), what = head.querySelector('.tol-what');
+      if (code) code.textContent = 'Para calmarse, juntos o a solas';
+      if (h1) h1.textContent = '¿Muy enojado ahora mismo?';
+      if (what) what.textContent = 'Cinco minutos para calmarse: una frase para pedir una pausa, un minuto de respiración y cómo volver a hablar.';
+      Array.prototype.forEach.call(head.querySelectorAll('.sx-safe-top, .sx-who'), function (n) { n.setAttribute('lang', 'en'); });
+    }
+    try { document.title = '¿Muy enojado ahora mismo? Para calmarse juntos · Spread Love & Acceptance'; } catch (e) {}
+  }
   if (esBtn && esBox) {
     esBtn.addEventListener('click', function () { showEs(esBox.hidden, true); });
-    if (location.hash === '#es' || /[?&]lang=es\b/.test(location.search)) showEs(true, true);
+    if (location.hash === '#es' || /[?&]lang=es\b/.test(location.search)) { spanishPage(); showEs(true, true); }
     window.addEventListener('hashchange', function () { if (location.hash === '#es') showEs(true, true); });
   }
 })();

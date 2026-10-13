@@ -160,7 +160,7 @@
     h += '</div>';
 
     var box = doc.createElement('details');
-    box.className = 'tg no-bubble no-cheer no-dive';
+    box.className = 'tg tol-plain no-bubble no-cheer no-dive';
     if (!doc.getElementById('about-this-tool')) box.id = 'about-this-tool';
     box.setAttribute('data-tool', id);
     box.innerHTML = h;
@@ -175,7 +175,7 @@
     var t = data.tools && data.tools[id];
     if (!t) return;
     el.setAttribute('data-tg-done', '1');
-    el.classList.add('tg-wrap', 'no-bubble');
+    el.classList.add('tg-wrap', 'tol-plain', 'no-bubble');
     el.innerHTML = '';
     var box = build(id, t, data.shared || {});
     el.appendChild(box);
