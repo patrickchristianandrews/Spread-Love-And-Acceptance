@@ -2077,7 +2077,8 @@
     var msg = 'Combined with the shared ' + what + (bits.length ? ': ' + bits.join('; ') + '.' : ': everything in it was already here.');
     // what differs is shown in the page, each with a choice (see conflictsEl), not only in this message
     this.conflicts = conflicts.slice(0, 40); this.cfRestored = false;
-    this.backNeeded = localOnly > 0 || conflicts.length > 0;
+    // a choice still to make waits: keeping this page's answer asks to send it back then (resolveConflict)
+    this.backNeeded = localOnly > 0;
     if (differ.length) msg += ' ' + (differ.length === 1 ? 'One thing is' : differ.length + ' things are') + ' different on the shared ' + what + '. Choose which to keep, at the top of the sheet.';
     if (dropped.length) msg += ' There was no room for ' + dropped.join(', ') + ' (eight people at most).';
     if (sameFixed) msg += ' ' + sameFixed;

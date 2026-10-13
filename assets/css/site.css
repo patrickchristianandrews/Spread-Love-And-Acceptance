@@ -8,12 +8,9 @@
   --debit:#96412B; --radius:3px;
 }
 
-/* Members-only content stays hidden until the membership check passes */
-.locked-section{ display:none !important; }
-body.unlocked .locked-section{ display:block !important; }
-/* Once unlocked, members content reads as normal page content */
-body.unlocked .locked-section{ border:0 !important; padding:0 !important; margin:0 !important; background:none !important; }
-body.unlocked .locked-section::before{ content:none !important; display:none !important; }
+/* (Nothing is locked: the old "members only" wrappers, .locked-section, read as normal page content, with or without JavaScript) */
+.locked-section{ border:0 !important; padding:0 !important; margin:0 !important; background:none !important; }
+.locked-section::before{ content:none !important; display:none !important; }
 
 /* ---------- Skip link ---------- */
 .tol-skip{

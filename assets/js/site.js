@@ -24,8 +24,6 @@
     // no paid version; the email list stays as an optional way to get updates.
     openAll: true,
     signupUrl: 'https://buttondown.email/api/emails/embed-subscribe/spreadloveandacceptance',
-    price: '$27/month',
-    joinUrl: 'https://gumroad.com/spreadloveandacceptance', // ← replace with your Gumroad product link
     supportEmail: 'patrick.christian.andrews@gmail.com',
     // Web3Forms access key: sends the 404 page's broken-link reports to your inbox without
     // putting your email address on the site. Get one free at https://web3forms.com
@@ -43,7 +41,7 @@
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
       { href: '/outside-help.html', code: 'New', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies and books behind the pages, in plain words' },
-      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work: feelings, stress, trust, change, grief, healing and helping' },
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '15 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger and love' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
@@ -105,8 +103,8 @@
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
       { href: '/write-it-through.html', code: 'New', title: 'Talk it through in writing', note: 'A calm, private way to sort something out in writing: one topic, facts not verdicts, one clear ask and a reply-by time' },
-      { href: '/new-relationship.html', code: 'New', title: 'Early days: dating and new relationships', note: 'Dating at any age: texting and pace, red flags or just different, the big questions, meeting family, and ending it kindly' },
-      { href: '/stepfamily.html', code: 'New', title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money and holidays' },
+      { href: '/new-relationship.html', deep: true, code: 'New', title: 'Early days: dating and new relationships', note: 'Dating at any age: texting and pace, red flags or just different, the big questions, meeting family, and ending it kindly' },
+      { href: '/stepfamily.html', deep: true, code: 'New', title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money and holidays' },
       { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
       { href: '/small-wins.html', code: 'Guide', title: 'Small wins, and turning the hard stuff into fuel', note: 'Why small wins build momentum, and kind ways to turn anger, worry and complaints into plans' },
       { href: '/pursue-withdraw.html', code: 'Guide', title: 'One wants to talk now, one needs space', note: 'Both sides of the same fight, and a pause plan with a return time' },
@@ -272,7 +270,7 @@
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Brain Breakers', note: 'Four instrumental pieces to see and feel, by Christian’s Lab' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Friendly conversations with Kane and Christian about the ideas behind it all' }
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Coming: Kane and Christian on the ideas behind it all. No episodes yet' }
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
@@ -315,7 +313,7 @@
       { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'From the beginning, one short chapter at a time' },
       { href: '/for-teachers.html', code: 'Class', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
       { href: '/groups.html', code: 'Group', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
-      { href: '/for-counselors.html', code: 'Pro', title: 'For counsellors and coaches', note: 'Using the free pages and tools with clients' },
+      { href: '/for-counselors.html', code: 'Pro', title: 'For counselors and coaches', note: 'Using the free pages and tools with clients' },
       { href: '/method-and-limits.html', code: 'Limits', title: 'Method and limits', note: 'What this site is, what it isn’t, and when to get other help' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
@@ -331,7 +329,7 @@
       { href: '#settings', code: 'New', title: 'High contrast', note: 'A new switch in Settings' },
       { href: '/whats-new.html', code: 'All', title: 'See everything new', note: 'Everything newly added, with dates' },
       { sub: 'New guides and the book' },
-      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '12 new chapters on how people work' },
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '15 chapters on how people work' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
@@ -357,14 +355,14 @@
       { href: '/adhd-kids.html', code: 'New', title: 'When a child has ADHD', note: 'For parents and grandparents' },
       { href: '/grown-up-children.html', code: 'New', title: 'Grown-up children and parents', note: 'Boundaries with a parent you love' },
       { href: '/sharing-a-room.html', code: 'New', title: 'Sharing a room', note: 'Dorm or flat: a room agreement to fill in together' },
-      { href: '/for-counselors.html', code: 'New', title: 'For counsellors and coaches', note: 'Using these free pages with clients and groups' },
+      { href: '/for-counselors.html', code: 'New', title: 'For counselors and coaches', note: 'Using these free pages with clients and groups' },
       { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now, and the book by topic' }
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
-      { href: '/new-relationship.html', title: 'Early days: dating and new relationships', note: 'Texting and pace, red flags or just different, meeting family, ending it kindly' },
-      { href: '/stepfamily.html', title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
+      { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Texting and pace, red flags or just different, meeting family, ending it kindly' },
+      { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
       { href: '/parents.html', title: 'For parents', note: 'Big feelings, coming back after you yell, siblings and teens' },
       { href: '/teens.html', title: 'For teens', note: 'Written for you: home, family, friends and feelings' },
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
@@ -378,7 +376,7 @@
       { href: '/how-to-stop-fighting-with-your-partner.html', title: 'How to stop fighting with your partner', note: 'Seven calm steps' },
       { href: '/share-the-load.html', title: 'Share the load, step by step', note: 'Which tool to use first' },
       { href: '/more-than-two.html', title: 'More than two partners', note: 'Polyamorous homes and triads' },
-      { href: '/new-relationship.html', title: 'Early days: dating and new relationships', note: 'Dating at any age, pace, and the big questions' },
+      { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Dating at any age, pace, and the big questions' },
       { href: '/different-hours.html', title: 'Different hours', note: 'Night shifts and opposite schedules' },
       { href: '/money-together.html', title: 'Money together', note: 'Saver and spender, moving in, wedding costs' },
       { href: '/gaming-and-time-together.html', title: 'Gaming, phones and time together', note: 'A calm talk and a time-together deal' },
@@ -402,12 +400,12 @@
       { href: '/family-rifts.html', title: 'Family rifts and estrangement', note: 'Adult siblings, a will, years of silence' },
       { href: '/two-faiths.html', title: 'Two faiths, one family', note: 'Holidays, naming the baby and what to tell the grandparents' },
       { href: '/caregivers.html', title: 'Caring for someone you love', note: 'A parent or relative who needs care' },
-      { href: '/stepfamily.html', title: 'Blended families and stepfamilies', note: 'Stepparents, step and half siblings, two homes' },
+      { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'Stepparents, step and half siblings, two homes' },
       { href: '/coming-out.html', title: 'Coming out as an adult', note: 'To parents and family, at your own pace' },
       { sub: 'Separated & co-parents', all: '/by-relationship.html#co-parents', allLabel: 'All for co-parents' },
       { href: '/co-parenting.html', title: 'Separated co-parents', note: 'Calmer handoffs and a tone check' },
       { href: '/on-my-own.html', title: 'On my own after a breakup', note: 'Building a life again, and part-time parenting' },
-      { href: '/stepfamily.html', title: 'Blended families and stepfamilies', note: 'Children in two homes, and a stepparent’s place' },
+      { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'Children in two homes, and a stepparent’s place' },
       { sub: 'Housemates', all: '/by-relationship.html#housemates', allLabel: 'All for housemates' },
       { href: '/sharing-a-room.html', title: 'Sharing a room', note: 'Dorm or flat: a room agreement' },
       { href: '/share-the-load.html#roommates', title: 'Roommates and housemates', note: 'Chores, bills and a house meeting' },
@@ -417,7 +415,7 @@
       { href: '/appreciation-at-work.html', title: 'Appreciation at work', note: 'Five ways people like to be thanked' },
       { href: '/wiring-card.html', title: 'A card on how you take in words', note: 'The Wiring Card, with a team version' },
       { href: '/groups.html', title: 'Leading a group', note: 'Six sessions with handouts' },
-      { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using these pages with clients' },
+      { href: '/for-counselors.html', title: 'For counselors and coaches', note: 'Using these pages with clients' },
       { sub: 'Life changes', all: '/by-relationship.html#life-changes', allLabel: 'All life changes' },
       { href: '/new-parent.html', title: 'New baby, sharing the load', note: 'The baby jobs and the invisible ones' },
       { href: '/when-one-is-ill.html', title: 'When one of you is ill', note: 'Chronic illness or disability' },
@@ -538,7 +536,7 @@
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'Drop in on the episode playing now, or cast it to your TV' },
       { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces from soft to cinematic, with a music visualizer' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast (coming)', note: 'Kane and Christian on the ideas behind it all. No episodes yet' },
       { sub: 'Frequency Buddies cartoon' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'All the episodes', note: 'Five animated adventures with the two pals, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
@@ -552,10 +550,11 @@
       { href: '/wp-11-sound-toolkit.html', code: 'Sounds', title: 'Calm-down sounds', note: 'Brown noise, a low hum and a soft flutter' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
       { sub: 'Talks and the pups live' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Kane and Christian talk through the ideas' },
+      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast (coming)', note: 'Kane and Christian on the ideas behind it all. No episodes yet' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library, guides and stories. Each page has a short version and a deeper one.', items: [
+      { href: '/book/download.html', code: 'PDF', title: 'Download the book as a PDF', note: 'The whole book in one file, to read offline or print' },
       { href: '/book/index.html', code: 'Book', title: 'Read the book', note: 'The whole book in order, from the first page, or on one page to print' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book at a glance', note: 'Where to start in the book, on your own or with others' },
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology and conflict in plain words, with the evidence and its limits' },
@@ -594,7 +593,7 @@
       { sub: 'For teachers and groups' },
       { href: '/for-teachers.html', title: 'For teachers', note: 'Free lessons and handouts on feelings, listening and fairness' },
       { href: '/groups.html', title: 'Leading a group', note: 'Using these pages with a group, class or circle' },
-      { href: '/for-counselors.html', title: 'For counsellors and coaches', note: 'Using the pages and tools with clients' },
+      { href: '/for-counselors.html', title: 'For counselors and coaches', note: 'Using the pages and tools with clients' },
       { sub: 'The book by topic' },
       { href: '/book/topic-share-the-load.html', code: 'Topic', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work' },
       { href: '/book/topic-talk-it-through.html', code: 'Topic', title: 'The book on talking it through', note: 'Every chapter’s part on talking and listening' },
@@ -1663,7 +1662,7 @@
     harassment: ['/safety.html', '/co-parenting.html'], harassing: 'harassment', harass: 'harassment', cutting: ['/teens.html', '/safety.html'], selfharm: 'cutting',
     espanol: ['/en-espanol.html'], spanish: 'espanol', 'español': 'espanol',
     flat: ['/complacency.html', '/turning-toward.html', '/recheck-drive.html'], routine: 'flat',
-    stepmom: ['/parents.html#stepfamilies', '/parents.html', '/co-parenting.html'], stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
+    stepmom: ['/stepfamily.html', '/stepfamily-in-depth.html#stepparent', '/parents.html#stepfamilies', '/co-parenting.html'], halfsibling: 'stepmom', halfsiblings: 'stepmom', stepsibling: 'stepmom', stepsiblings: 'stepmom', stepgrandparent: 'stepmom', 'step-grandparent': 'stepmom', bonusmom: 'stepmom', bonusdad: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom', stepkids: 'stepmom', stepchild: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', stepmother: 'stepmom', stepdad: 'stepmom', stepfather: 'stepmom', stepparent: 'stepmom', stepparents: 'stepmom', stepkids: 'stepmom', stepchildren: 'stepmom', stepson: 'stepmom', stepdaughter: 'stepmom', blended: 'stepmom', stepfamily: 'stepmom', stepfamilies: 'stepmom',
     lonely: ['/library/connection.html', '/grief.html', '/turning-toward.html'], loneliness: 'lonely', alone: 'lonely', isolated: 'lonely',
     grown: ['/grief.html', '/grandparents.html'], adult: 'grown',
     work: ['/work.html', '/appreciation-at-work.html', '/relationships.html'], workplace: 'work', job: 'work', office: 'work', coworker: 'work', coworkers: 'work', colleague: 'work', colleagues: 'work', team: 'work', teams: 'work', manager: 'work', boss: 'work', employee: 'work', employees: 'work', staff: 'work', grieving: 'grief', widow: 'grief', widower: 'grief', widowed: 'grief', bereaved: 'grief', bereavement: 'grief', mourning: 'grief', died: 'grief', loss: 'grief',
@@ -1932,6 +1931,13 @@
     // ADHD in a grown-up (the child's page leads otherwise)
     [/\b(i have adhd|i'?ve got adhd|i think i have adhd|adult adhd|adhd adults?|adhd (at|and) work|my adhd|adhd me|late diagnos\w*)\b/, 'r13adhdadult'],
     [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk'],
+    [/^(explore|browse)$|\b(everything on (this|the) site|all (the )?(pages|tools|guides)|site ?map|every page|what'?s on (this|the) site|list of (pages|tools|guides))\b/, 'r13explore'],
+    [/\b(in writing|write it (down|out)|put it in writing|write (them|him|her|my \w+) a (letter|message|email)|long message|by email instead)\b/, 'r13write'],
+    [/\b(neurotypes?|how i take things in|how you take things in|reading preferences?|make the site fit|fits my (mind|brain))\b/, 'r13takein'],
+    // early days: dating, a new relationship, deciding to move in (a teen's crush stays with the teen page)
+    [/^(?!.*\b(teen|teenager|school|crush|i'?m 1[3-7])\b).*\b(dating( again| app| apps)?|new relationship|started seeing|seeing someone new|first date|early days|red flags?|love ?bombing|ghost(ed|ing)|exclusive|are we a couple|define the relationship|dtr)\b/, 'r13dating'],
+    [/\b(mov(e|ing) in together|should we move in|move in with (him|her|them|my)|ready to move in)\b/, 'r13movein'],
+    [/\b(step ?(mum|mom|dad|mother|father|parent|kids?|children|child|son|daughter|siblings?|family|families|grand\w*)|blended famil\w*|half ?(brother|sister|siblings?)|bonus (mum|mom|dad|kids?))\b/, 'stepmom'],
     [/\b(yell\w*|shout\w*|scream\w*)\b.*\babus\w*|\babus\w*\b.*\b(yell\w*|shout\w*|scream\w*)\b/, 'r13yellabuse'],
     // control, fear and abuse: the safety page's signs first, never a dead end
     [/\b(gaslight\w*|coercive|coercion|narciss\w*|controlling|abus\w*|domestic violence|dv|intimate partner violence|manipulat\w*|isolat\w* me|threaten\w*|stalk\w*|walking on eggshells|afraid of (him|her|them|my)|scared of (him|her|them|my))\b/, 'r13abuse']
@@ -1954,6 +1960,12 @@
     r13stored: ['/on-this-device.html', '/safety.html#traces', '/legal/privacy-policy.html'],
     adhd: ['/adhd-kids.html', '/neurodivergent-relationships.html', '/wired-differently.html', '/wiring-card.html'],
     r13adhdadult: ['/wired-differently.html', '/neurodivergent-relationships.html', '/work.html#neurodiversity', '/wiring-card.html'],
+    r13explore: ['/explore.html', '/contents.html', '/by-relationship.html'],
+    r13write: ['/write-it-through.html', '/signal-translator.html', '/workpapers/wp-09-say-it-so-it-lands.html'],
+    r13takein: ['/how-you-take-things-in.html', '/wired-differently.html', '#settings'],
+    r13dating: ['/new-relationship.html', '/new-relationship-in-depth.html#flags', '/teens.html#dating', '/on-my-own.html'],
+    datingapp: 'r13dating', newrelationship: 'r13dating', exclusive: 'r13dating', exclusivity: 'r13dating', ghosting: 'r13dating', ghosted: 'r13dating', redflag: 'r13dating', redflags: 'r13dating', lovebombing: 'r13dating', cohabit: 'r13dating', cohabiting: 'r13dating',
+    r13movein: ['/new-relationship.html#moving-in', '/money-together.html', '/new-relationship.html'],
     r13yellabuse: ['/parents.html#is-yelling-abuse', '/safety.html#signs', '/parents.html#anger-help'],
     r13abuse: ['/safety.html#signs', '/safety.html', '/money-together.html#control', '/outside-help.html'], gaslighting: 'r13abuse', gaslight: 'r13abuse', gaslit: 'r13abuse', narcissist: 'r13abuse', narcissistic: 'r13abuse', coercive: 'r13abuse', abuse: 'r13abuse', abusive: 'r13abuse',
     r13smalltalk: ['/book/understanding-4-communication.html#small-talk', '/book/understanding-4-communication.html', '/refusals.html'],
@@ -1968,6 +1980,11 @@
    ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
    ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
    ['/bonding.html#ideas', 'Get a bonding idea: something to do together', 'Pick who, how much time and how much energy, and get one small idea at a time, including games for two.', 'Tool'],
+   ['/new-relationship-in-depth.html#flags', 'Red flag or just different?', 'Early days: how to tell a difference you can talk about from a sign of control, and what to do if it feels unsafe.', 'Guide'],
+   ['/new-relationship.html#moving-in', 'When to move in together: decide, don’t slide', 'Talk about money, space and what it means before the lease does the deciding.', 'Guide'],
+   ['/stepfamily-in-depth.html#stepparent', 'The stepparent role: a warm adult first', 'Rules come later. Build the relationship first and let the parent lead on discipline.', 'Guide'],
+   ['/stepfamily.html#loyalty', 'When children feel torn between homes', 'Kids caught between a parent and a stepparent, or between two homes: what helps them, in words you could use.', 'Guide'],
+   ['/teens.html#dating', 'For teens: dating and crushes', 'Written for teens: going at your own pace, and when something doesn’t feel right.', 'Teens'],
    ['/safety.html#signs', 'Signs of control or abuse (gaslighting, coercive control)', 'Being told you imagined things, checked on, cut off from friends or money, or afraid of how they’ll react: the signs, and free, private people to talk to.', 'Safety'],
    ['/safety.html#traces', 'Clearing your traces on a shared device', 'What this site keeps on your device, how to erase it, and leaving quickly.', 'Safety'],
    ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
@@ -1986,6 +2003,11 @@
   var RETITLE = { '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
+    '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, red flags or just different, the big questions, meeting family, moving in, and ending it kindly.'],
+    '/stepfamily.html': ['Blended families and stepfamilies', 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money, holidays and adult stepchildren.'],
+    '/write-it-through.html': ['Talk it through in writing', 'One topic, facts not verdicts, one clear ask and a reply-by time. Write it, wait, then send.'],
+    '/how-you-take-things-in.html': ['How you take things in', 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts.'],
+    '/explore.html': ['Everything on this site', 'Every page and tool on one page, with filters by need, relationship, time and kind of page.'],
     '/ladder.html': ['Where am I right now?', 'Find where you are right now, and a next step that fits.'],
     '/refusals.html': ['Say no kindly', 'Kind, clear ways to turn something down, with words you could use.'],
     '/friends.html': ['Friends: when a friendship drifts', 'When you’re always the one reaching out, a friend never texts back, or life changes pull you apart: kind words to say, and low-energy ways to stay close.'],
@@ -4085,16 +4107,17 @@
   }
 
   function gateMarkup(compact) {
-    var g = el('div', { class: 'tol-gate', role: 'region', 'aria-label': 'Members-only content' });
-    if (CONFIG.freePreview) {
+    // there is no paid version: this is only ever the optional "updates by email" box
+    var g = el('div', { class: 'tol-gate', role: 'region', 'aria-label': 'Email updates' });
+    {
       g.innerHTML =
         '<h2>Everything is free</h2>' +
-        '<p>Everything on this site is free. Enter your email to open every chapter, workpaper and tool. You’ll also get a short note when something new ships. Nothing is charged now.</p>' +
+        '<p>Everything on this site is already open, with no account. If you like, leave your email for a short note when something new ships.</p>' +
         (compact ? '' : '<div class="tol-actions"><a class="tol-btn is-quiet" href="/is-this-for-you.html">Is this right for you?</a></div>') +
         '<form class="tol-signin" novalidate>' +
           '<label for="tol-email-' + Math.random().toString(36).slice(2, 7) + '">Email address</label>' +
           '<div class="tol-field"><input type="email" autocomplete="email" placeholder="name@example.com" required>' +
-          '<button class="tol-btn" type="submit">Open everything free</button></div>' +
+          '<button class="tol-btn" type="submit">Send me updates</button></div>' +
           '<p class="tol-msg" aria-live="polite"></p>' +
         '</form>' +
         '<p class="tol-fine">Held by Buttondown and used only for program updates. Unsubscribe from any email. <a href="/legal/privacy-policy.html">Privacy policy</a></p>';
@@ -4105,23 +4128,6 @@
       });
       return g;
     }
-    g.innerHTML =
-      '<h2>This part is for members</h2>' +
-      '<p>Membership is ' + CONFIG.price + ' and opens every chapter, workpaper, and tool on this site. Cancel any time from your Gumroad library.</p>' +
-      '<div class="tol-actions"><a class="tol-btn" data-tol-join href="' + CONFIG.joinUrl + '">Join for ' + CONFIG.price + '</a>' +
-      (compact ? '' : '<a class="tol-btn is-quiet" href="/membership.html">What’s included</a>') + '</div>' +
-      '<form class="tol-signin" novalidate>' +
-        '<label for="tol-email-' + Math.random().toString(36).slice(2, 7) + '">Already a member? Enter the email you subscribed with.</label>' +
-        '<div class="tol-field"><input type="email" autocomplete="email" placeholder="you@example.com" required>' +
-        '<button class="tol-btn" type="submit">Unlock</button></div>' +
-        '<p class="tol-msg" aria-live="polite"></p>' +
-      '</form>';
-    var lab = g.querySelector('label'), inp = g.querySelector('input');
-    inp.id = lab.getAttribute('for');
-    g.querySelector('form').addEventListener('submit', function (e) {
-      e.preventDefault(); signIn(inp.value, g.querySelector('.tol-msg'));
-    });
-    return g;
   }
 
   function installGates() {
@@ -4182,11 +4188,10 @@
         n.appendChild(box);
       } else {
         var g = gateMarkup(true);
-        g.querySelector('h2').textContent = CONFIG.freePreview ? 'Open everything free' : 'Join or sign in';
+        g.querySelector('h2').textContent = 'Get updates by email (optional)';
         n.appendChild(g);
       }
     });
-    document.querySelectorAll('[data-tol-join]').forEach(function (a) { a.href = CONFIG.joinUrl; });
     // Plain sign-up forms on a page (<form data-tol-signup>): sign up and open everything in one step
     document.querySelectorAll('form[data-tol-signup]').forEach(function (f) {
       if (f.dataset.tolBound) return; f.dataset.tolBound = '1';
@@ -4200,7 +4205,6 @@
     var signed = CONFIG.openAll ? !!lsGet(STORE_KEY) : isMember;
     document.querySelectorAll('[data-tol-if-member]').forEach(function (n) { n.hidden = !signed; });
     document.querySelectorAll('[data-tol-if-guest]').forEach(function (n) { n.hidden = signed; });
-    document.querySelectorAll('[data-tol-price]').forEach(function (s) { s.textContent = CONFIG.price; });
     document.querySelectorAll('[data-tol-support]').forEach(function (a) {
       a.href = 'mailto:' + CONFIG.supportEmail; a.textContent = CONFIG.supportEmail;
     });

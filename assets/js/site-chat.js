@@ -254,6 +254,19 @@
     sc.onload = done; sc.onerror = done;
     document.head.appendChild(sc);
   }
+  // the Signal Translator's own rules (message-patterns.js, then signal-engine.js), loaded the first time someone asks
+  // Professor Puddles to check a message, so a pasted "Mum, …" gets a reading and a warmer version right here
+  var MP_URL = KB_URL.replace(/chat-kb\.js$/, 'message-patterns.js'), SE_URL = KB_URL.replace(/chat-kb\.js$/, 'signal-engine.js'), seWaiting = [], seTried = false;
+  function loadSE(cb) {
+    if (window.SignalEngine) return cb(window.SignalEngine);
+    if (seTried && !seWaiting.length) return cb(null);
+    seWaiting.push(cb);
+    if (seWaiting.length > 1) return;
+    seTried = true;
+    function done() { var w = seWaiting; seWaiting = []; w.forEach(function (f) { f(window.SignalEngine || null); }); }
+    function add(u, next) { var sc = document.createElement('script'); sc.src = u; sc.async = false; sc.onload = next; sc.onerror = done; document.head.appendChild(sc); }
+    if (window.TOLPatterns) add(SE_URL, done); else add(MP_URL, function () { add(SE_URL, done); });
+  }
   function buildBG(data) {
     var docs = data.docs || [], df = {}, tf = [], len = [], total = 0, byId = {};
     docs.forEach(function (d, i) {
@@ -2166,6 +2179,8 @@
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
       if (ovr) return ovr;
+      var ckr = !DANGER.test(vf) && !state.unsafe && checkMsgTurn(state, q0, vf);
+      if (ckr) { if (ckr.needSE) state.turn--; return ckr; }
       var igr = igTurn(state, q0, vf);
       if (igr) { if (igr.needIG) state.turn--; return igr; }
       var dt = !DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && !state.unsafe && deepTurn(state, q, vf);
@@ -2279,6 +2294,33 @@
   // about the child are still welcome (never ways to talk the shouting parent round)
   var HANDOFF_SHOUT = /\b(he|she|they|my ex|ex|his dad|her dad|their dad|her mum|his mum|their mum|her mom|his mom|their mom|the other parent)\b.{0,25}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|screaming|swears?|swore|swearing|kicks off|kicked off|goes off|went off)\b( at me)?.{0,60}\b(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|exchanges?|in front of)\b|\b(at|during) (the )?(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?)\b.{0,40}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|swears?|swore)\b/;
   function kidNameIn(q) { var m = /\b(?:in front of|our (?:son|daughter|boy|girl|kid|child)|my (?:son|daughter|boy|girl|kid|child)|tell)\s+([A-Z][a-z]{1,14})\b/.exec(String(q || '')); return m && !/^(Me|Him|Her|Them|The|My|Our|His|Their|Mum|Mom|Dad)$/.test(m[1]) ? m[1] : ''; }
+  // "can you check a message to my mum?", then the message; or a pasted "Mum, we'll decide about baptism ourselves."
+  var CHECK_ASK = /\b(can|could|would|will) you (please )?(check|read|look at|look over|proofread|review|have a look at)\b.{0,25}\b(message|text|email|letter|note|reply|this)\b|^(please )?(check|read over|look over) (this|my) (message|text|email|reply)\b|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send\b|\bhow (does|will|would) this (sound|land|come across)\b/;
+  var PASTED = /^(hi |hey |dear |hello )?(mum|mom|mam|mummy|mother|dad|daddy|father|nan|gran|grandma|grandad|babe|love|darling|[A-Z][a-z]{1,14})\s*,\s+\S+(\s+\S+){2,}/;
+  function checkMsgTurn(state, q0, vf) {
+    var t = String(q0 || '').trim(), m = /^[^:]{3,80}:\s*(.{8,})$/.exec(t), text = '';
+    if (CHECK_ASK.test(vf)) {
+      if (m && CHECK_ASK.test(norm(t.slice(0, t.indexOf(':'))))) text = m[1];
+      else { state.checkWait = state.turn; return { blocks: [{ k: 'p', x: 'Yes. Paste or type the message here, just as you’d send it, and I’ll show how it may land and a warmer version, using the Signal Translator’s rules. Nothing leaves this device.' }], chips: [], kind: 'care', id: 'checkask' }; }
+    } else if ((state.checkWait && state.turn - state.checkWait === 1 && t.split(/\s+/).length >= 3 && !/^(no|nevermind|never mind|cancel|start over)\b/i.test(t)) || (PASTED.test(t) && !/^(hi |hey |hello )?(ok|okay|so|well|yes|yeah|no|nope|honestly|anyway|sorry|thanks|thank you|please|also|right|um|hmm|actually|basically|btw|lol|oh|ah|wait|look|listen|professor|puddles|again|then|now|and|but|because|like|ugh|great|fine|sure|hello|hi|hey)\s*,/i.test(t) && !/\?\s*$/.test(t) && !/\b(how|what|why|should) (do|can|should|would) i\b/i.test(t))) text = t;
+    if (!text) return null;
+    if (DANGER.test(norm(text))) return null;  // a threat or harm in it: the safety answer, never a rewrite
+    var E = window.SignalEngine;
+    if (!E) { if (seTried) return null; return { needSE: true }; }
+    state.checkWait = 0;
+    var an, rw, v;
+    try { an = E.analyze(text, { channel: 'text' }); rw = E.rewrite(an, { wirings: ['general'], channel: 'text' }); v = E.verdict ? E.verdict(an, E.score(an, ['general'], 'text', 'v'), rw, {}) : null; } catch (e) { return null; }
+    if (!an || an.danger || an.selfHarm || (v && v.id === 'danger')) return null;
+    var b = [{ k: 'p', x: 'Here’s how it may land, using the Signal Translator’s rules: ' + ((v && v.text) || 'it reads clearly.') }];
+    if (rw && !rw.unchanged && rw.main && norm(rw.main) !== norm(text)) {
+      b.push({ k: 'script', l: 'A warmer way to say it', x: rw.main });
+      var why = (rw.changes || []).map(function (c) { return c && c.why; }).filter(Boolean)[0];
+      if (why) b.push({ k: 'p', x: why.replace(/"([^"]*)"/g, '“$1”') });
+      if (/\[[^\]]+\]/.test(rw.main)) b.push({ k: 'note', x: 'Words in [brackets] are optional: keep them only if they’re true for you.' });
+    } else b.push({ k: 'p', x: 'I wouldn’t change much. Read it once more as if you were them, on a bad day, then send it when you’re calm.' });
+    b.push({ k: 'links', x: [['Open it in the Signal Translator for more options', '/signal-translator.html']] });
+    return { blocks: b, chips: [{ label: 'Check another message', q: 'Can you check a message for me?' }], kind: 'care', id: 'checkmsg' };
+  }
   function handoffReply(f, kid) {
     var k = kid || 'your child';
     var b = [{ k: 'p', x: 'That sounds really stressful, and it isn’t something you can fix by choosing better words. It’s worth changing how handoffs work, for you and for ' + k + '.' },
@@ -3372,6 +3414,14 @@
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
     }
     r = safe(function () { return respond(state, q, doc); });
+    if (r && r.needSE) {
+      loadSE(function () {
+        var r4 = safe(function () { return respond(state, q, doc); });
+        if (r4 && (r4.needSE || r4.needIG || r4.needBG)) r4 = { blocks: [{ k: 'p', x: 'Sorry, I couldn’t open the message checker just now. The Signal Translator page can check it for you.' }, { k: 'links', x: [['The Signal Translator', '/signal-translator.html']] }], chips: [] };
+        cb(r4);
+      });
+      return;
+    }
     if (r && r.needIG) {
       loadIG(function () {
         var r3 = safe(function () { return respond(state, q, doc); });
