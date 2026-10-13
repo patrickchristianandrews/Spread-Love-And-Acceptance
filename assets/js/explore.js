@@ -69,7 +69,8 @@
   var REL_IDS = { 'just-me': 1, couples: 1, friends: 1, family: 1, 'co-parents': 1, housemates: 1, work: 1, 'life-changes': 1 };
   var REL_NAME = { 'just-me': 'Just me', couples: 'Couples', friends: 'Friends', family: 'Family', 'co-parents': 'Co-parents', housemates: 'Housemates', work: 'Work', 'life-changes': 'Life changes' };
   var CALM = /calm|breath|night-garden|ladder|upset-right-now|wp-11|soften|soundscapes|calm-visualizer|supplement|sleep|anxi|settle|soothe|bears-dojo/;
-  var HEALTH = /supplement|herb|illness|\bill\b|when-one-is-ill|sleep|health|disab|low energy|caregiv|carer|\bbody\b|nervous system|burn-?out|stress|adhd|autis|sensory|dyslex|breath|anxi|medic/;
+  var HEALTH = /supplement|herb|illness|\bill\b|sleep|health|disab|low energy|nervous system|burn-?out|adhd|autis|sensory|dyslex|anxi|medic|caring for someone/;
+  var HEALTH_PAGE = /^\/(calming-supplements|when-one-is-ill|caregivers|adhd-kids|night-garden|ladder|upset-right-now|wp-11|how-you-take-things-in|neurodivergent-relationships|wired-differently)\.html$|^\/book\/understanding-(2-stress|9-minds)/;
   function needsOf(e, areas) {
     var n = {}, txt = fold(e.p + ' ' + e.t + ' ' + e.n);
     if (areas.talk) n.talk = 1;
@@ -80,7 +81,7 @@
     if (areas.read || e.type === 'book' || /^\/(library|learn)\b|^\/(glossary|research|reading|library|infographic|polymath)\.html$/.test(e.p)) n.read = 1;
     if (e.type === 'game' || e.type === 'media' || areas.media) n.play = 1;
     if (CALM.test(txt) || (areas.play && e.type !== 'game')) n.calm = 1;
-    if (HEALTH.test(txt)) n.health = 1;
+    if (HEALTH_PAGE.test(e.p) || HEALTH.test(fold(e.t + ' ' + e.n))) n.health = 1;
     if (/money|chore|bills|who does what|fair share|invisible|mental load|one owner|split/.test(txt)) n.load = 1;
     if (/listen|say it|message|conversation|apolog|check-in|talk|fight|argu/.test(txt) && e.type !== 'game') n.talk = 1;
     if (/parent|teen|grand|family|kinship|foster|sibling|stepfam|child/.test(txt)) n.family = 1;

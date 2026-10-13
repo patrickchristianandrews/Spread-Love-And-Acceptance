@@ -1726,7 +1726,7 @@
       var pS = sum(shared.map(billTotal)), ptg = moneyTarget(), pfb = !!ptg.error; if (pfb) ptg = evenTarget();
       var putIn = function (tt) { return state.people.map(function (_, i) { return tt.t[i] * pS + sum(costs.filter(function (b) { return b.kind !== 'shared'; }).map(function (b) { return num(b.v[i]); })); }); };
       var pIn = putIn(ptg), sayIn = function (arr) { return joinNames(state.people.map(function (_, i) { return (i ? nameOf(i) + ' ' : nameOf(i) + ' puts in ') + cash(arr[i]); })) + ' a month'; };
-      var pl = 'We’re planning, not settling up. ' + sayIn(pIn) + (pS > 0 ? ' (shared bills ' + cash(pS) + ', ' + (ptg.mode === 'agreed' ? 'split by the ' + splitShort(ptg.t) + ' you ' + agreedWord() : ptg.mode === 'part' ? 'split by the nights each person is here' : 'split evenly') + ')' : '') + '.';
+      var pl = 'We’re planning, not settling up. ' + sayIn(pIn) + (pS > 0 ? ' (shared bills ' + cash(pS) + ', ' + (ptg.money ? 'split by income, ' + splitShort(ptg.t) : ptg.mode === 'agreed' ? 'split by the ' + splitShort(ptg.t) + ' you ' + agreedWord() : ptg.mode === 'part' ? 'split by the nights each person is here' : 'split evenly') + ')' : '') + '.';
       var pIs = ptg.mode === 'even' && !state.agreed.on ? incomeSplit() : null;
       if (pIs && pS > 0) pl += ' Split by income (' + splitShort(pIs.p.map(function (x) { return x / 100; })) + ') instead: ' + sayIn(putIn({ t: pIs.p.map(function (x) { return x / 100; }) })) + '. Pick whichever feels fair to you.';
       if (pfb) pl += ' (The split you set doesn’t add up to 100% yet, so this uses an even split.)';
@@ -1762,7 +1762,7 @@
       var tg = moneyTarget(), fallback = !!tg.error;
       if (fallback) tg = evenTarget();
       var fair = tg.t.map(function (x) { return x * s; });
-      var how = tg.mode === 'agreed' ? 'Split by the shares you ' + agreedWord() + ' (' + pctList(tg.t) + '), that’s ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
+      var how = tg.mode === 'agreed' ? (tg.money ? 'Split by income' : 'Split by the shares you ' + agreedWord()) + ' (' + pctList(tg.t) + '), that’s ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
         : tg.mode === 'part' ? 'With ' + halfNames() + ' counted for the nights they’re here, a fair split is ' + state.people.map(function (_, i) { return nameOf(i) + ' ' + cash(fair[i]); }).join(', ') + '.'
         : 'An even split would be ' + cash(fair[0]) + ' each.';
       var word = tg.mode === 'even' ? 'an even share' : 'their share';
@@ -1778,7 +1778,7 @@
         // money coming in for everyone, and no split picked yet: both ways side by side, never even first on its own
         var ip = isg.p.map(function (x) { return x / 100; }), ifair = ip.map(function (x) { return x * s; }), iset = settleUp(t, ifair, true);
         out.push('Two ways to split the shared bills. Split evenly: ' + (settle ? settle.replace(/\.$/, '') : 'it already comes out even') + ' · Split by income (' + splitShort(ip) + '): ' + (iset ? iset.replace(/\.$/, '') : 'it already comes out even') + '. Pick whichever feels fair to you.');
-      } else out.push(settle ? (soft ? 'If you split shared bills evenly, ' + settle + ' You can also split by income.' : (tg.mode === 'agreed' ? 'To settle up the shared bills by the split you ' + agreedWord() + ': ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle)
+      } else out.push(settle ? (soft ? 'If you split shared bills evenly, ' + settle + ' You can also split by income.' : (tg.money ? 'To settle up the shared bills by income: ' : tg.mode === 'agreed' ? 'To settle up the shared bills by the split you ' + agreedWord() + ': ' : tg.mode === 'part' ? 'To settle up the shared bills: ' : 'To settle up the shared bills evenly: ') + settle)
         : soft ? 'Split evenly, the shared bills already come out even.' : 'The shared bills are already settled: nobody owes anybody.');
       out.push('Shared bills listed: ' + cash(s) + '. ' + how + ' ' + parts.join('; ') + '.' +
         (fallback ? ' (The split you set doesn’t add up to 100% yet, so this uses an even split.)' : '') +
