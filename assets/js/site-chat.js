@@ -1196,6 +1196,11 @@
     b.push(going);
     if (P.path.length) { b.push({ k: 'h', x: 'A short path on the site' }); b.push({ k: 'links', x: P.path }); }
     b.push({ k: 'note', x: 'You know your situation best. This is general guidance from the program, not counseling or a professional opinion.' });
+    // flatmates, housemates, "three of us": group words, never "you both"
+    if (/\b(flatmates|housemates|roommates|three of us|four of us|five of us|the others|all of us|everyone in the (house|flat))\b/.test(state.curF || '') || noun === '#group') {
+      var grp = function (t) { return String(t).replace(/\bso you both\b/g, 'so all of you').replace(/\byou both\b/g, 'all of you').replace(/\bboth of you\b/g, 'all of you').replace(/\beither of you\b/g, 'any of you').replace(/\bYou both\b/g, 'All of you').replace(/\bthe two of you\b/g, 'all of you'); };
+      b.forEach(function (bl) { if (bl.k === 'list') bl.x = bl.x.map(grp); else if (typeof bl.x === 'string') bl.x = grp(bl.x); });
+    }
     state.last = { kind: 'sit', issue: issueKey, who: who, noun: noun, actor: actor || '', v: variant || 0, q: I.label, topic: I.label, u: P.path[0] && P.path[0][1] };
     var chips = [];
     if (I.deeper) chips.push({ label: 'Go deeper: ' + I.deeper[0], q: I.deeper[1] });
@@ -1717,6 +1722,16 @@
     state.last = { kind: 'card', q: title, topic: title, u: u };
     var chips = pc && pc.pageChips && pc.pageChips.length ? pc.pageChips.map(function (x) { return { label: x[0], q: x[1] }; }) : secs.slice(0, 3).map(function (x) { return { label: x.h.length > 40 ? x.h.slice(0, 38).replace(/\s+\S*$/, '') + '…' : x.h, doc: x.i }; });
     return { blocks: b, chips: chips.slice(0, 4), kind: 'page', id: 'overview' };
+  }
+  // the kind of relationship a topic card is about, for the playbooks
+  function relOf(id) {
+    id = String(id || '');
+    if (/^(coparent|handoffkit|exweekends|exschedule|exharass|exmessages|exbadmouth|holidayboth|kidnewplan|parttime|sundaygoodbye)/.test(id)) return 'coparent';
+    if (/^friends/.test(id)) return 'friend';
+    if (/^(room|house|sharingroom|rahelp)/.test(id)) return 'roommate';
+    if (/^(siblingrift|rift|inheritance|favourite|forgiveok|mustreconcile)/.test(id)) return 'family';
+    if (/^biz/.test(id)) return 'coworker';
+    return '';
   }
   function setTopic(state, c, root, side) { var T0 = state.topic; state.topic = { id: c.id, turn: state.turn || 0, root: root || c.id, v: T0 && T0.id === c.id ? (T0.v || 0) : 0, side: side != null ? side : (T0 && T0.root === (root || c.id) ? T0.side : null) }; }
   // the page a topic card is about: its own "page", else its first link that isn't a general tool
@@ -3114,6 +3129,9 @@
         sit.who = prevLast.who; sit.noun = prevLast.noun;
         if (sit.issue && IDX.sit.issues[sit.issue].only && IDX.sit.issues[sit.issue].only.indexOf(sit.who) === -1) sit.who = 'other';
       }
+      // the relationship we're already talking about: "she" after a co-parent answer is the other parent, never a romance
+      var relT = topicRoot(state) || topicCard(state), rel = relT && relOf(relT.id);
+      if (rel && sit.issue && (!sit.who || sit.who === 'other' || (sit.who === 'partner' && !/\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fianc\w*)\b/.test(f))) && !(IDX.sit.issues[sit.issue].only && IDX.sit.issues[sit.issue].only.indexOf(rel) === -1)) { sit.who = rel; sit.noun = ''; }
       if (!sit.personal && /^(is it|its|it is|is that|isnt it) (normal|ok|okay|common|natural|wrong|bad|weird|fine|unusual) to\b|\b(feel|feeling|felt)\b/.test(f)) sit.personal = true;
       // "the group chat is dead", "how should roommates split chores": a clear situation, even without "I" or "my"
       if (!sit.personal && sit.issue && !defn && (sit.score >= 5 || (sit.score >= 2 && sit.who && sit.who !== 'self' && sit.who !== 'other' && /^(how|what|why|should|do|does|can)\b/.test(f)))) sit.personal = true;
