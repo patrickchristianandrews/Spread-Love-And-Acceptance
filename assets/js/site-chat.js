@@ -2319,7 +2319,7 @@
     var young = /\b(i m|im|i am) 1[0-7]\b|\b(school|my parents|my mum|my mom|my dad)\b/.test(f);
     return { blocks: [{ k: 'p', x: 'I’m sorry. That’s a frightening thing to hear, and a lot to carry. You’re not responsible for keeping someone safe by staying.' },
       { k: 'p', x: 'If ' + he + '’s in immediate danger, call 911 (US) or 999 (UK). ' + (he === 'they' ? 'They' : he.charAt(0).toUpperCase() + he.slice(1)) + ' can call or text 988 (US) or Samaritans on 116 123 (UK and Ireland) any time, and so can you, to ask how to help.' },
-      { k: 'p', x: young ? 'Please tell an adult you trust today. Childline (UK) is free on 0800 1111; in the US you can text HOME to 741741.' : 'This is something to talk through with someone trained. You can also talk privately to someone trained: in the US, 1-800-799-7233; in the UK, 0808 2000 247.' },
+      { k: 'p', x: young ? 'Please tell an adult you trust today. Childline (UK) is free on 0800 1111; in the US you can text HOME to 741741.' : 'For yourself, you can talk it through privately with someone trained: in the US, 1-800-799-7233; in the UK, 0808 2000 247.' },
       { k: 'links', x: [['More support', '/outside-help.html']] }], chips: [], kind: 'safety', id: 'threatself' };
   }
 

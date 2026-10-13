@@ -419,10 +419,10 @@
     if (!has('expect') || HOME || path === PAGE) return;
     var m = main(); if (!m || !document.querySelector('main.read, body.tol-deep main')) return;
     // tools (something to fill in) don't get a reading time
-    if (m.querySelector('textarea, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, #ask-chat')) return;
+    if (m.querySelector('#ask-chat') || Array.prototype.some.call(m.querySelectorAll('textarea, input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=range]), select'), function (n) { return !within(n, '[class*="tol-"], [data-mini-player]'); })) return;
     var slot = topSlot(); if (!slot || slot.querySelector('.ti-time')) return;
     var clone = m.cloneNode(true);
-    Array.prototype.forEach.call(clone.querySelectorAll('nav, script, style, .ti-top, .tol-pud-card, .tol-cheer, .lp-card, .tol-read-host, .tol-fp-note, .tol-offer, [aria-hidden="true"], .sr-only, details:not([open]) > :not(summary)'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(clone.querySelectorAll('nav, script, style, .ti-top, .tol-pud-card, .tol-cheer, .lp-card, .tol-read-host, .tol-fp-note, .tol-offer, [aria-hidden="true"], .sr-only'), function (n) { n.remove(); });
     var words = (clone.textContent || '').split(/\s+/).filter(Boolean).length;
     if (words < 250) return;
     var mins = Math.max(1, Math.round(words / 200));
