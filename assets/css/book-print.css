@@ -8,12 +8,26 @@
    thumb tab in its part's colour: Part One at the top of the right edge, Part Two in the middle, Part Three
    at the bottom. */
 
+/* The same typefaces as the site, as static (non-variable) files: a PDF embeds these as small TrueType
+   subsets instead of large Type 3 fonts. Served by Google Fonts like the rest of the site's type. */
+@font-face { font-family: 'Fraunces Print'; font-style: italic; font-weight: 400; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NVf8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9vIVYX9G37lvd9sPEKsxx664UJf1hLTc7RrUo.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces Print'; font-style: italic; font-weight: 500; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NVf8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9vIVYX9G37lvd9sPEKsxx664UJf1h5Tc7RrUo.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces Print'; font-style: italic; font-weight: 600; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NVf8FyLNQOQZAnv9ZwNjucMHVn85Ni7emAe9lKqZTnbB-gzTK0K1ChJdt9vIVYX9G37lvd9sPEKsxx664UJf1iVSs7RrUo.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces Print'; font-style: normal; font-weight: 400; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NUh8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib1603gg7S2nfgRYIctxuTCf7W.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces Print'; font-style: normal; font-weight: 500; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NUh8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib1603gg7S2nfgRYIchRuTCf7W.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces Print'; font-style: normal; font-weight: 600; src: url(https://fonts.gstatic.com/s/fraunces/v38/6NUh8FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0K7iN7hzFUPJH58nib1603gg7S2nfgRYIcaRyTCf7W.ttf) format('truetype'); }
+@font-face { font-family: 'Lora Print'; font-style: italic; font-weight: 400; src: url(https://fonts.gstatic.com/s/lora/v37/0QI8MX1D_JOuMw_hLdO6T2wV9KnW-MoFoq92mQ.ttf) format('truetype'); }
+@font-face { font-family: 'Lora Print'; font-style: italic; font-weight: 600; src: url(https://fonts.gstatic.com/s/lora/v37/0QI8MX1D_JOuMw_hLdO6T2wV9KnW-BQCoq92mQ.ttf) format('truetype'); }
+@font-face { font-family: 'Lora Print'; font-style: normal; font-weight: 400; src: url(https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787weuxJBkqg.ttf) format('truetype'); }
+@font-face { font-family: 'Lora Print'; font-style: normal; font-weight: 500; src: url(https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787wsuxJBkqg.ttf) format('truetype'); }
+@font-face { font-family: 'Lora Print'; font-style: normal; font-weight: 600; src: url(https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787zAvBJBkqg.ttf) format('truetype'); }
+
 @page {
   size: 170mm 240mm;
   margin: 19mm 19mm 21mm 19mm;
-  @bottom-left { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3.2mm; border-top: .4pt solid #CDBF98; }
+  @bottom-left { content: "The Objective Ledger"; font-family: "Lora Print", "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3.2mm; border-top: .4pt solid #CDBF98; }
   @bottom-center { content: ""; vertical-align: top; border-top: .4pt solid #CDBF98; }
-  @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 2.8mm; border-top: .4pt solid #CDBF98; }
+  @bottom-right { content: counter(page); font-family: "Fraunces Print", "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 2.8mm; border-top: .4pt solid #CDBF98; }
 }
 @page pe-full { margin: 0;
   @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
@@ -30,7 +44,7 @@ body > :not(main) { display: none !important; }
 .no-print, .whole-toc, .whole-actions, .whole-note, .whole-top, .read-head.no-print, a.dig, .depth-bar, .pillar-line, .tol-listen-top, .tol-book-audio,
 main [class*="tol-"]:not(.tol-try), .tsk-line-btn, .tsk-line, button, .gl-dive, .bt-switch, .book-end, .book-open { display: none !important; }
 
-body { font-family: "Lora", Georgia, serif; font-size: 10.4pt; line-height: 1.5; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal; }
+body { font-family: "Lora Print", "Lora", Georgia, serif; font-size: 10.4pt; line-height: 1.5; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal; }
 main.read { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
 p, li, dd { orphans: 2; widows: 2; hyphens: manual; }
 p { margin: 0 0 2.6mm; }
@@ -50,15 +64,15 @@ img, svg { max-width: 100%; }
 .pe-cover { break-before: auto; }
 .pe-rules { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pe-cover-band { position: absolute; top: 0; left: 0; right: 0; height: 15mm; background: var(--acc); color: #FFFDF8; display: flex; justify-content: space-between; align-items: center; padding: 0 13mm 0 24mm; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; }
-.pe-cover-band span:last-child { font-family: "Lora", serif; font-style: italic; text-transform: none; letter-spacing: 0; font-size: 8.5pt; }
+.pe-cover-band span:last-child { font-family: "Lora Print", "Lora", serif; font-style: italic; text-transform: none; letter-spacing: 0; font-size: 8.5pt; }
 .pe-cover-text { position: absolute; top: 31mm; left: 24mm; right: 14mm; }
-.pe-cover-title { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 35pt; line-height: 1.02; letter-spacing: -.012em; margin: 0; color: var(--ink); }
+.pe-cover-title { font-family: "Fraunces Print", "Fraunces", Georgia, serif; font-weight: 600; font-size: 35pt; line-height: 1.02; letter-spacing: -.012em; margin: 0; color: var(--ink); }
 .pe-cover-sub { font-style: italic; font-size: 12.5pt; line-height: 1.38; margin: 4.5mm 0 0; color: var(--soft); max-width: 112mm; }
 .pe-cover-art { position: absolute; left: 24mm; right: 10mm; top: 86mm; height: 100mm; display: flex; align-items: center; justify-content: center; }
 .pe-cover-art::before { content: ""; position: absolute; width: 104mm; height: 104mm; border-radius: 50%; background: var(--tint); left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .pe-cover-art .pe-art { position: relative; width: 116mm; height: 87mm; }
 .pe-cover-foot { position: absolute; left: 24mm; right: 14mm; bottom: 13mm; border-top: .6pt solid var(--acc); padding-top: 3.5mm; }
-.pe-cover-pkg { font-family: "Fraunces", serif; font-weight: 600; font-size: 13pt; color: var(--acc); margin: 0 0 1mm; }
+.pe-cover-pkg { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 13pt; color: var(--acc); margin: 0 0 1mm; }
 .pe-cover-pkg span { font-weight: 400; color: var(--soft); }
 .pe-cover-line { font-size: 9pt; color: var(--soft); margin: 0; }
 .pe-cover-by { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 9pt; letter-spacing: .28em; text-transform: uppercase; margin: 5mm 0 0; color: var(--ink); }
@@ -66,11 +80,11 @@ img, svg { max-width: 100%; }
 /* ---------- front matter ---------- */
 .pe-half, .pe-titlep, .pe-copy, .pe-how, .pe-toc { page: pe-front; break-before: page; }
 .pe-half { height: 196mm; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-.pe-half-t { font-family: "Fraunces", serif; font-weight: 500; font-size: 22pt; margin: 0 0 3mm; }
+.pe-half-t { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 500; font-size: 22pt; margin: 0 0 3mm; }
 .pe-half-s { font-family: "IBM Plex Mono", monospace; font-size: 7.5pt; letter-spacing: .2em; text-transform: uppercase; color: var(--soft); margin: 0; }
 .pe-half::after { content: ""; width: 18mm; border-top: .6pt solid var(--brass); margin-top: 6mm; }
 .pe-titlep { height: 196mm; display: flex; flex-direction: column; justify-content: space-between; text-align: center; border-top: 1.4pt solid var(--acc); border-bottom: 1.4pt solid var(--acc); padding: 10mm 0; box-sizing: border-box; }
-.pe-titlep-t { font-family: "Fraunces", serif; font-weight: 600; font-size: 30pt; line-height: 1.05; margin: 0 0 3mm; }
+.pe-titlep-t { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 30pt; line-height: 1.05; margin: 0 0 3mm; }
 .pe-titlep-s { font-style: italic; font-size: 12pt; color: var(--soft); margin: 0 auto 6mm; max-width: 100mm; }
 .pe-titlep-v { font-family: "IBM Plex Mono", monospace; font-size: 7.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--acc); margin: 0; }
 .pe-titlep-art .pe-art { width: 70mm; height: 52mm; }
@@ -81,7 +95,7 @@ img, svg { max-width: 100%; }
 .pe-copy-in p { margin: 0 0 2.2mm; }
 .pe-copy-in a { text-decoration: none; }
 
-h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-height: 1.12; margin: 0 0 5mm; color: var(--ink); break-after: avoid; }
+h1 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 22pt; line-height: 1.12; margin: 0 0 5mm; color: var(--ink); break-after: avoid; }
 .pe-how h1, .pe-toc h1 { padding-bottom: 3mm; border-bottom: .6pt solid var(--brass); }
 .pe-how-lede { font-style: italic; font-size: 11pt; color: var(--soft); }
 .pe-how-grid { columns: 2; column-gap: 7mm; }
@@ -106,12 +120,12 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-toc-t { flex: 0 1 auto; font-size: 9.6pt; line-height: 1.32; }
 .pe-toc-s { display: block; }
 .pe-toc-dots { flex: 1 1 6mm; min-width: 6mm; border-bottom: .7pt dotted #B5A77F; margin: 0 2mm; transform: translateY(-.8mm); }
-.pe-pg { font-family: "Fraunces", serif; font-weight: 500; font-size: 9.4pt; min-width: 7mm; text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.pe-pg { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 500; font-size: 9.4pt; min-width: 7mm; text-align: right; font-variant-numeric: lining-nums tabular-nums; }
 .pe-toc-row.is-part { margin-top: 3.6mm; }
 .pe-toc-row.is-part a { border-top: .6pt solid var(--pc); padding-top: 1.6mm; }
 .pe-toc-row.is-part .pe-toc-l { color: var(--pc); font-weight: 500; }
-.pe-toc-row.is-part .pe-toc-t { font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; color: var(--pc); }
-.pe-toc-row.is-ch .pe-toc-l { text-align: right; padding-right: 3.5mm; box-sizing: border-box; font-family: "Fraunces", serif; font-size: 8.8pt; color: var(--soft); }
+.pe-toc-row.is-part .pe-toc-t { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 11pt; color: var(--pc); }
+.pe-toc-row.is-ch .pe-toc-l { text-align: right; padding-right: 3.5mm; box-sizing: border-box; font-family: "Fraunces Print", "Fraunces", serif; font-size: 8.8pt; color: var(--soft); }
 .pe-toc-row.is-front, .pe-toc-row.is-back { margin-top: .4mm; }
 .pe-toc-row.is-back:first-of-type, .pe-toc-row.is-ch + .pe-toc-row.is-back { margin-top: 3.6mm; }
 .pe-toc-row.is-back .pe-toc-t, .pe-toc-row.is-front .pe-toc-t { font-style: italic; }
@@ -135,9 +149,9 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-ch { break-before: page; position: relative; }
 .ch-open { position: relative; margin: 0 0 6mm; padding: 0; break-inside: avoid; break-after: avoid; }
 .ch-open::before { content: ""; display: block; width: 26mm; border-top: 2.4pt solid var(--pc); margin: 0 0 4mm; }
-.ch-num { font-family: "Fraunces", serif; font-weight: 600; font-size: 50pt; line-height: .95; color: var(--pc); margin: 0; font-variant-numeric: lining-nums; }
+.ch-num { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 50pt; line-height: .95; color: var(--pc); margin: 0; font-variant-numeric: lining-nums; }
 .ch-kicker { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.3pt; letter-spacing: .18em; text-transform: uppercase; color: var(--pc); margin: 2.4mm 0 1.6mm; }
-.ch-title { font-family: "Fraunces", serif; font-weight: 600; font-size: 20pt; line-height: 1.16; margin: 0 0 4mm; break-after: avoid; }
+.ch-title { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 20pt; line-height: 1.16; margin: 0 0 4mm; break-after: avoid; }
 .ch-intro { font-style: italic; font-size: 11.6pt; line-height: 1.45; color: #4A4338; margin: 0 0 4.5mm; }
 .ch-in { background: var(--pt); border-radius: 1.6mm; padding: 3mm 4mm 2mm; }
 .ch-in-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.9pt; letter-spacing: .16em; text-transform: uppercase; color: var(--pc); margin: 0 0 1.6mm; }
@@ -146,8 +160,8 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .ch-in-list li::marker { color: var(--pc); font-family: "IBM Plex Mono", monospace; font-size: 7pt; }
 .ch-in-list a { text-decoration: none; }
 
-.pe-body h3 { font-family: "Fraunces", serif; font-weight: 600; font-size: 13.2pt; line-height: 1.22; margin: 6.5mm 0 2.4mm; break-after: avoid; color: var(--ink); }
-.pe-body h4 { font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; line-height: 1.25; margin: 4.5mm 0 1.8mm; break-after: avoid; }
+.pe-body h3 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 13.2pt; line-height: 1.22; margin: 6.5mm 0 2.4mm; break-after: avoid; color: var(--ink); }
+.pe-body h4 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 11pt; line-height: 1.25; margin: 4.5mm 0 1.8mm; break-after: avoid; }
 .pe-body h5 { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.6pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 4mm 0 1.4mm; break-after: avoid; }
 .pe-body > h3, .pe-body .chapter-body > h3 { padding-top: 2.4mm; border-top: .5pt solid #E0D3B0; }
 .pe-body h3 + *, .pe-body h4 + * { break-before: avoid; }
@@ -236,7 +250,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-back-lede { font-style: italic; color: var(--soft); font-size: 9.6pt; margin: 0 0 5mm; }
 .pe-gloss-list { columns: 2; column-gap: 7mm; margin: 0; font-size: 8.6pt; line-height: 1.42; }
 .pe-gl { break-inside: avoid; margin: 0 0 2.8mm; }
-.pe-gl dt { font-family: "Fraunces", serif; font-weight: 600; font-size: 10pt; color: var(--ink); margin: 0 0 .5mm; }
+.pe-gl dt { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 10pt; color: var(--ink); margin: 0 0 .5mm; }
 .pe-gl dd { margin: 0; }
 .pe-gl-ex { display: block; color: var(--soft); font-style: italic; margin-top: .6mm; }
 .pe-gl-ex strong { font-weight: 500; }
@@ -245,7 +259,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-lof-list a { display: flex; align-items: baseline; text-decoration: none; padding: 1mm 0; font-size: 9pt; }
 .pe-lof-n { flex: 0 0 20mm; font-family: "IBM Plex Mono", monospace; font-size: 7pt; color: var(--pc); }
 .pe-lof-t em { color: var(--soft); font-size: 8.4pt; }
-.pe-notes .pe-notes-h { font-family: "Fraunces", serif; font-weight: 600; font-size: 10.6pt; margin: 5mm 0 2mm; padding-top: 1.6mm; border-top: .5pt solid #E0D3B0; break-after: avoid; column-span: all; }
+.pe-notes .pe-notes-h { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-size: 10.6pt; margin: 5mm 0 2mm; padding-top: 1.6mm; border-top: .5pt solid #E0D3B0; break-after: avoid; column-span: all; }
 .pe-notes .pe-notes-h span { display: block; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin-bottom: .6mm; }
 .pe-refs { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 6mm; font-size: 7.6pt; line-height: 1.4; }
 .pe-refs li { break-inside: avoid; margin: 0 0 2mm; }
@@ -264,7 +278,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-backcover .pe-rules { opacity: .14; }
 .pe-bc-in { position: absolute; left: 24mm; right: 18mm; top: 26mm; bottom: 16mm; }
 .pe-bc-k { font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 6mm; opacity: .9; }
-.pe-bc-blurb { font-family: "Fraunces", serif; font-size: 13pt; line-height: 1.42; margin: 0 0 6mm; }
+.pe-bc-blurb { font-family: "Fraunces Print", "Fraunces", serif; font-size: 13pt; line-height: 1.42; margin: 0 0 6mm; }
 .pe-bc-q { font-style: italic; font-size: 11pt; margin: 0 0 6mm; }
 .pe-bc-list { font-size: 9pt; line-height: 1.5; padding-left: 4mm; margin: 0 0 6mm; }
 .pe-bc-list li::marker { color: #FFFDF8; }

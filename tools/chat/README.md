@@ -106,6 +106,18 @@ harm or control is never bent to fit the topic. `sides` ([{re, what, how, script
 give each side of a two-sided topic its own answer (the saver and the spender, the night worker and the
 partner at home); a follow-up keeps the side it started on.
 
+More card fields (chat9): `"topic": true` makes a card a caring topic (as if it were listed in `CV_PERSONAL`);
+`"teenAlt": "<card id>"` answers with the young person's card instead when the speaker is a teen (on `/teens.html`, or
+“I’m 15”, “my carers”, “I’m in foster care”); `"childSafe": true` lets a card about the child answer after a safety
+reply, with “I can still help with things about …” first. A `clarify` entry with `"plain": true` gets no comic line.
+
+The topic carries across pages for the tab (sessionStorage `tol-chat-topic`), and `?for=co-parent` (or `foster`,
+`friend`) on a page counts as that situation's page. Opened from a page (“Tell me more about <the page>”, or
+`/ask.html?about=<its heading>`), the first answer is an overview of that page and its sections. The same answer is
+never given twice in a row (the next part of the page comes instead, or a question), and a pasted message
+(“Mum, …”, or after “can you check a message?”) is read with the Signal Translator's rules (`signal-engine.js`,
+loaded on first use).
+
 ## Adding a situation playbook
 
 `situations/who.json` lists the kinds of relationship (`nouns` are captured, so "my sister" becomes

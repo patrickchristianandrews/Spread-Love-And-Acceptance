@@ -555,7 +555,7 @@ window.TOLToolGuideData = {
     /* ---------------- Share the load ---------------- */
 
     'lemonade-stand': {
-      name: 'Chores and bills: who does what',
+      name: 'Chores and bills: count the hours and money',
       reg: 'lemon-full',
       pages: ['/lemonade-stand.html'],
       two: true,
@@ -679,7 +679,7 @@ window.TOLToolGuideData = {
     },
 
     'setup-check': {
-      name: 'Is the setup working for everyone?',
+      name: 'Fair split check: is the setup working?',
       pages: ['/is-the-setup-working.html', '/workpapers/calculators/is-the-setup-working-quick.html'],
       two: true,
       when: 'When you’ve listed the jobs and want a plain read on whether the way you share the work can keep going for everyone, for 2 to 8 people.',
@@ -939,6 +939,227 @@ window.TOLToolGuideData = {
       idea: 'The idea of “touchstones” as a menu is this site’s own.',
       limits: 'The research here is early and descriptive. It shows these things are common, not that making them causes closeness.',
       privacy: 'Nothing is saved or sent. You can copy the list and share it if you choose.'
+    },
+    /* ---------------- More tools (from the tools registry) ---------------- */
+
+    'roots': {
+      name: 'Where a reaction comes from',
+      reg: 'roots',
+      pages: ['/growing-up.html'],
+      when: 'When a reaction of yours feels bigger or older than the moment (always fixing things, going quiet, needing to be useful) and you want to see where it may have started.',
+      notWhen: 'Not for diagnosing anyone in your family, or for deciding who is to blame. Stop any time if it brings up too much.',
+      time: 'About 5 minutes.',
+      result: 'An old rule in your own words and a fairer, grown-up reading of it, for example “I’m only okay when I’m useful” becomes “Helping is something I do, not the price of being loved,” plus one small way to work with it now.',
+      next: [
+        ['/know-yourself.html', 'Know your own wiring', 'what’s you, what life taught you, and what’s just today'],
+        ['/wiring-card.html', 'Make a one-page card', 'so others know what helps'],
+        ['/self-path.html', 'Your self path', 'more small steps on your own']
+      ],
+      research: [
+        ['masten-2001', 'Resilience is common and usually comes from ordinary things, like relationships (Masten, 2001).'],
+        ['hudson-fraley-2015', 'People who want to change a trait can shift a little, especially with concrete plans (Hudson and Fraley, 2015).'],
+        ['byng-hall-1995', '“Family scripts” are patterns passed down that families can rewrite (Byng-Hall, 1995; a clinical framework).']
+      ],
+      idea: 'The tap-through and the example rules are this site’s own.',
+      limits: 'A gentle look back, not therapy. If old memories are painful, <a href="/outside-help.html">Help beyond this site</a> lists people to talk to.',
+      privacy: 'Your answers stay until you close the tab, or are kept in this browser only if you tick “Keep my answers on this device.” Nothing is sent anywhere.'
+    },
+
+    'snapshot': {
+      name: '2-minute load snapshot',
+      reg: 'snapshot',
+      pages: ['/snapshot/index.html'],
+      when: 'When you share a load with someone (a home, a child’s care, a team) and want a quick look at how it’s set up and how it bends when things get heavy.',
+      notWhen: 'Not a judgement on anyone’s effort. Answer about the setup, not the people.',
+      time: 'About 2 minutes.',
+      result: 'Which of four areas to look at first (for example “who notices what needs doing”), with the scoring shown openly.',
+      next: [
+        ['/lemonade-stand.html#quick', 'Who does what: chore split check', 'see the jobs on one list'],
+        ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'fix the area that came up'],
+        ['/share-the-load.html', 'Share the load, step by step', 'which tool to use next']
+      ],
+      research: [
+        ['daminger-2019', 'Noticing, planning and checking are real work and easy to miss (Daminger, 2019).'],
+        ['hobfoll-1989', 'Stress grows when what we rely on is used up faster than it’s replaced (Hobfoll, 1989).'],
+        ['deutsch-1975', 'Fair can mean equal, by effort or by need, depending on the relationship (Deutsch, 1975).']
+      ],
+      idea: 'The seven questions, the four areas and the scoring are this site’s own.',
+      limits: 'A quick snapshot of what you answered, not a measurement or a verdict.',
+      privacy: 'Your answers stay on this page. Nothing is sent anywhere.'
+    },
+
+    'calm-sounds': {
+      name: 'Calm-down sounds',
+      reg: 'sounds',
+      pages: ['/wp-11-sound-toolkit.html'],
+      when: 'While you settle after a hard moment, or to cover background noise when you need to calm down or focus.',
+      notWhen: 'Not a treatment. If a sound feels worse, stop; it’s a matter of taste.',
+      time: 'A few minutes.',
+      result: 'A sound that helps you, noted in your <a href="/wp-11.html">calm-down plan</a> so it’s ready next time.',
+      next: [
+        ['/wp-11.html', 'Calm-down plan', 'add the sound that helps'],
+        ['/night-garden.html', 'Breathing game', 'slow breaths, nothing to win'],
+        ['/upset-right-now.html', 'Upset right now?', 'five calm minutes']
+      ],
+      research: [],
+      idea: 'The three sounds (a low hum, a soft flutter and brown noise) are this site’s choice. There’s no strong research on which background sound calms people best.',
+      limits: 'A matter of taste, not a treatment. Keep the volume low.',
+      privacy: 'Nothing is kept or sent.'
+    },
+
+    'drift': {
+      name: 'Slow colours and tones to wind down',
+      reg: 'drift',
+      pages: ['/calm-visualizer.html'],
+      when: 'When you want a few quiet minutes with nothing to do: slow colours, kind words and gentle tones (headphones help).',
+      notWhen: 'If moving light or colour is uncomfortable for you, try <a href="/wp-11-sound-toolkit.html">sounds only</a> instead.',
+      time: 'About 5 minutes.',
+      result: 'A few quiet minutes and a slower breath.',
+      next: [
+        ['/night-garden.html', 'Breathing game', 'slow breathing with something to watch'],
+        ['/wp-11.html', 'Calm-down plan', 'what settles you, decided ahead of time'],
+        ['/quick-checks.html', 'Mood and energy check-in', 'a one-minute daily read']
+      ],
+      research: [
+        ['kaplan-1995', 'Things that hold attention gently (like nature) may help tired attention recover (Kaplan, 1995).']
+      ],
+      idea: 'The visuals and words are this site’s own.',
+      limits: 'A calm moment, not a treatment.',
+      privacy: 'Your last choices are kept in this browser. Nothing is sent anywhere.'
+    },
+
+    'handoff-bag': {
+      name: 'Handoff-bag checklist for two homes',
+      reg: 'handoff',
+      pages: ['/co-parenting.html'],
+      two: true,
+      when: 'When children move between two homes and handoffs keep going wrong over one forgotten thing.',
+      notWhen: 'Not a way to check up on the other parent. It’s a list for the bag, used the same way in both homes.',
+      time: 'About 3 minutes.',
+      result: 'One short list, the same in both homes, kept by the door or in the bag: medicines with the last dose, school things, kit, chargers and the comfort toy, and one line about anything new.',
+      next: [
+        ['/workpapers/wp-03-one-owner-per-job.html?for=coparents', 'One owner per job, for two homes', 'who handles what'],
+        ['/signal-translator.html', 'Check a message to the other parent', 'brief, friendly, firm'],
+        ['/write-it-through.html', 'Talk it through in writing', 'for bigger topics']
+      ],
+      research: [
+        ['haynes-et-al-2009', 'Simple checklists cut serious mistakes in hospitals (Haynes and colleagues, 2009).'],
+        ['feinberg-2003', 'Co-parenting goes better with agreement and a clear split of jobs between homes (Feinberg, 2003).']
+      ],
+      idea: 'The list itself is this site’s own starting point. Change it to fit your children.',
+      limits: 'A checklist prevents forgotten things; it doesn’t settle bigger disagreements between homes.',
+      privacy: 'Nothing is sent to this site. A shared list goes only to the person you send it to.'
+    },
+
+    'event-terms': {
+      name: 'Set your terms for a family event',
+      reg: 'terms',
+      pages: ['/family-rifts.html'],
+      when: 'Before a wedding, funeral, christening or holiday with family you’re estranged from or on careful terms with: you can go and still keep some things off the table.',
+      notWhen: 'Not something you have to send. You can fill it in just to get clear for yourself.',
+      time: 'About 5 minutes.',
+      result: 'A calm message in your own words: what you’re happy to do, what you’re not ready to talk about, and one thing you’d ask.',
+      next: [
+        ['/signal-translator.html', 'Check the message', 'before you send it'],
+        ['/refusals.html', 'Say no kindly', 'if the answer is “not this time”'],
+        ['/wp-11.html', 'Calm-down plan', 'for the day itself']
+      ],
+      research: [
+        ['pillemer-2020', 'Family estrangement is more common than people think, and some families do reconcile (Pillemer, 2020).'],
+        ['gollwitzer-sheeran-2006', 'Deciding in advance what you’ll do makes it easier to follow through (Gollwitzer and Sheeran, 2006).']
+      ],
+      idea: 'The three boxes and the message are this site’s own.',
+      limits: 'Clear terms help, but you can’t control how others respond.',
+      privacy: 'It stays on this page. Nothing is saved or sent.'
+    },
+
+    'full-package': {
+      name: 'One PDF of every worksheet, and a report',
+      reg: 'package',
+      pages: ['/full-path.html'],
+      two: true,
+      when: 'When you want every worksheet for your situation in one fillable PDF, and a detailed report written from your own answers, alone or with 2 to 8 people.',
+      notWhen: 'Not in one sitting. Do it in parts, over a few weeks.',
+      time: 'An hour or more, in parts.',
+      result: 'One PDF with your filled-in sheets and a report: what stands out, what’s worth a second look, and a short plan.',
+      next: [
+        ['/week-0.html', 'Six gentle weeks', 'the same sheets, one a week'],
+        ['/method-and-limits.html', 'How the scores work', 'the plain rules behind each one'],
+        ['/workpapers/fill/suite.html', 'All the worksheets on screen', 'fill them in here instead']
+      ],
+      research: [
+        ['tannenbaum-cerasoli-2013', 'Structured look-backs help people and groups improve (Tannenbaum and Cerasoli, 2013).']
+      ],
+      idea: 'The roads, the PDF and the report wording are this site’s own; the scores are written out on <a href="/method-and-limits.html">Method and limits</a>.',
+      limits: 'The report reads your answers back with simple rules. It isn’t a professional assessment.',
+      privacy: 'The PDF is made on this device and saved where you choose. Nothing is sent to this site.'
+    },
+
+    'six-weeks': {
+      name: 'Six gentle weeks',
+      reg: 'sixweeks',
+      pages: ['/prog-01.html'],
+      two: true,
+      when: 'When you’d like a gentle structure: one small step a week, in an order that helps, on your own or with anyone you share a home or a load with.',
+      notWhen: 'Not a course to keep up with. Missing a week is fine: pick up anywhere.',
+      time: 'About 30 minutes a week, for six weeks.',
+      result: 'Six small sheets done in order, and a before-and-after look at the end: which jobs now have owners, how full each battery is, and what changed.',
+      next: [
+        ['/week-0.html', 'Start with week 0', 'five minutes, and reminders in your own calendar'],
+        ['/workpapers/report-01.html', 'Your progress, week by week', 'see the weeks side by side'],
+        ['/examples.html', 'What small changes look like', 'made-up examples']
+      ],
+      research: [
+        ['lally-2010', 'New habits take weeks to months to settle, and missing a day doesn’t undo them (Lally and colleagues, 2010).'],
+        ['gollwitzer-sheeran-2006', 'Naming when and where you’ll do something makes it more likely to happen (Gollwitzer and Sheeran, 2006).']
+      ],
+      idea: 'The six steps and their order are this site’s own; the program hasn’t been tested in a study.',
+      limits: 'Self-help, not couples or family therapy.',
+      privacy: 'Your start date and the weeks you ticked are kept in this browser; worksheet drafts only if you choose to keep them. Nothing is sent anywhere.'
+    },
+
+    'week-0': {
+      name: 'Week 0: reminders in your own calendar',
+      reg: 'week0',
+      pages: ['/week-0.html'],
+      when: 'Before the six weeks: five minutes to see what they are, how long each takes, and to add a reminder for each week to your own calendar.',
+      notWhen: 'Nothing to fill in yet, and nothing to get right.',
+      time: 'About 5 minutes.',
+      result: 'You know what each week asks, and six reminders are in your own calendar (you add them; the site doesn’t send anything).',
+      next: [
+        ['/prog-01.html', 'Six gentle weeks: week 1', 'one small step'],
+        ['/workpapers/wp-01.html', 'Who did what this week', 'the week 1 sheet'],
+        ['/start-in-10-minutes.html', 'Start in 10 minutes', 'if you’d rather just try one thing']
+      ],
+      research: [
+        ['gollwitzer-sheeran-2006', 'A set time and place makes follow-through more likely (Gollwitzer and Sheeran, 2006).']
+      ],
+      idea: 'The week-by-week plan is this site’s own.',
+      limits: 'Reminders help you remember; they don’t make anyone take part.',
+      privacy: 'The calendar file is made on this device and added by you. Nothing is sent to this site.'
+    },
+
+    'progress-report': {
+      name: 'Your progress, week by week',
+      reg: 'progress',
+      pages: ['/workpapers/report-01.html'],
+      two: true,
+      when: 'Each week of the program, to type in what your worksheets produced and see them side by side: where they agree, and where they don’t.',
+      notWhen: 'Not a report card on anyone. It reads the setup over time.',
+      time: 'About 10 minutes a week.',
+      result: 'One shared picture of the setup over the weeks, for example “jobs with no clear owner: 6, then 3, then 1”, with the places your sheets disagree pointed out.',
+      next: [
+        ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back?', 'look at the repeats'],
+        ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'the fuller calculator'],
+        ['/check-ins.html', 'Talk about one finding', 'at a calm, set time']
+      ],
+      research: [
+        ['tannenbaum-cerasoli-2013', 'Regular, structured look-backs improve how groups work (Tannenbaum and Cerasoli, 2013).'],
+        ['kluger-denisi-1996', 'Feedback helps most when it’s about the task, and can backfire when it’s about the person (Kluger and DeNisi, 1996).']
+      ],
+      idea: 'The report and how it compares the sheets are this site’s own.',
+      limits: 'It can only read what you typed in. Numbers don’t capture how things feel; talk about that too.',
+      privacy: 'Your ledger is a file you keep: nothing is stored in the browser or sent anywhere. Press “Save ledger” to download it.'
     }
   }
 };

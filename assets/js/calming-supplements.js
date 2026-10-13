@@ -47,13 +47,15 @@
   function setFilterHeight() {
     if (bar) document.documentElement.style.setProperty('--cs-bar-h', bar.offsetHeight + 'px');
   }
-  // "Change filters" appears in the result bar once the drop-downs have scrolled out of view
-  if (change && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) {
-      var off = !es[0].isIntersecting && es[0].boundingClientRect.top < 0;
-      change.hidden = !off;
-      setFilterHeight();
-    }).observe(form);
+  // "Change filters" appears in the result bar once the drop-downs have scrolled up out of view
+  if (change) {
+    var ticking = false;
+    var checkUp = function () {
+      ticking = false;
+      var off = form.getBoundingClientRect().bottom < 0;
+      if (change.hidden === off) { change.hidden = !off; setFilterHeight(); }
+    };
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(checkUp); } }, { passive: true });
     change.addEventListener('click', function () {
       form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
       try { F.condition.el.focus({ preventScroll: true }); } catch (x) { F.condition.el.focus(); }

@@ -1493,7 +1493,7 @@ if (PERS) {
   t('chat9', 'a name is never "corrected" (lina)', { q: 'she signed lina up for swimming without telling me', not: /I think you mean|line up/ });
   t('chat9', 'a capitalised name is never "corrected" (Lina)', { q: 'she signed Lina up for swimming', not: /I think you mean/ });
   t('chat9', '?for=co-parent page context', { q: 'she makes decisions without asking me', page: '/someone-sent-you-this.html?for=co-parent', id: 'coparentdecide', not: /I love doing things together/ });
-  t('chat9', 'ex never remembers: no medicine assumed', { q: 'my ex never remembers anything for our son', id: 'handoffkit', not: /medicine|inhaler/i });
+  t('chat9', 'ex never remembers: no medicine assumed', { q: 'my ex never remembers anything for our son', id: 'handoffkit', not: /worrying when it’s medicine|inhaler/i });
   t('chat9', 'ex forgets the inhaler: medicine named', { q: 'he keeps sending her back without her inhaler', id: 'handoffkit', text: /medicine/ });
   c('chat9', ["i have a newborn and i'm neglecting my best friend", 'i feel so guilty', 'is it ok to send a voice note instead of texting'], { id: 'friendsvoice', link: '/friends.html#after-baby', not: /work setting|your manager|Messages at work/ });
   c('chat9', ["i live with my nan and she doesn't get me", 'my mum is in rehab', 'i miss my mum'], { id: 'teenmissparent', link: '/teens.html#parent-away', not: /Grief and loss|grief\.html/ });
@@ -1576,7 +1576,7 @@ if (PERS) {
   t('chat9', 'ashwagandha better than my meds', { q: 'does ashwagandha work better than my meds', id: 'herbashwagandha', text: /no good evidence[\s\S]*Never stop, swap or change/ });
   t('chat9', 'what dose: never a dose', { q: 'what dose of ashwagandha should i take', id: 'herbashwagandha', text: /^I can’t give doses\. A pharmacist/ });
   t('chat9', 'what to tell my doctor about supplements', { q: 'what should i tell my doctor about supplements', id: 'herbwords', script: true, link: '/calming-supplements.html#words' });
-  t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|Trevor/ });
+  t('chat9', 'adult bi and religious parents: adult answer', { q: 'im bi and scared to tell my parents, they are very religious', id: /lgbtadult|lgbtsafety/, link: '/coming-out.html', not: /GSA|For teens|misgender/i });
   t('chat9', 'states an adult age: adult coming out', { q: "i'm 31, not a teen. my partner is a woman and my parents are conservative christians", id: /lgbtadult|lgbtsafety/, not: /Talking with teenagers|Parenting styles/ });
   t('chat9', 'shared wifi: device privacy', { q: 'can my parents see what i look at on here? we share wifi', id: 'devicekeep', link: '/safety.html#traces' });
   t('chat9', 'homophobic dad: the boundary script', { q: 'my dad says homophobic stuff about my girlfriend, how do i set a boundary', id: 'lgbtboundary', text: /I’ll head home/ });

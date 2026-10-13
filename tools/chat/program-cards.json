@@ -2163,6 +2163,35 @@
       "chips": []
     },
     {
+      "id": "identityok",
+      "name": "is this site okay for us?",
+      "pat": "\\b(i m|im|i am) (nonbinary|non binary|enby|trans|genderqueer|genderfluid|agender|poly|polyamorous)\\b.{0,100}\\b(site|this|ok|okay|for us|for me|work for)\\b|\\b(they ?them|she ?they|he ?they|ze ?zir)\\b.{0,100}\\b(site|ok for|okay for|for us|for me)\\b|\\bmy partners are\\b.{0,60}\\b(site|ok|okay|for us)\\b",
+      "what": [
+        "Thanks for telling me. Everything here works for your family as it is, and you can type your own names and pronouns into the tools, so nobody is “Person 3”."
+      ],
+      "how": [
+        "Every tool works for more than two people: the Lemonade Stand, One owner per job, the check-ins.",
+        "Use each person’s name and pronouns, every time, including in shared lists and the group chat.",
+        "Describe your relationship in your own words: partners, triad, polycule, family."
+      ],
+      "links": [
+        [
+          "Names, pronouns and your own words",
+          "/more-than-two.html#respect"
+        ],
+        [
+          "Every tool here works for more than two",
+          "/more-than-two.html#tools"
+        ]
+      ],
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "keys": [],
+      "chips": []
+    },
+    {
       "id": "poly",
       "kind": "intent",
       "first": true,
@@ -4928,7 +4957,7 @@
     {
       "id": "bizsplit",
       "name": "splitting work fairly: the visible side",
-      "pat": "\\b(my job|my part|my side|mine|i do|i m|im|i handle|i run)\\b( is| s)?( the)? (baking|cooking|selling|sales|the (customers|clients|kitchen|shop floor|front|counter|making|creative))\\b.{0,60}\\b(their|his|her|theirs|they do|he does|she does|the other)\\b.{0,20}\\b(admin|paperwork|payroll|books|accounts|finances|ordering)\\b",
+      "pat": "\\b(my job|my part|my side|mine|i do|i m|im|i handle|i run)\\b( is| s)?( the)? (baking|cooking|selling|sales|the (customers|clients|kitchen|shop floor|front|counter|making|creative))\\b.{0,60}\\b(their|his|her|theirs|they do|he does|she does|the other)\\b.{0,20}\\b(admin|paperwork|payroll|books|accounts|finances|ordering)\\b|\\b(my job|my part|my side|mine|i do|i handle)\\b( is| s)?( the| all the)? (admin|paperwork|payroll|books|accounts|finances)\\b.{0,60}\\b(their|his|her|theirs|they do|he does|she does|the other)\\b.{0,20}\\b(baking|cooking|selling|sales|customers|kitchen|making)\\b",
       "what": [
         "A good first step is to ask what the admin involves right now. When admin is done well it’s invisible, so the person doing the visible work often doesn’t know how much is in it."
       ],
@@ -11823,35 +11852,6 @@
           "My parents keep fighting"
         ]
       ]
-    },
-    {
-      "id": "identityok",
-      "name": "is this site okay for us?",
-      "pat": "\\b(i m|im|i am) (nonbinary|non binary|enby|trans|genderqueer|genderfluid|agender|poly|polyamorous)\\b.{0,100}\\b(site|this|ok|okay|for us|for me|work for)\\b|\\b(they ?them|she ?they|he ?they|ze ?zir)\\b.{0,100}\\b(site|ok for|okay for|for us|for me)\\b|\\bmy partners are\\b.{0,60}\\b(site|ok|okay|for us)\\b",
-      "what": [
-        "Thanks for telling me. Everything here works for your family as it is, and you can type your own names and pronouns into the tools, so nobody is “Person 3”."
-      ],
-      "how": [
-        "Every tool works for more than two people: the Lemonade Stand, One owner per job, the check-ins.",
-        "Use each person’s name and pronouns, every time, including in shared lists and the group chat.",
-        "Describe your relationship in your own words: partners, triad, polycule, family."
-      ],
-      "links": [
-        [
-          "Names, pronouns and your own words",
-          "/more-than-two.html#respect"
-        ],
-        [
-          "Every tool here works for more than two",
-          "/more-than-two.html#tools"
-        ]
-      ],
-      "kind": "intent",
-      "first": true,
-      "newTopic": true,
-      "topic": true,
-      "keys": [],
-      "chips": []
     },
     {
       "id": "lgbtq",

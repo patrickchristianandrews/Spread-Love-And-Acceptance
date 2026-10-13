@@ -1903,7 +1903,7 @@
     if (/\b(i m|im|i am) (an adult|a grown ?up|[2-9]\d)\b|\bnot a (teen|teenager|kid|child)\b|\b(my|our) (foster|kinship) (son|daughter|child|kid|teen|grandson|granddaughter)\b|\bwe (foster|are fostering|re fostering)\b/.test(f)) state.teen = false;
     if (cm && state.teen && cm.teenAlt && cardByIdF(cm.teenAlt)) cm = cardByIdF(cm.teenAlt);
     // anything that might be about harm or control, or a card that answers those, is never bent to fit the topic
-    var risky = VERBAL.test(f) || SELF_HARMFUL.test(f) || NOT_LIVE.test(f) || HARD.test(f.replace(/\b(scared|afraid|frightened|terrified)\b/g, ' ')) || CONTROL.test(f.replace(/\bcontrolling\b/g, ' '));
+    var risky = VERBAL.test(f) || SELF_HARMFUL.test(f) || NOT_LIVE.test(f) || HARD.test(f.replace(/\b(scared|afraid|frightened|terrified)\b/g, ' ').replace(/\b(i m|im|i am|i feel|feel|feeling|felt|was|so|really|very|a bit)( so| really| very)? hurt\b|\bhurt (my |her |his |their )?feelings\b/g, ' ')) || CONTROL.test(f.replace(/\bcontrolling\b/g, ' '));
     // and a card about the chat itself or a feeling (bigger text, "is it my fault?") answers as usual, keeping the topic
     if (risky || (cm && (cm.safety || !cm.newTopic))) TC = TR = null;
     // a short follow-up while we're on a topic ("i do all the meetings and paperwork" after fostering, "how do i get a say"
@@ -2335,12 +2335,13 @@
   var HANDOFF_SHOUT = /\b(he|she|they|my ex|ex|his dad|her dad|their dad|her mum|his mum|their mum|her mom|his mom|their mom|the other parent)\b.{0,25}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|screaming|swears?|swore|swearing|kicks off|kicked off|goes off|went off)\b( at me)?.{0,60}\b(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|exchanges?|in front of)\b|\b(at|during) (the )?(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?)\b.{0,40}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|swears?|swore)\b/;
   function kidNameIn(q) { var m = /\b(?:in front of|our (?:son|daughter|boy|girl|kid|child)|my (?:son|daughter|boy|girl|kid|child)|tell)\s+([A-Z][a-z]{1,14})\b/.exec(String(q || '')); return m && !/^(Me|Him|Her|Them|The|My|Our|His|Their|Mum|Mom|Dad)$/.test(m[1]) ? m[1] : ''; }
   // "can you check a message to my mum?", then the message; or a pasted "Mum, we'll decide about baptism ourselves."
-  var CHECK_ASK = /\b(can|could|would|will) you (please )?(check|read|look at|look over|proofread|review|have a look at)\b.{0,25}\b(message|text|email|letter|note|reply|this)\b|^(please )?(check|read over|look over) (this|my) (message|text|email|reply)\b|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send\b|\bhow (does|will|would) this (sound|land|come across)\b/;
+  var CHECK_ASK = /\b(can|could|would|will) you (please )?(check|read|look at|look over|proofread|review|have a look at)\b.{0,25}\b(message|text|email|letter|note|reply|this)\b|^(please )?(check|read over|look over) (this|my) (message|text|email|reply)\b|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send( this| it)?\s*[:?]?$|\bis (this|it) (ok|okay|alright|fine|too much|too harsh) to send\s*:|\bhow (does|will|would) this (sound|land|come across)\b/;
   var PASTED = /^(hi |hey |dear |hello )?(mum|mom|mam|mummy|mother|dad|daddy|father|nan|gran|grandma|grandad|babe|love|darling|[A-Z][a-z]{1,14})\s*,\s+\S+(\s+\S+){2,}/;
   function checkMsgTurn(state, q0, vf) {
     var t = String(q0 || '').trim(), m = /^[^:]{3,80}:\s*(.{8,})$/.exec(t), text = '';
-    if (CHECK_ASK.test(vf)) {
-      if (m && CHECK_ASK.test(norm(t.slice(0, t.indexOf(':'))))) text = m[1];
+    var pre = m ? t.slice(0, t.indexOf(':')) : '';
+    if (CHECK_ASK.test(vf) || (m && /\b(is (this|it) (ok|okay|alright|fine|too much|too harsh) to send|check (this|my) (message|text)|how does this (sound|land))\b/i.test(pre))) {
+      if (m && (CHECK_ASK.test(norm(pre)) || /\bto send\b|\b(message|text)\b|\bsound|land\b/i.test(pre))) text = m[1];
       else { state.checkWait = state.turn; return { blocks: [{ k: 'p', x: 'Yes. Paste or type the message here, just as you’d send it, and I’ll show how it may land and a warmer version, using the Signal Translator’s rules. Nothing leaves this device.' }], chips: [], kind: 'care', id: 'checkask' }; }
     } else if ((state.checkWait && state.turn - state.checkWait === 1 && t.split(/\s+/).length >= 3 && !/^(no|nevermind|never mind|cancel|start over)\b/i.test(t)) || (PASTED.test(t) && !/^(hi |hey |hello )?(ok|okay|so|well|yes|yeah|no|nope|honestly|anyway|sorry|thanks|thank you|please|also|right|um|hmm|actually|basically|btw|lol|oh|ah|wait|look|listen|professor|puddles|again|then|now|and|but|because|like|ugh|great|fine|sure|hello|hi|hey)\s*,/i.test(t) && !/\?\s*$/.test(t) && !/\b(how|what|why|should) (do|can|should|would) i\b/i.test(t))) text = t;
     if (!text) return null;

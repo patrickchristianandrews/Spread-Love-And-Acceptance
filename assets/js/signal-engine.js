@@ -145,7 +145,7 @@ const WHEN_RE = /\[a time\]|\[a day\]|\[by when\]|\b(?:on (?:your|my|the|our) wa
 const WHEN_REAL = new RegExp(WHEN_RE.source.replace("\\[a time\\]|\\[a day\\]|\\[by when\\]|",""), "i");
 /* Court, custody and the children as leverage: very likely to escalate between co-parents */
 const LEGAL_RE = /\b(?:(?:i'll|i will|i'm going to|i am going to|i'm gonna|gonna) (?:take you to court|see you in court|take (?:this|it|you) to (?:court|a judge)|go to court|call (?:my|a) (?:lawyer|attorney|solicitor)|get (?:a|my) (?:lawyer|attorney|solicitor)|talk to (?:my|a) (?:lawyer|attorney|solicitor)|(?:go for|fight for|file for|apply for|sue for|get) (?:full |sole |primary )?custody|take (?:the kids|the children|them|the baby|my kids|our kids) (?:away|from you)|make sure you never see (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)))|see you in court|take you to court|(?:my|our) (?:lawyer|attorney|solicitor) (?:will|'ll|is going to|says|said|is (?:drawing|filing|sending))\b|(?:talk to|hear from|call|calling) (?:my|our) (?:lawyer|attorney|solicitor)|you(?:'ll| will) (?:never|not) (?:see|get) (?:them|the kids|the children|the baby|your (?:kids|children|son|daughter)|custody)(?: again)?|you(?:'ll| will) lose (?:the kids|the children|custody|them)|(?:i'm|i am) (?:getting|calling) (?:a|my) (?:lawyer|attorney|solicitor)|(?:full|sole) custody)\b/i;
-const KIDS_RE = /\bi (?:already |just |have |'ve )?(?:told|explained to) (?:the kids|the children|our (?:kids|children|son|daughter)|the boys|the girls|them)\b,?\s*(?:that\s+)?(?:you(?:'re| are)? (?:not|never)\b|you(?:'re| are) the (?:reason|problem)\b|you (?:aren't|won't|will not|don't|didn't|can't|left|lied|cheated|forgot|chose|never)\b|you'll never\b|you don't care\b|what you did\b|why you\b|about (?:you|us|the divorce|the separation|what you)\b)[^.!?]*|\b(?:i'm going to|i'll|i will|i'm gonna) tell (?:the kids|the children|our (?:kids|children|son|daughter)|them) (?:what you did|why you|about you|that you (?:aren't|won't|don't|didn't|never|left|lied|cheated))\b[^.!?]*/i;
+const KIDS_RE = /\bi(?:'ve| have)? (?:already |just )?(?:told|explained to) (?:the kids|the children|our (?:kids|children|son|daughter)|the boys|the girls|them)\b,?\s*(?:that\s+)?(?:you(?:'re| are)? (?:not|never)\b|you(?:'re| are) the (?:reason|problem)\b|you (?:aren't|won't|will not|don't|didn't|can't|left|lied|cheated|forgot|chose|never)\b|you'll never\b|you don't care\b|what you did\b|why you\b|about (?:you|us|the divorce|the separation|what you)\b)[^.!?]*|\b(?:i'm going to|i'll|i will|i'm gonna) tell (?:the kids|the children|our (?:kids|children|son|daughter)|them) (?:what you did|why you|about you|that you (?:aren't|won't|don't|didn't|never|left|lied|cheated))\b[^.!?]*/i;
 /* A safety worry: something left on, open, unlocked or within reach */
 const SAFE_THING = "stove|oven|hob|burners?|gas|iron|curling iron|(?:hair )?straighteners?|candles?|space heater|heater|fireplace|grill|bbq|(?:front |back |side |garage |patio |kitchen )?door|(?:pool |baby |stair |back |front )?gate|garage|car seat|booster seat|seat ?belt|medicines?|medications?|meds|pills|bleach|knives|knife|lighter|matches|bath|tap|water|car";
 const SAFE_RE = new RegExp("\\b(?:(?:left|leave|leaving|forgot to (?:turn off|lock|close|shut|blow out|unplug|buckle|put away))\\s+(?:the |your |my |our |her |his )?("+SAFE_THING+")\\b(?: \\w+)?\\s+(?:on|open|unlocked|running|lit|burning|plugged in|unbuckled|out|within reach|where (?:the kids|the baby|she|he|they) (?:can|could) (?:reach|get)|on the (?:counter|table))\\b|(?:the |your |my |our )("+SAFE_THING+") (?:was|were|is|are|got|has been|had been) (?:left )?(?:on|open|unlocked|running|lit|burning|plugged in|unbuckled|not buckled|within reach)\\b|(?:didn't|did not|forgot to) (?:buckle|strap) (?:her|him|them|the baby|the kids) (?:in|into)(?: (?:the|her|his|their) (car seat|booster seat|seat))?|(?:didn't|did not|forgot to) (lock|turn off|blow out|unplug) (?:the |your )?("+SAFE_THING+"))", "i");
@@ -1582,8 +1582,12 @@ function analyze(textIn, opts){
     se.mood = moodOf(se.features, se.text);
     se.subject = subjectOf(se.text);
     const a = askOf(se.text, se.features);
-    const hurt = se.features.some(id=>["brushoff","guilt","legal","kidsfirst"].includes(id)) || se.features.includes("sarcasm") && a && a.kind==="command";
+    const hurt = se.features.some(id=>["brushoff","guilt","legal","kidsfirst","hostile","stonewall"].includes(id)) || se.features.includes("sarcasm") && a && a.kind==="command";
     if(a && se.mood!=="One-word reply" && !hurt){ a.sentence=i; se.ask=a.text; asks.push(a); }
+    // "Want to grab coffee Saturday?", "Does Thursday work for you?", "Is that okay with you?": an invitation is an ask too,
+    // with no deadline to add
+    else if(!a && !hurt && /\?\s*$|^(?:want|wanna) /i.test(se.text.trim()) && /^(?:do you |did you )?(?:want|wanna) to\b|^wanna\b|^want to\b|\b(?:does|would|will) (?:that|this|it|thursday|friday|saturday|sunday|monday|tuesday|wednesday|the \w+|\w+day) (?:work|suit)(?: for)? (?:you|u)?\b|\bis (?:that|this|it) (?:ok|okay|alright|all right|cool|fine) (?:with|for) (?:you|u)\b|\bwould that be (?:ok|okay|alright|all right|fine)\b|\bwhat do you think\b|\bare you (?:still )?(?:up for|free|around)\b|\bwould you be up for\b/i.test(se.text)){
+      const inv = {text: se.text.trim().replace(/[?.!\s]+$/,""), kind:"invite", sentence:i}; se.ask = inv.text; asks.push(inv); }
   });
 
   // several asks in one breath
@@ -1622,53 +1626,55 @@ function analyze(textIn, opts){
 
 
   const askSentEs = [];
+  const lc = low.toLowerCase();
   /* ---------- everyday readings, tuned on tools/signal/corpus.json (node tools/signal/eval.js) ---------- */
   {
-    const sentText = h=>{ const se = sentOf(h); return low.slice(se.s, se.e); };
+    const sentText = h=>{ const se = sentOf(h); return lc.slice(se.s, se.e); };
     const YOU = /\b(?:you|your|yours|yourself|you're|youre|you've|you'll|you'd|u|ur)\b/i;
     // "again" in a line about yourself or a thing ("the wifi is down again", "I locked us out again", "it won't happen again")
     // is not a dig at anyone. A bare "Again." after a complaint still is
     drop("again", h=>{ const st = sentText(h); return !YOU.test(st) && words(st)>=3 && !/\b(?:were|was|has been|have been|got) (?:missed|forgotten|left|late|skipped|ignored)\b/.test(st); });
     // positive "always / never / every time": "Every time I see you I smile", "I'll never forget this trip", "no one ever tells you how hard…"
-    drop("absolute", h=>{ const a = low.slice(h.s, h.s+60); return /^(?:every (?:single )?time i (?:see|hear|think)|never (?:forget|stop (?:loving|smiling))|no one ever tells you|nobody ever tells you|always (?:love|loved|enjoy|look forward)|forever (?:grateful|thankful|yours))/.test(a); });
-    drop("calm", h=>/^smile$/i.test(h.match) && /\bi\s+$/.test(low.slice(Math.max(0,h.s-3), h.s)));
+    drop("absolute", h=>{ const a = lc.slice(h.s, h.s+60); return /^(?:every (?:single )?time i (?:see|hear|think)|never (?:forget|stop (?:loving|smiling))|no one ever tells you|nobody ever tells you|always (?:love|loved|enjoy|look forward)|forever (?:grateful|thankful|yours))/.test(a); });
+    drop("calm", h=>/^smile$/i.test(h.match) && /\bi\s+$/.test(lc.slice(Math.max(0,h.s-3), h.s)));
     // "you should try the Thai place", "you have to see it": a recommendation, not pressure
     const RECO = /^\s+(?:really |definitely |totally |honestly |so )?(?:try|see|watch|check out|read|listen to|visit|come|hear|meet|get one|go see)\b(?! (?:harder|to (?:be|not|listen|understand|remember)))/;
-    drop("should", h=>RECO.test(low.slice(h.e, h.e+40)));
-    drop("oblig", h=>/^you(?:'ve| have)? (?:got to|gotta|have to|need to|must)/i.test(h.match) && RECO.test(low.slice(h.e, h.e+40)));
-    drop("oblig", h=>/^\s*(?:try|see|watch|check out|read|listen to|visit|hear|meet)\b/.test(low.slice(h.e, h.e+30)) && /\b(?:amazing|so good|insane|incredible|brilliant|great|best|love it|you'll love)\b/.test(low));
+    drop("should", h=>RECO.test(lc.slice(h.e, h.e+40)));
+    drop("oblig", h=>/^you(?:'ve| have)? (?:got to|gotta|have to|need to|must)/i.test(h.match) && RECO.test(lc.slice(h.e, h.e+40)));
+    drop("oblig", h=>/^\s*(?:try|see|watch|check out|read|listen to|visit|hear|meet)\b/.test(lc.slice(h.e, h.e+30)) && /\b(?:amazing|so good|insane|incredible|brilliant|great|best|love it|you'll love)\b/.test(lc));
     // "I'm stupid tired", "you're crazy good at this": intensifiers, not labels
     const INTENSE = /^\s+(?:good|talented|fast|smart|lucky|cute|funny|strong|busy|tired|hungry|happy|excited|proud|beautiful|clever|rich|brave)\b/;
-    drop("label", h=>INTENSE.test(low.slice(h.e, h.e+16)));
-    drop("selfput", h=>INTENSE.test(low.slice(h.e, h.e+16)));
+    drop("label", h=>INTENSE.test(lc.slice(h.e, h.e+16)));
+    drop("selfput", h=>INTENSE.test(lc.slice(h.e, h.e+16)));
     // "I know it's annoying": owning that a rule is a pain is not criticism
-    drop("critic", h=>/\bi know (?:it's|this is|that's|it is|this|it)\s+(?:a bit |really |so |very )?$/.test(low.slice(Math.max(0,h.s-22), h.s)));
+    drop("critic", h=>/\bi know (?:it's|this is|that's|it is|this|it)\s+(?:a bit |really |so |very )?$/.test(lc.slice(Math.max(0,h.s-22), h.s)));
     // a dig said as politeness already explains the hint or the criticism inside it
     drop("hint", h=>inside(h,"passiveag") || inside(h,"guilt") || inside(h,"withdraw"));
     drop("critic", h=>inside(h,"passiveag"));
-    drop("softno", h=>inside(h,"jab") || /^maybe if you\b/.test(low.slice(h.s, h.s+14)));
+    drop("softno", h=>inside(h,"jab") || /^maybe if you\b/.test(lc.slice(h.s, h.s+14)));
     // "I wanted to say something about Saturday" is not a demand to reply
-    drop("demand", h=>/^say something$/i.test(h.match) && /\b(?:to|wanted|want|going|need)\s+$/.test(low.slice(Math.max(0,h.s-10), h.s)));
+    drop("demand", h=>/^say something$/i.test(h.match) && /\b(?:to|wanted|want|going|need)\s+$/.test(lc.slice(Math.max(0,h.s-10), h.s)));
     // "the wifi should be back tomorrow": a hedge on a fact, not a dodged answer
     drop("hedge", h=>!YOU.test(sentText(h)) && /\b(?:wifi|internet|power|train|bus|it|delivery|parcel|package|weather|charger|printer|car)\b/.test(sentText(h)));
     // sarcasm at the weather, not at a person ("Oh wonderful, it's raining on my one day off 🙃")
-    if(!YOU.test(low) && /\b(?:rain|raining|snow|weather|traffic|monday|delayed|cancell?ed|queue|my (?:car|phone|laptop))\b/.test(low)){ drop("sarcasm", h=>/^oh/i.test(h.match)); drop("passiveag", h=>/^[🙃🙂😊]+$/.test(h.match)); }
+    if(!YOU.test(lc) && /\b(?:rain|raining|snow|weather|traffic|monday|delayed|cancell?ed|queue|my (?:car|phone|laptop))\b/.test(lc)){ drop("sarcasm", h=>/^oh/i.test(h.match)); drop("passiveag", h=>/^[🙃🙂😊]+$/.test(h.match)); }
     // friendly swearing ("holy shit congrats!!!", "damn that sucks, I'm sorry mate", "oh shit I forgot the milk, sorry!!"):
     // not aimed at anyone, so it doesn't make the message an attack
-    if(/\b(?:sorry|congrats|congratulations|well done|amazing|so happy|proud of|that sucks|sucks|that's rough|so good|love (?:it|you|this))\b|🎉|❤/.test(low))
+    if(/\b(?:sorry|congrats|congratulations|well done|amazing|so happy|proud of|that sucks|sucks|that's rough|so good|love (?:it|you|this))\b|🎉|❤/.test(lc))
       drop("swear", h=>!YOU.test(sentText(h)) && /^(?:shit|damn|hell|crap|f\*+|fuck|fucking)$/i.test(h.match.trim()) || /^(?:oh|holy) /i.test(h.match));
     // a non-apology: "I'm sorry you feel that way"; and "Sorry, but you…" puts the blame back
-    drop("repair", h=>/^\s*(?:that |if )?you (?:feel|felt|think|thought|took it|see it)\b/.test(low.slice(h.e, h.e+20)) || /^(?:i messed up)$/.test(h.match) && /\b(?:scared|afraid|worried|think|hope)\s+(?:that\s+)?$/.test(low.slice(Math.max(0,h.s-14), h.s)));
-    { const sb = /\bsorry,? but (?:you|your)\b[^.!?\n]*/i.exec(low);
-      if(sb && !hits.some(h=>h.id==="sorrybut")){ push("sorrybut", sb.index+sb[0].search(/\bbut\b/), sb.index+sb[0].replace(/[\s.!?]+$/,"").length); drop("repair", h=>h.s < sb.index+sb[0].length && sb.index <= h.s+10); } }
+    drop("repair", h=>/^\s*(?:that |if )?you (?:feel|felt|think|thought|took it|see it)\b/.test(lc.slice(h.e, h.e+20)) || /^(?:i messed up)$/i.test(h.match) && /\b(?:scared|afraid|worried|think|hope)\s+(?:that\s+)?$/.test(lc.slice(Math.max(0,h.s-14), h.s)));
+    // "Sorry, but you…" is a lead-in, not an apology (the blame after it is read on its own)
+    { const sb = /\bsorry,? but (?:you|your)\b/i.exec(lc); if(sb) drop("repair", h=>h.s < sb.index+sb[0].length && sb.index <= h.s+10); }
     // thanks that aren't thanks ("nobody ever thanks me"), or are wrapped in an edge
-    drop("appreciation", h=>/\b(?:nobody|no one|no-one|never)\s+(?:ever\s+)?$/.test(low.slice(Math.max(0,h.s-16), h.s)) || inside(h,"passiveag") || inside(h,"sarcasm"));
-    if(has("sarcasm") || has("passiveag")) drop("appreciation", h=>sentences.some(se=>h.s>=se.s && h.s<se.e && hits.some(x=>["sarcasm","passiveag"].includes(x.id) && x.s>=se.s && x.s<se.e)) || /^thanks? for/i.test(h.match) && has("sarcasm"));
+    drop("appreciation", h=>/\b(?:nobody|no one|no-one|never)\s+(?:ever\s+)?$/.test(lc.slice(Math.max(0,h.s-16), h.s)) || inside(h,"passiveag") || inside(h,"sarcasm"));
+    if(has("sarcasm") || has("passiveag")) drop("appreciation", h=>sentences.some(se=>h.s>=se.s && h.s<se.e && hits.some(x=>["sarcasm","passiveag"].includes(x.id) && x.s>=se.s && x.s<se.e)) || /^thank(?:s| you) for/.test(lc.slice(h.s, h.s+14)) && has("sarcasm"));
     // everyday blame the lists above don't name yet
-    const addIf = (id, re)=>{ const m = re.exec(low); if(m && !hits.some(h=>h.id===id && h.s<m.index+m[0].length && m.index<h.e)) push(id, m.index, m.index+m[0].replace(/[\s,.!?]+$/,"").length); };
+    const addIf = (id, re)=>{ const m = re.exec(lc); if(m && !hits.some(h=>h.id===id && h.s<m.index+m[0].length && m.index<h.e)) push(id, m.index, m.index+m[0].replace(/[\s,.!?]+$/,"").length); };
     addIf("blameq", /\bdid you (?:even|actually|seriously|really) (?:read|look at|check|listen|think|try|bother)\b/);
+    addIf("critic", /\byou (?:didn't|did not|don't|do not) (?:have|need) to (?:yell|shout|snap|scream|swear|be (?:so )?(?:rude|mean|nasty|harsh))\b/);
     addIf("critic", /\bwithout (?:even )?(?:asking|telling|checking with|consulting|talking to) (?:me|us)\b|\bi expected (?:better|more) (?:from|of) you\b|\b(?:you're|you are|youre|ur) (?:so |really |such an? )?(?:embarrassing|an embarrassment)\b|\b(?:you're|you are) doing my head in\b|\byour \w+ (?:scares|terrifies|annoys|embarrasses|worries) me\b/);
-    if(APOLOGY_AT(low) < 0) addIf("critic", /\bthat was (?:kinda |kind of |so |really |pretty |a bit |well )?(?:rude|mean|uncalled for|out of order|out of line|harsh|nasty|low)\b/);
+    if(APOLOGY_AT(lc) < 0) addIf("critic", /\bthat was (?:kinda |kind of |so |really |pretty |a bit |well )?(?:rude|mean|uncalled for|out of order|out of line|harsh|nasty|low)\b/);
     addIf("jab", /\bi(?:'m| am) the only one (?:who |that )?(?:ever |actually |even |really )?(?:does|do|did|cares|tries|cleans|works|working|helps|pays|plans|remembers|calls|cooks|puts|bothers)\b|\bmaybe if you (?:actually|just|bothered to|ever)\b|\bi asked you (?:one|1|a single|one simple) (?:thing|job)\b|\byou (?:clearly |obviously )?(?:don't|do not) (?:care|give a damn) (?:about|for) (?:me|us|anyone|this family|the kids)\b|\b(?:you|u) only (?:ever )?(?:text|call|message|ring|visit|talk to) (?:me|us) when\b/);
     addIf("compare", /\bother (?:husbands|wives|partners|dads|mums|moms|parents|people|guys|girls|girlfriends|boyfriends|kids|families|couples) (?:actually|manage|do|help|remember|bother|seem)\b/);
     addIf("past", /\b(?:just|exactly) like (?:what|when) you (?:did|said)\b|\blike you did (?:at|last|on|with)\b/);
@@ -1676,8 +1682,11 @@ function analyze(textIn, opts){
     addIf("absolute", /\b(?:you|u) only ever\b|\bhappens every (?:time|day|week|night|weekend|month)\b|\bthe only one (?:who|that) ever\b/);
     addIf("guilt", /\bif you (?:really |truly |actually )?(?:loved|cared about|respected) me,? you(?:'d| would)\b|\bi gave up (?:my (?:career|job|life|twenties|dreams)|everything) for (?:this family|you|us|the kids|this)\b|\bdespu[eé]s de todo lo que (?:hice|he hecho|hago) por ti\b/);
     addIf("withdraw", /\bwhatever,? (?:mum|mom|dad|mother|father)\b/);
+    addIf("hostile", /\b(?:don't|do not|dont) (?:ever )?(?:contact|text|call|message) me (?:ever )?again\b/);
+    addIf("critic", /(?:^|[\s¿¡])(?:siempre|nunca|jam[aá]s) (?:me |nos |te )?\w+(?:as|es)\b/);
+    if(!/\bi love it when you\b/.test(lc)) addIf("appreciation", /\bi (?:always |really |just |absolutely )?love (?:it|coming|having|being|seeing|spending|that|this|how)\b/);
     if(!["swear","hostile","label","contempt","violent","legal","dxlabel","menace","sarcasm","jab","guilt","threat"].some(has)){
-      const bm2 = /\bi(?:'m| am) not (?:okay|ok|comfortable|happy) (?:with (?:you |people |anyone |that|this|being)|having)\b|\bi(?:'m| am) not going to (?:discuss|talk about|argue about|lend|sign|keep (?:doing|having))\b|\bi (?:don't|do not) want to (?:talk|hear) about [^.!?]{1,30}? (?:anymore|any more)\b|\bi(?:'m| am) only going to (?:discuss|talk about|reply|answer|communicate|message)\b|\bi (?:won't|will not) (?:sign|discuss|lend|be discussing|keep)\b[^.!?]{0,40}\b(?:until|unless|anymore|any more|without)\b|\bi (?:don't|do not) (?:check|answer|reply to|read) (?:work )?(?:messages|emails|texts|my phone) (?:after|before|on|at)\b|\bplease (?:don't|do not) (?:comment on|bring up|mention)\b/.exec(low);
+      const bm2 = /\bi(?:'m| am) not (?:okay|ok|comfortable|happy) (?:with (?:you |people |anyone |that|this|being)|having)\b|\bi(?:'m| am) not going to (?:discuss|talk about|argue about|lend|sign|keep (?:doing|having))\b|\bi (?:don't|do not) want to (?:talk|hear) about [^.!?]{1,30}? (?:anymore|any more)\b|\bi(?:'m| am) only going to (?:discuss|talk about|reply|answer|communicate|message)\b|\bi (?:won't|will not) (?:sign|discuss|lend|be discussing|keep)\b[^.!?]{0,40}\b(?:until|unless|anymore|any more|without)\b|\bi (?:don't|do not) (?:check|answer|reply to|read) (?:work )?(?:messages|emails|texts|my phone) (?:after|before|on|at)\b|\bplease (?:don't|do not) (?:comment on|bring up|mention)\b/.exec(lc);
       if(bm2){ push("boundary", bm2.index, bm2.index+bm2[0].length); drop("stonewall", h=>inside(h,"boundary")); drop("threat"); }
     }
     // Spanish basics: the most common sharp and kind phrases (the rewrite stays in your words)
@@ -1709,15 +1718,15 @@ function analyze(textIn, opts){
   // "you're the worst 😂", "I'm going to kill you if you spoil the finale 😂", "shut up 😂 no way": teasing between people
   // who joke like this. Real hurt (a put-down that cuts, sarcasm, guilt, a shut door, control, a real threat) is never teasing
   const PLAY_RE = SHARED && SHARED.PLAYFUL ? SHARED.PLAYFUL : /😂|🤣|\blol\b/;
-  const playMark = PLAY_RE.test(low) || /\b(?:you absolute (?:legend|star|hero|gem)|loser buys)\b/.test(low);
+  const playMark = PLAY_RE.test(lc) || (/😭/.test(lc) && /\b(?:annoying|cringe|the worst|idiot|dork|nerd|ok fine|fine i'll)\b/.test(lc)) || /\b(?:you absolute (?:legend|star|hero|gem)|loser buys)\b/.test(lc);
   const SEVERE = /\b(?:worthless|useless|pathetic|disgusting|failure|disappointment|waste of|terrible|awful|horrible|disgrace|liar|lazy|selfish|ungrateful|toxic|psycho|narcissist|heartless|cruel|ugly|fat|retard\w*|nothing without)\b/;
   const REAL_HURT = ["contempt","sarcasm","passiveag","guilt","withdraw","stonewall","brushoff","minimal","dxlabel","menace","control","legal","kidsfirst","sorrybut","jab","compare","heat","invalid","calm","madefeel","shouldhave","past","count","motive","blameq","tone","olddays","pointed","swear"];
   const TEASE = ["label","hostile","hyper","violent","threat","joke","shout","intens","idiom","impera","critic","absolute","again"];
   let banter = false, banterPoint = false;
-  if(playMark && !REAL_HURT.some(has) && !SEVERE.test(low) && !selfHarm && !control){
+  if(playMark && !REAL_HURT.some(has) && !SEVERE.test(lc) && !selfHarm && !control){
     banter = true;
     // "you never text back lol": a joke with a real point inside it stays a little sharp
-    banterPoint = ["absolute","again"].some(has) || (has("critic") && !/\b(?:annoying|annoy)\b/.test(low));
+    banterPoint = ["absolute","again"].some(has) || (has("critic") && !/\b(?:annoying|annoy)\b/.test(lc));
     ["label","hostile","hyper","violent","threat","joke","shout","intens","idiom"].forEach(id=>drop(id));
     if(!banterPoint) drop("critic");
   } else if(playMark && has("joke") && !hits.some(h=>FBY[h.id] && FBY[h.id].kind==="static" && !["joke","nowhen","period"].includes(h.id))) {
@@ -1725,12 +1734,12 @@ function analyze(textIn, opts){
     drop("joke"); banter = true;
   }
   // a warm line ("thinking of you x", "congrats!! 🎉", "happy birthday Mum"): kind, not just clear
-  const warm = has("appreciation") || has("repair") || /\b(?:miss (?:you|u|ya)|thinking of you|happy (?:birthday|anniversary)|congrat\w*|good ?night|sleep well|take care|safe (?:journey|travels|trip|flight)|lovely to see you|so good to see you|great to see you|how was your day|hope you(?:'re| are) (?:ok|okay|well|feeling better)|best night|so thoughtful|proud of|love (?:you|u|ya)|xx+|felicidades)\b|❤|🎉|🥰|😘|💕|🫶|(?:^|\s)x\s*$/.test(low);
+  const warm = has("appreciation") || has("repair") || /\b(?:miss (?:you|u|ya)|thinking of you|happy (?:birthday|anniversary)|congrat\w*|good ?night|sleep well|take care|safe (?:journey|travels|trip|flight)|lovely to see you|so good to see you|great to see you|how was your day|hope you(?:'re| are) (?:ok|okay|well|feeling better)|best night|so thoughtful|proud of|love (?:you|u|ya)|xx+|felicidades)\b|❤|🎉|🥰|😘|💕|🫶|(?:^|\s)x\s*$/.test(lc);
   // Spanish: read at a basic level; the rewrite keeps the writer's own words
-  const lang = /[¿¡ñ]|\b(?:que|qué|por favor|gracias|quiero|puedes|podr[ií]as|siempre|nunca|tenemos|hablar|cuando|llegues|mañana|lo siento|perd[oó]n|culpa|como quieras|alguien|deber[ií]a|despu[eé]s|mam[aá]|cena|leche|niños|viernes|basura|noche|jaja\w*|felicidades|orgullos[oa]|odio|peor|mejor|ego[ií]sta|m[eé]dico|anoche|escuch\w+|llam\w+|llegas|tarde|recoges|cuarto|eres|vale|matar)\b/i.test(low) && (low.match(/\b(?:que|qué|de|la|el|los|las|te|me|mi|tu|eres|es|por|para|lo|un|una|y|a|al|del|muy|no)\b/g)||[]).length + (low.match(/[¿¡ñáéíóú]/g)||[]).length >= 2 && !/\b(?:the|you|and|is|are|i'm|to|it)\b/.test(low) ? "es" : "en";
+  const lang = /[¿¡ñ]|\b(?:que|qué|por favor|gracias|quiero|puedes|podr[ií]as|siempre|nunca|tenemos|hablar|cuando|llegues|mañana|lo siento|perd[oó]n|culpa|como quieras|alguien|deber[ií]a|despu[eé]s|mam[aá]|cena|leche|niños|viernes|basura|noche|jaja\w*|felicidades|orgullos[oa]|odio|peor|mejor|ego[ií]sta|m[eé]dico|anoche|escuch\w+|llam\w+|llegas|tarde|recoges|cuarto|eres|vale|matar)\b/i.test(lc) && (lc.match(/\b(?:que|qué|de|la|el|los|las|te|me|mi|tu|eres|es|por|para|lo|un|una|y|a|al|del|muy|no)\b/g)||[]).length + (lc.match(/[¿¡ñáéíóú]/g)||[]).length >= 2 && !/\b(?:the|you|and|is|are|i'm|to|it)\b/.test(lc) ? "es" : "en";
   if(lang==="es"){
     // a Spanish request ("¿Puedes recoger a los niños el viernes?", "Llámame cuando llegues, por favor") is still an ask
-    sentences.forEach((se,i)=>{ const st = low.slice(se.s, se.e); if(/(?:^|[\s¿¡])(?:puedes|podr[ií]as|podemos|me ayudas)\b|\bpor favor\b|^\s*[¿¡]?(?:ll[aá]mame|llama|trae|compra|recoge|saca|limpia|ven)\b/.test(st) && !askSentEs.includes(i)) askSentEs.push(i); });
+    sentences.forEach((se,i)=>{ const st = lc.slice(se.s, se.e); if(/(?:^|[\s¿¡])(?:puedes|podr[ií]as|podemos|me ayudas)\b|\bpor favor\b|^\s*[¿¡]?(?:ll[aá]mame|llama|trae|compra|recoge|saca|limpia|ven)\b/.test(st) && !askSentEs.includes(i)) askSentEs.push(i); });
   }
   // assemble
   const found={}; const spans=[];
@@ -1751,7 +1760,7 @@ function analyze(textIn, opts){
     asks, segs,
     has: id=>!!found[id],
     missing: {
-      when: !!(asks.some(a=>!standingSent(a.sentence)) && !hasWhen),
+      when: !!(asks.some(a=>!standingSent(a.sentence) && !["invite","es"].includes(a.kind)) && !hasWhen),
       why: !!(asks.length && !hasWhy),
       topic: !!found.ominous,
       feeling: !feelingM && staticIds.some(id=>["label","absolute","critic","madefeel","compare","blameq","again","past","guilt","threat","sarcasm","jab"].includes(id)),
@@ -1833,9 +1842,8 @@ function score(an, ids, ch, state){
   if(ch==="email" && ids.includes("dyslexic") && an.words>25) sc+=0.5;
   const mult={v:1,s:1.4,d:1.9}[state||"v"]||1;
   sc = sc*mult + (state==="d"?1:0) + (state==="s"&&sc>0?0.3:0);
-  // swearing, a fed-up line, name-calling, contempt or a threat: always heavy static, however short.
-  // An eye-roll emoji on its own (🙄) is exasperation, not a put-down: sharp, not "very sharp"
-  const hot = an.staticIds.some(id=>HOT_IDS.includes(id) && !(id==="contempt" && (an.found.contempt||[]).every(w=>/^[\s🙄😒]+$/.test(w||"")))) || an.allCaps
+  // swearing, a fed-up line, name-calling, contempt (an eye-roll too) or a threat: always heavy static, however short
+  const hot = an.staticIds.some(id=>HOT_IDS.includes(id)) || an.allCaps
     || !!(an.found.jab && NOT_PARENT_RE.test(an.norm||""));
   if(hot) sc = Math.max(sc, 4.6);
   // only a hot line is "very sharp": a pile of smaller things (always, again, a comparison) is sharp, not an attack
@@ -3519,7 +3527,8 @@ function receive(an, opts){
   const rf = !crossed ? reframeOf(an, opts) : null;
   if(rf && rf.r.recv) meanings.push(typeof rf.r.recv.mean==="function" ? rf.r.recv.mean(rf.m, rf.c) : rf.r.recv.mean);
   RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm","withdraw","olddays","minim"].includes(id)))) meanings.push(line); });
-  const ask = an.asks && an.asks[0] && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(an.asks[0].text).length) ? an.asks[0].text : "";
+  const ask0 = an.asks && an.asks.find(a=>!["invite","es"].includes(a.kind));
+  const ask = ask0 && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(ask0.text).length) ? ask0.text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
   if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
   // the header and the body agree: "plain message" only when nothing in the words was flagged
@@ -3676,7 +3685,7 @@ function replyMissesHurt(an, prev){
   return HURT_IN.some(id=>pv.found[id]) && !ACK_RE.test(an.norm);
 }
 /* wording that's only a little loud or loose: "might hurt" would overstate it */
-const MILD_IDS = ["shout","intens","minim","period","dots","softno","hedge","vtime","nowhen","overhedge","long","questions","idiom","urgent","multi","vstd","reqmaybe","minimal","pointed","nudge","ominous","oblig","impera","hint","stonewall","cannot","butc","already","ellipsis","should","selfput","reassure","joke"];
+const MILD_IDS = ["shout","intens","minim","period","dots","softno","hedge","vtime","nowhen","overhedge","long","questions","idiom","urgent","multi","vstd","reqmaybe","minimal","pointed","nudge","ominous","impera","hint","stonewall","cannot","butc","already","ellipsis","should","selfput","reassure","joke"];
 function verdict(an, sc, rw, opts){
   const listener = (opts && String(opts.listener||"").trim()) || "them";
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
@@ -3700,6 +3709,12 @@ function verdict(an, sc, rw, opts){
   if(sorry && (lvl==="heavy" || (lvl==="some" && !(sc.level[1]||"").match(/little/i))))
     return {id:"hurt", apology:true, text: soft ? "Some of this may land harder than you mean. Here's a version that keeps your apology." : "Some of this may land harder than you mean. The notes below show which part."};
   const work = !!(opts && (opts.work || WORK_REL.includes(opts.rel)));
+  // teasing between people who joke like this: fine, with a note about the days it isn't
+  if(an.banter && !attack && lvl!=="heavy")
+    return {id: an.banterPoint ? "hurt" : "ok", banter:true, mild: !!an.banterPoint, text: an.banterPoint
+      ? "This reads as teasing with a real point inside it. If the point matters to you, say it plainly too, so it doesn't get lost in the joke."
+      : "This reads as playful teasing. It usually lands fine with someone who jokes with you like this. On a hard day, or with someone who reads words literally, a tease can sting, so add a kind word if you're not sure."};
+  const mildAll = an.staticIds.every(id=>MILD_IDS.includes(id));
   // "you're not my mum": it cuts deep, and it's often grief talking
   if(an.found.jab && NOT_PARENT_RE.test(an.norm||"") && !["swear","hostile","label","legal","violent","threat"].some(id=>an.found[id]))
     return {id:"fight", jab:true, notParent:true, text: "This may hurt them a lot. "+(soft ? "Often it's grief talking. Here's a way to say the feeling instead." : "The notes below show why.")};
@@ -3720,17 +3735,12 @@ function verdict(an, sc, rw, opts){
   if(an.found.closer && !attack)
     return {id:"hurt", closer:true, text: "This is fair, and it may still sound like a closed door. "+(soft ? "Here's a warmer way to say the same thing." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && fairConcern(an))
-    return {id:"hurt", fair:true, text: "Your worry is fair and worth saying plainly. "+(soft ? "Here's a version that keeps your words direct and lands easier for "+listener+"." : "The notes below show which words may land hard.")};
+    return {id:"hurt", fair:true, mild: mildAll, text: "Your worry is fair and worth saying plainly. "+(soft ? "Here's a version that keeps your words direct and lands easier for "+listener+"." : "The notes below show which words may land hard.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i) && work)
-    return {id:"hurt", work:true, text: "This may land as blame. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
+    return {id:"hurt", work:true, mild: mildAll, text: mildAll ? "This may come across sharper than you mean. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.") : "This may land as blame or an order. "+(soft ? "Here's a clearer way to say it." : "The notes below show why.")};
   if(lvl==="some" && !(sc.level[1]||"").match(/little/i))
   { const mild = an.staticIds.every(id=>MILD_IDS.includes(id));
     return {id:"hurt", mild, text: (an.safety ? "Your worry is fair, but this might hurt. " : mild ? "This may come across sharper than you mean. " : "This might hurt. ")+(soft ? (mild ? "Here's a gentler way to say it." : "Here's a softer way to say it.") : "The notes below show why.")}; }
-  // teasing between people who joke like this: fine, with a note about the days it isn't
-  if(an.banter && !attack && lvl!=="heavy")
-    return {id:"ok", banter:true, mild: !!an.banterPoint, text: an.banterPoint
-      ? "This reads as teasing with a real point inside it. If the point matters to you, say it plainly too, so it doesn't get lost in the joke."
-      : "This reads as playful teasing. It usually lands fine with someone who jokes with you like this. On a hard day, or with someone who reads words literally, a tease can sting, so add a kind word if you're not sure."};
   if(opts && opts.replyTo && replyMissesHurt(an, opts.replyTo))
     return {id:"hurt", reply:true, text: "Clear words. Add one line about what you heard first, for example: \u201cSounds like you're fed up with me cancelling. It's work, not you. Call Sunday at 7?\u201d"};
   if(an.staticIds && an.staticIds.length)
