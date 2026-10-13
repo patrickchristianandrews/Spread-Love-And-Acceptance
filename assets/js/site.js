@@ -2215,16 +2215,15 @@
   // it also forgets the chat and the pages remembered for "Pick up where you left off", so nothing shows on a shared device afterwards
   function quickExit() { try { sessionStorage.removeItem('tol-chat-v1'); localStorage.removeItem('tol-recent'); } catch (e) {} location.replace('https://www.google.com/search?q=weather+today'); }
   document.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-tol-exit]'); if (b) { e.preventDefault(); quickExit(); } });
+  // Esc twice, quickly, leaves the site from any page: in a game, while typing in a box, or with a menu open.
+  // (The first Esc still does its usual job, like closing a menu or clearing a box; a second one within a second leaves.)
   (function () {
-    var last = 0, GAME = /^\/(frequency-journey(-play)?|bears-dojo|night-garden|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|re-check-drive|calm-visualizer|soundscapes)\.html$/;
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape' || GAME.test(location.pathname) || document.fullscreenElement) return;
-      // an Esc that closes a menu, dialog or clears a box doesn't count, so closing things never sends anyone away
-      var ae = document.activeElement || {};
-      // (an open dropdown or menu button, anything aria-expanded, counts as something this Esc is closing)
-      if (Array.prototype.some.call(document.querySelectorAll('[role="dialog"]:not([hidden]), [aria-modal="true"]:not([hidden]), dialog[open], [aria-expanded="true"]'), function (d) { return d.getClientRects().length > 0; }) || /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName || '') || ae.isContentEditable) { last = 0; return; }
+    var last = 0;
+    window.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' && e.key !== 'Esc') return;
+      if (e.repeat) return;   // holding the key down isn't two presses
       var now = Date.now();
-      if (now - last < 700) quickExit();
+      if (now - last < 1000) { last = 0; quickExit(); return; }
       last = now;
     }, true);
   })();
