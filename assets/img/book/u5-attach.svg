@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 759" width="540" height="759" role="img" aria-labelledby="fig-u5-attach-t fig-u5-attach-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u5-attach-t">Attachment as two dimensions, not boxes</title>
+<desc id="fig-u5-attach-d">A square field. Across: avoidance, discomfort with closeness and depending on others, from low to high. Up: anxiety, worry about being rejected or left, from low to high. Many dots show that people sit anywhere in the field, not in four boxes. Soft notes in the corners describe tendencies: reaching for reassurance, close and at ease, handling things alone, wanting closeness while fearing it. An arrow shows that a person’s place can shift, for example with a steady, supportive relationship.</desc>
+<defs><marker id="fig-u5-attach-ar-8e3b47" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#8E3B47"/></marker><marker id="fig-u5-attach-ar-2b2620" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#2B2620"/></marker></defs>
+<rect x="1" y="1" width="538" height="757" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Patterns, not boxes</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Two scales. Everyone sits somewhere, and can</tspan><tspan x="28" dy="24.32">move.</tspan></text>
+<rect x="78" y="136.32" width="432" height="432" rx="12" fill="#F7F1E4" stroke="#D9CBA3" stroke-width="2"/>
+<line x1="294" y1="146.32" x2="294" y2="558.32" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 7"/>
+<line x1="88" y1="352.32" x2="500" y2="352.32" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 7"/>
+<circle cx="221.157" cy="370.822" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="223.602" cy="438.661" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="165.824" cy="430.308" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="333.426" cy="377.986" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="327.267" cy="392.37" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="274.563" cy="397.588" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="105.41" cy="342.601" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="283.724" cy="371.857" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="103.333" cy="551.04" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="169.14" cy="451.229" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="267.231" cy="416.568" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="284.922" cy="465.515" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="267.498" cy="380.448" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="187.894" cy="271.825" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="287.846" cy="314.55" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="191.243" cy="473.499" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="213.921" cy="421.535" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="294.041" cy="392.409" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="205.441" cy="491.343" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="199.43" cy="312.587" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="175.844" cy="392.71" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="277.169" cy="535.078" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="246.139" cy="305.584" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="95.28" cy="439.196" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="233.448" cy="479.881" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="282.986" cy="417.912" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="121.941" cy="344.85" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="297.099" cy="335.165" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="360.404" cy="383.067" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="251.95" cy="519.436" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="292.676" cy="463.013" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="205.002" cy="516.614" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="162.738" cy="456.394" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="347.948" cy="551.04" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="122.512" cy="393.154" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="360.63" cy="365.317" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="95.28" cy="551.04" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="271.495" cy="473.232" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="150.248" cy="332.577" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="332.595" cy="399.893" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="262.333" cy="377.148" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="372.996" cy="361.99" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="284.731" cy="367.842" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="113.433" cy="307.595" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="320.555" cy="369.328" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="95.28" cy="464.812" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="311.296" cy="551.04" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="227.055" cy="329.117" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="134.538" cy="280.642" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="287.465" cy="425.123" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="268.825" cy="359.462" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="252.042" cy="318.764" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="187.86" cy="446.842" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="327.661" cy="410.6" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="169.892" cy="335.115" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="362.448" cy="449.311" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="128.89" cy="423.86" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="229.929" cy="437.26" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="357.464" cy="497.091" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="345.629" cy="516.904" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="177.56" cy="360.965" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="334.803" cy="342.293" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="270.496" cy="401.115" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="254.676" cy="365.581" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="227.698" cy="390.028" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="289.169" cy="412.731" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="304.868" cy="366.353" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="407.193" cy="386.129" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="207.063" cy="443.379" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<circle cx="241.084" cy="336.976" r="5" fill="#7FB2E0" fill-opacity="0.65"/>
+<text x="94" y="166.32" font-size="17" font-style="italic" fill="#5A5346">reaches for</text>
+<text x="94" y="188.32" font-size="17" font-style="italic" fill="#5A5346">reassurance</text>
+<text x="494" y="166.32" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">wants closeness,</text>
+<text x="494" y="188.32" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">fears it</text>
+<text x="94" y="528.32" font-size="17" font-style="italic" fill="#5A5346">close and</text>
+<text x="94" y="550.32" font-size="17" font-style="italic" fill="#5A5346">at ease</text>
+<text x="494" y="528.32" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">handles things</text>
+<text x="494" y="550.32" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">alone</text>
+<circle cx="380.4" cy="257.28" r="9" fill="#8E3B47"/>
+<path d="M372.4 265.28 C340.4 317.28 310.8 392.79999999999995 262.8 406.79999999999995" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u5-attach-ar-8e3b47)"/>
+<text x="394.4" y="247.28" font-size="18" font-weight="bold" fill="#8E3B47">can shift</text>
+<path d="M78 584.3199999999999 H510" fill="none" stroke="#2B2620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u5-attach-ar-2b2620)"/>
+<text x="78" y="610.32" font-size="18" font-weight="bold">Avoidance: unease with closeness →</text>
+<text x="78" y="632.32" font-size="17" font-style="italic" fill="#5A5346">low</text>
+<text x="510" y="632.32" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">high</text>
+<path d="M62 568.3199999999999 V136.32" fill="none" stroke="#2B2620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u5-attach-ar-2b2620)"/>
+<text x="48" y="352.32" font-size="18" font-weight="bold" text-anchor="middle" transform="rotate(-90 48 352.32)">Anxiety: worry about being left →</text>
+<text x="28" y="663.32" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">After Brennan, Clark and Shaver (1998) and Fraley</tspan><tspan x="28" dy="23.04">and colleagues (2015): adult attachment is best</tspan><tspan x="28" dy="23.04">measured as two scales, not types. Dots are</tspan><tspan x="28" dy="23.04">illustrative, not data.</tspan></text>
+</svg>

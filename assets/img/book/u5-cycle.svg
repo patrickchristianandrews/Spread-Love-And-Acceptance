@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 754" width="540" height="754" role="img" aria-labelledby="fig-u5-cycle-t fig-u5-cycle-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u5-cycle-t">The pursue and withdraw cycle</title>
+<desc id="fig-u5-cycle-d">Two arrows chasing each other in a circle. One person reaches harder: more talk, more questions, more checking. The other feels pressed and pulls back: goes quiet, needs space. That makes the first feel shut out, so they reach harder again, and so on. Each move makes the other’s stronger. Ways out: the one who reaches can soften and slow down; the one who pulls back can say when they’ll come back, and then come back.</desc>
+<defs><marker id="fig-u5-cycle-ar-8e3b47" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#8E3B47"/></marker><marker id="fig-u5-cycle-ar-2f5f8a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#2F5F8A"/></marker></defs>
+<rect x="1" y="1" width="538" height="752" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">When one reaches and one pulls</tspan><tspan x="28" dy="32">back</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346">Each move makes the other’s stronger.</text>
+<circle cx="270" cy="326" r="150" fill="none" stroke="#D9CBA3" stroke-width="14"/>
+<path d="M129.0 274.7 A150 150 0 0 1 399.9 251.0" fill="none" stroke="#8E3B47" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u5-cycle-ar-8e3b47)"/>
+<path d="M411.0 377.3 A150 150 0 0 1 140.1 401.0" fill="none" stroke="#2F5F8A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u5-cycle-ar-2f5f8a)"/>
+<rect x="154" y="130" width="232" height="92" rx="16" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="270" y="164" font-size="21" font-weight="bold" fill="#8E3B47" text-anchor="middle">Reaches harder</text>
+<text x="270" y="190" font-size="18" font-style="italic" text-anchor="middle">more talk, more</text>
+<text x="270" y="212" font-size="18" font-style="italic" text-anchor="middle">questions</text>
+<rect x="154" y="430" width="232" height="92" rx="16" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="270" y="464" font-size="21" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Pulls back</text>
+<text x="270" y="490" font-size="18" font-style="italic" text-anchor="middle">goes quiet,</text>
+<text x="270" y="512" font-size="18" font-style="italic" text-anchor="middle">needs space</text>
+<text x="424" y="276" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">feels</text>
+<text x="424" y="298" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">pressed</text>
+<text x="116" y="354" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">feels</text>
+<text x="116" y="376" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">shut out</text>
+<text x="270" y="316" font-size="19" font-weight="bold" text-anchor="middle">Nobody</text>
+<text x="270" y="340" font-size="19" font-weight="bold" text-anchor="middle">is the villain</text>
+<text x="28" y="546" font-size="21" font-weight="bold" fill="#7A5620">Ways out</text>
+<circle cx="40" cy="576" r="7" fill="#8E3B47"/>
+<text x="58" y="582" font-size="19">If you reach: soften, slow down, ask once.</text>
+<circle cx="40" cy="614" r="7" fill="#2F5F8A"/>
+<text x="58" y="620" font-size="19"><tspan x="58" dy="0">If you pull back: say when you’ll come back,</tspan><tspan x="58" dy="24.32">then come back.</tspan></text>
+<text x="28" y="681.32" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">A common pattern in couples research (demand and</tspan><tspan x="28" dy="23.04">withdraw; Christensen and Heavey, 1990). It shows</tspan><tspan x="28" dy="23.04">up between friends and family too.</tspan></text>
+</svg>

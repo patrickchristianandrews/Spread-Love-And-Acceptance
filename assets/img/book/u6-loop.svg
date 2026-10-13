@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 698" width="540" height="698" role="img" aria-labelledby="fig-u6-loop-t fig-u6-loop-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u6-loop-t">Habits run on cues</title>
+<desc id="fig-u6-loop-d">A loop of three: a cue, such as after dinner, sets off a routine, such as shoes on and a short walk, and a small reward, such as fresh air and a small win, keeps it going. Over time the cue alone is enough. To change a habit, change the setup around it, especially the cue, rather than relying on willpower.</desc>
+<defs><marker id="fig-u6-loop-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="696" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Habits run on cues</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Over time, the cue alone is enough.</text>
+<path d="M338.0 170.2 A136 136 0 0 1 406.0 288.0" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u6-loop-ar-5a5346)"/>
+<path d="M338.0 405.8 A136 136 0 0 1 202.0 405.8" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u6-loop-ar-5a5346)"/>
+<path d="M134.0 288.0 A136 136 0 0 1 202.0 170.2" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u6-loop-ar-5a5346)"/>
+<circle cx="270" cy="152" r="70" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2.5"/>
+<text x="270" y="148" font-size="21" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Cue</text>
+<text x="270" y="172" font-size="16" font-style="italic" text-anchor="middle">after dinner</text>
+<circle cx="387.779" cy="356" r="70" fill="#F1E2C2" stroke="#7A5620" stroke-width="2.5"/>
+<text x="387.779" y="352" font-size="21" font-weight="bold" fill="#7A5620" text-anchor="middle">Routine</text>
+<text x="387.779" y="376" font-size="16" font-style="italic" text-anchor="middle"><tspan x="387.779" dy="0">shoes on, short</tspan><tspan x="387.779" dy="20.48">walk</tspan></text>
+<circle cx="152.221" cy="356" r="70" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2.5"/>
+<text x="152.221" y="352" font-size="21" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Reward</text>
+<text x="152.221" y="376" font-size="16" font-style="italic" text-anchor="middle"><tspan x="152.221" dy="0">fresh air, a</tspan><tspan x="152.221" dy="20.48">small win</tspan></text>
+<rect x="28" y="510" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="543" font-size="19" font-weight="bold" text-anchor="middle">Change the setup, not just your willpower:</text>
+<text x="270" y="567.7" font-size="19" font-style="italic" text-anchor="middle">move the cue, make the step tiny.</text>
+<text x="28" y="602.4" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">The cue, routine and reward loop is a popular</tspan><tspan x="28" dy="23.04">simplification; the core idea, that context triggers</tspan><tspan x="28" dy="23.04">habits, is well supported (for example Neal, Wood</tspan><tspan x="28" dy="23.04">and colleagues, 2011).</tspan></text>
+</svg>

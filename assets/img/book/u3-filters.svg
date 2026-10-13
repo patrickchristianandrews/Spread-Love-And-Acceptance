@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 700" width="540" height="700" role="img" aria-labelledby="fig-u3-filters-t fig-u3-filters-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u3-filters-t">Seeing is a best guess: what happened passes through filters</title>
+<desc id="fig-u3-filters-d">At the top, what happened: a friend hasn’t replied for a day. It passes through three filters: what I expect, what I’m looking for, and how full my tank is. Out comes the story that feels like a fact: &quot;She’s annoyed with me.&quot; A side path says: ask, don’t guess. &quot;Is everything okay?&quot; The answer: her phone broke.</desc>
+<defs><marker id="fig-u3-filters-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker><marker id="fig-u3-filters-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
+<rect x="1" y="1" width="538" height="698" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Seeing is a best guess</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">What happened passes through filters before it</tspan><tspan x="28" dy="24.32">becomes “what I saw”.</tspan></text>
+<rect x="68" y="122.32" width="404" height="66" rx="14" fill="#FFFFFF" stroke="#5A5346" stroke-width="1.5"/>
+<text x="270" y="148.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">What happened</text>
+<text x="270" y="174.32" font-size="20" font-weight="bold" text-anchor="middle">A friend hasn’t replied for a day.</text>
+<line x1="270" y1="190.32" x2="270" y2="208.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-u3-filters-ar-5a5346)"/>
+<path d="M98 212.32 H442 L416 256.32 H124 Z" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="241.32" font-size="19" font-weight="bold" fill="#2F5F8A" text-anchor="middle">What I expect</text>
+<line x1="270" y1="258.32" x2="270" y2="276.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-u3-filters-ar-5a5346)"/>
+<path d="M98 280.32 H442 L416 324.32 H124 Z" fill="#F1E2C2" stroke="#7A5620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="309.32" font-size="19" font-weight="bold" fill="#7A5620" text-anchor="middle">What I’m looking for</text>
+<line x1="270" y1="326.32" x2="270" y2="344.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-u3-filters-ar-5a5346)"/>
+<path d="M98 348.32 H442 L416 392.32 H124 Z" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="377.32" font-size="19" font-weight="bold" fill="#8E3B47" text-anchor="middle">How full my tank is</text>
+<line x1="270" y1="394.32" x2="270" y2="412.32" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-u3-filters-ar-5a5346)"/>
+<rect x="68" y="416.32" width="404" height="70" rx="14" fill="#ECE2C4" stroke="#7A5620" stroke-width="2"/>
+<text x="270" y="443.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">The story, which feels like a fact</text>
+<text x="270" y="471.32" font-size="21" font-weight="bold" text-anchor="middle">“She’s annoyed with me.”</text>
+<path d="M472 451.32 H506 V177.32 H474" fill="none" stroke="#3E6B4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u3-filters-ar-3e6b4c)"/>
+<rect x="28" y="506.32" width="484" height="96" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="46" y="536.32" font-size="21" font-weight="bold" fill="#3E6B4C">Ask, don’t guess.</text>
+<text x="46" y="564.32" font-size="19" font-style="italic">“Is everything okay?”</text>
+<text x="46" y="590.32" font-size="19" fill="#5A5346">Her phone broke.</text>
+<text x="28" y="627.32" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. The brain fills gaps from what it expects</tspan><tspan x="28" dy="23.04">(“predictive processing”, an influential idea, still</tspan><tspan x="28" dy="23.04">debated).</tspan></text>
+</svg>

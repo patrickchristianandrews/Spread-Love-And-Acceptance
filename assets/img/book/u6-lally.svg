@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 647" width="540" height="647" role="img" aria-labelledby="fig-u6-lally-t fig-u6-lally-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u6-lally-t">How long a new habit takes to feel automatic</title>
+<desc id="fig-u6-lally-d">A chart of how automatic a new daily habit feels, from 0 to the person’s own plateau, against days. Three illustrative curves rise and level off: a fast one that reaches 95 percent of its plateau at about 18 days, a middle one at about 66 days, the median in the study, and a slow one at about 254 days. A small dip on the middle curve shows a missed day; it did not meaningfully set progress back. Based on Lally and colleagues, 2010, who followed 96 volunteers.</desc>
+
+<rect x="1" y="1" width="538" height="645" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">About two months, give or take a</tspan><tspan x="28" dy="32">lot</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346">How automatic a new daily habit feels, over time.</text>
+<line x1="72" y1="150" x2="72" y2="400" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<line x1="72" y1="400" x2="510" y2="400" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<line x1="72" y1="170" x2="510" y2="170" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4 5"/>
+<text x="62" y="176" font-size="17" fill="#5A5346" text-anchor="end">own</text>
+<text x="62" y="196" font-size="17" fill="#5A5346" text-anchor="end">plateau</text>
+<text x="62" y="398" font-size="17" fill="#5A5346" text-anchor="end">0</text>
+<polyline points="72,400.0 77,309.5 82,254.6 87,221.3 91,201.1 96,188.9 101,181.5 106,176.9 111,174.2 116,172.6 121,171.5 126,170.9 130,170.6 135,170.3 140,170.2 145,170.1 150,170.1 155,170.0 160,170.0 164,170.0 169,170.0 174,170.0 179,170.0 184,170.0 189,170.0 194,170.0 199,170.0 203,170.0 208,170.0 213,170.0 218,170.0 223,170.0 228,170.0 233,170.0 237,170.0 242,170.0 247,170.0 252,170.0 257,170.0 262,170.0 267,170.0 272,170.0 276,170.0 281,170.0 286,170.0 291,170.0 296,170.0 301,170.0 306,170.0 310,170.0 315,170.0 320,170.0 325,170.0 330,170.0 335,170.0 340,170.0 345,170.0 349,170.0 354,170.0 359,170.0 364,170.0 369,170.0 374,170.0 379,170.0 383,170.0 388,170.0 393,170.0 398,170.0 403,170.0 408,170.0 413,170.0 418,170.0 422,170.0 427,170.0 432,170.0 437,170.0 442,170.0 447,170.0 452,170.0 456,170.0 461,170.0 466,170.0 471,170.0 476,170.0 481,170.0 486,170.0 491,170.0 495,170.0 500,170.0 505,170.0 510,170.0" fill="none" stroke="#2F5F8A" stroke-width="3.5" stroke-linejoin="round"/>
+<line x1="101.2" y1="181.5" x2="101.2" y2="400" stroke="#2F5F8A" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+<circle cx="101.2" cy="181.5" r="6" fill="#2F5F8A"/>
+<polyline points="72,400.0 77,370.7 82,345.1 87,322.8 91,303.3 96,286.3 101,271.5 106,258.5 111,247.3 116,237.4 121,228.8 126,221.3 130,214.8 135,213.1 140,211.1 145,199.7 150,196.0 155,192.6 160,189.8 164,187.2 169,185.0 174,183.1 179,181.5 184,180.0 189,178.7 194,177.6 199,176.6 203,175.8 208,175.1 213,174.4 218,173.8 223,173.4 228,172.9 233,172.6 237,172.2 242,171.9 247,171.7 252,171.5 257,171.3 262,171.1 267,171.0 272,170.9 276,170.7 281,170.7 286,170.6 291,170.5 296,170.4 301,170.4 306,170.3 310,170.3 315,170.3 320,170.2 325,170.2 330,170.2 335,170.1 340,170.1 345,170.1 349,170.1 354,170.1 359,170.1 364,170.1 369,170.1 374,170.0 379,170.0 383,170.0 388,170.0 393,170.0 398,170.0 403,170.0 408,170.0 413,170.0 418,170.0 422,170.0 427,170.0 432,170.0 437,170.0 442,170.0 447,170.0 452,170.0 456,170.0 461,170.0 466,170.0 471,170.0 476,170.0 481,170.0 486,170.0 491,170.0 495,170.0 500,170.0 505,170.0 510,170.0" fill="none" stroke="#7A5620" stroke-width="3.5" stroke-linejoin="round"/>
+<line x1="179.067" y1="181.5" x2="179.067" y2="400" stroke="#7A5620" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+<circle cx="179.067" cy="181.5" r="6" fill="#7A5620"/>
+<polyline points="72,400.0 77,392.0 82,384.3 87,376.8 91,369.6 96,362.7 101,356.0 106,349.5 111,343.2 116,337.2 121,331.4 126,325.8 130,320.3 135,315.1 140,310.1 145,305.2 150,300.5 155,295.9 160,291.5 164,287.3 169,283.2 174,279.3 179,275.5 184,271.8 189,268.3 194,264.8 199,261.5 203,258.4 208,255.3 213,252.3 218,249.4 223,246.7 228,244.0 233,241.4 237,238.9 242,236.5 247,234.2 252,232.0 257,229.8 262,227.8 267,225.7 272,223.8 276,221.9 281,220.1 286,218.4 291,216.7 296,215.1 301,213.5 306,212.0 310,210.5 315,209.1 320,207.8 325,206.4 330,205.2 335,203.9 340,202.8 345,201.6 349,200.5 354,199.5 359,198.4 364,197.4 369,196.5 374,195.6 379,194.7 383,193.8 388,193.0 393,192.2 398,191.4 403,190.7 408,189.9 413,189.3 418,188.6 422,187.9 427,187.3 432,186.7 437,186.1 442,185.6 447,185.0 452,184.5 456,184.0 461,183.5 466,183.0 471,182.6 476,182.1 481,181.7 486,181.3 491,180.9 495,180.5 500,180.2 505,179.8 510,179.5" fill="none" stroke="#3E6B4C" stroke-width="3.5" stroke-linejoin="round"/>
+<line x1="484.044" y1="181.5" x2="484.044" y2="400" stroke="#3E6B4C" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 4"/>
+<circle cx="484.044" cy="181.5" r="6" fill="#3E6B4C"/>
+<text x="101.2" y="422" font-size="17" font-weight="bold" fill="#2F5F8A" text-anchor="middle">18</text>
+<text x="179.067" y="422" font-size="17" font-weight="bold" fill="#7A5620" text-anchor="middle">66</text>
+<text x="484.044" y="422" font-size="17" font-weight="bold" fill="#3E6B4C" text-anchor="middle">254</text>
+<text x="331.556" y="422" font-size="17" font-style="italic" fill="#5A5346" text-anchor="middle">days</text>
+<text x="62" y="305" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">feels</text>
+<text x="62" y="325" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">automatic</text>
+<path d="M142.51111111111112 215.67474249606562 C168.51111111111112 259.6747424960656 198.51111111111112 269.6747424960656 228.51111111111112 271.6747424960656" fill="none" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="234.511" y="269.675" font-size="17" font-style="italic">a missed day:</text>
+<text x="234.511" y="289.675" font-size="17" font-style="italic">not a reset</text>
+<line x1="36" y1="456" x2="60" y2="456" stroke="#2F5F8A" stroke-width="4" stroke-linecap="round"/>
+<text x="70" y="462" font-size="18">Fastest in the study: about 18 days</text>
+<line x1="36" y1="484" x2="60" y2="484" stroke="#7A5620" stroke-width="4" stroke-linecap="round"/>
+<text x="70" y="490" font-size="18">Middle (median): about 66 days</text>
+<line x1="36" y1="512" x2="60" y2="512" stroke="#3E6B4C" stroke-width="4" stroke-linecap="round"/>
+<text x="70" y="518" font-size="18">Slowest: about 254 days</text>
+<text x="28" y="551" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustrative shapes, not the raw data. Lally and</tspan><tspan x="28" dy="23.04">colleagues (2010) followed 96 volunteers; reaching</tspan><tspan x="28" dy="23.04">95% of each person’s own plateau took 18 to 254</tspan><tspan x="28" dy="23.04">days, median 66. Simpler habits formed faster.</tspan></text>
+</svg>
