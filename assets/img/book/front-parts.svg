@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 902.64" width="540" height="902.64" role="img" aria-labelledby="fig-front-parts-t fig-front-parts-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-front-parts-t">How the three parts of the book fit together</title>
+<desc id="fig-front-parts-d">Three stacked cards. Part One, Yourself, asks how do I work. Part Two, Between us, asks how do we share a life fairly. Part Three, Understanding people, asks how do people work. Arrows show that you bring yourself into everything between you, and that Part Three explains why the Part Two tools work. Underneath all three: most of what goes wrong between people is understandable, and much of it can be put right.</desc>
+<defs><marker id="fig-front-parts-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker><marker id="fig-front-parts-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
+<rect x="1" y="1" width="538" height="900.64" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">How the three parts fit together</text>
+<rect x="28" y="68" width="428" height="162.64" rx="16" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<circle cx="60" cy="102" r="18" fill="#2F5F8A"/>
+<text x="60" y="109" font-size="20" font-weight="bold" fill="#FCF9F1" text-anchor="middle">1</text>
+<text x="90" y="102.8" font-size="21" font-weight="bold">Part One · Yourself</text>
+<text x="90" y="131.8" font-size="20" font-style="italic">How do I work?</text>
+<text x="90" y="160.7" font-size="19" fill="#5A5346"><tspan x="90" dy="0">Then, Now and Next: where your</tspan><tspan x="90" dy="24.32">lens came from, how you run today,</tspan><tspan x="90" dy="24.32">and who you are becoming.</tspan></text>
+<line x1="60" y1="236.64" x2="60" y2="282.64" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-front-parts-ar-5a5346)"/>
+<text x="84" y="266.64" font-size="19" font-style="italic" fill="#5A5346"><tspan x="84" dy="0">You bring yourself into every shared</tspan><tspan x="84" dy="24.32">life.</tspan></text>
+<rect x="28" y="292.64" width="428" height="186.96" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<circle cx="60" cy="326.64" r="18" fill="#7A5620"/>
+<text x="60" y="333.64" font-size="20" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>
+<text x="90" y="327.44" font-size="21" font-weight="bold">Part Two · Between us</text>
+<text x="90" y="356.44" font-size="20" font-style="italic">How do we share a life fairly?</text>
+<text x="90" y="385.34" font-size="19" fill="#5A5346"><tspan x="90" dy="0">The Preface and Chapters I to V:</tspan><tspan x="90" dy="24.32">the unseen work, the split, full</tspan><tspan x="90" dy="24.32">tanks, two kinds of fair, the</tspan><tspan x="90" dy="24.32">monthly look-back.</tspan></text>
+<line x1="60" y1="485.6" x2="60" y2="531.6" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-front-parts-ar-5a5346)"/>
+<text x="84" y="515.6" font-size="19" font-style="italic" fill="#5A5346">The tools rest on how people work.</text>
+<rect x="28" y="541.6" width="428" height="213.84" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<circle cx="60" cy="575.6" r="18" fill="#3E6B4C"/>
+<text x="60" y="582.6" font-size="20" font-weight="bold" fill="#FCF9F1" text-anchor="middle">3</text>
+<text x="90" y="576.4" font-size="21" font-weight="bold"><tspan x="90" dy="0">Part Three · Understanding</tspan><tspan x="90" dy="26.88">people</tspan></text>
+<text x="90" y="632.28" font-size="20" font-style="italic">How do people work?</text>
+<text x="90" y="661.18" font-size="19" fill="#5A5346"><tspan x="90" dy="0">Seventeen short chapters: feelings,</tspan><tspan x="90" dy="24.32">stress, seeing, talking, belonging,</tspan><tspan x="90" dy="24.32">change, worth, loss, minds, love</tspan><tspan x="90" dy="24.32">and more.</tspan></text>
+<path d="M456 581.6 C488 581.6 488 561.6 486 352.64 C486 340.64 476 332.64 458 332.64" fill="none" stroke="#3E6B4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 0" marker-end="url(#fig-front-parts-ar-3e6b4c)"/>
+<text x="496" y="467.12" font-size="18" font-style="italic" fill="#3E6B4C" text-anchor="middle" transform="rotate(-90 496 467.12)">explains why</text>
+<rect x="28" y="777.44" width="484" height="101.2" rx="14" fill="#ECE2C4"/>
+<text x="48" y="811.44" font-size="20" font-style="italic"><tspan x="48" dy="0">Underneath all three: most of what goes</tspan><tspan x="48" dy="25.6">wrong between people is understandable,</tspan><tspan x="48" dy="25.6">and much of it can be put right.</tspan></text>
+</svg>
