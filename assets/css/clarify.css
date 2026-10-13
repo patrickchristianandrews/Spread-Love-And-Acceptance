@@ -1,0 +1,72 @@
+/* clarify.css: "A few quick questions so the read is fair" (assets/js/clarify.js).
+   Light tokens only: the site's dark mode inverts the whole page, so this follows it by itself. */
+.tcl-slot{ margin:1rem 0; max-width:46rem; }
+.tcl-slot[hidden]{ display:none !important; }
+.tcl-offer, .tcl-ask, .tcl-result{
+  box-sizing:border-box; max-width:100%; overflow-wrap:anywhere;
+  border:1px solid var(--line, #D9CBA3); border-left:4px solid var(--brass, #A8792F);
+  background:#FFFDF6; color:var(--ink, #2B2620); border-radius:14px;
+  padding:.9rem 1.05rem; font:inherit; line-height:1.5;
+}
+.tcl-offer p, .tcl-ask p, .tcl-result p{ margin:.3rem 0; }
+.tcl-offer-t{ font-size:1rem; }
+.tcl-offer-t strong{ font-weight:600; }
+.tcl-offer-d, .tcl-why, .tcl-kept, .tcl-note, .tcl-foot-t{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.tcl-kept, .tcl-note{ font-size:.85rem; margin-top:.6rem !important; }
+.tcl-row, .tcl-foot{ display:flex; flex-wrap:wrap; gap:.5rem .9rem; align-items:center; margin-top:.7rem; }
+.tcl-btn{
+  min-height:44px; padding:.5rem 1rem; border-radius:999px; cursor:pointer;
+  border:1.5px solid var(--credit, #3E6B4C); background:var(--credit, #3E6B4C); color:#FFFDF6;
+  font:inherit; font-size:.95rem; font-weight:600; max-width:100%; white-space:normal; text-align:center;
+}
+.tcl-btn:hover{ filter:brightness(1.08); }
+.tcl-link{
+  min-height:44px; padding:.35rem .2rem; border:0; background:none; cursor:pointer;
+  color:var(--focus, #2B5B8C); text-decoration:underline; text-underline-offset:3px; font:inherit; font-size:.92rem;
+}
+.tcl-btn:focus-visible, .tcl-link:focus-visible, .tcl-a:focus-visible, .tcl-result:focus-visible, .tcl-q:focus-visible, .tcl-links a:focus-visible{
+  outline:3px solid var(--focus, #2B5B8C); outline-offset:2px;
+}
+.tcl-q:focus, .tcl-result:focus{ outline:none; }
+.tcl-head{ border-bottom:1px dashed var(--line, #D9CBA3); padding-bottom:.45rem; margin-bottom:.5rem; }
+.tcl-title-s{ font-weight:600; font-size:.95rem; }
+.tcl-q{ font-weight:600; font-size:1rem; margin:.6rem 0 .35rem !important; }
+.tcl-count{ display:block; font-weight:400; font-size:.82rem; color:var(--ink-soft, #5A5346); letter-spacing:.02em; margin-bottom:.15rem; }
+.tcl-answers{ display:flex; flex-wrap:wrap; gap:.45rem; }
+.is-step .tcl-answers{ flex-direction:column; align-items:stretch; }
+.tcl-a{
+  min-height:44px; padding:.45rem .9rem; border-radius:12px; cursor:pointer; text-align:left;
+  border:1.5px solid var(--line, #D9CBA3); background:#FFFFFF; color:var(--ink, #2B2620);
+  font:inherit; font-size:.95rem; line-height:1.35; max-width:100%; white-space:normal;
+}
+.tcl-a:hover{ border-color:var(--brass, #A8792F); }
+.tcl-a[aria-pressed="true"]{ border-color:var(--credit, #3E6B4C); background:#E9F2EA; font-weight:600; }
+.tcl-a.is-neutral{ background:transparent; border-style:dashed; color:var(--ink-soft, #5A5346); }
+.tcl-a.is-guess{ border-color:var(--brass, #A8792F); }
+.is-step .tcl-a.is-neutral{ align-self:flex-start; }
+.is-list .tcl-qbox{ padding:.35rem 0 .55rem; border-bottom:1px dotted var(--line, #D9CBA3); }
+.is-list .tcl-qbox:last-child{ border-bottom:0; }
+.is-list .tcl-a{ padding:.35rem .75rem; font-size:.9rem; }
+.tcl-loading{ color:var(--ink-soft, #5A5346); font-style:italic; }
+.tcl-result{ border-left-color:var(--credit, #3E6B4C); }
+.tcl-result.tcl-l1{ border-left-color:var(--brass, #A8792F); }
+.tcl-result.tcl-l2{ border-left-color:#B8862F; }
+.tcl-result.tcl-l3{ border-left-color:#7A6AA8; }
+.tcl-result.tcl-safety{ border-left-color:#9C8BC9; background:#F6F3FB; }
+.tcl-kicker{ font-size:.8rem; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-soft, #5A5346); }
+.tcl-title{ font-family:"Fraunces", Georgia, serif; font-size:1.18rem; font-weight:600; line-height:1.3; margin:.15rem 0 .35rem !important; }
+.tcl-say{ margin:.6rem 0; padding:.55rem .8rem; background:#F5EFDE; border-radius:10px; }
+.tcl-say-h, .tcl-took-h{ font-weight:600; font-size:.9rem; margin-top:.7rem !important; }
+.tcl-say .tcl-say-h{ margin-top:0 !important; }
+.tcl-say-q{ font-style:italic; }
+.tcl-copied{ font-size:.85rem; color:var(--credit, #3E6B4C); margin-left:.4rem; }
+.tcl-crisis{ font-weight:600; }
+.tcl-links, .tcl-took, .tcl-yours ul{ margin:.35rem 0 .35rem 1.1rem; padding:0; }
+.tcl-links li, .tcl-took li, .tcl-yours li{ margin:.2rem 0; }
+.tcl-links a{ color:var(--focus, #2B5B8C); }
+.tcl-yours{ margin-top:.4rem; font-size:.9rem; }
+.tcl-yours summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; color:var(--ink-soft, #5A5346); }
+@media (max-width:480px){
+  .tcl-offer, .tcl-ask, .tcl-result{ padding:.8rem .85rem; border-radius:12px; }
+}
+@media print{ .tcl-offer, .tcl-ask{ display:none !important; } }

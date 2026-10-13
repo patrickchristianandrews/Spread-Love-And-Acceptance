@@ -119,6 +119,7 @@ async function makeBook(ctx, file, opts = {}) {
         const id = (r.querySelector('a') || {}).getAttribute && r.querySelector('a').getAttribute('href').slice(1);
         if (!document.getElementById(id)) r.remove();
       });
+      document.querySelectorAll('.pe-lof-list li').forEach(li => { const a = li.querySelector('a'); if (a && !document.getElementById(a.getAttribute('href').slice(1))) li.remove(); });
       document.querySelectorAll('.pe-part-list li').forEach(li => { const a = li.querySelector('a'); if (a && !document.getElementById(a.getAttribute('href').slice(1))) li.remove(); });
       const notes = document.querySelector('.pe-notes');
       if (notes) {
@@ -149,9 +150,13 @@ async function makeBook(ctx, file, opts = {}) {
   }, { SITE, sample: !!opts.sample });
   log('prepared');
   if (prep.missingQR) console.log('  warning: %d QR codes not drawn', prep.missingQR);
+  // every picture loads before printing (lazy ones too), but a broken one never holds the book up
   await page.evaluate(async () => {
-    await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+    document.querySelectorAll('img[loading="lazy"]').forEach(i => { i.loading = 'eager'; });
+    const all = Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+    await Promise.race([all, new Promise(r => setTimeout(r, 30000))]);
   });
+  log('images');
 
   const fill = async (map, ix) => page.evaluate(({ map, ix }) => {
     document.querySelectorAll('.pe-pg[data-pg]').forEach(e => {

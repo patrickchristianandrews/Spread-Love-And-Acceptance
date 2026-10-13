@@ -528,12 +528,14 @@ def fig_html(f, markers=True):
          '<img src="%s" alt="%s"%s loading="lazy" decoding="async"></a>'
          '<figcaption><span class="book-fig-n">Figure %d</span> %s</figcaption></figure>') % (
         esc(f['id']), esc(f.get('kind', '')), esc(f['src']), esc(f['src']), esc(f.get('alt', '')), dims, f['n'], f.get('caption', ''))
-    return ('<!-- book-fig:start -->\n%s\n<!-- book-fig:end -->' % s) if markers else s
+    return ('<!-- book-fig:start -->\n%s\n<!-- book-fig:end -->' % s) if markers else s.replace(' loading="lazy"', '')
 
 
 def ex_html(x):
     body = read(x['path'])
     body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
+    # printed copies show where the "Fill in your own" link goes, as a short address
+    body = re.sub(r'(<p class="bk-ex-link"[^>]*>.*?)</p>', lambda m: re.sub(r'<a href="(/[^"]*)"', lambda a: '<a href="%s" data-u="spreadloveandacceptance.com%s"' % (a.group(1), a.group(1).split('#')[0]), m.group(0)), body, flags=re.S)
     title = x.get('title') or 'A filled-in example'
     # the snippet carries its own id (x['id']) on its <figure>; the wrapper only carries the number
     return ('<!-- book-ex:start -->\n<div class="book-ex-wrap no-bubble" data-ex-n="%d" data-ex-title="%s">%s</div>\n<!-- book-ex:end -->') % (

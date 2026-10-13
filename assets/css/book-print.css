@@ -231,7 +231,9 @@ h1 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-si
 .pe-end-list { list-style: none; padding: 0; margin: 0; }
 .pe-end-list li { position: relative; padding-left: 5mm; margin: 0 0 1.6mm; font-size: 9.4pt; line-height: 1.42; }
 .pe-end-list li::before { content: ""; position: absolute; left: .4mm; top: 1.6mm; width: 1.8mm; height: .9mm; border-left: 1.2pt solid var(--pc); border-bottom: 1.2pt solid var(--pc); transform: rotate(-45deg); }
-.pe-end-links { margin: 0 0 4mm; break-inside: avoid; }
+.pe-end-links { margin: 0 0 4mm; }
+.pe-end-conn li, .pe-end-k { break-inside: avoid; }
+.pe-end-k { break-after: avoid; }
 .pe-end-conn { list-style: none; padding: 0; margin: 0; }
 .pe-end-conn li { display: grid; grid-template-columns: 1fr auto; column-gap: 4mm; padding: 1.5mm 0; border-bottom: .4pt solid #E2D6B6; margin: 0; font-size: 9pt; line-height: 1.35; }
 .pe-conn-l { grid-column: 1; font-weight: 600; }
@@ -299,3 +301,7 @@ h1 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-si
 .bk-ex .bk-ex-title, .bk-ex .bk-ex-h, .bk-ex h3, .bk-ex h4 { font-family: "Fraunces Print", "Fraunces", Georgia, serif !important; }
 .bk-ex { font-size: 8.8pt !important; line-height: 1.42 !important; margin: 4mm 0 5mm !important; padding: 4mm 4mm 2.4mm !important; border-top: 2pt solid var(--pc) !important; }
 .bk-ex .bk-ex-k { color: var(--pc) !important; }
+
+/* the "Fill in your own" link under each example shows a short address, not the full https link */
+.bk-ex-link a::after { content: none !important; }
+.bk-ex-link a[data-u]::after { content: " (" attr(data-u) ")" !important; font-size: .82em; color: #5A5346; }
