@@ -11632,7 +11632,26 @@
           "How do I test a work email before I send it?"
         ]
       ],
-      "notPat": "\\b(of|with) (two|three|four|five|six|seven|eight|[2-8])\\b|\\bteam of\\b"
+      "notPat": "\\b(of|with) (two|three|four|five|six|seven|eight|[2-8])\\b|\\bteam of\\b",
+      "page": "/work.html",
+      "pageChips": [
+        [
+          "My co-founder and I clash",
+          "My business partner and I keep clashing"
+        ],
+        [
+          "Nobody sees the admin I do",
+          "Nobody sees the admin I do"
+        ],
+        [
+          "Small talk is hard",
+          "I hate small talk at work. What do I say?"
+        ],
+        [
+          "Who owns what?",
+          "My team keeps fighting over who owns what"
+        ]
+      ]
     },
     {
       "id": "teaminvisible",
@@ -11783,6 +11802,25 @@
         [
           "How do I ask my parents for more freedom?",
           "How do I ask my parents for more freedom?"
+        ]
+      ],
+      "page": "/teens.html",
+      "pageChips": [
+        [
+          "My nan doesn’t get me",
+          "I live with my nan and she doesn’t get me"
+        ],
+        [
+          "They took my phone",
+          "My carers took my phone again"
+        ],
+        [
+          "I miss my mum",
+          "I miss my mum, she’s away"
+        ],
+        [
+          "My parents keep fighting",
+          "My parents keep fighting"
         ]
       ]
     },

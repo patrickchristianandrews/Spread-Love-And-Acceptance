@@ -1,31 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 638" width="540" height="638" role="img" aria-labelledby="fig-u2-ladder-t fig-u2-ladder-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 680" width="540" height="680" role="img" aria-labelledby="fig-u2-ladder-t fig-u2-ladder-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u2-ladder-t">The ladder: three everyday states, and how a day moves through them</title>
 <desc id="fig-u2-ladder-d">Three bands. Top: revved up, fast and tense, small things feel urgent or personal. Middle: calm and connected, you can think, listen and hear hard things. Bottom: running on empty, flat and slow, short of words. A line shows a grandfather minding a toddler: calm at two, revved up by four, running on empty by six. Inside the middle band, the &quot;window&quot;, you can feel strongly and still think.</desc>
 
-<rect x="1" y="1" width="538" height="636" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<rect x="1" y="1" width="538" height="678" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">The ladder: three everyday states</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">You move up and down it all day.</text>
-<rect x="28" y="104" width="484" height="110" rx="0" fill="#F7DEE0"/>
+<rect x="28" y="104" width="484" height="124" rx="0" fill="#F7DEE0"/>
 <text x="42" y="134" font-size="20" font-weight="bold" fill="#8E3B47">Revved up</text>
-<text x="42" y="158" font-size="18" font-style="italic" fill="#5A5346">fast, tense; small things feel urgent</text>
-<rect x="28" y="214" width="484" height="110" rx="0" fill="#DCE7D8"/>
-<text x="42" y="244" font-size="20" font-weight="bold" fill="#3E6B4C">Calm and connected</text>
-<text x="42" y="268" font-size="18" font-style="italic" fill="#5A5346">you can think, listen, hear hard things</text>
-<rect x="28" y="324" width="484" height="110" rx="0" fill="#DCEAF6"/>
-<text x="42" y="354" font-size="20" font-weight="bold" fill="#2F5F8A">Running on empty</text>
-<text x="42" y="378" font-size="18" font-style="italic" fill="#5A5346">flat, slow, short of words</text>
-<rect x="28" y="104" width="484" height="330" rx="4" fill="none" stroke="#D9CBA3" stroke-width="2"/>
-<line x1="28" y1="214" x2="512" y2="214" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 5"/>
-<line x1="28" y1="324" x2="512" y2="324" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 5"/>
-<path d="M68.0 269.0 C101.7 269.0 101.7 275.6 135.3 275.6 C155.5 275.6 155.5 252.5 175.7 252.5 C195.9 252.5 195.9 229.4 216.1 229.4 C236.3 229.4 236.3 189.8 256.5 189.8 C270.0 189.8 270.0 150.2 283.5 150.2 C296.9 150.2 296.9 170.0 310.4 170.0 C330.6 170.0 330.6 229.4 350.8 229.4 C371.0 229.4 371.0 308.6 391.2 308.6 C411.4 308.6 411.4 361.4 431.6 361.4 C451.8 361.4 451.8 381.2 472.0 381.2" fill="none" stroke="#2B2620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-<circle cx="135.333" cy="275.6" r="7" fill="#2B2620"/>
-<circle cx="283.467" cy="150.2" r="7" fill="#2B2620"/>
-<circle cx="404.667" cy="328.4" r="7" fill="#2B2620"/>
-<text x="135.333" y="458" font-size="18" fill="#5A5346" text-anchor="middle">2pm</text>
-<text x="270" y="458" font-size="18" fill="#5A5346" text-anchor="middle">4pm</text>
-<text x="404.667" y="458" font-size="18" fill="#5A5346" text-anchor="middle">6pm</text>
-<text x="28" y="484" font-size="18" font-style="italic" fill="#5A5346">Same grandfather, same toddler. The state changed.</text>
-<rect x="28" y="498" width="484" height="46.7" rx="12" fill="#ECE2C4"/>
-<text x="270" y="531" font-size="19" font-weight="bold" text-anchor="middle">Hard talks go best from the middle band.</text>
-<text x="28" y="565.7" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Everyday words, not a medical model. A related map</tspan><tspan x="28" dy="23.04">is the “window of tolerance” (Siegel, 1999): inside</tspan><tspan x="28" dy="23.04">it, you can feel strongly and still think.</tspan></text>
+<text x="42" y="158" font-size="18" font-style="italic" fill="#5A5346"><tspan x="42" dy="0">fast, tense; small</tspan><tspan x="42" dy="23.04">things feel urgent</tspan></text>
+<rect x="28" y="228" width="484" height="124" rx="0" fill="#DCE7D8"/>
+<text x="42" y="258" font-size="20" font-weight="bold" fill="#3E6B4C"><tspan x="42" dy="0">Calm and</tspan><tspan x="42" dy="25.6">connected</tspan></text>
+<text x="42" y="307.6" font-size="18" font-style="italic" fill="#5A5346"><tspan x="42" dy="0">you can think,</tspan><tspan x="42" dy="23.04">listen, hear hard</tspan><tspan x="42" dy="23.04">things</tspan></text>
+<rect x="28" y="352" width="484" height="124" rx="0" fill="#DCEAF6"/>
+<text x="42" y="382" font-size="20" font-weight="bold" fill="#2F5F8A"><tspan x="42" dy="0">Running on</tspan><tspan x="42" dy="25.6">empty</tspan></text>
+<text x="42" y="431.6" font-size="18" font-style="italic" fill="#5A5346"><tspan x="42" dy="0">flat, slow, short of</tspan><tspan x="42" dy="23.04">words</tspan></text>
+<rect x="28" y="104" width="484" height="372" rx="4" fill="none" stroke="#D9CBA3" stroke-width="2"/>
+<line x1="28" y1="228" x2="512" y2="228" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 5"/>
+<line x1="28" y1="352" x2="512" y2="352" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="6 5"/>
+<line x1="246" y1="112" x2="246" y2="468" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M264.0 290.0 C283.0 290.0 283.0 297.4 302.0 297.4 C313.4 297.4 313.4 271.4 324.8 271.4 C336.2 271.4 336.2 245.4 347.6 245.4 C359.0 245.4 359.0 200.7 370.4 200.7 C378.0 200.7 378.0 156.1 385.6 156.1 C393.2 156.1 393.2 178.4 400.8 178.4 C412.2 178.4 412.2 245.4 423.6 245.4 C435.0 245.4 435.0 334.6 446.4 334.6 C457.8 334.6 457.8 394.2 469.2 394.2 C480.6 394.2 480.6 416.5 492.0 416.5" fill="none" stroke="#2B2620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="302" cy="297.44" r="7" fill="#2B2620"/>
+<circle cx="385.6" cy="156.08" r="7" fill="#2B2620"/>
+<circle cx="454" cy="356.96" r="7" fill="#2B2620"/>
+<text x="302" y="500" font-size="18" fill="#5A5346" text-anchor="middle">2pm</text>
+<text x="378" y="500" font-size="18" fill="#5A5346" text-anchor="middle">4pm</text>
+<text x="454" y="500" font-size="18" fill="#5A5346" text-anchor="middle">6pm</text>
+<text x="28" y="526" font-size="18" font-style="italic" fill="#5A5346">Same grandfather, same toddler. The state changed.</text>
+<rect x="28" y="540" width="484" height="46.7" rx="12" fill="#ECE2C4"/>
+<text x="270" y="573" font-size="19" font-weight="bold" text-anchor="middle">Hard talks go best from the middle band.</text>
+<text x="28" y="607.7" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Everyday words, not a medical model. A related map</tspan><tspan x="28" dy="23.04">is the “window of tolerance” (Siegel, 1999): inside</tspan><tspan x="28" dy="23.04">it, you can feel strongly and still think.</tspan></text>
 </svg>

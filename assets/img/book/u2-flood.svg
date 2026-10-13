@@ -7,12 +7,12 @@
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Pause, settle, then come back.</text>
 <line x1="64" y1="112" x2="64" y2="378" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
 <line x1="64" y1="378" x2="510" y2="378" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
-<text x="52" y="138" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">body</text>
-<text x="52" y="160" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">alarm</text>
+<text x="48" y="248" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle" transform="rotate(-90 48 248)">body alarm</text>
 <text x="510" y="402" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">time</text>
 <rect x="66" y="112" width="444" height="76" rx="0" fill="#F7DEE0"/>
 <line x1="64" y1="188" x2="510" y2="188" stroke="#8E3B47" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 5"/>
-<text x="504" y="136" font-size="18" font-weight="bold" fill="#8E3B47" text-anchor="end">Flooded: thinking offline</text>
+<text x="74" y="140" font-size="18" font-weight="bold" fill="#8E3B47">Flooded:</text>
+<text x="74" y="162" font-size="18" font-weight="bold" fill="#8E3B47">thinking offline</text>
 <path d="M224.6 175.2 C264.6 165.2 300.5 144.0 340.5 144.0" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 6"/>
 <text x="346.52" y="150" font-size="18" font-style="italic" fill="#5A5346">pushing on</text>
 <rect x="233.48" y="192" width="151.64" height="186" rx="0" fill="#DCE7D8" fill-opacity="0.8"/>
