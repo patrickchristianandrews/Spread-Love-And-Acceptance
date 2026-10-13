@@ -55,6 +55,7 @@ fieldset.q legend + *{ clear:both; }
 }
 </style>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/clarify.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/snapshot/snapshot-diagnostic-snapshot-interactive.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/snapshot/snapshot-diagnostic-snapshot-interactive.html">
@@ -130,6 +131,7 @@ fieldset.q legend + *{ clear:both; }
 <div class="map" id="map" role="img"></div>
 <div class="scores" id="result-scores"></div>
 <div id="result-mismatch"></div>
+<div class="tcl-slot" id="clarify-slot" hidden></div>
 <div class="next-steps">
 <strong>One thing to try this week:</strong>
 <p id="result-action" style="margin:0.4rem 0 0;"></p>
@@ -289,6 +291,8 @@ $("snapshot-form").addEventListener("submit", function(e){
   if (word !== key){
     mm.innerHTML = '<div class="mismatch"><p style="margin:0;"><strong>Worth noticing:</strong> your answers point to <em>' + esc(A.name) + '</em>, but the word you picked was closer to <em>' + esc(AREAS[word].name) + '</em>. Feelings and patterns don’t always line up. That gap is a good thing to bring up gently with the others, especially if they take the snapshot too.</p></div>';
   } else mm.innerHTML = "";
+  // not the steady area: a few optional questions first, so the read is fair (clarify.js)
+  if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: key !== "steady" });
   $("result-links").innerHTML = A.links.map(function(l){ return '<li><a href="' + l[1] + '">' + esc(l[0]) + '</a></li>'; }).join("") +
     '<li><a href="/five-pillars.html">The Five Pillars, in plain words</a></li><li><a href="/do/workpaper-playground.html">Practice in the Workpaper Playground</a></li>';
   var L = ["My 2-minute snapshot (The Objective Ledger)", "About: " + $("group").options[$("group").selectedIndex].text, "", "Area: " + A.name, A.desc(g), "",

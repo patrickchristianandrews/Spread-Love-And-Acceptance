@@ -190,7 +190,7 @@
   // Each kind has: how it's found, how much heat it adds, and what the other person may hear.
   var KINDS = {
     threat:   { label: 'Safety: a threat', heat: 6, tone: 'alarm', safety: true },
-    control:  { label: 'Safety: controlling', heat: 4, tone: 'alarm', safety: true },
+    control:  { label: 'Safety: checking up or cutting off', heat: 4, tone: 'alarm', safety: true },
     withdraw: { label: 'Shutting the door', heat: 2, tone: 'hot',
                 hear: '“Not now,” “forget it” or a silent “…” can mean someone is flooded: too overwhelmed to keep going. It can also mean they’re hurt and want the other person to keep trying. Without a time to come back, the other person may hear “this is over.”',
                 instead: 'Name the pause and a time to come back: “I need an hour. I’ll call you at 8.”' },
@@ -285,7 +285,10 @@
   function words(list) { return new RegExp('(?:^|[^\\w’\'])(' + list.join('|') + ')(?=$|[^\\w’\'])', 'gi'); }
   var PATTERNS = {
     threat: [words(["i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:hurt|kill|hit|ruin|destroy|end) you", "you(?:[’']?ll| will) regret (?:this|it)", "you(?:[’']?ll| will) be sorry", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) make you (?:pay|sorry|regret)", "i know where you (?:are|live|work)", "watch your back", "or else(?=\\s*(?:[.!?…]|$))", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) find you", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) take (?:the kids|the children|your kids|them) (?:away|from you)", "you(?:[’']?ll| will) never see (?:the kids|the children|them|your kids) again", "if you (?:leave|go|tell anyone)[^.!?]{0,40}(?:i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna))|you(?:[’']?ll| will) never)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) (?:post|send|share|show everyone) (?:your|the|those) (?:photos|pictures|messages|videos)", "i(?:[’']?ll| will|[’']?m (?:going to|gonna)| am (?:going to|gonna)) tell everyone"])],
-    control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "(?:send|share) (?:me )?your location", "i(?:[’']?m| am) tracking you", "who were you (?:with|talking to|texting)", "answer me", "you(?:[’']?re| are) not allowed", "you (?:can[’']?t|cannot) (?:go|see|talk to|leave|have)", "you need my permission", "i forbid", "you(?:[’']?re| are) not going (?:out|anywhere)", "stop (?:seeing|talking to) your (?:friends|family|sister|brother|mom|mum|dad)", "(?:block|delete) (?:him|her|them|your friends)", "you don[’']?t get (?:any )?money", "i control the money", "you(?:[’']?ll| will) do as i say", "because i said so"])],
+    // only clear signs of control (owner's rule, round 10): checking a phone or passwords, tracking, money, "you need my permission".
+    // A firm no, a house rule ("you can't see your friends until your homework is done"), "because I said so" or a question
+    // ("who were you with?") is not control; the shared control() below reads cutting someone off, demands and fear.
+    control: [words(["i(?:[’']?m| am) (?:checking|going through|going to check) your phone", "give me your (?:phone|password|passcode)", "what(?:[’']?s| is) your password", "i(?:[’']?m| am) tracking you", "you need my permission to (?:see|go out|leave|spend|talk to|use)", "you don[’']?t get (?:any )?money", "i control the money", "stop (?:seeing|talking to) your (?:friends|family)"])],
     verdict: [words(["you(?:[’']?re| are) (?:so |such an? |just |being |really |always |)?(?:selfish|lazy|useless|pathetic|ridiculous|crazy|insane|childish|impossible|stupid|an idiot|a joke|a liar|a mess|toxic|unbelievable|hopeless|the worst|a narcissist|dramatic|immature|clueless|heartless|cold)", "you don[’']?t care(?: about)?", "you only care about", "you(?:[’']?re| are) the problem", "what(?:[’']?s| is) wrong with you", "your problem is", "typical you", "that(?:[’']?s| is) so you", "you(?:[’']?re| are) just like your", "you make me (?:sick|crazy|miserable|feel (?:worthless|stupid|small|like (?:crap|garbage|nothing|an idiot)|bad|guilty|terrible))", "you(?:[’']?ve| have) ruined"])],
     demand: [words(["you should(?:n[’']?t)?(?: have)?", "you need to", "you have to", "you better", "why can[’']?t you", "why didn[’']?t you", "why don[’']?t you ever", "why do you always", "how hard is it", "is it too much to ask", "just do it", "do it now", "(?:can|could|would|will) you (?:please )?just", "just (?:get|do) it (?:done|already)", "asap", "immediately", "urgently", "right away"])],
     defend: [words(["why (?:are|r) (?:you|u) (?:being )?(?:like this|like that|this way|so (?:dramatic|difficult|sensitive|touchy|weird|extra|needy|mean|annoying|crazy|upset|angry|mad|intense))", "why (?:are|r) (?:you|u) being (?:so )?(?:like this|like that|dramatic|difficult|weird|mean|petty|extra|needy|crazy|ridiculous)", "what(?:[’']?s| is) (?:your|ur) (?:problem|deal|issue)", "what did i (?:even )?do(?: (?:now|wrong|this time))?", "i didn[’']?t (?:even )?do anything(?: wrong)?", "it[’']?s not my fault", "that[’']?s not what i said", "i never said that", "why do you always have to", "why is everything (?:a|such a) (?:big )?(?:deal|fight|problem)", "here we go"])],
@@ -331,6 +334,9 @@
     // threats and controlling lines the shared list knows ("if you tell anyone, you'll be sorry"), and digs or scorecards
     if (P && P.threats) P.threats(text).forEach(function (x) { marks.push({ kind: 'threat', start: x.start, end: x.end, text: x.text }); });
     if (P && P.digs) P.digs(text).forEach(function (x) { marks.push({ kind: 'dig', start: x.start, end: x.end, text: x.text }); });
+    // the shared reading of control (cutting someone off from people generally, checking up as a demand, put-downs that
+    // say they're worth nothing, someone saying they're afraid): the same bar as the Text message checker
+    if (P && P.control) { var cx = P.control(text); if (cx && !marks.some(function (m) { return m.kind === 'control' && m.start < cx.end && cx.start < m.end; })) marks.push({ kind: 'control', start: cx.start, end: cx.end, text: cx.text, ckind: cx.kind }); }
     // a calm boundary ("If you can't respect my relationship, I'll leave for today. I love you.") is not a threat
     if (P && P.isBoundary && P.isBoundary(text)) marks = marks.filter(function (m) { return m.kind !== 'threat'; });
     if (P && P.idioms) P.idioms(text).forEach(function (x) { if (!/kill|murder|strangle/i.test(x.text)) marks.push({ kind: 'idiom', start: x.start, end: x.start + x.text.length, text: x.text, means: x.means, words: x.words }); });
@@ -640,7 +646,7 @@
 
     if (r.safety) {
       moves.push({ key: 'safety', title: 'Step away from this one',
-        say: 'Threats, and checking or controlling what someone does, aren’t a communication problem to be worded better, and the conversation tools on this site aren’t meant for them. Step away from the conversation for now.',
+        say: 'Some lines here may be more than a wording problem: a threat, or checking up on someone or cutting them off. One conversation can’t tell you what a relationship is like, and better wording can’t fix those lines. If messages like this leave you feeling afraid or cut off, free and private support is there. Stepping away for now is okay.',
         script: '' });
       return moves;
     }
@@ -813,12 +819,14 @@
   // ---------- A reply someone is about to send ----------
   // Only tidy what can be tidied without changing meaning or grammar. Anything else is
   // flagged with a suggestion, and a simple shape is offered to write it fresh.
+  var SELF_BEFORE = /\b(?:i|i[’']m|i am|i[’']ve|i have|i[’']ll|i will|we|we[’']ve)\s+(?:\w+\s+){0,2}$/i;
   function tidy(text) {
     return String(text)
       .replace(/!{2,}/g, '!').replace(/\?{2,}/g, '?').replace(/\?!|!\?/g, '?')
       .replace(/\b([A-Z]{3,})\b/g, function (w) { return /^(?:OK|USA|UK|ADHD|OCD|PTSD|ASAP|FYI|PDF|WP|CALC|ID|NHS|IRS|GPS|ETA)$/.test(w) ? w : w.toLowerCase(); })
-      .replace(/\balways\b/gi, function (w) { return w[0] === 'A' ? 'Often' : 'often'; })
-      .replace(/\bnever\b/gi, function (w) { return w[0] === 'N' ? 'Rarely' : 'rarely'; });
+      // "I'm sorry I always…" is owning a pattern, so it stays; "you always…" becomes "often"
+      .replace(/\balways\b/gi, function (w, at, str) { return SELF_BEFORE.test(str.slice(Math.max(0, at - 30), at)) ? w : w[0] === 'A' ? 'Often' : 'often'; })
+      .replace(/\bnever\b/gi, function (w, at, str) { return SELF_BEFORE.test(str.slice(Math.max(0, at - 30), at)) ? w : w[0] === 'N' ? 'Rarely' : 'rarely'; });
   }
   function checkDraft(text) {
     text = String(text || '');

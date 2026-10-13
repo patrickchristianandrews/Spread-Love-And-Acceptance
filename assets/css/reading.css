@@ -242,7 +242,7 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .read.whole h1.pe-part-h{ margin:.2rem 0 .3rem; font-size:clamp(1.8rem, 1.4rem + 2vw, 2.4rem); }
 .read.whole .pe-part-b{ margin:0 0 .6rem; font-style:italic; color:var(--ink-soft); }
 .read.whole .pe-part-art{ display:none; }
-.read.whole h2.pe-part-l{ margin:.6rem 0 .3rem; font-size:.78rem; font-family:"IBM Plex Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--pc); }
+.read.whole .pe-part-l{ margin:.6rem 0 .3rem; font-size:.78rem; font-family:"IBM Plex Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--pc); }
 .read.whole ol.pe-part-list{ margin:0; padding-left:0 !important; list-style:none; }
 .read.whole ol.pe-part-list li{ margin:.25rem 0; max-width:none; }
 .read.whole ol.pe-part-list a span{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; color:var(--pc); margin-right:.3rem; }

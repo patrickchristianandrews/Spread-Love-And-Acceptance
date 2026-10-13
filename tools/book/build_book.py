@@ -857,12 +857,12 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <section class="pe-how pe-only" id="how">%s<h1>How to use this book</h1>
 <p class="pe-how-lede">%s This copy holds %d chapters in %s, in %s. There is no wrong way in.</p>
 <div class="pe-how-grid">
-<div><h2>The parts</h2><ul class="pe-how-parts">%s</ul></div>
-<div><h2>Two sizes of every chapter</h2><p>Every chapter comes in a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try. This is %s. The %s version is free at spreadloveandacceptance.com/book.</p></div>
-<div><h2>Read in order, or by need</h2><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
-<div><h2>In every chapter</h2><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
-<div><h2>The site, the program and Professor Puddles</h2><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
-<div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
+<div><p class="pe-how-h">The parts</p><ul class="pe-how-parts">%s</ul></div>
+<div><p class="pe-how-h">Two sizes of every chapter</p><p>Every chapter comes in a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try. This is %s. The %s version is free at spreadloveandacceptance.com/book.</p></div>
+<div><p class="pe-how-h">Read in order, or by need</p><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
+<div><p class="pe-how-h">In every chapter</p><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
+<div><p class="pe-how-h">The site, the program and Professor Puddles</p><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
+<div><p class="pe-how-h">Go gently</p><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
                        n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
     front = [f for f in FIGS if f['chapter'] == 'front']
@@ -883,10 +883,10 @@ def part_opener(part, deep, here):
     col, tint = PCOL[part]
     rows = ''.join('<li><a href="#%s"><span>%s</span> %s</a>%s</li>' % (e[0], esc(e[2]), esc(TITLES[e[0]]), pg(e[0]))
                    for e in ORDER if e[1] == part and e[0] in here)
-    return '''<section class="pe-part" id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
+    return '''<section class="pe-part no-bubble no-cheer no-dive" data-no-bubble id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
 <div class="pe-part-in"><p class="pe-part-k">%s</p><h1 class="pe-part-h">%s</h1><p class="pe-part-b">%s</p>
 <div class="pe-part-art">%s</div>
-<h2 class="pe-part-l">In this part</h2><ol class="pe-part-list">%s</ol></div></section>''' % (
+<p class="pe-part-l">In this part</p><ol class="pe-part-list">%s</ol></div></section>''' % (
         part, part, col, tint, mark('part-%d' % part), book_art.ledger_rules(170, 240, '#E9DFC4', col, top=20, step=7.5, left=24),
         name, sub, esc(blurb), book_art.part_mark(part), rows)
 
@@ -896,7 +896,7 @@ def chapter_open(e, deep):
     lis = ''.join('<li>%s</li>' % ('<a href="#%s--%s">%s</a>' % (e[0], i, esc(t)) if i else esc(t)) for i, t in hs)
     part = e[1]
     kicker = chapter_name(e) if part != 4 else 'Afterword'
-    return '''<header class="ch-open" data-part="%d">%s<p class="ch-num" aria-hidden="true">%s</p><p class="ch-kicker">%s</p>
+    return '''<header class="ch-open no-bubble no-cheer no-dive" data-no-bubble data-part="%d">%s<p class="ch-num" aria-hidden="true">%s</p><p class="ch-kicker">%s</p>
 <h2 class="ch-title">%s</h2><p class="ch-intro">%s</p>
 <div class="ch-in"><p class="ch-in-k">In this chapter</p><ol class="ch-in-list">%s</ol></div></header>''' % (
         part, mark(e[0]), esc(big_label(e)), esc(kicker), esc(TITLES[e[0]]), LEDES[e[0]], lis)
@@ -907,7 +907,7 @@ def qr_slot(url):
 
 
 def chapter_end(e, deep, here):
-    s = '<aside class="pe-end no-bubble" data-part="%d" aria-label="End of chapter">' % e[1]
+    s = '<aside class="pe-end no-bubble no-cheer no-dive" data-no-bubble data-part="%d" aria-label="End of chapter">' % e[1]
     s += '<div class="pe-end-rem"><h3 class="pe-end-k">What to remember</h3>%s</div>' % remember_html(e[0], 'pe-end-list')
     links = CONNECT.get(e[0], [])
     if links:
@@ -995,14 +995,14 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
     col = PCOL[4][0]
     s = ''
     # glossary
-    s += '<section class="pe-back pe-gloss" id="glossary" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Words used in this book</h1>' % (col, PCOL[4][1], mark('glossary'))
+    s += '<section class="pe-back pe-gloss no-bubble no-cheer no-dive" data-no-bubble id="glossary" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Words used in this book</h1>' % (col, PCOL[4][1], mark('glossary'))
     s += '<p class="pe-back-lede">The book’s own words, each in one plain sentence. More at spreadloveandacceptance.com/glossary.</p><dl class="pe-gloss-list">'
     for gid, nm, d, ex, _w in gloss:
         s += '<div class="pe-gl"><dt id="gl-%s">%s</dt><dd>%s%s</dd></div>' % (gid, esc(nm), d, (' <span class="pe-gl-ex">%s</span>' % ex) if ex else '')
     s += '</dl></section>'
     # list of figures and filled-in examples
     if figs:
-        s += '<section class="pe-back pe-lof" id="figures" style="--pc:%s">%s<h1 class="pe-back-h">List of figures</h1><ol class="pe-lof-list">' % (col, mark('figures'))
+        s += '<section class="pe-back pe-lof no-bubble no-cheer no-dive" data-no-bubble id="figures" style="--pc:%s">%s<h1 class="pe-back-h">List of figures</h1><ol class="pe-lof-list">' % (col, mark('figures'))
         for f in figs:
             cap = strip_tags(f.get('caption', '')).strip()
             cap = cap.split(': ')[0] if ': ' in cap[:70] else re.split(r'(?<=[.!?])\s', cap)[0]
@@ -1011,14 +1011,14 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
                 'Front of the book' if f['chapter'] == 'front' else esc(SHORT[f['chapter']]), pg('fig-%d' % f['n']))
         s += '</ol></section>'
     if exs:
-        s += '<section class="pe-back pe-lof" id="examples" style="--pc:%s">%s<h1 class="pe-back-h">List of filled-in examples</h1><ol class="pe-lof-list">' % (col, mark('examples'))
+        s += '<section class="pe-back pe-lof no-bubble no-cheer no-dive" data-no-bubble id="examples" style="--pc:%s">%s<h1 class="pe-back-h">List of filled-in examples</h1><ol class="pe-lof-list">' % (col, mark('examples'))
         for x in exs:
             s += '<li><a href="#%s--%s"><span class="pe-lof-n">Example %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
                 x['chapter'], x['id'], x['n'], esc(x.get('title', '')), esc(' · '.join(v for v in (x.get('who'), SHORT[x['chapter']]) if v)), pg('ex-%d' % x['n']))
         s += '</ol></section>'
     # research notes
     n_refs = sum(len(v) for v in notes.values())
-    s += '<section class="pe-back pe-notes" id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
+    s += '<section class="pe-back pe-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
     s += '<p class="pe-back-lede">The %d studies and books the chapters mention, chapter by chapter, each with what it found in plain words and where to read it. Every entry was checked against the original source. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
     for e in ORDER:
         if e[0] not in notes:

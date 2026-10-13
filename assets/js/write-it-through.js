@@ -146,7 +146,10 @@
   var BY_PAUSE = { today: 'Later today', tomorrow: 'Tomorrow', weekend: 'The weekend' };
 
   // ---------------------------------------------------------------- safety: fear, threats and control
-  var FEAR_RE = /\b(?:afraid\b(?!\s+(?:that|we|it|so|not|i'?ll|i will|i can'?t|i cannot|i won'?t)\b)|scared of (?:you|him|her|them|what)|scared to|frightened|terrified|(?:hit|hits|hitting|slapped|punched|kicked|pushed|shoved|choked|strangled|grabbed) (?:me|you|him|her|them|the kids|the children|my)\b|hurt(?:s)? me\b|threat(?:en|ened|ens|ening)?\b|won'?t let me|doesn'?t let me|don'?t let me|not allowed to (?:see|go|leave|work|have|talk)|controls? (?:my|all the|the|our) money|takes? (?:my|away my) (?:phone|money|keys|car|passport|cards?)|checks? my phone|tracks? (?:me|my phone|my location)|or else\b|i'?ll make you|you'?ll regret|kill (?:you|me|him|her)|not safe\b|unsafe\b|abus(?:e|ed|es|ive|ing)\b)/i;
+  // only clear signs (owner's rule, round 10): fear, violence, threats, money, phone or tracking, being cut off from people.
+  // A "no" ("my mum won't let me go to the gig", "you're not allowed to go"), "it hurts me", "I'm afraid I can't make it",
+  // "the ladder is unsafe" are everyday words, not a safety sign.
+  var FEAR_RE = /\b(?:(?:afraid|scared|frightened|terrified) (?:of (?:you|him|her|them|what (?:you|he|she|they)|how (?:angry|mad) (?:you|he|she|they))|to (?:go home|come home|say no|tell (?:you|him|her|them)|leave))\b|(?:i'?m|i am|i feel) (?:so |really )?(?:frightened|terrified)\b|(?:hit|hits|hitting|slapped|punched|kicked|pushed|shoved|choked|strangled|grabbed) (?:me|you|him|her|them|the kids|the children|my)\b|hurts? me (?:physically|badly)\b|threaten(?:ed|s|ing)? (?:to|me|my|the kids)\b|(?:won'?t|doesn'?t|don'?t|never) let me (?:(?:see|talk to|visit|call) (?:my )?(?:friends|family|mum|mom|dad|parents|sister|brother|anyone)|(?:have|use|keep|touch|see) (?:my own |my |any |our )?(?:money|bank card|bank|card|cards|phone|passport|wages|account)|leave the house|get a job|go to work)\b|controls? (?:my|all the|the|our) money|takes? (?:my|away my) (?:phone|money|keys|car|passport|cards?)|checks? my phone|tracks? (?:me|my phone|my location)|or else(?=\s*(?:[.!?…]|$))|i'?ll make you (?:pay|regret|sorry|suffer)|you'?ll regret|kill (?:you|me|him|her)\b(?!.{0,20}(?:😂|🤣|lol|haha))|(?:don'?t|do not) feel safe|not safe (?:at home|with (?:you|him|her|them))|abus(?:e|ed|es|ive|ing)\b)/i;
   var SELF_RE = /\b(?:kill myself|end (?:it all|my life)|don'?t want to (?:be alive|live)|hurt myself|suicid)/i;
   function engine() { var E = window.SignalEngine; return E && typeof E.analyze === 'function' ? E : null; }
   function analyze(text) { var E = engine(); if (!E || !text) return null; try { return E.analyze(text, { channel: 'text' }); } catch (e) { return null; } }
@@ -163,7 +166,7 @@
   function safetyNote(s, receiving) {
     var box = el('div', { cls: 'wit-safety-in' });
     if (s.fear) {
-      box.appendChild(el('p', null, [el('strong', { text: receiving ? 'If this message frightens you, your safety comes first.' : 'Some of these words can mean you don’t feel safe with this person.' })]));
+      box.appendChild(el('p', null, [el('strong', { text: receiving ? 'If this message frightens you, your safety comes first.' : 'Some of these words sound like you may not feel safe. If so, that matters more than any message.' })]));
       box.appendChild(el('p', { text: receiving
         ? 'You don’t have to reply, and you don’t have to do what it asks to keep the peace. Threats, checking up on you, controlling money or cutting you off from people are not a communication problem.'
         : 'If you’re afraid of them, or they control your money, your phone or who you see, a well-worded message isn’t the fix, and it isn’t your job to talk them round. Your safety is what matters.' }));

@@ -67,6 +67,8 @@ const PROMISE = /\b(?:i promise|i(?:'ll| will) (?:never|always)|it won't happen 
 const low = s => String(s || '').replace(/[’‘]/g, "'").toLowerCase();
 
 const lab = {}; Object.keys(LABELS).forEach(k => lab[k] = {tp: 0, fp: 0, fn: 0, fpList: [], fnList: []});
+// concern labels (control, a threat, a crisis): how many messages get one, and how many of those a person wouldn't give one
+let concernN = 0, concernFalse = 0, concernWanted = 0, concernHit = 0; const concernFalseList = [];
 let lvlN = 0, lvlExact = 0, lvl5 = 0, lvlNear = 0, under = 0, over = 0, keepN = 0, keepOk = 0, promiseBad = 0, gotN = 0, gotOk = 0;
 const misses = [];
 CORPUS.forEach(c => {
@@ -112,6 +114,9 @@ CORPUS.forEach(c => {
     const want2 = [].concat(c.lvl).map(l => (want.has('control') || want.has('threat') || want.has('crisis')) ? ['danger', 'fight'] : l === 'kind' || l === 'clear' ? ['ok'] : l === 'a little sharp' ? ['ok', 'hurt'] : l === 'sharp' ? ['hurt', 'fight'] : ['fight', 'danger', 'hurt']);
     gotN++; if(want2.some(a => a.includes(head))) gotOk++; else why.push('read-mode headline "' + head + '" (' + r.head[1] + ')');
   }
+  const concern = !!(an.control || an.danger || an.selfHarm), wantsConcern = ['control', 'threat', 'crisis'].some(k => want.has(k) || maybe.has(k));
+  if(concern){ concernN++; if(!wantsConcern){ concernFalse++; concernFalseList.push(c.id); } }
+  if(['control', 'threat', 'crisis'].some(k => want.has(k))){ concernWanted++; if(concern || has(an, ['threat', 'legal'])) concernHit++; }
   if(why.length) misses.push({id: c.id, rel: c.rel, t: c.t, got, found: Object.keys(an.found).join(','), why});
 });
 
@@ -125,6 +130,7 @@ const summary = {
   labelsMicro: {precision: pct(TP, TP + FP), recall: pct(TP, TP + FN)},
   keepAsk: {n: keepN, ok: keepOk, pct: pct(keepOk, keepN)}, addedPromises: promiseBad,
   readMode: {n: gotN, ok: gotOk, pct: pct(gotOk, gotN)},
+  concern: {messages: concernN, falseAlarms: concernFalse, falseList: concernFalseList, wanted: concernWanted, caught: concernHit},
   fullyRight: CORPUS.length - misses.length, fullyRightPct: pct(CORPUS.length - misses.length, CORPUS.length)
 };
 // regression guard: every message that read fully right when corpus-pass.json was saved must still read right
@@ -147,7 +153,8 @@ console.log('  with kind and clear told apart (five levels): ' + lvl5 + '/' + lv
 console.log('  read softer than a person would: ' + under + ' · read harsher: ' + over);
 console.log('Messages with everything right (level, every label, rewrite, read mode): ' + summary.fullyRight + '/' + CORPUS.length + ' (' + summary.fullyRightPct + '%)');
 console.log('Rewrite keeps the ask: ' + keepOk + '/' + keepN + ' · rewrites that add a promise: ' + promiseBad);
-console.log('"Read a message I got" headline agrees: ' + gotOk + '/' + gotN + ' (' + summary.readMode.pct + '%)\n');
+console.log('"Read a message I got" headline agrees: ' + gotOk + '/' + gotN + ' (' + summary.readMode.pct + '%)');
+console.log('Concern labels (control, threat, crisis): ' + concernN + ' messages, ' + concernFalse + ' a person wouldn\'t give one' + (concernFalseList.length ? ' (#' + concernFalseList.join(', #') + ')' : '') + '; real ones caught: ' + concernHit + '/' + concernWanted + '\n');
 console.log('label        TP  FP  FN  precision  recall');
 table.forEach(x => console.log(x.label.padEnd(12) + String(x.tp).padStart(3) + String(x.fp).padStart(4) + String(x.fn).padStart(4) + String(x.precision + '%').padStart(11) + String(x.recall + '%').padStart(8)));
 console.log('all labels  ' + String(TP).padStart(4) + String(FP).padStart(4) + String(FN).padStart(4) + String(summary.labelsMicro.precision + '%').padStart(11) + String(summary.labelsMicro.recall + '%').padStart(8));

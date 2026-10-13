@@ -79,8 +79,14 @@
   var FIGHT_RE = /\b(?:argu(?:e|ed|ing|ment)|fight|fought|row(?:ed)?|yell(?:ed|ing)?|shout(?:ed|ing)?|snapp?ed|blew up|fell out)\b/i;
   var SORRY_RE = /\b(?:sorry|apologi[sz]ed?|my bad|i was wrong|made up)\b/i;
 
+  // what someone says about another person ("she said she wants to kill herself", "he's scared of his dad") counts too
+  var CRISIS3_RE = /\b(?:wants?|wanted|going|trying|tried|threaten(?:s|ed|ing)?|talk(?:s|ed|ing)? about|thinking about|thinks about) (?:to )?(?:kill (?:herself|himself|themselves|themself|myself)|end (?:her|his|their|my) (?:life|lives)|take (?:her|his|their|my) (?:own )?life|die)\b|\b(?:doesn't|does not|don't|do not|didn't) want to (?:be alive|live|be here|wake up)(?: anymore| any more)?\b|\bsuicid\w*|\bself[- ]harm\w*|\b(?:cutting|hurting) (?:herself|himself|themselves|myself)\b|\boverdos\w*/i;
+  var FEAR3_RE = /\b(?:(?:she|he|they)(?:'s|'re| is| are)|i'm|i am) (?:so |really |too )?(?:scared|afraid|frightened|terrified) (?:of (?:him|her|them|his|her|their|my)\b|to go home)|\b(?:hits?|hit|punched|slapped|shoved|choked|strangled) (?:me|her|him|them)\b|\bthreatened (?:to|me|her|him|them)\b/i;
   function scanSafety(t) {
-    var Pp = P(); if (!t || !Pp) return null;
+    var Pp = P(); if (!t) return null;
+    if (CRISIS3_RE.test(t) && !/\b(?:lol|joke|joking|💀|😂)\b/i.test(t)) return 'crisis';
+    if (FEAR3_RE.test(t)) return 'fear';
+    if (!Pp) return null;
     if (Pp.selfHarm && Pp.selfHarm(t)) return 'crisis';
     var c = Pp.control ? Pp.control(t) : null;
     if (c && c.kinds && c.kinds.indexOf('fear') !== -1) return 'fear';
@@ -497,7 +503,53 @@
     });
   }
 
-  var api = { read: read, norm: norm, isEmpty: isEmpty, count: count, forClarify: forClarify, usedHTML: usedHTML, mount: mount, clarify: clarify,
+  /* Which Clarify questions fit a reading, or '' when nothing in it is about possible unfairness or pressure.
+     an: a SignalEngine analysis (optional); text: the words. */
+  function clarifyType(an, text) {
+    var f = (an && an.found) || {}, t = String(text || '').toLowerCase();
+    var has = function (ids) { return ids.some(function (id) { return !!f[id]; }); };
+    if (an && an.control && an.control.kind === 'fear') return 'afraid';
+    if (an && an.danger) return '';
+    if (/\b(?:my money|our money|spend|spending|purchase|bills?|rent|account|card)\b/.test(t) && (has(['jab', 'blameq', 'absolute', 'control', 'oblig']) || (an && an.control))) return 'money';
+    if (an && an.control && an.control.kind === 'degrade') return 'respect';
+    if ((an && (an.control || an.ultOwn || (an.care && an.care.kind === 'no'))) || has(['threat', 'closer'])) return 'limits';
+    if (has(['label', 'contempt', 'dxlabel', 'compare'])) return 'respect';
+    if (/\b(?:dishes|chores|bins|laundry|housework|clean(?:ing)?|cook(?:ing)?|kids|school run|everything around here|all the work)\b/.test(t) && has(['absolute', 'again', 'jab', 'guilt', 'count', 'blameq', 'critic'])) return 'load';
+    if (has(['jab', 'count', 'guilt', 'sorrybut', 'madefeel', 'shouldhave', 'past'])) return 'repair';
+    if (has(['withdraw', 'stonewall', 'brushoff', 'invalid', 'calm', 'absolute', 'blameq'])) return 'communication';
+    return '';
+  }
+  /* Offer the Clarify questions in slot (an element), when the reading is about possible unfairness or pressure.
+     o: {an, text, ctx, onResult}. Loads /assets/js/clarify.js only when needed. Returns the type offered, or ''. */
+  function offerClarify(slot, o) {
+    o = o || {};
+    if (!slot || typeof document === 'undefined') return '';
+    var type = o.type || clarifyType(o.an, o.text);
+    if (!type) { slot.hidden = true; return ''; }
+    var go = function () {
+      if (!root.TOLClarify || !root.TOLClarify.offer) { slot.hidden = true; return; }
+      root.TOLClarify.offer(slot, { type: type, show: true, context: function () { return { text: [o.text, o.ctx && norm(o.ctx).before, o.ctx && norm(o.ctx).other].filter(Boolean).join('\n'), known: forClarify(o.ctx || {}) }; }, onResult: o.onResult });
+    };
+    if (root.TOLClarify) go();
+    else {
+      var s = document.querySelector('script[src*="/clarify.js"]');
+      if (!s) { s = document.createElement('script'); s.src = '/assets/js/clarify.js'; s.defer = true; document.head.appendChild(s); }
+      s.addEventListener('load', go);
+    }
+    return type;
+  }
+  // a line that matches how strong the answers say it is (the Clarify card itself carries the next step)
+  function clarifyLine(res) {
+    if (!res || res.skipped) return '';
+    var lv = res.key === 'safety' ? 4 : res.level;
+    return lv >= 4 ? 'From your answers, safety comes first. The card below has free, private support, as an option.'
+      : lv === 3 ? 'From your answers, this may be bigger than one message. Talking it through with someone outside the two of you could help.'
+      : lv === 2 ? 'From your answers, this looks like a pattern worth working on together, more than a one-off.'
+      : lv === 1 ? 'From your answers, this is worth a calm talk, not a big alarm.'
+      : 'From your answers, this sounds like an ordinary rough patch or a one-off. Read the notes above lightly.';
+  }
+
+  var api = { read: read, norm: norm, clarifyType: clarifyType, offerClarify: offerClarify, clarifyLine: clarifyLine, isEmpty: isEmpty, count: count, forClarify: forClarify, usedHTML: usedHTML, mount: mount, clarify: clarify,
     ONE_MESSAGE: ONE_MESSAGE, LISTS: LISTS, ENGINE_REL: ENGINE_REL, STORE: STORE, scanSafety: scanSafety };
   if (NODE) module.exports = api; else root.TOLContext = api;
 })(typeof window !== 'undefined' ? window : this);

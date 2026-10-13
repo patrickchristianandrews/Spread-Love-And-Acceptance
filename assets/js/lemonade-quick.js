@@ -791,10 +791,20 @@
     if (out.getAttribute('data-h') !== html) { out.setAttribute('data-h', html); out.innerHTML = html; }
     var ill = $('lq-ill'); if (ill) ill.setAttribute('aria-pressed', String(!!q.ill));
     var aw = $('lq-away'); if (aw) aw.setAttribute('aria-pressed', String(!!q.away));
-    renderExtra(); renderCompare(); renderSend(); renderMini();
+    renderExtra(); renderCompare(); renderSend(); renderMini(); renderClarify(all);
     if (cardP) { if (!all.n && cardP.open) cardP.show(false); else cardP.later(); }
     document.querySelectorAll('#lq-list .lq-row').forEach(paintRow);
     stickSoon();
+  }
+
+  // When the home jobs lean a long way one way (65% or more with two of you), a few optional questions so the
+  // read is fair (clarify.js): agreed, temporary or evening out elsewhere pulls it back to ordinary. Not shown
+  // while "One of us has been away" is on, which already explains it.
+  function renderClarify(all) {
+    var slot = $('lq-clarify'); if (!slot || !window.TOLClarify) return;
+    var r = all.n >= 4 && !q.away ? homeShares() : null, k = q.people.length;
+    var lop = !!r && Math.max.apply(null, r) >= (k === 2 ? 65 : Math.round(160 / k));
+    window.TOLClarify.offer(slot, { type: 'load', show: lop, lang: isEs() ? 'es' : 'en' });
   }
 
   /* ---------- long hours or illness: paid work beside the picture, nights, and a fair split ---------- */

@@ -68,6 +68,7 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calc01-core.js"></script>
 <script src="/assets/js/calc02-core.js"></script>
+<script src="/assets/js/clarify.js"></script>
 <script src="/assets/js/household.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/look-back-30-days-quick.html">
@@ -176,6 +177,7 @@
         <h3>What didn't shift</h3>
         <ul class="list" id="steady"></ul>
         <p class="hint" id="missing"></p>
+        <div class="tcl-slot" id="clarify-slot" hidden></div>
         <div class="next-box" id="next-box"><span class="lbl">One next step</span><div id="next"></div></div>
       </div>
       <div class="btn-row no-print">
@@ -275,6 +277,8 @@
     $("shifted").innerHTML = cmp.shifted.length ? cmp.shifted.map(li).join("") : "<li>Nothing moved by enough to count. That's useful to know too.</li>";
     $("steady").innerHTML = cmp.steady.length ? cmp.steady.map(li).join("") : "<li>Everything you filled in moved.</li>";
     $("missing").textContent = cmp.missing.length ? "Not filled in at both ends, so not read: " + cmp.missing.map(function(x){ return x.label.toLowerCase(); }).join(", ") + "." : "";
+    // the setup ends below working well, or something went the other way: optional questions first (clarify.js)
+    if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: !!(cmp.setup && cmp.setup.endBand.key !== "high") || cmp.shifted.some(function(x){ return x.status === "worse"; }) });
     var nx = cmp.next;
     $("next").innerHTML = (nx.why ? "<p>" + esc(nx.why) + "</p>" : "") + "<p><strong>" + esc(nx.text) + "</strong>" + (nx.link ? ' <a href="' + nx.link[1] + '">' + esc(nx.link[0]) + "</a>" : "") + "</p>" + (nx.extra ? "<p>" + esc(nx.extra) + "</p>" : "");
     setText((head ? head.replace(/<[^>]+>/g, "") : "") + plain);

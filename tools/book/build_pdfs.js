@@ -30,6 +30,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 const OUT = path.join(ROOT, 'book', 'pdf');
 const NAMES = ['whole', 'for-yourself', 'together', 'understanding'];
 const SITE = 'https://spreadloveandacceptance.com';
+const FONTS = new Map();
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tol-book-'));
 
 function pageTexts(buf) {
@@ -87,6 +88,10 @@ function indexPages(pages, terms, from, to) {
 }
 
 async function render(page) {
+  // Chromium sometimes fails a very long print when the machine is busy: wait and ask once more
+  try { return await printPdf(page); } catch (e) { console.log('  print failed (%s), trying again', e.message.split('\n')[0]); await page.waitForTimeout(3000); return printPdf(page); }
+}
+function printPdf(page) {
   return page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, outline: true, tagged: false });
 }
 
@@ -94,14 +99,25 @@ async function makeBook(ctx, file, opts = {}) {
   const t0 = Date.now(), log = m => { if (process.env.BOOK_VERBOSE) console.log('  %s %ds %s', file, Math.round((Date.now() - t0) / 1000), m); };
   const page = await ctx.newPage();
   page.on('pageerror', e => console.log('  page error:', e.message));
-  await page.route('**/*', route => {
+  await page.route('**/*', async route => {
     const u = route.request().url();
     if (u.startsWith('http://127.0.0.1:' + PORT + '/')) {
       // hold back the site's own scripts: the print edition needs none of the widgets
       if (/\/assets\/js\//.test(u) && !/\/assets\/js\/share-kit\.js/.test(u)) return route.abort();
       return route.continue();
     }
-    if (/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(u)) return route.continue();
+    if (/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(u)) {
+      // fonts come once, are kept for the next books, and a slow answer is asked again (a missing font file
+      // would print in a fallback face)
+      if (FONTS.has(u)) return route.fulfill(FONTS.get(u));
+      for (let i = 0; i < 4; i++) {
+        try {
+          const r = await route.fetch({ timeout: 30000 });
+          if (r.ok()) { const v = { status: 200, headers: r.headers(), body: await r.body() }; FONTS.set(u, v); return route.fulfill(v); }
+        } catch (e) {}
+      }
+      return route.abort();
+    }
     return route.abort();
   });
   await page.goto(`http://127.0.0.1:${PORT}/book/${file}.html`, { waitUntil: 'load', timeout: 180000 });
@@ -109,6 +125,15 @@ async function makeBook(ctx, file, opts = {}) {
   log('loaded');
   await page.addScriptTag({ url: '/assets/js/share-kit.js' }).catch(() => page.addScriptTag({ path: path.join(ROOT, 'assets/js/share-kit.js') }));
   await page.emulateMedia({ media: 'print' });
+  // the print stylesheet brings its own (static) font files: load every face before the first print,
+  // or Chromium prints with a fallback font and the page numbers move later
+  await page.evaluate(async () => {
+    await Promise.all([...document.fonts].map(f => f.load().catch(() => null)));
+    await document.fonts.ready;
+  });
+  const badFonts = await page.evaluate(() => [...document.fonts].filter(f => f.status !== 'loaded' && /U\+0-10FFFF/i.test(f.unicodeRange)).map(f => f.family + ' ' + f.weight + ' ' + f.style));
+  if (badFonts.length) console.log('  warning: print fonts not loaded:', badFonts.join(', '));
+  log('fonts');
   const prep = await page.evaluate(({ SITE, sample }) => {
     if (sample) {
       // a short look at the design: the front matter, Part Two's opener, one chapter and the back matter

@@ -76,6 +76,7 @@
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calc01-core.js"></script>
+<script src="/assets/js/clarify.js"></script>
 <script src="/assets/js/household.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
@@ -188,6 +189,7 @@
         </div>
         <h3 style="font-size:1rem;margin:16px 0 4px;">What would help most</h3>
         <ul class="moves" id="moves"></ul>
+        <div class="tcl-slot" id="clarify-slot" hidden></div>
         <p id="next" style="font-size:0.94rem;"></p>
       </div>
       <div class="btn-row no-print">
@@ -315,6 +317,8 @@
     var worst = sf.slice().sort(function(x, y){ return y.short - x.short; })[0];
     var moves = C.suggestions({ wb: wb, oc: oc, as: as, balance: b, ownership: o, names: names.map(function(_, i){ return nameOf(i); }) });
     $("moves").innerHTML = moves.length ? moves.map(function(m){ return "<li>" + esc(m.text) + (m.gain > 0 && !m.full ? ' <span class="gain nums-only">+' + fg(m.gain) + "</span>" : "") + (m.link ? ' <a href="' + m.link[1] + '">' + esc(m.link[0]) + "</a>" : "") + "</li>"; }).join("") : "<li>Every part is at its best. Keep the rhythm.</li>";
+    // not working well yet: a few optional questions first, so the read is fair (clarify.js)
+    if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: bd.key !== "high" });
     $("next").innerHTML = bd.key === "high"
       ? "<strong>Next:</strong> nothing in the setup needs changing this week. Keep the same rhythm of <a href=\"/check-ins.html\">check-ins</a>."
       : "<strong>Next:</strong> start with the biggest shortfall, <strong>" + esc(worst.name.toLowerCase()) + "</strong>, not with whatever happened most recently. Bring the first suggestion above to the others as a question, not a ruling." +

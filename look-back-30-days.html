@@ -138,6 +138,7 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calc01-core.js"></script>
 <script src="/assets/js/calc02-core.js"></script>
+<script src="/assets/js/clarify.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/look-back-30-days.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/look-back-30-days.html">
@@ -275,6 +276,7 @@
           </div>
           <p class="panel-note" style="margin-top:8px;">Start = the average of weeks 1 and 2 (the ones filled in). End = the average of weeks 3 and 4. Setup is <a href="/is-the-setup-working.html">CALC-01</a>'s setup score, when balance, ownership and everyone's load are all there.</p>
         </div>
+        <div class="tcl-slot" id="clarify-slot" hidden></div>
         <div class="next-box" id="next-box"><span class="lbl">One next step</span><div id="next"></div></div>
       </div>
       <div class="btn-row no-print">
@@ -498,6 +500,8 @@ hours to change hands     = &frac12; &times; &Sigma; |gap| over everyone</pre>
     var nx = cmp.next;
     $("next").innerHTML = (nx.why ? "<p>" + esc(nx.why) + "</p>" : "") + "<p><strong>" + esc(nx.text) + "</strong>" + (nx.link ? ' <a href="' + nx.link[1] + '">' + esc(nx.link[0]) + "</a>" : "") + "</p>" + (nx.extra ? "<p>" + esc(nx.extra) + "</p>" : "");
     setText(head.replace(/<[^>]+>/g, "") + plain);
+    // the month leans one way, or slipped: a few optional questions first, so the read is fair (clarify.js)
+    if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: !!(run && run.moved >= 3 && (run.overEvery || []).length) || !!(cmp.setup && cmp.setup.endBand.key !== "high") || cmp.shifted.some(function(x){ return x.status === "worse"; }) });
 
     var sl = K.slots(endDate()), C2 = K.compare(A, B, nm, true);
     var L = ["Look back over 30 days (CALC-02, Spread Love & Acceptance)", "People: " + nm.join(", "), "From " + K.nice(sl[0].from) + " to " + K.nice(sl[3].to), ""];

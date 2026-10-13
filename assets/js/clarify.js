@@ -52,7 +52,7 @@
   var W = {
     offerT: ['A few quick questions so the read is fair', 'Unas preguntas rápidas para que la lectura sea justa'],
     optional: ['(optional)', '(opcional)'],
-    offerD: ['A leaning number alone can’t tell a fair arrangement from one that isn’t working. A few taps help. About a minute.', 'Un número solo no distingue un arreglo justo de uno que no funciona. Unos toques ayudan. Un minuto, más o menos.'],
+    offerD: ['A number alone can’t tell an ordinary rough patch, or a setup you both chose, from something worth more time. A few taps help. About a minute.', 'Un número solo no distingue una mala racha normal, o un arreglo que eligieron los dos, de algo que merece más tiempo. Unos toques ayudan. Un minuto, más o menos.'],
     ask: ['Answer a few questions', 'Responder unas preguntas'],
     notNow: ['Not now', 'Ahora no'],
     why: ['Why I’m asking:', 'Por qué pregunto:'],
@@ -121,7 +121,7 @@
 
   function pickType(D, box, lang, guess, done) {
     box.textContent = '';
-    var id = 'tcl-' + (++uid), wrap = el('div', 'tcl-ask', null, { role: 'group', 'aria-labelledby': id + '-h' });
+    var id = 'tcl-' + (++uid), wrap = el('div', 'tcl-ask tol-plain no-bubble', null, { role: 'group', 'aria-labelledby': id + '-h' });
     wrap.appendChild(el('p', 'tcl-q', w('pick', lang), { id: id + '-h', tabindex: '-1' }));
     wrap.appendChild(el('p', 'tcl-why', w('pickWhy', lang)));
     var row = el('div', 'tcl-answers');
@@ -141,7 +141,7 @@
     var list = (box.clientWidth || 0) >= 560;
     var id = 'tcl-' + (++uid);
     box.textContent = '';
-    var wrap = el('div', 'tcl-ask' + (list ? ' is-list' : ' is-step'));
+    var wrap = el('div', 'tcl-ask tol-plain no-bubble' + (list ? ' is-list' : ' is-step'));
     var head = el('div', 'tcl-head');
     head.appendChild(el('p', 'tcl-title-s', D.t(ty.title, lang)));
     var why = el('p', 'tcl-why'); why.appendChild(el('strong', null, w('why', lang) + ' ')); why.appendChild(document.createTextNode(D.t(ty.why, lang)));
@@ -201,7 +201,7 @@
     o = o || {};
     ensureCss();
     var lang = res.lang || langOf(o), D = window.TOLClarifyData;
-    var card = el('div', 'tcl-result tcl-' + (res.key || 'l0'), null, { role: 'region', tabindex: '-1' });
+    var card = el('div', 'tcl-result tol-plain no-bubble tcl-' + (res.key || 'l0'), null, { role: 'region', tabindex: '-1' });
     if (!D) { card.appendChild(el('p', 'tcl-note', w('failed', lang))); return card; }
     var nx = D.next(res, lang), tid = 'tcl-' + (++uid);
     card.setAttribute('aria-labelledby', tid);
@@ -266,14 +266,14 @@
     if (st.key === key) { slot.hidden = !!st.dismissed; return; }
     st.key = key; st.dismissed = false;
     ensureCss();
-    slot.classList.add('tcl-slot');
+    slot.classList.add('tcl-slot', 'tol-plain', 'no-bubble');
     showOffer(slot);
     slot.hidden = false;
   }
   function showOffer(slot) {
     var st = slot._tcl, o = st.o, lang = langOf(o);
     slot.textContent = '';
-    var box = el('div', 'tcl-offer no-print');
+    var box = el('div', 'tcl-offer tol-plain no-bubble no-print');
     var t = el('p', 'tcl-offer-t'); t.appendChild(el('strong', null, w('offerT', lang))); t.appendChild(document.createTextNode(' ' + w('optional', lang)));
     box.appendChild(t);
     box.appendChild(el('p', 'tcl-offer-d', o.why || w('offerD', lang)));
@@ -285,7 +285,7 @@
   }
   function start(slot) {
     var st = slot._tcl, o = st.o;
-    var area = el('div', 'tcl-area no-print');
+    var area = el('div', 'tcl-area tol-plain no-print');
     slot.textContent = '';
     slot.appendChild(area);
     ask({ type: o.type, context: typeof o.context === 'function' ? o.context() : o.context, container: area, lang: o.lang }).then(function (res) {
@@ -317,7 +317,7 @@
     if (s.getAttribute('data-clarify-place') === 'after' && t.nextElementSibling !== s && t.parentNode) t.parentNode.insertBefore(s, t.nextSibling);
     var when = s.getAttribute('data-clarify-when'), show = true;
     if (when) { try { show = new RegExp(when, 'i').test(t.textContent || ''); } catch (e) { show = false; } }
-    offer(s, { type: s.getAttribute('data-clarify'), show: show });
+    offer(s, { type: s.getAttribute('data-clarify'), show: show, why: s.getAttribute('data-clarify-why') || undefined });
   }
   var timer = 0;
   function later() { if (!timer) timer = setTimeout(function () { timer = 0; scan(); }, 200); }

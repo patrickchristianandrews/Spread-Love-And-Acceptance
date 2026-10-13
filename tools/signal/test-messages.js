@@ -526,7 +526,8 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   const rw = (t, rel) => E.rewrite(an(t), { wirings: ['general'], channel: 'text', rel: rel || 'partner' });
   const all = r => [r.main].concat((r.variants || []).map(v => v.text));
   const vd = (t, rel) => { const a = an(t); return E.verdict(a, E.score(a, ['general'], 'text'), E.rewrite(a, { wirings: ['general'], channel: 'text', rel: rel || 'partner' }), { rel: rel || 'partner' }); };
-  const CONTROL = ['Where were you? Send me your location now. Who were you with?', 'Who were you with?', 'Send me your location.', 'Show me your phone.',
+  // ctx10 (owner's rule, round 10): a bare "Who were you with?" is a question, not a check-up; it moved to the list below
+  const CONTROL = ['Where were you? Send me your location now. Who were you with?', 'Send me your location.', 'Show me your phone.',
     'Give me your password.', 'You can’t see your friends anymore.', 'Nobody else would ever want you.', 'You are worthless and nobody else would ever want you.',
     'You’re nothing without me.', 'I want to see your messages. Now.', 'Why is your location off?',
     // re-test 2 (a counsellor's report): ultimatums that cut someone off, watching, and "prove it"
@@ -535,13 +536,13 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
   CONTROL.forEach(t => {
     const a = an(t), g = E.receive(a, {}), gc = E.receive(a, { rel: 'coparent' });
     chk(a.control && a.found.control, '“' + t + '”: control is flagged');
-    chk(g.control && g.danger && /^This may be about control, not communication\.$/.test(g.head[1]), '“' + t + '” received: the head names control: ' + g.head[1]);
+    chk(g.control && g.danger && /^This line checks up on you\.|^This tells you who you can see\.|^This line is a put-down\./.test(g.head[1]), '“' + t + '” received: the head names control: ' + g.head[1]);
     chk(!g.meanings.some(m => /usually a request|kinder|upset about something specific/.test(m)), '“' + t + '” received: no kind reading of control: ' + g.meanings.join(' / '));
     chk(g.replies.length === 1 && !g.replies.some(r => /you'd like me to|location|phone|password|by when|what's the specific thing/i.test(r.text)), '“' + t + '” received: no compliant reply: ' + JSON.stringify(g.replies));
     chk(gc.control && gc.replies.length === 1, '“' + t + '” received from a co-parent: still control');
     chk(E.score(a, ['general'], 'text').level[0] === 'heavy', '“' + t + '”: control is heavy static');
     const v = vd(t);
-    chk(v.control && /control|checking up/.test(v.text), '“' + t + '” sent: the verdict names checking up or control: ' + v.text);
+    chk(v.control && /control|checking up|who they can see|hurt badly/.test(v.text), '“' + t + '” sent: the verdict names checking up or control: ' + v.text);
     all(rw(t)).forEach(x => chk(!/send me your location|show me your phone|password|who were you with|worthless|nobody else|can't see your friends|can’t see your friends|nothing without me/i.test(x), '“' + t + '”: the check stays in a rewrite: ' + x));
   });
   // a kind, one-off ask is not control
@@ -549,9 +550,10 @@ function brokenRx(x) { return /\b(?:a lot|much) (?:a lot|much)\b|To recap: (?:th
     'Could you share your location so we can find you at the festival?', 'I want to see your new phone!', 'You can’t see the screen from there.',
     'Nobody would believe you could run that fast.', 'Where are you? The film starts in 5.',
     'Text me when you land so I’ll know you’re safe.', 'I’m watching your show tonight!', 'I checked your phone, it’s charged.', 'Don’t bother coming home early, I’ll be out.',
-    'I’ll find out if you can come on Friday.', 'Where were you? I missed you!', 'I’m watching the kids tonight.'].forEach(t => chk(!an(t).control, '“' + t + '”: a kind ask is not control'));
+    'I’ll find out if you can come on Friday.', 'Where were you? I missed you!', 'I’m watching the kids tonight.', 'Who were you with?'].forEach(t => chk(!an(t).control, '“' + t + '”: a kind ask is not control'));
   // threats and control are never "looks okay" in either mode
-  ['If you go out with your friends tonight don’t bother coming home. I’ll know if you do.', 'You’re not allowed to go out.', 'If you leave I’ll make you regret it.', 'Do it or else.', 'You’ll regret it.', 'I’ll kill myself if you leave.', 'Give me your password.', 'Where were you? Prove it.', 'You can’t see your friends.'].forEach(t => {
+  // ctx10: "You’re not allowed to go out." between adults is a firm no (a phrasing note, no control label), per the owner's rule
+  ['If you go out with your friends tonight don’t bother coming home. I’ll know if you do.', 'If you leave I’ll make you regret it.', 'Do it or else.', 'You’ll regret it.', 'I’ll kill myself if you leave.', 'Give me your password.', 'Where were you? Prove it.', 'You can’t see your friends.'].forEach(t => {
     const a = an(t), g = E.receive(a, {}), v = vd(t);
     chk(g.danger && g.head[0] === 'danger' && !/looks okay/i.test(g.head[1]) && !g.meanings.some(m => /plain message|face value/.test(m)), '“' + t + '” received: never “looks okay”: ' + g.head[1]);
     chk(v.id === 'danger' || v.id === 'fight', '“' + t + '” sent: named as a threat or control: ' + v.id + ' ' + v.text);

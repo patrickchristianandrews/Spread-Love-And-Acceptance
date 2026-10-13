@@ -1281,6 +1281,12 @@ const REFRAMES = [
    send:(m)=>{ const v=(m[1]||m[3]||"").toLowerCase(), what = m[2] ? m[2].trim() : "[the thing]";
      return /nag/.test(v) ? "I'd like to sort out "+what+" without reminders. Could we agree who does what, and by when?" : /lectur|boss|micro/.test(v) ? "I'd like to do "+what+" my way. If something matters to you, could you tell me once, and then trust me with it?" : "I'd like to make my own choices about "+what+". Can we talk about where we each need a say?"; },
    recv:{mean:"They feel watched or told what to do. Underneath is usually a wish for trust and room to do it their way.", reply:"I don't want you to feel watched. What would help you feel trusted with it?"}},
+  // "Stop gaslighting me", "you're manipulating me": a label for the other person. Describe what happened and how it felt instead
+  {id:"labelme", re:/\bstop (gaslighting|manipulating|guilt[- ]?tripping) me\b|\b(?:you're|you are|ur|youre) (gaslighting|manipulating|guilt[- ]?tripping) me\b/i,
+   why:"\"Gaslighting\" or \"manipulating\" is a label for the other person, so they defend themselves instead of hearing you. Saying what happened, and how it left you feeling, can be answered.",
+   send:(m)=>{ const v=(m[1]||m[2]||"").toLowerCase();
+     return /gaslight/.test(v) ? "When you said [what they said], it didn't match how I remember it, and I came away doubting myself. Can we go over what happened, one thing at a time?" : "I'm feeling pressured about [the thing]. I'd like to decide in my own time. Can we talk about it once I've thought it through?"; },
+   recv:{mean:"They feel their memory or their choices aren't being respected. Underneath is usually a wish to be believed, or to have room to decide.", reply:"I don't want you to feel that way. Can you tell me what happened, as you remember it?"}},
   {id:"notmum", re:/\b(?:you're|you are|ur|youre|u r) not my (?:mum|mom|mother|dad|father|parent|real (?:mum|mom|dad|mother|father))\b[^.!?]*/i,
    why:"\"You're not my mum\" cuts deep, and it hides what you feel. Often it's grief or missing someone talking. Saying that, and that you need some space for now, keeps the feeling and keeps the door open.",
    send:(m,c)=>{ const w = (m[0].match(/\b(mum|mom|mother|dad|father|parent)\b/i)||["",""])[1].toLowerCase();
@@ -1352,7 +1358,8 @@ function parentLimitOf(opts, cm, low){
   const kid = c.people.some(p=>p.rel==="child" && p.age!=="adult");
   const fromParent = mode==="read" && c.people.some(p=>p.rel==="parent");
   const ends = /\b(?:tonight|today|this (?:week|weekend|evening|afternoon)|for (?:a|the|one|two|\d+) (?:week|weeks|day|days|night|nights|month)|until|till|unless|before|grounded|school night|bed ?time|after (?:dinner|homework|school)|homework|because|cos|'cause)\b/;
-  if(cm.kind==="monitor") return mode==="send" && kid && !/\b(?:prove|don't trust|i'll know|watching you)\b/.test(low);
+  // handing over a phone or a tablet at bedtime or homework time is a house rule; passwords, messages or "now" stay a check-up
+  if(cm.kind==="monitor") return mode==="send" && kid && /\b(?:phone|ipad|tablet|laptop|device|screen|switch|console)\b/.test(low) && !/\b(?:password|passcode|messages|texts|dms|chats|location|prove|don't trust|i'll know|watching you|now)\b/.test(low);
   if(cm.kind==="isolate") return (kid && mode==="send" || fromParent) && ends.test(low) && !/\b(?:anymore|ever again|for good|don't bother coming home|or me)\b/.test(low);
   return false;
 }
@@ -1502,15 +1509,19 @@ function analyze(textIn, opts){
     // with context: a parent's limit for a child or teen ("You can't see your friends this weekend", "Give me your phone, it's
     // bedtime") is parenting, not control. Fear, put-downs, threats and cutting someone off for good are never softened.
     if(cm && !has("menace") && parentLimitOf(opts, cm, low)){ parentLimit = {kind: cm.kind, text: low.slice(cm.start, cm.end)}; }
+    // at work, a manager watching work on a work laptop is a workplace matter (pressure, and maybe unfair), not relationship control
+    else if(cm && cm.kind==="monitor" && cm.kinds.length===1 && WORK_REL.includes(opts.rel) && /\b(?:laptop|computer|screen|slack|teams|hours|timesheet|shift|desk|work|slacking|emails?|calendar|tickets?)\b/.test(low) && !/\b(?:phone|location|who you|where you)\b/.test(low)){ /* read as pressure below */ }
     else if(cm && !has("menace")){ control = {kind: cm.kind, kinds: cm.kinds, text: low.slice(cm.start, cm.end)};
       drop("impera", h=>h.s<cm.end && cm.start<h.e); drop("urgent"); drop("label", h=>h.s<cm.end && cm.start<h.e); push("control", cm.start, cm.end); } }
   // a request or a "no" that comes from care, safety, health or respect for the relationship: read as care, never as control
   let care = null;
   if(!control && !has("menace") && !selfHarm && SHARED && SHARED.care){ const cr = SHARED.care(low); if(cr) care = {kind: cr.kind, kinds: cr.kinds, text: raw.slice(cr.start, cr.end)}; }
-  if(!care && parentLimit) care = {kind:"rule", kinds:["rule"], text: raw.slice(0, 0) || parentLimit.text};
+  if(!care && parentLimit) care = {kind:"rule", kinds:["rule"], text: parentLimit.text};
   // "If you keep lying to me, I'll end this": a stated boundary about your own choice, not a threat
   { const om = low.match(OWN_LIMIT_RE);
     if(om && has("threat") && !has("menace") && !OWN_PUNISH_RE.test(om[0])){ drop("threat"); push("boundary", om.index, om.index+om[0].replace(/[\s,.]+$/,"").length); } }
+  // "If you don't clean up, I'm leaving": an ultimatum about your own choice. Pressure, not a threat to harm or punish
+  const ultOwn = has("threat") && !has("menace") && hits.filter(h=>h.id==="threat").every(h=>!OWN_PUNISH_RE.test(h.match) && !/\b(?:tell|telling|take|taking|calling|throw|sell|ground|grounded|kick|regret|sorry|lose)\b/i.test(h.match));
   // a calm boundary ("If you can't respect my relationship, I'm going to leave for today. I love you."): caring, not a threat
   { const bm = low.match(BOUNDARY_RE);
     if(bm && !has("menace") && !["swear","hostile","label","contempt","violent","legal","dxlabel"].some(has) && (BOUNDARY_CARE.test(low) || /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i.test(bm[0]))){
@@ -1806,6 +1817,7 @@ function analyze(textIn, opts){
     control,
     care,
     parentLimit,
+    ultOwn,
     ctx: opts.ctx || null,
     ctxMode: opts.mode || "",
     selfHarm,
@@ -2106,7 +2118,7 @@ function workReframe(main, an, note, ctx){
   return out.join(" ");
 }
 
-function rewrite(an, opts){
+function rewriteBase(an, opts){
   opts = opts||{};
   const W = new Set(opts.wirings||[]);
   const log = [];
@@ -3522,7 +3534,7 @@ function turnAround(t){
   return out.replace(/^([A-Z])(?![A-Z'])(?=[a-z])/, c=>c.toLowerCase()).replace(/^(I)(?=[a-z])/, "i");
 }
 function unq(s){ return String(s||"").replace(/^"|"$/g,""); }
-function receive(an, opts){
+function receiveBase(an, opts){
   opts = opts||{};
   const has = id=>!!an.found[id];
   const found = an.staticIds.filter(id=>FBY[id] && !["period","long","nowhen"].includes(id)).map(id=>FBY[id].name);
@@ -3541,14 +3553,15 @@ function receive(an, opts){
       "Listen first, and ask what they need from you right now. Arguing with it, or explaining it away, can make it harder for them to say more.",
       "If someone is afraid of a partner or a family member, free and private support can help them, any time."],
     literal:[], replies:[{label:"A first answer", text:"Thank you for telling me. I believe you. What would help most right now?"}], found};
-  if(an.control) return {crossed:true, danger:true, control:true, head:["danger","This may be about control, not communication."],
+  if(an.control) return {crossed:true, danger:true, control:true, oneMessage:true, head:["danger", an.control.kind==="degrade" ? "This line is a put-down. It says nothing true about you." : an.control.kind==="isolate" ? "This tells you who you can see. That choice is yours." : "This line checks up on you. What you share, and when, is your choice."],
     meanings:[an.control.kind==="degrade" ? "Telling someone they're worth nothing, or that nobody else would want them, isn't okay, whatever was meant. It isn't true, and it isn't yours to fix."
       : an.control.kind==="isolate" ? "Deciding who you can see, or cutting you off from friends or family, isn't okay, whatever was meant. Who you see is your choice."
-      : "Messages that demand your location, your phone or who you were with can be signs of control, even when they're said as worry.",
+      : "A demand for your location, your phone or who you were with can take away your choice, even when it's said as worry.",
       an.control.kind==="degrade" ? "You don't have to answer it, or argue with it. A put-down like this says nothing true about you."
       : an.control.kind==="isolate" ? "You don't have to give up your friends or family to keep the peace, and you don't have to answer right away."
       : "You don't have to share your location, your phone or your passwords to prove anything, and you don't have to answer right away.",
-      "If this is part of a pattern (checking up on you, cutting you off from friends, put-downs, threats), or it frightens you, you deserve support. Free, private people can help, any time."],
+      "If messages like this leave you feeling afraid or cut off, free and private support is there, any time.",
+      "One message can't tell you what a relationship is like. Look at the whole picture, and trust what you know."],
     literal:[], replies:[{label:"Only if it feels safe to answer", text:"I've read this. I'm going to take some time before I reply."}], found};
   // "I want to kill myself": not a tone question. Their safety comes first, and so does yours
   if(an.selfHarm) return {crossed:false, danger:true, selfHarm:true, head:["danger","They may be in real pain. Their safety comes first."],
@@ -3567,7 +3580,7 @@ function receive(an, opts){
   if(rf && rf.r.recv) meanings.push(typeof rf.r.recv.mean==="function" ? rf.r.recv.mean(rf.m, rf.c) : rf.r.recv.mean);
   RECEIVE_MEANS.forEach(([ids, line])=>{ if(ids.some(has) && !meanings.includes(line) && !(rf && ids.some(id=>["hint","vtime","jab","softno","closer","blunt","sarcasm","withdraw","olddays","minim"].includes(id)))) meanings.push(line); });
   const ask0 = an.asks && an.asks.find(a=>!["invite","es"].includes(a.kind));
-  const ask = ask0 && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(ask0.text).length) ? ask0.text : "";
+  const ask = ask0 && !crossed && !(SHARED && SHARED.idioms && SHARED.idioms(ask0.text).length) && !LABEL_ACCUSE_RE.test(ask0.text) ? ask0.text : "";
   if(ask && ["oblig","impera","should","hint","passiveag","blameq","cannot"].some(has)) meanings.push("The request underneath looks like: \u201c"+turnAround(ask).replace(/[.?!]+$/,"")+"\u201d.");
   if(!crossed) Object.keys(RECEIVE_GOOD).forEach(id=>{ if(has(id) && !(id==="clearask" && !ask) && meanings.length<5) meanings.push(RECEIVE_GOOD[id]); });
   // the header and the body agree: "plain message" only when nothing in the words was flagged
@@ -3725,7 +3738,7 @@ function replyMissesHurt(an, prev){
 }
 /* wording that's only a little loud or loose: "might hurt" would overstate it */
 const MILD_IDS = ["shout","intens","minim","period","dots","softno","hedge","vtime","nowhen","overhedge","long","questions","idiom","urgent","multi","vstd","reqmaybe","minimal","pointed","nudge","ominous","impera","hint","stonewall","cannot","butc","already","ellipsis","should","selfput","reassure","joke"];
-function verdict(an, sc, rw, opts){
+function verdictBase(an, sc, rw, opts){
   const listener = (opts && String(opts.listener||"").trim()) || "them";
   if(!an || !an.norm || !an.norm.trim() || (rw && rw.gibberish)) return {id:"none", text:"This doesn't look like a sentence yet. Type what you'd really say."};
   const lvl = sc && sc.level ? sc.level[0] : "clear";
@@ -3736,9 +3749,10 @@ function verdict(an, sc, rw, opts){
   if(an.selfHarm) return {id:"danger", selfHarm:true, text:"If you're thinking about ending your life, please talk to someone now: call or text 988 (US), or your local emergency number. You deserve support."};
   // checking up, cutting someone off, or "nobody else would want you": can work as control, whatever was meant
   if(an.control && an.control.kind==="fear") return {id:"fight", control:true, fear:true, text:"This says someone feels afraid or controlled. That matters much more than the wording, and it isn't something a better wording can fix."};
-  if(an.control) return {id:"fight", control:true, text: an.control.kind==="degrade" ? "This would hurt badly. Telling someone they're worth nothing, or that nobody else would want them, can work as control, not just a sharp word."
-    : an.control.kind==="isolate" ? "This can come across as control: deciding who they can see. That isn't a tone problem."
-    : "This can come across as checking up on them, even if it comes from worry. That isn't a tone problem."};
+  // the words, never the person: what this line may do, and what usually works better
+  if(an.control) return {id:"fight", control:true, text: an.control.kind==="degrade" ? "This line would hurt badly. Telling someone they're worth nothing, or that nobody else would want them, cuts deep, whatever was meant."
+    : an.control.kind==="isolate" ? "This may come across as deciding who they can see, which is their choice. Saying what worries you, and asking, usually works better."
+    : "This may come across as checking up on them, even if it comes from worry. Saying the worry itself usually works better."};
   const attack = ATTACK_IDS.concat(["swear","hostile","legal","kidsfirst","violent","threat","dxlabel"]).some(id=>an.found && an.found[id]);
   // a calm boundary, or coming out: caring, never "a threat" or "might hurt"
   if((an.found.boundary || an.found.disclose) && !attack && lvl!=="heavy")
@@ -3795,6 +3809,174 @@ function moneyControl(text){ return MONEY_CONTROL_RE.test(norm(text)); }
 const NOT_READY_RE = /(?:^|[.!?]\s+)(?:so )?now you (?:want|need|decide) to (?:talk|meet|see me|be in touch|make up|fix (?:it|things))\b|(?:^|[.!?]\s+)(?:so )?now you (?:care|remember|have time)\b|\bafter (?:you|everything you|all you|what you) (?:took|did|said|put me through|stole|walked out|left|cheated|lied)\b/i;
 function notReady(text){ return NOT_READY_RE.test(norm(text)); }
 
-const api = {moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
+/* ============================================================
+   CARE AND CONTEXT
+   A request or a "no" from care, safety, health or respect for the relationship is named as that, never as control.
+   With context from the panel (opts.ctx, or analyze(text, {ctx})), the reading uses it: who they are, how they usually
+   write, whether it keeps coming back, how you're each doing, how you each take things in, culture notes, what you want,
+   and earlier messages. Context never softens a threat, a crisis, someone's fear, or a put-down.
+   ============================================================ */
+const CARE_SEND = {
+  worry:"This sounds like it comes from care: you're looking out for them. Keeping the reason, the ask and their choice keeps it a request.",
+  respect:"This reads as a no, or a limit, given out of respect for the relationship and for each other. That's fair to say. If you like, add the reason and leave room to talk.",
+  rule:"This sounds like a plan or a house rule, from care for the family. The reason and the ask together keep it a request, not an order.",
+  no:"A no is yours to give, and it isn't control on its own. It usually lands better with the reason and room to talk."
+};
+const CARE_GOT = {
+  worry:"This sounds like it comes from care. They may be worried about you, or want to protect what you have.",
+  respect:"They're telling you where they stand, likely to protect the relationship or themselves. It's a no, not a verdict on you.",
+  rule:"This sounds like a plan or a house rule, from care for the family, not a judgment on you.",
+  no:"They're telling you where they stand, likely to protect the relationship or themselves. If you'd like to know why, it's fine to ask calmly."
+};
+/* "Stop gaslighting me", "you're so toxic": a label for a person. The checker describes the words, never the person */
+const LABEL_ACCUSE_RE = /\b(?:gaslight\w*|manipulat\w*|narcissis\w*|toxic|abusive|psycho\w*|guilt[- ]?trip\w*)\b/i;
+const HOT_CTX = ["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst","threat"];
+function ctxRead(an, opts, mode){
+  const C = CTXM(); const ctx = (opts && opts.ctx) || (an && an.ctx);
+  if(!C || !ctx || C.isEmpty(ctx)) return null;
+  return C.read(ctx, {an, text: an.text, mode, engine: api});
+}
+function lastLine(t){ const ls = String(t||"").split(/\n+/).map(x=>x.replace(/^[^:\n]{1,24}:\s*/,"").trim()).filter(Boolean); return ls[ls.length-1] || ""; }
+function verdict(an, sc, rw, opts){
+  opts = opts||{};
+  const r0 = ctxRead(an, opts, "send");
+  if(r0 && r0.flags.work && !opts.work) opts = Object.assign({}, opts, {work:true});
+  if(r0 && !opts.replyTo && r0.ctx.earlier) opts = Object.assign({}, opts, {replyTo: lastLine(r0.ctx.earlier)});
+  let v = verdictBase(an, sc, rw, opts);
+  if(!an || !an.norm || v.id==="none") return v;
+  const f = an.found||{}, soft = rw && !rw.unchanged;
+  const hot = HOT_CTX.some(id=>f[id]);
+  // care: named, and never read as control
+  if(an.care && v.id!=="danger" && !v.control && !hot){
+    v = Object.assign({}, v, {careNote: CARE_SEND[an.care.kind], care: an.care.kind});
+    if(an.care.kind==="no" && v.id==="ok") v = Object.assign(v, {id:"hurt", mild:true, text:"This is a firm no. That's yours to give, and it isn't control on its own. It usually lands better with the reason and room to talk."});
+    else if(v.id==="hurt" && !v.apology && an.staticIds.every(id=>MILD_IDS.concat(["oblig","nowhen","period","long"]).includes(id))) v.text = "This comes from care, and it may still sound like an order. "+(soft ? "Here's a version that keeps the reason and the ask." : "Adding the reason helps.");
+  }
+  if(LABEL_ACCUSE_RE.test(an.norm) && v.id==="ok" && !an.banter)
+    v = Object.assign({}, v, {id:"hurt", labelWord:true, text:"A word like that is a label for the person, so it may land as an accusation. "+(soft ? "Here's a way to say what happened and how it felt." : "Saying what happened, and how it felt, can be answered.")});
+  if(an.ultOwn && v.id==="fight" && !["swear","hostile","label","contempt","menace","control","violent","dxlabel","legal","kidsfirst"].some(id=>f[id]))
+    v = Object.assign({}, v, {ult:true, text:"This is an ultimatum about your own choice, and it may land as pressure. "+(soft ? "Try the version below, and say your limit once, calmly." : "Make the ask on its own, and say your limit once, calmly.")});
+  if(!r0) return v;
+  const r = r0, F = r.flags;
+  v = Object.assign({}, v, {context: r});
+  if(r.safety) v.ctxSafety = r.safety;
+  if(v.id==="danger" || v.control || an.selfHarm) return v;
+  const mildOnly = an.staticIds.every(id=>MILD_IDS.includes(id) || ["period","long","nowhen"].includes(id));
+  // a parent's limit for a child or teen
+  if(F.parentLimit && !hot && (an.parentLimit || an.care || f.oblig || f.impera || f.should || f.cannot))
+    v = Object.assign(v, {id: v.id==="fight" ? "hurt" : v.id, limit:true, text:"This reads as a parent setting a limit, not control. "+(soft ? "Here's a version that keeps the limit and makes room for the reason." : "The reason, and how long it lasts, help it land.")});
+  // they write short themselves: a short message isn't cold to them
+  else if(F.shortStyle && (f.minimal || f.period) && mildOnly)
+    v = Object.assign(v, {id:"ok", shortOk:true, text:"They write short themselves, so this probably won't read as cold to them."});
+  // teasing between people who tease: more room, and a real point still gets said
+  else if(F.teaseRoom && (an.banter || f.sarcasm || f.jab) && !hot)
+    v = Object.assign(v, {id: (an.banterPoint || f.jab || f.absolute) ? "hurt" : "ok", mild:true, teaseOk:true, text: (an.banterPoint || f.jab || f.absolute) ? "Given how you two tease, this has room to be a joke. If there's a real point in it, say that part plainly too, so it isn't lost." : "Given how you two tease, this will probably land as the joke you mean. On a hard day, a kind word helps."});
+  if(F.literal && (f.hint || f.sarcasm || f.idiom || f.passiveag) && !/literally/.test(v.text)) v.text += " They take things literally, so say the ask plainly.";
+  if(F.toneSensitive && v.id==="ok" && an.staticIds.length && soft) v.text = "This will probably land okay. They're sensitive to tone, so the small change below may be worth it.";
+  if(F.themLow && F.themLow.length && (v.id==="hurt" || v.id==="fight")) v.text += " They may be running on empty today, so if it can wait, a calmer moment may help.";
+  if(F.recurring) v.recurring = true;
+  return v;
+}
+function receive(an, opts){
+  opts = opts||{};
+  let rv = receiveBase(an, opts);
+  const f = an.found||{}, has = id=>!!f[id];
+  const C = CTXM();
+  // care: "they may be worried about you", "they're telling you where they stand"
+  if(an.care && !rv.danger && !rv.crossed){
+    rv.care = an.care.kind;
+    rv.meanings = [CARE_GOT[an.care.kind]].concat(rv.meanings.filter(m=>!/usually a request|plain message|face value/.test(m))).slice(0,5);
+    if(rv.head[0]!=="ok" && an.staticIds.every(id=>MILD_IDS.concat(["oblig","nowhen","period","long"]).includes(id))) rv.head = ["ok", an.care.kind==="worry" ? "This sounds like it comes from care. It isn't a judgment on you." : an.care.kind==="rule" ? "This sounds like a plan or a house rule. It's worded firmly, but it isn't a judgment on you." : "This is a firm no or a limit. They're telling you where they stand."];
+    else if(rv.head[0]==="ok" && an.care.kind!=="worry" && !an.staticIds.length) rv.head = ["ok","This is a no or a limit. They're telling you where they stand."];
+    rv.replies = [an.care.kind==="worry" || an.care.kind==="rule" ? {label:"Answer the care", text:"Thanks for looking out for me. I'll [the thing], and I'll let you know."} : {label:"Ask about it calmly", text:"Okay, I hear you. Can you tell me what worries you about it, so we can talk it through?"}].concat(rv.replies).slice(0,4);
+  }
+  // "If you don't clean up, I'm leaving": pressure about their own choice, not a line crossed
+  if(an.ultOwn && rv.crossed && !rv.danger && !["label","dxlabel","contempt","hostile","swear","violent","legal","menace"].some(has)){
+    rv.crossed = false; rv.ult = true;
+    rv.head = ["fight","This is an ultimatum. It may feel like pressure, and it also shows how much this matters to them."];
+    rv.meanings = ["They're telling you what they'll do if this doesn't change. That's their choice to make. You don't have to answer it on the spot."].concat(rv.meanings.filter(m=>!/ultimatum/.test(m))).slice(0,5);
+    rv.replies = [{label:"Answer the ask, calmly", text:"I hear that this really matters to you. Can we talk about [the thing] at [a calm time] and agree what happens next?"}, {label:"Take time before you answer", text:"I've read this. I'm going to take some time before I reply."}];
+  }
+  // one message can't tell you what a relationship is like
+  if(!rv.danger && ["guilt","sarcasm","withdraw","jab","brushoff","stonewall","passiveag","label","hostile","contempt"].some(has)) rv.oneMessage = true;
+  const r = ctxRead(an, opts, "read");
+  if(!r) return rv;
+  const F = r.flags;
+  rv = Object.assign({}, rv, {context: r});
+  if(r.safety) rv.ctxSafety = r.safety;
+  if(rv.danger || rv.control || rv.selfHarm) return rv;
+  const crossedOnly = ["label","hostile","swear","contempt","violent","threat","legal","menace","dxlabel"].filter(has);
+  const hot = crossedOnly.length > 0;
+  const DIRECT = ["oblig","impera","should","urgent","blunt","critic","minimal","period","cannot","closer","nowhen"];
+  if(F.parentLimit && !hot && (an.parentLimit || an.care || has("oblig") || has("impera") || has("cannot")))
+    rv.head = ["ok","This reads as your parent setting a limit, not control. It's about the rule, not about you."];
+  else if(F.shortStyle && (has("minimal") || has("period")) && !hot && !has("brushoff"))
+    rv.head = ["ok","They usually write short, so this probably isn't cold."];
+  else if(F.teaseRoom && (an.banter || has("sarcasm") || has("jab") || (crossedOnly.length===1 && crossedOnly[0]==="label"))){
+    const point = an.banterPoint || has("jab") || has("absolute") || has("again");
+    rv.head = ["ok", point ? "Given how you two tease, this has room to be a joke, with a real point inside it." : "Given how you two tease, this has room to be a joke."];
+    if(rv.crossed){ rv.crossed = false; rv.replies = [{label:"If it stung", text:"Ha, I know you're joking, but that one stung a bit today."}]; }
+  }
+  else if((F.literal || F.esl || F.directStyle || F.formal) && !hot && an.staticIds.length && an.staticIds.every(id=>DIRECT.includes(id) || MILD_IDS.includes(id)))
+    rv.head = ["ok","Given what you know about them, the directness here is probably just plain wording, not coldness."];
+  if(F.themLow && F.themLow.length && rv.found && rv.found.length) rv.meanings = ["They may be running on empty today, so the wording may be sharper than they mean."].concat(rv.meanings).slice(0,5);
+  if(F.earlierHeat) rv.meanings = ["In light of the earlier messages, this is part of a heated exchange. A pause may help more than a quick reply."].concat(rv.meanings).slice(0,5);
+  else if(F.earlierWarm && rv.found && rv.found.length) rv.meanings = ["In light of the earlier messages, which were friendly, this is more likely a passing moment than a change in how they feel."].concat(rv.meanings).slice(0,5);
+  const GOAL_REPLY = {
+    limit:{label:"Set your limit, kindly", text:"I hear you. For me, [your limit]. I'm happy to talk about it at [a calm time]."},
+    plan:{label:"Fix the plan", text:"Let's settle it: how about [the plan] at [a time]?"},
+    repair:{label:"Repair", text:"I'm sorry for my part in this. I want us to be okay. Can we talk at [a time]?"},
+    calm:{label:"Calm it down", text:"I don't want to fight about this. Can we take a breather and talk at [a time]?"},
+    understood:{label:"Say how it landed", text:"I want to understand you, and I'd like you to understand me too. When you said that, it landed as [how it felt]. Did you mean that?"},
+    check:{label:"Check what they meant", text:"I want to be sure I've got this right. Did you mean [what you think they meant]?"}
+  };
+  const extra = [];
+  if(F.goal && GOAL_REPLY[F.goal]) extra.push(GOAL_REPLY[F.goal]);
+  if(F.recurring) extra.push({label:"Suggest a calm time", text:"This keeps coming up, and I'd like to sort it properly. Can we talk at [a calm time], not over text?"});
+  if(extra.length) rv.replies = extra.concat(rv.replies.filter(x=>!extra.some(e=>e.text===x.text))).slice(0,4);
+  return rv;
+}
+const GOAL_LABEL = {limit:"Aimed at setting a limit", plan:"Aimed at fixing the plan", repair:"Aimed at repair", calm:"Aimed at calming things", understood:"Aimed at being understood", check:"Just checking"};
+const GOAL_WHY = {
+  limit:"You want to set a limit: it's said once, kindly and clearly, with room for the reason. No apology for having it.",
+  plan:"You want to fix a plan: it ends with one concrete question, so there's something to say yes to.",
+  repair:"You want to repair: it starts with your part, then the hope.",
+  calm:"You want to calm things: it leads with not wanting a fight, and offers a pause.",
+  understood:"You want to be understood: it asks them to say back what they heard.",
+  check:"You want to check you're reading it right: ask before you decide."
+};
+function rewrite(an, opts){
+  opts = opts||{};
+  const r = an && !an.danger && !an.control && !an.selfHarm ? ctxRead(an, opts, "send") : null;
+  if(r){
+    const C = CTXM();
+    if(r.flags.work && !opts.work) opts = Object.assign({}, opts, {work:true, rel: opts.rel && WORK_REL.includes(opts.rel) ? opts.rel : "coworker"});
+    else if(!opts.rel && r.rel) opts = Object.assign({}, opts, {rel: r.rel});
+  }
+  const rw = rewriteBase(an, opts);
+  if(!r || rw.danger || rw.gibberish) return rw;
+  const F = r.flags;
+  const base = String(rw.unchanged ? an.text : (rw.variants[0] ? rw.variants[0].text : rw.main)).trim();
+  const endDot = t=>t.replace(/[\s.!]*$/,"").replace(/([^?])$/,"$1.");
+  const add = (v)=>{ if(v && v.text && !rw.variants.some(x=>x.text===v.text)) rw.variants.unshift(v); };
+  const heat = ["swear","hostile","label","contempt","sarcasm","jab","guilt","blameq","absolute","heat","again"].some(id=>an.found[id]);
+  let gtext = "";
+  if(F.goal==="limit") gtext = endDot(base)+(/\b(?:because|so that|so i|since)\b/i.test(base) ? "" : " [The reason, if you want to give one.]")+" I'm telling you so we're clear, not to start a fight.";
+  else if(F.goal==="repair") gtext = (an.apology ? "" : "I'm sorry for my part in this. ")+endDot(base)+" I want us to be okay.";
+  else if(F.goal==="calm") gtext = "I don't want to fight about this. "+endDot(base)+(heat ? " Can we take a breather and come back to it at [a time]?" : "");
+  else if(F.goal==="plan") gtext = endDot(base)+(an.missing.when || !an.asks.length ? " What time works for you?" : "");
+  else if(F.goal==="understood") gtext = endDot(base)+" Could you tell me what you heard, so I know it came across the way I mean it?";
+  if(F.goal && GOAL_LABEL[F.goal]) rw.goal = {id:F.goal, label:GOAL_LABEL[F.goal], why:GOAL_WHY[F.goal], text:gtext};
+  if(F.recurring){ rw.calmTime = "This keeps coming up, and I'd like to sort it properly. Can we talk about it at [a calm time], not over text?"; rw.variants.splice(1, 0, {id:"calmtime", label:"Suggest a calm time to talk", why:"This topic keeps coming back. A text rarely settles it; a calm talk at a good time can.", text: rw.calmTime}); }
+  if(F.parentLimit && !F.goal && (an.parentLimit || an.care || an.found.oblig || an.found.impera)){
+    gtext = endDot(base)+(/\b(?:because|so that|since)\b/i.test(base) ? "" : " That's because [the reason].")+" [When it ends, or what would change it.]";
+    rw.goal = {id:"parentlimit", label:"The limit, with the reason", why:"A limit lands better with the reason, and when it ends or what would change it. It stays a limit, said with care.", text:gtext};
+  }
+  if(rw.goal && rw.goal.text){ add({id:"goal", label: rw.goal.label, why: rw.goal.why, text: rw.goal.text}); if(rw.unchanged){ rw.unchanged = false; } rw.main = rw.goal.text; rw.primary = rw.variants[0]; }
+  rw.context = r;
+  return rw;
+}
+
+const api = {CARE_SEND, CARE_GOT, verdictBase, receiveBase, rewriteBase, moneyControl, notReady, replyMissesHurt, meantSelf, SELF_MEANT, receive, fairConcern, simpler, PLAIN: PLAIN_WORDS, F, FBY, NT, CHECK, CHANGE_WHY, GLOSS, title, gloss, verdict, analyze, detect, readings, rewrite, score, entry, splitSentences, commandOf, baseVerb, norm, chBase, shoutSpans, WRITTEN, ACRONYMS};
 if(typeof module!=="undefined" && module.exports) module.exports = api; else root.SignalEngine = api;
 })(typeof window!=="undefined" ? window : this);

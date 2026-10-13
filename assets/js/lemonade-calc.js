@@ -1965,6 +1965,8 @@
   function groupResults() {
     var b = balance(), wait = waitingFor();
     $('r-balance').textContent = balancePlain(b);
+    // a split that reads as drifting or lower: a few optional questions so the read is fair (clarify.js)
+    if (window.TOLClarify) window.TOLClarify.offer($('ls-clarify'), { type: 'load', show: !!(b && !b.error && !wait.length && b.value < 0.7 && b.movedHours >= 1) });
     var mt = b && !b.error ? balanceText(b) : '';
     if ($('r-maths')) { $('r-maths').hidden = !mt; $('r-maths-t').textContent = mt; }
     var vis = $('r-vis');

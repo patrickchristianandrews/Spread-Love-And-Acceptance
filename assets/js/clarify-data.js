@@ -616,8 +616,8 @@
         links: [L('Someone to talk to, free', 'Alguien con quien hablar, gratis', '/outside-help.html#talk'), L('When it’s more than a rough patch', 'Cuando es más que una mala racha', '/safety.html#signs')] }
     }
   };
-  var L3 = { body: P('Worth talking to someone outside the two of you. Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counsellor, your doctor, or someone you both trust are all options, if they feel right.',
-    'Vale la pena hablar con alguien de fuera. No porque algo ande mal con ninguno de los dos: algunos patrones cambian más fácil con una persona neutral presente. Un consejero, tu médico, o alguien de confianza para los dos son opciones, si les parecen bien.'),
+  var L3 = { body: P('Not because anything is wrong with either of you: some patterns are easier to shift with a neutral person in the room. A counsellor, your doctor, or someone you both trust are all options, if they feel right.',
+    'No porque algo ande mal con ninguno de los dos: algunos patrones cambian más fácil con una persona neutral presente. Un consejero, tu médico, o alguien de confianza para los dos son opciones, si les parecen bien.'),
     links: [L('Find a counsellor or therapist', 'Buscar un consejero o terapeuta', '/outside-help.html#counsellor'), L('Help beyond this site', 'Ayuda más allá de este sitio', '/outside-help.html')] };
   // the site's existing safety pages, offered as a question and an option, never as a verdict
   var SAFE = { body: P('Some of what you said can make it hard to feel safe, or free to say no. Only you can judge what fits. If it does, there are free, private people to talk to, any time.',

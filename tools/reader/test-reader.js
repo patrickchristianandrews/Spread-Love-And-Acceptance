@@ -303,5 +303,25 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
   ok(!R.checkDraft('I managed fine without you for 7 months.').checks.every(c => c.ok), 'a scorekeeping draft does not pass every check');
 }
 
+// ---------- ctx10 (owner's rule, round 10): care is not control, a "no" is not control, and labels stay off people ----------
+{
+  ['You can\'t see your friends until your homework is done.', 'You can\'t go out tonight, it\'s a school night.', 'Because I said so.', 'Answer me.', 'Who were you with?',
+   'I don\'t want you texting other people.', 'You\'re not allowed to go to that party.', 'Please don\'t, it hurts me.', 'Can we keep phones off at dinner?', 'If you keep lying to me, I\'ll end this.',
+   'Send me your location when you get there so I know you\'re safe x', 'I forbid you to eat my cake 😂'].forEach(t => {
+    ok(!kinds(t).includes('control') && !kinds(t).includes('threat'), `"${t}": not control or a threat; got ${kinds(t).join(',')}`);
+    const r = readOf('Sam: can I go out?\nMum: ' + t + '\nSam: ok', 'Sam');
+    ok(!r.safety, `a thread with "${t}" is not a safety read`);
+  });
+  ['Give me your phone.', 'What\'s your password?', 'You can\'t see your friends or family anymore.', 'I\'m tracking you.', 'Nobody else would ever want you.', 'I\'m scared of you.', 'If you leave I\'ll take the kids.'].forEach(t => {
+    ok(kinds(t).includes('control') || kinds(t).includes('threat'), `"${t}": still flagged; got ${kinds(t).join(',')}`);
+  });
+  // a quoted "always" inside an apology is owning a pattern, so the tidy-up leaves it alone
+  ok(/I'm sorry I always forget/.test(R.checkDraft("I'm sorry I always forget the bins.").softened || "I'm sorry I always forget the bins."), 'self-blame in an apology keeps "always"');
+  ok(/often/.test(R.checkDraft('You always forget the bins!!').softened), '"you always" still becomes "often"');
+  // the safety move describes lines, not people, and offers support as an option
+  const s = readOf('Sam: hi\nAlex: Give me your phone.\nSam: no', 'Sam');
+  ok(s.safety && s.next[0] && /afraid or cut off/.test(s.next[0].say) && !/controlling|abusive|toxic|red flag/i.test(s.next[0].say), 'the safety move is worded as an option: ' + (s.next[0] && s.next[0].say));
+}
+
 console.log(`${pass} passed, ${fail} failed`);
 if (fail) { errs.forEach(e => console.log('  - ' + e)); process.exit(1); }

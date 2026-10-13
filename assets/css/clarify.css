@@ -65,8 +65,9 @@
 .tcl-links li, .tcl-took li, .tcl-yours li{ margin:.2rem 0; }
 .tcl-links a{ color:var(--focus, #2B5B8C); }
 .tcl-yours{ margin-top:.4rem; font-size:.9rem; }
-.tcl-yours summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; color:var(--ink-soft, #5A5346); }
+.tcl-yours summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; color:var(--ink-soft, #5A5346); font:inherit; background:none; border:0; padding:0; }
 @media (max-width:480px){
   .tcl-offer, .tcl-ask, .tcl-result{ padding:.8rem .85rem; border-radius:12px; }
 }
 @media print{ .tcl-offer, .tcl-ask{ display:none !important; } }
+.tcl-result details.tcl-yours{ background:none; border:0; padding:0; box-shadow:none; }

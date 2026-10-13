@@ -495,6 +495,7 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
         <option value="caregiver">Someone I care for, or who cares for me</option>
       </select>
     </div>
+    <div id="stCtx" data-ctx-for="st"></div>
     <div class="field presetrow">
       <label for="presetSel">More examples</label>
       <select id="presetSel"></select>
@@ -522,7 +523,8 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
       <div class="st-acc-b">
         <p class="no-bubble">It&rsquo;s a rule-based reader. It looks for patterns in the words (&ldquo;always,&rdquo; a bare order, a hint, a joke marker, a threat) and reads them the way a careful person might. It can&rsquo;t hear a tone of voice, see a face, or know your history together.</p>
         <p class="no-bubble"><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labelled by hand, between partners, co-parents, housemates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
-        <p class="no-bubble">So use it as a second opinion, not a verdict. Check what it says against what you know about the person.</p>
+        <p class="no-bubble"><b>Adding context makes the reading fairer.</b> Under &ldquo;Add context&rdquo; you can say who they are to you, how they usually write, whether this keeps coming back, how you&rsquo;re each doing today and what you want from it. The reading then uses it, and shows what it took into account. It still can&rsquo;t know everything.</p>
+        <p class="no-bubble">So use it as a second opinion, not a verdict. Check what it says against what you know about the person. One message can&rsquo;t tell you what a relationship is like.</p>
       </div>
     </details>
 
@@ -761,12 +763,16 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
   <div class="note">
     <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
   </div>
+<div data-tool-guide="signal-translator"></div>
+<script src="/assets/js/tool-guide.js" defer></script>
   </main>
 </div>
 
 
 <script src="/assets/js/message-patterns.js"></script>
+<script src="/assets/js/context-panel.js"></script>
 <script src="/assets/js/signal-engine.js"></script>
+<script src="/assets/js/clarify.js" defer></script>
 <script>
 if(window.TOLPatterns) window.TOLPatterns.lookFor(document.getElementById("lookfor"), {intro:"This tool, the Carrier Wave Decoder’s tone check and the Conversation Reader all read wording with this same list, so the same words get the same reading in each. On top of it, the Translator checks the shape of a sentence: orders, hints, labels, vague timing, a missing ask. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict."});
 (function(){
@@ -2112,7 +2118,7 @@ function run(){
   paintNotesRel();
 
   const A=nm("A"), B=nm("B");
-  const an = E.analyze(text, {channel});
+  const an = E.analyze(text, {channel, ctx: ctxNow(), mode:"send"});
   const found = an.found, spans = an.spans, words = an.words;
   lastAn = an;
   $("#results").removeAttribute("data-no-reward");
@@ -2299,7 +2305,7 @@ function run(){
   // a family message after a long silence or a rift: kind words still meet the history, so no big green all-clear
   const riftOpener = lvl[0]==="clear" && (relId==="family" || (!relId && RIFT.test(text))) && (LONG_GAP.test(text) || RIFT.test(text));
   if(riftOpener && plain && plain.id==="ok") plain.text = "Your words are kind and clear. History can change how any message lands after a long silence, so go gently, and make it easy for them to take their time.";
-  let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
+  let vtop='<div class="verdict" id="verdict">'+(plain?'<p class="vplain v-'+esc(plain.id)+'" id="vplain">'+esc(plain.text)+'</p>':'')+(replyCtx?replyContext(replyCtx, an):'')+ctxExtra(plain, an, "send")+'<p class="vk">How it may land'+(general?' for most listeners':' for '+esc(B))+'</p>';
   const little = /little/i.test(lvl[1]);
   // a real apology: the plain line stays as gentle as the headline above it
   const mildLvl = !!(plain && plain.mild && lvl[0]==="some");
@@ -2390,6 +2396,7 @@ function run(){
   h += '<details class="st-rmore" id="rMore"'+(phoneW() ? '' : ' open')+'><summary>More: talking notes, print, check-in order</summary><div class="rfoot"><button class="go" type="button" id="addTopic">'+(useId==="now"?"Save the pause card, not this read":"Add the sentence I chose, then write the next")+'</button><button class="ghost" type="button" id="copy">Copy the full read</button><button class="ghost" type="button" id="print">Print</button><a class="ghost" href="check-ins.html" style="text-decoration:none">Check-in order</a></div></details>';
 
   const R=$("#results"); R.innerHTML=listenerFix(teamFix(youFix(h))); R.hidden=false;
+  clarifyFor(an, text);
   if(an.control || an.danger) noReward(R);
   else quietGarden(R, lvl[0]!=="clear" && (["family","coparent","caregiver"].includes(relId) || E.moneyControl(text) || found.withdraw || found.olddays || E.notReady(text) || RIFT.test(text)));
   paintSimple(); paintBrief();
@@ -2486,6 +2493,7 @@ function runDanger(text, an, B){
   lastChanged = true;
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">This is a threat</h2>';
   h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">This is a threat, not a tone problem.</p>';
+  h += ctxExtra({context: window.TOLContext && an.ctx ? TOLContext.read(an.ctx, {an, text, mode:"send"}) : null}, an, "send");
   h += '<p>This message would frighten or control '+esc(who)+'. Softer wording can&rsquo;t fix a threat, so there&rsquo;s no version here that keeps it. Please don&rsquo;t send it.</p>';
   h += '<p class="vk">Say what you need, without a threat</p><p class="vbest" id="vbest">'+phHTML(need)+'</p>'+simpleLine(need);
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
@@ -2548,7 +2556,7 @@ const COPARENT_REPLIES = [
   {label:"Only the next step", text:"Thanks for letting me know. Next pickup is [the day] at [the time]."}
 ];
 function fitReceived(an, rv){
-  const threat = !!(an.found.threat || an.found.legal);
+  const threat = !!((an.found.threat && !an.ultOwn) || an.found.legal);
   rv.threat = threat || rv.crossed;
   if(threat) rv.meanings = rv.meanings
     .filter(m=>!/^They're unhappy about something that happened/.test(m))
@@ -2573,14 +2581,14 @@ function fitReceived(an, rv){
   return rv;
 }
 function runReceived(text){
-  const an = E.analyze(text, {channel});
+  const an = E.analyze(text, {channel, ctx: ctxNow(), mode:"read"});
   const rv = fitReceived(an, E.receive(an, {rel:relId}));
   $("#results").removeAttribute("data-no-reward");
   let h = '<h2 id="rTitle" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Reading it kindly</h2>';
   const recvPlain = rv.head ? rv.head : rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : (rv.found && rv.found.length) ? ["hurt","This may sound harsher than they meant. Here are kinder ways to read it."]
     : ["ok","This looks okay. Nothing here needs decoding."];
-  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.fear ? '' : rv.control ? CONTROL_GOT : rv.danger && !(rv.selfHarm && !an.danger) ? SAFETY_GOT : '');
+  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p>'+ctxExtra(rv, an, "read")+'<p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.oneMessage && window.TOLContext ? '<p class="small tol-onemsg">'+esc(TOLContext.ONE_MESSAGE)+'</p>' : '')+'<div class="tol-clar" id="stClar" hidden></div>'+(rv.fear ? '' : rv.control ? CONTROL_GOT : rv.danger && !(rv.selfHarm && !an.danger) ? SAFETY_GOT : '');
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
   if(rv.crossed && !rv.danger) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
@@ -2594,7 +2602,7 @@ function runReceived(text){
     : '<p class="small">You don&rsquo;t have to reply right away. Waiting until you&rsquo;re calm is a fine answer too.</p>';
   h += '<div class="actions" style="margin:0"><button class="go" type="button" id="checkReply">Check my reply before I send it</button></div></div>';
   h += '<p class="small">'+(rv.found.length ? 'What the words contain: '+esc(rv.found.join("; "))+'. ' : '')+'This reads the words only. It can&rsquo;t know their tone, their day or your history, so these are possibilities, not verdicts.</p>';
-  const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); if(rv.danger) noReward(R); else quietGarden(R, rv.crossed || (rv.found && rv.found.length && ["family","coparent","caregiver"].includes(relId))); paintSimple();
+  const R=$("#results"); R.innerHTML=h; R.hidden=false; R.classList.remove("is-brief"); clarifyFor(an, text); if(rv.danger) noReward(R); else quietGarden(R, rv.crossed || (rv.found && rv.found.length && ["family","coparent","caregiver"].includes(relId))); paintSimple();
   R.querySelectorAll("[data-copyr]").forEach(b=>b.addEventListener("click",()=>{
     const t = rv.replies[+b.dataset.copyr].text;
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{b.textContent="Copied";},()=>{b.textContent="Select and copy manually";});
@@ -2608,6 +2616,39 @@ document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener(
 try { if (new URLSearchParams(location.search).get("mode") === "got") setMode("got"); } catch (e) {}
 /* the share-target code further down switches the mode and reads a shared message */
 window.TOLSignalPage = { setMode: m=>setMode(m), run: ()=>run() };
+/* ============================================================
+   ADD CONTEXT (context-panel.js): optional, and it changes the reading. The result says what it took into account,
+   with "Change context". Crisis or fear typed into the context is never ignored: the site's existing card shows.
+   ============================================================ */
+let stCtx = null;
+function ctxNow(){ try{ return stCtx ? stCtx.get() : null; }catch(e){ return null; } }
+function ctxExtra(v, an, mode){
+  if(!window.TOLContext) return "";
+  let h = "";
+  const r = v && v.context;
+  if(v && v.ctxSafety==="crisis") h += CRISIS_SELF;
+  else if(v && (v.ctxSafety==="fear" || v.ctxSafety==="threat")) h += SAFETY_GOT;
+  if(v && v.careNote) h += '<p class="small st-care"><b>'+esc(v.careNote)+'</b></p>';
+  h += TOLContext.usedHTML(r);
+  if(mode==="send") h += '<div class="tol-clar" id="stClar" hidden></div>';
+  return h;
+}
+/* "A few quick questions so the read is fair (optional)": only when the reading is about possible unfairness or pressure */
+function clarifyFor(an, text){
+  const slot = document.getElementById("stClar"); if(!slot || !window.TOLContext) return;
+  TOLContext.offerClarify(slot, {an, text, ctx: ctxNow(), onResult: res=>{
+    const line = TOLContext.clarifyLine(res); if(!line) return;
+    let p = document.getElementById("stClarLine");
+    if(!p){ p = document.createElement("p"); p.id = "stClarLine"; p.className = "small st-clar-line"; slot.parentNode.insertBefore(p, slot); }
+    p.textContent = line;
+  }});
+}
+if(window.TOLContext) stCtx = TOLContext.mount(document.getElementById("stCtx"), {
+  mode: ()=>stMode==="got" ? "read" : "send",
+  onChange: (c, o)=>{ if(o && o.again && $("#phrase").value.trim()) run(); }
+});
+// the mini checker's "Add context" link opens the panel
+if(stCtx && location.hash==="#add-context") stCtx.open(false);
 /* "Try an example": one tap picks the right mode, fills the box and reads it */
 document.querySelectorAll("#tryRow .tryex").forEach(b=>b.addEventListener("click",()=>{
   const m = b.getAttribute("data-mode")==="got" ? "got" : "send";

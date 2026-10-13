@@ -342,6 +342,40 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(!/\b(?:Mochi|Marmalade|Bean|Nightlight|Cocoa|Sparky|Dewdrop|Luna)\b/.test(ps.main), `${tag}: Shifter: stray pup names in the main text`);
     await p.evaluate(()=>TOLPerspective._pick('who','partner'));
     ok(await p.evaluate(()=>document.querySelector('.ps-chip[data-id="will"]').hidden && !document.querySelector('.ps-chip[data-id="deadline"]').hidden), `${tag}: Shifter: partner hides the rift options again`);
+    // 9. ctx10: "Add context" is optional, closed by default, and it changes the reading; the result says what it used
+    await go('');
+    const c0 = await p.evaluate(()=>({has:!!document.querySelector('#stCtx details.tol-ctx'), open:document.querySelector('#stCtx details').open, sum:document.querySelector('#stCtx summary').innerText}));
+    ok(c0.has && !c0.open && /Add context/.test(c0.sum) && /optional/.test(c0.sum), `${tag}: context panel present, closed, says optional: ${JSON.stringify(c0)}`);
+    r = await read("You can't see your friends this weekend.");
+    ok(/No context added/.test(r.all) && /Add context/.test(r.all), `${tag}: no context: the result invites it`);
+    await p.evaluate(()=>{ document.querySelector('#stCtx details').open = true; });
+    await p.click('#stCtx [data-q="rel0"] .tol-chip[data-v="child"]'); await p.click('#stCtx [data-q="age0"] .tol-chip[data-v="teen"]');
+    ok(await overflow(p)<=0, `${tag}: no horizontal overflow with the context panel open`);
+    await p.click('#stCtx .tol-ctx-done'); await p.waitForSelector('#vplain'); await p.waitForTimeout(150);
+    r = await p.evaluate(()=>({all:document.querySelector('#results').innerText, html:document.querySelector('#results').innerHTML}));
+    ok(/parent setting a limit/.test(r.all) && /What I took into account/.test(r.all) && /my child \(teen\)/.test(r.all) && /Change context/.test(r.all), `${tag}: with "my child, teen": a parent's limit, and what it used: ${r.all.slice(0,300)}`);
+    ok(!/control, not communication/.test(r.all), `${tag}: a parent's limit gets no control card`);
+    await p.click('#results .tol-ctx-change'); await p.waitForTimeout(100);
+    ok(await p.$eval('#stCtx details', e=>e.open), `${tag}: Change context opens the panel`);
+    await p.click('#stCtx .tol-ctx-clear');
+    // received, with "they always write short"
+    await p.evaluate(()=>{ document.querySelector('#stCtx details').open = true; });
+    await p.click('#stCtx [data-q="usual"] .tol-chip[data-v="short"]');
+    r = await read('k', true);
+    ok(/usually write short/.test(r.all) && /What I took into account/.test(r.all), `${tag}: received "k" from a short texter: not cold`);
+    // a crisis typed into the context is never ignored
+    await p.fill('#stCtx textarea[data-f="other"]', 'She said she wants to kill herself');
+    r = await read('ok', true);
+    ok(/988/.test(r.all) && /ending their life|ending your life/.test(r.all), `${tag}: crisis in the context shows the help`);
+    await p.click('#stCtx .tol-ctx-clear');
+    // care, not control: a request from worry, and a "no" between adults
+    r = await read("Please text me if you'll be late so I don't worry.");
+    ok(/comes from care/.test(r.all) && !/control, not communication/.test(r.all), `${tag}: a caring request reads as care`);
+    r = await read("You're not allowed to go to that party.", true);
+    ok(/where they stand/.test(r.all) && !/threat, not a tone problem|control, not communication/.test(r.all), `${tag}: a no, received: where they stand`);
+    // nothing kept unless asked
+    ok(await p.evaluate(()=>{ try{ return localStorage.getItem('tol-ctx-people')===null; }catch(e){ return true; } }), `${tag}: nothing stored without "Remember"`);
+    ok(errs.length===0, `${tag}: console errors after context checks: ${errs.join(' | ')}`);
     await ctx.close();
   }
   await b.close();

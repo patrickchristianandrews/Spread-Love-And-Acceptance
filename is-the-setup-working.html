@@ -204,6 +204,7 @@
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/calc01-core.js"></script>
+<script src="/assets/js/clarify.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/workpapers/calculators/is-the-setup-working-quick.html">
@@ -426,6 +427,7 @@
       <ul class="moves" id="moves"><li>Available once there's a read.</li></ul>
 
       <div id="divergence" hidden></div>
+      <div class="tcl-slot" id="clarify-slot" hidden></div>
       <div class="next-box" id="next-box"><span class="lbl">What to do next</span><div id="next-text"><p>Fill in the inputs above to see a read.</p></div></div>
       <div class="completeness" id="completeness">Inputs worked out: 0 of 4.</div>
 
@@ -930,6 +932,7 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
       $("next-box").className = "next-box hold";
       $("next-text").innerHTML = "<p>" + (warn.length ? "Restore the book's weights, or make them add up to 1.00, before reading anything from this." : "No read yet. Still needed: " + esc(missing.join(", ")) + ".") + "</p>";
       setSummary(warn.length ? "No read yet: the weights don't add up to 1.00." : "No read yet. Still needed: " + missing.join(", ") + ".");
+      if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { show: false });
       lastRead = null;
       save();
       return;
@@ -1005,6 +1008,8 @@ overall = (balance &times; 0.35) + (ownership &times; 0.30) + ((1 &minus; stress
     else if (mode === "hold"){ nb.className = "next-box hold"; nt.innerHTML = "<p><strong>Read it, but don't act on it yet.</strong> You said you're revved up. Write the number down and bring it to your next calm check-in.</p><p>" + base + "</p>" + extra; }
     else { nb.className = "next-box stop"; nt.innerHTML = "<p><strong>Stop here for today.</strong> You said you're running on empty, and on a day like that a read can sound like a verdict on you. It isn't. It will still be true tomorrow.</p>" + extra; }
 
+    // a lopsided or slipping read: a few optional questions first, so the read is fair (clarify.js)
+    if (window.TOLClarify) TOLClarify.offer($("clarify-slot"), { type: "load", show: mode !== "stop" && (sb.key !== "high" || !!lean) });
     lastRead = { wb: wb, oc: oc, as: as, rf: rf, sol: solV, apex: apV };
     var sn = document.body.classList.contains("show-nums");
     setSummary("The setup: " + sb.short + (sn ? " (" + f2(solV) + ")" : "") + ". With repairs counted: " + ab.short + (sn ? " (" + f2(apV) + ")" : "") + ". Biggest shortfall: " + worst.name.toLowerCase() + "." + (lean ? " Note: " + lean.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&") + "." : ""));

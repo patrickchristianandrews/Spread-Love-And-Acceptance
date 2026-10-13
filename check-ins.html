@@ -21,6 +21,7 @@
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/household.js" defer></script>
 <script src="/assets/js/fridge-sheet.js" defer></script>
+<script src="/assets/js/clarify.js" defer></script>
 <style>
   .ci-card{ margin:1.6rem 0; padding:1rem 1.2rem; border-radius:18px; border:1px solid #C6DFF4; background:#EEF4FB; }
   .read .ci-card h2{ margin-top:0; font-size:1.2rem; }
@@ -145,6 +146,7 @@
   <p class="ci-send">To send it to the other person’s phone: tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
   <p class="ci-small">Three or more of you? Go round in turn: each person says one fact and how it landed, the next person says back what they heard, then it moves on. Everyone gets a turn before anyone answers.</p>
   <div data-tfs-mount="checkin"></div>
+  <div class="tcl-slot" id="clarify-slot" hidden></div>
   </div>
   <div id="ci-family" class="ci-fam" hidden>
     <p>A plan for the family, not a list of chores: visits, advice, the little one’s routines and a regular job for a grandparent. Fill in what fits, skip the rest, then send it to each other.</p>
@@ -264,6 +266,25 @@
     } else if (++tries < 50) setTimeout(fridge, 200);
   })();
 })();
+</script>
+<script>
+// "One thing that felt heavy": once something is written there, offer a few optional questions so the read is fair
+// (clarify.js). The words are only read on this page, for crisis wording and a first guess at the topic.
+document.addEventListener('DOMContentLoaded', function () {
+  var mount = document.querySelector('[data-tfs-mount="checkin"]'), slot = document.getElementById('clarify-slot');
+  if (!mount || !slot || !window.TOLClarify) return;
+  function heavy() {
+    var l = Array.prototype.filter.call(mount.querySelectorAll('label'), function (x) { return /felt heavy/i.test(x.textContent); })[0];
+    var t = l && l.querySelector('textarea');
+    return t ? t.value.trim() : '';
+  }
+  function update() {
+    TOLClarify.offer(slot, { show: heavy().length >= 3, context: function () { return { text: heavy() }; },
+      why: 'If what felt heavy seems unfair, or keeps coming back, a few taps help tell a rough week from something worth more time. About a minute.' });
+  }
+  mount.addEventListener('input', update);
+  setTimeout(update, 400);
+});
 </script>
 </body>
 </html>

@@ -358,7 +358,8 @@ TESTER.forEach(c=>{
  ["You need to clean your room.","hurt",/might hurt/],
  ["You left the stove on again. That's dangerous.","hurt",/^Your worry is fair and worth saying plainly\. Here's a version that keeps your words direct and lands easier for them\.$/],
  ["You're so lazy and you never help.","fight",/start a fight/],
- ["If you don't clean up, I'm leaving.","fight",/start a fight/],
+ // ctx10 (owner's rule, round 10): an ultimatum about your own choice is pressure, not a threat, so it's named as an ultimatum
+ ["If you don't clean up, I'm leaving.","fight",/ultimatum about your own choice/],
  ["I'll take you to court and get full custody.","fight",/start a fight/]].forEach(([t,id,re])=>{
   const an=E.analyze(t,{channel:"text"}); const sc=E.score(an,["general"],"text","v"); const v=E.verdict(an,sc,E.rewrite(an,{wirings:["general"]}));
   ok(v.id===id && re.test(v.text), `"${t}": plain verdict ${v.id} "${v.text}"`);

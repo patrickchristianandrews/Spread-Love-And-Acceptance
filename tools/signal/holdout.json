@@ -19,7 +19,7 @@
 {"id":1018,"rel":"partner","cat":"apology","t":"I'm sorry. I was wrong and I'll make it right.","lvl":["kind","clear"],"f":["apology"]},
 {"id":1019,"rel":"partner","cat":"boundary","t":"I'm not comfortable lending money again. I hope you understand.","lvl":["clear","a little sharp"],"f":["boundary"]},
 {"id":1020,"rel":"partner","cat":"control","t":"Give me your password. Now.","lvl":"very sharp","f":["control","request"]},
-{"id":1021,"rel":"partner","cat":"control","t":"You're not allowed to go to that party.","lvl":"very sharp","f":["control"],"maybe":["threat"]},
+{"id":1021,"rel":"partner","cat":"no","t":"You're not allowed to go to that party.","lvl":["clear","a little sharp"],"f":[],"maybe":["request"],"note":"ctx10: relabelled under the owner's care-vs-control rule. A no between adults, with nothing else, gets a phrasing note, not a control label."},
 {"id":1022,"rel":"partner","cat":"control","t":"No one else would put up with you.","lvl":"very sharp","f":["control"],"maybe":["blame"]},
 {"id":1023,"rel":"partner","cat":"fear","t":"I'm scared of how angry you get.","lvl":["sharp","very sharp"],"f":["control"]},
 {"id":1024,"rel":"partner","cat":"fear","t":"he won't let me see my family","lvl":"very sharp","f":["control"]},
