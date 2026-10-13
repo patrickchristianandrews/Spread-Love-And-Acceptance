@@ -2130,6 +2130,8 @@
         if (!sc) return;
         // a long topic ("raising a child in two religions") needs most of its words, not just "child"
         if (qs.length >= 3 && hitN * 2 <= qs.length) return;
+        // every word of a short topic must be there ("coming out to religious parents" is not "caring for parents")
+        if (qs.length >= 2 && qs.length <= 4 && hitN < qs.length - (qs.length === 4 ? 1 : 0)) return;
       } else sc = Math.random();
       if (seen[i]) sc -= 100;
       scored.push([sc + Math.random() * 0.5, i]);
