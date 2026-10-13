@@ -482,7 +482,8 @@
           "\\b(tired|exhausted|resent\\w*|fed up)\\b",
           "heldfort"
         ]
-      ]
+      ],
+      "notPat": "\\b(he|she|they|him|her|my (husband|wife|partner|son|daughter|dad|mum|mom|boyfriend|girlfriend|brother|sister))\\b"
     },
     {
       "id": "sarcasm",
