@@ -32,6 +32,7 @@ TOLBuddies.episodes['s2e3'] = {
       { say: 'lumi', to: 'sugarfoot', text: 'I know! I’ve read about it. They say you need to solve a riddle to open it.', mood: 'excited', energy: 1.1, hold: 0.8 },
       { say: 'sugarfoot', to: 'lumi', text: 'A riddle? I love riddles! And star books. Do you like star books?', mood: 'excited', energy: 1.2, hold: 0.8 },
       { say: 'lumi', to: 'sugarfoot', text: 'I love star books! I have one about the stars that only shine over the sea.', mood: 'excited', energy: 1.2, hold: 0.8 },
+      { act: 'drop', who: 'sugarfoot', item: 'map', dur: 1 },
       { say: 'tidbit', to: 'all', text: 'I like stars too! Especially the falling ones! Whoosh!', mood: 'excited', energy: 1.2, hold: 0.6 },
       { say: 'sugarfoot', to: 'lumi', text: 'Which stars? The sea ones? What are they called?', mood: 'happy', hold: 0.8 },
       { act: 'lookat', who: 'tidbit', target: 'other', dur: 1.6 },

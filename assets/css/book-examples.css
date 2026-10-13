@@ -131,7 +131,13 @@ li > .bk-ex{ margin-left:0; }
 }
 
 @media print{
-  .bk-ex{ box-shadow:none; background:#fff; border-color:#9a8f78; margin:1.2rem 0; max-width:none; }
+  .bk-ex{ box-shadow:none; background:#fff; border-color:#9a8f78; margin:1.2rem 0; max-width:none; font-size:8.6pt; line-height:1.4; padding:1.1rem .9rem .7rem; }
+  .bk-ex-title{ font-size:10.5pt; }
+  .bk-ex-chips li{ padding:.05rem .45rem; font-size:7.8pt; }
+  .bk-ex-chips li.is-on{ font-size:8.2pt; }
+  .bk-ex-q{ margin:.15rem 0 .35rem; }
+  .bk-ex > figcaption, .bk-ex-part, .bk-ex-ql{ break-after:avoid; page-break-after:avoid; }
+  .bk-ex-f > div, .bk-ex-q, .bk-ex-out, .bk-ex-t tr{ break-inside:avoid; }
   .bk-ex-k{ background:#fff; border-color:#9a8f78; }
   .bk-ex-chips li{ opacity:1; }
   .bk-ex-chips li:not(.is-on){ color:#77705f; }

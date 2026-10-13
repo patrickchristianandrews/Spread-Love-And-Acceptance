@@ -702,6 +702,25 @@
       { href: '/book/understanding-17-groups.html', deep: true, code: '17', title: 'Part Three · Chapter 17: Fitting in', note: 'Groups, influence and culture, and disagreeing kindly' },
       { href: '/book/afterword.html', deep: true, code: 'After', title: 'Afterword: what the book adds up to', note: 'Six threads through the book, and where to go from here' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
+      { sub: 'The whole book on one page', all: '/book/download.html', allLabel: 'Download the book as a PDF' },
+      { href: '/book/whole.html', code: 'Book', title: 'The whole book on one page', note: 'Every part and chapter in one long page, to read straight through or print' },
+      { href: '/book/for-yourself.html', code: 'Book', title: 'The book for one person', note: 'Part One and the chapters for reading on your own, in one page' },
+      { href: '/book/together.html', code: 'Book', title: 'The book for two or more', note: 'The chapters for couples, families and housemates, in one page' },
+      { href: '/book/understanding.html', code: 'Book', title: 'Understanding People, as one book', note: 'Part Three on its own: how feelings, stress, trust and change work' },
+      { sub: 'The Professor’s Library, by topic', all: '/library.html', allLabel: 'The whole library' },
+      { href: '/library/emotions.html', code: 'Library', title: 'Feelings and emotions', note: 'What feelings are for, and naming them' },
+      { href: '/library/stress.html', code: 'Library', title: 'Stress and the body', note: 'The stress response, in plain English' },
+      { href: '/library/communication.html', code: 'Library', title: 'Talking and listening', note: 'Communication in relationships' },
+      { href: '/library/conflict.html', code: 'Library', title: 'Conflict and how to resolve it', note: 'What helps a disagreement end well' },
+      { href: '/library/connection.html', code: 'Library', title: 'Kindness and connection', note: 'Gratitude, kindness and closeness' },
+      { href: '/library/relationships.html', code: 'Library', title: 'How relationships work', note: 'What research says' },
+      { href: '/library/fairness.html', code: 'Library', title: 'Fairness and the mental load', note: 'Sharing the work at home fairly' },
+      { href: '/library/life.html', code: 'Library', title: 'Family, money and life changes', note: 'In-laws, money and big changes' },
+      { href: '/library/motivation.html', code: 'Library', title: 'Motivation, habits and change', note: 'Why change is hard, and what helps' },
+      { href: '/library/thinking.html', code: 'Library', title: 'Thinking traps', note: 'Common traps, and kinder ways to think' },
+      { href: '/library/wiring.html', code: 'Library', title: 'Differences in wiring', note: 'Autism, ADHD and sensitivity explained' },
+      { href: '/library/calm.html', code: 'Library', title: 'Calm and attention', note: 'Settling, focus and rest' },
+      { href: '/library/teams.html', code: 'Library', title: 'Systems and teams', note: 'Fair systems for teams and households' },
       { sub: 'Autism and neurodivergence' },
       { href: '/how-you-take-things-in.html', title: 'How you take things in', note: 'Pick your neurotype or preferences, and every page adapts' },
       { href: '/book/understanding-9-minds.html', code: '9', title: 'Minds that work differently (Part Three, Chapter 9)', note: 'Autism, ADHD, dyslexia and more, in plain words' },
@@ -2202,6 +2221,8 @@
     lonely: ['/living-alone.html#solitude', '/on-my-own.html#lonely', '/friends.html', '/library/connection.html', '/grief.html'], loneliness: 'lonely', isolated: 'lonely'
   };
   Object.keys(ACT_FIND).forEach(function (k) { ACT[k] = ACT_FIND[k]; });
+  // "all tools" means the tools directory (the round-13 rule below sends "all pages" to Explore)
+  PRE.unshift([/^(the )?tools$|\b(all (the |your |of the )?tools|every tool|list of (the )?tools|tools by type)\b/, 'tools']);
   [['living alone|live alone|living on my own|live on my own|living by myself|live by myself|first flat|first apartment|my own place', 'livingalone'],
    ['make friends|making friends|new friends|new city|friends as an adult', 'adultfriends'],
    ['body doubling|body double|executive function', 'bodydoubling'],
@@ -2437,7 +2458,7 @@
     // a section of a page (or the breathing break) named first for a word leads; further down it sits with the pages
     Object.keys(EXTRA).forEach(function (u) { if (boost[u]) out.push({ p: EXTRA[u], score: boost[u] + (first[u] ? 20 : 2) }); });
     // a newly written page that the index doesn't have yet still shows, from its line in FRESH
-    Object.keys(FRESH).forEach(function (u) { if (boost[u] && !indexed[u]) out.push({ p: { u: u, t: FRESH[u][0], d: FRESH[u][1], x: '' }, score: boost[u] + (first[u] ? 8 : 2) }); });
+    Object.keys(FRESH).forEach(function (u) { if (boost[u] && !indexed[u]) out.push({ p: { u: u, t: FRESH[u][0], d: FRESH[u][1], x: '' }, score: boost[u] + (first[u] ? 20 : 2) }); });
     return out.sort(function (a, b) { return b.score - a.score; }).slice(0, 25);
   }
   function snippet(p, terms) {

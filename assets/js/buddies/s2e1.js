@@ -193,6 +193,7 @@ TOLBuddies.episodes['s2e1'] = {
       { say: 'frog', to: 'both', text: 'Pebble Island. Best beach in the whole sea. Mind the crabs. They’re very polite, but they pinch hello.', mood: 'silly', hold: 0.8 },
       { act: 'laugh', who: 'both', dur: 2 },
       { guest: 'frog', exit: true },
+      { act: 'drop', who: 'sugarfoot', item: 'map', dur: 1 },
       { say: 'narrator', text: 'And as the sun began to slide down the sky, Buttercup bumped softly onto a sandy beach.', mood: 'happy', hold: 1.4 }
     ] },
 
