@@ -2923,6 +2923,6 @@ small.tol-mi-n{ display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit
 .tol-onpage[open] .tol-onpage-peek{ display:none; }
 .read .tol-onpage ol{ margin:0 !important; padding:.1rem .9rem .7rem 2.2rem !important; }
 .read .tol-onpage li{ margin:.1rem 0 !important; padding:0 !important; max-width:none !important; background:none !important; box-shadow:none !important; border:0 !important; }
-.tol-onpage a{ display:inline-block; min-height:36px; padding:.35rem 0; line-height:1.35; }
+.tol-onpage a{ display:inline-flex; align-items:center; min-height:44px; padding:.2rem 0; line-height:1.35; }
 body:has(.tol-outline.is-on) .tol-onpage{ display:none; }
 @media print{ .tol-onpage{ display:none !important; } }
