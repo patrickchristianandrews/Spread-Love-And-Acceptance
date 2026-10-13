@@ -526,7 +526,7 @@
         },
         columns: [
           { id: 'task', label: 'Task', type: 'text', w: 2.2 },
-          { id: 'owner', label: 'Named owner on WP-03?', type: 'select', options: ['Yes', 'No'], w: 1 },
+          { id: 'owner', label: 'Named owner on the job list?', type: 'select', options: ['Yes', 'No'], w: 1 },
           { id: 'kind', label: 'Classification', type: 'select', options: ['Structural gap', 'Capacity issue', 'One-off, no action'], w: 1.5 },
           { id: 'action', label: 'Action', type: 'text', w: 2.3 }
         ],

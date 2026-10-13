@@ -196,7 +196,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-body .try-this p { margin: 0 0 1.6mm; }
 .pe-body .try-this > p:first-child > strong:first-child { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); }
 .pe-body .try-this[data-in-short] { background: var(--pt); border: 0; border-left: 2.4pt solid var(--pc); border-radius: 0 1.6mm 1.6mm 0; }
-.pe-body .try-this p a { white-space: nowrap; }
+.pe-body .try-this p a { white-space: normal; overflow-wrap: anywhere; }
 .pe-body .yp-note { background: #FBF8F0; border: .7pt solid #CDBF98; border-left: .7pt solid #CDBF98; }
 .pe-body .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 3mm 0 4mm; break-inside: avoid; }
 .pe-body .two-col > div { padding: 2.4mm 3.2mm; border: .6pt solid #D3C49C; border-radius: 1.4mm; }
