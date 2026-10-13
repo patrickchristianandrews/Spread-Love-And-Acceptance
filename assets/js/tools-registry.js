@@ -109,7 +109,7 @@
     { id: 'wavelength', name: 'Communication style quiz', brand: 'Wavelength', href: '/wavelength.html', type: 'self', also: ['talk'],
       does: 'Twelve quick either/or questions about how you think, talk and listen.',
       gets: 'Your four-letter Wave Code and type, a card to share, and a side-by-side compare with someone else.',
-      mins: 2, time: 'About 2 minutes (10 for the full version)', who: ['solo', 'two'], benefit: 'People stop having to guess how to talk to you', top: 5,
+      mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'People stop having to guess how to talk to you', top: 5,
       kw: 'communication quiz personality quiz wave code style test archetype compare' },
     { id: 'wiring', name: 'How I like to be spoken to: a one-page card', brand: 'the Wiring Card', href: '/wiring-card.html', type: 'self', also: ['talk', 'work'],
       does: 'Pick what helps words reach you, what your silence means and what to avoid.',

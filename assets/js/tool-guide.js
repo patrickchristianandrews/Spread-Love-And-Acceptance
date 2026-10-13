@@ -42,19 +42,12 @@
     s.addEventListener('error', function () { /* no data: leave the placeholder empty */ });
   }
 
-  // the tools registry (tools9's window.TOLTools) names tools plainly; use its name when it has this tool
+  // the tools registry (window.TOLTools, /assets/js/tools-registry.js) names every tool plainly; when it is on the
+  // page, its name wins for the entry this tool points at (t.reg), so a rename there shows here too
   function registryName(t) {
-    var reg = window.TOLTools;
-    if (!reg) return '';
-    var list = Array.isArray(reg) ? reg : (reg.tools || reg.list || []);
-    if (!Array.isArray(list)) return '';
-    for (var i = 0; i < list.length; i++) {
-      var r = list[i] || {};
-      var urls = [r.url, r.href, r.page, r.path, r.link].filter(Boolean);
-      for (var j = 0; j < urls.length; j++) {
-        if (t.pages.indexOf(pathOf(urls[j])) >= 0) return r.plain || r.name || r.title || '';
-      }
-    }
+    var list = window.TOLTools;
+    if (!t.reg || !Array.isArray(list)) return '';
+    for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === t.reg) return list[i].name || '';
     return '';
   }
 
@@ -77,14 +70,14 @@
     return ch + '#' + e.id;
   }
   function findExample(t, list) {
-    var here = queryOf(location.search ? location.search : ''), best = null;
+    var here = (location.search || '').replace(/^\?/, ''), best = null;
     for (var i = 0; i < list.length; i++) {
       var e = list[i] || {};
       var tools = [].concat(e.tool || [], e.tools || []);
       for (var j = 0; j < tools.length; j++) {
         if (t.pages.indexOf(pathOf(tools[j])) < 0) continue;
         if (!exampleHref(e)) continue;
-        if (here && queryOf(tools[j]) === here.replace(/^\?/, '')) return e;
+        if (here && queryOf(tools[j]) === here) return e;
         if (!best) best = e;
       }
     }

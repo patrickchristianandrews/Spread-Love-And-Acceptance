@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 820" width="540" height="820" role="img" aria-labelledby="fig-u16-avoid-t fig-u16-avoid-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u16-avoid-t">Avoiding keeps fear going; small steps back in help</title>
+<desc id="fig-u16-avoid-d">Top: the avoidance loop. Fear leads to avoiding, which brings quick relief, which teaches the brain that escaping kept you safe, so the fear grows and life gets smaller. Bottom: the way back, a set of small, planned steps up a staircase, for example opening the letter, reading it, then a five-minute call. Each step builds new learning: I went, and I coped.</desc>
+<defs><marker id="fig-u16-avoid-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker><marker id="fig-u16-avoid-ar-8e3b47" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#8E3B47"/></marker></defs>
+<rect x="1" y="1" width="538" height="818" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Avoiding keeps fear going</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Quick relief now, a smaller life later.</text>
+<path d="M339.4 162.5 A118 118 0 0 1 387.4 245.7" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u16-avoid-ar-5a5346)"/>
+<path d="M318.0 365.8 A118 118 0 0 1 222.0 365.8" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u16-avoid-ar-5a5346)"/>
+<path d="M152.6 245.7 A118 118 0 0 1 200.6 162.5" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u16-avoid-ar-8e3b47)"/>
+<rect x="195" y="114" width="150" height="52" rx="26" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="270" y="147" font-size="20" font-weight="bold" fill="#8E3B47" text-anchor="middle">Fear</text>
+<rect x="297.191" y="291" width="150" height="52" rx="26" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="372.191" y="324" font-size="20" font-weight="bold" fill="#7A5620" text-anchor="middle">Avoid it</text>
+<rect x="92.809" y="291" width="150" height="52" rx="26" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="167.809" y="324" font-size="20" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Quick relief</text>
+<text x="270" y="242" font-size="18" font-style="italic" fill="#8E3B47" text-anchor="middle">fear grows,</text>
+<text x="270" y="264" font-size="18" font-style="italic" fill="#8E3B47" text-anchor="middle">life shrinks</text>
+<text x="28" y="428" font-size="21" font-weight="bold" fill="#3E6B4C">The way back: small, planned steps</text>
+<rect x="28" y="596" width="150" height="70" rx="8" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="40" y="624" font-size="18" font-weight="bold"><tspan x="40" dy="0">Open the</tspan><tspan x="40" dy="23.04">letter</tspan></text>
+<rect x="187" y="526" width="150" height="140" rx="8" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="199" y="554" font-size="18" font-weight="bold">Read it</text>
+<rect x="346" y="456" width="150" height="210" rx="8" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="358" y="484" font-size="18" font-weight="bold"><tspan x="358" dy="0">Call for five</tspan><tspan x="358" dy="23.04">minutes</tspan></text>
+<text x="28" y="480" font-size="19" font-style="italic" fill="#3E6B4C">“I went,</text>
+<text x="28" y="504" font-size="19" font-style="italic" fill="#3E6B4C">and I coped.”</text>
+<text x="28" y="701" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Planned, gradual approach (exposure) is among the</tspan><tspan x="28" dy="23.04">most effective treatments for anxiety; it builds new</tspan><tspan x="28" dy="23.04">learning that competes with the old fear (Craske</tspan><tspan x="28" dy="23.04">and colleagues, 2014). A therapist can help with</tspan><tspan x="28" dy="23.04">strong fears.</tspan></text>
+</svg>

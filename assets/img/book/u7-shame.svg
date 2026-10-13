@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 747" width="540" height="747" role="img" aria-labelledby="fig-u7-shame-t fig-u7-shame-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u7-shame-t">Guilt and shame: two roads from the same mistake</title>
+<desc id="fig-u7-shame-d">One mistake at the top splits into two roads. Guilt says &quot;I did a bad thing&quot;: it looks at the act, and leads to owning it, saying sorry and putting it right. Shame says &quot;I am bad&quot;: it looks at the whole self, and leads to hiding, denying, blaming or lashing out. A bridge between them: self-compassion. &quot;I did something I regret. I’m not a bad person. What can I put right?&quot;</desc>
+<defs><marker id="fig-u7-shame-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker><marker id="fig-u7-shame-ar-8e3b47" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#8E3B47"/></marker></defs>
+<rect x="1" y="1" width="538" height="745" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Guilt and shame</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Two roads from the same mistake.</text>
+<rect x="120" y="98" width="300" height="56" rx="28" fill="#ECE2C4" stroke="#7A5620" stroke-width="2"/>
+<text x="270" y="134" font-size="21" font-weight="bold" text-anchor="middle">I made a mistake</text>
+<path d="M240.0 156.0 C210.0 184.0 139.0 168.0 139.0 198.0" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u7-shame-ar-3e6b4c)"/>
+<path d="M300.0 156.0 C330.0 184.0 401.0 168.0 401.0 198.0" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u7-shame-ar-8e3b47)"/>
+<rect x="28" y="204" width="222" height="300" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="139" y="238" font-size="23" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Guilt</text>
+<text x="139" y="268" font-size="19" font-weight="bold" text-anchor="middle">“I did a bad thing.”</text>
+<text x="139" y="296" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">Looks at the act.</text>
+<rect x="50" y="322" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="139" y="351" font-size="19" text-anchor="middle">Own it</text>
+<rect x="50" y="378" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="139" y="407" font-size="19" text-anchor="middle">Say sorry</text>
+<rect x="50" y="434" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="139" y="463" font-size="19" text-anchor="middle">Put it right</text>
+<rect x="290" y="204" width="222" height="300" rx="16" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="401" y="238" font-size="23" font-weight="bold" fill="#8E3B47" text-anchor="middle">Shame</text>
+<text x="401" y="268" font-size="19" font-weight="bold" text-anchor="middle">“I am bad.”</text>
+<text x="401" y="296" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">Looks at the whole self.</text>
+<rect x="312" y="322" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#8E3B47" stroke-width="1.5"/>
+<text x="401" y="351" font-size="19" text-anchor="middle">Hide</text>
+<rect x="312" y="378" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#8E3B47" stroke-width="1.5"/>
+<text x="401" y="407" font-size="19" text-anchor="middle">Deny or blame</text>
+<rect x="312" y="434" width="178" height="44" rx="22" fill="#FCF9F1" stroke="#8E3B47" stroke-width="1.5"/>
+<text x="401" y="463" font-size="19" text-anchor="middle">Lash out</text>
+<rect x="28" y="522" width="484" height="104" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="46" y="554" font-size="20" font-weight="bold" fill="#7A5620">The bridge: self-compassion</text>
+<text x="46" y="582" font-size="19" font-style="italic">“I did something I regret. I’m not a bad</text>
+<text x="46" y="607" font-size="19" font-style="italic">person. What can I put right?”</text>
+<text x="28" y="651" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">After Helen Block Lewis (1971) and Tangney and</tspan><tspan x="28" dy="23.04">Dearing (2002). Shame means different things</tspan><tspan x="28" dy="23.04">across cultures; the research is strongest on a</tspan><tspan x="28" dy="23.04">global “I am bad” feeling.</tspan></text>
+</svg>

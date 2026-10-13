@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 811" width="540" height="811" role="img" aria-labelledby="fig-u11-repair-t fig-u11-repair-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u11-repair-t">Breaks and repair</title>
+<desc id="fig-u11-repair-d">A cycle of four: in step; a break, like a sharp word or a missed call; repair; and back in step, often a little stronger. Below, a real apology in three parts: name it (say what happened), own it (no &quot;but&quot;), and mend it (what you’ll do now and next time). Trust comes back in small, kept promises.</desc>
+<defs><marker id="fig-u11-repair-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="809" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">Every close relationship has</tspan><tspan x="28" dy="32">breaks</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346">What counts is coming back.</text>
+<path d="M326.1 195.0 A128 128 0 0 1 385.0 253.9" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u11-repair-ar-5a5346)"/>
+<path d="M385.0 366.1 A128 128 0 0 1 326.1 425.0" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u11-repair-ar-5a5346)"/>
+<path d="M213.9 425.0 A128 128 0 0 1 155.0 366.1" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u11-repair-ar-5a5346)"/>
+<path d="M155.0 253.9 A128 128 0 0 1 213.9 195.0" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u11-repair-ar-5a5346)"/>
+<rect x="195" y="159" width="150" height="46" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="270" y="189" font-size="20" font-weight="bold" fill="#3E6B4C" text-anchor="middle">In step</text>
+<rect x="323" y="264" width="150" height="92" rx="16" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="398" y="294" font-size="20" font-weight="bold" fill="#8E3B47" text-anchor="middle">A break</text>
+<text x="398" y="320" font-size="17" font-style="italic" text-anchor="middle">a sharp word,</text>
+<text x="398" y="341" font-size="17" font-style="italic" text-anchor="middle">a missed call</text>
+<rect x="195" y="392" width="150" height="92" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="270" y="422" font-size="20" font-weight="bold" fill="#7A5620" text-anchor="middle">Repair</text>
+<text x="270" y="448" font-size="17" font-style="italic" text-anchor="middle">notice it,</text>
+<text x="270" y="469" font-size="17" font-style="italic" text-anchor="middle">come back</text>
+<rect x="67" y="264" width="150" height="92" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="142" y="294" font-size="20" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Back in step</text>
+<text x="142" y="320" font-size="17" font-style="italic" text-anchor="middle">often a little</text>
+<text x="142" y="341" font-size="17" font-style="italic" text-anchor="middle">stronger</text>
+<text x="28" y="524" font-size="21" font-weight="bold" fill="#7A5620">A real apology</text>
+<rect x="28" y="538" width="154.667" height="96" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="105.333" y="570" font-size="20" font-weight="bold" text-anchor="middle">Name it</text>
+<text x="105.333" y="596" font-size="17" font-style="italic" text-anchor="middle"><tspan x="105.333" dy="0">say what you</tspan><tspan x="105.333" dy="21.76">did</tspan></text>
+<rect x="192.667" y="538" width="154.667" height="96" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="270" y="570" font-size="20" font-weight="bold" text-anchor="middle">Own it</text>
+<text x="270" y="596" font-size="17" font-style="italic" text-anchor="middle">no “but”</text>
+<rect x="357.333" y="538" width="154.667" height="96" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="434.667" y="570" font-size="20" font-weight="bold" text-anchor="middle">Mend it</text>
+<text x="434.667" y="596" font-size="17" font-style="italic" text-anchor="middle"><tspan x="434.667" dy="0">now and next</tspan><tspan x="434.667" dy="21.76">time</tspan></text>
+<rect x="28" y="648" width="484" height="46.7" rx="12" fill="#ECE2C4"/>
+<text x="270" y="681" font-size="19" font-style="italic" text-anchor="middle">Trust comes back in small, kept promises.</text>
+<text x="28" y="715.7" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Everyday breaks and repairs show up in parent and</tspan><tspan x="28" dy="23.04">baby play (Tronick), in couples (Gottman’s “repair</tspan><tspan x="28" dy="23.04">attempts”) and in therapy (Eubanks and colleagues,</tspan><tspan x="28" dy="23.04">2018).</tspan></text>
+</svg>

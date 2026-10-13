@@ -42,8 +42,22 @@
   function val(k) { return F[k].el ? F[k].el.value : ''; }
   function label(k) { var s = F[k].el; return s && s.value ? s.options[s.selectedIndex].text : ''; }
 
+  var bar = document.getElementById('cs-bar');
+  var change = document.getElementById('cs-change');
   function setFilterHeight() {
-    document.documentElement.style.setProperty('--cs-filter-h', form.offsetHeight + 'px');
+    if (bar) document.documentElement.style.setProperty('--cs-bar-h', bar.offsetHeight + 'px');
+  }
+  // "Change filters" appears in the result bar once the drop-downs have scrolled out of view
+  if (change && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) {
+      var off = !es[0].isIntersecting && es[0].boundingClientRect.top < 0;
+      change.hidden = !off;
+      setFilterHeight();
+    }).observe(form);
+    change.addEventListener('click', function () {
+      form.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+      try { F.condition.el.focus({ preventScroll: true }); } catch (x) { F.condition.el.focus(); }
+    });
   }
 
   function syncUrl() {

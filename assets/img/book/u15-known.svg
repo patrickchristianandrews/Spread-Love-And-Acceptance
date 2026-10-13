@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 801" width="540" height="801" role="img" aria-labelledby="fig-u15-known-t fig-u15-known-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u15-known-t">Closeness grows from being known</title>
+<desc id="fig-u15-known-d">At the top, five kinds of love in a row: friends, family, partners, chosen family, and yourself. Below, a loop of three steps that builds closeness: you share something real; the other person responds with understanding and care; you feel known, and share a little more next time. Love is something you do, in small ways, and it never includes fear or control.</desc>
+<defs><marker id="fig-u15-known-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="799" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">Closeness grows from being</tspan><tspan x="28" dy="32">known</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Love comes in many forms. It grows the same</tspan><tspan x="28" dy="24.32">way.</tspan></text>
+<path d="M76.4 205.92 C40.400000000000006 181.92 50.00000000000001 157.92 76.4 172.32 C102.80000000000001 157.92 112.4 181.92 76.4 205.92 Z" fill="#E8A0A8" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="76.4" y="236.32" font-size="17" font-style="italic" text-anchor="middle">friends</text>
+<path d="M173.2 205.92 C137.2 181.92 146.79999999999998 157.92 173.2 172.32 C199.6 157.92 209.2 181.92 173.2 205.92 Z" fill="#7FB2E0" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="173.2" y="236.32" font-size="17" font-style="italic" text-anchor="middle">family</text>
+<path d="M270.0 205.92 C234.0 181.92 243.6 157.92 270.0 172.32 C296.4 157.92 306.0 181.92 270.0 205.92 Z" fill="#E8A0A8" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="236.32" font-size="17" font-style="italic" text-anchor="middle">partners</text>
+<path d="M366.79999999999995 205.92 C330.79999999999995 181.92 340.4 157.92 366.79999999999995 172.32 C393.19999999999993 157.92 402.79999999999995 181.92 366.79999999999995 205.92 Z" fill="#8FB59A" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="366.8" y="236.32" font-size="17" font-style="italic" text-anchor="middle">chosen</text>
+<text x="366.8" y="256.32" font-size="17" font-style="italic" text-anchor="middle">family</text>
+<path d="M463.59999999999997 205.92 C427.59999999999997 181.92 437.2 157.92 463.59999999999997 172.32 C489.99999999999994 157.92 499.59999999999997 181.92 463.59999999999997 205.92 Z" fill="#D9B46A" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="463.6" y="236.32" font-size="17" font-style="italic" text-anchor="middle">yourself</text>
+<path d="M343.8 340.9 A132 132 0 0 1 401.7 441.1" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u15-known-ar-5a5346)"/>
+<path d="M327.9 569.0 A132 132 0 0 1 212.1 569.0" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u15-known-ar-5a5346)"/>
+<path d="M138.3 441.1 A132 132 0 0 1 196.2 340.9" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u15-known-ar-5a5346)"/>
+<rect x="172" y="278.32" width="196" height="80" rx="16" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="270" y="310.32" font-size="20" font-weight="bold" fill="#2F5F8A" text-anchor="middle">You share</text>
+<text x="270" y="338.32" font-size="17" font-style="italic" text-anchor="middle">something real</text>
+<rect x="286.315" y="476.32" width="196" height="80" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="384.315" y="508.32" font-size="20" font-weight="bold" fill="#7A5620" text-anchor="middle">They respond</text>
+<text x="384.315" y="536.32" font-size="17" font-style="italic" text-anchor="middle">with understanding</text>
+<rect x="57.6846" y="476.32" width="196" height="80" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="155.685" y="508.32" font-size="20" font-weight="bold" fill="#3E6B4C" text-anchor="middle">You feel known</text>
+<text x="155.685" y="536.32" font-size="17" font-style="italic" text-anchor="middle">and share more</text>
+<text x="270" y="458.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">a step at a time</text>
+<rect x="28" y="636.32" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="669.32" font-size="19" font-weight="bold" text-anchor="middle">Love is something you do, in small ways.</text>
+<text x="270" y="694.02" font-size="19" font-style="italic" text-anchor="middle">It never includes fear or control.</text>
+<text x="28" y="728.72" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">After Reis and Shaver’s intimacy process model</tspan><tspan x="28" dy="23.04">(1988), supported by diary studies (Laurenceau and</tspan><tspan x="28" dy="23.04">colleagues, 1998).</tspan></text>
+</svg>

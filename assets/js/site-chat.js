@@ -3970,7 +3970,9 @@
   // ------------------------------------------------------------------ public API
   // The text box only takes focus for keyboard and mouse users. On a touch screen, focusing it pops up the keyboard and
   // hides the Professor's message, so there the panel itself takes focus, and the box waits until it's tapped.
+  // before any event has been seen (the chat script loads on the first tap), go by the device: a coarse pointer is touch
   var lastInput = 'touch';
+  try { lastInput = window.matchMedia && window.matchMedia('(pointer: coarse)').matches ? 'touch' : 'mouse'; } catch (e) { lastInput = 'touch'; }
   try {
     if (document.addEventListener) {
       document.addEventListener('pointerdown', function (e) { lastInput = e.pointerType === 'mouse' ? 'mouse' : 'touch'; }, true);

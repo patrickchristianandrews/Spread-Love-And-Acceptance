@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 887" width="540" height="887" role="img" aria-labelledby="fig-u10-compass-t fig-u10-compass-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u10-compass-t">Values are directions, not finish lines</title>
+<desc id="fig-u10-compass-d">A path winds up the page toward an arrow labelled with a value, &quot;look after my health&quot;, that points on beyond the top: you never arrive. Along the path, flags mark goals that can be finished, like &quot;run a 5k&quot;, and small dots mark everyday acts: a walk, a glass of water, an early night. A compass sits beside it. Missing a goal is a missed stop; the direction is still there.</desc>
+<defs><marker id="fig-u10-compass-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
+<rect x="1" y="1" width="538" height="885" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Values are directions</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">A goal can be finished. A value is a direction you</tspan><tspan x="28" dy="24.32">keep facing.</tspan></text>
+<circle cx="110" cy="224.32" r="64" fill="#F1E2C2" stroke="#7A5620" stroke-width="2.5"/>
+<circle cx="110" cy="224.32" r="50" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<path d="M110 180.32 L120 224.32 L110 268.32 L100 224.32 Z" fill="#7A5620"/>
+<path d="M110 224.32 L120 224.32 L110 268.32 Z" fill="#D9CBA3"/>
+<text x="110" y="152.32" font-size="17" font-weight="bold" fill="#7A5620" text-anchor="middle">N</text>
+<path d="M290 692.3199999999999 C290 647.3199999999999 250 647.3199999999999 250 602.3199999999999 C250 557.3199999999999 330 557.3199999999999 330 512.3199999999999 C330 467.31999999999994 300 467.31999999999994 300 422.32 C300 377.32 380 377.32 380 332.32 C380 287.32 360 287.32 360 242.32 C360 207.32 420 207.32 420 172.32" fill="none" stroke="#D9CBA3" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M290 692.3199999999999 C290 647.3199999999999 250 647.3199999999999 250 602.3199999999999 C250 557.3199999999999 330 557.3199999999999 330 512.3199999999999 C330 467.31999999999994 300 467.31999999999994 300 422.32 C300 377.32 380 377.32 380 332.32 C380 287.32 360 287.32 360 242.32 C360 207.32 420 207.32 420 172.32" fill="none" stroke="#ECE2C4" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M420 172.32 L438 128.32" fill="none" stroke="#3E6B4C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u10-compass-ar-3e6b4c)"/>
+<text x="398" y="138.32" font-size="19" font-weight="bold" fill="#3E6B4C" text-anchor="end">Look after</text>
+<text x="398" y="162.32" font-size="19" font-weight="bold" fill="#3E6B4C" text-anchor="end">my health</text>
+<circle cx="262" cy="637.32" r="8" fill="#3E6B4C"/>
+<text x="244" y="643.32" font-size="18" font-style="italic" text-anchor="end">a walk</text>
+<circle cx="300" cy="552.32" r="8" fill="#3E6B4C"/>
+<text x="282" y="558.32" font-size="18" font-style="italic" text-anchor="end">a glass of water</text>
+<circle cx="322" cy="377.32" r="8" fill="#3E6B4C"/>
+<text x="304" y="383.32" font-size="18" font-style="italic" text-anchor="end">an early night</text>
+<line x1="314" y1="468.32" x2="314" y2="424.32" stroke="#2B2620" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M314 424.32 L344 432.32 L314 440.32 Z" fill="#E8A0A8" stroke="#8E3B47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="352" y="440.32" font-size="18" font-weight="bold">Run a 5k</text>
+<line x1="374" y1="288.32" x2="374" y2="244.32" stroke="#2B2620" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M374 244.32 L404 252.32 L374 260.32 Z" fill="#E8A0A8" stroke="#8E3B47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="412" y="260.32" font-size="18" font-weight="bold"><tspan x="412" dy="0">Cook</tspan><tspan x="412" dy="23.04">twice a</tspan><tspan x="412" dy="23.04">week</tspan></text>
+<circle cx="290" cy="692.32" r="10" fill="#2B2620"/>
+<text x="308" y="698.32" font-size="18" font-weight="bold">You, today</text>
+<circle cx="48" cy="332.32" r="8" fill="#3E6B4C"/>
+<text x="64" y="338.32" font-size="18">small acts</text>
+<line x1="48" y1="384.32" x2="48" y2="354.32" stroke="#2B2620" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M48 354.32 L70 360.32 L48 366.32 Z" fill="#E8A0A8" stroke="#8E3B47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="78" y="372.32" font-size="18">goals: stops</text>
+<text x="78" y="394.32" font-size="18">on the way</text>
+<rect x="28" y="722.32" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="755.32" font-size="19" font-weight="bold" text-anchor="middle">Missing a goal is a missed stop.</text>
+<text x="270" y="780.02" font-size="19" font-style="italic" text-anchor="middle">The direction is still there.</text>
+<text x="28" y="814.72" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. Acceptance and commitment therapy</tspan><tspan x="28" dy="23.04">treats values as “chosen life directions”, with goals</tspan><tspan x="28" dy="23.04">as milestones.</tspan></text>
+</svg>

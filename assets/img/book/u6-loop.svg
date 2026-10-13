@@ -10,13 +10,13 @@
 <path d="M134.0 288.0 A136 136 0 0 1 202.0 170.2" fill="none" stroke="#5A5346" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u6-loop-ar-5a5346)"/>
 <circle cx="270" cy="152" r="70" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2.5"/>
 <text x="270" y="148" font-size="21" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Cue</text>
-<text x="270" y="172" font-size="16" font-style="italic" text-anchor="middle">after dinner</text>
+<text x="270" y="172" font-size="17" font-style="italic" text-anchor="middle">after dinner</text>
 <circle cx="387.779" cy="356" r="70" fill="#F1E2C2" stroke="#7A5620" stroke-width="2.5"/>
 <text x="387.779" y="352" font-size="21" font-weight="bold" fill="#7A5620" text-anchor="middle">Routine</text>
-<text x="387.779" y="376" font-size="16" font-style="italic" text-anchor="middle"><tspan x="387.779" dy="0">shoes on, short</tspan><tspan x="387.779" dy="20.48">walk</tspan></text>
+<text x="387.779" y="376" font-size="17" font-style="italic" text-anchor="middle"><tspan x="387.779" dy="0">shoes on,</tspan><tspan x="387.779" dy="21.76">short walk</tspan></text>
 <circle cx="152.221" cy="356" r="70" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2.5"/>
 <text x="152.221" y="352" font-size="21" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Reward</text>
-<text x="152.221" y="376" font-size="16" font-style="italic" text-anchor="middle"><tspan x="152.221" dy="0">fresh air, a</tspan><tspan x="152.221" dy="20.48">small win</tspan></text>
+<text x="152.221" y="376" font-size="17" font-style="italic" text-anchor="middle"><tspan x="152.221" dy="0">fresh air, a</tspan><tspan x="152.221" dy="21.76">small win</tspan></text>
 <rect x="28" y="510" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
 <text x="270" y="543" font-size="19" font-weight="bold" text-anchor="middle">Change the setup, not just your willpower:</text>
 <text x="270" y="567.7" font-size="19" font-style="italic" text-anchor="middle">move the cue, make the step tiny.</text>

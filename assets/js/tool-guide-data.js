@@ -36,6 +36,7 @@ window.TOLToolGuideData = {
 
     'signal-translator': {
       name: 'Text message checker',
+      reg: 'signal',
       pages: ['/signal-translator.html'],
       when: 'Before you send a text, email or work message that matters. Or when a message you got stung or confused you and you want a calmer reading of it.',
       notWhen: 'Not in the middle of a heated exchange: take a break first with <a href="/pursue-withdraw.html">a pause plan</a>. Not for working out what someone “really” meant; only they can tell you that.',
@@ -57,7 +58,8 @@ window.TOLToolGuideData = {
     },
 
     'conversation-reader': {
-      name: 'Read a tricky conversation',
+      name: 'Chat analyzer: paste a conversation',
+      reg: 'reader',
       pages: ['/conversation-reader.html'],
       when: 'After a text or chat exchange went sideways and you want to see where it turned, what each of you may have been hearing, and a calmer way to reply.',
       notWhen: 'Not while you are still upset: reply later, after <a href="/upset-right-now.html">five calm minutes</a>. Not as evidence for who was right; it isn’t built for that.',
@@ -81,6 +83,7 @@ window.TOLToolGuideData = {
 
     'perspective-shifter': {
       name: 'See it from their side',
+      reg: 'perspective',
       pages: ['/perspective-shifter.html'],
       when: 'When someone’s reaction surprised or hurt you and you want to step round to their side before you talk.',
       notWhen: 'Not as a way to excuse something that keeps hurting you. Not to decide what they think: it gives you questions to ask them, not answers.',
@@ -103,7 +106,8 @@ window.TOLToolGuideData = {
     },
 
     'carrier-wave-decoder': {
-      name: 'When a talk goes sideways: a guided session',
+      name: 'When a talk goes wrong: a step-by-step reset',
+      reg: 'decoder',
       pages: ['/carrier-wave-decoder.html'],
       when: 'After a conversation went wrong between two people who usually get on, and you want to work out what slipped, settle yourself and practise what to say next time.',
       notWhen: 'Not in the heat of the moment: use <a href="/upset-right-now.html">Upset right now?</a> first. If it’s a big topic, raise it later in a <a href="/check-ins.html">check-in</a>.',
@@ -127,6 +131,7 @@ window.TOLToolGuideData = {
 
     'write-it-through': {
       name: 'Talk it through in writing',
+      reg: 'write',
       pages: ['/write-it-through.html'],
       two: true,
       when: 'When something is easier to sort out on paper: you want time to settle, to finish a thought without being cut off, and to both have the same words to look back on.',
@@ -150,7 +155,8 @@ window.TOLToolGuideData = {
     },
 
     'say-it-so-it-lands': {
-      name: 'Say it so it lands',
+      name: 'Before you reply: say it so it lands',
+      reg: 'sayit',
       pages: ['/workpapers/wp-09-say-it-so-it-lands.html', '/workpapers/fill/wp-09.html'],
       when: 'Before you answer something that stung, or before you raise a hard thing, so what you say is something the other person can actually hear.',
       notWhen: 'Not as a way to correct how someone else talks. Each person uses it on their own words only.',
@@ -173,6 +179,7 @@ window.TOLToolGuideData = {
 
     'soften-a-tense-moment': {
       name: 'Soften a tense moment',
+      reg: 'soften',
       pages: ['/tools/soften-a-tense-moment.html', '/tools/soften-a-tense-moment-full.html'],
       when: 'When the mood in the room is heavy (someone is frazzled, flat or prickly) and you want a small, kind way to shift it.',
       notWhen: 'Not if you’re wound up yourself: settle first. Not a way to talk someone out of a feeling they need to have.',
@@ -195,6 +202,7 @@ window.TOLToolGuideData = {
 
     'pause-plan': {
       name: 'Make a pause plan for arguments',
+      reg: 'pause',
       pages: ['/pursue-withdraw.html'],
       two: true,
       when: 'When one of you wants to sort it out now and the other needs space first, and the more one pushes, the more the other pulls back.',
@@ -218,10 +226,11 @@ window.TOLToolGuideData = {
     },
 
     'check-in-card': {
-      name: 'This week’s check-in card',
+      name: 'Weekly check-in card',
+      reg: 'checkincard',
       pages: ['/check-ins.html'],
       two: true,
-      when: 'When something needs talking about properly, but not right now: you agree a short, calm time for one topic.',
+      when: 'When something needs talking about properly, but not right now: you agree a short, calm time for one topic. With a parent or grown child, the family plan card covers visits, advice and a review date.',
       notWhen: 'Not for several topics at once: pick the one that would make the rest feel lighter. Not straight after a fight; wait until you’ve both settled.',
       time: 'About 5 minutes to fill in; the talk itself about 20 minutes.',
       result: 'A small card that names one topic, when and where you’ll talk, and the ground rules you both agreed (one topic, no blame, a pause word), ready to copy, send or stick on the fridge.',
@@ -241,7 +250,8 @@ window.TOLToolGuideData = {
     },
 
     'say-no-kindly': {
-      name: 'Say no kindly',
+      name: 'Say no kindly: script maker',
+      reg: 'refusals',
       pages: ['/refusals.html'],
       when: 'When you need to turn something down (a favour, an extra shift, a visit) and want words that are clear and kind.',
       notWhen: 'Not for turning down something that is your fair share of a job you agreed to; that’s a conversation for <a href="/workpapers/wp-03-one-owner-per-job.html">One owner per job</a>.',
@@ -265,10 +275,10 @@ window.TOLToolGuideData = {
       name: 'Decide together, then tell both families',
       pages: ['/two-faiths.html'],
       two: true,
-      when: 'When two faiths, cultures or family traditions meet a real decision (a name, a ceremony, a holiday) and you want to decide together and tell both families the same thing.',
+      when: 'When two faiths, cultures or family traditions meet a real decision (a name, a ceremony, a holiday) and you want to decide together and tell both families the same thing. The festival year planner on this page does the same for the whole year.',
       notWhen: 'Not before you’ve both had time to say what matters to you and why. Not as a way to settle it for the other person.',
       time: 'About 15 minutes to write; the deciding may take longer.',
-      result: 'One short decision you both agree with, and one message each of you sends to your own family in your own words, saying you decided together.',
+      result: 'One short decision you both agree with, and one message each of you sends to your own family in your own words, saying you decided together. For festivals: one year table of who goes where.',
       next: [
         ['/family-obligations.html', 'Family, visits and elders', 'if family pressure is the harder part'],
         ['/signal-translator.html', 'Check the family message', 'how it may land'],
@@ -287,6 +297,7 @@ window.TOLToolGuideData = {
 
     'wavelength': {
       name: 'Communication style quiz',
+      reg: 'wavelength',
       pages: ['/wavelength.html', '/communication-style-quiz.html'],
       when: 'When you’d like to put into words how you think, talk and listen, so the people around you don’t have to guess.',
       notWhen: 'Not to label or sort someone else. Not a personality test or a diagnosis.',
@@ -309,7 +320,8 @@ window.TOLToolGuideData = {
     },
 
     'wiring-card': {
-      name: 'Wiring Card: how to talk with me',
+      name: 'How I like to be spoken to: a one-page card',
+      reg: 'wiring',
       pages: ['/wiring-card.html'],
       when: 'When you want the people you live or work with to know what helps words reach you: pace, format, timing, what to avoid.',
       notWhen: 'Give it before a hard conversation, not during one.',
@@ -332,7 +344,8 @@ window.TOLToolGuideData = {
     },
 
     'todays-weather': {
-      name: 'Mood and energy check-in (Today’s Weather)',
+      name: 'Mood and energy check-in',
+      reg: 'weather',
       pages: ['/quick-checks.html'],
       when: 'Once a day, or before something hard, to see what today has room for.',
       notWhen: 'Not a way to rate someone else’s mood. Not a measure of your mental health.',
@@ -354,7 +367,8 @@ window.TOLToolGuideData = {
     },
 
     'how-much-carrying': {
-      name: 'How much are you carrying? (stress check)',
+      name: 'Load check: how much are you carrying?',
+      reg: 'load-check',
       pages: ['/workpapers/wp-02-how-much-are-you-carrying.html', '/workpapers/fill/wp-02.html'],
       when: 'Before a hard conversation, or when a small thing stings more than it should, to tell apart what you’re already carrying from the thing in front of you.',
       notWhen: 'Not about anyone else: fill it in only about yourself. Not a reason to skip a talk forever; a high score means “later”, not “never”.',
@@ -399,7 +413,8 @@ window.TOLToolGuideData = {
     },
 
     'rhythms': {
-      name: 'Compare your everyday rhythms',
+      name: 'Compare your daily rhythms',
+      reg: 'rhythms',
       pages: ['/tools/frequency-calibration.html'],
       two: true,
       when: 'When you and one other person keep clashing over timing: how often to talk money, decide things, check in, rest, or ask the big questions.',
@@ -423,6 +438,7 @@ window.TOLToolGuideData = {
 
     'where-am-i': {
       name: 'Where am I right now?',
+      reg: 'ladder',
       pages: ['/ladder.html'],
       when: 'When you can’t tell whether you’re calm enough to talk, or you feel revved up or flat and want one step that fits.',
       notWhen: 'Not for labelling someone else’s state.',
@@ -444,12 +460,13 @@ window.TOLToolGuideData = {
     },
 
     'flip-it': {
-      name: 'Flip it: turn a hard feeling into a next step',
+      name: 'Turn a complaint into a request',
+      reg: 'flip',
       pages: ['/small-wins.html'],
-      when: 'When anger, worry or regret is sitting with you and you’d like to find the useful message in it, or when you want to notice small things that went right.',
+      when: 'When a complaint, a worry, anger or a harsh thought about yourself keeps going round, and you’d like to turn it into a request or a plan. Also for noting small things that went right.',
       notWhen: 'Not a way to talk yourself out of a feeling. Some feelings just need to be felt for a while.',
-      time: 'About 3 minutes.',
-      result: 'One small, finishable step that comes from the feeling, for example “I’m annoyed the kitchen is always a mess” becomes “Ask for one owner for the evening wipe-down,” plus a done list of small wins.',
+      time: 'About 2 minutes.',
+      result: 'A suggested flip you then put in your own words, for example “The kitchen is always a mess” becomes “Could we give the evening wipe-down one owner?”, plus a private done list of small wins.',
       next: [
         ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'if the feeling is about the shared work'],
         ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'if the next step is a conversation'],
@@ -460,7 +477,7 @@ window.TOLToolGuideData = {
         ['carver-harmon-jones-2009', 'Anger usually moves us toward a goal, so it can point to what matters (Carver and Harmon-Jones, 2009).'],
         ['kross-ayduk-mischel-2005', 'Asking “why” from a little distance helps; reliving it doesn’t (Kross, Ayduk and Mischel, 2005).']
       ],
-      idea: 'The “Flip it” steps and the done list are this site’s own.',
+      idea: 'The flip rules and the done list are this site’s own. It is a simple set of rules, not a person, so change the words until they sound like you.',
       limits: 'A small reframing tool, not therapy. Feelings that stay heavy deserve real support.',
       privacy: 'Your done list is kept in this browser until you remove it or press Erase. Nothing is sent anywhere.'
     },
@@ -469,6 +486,7 @@ window.TOLToolGuideData = {
 
     'calm-down-kit': {
       name: 'Calm-down plan',
+      reg: 'calmkit',
       pages: ['/wp-11.html', '/workpapers/fill/wp-11.html'],
       when: 'On a calm day, to decide ahead of time what you notice first when you’re getting heated, the signal you’ll use, and what settles you.',
       notWhen: 'Not while you’re upset: use <a href="/upset-right-now.html">Upset right now?</a> first and make the kit later.',
@@ -490,7 +508,8 @@ window.TOLToolGuideData = {
     },
 
     'upset-right-now': {
-      name: 'Upset right now?',
+      name: 'Upset right now? A 5-minute calm-down',
+      reg: 'upset',
       pages: ['/upset-right-now.html'],
       when: 'Right now, when you or the two of you are too upset to talk well.',
       notWhen: 'Not a place to settle the argument. Come back to the topic later, at a time you name.',
@@ -512,7 +531,8 @@ window.TOLToolGuideData = {
     },
 
     'night-garden': {
-      name: 'Breathe in the Night Garden',
+      name: 'Breathing game',
+      reg: 'garden',
       pages: ['/night-garden.html'],
       when: 'At the end of a long day, or when your thoughts are busy and you want a few quiet minutes.',
       notWhen: 'Not a treatment, and it doesn’t replace talking to someone.',
@@ -535,7 +555,8 @@ window.TOLToolGuideData = {
     /* ---------------- Share the load ---------------- */
 
     'lemonade-stand': {
-      name: 'Who does what: chores and bills',
+      name: 'Chores and bills: who does what',
+      reg: 'lemon-full',
       pages: ['/lemonade-stand.html'],
       two: true,
       when: 'When the work at home or the bills feel uneven and you want to see the whole list plainly, with no blame. Works for two people or a whole house.',
@@ -559,7 +580,8 @@ window.TOLToolGuideData = {
     },
 
     'who-did-what': {
-      name: 'Who did what: a one-week log',
+      name: 'Who did what this week: a one-week log',
+      reg: 'whodid',
       pages: ['/workpapers/wp-01.html', '/workpapers/fill/wp-01.html'],
       two: true,
       when: 'When memories of a busy week are blurring and you want to see what actually got done at home, by whom.',
@@ -583,7 +605,8 @@ window.TOLToolGuideData = {
     },
 
     'one-owner': {
-      name: 'One owner per job',
+      name: 'One owner per job: a who-owns-what list',
+      reg: 'owner',
       pages: ['/workpapers/wp-03-one-owner-per-job.html', '/workpapers/fill/wp-03.html'],
       two: true,
       when: 'When the same jobs keep being re-decided, forgotten or done by whoever cracks first, at home, in a team or among family sharing someone’s care.',
@@ -608,6 +631,7 @@ window.TOLToolGuideData = {
 
     'keeps-coming-back': {
       name: 'What keeps coming back? A monthly look-back',
+      reg: 'keepscoming',
       pages: ['/workpapers/wp-04-what-keeps-coming-back.html', '/workpapers/fill/wp-04.html'],
       two: true,
       when: 'Once a month, to find the jobs that keep slipping and fix the setup instead of patching it again.',
@@ -630,7 +654,8 @@ window.TOLToolGuideData = {
     },
 
     'daily-check-in': {
-      name: 'The 90-second daily check-in',
+      name: '90-second daily check-in',
+      reg: 'checkin90',
       pages: ['/workpapers/wp-13-daily-check-in.html', '/workpapers/fill/wp-13.html'],
       two: true,
       when: 'Every day, at a regular moment (after dinner, at the start of a shift), so small things get said while they’re still small.',
@@ -678,7 +703,8 @@ window.TOLToolGuideData = {
     },
 
     'chore-chart': {
-      name: 'A fair chore chart (printable)',
+      name: 'Printable chore chart',
+      reg: 'chart',
       pages: ['/chore-chart-for-couples.html'],
       two: true,
       when: 'When you want every job at home, including the invisible ones, on one page with one owner each, and a 10-minute look once a week.',
@@ -701,7 +727,8 @@ window.TOLToolGuideData = {
     },
 
     'room-agreement': {
-      name: 'Room agreement for housemates',
+      name: 'Room agreement for roommates',
+      reg: 'room',
       pages: ['/sharing-a-room.html'],
       two: true,
       when: 'Early on when sharing a room or flat, or when one thing (noise, guests, cleaning, sleep) keeps bothering one of you.',
@@ -724,7 +751,8 @@ window.TOLToolGuideData = {
     },
 
     'time-together-deal': {
-      name: 'Time-together deal (gaming and phones)',
+      name: 'Time-together deal (games and phones)',
+      reg: 'deal',
       pages: ['/gaming-and-time-together.html'],
       two: true,
       when: 'When one of you feels ignored and the other feels nagged about gaming or phones, and you’d both like to feel chosen.',
@@ -749,6 +777,7 @@ window.TOLToolGuideData = {
 
     'week-on-one-page': {
       name: 'Our week on one page (different hours)',
+      reg: 'ourweek',
       pages: ['/different-hours.html'],
       two: true,
       when: 'When one of you works nights or shifts, or works from home, and you share a home but not a clock.',
@@ -771,10 +800,11 @@ window.TOLToolGuideData = {
     },
 
     'work-owners': {
-      name: 'Who owns what at work',
+      name: 'Team job list: one owner and a backup',
+      reg: 'team-owner',
       pages: ['/work.html'],
       two: true,
-      when: 'When jobs on a team or between business partners belong to “everyone”, and so to no one, or to the same reliable person every time.',
+      when: 'When jobs on a team or between business partners belong to “everyone”, and so to no one, or to the same reliable person every time. The 10-minute team check-in on this page keeps it current each week.',
       notWhen: 'Not a performance review. Not a way to load more work onto whoever is reliable.',
       time: 'About 20 minutes as a team.',
       result: 'A list of the recurring jobs, each with one owner and a backup for holidays and busy weeks, printed or copied for the team.',
@@ -795,7 +825,8 @@ window.TOLToolGuideData = {
     },
 
     'workpaper-suite': {
-      name: 'All the worksheets in one place',
+      name: 'All the worksheets for your situation, in order',
+      reg: 'suite',
       pages: ['/workpapers/fill/suite.html'],
       two: true,
       when: 'When you’d like to work through several worksheets in a sensible order for your situation (just you, a couple, a household, co-parents, a team), and get one report at the end.',
@@ -819,7 +850,8 @@ window.TOLToolGuideData = {
     /* ---------------- Closeness ---------------- */
 
     'bonding-ideas': {
-      name: 'Bonding ideas picker',
+      name: 'Get one small bonding idea',
+      reg: 'bonding',
       pages: ['/bonding.html'],
       when: 'When you’d like one small, low-cost idea to grow closeness with someone (a partner, child, friend, parent, housemate or coworker), sized to your time and energy.',
       notWhen: 'Not a fix for a hurt that needs talking about first; try <a href="/check-ins.html">a check-in</a> for that.',
@@ -863,7 +895,8 @@ window.TOLToolGuideData = {
     },
 
     'care-card': {
-      name: 'Care card (love languages as a menu)',
+      name: 'What feels like care to me: a care card',
+      reg: 'carecard',
       pages: ['/love-languages.html'],
       when: 'When you’d like to tell someone the small, specific things that make you feel cared for, and ask what works for them.',
       notWhen: 'Not a label for you or them, and not a test of whether you’re compatible.',
@@ -886,7 +919,8 @@ window.TOLToolGuideData = {
     },
 
     'touchstone-list': {
-      name: 'Your shared language (touchstones)',
+      name: 'Your shared words and rituals list',
+      reg: 'touchstones',
       pages: ['/touchstones.html'],
       when: 'When you’d like to notice and keep fresh the small things that say “we’re us”: nicknames, inside jokes, rituals.',
       notWhen: 'Not a test of how close you are. Every relationship’s touchstones look different.',

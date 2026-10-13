@@ -25,14 +25,19 @@ const JSON_OUT = args.includes('--json'), QUIET = args.includes('--quiet');
 const LEVELS = ['kind', 'clear', 'a little sharp', 'sharp', 'very sharp'];
 const WORK = ['coworker', 'manager', 'business'];
 const has = (an, ids) => ids.some(id => !!an.found[id]);
+const YOU = /\b(?:you|your|yours|yourself|you're|youre|u|ur)\b/i;
 const LABELS = {
   request:    an => an.asks.length > 0,
   hint:       an => has(an, ['hint']),
-  blame:      an => has(an, ['blameq', 'label', 'shouldhave', 'madefeel', 'critic', 'compare', 'jab', 'contempt', 'dxlabel', 'past', 'count', 'sorrybut', 'invalid', 'calm', 'hostile']),
+  // blame: a named blame pattern, or "always / never / again" aimed at the listener ("You never listen", "You're late again"),
+  // which the page explains as turning one moment into a verdict on the person
+  blame:      an => has(an, ['blameq', 'label', 'shouldhave', 'madefeel', 'critic', 'compare', 'jab', 'contempt', 'dxlabel', 'past', 'count', 'sorrybut', 'invalid', 'calm', 'hostile', 'passive'])
+                    || (has(an, ['absolute', 'again']) && YOU.test(an.norm)),
   sarcasm:    an => has(an, ['sarcasm']),
   absolutes:  an => has(an, ['absolute']),
   guilt:      an => has(an, ['guilt']),
-  withdrawal: an => has(an, ['withdraw', 'stonewall', 'brushoff']),
+  // "whatever" on its own is read as one short reply (minimal) that the page names as a brush-off
+  withdrawal: an => has(an, ['withdraw', 'stonewall', 'brushoff']) || (has(an, ['minimal']) && /whatev|if you say so|como quieras/i.test(an.norm)),
   apology:    an => !!an.apology || has(an, ['repair']),
   banter:     an => !!an.banter,
   gratitude:  an => has(an, ['appreciation']),

@@ -811,7 +811,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <div><h2>The parts</h2><ul class="pe-how-parts">%s</ul></div>
 <div><h2>Two sizes of every chapter</h2><p>Every chapter comes in a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try. This is %s. The %s version is free at spreadloveandacceptance.com/book.</p></div>
 <div><h2>Read in order, or by need</h2><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
-<div><h2>In every chapter</h2><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span>A short scene: a made-up moment from everyday life.</li><li><span class="pe-key pe-key-words"></span><strong>Words you could use</strong>: sentences to say out loud.</li><li><span class="pe-key pe-key-try"></span><strong>Try this</strong>: one small thing to do this week.</li><li><span class="pe-key pe-key-mix"></span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</li></ul></div>
+<div><h2>In every chapter</h2><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
 <div><h2>The site, the program and Professor Puddles</h2><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
 <div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
@@ -865,7 +865,7 @@ def chapter_end(e, deep, here):
                 where = '<a href="#%s">page %s</a>' % (tgt, pg(tgt))
                 lab = '<a href="#%s">%s</a>' % (tgt, esc(chapter_name(te)))
             else:
-                where = '<a href="%s">%s</a>' % (absolute(href(tgt, deep)), pretty_url(href(tgt)).replace('spreadloveandacceptance.com', 'online'))
+                where = '<a href="%s">read online</a>' % absolute(href(tgt, deep))
                 lab = '<a href="%s">%s</a>' % (absolute(href(tgt, deep)), esc(chapter_name(te)))
             s += '<li><span class="pe-conn-l">%s · %s</span><span class="pe-conn-w">%s</span><span class="pe-conn-p">%s</span></li>' % (
                 lab, esc(SHORT[tgt]), esc(w[0].upper() + w[1:]), where)
@@ -1008,7 +1008,9 @@ def page_rules(here, deep):
         nm = 'pc-' + e[0]
         foot = (chapter_name(e) + ' · ' + SHORT[e[0]]).replace('"', '\\"')
         r.append('#%s{page:%s}' % (e[0], nm))
-        r.append('@page %s{@bottom-left{content:"%s"}@%s{content:"";border-right:3mm solid %s}}' % (nm, foot, tab[e[1]], PCOL[e[1]][0]))
+        boxes = ''.join('@%s{content:"";%s}' % (b, ('border-right:3mm solid %s;height:52mm' % PCOL[e[1]][0]) if b == tab[e[1]] else '')
+                        for b in ('right-top', 'right-middle', 'right-bottom'))
+        r.append('@page %s{@bottom-left{content:"%s"}%s}' % (nm, foot, boxes))
     return '<style media="print">%s</style>' % '\n'.join(r)
 
 

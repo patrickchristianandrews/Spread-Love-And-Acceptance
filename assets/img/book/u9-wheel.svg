@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 798" width="540" height="798" role="img" aria-labelledby="fig-u9-wheel-t fig-u9-wheel-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u9-wheel-t">Brains vary: a profile, not a line</title>
+<desc id="fig-u9-wheel-d">At the top, a straight line from &quot;less&quot; to &quot;more&quot; is crossed out. Below, a six-spoke wheel: senses, focus, social energy, words, movement, and getting started. Two people’s profiles are drawn on it as different, uneven shapes, strong in some places and stretched in others. Neither shape is more or less than the other. Different is not broken, and a world built for one kind of mind can still make a difference disabling.</desc>
+
+<rect x="1" y="1" width="538" height="796" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Brains vary, like bodies do</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Different, not broken.</text>
+<line x1="88" y1="128" x2="452" y2="128" stroke="#5A5346" stroke-width="4" stroke-linecap="round"/>
+<text x="74" y="134" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">less</text>
+<text x="466" y="134" font-size="18" font-style="italic" fill="#5A5346">more</text>
+<path d="M254.0 112.0 L286.0 144.0 M286.0 112.0 L254.0 144.0" fill="none" stroke="#8E3B47" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="170" font-size="19" font-style="italic" text-anchor="middle">Not a line from “a little” to “a lot”…</text>
+<text x="270" y="204" font-size="19" font-weight="bold" text-anchor="middle">…but a profile with its own shape.</text>
+<polygon points="270.0,365.1 308.9,387.6 308.9,432.4 270.0,454.9 231.1,432.4 231.1,387.6" fill="none" stroke="#D9CBA3" stroke-width="1.5"/>
+<polygon points="270.0,320.2 347.7,365.1 347.7,454.9 270.0,499.8 192.3,454.9 192.3,365.1" fill="none" stroke="#D9CBA3" stroke-width="1.5"/>
+<polygon points="270.0,274.0 387.8,342.0 387.8,478.0 270.0,546.0 152.2,478.0 152.2,342.0" fill="#F7F1E4" stroke="#D9CBA3" stroke-width="1.5"/>
+<line x1="270" y1="410" x2="270" y2="274" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="270" y1="410" x2="387.779" y2="342" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="270" y1="410" x2="387.779" y2="478" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="270" y1="410" x2="270" y2="546" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="270" y1="410" x2="152.221" y2="478" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="270" y1="410" x2="152.221" y2="342" stroke="#D9CBA3" stroke-width="1.5" stroke-linecap="round"/>
+<polygon points="270.0,280.8 376.0,348.8 311.2,433.8 270.0,512.0 217.0,440.6 234.7,389.6" fill="#7FB2E0" fill-opacity="0.35" stroke="#2F5F8A" stroke-width="3" stroke-linejoin="round"/>
+<polygon points="270.0,348.8 317.1,382.8 370.1,467.8 270.0,484.8 164.0,471.2 187.6,362.4" fill="#E8A0A8" fill-opacity="0.35" stroke="#8E3B47" stroke-width="3" stroke-linejoin="round"/>
+<text x="270" y="248" font-size="18" font-weight="bold" text-anchor="middle">Senses</text>
+<text x="410.296" y="335" font-size="18" font-weight="bold">Focus</text>
+<text x="410.296" y="487" font-size="18" font-weight="bold">Social</text>
+<text x="410.296" y="509" font-size="18" font-weight="bold">energy</text>
+<text x="270" y="586" font-size="18" font-weight="bold" text-anchor="middle">Words</text>
+<text x="129.704" y="497" font-size="18" font-weight="bold" text-anchor="end">Movement</text>
+<text x="129.704" y="325" font-size="18" font-weight="bold" text-anchor="end">Getting</text>
+<text x="129.704" y="347" font-size="18" font-weight="bold" text-anchor="end">started</text>
+<rect x="40" y="594" width="26" height="18" rx="4" fill="#7FB2E0" stroke="#2F5F8A" stroke-width="2" fill-opacity="0.5"/>
+<text x="76" y="609" font-size="18">One person’s shape</text>
+<rect x="40" y="622" width="26" height="18" rx="4" fill="#E8A0A8" stroke="#8E3B47" stroke-width="2" fill-opacity="0.5"/>
+<text x="76" y="637" font-size="18">Another person’s shape</text>
+<rect x="28" y="656" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="689" font-size="19" font-style="italic" text-anchor="middle">Strong in some places, stretched in others.</text>
+<text x="270" y="713.7" font-size="19" font-style="italic" text-anchor="middle">Ask what helps, and say what helps you.</text>
+<text x="28" y="748.4" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration, not a test. “Spiky profile” is a common</tspan><tspan x="28" dy="23.04">way to describe uneven strengths and needs.</tspan></text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 895" width="540" height="895" role="img" aria-labelledby="fig-u14-dials-t fig-u14-dials-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u14-dials-t">Five traits, each a dial, not a box</title>
+<desc id="fig-u14-dials-d">Five rows, one for each of the Big Five traits: openness, conscientiousness, extraversion, agreeableness, and emotional stability (the other end is called neuroticism). Each row is a line between two plain-language ends, with a hump showing that most people sit near the middle. A dot marks one made-up person on each dial. Every trait has gifts and costs at both ends, and people change across life.</desc>
+
+<rect x="1" y="1" width="538" height="893" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Traits are dials, not boxes</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Most people sit near the middle of each one.</text>
+<text x="28" y="124" font-size="20" font-weight="bold" fill="#2F5F8A">Openness</text>
+<polygon points="40,182.0 40,181.1 48,180.8 55,180.5 63,180.1 71,179.6 78,179.0 86,178.3 94,177.4 101,176.5 109,175.4 117,174.1 124,172.6 132,171.0 140,169.3 147,167.3 155,165.2 163,163.0 170,160.7 178,158.3 186,155.8 193,153.3 201,150.9 209,148.6 216,146.3 224,144.3 232,142.5 239,140.9 247,139.7 255,138.7 262,138.2 270,138.0 278,138.2 285,138.7 293,139.7 301,140.9 308,142.5 316,144.3 324,146.3 331,148.6 339,150.9 347,153.3 354,155.8 362,158.3 370,160.7 377,163.0 385,165.2 393,167.3 400,169.3 408,171.0 416,172.6 423,174.1 431,175.4 439,176.5 446,177.4 454,178.3 462,179.0 469,179.6 477,180.1 485,180.5 492,180.8 500,181.1 500,182.0" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<line x1="40" y1="182" x2="500" y2="182" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<circle cx="362" cy="182" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="28" y="208" font-size="17" font-style="italic" fill="#5A5346">prefers the familiar</text>
+<text x="512" y="208" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">curious, loves new things</text>
+<text x="28" y="242" font-size="20" font-weight="bold" fill="#7A5620">Conscientiousness</text>
+<polygon points="40,300.0 40,299.1 48,298.8 55,298.5 63,298.1 71,297.6 78,297.0 86,296.3 94,295.4 101,294.5 109,293.4 117,292.1 124,290.6 132,289.0 140,287.3 147,285.3 155,283.2 163,281.0 170,278.7 178,276.3 186,273.8 193,271.3 201,268.9 209,266.6 216,264.3 224,262.3 232,260.5 239,258.9 247,257.7 255,256.7 262,256.2 270,256.0 278,256.2 285,256.7 293,257.7 301,258.9 308,260.5 316,262.3 324,264.3 331,266.6 339,268.9 347,271.3 354,273.8 362,276.3 370,278.7 377,281.0 385,283.2 393,285.3 400,287.3 408,289.0 416,290.6 423,292.1 431,293.4 439,294.5 446,295.4 454,296.3 462,297.0 469,297.6 477,298.1 485,298.5 492,298.8 500,299.1 500,300.0" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<line x1="40" y1="300" x2="500" y2="300" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<circle cx="201" cy="300" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="28" y="326" font-size="17" font-style="italic" fill="#5A5346">easygoing, flexible</text>
+<text x="512" y="326" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">organised, plans ahead</text>
+<text x="28" y="360" font-size="20" font-weight="bold" fill="#3E6B4C">Extraversion</text>
+<polygon points="40,418.0 40,417.1 48,416.8 55,416.5 63,416.1 71,415.6 78,415.0 86,414.3 94,413.4 101,412.5 109,411.4 117,410.1 124,408.6 132,407.0 140,405.3 147,403.3 155,401.2 163,399.0 170,396.7 178,394.3 186,391.8 193,389.3 201,386.9 209,384.6 216,382.3 224,380.3 232,378.5 239,376.9 247,375.7 255,374.7 262,374.2 270,374.0 278,374.2 285,374.7 293,375.7 301,376.9 308,378.5 316,380.3 324,382.3 331,384.6 339,386.9 347,389.3 354,391.8 362,394.3 370,396.7 377,399.0 385,401.2 393,403.3 400,405.3 408,407.0 416,408.6 423,410.1 431,411.4 439,412.5 446,413.4 454,414.3 462,415.0 469,415.6 477,416.1 485,416.5 492,416.8 500,417.1 500,418.0" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<line x1="40" y1="418" x2="500" y2="418" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<circle cx="168.8" cy="418" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="28" y="444" font-size="17" font-style="italic" fill="#5A5346">recharged by quiet</text>
+<text x="512" y="444" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">recharged by people</text>
+<text x="28" y="478" font-size="20" font-weight="bold" fill="#8E3B47">Agreeableness</text>
+<polygon points="40,536.0 40,535.1 48,534.8 55,534.5 63,534.1 71,533.6 78,533.0 86,532.3 94,531.4 101,530.5 109,529.4 117,528.1 124,526.6 132,525.0 140,523.3 147,521.3 155,519.2 163,517.0 170,514.7 178,512.3 186,509.8 193,507.3 201,504.9 209,502.6 216,500.3 224,498.3 232,496.5 239,494.9 247,493.7 255,492.7 262,492.2 270,492.0 278,492.2 285,492.7 293,493.7 301,494.9 308,496.5 316,498.3 324,500.3 331,502.6 339,504.9 347,507.3 354,509.8 362,512.3 370,514.7 377,517.0 385,519.2 393,521.3 400,523.3 408,525.0 416,526.6 423,528.1 431,529.4 439,530.5 446,531.4 454,532.3 462,533.0 469,533.6 477,534.1 485,534.5 492,534.8 500,535.1 500,536.0" fill="#F7DEE0" stroke="#8E3B47" stroke-width="1.5"/>
+<line x1="40" y1="536" x2="500" y2="536" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<circle cx="325.2" cy="536" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="28" y="562" font-size="17" font-style="italic" fill="#5A5346">challenging, blunt</text>
+<text x="512" y="562" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">accommodating, warm</text>
+<text x="28" y="596" font-size="20" font-weight="bold" fill="#2F5F8A">Emotional stability</text>
+<polygon points="40,654.0 40,653.1 48,652.8 55,652.5 63,652.1 71,651.6 78,651.0 86,650.3 94,649.4 101,648.5 109,647.4 117,646.1 124,644.6 132,643.0 140,641.3 147,639.3 155,637.2 163,635.0 170,632.7 178,630.3 186,627.8 193,625.3 201,622.9 209,620.6 216,618.3 224,616.3 232,614.5 239,612.9 247,611.7 255,610.7 262,610.2 270,610.0 278,610.2 285,610.7 293,611.7 301,612.9 308,614.5 316,616.3 324,618.3 331,620.6 339,622.9 347,625.3 354,627.8 362,630.3 370,632.7 377,635.0 385,637.2 393,639.3 400,641.3 408,643.0 416,644.6 423,646.1 431,647.4 439,648.5 446,649.4 454,650.3 462,651.0 469,651.6 477,652.1 485,652.5 492,652.8 500,653.1 500,654.0" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<line x1="40" y1="654" x2="500" y2="654" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<circle cx="247" cy="654" r="9" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="28" y="680" font-size="17" font-style="italic" fill="#5A5346">feels stress strongly</text>
+<text x="512" y="680" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">steady under stress</text>
+<circle cx="48" cy="706" r="8" fill="#FCF9F1" stroke="#2B2620" stroke-width="3"/>
+<text x="64" y="712" font-size="18">one made-up person</text>
+<rect x="28" y="730" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="763" font-size="19" font-style="italic" text-anchor="middle">Every trait has gifts and costs at both ends.</text>
+<text x="270" y="787.7" font-size="19" font-style="italic" text-anchor="middle">Clashes are mostly about fit, not fault.</text>
+<text x="28" y="822.4" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">The Big Five or five-factor model (for example</tspan><tspan x="28" dy="23.04">McCrae and Costa, 1987): a description of how</tspan><tspan x="28" dy="23.04">people differ, not an explanation. Illustrative shapes.</tspan></text>
+</svg>

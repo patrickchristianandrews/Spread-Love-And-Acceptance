@@ -24,8 +24,7 @@
 <text x="179.067" y="422" font-size="17" font-weight="bold" fill="#7A5620" text-anchor="middle">66</text>
 <text x="484.044" y="422" font-size="17" font-weight="bold" fill="#3E6B4C" text-anchor="middle">254</text>
 <text x="331.556" y="422" font-size="17" font-style="italic" fill="#5A5346" text-anchor="middle">days</text>
-<text x="62" y="305" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">feels</text>
-<text x="62" y="325" font-size="17" font-style="italic" fill="#5A5346" text-anchor="end">automatic</text>
+<text x="48" y="305" font-size="17" font-style="italic" fill="#5A5346" text-anchor="middle" transform="rotate(-90 48 305)">feels automatic →</text>
 <path d="M142.51111111111112 215.67474249606562 C168.51111111111112 259.6747424960656 198.51111111111112 269.6747424960656 228.51111111111112 271.6747424960656" fill="none" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="234.511" y="269.675" font-size="17" font-style="italic">a missed day:</text>
 <text x="234.511" y="289.675" font-size="17" font-style="italic">not a reset</text>

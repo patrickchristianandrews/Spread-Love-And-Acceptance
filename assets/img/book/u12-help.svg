@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 696" width="540" height="696" role="img" aria-labelledby="fig-u12-help-t fig-u12-help-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u12-help-t">Ask what kind of help they want</title>
+<desc id="fig-u12-help-d">One question at the top: &quot;Ideas, or just someone to listen?&quot; It leads to four kinds of help: comfort and listening; practical help, like a lift or a meal; ideas and advice, when they are asked for; and help making sense of it. Below, a reminder: fixing it for them can take away their power, and your limits make your help last.</desc>
+
+<rect x="1" y="1" width="538" height="694" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Ask what kind of help they want</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">The wrong kind of help can feel like not being</tspan><tspan x="28" dy="24.32">heard.</tspan></text>
+<path d="M84 122.32 H456 Q472 122.32 472 138.32 V166.32 Q472 182.32 456 182.32 H114 L98 198.32 L94 182.32 H84 Q68 182.32 68 166.32 V138.32 Q68 122.32 84 122.32 Z" fill="#ECE2C4" stroke="#7A5620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="270" y="160.32" font-size="20" font-weight="bold" text-anchor="middle">“Ideas, or just someone to listen?”</text>
+<rect x="28" y="208.32" width="235" height="92" rx="16" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="44" y="242.32" font-size="21" font-weight="bold" fill="#2F5F8A">Listening</text>
+<text x="44" y="270.32" font-size="18" font-style="italic">comfort, company</text>
+<rect x="277" y="208.32" width="235" height="92" rx="16" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="293" y="242.32" font-size="21" font-weight="bold" fill="#7A5620">Practical</text>
+<text x="293" y="270.32" font-size="18" font-style="italic">a lift, a meal</text>
+<rect x="28" y="312.32" width="235" height="92" rx="16" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="44" y="346.32" font-size="21" font-weight="bold" fill="#3E6B4C">Ideas</text>
+<text x="44" y="374.32" font-size="18" font-style="italic">advice, if asked</text>
+<rect x="277" y="312.32" width="235" height="92" rx="16" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="293" y="346.32" font-size="21" font-weight="bold" fill="#8E3B47">Making sense</text>
+<text x="293" y="374.32" font-size="18" font-style="italic">thinking it through</text>
+<rect x="28" y="422.32" width="8" height="27" rx="3" fill="#8E3B47"/>
+<text x="50" y="441.32" font-size="19">Fixing it for them can take away their power.</text>
+<rect x="28" y="467.32" width="8" height="51.32" rx="3" fill="#3E6B4C"/>
+<text x="50" y="486.32" font-size="19"><tspan x="50" dy="0">Care from a steady place. Your limits make</tspan><tspan x="50" dy="24.32">your help last.</tspan></text>
+<rect x="28" y="536.64" width="8" height="27" rx="3" fill="#2F5F8A"/>
+<text x="50" y="555.64" font-size="19">In a crisis, stay with them and bring in help.</text>
+<text x="28" y="600.64" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Kinds of support after House (1981). Support helps</tspan><tspan x="28" dy="23.04">most when it fits what the person needs (Cutrona</tspan><tspan x="28" dy="23.04">and Russell, 1990), though the evidence for exact</tspan><tspan x="28" dy="23.04">matching is mixed.</tspan></text>
+</svg>
