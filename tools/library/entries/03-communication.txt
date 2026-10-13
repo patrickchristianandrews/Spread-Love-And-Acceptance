@@ -56,7 +56,7 @@ A full NVC sentence might be: “When I see the laundry still on the floor (obse
 
 NVC also asks the listener to hear the feelings and needs behind the other person’s words, even when those words are harsh. That can be a generous way of listening.
 
-Critics point out that when used rigidly, NVC can sound scripted or even manipulative, as if feelings language is being used to win. It can also underplay real disagreements about what is fair. Many people find it most useful as a way of thinking rather than a script.
+Critics point out that when used rigidly, NVC can sound scripted, as if feelings language is being used to win. It can also underplay real disagreements about what is fair. Many people find it most useful as a way of thinking rather than a script.
 research:
 Rosenberg developed NVC from the 1960s and described it in *Nonviolent Communication* (first published 1999; later editions subtitled *A Language of Life*). It is widely used in mediation, schools and workplaces. Reviews of the research have found few rigorous studies: many evaluations are small, uncontrolled or qualitative, although results are generally positive. So it is best described as a promising, widely used practice with a thin evidence base.
 links:
@@ -293,7 +293,7 @@ pillars: IV
 aka: direct communication, blunt, hints, subtext, reading between the lines, literal
 nut: People differ in how directly they say what they mean. Some say it plainly; some expect the listener to read between the lines. Neither is wrong, but mixing them leads to misunderstandings.
 deep:
-Indirect speakers use hints, context and tone: “Is anyone else cold?” may mean “Please close the window.” Direct speakers say “Please close the window.” To an indirect speaker, directness can sound rude. To a direct speaker, hints can feel unclear or even manipulative.
+Indirect speakers use hints, context and tone: “Is anyone else cold?” may mean “Please close the window.” Direct speakers say “Please close the window.” To an indirect speaker, directness can sound rude. To a direct speaker, hints can feel unclear, or like a test.
 
 This difference can come from culture, family, personality or neurotype. Many autistic people, for example, prefer and use direct communication, and may miss hints that others expect to be obvious.
 
