@@ -147,6 +147,8 @@
     if (b.hasAttribute('data-no-cheer') && !b.classList.contains('is-game')) return true;
     if (TENDER.test(path)) return true;
     if (/^\/signal-translator(-in-depth)?\.html$/.test(path)) {
+      // the Translator marks a result that should stay quiet (work mode, a tense family, money or rift message) or get no level (threat or control)
+      if (document.querySelector('#results[data-quiet-garden], #results[data-no-reward]') || document.documentElement.classList.contains('st-usework')) return true;
       var rel = document.getElementById('relSel'), got = document.getElementById('gotRelSel'), ph = document.getElementById('phrase');
       if ((rel && /^(family|coparent)$/.test(rel.value)) || (got && /^(family|coparent)$/.test(got.value))) return true;
       if (ph && DISCLOSE.test(ph.value || '')) return true;

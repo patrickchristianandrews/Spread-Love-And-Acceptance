@@ -368,7 +368,7 @@
   }
   function draw(r) {
     var cv = $('ld-card'); if (!cv || !cv.getContext) return;
-    var ctx = cv.getContext('2d'), W = cv.width, H = cv.height, d = R[r], SERIF = 'Georgia, "Times New Roman", serif';
+    var ctx = cv.getContext('2d'), W = cv.width, H = cv.height, d = D(r), SERIF = 'Georgia, "Times New Roman", serif';
     ctx.fillStyle = '#F5EFDE'; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#ECE2C4'; ctx.fillRect(0, 0, W, 14);
     ctx.fillStyle = '#7A5620'; ctx.font = '500 30px "Courier New", monospace'; ctx.textAlign = 'left';
@@ -415,7 +415,7 @@
   $('ld-copy-line').addEventListener('click', function () {
     if (!current) return;
     var b = this;
-    copy(R[current].pause).then(function (ok) { if (ok) { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); say('Copied. Change any words so it sounds like you.'); } else say('Copying didn’t work here. Select the words and copy them by hand.'); });
+    copy(D(current).pause).then(function (ok) { if (ok) { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); say('Copied. Change any words so it sounds like you.'); } else say('Copying didn’t work here. Select the words and copy them by hand.'); });
   });
   $('ld-link').addEventListener('click', function () {
     if (!current) return;

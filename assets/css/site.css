@@ -2870,3 +2870,13 @@ html.tol-contrast[data-theme="dark"]:not(.tol-nodark){ filter:invert(1) hue-rota
 /* the little reading friends: never an empty speech bubble, and none at all while the page is kept still */
 .tol-cheer-say:has(> .tol-cheer-line:empty){ display:none !important; }
 html.tol-still .tol-cheer{ display:none !important; }
+/* phones: over words, the round buttons get smaller and sit right at the edge (still whole, never a half-hidden tab),
+   so they stay clear of text that starts a little in from the side */
+@media (max-width:560px){
+  html body .tol-pud-fab.is-peek{ left:max(3px, env(safe-area-inset-left)) !important; width:30px !important; height:30px !important; opacity:.92; }
+  html body .tol-pud-fab.is-peek .tol-pud-fab-art{ width:26px; height:26px; }
+  html body .tol-pud-fab.is-peek .tol-pud-fab-art svg{ width:23px; height:23px; }
+  html body .tol-breathe-btn.is-peek:not(.is-high){ right:max(3px, env(safe-area-inset-right)) !important; width:30px !important; height:30px !important; opacity:.92; }
+  html body .tol-breathe-btn.is-peek.is-left:not(.is-high){ left:calc(max(3px, env(safe-area-inset-left)) + 36px) !important; right:auto !important; }
+  html body .tol-breathe-btn.is-peek svg{ width:1rem !important; height:1rem !important; }
+}

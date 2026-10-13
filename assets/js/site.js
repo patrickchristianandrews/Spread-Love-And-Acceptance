@@ -2597,7 +2597,7 @@
   // down once the way is clear again.
   // Is any text someone could be reading (or an "In short" box) under this floating button's box? Samples a grid
   // of points over the box, and for each element found there checks where its words really are on screen.
-  var INSHORT = '.tol-inshort, [data-in-short], .pc-short, [aria-label="In short"]';
+  var INSHORT = '.tol-inshort, [data-in-short], .pc-short, [aria-label="In short"], #results .verdict, #results details, .vbest, .rfoot';
   function wordsUnder(r, self) {
     if (!r || !r.width) return false;
     var R = { left: r.left - 3, right: r.right + 3, top: r.top - 3, bottom: r.bottom + 3 }, seen = [], rng = document.createRange();
