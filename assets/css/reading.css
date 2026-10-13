@@ -169,3 +169,114 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .bk-dl a.bk-dl-file .bk-dl-m{ font-weight:400; font-size:.85rem; color:var(--ink-soft); }
 .bk-dl a.bk-dl-file[aria-disabled="true"]::after{ content:" (enter your email above)"; font-weight:400; font-size:.8rem; color:var(--ink-soft); }
 .bk-dl a.bk-dl-read{ font-size:.9rem; margin-left:.4rem; }
+
+/* ---------- the book's design on screen (made by tools/book/build_book.py; the print edition is book-print.css) ----------
+   part colours: Part One green, Part Two brass, Part Three blue, the back of the book rust */
+.read [data-part="1"], .bk-home [data-part="1"]{ --pc:#3E6B4C; --pt:#E2F0E6; }
+.read [data-part="2"], .bk-home [data-part="2"]{ --pc:#8A5F1C; --pt:#F6ECD2; }
+.read [data-part="3"], .bk-home [data-part="3"]{ --pc:#2B5B8C; --pt:#E1ECF7; }
+.read [data-part="4"], .bk-home [data-part="4"]{ --pc:#96412B; --pt:#F6E2D9; }
+.pe-only{ display:none !important; }
+@media print{ .book-open{ display:none !important; } }
+
+/* the chapter-opener band above each chapter's title */
+.read .book-open{ display:flex; align-items:flex-end; gap:.8rem; margin:0 0 .4rem; padding:0 0 .45rem; border-bottom:3px solid var(--pc); max-width:none; }
+.read .book-open-n{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(2.4rem, 1.8rem + 2.6vw, 3.4rem); line-height:.9; color:var(--pc); }
+.read .book-open-p{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pc); padding-bottom:.3rem; }
+
+/* figures: full width of the phone, tap to open the picture on its own */
+.read figure.book-fig{ margin:1.2rem 0 1.4rem; max-width:none; }
+.read figure.book-fig a.book-fig-zoom{ display:block; text-decoration:none; cursor:zoom-in; }
+.read figure.book-fig img{ display:block; width:100%; height:auto; max-width:600px; margin:0 auto; }
+.read figure.book-fig figcaption{ max-width:600px; margin:.5rem auto 0; font-size:.9rem; line-height:1.45; color:var(--ink-soft); }
+.read .book-fig-n{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.1em; text-transform:uppercase; color:var(--brass-ink); margin-right:.35rem; }
+@media (max-width:560px){
+  .read .ideas > li figure.book-fig{ margin-left:calc(-1 * var(--bb-px, 1rem)); margin-right:calc(-1 * var(--bb-px, 1rem)); }
+  .read figure.book-fig figcaption{ padding:0 .2rem; }
+}
+
+/* the end of every chapter: what to remember, and what it connects to */
+.read .book-end-grid{ display:grid; gap:1rem; margin:1.2rem 0 0; }
+@media (min-width:760px){ .read .book-end-grid{ grid-template-columns:1fr 1fr; } }
+.read .book-end-grid > section{ padding:.85rem 1.1rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
+.read .book-end-grid > section.book-end-rem{ background:var(--pt, var(--paper-deep)); border-color:transparent; border-left:4px solid var(--pc, var(--brass)); border-radius:4px 14px 14px 4px; }
+.read .book-end-grid h2.book-end-k{ margin:0 0 .45rem; padding:0; font-size:.78rem; font-family:"IBM Plex Mono", monospace; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--pc, var(--brass-ink)); border:0; }
+.read ul.book-end-list{ list-style:none; margin:0; padding:0 !important; }
+.read ul.book-end-list li{ margin:.35rem 0; max-width:none; line-height:1.45; }
+.read .book-end-rem li{ padding-left:1.3rem; position:relative; }
+.read .book-end-rem li::before{ content:""; position:absolute; left:.15rem; top:.42em; width:.55rem; height:.3rem; border-left:2px solid var(--pc, var(--credit)); border-bottom:2px solid var(--pc, var(--credit)); transform:rotate(-45deg); }
+.read .book-end-links li a{ font-weight:600; }
+.read .book-end-links li span{ display:block; font-size:.9rem; color:var(--ink-soft); }
+
+/* the book's home: the cover at the top, part colours in the contents */
+.bk-home .bk-cover{ display:grid; grid-template-columns:1fr; gap:.4rem; margin:0 0 1.2rem; padding:1.1rem 1.2rem 1rem 1.6rem; border-radius:18px; background:#F7F1E1; border:1px solid var(--line); position:relative; overflow:hidden;
+  background-image:repeating-linear-gradient(to bottom, transparent 0 27px, rgba(205,191,152,.45) 27px 28px); }
+.bk-home .bk-cover::before{ content:""; position:absolute; left:.85rem; top:0; bottom:0; border-left:1px solid #96412B; box-shadow:3px 0 0 -2px #96412B; }
+.bk-home .bk-cover-brand{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:#96412B; }
+.bk-home .bk-cover-k{ display:none; }
+.bk-home .bk-cover h1{ margin:.35rem 0 .2rem; font-size:clamp(2rem, 1.5rem + 2.4vw, 3rem); line-height:1.04; }
+.bk-home .bk-cover .bk-sub{ font-style:italic; }
+.bk-home .bk-cover-by{ margin:.6rem 0 0; font-family:"IBM Plex Mono", monospace; font-size:.78rem; letter-spacing:.2em; text-transform:uppercase; }
+.bk-home .bk-cover-art svg{ display:block; width:100%; max-width:340px; height:auto; margin:0 auto; }
+@media (min-width:700px){ .bk-home .bk-cover{ grid-template-columns:1.25fr 1fr; align-items:center; } }
+.bk-home .bk-part h2{ border-top:3px solid var(--pc); padding-top:.6rem; }
+.bk-home .bk-part h2 span{ color:var(--pc); }
+.bk-home .bk-part .bk-ch-n{ color:var(--pc); }
+.bk-home .bk-part a.bk-ch{ border-left:4px solid var(--pc); }
+.bk-home .bk-part .bk-ch-m{ border-left:4px solid var(--pc); }
+.bk-home .bk-toc figure.book-fig{ margin:1rem 0 .5rem; }
+
+/* the downloads: a small cover on each card */
+.bk-dl .bk-dl-card{ display:grid; grid-template-columns:7.2rem 1fr; gap:1rem; align-items:start; }
+.bk-dl .bk-dl-cover{ display:flex; flex-direction:column; gap:.3rem; aspect-ratio:170 / 240; padding:.5rem .45rem; border-radius:6px; background:#F7F1E1; border:1px solid var(--line); border-top:10px solid var(--acc); }
+.bk-dl .bk-dl-cover-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.82rem; line-height:1.05; }
+.bk-dl .bk-dl-cover svg{ width:100%; height:auto; background:var(--tint); border-radius:50%; }
+.bk-dl .bk-dl-cover-p{ margin-top:auto; font-size:.66rem; font-weight:600; color:var(--acc); line-height:1.2; }
+@media (max-width:420px){ .bk-dl .bk-dl-card{ grid-template-columns:5.4rem 1fr; gap:.8rem; } }
+
+/* the one-page books on screen: part openers, chapter openers and chapter ends */
+.read.whole section.pe-part{ margin:3rem 0 1.5rem; padding:1.1rem 1.2rem 1rem; border-radius:16px; background:var(--pt); border-left:8px solid var(--pc); }
+.read.whole section.pe-part .pe-rules, .read.whole .pe-mark{ display:none; }
+.read.whole .pe-part-k{ margin:0; font-family:"IBM Plex Mono", monospace; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; color:var(--pc); }
+.read.whole h1.pe-part-h{ margin:.2rem 0 .3rem; font-size:clamp(1.8rem, 1.4rem + 2vw, 2.4rem); }
+.read.whole .pe-part-b{ margin:0 0 .6rem; font-style:italic; color:var(--ink-soft); }
+.read.whole .pe-part-art{ display:none; }
+.read.whole h2.pe-part-l{ margin:.6rem 0 .3rem; font-size:.78rem; font-family:"IBM Plex Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--pc); }
+.read.whole ol.pe-part-list{ margin:0; padding-left:0 !important; list-style:none; }
+.read.whole ol.pe-part-list li{ margin:.25rem 0; max-width:none; }
+.read.whole ol.pe-part-list a span{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; color:var(--pc); margin-right:.3rem; }
+.read.whole .pe-pg:empty{ display:none; }
+.read.whole ol.pe-part-list .pe-pg{ display:none; }
+.read.whole article.pe-ch{ border-top:0; padding-top:.5rem; }
+.read.whole header.ch-open{ margin:0 0 1.2rem; padding:0 0 .9rem; border-bottom:1px solid var(--line); }
+.read.whole header.ch-open::before{ content:""; display:block; width:5rem; border-top:4px solid var(--pc); margin:0 0 .7rem; }
+.read.whole .ch-num{ margin:0; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(2.4rem, 1.8rem + 2.6vw, 3.2rem); line-height:.95; color:var(--pc); }
+.read.whole .ch-kicker{ margin:.35rem 0 .2rem; font-family:"IBM Plex Mono", monospace; font-size:.76rem; letter-spacing:.14em; text-transform:uppercase; color:var(--pc); }
+.read.whole h2.ch-title{ margin:0 0 .5rem; font-size:clamp(1.45rem, 1.2rem + 1.2vw, 1.85rem); line-height:1.2; }
+.read.whole .ch-intro{ font-style:italic; font-size:1.06rem; color:var(--ink-soft); }
+.read.whole .ch-in{ padding:.7rem 1rem; border-radius:12px; background:var(--pt); }
+.read.whole .ch-in-k{ margin:0 0 .3rem; font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--pc); }
+.read.whole ol.ch-in-list{ margin:0; padding-left:1.3rem; font-size:.94rem; }
+@media (min-width:700px){ .read.whole ol.ch-in-list{ columns:2; column-gap:1.6rem; } }
+.read.whole ol.ch-in-list li{ margin:.15rem 0; break-inside:avoid; }
+.read.whole aside.pe-end{ margin:2rem 0 1rem; padding:1rem 0 0; border-top:4px double var(--pc); display:grid; gap:1rem; }
+@media (min-width:760px){ .read.whole aside.pe-end{ grid-template-columns:1fr 1fr; } .read.whole .pe-end-use{ grid-column:1 / -1; } }
+.read.whole .pe-end > div{ padding:.8rem 1rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); }
+.read.whole .pe-end > .pe-end-rem{ background:var(--pt); border-color:transparent; }
+.read.whole h3.pe-end-k{ margin:0 0 .4rem; font-size:.76rem; font-family:"IBM Plex Mono", monospace; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--pc); }
+.read.whole ul.pe-end-list, .read.whole ul.pe-end-conn, .read.whole ul.pe-use{ list-style:none; margin:0; padding:0 !important; }
+.read.whole .pe-end li{ margin:.35rem 0; max-width:none; }
+.read.whole .pe-conn-l, .read.whole .pe-conn-w, .read.whole .pe-use-t a, .read.whole .pe-use-d{ display:block; }
+.read.whole .pe-conn-w, .read.whole .pe-use-d{ font-size:.9rem; color:var(--ink-soft); }
+.read.whole .pe-conn-p, .read.whole .pe-use-u, .read.whole .pe-qr{ display:none; }
+.read.whole section.pe-back{ margin:3rem 0 1rem; padding-top:1rem; border-top:4px solid #96412B; }
+.read.whole dl.pe-gloss-list .pe-gl{ margin:0 0 .8rem; }
+.read.whole dl.pe-gloss-list dt{ font-weight:600; font-family:"Fraunces", Georgia, serif; }
+.read.whole dl.pe-gloss-list dd{ margin:0; }
+.read.whole .pe-gl-ex{ display:block; color:var(--ink-soft); font-size:.92rem; }
+.read.whole .pe-notes-h span{ display:block; font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:#96412B; }
+.read.whole ul.pe-refs{ padding-left:1.1rem; font-size:.94rem; }
+.read.whole .pe-ref-u{ display:block; overflow-wrap:anywhere; font-size:.85rem; }
+.read.whole ol.pe-lof-list{ padding-left:0 !important; list-style:none; }
+.read.whole .pe-lof-n{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; color:#96412B; margin-right:.4rem; }
+.read.whole .pe-lof-list .pe-toc-dots{ display:none; }

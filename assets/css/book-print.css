@@ -44,7 +44,7 @@ body > :not(main) { display: none !important; }
 .no-print, .whole-toc, .whole-actions, .whole-note, .whole-top, .read-head.no-print, a.dig, .depth-bar, .pillar-line, .tol-listen-top, .tol-book-audio,
 main [class*="tol-"]:not(.tol-try), .tsk-line-btn, .tsk-line, button, .gl-dive, .bt-switch, .book-end, .book-open { display: none !important; }
 
-body { font-family: "Lora Print", "Lora", Georgia, serif; font-size: 10.4pt; line-height: 1.5; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal; }
+body { font-family: "Lora Print", "Lora", Georgia, serif; font-size: 10.4pt; line-height: 1.5; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; font-kerning: normal; }
 main.read { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
 p, li, dd { orphans: 2; widows: 2; hyphens: manual; }
 p { margin: 0 0 2.6mm; }
@@ -217,6 +217,12 @@ h1 { font-family: "Fraunces Print", "Fraunces", serif; font-weight: 600; font-si
 .book-fig figcaption { font-size: 8.4pt; line-height: 1.4; color: var(--soft); text-align: left; border-top: .4pt solid #D3C49C; padding-top: 1.6mm; }
 .book-fig-n { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin-right: 1.4mm; }
 .book-ex-wrap { margin: 4mm 0 5mm; break-inside: avoid; }
+.book-fig a.book-fig-zoom { text-decoration: none; }
+.pe-glance { page: pe-front; break-before: page; }
+.pe-glance h1 { padding-bottom: 3mm; border-bottom: .6pt solid var(--brass); }
+.pe-glance-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; --pc: #A8792F; }
+.pe-glance .book-fig { margin: 0; }
+.pe-glance .book-fig img { max-height: 112mm; }
 
 /* ---------- the end of every chapter ---------- */
 .pe-end { margin: 8mm 0 0; padding: 4mm 0 0; border-top: 2.4pt double var(--pc); break-before: auto; }

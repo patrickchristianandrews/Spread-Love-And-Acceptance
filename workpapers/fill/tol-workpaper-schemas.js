@@ -859,6 +859,355 @@
     ]
   };
 
+  /* ------------------------------------------------------------------ WP-12 */
+  // Same moment, different speeds (the Carrier Frequency Audit). For a few moments that come round
+  // often, each person marks their own speed, how much they want to talk, and how urgent it feels.
+  // A gap is how many steps apart two answers are on that list: a difference in pace, not in caring.
+  var WP12_SPEED = ['Right away', 'Within the hour', 'Later the same day', 'After a night’s sleep'];
+  var WP12_TALK = ['Quiet time first', 'A few words, then act', 'Talk it all through'];
+  var WP12_URGENT = ['Low', 'Medium', 'High'];
+  var WP12_MOMENTS = ['A plan changes at the last minute', 'A bill, letter or form needs dealing with', 'Something breaks or goes wrong at home', 'One of us is upset about something', 'Deciding what to do with free time'];
+  var WP12_ROWS = [];
+  WP12_MOMENTS.forEach(function (m) { WP12_ROWS.push({ moment: m, who: 'A' }); WP12_ROWS.push({ moment: m, who: 'B' }); });
+  function wp12Gaps(ctx) {
+    var by = {}, order = [];
+    ctx.rows('pace').forEach(function (r) {
+      var m = String(r.moment || '').trim();
+      if (!m || !r.who || !(r.speed || r.talk || r.urgent)) return;
+      var k = m.toLowerCase();
+      if (!by[k]) { by[k] = { name: m, rows: [] }; order.push(k); }
+      by[k].rows.push(r);
+    });
+    var out = [], ranked = [];
+    order.forEach(function (k) {
+      var g = by[k], who = {};
+      g.rows.forEach(function (r) { who[r.who] = 1; });
+      if (Object.keys(who).length < 2) { out.push({ label: g.name, value: 'Waiting for a second person’s answers.' }); return; }
+      var total = 0, bits = [];
+      [['Speed', 'speed', WP12_SPEED], ['Talk', 'talk', WP12_TALK], ['Urgency', 'urgent', WP12_URGENT]].forEach(function (d) {
+        var got = g.rows.filter(function (r) { return d[2].indexOf(r[d[1]]) >= 0; });
+        if (got.length < 2) return;
+        var idx = got.map(function (r) { return d[2].indexOf(r[d[1]]); }), steps = Math.max.apply(null, idx) - Math.min.apply(null, idx);
+        total += steps;
+        bits.push(d[0] + ': ' + (steps === 0 ? 'in step' : plural(steps, 'step') + ' apart (' + got.map(function (r) { return ctx.name(r.who) + ': ' + String(r[d[1]]).toLowerCase(); }).join(' · ') + ')'));
+      });
+      if (!bits.length) { out.push({ label: g.name, value: 'Waiting for a second person’s answers.' }); return; }
+      ranked.push({ name: g.name, total: total });
+      out.push({ label: g.name, value: bits.join('. ') + '.' });
+    });
+    if (!out.length) return [{ label: 'Where your speeds differ', value: 'Each person marks their own rows. A moment shows up here once two people have answered it.' }];
+    var big = ranked.filter(function (x) { return x.total >= 2; }).sort(function (a, b) { return b.total - a.total; });
+    if (ranked.length) out.push({
+      label: 'Start with',
+      value: big.length ? big[0].name + (big[1] ? '. Then: ' + big[1].name.charAt(0).toLowerCase() + big[1].name.slice(1) : '') + '.' : 'No big gaps in what you’ve marked so far. Keep the sheet, and look again in a few months.',
+      note: 'A gap is a difference in pace, not in how much anyone cares. Write one small agreement for the biggest one below, and try it for two weeks.'
+    });
+    return out;
+  }
+  W['wp-12'] = {
+    code: 'WP-12',
+    title: 'Same moment, different speeds',
+    plain: 'Same moment, different speeds',
+    slug: 'Same-moment-different-speeds',
+    purpose: 'For a few moments that come round often, each person marks how fast they want to move, how much they want to talk, and how urgent it feels. Then you look at the gaps together. Most of them turn out to be a difference in pace, not in willingness, and a small agreement closes most of the gap.',
+    people: true,
+    meta: [
+      { id: 'date', label: 'Date', type: 'date' }
+    ],
+    sections: [
+      {
+        type: 'note', pdf: false,
+        text: 'Each person fills in only their own rows, ideally before looking at the other person’s. Answer for how you really are on an ordinary day, not how you think you should be. The five moments are a start: change them to ones that come round in your life, and add more with “Add a moment”. Leave a box blank if it doesn’t apply.'
+      },
+      {
+        id: 'pace', type: 'table', title: 'Part A: Each person’s speed',
+        intro: 'Speed: how soon you want to act or decide. Talk: how you like to handle it. Urgency: how pressing it feels to you. There are no right answers. Every speed here is a normal way to be.',
+        addLabel: 'Add a moment',
+        columns: [
+          { id: 'moment', label: 'Moment', type: 'text', w: 2.2, prefill: true },
+          { id: 'who', label: 'Person', type: 'person', w: 1.1, prefill: true },
+          { id: 'speed', label: 'Speed', type: 'select', options: WP12_SPEED, w: 1.3 },
+          { id: 'talk', label: 'Talk', type: 'select', options: WP12_TALK, w: 1.3 },
+          { id: 'urgent', label: 'Urgency', type: 'select', options: WP12_URGENT, w: 0.9 },
+          { id: 'need', label: 'What helps me (optional)', type: 'text', w: 1.8, placeholder: 'e.g. a heads-up first' }
+        ],
+        defaultRows: WP12_ROWS
+      },
+      {
+        id: 'gaps', type: 'computed', title: 'Part B: Where your speeds differ',
+        compute: wp12Gaps
+      },
+      {
+        id: 'agree', type: 'table', title: 'Part C: One small agreement',
+        intro: 'Start with the biggest gap. A good agreement gives the faster person a way to start and the slower person a time to land: “When a bill comes, I’ll flag it the same day, and we’ll sort it on Sunday.” One or two is plenty. Try each for two weeks before you judge it.',
+        addLabel: 'Add an agreement',
+        columns: [
+          { id: 'moment', label: 'Moment', type: 'text', w: 1.8 },
+          { id: 'try', label: 'What we’ll try', type: 'textarea', w: 3.4 },
+          { id: 'until', label: 'Try it until', type: 'date', w: 1.1 }
+        ],
+        defaultRows: [{}]
+      },
+      {
+        type: 'note', pdf: true,
+        text: 'Not a compatibility test and not a diagnosis. Speed often flips from one moment to the next: the person who is fast about plans may be the slow one about bills. Run it again every few months, or after a big change.'
+      },
+      closing('Agreeing means you have both seen the gaps and will try the agreement. It doesn’t mean either of you has to change speed for good.')
+    ]
+  };
+
+  /* ------------------------------------------------------------------ WP-14 */
+  // Is it us, or is it everything else? (the Static Dampening Log). A week of evenings, each person on
+  // their own rows: outside pressure in one column, tense moments between you in another. The week's
+  // read counts how many tense moments came on a heavy day. A pattern to talk about, never proof.
+  var WP14_ROWS = [];
+  DAYS.forEach(function (d) { WP14_ROWS.push({ day: d, who: 'A' }); WP14_ROWS.push({ day: d, who: 'B' }); });
+  var WP14_COL = ['Outside pressure', 'Between us', 'Some of both', 'Not sure yet'];
+  function wp14Week(ctx) {
+    var rows = ctx.rows('log');
+    if (!rows.some(function (r) { return r.press || String(r.tense || '').trim(); })) return [{ label: 'This week', value: 'Fill in a few evenings to see the week here.' }];
+    var out = [], heavy = {};
+    rows.forEach(function (r) { if (r.press === 'A lot' && r.day) heavy[r.day] = true; });
+    ctx.people().forEach(function (p) {
+      var mine = rows.filter(function (r) { return r.who === p; });
+      if (!mine.some(function (r) { return r.press || String(r.tense || '').trim(); })) return;
+      var lot = mine.filter(function (r) { return r.press === 'A lot'; }).length, little = mine.filter(function (r) { return r.press === 'A little'; }).length;
+      var t = mine.filter(function (r) { return String(r.tense || '').trim(); }).length, from = {};
+      mine.forEach(function (r) { String(r.from || '').split(/[,;\/]+|\band\b/).forEach(function (x) { x = x.trim().toLowerCase(); if (x) from[x] = (from[x] || 0) + 1; }); });
+      var top = Object.keys(from).sort(function (a, b) { return from[b] - from[a]; }).slice(0, 3);
+      out.push({ label: ctx.name(p), value: plural(lot, 'day') + ' with a lot of outside pressure, ' + little + ' with a little. ' + plural(t, 'tense moment') + ' written down.' + (top.length ? ' The pressure came mostly from: ' + top.join(', ') + '.' : '') });
+    });
+    var tense = rows.filter(function (r) { return String(r.tense || '').trim(); });
+    if (tense.length) {
+      var onHeavy = tense.filter(function (r) { return heavy[r.day]; }).length;
+      out.push({ label: 'Tense moments on heavy days', value: onHeavy + ' of ' + tense.length + ' came on a day when someone had a lot of outside pressure.', note: 'A pattern to talk about, not proof. If you both wrote down the same moment, it counts twice.' });
+      var c = {}, any = false;
+      tense.forEach(function (r) { if (WP14_COL.indexOf(r.col) >= 0) { c[r.col] = (c[r.col] || 0) + 1; any = true; } });
+      if (any) out.push({ label: 'How you sorted them', value: WP14_COL.filter(function (k) { return c[k]; }).map(function (k) { return k + ': ' + c[k]; }).join(' · ') + '.', note: 'The “between us” ones are real and worth a calm talk. The “outside pressure” ones need a plan for the pressure, not a verdict on anyone.' });
+    }
+    return out;
+  }
+  W['wp-14'] = {
+    code: 'WP-14',
+    title: 'Is it us, or is it everything else?',
+    plain: 'Is it us, or is it everything else?',
+    slug: 'Is-it-us-or-everything-else',
+    purpose: 'A one-week log that keeps two things apart: pressure from outside (money, work, health, sleep, family) and friction that really starts between you. A line or two each evening, each person about their own day. At the end of the week, you look at what got blamed on the wrong thing, and make one plan for the pressure.',
+    people: true,
+    meta: [
+      { id: 'weekOf', label: 'Week beginning', type: 'date' }
+    ],
+    sections: [
+      {
+        type: 'note', pdf: false,
+        text: 'Each person fills in only their own rows, about their own day. Outside pressure is anything that weighs on you from beyond the two of you: a deadline, a bill, a bad night, an ill parent, a long commute. A tense moment is any small snap, sulk or silence between you. Write what happened in a few plain words, not who was wrong. Skip a day if you miss one; a few evenings are enough to see a pattern.'
+      },
+      {
+        id: 'log', type: 'table', title: 'Part A: Each evening',
+        intro: 'About a minute. “Looking back, it was mostly” is your best guess, and it can change. “Not sure yet” is a fine answer.',
+        addLabel: 'Add a row',
+        personDays: DAYS,
+        columns: [
+          { id: 'day', label: 'Day', type: 'select', options: DAYS, w: 0.7, prefill: true },
+          { id: 'who', label: 'Person', type: 'person', w: 1.1, prefill: true },
+          { id: 'press', label: 'Outside pressure today', type: 'select', options: ['None', 'A little', 'A lot'], w: 1 },
+          { id: 'from', label: 'Where it came from', type: 'text', w: 1.6, placeholder: 'e.g. work, money, sleep' },
+          { id: 'tense', label: 'A tense moment between us (if any)', type: 'text', w: 2.2 },
+          { id: 'col', label: 'Looking back, it was mostly', type: 'select', options: WP14_COL, w: 1.3 }
+        ],
+        defaultRows: WP14_ROWS
+      },
+      {
+        id: 'week', type: 'computed', title: 'Part B: The week at a glance',
+        compute: wp14Week
+      },
+      {
+        id: 'wrong', type: 'table', title: 'Part C: What got blamed on the wrong thing?',
+        intro: 'At the end of the week, together. Look at the tense moments that came on heavy days. Did one of you read outside pressure as something about the other person, or about the relationship? Write it down without blame: it happens to everyone.',
+        addLabel: 'Add a moment',
+        columns: [
+          { id: 'moment', label: 'The moment', type: 'text', w: 2 },
+          { id: 'seemed', label: 'What it seemed to be about', type: 'text', w: 2 },
+          { id: 'really', label: 'What was really going on', type: 'text', w: 2 },
+          { id: 'next', label: 'What would help next time', type: 'text', w: 2 }
+        ],
+        defaultRows: [{}]
+      },
+      {
+        id: 'plan', type: 'fields', title: 'Part D: One plan for the pressure',
+        intro: 'Outside pressure rarely goes away because you talked about it. What helps is facing it on the same side: a way to flag a heavy day, and a few things you’ll go easy on until it passes.',
+        fields: [
+          { id: 'pName', label: 'The pressure we’re facing right now', type: 'text', placeholder: 'e.g. the deadline at work, Mum’s hospital visits' },
+          { id: 'pFlag', label: 'How we’ll flag a heavy day', type: 'text', placeholder: 'e.g. “Rough day, not you” when I walk in' },
+          { id: 'pEase', label: 'What we’ll go easy on until it passes', type: 'text', placeholder: 'e.g. simple dinners, no big decisions on weeknights' },
+          { id: 'pHelp', label: 'One bit of outside help we could ask for (optional)', type: 'text', placeholder: 'e.g. a friend covers one school run' }
+        ]
+      },
+      {
+        type: 'note', pdf: true,
+        text: 'Outside pressure explains a hard day. It doesn’t excuse unkindness, and it doesn’t make what anyone felt less real. Friction that really is between you deserves its own calm talk, on a lighter day.'
+      },
+      closing()
+    ]
+  };
+
+  /* ------------------------------------------------------------------ WP-15 */
+  // Keep your little rituals alive (Harmonic Resonance & Entrainment). Every three months or so: the
+  // small shared habits that keep people close, which are alive, fading or stopped, and one to restart.
+  var WP15_STATE = ['Alive', 'Fading', 'Stopped', 'New idea'];
+  function wp15Count(ctx) {
+    var rows = ctx.rows('rituals').filter(function (r) { return String(r.ritual || '').trim(); });
+    if (!rows.length) return [{ label: 'Your rituals', value: 'List a few, and mark how each one is doing, to see where they stand.' }];
+    var c = {};
+    rows.forEach(function (r) { if (WP15_STATE.indexOf(r.state) >= 0) c[r.state] = (c[r.state] || 0) + 1; });
+    var out = [{ label: 'Your rituals', value: plural(rows.length, 'ritual') + ' listed. ' + (WP15_STATE.filter(function (k) { return c[k]; }).map(function (k) { return k + ': ' + c[k]; }).join(' · ') || 'Mark how each one is doing.') }];
+    var stopped = rows.filter(function (r) { return r.state === 'Stopped' || r.state === 'Fading'; }).map(function (r) { return String(r.ritual).trim(); });
+    if (stopped.length) out.push({ label: 'Fading or stopped', value: stopped.join(', ') + '.', note: 'Rituals lapse for ordinary reasons: a new job, a baby, a move, an illness, a hard year. A stopped one isn’t a failure. Pick one to restart below, or let it go on purpose.' });
+    var fresh = rows.filter(function (r) { return r.state === 'New idea'; }).map(function (r) { return String(r.ritual).trim(); });
+    if (fresh.length) out.push({ label: 'New ideas', value: fresh.join(', ') + '.' });
+    if (!stopped.length && c.Alive) out.push({ label: 'Reading it', value: 'Everything you listed is alive. Say thank you for one of them this week, out loud.' });
+    return out;
+  }
+  W['wp-15'] = {
+    code: 'WP-15',
+    title: 'Keep your little rituals alive',
+    plain: 'Keep your little rituals alive',
+    slug: 'Keep-your-little-rituals-alive',
+    purpose: 'Every three months or so, a short look at the small shared habits that keep you close: the morning coffee, the Sunday walk, the birthday breakfast. Which are alive, which are fading, which have quietly stopped. Then one to restart, small enough to keep on a hard week.',
+    people: true,
+    meta: [
+      { id: 'date', label: 'Date', type: 'date' }
+    ],
+    sections: [
+      {
+        type: 'note', pdf: false,
+        text: 'Do it together, somewhere comfortable, in about fifteen minutes. List the small things you share, and include the ones that stopped. Daily: a coffee, a goodbye at the door, a goodnight text. Weekly: a walk, a takeaway night, a Sunday call. Yearly: birthdays, a trip, a tradition. Nobody is to blame for one that lapsed.'
+      },
+      {
+        id: 'rituals', type: 'table', title: 'Part A: Our rituals, big and small',
+        intro: 'Alive: still happening, and still means something. Fading: still happening, but on autopilot or less often. Stopped: it used to happen and doesn’t now. New idea: something you’d like to try.',
+        addLabel: 'Add a ritual',
+        columns: [
+          { id: 'ritual', label: 'Ritual or habit', type: 'text', w: 2.3 },
+          { id: 'often', label: 'How often', type: 'select', options: ['Daily', 'Weekly', 'Monthly', 'Yearly', 'Now and then'], w: 1 },
+          { id: 'state', label: 'How it’s doing', type: 'select', options: WP15_STATE, w: 1 },
+          { id: 'note', label: 'What it gives us, or what got in the way', type: 'text', w: 2.6 }
+        ],
+        defaultRows: [{}, {}, {}, {}]
+      },
+      {
+        id: 'count', type: 'computed', title: 'Part B: Where your rituals stand',
+        compute: wp15Count
+      },
+      {
+        id: 'restart', type: 'fields', title: 'Part C: One to restart, or start',
+        intro: 'Just one. Pick the one you’d both miss most, or a new one you’re both curious about. Make it small enough to keep on a hard week.',
+        fields: [
+          { id: 'which', label: 'The ritual', type: 'text' },
+          { id: 'small', label: 'The smallest version that still counts', type: 'text', placeholder: 'e.g. twenty minutes round the park, not the whole hike' },
+          { id: 'first', label: 'The first time: when, and who will suggest it', type: 'text', placeholder: 'e.g. this Sunday after lunch; Jordan suggests it' },
+          { id: 'protect', label: 'What would make it easy to skip, and how we’ll protect it (optional)', type: 'text' }
+        ]
+      },
+      {
+        id: 'letgo', type: 'fields', title: 'Part D (optional): One to let go, with thanks',
+        intro: 'Not every ritual needs saving. Some belonged to an earlier season. Letting one go on purpose is kinder than letting it fade with guilt attached.',
+        fields: [
+          { id: 'goWhich', label: 'The ritual', type: 'text' },
+          { id: 'goThanks', label: 'What it gave us', type: 'text' }
+        ]
+      },
+      {
+        type: 'note', pdf: true,
+        text: 'A ritual is something you would both miss, not a test of love. A missed one is just a missed one. Look at this sheet again in about three months.'
+      },
+      closing()
+    ]
+  };
+
+  /* ------------------------------------------------------------------ examples for WP-12, 14, 15 */
+  // Made-up, filled-in examples for the three sheets above, shown folded away on each sheet ("See a
+  // filled-in example"). The rest of the examples live in tol-workpaper-library.js, which loads after
+  // this file; its TOL_WORKPAPER_EXAMPLE is wrapped so these three are answered here.
+  function exNames(road) {
+    return { apart: ['Diego', 'Lena'], family: ['Dana', 'Chris'], coparents: ['Mom', 'Dad'], roommates: ['Ana', 'Ben'], coworkers: ['Sam', 'Priya'], caregivers: ['Maya', 'Leo'], friends: ['You', 'Kim'], self: ['You', 'Sam'] }[road] || ['Alex', 'Jordan'];
+  }
+  var EXTRA_EX = {
+    'WP-12': function (road) {
+      var P = exNames(road);
+      return {
+        intro: 'A made-up example. ' + P[0] + ' and ' + P[1] + ' kept snapping at each other over plans and bills.',
+        parts: [
+          { title: 'Part A: each person’s speed', head: ['Moment', 'Who', 'Speed', 'Talk', 'Urgency'], rows: [
+            ['A plan changes at the last minute', P[0], 'Right away', 'A few words, then act', 'High'],
+            ['', P[1], 'Later the same day', 'Quiet time first', 'Low'],
+            ['A bill, letter or form needs dealing with', P[0], 'After a night’s sleep', 'Quiet time first', 'Low'],
+            ['', P[1], 'Right away', 'A few words, then act', 'High']] },
+          { title: 'Parts B and C: the gaps, and the agreements', lines: [
+            'Biggest gaps: the bills (speed 3 steps apart) and the plan changes (speed 2 steps apart).',
+            '“When a bill comes, ' + P[1] + ' flags it the same day. We sort it together on Sunday morning, not the minute it lands.”',
+            '“When plans change, ' + P[0] + ' says the new plan in one line, then gives ' + P[1] + ' an hour before anything is decided.”'] }
+        ],
+        note: 'Notice it cuts both ways: ' + P[0] + ' is the fast one about plans, ' + P[1] + ' about bills. Neither is “the slow one”.'
+      };
+    },
+    'WP-14': function (road) {
+      var P = exNames(road);
+      return {
+        intro: 'A made-up example: a few evenings from a heavy week for ' + P[0] + ' and ' + P[1] + '.',
+        parts: [
+          { title: 'Part A: each evening', head: ['Day', 'Who', 'Outside pressure', 'Where from', 'Tense moment', 'Mostly'], rows: [
+            ['Mon', P[0], 'A lot', 'Work deadline, bad sleep', 'Snapped about the dishes', 'Outside pressure'],
+            ['Mon', P[1], 'A little', 'Money', '', ''],
+            ['Wed', P[0], 'A lot', 'Work deadline', 'Felt ignored at dinner', 'Some of both'],
+            ['Thu', P[1], 'A lot', 'Mum in hospital', 'Short with each other about the weekend', 'Outside pressure'],
+            ['Sat', P[0], 'None', '', 'The same old argument about the car', 'Between us']] },
+          { title: 'Parts B to D: the week, and the plan', lines: [
+            '3 of 4 tense moments came on a day when someone had a lot of outside pressure.',
+            'Wrong thing: “I thought ' + P[1] + ' didn’t care about the weekend. Really, ' + P[1] + ' had been at the hospital all day.”',
+            'Plan: “Rough day, not you” at the door; simple dinners until the deadline passes; ask a sister to cover one hospital visit.',
+            'The car argument stays in the “between us” column, for a calm talk on a lighter day.'] }
+        ],
+        note: 'Outside pressure explains a hard day. It doesn’t excuse unkindness, and it doesn’t cancel the car argument.'
+      };
+    },
+    'WP-15': function (road) {
+      var P = exNames(road);
+      return {
+        intro: 'A made-up example: ' + P[0] + ' and ' + P[1] + ', on a quiet Sunday in spring.',
+        parts: [
+          { title: 'Part A: our rituals', head: ['Ritual', 'How often', 'How it’s doing', 'What it gives us, or what got in the way'], rows: [
+            ['Coffee together before work', 'Daily', 'Alive', 'Ten quiet minutes before the day starts'],
+            ['Friday takeaway and a film', 'Weekly', 'Fading', 'Phones come out; one of us falls asleep'],
+            ['Sunday walk', 'Weekly', 'Stopped', 'Stopped when Saturday shifts started'],
+            ['Birthday breakfast in bed', 'Yearly', 'Alive', 'We both still look forward to it'],
+            ['Try one new place a month', 'Monthly', 'New idea', P[1] + '’s idea']] },
+          { title: 'Parts C and D: restart one, let one go', lines: [
+            'Restart: the Sunday walk. Smallest version: twenty minutes round the park after lunch. ' + P[0] + ' suggests it this Sunday.',
+            'Let go, with thanks: Thursday quiz night. It was great when we lived near the pub.'] }
+        ],
+        note: 'One restart at a time. In three months, look again.'
+      };
+    }
+  };
+  function withExtraExamples(base) {
+    if (typeof base !== 'function' || base.tolExtra) return base;
+    var f = function (code, road) { return EXTRA_EX[code] ? EXTRA_EX[code](road) : base(code, road); };
+    f.tolExtra = true;
+    return f;
+  }
+  try {
+    if (typeof global.TOL_WORKPAPER_EXAMPLE === 'function') global.TOL_WORKPAPER_EXAMPLE = withExtraExamples(global.TOL_WORKPAPER_EXAMPLE);
+    else {
+      var heldEx = null;
+      Object.defineProperty(global, 'TOL_WORKPAPER_EXAMPLE', {
+        configurable: true, enumerable: true,
+        get: function () { return heldEx || function (code, road) { return EXTRA_EX[code] ? EXTRA_EX[code](road) : null; }; },
+        set: function (fn) { heldEx = withExtraExamples(fn); }
+      });
+    }
+  } catch (e) {}
+
   /* ------------------------------------------------------------------ road variants */
   // WP-03 worded and prefilled for the road someone is on. Everything else about the sheet stays the same.
   var RACI_ROADS = {

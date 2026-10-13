@@ -4,7 +4,8 @@
 Inputs (one entry per study, book or review; fields: id, authors, year, title, venue, doi, url,
 kind, finding, strength, topics, mentioned_on, verified, verified_by, note):
     tools/research/refs-a.json, refs-b.json, refs-c.json, refs-d.json (calming supplements and herbs),
-    refs-e.json (Part Three chapters 1, 2, 4, 9 and 13 to 15)
+    refs-e.json (Part Three chapters 1, 2, 4, 9 and 13 to 15), refs-f.json (calming supplements expansion and
+    the nervous system page), and any later refs-*.json
 
 Outputs:
     research.html                  "The research behind this site": every verified entry, grouped by topic
@@ -14,6 +15,7 @@ Outputs:
 Only entries marked verified (with a checked link) are published. Unverified entries are left out
 entirely. Run from anywhere:  python3 tools/research/build_research.py
 """
+import glob
 import html
 import json
 import os
@@ -22,7 +24,7 @@ import sys
 from collections import OrderedDict, defaultdict
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
-SRC = [os.path.join(ROOT, 'tools', 'research', 'refs-%s.json' % k) for k in 'abcde']
+SRC = sorted(glob.glob(os.path.join(ROOT, 'tools', 'research', 'refs-*.json')))  # refs-a.json, refs-b.json, ... (every list)
 OUT_PAGE = os.path.join(ROOT, 'research.html')
 OUT_INDEX = os.path.join(ROOT, 'assets', 'js', 'research-index.js')
 COMMON_WORDS = os.path.join(ROOT, 'tools', 'chat', 'common-words.txt')

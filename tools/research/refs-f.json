@@ -1,0 +1,2242 @@
+[
+ {
+  "id": "fda-cbd-regulation",
+  "authors": "US Food and Drug Administration (FDA)",
+  "year": null,
+  "title": "FDA regulation of cannabis and cannabis-derived products, including cannabidiol (CBD)",
+  "venue": "FDA website",
+  "doi": null,
+  "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+  "kind": "guideline",
+  "finding": "The FDA has approved one purified CBD medicine (Epidiolex), for seizures in Lennox-Gastaut syndrome, Dravet syndrome and, since 2020, tuberous sclerosis complex; it has not approved cannabis itself for any condition.",
+  "strength": "strong: the regulator’s own statement of what it has approved.",
+  "topics": [
+   "supplements",
+   "supplement-safety",
+   "regulation"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd (search result, Oct 2026)"
+ },
+ {
+  "id": "dold-2023-silexan",
+  "authors": "Dold, M., Bartova, L., Volz, H.-P., Seifritz, E., Möller, H.-J., Schläfke, S., & Kasper, S.",
+  "year": 2023,
+  "title": "Efficacy of Silexan in patients with anxiety disorders: a meta-analysis of randomized, placebo-controlled trials",
+  "venue": "European Archives of Psychiatry and Clinical Neuroscience, 273(7), 1615–1628",
+  "doi": "10.1007/s00406-022-01547-w",
+  "url": "https://doi.org/10.1007/s00406-022-01547-w",
+  "kind": "meta-analysis",
+  "finding": "Pooling all five placebo-controlled trials of the lavender oil capsule Silexan (1,213 adult outpatients, 10 weeks), anxiety scores fell more than on a dummy pill. All five trials were sponsored by the maker.",
+  "strength": "moderate: five randomized trials pooled, all funded by the manufacturer; results apply only to this product.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#lavender",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/36717399/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC10465640/ (search result, Oct 2026)"
+ },
+ {
+  "id": "ods-magnesium-hp",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Magnesium: Fact sheet for health professionals",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
+  "kind": "guideline",
+  "finding": "Forms of magnesium that dissolve well in liquid (aspartate, citrate, lactate and chloride) are absorbed somewhat better than magnesium oxide and sulfate, in small studies.",
+  "strength": "moderate: an official summary of research; the absorption studies are small.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#magnesium"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/ (search result, Oct 2026)"
+ },
+ {
+  "id": "mah-pitre-2021-magnesium-sleep",
+  "authors": "Mah, J., & Pitre, T.",
+  "year": 2021,
+  "title": "Oral magnesium supplementation for insomnia in older adults: a systematic review and meta-analysis",
+  "venue": "BMC Complementary Medicine and Therapies",
+  "doi": null,
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8053283/",
+  "kind": "meta-analysis",
+  "finding": "Three small trials (151 older adults) found people fell asleep about 17 minutes sooner on magnesium than on a dummy pill, with no clear change in total sleep; the evidence was low to very low quality.",
+  "strength": "early: three small trials at moderate to high risk of bias.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#magnesium"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8053283/ (search result, Oct 2026)"
+ },
+ {
+  "id": "gringras-2017-melatonin-autism",
+  "authors": "Gringras, P., Nir, T., Breddy, J., Frydman-Marom, A., & Findling, R. L.",
+  "year": 2017,
+  "title": "Efficacy and safety of pediatric prolonged-release melatonin for insomnia in children with autism spectrum disorder",
+  "venue": "Journal of the American Academy of Child & Adolescent Psychiatry, 56(11), 948–957",
+  "doi": "10.1016/j.jaac.2017.09.414",
+  "url": "https://doi.org/10.1016/j.jaac.2017.09.414",
+  "kind": "study",
+  "finding": "In a 13-week trial of 125 children (autistic, or with Smith-Magenis syndrome) with insomnia, a prescription prolonged-release melatonin helped them sleep longer and fall asleep sooner than a dummy pill.",
+  "strength": "moderate: one randomized, placebo-controlled trial, funded by the maker; long-term data come from follow-up studies.",
+  "topics": [
+   "supplements",
+   "sleep",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#melatonin",
+   "/calming-supplements.html#nt-autistic"
+  ],
+  "verified": true,
+  "verified_by": "https://psychnews.psychiatryonline.org/doi/10.1176/appi.pn.2017.11a6 ; https://clinicaltrials.gov/study/NCT01906866 (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-adhd-digest",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "ADHD and complementary health approaches: What the science says",
+  "venue": "NCCIH Clinical Digest",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/providers/digest/adhd-and-complementary-health-approaches-science",
+  "kind": "review",
+  "finding": "Summarises the research on complementary approaches for ADHD: omega-3 helps little if at all and less than medicine; melatonin may help sleep problems in children with ADHD; ginkgo and St John’s wort have not been shown to help.",
+  "strength": "moderate: an official summary of reviews and trials.",
+  "topics": [
+   "supplements",
+   "adhd",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#st-johns-wort",
+   "/calming-supplements.html#melatonin",
+   "/calming-supplements.html#omega-3",
+   "/calming-supplements.html#ginkgo",
+   "/calming-supplements.html#nt-adhd",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/providers/digest/adhd-and-complementary-health-approaches-science (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-autism-digest",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Autism spectrum disorder and complementary health approaches: What the science says",
+  "venue": "NCCIH Clinical Digest",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/providers/digest/autism-spectrum-disorder-and-complementary-health-approaches-science",
+  "kind": "review",
+  "finding": "Melatonin has evidence for sleep problems in autism; there isn’t enough evidence that omega-3 helps; secretin, chelation, hyperbaric oxygen and antifungals don’t help and may be dangerous; music therapy may help social interaction.",
+  "strength": "moderate: an official summary of reviews and trials; some of the research is older.",
+  "topics": [
+   "supplements",
+   "autism",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#omega-3",
+   "/calming-supplements.html#music",
+   "/calming-supplements.html#nt-autistic",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/providers/digest/autism-spectrum-disorder-and-complementary-health-approaches-science (search result, Oct 2026)"
+ },
+ {
+  "id": "gillies-2023-pufa-adhd",
+  "authors": "Gillies, D., Leach, M. J., & Perez Algorta, G.",
+  "year": 2023,
+  "title": "Polyunsaturated fatty acids (PUFA) for attention deficit hyperactivity disorder (ADHD) in children and adolescents",
+  "venue": "Cochrane Database of Systematic Reviews, Issue 4",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/37058600/",
+  "kind": "review",
+  "finding": "There was little evidence that omega-3 or omega-6 supplements improve ADHD symptoms in children and teens; the trials were small, varied and short.",
+  "strength": "strong: a Cochrane review; the conclusion is that there is little benefit.",
+  "topics": [
+   "supplements",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#omega-3",
+   "/calming-supplements.html#nt-adhd"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/37058600/ (search result, Oct 2026)"
+ },
+ {
+  "id": "richardson-montgomery-2005",
+  "authors": "Richardson, A. J., & Montgomery, P.",
+  "year": 2005,
+  "title": "The Oxford-Durham study: a randomized, controlled trial of dietary supplementation with fatty acids in children with developmental coordination disorder",
+  "venue": "Pediatrics, 115(5), 1360–1366",
+  "doi": "10.1542/peds.2004-2164",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/15867048/",
+  "kind": "study",
+  "finding": "In 117 children with dyspraxia (developmental coordination disorder), three months of omega-3 and omega-6 capsules did not improve movement skills, but reading, spelling and behaviour improved compared with olive-oil placebo capsules.",
+  "strength": "early: one randomized trial; not yet well replicated.",
+  "topics": [
+   "supplements",
+   "neurodiversity"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#omega-3",
+   "/calming-supplements.html#nt-dys"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15867048/ (search result, Oct 2026)"
+ },
+ {
+  "id": "agha-hosseini-2008-saffron-pms",
+  "authors": "Agha-Hosseini, M., Kashani, L., Aleyaseen, A., et al.",
+  "year": 2008,
+  "title": "Crocus sativus L. (saffron) in the treatment of premenstrual syndrome: a double-blind, randomised and placebo-controlled trial",
+  "venue": "BJOG, 115(4), 515–519",
+  "doi": "10.1111/j.1471-0528.2007.01652.x",
+  "url": "https://doi.org/10.1111/j.1471-0528.2007.01652.x",
+  "kind": "study",
+  "finding": "In a small Iranian trial (about 50 women over two cycles), saffron capsules reduced premenstrual symptoms and low mood more than a dummy pill.",
+  "strength": "early: one small randomized trial.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#saffron"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/18271889/ (search result, Oct 2026)"
+ },
+ {
+  "id": "baziar-2019-saffron-adhd",
+  "authors": "Baziar, S., et al.",
+  "year": 2019,
+  "title": "Crocus sativus L. versus methylphenidate in treatment of children with attention-deficit/hyperactivity disorder: a randomized, double-blind pilot study",
+  "venue": "Journal of Child and Adolescent Psychopharmacology, 29(3), 205–212",
+  "doi": "10.1089/cap.2018.0146",
+  "url": "https://doi.org/10.1089/cap.2018.0146",
+  "kind": "study",
+  "finding": "In a six-week pilot of 54 children with ADHD, saffron and methylphenidate gave similar improvements in parent and teacher ratings; there was no placebo group.",
+  "strength": "early: one small pilot without a placebo group.",
+  "topics": [
+   "supplements",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#saffron"
+  ],
+  "verified": true,
+  "verified_by": "https://www.thecarlatreport.com/articles/3048-crocus-sativus-vs-methylphenidate-for-adhd (search result, Oct 2026)"
+ },
+ {
+  "id": "shaw-2002-tryptophan-5htp",
+  "authors": "Shaw, K. A., Turner, J., & Del Mar, C.",
+  "year": 2002,
+  "title": "Tryptophan and 5-hydroxytryptophan for depression",
+  "venue": "Cochrane Database of Systematic Reviews, CD003198",
+  "doi": "10.1002/14651858.CD003198",
+  "url": "https://doi.org/10.1002/14651858.CD003198",
+  "kind": "review",
+  "finding": "Many studies, but few good enough to rely on; 5-HTP and tryptophan may beat a dummy pill for depression, but because proven, safer antidepressants exist their usefulness is limited, and a possible link to a dangerous illness (EMS) is unresolved.",
+  "strength": "mixed: a Cochrane review of mostly poor-quality trials.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#five-htp",
+   "/calming-supplements.html#l-tryptophan"
+  ],
+  "verified": true,
+  "verified_by": "https://www.cochrane.org/evidence/CD003198_tryptophan-and-5-hydroxytryptophan-depression (search result, Oct 2026)"
+ },
+ {
+  "id": "medlineplus-5htp",
+  "authors": "MedlinePlus, US National Library of Medicine",
+  "year": null,
+  "title": "5-HTP",
+  "venue": "MedlinePlus herbs and supplements",
+  "doi": null,
+  "url": "https://medlineplus.gov/druginfo/natural/794.html",
+  "kind": "guideline",
+  "finding": "Some people taking 5-HTP developed eosinophilia-myalgia syndrome (EMS), though it isn’t known whether 5-HTP or a contaminant caused it; it should not be combined with antidepressants or carbidopa, and should be avoided in pregnancy.",
+  "strength": "moderate: an official safety summary.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#five-htp"
+  ],
+  "verified": true,
+  "verified_by": "https://medlineplus.gov/druginfo/natural/794.html (search result, Oct 2026)"
+ },
+ {
+  "id": "medlineplus-tryptophan",
+  "authors": "MedlinePlus, US National Library of Medicine",
+  "year": null,
+  "title": "L-tryptophan",
+  "venue": "MedlinePlus herbs and supplements",
+  "doi": null,
+  "url": "https://medlineplus.gov/druginfo/natural/326.html",
+  "kind": "guideline",
+  "finding": "In 1989 an outbreak of eosinophilia-myalgia syndrome was traced mostly to L-tryptophan from one manufacturer; there is little reliable information on safety beyond 3 weeks, and it interacts with antidepressants.",
+  "strength": "moderate: an official safety summary.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#l-tryptophan"
+  ],
+  "verified": true,
+  "verified_by": "https://medlineplus.gov/druginfo/natural/326.html (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-same",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "S-Adenosyl-L-Methionine (SAMe): In depth",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth",
+  "kind": "guideline",
+  "finding": "At least 40 studies tested SAMe for depression and many showed benefits, but most were short, small and not high quality, so the evidence is not conclusive; people with bipolar disorder should use it only under supervision because it may worsen mania.",
+  "strength": "mixed: many small, short trials.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#same"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth (search result, Oct 2026)"
+ },
+ {
+  "id": "young-2019-b-vitamins",
+  "authors": "Young, L. M., et al.",
+  "year": 2019,
+  "title": "A systematic review and meta-analysis of B vitamin supplementation on depressive symptoms, anxiety, and stress: effects on healthy and “at-risk” individuals",
+  "venue": "Nutrients, 11(9), 2232",
+  "doi": "10.3390/nu11092232",
+  "url": "https://doi.org/10.3390/nu11092232",
+  "kind": "meta-analysis",
+  "finding": "Across 16 trials of B-complex supplements taken for at least four weeks, people reported slightly less stress; there was no clear effect on depression or anxiety.",
+  "strength": "moderate: a meta-analysis of randomized trials with a small effect and moderate differences between studies.",
+  "topics": [
+   "supplements",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#b-vitamins"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6770181/ (search result, Oct 2026)"
+ },
+ {
+  "id": "trotti-becker-2019-iron-rls",
+  "authors": "Trotti, L. M., & Becker, L. A.",
+  "year": 2019,
+  "title": "Iron for the treatment of restless legs syndrome",
+  "venue": "Cochrane Database of Systematic Reviews, CD007834.pub3",
+  "doi": "10.1002/14651858.CD007834.pub3",
+  "url": "https://doi.org/10.1002/14651858.CD007834.pub3",
+  "kind": "review",
+  "finding": "Across 10 trials (428 people), iron eased restless legs symptoms a little more than a dummy pill, sometimes even when blood iron was normal.",
+  "strength": "moderate: a Cochrane review of small trials, with a low-to-moderate benefit.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#iron"
+  ],
+  "verified": true,
+  "verified_by": "https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD007834.pub3/information (search result, Oct 2026)"
+ },
+ {
+  "id": "tseng-2018-iron-adhd",
+  "authors": "Tseng, P.-T., Cheng, Y.-S., Yen, C.-F., et al.",
+  "year": 2018,
+  "title": "Peripheral iron levels in children with attention-deficit hyperactivity disorder: a systematic review and meta-analysis",
+  "venue": "Scientific Reports, 8, 788",
+  "doi": "10.1038/s41598-017-19096-x",
+  "url": "https://doi.org/10.1038/s41598-017-19096-x",
+  "kind": "meta-analysis",
+  "finding": "Children with ADHD had lower ferritin (stored iron) on average than other children, but similar blood iron and transferrin.",
+  "strength": "moderate: a meta-analysis of observational studies; it shows a link, not a cause.",
+  "topics": [
+   "supplements",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#iron",
+   "/calming-supplements.html#nt-adhd"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5768671/ (search result, Oct 2026)"
+ },
+ {
+  "id": "ods-iron-consumer",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Iron: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Iron-Consumer/",
+  "kind": "guideline",
+  "finding": "The adult upper limit for iron is 45 mg a day unless prescribed; accidental overdose of iron products is a leading cause of fatal poisoning in children under 6; iron can reduce absorption of some medicines such as levothyroxine.",
+  "strength": "strong: an official fact sheet.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#safety",
+   "/calming-supplements.html#iron"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Iron-Consumer/ (search result, Oct 2026)"
+ },
+ {
+  "id": "woelk-2007-ginkgo-anxiety",
+  "authors": "Woelk, H., Arnoldt, K. H., Kieser, M., & Hoerr, R.",
+  "year": 2007,
+  "title": "Ginkgo biloba special extract EGb 761 in generalized anxiety disorder and adjustment disorder with anxious mood: a randomized, double-blind, placebo-controlled trial",
+  "venue": "Journal of Psychiatric Research, 41(6), 472–480",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/16808927/",
+  "kind": "study",
+  "finding": "In 107 people with generalized anxiety or adjustment disorder with anxiety, four weeks of a standard ginkgo extract lowered anxiety scores more than a dummy pill.",
+  "strength": "early: one randomized trial, not widely repeated.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ginkgo"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/16808927/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-ginkgo",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Ginkgo: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/ginkgo",
+  "kind": "guideline",
+  "finding": "Ginkgo has not been shown to prevent dementia or help several other conditions; leaf extract is likely safe in moderate amounts, but it may raise bleeding risk with blood thinners, and the raw seeds are poisonous.",
+  "strength": "moderate: an official summary of research.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ginkgo"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/ginkgo (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-asian-ginseng",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Asian ginseng: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/asian-ginseng",
+  "kind": "guideline",
+  "finding": "Evidence on Asian ginseng for tiredness is mixed; short-term use seems safe for most people, insomnia is the most common side effect, and it may lower blood sugar and interact with some medicines.",
+  "strength": "moderate: an official summary of research.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#asian-ginseng"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/asian-ginseng (search result, Oct 2026)"
+ },
+ {
+  "id": "kyrou-2017-hops",
+  "authors": "Kyrou, I., et al.",
+  "year": 2017,
+  "title": "Effects of a hops (Humulus lupulus L.) dry extract supplement on self-reported depression, anxiety and stress levels in apparently healthy young adults: a randomized, placebo-controlled, double-blind, crossover pilot study",
+  "venue": "Hormones, 16(2), 171–180",
+  "doi": null,
+  "url": "https://publications.aston.ac.uk/id/eprint/31376",
+  "kind": "study",
+  "finding": "In a crossover pilot, 36 young adults with mild stress, anxiety or low mood reported lower scores after four weeks of hops extract than after a dummy pill; morning cortisol did not change.",
+  "strength": "early: one small pilot study.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#hops"
+  ],
+  "verified": true,
+  "verified_by": "https://research.aston.ac.uk/en/publications/effects-of-a-hops-ihumulus-lupulus-li-dry-extract-supplement-on-s/ (search result, Oct 2026)"
+ },
+ {
+  "id": "lin-2011-kiwifruit-sleep",
+  "authors": "Lin, H.-H., Tsai, P.-S., Fang, S.-C., & Liu, J.-F.",
+  "year": 2011,
+  "title": "Effect of kiwifruit consumption on sleep quality in adults with sleep problems",
+  "venue": "Asia Pacific Journal of Clinical Nutrition, 20(2), 169–174",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/21669584/",
+  "kind": "study",
+  "finding": "24 adults with sleep problems who ate two kiwis an hour before bed for four weeks fell asleep faster and slept longer; there was no comparison group.",
+  "strength": "early: one small study without a control group.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#kiwi"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/21669584/ (search result, Oct 2026)"
+ },
+ {
+  "id": "herrera-arellano-2012-galphimia",
+  "authors": "Herrera-Arellano, A., Jiménez-Ferrer, J. E., Zamilpa, A., Tortoriello, J., et al.",
+  "year": 2012,
+  "title": "Therapeutic effectiveness of Galphimia glauca vs. lorazepam in generalized anxiety disorder: a controlled 15-week clinical trial",
+  "venue": "Planta Medica, 78(14), 1529–1535",
+  "doi": "10.1055/s-0032-1315110",
+  "url": "https://doi.org/10.1055/s-0032-1315110",
+  "kind": "study",
+  "finding": "In a 15-week double-blind trial, people with generalized anxiety improved about as much on a standard Galphimia glauca extract as on lorazepam, with fewer side effects; the trials come from the group that developed the extract.",
+  "strength": "early: trials from one research group, not independently repeated.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#galphimia"
+  ],
+  "verified": true,
+  "verified_by": "https://www.thieme-connect.com/products/ejournals/html/10.1055/s-0032-1315110 (search result, Oct 2026)"
+ },
+ {
+  "id": "kalman-2008-magnolia",
+  "authors": "Kalman, D. S., et al.",
+  "year": 2008,
+  "title": "Effect of a proprietary Magnolia and Phellodendron extract on stress levels in healthy women: a pilot, double-blind, placebo-controlled clinical trial",
+  "venue": "Nutrition Journal, 7, 11",
+  "doi": "10.1186/1475-2891-7-11",
+  "url": "https://doi.org/10.1186/1475-2891-7-11",
+  "kind": "study",
+  "finding": "In a six-week pilot (26 women completed), a magnolia-and-phellodendron blend reduced short-term (state) anxiety more than a dummy pill, but not long-standing anxiety, depression, sleep or cortisol.",
+  "strength": "early: one small pilot of a combination product.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#magnolia"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2359758/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nell-2013-sceletium",
+  "authors": "Nell, H., et al.",
+  "year": 2013,
+  "title": "A randomized, double-blind, parallel-group, placebo-controlled trial of extract Sceletium tortuosum (Zembrin) in healthy adults",
+  "venue": "Journal of Alternative and Complementary Medicine",
+  "doi": "10.1089/acm.2012.0185",
+  "url": "https://doi.org/10.1089/acm.2012.0185",
+  "kind": "study",
+  "finding": "Over three months, 37 healthy adults taking a standard sceletium extract showed no clinically important differences from placebo in vital signs, heart tracings or blood tests; the trial tested safety, not benefit.",
+  "strength": "early: one small safety trial linked to the maker.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sceletium"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/abs/10.1089/acm.2012.0185 (search result, Oct 2026)"
+ },
+ {
+  "id": "harvey-2011-sceletium",
+  "authors": "Harvey, A. L., Young, L. C., Viljoen, A. M., & Gericke, N. P.",
+  "year": 2011,
+  "title": "Pharmacological actions of the South African medicinal and functional food plant Sceletium tortuosum and its principal alkaloids",
+  "venue": "Journal of Ethnopharmacology, 137(3), 1124–1129",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/21798331/",
+  "kind": "study",
+  "finding": "In lab tests, a standard sceletium extract blocked the serotonin transporter (as SSRI antidepressants do) and the enzyme PDE4.",
+  "strength": "early: laboratory study, not in people.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sceletium"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/21798331/ (search result, Oct 2026)"
+ },
+ {
+  "id": "brock-2014-skullcap",
+  "authors": "Brock, C., Whitehouse, J., Tewfik, I., & Towell, T.",
+  "year": 2014,
+  "title": "American skullcap (Scutellaria lateriflora): a randomised, double-blind placebo-controlled crossover study of its effects on mood in healthy volunteers",
+  "venue": "Phytotherapy Research, 28(5), 692–698",
+  "doi": "10.1002/ptr.5044",
+  "url": "https://doi.org/10.1002/ptr.5044",
+  "kind": "study",
+  "finding": "In a two-week crossover trial in 43 healthy volunteers, the authors reported that American skullcap may improve mood and anxiety in some people, without notable side effects.",
+  "strength": "early: one small trial in healthy volunteers.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#skullcap"
+  ],
+  "verified": true,
+  "verified_by": "https://www.isrctn.com/ISRCTN48078312 ; https://westminsterresearch.westminster.ac.uk/item/8z40y/american-skullcap-scutellaria-lateriflora-l-a-study-of-its-effects-on-mood-in-healthy-volunteers (search result, Oct 2026)"
+ },
+ {
+  "id": "livertox-skullcap",
+  "authors": "LiverTox, National Institute of Diabetes and Digestive and Kidney Diseases (US)",
+  "year": null,
+  "title": "Skullcap",
+  "venue": "LiverTox (NCBI Bookshelf)",
+  "doi": null,
+  "url": "https://www.ncbi.nlm.nih.gov/books/NBK548757/",
+  "kind": "guideline",
+  "finding": "Liver injury has been reported with products containing skullcap, sometimes leading to liver failure; most cases involved several herbs, and some products were adulterated with germander, a known liver toxin.",
+  "strength": "moderate: case reports collected by the NIH liver-injury database.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#skullcap"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK548757/ (search result, Oct 2026)"
+ },
+ {
+  "id": "zhao-2024-zras",
+  "authors": "Zhao, F.-Y., Xu, P., Kennedy, G. A., Zheng, Z., et al.",
+  "year": 2024,
+  "title": "Commercial Chinese polyherbal preparation Zao Ren An Shen prescription for primary insomnia: a systematic review with meta-analysis and trial sequential analysis",
+  "venue": "Frontiers in Pharmacology, 15, 1376637",
+  "doi": "10.3389/fphar.2024.1376637",
+  "url": "https://www.frontiersin.org/articles/10.3389/fphar.2024.1376637/full",
+  "kind": "meta-analysis",
+  "finding": "Across 22 studies (2,142 people), the sour jujube seed formula Zao Ren An Shen looked promising for insomnia, but the evidence quality was limited and results disagree: a double-blind Australian trial found it no better than placebo.",
+  "strength": "mixed: many low-quality trials with conflicting results, testing a multi-herb formula.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ziziphus"
+  ],
+  "verified": true,
+  "verified_by": "https://doaj.org/article/11f168e062274adf92bab5b18b18a873 (search result, Oct 2026)"
+ },
+ {
+  "id": "ghazizadeh-hashemi-2018-pea",
+  "authors": "Ghazizadeh-Hashemi, M., et al.",
+  "year": 2018,
+  "title": "Palmitoylethanolamide as adjunctive therapy in major depressive disorder: a double-blind, randomized and placebo-controlled trial",
+  "venue": "Journal of Affective Disorders, 232, 127–133",
+  "doi": "10.1016/j.jad.2018.02.057",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/29486338/",
+  "kind": "study",
+  "finding": "In a six-week trial of 58 people with major depression taking citalopram, adding PEA improved depression scores more than adding a dummy pill.",
+  "strength": "early: one small randomized trial.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#pea"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/29486338/ (search result, Oct 2026)"
+ },
+ {
+  "id": "artukoglu-2017-pea-pain",
+  "authors": "Artukoglu, B. B., Beyer, C., Zuloff-Shani, A., Brener, E., & Bloch, M. H.",
+  "year": 2017,
+  "title": "Efficacy of palmitoylethanolamide for pain: a meta-analysis",
+  "venue": "Pain Physician, 20(5), 353–362",
+  "doi": null,
+  "url": "https://painphysicianjournal.com/linkout?issn=1533-3159&page=353&vol=20",
+  "kind": "meta-analysis",
+  "finding": "Across eight controlled trials, PEA reduced pain more than inactive comparisons; the trials were few, varied and often poor quality, and side effects were poorly reported.",
+  "strength": "early: a small meta-analysis of mostly low-quality trials.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#pea"
+  ],
+  "verified": true,
+  "verified_by": "https://www.painphysicianjournal.com/current/pdf?article=NDUwMg%3D%3D&journal=106 (search result, Oct 2026)"
+ },
+ {
+  "id": "eckert-2025-creatine-depression",
+  "authors": "Eckert and colleagues",
+  "year": 2025,
+  "title": "Creatine supplementation for treating symptoms of depression: a systematic review and meta-analysis",
+  "venue": "British Journal of Nutrition (published online November 2025)",
+  "doi": null,
+  "url": "https://www.cambridge.org/core/journals/british-journal-of-nutrition/article/creatine-supplementation-for-treating-symptoms-of-depression-a-systematic-review-and-metaanalysis/32402D649A44771955050ED518B6E564",
+  "kind": "meta-analysis",
+  "finding": "Across 11 trials (1,093 people), creatine did slightly better than placebo for depression, but the average effect was below what patients would notice and the evidence was very low certainty, with signs of bias.",
+  "strength": "early: very low certainty evidence; the true effect may be trivial or none.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#creatine"
+  ],
+  "verified": true,
+  "verified_by": "https://www.cambridge.org/core/product/32402D649A44771955050ED518B6E564 (search result, Oct 2026)"
+ },
+ {
+  "id": "menon-2025-lions-mane",
+  "authors": "Menon and colleagues",
+  "year": 2025,
+  "title": "Benefits, side effects, and uses of Hericium erinaceus as a supplement: a systematic review",
+  "venue": "Frontiers in Nutrition",
+  "doi": null,
+  "url": "https://doi.org/10.3389/fnut.2025.1641246",
+  "kind": "review",
+  "finding": "Human research on lion’s mane is a handful of small trials, mostly on thinking and memory; mood benefits come mainly from animal studies, and the safety profile still needs establishing.",
+  "strength": "early: few small human trials.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#lions-mane"
+  ],
+  "verified": true,
+  "verified_by": "https://repository.mbru.ac.ae/handle/1/1835 (search result, Oct 2026)"
+ },
+ {
+  "id": "pase-2012-bacopa",
+  "authors": "Pase, M. P., et al.",
+  "year": 2012,
+  "title": "The cognitive-enhancing effects of Bacopa monnieri: a systematic review of randomized, controlled human clinical trials",
+  "venue": "Journal of Alternative and Complementary Medicine, 18(7), 647–652",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/22747190/",
+  "kind": "review",
+  "finding": "Across six 12-week trials, bacopa improved memory free recall in 9 of 17 tests; the authors called the evidence suggestive, not conclusive.",
+  "strength": "early: a small number of short trials.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#bacopa"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22747190/ (search result, Oct 2026)"
+ },
+ {
+  "id": "ods-calcium-consumer",
+  "authors": "Office of Dietary Supplements (ODS), US National Institutes of Health",
+  "year": null,
+  "title": "Calcium: Fact sheet for consumers",
+  "venue": "ODS fact sheet",
+  "doi": null,
+  "url": "https://ods.od.nih.gov/factsheets/Calcium-Consumer/",
+  "kind": "guideline",
+  "finding": "Calcium carbonate stops levothyroxine being absorbed well if taken within 4 hours of it, and calcium interferes with quinolone antibiotics.",
+  "strength": "strong: an official fact sheet.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#calcium"
+  ],
+  "verified": true,
+  "verified_by": "https://ods.od.nih.gov/factsheets/Calcium-Consumer/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-chasteberry",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Chasteberry: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/chasteberry",
+  "kind": "guideline",
+  "finding": "Low to moderate quality studies suggest chasteberry might reduce PMS symptoms such as breast pain; it is generally well tolerated short term but may not be safe in pregnancy or with hormone-sensitive conditions.",
+  "strength": "early: low to moderate quality studies.",
+  "topics": [
+   "supplements",
+   "herbs"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#chasteberry"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/chasteberry (search result, Oct 2026)"
+ },
+ {
+  "id": "thys-jacobs-1998-calcium-pms",
+  "authors": "Thys-Jacobs, S., et al., for the Premenstrual Syndrome Study Group",
+  "year": 1998,
+  "title": "Calcium carbonate and the premenstrual syndrome: effects on premenstrual and menstrual symptoms",
+  "venue": "American Journal of Obstetrics and Gynecology, 179(2), 444–452",
+  "doi": "10.1016/s0002-9378(98)70377-1",
+  "url": "https://doi.org/10.1016/s0002-9378(98)70377-1",
+  "kind": "study",
+  "finding": "In a US trial of 466 women over three cycles, calcium carbonate lowered premenstrual symptom scores more than placebo by the second and third cycle; the placebo group also improved.",
+  "strength": "early: one large randomized trial, not widely repeated.",
+  "topics": [
+   "supplements"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#calcium"
+  ],
+  "verified": true,
+  "verified_by": "https://www.qxmd.com/r/9731851 (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-black-cohosh",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Black cohosh: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/black-cohosh",
+  "kind": "guideline",
+  "finding": "Black cohosh may help hot flushes but not anxiety or low mood, and studies disagree; rare but serious liver damage has been reported with products labelled as black cohosh, and some contain the wrong herb.",
+  "strength": "mixed: studies disagree.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#black-cohosh"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/black-cohosh (search result, Oct 2026)"
+ },
+ {
+  "id": "nice-ng23-menopause",
+  "authors": "National Institute for Health and Care Excellence (NICE)",
+  "year": 2024,
+  "title": "Menopause: identification and management (NG23)",
+  "venue": "NICE guideline (updated November 2024)",
+  "doi": null,
+  "url": "https://www.nice.org.uk/guidance/ng23",
+  "kind": "guideline",
+  "finding": "The 2024 update recommends menopause-specific CBT for hot flushes, sleep problems and low mood linked to menopause, alongside or instead of HRT, based on 14 randomized trials.",
+  "strength": "strong: a national guideline based on a review of trials.",
+  "topics": [
+   "complementary-health",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#browse",
+   "/calming-supplements.html#menopause-cbt"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nice.org.uk/guidance/ng23 (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-pms",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "PMS (premenstrual syndrome)",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/conditions/pre-menstrual-syndrome/",
+  "kind": "guideline",
+  "finding": "Regular exercise and plenty of sleep can help PMS; a GP can offer treatments including CBT, hormonal medicines and antidepressants if symptoms are severe.",
+  "strength": "moderate: official advice; the exercise trials are of poor quality.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#browse",
+   "/calming-supplements.html#exercise"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/conditions/pre-menstrual-syndrome/ (search result, Oct 2026)"
+ },
+ {
+  "id": "qaseem-2016-acp-insomnia",
+  "authors": "Qaseem, A., Kansagara, D., et al.",
+  "year": 2016,
+  "title": "Management of chronic insomnia disorder in adults: a clinical practice guideline from the American College of Physicians",
+  "venue": "Annals of Internal Medicine",
+  "doi": "10.7326/M15-2175",
+  "url": "https://doi.org/10.7326/M15-2175",
+  "kind": "guideline",
+  "finding": "Recommends cognitive behavioral therapy for insomnia (CBT-I) as the first treatment for all adults with chronic insomnia (a strong recommendation based on moderate-quality evidence).",
+  "strength": "strong: a national guideline based on a systematic review of trials.",
+  "topics": [
+   "sleep",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#start",
+   "/calming-supplements.html#cbt-i",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.acponline.org/acp-newsroom/acp-recommends-cognitive-behavioral-therapy-as-initial-treatment-forchronic-insomnia (search result, Oct 2026)"
+ },
+ {
+  "id": "nice-cg113-anxiety-panic",
+  "authors": "National Institute for Health and Care Excellence (NICE)",
+  "year": 2011,
+  "title": "Generalised anxiety disorder and panic disorder in adults: management (CG113)",
+  "venue": "NICE guideline (updated 2020)",
+  "doi": null,
+  "url": "https://www.nice.org.uk/guidance/cg113",
+  "kind": "guideline",
+  "finding": "Recommends stepped care: self-help first, then CBT or applied relaxation (or medicine) for generalized anxiety, and CBT for panic disorder.",
+  "strength": "strong: a national guideline based on reviews of trials.",
+  "topics": [
+   "anxiety",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbt-anxiety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nice.org.uk/guidance/cg113 (search result, Oct 2026)"
+ },
+ {
+  "id": "nice-cg159-social-anxiety",
+  "authors": "National Institute for Health and Care Excellence (NICE)",
+  "year": 2013,
+  "title": "Social anxiety disorder: recognition, assessment and treatment (CG159)",
+  "venue": "NICE guideline",
+  "doi": null,
+  "url": "https://www.nice.org.uk/guidance/cg159",
+  "kind": "guideline",
+  "finding": "Recommends individual CBT developed specifically for social anxiety for adults with social anxiety disorder.",
+  "strength": "strong: a national guideline based on reviews of trials.",
+  "topics": [
+   "anxiety",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbt-anxiety"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nice.org.uk/guidance/cg159 (search result, Oct 2026)"
+ },
+ {
+  "id": "nice-ng116-ptsd",
+  "authors": "National Institute for Health and Care Excellence (NICE)",
+  "year": 2018,
+  "title": "Post-traumatic stress disorder (NG116)",
+  "venue": "NICE guideline",
+  "doi": null,
+  "url": "https://www.nice.org.uk/guidance/ng116",
+  "kind": "guideline",
+  "finding": "Recommends trauma-focused CBT for adults with PTSD, and EMDR for adults with PTSD more than three months after a non-combat trauma.",
+  "strength": "strong: a national guideline based on reviews of trials.",
+  "topics": [
+   "anxiety",
+   "complementary-health",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#emdr"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nice.org.uk/guidance/ng116 (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-ptsd-treatment",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Treatment: Post-traumatic stress disorder (PTSD)",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/post-traumatic-stress-disorder-ptsd/treatment/",
+  "kind": "guideline",
+  "finding": "Talking therapies such as trauma-focused CBT and EMDR are the main treatments for PTSD; it is not clear exactly how EMDR works.",
+  "strength": "moderate: official advice.",
+  "topics": [
+   "complementary-health",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#emdr"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/post-traumatic-stress-disorder-ptsd/treatment/ (search result, Oct 2026)"
+ },
+ {
+  "id": "oxford-health-ocd",
+  "authors": "Oxford Health NHS Foundation Trust",
+  "year": null,
+  "title": "Obsessive compulsive disorder (OCD)",
+  "venue": "OHSPIC (NHS)",
+  "doi": null,
+  "url": "https://oxfordhealth.nhs.uk/ohspic/problems/ocd/",
+  "kind": "guideline",
+  "finding": "The evidence-based psychological treatment for OCD is individual CBT including exposure and response prevention (ERP) with a therapist.",
+  "strength": "moderate: NHS service guidance reflecting national guidelines.",
+  "topics": [
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cbt-anxiety",
+   "/calming-supplements.html#nt-anxiety-ocd"
+  ],
+  "verified": true,
+  "verified_by": "https://oxfordhealth.nhs.uk/ohspic/problems/ocd/ (search result, Oct 2026)"
+ },
+ {
+  "id": "ekholm-2020-weighted-blankets",
+  "authors": "Ekholm, B., Spulber, S., & Adler, M.",
+  "year": 2020,
+  "title": "A randomized controlled study of weighted chain blankets for insomnia in psychiatric disorders",
+  "venue": "Journal of Clinical Sleep Medicine, 16(9), 1567–1577",
+  "doi": null,
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7970589/",
+  "kind": "study",
+  "finding": "In 120 adults with insomnia and depression, bipolar disorder, anxiety or ADHD, four weeks with a weighted chain blanket reduced insomnia more than a light blanket.",
+  "strength": "early: one randomized trial with self-reported outcomes.",
+  "topics": [
+   "sleep",
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#weighted-blanket"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7970589/ (search result, Oct 2026)"
+ },
+ {
+  "id": "gringras-2014-weighted-blankets",
+  "authors": "Gringras, P., Green, D., Wright, B., et al.",
+  "year": 2014,
+  "title": "Weighted blankets and sleep in autistic children: a randomized controlled trial",
+  "venue": "Pediatrics, 134(2), 298–306",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/25022743/",
+  "kind": "study",
+  "finding": "In 67 autistic children, a weighted blanket did not lengthen sleep or change other sleep measures compared with a normal blanket, though children and parents preferred it.",
+  "strength": "moderate: a careful randomized crossover trial.",
+  "topics": [
+   "sleep",
+   "autism",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#weighted-blanket",
+   "/calming-supplements.html#nt-autistic"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/25022743/ (search result, Oct 2026)"
+ },
+ {
+  "id": "goessl-2017-hrv-biofeedback",
+  "authors": "Goessl, V. C., Curtiss, J. E., & Hofmann, S. G.",
+  "year": 2017,
+  "title": "The effect of heart rate variability biofeedback training on stress and anxiety: a meta-analysis",
+  "venue": "Psychological Medicine, 47(15), 2578–2586",
+  "doi": null,
+  "url": "https://www.cambridge.org/core/journals/psychological-medicine/article/effect-of-heart-rate-variability-biofeedback-training-on-stress-and-anxiety-a-metaanalysis/A839E9C968E54774DF5C8FB186764EF0",
+  "kind": "meta-analysis",
+  "finding": "Across 24 studies (484 people), training with heart-rate variability biofeedback reduced self-reported stress and anxiety, a large effect compared with controls; more well-controlled trials are needed.",
+  "strength": "moderate: a meta-analysis of mostly small studies.",
+  "topics": [
+   "stress",
+   "anxiety",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#hrv-biofeedback",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://open.bu.edu/handle/2144/26911 (search result, Oct 2026)"
+ },
+ {
+  "id": "jungmann-2018-cold-stimulation",
+  "authors": "Jungmann, M., et al.",
+  "year": 2018,
+  "title": "Effects of cold stimulation on cardiac-vagal activation in healthy participants: randomized controlled trial",
+  "venue": "JMIR Formative Research, 2(2), e10257",
+  "doi": "10.2196/10257",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6334714/",
+  "kind": "study",
+  "finding": "In 61 healthy adults, cold applied to the side of the neck slowed the heart rate and raised heart rate variability, a sign of increased activity in the calming (vagal) branch.",
+  "strength": "early: one laboratory study in healthy volunteers.",
+  "topics": [
+   "stress",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#cold-face",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://formative.jmir.org/2018/2/e10257/ (search result, Oct 2026)"
+ },
+ {
+  "id": "weitzberg-lundberg-2002-humming",
+  "authors": "Weitzberg, E., & Lundberg, J. O. N.",
+  "year": 2002,
+  "title": "Humming greatly increases nasal nitric oxide",
+  "venue": "American Journal of Respiratory and Critical Care Medicine, 166(2), 144–145",
+  "doi": "10.1164/rccm.200202-138BC",
+  "url": "https://doi.org/10.1164/rccm.200202-138BC",
+  "kind": "study",
+  "finding": "In 10 healthy people, humming raised nitric oxide in the nose about 15-fold compared with quiet breathing out, by improving air exchange with the sinuses.",
+  "strength": "early: one small physiology study about the sinuses, not about calm.",
+  "topics": [
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#singing"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12119224/ (search result, Oct 2026)"
+ },
+ {
+  "id": "williams-2018-group-singing",
+  "authors": "Williams, E., Dingle, G. A., & Clift, S.",
+  "year": 2018,
+  "title": "A systematic review of mental health and wellbeing outcomes of group singing for adults with a mental health condition",
+  "venue": "European Journal of Public Health, 28(6), 1035–1042",
+  "doi": "10.1093/eurpub/cky115",
+  "url": "https://doi.org/10.1093/eurpub/cky115",
+  "kind": "review",
+  "finding": "Across 13 studies (667 people with mental health conditions), group singing was linked with better mental health and wellbeing, but the studies had moderate to high risk of bias, so the findings are inconclusive.",
+  "strength": "early: mostly uncontrolled studies.",
+  "topics": [
+   "complementary-health",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#singing",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://repository.canterbury.ac.uk/item/88v5w (search result, Oct 2026)"
+ },
+ {
+  "id": "janssen-2016-hyperthermia",
+  "authors": "Janssen, C. W., et al.",
+  "year": 2016,
+  "title": "Whole-body hyperthermia for the treatment of major depressive disorder: a randomized clinical trial",
+  "venue": "JAMA Psychiatry, 73(8), 789–795",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/27172277/",
+  "kind": "study",
+  "finding": "In 30 adults with depression, one session of medical whole-body heating reduced depression scores more than a sham treatment over six weeks.",
+  "strength": "early: one small randomized trial.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sauna"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27172277/ (search result, Oct 2026)"
+ },
+ {
+  "id": "manzoni-2008-relaxation",
+  "authors": "Manzoni, G. M., Pagnini, F., Castelnuovo, G., & Molinari, E.",
+  "year": 2008,
+  "title": "Relaxation training for anxiety: a ten-years systematic review with meta-analysis",
+  "venue": "BMC Psychiatry, 8, 41",
+  "doi": "10.1186/1471-244X-8-41",
+  "url": "https://doi.org/10.1186/1471-244X-8-41",
+  "kind": "meta-analysis",
+  "finding": "Across 27 studies of relaxation training (progressive relaxation, autogenic training, applied relaxation and meditation), anxiety fell by a medium-to-large amount; many studies were not randomized.",
+  "strength": "moderate: a meta-analysis including uncontrolled studies.",
+  "topics": [
+   "anxiety",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#pmr"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2427027/ (search result, Oct 2026)"
+ },
+ {
+  "id": "pjrek-2020-light-therapy",
+  "authors": "Pjrek, E., et al.",
+  "year": 2020,
+  "title": "The efficacy of light therapy in the treatment of seasonal affective disorder: a meta-analysis of randomized controlled trials",
+  "venue": "Psychotherapy and Psychosomatics, 89(1), 17–24",
+  "doi": "10.1159/000502891",
+  "url": "https://doi.org/10.1159/000502891",
+  "kind": "meta-analysis",
+  "finding": "Across 18 trials (610 people), bright light therapy reduced seasonal depression more than dim light or sham devices, and more people responded.",
+  "strength": "moderate: a meta-analysis of small, varied trials with moderate to high risk of bias.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#light-therapy"
+  ],
+  "verified": true,
+  "verified_by": "https://figshare.com/articles/by-resource-doi/10.1159/000502891 (search result, Oct 2026)"
+ },
+ {
+  "id": "klevebrant-2022-caffeine-panic",
+  "authors": "Klevebrant, L., et al.",
+  "year": 2022,
+  "title": "Effects of caffeine on anxiety and panic attacks in patients with panic disorder: a systematic review and meta-analysis",
+  "venue": "General Hospital Psychiatry, 74, 22–31",
+  "doi": "10.1016/j.genhosppsych.2021.11.005",
+  "url": "https://doi.org/10.1016/j.genhosppsych.2021.11.005",
+  "kind": "meta-analysis",
+  "finding": "In caffeine challenge studies, about half of people with panic disorder had a panic attack after a large dose of caffeine (400 mg or more), compared with very few healthy people and none after placebo.",
+  "strength": "moderate: a meta-analysis of small lab studies using high doses.",
+  "topics": [
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#caffeine",
+   "/calming-supplements.html#nt-anxiety-ocd"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/34871964/ (search result, Oct 2026)"
+ },
+ {
+  "id": "niaaa-alcohol-mental-health",
+  "authors": "National Institute on Alcohol Abuse and Alcoholism (NIAAA)",
+  "year": null,
+  "title": "Mental health issues: alcohol use disorder and common co-occurring conditions",
+  "venue": "NIAAA Core Resource on Alcohol",
+  "doi": null,
+  "url": "https://www.niaaa.nih.gov/health-professionals-communities/core-resource-on-alcohol/mental-health-issues-alcohol-use-disorder-and-common-co-occurring-conditions",
+  "kind": "guideline",
+  "finding": "Alcohol may seem to relieve anxiety in the short term, but over time heavy drinking and repeated withdrawal can make anxiety and drinking worse.",
+  "strength": "moderate: an official summary of research.",
+  "topics": [
+   "anxiety",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#alcohol"
+  ],
+  "verified": true,
+  "verified_by": "https://www.niaaa.nih.gov/health-professionals-communities/core-resource-on-alcohol/mental-health-issues-alcohol-use-disorder-and-common-co-occurring-conditions (search result, Oct 2026)"
+ },
+ {
+  "id": "fang-2021-sleep-variability",
+  "authors": "Fang, Y., Forger, D. B., Frank, E., Sen, S., & Goldstein, C.",
+  "year": 2021,
+  "title": "Day-to-day variability in sleep parameters and depression risk: a prospective cohort study of training physicians",
+  "venue": "npj Digital Medicine, 4",
+  "doi": "10.1038/s41746-021-00400-z",
+  "url": "https://doi.org/10.1038/s41746-021-00400-z",
+  "kind": "study",
+  "finding": "In 2,115 first-year doctors wearing sleep trackers, more day-to-day variation in sleep went with more depressive symptoms, and steadier sleep with better next-day mood.",
+  "strength": "moderate: a large prospective study; it shows a link, not a cause.",
+  "topics": [
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sleep-regularity",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://doaj.org/article/fe521c3e0ca747da8672a7fac84a79b3 (search result, Oct 2026)"
+ },
+ {
+  "id": "pfeiffer-2019-headphones",
+  "authors": "Pfeiffer, B., Stein Duker, L., Murphy, A., & Shui, C.",
+  "year": 2019,
+  "title": "Effectiveness of noise-attenuating headphones on physiological responses for children with autism spectrum disorders",
+  "venue": "Frontiers in Integrative Neuroscience, 13, 65",
+  "doi": "10.3389/fnint.2019.00065",
+  "url": "https://doi.org/10.3389/fnint.2019.00065",
+  "kind": "study",
+  "finding": "In six autistic children, wearing noise-attenuating headphones during the day changed skin-conductance measures of stress compared with baseline.",
+  "strength": "early: a single-subject design with six children.",
+  "topics": [
+   "autism",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sensory-tools",
+   "/calming-supplements.html#nt-sensory",
+   "/nervous-system.html#sensory"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6863142/ (search result, Oct 2026)"
+ },
+ {
+  "id": "kuyken-2016-mbct",
+  "authors": "Kuyken, W., et al.",
+  "year": 2016,
+  "title": "Efficacy of mindfulness-based cognitive therapy in prevention of depressive relapse: an individual patient data meta-analysis from randomized trials",
+  "venue": "JAMA Psychiatry, 73(6), 565–574",
+  "doi": "10.1001/jamapsychiatry.2016.0076",
+  "url": "https://doi.org/10.1001/jamapsychiatry.2016.0076",
+  "kind": "meta-analysis",
+  "finding": "Across nine trials (1,258 people with recurrent depression), mindfulness-based cognitive therapy cut the risk of relapse over 60 weeks by about 31% (38% relapsed versus 49%).",
+  "strength": "strong: an individual-patient meta-analysis of randomized trials.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#mindfulness"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/27119968/ (search result, Oct 2026)"
+ },
+ {
+  "id": "cerrillo-urbina-2015-exercise-adhd",
+  "authors": "Cerrillo-Urbina, A. J., García-Hermoso, A., Sánchez-López, M., Pardo-Guijarro, M. J., Santos Gómez, J. L., & Martínez-Vizcaíno, V.",
+  "year": 2015,
+  "title": "The effects of physical exercise in children with attention deficit hyperactivity disorder: a systematic review and meta-analysis of randomized control trials",
+  "venue": "Child: Care, Health and Development, 41(6), 779–788",
+  "doi": "10.1111/cch.12255",
+  "url": "https://doi.org/10.1111/cch.12255",
+  "kind": "meta-analysis",
+  "finding": "Across eight small trials (249 children with ADHD), exercise, especially aerobic exercise, improved attention, hyperactivity and related symptoms compared with control groups.",
+  "strength": "moderate: a meta-analysis of small randomized trials.",
+  "topics": [
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#exercise",
+   "/calming-supplements.html#nt-adhd"
+  ],
+  "verified": true,
+  "verified_by": "https://search.pedro.org.au/search-results/record-detail/44747 (search result, Oct 2026)"
+ },
+ {
+  "id": "nice-ng206-mecfs",
+  "authors": "National Institute for Health and Care Excellence (NICE)",
+  "year": 2021,
+  "title": "Myalgic encephalomyelitis (or encephalopathy)/chronic fatigue syndrome: diagnosis and management (NG206)",
+  "venue": "NICE guideline",
+  "doi": null,
+  "url": "https://www.nice.org.uk/guidance/ng206",
+  "kind": "guideline",
+  "finding": "Recommends person-centred energy management (pacing) and says not to offer programmes based on fixed, step-by-step increases in physical activity, such as graded exercise therapy.",
+  "strength": "moderate: a national guideline; the trial evidence for ME/CFS treatments is limited.",
+  "topics": [
+   "energy",
+   "burnout"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#exercise",
+   "/calming-supplements.html#pacing",
+   "/calming-supplements.html#nt-chronic"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nice.org.uk/guidance/ng206 (search result, Oct 2026)"
+ },
+ {
+  "id": "kavirajan-2014-ces",
+  "authors": "Kavirajan, H. C., Lueck, K., & Chuang, K.",
+  "year": 2014,
+  "title": "Alternating current cranial electrotherapy stimulation (CES) for depression",
+  "venue": "Cochrane Database of Systematic Reviews, CD010521.pub2",
+  "doi": "10.1002/14651858.CD010521.pub2",
+  "url": "https://doi.org/10.1002/14651858.CD010521.pub2",
+  "kind": "review",
+  "finding": "Found no high-quality trials of cranial electrotherapy stimulation for acute depression, so there was insufficient evidence on whether it works.",
+  "strength": "early: no good trials found.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#ces"
+  ],
+  "verified": true,
+  "verified_by": "https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD010521.pub2/information (search result, Oct 2026)"
+ },
+ {
+  "id": "kretzler-2022-pets",
+  "authors": "Kretzler, B., König, H.-H., & Hajek, A.",
+  "year": 2022,
+  "title": "Pet ownership, loneliness, and social isolation: a systematic review",
+  "venue": "Social Psychiatry and Psychiatric Epidemiology, 57, 1935–1957",
+  "doi": "10.1007/s00127-022-02332-9",
+  "url": "https://doi.org/10.1007/s00127-022-02332-9",
+  "kind": "review",
+  "finding": "Across 24 observational studies, adult pet owners were less socially isolated; only some studies found less loneliness.",
+  "strength": "mixed: observational studies with mixed results.",
+  "topics": [
+   "loneliness",
+   "belonging"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#pets"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9272860/ (search result, Oct 2026)"
+ },
+ {
+  "id": "drugs-com-caffeine-methylphenidate",
+  "authors": "Drugs.com",
+  "year": null,
+  "title": "Drug interactions between caffeine and Ritalin-SR (methylphenidate)",
+  "venue": "Drugs.com interaction checker",
+  "doi": null,
+  "url": "https://www.drugs.com/drug-interactions/caffeine-with-ritalin-sr-450-0-1606-4667.html",
+  "kind": "guideline",
+  "finding": "Caffeine and methylphenidate can both raise blood pressure and heart rate, and taking them together may add to these effects.",
+  "strength": "moderate: a drug-interaction reference used by pharmacists and the public.",
+  "topics": [
+   "adhd",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#caffeine",
+   "/calming-supplements.html#nt-adhd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.drugs.com/drug-interactions/caffeine-with-ritalin-sr-450-0-1606-4667.html (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-methylphenidate-side-effects",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Side effects of methylphenidate for adults",
+  "venue": "NHS medicines information (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/medicines/methylphenidate-adults/side-effects-of-methylphenidate-for-adults/",
+  "kind": "guideline",
+  "finding": "Common side effects of methylphenidate include trouble sleeping and loss of appetite; taking the last dose more than 6 hours before bed, and taking it with a meal, can help.",
+  "strength": "strong: official medicines information.",
+  "topics": [
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sleep-regularity",
+   "/calming-supplements.html#regular-meals",
+   "/calming-supplements.html#nt-adhd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/medicines/methylphenidate-adults/side-effects-of-methylphenidate-for-adults/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nccih-acupuncture",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH)",
+  "year": null,
+  "title": "Acupuncture: Effectiveness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety",
+  "kind": "guideline",
+  "finding": "Summarises research on acupuncture; results for anxiety are mixed and many studies are of poor quality, and it is generally safe with a qualified practitioner using sterile needles.",
+  "strength": "mixed: studies disagree and many are low quality.",
+  "topics": [
+   "complementary-health"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#acupuncture"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/acupuncture-effectiveness-and-safety (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-bereavement",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Bereavement",
+  "venue": "NHS mental health advice (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/advice-for-life-situations-and-events/bereavement/",
+  "kind": "guideline",
+  "finding": "Advice and support for grief after a bereavement or loss, including when to see a GP and where to find bereavement support.",
+  "strength": "moderate: official advice.",
+  "topics": [
+   "grief"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#browse"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/advice-for-life-situations-and-events/bereavement/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nimh-so-stressed-out",
+  "authors": "National Institute of Mental Health (NIMH)",
+  "year": 2022,
+  "title": "I’m so stressed out! Fact sheet",
+  "venue": "NIMH",
+  "doi": null,
+  "url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet",
+  "kind": "guideline",
+  "finding": "Stress is usually a response to an outside cause and fades when it ends; anxiety can continue without a threat. If symptoms won’t go away or interfere with daily life, it may be time to talk to a professional.",
+  "strength": "moderate: official advice.",
+  "topics": [
+   "stress",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#stress-response",
+   "/nervous-system.html#doctor"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-panic-disorder",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Panic disorder",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/panic-disorder/",
+  "kind": "guideline",
+  "finding": "See a GP if you have symptoms of panic disorder; they may examine you to rule out other conditions that could cause the symptoms.",
+  "strength": "moderate: official advice.",
+  "topics": [
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#browse",
+   "/nervous-system.html#doctor"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/panic-disorder/ (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-dissociative-disorders",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Dissociative disorders",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/",
+  "kind": "guideline",
+  "finding": "Describes depersonalisation and derealisation; a GP may examine you and do tests to check for other causes, then refer you to a mental health specialist.",
+  "strength": "moderate: official advice.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#doctor"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/ (search result, Oct 2026)"
+ },
+ {
+  "id": "statpearls-autonomic-nervous-system",
+  "authors": "StatPearls, NCBI Bookshelf",
+  "year": null,
+  "title": "Physiology, autonomic nervous system",
+  "venue": "StatPearls (NCBI Bookshelf)",
+  "doi": null,
+  "url": "https://www.ncbi.nlm.nih.gov/books/NBK538516/",
+  "kind": "review",
+  "finding": "The autonomic nervous system controls organs automatically; its sympathetic and parasympathetic branches work in opposition to keep the body in balance, with a third, enteric, branch in the gut.",
+  "strength": "strong: a standard medical reference.",
+  "topics": [
+   "stress",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#what"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK538516/ (search result, Oct 2026)"
+ },
+ {
+  "id": "statpearls-stress-reaction",
+  "authors": "StatPearls, NCBI Bookshelf",
+  "year": null,
+  "title": "Physiology, stress reaction",
+  "venue": "StatPearls (NCBI Bookshelf)",
+  "doi": null,
+  "url": "https://www.ncbi.nlm.nih.gov/books/NBK541120/",
+  "kind": "review",
+  "finding": "The stress response has a fast arm (sympathetic nerves and adrenaline) and a slower arm (the HPA axis and cortisol), working together with the immune system.",
+  "strength": "strong: a standard medical reference.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#stress-response"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK541120/ (search result, Oct 2026)"
+ },
+ {
+  "id": "statpearls-vagus-nerve",
+  "authors": "StatPearls, NCBI Bookshelf",
+  "year": null,
+  "title": "Neuroanatomy, cranial nerve 10 (vagus nerve)",
+  "venue": "StatPearls (NCBI Bookshelf)",
+  "doi": null,
+  "url": "https://www.ncbi.nlm.nih.gov/books/NBK537171/",
+  "kind": "review",
+  "finding": "The vagus nerve is the longest cranial nerve, carrying both sensory and motor fibres from the brainstem to the heart, lungs and gut.",
+  "strength": "strong: a standard medical reference.",
+  "topics": [
+   "calm",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/books/NBK537171/ (search result, Oct 2026)"
+ },
+ {
+  "id": "conversation-2023-fawning",
+  "authors": "The Conversation",
+  "year": 2023,
+  "title": "What is fawning? How is it related to trauma and the fight-or-flight response?",
+  "venue": "The Conversation",
+  "doi": null,
+  "url": "https://theconversation.com/what-is-fawning-how-is-it-related-to-trauma-and-the-fight-or-flight-response-205024",
+  "kind": "news",
+  "finding": "The word “fawn” was introduced by therapist Pete Walker in his 2013 book on complex PTSD to describe people-pleasing as a response to threat; there isn’t yet much research on it.",
+  "strength": "theory: a popular clinical idea, not yet tested much.",
+  "topics": [
+   "stress",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#fight-flight"
+  ],
+  "verified": true,
+  "verified_by": "https://theconversation.com/what-is-fawning-how-is-it-related-to-trauma-and-the-fight-or-flight-response-205024 (search result, Oct 2026)"
+ },
+ {
+  "id": "nhs-gad-self-help",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Self-help: generalised anxiety disorder in adults",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/",
+  "kind": "guideline",
+  "finding": "The NHS self-help advice for anxiety includes regular exercise, relaxation and breathing exercises, good sleep, and cutting down on caffeine and alcohol, which can make anxiety and sleep worse.",
+  "strength": "moderate: official self-help advice built on research reviews; the advice is general, not tailored to one person.",
+  "topics": [
+   "supplements",
+   "anxiety",
+   "stress",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#caffeine",
+   "/calming-supplements.html#alcohol",
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/generalised-anxiety-disorder/self-help/ (search result, Oct 2026)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "singh-2023",
+  "authors": "Singh, B., et al.",
+  "year": 2023,
+  "title": "Effectiveness of physical activity interventions for improving depression, anxiety and distress: an overview of systematic reviews",
+  "venue": "British Journal of Sports Medicine",
+  "doi": "10.1136/bjsports-2022-106195",
+  "url": "https://doi.org/10.1136/bjsports-2022-106195",
+  "kind": "review",
+  "finding": "An overview of 97 reviews (1,039 trials, about 128,000 people) found physical activity reduced symptoms of depression, anxiety and distress compared with usual care, with medium-sized effects.",
+  "strength": "strong: a very large body of trials; the trials vary a lot in quality and type of exercise.",
+  "topics": [
+   "supplements",
+   "anxiety",
+   "stress",
+   "exercise"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#studies",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://bjsm.bmj.com/content/bjsports/early/2023/07/11/bjsports-2022-106195.full.pdf ; https://www.unisa.edu.au/media-centre/Releases/2023/exercise-more-effective-than-medicines-to-manage-mental-health",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "zaccaro-2018",
+  "authors": "Zaccaro, A., Piarulli, A., Laurino, M., Garbella, E., Menicucci, D., Neri, B., & Gemignani, A.",
+  "year": 2018,
+  "title": "How breath-control can change your life: A systematic review on psycho-physiological correlates of slow breathing",
+  "venue": "Frontiers in Human Neuroscience, 12, 353",
+  "doi": "10.3389/fnhum.2018.00353",
+  "url": "https://doi.org/10.3389/fnhum.2018.00353",
+  "kind": "review",
+  "finding": "Slow breathing was linked with changes in heart-rate variability and with more comfort, relaxation and alertness and less arousal and anxiety.",
+  "strength": "moderate: consistent direction, but many included studies were small.",
+  "topics": [
+   "stress",
+   "calm",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#start",
+   "/calming-supplements.html#breathing",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/30245619/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6137615/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "nccih-herb-drug",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Herb-drug interactions: What the science says",
+  "venue": "NCCIH Clinical Digest",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
+  "kind": "review",
+  "finding": "Lists clinically important interactions for St John’s wort, including cyclosporine (a transplant drug), indinavir (an HIV drug), birth control pills, warfarin, digoxin and benzodiazepines.",
+  "strength": "strong: interactions shown in studies of how the body handles drugs.",
+  "topics": [
+   "supplements",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-chronic"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science (search result, Oct 2026) ; https://www.ncbi.nlm.nih.gov/books/NBK548880/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "pittler-ernst-2003",
+  "authors": "Pittler, M. H., & Ernst, E.",
+  "year": 2003,
+  "title": "Kava extract versus placebo for treating anxiety",
+  "venue": "Cochrane Database of Systematic Reviews, CD003383",
+  "doi": "10.1002/14651858.CD003383",
+  "url": "https://doi.org/10.1002/14651858.CD003383",
+  "kind": "meta-analysis",
+  "finding": "Across 12 trials, kava extract eased anxiety a little more than a dummy pill, but the effect was small and not robust. The review is now marked as out of date.",
+  "strength": "mixed: a small effect, and the review is old.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "anxiety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#studies"
+  ],
+  "verified": true,
+  "verified_by": "https://www.cochrane.org/evidence/CD003383_kava-extract-treating-anxiety ; https://cochranelibrary.com/cdsr/doi/10.1002/14651858.CD003383/information/th",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "nccih-st-johns-wort",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "St. John’s Wort: Usefulness and safety",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/st-johns-wort",
+  "kind": "guideline",
+  "finding": "St John’s wort is not consistently effective for depression and is not approved as a medicine for it in the US. It interacts with many medicines, including birth control pills and some antidepressants, where the mix can cause a dangerous rise in serotonin.",
+  "strength": "moderate: official summary; trial results are mixed.",
+  "topics": [
+   "supplements",
+   "herbs",
+   "supplement-safety"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-anxiety-ocd"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/st-johns-wort ; https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth (search results, Oct 2026)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "nhs-sad-treatment",
+  "authors": "NHS (National Health Service, England)",
+  "year": null,
+  "title": "Treatment: Seasonal affective disorder (SAD)",
+  "venue": "NHS website (nhs.uk)",
+  "doi": null,
+  "url": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/",
+  "kind": "guideline",
+  "finding": "The NHS suggests getting as much natural daylight as you can, exercising and managing stress. Light boxes are not usually available on the NHS; check with a GP first if you have an eye condition or take medicines that make you sensitive to light.",
+  "strength": "early: the NHS says there isn’t enough evidence to be sure light therapy works, though many people find it helps.",
+  "topics": [
+   "supplements",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#light-therapy"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/treatment/ ; https://www.nhs.uk/mental-health/conditions/seasonal-affective-disorder-sad/ (search result, Oct 2026)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "holt-lunstad-2010",
+  "authors": "Holt-Lunstad, J., Smith, T. B., & Layton, J. B.",
+  "year": 2010,
+  "title": "Social relationships and mortality risk: A meta-analytic review",
+  "venue": "PLoS Medicine, 7(7), e1000316",
+  "doi": "10.1371/journal.pmed.1000316",
+  "url": "https://doi.org/10.1371/journal.pmed.1000316",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of 148 studies (308,849 participants) found people with stronger social relationships had about 50% greater odds of survival over the study periods, consistently across age, sex and health status.",
+  "strength": "strong — large meta-analysis of observational studies; causation not established",
+  "topics": [
+   "social-support",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#connection"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.plos.org/plosmedicine/article?id=10.1371%2Fjournal.pmed.1000316",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "swami-2022",
+  "authors": "Swami, V., Hochstöger, S., Kargl, E., & Stieger, S.",
+  "year": 2022,
+  "title": "Hangry in the field: An experience sampling study on the impact of hunger on anger, irritability, and affect",
+  "venue": "PLOS ONE, 17(7), e0269629",
+  "doi": "10.1371/journal.pone.0269629",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9258883/",
+  "kind": "study",
+  "finding": "Over 21 days, 64 adults reported more anger and irritability and less pleasure when they felt hungrier, even after accounting for factors like age, sex and trait anger.",
+  "strength": "early: a single, fairly small experience-sampling study.",
+  "topics": [
+   "stress",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#regular-meals"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9258883",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "balban-2023",
+  "authors": "Balban, M. Y., Neri, E., Kogon, M. M., Weed, L., Nouriani, B., Jo, B., Holl, G., Zeitzer, J. M., Spiegel, D., & Huberman, A. D.",
+  "year": 2023,
+  "title": "Brief structured respiration practices enhance mood and reduce physiological arousal",
+  "venue": "Cell Reports Medicine, 4(1), 100895",
+  "doi": "10.1016/j.xcrm.2022.100895",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947/",
+  "kind": "study",
+  "finding": "In a month-long randomized trial of five minutes a day, breathing exercises improved mood more than mindfulness meditation, with cyclic sighing (long out-breaths) showing the largest benefits.",
+  "strength": "early: a single remote trial; needs replication.",
+  "topics": [
+   "stress",
+   "calm",
+   "breathing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#sighing"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9873947 ; https://hubermanlab.stanford.edu/publications/brief-structured-respiration-practices-enhance-mood-and-reduce-physiological-arousal",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "frattaroli-2006",
+  "authors": "Frattaroli, J.",
+  "year": 2006,
+  "title": "Experimental disclosure and its moderators: A meta-analysis",
+  "venue": "Psychological Bulletin, 132(6), 823–865",
+  "doi": "10.1037/0033-2909.132.6.823",
+  "url": "https://doi.org/10.1037/0033-2909.132.6.823",
+  "kind": "meta-analysis",
+  "finding": "Pooling 146 randomized studies, experimental disclosure (such as expressive writing) had a small but significant positive average effect.",
+  "strength": "moderate: real but small effect that varies by person and outcome.",
+  "topics": [
+   "emotions",
+   "expressive-writing",
+   "healing"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#expressive-writing"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17073523/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "nccih-tai-chi",
+  "authors": "National Center for Complementary and Integrative Health (NCCIH), US National Institutes of Health",
+  "year": null,
+  "title": "Tai chi: What you need to know",
+  "venue": "NCCIH fact sheet",
+  "doi": null,
+  "url": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know",
+  "kind": "guideline",
+  "finding": "Tai chi appears safe, with minor aches the most common problem. Research suggests it helps balance in older adults, and NCCIH notes it may improve mood and quality of life in some groups of people with long-term illness.",
+  "strength": "early: for mood, the research is limited.",
+  "topics": [
+   "supplements",
+   "calm"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-chronic"
+  ],
+  "verified": true,
+  "verified_by": "https://www.nccih.nih.gov/health/tai-chi-what-you-need-to-know ; https://www.nccih.nih.gov/health/tips/tips-what-you-should-know-about-tai-chi-for-health (search result, Oct 2026)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "kinnaird-2019",
+  "authors": "Kinnaird, E., Stewart, C., & Tchanturia, K.",
+  "year": 2019,
+  "title": "Investigating alexithymia in autism: A systematic review and meta-analysis",
+  "venue": "European Psychiatry, 55, 80–89",
+  "doi": "10.1016/j.eurpsy.2018.09.004",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
+  "kind": "meta-analysis",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
+  "topics": [
+   "alexithymia",
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-autistic",
+   "/nervous-system.html#interoception"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "dunn-1997",
+  "authors": "Dunn, W.",
+  "year": 1997,
+  "title": "The impact of sensory processing abilities on the daily lives of young children and their families: A conceptual model",
+  "venue": "Infants & Young Children, 9(4), 23–35",
+  "doi": "10.1097/00001163-199704000-00005",
+  "url": "https://doi.org/10.1097/00001163-199704000-00005",
+  "kind": "theory",
+  "finding": "Proposed a model of sensory processing in which people differ in their neurological thresholds (high or low) and in how they respond (going along with them or acting against them), giving four patterns that affect daily life.",
+  "strength": "theory: a widely used clinical model and the basis of the Sensory Profile measures.",
+  "topics": [
+   "neurodiversity",
+   "sensory"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-sensory",
+   "/nervous-system.html#sensory"
+  ],
+  "verified": true,
+  "verified_by": "https://ouci.dntb.gov.ua/works/4082G0p4 (reference list with DOI)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "aron-aron-1997",
+  "authors": "Aron, E. N., & Aron, A.",
+  "year": 1997,
+  "title": "Sensory-processing sensitivity and its relation to introversion and emotionality",
+  "venue": "Journal of Personality and Social Psychology, 73(2), 345–368",
+  "doi": "10.1037/0022-3514.73.2.345",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/9248053/",
+  "kind": "study",
+  "finding": "Across seven studies, the authors identified a single core trait of sensory-processing sensitivity, partly independent of introversion and emotionality, and developed the 27-item Highly Sensitive Person Scale.",
+  "strength": "moderate: a widely used measure; later research supports the trait but debates its structure and overlap with neuroticism.",
+  "topics": [
+   "neurodiversity",
+   "sensory",
+   "highly-sensitive-person"
+  ],
+  "mentioned_on": [
+   "/calming-supplements.html#nt-hsp",
+   "/nervous-system.html#sensory"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9248053/ ; https://sensitivityresearch.com/publication/sensory-processing-sensitivity-and-its-relation-to-introversion-and-emotionality",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "mcewen-1998",
+  "authors": "McEwen, B. S.",
+  "year": 1998,
+  "title": "Protective and damaging effects of stress mediators",
+  "venue": "New England Journal of Medicine, 338(3), 171–179",
+  "doi": "10.1056/NEJM199801153380307",
+  "url": "https://doi.org/10.1056/NEJM199801153380307",
+  "kind": "review",
+  "finding": "Explained how the same stress hormones that protect us in the short term cause wear and tear (allostatic load) when stress systems are chronically over- or under-active.",
+  "strength": "strong: highly influential review.",
+  "topics": [
+   "stress",
+   "allostatic-load"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#stress-response"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9428819/ ; https://hero.epa.gov/hero/index.cfm/reference/details/reference_id/1260946",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "taylor-2000",
+  "authors": "Taylor, S. E., Klein, L. C., Lewis, B. P., Gruenewald, T. L., Gurung, R. A. R., & Updegraff, J. A.",
+  "year": 2000,
+  "title": "Biobehavioral responses to stress in females: Tend-and-befriend, not fight-or-flight",
+  "venue": "Psychological Review, 107(3), 411–429",
+  "doi": "10.1037/0033-295X.107.3.411",
+  "url": "https://doi.org/10.1037/0033-295X.107.3.411",
+  "kind": "theory",
+  "finding": "Proposed that under stress people, perhaps especially women, often respond by protecting others and seeking social connection (\"tend and befriend\"), not only fight or flight.",
+  "strength": "moderate: influential theory with supporting evidence; sex differences are debated.",
+  "topics": [
+   "stress"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#fight-flight"
+  ],
+  "verified": true,
+  "verified_by": "https://taylorlab.psych.ucla.edu/wp-content/uploads/sites/5/2014/10/2000_Biobehavioral-responses-to-stress-in-females_tend-and-befriend.pdf ; https://www.deepdyve.com/lp/doc/tSvZ2obcc9",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "siegel-1999",
+  "authors": "Siegel, D. J.",
+  "year": 1999,
+  "title": "The developing mind: Toward a neurobiology of interpersonal experience",
+  "venue": "Guilford Press",
+  "doi": null,
+  "url": "https://catalog.library.nashville.org/Record/CARL0000114962",
+  "kind": "book",
+  "finding": "A book linking attachment, memory and brain development; it introduced the \"window of tolerance\", the range of arousal in which a person can feel strong emotion and still think and respond flexibly.",
+  "strength": "theory: a widely used clinical metaphor rather than a tested construct.",
+  "topics": [
+   "stress",
+   "window-of-tolerance",
+   "trauma"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#window"
+  ],
+  "verified": true,
+  "verified_by": "https://cmu.marmot.org/Record/.b1416257x ; https://catalog.library.nashville.org/Record/CARL0000114962 (New York: Guilford Press, c1999)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "grossman-2023",
+  "authors": "Grossman, P.",
+  "year": 2023,
+  "title": "Fundamental challenges and likely refutations of the five basic premises of the polyvagal theory",
+  "venue": "Biological Psychology, 180, 108589",
+  "doi": "10.1016/j.biopsycho.2023.108589",
+  "url": "https://doi.org/10.1016/j.biopsycho.2023.108589",
+  "kind": "review",
+  "finding": "Reviewed the evidence for each of polyvagal theory's five basic premises and argued that each is untenable or highly implausible.",
+  "strength": "debated: a strong critique; Porges and colleagues have responded.",
+  "topics": [
+   "stress",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#polyvagal"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/37230290/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "grossman-taylor-2007",
+  "authors": "Grossman, P., & Taylor, E. W.",
+  "year": 2007,
+  "title": "Toward understanding respiratory sinus arrhythmia: Relations to cardiac vagal tone, evolution and biobehavioral functions",
+  "venue": "Biological Psychology, 74(2), 263–285",
+  "doi": "10.1016/j.biopsycho.2005.11.014",
+  "url": "https://doi.org/10.1016/j.biopsycho.2005.11.014",
+  "kind": "review",
+  "finding": "Raised caveats about using respiratory sinus arrhythmia as an index of vagal tone and challenged evolutionary assumptions used in polyvagal theory.",
+  "strength": "strong: a detailed physiological critique.",
+  "topics": [
+   "stress",
+   "polyvagal"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#polyvagal",
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://synapsesocial.com/papers/W2060699864 ; https://qigonginstitute.org/abstract-print/16846",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "coan-schaefer-davidson-2006",
+  "authors": "Coan, J. A., Schaefer, H. S., & Davidson, R. J.",
+  "year": 2006,
+  "title": "Lending a hand: Social regulation of the neural response to threat",
+  "venue": "Psychological Science, 17(12), 1032–1039",
+  "doi": "10.1111/j.1467-9280.2006.01832.x",
+  "url": "https://doi.org/10.1111/j.1467-9280.2006.01832.x",
+  "kind": "study",
+  "finding": "In an fMRI study, married women facing the threat of a mild shock showed less threat-related brain activity while holding their husband's hand than when alone.",
+  "strength": "moderate — small, much-cited brain-imaging study",
+  "topics": [
+   "social-support",
+   "attachment"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in citing references on journals.sagepub.com (e.g. https://journals.sagepub.com/doi/10.1177/1948550616646427)",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "yoo-walker-2007",
+  "authors": "Yoo, S.-S., Gujar, N., Hu, P., Jolesz, F. A., & Walker, M. P.",
+  "year": 2007,
+  "title": "The human emotional brain without sleep—a prefrontal amygdala disconnect",
+  "venue": "Current Biology, 17(20), R877–R878",
+  "doi": "10.1016/j.cub.2007.08.007",
+  "url": "https://doi.org/10.1016/j.cub.2007.08.007",
+  "kind": "study",
+  "finding": "After a night without sleep, the amygdala reacted more strongly to negative pictures and was less connected to the prefrontal cortex.",
+  "strength": "moderate: a small lab study, consistent with later sleep research.",
+  "topics": [
+   "stress",
+   "sleep"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#vagus"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/17956744 ; https://newsarchive.berkeley.edu/news/media/releases/2007/10/22_sleeploss.shtml",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "craig-2002",
+  "authors": "Craig, A. D.",
+  "year": 2002,
+  "title": "How do you feel? Interoception: the sense of the physiological condition of the body",
+  "venue": "Nature Reviews Neuroscience, 3(8), 655–666",
+  "doi": "10.1038/nrn894",
+  "url": "https://doi.org/10.1038/nrn894",
+  "kind": "review",
+  "finding": "Described a pathway that carries signals about the body's internal state to the brain (including the insula), and proposed it underlies subjective feelings, emotion and self-awareness.",
+  "strength": "strong: a foundational, widely cited review; some proposals remain theoretical.",
+  "topics": [
+   "interoception",
+   "emotions"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#interoception"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12154366/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "khalsa-2018",
+  "authors": "Khalsa, S. S., Adolphs, R., Cameron, O. G., Critchley, H. D., Davenport, P. W., Feinstein, J. S., et al.",
+  "year": 2018,
+  "title": "Interoception and mental health: A roadmap",
+  "venue": "Biological Psychiatry: Cognitive Neuroscience and Neuroimaging, 3(6), 501–513",
+  "doi": "10.1016/j.bpsc.2017.12.004",
+  "url": "https://doi.org/10.1016/j.bpsc.2017.12.004",
+  "kind": "review",
+  "finding": "A consensus review from the 2016 Interoception Summit on how to measure interoception and study its role in mental health.",
+  "strength": "moderate: expert consensus; the field is still developing reliable measures.",
+  "topics": [
+   "interoception",
+   "stress"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#interoception"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/29884281/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "butler-randall-2013",
+  "authors": "Butler, E. A., & Randall, A. K.",
+  "year": 2013,
+  "title": "Emotional coregulation in close relationships",
+  "venue": "Emotion Review, 5(2), 202–210",
+  "doi": "10.1177/1754073912451630",
+  "url": "https://doi.org/10.1177/1754073912451630",
+  "kind": "review",
+  "finding": "Defined emotional coregulation as a two-way link between partners' emotional states that helps keep both of them steady.",
+  "strength": "moderate: conceptual review of mostly small lab studies.",
+  "topics": [
+   "stress",
+   "co-regulation",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#co-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/1754073912451630 ; https://experts.arizona.edu/en/publications/emotional-coregulation-in-close-relationships/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ },
+ {
+  "id": "coan-sbarra-2015",
+  "authors": "Coan, J. A., & Sbarra, D. A.",
+  "year": 2015,
+  "title": "Social baseline theory: The social regulation of risk and effort",
+  "venue": "Current Opinion in Psychology, 1, 87–91",
+  "doi": "10.1016/j.copsyc.2014.12.021",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
+  "kind": "theory",
+  "finding": "Proposes that the brain expects to have supportive people around, which lowers perceived risk and effort; without them, coping takes more effort.",
+  "strength": "moderate: a theory supported by a growing set of mostly small studies.",
+  "topics": [
+   "stress",
+   "co-regulation"
+  ],
+  "mentioned_on": [
+   "/nervous-system.html#co-regulation"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4375548/",
+  "note": "Same work as in an earlier list; repeated here only to add where it now shows up (supp9)."
+ }
+]

@@ -1068,7 +1068,7 @@
   function openPanel(sectionId, toSearch, full) {
     lastFocus = document.activeElement;
     var pu = panel.querySelector('[data-pickup="menu"]');
-    if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); });
+    if (pu && !toSearch) loadPickUp(function () { window.TOLPickUp.mount(pu, 'menu'); if (esPage()) pu.setAttribute('lang', 'en'); });   // its ideas lead to English pages
     closeDrop();
     panel.querySelector('.tol-index').replaceWith(buildIndex({ accordion: true, open: sectionId, full: !!full }));
     renderPanelFocus();
@@ -1129,7 +1129,7 @@
 
     var bar = el('div', { class: 'tol-bar', role: 'banner' });
     bar.style.margin = (-pt) + 'px ' + (-pr) + 'px ' + pt + 'px ' + (-pl) + 'px';
-    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html', 'aria-label': 'Spread Love & Acceptance: home' },
+    bar.appendChild(el('a', { class: 'tol-brand', href: '/index.html', 'aria-label': T('Spread Love & Acceptance: home', 'Spread Love & Acceptance: inicio') },
       '<img class="tol-logo" src="/assets/img/logo-mark.svg" alt="" width="36" height="36"><span>Spread Love &amp; Acceptance</span>'));
 
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
@@ -1286,7 +1286,7 @@
       var SCENES = { start: 'garden', about: 'garden', self: 'beach', media: 'beach', relationships: 'lake', book: 'meadow', workpapers: 'river', program: 'forest', tools: 'forest' };
       var secId = (current === '/relationships.html' && 'relationships') || (hereSection && hereSection.id) || (/^\/book\//.test(current) ? 'book' : /^\/workpapers\//.test(current) ? 'workpapers' : /^\/(learn|legal)\//.test(current) ? 'about' : ''), sceneQ = secId === 'play' || body.classList.contains('is-game') ? '?scene=garden&tod=night' : '?scene=' + (SCENES[secId] || 'garden');
       if (body.hasAttribute('data-garden-nopals')) sceneQ += (sceneQ ? '&' : '?') + 'pals=off'; // the page has its own pals running about
-      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: 'The Night Garden, softly in the background', 'aria-hidden': 'true', tabindex: '-1' });
+      var gf = el('iframe', { class: 'tol-garden-bg', src: '/garden-backdrop.html' + sceneQ, title: T('The Night Garden, softly in the background', 'El Jardín de noche, suave, de fondo'), 'aria-hidden': 'true', tabindex: '-1' });
       var veil = el('div', { class: 'tol-garden-veil', 'aria-hidden': 'true' });
       body.insertBefore(veil, body.firstChild);
       body.insertBefore(gf, body.firstChild);
@@ -1486,7 +1486,7 @@
         bar.classList.add(c);
         if (c === 'is-shortname' && name) name.textContent = 'Spread Love';
       });
-      if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', 'Menu and search'); else mob.removeAttribute('aria-label');
+      if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', T('Menu and search', 'Menú y búsqueda')); else mob.removeAttribute('aria-label');
     }
     function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
     barHeightHook = barHeight;
@@ -1512,14 +1512,14 @@
       var idx = list.indexOf(here);
       var prev = list[idx - 1], next = list[idx + 1];
       if (prev || next) {
-        var pager = el('div', { class: 'tol-pager', role: 'navigation', 'aria-label': 'Previous and next' });
+        var pager = el('div', { class: 'tol-pager', role: 'navigation', 'aria-label': T('Previous and next', 'Anterior y siguiente') });
         if (pl || pr) { pager.style.marginLeft = (-pl) + 'px'; pager.style.marginRight = (-pr) + 'px'; pager.style.maxWidth = 'none'; }
         // Reading in depth? Stay in depth where the next page has a full version too.
         var pagerHref = function (it) { return inDepth && it.deep ? deepHref(it) : it.href; };
         if (prev) pager.appendChild(el('a', { href: pagerHref(prev), class: 'is-prev' },
-          '<span class="tol-pager-dir">Previous</span><span class="tol-pager-title">' + esc(label(prev)) + '</span>'));
+          '<span class="tol-pager-dir">' + T('Previous', 'Anterior') + '</span><span class="tol-pager-title">' + esc(label(prev)) + '</span>'));
         if (next) pager.appendChild(el('a', { href: pagerHref(next), class: 'is-next' },
-          '<span class="tol-pager-dir">Next</span><span class="tol-pager-title">' + esc(label(next)) + '</span>'));
+          '<span class="tol-pager-dir">' + T('Next', 'Siguiente') + '</span><span class="tol-pager-title">' + esc(label(next)) + '</span>'));
         body.insertBefore(pager, scrim);
       }
     }
@@ -1529,30 +1529,34 @@
     var foot = el('div', { class: 'tol-foot', role: 'contentinfo' });
     foot.style.margin = '2rem ' + (-pr) + 'px ' + (-pb) + 'px ' + (-pl) + 'px';
     // The privacy promise, on every page except the dashboard (which saves entries by design)
+    // (on a Spanish page the footer is in Spanish too; its links lead to English pages, so they carry hreflang="en")
+    var es = esPage(), hl = es ? ' hreflang="en"' : '';
     var promise = current === '/dashboard.html' ? '' :
-      '<p class="tol-promise">What you type into the tools and worksheets stays on your device. It is never collected or sent to us. <a href="/legal/privacy-policy.html#your-entries">How we handle your information</a></p>';
+      '<p class="tol-promise">' + T('What you type into the tools and worksheets stays on your device. It is never collected or sent to us.', 'Lo que escribes en las herramientas y las hojas de trabajo se queda en tu dispositivo. Nunca se recoge ni se nos envía.') + ' <a href="/legal/privacy-policy.html#your-entries"' + hl + '>' + T('How we handle your information', 'Cómo cuidamos tu información (en inglés)') + '</a></p>';
     foot.innerHTML = promise +
       '<span class="tol-foot-brand"><img src="/assets/img/logo-mark.svg" alt="" width="40" height="40">Spread Love &amp; Acceptance &middot; spreadloveandacceptance.com</span>' +
- (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">Every part of this program grows from the same few roots, seen across thirteen fields. <a href="/polymath.html">The polymath way &rarr;</a></p>') +
-      '<nav class="tol-foot-guides" aria-label="Guides">' +
-        '<a href="/invisible-labor-mental-load.html">The mental load</a>' +
-        '<a href="/chore-chart-for-couples.html">Fair chore chart</a>' +
-        '<a href="/how-to-stop-fighting-with-your-partner.html">How to stop fighting</a>' +
-        '<a href="/neurodivergent-relationships.html">Neurodivergent relationships</a>' +
-        '<a href="/communication-style-quiz.html">Communication style quiz</a>' +
-        '<a href="/frequency-buddies.html" data-work-hide>Cartoon for all ages</a>' +
+ (current === '/polymath.html' ? '' : '<p class="tol-foot-polymath">' + T('Every part of this program grows from the same few roots, seen across thirteen fields.', 'Todo este programa crece de unas pocas raíces, que se repiten en trece campos de estudio.') + ' <a href="/polymath.html"' + hl + '>' + T('The polymath way', 'Cómo se unen esos campos (en inglés)') + ' &rarr;</a></p>') +
+      '<nav class="tol-foot-guides" aria-label="' + T('Guides', 'Guías en inglés') + '">' +
+        (es ? '<span class="tol-foot-guides-k">Guías en inglés:</span>' : '') +
+        '<a href="/invisible-labor-mental-load.html"' + hl + '>' + T('The mental load', 'La carga mental') + '</a>' +
+        '<a href="/chore-chart-for-couples.html"' + hl + '>' + T('Fair chore chart', 'Repartir las tareas de la casa') + '</a>' +
+        '<a href="/how-to-stop-fighting-with-your-partner.html"' + hl + '>' + T('How to stop fighting', 'Cómo dejar de pelear') + '</a>' +
+        '<a href="/neurodivergent-relationships.html"' + hl + '>' + T('Neurodivergent relationships', 'Parejas neurodivergentes') + '</a>' +
+        '<a href="/communication-style-quiz.html"' + hl + '>' + T('Communication style quiz', 'Tu estilo para comunicarte') + '</a>' +
+        '<a href="/frequency-buddies.html" data-work-hide' + hl + '>' + T('Cartoon for all ages', 'Dibujos animados para todas las edades') + '</a>' +
       '</nav>' +
+      (es ? '<p class="tol-foot-es-note">Estos enlaces llevan a páginas en inglés:</p>' : '') +
       '<span class="tol-foot-links">' +
-        '<a href="/safety.html">Not safe at home?</a>' +
-        '<a href="/explore.html">Everything on this site</a>' +
-        '<a href="/contents.html">All pages</a>' +
-        '<a href="/membership.html">' + (CONFIG.openAll ? 'Email updates' : 'Membership') + '</a>' +
-        '<a href="/roadmap.html">Roadmap</a>' +
-        '<a href="/legal/privacy-policy.html">Privacy</a>' +
-        '<a href="/on-this-device.html">Stored on this device</a>' +
-        '<a href="/legal/terms-of-service.html">Terms</a>' +
-        '<a href="mailto:' + CONFIG.supportEmail + '">Contact</a>' +
-        (isApp() ? '' : '<button type="button" class="tol-install-link">Add to your home screen</button>') +
+        '<a href="/safety.html"' + hl + '>' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a>' +
+        '<a href="/explore.html"' + hl + '>' + T('Everything on this site', 'Todo el sitio') + '</a>' +
+        '<a href="/contents.html"' + hl + '>' + T('All pages', 'Todas las páginas') + '</a>' +
+        '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? T('Email updates', 'Novedades por correo') : 'Membership') + '</a>' +
+        '<a href="/roadmap.html"' + hl + '>' + T('Roadmap', 'Lo que viene') + '</a>' +
+        '<a href="/legal/privacy-policy.html"' + hl + '>' + T('Privacy', 'Privacidad') + '</a>' +
+        '<a href="/on-this-device.html"' + hl + '>' + T('Stored on this device', 'Lo que se guarda en este dispositivo') + '</a>' +
+        '<a href="/legal/terms-of-service.html"' + hl + '>' + T('Terms', 'Términos') + '</a>' +
+        '<a href="mailto:' + CONFIG.supportEmail + '">' + T('Contact', 'Contacto') + '</a>' +
+        (isApp() ? '' : '<button type="button" class="tol-install-link">' + T('Add to your home screen', 'Añadir a tu pantalla de inicio') + '</button>') +
       '</span>';
     foot.querySelector('.tol-foot-links').appendChild(quietButton('switch'));
     foot.querySelector('.tol-foot-links').appendChild(stillButton());
@@ -3009,17 +3013,18 @@
   function setStill(on, keep) {
     stillOn = !!on; if (!keep) lsSet(STILL_KEY, stillOn ? '1' : '0');
     document.documentElement.classList.toggle('tol-still', stillOn);
-    document.querySelectorAll('.tol-still-btn').forEach(function (b) {
+    // (only the still switches: Dark mode and Quiet mode share the look, and keep their own state)
+    document.querySelectorAll('.tol-still-btn:not(.tol-dark-btn):not(.tol-quiet-btn)').forEach(function (b) {
       b.setAttribute('aria-pressed', String(stillOn));
-      b.querySelector('.tol-still-state').textContent = stillOn ? 'On' : 'Off';
+      b.querySelector('.tol-still-state').textContent = stillOn ? T('On', 'Sí') : T('Off', 'No');
     });
     stillHooks.forEach(function (f) { try { f(stillOn); } catch (e) {} });
     try { document.dispatchEvent(new CustomEvent('tol-still', { detail: { on: stillOn } })); } catch (e) {}
   }
   function stillButton() {
     var b = el('button', { type: 'button', class: 'tol-still-btn', 'aria-pressed': String(stillOn) },
-      '<span class="tol-still-track" aria-hidden="true"><span></span></span>Keep the page still' +
-      '<span class="tol-still-state" aria-hidden="true">' + (stillOn ? 'On' : 'Off') + '</span>');
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + T('Keep the page still', 'Página quieta') +
+      '<span class="tol-still-state" aria-hidden="true">' + (stillOn ? T('On', 'Sí') : T('Off', 'No')) + '</span>');
     b.addEventListener('click', function () { setStill(!stillOn); });
     return b;
   }
@@ -3096,7 +3101,7 @@
     if (meta) meta.setAttribute('content', contrastOn() ? (darkNow() ? '#000000' : '#FFFFFF') : darkNow() ? '#1E1B24' : '#F5EFDE');
     document.querySelectorAll('.tol-dark-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(darkNow()));
-      b.querySelector('.tol-still-state').textContent = darkNow() ? 'On' : 'Off';
+      b.querySelector('.tol-still-state').textContent = darkNow() ? T('On', 'Sí') : T('Off', 'No');
     });
     document.querySelectorAll('.tol-quiet-btn').forEach(function (b) {
       b.setAttribute('aria-pressed', String(quietOn()));
@@ -3116,8 +3121,8 @@
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyReading); } catch (e) {} }
   function darkButton() {
     var b = el('button', { type: 'button', class: 'tol-still-btn tol-dark-btn', 'aria-pressed': String(darkNow()) },
-      '<span class="tol-still-track" aria-hidden="true"><span></span></span>Dark mode' +
-      '<span class="tol-still-state" aria-hidden="true">' + (darkNow() ? 'On' : 'Off') + '</span>');
+      '<span class="tol-still-track" aria-hidden="true"><span></span></span>' + T('Dark mode', 'Modo oscuro') +
+      '<span class="tol-still-state" aria-hidden="true">' + (darkNow() ? T('On', 'Sí') : T('Off', 'No')) + '</span>');
     b.addEventListener('click', function () { lsSet(THEME_KEY, darkNow() ? 'light' : 'dark'); applyReading(); });
     return b;
   }
@@ -3354,7 +3359,7 @@
   }
   function renderPanelFocus() {
     var host = panel && panel.querySelector('.tol-panel-focus'); if (!host) return;
-    host.innerHTML = ''; host.appendChild(focusLine('panel'));
+    host.innerHTML = ''; if (!esPage()) host.appendChild(focusLine('panel'));   // Focus mode picks English pages, so it stays off a Spanish page
   }
   function renderFocusPill() {
     Array.prototype.forEach.call(document.querySelectorAll('.tol-focus-line.is-page'), function (n) { n.remove(); });
@@ -3552,10 +3557,11 @@
         document.querySelector('meta[http-equiv="Content-Security-Policy"]') || /^\/(404|offline|garden-backdrop|pal-cam-tv|on-this-device|upset-right-now|safety|sent-this|someone-sent-you-this|outside-help|wp-11)\.html$|^\/workpapers\/fill\/wp-11\.html$/.test(current)) return;
     var main = document.querySelector('main'); if (!main) return;
     lsSet('tol-comfort-offer', 'shown:1'); ssSet('tol-offer-seen', location.pathname); // once on this device; Settings at the top is always there
-    var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
-      '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
-      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="biggest">Biggest text, and keep still</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>' +
-      '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Pick how you take things in &rarr;</a></p>');
+    var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': T('Make the site calmer or easier to read', 'Una página más tranquila o más fácil de leer') },
+      T('<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>',
+        '<p><strong>¿Te ayudaría una página más tranquila?</strong> El modo tranquilo deja todo quieto, en silencio y sencillo, sin ventanas que aparecen. La lectura fácil usa una letra clara y más espacio entre líneas. Puedes cambiarlo cuando quieras en <em>Ajustes</em>, arriba.</p>') +
+      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">' + T('Quiet mode', 'Modo tranquilo') + '</button><button type="button" data-offer="easy">' + T('Easy reading', 'Lectura fácil') + '</button><button type="button" data-offer="large">' + T('Larger text', 'Letra más grande') + '</button><button type="button" data-offer="biggest">' + T('Biggest text, and keep still', 'La letra más grande, y la página quieta') + '</button><button type="button" data-offer="no" class="is-quiet">' + T('No thanks', 'No, gracias') + '</button></p>' +
+      (esPage() ? '' : '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Pick how you take things in &rarr;</a></p>'));
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');
@@ -3564,7 +3570,7 @@
         // No thanks: the card folds down to one line where it is, so nothing on the page jumps. It goes
         // quietly once it has scrolled out of view (and the page is moved back by its height if it was above).
         var h0 = box.offsetHeight;
-        box.innerHTML = '<p class="tol-offer-done">Okay. These are always in <em>Settings</em> at the top.</p>';
+        box.innerHTML = '<p class="tol-offer-done">' + T('Okay. These are always in <em>Settings</em> at the top.', 'Está bien. Siempre están en <em>Ajustes</em>, arriba.') + '</p>';
         box.classList.add('is-done');
         var h1 = box.offsetHeight, still = document.documentElement.classList.contains('tol-still') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
         if (!still && h0 > h1) { box.style.height = h0 + 'px'; box.style.overflow = 'hidden'; void box.offsetHeight; box.style.transition = 'height .35s ease'; box.style.height = h1 + 'px'; }
@@ -3581,9 +3587,9 @@
         var foc = box.querySelector('p'); foc.setAttribute('tabindex', '-1'); foc.focus({ preventScroll: true });
         return;
       }
-      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce('Larger text is on. Change it any time in Settings.'); }
-      else if (what === 'biggest') { lsSet(SIZE_KEY, 'xxl'); setStill(true); after(); announce('The biggest text is on, and the page is kept still. Change it any time in Settings.'); }
-      else { setPreset(what, true); announce(what === 'quiet' ? 'Quiet mode is on.' : 'Easy reading is on.'); }
+      if (what === 'large') { lsSet(SIZE_KEY, 'lg'); after(); announce(T('Larger text is on. Change it any time in Settings.', 'La letra más grande está activada. Puedes cambiarla en Ajustes.')); }
+      else if (what === 'biggest') { lsSet(SIZE_KEY, 'xxl'); setStill(true); after(); announce(T('The biggest text is on, and the page is kept still. Change it any time in Settings.', 'La letra más grande está activada, y la página se queda quieta. Puedes cambiarlo en Ajustes.')); }
+      else { setPreset(what, true); announce(what === 'quiet' ? T('Quiet mode is on.', 'El modo tranquilo está activado.') : T('Easy reading is on.', 'La lectura fácil está activada.')); }
       // focus goes to whatever came next (the page's first heading if nothing else), so a screen reader lands somewhere real
       var nx = box.nextElementSibling, m = document.getElementById('tol-main'); box.remove();
       var tgt = (nx && nx.matches && nx.matches('h1, h2, h3, p, section, header') ? nx : null) || document.querySelector('main h1, main h2');
@@ -3628,13 +3634,15 @@
     }
     var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     var steps = ios
-      ? '<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>'
-      : '<li>Open your browser’s menu <span aria-hidden="true">(&#8942; or &#8943;)</span>.</li><li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li><li>Confirm, and look for the two little bubbles on your home screen.</li>';
+      ? T('<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>',
+          '<li>Toca el botón <strong>Compartir</strong> <span aria-hidden="true">(el cuadrado con una flecha)</span>.</li><li>Baja y toca <strong>Agregar a pantalla de inicio</strong>.</li><li>Toca <strong>Agregar</strong>.</li>')
+      : T('<li>Open your browser’s menu <span aria-hidden="true">(&#8942; or &#8943;)</span>.</li><li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li><li>Confirm, and look for the two little bubbles on your home screen.</li>',
+          '<li>Abre el menú del navegador <span aria-hidden="true">(&#8942; o &#8943;)</span>.</li><li>Toca <strong>Agregar a la pantalla principal</strong> o <strong>Instalar app</strong>.</li><li>Confirma, y busca las dos burbujitas en tu pantalla.</li>');
     var d = el('div', { class: 'tol-install', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-install-h' },
       '<div class="tol-install-card"><img src="/assets/icons/icon-192.png" alt="" width="72" height="72">' +
-      '<h2 id="tol-install-h">Keep us on your home screen</h2>' +
-      '<p>It opens like an app, works without a connection, and nothing you type ever leaves your phone.</p>' +
-      '<ol>' + steps + '</ol><p><a href="/install.html">More help, and what about widgets</a></p><button type="button" class="tol-install-close">Got it</button></div>');
+      '<h2 id="tol-install-h">' + T('Keep us on your home screen', 'Tennos a mano en tu pantalla de inicio') + '</h2>' +
+      '<p>' + T('It opens like an app, works without a connection, and nothing you type ever leaves your phone.', 'Se abre como una app, funciona sin conexión, y nada de lo que escribes sale de tu teléfono.') + '</p>' +
+      '<ol>' + steps + '</ol><p><a href="/install.html"' + (esPage() ? ' hreflang="en"' : '') + '>' + T('More help, and what about widgets', 'Más ayuda (en inglés)') + '</a></p><button type="button" class="tol-install-close">' + T('Got it', 'Entendido') + '</button></div>');
     function close() { d.remove(); document.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }
     d.addEventListener('click', function (e) { if (e.target === d || e.target.classList.contains('tol-install-close')) close(); });
@@ -3655,8 +3663,8 @@
       if (lsGet('tol-install-asked') || ssGet('tol-invite-seen') || document.querySelector('.tol-breathe:not([hidden]), .tol-install, .tol-wx')) return;
       lsSet('tol-install-asked', '1'); ssSet('tol-invite-seen', '1');
       var t = el('div', { class: 'tol-invite', role: 'status' },
-        '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>Want us on your home screen? It opens like an app, and nothing you type leaves your phone.</p>' +
-        '<span><button type="button" class="tol-invite-yes">Show me how</button><button type="button" class="tol-invite-no">Not now</button></span>');
+        '<img src="/assets/img/logo-mark.svg" alt="" width="44" height="44"><p>' + T('Want us on your home screen? It opens like an app, and nothing you type leaves your phone.', '¿Nos quieres en tu pantalla de inicio? Se abre como una app, y nada de lo que escribes sale de tu teléfono.') + '</p>' +
+        '<span><button type="button" class="tol-invite-yes">' + T('Show me how', 'Muéstrame cómo') + '</button><button type="button" class="tol-invite-no">' + T('Not now', 'Ahora no') + '</button></span>');
       t.querySelector('.tol-invite-yes').addEventListener('click', function () { t.remove(); showInstall(); });
       t.querySelector('.tol-invite-no').addEventListener('click', function () { t.remove(); });
       document.body.appendChild(t);
@@ -3909,7 +3917,7 @@
   function buildBreathe(body) {
     var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F9D9B8" stroke="#8A7BB8" stroke-width="1.4"/></svg>';
     var btn = el('button', { type: 'button', class: 'tol-breathe-btn', 'aria-haspopup': 'dialog' }, moon + '<span>' + T('Breathe', 'Respirar') + '</span>');
-    btn.setAttribute('aria-label', 'Breathe: take a breathing break');
+    btn.setAttribute('aria-label', T('Breathe: take a breathing break', 'Respirar: una pausa para respirar'));
     body.appendChild(btn);
     keepBreatheClear(btn);
     var loading = false;

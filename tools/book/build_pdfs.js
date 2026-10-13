@@ -87,7 +87,7 @@ function indexPages(pages, terms, from, to) {
 }
 
 async function render(page) {
-  return page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, outline: true, tagged: true });
+  return page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, outline: true, tagged: false });
 }
 
 async function makeBook(ctx, file, opts = {}) {

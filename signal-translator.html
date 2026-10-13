@@ -320,6 +320,26 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .verdict{border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet);padding:14px 16px;margin:0 0 14px}
 .verdict .vk{font-family:var(--display);font-size:.95rem;font-weight:600;color:var(--muted);margin:0 0 4px}
 .modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.st-sub{font-family:var(--display);font-size:1.12rem;line-height:1.45;color:var(--muted);margin:.35rem 0 1rem;max-width:58ch}
+.st-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 6px}
+.st-modes .mode{display:flex;align-items:flex-start;gap:12px;min-height:72px;padding:14px 16px;border-radius:14px;border-width:2px;font-size:1.08rem;line-height:1.3}
+.st-modes .mode input{margin-top:.2rem;flex:none}
+.st-modes .mode span{display:flex;flex-direction:column;gap:4px;min-width:0}
+.st-modes .mode small{font-weight:400;font-size:.88rem;color:var(--muted);line-height:1.4}
+.st-modes .mode:has(input:checked){background:color-mix(in srgb,var(--b) 8%,var(--sheet));border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
+@media (max-width:560px){.st-modes{grid-template-columns:1fr}.st-modes .mode{min-height:0}}
+.tryrow{margin-top:12px}
+.tryk{font-family:var(--display);font-weight:600;font-size:.95rem;margin:0 0 6px}
+.trylist{display:flex;flex-wrap:wrap;gap:8px}
+.tryex{display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:100%;min-height:44px;padding:7px 12px;border:1.5px solid var(--line);border-radius:12px;background:var(--sheet);font-family:var(--display);font-size:.92rem;line-height:1.35;text-align:left;overflow-wrap:anywhere}
+.tryex:hover{border-color:var(--b)}
+.tryw{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+details.st-acc{margin-top:14px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet)}
+details.st-acc summary{cursor:pointer;padding:10px 14px;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
+.st-acc-b{padding:0 14px 6px}
+.st-acc-b p{margin:.2rem 0 .7rem;max-width:66ch}
+.optwrap{position:relative}
+.optwrap .optcopy{margin:-2px 0 10px 12px;padding:6px 12px;font-size:.85rem}
 .mode{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);cursor:pointer;font-weight:600;font-size:1rem}
 .mode:has(input:checked){border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
 .mode input{accent-color:var(--b);width:1.1rem;height:1.1rem;margin:0}
@@ -442,12 +462,13 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
   <main id="main" data-research>
   <header class="top">
     <div class="kicker st-wd">Want to understand why messages land differently? <a href="wired-differently.html">Read: Wired differently</a></div>
-    <h1>The Signal Translator: a free tone checker for texts</h1>
-    <p class="lede">Type what you plan to say or send.<span class="lede-more"> See how it may land, and get a clearer version that keeps your ask.</span> Got a message that stung or confused you? Choose <button type="button" class="linkbtn modelink" id="ledeGot" aria-controls="phrase">Someone sent me this</button> to read it kindly.<span class="lede-more"> Everything else is optional.</span></p>
-    <div class="modes" role="radiogroup" aria-label="Whose message is this?">
-      <label class="mode"><input type="radio" name="stmode" value="send" checked><span>I&rsquo;m about to send this</span></label>
-      <label class="mode"><input type="radio" name="stmode" value="got"><span>Someone sent me this</span></label>
+    <h1>Text message checker</h1>
+    <p class="st-sub">the Signal Translator: see how a message may land, before you send it &mdash; or understand one you got</p>
+    <div class="modes st-modes" role="radiogroup" aria-label="What would you like to do?">
+      <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>Check a message before I send it</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
+      <label class="mode"><input type="radio" name="stmode" value="got"><span><b>Help me read a message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>
     </div>
+    <p class="lede">It reads the words only, on your device. Nothing you type is saved or sent.<span class="lede-more"> Everything below the box is optional.</span></p>
   </header>
 
   <!-- THE SENTENCE (first) -->
@@ -472,8 +493,19 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
         <option value="caregiver">Someone I care for, or who cares for me</option>
       </select>
     </div>
+    <div class="tryrow" id="tryRow">
+      <p class="tryk" id="tryK">Try an example</p>
+      <div class="trylist" role="group" aria-labelledby="tryK">
+        <button type="button" class="tryex" data-mode="send" data-t="You never help with anything around here."><span class="tryw">To send</span>You never help with anything around here.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Per my last email, the report is due Friday."><span class="tryw">To send, at work</span>Per my last email, the report is due Friday.</button>
+        <button type="button" class="tryex" data-mode="send" data-t="Can you pick the kids up at 5? I'm stuck at work."><span class="tryw">To send</span>Can you pick the kids up at 5? I&rsquo;m stuck at work.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="k."><span class="tryw">I got</span>k.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="Fine. Do what you want."><span class="tryw">I got</span>Fine. Do what you want.</button>
+        <button type="button" class="tryex" data-mode="got" data-t="you're the worst 😂"><span class="tryw">I got</span>you&rsquo;re the worst 😂</button>
+      </div>
+    </div>
     <div class="field presetrow">
-      <label for="presetSel">Or try an example</label>
+      <label for="presetSel">More examples</label>
       <select id="presetSel"></select>
     </div>
     <div class="actions">
@@ -482,6 +514,15 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
       <span class="msg" id="msg" role="alert"></span>
     </div>
 
+
+    <details class="st-acc" id="stAcc">
+      <summary>How accurate is this?</summary>
+      <div class="st-acc-b">
+        <p>It&rsquo;s a rule-based reader. It looks for patterns in the words (&ldquo;always,&rdquo; a bare order, a hint, a joke marker, a threat) and reads them the way a careful person might. It can&rsquo;t hear a tone of voice, see a face, or know your history together.</p>
+        <p><b>On everyday messages it&rsquo;s right about 9 times in 10.</b> We checked it against messages people labelled by hand, between partners, co-parents, housemates, friends, family and coworkers, written the way people really text. On 101 messages it had never been tuned on, it read how the message may land the same way a person did 92 times. It&rsquo;s least sure with sarcasm that has no tell-tale words, in-jokes, and lines that only make sense with what came before.</p>
+        <p>So use it as a second opinion, not a verdict. Check what it says against what you know about the person.</p>
+      </div>
+    </details>
 
     <details class="fine" id="fine">
       <summary>More options <span class="fine-sub">(who it&rsquo;s for, how you&rsquo;ll send it, how their brain works)</span></summary>
@@ -2038,6 +2079,8 @@ document.addEventListener("change", e=>{ if(e.target && e.target.id==="briefOn")
 document.addEventListener("click", e=>{
   if(e.target.closest && e.target.closest(".st-simple-btn")) toggleSimple();
   if(e.target.closest && e.target.closest("#notesOpen")){ const N=$("#notes"); if(N){ N.classList.remove("is-brief"); N.classList.add("st-open"); } const h=$("#sheetH"); if(h){ h.setAttribute("tabindex","-1"); h.focus(); } }
+  const oc = e.target.closest && e.target.closest(".optcopy, .vbest-copy");
+  if(oc){ const t = oc.getAttribute("data-say")||""; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{oc.textContent="Copied";},()=>{oc.textContent="Select and copy manually";}); }
   const cp = e.target.closest && e.target.closest("#copyBrief");
   if(cp){ const t = cp.getAttribute("data-say")||""; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{cp.textContent="Copied";},()=>{cp.textContent="Select and copy manually";}); }
 });
@@ -2279,7 +2322,8 @@ function run(){
   if(NOT_PARENT.test(text)){ const pw = (text.match(/\bnot my (?:real )?(mum|mom|mother|dad|father)\b/i)||["","Mum"])[1].toLowerCase(); const who = pw==="mom" ? "Mom" : /dad|father/.test(pw) ? "Dad" : "Mum";
     vtop+='<p class="small st-grief"><b>Often this is grief talking.</b> '+(/\bstop\b|can.t tell me/i.test(text) ? 'You can still ask for what you need: &ldquo;I miss '+who+', and I&rsquo;d like to be treated more like my age.&rdquo;' : 'Try: &ldquo;I&rsquo;m not angry at you. I&rsquo;m just missing '+who+' today.&rdquo;')+' Living with grandparents, a carer or other family? The <a href="/teens.html">teen page</a> has more.</p>'; }
   if(relId==="friend" && (found.jab || ONLY_ONE.test(text))) vtop+='<p class="small"><b>It hurts to feel like the only one reaching out.</b> Saying you miss them, and asking for one small thing, usually lands better than keeping score.</p>';
-  if(an.control) vtop+=CONTROL_SELF;
+  if(an.control && an.control.kind==="fear") vtop+='<p class="vhelp"><b>What you&rsquo;ve written says someone feels afraid or controlled.</b> That matters much more than the wording, and a softer version can&rsquo;t fix it.</p>'+SAFETY_GOT;
+  else if(an.control) vtop+=CONTROL_SELF;
   if(an.safety && !found.legal) vtop+='<p class="small"><b>The worry is valid.</b> A safety concern is worth saying plainly. The clearer version keeps the fact and asks for a habit that keeps it safe every time.</p>';
   // Easy reading: the words to send come straight after the plain line, the simpler English first
   let vdetail = '';
@@ -2287,7 +2331,7 @@ function run(){
   if((easyOn() || phoneW()) && !rw.unchanged){ const cut = vtop.indexOf('<p class="vk">How it may land'); vdetail = vtop.slice(cut); vtop = vtop.slice(0, cut); }
   if(!rw.unchanged){
     const sm1 = simpleLine(opts[0].say);
-    vtop+='<p class="vk">A clearer way to say it</p>'+(easyOn() ? sm1.replace('class="st-simple-only"','class="st-simple-only st-simple-first"') : '')+'<p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+(easyOn() ? '' : sm1);
+    vtop+='<p class="vk">A clearer way to say it</p>'+(easyOn() ? sm1.replace('class="st-simple-only"','class="st-simple-only st-simple-first"') : '')+'<p class="vbest" id="vbest">'+phHTML(opts[0].say)+'</p>'+(easyOn() ? '' : sm1)+'<button class="ghost vbest-copy" type="button" data-say="'+esc(opts[0].say)+'">Copy</button>';
     vtop+='<div class="actions" style="margin:0"><button class="go" type="button" id="copyBest">Copy this</button></div>';
     // the original right beside it, and one tap to keep it
     vtop+='<div class="vmine"><p class="vk">Your words</p><p class="vmine-t">'+esc(text)+'</p><button class="ghost" type="button" id="keepMine">Keep mine</button><span class="small" id="keepMineMsg" role="status"></span></div>';
@@ -2315,7 +2359,7 @@ function run(){
   if(an.asks.length && (found.oblig||found.impera||found.urgent||found.should)) askBits.push('<span><b>Why:</b> '+(an.missing.why?'missing':'given')+'</span>');
   if(askBits.length) sum+='<p class="askline">'+askBits.join("")+'</p>';
   sum+='<h3 class="say-h">Choose one way to say it</h3><p class="small">Words in <span class="ph">dashed boxes</span> are blanks for your own words. The one you pick goes on the talking notes. <a href="#chg">Why each change was made</a>.</p>';
-  sum+='<div role="radiogroup" aria-label="Ways to say it">'+opts.map((o,i)=>'<label class="opt"><input type="radio" name="saypick" value="'+esc(o.id)+'"'+(i===0?' checked':'')+'> <b>'+esc(o.fit)+'</b><span class="why">'+esc(o.why)+'</span><span class="saytext">'+phHTML(o.say)+'</span>'+simpleLine(o.say, "span")+'</label>').join("")+'</div>';
+  sum+='<div role="radiogroup" aria-label="Ways to say it">'+opts.map((o,i)=>'<div class="optwrap"><label class="opt"><input type="radio" name="saypick" value="'+esc(o.id)+'"'+(i===0?' checked':'')+'> <b>'+esc(o.fit)+'</b><span class="why">'+esc(o.why)+'</span><span class="saytext">'+phHTML(o.say)+'</span>'+simpleLine(o.say, "span")+'</label>'+(o.id==="yours" ? '' : '<button class="ghost optcopy" type="button" data-say="'+esc(o.say)+'" aria-label="Copy: '+esc(o.fit)+'">Copy</button>')+'</div>').join("")+'</div>';
   sum+='<div class="note-tools"><label>Priority<select id="pickPri"><option value="1"'+(lastTopic.pri==="1"?' selected':'')+'>Say first</option><option value="2"'+(lastTopic.pri==="2"?' selected':'')+'>If there is time</option><option value="3"'+(lastTopic.pri==="3"?' selected':'')+'>Park</option></select></label><label>Care<select id="pickCare"><option value="1"'+(lastTopic.care==="1"?' selected':'')+'>Light</option><option value="2"'+(lastTopic.care==="2"?' selected':'')+'>Careful</option><option value="3"'+(lastTopic.care==="3"?' selected':'')+'>Heavy</option></select></label></div>';
   sum+='<div class="cue'+(cue.id==="stop"?' stop':'')+'"><b>'+esc(cue.label)+'.</b> '+esc(cue.when)+' '+esc(cue.how)+'</div>';
   if(bstate==="d") sum+='<p class="small"><b>Timing:</b> '+esc(B)+' is shut down. Even the clearest version is best saved for later.</p>';
@@ -2534,7 +2578,7 @@ function runReceived(text){
   const recvPlain = rv.head ? rv.head : rv.crossed ? ["fight","Some of this crossed a line. You don\u2019t have to answer right now."]
     : (rv.found && rv.found.length) ? ["hurt","This may sound harsher than they meant. Here are kinder ways to read it."]
     : ["ok","This looks okay. Nothing here needs decoding."];
-  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.control ? CONTROL_GOT : rv.danger && !(rv.selfHarm && !an.danger) ? SAFETY_GOT : '');
+  h += '<div class="verdict recv'+(rv.danger?' danger-card':'')+'" id="verdict"><p class="vplain v-'+recvPlain[0]+'" id="vplain">'+esc(recvPlain[1])+'</p><p class="vk">What it might mean</p><ul class="rmean">'+rv.meanings.map(m=>'<li>'+esc(m)+'</li>').join('')+'</ul>'+(rv.fear ? '' : rv.control ? CONTROL_GOT : rv.danger && !(rv.selfHarm && !an.danger) ? SAFETY_GOT : '');
   if(rv.literal.length) h += '<div class="literal"><p class="small" style="margin:8px 0 2px"><b>Figures of speech, in plain words:</b></p><ul class="ul">'+rv.literal.map(x=>'<li>&ldquo;'+esc(x.text)+'&rdquo; usually means '+esc(x.means)+'.</li>').join('')+'</ul></div>';
   h += '</div>';
   if(rv.crossed && !rv.danger) h += '<div class="verdict line-card" role="note"><p class="vk">Some of this crossed a line</p><p>Name-calling, put-downs and threats aren&rsquo;t okay, whatever was going on for them. You don&rsquo;t have to answer tonight, and you&rsquo;re allowed to step away.</p>'
