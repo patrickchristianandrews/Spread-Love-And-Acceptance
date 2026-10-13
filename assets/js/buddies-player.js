@@ -94,7 +94,10 @@
     s1e2: 'The wind blows the song pages away, and the pals try to reach them from a windy rooftop. One pal snaps ("Why won\u2019t you just help?"), and they misunderstand each other for a while, then say sorry and make up.',
     s1e3: 'One pal quietly carries far too much and gets very tired. Stepping stones across a shallow creek, and soft falling snow. The pals argue and Sugarfoot cries a little, then they rest in a warm cabin and share the load.',
     s1e4: 'The pals\u2019 kite falls into the waves; they don\u2019t go in after it, and Hopper the frog swims out to help. They blame each other for a while, have a cozy dream under the sea, then find out what really broke.',
-    s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark; they say sorry, rest, and the moon helps them find the way.'
+    s1e5: 'At night in the forest, the pals take a wrong turn, their lantern grows dim, and they argue. They are never in the pitch dark; they say sorry, rest, and the moon helps them find the way.',
+    s2e1: 'The pals sail out of sight of land, the waves get big, and Sugarfoot is scared of the deep water. The pals snap at each other, then say sorry. Later Tidbit misses home, and gets a hug.',
+    s2e2: 'The pals argue about who did more work. Thick fog rolls in and they lose sight of each other for a little while, though they can always hear each other. A trail of lanterns brings them back together.',
+    s2e3: 'Tidbit feels left out when Sugarfoot and a new friend hit it off. She gets loud, knocks over some books, says unkind things and runs off to the harbor. They talk it through, say sorry and make room for everyone.'
   };
   // shuffle: every episode once, in a random order, then a fresh order (never the same one twice in a row)
   function shufflePick(cur) {
@@ -1893,7 +1896,7 @@
   // /assets/audio/buddies/<episode>/<key>.mp3, listed in index.json. A line plays its recording through
   // Web Audio (reliable on phones once Play has been pressed); a line with no recording falls back to
   // the device's own speech, and then to captions only.
-  var PLAYER_VER = '3 Oct · 1'; // shown under the player, so we can tell which version a browser has
+  var PLAYER_VER = '13 Oct · 1'; // shown under the player, so we can tell which version a browser has
   var REC = '2609c'; // bump whenever the recordings are redone, so no browser plays an old copy
   var CL = { base: '/assets/audio/buddies/', maps: {}, ready: {}, bufs: {}, got: {}, src: null, gain: null, token: 0, lastFx: -99 };
   function ckey(who, text) { var h = 0x811c9dc5, s = who + '|' + text; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
