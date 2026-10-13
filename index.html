@@ -641,6 +641,30 @@
   html.tol-quiet:not(.hh-all) .read .hh :is(.hh-offer-slot, .hh-app, .hh-ways),
   html.tol-quiet:not(.hh-all) .read > :is(#start-where, #guides, #explore, [data-app-ad], .cb-panel, .cb-extra){ display:none !important; }
   html.tol-quiet.hh-all .read .hh-quiet button{ display:none; }
+  /* What's here: the whole site in eight doors (find10) */
+  .read .hh-map{ margin:.2rem 0 1rem; }
+  .read .hh .hh-map-h{ margin:0 0 .5rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; line-height:1.3; color:var(--ink, #2B2620); }
+  .read .hh-map-doors{ display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:.55rem; margin:0; padding:0; list-style:none; }
+  .read .hh .hh-map-doors li{ margin:0; padding:0; width:auto; max-width:none; display:flex; }
+  .read .hh-map-doors li::before{ content:none; }
+  .read .hh-map-doors a{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"i t" "c c" "n n"; align-items:center; gap:.25rem .45rem; width:100%; box-sizing:border-box; min-height:48px; padding:.65rem .7rem .7rem;
+    border-radius:16px; border:1px solid #E6DAF3; background:#FFFFFF; color:var(--ink, #2B2620); text-decoration:none; box-shadow:0 8px 20px -16px rgba(78,63,107,.55); }
+  .read .hh-map-doors a:hover{ border-color:#B9A2DD; }
+  .read .hh-map-doors a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .read .hh-map-i{ grid-area:i; font-size:1.15rem; line-height:1; }
+  .read .hh-map-t{ grid-area:t; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1rem; line-height:1.2; }
+  .read .hh-map-c{ grid-area:c; justify-self:start; padding:.05rem .45rem; border-radius:999px; font:500 .72rem/1.5 "IBM Plex Mono", ui-monospace, monospace; color:#6B4A12; background:#FFF0D9; }
+  .read .hh-map-n{ grid-area:n; font-size:.85rem; line-height:1.35; color:var(--ink-soft, #5A5346); }
+  .read .hh .hh-map-all{ margin:.55rem 0 0; font-size:.95rem; }
+  .read .hh-map-all a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+  .read .hh .hh-mcm .mcm{ margin:.4rem 0 1rem; max-width:none; }
+  .read .hh-ways .home-find{ margin:.4rem 0 1rem; }
+  .read .hh .hh-find-sub{ margin:0 0 .5rem; font-size:.93rem; color:var(--ink-soft, #5A5346); }
+  @media (max-width:900px){ .read .hh-map-doors{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+  @media (max-width:640px){ .read .hh-map-doors a{ padding:.55rem .6rem .6rem; border-radius:14px; } .read .hh-map-n{ font-size:.82rem; } .read .hh-map-t{ font-size:.96rem; } }
+  html.tol-quiet .read .hh-map-doors a{ background:#FFFDF7; border-color:var(--line, #D9CBA3); box-shadow:none; border-radius:10px; }
+  html.tol-quiet .read .hh-map-i{ display:none; }
+  html.tol-quiet:not(.hh-all) .read .hh .hh-mcm{ display:none; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/start-where.js" defer></script>
@@ -978,5 +1002,31 @@
 <script src="/assets/js/app-ad.js" defer></script>
 <script src="/assets/js/message-check-mini.js" defer></script>
 <script src="/assets/js/start-finder.js" defer></script>
+<script>
+/* What's here: the counts come from the menu and the tools list, so they stay right as pages are added */
+document.addEventListener('DOMContentLoaded', function () {
+  function set(k, v) { Array.prototype.forEach.call(document.querySelectorAll('[data-hh-count="' + k + '"]'), function (n) { n.textContent = v; }); }
+  var M = window.TOLSiteMap;
+  if (M) {
+    var pages = {};
+    M.sections.concat(M.menu).forEach(function (g) { g.items.forEach(function (it) { if (it.href && it.href.charAt(0) === '/') pages[it.href.split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html')] = 1; }); });
+    set('pages', ' (' + Object.keys(pages).length + ' pages)');
+    var book = M.sections.filter(function (s) { return s.id === 'book'; })[0];
+    if (book) set('chapters', book.items.filter(function (it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d|understanding-\d+-[a-z-]+|afterword)\.html$/.test(it.href || ''); }).length + ' chapters');
+    var read = M.menu.filter(function (g) { return g.id === 'read'; })[0], rp = {};
+    if (read) { read.items.forEach(function (it) { if (it.href) rp[it.href.split(/[?#]/)[0]] = 1; }); set('read', Object.keys(rp).length + ' pages'); }
+  }
+  // the tools list loads after the page, only for the numbers
+  window.addEventListener('load', function () {
+    var sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js';
+    sc.onload = function () {
+      var T = window.TOLTools || []; if (!T.length) return;
+      function n(t) { return T.filter(function (x) { return x.type === t; }).length; }
+      set('tools', T.length + ' tools'); set('calm', n('calm') + ' calm tools'); set('play', n('play') + ' games');
+    };
+    document.head.appendChild(sc);
+  });
+});
+</script>
 </body>
 </html>
