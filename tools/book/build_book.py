@@ -513,7 +513,7 @@ def examples():
     out.sort(key=lambda x: order[x['chapter']])
     for n, x in enumerate(out, 1):
         x['n'] = n
-        x['id'] = 'ex-' + re.sub(r'[^a-z0-9-]+', '-', str(x.get('id') or n).lower()).strip('-')
+        x['id'] = re.sub(r'[^a-z0-9-]+', '-', str(x.get('id') or 'ex-%d' % n).lower()).strip('-')
     return out
 
 
@@ -535,8 +535,9 @@ def ex_html(x):
     body = read(x['path'])
     body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
     title = x.get('title') or 'A filled-in example'
-    return ('<!-- book-ex:start -->\n<div class="book-ex-wrap no-bubble" id="%s" data-ex-n="%d" data-ex-title="%s">%s</div>\n<!-- book-ex:end -->') % (
-        esc(x['id']), x['n'], esc(title), body.strip())
+    # the snippet carries its own id (x['id']) on its <figure>; the wrapper only carries the number
+    return ('<!-- book-ex:start -->\n<div class="book-ex-wrap no-bubble" data-ex-n="%d" data-ex-title="%s">%s</div>\n<!-- book-ex:end -->') % (
+        x['n'], esc(title), body.strip())
 
 
 def place_idea(s, n, block):
@@ -1011,7 +1012,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
         s += '<section class="pe-back pe-lof" id="examples" style="--pc:%s">%s<h1 class="pe-back-h">List of filled-in examples</h1><ol class="pe-lof-list">' % (col, mark('examples'))
         for x in exs:
             s += '<li><a href="#%s--%s"><span class="pe-lof-n">Example %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
-                x['chapter'], x['id'], x['n'], esc(x.get('title', '')), esc(x.get('tool', '') or SHORT[x['chapter']]), pg('ex-%d' % x['n']))
+                x['chapter'], x['id'], x['n'], esc(x.get('title', '')), esc(' · '.join(v for v in (x.get('who'), SHORT[x['chapter']]) if v)), pg('ex-%d' % x['n']))
         s += '</ol></section>'
     # research notes
     n_refs = sum(len(v) for v in notes.values())

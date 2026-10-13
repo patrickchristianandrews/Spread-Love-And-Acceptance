@@ -67,7 +67,7 @@
     frog: { name: 'Hopper the frog', pitch: 0.62, rate: 1.02, where: 'ground', h: 26 },
     butterfly: { name: 'the butterfly', pitch: 1.9, rate: 1.05, where: 'flutter', h: 16 },
     squirrel: { name: 'Nutmeg the squirrel', pitch: 1.7, rate: 1.16, where: 'ground', h: 40 },
-    lumi: { name: 'Lumi the red panda', pitch: 1.45, rate: 0.92, where: 'ground', h: 46 }
+    lumi: { name: 'Lumi the red panda', pitch: 1.45, rate: 0.92, where: 'ground', h: 62 }
   };
   var PALS = { tidbit: { name: 'Tidbit', look: 'collar', pitch: 1.6, rate: 1.08 }, sugarfoot: { name: 'Sugarfoot', look: 'drop', pitch: 1.35, rate: 0.95 } };
   var NARRATOR = { name: 'Narrator', pitch: 1.0, rate: 0.95 };
@@ -934,7 +934,7 @@
     }
     function drawBoatFront(g) {
       if (S.props.boat == null) return;
-      var bs = boatSpan(), y = G + boatBob(bs.c), a = bs.a, b = bs.b, top = y - 16;
+      var bs = boatSpan(), y = G + boatBob(bs.c), a = bs.a, b = bs.b, top = y - 9;
       g.fillStyle = '#C9784A'; g.beginPath(); g.moveTo(a - 10, top - 6); g.lineTo(b + 14, top - 8); g.quadraticCurveTo(b + 2, y + 26, b - 30, y + 30); g.lineTo(a + 24, y + 30); g.quadraticCurveTo(a, y + 22, a - 10, top - 6); g.closePath(); g.fill();
       rr(g, a - 12, top - 9, b - a + 28, 7, 3, '#8A4E2E');
       g.strokeStyle = 'rgba(255,240,220,.35)'; g.lineWidth = 1.2; g.beginPath(); g.moveTo(a + 2, top + 10); g.lineTo(b + 4, top + 9); g.stroke();
@@ -943,7 +943,6 @@
       if (S.scene === 'sea') { // the water lapping at the hull
         g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 1.6; g.beginPath();
         for (var x = a - 6; x <= b + 10; x += 4) { var yy = y + 24 + Math.sin(x * 0.12 + S.t * 2.2) * (S.reduced ? 0.6 : 2); if (x === a - 6) g.moveTo(x, yy); else g.lineTo(x, yy); } g.stroke();
-        var wg = g.createLinearGradient(0, y + 24, 0, y + 40); wg.addColorStop(0, 'rgba(62,141,191,.75)'); wg.addColorStop(1, 'rgba(44,111,158,.95)'); g.fillStyle = wg; g.fillRect(a - 20, y + 24, b - a + 50, 22);
       }
     }
     // a string of paper lanterns across the top: the lit ones glow (a new one lights up with a little bloom)
@@ -1334,7 +1333,7 @@
         if (talk > 0.05) circ(g, 0, -12.8, 0.8 + talk * 0.5, '#F7A8C2');
       },
       lumi: function (g, t, talk, blink) { // Lumi the red panda: round and fluffy, a curl on top, a rose scarf, and her little lantern
-        var sw = S.reduced ? 0 : Math.sin(t * 2.2) * 0.18, dk = S.geo ? S.geo.dark || 0 : 0;
+        var sw = S.reduced ? 0 : Math.sin(t * 2.2) * 0.18, dk = S.geo ? S.geo.dark || 0 : 0; g.save(); g.scale(1.35, 1.35);
         // the big striped tail, swishing
         g.save(); g.translate(-12, -14); g.rotate(-0.5 + sw); ell(g, -10, -10, 9, 20, '#C8613A', 0.3); [0, 1, 2].forEach(function (k) { ell(g, -10 + k * 1.6, -22 + k * 9, 8.6, 2.4, '#8E3F26', 0.3); }); g.restore();
         ell(g, -6, -2, 4.5, 2.4, '#4A2A22'); ell(g, 6, -2, 4.5, 2.4, '#4A2A22'); // paws
@@ -1352,7 +1351,7 @@
         // the lantern, held out in one paw (it glows when it's dim out)
         g.save(); g.translate(14, -22); g.rotate(sw * 0.5); line(g, -4, 2, 2, -2, '#4A2A22', 3); line(g, 2, -2, 2, 4, '#5A4A3A', 1);
         if (dk > 0.15 || S.weather === 'fog') { var lg = g.createRadialGradient(2, 12, 1, 2, 12, 26); lg.addColorStop(0, 'rgba(255,214,140,.6)'); lg.addColorStop(1, 'rgba(255,214,140,0)'); g.fillStyle = lg; g.fillRect(-24, -14, 52, 52); }
-        rr(g, -3, 4, 10, 13, 3, '#FFD98A'); rr(g, -4, 3, 12, 2.4, 1, '#5A4A3A'); rr(g, -4, 16, 12, 2.4, 1, '#5A4A3A'); rr(g, -0.5, 7, 5, 7, 2, 'rgba(255,248,220,.9)'); g.restore();
+        rr(g, -3, 4, 10, 13, 3, '#FFD98A'); rr(g, -4, 3, 12, 2.4, 1, '#5A4A3A'); rr(g, -4, 16, 12, 2.4, 1, '#5A4A3A'); rr(g, -0.5, 7, 5, 7, 2, 'rgba(255,248,220,.9)'); g.restore(); g.restore();
       },
       squirrel: function (g, t, talk, blink) {
         g.fillStyle = '#B5652F'; g.beginPath(); g.moveTo(-6, -4); g.bezierCurveTo(-30, -2, -30, -44, -12, -44); g.bezierCurveTo(-2, -44, -8, -30, -14, -26); g.bezierCurveTo(-18, -18, -12, -8, -6, -4); g.fill();
