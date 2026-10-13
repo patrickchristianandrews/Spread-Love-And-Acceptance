@@ -255,7 +255,7 @@
       var h = C.balanceHandoff(end.lastBal);
       if (h && names && names[h.from] && names[h.to]) text = 'Move about ' + f1(h.hours) + ' hour' + (h.hours === 1 ? '' : 's') + ' a week of regular jobs from ' + names[h.from] + ' to ' + names[h.to] + ', for the next two weeks, and write the change on the job list.';
     }
-    if (pick.key === 'as' && pick.heavy && pick.heavy.length && pick.status !== 'worse') why = 'How much each person is carrying didn’t come down for everyone: ' + pick.heavy.map(function (p) { return p.name; }).join(' and ') + (pick.heavy.length === 1 ? ' is' : ' are') + ' still at a high load.';
+    if (pick.key === 'as' && pick.heavy && pick.heavy.length && pick.status !== 'worse') why = pick.heavy.map(function (p) { return p.name; }).join(' and ') + (pick.heavy.length === 1 ? ' is' : ' are') + ' still at a high load (0.60 or more on How much are you carrying?). That is about the load, not the person.';
     var out = { key: pick.key, why: why, text: text, link: s.link };
     if (setup && setup.endBand.key === 'low' && setup.change < SHIFT.wb) out.extra = 'If it still feels stuck after a month of trying, outside support, like a counselor or a trusted mediator, is worth considering.';
     return out;

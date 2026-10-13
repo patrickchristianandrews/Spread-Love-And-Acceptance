@@ -320,7 +320,7 @@ q.w{quotes:"\201C" "\201D";font-family:var(--mono);font-size:.8rem;background:co
 .verdict{border:1.5px solid var(--line);border-radius:var(--radius);background:var(--sheet);padding:14px 16px;margin:0 0 14px}
 .verdict .vk{font-family:var(--display);font-size:.95rem;font-weight:600;color:var(--muted);margin:0 0 4px}
 .modes{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
-.st-sub{font-family:var(--display);font-size:1.12rem;line-height:1.45;color:var(--muted);margin:.35rem 0 1rem;max-width:58ch}
+.st-sub{font-size:.95rem;line-height:1.5;color:var(--muted);margin:.45rem 0 1rem;max-width:46rem}
 .st-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 6px}
 .st-modes .mode{display:flex;align-items:flex-start;gap:12px;min-height:72px;padding:14px 16px;border-radius:14px;border-width:2px;font-size:1.08rem;line-height:1.3}
 .st-modes .mode input{margin-top:.2rem;flex:none}
@@ -463,7 +463,8 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
   <header class="top">
     <div class="kicker st-wd">Want to understand why messages land differently? <a href="wired-differently.html">Read: Wired differently</a></div>
     <h1>Text message checker</h1>
-    <p class="st-sub">the Signal Translator: see how a message may land, before you send it &mdash; or understand one you got</p>
+    <p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--muted)">Also called the Signal Translator</p>
+    <p class="tol-what st-sub no-bubble"><strong>What it does:</strong> shows how a message may land before you send it, or helps you read one you got. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain read of the tone and a kinder, clearer version that keeps your ask. <span aria-hidden="true">&middot;</span> About 2 minutes</p>
     <div class="modes st-modes" role="radiogroup" aria-label="What would you like to do?">
       <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>Check a message before I send it</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="got"><span><b>Help me read a message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>

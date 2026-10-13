@@ -21,8 +21,9 @@
   // ---------- the vocabulary (shared with the validator) ----------
   var SCENES = ['backyard', 'beach', 'snow', 'pond', 'forest', 'rooftop', 'meadow', 'dock', 'citypark', 'pumpkins', 'cabin', 'cabinin', 'rainy', 'carnival',
     'library', 'bakery', 'gardenparty', 'campsite', 'lighthouse', 'underwater', 'space', 'farm', 'orchard', 'festival', 'aquarium', 'studio',
-    'bonfire', 'treehouse', 'theater', 'blank'];
-  var WEATHER = ['clear', 'rain', 'storm', 'snow', 'wind', 'stars'];
+    'bonfire', 'treehouse', 'theater', 'sea', 'blank'];
+  // 'sea' (open water, no land in front) is painted here, not by the pal cam; 'fog' is soft, drifting sea fog
+  var WEATHER = ['clear', 'rain', 'storm', 'snow', 'wind', 'stars', 'fog'];
   var MOODS = ['happy', 'excited', 'sad', 'grumpy', 'worried', 'calm', 'proud', 'silly', 'sleepy', 'surprised'];
   var MUSIC = ['gentle', 'happy', 'tense', 'sad', 'brave', 'triumph', 'none'];
   // things a pal can carry, and that can lie on the ground (or hang up high) as a prop: every one has a painter (ITEM_PAINT)
@@ -39,7 +40,9 @@
   var BUILDS = ['treehouse', 'roof', 'kite'];
   var TARGETS = ['other', 'left', 'right', 'up'];
   // scenery props (set on a scene or a place beat); every item above is a prop too: { map: 0.5 } on the ground, { page: [0.8, 120] } up high, { map: false } gone
-  var SCENERY = ['treehouse', 'bridge', 'creek', 'carousel', 'chimney', 'skykites', 'constellations', 'glow', 'shooting'];
+  // Season 2 adds: a little sailboat the pals ride in ('boat': x, or false), a far-off island on the horizon ('island': x, or false)
+  // and a string of paper lanterns overhead ('lanterns': how many are lit, 0 to 8, or false)
+  var SCENERY = ['treehouse', 'bridge', 'creek', 'carousel', 'chimney', 'skykites', 'constellations', 'glow', 'shooting', 'boat', 'island', 'lanterns'];
   var PROPS = SCENERY.concat(ITEMS);
   var GLOW = ['bright', 'flicker', 'dim']; // how the lantern shines (it stays that way, scene to scene)
   var SHOOTING = ['one', 'many'];         // a shooting star right now, or a whole starfall
@@ -63,7 +66,8 @@
     puddles: { name: 'Professor Puddles', pitch: 1.2, rate: 0.98, where: 'hover', h: 48 },
     frog: { name: 'Hopper the frog', pitch: 0.62, rate: 1.02, where: 'ground', h: 26 },
     butterfly: { name: 'the butterfly', pitch: 1.9, rate: 1.05, where: 'flutter', h: 16 },
-    squirrel: { name: 'Nutmeg the squirrel', pitch: 1.7, rate: 1.16, where: 'ground', h: 40 }
+    squirrel: { name: 'Nutmeg the squirrel', pitch: 1.7, rate: 1.16, where: 'ground', h: 40 },
+    lumi: { name: 'Lumi the red panda', pitch: 1.45, rate: 0.92, where: 'ground', h: 46 }
   };
   var PALS = { tidbit: { name: 'Tidbit', look: 'collar', pitch: 1.6, rate: 1.08 }, sugarfoot: { name: 'Sugarfoot', look: 'drop', pitch: 1.35, rate: 0.95 } };
   var NARRATOR = { name: 'Narrator', pitch: 1.0, rate: 0.95 };
@@ -75,6 +79,13 @@
       { id: 's1e3', n: 3, title: 'The Heavy Basket', world: 'Farm, orchard and a snowy summit', theme: 'A summit picnic, and a load to share', pillar: 'I', emoji: '🧺' },
       { id: 's1e4', n: 4, title: 'Who Broke the Kite?', world: 'Beach, lighthouse, dock and the deep', theme: 'A seaside kite race', pillar: 'II', emoji: '🪁' },
       { id: 's1e5', n: 5, title: 'The Longest Night', world: 'Forest, campsite, pond and the stars', theme: 'A night quest to the shooting stars', pillar: 'V', emoji: '🌠' }
+    ] },
+    // Season 2 lists only the episodes that are finished (no "coming soon" cards); they have no recorded voices
+    // yet (clips: false), so they play with the device's own voice, or captions
+    { season: 2, name: 'Season 2: The Great Big Sea', more: 'New episodes are added as they are finished.', eps: [
+      { id: 's2e1', n: 1, title: 'The Great Big Sea', world: 'The dock, the open sea and a little island', theme: 'Setting sail with a map in a bottle', pillar: 'IV', emoji: '⛵', clips: false },
+      { id: 's2e2', n: 2, title: 'The Lighthouse in the Fog', world: 'Lantern Island, its lighthouse and the fog', theme: 'Lost in the fog, and the lanterns that lead home', pillar: 'I', emoji: '🏮', clips: false },
+      { id: 's2e3', n: 3, title: 'Room for One More', world: 'The island library, its secret door and the night market', theme: 'A new friend, and a pal who feels left out', pillar: 'V', emoji: '📚', clips: false }
     ] }
   ];
   // a short, calm note shown before each episode plays: what happens that might feel big
@@ -270,7 +281,8 @@
       if (PROPS.indexOf(itemOf(k)) < 0 || (k !== itemOf(k) && ITEMS.indexOf(itemOf(k)) < 0)) E(at + ': unknown prop "' + k + '" (props: ' + PROPS.join(', ') + ')');
       else if (k === 'treehouse') { if (TREEHOUSE.indexOf(v) < 0) E(at + ': treehouse should be one of ' + TREEHOUSE.join(', ')); }
       else if (k === 'bridge' || k === 'creek' || k === 'skykites' || k === 'constellations') { if (typeof v !== 'boolean') E(at + ': ' + k + ' should be true or false'); }
-      else if (k === 'carousel' || k === 'chimney') { if (!(v === false || x01(v))) E(at + ': ' + k + ' should be 0..1 or false'); }
+      else if (k === 'carousel' || k === 'chimney' || k === 'boat' || k === 'island') { if (!(v === false || x01(v))) E(at + ': ' + k + ' should be 0..1 or false'); }
+      else if (k === 'lanterns') { if (!(v === false || (typeof v === 'number' && v === Math.round(v) && v >= 0 && v <= 8))) E(at + ': lanterns should be how many are lit (0 to 8) or false'); }
       else if (k === 'glow') { if (GLOW.indexOf(v) < 0) E(at + ': glow should be one of ' + GLOW.join(', ')); }
       else if (k === 'shooting') { if (!(v === false || SHOOTING.indexOf(v) >= 0)) E(at + ': shooting should be one, many or false'); }
       else if (!(v === false || v === null || x01(v) || (Array.isArray(v) && v.length === 2 && x01(v[0]) && typeof v[1] === 'number' && v[1] >= -40 && v[1] <= 240)))
@@ -533,7 +545,8 @@
         else if (k === 'treehouse') S.props.treehouse = thState(v);
         else if (k === 'glow') S.glow = GLOW.indexOf(v) >= 0 ? v : 'bright';
         else if (k === 'shooting') { S.props.shooting = v === 'many' ? 'many' : null; if (v === 'one' && !instant) shootStar(); }
-        else if (k === 'carousel' || k === 'chimney') S.props[k] = v === false ? null : clamp(num(v, 0.75), 0, 1);
+        else if (k === 'carousel' || k === 'chimney' || k === 'boat' || k === 'island') S.props[k] = v === false || v === null ? null : clamp(num(v, 0.5), 0, 1);
+        else if (k === 'lanterns') { var was = S.props.lanterns; S.props.lanterns = v === false || v === null ? null : clamp(Math.round(num(v, 0)), 0, 8); if (!instant && was != null && S.props.lanterns > was) S.lanternT = S.t; }
         else S.props[k] = !!v;
       }
     };
