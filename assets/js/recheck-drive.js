@@ -197,10 +197,18 @@
         S.total = typeof d.total === 'number' ? d.total : 0;
         S.started = !!d.started && !!S.who;
         S.flags = { mine: !!(d.flags && d.flags.mine), theirs: !!(d.flags && d.flags.theirs) };
+        if (typeof d.plain === 'boolean') S.plain = d.plain;
       }
     } catch (e) { /* private window or blocked storage: the game still works */ }
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+  // "Plain words, no football": steps on a garden path instead of yards, downs and field goals.
+  // On by default when the browser isn't set to English; the choice is kept with the drive (same key).
+  function plainOn() { if (typeof S.plain === 'boolean') return S.plain; try { return !/^en\b/i.test(navigator.language || 'en'); } catch (e) { return false; } }
+  function applyPlain() {
+    var on = plainOn(), rd = $('rd'); if (rd) rd.classList.toggle('is-plain', on);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rd-plain]'), function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+  }
   function erase() { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } }
 
   /* ---------- the field ---------- */
@@ -286,7 +294,7 @@
       var b = el('button', { type: 'button', 'class': 'rd-card', 'data-play': id });
       b.appendChild(el('span', { 'class': 'rd-cat' }, p.cat));
       b.appendChild(el('strong', null, p.title));
-      b.appendChild(el('span', { 'class': 'rd-yds' }, '+' + p.yards + ' yards'));
+      b.appendChild(el('span', { 'class': 'rd-yds' }, plainOn() ? (function (n) { return '+' + n + (n === 1 ? ' step' : ' steps'); })(Math.max(1, Math.round(p.yards / 3))) : '+' + p.yards + ' yards'));
       b.addEventListener('click', function () { openPlay(id); });
       h.appendChild(b);
     });
@@ -304,6 +312,11 @@
   }
   // How far along the drive is, without football words: about how many small plays are left to score.
   function plainWords(y) {
+    if (plainOn()) {
+      if (y >= KICK) return 'You’ve done enough small, kind things to finish this round. Press “Finish this round”, or keep going.';
+      var pt = (y - START) / (KICK - START), lf = Math.max(1, Math.ceil((KICK - y) / 7)), wd = ['', 'one', 'two', 'three', 'four', 'five', 'six'];
+      return (pt < 0.15 ? 'You’re just getting started' : pt < 0.4 ? 'You’re about a third of the way' : pt < 0.6 ? 'You’re about halfway' : 'You’re most of the way there') + ': about ' + (wd[lf] || lf) + ' more small ' + (lf === 1 ? 'thing' : 'things') + ' to finish this round.';
+    }
     if (y >= KICK) return 'In plain words: you’ve done enough small, kind things to score. Press “Kick the field goal”, or keep going.';
     var part = (y - START) / (KICK - START), left = Math.max(1, Math.ceil((KICK - y) / 7));
     var where = part < 0.15 ? 'you’re just getting started' : part < 0.4 ? 'you’re about a third of the way' : part < 0.6 ? 'you’re about halfway' : 'you’re most of the way there';
@@ -311,10 +324,14 @@
     return 'In plain words: ' + where + '; about ' + (words[left] || left) + ' more small ' + (left === 1 ? 'play' : 'plays') + ' to score.';
   }
   function renderStatus() {
-    var y = S.yards, nf = nextFirst(y);
+    var y = S.yards, nf = nextFirst(y), pl = plainOn();
+    applyPlain();
+    var hh = $('rd-hand-h'); if (hh) hh.textContent = pl ? 'Pick one small thing' : 'Call a play';
+    var shf = $('rd-shuffle'); if (shf) shf.textContent = pl ? 'Show me other ideas' : 'Show me different plays';
+    var fill = $('rd-path-fill'); if (fill) fill.style.width = (S.kicked ? 100 : Math.max(4, Math.min(96, (y - START) / (KICK - START) * 92))) + '%';
     $('rd-us').textContent = S.kicked ? '3' : '0';
     $('rd-down').textContent = S.kicked ? 'FIELD GOAL' : (y >= KICK ? 'FIELD-GOAL RANGE' : '1st & ' + Math.max(1, nf - y));
-    $('rd-status').textContent = S.kicked ? 'The kick is good.' : 'The ball is on ' + lineLabel(y) + '.';
+    $('rd-status').textContent = pl ? (S.kicked ? 'Round finished.' : S.done.length ? 'Small kind things done: ' + S.done.length + '.' : 'Pick one small, kind thing to do.') : S.kicked ? 'The kick is good.' : 'The ball is on ' + lineLabel(y) + '.';
     $('rd-sub').textContent = S.kicked ? '' : (y >= KICK
       ? 'You’re in field-goal range. Kick now, or call another play for extra yards.'
       : 'First down at ' + lineLabel(nf) + '. Field-goal range starts at ' + lineLabel(KICK) + '.');
@@ -329,11 +346,11 @@
     $('rd-kick').hidden = !(y >= KICK && !S.kicked);
     $('rd-handwrap').hidden = !!S.kicked;
     $('rd-done').hidden = !S.kicked;
-    $('rd-total').textContent = S.total ? 'Field goals kicked in this browser: ' + S.total + '. No streaks, just a quiet count.' : '';
+    $('rd-total').textContent = S.total ? (pl ? 'Rounds finished in this browser: ' : 'Field goals kicked in this browser: ') + S.total + '. No streaks, just a quiet count.' : '';
     // the log
     var ol = $('rd-log-list');
     while (ol.firstChild) ol.removeChild(ol.firstChild);
-    S.done.forEach(function (id) { ol.appendChild(el('li', null, byId[id].title + ' (+' + byId[id].yards + ')')); });
+    S.done.forEach(function (id) { ol.appendChild(el('li', null, byId[id].title + (pl ? '' : ' (+' + byId[id].yards + ')'))); });
     $('rd-log').hidden = !S.done.length;
   }
   function renderAll() {
@@ -348,7 +365,7 @@
   function openPlay(id) {
     var p = byId[id], sheet = $('rd-sheet');
     while (sheet.firstChild) sheet.removeChild(sheet.firstChild);
-    sheet.appendChild(el('p', { 'class': 'rd-cat' }, p.cat + ' · +' + p.yards + ' yards'));
+    sheet.appendChild(el('p', { 'class': 'rd-cat' }, plainOn() ? p.cat : p.cat + ' · +' + p.yards + ' yards'));
     sheet.appendChild(el('h3', null, p.title));
     sheet.appendChild(el('p', null, p.how));
     var lab = el('label', { 'for': 'rd-words' }, p.say + ' (change it to sound like you)');
@@ -364,7 +381,7 @@
     no.addEventListener('click', function () { sheet.hidden = true; $('rd-handwrap').hidden = false; var c = document.querySelector('.rd-card[data-play="' + id + '"]'); if (c) c.focus(); });
     row.appendChild(did); row.appendChild(copy); row.appendChild(no);
     sheet.appendChild(row);
-    sheet.appendChild(el('p', { 'class': 'rd-honest' }, 'Do it for real first, then tap “I did it.” The ball moves only when you say so, and “Not today” costs nothing. Words you type here are never saved or sent.'));
+    sheet.appendChild(el('p', { 'class': 'rd-honest' }, 'Do it for real first, then tap “I did it.” ' + (plainOn() ? 'You move along the path' : 'The ball moves') + ' only when you say so, and “Not today” costs nothing. Words you type here are never saved or sent.'));
     sheet.hidden = false;
     $('rd-handwrap').hidden = true;
     sheet.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
@@ -382,7 +399,7 @@
     dealHand();
     $('rd-sheet').hidden = true;
     renderAll();
-    var msg = (crossed ? 'First down! ' : '') + 'Good play: ' + p.why;
+    var msg = plainOn() ? 'Well done: ' + p.why : (crossed ? 'First down! ' : '') + 'Good play: ' + p.why;
     $('rd-status').textContent = msg;
     save();
     var c = document.querySelector('.rd-card'); if (c && !S.kicked && S.yards < KICK) c.focus();
@@ -410,6 +427,14 @@
       S.kicked = true; S.total += 1;
       var both = S.flags.mine && S.flags.theirs;
       var p = $('rd-done-p');
+      if (plainOn()) {
+        p.textContent = 'Round finished: you beat the Rut. ' + (both
+          ? (S.who === 'us' ? 'You each shared your side and heard the other’s. That is what lets two people understand each other.' : 'You shared your side and asked for theirs. That is what lets two people understand each other.')
+          : (S.who === 'us' ? 'Next round, try taking turns to share your side and hear the other’s.' : 'Next round, try sharing your own side and asking for theirs.'));
+        $('rd-done-h').textContent = 'Well done!';
+        renderStatus(); save(); celebrate(); $('rd-again').focus(); btn.disabled = false;
+        return;
+      }
       p.textContent = both
         ? (S.who === 'us'
           ? 'The kick is good, and it went through on both sides: you each shared your side and heard the other’s. That is what lets two people understand each other. Us 3, the Rut 0.'
@@ -423,7 +448,7 @@
       $('rd-again').focus();
       btn.disabled = false;
     }
-    if (reduced) { ball.style.transform = 'translate(' + x1 + 'px,' + y1 + 'px)'; landed(); } else requestAnimationFrame(stepAnim);
+    if (reduced || plainOn()) { ball.style.transform = 'translate(' + x1 + 'px,' + y1 + 'px)'; landed(); } else requestAnimationFrame(stepAnim);
   }
 
   function celebrate() {
@@ -456,7 +481,7 @@
   function driveText() {
     var lines = [S.who === 'us' ? 'Our Re-check Drive, together:' : 'My Re-check Drive, for ' + whoName(S.who).toLowerCase() + ':'];
     S.done.forEach(function (id) { lines.push('✓ ' + byId[id].title); });
-    lines.push(S.kicked ? 'Field goal: good.' : 'Ball on ' + lineLabel(S.yards) + '.');
+    lines.push(plainOn() ? (S.kicked ? 'Round finished.' : 'Still on the path.') : S.kicked ? 'Field goal: good.' : 'Ball on ' + lineLabel(S.yards) + '.');
     lines.push('From spreadloveandacceptance.com/recheck-drive.html');
     return lines.join('\n');
   }
@@ -483,6 +508,10 @@
     });
     load();
     drawField();
+    applyPlain();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rd-plain]'), function (b) {
+      b.addEventListener('click', function () { S.plain = !plainOn(); save(); applyPlain(); if (S.started) { drawHand(); renderStatus(); } });
+    });
     $('rd-start').addEventListener('click', function () {
       var r = document.querySelector('input[name="rd-who"]:checked');
       S.who = r ? r.value : 'self';
@@ -500,7 +529,9 @@
     $('rd-copy').addEventListener('click', function () { copyText(driveText(), $('rd-copy'), 'Copy my drive'); });
     $('rd-again').addEventListener('click', function () { newDrive(true); });
     $('rd-reset').addEventListener('click', function () {
+      var keepPlain = S.plain;
       erase(); S = { who: '', yards: START, done: [], hand: [], kicked: false, total: 0, started: false, flags: { mine: false, theirs: false } };
+      if (typeof keepPlain === 'boolean') S.plain = keepPlain;
       $('rd-sheet').hidden = true; renderAll();
     });
     if (S.started && !S.hand.length && !S.kicked) dealHand();

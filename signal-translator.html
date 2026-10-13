@@ -2558,6 +2558,8 @@ function runReceived(text){
   R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
 }
 document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener("change",()=>{ if(r.checked) setMode(r.value); }));
+// ?mode=got opens "Someone sent me this" (the co-parent and work pages link here for a message that stung)
+try { if (new URLSearchParams(location.search).get("mode") === "got") setMode("got"); } catch (e) {}
 /* "Someone sent me this" in the intro is a real button: it switches the mode and goes to the box */
 { const lg=$("#ledeGot"); if(lg) lg.addEventListener("click",()=>{ setMode("got"); const box=$("#sentenceBox"); if(box) box.scrollIntoView({block:"start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"}); $("#phrase").focus({preventScroll:true}); }); }
 /* "What you got from this" (added by come-back.js): words that fit the mode */
@@ -2907,8 +2909,9 @@ sync();
     if (!q && params) q = params.get('text');
     try { var box = document.getElementById('phrase'); if (q && box && !box.value) { box.value = q.slice(0, 1500); box.dispatchEvent(new Event('input', { bubbles: true })); } } catch (e) {}
     try {
-      if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel'; })) {
+      if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel' && k !== 'mode'; })) {
         var keep = [];
+        if (params.get('mode') === 'got') keep.push('mode=got');
         if (params.get('use') === 'work') keep.push('use=work');
         if (/^[a-z-]{2,20}$/.test(params.get('rel') || '')) keep.push('rel=' + params.get('rel'));
         if (/^[01]$/.test(params.get('work') || '')) keep.push('work=' + params.get('work')); // site.js reads ?work= after this runs

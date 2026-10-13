@@ -216,7 +216,7 @@
     <p class="ten-num">Step 1 of 4</p>
     <h2>Check your own weather</h2>
     <p class="ten-time">About 1 minute</p>
-    <p data-ten-show="me">Before anything else, see how you&rsquo;re doing today. One tap gives you a forecast: what today is good for, and what can wait.</p>
+    <p data-ten-show="me">Before anything else, see how you&rsquo;re doing today. A few quick taps, about a minute, give you a forecast: what today is good for, and what can wait.</p>
     <p data-ten-show="with" hidden>Each of you checks your own weather, on your own phone or one after the other. It shows whether now is a good time to talk, or whether a snack and a rest come first.</p>
     <p class="ten-row"><a class="ten-go" href="/quick-checks.html#today" data-ten-step="1">Check today&rsquo;s weather</a> <button type="button" class="ten-btn is-quiet" data-ten-done="1">Done, next step</button></p>
     <p class="ten-time">It opens in this tab, with a bar at the top that brings you straight back here.</p>
@@ -233,7 +233,7 @@
     <p data-ten-show="me">Your wiring, your weather and your words: a few short cards on reading yourself before you speak.</p>
     <p data-ten-show="with" hidden>The quiet, unseen jobs that keep a shared life running, and why they deserve to be noticed. Read it together, or each on your own.</p>
     <p class="ten-row"><button type="button" class="ten-go ten-open" id="ten-read" aria-expanded="false" aria-controls="ten-read-panel">Read it here</button>
-      <a href="/book/self-2-now.html" data-ten-step="2" data-ten-show="me">or open the page</a><a href="/book/preface.html" data-ten-step="2" data-ten-show="with" hidden>or open the page</a></p>
+      <a href="/book/self-2-now.html" data-ten-step="2" data-ten-show="me">or open the page</a><a href="/book/preface.html" data-ten-step="2" data-ten-show="with" hidden>or open the page</a> <button type="button" class="ten-btn is-quiet" data-ten-done="2">Done, next step</button></p>
     <div class="ten-panel" id="ten-read-panel" hidden tabindex="-1" aria-label="The short version"></div>
     <details class="ten-deeper">
       <summary>Go deeper: log one thing you did today</summary>
@@ -562,6 +562,7 @@
   btn.addEventListener('click', function () {
     var open = panel.hidden, url = readUrl();
     panel.hidden = !open; btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Close it' : 'Read it here';
+    if (!open && loadedFor === url) { mark(2, false); return; }   // closing the short read after it opened counts as reading it
     if (!open || loadedFor === url) { if (open) panel.focus(); return; }
     panel.innerHTML = '<p>Opening it&hellip;</p>';
     fetch(url, { credentials: 'same-origin' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }).then(function (t) {

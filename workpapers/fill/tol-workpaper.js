@@ -1618,7 +1618,9 @@
     });
     var blankUsed = CODES.slice(0, n).filter(function (c, i) { return !names[i] && used[c]; })[0];
     if (blankUsed) return { error: self.ctx().name(blankUsed) + ' is picked for \u201c' + used[blankUsed] + '\u201d but has no name yet. Type their name at the top (or pick someone else there), so the other device knows who is who.' };
-    if (names.filter(Boolean).length < Math.min(2, n)) return { error: 'Type ' + (names.filter(Boolean).length ? 'the other name' : 'your names') + ' at the top first, so the other device knows who is who.' };
+    // a week (the daily check-in) can go with just your own name: the other person adds theirs when it opens
+    var needN = this.shareWhat() === 'week' ? 1 : Math.min(2, n);
+    if (names.filter(Boolean).length < needN) return { error: 'Type ' + (names.filter(Boolean).length ? 'the other name' : needN === 1 ? 'your name' : 'your names') + ' at the top first, so the other device knows who is who.' };
     // the people sent, in order, without the empty places; rows point at them by name, so nothing shifts
     var d = { t: 'tol-list', v: 1, wp: this.schema.code, p: names.filter(Boolean), m: {}, tb: {} }, rows = 0;
     (this.schema.meta || []).forEach(function (f) { if (!isBlank(v[f.id]) && typeof v[f.id] !== 'object') d.m[f.id] = v[f.id]; });
@@ -1859,7 +1861,8 @@
     var box = h('div', { className: 'wpf-share-in no-print tol-plain', role: 'group', 'aria-label': 'A shared ' + what, tabindex: '-1', id: 'wpf-share-in' });
     if (!this.schema.people) {
       box.appendChild(h('p', {}, [h('strong', { text: (names[0] || 'Someone') + ' shared their ' + what + ' with you. ' }), d.s != null ? 'Load score: ' + d.s.toFixed(2) + ' out of 1.00.' : '']));
-      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It looks like your own sheet, so adding it fills in what is empty here.' : 'Adding it puts their score into \u201cSomeone else\u2019s score\u201d. Your own answers stay as they are.' }));
+      var myS = this.schema.share && this.schema.share.score ? this.schema.share.score(this.ctx()) : null;
+      box.appendChild(h('p', { className: 'wpf-help', text: this.oneIsMine(d) ? 'It has your name on it, so adding it fills in what is empty here.' : 'Adding it puts ' + (names[0] ? names[0] + '\u2019s' : 'their') + ' score beside yours' + (myS != null && d.s != null ? ' (you: ' + myS.toFixed(2) + ' \u00b7 ' + (names[0] || 'them') + ': ' + d.s.toFixed(2) + ')' : '') + '. Your own answers stay as they are, and nothing of theirs is ticked for you.' }));
       var their = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 600) : '';
       if (their && !this.oneIsMine(d)) box.appendChild(h('p', { className: 'wpf-shared-note' }, [h('strong', { text: 'What ' + (names[0] || 'they') + ' wanted to name: ' }), '\u201c' + their + '\u201d']));
       box.appendChild(h('div', { className: 'wpf-share-btns' }, [
@@ -1936,9 +1939,11 @@
   // Take in a shared sheet. replace: the shared one instead of this page. Otherwise combine: add what is
   // new, fill in what is empty here, and keep this page's own answer wherever both have something different.
   // Is a shared one-person sheet this person's own (same name, or nothing here yet)?
+  // Your own sheet coming back (from another device of yours): only when the name on it is yours. An empty
+  // page never takes someone else's answers as its own (their score goes beside yours instead).
   A.oneIsMine = function (d) {
     var mine = String(this.state.values.name || '').trim();
-    return !mine || answered(this.schema, this.state) === 0 || fold(mine) === fold(d.p[0]);
+    return !!mine && fold(mine) === fold(d.p[0]);
   };
   A.takeSharedOne = function (d) {
     var sc = this.schema, v = this.state.values, what = this.shareWhat(), who = d.p[0] || 'Someone';
@@ -1947,6 +1952,7 @@
       (sc.meta || []).forEach(function (f) { var x = d.m[f.id]; if (x != null && typeof x !== 'object' && isBlank(v[f.id])) { v[f.id] = x; filled++; } });
       ((sc.share && sc.share.values) || []).forEach(function (k) {
         var x = vals[k];
+        if (k === 'caring') return; // never ticked for you from a link
         if (x == null || typeof x === 'object' || x === '') return;
         if (isBlank(v[k])) { v[k] = x; filled++; } else if (String(v[k]) !== String(x)) differ++;
       });
@@ -1958,8 +1964,11 @@
     var list = String(v.partnerScore || '').split(/[,;\s]+/).filter(Boolean);
     var txt = d.s.toFixed(2);
     if (list.indexOf(txt) >= 0 && this.lastShared === who + txt) return who + '\u2019s score (' + txt + ') is already in \u201cSomeone else\u2019s score\u201d.';
-    list.push(txt);
+    var whoL = String(v.partnerWho || '').split('|');
+    while (whoL.length < list.length) whoL.push('');
+    whoL = whoL.slice(0, list.length); list.push(txt); whoL.push(String(who).replace(/\|/g, ' ').slice(0, 40));
     v.partnerScore = list.join(', ');
+    v.partnerWho = whoL.join('|');
     this.lastShared = who + txt;
     this.state = sanitize(sc, this.state);
     this.changed();
@@ -2072,6 +2081,8 @@
     if (differ.length) msg += ' ' + (differ.length === 1 ? 'One thing is' : differ.length + ' things are') + ' different on the shared ' + what + '. Choose which to keep, at the top of the sheet.';
     if (dropped.length) msg += ' There was no room for ' + dropped.join(', ') + ' (eight people at most).';
     if (sameFixed) msg += ' ' + sameFixed;
+    // a week sent with only the sender's name: the other person adds theirs here
+    if (what === 'week' && d.p.filter(Boolean).length === 1) msg += ' Type your own name next to ' + d.p.filter(Boolean)[0] + '\u2019s at the top, then add your answers.';
     return msg;
   };
 

@@ -179,3 +179,12 @@ ol.ti-ticked > li.ti-done{ color:var(--ink-soft, #5A5346); }
   .ti-prev .ti-s-pop{ position:static; display:inline-block; }
   .ti-actions button{ flex:1 1 100%; }
 }
+/* the sample sits outside the site's text bubbles: plain lines, so the changes are what you notice */
+.ti-prev :is(p, ul, ol, li, h3){ border:0 !important; box-shadow:none !important; width:auto !important; }
+.ti-prev .ti-s-short li, .ti-prev .ti-s-steps li{ background:none !important; padding:0 !important; border-radius:0 !important; }
+.ti-prev .ti-s-line{ border:1px solid #C6D6E6 !important; }
+.ti-prev .ti-s-calm{ border-color:#BCD8C3 !important; }
+.ti-prev .ti-s-cards li{ border:1px solid var(--line, #D9CBA3) !important; padding:.55rem .75rem !important; background:var(--paper, #F5EFDE) !important; }
+.ti-prev .ti-s-btn{ display:inline-block; white-space:nowrap; line-height:1.9; margin:.15rem 0; }
+.ti-prev.p-contrast :is(.ti-s-line, .ti-s-short, .ti-s-extra, .ti-s-cards li){ border:2px solid #000 !important; background:#fff !important; }
+.ti-piccard li{ background:#FFFDF7 !important; border:1px solid #E6D9B8 !important; box-shadow:none !important; padding:.6rem .8rem !important; border-radius:16px !important; }

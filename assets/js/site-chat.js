@@ -3457,6 +3457,7 @@
       root.setAttribute('aria-modal', 'true');
       root.setAttribute('aria-labelledby', uid + '-name');
       root.setAttribute('aria-describedby', uid + '-note');
+      root.setAttribute('tabindex', '-1');
     } else {
       root.setAttribute('role', 'region');
       root.setAttribute('aria-labelledby', uid + '-name');
@@ -3742,17 +3743,34 @@
     this.msgs = []; save(this.msgs); this.state.last = null; this.state.lastReply = null; this.state.recent = []; this.state.topic = null; saveTopic(this.state);
     this.log.textContent = ''; this.setChips([]);
     this.greet(this.char.greeting);
-    this.input.focus();
+    focusBox(this);
   };
 
   // ------------------------------------------------------------------ public API
+  // The text box only takes focus for keyboard and mouse users. On a touch screen, focusing it pops up the keyboard and
+  // hides the Professor's message, so there the panel itself takes focus, and the box waits until it's tapped.
+  var lastInput = 'touch';
+  try {
+    if (document.addEventListener) {
+      document.addEventListener('pointerdown', function (e) { lastInput = e.pointerType === 'mouse' ? 'mouse' : 'touch'; }, true);
+      document.addEventListener('touchstart', function () { lastInput = 'touch'; }, { capture: true, passive: true });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar' || e.key === 'Tab') lastInput = 'keyboard'; }, true);
+    }
+  } catch (e) { /* fine */ }
+  function focusBox(c, o) {
+    if (!c) return;
+    try {
+      if (lastInput === 'keyboard' || lastInput === 'mouse') c.input.focus(o);
+      else (c.mode === 'modal' ? c.root : c.log).focus(o || { preventScroll: true });
+    } catch (e) { /* fine */ }
+  }
   var modal = null, scrim = null, inline = null, lastFocus = null;
   var api = {
     open: function (opts) {
       if (inline && document.body.contains(inline.root)) {
         inline.start(opts);
         inline.root.scrollIntoView({ block: 'nearest', behavior: REDUCED ? 'auto' : 'smooth' });
-        inline.input.focus({ preventScroll: true });
+        focusBox(inline, { preventScroll: true });
         return;
       }
       if (!modal) {
@@ -3767,7 +3785,7 @@
       modal.root.classList.remove('is-in'); void modal.root.offsetWidth; modal.root.classList.add('is-in');
       document.documentElement.classList.add('tolc-lock');
       modal.start(opts);
-      setTimeout(function () { modal.input.focus(); }, 30);
+      setTimeout(function () { focusBox(modal); }, 30);
     },
     close: function () {
       if (!modal || modal.root.hidden) return;

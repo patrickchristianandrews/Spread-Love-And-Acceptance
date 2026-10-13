@@ -316,7 +316,7 @@
     var sp = specOf(t), out = [];
     if (t.rk) {
       if (t.h) out.push(['What I heard', t.h]);
-      out.push(['My answer', RK[t.rk] ? RK[t.rk].label.replace(/…$/, '') + (t.rk === 'yes' ? '.' : '') : '']);
+      out.push(['My answer', { yes: 'Yes.', yesand: 'Yes, and I’d like to add one thing.', notyet: 'Not yet. Here’s what I suggest instead.', differ: 'I see it differently. Here’s my side.', needtime: 'I need some time before I answer.' }[t.rk] || '']);
     } else if (t.k === 'sorry') out.push(['', 'I want to say sorry.']);
     else if (t.k === 'pause') out.push(['', 'I need a pause.']);
     if (t.f && sp.fact) out.push([sp.fact[0], t.f]);
@@ -552,7 +552,7 @@
     var p = payload(t, c, id, n), link = linkFor(p);
     var turn = turnFrom(p, 'me'); turn.link = link;
     c.turns.push(turn);
-    if ((t.rk === 'yes' || t.rk === 'yesand') && t.re) agree(c, t.re, t.lk, turn.at, replyTo && replyTo.who === 'them' ? 'them' : '');
+    if ((t.rk === 'yes' || t.rk === 'yesand') && t.re) agree(c, t.re, t.lk, turn.at, c.them, c.me);
     S.draft = null; save();
     committed = { turn: turn, link: link, text: plainText(t) };
     return committed;
@@ -561,10 +561,11 @@
     var t = { id: p.i, n: p.n, who: who, at: p.at, k: p.k, rk: p.rk || '', h: p.h || '', f: p.f || '', fe: p.fe || [], fx: p.fx || '', a: p.a || '', ns: p.ns || '', by: p.by || null, re: p.re || '', fn: p.fn || '', tn: p.tn || '' };
     return t;
   }
-  function agree(c, text, look, at, proposer) {
+  // asked: who asked for it, yes: who said yes (names as this device knows them; '' for "you")
+  function agree(c, text, look, at, asked, yes) {
     text = clean(text, 500); if (!text) return;
     if (c.agreed.some(function (x) { return x.text === text; })) return;
-    c.agreed.push({ text: text, at: at || new Date().toISOString(), look: look || ymd(addDays(new Date(), 14)) });
+    c.agreed.push({ text: text, at: at || new Date().toISOString(), look: look || ymd(addDays(new Date(), 14)), asked: clean(asked, 40), yes: clean(yes, 40) });
   }
 
   function say(msg) { var st = $('wit-status'); st.textContent = ''; setTimeout(function () { st.textContent = msg; }, 30); }
@@ -616,7 +617,7 @@
     var turn = turnFrom(q, 'them');
     c.turns.push(turn);
     c.turns.sort(function (a, b) { return (a.n - b.n) || (new Date(a.at) - new Date(b.at)); });
-    if ((q.rk === 'yes' || q.rk === 'yesand') && q.re) agree(c, q.re, q.lk, q.at);
+    if ((q.rk === 'yes' || q.rk === 'yesand') && q.re) agree(c, q.re, q.lk, q.at, c.me, c.them);
     S.cur = c.id;
     // a draft for another conversation stays where it was; a new letter starts the reply fresh
     if (S.draft && S.draft.c !== c.id) S.draft = null;
@@ -837,9 +838,10 @@
     body.appendChild(er);
   }
 
+  function whoAgreed(a) { return a.asked && a.yes ? a.asked + ' asked, ' + a.yes + ' said yes.' : ''; }
   function agreedText(c) {
     var lines = ['What we agreed' + (c.me || c.them ? ' (' + [c.me || 'me', c.them || 'you'].join(' and ') + ')' : '')];
-    c.agreed.forEach(function (a) { lines.push('• ' + endStop(a.text) + ' Agreed ' + dayName(new Date(a.at)) + '. Look again on ' + dayName(fromYmd(a.look) || new Date()) + '.'); });
+    c.agreed.forEach(function (a) { lines.push('• “' + endStop(a.text) + '” ' + (whoAgreed(a) ? whoAgreed(a) + ' ' : '') + 'Agreed ' + dayName(new Date(a.at)) + '. Look again on ' + dayName(fromYmd(a.look) || new Date()) + '.'); });
     return lines.join('\n');
   }
   function renderAgreed() {
@@ -852,7 +854,7 @@
     c.agreed.forEach(function (a, i) {
       var id = 'wit-look-' + i, inp = el('input', { type: 'date', id: id, value: a.look || '' });
       inp.addEventListener('change', function () { if (fromYmd(inp.value)) { a.look = inp.value; save(); } });
-      ul.appendChild(el('li', null, [el('p', { cls: 'wit-agreed-t', text: endStop(a.text) }), el('p', { cls: 'wit-agreed-m' }, ['Agreed ' + dayName(new Date(a.at)) + '. ', el('label', { for: id, text: 'Look again on ' }), inp])]));
+      ul.appendChild(el('li', null, [el('p', { cls: 'wit-agreed-t', text: '“' + endStop(a.text) + '”' }), el('p', { cls: 'wit-agreed-m' }, [(whoAgreed(a) ? whoAgreed(a) + ' ' : '') + 'Agreed ' + dayName(new Date(a.at)) + '. ', el('label', { for: id, text: 'Look again on ' }), inp])]));
     });
     box.appendChild(ul);
     var row = el('p', { cls: 'wit-acts' });

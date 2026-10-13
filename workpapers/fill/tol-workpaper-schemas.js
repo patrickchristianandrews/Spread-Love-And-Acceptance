@@ -268,6 +268,9 @@
       var road = parseInt(ctx.value('roadPeople'), 10);
       if (bad.length) out.push({ label: 'Left out', value: bad.join(', ') + (bad.length === 1 ? ' is' : ' are') + ' not between 0 and 1, so the average waits.', note: 'Each score is five answers added up and divided by 20, so it runs from 0 to 1 (for example 0.45).' });
       else if (others.length) {
+        // side by side, with names where they came with a shared link: "You: 0.55 · Owen: 0.70 (14 of 20)"
+        var whoL = String(ctx.value('partnerWho') || '').split('|');
+        out.push({ label: 'Side by side', value: 'You: ' + fmt(s, 2) + ' (' + Math.round(s * 20) + ' of 20) \u00b7 ' + others.map(function (x, i) { return (String(whoL[i] || '').trim() || 'Someone') + ': ' + fmt(x, 2) + ' (' + Math.round(x * 20) + ' of 20)'; }).join(' \u00b7 ') + '.', note: 'Each score is only about the person who filled it in. Neither is a verdict on anyone.' });
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });
@@ -288,6 +291,9 @@
     slug: 'How-much-are-you-carrying',
     purpose: 'A one-minute check that each person fills in about themselves. It separates "How much am I already carrying?" from "How upset am I about this one thing?" Higher numbers mean more load. It is not a clinical test, just a structured gut-check.',
     people: false,
+    // your own answers stay on this device (with "Erase" and "Forget it"), so opening someone's shared score
+    // in a new tab never loses them
+    keepByDefault: true,
     perPerson: true,
     // "Share as a link" / "Open a shared score" (tol-workpaper.js): someone else's score goes into "Everyone else's scores"
     share: { what: 'score', after: 'reading', values: WP02_FACTORS.map(function (f) { return 'factors.' + f.id; }).concat(['caring', 'note']), score: wp02Score },

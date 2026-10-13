@@ -150,3 +150,6 @@ html.wit-literal .wit-help .wit-soft{ display:none; }
   html.wit-print-agreed #thread{ border:0; padding:0; }
   html.wit-print-agreed .wit-agreed input[type="date"]{ border:0; padding:0; }
 }
+
+/* anything switched off stays off, whatever display a class gives it */
+.wit-tool [hidden], .wit-thread [hidden], .wit-inbox [hidden], .wit-tool[hidden], .wit-thread[hidden], .wit-inbox[hidden], .wit-turnbar[hidden], .wit-agreed[hidden]{ display:none !important; }
