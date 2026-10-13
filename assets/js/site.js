@@ -16,6 +16,15 @@
 (function () {
   'use strict';
 
+  // En español: a page with its own Spanish words says so with <html data-es>. Opened with ?lang=es (or #es),
+  // it becomes a Spanish page: lang="es" on <html>, so the bar, menu, footer and Settings below come in
+  // Spanish (T() and esPage(), further down, read that lang). A page can also set lang="es" itself before
+  // this runs (the Night Garden does, for a visitor arriving from /en-espanol.html).
+  try {
+    var de0 = document.documentElement;
+    if (de0.hasAttribute('data-es') && (/[?&]lang=es\b/.test(location.search) || location.hash === '#es')) de0.setAttribute('lang', 'es');
+  } catch (e) {}
+
   // ===== Settings you edit =====
   var CONFIG = {
     // dormant: only used if openAll were false
@@ -41,7 +50,7 @@
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
       { href: '/outside-help.html', code: 'New', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies and books behind the pages, in plain words' },
-      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '15 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger and love' },
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '17 chapters on how people work: feelings, stress, trust, change, grief, healing, helping, anger, love, worry and groups' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide to listening, saying what you need, hard talks and repair' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
@@ -269,8 +278,7 @@
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Tidbit & Sugarfoot: Pal Cam TV', note: 'The pals live, all day, full screen or cast to your TV, with music and the sounds of each place' },
       { href: '/reading.html', code: 'Articles', title: 'Articles to read', note: 'Hand-picked articles from Psychology Today, Greater Good, the Gottman Institute and more, grouped by topic and fresh every visit' },
       { href: '/soundscapes.html', code: 'Audio', title: 'Brain Breakers', note: 'Four instrumental pieces to see and feel, by Christian’s Lab' },
-      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast', note: 'Coming: Kane and Christian on the ideas behind it all. No episodes yet' }
+      { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album: the music that came before the framework, for settling first (Pillar III)' }
     ]},
     { id: 'about', title: 'About & status', blurb: 'Who made this and why, what’s finished so far, and the site’s policies.', items: [
       { href: '/about.html', code: '', title: 'About the creator', note: 'The person behind it, their story, and why this exists' },
@@ -330,7 +338,7 @@
       { href: '#settings', code: 'New', title: 'High contrast', note: 'A new switch in Settings' },
       { href: '/whats-new.html', code: 'All', title: 'See everything new', note: 'Everything newly added, with dates' },
       { sub: 'New guides and the book' },
-      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '15 chapters on how people work' },
+      { href: '/book/understanding-1-feelings.html', code: 'Book', title: 'The book, Part Three: Understanding people', note: '17 chapters on how people work' },
       { href: '/communication.html', code: 'New', title: 'Effective communication', note: 'A complete, plain guide' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small ways to grow closeness with anyone' },
       { href: '/small-wins.html', code: 'New', title: 'Small wins, and turning the hard stuff into fuel', note: 'Small wins, and turning hard feelings into fuel, with a Flip it tool' },
@@ -360,7 +368,7 @@
       { href: '/for-teachers.html', code: 'New', title: 'For teachers', note: 'Lessons on feelings and communication, printable handouts with teen versions' },
       { href: '/book/topic-start-here.html', code: 'Book', title: 'The book, expanded', note: 'Three parts now, and the book by topic' }
     ]},
-    { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons, music and the podcast are in Watch & listen.', items: [
+    { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games are in Calm & play; cartoons and music are in Watch & listen.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
       { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Texting and pace, red flags or just different, meeting family, ending it kindly' },
       { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
@@ -533,11 +541,10 @@
       { href: '/surprise.html', code: 'Wander', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/book/topic-calm.html', code: 'Book', title: 'The book on staying calm', note: 'Every chapter’s part on settling, plus the calm tools' }
     ]},
-    { id: 'media', name: 'Watch & listen', title: 'Watch & listen', blurb: 'The pups’ cartoon, calm music and sounds, and the podcast. Every episode has captions.', items: [
+    { id: 'media', name: 'Watch & listen', title: 'Watch & listen', blurb: 'The pups’ cartoon, calm music and sounds. Every episode has captions.', items: [
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'Frequency Buddies', note: 'A free cartoon about feelings, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'Frequency Buddies Live', note: 'Drop in on the episode playing now, or cast it to your TV' },
       { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces from soft to cinematic, with a music visualizer' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast (coming)', note: 'Kane and Christian on the ideas behind it all. No episodes yet' },
       { sub: 'Frequency Buddies cartoon' },
       { href: '/frequency-buddies.html', code: 'Cartoon', title: 'All the episodes', note: 'Five animated adventures with the two pals, with captions' },
       { href: '/frequency-buddies-live.html', code: 'On air', title: 'The Live channel', note: 'An always-on station: drop in on the episode playing now' },
@@ -550,8 +557,7 @@
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
       { href: '/wp-11-sound-toolkit.html', code: 'Sounds', title: 'Calm-down sounds', note: 'Brown noise, a low hum and a soft flutter' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
-      { sub: 'Talks and the pups live' },
-      { href: '/podcast-index.html', code: 'Podcast', title: 'The Podcast (coming)', note: 'Kane and Christian on the ideas behind it all. No episodes yet' },
+      { sub: 'The pups live' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
     ]},
     { id: 'read', name: 'Read & learn', title: 'Read & learn', blurb: 'The book, the library, guides and stories. Each page has a short version and a deeper one.', items: [
@@ -3042,6 +3048,8 @@
   // (a function, so the bar and menu can use it too, wherever they're built)
   function esPage() { return /^es\b/i.test(document.documentElement.lang || ''); }
   function T(en, es) { return esPage() ? es : en; }
+  // for the other scripts: TOLLang.es() is true on a Spanish page, TOLLang.T('Close', 'Cerrar') picks the words
+  window.TOLLang = { es: esPage, T: T };
   // four steps, each bigger than the one before (every word on the page is scaled by 1, 1.15, 1.35 or 1.6)
   var SIZE_NAMES = { md: T('Normal', 'Normal'), lg: T('Large', 'Grande'), xl: T('Extra large', 'Muy grande'), xxl: T('Largest', 'La más grande') }, SIZE_SCALE = { md: 1, lg: 1.15, xl: 1.35, xxl: 1.6 };
   var TINTS = { cream: T('Cream', 'Crema'), blue: T('Soft blue', 'Azul suave'), mint: T('Mint', 'Verde menta') };

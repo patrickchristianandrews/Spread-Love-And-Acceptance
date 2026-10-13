@@ -835,9 +835,13 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <div><h2>Read in order, or by need</h2><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
 <div><h2>In every chapter</h2><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
 <div><h2>The site, the program and Professor Puddles</h2><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
-%s<div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
+<div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
                        n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
+    front = [f for f in FIGS if f['chapter'] == 'front']
+    if front:
+        s += '\n<section class="pe-glance pe-only" id="glance">%s<h1>The book in two pictures</h1><div class="pe-glance-figs">%s</div></section>' % (
+            mark('glance'), ''.join(fig_html(f, False) for f in front))
     s += '\n<nav class="pe-toc pe-only" aria-label="Contents"><h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % ''.join(toc_rows)
     return s
 
@@ -1043,10 +1047,12 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     here = set(e[0] for e in ORDER if e[1] in parts)
     if name == 'whole':
         here.add('afterword')
-    figs = [f for f in FIGS if f['chapter'] in here and ('full' if deep else 'short') in (f.get('versions') or ['short', 'full'])]
+    figs = [f for f in FIGS if (f['chapter'] in here or f['chapter'] == 'front') and ('full' if deep else 'short') in (f.get('versions') or ['short', 'full'])]
     exs = [x for x in EXS if x['chapter'] in here and (x.get('after_id_full') if deep else x.get('after_id'))]
     parts_html, toc, ptoc = [], [], []
     ptoc.append(toc_row('how', '', 'How to use this book', 'is-front'))
+    if any(f['chapter'] == 'front' for f in FIGS):
+        ptoc.append(toc_row('glance', '', 'The book in two pictures', 'is-front'))
     for part in parts:
         pname, sub, _ = PARTS[part]
         toc.append('<li><strong>%s: %s</strong><ol>' % (pname, sub))
@@ -1197,6 +1203,7 @@ def build_home():
 <nav class="bk-toc no-bubble" data-no-bubble aria-label="Contents">
 <h2 class="bk-toc-h" id="contents">Contents</h2>
 %s
+%s
 </nav>
 <h2 id="other-ways">Other ways in</h2>
 <ul>
@@ -1209,7 +1216,8 @@ def build_home():
 </main>
 </body>
 </html>
-''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)), '\n'.join(rows), UPDATED)
+''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)),
+       ''.join(fig_html(f, False).replace(' id="fig-front-parts"', ' id="how-the-parts-fit"') for f in FIGS if f['id'] == 'fig-front-parts'), '\n'.join(rows), UPDATED)
     write(os.path.join(BOOK, 'index.html'), page)
 
 
