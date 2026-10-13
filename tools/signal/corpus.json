@@ -82,7 +82,7 @@
 {"id":81,"rel":"friend","cat":"notcrisis","t":"I'm dead 😂😂","lvl":["clear","kind"],"f":["banter"]},
 {"id":82,"rel":"partner","cat":"apology","t":"I'm really sorry I forgot. That's on me. I'll set a reminder for Friday.","lvl":["kind","clear"],"f":["apology"]},
 {"id":83,"rel":"partner","cat":"apology","t":"sorry, my bad","lvl":["kind","clear"],"f":["apology"]},
-{"id":84,"rel":"partner","cat":"apology","t":"I'm sorry, but you didn't have to yell at me.","lvl":["a little sharp","sharp"],"f":["apology","blame"]},
+{"id":84,"rel":"partner","cat":"apology","t":"I'm sorry, but you didn't have to yell at me.","lvl":["a little sharp","sharp"],"f":["blame"],"maybe":["apology"],"note":"relabelled: \"Sorry, but you…\" is a lead-in, not an apology (an earlier tester round decided this)"},
 {"id":85,"rel":"partner","cat":"apology","t":"I'm sorry you feel that way.","lvl":["a little sharp","sharp"],"f":[],"maybe":["edge"]},
 {"id":86,"rel":"partner","cat":"apology","t":"Sorry I was short with you earlier, work was a lot. Love you","lvl":"kind","f":["apology","gratitude"]},
 {"id":87,"rel":"partner","cat":"minimal","t":"k.","lvl":["a little sharp"],"f":[],"maybe":["withdrawal"]},

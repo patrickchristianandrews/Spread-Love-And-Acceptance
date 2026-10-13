@@ -32,7 +32,7 @@ const LABELS = {
   // blame: a named blame pattern, or "always / never / again" aimed at the listener ("You never listen", "You're late again"),
   // which the page explains as turning one moment into a verdict on the person
   blame:      an => has(an, ['blameq', 'label', 'shouldhave', 'madefeel', 'critic', 'compare', 'jab', 'contempt', 'dxlabel', 'past', 'count', 'sorrybut', 'invalid', 'calm', 'hostile', 'passive'])
-                    || (has(an, ['absolute', 'again']) && YOU.test(an.norm)),
+                    || (has(an, ['absolute', 'again']) && YOU.test(an.norm) && !an.banter),
   sarcasm:    an => has(an, ['sarcasm']),
   absolutes:  an => has(an, ['absolute']),
   guilt:      an => has(an, ['guilt']),
