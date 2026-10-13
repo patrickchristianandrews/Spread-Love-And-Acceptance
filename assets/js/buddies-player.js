@@ -925,8 +925,13 @@
     // the pals' little sailboat: a mast and a sail behind them, the hull in front, bobbing on the waves
     function boatSpan() { var c = X(S.props.boat), half = Math.max(120, (S.geo.x1 - S.geo.x0) * 0.3); return { a: c - half, b: c + half, c: c }; }
     function boatBob(px) { if (S.scene !== 'sea') return 0; var bs = boatSpan(), amp = S.reduced ? 0.8 : 2.6; return Math.sin(S.t * 1.3) * amp + Math.sin(S.t * 0.9 + 1) * amp * 0.4 * ((px - bs.c) / (bs.b - bs.c)); }
+    // on land (pulled up on a beach) the boat is drawn smaller, behind the pals, so they can walk past it
+    function beached(g, fn) { var c = X(S.props.boat); g.save(); g.translate(c, G); g.scale(0.5, 0.5); g.translate(-c, -G); fn(g); g.restore(); }
     function drawBoatBack(g) {
       if (S.props.boat == null) return;
+      if (S.scene !== 'sea') beached(g, function (h) { boatMast(h); boatHull(h); }); else boatMast(g);
+    }
+    function boatMast(g) {
       var bs = boatSpan(), y = G + boatBob(bs.c), mx = bs.c + (bs.b - bs.a) * 0.08, sw = S.reduced ? 0 : Math.sin(S.t * 1.1) * 3;
       line(g, mx, y - 12, mx, y - 190, '#8A6340', 3.4);
       g.fillStyle = '#FFF8EA'; g.beginPath(); g.moveTo(mx + 4, y - 184); g.quadraticCurveTo(mx + 70 + sw, y - 110, mx + 82 + sw, y - 34); g.lineTo(mx + 4, y - 34); g.closePath(); g.fill();
@@ -935,8 +940,8 @@
       g.fillStyle = '#E4566E'; g.beginPath(); g.moveTo(mx, y - 190); g.lineTo(mx + 18, y - 185 + sw * 0.5); g.lineTo(mx, y - 180); g.closePath(); g.fill();
       rr(g, bs.a + 14, y - 22, bs.b - bs.a - 28, 4, 2, '#7A5636'); // the far rail
     }
-    function drawBoatFront(g) {
-      if (S.props.boat == null) return;
+    function drawBoatFront(g) { if (S.props.boat != null && S.scene === 'sea') boatHull(g); }
+    function boatHull(g) {
       var bs = boatSpan(), y = G + boatBob(bs.c), a = bs.a, b = bs.b, top = y - 9;
       g.fillStyle = '#C9784A'; g.beginPath(); g.moveTo(a - 10, top - 6); g.lineTo(b + 14, top - 8); g.quadraticCurveTo(b + 2, y + 26, b - 30, y + 30); g.lineTo(a + 24, y + 30); g.quadraticCurveTo(a, y + 22, a - 10, top - 6); g.closePath(); g.fill();
       rr(g, a - 12, top - 9, b - a + 28, 7, 3, '#8A4E2E');
@@ -2740,7 +2745,7 @@
       var trailer = Array.isArray(teaser), tlines = trailer ? teaser : [];   // a trailer (a list of lines) is read aloud; a plain teaser stays plain text
       endOv.innerHTML = '<div class="fb-ovc"><p class="fb-k">The end · ' + esc(ep.title) + '</p><h3>What the pals learned</h3><p>' + esc(ep.lesson) + '</p>' +
         (tlines.length || teaser || ntitle ? '<div class="fb-next"><b>Next time on Frequency Buddies' + (ntitle ? ': ' + esc(ntitle) : '') + '</b>' + (trailer ? '<div class="fb-trailer">' + tlines.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>' + (VO.ok && tlines.length ? '<button type="button" class="fb-b fb-hear" aria-pressed="false">🎬 Hear the trailer</button>' : '') : esc(teaser)) + '</div>' : '') +
-        '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch episode ' + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
+        '<div class="fb-row">' + (nep ? '<a class="fb-b is-main" href="/frequency-buddies.html?ep=' + nid + '">▶ Watch ' + ((nep.season || 1) !== (ep.season || 1) ? 'Season ' + nep.season + ', episode ' : 'episode ') + nep.number + '</a>' : nid ? '<span class="fb-b" aria-disabled="true">Episode ' + (ce ? ce.n : '') + ' is coming soon</span>' : '') +
         '<button type="button" class="fb-b fb-again">↺ Watch again</button><a class="fb-b" href="/frequency-journey.html#buddies">All episodes</a></div></div>';
       endOv.querySelector('.fb-again').addEventListener('click', restart);
       TV.btn = endOv.querySelector('.fb-hear'); tstop();

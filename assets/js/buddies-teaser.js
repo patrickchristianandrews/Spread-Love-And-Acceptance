@@ -502,8 +502,8 @@
         star(g, sx, sy, (2 + rnd(i + 1104) * 4) * (1 - k * 0.6), ['rgba(255,236,160,', 'rgba(255,190,215,', 'rgba(190,250,235,', 'rgba(255,255,255,'][i % 4] + (1 - k) + ')', q * 2 + i);
       }
     }
-    // Coming soon
-    if (u > 2.2) { var a3 = clamp((u - 2.2) / 0.5, 0, 1); g.globalAlpha = a3; font(g, 'italic 500', 28); g.fillStyle = '#FBE7FF'; g.fillText('Coming soon', 320, 266 + 6 * (1 - eout((u - 2.2) / 0.5))); rr(g, 320 - 70 * a3, 286, 140 * a3, 2.5, 1.2, 'rgba(247,201,139,.8)'); g.globalAlpha = 1; }
+    // Out now
+    if (u > 2.2) { var a3 = clamp((u - 2.2) / 0.5, 0, 1); g.globalAlpha = a3; font(g, 'italic 500', 28); g.fillStyle = '#FBE7FF'; g.fillText('Out now', 320, 266 + 6 * (1 - eout((u - 2.2) / 0.5))); rr(g, 320 - 70 * a3, 286, 140 * a3, 2.5, 1.2, 'rgba(247,201,139,.8)'); g.globalAlpha = 1; }
     if (u > 3.0) { g.globalAlpha = clamp((u - 3.0) / 0.6, 0, 1) * 0.85; font(g, '500', 13, '"IBM Plex Mono", monospace'); spacing(g, 1); g.fillStyle = '#D9C8F0'; g.fillText('FREE ON SPREADLOVEANDACCEPTANCE.COM', 320, 340); spacing(g, 0); g.globalAlpha = 1; }
     // the pals pop up, one each side
     if (u > 1.6) {
@@ -1193,10 +1193,10 @@
       // the big play/pause sign over the picture is only a picture: a click on it goes to the canvas, which plays or pauses.
       // The one set of real controls is the bar under the picture.
       '<div class="tz-tap" aria-hidden="true"><span class="tz-tb tz-tap-play">▶</span></div>' +
-      '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is coming soon</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again"><span aria-hidden="true">↺</span> Watch again</button><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
+      '<div class="tz-ov tz-end" hidden><div class="tz-ovc"><p class="tz-k">Season 2 is out now</p><h3 class="tz-end-h">You found 0 of 5 secrets</h3><p class="tz-end-p">Watch it again to find them all.</p><div class="tz-row"><button type="button" class="tz-b is-main tz-again"><span aria-hidden="true">↺</span> Watch again</button><a class="tz-b" href="/frequency-buddies.html?ep=s2e1">Watch Season 2</a><a class="tz-b" href="#pick">Pick your favorite new place</a></div></div></div>' +
       '</div>' +
       // the poster's words sit under the picture, not on top of the big title
-      '<div class="tz-start"><div class="tz-ovc"><p class="tz-k">Out now: the Season 2 teaser</p><button type="button" class="tz-big"><span aria-hidden="true">▶</span> Play the teaser</button><p>Season 2 itself is coming soon. The teaser is about two minutes long, and <b>five secrets</b> are hidden in it: tap them when you spot them, or press S.</p></div></div>' +
+      '<div class="tz-start"><div class="tz-ovc"><p class="tz-k">Out now: the Season 2 teaser</p><button type="button" class="tz-big"><span aria-hidden="true">▶</span> Play the teaser</button><p>The first Season 2 episodes are out now. The teaser is about two minutes long, and <b>five secrets</b> are hidden in it: tap them when you spot them, or press S.</p></div></div>' +
       '<div class="tz-prog"><div class="tz-track" role="slider" tabindex="0" aria-label="Teaser time" aria-valuemin="0" aria-valuemax="' + Math.round(DUR) + '" aria-valuenow="0"><div class="tz-fill"></div></div><span class="tz-time">0:00 / ' + fmt(DUR) + '</span></div>' +
       '<div class="tz-ctrl"><button type="button" class="tz-b is-main tz-play"><span aria-hidden="true">▶</span> Play</button><button type="button" class="tz-b tz-re"><span aria-hidden="true">↺</span> Replay<span class="tz-sr"> from the start</span></button><span class="tz-sp"></span><button type="button" class="tz-b tz-full"><span aria-hidden="true">⛶</span> <span class="tz-lbl">Full screen</span></button></div>' +
       '<div class="tz-found"><span class="tz-found-t">🔍 Secrets found: <b>0</b> of 5</span><span class="tz-lookw"><span class="tz-b tz-look-ghost" aria-hidden="true">Watch for a secret…</span><button type="button" class="tz-b tz-look"><span aria-hidden="true">🔍</span> Look for a secret here</button></span><span class="tz-dots" aria-hidden="true"></span></div>' +
@@ -1338,7 +1338,7 @@
       P.playing = false; P.ended = true; audioStop(); silence(); syncBtns(); wake(true);
       MEM.plays = (MEM.plays || 0) + 1; save(MEM);
       var n = MEM.found.length; $('.tz-end-h').textContent = n >= 5 ? 'You found all 5 secrets! 🌟' : 'You found ' + n + ' of 5 secrets';
-      $('.tz-end-p').textContent = n >= 5 ? 'Super spotter! Season 2 is coming soon, and you’re ready for it.' : n === 0 ? 'Five secrets are hidden in the teaser. Watch it again and tap them when you spot them!' : 'Watch it again to find them all. Need a clue? The hints are just below.';
+      $('.tz-end-p').textContent = n >= 5 ? 'Super spotter! Now you’re ready for Season 2.' : n === 0 ? 'Five secrets are hidden in the teaser. Watch it again and tap them when you spot them!' : 'Watch it again to find them all. Need a clue? The hints are just below.';
       endOv.hidden = false; document.dispatchEvent(new CustomEvent('tol-teaser-end', { detail: { found: n } }));
     }
     function inView() { if (document.fullscreenElement || player.classList.contains('is-full')) return; var hd = document.querySelector('.tol-bar'), top = hd ? Math.max(0, hd.getBoundingClientRect().bottom) : 0, r = player.getBoundingClientRect(); if (r.top < top + 4 || r.top > innerHeight * 0.5) { try { scrollBy({ top: r.top - top - 10, behavior: P.calm ? 'auto' : 'smooth' }); } catch (e) { scrollBy(0, r.top - top - 10); } } }

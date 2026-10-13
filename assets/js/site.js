@@ -551,7 +551,7 @@
       { href: '/frequency-buddies-shuffle.html', code: 'Shuffle', title: 'Episodes on shuffle', note: 'Episode after episode in a random order' },
       { href: '/frequency-buddies-music-video.html', code: 'Song', title: 'The theme song music video', note: 'Everyone on stage, singing and dancing' },
       { href: '/frequency-buddies-music-video-maker.html', code: 'Make', title: 'Make your own music video', note: 'Pick the stage, costumes and moves, then share it' },
-      { href: '/frequency-buddies-season-2.html', code: 'Teaser', title: 'Season 2 teaser', note: 'New places, new friends, and five hidden secrets' },
+      { href: '/frequency-buddies-season-2.html', code: 'S2', title: 'Season 2: The Great Big Sea', note: 'New episodes, and the teaser with five hidden secrets' },
       { sub: 'Music and calm sounds' },
       { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualizer and vibration' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
@@ -4467,7 +4467,7 @@
     [/^\/frequency-buddies\.html$/, 'Share this episode', 'Frequency Buddies: a gentle cartoon for all ages, free, with captions.', { pin: true, episode: true }],
     [/^\/frequency-buddies-live\.html$/, 'Share the station', 'Frequency Buddies Live: a gentle cartoon station for all ages, always on.', { pin: true }],
     [/^\/frequency-buddies-shuffle\.html$/, 'Share this page', 'Frequency Buddies on shuffle: gentle cartoon episodes for all ages.', { pin: true }],
-    [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is coming! Watch the two-minute teaser and look for the five secrets.', { pin: true }],
+    [/^\/frequency-buddies-season-2\.html$/, 'Share the teaser', 'Frequency Buddies Season 2 is here! Watch the new episodes, then the two-minute teaser, and look for the five secrets.', { pin: true }],
     [/^\/frequency-buddies-music-video[\w-]*\.html$/, 'Share the music video', 'A Frequency Buddies music video for all ages.', { pin: true }],
     // games (the game, never a score)
     [/^\/pause-and-play\.html$/, 'Share the games', 'Calm games for a busy mind. Free, with no timers.'],
