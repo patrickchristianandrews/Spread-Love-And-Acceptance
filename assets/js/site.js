@@ -2377,8 +2377,9 @@
   function onThisPage(body) {
     var main = document.querySelector('main.read');
     if (!main || current === '/index.html' || /^\/(book|workpapers\/fill|legal)\//.test(current) || body.classList.contains('is-game') || main.querySelector('.tol-onpage')) return;
-    // a page that already lists its parts near the top keeps its own list
-    if (main.querySelector('nav[aria-label="On this page"], .gp-jump, .jump, .jump-links, [data-jump], .tol-jump, .toc, .page-toc')) return;
+    // a page that already lists its parts near the top keeps its own list (one far down the page doesn't count)
+    var own = main.querySelector('nav[aria-label="On this page"], .gp-jump, .jump, .jump-links, [data-jump], .tol-jump, .toc, .page-toc');
+    if (own && own.getBoundingClientRect().top + (window.scrollY || 0) < Math.max(900, window.innerHeight * 1.1)) return;
     var hs = Array.prototype.filter.call(main.querySelectorAll('h2'), function (h) {
       return h.textContent.trim().length > 2 && h.getClientRects().length && !h.closest('aside, nav, details, .tol-pud-card, .tol-read-wrap, .tol-fp-note, .no-onpage, [hidden]');
     });
@@ -2401,7 +2402,7 @@
       try { t.focus({ preventScroll: true }); } catch (er) {}
     });
     var head = main.querySelector(':scope > .read-head'), h1 = main.querySelector('h1'), lede = main.querySelector(':scope > .simple-lede, :scope > .lede');
-    var after = lede || head || (h1 && h1.parentNode === main ? h1 : null);
+    var after = head || (h1 && h1.parentNode === main ? h1 : null) || lede;
     if (after) after.after(box); else main.insertBefore(box, main.firstChild);
   }
 
