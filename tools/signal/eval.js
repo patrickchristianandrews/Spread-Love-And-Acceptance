@@ -3,6 +3,9 @@
      node tools/signal/eval.js            # summary: level accuracy, precision/recall per label, every miss
      node tools/signal/eval.js --json     # the same numbers as JSON (for the page's "How accurate is this?" note)
      node tools/signal/eval.js --quiet    # summary only, no list of misses
+     node tools/signal/eval.js --file holdout.json   # the held-out set, written after tuning and never tuned on
+     node tools/signal/eval.js --regress  # fails if a message that read right before now reads wrong (corpus-pass.json)
+     node tools/signal/eval.js --save-pass  # record which messages read fully right now, for --regress
 
    The corpus (tools/signal/corpus.json) is a set of realistic messages written by hand, each with what a careful
    human reader would say about it:
@@ -18,8 +21,10 @@
 'use strict';
 const path = require('path');
 const E = require(path.join(__dirname, '../../assets/js/signal-engine.js'));
-const CORPUS = require(path.join(__dirname, 'corpus.json'));
 const args = process.argv.slice(2);
+// --file holdout.json reads another labelled set (the held-out messages written after tuning)
+const FILE = args.includes('--file') ? args[args.indexOf('--file') + 1] : 'corpus.json';
+const CORPUS = require(path.join(__dirname, FILE));
 const JSON_OUT = args.includes('--json'), QUIET = args.includes('--quiet');
 
 const LEVELS = ['kind', 'clear', 'a little sharp', 'sharp', 'very sharp'];
@@ -31,7 +36,7 @@ const LABELS = {
   hint:       an => has(an, ['hint']),
   // blame: a named blame pattern, or "always / never / again" aimed at the listener ("You never listen", "You're late again"),
   // which the page explains as turning one moment into a verdict on the person
-  blame:      an => has(an, ['blameq', 'label', 'shouldhave', 'madefeel', 'critic', 'compare', 'jab', 'contempt', 'dxlabel', 'past', 'count', 'sorrybut', 'invalid', 'calm', 'hostile', 'passive'])
+  blame:      an => has(an, ['blameq', 'label', 'shouldhave', 'madefeel', 'critic', 'compare', 'jab', 'contempt', 'dxlabel', 'past', 'count', 'sorrybut', 'invalid', 'calm', 'hostile', 'passive', 'kidsfirst'])
                     || (has(an, ['absolute', 'again']) && YOU.test(an.norm) && !an.banter),
   sarcasm:    an => has(an, ['sarcasm']),
   absolutes:  an => has(an, ['absolute']),
@@ -122,6 +127,19 @@ const summary = {
   readMode: {n: gotN, ok: gotOk, pct: pct(gotOk, gotN)},
   fullyRight: CORPUS.length - misses.length, fullyRightPct: pct(CORPUS.length - misses.length, CORPUS.length)
 };
+// regression guard: every message that read fully right when corpus-pass.json was saved must still read right
+// (every fixed miss stays fixed). Save with --save-pass after an intended change.
+const PASS_FILE = path.join(__dirname, FILE.replace(/\.json$/, '') + '-pass.json');
+if(args.includes('--save-pass')){
+  require('fs').writeFileSync(PASS_FILE, JSON.stringify(CORPUS.filter(c => !misses.some(m => m.id === c.id)).map(c => c.id)) + '\n');
+  console.log('saved ' + (CORPUS.length - misses.length) + ' passing ids to ' + path.basename(PASS_FILE));
+}
+if(args.includes('--regress')){
+  const was = require(PASS_FILE), now = misses.filter(m => was.includes(m.id));
+  now.forEach(m => console.log('REGRESSION #' + m.id + ' ' + m.t + '\n    ' + m.why.join('\n    ')));
+  console.log(was.length + ' messages that read right before; ' + (was.length - now.length) + ' still right, ' + now.length + ' regressed');
+  process.exit(now.length ? 1 : 0);
+}
 if(JSON_OUT){ console.log(JSON.stringify({summary, labels: table.map(({fpList, fnList, ...x}) => x), misses}, null, 1)); process.exit(0); }
 console.log('Text message checker: evaluation on ' + CORPUS.length + ' hand-labelled messages\n');
 console.log('How it may land (kind/clear, a little sharp, sharp, very sharp): ' + lvlExact + '/' + lvlN + ' right (' + summary.levelPct + '%), within one step ' + summary.levelWithinOne + '%');

@@ -170,7 +170,7 @@
     ["\\bunbill?ed (det|dept|dett|dbt|debit|dets|depts)\\b", "unbilled debt"],
     ["\\bcalm down kit\\b", "calm-down kit"],
     ["\\bclam (down|me)\\b", "calm $1"],
-    ["\\byour (always|never|so|such|being|late|not|going|doing|the only|the worst|the best|a|an|too|really|just|welcome|kidding|joking|lying|making|acting|driving|getting|overreacting|still|literally|constantly|obviously)\\b", "you're $1"]
+    ["\\byour (always|never|so|such|being|late|not|going|doing|the only|the worst|the best|a|an|too|really|just|welcome|kidding|joking|lying|making|acting|driving|getting|overreacting|still|literally|constantly|obviously)\\b(?! (?:is|was|isn't|wasn't|has|had|really (?:is|was)|scares|scared|annoys|annoyed|worries|worried|frightens|makes|made|gets|got|needs|could|can|will|would|skills|style|habit|habits|lessons|test|licen[cs]e|instructor|record))", "you're $1"]
   ];
   /* SPELL-END */
   // "allways" → "always", keeping the writer's capitals. Returns {text, fixes:[{from, to}]}.

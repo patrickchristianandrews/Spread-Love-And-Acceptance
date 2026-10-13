@@ -488,11 +488,12 @@ def figures():
     for f in _load('figures.json'):
         ch = norm_ch(f.get('chapter'))
         src = f.get('src') or ''
-        if ch not in SLUGS or not src or not os.path.exists(os.path.join(ROOT, src.lstrip('/'))):
+        if (ch not in SLUGS and ch != 'front') or not src or not os.path.exists(os.path.join(ROOT, src.lstrip('/'))):
             continue
         f = dict(f, chapter=ch, src='/' + src.lstrip('/'))
         out.append(f)
     order = {e[0]: i for i, e in enumerate(ORDER)}
+    order['front'] = -1
     out.sort(key=lambda f: order[f['chapter']])
     for n, f in enumerate(out, 1):
         f['n'] = n
@@ -520,12 +521,14 @@ FIGS = figures()
 EXS = examples()
 
 
-def fig_html(f):
-    wh = svg_size(f['src']) if f['src'].endswith('.svg') else None
-    dims = ' width="%d" height="%d"' % wh if wh else ''
-    return ('<!-- book-fig:start -->\n<figure class="book-fig no-bubble" id="%s"><img src="%s" alt="%s"%s loading="lazy" decoding="async">'
-            '<figcaption><span class="book-fig-n">Figure %d</span> %s</figcaption></figure>\n<!-- book-fig:end -->') % (
-        esc(f['id']), esc(f['src']), esc(f.get('alt', '')), dims, f['n'], f.get('caption', ''))
+def fig_html(f, markers=True):
+    wh = (f.get('width'), f.get('height')) if f.get('width') and f.get('height') else (svg_size(f['src']) if f['src'].endswith('.svg') else None)
+    dims = ' width="%d" height="%d"' % tuple(wh) if wh else ''
+    s = ('<figure class="book-fig no-bubble" id="%s" data-kind="%s"><a class="book-fig-zoom" href="%s" title="Open the picture on its own, to zoom in">'
+         '<img src="%s" alt="%s"%s loading="lazy" decoding="async"></a>'
+         '<figcaption><span class="book-fig-n">Figure %d</span> %s</figcaption></figure>') % (
+        esc(f['id']), esc(f.get('kind', '')), esc(f['src']), esc(f['src']), esc(f.get('alt', '')), dims, f['n'], f.get('caption', ''))
+    return ('<!-- book-fig:start -->\n%s\n<!-- book-fig:end -->' % s) if markers else s
 
 
 def ex_html(x):
@@ -534,6 +537,21 @@ def ex_html(x):
     title = x.get('title') or 'A filled-in example'
     return ('<!-- book-ex:start -->\n<div class="book-ex-wrap no-bubble" id="%s" data-ex-n="%d" data-ex-title="%s">%s</div>\n<!-- book-ex:end -->') % (
         esc(x['id']), x['n'], esc(title), body.strip())
+
+
+def place_idea(s, n, block):
+    """At the end of the nth <li> of the page's <ol class="ideas"> (the big ideas on the short pages have no ids)."""
+    m = re.search(r'<ol class="ideas"[^>]*>', s)
+    if not m or not n:
+        return s, False
+    k = m.end()
+    for _ in range(int(n)):
+        j = s.find('<li', k)
+        if j < 0:
+            return s, False
+        k = element_end(s, j)
+    e = k - len('</li>')
+    return s[:e] + '\n' + block + '\n' + s[e:], True
 
 
 def place(s, after_id, block):
@@ -566,7 +584,11 @@ def insert_generated(s, slug, deep):
         if f['chapter'] != slug or ver not in (f.get('versions') or ['short', 'full']):
             continue
         aid = (f.get('after_id_full') if deep else None) or f.get('after_id')
-        s, ok = place(s, aid, fig_html(f))
+        if not deep and not f.get('after_id') and f.get('idea'):
+            s, ok = place_idea(s, f['idea'], fig_html(f))
+            aid = 'idea %s' % f['idea']
+        else:
+            s, ok = place(s, aid, fig_html(f))
         if not ok:
             MISSING.append('figure %s: #%s not found in %s%s' % (f['src'], aid, slug, '-in-depth' if deep else ''))
     for x in EXS:
@@ -813,7 +835,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <div><h2>Read in order, or by need</h2><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
 <div><h2>In every chapter</h2><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
 <div><h2>The site, the program and Professor Puddles</h2><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
-<div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
+%s<div><h2>Go gently</h2><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
                        n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
     s += '\n<nav class="pe-toc pe-only" aria-label="Contents"><h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % ''.join(toc_rows)
@@ -951,8 +973,11 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
     if figs:
         s += '<section class="pe-back pe-lof" id="figures" style="--pc:%s">%s<h1 class="pe-back-h">List of figures</h1><ol class="pe-lof-list">' % (col, mark('figures'))
         for f in figs:
-            s += '<li><a href="#%s--%s"><span class="pe-lof-n">Figure %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
-                f['chapter'], f['id'], f['n'], strip_tags(f.get('caption', '')).strip() and esc(strip_tags(f.get('caption', '')).strip()), esc(SHORT[f['chapter']]), pg('fig-%d' % f['n']))
+            cap = strip_tags(f.get('caption', '')).strip()
+            cap = cap.split(': ')[0] if ': ' in cap[:70] else re.split(r'(?<=[.!?])\s', cap)[0]
+            s += '<li><a href="#%s"><span class="pe-lof-n">Figure %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
+                f['id'] if f['chapter'] == 'front' else '%s--%s' % (f['chapter'], f['id']), f['n'], esc(cap.rstrip('.')),
+                'Front of the book' if f['chapter'] == 'front' else esc(SHORT[f['chapter']]), pg('fig-%d' % f['n']))
         s += '</ol></section>'
     if exs:
         s += '<section class="pe-back pe-lof" id="examples" style="--pc:%s">%s<h1 class="pe-back-h">List of filled-in examples</h1><ol class="pe-lof-list">' % (col, mark('examples'))
