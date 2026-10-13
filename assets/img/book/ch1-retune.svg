@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 656" width="540" height="656" role="img" aria-labelledby="fig-ch1-retune-t fig-ch1-retune-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch1-retune-t">Retuning, step by step</title>
+<desc id="fig-ch1-retune-d">Four steps going down. One: name the mismatch out loud, without blame, for example &quot;I think we’re on different wavelengths.&quot; Two: check your own state; if you are revved up or running on empty, pause and name a time to come back. Three: slow the pace on purpose: shorter turns, more pauses, a lower voice. Four: only then, go back to the topic.</desc>
+<defs><marker id="fig-ch1-retune-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="654" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Retuning, step by step</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Before you carry on with a talk that has started to</tspan><tspan x="28" dy="24.32">whistle.</tspan></text>
+<rect x="28" y="122.32" width="484" height="100.88" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<circle cx="58" cy="172.76" r="17" fill="#2F5F8A"/>
+<text x="58" y="179.76" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">1</text>
+<text x="88" y="153.12" font-size="21" font-weight="bold"><tspan x="88" dy="0">Name the mismatch, without</tspan><tspan x="88" dy="26.88">blame</tspan></text>
+<text x="88" y="205" font-size="19" fill="#5A5346">“I think we’re on different wavelengths.”</text>
+<line x1="58" y1="226.2" x2="58" y2="248.2" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-ch1-retune-ar-5a5346)"/>
+<rect x="28" y="253.2" width="484" height="98.32" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="302.36" r="17" fill="#7A5620"/>
+<text x="58" y="309.36" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>
+<text x="88" y="284" font-size="21" font-weight="bold">Check your own state</text>
+<text x="88" y="309" font-size="19" fill="#5A5346"><tspan x="88" dy="0">Revved up or running on empty? Pause,</tspan><tspan x="88" dy="24.32">and name a time to come back.</tspan></text>
+<line x1="58" y1="354.52" x2="58" y2="376.52" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-ch1-retune-ar-5a5346)"/>
+<rect x="28" y="381.52" width="484" height="98.32" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<circle cx="58" cy="430.68" r="17" fill="#7A5620"/>
+<text x="58" y="437.68" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">3</text>
+<text x="88" y="412.32" font-size="21" font-weight="bold">Slow the pace on purpose</text>
+<text x="88" y="437.32" font-size="19" fill="#5A5346"><tspan x="88" dy="0">Shorter turns, more pauses, a lower</tspan><tspan x="88" dy="24.32">voice.</tspan></text>
+<line x1="58" y1="482.84" x2="58" y2="504.84" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" marker-end="url(#fig-ch1-retune-ar-5a5346)"/>
+<rect x="28" y="509.84" width="484" height="74" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<circle cx="58" cy="546.84" r="17" fill="#3E6B4C"/>
+<text x="58" y="553.84" font-size="19" font-weight="bold" fill="#FCF9F1" text-anchor="middle">4</text>
+<text x="88" y="540.64" font-size="21" font-weight="bold">Then go back to the topic</text>
+<text x="88" y="565.64" font-size="19" fill="#5A5346">It still matters. Now you can both hear it.</text>
+<text x="28" y="606.84" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">This book’s four steps. Anyone can call a pause, and</tspan><tspan x="28" dy="23.04">nobody should be blocked from leaving the room.</tspan></text>
+</svg>

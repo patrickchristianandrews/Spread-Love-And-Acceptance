@@ -49,7 +49,7 @@
     { id: 'readable', group: 'more', name: 'Easier-to-read text', note: 'A plain, clear font your device already has (like Verdana), roomier spacing, shorter left-aligned lines, and no italics.' },
     { id: 'ruler', group: 'more', name: 'Reading ruler', note: 'A soft band that follows your finger or pointer, so you keep your place on the line.' },
     { id: 'senses', group: 'more', name: 'Calm for the senses', note: 'A still page, site sounds off, and no bubbles or shapes behind the words.' },
-    { id: 'reassure', group: 'more', name: 'Reassurance and a way out', note: 'A short line at the top of each page: nothing here is graded, there’s no rush, and a “Leave this site quickly” button. Progress counts are hidden.' },
+    { id: 'reassure', group: 'more', name: 'Reassurance', note: 'A short line at the top of each page: nothing here is graded, there’s no rush, and you can stop at any point. Progress counts are hidden.' },
     { id: 'expect', group: 'more', name: 'Know what’s coming', note: 'Reading pages say how long they take (minutes and words) and list their parts before you start.' },
     { id: 'checklist', group: 'more', name: 'Tick off steps', note: 'Numbered steps get tick boxes, remembered on this device, so you can see what you’ve done.' },
     { id: 'targets', group: 'more', name: 'Bigger buttons', note: 'Buttons, form boxes and links in lists get larger and roomier, so they’re easier to tap.' },
@@ -408,10 +408,8 @@
     var slot = topSlot(); if (!slot || slot.querySelector('.ti-calm')) return;
     var txt = (m.textContent || '');
     var privateToo = /(stays?|kept|saved) (only )?(on|in) (this|your) (device|browser|phone)|never leaves|nothing you type (leaves|is sent)|leaves your device/i.test(txt);
-    var hasExit = !!m.querySelector('[data-tol-exit]');
     var p = el('p', { class: 'ti-calm' });
-    p.innerHTML = '<span>Nothing here is graded. There’s no right answer and no rush, and you can stop at any point.' + (privateToo ? ' What you type stays on this device.' : '') + '</span>' +
-      (hasExit ? '' : ' <button type="button" data-tol-exit class="ti-exit">Leave this site quickly</button>');
+    p.innerHTML = '<span>Nothing here is graded. There’s no right answer and no rush, and you can stop at any point.' + (privateToo ? ' What you type stays on this device.' : '') + '</span>';
     slot.appendChild(p);
   }
 

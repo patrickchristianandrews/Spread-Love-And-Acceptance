@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 559" width="540" height="559" role="img" aria-labelledby="fig-preface-estimates-t fig-preface-estimates-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-preface-estimates-t">We each remember our own effort best</title>
+<desc id="fig-preface-estimates-d">A bar showing 100 percent of the shared work. One person’s estimate of their own share, about 60 percent, fills from the left in blue. The other person’s estimate, about 55 percent, fills from the right in rose. They overlap by 15 percent, so together they add up to 115 percent. Illustrative numbers: in a 1979 study, partners’ separate estimates of their own share usually added up to more than 100 percent. Nobody was lying. The fix is to put both weeks on paper, side by side.</desc>
+
+<rect x="1" y="1" width="538" height="557" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">We each remember our own effort</tspan><tspan x="28" dy="32">best</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346">Two honest guesses about the same home.</text>
+<text x="40" y="154" font-size="20" font-weight="bold" fill="#2F5F8A">“I do about 60%.”</text>
+<rect x="40" y="168" width="276" height="40" rx="8" fill="#7FB2E0"/>
+<text x="54" y="195" font-size="18">my share, as I remember it</text>
+<rect x="247" y="218" width="253" height="40" rx="8" fill="#E8A0A8"/>
+<text x="486" y="245" font-size="18" text-anchor="end">my share, as I remember it</text>
+<text x="500" y="286" font-size="20" font-weight="bold" fill="#8E3B47" text-anchor="end">“I do about 55%.”</text>
+<rect x="247" y="154" width="69" height="112" rx="6" fill="none" stroke="#2B2620" stroke-width="2" stroke-dasharray="5 4"/>
+<line x1="40" y1="138" x2="40" y2="270" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<line x1="500" y1="138" x2="500" y2="270" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<path d="M281.5 274.0 L281.5 306.0" fill="none" stroke="#2B2620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="281.5" y="328" font-size="19" font-weight="bold" text-anchor="middle">counted twice: 15%</text>
+<text x="40" y="366" font-size="18" fill="#5A5346">0%</text>
+<text x="500" y="366" font-size="18" fill="#5A5346" text-anchor="end">100% of the work</text>
+<rect x="28" y="394" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="427" font-size="19" font-weight="bold" text-anchor="middle">Together: 115%. Nobody is lying.</text>
+<text x="270" y="451.7" font-size="19" font-style="italic" text-anchor="middle">Fix: put both weeks on paper, side by side.</text>
+<text x="28" y="486.4" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustrative numbers. In Ross and Sicoly’s 1979</tspan><tspan x="28" dy="23.04">study, partners’ separate estimates of their own</tspan><tspan x="28" dy="23.04">share usually added up to more than 100%.</tspan></text>
+</svg>

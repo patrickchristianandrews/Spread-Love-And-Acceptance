@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 625.64" width="540" height="625.64" role="img" aria-labelledby="fig-then-stages-t fig-then-stages-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 626" width="540" height="626" role="img" aria-labelledby="fig-then-stages-t fig-then-stages-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-then-stages-t">Each stage of growing up asks its own question</title>
 <desc id="fig-then-stages-d">A winding path with six stops. About 0 to 1: is the world safe, will someone come? About 2 to 3: can I do it myself? About 4 to 5: is it okay to start things and take up space? About 6 to 11: am I capable? About 12 to 17: who am I, and where do I belong? About 18 to 39: can I be close without losing myself? The questions come back at big changes, and can be answered again.</desc>
 
-<rect x="1" y="1" width="538" height="623.64" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<rect x="1" y="1" width="538" height="624" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Each stage asks its own question</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Ages are rough. People move at their own pace.</text>
 <path d="M54 130.0 C54 159.0 78 159.0 78 188.0 C78 217.0 54 217.0 54 246.0 C54 287.8 78 287.8 78 329.6 C78 358.6 54 358.6 54 387.6 C54 416.6 78 416.6 78 445.6" fill="none" stroke="#D9CBA3" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>

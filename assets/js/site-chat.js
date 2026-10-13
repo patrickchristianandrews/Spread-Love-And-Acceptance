@@ -1526,8 +1526,11 @@
       c.blocks[0].x = fill('Thanks for telling me. I’d like to help with the right thing with {them}. Is it closest to one of these? Or say a bit more in your own words.', whoCtx(sit.who, sit.noun));
       return c;
     }
+    // the chips fit the person: on your own, after a loss, or older, never a list of couple fights
+    var solo = /\b(alone|on my own|by myself|lonely|widow\w*|lost my (wife|husband|partner)|(wife|husband|partner) (died|passed)|retired|my age|older|(i m|im|i am) (5|6|7|8|9)\d|single|divorced|live alone)\b/.test(f) || (state.page && /^\/(grief|on-my-own|empty-nest|grandparents)\.html$/.test(state.page.u || ''));
     return { blocks: [{ k: 'p', x: 'Thanks for telling me. I want to make sure I help with the right thing. Is it closest to one of these? Or tell me a little more in your own words, like who it’s with and what happened.' }],
-      chips: [{ label: 'We keep having the same fight', q: 'We keep having the same fight again' }, { label: 'Making up after a fight', q: 'How do we make up after a fight?' },
+      chips: solo ? [{ label: 'Building a life on my own', q: 'Building a life on my own' }, { label: 'I lost someone', q: 'I lost my partner and the house is so quiet' }, { label: 'I feel lonely', q: 'I feel lonely' }, { label: 'Tell me something calming', q: 'Tell me something calming' }]
+        : [{ label: 'We keep having the same fight', q: 'We keep having the same fight again' }, { label: 'Making up after a fight', q: 'How do we make up after a fight?' },
         { label: 'I’m worn out', q: 'I feel exhausted and overwhelmed' }, { label: 'What can I do tonight?', q: 'What can I do tonight?' }], kind: 'clarify' };
   }
 
@@ -1832,8 +1835,10 @@
     if (pages.length) {
       var res = search(q), qt = (res.base || []).filter(function (t, j, a) { return a.indexOf(t) === j && !ROLE[t] && !STOP[t]; });
       var hits = res.hits.filter(function (h) { var d = KB.docs[h.i], u = d.u.split('#')[0]; return !d.tip && !d.g && pages.indexOf(u) !== -1 && d.u !== u + '#main' && d.u !== u + '#more'; });
-      var top = hits[0];
-      if (top && qt.length && top.cov >= 0.3 && top.s >= 1.0) {
+      var top = hits[0], g0 = res.hits.filter(function (h) { return !KB.docs[h.i].tip; })[0];
+      // a question that another page answers much better is a new question, not a follow-up ("Staying with …" would be stale)
+      var elsewhere = top && g0 && pages.indexOf(KB.docs[g0.i].u.split('#')[0]) === -1 && g0.s >= top.s * 1.5 && g0.cov >= top.cov;
+      if (top && qt.length && top.cov >= 0.3 && top.s >= 1.0 && !elsewhere) {
         var pb = passageBlock(top.i, res.terms);
         var fl0 = TF_FEEL.test(f) ? (c.fuFeel || 'That makes sense, and a lot of people in your spot feel the same.') + ' ' : '';
         return done({ blocks: [{ k: 'p', x: fl0 + 'Staying with ' + (pgT || TC.name) + ', this part fits:' }, pb], chips: [{ label: 'What could I say?', q: 'What do I actually say?' }] });

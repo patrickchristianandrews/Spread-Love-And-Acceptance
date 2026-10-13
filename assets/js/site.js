@@ -299,6 +299,7 @@
   var MENU = [
     { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? A gentle first step, and help right now.', items: [
       { href: '/explore.html', code: 'All', title: 'Everything on this site', note: 'Every page and tool on one page, with filters by need, relationship and time' },
+      { href: '/explore.html?type=tool', code: 'Tools', title: 'All the tools', note: 'Every interactive tool in one list: checks, translators, planners and calm tools' },
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
       { href: '/safety.html', code: 'Safety', title: 'Not safe at home?', note: 'If someone hurts, threatens, watches or controls you: hotlines, leaving quickly, clearing this site' },

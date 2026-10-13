@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 750" width="540" height="750" role="img" aria-labelledby="fig-ch3-angles-t fig-ch3-angles-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch3-angles-t">Seven angles on the same moment</title>
+<desc id="fig-ch3-angles-d">A circle labelled &quot;the same moment&quot; with seven smaller circles around it, one for each angle you might be seeing it from: tiredness, time pressure, history, family script, fairness, talking style and outside stress. An angle is a place to stand, not a verdict. Name your own, and ask about theirs.</desc>
+
+<rect x="1" y="1" width="538" height="748" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620"><tspan x="28" dy="0">Seven angles on the same</tspan><tspan x="28" dy="32">moment</tspan></text>
+<text x="28" y="108" font-size="19" font-style="italic" fill="#5A5346">Which one are you looking from right now?</text>
+<line x1="270" y1="296" x2="270" y2="258" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="270" cy="198" r="56" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="270" y="205" font-size="18" font-weight="bold" text-anchor="middle">Tiredness</text>
+<line x1="324.728" y1="322.356" x2="354.438" y2="298.663" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="401.348" cy="261.254" r="56" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="401.348" y="258.254" font-size="18" font-weight="bold" text-anchor="middle">Time</text>
+<text x="401.348" y="281.254" font-size="18" font-weight="bold" text-anchor="middle">pressure</text>
+<line x1="338.245" y1="381.576" x2="375.292" y2="390.032" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="433.788" cy="403.384" r="56" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="433.788" y="410.384" font-size="18" font-weight="bold" text-anchor="middle">History</text>
+<line x1="300.372" y1="429.068" x2="316.859" y2="463.305" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="342.892" cy="517.363" r="56" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="342.892" y="514.363" font-size="18" font-weight="bold" text-anchor="middle">Family</text>
+<text x="342.892" y="537.363" font-size="18" font-weight="bold" text-anchor="middle">script</text>
+<line x1="239.628" y1="429.068" x2="223.141" y2="463.305" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="197.108" cy="517.363" r="56" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="197.108" y="524.363" font-size="18" font-weight="bold" text-anchor="middle">Fairness</text>
+<line x1="201.755" y1="381.576" x2="164.708" y2="390.032" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="106.212" cy="403.384" r="56" fill="#F1E2C2" stroke="#7A5620" stroke-width="2"/>
+<text x="106.212" y="400.384" font-size="18" font-weight="bold" text-anchor="middle">Talking</text>
+<text x="106.212" y="423.384" font-size="18" font-weight="bold" text-anchor="middle">style</text>
+<line x1="215.272" y1="322.356" x2="185.562" y2="298.663" stroke="#D9CBA3" stroke-width="3" stroke-linecap="round"/>
+<circle cx="138.652" cy="261.254" r="56" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="138.652" y="258.254" font-size="18" font-weight="bold" text-anchor="middle">Outside</text>
+<text x="138.652" y="281.254" font-size="18" font-weight="bold" text-anchor="middle">stress</text>
+<circle cx="270" cy="366" r="66" fill="#ECE2C4" stroke="#7A5620" stroke-width="2.5"/>
+<text x="270" y="362" font-size="19" font-weight="bold" text-anchor="middle">The same</text>
+<text x="270" y="386" font-size="19" font-weight="bold" text-anchor="middle">moment</text>
+<rect x="28" y="608" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="641" font-size="19" font-weight="bold" text-anchor="middle">An angle is a place to stand, not a verdict.</text>
+<text x="270" y="665.7" font-size="19" font-style="italic" text-anchor="middle">Name your own. Ask about theirs.</text>
+<text x="28" y="700.4" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. The seven angles are this book’s; the</tspan><tspan x="28" dy="23.04">Perspective Shifter page uses the same seven.</tspan></text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 762" width="540" height="762" role="img" aria-labelledby="fig-ch2-check-t fig-ch2-check-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch2-check-t">Is the split working? Three inputs, one snapshot</title>
+<desc id="fig-ch2-check-d">Three readings go in: workload balance (worth up to 0.40), ownership clarity (up to 0.35) and leftover stress (up to 0.25). In the chapter’s made-up example, Sam and Alex earn 0.24 for balance (short by 0.16), 0.28 for ownership (short by 0.07) and 0.15 for stress (short by 0.10). Together that is 0.67, in the middle band, between 0.4 and 0.7, where something is drifting. Start with the biggest shortfall: here, balance. The score judges the setup, never a person.</desc>
+
+<rect x="1" y="1" width="538" height="760" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Is the split working?</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Three readings go in. One snapshot, from 0 to 1,</tspan><tspan x="28" dy="24.32">comes out.</tspan></text>
+<text x="28" y="144.32" font-size="19" font-style="italic" fill="#5A5346">Sam and Alex’s first week (a made-up example)</text>
+<text x="28" y="180.32" font-size="20" font-weight="bold" fill="#2F5F8A">Workload balance</text>
+<text x="512" y="180.32" font-size="19" font-weight="bold" fill="#8E3B47" text-anchor="end">short 0.16</text>
+<rect x="28" y="190.32" width="480" height="34" rx="8" fill="#F7DEE0" stroke="#8E3B47" stroke-width="1.5" stroke-dasharray="4 3"/>
+<rect x="28" y="190.32" width="288" height="34" rx="8" fill="#7FB2E0"/>
+<text x="40" y="213.32" font-size="18" font-weight="bold">0.24 of 0.40</text>
+<text x="28" y="246.32" font-size="18" font-style="italic" fill="#5A5346">how the hours split</text>
+<text x="28" y="278.32" font-size="20" font-weight="bold" fill="#7A5620">Ownership clarity</text>
+<text x="512" y="278.32" font-size="19" font-weight="bold" fill="#8E3B47" text-anchor="end">short 0.07</text>
+<rect x="28" y="288.32" width="420" height="34" rx="8" fill="#F7DEE0" stroke="#8E3B47" stroke-width="1.5" stroke-dasharray="4 3"/>
+<rect x="28" y="288.32" width="336" height="34" rx="8" fill="#D9B46A"/>
+<text x="40" y="311.32" font-size="18" font-weight="bold">0.28 of 0.35</text>
+<text x="28" y="344.32" font-size="18" font-style="italic" fill="#5A5346">a name on every job</text>
+<text x="28" y="376.32" font-size="20" font-weight="bold" fill="#3E6B4C">Leftover stress</text>
+<text x="512" y="376.32" font-size="19" font-weight="bold" fill="#8E3B47" text-anchor="end">short 0.10</text>
+<rect x="28" y="386.32" width="300" height="34" rx="8" fill="#F7DEE0" stroke="#8E3B47" stroke-width="1.5" stroke-dasharray="4 3"/>
+<rect x="28" y="386.32" width="180" height="34" rx="8" fill="#8FB59A"/>
+<text x="40" y="409.32" font-size="18" font-weight="bold">0.15 of 0.25</text>
+<text x="28" y="442.32" font-size="18" font-style="italic" fill="#5A5346">how full each tank is</text>
+<text x="28" y="484.32" font-size="20" font-weight="bold">Add them up: 0.24 + 0.28 + 0.15 = 0.67</text>
+<rect x="28" y="532.32" width="193.6" height="30" rx="0" fill="#F7DEE0" stroke="#D9CBA3" stroke-width="1"/>
+<text x="124.8" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">rethink the setup</text>
+<rect x="221.6" y="532.32" width="145.2" height="30" rx="0" fill="#F1E2C2" stroke="#D9CBA3" stroke-width="1"/>
+<text x="294.2" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">drifting</text>
+<rect x="366.8" y="532.32" width="145.2" height="30" rx="0" fill="#DCE7D8" stroke="#D9CBA3" stroke-width="1"/>
+<text x="439.4" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">holding</text>
+<text x="28" y="608.32" font-size="18" fill="#5A5346">0</text>
+<text x="221.6" y="608.32" font-size="18" fill="#5A5346" text-anchor="middle">0.4</text>
+<text x="366.8" y="608.32" font-size="18" fill="#5A5346" text-anchor="middle">0.7</text>
+<text x="512" y="608.32" font-size="18" fill="#5A5346" text-anchor="end">1</text>
+<path d="M343.28000000000003 508.32 L361.28000000000003 508.32 L352.28000000000003 526.3199999999999 Z" fill="#2B2620"/>
+<line x1="352.28" y1="526.32" x2="352.28" y2="566.32" stroke="#2B2620" stroke-width="3" stroke-linecap="round"/>
+<text x="338.28" y="520.32" font-size="19" font-weight="bold" text-anchor="end">0.67</text>
+<rect x="28" y="620.32" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="653.32" font-size="19" font-weight="bold" text-anchor="middle">Start with the biggest shortfall.</text>
+<text x="270" y="678.02" font-size="19" font-style="italic" text-anchor="middle">It judges the setup, never a person.</text>
+<text x="28" y="712.72" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">The weights and bands are this book’s own choice,</tspan><tspan x="28" dy="23.04">not research findings. A snapshot, not a sentence.</tspan></text>
+</svg>

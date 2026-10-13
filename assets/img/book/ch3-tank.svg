@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 678" width="540" height="678" role="img" aria-labelledby="fig-ch3-tank-t fig-ch3-tank-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch3-tank-t">How full is your stress tank?</title>
+<desc id="fig-ch3-tank-d">A tank filled in layers by five things, each scored from 0 to 4: sleep debt 3, workload elsewhere 3, unresolved conflict 1, physical state 0, time pressure 4. That adds to 11 out of 20, which is 0.55, in the moderate band between 0.30 and 0.60. Under 0.30 is low; 0.60 or more is high. At moderate, say it before a hard talk: &quot;Heads up, I’m carrying more than usual today.&quot; Made-up example from the chapter.</desc>
+
+<rect x="1" y="1" width="538" height="676" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">How full is your stress tank?</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Score five things from 0 to 4. Add them up, divide</tspan><tspan x="28" dy="24.32">by 20.</tspan></text>
+<rect x="128" y="142.32" width="150" height="320" rx="10" fill="#FFFFFF"/>
+<rect x="128" y="414.32" width="150" height="48" rx="0" fill="#7FB2E0"/>
+<line x1="128" y1="414.32" x2="278" y2="414.32" stroke="#FCF9F1" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="128" y="366.32" width="150" height="48" rx="0" fill="#D9B46A"/>
+<line x1="128" y1="366.32" x2="278" y2="366.32" stroke="#FCF9F1" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="128" y="350.32" width="150" height="16" rx="0" fill="#E8A0A8"/>
+<line x1="128" y1="350.32" x2="278" y2="350.32" stroke="#FCF9F1" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="128" y="286.32" width="150" height="64" rx="0" fill="#8FB59A"/>
+<line x1="128" y1="286.32" x2="278" y2="286.32" stroke="#FCF9F1" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="128" y="142.32" width="150" height="320" rx="10" fill="none" stroke="#2B2620" stroke-width="3"/>
+<line x1="120" y1="366.32" x2="286" y2="366.32" stroke="#2B2620" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 4"/>
+<text x="114" y="372.32" font-size="18" text-anchor="end">0.30</text>
+<line x1="120" y1="270.32" x2="286" y2="270.32" stroke="#2B2620" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 4"/>
+<text x="114" y="276.32" font-size="18" text-anchor="end">0.60</text>
+<text x="114" y="444.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">low</text>
+<text x="114" y="348.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">moderate</text>
+<text x="114" y="236.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">high</text>
+<text x="203" y="274.32" font-size="22" font-weight="bold" text-anchor="middle">0.55</text>
+<text x="312" y="168.32" font-size="19" font-weight="bold" fill="#5A5346">Sam today</text>
+<rect x="312" y="184.32" width="18" height="18" rx="3" fill="#8FB59A" stroke="#5A5346" stroke-width="1"/>
+<text x="340" y="199.32" font-size="18"><tspan x="340" dy="0">Time pressure</tspan><tspan x="340" dy="23.04">today</tspan></text>
+<text x="510" y="199.32" font-size="19" font-weight="bold" text-anchor="end">4</text>
+<rect x="312" y="254.36" width="18" height="18" rx="3" fill="#B9B0E0" stroke="#5A5346" stroke-width="1"/>
+<text x="340" y="269.36" font-size="18"><tspan x="340" dy="0">Body: hungry,</tspan><tspan x="340" dy="23.04">unwell, in pain</tspan></text>
+<text x="510" y="269.36" font-size="19" font-weight="bold" text-anchor="end">0</text>
+<rect x="312" y="324.4" width="18" height="18" rx="3" fill="#E8A0A8" stroke="#5A5346" stroke-width="1"/>
+<text x="340" y="339.4" font-size="18"><tspan x="340" dy="0">Unresolved</tspan><tspan x="340" dy="23.04">conflict</tspan></text>
+<text x="510" y="339.4" font-size="19" font-weight="bold" text-anchor="end">1</text>
+<rect x="312" y="394.44" width="18" height="18" rx="3" fill="#D9B46A" stroke="#5A5346" stroke-width="1"/>
+<text x="340" y="409.44" font-size="18"><tspan x="340" dy="0">Workload</tspan><tspan x="340" dy="23.04">elsewhere</tspan></text>
+<text x="510" y="409.44" font-size="19" font-weight="bold" text-anchor="end">3</text>
+<rect x="312" y="464.48" width="18" height="18" rx="3" fill="#7FB2E0" stroke="#5A5346" stroke-width="1"/>
+<text x="340" y="479.48" font-size="18">Sleep debt</text>
+<text x="510" y="479.48" font-size="19" font-weight="bold" text-anchor="end">3</text>
+<line x1="312" y1="503.48" x2="510" y2="503.48" stroke="#5A5346" stroke-width="1.5" stroke-linecap="round"/>
+<text x="312" y="527.48" font-size="19" font-weight="bold">11 ÷ 20</text>
+<text x="510" y="527.48" font-size="19" font-weight="bold" text-anchor="end">= 0.55</text>
+<rect x="28" y="488.32" width="484" height="96.1" rx="12" fill="#ECE2C4"/>
+<text x="270" y="521.32" font-size="19" font-weight="bold" text-anchor="middle">Moderate: say it before a hard talk.</text>
+<text x="270" y="546.02" font-size="19" font-style="italic" text-anchor="middle">“Heads up, I’m carrying more</text>
+<text x="270" y="570.72" font-size="19" font-style="italic" text-anchor="middle">than usual today.”</text>
+<text x="28" y="605.42" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Made-up example from this chapter. The five items</tspan><tspan x="28" dy="23.04">and bands are this book’s, not a tested</tspan><tspan x="28" dy="23.04">questionnaire.</tspan></text>
+</svg>
