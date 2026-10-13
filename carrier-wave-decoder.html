@@ -357,6 +357,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/message-patterns.js"></script>
+<script src="/assets/js/context-panel.js"></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/carrier-wave-decoder.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/carrier-wave-decoder.html">
@@ -557,7 +558,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
 
   <!-- TONE CHECK -->
   <section data-panel="tone" role="tabpanel" hidden>
-    <div class="guarantee" role="note"><b>A private check before you send.</b> This reads only your own draft, and only in this browser. The other person never sees these suggestions, and nothing on this tab is saved or sent anywhere. Like a spell-checker, it suggests and you decide. You can copy or use your draft as written at any time.</div>
+    <div class="guarantee" role="note"><b>A private check before you send.</b> This reads only your own draft, and only in this browser. The other person never sees these suggestions, and nothing on this tab is saved or sent anywhere. Like a spell-checker, it suggests and you decide. You can copy or use your draft as written at any time. Adding context (under your draft) makes the check fairer; it still can&rsquo;t know everything.</div>
     <div class="tgrid">
       <div>
         <p class="lab" style="margin:0">How do you mean this to come across?</p>
@@ -578,6 +579,7 @@ textarea{width:100%;min-height:90px;margin-top:6px;border:1px solid var(--line);
           <button class="ghost" id="t-clear" type="button">Clear</button>
         </div>
         <p class="hint" style="margin:8px 0 0">These buttons always work, whatever the check says.</p>
+        <div id="t-ctx" data-ctx-for="cw" style="margin-top:14px"></div>
       </div>
       <div class="panel" id="t-out" aria-live="polite"></div>
       <details class="panel lookfor"><summary>What it looks for</summary><div id="lookfor"></div></details>
@@ -1667,13 +1669,22 @@ function mountTone(mount,ta,st,compact){
   if(!mount||!ta) return;
   const text=ta.value, hits=toneScan(text,st.ignored);
   const hard=hits.filter(h=>h.r.hard).length, soft=hits.length-hard; st.hard=hard;
-  const iw=st.intent?{info:"just information",warm:"warm",firm:"firm"}[st.intent]:"";
+  // "Add context" (context-panel.js): who it's for, how they take things in, what you want. The check uses it
+  const cx=(!compact&&window.TOLContext&&cwCtx)?TOLContext.read(cwCtx.get(),{text,mode:"send"}):null, F=cx?cx.flags:{};
+  const intent=st.intent||(F.goal==="limit"||F.parentLimit?"firm":F.goal==="calm"||F.goal==="repair"?"warm":null);
+  const iw=intent?{info:"just information",warm:"warm",firm:"firm"}[intent]:"";
   let sum;
   if(!text.trim()) sum=compact?"Suggestions appear here as you type.":"Start typing. Suggestions appear here as you go, the way a spell-checker's do.";
-  else if(!st.intent) sum=hard?`${hard} phrase${hard===1?"":"s"} may land sharper than you mean. Pick how you mean it to come across above, and the check will compare against that.`:"Nothing here tends to land as sharp. Pick how you mean it to come across above, if you like.";
-  else if(st.intent==="firm") sum=hard?`You've chosen to be firm, and that's allowed. ${hard} phrase${hard===1?"":"s"} may land as a verdict rather than a request.`:"Firm and clear. Nothing here tends to land as a verdict.";
+  else if(!intent) sum=hard?`${hard} phrase${hard===1?"":"s"} may land sharper than you mean. Pick how you mean it to come across above, and the check will compare against that.`:"Nothing here tends to land as sharp. Pick how you mean it to come across above, if you like.";
+  else if(intent==="firm") sum=hard?`${st.intent?"You've chosen to be firm":F.parentLimit?"You're setting a limit as a parent":"You want to set a limit"}, and that's allowed. ${hard} phrase${hard===1?"":"s"} may land as a verdict rather than a request.`:"Firm and clear. Nothing here tends to land as a verdict.";
   else sum=hard?`You mean this as ${iw}. ${hard} phrase${hard===1?"":"s"} often land${hard===1?"s":""} sharper than that.`:`Nothing here tends to land sharper than ${iw}.`;
   if(text.trim()&&soft) sum+=` ${soft} more suggestion${soft===1?"":"s"} could make it clearer.`;
+  if(text.trim()&&cx&&!cx.empty){
+    if(F.toneSensitive&&hard) sum+=" They're sensitive to tone, so the marked phrases are worth a second look.";
+    if(F.teaseRoom&&hits.some(h=>h.r.id==="sarcasm")) sum+=" You tease each other a lot, so the sarcasm mark has more room. If there's a real point inside it, say that part plainly too.";
+    if(F.work) sum+=" At work, keep it to the task, the ask and the time.";
+    if((F.goal==="limit"||F.parentLimit)&&!CAUSAL_RE.test(text)) sum+=" A limit lands better with the reason.";
+  }
   const list=hits.length?`<ul class="tc-list">${hits.map((h,k)=>{const rep=h.r.swap?h.r.swap(h.text):null;
     return `<li class="${h.r.hard?"":"soft"}"><q>${esc(h.text)}</q> <span class="kind">${esc(h.r.name)}</span><span class="why">${esc(h.r.why)} ${esc(h.r.fix)}</span><span class="row">${rep?`<button class="ghost" data-rep="${k}">Replace with “${esc(rep)}”</button>`:""}<button class="ghost" data-ign="${k}">Ignore</button></span></li>`;}).join("")}</ul>`:"";
   if(compact){
@@ -1683,6 +1694,7 @@ function mountTone(mount,ta,st,compact){
     mount.innerHTML=`<h2>Private suggestions</h2><p class="tc-sum">${esc(sum)}</p>
       ${text.trim()?`<div class="tc-preview" aria-label="Your draft with suggestions marked">${markPreview(text,hits)}</div>`:""}
       ${list}
+      ${cx?TOLContext.usedHTML(cx):""}
       ${G.length?`<h2 style="margin-top:18px">What's working</h2><ul class="good">${G.map(g=>`<li><span class="mk" style="color:var(${g.ok?"--v":"--muted"})">${g.ok?"✓":"○"}</span><span>${g.t}${g.opt?` <small>(optional)</small>`:""}</span></li>`).join("")}</ul>`:""}
       <p class="hint" style="margin:16px 0 0">Only you see these suggestions. They're never saved, sent, or added to the journal, the letter, or a finding.</p>`;
   }
@@ -1706,6 +1718,7 @@ function renderTone(){
   mountTone($("t-out"),$("draft"),toneState,false);
 }
 $("draft").addEventListener("input",()=>mountTone($("t-out"),$("draft"),toneState,false));
+var cwCtx=window.TOLContext&&$("t-ctx")?TOLContext.mount($("t-ctx"),{mode:"send",onChange:()=>mountTone($("t-out"),$("draft"),toneState,false)}):null;
 const sentence=s=>{s=String(s||"").trim();if(!s)return "";s=s.charAt(0).toUpperCase()+s.slice(1);return /[.!?]$/.test(s)?s:s+".";};
 let bArm=null;
 $("b-go").onclick=()=>{

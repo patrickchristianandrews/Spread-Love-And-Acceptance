@@ -138,6 +138,12 @@
 
   function questionsUI(D, box, type, lang, ctx, finish, repick) {
     var qs = D.questions(type, lang), ty = D.TYPES[type], answers = {}, i = 0;
+    // answers the page already has (ctx10: the "Add context" panel, e.g. "it keeps coming back" -> how often) are filled in
+    // and not asked again: context.prefill = {questionId: answerId}
+    var pre = (ctx && ctx.prefill) || {};
+    qs.forEach(function (q) { if (pre[q.id] && q.answers.some(function (a) { return a.id === pre[q.id]; })) answers[q.id] = pre[q.id]; });
+    qs = qs.filter(function (q) { return !(q.id in answers); });
+    if (!qs.length) { finish(answers, false); return; }
     var list = (box.clientWidth || 0) >= 560;
     var id = 'tcl-' + (++uid);
     box.textContent = '';

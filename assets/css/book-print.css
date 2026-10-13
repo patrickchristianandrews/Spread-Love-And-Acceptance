@@ -69,7 +69,7 @@ img, svg { max-width: 100%; }
 .pe-cover-band span:last-child { font-family: "Lora", serif; font-style: italic; text-transform: none; letter-spacing: 0; font-size: 8.5pt; }
 .pe-cover-text { position: absolute; top: 31mm; left: 24mm; right: 14mm; }
 .pe-cover-title { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 35pt; line-height: 1.02; letter-spacing: -.012em; margin: 0; color: var(--ink); }
-.pe-cover-sub { font-style: italic; font-size: 12.5pt; line-height: 1.38; margin: 4.5mm 0 0; color: var(--soft); max-width: 112mm; }
+.pe-cover-sub { font-style: italic; font-size: 12.5pt; line-height: 1.38; margin: 4.5mm 0 0; color: var(--soft); max-width: 118mm; text-wrap: balance; }
 .pe-cover-art { position: absolute; left: 24mm; right: 10mm; top: 86mm; height: 100mm; display: flex; align-items: center; justify-content: center; }
 .pe-cover-art::before { content: ""; position: absolute; width: 104mm; height: 104mm; border-radius: 50%; background: var(--tint); left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .pe-cover-art .pe-art { position: relative; width: 116mm; height: 87mm; }
@@ -87,7 +87,7 @@ img, svg { max-width: 100%; }
 .pe-half::after { content: ""; width: 18mm; border-top: .6pt solid var(--brass); margin-top: 6mm; }
 .pe-titlep { height: 196mm; display: flex; flex-direction: column; justify-content: space-between; text-align: center; border-top: 1.4pt solid var(--acc); border-bottom: 1.4pt solid var(--acc); padding: 10mm 0; box-sizing: border-box; }
 .pe-titlep-t { font-family: "Fraunces", serif; font-weight: 600; font-size: 30pt; line-height: 1.05; margin: 0 0 3mm; }
-.pe-titlep-s { font-style: italic; font-size: 12pt; color: var(--soft); margin: 0 auto 6mm; max-width: 100mm; }
+.pe-titlep-s { font-style: italic; font-size: 12pt; color: var(--soft); margin: 0 auto 6mm; max-width: 100mm; text-wrap: balance; }
 .pe-titlep-v { font-family: "IBM Plex Mono", monospace; font-size: 7.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--acc); margin: 0; }
 .pe-titlep-art .pe-art { width: 70mm; height: 52mm; }
 .pe-titlep-a { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 10pt; letter-spacing: .3em; text-transform: uppercase; margin: 0 0 3mm; }
@@ -118,7 +118,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-toc-list { list-style: none; padding: 0; margin: 0; }
 .pe-toc-row { margin: 0; break-inside: avoid; }
 .pe-toc-row a { display: flex; align-items: baseline; text-decoration: none; padding: .9mm 0; }
-.pe-toc-l { flex: 0 0 15mm; font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; letter-spacing: .06em; color: var(--brass); }
+.pe-toc-l { flex: 0 0 18mm; font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; letter-spacing: .06em; color: var(--brass); }
 .pe-toc-t { flex: 0 1 auto; font-size: 9.6pt; line-height: 1.32; }
 .pe-toc-s { display: block; }
 .pe-toc-dots { flex: 1 1 6mm; min-width: 6mm; border-bottom: .7pt dotted #B5A77F; margin: 0 2mm; transform: translateY(-.8mm); }
@@ -137,13 +137,13 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-part::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 13mm; background: var(--pc); }
 .pe-part-in { position: absolute; left: 32mm; right: 16mm; top: 30mm; bottom: 18mm; }
 .pe-part-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 8pt; letter-spacing: .24em; text-transform: uppercase; color: var(--pc); margin: 0 0 2mm; }
-.pe-part-h { font-size: 38pt; line-height: 1; margin: 0 0 5mm; border: 0; padding: 0; }
-.pe-part-b { font-style: italic; font-size: 12pt; line-height: 1.42; color: var(--soft); max-width: 100mm; margin: 0 0 6mm; }
-.pe-part-art { width: 46mm; height: 38mm; margin: 0 0 6mm; }
+.pe-part-h { font-size: 38pt; line-height: 1; margin: 0 0 5mm; border: 0; padding: 0; text-wrap: balance; }
+.pe-part-b { font-style: italic; font-size: 12pt; line-height: 1.42; color: var(--soft); max-width: 100mm; margin: 0 0 9mm; text-wrap: balance; }
+.pe-part-art { position: absolute; right: 0; top: -21mm; width: 34mm; height: 28mm; margin: 0; }
 .pe-part-art svg { width: 100%; height: 100%; }
 .pe-part-l { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.2pt; letter-spacing: .16em; text-transform: uppercase; color: var(--pc); margin: 0 0 2mm; padding-bottom: 1.6mm; border-bottom: .6pt solid var(--pc); }
 .pe-part-list { list-style: none; padding: 0; margin: 0; }
-.pe-part-list li { display: flex; align-items: baseline; gap: 2mm; margin: 0; padding: 1.15mm 0; border-bottom: .3pt solid #E2D6B6; font-size: 9.3pt; line-height: 1.3; }
+.pe-part-list li { display: flex; align-items: baseline; gap: 2mm; margin: 0; padding: 1mm 0; border-bottom: .3pt solid #E2D6B6; font-size: 9.3pt; line-height: 1.3; }
 .pe-part-list a { flex: 1; text-decoration: none; }
 .pe-part-list a span { display: inline-block; min-width: 15mm; font-family: "IBM Plex Mono", monospace; font-size: 7pt; color: var(--pc); letter-spacing: .05em; }
 
@@ -307,3 +307,8 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 /* the "Fill in your own" link under each example shows a short address, not the full https link */
 .bk-ex-link a::after { content: none !important; }
 .bk-ex-link a[data-u]::after { content: " (" attr(data-u) ")" !important; font-size: .82em; color: #5A5346; }
+
+/* part openers: the short chapter names (the full titles are for the screen) */
+.pe-part-list b { font-weight: 400; }
+.pe-part-list b.no-print { display: none; }
+.ch-title, .pe-back-h, .pe-cover-title { text-wrap: balance; }

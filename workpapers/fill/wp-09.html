@@ -37,6 +37,18 @@
 
   <div id="wpf-root" class="wpf-form" role="region" aria-label="WP-09 worksheet"></div>
 
+  <section class="wpf-ctx tol-plain" aria-labelledby="wp09-ctx-h">
+    <h2 id="wp09-ctx-h">Weighing a message you got? Add context (optional)</h2>
+    <p class="wpf-lede">The four quick checks go further with context: who they are to you, how they usually write, whether this keeps coming back, and how you&rsquo;re each doing today. Adding it makes the reading fairer, though it still can&rsquo;t know everything. It stays on this device and isn&rsquo;t part of the PDF.</p>
+    <label for="wp09-msg">The message you got (optional)</label>
+    <textarea id="wp09-msg" rows="3" maxlength="1500" autocomplete="off"></textarea>
+    <div id="wp09-ctx" data-ctx-for="wp09"></div>
+    <div id="wp09-ctx-out" aria-live="polite"></div>
+  </section>
+  <script src="/assets/js/message-patterns.js" defer></script>
+  <script src="/assets/js/context-panel.js" defer></script>
+  <script src="/assets/js/wp09-context.js" defer></script>
+
   <p class="wpf-after">Using a shared computer? When you've downloaded what you need, <button type="button" id="wpf-clear" class="wpf-clear">Clear this page</button></p>
   <p class="wpf-after"><a href="/workpapers/wp-09-say-it-so-it-lands.html">Read about WP-09 first: Say it so it lands</a> &middot; <a href="/workpapers/fill/">All fill-in workpapers</a> &middot; <a href="/workpapers/fill/suite.html">Build your whole Workpaper Suite</a></p>
 

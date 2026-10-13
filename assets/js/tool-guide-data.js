@@ -53,7 +53,7 @@ window.TOLToolGuideData = {
         ['crompton-2020', 'People who are wired differently can miss each other’s meaning more than people wired alike (Crompton and colleagues, 2020).']
       ],
       idea: 'The levels (from kind to very sharp), the patterns it looks for and the rewrite rules are this site’s own, written by hand.',
-      limits: 'It reads the words only, not tone of voice, emoji habits or your history together. It is rule-based and will sometimes be wrong. Check its reading against what you know about the person. Not a test of anyone.',
+      limits: 'It reads the words only, not tone of voice, emoji habits or your history together. In our tests it read 92 of 101 held-out everyday messages the way people expected. Adding context (who they are, how they usually write, what you want) helps, and it still can\u2019t know everything. It is rule-based and will sometimes be wrong. Check its reading against what you know about the person. Not a test of anyone.',
       privacy: 'The checking happens on this device. What you type is not sent anywhere. Only your view settings are kept in this browser.'
     },
 
@@ -76,7 +76,7 @@ window.TOLToolGuideData = {
         ['schegloff-jefferson-sacks-1977', 'Fixing misunderstandings is a normal, built-in part of everyday talk (Schegloff and colleagues, 1977).']
       ],
       idea: 'Finding “the turn”, the both-sides reading and the reply wording are this site’s own method.',
-      limits: 'It reads the words you paste, not tone of voice or what happened before. It may pick the wrong turning point. It never decides who was right.',
+      limits: 'It reads the words you paste, not tone of voice or what happened before. Adding context (who they are, how they usually write, whether it keeps coming back) helps, and it still can\u2019t know everything. It may pick the wrong turning point. It never decides who was right.',
       fair: ['Only paste a conversation you were part of, and keep it to yourself unless the other person agrees to look at it with you.'],
       privacy: 'It runs entirely in this browser. What you paste or screenshot is not saved or sent anywhere. Close the tab and it’s gone.'
     },

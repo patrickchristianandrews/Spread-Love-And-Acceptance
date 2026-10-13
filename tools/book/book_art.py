@@ -115,8 +115,8 @@ def illustration(kind):
         g.append(hands([(60, 99, 4.6), (84, 98, 4.6), (116, 98, 4.6), (140, 99, 4.6)], 'peach'))
         g.append(spark(22, 34, 10) + spark(180, 30, 12))
     else:  # understanding
-        g.append(buddy(46, 78, 62, 'sky', -6, 1))
-        g.append(buddy(154, 78, 62, 'butter', 6, -1))
+        g.append(buddy(36, 82, 60, 'sky', -6, 1))
+        g.append(buddy(164, 82, 60, 'butter', 6, -1))
         g.append(heart_book(100, 76, 92))
         g.append(heart(100, 10, 16) + spark(34, 26, 12) + spark(166, 24, 10) + spark(140, 8, 6, '#EE8FA6'))
     return '<svg class="pe-art" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">%s</svg>' % ''.join(g)

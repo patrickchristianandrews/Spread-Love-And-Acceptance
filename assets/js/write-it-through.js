@@ -152,7 +152,15 @@
   var FEAR_RE = /\b(?:(?:afraid|scared|frightened|terrified) (?:of (?:you|him|her|them|what (?:you|he|she|they)|how (?:angry|mad) (?:you|he|she|they))|to (?:go home|come home|say no|tell (?:you|him|her|them)|leave))\b|(?:i'?m|i am|i feel) (?:so |really )?(?:frightened|terrified)\b|(?:hit|hits|hitting|slapped|punched|kicked|pushed|shoved|choked|strangled|grabbed) (?:me|you|him|her|them|the kids|the children|my)\b|hurts? me (?:physically|badly)\b|threaten(?:ed|s|ing)? (?:to|me|my|the kids)\b|(?:won'?t|doesn'?t|don'?t|never) let me (?:(?:see|talk to|visit|call) (?:my )?(?:friends|family|mum|mom|dad|parents|sister|brother|anyone)|(?:have|use|keep|touch|see) (?:my own |my |any |our )?(?:money|bank card|bank|card|cards|phone|passport|wages|account)|leave the house|get a job|go to work)\b|controls? (?:my|all the|the|our) money|takes? (?:my|away my) (?:phone|money|keys|car|passport|cards?)|checks? my phone|tracks? (?:me|my phone|my location)|or else(?=\s*(?:[.!?…]|$))|i'?ll make you (?:pay|regret|sorry|suffer)|you'?ll regret|kill (?:you|me|him|her)\b(?!.{0,20}(?:😂|🤣|lol|haha))|(?:don'?t|do not) feel safe|not safe (?:at home|with (?:you|him|her|them))|abus(?:e|ed|es|ive|ing)\b)/i;
   var SELF_RE = /\b(?:kill myself|end (?:it all|my life)|don'?t want to (?:be alive|live)|hurt myself|suicid)/i;
   function engine() { var E = window.SignalEngine; return E && typeof E.analyze === 'function' ? E : null; }
-  function analyze(text) { var E = engine(); if (!E || !text) return null; try { return E.analyze(text, { channel: 'text' }); } catch (e) { return null; } }
+  // "Add context" (context-panel.js), optional: the check and the softer lines use it, and say what they took into account
+  var witCtx = null, CTX_REL = { partner: 'partner', coparent: 'ex', family: 'family', friend: 'friend', housemate: 'roommate', coworker: 'coworker', group: 'group' };
+  function ctxNow() {
+    if (!witCtx || !window.TOLContext) return null;
+    var c = witCtx.get(), r = doc.querySelector('input[name="wit-rel"]:checked');
+    if (!c.people.length && r && CTX_REL[r.value] && !TOLContext.isEmpty(c)) c.people = [{ rel: CTX_REL[r.value] }];
+    return TOLContext.isEmpty(c) ? null : c;
+  }
+  function analyze(text) { var E = engine(); if (!E || !text) return null; try { return E.analyze(text, { channel: 'text', ctx: ctxNow(), mode: 'send' }); } catch (e) { return null; } }
   function safetyOf(text) {
     var out = { fear: false, self: false };
     if (!text) return out;
@@ -411,6 +419,9 @@
     }
     // safety first: no "talk them round" lines when someone may be afraid
     var safe = safetyOf(prose(t));
+    // crisis or fear typed into the context is never ignored
+    var cxr = ctxNow() ? TOLContext.read(ctxNow(), { text: prose(t), mode: 'send' }) : null;
+    if (cxr && cxr.safety === 'crisis') safe.self = true; else if (cxr && cxr.safety) safe.fear = true;
     sf.textContent = ''; sf.hidden = !(safe.fear || safe.self);
     if (!sf.hidden) sf.appendChild(safetyNote(safe, false));
     ck.textContent = '';
@@ -422,6 +433,7 @@
     });
     ck.appendChild(el('p', { cls: 'wit-check-h', text: 'House rules' }));
     ck.appendChild(ul);
+    if (cxr) { cxr = TOLContext.read(ctxNow(), { an: all.an, text: prose(t), mode: 'send', engine: engine() }); var cxd = el('div'); cxd.innerHTML = TOLContext.usedHTML(cxr); ck.appendChild(cxd); }
     if (safe.fear || safe.self) return;
     // flagged words and a softer line, field by field
     var fields = [['wit-fact', t.f], ['wit-feelx', t.fx], ['wit-ask', t.a], ['wit-not', t.ns], ['wit-heard', t.h]];
@@ -491,6 +503,10 @@
   }
 
   var tick = null;
+  function mountCtx() {
+    if (witCtx || !window.TOLContext || !$('wit-ctx')) return;
+    witCtx = TOLContext.mount($('wit-ctx'), { mode: 'send', onChange: function () { renderCheck(); } });
+  }
   function changed() {
     shape(); drawPicksIfNeeded();
     clearTimeout(tick); tick = setTimeout(function () { renderCheck(); saveDraft(); }, 250);
@@ -888,7 +904,7 @@
   }
 
   function renderAll() {
-    renderInbox(); renderTurnbar(); renderComposer(); drawPicksIfNeeded(); renderThread(); renderCheck();
+    mountCtx(); renderInbox(); renderTurnbar(); renderComposer(); drawPicksIfNeeded(); renderThread(); renderCheck();
   }
 
   // ---------------------------------------------------------------- "Plain and literal"

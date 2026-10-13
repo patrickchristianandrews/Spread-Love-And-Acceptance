@@ -439,6 +439,7 @@
       <label><input type="radio" name="st" value="scattered"> Scattered (too many threads)</label>
       <label><input type="radio" name="st" value="unsure"> Not sure</label>
     </fieldset>
+    <div id="soft-ctx" data-ctx-for="soft"></div>
     <div class="pick-out" id="pick-out" tabindex="-1" aria-live="polite"></div>
     <p style="font-size:.9rem;color:var(--ink-soft);">Want the full version, with your own state, the situation and the relationship built in, and a plan you can print? That&#39;s <a href="/tools/soften-a-tense-moment-full.html#builder">the plan builder in level 2</a>.</p>
   </div>
@@ -497,19 +498,33 @@
 </div>
 
 </div>
+<script src="/assets/js/message-patterns.js"></script>
+<script src="/assets/js/context-panel.js"></script>
 <script src="/assets/js/mood-arbitrage.js"></script>
 <script>
 (function(){
   var M=window.TOLMood, out=document.getElementById('pick-out');
-  document.querySelectorAll('input[name="st"]').forEach(function(r){
-    r.addEventListener('change', function(){
-      var k=r.value, m=M.MOVES[k], s=M.STATES[k];
-      out.innerHTML='<h3>'+M.esc(m.title)+'</h3>'+
+  // "Add context" (context-panel.js): optional; the move says what it took into account, and it changes with it
+  var ctxPanel=window.TOLContext?TOLContext.mount(document.getElementById('soft-ctx'),{mode:'read',onChange:function(c,o){ var r=document.querySelector('input[name="st"]:checked'); if(o&&o.again&&r) show(r.value); }}):null;
+  var GOAL_SAY={calm:1,repair:1,understood:1,plan:1,limit:1,check:1};
+  function show(k){
+      var m=M.MOVES[k], s=M.STATES[k];
+      var x=ctxPanel?ctxPanel.get():null, cx=x&&!TOLContext.isEmpty(x)?TOLContext.read(x,{text:'',mode:'read'}):null, F=cx?cx.flags:{};
+      var me=(x&&x.me||[]).filter(function(v){return v!=='fine';});
+      var first=me.length?'<p><strong>First, though:</strong> you said you’re '+M.esc(me.join(' and '))+' today. Settle for a few minutes before you try, or say you’ll come back.</p>'
+        :'<p><strong>First, though:</strong> check your own state. If you&#39;re wound up too, settle for a few minutes before you try.</p>';
+      var later=F.recurring?'<p><strong>Later:</strong> this keeps coming back, so pick a calm time to talk it through, not now. <a href="/workpapers/wp-04-what-keeps-coming-back.html">What keeps coming back (WP-04)</a></p>':'';
+      var work=F.work?'<p><strong>At work:</strong> keep it practical and brief. Offer a short break or to pick it up later, and skip anything personal.</p>':'';
+      out.innerHTML=(cx&&cx.safety?TOLContext.usedHTML(cx):'')+'<h3>'+M.esc(m.title)+'</h3>'+
         '<p><strong>They seem '+M.esc(s.name.toLowerCase())+'.</strong> '+M.esc(m.goal)+'</p>'+
         '<p>'+M.esc(m.how)+'</p>'+
-        '<p><strong>Try saying:</strong> '+M.esc(m.words[0])+'</p>'+
+        '<p><strong>Try saying:</strong> '+M.esc(F.work&&m.words[1]?m.words[1]:m.words[0])+'</p>'+
         '<p><strong>Avoid:</strong> '+m.avoid.map(M.esc).join('; ')+'.</p>'+
-        '<p><strong>First, though:</strong> check your own state. If you&#39;re wound up too, settle for a few minutes before you try.</p>';
+        first+work+later+(cx&&!cx.safety?TOLContext.usedHTML(cx,{skip:['me','work','keeps']}):'');
+  }
+  document.querySelectorAll('input[name="st"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      show(r.value);
     });
   });
 })();

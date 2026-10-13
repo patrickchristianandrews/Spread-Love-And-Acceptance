@@ -56,6 +56,13 @@
       ['reached', 'the times you thought about reaching out', 'the times I thought about reaching out', 'rift'], ['part', 'your own part in what happened', 'my own part in what happened', 'rift']] },
     { id: 'neither', t: 'Neither of you could fully see', o: [['tone', 'each other’s tone, in writing'], ['intent', 'what was going on in the other’s head'], ['next', 'what would happen next'], ['others', 'what other people had said to each of you']] }
   ];
+  // ctx10: a last, optional step for your own side: what you want from this, how you are today, and anything else.
+  // With the choices above, it goes through the shared context reader (context-panel.js), so the bridge sentence
+  // aims at what you want, and the result says what it took into account.
+  var MINE = [
+    { id: 'goal', t: 'What do you want from this?', one: true, o: [['understood', 'To be understood'], ['plan', 'To fix a plan'], ['calm', 'To calm things'], ['limit', 'To set a limit'], ['repair', 'To repair'], ['check', 'Just to check I’m reading it right']] },
+    { id: 'me', t: 'How are you doing today?', o: [['tired', 'Tired'], ['stressed', 'Stressed'], ['unwell', 'Unwell'], ['rushed', 'Rushed'], ['fine', 'Fine']] }
+  ];
   var S = {}; function sel(g) { return S[g] || (S[g] = []); }
   function on(g, id) { return sel(g).indexOf(id) >= 0; }
   function escA(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -89,19 +96,40 @@
     SEE.forEach(function (G) {
       html += '<h3 class="ps-h3">' + esc(G.t) + '</h3><div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(chip(G)).join('') + '</div>';
     });
+    html += '</section><section class="ps-box"><h2>' + (GROUPS.length + 3) + '. Last, your side (optional)</h2><p class="ps-q">Adding context makes the picture fairer. It still can’t know everything.</p>';
+    MINE.forEach(function (G) { html += '<h3 class="ps-h3">' + esc(G.t) + '</h3><div class="ps-chips" role="group" aria-label="' + esc(G.t) + '">' + G.o.map(chip(G)).join('') + '</div>'; });
+    html += '<label class="ps-lbl">Culture or language notes, or anything else (optional)<input type="text" maxlength="200" data-note placeholder="For example: English is their second language. In my family we’re loud."></label>';
     html += '</section></div><aside class="ps-out" aria-live="polite" aria-labelledby="ps-out-h"><h2 id="ps-out-h">🔭 Through their eyes</h2><div data-out></div></aside></div>';
     root.innerHTML = html;
   }
 
+  // the Shifter's choices, as the shared context (context-panel.js)
+  var REL_OF = { partner: 'partner', family: 'family', roommate: 'roommate', friend: 'friend', coworker: 'coworker', coparent: 'ex', teen: 'child', other: 'other' };
+  function ctxNow() {
+    var v = function (sel0) { var x = root.querySelector(sel0); return x ? x.value.trim() : ''; };
+    var them = [];
+    if (on('state', 'empty')) them.push('tired'); if (on('around', 'sleep') || on('around', 'day') || on('around', 'late')) them.push('tired');
+    if (on('around', 'rushed')) them.push('rushed'); if (on('around', 'unwell')) them.push('unwell'); if (on('state', 'revved') || on('around', 'money') || on('around', 'caring')) them.push('stressed');
+    var take = []; if (on('wired', 'literal')) take.push('literal'); if (on('wired', 'process')) take.push('time'); if (on('wired', 'tone')) take.push('tone');
+    var usual = []; if (on('wired', 'direct')) usual.push('direct');
+    return { people: sel('who')[0] ? [{ rel: REL_OF[sel('who')[0]] || 'other' }] : [], before: v('[data-what]'), usual: usual, topic: on('history', 'before') ? 'keeps' : '',
+      them: them.filter(function (x, i, a) { return a.indexOf(x) === i; }), me: sel('me').slice(), takeThem: take, goal: sel('goal')[0] || '', culture: v('[data-note]') };
+  }
+  var GOAL_BRIDGE = {
+    understood: ' I’d also like you to understand how it looked from my side.', plan: ' Could we settle the next step together, at [a time]?',
+    limit: ' And I’d like to be clear about one thing for me: [your limit].', check: ''
+  };
   function render() {
     var out = root.querySelector('[data-out]'), whoO = sel('who')[0] ? label(GROUPS, 'who', sel('who')[0]) : null, who = whoO ? whoO[2] : 'the other person';
     var picks = []; GROUPS.forEach(function (G) { if (G.id === 'who') return; sel(G.id).forEach(function (id) { var o = label(GROUPS, G.id, id); if (o) picks.push({ g: G, o: o }); }); });
     var seen = {}; SEE.forEach(function (G) { seen[G.id] = sel(G.id).map(function (id) { return label(SEE, G.id, id)[1]; }); });
-    if (!picks.length && !seen.theysaw.length && !seen.yousaw.length && !seen.neither.length) {
+    var cx = window.TOLContext ? TOLContext.read(ctxNow(), { text: (root.querySelector('[data-said]') || {}).value || '', mode: 'read' }) : null;
+    var safe = cx && cx.safety ? '<p class="ps-why" role="note"><strong>' + esc(cx.notes[0].text) + '</strong> <a href="' + cx.notes[0].href + '">' + esc(cx.notes[0].link) + '</a></p>' : '';
+    if (!picks.length && !seen.theysaw.length && !seen.yousaw.length && !seen.neither.length && !(cx && !cx.empty)) {
       out.innerHTML = '<p class="ps-empty">Tap what might be true for them, on the left. Their side of the moment builds itself here: how it may have looked to them, what each of you could and couldn’t see, and a sentence to bridge the gap.</p>';
       return;
     }
-    var h = '<p class="ps-lead">Seen from ' + esc(who) + '’s side, here’s how the moment may have looked. These are possibilities to check, not facts about them.</p>';
+    var h = safe + '<p class="ps-lead">Seen from ' + esc(who) + '’s side, here’s how the moment may have looked. These are possibilities to check, not facts about them.</p>';
     var RIFT_TEXT = { fair: 'They may have been seeing it through fairness: who was treated how, who was trusted, and whether that has ever been said out loud.', before: 'If this has come up before, they may have been answering the whole history, not just this moment.' };
     if (picks.length) h += '<h3>How it may have looked to them</h3><ul>' + picks.map(function (p) { var t = riftMode() && p.g.id === 'history' && RIFT_TEXT[p.o[0]] ? RIFT_TEXT[p.o[0]] : p.o[2]; return '<li><strong>' + esc(p.o[1]) + ':</strong> ' + esc(t) + '</li>'; }).join('') + '</ul>';
     if (seen.theysaw.length || seen.yousaw.length || seen.neither.length) {
@@ -141,11 +169,17 @@
       (mine ? ' On my side, I knew about ' + mine + ', and I’m not sure that came across.' : '') +
       (theirs ? ' I’m wondering whether, for you, ' + theirsPhrase(theirs[0]) + '.' : '') +
       ' Could we compare notes? I’d like to understand how it looked to you.';
+    // aimed at what you want from it
+    var goal = sel('goal')[0];
+    if (goal === 'repair') bridge = 'I’m sorry for my part in this. ' + bridge;
+    else if (goal === 'calm') bridge = 'I don’t want to fight about this. ' + bridge;
+    else if (goal && GOAL_BRIDGE[goal]) bridge += GOAL_BRIDGE[goal];
     h += '<h3>A sentence to bridge the gap</h3><p class="ps-bridge">' + esc(bridge) + '</p>' +
       '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button><a class="ps-b is-main" href="/signal-translator.html" data-st-text="' + escA(bridge) + '">Check how it may land in the Signal Translator →</a></p>';
     var said = (root.querySelector('[data-said]') || {}).value;
     if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html" data-st-text="' + escA(said.trim()) + '">See how the words that were said may have been heard →</a></p>';
     if (rift) h += '<p class="ps-why"><strong>After a long rift:</strong> old roles often come back into the room, and reaching out is optional, on both sides. <a href="/family-rifts.html#old-roles">Family rifts: old roles at the table</a> and <a href="/family-rifts.html#reaching-out">reaching out after a long silence</a> go further.</p>';
+    if (cx && !cx.empty) h += TOLContext.usedHTML(cx, { skip: ['short', 'emoji', 'direct'], noChange: true });
     h += '<p class="ps-tag">Built on the seven angles in <a href="/book/chapter-3.html">Chapter III</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. For how different wiring changes what’s heard, see <a href="/wired-differently.html">Wired Differently</a>.</p>';
     out.innerHTML = h;
   }
@@ -166,7 +200,7 @@
   root.addEventListener('click', function (e) {
     var b = e.target.closest('.ps-chip');
     if (b) {
-      var g = b.getAttribute('data-g'), id = b.getAttribute('data-id'), G = GROUPS.filter(function (x) { return x.id === g; })[0], list = sel(g), i = list.indexOf(id);
+      var g = b.getAttribute('data-g'), id = b.getAttribute('data-id'), G = GROUPS.concat(MINE).filter(function (x) { return x.id === g; })[0], list = sel(g), i = list.indexOf(id);
       if (i >= 0) list.splice(i, 1); else { if (G && G.one) list.length = 0; list.push(id); }
       Array.prototype.forEach.call(root.querySelectorAll('.ps-chip[data-g="' + g + '"]'), function (c) { var x = on(g, c.getAttribute('data-id')); c.classList.toggle('is-on', x); c.setAttribute('aria-pressed', String(x)); });
       fitChips(); render(); return;
@@ -176,7 +210,7 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(function () { st.textContent = 'Copied'; setTimeout(function () { st.textContent = 'Copy the sentence'; }, 1600); });
     }
   });
-  root.addEventListener('input', function (e) { if (e.target.hasAttribute('data-said')) { clearTimeout(root._t); root._t = setTimeout(render, 300); } });
+  root.addEventListener('input', function (e) { if (e.target.hasAttribute('data-said') || e.target.hasAttribute('data-note') || e.target.hasAttribute('data-what')) { clearTimeout(root._t); root._t = setTimeout(render, 300); } });
   render();
   window.TOLPerspective = { _pick: function (g, id) { var b = root.querySelector('.ps-chip[data-g="' + g + '"][data-id="' + id + '"]'); if (b) b.click(); } };
 })();

@@ -809,6 +809,7 @@
         </div>
       </fieldset>
 
+      <div id="soft-ctx" data-ctx-for="soft"></div>
       <p class="form-msg" id="them-err" role="alert"></p>
       <div class="button-group">
         <button class="btn btn-primary" type="submit">Build my plan</button>
@@ -969,6 +970,8 @@
 <script src="/assets/js/tool-guide.js" defer></script>
 </div>
 
+<script src="/assets/js/message-patterns.js"></script>
+<script src="/assets/js/context-panel.js"></script>
 <script src="/assets/js/mood-arbitrage.js"></script>
 <script>
 (function(){
@@ -980,9 +983,20 @@
     if(!c.them){ planEl.hidden=true; current=null; return false; }
     var p=M.plan(c); current=p;
     $('plan-title').textContent=p.title; $('plan-sub').textContent=p.sub;
-    $('plan-body').innerHTML=M.planHTML(p,true);
+    $('plan-body').innerHTML=M.planHTML(p,true)+ctxHTML(c);
     planEl.hidden=false; $('plan-msg').textContent='';
     return true;
+  }
+  // "Add context" (context-panel.js): optional; the plan says what it took into account, and what that changes
+  var REL={partner:'partner',family:'family',coparent:'ex',roommate:'roommate',coworker:'coworker',care:'family',friend:'friend'};
+  var ctxPanel=window.TOLContext?TOLContext.mount($('soft-ctx'),{mode:'read',onChange:function(cc,o){ if(o&&o.again&&picked('them')) build(); }}):null;
+  function ctxHTML(c){
+    if(!ctxPanel) return '';
+    var x=ctxPanel.get();
+    if(!x.people.length&&c.rel&&REL[c.rel]) x.people=[{rel:REL[c.rel]}];
+    if(!x.me.length&&c.you==='low') x.me=['tired'];
+    if(TOLContext.isEmpty(ctxPanel.get())) return '';
+    return TOLContext.usedHTML(TOLContext.read(x,{text:'',mode:'read'}));
   }
   form.addEventListener('submit', function(e){
     e.preventDefault();

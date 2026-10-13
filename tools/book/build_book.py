@@ -881,7 +881,7 @@ def toc_row(key, label, title, cls='', sub=''):
 def part_opener(part, deep, here):
     name, sub, blurb = PARTS[part]
     col, tint = PCOL[part]
-    rows = ''.join('<li><a href="#%s"><span>%s</span> %s</a>%s</li>' % (e[0], esc(e[2]), esc(TITLES[e[0]]), pg(e[0]))
+    rows = ''.join('<li><a href="#%s"><span>%s</span> <b class="pe-only">%s</b><b class="no-print">%s</b></a>%s</li>' % (e[0], esc(e[2]), esc(SHORT[e[0]]), esc(TITLES[e[0]]), pg(e[0]))
                    for e in ORDER if e[1] == part and e[0] in here)
     return '''<section class="pe-part no-bubble no-cheer no-dive" data-no-bubble id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
 <div class="pe-part-in"><p class="pe-part-k">%s</p><h1 class="pe-part-h">%s</h1><p class="pe-part-b">%s</p>
@@ -1033,8 +1033,9 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
         terms[lab.lower()] = (lab, rx)
     for gid, nm, d, ex, w in gloss:
         k = nm.lower()
-        if k not in terms:
-            terms[k] = (nm, re.escape(w))
+        lab = nm if re.search(r'[A-Z]', nm[1:]) else nm[0].lower() + nm[1:]
+        if k not in terms and not any(k.startswith(t.split(',')[0]) for t in terms):
+            terms[k] = (lab, re.escape(w))
     for k in sorted(terms, key=lambda x: x.lstrip('“').lower()):
         lab, rx = terms[k]
         key = 'ix-' + re.sub(r'[^a-z0-9]+', '-', lab.lower()).strip('-')

@@ -107,9 +107,12 @@
       drop('<span class="cr-num">02</span><span id="cr-s2">Who’s who, and how it happened</span>', s2, state.format === 'unlabelled', esc('You: ' + state.me + ' · ' + formName)) + '</section>';
 
     // Threats or control: no rewording makes those okay
-    if (r.safety) {
+    // context typed into "Add context" is read for crisis and fear too, and never ignored
+    var cx = ctxRead(r, them);
+    if (cx && cx.safety === 'crisis') html += '<section class="cr-safety" role="alert"><p><strong>' + esc(cx.notes[0].text) + '</strong> <a href="/outside-help.html">Help beyond this site</a></p></section>';
+    if (r.safety || (cx && (cx.safety === 'fear' || cx.safety === 'threat'))) {
       html += '<section class="cr-safety" role="alert" aria-labelledby="cr-safe"><h2 id="cr-safe">Step away from this one</h2>' +
-        '<p>Something in this conversation reads as a threat, or as checking, controlling or cutting someone off. That isn’t a communication problem to be worded better, and the Reader can’t judge it properly. It’s okay to step away.</p>' +
+        '<p>Something here may be more than a wording problem: a threat, or checking up on someone or cutting them off, or someone feeling afraid. Better wording can’t fix that, and the Reader can’t judge it properly. One conversation can’t tell you what a relationship is like. If messages like this leave you feeling afraid or cut off, free and private support is there. It’s okay to step away.</p>' +
         '<p>If someone is hurting, threatening, watching or controlling you, it isn’t your fault. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233 or text START to 88788. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.</p>' +
         '<p><a href="/safety.html">Not safe at home?</a> <button type="button" class="cr-btn is-quiet is-small" data-tol-exit>Leave this site quickly</button></p></section>';
     }
@@ -117,6 +120,9 @@
     // 03 The read
     html += '<section class="cr-step" aria-labelledby="cr-s3"><h2 id="cr-s3"><span>03</span>The read</h2>';
     html += '<div class="cr-summary">' + summary(r, them) + chart(r) + '</div>';
+    if (window.TOLContext) html += TOLContext.usedHTML(cx) + '<div class="tol-clar" id="cr-clar" hidden></div>';
+    // what the context changes: moves for "it keeps coming back" and for what you want, first
+    if (cx && !cx.empty && !r.safety && r.next) r.next = ctxMoves(cx, them).concat(r.next);
 
     // How to respond (not for a thread that reads as threats or control: there, no advice on wording)
     if (r.next && r.next.length && !r.safety) {
@@ -166,6 +172,8 @@
     });
     r.unanswered.forEach(function (u) {
       var t = r.turns[u.at];
+      // "they always write short": a one-word reply is how they text, not a brush-off
+      if (u.flat && cx && cx.flags.shortStyle) { notes.push('<strong>A short reply.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '” and the reply was “' + esc(snip(u.flat, 20)) + '”. You said they usually write short, so this is probably how they text, not a brush-off. If the answer matters, ask once more, kindly.'); return; }
       notes.push('<strong>A question that may not have been answered.</strong> ' + esc(t.who) + ' asked “' + esc(snip(u.q, 90)) + '”' + (u.open ? ' and it’s still open.' : u.flat ? ', and the reply was only “' + esc(snip(u.flat, 20)) + '”. A one-word reply can mean yes, or “I’m upset”, so it’s worth checking which.' : ', and the reply went somewhere else.'));
     });
     (r.literal || []).forEach(function (x) {
@@ -192,7 +200,50 @@
     out.innerHTML = html;
     draftStep.hidden = false;
     wire();
+    clarifyFor(r);
     if (scroll) { var s = $('cr-s3'); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+
+  // ---------- Add context (context-panel.js): optional; the read uses it and says what it took into account ----------
+  var ctxPanel = null;
+  function ctxRead(r, them) {
+    if (!window.TOLContext || !ctxPanel) return null;
+    var c = ctxPanel.get();
+    var lastTheirs = null; for (var i = r.turns.length - 1; i >= 0; i--) if (!r.turns[i].mine) { lastTheirs = r.turns[i]; break; }
+    var earlier = r.turns.slice(0, lastTheirs ? r.turns.indexOf(lastTheirs) : r.turns.length).map(function (t) { return t.text; }).join('\n');
+    if (!c.earlier && earlier) c.earlier = earlier;
+    var cx = TOLContext.read(c, { text: lastTheirs ? lastTheirs.text : '', mode: 'read', engine: window.SignalEngine || null });
+    // the pasted thread itself counts as "earlier messages", but it isn't something the person added
+    if (!ctxPanel.get().earlier) cx.used = cx.used.filter(function (u) { return !/earlier messages you pasted/.test(u); });
+    if (TOLContext.isEmpty(ctxPanel.get())) return TOLContext.read({}, {});
+    return cx;
+  }
+  var GOAL_MOVE = {
+    limit: ['Set your limit, kindly', 'Say it once, calmly. You don’t have to argue the whole thing in a message.', 'I hear you. For me, [your limit]. I’m happy to talk about it at [a calm time].'],
+    plan: ['Fix the plan', 'Answer with one concrete suggestion: a time, a place or a next step.', 'Let’s settle it: how about [the plan] at [a time]?'],
+    repair: ['Repair first', 'Name your part, if there was one, and the thing you both want.', 'I’m sorry for my part in this. I want us to be okay. Can we talk at [a time]?'],
+    calm: ['Calm it down', 'You don’t have to answer the sharpest line. Answer the part you can agree with, or ask for a pause.', 'I don’t want to fight about this. Can we take a breather and talk at [a time]?'],
+    understood: ['Say how it landed', 'Answer the point first, then say how it landed for you.', 'I want to understand you, and I’d like you to understand me too. When you said that, it landed as [how it felt]. Did you mean that?'],
+    check: ['Check what they meant', 'Ask before deciding what it meant.', 'I want to be sure I’ve got this right. Did you mean [what you think they meant]?']
+  };
+  function ctxMoves(cx, them) {
+    var mv = [];
+    if (cx.flags.goal && GOAL_MOVE[cx.flags.goal]) { var g = GOAL_MOVE[cx.flags.goal]; mv.push({ key: 'goal', title: 'What you want: ' + g[0].toLowerCase(), say: g[1], script: g[2] }); }
+    if (cx.flags.recurring) mv.push({ key: 'keeps', title: 'This keeps coming back', say: 'A message thread rarely settles a topic that keeps coming back. Suggest a calm time to talk it through, not over text.', script: 'This keeps coming up, and I’d like to sort it properly. Can we talk at [a calm time], not over text?', dig: ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back (WP-04)'] });
+    return mv;
+  }
+  // "A few quick questions so the read is fair (optional)": when the thread shows possible unfairness or pressure
+  var MARK_AS = { dig: 'jab', verdict: 'label', contempt: 'contempt', dismiss: 'brushoff', withdraw: 'withdraw', absolute: 'absolute', compare: 'compare', defend: 'invalid', demand: 'oblig' };
+  function clarifyFor(r) {
+    var slot = $('cr-clar'); if (!slot || !window.TOLContext) return;
+    var found = {}, text = r.turns.map(function (t) { return t.text; }).join('\n');
+    r.turns.forEach(function (t) { t.marks.forEach(function (m) { if (MARK_AS[m.kind]) found[MARK_AS[m.kind]] = [m.text]; }); });
+    var an = { found: found, control: r.control ? { kind: 'isolate' } : null };
+    TOLContext.offerClarify(slot, { an: an, text: text, ctx: ctxPanel ? ctxPanel.get() : null, onResult: function (res) {
+      var line = TOLContext.clarifyLine(res); if (!line) return;
+      var p = $('cr-clar-line'); if (!p) { p = document.createElement('p'); p.id = 'cr-clar-line'; p.className = 'cr-note'; slot.parentNode.insertBefore(p, slot); }
+      p.textContent = line;
+    } });
   }
 
   function summary(r, them) {
@@ -356,7 +407,7 @@
     d.marks.forEach(function (m) { if (kinds.indexOf(m.kind) === -1) kinds.push(m.kind); });
     if (d.unsafe) {
       draftOut.innerHTML = '<div class="cr-safety" role="alert" style="margin-top:1rem;"><h2>Please don’t send this one</h2>' +
-        '<p>This reads as a threat or as controlling the other person. No rewording makes it okay to send. Step away from the conversation for now.</p></div>';
+        '<p>These words read as a threat, or as checking up on or cutting off the other person. No rewording makes that okay to send. Step away from the conversation for now.</p></div>';
       return;
     }
     var h = '<ul class="cr-checks">' + d.checks.map(function (c) { return '<li class="' + (c.ok ? 'ok' : '') + '">' + esc(c.label) + '</li>'; }).join('') + '</ul>';
@@ -374,6 +425,8 @@
   draft.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(checkDraft, 250); });
 
   $('cr-go').addEventListener('click', function () { start(input.value); });
+  // Add context: closed by default; "Done" reads the conversation again with it
+  if (window.TOLContext && $('cr-ctx')) ctxPanel = TOLContext.mount($('cr-ctx'), { mode: 'read', earlier: false, onChange: function (c, o) { if (o && o.again && state && state.me) render(false); } });
   // the screenshot reader hands over the checked text, and who "you" are, so there's nothing to ask twice
   window.TOLReaderPage = {
     read: function (text, me) {

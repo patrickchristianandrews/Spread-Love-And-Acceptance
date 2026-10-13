@@ -2629,7 +2629,7 @@ function ctxExtra(v, an, mode){
   if(v && v.ctxSafety==="crisis") h += CRISIS_SELF;
   else if(v && (v.ctxSafety==="fear" || v.ctxSafety==="threat")) h += SAFETY_GOT;
   if(v && v.careNote) h += '<p class="small st-care"><b>'+esc(v.careNote)+'</b></p>';
-  h += TOLContext.usedHTML(r);
+  h += TOLContext.usedHTML(r, {skip: [v && v.limit ? 'limit' : '', v && v.shortOk ? 'short' : ''].concat(v && v.head && /parent setting a limit/.test(v.head[1]) ? ['limit'] : []).concat(v && v.head && /usually write short/.test(v.head[1]) ? ['short'] : [])});
   if(mode==="send") h += '<div class="tol-clar" id="stClar" hidden></div>';
   return h;
 }
@@ -2649,6 +2649,8 @@ if(window.TOLContext) stCtx = TOLContext.mount(document.getElementById("stCtx"),
 });
 // the mini checker's "Add context" link opens the panel
 if(stCtx && location.hash==="#add-context") stCtx.open(false);
+// context handed over from another page (WP-09) waits in this tab's sessionStorage ('tol-st-ctx'), never in the address
+try{ const sc = sessionStorage.getItem("tol-st-ctx"); if(sc!=null){ sessionStorage.removeItem("tol-st-ctx"); if(stCtx){ stCtx.set(JSON.parse(sc)); stCtx.open(false); } } }catch(e){}
 /* "Try an example": one tap picks the right mode, fills the box and reads it */
 document.querySelectorAll("#tryRow .tryex").forEach(b=>b.addEventListener("click",()=>{
   const m = b.getAttribute("data-mode")==="got" ? "got" : "send";

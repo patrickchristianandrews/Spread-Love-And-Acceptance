@@ -210,9 +210,11 @@ body:has(#cr-out .cr-safety) .cb-end { display: none !important; }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/message-patterns.js" defer></script>
+<script src="/assets/js/context-panel.js" defer></script>
 <script src="/assets/js/conversation-reader-engine.js" defer></script>
 <script src="/assets/js/conversation-reader.js" defer></script>
 <script src="/assets/js/conversation-reader-ocr.js" defer></script>
+<script src="/assets/js/clarify.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/conversation-reader.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/conversation-reader.html">
@@ -266,6 +268,7 @@ body:has(#cr-out .cr-safety) .cb-end { display: none !important; }
   <p class="cr-hint">Copy the messages from your phone, a chat app or an email, and paste them here. Names at the start of each line help (“Sam: …”), but they’re not required. If there are names, the Reader will ask which one is you.</p>
   <label for="cr-input" class="visually-hidden" style="position:absolute;left:-9999px;">The conversation</label>
   <textarea id="cr-input" spellcheck="false" placeholder="Sam: are we still on for Saturday?&#10;Alex: maybe, I'll let you know later&#10;Sam: you said that last week. When will you know?"></textarea>
+  <div id="cr-ctx" data-ctx-for="cr"></div>
   <div class="cr-actions">
     <button type="button" class="cr-btn" id="cr-go">Read it</button>
     <button type="button" class="cr-btn is-quiet" id="cr-example">Try an example</button>
@@ -311,10 +314,13 @@ body:has(#cr-out .cr-safety) .cb-end { display: none !important; }
   <details>
     <summary><strong id="cr-lim">What the Reader can and can’t do</strong></summary>
     <p>The Reader looks for patterns in words: absolutes like “always” and “never”, sentences about who someone is, dismissals, sarcasm, eye-rolls and passive-aggressive jabs, comparisons, shutting the door without a time to come back, capitals, apologies and other repair attempts, clear asks, questions that may not have been answered, the past being brought in, and long silences when times are included. It weighs them to show where the conversation got heated.</p>
+    <p><strong>Adding context makes the read fairer.</strong> Under “Add context” you can say who they are to you, how they usually write, whether this keeps coming back, how you’re each doing today and what you want from it. The read uses it and shows what it took into account. It still can’t know everything, and one conversation can’t tell you what a relationship is like.</p>
     <p>It can’t hear tone of voice, and it doesn’t know your history, your in-jokes, or what either of you meant. The same words can be affectionate between two people and cutting between two others. Use it to slow down and prepare, never as proof of who was right. The program judges arrangements, never people.</p>
     <p>If someone’s wiring shapes how words land, the <a href="/signal-translator.html">Signal Translator</a> goes deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
   </details>
 </section>
+<div data-tool-guide="conversation-reader"></div>
+<script src="/assets/js/tool-guide.js" defer></script>
 </main>
 </body>
 </html>

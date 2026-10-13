@@ -85,14 +85,18 @@
         '<textarea id="' + id + 't" maxlength="1500" placeholder="Type or paste it the way you would send it."></textarea>' +
         '<div class="mcm-row"><button type="button" class="mcm-go">Check it</button>' +
         '<a class="mcm-full" href="' + full + '">Open the full checker &rarr;</a></div>' +
+        // the full checker has "Add context" (who they are, how they usually write, what you want): the fairer reading
+        '<p class="mcm-sub no-bubble mcm-ctx-l"><a class="mcm-ctx" href="' + full + '#add-context">Add context</a> for a fairer reading (who they are, how they usually write, what you want).</p>' +
         '<div class="mcm-out" aria-live="polite"></div>' +
       '</section>';
-    var box = host.querySelector('textarea'), go = host.querySelector('.mcm-go'), out = host.querySelector('.mcm-out'), link = host.querySelector('.mcm-full');
+    var box = host.querySelector('textarea'), go = host.querySelector('.mcm-go'), out = host.querySelector('.mcm-out'), link = host.querySelector('.mcm-full'), ctxLink = host.querySelector('.mcm-ctx');
 
     // only load the engine when someone shows they want it
     box.addEventListener('focus', function () { engine().catch(function () {}); }, { once: true });
     // the full checker gets the words, without putting them in the address
-    link.addEventListener('click', function () { try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); } catch (e) {} });
+    function hand() { try { if (box.value.trim()) sessionStorage.setItem('tol-st-text', box.value.trim().slice(0, 1500)); } catch (e) {} }
+    link.addEventListener('click', hand);
+    ctxLink.addEventListener('click', hand);
 
     function check() {
       var text = box.value.trim();

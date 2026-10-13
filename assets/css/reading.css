@@ -248,6 +248,7 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .read.whole ol.pe-part-list a span{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; color:var(--pc); margin-right:.3rem; }
 .read.whole .pe-pg:empty{ display:none; }
 .read.whole ol.pe-part-list .pe-pg{ display:none; }
+.read.whole ol.pe-part-list b{ font-weight:inherit; }
 .read.whole article.pe-ch{ border-top:0; padding-top:.5rem; }
 .read.whole header.ch-open{ margin:0 0 1.2rem; padding:0 0 .9rem; border-bottom:1px solid var(--line); }
 .read.whole header.ch-open::before{ content:""; display:block; width:5rem; border-top:4px solid var(--pc); margin:0 0 .7rem; }

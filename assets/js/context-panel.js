@@ -306,7 +306,12 @@
   /* what the Clarify questions (assets/js/clarify.js) need to know already, so they aren't asked twice */
   function forClarify(ctxIn) {
     var c = norm(ctxIn), r = read(c, {});
+    // answers to the Clarify questions that the context already gives (question id -> answer id in clarify-data.js)
+    var prefill = {};
+    if (c.topic === 'keeps') prefill.often = 'most'; else if (c.topic === 'few') prefill.often = 'sometimes'; else if (c.topic === 'first') prefill.often = 'once';
+    if (r.safety === 'fear') prefill.afraid = 'afraid';
     return {
+      prefill: prefill,
       who: c.people.map(function (p) { return p.rel; }), rel: r.rel, age: (c.people[0] || {}).age || '',
       recurring: c.topic === 'keeps' ? true : c.topic === 'first' ? false : null, topic: c.topic,
       afraid: r.safety === 'fear' ? true : null, crisis: r.safety === 'crisis',
@@ -320,8 +325,9 @@
   function usedHTML(r, opts) {
     opts = opts || {};
     if (!r || r.empty) return '<p class="tol-ctx-used tol-ctx-none tol-plain no-bubble">No context added, so this reads the words alone. <button type="button" class="tol-ctx-change">Add context</button> to make the reading fairer.</p>';
-    var notes = r.notes.slice(0, opts.max || 6);
-    return '<div class="tol-ctx-used tol-plain no-bubble" role="note"><p class="tol-ctx-took"><b>What I took into account:</b> ' + esc(r.used.join('; ') || 'what you added') + '. <button type="button" class="tol-ctx-change">Change context</button></p>' +
+    var skip = opts.skip || [];
+    var notes = r.notes.filter(function (n) { return skip.indexOf(n.id) === -1; }).slice(0, opts.max || 6);
+    return '<div class="tol-ctx-used tol-plain no-bubble" role="note"><p class="tol-ctx-took"><b>What I took into account:</b> ' + esc(r.used.join('; ') || 'what you added') + '.' + (opts.noChange ? '' : ' <button type="button" class="tol-ctx-change">Change context</button>') + '</p>' +
       (notes.length ? '<ul class="tol-ctx-notes">' + notes.map(function (n) { return '<li class="tol-ctx-n-' + esc(n.id) + '">' + esc(n.text) + (n.href ? ' <a href="' + esc(n.href) + '">' + esc(n.link || 'More') + '</a>' : '') + '</li>'; }).join('') + '</ul>' : '') +
       '<p class="tol-ctx-still">Context makes the reading fairer. It still can’t know everything, so check it against what you know.</p></div>';
   }
@@ -528,7 +534,7 @@
     if (!type) { slot.hidden = true; return ''; }
     var go = function () {
       if (!root.TOLClarify || !root.TOLClarify.offer) { slot.hidden = true; return; }
-      root.TOLClarify.offer(slot, { type: type, show: true, context: function () { return { text: [o.text, o.ctx && norm(o.ctx).before, o.ctx && norm(o.ctx).other].filter(Boolean).join('\n'), known: forClarify(o.ctx || {}) }; }, onResult: o.onResult });
+      root.TOLClarify.offer(slot, { type: type, show: true, context: function () { var k = forClarify(o.ctx || {}); return { text: [o.text, o.ctx && norm(o.ctx).before, o.ctx && norm(o.ctx).other].filter(Boolean).join('\n'), known: k, prefill: k.prefill }; }, onResult: o.onResult });
     };
     if (root.TOLClarify) go();
     else {
