@@ -91,6 +91,7 @@ async function render(page) {
 }
 
 async function makeBook(ctx, file, opts = {}) {
+  const t0 = Date.now(), log = m => { if (process.env.BOOK_VERBOSE) console.log('  %s %ds %s', file, Math.round((Date.now() - t0) / 1000), m); };
   const page = await ctx.newPage();
   page.on('pageerror', e => console.log('  page error:', e.message));
   await page.route('**/*', route => {
@@ -105,6 +106,7 @@ async function makeBook(ctx, file, opts = {}) {
   });
   await page.goto(`http://127.0.0.1:${PORT}/book/${file}.html`, { waitUntil: 'load', timeout: 180000 });
   try { await page.evaluate(() => document.fonts && document.fonts.ready); } catch (e) {}
+  log('loaded');
   await page.addScriptTag({ url: '/assets/js/share-kit.js' }).catch(() => page.addScriptTag({ path: path.join(ROOT, 'assets/js/share-kit.js') }));
   await page.emulateMedia({ media: 'print' });
   const prep = await page.evaluate(({ SITE, sample }) => {
@@ -145,6 +147,7 @@ async function makeBook(ctx, file, opts = {}) {
     const terms = [...document.querySelectorAll('.pe-ix li[data-ix]')].map(li => [li.getAttribute('data-ix'), li.getAttribute('data-ix-re')]);
     return { qr, missingQR, keys, terms };
   }, { SITE, sample: !!opts.sample });
+  log('prepared');
   if (prep.missingQR) console.log('  warning: %d QR codes not drawn', prep.missingQR);
   await page.evaluate(async () => {
     await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
@@ -166,6 +169,7 @@ async function makeBook(ctx, file, opts = {}) {
   }, { map, ix });
 
   let buf = await render(page);
+  log('first print');
   let map = {}, ix = {};
   for (let pass = 1; pass <= 4; pass++) {
     const pages = pageTexts(buf);
@@ -180,6 +184,7 @@ async function makeBook(ctx, file, opts = {}) {
     if (same) break;
     await fill(map, ix);
     buf = await render(page);
+    log('pass ' + pass);
   }
   // the final copy, without the markers (they sit outside the flow, so nothing moves)
   const before = pageCount(buf);

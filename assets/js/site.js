@@ -622,7 +622,7 @@
       { href: '/tools/frequency-calibration.html', code: 'Tool', title: 'Find your natural rhythms', note: 'Your rhythms for money, decisions, check-ins and rest' },
       { href: '/neurodivergent-relationships.html', code: 'Guide', title: 'Neurodivergent relationships', note: 'Tips for ADHD, autistic and AuDHD readers' },
       { href: '/quick-checks.html#today', code: 'Daily', title: 'Today’s Weather', note: 'A one-minute read on how you’re doing today' },
-      { sub: 'Settle yourself', area: 'self', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
+      { sub: 'Settle yourself', area: 'self', tt: 'calm', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
       { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
       { href: '/nervous-system.html', code: 'Guide', title: 'Your nervous system, in plain words', note: 'Fight, flight and freeze, the vagus nerve, and what helps you settle' },
       { href: '/calming-supplements.html', code: 'Guide', title: 'Calming supplements, herbs and natural approaches', note: 'What the research says, side effects, and what to check with a pharmacist' },
@@ -644,7 +644,7 @@
       { href: '/quiet-crossword.html', code: 'Game', title: 'Quiet Crossword', note: 'Small, friendly crosswords in five gentle levels' },
       { href: '/daily-ledger-crossword.html', code: 'Game', title: 'The Daily Ledger Crossword', note: 'A newspaper-style crossword, from a quick Mini up' },
       { href: '/recheck-drive.html', code: 'Game', title: 'The Re-check Drive', note: 'A calm football game made from the complacency playbook' },
-      { sub: 'Breathe & quiet', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
+      { sub: 'Breathe & quiet', tt: 'calm', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
       { href: '/night-garden.html', code: 'Breathe', title: 'The Night Garden', note: 'Breathe slowly and watch the flowers bloom' },
       { href: '/ladder.html', code: 'Now', title: 'Where am I right now?', note: 'Find where you are right now, and a next step that fits' },
       { href: '/wp-11.html', code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' },
@@ -814,11 +814,12 @@
         if (!it.href) return;
         if (PAID[it.href.split('#')[0]]) it.paid = true;
         var p = it.href.split('#')[0];
+        if (g.id === 'tools' && it.href !== p) return;   // a tool inside a longer page doesn't make that page a tool
         if (p === current && score === null) score = inSub ? 2 : 3;
         if (ref && p === ref && ref !== current) hasRef = true;
       });
       if (score === null) return;
-      if (g.id === 'rel') score -= 1.5; else if (g.id === 'new' || g.id === 'start') score -= 3;
+      if (g.id === 'rel') score -= 1.5; else if (g.id === 'start') score -= 3; else if (g.id === 'tools') score -= 0.5;
       if (hasRef) score += 5;
       if (score > best) { best = score; hereGroup = g; }
     });
@@ -827,7 +828,8 @@
     var HERE_FIX = { '/work.html': 'rel', '/someone-sent-you-this.html': 'start', '/sent-this.html': 'start', '/en-espanol.html': '' };
     if (Object.prototype.hasOwnProperty.call(HERE_FIX, current)) hereGroup = MENU.filter(function (g) { return g.id === HERE_FIX[current]; })[0] || null;
     // a page that is a tool in its own right (listed in Tools without a #part) belongs to Tools, under its type
-    else MENU.forEach(function (g) { if (g.id === 'tools' && g.items.some(function (it) { return it.href === current && !it.sub && it.href !== '/tools.html'; })) hereGroup = g; });
+    // (the games stay in Calm & play)
+    else MENU.forEach(function (g) { var sub = ''; if (g.id === 'tools' && g.items.some(function (it) { if (it.sub) { sub = it.sub; return false; } return it.href === current && sub !== 'Play' && it.href !== '/tools.html'; })) hereGroup = g; });
   })();
 
   // ===== Focus mode: "Focus on what I'm learning" =====
@@ -2611,11 +2613,11 @@
         return L.items.some(function (it) { if (it.href === current || pathOnly(it.href) === current) { hit = L; return true; } return false; });
       });
       if (hit) {
-        var area = null;
-        g.items.some(function (it) { if (it.sub === hit.name && hit.name) { area = it.area || null; return true; } return false; });
+        var area = null, tt = null;
+        g.items.some(function (it) { if (it.sub === hit.name && hit.name) { area = it.area || null; tt = it.tt || null; return true; } return false; });
         if (!area && g.id === 'rel' && hit.all) { var m = /#([a-z-]+)$/.exec(hit.all); area = m ? m[1] : null; }
         if (!area) area = /^(play|read)$/.test(g.id) ? g.id : null;
-        return { g: g, list: hit, area: area };
+        return { g: g, list: hit, area: area, tt: tt };
       }
     }
     return null;
@@ -2673,7 +2675,7 @@
       var L = pl.list.items, i0 = -1;
       L.forEach(function (it, i) { if (i0 < 0 && pathOnly(it.href) === me) i0 = i; });
       L.slice(i0 + 1).concat(L.slice(0, Math.max(i0, 0))).forEach(function (it) { if (picks.length < 3) add(it.href, it.plain ? it.title : menuLabel(it), it.note || ''); });
-      var tt = AREA_TOOLTYPE[pl.area];
+      var tt = pl.tt || AREA_TOOLTYPE[pl.area];
       if (tt) { var linked = {}; Array.prototype.forEach.call(main.querySelectorAll('a[href]'), function (a) { linked[pathOnly(a.getAttribute('href'))] = 1; });
         tools.filter(function (t) { return t.type === tt && !linked[pathOnly(t.href)]; }).sort(byRank).some(function (t) { add(t.href, t.name, t.does); return picks.length >= 4; }); }
       more = [pl.list.name ? 'Everything in ' + pl.list.name : 'Everything in ' + (pl.g.name || pl.g.title), pl.list.all || GROUP_HOME[pl.g.id] || '/explore.html'];
