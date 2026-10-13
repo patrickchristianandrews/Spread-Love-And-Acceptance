@@ -19,6 +19,10 @@
 // The shared pattern list (message-patterns.js): the Carrier Wave Decoder's tone check and the
 // Conversation Reader read words with the same list, so the same words get the same reading.
 const SHARED = (typeof module!=="undefined" && module.exports) ? require("./message-patterns.js") : (root && root.TOLPatterns);
+/* the shared context panel (assets/js/context-panel.js): what "Add context" means for a reading. Optional everywhere:
+   analyze(text) with no ctx reads exactly as before. */
+const CTXMOD = (typeof module!=="undefined" && module.exports) ? (()=>{ try{ return require("./context-panel.js"); }catch(e){ return null; } })() : null;
+function CTXM(){ return CTXMOD || (root && root.TOLContext) || null; }
 
 /* ============================================================
    WORD LISTS
@@ -1335,6 +1339,23 @@ function reframeOf(an, opts){
   return null;
 }
 
+/* "If you keep lying to me, I'll end this", "If this keeps happening I'll need to leave": your own consequence for something
+   that keeps happening. A boundary, not a threat. A threat harms, punishes, exposes, or takes away the kids, money or a home. */
+const OWN_LIMIT_RE = /\bif (?:you (?:keep|carry on|continue|go on)|this keeps|it keeps|that keeps)\b[^.!?]{1,80}?,?\s*(?:then )?(?:i'll|i will|i'm going to|i am going to|i'm gonna|i'd|i would|i need to|i'll need to|i'll have to|i have to|i'm)\s+(?:need to |have to |be )?(?:end (?:this|it|things|us|the relationship|our relationship)|leave|leaving|go|walk away|break up|move out|be done|done|stop (?:talking|seeing|answering|replying)|not (?:stay|come|be able to stay)|step back|take a break)\b[^.!?]*/i;
+const OWN_PUNISH_RE = /\b(?:take (?:the|your) (?:kids|children|money|car|keys|phone|house)|tell (?:everyone|your|them)|kick you|throw you|hurt|kill|ruin|make you|regret|be sorry|post|expose|lose|leave you with nothing)\b/i;
+/* With context (opts.ctx from the context panel): a parent's limit for a child under 12 or a teen, or (reading a message
+   from "my parent") a time-limited limit. Fear, put-downs and cutting someone off with no end are never a parent's limit. */
+function parentLimitOf(opts, cm, low){
+  const C = CTXM(); if(!opts || !opts.ctx || !C || !cm) return false;
+  if(cm.kinds && cm.kinds.some(k=>k==="fear" || k==="degrade")) return false;
+  const c = C.norm(opts.ctx), mode = opts.mode==="read" ? "read" : "send";
+  const kid = c.people.some(p=>p.rel==="child" && p.age!=="adult");
+  const fromParent = mode==="read" && c.people.some(p=>p.rel==="parent");
+  const ends = /\b(?:tonight|today|this (?:week|weekend|evening|afternoon)|for (?:a|the|one|two|\d+) (?:week|weeks|day|days|night|nights|month)|until|till|unless|before|grounded|school night|bed ?time|after (?:dinner|homework|school)|homework|because|cos|'cause)\b/;
+  if(cm.kind==="monitor") return mode==="send" && kid && !/\b(?:prove|don't trust|i'll know|watching you)\b/.test(low);
+  if(cm.kind==="isolate") return (kid && mode==="send" || fromParent) && ends.test(low) && !/\b(?:anymore|ever again|for good|don't bother coming home|or me)\b/.test(low);
+  return false;
+}
 function analyze(textIn, opts){
   opts = opts||{};
   const ch = opts.channel||"person";
@@ -1476,10 +1497,20 @@ function analyze(textIn, opts){
   if(selfHarm && !has("menace") && /\bif you (?:ever )?(?:leave|go|break up|walk out|don't|do not|won't|end)\b|\b(?:it'll|it will|it'd|it would) be (?:all )?your fault\b|\bbecause of you\b/i.test(low)){
     const sm = low.match(SHARED.SELFHARM_RE) || (SHARED.SELFHARM_MORE && low.match(SHARED.SELFHARM_MORE)); if(sm){ push("menace", sm.index, sm.index+sm[0].length); drop("threat"); } }
   // checking up, cutting someone off, or "nobody else would want you": signs of control, not a tone problem
-  let control = null;
+  let control = null, parentLimit = null;
   { const cm = SHARED && SHARED.control ? SHARED.control(low) : null;
-    if(cm && !has("menace")){ control = {kind: cm.kind, kinds: cm.kinds, text: low.slice(cm.start, cm.end)};
+    // with context: a parent's limit for a child or teen ("You can't see your friends this weekend", "Give me your phone, it's
+    // bedtime") is parenting, not control. Fear, put-downs, threats and cutting someone off for good are never softened.
+    if(cm && !has("menace") && parentLimitOf(opts, cm, low)){ parentLimit = {kind: cm.kind, text: low.slice(cm.start, cm.end)}; }
+    else if(cm && !has("menace")){ control = {kind: cm.kind, kinds: cm.kinds, text: low.slice(cm.start, cm.end)};
       drop("impera", h=>h.s<cm.end && cm.start<h.e); drop("urgent"); drop("label", h=>h.s<cm.end && cm.start<h.e); push("control", cm.start, cm.end); } }
+  // a request or a "no" that comes from care, safety, health or respect for the relationship: read as care, never as control
+  let care = null;
+  if(!control && !has("menace") && !selfHarm && SHARED && SHARED.care){ const cr = SHARED.care(low); if(cr) care = {kind: cr.kind, kinds: cr.kinds, text: raw.slice(cr.start, cr.end)}; }
+  if(!care && parentLimit) care = {kind:"rule", kinds:["rule"], text: raw.slice(0, 0) || parentLimit.text};
+  // "If you keep lying to me, I'll end this": a stated boundary about your own choice, not a threat
+  { const om = low.match(OWN_LIMIT_RE);
+    if(om && has("threat") && !has("menace") && !OWN_PUNISH_RE.test(om[0])){ drop("threat"); push("boundary", om.index, om.index+om[0].replace(/[\s,.]+$/,"").length); } }
   // a calm boundary ("If you can't respect my relationship, I'm going to leave for today. I love you."): caring, not a threat
   { const bm = low.match(BOUNDARY_RE);
     if(bm && !has("menace") && !["swear","hostile","label","contempt","violent","legal","dxlabel"].some(has) && (BOUNDARY_CARE.test(low) || /\b(?:step (?:away|out|back)|take (?:a break|some space|space|a step back|a breather)|hang up|end (?:the|this) (?:call|visit|conversation|chat)|leave the (?:room|conversation|call))\b/i.test(bm[0]))){
@@ -1773,6 +1804,10 @@ function analyze(textIn, opts){
     feelingWord: feelingM ? feelingM[1] : "",
     safety,
     control,
+    care,
+    parentLimit,
+    ctx: opts.ctx || null,
+    ctxMode: opts.mode || "",
     selfHarm,
     danger: !!found.menace,
     apology: apology >= 0 && !found.menace

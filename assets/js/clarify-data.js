@@ -47,11 +47,12 @@
      score = the sum of w; C = answers with w >= 1; B = answers with a benign flag.
        Safety   afraid, threat, danger or crisis wording on their own; otherwise two different clear signs (S >= 2),
                 or one clear sign together with a pressure sign (S >= 1 and P >= 1). Nothing else.
-       Level 3  score >= 8 with at least 3 concerns and talking hasn't helped (stuck); or score >= 7 with at least 3
-                concerns and a pressure or clear sign.
+       Level 3  score >= 7 with at least 3 concerns, and either talking hasn't helped (stuck) or there is a pressure
+                or clear sign.
        Level 2  score >= 5 with at least 2 concerns and something that makes it a pattern (often, long, stuck,
                 one way, or a pressure or clear sign).
-       Level 1  score >= 2; or any concern when it hasn't been talked about yet, or you don't know how they feel.
+       Level 1  score >= 2; or any concern when it hasn't been talked about yet, talking hasn't changed it yet, or you
+                don't know how they feel.
        Level 0  everything else.
      Floors: one clear sign is at least level 2; a pressure sign, or a threat in the typed words, at least level 1.
      Ordinary explanations pull the level DOWN: with no pressure or clear sign, two or more benign answers cap the
@@ -420,8 +421,8 @@
   function readText(text) {
     var s = String(text || ''); if (!s.trim()) return { crisis: false, threat: false };
     var p = patterns(), crisis = false, threat = false;
-    try { crisis = p && p.selfHarm ? !!p.selfHarm(s) : false; } catch (e) {}
-    if (!crisis) crisis = CRISIS_FALLBACK.test(s);
+    // the shared list knows everyday exaggeration ("I'll die of embarrassment"); the fallback is only for pages without it
+    try { crisis = p && p.selfHarm ? !!p.selfHarm(s) : CRISIS_FALLBACK.test(s); } catch (e) { crisis = CRISIS_FALLBACK.test(s); }
     try { threat = p && p.threats ? p.threats(s).length > 0 : false; } catch (e) {}
     if (!threat) threat = THREAT_FALLBACK.test(s);
     return { crisis: crisis, threat: threat };
@@ -500,9 +501,9 @@
     var level = 0;
     if (safety) level = 4;
     else {
-      if (score >= 2 || (C >= 1 && (has(flags, 'nottalked') || has(flags, 'unknownfeel')))) level = 1;
+      if (score >= 2 || (C >= 1 && (has(flags, 'nottalked') || has(flags, 'unknownfeel') || has(flags, 'stuck')))) level = 1;
       if (score >= 5 && C >= 2 && pattern) level = 2;
-      if ((score >= 8 && C >= 3 && has(flags, 'stuck')) || (score >= 7 && C >= 3 && (Pn > 0 || S > 0))) level = 3;
+      if (score >= 7 && C >= 3 && (has(flags, 'stuck') || Pn > 0 || S > 0)) level = 3;
       if (S >= 1 && level < 2) level = 2;
       if ((Pn >= 1 || has(flags, 'textthreat')) && level < 1) level = 1;
       if (!Pn && !S) { if (B >= 2 && level > 1) level = 1; else if (B === 1 && level > 2) level = 2; }
@@ -516,6 +517,8 @@
     res.took = took;
     if (res.notsure >= 3) res.reasons.push(t(P('Several answers were “not sure”. That’s fine: a calm talk can fill in the gaps.', 'Varias respuestas fueron «no estoy seguro». Está bien: una charla tranquila puede completar lo que falta.'), lang));
     if (!res.answered && !res.reasons.length) res.reasons.push(t(P('No answers yet, so this is the everyday read.', 'Todavía no hay respuestas, así que esta es la lectura de todos los días.'), lang));
+    else if (!res.reasons.length) res.reasons.push(t(level ? P('Some of your answers point to something worth a closer look.', 'Algunas de tus respuestas apuntan a algo que vale la pena mirar con más calma.')
+      : P('Nothing in your answers points past an ordinary rough patch.', 'Nada en tus respuestas apunta a algo más que una mala racha normal.'), lang));
     return res;
   }
   function lowerFirst(s) { return s ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
@@ -660,9 +663,9 @@
         'Ask the questions of one type in order, one per turn. Every question also accepts "Not sure" and "Skip". "Skip all" ends with level 0 and everyday tips.',
         'score = sum of w over the answers; C = answers with w >= 1; B = answers with a benign flag; S = distinct clear signs; P = distinct pressure signs.',
         'Safety (level 4): an answer flagged afraid, threat or danger; crisis wording in what they typed; S >= 2; or S >= 1 and P >= 1.',
-        'Level 3: (score >= 8 and C >= 3 and stuck) or (score >= 7 and C >= 3 and (P or S)).',
+        'Level 3: score >= 7 and C >= 3 and (stuck or P or S).',
         'Level 2: score >= 5 and C >= 2 and one of often, long, stuck, oneway, P or S.',
-        'Level 1: score >= 2, or C >= 1 with nottalked or unknownfeel.',
+        'Level 1: score >= 2, or C >= 1 with nottalked, stuck or unknownfeel.',
         'Floors: S >= 1 gives at least level 2; P >= 1 or a threat in the typed words gives at least level 1.',
         'Caps (only when P = 0 and S = 0): B >= 2 caps at level 1; B = 1 caps at level 2.',
         'A single answer never reaches level 3 or safety, except afraid, threat, danger or crisis wording.',

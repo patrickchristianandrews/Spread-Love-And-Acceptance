@@ -157,7 +157,7 @@ var S = [
   ['money: one handles by agreement, debt plan, ask and get it', 'money', { setup: 'oneagreed', access: 'ask', reason: 'temp', sayno: 'awkward' }, [0, 1]],
   ['money: job loss, has to ask, a bit awkward', 'money', { setup: 'oneagreed', access: 'ask', reason: 'temp', talked: 'notyet', sayno: 'awkward', afraid: 'no' }, [0, 1]],
   ['money: no say, has to ask, not talked', 'money', { setup: 'onesay', access: 'ask', reason: 'none', talked: 'notyet' }, [1, 2]],
-  ['money: no say, stuck, gets upset', 'money', { setup: 'onesay', access: 'ask', reason: 'none', talked: 'same', sayno: 'upset' }, 2],
+  ['money: no say, stuck, gets upset', 'money', { setup: 'onesay', access: 'ask', reason: 'none', talked: 'same', sayno: 'upset' }, [2, 3]],
   ['money: kept from money alone', 'money', { access: 'kept' }, 2],
   ['money: kept from money + fallout -> safety', 'money', { setup: 'onesay', access: 'kept', sayno: 'fallout' }, 4],
   ['money: kept from money + cant say no -> safety', 'money', { access: 'kept', afraid: 'cantno' }, 4],
