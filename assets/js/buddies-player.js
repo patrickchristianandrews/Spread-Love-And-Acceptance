@@ -82,10 +82,10 @@
     ] },
     // Season 2 lists only the episodes that are finished (no "coming soon" cards); they have no recorded voices
     // yet (clips: false), so they play with the device's own voice, or captions
-    { season: 2, name: 'Season 2: The Great Big Sea', more: 'New episodes are added as they are finished.', eps: [
-      { id: 's2e1', n: 1, title: 'The Great Big Sea', world: 'The dock, the open sea and a little island', theme: 'Setting sail with a map in a bottle', pillar: 'IV', emoji: '⛵', clips: false },
-      { id: 's2e2', n: 2, title: 'The Lighthouse in the Fog', world: 'Lantern Island, its lighthouse and the fog', theme: 'Lost in the fog, and the lanterns that lead home', pillar: 'I', emoji: '🏮', clips: false },
-      { id: 's2e3', n: 3, title: 'Room for One More', world: 'The island library, its secret door and the night market', theme: 'A new friend, and a pal who feels left out', pillar: 'V', emoji: '📚', clips: false }
+    { season: 2, name: 'Season 2: The Great Big Sea', more: 'New episodes are added as they are finished.', len: 'about 15 minutes', eps: [
+      { id: 's2e1', n: 1, title: 'The Great Big Sea', world: 'The dock, the open sea and a little island', theme: 'Setting sail with a map in a bottle', pillar: 'IV', emoji: '⛵', clips: false, thumb: 'sea' },
+      { id: 's2e2', n: 2, title: 'The Lighthouse in the Fog', world: 'Lantern Island, its lighthouse and the fog', theme: 'Lost in the fog, and the lanterns that lead home', pillar: 'I', emoji: '🏮', clips: false, thumb: 'lighthouse' },
+      { id: 's2e3', n: 3, title: 'Room for One More', world: 'The island library, its secret door and the night market', theme: 'A new friend, and a pal who feels left out', pillar: 'V', emoji: '📚', clips: false, thumb: 'carnival' }
     ] }
   ];
   // a short, calm note shown before each episode plays: what happens that might feel big
@@ -2798,7 +2798,7 @@
     CATALOG.forEach(function (s) {
       html += '<div class="fb-season"><div class="fb-season-h"><span class="fb-badge">Season ' + s.season + '</span><h3>' + esc(s.name.replace(/^Season \d+: /, '')) + '</h3></div><ol class="fb-cards">';
       s.eps.forEach(function (e) { html += '<li data-ep="' + e.id + '"></li>'; });
-      html += '</ol><p class="fb-more">' + (s.more ? esc(s.more) + ' ' : '') + 'Each episode runs about 16 to 17 minutes, in short chapters of about 2 to 4 minutes, with captions and gentle voices. You can watch one chapter at a time.</p></div>';
+      html += '</ol><p class="fb-more">' + (s.more ? esc(s.more) + ' ' : '') + 'Each episode runs ' + (s.len || 'about 16 to 17 minutes') + ', in short chapters of about 2 to 4 minutes, with captions and gentle voices. You can watch one chapter at a time.</p></div>';
     });
     host.innerHTML = html;
     function card(e) {
@@ -2817,7 +2817,9 @@
   // a small painted still for a card: the episode's first real scene, with the pals in it
   function thumb(li, ep) {
     var PC2 = window.TOLPalsCam; if (!PC2 || !PC2.paintScene || !window.TOLPups) return;
-    var sc = null; ep.chapters.some(function (c) { return c.beats.some(function (b) { if (b.scene && b.scene !== 'blank' && b.scene !== 'theater') { sc = b; return true; } return false; }); });
+    // the episode's first real scene, or (when the catalog names one) the first scene of that kind
+    var want = (catalogEntry(ep.id) || {}).thumb, sc = null;
+    ep.chapters.some(function (c) { return c.beats.some(function (b) { if (b.scene && b.scene !== 'blank' && b.scene !== 'theater' && (!want || b.scene === want)) { sc = b; return true; } return false; }); });
     if (!sc) return;
     var go = function () {
       var old = li.querySelector('.fb-thumb'); if (!old) return;
