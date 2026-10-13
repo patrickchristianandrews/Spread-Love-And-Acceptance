@@ -596,7 +596,9 @@ MISSING = []
 
 
 def insert_generated(s, slug, deep):
-    s = re.sub(r'\n?<!-- book-(fig|ex):start -->.*?<!-- book-\1:end -->\n?', '\n', s, flags=re.S)
+    # Take out the old blocks with all the line breaks around them, leaving one blank line, so a rebuild
+    # doesn't add a blank line at each spot every time it runs.
+    s = re.sub(r'\n*<!-- book-(fig|ex):start -->.*?<!-- book-\1:end -->\n*', '\n\n', s, flags=re.S)
     ver = 'full' if deep else 'short'
     for f in FIGS:
         if f['chapter'] != slug or ver not in (f.get('versions') or ['short', 'full']):
@@ -955,9 +957,23 @@ def glossary_terms(text):
         words_ = [name.split(' (')[0]] + [a.strip() for a in (also or '').split(',') if len(a.strip()) > 3]
         hits = sum(len(re.findall(r'\b%s\b' % re.escape(w), text, re.I)) for w in words_[:4])
         if hits >= 2:
-            out.append((gid, name, d.group(1) if d else '', re.sub(r'</?a\b[^>]*>', '', ex.group(1)) if ex else '', words_[0]))
+            out.append((gid, name, gloss_plain(d.group(1)) if d else '',
+                        gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))) if ex else '', words_[0]))
     out.sort(key=lambda x: x[1].lower())
     return out
+
+
+# The book uses the worksheets' plain names, never their WP-NN codes (the site glossary keeps the codes).
+GLOSS_PLAIN = [
+    ('WP-01 is a week’s log of who did what.', 'Who did what is a one-week log of the jobs each person did.'),
+    ('a higher WP-02 score', 'a higher score there'),
+]
+
+
+def gloss_plain(s):
+    for a, b in GLOSS_PLAIN:
+        s = s.replace(a, b)
+    return re.sub(r' \(WP-\d+\)', '', s)
 
 
 def research_notes(here):
@@ -1146,7 +1162,7 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 </script>
 </body>
 </html>
-''' % (fname, front_matter(name, deep, parts, title, who, ptoc), title.replace(' (Full Version)', ': the full version'), lede, fname, other,
+''' % (fname, front_matter(name, deep, parts, title, who, ptoc), title.replace(' (Full Version)', ': the full version'), lede, name, other,
        'Switch to the short versions' if deep else 'Switch to the full versions',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
        ''.join(toc), '\n'.join(parts_html), back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep))
@@ -1166,9 +1182,10 @@ def build_download():
                 meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
             rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a></li>' % (
                 fname, fname, 'Full version' if deep else 'Short version', meta, fname))
-        chs = sum(1 for e in ORDER if e[1] in parts) + (1 if name == 'whole' else 0)
+        # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
+        chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
         acc, tint = COVER[name][0], COVER[name][1]
-        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">The Objective Ledger</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h2>%s</h2><p>%s %d chapters.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
+        cards.append('<section class="bk-dl-card" id="%s" style="--acc:%s;--tint:%s"><div class="bk-dl-cover" aria-hidden="true"><span class="bk-dl-cover-t">The Objective Ledger</span>%s<span class="bk-dl-cover-p">%s</span></div><div class="bk-dl-body"><h2>%s</h2><p>%s %s.</p><ul class="bk-dl-list">%s</ul></div></section>' % (
             name, acc, tint, book_art.illustration(name), esc(COVER[name][2]), esc(title), esc(who), chs, ''.join(rows)))
     page = HEAD_TMPL.replace('{TITLE}', 'Download the Book as a PDF').replace('{DESC}', 'Download the book as a PDF.')
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-pupvisits data-no-brain-break data-no-clip>

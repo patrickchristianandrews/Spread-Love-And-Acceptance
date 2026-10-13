@@ -851,7 +851,7 @@
         columns: [
           { id: 'item', label: 'Sore spot that keeps coming up', type: 'text', w: 3 },
           { id: 'times', label: 'Times this week', type: 'number', w: 0.9 },
-          { id: 'to', label: 'Move to', type: 'select', options: ['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], labels: { 'RACI Treaty (WP-03)': 'One owner per job (WP-03)', 'Tone Filter (WP-09)': 'Say it so it lands (WP-09)' }, w: 1.8 }
+          { id: 'to', label: 'Move to', type: 'select', options: ['RACI Treaty (WP-03)', 'Tone Filter (WP-09)', 'Keep watching'], labels: { 'RACI Treaty (WP-03)': 'One owner per job', 'Tone Filter (WP-09)': 'Say it so it lands' }, w: 1.8 }
         ],
         defaultRows: [{}]
       },

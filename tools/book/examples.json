@@ -195,7 +195,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-perspective-hana.html",
   "tool": "/perspective-shifter.html",
-  "title": "The Perspective Shifter",
+  "title": "See it from their side (the Perspective Shifter)",
   "who": "Hana, about her friend Lou",
   "relationship": "friends",
   "versions": [
@@ -331,7 +331,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-signal-zoe.html",
   "tool": "/signal-translator.html",
-  "title": "The Signal Translator",
+  "title": "Text message checker (the Signal Translator)",
   "who": "Zoe, texting her oldest friend, who moved abroad",
   "relationship": "long-distance friends",
   "versions": [
@@ -348,7 +348,7 @@
   "after_heading_full": null,
   "file": "tools/book/examples/ex-reader-dana-raj.html",
   "tool": "/conversation-reader.html",
-  "title": "The Conversation Reader",
+  "title": "Chat analyzer (the Conversation Reader)",
   "who": "Dana and Raj, coworkers on the same project",
   "relationship": "coworkers",
   "versions": [
@@ -466,7 +466,7 @@
   "after_id_full": "fit",
   "after_heading_full": null,
   "file": "tools/book/examples/ex-wavelength-mo.html",
-  "tool": "/wavelength.html#find-your-wavelength",
+  "tool": "/wavelength.html",
   "title": "Wavelength",
   "who": "Mo, before moving in with his friend Callum",
   "relationship": "friends moving in together",

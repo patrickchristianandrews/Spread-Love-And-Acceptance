@@ -1,7 +1,7 @@
 {
  "together": {
   "pages": 122,
-  "bytes": 2088962,
+  "bytes": 2055050,
   "title": "The Book for Two or More",
   "pagemap": {
    "how": 5,
@@ -65,7 +65,7 @@
    "ix-listening": "12, 33, 38, 84",
    "ix-owner-one-owner-per-job": "76–78, 82, 89, 93–95, 97",
    "ix-pressure": "57–62, 68–69, 71",
-   "ix-repair": "20, 91, 104, 108",
+   "ix-repair": "20, 91, 104, 109",
    "ix-rest": "6, 49–50, 54, 66–67, 69, 71, 86",
    "ix-retune": "33–34",
    "ix-safety": "23, 38, 48, 51, 54, 70, 73, 90, 106",
@@ -79,14 +79,14 @@
    "ix-unseen-work": "6, 9–10, 16–19, 21, 24",
    "ix-values": "91",
    "ix-wiring": "24, 35, 38, 71",
-   "ix-workpaper": "15, 24, 33, 38, 40, 47, 55, 60, 66",
+   "ix-workpaper": "15, 24, 33, 38, 40, 47, 55, 60, 72",
    "ix-worry": "27, 35–36, 50, 63, 68, 105",
    "ix-your-lens": "6, 57"
   }
  },
  "together-in-depth": {
   "pages": 183,
-  "bytes": 2959425,
+  "bytes": 2963029,
   "title": "The Book for Two or More (Full Version)",
   "pagemap": {
    "how": 5,
@@ -140,9 +140,9 @@
    "ix-carrier-wave": "58",
    "ix-change": "6, 19, 28, 75, 81, 98, 159, 164, 169",
    "ix-check-in": "7, 51–54, 56, 59, 75, 163",
-   "ix-complacency": "16, 18, 51, 83, 102, 131–132, 160–161",
+   "ix-complacency": "16, 18, 51, 83, 102, 131–132, 160, 162",
    "ix-culture": "27, 41–42, 64, 89, 107, 145, 165",
-   "ix-drift": "6, 10, 16, 31, 33, 39, 51, 55, 160",
+   "ix-drift": "6, 10, 16, 31, 33, 39, 51–52, 55",
    "ix-empathy": "45",
    "ix-fairness": "118–122, 124, 131, 141, 145",
    "ix-flooded": "47",
@@ -151,7 +151,7 @@
    "ix-grief": "33, 125, 144, 154",
    "ix-guilt": "111, 133",
    "ix-habits": "18, 25, 27–28, 31, 51–52, 56, 169",
-   "ix-listening": "19, 44, 47, 51–52, 54, 56, 96, 162",
+   "ix-listening": "19, 44, 47, 51–52, 54, 56, 59, 96",
    "ix-mental-load": "13",
    "ix-owner-one-owner-per-job": "69–71, 122, 126–127, 130, 151, 153",
    "ix-personality": "14",
@@ -164,8 +164,7 @@
    "ix-sleep": "44, 58, 66, 72–74, 93, 97–98",
    "ix-static": "37, 46, 56–57",
    "ix-stress": "25, 73–74, 79–80, 82, 92–93, 113",
-   "ix-the-five-pillars": "9–10, 35–36, 60–61, 92–93, 118",
-   "ix-the-load": "10, 27, 30, 65, 80, 86, 115, 141, 165",
+   "ix-the-load": "10, 26, 30, 65, 80, 86, 115, 141, 165",
    "ix-today-s-weather": "95",
    "ix-trust": "31, 34, 70, 120",
    "ix-turning-toward": "52, 162",
@@ -180,7 +179,7 @@
  },
  "whole": {
   "pages": 451,
-  "bytes": 6433590,
+  "bytes": 6325115,
   "title": "The Whole Book on One Page",
   "pagemap": {
    "how": 5,
@@ -353,14 +352,14 @@
    "ix-values": "285–287, 290–291, 293–296",
    "ix-wired-differently": "26, 32, 42, 173, 199, 251, 276, 282, 284",
    "ix-wiring": "15, 26, 28, 33, 38–39, 42, 274, 283",
-   "ix-workpaper": "29, 43, 47, 53, 66, 75, 84, 89, 91",
+   "ix-workpaper": "43, 47, 53, 66, 75, 84, 89, 91, 98",
    "ix-worry": "37, 188, 219, 366–367, 369–370, 376, 378",
    "ix-your-lens": "10–11, 15, 20–21, 24–25, 200, 264"
   }
  },
  "whole-in-depth": {
   "pages": 688,
-  "bytes": 8251663,
+  "bytes": 8259098,
   "title": "The Whole Book on One Page (Full Version)",
   "pagemap": {
    "how": 5,
@@ -494,7 +493,7 @@
    "ix-culture": "12, 272, 612–613, 622–623, 627–628, 631",
    "ix-depression": "21, 588, 594–597, 603, 606, 608",
    "ix-developmental-stages": "16",
-   "ix-drift": "6, 84, 90, 96, 111, 131, 135, 240, 584",
+   "ix-drift": "6, 84, 90, 96, 111, 113, 131, 135, 584",
    "ix-empathy": "54, 125, 265, 273, 291, 430, 457, 513–514",
    "ix-fairness": "198–202, 204, 211, 221, 225",
    "ix-flooded": "127, 275, 279, 283–285, 292, 294, 533",
@@ -509,7 +508,7 @@
    "ix-loneliness": "260–261, 263, 270, 345–346, 362–363, 586",
    "ix-masking": "38, 53–54, 262, 356, 435–436, 453, 457",
    "ix-mental-load": "93",
-   "ix-owner-one-owner-per-job": "150–151, 202, 206–207, 210, 231, 233, 523",
+   "ix-owner-one-owner-per-job": "149–151, 202, 206–207, 210, 233, 523",
    "ix-perception": "7, 298–300, 308, 310, 313, 315, 317",
    "ix-personality": "551–553, 556, 558–559, 561, 567–568",
    "ix-pressure": "46, 67, 153, 185, 362–363, 376, 607, 632",
@@ -524,10 +523,9 @@
    "ix-stress": "153–154, 172–173, 275–277, 291, 297",
    "ix-talk-window": "283",
    "ix-temperament": "36, 40, 551–555, 564, 569",
-   "ix-the-five-pillars": "10–11, 37–38, 65–66, 89–90, 115",
-   "ix-the-load": "12, 14, 38, 90, 107, 110, 145, 160, 166",
-   "ix-the-rulebook-from-home": "10, 23, 25–26, 35",
-   "ix-today-s-weather": "31, 44, 46–47, 62, 175, 274, 282–283",
+   "ix-the-load": "12, 14, 38, 90, 106, 110, 145, 160, 166",
+   "ix-the-rulebook-from-home": "10, 23, 25–26, 36",
+   "ix-today-s-weather": "31, 44, 46–47, 63, 175, 274, 282–283",
    "ix-trauma": "498, 504, 588, 600–602, 604, 607, 609",
    "ix-trust": "344–345, 353–354, 357, 360, 362, 495–496",
    "ix-turning-toward": "132, 242, 353, 359, 479, 579, 584, 587",
@@ -537,18 +535,18 @@
    "ix-wired-differently": "37, 53, 64, 124, 261, 273, 317, 341, 448",
    "ix-wiring": "38–41, 43, 56, 60, 64, 440",
    "ix-workpaper": "52, 64, 75, 82, 102, 110, 114, 134–135",
-   "ix-worry": "200, 477, 588–589, 593–594, 604–606",
+   "ix-worry": "199, 477, 588–589, 593–594, 604–606",
    "ix-your-lens": "10, 14–15, 31–32, 36, 317, 406, 425"
   }
  },
  "sample": {
   "pages": 34,
-  "bytes": 735471,
+  "bytes": 735488,
   "title": "The Objective Ledger: a sample"
  },
  "for-yourself": {
   "pages": 337,
-  "bytes": 4831431,
+  "bytes": 4830752,
   "title": "The Book for One Person",
   "pagemap": {
    "how": 5,
@@ -691,7 +689,7 @@
  },
  "for-yourself-in-depth": {
   "pages": 514,
-  "bytes": 5848682,
+  "bytes": 5850852,
   "title": "The Book for One Person (Full Version)",
   "pagemap": {
    "how": 5,
@@ -819,10 +817,9 @@
    "ix-stress": "112–114, 122–123, 127–128, 132, 134",
    "ix-talk-window": "120",
    "ix-temperament": "36, 40, 388–392, 401, 406",
-   "ix-the-five-pillars": "10–11, 37–38, 65–66",
    "ix-the-load": "12, 14, 38, 121, 353–354, 365, 438, 444",
-   "ix-the-rulebook-from-home": "10, 23, 25–26, 35",
-   "ix-today-s-weather": "31, 44, 46–47, 62, 111, 119–120, 448",
+   "ix-the-rulebook-from-home": "10, 23, 25–26, 36",
+   "ix-today-s-weather": "31, 44, 46–47, 63, 111, 119–120, 448",
    "ix-trauma": "335, 341, 425, 437–439, 441, 444, 446",
    "ix-trust": "181–182, 190–191, 194, 197, 199, 332–333",
    "ix-turning-toward": "190, 196, 316, 416, 421, 424",
@@ -836,7 +833,7 @@
  },
  "understanding": {
   "pages": 283,
-  "bytes": 4120097,
+  "bytes": 4120025,
   "title": "Understanding People",
   "pagemap": {
    "how": 5,
@@ -962,7 +959,7 @@
  },
  "understanding-in-depth": {
   "pages": 430,
-  "bytes": 4695850,
+  "bytes": 4695657,
   "title": "Understanding People (Full Version)",
   "pagemap": {
    "how": 5,
