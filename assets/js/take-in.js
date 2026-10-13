@@ -324,7 +324,8 @@
       if (card) { oneLists.forEach(function (L) { if (!L.all) show(L, card, true); }); }
       else {
         var dh = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        window.scrollTo({ top: Math.min(at.y, Math.round(dh * at.p / 100) || at.y), behavior: 'auto' });
+        // the same spot if the page is still that long; otherwise the same share of the way down
+        window.scrollTo({ top: at.y <= dh ? at.y : Math.round(dh * at.p / 100), behavior: 'auto' });
       }
       p.remove();
     });

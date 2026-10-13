@@ -405,6 +405,7 @@
         "Look at the pattern, not the label: what do they do, how often, and how do you feel around them?",
         "Notice whether it’s new or has always been there, and whether it’s getting worse.",
         "If you’re worried about their health, say so kindly and suggest they see their doctor. A doctor or psychologist is the right person to assess it.",
+        "If you feel scared, controlled or put down, that matters more than any label: the Not safe at home? page lists the signs, and people to talk to.",
         "For yourself, a counsellor can help you think it through, whatever the answer turns out to be."
       ],
       "script": [
@@ -417,6 +418,10 @@
         [
           "How to find a professional",
           "/outside-help.html#counsellor"
+        ],
+        [
+          "When it’s more than a rough patch",
+          "/safety.html#signs"
         ]
       ],
       "kind": "intent",
@@ -1046,7 +1051,7 @@
       "how": [
         "The For counsellors page explains what the program is and isn’t, how it was built, and its honest limits.",
         "It’s self-help, not a clinical tool: the scores start conversations; they don’t assess anyone.",
-        "Please don’t use the couples tools where one person is afraid of the other.",
+        "Please don’t use the couples tools where there is fear or control in the relationship. The Not safe at home? page explains why.",
         "Workpapers and the Lemonade Stand work well as homework: each person fills in their own side, then you look at it together."
       ],
       "links": [
@@ -5817,7 +5822,7 @@
         "Normal: a limit you both agree, that applies to both of you, like “we check with each other before anything over $200.”",
         "Normal: either of you can raise it, change it, or say no, without fear.",
         "Not normal: it’s one-sided (only one of you has to ask), hidden, or punished, with anger, the silent treatment or a card taken away.",
-        "Not normal: you have to ask for money you need, explain every receipt, or aren’t allowed to work or see the accounts."
+        "Not normal: you have to ask for money you need, explain every receipt, or aren’t allowed to work or see the accounts. If that sounds familiar, the Not safe at home? page lists the signs, and people you can talk to privately."
       ],
       "script": [
         "Can we agree one amount where we both check with each other first? Same rule for both of us, and we look at it again in a month."
@@ -5826,6 +5831,10 @@
         [
           "Money together: is it controlling, or normal?",
           "/money-together.html#control"
+        ],
+        [
+          "Not safe at home? The signs of control",
+          "/safety.html"
         ]
       ],
       "chips": [],
@@ -5840,7 +5849,7 @@
             "Ask yourself the quick check: did we both agree to it? Does it apply to both of us? Can either of us bring it up and change it? Do we both know where the money is?",
             "If the answers are yes, it’s a plan you can tweak together. Suggest one limit for big purchases, and leave the rest alone.",
             "If it’s one-sided, hidden, or you face anger, sulking or a card taken away when you spend, that isn’t a money style. It’s a sign of control.",
-            "page lists the signs, and people you can talk to privately."
+            "If you feel afraid to spend, to ask or to say no, the Not safe at home? page lists the signs, and people you can talk to privately."
           ],
           "script": [
             "I feel watched when I have to explain small things. Could we agree a limit for big purchases, and leave the rest alone?"
@@ -5852,6 +5861,10 @@
             [
               "Is it controlling, or normal? (money)",
               "/money-together.html#control"
+            ],
+            [
+              "Not safe at home? The signs",
+              "/safety.html#signs"
             ]
           ]
         },
@@ -5932,7 +5945,8 @@
         "Each say what money means to you: safety, freedom, fun, looking after family.",
         "Agree the big numbers together: what you save each month, and a fun amount each of you spends with no questions asked.",
         "Pick a check-first limit that applies to both of you, like any single purchase over $200.",
-        "Look at it once a month for 20 minutes, not in the middle of an argument."
+        "Look at it once a month for 20 minutes, not in the middle of an argument.",
+        "If you’re scared of them, not just worried about money, that’s different. The Not safe at home? page can help."
       ],
       "script": [
         "I’m a saver; it helps me feel safe. I know you love enjoying life now. Can we agree a fun budget for each of us and a savings amount, and check in monthly?"
@@ -7565,7 +7579,7 @@
       "how": [
         "Every tool lets you type your own names, so it says “Sam and Alex”, not “husband and wife”.",
         "If you’re working through coming out as an adult, to family, at work or with a partner, there’s a page for that.",
-        "If a family reaction could put you at risk, plan first: somewhere to go, and your own money and phone."
+        "If a family reaction could put you at risk, the Not safe at home? page can help you plan."
       ],
       "links": [
         [
@@ -8396,7 +8410,7 @@
         "Your own money: a bank account and a phone in your own name, and some savings if you can.",
         "Somewhere to go if a talk goes badly: a friend’s sofa, a way home.",
         "You can wait. There’s no deadline, and telling a sibling or a friend first is a real step.",
-        "Support: in the US, the LGBT National Help Center on 1-888-843-4564; in the UK, Switchboard on 0800 0119 100."
+        "Support: in the US, the LGBT National Help Center on 1-888-843-4564; in the UK, Switchboard on 0800 0119 100. If you’re afraid of violence, or of being forced into anything, see Not safe at home?"
       ],
       "script": [
         "I know this is hard for you. I’m not going anywhere. When you’re ready to talk, I’m here."
@@ -8409,6 +8423,10 @@
         [
           "What if they cut me off?",
           "/coming-out.html#cut-off"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ],
       "pat": "\\b(zzqx_never_matches)\\b"
@@ -8424,7 +8442,7 @@
         "Talk about what each of you needs, not about who is braver.",
         "Agree small steps: who knows now, who’s next, and roughly when.",
         "Agree what you’ll each say if someone asks, so nobody is caught off guard.",
-        "It’s still your decision. A partner who threatens to out you is crossing a line."
+        "A partner who threatens to out you, or uses it to control you, is crossing a line. The Not safe at home? page can help."
       ],
       "script": [
         "I want to be out with you. I’m scared about my parents, and I need to do it in my own time. Can we agree a first step together, like telling my sister by the summer?",
@@ -8491,6 +8509,10 @@
         [
           "Where to get support",
           "/coming-out.html#support"
+        ],
+        [
+          "Not safe at home? (if a reaction could be dangerous)",
+          "/safety.html"
         ]
       ],
       "chips": [],
@@ -8544,7 +8566,7 @@
         "Think through what you depend on them for (money, housing, a job, childcare) and make a backup for each before a big conversation.",
         "Have your own people lined up for the day of the talk and the days after: a friend, a partner, a counsellor.",
         "First reactions often soften with time. Leave the door open (“I’ll call you next week”) without accepting cruelty.",
-        "If a reaction could be dangerous, or you’d need somewhere to go, plan that first."
+        "If a reaction could be dangerous, or you’d need somewhere to go, look at the Not safe at home? page first."
       ],
       "script": [
         "I’m not asking you to agree with everything today. I’m asking you to stay in my life while you think about it."
@@ -8559,6 +8581,10 @@
         [
           "What if they cut me off?",
           "/coming-out.html#cut-off"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ],
         [
           "What’s stored on this device",
@@ -8627,8 +8653,8 @@
           "/on-this-device.html"
         ],
         [
-          "Clearing what this site keeps",
-          "/safety.html#traces"
+          "Not safe at home? (clearing what this site keeps)",
+          "/safety.html"
         ]
       ],
       "chips": []
@@ -9017,6 +9043,10 @@
           "/teens.html#middle"
         ],
         [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
+        ],
+        [
           "Calm sounds",
           "/soundscapes.html#brain-breakers"
         ]
@@ -9093,6 +9123,10 @@
         [
           "For teens",
           "/teens.html"
+        ],
+        [
+          "If home doesn’t feel safe",
+          "/safety.html#teens"
         ]
       ],
       "chips": [],
@@ -9817,7 +9851,7 @@
         "You can own your part, if there is one, without carrying all of it.",
         "Look at the setup before the person, and that includes you.",
         "You don’t have to settle who was right tonight.",
-        "If they blame you for their yelling, that blame isn’t yours to carry. If you’re ever hurt or scared, please talk to someone trained."
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
       ],
       "what_hurt": [
         "No, not the way it was said to you. How someone speaks to you is theirs to own, and things between two people are rarely one person’s fault."
@@ -9827,7 +9861,7 @@
         "Crying or feeling shaken afterward is a very human response, not a weakness.",
         "You don’t have to work out who was right tonight.",
         "When you’re both calm, you can say how it landed, in one sentence.",
-        "If they blame you for their yelling, that blame isn’t yours to carry. If you’re ever hurt or scared, please talk to someone trained."
+        "If you’re ever afraid of them, or they blame you for their yelling or for hurting you, that blame isn’t yours to carry. The Not safe at home? page has free people to talk to."
       ],
       "pillar": "Pillar II, Fix the setup, not the person.",
       "links": [
@@ -9838,6 +9872,10 @@
         [
           "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ],
       "chips": [
@@ -10467,7 +10505,7 @@
         "In your hands: your words, your effort, your rest, your limits, and saying yes, no or “not today.” Theirs to decide: how it lands, whether they change, what they think of you.",
         "Signs you’re over-giving: quiet resentment, a silent scorecard, feeling invisible, being tired before the day starts.",
         "Notice it, name it once without blame, then adjust your side: give the effort that’s being given, and see what comes back.",
-        "Matching energy means matching care and effort, never volume or meanness."
+        "Matching energy means matching care and effort, never volume or meanness. If you’re afraid of someone, that’s different: the Not safe at home? page is for that."
       ],
       "script": "I can do my part. That one is yours.",
       "links": [
@@ -10937,7 +10975,7 @@
         "Talk about the feeling, not the device: “When you’re on your phone at dinner, I feel like I’m not really there.” That lands better than “you’re always on your phone”.",
         "Agree on one or two simple norms together, like phones away at meals or in bed, rather than one person setting rules for the other.",
         "If it’s about trust or jealousy, say what would help you feel secure, and ask what would help them. Reassurance you both choose works; checking each other’s phones usually makes it worse.",
-        "If either of you checks, tracks or controls the other’s phone or friends, that’s more than a disagreement, and worth talking through with a counsellor."
+        "If either of you checks, tracks or controls the other’s phone or friends, that’s a different thing from a disagreement. The Not safe at home? page explains the difference."
       ],
       "script": [
         "I don’t want to police your phone. I think what’s really bugging me is feeling a bit shut out. Can we figure out some phone-free time that works for both of us?"
@@ -10950,6 +10988,10 @@
         [
           "Turning toward: small ways to connect",
           "/turning-toward.html"
+        ],
+        [
+          "Not safe at home? (the difference between worry and control)",
+          "/safety.html"
         ]
       ],
       "chips": [
@@ -11074,12 +11116,16 @@
         "That’s a big question, and it deserves more than a chat can give. I can’t tell you whether to stay or go, but I can help you think it through."
       ],
       "how": [
-        "First: if you feel scared of them, or they hurt or threaten you, that changes everything. Talk to someone trained before anything else.",
+        "First, safety: if you feel scared of them, or they hurt, threaten, watch or control you, that changes everything. Please look at the Not safe at home? page and talk to an advocate, who can help you plan safely.",
         "If it’s more that things feel stuck or empty, it can help to write down what you want, what you’ve tried, and what would need to change for you to want to stay.",
         "A couples counselor, or a counselor just for you, is the best place to work out a decision like this. Many people go on their own first.",
         "You don’t have to decide today. Taking care of your sleep and support while you think is part of deciding well."
       ],
       "links": [
+        [
+          "Not safe at home?",
+          "/safety.html"
+        ],
         [
           "Is the setup working for everyone?",
           "/is-the-setup-working.html"
@@ -11341,6 +11387,10 @@
       ],
       "links": [
         [
+          "After a separation: when it’s more than conflict",
+          "/safety.html#after-separation"
+        ],
+        [
           "Separated co-parents",
           "/co-parenting.html"
         ]
@@ -11368,7 +11418,7 @@
         "You don’t have to reply tonight. Answer at a set time once a day, and only the parts about the kids or logistics.",
         "Use BIFF: Brief, Informative, Friendly (or at least neutral), Firm. For example: “Got it. I’ll be at the school at 5 on Sunday.”",
         "Skip the history, the feelings and the defending yourself. Don’t admit fault in writing (“It was my fault”, “I always do this”); if something needs owning, say what you’ll do next instead: “I’ll leave earlier on Sundays.”",
-        "Keep copies. If messages turn threatening or won’t stop, talk to your lawyer."
+        "Keep copies. If messages turn threatening or won’t stop, see the after-separation part of the Not safe at home? page and talk to your lawyer."
       ],
       "script": [
         "Thanks for letting me know. I’ll have the kids at the school at 5 on Sunday."
@@ -11787,6 +11837,10 @@
           "/teens.html#lgbtq"
         ],
         [
+          "Not safe at home?",
+          "/safety.html"
+        ],
+        [
           "For teens",
           "/teens.html"
         ]
@@ -11820,7 +11874,7 @@
         "Ask what they’re worried about. Often there’s one specific fear (strangers, bullying, safety), and you can agree on something that covers it without reading everything.",
         "Offer a deal: “Can we agree on what you’ll check and when, instead of reading everything? I’ll keep location on when I’m out.”",
         "Keep your passwords to yourself, and be careful what you put in writing anywhere.",
-        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different. page."
+        "If a parent uses your phone to scare, punish or isolate you, or you don’t feel safe at home, that’s different. Talk to a school counselor or another trusted adult, or see the Not safe at home? page."
       ],
       "script": [
         "I get that you worry about me. Could we agree on what you check and when, so I can have some privacy too?"
@@ -11829,6 +11883,10 @@
         [
           "For teens",
           "/teens.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ],
       "chips": [],
@@ -11849,7 +11907,7 @@
         "Give yourself somewhere to go when it gets loud: headphones, your room, a walk, a friend’s place, or a calm sound on this site.",
         "If you want to say something, pick a calm moment and keep it about you: “When you two shout, I feel scared and can’t sleep.” You don’t have to take sides.",
         "Talk to someone outside it: a friend, a relative, a school counselor or coach.",
-        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing. page."
+        "If anyone gets hurt, things get thrown, or you’re scared for your safety or a parent’s, that’s more than arguing. Call 911 in an emergency, and see the Not safe at home? page."
       ],
       "links": [
         [
@@ -11859,6 +11917,10 @@
         [
           "Calm sounds",
           "/soundscapes.html"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ],
       "chips": [],
@@ -13797,6 +13859,10 @@
         [
           "Finding a counsellor",
           "/outside-help.html#counsellor"
+        ],
+        [
+          "Not safe at home?",
+          "/safety.html"
         ]
       ]
     },
