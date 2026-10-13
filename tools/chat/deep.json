@@ -163,6 +163,105 @@
    "try": "Open the “Not safe at home?” page on a device you trust, and read just the first part."
   },
   {
+   "id": "meltdowns",
+   "title": "Meltdowns and shutdowns",
+   "patterns": [
+    "\\bmeltdowns?\\b",
+    "\\bshut ?downs?\\b",
+    "\\bmelt ?down\\b"
+   ],
+   "links": [
+    [
+     "Meltdowns and shutdowns (Part Three, Chapter 9)",
+     "/book/understanding-9-minds-in-depth.html#meltdowns"
+    ],
+    [
+     "The Calm-Down Kit",
+     "/workpapers/fill/wp-11.html"
+    ]
+   ],
+   "philosophy": "Aristotle distinguished what we do voluntarily from what happens under compulsion, and thought praise and blame belong to the voluntary. A meltdown or shutdown is closer to something that happens to a person than something they do, so blame misreads it.",
+   "psychology": "In interviews with autistic children and young people, Phung and colleagues (2021) explored burnout, inertia, meltdown and shutdown as separate experiences. A meltdown is an outward loss of control (crying, shouting, running); a shutdown is an inward one (going still, losing speech). A tantrum usually has a goal and stops when it’s met; a meltdown has no goal and stops when the overwhelm passes.",
+   "autistic_lens": "Many autistic adults carry shame from being punished for meltdowns as children. A meltdown is a nervous system at its limit, not a moral failure. In the moment, less input helps: fewer words, less noise and light, no questions. Afterwards, rest comes before any talk.",
+   "together": "Meet a meltdown with safety and quiet, not consequences, and plan on calm days: early signs, a way to leave, a signal you agree.",
+   "question": "What are your, or their, first signs that overload is building?",
+   "try": "Agree one signal with someone you’re often with, meaning “I need to leave for twenty minutes”, and how they can help."
+  },
+  {
+   "id": "small-talk",
+   "title": "Small talk",
+   "patterns": [
+    "\\bsmall talk\\b",
+    "\\bchit ?chat\\b",
+    "\\bphatic\\b"
+   ],
+   "links": [
+    [
+     "Small talk at work, if you’re autistic",
+     "/work.html#autistic-at-work"
+    ],
+    [
+     "Bonding without eye contact or small talk",
+     "/neurodivergent-relationships.html"
+    ]
+   ],
+   "philosophy": "The anthropologist Bronisław Malinowski called small talk ‘phatic communion’ (1923): talk whose job is not to share information but to say ‘we’re fine, we’re connected’. The words matter less than the signal underneath.",
+   "psychology": "Nicholas Epley and Juliana Schroeder (2014) asked train commuters to talk to a stranger; most expected it to be unpleasant, and most enjoyed it more than they predicted. Small exchanges can lift mood, though people differ a lot in how draining they find them.",
+   "autistic_lens": "Small talk’s rules are unwritten, and that is what makes it hard for many autistic people: if you take words literally, ‘How are you?’ seems to ask for an answer nobody wants. Many prefer to connect by sharing information or an interest. It’s fine to keep small talk to one exchange, or to have three stock lines ready.",
+   "together": "Small talk is a ritual, not a test. You can take part in a small way, on your terms, and let deeper connection happen around shared interests instead.",
+   "question": "Which three short lines would make small talk easier for you?",
+   "try": "Pick one stock line (“Busy day?”) and one kind close (“Right, back to it. Good to see you.”) and use them once this week."
+  },
+  {
+   "id": "double-empathy",
+   "title": "The double empathy problem",
+   "patterns": [
+    "\\bdouble empathy\\b",
+    "\\b(empathy|understand\\w*)\\b.{0,20}\\b(both ways|two ways|goes both|runs both)\\b"
+   ],
+   "links": [
+    [
+     "Autism and the double empathy problem (Part Three, Chapter 9)",
+     "/book/understanding-9-minds-in-depth.html#autism"
+    ],
+    [
+     "The double empathy problem",
+     "/library/wiring.html#double-empathy"
+    ]
+   ],
+   "philosophy": "In a famous 1974 essay, Thomas Nagel asked what it is like to be a bat: we can know facts about echolocation and still not know what it is like from the inside. Something similar happens between different human minds, in both directions. Knowing the limits of your own imagination is a good start for empathy that runs both ways.",
+   "psychology": "In 2012 the autistic researcher Damian Milton described the double empathy problem: when autistic and non-autistic people misunderstand each other, the gap runs both ways. Catherine Crompton and colleagues (2020) found information passed along chains of autistic people as accurately as along non-autistic chains, but accuracy dropped in mixed chains. Noah Sasson and colleagues (2017) found that non-autistic observers judged autistic people less favourably from brief videos, but not from their words alone.",
+   "autistic_lens": "Many autistic people value directness and find hints and unspoken rules exhausting. Saying exactly what you mean is, for many, a form of respect. Part of the ‘social difficulty’ lives in how others react to an autistic style, not only in autistic people themselves.",
+   "together": "When two people keep missing each other, neither is broken: they are tuned differently. Translating, in both directions, works better than asking one side to do all the adjusting.",
+   "question": "Where might you be the one who is hard to read, from the other side?",
+   "try": "Next time something lands wrong, ask: “What did you hear me say?” and say what you meant, plainly."
+  },
+  {
+   "id": "autistic-burnout",
+   "title": "Autistic burnout",
+   "patterns": [
+    "\\bautistic burn ?out\\b",
+    "\\bburn ?out\\b.{0,25}\\b(autis\\w*|neurodivergent)\\b",
+    "\\b(autis\\w*|neurodivergent)\\b.{0,25}\\bburn ?out\\b"
+   ],
+   "links": [
+    [
+     "Autistic burnout, rest and recovery (Part Three, Chapter 9)",
+     "/book/understanding-9-minds-in-depth.html#burnout"
+    ],
+    [
+     "Masking, energy and burnout",
+     "/book/understanding-9-minds-in-depth.html#masking"
+    ]
+   ],
+   "philosophy": "The philosopher Byung-Chul Han, in The Burnout Society (2010), argued that modern life pushes people to keep performing and optimising themselves until they are exhausted. He meant society in general, but it fits autistic burnout closely: for many autistic people the performance runs all day, in every conversation, shop and corridor.",
+   "psychology": "Working with autistic adults as co-researchers, Dora Raymaker and colleagues (2020) described autistic burnout as long-term exhaustion, loss of skills (speech, planning, memory or self-care can drop away) and lower tolerance of sensory input. It comes from chronic stress and a mismatch between what is expected and what someone can do, without enough support. It often lasts months, and it appears to be different from work burnout and from depression, though people can have more than one.",
+   "autistic_lens": "Autistic burnout is often mistaken for laziness, depression or ‘not coping’. Many autistic people say recovery began only when they stopped pushing: fewer demands, less masking, more time alone and with their interests, a calmer sensory world, and people who believe them.",
+   "together": "Burnout isn’t a failure of effort; it’s what happens when effort has been spent on fitting in for too long. Recovery usually means doing less, not trying harder, and planning ahead for the early signs.",
+   "question": "Which demand could you drop this week, so there is more left for you?",
+   "try": "Write your three earliest signs of burnout, and one demand you’ll let go of when you notice them. Words for others: “I’m in burnout. I need fewer demands for a while, not encouragement to push through.”"
+  },
+  {
    "id": "autistic-lens",
    "title": "Why look through an autistic lens?",
    "patterns": [

@@ -30,7 +30,7 @@
   var DEFAULT_CHAR = {
     name: 'Professor Puddles',
     color: '#7FA88A',
-    greeting: 'Hi, I’m Professor Puddles! Ask me about anything in the program, like a tool, a workpaper or what a score means. Or tell me what’s going on, with yourself or someone else, and I’ll suggest a few kind next steps, with links to the right pages. You can also just chat with me, say ‘talk deep’ for the big questions, or ask me for an infographic, like ‘make an infographic about the mental load’.'
+    greeting: 'Hi, I’m Professor Puddles. Tell me what’s on your mind in your own words, and I’ll suggest a page and some words you could say.'
   };
 
   // ------------------------------------------------------------------ text helpers
@@ -444,6 +444,7 @@
   }
 
   // Follow-up chips: glossary terms mentioned in what was shown, then headings of other good hits.
+  var GLOSS_COMMON = /^(static|signal|signals|noise|battery|batteries|weather|drift|load|frequency|frequencies|bandwidth|wiring|wired|tone|lens|channel|channels|ledger|carrier|wave|waves|tuning|calibration|receiver|sender|range|pace|rhythm|charge|tank|owner|owners)$/;
   function followUps(shown, hits, limit) {
     var out = [], used = {}, pages = {};
     shown.forEach(function (i) { used[i] = 1; pages[KB.docs[i].u.split('#')[0]] = 1; });
@@ -451,7 +452,8 @@
     for (var i = 0; i < KB.docs.length && out.length < 2; i++) {
       var d = KB.docs[i];
       if (!d.g || used[i]) continue;
-      var hit = (d.m || []).some(function (m) { return m.length > 3 && text.indexOf(m.toLowerCase()) !== -1; });
+      // a site word that is also an everyday word ("static", "signal", "battery") is no reason to offer its definition
+      var hit = (d.m || []).some(function (m) { var ml = m.toLowerCase(); return m.length > 3 && !GLOSS_COMMON.test(ml) && new RegExp('[^a-z]' + ml.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[^a-z]').test(text); });
       if (hit) { used[i] = 1; out.push({ label: d.t, doc: i }); }
     }
     (hits || []).slice(0, 12).forEach(function (h) {
@@ -1759,6 +1761,7 @@
   var TEEN_CUE = /\b(i m|im|i am) 1[0-7]( years old| yrs old| year old)?\b|\b(i m|im|i am|i ve been|ive been) (in|into) (foster care|care|a foster home|a placement)\b|\bmy (foster )?carers\b|\bmy foster (mum|mom|dad|parents|family|carer)\b|\bmy (nan|nana|nanna|gran|granny|grandma|grandad)\b.{0,30}\b(took|takes|taking|wont let|won t let|doesnt get|dont get|strict|rules|my phone|curfew)\b|\b(in|at) (year (7|8|9|10|11|12|13)|grade (6|7|8|9|10|11|12)|high school|middle school|secondary school|sixth form)\b/;
   var TF_PRINT = /\b(print|printable|printing|print out|printed|printer)\b/;
   var TF_SOURCE = /\b(source|sources|cite|citation|reference|references|who (came up with|invented|said|discovered|found) (that|this|it)|where (does|did) (that|this|it) come from|is there (any )?(research|evidence|a study|science)|what (research|study|studies))\b/;
+  var PRINT_SHORT = /^\/(adhd-kids|grandparents)\.html$/;
   function printReply(state, f, TC) {
     var u = '', t = '';
     var ab = f.match(/\b(?:page|guide|one|bit|part|section|handout|sheet)?\s*(?:about|on|for)\s+(.+?)(?:\s+(?:page|guide))?$/);
@@ -1771,9 +1774,9 @@
     if (!u && TC) u = topicPage(TC);
     if (!u && state.page && state.page.u && state.page.u !== '/ask.html') u = state.page.u;
     if (u) t = pageTitle(u);
-    var b = [{ k: 'p', x: u ? 'Yes. To print ' + (t ? '“' + t + '”' : 'that page') + ', open it, then tap Share at the top of the page and choose Print this page. Your browser’s own Print works too (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout.' :
-      'Yes. Every page can be printed: open it, tap Share at the top and choose Print this page, or use your browser’s own Print (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout. Which page would you like?' }];
-    if (u && /^\/(adhd-kids|grandparents)\.html$/.test(u)) b.push({ k: 'p', x: 'That page also has a short printable summary near the top.' });
+    var b = [{ k: 'p', x: u ? 'Yes. To print ' + (t ? '“' + t + '”' : 'that page') + ', open it and scroll to the bottom: the Print this page button is next to Share. On a computer, your browser’s own Print works too (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout.' :
+      'Yes. Guides and chapters have a Print this page button at the bottom, next to Share. On a computer, your browser’s own Print works too (Ctrl+P, or ⌘P on a Mac). The menus, buttons and cartoons are left off the printout. Which page would you like?' }];
+    if (u && PRINT_SHORT.test(u)) b.push({ k: 'p', x: 'That page also has a Print a short version button near the top, with just the main points and the words to use.' });
     if (u) b.push({ k: 'links', x: [[t || 'The page', u]] });
     return { blocks: b, chips: [], kind: 'care', id: 'print' };
   }
@@ -2562,7 +2565,7 @@
     if (r.kind === 'deep') return r;   // deep talk is never joked about
     var R = P.rules || {}, k = r.kind || 'search', f = norm(q);
     // after anything serious, stay plain: for good after safety, and after care or someone's situation until a light topic
-    if (/^(safety|redflag)$/.test(k) || state.unsafe) { state.plain = 2; return r; }
+    if (/^(safety|redflag)$/.test(k) || state.unsafe || state.crisis) { state.plain = 2; return r; }
     if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
     if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
     if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
@@ -2575,7 +2578,9 @@
     if (card && !light) return r;
     var quiet = quietOn() || state.easy || state.brief;
     var sec = (R.section_for_kind || {})[k];
-    var openerOk = !quiet && (light || (R.opener_kinds || []).indexOf(k) !== -1 || k === 'fun');
+    // a real question about someone's own life gets the answer first: a comic opener never stands in front of it
+    var personalQ = /\b(i|we|my|our|me|us|im|ive|were)\b/.test(f) && k !== 'fun';
+    var openerOk = !quiet && !personalQ && (light || (R.opener_kinds || []).indexOf(k) !== -1 || k === 'fun');
     var closerOk = light || (R.closer_only_kinds || []).indexOf(k) !== -1 || (R.opener_kinds || []).indexOf(k) !== -1;
     // the kinds with their own voice: "thanks", nothing found, a choice to make
     // gibberish keeps its plain "I didn't catch that": a joke there reads as not listening
@@ -3220,7 +3225,10 @@
     if (weak) {
       // No direct answer. If a passage still shares a real part of the question, show the closest one or two,
       // clearly labelled as the nearest match rather than an answer; otherwise say so and offer starters.
-      var near = offTopic ? [] : res.hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.5 && h.s >= 1.4 && !/^\/(about\.html|architecture\/)/.test(KB.docs[h.i].u); }).slice(0, 8);  // the full ranking, before the short-question filter above
+      var refsOk = /\b(stud(y|ies)|research|paper|papers|cite|citation|source|sources|evidence|journal|doi|reference)\b/.test(f);
+      var near = offTopic ? [] : res.hits.filter(function (h) { return !KB.docs[h.i].tip && h.cov >= 0.5 && h.s >= 1.4 && !/^\/(about\.html|architecture\/)/.test(KB.docs[h.i].u); }).slice(0, 8);
+      // a plain question gets the site's own explanation before a reference-list entry ("are emotions universal?")
+      if (!refsOk) { var nonRef = near.filter(function (h) { return !/^\/research\.html#ref-/.test(KB.docs[h.i].u); }); if (nonRef.length) near = nonRef; }  // the full ranking, before the short-question filter above
       var closest = [], seenKey = {};
       near.forEach(function (h) {
         var d = KB.docs[h.i], key = d.u.split('#')[0] + '|' + d.h.split(':')[0];
@@ -3427,7 +3435,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = noRepeat(state, q, x); if (x && x.blocks) state.lastSig = sigOf(x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = noRepeat(state, q, x); if (x && x.blocks) state.lastSig = sigOf(x); x = dejargon(x, q); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
