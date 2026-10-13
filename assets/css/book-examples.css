@@ -32,9 +32,9 @@
 
 /* the sheet itself */
 .bk-ex-sheet{ border-top:1px solid var(--bkx-line); padding-top:.75rem; }
-.bk-ex-h{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1rem; margin:0 0 .15rem !important; color:var(--bkx-ink); }
-.bk-ex-hsub, .bk-ex-intro{ font-size:.84rem; color:var(--bkx-soft); margin:0 0 .55rem !important; }
-.bk-ex-part{
+figure.bk-ex .bk-ex-h{ font-family:"Fraunces", Georgia, serif; font-weight:500; font-size:1rem; margin:0 0 .15rem !important; color:var(--bkx-ink); }
+figure.bk-ex .bk-ex-hsub, figure.bk-ex .bk-ex-intro{ font-size:.84rem; color:var(--bkx-soft); margin:0 0 .55rem !important; }
+figure.bk-ex .bk-ex-part{
   font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.92rem; margin:1rem 0 .3rem !important;
   padding-bottom:.15rem; border-bottom:1px solid var(--bkx-line);
 }
@@ -48,12 +48,12 @@
 .bk-ex-v{ font-family:"Lora", Georgia, serif; font-style:italic; color:var(--bkx-hand); font-size:1.04em; }
 .bk-ex-blank{ display:inline-block; min-width:2.5em; }
 .bk-ex-printed{ font-style:normal; color:var(--bkx-soft); font-size:.92em; }
-.bk-ex-say{ margin:.2rem 0 .6rem !important; }
+figure.bk-ex .bk-ex-say{ margin:.2rem 0 .6rem !important; }
 
 /* tap-to-pick questions: the chosen answers are ringed, like circled in pen */
 .bk-ex-q{ margin:.35rem 0 .6rem; break-inside:avoid; }
-.bk-ex-ql{ font-size:.82rem; color:var(--bkx-soft); margin:0 0 .25rem !important; }
-.bk-ex-qn{ font-size:.8rem; color:var(--bkx-soft); margin:.2rem 0 0 !important; }
+figure.bk-ex .bk-ex-ql{ font-size:.82rem; color:var(--bkx-soft); margin:0 0 .25rem !important; }
+figure.bk-ex .bk-ex-qn{ font-size:.8rem; color:var(--bkx-soft); margin:.2rem 0 0 !important; }
 .bk-ex-chips{ list-style:none; margin:0 !important; padding:0 !important; display:flex; flex-wrap:wrap; gap:.3rem .35rem; }
 .bk-ex-chips li{
   margin:0; padding:.12rem .55rem; font-size:.8rem; line-height:1.45;
@@ -65,7 +65,7 @@
 }
 
 /* tick boxes */
-.bk-ex-tick{ margin:.55rem 0 .3rem !important; font-size:.88rem; }
+figure.bk-ex .bk-ex-tick{ margin:.55rem 0 .3rem !important; font-size:.88rem; }
 .bk-ex-box{
   display:inline-block; width:1.05em; height:1.05em; line-height:1; text-align:center; vertical-align:-.12em;
   border:1px solid var(--bkx-soft); border-radius:2px; font-style:italic; color:var(--bkx-hand); font-weight:600;
@@ -87,7 +87,7 @@
 
 /* what the tool prints back */
 .bk-ex-out{ margin:.85rem 0 .35rem; padding:.6rem .75rem .45rem; border:1px dashed var(--bkx-line); border-radius:3px; break-inside:avoid; }
-.bk-ex-ok{
+figure.bk-ex .bk-ex-ok{
   font:500 .64rem/1.3 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase;
   color:var(--bkx-soft); margin:0 0 .4rem !important;
 }
@@ -95,11 +95,11 @@
 .bk-ex-out dl > div{ margin:0 0 .4rem; }
 .bk-ex-out dt{ font-weight:600; font-size:.86rem; margin:0; }
 .bk-ex-out dd{ margin:0; font-size:.88rem; }
-.bk-ex-out p{ margin:0 0 .4rem !important; font-size:.88rem; }
+figure.bk-ex .bk-ex-out p{ margin:0 0 .4rem !important; font-size:.88rem; }
 
 /* under the card */
-.bk-ex-note{ margin:.75rem 0 .15rem !important; font-size:.8rem; font-style:italic; color:var(--bkx-soft); }
-.bk-ex-link{ margin:0 !important; font-size:.84rem; }
+figure.bk-ex .bk-ex-note{ margin:.75rem 0 .15rem !important; font-size:.8rem; font-style:italic; color:var(--bkx-soft); }
+figure.bk-ex .bk-ex-link{ margin:0 !important; font-size:.84rem; }
 .bk-ex-link a{ color:var(--bkx-ink); text-decoration:underline; text-decoration-color:var(--brass, #A8792F); text-underline-offset:3px; }
 .bk-ex-link a:focus-visible{ outline:2px solid var(--focus, #2B5B8C); outline-offset:2px; }
 

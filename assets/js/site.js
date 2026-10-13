@@ -118,7 +118,7 @@
       { href: '/how-to-stop-fighting-with-your-partner.html', code: 'Guide', title: 'How to stop fighting with your partner', note: 'Seven calm steps, from the first sign to fixing the setup behind repeat fights' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, asks that land, timing, hard talks, repair, and talking in every kind of relationship' },
       { href: '/write-it-through.html', code: 'New', title: 'Talk it through in writing', note: 'A calm, private way to sort something out in writing: one topic, facts not verdicts, one clear ask and a reply-by time' },
-      { href: '/new-relationship.html', deep: true, code: 'New', title: 'Early days: dating and new relationships', note: 'Dating at any age: texting and pace, red flags or just different, the big questions, meeting family, and ending it kindly' },
+      { href: '/new-relationship.html', deep: true, code: 'New', title: 'Early days: dating and new relationships', note: 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, and ending it kindly' },
       { href: '/stepfamily.html', deep: true, code: 'New', title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money and holidays' },
       { href: '/bonding.html', code: 'Guide', title: 'Bonding: how closeness grows', note: 'What research says about closeness, with small ideas for partners, kids, friends, family, coworkers and you' },
       { href: '/small-wins.html', code: 'Guide', title: 'Small wins, and turning the hard stuff into fuel', note: 'Why small wins build momentum, and kind ways to turn anger, worry and complaints into plans' },
@@ -470,7 +470,7 @@
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games, cartoons and music are in Calm & play.', items: [
       { href: '/by-relationship.html', code: 'All', title: 'See everything by relationship', note: 'Every page, grouped by who it’s about' },
-      { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Texting and pace, red flags or just different, meeting family, ending it kindly' },
+      { href: '/new-relationship.html', deep: true, title: 'Early days: dating and new relationships', note: 'Texting and pace, ordinary differences and real concerns, meeting family, ending it kindly' },
       { href: '/stepfamily.html', deep: true, title: 'Blended families and stepfamilies', note: 'The stepparent role, kids feeling torn, two homes with different rules' },
       { href: '/parents.html', title: 'For parents', note: 'Big feelings, coming back after you yell, siblings and teens' },
       { href: '/teens.html', title: 'For teens', note: 'Written for you: home, family, friends and feelings' },
@@ -2256,7 +2256,7 @@
    ['/book/understanding-4-communication.html#small-talk', 'Small talk has a job, and it can be short', 'Part Three, Chapter 4. Why small talk matters, why it is hard work for many people, and a few ready-made lines.', 'Book'],
    ['/workpapers/fill/wp-03.html?for=coparents', 'A list for two homes (one owner per job)', 'A fillable list for co-parents: the handoff bag, school, doctor, clubs. Each job has one owner. Kept on this device.', 'Tool'],
    ['/bonding.html#ideas', 'Get a bonding idea: something to do together', 'Pick who, how much time and how much energy, and get one small idea at a time, including games for two.', 'Tool'],
-   ['/new-relationship-in-depth.html#flags', 'Red flag or just different?', 'Early days: how to tell a difference you can talk about from a sign of control, and what to do if it feels unsafe.', 'Guide'],
+   ['/new-relationship-in-depth.html#flags', 'Just different, or a real concern?', 'Early days: how to tell a difference you can talk about from a sign of control (a caring request or a no is not control), and what to do if it feels unsafe.', 'Guide'],
    ['/new-relationship.html#moving-in', 'When to move in together: decide, don’t slide', 'Talk about money, space and what it means before the lease does the deciding.', 'Guide'],
    ['/stepfamily-in-depth.html#stepparent', 'The stepparent role: a warm adult first', 'Rules come later. Build the relationship first and let the parent lead on discipline.', 'Guide'],
    ['/stepfamily.html#loyalty', 'When children feel torn between homes', 'Kids caught between a parent and a stepparent, or between two homes: what helps them, in words you could use.', 'Guide'],
@@ -2279,7 +2279,7 @@
   var RETITLE = { '/check-ins.html': ['Check-ins: for couples, families and housemates', 'A calm, regular time to talk: a weekly check-in or a house meeting, for couples, families and housemates. How to raise a thing once, properly.'] };
   // pages that are newly written: if the search index was built before a page existed, its result still shows
   var FRESH = {
-    '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, red flags or just different, the big questions, meeting family, moving in, and ending it kindly.'],
+    '/new-relationship.html': ['Early days: dating and new relationships', 'Dating at any age: texting and pace, telling a difference from a real concern, the big questions, meeting family, moving in, and ending it kindly.'],
     '/stepfamily.html': ['Blended families and stepfamilies', 'The stepparent role, kids feeling torn, two homes with different rules, step and half siblings, money, holidays and adult stepchildren.'],
     '/write-it-through.html': ['Talk it through in writing', 'One topic, facts not verdicts, one clear ask and a reply-by time. Write it, wait, then send.'],
     '/how-you-take-things-in.html': ['How you take things in', 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts.'],

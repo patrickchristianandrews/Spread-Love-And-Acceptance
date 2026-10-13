@@ -642,12 +642,12 @@
   html.tol-quiet:not(.hh-all) .read > :is(#start-where, #guides, #explore, [data-app-ad], .cb-panel, .cb-extra){ display:none !important; }
   html.tol-quiet.hh-all .read .hh-quiet button{ display:none; }
   /* What's here: the whole site in eight doors (find10) */
-  .read .hh-map{ margin:.2rem 0 1rem; }
+  .read .hh-map{ margin:.2rem 0 .5rem; }
   .read .hh .hh-map-h{ margin:0 0 .5rem; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; line-height:1.3; color:var(--ink, #2B2620); }
   .read .hh-map-doors{ display:grid; grid-template-columns:repeat(auto-fill, minmax(13rem, 1fr)); gap:.55rem; margin:0; padding:0; list-style:none; }
   .read .hh .hh-map-doors li{ margin:0; padding:0; width:auto; max-width:none; display:flex; }
   .read .hh-map-doors li::before{ content:none; }
-  .read .hh-map-doors a{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"i t" "c c" "n n"; align-items:center; gap:.25rem .45rem; width:100%; box-sizing:border-box; min-height:48px; padding:.65rem .7rem .7rem;
+  .read .hh-map-doors a{ display:grid; grid-template-columns:auto 1fr; grid-template-areas:"i t" "c c" "n n"; align-items:center; align-content:start; gap:.25rem .45rem; width:100%; box-sizing:border-box; min-height:48px; padding:.65rem .7rem .7rem;
     border-radius:16px; border:1px solid #E6DAF3; background:#FFFFFF; color:var(--ink, #2B2620); text-decoration:none; box-shadow:0 8px 20px -16px rgba(78,63,107,.55); }
   .read .hh-map-doors a:hover{ border-color:#B9A2DD; }
   .read .hh-map-doors a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
@@ -1008,7 +1008,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (M) {
     var pages = {};
     M.sections.concat(M.menu).forEach(function (g) { g.items.forEach(function (it) { if (it.href && it.href.charAt(0) === '/') pages[it.href.split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html')] = 1; }); });
-    set('pages', ' (' + Object.keys(pages).length + ' pages)');
+    set('pages', '\u00a0(' + Object.keys(pages).length + ' pages)');
     var book = M.sections.filter(function (s) { return s.id === 'book'; })[0];
     if (book) set('chapters', book.items.filter(function (it) { return /^\/book\/(self-\d-[a-z]+|preface|chapter-\d|understanding-\d+-[a-z-]+|afterword)\.html$/.test(it.href || ''); }).length + ' chapters');
     var read = M.menu.filter(function (g) { return g.id === 'read'; })[0], rp = {};
