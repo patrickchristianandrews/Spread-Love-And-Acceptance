@@ -569,25 +569,7 @@
   var PARENT_PHONE = /\b(mom|mum|dad|parents?|mother|father|stepmom|stepdad|stepmother|stepfather|nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?)|aunt|auntie|uncle)\b.{0,40}\b(read\w*|check\w*|go(es)? through|look\w* (at|through)|track\w*|take\w*|took)\b.{0,25}\b(my )?(texts|messages|phone|location|dms|chats?)\b|\b(is|are) (my )?(mom|mum|dad|parents?) allowed to\b/;
   function cardByIdF(id) { return (IDX.first || []).filter(function (x) { return x.id === id; })[0] || null; }
   var MONEY_CTL = /\b(money|receipts?|spend\w*|purchases?|bank|allowance|pocket money|paycheck|cards?|buy|bought|pay for|penny|cent|budget|finances?|transactions?)\b/;
-  function controlReply(f) {
-    if (f && MONEY_CTL.test(f) && !/\b(phone|texts|messages|location|passwords?|emails?)\b/.test(f)) return { blocks: [
-      { k: 'p', x: 'That’s worth taking seriously, and it’s not your fault. Agreeing limits on money together is normal. Having to show every receipt or explain every purchase, or facing anger when you spend on yourself or your friends, isn’t a money style. It’s a common sign of control.' },
-      { k: 'p', x: 'A quick check, from the money page:' },
-      { k: 'list', x: ['Normal: a limit you both agreed, that applies to both of you, and that either of you can raise or change without fear.',
-        'Control: it’s one-sided (only you have to ask, explain or hand over receipts), hidden (you can’t see the accounts), or punished (anger, sulking, threats, or a card taken away).',
-        'If you feel you have to explain yourself to avoid trouble, trust that feeling.'] },
-      { k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Outside the US and UK, findahelpline.com lists free lines.' },
-      { k: 'links', x: [['Money together: is it controlling, or normal?', '/money-together.html#control'], ['Not safe at home? The signs of control, and people to talk to', '/safety.html']] }],
-      chips: [{ label: 'What are the red flags?', q: 'What are the red flags in a relationship?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
-    return { blocks: [
-      { k: 'p', x: 'That’s worth taking seriously, and it’s not your fault. Checking someone’s phone or location, limiting who they see or what money they have, or blaming them for someone else’s anger are common signs of control. They aren’t a communication problem that better wording can fix.' },
-      { k: 'p', x: 'There’s a real difference between sharing you both chose (like location sharing you each agreed to and can turn off) and checking or tracking that happens in secret, without asking, or that you’d be afraid to say no to.' },
-      { k: 'list', x: ['If you feel watched, scared, or like you have to explain yourself to avoid trouble, trust that feeling.',
-        'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. Outside the US, findahelpline.com lists free lines.',
-        'If your phone might be checked, use a device they can’t see, and look at the Not safe at home? page for how to clear what this site keeps.'] },
-      { k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] }],
-      chips: [{ label: 'What are the red flags?', q: 'What are the red flags in a relationship?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
-  }
+
   // A friend (or anyone else) who is hurting themselves: how to help them, and who helps you help
   var OTHER_HARM = /\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\b|\b(friend|sister|brother|son|daughter|kid|child|partner|girlfriend|boyfriend|gf|bf|mom|dad|someone)\b.{0,40}\b(self ?harm\w*|suicid\w*|wants? to die|kill (themselves|himself|herself))\b/;
   function otherHarmReply() {
@@ -633,9 +615,9 @@
   var HIDE = /\b(hide|cover|delete|clear|erase|remove|wipe)\b.{0,30}\b(visit(ed)?|history|tracks|this site|that i (was|came)|my (searches|chat))\b|\b(private|incognito) (window|mode|browsing)\b|\bquick(ly)? exit\b|\bleave (this site )?quickly\b/;
   function hideReply() {
     return { blocks: [
-      { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The Not safe at home? page has one button to erase all of it and stop the page list.' },
+      { k: 'p', x: 'Here’s how to leave less of a trace. This site keeps small notes only in this browser (your settings, the pages you opened for “Pick up where you left off”, and this chat). The page on clearing what this site keeps has one button to erase all of it and stop the page list.' },
       { k: 'list', x: ['Next time, open the site in a private window (Incognito or Private browsing), so nothing goes into your history.', 'To remove past visits, open your browser’s History, search for “spreadloveandacceptance”, and delete those entries.', 'To leave fast, press Esc twice, or use “Leave this site quickly” in the menu.'] },
-      { k: 'links', x: [['Not safe at home? (erase button and hotlines)', '/safety.html'], ['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
+      { k: 'links', x: [['Clearing what this site keeps', '/safety.html#traces'], ['What’s stored on this device', '/on-this-device.html']] }], chips: [], kind: 'safety' };
   }
 
   // Name-calling, screaming, "walking on eggshells", "he turns everything around on me", "how do I say it so he doesn't get
@@ -647,16 +629,19 @@
   var VERBAL_NOT = /\b(brother|sister|sibling|son|daughter|kids?|child|children|classmates?|kids at school|boss|manager|coworkers?|colleagues?|teacher|students?|roommates?)\b/;
   var VERBAL_DETAIL = /\b(scream\w*|yell\w*|shout\w*|swear\w*|swore|names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|eggshells|turns?|turned|twist\w*|flip\w*|darvo|apologi\w*|angry|mad|furious|blames?|gaslight\w*)\b/;
   function verbalReply(f) {
-    var detail = VERBAL_DETAIL.test(f);
-    var b = [detail ? { k: 'p', x: 'I’m really glad you asked. Being screamed at, called names or made to feel worthless, or having things turned around so it’s always your fault, is serious. It isn’t a communication problem you can fix by wording things better, and it is not your fault.' }
-      : { k: 'p', x: 'That’s a fair thing to wonder about. I can’t diagnose anyone, and nobody can from a chat. A label matters less than the pattern: what they do, and how you feel around them.' }];
-    if (detail && /narcissis|apologi|turns?|turned|twist|flip|darvo/.test(f)) b.push({ k: 'p', x: 'I can’t diagnose anyone, and a label matters less than the pattern. Someone who never apologises and always turns it back on you (sometimes called DARVO: deny, attack, then act as if they’re the one hurt) is a pattern worth taking seriously, whatever the label.' });
-    b.push({ k: 'p', x: detail ? 'Some signs it has moved from ordinary conflict into control:' : 'Whatever the label, these are signs that it’s more than ordinary conflict:' });
-    b.push({ k: 'list', x: ['You change what you say or do to avoid their anger, or feel you’re walking on eggshells.', 'Name-calling, insults or putting you down, in private or in front of others.', 'You’re always the one to blame, and you’ve started to doubt your own memory.', 'They check on you, or limit who you see or what money you have.', 'You feel scared of them, or of how they’ll react.'] });
-    b.push({ k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247, and the Men’s Advice Line is 0808 801 0327. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.' });
-    b.push({ k: 'links', x: [['Not safe at home? The signs, people to talk to, and leaving this site quickly', '/safety.html']] });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+    // walking on eggshells, keeping them calm so they don't get angry: that is fear, said quietly
+    if (/\bwalk\w* on egg ?shells\b|\bkeep (him|her|them) (calm|happy|from (getting|going) (angry|mad))\b|\bso (that )?(he|she|they) (doesnt|dont|wont|does not|will not) (get|go) (so )?(angry|mad|furious|off|crazy)\b/.test(f)) return disclosureReply(f + ' scared');
+    // "is he a narcissist?": no diagnosis, what to look at instead, and someone to talk it through with
+    if (/narcissis|psychopath|sociopath/.test(f) && !/\b(names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|screams?|yells?|shouts?)\b/.test(f)) {
+      return { blocks: [{ k: 'p', x: 'That’s a fair thing to wonder about. I can’t diagnose anyone, and nobody can from a chat. A label matters less than the pattern: what they do, how often, and how you feel around them.' },
+        { k: 'list', x: ['Notice what actually happens, and how you feel afterwards: heard, or small?', 'Notice whether they can say sorry and change, or always turn it back on you.', 'Talk it through with someone you trust, or a counsellor. They can help you see the pattern clearly.'] },
+        { k: 'links', x: [['Finding a counsellor or other help', '/outside-help.html']] }], chips: [], kind: 'care', id: 'labelq' };
+    }
+    return { blocks: [{ k: 'p', x: 'Being called names or put down hurts, and you don’t deserve it, whatever the argument is about.' },
+      { k: 'list', x: ['At a calm time, say plainly how it lands: “When you call me names, I stop being able to hear anything else. I need you to stop.”', 'When it starts, you can step away: “I’ll talk when we can both be respectful.”', 'If they never say sorry, or always turn it back on you, that’s worth talking through with someone you trust, or a counsellor.'] },
+      { k: 'links', x: [['Finding a counsellor or other help', '/outside-help.html']] }], chips: [], kind: 'care', id: 'putdowns' };
   }
+
 
   // Fear of a person ("he shouts at me at handover and I'm scared", "I'm scared when my husband drinks") is important
   // information, not a communication problem: never "it means the relationship matters", never an apology script.
@@ -1283,13 +1268,10 @@
     if (CV_REDFLAG.test(f) && !(/\bcontrolling\b/.test(f) && MONEY_W.test(f))) {
       var b = [];
       var I0 = L && L.kind === 'sit' && IDX.sit.issues[L.issue];
-      if (I0 && L.issue !== 'hurtbythem') b.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. It isn’t a red flag by itself. What matters is how it happens, and how you feel around them.' });
-      else b.push({ k: 'p', x: 'Here’s how to tell an ordinary rough patch from a red flag.' });
-      b.push({ k: 'p', x: 'These are red flags, and they’re not a communication problem:' });
-      b.push({ k: 'list', x: ['You feel scared of them, or of how they’ll react.', 'They hurt, push, corner or threaten you, or threaten to hurt themselves, the kids or a pet.', 'They check your phone, track where you are, or cut you off from friends and family.', 'They control all the money, or stop you from working.', 'They pressure you into sex, or anything else you don’t want.', 'You’re always the one to blame, and you’ve started to doubt your own memory.'] });
-      b.push({ k: 'p', x: 'If any of these fit, please skip the tools here and talk to people who help with this every day. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233, or text START to 88788.' });
-      b.push({ k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] });
-      b.push({ k: 'note', x: I0 ? 'If none of them fit, it’s most likely an ordinary problem you can work on together, and the steps I gave still apply.' : 'If none of them fit, it’s most likely an ordinary problem you can work on together. Tell me what’s going on, and I’ll suggest a few steps.' });
+      if (I0 && L.issue !== 'hurtbythem') b.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. It isn’t a red flag by itself.' });
+      b.push({ k: 'p', x: 'Everyday conflict, even when it’s frustrating, is something two people can work on. It’s different if someone hurts you, threatens you or makes you scared. That isn’t something to fix with tips: talk it through with someone trained. You can talk privately: in the US, 1-800-799-7233; in the UK, 0808 2000 247.' });
+      b.push({ k: 'links', x: [['More support', '/outside-help.html']] });
+      b.push({ k: 'note', x: I0 ? 'If none of that fits, the steps I gave still apply.' : 'If none of that fits, tell me what’s going on, and I’ll suggest a few steps.' });
       return { blocks: b, chips: L && L.kind === 'sit' ? [{ label: 'What should I do first?', q: 'What should I do first?' }, { label: 'Words I could use', q: 'Another way to say it' }] : [], kind: 'redflag' };
     }
     if (CV_NOHELP.test(f)) {
@@ -2156,18 +2138,18 @@
       if (SAFETY_TERM.test(vf)) { state.last = null; state.care = null; state.topic = null; return safetyTermReply(vf); }
       if (!NOT_LIVE.test(vf) && OWN_VIOLENT.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownViolentReply(vf), sp); }
       if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; state.topic = null; return meant(childCrisisReply(), sp); }
-      if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
+      if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; state.fearSeen = true; return meant(mutualReply(), sp); }
       if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && ANGER_NOW.test(vf) && !/\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|ex|dad|mum|mom|son|daughter|kid|boss))\b( s| is| gets| keeps)? (about to|going to|gonna|losing|loses)\b/.test(vf)) { state.last = null; return meant(angerNowReply(), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; state.topic = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
-      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
+      if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; state.fearSeen = true; return meant(fearReply(vf), sp); }
       if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care)) return meant(conflictNotAbuse(state), sp);
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
       // shouted at during a handoff (often in front of the child): handoff safety first, and the child questions stay open
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && HANDOFF_SHOUT.test(vf) && (EX_W.test(vf) || /\bin front of\b/.test(vf)) && !VERBAL_STRONG.test(vf)) { state.last = null; state.care = null; state.fearSeen = true; state.coSeen = true; state.kidName = kidNameIn(q0) || state.kidName || ''; var hc = cardById('coparenting'); if (hc) setTopic(state, hc, 'coparenting'); return meant(handoffReply(vf, state.kidName), sp); }
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && YELLED_AT.test(vf) && !VERBAL_STRONG.test(vf) && !VERBAL_NOT.test(vf)) { state.last = null; state.care = null; state.fearSeen = true; return meant(yelledAtReply(vf), sp); }
-      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
+      if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
       var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
@@ -2261,7 +2243,7 @@
     // safety first, as everywhere
     if (/\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f))
       return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama o escribe al 988 (EE. UU.). Cuando oigas “Presione 2”, marca el 2 para hablar en español.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
-    if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
+    if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me grita y tengo miedo)\b/.test(f))
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
       return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
@@ -2282,7 +2264,6 @@
   }
   // Once someone has told us about control or danger, later questions in the same chat never get couples tips
   // ("you're on the same side", talk it through calmly, conflict is normal): those could put them at risk.
-  var AFTER_SAFE = /\b(he|him|his|she|her|they|them|partner|boyfriend|girlfriend|husband|wife|bf|gf|normal|overreact\w*|too sensitive|my fault|talk to|talk with|stop|friends?|money|phone|argue|argument|fight\w*|calm|leave|stay|love|counts?|is it|am i|what do i do|how do i)\b/;
   // "he shouts at me at the handover in front of Leo": safer handoffs first, the helplines, and a promise that questions
   // about the child are still welcome (never ways to talk the shouting parent round)
   var HANDOFF_SHOUT = /\b(he|she|they|my ex|ex|his dad|her dad|their dad|her mum|his mum|their mum|her mom|his mom|their mom|the other parent)\b.{0,25}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|screaming|swears?|swore|swearing|kicks off|kicked off|goes off|went off)\b( at me)?.{0,60}\b(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?|exchanges?|in front of)\b|\b(at|during) (the )?(handovers?|handoffs?|hand ?overs?|hand ?offs?|drop ?offs?|pick ?ups?)\b.{0,40}\b(shouts?|shouted|shouting|yells?|yelled|yelling|screams?|screamed|swears?|swore)\b/;
@@ -2319,17 +2300,15 @@
     var b = [{ k: 'p', x: 'That sounds really stressful, and it isn’t something you can fix by choosing better words. It’s worth changing how handoffs work, for you and for ' + k + '.' },
       { k: 'list', x: ['Keep handoffs short: times and bags only. Anything else goes by message, later.', 'Hand over somewhere public and busy, or through school or nursery, so you don’t have to meet at the door.', 'If something starts at the door, don’t answer it there: “Let’s do this by message,” and go.', 'Afterwards, tell ' + k + ' it isn’t their worry: “Grown-ups sometimes get cross. You’re not in trouble.”', 'Keep the messages, with dates. If it keeps happening, a mediator or family lawyer can help you set up calmer handoffs.'] },
       { k: 'script', l: 'At the door', x: 'I’m not going to talk about this now. Message me later. Bye, ' + (kid || 'sweetheart') + ', see you Friday.' },
-      { k: 'p', x: 'If you ever feel afraid of them, private help is here: in the US 1-800-799-7233 (or text START to 88788), in the UK 0808 2000 247, and the Not safe at home? page.' },
-      { k: 'links', x: [['Four steps for calmer handoffs', '/co-parenting.html#handoff'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel'], ['After a separation: when it’s more than conflict', '/safety.html#after-separation']] }];
+      { k: 'links', x: [['Four steps for calmer handoffs', '/co-parenting.html#handoff'], ['When the other parent won’t cooperate', '/co-parenting.html#parallel']] }];
     return { blocks: b, chips: [{ label: kid ? 'Telling ' + kid + ' about the plan' : 'Telling my child about the plan', q: 'How do I tell ' + (kid || 'my child') + ' about the new handoff plan?' }, { label: 'How should we word texts?', q: 'We only text, how should we word things?' }], kind: 'care', id: 'handoff' };
   }
   // "my husband yells at me" (no fear, no names, no threats): the ordinary question first, warmly, and one gentle line
   var YELLED_AT = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( sometimes| often| still| just| really)? (yells|screams|shouts|swears|snaps|raises (his|her|their) voice) at me\b/;
   function yelledAtReply(f) {
     return { blocks: [{ k: 'p', x: 'Being yelled at hurts, even when it comes from stress, and it’s fair to want it to stop.' },
-      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, comes with names or threats, or you feel scared, that’s more than a communication problem.'] },
-      { k: 'p', x: 'If you ever feel afraid of them, private help is here: in the US 1-800-799-7233 (or text START to 88788), in the UK 0808 2000 247, and the Not safe at home? page.' },
-      { k: 'links', x: [['A pause plan for two', '/pursue-withdraw.html#plan'], ['When it’s more than a rough patch', '/safety.html#signs']] }],
+      { k: 'list', x: ['Pick a calm time, not the moment it happens, and say how it lands: “When you shout at me, I stop being able to listen.”', 'Agree a pause word together: either of you can call a break, and you come back in twenty minutes.', 'Ask what’s going on for them: stress, tiredness, something underneath. That isn’t an excuse, but it helps you both change it.', 'If it happens most days, or it’s wearing you down, talking it through with a counsellor can help.'] },
+      { k: 'links', x: [['A pause plan for two', '/pursue-withdraw.html#plan'], ['Finding a counsellor or other help', '/outside-help.html']] }],
       chips: [{ label: 'What do I say?', q: 'What do I actually say?' }], kind: 'care', id: 'yelledat' };
   }
 
@@ -2385,13 +2364,7 @@
       chips: [], kind: 'care', id: 'safetyterm' };
   }
 
-  function afterSafeReply(f) {
-    var b = [{ k: 'p', x: 'Because of what you told me earlier, I won’t suggest ways to talk them round or keep the peace. When someone is checking, limiting or frightening you, that isn’t a communication problem, and it isn’t yours to fix by saying things better.' }];
-    if (/\b(normal|overreact\w*|too sensitive|counts?|is it (that )?bad|am i (being )?(dramatic|silly|crazy))\b/.test(f)) b.push({ k: 'p', x: 'What you described isn’t a normal part of disagreeing, and you’re not overreacting by asking about it. You don’t need to be hit for it to count.' });
-    b.push({ k: 'p', x: 'An advocate can listen and help you think it through privately, even if you’re not sure it counts. In the US: call 1-800-799-7233, or text START to 88788 (National Domestic Violence Hotline), any time. Outside the US, findahelpline.com lists free lines. If you’re in danger right now, call 911 or your local emergency number.' });
-    b.push({ k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] });
-    return { blocks: b, chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
-  }
+
   // Someone worried about THEIR OWN behaviour ("am I an abuser?", "is yelling at kids abuse?", "I scared my son"):
   // an honest line between yelling and abuse, real help for them, and no victim script or locked safety mode.
   var SELF_HARMFUL = /\b(am i|i m|im|i am|i might be|i think i m|i think im|worried i m|worried im|scared i m|scared im|afraid i m|afraid im|could i be|maybe i m|maybe im)\b.{0,12}\b(an |the |a )?(abuser|abusive( one)?|toxic( one)?|the problem|emotionally abusive|a bad (dad|father|mom|mum|mother|parent|husband|wife|partner))\b|\bis (it|yelling|shouting|screaming|losing my temper)\b.{0,30}\b(abuse|abusive)\b|\bi (scared|frightened|terrified) my (son|daughter|kid|kids|child|children|wife|husband|partner|family)\b|\bmy (son|daughter|kid|child|wife|husband|partner)\b.{0,20}\b(flinch\w*|is scared of me|is afraid of me|was scared of me|cowered)\b|\b(am i|could i be|have i been|i m|im|i am|worried i m|worried im|scared i m|scared im)( (really|actually))? (damaging|traumati[sz]ing|ruining|scarring|harming|messing up|screwing up) (my|the|our) (kids|children|son|daughter|child|family|boys|girls)\b/;
@@ -2411,18 +2384,18 @@
     var person = /\b(hit|grab\w*|shov\w*|push\w*) (my (wife|husband|partner|son|daughter|kid|kids|child)|him|her|them)\b|\b(throw|threw|throwing) \w+ at (my|him|her|them)\b/.test(f), intent = HURT_INTENT.test(f);
     if (intent) return { blocks: [
       { k: 'p', x: 'Thank you for saying it instead of doing it. That matters. Right now, put distance between you: leave the room, or the house, and don’t go back until your body has calmed down. Nobody needs to be hurt, including you.' },
-      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.', 'If you think you might hurt someone, or anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.', 'When it has passed, get support today: your doctor, an anger-management group, or a counsellor. In the US, the National Domestic Violence Hotline (1-800-799-7233) also talks with people worried about their own behaviour. In the UK, the Respect Phoneline is on 0808 802 4040.'] },
-      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help'], ['When it’s your own behaviour', '/safety.html#own-behaviour']] }],
+      { k: 'list', x: ['Go somewhere you can’t reach them: outside, a walk round the block, the car parked up, a friend’s place.', 'Breathe in for 4 and out for 6 until the urge eases. Cold water on your face helps.', 'If you think you might hurt someone, or anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.', 'When it has passed, get support today: your doctor, an anger-management group, or a counsellor.'] },
+      { k: 'links', x: [['Getting help with anger', '/parents.html#anger-help']] }],
       chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }], kind: 'care', id: 'ownagg' };
     var b = [{ k: 'p', x: 'Thank you for being honest about this. That takes courage, and it’s the first step to changing it. ' + (person ? 'Throwing things at someone, or putting hands on them, is serious: it frightens them, and someone can get hurt.' : 'Slamming doors, punching walls or throwing things is serious even when nobody is touched: it frightens the people who see it, and it’s a step closer to someone getting hurt.') + ' It isn’t a verdict on who you are, and it can change.' }];
-    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, that is abuse, and it’s important to get help today.' });
+    if (person) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed, thrown things at or threatened anyone, it’s important to get help today.' });
     b.push({ k: 'p', x: 'Right now, keep everyone safe:' });
     b.push({ k: 'list', x: ['When you feel it rising, step away first: leave the room, or go outside. Say “I’m getting too angry. I’m taking a break, and I’ll be back in twenty minutes.”',
       'Breathe in for 4 and out for 6 until your body slows down. Don’t go back until it has.',
       'Later, repair: “I scared you when I slammed the door. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
       'Get support today: your doctor, an Employee Assistance Program, or an anger-management group or counsellor. That’s a strong thing to do for your family.'] });
-    b.push({ k: 'p', x: 'In the US, the National Domestic Violence Hotline (1-800-799-7233) also talks with people who are worried about their own behaviour. In the UK, the Respect Phoneline (0808 802 4040) is for people worried about their own anger or behaviour at home. If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
-    b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['Getting help with anger', '/parents.html#anger-help'], ['When it’s your own behaviour', '/safety.html#own-behaviour'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
+    b.push({ k: 'p', x: 'If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
+    b.push({ k: 'links', x: [['Is yelling abuse? (and getting help for your anger)', '/parents.html#is-yelling-abuse'], ['Getting help with anger', '/parents.html#anger-help'], ['When it’s you and your child: four steps', '/upset-right-now.html#parent-child']] });
     return { blocks: b, chips: [{ label: 'What do I do in the moment?', q: 'what do i do in the moment when i feel it rising' }, { label: 'How do I apologise?', q: 'how do i apologize to my family for yelling' }], kind: 'care', id: 'ownagg' };
   }
   // "what do I do when I'm about to yell", "I feel myself about to explode": the steps for right now, first
@@ -2503,7 +2476,7 @@
     var hurt = /\b(hit|hits|slap\w*|punch\w*|shov\w*|push\w*|grab\w*|threat\w*|kick\w*|choke\w*|throw|threw)\b/.test(f);
     var b = [{ k: 'p', x: 'It took courage to ask that, and asking it usually means you want to do better. Here’s an honest answer.' },
       { k: 'p', x: 'Yelling now and then, followed by a real repair, is not the same as abuse. It becomes a safety issue if your family is afraid of you, if it comes with threats, name-calling, breaking or throwing things, or control, or if it happens most days. If someone flinched or went quiet around you, take that seriously: not as a verdict on you, but as a sign to get support now.' }];
-    if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, that is abuse, and it’s important to get help today. In the US the National Domestic Violence Hotline (1-800-799-7233) also talks with people who are worried about their own behaviour. In the UK, the Respect Phoneline (0808 802 4040) does the same. If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
+    if (hurt) b.push({ k: 'p', x: 'If you have hit, shoved, grabbed or threatened anyone, it’s important to get help today: your doctor, a counsellor, or an anger-management course. If anyone is in danger right now, call 911 (US), 999 (UK) or your local emergency number.' });
     b.push({ k: 'list', x: ['In the moment: stop, step back, say “I’m getting too loud, I’m going to take a breath,” and breathe for a minute.',
       'Afterwards, repair: “I scared you when I yelled. That wasn’t okay, and it wasn’t your fault.” Then say what you’ll do differently.',
       'Get support for yourself: your doctor, an Employee Assistance Program, or a counsellor or anger-management group. That’s a strong thing to do for your family.',
@@ -2621,8 +2594,8 @@
     if (!rq) return null;
     // after a safety reply (or once someone has told us about danger), no pictures: privacy and safety come first
     if (state.unsafe || state.lastKind === 'safety' || state.lastKind === 'redflag') {
-      return { blocks: [{ k: 'p', x: 'I won’t make a picture of this one. Pictures can be saved and shared, and what you told me deserves to stay private. The safety page has everything in one place, and a quick way to leave.' },
-        { k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] }], chips: [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }], kind: 'safety' };
+      return { blocks: [{ k: 'p', x: 'I won’t make a picture of this one. Pictures can be saved and shared, and what you told me deserves to stay private.' },
+        { k: 'links', x: [['More support', '/outside-help.html']] }], chips: [], kind: 'safety' };
     }
     var spec = null, src = '';
     try {
@@ -3022,19 +2995,18 @@
     var f = norm(q), prevLast = state.last;
     if (chipDoc == null && SELF_HARMFUL.test(f) && !/\b(he|she|they|my (husband|wife|partner|boyfriend|girlfriend|ex|dad|mum|mom|father|mother|stepdad|stepmom)) (says|said|calls|called|tells|told) (me )?(i m|im|i am)\b/.test(f)) { state.last = null; state.unsafe = false; return selfHarmfulReply(f); }
     if (chipDoc == null && CV_RESTART.test(f)) state.unsafe = false;
-    if (chipDoc == null && state.unsafe && !DANGER.test(f) && !HIDE.test(f) && AFTER_SAFE.test(f)) { state.last = null; return afterSafeReply(f); }
     if (chipDoc == null) {
       if (DANGER.test(f)) {
         state.last = null; state.topic = null; state.pageTopic = null;
-        if (THREAT_SELF.test(f)) { state.unsafe = true; return threatSelfReply(f); }
+        if (THREAT_SELF.test(f)) { state.unsafe = false; return threatSelfReply(f); }
         if (NOT_LIVE.test(f) && !OTHER_HARM.test(f)) state.crisis = state.turn || 1;
-        if (!(PARENT_PHONE.test(f) && !HARD.test(f)) && !OTHER_HARM.test(f) && !NOT_LIVE.test(f)) state.unsafe = true;
+        state.unsafe = false;  // a disclosure gets a short, calm reply; the next message gets ordinary help again
         if (OTHER_HARM.test(f) && !/\b(i|me|my ?self)\b.{0,20}\b(cut|hurt|harm|kill|die)\b/.test(f)) return otherHarmReply();
         var thc = !HARD.test(f) && cardByIdF('teenhouse');
         if (thc && thc.re.test(f) && !/\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fianc\w*)\b/.test(f)) { state.unsafe = false; var rth = cardReply(state, thc, 'about'); rth.kind = 'care'; return rth; }
         var pc = PARENT_PHONE.test(f) && !HARD.test(f) && cardByIdF('parentphone');
         if (pc) { var rp = cardReply(state, pc, 'about'); rp.kind = 'care'; return rp; }
-        return CONTROL.test(f) && !HARD.test(f) && !/\bso (that )?i (couldn.?t|couldnt|could not|can.?t|cant)\b/.test(f) ? controlReply(f) : safetyReply(f);
+        return safetyReply(f);
       }
       if (HIDE.test(f)) { state.last = null; return hideReply(); }
       f = roommatesFigure(f);

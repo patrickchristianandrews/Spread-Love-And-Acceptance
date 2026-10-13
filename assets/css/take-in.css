@@ -1,21 +1,21 @@
 /* take-in.css — "How you take things in" (take-in.js): the page-wide helpers each choice adds, and the picker
    on /how-you-take-things-in.html. Dark mode needs nothing here: site.css turns the whole page around softly. */
 
-/* ---------- the small lines at the top of a page (Carry on where you were, reassurance, reading time) ---------- */
+/* ---------- the small lines at the top of a page (Carry on where you were, reassurance, reading time). Their classes never share a name with the html ti-<choice> classes. ---------- */
 .ti-top{ display:grid; gap:.5rem; margin:0 0 1.1rem !important; padding:0 !important; background:none !important; box-shadow:none !important; border:0 !important; max-width:none !important; }
 .ti-top > *{ margin:0 !important; }
-.ti-top :is(.ti-place, .ti-calm, .ti-expect){ font:400 .97rem/1.5 "Lora", Georgia, serif; padding:.55rem .9rem !important; border-radius:14px; background:#F2F6FA !important; border:1px solid #C6D6E6; color:var(--ink, #2B2620); max-width:none !important; box-shadow:none !important; }
-.ti-top .ti-place a{ font-weight:600; }
-.ti-top .ti-place small{ color:var(--ink-soft, #5A5346); }
+.ti-top :is(.ti-back, .ti-calm, .ti-time){ font:400 .97rem/1.5 "Lora", Georgia, serif; padding:.55rem .9rem !important; border-radius:14px; background:#F2F6FA !important; border:1px solid #C6D6E6; color:var(--ink, #2B2620); max-width:none !important; box-shadow:none !important; }
+.ti-top .ti-back a{ font-weight:600; }
+.ti-top .ti-back small{ color:var(--ink-soft, #5A5346); }
 .ti-top .ti-calm{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .8rem; background:#F1F7F2 !important; border-color:#BCD8C3; }
 .ti-top .ti-calm > span{ flex:1 1 16rem; }
 .ti-exit{ font:600 .9rem/1.2 "Lora", Georgia, serif; min-height:44px; padding:.4rem 1rem; border-radius:999px; border:1.5px solid #96412B; background:#FFFDF7; color:#7A2F1C; cursor:pointer; }
 .ti-exit:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-.ti-expect p{ margin:0 !important; padding:0 !important; background:none !important; box-shadow:none !important; max-width:none !important; }
-.ti-expect details{ margin:.35rem 0 0; }
-.ti-expect summary{ cursor:pointer; font-weight:600; min-height:32px; }
-.ti-expect ol{ margin:.35rem 0 .1rem !important; padding-left:1.4rem !important; background:none !important; box-shadow:none !important; }
-.ti-expect li{ margin:.15rem 0 !important; }
+.ti-time p{ margin:0 !important; padding:0 !important; background:none !important; box-shadow:none !important; max-width:none !important; }
+.ti-time details{ margin:.35rem 0 0; }
+.ti-time summary{ cursor:pointer; font-weight:600; min-height:32px; }
+.ti-time ol{ margin:.35rem 0 .1rem !important; padding-left:1.4rem !important; background:none !important; box-shadow:none !important; }
+.ti-time li{ margin:.15rem 0 !important; }
 
 /* ---------- Plain and literal: no jokey helper lines ---------- */
 html.ti-literal :is(.tol-cheer, .tpv, .tpv-bub, .tol-fbs-wrap){ display:none !important; }

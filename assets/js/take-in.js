@@ -316,7 +316,7 @@
     var card = at.c > 0 && oneLists.length ? at.c : 0;
     if (!card && (at.y < 700 || at.p < 8)) return;
     var slot = topSlot(); if (!slot) return;
-    var p = el('p', { class: 'ti-place' });
+    var p = el('p', { class: 'ti-back' });
     p.innerHTML = '<a href="#" class="ti-place-go">' + (card ? 'Carry on from part ' + (card + 1) : 'Carry on where you were') + '</a> <small>' +
       (card ? '' : '(about ' + Math.min(99, at.p) + '% of the way down)') + '</small>';
     p.querySelector('a').addEventListener('click', function (e) {
@@ -419,15 +419,15 @@
     if (!has('expect') || HOME || path === PAGE) return;
     var m = main(); if (!m || !document.querySelector('main.read, body.tol-deep main')) return;
     // tools (something to fill in) don't get a reading time
-    if (m.querySelectorAll('textarea, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select').length > 1) return;
-    var slot = topSlot(); if (!slot || slot.querySelector('.ti-expect')) return;
+    if (m.querySelector('textarea, input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, #ask-chat')) return;
+    var slot = topSlot(); if (!slot || slot.querySelector('.ti-time')) return;
     var clone = m.cloneNode(true);
     Array.prototype.forEach.call(clone.querySelectorAll('nav, script, style, .ti-top, .tol-pud-card, .tol-cheer, .lp-card, .tol-read-host, .tol-fp-note, .tol-offer, [aria-hidden="true"], .sr-only, details:not([open]) > :not(summary)'), function (n) { n.remove(); });
     var words = (clone.textContent || '').split(/\s+/).filter(Boolean).length;
     if (words < 250) return;
     var mins = Math.max(1, Math.round(words / 200));
     var hs = Array.prototype.filter.call(m.querySelectorAll('h2'), function (h) { return !inOwn(h) && !h.closest('.tol-pud-card, .lp-card, .tol-read-host, .tol-fp-note, aside') && (h.textContent || '').trim(); });
-    var p = el('div', { class: 'ti-expect' });
+    var p = el('div', { class: 'ti-time' });
     p.innerHTML = '<p><strong>About ' + mins + (mins === 1 ? ' minute' : ' minutes') + ' to read</strong> (' + words.toLocaleString('en-US') + ' words' +
       (hs.length ? ', in ' + hs.length + (hs.length === 1 ? ' part' : ' parts') : '') + '). You can stop and come back any time.</p>' +
       (hs.length > 1 ? '<details><summary>What’s on this page</summary><ol>' + hs.map(function (h) {
