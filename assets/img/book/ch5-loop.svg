@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 1018" width="540" height="1018" role="img" aria-labelledby="fig-ch5-loop-t fig-ch5-loop-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch5-loop-t">The monthly look-back</title>
+<desc id="fig-ch5-loop-d">Three steps that repeat each month. One: mark the month. In a grid of jobs by week, an x goes next to a job each week it slipped, never next to a person; for example, the recycling slipped all four weeks and the bins three. Two: sort each repeat: a structural gap (no clear owner: update the job list), a capacity issue (the owner can’t keep up: set a time for a kind talk), or a one-off (a clear short-term reason: note it and move on). Three: count and close the month. A falling number of structural gaps over several months is a good sign; zero is not the goal.</desc>
+<defs><marker id="fig-ch5-loop-ar-7a5620" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#7A5620"/></marker><marker id="fig-ch5-loop-ar-8e3b47" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#8E3B47"/></marker><marker id="fig-ch5-loop-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
+<rect x="1" y="1" width="538" height="1016" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">The monthly look-back</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Which gaps kept reopening, however often we</tspan><tspan x="28" dy="24.32">closed them?</tspan></text>
+<circle cx="44" cy="136.32" r="15" fill="#2F5F8A"/>
+<text x="44" y="143.32" font-size="18" font-weight="bold" fill="#FCF9F1" text-anchor="middle">1</text>
+<text x="70" y="143.32" font-size="21" font-weight="bold">Mark the month</text>
+<text x="235" y="180.32" font-size="17" fill="#5A5346" text-anchor="middle">Week 1</text>
+<text x="309" y="180.32" font-size="17" fill="#5A5346" text-anchor="middle">Week 2</text>
+<text x="383" y="180.32" font-size="17" fill="#5A5346" text-anchor="middle">Week 3</text>
+<text x="457" y="180.32" font-size="17" fill="#5A5346" text-anchor="middle">Week 4</text>
+<rect x="28" y="190.32" width="484" height="40" rx="6" fill="#DCEAF6"/>
+<text x="40" y="217.32" font-size="19">Recycling</text>
+<path d="M228.0 203.32 L242.0 217.32 M242.0 203.32 L228.0 217.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M302.0 203.32 L316.0 217.32 M316.0 203.32 L302.0 217.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M376.0 203.32 L390.0 217.32 M390.0 203.32 L376.0 217.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M450.0 203.32 L464.0 217.32 M464.0 203.32 L450.0 217.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="28" y="230.32" width="484" height="40" rx="6" fill="#FCF9F1"/>
+<text x="40" y="257.32" font-size="19">Bins</text>
+<path d="M228.0 243.32 L242.0 257.32 M242.0 243.32 L228.0 257.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M302.0 243.32 L316.0 257.32 M316.0 243.32 L302.0 257.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="383" cy="250.32" r="3" fill="#D9CBA3"/>
+<path d="M450.0 243.32 L464.0 257.32 M464.0 243.32 L450.0 257.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="28" y="270.32" width="484" height="40" rx="6" fill="#DCEAF6"/>
+<text x="40" y="297.32" font-size="19">School forms</text>
+<circle cx="235" cy="290.32" r="3" fill="#D9CBA3"/>
+<path d="M302.0 283.32 L316.0 297.32 M316.0 283.32 L302.0 297.32" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="383" cy="290.32" r="3" fill="#D9CBA3"/>
+<circle cx="457" cy="290.32" r="3" fill="#D9CBA3"/>
+<rect x="28" y="310.32" width="484" height="40" rx="6" fill="#FCF9F1"/>
+<text x="40" y="337.32" font-size="19">Dog’s walk</text>
+<circle cx="235" cy="330.32" r="3" fill="#D9CBA3"/>
+<circle cx="309" cy="330.32" r="3" fill="#D9CBA3"/>
+<circle cx="383" cy="330.32" r="3" fill="#D9CBA3"/>
+<circle cx="457" cy="330.32" r="3" fill="#D9CBA3"/>
+<text x="28" y="376.32" font-size="18" font-style="italic" fill="#5A5346">The ✗ goes next to a job, never next to a person.</text>
+<circle cx="44" cy="408.32" r="15" fill="#7A5620"/>
+<text x="44" y="415.32" font-size="18" font-weight="bold" fill="#FCF9F1" text-anchor="middle">2</text>
+<text x="70" y="415.32" font-size="21" font-weight="bold">Sort each repeat</text>
+<rect x="28" y="432.32" width="484" height="96.04" rx="12" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="44" y="463.32" font-size="20" font-weight="bold" fill="#7A5620">Structural gap</text>
+<text x="44" y="488.32" font-size="18" fill="#5A5346"><tspan x="44" dy="0">No clear owner, or the</tspan><tspan x="44" dy="23.04">wrong name on the list.</tspan></text>
+<path d="M324 480.34 h22" fill="none" stroke="#7A5620" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-ch5-loop-ar-7a5620)"/>
+<text x="358" y="486.34" font-size="18" font-weight="bold"><tspan x="358" dy="0">Update the</tspan><tspan x="358" dy="23.04">job list.</tspan></text>
+<rect x="28" y="536.36" width="484" height="96.04" rx="12" fill="#F7DEE0" stroke="#8E3B47" stroke-width="1.5"/>
+<text x="44" y="567.36" font-size="20" font-weight="bold" fill="#8E3B47">Capacity issue</text>
+<text x="44" y="592.36" font-size="18" fill="#5A5346"><tspan x="44" dy="0">An owner who has run out of</tspan><tspan x="44" dy="23.04">room.</tspan></text>
+<path d="M324 584.38 h22" fill="none" stroke="#8E3B47" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-ch5-loop-ar-8e3b47)"/>
+<text x="358" y="590.38" font-size="18" font-weight="bold"><tspan x="358" dy="0">Set a time for</tspan><tspan x="358" dy="23.04">a kind talk.</tspan></text>
+<rect x="28" y="640.4" width="484" height="96.04" rx="12" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="44" y="671.4" font-size="20" font-weight="bold" fill="#3E6B4C">One-off</text>
+<text x="44" y="696.4" font-size="18" fill="#5A5346"><tspan x="44" dy="0">A clear short-term reason:</tspan><tspan x="44" dy="23.04">illness, travel.</tspan></text>
+<path d="M324 688.42 h22" fill="none" stroke="#3E6B4C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-ch5-loop-ar-3e6b4c)"/>
+<text x="358" y="694.42" font-size="18" font-weight="bold"><tspan x="358" dy="0">Note it and</tspan><tspan x="358" dy="23.04">move on.</tspan></text>
+<circle cx="44" cy="770.44" r="15" fill="#3E6B4C"/>
+<text x="44" y="777.44" font-size="18" font-weight="bold" fill="#FCF9F1" text-anchor="middle">3</text>
+<text x="70" y="777.44" font-size="21" font-weight="bold">Count, and close the month</text>
+<text x="70" y="810.44" font-size="19" fill="#5A5346"><tspan x="70" dy="0">Fewer structural gaps over several months is</tspan><tspan x="70" dy="24.32">a good sign. Zero isn’t the goal.</tspan></text>
+<rect x="28" y="852.76" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="885.76" font-size="19" font-style="italic" text-anchor="middle">Short and kind. A look at the setup,</text>
+<text x="270" y="910.46" font-size="19" font-style="italic" text-anchor="middle">not a review of either person.</text>
+<text x="28" y="945.16" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">This book’s own method, adapted from team</tspan><tspan x="28" dy="23.04">“retrospectives”; it hasn’t been tested as a</tspan><tspan x="28" dy="23.04">household method.</tspan></text>
+</svg>

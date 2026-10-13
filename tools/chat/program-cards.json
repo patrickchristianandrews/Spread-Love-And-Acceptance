@@ -10656,7 +10656,7 @@
       "first": true,
       "newTopic": true,
       "name": "getting adult children to help with care",
-      "pat": "\\b(my )?(grown |adult )?(daughter|son|kids|children)\\b.{0,50}\\b(won t|wont|doesn t|doesnt|don t|dont|never|refuses? to)\\b.{0,30}\\b(help|visit|call|get it|understand)\\b.{0,60}\\b(dad|mom|mum|father|mother|husband|wife|him|her|caring|care)\\b|\\b(car(e|ing) for|caregiv\\w*|carer|looking after|look after)\\b.{0,80}\\b(daughter|son|kids|children)\\b.{0,30}\\b(won t|wont|doesn t|doesnt|don t|dont|never)\\b",
+      "pat": "\\b(my )?(grown |adult )?(daughter|son|kids|children)\\b.{0,50}\\b(won t|wont|doesn t|doesnt|don t|dont|never|refuses? to)\\b.{0,30}\\b(help|visit|call|get it|understand)\\b.{0,60}\\b(dad|mom|mum|father|mother|husband|wife|him|her|caring|care)\\b|\\b(car(e|ing) for|caregiv\\w*|carer|looking after|look after)\\b.{0,80}\\b(daughter|son|kids|children)\\b.{0,30}\\b(won t|wont|doesn t|doesnt|don t|dont|never)\\b|^(so |and |but )?(how (do |can |should )?i|how to|how do we) ask (my )?(grown |adult |grown up )?(children|kids|son|daughter|sons|daughters)\\b.{0,15}\\b(for )?(more )?help( (with|caring for|looking after) (him|her|their (dad|mum|mom|father|mother)|my (husband|wife)))?$",
       "keys": [],
       "what": [
         "That’s a lonely place to be. Adult children who live far away often don’t see how much it takes, and many want to help but don’t know what to do. A specific ask usually works better than a general one."
@@ -10685,7 +10685,8 @@
           "Respite and support",
           "Is there respite or support for dementia caregivers?"
         ]
-      ]
+      ],
+      "notPat": "\\b(chores|around the house|tidy|toys|homework|bedroom|teen\\w*|little|young|toddler\\w*)\\b"
     },
     {
       "id": "careresent",
@@ -10693,7 +10694,7 @@
       "first": true,
       "newTopic": true,
       "name": "resentment and guilt as a caregiver",
-      "pat": "\\b(resent\\w*|angry at|frustrated with|annoyed with|hate)\\b.{0,40}\\b(the person i care for|him|her|my husband|my wife|my mom|my mum|my dad|my mother|my father|caring|caregiving)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b|\\b(guilt\\w*|ashamed|bad person)\\b.{0,40}\\b(resent\\w*)\\b|\\bi resent (caring|looking after|the person i care for)\\b|\\b(impatient|snap\\w*|short|cross|angry) with (my )?(wife|husband|partner|mum|mom|mother|dad|father)\\b.{0,50}\\bguilt\\w*\\b",
+      "pat": "\\b(resent\\w*|angry at|frustrated with|annoyed with|hate)\\b.{0,40}\\b(the person i care for|him|her|my husband|my wife|my mom|my mum|my dad|my mother|my father|caring|caregiving)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b|\\b(guilt\\w*|ashamed|bad person)\\b.{0,40}\\b(resent\\w*)\\b|\\bi resent (caring|looking after|the person i care for)\\b|\\b(impatient|snap\\w*|short|cross|angry) with (my )?(wife|husband|partner|mum|mom|mother|dad|father)\\b.{0,50}\\bguilt\\w*\\b|\\b(lose|lost|losing) (my )?patience with (her|him|them|my \\w+)\\b.{0,60}\\b(guilt\\w*|bad person|terrible|awful|ashamed)\\b",
       "keys": [],
       "what": [
         "Resentment and guilt are among the most common feelings caregivers have. They don’t mean you love the person less. They usually mean you’re carrying too much, for too long, with too little rest."

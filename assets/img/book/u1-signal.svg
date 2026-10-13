@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 711" width="540" height="711" role="img" aria-labelledby="fig-u1-signal-t fig-u1-signal-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u1-signal-t">A feeling is a signal, not a verdict</title>
+<desc id="fig-u1-signal-d">A simple figure with places a feeling often shows up first: a hot face, a tight throat, a tight chest, a knot in the stomach, clenched hands. Below, three steps: feel it in the body, name it in a word or two, then choose what you do next. A feeling says &quot;something here matters to me&quot;. It doesn’t say what to do.</desc>
+<defs><marker id="fig-u1-signal-ar-5a5346" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#5A5346"/></marker></defs>
+<rect x="1" y="1" width="538" height="709" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">A feeling is a signal, not a verdict</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">It often shows up in the body before it has a</tspan><tspan x="28" dy="24.32">word.</tspan></text>
+<circle cx="150" cy="162.32" r="32" fill="#F7F1E4" stroke="#5A5346" stroke-width="2.5"/>
+<path d="M92.0 428.32 C88.0 308.32 94.0 214.32 150 212.32 C206.0 214.32 212.0 308.32 208.0 428.32 Z" fill="#F7F1E4" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M100.0 238.32 C66.0 278.32 58.0 328.32 62.0 364.32" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M200.0 238.32 C234.0 278.32 242.0 328.32 238.0 364.32" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="150" cy="168.32" r="12" fill="#E8A0A8" fill-opacity="0.75"/>
+<path d="M164 168.32 C225.0 168.32 225.0 152.32 292 152.32" fill="none" stroke="#D9CBA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="158.32" font-size="19">Hot face</text>
+<circle cx="150" cy="224.32" r="12" fill="#7FB2E0" fill-opacity="0.75"/>
+<path d="M164 224.32 C225.0 224.32 225.0 208.32 292 208.32" fill="none" stroke="#D9CBA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="214.32" font-size="19">Tight throat</text>
+<circle cx="150" cy="268.32" r="12" fill="#E8A0A8" fill-opacity="0.75"/>
+<path d="M164 268.32 C225.0 268.32 225.0 264.32 292 264.32" fill="none" stroke="#D9CBA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="270.32" font-size="19">Tight chest</text>
+<circle cx="150" cy="328.32" r="12" fill="#D9B46A" fill-opacity="0.75"/>
+<path d="M164 328.32 C225.0 328.32 225.0 320.32 292 320.32" fill="none" stroke="#D9CBA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="326.32" font-size="19">Knot in the stomach</text>
+<circle cx="238" cy="368.32" r="12" fill="#7FB2E0" fill-opacity="0.75"/>
+<path d="M252 368.32 C269.0 368.32 269.0 376.32 292 376.32" fill="none" stroke="#D9CBA3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="300" y="382.32" font-size="19">Clenched hands</text>
+<rect x="28" y="444.32" width="144" height="86" rx="14" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="1.5"/>
+<text x="100" y="478.32" font-size="21" font-weight="bold" fill="#2F5F8A" text-anchor="middle">Feel it</text>
+<text x="100" y="506.32" font-size="17" font-style="italic" text-anchor="middle">in the body</text>
+<path d="M176.0 487.32 h16" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u1-signal-ar-5a5346)"/>
+<rect x="198" y="444.32" width="144" height="86" rx="14" fill="#F1E2C2" stroke="#7A5620" stroke-width="1.5"/>
+<text x="270" y="478.32" font-size="21" font-weight="bold" fill="#7A5620" text-anchor="middle">Name it</text>
+<text x="270" y="506.32" font-size="17" font-style="italic" text-anchor="middle"><tspan x="270" dy="0">“I feel let</tspan><tspan x="270" dy="21.76">down”</tspan></text>
+<path d="M346.0 487.32 h16" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fig-u1-signal-ar-5a5346)"/>
+<rect x="368" y="444.32" width="144" height="86" rx="14" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="1.5"/>
+<text x="440" y="478.32" font-size="21" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Choose</text>
+<text x="440" y="506.32" font-size="17" font-style="italic" text-anchor="middle"><tspan x="440" dy="0">what you do</tspan><tspan x="440" dy="21.76">next</tspan></text>
+<rect x="28" y="546.32" width="484" height="71.4" rx="12" fill="#ECE2C4"/>
+<text x="270" y="579.32" font-size="19" font-weight="bold" text-anchor="middle">It says: something here matters to me.</text>
+<text x="270" y="604.02" font-size="19" font-style="italic" text-anchor="middle">It doesn’t say what to do.</text>
+<text x="28" y="638.72" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustration. Everyone’s body signals are a little</tspan><tspan x="28" dy="23.04">different; these are common ones, not a medical</tspan><tspan x="28" dy="23.04">map.</tspan></text>
+</svg>

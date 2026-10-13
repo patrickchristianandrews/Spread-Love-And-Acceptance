@@ -587,6 +587,7 @@
       { href: '/book/understanding-15-love.html', deep: true, code: '15', title: 'Part Three · Chapter 15: Closeness and love', note: 'Being known, and love in many forms' },
       { href: '/quest.html', title: 'Your quest map', note: 'A map that lights up as you read' },
       { sub: 'Autism and neurodivergence' },
+      { href: '/how-you-take-things-in.html', title: 'How you take things in', note: 'Pick your neurotype or preferences, and every page adapts' },
       { href: '/book/understanding-9-minds.html', code: '9', title: 'Minds that work differently (Part Three, Chapter 9)', note: 'Autism, ADHD, dyslexia and more, in plain words' },
       { href: '/wired-differently.html', title: 'Wired Differently', note: 'How differently wired minds take in words, plans and noise' },
       { href: '/neurodivergent-relationships.html', title: 'Neurodivergent relationships', note: 'ADHD and autistic couples, families and friends' },
@@ -1934,7 +1935,7 @@
     [/\bsmall ?talk\b|\bchit ?chat\b|\bmaking conversation\b/, 'r13smalltalk'],
     [/^(explore|browse)$|\b(everything on (this|the) site|all (the )?(pages|tools|guides)|site ?map|every page|what'?s on (this|the) site|list of (pages|tools|guides))\b/, 'r13explore'],
     [/\b(in writing|write it (down|out)|put it in writing|write (them|him|her|my \w+) a (letter|message|email)|long message|by email instead)\b/, 'r13write'],
-    [/\b(neurotypes?|how i take things in|how you take things in|reading preferences?|make the site fit|fits my (mind|brain))\b/, 'r13takein'],
+    [/\b(neurotypes?|how i take things in|how you take things in|reading preferences?|make the site fit|fits my (mind|brain)|accessibility|accessible|(adhd|autism|autistic|dyslexia|dyslexic|sensory) (mode|settings?|font|view|version)|dyslexia friendly|easy to read font)\b/, 'r13takein'],
     // early days: dating, a new relationship, deciding to move in (a teen's crush stays with the teen page)
     [/^(?!.*\b(teen|teenager|school|crush|i'?m 1[3-7])\b).*\b(dating( again| app| apps)?|new relationship|started seeing|seeing someone new|first date|early days|red flags?|love ?bombing|ghost(ed|ing)|exclusive|are we a couple|define the relationship|dtr)\b/, 'r13dating'],
     [/\b(mov(e|ing) in together|should we move in|move in with (him|her|them|my)|ready to move in)\b/, 'r13movein'],
@@ -3064,6 +3065,8 @@
   }
   function applyReading() {
     var h = document.documentElement, t = lsGet(THEME_KEY), z = lsGet(SIZE_KEY);
+    // the chosen "How you take things in" profile, straight away (take-in.js does the rest when it arrives)
+    try { (JSON.parse(lsGet('tol-take-in') || '{}').prefs || []).forEach(function (p) { if (/^[a-z0-9-]+$/.test(p)) h.classList.add('ti-' + p); }); } catch (e) {}
     if (t === 'dark' || t === 'light') h.setAttribute('data-theme', t); else h.removeAttribute('data-theme');
     ['lg', 'xl', 'xxl'].forEach(function (s) { h.classList.toggle('tol-text-' + s, z === s); });
     // pages that draw on a canvas (the games) grow their words with the root size instead of a zoom
@@ -3100,6 +3103,8 @@
   }
   function helpersHidden() { var c = document.documentElement.classList; return c.contains('tol-no-helpers') || c.contains('tol-work'); }
   applyReading();
+  // "How you take things in" (take-in.js): loaded only when someone has picked a profile, or on its own page
+  try { if (lsGet('tol-take-in') || current === '/how-you-take-things-in.html') { var tij = document.createElement('script'); tij.src = '/assets/js/take-in.js'; document.head.appendChild(tij); } } catch (e) {}
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyReading); } catch (e) {} }
   function darkButton() {
     var b = el('button', { type: 'button', class: 'tol-still-btn tol-dark-btn', 'aria-pressed': String(darkNow()) },
@@ -3210,6 +3215,7 @@
       '<div class="tol-set-card">' +
       '<div class="tol-set-head"><h2 id="' + id + '-h">' + T('Settings', 'Ajustes') + '</h2><button type="button" class="tol-set-close">' + T('Close', 'Cerrar') + '</button></div>' +
       '<p class="tol-set-intro">' + T('Make the site easier to see, calmer, or easier to read. Your choices stay on this device only.', 'Haz que el sitio se vea mejor, más tranquilo o más fácil de leer. Lo que elijas se queda solo en este dispositivo.') + '</p>' +
+      (esPage() ? '' : '<p class="tol-set-takein"><a href="/how-you-take-things-in.html"><strong>How you take things in</strong>: pick by neurotype (ADHD, autistic, dyslexic and more) or by plain preferences, and every page adapts</a></p>') +
       // the two things people look for first: bigger words and stronger contrast
       '<h3 class="tol-set-k tol-set-k1">' + T('Text and contrast', 'Letra y contraste') + '</h3>' +
       '<fieldset class="tol-set-sizes"><legend>' + T('Text size', 'Tamaño de letra') + ' <small>' + T('(smallest to biggest)', '(de menor a mayor)') + '</small></legend>' + ['md', 'lg', 'xl', 'xxl'].map(function (k) { return radio('size', 'data-size-opt', k, '<span class="tol-set-size tol-set-size-' + k + '">' + SIZE_NAMES[k] + '</span>'); }).join('') + '</fieldset>' +
@@ -3277,6 +3283,7 @@
       if (e.target.closest('.tol-set-listen-go')) { var lg = document.querySelector('.tol-listen-go'); closeSettings(); if (lg) { lg.scrollIntoView({ block: 'center' }); lg.click(); } }
       if (e.target.closest('.tol-set-reset')) {
         [QUIET_KEY, EASY_KEY, PREV_KEY + '-quiet', PREV_KEY + '-easy', SIZE_KEY, THEME_KEY, HELP_KEY, FONT_KEY, SPACE_KEY, TINT_KEY, RULER_KEY, BUB_KEY, STILL_KEY, CONTRAST_KEY].forEach(lsDel);
+        lsDel('tol-take-in'); if (window.TOLTakeIn && window.TOLTakeIn.reset) window.TOLTakeIn.reset();
         setSounds(false); refreshStill(); after(); quietEvent(); announce(T('Everything is back to the usual.', 'Todo volvió a lo de siempre.'));
       }
     });
@@ -3539,7 +3546,8 @@
     lsSet('tol-comfort-offer', 'shown:1'); ssSet('tol-offer-seen', location.pathname); // once on this device; Settings at the top is always there
     var box = el('aside', { class: 'tol-offer no-bubble no-cheer', 'aria-label': 'Make the site calmer or easier to read' },
       '<p><strong>Would a calmer page help?</strong> Quiet mode keeps everything still, silent and plain, with no pop-ups. Easy reading uses a clear font and roomy lines. You can change any of these any time in <em>Settings</em> at the top.</p>' +
-      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="biggest">Biggest text, and keep still</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>');
+      '<p class="tol-offer-row"><button type="button" data-offer="quiet" class="is-main">Quiet mode</button><button type="button" data-offer="easy">Easy reading</button><button type="button" data-offer="large">Larger text</button><button type="button" data-offer="biggest">Biggest text, and keep still</button><button type="button" data-offer="no" class="is-quiet">No thanks</button></p>' +
+      '<p class="tol-offer-more"><a href="/how-you-take-things-in.html">Pick how you take things in &rarr;</a></p>');
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-offer]'); if (!b) return;
       var what = b.getAttribute('data-offer');

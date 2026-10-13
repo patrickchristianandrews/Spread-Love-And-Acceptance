@@ -2926,3 +2926,9 @@ small.tol-mi-n{ display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit
 .tol-onpage a{ display:inline-flex; align-items:center; min-height:44px; padding:.2rem 0; line-height:1.35; }
 body:has(.tol-outline.is-on) .tol-onpage{ display:none; }
 @media print{ .tol-onpage{ display:none !important; } }
+/* "How you take things in" (take-in.js): its link at the top of Settings, and under the calmer-page offer */
+.tol-set-takein{ margin:.2rem 0 1rem; padding:.6rem .85rem; border:1px solid #C6D6E6; border-radius:12px; background:#F2F6FA; }
+.tol-offer .tol-offer-more{ margin-top:.5rem !important; font-size:.92rem; }
+.tol-offer .tol-offer-more a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+.read .hh-offer-slot .tol-offer .tol-offer-more{ flex-basis:100%; margin-top:0 !important; font-size:.86rem; }
+.read .hh-offer-slot .tol-offer .tol-offer-more a{ min-height:32px; }

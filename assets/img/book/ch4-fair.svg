@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 748" width="540" height="748" role="img" aria-labelledby="fig-ch4-fair-t fig-ch4-fair-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-ch4-fair-t">Two kinds of fair, and the agreement that settles them</title>
+<desc id="fig-ch4-fair-d">Two cards. Fair by results asks: did it all get done? It guards the worry &quot;will the home keep running?&quot; It is flexible, but can hide who always steps in. Fair by promises asks: did each of us do what we agreed? It guards the worry &quot;can I rely on you?&quot; It is clear, but can feel rigid in a hard week. Below, the agreement: once a job has a named owner, look to the owner, not to whether someone else quietly covered.</desc>
+
+<rect x="1" y="1" width="538" height="746" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Two kinds of fair</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Both are reasonable. Trouble starts when you use</tspan><tspan x="28" dy="24.32">different ones without saying so.</tspan></text>
+<rect x="28" y="122.32" width="484" height="185.36" rx="16" fill="#DCEAF6" stroke="#2F5F8A" stroke-width="2"/>
+<text x="46" y="156.32" font-size="22" font-weight="bold" fill="#2F5F8A">Fair by results</text>
+<text x="46" y="186.32" font-size="19" font-style="italic">Asks: Did it all get done?</text>
+<text x="46" y="215.32" font-size="19"><tspan x="46" dy="0">Guards: Will the home</tspan><tspan x="46" dy="24.32">keep running?</tspan></text>
+<text x="46" y="266.64" font-size="18" fill="#5A5346"><tspan x="46" dy="0">Good: flexible. Watch: it can</tspan><tspan x="46" dy="23.04">hide who always steps in.</tspan></text>
+<rect x="330" y="140.32" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="165.32" font-size="17">Bins</text>
+<path d="M468 159.32 L473.6 164.92 L484 152.92" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="330" y="186.32" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="211.32" font-size="17">Dentist</text>
+<path d="M468 205.32 L473.6 210.92 L484 198.92" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="330" y="232.32" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="257.32" font-size="17">School forms</text>
+<path d="M468 251.32 L473.6 256.92 L484 244.92" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="28" y="321.68" width="484" height="185.36" rx="16" fill="#F7DEE0" stroke="#8E3B47" stroke-width="2"/>
+<text x="46" y="355.68" font-size="22" font-weight="bold" fill="#8E3B47">Fair by promises</text>
+<text x="46" y="385.68" font-size="19" font-style="italic"><tspan x="46" dy="0">Asks: Did each of us do</tspan><tspan x="46" dy="24.32">what we agreed?</tspan></text>
+<text x="46" y="439" font-size="19">Guards: Can I rely on you?</text>
+<text x="46" y="466" font-size="18" fill="#5A5346"><tspan x="46" dy="0">Good: clear. Watch: it can</tspan><tspan x="46" dy="23.04">feel rigid in a hard week.</tspan></text>
+<rect x="330" y="339.68" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="364.68" font-size="17">Bins · Sam</text>
+<path d="M468 358.67999999999995 L473.6 364.28 L484 352.28" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="330" y="385.68" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="410.68" font-size="17">Dentist · Maya</text>
+<path d="M470 398.67999999999995 L482 410.67999999999995 M482 398.67999999999995 L470 410.67999999999995" fill="none" stroke="#8E3B47" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="330" y="431.68" width="166" height="38" rx="8" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="1.5"/>
+<text x="342" y="456.68" font-size="17">School forms · Lin</text>
+<path d="M468 450.67999999999995 L473.6 456.28 L484 444.28" fill="none" stroke="#3E6B4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="28" y="543.04" font-size="21" font-weight="bold" fill="#7A5620">The agreement: look to the owner</text>
+<path d="M54 557.04 H512 V621.04 H54 L28 589.04 Z" fill="#F1E2C2" stroke="#7A5620" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="54" cy="589.04" r="6" fill="#FCF9F1" stroke="#7A5620" stroke-width="2"/>
+<text x="74" y="584.04" font-size="20" font-weight="bold">Bins · owner: Sam</text>
+<text x="74" y="609.04" font-size="18" font-style="italic" fill="#5A5346">second name: Alex, who notices and asks once</text>
+<text x="28" y="652.04" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Once a job has a named owner, judge it by whether</tspan><tspan x="28" dy="23.04">the owner did their part (swapping or asking ahead</tspan><tspan x="28" dy="23.04">counts), not by whether someone quietly covered.</tspan><tspan x="28" dy="23.04">Made-up examples.</tspan></text>
+</svg>

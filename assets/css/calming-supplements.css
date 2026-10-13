@@ -1,0 +1,141 @@
+/* calming-supplements.css: the calming supplements guide and the nervous system page.
+   Only the site's own color tokens are used, so dark mode (an invert filter in site.css) follows automatically. */
+
+/* ---------- notes, sources, scripts ---------- */
+.cs-note{ margin:1rem 0 1.4rem !important; padding:.8rem 1rem; border:1px solid var(--line); border-left:4px solid var(--brass); border-radius:12px; background:var(--paper); font-size:.97rem; }
+.cs-note p{ margin:.25rem 0 !important; max-width:none !important; }
+.cs-checked{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--ink-soft); }
+.cs-src{ font-size:.86rem !important; color:var(--ink-soft); margin-top:.55rem !important; overflow-wrap:anywhere; }
+.cs-say{ margin:.6rem 0 1.5rem !important; padding:.3rem 0 .3rem .95rem; border-left:3px solid var(--credit); }
+.cs-say p{ margin:.45rem 0 !important; font-style:italic; }
+.cs-help{ margin:1rem 0 1.4rem !important; padding:.9rem 1rem; border-radius:14px; border:1px solid var(--line); border-left:4px solid var(--debit); background:var(--paper-deep); }
+.cs-help p, .cs-help li{ max-width:none !important; }
+.cs-help ul{ margin:.4rem 0 .2rem; padding-left:1.2rem; }
+.cs-studies{ padding-left:1.4rem; margin:.6rem 0 1.4rem; }
+.cs-studies li{ margin:.55rem 0; max-width:none; }
+.cs-studies a{ overflow-wrap:anywhere; }
+.cs-st-who, .cs-st-why{ display:block; font-size:.93rem; }
+.cs-st-who{ color:var(--ink-soft); font-size:.86rem; }
+.cs-all{ font-size:.88rem; padding-left:1.1rem; }
+.cs-all li{ margin:.35rem 0; max-width:none; overflow-wrap:anywhere; }
+.cs-links{ list-style:none; padding:0 !important; margin:.75rem 0 1.5rem !important; display:grid; gap:.5rem; width:100%; }
+.cs-links li{ margin:0 !important; max-width:none !important; width:100%; box-sizing:border-box; }
+.cs-links a{ display:block; min-height:44px; box-sizing:border-box; padding:.7rem 1rem; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius, 10px); text-decoration:none; }
+.cs-links a:hover{ border-color:var(--credit); }
+.cs-links a strong{ font-family:"Fraunces", Georgia, serif; text-decoration:underline; text-underline-offset:.15em; }
+.cs-links a span{ display:block; color:var(--ink-soft); font-size:.95rem; margin-top:.15rem; }
+
+/* ---------- "Start here" path ---------- */
+.cs-path{ list-style:none; counter-reset:cs-step; padding:0 !important; margin:.6rem 0 1.2rem !important; display:grid; gap:.5rem; }
+.cs-path > li{ counter-increment:cs-step; position:relative; margin:0 !important; max-width:none !important; padding:.65rem .9rem .65rem 3rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); line-height:1.5; }
+.cs-path > li::before{ content:counter(cs-step); position:absolute; left:.8rem; top:.62rem; width:1.6rem; height:1.6rem; border-radius:50%; background:var(--credit); color:#FFFDF7; font:600 .9rem/1.6rem "IBM Plex Mono", ui-monospace, monospace; text-align:center; }
+.cs-path > li a{ white-space:nowrap; }
+
+/* ---------- evidence legend ---------- */
+.cs-legend{ list-style:none; padding:0 !important; margin:.4rem 0 1.2rem !important; display:grid; gap:.3rem; grid-template-columns:repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+.cs-legend li{ margin:0 !important; max-width:none !important; font-size:.93rem; }
+
+/* ---------- badges ---------- */
+.cs-badge, .cs-kind{ display:inline-block; padding:.05rem .55rem; border-radius:999px; font:500 .75rem/1.6 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.02em; border:1px solid var(--ink-soft); color:var(--ink); background:var(--paper-deep); white-space:nowrap; }
+.cs-kind{ border-radius:4px; background:var(--paper); }
+.cs-b-good{ border-color:var(--credit); color:var(--credit); }
+.cs-b-some{ border-color:var(--brass); color:var(--brass-ink); }
+.cs-b-early, .cs-b-weak{ border-style:dashed; }
+.cs-b-mixed{ border-color:var(--debit); color:var(--debit); }
+.cs-b-none{ border-color:var(--debit); color:var(--debit); border-style:dashed; }
+.cs-b-warn{ border-color:var(--debit); background:var(--debit); color:#FFFDF7; white-space:normal; }
+
+/* ---------- dropdown rows (cards, "On this page") ---------- */
+details.cs-dd{ margin:.55rem 0 0; border:1px solid var(--line); border-radius:10px; background:var(--paper-deep); }
+details.cs-dd > summary{ cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:.6rem; min-height:44px; box-sizing:border-box; padding:.45rem .8rem; font-weight:600; font-size:.93rem; color:var(--ink); border-radius:9px; }
+details.cs-dd > summary::-webkit-details-marker{ display:none; }
+details.cs-dd > summary::after{ content:""; flex:none; width:.6rem; height:.6rem; margin-right:.2rem; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:translateY(-25%) rotate(45deg); transition:transform .2s; }
+details.cs-dd[open] > summary::after{ transform:translateY(20%) rotate(-135deg); }
+details.cs-dd > summary:hover{ background:var(--paper); }
+details.cs-dd > summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+details.cs-dd[open] > summary{ border-bottom:1px solid var(--line); border-radius:9px 9px 0 0; }
+.cs-dd-body{ padding:.5rem .85rem .7rem; background:var(--paper); border-radius:0 0 9px 9px; }
+.cs-dd-body p{ font-size:.94rem; margin:.4rem 0 !important; max-width:none !important; }
+@media (prefers-reduced-motion: reduce){ details.cs-dd > summary::after{ transition:none; } }
+details.cs-toc{ margin:1rem 0 1.4rem !important; }
+.cs-toc-list{ list-style:none; padding:0 !important; margin:.2rem 0 !important; columns:2 15rem; column-gap:1.5rem; }
+.cs-toc-list li{ margin:0 !important; max-width:none !important; break-inside:avoid; }
+.cs-toc-list a{ display:flex; align-items:center; min-height:44px; box-sizing:border-box; }
+
+/* ---------- filters ---------- */
+.cs-browse{ position:relative; }
+.cs-filter{ margin:1rem 0 .6rem; padding:.7rem .8rem .55rem; border:1px solid var(--ink-soft); border-radius:14px; background:var(--paper); box-shadow:0 2px 0 var(--line); }
+.cs-f-row{ display:grid; grid-template-columns:1fr; gap:.5rem; }
+.cs-f{ display:flex; flex-direction:column; gap:.15rem; min-width:0; }
+.cs-f > span{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; font-weight:500; color:var(--ink-soft); letter-spacing:.02em; }
+.cs-f select{ width:100%; min-width:0; min-height:44px; box-sizing:border-box; padding:.4rem 2.2rem .4rem .7rem; font:inherit; font-size:1rem; color:var(--ink); background-color:var(--paper);
+  border:1.5px solid var(--ink-soft); border-radius:10px; -webkit-appearance:none; appearance:none;
+  background-image:linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:calc(100% - 1.1rem) 52%, calc(100% - .75rem) 52%; background-size:.35rem .35rem, .35rem .35rem; background-repeat:no-repeat; text-overflow:ellipsis; }
+.cs-f select:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.cs-f select.cs-on{ border-color:var(--credit); box-shadow:inset 0 0 0 1px var(--credit); }
+.cs-f-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:.5rem .6rem; margin-top:.55rem; }
+.cs-count{ margin:0 auto 0 0 !important; font-weight:600; font-size:.95rem; max-width:none !important; }
+.cs-btn{ min-height:44px; padding:.35rem 1rem; font:inherit; font-size:.95rem; font-weight:600; color:var(--ink); background:var(--paper-deep); border:1.5px solid var(--ink-soft); border-radius:999px; cursor:pointer; }
+.cs-btn:hover{ border-color:var(--ink); }
+.cs-btn:focus-visible, .cs-linkbtn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.cs-btn-go{ background:var(--credit); border-color:var(--credit); color:#FFFDF7; }
+.cs-linkbtn{ font:inherit; color:inherit; background:none; border:0; padding:0; text-decoration:underline; text-decoration-color:var(--brass); text-underline-offset:3px; cursor:pointer; }
+.cs-jumpto{ display:flex; align-items:flex-end; gap:.5rem; margin:.2rem 0 1rem; }
+.cs-jumpto .cs-f{ flex:1; }
+.cs-notes p, .cs-notes div{ margin:.3rem 0 .6rem !important; max-width:none !important; }
+.cs-notes > p, .cs-notes > div > p{ padding:.55rem .85rem; border-left:4px solid var(--brass); background:var(--paper-deep); border-radius:0 10px 10px 0; font-size:.96rem; margin:0 !important; }
+.cs-notes > *{ margin-bottom:.5rem !important; }
+.cs-empty{ padding:.8rem 1rem; border:1px dashed var(--ink-soft); border-radius:12px; }
+@media (min-width:640px){
+  .cs-f-row{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width:960px) and (min-height:620px){
+  .cs-f-row{ grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .cs-filter{ position:sticky; top:calc(var(--tol-bar-h, 58px) + .4rem); z-index:30; }
+  .cs-page .cs-card{ scroll-margin-top:calc(var(--tol-bar-h, 58px) + var(--cs-filter-h, 130px) + 1rem); }
+}
+
+/* the card area gets more room on wide screens */
+@media (min-width:1100px){
+  .cs-browse{ width:min(66rem, calc(100vw - 4rem)); left:50%; transform:translateX(-50%); }
+  .cs-browse > p, .cs-browse > h2{ max-width:42rem; }
+}
+
+/* ---------- cards ---------- */
+.cs-cards{ display:grid; gap:.8rem; margin:.8rem 0 1.6rem; grid-template-columns:repeat(auto-fill, minmax(min(100%, 19.5rem), 1fr)); align-items:start; }
+.cs-card{ border:1px solid var(--line); border-radius:14px; background:var(--paper); padding:.85rem 1rem .8rem; min-width:0; scroll-margin-top:calc(var(--tol-bar-h, 60px) + 1rem); }
+.cs-card[hidden]{ display:none; }
+.cs-card h3{ margin:0 0 .35rem !important; font-size:1.12rem !important; }
+.cs-card h3:focus{ outline:none; }
+.cs-card h3:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.cs-card:target{ border-color:var(--brass); box-shadow:0 0 0 2px var(--brass); }
+.cs-aka{ font-weight:400; font-size:.9rem; color:var(--ink-soft); }
+.cs-tags{ margin:0 0 .45rem !important; display:flex; flex-wrap:wrap; gap:.35rem; }
+.cs-sum{ font-weight:600; }
+.cs-dl{ margin:0 !important; }
+.cs-dl dt{ font-weight:600; font-size:.88rem; color:var(--ink-soft); margin:.45rem 0 .05rem; }
+.cs-dl dd{ margin:0; font-size:.97rem; line-height:1.5; }
+.cs-card p{ margin:.3rem 0 !important; max-width:none !important; font-size:.97rem; }
+.cs-for{ font-size:.86rem !important; color:var(--ink-soft); }
+.cs-for-h{ font-weight:600; }
+.cs-ask{ border-top:1px dashed var(--line); padding-top:.45rem; }
+.cs-ntc{ margin:.45rem 0 .1rem; padding:.45rem .7rem; border-left:4px solid var(--credit); background:var(--paper-deep); border-radius:0 8px 8px 0; }
+.cs-ntc p{ font-size:.94rem; }
+.cs-ntlink{ margin-top:-.4rem !important; }
+
+/* ---------- nervous system page ---------- */
+.ns-now{ list-style:none; padding:0 !important; margin:.6rem 0 1.4rem !important; display:grid; gap:.55rem; grid-template-columns:repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.ns-now > li{ margin:0 !important; max-width:none !important; padding:.7rem .9rem; border:1px solid var(--line); border-left:4px solid var(--credit); border-radius:12px; background:var(--paper); line-height:1.5; }
+.ns-now > li strong:first-child{ display:block; font-family:"Fraunces", Georgia, serif; font-size:1.05rem; margin-bottom:.15rem; }
+.ns-table{ width:100%; border-collapse:collapse; font-size:.95rem; margin:.5rem 0 1.2rem; }
+.ns-table th, .ns-table td{ text-align:left; vertical-align:top; padding:.5rem .55rem; border-bottom:1px solid var(--line); }
+.ns-table th{ font-weight:600; border-bottom:2px solid var(--ink-soft); }
+.ns-wrap{ overflow-x:auto; max-width:100%; }
+
+@media print{
+  .cs-filter, .cs-jumpto, .cs-notes, details.cs-toc{ display:none !important; }
+  .cs-browse{ width:auto; left:auto; transform:none; }
+  .cs-card{ break-inside:avoid; }
+  .cs-card[hidden]{ display:block !important; }
+}

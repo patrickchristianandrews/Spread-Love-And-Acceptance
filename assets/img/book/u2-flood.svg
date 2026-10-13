@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 610" width="540" height="610" role="img" aria-labelledby="fig-u2-flood-t fig-u2-flood-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<title id="fig-u2-flood-t">Flooding and the twenty-minute break</title>
+<desc id="fig-u2-flood-d">A curve of how stirred up the body is during an argument. It rises until it crosses the flooding line, where listening and careful thinking go offline. At that point, pause and name a time to come back. During a break of at least twenty minutes, doing something soothing rather than rehearsing the argument, the curve comes back down. Then come back and talk. A dashed line shows that pushing on keeps the body high.</desc>
+
+<rect x="1" y="1" width="538" height="608" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Flooded means offline</text>
+<text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Pause, settle, then come back.</text>
+<line x1="64" y1="112" x2="64" y2="378" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<line x1="64" y1="378" x2="510" y2="378" stroke="#5A5346" stroke-width="2" stroke-linecap="round"/>
+<text x="52" y="138" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">body</text>
+<text x="52" y="160" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">alarm</text>
+<text x="510" y="402" font-size="18" font-style="italic" fill="#5A5346" text-anchor="end">time</text>
+<rect x="66" y="112" width="444" height="76" rx="0" fill="#F7DEE0"/>
+<line x1="64" y1="188" x2="510" y2="188" stroke="#8E3B47" stroke-width="2" stroke-linecap="round" stroke-dasharray="7 5"/>
+<text x="504" y="136" font-size="18" font-weight="bold" fill="#8E3B47" text-anchor="end">Flooded: thinking offline</text>
+<path d="M224.6 175.2 C264.6 165.2 300.5 144.0 340.5 144.0" fill="none" stroke="#5A5346" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 6"/>
+<text x="346.52" y="150" font-size="18" font-style="italic" fill="#5A5346">pushing on</text>
+<rect x="233.48" y="192" width="151.64" height="186" rx="0" fill="#DCE7D8" fill-opacity="0.8"/>
+<text x="309.3" y="338" font-size="19" font-weight="bold" fill="#3E6B4C" text-anchor="middle">20+ minutes</text>
+<text x="309.3" y="362" font-size="17" font-style="italic" text-anchor="middle">doing something soothing</text>
+<path d="M64.0 331.2 C86.3 331.2 86.3 313.0 108.6 313.0 C130.9 313.0 130.9 268.8 153.2 268.8 C175.5 268.8 175.5 206.4 197.8 206.4 C211.2 206.4 211.2 175.2 224.6 175.2 C246.9 175.2 246.9 190.8 269.2 190.8 C295.9 190.8 295.9 242.8 322.7 242.8 C349.4 242.8 349.4 289.6 376.2 289.6 C403.0 289.6 403.0 315.6 429.7 315.6 C469.9 315.6 469.9 326.0 510.0 326.0" fill="none" stroke="#2B2620" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="224.56" cy="175.2" r="8" fill="#8E3B47"/>
+<circle cx="447.56" cy="318.2" r="8" fill="#3E6B4C"/>
+<circle cx="46" cy="430" r="8" fill="#8E3B47" stroke="#8E3B47" stroke-width="2"/>
+<text x="66" y="436" font-size="19">Pause, and name a time to come back.</text>
+<circle cx="46" cy="462" r="8" fill="#DCE7D8" stroke="#3E6B4C" stroke-width="2"/>
+<text x="66" y="468" font-size="19">Settle the body. Don’t rehearse the argument.</text>
+<circle cx="46" cy="494" r="8" fill="#3E6B4C" stroke="#3E6B4C" stroke-width="2"/>
+<text x="66" y="500" font-size="19">Come back and talk, once you can listen.</text>
+<text x="28" y="537" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">Illustrative curve. John Gottman’s work on couples</tspan><tspan x="28" dy="23.04">suggests a real break of at least about twenty</tspan><tspan x="28" dy="23.04">minutes when flooded.</tspan></text>
+</svg>
