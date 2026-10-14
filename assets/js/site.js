@@ -74,7 +74,7 @@
       { href: '/whats-new.html', code: 'All', title: 'What’s new', note: 'Everything newly added and everything that’s grown, in one place, with dates' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Any age, any reason: alone not lonely, a home for one, making friends as an adult, and asking for help' },
       { href: '/nervous-system.html', code: 'New', title: 'Your nervous system, in plain words', note: 'The stress response, polyvagal theory honestly, and what helps' },
-      { href: '/tools.html', code: 'New', title: 'All tools, by type', note: 'Every tool with a plain name, grouped by type: what it does, what you get and how long it takes' },
+      { href: '/tools.html', code: 'New', title: 'All tools', note: 'Every tool with a plain name, the ones you can use on your own first: what it does, what you get and how long it takes' },
       { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'Five minutes before the six gentle weeks, and a reminder for each week in your own calendar' },
       { href: '/someone-sent-you-this.html', code: 'New', title: 'Someone sent you this?', note: 'What the site is in three lines, with no pressure, and messages to send someone else' },
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for couples, housemates, siblings, co-parents, friends and more' },
@@ -111,7 +111,7 @@
     { id: 'start', title: 'Start here', blurb: 'New to the site? These pages explain the idea and let you try it in a few minutes.', items: [
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and the one best first step for you' },
       { href: '/explore.html', code: 'All', title: 'Everything on this site', note: 'Every page and tool on one page: filter by what you need, who it’s about, how long you have, and what kind of page it is' },
-      { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool in one place, grouped by type: what it does, what you get and how long it takes' },
+      { href: '/tools.html', code: 'All', title: 'All tools', note: 'Every tool in one place, the ones you can use on your own first, with filters by what you want to do' },
       { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
       { href: '/someone-sent-you-this.html', code: '', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
@@ -293,7 +293,7 @@
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool, grouped by type: communication, self-discovery, share the load, calm, family, work and more' },
+      { href: '/tools.html', code: 'All', title: 'All tools', note: 'Every tool, with filters: self-discovery, communication, share the load, calm, family, work and more' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
       { href: '/signal-translator.html', code: 'New', title: 'Chat analyzer', note: 'Check how one message may land before you send it, or paste a whole text thread, chat or email exchange: see where it turned and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
@@ -358,7 +358,7 @@
       { sub: 'What’s new', all: '/whats-new.html', allLabel: 'Everything new, with dates' },
       { href: '/living-alone.html', deep: true, code: 'New', title: 'Living on your own, living well', note: 'Alone not lonely, a home for one, adult friendships' },
       { href: '/nervous-system.html', code: 'New', title: 'Your nervous system, in plain words', note: 'The stress response, polyvagal theory honestly, and what helps' },
-      { href: '/tools.html', code: 'New', title: 'All tools, by type', note: 'Every tool with a plain name: what it does and what you get' },
+      { href: '/tools.html', code: 'New', title: 'All tools', note: 'Every tool with a plain name: what it does and what you get' },
       { href: '/week-0.html', code: 'New', title: 'Week 0, and the six weeks in your calendar', note: 'A five-minute start, and a reminder for each week' },
       { href: '/examples.html', code: 'New', title: 'What small changes look like', note: 'Made-up examples for many kinds of relationship' },
       { href: '/research.html', code: 'New', title: 'The research behind the site', note: 'The studies behind the pages, in plain words' },
@@ -1383,7 +1383,7 @@
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('The whole site at a glance', 'Todo el sitio de un vistazo') },
       '<p class="tol-panel-quick-h">' + T('The whole site at a glance', 'Todo el sitio de un vistazo') + '</p><ul>' +
       [['/explore.html', '&#129517;', T('Everything on this site', 'Todo el sitio (en inglés)')],
-       ['/tools.html', '&#129520;', T('All tools, by type', 'Todas las herramientas')],
+       ['/tools.html', '&#129520;', T('All tools', 'Todas las herramientas')],
        ['/by-relationship.html', '&#128101;', T('Guides by relationship', 'Guías por relación')],
        ['/book/index.html', '&#128214;', T('Read the book', 'Leer el libro')],
        ['/ladder.html', '&#127807;', T('Calm down now', 'Calmarte ahora')],
@@ -2342,7 +2342,7 @@
     '/workpapers/wp-15-keep-your-little-rituals-alive.html': ['WP-15: Keep your little rituals alive', 'Every few months, list the small habits you share and mark which are alive, fading or stopped. Restart one in its smallest form.'],
     '/workpapers/calculators/look-back-30-days-quick.html': ['Look back over 30 days (the 30-Day Look-Back)', 'Type in how things were a month ago and how they are this week: what shifted, what didn’t, and one next step. It reads the setup, never a person.'],
     '/look-back-30-days.html': ['Look back over 30 days: the long form', 'Four weeks of hours, rescues, load and jobs side by side, with the running imbalance and one next step.'],
-    '/tools.html': ['All tools, by type', 'Every tool on the site with a plain name, grouped by type: communication, self-discovery, share the load, calm and stress, family, work, health, plans, learning and play.'],
+    '/tools.html': ['All tools', 'Every tool on the site with a plain name, the ones you can use on your own first, with filters: communication, self-discovery, share the load, calm and stress, family, work, health, plans, learning and play.'],
     '/why-this-site.html': ['Why use this instead of an article or an AI chat?', 'What is different here: tools that use your own situation, plain words, research shown openly, and nothing you type leaving your device. And where it falls short.'],
     '/nervous-system.html': ['Your nervous system, in plain words', 'Fight, flight and freeze, the vagus nerve and polyvagal theory explained honestly, and what helps your body settle.'],
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],

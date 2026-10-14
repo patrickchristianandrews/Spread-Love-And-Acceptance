@@ -802,7 +802,7 @@
     <h2 class="hh-map-h" id="hh-map-h">What&rsquo;s here</h2>
     <ul class="hh-map-doors">
     <li><a href="/start-here.html#three-questions"><span class="hh-map-i" aria-hidden="true">&#129517;</span><span class="hh-map-t">Start here</span><span class="hh-map-c">3 questions</span><span class="hh-map-n">Not sure? Three quick questions, then one first step.</span></a></li>
-    <li><a href="/tools.html"><span class="hh-map-i" aria-hidden="true">&#129520;</span><span class="hh-map-t">Tools, by type</span><span class="hh-map-c" data-hh-count="tools">73 tools</span><span class="hh-map-n">Text checker, chore split, quizzes, planners and more.</span></a></li>
+    <li><a href="/tools.html"><span class="hh-map-i" aria-hidden="true">&#129520;</span><span class="hh-map-t">All tools</span><span class="hh-map-c" data-hh-count="tools">51 tools</span><span class="hh-map-n">Start on your own: Chat analyzer, chore split, quizzes and more.</span></a></li>
     <li><a href="/by-relationship.html"><span class="hh-map-i" aria-hidden="true">&#128101;</span><span class="hh-map-t">Guides by relationship</span><span class="hh-map-c">8 groups</span><span class="hh-map-n">Couples, friends, family, co-parents, housemates, work, you.</span></a></li>
     <li><a href="/book/index.html"><span class="hh-map-i" aria-hidden="true">&#128214;</span><span class="hh-map-t">The book</span><span class="hh-map-c" data-hh-count="chapters">27 chapters</span><span class="hh-map-n">Yourself, between us, and understanding people.</span></a></li>
     <li><a href="/ladder.html"><span class="hh-map-i" aria-hidden="true">&#127807;</span><span class="hh-map-t">Calm right now</span><span class="hh-map-c" data-hh-count="calm">7 calm tools</span><span class="hh-map-n">A one-minute check, then one calm step that fits.</span></a></li>
@@ -1009,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('load', function () {
     var sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js';
     sc.onload = function () {
-      var T = window.TOLTools || []; if (!T.length) return;
+      var T = (window.TOLTools || []).filter(function (x) { return x.kind !== 'workpaper'; }); if (!T.length) return;
       function n(t) { return T.filter(function (x) { return x.type === t; }).length; }
       set('tools', T.length + ' tools'); set('calm', n('calm') + ' calm tools'); set('play', n('play') + ' games');
     };

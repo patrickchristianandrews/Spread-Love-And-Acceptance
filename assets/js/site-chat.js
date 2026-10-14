@@ -3582,8 +3582,10 @@
     P._c = 1;
     return P;
   }
+  var PZ_LEAD = /^(?:(?:pretty |really |very |quite |so )?(?:good|great|fine|ok|okay|alright|not bad|grand|well|lovely|brilliant)(?: (?:thanks|thank you|thx|ty))?|thanks|thank you|yes|yeah|yep|no|nope|haha|lol|oh|ooh) (?=(?:i|we|my|our|today|just|this|last|it s|its)\b)/;
   function pzWhich(state, fs, card0) {
     var P = pzCompile(); if (!P || !P.topics) return null;
+    fs = fs.replace(PZ_LEAD, '');
     var n = fs.split(' ').length, ctx = pzCtx(state), dislike = PZ_DISLIKE.test(fs);
     if (n > 16 || PZ_SITEW.test(fs)) return null;
     if (/^(what|how|where|which|who|why|when|is there|are there|is it|can i|can we|could i|should|does|do i|do we|any)\b/.test(fs) && !PZ_ASKHIM.test(fs)) return null;
@@ -3597,7 +3599,7 @@
     if (!strong && !(bare && (ctx || n <= 2))) return null;
     if (card0 && !strong && !ctx) return null;
     if (best.t.site && !strong && !ctx) return null;
-    return { t: best.t, thing: best.thing, strong: strong, dislike: dislike };
+    return { t: best.t, thing: best.thing, strong: strong, dislike: dislike, asked: PZ_ASKHIM.test(fs) };
   }
   // a category word ("film", "breakfast") is not a "thing" to echo back or remember: "pizza" and "jazz" are
   var PZ_GENERIC = /^(weather|food|snacks?|breakfast|lunch|dinner|supper|brunch|hungry|starving|peckish|cook|cooking|cooked|eating|baking|baked|bake|dessert|pudding|drinks?|brew|pets?|music|songs?|singing|sing|singer|band|bands|tunes?|radio|film|films|movie|movies|cinema|tv|telly|television|series|episodes?|show|shows|trailer|book|books|novels?|reading|read a|reader|games?|gaming|gamer|console|sport|sports|exercise|workout|match|the match|hobby|hobbies|weekend|weekends|plans|day off|days off|holiday|holidays|vacation|festival|decorations|work|working|job|office|shift|shifts|school|class|classes|lessons?|study|studying|meeting|meetings|project|deadline|sleep|slept|sleeping|bed|bedtime|going to bed|dream|dreams|dreamt|dreamed|nap|naps|napping|alarm|birthday|birthdays|bday|party|birthday party|presents?|season|seasons|leaves|travel|travelling|traveling|trip|trips|visit|visiting|adventure|packing|plane|flight|flying)$/;
@@ -3629,7 +3631,7 @@
     } else {
       var t = w.t, line;
       if (w.dislike) line = pzPick(state, P.dislike);
-      else if (w.thing && !PZ_GENERIC.test(w.thing) && t.thing && t.thing.length && w.strong && frand(state) < 0.6) line = pzFill(state, pzPick(state, t.thing), { thing: w.thing });
+      else if (w.thing && !w.asked && !PZ_GENERIC.test(w.thing) && t.thing && t.thing.length && w.strong && frand(state) < 0.6) line = pzFill(state, pzPick(state, t.thing), { thing: w.thing });
       else line = pzPick(state, t.replies);
       b.push({ k: 'p', x: pzFill(state, line) });
       // "I love pizza": that's a favourite worth remembering
@@ -4007,7 +4009,8 @@
     }
     // "I love Christmas", "I'm planning a birthday party", "do you play video games?": chit-chat, before the care cards and
     // playbooks read them as a problem (only with no one else named, nothing negative and nothing upsetting in it)
-    if (!em && (PZ_ASKHIM.test(fs) || PZ_POS.test(fs)) && !PZ_REL.test(fs) && !PZ_NEG.test(fs) && fs.split(' ').length <= 14) {
+    var fs2 = fs.replace(PZ_LEAD, '');
+    if (!em && (PZ_ASKHIM.test(fs2) || PZ_POS.test(fs2)) && !PZ_REL.test(fs) && !PZ_NEG.test(fs) && fs.split(' ').length <= 16) {
       var pw = pzWhich(state, fs, null);
       if (pw && pw.strong) { var tr = pzTopic(state, raw, f, raw, null); if (tr) return tr; }
     }
