@@ -915,7 +915,7 @@ def cover(name, deep):
 <div class="pe-cover-text"><p class="pe-cover-title">The Objective Ledger</p>
 <p class="pe-cover-sub">Understanding yourself and the people you share a life with</p></div>
 <div class="pe-cover-art">%s</div>
-<div class="pe-cover-foot"><p class="pe-cover-pkg">%s <span>· %s</span></p><p class="pe-cover-line">%s</p><p class="pe-cover-by">%s</p></div>
+<div class="pe-cover-foot"><p class="pe-cover-pkg">%s <span>· %s</span></p><p class="pe-cover-line">%s</p><p class="pe-cover-by">by %s</p></div>
 </section>''' % (acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), 'See it fairly. Say it kindly.',
                  book_art.illustration(name), label, ver, line, AUTHOR)
 
@@ -934,7 +934,7 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <p class="pe-titlep-s">Understanding yourself and the people you share a life with</p>
 <p class="pe-titlep-v">%s · %s</p></div>
 <div class="pe-titlep-art">%s</div>
-<div class="pe-titlep-by"><p class="pe-titlep-a">%s</p><p class="pe-titlep-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>
+<div class="pe-titlep-by"><p class="pe-titlep-a">by %s</p><p class="pe-titlep-p">Spread Love &amp; Acceptance<br>spreadloveandacceptance.com</p></div></section>
 <section class="pe-copy pe-only"><div class="pe-copy-in">
 <p><em>The Objective Ledger</em>: %s, %s.<br>By %s. Spread Love &amp; Acceptance.</p>
 <p>This edition: %s. Made from the chapters at <a href="%s/book/">spreadloveandacceptance.com/book</a>, where they are kept up to date.</p>
@@ -1348,7 +1348,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
 <ul class="pe-bc-list"><li>Two sizes of every chapter: short and full</li><li>Everyday scenes, words you could use and one small thing to try</li><li>Free tools and worksheets that stay on your device</li><li>For every kind of relationship, and for people on their own</li></ul>
 <div class="pe-bc-art">%s</div>
 <p class="pe-bc-site">Free to read at <strong>spreadloveandacceptance.com/book</strong></p>
-<p class="pe-bc-by">%s · Spread Love &amp; Acceptance</p></div></section>''' % (
+<p class="pe-bc-by">by %s · Spread Love &amp; Acceptance</p></div></section>''' % (
         acc, tint, book_art.ledger_rules(170, 240, '#E4D7B2', acc, top=22, step=7.5, left=17), esc(COVER[name][2]), esc(BLURB[name]),
         book_art.part_mark(4), AUTHOR)
     return s
@@ -1576,7 +1576,7 @@ def build_home():
 <main class="read bk-home" id="main">
 <div class="bk-cover no-bubble" data-no-bubble><div class="bk-cover-text"><p class="bk-cover-brand">Spread Love &amp; Acceptance</p>
 <p class="bk-cover-k">The book</p>
-<h1>The Objective Ledger</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">By %s</p></div>
+<h1>The Objective Ledger</h1><p class="bk-sub">Understanding yourself and the people you share a life with</p><p class="bk-cover-by">by %s</p></div>
 <div class="bk-cover-art">%s</div></div>
 <p class="simple-lede">A ledger is just a notebook where you write down what happened, so you can look at it calmly later. That’s the whole idea of this book: see what is really going on, in yourself and between people, without blaming anyone, and then change one small thing.</p>
 <div class="bk-start no-bubble" data-no-bubble>

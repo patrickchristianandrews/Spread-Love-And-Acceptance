@@ -217,7 +217,7 @@ html.tol-bookview :is(.tol-offer, .depth-bar, .tol-depth-q, .tol-depth-opts, .to
 .bk-home .bk-cover-k{ display:none; }
 .bk-home .bk-cover h1{ margin:.35rem 0 .2rem; font-size:clamp(2rem, 1.5rem + 2.4vw, 3rem); line-height:1.04; }
 .bk-home .bk-cover .bk-sub{ font-style:italic; }
-.bk-home .bk-cover-by{ margin:.6rem 0 0; font-family:"IBM Plex Mono", monospace; font-size:.78rem; letter-spacing:.2em; text-transform:uppercase; }
+.bk-home .bk-cover-by{ margin:.6rem 0 0; font-family:"Lora", Georgia, serif; font-style:italic; font-size:.95rem; letter-spacing:.02em; text-transform:none; }
 .bk-home .bk-cover-art svg{ display:block; width:100%; max-width:340px; height:auto; margin:0 auto; }
 @media (min-width:700px){ .bk-home .bk-cover{ grid-template-columns:1.25fr 1fr; align-items:center; } }
 .bk-home .bk-part h2{ border-top:3px solid var(--pc); padding-top:.6rem; }

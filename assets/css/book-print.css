@@ -141,7 +141,7 @@ img, svg { max-width: 100%; }
 .pe-cover-pkg { font-family: "Fraunces", serif; font-weight: 600; font-size: 13pt; color: var(--acc); margin: 0 0 1mm; }
 .pe-cover-pkg span { font-weight: 400; color: var(--soft); }
 .pe-cover-line { font-size: 9pt; color: var(--soft); margin: 0; }
-.pe-cover-by { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 9pt; letter-spacing: .28em; text-transform: uppercase; margin: 5mm 0 0; color: var(--ink); }
+.pe-cover-by { font-family: "Lora", Georgia, serif; font-style: italic; font-weight: 500; font-size: 11pt; letter-spacing: .02em; text-transform: none; margin: 5mm 0 0; color: var(--ink); }
 
 /* ---------- front matter ---------- */
 .pe-half, .pe-titlep, .pe-copy, .pe-how, .pe-toc { page: pe-front; break-before: page; }
@@ -154,7 +154,7 @@ img, svg { max-width: 100%; }
 .pe-titlep-s { font-style: italic; font-size: 12pt; color: var(--soft); margin: 0 auto 6mm; max-width: 100mm; text-wrap: balance; }
 .pe-titlep-v { font-family: "IBM Plex Mono", monospace; font-size: 7.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--acc); margin: 0; }
 .pe-titlep-art .pe-art { width: 70mm; height: 52mm; }
-.pe-titlep-a { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 10pt; letter-spacing: .3em; text-transform: uppercase; margin: 0 0 3mm; }
+.pe-titlep-a { font-family: "Lora", Georgia, serif; font-style: italic; font-weight: 500; font-size: 12pt; letter-spacing: .02em; text-transform: none; margin: 0 0 3mm; }
 .pe-titlep-p { font-size: 8.5pt; color: var(--soft); margin: 0; line-height: 1.5; }
 .pe-copy { height: 196mm; display: flex; flex-direction: column; justify-content: flex-end; }
 .pe-copy-in { font-size: 7.9pt; line-height: 1.5; color: #3F3A31; }
@@ -372,7 +372,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-bc-art { width: 50mm; height: 42mm; background: #FFFDF8; border-radius: 50%; padding: 4mm; box-sizing: content-box; }
 .pe-bc-art svg { width: 100%; height: 100%; }
 .pe-bc-site { position: absolute; bottom: 12mm; left: 0; right: 0; margin: 0; font-size: 9.6pt; }
-.pe-bc-by { position: absolute; bottom: 4mm; left: 0; right: 0; margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+.pe-bc-by { position: absolute; bottom: 4mm; left: 0; right: 0; margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .06em; text-transform: none; opacity: .85; }
 .pe-backcover a { color: inherit; }
 
 /* filled-in examples (their own look is /assets/css/book-examples.css): the static print typefaces, and the part colour on the tab */
