@@ -1,6 +1,7 @@
 /* app-ad.js — the "Get the app" ad: Tidbit and Sugarfoot on a straight stage, each keeping to their own side of a little boombox, moonwalking, spinning, flipping and hopping.
-   It sits under the opening block of the home page and Start here, and links to /install.html (Android installs now;
-   on iPhone, Add to Home Screen; an App Store version is planned, with no date). It can be hidden (remembered on this device only,
+   It sits under the opening block of the home page and Start here, and links to /install.html (the free app is this site,
+   installed: one tap on Android and in Chrome or Edge on a computer; Add to Home Screen on iPhone and iPad). The slim
+   "Get the free app" line at the top of every page is app-bar.js. It can be hidden (remembered on this device only,
    key 'tol-appad-off'), is skipped inside the installed app and on the install page, and is a still picture with
    reduced motion. Uses the pups from pups.js. TOLAppAd.drawScene(ctx, W, H, t, opts) draws just the dancing,
    so the share image (assets/img/get-the-app.png) is made from the very same drawing. */
