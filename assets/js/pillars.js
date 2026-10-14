@@ -130,9 +130,6 @@
     '/lemonade-stand.html': { p: [1, 5], n: {
       1: ['List what you did this week.', 'See the split as a plain fact.'],
       5: ['Notice what you do without being asked.', 'See where the load quietly piles up.'] } },
-    '/conversation-reader.html': { p: [4, 3], n: {
-      4: ['See what you may be hearing.', 'See where a thread turned, and a calmer reply.'],
-      3: ['Notice when you are too wound up to reply.', 'Answer once you are both calmer.'] } },
     '/wiring-card.html': { p: [4], n: {
       4: ['Write down how you receive words and what silence means.', 'Hand them a card on what lands and what to avoid.'] } },
     '/signal-translator.html': { p: [4, 3], n: {

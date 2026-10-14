@@ -49,7 +49,7 @@
   "hints": [
     {"chapter": "part-1", "who": "sugarfoot", "text": "Sugarfoot’s tip: go slowly in this part. It’s all about you, and you’re worth the time. A one-minute check on how you are today is a gentle way in.", "tool": "weather"},
     {"chapter": "part-2", "who": "tidbit", "text": "Tidbit wants you to know: this part comes with workpapers to fill in, together or on your own. Ooh, start with the one-week log!", "wp": "wp01"},
-    {"chapter": "part-3", "who": "puddles", "text": "This part explains how people work. If a question pops up while you read, ask me. I only answer from the site’s checked pages, and nothing you type leaves your device.", "tool": "ask"},
+    {"chapter": "part-3", "who": "puddles", "text": "If a question pops up while you read, ask me. Nothing you type leaves your device.", "tool": "ask"},
 
     {"chapter": "self-1-then", "version": "short", "idea": 2, "who": "tidbit", "text": "Tidbit wants you to know: the rules from home aren’t good or bad, they’re just yours to have a good sniff at. A fun first look is how you like to talk.", "tool": "wavelength"},
     {"chapter": "self-1-then", "version": "short", "idea": 6, "who": "puddles", "text": "When an old rule jumps in before you’ve had a chance to think, you don’t have to argue with it. Write it down, and look at it again on a calm day.", "tool": "roots"},

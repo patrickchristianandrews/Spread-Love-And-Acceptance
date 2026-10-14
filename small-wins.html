@@ -281,7 +281,7 @@
   <p class="sw-note" id="sw-flip-why" hidden></p>
   <div class="sw-acts" id="sw-flip-acts" hidden>
     <button type="button" class="sw-btn is-quiet" id="sw-flip-copy">Copy</button>
-    <a class="sw-btn is-quiet" id="sw-flip-check" href="/signal-translator.html">Check it in the Signal Translator</a>
+    <a class="sw-btn is-quiet" id="sw-flip-check" href="/signal-translator.html">Check it in the Chat analyzer</a>
   </div>
   <p class="sw-status" id="sw-flip-status" aria-live="polite"></p>
 </section>
@@ -345,7 +345,7 @@
 (function () {
   'use strict';
   // Two small tools. Rule-based, all on this device. The done list is kept in localStorage
-  // under 'tol-small-wins'; the Flip it text is never stored (only handed to the Signal Translator
+  // under 'tol-small-wins'; the Flip it text is never stored (only handed to the Chat analyzer
   // through this tab's sessionStorage, 'tol-st-text', when you tap that link).
   var $ = function (id) { return document.getElementById(id); };
   function say(el, msg) { if (!el) return; el.textContent = ''; setTimeout(function () { el.textContent = msg; }, 30); }
@@ -495,7 +495,7 @@
       else say(fStatus, 'Copying didn’t work here. Select the words and copy them by hand.');
     });
   });
-  // The Signal Translator picks the words up from this tab's sessionStorage, so they never go in the address.
+  // The Chat analyzer picks the words up from this tab's sessionStorage, so they never go in the address.
   fCheck.addEventListener('click', function () {
     var t = last && last.send ? last.send : tidy(fText.value);
     if (!t) return;

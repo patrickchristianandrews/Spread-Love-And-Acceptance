@@ -44,7 +44,7 @@
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], calc: ['CALC-01: Is the setup working for everyone?', '/workpapers/calculators/is-the-setup-working-quick.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'], freq: ['Frequency Calibration', '/tools/frequency-calibration.html'],
     mood: ['Soften a tense moment', '/tools/soften-a-tense-moment.html'], wired: ['Wired Differently', '/wired-differently.html'], wiring: ['Wiring Card', '/wiring-card.html'],
-    signal: ['The Signal Translator', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],
+    signal: ['The Chat analyzer', '/signal-translator.html'], checkins: ['Check-ins', '/check-ins.html'], ground: ['Check-in ground rules', '/check-ins.html#ground'],
     prog: ['PROG-01: 6-week program', '/prog-01.html'], report: ['REPORT-01: The Full Read', '/workpapers/report-01.html'], garden: ['The Night Garden', '/night-garden.html'],
     toward: ['Turning Toward', '/turning-toward.html'], complacency: ['Complacency', '/complacency.html'],
     recheck: ['The Re-check Drive', '/recheck-drive.html']

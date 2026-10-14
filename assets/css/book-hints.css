@@ -103,6 +103,10 @@
   .bh-u::before, .wt-u::before{ content:"· "; }
   .pe-part .book-hint{ position:absolute; left:0; right:0; bottom:0; margin:0; }
   .pe-part .book-hint .bh-text{ font-size:8.8pt; }
+  /* Part Three lists 17 chapters: there the hint follows the list instead of sitting at the foot of the page */
+  #part-3 .pe-part-list li{ padding:.55mm 0; }
+  #part-3 .book-hint{ position:static; margin-top:3.5mm; padding:1.6mm 2.6mm 1.8mm 2.2mm; }
+  #part-3 .book-hint .bh-badge{ width:9mm; height:9mm; }
   /* the orientation and the lists, in the print edition */
   .pe-fb-meet .bh-kinds{ grid-template-columns:1fr; gap:3mm; margin-bottom:4mm; }
   .pe-fb-meet .bh-kind{ padding:2.6mm 3.2mm; border-width:.7pt; break-inside:avoid; }

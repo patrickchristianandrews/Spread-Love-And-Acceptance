@@ -520,7 +520,7 @@
     opts = opts || {};
     var hard = LIST.filter(function (p) { return !p.good; }), good = LIST.filter(function (p) { return p.good; });
     function li(p) { return '<li><b>' + esc(p.name) + '</b>' + (p.ex && p.ex.length ? ' <span class="lf-ex">(' + p.ex.slice(0, 2).map(function (e) { return '“' + esc(e) + '”'; }).join(', ') + ')</span>' : '') + '<br><span class="lf-why">' + esc(p.what) + '</span></li>'; }
-    return '<p>' + esc(opts.intro || 'The Signal Translator, the Carrier Wave Decoder’s tone check and the Conversation Reader all read wording with this same list, so the same words get the same reading in each. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict.') + '</p>' +
+    return '<p>' + esc(opts.intro || 'The Chat analyzer (for one message or a whole conversation) and the Carrier Wave Decoder’s tone check both read wording with this same list, so the same words get the same reading in each. It reads words only, never tone of voice or history, so every mark is a “may land as,” not a verdict.') + '</p>' +
       '<h3 class="lf-h">What may land harder than you mean</h3><ul class="lf-list">' + hard.map(function (p) { return li(p) + (p.alsoAs ? li(p.alsoAs) : ''); }).join('') + '</ul>' +
       '<h3 class="lf-h">What tends to help</h3><ul class="lf-list">' + good.map(li).join('') + '</ul>' +
       '<p class="lf-note">Each tool also has a few checks of its own, like orders, labels, or a question that went unanswered, and it names them where they come up.</p>';

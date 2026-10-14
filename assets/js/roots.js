@@ -134,7 +134,7 @@
   var LINKS = {
     rulebook: ['The rulebook from home', '#home'], lenscheck: ['The one-minute lens check', '#check'],
     wavelength: ['Wavelength', '/wavelength.html'], knowyourself: ['Know your own wiring', '/know-yourself.html'],
-    signal: ['The Signal Translator', '/signal-translator.html'], shifter: ['See it from their side', '/carrier-wave-decoder.html?tab=their-side'],
+    signal: ['The Chat analyzer', '/signal-translator.html'], shifter: ['See it from their side', '/carrier-wave-decoder.html?tab=their-side'],
     calm: ['The Calm-Down Kit (WP-11)', '/wp-11.html'], weather: ['Today’s Weather', '/quick-checks.html#today'],
     sayno: ['Kind ways to say no (WP-01)', '/workpapers/wp-01.html'], ch3: ['Chapter III: leftover stress', '/book/chapter-3.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], checkins: ['Swap rulebooks in a check-in', '/check-ins.html'],
@@ -210,7 +210,7 @@
       protect: 'If mistakes were met with trouble, or you were compared or picked on, shielding yourself fast may have kept you from being hurt.',
       cost: 'Now even kind feedback can land like an attack, and small notes turn into big arguments.',
       notice: 'Heat in your face, a fast “but…”, or the urge to explain before they’ve finished.',
-      tryit: ['Next time you get feedback, say “Let me think about that,” and answer an hour later.', 'Run the words through the Signal Translator to hear them without the old sting.'],
+      tryit: ['Next time you get feedback, say “Let me think about that,” and answer an hour later.', 'Run the words through the Chat analyzer to hear them without the old sting.'],
       say: 'Part of me wants to defend myself. Give me a minute so I can actually hear you.',
       rule: ['Mistakes mean I’m bad.', 'I can own a mistake without being one.'],
       links: ['signal', 'lenscheck', 'ch3'] },

@@ -3999,7 +3999,7 @@
     peopleBox.insertBefore(hhHost, peopleBox.firstChild);
     hhWrite = HH.writer('lemonade', hhCollect);
     // the tick sits right under the names, where they're typed, with one plain line on what it's for
-    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite, hint: 'On by default once your names are in: saves retyping them in the worksheets, the Signal Translator and the Wiring Card. Untick to keep them here only.',
+    var hhKeep = HH.remember({ tool: 'lemonade', write: hhWrite, hint: 'On by default once your names are in: saves retyping them in the worksheets, the Chat analyzer and the Wiring Card. Untick to keep them here only.',
       onChange: function (on) { state.hhNo = !on; save(); try { document.dispatchEvent(new CustomEvent('tol-lemonade-hhno', { detail: !on })); } catch (e) {} } });
     hhKeepEl = hhKeep;
     hhKeep.classList.add('ls-hh-keep');

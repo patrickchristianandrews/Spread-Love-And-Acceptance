@@ -40,7 +40,8 @@
     "gaming": ["video games", "video game", "videogames", "xbox", "playstation", "fortnite", "gamer"],
     "sorry": ["apologize", "apologise", "apology", "apologies", "perdon"],
     "never": ["nunca"],
-    "house": ["home", "casa", "hogar", "flat", "apartment"]
+    "house": ["home", "casa", "hogar", "flat", "apartment"],
+    "chat analyzer": ["chat analyser", "signal translator", "conversation reader", "text message checker", "message checker", "tone checker", "conversation analyzer"]
   },
   "needs": [
     {"id": "chore-fights", "l": "Arguing about chores", "say": ["we keep fighting about dishes", "we argue about chores", "always fighting about housework", "who does the cleaning", "fights about laundry", "chores arguments"], "go": [["/lemonade-stand.html#quick", "Tap who mostly does each job, so you can talk about the list, not about each other."], ["/share-the-load.html", "A calm, step-by-step way to split the jobs at home."], ["/workpapers/wp-03-one-owner-per-job.html", "Give each job one owner, so nothing falls between you."]]},

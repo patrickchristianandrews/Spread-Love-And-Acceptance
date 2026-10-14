@@ -181,7 +181,7 @@
     <h3><label for="rf-mine">Make it mine</label></h3>
     <p class="rf-hint">Tap “Make it mine” under a script, or type your own. Change any words so it sounds like you.</p>
     <textarea id="rf-mine" maxlength="1500" placeholder="Your words go here."></textarea>
-    <p class="rf-acts"><button type="button" class="rf-btn is-main" id="rf-mine-copy">Copy</button><a class="rf-btn" id="rf-check" href="/signal-translator.html">Check it in the Signal Translator</a></p>
+    <p class="rf-acts"><button type="button" class="rf-btn is-main" id="rf-mine-copy">Copy</button><a class="rf-btn" id="rf-check" href="/signal-translator.html">Check it in the Chat analyzer</a></p>
     <p class="rf-status" id="rf-status" role="status" aria-live="polite"></p>
   </div>
 </div>
@@ -210,7 +210,7 @@
 <h2 id="not">What a kind no is not</h2>
 <p>It isn’t a long list of reasons, a tally of everything you’ve already done, or a refusal to ever talk about it again. It’s one calm statement of your limit that leaves the door open.</p>
 <p>It also isn’t a test of whether the other person is a good person. They asked; you answered. Both are fine. If you feel guilty afterwards, that’s common, especially with family. Guilt is a feeling, not proof you did something wrong.</p>
-<p>Not sure how your words will land? Paste them into the <a href="/signal-translator.html">Signal Translator</a> before you send them.</p>
+<p>Not sure how your words will land? Paste them into the <a href="/signal-translator.html">Chat analyzer</a> before you send them.</p>
 
 <p>A no can bring some disappointment. That’s normal, and it usually passes. If a no has ever led to threats or harm, though, the perfect words aren’t the answer.</p>
 <p class="tol-safe-line no-bubble" id="safe" style="font-size:.88rem;color:var(--ink-soft,#5A5346)">Made for everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, <a href="/safety.html">private help is here</a>.</p>
@@ -379,7 +379,7 @@
     if (!t) { say('The box is empty. Tap “Make it mine” under a script, or type your own.'); mine.focus(); return; }
     copy(t, this);
   });
-  // The Signal Translator picks the words up from this tab's sessionStorage, so they never go in the address.
+  // The Chat analyzer picks the words up from this tab's sessionStorage, so they never go in the address.
   $('rf-check').addEventListener('click', function (e) {
     var t = mine.value.trim();
     if (!t && sit) t = plain(0);

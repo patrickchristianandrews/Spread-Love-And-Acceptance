@@ -99,7 +99,7 @@
     ['Love languages are a menu, not a label. Most people like more than one.', '/love-languages.html', 'Love languages'],
     ['A good apology names what happened, owns your part and offers to help fix it.', '/apology-languages.html', 'Apology languages'],
     ['A fight that keeps coming back usually points to a gap in the setup, not a bad person.', '/book/chapter-2.html', 'Is the split working?'],
-    ['Text loses tone. If a message could be read two ways, test it first or call instead.', '/signal-translator.html', 'The Signal Translator'],
+    ['Text loses tone. If a message could be read two ways, test it first or call instead.', '/signal-translator.html', 'The Chat analyzer'],
     ['Matching energy means matching care and effort, never volume or meanness.', '/book/self-2-now-in-depth.html#control', 'Matching energy'],
     ['A kind no can be fair: say why, say what you have left, and offer something else.', '/self-path.html#no', 'Kind ways to say no'],
     ['Different brains take in the same words differently, and that’s nobody’s fault.', '/wired-differently.html', 'Wired differently'],

@@ -131,7 +131,7 @@ window.TOL_CHEER = {
     ['A hard talk goes better with a few ground rules.', '/check-ins.html#ground', 'Check-in ground rules'],
     ['Same words, different wiring? That’s normal.', '/wired-differently.html', 'Wired Differently'],
     ['Let the people you love know how you’re wired.', '/wiring-card.html', 'Make a Wiring Card'],
-    ['Wondering how a sentence might land?', '/signal-translator.html', 'The Signal Translator'],
+    ['Wondering how a sentence might land?', '/signal-translator.html', 'The Chat analyzer'],
     ['How’s your weather today? It changes what today is good for.', '/quick-checks.html#today', 'Today’s Weather'],
     ['Need a calm minute? The garden is always open.', '/night-garden.html', 'The Night Garden'],
     ['Seeing who did what, side by side, can end the scorekeeping.', '/lemonade-stand.html', 'The Lemonade Stand'],
@@ -158,7 +158,7 @@ window.TOL_CHEER = {
     ['Want a calming word search?', '/quiet-words.html', 'Quiet Words'],
     ['Let a few words bloom for a calm minute.', '/word-bloom.html', 'Word Bloom'],
     ['A tiny, gentle crossword for a busy brain.', '/quiet-crossword.html', 'Quiet Crossword'],
-    ['Want to read a chat with fresh, kind eyes?', '/conversation-reader.html', 'The Conversation Reader']
+    ['Want to read a chat with fresh, kind eyes?', '/signal-translator.html#conversation', 'The Chat analyzer']
   ],
   half: [
     'Halfway there!', 'Half done. Lovely pace.', 'Halfway! Stretch, sip some water, keep going.', 'Look at you, halfway through already.',
@@ -290,11 +290,11 @@ window.TOL_CHEER = {
       'A calm moment is a great time to try it.', 'Tools are like flashlights. They help you see.', 'Nothing is graded. Explore freely.',
       'Share what you find, if you want to.', 'A fresh try is always welcome.',
       ['Not sure which tool fits? Ask the Professor.', '/ask.html', 'Chat with Professor Puddles'],
-      ['Turn a tricky sentence into a softer one.', '/signal-translator.html', 'The Signal Translator'],
+      ['Turn a tricky sentence into a softer one.', '/signal-translator.html', 'The Chat analyzer'],
       ['Who did what? See it side by side.', '/lemonade-stand.html', 'The Lemonade Stand'],
       ['Make a card that says “here’s how I work.”', '/wiring-card.html', 'Make a Wiring Card'],
       ['A calm picture for a busy mind.', '/calm-visualizer.html', 'Drift, the calm visualizer'],
-      ['Read a conversation with fresh eyes.', '/conversation-reader.html', 'The Conversation Reader']
+      ['Read a conversation with fresh eyes.', '/signal-translator.html#conversation', 'The Chat analyzer']
     ],
     start: [
       'New here? Welcome! Start anywhere.', 'No sign-up needed to look around.', 'Poke around. Every door here is friendly.',

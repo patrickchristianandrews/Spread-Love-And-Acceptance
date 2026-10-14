@@ -14,8 +14,8 @@
   // ---------- "I have 1, 5 or 15 minutes" (the same choices as the home page) ----------
   var TIME = {
     1: [['Wound up', 'Breathe for one minute', '#breathe'], ['Before a talk', 'Check your weather', '/quick-checks.html#today'],
-        ['A message to send', 'Test it in the Signal Translator', '/signal-translator.html'], ['Just a moment', 'Sit in the Night Garden', '/night-garden.html']],
-    5: [['We just had a fight', 'Paste it into the Conversation Reader', '/conversation-reader.html'], ['Chores piling up', 'List them in the Lemonade Stand', '/lemonade-stand.html'],
+        ['A message to send', 'Test it in the Chat analyzer', '/signal-translator.html'], ['Just a moment', 'Sit in the Night Garden', '/night-garden.html']],
+    5: [['We just had a fight', 'Paste it into the Chat analyzer', '/signal-translator.html#conversation'], ['Chores piling up', 'List them in the Lemonade Stand', '/lemonade-stand.html'],
         ['Wound up', 'Three minutes of Breathe', '#breathe'], ['Understand myself', 'Start your Wiring Card', '/wiring-card.html']],
     15: [['New here', 'Start in 10 minutes', '/start-in-10-minutes.html'], ['After a hard talk', 'The Carrier Wave Decoder, step by step', '/carrier-wave-decoder.html'],
         ['Chores piling up', 'Give every job one owner', '/workpapers/wp-03-one-owner-per-job.html'], ['Need to settle', 'A soundscape, eyes closed', '/soundscapes.html']]

@@ -100,10 +100,14 @@
   function nextChapter() { for (var i = 0; i < BOOK.length; i++) if (!S.read[BOOK[i].u]) return BOOK[i]; return null; }
 
   var TOOLS = {
-    '/signal-translator.html': { t: 'Signal Translator', gain: 'You just found a kinder way to say it, before it was said.',
-      result: function () { var r = doc.getElementById('results'); return r && !r.hidden && !r.hasAttribute('data-no-reward') && r.textContent.trim().length > 20 ? r : null; } },
-    '/conversation-reader.html': { t: 'Conversation Reader', gain: 'You just looked at a talk from both sides, without blaming anyone.',
-      result: function () { var r = doc.getElementById('cr-out'); return r && !r.querySelector('.cr-safety') && r.textContent.trim().length > 20 ? r : null; } },
+    '/signal-translator.html': { t: 'Chat analyzer', gain: 'You just found a kinder way to say it, before it was said.',
+      result: function () {
+        var r = doc.getElementById('results');
+        if (r && !r.hidden && !r.hasAttribute('data-no-reward') && r.textContent.trim().length > 20) return r;
+        // the whole-conversation view (once the Conversation Reader page)
+        var c = doc.getElementById('cr-out');
+        return c && !c.querySelector('.cr-safety') && c.textContent.trim().length > 20 ? c : null;
+      } },
     '/carrier-wave-decoder.html': { t: 'Carrier Wave Decoder', gain: 'You just worked out what slipped in a talk, not who started it.',
       result: function () { var r = doc.getElementById('result'); return r && !r.hidden ? r : null; } },
     '/lemonade-stand.html': { t: 'Lemonade Stand', gain: 'You just put the work where everyone can see it. That is the first step to sharing it.',
@@ -195,7 +199,7 @@
   }
 
   // minutes and tags for the menu launcher's ideas (pick-up.js), so both share one list
-  var MIN_FOR = { '#breathe': 1, '/quick-checks.html#today': 1, '/night-garden.html': 1, '/signal-translator.html': 3, '/conversation-reader.html': 5, '/lemonade-stand.html': 5,
+  var MIN_FOR = { '#breathe': 1, '/quick-checks.html#today': 1, '/night-garden.html': 1, '/signal-translator.html': 3, '/signal-translator.html#conversation': 5, '/lemonade-stand.html': 5,
     '/wiring-card.html': 5, '/start-in-10-minutes.html': 10, '/carrier-wave-decoder.html': 10, '/workpapers/wp-03-one-owner-per-job.html': 10, '/soundscapes.html': 10 };
   function fromLauncher() {
     var T = window.TOLPickUp && window.TOLPickUp.time, out = { 1: [], 5: [], 15: [] };
@@ -219,7 +223,7 @@
       ],
       5: [
         { t: 'Read the start of ' + nc.code + ': ' + nc.t, u: nc.u, m: 4, why: nc.n, tag: 'book' },
-        { t: 'Run one message through the Signal Translator', u: '/signal-translator.html', m: 3, why: 'see how it may land before you send it', tag: 'talk' },
+        { t: 'Run one message through the Chat analyzer', u: '/signal-translator.html', m: 3, why: 'see how it may land before you send it', tag: 'talk' },
         { t: 'Try a Check yourself moment', u: '/five-pillars.html', m: 4, why: 'a quick question on the Five Pillars, with a petal for you', tag: 'self' },
         { t: 'Watch one chapter of Frequency Buddies with a kid', u: '/frequency-buddies.html?ep=' + ne[0], m: 4, why: ne[1] + ', in short pieces', tag: 'kids' }
       ],
@@ -468,9 +472,8 @@
     wiring: ['/wiring-card.html', 'Your Wiring Card', 'how you work, in words someone else can read'],
     wavelength: ['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen'],
     selfpath: ['/self-path.html', 'Your self path', 'six small steps on your own, at your own pace'],
-    signal: ['/signal-translator.html', 'The Signal Translator', 'test one message before you send it'],
+    signal: ['/signal-translator.html', 'The Chat analyzer', 'test one message before you send it'],
     notes: ['/signal-translator.html#notes', 'Your talking notes', 'write down what you want to say, before the talk'],
-    reader: ['/conversation-reader.html', 'The Conversation Reader', 'look at a talk that went sideways, from both sides'],
     decoder: ['/carrier-wave-decoder.html', 'The Carrier Wave Decoder', 'work out what slipped, not who started it'],
     checkins: ['/check-ins.html', 'Check-ins', 'raise one thing at a calm, set time'],
     lemon: ['/lemonade-stand.html', 'The Lemonade Stand', 'every job and its hours, where everyone can see them'],
@@ -491,8 +494,7 @@
   var NEXT = {
     '/quick-checks.html': { me: 'wiring', with: ['checkins', 'now you know your weather, pick a good time to talk'], alt: 'almanac' },
     '/ladder.html': { me: 'kit', with: ['kit', 'plan what settles each of you, before the next hard moment'], alt: 'weather' },
-    '/signal-translator.html': { me: 'wp09', with: 'checkins', alt: 'reader' },
-    '/conversation-reader.html': { me: ['signal', 'test your next message before you send it'], with: ['decoder', 'go through it together, without blame'], alt: 'pause' },
+    '/signal-translator.html': { me: 'wp09', with: 'checkins' },
     '/carrier-wave-decoder.html': { me: 'wp04', with: ['checkins', 'how to raise it once, calmly, at a good time'] },
     '/lemonade-stand.html': { me: ['wp02', 'see how full your own battery is'], with: ['wp03', 'give every job one owner, together'], alt: 'setup' },
     '/wavelength.html': { me: 'wiring', with: ['wiring', 'one page you can hand to someone, and swap'] },

@@ -206,8 +206,8 @@ window.TOL_PUP_LINES = {
       'A tool is a helper, not a judge. Use what’s useful.',
       'Try it on something small first.',
       'What you type in the tools stays on your device.',
-      ['Stuck on a tricky message? Read it a few different ways.', '/signal-translator.html', 'Signal Translator'],
-      ['See a talk from more than one angle.', '/conversation-reader.html', 'Conversation Reader'],
+      ['Stuck on a tricky message? Read it a few different ways.', '/signal-translator.html', 'Chat analyzer'],
+      ['See a talk from more than one angle.', '/signal-translator.html#conversation', 'Chat analyzer'],
       ['Ask the Professor. Answers come from this site’s own pages.', '/ask.html', 'Chat with Professor Puddles'],
       ['Play a little shop and learn about sharing the load.', '/lemonade-stand.html', 'Lemonade Stand']
     ],
@@ -304,7 +304,7 @@ window.TOL_PUP_LINES = {
     ]],
     ['frequenc|tune|tuning|static|signal|station|in step', [
       ['Two kind people can still be a little out of tune. It’s fixable!', '/frequency-framework.html', 'The Frequency Framework'],
-      ['Tricky message? Read it a few ways first.', '/signal-translator.html', 'Signal Translator']
+      ['Tricky message? Read it a few ways first.', '/signal-translator.html', 'Chat analyzer']
     ]],
     ['moment|setting|timing|when to', [
       'Pick a good moment first. Not when someone’s hungry or rushing!',

@@ -55,7 +55,7 @@
     '/book/chapter-3.html': 'Full tanks and different angles', '/book/chapter-4.html': 'Two kinds of fair', '/book/chapter-5.html': 'The monthly look-back'
   };
   var TOOLS = {
-    '/signal-translator.html': 'the Signal Translator', '/conversation-reader.html': 'the Conversation Reader', '/carrier-wave-decoder.html': 'the Carrier Wave Decoder',
+    '/signal-translator.html': 'the Chat analyzer', '/signal-translator.html#conversation': 'the Chat analyzer', '/carrier-wave-decoder.html': 'the Carrier Wave Decoder',
     '/lemonade-stand.html': 'the Lemonade Stand', '/quick-checks.html': 'Today’s Weather', '/wavelength.html': 'Wavelength', '/wiring-card.html': 'your Wiring Card'
   };
   var SHEETS = {

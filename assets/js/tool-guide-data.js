@@ -61,7 +61,7 @@ window.TOLToolGuideData = {
     'conversation-reader': {
       name: 'Chat analyzer: a whole conversation or screenshot',
       reg: 'signal',
-      pages: ['/signal-translator.html', '/conversation-reader.html'],
+      pages: ['/signal-translator.html', '/signal-translator.html#conversation'],
       when: 'After a text or chat exchange went sideways and you want to see where it turned, what each of you may have been hearing, and a calmer way to reply.',
       notWhen: 'Not while you are still upset: reply later, after <a href="/upset-right-now.html">five calm minutes</a>. Not as evidence for who was right; it isn’t built for that.',
       time: 'About 5 to 10 minutes.',

@@ -21,8 +21,7 @@
     wavelength: ['/wavelength.html', 'Communication style quiz', 'about 2 minutes', 'twelve either/or taps that put how you talk and listen into words'],
     wiring: ['/wiring-card.html', 'How I like to be spoken to: a one-page card', 'about 10 minutes', 'a one-page card on what helps words reach you'],
     flip: ['/small-wins.html#flip-it', 'Turn a complaint into a request', 'about 2 minutes', 'a complaint or worry turned into a request or a plan'],
-    signal: ['/signal-translator.html', 'Text message checker', 'about 2 minutes', 'see how a message may land, and a calmer version that keeps your ask'],
-    reader: ['/conversation-reader.html', 'Chat analyzer: paste a conversation', 'about 10 minutes', 'paste the thread and see where it turned, from both sides'],
+    signal: ['/signal-translator.html', 'Chat analyzer', 'about 2 minutes', 'see how a message may land and a calmer version that keeps your ask, or paste a whole chat to see where it turned'],
     shifter: ['/perspective-shifter.html', 'See it from their side', 'about 5 minutes', 'their side of the moment, and questions to ask instead of guessing'],
     decoder: ['/carrier-wave-decoder.html', 'When a talk goes wrong: a step-by-step reset', 'about 20 minutes', 'work out what slipped, settle, and practise what to say next time'],
     write: ['/write-it-through.html', 'Talk it through in writing', 'about 10 minutes, then a wait', 'one topic, facts not verdicts, one clear ask'],
@@ -77,7 +76,7 @@
       ['stressed', 'I’m stressed or running on empty', ['carry', 'kit', 'selfpath'], 'know', 'garden'],
       ['upset', 'I’m upset right now', ['upset', 'upset', 'kit'], 'pursue', 'garden'],
       ['understand', 'I want to understand myself better', ['wavelength', 'wiring', 'selfpath'], 'know', 'weather'],
-      ['message', 'A message I got, or want to send, is bothering me', ['signal', 'reader', 'write'], 'wired', 'landit'],
+      ['message', 'A message I got, or want to send, is bothering me', ['signal', 'landit', 'write'], 'wired', 'shifter'],
       ['load', 'I’m carrying too much at home', ['carry', 'lemonq', 'owner'], 'invisible', 'no']
     ]],
     ['partner', 'A partner', 'it’s about a partner', true, [
@@ -85,7 +84,7 @@
       ['space', 'One of us wants to talk now, the other needs space', ['ladder', 'pause', 'kit'], 'pursue', 'checkin'],
       ['chores', 'Chores or the mental load feel unfair', ['carry', 'lemonq', 'owner'], 'invisible', 'daily'],
       ['distant', 'We feel a bit distant', ['turn', 'care', 'bond'], 'complacency', 'daily'],
-      ['text', 'A text or message went wrong', ['signal', 'reader', 'write'], 'wired', 'shifter'],
+      ['text', 'A text or message went wrong', ['signal', 'landit', 'write'], 'wired', 'shifter'],
       ['screens', 'Phones, gaming or different schedules', ['turn', 'deal', 'week'], 'hours', 'rhythms']
     ]],
     ['family', 'Family', 'it’s about family', true, [
@@ -98,7 +97,7 @@
     ['friend', 'A friend', 'it’s about a friend', true, [
       ['drift', 'We’ve drifted apart', ['bond', 'turn', 'touch'], 'friends', 'signal'],
       ['fallout', 'We had a falling out', ['shifter', 'landit', 'write'], 'friends', 'signal'],
-      ['text', 'A message went wrong', ['signal', 'reader', 'write'], 'friends', 'shifter'],
+      ['text', 'A message went wrong', ['signal', 'landit', 'write'], 'friends', 'shifter'],
       ['no', 'I need to say no or set a limit', ['no', 'landit', 'write'], 'friends', 'carry']
     ]],
     ['house', 'Housemates', 'it’s about housemates', true, [
@@ -109,7 +108,7 @@
     ]],
     ['work', 'Work', 'it’s about work', true, [
       ['owners', 'Nobody is sure who owns what', ['carry', 'work', 'work'], 'work', 'keeps'],
-      ['message', 'A message landed badly, or I need to send a hard one', ['signal', 'reader', 'landit'], 'wired', 'shifter'],
+      ['message', 'A message landed badly, or I need to send a hard one', ['signal', 'landit', 'landit'], 'wired', 'shifter'],
       ['overload', 'Too much on my plate', ['carry', 'no', 'kit'], 'work', 'work'],
       ['thanks', 'We’d like to appreciate each other better', ['daily', 'wiring', 'wavelength'], 'thanks', 'bond']
     ]],
@@ -117,7 +116,7 @@
       ['load', 'Sharing the load among three or more', ['lemonq', 'lemonq', 'owner'], 'more', 'keeps'],
       ['same', 'The same argument keeps coming back', ['shifter', 'pause', 'keeps'], 'more', 'checkin'],
       ['time', 'Time together and schedules', ['turn', 'rhythms', 'week'], 'more', 'deal'],
-      ['text', 'A message went wrong', ['signal', 'reader', 'write'], 'exPoly', 'shifter']
+      ['text', 'A message went wrong', ['signal', 'landit', 'write'], 'exPoly', 'shifter']
     ]]
   ];
   var TIME = [['2', '2 minutes', 'about 2 minutes, or not much energy'], ['10', '10 minutes', 'about 10 minutes'], ['more', 'Longer', 'more time']];

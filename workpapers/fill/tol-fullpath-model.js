@@ -1990,7 +1990,7 @@
       sug('For anything about health or medicines, follow the care team’s instructions. These pages are about who owns each task.');
       sug('At each handoff, say what the next person needs to know, in one or two lines.');
     }
-    out.links = [['The Five Pillars', '/five-pillars.html'], ['Check-ins', '/check-ins.html'], ['The Signal Translator', '/signal-translator.html'], ['CALC-01', '/is-the-setup-working.html']];
+    out.links = [['The Five Pillars', '/five-pillars.html'], ['Check-ins', '/check-ins.html'], ['The Chat analyzer', '/signal-translator.html'], ['CALC-01', '/is-the-setup-working.html']];
     return out;
   }
 
@@ -2103,7 +2103,7 @@
     know: ['Know yourself', '/know-yourself.html'],
     pillars: ['The Five Pillars', '/five-pillars.html'],
     checkins: ['Check-ins', '/check-ins.html'],
-    signal: ['The Signal Translator', '/signal-translator.html'],
+    signal: ['The Chat analyzer', '/signal-translator.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'],
     decoder: ['Carrier Wave Decoder', '/carrier-wave-decoder.html'],
     pause: ['Pause and Play', '/pause-and-play.html'],

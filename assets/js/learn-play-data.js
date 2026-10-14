@@ -817,7 +817,7 @@ window.TOLLearnPlayData = {
       t: 'Ways in', g: 'harbor', n: '/start-here.html',
       m: [
         { at: 'open to anyone', k: 'sort', q: 'Open to anyone, or optional extra?', bins: ['Open to anyone, no sign-up', 'Optional, only if you want it'],
-          items: [['The Signal Translator and the Wiring Card', 0], ['All seven workpapers', 0], ['A short email when something new goes live', 1, 'Yes. Email updates are optional, and you don’t need them to use anything.'], ['Every chapter of the book', 0], ['The Carrier Wave Decoder', 0]] },
+          items: [['The Chat analyzer and the Wiring Card', 0], ['All seven workpapers', 0], ['A short email when something new goes live', 1, 'Yes. Email updates are optional, and you don’t need them to use anything.'], ['Every chapter of the book', 0], ['The Carrier Wave Decoder', 0]] },
         { at: 'Email updates are optional', k: 'quiz', q: 'What do you need to use everything here?',
           o: [['Nothing. It’s all open already', true, 'Yes! No sign-up, no account and no password. Your email is only for updates, if you want them.'],
               ['Your email address', false, 'Not quite. Email is optional. It only gets you a short note when something new goes live.'],

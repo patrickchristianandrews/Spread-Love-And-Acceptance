@@ -30,7 +30,7 @@
       picks:[
         ['/share-the-load.html#roommates','Roommates: rent, bills and three or more people','A shared-expenses note, fair splits, and how to talk about money without a fight.'],
         ['/lemonade-stand.html','The Lemonade Stand','Jobs and hours side by side. Works with more than two people.'],
-        ['/signal-translator.html','The Signal Translator','Test your opening line about money before the house meeting.']
+        ['/signal-translator.html','The Chat analyzer','Test your opening line about money before the house meeting.']
       ]},
     { id:'friends', ico:'\uD83E\uDEC2', label:'A friendship has drifted',
       say:'Friendships often drift without anyone choosing it: a move, a new baby, a busy year. It is fine to be the one who reaches out first, and it is fine to ask for a little more back. A short, warm message with no guilt in it usually does more than a long one.',
@@ -210,7 +210,7 @@
     { id:'say-hard', ico:'\u2709', label:'I need to say something hard',
       say:'Good. Saying it badly and saying nothing are both worse. It is worth testing the words first, because the same sentence lands very differently depending on who is receiving it.',
       picks:[
-        ['/signal-translator.html','The Signal Translator','Type your sentence and see where it might land badly.'],
+        ['/signal-translator.html','The Chat analyzer','Type your sentence and see where it might land badly.'],
         ['/workpapers/wp-09-say-it-so-it-lands.html','Say it so it lands','Fact, feeling, ask. Same content, far less damage.'],
         ['/check-ins.html','Check-ins','Pick the time and the room before you pick the words.']
       ]},
@@ -255,7 +255,7 @@
       say:'Fair enough. Growing up means you and the adults around you are both figuring out the new rules at the same time, and that gets loud. Here is stuff written for you, not about you.',
       picks:[
         ['/teens.html','For teens','Parents, friends, feelings and dating, with places to get help.'],
-        ['/signal-translator.html','The Signal Translator','Test a message before you send it.'],
+        ['/signal-translator.html','The Chat analyzer','Test a message before you send it.'],
         ['/frequency-journey.html','The arcade','When you just need a break.']
       ]},
     { id:'not-safe', ico:'\uD83D\uDEE1', label:'I don\u2019t feel safe with someone',
@@ -297,7 +297,7 @@
       picks:[
         ['/long-distance.html','Long-distance and apart','Call rhythm, time zones, video check-ins and reading short texts.'],
         ['/turning-toward.html','Turning toward','Small moments you can send to their phone in one tap.'],
-        ['/signal-translator.html','The Signal Translator','Check how a short text might land, before you guess.']
+        ['/signal-translator.html','The Chat analyzer','Check how a short text might land, before you guess.']
       ]},
     { id:'keep-good', ico:'\uD83C\uDF31', label:'We\u2019re okay, but it feels a bit flat',
       say:'Nothing is wrong, and that\u2019s worth protecting. When things feel flat, small regular moments of attention bring the warmth back, without turning it into a problem to solve.',

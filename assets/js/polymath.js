@@ -8,7 +8,7 @@
 
   var ROOTS = {
     balance: { name: 'Balance', ico: '⚖️', idea: 'what flows in has to match what flows out, or something runs dry', tool: ['The Lemonade Stand: see the whole load together', '/lemonade-stand.html'], pillar: 'Pillar I, See the whole load' },
-    signal: { name: 'Signal and noise', ico: '📡', idea: 'what’s sent isn’t always what arrives', tool: ['The Signal Translator: how a message may land', '/signal-translator.html'], pillar: 'Pillar IV, Tune how you send and receive' },
+    signal: { name: 'Signal and noise', ico: '📡', idea: 'what’s sent isn’t always what arrives', tool: ['The Chat analyzer: how a message may land', '/signal-translator.html'], pillar: 'Pillar IV, Tune how you send and receive' },
     loops: { name: 'Feedback loops', ico: '🔁', idea: 'small things repeated, with a check each time, shape the whole system', tool: ['The 90-second daily check-in (WP-13)', '/workpapers/wp-13-daily-check-in.html'], pillar: 'Pillar V, Notice the quiet incentives' },
     capacity: { name: 'Limited capacity', ico: '🔋', idea: 'everything has a limit, and a system with no spare room breaks on an ordinary bad day', tool: ['Today’s Weather: a one-minute check on yourself', '/quick-checks.html#today'], pillar: 'Pillar III, Read your state first' },
     ownership: { name: 'Ownership and structure', ico: '🗂️', idea: 'work that belongs to everyone belongs to no one', tool: ['One owner per job (WP-03)', '/workpapers/wp-03-one-owner-per-job.html'], pillar: 'Pillar II, Fix the setup, not the person' },
