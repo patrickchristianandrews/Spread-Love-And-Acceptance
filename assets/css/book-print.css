@@ -298,7 +298,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-glance-figs { display: block; --pc: #A8792F; }
 .pe-glance .book-fig { margin: 0 0 6mm; }
 .pe-glance .book-fig + .book-fig { break-before: page; }
-.pe-glance .book-fig img, .pe-glance .book-fig svg.pe-svg { max-height: 172mm; }
+.pe-glance .book-fig img, .pe-glance .book-fig svg.pe-svg { max-height: 152mm; }
 
 /* ---------- the end of every chapter ---------- */
 .pe-end { margin: 8mm 0 0; padding: 4mm 0 0; border-top: 2.4pt double var(--pc); break-before: auto; }
