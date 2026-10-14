@@ -43,7 +43,7 @@
        "short": [
         "mental-load"
        ],
-       "label": "The work nobody sees"
+       "label": "The mental load"
       }
      ],
      "tool": [
@@ -137,7 +137,7 @@
         "new-baby",
         "small-children"
        ],
-       "label": "New babies and small children"
+       "label": "Small children and a new baby"
       },
       {
        "ch": "understanding-2-stress",
@@ -157,17 +157,14 @@
      "problem": "We’re about to move in together.",
      "refs": [
       {
-       "ch": "chapter-4",
+       "ch": "chapter-5",
        "full": [
-        "moving-in",
-        "before-you-move-in",
-        "agreeing"
+        "moving-in"
        ],
        "short": [
-        "moving-in",
-        "before-you-move-in"
+        "moving-in"
        ],
-       "label": "Before you move in"
+       "label": "Starting out: before you move in"
       }
      ],
      "tool": [
@@ -188,7 +185,7 @@
         "money",
         "money-together"
        ],
-       "label": "Money, shared or separate"
+       "label": "Money between you"
       }
      ],
      "tool": [
@@ -279,6 +276,25 @@
      "tool": [
       "One owner per job",
       "/workpapers/wp-03-one-owner-per-job.html"
+     ]
+    },
+    {
+     "problem": "Faith matters to us, or family elders expect a say.",
+     "refs": [
+      {
+       "ch": "chapter-1",
+       "full": [
+        "faith-culture"
+       ],
+       "short": [
+        "faith-culture"
+       ],
+       "label": "Faith, culture and family voices"
+      }
+     ],
+     "tool": [
+      "The 90-second daily check-in",
+      "/workpapers/wp-13-daily-check-in.html"
      ]
     },
     {

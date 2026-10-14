@@ -234,17 +234,21 @@ async function makeBook(ctx, file, opts = {}) {
     return { qr, missingQR, keys, terms, pads, parts, chapters };
   }, { SITE, sample: !!opts.sample });
   log('prepared');
-  // anything wider than the text column makes Chromium shrink every page of the book to fit: name it
+  // anything wider than the text column makes Chromium shrink every page of the book (by up to a quarter): lay
+  // the book out at the column's width (132 mm) for a moment and name whatever sticks out
+  const vp = page.viewportSize();
+  await page.setViewportSize({ width: 499, height: 900 });
   const wide = await page.evaluate(() => {
-    const W = document.querySelector('main').getBoundingClientRect().right + 1;
-    const out = [];
+    const W = document.documentElement.clientWidth + 1, out = [];
     for (const el of document.querySelectorAll('main *')) {
+      if (el.closest('.pe-part, .pe-recto-pad, .pe-cover, .pe-backcover')) continue;
       const r = el.getBoundingClientRect();
-      if (r.width && r.right > W && !el.closest('.pe-part, .pe-recto-pad') && out.length < 8) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 60));
+      if (r.width && r.right > W && out.length < 8) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 60));
     }
     return out;
   });
-  if (wide.length) console.log('  warning: wider than the page (the book would print smaller):\n   ' + wide.join('\n   '));
+  await page.setViewportSize(vp || { width: 1280, height: 720 });
+  if (wide.length) console.log('  WARNING: wider than the text column, so Chromium will print the whole book smaller:\n   ' + wide.join('\n   '));
   if (prep.missingQR) console.log('  warning: %d QR codes not drawn', prep.missingQR);
   // every picture loads before printing (lazy ones too), but a broken one never holds the book up
   await page.evaluate(async () => {

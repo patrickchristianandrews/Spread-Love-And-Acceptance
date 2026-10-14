@@ -285,7 +285,13 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .book-fig svg.pe-svg { display: block; margin: 0 auto 2mm; width: 100%; height: auto; max-height: 165mm; }
 .book-fig figcaption { font-size: 8.4pt; line-height: 1.4; color: var(--soft); text-align: left; border-top: .4pt solid #D3C49C; padding-top: 1.6mm; }
 .book-fig-n { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin-right: 1.4mm; }
-.book-ex-wrap { margin: 4mm 0 5mm; break-inside: avoid; }
+/* a long filled-in example may run on to the next page (between its fields and rows, never inside one) rather
+   than leave a hole; its tab, title and first lines stay together */
+.book-ex-wrap { margin: 4mm 0 5mm; break-inside: auto; }
+.book-ex-wrap .bk-ex { break-inside: auto !important; page-break-inside: auto !important; }
+.bk-ex > figcaption { break-after: avoid; }
+.bk-ex-sheet > :first-child, .bk-ex-sheet > :first-child + * { break-before: avoid; break-after: avoid; }
+.bk-ex-note, .bk-ex-link { break-before: avoid; }
 .book-fig a.book-fig-zoom { text-decoration: none; }
 .pe-glance { page: pe-front; break-before: page; }
 .pe-glance h1 { padding-bottom: 3mm; border-bottom: .6pt solid var(--brass); }
