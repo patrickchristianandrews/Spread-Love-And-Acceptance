@@ -60,7 +60,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p.goto(BASE + '/workpapers/fill/wp-01.html');
     const field = p.locator('.wpf-form input[type="text"], .wpf-form textarea').first();
     await field.fill('Rowan’s first answer');
-    await p.check('#wpf-keep');
+    await p.evaluate(() => { const k = document.getElementById('wpf-keep'); if (!k.checked) k.click(); });
     await p.waitForTimeout(800);
     const wpKey = await p.evaluate(() => Object.keys(localStorage).find((k) => k.startsWith('tol-wpf-keep:')));
     ok(!!wpKey, 'worksheet draft kept (' + wpKey + ')');

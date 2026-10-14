@@ -260,6 +260,81 @@ asyncChecks.push((async function () {
   ok(C.has('TOL-TOGETHER:1.abc'), 'has() spots a together code');
 })();
 
+
+// ------------------------------------------------------------------ joining: side by side, scores, merged lists
+(function () {
+  const F = C.combine.fields, S = C.combine.score, L = C.combine.list;
+  const two = [{ id: 'a', n: 'Alex', me: true, d: { w: ['Hugs', 'Notes'], t: 'Tea', x: '' } }, { id: 'b', n: 'Sam', d: { w: ['notes ', 'Walks'], t: ' tea', y: 'Only Sam' } }];
+  const f2 = F(two, []);
+  eq([f2.same, f2.differ], [1, 1], 'two people: one answer the same, one different');
+  eq(f2.rows.filter(r => r.k === 'w')[0].common, ['Notes'], 'two people: the choices both made are found (case and spaces don’t matter)');
+  ok(f2.rows.filter(r => r.k === 'y')[0].missing, 'one person missing an answer: marked, not counted as a difference');
+  ok(!f2.rows.some(r => r.k === 'x'), 'an answer nobody filled in is left out');
+  const three = two.concat([{ id: 'k', n: 'Kim', d: { w: ['Notes'], t: 'Coffee' } }]);
+  const f3 = F(three, [{ k: 'w' }, { k: 't' }]);
+  eq(f3.rows.map(r => [r.k, r.same]), [['w', false], ['t', false]], 'three people: compared across everyone');
+  eq(f3.rows[0].common, ['Notes'], 'three people: what all three chose');
+  const s2 = S([{ id: 'a', n: 'Alex', me: true, d: { s: 0.62 } }, { id: 'b', n: 'Sam', d: { s: 0.30 } }]);
+  eq([s2.gap, s2.close, s2.high && s2.high.n], [0.32, false, 'Alex'], 'scores: the gap, and whose reads higher');
+  ok(!/win|lose|better|worse/i.test(C.combine.gapWords(s2)), 'scores: the words name no winner');
+  ok(/isn’t a contest/.test(C.combine.gapWords(s2)), 'scores: the words say it isn’t a contest');
+  const s3 = S([{ n: 'A', d: { s: 0.5 } }, { n: 'B', d: { s: 0.55 } }, { n: 'C', d: {} }]);
+  eq([s3.gap, s3.close], [0.05, true], 'scores: three people, one missing, the others close');
+  ok(S([{ n: 'A', d: { s: 0.5 } }]).gap === null, 'scores: one score alone has no gap');
+  const l = L([{ n: 'Alex', d: { items: ['Morning coffee', { t: 'Sunday walk', x: 'fading' }] } }, { n: 'Sam', d: { items: ['morning  coffee', 'Movie night'] } }, { n: 'Kim', d: {} }]);
+  eq(l.items.map(i => [i.text, i.by]), [['Morning coffee', ['Alex', 'Sam']], ['Sunday walk', ['Alex']], ['Movie night', ['Sam']]], 'lists: merged, duplicates joined, who added what (a person with no list is fine)');
+  eq(l.shared, 1, 'lists: one item on more than one list');
+  eq(l.items[1].extra, [{ n: 'Alex', x: 'fading' }], 'lists: a note on an item is kept with who wrote it');
+})();
+
+// ------------------------------------------------------------------ "Share my results": the bundle
+(function () {
+  const R = require(path.join(__dirname, '..', '..', 'assets', 'js', 'collab-results.js'));
+  function store(ls, ss) { return { ls: k => (k in ls ? ls[k] : null), ss: k => (k in ss ? ss[k] : null) }; }
+  const wp02 = { format: 'x', state: { values: { name: 'Alex', 'factors.sleep': '3', 'factors.work': '3', 'factors.conflict': '2', 'factors.physical': '2', 'factors.time': '3' }, tables: {} } };
+  const A = store({
+    'tol-weather-v1': JSON.stringify([{ d: '2026-10-14', sky: 'fog', load: 3, sleep: 1 }]),
+    'tol-letters': JSON.stringify({ cur: 'c1', convos: { c1: { turns: [{ who: 'me', f: 'The bins.', a: 'One owner?' }] } } }),
+    'tol-wpf-keep:WP-15': JSON.stringify({ state: { values: {}, tables: { rituals: [{ ritual: 'Morning coffee', state: 'Alive' }, { ritual: '' }] } } }),
+    'tol-wpf-keep:WP-03': JSON.stringify({ state: { values: { partnerA: 'Noor', partnerB: 'Sami' }, tables: { treaty: [{ task: 'Bins', r: 'A' }, { task: 'Dishes & kitchen reset', freq: 'Daily' }, { task: 'Laundry', r: 'Both' }] } } })
+  }, {
+    'tol-wavelength-tab-v1': JSON.stringify({ answers: { pace: ['a', 'a', 'b'], lens: ['b', 'b', 'b'], send: ['a', 'a', 'a'], recv: ['b', 'a', 'b'] }, chips: [] }),
+    'tol-collab-results': JSON.stringify({ care: { w: ['A handwritten note'], t: ['A walk together'] }, touch: { items: ['Our song'] } }),
+    'tol-wpf-tab:WP-02': JSON.stringify(wp02)
+  });
+  const av = R.available(A), ids = av.map(a => a.id);
+  ['wavelength', 'care', 'rituals', 'load', 'weather', 'letter', 'wp-03', 'wp-15'].forEach(id => ok(ids.indexOf(id) >= 0, 'bundle: found on this device: ' + id));
+  eq(av.filter(a => a.private).map(a => a.id).sort(), ['letter', 'weather'], 'bundle: today’s weather and the message are marked private');
+  eq(av.filter(a => a.id === 'wavelength')[0].data, { c: 'QTDA' }, 'bundle: the Wave Code from finished answers');
+  eq(av.filter(a => a.id === 'load')[0].data, { s: 0.65 }, 'bundle: the load score from this tab’s WP-02');
+  eq(av.filter(a => a.id === 'rituals')[0].data.items.map(i => i.t), ['Morning coffee', 'Our song'], 'bundle: rituals from WP-15 and the touchstone list');
+  eq(av.filter(a => a.id === 'wp-03')[0].data.items, [{ t: 'Bins', x: 'Noor' }, { t: 'Laundry', x: 'shared' }], 'bundle: WP-03 jobs with an owner (an untouched starter job stays home)');
+  eq(Object.keys(R.build(A, []).items), [], 'bundle: nothing goes in by default');
+  eq(Object.keys(R.build(A, ['care', 'load']).items).sort(), ['care', 'load'], 'bundle: only the chosen subset goes in');
+  ok(!('weather' in R.build(A, ['care', 'wavelength', 'load']).items) && !('letter' in R.build(A, ['care']).items), 'bundle: private items stay out unless picked');
+  ok('weather' in R.build(A, ['weather']).items, 'bundle: a private item goes only when picked by name');
+  ok(!('nonsense' in R.build(A, ['nonsense', 'care']).items), 'bundle: an unknown id is ignored');
+  // joining bundles: two and three people, a missing section, a newer version, something unknown
+  const envA = C.envelope({ tool: 'bundle', id: 'palex001', name: 'Alex', d: R.build(A, ['care', 'load', 'wavelength']), at: 1760000000, r: 'bund01' });
+  const sam = { v: 1, items: { care: { v: 1, d: { w: ['A handwritten note', 'Hearing “I’m proud of you”'] } }, wavelength: { v: 1, d: { c: 'SFNA' } } } };
+  const envB = C.envelope({ tool: 'bundle', id: 'psam0002', name: 'Sam', d: sam, at: 1760000100, base: envA, r: envA.r });
+  const linkB = C.read(C.link(envB, '/together.html'));
+  const it2 = R.items(linkB, 'palex001');
+  eq(Object.keys(it2.byItem).sort(), ['care', 'load', 'wavelength'], 'bundle: two people, every result listed');
+  eq(it2.byItem.care.map(x => [x.n, !!x.me]), [['Alex', true], ['Sam', false]], 'bundle: two people, each one’s part, yours marked');
+  eq(it2.byItem.load.map(x => x.n), ['Alex'], 'bundle: one person missing a section (Sam sent no load)');
+  const kim = { v: 1, items: { care: { v: 7, d: { w: ['A long hug'] } }, futurething: { v: 1, d: { a: 1 } } } };
+  const envK = C.envelope({ tool: 'bundle', id: 'pkim0003', name: 'Kim', d: kim, at: 1760000200, base: linkB, r: envA.r });
+  const it3 = R.items(C.read(C.link(envK, '/together.html')), 'psam0002');
+  eq(it3.byItem.care.map(x => x.n), ['Alex', 'Sam', 'Kim'], 'bundle: three people, in the order they sent');
+  eq(it3.newer, ['care'], 'bundle: a part from a newer version is flagged, and still shown');
+  eq(it3.unknown, ['futurething'], 'bundle: something this version doesn’t know is set aside');
+  // the side-by-side data for a Wave Code reads letter by letter
+  eq(R.shaped('wavelength', { c: 'QTDA' }), { pace: 'Q · Quick Spark', lens: 'T · Trees (details first)', send: 'D · Direct', recv: 'A · Attuned' }, 'bundle: a Wave Code shaped for side by side');
+  const fw = C.combine.fields([{ n: 'A', me: true, d: R.shaped('wavelength', { c: 'QTDA' }) }, { n: 'S', d: R.shaped('wavelength', { c: 'QFNA' }) }], []);
+  eq([fw.same, fw.differ], [2, 2], 'bundle: two Wave Codes, two lines the same and two different');
+})();
+
 // ------------------------------------------------------------------ sms: and mailto:
 (function () {
   const body = 'Here’s my part.\nhttps://spreadloveandacceptance.com/check-ins.html#together=1.abc_-';
