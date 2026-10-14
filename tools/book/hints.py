@@ -102,19 +102,74 @@ SPEAKERS = {
 
 
 # ---------- the catalogue and the hints ----------
+OVERRIDES = {}
+
+
 def _load():
+    global OVERRIDES
     p = os.path.join(HERE, 'hints.json')
     try:
         d = json.load(open(p, encoding='utf-8'))
     except Exception as ex:  # a half-written file must not break the book
         print('book: skipped hints.json (%s)' % ex)
         return [], [], []
+    OVERRIDES = d.get('kinds') or {}
     return d.get('workpapers') or [], d.get('tools') or [], d.get('hints') or []
 
 
-WORKPAPERS, TOOLS, HINTS = _load()
+def _registry():
+    """The site's tool list (/assets/js/tools-registry.js) as [{id, href, kind}], read with node. Its `kind`
+    ('workpaper' or 'tool') is the single source of truth for which list an item belongs to."""
+    import subprocess
+    js = ("global.window={};require(process.argv[1]);process.stdout.write(JSON.stringify("
+          "(window.TOLTools||[]).map(function(t){return {id:t.id,href:t.href,kind:t.kind};})))")
+    try:
+        out = subprocess.run(['node', '-e', js, os.path.join(ROOT, 'assets', 'js', 'tools-registry.js')],
+                             capture_output=True, text=True, timeout=30)
+        return json.loads(out.stdout or '[]')
+    except Exception as ex:
+        print('book: could not read tools-registry.js (%s); using the kinds in hints.json' % ex)
+        return []
+
+
+REGISTRY = _registry()
+REG_MISSES = []
+
+
+def _reg_kind(item):
+    """The registry's kind for a catalogue item: by its id ("reg"), its exact address, or its page."""
+    if not REGISTRY:
+        return None
+    by_id = {r['id']: r for r in REGISTRY}
+    if item.get('reg') in by_id:
+        return by_id[item['reg']]['kind']
+    for r in REGISTRY:
+        if r['href'] == item['href']:
+            return r['kind']
+    paths = [re.sub(r'[#?].*$', '', item['href'])] + list(item.get('match') or [])
+    kinds = set(r['kind'] for r in REGISTRY if re.sub(r'[#?].*$', '', r['href']) in paths)
+    return kinds.pop() if len(kinds) == 1 else None
+
+
+def _sort(declared_wp, declared_tools):
+    """Put every catalogue item in the list its registry kind says (items the registry doesn't list keep
+    the list they are declared in)."""
+    wps, tls = [], []
+    for item, declared in [(w, 'workpaper') for w in declared_wp] + [(t, 'tool') for t in declared_tools]:
+        kind = _reg_kind(item)
+        if kind is None:
+            REG_MISSES.append(item['key'])
+            kind = declared
+        item = dict(item, kind=kind)
+        (wps if kind == 'workpaper' else tls).append(item)
+    return wps, tls
+
+
+_WP0, _TL0, HINTS = _load()
+WORKPAPERS, TOOLS = _sort(_WP0, _TL0)
 WP = {w['key']: w for w in WORKPAPERS}
 TL = {t['key']: t for t in TOOLS}
+ITEM = dict(list(WP.items()) + list(TL.items()))
 
 
 def short_path(item):
@@ -152,11 +207,10 @@ def ref_line(kind, item, cls='bh-ref'):
 def hint_html(h, markers=True, extra_cls=''):
     who = h.get('who') if h.get('who') in SPEAKERS else 'puddles'
     name, svg = SPEAKERS[who]
-    refs = ''
-    if h.get('wp') in WP:
-        refs += ref_line('wp', WP[h['wp']])
-    if h.get('tool') in TL:
-        refs += ref_line('tool', TL[h['tool']])
+    # each named item is shown as what the registry says it is: the workpaper line first, then the tool line
+    named = [ITEM[k] for k in (h.get('wp'), h.get('tool')) if k in ITEM]
+    refs = ''.join(ref_line('wp', i) for i in named if i['kind'] == 'workpaper')
+    refs += ''.join(ref_line('tool', i) for i in named if i['kind'] != 'workpaper')
     s = ('<aside class="book-hint%s no-bubble no-cheer no-dive" data-no-bubble data-who="%s" aria-label="A hint from %s">'
          '<span class="bh-badge" aria-hidden="true">%s</span><div class="bh-body"><p class="bh-who">%s</p>'
          '<p class="bh-text">%s</p>%s</div></aside>') % (
@@ -232,10 +286,12 @@ def check_links(warn):
         if not (os.path.exists(os.path.join(ROOT, sp.lstrip('/') + '.html')) or os.path.exists(os.path.join(ROOT, sp.lstrip('/'), 'index.html'))):
             warn('hints: the printed address of %s (%s) has no page' % (item['key'], sp))
     for h in HINTS:
-        if h.get('wp') and h['wp'] not in WP:
-            warn('hint in %s names an unknown workpaper %s' % (h.get('chapter'), h['wp']))
-        if h.get('tool') and h['tool'] not in TL:
-            warn('hint in %s names an unknown tool %s' % (h.get('chapter'), h['tool']))
+        for f in ('wp', 'tool'):
+            if h.get(f) and h[f] not in ITEM:
+                warn('hint in %s names an unknown item %s' % (h.get('chapter'), h[f]))
+            elif h.get(f) and (ITEM[h[f]]['kind'] == 'workpaper') != (f == 'wp'):
+                warn('hint in %s: %s is a %s in tools-registry.js; move it to "%s"' % (
+                    h.get('chapter'), h[f], ITEM[h[f]]['kind'], 'wp' if ITEM[h[f]]['kind'] == 'workpaper' else 'tool'))
         if not h.get('wp') and not h.get('tool'):
             warn('hint in %s names no workpaper or tool' % h.get('chapter'))
 
@@ -360,3 +416,133 @@ def back_section(mark, found, chapter_ref, pc):
     body += lists_html(found, chapter_ref)
     return ('<section class="pe-fb pe-fb-back pe-back pe-fb-wt no-bubble no-cheer no-dive" data-no-bubble id="wp-tools" style="--pc:%s">%s'
             '<h1 class="pe-fb-title">Workpapers and tools in this book</h1>\n%s\n</section>') % (pc, mark('wp-tools'), body)
+
+
+# ---------- keep the chapters' own lists of workpapers and tools apart ----------
+# The owner: "Keep work papers and tools separate." Part Three's "Tools and reading on this site" lists and the
+# topic pages' "Tools and workpapers for this" lists used to mix them. split_lists() sorts each item into
+# Workpapers / Tools / Reading by its link, using tools-registry.js's kind, and rewrites the list in the page
+# source between <!-- book-kinds:start --> and <!-- book-kinds:end --> (run again, it re-sorts the same items).
+KIND_START, KIND_END = '<!-- book-kinds:start -->', '<!-- book-kinds:end -->'
+SPLIT_HEADS = [
+    # (heading pattern, new heading text)
+    (r'<h2 id="tools">[^<]*</h2>', '<h2 id="tools">{kinds} on this site</h2>'),
+    (r'<h2>(?:Tools and workpapers|Workpapers and tools) for this</h2>', '<h2>Workpapers and tools for this</h2>'),
+]
+KIND_HEADS = {
+    'workpaper': ('Workpapers', 'pages you fill in, on your own or together'),
+    'tool': ('Tools', 'helpers you use on the site'),
+    'reading': ('Reading', 'pages to read on the site'),
+}
+
+
+def classify(href):
+    """'workpaper', 'tool' or 'reading' for a site link. The registry's kind decides: the exact address, or the
+    page itself when the registry lists the whole page, or a #part of a page whose tool sits at a #part."""
+    h = html.unescape(href)
+    over = (OVERRIDES or {}).get(h)
+    if over:
+        return over
+    if not h.startswith('/') or h.startswith('/library/') or h.startswith('/book/'):
+        return 'reading'
+    path, frag = re.sub(r'[#?].*$', '', h), ('#' in h)
+    for r in REGISTRY:
+        if r['href'] == h:
+            return r['kind']
+    for r in REGISTRY:
+        rp = re.sub(r'[#?].*$', '', r['href'])
+        if rp == path and ('#' not in r['href'] or frag):
+            return r['kind']
+    if re.match(r'^/(?:workpapers/(?!calculators/)|wp-\d)', path):
+        return 'workpaper'
+    return 'reading'
+
+
+def _li_kind(li):
+    ks = [classify(h) for h in re.findall(r'<a\b[^>]*\bhref="([^"]+)"', li)]
+    for k in ('workpaper', 'tool'):
+        if ks and ks[0] == k:
+            return k
+    if 'workpaper' in ks:
+        return 'workpaper'
+    return 'tool' if 'tool' in ks else 'reading'
+
+
+def _top_lis(ul_html, element_end):
+    out, i = [], 0
+    while True:
+        j = ul_html.find('<li', i)
+        if j < 0:
+            return out
+        k = element_end(ul_html, j)
+        out.append(ul_html[j:k])
+        i = k
+
+
+ARROW_ROW = re.compile(r'<p>((?:\s*<a [^>]*>[^<]*(?:&rarr;|→)\s*</a>)+\s*)</p>')
+
+
+def _split_arrow_rows(pre):
+    """A row of "Name →" links before the list: one row per kind (workpapers, then tools, then reading)."""
+    def sub(m):
+        links = re.findall(r'<a [^>]*>[^<]*</a>', m.group(1))
+        by = {'workpaper': [], 'tool': [], 'reading': []}
+        for a in links:
+            by[classify(re.search(r'href="([^"]+)"', a).group(1))].append(a)
+        rows = [' '.join(by[k]) for k in ('workpaper', 'tool', 'reading') if by[k]]
+        return '\n  '.join('<p>%s</p>' % r for r in rows)
+    return ARROW_ROW.sub(sub, pre)
+
+
+def split_lists(s, element_end, warn=None, tag=''):
+    for pat, new_head in SPLIT_HEADS:
+        m = re.search(pat, s)
+        if not m:
+            continue
+        a = m.end()
+        # the section runs to the next h2, the end of its <section>, or the end of the page's main text
+        stops = [k for k in (s.find('<h2', a), s.find('</section>', a), s.find('</main>', a)) if k > 0]
+        limit = min(stops) if stops else len(s)
+        ks = s.find(KIND_START, a)
+        if 0 <= ks < limit:
+            st = ks
+            en = s.index(KIND_END, st) + len(KIND_END)
+            region = s[st:en]
+            uls = [region[x.start():element_end(region, x.start())] for x in re.finditer(r'<ul\b', region)]
+        else:
+            u = re.search(r'<ul\b[^>]*>', s[a:limit])
+            if not u:
+                if warn:
+                    warn('lists: no list after %s in %s' % (m.group(0), tag))
+                continue
+            st = a + u.start()
+            en = element_end(s, st)
+            uls = [s[st:en]]
+        pre = _split_arrow_rows(s[a:st])
+        ul_cls = ''
+        cm = re.match(r'<ul\b[^>]*\bclass="([^"]*)"', uls[0]) if uls else None
+        if cm:
+            ul_cls = ' '.join(c for c in cm.group(1).split() if not c.startswith('kind-'))
+        groups = {'workpaper': [], 'tool': [], 'reading': []}
+        for ul in uls:
+            inner = ul[ul.index('>') + 1:ul.rindex('</ul>')]
+            for li in _top_lis(inner, element_end):
+                groups[_li_kind(li)].append(li.strip())
+        out = [KIND_START]
+        for k in ('workpaper', 'tool', 'reading'):
+            if not groups[k]:
+                continue
+            h, sub = KIND_HEADS[k]
+            out.append('<h3 class="kind-h kind-h-%s">%s <span class="kind-sub">%s</span></h3>' % (k, h, sub))
+            out.append('<ul class="%s">' % ' '.join(x for x in (ul_cls, 'kind-list', 'kind-' + k) if x))
+            out.extend('  ' + li for li in groups[k])
+            out.append('</ul>')
+        out.append(KIND_END)
+        if '{kinds}' in new_head:
+            present = [k for k in ('workpaper', 'tool', 'reading') if groups[k] or any(
+                classify(h) == k for h in re.findall(r'href="([^"]+)"', pre))]
+            words = [{'workpaper': 'workpapers', 'tool': 'tools', 'reading': 'reading'}[k] for k in present] or ['reading']
+            phrase = words[0] if len(words) == 1 else ', '.join(words[:-1]) + ' and ' + words[-1]
+            new_head = new_head.replace('{kinds}', phrase[0].upper() + phrase[1:])
+        s = s[:m.start()] + new_head + pre + '\n'.join(out) + s[en:]
+    return s

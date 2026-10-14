@@ -130,3 +130,16 @@
   .pe-ff-k-wp{ background:#FFFDF4; color:#6E4E1C; border:.6pt dashed #A8792F; border-radius:.4mm; }
   .pe-ff-k-tool{ background:#3E6B4C; color:#FFFDF7; border:.6pt solid #3E6B4C; border-radius:2mm; }
 }
+
+/* the chapters' and topic pages' own lists, split into Workpapers, Tools and Reading (hints.split_lists) */
+h3.kind-h{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .55rem; margin:1.2rem 0 .4rem; font-size:1.05rem; }
+h3.kind-h .kind-sub{ font-family:"Lora", Georgia, serif; font-weight:400; font-style:italic; font-size:.9rem; color:var(--ink-soft, #5A5346); }
+h3.kind-h-workpaper::before, h3.kind-h-tool::before{
+  content:""; display:inline-block; width:.85rem; height:.85rem; align-self:center; flex:0 0 auto;
+}
+h3.kind-h-workpaper::before{ background:#FFFDF4; border:1.2px dashed #A8792F; border-radius:2px; }
+h3.kind-h-tool::before{ background:#3E6B4C; border-radius:999px; }
+@media print{
+  h3.kind-h, .pe-body h4.kind-h{ font-size:10.6pt; margin:3.4mm 0 1.2mm; break-after:avoid; }
+  .kind-h .kind-sub{ font-size:8.6pt; }
+}

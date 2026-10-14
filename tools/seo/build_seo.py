@@ -955,7 +955,9 @@ def process(path, report):
     s = re.sub(r'\n?<!-- launch:start -->.*?<!-- launch:end -->', '', s, flags=re.S)
     # (never on the two safety pages: the cover doesn't show there anyway, and those pages are left as they are)
     if 'id="lp-boot-css"' not in s[:s.find('</head>')] and CSP_META not in s[:s.find('</head>')] and path not in LOCK_FREE:
-        mv = re.search(r'<meta name="viewport"[^>]*>', s[:s.find('</head>')]) or re.search(r'<meta charset="[^"]*"\s*/?>', s[:s.find('</head>')])
+        # (after the app-lock line when there is one, so lock_boot() below finds it already in place)
+        mv = (re.search(r'<!-- lock:end -->', s[:s.find('</head>')]) or re.search(r'<meta name="viewport"[^>]*>', s[:s.find('</head>')])
+              or re.search(r'<meta charset="[^"]*"\s*/?>', s[:s.find('</head>')]))
         if mv: s = s[:mv.end()] + '\n<!-- launch:start -->' + ''.join(LAUNCH_BOOT) + '<!-- launch:end -->' + s[mv.end():]
     ov_title, ov_desc = OVERRIDE.get(path, (None, None))
     st, sd = SEARCH.get(path, (None, None))

@@ -1,5 +1,7 @@
 {
-  "about": "The character hints in the book and the workpapers and tools they point to (bookpals11). Read by tools/book/hints.py. Workpapers are pages you fill in (kind 'workpaper' in /assets/js/tools-registry.js); tools are interactive helpers on the site (kind 'tool'). Keep them separate: a hint names at most one of each, on its own line. 'print' is the short address printed on paper (a page that exists, without .html).",
+  "about": "The character hints in the book and the workpapers and tools they point to (bookpals11). Read by tools/book/hints.py. Workpapers are pages you fill in; tools are interactive helpers on the site. Which list an item is shown in comes from its kind in /assets/js/tools-registry.js (the single source of truth; the calculators and the practice playground are tools); the two lists here are only the fallback for items the registry doesn't list. Keep them separate: a hint names at most one of each, on its own line. 'print' is the short address printed on paper (a page that exists, without .html).",
+  "kinds": {"/self-path.html#package": "workpaper", "/quick-checks.html": "tool", "/perspective-shifter.html": "tool", "/communication-style-quiz.html": "tool"},
+  "kinds_about": "Links the registry does not list as written, with their kind: the Individual package is every workpaper of the self path in one PDF; /quick-checks.html is Today’s Weather (registry: #today); /perspective-shifter.html now opens the reset tool’s Their side tab; /communication-style-quiz.html is the quiz’s own page.",
   "workpapers": [
     {"key": "wp01", "code": "WP-01", "name": "Who did what", "href": "/workpapers/wp-01.html", "print": "/wp-01"},
     {"key": "wp02", "code": "WP-02", "name": "How much are you carrying?", "href": "/workpapers/wp-02-how-much-are-you-carrying.html", "print": "/wp-02"},
@@ -11,8 +13,6 @@
     {"key": "wp13", "code": "WP-13", "name": "The 90-second daily check-in", "href": "/workpapers/wp-13-daily-check-in.html", "print": "/wp-13"},
     {"key": "wp14", "code": "WP-14", "name": "Is it us, or is it everything else?", "href": "/workpapers/wp-14-is-it-us-or-everything-else.html", "print": "/wp-14"},
     {"key": "wp15", "code": "WP-15", "name": "Keep your little rituals alive", "href": "/workpapers/wp-15-keep-your-little-rituals-alive.html", "print": "/wp-15"},
-    {"key": "calc01", "code": "CALC-01", "name": "Is the setup working for everyone?", "href": "/is-the-setup-working.html", "match": ["/workpapers/calculators/is-the-setup-working-quick.html", "/calc01-solvency.html"]},
-    {"key": "calc02", "code": "CALC-02", "name": "Look back over 30 days", "href": "/look-back-30-days.html", "match": ["/workpapers/calculators/look-back-30-days-quick.html"]},
     {"key": "fill", "code": "", "name": "All the workpapers, to fill in on screen or print", "href": "/workpapers/fill/index.html", "print": "/workpapers/fill"}
   ],
   "tools": [
@@ -44,7 +44,9 @@
     {"key": "room", "name": "Room agreement for roommates", "href": "/sharing-a-room.html#agreement-h"},
     {"key": "teamcheck", "name": "10-minute team check-in", "href": "/work.html#check-in"},
     {"key": "connect", "name": "Connect two fields of study", "href": "/polymath.html#connect"},
-    {"key": "start10", "name": "Start in 10 minutes", "href": "/start-in-10-minutes.html"}
+    {"key": "start10", "name": "Start in 10 minutes", "href": "/start-in-10-minutes.html"},
+    {"key": "calc01", "name": "Fair split calculator", "href": "/is-the-setup-working.html", "match": ["/workpapers/calculators/is-the-setup-working-quick.html", "/calc01-solvency.html"]},
+    {"key": "calc02", "name": "Look back over 30 days", "href": "/look-back-30-days.html", "match": ["/workpapers/calculators/look-back-30-days-quick.html"]}
   ],
   "hints": [
     {"chapter": "part-1", "who": "sugarfoot", "text": "Sugarfoot’s tip: go slowly in this part. It’s all about you, and you’re worth the time. A one-minute check on how you are today is a gentle way in.", "tool": "weather"},
@@ -83,11 +85,11 @@
     {"chapter": "chapter-1", "version": "full", "after_id": "going-back", "who": "sugarfoot", "text": "Sugarfoot’s tip: if a talk has already gone wrong, that’s all right. Take a slow breath first, then try the step-by-step reset together.", "tool": "reset"},
     {"chapter": "chapter-1", "version": "full", "after_id": "your-part", "who": "puddles", "text": "The smallest habit in this chapter often does the most: three short questions, once a day. The daily check-in keeps them in one place.", "wp": "wp13"},
 
-    {"chapter": "chapter-2", "version": "short", "idea": 1, "who": "sugarfoot", "text": "Sugarfoot’s tip: one bad evening isn’t the whole story. Give it a month, then run the check together, slowly, with a snack.", "wp": "calc01"},
+    {"chapter": "chapter-2", "version": "short", "idea": 1, "who": "sugarfoot", "text": "Sugarfoot’s tip: one bad evening isn’t the whole story. Give it a month, then run the check together, slowly, with a snack.", "tool": "calc01"},
     {"chapter": "chapter-2", "version": "short", "idea": 4, "who": "puddles", "text": "A job without a name tends to land on whoever notices first. Write one owner next to each job, and the guessing stops.", "wp": "wp03"},
     {"chapter": "chapter-2", "version": "full", "after_id": "what-counts", "who": "puddles", "text": "The check only works if the hidden jobs are counted too. A one-week log, with the planning and remembering written in, gives you honest numbers to start from.", "wp": "wp01"},
     {"chapter": "chapter-2", "version": "full", "after_id": "stress", "who": "tidbit", "text": "Tidbit wants you to know: the stress input is just five quick questions about how full your tank is. No wrong answers, promise!", "wp": "wp02"},
-    {"chapter": "chapter-2", "version": "full", "after_id": "apex", "who": "puddles", "text": "The score judges the setup, never a person. Let the calculator do the sums, and save your energy for the talk afterwards. Even a professor would rather not do long division at the kitchen table.", "wp": "calc01"},
+    {"chapter": "chapter-2", "version": "full", "after_id": "apex", "who": "puddles", "text": "The score judges the setup, never a person. Let the calculator do the sums, and save your energy for the talk afterwards. Even a professor would rather not do long division at the kitchen table.", "tool": "calc01"},
 
     {"chapter": "chapter-3", "version": "short", "idea": 2, "who": "puddles", "text": "Before a hard talk, check how full your own tank is. Five quick questions, about two minutes, and you’ll know whether now is the time.", "wp": "wp02"},
     {"chapter": "chapter-3", "version": "short", "idea": 7, "who": "tidbit", "text": "Tidbit’s tip: say your number out loud, like “I’m a seven today.” It’s quick, and nobody has to guess!", "tool": "weather"},
@@ -106,7 +108,7 @@
     {"chapter": "chapter-5", "version": "short", "idea": 6, "who": "puddles", "text": "The look-back has its own workpaper: a month of notes, one list, and an ✗ for each week a job slipped. It makes a pattern easy to see.", "wp": "wp04"},
     {"chapter": "chapter-5", "version": "short", "idea": 8, "who": "tidbit", "text": "Tidbit wants you to know: a look-back can start with a high five. Name one thing that went well first! The weekly card has a nice way to begin.", "tool": "weekly"},
     {"chapter": "chapter-5", "version": "full", "after_id": "what-you-need", "who": "puddles", "text": "The look-back has its own workpaper: a month of notes, one list, and an ✗ for each week a job slipped. It makes a pattern easy to see.", "wp": "wp04"},
-    {"chapter": "chapter-5", "version": "full", "after_id": "count", "who": "puddles", "text": "If you’d rather not add things up by hand, the 30-day calculator does the counting, so the talk can be about the setup, not the sums.", "wp": "calc02"},
+    {"chapter": "chapter-5", "version": "full", "after_id": "count", "who": "puddles", "text": "If you’d rather not add things up by hand, the 30-day calculator does the counting, so the talk can be about the setup, not the sums.", "tool": "calc02"},
     {"chapter": "chapter-5", "version": "full", "after_id": "quiet-months", "who": "tidbit", "text": "Tidbit wants you to know: a quiet month deserves a high five! Name what went well before anything else. The weekly card has a nice way to begin.", "tool": "weekly"},
     {"chapter": "chapter-5", "version": "full", "after_id": "moving-in", "who": "sugarfoot", "text": "Sugarfoot’s tip: before you move in, pick owners for just three jobs, over a slow cup of tea. Small and early is easiest.", "wp": "wp03"},
 

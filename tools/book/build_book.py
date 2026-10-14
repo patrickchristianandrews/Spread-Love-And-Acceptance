@@ -493,10 +493,13 @@ def uses(slug):
     if e[4]:
         return [(t, h, '') for t, h in e[4]][:2]
     pg = PAGES[(slug, False)]
-    m = re.search(r'<h2 id="tools">.*?<ul>(.*?)</ul>', pg, re.S)
+    # the chapter's list (split into workpapers, tools and reading by hints.split_lists): workpapers and tools first
+    m = re.search(r'<h2 id="tools">[^<]*</h2>\s*<!-- book-kinds:start -->.*?<!-- book-kinds:end -->', pg, re.S) or re.search(r'<h2 id="tools">.*?</ul>', pg, re.S)
     out = []
     if m:
-        for li in re.findall(r'<li>(.*?)</li>', m.group(1), re.S):
+        lis = re.findall(r'<li>(.*?)</li>', m.group(0), re.S)
+        lis.sort(key=lambda li: {'workpaper': 0, 'tool': 1}.get(hints._li_kind(li), 2))
+        for li in lis:
             a = re.match(r'\s*<a href="([^"]+)">(.*?)</a>:?\s*(.*)', li, re.S)
             if a and not a.group(1).startswith('/library/'):
                 d = re.sub(r'^[\s,;:·–—-]+', '', strip_tags(a.group(3))).strip().rstrip('.')
@@ -798,6 +801,8 @@ def patch_chapter(i, deep):
     if 'class="last-updated' not in s:
         s = s.replace('</main>', '<p class="last-updated no-bubble">Last updated: %s</p>\n</main>' % UPDATED, 1)
     s = s.replace('<header class="read-head">', open_block(e) + '<header class="read-head">', 1)
+    # bookpals11: the chapter's own list of workpapers, tools and reading, as three separate lists
+    s = hints.split_lists(s, element_end, MISSING.append, e[0] + ('-in-depth' if deep else ''))
     s = insert_generated(s, e[0], deep)
     ver = 'full' if deep else 'short'
     if ver not in FIGCOUNT:
@@ -1044,6 +1049,10 @@ def chapter_end(e, deep, here):
 # Words that only make sense on the website, as the book says them (the packages, on screen and on paper).
 PRINT_SWAPS = [
     ('Tools and reading on this site', 'Tools and reading on the website'),
+    ('Workpapers, tools and reading on this site', 'Workpapers, tools and reading on the website'),
+    ('Tools and reading on this site', 'Tools and reading on the website'), ('Workpapers and reading on this site', 'Workpapers and reading on the website'),
+    ('Reading on this site', 'Reading on the website'),
+    ('helpers you use on the site', 'helpers you use on the website'), ('pages to read on the site', 'pages to read on the website'),
     ('This site’s idea', 'This book’s idea'), ('this site’s idea', 'this book’s idea'),
     ('this site’s own', 'this book’s own'), ('This site uses', 'This book uses'), ('this site uses', 'this book uses'),
     ('runs through this site', 'runs through this book'),
@@ -1684,7 +1693,8 @@ def patch_topics():
     for p in sorted(glob.glob(os.path.join(BOOK, 'topic-*.html'))):
         slug = os.path.basename(p)[:-5]
         s = read(p)
-        t = hints.insert(s, slug, None, place, place_idea, place_heading, MISSING.append)
+        t = hints.split_lists(s, element_end, MISSING.append, slug)
+        t = hints.insert(t, slug, None, place, place_idea, place_heading, MISSING.append)
         if t != s:
             write(p, t)
 
