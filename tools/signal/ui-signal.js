@@ -333,7 +333,9 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(/Want to understand why messages land differently\?/.test(await p.$eval('header.top', e=>e.innerText)), `${tag}: plain reading link in the header`);
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     // 8. the Perspective Shifter: a family rift gets rift options, no "your day" or deadline, no roommates, no stray pup names
-    await p.goto(URL.replace('signal-translator','perspective-shifter')); await p.waitForLoadState('load'); await p.waitForTimeout(600);
+    // (See it from their side now lives in the Carrier Wave Decoder's "Their side" step; the old address sends people there)
+    await p.goto(URL.replace('signal-translator','perspective-shifter')); await p.waitForURL(/carrier-wave-decoder/); await p.waitForLoadState('load');
+    await p.waitForFunction(()=>window.TOLPerspective && document.querySelector('[data-out]'), null, {timeout:10000}); await p.waitForTimeout(300);
     for(const [g,id] of [['who','family'],['history','sore'],['history','fair'],['state','unsure']]) await p.evaluate(([g,id])=>TOLPerspective._pick(g,id),[g,id]);
     const ps = await p.evaluate(()=>({main:document.querySelector('main').innerText, out:document.querySelector('[data-out]').innerText,
       rift:['will','grief','favour'].every(id=>!document.querySelector('.ps-chip[data-id="'+id+'"]').hidden), deadline:!document.querySelector('.ps-chip[data-id="deadline"]').hidden}));
