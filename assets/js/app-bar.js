@@ -1,31 +1,44 @@
 /* app-bar.js — the free app, offered in one slim line at the very top of every page, and the iPhone/iPad
-   "Add to Home Screen" guide.
+   install sheet.
 
    THE LINE. site.js keeps an empty 36px <aside class="tol-appbar"> above the site's bar from the first paint
    (so nothing jumps) and loads this file, which fills it in for the device in hand:
      - Chrome or Edge has offered to install (beforeinstallprompt): "Install the free app" asks it right away.
-     - iPhone or iPad: "Add the free app to your Home Screen" opens the guide below.
+     - iPhone or iPad: the same words, "Install the free app", open the install sheet below.
      - Android without that offer: "Get the free app" goes to /install.html#chrome.
      - anything else: "Get the free app" goes to /install.html.
    Never inside the installed app, never on /install.html, never on paper. Its × hides it for this visit only
    (sessionStorage 'tol-appbar-off'); it is back on the next visit. Quiet mode: plain and still (app-bar.css).
 
-   THE GUIDE. window.TOLAppBar.guide() opens three illustrated steps (Share, Add to Home Screen, Add) with an
-   arrow pointing at where the Share button is on this browser: the bottom bar in Safari on iPhone (behind
-   the ⋯ button in Safari 26's compact layout), the top right in Safari on iPad, the address bar in Chrome.
-   install.html shows the same drawings: any element with data-iosg-fig="1", "2" or "3" gets one.
+   THE INSTALL SHEET. Apple lets no website install itself in one tap (Safari has no install prompt), so
+   window.TOLAppBar.guide() opens the nearest thing: an iOS-style sheet with the app's icon and name and a blue
+   Install button. Install shows the two taps Safari needs (Share, then Add to Home Screen and Add), with a
+   bouncing arrow pointing at where the Share button is on this browser: the bottom bar in Safari on iPhone
+   (behind the ⋯ button in Safari 26), the top right in Safari on iPad, the address bar in Chrome. Inside
+   another app's browser (Instagram, Facebook, TikTok, Gmail...) it says to open the page in Safari first, with a
+   Copy link button. It is a modal <dialog>, so it sits above the site's dark-mode filter and takes the real iOS
+   light or dark colours, following the site's own dark mode. install.html shows the same sheet, still, inline:
+   any element with data-iosg-inline gets one.
+
+   AFTER INSTALL. Opened from the Home Screen (navigator.standalone), one small "Installed. Welcome to the app"
+   note shows once (localStorage 'tol-ios-welcome'). site.js loads this file in the app only until then.
    Spanish pages get Spanish words (TOLLang from site.js). Nothing is sent anywhere. */
 (function () {
   'use strict';
   if (window.TOLAppBar) return;
-  var OFF = 'tol-appbar-off';
+  var OFF = 'tol-appbar-off', WELCOME = 'tol-ios-welcome';
   function T(en, es) { return window.TOLLang ? window.TOLLang.T(en, es) : en; }
   function isEs() { return !!(window.TOLLang && window.TOLLang.es()); }
   function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
   function ssSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+  // the sheet slides and the arrow bounces like iOS, even with the page kept still (phones start still): the arrow is how
+  // it shows where to tap. Quiet mode and the device's "reduce motion" keep both still.
+  function stillMotion() {
+    return document.documentElement.classList.contains('tol-quiet') || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
 
   // ---------------------------------------------------------------- which device, which browser
   var ua = navigator.userAgent || '';
@@ -33,7 +46,7 @@
   var IOS = IPAD || /iphone|ipod/i.test(ua);
   var ANDROID = !IOS && /android/i.test(ua);
   function iosBrowser() {
-    if (/FBAN|FBAV|Instagram|Line\/|LinkedInApp|Snapchat|Twitter|TikTok|musical_ly|GSA\//.test(ua)) return 'inapp';
+    if (/FBAN|FBAV|FBIOS|Instagram|Line\/|LinkedInApp|Snapchat|Twitter|TikTok|musical_ly|BytedanceWebview|Pinterest|MicroMessenger|GSA\/|Gmail/.test(ua)) return 'inapp';
     if (/CriOS/.test(ua)) return 'chrome';
     if (/EdgiOS/.test(ua)) return 'edge';
     if (/FxiOS/.test(ua)) return 'firefox';
@@ -49,153 +62,189 @@
     return m && +m[1] >= 26 ? 'iphone26' : 'iphone';
   }
 
-  // ---------------------------------------------------------------- the drawings (each has its own light screen, so dark mode leaves it readable)
-  var FONT = 'font-family="-apple-system, system-ui, Helvetica, Arial, sans-serif"';
-  var HI = '#E4566E', BLUE = '#007AFF';
-  function shareGlyph(x, y, s, col) {
-    s = s || 1; col = col || BLUE;
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')" fill="none" stroke="' + col + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
-      '<path d="M-4 -3h-4v13h16v-13h-4"/><path d="M0 4v-15M-4.5 -6.5l4.5-4.5 4.5 4.5"/></g>';
-  }
-  function dots(x, y, col) { col = col || '#3A3A3C'; return '<g fill="' + col + '"><circle cx="' + (x - 6) + '" cy="' + y + '" r="2.2"/><circle cx="' + x + '" cy="' + y + '" r="2.2"/><circle cx="' + (x + 6) + '" cy="' + y + '" r="2.2"/></g>'; }
-  function ring(x, y, r) { return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="none" stroke="' + HI + '" stroke-width="3"/><circle cx="' + x + '" cy="' + y + '" r="' + (r + 5) + '" fill="none" stroke="' + HI + '" stroke-opacity=".3" stroke-width="3"/>'; }
-  function box(x, y, w, h) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="9" fill="none" stroke="' + HI + '" stroke-width="3"/>'; }
-  function txt(x, y, s, size, extra) { return '<text x="' + x + '" y="' + y + '" font-size="' + (size || 12) + '" ' + FONT + ' ' + (extra || 'fill="#1C1C1E"') + '>' + esc(s) + '</text>'; }
-  function page(y0, y1) {   // a few grey lines standing for the page
-    var o = '';
-    for (var y = y0, i = 0; y < y1; y += 16, i++) o += '<rect x="24" y="' + y + '" width="' + (i % 3 === 2 ? 150 : 252) + '" height="7" rx="3.5" fill="#D9D9DE"/>';
-    return o;
-  }
-  function frame(inner, label) {
-    return '<svg class="tol-iosg-pic" viewBox="0 0 300 160" role="img" aria-label="' + esc(label) + '" focusable="false">' +
-      '<rect width="300" height="160" rx="18" fill="#F2F2F7"/>' + inner + '</svg>';
-  }
-  function menu(x, y, rows, hi) {   // a small pop-up menu
-    var h = rows.length * 26 + 8, o = '<rect x="' + x + '" y="' + y + '" width="128" height="' + h + '" rx="12" fill="#fff" stroke="#D1D1D6"/>';
-    rows.forEach(function (r, i) {
-      var ry = y + 4 + i * 26;
-      if (i) o += '<path d="M' + (x + 8) + ' ' + ry + 'h112" stroke="#E5E5EA"/>';
-      o += txt(x + 12, ry + 17, r, 12) + (i === hi ? shareGlyph(x + 112, ry + 16, 0.7) + box(x + 3, ry + 1, 122, 24) : '');
-    });
-    return o;
-  }
-  var URL_TXT = 'spreadloveandacceptance.com';
-  function figShare(w) {
-    var o, lab = T('Where the Share button is', 'Dónde está el botón Compartir');
-    if (w === 'iphone') {
-      o = page(18, 86) + '<rect x="0" y="88" width="300" height="72" rx="0" fill="#F9F9FB"/><rect x="40" y="94" width="220" height="24" rx="12" fill="#E5E5EA"/>' + txt(150, 110, URL_TXT, 11, 'fill="#3A3A3C" text-anchor="middle"') +
-        '<path d="M44 132l-7 7 7 7" fill="none" stroke="' + BLUE + '" stroke-width="2.4" stroke-linecap="round"/><path d="M96 132l7 7-7 7" fill="none" stroke="#C7C7CC" stroke-width="2.4" stroke-linecap="round"/>' +
-        shareGlyph(150, 142, 0.95) + ring(150, 139, 17) +
-        '<path d="M196 133h20v14h-20z" fill="none" stroke="' + BLUE + '" stroke-width="2"/><rect x="250" y="131" width="15" height="15" rx="3" fill="none" stroke="' + BLUE + '" stroke-width="2"/>';
-    } else if (w === 'iphone26') {
-      o = page(14, 70) + menu(160, 22, [T('Share', 'Compartir'), T('Add Bookmark', 'Agregar marcador')], 0) +
-        '<rect x="0" y="112" width="300" height="48" fill="#F9F9FB"/><circle cx="28" cy="136" r="16" fill="#E5E5EA"/><path d="M31 129l-7 7 7 7" fill="none" stroke="#3A3A3C" stroke-width="2.4" stroke-linecap="round"/>' +
-        '<rect x="52" y="120" width="186" height="32" rx="16" fill="#E5E5EA"/>' + txt(145, 140, URL_TXT, 11, 'fill="#3A3A3C" text-anchor="middle"') +
-        '<circle cx="268" cy="136" r="16" fill="#E5E5EA"/>' + dots(268, 136) + ring(268, 136, 19);
-    } else if (w === 'ipad') {
-      o = '<rect x="0" y="0" width="300" height="40" rx="18" fill="#F9F9FB"/><rect x="0" y="20" width="300" height="20" fill="#F9F9FB"/>' +
-        '<rect x="14" y="13" width="16" height="14" rx="3" fill="none" stroke="' + BLUE + '" stroke-width="2"/>' +
-        '<rect x="80" y="9" width="140" height="22" rx="11" fill="#E5E5EA"/>' + txt(150, 24, URL_TXT, 9.5, 'fill="#3A3A3C" text-anchor="middle"') +
-        shareGlyph(242, 22, 0.85) + ring(242, 19, 15) + '<path d="M266 20h12M272 14v12" stroke="' + BLUE + '" stroke-width="2.2" stroke-linecap="round"/>' + page(56, 150);
-    } else if (w === 'chrome') {
-      o = '<rect x="0" y="0" width="300" height="48" rx="18" fill="#F9F9FB"/><rect x="0" y="24" width="300" height="24" fill="#F9F9FB"/>' +
-        '<rect x="14" y="9" width="272" height="30" rx="15" fill="#E5E5EA"/>' + txt(30, 29, URL_TXT, 11, 'fill="#3A3A3C"') +
-        shareGlyph(264, 27, 0.8) + ring(264, 24, 15) + page(62, 150);
-    } else if (w === 'edge') {
-      o = page(14, 70) + menu(86, 26, [T('Share', 'Compartir'), T('Settings', 'Configuración')], 0) +
-        '<rect x="0" y="112" width="300" height="48" fill="#F9F9FB"/>' + dots(150, 136) + ring(150, 136, 17);
-    } else if (w === 'firefox') {
-      o = page(14, 70) + menu(160, 26, [T('Share', 'Compartir'), T('Settings', 'Configuración')], 0) +
-        '<rect x="0" y="112" width="300" height="48" fill="#F9F9FB"/><path d="M260 128h16M260 136h16M260 144h16" stroke="#3A3A3C" stroke-width="2.4" stroke-linecap="round"/>' + ring(268, 136, 17);
-    } else {   // inside another app: open it in Safari first
-      o = '<rect x="0" y="0" width="300" height="40" rx="18" fill="#F9F9FB"/><rect x="0" y="20" width="300" height="20" fill="#F9F9FB"/>' + dots(270, 20) + ring(270, 20, 16) +
-        '<rect x="150" y="46" width="138" height="34" rx="12" fill="#fff" stroke="#D1D1D6"/>' + txt(162, 68, T('Open in Safari', 'Abrir en Safari'), 12) + box(153, 49, 132, 28) + page(96, 150);
-    }
-    return frame(o, lab);
-  }
-  function figAdd() {
-    var rows = [T('Copy', 'Copiar'), T('Add to Reading List', 'Agregar a la lista de lectura'), T('Add to Home Screen', 'Agregar a pantalla de inicio'), T('Find on Page', 'Buscar en la página')], o = '';
-    o += '<rect x="16" y="10" width="268" height="140" rx="14" fill="#fff"/>';
-    rows.forEach(function (r, i) {
-      var y = 10 + i * 35;
-      if (i) o += '<path d="M28 ' + y + 'h244" stroke="#E5E5EA"/>';
-      o += txt(30, y + 22, r, 12.5, i === 2 ? 'fill="#1C1C1E" font-weight="700"' : 'fill="#1C1C1E"');
-      if (i === 2) o += '<rect x="250" y="' + (y + 9) + '" width="17" height="17" rx="4" fill="none" stroke="#1C1C1E" stroke-width="1.8"/><path d="M258.5 ' + (y + 13) + 'v9M254 ' + (y + 17.5) + 'h9" stroke="#1C1C1E" stroke-width="1.8" stroke-linecap="round"/>' + box(20, y + 3, 260, 30);
-      else o += '<circle cx="258.5" cy="' + (y + 17.5) + '" r="7" fill="none" stroke="#8E8E93" stroke-width="1.6"/>';
-    });
-    return frame(o, T('Add to Home Screen, in the list', 'Agregar a pantalla de inicio, en la lista'));
-  }
-  function figConfirm() {
-    var o = '<rect x="0" y="0" width="300" height="40" rx="18" fill="#F9F9FB"/><rect x="0" y="20" width="300" height="20" fill="#F9F9FB"/>' +
-      txt(16, 25, T('Cancel', 'Cancelar'), 12.5, 'fill="' + BLUE + '"') + txt(150, 25, T('Add to Home Screen', 'Agregar a inicio'), 12, 'fill="#1C1C1E" font-weight="700" text-anchor="middle"') +
-      txt(284, 25, T('Add', 'Agregar'), 13, 'fill="' + BLUE + '" font-weight="700" text-anchor="end"') + box(isEs() ? 226 : 250, 6, isEs() ? 66 : 42, 28) +
-      '<rect x="16" y="50" width="268" height="58" rx="12" fill="#fff"/><image href="/assets/icons/apple-touch-icon-180.png" x="26" y="57" width="44" height="44" preserveAspectRatio="xMidYMid meet"/>' +
-      '<rect x="26" y="57" width="44" height="44" rx="10" fill="none" stroke="#E5E5EA"/>' +
-      txt(80, 76, 'Spread Love & Acceptance', 12.5, 'fill="#1C1C1E" font-weight="600"') + txt(80, 94, URL_TXT, 10, 'fill="#8E8E93"') +
-      '<rect x="16" y="116" width="268" height="34" rx="12" fill="#fff"/>' + txt(28, 138, T('Open as Web App', 'Abrir como app web'), 12) +
-      '<rect x="238" y="123" width="36" height="20" rx="10" fill="#34C759"/><circle cx="264" cy="133" r="8" fill="#fff"/>';
-    return frame(o, T('The Add button, top right', 'El botón Agregar, arriba a la derecha'));
-  }
-  function drawings(w) { w = w || where(); return [figShare(w), figAdd(), figConfirm()]; }
+  // ---------------------------------------------------------------- small iOS-style glyphs (they take the text colour)
+  var SVG = '<svg class="tol-iosg-g" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">';
+  var G_SHARE = SVG + '<path d="M8.5 9.5H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1.5"/><path d="M12 14.5V2.8M8.3 6.3 12 2.6l3.7 3.7"/></svg>';
+  var G_PLUS = SVG + '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8v8M8 12h8"/></svg>';
+  var G_BOOK = SVG + '<path d="M12 6.5C10 5 7 4.6 4 5v13c3-.4 6 0 8 1.5 2-1.5 5-1.9 8-1.5V5c-3-.4-6 0-8 1.5zM12 6.5v13"/></svg>';
+  var G_DOTS = '<svg class="tol-iosg-g" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10.2" fill="none" stroke="currentColor" stroke-width="1.6"/><g fill="currentColor"><circle cx="7.4" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="16.6" cy="12" r="1.5"/></g></svg>';
+  var G_MENU = SVG + '<path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+  var G_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ARROW = '<svg viewBox="0 0 56 56" aria-hidden="true" focusable="false"><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#007AFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function sh() { return '<span class="tol-iosg-ico">' + G_SHARE + '</span>'; }
+  function dt() { return '<span class="tol-iosg-ico">' + G_DOTS + '</span>'; }
 
-  // ---------------------------------------------------------------- the words for each step
-  function steps(w) {
-    var s1 = {
-      iphone: T('Tap the <strong>Share</strong> button at the bottom of the screen. It is the square with an arrow pointing up.', 'Toca el botón <strong>Compartir</strong> abajo en la pantalla. Es el cuadrado con una flecha hacia arriba.'),
-      iphone26: T('Tap the <strong>&middot;&middot;&middot;</strong> button at the bottom right, then tap <strong>Share</strong>. (If you see the Share button itself, the square with an arrow, tap that.)', 'Toca el botón <strong>&middot;&middot;&middot;</strong> abajo a la derecha y luego <strong>Compartir</strong>. (Si ves el botón Compartir, el cuadrado con una flecha, tócalo.)'),
-      ipad: T('Tap the <strong>Share</strong> button at the top right. It is the square with an arrow pointing up.', 'Toca el botón <strong>Compartir</strong> arriba a la derecha. Es el cuadrado con una flecha hacia arriba.'),
-      chrome: T('Tap the <strong>Share</strong> button at the top right, in the address bar.', 'Toca el botón <strong>Compartir</strong> arriba a la derecha, en la barra de direcciones.'),
-      edge: T('Tap the <strong>&middot;&middot;&middot;</strong> menu at the bottom, then tap <strong>Share</strong>.', 'Toca el menú <strong>&middot;&middot;&middot;</strong> de abajo y luego <strong>Compartir</strong>.'),
-      firefox: T('Tap the menu (three lines) at the bottom right, then tap <strong>Share</strong>. If you can&rsquo;t find it, open this page in Safari.', 'Toca el menú (tres rayas) abajo a la derecha y luego <strong>Compartir</strong>. Si no lo encuentras, abre esta página en Safari.'),
-      inapp: T('This page is open inside another app. Tap <strong>&middot;&middot;&middot;</strong> and choose <strong>Open in Safari</strong> (or Open in browser). Then tap Share there.', 'Esta página está abierta dentro de otra app. Toca <strong>&middot;&middot;&middot;</strong> y elige <strong>Abrir en Safari</strong>. Después toca Compartir allí.')
-    }[w];
-    return [s1,
-      T('Scroll down the list and tap <strong>Add to Home Screen</strong>.', 'Baja por la lista y toca <strong>Agregar a pantalla de inicio</strong>.'),
-      T('Tap <strong>Add</strong> at the top right. If you see <em>Open as Web App</em>, leave it on.', 'Toca <strong>Agregar</strong> arriba a la derecha. Si ves <em>Abrir como app web</em>, déjalo activado.')];
+  // ---------------------------------------------------------------- the words
+  var NAME = 'Spread Love &amp; Acceptance';
+  function step1(w) {
+    return {
+      iphone: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the bottom of the screen.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, abajo en la pantalla.'),
+      iphone26: T('Tap <b>&middot;&middot;&middot;</b> ' + dt() + ' in Safari&rsquo;s toolbar, at the bottom right. Then tap <b>Share</b> ' + sh() + '.', 'Toca <b>&middot;&middot;&middot;</b> ' + dt() + ' en la barra de Safari, abajo a la derecha. Luego toca <b>Compartir</b> ' + sh() + '.'),
+      ipad: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, arriba a la derecha.'),
+      chrome: T('Tap <b>Share</b> ' + sh() + ' in Chrome&rsquo;s address bar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de direcciones de Chrome, arriba a la derecha.'),
+      edge: T('Tap <b>&middot;&middot;&middot;</b> ' + dt() + ' at the bottom of Edge. Then tap <b>Share</b> ' + sh() + '.', 'Toca <b>&middot;&middot;&middot;</b> ' + dt() + ' abajo en Edge. Luego toca <b>Compartir</b> ' + sh() + '.'),
+      firefox: T('Tap the menu <span class="tol-iosg-ico">' + G_MENU + '</span> at the bottom right of Firefox. Then tap <b>Share</b> ' + sh() + '.', 'Toca el menú <span class="tol-iosg-ico">' + G_MENU + '</span> abajo a la derecha en Firefox. Luego toca <b>Compartir</b> ' + sh() + '.')
+    }[w] || '';
+  }
+  function step2() { return T('Tap <b>Add to Home Screen</b>, then <b>Add</b>.', 'Toca <b>Agregar a pantalla de inicio</b> y luego <b>Agregar</b>.'); }
+  // a little copy of the share sheet's list, and of the Add bar, so the right row is easy to spot
+  function mock() {
+    function row(g, t, hi) { return '<span class="tol-iosg-mrow' + (hi ? ' is-hi' : '') + '"><span>' + t + '</span><span class="tol-iosg-mg">' + g + '</span></span>'; }
+    return '<span class="tol-iosg-mock" aria-hidden="true">' +
+      '<span class="tol-iosg-mlist">' + row(G_BOOK, T('Add Bookmark', 'Agregar marcador')) + row(G_PLUS, T('Add to Home Screen', 'Agregar a pantalla de inicio'), true) + '</span>' +
+      '<span class="tol-iosg-mbar"><span class="tol-iosg-mc">' + T('Cancel', 'Cancelar') + '</span><b>' + T('Add to Home Screen', 'Agregar a inicio') + '</b><span class="tol-iosg-madd">' + T('Add', 'Agregar') + '</span></span>' +
+    '</span>';
+  }
+  function stepsHTML(w) {
+    return '<ol class="tol-iosg-steps no-bubble">' +
+      '<li><span class="tol-iosg-n" aria-hidden="true">1</span><span class="tol-iosg-t">' + step1(w) + '</span></li>' +
+      '<li><span class="tol-iosg-n" aria-hidden="true">2</span><span class="tol-iosg-t">' + step2() + mock() +
+        '<span class="tol-iosg-note">' + T('It may be further down the list. If you see <i>Open as Web App</i>, leave it on.', 'Puede estar más abajo en la lista. Si ves <i>Abrir como app web</i>, déjalo activado.') + '</span></span></li>' +
+    '</ol>';
+  }
+  function inappHTML() {
+    return '<div class="tol-iosg-inapp">' +
+      '<p class="tol-iosg-h3" id="tol-iosg-step">' + T('Open this page in Safari first', 'Primero abre esta página en Safari') + '</p>' +
+      '<p class="tol-iosg-p">' + T('This page is open inside another app. Apps like Instagram, Facebook, TikTok and Gmail can&rsquo;t add things to your Home Screen. Safari can.', 'Esta página está abierta dentro de otra app. Apps como Instagram, Facebook, TikTok y Gmail no pueden agregar cosas a tu pantalla de inicio. Safari sí.') + '</p>' +
+      '<p class="tol-iosg-p">' + T('Tap ' + dt() + ' or the menu at the top right and choose <b>Open in Safari</b> (or <b>Open in browser</b>). Or copy the link and paste it into Safari.', 'Toca ' + dt() + ' o el menú de arriba a la derecha y elige <b>Abrir en Safari</b> (o <b>Abrir en el navegador</b>). O copia el enlace y pégalo en Safari.') + '</p>' +
+      '<button type="button" class="tol-iosg-copy">' + T('Copy link', 'Copiar enlace') + '</button>' +
+      '<p class="tol-iosg-copied" role="status"></p>' +
+      '<p class="tol-iosg-p tol-iosg-dim">' + T('Then tap <b>Install the free app</b> again, in Safari.', 'Luego toca <b>Instala la app gratis</b> otra vez, en Safari.') + '</p>' +
+    '</div>';
+  }
+  // the top of the sheet: icon, name, one grey line, and the blue Install button (App Store style)
+  function headHTML(tag, button) {
+    return '<div class="tol-iosg-app">' +
+      '<img class="tol-iosg-icon" src="/assets/icons/apple-touch-icon-180.png" alt="" width="88" height="88">' +
+      '<div class="tol-iosg-meta">' +
+        '<' + tag + ' class="tol-iosg-name" id="' + (tag === 'h2' ? 'tol-iosg-h' : 'tol-iosg-hi') + '">' + NAME + '</' + tag + '>' +
+        '<p class="tol-iosg-sub">' + T('Free &middot; No account &middot; Works offline', 'Gratis &middot; Sin cuenta &middot; Funciona sin conexión') + '</p>' +
+        button +
+      '</div>' +
+    '</div>';
   }
 
-  // ---------------------------------------------------------------- the guide
+  // ---------------------------------------------------------------- the sheet
   var POINT = { iphone: 'is-bottom', iphone26: 'is-bottom-right', ipad: 'is-top-right', chrome: 'is-top-right', edge: 'is-bottom', firefox: 'is-bottom-right', inapp: 'is-top-right' };
-  var ARROW = '<svg viewBox="0 0 56 56" aria-hidden="true" focusable="false"><path d="M28 4v38M14 30l14 16 14-16" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 4v38M14 30l14 16 14-16" fill="none" stroke="' + HI + '" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var open = null;
   function guide(from) {
     if (open) return;
-    css();
-    var w = where(), pics = drawings(w), st = steps(w), here = /\/install\.html$/.test(location.pathname);
-    var ov = document.createElement('div');
-    ov.className = 'tol-iosg no-bubble' + (POINT[w] === 'is-top-right' ? ' is-top' : '');
-    ov.innerHTML =
-      '<div class="tol-iosg-card" role="dialog" aria-modal="true" aria-labelledby="tol-iosg-h" tabindex="-1">' +
-        '<h2 id="tol-iosg-h">' + T('Add the free app to your Home Screen', 'Agrega la app gratis a tu pantalla de inicio') + '</h2>' +
-        '<p class="tol-iosg-sub">' + T('Three taps. It gets its own icon, Spread Love &amp; Acceptance, and opens full screen. Free, no account.', 'Tres toques. Tendrá su propio ícono, Spread Love &amp; Acceptance, y se abrirá a pantalla completa. Gratis, sin cuenta.') + '</p>' +
-        '<ol>' + st.map(function (s, i) { return '<li><p>' + s + '</p>' + pics[i] + '</li>'; }).join('') + '</ol>' +
-        (IOS ? '' : '<p class="tol-iosg-tip">' + T('Open this page on your iPhone or iPad to do it there. Safari is the surest; Chrome and Edge work too on iOS 16.4 or newer.', 'Abre esta página en tu iPhone o iPad para hacerlo allí. Safari es lo más seguro; Chrome y Edge también sirven con iOS 16.4 o más nuevo.') + '</p>') +
-        '<p class="tol-iosg-row"><button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
-        (here ? '' : '<a class="tol-iosg-more" href="/install.html#iphone"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') + '</p>' +
-        '<button type="button" class="tol-iosg-x" aria-label="' + T('Close', 'Cerrar') + '">&times;</button>' +
-      '</div>';
-    var pt = null;
-    if (IOS && POINT[w]) { pt = document.createElement('div'); pt.className = 'tol-iosg-point ' + POINT[w]; pt.setAttribute('aria-hidden', 'true'); pt.innerHTML = ARROW; }
-    var card = ov.firstChild, root = document.documentElement, was = root.style.overflow;
+    var w = where(), here = /\/install\.html$/.test(location.pathname), root = document.documentElement;
+    var dlg = document.createElement('dialog');
+    var canModal = typeof dlg.showModal === 'function';
+    // the site's dark mode turns the whole page over with a filter; a modal dialog sits above it, so it takes real dark colours
+    var dark = canModal && /invert/.test(getComputedStyle(root).filter || '');
+    dlg.className = 'tol-iosg no-bubble' + (canModal ? ' is-top' : ' is-flat') + (dark ? ' is-dark' : '') + (POINT[w] ? ' ' + POINT[w] : '') + (stillMotion() ? ' is-still' : '');
+    dlg.setAttribute('aria-labelledby', 'tol-iosg-h');
+    dlg.innerHTML =
+      '<div class="tol-iosg-card no-bubble" tabindex="-1">' +
+        '<span class="tol-iosg-grab" aria-hidden="true"></span>' +
+        '<button type="button" class="tol-iosg-x" aria-label="' + T('Close', 'Cerrar') + '"><span aria-hidden="true">&times;</span></button>' +
+        headHTML('h2', '<button type="button" class="tol-iosg-get">' + T('Install', 'Instalar') + '</button><span class="tol-iosg-free" hidden>' + G_CHECK + T('Free', 'Gratis') + '</span>') +
+        '<p class="tol-iosg-about">' + T('Puts ' + NAME + ' on your Home Screen with its own icon. It opens full screen, like any app.', 'Pone ' + NAME + ' en tu pantalla de inicio con su propio ícono. Se abre a pantalla completa, como cualquier app.') + '</p>' +
+        '<div class="tol-iosg-how" hidden>' +
+          (w === 'inapp' ? inappHTML() :
+            '<p class="tol-iosg-h3" id="tol-iosg-step" tabindex="-1">' + T('Two taps in ' + ({ chrome: 'Chrome', edge: 'Edge', firefox: 'Firefox' }[w] || 'Safari'), 'Dos toques en ' + ({ chrome: 'Chrome', edge: 'Edge', firefox: 'Firefox' }[w] || 'Safari')) + '</p>' + stepsHTML(w)) +
+          (IOS ? '' : '<p class="tol-iosg-p tol-iosg-dim">' + T('Open this page on your iPhone or iPad to do it there.', 'Abre esta página en tu iPhone o iPad para hacerlo allí.') + '</p>') +
+          '<button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
+          (here ? '' : '<a class="tol-iosg-more" href="/install.html#iphone"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') +
+        '</div>' +
+      '</div>' +
+      (IOS && POINT[w] ? '<div class="tol-iosg-point" aria-hidden="true">' + ARROW + '</div>' : '');
+    var card = dlg.querySelector('.tol-iosg-card'), was = root.style.overflow, closing = false;
     function close() {
-      ov.remove(); if (pt) pt.remove(); root.style.overflow = was; document.removeEventListener('keydown', onKey, true); open = null;
-      if (from && from.focus && document.contains(from)) from.focus();
+      if (closing) return; closing = true;
+      document.removeEventListener('keydown', onKey, true);
+      function gone() {
+        try { if (dlg.open && dlg.close) dlg.close(); } catch (e) {}
+        dlg.remove(); root.style.overflow = was; open = null;
+        if (from && from.focus && document.contains(from)) from.focus();
+      }
+      if (dlg.classList.contains('is-still')) gone();
+      else { dlg.classList.add('is-closing'); setTimeout(gone, 220); }
     }
     function onKey(e) {
       if (e.key === 'Escape') { e.preventDefault(); close(); return; }
       if (e.key !== 'Tab') return;
-      var f = Array.prototype.filter.call(card.querySelectorAll('button, a[href]'), function (n) { return n.offsetParent !== null; });
+      var f = Array.prototype.filter.call(card.querySelectorAll('button, a[href]'), function (n) { return n.offsetParent !== null && !n.disabled; });
       if (!f.length) return;
       var a = f[0], z = f[f.length - 1];
-      if (e.shiftKey && (document.activeElement === a || document.activeElement === card)) { e.preventDefault(); z.focus(); }
+      if (!card.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
+      else if (e.shiftKey && (document.activeElement === a || document.activeElement === card)) { e.preventDefault(); z.focus(); }
       else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
     }
-    ov.addEventListener('click', function (e) { if (e.target === ov || e.target.closest('.tol-iosg-done, .tol-iosg-x')) close(); });
+    // Install: show the taps (and the arrow that points at Share)
+    var get = dlg.querySelector('.tol-iosg-get');
+    get.addEventListener('click', function () {
+      dlg.classList.add('is-steps');
+      dlg.querySelector('.tol-iosg-how').hidden = false;
+      dlg.querySelector('.tol-iosg-about').hidden = true;
+      get.hidden = true; dlg.querySelector('.tol-iosg-free').hidden = false;
+      var to = dlg.querySelector('#tol-iosg-step');
+      if (w === 'inapp') to = dlg.querySelector('.tol-iosg-copy');
+      if (to) { if (!to.hasAttribute('tabindex') && to.tagName !== 'BUTTON') to.setAttribute('tabindex', '-1'); to.focus(); }
+    });
+    var copy = dlg.querySelector('.tol-iosg-copy');
+    if (copy) copy.addEventListener('click', function () {
+      var link = location.origin + location.pathname, said = dlg.querySelector('.tol-iosg-copied');
+      function ok() { said.textContent = T('Copied. Now open Safari and paste it into the address bar.', 'Copiado. Ahora abre Safari y pégalo en la barra de direcciones.'); }
+      function manual() { said.textContent = T('Copy this link: ', 'Copia este enlace: ') + link; }
+      function old() {
+        try {
+          var ta = document.createElement('textarea'); ta.value = link; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          card.appendChild(ta); ta.select(); ta.setSelectionRange(0, link.length);
+          var done = document.execCommand('copy'); ta.remove(); if (done) ok(); else manual();
+        } catch (e) { manual(); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(ok, old); else old();
+    });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target.closest('.tol-iosg-done, .tol-iosg-x')) close(); });
+    dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
+    // pull the sheet down to close it, like any iOS sheet
+    var y0 = null, dy = 0;
+    card.addEventListener('touchstart', function (e) { if (card.scrollTop > 0 || e.touches.length !== 1) { y0 = null; return; } y0 = e.touches[0].clientY; dy = 0; }, { passive: true });
+    card.addEventListener('touchmove', function (e) {
+      if (y0 === null) return; dy = e.touches[0].clientY - y0;
+      if (dy > 0) { card.style.transition = 'none'; card.style.transform = 'translateY(' + dy + 'px)'; } else { card.style.transform = ''; }
+    }, { passive: true });
+    card.addEventListener('touchend', function () {
+      if (y0 === null) return; y0 = null; card.style.transition = ''; card.style.transform = '';
+      if (dy > 90) close();
+    });
     document.addEventListener('keydown', onKey, true);
-    document.body.appendChild(ov); if (pt) document.body.appendChild(pt);
+    (document.body || root).appendChild(dlg);
+    css(function () {});
+    try { if (canModal) dlg.showModal(); else dlg.setAttribute('open', ''); } catch (e) { dlg.setAttribute('open', ''); dlg.classList.remove('is-top', 'is-dark'); dlg.classList.add('is-flat'); }
     root.style.overflow = 'hidden';
-    open = ov;
-    card.focus();
+    open = dlg;
+    get.focus();
+  }
+
+  // the same sheet, still, inside a page (the install page's Apple steps)
+  function inline(host) {
+    var w = where(), btn = IOS
+      ? '<button type="button" class="tol-iosg-get">' + T('Install', 'Instalar') + '</button>'
+      : '<span class="tol-iosg-free is-plain">' + T('Free', 'Gratis') + '</span>';
+    host.innerHTML = '<div class="tol-iosg-card is-inline no-bubble">' + headHTML('p', btn) +
+      stepsHTML(w === 'inapp' ? (IPAD ? 'ipad' : 'iphone26') : w) + '</div>';
+    var b = host.querySelector('.tol-iosg-get');
+    if (b) b.addEventListener('click', function () { guide(b); });
+  }
+
+  // ---------------------------------------------------------------- after install: one small welcome, once
+  function welcome() {
+    if (navigator.standalone !== true || lsGet(WELCOME) === '1') return;
+    lsSet(WELCOME, '1');
+    css(function () {
+      var t = document.createElement('div');
+      t.className = 'tol-iosw no-bubble' + (stillMotion() ? ' is-still' : '');
+      t.setAttribute('role', 'status');
+      t.innerHTML = '<img src="/assets/icons/apple-touch-icon-180.png" alt="" width="28" height="28"><span>' + T('Installed. Welcome to the app', 'Instalada. Te damos la bienvenida a la app') + '</span>';
+      document.body.appendChild(t);
+      function bye() { t.classList.add('is-out'); setTimeout(function () { t.remove(); }, 400); }
+      t.addEventListener('click', bye);
+      setTimeout(bye, 4500);
+    });
   }
 
   // ---------------------------------------------------------------- the line at the top
@@ -220,9 +269,8 @@
       html = '<button type="button" class="tol-appbar-go" data-appbar="install"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
     } else if (lsGet('tol-app-installed') === '1' && !IOS) {
       html = '<span class="tol-appbar-note" style="display:block">' + T('You have the free app. Open it from your home screen or app list.', 'Ya tienes la app gratis. Ábrela desde tu pantalla de inicio.') + '</span>';
-    } else if (IOS) {
-      html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-label="' + T('Add the free app to your Home Screen', 'Agrega la app gratis a tu pantalla de inicio') + '"><span>' +
-        T('Add the free app<span class="tol-appbar-more"> to your Home Screen</span>', 'Agrega la app gratis<span class="tol-appbar-more"> a tu inicio</span>') + '</span></button>';
+    } else if (IOS) {   // the same words as Android; Apple's two taps are shown in the sheet
+      html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-haspopup="dialog"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
     } else if (ANDROID) {
       html = '<a class="tol-appbar-go" href="/install.html#chrome"' + hl() + '><span>' + T('Get the free app<span class="tol-appbar-more"> for Android</span>', 'Consigue la app gratis<span class="tol-appbar-more"> para Android</span>') + '</span></a>' + note;
     } else {
@@ -260,13 +308,10 @@
 
   function mount() {
     iosHead();
-    // the same drawings, wherever a page asks for them (the install page's Apple steps)
-    var figs = document.querySelectorAll('[data-iosg-fig]');
-    if (figs.length) {
-      css();
-      var pics = drawings();
-      Array.prototype.forEach.call(figs, function (n) { var i = +n.getAttribute('data-iosg-fig') - 1; if (pics[i]) n.innerHTML = pics[i]; });
-    }
+    welcome();
+    // the same sheet, still, wherever a page asks for it (the install page's Apple steps)
+    var hosts = document.querySelectorAll('[data-iosg-inline]');
+    if (hosts.length) { css(); Array.prototype.forEach.call(hosts, inline); }
     var bar = document.querySelector('aside.tol-appbar');
     if (!bar) return;
     if (standalone() || /\/install\.html$/.test(location.pathname) || ssGet(OFF) === '1') { bar.remove(); return; }
@@ -278,6 +323,6 @@
     document.addEventListener('tol-app-installed', again);
   }
 
-  window.TOLAppBar = { guide: guide, drawings: drawings, where: where, ios: IOS };
+  window.TOLAppBar = { guide: guide, where: where, ios: IOS, browser: iosBrowser };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 })();

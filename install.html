@@ -85,10 +85,10 @@
   .in-pin{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 1.4rem; padding:0; list-style:none; }
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
-  /* the iPhone drawings (app-bar.js draws them; the space is kept so nothing jumps) */
-  main.read .in-fig{ display:block; width:100%; max-width:300px; aspect-ratio:300/160; margin:.6rem 0 .1rem; }
-  main.read .in-fig svg{ display:block; width:100%; height:auto; }
   main.read h3.in-h3{ margin:1.4rem 0 .4rem; }
+  /* the iPhone install sheet, still (app-bar.js draws it; the space is kept so nothing jumps) */
+  main.read .in-ios{ min-height:360px; margin:.6rem 0 1rem; }
+  main.read .in-ios > ol.in-steps{ margin:0 !important; }
   @media (max-width:760px){ .in-pick{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:68px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } .in-tab[aria-selected="true"]::after{ top:-.6rem; right:.6rem; } }
 </style>
@@ -159,7 +159,7 @@
 
 <div class="in-pick no-bubble" role="tablist" aria-label="Choose your device">
   <button type="button" role="tab" class="in-tab" id="tab-android" data-p="android" aria-controls="p-android" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129302;</span><span class="in-tab-t">Android</span><span class="in-tab-s is-now">Install now</span></button>
-  <button type="button" role="tab" class="in-tab" id="tab-apple" data-p="apple" aria-controls="p-apple" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#127822;</span><span class="in-tab-t">iPhone &amp; iPad</span><span class="in-tab-s is-now">Add to Home Screen</span></button>
+  <button type="button" role="tab" class="in-tab" id="tab-apple" data-p="apple" aria-controls="p-apple" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#127822;</span><span class="in-tab-t">iPhone &amp; iPad</span><span class="in-tab-s is-now">Install in 2 taps</span></button>
   <button type="button" role="tab" class="in-tab" id="tab-windows" data-p="windows" aria-controls="p-windows" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129695;</span><span class="in-tab-t">Windows</span><span class="in-tab-s is-now">Install now</span></button>
   <button type="button" role="tab" class="in-tab" id="tab-mac" data-p="mac" aria-controls="p-mac" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#128187;</span><span class="in-tab-t">Mac &amp; Linux</span><span class="in-tab-s is-now">Chrome or Edge</span></button>
 </div>
@@ -200,18 +200,23 @@
 </section>
 
 <section class="in-panel no-bubble" id="p-apple" role="tabpanel" aria-labelledby="tab-apple" hidden>
-  <h2 id="iphone">On iPhone or iPad: add it to your Home Screen</h2>
-  <p>Apple doesn&rsquo;t let a website install itself with one button, so on an iPhone or iPad it takes three taps. It is free, with nothing to sign up for. Opened on an iPhone or iPad, the button above shows you each step, with an arrow pointing to the right place on your screen.</p>
-  <ol class="in-steps no-bubble">
-    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Safari</strong>. Chrome and Edge work too on iOS 16.4 or newer. If the page is open inside another app (a social app or a mail app), tap its menu and choose <strong>Open in Safari</strong> first.</li>
-    <li>Tap the <strong>Share</strong> button, the square with an arrow pointing up. On an iPhone it is in the bar at the bottom of Safari. With iOS 26&rsquo;s compact layout, tap the <strong>&middot;&middot;&middot;</strong> button at the bottom right first, then <strong>Share</strong>. On an iPad it is at the top right. In Chrome it is at the top right, in the address bar.
-      <span class="in-fig" data-iosg-fig="1"></span></li>
-    <li>Scroll down the list and tap <strong>Add to Home Screen</strong>.
-      <span class="in-fig" data-iosg-fig="2"></span></li>
-    <li>Tap <strong>Add</strong> at the top right. If you see <strong>Open as Web App</strong>, leave it switched on.
-      <span class="in-fig" data-iosg-fig="3"></span></li>
-    <li>Find the new icon, <strong>Spread Love &amp; Acceptance</strong>, on your Home Screen and open it from there. It opens full screen, like an app you downloaded.</li>
-  </ol>
+  <h2 id="iphone">Install on iPhone and iPad</h2>
+  <p>Apple doesn&rsquo;t let any website install itself with one button, so on an iPhone or iPad it takes two taps in Safari. It is free, with no account. On an iPhone or iPad, tap <strong>Install</strong> below and an arrow points to the right place on your screen.</p>
+  <div class="in-ios" data-iosg-inline>
+    <ol class="in-steps no-bubble">
+      <li>Tap <strong>Share</strong> (the square with an arrow pointing up) in Safari&rsquo;s toolbar. With iOS 26, tap <strong>&middot;&middot;&middot;</strong> at the bottom right first, then <strong>Share</strong>.</li>
+      <li>Tap <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+    </ol>
+  </div>
+  <p>Then find the new icon, <strong>Spread Love &amp; Acceptance</strong>, on your Home Screen and open it from there. It opens full screen, like an app you downloaded.</p>
+
+  <h3 class="in-h3" id="iphone-other">Not in Safari?</h3>
+  <ul class="in-plain no-bubble">
+    <li><strong>Inside another app</strong> (Instagram, Facebook, TikTok, Gmail and others): tap its menu and choose <strong>Open in Safari</strong> or <strong>Open in browser</strong> first. Those apps can&rsquo;t add things to your Home Screen.</li>
+    <li><strong>Chrome</strong> (iOS 16.4 or newer): tap <strong>Share</strong> in the address bar at the top right, then <strong>Add to Home Screen</strong>.</li>
+    <li><strong>Edge</strong> (iOS 16.4 or newer): tap <strong>&middot;&middot;&middot;</strong> at the bottom, then <strong>Share</strong>, then <strong>Add to Home Screen</strong>.</li>
+    <li><strong>On an iPad,</strong> Safari&rsquo;s Share button is at the top right.</li>
+  </ul>
 
   <h3 class="in-h3" id="iphone-get">What you get on iPhone and iPad</h3>
   <ul class="in-get no-bubble">
@@ -311,7 +316,7 @@
     if (cur === 'apple') {   // Apple does not let a web page install itself, so the button opens the illustrated steps (app-bar.js)
       if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
       if (was) { state.textContent = 'The app is already on this device.'; sub.textContent = 'Look for the two little bubbles on your home screen.'; card.classList.add('is-ok'); return; }
-      if (ios) { state.textContent = 'Three taps and it is on your Home Screen.'; sub.textContent = 'Press the button to see each step, with an arrow pointing to the right place on your screen.'; btn.textContent = 'Show me, step by step'; btn.hidden = false; }
+      if (ios) { state.textContent = 'Two taps and it is on your Home Screen.'; sub.textContent = 'Press the button. An arrow points to the right place on your screen.'; btn.textContent = 'Install the free app'; btn.hidden = false; }
       else { state.textContent = 'This part is for an iPhone or iPad.'; sub.textContent = 'Open this page on it, or pick your device above.'; }
       return;
     }

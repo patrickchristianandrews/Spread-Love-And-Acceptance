@@ -1647,6 +1647,9 @@
       body.insertBefore(appBar, body.firstChild);
       bar.style.marginTop = '0px';
       loadScript('/assets/js/app-bar.js').catch(function () { appBar.remove(); });
+    } else if (window.navigator.standalone === true && !inFrame && lsGet('tol-ios-welcome') !== '1') {
+      // just added to an iPhone or iPad Home Screen: app-bar.js says "Installed. Welcome to the app", once
+      loadScript('/assets/js/app-bar.js').catch(function () {});
     }
     body.insertBefore(skip, body.firstChild);
     // work mode from a link: one quiet line under the bar says so, with a way out

@@ -1,5 +1,5 @@
 /* app-bar.css — the slim "Get the free app" line at the very top of every page, and the iPhone/iPad
-   "Add to Home Screen" guide it opens (both built by app-bar.js). The line is always exactly 36px tall:
+   install sheet it opens (both built by app-bar.js). The line is always exactly 36px tall:
    site.js keeps that space from the first paint, so nothing on the page jumps when it fills in. */
 
 .tol-appbar{
@@ -35,45 +35,166 @@ html.tol-quiet .tol-appbar-go, html.tol-work .tol-appbar-go{ border-color:var(--
 html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
 /* never inside the installed app, and never on paper */
 @media (display-mode: standalone){ .tol-appbar{ display:none !important; } }
-@media print{ .tol-appbar, .tol-iosg{ display:none !important; } }
+@media print{ .tol-appbar, .tol-iosg, .tol-iosw{ display:none !important; } }
 
-/* ---------- The iPhone / iPad guide ---------- */
-.tol-iosg{ position:fixed; inset:0; z-index:2147483000; display:flex; align-items:center; justify-content:center; padding:12px; box-sizing:border-box; background:rgba(40,28,58,.55); }
-.tol-iosg *{ box-sizing:border-box; }
+/* ---------- The iPhone / iPad install sheet (looks and feels like iOS) ----------
+   The modal one is a <dialog> in the top layer, above the site's dark-mode filter, so it carries its own
+   light and dark colours (.is-dark is set when the site is in dark mode). The still copy on install.html
+   (.is-inline) sits in the page, so the site's own dark mode turns it over like everything else. */
 .tol-iosg-card{
-  position:relative; width:100%; max-width:460px; max-height:calc(100% - 8px); overflow-y:auto; overscroll-behavior:contain;
-  padding:1.1rem 1.1rem 1rem; border-radius:24px; background:#FFFDF7; color:#2B2620; box-shadow:0 20px 60px -20px rgba(0,0,0,.5);
-  font:400 17px/1.45 "Lora", Georgia, serif; text-align:left;
+  --sh-bg:#F2F2F7; --cell:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.62); --sep:rgba(60,60,67,.22);
+  --blue:#007AFF; --fill:rgba(120,120,128,.14); --grab:rgba(60,60,67,.3); --hi:rgba(0,122,255,.12);
+  font:400 17px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing:antialiased; letter-spacing:-.01em; color:var(--label); background:var(--sh-bg); text-align:left;
 }
-.tol-iosg-card:focus{ outline:none; }
-.tol-iosg h2{ margin:0 2.4rem .3rem 0 !important; padding:0 !important; font:700 1.3rem/1.2 "Fraunces", Georgia, serif !important; color:#3B2A55 !important; background:none !important; border:0 !important; }
-.tol-iosg-sub{ margin:0 0 .8rem !important; font-size:.95rem; color:#5A5346; }
-.tol-iosg ol{ list-style:none !important; margin:0 0 .8rem !important; padding:0 !important; display:grid; gap:.7rem; counter-reset:g; }
-.tol-iosg li{ counter-increment:g; display:grid; grid-template-columns:2.1rem 1fr; gap:.2rem .6rem; align-items:start; margin:0 !important; padding:.7rem .75rem !important; border-radius:18px; border:1px solid #E4D9C0; background:#fff; max-width:none !important; }
-.tol-iosg li::before{ content:counter(g); display:grid; place-items:center; width:2rem; height:2rem; border-radius:50%; background:#5B3F8A; color:#fff; font:700 1rem/1 "Lora", Georgia, serif; }
-.tol-iosg li p{ margin:0 !important; padding:0 !important; background:none !important; border:0 !important; max-width:none !important; }
-.tol-iosg li .tol-iosg-pic{ grid-column:1 / -1; display:block; margin:.45rem auto 0; width:100%; max-width:300px; height:auto; }
-.tol-iosg-tip{ margin:0 0 .9rem !important; padding:.6rem .8rem !important; border-radius:14px; background:#F3EEFD; font-size:.92rem; color:#3F3270; }
-.tol-iosg-row{ display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; }
-.tol-iosg-done{ min-height:52px; padding:.6rem 2rem; border-radius:999px; border:0; background:#5B3F8A; color:#fff; font:700 1.1rem/1 "Lora", Georgia, serif; cursor:pointer; }
-.tol-iosg-more{ font-size:.95rem; }
-.tol-iosg-x{ position:absolute; top:.5rem; right:.5rem; width:44px; height:44px; border:0; border-radius:50%; background:none; color:#5A4A6E; font:400 26px/1 Georgia, serif; cursor:pointer; }
-.tol-iosg-done:focus-visible, .tol-iosg-x:focus-visible, .tol-iosg a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-/* the arrow that points at where the button is on this browser */
-.tol-iosg-point{ position:fixed; z-index:2147483001; width:56px; height:56px; pointer-events:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
-.tol-iosg-point svg{ width:100%; height:100%; }
-.tol-iosg-point.is-bottom{ left:50%; bottom:4px; margin-left:-28px; }
-.tol-iosg-point.is-bottom-right{ right:10px; bottom:4px; }
-.tol-iosg-point.is-top-right{ right:10px; top:4px; transform:rotate(180deg); }
-@keyframes tol-iosg-bob{ 0%,100%{ translate:0 0; } 50%{ translate:0 8px; } }
-.tol-iosg-point.is-bottom, .tol-iosg-point.is-bottom-right{ animation:tol-iosg-bob 1.2s ease-in-out infinite; }
-@keyframes tol-iosg-bob-up{ 0%,100%{ translate:0 0; } 50%{ translate:0 -8px; } }
-.tol-iosg-point.is-top-right{ animation:tol-iosg-bob-up 1.2s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce){ .tol-iosg-point{ animation:none !important; } }
-html.tol-quiet .tol-iosg-point, html.tol-still .tol-iosg-point{ animation:none !important; }
-/* with the card at the bottom of a phone screen, it leaves room for the arrow */
-@media (max-width:560px){ .tol-iosg{ align-items:flex-end; padding:8px 8px 64px; } .tol-iosg.is-top{ align-items:flex-start; padding:64px 8px 8px; } }
+.tol-iosg.is-dark .tol-iosg-card{
+  --sh-bg:#1C1C1E; --cell:#2C2C2E; --label:#FFFFFF; --label2:rgba(235,235,245,.62); --sep:rgba(84,84,88,.6);
+  --blue:#0A84FF; --fill:rgba(120,120,128,.3); --grab:rgba(235,235,245,.3); --hi:rgba(10,132,255,.22);
+}
+.tol-iosg-card *{ box-sizing:border-box; }
+.tol-iosg-card :is(p, h2, ol, li, b, i){ font-family:inherit !important; }
+.tol-iosg-card :is(p, h2, ol, li){ margin:0 !important; padding:0 !important; max-width:none !important; background:none !important; border:0 !important; box-shadow:none !important; }
+.tol-iosg-card :is(p, li)::before, .tol-iosg-card :is(p, li)::after{ content:none; }
 
-/* the same drawings on the install page */
-.tol-iosg-figs{ display:grid; gap:.5rem; }
-.tol-iosg-figs svg{ display:block; width:100%; max-width:300px; height:auto; }
+/* the dialog covers the screen; the sheet sits at the bottom of it */
+.tol-iosg{ position:fixed; inset:0; z-index:2147483000; width:100%; height:100%; max-width:none; max-height:none; margin:0; padding:0; border:0; background:transparent; color:inherit; overflow:hidden; }
+.tol-iosg[open]{ display:flex; flex-direction:column; justify-content:flex-end; align-items:center; }
+.tol-iosg::backdrop{ background:rgba(0,0,0,.3); -webkit-backdrop-filter:blur(8px) saturate(1.2); backdrop-filter:blur(8px) saturate(1.2); }
+.tol-iosg.is-flat{ background:rgba(0,0,0,.3); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+/* the top layer is not under the site's dark-mode filter, so pictures there must not be turned back over */
+.tol-iosg.is-top :is(img, svg){ filter:none !important; }
+.tol-iosg .tol-iosg-card{
+  position:relative; width:100%; max-width:540px; max-height:calc(100% - 20px); overflow-y:auto; overscroll-behavior:contain;
+  padding:6px 16px calc(18px + env(safe-area-inset-bottom, 0px)); border-radius:13px 13px 0 0;
+  box-shadow:0 -1px 0 rgba(0,0,0,.04), 0 -10px 40px rgba(0,0,0,.18);
+  transition:transform .3s cubic-bezier(.32,.72,0,1); animation:tol-iosg-up .42s cubic-bezier(.32,.72,0,1);
+}
+.tol-iosg .tol-iosg-card:focus{ outline:none; }
+@keyframes tol-iosg-up{ from{ transform:translateY(100%); } to{ transform:translateY(0); } }
+@keyframes tol-iosg-fade{ from{ opacity:0; } to{ opacity:1; } }
+.tol-iosg[open]{ animation:tol-iosg-fade .25s ease-out; }
+.tol-iosg.is-closing .tol-iosg-card{ transform:translateY(105%); transition:transform .22s ease-in; }
+.tol-iosg.is-closing{ opacity:0; transition:opacity .22s ease-in; }
+.tol-iosg.is-still .tol-iosg-card, .tol-iosg.is-still[open]{ animation:none; transition:none; }
+/* with the arrow pointing at Safari's bottom bar, the sheet floats a little higher to leave it room */
+.tol-iosg.is-steps:is(.is-bottom, .is-bottom-right) .tol-iosg-card{ margin-bottom:68px; border-radius:13px; max-height:calc(100% - 88px); padding-bottom:16px; }
+.tol-iosg.is-steps:is(.is-bottom, .is-bottom-right) .tol-iosg-card{ width:calc(100% - 16px); }
+/* on an iPad or a computer: a centred card, like an iPad form sheet */
+@media (min-width:600px){
+  .tol-iosg[open]{ justify-content:center; }
+  .tol-iosg .tol-iosg-card, .tol-iosg.is-steps:is(.is-bottom, .is-bottom-right) .tol-iosg-card{ width:calc(100% - 48px); max-width:480px; border-radius:13px; margin-bottom:0; padding:6px 20px 20px; }
+}
+
+.tol-iosg-grab{ display:block; width:36px; height:5px; margin:0 auto 12px; border-radius:3px; background:var(--grab); }
+.tol-iosg-x{
+  position:absolute; top:6px; right:6px; display:grid; place-items:center; width:44px; height:44px; padding:0; border:0; border-radius:50%;
+  background:none; color:var(--label2); cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.tol-iosg-x span{ display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--fill); font:600 20px/1 -apple-system, system-ui, sans-serif; }
+
+/* the app, App Store style */
+.tol-iosg-app{ display:grid; grid-template-columns:88px minmax(0,1fr); gap:14px; align-items:start; padding:8px 40px 14px 0; }
+.tol-iosg-icon{ display:block; width:88px; height:88px; border-radius:20px; box-shadow:0 0 0 .5px var(--sep), 0 1px 3px rgba(0,0,0,.1); background:#fff; }
+.tol-iosg-meta{ display:flex; flex-direction:column; align-items:flex-start; gap:2px; min-width:0; padding-top:2px; }
+.tol-iosg-card .tol-iosg-name{ font-weight:600 !important; font-size:20px !important; line-height:1.2 !important; letter-spacing:-.02em; color:var(--label) !important; }
+.tol-iosg-card .tol-iosg-sub{ font-size:14px; line-height:1.3; color:var(--label2); }
+.tol-iosg-get{
+  margin-top:10px; min-width:96px; height:36px; padding:0 22px; border:0; border-radius:18px; background:var(--blue); color:#fff;
+  font:700 16px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; letter-spacing:0; cursor:pointer;
+  -webkit-tap-highlight-color:transparent; transition:transform .12s, opacity .12s;
+}
+.tol-iosg-get:active{ transform:scale(.96); opacity:.85; }
+.tol-iosg-get[hidden], .tol-iosg-free[hidden], .tol-iosg-how[hidden], .tol-iosg-about[hidden]{ display:none !important; }
+.tol-iosg-free{ display:inline-flex; align-items:center; gap:5px; margin-top:10px; height:36px; padding:0 16px; border-radius:18px; background:var(--fill); color:var(--blue); font-weight:700; font-size:16px; }
+.tol-iosg-free svg{ width:16px; height:16px; }
+.tol-iosg-free.is-plain{ padding:0 18px; }
+.tol-iosg-card .tol-iosg-about{ padding:12px 0 4px !important; border-top:.5px solid var(--sep) !important; font-size:15px; line-height:1.4; color:var(--label2); }
+
+/* with the taps showing, the top shrinks to a short row so it all fits on one phone screen */
+.tol-iosg.is-steps .tol-iosg-app{ grid-template-columns:60px minmax(0,1fr); gap:12px; padding-bottom:12px; }
+.tol-iosg.is-steps .tol-iosg-icon{ width:60px; height:60px; border-radius:14px; }
+.tol-iosg-card.is-inline .tol-iosg-name, .tol-iosg.is-steps .tol-iosg-card .tol-iosg-name{ font-size:17px !important; }
+.tol-iosg.is-steps .tol-iosg-sub{ font-size:13px; }
+.tol-iosg.is-steps .tol-iosg-free{ margin-top:6px; height:28px; padding:0 12px; font-size:15px; border-radius:14px; }
+.tol-iosg.is-steps .tol-iosg-how{ padding-top:12px; }
+.tol-iosg.is-steps .tol-iosg-done{ margin-top:12px; }
+.tol-iosg.is-steps .tol-iosg-more{ margin-top:4px; }
+/* the two taps */
+.tol-iosg-how{ border-top:.5px solid var(--sep); padding-top:14px; }
+.tol-iosg-card .tol-iosg-h3{ margin:0 0 10px 4px !important; font-size:13px; font-weight:600; letter-spacing:.02em; text-transform:uppercase; color:var(--label2); }
+.tol-iosg-h3:focus{ outline:none; }
+.tol-iosg-card .tol-iosg-steps{ list-style:none !important; display:grid; gap:0; border-radius:12px !important; background:var(--cell) !important; overflow:hidden; }
+.tol-iosg-card .tol-iosg-steps > li{ display:grid; grid-template-columns:28px minmax(0,1fr); gap:12px; align-items:start; padding:14px 14px 14px 12px !important; list-style:none !important; }
+.tol-iosg-card .tol-iosg-steps > li + li{ border-top:.5px solid var(--sep) !important; }
+.tol-iosg-n{ display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--blue); color:#fff; font-weight:700; font-size:15px; line-height:1; }
+.tol-iosg-t{ display:block; min-width:0; font-size:17px; line-height:1.4; padding-top:2px; }
+.tol-iosg-t b{ font-weight:600; }
+.tol-iosg-ico{ display:inline-grid; place-items:center; width:30px; height:30px; margin:-6px 1px; vertical-align:middle; border-radius:8px; background:var(--fill); color:var(--blue); }
+.tol-iosg-ico .tol-iosg-g{ width:20px; height:20px; }
+.tol-iosg-note{ display:block; margin-top:8px; font-size:14px; line-height:1.35; color:var(--label2); }
+/* a copy of the rows in Safari's share list, and the Add bar */
+.tol-iosg-mock{ display:grid; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:10px; }
+.tol-iosg-mlist{ display:block; border-radius:10px; overflow:hidden; background:var(--sh-bg); }
+.tol-iosg-mrow{ display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:40px; padding:6px 12px; font-size:15px; color:var(--label2); }
+.tol-iosg-mrow + .tol-iosg-mrow{ border-top:.5px solid var(--sep); }
+.tol-iosg-mrow.is-hi{ color:var(--label); font-weight:600; background:var(--hi); box-shadow:inset 0 0 0 2px var(--blue); border-radius:10px; border-top-color:transparent; }
+.tol-iosg-mrow.is-hi + .tol-iosg-mrow{ border-top-color:transparent; }
+.tol-iosg-mg{ flex:none; display:grid; place-items:center; color:inherit; }
+.tol-iosg-mg svg{ width:20px; height:20px; }
+.tol-iosg-mbar{ display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:40px; padding:6px 6px 6px 12px; border-radius:10px; background:var(--sh-bg); font-size:14px; }
+.tol-iosg-mbar b{ flex:1; min-width:0; text-align:center; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tol-iosg-mc{ color:var(--blue); }
+.tol-iosg-madd{ padding:4px 12px; border-radius:14px; color:var(--blue); font-weight:700; box-shadow:inset 0 0 0 2px var(--blue); background:var(--hi); }
+
+/* inside another app */
+.tol-iosg-inapp{ display:grid; gap:10px; padding:14px; border-radius:12px; background:var(--cell); }
+.tol-iosg-card .tol-iosg-inapp .tol-iosg-h3{ margin:0 !important; font-size:19px; font-weight:600; letter-spacing:-.01em; text-transform:none; color:var(--label); }
+.tol-iosg-card .tol-iosg-p{ font-size:16px; line-height:1.4; }
+.tol-iosg-card .tol-iosg-dim{ color:var(--label2); font-size:15px; }
+.tol-iosg-copy{ justify-self:start; min-height:44px; padding:0 22px; border:0; border-radius:22px; background:var(--blue); color:#fff; font:600 17px/1 -apple-system, system-ui, sans-serif; cursor:pointer; }
+.tol-iosg-card .tol-iosg-copied{ font-size:15px; color:var(--label); font-weight:600; overflow-wrap:anywhere; }
+.tol-iosg-card .tol-iosg-copied:empty{ display:none; }
+
+.tol-iosg-done{
+  display:block; width:100%; min-height:50px; margin-top:16px; border:0; border-radius:25px; background:var(--fill); color:var(--blue);
+  font:600 17px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.tol-iosg-done:active{ opacity:.7; }
+.tol-iosg-more{ display:block; width:max-content; margin:12px auto 0; padding:8px; color:var(--blue) !important; font-size:15px; text-decoration:none !important; }
+.tol-iosg-card :is(button, a):focus-visible{ outline:3px solid var(--blue); outline-offset:2px; }
+
+/* the arrow that points at where the Share button is on this browser (only once the steps show) */
+.tol-iosg-point{ position:absolute; z-index:2; width:56px; height:56px; pointer-events:none; filter:drop-shadow(0 2px 5px rgba(0,0,0,.35)); display:none; }
+.tol-iosg.is-steps .tol-iosg-point{ display:block; }
+.tol-iosg-point svg{ display:block; width:100%; height:100%; }
+.tol-iosg.is-bottom .tol-iosg-point{ left:50%; bottom:6px; margin-left:-28px; }
+.tol-iosg.is-bottom-right .tol-iosg-point{ right:10px; bottom:6px; }
+.tol-iosg.is-top-right .tol-iosg-point{ right:12px; top:4px; transform:rotate(180deg); }
+@keyframes tol-iosg-bob{ 0%,100%{ translate:0 0; } 50%{ translate:0 10px; } }
+@keyframes tol-iosg-bob-up{ 0%,100%{ translate:0 0; } 50%{ translate:0 -10px; } }
+.tol-iosg:is(.is-bottom, .is-bottom-right) .tol-iosg-point{ animation:tol-iosg-bob 1s ease-in-out infinite; }
+.tol-iosg.is-top-right .tol-iosg-point{ animation:tol-iosg-bob-up 1s ease-in-out infinite; }
+.tol-iosg.is-still .tol-iosg-point{ animation:none; }
+@media (prefers-reduced-motion: reduce){ .tol-iosg-point{ animation:none !important; } .tol-iosg .tol-iosg-card, .tol-iosg[open]{ animation:none !important; } }
+/* with the arrow at the top, keep the sheet clear of it */
+.tol-iosg.is-steps.is-top-right .tol-iosg-card{ max-height:calc(100% - 72px); }
+
+/* the still copy on the install page */
+.tol-iosg-card.is-inline{ max-width:520px; margin:.6rem 0 1rem; padding:16px; border-radius:16px; }
+.tol-iosg-card.is-inline .tol-iosg-app{ padding-right:0; }
+.tol-iosg-card.is-inline .tol-iosg-steps{ margin-top:2px !important; }
+@media (max-width:380px){ .tol-iosg-app{ grid-template-columns:72px minmax(0,1fr); gap:12px; } .tol-iosg-icon{ width:72px; height:72px; border-radius:16px; } .tol-iosg-card .tol-iosg-name{ font-size:18px !important; } }
+
+/* after install: a small welcome at the top, once */
+.tol-iosw{
+  position:fixed; z-index:2147483000; left:50%; top:calc(env(safe-area-inset-top, 0px) + 10px); transform:translateX(-50%);
+  display:flex; align-items:center; gap:10px; max-width:calc(100% - 24px); padding:8px 18px 8px 8px; border-radius:24px;
+  background:rgba(255,255,255,.96); color:#000; box-shadow:0 0 0 .5px rgba(0,0,0,.08), 0 8px 28px rgba(0,0,0,.18);
+  font:600 15px/1.25 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; cursor:pointer;
+  animation:tol-iosw-in .45s cubic-bezier(.32,.72,0,1);
+}
+.tol-iosw img{ flex:none; width:28px; height:28px; border-radius:7px; }
+.tol-iosw.is-out{ opacity:0; transform:translate(-50%, -12px); transition:opacity .35s, transform .35s; }
+@keyframes tol-iosw-in{ from{ opacity:0; transform:translate(-50%, -16px); } to{ opacity:1; transform:translate(-50%, 0); } }
+.tol-iosw.is-still, .tol-iosw.is-still.is-out{ animation:none; transition:none; }
+@media (prefers-reduced-motion: reduce){ .tol-iosw{ animation:none; } }

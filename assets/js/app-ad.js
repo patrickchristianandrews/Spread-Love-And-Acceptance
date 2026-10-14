@@ -1,6 +1,7 @@
 /* app-ad.js — the "Get the app" ad: Tidbit and Sugarfoot on a straight stage, each keeping to their own side of a little boombox, moonwalking, spinning, flipping and hopping.
    It sits under the opening block of the home page and Start here, and links to /install.html (the free app is this site,
-   installed: one tap on Android and in Chrome or Edge on a computer; Add to Home Screen on iPhone and iPad). The slim
+   installed: one tap on Android and in Chrome or Edge on a computer; on iPhone and iPad the button says the same,
+   "Install the free app", and opens app-bar.js's install sheet with Safari's two taps). The slim
    "Get the free app" line at the top of every page is app-bar.js. It can be hidden (remembered on this device only,
    key 'tol-appad-off'), is skipped inside the installed app and on the install page, and is a still picture with
    reduced motion. Uses the pups from pups.js. TOLAppAd.drawScene(ctx, W, H, t, opts) draws just the dancing,
@@ -140,6 +141,9 @@
         '<button type="button" class="aa-x" aria-label="Hide this for now">&times;</button>' +
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
+    // iPhone and iPad: the same words as Android's one-tap install; the button opens the install sheet (app-bar.js)
+    var iosNow = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (iosNow) { var aaGo = card.querySelector('.aa-go'); aaGo.textContent = 'Install the free app'; aaGo.setAttribute('aria-haspopup', 'dialog'); }
     document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
     // one tap where the browser allows it: Chrome or Edge's own install, or on iPhone and iPad the illustrated Add to Home Screen guide
     card.querySelector('.aa-go').addEventListener('click', function (e) {
