@@ -24,18 +24,77 @@
 @font-face { font-family: 'Lora'; font-style: normal; font-weight: 500; src: url(https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787wsuxJBkqg.ttf) format('truetype'); }
 @font-face { font-family: 'Lora'; font-style: normal; font-weight: 600; src: url(https://fonts.gstatic.com/s/lora/v37/0QI6MX1D_JOuGQbT0gvTJPa787zAvBJBkqg.ttf) format('truetype'); }
 
+/* The few characters those faces lack (ticks and crosses, arrows, ā ł, Greek δ) come from Noto fonts, also from
+   Google Fonts, added to each family by unicode-range, so the PDF never falls back to a system font (and the
+   figures, which are inline SVG in the print edition and set in Lora, get them too). */
+/* (each extra face repeats a real face's style and weight exactly, so Chromium joins them into one font) */
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 400; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 400; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 400; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 500; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 500; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 500; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 600; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 600; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: normal; font-weight: 600; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 400; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 400; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 400; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 600; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 600; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Lora'; font-style: italic; font-weight: 600; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 400; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 500; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 500; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 500; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 600; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 400; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 400; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 400; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 500; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 500; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 500; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 600; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 600; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 600; unicode-range: U+0100-024F, U+0370-03FF; src: url(https://fonts.gstatic.com/s/notoserif/v33/ga6iaw1J5X9T9RW6j9bNVls-hfgvz8JcMofYTa32J4wsL2JAlAhZqFCjwA.ttf) format('truetype'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; unicode-range: U+2713-2718; src: url(https://fonts.gstatic.com/s/notosanssymbols2/v25/I_uyMoGduATTei9eI8daxVHDyfisHr71ypM.ttf) format('truetype'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500; unicode-range: U+2190-21FF; src: url(https://fonts.gstatic.com/s/notosansmath/v19/7Aump_cpkSecTWaHRlH2hyV5UHkG.ttf) format('truetype'); }
+
+/* A bound book: odd pages are right-hand pages (rectos), even pages left-hand (versos). The wider margin is on
+   the inside (the gutter); the page number, the running head and the part's thumb tab sit on the outer edge.
+   Each chapter and back-matter section is a named page (set in the package itself, see page_rules in
+   tools/book/build_book.py) with its own running head and tab. Page 1 is the half-title: the cover is a
+   separate file (build_pdfs.js). */
 @page {
   size: 170mm 240mm;
-  margin: 19mm 19mm 21mm 19mm;
-  @bottom-left { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3.2mm; border-top: .4pt solid #CDBF98; }
+  margin: 19mm 17mm 21mm 21mm;
+}
+@page :right { margin: 19mm 17mm 21mm 21mm;
+  @bottom-left { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; }
   @bottom-center { content: ""; vertical-align: top; border-top: .4pt solid #CDBF98; }
-  @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 2.8mm; border-top: .4pt solid #CDBF98; }
+  @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; text-align: right; }
+}
+@page :left { margin: 19mm 21mm 21mm 17mm;
+  @bottom-left { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 8.6pt; color: #2B2620; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; text-align: left; }
+  @bottom-center { content: ""; vertical-align: top; border-top: .4pt solid #CDBF98; }
+  @bottom-right { content: "The Objective Ledger"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.4pt; color: #6E6556; vertical-align: top; padding-top: 3mm; border-top: .4pt solid #CDBF98; white-space: nowrap; text-align: right; }
 }
 @page pe-full { margin: 0;
   @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
 @page pe-front {
   @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
-@page pe-back { @bottom-left { content: "The Objective Ledger · At the back of the book"; } @right-top { content: ""; } @right-middle { content: ""; } @right-bottom { content: ""; border-right: 3mm solid #96412B; height: 52mm; } }
+@page pe-blank {
+  @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
+/* an intentionally blank page, switched on by build_pdfs.js so the title page and each part opener start on
+   a right-hand page */
+.pe-recto-pad { display: none; }
+.pe-recto-pad.is-on { display: block; page: pe-blank; break-before: page; height: 2mm; }
 
 :root { --ink: #2B2620; --soft: #5A5346; --line: #D9CBA3; --paper: #F7F1E1; --brass: #A8792F; --pc: #2B2620; --pt: #F3EEE2; }
 
@@ -50,7 +109,12 @@ body { font-family: "Lora", Georgia, serif; font-size: 10.4pt; line-height: 1.5;
 main.read { display: block !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
 p, li, dd { orphans: 2; widows: 2; hyphens: manual; }
 p { margin: 0 0 2.6mm; }
-a { color: inherit; text-decoration: underline; text-decoration-thickness: .4pt; text-decoration-color: #C4B48A; text-underline-offset: 1.5pt; }
+a { color: inherit; text-decoration: none; }
+/* site addresses and page references after links (made by build_book.py), and what only belongs on screen */
+.pe-u { font-size: .86em; color: #5A5346; }
+.pe-xref { color: #5A5346; }
+.pe-nb { white-space: nowrap; }
+.pe-noprint, .pe-body .nine-more, .pe-body p.depth-bar { display: none !important; }
 strong { font-weight: 600; }
 em, cite { font-style: italic; }
 small { font-size: 8.4pt; }
@@ -62,7 +126,7 @@ img, svg { max-width: 100%; }
 .pe-mark { position: absolute; font-size: 1px; line-height: 1px; color: #fff; white-space: nowrap; hyphens: none; letter-spacing: 0; }
 
 /* ---------- cover ---------- */
-.pe-cover, .pe-backcover, .pe-part { page: pe-full; position: relative; width: 170mm; height: 239.6mm; overflow: hidden; break-after: page; break-before: page; background: var(--paper); }
+.pe-cover, .pe-backcover, .pe-part { page: pe-full; position: relative; width: auto; height: 239.6mm; overflow: hidden; break-after: page; break-before: page; background: var(--paper); }
 .pe-cover { break-before: auto; }
 .pe-rules { position: absolute; inset: 0; width: 100%; height: 100%; }
 .pe-cover-band { position: absolute; top: 0; left: 0; right: 0; height: 15mm; background: var(--acc); color: #FFFDF8; display: flex; justify-content: space-between; align-items: center; padding: 0 13mm 0 24mm; font-family: "IBM Plex Mono", monospace; font-size: 7pt; letter-spacing: .16em; text-transform: uppercase; }
@@ -167,6 +231,8 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-body h5 { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.6pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin: 4mm 0 1.4mm; break-after: avoid; }
 .pe-body > h3, .pe-body .chapter-body > h3 { padding-top: 2.4mm; border-top: .5pt solid #E0D3B0; }
 .pe-body h3 + *, .pe-body h4 + * { break-before: avoid; }
+.pe-body h3, .pe-body h4, .pe-body h5 { break-inside: avoid; }
+.pe-body ol.ideas > li > h3 + p { break-before: avoid; orphans: 3; }
 
 /* the big ideas: numbered sections */
 .pe-body ol.ideas { list-style: none; padding: 0; margin: 2mm 0 5mm; counter-reset: idea; display: block !important; }
@@ -215,16 +281,18 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 
 /* figures and filled-in examples */
 .book-fig { margin: 4mm 0 5mm; padding: 0; break-inside: avoid; text-align: center; }
-.book-fig img { display: block; margin: 0 auto 2mm; max-width: 100%; max-height: 118mm; width: auto; height: auto; }
+.book-fig img { display: block; margin: 0 auto 2mm; max-width: 100%; max-height: 165mm; width: auto; height: auto; }
+.book-fig svg.pe-svg { display: block; margin: 0 auto 2mm; width: 100%; height: auto; max-height: 165mm; }
 .book-fig figcaption { font-size: 8.4pt; line-height: 1.4; color: var(--soft); text-align: left; border-top: .4pt solid #D3C49C; padding-top: 1.6mm; }
 .book-fig-n { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); margin-right: 1.4mm; }
 .book-ex-wrap { margin: 4mm 0 5mm; break-inside: avoid; }
 .book-fig a.book-fig-zoom { text-decoration: none; }
 .pe-glance { page: pe-front; break-before: page; }
 .pe-glance h1 { padding-bottom: 3mm; border-bottom: .6pt solid var(--brass); }
-.pe-glance-figs { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; align-items: start; --pc: #A8792F; }
-.pe-glance .book-fig { margin: 0; }
-.pe-glance .book-fig img { max-height: 112mm; }
+.pe-glance-figs { display: block; --pc: #A8792F; }
+.pe-glance .book-fig { margin: 0 0 6mm; }
+.pe-glance .book-fig + .book-fig { break-before: page; }
+.pe-glance .book-fig img, .pe-glance .book-fig svg.pe-svg { max-height: 172mm; }
 
 /* ---------- the end of every chapter ---------- */
 .pe-end { margin: 8mm 0 0; padding: 4mm 0 0; border-top: 2.4pt double var(--pc); break-before: auto; }
@@ -244,15 +312,16 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-conn-p { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; white-space: nowrap; color: var(--pc); }
 .pe-conn-p a { text-decoration: none; }
 .pe-conn-p .pe-pg { font-family: inherit; font-size: inherit; font-weight: 500; }
-.pe-end-use { break-inside: avoid; }
+.pe-end-use { break-inside: avoid; break-before: avoid; }
+.pe-end-links { break-inside: avoid; }
 .pe-use { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
 .pe-use li { display: flex; gap: 3mm; align-items: flex-start; margin: 0; padding: 2.4mm; border: .6pt solid #D3C49C; border-radius: 1.6mm; }
-.pe-qr { flex: 0 0 19mm; width: 19mm; height: 19mm; display: block; }
-.pe-qr svg { width: 19mm; height: 19mm; display: block; }
+.pe-qr { flex: 0 0 16mm; width: 16mm; height: 16mm; display: block; }
+.pe-qr svg { width: 16mm; height: 16mm; display: block; }
 .pe-use-t { font-size: 8.8pt; line-height: 1.35; }
 .pe-use-t a { font-weight: 600; text-decoration: none; display: block; }
 .pe-use-d { display: block; color: var(--soft); font-size: 8.2pt; margin-top: .6mm; }
-.pe-use-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.4pt; color: var(--soft); margin-top: 1mm; overflow-wrap: anywhere; }
+.pe-use-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.2pt; color: var(--soft); margin-top: 1mm; }
 
 /* ---------- back matter ---------- */
 .pe-back { page: pe-back; break-before: page; --pc: #96412B; --pt: #F6E2D9; }
@@ -276,7 +345,9 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-ref-a { font-weight: 600; }
 .pe-ref-t { font-style: italic; }
 .pe-ref-f { color: #4A4338; }
-.pe-ref-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.2pt; color: var(--soft); text-decoration: none; overflow-wrap: anywhere; margin-top: .3mm; }
+.pe-ref-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.2pt; color: var(--soft); text-decoration: none; margin-top: .3mm; }
+.pe-notes .pe-notes-h + .pe-refs { break-before: avoid; }
+.pe-notes .pe-notes-h { break-inside: avoid; }
 .pe-ix { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 5mm; font-size: 8.3pt; line-height: 1.36; }
 .pe-ix li { margin: 0 0 1mm; break-inside: avoid; padding-left: 3mm; text-indent: -3mm; }
 .pe-ix-t { font-weight: 600; }
@@ -304,9 +375,15 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .bk-ex { font-size: 8.8pt !important; line-height: 1.42 !important; margin: 4mm 0 5mm !important; padding: 4mm 4mm 2.4mm !important; border-top: 2pt solid var(--pc) !important; }
 .bk-ex .bk-ex-k { color: var(--pc) !important; }
 
-/* the "Fill in your own" link under each example shows a short address, not the full https link */
+/* the "Fill in your own" link under each example shows a short address (a print-only span from build_book.py) */
 .bk-ex-link a::after { content: none !important; }
-.bk-ex-link a[data-u]::after { content: " (" attr(data-u) ")" !important; font-size: .82em; color: #5A5346; }
+.bk-ex .bk-ex-k { position: static !important; display: inline-block; margin: -7.2mm 0 1.6mm !important; transform: none; }
+.bk-ex > figcaption { margin-top: 0 !important; }
+.bk-ex-t th, .pe-body .bk-ex-t th { font-family: "Lora", Georgia, serif !important; font-weight: 600; font-size: 7.6pt; letter-spacing: 0; text-transform: none; line-height: 1.25; color: var(--soft); background: none; border-bottom: .8pt solid #CDBF98; padding: 1.2mm 1.4mm; hyphens: manual; }
+.bk-ex-t td { padding: 1.2mm 1.4mm; }
+.bk-ex-t .pe-th-opt { display: none; }
+.bk-ex-t td:last-child { min-width: 24mm; }
+.bk-ex-t td:first-child { min-width: 20mm; }
 
 /* part openers: the short chapter names (the full titles are for the screen) */
 .pe-part-list b { font-weight: 400; }

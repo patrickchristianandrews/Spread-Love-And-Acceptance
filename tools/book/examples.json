@@ -493,23 +493,6 @@
   ]
  },
  {
-  "id": "ex-wp02-eli",
-  "chapter": "understanding-16-worry",
-  "after_id": "basics",
-  "after_heading": null,
-  "after_id_full": "basics",
-  "after_heading_full": null,
-  "file": "tools/book/examples/ex-wp02-eli.html",
-  "tool": "/workpapers/fill/wp-02.html?road=self",
-  "title": "How much are you carrying? (just me)",
-  "who": "Eli, on his own, in a low week",
-  "relationship": "someone on their own",
-  "versions": [
-   "short",
-   "full"
-  ]
- },
- {
   "id": "ex-houserules-shona-kai",
   "chapter": "understanding-17-groups",
   "after_id": "norms",
@@ -538,6 +521,108 @@
   "title": "Family plan card",
   "who": "Amaka and Chris, new parents, with Chris’s parents",
   "relationship": "new parents and grandparents",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b2-wp01-hollie-gareth",
+  "chapter": "chapter-2",
+  "after_id": "small-children",
+  "after_heading": null,
+  "after_id_full": "small-children",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b2-wp01-hollie-gareth.html",
+  "tool": "/workpapers/fill/wp-01.html",
+  "title": "Who did what, with small children",
+  "who": "Hollie and Gareth, parents of a toddler and a baby; Gareth works shifts",
+  "relationship": "parents of small children (one on shifts)",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b3-weather-esme",
+  "chapter": "understanding-1-feelings",
+  "after_id": null,
+  "after_heading": "Feelings start in the body.",
+  "after_id_full": "body",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b3-weather-esme.html",
+  "tool": "/quick-checks.html#today",
+  "title": "Today’s Weather",
+  "who": "Esme, 29, after a worrying message from her manager",
+  "relationship": "coworkers",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b3-flip-hamish",
+  "chapter": "understanding-7-worth",
+  "after_id": null,
+  "after_heading": "The inner critic is trying to protect you.",
+  "after_id_full": "critic",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b3-flip-hamish.html",
+  "tool": "/small-wins.html#flip-it",
+  "title": "Flip it",
+  "who": "Hamish, 44, after a mistake at work",
+  "relationship": "coworkers",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b3-write-edith",
+  "chapter": "understanding-8-loss",
+  "after_id": null,
+  "after_heading": "People grieve in different ways.",
+  "after_id_full": "styles",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b3-write-edith.html",
+  "tool": "/write-it-through.html#write",
+  "title": "Talk it through in writing",
+  "who": "Edith, 74, widowed, writing to her grown-up son and daughter",
+  "relationship": "a parent and grown-up children",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b3-rituals-team",
+  "chapter": "understanding-10-values",
+  "after_id": null,
+  "after_heading": "Meaning comes from ordinary places.",
+  "after_id_full": "meaning",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b3-rituals-team.html",
+  "tool": "/workpapers/fill/wp-15.html",
+  "title": "Keep your little rituals alive",
+  "who": "Lachlan and Sunita, who lead a hybrid team together",
+  "relationship": "coworkers",
+  "versions": [
+   "short",
+   "full"
+  ]
+ },
+ {
+  "id": "ex-b3-flip-tolu",
+  "chapter": "understanding-16-worry",
+  "after_id": "worry-time",
+  "after_heading": null,
+  "after_id_full": "worry-time",
+  "after_heading_full": null,
+  "file": "tools/book/examples/ex-b3-flip-tolu.html",
+  "tool": "/small-wins.html#flip-it",
+  "title": "Flip it",
+  "who": "Tolu, 17, worrying about an exam at 1am",
+  "relationship": "someone on their own (a teenager)",
   "versions": [
    "short",
    "full"

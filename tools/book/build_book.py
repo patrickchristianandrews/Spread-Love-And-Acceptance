@@ -535,7 +535,11 @@ def ex_html(x):
     body = read(x['path'])
     body = re.sub(r'<script\b.*?</script>', '', body, flags=re.S)
     # printed copies show where the "Fill in your own" link goes, as a short address
-    body = re.sub(r'(<p class="bk-ex-link"[^>]*>.*?)</p>', lambda m: re.sub(r'<a href="(/[^"]*)"', lambda a: '<a href="%s" data-u="spreadloveandacceptance.com%s"' % (a.group(1), a.group(1).split('#')[0]), m.group(0)), body, flags=re.S)
+    body = re.sub(r'(<p class="bk-ex-link"[^>]*>.*?)</p>', lambda m: re.sub(
+        r'<a href="(/[^"]*)"([^>]*)>(.*?)</a>', lambda a: '<a href="%s" data-u="%s"%s>%s</a><span class="pe-only pe-u"> (%s)</span>' % (
+            a.group(1), esc(short_address(a.group(1))), a.group(2), a.group(3), addr_html(short_address(a.group(1)))), m.group(0), flags=re.S), body, flags=re.S)
+    # long optional notes in table headings ("(hours each time, optional)") are left off the printed page
+    body = re.sub(r'(<th\b[^>]*>[^<]*?)\s*(\([^()<]{8,}\))(</th>)', r'\1<span class="pe-th-opt"> \2</span>\3', body)
     title = x.get('title') or 'A filled-in example'
     # the snippet carries its own id (x['id']) on its <figure>; the wrapper only carries the number
     return ('<!-- book-ex:start -->\n<div class="book-ex-wrap no-bubble" data-ex-n="%d" data-ex-title="%s">%s</div>\n<!-- book-ex:end -->') % (
@@ -854,7 +858,8 @@ def front_matter(name, deep, parts, title, who, toc_rows):
     s = cover(name, deep)
     s += '''
 <section class="pe-half pe-only">%s<p class="pe-half-t">The Objective Ledger</p><p class="pe-half-s">%s · %s</p></section>
-<section class="pe-titlep pe-only" style="--acc:%s"><div class="pe-titlep-top"><p class="pe-titlep-t">The Objective Ledger</p>
+<div class="pe-recto-pad pe-only" data-for="titlep"></div>
+<section class="pe-titlep pe-only" style="--acc:%s">%s<div class="pe-titlep-top"><p class="pe-titlep-t">The Objective Ledger</p>
 <p class="pe-titlep-s">Understanding yourself and the people you share a life with</p>
 <p class="pe-titlep-v">%s · %s</p></div>
 <div class="pe-titlep-art">%s</div>
@@ -868,7 +873,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
-</div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
+</div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
                        book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE, SITE)
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
@@ -888,7 +893,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
     if front:
         s += '\n<section class="pe-glance pe-only" id="glance">%s<h1>The book in two pictures</h1><div class="pe-glance-figs">%s</div></section>' % (
             mark('glance'), ''.join(fig_html(f, False) for f in front))
-    s += '\n<nav class="pe-toc pe-only" aria-label="Contents"><h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % ''.join(toc_rows)
+    s += '\n<nav class="pe-toc pe-only" aria-label="Contents">%s<h1>Contents</h1><ol class="pe-toc-list">%s</ol></nav>' % (mark('contents'), ''.join(toc_rows))
     return s
 
 
@@ -902,11 +907,12 @@ def part_opener(part, deep, here):
     col, tint = PCOL[part]
     rows = ''.join('<li><a href="#%s"><span>%s</span> <b class="pe-only">%s</b><b class="no-print">%s</b></a>%s</li>' % (e[0], esc(e[2]), esc(SHORT[e[0]]), esc(TITLES[e[0]]), pg(e[0]))
                    for e in ORDER if e[1] == part and e[0] in here)
-    return '''<section class="pe-part no-bubble no-cheer no-dive" data-no-bubble id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
+    return '''<div class="pe-recto-pad pe-only" data-for="part-%d"></div>
+<section class="pe-part no-bubble no-cheer no-dive" data-no-bubble id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
 <div class="pe-part-in"><p class="pe-part-k">%s</p><h1 class="pe-part-h">%s</h1><p class="pe-part-b">%s</p>
 <div class="pe-part-art">%s</div>
 <p class="pe-part-l">In this part</p><ol class="pe-part-list">%s</ol></div></section>''' % (
-        part, part, col, tint, mark('part-%d' % part), book_art.ledger_rules(170, 240, '#E9DFC4', col, top=20, step=7.5, left=24),
+        part, part, part, col, tint, mark('part-%d' % part), book_art.ledger_rules(170, 240, '#E9DFC4', col, top=20, step=7.5, left=24),
         name, sub, esc(blurb), book_art.part_mark(part), rows)
 
 
@@ -945,7 +951,7 @@ def chapter_end(e, deep, here):
     s += '<div class="pe-end-use"><h3 class="pe-end-k">Put it to use</h3><ul class="pe-use">'
     for t, u, d in uses(e[0]):
         s += '<li>%s<span class="pe-use-t"><a href="%s">%s</a>%s<span class="pe-use-u">%s</span></span></li>' % (
-            qr_slot(u), absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', esc(pretty_url(u)))
+            qr_slot(u), absolute(u), esc(t), ('<span class="pe-use-d">%s</span>' % esc(d)) if d else '', addr_html(short_address(u)))
     s += '</ul></div></aside>'
     return s
 
@@ -979,6 +985,11 @@ def short_address(url):
     return m.group(1) if m else ''
 
 
+def addr_html(addr):
+    """An address that may wrap after a slash but never at its own hyphens."""
+    return '/<wbr>'.join('<span class="pe-nb">%s</span>' % esc(x) for x in addr.split('/'))
+
+
 def print_links(body, slug, here):
     """On paper a link goes nowhere. Links to another chapter in this book get a page number; links to a site
     page get a short address the first time they appear in a chapter; rows that are only links (the arrow
@@ -994,7 +1005,7 @@ def print_links(body, slug, here):
     def sub(m):
         attrs, text = m.group(1), m.group(2)
         hm = re.search(r'\bhref="([^"]+)"', attrs)
-        if not hm or 'data-u=' in attrs or 'class="dig' in attrs:
+        if not hm or 'data-u=' in attrs or 'class="dig' in attrs or 'book-fig-zoom' in attrs:
             return m.group(0)
         h = html.unescape(hm.group(1))
         if h.startswith('#'):
@@ -1008,7 +1019,7 @@ def print_links(body, slug, here):
             else:
                 key = tgt
             return m.group(0) + '<span class="pe-only pe-xref"> (page %s)</span>' % pg(key)
-        if h.startswith('/') and NO_ADDRESS.match(h):
+        if h.startswith('/') and (NO_ADDRESS.match(h) or h.startswith('/assets/')):
             return m.group(0)
         if not (h.startswith('/') or h.startswith('http')):
             return m.group(0)
@@ -1017,7 +1028,7 @@ def print_links(body, slug, here):
         if not addr or addr in seen or addr.lower() in plain or plain.startswith('spreadloveandacceptance.com'):
             return m.group(0)
         seen.add(addr)
-        return m.group(0) + '<span class="pe-only pe-u"> (%s)</span>' % esc(addr)
+        return m.group(0) + '<span class="pe-only pe-u"> (%s)</span>' % addr_html(addr)
     return re.sub(r'<a\b([^>]*)>(.*?)</a>', sub, body, flags=re.S)
 
 
@@ -1193,18 +1204,35 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
 
 
 def page_rules(here, deep):
-    """Named pages for the print edition: a running footer with the chapter's name and the part's thumb tab."""
-    tab = {1: 'right-top', 2: 'right-middle', 3: 'right-bottom', 4: 'right-bottom'}
+    """Named pages for the print edition, set for a bound book: on a right-hand page (odd numbers) the page
+    number and the part's thumb tab sit on the right edge and the running head names the chapter; on a
+    left-hand page (even numbers) they sit on the left edge and the running head names the part and chapter.
+    The inner margin is the wider one (the gutter)."""
+    pos = {1: 'top', 2: 'middle', 3: 'bottom', 4: 'bottom'}
+    q = lambda t: '"%s"' % t.replace('\\', '').replace('"', '\\"')
+    edge = 'vertical-align:top;padding-top:3mm;border-top:.4pt solid #CDBF98;white-space:nowrap;'
+    head = 'font-family:"Lora",Georgia,serif;font-style:italic;font-size:7.4pt;color:#6E6556;' + edge
+    num = 'content:counter(page);font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:8.6pt;color:#2B2620;' + edge
+
+    def rules(nm, recto, verso, part):
+        col = PCOL[part][0]
+        tab_r = ''.join('@right-%s{content:"";%s}' % (b, ('border-right:3mm solid %s;height:52mm' % col) if b == pos[part] else '') for b in ('top', 'middle', 'bottom'))
+        tab_l = ''.join('@left-%s{content:"";%s}' % (b, ('border-left:3mm solid %s;height:52mm' % col) if b == pos[part] else '') for b in ('top', 'middle', 'bottom'))
+        return ('@page %s:right{@bottom-left{content:%s;%s}@bottom-center{content:"";%s}@bottom-right{%stext-align:right}%s}'
+                '@page %s:left{@bottom-left{%stext-align:left}@bottom-center{content:"";%s}@bottom-right{content:%s;%stext-align:right}%s}') % (
+            nm, q(recto), head, edge, num, tab_r, nm, num, edge, q(verso), head, tab_l)
     r = []
     for e in ORDER:
         if e[0] not in here:
             continue
         nm = 'pc-' + e[0]
-        foot = (chapter_name(e) + ' · ' + SHORT[e[0]]).replace('"', '\\"')
         r.append('#%s{page:%s}' % (e[0], nm))
-        boxes = ''.join('@%s{content:"";%s}' % (b, ('border-right:3mm solid %s;height:52mm' % PCOL[e[1]][0]) if b == tab[e[1]] else '')
-                        for b in ('right-top', 'right-middle', 'right-bottom'))
-        r.append('@page %s{@bottom-left{content:"%s"}%s}' % (nm, foot, boxes))
+        r.append(rules(nm, SHORT[e[0]], 'The Objective Ledger · ' + chapter_name(e), e[1]))
+    for sec, label in (('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
+                       ('notes', 'Research notes'), ('index', 'Index')):
+        nm = 'pb-' + sec
+        r.append('#%s{page:%s}' % (sec, nm))
+        r.append(rules(nm, label, 'The Objective Ledger · At the back of the book', 4))
     return '<style media="print">%s</style>' % '\n'.join(r)
 
 
@@ -1250,6 +1278,26 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     front_html = front_matter(name, deep, parts, title or 'The Whole Book', who, ptoc)
     both, figs, exs = finish_package(front_html + '\n<!--pe-split-->\n' + '\n'.join(parts_html))
     front_html, body_html = both.split('\n<!--pe-split-->\n', 1)
+    # the PDF's bookmarks: [title, page key, level]
+    ol = [['How to use this book', 'how', 0]]
+    if any(f['chapter'] == 'front' for f in FIGS):
+        ol.append(['The book in two pictures', 'glance', 0])
+    ol.append(['Contents', 'contents', 0])
+    for part in parts:
+        ol.append(['%s: %s' % PARTS[part][:2], 'part-%d' % part, 0])
+        for e in [x for x in ORDER if x[1] == part]:
+            ol.append(['%s · %s' % (e[2], TITLES[e[0]]), e[0], 1])
+    if 'afterword' in here:
+        ol.append(['Afterword: %s' % TITLES['afterword'], 'afterword', 0])
+    ol.append(['Words used in this book', 'glossary', 0])
+    if figs:
+        ol.append(['List of figures', 'figures', 0])
+    if exs:
+        ol.append(['List of filled-in examples', 'examples', 0])
+    ol += [['Research notes', 'notes', 0], ['Index', 'index', 0]]
+    outline_json = '<script type="application/json" id="pe-outline">%s</script>' % json.dumps(
+        {'outline': ol, 'title': 'The Objective Ledger: %s (%s)' % (COVER[name][2][0].upper() + COVER[name][2][1:], 'full version' if deep else 'short version'),
+         'author': AUTHOR, 'subject': COVER[name][3]}, ensure_ascii=False).replace('</', '<\\/')
     fname = name + ('-in-depth' if deep else '')
     other = '/book/%s.html' % (name if deep else name + '-in-depth')
     base = title or 'The Whole Book'
@@ -1276,6 +1324,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
 <p class="last-updated no-bubble no-print">Last updated: %s. From spreadloveandacceptance.com. Free to read and share for personal and non-commercial teaching use, with credit.</p>
 </main>
 %s
+%s
 <script>
 // the print edition's QR codes ("Put it to use"), drawn on this device by the site's own encoder
 function peQR(){ if (!window.TOLShareKit || !TOLShareKit.qr) return false; document.querySelectorAll('.pe-qr[data-qr]').forEach(function (el) { if (el.firstChild) return; var s = TOLShareKit.qr.svg(el.getAttribute('data-qr')); if (s) { s.removeAttribute('class'); s.setAttribute('aria-hidden', 'true'); el.appendChild(s); } }); return true; }
@@ -1289,7 +1338,7 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 ''' % (fname, front_html, title.replace(' (Full Version)', ': the full version'), lede, name, other,
        'Switch to the short versions' if deep else 'Switch to the full versions',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
-       ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep))
+       ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep), outline_json)
     write(os.path.join(BOOK, fname + '.html'), page)
 
 

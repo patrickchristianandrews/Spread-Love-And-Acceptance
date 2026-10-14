@@ -1,0 +1,537 @@
+[
+ {
+  "id": "hochschild-machung-1989",
+  "authors": "Hochschild, A. R., with Machung, A.",
+  "year": 1989,
+  "title": "The Second Shift: Working Parents and the Revolution at Home",
+  "venue": "Viking Penguin (updated edition 2012, Penguin Books)",
+  "doi": null,
+  "url": "https://www.penguinrandomhouse.com/books/310593/the-second-shift-by-arlie-hochschild",
+  "kind": "book",
+  "finding": "Interviews and home observations of dual-earner couples with young children found that working mothers did much more of the housework and childcare, adding up to a large extra load over a year; many couples told themselves stories that the split was fair.",
+  "strength": "moderate — influential qualitative study; its figures describe its sample, though large time-use surveys confirm a persistent (narrowing) gap",
+  "topics": [
+   "invisible-work",
+   "second-shift",
+   "gender",
+   "time-use"
+  ],
+  "mentioned_on": [
+   "/book/preface.html#mental-load",
+   "/book/preface-in-depth.html#mental-load"
+  ],
+  "verified": true,
+  "verified_by": "https://en.wikipedia.org/wiki/The_Second_Shift ; https://www.penguinrandomhouse.com/books/310593/the-second-shift-by-arlie-hochschild ; https://www.publishersweekly.com/9780670824632",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "daminger-2019",
+  "authors": "Daminger, A.",
+  "year": 2019,
+  "title": "The cognitive dimension of household labor",
+  "venue": "American Sociological Review, 84(4), 609–633",
+  "doi": "10.1177/0003122419859007",
+  "url": "https://doi.org/10.1177/0003122419859007",
+  "kind": "study",
+  "finding": "Interviews with 35 couples (70 interviews) identified four parts of household “cognitive labor”: anticipating needs, identifying options, deciding, and monitoring. Women did more of it overall, especially anticipating and monitoring; deciding was shared more equally. The work was often unseen by both partners.",
+  "strength": "moderate — rich qualitative study of a mostly college-educated sample; not population estimates",
+  "topics": [
+   "invisible-work",
+   "mental-load",
+   "cognitive-labour",
+   "gender"
+  ],
+  "mentioned_on": [
+   "/book/preface.html#mental-load",
+   "/book/preface-in-depth.html#mental-load"
+  ],
+  "verified": true,
+  "verified_by": "https://inequality.hks.harvard.edu/publications/cognitive-dimension-household-labor ; https://daily.jstor.org/the-gendered-labor-of-noticing-and-anticipating",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "yavorsky-kamp-dush-schoppe-sullivan-2015",
+  "authors": "Yavorsky, J. E., Kamp Dush, C. M., & Schoppe-Sullivan, S. J.",
+  "year": 2015,
+  "title": "The production of inequality: The gender division of labor across the transition to parenthood",
+  "venue": "Journal of Marriage and Family, 77(3), 662–679",
+  "doi": "10.1111/jomf.12189",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4584401",
+  "kind": "study",
+  "finding": "Time-diary data from dual-earner couples showed a gender gap in total work opening up after a first baby: mothers took on most of the added childcare without cutting their paid hours; survey reports overstated how equal things were.",
+  "strength": "moderate — careful longitudinal design; small, highly educated US sample",
+  "topics": [
+   "transition-to-parenthood",
+   "gender",
+   "time-use",
+   "division-of-labour"
+  ],
+  "mentioned_on": [
+   "/book/preface.html#mental-load",
+   "/book/preface-in-depth.html#mental-load",
+   "/book/chapter-2-in-depth.html#small-children"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4584401 ; https://memberpubs.pop.umn.edu/citations/show/45fec705-16b5-321c-8f42-81ed258db865",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "allen-hawkins-1999",
+  "authors": "Allen, S. M., & Hawkins, A. J.",
+  "year": 1999,
+  "title": "Maternal gatekeeping: Mothers’ beliefs and behaviors that inhibit greater father involvement in family work",
+  "venue": "Journal of Marriage and the Family, 61(1), 199–212",
+  "doi": "10.2307/353894",
+  "url": "https://scholarsarchive.byu.edu/facpub/4214",
+  "kind": "study",
+  "finding": "Defined maternal gatekeeping along three dimensions and, in 622 dual-earner mothers, classified about one in five as gatekeepers; they did more family work each week and had less equal divisions of labor.",
+  "strength": "moderate — influential concept; later work stresses both gate-closing and gate-opening and warns against blaming mothers",
+  "topics": [
+   "gatekeeping",
+   "division-of-labour",
+   "parenting",
+   "gender"
+  ],
+  "mentioned_on": [
+   "/book/preface.html#mental-load",
+   "/book/preface-in-depth.html#mental-load"
+  ],
+  "verified": true,
+  "verified_by": "https://scholarsarchive.byu.edu/facpub/4214 ; https://synapsesocial.com/papers/W2002519253",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "schoppe-sullivan-et-al-2008",
+  "authors": "Schoppe-Sullivan, S. J., Brown, G. L., Cannon, E. A., Mangelsdorf, S. C., & Sokolowski, M. S.",
+  "year": 2008,
+  "title": "Maternal gatekeeping, coparenting quality, and fathering behavior in families with infants",
+  "venue": "Journal of Family Psychology, 22(3), 389–398",
+  "doi": "10.1037/0893-3200.22.3.389",
+  "url": "https://doi.org/10.1037/0893-3200.22.3.389",
+  "kind": "study",
+  "finding": "In 97 couples with infants, fathers were more involved in day-to-day care when mothers actively encouraged them (gate-opening); when mothers were highly critical (gate-closing), fathers’ own beliefs about involvement mattered less.",
+  "strength": "moderate — observational study of one US sample; correlational",
+  "topics": [
+   "gatekeeping",
+   "coparenting",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/preface.html#mental-load",
+   "/book/preface-in-depth.html#mental-load"
+  ],
+  "verified": true,
+  "verified_by": "https://news.osu.edu/moms-behavior-key-to-dads-involvement-in-child-care/ ; https://periodicos.ufjf.br/index.php/psicologiaempesquisa/article/view/42431",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "doss-et-al-2009",
+  "authors": "Doss, B. D., Rhoades, G. K., Stanley, S. M., & Markman, H. J.",
+  "year": 2009,
+  "title": "The effect of the transition to parenthood on relationship quality: An 8-year prospective study",
+  "venue": "Journal of Personality and Social Psychology, 96(3), 601–619",
+  "doi": "10.1037/a0013969",
+  "url": "https://doi.org/10.1037/a0013969",
+  "kind": "study",
+  "finding": "Following 218 couples over the first eight years of marriage, those who had a first child showed sudden declines in relationship quality after the birth, on average, compared with couples who did not.",
+  "strength": "moderate — strong longitudinal design; averages hide wide variation",
+  "topics": [
+   "transition-to-parenthood",
+   "parenting",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/preface-in-depth.html#mental-load",
+   "/book/chapter-2-in-depth.html#small-children"
+  ],
+  "verified": true,
+  "verified_by": "https://pubpeer.com/publications/18486FF5116101E35FC9B9994B26BB ; https://local.psy.miami.edu/faculty/dmessinger/c_c/rsrcs/rdgs/emot/doss.jpsp.2009.parenthood.pdf",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "cowan-cowan-1992",
+  "authors": "Cowan, C. P., & Cowan, P. A.",
+  "year": 1992,
+  "title": "When Partners Become Parents: The Big Life Change for Couples",
+  "venue": "BasicBooks (New York); reissued 1999 (Erlbaum) and 2011",
+  "doi": null,
+  "url": "https://openlibrary.org/works/OL92708W",
+  "kind": "book",
+  "finding": "Based on the Becoming a Family Project, a long-term study of expectant couples, describes how strain and conflict between partners commonly rise across the transition to parenthood, and tests couples groups as prevention.",
+  "strength": "moderate — longitudinal study with a preventive intervention; modest sample",
+  "topics": [
+   "transition-to-parenthood",
+   "parenting",
+   "division-of-labour"
+  ],
+  "mentioned_on": [
+   "/book/preface-in-depth.html#mental-load",
+   "/book/chapter-2-in-depth.html#small-children"
+  ],
+  "verified": true,
+  "verified_by": "https://openlibrary.org/works/OL92708W ; https://newsarchive.berkeley.edu/news/berkeleyan/2005/04/27_cowan.shtml",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "feinberg-kan-2008",
+  "authors": "Feinberg, M. E., & Kan, M. L.",
+  "year": 2008,
+  "title": "Establishing Family Foundations: Intervention effects on coparenting, parent/infant well-being, and parent-child relations",
+  "venue": "Journal of Family Psychology, 22(2), 253–263",
+  "doi": "10.1037/0893-3200.22.2.253",
+  "url": "https://doi.org/10.1037/0893-3200.22.2.253",
+  "kind": "study",
+  "finding": "A randomized trial with 169 expectant first-time couples found that the Family Foundations classes, delivered before and after birth, improved coparenting and some aspects of parent and infant wellbeing at follow-up.",
+  "strength": "moderate — randomized trial; later trials broadly supportive",
+  "topics": [
+   "coparenting",
+   "transition-to-parenthood",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/chapter-2-in-depth.html#small-children"
+  ],
+  "verified": true,
+  "verified_by": "https://pure.psu.edu/en/publications/establishing-family-foundations-intervention-effects-on-coparenti/ ; https://aifs.gov.au/node/37361",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "bryant-conger-meehan-2001",
+  "authors": "Bryant, C. M., Conger, R. D., & Meehan, J. M.",
+  "year": 2001,
+  "title": "The influence of in-laws on change in marital success",
+  "venue": "Journal of Marriage and Family, 63(3), 614–626",
+  "doi": "10.1111/j.1741-3737.2001.00614.x",
+  "url": "https://www.jstor.org/stable/3654637",
+  "kind": "study",
+  "finding": "Following couples for several years, found that conflict and poorer relationships with in-laws predicted later declines in marital success (stability, satisfaction and commitment).",
+  "strength": "moderate — longitudinal US sample; correlational",
+  "topics": [
+   "in-laws",
+   "family",
+   "relationships"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#faith-culture"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8133523 ; https://pmc.ncbi.nlm.nih.gov/articles/PMC5006754/",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "emery-1982",
+  "authors": "Emery, R. E.",
+  "year": 1982,
+  "title": "Interparental conflict and the children of discord and divorce",
+  "venue": "Psychological Bulletin, 92(2), 310–330",
+  "doi": "10.1037/0033-2909.92.2.310",
+  "url": "https://doi.org/10.1037/0033-2909.92.2.310",
+  "kind": "review",
+  "finding": "Reviewed evidence that conflict between parents, in married and divorced families, is linked to children’s problems, and that the amount and type of conflict matter.",
+  "strength": "strong — classic review",
+  "topics": [
+   "coparenting",
+   "conflict",
+   "divorce"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#two-homes"
+  ],
+  "verified": true,
+  "verified_by": "Citation confirmed in published reference lists (Springer, DeepDyve) and described as a review of links between parental conflict and children’s problems in a Government of Canada Department of Justice report, justice.gc.ca/eng/rp-pr/fl-lf/divorce/2004_1/p3.html (search results, Oct 2026)",
+  "note": "Same work as in refs-a (unverified there); verified here and repeated to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "amato-2001",
+  "authors": "Amato, P. R.",
+  "year": 2001,
+  "title": "Children of divorce in the 1990s: An update of the Amato and Keith (1991) meta-analysis",
+  "venue": "Journal of Family Psychology, 15(3), 355–370",
+  "doi": "10.1037/0893-3200.15.3.355",
+  "url": "https://doi.org/10.1037/0893-3200.15.3.355",
+  "kind": "meta-analysis",
+  "finding": "Updated a meta-analysis comparing children of divorced and continuously married parents; differences in wellbeing were small on average and persisted in studies from the 1990s.",
+  "strength": "strong — meta-analysis; correlational studies",
+  "topics": [
+   "coparenting",
+   "divorce",
+   "family"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#two-homes"
+  ],
+  "verified": true,
+  "verified_by": "https://mjms.mums.ac.ir/article_20195.html ; https://justice.gc.ca/eng/rp-pr/fl-lf/divorce/vcsdm-pvem/ref.html",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "hetherington-kelly-2002",
+  "authors": "Hetherington, E. M., & Kelly, J.",
+  "year": 2002,
+  "title": "For Better or For Worse: Divorce Reconsidered",
+  "venue": "W. W. Norton",
+  "doi": null,
+  "url": "https://wwnorton.co.uk/books/9780393324136-for-better-or-for-worse",
+  "kind": "book",
+  "finding": "Drawing on long-term studies of about 1,400 families, argues that most children of divorce and remarriage turn out reasonably well, with outcomes varying widely.",
+  "strength": "moderate — large longitudinal programme; popular book that drew some controversy",
+  "topics": [
+   "stepfamilies",
+   "divorce",
+   "family"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#two-homes"
+  ],
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/978-0-393-04862-9 ; https://search.ub.tum.de/vufind/Record/DE-604.BV014461251 ; https://wwnorton.co.uk/books/9780393324136-for-better-or-for-worse",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "papernow-2013",
+  "authors": "Papernow, P. L.",
+  "year": 2013,
+  "title": "Surviving and Thriving in Stepfamily Relationships: What Works and What Doesn’t",
+  "venue": "Routledge",
+  "doi": null,
+  "url": "https://www.routledge.com/Surviving-and-Thriving-in-Stepfamily-Relationships-What-Works-and-What/Papernow/p/book/9780415894388",
+  "kind": "book",
+  "finding": "Describes “stepfamily architecture” and five common challenges it creates, drawing on research and clinical experience; closeness between stepfamily members typically builds slowly.",
+  "strength": "moderate — practitioner synthesis of research and clinical experience, not a single study",
+  "topics": [
+   "stepfamilies",
+   "family",
+   "parenting"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#two-homes"
+  ],
+  "verified": true,
+  "verified_by": "https://www.routledge.com/Surviving-and-Thriving-in-Stepfamily-Relationships-What-Works-and-What/Papernow/p/book/9780415894388",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "papp-cummings-goeke-morey-2009",
+  "authors": "Papp, L. M., Cummings, E. M., & Goeke-Morey, M. C.",
+  "year": 2009,
+  "title": "For richer, for poorer: Money as a topic of marital conflict in the home",
+  "venue": "Family Relations, 58(1), 91–103",
+  "doi": "10.1111/j.1741-3729.2008.00537.x",
+  "url": "https://doi.org/10.1111/j.1741-3729.2008.00537.x",
+  "kind": "study",
+  "finding": "In home diary records of marital conflict, money was not the most frequent topic, but money conflicts were more pervasive, problematic and recurrent than other conflicts and more likely to stay unresolved.",
+  "strength": "moderate — diary design with one US community sample; correlational",
+  "topics": [
+   "money",
+   "conflict",
+   "couples"
+  ],
+  "mentioned_on": [
+   "/book/chapter-4-in-depth.html#money"
+  ],
+  "verified": true,
+  "verified_by": "https://humanecology.wisc.edu/staff/papp-lauren-m/ ; https://newprairiepress.org/jft/vol1/iss1/7",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "dew-britt-huston-2012",
+  "authors": "Dew, J., Britt, S., & Huston, S.",
+  "year": 2012,
+  "title": "Examining the relationship between financial issues and divorce",
+  "venue": "Family Relations, 61(4), 615–628",
+  "doi": "10.1111/j.1741-3729.2012.00715.x",
+  "url": "https://scholarsarchive.byu.edu/facpub/4526",
+  "kind": "study",
+  "finding": "In US national survey data on about 4,500 couples, financial disagreements were the strongest of the disagreement types in predicting later divorce, for both wives and husbands.",
+  "strength": "moderate — large longitudinal sample; correlational",
+  "topics": [
+   "money",
+   "conflict",
+   "divorce"
+  ],
+  "mentioned_on": [
+   "/book/chapter-4-in-depth.html#money"
+  ],
+  "verified": true,
+  "verified_by": "https://scholarsarchive.byu.edu/facpub/4526 ; https://blogs.ifas.ufl.edu/fycsdept/?p=117",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "rick-small-finkel-2011",
+  "authors": "Rick, S. I., Small, D. A., & Finkel, E. J.",
+  "year": 2011,
+  "title": "Fatal (fiscal) attraction: Spendthrifts and tightwads in marriage",
+  "venue": "Journal of Marketing Research, 48(2), 228–237",
+  "doi": "10.1509/jmkr.48.2.228",
+  "url": "https://www.kellogg.northwestern.edu/academics-research/research/detail/2011/fatal-fiscal-attraction-spendthrifts-and-tightwads-in-marriage",
+  "kind": "study",
+  "finding": "Tightwads and spendthrifts tend to marry each other; the bigger the difference within a couple, the more conflict over money, which in turn predicts lower marital wellbeing.",
+  "strength": "moderate — several survey studies; correlational",
+  "topics": [
+   "money",
+   "couples",
+   "conflict"
+  ],
+  "mentioned_on": [
+   "/book/chapter-4-in-depth.html#money"
+  ],
+  "verified": true,
+  "verified_by": "https://www.kellogg.northwestern.edu/academics-research/research/detail/2011/fatal-fiscal-attraction-spendthrifts-and-tightwads-in-marriage ; https://journals.sagepub.com/doi/full/10.1509/jmkr.48.2.228",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "klontz-et-al-2011",
+  "authors": "Klontz, B., Britt, S. L., Mentzer, J., & Klontz, T.",
+  "year": 2011,
+  "title": "Money beliefs and financial behaviors: Development of the Klontz Money Script Inventory",
+  "venue": "Journal of Financial Therapy, 2(1), 1–22",
+  "doi": "10.4148/jft.v2i1.451",
+  "url": "https://doi.org/10.4148/jft.v2i1.451",
+  "kind": "study",
+  "finding": "In 422 respondents, beliefs about money clustered into four “money scripts” (money avoidance, money worship, money status and money vigilance), several of which were linked with income and net worth.",
+  "strength": "early — a newer measure from one sample; the site rightly calls it “less established”",
+  "topics": [
+   "money",
+   "family-scripts"
+  ],
+  "mentioned_on": [
+   "/book/chapter-4-in-depth.html#money"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.newprairiepress.org/jft/article/id/5669/ ; https://caas.usu.edu/fcse/files/money-beliefs-and-financial-behaviors-development-the-klontz-money-script-inventory-jft-2011.pdf",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "pillemer-2020",
+  "authors": "Pillemer, K.",
+  "year": 2020,
+  "title": "Fault Lines: Fractured Families and How to Mend Them",
+  "venue": "Avery (Penguin Random House)",
+  "doi": null,
+  "url": "https://search.worldcat.org/oclc/1145305518",
+  "kind": "book",
+  "finding": "Draws on the Cornell Reconciliation Project, including a national survey on estrangement and interviews, to show family estrangement is more common than people assume and that some people reconcile.",
+  "strength": "moderate — survey plus interviews; popular book",
+  "topics": [
+   "family",
+   "estrangement",
+   "siblings"
+  ],
+  "mentioned_on": [
+   "/book/chapter-5-in-depth.html#kinship"
+  ],
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/oclc/1145305518 ; https://www.porchlightbooks.com/products/fault-lines-karl-pillemer-9780525539032",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "boss-1999",
+  "authors": "Boss, P.",
+  "year": 1999,
+  "title": "Ambiguous loss: Learning to live with unresolved grief",
+  "venue": "Harvard University Press",
+  "doi": null,
+  "url": "https://bookshare.org/browse/book/2050897",
+  "kind": "book",
+  "finding": "Named \"ambiguous loss\": losses without clear closure, such as someone physically absent but psychologically present, or present but psychologically changed (as in dementia), and suggested ways to cope.",
+  "strength": "moderate: a widely used conceptual framework supported by clinical and qualitative research.",
+  "topics": [
+   "grief",
+   "ambiguous-loss"
+  ],
+  "mentioned_on": [
+   "/book/chapter-5-in-depth.html#kinship"
+  ],
+  "verified": true,
+  "verified_by": "https://bookshare.org/browse/book/2050897 (Harvard University Press, 1999)",
+  "note": "Same work as in an earlier refs file; repeated here only to add where it now shows up in Part Two (bookfixB2)."
+ },
+ {
+  "id": "lambert-fincham-et-al-2010-prayer",
+  "authors": "Lambert, N. M., Fincham, F. D., Stillman, T. F., Graham, S. M., & Beach, S. R. H.",
+  "year": 2010,
+  "title": "Motivating change in relationships: Can prayer increase forgiveness?",
+  "venue": "Psychological Science, 21(1), 126–132",
+  "doi": "10.1177/0956797609355634",
+  "url": "https://doi.org/10.1177/0956797609355634",
+  "kind": "study",
+  "finding": "In two small experiments with students, people asked to pray for a romantic partner (study 1) or for a friend daily for four weeks (study 2) reported more willingness to forgive that person than people in comparison conditions; in study 2 this went with a rise in selfless concern.",
+  "strength": "early: two small student samples from one region, with self-report outcomes.",
+  "topics": [
+   "faith",
+   "forgiveness",
+   "couples"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#faith-culture"
+  ],
+  "verified": true,
+  "verified_by": "https://www.psychologicalscience.org/journals/psychological-science/0956797609355634/ and https://www.sciencedaily.com/releases/2010/01/100127134607.htm (search results, Oct 2026)"
+ },
+ {
+  "id": "mahoney-2010-religion-families",
+  "authors": "Mahoney, A.",
+  "year": 2010,
+  "title": "Religion in families, 1999–2009: A relational spirituality framework",
+  "venue": "Journal of Marriage and Family, 72(4), 805–827",
+  "doi": "10.1111/j.1741-3737.2010.00732.x",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3219420/",
+  "kind": "review",
+  "finding": "Reviewed a decade of peer-reviewed studies on religion in marriage and parent–child relationships, “for better and worse”, organising them by how faith may help form, maintain and change family relationships; faith can strengthen family life and can also be a source of strain.",
+  "strength": "moderate: a broad review; most studies are correlational.",
+  "topics": [
+   "faith",
+   "couples",
+   "family"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#faith-culture"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3219420 (search result, Oct 2026)"
+ },
+ {
+  "id": "maccoby-mnookin-1992",
+  "authors": "Maccoby, E. E., & Mnookin, R. H.",
+  "year": 1992,
+  "title": "Dividing the Child: Social and Legal Dilemmas of Custody",
+  "venue": "Harvard University Press",
+  "doi": null,
+  "url": "https://hls.harvard.edu/bibliography/dividing-the-child-social-and-legal-dilemmas-of-custody/",
+  "kind": "book",
+  "finding": "Following more than a thousand separating families for three years, described three patterns of co-parenting among families where children spent time in both homes: cooperative, conflicted and disengaged; most parents avoided legal battles but many found it hard to cooperate.",
+  "strength": "moderate: a large long-term study, from one US state.",
+  "topics": [
+   "co-parenting",
+   "separation",
+   "family"
+  ],
+  "mentioned_on": [
+   "/book/chapter-3-in-depth.html#two-homes"
+  ],
+  "verified": true,
+  "verified_by": "https://www.pon.harvard.edu/shop/dividing-the-child-social-and-legal-dilemmas-of-custody (publisher description, search result, Oct 2026)"
+ },
+ {
+  "id": "hayslip-kaminski-2005",
+  "authors": "Hayslip, B., Jr., & Kaminski, P. L.",
+  "year": 2005,
+  "title": "Grandparents raising their grandchildren: A review of the literature and suggestions for practice",
+  "venue": "The Gerontologist, 45(2), 262–269",
+  "doi": "10.1093/geront/45.2.262",
+  "url": "https://doi.org/10.1093/geront/45.2.262",
+  "kind": "review",
+  "finding": "Reviewed research on custodial grandparents: the costs and benefits of raising a grandchild, how varied these families are, their need for social support, parenting, and help at several levels.",
+  "strength": "moderate: a narrative review of mostly small and survey studies.",
+  "topics": [
+   "kinship-care",
+   "grandparents",
+   "family"
+  ],
+  "mentioned_on": [
+   "/book/chapter-5-in-depth.html#kinship"
+  ],
+  "verified": true,
+  "verified_by": "https://gerontologist.gerontologyjournals.org/cgi/content/abstract/45/2/262 (search result, Oct 2026)"
+ }
+]

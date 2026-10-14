@@ -17,6 +17,16 @@
       at each chapter, part, figure and back-matter section, and every page where an index term appears.
    4. Write the page numbers into the contents, the part openers, "This connects to" and the index, and print
       again until the numbers stop moving. Then take the markers out and print the final copy.
+
+   Print structure (bookfixA): the interior is printed without the covers, so page 1 is the half-title (a
+   right-hand page) and odd pages are rectos; the title page and each part opener are moved to a recto with a
+   blank page where needed. The covers are printed separately (two pages: front, back). tools/book/pdf_finish.py
+   (pypdf) then pads the interior to an even page count and writes:
+     book/pdf/<book>.pdf                    the screen edition: front cover + interior + back cover, with
+                                            bookmarks, the document title, and page labels that match the folios
+     book/pdf/print/<book>-interior.pdf     the interior on its own, for a print shop (BOOK_PRINT_KIT=0 skips)
+     book/pdf/print/<book>-cover.pdf        the front and back cover on their own
+   The figures are inlined as SVG before printing, so their text is set in the book's own fonts.
 */
 const fs = require('fs');
 const os = require('os');
@@ -31,6 +41,8 @@ const OUT = path.join(ROOT, 'book', 'pdf');
 const NAMES = ['whole', 'for-yourself', 'together', 'understanding'];
 const SITE = 'https://spreadloveandacceptance.com';
 const FONTS = new Map();
+const PRINT_KIT = process.env.BOOK_PRINT_KIT !== '0';
+const PRINT_OUT = path.join(OUT, 'print');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tol-book-'));
 
 function pageTexts(buf) {
@@ -60,20 +72,23 @@ function findMarks(pages, keys) {
 }
 
 // pages where each index term appears, between the first chapter and the back matter
-function indexPages(pages, terms, from, to) {
+function indexPages(pages, terms, from, to, skip) {
   const out = {};
-  for (const [key, rx] of terms) {
+  for (const [key, rx, cs] of terms) {
     let re;
-    try { re = new RegExp('(?<![A-Za-z])(?:' + rx + ')', 'gi'); } catch (e) { continue; }
+    try { re = new RegExp('(?<![A-Za-z])(?:' + rx + ')(?![A-Za-z])', cs ? 'g' : 'gi'); } catch (e) { continue; }
     const hits = [];
     for (let p = from; p <= to && p <= pages.length; p++) {
+      if (skip.has(p)) continue;
       const t = pages[p - 1].replace(/-\n/g, '-').replace(/\s+/g, ' ');
       const n = (t.match(re) || []).length;
       if (n) hits.push([p, n]);
     }
     if (!hits.length) continue;
+    // every page is listed (consecutive pages as a range); a word on very many pages keeps the pages that
+    // say it at least twice, so the entry points to where the book dwells on it
     let keep = hits;
-    if (hits.length > 9) keep = hits.slice().sort((a, b) => b[1] - a[1] || a[0] - b[0]).slice(0, 9).sort((a, b) => a[0] - b[0]);
+    if (hits.length > 30) { const k = hits.filter(h => h[1] >= 2); if (k.length >= 5) keep = k; }
     const nums = keep.map(h => h[0]);
     const parts = [];
     for (let i = 0; i < nums.length; i++) {
@@ -134,11 +149,53 @@ async function makeBook(ctx, file, opts = {}) {
   const badFonts = await page.evaluate(() => [...document.fonts].filter(f => f.status !== 'loaded' && /U\+0-10FFFF/i.test(f.unicodeRange)).map(f => f.family + ' ' + f.weight + ' ' + f.style));
   if (badFonts.length) console.log('  warning: print fonts not loaded:', badFonts.join(', '));
   log('fonts');
+  // the covers are printed on their own (a separate file for a print shop, and the outside of the screen
+  // edition); the interior starts at the half-title on page 1
+  const covers = await page.evaluate(() => {
+    const out = [...document.querySelectorAll('.pe-cover, .pe-backcover')].map(el => el.outerHTML);
+    document.querySelectorAll('.pe-cover, .pe-backcover').forEach(el => el.remove());
+    const o = document.getElementById('pe-outline');
+    return { html: out, meta: o ? JSON.parse(o.textContent) : {} };
+  });
+  // the figures go into the page as inline SVG, so their text is set in the book's fonts (an <img> can't use them)
+  const inlined = await page.evaluate(async () => {
+    let n = 0, k = 0;
+    for (const img of [...document.querySelectorAll('figure.book-fig img[src$=".svg"]')]) {
+      try {
+        const txt = await (await fetch(img.getAttribute('src'))).text();
+        const doc = new DOMParser().parseFromString(txt, 'image/svg+xml');
+        const svg = doc.documentElement;
+        if (!svg || svg.nodeName.toLowerCase() !== 'svg') continue;
+        const pre = 'pesvg' + (++k) + '-';
+        const ids = [...svg.querySelectorAll('[id]')].map(e => e.id);
+        svg.querySelectorAll('[id]').forEach(e => { e.id = pre + e.id; });
+        [svg, ...svg.querySelectorAll('*')].forEach(e => {
+          for (const a of [...e.attributes]) {
+            let v = a.value;
+            if (v.includes('url(#')) v = v.replace(/url\(#([^)]+)\)/g, (m, id) => ids.includes(id) ? 'url(#' + pre + id + ')' : m);
+            if (/(^|:)href$/.test(a.name) && v.startsWith('#') && ids.includes(v.slice(1))) v = '#' + pre + v.slice(1);
+            if (/^aria-(labelledby|describedby)$/.test(a.name)) v = v.split(/\s+/).map(x => ids.includes(x) ? pre + x : x).join(' ');
+            if (v !== a.value) e.setAttribute(a.name, v);
+          }
+        });
+        svg.removeAttribute('width'); svg.removeAttribute('height');
+        svg.setAttribute('class', 'pe-svg');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        if (img.alt) svg.setAttribute('aria-label', img.alt);
+        const node = document.importNode(svg, true);
+        img.replaceWith(node);
+        n++;
+      } catch (e) {}
+    }
+    return n;
+  });
+  log('inlined ' + inlined + ' figures');
   const prep = await page.evaluate(({ SITE, sample }) => {
     if (sample) {
       // a short look at the design: the front matter, Part Two's opener, one chapter and the back matter
       const keep = new Set(['chapter-2']);
       document.querySelectorAll('.pe-part').forEach(p => { if (p.id !== 'part-2') p.remove(); });
+      document.querySelectorAll('.pe-recto-pad').forEach(p => { if (!/^(titlep|part-2)$/.test(p.getAttribute('data-for'))) p.remove(); });
       document.querySelectorAll('article.pe-ch').forEach(a => { if (!keep.has(a.id)) a.remove(); });
       document.querySelectorAll('.pe-toc-row').forEach(r => {
         const id = (r.querySelector('a') || {}).getAttribute && r.querySelector('a').getAttribute('href').slice(1);
@@ -170,10 +227,24 @@ async function makeBook(ctx, file, opts = {}) {
     const qr = typeof window.peQR === 'function' ? window.peQR() : false;
     const missingQR = [...document.querySelectorAll('.pe-qr')].filter(q => !q.querySelector('svg')).length;
     const keys = [...new Set([...document.querySelectorAll('.pe-pg[data-pg]')].map(e => e.getAttribute('data-pg')))];
-    const terms = [...document.querySelectorAll('.pe-ix li[data-ix]')].map(li => [li.getAttribute('data-ix'), li.getAttribute('data-ix-re')]);
-    return { qr, missingQR, keys, terms };
+    const terms = [...document.querySelectorAll('.pe-ix li[data-ix]')].map(li => [li.getAttribute('data-ix'), li.getAttribute('data-ix-re'), li.hasAttribute('data-ix-cs')]);
+    const pads = [...document.querySelectorAll('.pe-recto-pad[data-for]')].map(p => p.getAttribute('data-for'));
+    const parts = [...document.querySelectorAll('section.pe-part[id]')].map(p => p.id);
+    const chapters = [...document.querySelectorAll('article.pe-ch[id]')].map(a => a.id);
+    return { qr, missingQR, keys, terms, pads, parts, chapters };
   }, { SITE, sample: !!opts.sample });
   log('prepared');
+  // anything wider than the text column makes Chromium shrink every page of the book to fit: name it
+  const wide = await page.evaluate(() => {
+    const W = document.querySelector('main').getBoundingClientRect().right + 1;
+    const out = [];
+    for (const el of document.querySelectorAll('main *')) {
+      const r = el.getBoundingClientRect();
+      if (r.width && r.right > W && !el.closest('.pe-part, .pe-recto-pad') && out.length < 8) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 60));
+    }
+    return out;
+  });
+  if (wide.length) console.log('  warning: wider than the page (the book would print smaller):\n   ' + wide.join('\n   '));
   if (prep.missingQR) console.log('  warning: %d QR codes not drawn', prep.missingQR);
   // every picture loads before printing (lazy ones too), but a broken one never holds the book up
   await page.evaluate(async () => {
@@ -190,6 +261,9 @@ async function makeBook(ctx, file, opts = {}) {
       // a chapter that is not in this book: point to it online instead of an empty page number
       const conn = e.closest('.pe-conn-p');
       if (conn && !v) { const a = conn.querySelector('a'); if (a) { a.textContent = 'online'; } }
+      // a cross-reference whose place wasn't found: leave the reference out rather than print "page "
+      const xr = e.closest('.pe-xref');
+      if (xr) xr.style.display = v ? '' : 'none';
     });
     document.querySelectorAll('.pe-ix li[data-ix]').forEach(li => {
       const v = ix[li.getAttribute('data-ix')];
@@ -197,19 +271,34 @@ async function makeBook(ctx, file, opts = {}) {
       li.classList.toggle('is-empty', !v);
     });
   }, { map, ix });
+  // the title page and the part openers start on a right-hand (odd) page: switch a blank page on or off
+  // before each one, in page order, counting the shift the earlier ones make
+  const setPads = async found => page.evaluate(({ found, pads }) => {
+    let shift = 0, changed = false;
+    for (const k of pads) {
+      const el = document.querySelector('.pe-recto-pad[data-for="' + k + '"]');
+      if (!el || !found[k]) continue;
+      const at = found[k] + shift;
+      if (at % 2 === 0) { const on = el.classList.toggle('is-on'); shift += on ? 1 : -1; changed = true; }
+    }
+    return changed;
+  }, { found, pads: prep.pads });
 
   let buf = await render(page);
   log('first print');
   let map = {}, ix = {};
-  for (let pass = 1; pass <= 4; pass++) {
+  for (let pass = 1; pass <= 7; pass++) {
     const pages = pageTexts(buf);
-    const allKeys = prep.keys.concat(['glossary', 'notes', 'index']);
+    const allKeys = [...new Set(prep.keys.concat(['glossary', 'notes', 'index', 'contents', 'how', 'glance', 'half', 'titlep'], prep.pads, prep.parts, prep.chapters))];
     const found = findMarks(pages, allKeys);
-    const chapterPages = Object.entries(found).filter(([k]) => !/^(how|glossary|figures|examples|notes|index)$/.test(k)).map(([, v]) => v);
+    const padsChanged = await setPads(found);
+    // the index covers the chapters only: from the first chapter to the glossary, without the part openers
+    const chapterPages = prep.chapters.map(k => found[k]).filter(Boolean);
     const from = chapterPages.length ? Math.min(...chapterPages) : 1;
     const to = (found.glossary || pages.length + 1) - 1;
-    const newIx = indexPages(pages, prep.terms, from, to);
-    const same = JSON.stringify(found) === JSON.stringify(map) && JSON.stringify(newIx) === JSON.stringify(ix);
+    const skip = new Set(prep.parts.map(k => found[k]).filter(Boolean));
+    const newIx = indexPages(pages, prep.terms, from, to, skip);
+    const same = !padsChanged && JSON.stringify(found) === JSON.stringify(map) && JSON.stringify(newIx) === JSON.stringify(ix);
     map = found; ix = newIx;
     if (same) break;
     await fill(map, ix);
@@ -222,9 +311,36 @@ async function makeBook(ctx, file, opts = {}) {
   buf = await render(page);
   const pages = pageCount(buf);
   if (pages !== before) console.log('  warning: page count moved from %d to %d after removing markers', before, pages);
-  const title = await page.title();
+  const blanks = await page.evaluate(() => document.querySelectorAll('.pe-recto-pad.is-on').length);
+  // the covers, on their own: front, then back
+  await page.evaluate(html => { const m = document.querySelector('main'); m.innerHTML = html.join('\n'); }, covers.html);
+  const coverBuf = covers.html.length ? await render(page) : null;
   await page.close();
-  return { buf, pages, title, pagemap: Object.assign({}, map, ix) };
+  return { buf, coverBuf, pages, blanks, meta: covers.meta, pagemap: Object.assign({}, map, ix) };
+}
+
+// pad, join the covers, add the bookmarks and the document title (tools/book/pdf_finish.py, with pypdf)
+function finish(file, r, kit) {
+  const interior = path.join(TMP, file + '-interior.pdf');
+  const cover = path.join(TMP, file + '-cover.pdf');
+  fs.writeFileSync(interior, r.buf);
+  if (r.coverBuf) fs.writeFileSync(cover, r.coverBuf);
+  const meta = r.meta || {};
+  const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
+  const job = {
+    interior, cover: r.coverBuf ? cover : null, screen: path.join(OUT, file + '.pdf'),
+    title: meta.title || 'The Objective Ledger', author: meta.author || '', subject: meta.subject || '', outline,
+  };
+  if (kit) {
+    fs.mkdirSync(PRINT_OUT, { recursive: true });
+    job.print_interior = path.join(PRINT_OUT, file + '-interior.pdf');
+    job.print_cover = path.join(PRINT_OUT, file + '-cover.pdf');
+  }
+  const jf = path.join(TMP, file + '-job.json');
+  fs.writeFileSync(jf, JSON.stringify(job));
+  const res = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
+  const size = f => { try { return fs.statSync(f).size; } catch (e) { return 0; } };
+  return Object.assign(res, { bytes: size(job.screen), interior_bytes: kit ? size(job.print_interior) : 0, cover_bytes: kit ? size(job.print_cover) : 0 });
 }
 
 (async () => {
@@ -236,18 +352,22 @@ async function makeBook(ctx, file, opts = {}) {
   const jobs = [];
   for (const name of NAMES) for (const deep of [false, true]) jobs.push(name + (deep ? '-in-depth' : ''));
   const want = f => !ONLY.length || ONLY.includes(f) || ONLY.includes(f.replace(/-in-depth$/, ''));
+  // any other name is a page in /book/ to print as a book (for trying out a change on a copy)
+  for (const extra of ONLY) if (extra !== 'sample' && !jobs.includes(extra) && !NAMES.includes(extra) && fs.existsSync(path.join(ROOT, 'book', extra + '.html'))) jobs.push(extra);
   for (const file of jobs.filter(want)) {
     const t0 = Date.now();
     const r = await makeBook(ctx, file);
-    fs.writeFileSync(path.join(OUT, file + '.pdf'), r.buf);
-    manifest[file] = { pages: r.pages, bytes: r.buf.length, title: r.title, pagemap: r.pagemap };
-    console.log(file, r.pages, 'pages', (r.buf.length / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+    const f = finish(file, r, PRINT_KIT);
+    manifest[file] = { pages: f.screen_pages, interior_pages: f.interior_pages, blank_pages: r.blanks + f.padded, bytes: f.bytes, title: (r.meta || {}).title || file, pagemap: r.pagemap };
+    if (PRINT_KIT) manifest[file].print = { interior: 'print/' + file + '-interior.pdf', interior_bytes: f.interior_bytes, cover: 'print/' + file + '-cover.pdf', cover_bytes: f.cover_bytes };
+    console.log(file, f.screen_pages, 'pages (interior', f.interior_pages + ')', (f.bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
   }
   if (!ONLY.length || ONLY.includes('sample')) {
     const r = await makeBook(ctx, 'whole', { sample: true });
-    fs.writeFileSync(path.join(OUT, 'sample.pdf'), r.buf);
-    manifest.sample = { pages: r.pages, bytes: r.buf.length, title: 'The Objective Ledger: a sample' };
-    console.log('sample', r.pages, 'pages', (r.buf.length / 1048576).toFixed(1) + ' MB');
+    r.meta = Object.assign({}, r.meta, { title: 'The Objective Ledger: a sample', outline: [] });
+    const f = finish('sample', r, false);
+    manifest.sample = { pages: f.screen_pages, bytes: f.bytes, title: 'The Objective Ledger: a sample' };
+    console.log('sample', f.screen_pages, 'pages', (f.bytes / 1048576).toFixed(1) + ' MB');
   }
   fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 1) + '\n');
   await browser.close();
