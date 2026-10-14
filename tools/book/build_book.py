@@ -1102,7 +1102,8 @@ def ref_html(r):
     yr = r.get('year', '')
     t = esc(r.get('title', ''))
     url = r.get('url') or (('https://doi.org/' + r['doi']) if r.get('doi') else '')
-    link = (' <a class="pe-ref-u" href="%s">%s</a>' % (esc(url), esc(re.sub(r'^https?://(www\.)?', '', url).rstrip('/')))) if url else ''
+    shown = ('doi.org/' + r['doi']) if r.get('doi') else re.sub(r'^https?://(www\.)?', '', url).rstrip('/')
+    link = (' <a class="pe-ref-u" href="%s">%s</a>' % (esc(url), '/<wbr>'.join(esc(x) for x in shown.split('/')))) if url else ''
     return '<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s.</span> <span class="pe-ref-f">%s</span>%s</li>' % (
         au, yr, t, esc(r.get('finding', '')), link)
 

@@ -345,7 +345,7 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-ref-a { font-weight: 600; }
 .pe-ref-t { font-style: italic; }
 .pe-ref-f { color: #4A4338; }
-.pe-ref-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.2pt; color: var(--soft); text-decoration: none; margin-top: .3mm; }
+.pe-ref-u { display: block; font-family: "IBM Plex Mono", monospace; font-size: 6.2pt; color: var(--soft); text-decoration: none; margin-top: .3mm; overflow-wrap: anywhere; }
 .pe-notes .pe-notes-h + .pe-refs { break-before: avoid; }
 .pe-notes .pe-notes-h { break-inside: avoid; }
 .pe-ix { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 5mm; font-size: 8.3pt; line-height: 1.36; }
