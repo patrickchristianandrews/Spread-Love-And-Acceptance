@@ -46,7 +46,7 @@
     t = String(t || '').replace(/\s+/g, ' ').replace(/^[|l!1]\s+(?=[a-z])/, 'I ').replace(/(\s)[|](\s)/g, '$1I$2')
       .replace(/(^|\s)[|l1](?=['’](?:ll|m|ve|d)\b)/g, '$1I').replace(/(\s)l(\s+(?:am|was|will|would|can|could|think|know|did|do|have|had|just|really|need|want|love|miss|hope|guess|mean|said|feel|got)\b)/g, '$1I$2')
       // 0 and O mixed up: a zero inside a word is an o, an O inside a time is a zero
-      .replace(/([a-z])0(?=[a-z])/gi, '$1o').replace(/(\d[:.])O(?=\d)|(\d[:.]\d)O\b/g, function (m, a, b) { return (a || b) + '0'; })
+      .replace(/([a-z])0(?=[a-z])/gi, '$1o').replace(/\b(\d)O(?=[:.]\d)/g, '$10').replace(/(\d[:.])O(?=\d)|(\d[:.]\d)O\b/g, function (m, a, b) { return (a || b) + '0'; })
       // stray marks: backticks and doubled quotes become plain apostrophes and quotes
       .replace(/[`´]/g, '’').replace(/''/g, '"')
       .replace(JUNK_EDGE, '').trim();
@@ -134,7 +134,6 @@
   //   the ticks) comes off, a coloured name at the top of someone's bubble is who sent it (group chats),
   //   and the clock, header, date chips, receipts, message box and keyboard are left out.
   var INPUT = /^(?:i ?message|text message|rcs message|sms|mms|sms\/mms|chat|message|messages|message\s?\.{2,3}|message…|type a message|write a message|send a message|start a message|signal message|aa|reply)$/i;
-  var KEYS = /^(?:space|return|go|send|enter|search|done|next|123|abc|\?123|,|\.|[a-z]{1,3})$/i;
   function nameLike(t) {
     t = String(t || '').trim();
     return t.length >= 2 && t.length <= 26 && t.split(/\s+/).length <= 3 && /^[~+]?\s?[A-Za-z][\w.'’ -]*$/.test(t) && !/[?!,]$/.test(t) && !CHROME.test(t) && !INPUT.test(t) &&
@@ -159,13 +158,18 @@
     var bubbleLines = lines.filter(bubbly);
     if (bubbleLines.length < 2) return null;
     // the bottom: the message box, and a keyboard under it
-    var cut = H, keys = [];
-    lines.forEach(function (l) {
-      var t = clean(l.text, true);
-      if (l.bbox.y0 > H * 0.5 && INPUT.test(t)) cut = Math.min(cut, l.bbox.y0);
-      if (l.bbox.y0 > H * 0.5 && (KEYS.test(t.replace(/\s+/g, '')) || /^(?:[a-z]\s+){2,}[a-z]$/i.test(t))) keys.push(l.bbox.y0);
-    });
-    if (keys.length >= 5) cut = Math.min(cut, Math.min.apply(null, keys));
+    // (the keyboard is always under the message box; with no box found, it's a cluster of single letters with "space" or "return")
+    var cut = H, keys = [], keyWord = false;
+    lines.forEach(function (l) { if (l.bbox.y0 > H * 0.5 && INPUT.test(clean(l.text, true))) cut = Math.min(cut, l.bbox.y0); });
+    if (cut === H) {
+      lines.forEach(function (l) {
+        var t = clean(l.text, true), flat = t.replace(/\s+/g, '');
+        if (l.bbox.y0 <= H * 0.55) return;
+        if (/^(?:space|return|enter|go|send|search|done|next|123|\?123|abc)$/i.test(flat)) { keyWord = true; keys.push(l.bbox.y0); }
+        else if (/^[a-z]$/i.test(flat) || /^(?:[a-z]\s+){2,}[a-z]$/i.test(t) || /^(?:qwe|asd|zxc|qwerty|asdf|zxcv)/i.test(flat)) keys.push(l.bbox.y0);
+      });
+      if (keyWord && keys.length >= 5) cut = Math.min.apply(null, keys);
+    }
     // the top: the clock and battery, and the header with their name (a full-width bar, or plain lines above the first bubble)
     var firstBubble = Math.min.apply(null, bubbleLines.filter(function (l) { return l.bbox.y0 < cut; }).map(function (l) { return l.bbox.y0; }).concat([H]));
     var headLimit = Math.min(H * 0.2, firstBubble), name = '', nameH = 0;

@@ -416,7 +416,8 @@
     ['tol-shared-stash', 'Shared computer mode', 'On a shared computer: this tab’s notes, carried from page to page and gone when the tab closes.'],
     ['tol-shared-session', 'Shared computer mode', 'That this tab has started, so notes left by an earlier visit are cleared.'],
     ['tol-shared-nav', 'Shared computer mode', 'That you just followed a link to another page here, so your notes go with you.'],
-    ['tol-shared-reloaded', 'Shared computer mode', 'That the page reloaded once to show your notes, so it doesn’t do it twice.']
+    ['tol-shared-reloaded', 'Shared computer mode', 'That the page reloaded once to show your notes, so it doesn’t do it twice.'],
+    ['tol-launch-seen', 'The app’s opening pups', 'In the installed app: that Tidbit and Sugarfoot already ran across the screen as it opened, so they only do it once each time you open the app.']
   ];
   function store(s) { try { return s === 'session' ? sessionStorage : localStorage; } catch (e) { return null; } }
   function allKeys(s) { var st = store(s), out = []; if (!st) return out; for (var i = 0; i < st.length; i++) out.push(st.key(i)); return out.sort(); }

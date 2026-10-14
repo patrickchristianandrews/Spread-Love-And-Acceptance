@@ -1834,7 +1834,7 @@ if (PERSONA) {
   const TOPICS = {
     weather: ['it\'s raining here', 'do you like the rain?'],
     food: ['I had pancakes for breakfast', 'do you like pizza?'],
-    drinks: ['I\'m drinking a cup of tea', 'do you drink coffee?'],
+    drinks: ['I\'m having a cup of tea', 'do you drink coffee?'],  // “drinking” alone stays with the care routes (alcohol)
     pets: ['we\'ve got a hamster', 'do you like dogs?'],
     music: ['I\'ve been listening to jazz all day', 'do you like music?'],
     films: ['I watched a great film last night', 'have you seen any good movies?'],
@@ -1951,7 +1951,7 @@ if (PERSONA) {
   t('chat11', 'ok (fresh)', { q: 'ok', kind: 'chat', id: 'pz-react-ok', check: endsQ });
   c('chat11', ['tell me a joke', 'lol'], { kind: 'fun', id: 'pz-react-laugh', text: PZ_RE(['react.laugh']) });
   c('chat11', ['tell me a joke', 'haha good one'], { kind: 'fun', id: 'pz-react-laugh' });
-  c('chat11', ['let\'s just chat', 'purple'], { kind: 'chat', id: 'pz-react-oneword', text: /Purple/ });
+  c('chat11', ['let\'s just chat', 'purple'], { kind: 'chat', id: 'pz-react-oneword', text: /purple/i });
   c('chat11', ['let\'s just chat', 'asdfghjkl'], { kind: 'chat', id: 'pz-nonsense', text: /didn’t (quite )?catch/ });
   c('chat11', ['let\'s just chat', 'yes'], { kind: 'chat', id: 'pz-react-yes' });
   c('chat11', ['let\'s just chat', 'nope'], { kind: 'chat', id: 'pz-react-no', text: /no/i });

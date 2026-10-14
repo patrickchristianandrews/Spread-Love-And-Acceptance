@@ -64,7 +64,7 @@
     if ((M.isTool && M.isTool(p)) || /^(Tool|Quiz|Daily|Now|Breathe|Chat)$/.test(c) || /^\/(ladder|wavelength|wiring-card|communication-style-quiz|write-it-through|how-you-take-things-in|ask)\.html$/.test(p)) return 'tool';
     return 'guide';
   }
-  var TYPE_NAME = { guide: 'Guide', tool: 'Tool', worksheet: 'Worksheet', game: 'Game', book: 'Book', media: 'Watch or listen', info: 'About the site' };
+  var TYPE_NAME = { guide: 'Guide', tool: 'Tool', worksheet: 'Workpaper', game: 'Game', book: 'Book', media: 'Watch or listen', info: 'About the site' };
   var DEFAULT_MIN = { guide: 10, tool: 5, worksheet: 10, game: 5, book: 15, media: 5, info: 5 };
   var WORDNUM = { one: 1, two: 2, three: 3, four: 4, five: 5, ten: 10, fifteen: 15, twenty: 20, thirty: 30, ninety: 1.5 };
   function minutesOf(e) {
@@ -183,6 +183,9 @@
     function bestRank(e) { return bestAt[e.p] == null ? 99 : bestAt[e.p]; }
     if (terms.length) hits.sort(function (a, b) { var ta = terms.every(function (t) { return fold(a.t).indexOf(t) !== -1; }), tb = terms.every(function (t) { return fold(b.t).indexOf(t) !== -1; }); return (bestRank(a) - bestRank(b)) || (tb - ta) || (solo ? soloOf(b) - soloOf(a) : 0) || (a.order - b.order); });
     else if (S.sort === 'new') hits.sort(function (a, b) { return (b.isNew - a.isNew) || (a.order - b.order); });
+    // words typed: each kind of page sits together (tools, workpapers, guides...), in the order the kinds first
+    // appear, so a workpaper is never shown in among the tools or the other way round
+    if (terms.length) { var kOrder = [], byK = {}; hits.forEach(function (e) { if (!byK[e.type]) { byK[e.type] = []; kOrder.push(e.type); } byK[e.type].push(e); }); hits = [].concat.apply([], kOrder.map(function (k) { return byK[k]; })); }
     var show = {}, order = [];
     hits.forEach(function (e, n) { if (n < shownMax) { show[e.order] = 1; order.push(e.order); } });
     lis.forEach(function (li) { li.hidden = !show[+li.getAttribute('data-i')]; });

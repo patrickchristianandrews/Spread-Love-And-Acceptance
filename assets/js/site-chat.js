@@ -3569,7 +3569,7 @@
   var PZ_DISLIKE = /^(?:(?:honestly|actually|well|um|nah|no|hmm|eh) )*(?:i|we) (?:dont|don t|do not|really dont|really don t) (?:really )?(?:like|love|enjoy|care for|get|watch|play|drink|eat|read) |^(?:i m|im|i am) not (?:really )?(?:a |that )?(?:big )?(?:fan of|into) |^not (?:a |really a |much of a |the biggest )(?:fan|\w+ person)\b/;
   var PZ_SITEW = /\b(site|website|web page|this page|the page|tool|tools|app|workpapers?|worksheets?|chapter|chapters|ledger|your book|the book|this book|the program|lemonade|night garden|word bloom|quiet words|frequency|buddies|pause and play|crosswords?|arcade|soundscapes?|brain breakers?|puddles|professor|wavelength|wiring|battery|check in|check ins|signal translator|decoder|infographic)\b/;
   var PZ_STMT = /^(?:(?:oh|well|so|yeah|yes|yep|ok|okay|haha|lol|hmm|honestly|actually|ah|um|umm|and|also|btw|guess what|today|tonight|yesterday|this morning|last night|this weekend|at the weekend|just|aww|ooh|wow|omg|hey|hi|hello) )*(?:i|im|i m|ive|i ve|i d|id|ill|i ll|we|were|we re|weve|we ve|we ll|me and|my|our|just|had|got|been|going|watching|watched|reading|playing|listening|eating|ate|cooking|made|baked|drinking|having|its|it s|it is|it was|there s|theres|so much|love|loving|currently|finally)\b/;
-  var PZ_ASKHIM = /^(?:(?:so|and|hey|ok|okay|professor|puddles|but) )*(?:(?:do|did) (?:you|u|ya) (?:like|love|enjoy|play|watch|read|listen to|eat|drink|ever|prefer|go|sleep|dream|have a favourite|have a favorite|celebrate|get)|are (?:you|u) (?:into|a fan of|a (?:\w+ )?person)|what do you think (?:of|about)|(?:what|which) (?:s |is )?(?:your|ur) (?:favourite|favorite|fave|fav)|have you (?:ever )?(?:seen|read|played|watched|heard|tried|been)|how about you|what about you|can you (?:swim|dance|sing|cook|play))\b/;
+  var PZ_ASKHIM = /^(?:(?:so|and|hey|ok|okay|professor|puddles|but) )*(?:(?:do|did) (?:you|u|ya) (?:like|love|enjoy|play|watch|read|listen to|eat|drink|ever|prefer|go|sleep|dream|have a favourite|have a favorite|celebrate|get)|are (?:you|u) (?:into|a fan of|a (?:\w+ )?person)|what do you think (?:of|about)|(?:what|which)(?: s|s| is)? (?:your|ur) (?:favourite|favorite|fave|fav)|have you (?:ever )?(?:seen|read|played|watched|heard|tried|been)|how about you|what about you|can you (?:swim|dance|sing|cook|play))\b/;
   var PZ_POS = /^(?:(?:oh|well|so|yeah|yes|honestly|actually|today|tonight|yesterday|this morning|last night|just|guess what|and) )*(?:i|we|i m|im|i ve|ive|we re|were|we ve|weve|me and)\b.*\b(?:love|loved|like|liked|enjoy|enjoyed|adore|had a (?:lovely|great|nice|good|fun|brilliant|lazy|relaxing|wonderful)|watched|watching|played|playing|reading|listening|listened|went|going|planning|baked|made|cooked|started|having|had)\b/;
   var PZ_OPEN = /^(?:(?:can|could|shall) we |let s |lets |i want to |i d like to |id like to |wanna )?(?:talk|chat|natter|gossip) (?:about|on) /;
   function pzCompile() {
@@ -3600,7 +3600,7 @@
     return { t: best.t, thing: best.thing, strong: strong, dislike: dislike };
   }
   // a category word ("film", "breakfast") is not a "thing" to echo back or remember: "pizza" and "jazz" are
-  var PZ_GENERIC = /^(weather|food|snacks?|breakfast|lunch|dinner|supper|brunch|hungry|starving|peckish|cook|cooking|cooked|eating|baking|baked|bake|dessert|pudding|drinks?|brew|pets?|music|songs?|singing|sing|singer|band|bands|tunes?|radio|film|films|movie|movies|cinema|tv|telly|television|series|episodes?|show|shows|trailer|book|books|novels?|reading|read a|reader|games?|gaming|gamer|console|sport|sports|exercise|workout|match|the match|hobby|hobbies|weekend|weekends|plans|day off|days off|holiday|holidays|vacation|festival|decorations|work|working|job|office|shift|shifts|school|class|classes|lessons?|study|studying|meeting|meetings|project|deadline|sleep|slept|sleeping|bed|bedtime|going to bed|dream|dreams|dreamt|dreamed|nap|naps|napping|alarm|birthday|birthdays|bday|party|presents?|season|seasons|leaves|travel|travelling|traveling|trip|trips|visit|visiting|adventure|packing|plane|flight|flying)$/;
+  var PZ_GENERIC = /^(weather|food|snacks?|breakfast|lunch|dinner|supper|brunch|hungry|starving|peckish|cook|cooking|cooked|eating|baking|baked|bake|dessert|pudding|drinks?|brew|pets?|music|songs?|singing|sing|singer|band|bands|tunes?|radio|film|films|movie|movies|cinema|tv|telly|television|series|episodes?|show|shows|trailer|book|books|novels?|reading|read a|reader|games?|gaming|gamer|console|sport|sports|exercise|workout|match|the match|hobby|hobbies|weekend|weekends|plans|day off|days off|holiday|holidays|vacation|festival|decorations|work|working|job|office|shift|shifts|school|class|classes|lessons?|study|studying|meeting|meetings|project|deadline|sleep|slept|sleeping|bed|bedtime|going to bed|dream|dreams|dreamt|dreamed|nap|naps|napping|alarm|birthday|birthdays|bday|party|birthday party|presents?|season|seasons|leaves|travel|travelling|traveling|trip|trips|visit|visiting|adventure|packing|plane|flight|flying)$/;
   var PZ_HOW = /\b(?:how s|hows|how is|how was|how did) (?:your|ur|the) (?:day|morning|afternoon|evening|week|weekend|puddle|life)\b|\bhow (?:s|is) life\b|\bhow are things\b|\bhow (?:s|is) it going\b|\bwhat s new with you\b|\bwhat have you been up to\b|\bwhat did you do today\b/;
   function pzHisDay(state) {
     var P = PZ(), D = P.day || {}, S = pzS(state);
@@ -3636,7 +3636,9 @@
       if (!w.dislike && /\b(?:i|we) (?:really |absolutely |just |totally )?(?:love|adore|am obsessed with|m obsessed with|m a big fan of|am a big fan of)\b/.test(fs) && w.thing && !PZ_GENERIC.test(w.thing) && !S.mem.fav) {
         S.mem.fav = { thing: w.thing, topic: t.id }; S.at.fav = state.turn || 0; pzSave(state);
       }
-      b.push({ k: 'p', x: pzAskBack(state, t) });
+      // a line that already asks something ("Christmas! What's your favourite part of it?") needs no second question, unless a callback is due
+      var cbk = /\?\s*$/.test(b[0].x) ? pzCallback(state) : null;
+      if (cbk !== '') b.push({ k: 'p', x: cbk || pzAskBack(state, t) });
     }
     if (got && pzPerks() && !S.kept) own.push({ label: 'Remember me next time', q: 'Remember me next time' });
     return pzR(state, b, pzChips(state, own), 'chat', got ? (got.pet ? 'pz-pet' : 'pz-fav') : 'pz-' + w.t.id, 'topic');
@@ -3765,7 +3767,7 @@
     var both = /\b(both|neither|either|none)\b/.test(fs);
     if (!a && !bb && !both && fs.split(' ').length > 4) { S.game = null; return null; }
     S.game = null;
-    var x = both ? pzPick(state, P.wyr_both) : pzPick(state, P.wyr_react);
+    var x = both ? ((P.wyr_both || [])[/\b(neither|none)\b/.test(fs) ? 1 : 0] || '') : pzPick(state, P.wyr_react);
     return pzR(state, [{ k: 'p', x: x + ' ' + w.pick }], pzChips(state, [{ label: 'Another one', q: 'Another would you rather' }]), 'fun', 'pz-wyr-answer', 'wyr');
   }
   function pzStory(state) { var P = PZ(); return pzR(state, [{ k: 'p', x: pzPick(state, P.stories) }], pzChips(state, [{ label: 'Another story', q: 'Tell me another story' }]), 'fun', 'pz-story', 'story'); }

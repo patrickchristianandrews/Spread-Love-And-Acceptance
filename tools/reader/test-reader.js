@@ -230,6 +230,42 @@ ok(lay.bubbles[2].text === 'It would be nice if someone helped around here.', 'a
 ok(lay.bubbles[3].text === 'I literally just got home. You always do this.', '"|" is read as "I"');
 ok(lay.bubbles[5].text === 'Sorry. Can we talk at 8?', 'a question mark read as 7 is fixed');
 ok(!lay.bubbles.some(b => /Delivered|iMessage|9:4|Today|82%/.test(b.text)), 'no chat furniture');
+// the colour-aware reading (the browser measures colours; here they're given): bubbles by colour block, sides by
+// where the bubble sits, small grey times dropped by their ink, a group member's coloured name, no keyboard
+{
+  const W = 1170, H = 2532, SCR = [239, 231, 222], THEM = [255, 255, 255], ME = [217, 253, 211];
+  const wd = (text, x0, y0, x1, y1, c, sat) => ({ text, conf: 92, bbox: { x0, y0, x1, y1 }, ink: { c, sat: sat || 0 } });
+  const ln = (words, bg, rect) => { const b = { x0: Math.min(...words.map(w => w.bbox.x0)), y0: Math.min(...words.map(w => w.bbox.y0)), x1: Math.max(...words.map(w => w.bbox.x1)), y1: Math.max(...words.map(w => w.bbox.y1)) };
+    return { text: words.map(w => w.text).join(' '), conf: 92, bbox: b, words, bg, inBubble: bg !== SCR, rect, ink: { c: Math.max(...words.map(w => w.ink.c)), sat: Math.max(...words.map(w => w.ink.sat)) } }; };
+  const r1 = { x0: 31, x1: 895, y0: 1300, y1: 1460 }, r2 = { x0: 505, x1: 1138, y0: 1475, y1: 1572 }, r3 = { x0: 31, x1: 700, y0: 1590, y1: 1700 }, r4 = { x0: 31, x1: 600, y0: 1715, y1: 1800 };
+  const pg = { width: W, height: H, lines: [
+    ln([wd('Sunday', 280, 119, 420, 157, 532), wd('picnic', 430, 119, 560, 157, 532)], SCR, null),
+    ln([wd('Sam', 59, 1310, 140, 1340, 300, 0.7)], THEM, r1),
+    ln([wd('Who’s', 59, 1350, 180, 1395, 688), wd('bringing', 190, 1350, 380, 1395, 688), wd('snacks?', 390, 1350, 560, 1395, 688)], THEM, r1),
+    ln([wd('9:30', 754, 1417, 820, 1447, 415), wd('pm', 825, 1417, 870, 1447, 415)], THEM, r1),
+    ln([wd('I', 534, 1501, 545, 1552, 604), wd('can', 555, 1501, 620, 1552, 604), wd('bring', 630, 1501, 720, 1552, 604), wd('crisps', 730, 1501, 850, 1552, 604), wd('and', 860, 1501, 920, 1552, 604), wd('dips.', 930, 1501, 1000, 1552, 604), wd('3;', 1010, 1501, 1049, 1552, 331)], ME, r2),
+    ln([wd('Priya', 59, 1600, 160, 1630, 300, 0.7)], THEM, r3),
+    ln([wd('Count', 59, 1640, 180, 1685, 688), wd('me', 190, 1640, 240, 1685, 688), wd('in', 250, 1640, 290, 1685, 688)], THEM, r3),
+    ln([wd('Same', 59, 1725, 160, 1770, 688), wd('here', 170, 1725, 260, 1770, 688)], THEM, r4),
+    ln([wd('Message', 76, 2100, 264, 2140, 415)], THEM, { x0: 25, x1: 982, y0: 2090, y1: 2150 }),
+    ln([wd('q', 30, 2200, 60, 2240, 700), wd('w', 100, 2200, 130, 2240, 700), wd('e', 170, 2200, 200, 2240, 700)], [200, 200, 205], { x0: 0, x1: 1169, y0: 2180, y1: 2532 }),
+    ln([wd('a', 60, 2300, 90, 2340, 700)], [200, 200, 205], { x0: 0, x1: 1169, y0: 2180, y1: 2532 }),
+    ln([wd('z', 120, 2400, 150, 2440, 700)], [200, 200, 205], { x0: 0, x1: 1169, y0: 2180, y1: 2532 }),
+    ln([wd('space', 400, 2480, 600, 2520, 700)], [200, 200, 205], { x0: 0, x1: 1169, y0: 2180, y1: 2532 }),
+    ln([wd('return', 900, 2480, 1100, 2520, 700)], [200, 200, 205], { x0: 0, x1: 1169, y0: 2180, y1: 2532 })
+  ] };
+  const fx = O.layout([pg]);
+  ok(fx.bubbles.map(b => b.side + ':' + (b.who || '') + ':' + b.text).join(' | ') === 'left:Sam:Who’s bringing snacks? | right::I can bring crisps and dips. | left:Priya:Count me in | left:Priya:Same here',
+    'colour-aware reading: ' + fx.bubbles.map(b => b.side + ':' + (b.who || '') + ':' + b.text).join(' | '));
+  const noBox = O.layout([{ width: W, height: H, lines: pg.lines.filter(l => l.text !== 'Message') }]);
+  ok(noBox.bubbles.length === 4 && !noBox.bubbles.some(b => /space|return|^q/.test(b.text)), 'no message box: the keyboard still comes off: ' + noBox.bubbles.map(b => b.text).join(' | '));
+  ok(fx.name === 'Sunday picnic', 'colour-aware reading: the header name (got ' + fx.name + ')');
+  const tt = O.toTurns(fx, 'right');
+  ok(tt.text === 'Sam: Who’s bringing snacks?\nMe: I can bring crisps and dips.\nPriya: Count me in Same here', 'one turn per run of messages, with each person’s name: ' + JSON.stringify(tt.text));
+  ok(O.toTurns(fx, 'left').text.split('\n')[0] === 'Me: Who’s bringing snacks?', 'mine on the left: the left side is me');
+  ok(O.clean('|’ll call you at 6:15', true) === 'I’ll call you at 6:15' && O.clean('it was g0od, see you at 1O:30', true) === 'it was good, see you at 10:30', 'OCR slips: ' + O.clean('|’ll call you at 6:15', true) + ' / ' + O.clean('it was g0od, see you at 1O:30', true));
+  ok(!O.CHROME.test('Friday works 👍') && O.CHROME.test('Friday') && O.CHROME.test('Tue, Mar 12') && O.CHROME.test('12 March 2024') && O.CHROME.test('9:31 PM · Read'), 'day lines are chrome, a message starting with a day is not');
+}
 const noHead = O.layout([{ width: 1000, height: 2000, lines: [L('hey are you home?', 40, 400, 500, 440), L('Thanks Jamie, on my way', 500, 500, 960, 540)] }]);
 ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them (got ' + noHead.name + ')');
 

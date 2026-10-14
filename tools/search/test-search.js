@@ -279,6 +279,27 @@ async function waitUp(url, n) { for (let i = 0; i < (n || 50); i++) { try { cons
         await p.waitForFunction(() => { const b = document.querySelector('.tol-find-best'); return b && !b.hidden && /lemonade-stand/.test(b.innerHTML); }, null, { timeout: 8000 });
         await p.waitForFunction(() => !document.querySelector('.tol-find-results').hidden, null, { timeout: 8000 });
         ok(true, tag + ' typed problem shows best match then results');
+        // workpapers and tools: always labelled as what they are, and each kind kept together
+        for (const words of ['we keep fighting about dishes', 'chores', 'check in', 'worksheet']) {
+          await input.fill(words);
+          await p.waitForFunction(w => document.querySelector('#tol-find-q').value === w && (!document.querySelector('.tol-find-results').hidden || !document.querySelector('.tol-find-best').hidden), words, { timeout: 8000 });
+          await p.waitForTimeout(400);
+          const K = await p.evaluate(() => {
+            const WP = /^\/workpapers\/(?!calculators\/)|^\/wp-\d|^\/(prog-01|week-0|full-path|chore-chart-for-couples)\.html$/;
+            const bad = [], runs = {};
+            for (const sel of ['.tol-find-best a[data-kind]', '.tol-find-results a[data-kind]']) {
+              let last = null; const seen = {};
+              document.querySelectorAll(sel).forEach(a => {
+                const k = a.getAttribute('data-kind'), path = a.getAttribute('href').split(/[?#]/)[0], tagT = (a.querySelector('.tol-find-kind') || {}).textContent || '';
+                if (WP.test(path) && (k !== 'Workpaper' || tagT !== 'Workpaper')) bad.push(path + ' shown as ' + k + '/' + tagT);
+                if (!WP.test(path) && (k === 'Workpaper' || tagT === 'Workpaper')) bad.push(path + ' shown as a workpaper');
+                if (k !== last) { if (seen[k]) bad.push(sel + ': ' + k + ' split into two groups'); seen[k] = 1; last = k; }
+              });
+            }
+            return bad;
+          });
+          ok(!K.length, tag + ' "' + words + '" workpapers vs tools: ' + K.join('; '));
+        }
         // nothing found: the fallback
         await input.fill('xyzzy blorf');
         await p.waitForSelector('.tol-find-none:not([hidden])', { timeout: 8000 });

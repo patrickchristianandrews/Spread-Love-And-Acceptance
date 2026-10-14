@@ -2968,14 +2968,14 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 .tol-panel .tol-subm-btn{ min-height:48px; }
 .tol-panel .tol-tree a.tol-row{ min-height:48px; box-sizing:border-box; }
 
-/* ---- menu10: each menu group is its blurb, ONE "See all" link, then only sub-menus (site.js buildTree) ---- */
-.tol-seeall-li{ list-style:none; margin:0 0 .3rem; }
-.tol-drop .tol-seeall-li{ padding-bottom:.3rem; border-bottom:1px solid var(--line); }
+/* ---- menu10/menu11: each menu group is its blurb and then ONLY sub-menus (site.js buildTree). The group's
+   "See all …" link opens its first sub-menu; Start here's Focus and progress lines close that one. ---- */
+.tol-seeall-li{ list-style:none; }
 .tol-drop a.tol-seeall .tol-mi-t, .tol-panel a.tol-seeall .tol-title{ font-weight:600; color:var(--focus, #2B5B8C); }
-.tol-panel .tol-tree a.tol-seeall{ border-bottom:1px solid var(--line); }
-.tol-drop .tol-tree > li.tol-seeall-li + li > .tol-subm-btn{ border-top:0; }
-.tol-tree a[aria-current="page"] .tol-mi-t{ font-weight:700; }
-.tol-drop .tol-subm-list a[aria-current="page"]{ box-shadow:inset 3px 0 0 var(--brass, #A57A2E); }
-/* the Focus line and progress now close the Start here list, so their rule sits above them */
-.tol-drop .tol-focus-li{ margin:.35rem 0 0; padding-top:.45rem; border-bottom:0; border-top:1px solid var(--line); }
+.tol-drop .tol-subm-list .tol-focus-li{ margin:.35rem 0 0; padding:.45rem .3rem .2rem; border-bottom:0; border-top:1px solid var(--line); }
 .tol-drop .tol-subm-btn{ min-height:44px; }
+.tol-drop .tol-tree > li.tol-drop-blurb + li.tol-subm > .tol-subm-btn{ border-top:0; }
+/* the menu never highlights the page you're on: no "(you are here)", no marked row, no marked section button */
+.tol-panel .tol-tree .tol-row[aria-current="page"] .tol-title::after{ content:none; }
+.tol-panel .tol-tree .tol-row[aria-current="page"], .tol-drop a[aria-current="page"]{ background:none; font-weight:inherit; border-left-color:transparent; box-shadow:none; }
+.tol-acc-here{ display:none !important; }

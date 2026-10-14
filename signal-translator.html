@@ -2781,7 +2781,7 @@ function runCrisis(text){
   h += '<div class="verdict danger-card" id="verdict"><p class="vplain v-danger" id="vplain">You deserve support right now.</p>';
   h += CRISIS_SELF;
   h += '<p>If you want to tell someone close to you, your words are fine as they are. You could add one line: &ldquo;I&rsquo;m not okay, and I need you to stay with me or call me.&rdquo;</p>';
-  h += '<p class="small">If someone sent this to you, choose &ldquo;Someone sent me this&rdquo; above.</p></div>';
+  h += '<p class="small">If someone sent this to you, choose &ldquo;A message I got&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R);
   R.focus({preventScroll:true});
   R.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"});
@@ -2800,7 +2800,7 @@ function runDanger(text, an, B){
   if(pause) h += '<p class="vk" style="margin-top:12px">Or take a break first</p><p class="vbest">'+phHTML(pause)+'</p>';
   h += '<p class="vk" style="margin-top:12px">Your words, with the threat marked</p><p class="vbest marked">'+markup(an.text, an.spans)+'</p>';
   h += an.selfHarm ? CRISIS_SELF + SAFETY_SELF : SAFETY_SELF;
-  h += '<p class="small">If someone sent this to you, choose &ldquo;Someone sent me this&rdquo; above.</p></div>';
+  h += '<p class="small">If someone sent this to you, choose &ldquo;A message I got&rdquo; above.</p></div>';
   const R=$("#results"); R.innerHTML=h; R.hidden=false; noReward(R); paintSimple();
   const cb=$("#copyBest"); if(cb) cb.addEventListener("click",()=>{ (navigator.clipboard?navigator.clipboard.writeText(need):Promise.reject()).then(()=>{cb.textContent="Copied";},()=>{cb.textContent="Select and copy manually";}); });
   R.focus({preventScroll:true});
@@ -3430,7 +3430,7 @@ sync();
     var q = null, shared = false;
     try { q = sessionStorage.getItem('tol-st-text'); if (q != null) sessionStorage.removeItem('tol-st-text'); } catch (e) {}
     // Shared from another app (the installed app's share target sends ?text=, ?title=, ?url=), or ?from=share:
-    // it's a message someone got, so it opens in "Help me read a message I got" and reads it straight away
+    // it's a message someone got, so it opens in "A message I got" and reads it straight away
     if (!q && params && (params.get('text') || params.get('title') || params.get('url'))) {
       var st = (params.get('text') || '').trim(), sti = (params.get('title') || '').trim(), su = (params.get('url') || '').trim();
       q = [st || sti, su && st.indexOf(su) === -1 ? su : ''].filter(Boolean).join(' ');

@@ -466,7 +466,7 @@
     ]},
     { id: 'workpapers', name: 'Workpapers', title: 'Workpapers', blurb: 'Short worksheets to fill in, print or keep on this device, alone or together. The interactive tools are in Tools.',
       all: '/workpapers/fill/suite.html', allLabel: 'See all the worksheets, in order', items: [
-      { sub: 'Start here', area: 'load' },
+      { sub: 'Where to begin', area: 'load' },
       { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
       { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
       { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
@@ -1053,12 +1053,13 @@
     });
     return { top: top, subs: subs.filter(function (x) { return x.items.length || x.all; }) };
   }
-  function isHere(it) { return it.href.split('#')[0] === current; }
-  // the menu tree for one group: its "See all" link, then each sub-menu as a button that opens its list
-  // (a tap or click, never hover only; Esc closes it again). mode: 'drop' (top bar) or 'panel' (the Menu).
-  // All sub-menus start closed, except the one holding this page, which opens with the page marked.
+  // the menu tree for one group: a line on what it holds (top bar only; the Menu panel has it in the heading), then
+  // ONLY sub-menus, each a button that opens its list (a tap or click, never hover only; Esc closes it again).
+  // Every link sits inside a sub-menu: the group's "See all …" link opens the first one, and Start here's Focus and
+  // progress lines close it. Every sub-menu starts closed, and the page you're on is never highlighted.
+  // mode: 'drop' (top bar) or 'panel' (the Menu).
   var treeN = 0;
-  function buildTree(g, mode, openAll) {
+  function buildTree(g, mode) {
     var T = menuTree(g), ul = el('ul', { class: 'tol-tree' + (mode === 'panel' ? ' tol-picks' : '') });
     // each page shows its one-line note under its name, so people can see what it is before they tap
     function link(it) {
@@ -1066,31 +1067,29 @@
       var a = mode === 'panel' ? el('a', { class: 'tol-row', href: it.href }, '<span class="tol-title">' + esc(menuLabel(it)) + note + '</span>')
         : el('a', { href: it.href }, '<span class="tol-mi"><span class="tol-mi-t">' + esc(menuLabel(it)) + '</span>' + note + '</span>');
       if (it.lang) a.setAttribute('lang', it.lang);
-      if (isHere(it)) a.setAttribute('aria-current', 'page');
       var li = el('li'); li.appendChild(a); return li;
     }
-    // the top bar's list opens with a line saying what this section holds (the Menu panel has it in the section's heading)
-    if (mode === 'drop' && g.blurb) ul.appendChild(el('li', { class: 'tol-drop-blurb', role: 'presentation' }, esc(g.blurb)));
-    // then one "See all" link to the section's own directory page
-    if (g.all) {
-      var sa = el('li', { class: 'tol-seeall-li' });
-      var saA = el('a', { href: g.all, class: 'tol-seeall' + (mode === 'panel' ? ' tol-row' : '') },
-        (mode === 'panel' ? '<span class="tol-title">' : '<span class="tol-mi"><span class="tol-mi-t">') + esc(g.allLabel || 'See all') + ' →' + (mode === 'panel' ? '</span>' : '</span></span>'));
-      if (g.all === current) saA.setAttribute('aria-current', 'page');
-      sa.appendChild(saA); ul.appendChild(sa);
+    function bold(href, text, cls) {
+      var li = el('li', { class: cls });
+      li.appendChild(el('a', { href: href, class: (cls === 'tol-seeall-li' ? 'tol-seeall' : '') + (mode === 'panel' ? ' tol-row' : '') },
+        (mode === 'panel' ? '<span class="tol-title">' : '<span class="tol-mi"><span class="tol-mi-t">') + esc(text) + ' →' + (mode === 'panel' ? '</span>' : '</span></span>')));
+      return li;
     }
-    T.top.forEach(function (it) { ul.appendChild(link(it)); });
-    // the one sub-menu that opens by itself: the first that lists this page (or, failing that, whose "All …" page this is)
-    var openAt = -1;
-    T.subs.some(function (sm, i) { if (sm.items.some(isHere)) { openAt = i; return true; } return false; });
-    if (openAt < 0) T.subs.some(function (sm, i) { var ap = sm.all ? sm.all.split(/[?#]/)[0] : ''; if (ap && ap === current && ap !== String(g.all || '').split(/[?#]/)[0]) { openAt = i; return true; } return false; });
+    if (mode === 'drop' && g.blurb) ul.appendChild(el('li', { class: 'tol-drop-blurb', role: 'presentation' }, esc(g.blurb)));
+    var subs = T.subs.slice();
+    // (MENU has no loose pages; any that turn up go in an "Overview" sub-menu rather than sitting loose)
+    if (T.top.length) subs.unshift({ name: 'Overview', items: T.top });
+    if (!subs.length && g.all) subs.push({ name: 'Overview', items: [] });
     var subBtns = [];
-    T.subs.forEach(function (sm, smi) {
+    subs.forEach(function (sm, smi) {
       var id = 'tol-sm-' + mode + '-' + g.id + '-' + (++treeN);
       var li = el('li', { class: 'tol-subm' });
+      var first = smi === 0, extra = first && g.all ? 1 : 0;
       var btn = el('button', { type: 'button', class: 'tol-subm-btn', 'aria-expanded': 'false', 'aria-controls': id },
-        '<span>' + esc(sm.name) + '</span><span class="tol-subm-n" aria-hidden="true">' + sm.items.length + '</span>');
+        '<span>' + esc(sm.name) + '</span><span class="tol-subm-n" aria-hidden="true">' + (sm.items.length + extra) + '</span>');
       var list = el('ul', { class: 'tol-subm-list', id: id, hidden: '' });
+      // the group's "See all …" link opens its first sub-menu
+      if (extra) list.appendChild(bold(g.all, g.allLabel || 'See all', 'tol-seeall-li'));
       var MAX = 8, many = sm.items.length > MAX;
       sm.items.forEach(function (it, n) { var r = link(it); if (many && n >= MAX - 1) r.hidden = true; list.appendChild(r); });
       if (many) {
@@ -1098,15 +1097,21 @@
         more.addEventListener('click', function (e) {
           // the button is removed, so this click must not reach the "click outside closes the menu" listener
           e.stopPropagation();
-          var first = null;
-          Array.prototype.forEach.call(list.children, function (c) { if (c.hidden) { c.hidden = false; if (!first) first = c.querySelector('a'); } });
-          if (first) first.focus();
+          var firstA = null;
+          Array.prototype.forEach.call(list.children, function (c) { if (c.hidden) { c.hidden = false; if (!firstA) firstA = c.querySelector('a'); } });
+          if (firstA) firstA.focus();
           moreLi.remove();
         });
         moreLi.appendChild(more); list.appendChild(moreLi);
       }
       // its "All …" link, unless that page is already in the list
-      if (sm.all && !sm.items.some(function (it) { return it.href === sm.all; })) { var al = el('li', { class: 'tol-subm-all' }); al.appendChild(el('a', { href: sm.all, class: mode === 'panel' ? 'tol-row' : '' }, (mode === 'panel' ? '<span class="tol-title">' : '') + esc(sm.allLabel || 'See all') + ' →' + (mode === 'panel' ? '</span>' : ''))); list.appendChild(al); }
+      if (sm.all && !sm.items.some(function (it) { return it.href === sm.all; })) list.appendChild(bold(sm.all, sm.allLabel || 'See all', 'tol-subm-all'));
+      // Start here: "Focus on what I'm learning" (top bar) and a small, kind progress line close its first sub-menu
+      if (first && g.id === 'start') {
+        if (mode === 'drop') { var fli = el('li', { class: 'tol-focus-li' }); fli.appendChild(focusLine('drop')); list.appendChild(fli); }
+        var pg = progress();
+        if (pg) list.appendChild(el('li', { class: 'tol-mine-li' }, progressHTML(pg)));
+      }
       function set(open) { btn.setAttribute('aria-expanded', open ? 'true' : 'false'); list.hidden = !open; }
       btn.addEventListener('click', function () {
         var open = btn.getAttribute('aria-expanded') !== 'true';
@@ -1118,15 +1123,8 @@
         if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { e.preventDefault(); e.stopPropagation(); set(false); btn.focus(); }
       });
       subBtns.push({ btn: btn, set: set });
-      if (openAll || smi === openAt) set(true);
       li.appendChild(btn); li.appendChild(list); ul.appendChild(li);
     });
-    // Start here ends with "Focus on what I'm learning" (the top bar) and a small, kind progress line
-    if (g.id === 'start') {
-      if (mode === 'drop') { var fli = el('li', { class: 'tol-focus-li' }); fli.appendChild(focusLine('drop')); ul.appendChild(fli); }
-      var pg = progress();
-      if (pg) ul.appendChild(el('li', { class: 'tol-mine-li' }, progressHTML(pg)));
-    }
     return ul;
   }
 
@@ -1145,7 +1143,7 @@
         // The panel shows section names only; open one to see its pages
         sec = el('details', { class: 'tol-index-section tol-acc', id: 'tol-sec-' + s.id });
         if (s.id === opts.open) sec.open = true;
-        var hereMark = hereGroup && hereGroup.id === s.id ? ' <span class="tol-acc-here"' + (esPage() ? ' lang="es"' : '') + '>' + T('you are here', 'estás aquí') + '</span>' : '';
+        var hereMark = '';   // no "you are here": the menu never highlights the page you're on
         sec.appendChild(el('summary', null, '<span class="tol-acc-title">' + esc(s.title) + hereMark + '</span>' + (s.blurb ? '<span class="tol-acc-blurb">' + esc(s.blurb) + '</span>' : '')));
         // One section open at a time keeps the list short
         sec.addEventListener('toggle', function () {
@@ -1158,7 +1156,7 @@
       }
       if (opts.accordion) {
         // a few pages first, then small sub-menus; arriving from "Everything in …" opens them all
-        sec.appendChild(buildTree(s, 'panel', !!(opts.full && s.id === opts.open)));
+        sec.appendChild(buildTree(s, 'panel'));
         wrap.appendChild(sec);
         return;
       }
@@ -1215,7 +1213,6 @@
     var s = menuGroup(MENU.filter(function (x) { return x.id === id; })[0]);
     var item = el('div', { class: 'tol-nav-item' });
     var btn = el('button', { type: 'button', 'data-sec': id, 'aria-expanded': 'false', 'aria-controls': 'tol-drop-' + id }, esc(name));
-    if (hereGroup && hereGroup.id === id) btn.setAttribute('aria-current', 'true');
     var menu = el('div', { class: 'tol-drop' + (alignRight ? ' is-right' : ''), id: 'tol-drop-' + id, hidden: '' });
     menu.appendChild(buildTree(s, 'drop'));
     btn.addEventListener('click', function () {
@@ -1338,14 +1335,12 @@
     var nav = el('div', { class: 'tol-sections', role: 'navigation', 'aria-label': 'Site sections' });
     if (esPage()) nav.setAttribute('lang', 'en');   // the section names stay English (they lead to English pages)
     // on a smaller laptop the less-used sections fold into Menu one by one, before all of them do
-    var FOLD = { read: 1, play: 2, topics: 3, rel: 4 };
+    var FOLD = { read: 1, play: 2, workpapers: 3, topics: 3, rel: 4 };
     // the Spanish page, in its own words, at the top level (it steps aside first if the bar gets crowded)
     var esLink = el('a', { class: 'tol-es-link', href: '/en-espanol.html', lang: 'es', hreflang: 'es' }, 'En español');
-    if (current === '/en-espanol.html') esLink.setAttribute('aria-current', 'page');
     // the book, one tap from every page: on a laptop the less-used sections fold into Menu before it goes
     var bookLink = el('a', { class: 'tol-es-link tol-book-link', href: '/book/index.html' }, T('Read the book', 'Leer el libro'));
     if (esPage()) bookLink.setAttribute('lang', 'es');
-    if (current === '/book/index.html') bookLink.setAttribute('aria-current', 'page');
     nav.appendChild(bookLink);
     nav.appendChild(esLink);
     // the section buttons (built again when Focus mode changes)
@@ -1382,7 +1377,7 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     // the most used tool, one tap away, right under search (the Chat analyzer: one message or a whole chat)
-    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"' + (current === '/signal-translator.html' ? ' aria-current="page"' : '') + '><span aria-hidden="true">💬</span> ' + T('Chat analyzer', 'Analizar una conversación') + '</a>'));
+    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + T('Chat analyzer', 'Analizar una conversación') + '</a>'));
     // the whole site at a glance, one tap each: the directories first, then what most people come for
     // (the sections below hold everything else)
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('The whole site at a glance', 'Todo el sitio de un vistazo') },
@@ -1395,7 +1390,7 @@
        ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
        ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
        ['/start-here.html#three-questions', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
-      ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === current ? ' aria-current="page"' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
+      ].map(function (q) { return '<li><a href="' + q[0] + '"><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(buildIndex({ accordion: true }));
     panel.appendChild(el('div', { class: 'tol-panel-focus' }));
@@ -2685,7 +2680,8 @@
       loadSearch(function (data) {
         var R = null; try { R = data ? smartSearch(data, q) : null; } catch (e) { R = null; }
         if (namedPage(R, M.best)) { M.best = null; urls = []; }
-        var hits = R ? R.hits.map(function (h) { return h.p.u; }) : [];
+        // the same order the list shows: each kind (tools, workpapers, pages) together
+        var hits = R ? [].concat.apply([], groupByKind(R.hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); }).map(function (G) { return G.items; })).map(function (h) { return h.p.u; }) : [];
         hits.forEach(function (u) { if (urls.indexOf(u) === -1) urls.push(u); });
         cb({ urls: urls, best: M.best, close: M.close, pages: hits.length, fallback: !urls.length });
       });
@@ -2973,7 +2969,7 @@
   // Picked in menu order, never at random. Not on the home page, directory pages, book chapters (they have the
   // chapter bar) or games. <body data-no-where> leaves out the trail; <body data-no-related> leaves out the strip.
   var WHERE_SKIP = /^\/(index|404|offline|garden-backdrop|explore|tools|contents|by-relationship|pal-cam-tv|frequency-journey-play|en-espanol)\.html$/;
-  var GROUP_HOME = { start: '/start-here.html', tools: '/tools.html', rel: '/by-relationship.html', topics: '/explore.html', play: '/explore.html?need=calm', read: '/explore.html?need=read', about: '/contents.html' };
+  var GROUP_HOME = { start: '/start-here.html', tools: '/tools.html', workpapers: '/workpapers/fill/suite.html', rel: '/by-relationship.html', topics: '/explore.html', play: '/explore.html?need=calm', read: '/explore.html?need=read', about: '/contents.html' };
   // a menu area (or a By relationship sub-menu) and the tool type that goes with it
   var AREA_TOOLTYPE = { load: 'load', talk: 'talk', self: 'self', play: 'calm', media: 'calm', read: 'learn', 'just-me': 'self', couples: 'talk', friends: 'talk', family: 'family', 'co-parents': 'family', housemates: 'load', work: 'work', 'life-changes': 'plan' };
   function pathOnly(u) { return String(u || '').split(/[?#]/)[0]; }

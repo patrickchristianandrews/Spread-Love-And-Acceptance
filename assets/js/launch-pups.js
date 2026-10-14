@@ -83,7 +83,11 @@
       g.rotate(p.side < 0 ? Math.PI / 2 : -Math.PI / 2);
       if ((p.side < 0 && p.dir < 0) || (p.side > 0 && p.dir > 0)) g.scale(-1, 1);
       g.scale(s, s);
-      if (dark) { g.fillStyle = 'rgba(255,240,225,.07)'; g.beginPath(); g.ellipse(2, -20, 44, 26, 0, 0, TAU); g.fill(); }
+      if (dark) {   // a soft glow, so the dark pups show up on the dark background
+        var gl = g.createRadialGradient(2, -20, 4, 2, -20, 46);
+        gl.addColorStop(0, 'rgba(255,240,225,.13)'); gl.addColorStop(1, 'rgba(255,240,225,0)');
+        g.fillStyle = gl; g.beginPath(); g.arc(2, -20, 46, 0, TAU); g.fill();
+      }
       var blink = ((t + (p.side > 0 ? 900 : 0)) % 2600) < 110;
       P.draw(g, P.looks[p.look], 'run', p.ph, Math.sin(t / 85 + p.side) * 0.9, blink, t, Math.sin(p.ph * 0.5) * 0.05);
       g.restore();
