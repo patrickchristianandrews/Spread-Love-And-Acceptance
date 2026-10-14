@@ -2,7 +2,7 @@
    one short read and one "or try this instead", with the reason ("Because you said ...").
    Use anywhere:  <div data-start-finder></div>  <script src="/assets/js/start-finder.js" defer></script>
      data-start-finder="compact"  smaller headings, for the home page
-     data-url                     read ?who=&what=&time= from the address (the /find-your-start.html page sets it)
+     data-url                     read ?who=&what=&time= from the address (the /start-here.html page sets it; /find-your-start.html now leads there)
    It loads its own styles (/assets/css/start-finder.css). Nothing is stored and nothing is sent. */
 (function () {
   'use strict';

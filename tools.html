@@ -77,6 +77,7 @@
   .tl-does{ font-size:.93rem; line-height:1.45; }
   .tl-gets{ font-size:.93rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
   .tl-gets b{ color:var(--ink, #2B2620); font-weight:600; }
+  .tl-modes{ font-size:.9rem; color:#4E3F6B; }
   .tl-foot{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; margin-top:auto; padding-top:.35rem; }
   .tl-foot .tl-m{ display:inline-block; padding:.12rem .55rem; border-radius:999px; font:500 .74rem/1.4 "IBM Plex Mono", ui-monospace, monospace; color:#4E3F6B; background:#F4ECFB; }
   .tl-foot .tl-time{ color:#6B4A12; background:#FFF0D9; }
@@ -220,7 +221,7 @@
   }
   function together(t) { return t.who.indexOf('two') !== -1 || t.who.indexOf('group') !== -1; }
   TOOLS.forEach(function (t) {
-    t.hay = fold([t.name, t.brand, t.does, t.kw, TYPE[t.type] && TYPE[t.type].name].concat((t.also || []).map(function (a) { return TYPE[a] ? TYPE[a].name : ''; })).join(' '));
+    t.hay = fold([t.name, t.brand, t.does, t.kw, (t.modes || []).map(function (m) { return m[0]; }).join(' '), TYPE[t.type] && TYPE[t.type].name].concat((t.also || []).map(function (a) { return TYPE[a] ? TYPE[a].name : ''; })).join(' '));
   });
 
   // ---------- Start here: the six testers liked most
@@ -241,6 +242,7 @@
       '<span class="tl-name">' + esc(t.name) + '</span>' +
       (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') +
       '<span class="tl-does">' + esc(t.does) + '</span>' +
+      (t.modes && t.modes.length > 1 ? '<span class="tl-modes"><b>Ways in:</b> ' + t.modes.map(function (m) { return esc(m[0]); }).join(' · ') + '</span>' : '') +
       '<span class="tl-gets"><b>You get:</b> ' + esc(t.gets) + '</span>' +
       '<span class="tl-foot"><span class="tl-m tl-time">' + esc(t.time) + '</span><span class="tl-m">' + esc(whoText(t.who)) + '</span>' +
       '<span class="tl-open" aria-hidden="true">Open&nbsp;&rarr;</span></span></a>';

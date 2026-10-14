@@ -1351,11 +1351,11 @@
   // Share buttons on the pages: content pages, book chapters, tool results, tool cards, Puddles
   // =====================================================================================
   var GAME = /^\/(word-bloom|quiet-crossword|daily-ledger-crossword|quiet-words|frequency-journey(-play)?|night-garden|bears-dojo|recheck-drive|echoes-of-gold|pal-cam-tv|garden-backdrop|pause-and-play|keepsakes|calm-visualizer|soundscapes|heartprint|pawprint|frequency-buddies[\w-]*)\.html$/;
-  var NOT_CONTENT = /^\/(404|offline|safety|on-this-device|privacy-policy|terms-of-service|refund-policy|membership|dashboard|telemetry|sent-this|someone-sent-you-this|upset-right-now|surprise|index)\.html$|^\/(legal|workpapers\/fill|store|supabase|infrastructure|architecture|notes|samples|manuscript|shots|snapshot)\//;
+  var NOT_CONTENT = /^\/(404|offline|safety|on-this-device|privacy-policy|terms-of-service|refund-policy|membership|dashboard|telemetry|sent-this|someone-sent-you-this|upset-right-now|surprise|index)\.html$|^\/(legal|workpapers\/fill|store|supabase|infrastructure|notes|samples|manuscript|shots)\//;
   function noShare() { return document.body.hasAttribute('data-no-share') || document.body.classList.contains('is-game'); }
   function noindex() { var m = document.querySelector('meta[name="robots"]'); return !!m && /noindex/i.test(m.getAttribute('content') || ''); }
   function pageTitle() {
-    var h = document.querySelector('main h1');
+    var h = document.querySelector('main h1, [role="main"] h1');
     var t = h ? h.textContent.replace(/\s+/g, ' ').trim() : '';
     return t || (document.title || '').replace(/\s*[|·–-]\s*Spread Love.*$/i, '').trim();
   }
@@ -1378,7 +1378,7 @@
     });
   }
   function placePage() {
-    var main = document.querySelector('main');
+    var main = document.querySelector('main') || document.querySelector('[role="main"]');
     if (!main || noShare() || GAME.test(path) || noindex()) return;
     var h1 = main.querySelector('h1');
     var content = !!h1 && !NOT_CONTENT.test(path);
@@ -1412,7 +1412,7 @@
         row = mk('div', { class: 'tol-share-row tsk-end-row tol-plain no-bubble' });
         row.appendChild(b);
         if (!main.querySelector('main [data-print], .tol-print-btn') && !isDownload && !home) {
-          var pb = mk('button', { type: 'button', class: 'tol-print-btn' }, T('Print or save as PDF', 'Imprimir o guardar como PDF'));
+          var pb = mk('button', { type: 'button', class: 'tol-print-btn' }, T('Print this page', 'Imprimir esta página'));
           pb.addEventListener('click', function () { window.print(); });
           row.appendChild(pb);
         }

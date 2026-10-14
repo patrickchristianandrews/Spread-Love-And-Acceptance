@@ -772,11 +772,6 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <p class="relset small" id="relSet" hidden>Reading it for: <b id="relSetName"></b>. <button type="button" class="linkbtn" id="relSetChange">Change</button></p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
-    <!-- a screenshot, or a whole conversation: both open "A whole conversation or screenshot"; one message comes back here -->
-    <div class="st-in" role="group" aria-label="Other ways to add it">
-      <button type="button" id="stFromShot"><span aria-hidden="true">📷</span> From a screenshot</button>
-      <button type="button" id="stFromChat"><span aria-hidden="true">💬</span> Paste a whole conversation</button>
-    </div>
     <div class="st-chatoffer" id="stChatOffer" hidden aria-live="polite"></div>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
@@ -802,6 +797,11 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
       <button class="go" id="go" type="button">Translate</button>
       <button class="ghost" id="reset" type="button">Start over</button>
       <span class="msg" id="msg" role="alert"></span>
+    </div>
+    <!-- a screenshot, or a whole conversation: both open the view "A whole conversation or screenshot"; one message comes back here. After Translate in the Tab order, so the box and its button stay close -->
+    <div class="st-in" role="group" aria-label="Other ways to add it">
+      <button type="button" id="stFromShot"><span aria-hidden="true">📷</span> From a screenshot</button>
+      <button type="button" id="stFromChat"><span aria-hidden="true">💬</span> Paste a whole conversation</button>
     </div>
     <div class="tryrow" id="tryRow">
       <p class="tryk no-bubble" id="tryK">Try an example</p>

@@ -4777,7 +4777,7 @@
     document.documentElement.classList.add('tol-share-open');
     // share-kit.js (more places, grouped) lays itself out for what is being shared
     try { document.dispatchEvent(new CustomEvent('tol-share-sheet', { detail: { data: d, box: box, close: closeShareSheet } })); } catch (e) {}
-    var firstAct = box.querySelector('[data-act]:not([hidden])') || box.querySelector('.tol-share-close');
+    var firstAct = Array.prototype.filter.call(box.querySelectorAll('[data-act]:not([hidden])'), function (n) { return n.getClientRects().length > 0; })[0] || box.querySelector('.tol-share-close');
     firstAct.focus({ preventScroll: true });
   }
   function closeShareSheet() {

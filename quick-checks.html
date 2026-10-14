@@ -21,7 +21,19 @@
 <script>/* The Lemonade Stand moved to its own page: send old links there */ (function () { function go() { if (location.hash === "#lemonade") location.replace("/lemonade-stand.html"); } go(); window.addEventListener("hashchange", go); })();</script>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/ten-return.js" defer></script>
+<script src="/assets/js/sky-check.js" defer></script>
 <style>
+  /* "How am I right now?": two modes on one page. Quick (4 taps, the ladder) and the full forecast */
+  .hm-modes{ display:grid; grid-template-columns:repeat(auto-fit, minmax(14rem, 1fr)); gap:.6rem; margin:1.1rem 0 1.4rem; }
+  .hm-mode{ display:block; width:100%; box-sizing:border-box; min-height:64px; padding:.75rem 1rem; border-radius:14px; border:1px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; text-align:left; font:600 1.05rem/1.3 "Fraunces", Georgia, serif; cursor:pointer; }
+  .hm-mode small{ display:block; font:400 .92rem/1.4 "Lora", Georgia, serif; color:var(--ink-soft); margin-top:.15rem; }
+  .hm-mode:hover{ border-color:var(--credit); }
+  .hm-mode[aria-pressed="true"]{ border:2px solid var(--credit); background:var(--paper-deep, var(--paper)); }
+  .hm-mode:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+  .qc-sky .pg-safe{ margin:1.2rem 0; padding:1rem 1.2rem; border-left:4px solid var(--debit, var(--credit)); background:var(--paper-deep, var(--paper)); border-radius:var(--radius, 10px); }
+  .qc-sky .pg-safe p{ margin:.4rem 0 !important; }
+  .qc-sky h3{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.1rem; margin:1.4rem 0 .3rem; }
+  .step-more{ font-size:.88rem; color:var(--ink-soft); margin:.55rem 0 0; max-width:62ch; }
   .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   .steps{ counter-reset:step; }
   .step{ margin:1.5rem 0 0; padding-top:1.1rem; border-top:1px solid var(--line); }
@@ -249,17 +261,32 @@
 
   <header class="read-head">
     <p class="read-code">Free &middot; nothing leaves your device</p>
-    <h1>Mood and energy check-in</h1>
-    <p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">Also called Today&rsquo;s Weather</p>
-    <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> one minute on your mood, sleep, body and what&rsquo;s coming up today. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> today&rsquo;s forecast: what today is good for, a good time to talk, and a private log of your patterns if you want one. <span aria-hidden="true">&middot;</span> About a minute</p>
+    <h1>How am I right now?</h1>
+    <p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--ink-soft,#5A5346)">A mood and energy check-in. The full forecast is also called Today&rsquo;s Weather</p>
+    <p class="tol-what no-bubble" style="margin:.45rem 0 0;font-size:.95rem;line-height:1.5;color:var(--ink-soft,#5A5346);max-width:46rem"><strong>What it does:</strong> four quick taps, or one minute on your mood, sleep, body and what&rsquo;s coming up today. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> calm, revved up or running on empty, with what helps right now; or today&rsquo;s full forecast: what today is good for, a good time to talk, and a private log of your patterns if you want one. <span aria-hidden="true">&middot;</span> 20 seconds to a minute</p>
   </header>
 
-  <p class="lede">People have inner weather. Some mornings are clear, some are gusty, some are fogged in, and it changes without asking your permission. This is a one-minute reading of today&#39;s conditions: the sky, the pressure, the ground underneath, and what&#39;s blowing in.</p>
-  <p class="why">We use weather on purpose. Weather isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
+  <div class="hm-modes" role="group" aria-label="Pick how to check">
+    <button class="hm-mode" type="button" data-hm="sky" aria-pressed="false" aria-controls="qc-sky">Quick: 4 taps<small>Just the sky: calm, revved up or running on empty, and what helps right now. About 20 seconds.</small></button>
+    <button class="hm-mode" type="button" data-hm="full" aria-pressed="true" aria-controls="today">Full forecast<small>The sky plus sleep, pressure, your body and what&rsquo;s coming up. About a minute, and you can keep it.</small></button>
+  </div>
+
+  <p class="lede" data-full>People have inner weather. Some mornings are clear, some are gusty, some are fogged in, and it changes without asking your permission. This is a one-minute reading of today&#39;s conditions: the sky, the pressure, the ground underneath, and what&#39;s blowing in.</p>
+  <p class="why" data-full>We use weather on purpose. Weather isn&#39;t a grade, a diagnosis or a verdict on you, any more than rain is a verdict on a town. Conditions pass. Knowing them just tells you what today is good for, and what to leave until the front moves through.</p>
 
   <section id="today" aria-labelledby="today-h">
     <h2 id="today-h" class="sr-only">Check today&#39;s weather</h2>
-    <div class="steps">
+    <div class="qc-sky" id="qc-sky" hidden>
+      <h2 id="sky-h" class="sr-only">Quick check: four taps</h2>
+      <p class="step-hint">Four quick taps about your body, your thoughts and what you feel like doing. They place you on the <a href="/ladder.html">Nervous System Ladder</a>: calm and connected (a clear sky), revved up (gusty), or running on empty (fogged in). It&rsquo;s a best guess, not a reading. Nothing you tap leaves this device.</p>
+      <div data-sky-check data-top="qc-sky"></div>
+      <h3 id="sky-safe">If you feel afraid</h3>
+      <div class="pg-safe">
+        <p>If your body is tense because you are afraid of how someone will react, that is not a “state” to calm down from. It may be a warning. You don’t have to talk, pause politely or explain yourself to someone who frightens you.</p>
+        <p><a href="/safety.html">Not safe at home?</a> has free, private help and people to talk to.</p>
+      </div>
+    </div>
+    <div class="steps" data-full>
 
       <div class="step">
         <p class="step-n">Step 1 of 8 &middot; required</p>
@@ -298,6 +325,7 @@
           <button class="chip" type="button" data-load="building" aria-pressed="false">Building</button>
           <button class="chip" type="button" data-load="heavy" aria-pressed="false">Heavy</button>
         </div>
+        <p class="step-more">Want to score it? <a href="/workpapers/wp-02-how-much-are-you-carrying.html">How much are you carrying?</a> (WP-02) is a two-minute load check that separates what you already carry from today&rsquo;s upset.</p>
       </div>
 
       <div class="step">
@@ -373,10 +401,10 @@
       </div>
     </div>
 
-    <p class="see-fc"><button class="btn is-primary" type="button" id="see-fc">See my forecast</button></p>
+    <p class="see-fc" data-full><button class="btn is-primary" type="button" id="see-fc">See my forecast</button></p>
     <p class="sr-only" id="fc-status" role="status" aria-live="polite" aria-atomic="true"></p>
 
-    <div class="forecast" id="forecast">
+    <div class="forecast" id="forecast" data-full>
       <div class="fc-head">
         <span class="fc-ico" id="fc-ico" aria-hidden="true">&#9925;</span>
         <div class="fc-titles">
@@ -519,7 +547,7 @@
     </section>
 
     <p class="why"><strong>What this is not.</strong> It isn&#39;t a diagnosis, a grade or a judgment, and it can&#39;t tell you anything about your health. It describes a few hours of conditions, and conditions change. A heavy reading is information about a day, not a failing in a person.</p>
-    <p class="why">See also: <a href="/know-yourself.html">Know your own wiring</a>, for telling today&#39;s conditions apart from lasting wiring and older patterns, and the <a href="/carrier-wave-decoder.html">Carrier Wave Decoder</a>, for a moment that has already gone sideways.</p>
+    <p class="why">See also: <a href="/know-yourself.html">Know your own wiring</a>, for telling today&#39;s conditions apart from lasting wiring and older patterns, and <a href="/carrier-wave-decoder.html">After a talk went wrong: a step-by-step reset</a>, for a moment that has already gone sideways.</p>
   </section>
 
   <p class="why" style="margin-top:2.5rem;">Looking for the Lemonade Stand, the weekly tally of who did what? It has <a href="/lemonade-stand.html">its own page</a>.</p>
@@ -1056,6 +1084,56 @@ document.addEventListener('click', function (e) {
     if (m && m.offsetParent !== null) m.click(); else if (++tries < 40) setTimeout(pick, 100);
   })();
 });
+</script>
+<script>
+/* "How am I right now?": two modes on this page.
+   Quick (4 taps, the Nervous System Ladder, from sky-check.js): ?mode=sky, or a shared #rung= link (old /ladder.html links too).
+   Full forecast (Today's Weather): the default, ?mode=full, #today, #ladder and the rest.
+   ?sky=clear|gusty|fog (and &rel=solo) arrive from the quick check's "Add the rest": the sky is already picked. Nothing is stored. */
+(function () {
+  var btns = [].slice.call(document.querySelectorAll('[data-hm]')), sky = document.getElementById('qc-sky');
+  if (!btns.length || !sky) return;
+  var params; try { params = new URLSearchParams(location.search); } catch (e) { params = null; }
+  function setUrl(m) {
+    try {
+      var q = new URLSearchParams(location.search); q.delete('sky'); q.delete('rel');
+      if (m === 'sky') q.set('mode', 'sky'); else q.delete('mode');
+      var h = location.hash;
+      if (m !== 'sky' && /(?:^#|&)rung=/.test(h)) h = '';
+      var qs = q.toString();
+      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + h);
+    } catch (e) {}
+  }
+  function setMode(m, opts) {
+    opts = opts || {};
+    btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-hm') === m ? 'true' : 'false'); });
+    sky.hidden = m !== 'sky';
+    [].forEach.call(document.querySelectorAll('[data-full]'), function (el) { el.hidden = m === 'sky'; });
+    if (!opts.keepUrl) setUrl(m);
+  }
+  btns.forEach(function (b) { b.addEventListener('click', function () { setMode(b.getAttribute('data-hm')); }); });
+
+  // "Add the rest of today's weather" from the quick check: the full forecast, with the sky already picked
+  function prefill(skyId, solo) {
+    var r = document.querySelector('[data-sky="' + skyId + '"]');
+    if (r && r.getAttribute('aria-pressed') !== 'true') r.click();
+    if (solo) { var c = document.querySelector('[data-rel="solo"]'); if (c && c.getAttribute('aria-pressed') !== 'true') c.click(); }
+    var h = document.getElementById('h-rel');
+    if (h) { h.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); }
+    var st = document.getElementById('fc-status'); if (st) st.textContent = 'Step 1 is filled in from your quick check. Add as much of the rest as you like.';
+    var first = document.querySelector('[data-rel]'); if (first) try { first.focus({ preventScroll: true }); } catch (e) {}
+  }
+  document.addEventListener('tol-sky-more', function (e) {
+    var d = e.detail || {};
+    setMode('full');
+    prefill(d.sky, d.solo);
+  });
+
+  var wantSky = params && /^(clear|gusty|fog)$/.test(params.get('sky') || '') ? params.get('sky') : '';
+  var mode = params && params.get('mode') === 'sky' ? 'sky' : (/(?:^#|&)rung=(calm|revved|empty)\b/.test(location.hash || '') && !wantSky ? 'sky' : 'full');
+  setMode(mode, { keepUrl: true });
+  if (wantSky) { setUrl('full'); setTimeout(function () { prefill(wantSky, params.get('rel') === 'solo'); }, 0); }
+})();
 </script>
 </body>
 </html>

@@ -2,12 +2,16 @@
    for them (who they are to you, how they're wired, the state they were in, what was going on around them, their
    history), and what each of you could or couldn't see. It builds a picture of how the moment may have looked from
    where they stood, why it can look different from what was meant, questions to check instead of guessing, and a
-   sentence to bridge the gap (which you can test in the Signal Translator). Built on the seven angles of Chapter III.
+   sentence to bridge the gap (which you can test in the Chat analyzer). Built on the seven angles of Chapter III.
+   It is now the "Their side" step of /carrier-wave-decoder.html (After a talk went wrong: a step-by-step reset), which
+   loads this file when that step opens; /perspective-shifter.html redirects there. With data-pshift-step on the root,
+   "Use it in the last step" fires a "tol-ps-bridge" event (detail.text) so the page can carry the sentence on.
    Everything happens in this browser; nothing is sent anywhere or kept. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-pshift]');
   if (!root) return;
+  var STEP = root.hasAttribute('data-pshift-step');
 
   // each choice: id, label, how it may have shaped the moment for them
   var GROUPS = [
@@ -175,9 +179,11 @@
     else if (goal === 'calm') bridge = 'I don’t want to fight about this. ' + bridge;
     else if (goal && GOAL_BRIDGE[goal]) bridge += GOAL_BRIDGE[goal];
     h += '<h3>A sentence to bridge the gap</h3><p class="ps-bridge">' + esc(bridge) + '</p>' +
-      '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button><a class="ps-b is-main" href="/signal-translator.html" data-st-text="' + escA(bridge) + '">Check how it may land in the Signal Translator →</a></p>';
+      '<p class="ps-acts"><button type="button" class="ps-b" data-copy>Copy the sentence</button>' +
+      (STEP ? '<button type="button" class="ps-b is-main" data-ps-use>Use it in the last step: check the sentence →</button>'
+            : '<a class="ps-b is-main" href="/signal-translator.html" data-st-text="' + escA(bridge) + '">Check how it may land in the Chat analyzer →</a>') + '</p>';
     var said = (root.querySelector('[data-said]') || {}).value;
-    if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html" data-st-text="' + escA(said.trim()) + '">See how the words that were said may have been heard →</a></p>';
+    if (said && said.trim()) h += '<p class="ps-acts"><a class="ps-b" href="/signal-translator.html" data-st-text="' + escA(said.trim()) + '">See how the words that were said may have been heard, in the Chat analyzer →</a></p>';
     if (rift) h += '<p class="ps-why"><strong>After a long rift:</strong> old roles often come back into the room, and reaching out is optional, on both sides. <a href="/family-rifts.html#old-roles">Family rifts: old roles at the table</a> and <a href="/family-rifts.html#reaching-out">reaching out after a long silence</a> go further.</p>';
     if (cx && !cx.empty) h += TOLContext.usedHTML(cx, { skip: ['short', 'emoji', 'direct'], noChange: true });
     h += '<p class="ps-tag">Built on the seven angles in <a href="/book/chapter-3.html">Chapter III</a> and <a href="/five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. For how different wiring changes what’s heard, see <a href="/wired-differently.html">Wired Differently</a>.</p>';
@@ -204,6 +210,11 @@
       if (i >= 0) list.splice(i, 1); else { if (G && G.one) list.length = 0; list.push(id); }
       Array.prototype.forEach.call(root.querySelectorAll('.ps-chip[data-g="' + g + '"]'), function (c) { var x = on(g, c.getAttribute('data-id')); c.classList.toggle('is-on', x); c.setAttribute('aria-pressed', String(x)); });
       fitChips(); render(); return;
+    }
+    if (e.target.closest('[data-ps-use]')) {
+      var bt = ((root.querySelector('.ps-bridge') || {}).textContent || '').trim(), ev;
+      try { ev = new CustomEvent('tol-ps-bridge', { bubbles: true, detail: { text: bt } }); } catch (x) { ev = document.createEvent('CustomEvent'); ev.initCustomEvent('tol-ps-bridge', true, false, { text: bt }); }
+      root.dispatchEvent(ev); return;
     }
     if (e.target.closest('[data-copy]')) {
       var t = (root.querySelector('.ps-bridge') || {}).textContent || '', st = e.target.closest('[data-copy]');

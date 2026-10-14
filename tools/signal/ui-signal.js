@@ -378,6 +378,139 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(errs.length===0, `${tag}: console errors after context checks: ${errs.join(' | ')}`);
     await ctx.close();
   }
+  // ---------- shot10: the Chat analyzer (one page: a message to send, a message I got, a whole conversation or screenshot) ----------
+  // The screenshot reader itself (real OCR on made-up chat screenshots) is checked by tools/signal/ui-shots.js.
+  const CHAT = 'Sam: are we still on for Saturday?\nAlex: maybe, I\'ll let you know later\nSam: you said that last week. When will you know?\nAlex: I SAID later. Why do you always do this??\nSam: ok. Can we talk tonight?';
+  for(const [w,h] of [[390,844],[1366,768]]){
+    for(const scheme of ['light','dark']){
+      const tag='chat '+w+'x'+h+' '+scheme;
+      const ctx = await b.newContext({viewport:{width:w,height:h}, colorScheme: scheme, hasTouch: w<500, isMobile: w<500});
+      const p = await ctx.newPage();
+      const errs=[]; p.on('pageerror',e=>errs.push('pageerror: '+e.message)); p.on('console',m=>{ if(m.type()==='error' && !/Failed to load resource/.test(m.text())) errs.push('console: '+m.text()); });
+      const reqs=[]; p.on('request', r=>reqs.push(r.url()));
+      await p.route('**/*', r=>/^http:\/\/(localhost|127\.0\.0\.1)/.test(r.request().url()) ? r.continue() : r.abort());
+      const go = async (q)=>{ await p.goto(URL+(q||'')); await p.waitForLoadState('load'); };
+      const vis = sel=>p.evaluate(s=>{ const e=document.querySelector(s); return !!e && e.checkVisibility(); }, sel);
+      await go('');
+      // the page: one name, three ways in
+      const head = await p.evaluate(()=>({h1:document.querySelector('h1').innerText, title:document.title, aka:document.querySelector('.tol-aka').innerText,
+        modes:[...document.querySelectorAll('input[name="stmode"]')].map(r=>r.value+':'+r.closest('label').querySelector('b').innerText)}));
+      ok(head.h1==='Chat analyzer' && /Chat Analyzer/.test(head.title) && /Signal Translator/.test(head.aka), `${tag}: page named Chat analyzer: ${JSON.stringify(head)}`);
+      ok(JSON.stringify(head.modes)===JSON.stringify(['send:A message I’m about to send','got:A message I got','chat:A whole conversation or screenshot']), `${tag}: three choices: ${head.modes.join(' | ')}`);
+      ok(await vis('#stFromShot') && await vis('#stFromChat') && /From a screenshot/.test(await p.innerText('#stFromShot')) && /Paste a whole conversation/.test(await p.innerText('#stFromChat')), `${tag}: the two buttons by the box`);
+      ok(!reqs.some(u=>/conversation-reader|tesseract/.test(u)), `${tag}: the conversation and screenshot readers don't load until asked for`);
+      ok(await overflow(p)<=0, `${tag}: overflow on load`);
+      await p.screenshot({path:S+`chat-${w}-${scheme}-1-send.png`});
+      // "A message I got" keeps the buttons
+      await p.check('input[name="stmode"][value="got"]');
+      ok(await vis('#stFromShot') && await vis('#stFromChat') && /Paste the message you got/.test(await p.innerText('#phraseLab')), `${tag}: buttons in "A message I got" too`);
+      // a whole chat pasted into the one-message box: the two choices, offered straight away
+      await p.check('input[name="stmode"][value="send"]');
+      await p.focus('#phrase');
+      await p.evaluate(t=>{ const dt=new DataTransfer(); dt.setData('text/plain', t); const box=document.querySelector('#phrase'); const ev=new ClipboardEvent('paste',{clipboardData:dt, bubbles:true, cancelable:true}); box.dispatchEvent(ev); if(!ev.defaultPrevented){ box.value=t.slice(0,1500); box.dispatchEvent(new Event('input',{bubbles:true})); } }, CHAT);
+      await p.waitForSelector('#stChatOffer:not([hidden]) #stCoAll', {timeout:10000});
+      const offer = await p.innerText('#stChatOffer');
+      ok(/whole conversation/.test(offer) && /5 messages/.test(offer) && /Sam and Alex/.test(offer) && /Check one message/.test(offer), `${tag}: paste offer: ${offer.slice(0,160)}`);
+      ok(!reqs.some(u=>/tesseract/.test(u)), `${tag}: a pasted chat doesn't load the screenshot reader`);
+      await p.screenshot({path:S+`chat-${w}-${scheme}-2-paste-offer.png`});
+      // "Check one message": pick Alex's line, as Sam: it opens "A message I got" and reads it
+      await p.selectOption('#stCoMe', 'Sam');
+      await p.click('#stCoOne'); await p.click('#stCoList [data-turn="3"]');
+      await p.waitForSelector('#vplain');
+      const one = await p.evaluate(()=>({mode:document.querySelector('input[name="stmode"]:checked').value, box:document.querySelector('#phrase').value, offer:document.querySelector('#stChatOffer').hidden}));
+      ok(one.mode==='got' && one.box==='I SAID later. Why do you always do this??' && one.offer, `${tag}: one message from them is read in "A message I got": ${JSON.stringify(one)}`);
+      // and one of my own: "A message I'm about to send", answering what they said
+      await p.fill('#phrase',''); await p.check('input[name="stmode"][value="send"]'); await p.focus('#phrase');
+      await p.evaluate(t=>{ const dt=new DataTransfer(); dt.setData('text/plain', t); const box=document.querySelector('#phrase'); box.dispatchEvent(new ClipboardEvent('paste',{clipboardData:dt, bubbles:true, cancelable:true})); box.value=t.slice(0,1500); }, CHAT);
+      await p.waitForSelector('#stChatOffer:not([hidden]) #stCoAll');
+      await p.selectOption('#stCoMe', 'Sam'); await p.click('#stCoOne'); await p.click('#stCoList [data-turn="4"]'); await p.waitForSelector('#vplain');
+      const mine = await p.evaluate(()=>({mode:document.querySelector('input[name="stmode"]:checked').value, reply:!document.querySelector('#replyTo').hidden && document.querySelector('#replyToText').textContent}));
+      ok(mine.mode==='send' && /I SAID later/.test(mine.reply||''), `${tag}: my own message is checked before sending, as a reply: ${JSON.stringify(mine)}`);
+      // "Read the whole conversation": the Reader's view, on this page, with who "you" are already known
+      await p.fill('#phrase',''); await p.focus('#phrase');
+      await p.evaluate(t=>{ const dt=new DataTransfer(); dt.setData('text/plain', t); const box=document.querySelector('#phrase'); box.dispatchEvent(new ClipboardEvent('paste',{clipboardData:dt, bubbles:true, cancelable:true})); box.value=t.slice(0,1500); }, CHAT);
+      await p.waitForSelector('#stChatOffer:not([hidden]) #stCoAll');
+      await p.selectOption('#stCoMe', 'Alex'); await p.click('#stCoAll');
+      await p.waitForSelector('#cr-out .cr-summary, #cr-out .cr-thread', {timeout:15000});
+      const whole = await p.evaluate(()=>({mode:document.querySelector('input[name="stmode"]:checked').value, single:document.querySelector('#sentenceBox').checkVisibility(), out:document.querySelector('#cr-out').innerText, hash:location.hash}));
+      ok(whole.mode==='chat' && !whole.single && /5 messages/.test(whole.out) && !/Which one is you\?/.test(whole.out.slice(0,200)) && whole.hash==='#conversation', `${tag}: whole conversation read here: ${JSON.stringify({...whole, out:whole.out.slice(0,120)})}`);
+      ok(await overflow(p)<=0, `${tag}: overflow in the whole-conversation view`);
+      await p.screenshot({path:S+`chat-${w}-${scheme}-3-whole.png`});
+      // context panel and "What it looks for" work in the whole-conversation view too
+      ok(await p.evaluate(()=>!!document.querySelector('#cr-ctx details.tol-ctx') && document.querySelectorAll('#cr-lookfor li').length>5), `${tag}: the conversation view has its context panel and pattern list`);
+      ok(await p.evaluate(()=>document.querySelector('.tol-safe-line') && /afraid or controlled/.test(document.querySelector('#conversation').innerText)), `${tag}: the safety line moved in with the Reader`);
+      // the third choice keeps "Try an example" and the reply check
+      await p.click('#cr-example'); await p.waitForSelector('#cr-draft-step:not([hidden])');
+      await p.fill('#cr-draft', 'You ALWAYS do this!!'); await p.waitForTimeout(400);
+      ok(/always\/never|Always|less heat/i.test(await p.innerText('#cr-draft-out')), `${tag}: reply check in the conversation view`);
+      // back to one message: the box, the context panel and the accuracy note are there
+      await p.check('input[name="stmode"][value="send"]');
+      ok(await vis('#phrase') && await vis('#stAcc') && !(await vis('#conversation')) && await p.evaluate(()=>location.hash===''), `${tag}: back to one message`);
+      await p.fill('#phrase','Per my last email, the report is due Friday.'); await p.click('#go'); await p.waitForSelector('#vplain');
+      ok(/Per my last|report/.test(await p.innerText('#results')), `${tag}: one message still reads after the conversation view`);
+      // "Paste a whole conversation" opens the view at its box
+      await p.click('#stFromChat'); await p.waitForTimeout(300);
+      ok(await p.evaluate(()=>document.activeElement && document.activeElement.id==='cr-input'), `${tag}: "Paste a whole conversation" goes to the conversation box`);
+      // "From a screenshot": the side question comes first, the first time
+      await p.check('input[name="stmode"][value="send"]');
+      await p.click('#stFromShot'); await p.waitForSelector('#cr-side', {timeout:10000}); await p.waitForTimeout(200);
+      const sideQ = await p.evaluate(()=>({q:document.querySelector('#cr-side').checkVisibility() && document.querySelector('#cr-side legend').innerText, right:document.querySelector('input[name="cr-side"][value="right"]').checked, opts:[...document.querySelectorAll('.cr-side-opt b')].map(b=>b.innerText), priv:document.querySelector('.cr-shots-private').innerText}));
+      ok(sideQ.q==='Which side are your messages on?' && sideQ.right && sideQ.opts.join('|')==='Mine are on the right|Mine are on the left' && /never uploaded/.test(sideQ.priv), `${tag}: side question first: ${JSON.stringify(sideQ)}`);
+      ok(!reqs.some(u=>/tesseract/.test(u)), `${tag}: the OCR files load only when a screenshot is picked`);
+      ok(await overflow(p)<=0, `${tag}: overflow with the screenshot question`);
+      await p.screenshot({path:S+`chat-${w}-${scheme}-4-side-question.png`});
+      ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
+      await ctx.close();
+    }
+  }
+  // hand-offs, old links and the redirect
+  {
+    const ctx = await b.newContext({viewport:{width:390,height:844}}); const p = await ctx.newPage();
+    const errs=[]; p.on('pageerror',e=>errs.push('pageerror: '+e.message));
+    await p.route('**/*', r=>/^http:\/\/(localhost|127\.0\.0\.1)/.test(r.request().url()) ? r.continue() : r.abort());
+    const BASE = URL.replace(/\/signal-translator\.html$/, '');
+    // a whole conversation handed over in sessionStorage ('tol-cr-text'): read, then removed
+    await p.goto(BASE+'/index.html'); await p.evaluate(t=>sessionStorage.setItem('tol-cr-text', JSON.stringify({text:t, me:'Sam'})), CHAT);
+    await p.goto(URL); await p.waitForSelector('#cr-out .cr-summary, #cr-out .cr-thread', {timeout:15000});
+    ok(await p.evaluate(()=>sessionStorage.getItem('tol-cr-text')===null && document.querySelector('input[name="stmode"]:checked').value==='chat'), 'hand-off: the conversation is read and the key removed');
+    // one sentence handed over ('tol-st-text', used by Say no kindly, Flip it, See it from their side, the two-faiths page and the mini checker)
+    await p.evaluate(()=>sessionStorage.setItem('tol-st-text', 'You never call me back.'));
+    await p.goto(URL); await p.waitForLoadState('load');
+    ok(await p.evaluate(()=>document.querySelector('#phrase').value==='You never call me back.' && sessionStorage.getItem('tol-st-text')===null), 'tol-st-text still fills the one-message box');
+    // ?mode=got, the share target and ?mode=chat
+    await p.goto(URL+'?mode=got'); await p.waitForLoadState('load');
+    ok(await p.evaluate(()=>document.querySelector('input[name="stmode"]:checked').value==='got'), '?mode=got still opens "A message I got"');
+    await p.goto(URL+'?text='+encodeURIComponent('Fine. Do what you want.')); await p.waitForSelector('#vplain');
+    ok(await p.evaluate(()=>document.querySelector('input[name="stmode"]:checked').value==='got' && !/text=/.test(location.search)), 'the share target still reads a shared message, and the words leave the address');
+    await p.goto(URL+'?mode=chat'); await p.waitForLoadState('load');
+    ok(await p.evaluate(()=>document.querySelector('input[name="stmode"]:checked').value==='chat' && document.querySelector('#conversation').checkVisibility()), '?mode=chat opens the conversation view');
+    // the old address sends people here, keeping the #part and a ?text= conversation (out of the address)
+    await p.goto(BASE+'/conversation-reader.html'); await p.waitForURL(/signal-translator\.html#conversation$/); await p.waitForLoadState('load');
+    ok(await p.evaluate(()=>document.querySelector('#conversation').checkVisibility()), 'redirect: /conversation-reader.html opens the conversation view');
+    await p.goto(BASE+'/conversation-reader.html#cr-s1'); await p.waitForURL(/#cr-s1$/); await p.waitForLoadState('load');
+    ok(await p.evaluate(()=>document.querySelector('#conversation').checkVisibility()), 'redirect: an old #part is kept and opens the view');
+    await p.goto(BASE+'/conversation-reader.html?text='+encodeURIComponent(CHAT)); await p.waitForURL(/signal-translator/); await p.waitForSelector('#cr-out .cr-summary, #cr-out .cr-thread, #cr-out .cr-ask', {timeout:15000});
+    ok(await p.evaluate(()=>/Saturday/.test(document.querySelector('#cr-input').value) && !/text=/.test(location.href)), 'redirect: ?text= goes over without staying in the address');
+    const meta = await (await p.request.get(BASE+'/conversation-reader.html')).text();
+    ok(/noindex/.test(meta) && /http-equiv="refresh"[^>]*signal-translator\.html#conversation/.test(meta) && /<a href="\/signal-translator\.html#conversation">/.test(meta), 'redirect page: noindex, meta refresh and a link');
+    ok(errs.length===0, 'hand-offs: page errors: '+errs.join(' | '));
+    await ctx.close();
+    // with JavaScript off, the refresh still gets there
+    const off = await b.newContext({javaScriptEnabled:false}); const q = await off.newPage();
+    await q.route('**/*', r=>/^http:\/\/(localhost|127\.0\.0\.1)/.test(r.request().url()) ? r.continue() : r.abort());
+    await q.goto(BASE+'/conversation-reader.html'); await q.waitForURL(/signal-translator\.html#conversation$/, {timeout:10000}).catch(()=>{});
+    ok(/signal-translator\.html#conversation$/.test(q.url()), 'redirect with JavaScript off: '+q.url());
+    await off.close();
+    // the mini checker points to the Chat analyzer, with the screenshot and whole-chat way in
+    const m = await b.newPage({viewport:{width:390,height:844}});
+    await m.route('**/*', r=>/^http:\/\/(localhost|127\.0\.0\.1)/.test(r.request().url()) ? r.continue() : r.abort());
+    await m.goto(BASE+'/index.html'); await m.waitForSelector('[data-message-check-mini] .mcm-shotl', {timeout:10000});
+    const mini = await m.evaluate(()=>({full:document.querySelector('.mcm-full').getAttribute('href'), fullT:document.querySelector('.mcm-full').innerText, shot:document.querySelector('.mcm-shotl').getAttribute('href'), shotT:document.querySelector('.mcm-shotl').innerText}));
+    ok(mini.full==='/signal-translator.html' && /Chat analyzer/.test(mini.fullT) && mini.shot==='/signal-translator.html#conversation' && /Got a screenshot or a whole chat\?/.test(mini.shotT), 'mini checker links: '+JSON.stringify(mini));
+    await m.click('.mcm-shotl'); await m.waitForURL(/#conversation$/); await m.waitForLoadState('load');
+    ok(await m.evaluate(()=>document.querySelector('#conversation').checkVisibility()), 'mini checker: the screenshot link opens the conversation view');
+    await m.close();
+  }
   await b.close();
   console.log(`UI: ${pass} checks passed, ${fail} failed`);
   if(fail){ console.log(errsOut.join('\n')); process.exit(1); }

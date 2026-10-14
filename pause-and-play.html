@@ -27,6 +27,7 @@
   .pp-quick-row{ display:flex; flex-wrap:wrap; gap:.5rem; }
   .pp-quick-btn{ font:inherit; font-weight:600; font-size:.95rem; min-height:48px; padding:.5rem 1.1rem; border-radius:999px; border:1px solid #D9C8F0; background:#F3EEF9; color:#3C3350; cursor:pointer; text-align:left; }
   .pp-quick-btn:hover{ background:#EDE3F8; }
+  .read a.pp-quick-link{ display:inline-flex; align-items:center; gap:.3rem; box-sizing:border-box; text-decoration:none; color:#3C3350; }
   .pp-quick-out{ margin:.7rem 0 0; min-height:1.2em; }
   .pp-quick-out:empty{ display:none; }
   .pp-quick-note{ margin:.6rem 0 0; font-size:.9rem; color:#5A5346; }
@@ -100,6 +101,9 @@
   .pp-card.is-paper{ --c1:rgba(251,248,240,.9); --c2:rgba(238,232,220,.84); }
   .pp-card.is-words{ --c1:rgba(241,249,236,.84); --c2:rgba(255,248,238,.8); }
   .pp-card.is-breathe{ --c1:rgba(246,238,248,.84); --c2:rgba(238,244,250,.8); cursor:pointer; font:inherit; text-align:left; width:100%; }
+  .pp-card.is-dojo{ --c1:rgba(236,246,238,.86); --c2:rgba(250,240,226,.82); }
+  .pp-card.is-drive{ --c1:rgba(232,244,232,.86); --c2:rgba(238,244,250,.82); }
+  .pp-card.is-video{ --c1:rgba(253,238,242,.86); --c2:rgba(255,243,214,.82); }
   .pp-card.is-keep{ --c1:rgba(255,248,222,.84); --c2:rgba(253,238,242,.8); }
   .pp-why{ background:rgba(255,253,247,.82) !important; }
   .pp-why{ margin-top:.4rem; }
@@ -180,6 +184,7 @@
   <div class="pp-quick-row">
     <button type="button" class="pp-quick-btn" id="pp-pick"><span aria-hidden="true">&#127922;</span> Pick one for me (2 minutes)</button>
     <button type="button" class="pp-quick-btn" id="pp-tonight"><span aria-hidden="true">&#127769;</span> Tonight only: a 3-minute wind-down</button>
+    <a class="pp-quick-btn pp-quick-link" href="/surprise.html"><span aria-hidden="true">&#10024;</span> Surprise me: anything on the site</a>
   </div>
   <p class="pp-quick-out" id="pp-pick-out" aria-live="polite"></p>
   <p class="pp-quick-note">The wind-down is silent: one minute of slow breathing, one minute with a quiet picture, and one kind sentence. You can stop at any time.</p>
@@ -200,7 +205,7 @@
 </div>
 
 <div class="try-this pp-why pp-what">
-  <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site: a handful of gentle games for when your mind needs a rest. Breathe in the Night Garden, take the Frequency Journey, spell words in Word Bloom, solve a crossword, or find words in a quiet word search. There are no timers and no way to lose.</p>
+  <p><strong>What is Pause &amp; Play?</strong> It’s the calm corner of the site, and every game on it is here: gentle games for when your mind needs a rest. Breathe in the Night Garden, play Tidbit and Sugarfoot’s Arcade, wander the Bears Dojo, move the ball in the Re-check Drive, spell words in Word Bloom, solve a crossword, find words in a quiet word search, or make a cartoon music video. There are no timers and no way to lose.</p>
   <p>Every level you finish counts, and now and then something new appears in the living garden behind every page and joins the animals playing there. <a href="/keepsakes.html">My garden</a> keeps a list of everything that has arrived. A few minutes here is a lovely way to settle before a hard conversation, or to wind down at night. Nothing you type or choose is sent anywhere.</p>
 </div>
 
@@ -223,9 +228,21 @@
   <a class="pp-card is-journey is-wide" href="/frequency-journey.html" aria-labelledby="pp-t3" aria-describedby="pp-n3 pp-d3 pp-m3">
     <span class="pp-tag" id="pp-n3">New</span>
     <span class="pp-ico" aria-hidden="true">&#127925;</span>
-    <h3 id="pp-t3">The Frequency Journey</h3>
-    <p id="pp-d3">Pick Tidbit or Sugarfoot, then pick a game: gather every treat in a maze while grumpy little clouds of Static drift about, or hop over a busy road and ride the logs across a river to the doghouses.</p>
-    <span id="pp-m3" class="pp-meta">A maze chase and a crossing game · easy controls · no game over</span>
+    <h3 id="pp-t3">Tidbit and Sugarfoot’s Arcade</h3>
+    <p id="pp-d3">Five gentle classic games with the two pups: a maze chase past grumpy little clouds of Static, a crossing over a busy road and a river, a wagon-trail journey, a brick breaker and a catch game.</p>
+    <span id="pp-m3" class="pp-meta">Five games · easy controls · no game over</span>
+  </a>
+  <a class="pp-card is-dojo" href="/bears-dojo.html" aria-labelledby="pp-t10" aria-describedby="pp-d10 pp-m10">
+    <span class="pp-ico" aria-hidden="true">&#128059;</span>
+    <h3 id="pp-t10">The Bears Dojo</h3>
+    <p id="pp-d10">Wander a quiet temple garden while two bears tend it, build your own bear, then step inside for something gentle.</p>
+    <span id="pp-m10" class="pp-meta">As long as you like</span>
+  </a>
+  <a class="pp-card is-drive" href="/recheck-drive.html" aria-labelledby="pp-t11" aria-describedby="pp-d11 pp-m11">
+    <span class="pp-ico" aria-hidden="true">&#127944;</span>
+    <h3 id="pp-t11">The Re-check Drive</h3>
+    <p id="pp-d11">A calm football game: do small, kind re-checks for real, and each one moves the ball toward a field goal.</p>
+    <span id="pp-m11" class="pp-meta">No clock · alone or with someone</span>
   </a>
   <a class="pp-card is-bloom" href="/word-bloom.html" aria-labelledby="pp-t4" aria-describedby="pp-n4 pp-d4 pp-m4">
     <span class="pp-tag" id="pp-n4">New</span>
@@ -234,25 +251,24 @@
     <p id="pp-d4">Swipe across the petals to spell words and fill a little crossword.</p>
     <span id="pp-m4" class="pp-meta" data-meta="bloom">Thousands of wheels in five sizes</span>
   </a>
-  <a class="pp-card is-xw" href="/quiet-crossword.html" aria-labelledby="pp-t5" aria-describedby="pp-n5 pp-d5 pp-m5">
-    <span class="pp-tag" id="pp-n5">New</span>
+  <a class="pp-card is-xw" href="/quiet-crossword.html" aria-labelledby="pp-t5" aria-describedby="pp-d5 pp-m5 pp-m6">
     <span class="pp-ico" aria-hidden="true">&#9999;&#65039;</span>
-    <h3 id="pp-t5">Quiet Crossword</h3>
-    <p id="pp-d5">A small, friendly crossword with a new themed one every day, and thousands more to play.</p>
-    <span id="pp-m5" class="pp-meta" data-meta="xw">Made for your phone</span>
-  </a>
-  <a class="pp-card is-paper" href="/daily-ledger-crossword.html" aria-labelledby="pp-t6" aria-describedby="pp-n6 pp-d6 pp-m6">
-    <span class="pp-tag" id="pp-n6">New</span>
-    <span class="pp-ico" aria-hidden="true">&#128240;</span>
-    <h3 id="pp-t6">The Daily Ledger Crossword</h3>
-    <p id="pp-d6">A newspaper-style crossword: a new Mini every day, a bigger grid that grows through the week, and a Big Sunday on Sundays.</p>
-    <span id="pp-m6" class="pp-meta" data-meta="paper">Five sizes, and the whole collection to play any time</span>
+    <h3 id="pp-t5">Crosswords</h3>
+    <p id="pp-d5">Two ways to play: gentle levels made for a phone (Quiet Crossword), or a newspaper daily from a quick Mini to a Big Sunday (the Daily Ledger). Choose at the top of the page.</p>
+    <span id="pp-m5" class="pp-meta" data-meta="xw">Gentle levels, made for your phone</span>
+    <span id="pp-m6" class="pp-meta" data-meta="paper">Newspaper daily, in five sizes</span>
   </a>
   <a class="pp-card is-words" href="/quiet-words.html" aria-labelledby="pp-t7" aria-describedby="pp-d7 pp-m7">
     <span class="pp-ico" aria-hidden="true">&#128269;</span>
     <h3 id="pp-t7">Quiet Words</h3>
     <p id="pp-d7">A gentle word search. Every word leaves a kind thought behind.</p>
     <span id="pp-m7" class="pp-meta" data-meta="words">A new theme each day, and hundreds more</span>
+  </a>
+  <a class="pp-card is-video" href="/frequency-buddies-music-video-maker.html" aria-labelledby="pp-t12" aria-describedby="pp-d12 pp-m12">
+    <span class="pp-ico" aria-hidden="true">&#127916;</span>
+    <h3 id="pp-t12">Make a cartoon music video</h3>
+    <p id="pp-d12">Pick the stage, lights, costumes, moves and who is on stage, then play your own music video.</p>
+    <span id="pp-m12" class="pp-meta">About 5 minutes · fun with kids</span>
   </a>
   <button type="button" class="pp-card is-breathe" data-breathe aria-labelledby="pp-t8" aria-describedby="pp-d8 pp-m8">
     <span class="pp-ico" aria-hidden="true">&#129767;</span>

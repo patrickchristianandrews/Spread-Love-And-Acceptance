@@ -220,6 +220,35 @@
   .bb-table th, .bb-table td{ padding:.6rem .8rem; text-align:left; border-bottom:1px solid #E3D3F0; vertical-align:top; }
   .bb-table thead th{ font-family:"IBM Plex Mono", monospace; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:#6B4F8A; }
   @media (max-width:520px){ .bb-fx > div{ grid-template-columns:1fr; gap:.1rem; } }
+  /* the two ways in (music, or a plain background sound) and the background sounds themselves: once the Sound Toolkit page */
+  .cs-modes{ margin:0 0 1.4rem; }
+  .cs-modes-k{ margin:0 0 .45rem; font:600 .78rem "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); }
+  .cs-modes ul{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:.6rem; }
+  .cs-modes li{ margin:0; max-width:none; }
+  .cs-modes a{ display:flex; flex-direction:column; gap:.15rem; min-height:44px; box-sizing:border-box; padding:.75rem 1rem; border-radius:16px; border:2px solid #C9B3EA; background:#FFFFFF; color:var(--ink) !important; text-decoration:none !important; }
+  .cs-modes a:hover{ border-color:#6B4F8A; background:#F7F1FC; }
+  .cs-modes a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+  .cs-modes strong{ font:600 1.08rem/1.25 "Fraunces", Georgia, serif; }
+  .cs-modes span{ font-size:.92rem; color:var(--ink-soft); line-height:1.4; }
+  #background{ margin-top:2.5rem; scroll-margin-top:4.5rem; }
+  #brain-breakers{ scroll-margin-top:4.5rem; }
+  .bg-rack{ padding:1.1rem 1.2rem; border-radius:20px; border:1px solid var(--line); background:var(--paper-deep, #ECE2C4); }
+  .bg-note{ margin:0 0 1rem; padding:.8rem 1rem; border-left:4px solid var(--focus, #2B5B8C); border-radius:6px; background:#E7EEF4; font-size:.93rem; line-height:1.55; }
+  .bg-note p{ margin:0 0 .5rem; max-width:none; } .bg-note p:last-child{ margin-bottom:0; }
+  .bg-track{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:.75rem; margin:0 0 .8rem; padding:.9rem 1rem; border-radius:12px; border:1px solid var(--line); background:var(--paper, #F5EFDE); }
+  .bg-meta{ flex:1 1 16em; min-width:0; font-size:.92rem; }
+  .bg-meta strong{ display:block; font-size:1.02rem; margin-bottom:.1rem; }
+  .bg-meta span{ color:var(--ink-soft); }
+  .bg-rack button{ font:600 1rem/1.2 "Lora", Georgia, serif; min-height:44px; min-width:84px; padding:.55rem 1.2rem; border-radius:999px; border:0; background:#2B2620; color:#fff; cursor:pointer; flex-shrink:0; }
+  .bg-rack button[aria-pressed="true"]{ background:#3E6B4C; }
+  .bg-rack button:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:3px; }
+  .bg-master{ display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; justify-content:space-between; margin-top:1rem; }
+  .bg-master label{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; font-size:.92rem; flex:1 1 220px; min-width:0; }
+  .bg-master input[type="range"]{ flex:1 1 8em; min-width:0; min-height:44px; accent-color:#3E6B4C; }
+  .bg-rack #bg-stop-all{ background:#524B3E; }
+  .bg-status{ font-size:.9rem; min-height:1.4em; margin:.5rem 0 0; }
+  .bg-warn{ font-size:.88rem; color:var(--ink-soft); margin:.8rem 0 0; }
+  @media (max-width:480px){ .bg-track{ flex-direction:column; align-items:stretch; } .bg-rack{ padding:.9rem .8rem; } }
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -296,6 +325,14 @@
   <div class="rule" aria-hidden="true"></div>
 
   <main>
+
+    <nav class="cs-modes no-bubble" aria-label="Calm sounds and music: two ways in">
+      <p class="cs-modes-k">Calm sounds and music: two ways in</p>
+      <ul>
+        <li><a href="#brain-breakers" data-mode="music"><strong>Music (Brain Breakers)</strong><span>Four short instrumental pieces, with a visualizer.</span></a></li>
+        <li><a href="#background" data-mode="background"><strong>Background sounds</strong><span>A low hum, a soft flutter or brown noise.</span></a></li>
+      </ul>
+    </nav>
 
     <section id="senses" class="no-bubble" aria-labelledby="senses-h"></section>
 
@@ -436,6 +473,138 @@
         });
       });
     </script>
+
+    <section id="background" aria-labelledby="bg-h">
+      <div class="kicker">Background sounds</div>
+      <h2 class="live-h" id="bg-h">Calm-down sounds: a low hum, a soft flutter, brown noise</h2>
+      <p class="lede">Three simple background sounds to try while you settle. Also called the Sound Toolkit. A companion to <a href="/wp-11.html">your calm-down plan (the Calm-Down Kit)</a>.</p>
+      <div class="bg-rack">
+        <div class="bg-note">
+          <p>Some people like one of these in the background while they settle; others don’t, and that’s useful to know too. This is a matter of taste, not a treatment. Nothing here is shown to relieve stress or change how your body works. If a sound does nothing for you, the other settling steps in <a href="/wp-11-in-depth.html#moment">the Calm-Down Kit</a> will serve you better.</p>
+          <p class="pillar-note">This puts <a href="/five-pillars.html#read-your-state">Pillar III (“Read your state first”)</a> to work. In you: you learn which surroundings help you settle. Between you and others: you can say “I’m taking ten minutes with some quiet sound, then I’ll come back,” and keep the promise. See <a href="/five-pillars.html">the Five Pillars</a>.</p>
+          <p>Try one at a time, at a low volume, and notice how it actually feels to you.</p>
+        </div>
+
+        <div class="bg-track">
+          <div class="bg-meta">
+            <strong id="t-sub">Low hum</strong>
+            <span>A steady, very low tone (40 vibrations a second, written 40&nbsp;Hz). Phone and laptop speakers often can’t play a tone this low, so you may need headphones to hear it.</span>
+          </div>
+          <button type="button" data-stem="sub" aria-pressed="false" aria-describedby="t-sub">Start</button>
+        </div>
+        <div class="bg-track">
+          <div class="bg-meta">
+            <strong id="t-pulse">Soft flutter</strong>
+            <span>A mid tone that switches on and off 40 times a second, so it sounds like a fast, even flutter. Some people enjoy it; no particular effect has been shown.</span>
+          </div>
+          <button type="button" data-stem="pulse" aria-pressed="false" aria-describedby="t-pulse">Start</button>
+        </div>
+        <div class="bg-track">
+          <div class="bg-meta">
+            <strong id="t-brown">Brown noise</strong>
+            <span>A smooth, low hiss, a bit like distant surf. It can cover uneven background sounds.</span>
+          </div>
+          <button type="button" data-stem="brown" aria-pressed="false" aria-describedby="t-brown">Start</button>
+        </div>
+
+        <div class="bg-master">
+          <label for="bg-vol">Volume <input type="range" id="bg-vol" min="0" max="1" step="0.05" value="0.5"></label>
+          <button type="button" id="bg-stop-all">Stop all</button>
+        </div>
+        <p class="bg-status" id="bg-status" role="status"></p>
+        <p class="bg-warn">Start low, especially with headphones: low tones can feel stronger than you expect. Sounds stop when you leave or hide this page, or turn on Quiet mode.</p>
+        <p class="bg-warn"><a href="/wp-11.html">&larr; Back to the Calm-Down Kit (WP-11)</a> &middot; <a href="/workpapers/fill/wp-11.html">Fill in your kit</a> &middot; <a href="#brain-breakers">The music</a></p>
+      </div>
+    </section>
+    <script>
+    /* Background sounds (once /wp-11-sound-toolkit.html): three sounds made in the browser, nothing downloaded,
+       nothing kept. Each fades in and out so nothing starts with a click. */
+    (function () {
+      'use strict';
+      var ctx = null, master = null;
+      var nodes = { sub: null, pulse: null, brown: null };
+      var NAMES = { sub: 'Low hum', pulse: 'Soft flutter', brown: 'Brown noise' };
+      var vol = document.getElementById('bg-vol'), status = document.getElementById('bg-status');
+      if (!vol || !status) return;
+      function initAudio() {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return false;
+        if (!ctx) { ctx = new AC(); master = ctx.createGain(); master.gain.value = parseFloat(vol.value); master.connect(ctx.destination); }
+        if (ctx.state === 'suspended') ctx.resume();
+        return true;
+      }
+      function fadeOut(gain, stopFns) {
+        var t = ctx.currentTime;
+        gain.gain.cancelScheduledValues(t);
+        gain.gain.setTargetAtTime(0, t, 0.05);
+        setTimeout(function () { stopFns.forEach(function (f) { try { f(); } catch (e) {} }); }, 300);
+      }
+      function startGenerator(type) {
+        var out = ctx.createGain();
+        out.gain.value = 0;
+        out.connect(master);
+        if (type === 'sub') {
+          var osc = ctx.createOscillator();
+          osc.type = 'sine'; osc.frequency.value = 40;
+          osc.connect(out); osc.start();
+          out.gain.setTargetAtTime(0.5, ctx.currentTime, 0.1);
+          return { stop: function () { fadeOut(out, [function () { osc.stop(); osc.disconnect(); out.disconnect(); }]); } };
+        }
+        if (type === 'pulse') {
+          // a 200 Hz tone whose loudness is switched on and off 40 times a second by a square wave
+          var carrier = ctx.createOscillator(), gate = ctx.createGain(), mod = ctx.createOscillator(), depth = ctx.createGain();
+          carrier.type = 'sine'; carrier.frequency.value = 200;
+          mod.type = 'square'; mod.frequency.value = 40;
+          gate.gain.value = 0.5; depth.gain.value = 0.5;
+          mod.connect(depth); depth.connect(gate.gain);
+          carrier.connect(gate); gate.connect(out);
+          carrier.start(); mod.start();
+          out.gain.setTargetAtTime(0.18, ctx.currentTime, 0.1);
+          return { stop: function () { fadeOut(out, [function () { carrier.stop(); mod.stop(); carrier.disconnect(); mod.disconnect(); gate.disconnect(); out.disconnect(); }]); } };
+        }
+        // brown noise: each sample drifts a little from the last one
+        var size = ctx.sampleRate * 2, buffer = ctx.createBuffer(1, size, ctx.sampleRate), data = buffer.getChannelData(0), lastOut = 0;
+        for (var i = 0; i < size; i++) { var white = Math.random() * 2 - 1; data[i] = (lastOut + 0.02 * white) / 1.02; lastOut = data[i]; data[i] *= 3.0; }
+        var noise = ctx.createBufferSource();
+        noise.buffer = buffer; noise.loop = true;
+        noise.connect(out); noise.start();
+        out.gain.setTargetAtTime(0.3, ctx.currentTime, 0.1);
+        return { stop: function () { fadeOut(out, [function () { noise.stop(); noise.disconnect(); out.disconnect(); }]); } };
+      }
+      function setButton(type, on) {
+        var b = document.querySelector('[data-stem="' + type + '"]');
+        b.setAttribute('aria-pressed', String(on));
+        b.textContent = on ? 'Stop' : 'Start';
+      }
+      function quietOn() { try { return !!(window.TOLQuiet && window.TOLQuiet.on()); } catch (e) { return false; } }
+      function toggle(type) {
+        if (nodes[type]) { nodes[type].stop(); nodes[type] = null; setButton(type, false); status.textContent = NAMES[type] + ' stopped.'; return; }
+        if (quietOn()) { status.textContent = 'Quiet mode is on, so nothing plays. Turn it off in the site settings to try a sound.'; return; }
+        if (!initAudio()) { status.textContent = 'This browser can’t play generated sound.'; return; }
+        nodes[type] = startGenerator(type); setButton(type, true);
+        status.textContent = NAMES[type] + ' playing.';
+      }
+      function stopAll() {
+        var any = false;
+        Object.keys(nodes).forEach(function (k) { if (nodes[k]) { nodes[k].stop(); nodes[k] = null; any = true; } setButton(k, false); });
+        if (any) status.textContent = 'All sounds stopped.';
+      }
+      Array.prototype.forEach.call(document.querySelectorAll('[data-stem]'), function (b) { b.addEventListener('click', function () { toggle(b.getAttribute('data-stem')); }); });
+      document.getElementById('bg-stop-all').addEventListener('click', stopAll);
+      vol.addEventListener('input', function () { if (master) master.gain.setTargetAtTime(parseFloat(vol.value), ctx.currentTime, 0.05); });
+      document.addEventListener('visibilitychange', function () { if (document.hidden) stopAll(); });
+      window.addEventListener('pagehide', stopAll);
+      document.addEventListener('tol-quiet', function () { if (quietOn()) stopAll(); });
+      // the visualizer above fills in after the page loads and pushes things down: land on the part the address asks for
+      if (/^#(background|brain-breakers|finder)$/.test(location.hash)) {
+        window.addEventListener('load', function () {
+          setTimeout(function () { var t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 350);
+        });
+      }
+    })();
+    </script>
+    <div data-tool-guide="calm-sounds"></div>
+    <script src="/assets/js/tool-guide.js" defer></script>
 
   </main>
 </div>

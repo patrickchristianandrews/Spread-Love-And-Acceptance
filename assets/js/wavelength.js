@@ -1409,23 +1409,26 @@
 
   // Opened from someone's Wave Code link (wavelength.html?compare=SFNA&from=Priya): read it, then take it out of the
   // address bar so the code and name don't linger in history or get shared on by accident.
-  const fromLink = (function readLink() {
-    // "#together=…" (collab.js): the newest Wave Code in it that isn't yours
+  // "#together=…" (collab.js): the newest Wave Code in it that isn't yours
+  function readTogether() {
     const C = window.TOLCollab;
-    if (C && /^#together=/.test(location.hash || '')) {
-      const env = C.read(location.hash);
-      if (env && env.t === 'wavelength') {
-        try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
-        const me = C.me().id;
-        const ids = Object.keys(env.p).filter(k => k !== me && /^[QS][FT][DN][EA]$/.test(String((env.p[k].d || {}).c || '').toUpperCase())).sort((a, b) => (env.p[b].at || 0) - (env.p[a].at || 0));
-        if (!ids.length) return false;
-        const p = env.p[ids[0]];
-        if (p.d.rel === 'friends') ARRIVE.friends = true;
-        C.saveMe();
-        S.their = { code: String(p.d.c).toUpperCase(), from: cleanName(p.n) }; S.view = 'incoming'; S.ch = null;
-        return true;
-      }
-    }
+    if (!C || !/^#together=/.test(location.hash || '')) return false;
+    const env = C.read(location.hash);
+    if (!env || env.t !== 'wavelength') return false;
+    try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
+    const me = C.me().id;
+    const ids = Object.keys(env.p).filter(k => k !== me && /^[QS][FT][DN][EA]$/.test(String((env.p[k].d || {}).c || '').toUpperCase())).sort((a, b) => (env.p[b].at || 0) - (env.p[a].at || 0));
+    if (!ids.length) return false;
+    const p = env.p[ids[0]];
+    if (p.d.rel === 'friends') ARRIVE.friends = true;
+    C.saveMe();
+    S.their = { code: String(p.d.c).toUpperCase(), from: cleanName(p.n) }; S.view = 'incoming'; S.ch = null;
+    return true;
+  }
+  // a link opened in a tab already on this page only changes the part after the #
+  window.addEventListener('hashchange', () => { if (readTogether()) { save(); render(); const h = root.querySelector('.wl-incoming h2'); if (h) { h.setAttribute('tabindex', '-1'); h.scrollIntoView({ block: 'start' }); h.focus({ preventScroll: true }); } } });
+  const fromLink = (function readLink() {
+    if (readTogether()) return true;
     let q; try { q = new URLSearchParams(location.search); } catch (e) { return false; }
     if (!q.has('compare') && !q.has('from')) return false;
     const code = extractCode(q.get('compare') || ''), from = cleanName(q.get('from') || '');

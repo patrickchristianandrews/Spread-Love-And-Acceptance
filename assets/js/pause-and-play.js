@@ -61,7 +61,9 @@
     ['/word-bloom.html', 'Word Bloom', 'spell a few words from the petals'],
     ['/night-garden.html', 'The Night Garden', 'breathe with the glowing light for a few rounds'],
     ['/quiet-crossword.html', 'Quiet Crossword', 'fill in two or three clues, then stop'],
-    ['/frequency-journey.html', 'The Frequency Journey', 'play one short round as Tidbit or Sugarfoot']
+    ['/frequency-journey.html', 'Tidbit and Sugarfoot’s Arcade', 'play one short round as Tidbit or Sugarfoot'],
+    ['/daily-ledger-crossword.html', 'the Daily Ledger Crossword', 'try today’s 5x5 Mini, or just a few clues'],
+    ['/bears-dojo.html', 'the Bears Dojo', 'wander the garden with the two bears for a minute or two']
   ], lastPick = -1;
   var pickBtn = document.getElementById('pp-pick'), pickOut = document.getElementById('pp-pick-out');
   if (pickBtn && pickOut) pickBtn.addEventListener('click', function () {

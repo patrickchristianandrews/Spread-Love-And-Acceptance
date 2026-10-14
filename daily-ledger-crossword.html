@@ -20,6 +20,13 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/assets/css/games.css">
 <style>
+  /* Crosswords: one tool, two ways to play (this page and its twin share quiet-crossword.js) */
+  .xw-modes{ position:relative; z-index:2; display:flex; flex-wrap:wrap; align-items:center; gap:.45rem; margin:0 0 .9rem; }
+  .xw-modes-k{ font:600 .76rem/1.2 "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft, #5A5346); margin-right:.15rem; }
+  .xw-modes a{ display:inline-flex; flex-direction:column; justify-content:center; min-height:44px; box-sizing:border-box; padding:.3rem .95rem; border-radius:14px; border:2px solid #D9C8F0; background:#fff; color:#4E3F6B !important; text-decoration:none !important; font-weight:600; line-height:1.2; }
+  .xw-modes a small{ font-weight:400; font-size:.78rem; color:#6A5E80; }
+  .xw-modes a[aria-current="page"]{ background:#EDE3F8; border-color:#6B4F8A; color:#3C3350 !important; }
+  .xw-modes a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
   .xw[hidden]{ display:none; }
   .xw{ position:relative; padding:.9rem .9rem 1rem; }
   .xw-head{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-bottom:.6rem; }
@@ -176,6 +183,11 @@
   <a class="gm-tab" href="/daily-ledger-crossword.html" aria-current="page">&#128240; Newspaper</a>
   <a class="gm-tab" href="/quiet-words.html">&#128269; Words</a>
   <span class="gm-chip" data-rewards-chip></span>
+</nav>
+<nav class="xw-modes" aria-label="Crosswords: two ways to play">
+  <span class="xw-modes-k">Crosswords:</span>
+  <a href="/quiet-crossword.html">Gentle levels<small>Five small levels, made for a phone</small></a>
+  <a href="/daily-ledger-crossword.html" aria-current="page">Newspaper daily<small>A Mini every day, up to a Big Sunday</small></a>
 </nav>
 <p class="simple-lede xw-intro">A real newspaper-style crossword. Every day there’s a new 5&times;5 Mini and one bigger grid that grows through the week, with a 13&times;13 Big Sunday on Sundays. Today’s puzzles are the same for everyone, and nearly two thousand more wait under the sizes below. Each word glows when it’s right, and there’s no timer.</p>
 

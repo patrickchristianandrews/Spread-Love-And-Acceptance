@@ -825,16 +825,16 @@ window.TOLToolGuideData = {
     },
 
     'workpaper-suite': {
-      name: 'All the worksheets for your situation, in order',
+      name: 'Your worksheets, in order, with a report',
       reg: 'suite',
-      pages: ['/workpapers/fill/suite.html'],
+      pages: ['/workpapers/fill/suite.html', '/full-path.html'],
       two: true,
-      when: 'When you’d like to work through several worksheets in a sensible order for your situation (just you, a couple, a household, co-parents, a team), and get one report at the end.',
-      notWhen: 'Not all in one sitting. One sheet a week is plenty; <a href="/week-0.html">Six gentle weeks</a> paces it for you.',
+      when: 'When you’d like to work through several worksheets in a sensible order for your situation (just you, a couple, a household, co-parents, a team), and get one report at the end. Fill them in one at a time, or all of them in one PDF (“Full path package”).',
+      notWhen: 'Not all in one sitting. One sheet a week is plenty; <a href="/prog-01.html">Six gentle weeks</a> paces it for you.',
       time: 'Each sheet takes 5 to 30 minutes; the whole road takes a few weeks.',
-      result: 'Your filled-in sheets in one PDF you can type into or print, and a short report written for your road.',
+      result: 'Your filled-in sheets in one PDF you can type into or print, and a report written for your road: findings, things worth a second look, and a short plan.',
       next: [
-        ['/week-0.html', 'Six gentle weeks, starting with week 0', 'one sheet a week'],
+        ['/prog-01.html', 'Six gentle weeks', 'one sheet a week, with calendar reminders'],
         ['/is-the-setup-working.html', 'Is the setup working for everyone?', 'see how the split is going'],
         ['/method-and-limits.html', 'How the scores work', 'the plain rules behind each one']
       ],
@@ -989,22 +989,22 @@ window.TOLToolGuideData = {
     },
 
     'calm-sounds': {
-      name: 'Calm-down sounds',
-      reg: 'sounds',
-      pages: ['/wp-11-sound-toolkit.html'],
-      when: 'While you settle after a hard moment, or to cover background noise when you need to calm down or focus.',
-      notWhen: 'Not a treatment. If a sound feels worse, stop; it’s a matter of taste.',
-      time: 'A few minutes.',
-      result: 'A sound that helps you, noted in your <a href="/wp-11.html">calm-down plan</a> so it’s ready next time.',
+      name: 'Calm sounds and music',
+      reg: 'music',
+      pages: ['/soundscapes.html', '/wp-11-sound-toolkit.html'],
+      when: 'While you settle after a hard moment, to cover background noise when you need to calm down or focus, or for a short real break. Music for a break; a plain background sound for something steady.',
+      notWhen: 'Not a treatment. If a sound or a piece feels worse, stop; it’s a matter of taste.',
+      time: 'A few minutes, or a piece of 2 to 4 minutes.',
+      result: 'A sound or a piece that helps you, noted in your <a href="/wp-11.html">calm-down plan</a> so it’s ready next time.',
       next: [
         ['/wp-11.html', 'Calm-down plan', 'add the sound that helps'],
         ['/night-garden.html', 'Breathing game', 'slow breaths, nothing to win'],
         ['/upset-right-now.html', 'Upset right now?', 'five calm minutes']
       ],
       research: [],
-      idea: 'The three sounds (a low hum, a soft flutter and brown noise) are this site’s choice. There’s no strong research on which background sound calms people best.',
+      idea: 'The three background sounds (a low hum, a soft flutter and brown noise) are this site’s choice, and the music is by Christian’s Lab. There’s no strong research on which sound calms people best.',
       limits: 'A matter of taste, not a treatment. Keep the volume low.',
-      privacy: 'Nothing is kept or sent.'
+      privacy: 'The background sounds keep nothing. The music keeps your favourite and what you played in this browser. Nothing is sent anywhere.'
     },
 
     'drift': {
@@ -1012,7 +1012,7 @@ window.TOLToolGuideData = {
       reg: 'drift',
       pages: ['/calm-visualizer.html'],
       when: 'When you want a few quiet minutes with nothing to do: slow colours, kind words and gentle tones (headphones help).',
-      notWhen: 'If moving light or colour is uncomfortable for you, try <a href="/wp-11-sound-toolkit.html">sounds only</a> instead.',
+      notWhen: 'If moving light or colour is uncomfortable for you, try <a href="/soundscapes.html#background">sounds only</a> instead.',
       time: 'About 5 minutes.',
       result: 'A few quiet minutes and a slower breath.',
       next: [
@@ -1074,8 +1074,8 @@ window.TOLToolGuideData = {
     },
 
     'full-package': {
-      name: 'One PDF of every worksheet, and a report',
-      reg: 'package',
+      name: 'Your worksheets, in order, with a report',
+      reg: 'suite',
       pages: ['/full-path.html'],
       two: true,
       when: 'When you want every worksheet for your situation in one fillable PDF, and a detailed report written from your own answers, alone or with 2 to 8 people.',
@@ -1083,7 +1083,7 @@ window.TOLToolGuideData = {
       time: 'An hour or more, in parts.',
       result: 'One PDF with your filled-in sheets and a report: what stands out, what’s worth a second look, and a short plan.',
       next: [
-        ['/week-0.html', 'Six gentle weeks', 'the same sheets, one a week'],
+        ['/prog-01.html', 'Six gentle weeks', 'the same sheets, one a week'],
         ['/method-and-limits.html', 'How the scores work', 'the plain rules behind each one'],
         ['/workpapers/fill/suite.html', 'All the worksheets on screen', 'fill them in here instead']
       ],
@@ -1119,8 +1119,7 @@ window.TOLToolGuideData = {
     },
 
     'week-0': {
-      name: 'Week 0: reminders in your own calendar',
-      reg: 'week0',
+      name: 'Week 0: a five-minute start to Six gentle weeks',
       pages: ['/week-0.html'],
       when: 'Before the six weeks: five minutes to see what they are, how long each takes, and to add a reminder for each week to your own calendar.',
       notWhen: 'Nothing to fill in yet, and nothing to get right.',

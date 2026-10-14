@@ -47,6 +47,8 @@
   function registryName(t) {
     var list = window.TOLTools;
     if (!t.reg || !Array.isArray(list)) return '';
+    // a merged tool's old id still finds the tool it now lives in
+    if (typeof window.TOLToolById === 'function') { var hit = window.TOLToolById(t.reg); return hit ? hit.name || '' : ''; }
     for (var i = 0; i < list.length; i++) if (list[i] && list[i].id === t.reg) return list[i].name || '';
     return '';
   }

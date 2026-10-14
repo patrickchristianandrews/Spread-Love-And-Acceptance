@@ -15,6 +15,8 @@
      benefit the main reason to use it, in a few words
      top     1–6 for the "Start here" strip on /tools.html (the tools testers used and liked most), else 0
      kw      extra words people might search for
+     modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
+   Old ids of merged tools: window.TOLToolAliases (old id -> new id); window.TOLToolById(id) follows them.
    Nothing here is stored or sent. */
 (function () {
   'use strict';
@@ -227,11 +229,12 @@
       gets: 'One small move that fits their state. The second level builds a plan you can print.',
       mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Lower the heat without forced cheer',
       kw: 'tense mood bad mood soften defuse' },
-    { id: 'sounds', name: 'Calm-down sounds', brand: 'the Sound Toolkit', href: '/wp-11-sound-toolkit.html', type: 'calm', also: ['health'],
-      does: 'Three simple background sounds: a low hum, a soft flutter and brown noise.',
-      gets: 'A sound to try while you settle. A matter of taste, not a treatment.',
-      mins: 3, time: 'A few minutes', who: ['solo'], benefit: 'Something steady in the background',
-      kw: 'brown noise white noise hum sound' },
+    { id: 'music', name: 'Calm sounds and music', brand: 'Brain Breakers and the Sound Toolkit', href: '/soundscapes.html', type: 'calm', also: ['health', 'play'],
+      modes: [['Music', '/soundscapes.html#brain-breakers'], ['Background sounds', '/soundscapes.html#background']],
+      does: 'Two ways to press play while you settle: four instrumental pieces with a visualizer, or a plain background sound (a low hum, a soft flutter or brown noise).',
+      gets: 'A short break for your mind, or something steady in the background. A matter of taste, not a treatment.',
+      mins: 5, time: 'A few minutes, or as long as you like', who: ['solo'], benefit: 'A real break, away from words',
+      kw: 'music instrumental relax brain breakers brown noise white noise hum sound toolkit calm-down sounds background sound' },
     { id: 'drift', name: 'Slow colours and tones to wind down', brand: 'Drift', href: '/calm-visualizer.html', type: 'calm', also: ['play'],
       does: 'Pick how you feel. Slow colours, kind words and gentle tones keep you company (headphones help).',
       gets: 'A few quiet minutes with nothing to do.',
@@ -242,11 +245,6 @@
       gets: 'A few slower breaths, with no timer and nothing to lose.',
       mins: 3, time: 'A few minutes', who: ['solo'], benefit: 'Slower breathing that feels like play',
       kw: 'breathing exercise breathe game relax' },
-    { id: 'music', name: 'Calm music with a visualizer', brand: 'Brain Breakers', href: '/soundscapes.html#brain-breakers', type: 'calm', also: ['play'],
-      does: 'Four instrumental pieces, from soft to cinematic, with a music visualizer.',
-      gets: 'A short break for your mind.',
-      mins: 5, time: 'About 5 minutes a piece', who: ['solo'], benefit: 'A real break, away from words',
-      kw: 'music instrumental relax' },
 
     // ---------- Family and parenting
     { id: 'handoff', name: 'Handoff-bag checklist for two homes', brand: '', href: '/co-parenting.html#handoff-bag', type: 'family', also: ['plan'],
@@ -305,26 +303,17 @@
       gets: 'One shared week to copy or send as a text.',
       mins: 10, time: 'About 10 minutes', who: ['two'], benefit: 'Fewer crossed wires on opposite shifts',
       kw: 'shift work night shift schedule rota different hours' },
-    { id: 'suite', name: 'All the worksheets for your situation, in order', brand: 'the Workpaper Suite', href: '/workpapers/fill/suite.html', type: 'plan', also: ['load', 'self'],
-      does: 'Choose your road (just me, a couple, a home, a family, a team) and fill its worksheets in order.',
-      gets: 'One PDF to fill in on your phone or print, and a report written from your answers.',
+    { id: 'suite', name: 'Your worksheets, in order, with a report', brand: 'the Workpaper Suite, and the package and report', href: '/workpapers/fill/suite.html', type: 'plan', also: ['load', 'self'],
+      modes: [['One at a time', '/workpapers/fill/suite.html'], ['One PDF of everything', '/workpapers/fill/suite.html#full-path']],
+      does: 'Choose your road (just me, a couple, a home, a family, a team). Fill its worksheets one at a time, or all of them in one PDF.',
+      gets: 'Your filled-in sheets, and a report written from your answers: findings, things worth a second look, and a plan.',
       mins: 45, time: 'About 45 minutes, in parts', who: ['solo', 'two', 'group'], benefit: 'Everything in one place, in the right order',
-      kw: 'workpapers worksheets pdf fill in suite' },
-    { id: 'package', name: 'One PDF of every worksheet, and a report', brand: 'the package and report', href: '/full-path.html', type: 'plan', also: ['load'],
-      does: 'Every worksheet for your relationship in one fillable PDF.',
-      gets: 'A detailed report from your answers: findings, things worth a second look, and a plan.',
-      mins: 60, time: 'An hour or more, in parts', who: ['solo', 'two', 'group'], benefit: 'A full picture, written up for you',
-      kw: 'full path package report pdf' },
+      kw: 'workpapers worksheets pdf fill in suite full path package report' },
     { id: 'sixweeks', name: 'Six gentle weeks', brand: '', href: '/prog-01.html', type: 'plan', also: ['load'],
-      does: 'One small step a week, in order, alone or with anyone you share a home with.',
+      does: 'One small step a week, in order, alone or with anyone you share a home with. Start with a five-minute week 0, and add a reminder for each week to your own calendar.',
       gets: 'A before-and-after look at the end. Missing a week is fine.',
       mins: 30, time: 'About 30 minutes a week', who: ['solo', 'two', 'group'], benefit: 'A guided start, one week at a time',
-      kw: 'program course six weeks guided plan' },
-    { id: 'week0', name: 'Week 0: reminders in your own calendar', brand: '', href: '/week-0.html', type: 'plan', also: [],
-      does: 'Five minutes on what the six weeks are, and how long each takes.',
-      gets: 'A reminder for each week, added to your own calendar.',
-      mins: 5, time: 'About 5 minutes', who: ['solo', 'two', 'group'], benefit: 'A gentle start, with no streaks',
-      kw: 'calendar reminder ics start' },
+      kw: 'program course six weeks guided plan week 0 calendar reminder ics start' },
     { id: 'progress', name: 'Your progress, week by week', brand: '', href: '/workpapers/report-01.html', type: 'plan', also: [],
       does: 'Type in what your worksheets produced each week.',
       gets: 'A report that reads them side by side: where they agree, and where they don’t.',
@@ -364,11 +353,11 @@
       kw: 'quest map progress learning' },
 
     // ---------- Play
-    { id: 'pauseplay', name: 'All the calm games', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
-      does: 'Every calm game in one place, with your level and your garden.',
+    { id: 'pauseplay', name: 'Games: every calm game in one place', brand: 'Pause & Play', href: '/pause-and-play.html', type: 'play', also: ['calm'],
+      does: 'Breathing, word games, crosswords, the arcade, the Bears Dojo, the Re-check Drive and the music video maker, with your level and your garden. Or press “Pick one for me”.',
       gets: 'A gentle break whenever you want one.',
       mins: 5, time: 'As long as you like', who: ['solo'], benefit: 'Settle your mind before you talk',
-      kw: 'games calm games play' },
+      kw: 'games calm games play surprise me random pick one for me' },
     { id: 'arcade', name: 'Five gentle arcade games', brand: 'Tidbit and Sugarfoot’s Arcade', href: '/frequency-journey.html', type: 'play', also: [],
       does: 'A maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game.',
       gets: 'Classic games with the two pups, no way to lose.',
@@ -384,16 +373,12 @@
       gets: 'A kind thought for every word you find.',
       mins: 5, time: 'A few minutes', who: ['solo'], benefit: 'Quiet focus',
       kw: 'word search puzzle' },
-    { id: 'minicross', name: 'Mini crosswords', brand: 'Quiet Crossword', href: '/quiet-crossword.html', type: 'play', also: [],
-      does: 'Small, friendly crosswords in five gentle levels, made for a phone.',
-      gets: 'A short puzzle with gentle clues.',
-      mins: 5, time: 'A few minutes', who: ['solo'], benefit: 'A small puzzle you can finish',
-      kw: 'crossword mini puzzle' },
-    { id: 'dailycross', name: 'Daily crossword', brand: 'the Daily Ledger Crossword', href: '/daily-ledger-crossword.html', type: 'play', also: [],
-      does: 'A newspaper-style crossword, from a quick 5x5 mini to a big Sunday grid.',
-      gets: 'A fresh crossword with fair, friendly clues.',
-      mins: 10, time: '5 to 30 minutes', who: ['solo', 'two'], benefit: 'A daily puzzle to share',
-      kw: 'crossword daily newspaper puzzle' },
+    { id: 'crosswords', name: 'Crosswords', brand: 'Quiet Crossword and the Daily Ledger Crossword', href: '/quiet-crossword.html', type: 'play', also: [],
+      modes: [['Gentle levels', '/quiet-crossword.html'], ['Newspaper daily', '/daily-ledger-crossword.html']],
+      does: 'Two ways to play: small, friendly crosswords in five gentle levels, or a newspaper-style daily, from a quick 5x5 mini to a big Sunday grid.',
+      gets: 'A short puzzle with fair, friendly clues, and a new one every day.',
+      mins: 5, time: '5 to 30 minutes', who: ['solo', 'two'], benefit: 'A small puzzle you can finish',
+      kw: 'crossword mini puzzle daily newspaper easy crossword daily ledger quiet crossword' },
     { id: 'drive', name: 'Calm football game for small kind acts', brand: 'the Re-check Drive', href: '/recheck-drive.html', type: 'play', also: ['talk'],
       does: 'Do small, kind re-checks from the complacency playbook for real. Each one moves the ball.',
       gets: 'A field goal, and a few real kind things done. No clock.',
@@ -408,14 +393,29 @@
       does: 'Pick the stage, lights, costumes, moves and who is on stage.',
       gets: 'Your own music video to play and share.',
       mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Something silly to make together with kids',
-      kw: 'music video maker kids cartoon create' },
-    { id: 'surprise', name: 'Surprise me', brand: '', href: '/surprise.html', type: 'play', also: ['calm'],
-      does: 'One button picks a game, a guide or something calm.',
-      gets: 'Somewhere new to go when you can’t decide.',
-      mins: 1, time: 'One tap', who: ['solo'], benefit: 'No decisions needed',
-      kw: 'random surprise' }
+      kw: 'music video maker kids cartoon create' }
   ];
+
+  // Tools that were merged keep their old ids: each old id points at the tool it now lives in, so a link,
+  // a guide panel or a saved reference that names the old id still finds the right card.
+  var ALIASES = {
+    sounds: 'music',            // Calm-down sounds -> Calm sounds and music (/soundscapes.html#background)
+    package: 'suite',           // the package and report -> Your worksheets, in order, with a report (#full-path)
+    week0: 'sixweeks',          // Week 0 -> Six gentle weeks (its calendar reminders are on /prog-01.html#calendar)
+    minicross: 'crosswords',    // Quiet Crossword -> Crosswords, "Gentle levels"
+    dailycross: 'crosswords',   // the Daily Ledger Crossword -> Crosswords, "Newspaper daily"
+    surprise: 'pauseplay'       // Surprise me is a site-wide button now; the games hub has "Pick one for me"
+  };
+  var A = window.TOLToolAliases || {};
+  Object.keys(ALIASES).forEach(function (k) { A[k] = ALIASES[k]; });
 
   window.TOLToolTypes = TYPES;
   window.TOLTools = T;
+  window.TOLToolAliases = A;
+  // the tool for an id, following old (merged) ids to the tool that replaced them
+  window.TOLToolById = function (id) {
+    for (var n = 0; n < 5 && A[id]; n++) id = A[id];
+    for (var i = 0; i < T.length; i++) if (T[i].id === id) return T[i];
+    return null;
+  };
 })();
