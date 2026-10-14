@@ -541,7 +541,7 @@ CANONICAL_TO = {
 IMAGE_INFO = {
     OG_IMAGE: (1200, 630, 'image/png', 'Two friends sharing one heart, with two happy pups: Spread Love & Acceptance'),
     SEASON_VIDEO['thumb']: (1280, 720, 'image/jpeg', 'Tidbit and Sugarfoot, the two pups of the Frequency Buddies cartoon'),
-    SITE + '/assets/img/frequency-buddies-season-2-teaser.jpg': (1280, 720, 'image/jpeg', 'Frequency Buddies Season 2, coming soon: Tidbit and Sugarfoot under a starry sky'),
+    SITE + '/assets/img/frequency-buddies-season-2-teaser.jpg': (1280, 720, 'image/jpeg', 'Frequency Buddies Season 2: Tidbit and Sugarfoot under a starry sky'),
 }
 PAGE_IMAGE = {p: SEASON_VIDEO['thumb'] for p in ('frequency-buddies.html', 'frequency-buddies-shuffle.html', 'frequency-buddies-live.html', 'frequency-buddies-music-video.html', 'frequency-buddies-music-video-maker.html')}
 
@@ -550,11 +550,14 @@ AUTHOR = {'@type': 'Person', '@id': SITE + '/about.html#christian', 'name': AUTH
 PUBLISHER = {'@type': 'Organization', '@id': SITE + '/#org', 'name': BRAND, 'url': SITE + '/',
              'logo': {'@type': 'ImageObject', 'url': LOGO}}
 
-# The book, in order: the Preface and the chapters that are live today
-BOOK_PARTS = [('Preface: The work nobody sees', 'book/preface.html'), ('Chapter I: Why we get out of tune', 'book/chapter-1.html'),
+# The book, in reading order: Part One (yourself), Part Two (between us: the Preface and Chapters I to V),
+# Part Three (understanding people, seventeen chapters) and the afterword. 26 chapters and an afterword in all.
+BOOK_PARTS = [('Part One, Then: Where your lens came from', 'book/self-1-then.html'), ('Part One, Now: Your wiring, weather and words', 'book/self-2-now.html'),
+              ('Part One, Next: Shaping who you are becoming', 'book/self-3-next.html')]
+BOOK_PARTS += [('Preface: The work nobody sees', 'book/preface.html'), ('Chapter I: Why we get out of tune', 'book/chapter-1.html'),
               ('Chapter II: Is the split working?', 'book/chapter-2.html'), ('Chapter III: Full tanks and different angles', 'book/chapter-3.html'),
               ('Chapter IV: Two kinds of fair', 'book/chapter-4.html'), ('Chapter V: The monthly look-back', 'book/chapter-5.html')]
-# Part Three: Understanding people, twelve chapters on how people work (each also has an -in-depth page)
+# Part Three: Understanding people, seventeen chapters on how people work (each also has an -in-depth page)
 BOOK_PARTS += [('Part Three, Chapter %d: %s' % (i + 1, n), 'book/understanding-%s.html' % s) for i, (s, n) in enumerate([
     ('1-feelings', 'How feelings work'),
     ('2-stress', 'Stress and the nervous system'),
@@ -568,12 +571,24 @@ BOOK_PARTS += [('Part Three, Chapter %d: %s' % (i + 1, n), 'book/understanding-%
     ('10-values', 'Values, meaning and a good life'),
     ('11-healing', 'Healing after hurt'),
     ('12-helping', 'Helping others well'),
+    ('13-anger', 'Anger'),
+    ('14-personality', 'Personality, temperament and change'),
+    ('15-love', 'Closeness and love'),
+    ('16-worry', 'Worry, low mood and trauma'),
+    ('17-groups', 'Fitting in: groups, influence and culture'),
 ])]
-BOOK_ID = SITE + '/contents.html#book'
+BOOK_PARTS += [('Afterword: What the book adds up to', 'book/afterword.html')]
+BOOK_ID = SITE + '/book/#book'
+BOOK_DESC = ('A free self-help book in three parts, 26 chapters in all, and an afterword: knowing yourself (three chapters); sharing a '
+             'life, a home or a job fairly and kindly (the Preface and Chapters I to V); and understanding people, seventeen chapters '
+             'on how feelings, stress, trust, change, grief, healing, anger, personality, worry, groups and love work.')
+# The book as free PDF files (book/download.html), each in a short and a full version
+BOOK_PDFS = [('The whole book', 'whole'), ('The book for one person (Parts One and Three)', 'for-yourself'),
+             ('The book for two or more (Part Two)', 'together'), ('Understanding People (Part Three)', 'understanding')]
 
 # The middle step of each page's breadcrumb trail (name, page)
 CRUMB_PARENTS = [
-    (r'^book/', 'The book', 'contents.html'),
+    (r'^book/', 'The book', 'book/index.html'),
     (r'^library/', 'The Professor’s Library', 'library.html'),
     (r'^learn/index-in-depth', 'Stories from Philosophy', 'learn/index.html'),
     (r'^(workpapers/|wp-\d|prog-01-in)', 'Which part of the program to use', 'program.html'),
@@ -590,17 +605,22 @@ def video_ld(publisher):
 
 def series_ld(publisher):
     eps = [('s1e1', 'The Storm Over the Treehouse'), ('s1e2', 'Out of Tune'), ('s1e3', 'The Heavy Basket'), ('s1e4', 'Who Broke the Kite?'), ('s1e5', 'The Longest Night')]
+    eps2 = [('s2e1', 'The Great Big Sea'), ('s2e2', 'The Lighthouse in the Fog'), ('s2e3', 'Room for One More')]   # no video files for Season 2 yet
+    season = lambda n, name, el: {'@type': 'TVSeason', 'seasonNumber': n, 'name': name, 'numberOfEpisodes': len(el),
+                                  'episode': [{'@type': 'TVEpisode', 'episodeNumber': i + 1, 'name': t, 'url': SITE + '/frequency-buddies.html?ep=' + e} for i, (e, t) in enumerate(el)]}
     return {'@type': 'TVSeries', 'name': 'Frequency Buddies', 'description': 'A gentle animated series for all ages starring two pups, Tidbit and Sugarfoot.',
             'genre': ['Animation', 'Kids & Family'], 'inLanguage': 'en-US', 'isFamilyFriendly': True, 'url': SITE + '/frequency-buddies.html',
-            'image': SEASON_VIDEO['thumb'], 'publisher': publisher, 'numberOfSeasons': 1, 'numberOfEpisodes': len(eps),
+            'image': SEASON_VIDEO['thumb'], 'publisher': publisher, 'numberOfSeasons': 2, 'numberOfEpisodes': len(eps) + len(eps2),
             'character': [{'@type': 'Person', 'name': 'Tidbit'}, {'@type': 'Person', 'name': 'Sugarfoot'}],
-            'containsSeason': {'@type': 'TVSeason', 'seasonNumber': 1, 'name': 'Season 1: The First Adventures', 'numberOfEpisodes': len(eps),
-                               'episode': [{'@type': 'TVEpisode', 'episodeNumber': i + 1, 'name': t, 'url': SITE + '/frequency-buddies.html?ep=' + e} for i, (e, t) in enumerate(eps)]}}
+            'containsSeason': [season(1, 'Season 1: The First Adventures', eps), season(2, 'Season 2: The Great Big Sea', eps2)]}
 
 
-TOOLS = r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|is-the-setup-working|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask)'
+TOOLS = (r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|is-the-setup-working|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask'
+         r'|perspective-shifter|ladder|refusals|wavelength|write-it-through|look-back-30-days|find-your-start|how-you-take-things-in)')
+# Pages that list other pages (marked as a collection, with the site search on explore.html)
+HUBS = r'^(tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
 GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
-ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary)'
+ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|outside-help|research\.html|en-espanol)'
 
 
 def rel_url(path):
