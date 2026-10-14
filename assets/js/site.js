@@ -5368,7 +5368,8 @@
   function progressHook() {
     var lock = lsGet('tol-lock-v1') || '', locked = lock.indexOf('"on":1') > 0, h = document.documentElement;
     var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
-    if (locked && !inFrame) h.style.visibility = 'hidden';
+    // (the lock never covers the two safety pages, so they're never hidden, not even for a moment)
+    if (locked && !inFrame && !/^\/(safety|upset-right-now)\.html$/.test(current)) h.style.visibility = 'hidden';
     var go = function () { loadScript('/assets/js/progress.js').catch(function () { h.style.visibility = ''; }); };
     var n = 0; try { n = localStorage.length; } catch (e) {}
     if (current === '/on-this-device.html' || lsGet('tol-save-mode-v1') === 'shared' || locked) go();
