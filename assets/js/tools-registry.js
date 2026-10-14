@@ -61,16 +61,12 @@
       gets: 'Three kind, copy-ready ways to say no, with something to offer instead.',
       mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'A clear no that keeps the friendship',
       kw: 'say no refuse decline boundary boundaries turn down' },
-    { id: 'decoder', name: 'When a talk goes wrong: a step-by-step reset', brand: 'the Carrier Wave Decoder', href: '/carrier-wave-decoder.html', type: 'talk', also: ['calm'],
-      does: 'A guided session for after a conversation went sideways: check your state, settle, work out what happened, try again.',
-      gets: 'Notes on what went out of sync, a practice script, and a short weekly look back.',
-      mins: 15, time: 'About 15 minutes', who: ['solo', 'two'], benefit: 'Learn from a bad moment instead of repeating it',
-      kw: 'conversation went wrong out of sync misunderstanding argument repair reset' },
-    { id: 'perspective', name: 'See it from their side', brand: 'the Perspective Shifter', href: '/perspective-shifter.html', type: 'talk', also: ['family'],
-      does: 'You tap what might be true for the other person in a moment that went wrong.',
-      gets: 'Their side of the moment, questions to ask instead of guessing, and a sentence to bridge the gap.',
-      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'Understand them without deciding who was right',
-      kw: 'their point of view perspective empathy other side why did they' },
+    { id: 'decoder', name: 'After a talk went wrong: a step-by-step reset', brand: 'the Carrier Wave Decoder, with See it from their side', href: '/carrier-wave-decoder.html', type: 'talk', also: ['calm', 'family'],
+      modes: [['Start a session', '/carrier-wave-decoder.html'], ['Their side', '/carrier-wave-decoder.html?tab=their-side'], ['Do it together', '/carrier-wave-decoder.html#together']],
+      does: 'A guided session for after a conversation went sideways: settle, work out what went out of sync, see their side, try again, then check your sentence.',
+      gets: 'Their side of the moment, questions to ask instead of guessing, a sentence to bridge the gap (checked in the Chat analyzer), and notes to look back on.',
+      mins: 15, time: 'About 15 minutes; Their side alone about 5', who: ['solo', 'two'], benefit: 'Learn from a bad moment instead of repeating it',
+      kw: 'conversation went wrong out of sync misunderstanding argument repair reset their point of view perspective perspective shifter empathy other side why did they see it from their side' },
     { id: 'pause', name: 'Make a pause plan for arguments', brand: '', href: '/pursue-withdraw.html#plan-h', type: 'talk', also: ['calm', 'plan'],
       does: 'Agree on a calm day how either of you can take a break, and when you come back.',
       gets: 'Your pause word, how long a break lasts, a return time and the first sentence back, to copy or send.',
@@ -130,11 +126,6 @@
       gets: 'A one-page card to copy, print or share, and a side-by-side view with someone else’s card.',
       mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Hard talks start from how you each take things in',
       kw: 'wiring card neurodivergent adhd autistic how i communicate card' },
-    { id: 'load-check', name: 'Load check: how much are you carrying?', brand: '', href: '/workpapers/wp-02-how-much-are-you-carrying.html', type: 'self', also: ['load', 'calm'],
-      does: 'Five quick questions that separate what you already carry from today’s upset.',
-      gets: 'A load score from 0 to 1 with what it means, and one next step.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Know if it is this one thing, or everything',
-      kw: 'stress check battery overwhelmed burnout load how full' },
     { id: 'roots', name: 'Where a reaction comes from', brand: 'Roots & Wings', href: '/growing-up.html#roots-h', type: 'self', also: [],
       does: 'A gentle tap-through look at where a trait or reaction may have started.',
       gets: 'A fairer, grown-up reading of an old rule, and small ways to work with it now.',
@@ -214,11 +205,6 @@
       gets: 'A calmer body, and words to come back to the talk with.',
       mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Stop a fight getting worse',
       kw: 'angry upset fight right now calm down breathe yelling' },
-    { id: 'ladder', name: 'Where am I right now?', brand: '', href: '/ladder.html', type: 'health', also: ['calm', 'self'],
-      does: 'Four quick taps about your body, your thoughts and what you feel like doing.',
-      gets: 'Calm, revved up or running on empty, with what helps right now and a pause line to say.',
-      mins: 1, time: 'About a minute', who: ['solo'], benefit: 'Know if now is a good time to talk',
-      kw: 'nervous system ladder state stressed shut down overwhelmed' },
     { id: 'calmkit', name: 'Calm-down plan', brand: 'the Calm-Down Kit', href: '/wp-11.html', type: 'calm', also: ['self', 'plan'],
       does: 'On a calm day, decide your early signs, a pause signal and what settles you.',
       gets: 'Your own plan for heated moments, to keep on your phone or print.',
@@ -281,11 +267,12 @@
       kw: 'team meeting standup weekly workload' },
 
     // ---------- Health and body
-    { id: 'weather', name: 'Mood and energy check-in', brand: 'Today’s Weather', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
-      does: 'One minute on your mood, sleep, body and what is coming up today.',
-      gets: 'Today’s forecast: what today is good for, a good time to talk, and a private log of your patterns if you want one.',
-      mins: 1, time: 'About a minute', who: ['solo'], benefit: 'Plan the day around how you actually are',
-      kw: 'mood tracker mood check in energy sleep daily check today weather almanac' },
+    { id: 'weather', name: 'How am I right now? A mood and energy check', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
+      modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
+      does: 'Four quick taps on how you are right now, or one minute on your mood, sleep, body, pressure and what is coming up today.',
+      gets: 'Calm, revved up or running on empty, with what helps now and a pause line; or today’s full forecast, a good time to talk, and a private log if you want one.',
+      mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk',
+      kw: 'mood tracker mood check in energy sleep daily check today weather almanac nervous system ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check' },
 
     // ---------- Plan together
     { id: 'deal', name: 'Time-together deal (games and phones)', brand: '', href: '/gaming-and-time-together.html#deal-h', type: 'plan', also: [],
@@ -404,7 +391,10 @@
     week0: 'sixweeks',          // Week 0 -> Six gentle weeks (its calendar reminders are on /prog-01.html#calendar)
     minicross: 'crosswords',    // Quiet Crossword -> Crosswords, "Gentle levels"
     dailycross: 'crosswords',   // the Daily Ledger Crossword -> Crosswords, "Newspaper daily"
-    surprise: 'pauseplay'       // Surprise me is a site-wide button now; the games hub has "Pick one for me"
+    surprise: 'pauseplay',      // Surprise me is a site-wide button now; the games hub has "Pick one for me"
+    ladder: 'weather',          // Where am I right now? -> How am I right now?, "Quick: 4 taps" (/ladder.html, #rung= links)
+    'load-check': 'weather',    // the load check's card -> the pressure step (the WP-02 worksheet page itself stays)
+    perspective: 'decoder'      // See it from their side -> After a talk went wrong, "Their side" (?tab=their-side)
   };
   var A = window.TOLToolAliases || {};
   Object.keys(ALIASES).forEach(function (k) { A[k] = ALIASES[k]; });
