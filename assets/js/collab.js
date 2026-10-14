@@ -620,7 +620,7 @@
     function persist() {
       var t = ssGet(TAB_KEY) || {}; t[tool] = { env: st.env, sig: st.sig, at: st.at, r: st.r }; ssSet(TAB_KEY, t);
       var k = lsGet(KEPT_KEY) || {};
-      if (keepOn) { k[tool] = { env: st.env, sig: st.sig, at: st.at, r: st.r, saved: now() }; lsSet(KEPT_KEY, k); }
+      if (keepOn) { k[tool] = { env: st.env, sig: st.sig, at: st.at, r: st.r, saved: now(), hist: k[tool] && k[tool].hist }; lsSet(KEPT_KEY, k); }
       else if (k[tool]) { delete k[tool]; lsSet(KEPT_KEY, Object.keys(k).length ? k : null); }
     }
     function others() { var e = st.env, id = myId(); return e ? Object.keys(e.p).filter(function (k) { return k !== id; }) : []; }
@@ -651,6 +651,9 @@
     var pick = mk('div', { cls: 'tcol-pick', hidden: '' });
     var people = mk('p', { cls: 'tcol-people', hidden: '' });
     var parts = mk('div', { cls: 'tcol-parts', hidden: '' });
+    // joining: everyone's answers side by side (where you match, where you differ, one next step)
+    var side = mk('div', { cls: 'tcol-side', hidden: '' }), sideOpen = false;
+    var hist = mk('details', { cls: 'tcol-hist', hidden: '' });
     var nid = 'tcol-n-' + tool;
     var meRow = mk('p', { cls: 'tcol-me' }, [mk('label', { for: nid, text: T('Your name (optional)', 'Tu nombre (opcional)') }),
       mk('input', { type: 'text', id: nid, cls: 'tcol-name', maxlength: '40', autocomplete: 'off', placeholder: T('Me', 'Yo') })]);
@@ -669,7 +672,7 @@
       mk('p', { cls: 'tcol-small', text: T('So next time you can see what changed. Only on this device, never sent anywhere. Off: what they sent stays in this tab until you close it.', 'Así la próxima vez ves qué cambió. Solo en este aparato, nunca se envía. Si no lo marcas, lo que te enviaron queda en esta pestaña hasta que la cierres.') }),
       mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', text: T('Clear what you received', 'Borrar lo que recibiste') })])]);
     var pst = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
-    [banner, pick, people, parts, meRow, send, paste, keep, pst].forEach(function (n) { panel.appendChild(n); });
+    [banner, pick, people, parts, side, hist, meRow, send, paste, keep, pst].forEach(function (n) { panel.appendChild(n); });
     mount.appendChild(panel);
     function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
     function status(m) { pst.textContent = ''; setTimeout(function () { pst.textContent = m; }, 30); }
@@ -728,6 +731,37 @@
         parts.appendChild(art);
       });
       void id0;
+      drawSide();
+    }
+    function canCombine() { return opts.combine !== false && others().length > 0 && !mineBlank(); }
+    function everyone() {
+      var me = getMe(), list = [{ id: me.id, n: myName(), me: true, d: mine() }];
+      others().forEach(function (id) { list.push({ id: id, n: st.env.p[id].n, d: clone(st.env.p[id].d) }); });
+      return list;
+    }
+    function drawSide() {
+      side.textContent = '';
+      if (!canCombine()) { side.hidden = true; return; }
+      side.hidden = false;
+      var b = mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', 'aria-expanded': String(sideOpen), text: sideOpen ? T('Hide the side-by-side view', 'Ocultar la vista lado a lado') : T('See everyone’s answers side by side', 'Ver las respuestas de todos lado a lado') });
+      side.appendChild(mk('p', {}, [b]));
+      if (sideOpen) side.appendChild(combinedView(everyone(), { kind: opts.kind || 'fields', fields: opts.fields, format: opts.format, next: opts.next, k: opts.scoreKey, list: opts.listKey, tool: tool,
+        title: T('Side by side', 'Lado a lado') }));
+    }
+    function drawHist() {
+      hist.textContent = '';
+      var k = (lsGet(KEPT_KEY) || {})[tool], h = opts.history && k && Array.isArray(k.hist) ? k.hist : [];
+      if (!h.length) { hist.hidden = true; return; }
+      hist.hidden = false;
+      hist.appendChild(mk('summary', { text: T('Earlier rounds, kept on this device (' + h.length + ')', 'Rondas anteriores, guardadas en este aparato (' + h.length + ')') }));
+      h.slice().reverse().forEach(function (r) {
+        var art = mk('div', { cls: 'tcol-hist-r' }, [mk('p', { cls: 'tcol-when', text: when(r.at) })]);
+        (r.people || []).forEach(function (p) {
+          var bits = Object.keys(p.d || {}).filter(function (x) { return fmt(x, p.d[x]); }).map(function (x) { return label(x) + ': ' + fmt(x, p.d[x]); });
+          if (bits.length) art.appendChild(mk('p', { cls: 'tcol-small', text: (p.n || T('Someone', 'Alguien')) + ' · ' + bits.join(' · ') }));
+        });
+        hist.appendChild(art);
+      });
     }
     function drawBanner() {
       banner.textContent = '';
@@ -759,6 +793,9 @@
         if (info.filled) lines.push(T('Their answers are filled in below, so you can start from them and change anything.', 'Sus respuestas están abajo, así puedes partir de ellas y cambiar lo que quieras.'));
         if (info.mineBack) lines.push(T('Your own part came back with the link, so it’s filled in again.', 'Tu propia parte volvió con el enlace, así que está completa otra vez.'));
         if (lines.length) { var ul = mk('ul', { cls: 'tcol-changes' }); lines.forEach(function (l) { ul.appendChild(mk('li', { text: l })); }); banner.appendChild(ul); }
+        // you've done it too: offer to join the answers
+        if (canCombine() && !sideOpen) banner.appendChild(mk('p', {}, [reply ? '' : T('You’ve done this too. ', 'Tú también lo hiciste. '),
+          mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'side', text: reply ? T('See your answers side by side', 'Ver sus respuestas lado a lado') : T('Combine your answers?', '¿Combinar sus respuestas?') })]));
       }
       banner.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'hide', text: T('Okay, hide this', 'Listo, ocultar esto') })]));
     }
@@ -770,7 +807,7 @@
       pick.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn', 'data-k': 'isme', text: T('Yes, that’s me', 'Sí, soy yo') }), ' ',
         mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'notme', text: T('No, someone else', 'No, es otra persona') })]));
     }
-    function render() { drawBanner(); drawPick(); draw(); send.refresh(); }
+    function render() { drawBanner(); drawPick(); draw(); drawHist(); send.refresh(); }
 
     // ---- opening a link ----
     function take(env, how) {
@@ -801,6 +838,15 @@
       if (res.env.p[me.id]) delete res.env.p[me.id];
       st.env = res.env; st.r = res.env.r;
       persist();
+      // a shared history: each round kept, on this device only, if "Keep on this device" is ticked
+      if (opts.history && keepOn) {
+        var kk0 = lsGet(KEPT_KEY) || {}, e0 = kk0[tool];
+        if (e0) {
+          e0.hist = Array.isArray(e0.hist) ? e0.hist : [];
+          e0.hist.push({ at: now(), people: [{ n: myName() || T('You', 'Tú'), d: mine() }].concat(Object.keys(res.env.p).map(function (k) { return { n: res.env.p[k].n, d: res.env.p[k].d }; })) });
+          e0.hist = e0.hist.slice(-12); lsSet(KEPT_KEY, kk0);
+        }
+      }
       render();
       if (opts.onMerge) { try { opts.onMerge(st.env, info); } catch (e) {} }
       return true;
@@ -820,6 +866,12 @@
     panel.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-k]'); if (!b) return;
       var k = b.getAttribute('data-k');
+      if (k === 'side') {
+        sideOpen = !sideOpen; drawBanner(); drawSide();
+        var t0 = side.querySelector('[data-k="side"]'); if (t0) t0.focus({ preventScroll: true });
+        if (sideOpen) { var cv = side.querySelector('.tcol-cmp'); if (cv) try { cv.scrollIntoView({ block: 'nearest' }); } catch (er) {} }
+        return;
+      }
       if (k === 'hide') { info = null; drawBanner(); var h = panel.querySelector('.tcol-h'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } return; }
       if (k === 'open') {
         var ta = panel.querySelector('.tcol-pastebox'), env = read(ta.value);
