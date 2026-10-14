@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 762" width="540" height="762" role="img" aria-labelledby="fig-ch2-check-t fig-ch2-check-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-ch2-check-t">Is the split working? Three inputs, one snapshot</title>
-<desc id="fig-ch2-check-d">Three readings go in: workload balance (worth up to 0.40), ownership clarity (up to 0.35) and leftover stress (up to 0.25). In the chapter’s made-up example, Sam and Alex earn 0.24 for balance (short by 0.16), 0.28 for ownership (short by 0.07) and 0.15 for stress (short by 0.10). Together that is 0.67, in the middle band, between 0.4 and 0.7, where something is drifting. Start with the biggest shortfall: here, balance. The score judges the setup, never a person.</desc>
+<desc id="fig-ch2-check-d">Three readings go in: workload balance (worth up to 0.40), ownership clarity (up to 0.35) and leftover stress (up to 0.25). In the chapter’s made-up example, Sam and Alex earn 0.24 for balance (short by 0.16), 0.28 for ownership (short by 0.07) and 0.15 for stress (short by 0.10). Together that is 0.67, in the middle band, between 0.4 and 0.7: needs a look, where something is drifting. Start with the biggest shortfall: here, balance. The score judges the setup, never a person.</desc>
 
 <rect x="1" y="1" width="538" height="760" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Is the split working?</text>
@@ -26,11 +26,11 @@
 <text x="28" y="442.32" font-size="18" font-style="italic" fill="#5A5346">how full each tank is</text>
 <text x="28" y="484.32" font-size="20" font-weight="bold">Add them up: 0.24 + 0.28 + 0.15 = 0.67</text>
 <rect x="28" y="532.32" width="193.6" height="30" rx="0" fill="#F7DEE0" stroke="#D9CBA3" stroke-width="1"/>
-<text x="124.8" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">rethink the setup</text>
+<text x="124.8" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">needs a rethink</text>
 <rect x="221.6" y="532.32" width="145.2" height="30" rx="0" fill="#F1E2C2" stroke="#D9CBA3" stroke-width="1"/>
-<text x="294.2" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">drifting</text>
+<text x="294.2" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">needs a look</text>
 <rect x="366.8" y="532.32" width="145.2" height="30" rx="0" fill="#DCE7D8" stroke="#D9CBA3" stroke-width="1"/>
-<text x="439.4" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">holding</text>
+<text x="439.4" y="586.32" font-size="18" font-style="italic" fill="#5A5346" text-anchor="middle">working well</text>
 <text x="28" y="608.32" font-size="18" fill="#5A5346">0</text>
 <text x="221.6" y="608.32" font-size="18" fill="#5A5346" text-anchor="middle">0.4</text>
 <text x="366.8" y="608.32" font-size="18" fill="#5A5346" text-anchor="middle">0.7</text>

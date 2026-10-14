@@ -419,7 +419,7 @@
   }
   function selfFlip(t) {
     var lab = t.match(LABELS), ev = t.match(/\bi\s+((?:forgot|missed|messed up|failed|lost|said|snapped|yelled|shouted|broke|ruined|didn'?t|did not|couldn'?t|could not|wasted|skipped|overslept|let)\b.*)$/i);
-    var event = ev ? tidy(ev[1].replace(/\bmy\b/gi, 'your').replace(/\bme\b/gi, 'you').replace(/\bmyself\b/gi, 'yourself').replace(/\bi\b/gi, 'you')) : '';
+    var event = ev ? tidy(ev[1].replace(/\bmy\b/gi, 'your').replace(/\bme\b/gi, 'you').replace(/\bmyself\b/gi, 'yourself').replace(/\bi am\b/gi, 'you are').replace(/\bi['’]m\b/gi, 'you’re').replace(/\bi was\b/gi, 'you were').replace(/\bi\b/gi, 'you').replace(/\bam\b/gi, 'are')) : '';
     var label = lab ? lab[1].toLowerCase() : '';
     var friend = event ? 'You ' + event + '. That’s one moment, not the whole of you.' : 'That sounds like a hard moment. One mistake is not the whole of you.';
     if (label) friend += /^not /.test(label) ? ' You’re enough, even on a hard day.' : ' You’re not ' + (/^(idiot|failure|loser)$/.test(label) ? 'a ' + label : label) + '. You’re a person having a hard day.';
