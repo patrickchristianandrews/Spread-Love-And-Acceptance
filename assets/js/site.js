@@ -1636,6 +1636,15 @@
     var anchor = el('span', { id: 'tol-main', tabindex: '-1' });
     body.insertBefore(anchor, body.firstChild);
     body.insertBefore(bar, body.firstChild);
+    // the free app, in one slim line above the bar (app-bar.js fills it in; its 36px are kept from the start so nothing jumps).
+    // Not in the installed app, not on the install page, not inside a frame, and not after its × this visit.
+    var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
+    if (!isApp() && current !== '/install.html' && !inFrame && ssGet('tol-appbar-off') !== '1') {
+      var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': T('The free app', 'La app gratis'), style: 'height:36px;margin:' + (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px' });
+      body.insertBefore(appBar, body.firstChild);
+      bar.style.marginTop = '0px';
+      loadScript('/assets/js/app-bar.js').catch(function () { appBar.remove(); });
+    }
     body.insertBefore(skip, body.firstChild);
     // work mode from a link: one quiet line under the bar says so, with a way out
     if (WORK) {

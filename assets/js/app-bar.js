@@ -214,7 +214,7 @@
     if (ready) {
       html = '<button type="button" class="tol-appbar-go" data-appbar="install"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
     } else if (lsGet('tol-app-installed') === '1' && !IOS) {
-      html = '<span class="tol-appbar-note" style="display:inline">' + T('You have the free app. Open it from your home screen or app list.', 'Ya tienes la app gratis. Ábrela desde tu pantalla de inicio.') + '</span>';
+      html = '<span class="tol-appbar-note" style="display:block">' + T('You have the free app. Open it from your home screen or app list.', 'Ya tienes la app gratis. Ábrela desde tu pantalla de inicio.') + '</span>';
     } else if (IOS) {
       html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-label="' + T('Add the free app to your Home Screen', 'Agrega la app gratis a tu pantalla de inicio') + '"><span>' +
         T('Add the free app<span class="tol-appbar-more"> to your Home Screen</span>', 'Agrega la app gratis<span class="tol-appbar-more"> a tu inicio</span>') + '</span></button>';
