@@ -234,6 +234,145 @@ def main():
     with open(OUT, 'w', encoding='utf-8') as fh:
         fh.write(js)
     print('indexed %d pages, %d KB -> %s' % (len(rows), len(js.encode('utf-8')) // 1024, os.path.relpath(OUT, ROOT)))
+    build_needs(rows)
+
+
+# ---------- the "needs" layer: everyday words for a problem -> the best 1-3 pages ----------
+# tools/search/needs.json is written by hand. This checks it and writes assets/js/search-needs.js, a small
+# file the search loads first (before the big index), so "Best match for what you described" shows at once.
+NEEDS_IN = os.path.join(ROOT, 'tools', 'search', 'needs.json')
+NEEDS_OUT = os.path.join(ROOT, 'assets', 'js', 'search-needs.js')
+REGISTRY = os.path.join(ROOT, 'assets', 'js', 'tools-registry.js')
+
+
+def registry():
+    """The tools list (tools-registry.js), read with node; [] if node isn't there."""
+    code = ("global.window={};require(process.argv[1]);process.stdout.write(JSON.stringify("
+            "(window.TOLTools||[]).map(function(t){return {id:t.id,name:t.name,href:t.href,who:t.who||[],modes:t.modes||[]};})))")
+    try:
+        return json.loads(subprocess.check_output(['node', '-e', code, REGISTRY], cwd=ROOT).decode())
+    except Exception as e:
+        print('note: could not read tools-registry.js with node (%s); titles come from the pages' % e, file=sys.stderr)
+        return []
+
+
+def stub_target(path):
+    """Where a redirect stub sends people (its meta refresh), or None for a real page."""
+    try:
+        src = open(path, encoding='utf-8', errors='replace').read(6000)
+    except OSError:
+        return None
+    m = re.search(r'http-equiv=["\']refresh["\'][^>]*content=["\'][^"\']*url=([^"\'>\s]+)', src, re.I)
+    return html.unescape(m.group(1)) if m else None
+
+
+def split_url(u):
+    path, rest = re.match(r'^([^?#]*)(.*)$', u).groups()
+    return path, rest
+
+
+def resolve(u, seen=0):
+    """Follow redirect stubs (a merged tool's old address) to the page it moved to. Keeps the #part asked for
+    when the new address has none."""
+    path, rest = split_url(u)
+    f = os.path.join(ROOT, path.lstrip('/'))
+    if path.endswith('/'):
+        f = os.path.join(f, 'index.html')
+    if not os.path.isfile(f):
+        return None
+    t = stub_target(f)
+    if not t or seen > 4:
+        return u
+    tp, trest = split_url(t)
+    if not tp.startswith('/'):
+        tp = '/' + os.path.normpath(os.path.join(os.path.dirname(path.lstrip('/')), tp)).lstrip('./')
+    if '#' not in trest and '#' in rest:
+        trest += rest[rest.index('#'):]
+    return resolve(tp + trest, seen + 1)
+
+
+def section_title(u, page_title):
+    """A link to a part of a guide reads as 'Guide name: section heading'."""
+    path, rest = split_url(u)
+    if '#' not in rest:
+        return page_title
+    frag = rest[rest.index('#') + 1:]
+    try:
+        src = open(os.path.join(ROOT, path.lstrip('/')), encoding='utf-8', errors='replace').read()
+    except OSError:
+        return page_title
+    m = re.search(r'<h[23][^>]*\bid=["\']' + re.escape(frag) + r'["\'][^>]*>(.*?)</h[23]>', src, re.S)
+    if not m:
+        return page_title
+    head = clean(re.sub(r'<[^>]+>', ' ', m.group(1)))
+    short = re.split(r'[:?]\s', page_title)[0].strip()
+    return (short + ': ' + head) if head and short and short.lower() not in head.lower() else (head or page_title)
+
+
+def build_needs(rows):
+    try:
+        src = json.load(open(NEEDS_IN, encoding='utf-8'))
+    except (OSError, ValueError) as e:
+        print('note: tools/search/needs.json not read (%s); search-needs.js not written' % e, file=sys.stderr)
+        return
+    tools = registry()
+    by_href, by_path = {}, {}
+    for t in tools:
+        solo = 1 if 'solo' in t['who'] else 0
+        by_href.setdefault(t['href'], (t['name'], solo))
+        for label, href in t['modes']:
+            by_href.setdefault(href, (t['name'] + ' (' + label + ')', solo))
+        if '#' not in t['href'] and '?' not in t['href']:
+            by_path.setdefault(t['href'], (t['name'], solo))
+    titles = {r['u']: r['t'] for r in rows}
+    problems, needs, moved = [], [], 0
+    seen_ids = set()
+    for n in src.get('needs', []):
+        if n['id'] in seen_ids:
+            problems.append('duplicate id ' + n['id'])
+        seen_ids.add(n['id'])
+        go = []
+        for g in n.get('go', []):
+            u = resolve(g[0])
+            if not u:
+                problems.append('%s: %s does not exist' % (n['id'], g[0]))
+                continue
+            if u != g[0]:
+                moved += 1
+            path = split_url(u)[0]
+            hit = by_href.get(u) or by_href.get(g[0]) or by_path.get(path)
+            title = g[2] if len(g) > 2 and g[2] else (hit[0] if hit else section_title(u, titles.get(path) or path))
+            # a guide or a page to read works for one person; a tool says who it's for
+            solo = hit[1] if hit else 1
+            if any(x[0] == u for x in go):
+                continue
+            go.append([u, title, g[1], solo])
+        if not go or not n.get('say'):
+            problems.append('%s: nothing to show' % n['id'])
+            continue
+        needs.append({'id': n['id'], 'l': n['l'], 's': n['say'], 'g': go})
+    # what usually comes next: for each page, the pages named beside it in the same needs (most often first)
+    pair = {}
+    for n in needs:
+        us = [split_url(g[0])[0] for g in n['g']]
+        for a in us:
+            for b in n['g']:
+                bp = split_url(b[0])[0]
+                if bp == a:
+                    continue
+                d = pair.setdefault(a, {})
+                d[b[0]] = d.get(b[0], 0) + 1
+    nxt = {a: [u for u, _ in sorted(d.items(), key=lambda kv: -kv[1])[:5]] for a, d in pair.items()}
+    data = {'v': 1, 'chips': src.get('chips', []), 'syn': src.get('syn', {}), 'needs': needs, 'next': nxt}
+    js = ('/* search-needs.js: built by tools/search/build_index.py from tools/search/needs.json. Do not edit by hand.\n'
+          '   Everyday ways to describe a problem, and the pages that help. Used only in the browser by the search. */\n'
+          'window.TOL_NEEDS = ' + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ';\n')
+    with open(NEEDS_OUT, 'w', encoding='utf-8') as fh:
+        fh.write(js)
+    for p in problems:
+        print('needs.json: ' + p, file=sys.stderr)
+    print('needs: %d needs, %d phrasings, %d addresses moved to a merged page, %d KB -> %s' % (
+        len(needs), sum(len(n['s']) for n in needs), moved, len(js.encode('utf-8')) // 1024, os.path.relpath(NEEDS_OUT, ROOT)))
 
 
 if __name__ == '__main__':

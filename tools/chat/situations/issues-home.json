@@ -631,10 +631,8 @@
           "The Wiring Card",
           "/wiring-card.html"
         ],
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ]
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"]
       ],
       "deeper": [
         "one owner per job",
@@ -681,18 +679,14 @@
         "For Friday’s dinner, could we agree you’ll leave by 6:30? That gives us some buffer."
       ],
       "path": [
-        [
-          "Today’s Weather",
-          "/quick-checks.html#today"
-        ],
+        ["How am I right now? (Today’s Weather)",
+          "/quick-checks.html#today"],
         [
           "The planning fallacy (Library)",
           "/library/thinking.html#planning-fallacy"
         ],
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ]
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"]
       ],
       "deeper": [
         "why plans slip",
@@ -747,10 +741,8 @@
           "The Signal Translator",
           "/signal-translator.html"
         ],
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ]
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"]
       ],
       "deeper": [
         "one owner per job",

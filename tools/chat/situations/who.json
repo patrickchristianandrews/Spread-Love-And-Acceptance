@@ -7,23 +7,17 @@
       "cues": "",
       "fit": "Everything in the program starts with you. You can do all of this on your own: check your own weather, learn your wiring, and plan what settles you. Here’s a gentle path for just you.",
       "path": [
-        [
-          "Today’s Weather: a one-minute check on yourself",
-          "/quick-checks.html#today"
-        ],
+        ["How am I right now? A one-minute check on yourself",
+          "/quick-checks.html#today"],
         [
           "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-how-much-are-you-carrying.html"
         ],
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ]
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"]
       ],
-      "read": [
-        "Know your own wiring",
-        "/know-yourself.html"
-      ],
+      "read": ["Self-discovery: know your own wiring",
+        "/know-yourself.html"],
       "step": "Check your battery before you judge yourself: is this about the thing, or about everything else you’re carrying today?",
       "chips": [
         [

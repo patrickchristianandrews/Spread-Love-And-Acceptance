@@ -755,7 +755,7 @@
         if (top.length) blocks.push({ k: 'p', x: 'If you answered in the page’s order, the heaviest part right now is ' + top.join(' and ') + '. That’s worth naming, even just to yourself.' });
         blocks.push({ k: 'note', x: 'This is Pillar III, Read your state first. ' + NOT_VERDICT + ' It isn’t a medical test.' });
         blocks.push({ k: 'links', x: safeLinks([['WP-02: How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html'],
-          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['Today’s Weather', '/quick-checks.html#today']]) });
+          v >= 0.3 ? ['WP-11: The Calm-Down Kit', '/wp-11.html'] : ['How am I right now? (Today’s Weather)', '/quick-checks.html#today']]) });
         return { blocks: blocks, chips: [{ label: 'What helps when my battery is low?', q: 'What helps when my battery is low?' }, { label: 'How does this feed CALC-01?', q: 'How does CALC-01 work?' }], kind: 'calc', topic: 'battery score' };
       }
       var one = n.filter(function (x) { return x <= 1; });
@@ -1176,7 +1176,7 @@
     // words for a second person involved (a parent, a partner), when the issue has them
     var also = !self && I.scripts_also && I.scripts_also[1] && I.scripts_also[1].length ? I.scripts_also : null;
     var path = (C.path || (self && I.path_self) || I.path || []).slice(0, 2);
-    var read = C.read || (W.read && !self && !I.ownRead ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Know your own wiring', '/know-yourself.html'] : null);
+    var read = C.read || (W.read && !self && !I.ownRead ? W.read : null) || (I.path_self && self ? null : (I.path || [])[2]) || (self ? ['Self-discovery: know your own wiring', '/know-yourself.html'] : null);
     if (read && path.every(function (p) { return p[1] !== read[1]; })) path.push(read);
     return { I: I, C: C, ctx: ctx, reflect: pickF('reflect'), going: pickF('going'), steps: steps, scripts: scripts, also: also,
       path: safeLinks(path).slice(0, 3), ex: pickF('ex'), more: pickF('more'), tonight: pickF('tonight') };
@@ -1662,7 +1662,7 @@
   }
   function leftOff(state) {
     var L = state.last;
-    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: Today’s Weather keeps an almanac of the readings you save, the Carrier Wave Decoder keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
+    var tail = { k: 'p', x: 'Tools that keep your place do it on this device: How am I right now? (Today’s Weather) keeps an almanac of the readings you save, After a talk went wrong (the Carrier Wave Decoder) keeps a journal, and fill-in workpapers can keep a draft if you turn that on.' };
     if (L && (L.topic || L.q)) {
       var what = L.topic || '“' + String(L.q).slice(0, 60) + '”';
       return { blocks: [{ k: 'p', x: 'We were last talking about ' + what + '. Want to carry on with that, or start something new?' }, tail],

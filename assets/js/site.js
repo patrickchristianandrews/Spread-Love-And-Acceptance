@@ -115,7 +115,6 @@
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and the one best first step for you' },
       { href: '/explore.html', code: 'All', title: 'Everything on this site', note: 'Every page and tool on one page: filter by what you need, who it’s about, how long you have, and what kind of page it is' },
       { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool in one place, grouped by type: what it does, what you get and how long it takes' },
-      { href: '/find-your-start.html', code: 'Start', title: 'Find your starting point', note: 'Three quick questions, then one thing to try first, one short read and one other idea' },
       { href: '/why-this-site.html', code: 'Why', title: 'Why use this instead of an article or an AI chat?', note: 'What’s different here, and where it falls short' },
       { href: '/start-in-10-minutes.html', code: '10 min', title: 'Start in 10 minutes', note: 'A short, straight path: check your weather, read the Preface, try one card and log one thing' },
       { href: '/someone-sent-you-this.html', code: '', title: 'Someone sent you this?', note: 'What it is in three lines, no pressure, and messages to send someone else' },
@@ -202,7 +201,7 @@
       { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with one owner per job, getting back in tune, and saying it so it lands' },
       { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams, with no cartoons: one owner per job, messages, appreciation, a team session' },
       { href: '/relationships.html#caregivers', deep: true, code: '', title: 'Caregivers', note: 'Start with your battery, one owner per job, and the Calm-Down Kit' },
-      { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
+      { href: '/workpapers/fill/suite.html#full-path', code: 'Package', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one fillable PDF of everything, and a detailed report from your answers: findings, recommendations and a plan' },
       { href: '/relationships.html#map', deep: true, code: 'Map', title: 'The full map', note: 'Every chapter, worksheet and tool, for every kind of relationship' },
       { href: '/grandparents.html', code: 'New', title: 'For grandparents', note: 'Help with the grandkids without taking over: fair childcare, house rules and saying no kindly' },
       { href: '/grief.html', code: 'New', title: 'Grief and loss', note: 'Loss, family after a loss, reconnecting, and starting a new chapter' },
@@ -276,7 +275,7 @@
       { href: '/library.html', code: 'Library', title: 'The Professor’s Library', note: 'Psychology, behavioral science and conflict resolution in plain words: 235 short entries, each tied to the Five Pillars and the program' },
     ]},
     { id: 'workpapers', title: 'Workpapers', blurb: 'Short worksheets. Each of you fills in your own, then you read them together. They work best in the order listed, with the monthly look-back once a month.', items: [
-      { href: '/full-path.html', code: 'Package', title: 'The workpaper package and report', note: 'One fillable PDF for your relationship, and a detailed report from your answers: findings, recommendations and a plan' },
+      { href: '/workpapers/fill/suite.html#full-path', code: 'Package', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one fillable PDF of everything, and a detailed report from your answers: findings, recommendations and a plan' },
       { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what, and kind ways to say no', note: 'Start here: a week’s log of who did what, plus kind ways to say no', paid: true },
       { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'Five quick questions: how much are you already carrying today?', paid: true },
       { href: '/workpapers/wp-03-one-owner-per-job.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'Give every regular job one owner, so nobody has to keep asking', paid: true },
@@ -298,7 +297,7 @@
       { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Your week-by-week record, so progress builds instead of starting over', paid: true }
     ]},
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
-      { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool, grouped by type: communication, know yourself, share the load, calm, family, work and more' },
+      { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool, grouped by type: communication, self-discovery, share the load, calm, family, work and more' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
       { href: '/signal-translator.html', code: 'New', title: 'Chat analyzer', note: 'Check how one message may land before you send it, or paste a whole text thread, chat or email exchange: see where it turned and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
@@ -354,7 +353,6 @@
     { id: 'start', name: 'Start here', title: 'Start here', blurb: 'New here? See the whole site at a glance, find your first step, or get help right now.',
       all: '/explore.html', allLabel: 'See everything on this site', items: [
       { sub: 'First steps', all: '/start-here.html', allLabel: 'Start here, in one minute' },
-      { href: '/find-your-start.html', code: 'Start', title: 'Find your starting point', note: 'Three quick questions, then one thing to try first and one short read' },
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
       { href: '/outside-help.html', code: 'Help', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
@@ -421,7 +419,7 @@
       { href: '/bonding.html#ideas', plain: true, title: 'Get one small bonding idea', note: 'Pick who it is with, how much time and how much energy you have. Also called the idea picker.' },
       { href: '/love-languages.html#ll-card-h', plain: true, title: 'What feels like care to me: a care card', note: 'Tick what would feel like care to you right now: words, help, time, small gifts or touch. Also called love languages.' },
       { href: '/touchstones.html#ts-card-h', plain: true, title: 'Your shared words and rituals list', note: 'Note the shared words, jokes, rituals and stories that say “this is us”. Also called touchstones.' },
-      { sub: 'Know yourself', all: '/tools.html#know-yourself', allLabel: 'All know yourself tools' },
+      { sub: 'Self-discovery', all: '/tools.html#self-discovery', allLabel: 'All self-discovery tools' },
       { href: '/wavelength.html', plain: true, title: 'Communication style quiz', note: 'Twelve quick either/or questions about how you think, talk and listen. Also called Wavelength.' },
       { href: '/wiring-card.html', plain: true, title: 'How I like to be spoken to: a one-page card', note: 'Pick what helps words reach you, what your silence means and what to avoid. Also called the Wiring Card.' },
       { href: '/workpapers/wp-02-how-much-are-you-carrying.html', plain: true, title: 'Load check: how much are you carrying?', note: 'Five quick questions that separate what you already carry from today’s upset.' },
@@ -445,10 +443,9 @@
       { href: '/upset-right-now.html', plain: true, title: 'Upset right now? A 5-minute calm-down', note: 'A pause line with a return time, a one-minute breathing pacer, and how to come back.' },
       { href: '/wp-11.html', plain: true, title: 'Calm-down plan', note: 'On a calm day, decide your early signs, a pause signal and what settles you. Also called the Calm-Down Kit.' },
       { href: '/tools/soften-a-tense-moment.html', plain: true, title: 'Soften a tense moment', note: 'Settle yourself, read the state someone else is in, and pick one small move.' },
-      { href: '/wp-11-sound-toolkit.html', plain: true, title: 'Calm-down sounds', note: 'Three simple background sounds: a low hum, a soft flutter and brown noise. Also called the Sound Toolkit.' },
       { href: '/calm-visualizer.html', plain: true, title: 'Slow colours and tones to wind down', note: 'Pick how you feel. Slow colours, kind words and gentle tones keep you company (headphones help). Also called Drift.' },
       { href: '/night-garden.html', plain: true, title: 'Breathing game', note: 'Breathe slowly to make flowers bloom and fireflies gather. Also called the Night Garden.' },
-      { href: '/soundscapes.html#brain-breakers', plain: true, title: 'Calm music with a visualizer', note: 'Four instrumental pieces, from soft to cinematic, with a music visualizer. Also called Brain Breakers.' },
+      { href: '/soundscapes.html', plain: true, title: 'Calm sounds and music', note: 'Music with a visualizer, or a plain background sound (a low hum, a soft flutter, brown noise). Also called Brain Breakers and the Sound Toolkit.' },
       { sub: 'Family and parenting', all: '/tools.html#family-and-parenting', allLabel: 'All family and parenting tools' },
       { href: '/co-parenting.html#handoff-bag', plain: true, title: 'Handoff-bag checklist for two homes', note: 'A short list, the same in both homes, of what goes in the bag.' },
       { href: '/two-faiths.html#festival-year', plain: true, title: 'Our festival year planner', note: 'List the festivals and big days from both traditions, and who goes where.' },
@@ -465,9 +462,7 @@
       { href: '/sharing-a-room.html#agreement-h', plain: true, title: 'Room agreement for roommates', note: 'Quiet hours, guests, cleaning and borrowing, from a common starting point.' },
       { href: '/different-hours.html#our-week', plain: true, title: 'Our week on one page (different hours)', note: 'Write both schedules for the week, with sleep, overlaps and one together time.' },
       { href: '/workpapers/fill/suite.html', plain: true, title: 'All the worksheets for your situation, in order', note: 'Choose your road (just me, a couple, a home, a family, a team) and fill its worksheets in order. Also called the Workpaper Suite.' },
-      { href: '/full-path.html', plain: true, title: 'One PDF of every worksheet, and a report', note: 'Every worksheet for your relationship in one fillable PDF. Also called the package and report.' },
       { href: '/prog-01.html', plain: true, title: 'Six gentle weeks', note: 'One small step a week, in order, alone or with anyone you share a home with.' },
-      { href: '/week-0.html', plain: true, title: 'Week 0: reminders in your own calendar', note: 'Five minutes on what the six weeks are, and how long each takes.' },
       { href: '/workpapers/report-01.html', plain: true, title: 'Your progress, week by week', note: 'Type in what your worksheets produced each week.' },
       { sub: 'Learn', all: '/tools.html#learn', allLabel: 'All learn tools' },
       { href: '/ask.html', plain: true, title: 'Ask a question in your own words', note: 'Type what is going on, the way you would say it to a friend. Also called Professor Puddles.' },
@@ -477,16 +472,14 @@
       { href: '/polymath.html#connect', plain: true, title: 'Connect two fields of study', note: 'Pick any two fields, like music and economics, and see the root they share.' },
       { href: '/quest.html', plain: true, title: 'Your learning map', note: 'Small “check yourself” moments on reading pages, and a map of the whole program. Also called the quest map.' },
       { sub: 'Play', all: '/tools.html#play', allLabel: 'All play tools' },
-      { href: '/pause-and-play.html', plain: true, title: 'All the calm games', note: 'Every calm game in one place, with your level and your garden. Also called Pause & Play.' },
+      { href: '/pause-and-play.html', plain: true, title: 'Games: every calm game in one place', note: 'Breathing, word games, crosswords, the arcade, the Bears Dojo, the Re-check Drive and the music video maker. Also called Pause & Play.' },
       { href: '/frequency-journey.html', plain: true, title: 'Five gentle arcade games', note: 'A maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game. Also called Tidbit and Sugarfoot’s Arcade.' },
       { href: '/word-bloom.html', plain: true, title: 'Swipe-to-spell word game', note: 'Swipe across a wheel of letters to find hidden words. Also called Word Bloom.' },
       { href: '/quiet-words.html', plain: true, title: 'Calm word search', note: 'A word search with a new theme in every puzzle. Also called Quiet Words.' },
-      { href: '/quiet-crossword.html', plain: true, title: 'Mini crosswords', note: 'Small, friendly crosswords in five gentle levels, made for a phone. Also called Quiet Crossword.' },
-      { href: '/daily-ledger-crossword.html', plain: true, title: 'Daily crossword', note: 'A newspaper-style crossword, from a quick 5x5 mini to a big Sunday grid. Also called the Daily Ledger Crossword.' },
+      { href: '/quiet-crossword.html', plain: true, title: 'Crosswords', note: 'Gentle levels made for a phone, or a newspaper daily from a 5x5 Mini to a Big Sunday. Also called Quiet Crossword and the Daily Ledger Crossword.' },
       { href: '/recheck-drive.html', plain: true, title: 'Calm football game for small kind acts', note: 'Do small, kind re-checks from the complacency playbook for real. Each one moves the ball. Also called the Re-check Drive.' },
       { href: '/bears-dojo.html', plain: true, title: 'A quiet temple garden to wander', note: 'Wander a garden while two bears tend it, build your own bear, then step inside. Also called the Bears Dojo.' },
-      { href: '/frequency-buddies-music-video-maker.html', plain: true, title: 'Make a cartoon music video', note: 'Pick the stage, lights, costumes, moves and who is on stage. Also called the Frequency Buddies video maker.' },
-      { href: '/surprise.html', plain: true, title: 'Surprise me', note: 'One button picks a game, a guide or something calm.' }
+      { href: '/frequency-buddies-music-video-maker.html', plain: true, title: 'Make a cartoon music video', note: 'Pick the stage, lights, costumes, moves and who is on stage. Also called the Frequency Buddies video maker.' }
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games, cartoons and music are in Calm & play.',
       all: '/by-relationship.html', allLabel: 'See everything by relationship', items: [
@@ -558,7 +551,7 @@
       { href: '/install.html', title: 'Get the app', note: 'Its own icon, works offline' },
       { href: '/on-this-device.html', title: 'What’s stored on this device', note: 'See and erase what this site keeps' }
     ]},
-    { id: 'topics', name: 'Topics', title: 'Guides by topic', blurb: 'Plain guides and the tools that go with them: sharing the load, talking it through, knowing yourself and settling. What you type stays on your device.',
+    { id: 'topics', name: 'Topics', title: 'Guides by topic', blurb: 'Plain guides and the tools that go with them: sharing the load, talking it through, self-discovery and settling. What you type stays on your device.',
       all: '/explore.html', allLabel: 'See all guides, with filters by topic', items: [
       { sub: 'Share the load', area: 'load', all: '/explore.html?need=load', allLabel: 'Everything on sharing the load' },
       { href: '/share-the-load.html', code: 'Start', title: 'Share the load: tools, in order', note: 'Which tool to use first, and what comes next' },
@@ -585,8 +578,7 @@
       { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', deep: true, code: 'WP-14', title: 'Is it us, or is it everything else?', note: 'A week’s log: outside pressure, or friction between you' },
       { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
       { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
-      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'Every worksheet for your household or group, fillable and printable' },
-      { href: '/full-path.html', code: 'Package', title: 'The package and report', note: 'One PDF for your relationship, and a report from your answers' },
+      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
       { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' },
       { sub: 'Talk it through', area: 'talk', all: '/explore.html?need=talk', allLabel: 'Everything on talking it through' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, timing, hard talks and repair' },
@@ -613,7 +605,7 @@
       { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', deep: true, code: 'WP-15', title: 'Keep your little rituals alive', note: 'Which shared rituals are alive, fading or stopped' },
       { href: '/languages-of-connection.html', code: 'New', title: 'How the languages fit together', note: 'Love, apology and appreciation languages, touchstones and your wiring in one picture' },
       { href: '/complacency.html', deep: true, title: 'Complacency', note: 'Why “it’s fine” stops being checked, and the small re-checks that keep things alive' },
-      { sub: 'Know yourself', area: 'self', all: '/explore.html?need=self', allLabel: 'Everything on knowing yourself' },
+      { sub: 'Self-discovery', area: 'self', all: '/explore.html?need=self', allLabel: 'Everything on self-discovery' },
       { href: '/self-path.html', code: 'Start', title: 'Your self-discovery path', note: 'The self path, step by step, on your own' },
       { href: '/how-you-take-things-in.html', code: 'New', title: 'How you take things in', note: 'ADHD, autistic, dyslexic or just your own way: make every page fit your mind' },
       { href: '/wavelength.html', code: 'New', title: 'Find your Wavelength', note: 'How you think, talk and listen: your Wave Code' },
@@ -640,7 +632,7 @@
     { id: 'play', name: 'Calm & play', title: 'Calm, play, watch & listen', blurb: 'Calm games, breathing, the pups’ cartoon and calm music for a busy mind. No timers and no way to lose. Every episode has captions.',
       all: '/explore.html?need=calm', allLabel: 'See everything calm, to play, watch or hear', items: [
       { sub: 'Games', all: '/pause-and-play.html', allLabel: 'All the calm games' },
-      { href: '/pause-and-play.html', code: 'All', title: 'Pause & Play', note: 'All the calm games and word puzzles, your level and your garden' },
+      { href: '/pause-and-play.html', code: 'All', title: 'Games: every calm game in one place', note: 'All the calm games and word puzzles, your level and your garden' },
       { href: '/bears-dojo.html', code: 'New', title: 'The Bears Dojo', note: 'A temple garden to wander, a bear to build, a quiet room of gentle things' },
       { href: '/frequency-journey.html', code: 'Game', title: 'Tidbit and Sugarfoot’s Arcade', note: 'Five gentle classic games: a maze chase, a crossing, a wagon-trail journey, a brick breaker and a catch game' },
       { href: '/word-bloom.html', code: 'Game', title: 'Word Bloom', note: 'Swipe across the petals to spell words, in gentle levels' },
@@ -668,7 +660,7 @@
       { sub: 'Music and calm sounds', area: 'media' },
       { href: '/soundscapes.html#brain-breakers', code: 'Music', title: 'Brain Breakers', note: 'Four instrumental pieces, with a music visualizer and vibration' },
       { href: '/calm-visualizer.html', code: 'Drift', title: 'Drift: calm visualizer', note: 'Slow colors and tones matched to how you feel' },
-      { href: '/wp-11-sound-toolkit.html', code: 'Sounds', title: 'Calm-down sounds', note: 'Brown noise, a low hum and a soft flutter' },
+      { href: '/soundscapes.html#background', code: 'Sounds', title: 'Calm sounds: background', note: 'Brown noise, a low hum and a soft flutter' },
       { href: '/echoes-of-gold.html', code: 'Album', title: 'Echoes of Gold', note: 'The companion album' },
       { sub: 'The pups live', area: 'media' },
       { href: '/pal-cam-tv.html', code: 'Live', title: 'Pal Cam TV', note: 'The pups live, all day, full screen or on your TV' }
@@ -874,7 +866,7 @@
     ['just-me', 'Just me', 'rel'], ['couples', 'Couples & partners', 'rel', 'Couples'], ['friends', 'Friends', 'rel'], ['family', 'Family', 'rel'],
     ['co-parents', 'Separated & co-parents', 'rel', 'Co-parents'], ['housemates', 'Housemates', 'rel'], ['work', 'Work & business partners', 'rel', 'Work'],
     ['life-changes', 'Life changes', 'rel'],
-    ['load', 'Share the load', 'topic'], ['talk', 'Talk it through', 'topic'], ['self', 'Know yourself', 'topic'], ['play', 'Calm & play', 'topic'],
+    ['load', 'Share the load', 'topic'], ['talk', 'Talk it through', 'topic'], ['self', 'Self-discovery', 'topic'], ['play', 'Calm & play', 'topic'],
     ['media', 'Watch & listen', 'topic'], ['read', 'Read & learn', 'topic']
   ];
   // the groups on /by-relationship.html (page names without .html); the menu's own groups are added below
@@ -888,7 +880,7 @@
     'work': 'work appreciation-at-work workpapers/wp-09-say-it-so-it-lands library/teams coming-out different-hours groups for-counselors wiring-card',
     'life-changes': 'new-parent living-alone grown-up-children money-together coming-home when-one-is-ill caregivers empty-nest retired-together grief on-my-own coming-out library/life',
     'play': 'frequency-journey word-bloom quiet-crossword daily-ledger-crossword quiet-words recheck-drive pause-and-play keepsakes surprise night-garden bears-dojo',
-    'media': 'calm-visualizer soundscapes wp-11-sound-toolkit echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
+    'media': 'calm-visualizer soundscapes echoes-of-gold frequency-buddies frequency-buddies-live frequency-buddies-shuffle frequency-buddies-music-video frequency-buddies-music-video-maker frequency-buddies-season-2 pal-cam-tv podcast-index'
   };
   // pages that are never "outside your focus": the start, safety, help and the site's own pages
   var FOCUS_NEUTRAL = /^\/(index|start-here|safety|upset-right-now|ask|on-this-device|contents|by-relationship|whats-new|404|offline|en-espanol|about|membership|install|sent-this|someone-sent-you-this|outside-help|examples|is-this-for-you|method-and-limits|roadmap|glossary)\.html$|^\/legal\//;
@@ -1015,10 +1007,10 @@
     '/ladder.html': 'How am I right now? (4 taps)',
     '/wp-11.html': 'Calm-down plan (Calm-Down Kit)',
     '/tools/soften-a-tense-moment.html': 'Soften a tense moment',
-    '/wp-11-sound-toolkit.html': 'Calm-down sounds (Sound Toolkit)',
     '/calm-visualizer.html': 'Slow colours and tones to wind down (Drift)',
     '/night-garden.html': 'Breathing game (Night Garden)',
-    '/soundscapes.html#brain-breakers': 'Calm music with a visualizer (Brain Breakers)',
+    '/soundscapes.html#brain-breakers': 'Calm sounds and music (Brain Breakers)',
+    '/soundscapes.html#background': 'Calm sounds and music: background sounds (Sound Toolkit)',
     '/co-parenting.html#handoff-bag': 'Handoff-bag checklist for two homes',
     '/two-faiths.html#festival-year': 'Our festival year planner',
     '/check-ins.html?for=family#card': 'Family plan card',
@@ -1029,10 +1021,9 @@
     '/gaming-and-time-together.html#deal-h': 'Time-together deal (games and phones)',
     '/sharing-a-room.html#agreement-h': 'Room agreement for roommates',
     '/different-hours.html#our-week': 'Our week on one page (different hours)',
-    '/workpapers/fill/suite.html': 'All the worksheets for your situation, in order (Workpaper Suite)',
-    '/full-path.html': 'One PDF of every worksheet, and a report (package and report)',
+    '/workpapers/fill/suite.html': 'Your worksheets, in order, with a report (Workpaper Suite)',
     '/prog-01.html': 'Six gentle weeks',
-    '/week-0.html': 'Week 0: reminders in your own calendar',
+    '/week-0.html': 'Week 0: a five-minute start',
     '/workpapers/report-01.html': 'Your progress, week by week',
     '/ask.html': 'Ask a question in your own words (Professor Puddles)',
     '/start-in-10-minutes.html': 'Start in 10 minutes',
@@ -1040,18 +1031,18 @@
     '/tools/frequency-sync-visualizer.html': 'Watch two rhythms fall into step (Frequency Sync Visualizer)',
     '/polymath.html#connect': 'Connect two fields of study',
     '/quest.html': 'Your learning map (quest map)',
-    '/pause-and-play.html': 'All the calm games (Pause & Play)',
+    '/pause-and-play.html': 'Games: every calm game in one place (Pause & Play)',
     '/frequency-journey.html': 'Five gentle arcade games (Tidbit and Sugarfoot’s Arcade)',
     '/word-bloom.html': 'Swipe-to-spell word game (Word Bloom)',
     '/quiet-words.html': 'Calm word search (Quiet Words)',
-    '/quiet-crossword.html': 'Mini crosswords (Quiet Crossword)',
-    '/daily-ledger-crossword.html': 'Daily crossword (Daily Ledger Crossword)',
+    '/quiet-crossword.html': 'Crosswords: gentle levels (Quiet Crossword)',
+    '/daily-ledger-crossword.html': 'Crosswords: newspaper daily (Daily Ledger Crossword)',
     '/recheck-drive.html': 'Calm football game for small kind acts (Re-check Drive)',
     '/bears-dojo.html': 'A quiet temple garden to wander (Bears Dojo)',
     '/frequency-buddies-music-video-maker.html': 'Make a cartoon music video (Frequency Buddies video maker)',
     '/surprise.html': 'Surprise me',
     '/quick-checks.html': 'How am I right now? (Today’s Weather)',
-    '/soundscapes.html': 'Calm music with a visualizer (Brain Breakers)',
+    '/soundscapes.html': 'Calm sounds and music (Brain Breakers)',
     '/workpapers/fill/suite.html?road=self': 'Worksheets for you, in order (Workpaper Suite)'
   };
   function menuLabel(it) { return (it.plain && it.title) || PLAIN_LABEL[it.href] || it.title; }
@@ -1406,7 +1397,7 @@
        ['/ladder.html', '&#127807;', T('Calm down now', 'Calmarte ahora')],
        ['/ask.html', '&#128167;', T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles')],
        ['/calming-supplements.html', '&#127793;', T('Calming herbs and supplements', 'Hierbas y suplementos')],
-       ['/find-your-start.html', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
+       ['/start-here.html#three-questions', '&#10067;', T('Not sure? Three questions', 'No sé por dónde empezar')]
       ].map(function (q) { return '<li><a href="' + q[0] + '"' + (q[0] === current ? ' aria-current="page"' : '') + '><span aria-hidden="true">' + q[1] + '</span> ' + q[2] + '</a></li>'; }).join('') + '</ul>'));
     panel.appendChild(el('p', { class: 'tol-panel-es', lang: 'es' }, '<a href="/en-espanol.html" hreflang="es">En español</a>: pasos cortos, en tu idioma'));
     panel.appendChild(buildIndex({ accordion: true }));
@@ -1590,7 +1581,7 @@
         '<p>' + (solo
           ? 'The <strong>Individual</strong> full path package puts every workpaper for the self path into one fillable PDF, then turns your answers into a report just for you: what’s filling your battery, patterns worth noticing, and kind next steps.'
           : 'The <strong>full path package</strong> puts every workpaper for your relationship into one fillable PDF, for you alone or 2 to 8 people, then turns your answers into a detailed report: findings, things worth a second look, recommendations and a plan.') + '</p>' +
-        '<p><a href="' + (solo ? '/self-path.html#package' : '/full-path.html') + '">See how it works</a> · <a href="/workpapers/fill/suite.html' + (solo ? '?road=self' : '') + '#full-path">Open the package</a></p>');
+        '<p>' + (solo ? '<a href="/self-path.html#package">See how it works</a> · ' : '') + '<a href="/workpapers/fill/suite.html' + (solo ? '?road=self' : '') + '#full-path">Open the package</a></p>');
       fpMain.appendChild(fpBox);
     }
 
@@ -2354,9 +2345,8 @@
     '/workpapers/wp-15-keep-your-little-rituals-alive.html': ['WP-15: Keep your little rituals alive', 'Every few months, list the small habits you share and mark which are alive, fading or stopped. Restart one in its smallest form.'],
     '/workpapers/calculators/look-back-30-days-quick.html': ['Look back over 30 days (the 30-Day Look-Back)', 'Type in how things were a month ago and how they are this week: what shifted, what didn’t, and one next step. It reads the setup, never a person.'],
     '/look-back-30-days.html': ['Look back over 30 days: the long form', 'Four weeks of hours, rescues, load and jobs side by side, with the running imbalance and one next step.'],
-    '/tools.html': ['All tools, by type', 'Every tool on the site with a plain name, grouped by type: communication, know yourself, share the load, calm and stress, family, work, health, plans, learning and play.'],
+    '/tools.html': ['All tools, by type', 'Every tool on the site with a plain name, grouped by type: communication, self-discovery, share the load, calm and stress, family, work, health, plans, learning and play.'],
     '/why-this-site.html': ['Why use this instead of an article or an AI chat?', 'What is different here: tools that use your own situation, plain words, research shown openly, and nothing you type leaving your device. And where it falls short.'],
-    '/find-your-start.html': ['Find your starting point', 'Three quick questions: who it’s about, what’s going on and how much time you have. You get one thing to try first, one short read and one other idea.'],
     '/nervous-system.html': ['Your nervous system, in plain words', 'Fight, flight and freeze, the vagus nerve and polyvagal theory explained honestly, and what helps your body settle.'],
     '/living-alone.html': ['Living on your own, living well', 'Any age, any reason: alone is not lonely, a home that runs itself, making friends as an adult, asking for help, and safety basics.'],
     '/research.html': ['The research behind this site', 'The studies, books and reviews behind the site: what each found, in plain words, and how strong the evidence is.']
@@ -2465,7 +2455,7 @@
   function searchPages(list, q, termsIn) {
     var terms = termsIn || searchTerms(q);
     if (!terms.length) return [];
-    var out = [], boost = {}, first = {};
+    var out = [], boost = {}, first = {}, together = NTOGETHER.test(fold(q || ''));
     // a situation named by a phrase ("won't let me see the baby", "dad died") leads over a single everyday word beside it
     var anySit = terms.some(function (t) { return actFor(t) && !(vocab && vocab[t]); });
     terms.forEach(function (t) {
@@ -2495,6 +2485,8 @@
       if (b && TOOL_URL.test(p.u)) b += first[p.u] ? 10 : 0;   // a tool named first for a word leads; further down it only edges ahead
       score += b;
       // the simple page comes before its in-depth twin: most people want the short way in first
+      // when nobody else is named, a tool one person can use alone edges ahead of a two-person one
+      if (score && needsPrep && needsPrep.solo[p.u] === 0 && !together) score -= 3;
       if (score) out.push({ p: p, score: score - (p.f ? 2 : 0) - (/-in-depth\.html/.test(p.u) ? 10 : 0) - (/^\/(telemetry|suite-index|roadmap|architecture|legal\/)/.test(p.u) ? 15 : 0) + (TOOL_URL.test(p.u) && score > 8 ? 3 : 0) });
     });
     // a section of a page (or the breathing break) named first for a word leads; further down it sits with the pages
@@ -2537,6 +2529,226 @@
     terms.forEach(function (t, i) { if (fixed[i] !== t) said = said.replace(new RegExp('(^|[^a-z0-9])' + reEsc(t) + '(?![a-z0-9])'), '$1' + fixed[i]); });
     return { hits: hits, used: used, fixed: fixed, changed: changed, auto: auto, said: said };
   }
+
+  // ---------- Search by what's going on (the "needs" layer) ----------
+  // People who don't know a tool's name type their problem: "we keep fighting about dishes", "my teen won't talk
+  // to me". assets/js/search-needs.js (built by tools/search/build_index.py from tools/search/needs.json) holds
+  // hundreds of everyday ways of saying a problem, each with the 1-3 pages that help most and one line on why.
+  // It is small and loads before the big index, so "Best match for what you described" shows at once. It forgives
+  // spelling slips, plurals, word order and filler words. When nobody else is named, what one person can use
+  // alone comes first: people usually look on their own before they bring anyone else in.
+  var needsData = null, needsWait = null, needsPrep = null;
+  function loadNeeds(cb) {
+    if (needsData) return cb(needsData);
+    if (needsWait) { needsWait.push(cb); return; }
+    needsWait = [cb];
+    var sc = document.createElement('script'); sc.src = '/assets/js/search-needs.js';
+    function done(d) { var w = needsWait; needsWait = null; w.forEach(function (f) { try { f(d); } catch (err) { if (window.console) console.warn('search:', err); } }); }
+    sc.onload = function () { try { needsData = window.TOL_NEEDS && window.TOL_NEEDS.needs ? window.TOL_NEEDS : null; if (needsData) prepNeeds(needsData); } catch (err) { needsData = null; } done(needsData); };
+    sc.onerror = function () { sc.remove(); done(null); };
+    document.head.appendChild(sc);
+  }
+  // filler words that say nothing about the problem (English and everyday Spanish)
+  var NSTOP = {};
+  ('a an the and or but so to of in on at by for with from into about as is it its be been am are was were do does did done have has had having ' +
+   'i im ive id me my mine myself we us our ours you your yours he him his she her hers they them their theirs this that these those there here ' +
+   'what how why when where who which can could would should will shall may might must just really very quite so too also still even ever ' +
+   'get got gets getting keep keeps kept one some any all each every much many more most lot lots thing things stuff something anything ' +
+   'dont doesnt didnt cant cannot wont isnt arent wasnt werent havent hasnt hadnt wouldnt couldnt shouldnt aint not no ' +
+   'youre theyre were hes shes thats whats theres lets ok okay please like want need feel feeling felt help-me ' +
+   'de la el los las y en que con por para mi mis me un una lo le se es muy al del su sus yo tu te nos').split(' ').forEach(function (w) { NSTOP[w] = 1; });
+  // "want", "need", "feel" say how, not what: kept out, so "i need calm" and "calm" read the same
+  function nStem(w) {
+    w = w.replace(/'s$/, '').replace(/'/g, '');
+    if (w.length > 5 && /ies$/.test(w)) w = w.slice(0, -3) + 'y';
+    else if (w.length > 5 && /ing$/.test(w)) w = w.slice(0, -3);
+    else if (w.length > 4 && /ed$/.test(w)) w = w.slice(0, -2);
+    else if (w.length > 4 && /(ches|shes|sses|xes|zes)$/.test(w)) w = w.slice(0, -2);
+    else if (w.length > 3 && /s$/.test(w) && !/(ss|us|is)$/.test(w)) w = w.slice(0, -1);
+    if (w.length > 4 && /([b-df-hj-np-tv-z])\1$/.test(w) && !/(ll|ss|ff|zz)$/.test(w)) w = w.slice(0, -1);
+    if (w.length > 4 && /e$/.test(w)) w = w.slice(0, -1);
+    return w;
+  }
+  function nCanon(w) {
+    var P = needsPrep; if (!P) return nStem(w);
+    var r = P.syn[w] || w, s = nStem(r);
+    return P.synStem[s] || s;
+  }
+  function nTokens(q) {
+    var f = fold(q).replace(/[¿?¡!.,;:()"“”«»\/]+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (needsPrep) needsPrep.multi.forEach(function (m) { f = f.replace(m[0], m[1]); });
+    var out = [], seen = {};
+    f.split(/[^a-z0-9'-]+/).forEach(function (w) {
+      w = w.replace(/^['-]+|['-]+$/g, '');
+      if (!w || NSTOP[w] || NSTOP[w.replace(/'/g, '')] || (w.length < 2 && !/\d/.test(w))) return;
+      var c = nCanon(w);
+      if (c && !seen[c]) { seen[c] = 1; out.push(c); }
+    });
+    return out;
+  }
+  function prepNeeds(D) {
+    var P = needsPrep = { syn: {}, synStem: {}, multi: [], df: {}, vocab: [], solo: {} };
+    Object.keys(D.syn || {}).forEach(function (k) {
+      var ks = nStem(k);
+      P.synStem[ks] = ks;
+      (D.syn[k] || []).forEach(function (v) {
+        v = fold(v);
+        if (v.indexOf(' ') !== -1) P.multi.push([new RegExp('(^|[^a-z0-9])' + reEsc(v) + '(?![a-z0-9])', 'g'), '$1' + k]);
+        else { P.syn[v] = k; if (!P.synStem[nStem(v)]) P.synStem[nStem(v)] = ks; }
+      });
+    });
+    D.needs.forEach(function (n) {
+      var bag = {};
+      n._p = n.s.map(function (s) { var t = nTokens(s); t.forEach(function (x) { bag[x] = 1; }); return t; });
+      n._bag = bag;
+      Object.keys(bag).forEach(function (t) { P.df[t] = (P.df[t] || 0) + 1; });
+      n.g.forEach(function (g) { var u = g[0]; if (P.solo[u] == null || !g[3]) P.solo[u] = g[3] ? 1 : 0; });
+    });
+    P.vocab = Object.keys(P.df);
+    P.N = D.needs.length;
+  }
+  function nIdf(t) { var P = needsPrep; return Math.log(1 + P.N / (P.df[t] || 0.5)); }
+  // a word the needs don't use: the nearest one they do, a letter or two off ("chors", "anxios", "teenger")
+  function nNear(t) {
+    var P = needsPrep; if (t.length < 4 || /\d/.test(t)) return null;
+    var max = t.length <= 6 ? 1 : 2, best = null, bd = 9;
+    P.vocab.forEach(function (v) {
+      if (Math.abs(v.length - t.length) > max || v.length < 3) return;
+      var d = editDist(t, v, max);
+      if (d <= max && (d < bd || (d === bd && (P.df[v] || 0) > (P.df[best] || 0)))) { bd = d; best = v; }
+    });
+    return best;
+  }
+  var NTOGETHER = /(^|[^a-z])(we|us|our|ours|together|both|each other|as a couple|as a family|our team|nosotros|juntos)([^a-z]|$)/;
+  // a query names someone else ("we", "together", "both of us"): the order written in needs.json stays; otherwise
+  // what one person can use alone moves first
+  function soloFirst(go, q) {
+    if (NTOGETHER.test(fold(q))) return go.slice();
+    return go.map(function (g, i) { return [g, i]; }).sort(function (a, b) { return ((b[0][3] ? 1 : 0) - (a[0][3] ? 1 : 0)) || (a[1] - b[1]); }).map(function (x) { return x[0]; });
+  }
+  // a question about safety at home never gets a "best match" in front of the safety page
+  function safetyQuery(q) {
+    try { return searchTerms(q).some(function (t) { var a = actFor(t); return a && a[0] === '/safety.html'; }); } catch (e) { return false; }
+  }
+  function matchNeeds(q) {
+    var P = needsPrep, D = needsData;
+    if (!P || !D) return { best: null, close: [], score: 0 };
+    var raw = nTokens(q), Q = [], fuzzy = {};
+    raw.forEach(function (t) {
+      if (P.df[t]) { Q.push(t); return; }
+      var n = nNear(t);
+      if (n && !P.df[t]) { fuzzy[n] = 1; Q.push(n); } else Q.push(t);
+    });
+    if (!Q.length) return { best: null, close: [], score: 0, tokens: Q };
+    var w = {}, qW = 0;
+    Q.forEach(function (t) { w[t] = P.df[t] ? nIdf(t) * (fuzzy[t] ? 0.85 : 1) : 1; qW += w[t]; });
+    var scored = D.needs.map(function (n) {
+      var best = 0, bestCov = 0;
+      n._p.forEach(function (pt) {
+        if (!pt.length) return;
+        var m = 0, pW = 0;
+        pt.forEach(function (t) { pW += nIdf(t); });
+        Q.forEach(function (t) { if (pt.indexOf(t) !== -1) m += w[t]; });
+        if (!m) return;
+        var covQ = m / qW, covP = Math.min(1, m / pW), s = 0.6 * covQ + 0.4 * covP;
+        if (s > best) { best = s; bestCov = covQ; }
+      });
+      var bm = 0; Q.forEach(function (t) { if (n._bag[t]) bm += w[t]; });
+      var bagCov = bm / qW;
+      return { n: n, score: 0.75 * best + 0.25 * bagCov, covQ: Math.max(bestCov, bagCov * 0.9) };
+    }).filter(function (x) { return x.score > 0; }).sort(function (a, b) { return b.score - a.score; });
+    var top = scored[0], strong = top && top.score >= 0.55 && top.covQ >= 0.6 && !safetyQuery(q);
+    // two needs nearly tied: the one whose pages one person can start alone goes first
+    if (strong && scored[1] && scored[1].score >= top.score - 0.02 && !NTOGETHER.test(fold(q)) && (scored[1].n.g[0][3] || 0) > (top.n.g[0][3] || 0)) { var x0 = scored[0]; scored[0] = scored[1]; scored[1] = x0; top = scored[0]; }
+    return {
+      best: strong ? { id: top.n.id, l: top.n.l, g: soloFirst(top.n.g, q) } : null,
+      score: top ? top.score : 0,
+      close: scored.slice(strong ? 1 : 0).filter(function (x) { return x.score >= 0.2; }).slice(0, 4).map(function (x) { return { id: x.n.id, l: x.n.l, q: x.n.s[0], g: x.n.g }; }),
+      tokens: Q
+    };
+  }
+  // the search's answer as a list of addresses, best first: the needs match, then the page search
+  function rankAll(q, cb) {
+    loadNeeds(function () {
+      var M = matchNeeds(q), urls = M.best ? M.best.g.map(function (g) { return g[0]; }) : [];
+      loadSearch(function (data) {
+        var R = null; try { R = data ? smartSearch(data, q) : null; } catch (e) { R = null; }
+        var hits = R ? R.hits.map(function (h) { return h.p.u; }) : [];
+        hits.forEach(function (u) { if (urls.indexOf(u) === -1) urls.push(u); });
+        cb({ urls: urls, best: M.best, close: M.close, pages: hits.length, fallback: !urls.length });
+      });
+    });
+  }
+  function escA(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var needsCSSDone = false;
+  function needsCSS() {
+    if (needsCSSDone) return; needsCSSDone = true;
+    var st = document.createElement('style');
+    st.textContent =
+      '.tol-find-best{margin:.7rem 0 .2rem;padding:.7rem .75rem .5rem;border:1.5px solid var(--line,#D9CBA3);border-left:4px solid var(--focus,#2B5B8C);border-radius:12px;background:var(--paper-deep,#F3EBD6);}' +
+      '.tol-find-best h3,.tol-find-help h3,.tol-find-none h3{margin:0 0 .2rem;font:600 .95rem/1.35 var(--tol-sans,system-ui,sans-serif);color:var(--ink,#2B2620);}' +
+      '.tol-find-best .tol-find-for{margin:0 0 .35rem;font-size:.86rem;color:var(--ink-soft,#5A5048);}' +
+      '.tol-find-best ol{list-style:none;margin:0;padding:0;}.tol-find-best li{margin:0;border-top:1px dotted var(--line,#D9CBA3);}.tol-find-best li:first-child{border-top:0;}' +
+      '.tol-find-best a{display:block;padding:.55rem .35rem;color:var(--ink,#2B2620);text-decoration:none;border-radius:8px;}.tol-find-best a:hover{background:rgba(127,127,127,.12);}' +
+      '.tol-find-best a:focus-visible,.tol-find-chip:focus-visible,.tol-find-more a:focus-visible,.tol-find-more button:focus-visible{outline:2px solid var(--focus,#2B5B8C);outline-offset:2px;}' +
+      '.tol-find-bt{display:block;font-weight:600;font-size:1.02rem;overflow-wrap:anywhere;}.tol-find-bw{display:block;font-size:.9rem;color:var(--ink-soft,#5A5048);line-height:1.45;margin-top:.1rem;}' +
+      '.tol-find-help,.tol-find-none{margin:.7rem 0 .2rem;}' +
+      '.tol-find-chips{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;margin:.35rem 0 .5rem;padding:0;}.tol-find-chips li{margin:0;}' +
+      '.tol-find-chip{font:inherit;font-size:.92rem;min-height:40px;padding:.35rem .8rem;border-radius:999px;border:1.5px solid var(--line,#D9CBA3);background:var(--paper,#FFFDF7);color:var(--ink,#2B2620);cursor:pointer;text-align:left;max-width:100%;}' +
+      '.tol-find-chip:hover{border-color:var(--focus,#2B5B8C);}' +
+      '.tol-find-more{display:flex;flex-wrap:wrap;gap:.3rem 1rem;margin:.2rem 0 0;padding:0;list-style:none;font-size:.95rem;}.tol-find-more li{margin:0;}' +
+      '.tol-find-more a,.tol-find-more button{display:inline-flex;align-items:center;min-height:40px;color:var(--focus,#2B5B8C);font:inherit;font-weight:600;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;text-align:left;}' +
+      '.tol-find-also{margin:.6rem 0 .1rem;font-size:.95rem;}.tol-find-also a{font-weight:600;}' +
+      '.tol-find-help[hidden],.tol-find-best[hidden],.tol-find-none[hidden]{display:none;}';
+    document.head.appendChild(st);
+  }
+  var FINDER = '/start-here.html#three-questions';
+  // "Best match for what you described": the need's 1-3 pages, each with why it helps
+  function needsBestHTML(best, q, head) {
+    if (!best) return '';
+    return '<h3>' + escA(head || T('Best match for what you described', 'Lo que mejor encaja con lo que describes')) + '</h3>' +
+      '<p class="tol-find-for">' + escA(best.l) + '</p><ol>' + best.g.map(function (g) {
+        return '<li><a href="' + escA(g[0]) + '" data-find-best><span class="tol-find-bt">' + escA(g[1]) + '</span><span class="tol-find-bw">' + escA(g[2]) + '</span></a></li>';
+      }).join('') + '</ol>';
+  }
+  function chipsHTML(list) {
+    return '<ul class="tol-find-chips">' + list.map(function (c) { return '<li><button type="button" class="tol-find-chip" data-find-q="' + escA(c[1]) + '">' + escA(c[0]) + '</button></li>'; }).join('') + '</ul>';
+  }
+  function moreHTML(q, opts) {
+    opts = opts || {};
+    return '<ul class="tol-find-more">' +
+      '<li><a href="' + FINDER + '">' + T('Not sure? Answer 3 questions', '¿No sabes? Responde 3 preguntas') + '</a></li>' +
+      (opts.ask ? '<li><a href="/ask.html' + (q ? '?q=' + encodeURIComponent(q) : '') + '" data-find-ask="' + escA(q || '') + '">' + T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles') + (q ? T(' in your words', ' con tus palabras') : '') + '</a></li>' : '') +
+      '<li><a href="/explore.html' + (opts.exploreQ && q ? '?q=' + encodeURIComponent(q) : '') + '">' + T('See everything', 'Ver todo') + '</a></li></ul>';
+  }
+  // the empty box: "What's going on?" (things one person can start alone lead), the 3-question finder, everything
+  function needsEmptyHTML() {
+    var chips = (needsData && needsData.chips) || [];
+    return '<h3>' + T('What’s going on?', '¿Qué está pasando?') + '</h3>' + (chips.length ? chipsHTML(chips) : '') + moreHTML('', {});
+  }
+  // nothing matched: the closest needs, the finder, Professor Puddles with their own words, and everything
+  function needsFallbackHTML(q, M) {
+    var close = (M && M.close) || [];
+    var chips = close.length ? close.map(function (c) { return [c.l, c.q]; }) : ((needsData && needsData.chips) || []).slice(0, 5);
+    return '<h3>' + (close.length ? T('Closest to what you described', 'Lo más parecido a lo que describes') : T('Try one of these', 'Prueba una de estas')) + '</h3>' +
+      (chips.length ? chipsHTML(chips) : '') + moreHTML(q, { ask: true });
+  }
+  function askPuddles(q) {
+    function go() { if (window.TOLChat) { if (q) window.TOLChat.ask(q); else window.TOLChat.open({}); } }
+    if (window.TOLChat) return go();
+    var sc = document.createElement('script'); sc.src = '/assets/js/site-chat.js';
+    sc.onload = go; sc.onerror = function () { location.href = '/ask.html' + (q ? '?q=' + encodeURIComponent(q) : ''); };
+    document.head.appendChild(sc);
+  }
+  // clicks inside any needs box: a chip searches its words; "Ask Professor Puddles" opens him with their words
+  function wireNeeds(root, onChip, beforeAsk) {
+    root.addEventListener('click', function (e) {
+      var c = e.target.closest && e.target.closest('[data-find-q]');
+      if (c) { e.preventDefault(); onChip(c.getAttribute('data-find-q')); return; }
+      var a = e.target.closest && e.target.closest('[data-find-ask]');
+      if (a && !(e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1)) { e.preventDefault(); if (beforeAsk) beforeAsk(); askPuddles(a.getAttribute('data-find-ask')); }
+    });
+  }
   var runSearch = function () {};
   // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
   // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
@@ -2558,16 +2770,35 @@
   function buildSearch() {
     var box = el('div', { class: 'tol-find', role: 'search' },
       '<label for="tol-find-q">' + T('Search the site', 'Buscar en el sitio') + '</label>' +
-      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + T('A word or two, like “chores” or “calm down”', 'Una o dos palabras, como “tareas” o “calma”') + '" aria-describedby="tol-find-note">' +
+      '<input id="tol-find-q" type="search" autocomplete="off" spellcheck="true" enterkeyhint="search" placeholder="' + T('Describe what’s going on, e.g. “we argue about chores”', 'Cuenta qué pasa, p. ej. “peleamos por las tareas”') + '" aria-describedby="tol-find-note">' +
       '<p class="tol-find-note" id="tol-find-note" aria-live="polite">' + T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.') + '</p>' +
+      '<div class="tol-find-help" hidden></div><div class="tol-find-best" hidden></div><div class="tol-find-none" hidden></div>' +
       '<ol class="tol-find-results" hidden></ol>');
+    needsCSS();
     var input = box.querySelector('input'), note = box.querySelector('.tol-find-note'), list = box.querySelector('.tol-find-results'), timer = null;
+    var helpEl = box.querySelector('.tol-find-help'), bestEl = box.querySelector('.tol-find-best'), noneEl = box.querySelector('.tol-find-none');
+    // the empty box, focused: "What's going on?" chips, the 3-question finder and everything
+    function showHelp() {
+      if (input.value.trim()) return;
+      helpEl.innerHTML = needsEmptyHTML(); helpEl.hidden = false;
+      if (!needsData) loadNeeds(function () { if (!input.value.trim() && !helpEl.hidden) helpEl.innerHTML = needsEmptyHTML(); });
+    }
+    input.addEventListener('focus', showHelp);
+    wireNeeds(box, function (words) { input.value = words; searchAll = false; runSearch(words); input.focus(); }, function () { closePanel(); });
     var shownFor = null;   // the words the list on screen is for
     var searchAll = false; // in Focus mode: true once "Show everything" is pressed for these results
     runSearch = function (q, then) {
       q = String(q || '').trim();
       var idx = panel && panel.querySelector('.tol-index');
-      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; note.textContent = T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.'); if (idx) idx.hidden = false; return; }
+      if (!q) { shownFor = null; list.hidden = true; list.innerHTML = ''; bestEl.hidden = noneEl.hidden = true; if (document.activeElement === input) showHelp(); note.textContent = T('Searches every page, on your device. Spelling can be rough.', 'Busca en todas las páginas, en tu dispositivo. La mayoría están en inglés.'); if (idx) idx.hidden = false; return; }
+      helpEl.hidden = true;
+      var M = { best: null, close: [] }, bestU = {};
+      loadNeeds(function () {
+      if (input.value.trim() !== q) return;
+      try { M = matchNeeds(q); } catch (err) { M = { best: null, close: [] }; }
+      // the best match for what they described shows at once, before the page index has loaded
+      bestEl.innerHTML = needsBestHTML(M.best, q); bestEl.hidden = !M.best; noneEl.hidden = true;
+      if (M.best) M.best.g.forEach(function (g) { bestU[g[0]] = 1; });
       loadSearch(function (data) {
         if (input.value.trim() !== q) return;
         if (!data) { note.textContent = T('Search isn’t available just now. The full list of pages is below.', 'La búsqueda no está disponible ahora. Abajo está la lista de páginas.'); if (idx) idx.hidden = false; return; }
@@ -2579,7 +2810,7 @@
           note.textContent = 'Search had a hiccup with “' + q + '”. Try another word, or browse the sections below.';
           return;
         }
-        var hits = R.hits, used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
+        var hits = R.hits.filter(function (h) { return !bestU[h.p.u]; }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
         // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
         // the rest wait behind "Show everything"
         var outside = 0, focusNone = false;
@@ -2590,8 +2821,10 @@
           else if (inF.length) hits = inF;
           else if (outside) focusNone = true;
         }
-        if (idx) idx.hidden = !!hits.length;
+        if (idx) idx.hidden = !!(hits.length || M.best);
         list.hidden = !hits.length;
+        // never a dead end: nothing found, so the closest needs, the finder, Professor Puddles and everything
+        noneEl.innerHTML = !hits.length && !M.best ? needsFallbackHTML(q, M) : ''; noneEl.hidden = !!(hits.length || M.best);
         list.innerHTML = hits.map(function (h) {
           var p = h.p, act = p.u.charAt(0) === '#';
           var kind = act ? p.k : TOOL_URL.test(p.u) ? 'Tool' : '';
@@ -2600,13 +2833,13 @@
             '<span class="tol-find-s">' + markTerms(act ? p.d : snippet(p, used), used) + '</span></a></li>';
         }).join('');
         var said = '“' + (auto ? R.said : q) + '”';
-        var head = hits.length ? (hits.length === 25 ? T('The 25 best matches for ', 'Los 25 mejores resultados para ') + said + '.' : hits.length + (hits.length === 1 ? T(' result for ', ' resultado para ') : T(' results for ', ' resultados para ')) + said + '.')
-          : T('Nothing matches “' + q + '” yet. Try a shorter or different word, browse the sections below, or ask Professor Puddles in your own words.', 'Nada coincide con “' + q + '” todavía. Prueba con otra palabra más corta, mira las secciones de abajo o pregúntale al Profesor Puddles con tus propias palabras.');
+        var head = !hits.length && M.best ? T('The best match is above.', 'Lo que mejor encaja está arriba.') : hits.length ? (M.best ? T('More pages: ', 'Más páginas: ') : '') + (hits.length === 25 ? T('The 25 best matches for ', 'Los 25 mejores resultados para ') + said + '.' : hits.length + (hits.length === 1 ? T(' result for ', ' resultado para ') : T(' results for ', ' resultados para ')) + said + '.')
+          : T('Nothing matches “' + q + '” yet. Here are the closest things, or try other words.', 'Nada coincide con “' + q + '” todavía. Aquí está lo más parecido, o prueba otras palabras.');
         note.innerHTML = '';
         if (auto) note.appendChild(document.createTextNode(T('Showing results for “' + R.said + '” (you typed “' + q + '”). ', 'Resultados para “' + R.said + '” (escribiste “' + q + '”). ')));
         note.appendChild(document.createTextNode(auto ? (hits.length === 25 ? T('The 25 best matches.', 'Los 25 mejores resultados.') : hits.length + (hits.length === 1 ? T(' result.', ' resultado.') : T(' results.', ' resultados.'))) : head));
         if (hits.length && esPage()) note.appendChild(document.createTextNode(' La mayoría de las páginas están en inglés.'));
-        if (!hits.length || hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'))); }
+        if ((hits.length || M.best) && hits.length < 3) { note.appendChild(document.createTextNode(' ')); note.appendChild(el('a', { href: '/ask.html', class: 'tol-find-ask' }, T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles'))); }
         if (outside) {
           note.appendChild(document.createTextNode(focusNone ? ' Nothing in your focus matches, so here is everything. ' : searchAll ? ' Your focus first, then everything else. ' : ' Showing your focus (' + focusList() + '). '));
           if (!focusNone) {
@@ -2622,6 +2855,7 @@
         }
         shownFor = q;
         if (then) then();
+      });
       });
     };
     list.addEventListener('click', function (e) {
@@ -2640,7 +2874,7 @@
         e.preventDefault();
         // typed fast and pressed Enter before the list caught up: search now, then go to the first result
         // Enter opens the first result (a page, or the Breathe break / Settings right here)
-        var go = function () { var first = list.querySelector('a'); if (first) first.click(); };
+        var go = function () { var first = (!bestEl.hidden && bestEl.querySelector('a')) || list.querySelector('a'); if (first) first.click(); };
         if (shownFor !== input.value.trim()) { clearTimeout(timer); runSearch(input.value, go); } else go();
       }
       // Escape clears the box and, in the menu or search panel, closes it too: one press is enough
@@ -2653,6 +2887,10 @@
   // the menu's own lists, for pages that show the whole site (/explore.html): read-only copies of what the menu uses
   window.TOLSiteMap = { sections: SECTIONS, menu: MENU, areasOf: areasOf, focusAreas: FOCUS_AREAS, isTool: function (u) { return TOOL_URL.test(String(u || '').split(/[?#]/)[0]); }, plainLabel: function (u) { return PLAIN_LABEL[u] || ''; } };
   window.TOLSearch = { load: loadSearch, correct: function (w) { return correct(fold(w)) || null; },
+    // the needs layer, for /explore.html, /tools.html and tests: needs(q, cb) -> { best, close }; rank(q, cb) -> addresses, best first
+    loadNeeds: loadNeeds, needs: function (q, cb) { loadNeeds(function () { var M; try { M = matchNeeds(q); } catch (e) { M = { best: null, close: [] }; } cb(M); }); },
+    rank: rankAll, bestHTML: function (best, q) { needsCSS(); return needsBestHTML(best, q); }, fallbackHTML: function (q, M) { needsCSS(); return needsFallbackHTML(q, M); },
+    emptyHTML: function () { needsCSS(); return needsEmptyHTML(); }, wire: wireNeeds, soloOf: function (u) { return needsPrep ? needsPrep.solo[u] : undefined; },
     find: function (q, cb) { loadSearch(function (d) { if (!d) return cb([], q); var R; try { R = smartSearch(d, q); } catch (err) { return cb([], q); } cb(R.hits.map(function (x) { return x.p; }), R.used.join(' ')); }); } };
 
   // ---------- "Chapter N of 6": where you are in the book, with every chapter one tap away ----------

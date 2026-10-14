@@ -29,10 +29,8 @@
       },
       "scriptLabel": "Something to tell yourself",
       "path": [
-        [
-          "Today’s Weather: what is today good for?",
-          "/quick-checks.html#today"
-        ],
+        ["How am I right now? What is today good for?",
+          "/quick-checks.html#today"],
         [
           "How much are you carrying? (WP-02)",
           "/workpapers/wp-02-how-much-are-you-carrying.html"
@@ -95,10 +93,8 @@
           "The Calm-Down Kit (WP-11)",
           "/wp-11.html"
         ],
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ]
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"]
       ],
       "deeper": [
         "where big reactions come from",
@@ -266,14 +262,10 @@
       },
       "scriptLabel": "Something to tell yourself",
       "path": [
-        [
-          "Know your own wiring",
-          "/know-yourself.html"
-        ],
-        [
-          "Today’s Weather",
-          "/quick-checks.html#today"
-        ],
+        ["Self-discovery: know your own wiring",
+          "/know-yourself.html"],
+        ["How am I right now? (Today’s Weather)",
+          "/quick-checks.html#today"],
         [
           "Self-compassion (Library)",
           "/library/connection.html#self-compassion"

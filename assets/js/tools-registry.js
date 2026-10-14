@@ -13,9 +13,10 @@
      mins    about how long, in minutes (for sorting and filters); time: the same in words
      who     'solo' (on your own), 'two' (with one other person), 'group' (three or more, a home or a team)
      benefit the main reason to use it, in a few words
-     top     1–6 for the "Start here" strip on /tools.html (the tools testers used and liked most), else 0
+     top     1–6 for the "Start here" strip on /tools.html: tools a person can use on their own (our picks, after what testers liked most), else 0
      kw      extra words people might search for
      modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
+     outcomes, people, bestFor, liked, example, sample, es: added below from MORE (what it helps with, who it is for)
    Old ids of merged tools: window.TOLToolAliases (old id -> new id); window.TOLToolById(id) follows them.
    Nothing here is stored or sent. */
 (function () {
@@ -23,7 +24,7 @@
 
   var TYPES = [
     { id: 'talk', slug: 'communication', name: 'Communication', blurb: 'Say it so it lands, read what they meant, and stay close.' },
-    { id: 'self', slug: 'know-yourself', name: 'Know yourself', blurb: 'Quizzes and checks for how you work. Nothing here needs anyone else.' },
+    { id: 'self', slug: 'self-discovery', oldSlugs: ['know-yourself'], name: 'Self-discovery', blurb: 'Quizzes and checks for how you work. Nothing here needs anyone else.' },
     { id: 'load', slug: 'share-the-load', name: 'Share the load', blurb: 'See who does what at home, and give every job an owner.' },
     { id: 'calm', slug: 'calm-and-stress', name: 'Calm and stress', blurb: 'Settle your body first, in the moment or ahead of time.' },
     { id: 'family', slug: 'family-and-parenting', name: 'Family and parenting', blurb: 'Two homes, two traditions, grown-up children and family events.' },
@@ -75,7 +76,7 @@
     { id: 'checkin90', name: '90-second daily check-in', brand: '', href: '/workpapers/wp-13-daily-check-in.html', type: 'talk', also: ['plan', 'load'],
       does: 'One sentence each, once a day: how you are doing and what is coming up. No debating.',
       gets: 'A tiny daily habit, and a fill-in sheet to keep track if you like.',
-      mins: 2, time: 'About 2 minutes a day', who: ['two', 'group'], benefit: 'Small things stay small', top: 6,
+      mins: 2, time: 'About 2 minutes a day', who: ['two', 'group'], benefit: 'Small things stay small',
       kw: 'daily check in check-in routine habit each day shift change' },
     { id: 'pace12', name: 'Same moment, different speeds', brand: 'WP-12', href: '/workpapers/wp-12-same-moment-different-speeds.html', type: 'talk', also: ['plan'],
       does: 'For five everyday moments, each person marks how fast they want to move, how much they want to talk, and how urgent it feels.',
@@ -119,12 +120,12 @@
     { id: 'wavelength', name: 'Communication style quiz', brand: 'Wavelength', href: '/wavelength.html', type: 'self', also: ['talk'],
       does: 'Twelve quick either/or questions about how you think, talk and listen.',
       gets: 'Your four-letter Wave Code and type, a card to share, and a side-by-side compare with someone else.',
-      mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'People stop having to guess how to talk to you', top: 5,
+      mins: 2, time: '2 to 10 minutes', who: ['solo', 'two'], benefit: 'People stop having to guess how to talk to you', top: 4,
       kw: 'communication quiz personality quiz wave code style test archetype compare' },
     { id: 'wiring', name: 'How I like to be spoken to: a one-page card', brand: 'the Wiring Card', href: '/wiring-card.html', type: 'self', also: ['talk', 'work'],
       does: 'Pick what helps words reach you, what your silence means and what to avoid.',
       gets: 'A one-page card to copy, print or share, and a side-by-side view with someone else’s card.',
-      mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Hard talks start from how you each take things in',
+      mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Hard talks start from how you each take things in', top: 6,
       kw: 'wiring card neurodivergent adhd autistic how i communicate card' },
     { id: 'roots', name: 'Where a reaction comes from', brand: 'Roots & Wings', href: '/growing-up.html#roots-h', type: 'self', also: [],
       does: 'A gentle tap-through look at where a trait or reaction may have started.',
@@ -146,7 +147,7 @@
     { id: 'lemon-quick', name: 'Who does what: chore split check', brand: 'the Lemonade Stand, quick look', href: '/lemonade-stand.html#quick', type: 'load', also: ['family'],
       does: 'Tap who mostly does each job at home, the thinking work too. Send it so others can answer on their own.',
       gets: 'A plain picture of the split, where you agree and differ, and a fridge list to print or send.',
-      mins: 2, time: 'About 2 minutes', who: ['solo', 'two', 'group'], benefit: 'Settle “who does more” with facts, not blame', top: 2,
+      mins: 2, time: 'About 2 minutes', who: ['solo', 'two', 'group'], benefit: 'Settle “who does more” with facts, not blame', top: 3,
       kw: 'chore split chores who does more housework fair split roommates housemates mental load quick look' },
     { id: 'lemon-full', name: 'Chores and bills: count the hours and money', brand: 'the Lemonade Stand', href: '/lemonade-stand.html', type: 'load', also: ['plan'],
       does: 'List the jobs, the hours and the bills for one person or a whole home.',
@@ -156,7 +157,7 @@
     { id: 'owner', name: 'One owner per job: a who-owns-what list', brand: '', href: '/workpapers/wp-03-one-owner-per-job.html', type: 'load', also: ['family', 'work', 'plan'],
       does: 'Give every regular job one owner, a backup and what “done” means.',
       gets: 'A fridge list to print, save or send. Others add their version and you combine them.',
-      mins: 10, time: 'About 10 minutes', who: ['two', 'group'], benefit: 'Nobody has to keep asking', top: 3,
+      mins: 10, time: 'About 10 minutes', who: ['two', 'group'], benefit: 'Nobody has to keep asking',
       kw: 'chore chart rota roster who owns what fridge list house rules jobs list two homes' },
     { id: 'whodid', name: 'Who did what this week: a one-week log', brand: '', href: '/workpapers/wp-01.html', type: 'load', also: [],
       does: 'Log who did what at home for one week, the invisible jobs too.',
@@ -271,7 +272,7 @@
       modes: [['Quick: 4 taps', '/ladder.html'], ['Full forecast', '/quick-checks.html#today']],
       does: 'Four quick taps on how you are right now, or one minute on your mood, sleep, body, pressure and what is coming up today.',
       gets: 'Calm, revved up or running on empty, with what helps now and a pause line; or today’s full forecast, a good time to talk, and a private log if you want one.',
-      mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk',
+      mins: 1, time: '20 seconds to a minute', who: ['solo'], benefit: 'Know if now is a good time to talk', top: 5,
       kw: 'mood tracker mood check in energy sleep daily check today weather almanac nervous system ladder where am i right now state stressed shut down overwhelmed stress check battery burnout load how full load check' },
 
     // ---------- Plan together
@@ -311,7 +312,7 @@
     { id: 'ask', name: 'Ask a question in your own words', brand: 'Professor Puddles', href: '/ask.html', type: 'learn', also: ['talk'],
       does: 'Type what is going on, the way you would say it to a friend.',
       gets: 'Kind next steps, words you could use and the right pages, made only from this site.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Help for your exact situation, privately', top: 4,
+      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Help for your exact situation, privately', top: 2,
       kw: 'chat chatbot ask question help puddles assistant' },
     { id: 'start10', name: 'Start in 10 minutes', brand: '', href: '/start-in-10-minutes.html', type: 'learn', also: ['self'],
       does: 'Four small steps, just for you or with someone: your weather, one short read, one pattern, one thing to try.',
@@ -382,6 +383,120 @@
       mins: 5, time: 'About 5 minutes', who: ['solo', 'two'], benefit: 'Something silly to make together with kids',
       kw: 'music video maker kids cartoon create' }
   ];
+
+  // ---------- What each tool helps with, and who it is for (used by /tools.html's filters and cards; tools11)
+  //   o      outcomes: calm (Calm down) · talk (Talk better) · self (Self-discovery) · other (Understand someone)
+  //          · load (Share the load fairly) · plan (Plan together) · learn (Learn) · fun (Have fun)
+  //   p      who it is for besides yourself, the main one first: partner · family (family and kids) · housemates · work · friends
+  //          ('me', on your own, comes from who: ['solo'])
+  //   best   "Best for: …" in a few words
+  //   liked  how many practice testers (made-up households run through the site, $SP/reports13) named it among what
+  //          they liked most. A guide for ordering, never a rating from real users.
+  //   ex     a filled-in example from the book (tools/book/examples/<ex>.html); sample: a two-line made-up result instead
+  //   es     the tool also works in Spanish
+  // A tool with no line here still works: the page falls back to its type.
+  var MORE = {
+    signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, or one that stung', liked: 17, ex: 'ex-signal-zoe' },
+    reader: { o: 'talk other', p: 'partner family friends work', best: 'a text argument you keep rereading', ex: 'ex-reader-dana-raj' },
+    write: { o: 'talk', p: 'partner family friends', best: 'a big topic that goes wrong when you say it out loud', ex: 'ex-write-carys-owen' },
+    sayit: { o: 'talk calm', p: 'partner family friends work', best: 'the moment before you answer something that stung', ex: 'ex-wp09-carla' },
+    refusals: { o: 'talk', p: 'family friends work', best: 'saying no without the guilt spiral',
+      sample: 'Asked to cover a Saturday shift, plainer: “I can’t do this Saturday. I could swap for one next month if that helps.”' },
+    decoder: { o: 'talk other calm', p: 'partner family friends', best: 'the day after a talk went sideways', ex: 'ex-perspective-hana' },
+    pause: { o: 'calm talk plan', p: 'partner', best: 'when one of you wants to talk now and the other needs space', liked: 1, ex: 'ex-pauseplan-imani-kwame' },
+    checkin90: { o: 'talk plan', p: 'partner family housemates', best: 'busy weeks when you barely cross paths', liked: 2, ex: 'ex-wp13-priya-dev' },
+    pace12: { o: 'other plan', p: 'partner housemates family', best: 'when one of you decides fast and the other needs time',
+      sample: 'Biggest gap: weekend plans (one wants to settle it tonight, one wants a day to think). Agreement: “We decide by Thursday lunch.”' },
+    static14: { o: 'other load', p: 'partner family housemates', best: 'a hard stretch when you keep snapping at each other',
+      sample: 'The week’s pattern: four of five tense evenings came after a late work call. The plan: work phone off at 8.' },
+    rituals15: { o: 'plan fun', p: 'partner family friends work', best: 'feeling like you’ve drifted into flatmates', ex: 'ex-b3-rituals-team' },
+    checkincard: { o: 'talk plan', p: 'partner family housemates', best: 'a calm, regular time to raise small things', ex: 'ex-checkin-linda-jordan' },
+    flip: { o: 'self talk calm', p: '', best: 'a grumble or a harsh thought going round your head', ex: 'ex-b3-flip-hamish' },
+    bonding: { o: 'fun', p: 'partner family friends', best: 'wanting closeness with no energy for a big plan',
+      sample: 'With a partner, 10 minutes, low energy: “Lie down and swap one high and one low from today.”' },
+    carecard: { o: 'self other', p: 'partner family friends', best: 'knowing what you need before you ask for it',
+      sample: 'Right now, care looks like: one job taken off my list without being asked. Kind words come second.' },
+    touchstones: { o: 'fun plan', p: 'partner family friends', best: 'keeping the “this is us” things alive',
+      sample: '“Tea on the step”, the Tuesday call, the word “sproinged”. New one to try: Sunday pancakes.' },
+    wavelength: { o: 'self other', p: 'partner friends family work housemates', best: 'working out why you and someone keep missing each other', liked: 3, ex: 'ex-wavelength-mo' },
+    wiring: { o: 'self talk', p: 'partner work friends family', best: 'telling people how to reach you, without a long talk', ex: 'ex-wiring-ife' },
+    roots: { o: 'self', p: '', best: 'a reaction that feels bigger than the moment',
+      sample: 'Trait: “I go quiet when someone raises their voice.” A grown-up reading: it kept me safe once; now I can say “give me ten minutes”.' },
+    'take-in': { o: 'self learn', p: '', best: 'pages that feel like too much to read',
+      sample: 'Picked: ADHD. Pages now show shorter steps, one thing at a time, with read-aloud on.' },
+    rhythms: { o: 'other plan', p: 'partner housemates', best: 'a morning person and a night owl under one roof',
+      sample: 'Money: one plans ahead, one spends as it comes. Agreement: a 10-minute money check every other Sunday.' },
+    'lemon-quick': { o: 'load other', p: 'partner housemates family', best: 'the “who does more?” argument', liked: 19, ex: 'ex-lemonade-housemates', es: 1 },
+    'lemon-full': { o: 'load plan', p: 'partner housemates family', best: 'seeing hours and bills together, not just chores', liked: 2, ex: 'ex-lemonade-money-grace-ruth', es: 1 },
+    owner: { o: 'load plan', p: 'housemates partner family', best: 'jobs that only get done when someone nags', liked: 16, ex: 'ex-wp03-coparents' },
+    whodid: { o: 'load', p: 'partner housemates family', best: 'swapping “I do everything” for a real week', ex: 'ex-wp01-marcus-theo' },
+    keepscoming: { o: 'load plan', p: 'housemates partner family', best: 'the same argument coming back every month', liked: 1, ex: 'ex-wp04-triad' },
+    'fair-quick': { o: 'load', p: 'partner housemates family', best: 'checking whether your split can last', ex: 'ex-setup-rosemary-ken' },
+    'fair-full': { o: 'load learn', p: 'partner housemates family', best: 'people who want to see every number',
+      sample: 'Hours: 31 and 19 a week. Every job has a name. The read: workable for now, but one person carries most of the planning.' },
+    'lookback-quick': { o: 'load plan', p: 'partner housemates family', best: 'checking whether last month’s changes stuck',
+      sample: 'A month ago: dishes argued about most nights. This week: twice. Next step: keep the rota and add a backup for Sundays.' },
+    'lookback-full': { o: 'load plan', p: 'partner housemates family', best: 'a whole month, side by side',
+      sample: 'Running imbalance: down from 9 hours a week to 4. What shifted: the shopping. What didn’t: the planning.' },
+    snapshot: { o: 'load self', p: '', best: 'not knowing where to start with a shared load',
+      sample: 'Look first at: “When things get heavy”, who picks up the slack when one of you is ill.' },
+    chart: { o: 'load plan', p: 'partner housemates family', best: 'a chart everyone can see on the fridge',
+      sample: 'Bins: Sam, backup Jo. Done means: out by 7 on Tuesday night.' },
+    upset: { o: 'calm', p: 'partner family', best: 'right now, in the middle of an argument', es: 1,
+      sample: 'Pause line: “I’m getting too heated. I’m taking 20 minutes and I’ll come back at 8:15.”' },
+    calmkit: { o: 'calm self plan', p: 'partner', best: 'knowing your early signs before the next heated moment', ex: 'ex-wp11-nell' },
+    soften: { o: 'calm other', p: 'partner family housemates work', best: 'someone near you is in a bad mood',
+      sample: 'They seem: running on empty. One small move: a glass of water, and no questions for now.' },
+    music: { o: 'calm fun', p: '', best: 'a few minutes away from words' },
+    drift: { o: 'calm', p: '', best: 'winding down before sleep' },
+    garden: { o: 'calm fun', p: '', best: 'slowing your breathing without counting', es: 1 },
+    handoff: { o: 'plan', p: 'family', best: 'co-parents handing over between two homes',
+      sample: 'In the bag: the inhaler with a note of the last dose, the reading book, the charger, one comfort toy.' },
+    festival: { o: 'plan', p: 'partner family', best: 'two traditions and two sets of in-laws', liked: 2,
+      sample: 'Diwali: at Asha’s parents. Christmas Day: at ours, both families invited, done by 6.' },
+    familyplan: { o: 'plan talk', p: 'family', best: 'kind boundaries with parents or grown children', liked: 1, ex: 'ex-familyplan-amaka' },
+    terms: { o: 'talk calm', p: 'family', best: 'a family event while some things are still raw', liked: 1,
+      sample: '“I’ll come for the meal and leave by 4. I’m not ready to talk about the house yet. One ask: can I sit near Gran?”' },
+    'team-owner': { o: 'load plan', p: 'work', best: 'a team where jobs land on whoever notices first', liked: 2,
+      sample: 'Payroll: Ade, backup Ben, monthly. Supplier orders: Ben, backup Ade, weekly.' },
+    'team-checkin': { o: 'talk load', p: 'work', best: 'raising workload early, without blame',
+      sample: 'Ben: week 80% full. Thanks to Ade for the VAT return. Slipped: the website update, new owner Ade.' },
+    weather: { o: 'self calm', p: '', best: 'deciding whether now is a good time to talk', liked: 1, ex: 'ex-weather-joel' },
+    deal: { o: 'plan fun', p: 'partner', best: 'gaming or phones versus time together', liked: 2, ex: 'ex-deal-jamal-tess' },
+    room: { o: 'plan load', p: 'housemates', best: 'roommates, before small things get big', ex: 'ex-room-kayla-bea' },
+    ourweek: { o: 'plan', p: 'partner family', best: 'opposite shifts and crossed wires',
+      sample: 'Overlap: Tuesday and Saturday mornings. Together time: Saturday breakfast, phones away.' },
+    suite: { o: 'plan load learn', p: 'partner family housemates work', best: 'doing the whole program properly, in order' },
+    sixweeks: { o: 'plan learn', p: 'partner family housemates', best: 'a guided start, one small step a week' },
+    progress: { o: 'plan', p: 'partner family housemates', best: 'seeing whether things are actually getting better' },
+    ask: { o: 'learn talk self other', p: 'partner family friends work housemates', best: 'a situation that doesn’t fit a box', liked: 28, es: 1,
+      sample: 'You type: “my partner never helps with bedtime”. You get: kind next steps, words you could use, and two pages to read.' },
+    start10: { o: 'learn self', p: 'partner', best: 'your first visit, with ten minutes to spare',
+      sample: '“Here’s what I got: my weather is gusty. My pattern: I go quiet when tired. One thing to try: say ‘I need ten minutes’.”' },
+    playground: { o: 'learn load', p: '', best: 'trying the worksheets before using your own week' },
+    sync: { o: 'learn', p: '', best: 'seeing why a tiny daily check-in works' },
+    connect: { o: 'learn fun', p: '', best: 'curious minds who like linking ideas' },
+    quest: { o: 'learn', p: '', best: 'seeing how far you’ve come' },
+    pauseplay: { o: 'fun calm', p: 'family', best: 'a gentle break before you talk' },
+    arcade: { o: 'fun', p: 'family', best: 'playing with kids, with no way to lose' },
+    wordbloom: { o: 'fun', p: '', best: 'a calm word puzzle' },
+    quietwords: { o: 'fun calm', p: '', best: 'quiet focus for a few minutes' },
+    crosswords: { o: 'fun', p: 'partner', best: 'a small puzzle to finish, alone or side by side' },
+    drive: { o: 'fun other', p: 'partner', best: 'keeping small kindnesses from going stale' },
+    dojo: { o: 'fun calm', p: '', best: 'a soft place to land' },
+    mvmaker: { o: 'fun', p: 'family', best: 'making something silly with kids' }
+  };
+  var TYPE_OUT = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'plan', work: 'load', health: 'self calm', plan: 'plan', learn: 'learn', play: 'fun' };
+  T.forEach(function (t) {
+    var x = MORE[t.id] || {}, p = (x.p != null ? x.p : (t.who.indexOf('two') !== -1 ? 'partner' : '') + (t.who.indexOf('group') !== -1 ? ' family housemates work' : '')).split(/\s+/).filter(Boolean);
+    t.outcomes = (x.o || TYPE_OUT[t.type] || '').split(/\s+/).filter(Boolean);
+    t.people = (t.who.indexOf('solo') !== -1 ? ['me'] : []).concat(p);
+    if (t.bestFor == null) t.bestFor = x.best || '';
+    t.liked = x.liked || 0;
+    if (x.ex) t.example = x.ex;
+    if (x.sample) t.sample = x.sample;
+    if (x.es) t.es = true;
+  });
 
   // Tools that were merged keep their old ids: each old id points at the tool it now lives in, so a link,
   // a guide panel or a saved reference that names the old id still finds the right card.

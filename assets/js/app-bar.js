@@ -309,7 +309,7 @@
             dockMenu() +
             '<p class="tol-iosg-p tol-iosg-dim">' + T('This needs macOS Sonoma or later.', 'Necesita macOS Sonoma o posterior.') + '</p>' +
           '</div>' : '') +
-        (DESK.br === 'firefox' ? '<p class="tol-iosg-p tol-iosg-dim tol-desk-ff">' + T('For a full app with its own window, open this site in Chrome or Edge and tap <b>Install</b>.', 'Para una app completa con su propia ventana, abre este sitio en Chrome o Edge y toca <b>Instalar</b>.') + '</p>' : '') +
+        (DESK.br === 'firefox' ? '<p class="tol-iosg-p tol-iosg-dim tol-desk-ff">' + T('For a full app with its own window, open this site in Chrome or Edge and tap <b>Install</b>.', 'Para una app completa con su propia ventana, abre este sitio en Chrome o Edge y haz clic en <b>Instalar</b>.') + '</p>' : '') +
         '<button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
         (here ? '' : '<a class="tol-iosg-more" href="/install.html#' + (DESK.os === 'win' ? 'windows' : 'desktop') + '"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') +
       '</div>';
@@ -318,6 +318,7 @@
     dl.addEventListener('click', function () {
       saveFile(f, dlg.querySelector('.tol-iosg-card'));
       after.hidden = false;
+      dlg.querySelector('.tol-iosg-about').hidden = true;   // room for the next step, as the iPhone sheet does
       dl.classList.add('is-again');
       dl.querySelector('span').textContent = T('Download it again', 'Descargarlo otra vez');
       // filled after it is shown, so screen readers say it

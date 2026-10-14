@@ -232,3 +232,8 @@
 .fp-conflict .fp-opt{ max-width: 100%; overflow-wrap: anywhere; border-radius: 14px; }
 .fp-fields > .fp-fields, .fp-block > *{ min-width: 0; max-width: 100%; }
 .fp-fields > .fp-fields{ flex: 1 1 100%; }
+
+/* "What the report gives you" (moved here from /full-path.html) */
+.fp-what{ margin: 0 0 1em; }
+.fp-what summary{ min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.fp-what ul{ margin: .3em 0 .6em; }

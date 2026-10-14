@@ -15,7 +15,7 @@
   "syn": {
     "mum": ["mom", "mother", "mama", "mommy", "mummy", "mam", "madre", "mami"],
     "dad": ["father", "papa", "daddy", "padre", "papi", "pops"],
-    "partner": ["husband", "wife", "boyfriend", "girlfriend", "spouse", "hubby", "wifey", "bf", "gf", "fiance", "fiancee", "pareja", "esposo", "esposa", "marido", "novio", "novia", "other half", "significant other", "so"],
+    "partner": ["husband", "wife", "boyfriend", "girlfriend", "spouse", "hubby", "wifey", "bf", "gf", "fiance", "fiancee", "pareja", "esposo", "esposa", "marido", "novio", "novia", "other half", "significant other"],
     "kid": ["child", "children", "kids", "son", "daughter", "hijo", "hija", "hijos", "hijas", "ninos"],
     "teen": ["teenager", "teenage", "adolescent", "teens", "teenagers", "adolescente"],
     "fight": ["argue", "argument", "arguing", "fighting", "fought", "row", "rows", "bicker", "bickering", "quarrel", "clash", "pelea", "peleas", "pelean", "peleamos", "discutir", "discutimos", "discusion"],
@@ -25,7 +25,7 @@
     "text": ["message", "messages", "texts", "texting", "txt", "sms", "whatsapp", "email", "dm", "mensaje"],
     "anxious": ["anxiety", "anxiety's", "worried", "worry", "worrying", "nervous", "panicky", "ansiedad", "ansioso", "ansiosa"],
     "stressed": ["stress", "stressful", "estresado", "estresada", "estres"],
-    "sad": ["unhappy", "down", "low", "blue", "miserable", "triste", "depressed", "depression"],
+    "sad": ["unhappy", "blue", "miserable", "triste", "depressed", "depression"],
     "angry": ["anger", "mad", "furious", "rage", "pissed", "enojado", "enojada", "enojo"],
     "tired": ["exhausted", "drained", "knackered", "shattered", "wiped", "cansado", "cansada", "agotado", "agotada"],
     "sleep": ["asleep", "sleeping", "insomnia", "dormir"],
@@ -37,7 +37,7 @@
     "money": ["finances", "finance", "cash", "dinero", "spending", "spend", "spends"],
     "grandkid": ["grandchild", "grandchildren", "grandkids", "grandson", "granddaughter", "nietos"],
     "phone": ["mobile", "cellphone", "scrolling", "scrolls", "tiktok", "instagram"],
-    "gaming": ["games", "videogames", "xbox", "playstation", "fortnite", "gamer", "game"],
+    "gaming": ["videogames", "xbox", "playstation", "fortnite", "gamer"],
     "sorry": ["apologize", "apologise", "apology", "apologies", "perdon"],
     "never": ["nunca"],
     "house": ["home", "casa", "hogar", "flat", "apartment"]
@@ -69,8 +69,8 @@
     {"id": "after-fight", "l": "After a talk went wrong", "say": ["after a fight how do we make up", "the talk went wrong", "conversation went sideways", "it got out of hand", "how to fix things after an argument", "make up after a fight"], "go": [["/carrier-wave-decoder.html", "A step-by-step reset: settle, see what went out of sync, see their side, try again."], ["/apology-languages.html", "How to say sorry so it lands."]]},
     {"id": "their-side", "l": "See it from their side", "say": ["i dont understand why he's upset", "see it from their point of view", "why did she react like that", "perspective taking", "how did they see it"], "go": [["/carrier-wave-decoder.html?tab=their-side", "The Their side step: look at the moment the way they saw it."], ["/growing-up.html#roots-h", "Sometimes a reaction comes from long before you."]]},
     {"id": "check-text", "l": "Check a text before I send it", "say": ["how will my text sound", "does this message sound rude", "check my message before i send it", "is my text passive aggressive", "tone of my email", "will this come across wrong"], "go": [["/signal-translator.html", "Shows how a message may land before you send it, on your device."], ["/workpapers/wp-09-say-it-so-it-lands.html", "A quick self-check before you answer something that stung."]]},
-    {"id": "read-text", "l": "What did their text mean?", "say": ["what does this text mean", "he sent me a weird text", "is she mad at me", "read between the lines of a message", "what does k mean", "dry texter", "left on read"], "go": [["/signal-translator.html", "Paste their message to see the ways it could be meant."], ["/signal-translator.html#conversation", "Or paste the whole chat for the bigger picture."]]},
-    {"id": "read-chat", "l": "Read a whole chat", "say": ["analyze our text conversation", "screenshot of our argument", "who was right in this chat", "paste a conversation", "look at our whatsapp chat"], "go": [["/signal-translator.html#conversation", "Paste a chat or add a screenshot. It reads it on your device and suggests a calm reply."]]},
+    {"id": "read-text", "l": "What did their text mean?", "say": ["what does this text mean", "he sent me a weird text", "is she mad at me", "read between the lines of a message", "what does k mean", "dry texter", "left on read"], "go": [["/signal-translator.html", "Paste their message to see the ways it could be meant."], ["/signal-translator.html#conversation", "Or paste the whole chat for the bigger picture.", "Chat analyzer: a whole conversation"]]},
+    {"id": "read-chat", "l": "Read a whole chat", "say": ["analyze our text conversation", "screenshot of our argument", "who was right in this chat", "paste a conversation", "look at our whatsapp chat"], "go": [["/signal-translator.html#conversation", "Paste a chat or add a screenshot. It reads it on your device and suggests a calm reply.", "Chat analyzer: a whole conversation"]]},
     {"id": "reply-hurt", "l": "Reply to something that stung", "say": ["how do i reply to a mean text", "what do i say back", "he said something hurtful", "reply without making it worse", "she insulted me"], "go": [["/workpapers/wp-09-say-it-so-it-lands.html", "Before you reply: a quick check so your answer lands."], ["/signal-translator.html", "Try your reply and see how it may land."]]},
     {"id": "write-it", "l": "Say it in writing", "say": ["write a letter to my partner", "too upset to talk face to face", "put it in writing", "hard conversation in writing", "i say it better written down"], "go": [["/write-it-through.html", "One topic, facts not verdicts, one clear ask. Write it, wait, then send."]]},
     {"id": "raise-it", "l": "Bring up something hard", "say": ["how do i bring something up", "how to start a difficult conversation", "how to tell my partner something is wrong", "need to talk but scared of a fight", "difficult conversation"], "go": [["/write-it-through.html", "Plan what to say, one topic at a time."], ["/communication.html#hard-talks", "How to start hard talks gently."], ["/check-ins.html#card", "A regular, calm time to raise things."]]},
@@ -184,8 +184,8 @@
     {"id": "es-casa", "l": "Hago todo en la casa", "say": ["hago todo en la casa", "mi pareja no ayuda en la casa", "las tareas de la casa", "mi esposo no ayuda"], "go": [["/en-espanol.html#casa", "Cuando sientes que haces todo en la casa."], ["/lemonade-stand.html#quick", "Who does what, in two minutes (in English)."]]},
     {"id": "es-pelea", "l": "Peleamos mucho", "say": ["peleamos mucho", "mi pareja y yo peleamos", "discutimos todo el tiempo", "estoy muy enojado"], "go": [["/en-espanol.html#enojado", "Cuando estás muy enojado ahora mismo."], ["/upset-right-now.html#es", "Una pausa de cinco minutos, en español."]]},
     {"id": "es-hijos", "l": "Mis hijos pelean", "say": ["mis hijos pelean", "le grito a mis hijos", "mi hijo adolescente no me habla"], "go": [["/en-espanol.html#hijos-pelean", "Cuando los hijos pelean."], ["/en-espanol.html#grito", "Cuando grito a mis hijos."]]},
-    {"id": "es-cuidar", "l": "Cuido a alguien", "say": ["estoy agotada cuidando a mi mama", "cuido a mi papa", "cuidar a mi pareja enferma"], "go": [["/en-espanol.html#cuidar", "Cuando cuidas a alguien que quieres."]]},
-    {"id": "es-perdida", "l": "Una pérdida", "say": ["murio mi padre", "duelo", "perdi a mi mama"], "go": [["/en-espanol.html#perdida", "Para la pérdida y el duelo."]]},
+    {"id": "es-cuidar", "l": "Cuido a alguien", "say": ["estoy agotada cuidando a mi mama", "cuido a mi papa", "cuidar a mi pareja enferma", "extraño a mi mama aunque sigue aqui"], "go": [["/en-espanol.html#cuidar", "Cuando cuidas a alguien que quieres."]]},
+    {"id": "es-perdida", "l": "Una pérdida", "say": ["murio mi padre", "duelo", "perdi a mi mama"], "go": [["/grief.html", "El duelo y la pérdida, para ti y tu familia (la página está en inglés)."], ["/en-espanol.html", "Ayuda en español."]]},
     {"id": "es-calma", "l": "No puedo dormir / ansiedad", "say": ["no puedo dormir", "tengo ansiedad", "estoy estresada", "necesito calma"], "go": [["/upset-right-now.html#es", "Una pausa y respiración, en español."], ["/night-garden.html", "Un juego de respiración lenta."]]}
   ]
 }

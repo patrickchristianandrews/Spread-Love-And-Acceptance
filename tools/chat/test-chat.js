@@ -1424,7 +1424,7 @@ if (PERS) {
   t('chat4', 'how do I turn on high contrast', { id: 'textsize', text: /High contrast/ });
   t('chat4', 'how do i make text bigger', { id: 'textsize', text: /Settings/ });
   t('chat4', 'what is week 0', { id: 'week0', link: '/week-0.html' });
-  t('chat4', 'can i add reminders to my calendar', { id: 'week0', link: '/week-0.html' });
+  t('chat4', 'can i add reminders to my calendar', { id: 'prog01', link: '/prog-01.html#calendar' });  // mergeB: reminders live in Six gentle weeks
   t('chat4', 'where else can i get help', { id: 'outsidehelp', link: '/outside-help.html' });
   t('chat4', 'my partner sent me this link (both pages)', { q: 'my partner sent me this link', link: '/someone-sent-you-this.html' });
   // calming supplements and herbs: the research, never a dose, always "check with a pharmacist or doctor", crisis first, no jokes
@@ -1706,7 +1706,7 @@ t('chat10', 'opened with the co-parenting page’s current heading', { q: 'she m
 t('chat10', 'all tools, by type', { q: 'what tools are there', id: 'alltools', link: '/tools.html' });
 t('chat10', 'a list of every tool', { q: 'is there a list of every tool', id: 'alltools', link: '/tools.html' });
 t('chat10', 'everything on this site', { q: 'how do I explore the site', id: 'explore', link: '/explore.html' });
-t('chat10', 'where to start: the three quick questions', { q: 'help me find where to start', kind: 'card', id: 'start', link: ['/start-here.html', '/find-your-start.html'], text: /Find your starting point/ });
+t('chat10', 'where to start: the three quick questions', { q: 'help me find where to start', kind: 'card', id: 'start', link: '/start-here.html', text: /three quick questions/ });  // mergeB: /find-your-start.html is now /start-here.html#three-questions
 t('chat10', 'why this site', { q: 'why should I use this site instead of an AI chat', id: 'whysite', link: '/why-this-site.html', text: /free/ });
 t('chat10', 'living alone', { q: 'I live alone', id: 'livingalone', link: '/living-alone.html' });
 t('chat10', 'living alone tips', { q: 'tips for living alone', id: 'livingalone', link: '/living-alone.html', not: /isn’t only for couples/ });

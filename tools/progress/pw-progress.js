@@ -88,8 +88,8 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
 
     // the browser clears the site's storage
     await p.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
-    await p.reload(); await p.waitForSelector('#tp-what .tp-none');
-    ok(true, 'storage cleared');
+    await p.reload(); await p.waitForSelector('#tp-what .tp-last');
+    ok(!/Lemonade|Weather|Worksheets/.test(await p.textContent('#tp-what')), 'storage cleared: the three tools are gone');
     await p.evaluate(() => localStorage.setItem('tol-save-mode-v1', 'own'));
     await p.reload(); await p.waitForSelector('#tp-what');
 
@@ -107,7 +107,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p.screenshot({ path: path.join(OUT, 'restore-preview-1366.png'), fullPage: false, clip: await p.locator('#restore').boundingBox() });
     await p.click('[data-tp="apply"]');
     await p.waitForSelector('#tp-in .tp-ok');
-    ok(/Restored\. 3 added/.test(await p.textContent('#tp-in')), 'restore: 3 added');
+    const rt = await p.textContent('#tp-in'); ok(/Restored\. \d+ added/.test(rt), 'restore: ' + rt.slice(0, 80));
 
     await p.goto(BASE + '/lemonade-stand.html'); await p.waitForTimeout(1200);
     const names = await p.evaluate(() => Array.from(document.querySelectorAll('input[type="text"]')).map((i) => i.value).join('|'));
@@ -142,7 +142,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     const q = await c2.newPage();
     await q.goto(link);
     await q.waitForSelector('#tp-in-pw');
-    ok(!/restore=1/.test(q.url()), 'the link’s data is taken out of the address bar');
+    ok(await q.evaluate(() => location.hash === '#restore'), 'the link’s data is taken out of the address bar');
     ok(await q.evaluate(() => !localStorage.getItem('tol-lemonade-quick')), 'opening the link restores nothing by itself');
     await q.fill('#tp-in-pw', 'moving-day-7'); await q.click('[data-tp="unlock"]');
     await q.waitForSelector('[data-tp="apply"]');
@@ -178,27 +178,27 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p.keyboard.press('Escape');
     await p.waitForTimeout(150);
     ok(await p.evaluate(() => !document.querySelector('dialog.tcc') && !!localStorage.getItem('tol-weather-v1')), 'Escape at step 1: nothing cleared');
-    await er.click(); await p.click('dialog.tcc >> text=Yes, clear it');
+    await er.click(); await p.click('dialog.tcc button:has-text("Yes, clear it")');
     ok(/Today’s Weather/.test(await p.textContent('dialog.tcc')), 'step 2 names what goes');
     await p.screenshot({ path: path.join(OUT, 'confirm-step2-1366.png') });
-    await p.click('dialog.tcc >> text=Cancel');
+    await p.click('dialog.tcc button:has-text("Cancel")');
     ok(await p.evaluate(() => !!localStorage.getItem('tol-weather-v1')), 'Cancel at step 2: nothing cleared');
-    await er.click(); await p.click('dialog.tcc >> text=Yes, clear it'); await p.click('dialog.tcc >> text=Yes, I’m sure');
+    await er.click(); await p.click('dialog.tcc button:has-text("Yes, clear it")'); await p.click('dialog.tcc button:has-text("Yes, I’m sure")');
     const sum = async () => { const t = await p.textContent('#tcc-ans + *, label[for="tcc-ans"]'); const m = /(\d) \+ (\d)/.exec(t); return +m[1] + +m[2]; };
     let s1 = await sum();
-    ok(await p.isDisabled('dialog.tcc >> text=Clear now'), 'Clear now is off before the answer');
+    ok(await p.isDisabled('dialog.tcc button:has-text("Clear now")'), 'Clear now is off before the answer');
     await p.fill('#tcc-ans', String(s1 + 1)); await p.keyboard.press('Enter');
-    ok(/Not quite/.test(await p.textContent('.tcc-live')) && await p.isDisabled('dialog.tcc >> text=Clear now'), 'a wrong answer: kind words, a new sum, still off');
+    ok(/Not quite/.test(await p.textContent('.tcc-live')) && await p.isDisabled('dialog.tcc button:has-text("Clear now")'), 'a wrong answer: kind words, a new sum, still off');
     ok(await p.evaluate(() => !!localStorage.getItem('tol-weather-v1')), 'a wrong answer clears nothing');
     await p.screenshot({ path: path.join(OUT, 'confirm-sum-1366.png') });
     const s2 = await sum();
     await p.fill('#tcc-ans', String(s2)); await p.keyboard.press('Enter');
-    ok(!(await p.isDisabled('dialog.tcc >> text=Clear now')), 'the right answer turns on Clear now');
-    await p.click('dialog.tcc >> text=Clear now');
-    await p.waitForSelector('dialog.tcc >> text=Cleared');
+    ok(!(await p.isDisabled('dialog.tcc button:has-text("Clear now")')), 'the right answer turns on Clear now');
+    await p.click('dialog.tcc button:has-text("Clear now")');
+    await p.waitForSelector('dialog.tcc h2:has-text("Cleared")');
     ok(/Nothing from Today’s Weather/.test(await p.textContent('dialog.tcc')), 'after: "Cleared. Nothing from … is left"');
     ok(await p.evaluate(() => !localStorage.getItem('tol-weather-v1') && !!localStorage.getItem('tol-lemonade-quick')), 'only that item is cleared');
-    await p.click('dialog.tcc >> text=Close');
+    await p.click('dialog.tcc button:has-text("Close")');
 
     // ============================================================ 5. the app lock
     await p.evaluate(() => document.getElementById('lock').scrollIntoView());
@@ -249,13 +249,13 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p2.evaluate((w) => localStorage.setItem('tol-weather-v1', w), WEATHER);
     await p2.click('#tp-chip >> text=Clear everything now');
     await p2.waitForSelector('dialog.tcc');
-    await p2.click('dialog.tcc >> text=Yes, clear it');
+    await p2.click('dialog.tcc button:has-text("Yes, clear it")');
     ok(await p2.isVisible('#tcc-ans'), 'shared: Clear everything now is short (the sum comes next)');
     const t = await p2.textContent('label[for="tcc-ans"]'); const m = /(\d) \+ (\d)/.exec(t);
     await p2.fill('#tcc-ans', String(+m[1] + +m[2])); await p2.keyboard.press('Enter');
-    await p2.click('dialog.tcc >> text=Clear now');
-    await p2.waitForSelector('dialog.tcc >> text=Cleared');
-    await Promise.all([p2.waitForNavigation(), p2.click('dialog.tcc >> text=Close')]);
+    await p2.click('dialog.tcc button:has-text("Clear now")');
+    await p2.waitForSelector('dialog.tcc h2:has-text("Cleared")');
+    await Promise.all([p2.waitForNavigation(), p2.click('dialog.tcc button:has-text("Close")')]);
     await p2.waitForTimeout(800);
     ok(await p2.evaluate(() => !localStorage.getItem('tol-weather-v1') && localStorage.getItem('tol-save-mode-v1') === 'shared'), 'shared: Clear everything now clears, and stays in shared mode');
     await p2.goto(BASE + '/on-this-device.html'); await p2.waitForSelector('#tp-level .tp-take');

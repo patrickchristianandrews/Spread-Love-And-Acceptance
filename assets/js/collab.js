@@ -1051,6 +1051,10 @@
         var row = mk('div', { cls: 'tcol-cmp-row' + (r.same ? ' is-same' : '') });
         var h = mk('p', { cls: 'tcol-cmp-k' }, [mk('strong', { text: label(r.k) })]);
         if (people.length > 1 && !r.missing) h.appendChild(mk('span', { cls: 'tcol-tag' + (r.same ? ' is-same' : ''), text: r.same ? T('Same', 'Igual') : T('Different', 'Distinto') }));
+        else if (people.length > 1) {
+          var only = people.filter(function (p, i) { return filled(r.vals[i]); });
+          if (only.length === 1) h.appendChild(mk('span', { cls: 'tcol-tag', text: T('Only ', 'Solo ') + personName(only[0]) }));
+        }
         row.appendChild(h);
         var ul2 = mk('ul', { cls: 'tcol-cmp-vals' });
         people.forEach(function (p, i) { var t = showVal(r.vals[i], opts.format, r.k); ul2.appendChild(mk('li', {}, [mk('span', { cls: 'tcol-cmp-who', text: personName(p) + ': ' }), t || T('(left blank)', '(en blanco)')])); });

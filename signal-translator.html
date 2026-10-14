@@ -2924,7 +2924,7 @@ window.TOLSignalPage = { setMode: m=>setMode(m), run: ()=>run(), checkOne: o=>ch
    is opened, or when a whole chat is pasted into the one-message box; the screenshot reader's own files
    (assets/vendor/tesseract/) load only when a screenshot is picked.
    ============================================================ */
-let chatOn = false, readerP = null;
+var chatOn = false, readerP = null;   // var: setMode() can run (for ?mode=got) before this line
 function loadScript(src){ return new Promise((ok,no)=>{ const sc=document.createElement("script"); sc.src=src; sc.async=false; sc.onload=ok; sc.onerror=()=>no(new Error("could not load "+src)); document.head.appendChild(sc); }); }
 function loadEngine(){ return window.TOLReader ? Promise.resolve() : loadScript("/assets/js/conversation-reader-engine.js"); }
 function loadReader(){

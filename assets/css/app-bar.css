@@ -225,7 +225,7 @@ html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
 .tol-desk-mbar{ display:flex; align-items:center; gap:2px; padding:3px 6px; border-radius:7px 7px 0 0; background:var(--fill); color:var(--label); }
 .tol-desk-mbar > *{ padding:2px 8px; border-radius:4px; white-space:nowrap; }
 .tol-desk-mbar b{ font-weight:700; }
-.tol-desk-mbar .is-on{ background:var(--fill); }
+.tol-desk-mbar .is-on{ background:var(--hi); color:var(--blue); font-weight:600; }
 .tol-desk-mdrop{ display:flex; flex-direction:column; width:max-content; min-width:170px; max-width:100%; margin-left:58px; padding:5px; border-radius:0 0 8px 8px;
   background:var(--cell); color:var(--label); box-shadow:0 0 0 .5px var(--sep), 0 6px 18px rgba(0,0,0,.14); }
 .tol-desk-mi{ padding:3px 10px; border-radius:4px; white-space:nowrap; }

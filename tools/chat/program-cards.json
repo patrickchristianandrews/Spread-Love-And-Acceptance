@@ -132,7 +132,7 @@
           "/wired-differently.html"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ]
       ]
@@ -238,8 +238,8 @@
           "What do the Wave Code letters mean?"
         ],
         [
-          "What is the Perspective Shifter?",
-          "What is the Perspective Shifter?"
+          "See it from their side",
+          "How do I see it from their side?"
         ]
       ],
       "links": [
@@ -248,8 +248,8 @@
           "/wavelength.html"
         ],
         [
-          "The Perspective Shifter",
-          "/perspective-shifter.html"
+          "See it from their side",
+          "/carrier-wave-decoder.html?tab=their-side"
         ]
       ]
     },
@@ -581,7 +581,7 @@
           "/wired-differently.html"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ]
       ],
@@ -6812,7 +6812,7 @@
           ],
           "links": [
             [
-              "Know yourself: then, where your rules came from",
+              "Self-discovery: then, where your rules came from",
               "/book/self-1-then.html"
             ],
             [
@@ -8163,7 +8163,7 @@
       ],
       "how": [
         "Choose “Us, together” at the start and take turns.",
-        "For something quieter side by side, Pause & Play has calm games you can pass the phone for."
+        "For something quieter side by side, Games (Pause & Play) has calm games you can pass the phone for."
       ],
       "plain": [
         "Play the Re-check Drive together.",
@@ -8180,7 +8180,7 @@
           "/turning-toward.html"
         ],
         [
-          "Pause & Play: calm games to pass the phone",
+          "Games (Pause & Play): calm games to pass the phone",
           "/pause-and-play.html"
         ]
       ],
@@ -10074,7 +10074,7 @@
           "/start-in-10-minutes.html"
         ],
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ],
         [
@@ -10159,7 +10159,7 @@
           "/wp-11.html"
         ],
         [
-          "The Carrier Wave Decoder",
+          "After a talk went wrong: a step-by-step reset",
           "/carrier-wave-decoder.html#decode"
         ]
       ],
@@ -10192,7 +10192,7 @@
           "/quick-checks.html#almanac"
         ],
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ]
       ],
@@ -12342,7 +12342,6 @@
         "calmdown kit",
         "pause line",
         "workpaper 11",
-        "sound toolkit",
         "words to ask for a pause",
         "give me words to ask for a pause",
         "how do i ask for a pause",
@@ -12643,7 +12642,7 @@
           "/workpapers/report-01.html"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ]
       ]
@@ -12664,7 +12663,12 @@
         "the program week by week",
         "implementation roadmap",
         "guided implementation",
-        "the 6 week program"
+        "the 6 week program",
+        "calendar reminders",
+        "add reminders to my calendar",
+        "program reminders",
+        "reminders in my calendar",
+        "week 0 reminders"
       ],
       "what": "PROG-01 is a six-week path through the program, one step at a time. It works best with the other person, but you can do it on your own.",
       "how": [
@@ -12673,13 +12677,18 @@
         "Week 3, your batteries: read Chapters III and IV, and do How much are you carrying? (WP-02) daily.",
         "Week 4, talk about it kindly: Say it so it lands (WP-09) and your Calm-Down Kit (WP-11).",
         "Week 5, get back in step: the 90-second daily check-in (WP-13).",
-        "Week 6, make it last: log another week, compare with week one, and do your first monthly look-back (WP-04)."
+        "Week 6, make it last: log another week, compare with week one, and do your first monthly look-back (WP-04).",
+        "Reminders: add the six weeks to your own calendar from this page, so each step comes back to you. Nothing is sent anywhere."
       ],
       "pillar": "All Five Pillars, in order.",
       "links": [
         [
           "PROG-01: Six gentle weeks",
           "/prog-01.html"
+        ],
+        [
+          "Add the six weeks to your calendar",
+          "/prog-01.html#calendar"
         ],
         [
           "The Workpaper Suite (week by week)",
@@ -12694,7 +12703,7 @@
     {
       "id": "suite",
       "kind": "tool",
-      "name": "the Workpaper Suite",
+      "name": "Your worksheets, in order, with a report (the Workpaper Suite)",
       "keys": [
         "workpaper suite",
         "~the suite",
@@ -12702,9 +12711,11 @@
         "~roads",
         "~your road",
         "fillable pdf",
-        "suite file"
+        "suite file",
+        "your worksheets in order",
+        "worksheets in order with a report"
       ],
-      "what": "The Workpaper Suite lines up the workpapers for your road in the order that helps most. Pick who it’s for (just you, partners, family, co-parents, friends, roommates, coworkers, caregivers, or the 6-week program), fill the sheets in on screen, then download one fillable PDF and a report written for your road.",
+      "what": "The Workpaper Suite lines up the workpapers for your road in the order that helps most. Pick who it’s for (just you, partners, family, co-parents, friends, roommates, coworkers, caregivers, or the 6-week program), fill the sheets in on screen, then download one fillable PDF and a report written for your road. Two ways in: “One at a time”, or “One PDF of everything”.",
       "how": [
         "Choose your road, and optionally add the first names of the people on it (they appear in every owner drop-down).",
         "Work through your road by step, or week by week.",
@@ -12717,7 +12728,7 @@
       "pillar": "Every road uses all Five Pillars, starting inside you and then between you and others.",
       "links": [
         [
-          "Build your Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ],
         [
@@ -12729,15 +12740,18 @@
     {
       "id": "fullpath",
       "kind": "tool",
-      "name": "the full-path package",
+      "name": "One PDF of everything (Your worksheets, in order, with a report)",
       "keys": [
         "full path package",
         "~full path",
         "whole road",
         "everything as one pdf",
-        "~one pdf"
+        "~one pdf",
+        "one pdf of everything",
+        "your worksheets in order with a report",
+        "the package and report"
       ],
-      "what": "The full-path package is the Workpaper Suite’s way of giving you your whole road in one go: every workpaper on your road, in order, as one fillable PDF, plus a report written from what you filled in.",
+      "what": "“One PDF of everything” is one of the two ways into Your worksheets, in order, with a report (the Workpaper Suite, once also called the full-path package). It’s the way of giving you your whole road in one go: every workpaper on your road, in order, as one fillable PDF, plus a report written from what you filled in.",
       "how": [
         "Open the Workpaper Suite and choose your road.",
         "Fill in what you can on screen, or bring in drafts and PDFs you’ve already filled in.",
@@ -12747,8 +12761,8 @@
       "pillar": "All Five Pillars, in your road’s order.",
       "links": [
         [
-          "The Workpaper Suite",
-          "/workpapers/fill/suite.html"
+          "Your worksheets, in order, with a report: One PDF of everything",
+          "/workpapers/fill/suite.html#full-path"
         ]
       ]
     },
@@ -12779,7 +12793,7 @@
           "/workpapers/fill/index.html"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ]
       ]
@@ -12815,7 +12829,7 @@
     {
       "id": "weather",
       "kind": "tool",
-      "name": "Today’s Weather",
+      "name": "How am I right now? (Today’s Weather)",
       "keys": [
         "todays weather",
         "today s weather",
@@ -12827,9 +12841,14 @@
         "almanac",
         "today weather",
         "~weather",
-        "~forecast"
+        "~forecast",
+        "how am i right now",
+        "how am i right now check",
+        "mood and energy check",
+        "mood and energy check in",
+        "mood check"
       ],
-      "what": "Today’s Weather is a free, one-minute reading of your own conditions today: the sky, the pressure, the ground underneath, and what’s blowing in. It tells you what today is good for, and what to leave until the front moves through. It’s a reading of you, never of anyone else.",
+      "what": "How am I right now? is a quick check on yourself, in two modes: four quick taps, or Today’s Weather, its full one-minute forecast. The forecast is a free, one-minute reading of your own conditions today: the sky, the pressure, the ground underneath, and what’s blowing in. It tells you what today is good for, and what to leave until the front moves through. It’s a reading of you, never of anyone else.",
       "how": [
         "Step 1 (the only required one): pick the sky closest to true right now: Clear (calm and connected), Gusty (revved up) or Fogged in (running on empty).",
         "Optionally add who you’ll be around, how much you were already carrying, body needs, last night’s sleep, people load, what’s on your mind, and what would help in the next hour.",
@@ -12841,7 +12860,7 @@
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ],
         [
@@ -12978,7 +12997,7 @@
           "/how-you-take-things-in.html"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ]
       ],
@@ -13023,14 +13042,18 @@
     {
       "id": "decoder",
       "kind": "tool",
-      "name": "the Carrier Wave Decoder",
+      "name": "After a talk went wrong (the Carrier Wave Decoder)",
       "keys": [
         "carrier wave decoder",
         "carrier wave",
         "~decoder",
-        "~retune"
+        "~retune",
+        "after a talk went wrong",
+        "a talk went wrong",
+        "step by step reset",
+        "when a talk goes wrong"
       ],
-      "what": "The Carrier Wave Decoder is a guided session for the moment a conversation starts going sideways, with anyone. You work out what was out of sync, check your state, retune your body, practice with a guided script, and keep notes on what works. It puts Chapter I’s radio idea into practice.",
+      "what": "After a talk went wrong (the Carrier Wave Decoder) is a step-by-step reset for the moment a conversation starts going sideways, with anyone. You settle, work out what was out of sync, check your state, retune your body, see it from their side, practice with a guided script, and keep notes on what works. It puts Chapter I’s radio idea into practice.",
       "how": [
         "Start a session and pick the state closest to how you feel: calm, revved up, or shut down.",
         "Decode the moment: for pace, tone and timing, mark where you were and your best guess at where they were.",
@@ -13042,7 +13065,7 @@
       "pillar": "Pillar IV, Tune how you send and receive; the state check uses Pillar III.",
       "links": [
         [
-          "The Carrier Wave Decoder",
+          "After a talk went wrong: a step-by-step reset",
           "/carrier-wave-decoder.html"
         ],
         [
@@ -13229,7 +13252,7 @@
           "/night-garden.html"
         ],
         [
-          "Pause & Play",
+          "Games: every calm game in one place",
           "/pause-and-play.html"
         ]
       ]
@@ -13237,7 +13260,7 @@
     {
       "id": "pauseplay",
       "kind": "tool",
-      "name": "Pause & Play",
+      "name": "Games: every calm game in one place (Pause & Play)",
       "keys": [
         "pause and play",
         "pause play",
@@ -13245,9 +13268,12 @@
         "~game",
         "calm games",
         "levels that grow the background",
-        "living garden"
+        "living garden",
+        "games every calm game",
+        "every calm game",
+        "games hub"
       ],
-      "what": "Pause & Play is the calm corner of the site: gentle games for when your mind needs a rest. Drift, the Night Garden, Tidbit and Sugarfoot’s Arcade, Word Bloom, Quiet Crossword, the Daily Ledger Crossword and Quiet Words. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
+      "what": "Games (Pause & Play) is every calm game in one place: gentle games for when your mind needs a rest. Drift, the Night Garden, Tidbit and Sugarfoot’s Arcade, Word Bloom, Crosswords (gentle levels or a newspaper daily), Quiet Words, the Bears Dojo, the Re-check Drive and the music video maker. No timers, no way to lose, and every few levels something new appears in the living garden behind every page.",
       "how": [
         "Pick a game that fits your mood: breathing (Night Garden, Drift), words (Word Bloom, Quiet Words, the crosswords) or a quick arcade round (Tidbit and Sugarfoot’s Arcade).",
         "Play a few minutes to settle before a hard conversation, or to wind down at night.",
@@ -13256,7 +13282,7 @@
       "pillar": "Mostly Pillar III, Read your state first: settle, then talk.",
       "links": [
         [
-          "Pause & Play",
+          "Games: every calm game in one place",
           "/pause-and-play.html"
         ],
         [
@@ -13293,11 +13319,15 @@
     {
       "id": "quietcross",
       "kind": "tool",
-      "name": "the Quiet Crossword",
+      "name": "Crosswords, gentle levels (the Quiet Crossword)",
       "keys": [
-        "quiet crossword"
+        "quiet crossword",
+        "crosswords",
+        "crossword",
+        "gentle levels",
+        "the crosswords"
       ],
-      "what": "The Quiet Crossword is a small, friendly crossword made for playing on a phone, from gentle to expert. Each word glows when it’s right, and there’s no timer.",
+      "what": "Crosswords has two modes. Gentle levels (the Quiet Crossword) is a small, friendly crossword made for playing on a phone, from gentle to expert. Each word glows when it’s right, and there’s no timer. Newspaper daily (the Daily Ledger Crossword) is the newspaper-style one.",
       "how": [
         "Tap a square and type; tap again to switch between across and down.",
         "Use “Check my letters” or “Show a letter” whenever you like.",
@@ -13306,11 +13336,11 @@
       "pillar": "Pillar III: a small puzzle gives your mind one gentle thing to hold.",
       "links": [
         [
-          "Quiet Crossword",
+          "Crosswords: gentle levels",
           "/quiet-crossword.html"
         ],
         [
-          "The Daily Ledger Crossword",
+          "Crosswords: newspaper daily",
           "/daily-ledger-crossword.html"
         ]
       ]
@@ -13318,14 +13348,15 @@
     {
       "id": "dailycross",
       "kind": "tool",
-      "name": "the Daily Ledger Crossword",
+      "name": "Crosswords, newspaper daily (the Daily Ledger Crossword)",
       "keys": [
         "daily ledger crossword",
         "daily ledger",
         "newspaper crossword",
-        "big sunday"
+        "big sunday",
+        "newspaper daily"
       ],
-      "what": "The Daily Ledger Crossword is a real newspaper-style crossword, from a quick 5×5 Mini to a Big Sunday 13×13. The grids grow bigger and the clues a little trickier as you go, and there’s still no timer.",
+      "what": "Newspaper daily (the Daily Ledger Crossword) is the Crosswords mode for a real newspaper-style crossword, from a quick 5×5 Mini to a Big Sunday 13×13. The grids grow bigger and the clues a little trickier as you go, and there’s still no timer.",
       "how": [
         "Tap a square and type; tap it again to switch between across and down.",
         "The small numbers match the clues. Some squares belong to only one word, as in British newspaper crosswords.",
@@ -13334,11 +13365,11 @@
       "pillar": "Pillar III: a calm puzzle before or after a busy day.",
       "links": [
         [
-          "The Daily Ledger Crossword",
+          "Crosswords: newspaper daily",
           "/daily-ledger-crossword.html"
         ],
         [
-          "Quiet Crossword",
+          "Crosswords: gentle levels",
           "/quiet-crossword.html"
         ]
       ]
@@ -13445,16 +13476,23 @@
     {
       "id": "soundscapes",
       "kind": "tool",
-      "name": "Soundscapes: Brain Breakers",
+      "name": "Calm sounds and music (Soundscapes)",
       "keys": [
         "~soundscapes",
         "~soundscape",
         "shooting star",
         "watching a shooting star",
         "thunderous shimmer",
-        "~audio"
+        "~audio",
+        "calm sounds and music",
+        "calm sounds",
+        "background sounds",
+        "background sound",
+        "brown noise",
+        "sound toolkit",
+        "the sound toolkit"
       ],
-      "what": "The Soundscapes page is now all about Brain Breakers: four instrumental pieces by Christian’s Lab, each with a different job. Shooting Star is the softest and most floating, for quieting a busy mind, anxiety or pre-sleep wind-down. Thunderous Shimmer is textural and restless, for recovery that needs a spark and a little curious alertness. Watching a Shooting Star is the most expansive and cinematic, for shifting out of a stuck or low-energy state. Bouncy Bedroom is short, intimate and playful (alternative R&B, Chicago bounce and bedroom-pop), for lifting low energy or mild boredom with a small bounce while staying relaxed. The page also has See and feel the sound, and a short picker. These are listening notes, not a clinical tool.",
+      "what": "Calm sounds and music has two ways in: Music (Brain Breakers) or Background sounds (a low hum, a soft flutter, brown noise; once called the Sound Toolkit). The music is Brain Breakers: four instrumental pieces by Christian’s Lab, each with a different job. Shooting Star is the softest and most floating, for quieting a busy mind, anxiety or pre-sleep wind-down. Thunderous Shimmer is textural and restless, for recovery that needs a spark and a little curious alertness. Watching a Shooting Star is the most expansive and cinematic, for shifting out of a stuck or low-energy state. Bouncy Bedroom is short, intimate and playful (alternative R&B, Chicago bounce and bedroom-pop), for lifting low energy or mild boredom with a small bounce while staying relaxed. The page also has See and feel the sound, and a short picker. These are listening notes, not a clinical tool.",
       "how": [
         "Open Soundscapes and tap what you need in Find your Brain Breaker, or just press play on a track.",
         "Press See and feel this to watch the track and, on an Android phone with Chrome, feel it as vibration.",
@@ -13463,8 +13501,12 @@
       "pillar": "Pillar III, Read your state first.",
       "links": [
         [
-          "Brain Breakers",
+          "Calm sounds and music: Brain Breakers",
           "/soundscapes.html#brain-breakers"
+        ],
+        [
+          "Calm sounds and music: background sounds",
+          "/soundscapes.html#background"
         ],
         [
           "See and feel the sound",
@@ -13594,14 +13636,18 @@
     {
       "id": "knowyourself",
       "kind": "tool",
-      "name": "Know your own wiring",
+      "name": "Self-discovery: know your own wiring",
       "keys": [
         "know your own wiring",
         "know yourself",
         "~three layers",
-        "wiring patterns conditions"
+        "wiring patterns conditions",
+        "self discovery",
+        "self-discovery",
+        "self discovery page",
+        "self discovery guide"
       ],
-      "what": "Know your own wiring helps with “why do I react this way?”. Most reactions come from three places at once: your wiring (how you’re built, which stays), patterns life has taught you (which can shift with practice), and today’s conditions (sleep, stress, load, which pass). Knowing which is which helps you understand yourself and explain yourself to others.",
+      "what": "Self-discovery (Know your own wiring) helps with “why do I react this way?”. Most reactions come from three places at once: your wiring (how you’re built, which stays), patterns life has taught you (which can shift with practice), and today’s conditions (sleep, stress, load, which pass). Knowing which is which helps you understand yourself and explain yourself to others.",
       "how": [
         "Think of a recent reaction that surprised you.",
         "Sort it: how much was wiring, how much a learned pattern, how much today’s conditions?",
@@ -13611,7 +13657,7 @@
       "pillar": "Mainly Pillar III and Pillar IV, with help from Pillars I and II.",
       "links": [
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ],
         [
@@ -13782,7 +13828,7 @@
           "/five-pillars.html#read-your-state"
         ],
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ],
         [
@@ -13935,7 +13981,7 @@
           "/book/chapter-1.html"
         ],
         [
-          "The Carrier Wave Decoder",
+          "After a talk went wrong: a step-by-step reset",
           "/carrier-wave-decoder.html"
         ]
       ]
@@ -14315,7 +14361,7 @@
     {
       "id": "week0",
       "kind": "tool",
-      "name": "Week 0: a gentle start to the six weeks",
+      "name": "Week 0: a five-minute start",
       "keys": [
         "week 0",
         "week zero",
@@ -14328,12 +14374,9 @@
         "the six weeks",
         "how do i start the six weeks",
         "before week one",
-        "before week 1",
-        "calendar reminders",
-        "add reminders to my calendar",
-        "program reminders"
+        "before week 1"
       ],
-      "what": "Week 0 is a gentle start before the six weeks: what the program is, how much time it takes, who it’s for, a pace that suits you, and how to add calendar reminders you set yourself. Nothing is sent anywhere.",
+      "what": "Week 0 is a five-minute start before the six weeks: what the program is, how much time it takes, who it’s for, and a pace that suits you. Calendar reminders you set yourself now live in Six gentle weeks. Nothing is sent anywhere.",
       "how": [
         "Read what the six weeks involve, and pick a pace that fits your life.",
         "Add the reminders to your own calendar, if you like.",
@@ -14341,8 +14384,12 @@
       ],
       "links": [
         [
-          "Week 0: a gentle start",
+          "Week 0: a five-minute start",
           "/week-0.html"
+        ],
+        [
+          "Six gentle weeks: calendar reminders",
+          "/prog-01.html#calendar"
         ],
         [
           "Start here",
@@ -14534,7 +14581,8 @@
         "find your start",
         "three quick questions",
         "help me find where to start",
-        "help me find a starting point"
+        "help me find a starting point",
+        "start here three quick questions"
       ],
       "what": [
         "Welcome! A gentle way in: start with yourself, then add the other person when you’re ready.",
@@ -14545,7 +14593,7 @@
         "Read the Preface, The work nobody sees (free).",
         "Start a who-did-what list today, in Who did what (WP-01) or on the Lemonade Stand. Just today’s jobs is plenty.",
         "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01).",
-        "Not sure? Find your starting point asks three quick questions and suggests one thing to try first."
+        "Not sure? Start here has three quick questions that suggest one thing to try first."
       ],
       "links": [
         [
@@ -14553,16 +14601,16 @@
           "/start-here.html"
         ],
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ],
         [
-          "Find your starting point (three quick questions)",
-          "/find-your-start.html"
+          "Start here: three quick questions",
+          "/start-here.html#three-questions"
         ]
       ],
       "chips": [
@@ -14638,7 +14686,7 @@
         "Everything on this site lists every guide, tool, worksheet, game and book chapter in one place. Choose what you need, who it’s about and how long you have, and the list narrows."
       ],
       "how": [
-        "Pick what you need: talk it through, share the load, calm down, know yourself, family, work, health, reading or play.",
+        "Pick what you need: talk it through, share the load, calm down, self-discovery, family, work, health, reading or play.",
         "Pick who it’s about: just you, partners, friends, family, co-parents, housemates or work.",
         "Pick how long you have, from about a minute to half an hour or more."
       ],
@@ -14652,8 +14700,8 @@
           "/tools.html"
         ],
         [
-          "Find your starting point",
-          "/find-your-start.html"
+          "Start here: three quick questions",
+          "/start-here.html#three-questions"
         ]
       ],
       "chips": [
@@ -14691,8 +14739,8 @@
           "/why-this-site.html"
         ],
         [
-          "Find your starting point",
-          "/find-your-start.html"
+          "Start here: three quick questions",
+          "/start-here.html#three-questions"
         ]
       ],
       "chips": [
@@ -14739,7 +14787,7 @@
           "/relationships.html"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ]
       ],
@@ -14781,7 +14829,7 @@
       ],
       "how": [
         "Check Today’s Weather and How much are you carrying? (WP-02) for yourself.",
-        "Learn your wiring (Know your own wiring, the Wiring Card).",
+        "Learn your wiring (Self-discovery: know your own wiring, and the Wiring Card).",
         "Plan your Calm-Down Kit (WP-11).",
         "Log your own side of the week (WP-01). Only fill in worksheets about yourself, never about someone else."
       ],
@@ -14791,7 +14839,7 @@
           "/workpapers/fill/suite.html"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ],
         [
@@ -14962,7 +15010,7 @@
           "What do the Snapshot results mean?"
         ],
         [
-          "Today’s Weather",
+          "How am I right now?",
           "What does my Today’s Weather forecast mean?"
         ]
       ]
@@ -14992,7 +15040,7 @@
           "/prog-01.html"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ]
       ]
@@ -15070,7 +15118,7 @@
           "/workpapers/fill/index.html"
         ],
         [
-          "The Workpaper Suite",
+          "Your worksheets, in order, with a report",
           "/workpapers/fill/suite.html"
         ]
       ]
@@ -15508,15 +15556,15 @@
       "how": [
         "Start with Today’s Weather, a one-minute check on yourself.",
         "Try How much are you carrying? (WP-02) before a conversation that matters, with anyone.",
-        "Learn your own wiring on Know your own wiring, so you can explain what helps you."
+        "Learn your own wiring on the Self-discovery page (Know your own wiring), so you can explain what helps you."
       ],
       "links": [
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ],
         [
-          "Today’s Weather",
+          "How am I right now? (Today’s Weather)",
           "/quick-checks.html#today"
         ],
         [
@@ -15652,7 +15700,7 @@
       ],
       "links": [
         [
-          "Today’s Weather: a one-minute check",
+          "How am I right now? A one-minute check",
           "/quick-checks.html#today"
         ],
         [
@@ -15710,7 +15758,7 @@
           "Why do experiences at certain ages matter more?"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "What is Know your own wiring?"
         ]
       ]
@@ -15764,7 +15812,7 @@
           "/growing-up.html"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "/know-yourself.html"
         ]
       ],
@@ -15774,7 +15822,7 @@
           "What is the rulebook from home?"
         ],
         [
-          "Know your own wiring",
+          "Self-discovery: know your own wiring",
           "What is Know your own wiring?"
         ]
       ]
@@ -16143,7 +16191,7 @@
         "Music + Behavioral science (feedback loops): A song is a loop: a pattern that repeats with small changes. A habit tied to a tune or a time of day is easier to keep. In the program: The 90-second daily check-in (WP-13).",
         "Music + Holistic therapies (state and setting): Music therapy is a recognized form of care: singing, drumming and listening help people settle, feel connected and find words. In the program: The Calm-Down Kit (WP-11).",
         "Music + Aromatherapy (state and setting): Sound and scent both set the mood of a room before anyone speaks. A playlist in the kitchen does what a candle does. In the program: Brain Breakers.",
-        "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Pause & Play.",
+        "Music + Laughter therapy (state and setting): Laughter is rhythm too: breath, bounce and sound, in time with other people. A shared laugh and a shared song both say “we’re in step.” In the program: Games (Pause & Play).",
         "Laughter therapy + Psychology (state and setting): A shared laugh tells the body “we’re safe.” Research on couples suggests that gentle humor during a disagreement can help calm it down. In the program: Turning Toward.",
         "Laughter therapy + Neurobiology (state and setting): Laughing is linked with looser muscles and lower stress afterward. It’s a quick way to let the body know the alarm can stand down. In the program: The Calm-Down Kit (WP-11).",
         "Laughter therapy + Holistic therapies (state and setting): Laughter yoga and therapeutic humor are part of the holistic toolkit: a whole-body reset that costs nothing. In the program: The Night Garden."
@@ -16211,7 +16259,7 @@
         "Politics + Finance (balance): A budget is a political document: it shows what a group values. A week’s chores and hours are a household budget, and they show the same thing. In the program: Who did what (WP-01).",
         "Music + Business (ownership and structure): An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat. In the program: One owner per job (WP-03).",
         "Laughter therapy + Behavioral science (feedback loops): A small, shared bit of silliness gets repeated and sticks. The in-joke is a habit that keeps closeness going. In the program: Turning Toward.",
-        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. A few minutes of play is a cheap way to top up the battery everything else draws on. In the program: Pause & Play.",
+        "Laughter therapy + Economics (limited capacity): Joy refills what effort spends. A few minutes of play is a cheap way to top up the battery everything else draws on. In the program: Games (Pause & Play).",
         "Laughter therapy + Business (feedback loops): Teams that can laugh together tend to find it easier to say hard things early, while they’re still small. In the program: Check-ins.",
         "Laughter therapy + Aromatherapy (state and setting): A warm, softly lit, relaxed room makes laughter easier. The senses set the mood for play as much as for calm. In the program: Brain Breakers."
       ],
@@ -16255,14 +16303,14 @@
         "Philosophy + Behavioral science (feedback loops): Aristotle thought we become what we repeatedly do. Character, like a habit, is built by small acts, not by one big decision. In the program: Small and often.",
         "Philosophy + Neurobiology (state and setting): If shutting down or getting revved up is a body doing its job, it isn’t a character flaw. That changes what blame means. In the program: Pillar II.",
         "Philosophy + Holistic therapies (balance): A setup can be sustainable without being good for the people in it. Asking what makes the whole person well is a different question from “does it work?” In the program: Chapter II: what the number is not.",
-        "Philosophy + Aromatherapy (state and setting): What we take in through the senses shapes what we believe is true. Two people in one room may not be perceiving the same room. In the program: The Perspective Shifter.",
+        "Philosophy + Aromatherapy (state and setting): What we take in through the senses shapes what we believe is true. Two people in one room may not be perceiving the same room. In the program: See it from their side (After a talk went wrong).",
         "Behavioral science + Holistic therapies (feedback loops): The smallest repeated acts, a breath, a daily check-in, a weekly look back, are rhythms, and rhythm is how a body and a relationship stay in tune. In the program: Chapter V: the rhythms.",
         "Economics + Holistic therapies (balance): Rest isn’t time lost. It keeps the capacity that everything else spends, so skipping it is borrowing against next week. In the program: Wavelength: what fills you up.",
         "Economics + Aromatherapy (quiet incentives): A room, like a market, carries costs nobody pays out loud. A rushed, noisy setting quietly taxes every conversation in it. In the program: Chapter IV: the setting.",
         "Business + Aromatherapy (state and setting): Good workplaces are designed so the setting helps people do their best. A home can be too: a quiet corner for hard talks is a design choice. In the program: Check-ins: a good moment.",
         "Finance + Holistic therapies (balance): A setup score says whether an arrangement can last, never whether it’s worthwhile. Holistic care asks the other question: what makes the whole person well. In the program: Chapter II.",
         "Finance + Aromatherapy (balance): Changing the setting costs almost nothing and pays back on every conversation held there: the cheapest investment in the whole program. In the program: Chapter IV: where and when to talk.",
-        "The art of debating + Holistic therapies (state and setting): Holistic care treats the whole person, and so does a good debate partner. The person across from you is tired, hungry or hurt as well as holding a position. In the program: The Perspective Shifter.",
+        "The art of debating + Holistic therapies (state and setting): Holistic care treats the whole person, and so does a good debate partner. The person across from you is tired, hungry or hurt as well as holding a position. In the program: See it from their side (After a talk went wrong).",
         "Politics + Neurobiology (state and setting): The nervous system treats a threat to “our side” as a threat to the self. Calm bodies compromise more, which is why settling comes before the vote. In the program: The Calm-Down Kit (WP-11).",
         "Politics + Holistic therapies (balance): Public health and holistic care agree that wellbeing is shaped by the conditions around a person, not only by their choices. Fix the conditions. In the program: Pillar II.",
         "Politics + Aromatherapy (state and setting): Politics knows the setting is a message: where the table is, how the room is laid out, who sits where. A home can use the same craft for hard talks. In the program: Check-ins: a good moment.",
@@ -16271,7 +16319,7 @@
         "Music + Philosophy (balance): Thinkers since Pythagoras have asked why sound moves us. Harmony is a picture of fairness: different parts, each with room, in one piece. In the program: Echoes of Gold.",
         "Music + Economics (limited capacity): Attention is what a song and a market both compete for, and it runs out. A noisy setting taxes every conversation held in it. In the program: Brain Breakers.",
         "Music + Finance (balance): In music a rest is written into the score, and silence counts as much as sound. In a household the quiet work needs writing down too. In the program: The Preface: unbilled debt.",
-        "Laughter therapy + Philosophy (signal and noise): Thinkers have long said humor spots what’s out of place: the gap between how things are and how they should be. A good joke names the gap without blaming anyone. In the program: The Perspective Shifter.",
+        "Laughter therapy + Philosophy (signal and noise): Thinkers have long said humor spots what’s out of place: the gap between how things are and how they should be. A good joke names the gap without blaming anyone. In the program: See it from their side (After a talk went wrong).",
         "Laughter therapy + Finance (balance): Goodwill is a reserve, and shared laughs are deposits that don’t appear on any sheet but make the withdrawals of a hard week survivable. In the program: Turning Toward."
       ],
       "pillar": "That’s all 78 pairs. Last of all, the chain: how each field leads into the next.",
@@ -16456,7 +16504,7 @@
     {
       "id": "pshift",
       "kind": "tool",
-      "name": "the Perspective Shifter",
+      "name": "See it from their side (the “Their side” step of After a talk went wrong)",
       "keys": [
         "perspective shifter",
         "the perspective shifter",
@@ -16466,11 +16514,14 @@
         "from their perspective",
         "see their side",
         "put myself in their shoes",
-        "other persons perspective"
+        "other persons perspective",
+        "their side step",
+        "the their side step",
+        "their side tab"
       ],
-      "what": "The Perspective Shifter helps you see a moment from the other person’s side. You tap what might be true for them: who they are to you, the state they were in, what was going on around them, how they’re wired and what history they carry. Then you note what each of you could and couldn’t see. It builds a picture of how the moment may have looked to them, why it can look different from what was meant, questions to check instead of guessing, and a sentence to bridge the gap that you can test in the Signal Translator.",
+      "what": "See it from their side is now the “Their side” step of After a talk went wrong (the Carrier Wave Decoder). Once it was its own page, the Perspective Shifter. It helps you see a moment from the other person’s side. You tap what might be true for them: who they are to you, the state they were in, what was going on around them, how they’re wired and what history they carry. Then you note what each of you could and couldn’t see. It builds a picture of how the moment may have looked to them, why it can look different from what was meant, questions to check instead of guessing, and a sentence to bridge the gap that you can test in the Signal Translator.",
       "how": [
-        "Open the Perspective Shifter and, if you like, write what happened in a line.",
+        "Open After a talk went wrong at its “Their side” step and, if you like, write what happened in a line.",
         "Tap what might be true for them in each group. Their side builds itself as you go.",
         "Look closely at “What could each of you see?”: most misunderstandings come from different information, not different values.",
         "Use the questions to check, and test the bridge sentence in the Signal Translator before you say it."
@@ -16488,8 +16539,8 @@
       ],
       "links": [
         [
-          "The Perspective Shifter",
-          "/perspective-shifter.html"
+          "See it from their side",
+          "/carrier-wave-decoder.html?tab=their-side"
         ],
         [
           "The Signal Translator",
@@ -16631,7 +16682,7 @@
     {
       "id": "knowmenu",
       "kind": "tool",
-      "name": "the Know yourself menu",
+      "name": "the Self-discovery menu",
       "keys": [
         "know yourself menu",
         "the know yourself tab",
@@ -16641,11 +16692,14 @@
         "things i can do alone",
         "where are the tools for me",
         "just for me menu",
-        "solo tools"
+        "solo tools",
+        "self discovery menu",
+        "the self discovery tab",
+        "self-discovery menu"
       ],
-      "what": "The Know yourself tab in the menu gathers everything one person can use alone: start here on your own (your self path, Wavelength, Today’s Weather, Professor Puddles), know your own wiring, check your load, settle yourself, get ready before a hard talk, and the worksheets and reading that go with it. Nothing there needs anyone else.",
+      "what": "The Self-discovery tab in the menu gathers everything one person can use alone: start here on your own (your self path, Wavelength, Today’s Weather, Professor Puddles), know your own wiring, check your load, settle yourself, get ready before a hard talk, and the worksheets and reading that go with it. Nothing there needs anyone else.",
       "how": [
-        "Open the Menu and choose Know yourself.",
+        "Open the Menu and choose Self-discovery.",
         "Pick a group: start here, know your wiring, check your load, settle yourself, before you say it, or worksheets and reading.",
         "For things to do with someone else, look under Tools for two."
       ],
@@ -16710,7 +16764,7 @@
           "/bears-dojo.html"
         ],
         [
-          "Pause & Play",
+          "Games: every calm game in one place",
           "/pause-and-play.html"
         ]
       ]
@@ -16923,7 +16977,7 @@
           "/how-to-stop-fighting-with-your-partner.html"
         ],
         [
-          "The Carrier Wave Decoder",
+          "After a talk went wrong: a step-by-step reset",
           "/carrier-wave-decoder.html"
         ]
       ]
@@ -17386,7 +17440,7 @@
         "~how does it all connect",
         "what to reach for when"
       ],
-      "what": "The languages of connection page puts it all in one picture: six layers from you outward. First you (know yourself), then how you talk and listen (Wavelength and the Wiring Card), how you show care (love languages), the words you share (touchstones), how you repair (apology languages), and how you keep it alive (turning toward, check-ins and the complacency re-checks). It has a table of what to reach for in each situation, how well each idea holds up, and a worked example.",
+      "what": "The languages of connection page puts it all in one picture: six layers from you outward. First you (self-discovery), then how you talk and listen (Wavelength and the Wiring Card), how you show care (love languages), the words you share (touchstones), how you repair (apology languages), and how you keep it alive (turning toward, check-ins and the complacency re-checks). It has a table of what to reach for in each situation, how well each idea holds up, and a worked example.",
       "how": [
         "Find the row in the table that sounds most like this week.",
         "Read that one page and try one small thing from it.",
@@ -17570,7 +17624,7 @@
           "/book/understanding-2-stress.html"
         ],
         [
-          "Where am I right now? (the ladder check)",
+          "How am I right now? Quick mode (4 taps)",
           "/ladder.html"
         ]
       ]
@@ -17965,7 +18019,7 @@
     {
       "id": "ladder",
       "kind": "tool",
-      "name": "Where am I right now? (the ladder check)",
+      "name": "How am I right now? Quick mode (the 4-tap ladder check)",
       "keys": [
         "where am i on the ladder",
         "where am i right now",
@@ -17980,7 +18034,7 @@
         "the ladder page",
         "where am i on the ladder right now"
       ],
-      "what": "Where am I right now? is a four-tap check on the nervous system ladder. It shows if you’re calm and connected, revved up, or running on empty, with what helps right now, a pause line to say, and when to talk again.",
+      "what": "How am I right now?, quick mode, is a four-tap check (it used to be called Where am I right now?) on the nervous system ladder. It shows if you’re calm and connected, revved up, or running on empty, with what helps right now, a pause line to say, and when to talk again.",
       "how": [
         "Open the ladder check and answer four quick taps.",
         "Read what helps on your rung, right now.",
@@ -17988,7 +18042,7 @@
       ],
       "links": [
         [
-          "Where am I right now?",
+          "How am I right now? Quick mode (4 taps)",
           "/ladder.html"
         ],
         [
@@ -18308,8 +18362,8 @@
           "What is the Check-ins guide?"
         ],
         [
-          "Today’s Weather (a check on me)",
-          "What is Today’s Weather?"
+          "How am I right now? (a check on me)",
+          "What is the How am I right now? check"
         ]
       ]
     },
@@ -18336,11 +18390,11 @@
       "x": "There are two crosswords and a few other gentle puzzles. Which sounds good?",
       "chips": [
         [
-          "Quiet Crossword (small, friendly)",
+          "Crosswords: gentle levels",
           "What is the Quiet Crossword?"
         ],
         [
-          "The Daily Ledger (newspaper-style)",
+          "Crosswords: newspaper daily",
           "What is the Daily Ledger Crossword?"
         ],
         [

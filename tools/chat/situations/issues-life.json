@@ -95,7 +95,7 @@
       "scripts": {
         "default": ["I’ve been trying a little check-in thing that helps me. No pressure, but would you do two minutes of it with me on Sunday?", "You don’t have to read any of it. I’m just trying to say things more clearly, and I’d love to know if it helps.", "I’m not trying to fix you. I’m trying to make our week easier, for both of us."]
       },
-      "path": [["Can I do this on my own?", "/is-this-for-you.html"], ["Who did what (WP-01)", "/workpapers/wp-01.html"], ["Know your own wiring", "/know-yourself.html"]],
+      "path": [["Can I do this on my own?", "/is-this-for-you.html"], ["Who did what (WP-01)", "/workpapers/wp-01.html"], ["Self-discovery: know your own wiring", "/know-yourself.html"]],
       "deeper": ["doing it from one side", "Can I do this alone?"],
       "ex": "Chris’s partner rolled their eyes at “workpapers.” So Chris just started checking their own battery before raising anything, and moved hard talks away from right after work. A month later their partner said, “Things feel calmer lately. What are you doing?” That was the moment to share it.",
       "tonight": "do one thing just for you: a one-minute battery check before any conversation that matters."
@@ -285,7 +285,7 @@
         "kid": ["I’m sorry I raised my voice. You didn’t deserve that. Can we talk about the homework after a snack?"],
         "coworker": ["I didn’t handle our conversation well this morning, and I’m sorry. Could we try again this afternoon?"]
       },
-      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["The Carrier Wave Decoder", "/carrier-wave-decoder.html"], ["Repair attempts (Library)", "/library/relationships.html#repair-attempts"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["After a talk went wrong: a step-by-step reset", "/carrier-wave-decoder.html"], ["Repair attempts (Library)", "/library/relationships.html#repair-attempts"]],
       "deeper": ["what makes an apology work", "What makes a good apology?"],
       "ex": "After another fight about the car, Jess waited until they’d both eaten, then said, “I’m sorry I called you careless. That wasn’t fair.” No “but”. Her partner softened right away, and the actual problem (who books the service) took five minutes the next day.",
       "tonight": "let things settle, then say one short, honest sorry for your part, with no “but” after it."
@@ -303,7 +303,7 @@
       "going_other": "This is Pillar III, Read your state first. Many people need a short buffer after work before they can really listen, and it’s about their energy, not about you. Agreeing a small, predictable transition time, and a proper catch-up after it, usually makes the evening feel warmer for both of you.",
       "steps_other": ["Greet them warmly and save the questions and jobs for twenty minutes or so.", "Agree together, on a calm day, what the buffer looks like and when you’ll catch up.", "Ask for the catch-up you want too: “After your twenty minutes, can we have ten minutes, just us?”"],
       "scripts_other": ["Take your twenty minutes. When you’re ready, I’d love to hear about your day, and tell you about mine.", "I’ve noticed you need a bit of quiet when you get in. Could we plan a proper catch-up after dinner?"],
-      "path": [["How much are you carrying? (WP-02)", "/workpapers/wp-02-how-much-are-you-carrying.html"], ["Today’s Weather", "/quick-checks.html#today"], ["Turning Toward: small rituals", "/turning-toward.html#rituals"]],
+      "path": [["How much are you carrying? (WP-02)", "/workpapers/wp-02-how-much-are-you-carrying.html"], ["How am I right now? (Today’s Weather)", "/quick-checks.html#today"], ["Turning Toward: small rituals", "/turning-toward.html#rituals"]],
       "deeper": ["reading your state first", "What is Pillar III, Read your state first?"],
       "ex": "Every evening, Ben walked in to a list of questions and snapped. They agreed on a routine: a hello and a hug, then twenty minutes for Ben to change and sit, then a real catch-up over dinner. The snapping mostly stopped within a week.",
       "tonight": "when you get home, say “I just need ten minutes to land, then I’m all yours,” and then come back when you said."
