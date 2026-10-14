@@ -1643,7 +1643,9 @@
     // Not in the installed app, not on the install page, not inside a frame, and not after its × this visit.
     var inFrame = true; try { inFrame = window.self !== window.top; } catch (e) {}
     if (!isApp() && current !== '/install.html' && !inFrame && ssGet('tol-appbar-off') !== '1') {
-      var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': T('The free app', 'La app gratis'), style: 'height:36px;margin:' + (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px' });
+      var appBar = el('aside', { class: 'tol-appbar no-bubble', 'aria-label': T('The free app', 'La app gratis') });
+      // set through the DOM, not a style="" attribute, so pages with a strict Content-Security-Policy accept it too
+      appBar.style.height = '36px'; appBar.style.margin = (-pt) + 'px ' + (-pr) + 'px 0 ' + (-pl) + 'px';
       body.insertBefore(appBar, body.firstChild);
       bar.style.marginTop = '0px';
       loadScript('/assets/js/app-bar.js').catch(function () { appBar.remove(); });
@@ -2666,6 +2668,8 @@
     }
     return null;
   }
+  // the Contents page lists each page once, in its home section, so "What's new" has no section there: it is its own page
+  function sectionHome(sec) { return sec.id === 'new' ? '/whats-new.html' : '/contents.html#contents-' + sec.id; }
   function whereCrumbs(pl) {
     var c = [];
     if (pl) {
@@ -2673,7 +2677,7 @@
       if (pl.list.name) c.push([pl.list.name, pl.list.all || GROUP_HOME[pl.g.id] || '/explore.html']);
       return c;
     }
-    if (hereSection) return [[hereSection.title, '/contents.html#contents-' + hereSection.id]];
+    if (hereSection) return [[hereSection.title, sectionHome(hereSection)]];
     var P = [[/^\/book\//, 'The book', '/book/index.html'], [/^\/library\//, 'The Professor’s Library', '/library.html'], [/^\/learn\//, 'Stories from Philosophy', '/learn/index.html'],
       [/^\/workpapers\//, 'Worksheets', '/workpapers/fill/suite.html'], [/^\/legal\//, 'About', '/contents.html'], [/^\/tools\//, 'Tools', '/tools.html']];
     for (var i = 0; i < P.length; i++) if (P[i][0].test(current)) return [[P[i][1], P[i][2]]];
@@ -2727,7 +2731,7 @@
       var S = hereSection.items.filter(function (it) { return it.href && !it.sub && it.menu !== false; }), j0 = -1;
       S.forEach(function (it, i) { if (j0 < 0 && pathOnly(it.href) === me) j0 = i; });
       S.slice(j0 + 1).concat(S.slice(0, Math.max(j0, 0))).forEach(function (it) { if (picks.length < 3) add(it.href, it.title, it.note || ''); });
-      more = ['Everything in ' + hereSection.title, '/contents.html#contents-' + hereSection.id];
+      more = ['Everything in ' + hereSection.title, sectionHome(hereSection)];
     }
     if (picks.length < 2) return;
     var box = el('aside', { class: 'tol-related no-bubble', 'aria-labelledby': 'tol-related-h' });
