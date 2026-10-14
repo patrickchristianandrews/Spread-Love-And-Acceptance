@@ -877,6 +877,162 @@
     };
   }
 
+
+  // ============================================================== joining: answers side by side
+  // people: [{ id, n (name), me (true for you), d (their answers) }]. Plain data in, plain data out (node-testable).
+  function normV(v) {
+    if (Array.isArray(v)) return v.map(normV).filter(function (x) { return x !== ''; }).sort();
+    if (v == null) return '';
+    if (typeof v === 'object') return JSON.stringify(v);
+    return String(v).replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+  function filled(v) { return Array.isArray(v) ? v.length > 0 : v != null && String(v).trim() !== '' && v !== false; }
+  // one row per answer: everyone's value, whether they match, and (for lists of choices) what they share
+  function combineFields(people, fields) {
+    var keys = fields && fields.length ? fields.map(function (f) { return f.k; }) : [];
+    if (!keys.length) people.forEach(function (p) { Object.keys(p.d || {}).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); }); });
+    var rows = [], same = 0, differ = 0, missing = 0;
+    keys.forEach(function (k) {
+      var vals = people.map(function (p) { return p.d ? p.d[k] : undefined; });
+      var have = vals.filter(filled);
+      if (!have.length) return;
+      var row = { k: k, vals: vals, same: false, missing: have.length < people.length };
+      if (have.length >= 2) {
+        if (have.every(Array.isArray)) {
+          var sets = have.map(function (a) { return normV(a); });
+          row.common = sets[0].filter(function (x) { return sets.every(function (s) { return s.indexOf(x) >= 0; }); });
+          // the shared choices, in the first person's own words
+          row.common = have[0].filter(function (x) { return row.common.indexOf(normV(x)) >= 0; });
+          row.same = sets.every(function (s) { return JSON.stringify(s) === JSON.stringify(sets[0]); });
+        } else {
+          var n0 = JSON.stringify(normV(have[0]));
+          row.same = have.every(function (v) { return JSON.stringify(normV(v)) === n0; });
+        }
+        if (row.same) same++; else differ++;
+      }
+      if (row.missing) missing++;
+      rows.push(row);
+    });
+    return { rows: rows, same: same, differ: differ, missing: missing };
+  }
+  // scores: everyone's value and the gap, with no "winner". o: { higher: 'load' (higher means more), digits }
+  function combineScore(people, o) {
+    o = o || {};
+    var vals = people.map(function (p) { var v = p.d ? +p.d[o.k || 's'] : NaN; return { id: p.id, n: p.n, me: !!p.me, v: isFinite(v) ? v : null }; });
+    var have = vals.filter(function (x) { return x.v !== null; });
+    var res = { vals: vals, gap: null, high: null, close: true };
+    if (have.length < 2) return res;
+    var hi = have.reduce(function (a, b) { return b.v > a.v ? b : a; }), lo = have.reduce(function (a, b) { return b.v < a.v ? b : a; });
+    res.gap = Math.round((hi.v - lo.v) * 100) / 100;
+    res.close = res.gap < (o.close != null ? o.close : 0.1);
+    res.high = res.close ? null : hi;
+    return res;
+  }
+  // lists: one merged list, duplicates joined (case and spaces don't matter), with who added each one
+  function combineList(people, o) {
+    o = o || {};
+    var items = [], at = {};
+    people.forEach(function (p) {
+      (Array.isArray(p.d && p.d[o.k || 'items']) ? p.d[o.k || 'items'] : []).forEach(function (it) {
+        var text = typeof it === 'string' ? it : it && (it.t || it.text || it.name) || '';
+        text = String(text).replace(/\s+/g, ' ').trim(); if (!text) return;
+        var key = text.toLowerCase();
+        if (at[key] == null) { at[key] = items.length; items.push({ text: text, by: [], extra: [] }); }
+        var row = items[at[key]];
+        if (row.by.indexOf(p.n) < 0) row.by.push(p.n);
+        if (it && typeof it === 'object' && it.x) row.extra.push({ n: p.n, x: String(it.x) });
+      });
+    });
+    var shared = items.filter(function (r) { return r.by.length > 1; }).length;
+    return { items: items, shared: shared };
+  }
+  // the kind words for a gap between two or more scores
+  function gapWords(res, o) {
+    o = o || {};
+    if (res.gap === null) return T('Only one score so far. When the others send theirs, the gap shows here.', 'Por ahora solo hay un puntaje. Cuando los demás envíen el suyo, la diferencia aparece aquí.');
+    var g = res.gap.toFixed(2);
+    if (res.close) return T('Your scores are close (a gap of ' + g + '). Neither of you is carrying much more than the other right now.', 'Sus puntajes están cerca (una diferencia de ' + g + '). Ahora mismo nadie carga mucho más que el otro.');
+    var who = res.high.me ? T('yours', 'el tuyo') : (res.high.n || T('one of yours', 'uno de ustedes')) + T('’s', '');
+    return o.words ? o.words(res, g) : T('A gap of ' + g + ': ' + who + ' reads higher right now. That isn’t a contest or anyone’s fault. It’s a reason to look at what’s on each plate this week.', 'Una diferencia de ' + g + ': ' + who + ' está más alto ahora. No es una competencia ni culpa de nadie. Es una razón para mirar qué tiene cada uno esta semana.');
+  }
+
+  // ---- the side-by-side view on the page (only text, never HTML)
+  function personName(p) { return p.me ? (p.n ? p.n + T(' (you)', ' (tú)') : T('You', 'Tú')) : (p.n || T('Someone', 'Alguien')); }
+  function showVal(v, fmt, k) {
+    if (fmt) { var r = fmt(k, v); if (r != null) return String(r); }
+    if (Array.isArray(v)) return v.join(', ');
+    if (v === true) return T('Yes', 'Sí'); if (v === false || v == null) return '';
+    return String(v);
+  }
+  // opts: { kind: 'fields'|'score'|'list', fields, label(k), format(k, v), next (a sentence), title, scoreLabel, k }
+  function combinedView(people, opts) {
+    css();
+    opts = opts || {};
+    var box = mk('div', { cls: 'tcol-cmp' });
+    if (opts.title) box.appendChild(mk('h4', { cls: 'tcol-cmp-h', text: opts.title }));
+    var label = opts.label || function (k) { var f = (opts.fields || []).filter(function (x) { return x.k === k; })[0]; return f ? T(f.en, f.es || f.en) : k; };
+    var kind = opts.kind || 'fields', summary = '';
+    if (kind === 'score') {
+      var res = combineScore(people, opts);
+      var ul = mk('ul', { cls: 'tcol-cmp-scores' });
+      res.vals.forEach(function (v) { ul.appendChild(mk('li', {}, [mk('strong', { text: personName(people.filter(function (p) { return p.id === v.id; })[0] || v) + ': ' }), v.v === null ? T('not answered yet', 'todavía sin responder') : v.v.toFixed(opts.digits == null ? 2 : opts.digits) + (opts.scoreLabel ? ' ' + opts.scoreLabel : '')])); });
+      box.appendChild(ul);
+      summary = gapWords(res, opts);
+      box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
+    } else if (kind === 'list') {
+      var L = combineList(people, opts), ol = mk('ul', { cls: 'tcol-cmp-list' });
+      L.items.forEach(function (it) {
+        var li = mk('li', { cls: it.by.length > 1 ? 'is-same' : '' }, [mk('span', { cls: 'tcol-cmp-item', text: it.text }), ' ',
+          mk('span', { cls: 'tcol-cmp-by', text: it.by.length === people.length && people.length > 1 ? T('everyone', 'todos') : T('added by ', 'de ') + it.by.join(', ') })]);
+        it.extra.forEach(function (e) { li.appendChild(mk('span', { cls: 'tcol-cmp-x', text: e.n + ': ' + e.x })); });
+        ol.appendChild(li);
+      });
+      summary = L.items.length ? T(L.items.length + (L.items.length === 1 ? ' item' : ' items') + ' in all' + (L.shared ? ', ' + L.shared + ' on more than one list (joined into one).' : '.'), L.items.length + ' en total' + (L.shared ? ', ' + L.shared + ' en más de una lista (unidos en uno).' : '.')) : T('Nothing on the lists yet.', 'Todavía no hay nada en las listas.');
+      box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
+      box.appendChild(ol);
+    } else {
+      var F = combineFields(people, opts.fields);
+      summary = people.length < 2 ? '' : T('You match on ' + F.same + ' and see ' + F.differ + ' differently.', 'Coinciden en ' + F.same + ' y lo ven distinto en ' + F.differ + '.') + (F.missing ? T(' Some answers are only on one side.', ' Algunas respuestas están solo de un lado.') : '');
+      if (summary) box.appendChild(mk('p', { cls: 'tcol-cmp-sum', text: summary }));
+      F.rows.forEach(function (r) {
+        var row = mk('div', { cls: 'tcol-cmp-row' + (r.same ? ' is-same' : '') });
+        var h = mk('p', { cls: 'tcol-cmp-k' }, [mk('strong', { text: label(r.k) })]);
+        if (people.length > 1 && !r.missing) h.appendChild(mk('span', { cls: 'tcol-tag' + (r.same ? ' is-same' : ''), text: r.same ? T('Same', 'Igual') : T('Different', 'Distinto') }));
+        row.appendChild(h);
+        var ul2 = mk('ul', { cls: 'tcol-cmp-vals' });
+        people.forEach(function (p, i) { var t = showVal(r.vals[i], opts.format, r.k); ul2.appendChild(mk('li', {}, [mk('span', { cls: 'tcol-cmp-who', text: personName(p) + ': ' }), t || T('(left blank)', '(en blanco)')])); });
+        row.appendChild(ul2);
+        if (r.common && r.common.length && !r.same) row.appendChild(mk('p', { cls: 'tcol-cmp-common', text: T('You both chose: ', 'Los dos eligieron: ') + r.common.join(', ') }));
+        box.appendChild(row);
+      });
+    }
+    var next = typeof opts.next === 'function' ? opts.next(people) : opts.next;
+    if (next) box.appendChild(mk('p', { cls: 'tcol-cmp-next' }, [mk('strong', { text: T('One next step: ', 'Un paso siguiente: ') }), next]));
+    box.appendChild(mk('p', { cls: 'tcol-priv', text: T('Their answers came inside the link. Nothing is stored on our side.', 'Sus respuestas llegaron dentro del enlace. No se guarda nada de nuestro lado.') }));
+    // "Save this combined view" in My saved entries (progress.js), where the device keeps them
+    var P = W && W.TOLProgress;
+    if (P && typeof P.saveEntry === 'function' && (typeof P.level !== 'function' || P.level() !== 'shared')) {
+      var sv = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', text: T('Save this combined view', 'Guardar esta vista combinada') }), sst = mk('span', { cls: 'tcol-small', role: 'status' });
+      sv.addEventListener('click', function () {
+        var text = combinedText(people, opts);
+        Promise.resolve().then(function () { return P.saveEntry({ tool: 'together' + (opts.tool ? ':' + opts.tool : ''), title: opts.title || T('Combined view', 'Vista combinada'), text: text, data: { people: people.map(function (p) { return { n: p.n, me: !!p.me, d: p.d }; }), kind: kind } }); })
+          .then(function (r) { sst.textContent = r === false ? T(' Couldn’t save it here.', ' No se pudo guardar aquí.') : T(' Saved in My saved entries, on this device only.', ' Guardado en Mis entradas guardadas, solo en este aparato.'); }, function () { sst.textContent = T(' Couldn’t save it here.', ' No se pudo guardar aquí.'); });
+      });
+      box.appendChild(mk('p', {}, [sv, sst]));
+    }
+    return box;
+  }
+  // the same view as plain text (for saving or copying)
+  function combinedText(people, opts) {
+    opts = opts || {};
+    var label = opts.label || function (k) { var f = (opts.fields || []).filter(function (x) { return x.k === k; })[0]; return f ? f.en : k; };
+    var out = [opts.title || 'Combined view'];
+    if (opts.kind === 'score') { var r = combineScore(people, opts); r.vals.forEach(function (v) { out.push((v.n || 'Someone') + ': ' + (v.v === null ? '-' : v.v.toFixed(2))); }); out.push(gapWords(r, opts)); }
+    else if (opts.kind === 'list') combineList(people, opts).items.forEach(function (it) { out.push('- ' + it.text + ' (' + it.by.join(', ') + ')'); });
+    else combineFields(people, opts.fields).rows.forEach(function (row) { out.push(label(row.k) + (row.same ? ' (same)' : '') + ': ' + people.map(function (p, i) { return (p.n || 'Someone') + ' ' + showVal(row.vals[i], opts.format, row.k); }).join(' · ')); });
+    return out.join('\n');
+  }
+
   var API = {
     version: VERSION, HASH: HASH, CODE: CODE, LONG: LONG,
     pack: pack, packSync: packSync, unpack: unpack, unpackSync: unpackSync,
@@ -886,6 +1042,7 @@
     me: getMe, saveMe: saveMe, rid: rid,
     smsHref: smsHref, mailHref: mailHref,
     sendBlock: sendBlock, sendSheet: sendSheet, closeSheet: closeSheet, attach: attach,
+    combine: { fields: combineFields, score: combineScore, list: combineList, gapWords: gapWords, view: combinedView, text: combinedText },
     keys: { me: ME_KEY, kept: KEPT_KEY, tab: TAB_KEY }
   };
   if (W) W.TOLCollab = API;
