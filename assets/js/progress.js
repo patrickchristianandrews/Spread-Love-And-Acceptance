@@ -1451,7 +1451,7 @@
   }
   function drawAll() { drawLevel(); drawWhat(); drawKeep(); drawEntries(); drawHistory(); drawLock(); drawClear(); var h = $('tp-app-hint'); if (h) h.hidden = !isApp(); }
   function section() {
-    var root = $('progress'); if (!root) return;
+    var root = D.querySelector('section.tp'); if (!root) return;
     css();
     root.classList.add('tp-live');
     drawAll();

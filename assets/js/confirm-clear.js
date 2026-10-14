@@ -102,6 +102,7 @@
     var native = typeof HTMLDialogElement === 'function' && !!D.createElement('dialog').showModal;
     var d = mk(native ? 'dialog' : 'div', { class: 'tcc' + (native ? '' : ' tcc-plain'), 'aria-labelledby': 'tcc-h', 'aria-describedby': 'tcc-body' });
     if (!native) { d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); }
+    d.style.visibility = 'visible';   // shows over the app lock screen too (the page itself is hidden then)
     var card = mk('div', { class: 'tcc-card' });
     var h = mk('h2', { id: 'tcc-h', tabindex: '-1' }), body = mk('div', { id: 'tcc-body', class: 'tcc-body' }), acts = mk('div', { class: 'tcc-acts' });
     var live = mk('p', { class: 'tcc-live', role: 'status', 'aria-live': 'polite' });

@@ -187,6 +187,54 @@ html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
 .tol-iosg-card.is-inline .tol-iosg-steps{ margin-top:2px !important; }
 @media (max-width:380px){ .tol-iosg-app{ grid-template-columns:72px minmax(0,1fr); gap:12px; } .tol-iosg-icon{ width:72px; height:72px; border-radius:16px; } .tol-iosg-card .tol-iosg-name{ font-size:18px !important; } }
 
+/* ---------- The computer sheet (Safari on a Mac, Firefox): a desktop shortcut in one click ---------- */
+.tol-iosg.is-desk .tol-iosg-app{ padding-bottom:12px; }
+.tol-iosg.is-desk .tol-iosg-about{ padding-bottom:14px !important; }
+.tol-desk-dl{
+  display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:50px; padding:10px 18px; border:0; border-radius:25px;
+  background:var(--blue); color:#fff; font:600 17px/1.2 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; text-align:center;
+  cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .12s, opacity .12s;
+}
+.tol-desk-dl .tol-iosg-g{ flex:none; width:22px; height:22px; }
+.tol-desk-dl:active{ transform:scale(.98); opacity:.85; }
+.tol-desk-dl.is-again{ background:var(--fill); color:var(--blue); }
+.tol-iosg-card .tol-desk-dl:focus-visible{ outline:3px solid var(--blue); outline-offset:2px; }
+.tol-desk-after[hidden]{ display:none !important; }
+.tol-desk-after{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; align-items:center; margin-top:12px; padding:12px 14px; border-radius:12px; background:var(--cell); }
+.tol-iosg-card .tol-desk-said{ font-size:16px; line-height:1.4; }
+.tol-iosg-card .tol-desk-said .tol-iosg-dim{ display:block; margin-top:4px; font-size:14px; }
+/* the drawing: Downloads, a dotted arrow, the desktop */
+.tol-desk-fig{ display:flex; align-items:flex-end; gap:2px; }
+.tol-desk-place{ display:flex; flex-direction:column; align-items:center; gap:3px; }
+.tol-desk-box{ position:relative; display:grid; place-items:center; width:46px; height:36px; }
+.tol-desk-box.is-folder{ border-radius:3px 7px 7px 7px; background:#8EC5F5; box-shadow:inset 0 6px 0 #6FB1EE; }
+.tol-desk-box.is-folder::before{ content:""; position:absolute; left:0; top:-5px; width:18px; height:6px; border-radius:3px 3px 0 0; background:#6FB1EE; }
+.tol-desk-box.is-screen{ border-radius:5px; background:linear-gradient(135deg,#B9A5E8,#F3B9CC); box-shadow:0 0 0 2.5px var(--label2); }
+.tol-desk-box.is-screen::after{ content:""; position:absolute; left:50%; bottom:-8px; width:16px; height:4px; margin-left:-8px; border-radius:2px; background:var(--label2); }
+.tol-desk-doc{ position:relative; display:grid; place-items:center; width:20px; height:24px; }
+.tol-desk-file{ position:absolute; inset:0; width:100%; height:100%; }
+.tol-desk-doc img{ position:relative; width:11px; height:11px; margin-top:4px; border-radius:2px; }
+.tol-desk-cap{ font-size:11px; line-height:1.1; color:var(--label2); white-space:nowrap; margin-top:4px; }
+.tol-desk-place:last-child .tol-desk-cap{ margin-top:10px; }
+.tol-desk-arrow{ width:34px; height:14px; margin:0 0 30px; }
+/* Safari 17+: make it an app, with a small copy of the File menu */
+.tol-desk-app{ margin-top:18px; padding-top:14px; border-top:.5px solid var(--sep); }
+.tol-iosg-card .tol-desk-app .tol-iosg-p{ font-size:16px; }
+.tol-iosg-card .tol-desk-app .tol-iosg-dim{ margin-top:8px !important; font-size:14px; }
+.tol-desk-menu{ display:block; width:max-content; max-width:100%; margin-top:10px; font:400 13px/1.25 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+.tol-desk-mbar{ display:flex; align-items:center; gap:2px; padding:3px 6px; border-radius:7px 7px 0 0; background:var(--fill); color:var(--label); }
+.tol-desk-mbar > *{ padding:2px 8px; border-radius:4px; white-space:nowrap; }
+.tol-desk-mbar b{ font-weight:700; }
+.tol-desk-mbar .is-on{ background:var(--fill); }
+.tol-desk-mdrop{ display:flex; flex-direction:column; width:max-content; min-width:170px; max-width:100%; margin-left:58px; padding:5px; border-radius:0 0 8px 8px;
+  background:var(--cell); color:var(--label); box-shadow:0 0 0 .5px var(--sep), 0 6px 18px rgba(0,0,0,.14); }
+.tol-desk-mi{ padding:3px 10px; border-radius:4px; white-space:nowrap; }
+.tol-desk-mi.is-hi{ background:var(--blue); color:#fff; font-weight:600; }
+.tol-desk-msep{ height:.5px; margin:4px 8px; background:var(--sep); }
+.tol-iosg-card .tol-desk-ff{ margin-top:16px !important; }
+.tol-iosg.is-desk .tol-iosg-done{ margin-top:16px; }
+@media (max-width:380px){ .tol-desk-after{ grid-template-columns:minmax(0,1fr); justify-items:start; } }
+
 /* after install: a small welcome at the top, once */
 .tol-iosw{
   position:fixed; z-index:2147483000; left:0; right:0; top:calc(env(safe-area-inset-top, 0px) + 10px); width:max-content; margin:0 auto;

@@ -1,0 +1,147 @@
+/* progress.css — "Your progress" (progress.js) and "Are you sure?" (confirm-clear.js).
+   Light colors only: dark mode is the site-wide invert in site.css. No inline styles are needed, so the
+   strict-CSP worksheet pages accept everything here. */
+
+/* ---------- shared pieces ---------- */
+.tp-btn{ display:inline-flex; align-items:center; justify-content:center; gap:.35rem; box-sizing:border-box; min-height:44px; padding:.45rem 1.05rem;
+  font:600 .95rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; text-decoration:none; text-align:center; }
+.tp-btn:hover{ background:#F6F0FF; }
+.tp-btn:focus-visible, .tp-link:focus-visible, .tp a:focus-visible, .tcc input:focus-visible, .tp input:focus-visible, .tp select:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tp-btn.is-strong{ background:#5B3F8C; border-color:#5B3F8C; color:#fff; }
+.tp-btn.is-strong:hover{ background:#4A3274; }
+.tp-btn.is-danger{ background:#96412B; border-color:#96412B; color:#fff; }
+.tp-btn.is-danger:hover{ background:#7E3522; }
+.tp-btn.is-small{ min-height:40px; padding:.3rem .8rem; font-size:.9rem; }
+.tp-btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.tp-btn[hidden]{ display:none; }
+.tp-link{ min-height:44px; padding:.3rem .4rem; font:inherit; font-size:.92rem; color:#4A3274; background:none; border:0; text-decoration:underline; cursor:pointer; }
+.tp-hide{ position:absolute; left:-9999px; }
+.tp-status{ min-height:1.4rem; margin:.4rem 0 0 !important; font-weight:600; color:#2F5A3C; }
+.tp-status.is-bad, .tp-warn.is-bad{ color:#96412B; }
+.tp-ok{ color:#2F5A3C; font-weight:600; }
+.tp-warn{ font-size:.95rem; color:#6B4A12; }
+.tp-note{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.tp-none{ color:var(--ink-soft, #5A5346); font-style:italic; }
+.tp-acts{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; margin:.6rem 0 0 !important; }
+.tp-row{ display:flex; flex-wrap:wrap; gap:.35rem .6rem; align-items:center; margin:.5rem 0 0 !important; }
+.tp-row label{ flex:1 1 100%; font-weight:600; font-size:.95rem; }
+.tp-row input[type="password"], .tp-row input[type="text"], .tp-row select, .tp select{ box-sizing:border-box; min-height:44px; max-width:100%; padding:.4rem .6rem;
+  font:1rem/1.2 "Lora", Georgia, serif; color:#2B2620; background:#fff; border:1.5px solid #CDBF99; border-radius:10px; }
+.tp-row input[type="password"], .tp-row input[type="text"]{ flex:1 1 14rem; min-width:0; }
+.tp-row select{ flex:1 1 12rem; min-width:0; }
+.tp-pin{ flex:0 1 9rem !important; letter-spacing:.3em; font-family:"IBM Plex Mono", monospace !important; }
+.tp-show{ display:inline-flex; gap:.4rem; align-items:center; margin-top:.4rem; font-size:.92rem; min-height:44px; }
+.tp-show input, .tp-mode input, .tp-remind input{ width:1.2rem; height:1.2rem; flex:none; }
+
+/* ---------- the section on /on-this-device.html ---------- */
+.tp{ margin:1.4rem 0 2rem; }
+.tp h3{ margin:.1rem 0 .4rem !important; font-family:"Fraunces", Georgia, serif; font-size:1.2rem; }
+.tp p{ max-width:none !important; }
+.tp-promise{ padding:.8rem 1rem !important; border-radius:16px; background:#EEF6EF !important; border:1px solid #BFD9C4; }
+.tp-level{ margin:.9rem 0; padding:.9rem 1rem; border-radius:16px; background:#F6F0FF; border:1px solid #D6C8EE; }
+.tp-level-h{ margin:0 0 .3rem !important; font:600 1.1rem/1.3 "Fraunces", Georgia, serif; }
+.tp-level p{ margin:.3rem 0 0 !important; }
+.tp-perk{ font-weight:600; color:#4A3274; }
+.tp-take{ margin:.4rem 0 0 !important; padding-left:1.2rem !important; }
+.tp-take li{ margin:.25rem 0 !important; }
+.tp-compare-wrap{ margin:.8rem 0 1rem; }
+.tp-compare{ width:100%; border-collapse:collapse; font-size:.9rem; table-layout:fixed; }
+.tp-compare caption{ text-align:left; font-weight:600; margin-bottom:.35rem; }
+.tp-compare th, .tp-compare td{ padding:.4rem .35rem; border-bottom:1px solid var(--line, #D9CBA3); text-align:left; vertical-align:top; overflow-wrap:anywhere; hyphens:auto; }
+.tp-compare thead th{ font-size:.85rem; line-height:1.2; }
+.tp-compare th:first-child{ width:34%; }
+.tp-compare .tp-here{ display:none; font-size:.75rem; font-weight:700; color:#5B3F8C; }
+.tp-at-shared [data-col="shared"], .tp-at-phone [data-col="phone"], .tp-at-app [data-col="app"]{ background:#F6F0FF; }
+.tp-at-shared th[data-col="shared"] .tp-here, .tp-at-phone th[data-col="phone"] .tp-here, .tp-at-app th[data-col="app"] .tp-here{ display:block; }
+.tp-what{ margin:.6rem 0; }
+.tp-what-h{ font-weight:600; margin:.4rem 0 .2rem !important; }
+.tp-list{ margin:.2rem 0 .4rem !important; padding-left:1.2rem !important; }
+.tp-list li{ margin:.2rem 0 !important; max-width:none !important; }
+.tp-last{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.tp-grid{ display:grid; gap:.9rem; grid-template-columns:repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin:1rem 0; }
+.tp-box{ box-sizing:border-box; min-width:0; padding:.9rem 1rem 1rem; border-radius:16px; border:1px solid var(--line, #D9CBA3); background:rgba(255,251,242,.97); scroll-margin-top:5rem; }
+.tp-box p{ margin:.35rem 0 0 !important; }
+.tp-box ul{ margin:.35rem 0 0 !important; }
+.tp-in{ margin-top:.7rem; padding:.8rem .9rem; border-radius:12px; background:#FFF8E6; border:1px solid #E8D49A; }
+.tp-in[hidden]{ display:none; }
+.tp-in-h{ font-weight:600; }
+.tp-mode{ margin:.6rem 0 0; padding:.5rem .7rem; border:1px solid var(--line, #D9CBA3); border-radius:12px; min-width:0; }
+.tp-mode legend{ font-weight:600; padding:0 .3rem; }
+.tp-mode label{ display:flex; gap:.5rem; align-items:flex-start; flex-wrap:wrap; margin:.35rem 0; line-height:1.35; min-height:44px; }
+.tp-mode label input[type="radio"]{ margin-top:.15rem; }
+.tp-mode select{ flex:1 1 10rem; min-width:0; }
+.tp-file{ position:relative; overflow:hidden; }
+.tp-file input{ position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; }
+.tp-file:focus-within{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+#tp-link textarea{ box-sizing:border-box; width:100%; min-height:5.5rem; margin-top:.5rem; padding:.5rem; font:.8rem/1.3 "IBM Plex Mono", monospace; border:1.5px solid #CDBF99; border-radius:10px; overflow-wrap:anywhere; word-break:break-all; resize:vertical; }
+#tp-link[hidden], #tp-app-hint[hidden]{ display:none; }
+.tp-remind{ display:flex; gap:.5rem; align-items:center; margin-top:.6rem; min-height:44px; }
+.tp-entries{ list-style:none; padding:0 !important; margin:.6rem 0 0 !important; display:grid; gap:.5rem; }
+.tp-entries > li{ margin:0 !important; max-width:none !important; padding:.6rem .75rem; border-radius:12px; border:1px solid var(--line, #D9CBA3); background:#fff; }
+.tp-e-meta{ display:block; font-size:.88rem; color:var(--ink-soft, #5A5346); overflow-wrap:anywhere; }
+.tp-e-detail{ margin-top:.5rem; padding-top:.5rem; border-top:1px dashed var(--line, #D9CBA3); }
+.tp-lines{ margin:.3rem 0 0; max-height:22rem; overflow:auto; font-size:.88rem; }
+.tp-lines dt{ font-weight:600; color:#5A5346; overflow-wrap:anywhere; }
+.tp-lines dd{ margin:0 0 .35rem; overflow-wrap:anywhere; }
+.tp-diff ul{ font-size:.88rem; overflow-wrap:anywhere; }
+.tp-hist{ margin-top:.3rem; }
+.tp-entry-new{ padding-bottom:.4rem; }
+
+/* ---------- pop-up cards (iPhone tip, backup reminder, "own or shared computer?") ---------- */
+.tp-card-pop{ position:fixed; z-index:960; left:16px; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); box-sizing:border-box; width:min(26rem, calc(100vw - 32px));
+  padding:.9rem 1rem 1rem; border-radius:18px; background:#FFFDF7; color:#2B2620; border:1.5px solid #D6C8EE; box-shadow:0 14px 34px -16px rgba(60,40,110,.45);
+  font:1rem/1.45 "Lora", Georgia, serif; }
+.tp-card-pop p{ margin:.35rem 0 0; max-width:none; font-size:.95rem; }
+.tp-card-pop .tp-pop-h{ margin:0; font:600 1.1rem/1.3 "Fraunces", Georgia, serif; }
+.tp-pop-acts{ display:flex; flex-wrap:wrap; gap:.45rem; margin-top:.7rem !important; }
+html:not(.tol-still):not(.tol-quiet) .tp-card-pop{ animation:tp-rise .35s ease-out; }
+@keyframes tp-rise{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce){ .tp-card-pop{ animation:none !important; } }
+
+/* ---------- shared-computer chip ---------- */
+.tp-chip{ position:fixed; z-index:950; left:12px; bottom:12px; display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem; max-width:calc(100vw - 24px); box-sizing:border-box;
+  padding:.35rem .5rem .35rem .85rem; border-radius:999px; background:#2B2620; color:#FFFDF7; font:600 .9rem/1.2 "Lora", Georgia, serif; box-shadow:0 8px 22px -12px rgba(0,0,0,.5); }
+.tp-chip .tp-btn{ min-height:36px; padding:.25rem .8rem; font-size:.85rem; background:#FFFDF7; border-color:#FFFDF7; }
+.tp-chip-a{ color:#FFE9A8; font-size:.85rem; padding:.4rem .3rem; }
+.tp-chip-a:focus-visible{ outline:3px solid #FFE9A8; outline-offset:2px; }
+
+/* ---------- the app lock screen ---------- */
+.tp-lock{ position:fixed; inset:0; z-index:2147483000; display:flex; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;
+  background:#F5EFDE; visibility:visible; overflow:auto; }
+.tp-lock-card{ box-sizing:border-box; width:min(24rem, 100%); padding:1.3rem 1.2rem; border-radius:20px; background:#FFFDF7; border:1.5px solid #D6C8EE;
+  box-shadow:0 18px 40px -22px rgba(60,40,110,.5); font:1rem/1.45 "Lora", Georgia, serif; color:#2B2620; }
+.tp-lock-card h2{ margin:0 0 .3rem; font:600 1.5rem/1.2 "Fraunces", Georgia, serif; }
+.tp-lock-card p{ margin:.4rem 0 0; }
+.tp-forgot{ margin-top:1rem; font-size:.92rem; }
+.tp-forgot summary{ cursor:pointer; min-height:44px; display:flex; align-items:center; color:#4A3274; text-decoration:underline; }
+.tp-forgot .tp-btn{ margin-top:.5rem; }
+
+/* ---------- "Are you sure?" (confirm-clear.js) ---------- */
+.tcc{ box-sizing:border-box; width:min(28rem, calc(100vw - 16px)); max-width:none; max-height:calc(100dvh - 16px); padding:0; border:1.5px solid #D6C8EE; border-radius:20px;
+  background:#FFFDF7; color:#2B2620; font:1rem/1.45 "Lora", Georgia, serif; visibility:visible; overflow:auto; }
+.tcc::backdrop{ background:rgba(33,29,23,.5); }
+.tcc-plain{ position:fixed; z-index:2147483100; left:50%; top:50%; transform:translate(-50%, -50%); }
+.tcc-card{ padding:1.1rem 1.15rem 1.15rem; }
+.tcc h2{ margin:0 0 .4rem; font:600 1.35rem/1.25 "Fraunces", Georgia, serif; }
+.tcc h2:focus{ outline:none; }
+.tcc p{ margin:.4rem 0 0; max-width:none; }
+.tcc-list{ margin:.3rem 0 .4rem; padding-left:1.2rem; }
+.tcc-backup{ margin-top:.8rem; padding:.7rem .8rem; border-radius:12px; background:#FFF8E6; border:1px solid #E8D49A; }
+.tcc-backup .tp-btn{ margin-top:.5rem; }
+.tcc-row{ display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; }
+.tcc-row label{ flex:1 1 100%; font-size:.92rem; font-weight:600; }
+.tcc-row input{ box-sizing:border-box; flex:1 1 12rem; min-width:0; min-height:44px; padding:.4rem .6rem; font:1rem "Lora", Georgia, serif; border:1.5px solid #CDBF99; border-radius:10px; }
+.tcc-q{ display:flex; flex-wrap:wrap; gap:.5rem; align-items:center; font-size:1.15rem; font-weight:600; }
+.tcc-ans{ box-sizing:border-box; width:5rem; min-height:48px; padding:.3rem .5rem; font:600 1.3rem "IBM Plex Mono", monospace; text-align:center; border:2px solid #B9A8D6; border-radius:10px; }
+.tcc-body > .tp-btn{ margin-top:.5rem; }
+.tcc-live{ min-height:1.4rem; font-weight:600; color:#4A3274; }
+.tcc-acts{ display:flex; flex-wrap:wrap; gap:.5rem; justify-content:flex-end; margin-top:.9rem; }
+
+@media print{ .tp-card-pop, .tp-chip, .tp-lock, .tcc{ display:none !important; } html{ visibility:visible !important; } }
+@media (max-width:520px){
+  .tp-card-pop{ left:12px; width:calc(100vw - 24px); bottom:calc(12px + env(safe-area-inset-bottom, 0px)); }
+  .tp-compare{ font-size:.82rem; }
+  .tp-compare th:first-child{ width:30%; }
+  .tcc-acts{ justify-content:stretch; }
+  .tcc-acts .tp-btn{ flex:1 1 auto; }
+}

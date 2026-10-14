@@ -102,13 +102,119 @@
 <p class="simple-lede">Some pages keep small notes in this browser, like your settings, a draft, or how far you got in a game. They stay on this device. They are never sent to us. Here is every one of them, in plain words, with a way to erase it.</p>
 
 <ul>
-  <li><strong>Only in this browser.</strong> Another browser or phone won’t see them.</li>
-  <li><strong>Erasing is for good.</strong> There is no copy anywhere else to bring it back from.</li>
+  <li><strong>Only in this browser.</strong> Another browser or phone won’t see them, unless you move them yourself (see Your progress, below).</li>
+  <li><strong>Erasing is for good.</strong> There is no copy anywhere else to bring it back from, unless you saved a backup file yourself.</li>
   <li><strong>Erasing a setting</strong> just puts that page back to its usual look.</li>
 </ul>
 
+<!-- progress:start (save10: assets/js/progress.js + assets/css/progress.css fill and run this section) -->
+<h2 id="progress">Your progress</h2>
+<section class="tp no-bubble" aria-labelledby="progress">
+<p class="tp-promise"><strong>Private, and free.</strong> There’s no account. What you do here stays on this device, and we never see it. A backup file or a move link is made right here, and goes only where you put it or send it.</p>
+<div id="tp-level" class="tp-level" aria-live="polite"><p class="tp-level-h">Saving here</p><p>This part needs JavaScript.</p></div>
+
+<div class="tp-compare-wrap">
+<table id="tp-compare" class="tp-compare">
+  <caption>What each way of saving gives you</caption>
+  <thead><tr><th scope="col">&nbsp;</th><th scope="col" data-col="shared">Shared computer<span class="tp-here">You are here</span></th><th scope="col" data-col="phone">Phone browser<span class="tp-here">You are here</span></th><th scope="col" data-col="app">App or own computer<span class="tp-here">You are here</span></th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Kept after you close it</th><td data-col="shared">No</td><td data-col="phone">Yes</td><td data-col="app">Yes</td></tr>
+    <tr><th scope="row">Backup, restore, move</th><td data-col="shared">Yes</td><td data-col="phone">Yes</td><td data-col="app">Yes</td></tr>
+    <tr><th scope="row">Asks the browser to keep it safe</th><td data-col="shared">No</td><td data-col="phone">Once</td><td data-col="app">Every time</td></tr>
+    <tr><th scope="row">My saved entries</th><td data-col="shared">No</td><td data-col="phone">No</td><td data-col="app">Yes</td></tr>
+    <tr><th scope="row">Earlier versions</th><td data-col="shared">No</td><td data-col="phone">No</td><td data-col="app">Yes</td></tr>
+    <tr><th scope="row">App lock (PIN, Face ID, fingerprint)</th><td data-col="shared">No</td><td data-col="phone">Yes</td><td data-col="app">Yes</td></tr>
+    <tr><th scope="row">Backup reminders</th><td data-col="shared">No</td><td data-col="phone">Yes</td><td data-col="app">Yes</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div id="tp-what" class="tp-what" aria-live="polite"></div>
+
+<div class="tp-grid">
+  <div class="tp-box" id="backup">
+    <h3>Save a backup</h3>
+    <p>One file with everything you’ve done here. Keep it in Files, iCloud Drive or Google Drive, on a USB stick, or email it to yourself.</p>
+    <p class="tp-row"><label for="tp-pw1">Password (optional, but best)</label><input id="tp-pw1" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"></p>
+    <p class="tp-row"><label for="tp-pw2">Type it again</label><input id="tp-pw2" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"></p>
+    <label class="tp-show"><input type="checkbox" data-tp-show="tp-pw1 tp-pw2"> Show the password</label>
+    <p id="tp-backup-warn" class="tp-warn" aria-live="polite"></p>
+    <p class="tp-acts"><button type="button" class="tp-btn is-strong" data-tp="backup">Save a backup</button></p>
+    <p id="tp-backup-msg" class="tp-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="tp-box" id="restore">
+    <h3>Restore from a backup</h3>
+    <p>Open a backup file you saved. You’ll see what’s in it (tool names and dates) before anything changes.</p>
+    <p class="tp-acts"><label class="tp-btn tp-file">Choose a backup file<input type="file" id="tp-file" accept=".json,application/json"></label></p>
+    <div id="tp-in" class="tp-in" hidden></div>
+  </div>
+
+  <div class="tp-box" id="move">
+    <h3>Move to another device, or into the app</h3>
+    <p id="tp-app-hint" class="tp-perk" hidden>Bringing your progress over from your browser? Paste the move link below, or choose a backup file under Restore.</p>
+    <p>Make a link that carries your progress. Open it on your other phone, computer or the app, and it asks before restoring anything. The link holds your progress after the “#”, which browsers never send to any website.</p>
+    <p class="tp-row"><label for="tp-lpw1">Password for the link (strongly suggested)</label><input id="tp-lpw1" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"></p>
+    <p class="tp-row"><label for="tp-lpw2">Type it again</label><input id="tp-lpw2" type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false"></p>
+    <label class="tp-show"><input type="checkbox" data-tp-show="tp-lpw1 tp-lpw2"> Show the password</label>
+    <p id="tp-link-warn" class="tp-warn" aria-live="polite"></p>
+    <p class="tp-acts"><button type="button" class="tp-btn is-strong" data-tp="link">Make a move link</button></p>
+    <div id="tp-link" hidden>
+      <label for="tp-link-text" class="tp-hide">Your move link</label>
+      <textarea id="tp-link-text" readonly></textarea>
+      <p class="tp-acts">
+        <button type="button" class="tp-btn" data-tp="copy">Copy link</button>
+        <button type="button" class="tp-btn" data-tp="qr">Show a QR code</button>
+        <button type="button" class="tp-btn" data-tp="email-link">Email it to yourself</button>
+        <button type="button" class="tp-btn" data-tp="share-link">Share</button>
+      </p>
+    </div>
+    <p id="tp-link-msg" class="tp-status" role="status" aria-live="polite"></p>
+    <p class="tp-note">On iPhone and iPad, links open in Safari, not in the Home Screen app. To bring progress into the app, copy the link, open the app, come to this page, and paste it here:</p>
+    <p class="tp-row"><label for="tp-paste">Have a move link? Paste it here</label><input id="tp-paste" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false"><button type="button" class="tp-btn" data-tp="paste">Open it</button></p>
+    <p id="tp-paste-msg" class="tp-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="tp-box" id="keep">
+    <h3>Keep it from being cleared</h3>
+    <p id="tp-persist">Checking…</p>
+    <p class="tp-acts"><button type="button" class="tp-btn" data-tp="persist" hidden>Ask this browser to keep it</button></p>
+    <ul>
+      <li>Safari on iPhone, iPad and Mac can clear a website’s saved data after 7 days of using Safari without visiting it. The app on your Home Screen keeps its own count, so it isn’t cleared that way.</li>
+      <li>The Home Screen app and Safari keep separate storage. Installing starts the app empty: bring your progress over with a move link or a backup.</li>
+      <li>Any browser may clear it when the device runs low on space, and clearing your history or site data removes it.</li>
+    </ul>
+    <label class="tp-remind"><input type="checkbox" id="tp-remind" checked> Remind me to save a backup (at most once a month)</label>
+  </div>
+
+  <div class="tp-box" id="entries">
+    <h3>My saved entries</h3>
+    <p>Save a tool’s answers as a dated entry, then open it later, compare it with an earlier one, rename it or put it back. Saved entries go into your backups too.</p>
+    <div id="tp-entries"></div>
+  </div>
+
+  <div class="tp-box" id="history">
+    <h3>Earlier versions</h3>
+    <p>Each time something changes in a tool, the version before is kept, so you can go back. Erasing a tool’s data erases its earlier versions too.</p>
+    <div id="tp-history"></div>
+  </div>
+
+  <div class="tp-box" id="lock">
+    <h3>App lock</h3>
+    <div id="tp-lock"></div>
+  </div>
+
+  <div class="tp-box" id="clear">
+    <h3>Clear my data</h3>
+    <p>Clear everything, or one tool at a time. You’ll be asked twice, with a quick sum to type, so nothing goes by accident.</p>
+    <div id="tp-clear"></div>
+  </div>
+</div>
+</section>
+<!-- progress:end -->
+
 <div class="od-all no-bubble">
-  <button type="button" class="od-btn is-strong" data-od="all">Erase everything</button>
+  <button type="button" class="od-btn is-strong" data-od="all" data-clear-confirm="everything this site keeps in this browser (your settings, drafts, logs, games, saved entries and saved email)" data-clear-keys="*">Erase everything</button>
   <button type="button" class="od-btn" data-od="refresh">Check again</button>
 </div>
 <p class="od-msg no-bubble" role="status" aria-live="polite"></p>
@@ -254,7 +360,13 @@
     ['tol-our-week', 'Different hours: our week on one page', 'The names, shifts, protected sleep, overlap, together time and jobs you fill in under “Our week on one page”, and which one is you. Kept as you type, until you tap “Forget it on this device”.'],
     ['tol-book-dl', 'Book downloads', 'That you already gave an email address for the book PDFs, so the download links stay open. Your address itself is not kept here.'],
     ['tol-calc02-v1', 'Look back over 30 days', 'The names and the four weeks of numbers, only if you chose to keep them on this device. The erase button removes them.'],
-    ['tol-ctx-people', 'Context for a person', 'The context you added about someone (who they are to you, how they usually write), only if you switched on “Remember for this person”. Off unless you turn it on; Forget removes it.']
+    ['tol-ctx-people', 'Context for a person', 'The context you added about someone (who they are to you, how they usually write), only if you switched on “Remember for this person”. Off unless you turn it on; Forget removes it.'],
+    ['tol-backup-v1', 'Backups and reminders', 'When you last saved a backup, when a backup reminder or the app tip last showed, whether you turned the reminder off, and whether this browser agreed to keep your progress. Dates only.'],
+    ['tol-progress-times-v1', 'When your progress last changed', 'For each item above, a short fingerprint and the time it last changed, so restoring a backup can keep whichever is newer. No contents.'],
+    ['tol-save-mode-v1', 'Own or shared computer', 'Your answer to “Is this your own computer or a shared one?” (computers only). On a shared one, everything else is cleared when you close the tab.'],
+    ['tol-entries-v1', 'My saved entries', 'The tool answers you saved as dated entries, with the names you gave them. Kept until you delete them. Only in the app or on your own computer.'],
+    ['tol-history-v1', 'Earlier versions', 'Up to the last 10 versions of each tool’s answers, so you can go back. Erasing a tool’s data erases its versions too. Only in the app or on your own computer.'],
+    ['tol-lock-v1', 'App lock', 'That the lock is on, your PIN as a one-way scrambled code (never the PIN itself), how long until it locks, the Face ID or fingerprint key’s ID if you added one, and wrong tries.']
   ];
   var SESSION = [
     ['tol-appbar-off', 'The free app line at the top', 'That you hid the “Get the free app” line for this visit. It comes back next visit.'],
@@ -300,7 +412,11 @@
     ['cwd-consent-seen', 'Decoder saving', 'That you’ve already seen the question about keeping your progress, this visit.'],
     ['tol-chat-topic', 'Your chat with Professor Puddles', 'Which topic the chat is on, so it can carry on from the next page, until you close the tab.'],
     ['tol-keys-hint', 'Keyboard tip', 'That the “press ? for keyboard shortcuts” tip was shown this visit.'],
-    ['br-q', 'Find it by relationship', 'What you typed in the filter box, until you close the tab.']
+    ['br-q', 'Find it by relationship', 'What you typed in the filter box, until you close the tab.'],
+    ['tol-shared-stash', 'Shared computer mode', 'On a shared computer: this tab’s notes, carried from page to page and gone when the tab closes.'],
+    ['tol-shared-session', 'Shared computer mode', 'That this tab has started, so notes left by an earlier visit are cleared.'],
+    ['tol-shared-nav', 'Shared computer mode', 'That you just followed a link to another page here, so your notes go with you.'],
+    ['tol-shared-reloaded', 'Shared computer mode', 'That the page reloaded once to show your notes, so it doesn’t do it twice.']
   ];
   function store(s) { try { return s === 'session' ? sessionStorage : localStorage; } catch (e) { return null; } }
   function allKeys(s) { var st = store(s), out = []; if (!st) return out; for (var i = 0; i < st.length; i++) out.push(st.key(i)); return out.sort(); }
@@ -319,7 +435,7 @@
       host.innerHTML = '<ul class="od-list">' + keys.map(function (k) {
         var i = info(k, g[2]) || info(k, KNOWN) || [k, 'Something from this site', 'A small note one of the pages keeps.'];
         return '<li><div><strong>' + esc(i[1]) + '</strong><p>' + esc(i[2]) + '</p><span class="od-key">Stored as “' + esc(k) + '” · ' + size(k, g[0]) + '</span></div>' +
-          '<button type="button" class="od-btn" data-erase="' + esc(k) + '" data-store="' + g[0] + '" aria-label="Erase ' + esc(i[1]) + '">Erase</button></li>';
+          '<button type="button" class="od-btn" data-erase="' + esc(k) + '" data-store="' + g[0] + '" data-clear-confirm="' + esc(i[1]) + '" data-clear-keys="' + (g[0] === 'local' ? esc(k) : '') + '" aria-label="Erase ' + esc(i[1]) + '">Erase</button></li>';
       }).join('') + '</ul>';
     });
   }
@@ -334,7 +450,7 @@
     }
     var a = e.target.closest('[data-od]'); if (!a) return;
     if (a.getAttribute('data-od') === 'refresh') { render(); msg.textContent = 'Up to date.'; return; }
-    if (!confirm('Erase everything this site keeps in this browser? Your settings, drafts, logs, games and saved email here will all be cleared. This can’t be undone.')) return;
+    // "Are you sure?", a second check and a quick sum come first: site.js runs confirm-clear.js for data-clear-confirm
     var done = function () { render(); msg.textContent = 'Everything is erased: your settings, drafts and logs, the offline copies of pages, and the analytics cookies. The site will look the usual way from your next page.'; };
     if (window.TOL && window.TOL.eraseAll) window.TOL.eraseAll().then(done, done);
     else { ['local', 'session'].forEach(function (s) { allKeys(s).filter(ours).forEach(function (k) { try { store(s).removeItem(k); } catch (er) {} }); }); done(); }

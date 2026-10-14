@@ -5,6 +5,7 @@
    (so nothing jumps) and loads this file, which fills it in for the device in hand:
      - Chrome or Edge has offered to install (beforeinstallprompt): "Install the free app" asks it right away.
      - iPhone or iPad: the same words, "Install the free app", open the install sheet below.
+     - Safari on a Mac, or Firefox on a computer (no install offer): the same words open the computer sheet below.
      - Android without that offer: "Get the free app" goes to /install.html#chrome.
      - anything else: "Get the free app" goes to /install.html.
    Never inside the installed app, never on /install.html, never on paper. Its × hides it for this visit only
@@ -19,6 +20,10 @@
    Copy link button. It is a modal <dialog>, so it sits above the site's dark-mode filter and takes the real iOS
    light or dark colours, following the site's own dark mode. install.html shows the same sheet, still, inline:
    any element with data-iosg-inline gets one.
+
+   THE COMPUTER SHEET. window.TOLAppBar.desk(): the same sheet for Safari on a Mac and Firefox on Windows, Mac or Linux.
+   One button downloads a desktop shortcut made right in the browser (Windows .url, Mac .webloc, Linux .desktop); then a
+   small drawing says to drag it to the desktop. Safari 17+ also gets File > Add to Dock; Firefox a line about Chrome or Edge.
 
    AFTER INSTALL. Opened from the Home Screen (navigator.standalone), one small "Installed. Welcome to the app"
    note shows once (localStorage 'tol-ios-welcome'). site.js loads this file in the app only until then.
@@ -151,28 +156,8 @@
         '</div>' +
       '</div>' +
       (IOS && POINT[w] ? '<div class="tol-iosg-point" aria-hidden="true">' + ARROW + '</div>' : '');
-    var card = dlg.querySelector('.tol-iosg-card'), was = root.style.overflow, closing = false;
-    function close() {
-      if (closing) return; closing = true;
-      document.removeEventListener('keydown', onKey, true);
-      function gone() {
-        try { if (dlg.open && dlg.close) dlg.close(); } catch (e) {}
-        dlg.remove(); root.style.overflow = was; open = null;
-        if (from && from.focus && document.contains(from)) from.focus();
-      }
-      if (dlg.classList.contains('is-still')) gone();
-      else { dlg.classList.add('is-closing'); setTimeout(gone, 220); }
-    }
-    function onKey(e) {
-      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-      if (e.key !== 'Tab') return;
-      var f = Array.prototype.filter.call(card.querySelectorAll('button, a[href]'), function (n) { return n.offsetParent !== null && !n.disabled; });
-      if (!f.length) return;
-      var a = f[0], z = f[f.length - 1];
-      if (!card.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
-      else if (e.shiftKey && (document.activeElement === a || document.activeElement === card)) { e.preventDefault(); z.focus(); }
-      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
-    }
+    var card = dlg.querySelector('.tol-iosg-card');
+    present(dlg, from);
     // Install: show the taps (and the arrow that points at Share)
     var get = dlg.querySelector('.tol-iosg-get');
     get.addEventListener('click', function () {
@@ -198,6 +183,35 @@
       }
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(ok, old); else old();
     });
+    get.focus();
+  }
+
+  // the sheet's shared workings (the iPhone sheet and the computer sheet): open it as a modal above the page, close it
+  // with ×, Done, Escape, a click outside or a pull down, keep Tab inside it, and give focus back to what opened it
+  function present(dlg, from) {
+    var root = document.documentElement, canModal = typeof dlg.showModal === 'function';
+    var card = dlg.querySelector('.tol-iosg-card'), was = root.style.overflow, closing = false;
+    function close() {
+      if (closing) return; closing = true;
+      document.removeEventListener('keydown', onKey, true);
+      function gone() {
+        try { if (dlg.open && dlg.close) dlg.close(); } catch (e) {}
+        dlg.remove(); root.style.overflow = was; open = null;
+        if (from && from.focus && document.contains(from)) from.focus();
+      }
+      if (dlg.classList.contains('is-still')) gone();
+      else { dlg.classList.add('is-closing'); setTimeout(gone, 220); }
+    }
+    function onKey(e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      var f = Array.prototype.filter.call(card.querySelectorAll('button, a[href]'), function (n) { return n.offsetParent !== null && !n.disabled; });
+      if (!f.length) return;
+      var a = f[0], z = f[f.length - 1];
+      if (!card.contains(document.activeElement)) { e.preventDefault(); a.focus(); }
+      else if (e.shiftKey && (document.activeElement === a || document.activeElement === card)) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
     dlg.addEventListener('click', function (e) { if (e.target === dlg || e.target.closest('.tol-iosg-done, .tol-iosg-x')) close(); });
     dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });
     // pull the sheet down to close it, like any iOS sheet
@@ -217,7 +231,102 @@
     try { if (canModal) dlg.showModal(); else dlg.setAttribute('open', ''); } catch (e) { dlg.setAttribute('open', ''); dlg.classList.remove('is-top', 'is-dark'); dlg.classList.add('is-flat'); }
     root.style.overflow = 'hidden';
     open = dlg;
-    get.focus();
+    return close;
+  }
+
+  // ---------------------------------------------------------------- computers with no install button: Safari on a Mac, Firefox
+  // Safari on a Mac and Firefox (Windows, Mac, Linux) have no install prompt for websites. The next best thing, in one click:
+  // a desktop shortcut file, made right here in the browser (nothing is fetched or sent). Safari 17 and later (macOS Sonoma
+  // or later) can also make a real app with File > Add to Dock, so it says how, with a small drawing of that menu.
+  var SITE = 'https://spreadloveandacceptance.com/';
+  var DESK = (function () {
+    if (IOS || ANDROID || /Mobi|Tablet/i.test(ua)) return null;
+    var os = /Windows/.test(ua) ? 'win' : /Macintosh|Mac OS X/.test(ua) ? 'mac' : /Linux|X11|CrOS|BSD/.test(ua) ? 'linux' : null;
+    if (!os) return null;
+    if (/Firefox\//.test(ua) && !/Seamonkey/i.test(ua)) return { os: os, br: 'firefox', v: 0 };
+    var v = /Version\/(\d+)/.exec(ua);
+    if (os === 'mac' && v && /Safari\//.test(ua) && !/Chrome|Chromium|CriOS|Edg|OPR|Firefox|FxiOS/.test(ua)) return { os: os, br: 'safari', v: +v[1] };
+    return null;
+  })();
+  // the shortcut file for this computer: Windows .url, Mac .webloc, Linux .desktop
+  function shortcut(os) {
+    if (os === 'win') return { name: 'Spread Love & Acceptance.url',
+      text: '[InternetShortcut]\r\nURL=' + SITE + '\r\nIconFile=' + SITE + 'favicon.ico\r\nIconIndex=0\r\n' };
+    if (os === 'mac') return { name: 'Spread Love & Acceptance.webloc',
+      text: '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n' +
+        '<plist version="1.0">\n<dict>\n\t<key>URL</key>\n\t<string>' + SITE + '</string>\n</dict>\n</plist>\n' };
+    return { name: 'spread-love-and-acceptance.desktop',
+      text: '[Desktop Entry]\nVersion=1.0\nType=Link\nName=Spread Love & Acceptance\nComment=Open ' + SITE + '\nURL=' + SITE + '\nIcon=web-browser\n' };
+  }
+  function saveFile(f, where) {
+    var blob = new Blob([f.text], { type: 'application/octet-stream' }), url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = f.name; a.rel = 'noopener'; a.hidden = true; a.tabIndex = -1;
+    where.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 4000);
+  }
+  var G_DOWN = SVG + '<path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2"/></svg>';
+  // a tiny drawing: the file in Downloads, a dotted arrow, the same file on the desktop
+  function dragFig() {
+    var file = '<svg class="tol-desk-file" viewBox="0 0 28 34" aria-hidden="true" focusable="false"><path d="M3 2h15l7 7v23H3z" fill="var(--cell)" stroke="var(--label2)" stroke-width="1.5" stroke-linejoin="round"/><path d="M18 2v7h7" fill="none" stroke="var(--label2)" stroke-width="1.5" stroke-linejoin="round"/></svg>' +
+      '<img src="/assets/icons/favicon-32.png" alt="" width="14" height="14">';
+    return '<span class="tol-desk-fig" aria-hidden="true">' +
+      '<span class="tol-desk-place"><span class="tol-desk-box is-folder"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + T('Downloads', 'Descargas') + '</span></span>' +
+      '<svg class="tol-desk-arrow" viewBox="0 0 64 24" focusable="false"><path d="M4 18C20 2 42 2 56 14" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-dasharray="4 4" stroke-linecap="round"/><path d="M49 15l8 0-2-8" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '<span class="tol-desk-place"><span class="tol-desk-box is-screen"><span class="tol-desk-doc">' + file + '</span></span><span class="tol-desk-cap">' + T('Desktop', 'Escritorio') + '</span></span>' +
+    '</span>';
+  }
+  // a small copy of Safari's File menu, with Add to Dock picked out
+  function dockMenu() {
+    function it(t, hi) { return '<span class="tol-desk-mi' + (hi ? ' is-hi' : '') + '">' + t + '</span>'; }
+    return '<span class="tol-desk-menu" aria-hidden="true">' +
+      '<span class="tol-desk-mbar"><b>Safari</b><span class="is-on">' + T('File', 'Archivo') + '</span><span>' + T('Edit', 'Edición') + '</span><span>' + T('View', 'Visualización') + '</span></span>' +
+      '<span class="tol-desk-mdrop">' + it(T('New Window', 'Nueva ventana')) + it(T('Open File&hellip;', 'Abrir archivo&hellip;')) + it(T('Close Window', 'Cerrar ventana')) +
+        '<span class="tol-desk-msep"></span>' + it(T('Share', 'Compartir')) + it(T('Add to Dock&hellip;', 'Agregar al Dock&hellip;'), true) + '</span>' +
+    '</span>';
+  }
+  function desk(from) {
+    if (open || !DESK) return;
+    var root = document.documentElement, f = shortcut(DESK.os), here = /\/install\.html$/.test(location.pathname);
+    var dlg = document.createElement('dialog'), canModal = typeof dlg.showModal === 'function';
+    var dark = canModal && /invert/.test(getComputedStyle(root).filter || '');
+    var dock = DESK.br === 'safari' && DESK.v >= 17;
+    dlg.className = 'tol-iosg is-desk no-bubble' + (canModal ? ' is-top' : ' is-flat') + (dark ? ' is-dark' : '') + (stillMotion() ? ' is-still' : '');
+    dlg.setAttribute('aria-labelledby', 'tol-iosg-h');
+    dlg.innerHTML =
+      '<div class="tol-iosg-card no-bubble" tabindex="-1">' +
+        '<span class="tol-iosg-grab" aria-hidden="true"></span>' +
+        '<button type="button" class="tol-iosg-x" aria-label="' + T('Close', 'Cerrar') + '"><span aria-hidden="true">&times;</span></button>' +
+        headHTML('h2', '') +
+        '<p class="tol-iosg-about">' + T('Put the site on your desktop. One double-click opens it, any time.', 'Pon el sitio en tu escritorio. Un doble clic lo abre, cuando quieras.') + '</p>' +
+        '<button type="button" class="tol-desk-dl">' + G_DOWN + '<span>' + T('Download a desktop shortcut', 'Descargar un acceso directo') + '</span></button>' +
+        '<div class="tol-desk-after" hidden>' + dragFig() +
+          '<p class="tol-iosg-p tol-desk-said" role="status"></p>' +
+        '</div>' +
+        (dock ? '<div class="tol-desk-app">' +
+            '<p class="tol-iosg-h3">' + T('Or make it an app', 'O conviértelo en una app') + '</p>' +
+            '<p class="tol-iosg-p">' + T('In Safari&rsquo;s menu bar choose <b>File</b> &rarr; <b>Add to Dock</b>, then click <b>Add</b>. It opens in its own window, with its own icon in the Dock.', 'En la barra de menús de Safari elige <b>Archivo</b> &rarr; <b>Agregar al Dock</b> y luego haz clic en <b>Agregar</b>. Se abre en su propia ventana, con su propio ícono en el Dock.') + '</p>' +
+            dockMenu() +
+            '<p class="tol-iosg-p tol-iosg-dim">' + T('This needs macOS Sonoma or later.', 'Necesita macOS Sonoma o posterior.') + '</p>' +
+          '</div>' : '') +
+        (DESK.br === 'firefox' ? '<p class="tol-iosg-p tol-iosg-dim tol-desk-ff">' + T('For a full app with its own window, open this site in Chrome or Edge and tap <b>Install</b>.', 'Para una app completa con su propia ventana, abre este sitio en Chrome o Edge y toca <b>Instalar</b>.') + '</p>' : '') +
+        '<button type="button" class="tol-iosg-done">' + T('Done', 'Listo') + '</button>' +
+        (here ? '' : '<a class="tol-iosg-more" href="/install.html#' + (DESK.os === 'win' ? 'windows' : 'desktop') + '"' + (isEs() ? ' hreflang="en"' : '') + '>' + T('More help', 'Más ayuda (en inglés)') + '</a>') +
+      '</div>';
+    present(dlg, from);
+    var dl = dlg.querySelector('.tol-desk-dl'), after = dlg.querySelector('.tol-desk-after');
+    dl.addEventListener('click', function () {
+      saveFile(f, dlg.querySelector('.tol-iosg-card'));
+      after.hidden = false;
+      dl.classList.add('is-again');
+      dl.querySelector('span').textContent = T('Download it again', 'Descargarlo otra vez');
+      // filled after it is shown, so screen readers say it
+      setTimeout(function () {
+        after.querySelector('.tol-desk-said').innerHTML = T('Drag it from your Downloads to your desktop. Double-click it any time to open the site.', 'Arrástralo de tus Descargas a tu escritorio. Haz doble clic en él cuando quieras para abrir el sitio.') +
+          (DESK.os === 'linux' ? ' <span class="tol-iosg-dim">' + T('If your computer asks whether to trust it or allow launching, say yes.', 'Si tu computadora pregunta si confías en él o si permites abrirlo, di que sí.') + '</span>' : '');
+      }, 60);
+    });
+    dl.focus();
   }
 
   // the same sheet, still, inside a page (the install page's Apple steps)
@@ -271,6 +380,8 @@
       html = '<span class="tol-appbar-note" style="display:block">' + T('You have the free app. Open it from your home screen or app list.', 'Ya tienes la app gratis. Ábrela desde tu pantalla de inicio.') + '</span>';
     } else if (IOS) {   // the same words as Android; Apple's two taps are shown in the sheet
       html = '<button type="button" class="tol-appbar-go" data-appbar="ios" aria-haspopup="dialog"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
+    } else if (DESK) {   // Safari on a Mac, Firefox: a desktop shortcut in one click (and Add to Dock in Safari 17+), in a sheet
+      html = '<button type="button" class="tol-appbar-go" data-appbar="desk" aria-haspopup="dialog"><span>' + T('Install the free app', 'Instala la app gratis') + '</span></button>' + note;
     } else if (ANDROID) {
       html = '<a class="tol-appbar-go" href="/install.html#chrome"' + hl() + '><span>' + T('Get the free app<span class="tol-appbar-more"> for Android</span>', 'Consigue la app gratis<span class="tol-appbar-more"> para Android</span>') + '</span></a>' + note;
     } else {
@@ -284,6 +395,7 @@
       window.TOLInstall.ask().then(function (r) { if (r === 'unavailable' || r === 'error') location.href = '/install.html'; else render(bar); });
     });
     if (go && go.getAttribute('data-appbar') === 'ios') go.addEventListener('click', function () { guide(go); });
+    if (go && go.getAttribute('data-appbar') === 'desk') go.addEventListener('click', function () { desk(go); });
     bar.querySelector('.tol-appbar-x').addEventListener('click', function () {
       ssSet(OFF, '1');
       var next = document.querySelector('.tol-bar a, .tol-bar button');
@@ -323,6 +435,6 @@
     document.addEventListener('tol-app-installed', again);
   }
 
-  window.TOLAppBar = { guide: guide, where: where, ios: IOS, browser: iosBrowser };
+  window.TOLAppBar = { guide: guide, where: where, ios: IOS, browser: iosBrowser, desk: desk, computer: DESK };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 })();

@@ -334,10 +334,10 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(errs.length===0, `${tag}: console errors: ${errs.join(' | ')}`);
     // 8. the Perspective Shifter: a family rift gets rift options, no "your day" or deadline, no roommates, no stray pup names
     // (See it from their side now lives in the Carrier Wave Decoder's "Their side" step; the old address sends people there)
-    await p.goto(URL.replace('signal-translator','perspective-shifter')); await p.waitForURL(/carrier-wave-decoder/); await p.waitForLoadState('load');
-    await p.waitForFunction(()=>window.TOLPerspective && document.querySelector('[data-out]'), null, {timeout:10000}); await p.waitForTimeout(300);
+    await p.goto(URL.replace('signal-translator.html','carrier-wave-decoder.html?tab=their-side')); await p.waitForLoadState('load');
+    await p.waitForFunction(()=>window.TOLPerspective && document.querySelector('.ps-chip'), null, {timeout:10000}); await p.waitForTimeout(300);
     for(const [g,id] of [['who','family'],['history','sore'],['history','fair'],['state','unsure']]) await p.evaluate(([g,id])=>TOLPerspective._pick(g,id),[g,id]);
-    const ps = await p.evaluate(()=>({main:(document.querySelector('main')||document.querySelector('[data-out]').parentElement.parentElement).innerText, out:document.querySelector('[data-out]').innerText,
+    const ps = await p.evaluate(()=>({main:(document.querySelector('[data-panel="their-side"]')||document.body).innerText, out:document.querySelector('[data-out]').innerText,
       rift:['will','grief','favour'].every(id=>!document.querySelector('.ps-chip[data-id="'+id+'"]').hidden), deadline:!document.querySelector('.ps-chip[data-id="deadline"]').hidden}));
     ok(ps.rift && !ps.deadline, `${tag}: Shifter: rift options should show and the deadline should hide`);
     ok(!/How was your day|deadline only/.test(ps.out) && /all this time/.test(ps.out), `${tag}: Shifter: rift questions: ${ps.out.slice(0,200)}`);
