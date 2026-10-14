@@ -108,6 +108,7 @@ Porges published the theory in 1995 and his book *The Polyvagal Theory* in 2011.
 links:
 /quick-checks.html#ladder | The nervous-system self-check (the ladder)
 /wp-11.html | The Calm-Down Kit (WP-11)
+/nervous-system.html#polyvagal | Your nervous system, in plain words: polyvagal theory, honestly
 talk:
 - Is the idea of different “states” useful for you, whatever the biology?
 - What helps you feel safe enough to talk openly?
