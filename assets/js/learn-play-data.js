@@ -659,27 +659,6 @@ window.TOLLearnPlayData = {
       ]
     },
 
-    '/wp-11.html': {
-      t: 'The Calm-Down Kit (WP-11)', g: 'p3', n: '/workpapers/wp-03-one-owner-per-job.html',
-      m: [
-        { at: 'never for them', k: 'quiz', q: 'Who is the Calm-Down Kit for?',
-          o: [['You, about yourself', true, 'Yes! It’s never something to hand to the other person.'],
-              ['The other person, when they get upset', false, 'Not quite. It’s only ever about you.']] },
-        { at: 'Decide now', k: 'gap', q: 'Fill the gap with the kit’s own words.',
-          s: 'Your stepping-away sentence says how you feel, how long, and ___.', o: ['when you’ll be back', 'who started it', 'what they did wrong'], a: 0,
-          say: 'Yes! A time to come back means a break is never mistaken for walking out.' },
-        { at: 'In the moment', k: 'quiz', q: 'Which of these is one of the kit’s calming steps?',
-          o: [['Breathe in for four, out for six', true, 'Yes! Or a slow walk.'],
-              ['Rehearse your comeback', false, 'Not quite. Pick something that settles your body, like a slow walk.'],
-              ['Scroll the news', false, 'Not quite. Pick a step that brings you down, like slow breathing.']] },
-        { at: 'guide when you go back', k: 'slider', q: 'You’ve done a round of calming steps. Drag your new battery score.', label: 'Battery score now',
-          min: 0.3, max: 0.8, step: 0.05, start: 0.7, fmt: 'dec2',
-          zones: [[0.49, 'Under 0.50', 'Go back at the time you said. Start with one small, simple task.', '🌤️'],
-                  [0.59, '0.50 to 0.60', 'Do another round of your calming steps.', '⛅'],
-                  [0.8, '0.60 or more', 'Still here after two rounds? That’s okay: pick a new time and say when.', '🌧️']] }
-      ]
-    },
-
     '/workpapers/wp-03-one-owner-per-job.html': {
       t: 'One owner per job (WP-03)', g: 'p2', n: '/workpapers/wp-04-what-keeps-coming-back.html',
       m: [
@@ -691,7 +670,7 @@ window.TOLLearnPlayData = {
         { at: 'Agreeing means', k: 'quiz', q: 'Agreeing on the list says…',
           o: [['We agree who owns what, as written', true, 'Yes! Clear, not perfect.'],
               ['Every job feels perfectly fair', false, 'Not quite. Agreeing means clear, not perfect.']] },
-        { at: 'Count how many', k: 'slider', q: 'Ten jobs on your list. Drag how many have both names.', label: 'Jobs with both names',
+        { at: 'Count how many', k: 'slider', q: 'Ten jobs on your list. Drag how many have an owner.', label: 'Jobs with an owner',
           min: 0, max: 10, step: 1, start: 4, fmt: 'of10',
           zones: [[3, 'Lots of gaps', 'Unowned jobs drift to whoever notices first.', '🧩'],
                   [7, 'Getting clearer', 'Keep going. Name owners for the easier jobs first.', '🧩'],

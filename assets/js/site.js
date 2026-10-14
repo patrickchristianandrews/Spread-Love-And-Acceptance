@@ -2172,7 +2172,7 @@
     r13homesleep: ['/coming-home.html#sleep', '/coming-home.html#support', '/coming-home.html'],
     nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
     r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
-    r13longhours: ['/different-hours.html#long-days', '/different-hours.html', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
+    r13longhours: ['/different-hours.html#long-days', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
     anxiety: ['#breathe', '/calming-supplements.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
     r13herbs: ['/calming-supplements.html', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
     r13feelings: ['/book/understanding-1-feelings.html#not-brought-up', '/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
