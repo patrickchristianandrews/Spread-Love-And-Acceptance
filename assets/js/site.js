@@ -94,7 +94,6 @@
       { href: '/new-parent.html', code: '', title: 'New baby, sharing the load', note: 'A three-step way for new parents to split the baby jobs and the invisible ones' },
       { href: '/co-parenting.html', code: '', title: 'Separated co-parents', note: 'Exchange-day scripts, a tone check, parallel parenting, and a safety note' },
       { href: '/upset-right-now.html', code: '', title: 'Upset right now?', note: 'Pause, breathe and come back: a five-minute page, no sign-up' },
-      { href: '/safety.html', code: '', title: 'Not safe at home?', note: 'Hotlines, leaving this site quickly, and clearing what it keeps' },
       { href: '/outside-help.html', code: '', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
       { href: '/surprise.html', code: '', title: 'Surprise me', note: 'One button picks a game, a guide or something calm' },
       { href: '/install.html', code: '', title: 'Get the app', note: 'Android now; on iPhone, add it to your Home Screen from Safari. Its own icon, full screen, works offline' },
@@ -328,7 +327,6 @@
       { href: '/find-your-start.html', code: 'Start', title: 'Find your starting point', note: 'Three quick questions, then one thing to try first and one short read' },
       { href: '/start-here.html', code: 'Start', title: 'Start here', note: 'What this is in one minute, and your best first step' },
       { href: '/upset-right-now.html', code: 'Now', title: 'Upset right now?', note: 'A five-minute page for two upset people: pause, breathe, come back' },
-      { href: '/safety.html', code: 'Safety', title: 'Not safe at home?', note: 'If someone hurts, threatens, watches or controls you: hotlines, leaving quickly, clearing this site' },
       { href: '/outside-help.html', code: 'Help', title: 'Help beyond this site', note: 'Finding a counsellor, free helplines, support groups and books' },
       { href: '/ask.html', code: 'Chat', title: 'Ask Professor Puddles', note: 'Ask in your own words. Answers come only from this site' },
       { href: '/en-espanol.html', code: 'ES', title: 'En español', note: 'Una página corta en español', lang: 'es' },
@@ -1774,7 +1772,6 @@
       '</nav>' +
       (es ? '<p class="tol-foot-es-note">Estos enlaces llevan a páginas en inglés:</p>' : '') +
       '<span class="tol-foot-links">' +
-        '<a href="/safety.html"' + hl + '>' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a>' +
         '<a href="/explore.html"' + hl + '>' + T('Everything on this site', 'Todo el sitio') + '</a>' +
         '<a href="/contents.html"' + hl + '>' + T('All pages', 'Todas las páginas') + '</a>' +
         '<a href="/membership.html"' + hl + '>' + (CONFIG.openAll ? T('Email updates', 'Novedades por correo') : 'Membership') + '</a>' +
