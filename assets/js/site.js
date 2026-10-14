@@ -3019,9 +3019,15 @@
     }
     if (!h.querySelector('link[rel="apple-touch-icon"]')) add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon-180.png', sizes: '180x180' });
     if (!h.querySelector('meta[name="theme-color"]')) add('meta', { name: 'theme-color', content: '#F5EFDE' });
-    add('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
-    add('meta', { name: 'mobile-web-app-capable', content: 'yes' });
-    add('meta', { name: 'apple-mobile-web-app-title', content: 'The Ledger' });
+    // the installed app's name on a home screen, full screen on iPhone and iPad (build_seo.py writes these into each page; this fills any gap)
+    if (!h.querySelector('meta[name="apple-mobile-web-app-capable"]')) add('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
+    if (!h.querySelector('meta[name="mobile-web-app-capable"]')) add('meta', { name: 'mobile-web-app-capable', content: 'yes' });
+    if (!h.querySelector('meta[name="apple-mobile-web-app-title"]')) add('meta', { name: 'apple-mobile-web-app-title', content: 'Spread Love & Acceptance' });
+    if (!h.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')) add('meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'default' });
+    if (!h.querySelector('link[rel="apple-touch-icon"][sizes="152x152"]')) {
+      add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon-152.png', sizes: '152x152' });
+      add('link', { rel: 'apple-touch-icon', href: '/assets/icons/apple-touch-icon-167.png', sizes: '167x167' });
+    }
     if (isApp()) document.documentElement.classList.add('tol-app');
     if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
       window.addEventListener('load', function () {
@@ -4015,6 +4021,13 @@
       return;
     }
     var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    // iPhone and iPad: the illustrated guide (app-bar.js), with an arrow to where Share is on this browser
+    if (ios) {
+      var opener = document.activeElement;
+      if (window.TOLAppBar) { window.TOLAppBar.guide(opener); return; }
+      loadScript('/assets/js/app-bar.js').then(function () { if (window.TOLAppBar) window.TOLAppBar.guide(opener); }).catch(function () {});
+      return;
+    }
     var steps = ios
       ? T('<li>Tap the <strong>Share</strong> button <span aria-hidden="true">(the square with an arrow)</span>.</li><li>Scroll down and tap <strong>Add to Home Screen</strong>.</li><li>Tap <strong>Add</strong>.</li>',
           '<li>Toca el botón <strong>Compartir</strong> <span aria-hidden="true">(el cuadrado con una flecha)</span>.</li><li>Baja y toca <strong>Agregar a pantalla de inicio</strong>.</li><li>Toca <strong>Agregar</strong>.</li>')
