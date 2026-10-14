@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 626" width="540" height="626" role="img" aria-labelledby="fig-then-stages-t fig-then-stages-d" font-family="Lora, Georgia, serif" fill="#2B2620">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 794" width="540" height="794" role="img" aria-labelledby="fig-then-stages-t fig-then-stages-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-then-stages-t">Each stage of growing up asks its own question</title>
-<desc id="fig-then-stages-d">A winding path with six stops. About 0 to 1: is the world safe, will someone come? About 2 to 3: can I do it myself? About 4 to 5: is it okay to start things and take up space? About 6 to 11: am I capable? About 12 to 17: who am I, and where do I belong? About 18 to 39: can I be close without losing myself? The questions come back at big changes, and can be answered again.</desc>
+<desc id="fig-then-stages-d">A winding path with eight stops. About 0 to 1: is the world safe, will someone come? About 2 to 3: can I do it myself? About 4 to 5: is it okay to start things and take up space? About 6 to 11: am I capable? About 12 to 17: who am I, and where do I belong? About 18 to 39: can I be close without losing myself? About 40 to 64: what am I building, and who am I making room for? About 65 on: has my life meant something, and can I make peace with it? The questions come back at big changes, and can be answered again.</desc>
 
-<rect x="1" y="1" width="538" height="624" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
+<rect x="1" y="1" width="538" height="792" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Each stage asks its own question</text>
 <text x="28" y="76" font-size="19" font-style="italic" fill="#5A5346">Ages are rough. People move at their own pace.</text>
-<path d="M54 130.0 C54 159.0 78 159.0 78 188.0 C78 217.0 54 217.0 54 246.0 C54 287.8 78 287.8 78 329.6 C78 358.6 54 358.6 54 387.6 C54 416.6 78 416.6 78 445.6" fill="none" stroke="#D9CBA3" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M54 130.0 C54 159.0 78 159.0 78 188.0 C78 217.0 54 217.0 54 246.0 C54 287.8 78 287.8 78 329.6 C78 358.6 54 358.6 54 387.6 C54 416.6 78 416.6 78 445.6 C78 474.6 54 474.6 54 503.6 C54 545.4 78 545.4 78 587.2" fill="none" stroke="#D9CBA3" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="54" cy="130" r="13" fill="#FCF9F1" stroke="#2F5F8A" stroke-width="3"/>
 <text x="106" y="128" font-size="18" font-style="italic" fill="#2F5F8A">about 0–1</text>
 <text x="106" y="152" font-size="20">Is the world safe? Will someone come?</text>
@@ -24,8 +24,14 @@
 <circle cx="78" cy="445.6" r="13" fill="#FCF9F1" stroke="#7A5620" stroke-width="3"/>
 <text x="106" y="443.6" font-size="18" font-style="italic" fill="#7A5620">about 18–39</text>
 <text x="106" y="467.6" font-size="20">Can I be close without losing myself?</text>
-<rect x="28" y="489.6" width="484" height="64" rx="12" fill="#ECE2C4"/>
-<text x="270" y="516.6" font-size="19" font-style="italic" text-anchor="middle">The questions come back at big changes,</text>
-<text x="270" y="540.6" font-size="19" font-style="italic" text-anchor="middle">and each time you can answer a little differently.</text>
-<text x="28" y="576.6" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">After Erik Erikson’s stages (1950s): a theory for</tspan><tspan x="28" dy="23.04">reflection, not a measured sequence.</tspan></text>
+<circle cx="54" cy="503.6" r="13" fill="#FCF9F1" stroke="#96412B" stroke-width="3"/>
+<text x="106" y="501.6" font-size="18" font-style="italic" fill="#96412B">about 40–64</text>
+<text x="106" y="525.6" font-size="20"><tspan x="106" dy="0">What am I building, and who am I making</tspan><tspan x="106" dy="25.6">room for?</tspan></text>
+<circle cx="78" cy="587.2" r="13" fill="#FCF9F1" stroke="#96412B" stroke-width="3"/>
+<text x="106" y="585.2" font-size="18" font-style="italic" fill="#96412B">about 65 on</text>
+<text x="106" y="609.2" font-size="20"><tspan x="106" dy="0">Has my life meant something, and can I</tspan><tspan x="106" dy="25.6">make peace with it?</tspan></text>
+<rect x="28" y="656.8" width="484" height="64" rx="12" fill="#ECE2C4"/>
+<text x="270" y="683.8" font-size="19" font-style="italic" text-anchor="middle">The questions come back at big changes,</text>
+<text x="270" y="707.8" font-size="19" font-style="italic" text-anchor="middle">and each time you can answer a little differently.</text>
+<text x="28" y="743.8" font-size="18" font-style="italic" fill="#5A5346"><tspan x="28" dy="0">After Erik Erikson’s stages (1950s): a theory for</tspan><tspan x="28" dy="23.04">reflection, not a measured sequence.</tspan></text>
 </svg>

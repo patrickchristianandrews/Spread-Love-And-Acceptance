@@ -129,12 +129,10 @@
       {
        "ch": "chapter-2",
        "full": [
-        "new-baby",
         "small-children",
         "trend"
        ],
        "short": [
-        "new-baby",
         "small-children"
        ],
        "label": "Small children and a new baby"
@@ -504,19 +502,16 @@
         "hard-things"
        ],
        "short": [
-        "feedback",
-        "at-work"
+        "with-others"
        ],
        "label": "Saying hard things kindly"
       },
       {
        "ch": "understanding-17-groups",
        "full": [
-        "groupthink",
         "dissent"
        ],
        "short": [
-        "groupthink",
         "dissent"
        ],
        "label": "Disagreeing kindly in a group"
@@ -784,12 +779,9 @@
       {
        "ch": "understanding-13-anger",
        "full": [
-        "teen",
-        "teens",
         "hot-minutes"
        ],
        "short": [
-        "teen",
         "teens"
        ],
        "label": "The hot minutes"
