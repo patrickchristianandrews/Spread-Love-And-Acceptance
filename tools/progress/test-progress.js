@@ -188,6 +188,17 @@ function sample() {
     P.restore(await P.readBackup(file, 'entries-pw'), 'merge', st2);
     eq(P.entries(st2).map((e) => e.name), ['First week', e2.name], 'export: saved entries travel in the backup and come back');
     throws(() => P.saveEntry(new Store(), { group: 'lemon' }), 'empty', 'save: nothing to save');
+    // a tool's result, saved from its result area (collab.js "Save this combined view")
+    const r1 = P.saveResult(st, { tool: 'together:wp-01', title: 'Our week <b>', text: 'Sam: 12 jobs\nAlex: 9 jobs <script>x</script>', data: { people: [{ n: 'Sam', d: { a: 1 } }], kind: 'week' } });
+    ok(r1.kind === 'result' && r1.g === 'together' && !/[<>]/.test(r1.name) && !/<script/i.test(r1.text) && r1.sum === 'Sam: 12 jobs', 'result entry: saved as plain text, grouped, short summary');
+    ok(P.entries(st).some((e) => e.id === r1.id), 'result entry: listed with the others');
+    ok(P.putBack(st, r1.id) === 0, 'result entry: nothing to put back into a tool');
+    const r2 = P.saveResult(st, { tool: 'together:wp-01', text: 'Sam: 10 jobs', data: { people: [{ n: 'Sam', d: { a: 2 } }], kind: 'week' } });
+    ok(P.compare(r1, r2).some((x) => x.was === '1' && x.now === '2'), 'result entry: compare over time');
+    const back = new Store(); P.restore(await P.readBackup(await P.makeBackup(P.collect(st), '')), 'merge', back);
+    ok(P.entries(back).some((e) => e.id === r1.id && e.text === r1.text), 'result entry: travels in the backup and passes the strict checks');
+    ok(P.saveEntry({ tool: 'x', text: 'y' }) === false, 'saveEntry({ … }) outside a browser returns false');
+    P.deleteEntry(st, r1.id); P.deleteEntry(st, r2.id);
     const bad = new Store({ 'tol-entries-v1': JSON.stringify({ v: 1, list: [{ id: 'abcd', g: 'lemon', t: 1, name: 'x', data: { 'evil-key': 'x' } }, { id: 'zz', g: 'nope' }] }) });
     ok(P.entries(bad).length === 0, 'list: malformed entries are ignored');
     const evil = new Store({ 'tol-entries-v1': JSON.stringify({ v: 1, list: [{ id: 'abcde', g: 'lemon', t: 1, name: 'x', sum: '', data: { 'tol-lemonade-quick': '{"a":"\\\\u003cscript>"}', 'tol-small-wins': '<img src=x>' } }] }) });

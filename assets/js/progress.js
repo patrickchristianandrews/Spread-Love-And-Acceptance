@@ -54,7 +54,7 @@
   'use strict';
   var W = typeof window !== 'undefined' ? window : null;
   var D = W && W.document;
-  if (W && W.TOLProgress) return;
+  if (W && W.TOLProgress && W.TOLProgress.collect) return;   // site.js keeps { get, html } here for the progress line: kept below
 
   var FORMAT = 'spread-love-progress', VERSION = 1;
   var ITER = 310000, MAX_ITER = 2000000;
@@ -103,6 +103,7 @@
   ];
   var GROUPS = {
     entries: ['*', 'My saved entries', 'Mis entradas guardadas'],
+    together: ['*', 'Worked on together', 'Trabajado juntos'],
     checkin: ['*', 'This week’s check-in: jobs that keep coming back', 'Revisión de la semana: tareas que vuelven'],
     wins: ['*', 'Small wins', 'Pequeños logros'],
     ten: ['*', 'Start in 10 minutes', 'Empieza en 10 minutos'],
@@ -431,9 +432,10 @@
     var raw = null; try { raw = JSON.parse(sget(st, ENTRIES_KEY) || 'null'); } catch (e) {}
     var list = raw && Array.isArray(raw.list) ? raw.list : [];
     return list.filter(function (e) {
-      return isObj(e) && typeof e.id === 'string' && /^[a-z0-9]{4,40}$/.test(e.id) && typeof e.g === 'string' && own(GROUPS, e.g) &&
-        typeof e.t === 'number' && isFinite(e.t) && typeof e.name === 'string' && isObj(e.data) &&
-        Object.keys(e.data).every(function (k) { return included(k) && k !== ENTRIES_KEY && typeof e.data[k] === 'string'; });
+      if (!(isObj(e) && typeof e.id === 'string' && /^[a-z0-9]{4,40}$/.test(e.id) && typeof e.g === 'string' && own(GROUPS, e.g) &&
+        typeof e.t === 'number' && isFinite(e.t) && typeof e.name === 'string')) return false;
+      if (e.kind === 'result') return typeof e.text === 'string' && (e.tool === undefined || typeof e.tool === 'string');
+      return isObj(e.data) && Object.keys(e.data).every(function (k) { return included(k) && k !== ENTRIES_KEY && typeof e.data[k] === 'string'; });
     });
   }
   function writeEntries(st, list) {
@@ -467,6 +469,31 @@
     list.push(e); writeEntries(st, list); track(st);
     return e;
   }
+  // a tool's result, saved from its result area: { tool, title, text, data } (text and data are kept as plain text and JSON)
+  function plainText(s, max) { return String(s == null ? '' : s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').replace(/<(?=[a-z!\/?])/gi, '‹').replace(/javascript\s*:/gi, 'javascript :').slice(0, max); }
+  function plainData(v, depth) {
+    if (depth > 12) return null;
+    if (typeof v === 'string') return plainText(v, 5000);
+    if (typeof v === 'number') return isFinite(v) ? v : null;
+    if (typeof v === 'boolean' || v === null) return v;
+    if (Array.isArray(v)) return v.slice(0, 200).map(function (x) { return plainData(x, depth + 1); });
+    if (isObj(v)) { var o = {}; Object.keys(v).slice(0, 200).forEach(function (k) { if (k !== '__proto__') o[plainText(k, 80)] = plainData(v[k], depth + 1); }); return o; }
+    return null;
+  }
+  function saveResult(st, o, now) {
+    o = o || {}; now = now || Date.now();
+    var text = plainText(o.text, 20000), res = o.data === undefined ? null : plainData(o.data, 0);
+    if (!text && res === null) throw ProgressError('empty', 'nothing to save');
+    if (res !== null && JSON.stringify(res).length > 200000) throw ProgressError('full', 'too big');
+    var tool = String(o.tool || '').replace(/[^a-z0-9:_-]/gi, '').slice(0, 60);
+    var g = own(GROUPS, tool) ? tool : /^together/.test(tool) ? 'together' : o.group && own(GROUPS, o.group) ? o.group : 'other';
+    var list = entries(st);
+    if (list.length >= ENTRY_MAX) throw ProgressError('full', 'too many entries');
+    var name = plainText(o.title || o.name, NAME_MAX).replace(/[<>]/g, '').trim() || (groupName(g) + ' · ' + new Date(now).toISOString().slice(0, 10));
+    var e = { id: newId(now), kind: 'result', g: g, tool: tool || undefined, t: now, name: name, sum: plainText(o.summary || text.split('\n')[0] || describe({ x: JSON.stringify(res) }), 200).replace(/[<>]/g, ''), text: text, res: res };
+    list.push(e); writeEntries(st, list); track(st);
+    return e;
+  }
   function renameEntry(st, id, name) {
     var list = entries(st), e = list.filter(function (x) { return x.id === id; })[0]; if (!e) return false;
     name = String(name || '').replace(/[\u0000-\u001F<>]/g, '').trim().slice(0, NAME_MAX); if (!name) return false;
@@ -479,7 +506,7 @@
     track(st); return true;
   }
   function putBack(st, id) {
-    var e = entries(st).filter(function (x) { return x.id === id; })[0]; if (!e) return 0;
+    var e = entries(st).filter(function (x) { return x.id === id; })[0]; if (!e || e.kind === 'result') return 0;
     var n = 0;
     Object.keys(e.data).forEach(function (k) { var v = cleanValue(e.data[k]); if (v === null) return; try { st.setItem(k, v); n++; } catch (er) {} });
     track(st); return n;
@@ -500,10 +527,11 @@
     });
     return out;
   }
+  function rowsOf(e, max) { return e.kind === 'result' ? flatten({ result: JSON.stringify(e.res === undefined ? null : e.res) }, max) : flatten(e.data, max); }
   function compare(a, b) {
     var A = {}, B = {}, out = [];
-    flatten(a.data, 2000).forEach(function (x) { A[x[0]] = x[1]; });
-    flatten(b.data, 2000).forEach(function (x) { B[x[0]] = x[1]; });
+    rowsOf(a, 2000).forEach(function (x) { A[x[0]] = x[1]; });
+    rowsOf(b, 2000).forEach(function (x) { B[x[0]] = x[1]; });
     Object.keys(A).forEach(function (k) { if (!own(B, k)) out.push({ path: k, was: A[k], now: null }); else if (A[k] !== B[k]) out.push({ path: k, was: A[k], now: B[k] }); });
     Object.keys(B).forEach(function (k) { if (!own(A, k)) out.push({ path: k, was: null, now: B[k] }); });
     return out;
@@ -642,14 +670,22 @@
     included: included, meaningful: meaningful, groupOf: groupOf, groupName: groupName,
     collect: collect, track: track, validate: validate, makeBackup: makeBackup, readBackup: readBackup, inspect: inspect,
     packLink: packLink, unpackLink: unpackLink, linkInfo: linkInfo, restore: restore, summary: summary,
-    entries: entries, saveEntry: saveEntry, renameEntry: renameEntry, deleteEntry: deleteEntry, putBack: putBack, compare: compare, flatten: flatten,
+    entries: entries, saveEntry: function (a, b, c) { return a && typeof a.getItem === 'function' ? saveEntry(a, b, c) : browserSave(a); }, saveResult: saveResult, rowsOf: rowsOf, renameEntry: renameEntry, deleteEntry: deleteEntry, putBack: putBack, compare: compare, flatten: flatten,
     recordHistory: recordHistory, history: history, goBack: goBack, dropHistory: dropHistory,
     validPin: validPin, pinRecord: pinRecord, checkPin: checkPin, lockDue: lockDue, failDelay: failDelay,
     sharedStash: sharedStash, sharedWipe: sharedWipe, sharedRestore: sharedRestore,
     persist: persist, persisted: persisted, ProgressError: ProgressError
   };
+  // one tap from a tool's result area: TOLProgress.saveEntry({ tool, title, text, data }) → the entry, or false
+  // (false when this isn't the app or your own computer, or storage is full; TOLProgress.perks() says beforehand)
+  function browserSave(o) {
+    var st = local(); if (!st || !W || !perks()) return false;
+    try { return o && (o.text !== undefined || o.data !== undefined) && !o.keys && !o.group ? saveResult(st, o) : saveEntry(st, o); } catch (e) { return false; }
+  }
   if (typeof module === 'object' && module.exports) module.exports = API;
   if (!D) return;
+  var before = W.TOLProgress;   // site.js's { get, html } for the "Your progress" line: kept on the same object
+  if (before && typeof before === 'object') Object.keys(before).forEach(function (k) { if (!own(API, k)) API[k] = before[k]; });
   W.TOLProgress = API;
 
   // =====================================================================================================
@@ -948,6 +984,7 @@
 
   // ---------------------------------------------------------------- one-tap "Save as an entry" for tools (and a backup for confirm-clear.js)
   API.level = level;
+  API.perks = function () { return perks(); };
   API.save = function (o) {
     if (!perks()) return Promise.resolve({ ok: false, why: 'not-here', text: T('Saved entries come with the free app, or on your own computer.', 'Las entradas guardadas vienen con la app gratis, o en tu propia computadora.') });
     try { var e = saveEntry(local(), o); return Promise.resolve({ ok: true, entry: e, text: T('Saved to My saved entries.', 'Guardado en Mis entradas guardadas.') }); }
@@ -1135,16 +1172,19 @@
   }
   function entryDetail(e, list) {
     var box = mk('div', { class: 'tp-e-detail' });
-    var rows = flatten(e.data);
+    var rows = rowsOf(e);
     box.appendChild(mk('p', { class: 'tp-what-h' }, T('What was saved', 'Lo que se guardó')));
-    box.appendChild(rows.length ? linesBox(rows) : mk('p', { class: 'tp-none' }, T('No answers in this one.', 'Sin respuestas en esta.')));
+    if (e.kind === 'result' && e.text) box.appendChild(mk('p', { class: 'tp-e-text' }, e.text));
+    else box.appendChild(rows.length ? linesBox(rows) : mk('p', { class: 'tp-none' }, T('No answers in this one.', 'Sin respuestas en esta.')));
     var acts = mk('p', { class: 'tp-acts' });
+    if (e.kind !== 'result') {
     acts.appendChild(btn(T('Put this back in the tool', 'Volver a ponerla en la herramienta'), '', function () {
       if (!W.confirm(T('Put this entry back? What the tool has now is replaced (it stays in Earlier versions).', '¿Volver a poner esta entrada? Lo que tiene ahora la herramienta se reemplaza (queda en Versiones anteriores).'))) return;
       recordHistory(local()); var n = putBack(local(), e.id); recordHistory(local());
       say('tp-e-msg', n ? T('Put back. Open the tool to see it.', 'Hecho. Abre la herramienta para verlo.') : T('Couldn’t put it back.', 'No se pudo volver a poner.'), !n); drawWhat(); drawHistory();
     }));
     box.appendChild(acts);
+    }
     var same = list.filter(function (x) { return x.g === e.g && x.id !== e.id; });
     if (same.length) {
       var r = mk('p', { class: 'tp-row' });
@@ -1498,7 +1538,7 @@
   }
 
   function start() {
-    try { everywhere(); } catch (e) { console.log('EVERYWHERE', e && e.stack); reveal(); } console.log('START', PAGE, path);
+    try { everywhere(); } catch (e) { reveal(); }
     if (PAGE) section();
   }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start); else start();
