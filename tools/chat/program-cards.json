@@ -5860,7 +5860,7 @@
       ],
       "links": [
         [
-          "Money together: is it controlling, or normal?",
+          "Money together: an agreed limit, or control?",
           "/money-together.html#control"
         ],
         [
@@ -5890,7 +5890,7 @@
           ],
           "links": [
             [
-              "Is it controlling, or normal? (money)",
+              "An agreed limit, or control? (money)",
               "/money-together.html#control"
             ],
             [
@@ -5918,7 +5918,7 @@
           ],
           "links": [
             [
-              "Is it controlling, or normal? (money)",
+              "An agreed limit, or control? (money)",
               "/money-together.html#control"
             ],
             [
@@ -10992,6 +10992,54 @@
       "chips": []
     },
     {
+      "id": "friendsjealous",
+      "name": "jealous or quiet when I see friends",
+      "pat": "\\b(jealous|sulks?|sulky|sulking|pouts?|goes quiet|go quiet|gets quiet|goes cold|gives me the silent treatment|gets (upset|cold|moody|grumpy|funny|weird|off|huffy|annoyed))( with me| at me)?( (if|when|whenever|every time|each time|after|because) i (see|go out with|go out|meet( up with)?|hang out with|spend time with|visit|go for drinks with|have drinks with|text|call)( (with|to))? (my )?(friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads))\\b|\\bjealous of (my|me seeing my|me spending time with my|the time i spend with my) (friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads)\\b",
+      "notPat": "\\b(won t|wont|doesn t|does not|never) let me\\b|\\bnot allowed\\b|\\bstops? me\\b|\\b(scared|afraid|frightened|terrified|unsafe|hits?|hurt\\w*|threat\\w*|punish\\w*|checks?|tracks?|reads?)\\b|\\b(my (son|daughter|kid|child|toddler)|our (son|daughter|kid))\\b",
+      "what": [
+        "It’s hard when time with your friends or family leaves your partner jealous, quiet or sulky afterwards. Feeling jealous is human, and it usually points at something underneath: wanting more time together, or wanting to feel sure of where they stand. It isn’t yours to fix alone, and it isn’t a reason to stop seeing people you care about."
+      ],
+      "how": [
+        "Talk about it on a calm day, not as you’re heading out or just back.",
+        "Ask what the feeling is about: “What goes on for you when I’m out with them?” Listen before you explain.",
+        "Offer what you can, by choice: a text during the evening, a plan for time just the two of you that week, or having them along sometimes.",
+        "Keep seeing your friends. Reassurance helps; giving up your people doesn’t, and usually makes the worry bigger.",
+        "If you’re ever stopped from seeing people, or you feel afraid of how they’ll react, that’s different, and private help is on the Not safe at home? page."
+      ],
+      "script": [
+        "I love you, and my friends matter to me too. When I come home and you go quiet, I feel like I’ve done something wrong. Can we talk about what would help you feel okay when I’m out?"
+      ],
+      "links": [
+        [
+          "Saying no, and hearing no",
+          "/communication.html#saying-no"
+        ],
+        [
+          "Check-ins: raise it once, calmly",
+          "/check-ins.html"
+        ],
+        [
+          "Not safe at home? People to talk to",
+          "/safety.html"
+        ]
+      ],
+      "chips": [
+        [
+          "What could I say?",
+          "Another way to say it"
+        ],
+        [
+          "Ask me a few questions",
+          "A few questions about a limit or a no"
+        ]
+      ],
+      "topic": true,
+      "kind": "intent",
+      "first": true,
+      "newTopic": true,
+      "keys": []
+    },
+    {
       "id": "phonetrust",
       "kind": "intent",
       "first": true,
@@ -11028,8 +11076,8 @@
       ],
       "chips": [
         [
-          "Is that a red flag?",
-          "Is that a red flag?"
+          "How do I tell the difference?",
+          "How do I tell the difference?"
         ],
         [
           "What could I say?",
@@ -11169,8 +11217,8 @@
       ],
       "chips": [
         [
-          "What are the red flags?",
-          "What are the red flags in a relationship?"
+          "How do I tell the difference?",
+          "How do I tell the difference?"
         ]
       ],
       "safety": true
@@ -11909,7 +11957,7 @@
       "pat": "\\b(is|are) (my )?(mom|mum|dad|parents?) allowed to (read|check|look at|go through|take|track)\\b|\\b(mom|mum|dad|parents?)\\b.{0,30}\\b(reads?|checks?|goes through|looks through|tracks?|takes?|took)\\b.{0,20}\\bmy (texts|messages|phone|location|dms|chats?)\\b",
       "keys": [],
       "what": [
-        "It’s really common for parents of teens to check phones or share locations, and it’s also normal to want privacy. Both things can be true. A parent checking for safety isn’t the same as a partner controlling you."
+        "It’s really common for parents of teens to check phones or share locations, and it’s also normal to want privacy. Both things can be true. A parent checking for safety isn’t the same as a partner watching you without your agreement."
       ],
       "how": [
         "Ask what they’re worried about. Often there’s one specific fear (strangers, bullying, safety), and you can agree on something that covers it without reading everything.",
@@ -15404,14 +15452,20 @@
         "when does season 2 come out",
         "new episodes",
         "more episodes",
-        "are there more episodes"
+        "are there more episodes",
+        "the great big sea",
+        "great big sea",
+        "lumi",
+        "lumi the red panda",
+        "season 2 episodes"
       ],
-      "what": "Season 2 of Frequency Buddies is on its way, and there’s a two-minute teaser to watch now. Tidbit and Sugarfoot head farther than ever: a hot-air balloon above the clouds, a lighthouse in the fog, a snowy mountain top, a secret door in the library, a night market, a glowing sea and a rooftop full of shooting stars, plus a new friend nobody has met yet, all told like a movie trailer with seven slapstick gags that borrow famous movie moments. There’s no release date yet; it’s coming, and the site will share more as it gets closer.",
+      "what": "Season 2 of Frequency Buddies, The Great Big Sea, is out: three episodes so far. The pals sail out of sight of land and learn to ask “fixing, hugging or listening?”, thank the quiet jobs in the fog on Lantern Island, and make room for a new friend, Lumi the red panda. New episodes are added as they are finished. There’s also a two-minute teaser.",
       "how": [
-        "Open the Season 2 page and press Play the teaser. It’s about two minutes long, and the Voices button reads it aloud.",
-        "Five little secrets are hidden in it, like a star sticker and a paw print. Tap one on the picture when you spot it, or pause and hunt. What you find is remembered on your device only.",
-        "After it ends, pick the new place you’re most excited for and see what the pals say.",
-        "To hear when it’s out, join free with your email: you’ll be on the site’s update list."
+        "Open Frequency Buddies and pick a Season 2 episode. Your device reads the lines aloud, and captions are always on.",
+        "The Great Big Sea: Sugarfoot is scared on the big sea, and the pals learn to ask “fixing, hugging or listening?”",
+        "The Lighthouse in the Fog: the pals argue about who did more, then thank each other for the quiet jobs.",
+        "Room for One More: Tidbit feels left out when a new friend, Lumi, arrives, and finds the quiet feeling underneath.",
+        "Want a taste first? The Season 2 page has the two-minute teaser."
       ],
       "chips": [
         [
@@ -15426,16 +15480,16 @@
       "pillar": "Every episode shows one of the five pillars in a story anyone can follow, from little ones to grandparents.",
       "links": [
         [
-          "Watch the Season 2 teaser",
+          "Watch Season 2",
+          "/frequency-buddies.html?ep=s2e1"
+        ],
+        [
+          "Season 2 page and teaser",
           "/frequency-buddies-season-2.html"
         ],
         [
           "Season 1 episodes",
           "/frequency-buddies.html"
-        ],
-        [
-          "Join free",
-          "/membership.html"
         ]
       ]
     },
@@ -16415,7 +16469,7 @@
         "Never use the kids as messengers. Send messages to the adult.",
         "Give each task one owner, in a shared calendar or a short note.",
         "Park bigger things: “Can we put that on Thursday’s check-in?”",
-        "If the other parent is controlling or frightening, put your safety first: plan exchanges in public or through a third person, and keep your messages short and factual."
+        "If the other parent frightens you, or tries to control where you go or who you see, put your safety first: plan exchanges in public or through a third person, and keep your messages short and factual."
       ],
       "pillar": "Pillar IV, Tune how you send and receive.",
       "links": [

@@ -118,6 +118,16 @@ never given twice in a row (the next part of the page comes instead, or a questi
 (“Mum, …”, or after “can you check a message?”) is read with the Signal Translator's rules (`signal-engine.js`,
 loaded on first use).
 
+Care, labels and fairness (care10/clarify10): a request made out of care (“text me if you’ll be late”), a “no” given for
+the relationship (“not the trip with your ex”), a parent’s house rule, or a stated consequence (“I’ll leave if this keeps
+happening”) gets help to talk it through (`careReqReply`), never the control answer. Puddles never calls anyone
+“toxic”, a “narcissist”, “controlling”, “manipulative” or a “red flag”: when someone does, he asks what happened
+(`labelReply`). “Is this fair?”, a label with a topic, “is that a red flag?” after a situation, and the topic chips
+(“A few questions about money”) start the short questions from `assets/js/clarify-data.js` (loaded on first use): one
+per turn, the answers as chips (plus Not sure, Skip this one, Skip all), then `evaluate()` and `next()` give a read of
+level 0–3, or the safety answer with its hotlines. Isolation from people in general, checking without agreement,
+money kept back, threats and fear keep the safety answers. Tests: the `care10` group.
+
 ## Adding a situation playbook
 
 `situations/who.json` lists the kinds of relationship (`nouns` are captured, so "my sister" becomes

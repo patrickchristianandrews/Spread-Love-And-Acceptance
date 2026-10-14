@@ -548,7 +548,7 @@
     '\\btake my (own )?life\\b', '\\bunalive\\w*', '\\bnot (be|being) here anymore\\b', '\\bgive up on (life|living|everything)\\b', '\\bhurt (him|her|them|someone|somebody)\\b',
     // control and fear: someone watching, limiting or frightening you is a safety matter, not a talking-better one
     '\\b(do ?n.?t|dont|do not|never|no longer) feel safe\\b', '\\b(gets?|getting|is|it s|its|feels?|can get) (really |so |very )?(scary|frightening|terrifying) (at home|in (my|our) (house|home)|when (he|she|they) (drinks?|gets? angry))\\b', '\\bscary at home\\b', '\\b(he|she|they|my (mum|mom|dad|stepdad|stepmom|stepfather|stepmother|father|mother|partner|husband|wife|boyfriend|girlfriend|brother|sister|uncle|aunt)) (really |sometimes |often |always )?(scares|frightens|terrifies) me\\b',
-    '\\b(angry|mad|furious|upset|jealous|sulks?|sulky|cold|silent) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\\b', '\\b(gives|give) me (an |a )?(allowance|pocket money)\\b', '\\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\\b', '\\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\\b', '\\b(get|make) (him|her|them|my \\w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\\b', '\\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\\b',
+    '\\b(angry|mad|furious) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\\b', '\\b(gives|give) me (an |a )?(allowance|pocket money)\\b', '\\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\\b', '\\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\\b', '\\b(get|make) (him|her|them|my \\w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\\b', '\\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\\b',
     '\\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\\b', '\\b(see|check\\w*|go(es)? through|look(s)? at|look(s)? through|read\\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\\b', '\\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\\b', '\\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\\b',
     '\\b(checks|checked|reads|read|goes through|went through|looks through|searches|tracks|monitors|takes|took|smashed|broke) (my|all my) (phone|texts|messages|emails?|location|social media)\\b',
     '\\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\\b', '\\b(tracking|spy|spying) (app|apps|on me)\\b',
@@ -558,9 +558,9 @@
     '\\b(scared|afraid|frightened|terrified) (of|for) (him|her)\\b', '\\bnot safe\\b', '\\bunsafe\\b',
     '\\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \\w+) (yells|yelled|screams|screamed|shouts|hits|hit|hurts|hurt|gets (so )?(angry|mad|violent)|throws|threw|grabs|grabbed|pushes|pushed)\\b',
     '\\b(he|she|they|my \\w+) (says|said|tells me) it(.?s| is)? my fault (he|she|they) (yell|scream|shout|hit|hurt|get angry|lose)\\w*',
-    '\\b(isolat\\w+) me\\b', '\\bcut me off from (my )?(friends|family)\\b', '\\b(threatens|threatened) to (leave with|take|hurt) (the )?(kids|children|baby|dog|cat|pet)\\b',
+    '\\b(says|said|told me|tells me|keeps saying|threatens|threatened)( that)? (he|she|they|hell|shell|theyll)( ll| will| would| d| is going to| s going to| is gonna| s gonna| re going to)? (hurt|kill|hit|beat|harm|punish) (me|us|the kids|the children|my)\\b', '\\b(isolat\\w+) me\\b', '\\bcut me off from (my )?(friends|family)\\b', '\\bthreat\\w* to (leave (me )?and )?(take|keep) (the |my |our )?(kids|children|baby|son|daughter)\\b', '\\bthreat\\w* to (leave|divorce|dump|break up with) (me )?if i (see|go out with|go out|meet|talk to|text|call|visit|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents)\\b', '\\b(threatens|threatened) to (leave with|take|hurt) (the )?(kids|children|baby|dog|cat|pet)\\b',
     '\\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\\b',
-    '\\bgaslight\\w*', '\\bmakes? me feel (crazy|like i m crazy|like im crazy)\\b',
+    '\\bmakes? me feel (crazy|like i m crazy|like im crazy)\\b',
     '\\bthrows things\\b', '\\bthrew (a|the|my) \\w+ at me\\b', '\\bblocks? the door\\b', '\\bcoercive\\b',
     // intimidation: violence near you, not at you, is still a safety matter
     '\\bpunch(es|ed|ing)? (a hole in |holes in )?(the|a) (wall|door|walls|doors)\\b', '\\b(smash|smashes|smashed|smashing|break|breaks|broke|breaking|throw|throws|threw|throwing) (things|stuff|plates|dishes|my \\w+)\\b',
@@ -570,7 +570,7 @@
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bending (it all|my life)\b|\b(feel|felt|feeling) like ending\b|\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|being here)\b|\bno point (in )?(carrying on|being here)\b|\b(would|d) be better off (dead|without me)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
   // These get a plainer answer with the difference between agreed sharing and control, the hotline, and a way to keep talking.
-  var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bgaslight\w*|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\b(angry|mad|furious|upset|jealous|sulks?|sulky|cold|silent) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\b|\b(gives|give) me (an |a )?(allowance|pocket money)\b|\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\b|\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\b|\b(get|make) (him|her|them|my \w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\b|\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\b|\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\b|\b(see|check\w*|go(es)? through|look(s)? at|look(s)? through|read\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\b|\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\b|\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\b|\bcontrolling\b|\bcoercive\b/;
+  var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\b(angry|mad|furious) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\b|\b(gives|give) me (an |a )?(allowance|pocket money)\b|\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\b|\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\b|\b(get|make) (him|her|them|my \w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\b|\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\b|\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\b|\b(see|check\w*|go(es)? through|look(s)? at|look(s)? through|read\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\b|\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\b|\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\b|\bcoercive\b/;
   var HARD = /\b(hit|hits|hitting|slap\w*|punch\w*|chok\w*|kick\w*|strangl\w*|shov\w*|push\w* me|beat\w*|kill\w*|die|dead|suicid\w*|hurt\w*|harm\w*|rape\w*|assault\w*|gun|knife|weapon|threat\w*|scared|afraid|frightened|terrified|stalk\w*|overdos\w*|not safe|unsafe|violen\w*|abus\w*|throws|threw|blocks? the door|grabb?\w*)\b/;
   // a parent reading a teen's phone is a different question from a partner doing it
   var PARENT_PHONE = /\b(mom|mum|dad|parents?|mother|father|stepmom|stepdad|stepmother|stepfather|nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?)|aunt|auntie|uncle)\b.{0,40}\b(read\w*|check\w*|go(es)? through|look\w* (at|through)|track\w*|take\w*|took)\b.{0,25}\b(my )?(texts|messages|phone|location|dms|chats?)\b|\b(is|are) (my )?(mom|mum|dad|parents?) allowed to\b/;
@@ -585,8 +585,8 @@
         'Control: it’s one-sided (only you have to ask, explain or hand over receipts), hidden (you can’t see the accounts), or punished (anger, sulking, threats, or a card taken away).',
         'If you feel you have to explain yourself to avoid trouble, trust that feeling.'] },
       { k: 'p', x: 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Outside the US and UK, findahelpline.com lists free lines.' },
-      { k: 'links', x: [['Money together: is it controlling, or normal?', '/money-together.html#control'], ['Not safe at home? The signs of control, and people to talk to', '/safety.html']] }],
-      chips: [{ label: 'What are the red flags?', q: 'What are the red flags in a relationship?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+      { k: 'links', x: [['Money together: an agreed limit, or control?', '/money-together.html#control'], ['Not safe at home? The signs of control, and people to talk to', '/safety.html']] }],
+      chips: [{ label: 'Ask me a few questions', q: 'A few questions about money' }, { label: 'How do I tell the difference?', q: 'How do I tell the difference?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
     return { blocks: [
       { k: 'p', x: 'That’s worth taking seriously, and it’s not your fault. Checking someone’s phone or location, limiting who they see or what money they have, or blaming them for someone else’s anger are common signs of control. They aren’t a communication problem that better wording can fix.' },
       { k: 'p', x: 'There’s a real difference between sharing you both chose (like location sharing you each agreed to and can turn off) and checking or tracking that happens in secret, without asking, or that you’d be afraid to say no to.' },
@@ -594,7 +594,7 @@
         'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. Outside the US, findahelpline.com lists free lines.',
         'If your phone might be checked, use a device they can’t see, and look at the Not safe at home? page for how to clear what this site keeps.'] },
       { k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] }],
-      chips: [{ label: 'What are the red flags?', q: 'What are the red flags in a relationship?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
+      chips: [{ label: 'Ask me a few questions', q: 'A few questions about put-downs or respect' }, { label: 'How do I tell the difference?', q: 'How do I tell the difference?' }, { label: 'Something else', q: 'Start over' }], kind: 'safety' };
   }  // A friend (or anyone else) who is hurting themselves: how to help them, and who helps you help
   var OTHER_HARM = /\b(cuts?|cutting|hurts?|hurting|harms?|harming|burns?|burning) (themselves|themself|himself|herself)\b|\b(friend|sister|brother|son|daughter|kid|child|partner|girlfriend|boyfriend|gf|bf|mom|dad|someone)\b.{0,40}\b(self ?harm\w*|suicid\w*|wants? to die|kill (themselves|himself|herself))\b/;
   function otherHarmReply() {
@@ -1280,7 +1280,7 @@
   // "what about my sister?" right after a caring answer. They keep the topic we were on.
   var CV_THANKS = /^(ok |okay |oh |aw |aww )?(thanks?|thank (you|u)|ty|thx|cheers|many thanks|appreciate (it|that|you))( (so|very) much| a lot| a bunch| again)?( (puddles|professor|professor puddles|prof))?( (that|this) (helps?|helped|was (helpful|useful|great|kind|nice)))?$|^(that|this) (helps?|helped|was (really |so |very )?(helpful|useful))( thanks?| thank you)?$/;
   var CV_NOHELP = /^(sorry |hmm |um |well |but |no |nah |honestly |ok |okay )*((that|this|it|none of (that|this|it)|your (answer|advice|reply)) (didnt|did not|doesnt|does not|isnt|is not|wasnt|was not|wont|will not) (help|work|helpful|useful|fit|right|it|what i (meant|asked|needed|wanted))( me)?( at all| much| really)?( though)?|not (helpful|useful|really helpful|quite it|it|what i (meant|asked|needed))|(thats|that s) (not (it|helpful|useful|right|what i (meant|asked|needed))|useless|no help|unhelpful)|useless|unhelpful|no help|not helping|still stuck|i m still stuck|im still stuck|(i ve|ive|i have) (already )?tried (that|it|those|this)( already)?|i already tried (that|it|those|this)|tried (that|it) already)$/;
-  var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
+  var CV_REDFLAG = /\b(is|are|isnt|was|could) (that|this|it|those|these|they|he|she|this behaviou?r|that behaviou?r) (be )?(a )?(red flags?|toxic|abus\w*|controlling|manipulat\w*|gaslight\w*|healthy|unhealthy|a warning sign|warning signs?|a bad sign)\b|^(how (do|can) (i|you) tell the difference|red flags?|any red flags|what are (the |some )?red flags|signs of (abuse|control|coercive control|a toxic relationship)|should i be worried|is (this|that) normal in a relationship)\b/;
   // "is it controlling if I ask him to check before he buys things?": the normal-vs-control money answer, not the red-flag list
   var MONEY_W = /\b(money|buy\w*|bought|spend\w*|purchases?|budget|bank|finances?|card)\b/;
   var CV_NEXT = /^(ok |okay |so |and |alright |right |cool |great |got it |done |ok done |i did that )*(and )?(then what|what then|what after that|after that|and after that|what comes next|what comes after that|whats after that|what do i do after that|what should i do after that|then)\??$/;
@@ -1299,16 +1299,29 @@
     if (CV_THANKS.test(f)) return { blocks: [{ k: 'p', x: 'You’re welcome.' }, { k: 'p', x: 'Ask me something else whenever you like.' }], chips: [{ label: 'Surprise me', q: 'Surprise me' }, { label: 'Give me a little tip', q: 'Give me a tip' }], kind: 'thanks' };
     if (CV_RESTART.test(f)) { state.last = null; state.care = null; state.topic = null; return { blocks: [{ k: 'p', x: 'Sure, a fresh start. What’s on your mind? A few words is plenty.' }], chips: STARTERS, kind: 'restart' }; }
     if (CV_REDFLAG.test(f) && !(/\bcontrolling\b/.test(f) && MONEY_W.test(f))) {
+      // never a verdict: what makes something more than a rough patch, and, when we know what it's about, a few short questions
       var b = [];
       var I0 = L && L.kind === 'sit' && IDX.sit.issues[L.issue];
-      if (I0 && L.issue !== 'hurtbythem') b.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. It isn’t a red flag by itself. What matters is how it happens, and how you feel around them.' });
-      else b.push({ k: 'p', x: 'Here’s how to tell an ordinary rough patch from a red flag.' });
-      b.push({ k: 'p', x: 'These are red flags, and they’re not a communication problem:' });
+      var ctxT = (state.lastQ || '') + ' ' + (I0 ? I0.label : '');
+      var gt = (I0 || (L && state.lastQ)) && cqGuess(ctxT);
+      var gentle = { k: 'note', x: 'If you ever feel afraid of them, or unable to say no, free and private help is here, any time.' };
+      var safeL = { k: 'links', x: [['Not safe at home? People to talk to', '/safety.html']] };
+      if (gt && gt !== 'afraid' && L && L.issue !== 'hurtbythem' && window.TOLClarifyData) {
+        var intro = [];
+        if (I0) intro.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. On its own, it isn’t a sign of control. What matters is how it happens, and how you feel around them.' });
+        intro.push({ k: 'p', x: 'A few short questions will help me give you a fair read, rather than a guess.' });
+        var rq = cqStart(state, gt, ctxT, intro, [gentle, safeL]);
+        if (rq) { rq.kind = 'redflag'; return rq; }
+      }
+      if (I0 && L.issue !== 'hurtbythem') b.push({ k: 'p', x: 'On its own, ' + lc1(I0.label) + ' is a common problem, and a fixable one. On its own, it isn’t a sign of control. What matters is how it happens, and how you feel around them.' });
+      else b.push({ k: 'p', x: 'Here’s how to tell an ordinary rough patch from something more serious.' });
+      b.push({ k: 'p', x: 'These are signs to take seriously, and they’re not a communication problem:' });
       b.push({ k: 'list', x: ['You feel scared of them, or of how they’ll react.', 'They hurt, push, corner or threaten you, or threaten to hurt themselves, the kids or a pet.', 'They check your phone, track where you are, or cut you off from friends and family.', 'They control all the money, or stop you from working.', 'They pressure you into sex, or anything else you don’t want.', 'You’re always the one to blame, and you’ve started to doubt your own memory.'] });
+      b.push({ k: 'p', x: 'Saying no, or asking for something out of care or respect for the relationship, is not control. That’s true for partners, family and friends alike. A calm “I won’t stay if this keeps happening” is a boundary, not a threat.' });
       b.push({ k: 'p', x: 'If any of these fit, please skip the tools here and talk to people who help with this every day. In the US, the National Domestic Violence Hotline is free and private: call 1-800-799-7233, or text START to 88788.' });
       b.push({ k: 'links', x: [['Not safe at home? Hotlines, leaving this site quickly, and clearing what it keeps', '/safety.html']] });
-      b.push({ k: 'note', x: I0 ? 'If none of them fit, it’s most likely an ordinary problem you can work on together, and the steps I gave still apply.' : 'If none of them fit, it’s most likely an ordinary problem you can work on together. Tell me what’s going on, and I’ll suggest a few steps.' });
-      return { blocks: b, chips: L && L.kind === 'sit' ? [{ label: 'What should I do first?', q: 'What should I do first?' }, { label: 'Words I could use', q: 'Another way to say it' }] : [], kind: 'redflag' };
+      b.push({ k: 'note', x: I0 ? 'If none of them fit, it’s most likely an ordinary problem you can work on together, and the steps I gave still apply.' : 'If none of them fit, it’s most likely an ordinary problem you can work on together. Tell me what’s going on, or pick what it’s about, and I’ll ask a few short questions so my answer fits.' });
+      return { blocks: b, chips: L && L.kind === 'sit' ? [{ label: 'What should I do first?', q: 'What should I do first?' }, { label: 'Words I could use', q: 'Another way to say it' }] : PICK_CHIPS.slice(0, 5), kind: 'redflag' };
     }
     if (CV_NOHELP.test(f)) {
       var tried = /tried/.test(f), nb = [];
@@ -2171,12 +2184,215 @@
     state.last = { kind: 'card', card: 'reading', q: 'articles', topic: 'articles', u: '/reading.html' };
     return { blocks: b, chips: chips, kind: 'card', id: 'reading', noBrief: true };
   }
+  // ------------------------------------------------------------------ care, labels, and asking before concluding
+  // Asking for something out of care ("text me if you'll be late"), or a "no" given for the relationship ("not the trip
+  // with your ex"), is not control, for partners, family and friends alike; nor is saying what you will do if something
+  // keeps happening. Those get help to talk it through. Only isolation from people in general, checking without
+  // agreement, money kept back, threats, or fear get the safety answers. Puddles never puts a label on anyone ("toxic",
+  // "narcissist", "controlling", "red flag"): when someone uses one, he asks what happened, and when something may be
+  // unfair he asks a few short questions first (assets/js/clarify-data.js, shared with the tools), one per turn, and
+  // only then gives a read that fits the answers.
+  var CARE_LINE = 'Saying no, or asking for something out of care or respect for the relationship, is not control. That’s true for partners, family and friends alike. Control takes away someone’s freedom more broadly: cutting them off from people, watching them without agreement, controlling their money, threats, or leaving them afraid.';
+  var WHO_C = '(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad|sister|brother|friend|best friend|flatmate|housemate|roommate))';
+  var CARE_REQ = new RegExp([
+    '\\b' + WHO_C + '( s| is)? (wants?|asked|asks|would like|d like|likes|expects|needs) (me )?(to )?(text|call|message|ring|let (him|her|them) know|check in|tell (him|her|them))( (him|her|them))? (when|if|that) (i m |i ll |i am |i will |i d |im |i get |i |it s |its )?(be |am |m |going to be |running |gonna be )?(late|home|out late|back late|staying out|on my way|safe|away|leaving)\\b',
+    '\\b' + WHO_C + ' (asked|asks|wants|told|tells|would like|d like|would rather|prefers|doesn t want|does not want|didn t want) (me )?(not to |to not |to stop |me to stop |i don t |i didn t )?(flirt\\w*|text\\w*|messag\\w*|talk\\w*|see\\w*|meet\\w*|hang\\w* out|go\\w* out|stay\\w* in touch|dm\\w*|follow\\w*|lik\\w*|sleep\\w* over)( (with|to|at))? (my |her |his )?(ex|exes|ex s)\\b',
+    '\\b' + WHO_C + ' (says|said|wants|told me|tells me|expects|insists) (that )?(i )?(need|have|has|must|should|got) to be (home|back|in) (by|before)\\b',
+    '\\b' + WHO_C + ' (wants|would like|asked|asks|suggested|thinks|says) (that )?(us|we|me) (to )?(should )?(agree|talk|check( with (him|her|them|each other))?|decide together)( together)? (on|before|about) (any )?(big|large|major|bigger) (purchases?|spends?|spending|decisions|buys?|things)\\b',
+    '\\b' + WHO_C + ' (wants|would like|asked|asks|suggested|says) (for )?(us )?(no phones|phones?|our phones|screens|the tv)( to be)?( off| away| down| out of the room)?( (at|during|for) (dinner|meals?|mealtimes?|bedtime|bed|date night))\\b',
+    '\\b' + WHO_C + ' (said|says|told me) no to (me )?(going|staying|lending|taking|going on|going to|seeing|inviting|buying|getting)\\b',
+    '\\b' + WHO_C + ' (doesn t|does not|don t|do not|didn t|did not) want me (going|to go|staying|to stay|lending|to lend|inviting|to invite|sleeping|to sleep) (to |on |out |away |over )?(that|the|this|a|an|his|her|their|my ex)\\b',
+    '\\b' + WHO_C + '( s| is)? not (ok|okay|comfortable|happy|cool|fine) (with )?(me )?(going|lending|staying|sharing|meeting|inviting|having|sleeping|texting my ex|talking to my ex|seeing my ex)\\b',
+    '\\b' + WHO_C + ' (won t|wont|will not|doesn t|does not) let me (go|stay|sleep) (on|to|at) (the |that |a |this |my ex s |his |her )?(trip|holiday|vacation|party|festival|weekend away|concert|sleepover|stag|hen|bachelor\\w*|club|gig)\\b',
+    // a parent's house rule, called "controlling": a house rule, not control
+    '\\bmy (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)( is| are| s| re)?( so| really| very| a bit| super)? (controlling|strict|overprotective) (about|with) (my )?(curfew|bedtime|screen time|my phone|the phone|homework|chores|house rules|rules|going out|parties|sleepovers)\\b'
+  ].join('|'));
+  // saying what you will do if something keeps happening is a boundary, not a threat
+  var OWN_CONSEQ = /\b(i ll|ill|i will|i m going to|im going to|i am going to|i would|i d) (have to |need to |probably )?(leave|go|move out|end (it|things|this|the relationship)|walk away|stay (at|with) my \w+)( for a (while|bit|few days))? if (this|it|that|he|she|they|you) (keeps?|carry|carries|continues|happens again|does (it|that) again|doesn t|don t|won t|lies? again|cheats? again|drinks?)|\bif (this|it|that|he|she|they|you) (keeps? (happening|going|on)|happens again|does (it|that) again|cheats? again|lies? again|keeps? (lying|drinking|cheating|gambling))( again)?( then)? (i ll|ill|i will|i m going to|im going to|i am going to) (leave|go|move out|end (it|things|this)|walk away)\b|\bis it (a threat|threatening|an ultimatum|manipulative|controlling) (if|to|when) (i )?(say|tell (him|her|them)) (that )?(i ll|ill|i will|i m going to|im going to) (leave|go|move out|end it)\b/;
+  // and theirs: "he says he'll leave if I keep drinking" tells you how much it matters to them
+  var OTHER_CONSEQ = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( has| keeps)? (says|said|told me|tells me|saying|says that|said that) (he|she|they)( ll| will| would| is going to| s going to| re going to| are going to)? (leave|move out|end it|end things|walk away|leave me|go)( me)? if i (keep|don t stop|carry on|keep on|go back to|ever|start) ?(drinking|lying|gambling|cheating|smoking|using|doing (it|that|drugs)|being late|disappearing|spending|again)\b/;
+  // what lifts it out of the everyday: fear, harm, threats, people in general, checking, money kept back, every time
+  var CARE_BLOCK = /\b(scared|afraid|frightened|terrified|unsafe|not safe|hurt\w*|hit\w*|threat\w*|punish\w*|or else|rage|explodes?|screams?|kids|children|baby|anyone|anybody|my friends|my family|friends or family|(any|all) (of )?(my )?(friends|family)|people|never|every (single )?(time|day|night)|always|passwords?|track\w*|location|allowance|my (own )?money|money i earn)\b/;
+  // contractions the spelling fix may have joined ("doesnt", "ill be late"), put back the way the patterns expect
+  function cnorm(f) { return String(f || '').replace(/\b(doesn|don|didn|won|isn|wasn|aren|can|wouldn|shouldn)t\b/g, '$1 t').replace(/\bwont\b/g, 'won t').replace(/\bill (?=(be|leave|go|move|end|walk|text|call|need|have|probably|stay|let)\b)/g, 'i ll ').replace(/\bim (?=(going|gonna|late|out|home|on my way)\b)/g, 'i m ').replace(/\b(she|he|it)s (?=(not|so|really|a bit|very)\b)/g, '$1 s ').replace(/\b(hell|shell|theyll)(?= (leave|go|move|end|walk|stop|be)\b)/g, function (m) { return m === 'hell' ? 'he ll' : m === 'shell' ? 'she ll' : 'they ll'; });
+  }
+  function careReqReply(f) {
+    if (OTHER_CONSEQ.test(f) && !CARE_REQ.test(f)) return { blocks: [
+      { k: 'p', x: 'When someone tells you what they’ll do if something keeps happening, that’s a boundary, not a threat. It’s a hard thing to hear, and it tells you how much this matters to them.' },
+      { k: 'list', x: ['Take it seriously, and try not to argue with the boundary itself. Ask what’s behind it: “What’s it been like for you?”', 'Say what you can honestly do, and by when. Small and real beats big and vague.', 'If the thing is hard to change on your own, like drinking or gambling, getting support is part of the answer, not a sign of failure.', 'Agree a time to look at it again together.'] },
+      { k: 'script', l: 'Words you could use', x: 'I hear you, and I know this has been hard on you. I don’t want to lose us. Here’s what I’m going to do this week, and I’d like us to talk again on Sunday about how it’s going.' },
+      { k: 'links', x: [['Saying no, and hearing no', '/communication.html#saying-no'], ['Someone to talk to, free', '/outside-help.html#talk']] }],
+      chips: [{ label: 'Something else', q: 'Start over' }], kind: 'care', id: 'theirboundary' };
+    if (OWN_CONSEQ.test(f) && !CARE_REQ.test(f)) return { blocks: [
+      { k: 'p', x: 'Saying what you will do if something keeps happening is a boundary, not a threat. A threat tries to frighten someone into doing what you want. A boundary tells them what you need, and what you’ll do to look after yourself.' },
+      { k: 'list', x: ['Say it once, calmly, at a quiet time, not in the middle of a row.', 'Name the thing, not the person: “the lying”, “the drinking”, not “you’re a liar”.', 'Only say what you’re ready to do, and do it if it happens again. It’s there to look after you, not to punish them.', 'Leave room for them to change: say what would help, too.'] },
+      { k: 'script', l: 'Words you could use', x: 'I love you, and I can’t keep going through this. If it happens again, I’ll need to step back for a while. I’m telling you now, calmly, so it isn’t a surprise, and because I want this to work.' },
+      { k: 'note', x: 'If you’re ever afraid to say it, or afraid of how they’ll react, that’s different, and you deserve support with it.' },
+      { k: 'links', x: [['Saying no, kindly and clearly', '/communication.html#saying-no'], ['Someone to talk to, free', '/outside-help.html#talk']] }],
+      chips: [{ label: 'How do I say it calmly?', q: 'How do I say no kindly' }, { label: 'Something else', q: 'Start over' }], kind: 'care', id: 'ownboundary' };
+    var home = /\b(mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)\b/.test(f) && /\b(home|back|in) (by|before)\b|\b(curfew|bedtime|screen time|homework|house rules|rules|going out|parties|sleepovers)\b/.test(f);
+    var late = /\b(late|on my way|safe|staying out|leaving)\b/.test(f) && /\b(text|call|message|ring|let|check in|tell)\b/.test(f);
+    var ex = /\bex(es| s)?\b/.test(f), buy = /\b(purchases?|spends?|spending|buys?|lend\w*|money)\b/.test(f), phones = /\b(phones?|screens|tv)\b/.test(f) && !home;
+    var lead = home ? 'It sounds like a house rule that comes from worry about you. Rules at home are normal, and they’re easier to live with when you know the reason and can talk about them, especially as you get older.'
+      : late ? 'It sounds like they want to know you’re safe. Asking for a text when you’ll be late is usually worry, not distrust.'
+      : ex ? 'It sounds like this is about the relationship feeling safe for them. Asking you to keep some distance from an ex is a common request, and it usually comes from feeling uneasy, not from wanting to run your life.'
+      : buy ? 'It sounds like they want money decisions to feel safe and fair for both of you. Agreeing before big spends, or saying no to a loan, is a common way couples look after their shared life.'
+      : phones ? 'Wanting phones away at dinner is usually a wish for more of you, not less freedom.'
+      : 'It sounds like they said no out of care for the relationship, or because it made them uneasy. A “no” like that can sting, especially when you were looking forward to it, but it isn’t control.';
+    var say = home ? 'I get that you worry. Can we talk about the time? If I text you where I am, could it be eleven on weekends?'
+      : late ? 'I get that you worry when I’m late. I’ll text if I’m going to be more than half an hour late. Does that work for you?'
+      : ex ? 'I can hear this matters to you. Can you tell me what feels hard about it? I want you to feel secure, and I’d like to say how I see it too.'
+      : buy ? 'I can see why you want us to agree on this. Can we set an amount together, so we both know when to check in?'
+      : phones ? 'Okay, phones away at dinner. Could we keep it to dinner, and agree what happens if one of us is waiting for an important call?'
+      : 'I can hear this matters to you. Can you tell me what’s behind it? Then I’ll tell you how it lands for me, and we can find something we’re both okay with.';
+    return { blocks: [
+      { k: 'p', x: lead },
+      { k: 'p', x: 'A request leaves room for you to say how it lands and to talk it through. A rule handed down with no room for “no” feels different. Most things like this sit in between, and a calm talk turns them into something you both agree.' },
+      { k: 'list', x: ['Ask what’s behind it: “What worries you about it?” Listen to the answer before you explain your side.', 'Say what it costs you, plainly: “I was really looking forward to it,” or “I feel less trusted when…”.', 'Look for a version you can both live with: a quick text, meeting in a group, a time limit, an amount to check in over.', 'Agree it, try it for a few weeks, and look at it again together.'] },
+      { k: 'script', l: 'Words you could use', x: say }]
+      .concat(/\b(angry|mad|furious|yells?|shouts?|snaps?|sulks?|cross|upset)\b/.test(f) ? [{ k: 'p', x: 'If there’s anger when it doesn’t happen, say that part too, calmly and at a quiet time: “I want to do this for you, and I also need it to be okay when I forget.” If saying no ever leads to a big row, days of silence, or you feel afraid, that’s different, and I can help with that too.' }] : [])
+      .concat([{ k: 'note', x: CARE_LINE },
+      { k: 'links', x: [['Saying no, and hearing no', '/communication.html#saying-no'], ['A kind weekly check-in', '/check-ins.html']] }]),
+      chips: [{ label: 'Is it fair? A few quick questions', q: 'A few questions about a limit or a no' }, { label: 'Something else', q: 'Start over' }], kind: 'care', id: 'carenotcontrol' };
+  }
+
+  // the questions (clarify-data.js), loaded the first time they're needed
+  var CD_URL = KB_URL.replace(/chat-kb\.js$/, 'clarify-data.js'), cdWaiting = [], cdTried = false;
+  function loadCD(cb) {
+    if (window.TOLClarifyData) return cb(window.TOLClarifyData);
+    if (cdTried && !cdWaiting.length) return cb(null);
+    cdWaiting.push(cb);
+    if (cdWaiting.length > 1) return;
+    cdTried = true;
+    function done() { var w = cdWaiting; cdWaiting = []; w.forEach(function (fn) { fn(window.TOLClarifyData || null); }); }
+    var sc = document.createElement('script');
+    sc.src = CD_URL; sc.async = true; sc.onload = done; sc.onerror = done;
+    document.head.appendChild(sc);
+  }
+  var CQ_TYPES = [['load', 'who does what'], ['money', 'money'], ['decisions', 'who decides'], ['limits', 'a limit or a no'], ['communication', 'how we talk'], ['respect', 'put-downs or respect'], ['time', 'time together'], ['repair', 'apologies and blame'], ['recurring', 'a fight that keeps coming back'], ['afraid', 'feeling afraid']];
+  var CQ_PICK = new RegExp('^(a few )?(quick |short )?questions (about|on) (' + CQ_TYPES.map(function (x) { return x[1].replace(/[-]/g, ' '); }).join('|') + ')$');
+  var CQ_SKIPALL = /^(skip (all|them all|the questions|the rest|these)|no (more )?questions|just tell me|skip all of (them|these))$/;
+  var PICK_CHIPS = [{ label: 'Money', q: 'A few questions about money' }, { label: 'A limit or a “no”', q: 'A few questions about a limit or a no' }, { label: 'Who decides things', q: 'A few questions about who decides' },
+    { label: 'How we talk to each other', q: 'A few questions about how we talk' }, { label: 'Put-downs', q: 'A few questions about put-downs or respect' }, { label: 'I feel afraid', q: 'A few questions about feeling afraid' }];
+  function cqTypeOf(f) {
+    var m = CQ_PICK.exec(f);
+    if (!m) return null;
+    var name = m[4];
+    return (CQ_TYPES.filter(function (x) { return x[1].replace(/[-]/g, ' ') === name; })[0] || [])[0] || null;
+  }
+  function cqGuess(text) {
+    var C = window.TOLClarifyData;
+    var s = norm(text || '').replace(/\b(red flags?|toxic|narcissis\w*|narc|manipulat\w*|gaslight\w*|gaslit|controlling|abusive|psychopath\w*|sociopath\w*|is (this|that|it) (normal|fair|okay|ok))\b/g, ' ');
+    return C ? C.guessType(s) : null;
+  }
+  function cqAsk(state, intro, outro) {
+    var C = window.TOLClarifyData, S = state.cq, qs = C.questions(S.type, 'en'), q = qs[S.i];
+    var b = (intro || []).slice();
+    b.push({ k: 'p', x: q.text });
+    if (S.i === 0) b.push({ k: 'note', x: 'One short question at a time, ' + qs.length + ' at most. Tap an answer, skip any of them, or skip them all.' });
+    (outro || []).forEach(function (x) { b.push(x); });
+    var chips = q.answers.map(function (a) { return { label: a.skip ? 'Skip this one' : a.text, q: a.skip ? 'Skip' : a.text, keep: 1 }; });
+    chips.push({ label: 'Skip all', q: 'Skip all', keep: 1 });
+    return { blocks: b, chips: chips, kind: 'ask', id: 'clarify-' + S.type };
+  }
+  function cqStart(state, type, text, intro, outro) {
+    if (!window.TOLClarifyData || !window.TOLClarifyData.TYPES[type]) return null;
+    state.cq = { type: type, i: 0, ans: {}, text: text || '', turn: state.turn || 0 };
+    // the bank's own "why" line says what the questions are for (clarify-data.js), in place of a generic one
+    var why = window.TOLClarifyData.TYPES[type].why, wx = why && window.TOLClarifyData.t(why, 'en');
+    var ib = (intro || []).filter(function (x) { return !/^(A few short questions|Okay\. A few short questions)/.test(x.x || ''); });
+    ib.push({ k: 'p', x: wx || 'A few short questions will help me give you a fair read, rather than a guess.' });
+    return cqAsk(state, ib, outro);
+  }
+  function cqTurn(state, q0) {
+    var S = state.cq, C = window.TOLClarifyData;
+    if (!S || !C || (state.turn || 0) - (S.last || S.turn) > 2) { state.cq = null; return null; }
+    var f = norm(q0), qs = C.questions(S.type, 'en'), qq = qs[S.i], raw = C.TYPES[S.type].questions[S.i];
+    if (!qq) { state.cq = null; return null; }
+    S.last = state.turn;
+    if (CQ_SKIPALL.test(f)) { S.skipAll = true; return cqRead(state); }
+    var hit = null;
+    qq.answers.forEach(function (a) { if (!hit && norm(a.text) === f) hit = a; });
+    if (!hit && /^(skip|skip this( one)?|pass|next( question)?)$/.test(f)) hit = { id: 'skip' };
+    if (!hit && /^(not sure|unsure|dunno|i don t know|i dont know|no idea|idk)$/.test(f)) hit = { id: 'notsure' };
+    if (!hit && /^(yes|yeah|yep|yup|no|nope|nah)$/.test(f)) {
+      var yn = /^n/.test(f) ? 'no' : 'yes', m = qq.answers.filter(function (a) { return !a.neutral && norm(a.text).split(' ')[0] === yn; });
+      if (m.length === 1) hit = m[0];
+    }
+    if (!hit) { state.cq = null; return null; }   // something new: answer that instead
+    S.ans[qq.id] = hit.id; S.i++;
+    var rawA = (raw.answers || []).filter(function (a) { return a.id === hit.id; })[0];
+    var urgent = rawA && (rawA.f || []).some(function (x) { return /^(afraid|threat|danger)$/.test(x); });
+    if (!urgent) { try { urgent = C.evaluate(S.type, S.ans, { text: S.text, lang: 'en' }).level >= 4; } catch (e) {} }
+    if (!urgent && S.i < qs.length) return cqAsk(state, [{ k: 'p', x: S.i === qs.length - 1 && !/^last one/i.test(qs[S.i].text) ? 'Thanks. Last one.' : 'Thanks.' }]);
+    return cqRead(state);
+  }
+  var DV_LINES = 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 (US), 999 (UK) or your local emergency number.';
+  function cqRead(state) {
+    var C = window.TOLClarifyData, S = state.cq;
+    state.cq = null;
+    var res = C.evaluate(S.type, S.skipAll ? 'skip' : S.ans, { text: S.text, lang: 'en' }), nx = C.next(res, 'en');
+    var b = norm(nx.body).indexOf(norm(nx.title)) === 0 ? [] : [{ k: 'p', x: nx.title + '.' }];
+    if (res.reasons && res.reasons.length && !S.skipAll) { b.push({ k: 'p', x: 'What I took into account:' }); b.push({ k: 'list', x: res.reasons.slice(0, 4) }); }
+    else if (res.reasons && res.reasons.length) b.push({ k: 'note', x: res.reasons[0] });
+    b.push({ k: 'p', x: nx.body });
+    if (nx.extra) b.push({ k: 'p', x: nx.extra });
+    if (res.level >= 4) b.push({ k: 'p', x: DV_LINES });
+    if (nx.say) b.push({ k: 'script', l: 'Words you could use', x: nx.say });
+    if (nx.footer) b.push({ k: 'note', x: nx.footer });
+    var links = (nx.links || []).concat(nx.footerLinks || []).map(function (l) { return [l.text, l.href]; });
+    if (res.level >= 4 && !links.some(function (l) { return /^\/safety\.html/.test(l[1]); })) links.push(['Not safe at home? People to talk to', '/safety.html']);
+    if (links.length) b.push({ k: 'links', x: links });
+    b.push({ k: 'note', x: 'This is a read of your answers, not a verdict on anyone. You know your situation best.' });
+    if (res.level >= 4) { state.unsafe = true; state.fearSeen = true; }
+    state.last = null;
+    var chips = res.level >= 4 ? [{ label: 'How do I clear this chat?', q: 'how do i clear my history' }, { label: 'Something else', q: 'Start over' }]
+      : [{ label: 'Ask the questions again', q: 'A few questions about ' + (CQ_TYPES.filter(function (x) { return x[0] === S.type; })[0] || ['', 'who does what'])[1] }, { label: 'Something else', q: 'Start over' }];
+    return { blocks: b, chips: chips, kind: res.level >= 4 ? 'safety' : 'read', id: 'clarify-' + S.type, level: res.level };
+  }
+
+  // "my husband is toxic", "is she a narcissist", "my boyfriend is so controlling", "he gaslights me": never confirmed
+  var WHO_L = '(he|she|they|hes|shes|theyre|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex|ex husband|ex wife|mum|mom|dad|mother|father|parents|sister|brother|friend|best friend|mother in law|father in law|son|daughter|flatmate|housemate|roommate))';
+  var LABEL_W = '(toxic|a toxic person|narcissist\\w*|a narcissist|a narc|manipulative|a manipulator|controlling|a control freak|a red flag|full of red flags|a psychopath|a sociopath|psychopathic|sociopathic)';
+  var LABEL_PERSON = new RegExp('\\b' + WHO_L + '( is| s| are| re| has been| s been| was| seems| sounds| can be| gets| acts| is being| s being| are being)?( so| really| very| a bit| kind of| kinda| quite| super| such| being| totally| completely| just)* ' + LABEL_W + '\\b|' +
+    '\\b(is|isnt|are|could) ' + WHO_L + '( be| being)? ' + LABEL_W + '\\b|' +
+    '\\b' + WHO_L + '( is| s| keeps| always| constantly)* (gaslighting|gaslights|gaslighted|gaslit|manipulating|manipulates|manipulated) me\\b|' +
+    '\\b(i m|im|i am|i feel like i m|i feel like im|i think i m|i think im|feel) (being|been|getting) (gaslit|gaslighted|manipulated)\\b|' +
+    '^(toxic|controlling|manipulative|manipulation|a control freak|toxic relationship|my relationship is toxic|our relationship is toxic|is my relationship toxic|is our relationship toxic)$|\\b(my|our) relationship (is|feels|seems) (so |really |very )?toxic\\b|\\bis (my|our|this) relationship toxic\\b');
+  var LBL_HEAVY = /\b(scream\w*|yell\w*|shout\w*|swear\w*|swore|calls? me|called me|names|worthless|stupid|useless|pathetic|put\w* me down|belittl\w*|eggshells|crazy)\b/;
+  var LABEL_WORK = /\b(bakery|business|shop|cafe|cofounder|co founder|founder|company|boss|manager|colleague|coworker|co worker|office|my job|at work|team|client|customer|landlord)\b/;
+  function labelReply(state, f, q0) {
+    var narc = /\bnarc|psychopath|sociopath/.test(f), gas = /\bgasl/.test(f), man = /\bmanipulat/.test(f), ctl = /\bcontrol/.test(f);
+    var lead = narc ? 'That’s a fair thing to wonder about when someone is hard to be around. I can’t diagnose anyone, and nobody can from a chat. A label matters less than what actually happens, and how it leaves you feeling.'
+      : gas ? 'Being left unsure of what you remember is a horrible feeling. I can’t tell from here what’s going on between you, and the word matters less than what actually happens.'
+      : 'That sounds hard to live with. I can’t tell from here what’s going on, and I won’t put a label on anyone: what actually happens, and how it leaves you feeling, matters more than the word.';
+    var type = cqGuess(f);
+    var gentle = { k: 'note', x: 'If you ever feel afraid of them, or unable to say no, free and private help is here, any time.' };
+    var safeL = { k: 'links', x: [['Not safe at home? People to talk to', '/safety.html']] };
+    if (type && type !== 'afraid' && window.TOLClarifyData) {
+      var r0 = cqStart(state, type, q0, [{ k: 'p', x: lead }, { k: 'p', x: 'A few short questions will help me give you a fair read, rather than a guess.' }], [gentle, safeL]);
+      if (r0) return r0;
+    }
+    return { blocks: [{ k: 'p', x: lead },
+      { k: 'p', x: (man ? 'What do they do that leaves you feeling pushed or played?' : ctl ? 'What happens, day to day?' : 'What happened, or what keeps happening?') + ' A line or two is plenty. Or pick what it’s mostly about, and I’ll ask a few short questions so my answer fits.' },
+      gentle, safeL],
+      chips: PICK_CHIPS, kind: 'care', id: 'label' };
+  }
+  // "is it fair that I do all the cooking?", "am I being unreasonable?": a few questions first
+  var FAIR_Q = /\b(is (it|this|that) (fair|unfair|reasonable|unreasonable|too much to ask)|am i (being )?(unfair|unreasonable)|is (he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)) being (unfair|unreasonable)|is (it|this|that) (normal|okay|ok) (that|for|when|if) (my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)|he|she)\b)/;
+  var FAIR_NOT = /\b(son|daughter|kids?|child|children|toddler|teen\w*|baby|babies|deploy\w*|grief|grieving|died|death|period|pregnan\w*|sex|work|boss|colleague|coworker|landlord|school|teacher)\b/;
   function respond(state, q, chipDoc) {
     var sp = null, q0 = q;
     state.turn = (state.turn || 0) + 1;
     if (state.pageCtx && !state.pageDone) pageInit(state);
     if (chipDoc == null) {
       // a message in Spanish gets a Spanish answer, before any English spelling fix ("triste" is not "trust")
+      // an answer to one of the short questions (tapped or typed) carries on with them
+      if (state.cq) { var cqr = cqTurn(state, q); if (cqr) return cqr; }
+      var f00 = norm(q);
+      if (!window.TOLClarifyData && !cdTried && (CQ_PICK.test(f00) || CV_REDFLAG.test(f00) || LABEL_PERSON.test(f00) || FAIR_Q.test(f00))) return { needCD: true };
+      var cqt = cqTypeOf(f00), cqs = cqt && cqStart(state, cqt, '', [{ k: 'p', x: 'Okay. A few short questions, so my answer fits what’s really going on.' }]);
+      if (cqs) { state.last = null; state.care = null; return cqs; }
       var esr = spanishReply(state, q);
       if (esr) return esr;
       sp = spellFix(q);
@@ -2194,6 +2410,16 @@
       if (CHILD_CRISIS.test(vf)) { state.last = null; state.care = null; state.topic = null; return meant(childCrisisReply(), sp); }
       if (!NOT_LIVE.test(vf) && MUTUAL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(mutualReply(), sp); }
       if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
+      // a request made out of care, a "no" for the relationship, or your own consequence: help to talk it through, not control
+      var cvf0 = cnorm(vf), cvg0 = cvf0.replace(/\bis it (a threat|threatening|an ultimatum)\b/, ' ');
+      if (!NOT_LIVE.test(vf) && !HARD.test(cvg0) && !FEAR_W.test(vf) && !CARE_BLOCK.test(cvg0) && (CARE_REQ.test(cvf0) || OWN_CONSEQ.test(cvf0) || OTHER_CONSEQ.test(cvf0))) { state.last = null; state.care = null; state.topic = null; return meant(careReqReply(cvf0), sp); }
+      // a label for someone ("toxic", "narcissist", "controlling"): never confirmed; what happened, and a few questions
+      if (!NOT_LIVE.test(vf) && LABEL_PERSON.test(vf) && !LABEL_WORK.test(vf) && !MONEY_W.test(vf) && !(state.topic && /^biz/.test(state.topic.id || '')) && !FEAR_W.test(vf) && !HARD.test(vf) && !LBL_HEAVY.test(vf) && !DANGER.test(vf.replace(LABEL_PERSON, ' '))) { state.last = null; state.care = null; state.topic = null; return meant(labelReply(state, vf, q0), sp); }
+      // "is it fair that…", "am I being unreasonable?": a few short questions before any read
+      if (FAIR_Q.test(vf) && !FAIR_NOT.test(vf) && !DANGER.test(vf) && !FEAR_W.test(vf) && window.TOLClarifyData) {
+        var ft0 = cqGuess(vf), fr0 = ft0 && ft0 !== 'afraid' && cqStart(state, ft0, q0, [{ k: 'p', x: 'That’s a good thing to ask before deciding anything, and a few short questions will help me answer it fairly.' }]);
+        if (fr0) { state.last = null; state.care = null; return meant(fr0, sp); }
+      }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && ANGER_NOW.test(vf) && !/\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|ex|dad|mum|mom|son|daughter|kid|boss))\b( s| is| gets| keeps)? (about to|going to|gonna|losing|loses)\b/.test(vf)) { state.last = null; return meant(angerNowReply(), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; state.topic = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
@@ -2601,7 +2827,7 @@
     var R = P.rules || {}, k = r.kind || 'search', f = norm(q);
     // after anything serious, stay plain: for good after safety, and after care or someone's situation until a light topic
     if (/^(safety|redflag)$/.test(k) || state.unsafe || state.crisis) { state.plain = 2; return r; }
-    if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
+    if (/^(care|care-more|sit|sit-more|road|road-more|nohelp|calc|lang|ask|read)$/.test(k)) { state.plain = Math.max(state.plain || 0, 1); return r; }
     if ((R.never_on_kinds || []).indexOf(k) !== -1) return r;
     if (FUN_UPSET.test(f) || DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f)) return r;
     var txt = JSON.stringify(r.blocks);
@@ -2954,7 +3180,7 @@
   function deepChip(state, q, r) {
     var D = KB && KB.deep;
     if (!D || !r || !r.blocks || deepOn(state) || state.unsafe) return r;
-    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more', 'info', 'about']);
+    var k = r.kind || 'search', never = dlist(dRule('never_on_kinds')).concat(['safety', 'redflag', 'lang', 'deep', 'chat', 'fun', 'thanks', 'hello', 'unclear', 'offtopic', 'none', 'clarify', 'care', 'care-more', 'calc', 'nohelp', 'short', 'road', 'road-more', 'info', 'about', 'ask', 'read']);
     if (never.indexOf(k) !== -1) return r;
     var f = norm(q);
     if (DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || FUN_UPSET.test(f)) return r;
@@ -3418,7 +3644,7 @@
       var cq = norm(c.q || c.label);
       if (chipSeen[cq]) return false; chipSeen[cq] = 1;
       // "Another way to say it" and "Tell me more" are meant to be pressed again; anything else just asked is a loop
-      if (!/^(another|tell me more|more|surprise me|give me a tip|another tip)/.test(cq) && recent.indexOf(cq) !== -1) return false;
+      if (!c.keep && !/^(another|tell me more|more|surprise me|give me a tip|another tip)/.test(cq) && recent.indexOf(cq) !== -1) return false;
       if (c.doc != null && /[.!]$/.test(c.label) && !/\?$/.test(c.label)) return false;
       return true;
     });
@@ -3439,7 +3665,7 @@
     });
   }
   function noRepeat(state, q, r) {
-    if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info)$/.test(r.kind || '')) return r;
+    if (!r || !r.blocks || /^(safety|redflag|clarify|hello|thanks|calc|lang|fun|chat|restart|info|ask|read)$/.test(r.kind || '')) return r;
     var sig = sigOf(r);
     if (!sig || sig !== state.lastSig) return r;
     // a playbook again ("he just writes 'ok.'"): one thing for tonight and another way to say it, not the whole answer
@@ -3496,6 +3722,16 @@
         var r4 = safe(function () { return respond(state, q, doc); });
         if (r4 && (r4.needSE || r4.needIG || r4.needBG)) r4 = { blocks: [{ k: 'p', x: 'Sorry, I couldn’t open the message checker just now. The Signal Translator page can check it for you.' }, { k: 'links', x: [['The Signal Translator', '/signal-translator.html']] }], chips: [] };
         cb(r4);
+      });
+      return;
+    }
+    if (r && r.needCD) {
+      state.turn = Math.max(0, (state.turn || 1) - 1);
+      loadCD(function () {
+        var r5 = safe(function () { return respond(state, q, doc); });
+        if (r5 && r5.needCD) r5 = safe(function () { return respond(state, q, doc); });
+        if (r5 && r5.needBG) { loadBG(function () { cb(safe(function () { return respond(state, q, doc); })); }); return; }
+        cb(r5);
       });
       return;
     }
@@ -3856,6 +4092,7 @@
       if (c.q) b.setAttribute('data-q', c.q);
       box.appendChild(b);
     });
+    box.scrollLeft = 0;   // a new set of chips starts at the first one (phones scroll the row sideways)
   };
 
   // true when the log has no scroll box of its own (the inline chat on a phone): scroll the page instead

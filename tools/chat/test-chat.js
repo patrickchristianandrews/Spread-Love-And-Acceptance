@@ -572,7 +572,7 @@ t('parents', 'can I use this at work with my team?', { id: 'atwork', link: '/wor
 t('parents', 'my husband died last year', { id: 'grief', link: '/grief.html' });
 // round 4: safety nuance, new topics, memory
 t('safety', "he says it's my fault he yells", { kind: 'safety', link: '/safety.html', not: /Snapping|apolog/i });
-t('safety', 'my partner gaslights me', { kind: 'safety', link: '/safety.html' });
+t('safety', 'my partner gaslights me', { kind: 'care', id: 'label', link: '/safety.html', not: /red flag|is gaslighting you/ });
 t('safety', 'is it controlling if he checks my location', { kind: 'safety', text: /agreed to/, link: '/safety.html' });
 t('safety', 'I don\'t want to be here anymore (911 and findahelpline)', { q: "I don't want to be here anymore", kind: 'safety', text: /911[\s\S]*findahelpline/ });
 t('care', 'should I leave my husband?', { id: 'leave', link: '/safety.html' });
@@ -608,7 +608,7 @@ t('parents', 'is there a frequency buddies music video', { kind: 'card', id: 'bu
 t('parents', 'where can I hear the frequency buddies theme song', { kind: 'card', id: 'buddiesmusicvideo', link: '/frequency-buddies-music-video.html' });
 t('parents', 'can I make my own music video', { kind: 'card', id: 'buddiesmvmaker', link: '/frequency-buddies-music-video-maker.html' });
 t('parents', 'is there a music video maker for frequency buddies', { kind: 'card', id: 'buddiesmvmaker', link: '/frequency-buddies-music-video-maker.html' });
-t('parents', 'when is the next season of frequency buddies', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html', text: /no release date yet/ });
+t('parents', 'when is the next season of frequency buddies', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html', text: /out|three episodes/ });
 t('parents', 'is there a season 2 teaser', { kind: 'card', id: 'buddiess2', link: '/frequency-buddies-season-2.html' });
 
 // ---------------------------------------------------------------- the nine fields and how they connect
@@ -780,7 +780,7 @@ t('round7', 'im starting to dread going back to my dorm room', { not: /drama roo
 const ABUSE_OK = /not a communication problem|isn.t a communication problem/;
 const NO_SNAP = /snap|full battery|rarely one person|I’m sorry I/;
 t('round7', 'When we fight he screams at me and calls me worthless. How do I say things so he doesn\'t get so angry?', { kind: 'safety', text: ABUSE_OK, link: '/safety.html', not: NO_SNAP });
-t('round7', 'He never apologizes and always turns things around on me. Is he a narcissist?', { kind: 'safety', text: /can’t diagnose[\s\S]*1-800-799-7233/, not: NO_SNAP });
+t('round7', 'He never apologizes and always turns things around on me. Is he a narcissist?', { kind: 'ask', id: 'clarify-repair', text: /can’t diagnose[\s\S]*who usually says sorry first/, link: '/safety.html', not: NO_SNAP });
 t('round7', 'i feel like i\'m walking on eggshells', { kind: 'safety', text: /0808 2000 247/ });
 t('round7', 'he calls me names', { kind: 'safety', link: '/safety.html' });
 t('round7', 'she always turns it around on me', { kind: 'safety' });
@@ -844,7 +844,7 @@ t('round7', 'how do i set boundaries with my mum without hurting her', { id: 'fa
 t('round7', 'How do I set a boundary kindly? (the Go deeper chip)', { q: 'How do I set a boundary kindly?', id: 'familyboundary' });
 // co-parents, on my own
 t('round7', 'my ex makes decisions about our kid without asking me', { id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /I love doing things together/ });
-c('round7', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: 'coparentdecide', not: /DACI|decision rights at work/i });
+c('round7', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: /^coparent(say|decide)$/, not: /DACI|decision rights at work/i });
 t('round7', 'he keeps sending her back without her inhaler', { id: 'handoffkit', text: /checklist/ });
 t('round7', 'my ex never remembers anything for our daughter', { id: 'handoffkit', text: /^It’s tiring/ });
 t('round7', 'kids are bored at my place', { id: 'parttimehome', link: '/on-my-own.html' });
@@ -867,12 +867,12 @@ t('round7', 'he works from home and does the house and dog while i sleep all day
 t('round7', 'we\'re a gay couple', { id: 'gaycouple', text: /works for any couple/, link: '/coming-out.html', not: /school/ });
 // two faiths, holidays
 t('round7', 'my wife and I have different religions and a baby on the way', { id: 'twofaiths', link: '/two-faiths.html', text: /^Faith/ });
-t('round7', 'how do we choose a baby name that works for both our faiths', { id: 'twofaiths' });
+t('round7', 'how do we choose a baby name that works for both our faiths', { id: /^(faithnames|twofaiths)$/ });
 t('round7', 'how do we decide what religion to raise our kid', { id: 'twofaiths' });
 t('round7', 'I\'m Catholic and my husband is Muslim', { id: 'twofaiths' });
 t('round7', 'is there anything specific for interfaith couples?', { id: 'twofaiths' });
 t('round7', 'my mum wants the baby baptised', { id: 'twofaiths' });
-t('round7', 'how do we do Eid and Christmas', { id: 'twofaiths' });
+t('round7', 'how do we do Eid and Christmas', { id: /^(faithholidays|twofaiths)$/ });
 t('round7', 'how do we split holidays between both families', { id: 'holidaysplit', not: /court order/i });
 t('round7', 'articles about raising a child in two religions', { id: 'reading', link: '/two-faiths.html' });
 // money
@@ -1077,7 +1077,7 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
   // co-parents, with and without the page they came from
   t('chat8', 'she makes decisions without asking me (opened from the co-parenting page)', { q: 'she makes decisions without asking me', about: 'Separated co-parents', id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /I love doing things together/ });
   t('chat8', 'she makes decisions without asking me (pop-up on co-parenting.html)', { q: 'she makes decisions without asking me', page: '/co-parenting.html', id: 'coparentdecide', text: /within 3 days/, not: /48 hours/ });
-  c('chat8', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: 'coparentdecide', link: '/co-parenting.html#who-decides', not: /DACI|48 hours/ });
+  c('chat8', ['my ex makes decisions about our kid without asking me', 'how do i get a say'], { id: /^coparent(say|decide)$/, link: '/co-parenting.html#who-decides', not: /DACI|48 hours/ });
   t('chat8', 'she told me about the school trip the night before', { id: 'coparentlate', link: '/co-parenting.html' });
   t('chat8', 'i feel shut out as a dad', { id: 'coparentshutout', link: '/co-parenting.html#who-decides', not: /window of tolerance/i });
   t('chat8', "he's honestly useless (co-parenting page)", { q: "he's honestly useless", page: '/co-parenting.html', id: 'coparentuseless', not: /retir/i });
@@ -1607,6 +1607,54 @@ if (PERS) {
   t('chat9', 'nobody notices what I do: all kinds of unseen work', { q: 'nobody notices what I do', id: 'nobodynotices', text: /thinking work[\s\S]*physical jobs[\s\S]*paid work/ });
   t('chat9', 'they say I’m rude: the direct script', { q: "they say I'm rude at work", id: 'saysrude', text: /I’m direct because I want to be clear, not unkind/, link: '/signal-translator.html?use=work', not: /when you get a chance/ });
   t('chat9', 'work mode links carry ?use=work', { q: 'how do I ask my boss for written instructions', link: '/signal-translator.html?use=work' });
+  // care10 / clarify10: care is not control; no labels; ask a few short questions before any read
+  const DV10 = /1-800-799-7233|National Domestic|0808 2000 247|signs of control|isn.t a communication problem|These are red flags/;
+  const LABEL_SAY = /\bred flags?\b|\btoxic\b|\bnarcissist\b|\bmanipulative\b|\b(is|are|being) (so |very |really )?controlling\b|\bgaslighting you\b|\babusive\b/i;
+  [["she wants me to text when I'll be late", /know you’re safe/], ['he asked me not to flirt with my ex', /distance from an ex/], ['my mum says I need to be home by 10', /house rule/],
+    ['my partner wants us to agree before big purchases', /big spends/], ['he wants phones off at dinner', /phones away at dinner/], ['my partner said no to me going on the trip with my ex', /distance from an ex/],
+    ["my wife doesn't want me going to that party", /said no out of care/], ["he said he's not okay with me lending his brother money", /saying no to a loan/], ["he won't let me go on the trip with my ex", /distance from an ex/],
+    ['my mum is controlling about curfew', /house rule/]]
+    .forEach(([q, x]) => t('care10', 'care, not control: ' + q, { q, kind: 'care', id: 'carenotcontrol', text: new RegExp(x.source + '[\\s\\S]*is not control'), script: true, link: '/communication.html#saying-no', not: new RegExp(DV10.source + '|' + LABEL_SAY.source, 'i'), chip: /A few quick questions/ }));
+  t('care10', 'care request with anger: one gentle line, no control answer', { q: "my wife wants me to text her when I'm on my way home but she gets angry if I don't", id: 'carenotcontrol', text: /also need it to be okay when I forget/, not: DV10 });
+  [["I'll leave if this keeps happening", 'ownboundary'], ["If he lies again I'll leave", 'ownboundary'], ["is it a threat if I tell him I'll leave", 'ownboundary'], ["he says he'll leave if I keep drinking", 'theirboundary']]
+    .forEach(([q, id]) => t('care10', 'a stated consequence is a boundary: ' + q, { q, kind: 'care', id, text: /boundary, not a threat/, not: DV10 }));
+  // the other direction: isolation, checking, money kept back, threats and fear keep the safety answers and resources
+  [["he won't let me see my friends or family", /1-800-799-7233/], ['he checks my phone every night', /1-800-799-7233/], ['my husband controls all the money', /1-800-799-7233/],
+    ['she threatened to leave and take the kids if I go out with my friends', /1-800-799-7233|not your fault/], ["my boyfriend is controlling, he checks my phone", /1-800-799-7233/], ["he says he'll hurt me if I go to the party", /not your fault|1-800-799-7233/]]
+    .forEach(([q, x]) => t('care10', 'still a safety answer: ' + q, { q, kind: 'safety', text: x, link: '/safety.html' }));
+  t('care10', 'the control answer asks rather than concludes', { q: 'he checks my phone every night', chip: /Ask me a few questions/, nochip: /red flag/i });
+  t('care10', 'a request "or else" is not the care answer', { q: 'my partner wants me to text when I’m late or else', not: /is not control/ });
+  // jealousy, sulking, silence, one harsh message, an argument: ordinary help first
+  [['she gets jealous when I see my friends', 'friendsjealous'], ['he sulks when I go out with my mates', 'friendsjealous'], ['my girlfriend goes quiet every time I see my family', 'friendsjealous']]
+    .forEach(([q, id]) => t('care10', 'jealous or quiet: ordinary help: ' + q, { q, id, script: true, text: /isn’t a reason to stop seeing/, not: new RegExp(DV10.source + '|' + LABEL_SAY.source, 'i') }));
+  ['my wife gives me the silent treatment', 'he sent me one harsh message', 'we had a big argument last night', 'he said no to a holiday this year']
+    .forEach(q => t('care10', 'ordinary, not safety: ' + q, { q, not: DV10 }));
+  // a label typed by the person: never confirmed; what happened, or a few questions
+  [['my husband is toxic', /won’t put a label/], ['is my wife a narcissist', /can’t diagnose/], ['my boyfriend is so controlling', /won’t put a label/], ['she is so manipulative', /won’t put a label/],
+    ['controlling', /won’t put a label/], ['my partner gaslights me', /unsure of what you remember/], ['our relationship is toxic', /won’t put a label/]]
+    .forEach(([q, x]) => t('care10', 'a label, explored: ' + q, { q, kind: 'care', id: 'label', text: x, link: '/safety.html', chip: /Money|I feel afraid/, not: new RegExp(DV10.source + '|' + LABEL_SAY.source, 'i') }));
+  t('care10', 'a label with a topic starts the questions', { q: 'my partner is a bit controlling about the dishes', kind: 'ask', id: 'clarify-load', text: /How long/, chip: /A year or more/, not: LABEL_SAY });
+  t('care10', 'red flag with no context: signs, the clarity line, resources, no verdict', { q: 'is this a red flag', kind: 'redflag', text: /signs to take seriously[\s\S]*is not control/, link: '/safety.html', not: /These are red flags|from a red flag/, chip: /Money/ });
+  t('care10', 'how do I tell the difference', { q: 'How do I tell the difference?', kind: 'redflag', link: '/safety.html' });
+  c('care10', ['We keep fighting about money', 'is that a red flag?'], { kind: 'redflag', id: 'clarify-money', text: /fixable[\s\S]*isn’t a sign of control[\s\S]*How is money set up/, chip: /Shared, and we can both see it/, link: '/safety.html', not: LABEL_SAY });
+  // the short questions: one per turn, tap answers, then a read that fits
+  c('care10', ['is it fair that I do all the cooking'], { kind: 'ask', id: 'clarify-load', text: /How long has the split/, chip: /A year or more/ });
+  c('care10', ['is it fair that I do all the cooking', 'Not sure'], { kind: 'ask', id: 'clarify-load', text: /reason it’s this way/, chip: /^Not sure$/ });
+  c('care10', ['is it fair that I do all the cooking', 'A year or more', 'Not that I know of', 'One of us feels worn down or resentful', 'Yes, but nothing has changed', 'No, not really'],
+    { kind: 'read', id: 'clarify-load', text: /someone outside the two of you[\s\S]*not a verdict/, link: '/outside-help.html', not: DV10 });
+  c('care10', ['is it fair that I do all the cooking', 'A few weeks, or less', 'Yes, something for now: illness, a new baby, a new job, exams, a move', 'We both seem fine with it', 'Yes, and it’s getting better', 'Yes, it evens out'],
+    { kind: 'read', text: /ordinary rough patch/, not: DV10 });
+  c('care10', ['is it fair that I do all the cooking', 'just tell me'], { kind: 'read', text: /everyday read/, not: DV10 });
+  c('care10', ['A few questions about money', 'Skip all'], { kind: 'read', id: 'clarify-money', text: /everyday read/, not: DV10 });
+  t('care10', 'the bank’s own why line, then the first question, with Skip all', { q: 'A few questions about money', kind: 'ask', id: 'clarify-money', text: /many fair ways[\s\S]*How is money set up/, chip: /^Skip all$/ });
+  c('care10', ['my partner said no to me going on the trip with my ex', 'A few questions about a limit or a no', 'Respect for the relationship (for example an ex, flirting, late-night messages)', 'Yes, to both of us', 'It was asked kindly, and I could say no', 'Yes, both of us can', 'No'],
+    { kind: 'read', id: 'clarify-limits', text: /ordinary rough patch[\s\S]*care or respect/, not: DV10 });
+  c('care10', ['A few questions about a limit or a no', 'Who I can see or talk to, in general (friends, family)', 'No, only to me', 'One of us set it', 'It leads to a big row, days of silence, or something being taken away'],
+    { kind: 'safety', text: /Only you can judge[\s\S]*1-800-799-7233/, link: '/safety.html' });
+  c('care10', ['my husband is toxic', 'A few questions about feeling afraid', 'Yes, I’m safe right now', 'Yes, I feel afraid'], { kind: 'safety', text: /1-800-799-7233/, link: '/safety.html#talk' });
+  c('care10', ['is it fair that I do all the cooking', 'I want to end it all'], { kind: 'safety', text: /988/ });
+  c('care10', ['is it fair that I do all the cooking', 'my mum keeps calling me at work'], { not: /How long has the split|reason it’s this way/ });
+  c('care10', ['He never apologizes and always turns things around on me. Is he a narcissist?', 'Always me. The other never does'], { kind: 'ask', id: 'clarify-repair', text: /blame land on one person/ });
 }
 
 // ---------------------------------------------------------------- ask.html: every "Try asking…" question gets a real answer
