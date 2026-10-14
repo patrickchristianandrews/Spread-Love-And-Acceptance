@@ -3003,8 +3003,8 @@ function offerChat(full){
     if(!(["chat export","named lines","chat app","email"].includes(P.format) && who.length>=2 && P.turns.length>=2)){ box.hidden=true; box.innerHTML=""; return; }
     const guess = who.filter(x=>/^(me|you|i|myself)$/i.test(x))[0] || "";
     const list = who.length===2 ? who[0]+" and "+who[1] : who.slice(0,-1).join(", ")+" and "+who[who.length-1];
-    box.innerHTML = '<p><b>This looks like a whole conversation:</b> '+P.turns.length+' messages from '+esc(list)+'.</p>'
-      + '<div class="st-co-me"><label for="stCoMe">Which one is you?</label><select id="stCoMe"><option value="">Not sure</option>'+who.map(x=>'<option'+(x===guess?' selected':'')+'>'+esc(x)+'</option>').join("")+'</select></div>'
+    box.innerHTML = '<p class="no-bubble"><b>This looks like a whole conversation:</b> '+P.turns.length+' messages from '+esc(list)+'.</p>'
+      + '<div class="st-co-me no-bubble"><label class="no-bubble" for="stCoMe">Which one is you?</label><select id="stCoMe"><option value="">Not sure</option>'+who.map(x=>'<option'+(x===guess?' selected':'')+'>'+esc(x)+'</option>').join("")+'</select></div>'
       + '<div class="st-co-acts"><button type="button" class="is-main" id="stCoAll">Read the whole conversation</button><button type="button" id="stCoOne">Check one message</button><button type="button" id="stCoNo">Keep it as one message</button></div>'
       + '<ol class="st-co-list" id="stCoList" hidden aria-label="Pick the message to check">'+P.turns.map((t,i)=>'<li><button type="button" data-turn="'+i+'"><b>'+esc(t.who)+':</b> '+esc(t.text.length>220?t.text.slice(0,217)+"\u2026":t.text)+'</button></li>').join("")+'</ol>';
     box.hidden=false;

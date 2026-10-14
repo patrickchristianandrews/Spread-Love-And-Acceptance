@@ -670,7 +670,8 @@
     var keep = mk('div', { cls: 'tcol-keep' }, [
       mk('p', {}, [mk('input', { type: 'checkbox', id: kid, cls: 'tcol-keepbox' }), ' ', mk('label', { for: kid, text: T('Keep on this device', 'Guardar en este aparato') })]),
       mk('p', { cls: 'tcol-small', text: T('So next time you can see what changed. Only on this device, never sent anywhere. Off: what they sent stays in this tab until you close it.', 'Así la próxima vez ves qué cambió. Solo en este aparato, nunca se envía. Si no lo marcas, lo que te enviaron queda en esta pestaña hasta que la cierres.') }),
-      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', text: T('Clear what you received', 'Borrar lo que recibiste') })])]);
+      // site.js asks "are you sure?" first (data-clear-confirm), then this clears it
+      mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', 'data-clear-confirm': T('what the others sent you here', 'lo que te enviaron los demás'), 'data-clear-keys': KEPT_KEY + ' ' + TAB_KEY, text: T('Clear what you received', 'Borrar lo que recibiste') })])]);
     var pst = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
     var more = mk('p', { cls: 'tcol-small' }, [T('Sending several results at once (your Wave Code, your care card…)? ', '¿Varios resultados a la vez? '), mk('a', { href: '/together.html#share', text: T('Share my results', 'Compartir mis resultados') }), '.']);
     [banner, pick, people, parts, side, hist, meRow, send, paste, keep, more, pst].forEach(function (n) { panel.appendChild(n); });
@@ -1067,8 +1068,12 @@
     if (next) box.appendChild(mk('p', { cls: 'tcol-cmp-next' }, [mk('strong', { text: T('One next step: ', 'Un paso siguiente: ') }), next]));
     box.appendChild(mk('p', { cls: 'tcol-priv', text: T('Their answers came inside the link. Nothing is stored on our side.', 'Sus respuestas llegaron dentro del enlace. No se guarda nada de nuestro lado.') }));
     // "Save this combined view" in My saved entries (progress.js), where the device keeps them
-    var P = W && W.TOLProgress;
-    if (P && typeof P.saveEntry === 'function' && (typeof P.level !== 'function' || P.level() !== 'shared')) {
+    var P = W && W.TOLProgress, perks = true;
+    try { perks = !P || typeof P.perks !== 'function' || !!P.perks(); } catch (e) { perks = false; }
+    // a phone browser or a shared computer can't keep saved entries: say where they can be kept instead
+    if (P && typeof P.saveEntry === 'function' && !perks) {
+      box.appendChild(mk('p', { cls: 'tcol-small' }, [T('Install the free app to keep a history of your results, saved entries and an app lock. ', 'Instala la app gratuita para guardar el historial de tus resultados, tus entradas y un bloqueo. '), mk('a', { href: '/install.html', text: T('Install the free app', 'Instalar la app gratuita') })]));
+    } else if (P && typeof P.saveEntry === 'function' && (typeof P.level !== 'function' || P.level() !== 'shared')) {
       var sv = mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', text: T('Save this combined view', 'Guardar esta vista combinada') }), sst = mk('span', { cls: 'tcol-small', role: 'status' });
       sv.addEventListener('click', function () {
         var text = combinedText(people, opts);

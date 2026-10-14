@@ -1,0 +1,128 @@
+/* book-hints.css: the character hints in "The Objective Ledger" (tools/book/hints.py, bookpals11), on screen and on
+   paper, plus the "Workpapers, tools and three friends" orientation and the two lists at the back.
+   A hint: a round character badge, the speaker's name, one or two sentences, then one line for a workpaper and/or
+   one line for a tool. Workpapers and tools never share a line, and they look different:
+     a workpaper tag is square, cream and dashed, like a sheet of paper (something you fill in);
+     a tool tag is a round, solid pill (something you use on the site).
+   Both still read clearly in black and white. Dark mode: the site inverts the page and turns pictures back, so
+   only light colours are set here. Flat colour only (no shadows or gradients), so the PDFs stay small. */
+
+.book-hint{
+  --bh-bg:#EEF4FA; --bh-line:#C3D7EA; --bh-acc:#2B5B8C;
+  display:flex; gap:.85rem; align-items:flex-start;
+  margin:1.5rem 0; padding:.85rem 1rem .9rem .85rem;
+  background:var(--bh-bg); border:1px solid var(--bh-line); border-radius:16px;
+  font-family:"Lora", Georgia, serif; color:var(--ink, #2B2620);
+  max-width:44rem; box-sizing:border-box; overflow-wrap:break-word;
+}
+.book-hint[data-who="tidbit"]{ --bh-bg:#FBF4DE; --bh-line:#E7D398; --bh-acc:#7A5620; }
+.book-hint[data-who="sugarfoot"]{ --bh-bg:#F8EEE9; --bh-line:#E7C9BB; --bh-acc:#8E3F2A; }
+.book-hint .bh-badge, .bh-friends .bh-badge{
+  flex:0 0 auto; width:3.1rem; height:3.1rem; border-radius:50%;
+  background:#FFFDF7; border:1.5px solid var(--bh-acc, #A8792F);
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.book-hint .bh-badge svg, .bh-friends .bh-badge svg{ width:94%; height:94%; display:block; }
+.book-hint .bh-body{ flex:1 1 auto; min-width:0; }
+.book-hint p{ margin:0; }
+.book-hint .bh-who{
+  font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.95rem; line-height:1.3;
+  color:var(--bh-acc); margin:.1rem 0 .2rem;
+}
+.book-hint .bh-text{ font-size:1rem; line-height:1.58; }
+.book-hint .bh-ref{ margin-top:.55rem; font-size:.95rem; line-height:1.45; }
+.book-hint .bh-ref + .bh-ref{ margin-top:.35rem; }
+.book-hint .bh-ref a{ font-weight:600; }
+.bh-c{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+.bh-u, .wt-u{ display:none; }
+
+/* the two kinds of tag */
+.book-hint .bh-k, .bh-tag, .wt-name .bh-k{
+  display:inline-block; margin-right:.45rem; padding:.08rem .45rem .1rem;
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; line-height:1.5; vertical-align:.08em; white-space:nowrap;
+}
+.book-hint .bh-wp .bh-k, .bh-tag-wp, .wt-list-wp .bh-k{
+  background:#FFFDF4; color:#6E4E1C; border:1.2px dashed #A8792F; border-radius:2px;
+}
+.book-hint .bh-tool .bh-k, .bh-tag-tool, .wt-list-tool .bh-k{
+  background:#3E6B4C; color:#FFFDF7; border:1.2px solid #3E6B4C; border-radius:999px;
+}
+
+/* the orientation: "Workpapers, tools and three friends" */
+.bh-meet{ margin:1rem 0 1.4rem; }
+.bh-kinds{ display:grid; grid-template-columns:1fr; gap:.8rem; margin:0 0 .9rem; }
+@media (min-width:720px){ .bh-kinds{ grid-template-columns:1fr 1fr; } }
+.bh-kind{ padding:.8rem .95rem; border-radius:12px; }
+.bh-kind p{ margin:0; }
+.bh-kind p + p{ margin-top:.4rem; }
+.bh-kind-wp{ background:#FFFBEF; border:1.4px dashed #C9A35A; border-radius:4px; }
+.bh-kind-tool{ background:#EEF5EF; border:1.4px solid #A9C7B0; border-radius:16px; }
+.bh-kind-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; margin-bottom:.35rem !important; }
+.bh-meet-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; margin:1rem 0 .5rem; }
+.bh-meet-note{ color:var(--ink-soft, #5A5346); font-size:.95rem; margin:.4rem 0; }
+.bh-friends{ list-style:none; margin:0; padding:0; display:grid; gap:.6rem; }
+.bh-friends li{ display:flex; gap:.75rem; align-items:center; margin:0; }
+.bh-friends li:nth-child(1) .bh-badge{ --bh-acc:#2B5B8C; }
+.bh-friends li:nth-child(2) .bh-badge{ --bh-acc:#7A5620; }
+.bh-friends li:nth-child(3) .bh-badge{ --bh-acc:#8E3F2A; }
+
+/* the two lists: "Workpapers mentioned in this book" and "Tools mentioned in this book" */
+.wt-list{ list-style:none; margin:.4rem 0 1.4rem; padding:0; }
+.wt-list li{ margin:0; padding:.55rem 0; border-bottom:1px solid var(--line, #D9CBA3); }
+.wt-list p{ margin:0; }
+.wt-name a{ font-weight:600; }
+.wt-in{ font-size:.92rem; color:var(--ink-soft, #5A5346); margin-top:.15rem !important; }
+.wt-lede{ color:var(--ink-soft, #5A5346); margin:.1rem 0 .3rem; }
+.wt-h-wp, .wt-h-tool{ margin-top:1.4rem; }
+
+/* the part openers (print edition) and the book's home */
+.bk-part .book-hint{ margin:1rem 0 .4rem; }
+
+@media (max-width:480px){
+  .book-hint{ gap:.65rem; padding:.75rem .8rem .8rem .7rem; border-radius:14px; }
+  .book-hint .bh-badge{ width:2.6rem; height:2.6rem; }
+}
+
+/* ---------- on paper ---------- */
+@media print{
+  .book-hint{
+    display:flex; gap:2.6mm; margin:3.2mm 0 4mm; padding:2.2mm 3mm 2.4mm 2.4mm; max-width:none;
+    border:.6pt solid var(--bh-acc); border-radius:2.2mm; background:var(--bh-bg);
+    break-inside:avoid; page-break-inside:avoid;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .book-hint .bh-badge{ width:10.5mm; height:10.5mm; border-width:.6pt; }
+  .book-hint .bh-who{ font-family:"IBM Plex Mono", monospace; font-weight:500; font-size:6.9pt; letter-spacing:.12em; text-transform:uppercase; margin:.4mm 0 .8mm; }
+  .book-hint .bh-text{ font-size:9.3pt; line-height:1.45; }
+  .book-hint .bh-ref{ font-size:8.6pt; line-height:1.4; margin-top:1.4mm; }
+  .book-hint .bh-ref + .bh-ref{ margin-top:.8mm; }
+  .book-hint .bh-ref a{ text-decoration:none; color:inherit; }
+  .book-hint .bh-k, .bh-tag, .wt-name .bh-k{ font-size:6.4pt; padding:.2mm 1.2mm; margin-right:1.4mm; border-width:.6pt; }
+  .bh-u, .wt-u{ display:inline; font-family:"IBM Plex Mono", monospace; font-size:6.8pt; color:#5A5346; margin-left:1mm; }
+  .bh-u::before, .wt-u::before{ content:"· "; }
+  .pe-part .book-hint{ position:absolute; left:0; right:0; bottom:0; margin:0; }
+  .pe-part .book-hint .bh-text{ font-size:8.8pt; }
+  /* the orientation and the lists, in the print edition */
+  .pe-fb-meet .bh-kinds{ grid-template-columns:1fr; gap:3mm; margin-bottom:4mm; }
+  .pe-fb-meet .bh-kind{ padding:2.6mm 3.2mm; border-width:.7pt; break-inside:avoid; }
+  .pe-fb-meet .bh-kind-h{ font-size:10.6pt; }
+  .pe-fb-meet .bh-meet-h{ font-size:11.4pt; margin:5mm 0 2.4mm; }
+  .pe-fb-meet .bh-friends{ gap:2.6mm; }
+  .pe-fb-meet .bh-friends li{ gap:3mm; font-size:9.6pt; line-height:1.45; }
+  .pe-fb-meet .bh-friends .bh-badge{ width:12mm; height:12mm; border-width:.6pt; }
+  .pe-fb-meet .bh-meet-note{ font-size:9.2pt; }
+  .pe-fb-wt .wt-h{ font-family:"Fraunces", serif; font-weight:600; font-size:12pt; margin:5mm 0 1mm; break-after:avoid; }
+  .pe-fb-wt .wt-lede{ font-size:9pt; font-style:italic; margin:0 0 1.6mm; }
+  .pe-fb-wt .wt-list{ margin:0 0 3mm; }
+  .pe-fb-wt .wt-list li{ padding:1.6mm 0; border-bottom:.3pt solid #E2D6B6; break-inside:avoid; }
+  .pe-fb-wt .wt-name{ font-size:9.4pt; line-height:1.4; }
+  .pe-fb-wt .wt-name a{ text-decoration:none; color:inherit; }
+  .pe-fb-wt .wt-in{ font-size:8.4pt; line-height:1.4; }
+  .pe-fb-wt .wt-in a{ text-decoration:none; color:inherit; }
+  /* "Find it fast": each thing to try says whether it is a workpaper or a tool */
+  .pe-ff-k{ display:block; width:max-content; margin:0 0 .6mm; padding:.1mm 1.1mm; font-family:"IBM Plex Mono", monospace; font-weight:500;
+    font-size:5.6pt; letter-spacing:.08em; text-transform:uppercase; line-height:1.5; }
+  .pe-ff-k-wp{ background:#FFFDF4; color:#6E4E1C; border:.6pt dashed #A8792F; border-radius:.4mm; }
+  .pe-ff-k-tool{ background:#3E6B4C; color:#FFFDF7; border:.6pt solid #3E6B4C; border-radius:2mm; }
+}

@@ -36,6 +36,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import book_art  # noqa: E402
 import front_back  # noqa: E402  (bookfixB1: help-now page, Find it fast, If someone handed you this book, the appendices)
+import hints  # noqa: E402  (bookpals11: the character hints, "Workpapers, tools and three friends", the two lists at the back)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 BOOK = os.path.join(ROOT, 'book')
@@ -305,7 +306,8 @@ INDEX_TERMS = [
     # tools and the book's own words
     ('Calm-Down Kit', r'Calm-Down Kit', 1), ('daily check-in (90 seconds)', r'90-second'), ('How much are you carrying?', r'How much are you carrying', 1),
     ('Lemonade Stand', r'Lemonade Stand', 1), ('monthly look-back', r'look-backs?'), ('One owner per job', r'One owner per job', 1),
-    ('Professor Puddles', r'Puddles', 1), ('Say it so it lands', r'Say it so it lands', 1), ('See it from their side', r'See it from their side', 1),
+    # (no "Professor Puddles" entry: he signs a hint on most pages now, so the list of pages would say nothing)
+    ('Say it so it lands', r'Say it so it lands', 1), ('See it from their side', r'See it from their side', 1),
     ('self path', r'self path', 1), ('six-week program', r'six-week program'), ('Today’s Weather', r'Today’s Weather', 1),
     ('Wavelength, Wave Code', r'Wavelength|Wave Code', 1), ('What keeps coming back?', r'What keeps coming back', 1),
     ('Who did what', r'Who did what', 1), ('Wiring Card', r'Wiring Card', 1), ('rulebook from home', r'rulebook'),
@@ -686,6 +688,7 @@ def insert_generated(s, slug, deep):
     # Take out the old blocks with all the line breaks around them, leaving one blank line, so a rebuild
     # doesn't add a blank line at each spot every time it runs.
     s = re.sub(r'\n*<!-- book-(fig|ex):start -->.*?<!-- book-\1:end -->\n*', '\n\n', s, flags=re.S)
+    s = hints.strip(s)
     ver = 'full' if deep else 'short'
     for f in FIGS:
         if f['chapter'] != slug or ver not in (f.get('versions') or ['short', 'full']):
@@ -712,6 +715,8 @@ def insert_generated(s, slug, deep):
             continue
         if not ok:
             MISSING.append('example %s: %s not found in %s%s' % (x['id'], aid, slug, '-in-depth' if deep else ''))
+    # the character hints (tools/book/hints.json), placed last so they sit after a figure or example at the same spot
+    s = hints.insert(s, slug, deep, place, place_idea, place_heading, MISSING.append)
     return s
 
 
@@ -850,7 +855,7 @@ def clean_for_whole(inner, slug, deep, here=None):
     s = drop_element(s, r'<div class="tol-book-audio')
     s = drop_element(s, r'<div class="bt-switch')
     s = drop_element(s, r'<aside class="book-end')
-    s = re.sub(r'<!-- book-(end|fig|ex):(start|end) -->', '', s)
+    s = re.sub(r'<!-- book-(end|fig|ex|hint):(start|end) -->', '', s)
     s = drop_element(s, r'<nav class="p3-nav')
     s = re.sub(r'<p class="depth-bar">.*?</p>', '', s, flags=re.S)
     s = re.sub(r'<div data-research-box></div>', '', s)
@@ -957,10 +962,12 @@ def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
 <div><p class="pe-how-h">Two sizes of every chapter</p><p>Every chapter comes in a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try. This is %s. The %s version is free at spreadloveandacceptance.com/book.</p></div>
 <div><p class="pe-how-h">Read in order, or by need</p><p>Read it front to back like any book, or start with the chapter that fits what is going on. Each chapter ends with <em>What to remember</em>, <em>This connects to</em> (the chapters that explain it or put it to use, with page numbers) and <em>Put it to use</em>, with codes you can scan for the matching tool.</p></div>
 <div><p class="pe-how-h">In every chapter</p><ul class="pe-how-keys"><li><span class="pe-key pe-key-scene"></span><span>A short scene: a made-up moment from everyday life.</span></li><li><span class="pe-key pe-key-words"></span><span><strong>Words you could use</strong>: sentences to say out loud.</span></li><li><span class="pe-key pe-key-try"></span><span><strong>Try this</strong>: one small thing to do this week.</span></li><li><span class="pe-key pe-key-mix"></span><span><strong>Common mix-ups</strong>: easy mistakes, and what is closer to true.</span></li></ul></div>
-<div><p class="pe-how-h">The site, the program and Professor Puddles</p><p>The book has a free website with the tools and worksheets the chapters mention. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
+<div><p class="pe-how-h">The site, the program and Professor Puddles</p><p>The book has a free website with the workpapers (pages you fill in) and tools (helpers you use) that the chapters mention; the next page explains both. Nothing you type there leaves your device, and there is no account. The <strong>six-week program</strong> (spreadloveandacceptance.com/prog-01) puts Part Two to work a week at a time, and the <strong>self path</strong> does the same for Part One. <strong>Professor Puddles</strong>, the site’s friendly guide, answers questions about the book’s ideas.</p></div>
 <div><p class="pe-how-h">Go gently</p><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
                        n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
+    # bookpals11: the two kinds of help (workpapers and tools) and the three characters who give hints
+    s += '\n' + hints.front_section(mark)
     s += '\n' + fbk.get('find-it-fast', '') + '\n' + fbk.get('handed', '')
     front = [f for f in FIGS if f['chapter'] == 'front']
     if front:
@@ -984,9 +991,14 @@ def part_opener(part, deep, here):
 <section class="pe-part no-bubble no-cheer no-dive" data-no-bubble id="part-%d" data-part="%d" style="--pc:%s;--pt:%s">%s%s
 <div class="pe-part-in"><p class="pe-part-k">%s</p><h1 class="pe-part-h">%s</h1><p class="pe-part-b">%s</p>
 <div class="pe-part-art">%s</div>
-<p class="pe-part-l">In this part</p><ol class="pe-part-list">%s</ol></div></section>''' % (
+<p class="pe-part-l">In this part</p><ol class="pe-part-list">%s</ol>%s</div></section>''' % (
         part, part, part, col, tint, mark('part-%d' % part), book_art.ledger_rules(170, 240, '#E9DFC4', col, top=20, step=7.5, left=24),
-        name, sub, esc(blurb), book_art.part_mark(part), rows)
+        name, sub, esc(blurb), book_art.part_mark(part), rows, part_hint(part))
+
+
+def part_hint(part):
+    """bookpals11: one character hint on each part opener (and on the book's home, under the part)."""
+    return ''.join(hints.hint_html(h, markers=False) for h in hints.hints_for('part-%d' % part))
 
 
 def chapter_open(e, deep):
@@ -1379,7 +1391,7 @@ def page_rules(here, deep):
         nm = 'pc-' + e[0]
         r.append('#%s{page:%s}' % (e[0], nm))
         r.append(rules(nm, SHORT[e[0]], 'The Objective Ledger · ' + chapter_name(e), e[1]))
-    for sec, label in (('numbers', 'How the numbers work'), ('worksheets', 'Blank worksheets'), ('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
+    for sec, label in (('wp-tools', 'Workpapers and tools'), ('numbers', 'How the numbers work'), ('worksheets', 'Blank worksheets'), ('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
                        ('notes', 'Research notes'), ('index', 'Index')):
         nm = 'pb-' + sec
         r.append('#%s{page:%s}' % (sec, nm))
@@ -1396,10 +1408,16 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     parts_html, toc, ptoc = [], [], []
     fb = front_back.Ctx(name, deep, parts, here, PAGES, pg, mark, lambda s_: chapter_name(entry(s_)), SHORT, SITE, XREFS.add)
     fb_front, fb_back = front_back.front_sections(fb), front_back.back_sections(fb)
+    # bookpals11: "Workpapers and tools in this book", two separate lists, first in the back matter
+    order_here = [e[0] for e in ORDER if e[0] in here]
+    found = hints.mentions(dict((s_, PAGES[(s_, deep)]) for s_ in order_here), order_here)
+    wt_ref = lambda s_: '<a href="#%s">%s</a><span class="pe-only"> (page %s)</span>' % (s_, esc(SHORT[s_]), pg(s_))
+    fb_back = [{'key': 'wp-tools', 'toc': 'Workpapers and tools in this book', 'html': hints.back_section(mark, found, wt_ref, PCOL[4][0])}] + list(fb_back)
     fbt = dict((x['key'], x['toc']) for x in fb_front)
     if 'help-now' in fbt:
         ptoc.append(toc_row('help-now', '', fbt['help-now'], 'is-front'))
     ptoc.append(toc_row('how', '', 'How to use this book', 'is-front'))
+    ptoc.append(toc_row('meet', '', 'Workpapers, tools and three friends', 'is-front'))
     for k in ('find-it-fast', 'handed'):
         if k in fbt:
             ptoc.append(toc_row(k, '', fbt[k], 'is-front'))
@@ -1443,6 +1461,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     # the PDF's bookmarks: [title, page key, level]
     ol = [[fbt['help-now'], 'help-now', 0]] if 'help-now' in fbt else []
     ol.append(['How to use this book', 'how', 0])
+    ol.append(['Workpapers, tools and three friends', 'meet', 0])
     ol += [[fbt[k], k, 0] for k in ('find-it-fast', 'handed') if k in fbt]
     if any(f['chapter'] == 'front' for f in FIGS):
         ol.append(['The book in two pictures', 'glance', 0])
@@ -1476,6 +1495,8 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     if EXS:
         head = head.replace('</head>', EX_CSS + '\n</head>')
     head = head.replace('</head>', front_back.STYLE + '\n</head>')
+    # the hints' styles (screen and print), after the print edition's own stylesheet
+    head = head.replace(hints.CSS + '\n', '').replace(hints.CSS, '').replace('</head>', hints.CSS + '\n</head>')
     page = head
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-pudcards data-no-dives data-no-reading data-no-line-share class="whole-book pe-book" data-pe="%s">
 <main class="read whole" id="main">
@@ -1568,7 +1589,7 @@ def build_home():
         rows.append('<section class="bk-part" id="part-%d" data-part="%d"><h2><span>%s</span> %s</h2><p class="bk-part-note">%s</p><ol class="bk-list">' % (part, part, name, sub, blurb))
         for e in [x for x in ORDER if x[1] == part]:
             rows.append(home_row(e))
-        rows.append('</ol></section>')
+        rows.append('</ol>%s</section>' % part_hint(part))
     e = entry('afterword')
     rows.append('<section class="bk-part" id="afterword" data-part="4"><h2><span>To finish</span> Afterword</h2><ol class="bk-list">%s</ol></section>' % home_row(e))
     page = HEAD_TMPL.replace('{TITLE}', 'The Book: The Objective Ledger').replace('{DESC}', 'The book.')
@@ -1588,13 +1609,19 @@ def build_home():
 <li><strong>Read it in order, like any book.</strong> %d chapters in three parts, and an afterword. Every chapter ends with what to remember, the chapters it connects to, and the next one.</li>
 <li><strong>Two sizes of every chapter.</strong> The short version takes about 10 to 15 minutes. The full version adds the research, more examples and more to try.</li>
 <li><strong>Free, with nothing to sign up for.</strong> No account and no paid version. Read on a phone, a computer or on paper.</li>
-<li><strong>Or use it with the program.</strong> Each chapter ends with the steps and worksheets that go with it, if you want to put it to work.</li>
+<li><strong>Or use it with the program.</strong> Each chapter ends with the steps and workpapers that go with it, if you want to put it to work.</li>
 </ul>
+<section class="bk-meet no-bubble" data-no-bubble aria-labelledby="meet-h"><h2 id="meet-h">Workpapers, tools and three friends</h2>
+%s
+<p class="no-bubble">Every workpaper and tool the book mentions is listed <a href="#wp-tools">at the end of this page</a>.</p></section>
 <nav class="bk-toc no-bubble" data-no-bubble aria-label="Contents">
 <h2 class="bk-toc-h" id="contents">Contents</h2>
 %s
 %s
 </nav>
+<section class="bk-wt no-bubble" data-no-bubble id="wp-tools"><h2>Workpapers and tools in this book</h2>
+<p>Two separate lists, with the chapters that mention each one. All free, with no account, and what you type stays on your device.</p>
+%s</section>
 <h2 id="other-ways">Other ways in</h2>
 <ul>
 <li><a href="/book/topic-start-here.html">The book at a glance</a>: the whole book in short paragraphs, for one person or for people together.</li>
@@ -1606,9 +1633,21 @@ def build_home():
 </main>
 </body>
 </html>
-''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)),
-       ''.join(fig_html(f, False).replace(' id="fig-front-parts"', ' id="how-the-parts-fit"') for f in FIGS if f['id'] == 'fig-front-parts'), '\n'.join(rows), UPDATED)
-    write(os.path.join(BOOK, 'index.html'), page)
+''' % (AUTHOR, book_art.illustration('whole'), sum(1 for e in ORDER if e[1] in (1, 2, 3)), hints.meet_html(False),
+       ''.join(fig_html(f, False).replace(' id="fig-front-parts"', ' id="how-the-parts-fit"') for f in FIGS if f['id'] == 'fig-front-parts'), '\n'.join(rows),
+       home_lists(), UPDATED)
+    write(os.path.join(BOOK, 'index.html'), hints.with_css(page))
+
+
+def home_lists():
+    """bookpals11: the book's workpapers and tools, in two lists, with the chapters (short versions) that mention them."""
+    slugs = [e[0] for e in ORDER]
+    found = {}
+    for deep in (False, True):
+        for k, v in hints.mentions(dict((s_, PAGES[(s_, deep)]) for s_ in slugs), slugs).items():
+            found.setdefault(k, [])
+            found[k] = [s_ for s_ in slugs if s_ in found[k] or s_ in v]
+    return hints.lists_html(found, lambda s_: '<a href="%s">%s</a>' % (href(s_), esc(SHORT[s_])), 'h3')
 
 
 def home_row(e):
@@ -1638,6 +1677,16 @@ def patch_glance():
     out.append('<!-- book-order:end -->')
     s = re.sub(r'<!-- book-order:start -->.*?<!-- book-order:end -->', lambda m: '\n'.join(out), s, flags=re.S)
     write(p, s)
+
+
+def patch_topics():
+    """bookpals11: the character hints on the book's topic pages (book/topic-*.html)."""
+    for p in sorted(glob.glob(os.path.join(BOOK, 'topic-*.html'))):
+        slug = os.path.basename(p)[:-5]
+        s = read(p)
+        t = hints.insert(s, slug, None, place, place_idea, place_heading, MISSING.append)
+        if t != s:
+            write(p, t)
 
 
 def head_template():
@@ -1671,6 +1720,8 @@ if __name__ == '__main__':
     build_download()
     build_home()
     patch_glance()
+    patch_topics()
+    hints.check_links(MISSING.append)
     for m in MISSING:
         print('book: WARNING', m)
     print('book: %d chapters, %d figures, %d filled-in examples, home, packages (short %d words, full %d words)' % (

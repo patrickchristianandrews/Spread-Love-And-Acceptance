@@ -217,17 +217,34 @@ def find_it_fast(ctx):
             pages = ''.join('<span class="pe-ff-n">%s</span>' % (c[1] if c[2] else '<span class="pe-ff-on">online</span>') for c in cells)
             tool = r.get('tool')
             tool_html = '<a href="%s%s">%s</a>' % (ctx.site, esc(tool[1]), esc(tool[0])) if tool else '<span class="pe-ff-none">The page itself</span>'
+            if tool:
+                # bookpals11: say which kind it is, so workpapers and tools are never mixed up in this column
+                tool_html = _kind_label(tool[1]) + tool_html
             rows.append('<tr><th scope="row">%s</th><td class="pe-ff-where">%s</td><td class="pe-ff-pg">%s</td><td class="pe-ff-tool">%s</td></tr>' % (
                 esc(r['problem']), where, pages, tool_html))
         if rows:
             out.append('<h2 class="pe-ff-h">%s</h2><table class="pe-ff"><thead><tr><th scope="col">If this is going on</th><th scope="col">Read</th><th scope="col">Page</th><th scope="col">Try</th></tr></thead><tbody>%s</tbody></table>' % (
                 esc(g['title']), ''.join(rows)))
-    tail = ['The tools are free on the website, with nothing to sign up for; each chapter’s end has a code you can scan for its tools.']
+    tail = ['Each thing to try is marked as a workpaper (a page you fill in) or a tool (a helper you use on the site). All are free on the website, with nothing to sign up for; each chapter’s end has a code you can scan for them.']
     if skipped:
         tail.insert(0, 'This copy holds only part of the book, so this map lists the problems it covers. The whole book’s map has %d more, and every chapter is free to read at spreadloveandacceptance.com/book.' % skipped)
     tail.append('Looking for a word rather than a problem? The index at the back lists the main ideas.')
     out.append('<p class="pe-fb-small">%s</p>' % ' '.join(tail))
     return ''.join(out)
+
+
+def _kind_label(href):
+    """A small "Workpaper WP-03" or "Tool" label for a thing to try (the kinds as in tools/book/hints.json)."""
+    try:
+        import hints
+    except Exception:
+        return ''
+    k = hints._match(href)
+    if not k:
+        return ''
+    if k[0] == 'wp':
+        return '<span class="pe-ff-k pe-ff-k-wp">%s</span>' % esc(hints.wp_label(hints.WP[k[1]]))
+    return '<span class="pe-ff-k pe-ff-k-tool">Tool</span>'
 
 
 # ---------- sections ----------

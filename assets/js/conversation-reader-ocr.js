@@ -524,14 +524,14 @@
     }
     var box = doc.createElement('div');
     box.className = 'cr-shots';
-    box.innerHTML = '<p class="cr-shots-h"><strong>Or use a screenshot.</strong> Pick one or more screenshots of the chat, in order (iMessage, WhatsApp, Messenger, Android Messages, Instagram, texts). You can also paste or drop them here.</p>' +
+    box.innerHTML = '<p class="cr-shots-h no-bubble"><strong>Or use a screenshot.</strong> Pick one or more screenshots of the chat, in order (iMessage, WhatsApp, Messenger, Android Messages, Instagram, texts). You can also paste or drop them here.</p>' +
       '<fieldset class="cr-side" id="cr-side"><legend>Which side are your messages on?</legend><div class="cr-side-opts">' +
       opt('right', 'Mine are on the right', 'Usual on iMessage, WhatsApp and Messenger') + opt('left', 'Mine are on the left', 'The other way round') + '</div></fieldset>' +
-      '<p class="cr-side-line" id="cr-side-line" hidden>Your messages: <b id="cr-side-now"></b> <span aria-hidden="true">·</span> <button type="button" class="linkbtn" id="cr-side-change">change</button></p>' +
+      '<p class="cr-side-line no-bubble" id="cr-side-line" hidden>Your messages: <b id="cr-side-now"></b> <span aria-hidden="true">·</span> <button type="button" class="linkbtn" id="cr-side-change">change</button></p>' +
       '<div class="cr-actions"><label class="cr-btn" for="cr-shot" tabindex="0" role="button" id="cr-shot-pick">Choose screenshots</label>' +
       '<button type="button" class="cr-btn" id="cr-shot-read" hidden>Read the screenshot</button>' +
       '<input type="file" id="cr-shot" accept="image/*" multiple style="position:absolute;left:-9999px;width:1px;height:1px"></div>' +
-      '<p class="cr-hint cr-shots-private">Your screenshot is read on this device and never uploaded.</p>' +
+      '<p class="cr-hint cr-shots-private no-bubble">Your screenshot is read on this device and never uploaded.</p>' +
       '<p class="cr-hint" id="cr-shot-status" role="status" aria-live="polite"></p>';
     actions.parentNode.insertBefore(box, actions.nextSibling);
     var review = doc.createElement('div'); review.id = 'cr-review';
