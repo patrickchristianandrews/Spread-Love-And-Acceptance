@@ -1304,8 +1304,10 @@
     if (!/^es\b/i.test(String(langs[0] || '')) || current === '/en-espanol.html' || /^\/(404|offline|pal-cam-tv|garden-backdrop)\.html$/.test(current)) return;
     if (document.body.classList.contains('is-game') || lsGet('tol-es-hint') === 'no') return;
     try { if (sessionStorage.getItem('tol-es-hint-seen') === '1') return; sessionStorage.setItem('tol-es-hint-seen', '1'); } catch (e) {}
+    var esHref = document.body.getAttribute('data-es-href') || '/en-espanol.html';
+    if (!/^\/[^\/]/.test(esHref)) esHref = '/en-espanol.html';
     var line = el('p', { class: 'tol-es-hint tol-plain no-bubble', lang: 'es', role: 'note' },
-      '<span>¿Prefieres español?</span> <a href="/en-espanol.html" hreflang="es">Ver la página en español →</a>' +
+      '<span>¿Prefieres español?</span> <a href="' + esc(esHref).replace(/"/g, '&quot;') + '" hreflang="es">Ver la página en español →</a>' +
       '<button type="button" aria-label="Cerrar: no volver a mostrar">Cerrar</button>');
     line.querySelector('button').addEventListener('click', function () { lsSet('tol-es-hint', 'no'); line.remove(); });
     line.querySelector('a').addEventListener('click', function () { lsSet('tol-es-hint', 'no'); });
@@ -2131,7 +2133,7 @@
     // a couple who feel like housemates (never grief first)
     [/^(?!.*\b(friend|friends|friendship|mate|bestie)\b).*\b(not close|no longer close|not as close|drift\w* apart|grown apart|growing apart|like (room|house|flat)mates|(room|house|flat)mates? (marriage|relationship)|(marriage|relationship) (like )?(room|house|flat)mates?|married (a |for a |for )?(long time|years|decades|\d+ years)|long marriage|(married|together) too long)\b/, 'r13apart'],
     // long working hours
-    [/\b(\d{2,3}|long|longer|crazy|silly|late|insane|huge) ?(hour|hours|hrs|hr)( a week| weeks| days)?\b|\b(works?|working) (all the time|every hour|late every|nights and weekends)\b|\b(always working|never home|workaholic|works too much)\b/, 'r13longhours'],
+    [/\b(\d{2,3}|long|longer|crazy|silly|late|insane|huge) ?(hour|hours|hrs|hr)( a week| weeks| days)?\b|\b(works?|working) (all the time|every hour|late every|nights and weekends)\b|\b(always working|never home|workaholic|works too much)\b|\blong (work(ing)? )?days\b/, 'r13longhours'],
     // calm without medicine
     [/\b(natural|herbal|herbs?|supplements?|vitamins?|magnesium|ashwagandha|chamomile|cbd|lavender|valerian)\b.*\b(anxi\w*|calm\w*|stress\w*|sleep|nerves|panic)\b|\b(anxi\w*|calm\w*|stress\w*|sleep|nerves|panic)\b.*\b(natural\w*|herbal|herbs?|supplements?|vitamins?)\b/, 'r13herbs'],
     // feelings, for people who were never taught the words
@@ -2170,7 +2172,7 @@
     r13homesleep: ['/coming-home.html#sleep', '/coming-home.html#support', '/coming-home.html'],
     nightmare: 'r13homesleep', nightmares: 'r13homesleep', hypervigilant: 'r13homesleep',
     r13apart: ['/empty-nest.html', '/complacency.html', '/turning-toward.html', '/bonding.html'],
-    r13longhours: ['/different-hours.html', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
+    r13longhours: ['/different-hours.html#long-days', '/different-hours.html', '/lemonade-stand.html', '/invisible-labor-mental-load.html', '/turning-toward.html'],
     anxiety: ['#breathe', '/calming-supplements.html', '/ladder.html', '/upset-right-now.html', '/wp-11.html', '/night-garden.html'], anxious: 'anxiety', panic: 'anxiety',
     r13herbs: ['/calming-supplements.html', '#breathe', '/ladder.html'], supplements: 'r13herbs', supplement: 'r13herbs', herbs: 'r13herbs', herbal: 'r13herbs', ashwagandha: 'r13herbs', magnesium: 'r13herbs', chamomile: 'r13herbs', valerian: 'r13herbs', cbd: 'r13herbs',
     r13feelings: ['/book/understanding-1-feelings.html#not-brought-up', '/book/understanding-1-feelings.html', '/communication.html', '/know-yourself.html'],
@@ -3217,9 +3219,10 @@
     var h1 = main.querySelector('h1'), title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title.split('·')[0].trim();
     function opts(topic) {
       return { name: PUDDLES.name, svg: PUDDLES.svg, color: PUDDLES.color, topic: topic || '',
-        greeting: 'Hello! I’m Professor Puddles. Curious about something on “' + title.slice(0, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
+        greeting: esPage() ? '¡Hola! Soy el Profesor Puddles. Escríbeme en español y te respondo con lo esencial de este sitio. Lo que escribes se queda en tu dispositivo.' :
+          'Hello! I’m Professor Puddles. Curious about something on “' + title.slice(0, 80) + '”? Ask me in your own words, or tap a word with a water drop 💧 and choose “Chat it out”. I answer from this site’s pages, and what you type stays on this device.' };
     }
-    var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': T('Ask Professor Puddles about this page', 'Pregúntale al Profesor Puddles (responde sobre todo en inglés)'), title: T('Ask Professor Puddles', '¿Hablamos? (sobre todo en inglés)') },
+    var fab = el('button', { type: 'button', class: 'tol-pud-fab is-wait', 'aria-label': T('Ask Professor Puddles about this page', 'Pregúntale al Profesor Puddles (escríbele en español)'), title: T('Ask Professor Puddles', 'Pregúntale al Profesor Puddles (escríbele en español)') },
       '<span class="tol-pud-fab-art" aria-hidden="true">' + PUDDLES_SVG + '</span><span class="tol-pud-fab-t">' + T('Ask Professor Puddles', '¿Hablamos?') + '</span>');
     fab.addEventListener('click', function () { openPud(opts('')); });
     if (!game) { body.appendChild(fab); body.classList.add('has-pud-fab'); }
@@ -3237,7 +3240,7 @@
     if (!main.querySelector('.tol-pud-end')) {
       var endBox = el('aside', { class: 'tol-pud-card tol-pud-end no-bubble', 'aria-label': 'Ask Professor Puddles' },
         '<span class="tol-pud-card-art" aria-hidden="true">' + PUDDLES_SVG + '</span>' +
-        (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Por ahora responde sobre todo en inglés, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +
+        (esPage() ? '<p><strong>¿Quieres saber más?</strong> Pregúntale al Profesor Puddles. Escríbele en español: te responde en español con lo esencial, con palabras sencillas y desde las páginas de este sitio. Lo que escribes no sale de tu dispositivo.</p>' +
         '<button type="button" class="tol-pud-card-go">💧 Pregúntale al Profesor Puddles</button>' :
         '<p><strong>Want to know more?</strong> Ask Professor Puddles! He answers in plain words from this site’s own pages, and he can now find you good articles on any topic, too. Nothing you type leaves your device.</p>' +
         '<button type="button" class="tol-pud-card-go">💧 ' + (title && current !== '/index.html' ? 'Ask him about “' + esc(title.replace(/[?.!:]+$/, '').slice(0, 60)) + '”' : 'Ask Professor Puddles') + '</button>'));
