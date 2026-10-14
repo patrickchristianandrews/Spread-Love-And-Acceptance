@@ -44,7 +44,7 @@ UPDATED = 'October 2026'
 AUTHOR = 'Christian'
 
 PARTS = {
-    1: ('Part One', 'Yourself', 'Where you came from, who you are now and who you are becoming. You can read all of it on your own.'),
+    1: ('Part One', 'Self-discovery', 'Where you came from, who you are now and who you are becoming. You can read all of it on your own.'),
     2: ('Part Two', 'Between us', 'One idea per chapter about sharing a life, a home or work with someone, each with a worksheet that puts it to use.'),
     3: ('Part Three', 'Understanding people', 'How feelings, stress, trust, change, grief, groups and love work, for anyone, in any kind of relationship.'),
 }
@@ -878,7 +878,7 @@ def clean_for_whole(inner, slug, deep, here=None):
 
 PACKAGES = [
     ('whole', (1, 2, 3), 'The Whole Book', 'Every chapter, all three parts.'),
-    ('for-yourself', (1, 3), 'The Book for One Person', 'Part One (yourself) and Part Three (understanding people): everything you can read and use on your own.'),
+    ('for-yourself', (1, 3), 'The Book for One Person', 'Part One (self-discovery) and Part Three (understanding people): everything you can read and use on your own.'),
     ('together', (2,), 'The Book for Two or More', 'Part Two (between us): sharing a home, work or care with partners, family, housemates, co-parents or coworkers.'),
     ('understanding', (3,), 'Understanding People', 'Part Three on its own: how feelings, stress, trust, change, grief and love work.'),
 ]

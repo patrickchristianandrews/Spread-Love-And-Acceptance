@@ -1498,7 +1498,7 @@
   }
 
   function start() {
-    try { everywhere(); } catch (e) { reveal(); }
+    try { everywhere(); } catch (e) { console.log('EVERYWHERE', e && e.stack); reveal(); } console.log('START', PAGE, path);
     if (PAGE) section();
   }
   if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start); else start();
