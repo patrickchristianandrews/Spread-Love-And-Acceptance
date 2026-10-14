@@ -257,7 +257,9 @@
     box.textContent = '';
     var me = C.me(), got = items(env, me.id), mineNow = {};
     available(STORE).forEach(function (a) { mineNow[a.id] = a.data; });
-    var from = env.f && env.p[env.f] ? env.p[env.f].n : '', ids = Object.keys(got.byItem);
+    // only results someone else sent (your own part comes back with a reply, and is already yours)
+    var from = env.f && env.p[env.f] && env.f !== me.id ? env.p[env.f].n : '', ids = Object.keys(got.byItem).filter(function (id) { return got.byItem[id].some(function (x) { return !x.me; }); });
+    if (!from) { var o0 = Object.keys(env.p).filter(function (k) { return k !== me.id; }).sort(function (a, b) { return (env.p[b].at || 0) - (env.p[a].at || 0); })[0]; if (o0) from = env.p[o0].n; }
     var senders = Object.keys(env.p).filter(function (k) { return k !== me.id; }).map(function (k) { return env.p[k].n || T('Someone', 'Alguien'); });
     box.appendChild(mk('h2', { id: 'tres-in-h', tabindex: '-1', text: senders.length > 1 ? T(senders.join(', ') + ' sent you some results', senders.join(', ') + ' te enviaron algunos resultados') : T((from || T('Someone', 'Alguien')) + ' sent you some results', (from || 'Alguien') + ' te envió algunos resultados') }));
     box.appendChild(mk('p', { text: ids.length ? T('Here’s what came in: ', 'Esto es lo que llegó: ') + ids.map(title).join(', ') + '. ' + T('For each one, put yours next to it, or just look.', 'Para cada uno, pon el tuyo al lado o solo míralo.') : T('Nothing in this link that this page can show.', 'Nada en este enlace que esta página pueda mostrar.') }));
