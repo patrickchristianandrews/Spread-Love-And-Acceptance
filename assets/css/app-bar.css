@@ -1,0 +1,79 @@
+/* app-bar.css — the slim "Get the free app" line at the very top of every page, and the iPhone/iPad
+   "Add to Home Screen" guide it opens (both built by app-bar.js). The line is always exactly 36px tall:
+   site.js keeps that space from the first paint, so nothing on the page jumps when it fills in. */
+
+.tol-appbar{
+  position:relative; z-index:901; display:flex; align-items:center; justify-content:center; gap:.5rem;
+  height:36px; min-height:36px; box-sizing:border-box; margin:0; padding:0 40px 0 10px; overflow:hidden;
+  background:linear-gradient(90deg,#FCE8EE,#F1EAFD 55%,#E6F3F5); border-bottom:1px solid #E4D2EE;
+  color:#3B2A55; font:600 14px/1.2 "Lora", Georgia, serif; text-align:center;
+}
+.tol-appbar *{ box-sizing:border-box; }
+.tol-appbar[hidden]{ display:none !important; }
+.tol-appbar-in{ display:flex; align-items:center; gap:.5rem; min-width:0; max-width:100%; }
+.tol-appbar-ic{ flex:none; width:24px; height:24px; border-radius:6px; box-shadow:0 1px 2px rgba(60,40,90,.25); }
+.tol-appbar-go{
+  display:inline-flex; align-items:center; min-width:0; height:28px; padding:0 .8rem; border-radius:999px;
+  border:1px solid #C9A4DC; background:#fff; color:#4A2370 !important; text-decoration:none !important;
+  font:700 14px/1 "Lora", Georgia, serif; white-space:nowrap; cursor:pointer;
+}
+.tol-appbar-go > span{ min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.tol-appbar-go:hover{ background:#F6EEFC; }
+.tol-appbar-note{ min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-weight:500; font-size:13px; color:#5A4A6E; }
+.tol-appbar-x{
+  position:absolute; top:0; right:0; width:36px; height:36px; padding:0; border:0; border-radius:0;
+  background:none; color:#5A4A6E; font:400 22px/1 Georgia, serif; cursor:pointer;
+}
+.tol-appbar-x:hover{ background:rgba(60,40,90,.08); }
+.tol-appbar-go:focus-visible, .tol-appbar-x:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:-3px; }
+/* small phones: the short words only */
+@media (max-width:700px){ .tol-appbar-note{ display:none; } }
+@media (max-width:400px){ .tol-appbar-more{ display:none; } .tol-appbar{ padding-left:6px; } }
+/* Quiet mode and work mode: plain, flat, still */
+html.tol-quiet .tol-appbar, html.tol-work .tol-appbar{ background:#FFFDF7; border-bottom-color:var(--line, #D9CBA3); }
+html.tol-quiet .tol-appbar-go, html.tol-work .tol-appbar-go{ border-color:var(--line, #D9CBA3); color:var(--ink, #2B2620) !important; }
+html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
+/* never inside the installed app, and never on paper */
+@media (display-mode: standalone){ .tol-appbar{ display:none !important; } }
+@media print{ .tol-appbar, .tol-iosg{ display:none !important; } }
+
+/* ---------- The iPhone / iPad guide ---------- */
+.tol-iosg{ position:fixed; inset:0; z-index:2147483000; display:flex; align-items:center; justify-content:center; padding:12px; box-sizing:border-box; background:rgba(40,28,58,.55); }
+.tol-iosg *{ box-sizing:border-box; }
+.tol-iosg-card{
+  position:relative; width:100%; max-width:460px; max-height:calc(100% - 8px); overflow-y:auto; overscroll-behavior:contain;
+  padding:1.1rem 1.1rem 1rem; border-radius:24px; background:#FFFDF7; color:#2B2620; box-shadow:0 20px 60px -20px rgba(0,0,0,.5);
+  font:400 17px/1.45 "Lora", Georgia, serif; text-align:left;
+}
+.tol-iosg-card:focus{ outline:none; }
+.tol-iosg h2{ margin:0 2.4rem .3rem 0 !important; padding:0 !important; font:700 1.3rem/1.2 "Fraunces", Georgia, serif !important; color:#3B2A55 !important; background:none !important; border:0 !important; }
+.tol-iosg-sub{ margin:0 0 .8rem !important; font-size:.95rem; color:#5A5346; }
+.tol-iosg ol{ list-style:none !important; margin:0 0 .8rem !important; padding:0 !important; display:grid; gap:.7rem; counter-reset:g; }
+.tol-iosg li{ counter-increment:g; display:grid; grid-template-columns:2.1rem 1fr; gap:.2rem .6rem; align-items:start; margin:0 !important; padding:.7rem .75rem !important; border-radius:18px; border:1px solid #E4D9C0; background:#fff; max-width:none !important; }
+.tol-iosg li::before{ content:counter(g); display:grid; place-items:center; width:2rem; height:2rem; border-radius:50%; background:#5B3F8A; color:#fff; font:700 1rem/1 "Lora", Georgia, serif; }
+.tol-iosg li p{ margin:0 !important; padding:0 !important; background:none !important; border:0 !important; max-width:none !important; }
+.tol-iosg li .tol-iosg-pic{ grid-column:1 / -1; display:block; margin:.45rem auto 0; width:100%; max-width:300px; height:auto; }
+.tol-iosg-tip{ margin:0 0 .9rem !important; padding:.6rem .8rem !important; border-radius:14px; background:#F3EEFD; font-size:.92rem; color:#3F3270; }
+.tol-iosg-row{ display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; }
+.tol-iosg-done{ min-height:52px; padding:.6rem 2rem; border-radius:999px; border:0; background:#5B3F8A; color:#fff; font:700 1.1rem/1 "Lora", Georgia, serif; cursor:pointer; }
+.tol-iosg-more{ font-size:.95rem; }
+.tol-iosg-x{ position:absolute; top:.5rem; right:.5rem; width:44px; height:44px; border:0; border-radius:50%; background:none; color:#5A4A6E; font:400 26px/1 Georgia, serif; cursor:pointer; }
+.tol-iosg-done:focus-visible, .tol-iosg-x:focus-visible, .tol-iosg a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+/* the arrow that points at where the button is on this browser */
+.tol-iosg-point{ position:fixed; z-index:2147483001; width:56px; height:56px; pointer-events:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
+.tol-iosg-point svg{ width:100%; height:100%; }
+.tol-iosg-point.is-bottom{ left:50%; bottom:4px; margin-left:-28px; }
+.tol-iosg-point.is-bottom-right{ right:10px; bottom:4px; }
+.tol-iosg-point.is-top-right{ right:10px; top:4px; transform:rotate(180deg); }
+@keyframes tol-iosg-bob{ 0%,100%{ translate:0 0; } 50%{ translate:0 8px; } }
+.tol-iosg-point.is-bottom, .tol-iosg-point.is-bottom-right{ animation:tol-iosg-bob 1.2s ease-in-out infinite; }
+@keyframes tol-iosg-bob-up{ 0%,100%{ translate:0 0; } 50%{ translate:0 -8px; } }
+.tol-iosg-point.is-top-right{ animation:tol-iosg-bob-up 1.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .tol-iosg-point{ animation:none !important; } }
+html.tol-quiet .tol-iosg-point, html.tol-still .tol-iosg-point{ animation:none !important; }
+/* with the card at the bottom of a phone screen, it leaves room for the arrow */
+@media (max-width:560px){ .tol-iosg{ align-items:flex-end; padding:8px 8px 64px; } .tol-iosg.is-top{ align-items:flex-start; padding:64px 8px 8px; } }
+
+/* the same drawings on the install page */
+.tol-iosg-figs{ display:grid; gap:.5rem; }
+.tol-iosg-figs svg{ display:block; width:100%; max-width:300px; height:auto; }

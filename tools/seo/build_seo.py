@@ -639,7 +639,7 @@ def series_ld(publisher):
 TOOLS = (r'^(tools/|signal-translator|carrier-wave-decoder|conversation-reader|lemonade-stand|calc01-solvency|is-the-setup-working|wiring-card|quick-checks|full-path|workpapers/calculators|do/|snapshot/|pal-cam-tv|ask'
          r'|perspective-shifter|ladder|refusals|wavelength|write-it-through|look-back-30-days|find-your-start|how-you-take-things-in)')
 # Pages that list other pages (marked as a collection, with the site search on explore.html)
-HUBS = r'^(tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
+HUBS = r'^(book/index\.html|tools\.html|explore\.html|by-relationship\.html|contents\.html|pause-and-play\.html)$'
 GAMES = r'^(recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger-crossword|frequency-journey|night-garden|bears-dojo|calm-visualizer)'
 ARTICLES = r'^(invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|book/|library/|learn/|workpapers/wp-|workpapers/report|wp-|five-pillars|turning-toward|complacency|check-ins|know-yourself|wired-differently|frequency-framework|how-it-works|relationships|self-path|glossary|communication\.html|bonding|living-alone|stepfamily|new-relationship|nervous-system|calming-supplements|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|co-parenting|parents|teens|new-parent|share-the-load|grief|caregivers|family-rifts|work\.html|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|sharing-a-room|when-one-is-ill|empty-nest|retired-together|family-obligations|long-distance|pursue-withdraw|small-wins|why-this-site|growing-up|polymath|communication-style-quiz|for-teachers|for-counselors|outside-help|research\.html|en-espanol)'
 
@@ -1077,11 +1077,13 @@ GROUPS = [
     ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
+    ('Frequency Buddies, a cartoon about feelings for all ages', r'^frequency-buddies'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
-    ('Help for your situation', r'^(by-relationship|ladder|refusals|upset-right-now|safety|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
+    ('Help for your situation', r'^(by-relationship|examples|for-teachers|groups\.html|infographic|ladder|refusals|upset-right-now|safety|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
     ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
     ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|outside-help|polymath|frequency-framework)'),
+    ('About this site', r'^(install|roadmap|telemetry|on-this-device|surprise|keepsakes|brand|legal/|architecture/)'),
 ]
 
 
