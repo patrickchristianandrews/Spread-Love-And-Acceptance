@@ -333,7 +333,7 @@ STYLE = '''<style>
   .pe-fb-numbers thead th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.8pt; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); background: var(--pt); }
   .pe-fb-numbers h2 { padding-top: 2mm; border-top: .5pt solid #E0D3B0; }
   /* Reading research */
-  .pe-fb-research { margin: 0 0 6mm; padding: 3.4mm 4.4mm 2mm; border: .8pt solid var(--pc); border-radius: 1.6mm; break-inside: avoid; columns: 1; }
+  .pe-fb-research { margin: 0 0 6mm; padding: 3.4mm 4.4mm 2mm; border: .8pt solid var(--pc); border-radius: 1.6mm; break-inside: auto; columns: 1; }
   .pe-fb-research h2 { font-family: "Fraunces", serif; font-weight: 600; font-size: 12pt; margin: 0 0 1.6mm; }
   .pe-fb-research p, .pe-fb-research dd { font-size: 8.8pt; line-height: 1.42; }
   .pe-fb-research dl { columns: 2; column-gap: 6mm; margin: 0 0 2mm; }
@@ -342,20 +342,21 @@ STYLE = '''<style>
   .pe-fb-research dd { margin: 0; }
   /* Blank worksheets: one page each */
   .pe-fb-worksheets .pe-ws-screen { display: none; }
-  .pe-ws-sheet { break-before: page; break-inside: avoid; }
+  .pe-ws-sheet { break-before: page; break-inside: avoid; zoom: .94; }
+  .pe-ws-sheet.is-long { zoom: .8; }
   .pe-ws-sheet:first-of-type { break-before: auto; }
   .pe-ws-head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1.2pt solid var(--pc); padding-bottom: 1.4mm; margin: 0 0 2mm; }
   .pe-ws-head h2 { margin: 0; font-size: 15pt; border: 0; padding: 0; }
-  .pe-ws-head span { font-family: "IBM Plex Mono", monospace; font-size: 6.6pt; letter-spacing: .02em; color: var(--soft); text-align: right; max-width: 58mm; }
+  .pe-ws-head span { font-family: "IBM Plex Mono", monospace; font-size: 6.6pt; letter-spacing: .02em; color: var(--soft); text-align: right; max-width: 58mm; overflow-wrap: anywhere; min-width: 0; }
   .pe-ws-sheet p { font-size: 8.4pt !important; line-height: 1.36; margin: 0 0 1.6mm; }
   .pe-ws-sheet h3 { font-size: 9.6pt !important; margin: 2.6mm 0 1mm !important; }
   .pe-ws-meta { display: flex; flex-wrap: wrap; gap: 1mm 5mm; margin: 0 0 2mm; }
   .pe-ws-meta span { font-size: 8.4pt; flex: 1 1 40%; border-bottom: .5pt solid #8C8270; padding: 3.4mm 0 .4mm; }
   .pe-ws-t { width: 100%; border-collapse: collapse; table-layout: fixed; margin: 0 0 2mm; }
   .pe-ws-t th { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 6.2pt; letter-spacing: .04em; line-height: 1.25; text-transform: none; color: var(--ink); background: var(--pt); text-align: left; vertical-align: bottom; padding: 1mm 1.2mm; border: .5pt solid #8C8270; }
-  .pe-ws-t td { height: 7.2mm; border: .5pt solid #8C8270; padding: 0 1.2mm; font-size: 7.6pt; color: var(--soft); vertical-align: middle; }
-  .pe-ws-t.is-tall td { height: 11mm; }
-  .pe-ws-t.is-short td { height: 6.2mm; }
+  .pe-ws-t td { height: 6.5mm; border: .5pt solid #8C8270; padding: 0 1.2mm; font-size: 7.6pt; color: var(--soft); vertical-align: middle; }
+  .pe-ws-t.is-tall td { height: 10mm; }
+  .pe-ws-t.is-short td { height: 5.6mm; }
   .pe-ws-line { border-bottom: .5pt solid #8C8270; height: 7mm; margin: 0 0 1mm; }
   .pe-ws-box { border: .5pt solid #8C8270; border-radius: 1mm; min-height: 14mm; padding: 1.2mm 2mm; margin: 0 0 2mm; font-size: 8pt; }
   .pe-ws-box b { font-weight: 600; font-size: 8.2pt; display: block; }

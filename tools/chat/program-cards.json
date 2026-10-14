@@ -597,6 +597,54 @@
       ]
     },
     {
+      "id": "nervoussystem",
+      "kind": "intent",
+      "name": "your nervous system",
+      "pat": "\\b(what is|what s|whats|explain|how does|tell me about|what does) (the |my |your |our )?(nervous system|vagus nerve|vagal tone|stress response|autonomic nervous system)\\b|\\b(calm|reset|regulate|soothe|settle) (my|your|the|our) (nervous system|vagus nerve)\\b|\\b(nervous system|vagus nerve) (reset|regulation|hacks?|exercises?|stimulation)\\b|\\b(dysregulated|dysregulation|my nervous system is)\\b|\\bfight,? flight,? (or |and )?(freeze|fawn)\\b|\\bfight or flight\\b|\\bwhat is fawning\\b|\\binteroception\\b|\\bpolyvagal\\b",
+      "keys": [
+        "nervous system",
+        "vagus nerve",
+        "the nervous system"
+      ],
+      "what": [
+        "Your nervous system is how your body notices things, reacts and settles again. It has a “go” side and a “rest” side, and you need both. Feeling wired, frozen or flat is your nervous system doing its job, sometimes a bit too well.",
+        "What helps it settle: a longer out-breath, movement, cool water on the face, a safe person, and sleep. Popular ideas such as polyvagal theory and “fawning” give useful words, but they aren’t settled science."
+      ],
+      "how": [
+        "Breathe out longer than you breathe in: in for 4, out for 6, for a minute or two.",
+        "Move for a few minutes: walk, climb the stairs, shake out your arms.",
+        "Cool your face with cold water for up to 30 seconds (skip it if you have a heart condition).",
+        "If panic, feeling unreal or low mood keeps coming back, see a doctor."
+      ],
+      "links": [
+        [
+          "Your nervous system, in plain words",
+          "/nervous-system.html"
+        ],
+        [
+          "Calm it now",
+          "/nervous-system.html#now"
+        ],
+        [
+          "When to see a doctor",
+          "/nervous-system.html#doctor"
+        ]
+      ],
+      "chips": [
+        [
+          "I need to calm down right now",
+          "I need to calm down right now"
+        ],
+        [
+          "What is the ladder?",
+          "what is the ladder"
+        ]
+      ],
+      "topic": false,
+      "first": true,
+      "newTopic": true
+    },
+    {
       "id": "calmnow",
       "kind": "intent",
       "first": true,
@@ -807,7 +855,7 @@
       "pat": "\\b(cbd|cannabidiol)\\b",
       "keys": [],
       "what": [
-        "There is little good research on CBD for everyday anxiety so far. The only approved CBD medicine in the US is for two rare forms of epilepsy. The FDA warns CBD can harm the liver and change how other medicines work.",
+        "There is little good research on CBD for everyday stress or anxiety so far. The only approved CBD medicine in the US is a purified prescription form for seizures linked to three rare conditions: Lennox-Gastaut syndrome, Dravet syndrome and tuberous sclerosis complex. The FDA warns CBD can harm the liver and change how other medicines work, including antidepressants and blood thinners.",
         "Please check with a pharmacist or doctor first."
       ],
       "links": [
@@ -5843,7 +5891,7 @@
       "kind": "intent",
       "first": true,
       "newTopic": true,
-      "name": "money limits: normal, or controlling?",
+      "name": "money limits: an agreed limit, or control?",
       "pat": "\\b(is it|is that|is this|is (he|she|they)( being)?|am i( being)?|are (we|you)|would it be)\\b.{0,40}\\bcontrolling\\b.{0,60}\\b(money|buy\\w*|bought|spend\\w*|purchases?|budget|bank|card|finances?)\\b|\\b(money|buy\\w*|spend\\w*|purchases?|budget|finances?)\\b.{0,60}\\bcontrolling\\b|\\bcontrolling (about|with|over) (money|spending|finances)\\b|\\b(check|ask) with me before (he|she|they) (buys?|spends?)\\b",
       "keys": [],
       "what": [
@@ -10994,7 +11042,7 @@
     {
       "id": "friendsjealous",
       "name": "jealous or quiet when I see friends",
-      "pat": "\\b(jealous|sulks?|sulky|sulking|pouts?|goes quiet|go quiet|gets quiet|goes cold|gives me the silent treatment|gets (upset|cold|moody|grumpy|funny|weird|off|huffy|annoyed))( with me| at me)?( (if|when|whenever|every time|each time|after|because) i (see|go out with|go out|meet( up with)?|hang out with|spend time with|visit|go for drinks with|have drinks with|text|call)( (with|to))? (my )?(friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads))\\b|\\bjealous of (my|me seeing my|me spending time with my|the time i spend with my) (friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads)\\b",
+      "pat": "\\b(jealous|sulks?|sulky|sulking|pouts?|goes quiet|go quiet|gets quiet|goes cold|gives me the silent treatment|gets (upset|cold|moody|grumpy|funny|weird|off|huffy|annoyed))( with me| at me)?( (if|when|whenever|every time|each time|after|because) i (see|go out with|go out|meet( up with)?|hang out with|spend time with|visit|go for drinks with|have drinks with|text|call)( (with|to))? (my )?(friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads))\\b|\\bjealous of (my|me seeing my|me spending time with my|the time i spend with my) (friends|mates|pals|family|sister|brother|mum|mom|parents|colleagues|coworkers|work friends|the girls|the boys|the lads)\\b|\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)) (doesn t|doesnt|does not|don t|dont|do not) like (it )?(when )?(me |i )?(going out|go out|goes out|seeing|see|going for drinks|go for drinks)( with)? ?(my (friends|mates|girls|boys|lads))?( without (him|her|them))?\\b",
       "notPat": "\\b(won t|wont|doesn t|does not|never) let me\\b|\\bnot allowed\\b|\\bstops? me\\b|\\b(scared|afraid|frightened|terrified|unsafe|hits?|hurt\\w*|threat\\w*|punish\\w*|checks?|tracks?|reads?)\\b|\\b(my (son|daughter|kid|child|toddler)|our (son|daughter|kid))\\b",
       "what": [
         "It’s hard when time with your friends or family leaves your partner jealous, quiet or sulky afterwards. Feeling jealous is human, and it usually points at something underneath: wanting more time together, or wanting to feel sure of where they stand. It isn’t yours to fix alone, and it isn’t a reason to stop seeing people you care about."
@@ -12328,6 +12376,43 @@
       ]
     },
     {
+      "id": "wp12",
+      "kind": "tool",
+      "name": "Same moment, different speeds (WP-12)",
+      "keys": [
+        "wp12",
+        "wp 12",
+        "workpaper 12",
+        "same moment different speeds",
+        "carrier frequency audit",
+        "different speeds",
+        "different paces"
+      ],
+      "what": "Same moment, different speeds (WP-12, also called the Carrier Frequency Audit) is for when one of you wants to sort it now and the other needs a minute, or a night. For five moments that come round often, each of you marks how fast you want to move, how much you want to talk, and how urgent it feels. You get your gaps in plain words, and one small agreement for the biggest.",
+      "how": [
+        "Pick five moments that come round often: a plan that changes, a bill, something that breaks, one of you upset, a free Saturday.",
+        "Each of you marks your own speed, talk and urgency, on your own, before looking at the other’s.",
+        "Look at the gaps together, with curiosity. The fast one about plans may be the slow one about bills.",
+        "Write one small agreement for the biggest gap: a way for the faster person to start and a time for the slower one to land. Try it for two weeks."
+      ],
+      "results": "Fast and slow aren’t good and bad. Most of the friction is pace, not willingness, and naming it is half the fix. About 20 minutes, once.",
+      "links": [
+        [
+          "Same moment, different speeds (WP-12)",
+          "/workpapers/wp-12-same-moment-different-speeds.html"
+        ],
+        [
+          "Fill it in on screen",
+          "/workpapers/fill/wp-12.html"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b"
+    },
+    {
       "id": "wp13",
       "kind": "tool",
       "name": "the 90-second daily check-in (WP-13)",
@@ -12365,6 +12450,80 @@
           "/tools/frequency-sync-visualizer.html"
         ]
       ]
+    },
+    {
+      "id": "wp14",
+      "kind": "tool",
+      "name": "Is it us, or is it everything else? (WP-14)",
+      "keys": [
+        "wp14",
+        "wp 14",
+        "workpaper 14",
+        "is it us or everything else",
+        "is it us or is it everything else",
+        "static dampening log",
+        "static dampening"
+      ],
+      "what": "Is it us, or is it everything else? (WP-14, also called the Static Dampening Log) is a one-week log for when outside pressure, like work, money, health or a sick parent, starts to feel like something wrong between you. Each evening, one line: outside pressure in one column, tense moments between you in the other.",
+      "how": [
+        "Each evening, mark how much outside pressure you had (none, a little, a lot) and where it came from.",
+        "Note any tense moment between you, in a few plain words. Each person fills in only their own rows.",
+        "For each tense moment, make a guess, not a verdict: outside pressure, between us, some of both, or not sure yet.",
+        "At the end of the week, look for the wrong label, and make one plan for the pressure, like a way to flag a heavy day: “Rough day, not you.”"
+      ],
+      "results": "You get a clearer view of what really started the friction. About a minute a day, plus 15 minutes at the end of the week.",
+      "links": [
+        [
+          "Is it us, or is it everything else? (WP-14)",
+          "/workpapers/wp-14-is-it-us-or-everything-else.html"
+        ],
+        [
+          "Fill it in on screen",
+          "/workpapers/fill/wp-14.html"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b"
+    },
+    {
+      "id": "wp15",
+      "kind": "tool",
+      "name": "Keep your little rituals alive (WP-15)",
+      "keys": [
+        "wp15",
+        "wp 15",
+        "workpaper 15",
+        "keep your little rituals alive",
+        "little rituals",
+        "harmonic resonance",
+        "harmonic resonance and entrainment"
+      ],
+      "what": "Keep your little rituals alive (WP-15, also called Harmonic Resonance & Entrainment) is a gentle look, every three months or so, at the small habits you share: the Saturday pancakes, the walk after dinner, the goodnight text. You mark which are alive, fading or stopped, and pick one to restart.",
+      "how": [
+        "List your rituals, including the ones that stopped: daily, weekly and yearly.",
+        "Mark each one: alive, fading, stopped, or a new idea. Rituals lapse for ordinary reasons, and nobody is to blame.",
+        "Restart one in its smallest form, and decide when, and who will suggest it the first time.",
+        "Let one go on purpose, with thanks, if it belonged to an earlier season."
+      ],
+      "results": "You get one ritual to restart, small enough to keep on a hard week. About 15 minutes, four times a year.",
+      "links": [
+        [
+          "Keep your little rituals alive (WP-15)",
+          "/workpapers/wp-15-keep-your-little-rituals-alive.html"
+        ],
+        [
+          "Fill it in on screen",
+          "/workpapers/fill/wp-15.html"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b"
     },
     {
       "id": "calc01",
@@ -12415,6 +12574,49 @@
           "/book/chapter-2.html"
         ]
       ]
+    },
+    {
+      "id": "calc02",
+      "kind": "tool",
+      "name": "the 30-Day Look-Back (CALC-02)",
+      "keys": [
+        "calc02",
+        "calc 02",
+        "calc-02",
+        "calculator 02",
+        "30 day look back",
+        "30 day lookback",
+        "thirty day look back",
+        "look back 30 days",
+        "look back over 30 days",
+        "the full look back",
+        "30 day look-back",
+        "running imbalance"
+      ],
+      "what": "The 30-Day Look-Back (CALC-02) puts four weeks side by side for 2 to 8 people: who did what, last-minute rescues, how much each person is carrying, and whether each job has an owner. You get the running imbalance, what shifted, what didn’t, and one next step. It reads the setup, never a person.",
+      "how": [
+        "Say who’s looking back, and the last day to look back from.",
+        "Fill in what you tracked for each of the four weeks. Blank is fine: each part is read from the weeks that have it.",
+        "Read what shifted and what didn’t, then pick the one next step.",
+        "Only have a rough “then and now”? Use the quick look-back instead."
+      ],
+      "results": "A place to start a conversation, not a verdict. One week can be a fluke; thirty days is long enough to see whether what you changed is changing anything. The next step looks first at jobs without an owner, then uneven hours, rescues and a high load, because ownership is usually the easiest thing to change.",
+      "pillar": "Pillar I, See the whole load, and Pillar II, Fix the setup, not the person.",
+      "links": [
+        [
+          "The 30-Day Look-Back (CALC-02)",
+          "/look-back-30-days.html"
+        ],
+        [
+          "The quick look-back",
+          "/workpapers/calculators/look-back-30-days-quick.html"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b"
     },
     {
       "id": "report01",
@@ -12706,6 +12908,85 @@
           "/wired-differently.html"
         ]
       ]
+    },
+    {
+      "id": "writeit",
+      "kind": "tool",
+      "name": "Talk it through in writing",
+      "keys": [
+        "write it through",
+        "talk it through in writing",
+        "write it wait then send",
+        "write it wait send",
+        "write it then wait",
+        "sort it out in writing",
+        "talk it through by text"
+      ],
+      "what": "Talk it through in writing is a calm, private way to sort something out on paper: one topic, facts not verdicts, one clear ask and a reply-by time. You write it, wait a little, then send it as a private link. It works for partners, co-parents and exes, family, friends, housemates, coworkers and groups.",
+      "how": [
+        "Say who it’s to, and what kind of message it is.",
+        "Write one thing: what happened, how it landed, and one clear ask, with a reply-by time.",
+        "Let the gentle check read it for sharp words you didn’t mean.",
+        "Wait before you send. Big feelings fade a little in twenty minutes.",
+        "Send it as a private link. Nothing is sent anywhere else."
+      ],
+      "results": "If you’re afraid of the other person, a well-worded message isn’t the answer: your safety is, and the Not safe at home? page has free, private people to talk to. If you’re flooded right now, try Upset right now? first.",
+      "links": [
+        [
+          "Talk it through in writing",
+          "/write-it-through.html"
+        ],
+        [
+          "House rules for written disagreements",
+          "/write-it-through.html#rules"
+        ]
+      ],
+      "chips": [
+        [
+          "Check a message before I send it",
+          "can you check a message before I send it"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "pat": "\\b(zzqx_never_matches)\\b"
+    },
+    {
+      "id": "takethingsin",
+      "kind": "tool",
+      "name": "How you take things in",
+      "keys": [
+        "how you take things in",
+        "how i take things in",
+        "how do i take things in",
+        "how do you take things in",
+        "make the site fit my mind",
+        "make the site fit your mind",
+        "make the site fit me"
+      ],
+      "what": "How you take things in lets you make the whole site fit your mind. Pick how your mind works (ADHD, autistic, dyslexic and more), or just pick plain preferences, like short steps first, literal words, or listening instead of reading, and every page adapts. It’s optional, no labels are needed, and your choices stay on this device.",
+      "how": [
+        "Open How you take things in.",
+        "Pick any neurotype that fits, or none. Each one shows exactly what it turns on, and you can untick any of it.",
+        "Or just pick what helps, from the plain list.",
+        "See it on the sample, then browse as usual. Clear it all any time with one button."
+      ],
+      "links": [
+        [
+          "How you take things in",
+          "/how-you-take-things-in.html"
+        ],
+        [
+          "Know your own wiring",
+          "/know-yourself.html"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true,
+      "chips": [],
+      "pat": "\\b(zzqx_never_matches)\\b"
     },
     {
       "id": "signal",
@@ -13217,23 +13498,33 @@
     {
       "id": "podcast",
       "kind": "tool",
-      "name": "the podcast",
+      "name": "audio and the podcast",
       "keys": [
         "podcast",
+        "the podcast",
         "kane and christian",
+        "audiobook",
+        "audio book",
+        "listen to the book",
+        "read the book aloud",
+        "read aloud",
         "~episodes",
         "~episode"
       ],
-      "what": "The Kane and Christian Experience explores the program through stories, real-life examples and conversation. Each episode dives into one workpaper, chapter or theme; listen in any order or follow the path matched to the PROG-01 weeks. No episodes are published yet: the first three are recorded and coming soon, and the rest are in production or planned.",
+      "what": "There’s no podcast or audiobook. Instead, every chapter of the book can be read aloud on this site: open any chapter and press Listen to this chapter near the top. It uses your device’s own voice, so nothing is sent anywhere.",
       "how": [
-        "Open the podcast page and filter by theme (foundation, diagnostics, communication, resonance).",
-        "When episodes are out, start with Episode 1 on Unbilled Debt, or pick the one matching your current week."
+        "Open any chapter of the book.",
+        "Press Listen to this chapter near the top. If your device has no voice built in, the button doesn’t show.",
+        "Looking for music? Brain Breakers and Echoes of Gold are ready to play."
       ],
-      "pillar": "Each episode names its chapter or workpaper, and so its pillar.",
       "links": [
         [
-          "The Podcast",
+          "Listening to the book",
           "/podcast-index.html"
+        ],
+        [
+          "The book",
+          "/book/index.html"
         ]
       ]
     },
@@ -13608,8 +13899,7 @@
       "what": "The Preface is about the work nobody sees: remembering appointments, noticing the milk is low, calming a tense moment. None of it shows up on a calendar, so it rarely gets a thank-you, and over months it piles up. The book calls that pile unbilled debt. It’s free to read.",
       "how": [
         "Read the simple version first, then the full preface if you want the detail.",
-        "Try a week of Who did what (WP-01) to see your own unbilled work.",
-        "Listen to podcast Episode 1 if you like a human voice with the ideas."
+        "Try a week of Who did what (WP-01) to see your own unbilled work."
       ],
       "pillar": "Mostly Pillar I, See the whole load, with Pillar V.",
       "links": [
@@ -13693,7 +13983,7 @@
         "7 ocular vectors",
         "seven angles"
       ],
-      "what": "Chapter III explains why some reactions are bigger than their cause (a full tank overflows) and why two people can see the same moment so differently: the seven angles people see things from. Anything decided while a tank is overflowing is worth coming back to. It opens free with your email.",
+      "what": "Chapter III explains why some reactions are bigger than their cause (a full tank overflows) and why two people can see the same moment so differently: the seven angles people see things from. Anything decided while a tank is overflowing is worth coming back to. It’s free to read, with nothing to sign up for.",
       "how": [
         "Read the chapter, then try How much are you carrying? (WP-02) daily for a week.",
         "Plan your pause in the Calm-Down Kit (WP-11)."
@@ -13722,7 +14012,7 @@
         "deontological parity",
         "sensory gating"
       ],
-      "what": "Chapter IV is about agreeing what “fair” means before you argue about it, and giving a comment a moment to land before you answer. One kind of fair asks “did everything get done?”, the other “did each of us do what we said?”. Both are reasonable; friction starts when you’re each using a different one. It opens free with your email.",
+      "what": "Chapter IV is about agreeing what “fair” means before you argue about it, and giving a comment a moment to land before you answer. One kind of fair asks “did everything get done?”, the other “did each of us do what we said?”. Both are reasonable; friction starts when you’re each using a different one. It’s free to read, with nothing to sign up for.",
       "how": [
         "Talk about which kind of fair each of you uses, on a calm day.",
         "Practice letting a comment land, then use Say it so it lands (WP-09) before you answer."
@@ -13749,7 +14039,7 @@
         "chapter five",
         "the monthly look back chapter"
       ],
-      "what": "Chapter V is about looking back once a month for the problems that keep coming back, and fixing the setup instead of having the same argument again. One missed job is a fluke; the same job missed four weeks running is a pattern you only see across the month. It opens free with your email.",
+      "what": "Chapter V is about looking back once a month for the problems that keep coming back, and fixing the setup instead of having the same argument again. One missed job is a fluke; the same job missed four weeks running is a pattern you only see across the month. It’s free to read, with nothing to sign up for.",
       "how": [
         "Bring four weekly logs and your job list.",
         "Run What keeps coming back? (WP-04), the monthly look-back."
@@ -13767,6 +14057,36 @@
       ]
     },
     {
+      "id": "bookdownload",
+      "kind": "intent",
+      "name": "the book as a PDF",
+      "pat": "\\b(download|pdf|print|printable|e ?book|epub|kindle|offline (copy|version)) (of |a copy of )?(the |your |this )?(whole )?(book|ledger|objective ledger)\\b|\\b(book|ledger) (as a |in )?(pdf|download|e ?book|printable)\\b|\\b(can|could) i (download|print|get a pdf of) (the|your|this) book\\b|\\bis (the|your) book (on|in) (kindle|pdf)\\b",
+      "keys": [
+        "download the book",
+        "book pdf",
+        "the book as a pdf",
+        "pdf of the book"
+      ],
+      "what": [
+        "Yes. The book is a free PDF, in a short or a full version: the whole book, the book for one person, the book for two or more, or Understanding People.",
+        "To download, you enter an email address. It goes to Buttondown, the site’s email service, so you can get a short note when something new is added; you can unsubscribe in one tap. Reading the book here on the site never needs an email."
+      ],
+      "links": [
+        [
+          "Download the book as a PDF",
+          "/book/download.html"
+        ],
+        [
+          "Read it here, free",
+          "/book/index.html"
+        ]
+      ],
+      "topic": false,
+      "first": true,
+      "newTopic": true,
+      "chips": []
+    },
+    {
       "id": "book",
       "kind": "tool",
       "name": "the book",
@@ -13777,21 +14097,25 @@
         "manuscript",
         "the chapters"
       ],
-      "what": "The book has a preface and five chapters so far, each pairing with a workpaper. Preface: the work nobody sees. I: why we get out of tune. II: is the split working? III: full tanks and different angles. IV: two kinds of fair. V: the monthly look-back. The Preface and Chapters I and II are free to read; Chapters III to V open free with your email.",
+      "what": "The Objective Ledger is free to read here, with nothing to sign up for: 26 chapters in three parts, and an afterword. Part One is about yourself, Part Two is about sharing a life fairly (between us), and Part Three is about understanding people. Every chapter has a short version (about 10 to 15 minutes) and a full version with the research, more examples and more to try.",
       "how": [
-        "Start with the Preface.",
-        "Each chapter has a simple version and a full, in-depth version.",
-        "Tap any word with the water drop for a mini dive, one step at a time."
+        "Start with Part One, Then, or open the contents and pick what fits.",
+        "Read the short version first; the full version is there when you want more.",
+        "Each chapter ends with what to remember, the chapters it connects to, and the steps and worksheets that go with it."
       ],
-      "pillar": "Each chapter names its main pillar.",
+      "pillar": "Part Two’s chapters each name their main pillar.",
       "links": [
         [
-          "Preface",
-          "/book/preface.html"
+          "The book",
+          "/book/index.html"
         ],
         [
-          "Contents",
-          "/contents.html"
+          "Start reading: Part One, Then",
+          "/book/self-1-then.html"
+        ],
+        [
+          "Download as a PDF",
+          "/book/download.html"
         ]
       ]
     },
@@ -14204,7 +14528,13 @@
         "dont know where to begin",
         "not sure where to start",
         "not sure where to begin",
-        "no idea where to start"
+        "no idea where to start",
+        "find my starting point",
+        "find your starting point",
+        "find your start",
+        "three quick questions",
+        "help me find where to start",
+        "help me find a starting point"
       ],
       "what": [
         "Welcome! A gentle way in: start with yourself, then add the other person when you’re ready.",
@@ -14214,7 +14544,8 @@
         "One minute on Today’s Weather to see how you’re doing today.",
         "Read the Preface, The work nobody sees (free).",
         "Start a who-did-what list today, in Who did what (WP-01) or on the Lemonade Stand. Just today’s jobs is plenty.",
-        "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01)."
+        "Later, follow the Workpaper Suite for your road, or the six gentle weeks (PROG-01).",
+        "Not sure? Find your starting point asks three quick questions and suggests one thing to try first."
       ],
       "links": [
         [
@@ -14228,6 +14559,10 @@
         [
           "The Workpaper Suite",
           "/workpapers/fill/suite.html"
+        ],
+        [
+          "Find your starting point (three quick questions)",
+          "/find-your-start.html"
         ]
       ],
       "chips": [
@@ -14240,6 +14575,139 @@
           "Can I do this on my own?"
         ]
       ]
+    },
+    {
+      "id": "alltools",
+      "kind": "intent",
+      "name": "all tools, by type",
+      "pat": "^(so )?(what|which) tools (are there|do you have|are on (the|this) site|does (the|this) site have|have you got)\\b|\\b(all|every|list (of )?(all |every )?)(the )?tools( on (the|this) site)?$|\\btools by type\\b|\\b(show|list|give) me (all |every )?(of )?(the )?tools\\b|\\b(a |the )?list of (all |every )?(the )?tools\\b|\\bevery tool\\b|\\ball (the )?tools page\\b",
+      "keys": [
+        "all tools",
+        "all the tools",
+        "every tool",
+        "tools by type",
+        "list of tools",
+        "all tools by type",
+        "the tools page"
+      ],
+      "what": [
+        "All tools, by type lists every tool on the site in one place, grouped by what it helps with: communication, knowing yourself, sharing chores, calm and stress, family, work and games.",
+        "Each card says what the tool does, what you get and about how long it takes. They’re all free, and what you type into them stays on your device."
+      ],
+      "how": [
+        "Start with the six most useful, at the top of the page.",
+        "Or filter by type, and by who it’s for: on your own, or together.",
+        "Want guides and reading too? Everything on this site lists every page, with filters."
+      ],
+      "links": [
+        [
+          "All tools, by type",
+          "/tools.html"
+        ],
+        [
+          "Everything on this site",
+          "/explore.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Which tool fits me?",
+          "Which tool fits my situation?"
+        ],
+        [
+          "Find my starting point",
+          "help me find where to start"
+        ]
+      ],
+      "topic": false,
+      "first": true,
+      "newTopic": true
+    },
+    {
+      "id": "explore",
+      "kind": "intent",
+      "name": "everything on this site",
+      "pat": "\\b(everything on (the|this) site|every (page|guide)( on (the|this) site)?|all (the )?(pages|guides)( on (the|this) site)?|(a |the )?list of (all |every )?(the )?pages|explore (the|this) site|browse (the|this) site|browse everything|how do i (explore|browse|find my way around)( the site| this site)?|find my way around|site ?map|everything you have)\\b",
+      "keys": [
+        "everything on this site",
+        "explore page",
+        "the explore page",
+        "browse everything"
+      ],
+      "what": [
+        "Everything on this site lists every guide, tool, worksheet, game and book chapter in one place. Choose what you need, who it’s about and how long you have, and the list narrows."
+      ],
+      "how": [
+        "Pick what you need: talk it through, share the load, calm down, know yourself, family, work, health, reading or play.",
+        "Pick who it’s about: just you, partners, friends, family, co-parents, housemates or work.",
+        "Pick how long you have, from about a minute to half an hour or more."
+      ],
+      "links": [
+        [
+          "Everything on this site",
+          "/explore.html"
+        ],
+        [
+          "All tools, by type",
+          "/tools.html"
+        ],
+        [
+          "Find your starting point",
+          "/find-your-start.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Where do I start?",
+          "Where do I start?"
+        ]
+      ],
+      "topic": false,
+      "first": true,
+      "newTopic": true
+    },
+    {
+      "id": "whysite",
+      "kind": "intent",
+      "name": "why use this site",
+      "pat": "\\bwhy (should i|would i|do i|should we|would we|would anyone|should anyone) (use|trust|try|bother with) (this|the|your) (site|website|program)\\b|\\bwhy (use )?(this|the|your) (site|website)( and not| instead| rather| over)\\b|\\bwhy (use|try) (this|the|your) (site|website)\\b|\\b(instead of|rather than|vs|versus|better than|different from|compared to) (just )?(an |a )?(ai( chat| chatbot)?|chatgpt|chat gpt|chatbot|article|articles|google)\\b|\\bwhat makes (this|the|your) (site|website) (different|special|worth)\\b|\\bhow is (this|the|your) (site|website) different\\b|\\bwhy not (just )?(use |ask )?(an ai|chatgpt|google|an article)\\b",
+      "keys": [
+        "why this site",
+        "why use this site",
+        "why this site and not another"
+      ],
+      "what": [
+        "Articles and AI chats can be useful, and sometimes they’re the better choice. What’s different here: most tools end in something you make and keep together, like a pause plan or a job list with one owner each, not just advice.",
+        "They’re built for both sides: each person answers for themselves, and nothing scores who is better or worse. Everything is free and private, with no account, and what you type stays on your device."
+      ],
+      "how": [
+        "Made for every kind of relationship and every kind of mind: couples, family, co-parents, friends, housemates, work, and people on their own.",
+        "The book and the tools connect: each chapter points to the tool that puts it to work.",
+        "It’s honest about its limits: it’s self-help, not therapy, and it says when a counsellor or doctor is the better choice."
+      ],
+      "links": [
+        [
+          "Why use this instead of an article or an AI chat?",
+          "/why-this-site.html"
+        ],
+        [
+          "Find your starting point",
+          "/find-your-start.html"
+        ]
+      ],
+      "chips": [
+        [
+          "Where do I start?",
+          "Where do I start?"
+        ],
+        [
+          "Is it free?",
+          "Is it free?"
+        ]
+      ],
+      "topic": false,
+      "first": true,
+      "newTopic": true
     },
     {
       "id": "whichtool",
@@ -14403,7 +14871,7 @@
       "id": "free",
       "kind": "intent",
       "name": "cost and access",
-      "pat": "(is (it|this|the site|everything) free)|(how much (does|is) (it|this))|(what does it cost)|(do i (have to|need to) pay)|(is there a (fee|charge|subscription|paywall))|(paid (membership|version|plan))|\\b(sign ?up|signup|membership|members?)\\b",
+      "pat": "(is (it|this|the site|everything) free)|(how much (does|is) (it|this))|(what does it cost)|(do i (have to|need to) pay)|(is there a (fee|charge|subscription|paywall))|(paid (membership|version|plan))|\\b(sign ?up|signup|membership|members?)\\b|\\bdoes (it|this|the site|the app|the book|anything here) cost( anything| money)?\\b|\\bis (the app|the book|everything here) free\\b|\\bcost anything\\b",
       "keys": [
         "is it free",
         "is this free",
@@ -14415,7 +14883,7 @@
         "paid membership"
       ],
       "what": [
-        "Yes. Everything here is free: no sign-up, no account and no paid version. Every chapter, workpaper and tool works without giving anything, and the site never asks for card details.",
+        "Everything here is free: no sign-up, no account and no paid version. Every chapter, workpaper and tool works without giving anything, and the site never asks for card details.",
         "If you’d like a short note when something new ships, you can leave your email on the Email updates page. That’s optional, and nothing is charged."
       ],
       "links": [
@@ -14971,6 +15439,58 @@
       ]
     },
     {
+      "id": "livingalone",
+      "kind": "intent",
+      "name": "living on your own",
+      "pat": "^(i |i m |im |i am |and i |but i )?(live|living|live on|living on) (alone|on my own|by myself)( now)?$|\\b(tips|help|advice|guide) (for|on|about) (living|live) (alone|on my own|by myself)\\b|\\bliving (alone|on my own|by myself) (tips|help|advice|well|guide)\\b|\\bhome for one\\b|\\b(i m|im|i am|just) (moved|moving) (out )?(in )?(to )?(my own place|a place of my own|my first flat|my first apartment|my first place)\\b|\\bmy first (flat|apartment|place) (alone|on my own|by myself)\\b|\\bhow (do i|to) (live|cope living|manage living) (alone|on my own|by myself)\\b",
+      "notPat": "\\b(lonely|loneliness|isolated|no friends|nobody|no one)\\b",
+      "keys": [
+        "living alone",
+        "live alone",
+        "living on my own",
+        "tips for living alone"
+      ],
+      "what": [
+        "Living on your own can be a good life in its own right, at any age: a first flat, a home of your own by choice, or living alone after a loss. Alone isn’t the same as lonely: you can enjoy your own company and still need people."
+      ],
+      "how": [
+        "Nobody reminds you, so keep one list of the jobs that keep your life running, with dates.",
+        "Give your week a few anchors: meals, a weekly plan with people, a slow morning.",
+        "Adult friendships grow from repetition: the same faces again and again, plus small invitations.",
+        "Keep a short “people I can call” list, and one person who knows you’re okay."
+      ],
+      "script": [
+        "I’ve been meaning to ask: would you like to make this a regular thing? Same time next week?"
+      ],
+      "links": [
+        [
+          "Living on your own, living well",
+          "/living-alone.html"
+        ],
+        [
+          "Making friends as an adult",
+          "/living-alone.html#friends"
+        ],
+        [
+          "When loneliness feels heavy",
+          "/living-alone.html#heavy"
+        ]
+      ],
+      "chips": [
+        [
+          "I feel lonely",
+          "I feel lonely"
+        ],
+        [
+          "Can I use the program on my own?",
+          "can i use this if im single"
+        ]
+      ],
+      "first": true,
+      "newTopic": true,
+      "topic": true
+    },
+    {
       "id": "single",
       "kind": "intent",
       "name": "using the program on your own or while single",
@@ -14979,9 +15499,7 @@
         "if im single",
         "im single",
         "i am single",
-        "no partner",
-        "live alone",
-        "living alone"
+        "no partner"
       ],
       "what": [
         "Yes, absolutely. The program isn’t only for couples. Every one of the Five Pillars starts with you: seeing your own load, reading your own state before you react, knowing your own wiring, and noticing the quiet pulls on your time.",
@@ -15020,27 +15538,27 @@
         "the app"
       ],
       "what": [
-        "There’s nothing to download, and you don’t need an app store. An Apple App Store version is coming soon, with no date yet. Until then, the site works like an app on your phone: add it to your home screen and it opens full-screen, with its own icon, like any other app.",
-        "Pages you’ve opened before keep working without a connection, and everything you type in the tools stays on your device.",
+        "Yes, and it’s free: the site installs as an app, with no store, no account and nothing to buy. It gets its own icon, opens full screen, and the pages you’ve opened keep working without a connection. Everything you type stays on your device.",
+        "On Android, the Get the app page has a one-tap Install button in Chrome. On an iPhone or iPad, Apple doesn’t let a website install itself with one button, so it takes three taps, and the page shows you each one. There’s no App Store version: adding it from Safari gives you the whole app.",
         "Real Android widgets need a native app, so an app installed from Chrome can’t add one yet. Press and hold the icon for quick jumps, or pin a single page to your home screen."
       ],
       "how": [
-        "On an iPhone or iPad, open the site in Safari, tap the Share button, then “Add to Home Screen”.",
-        "On Android, open the site in Chrome, tap the ⋮ menu, then “Add to Home screen” or “Install app”.",
-        "On a computer, most browsers show an install icon in the address bar."
+        "On Android, open the site in Chrome and tap Install on the Get the app page (or the ⋮ menu, then “Install app”).",
+        "On an iPhone or iPad, open the site in Safari, tap the Share button, then “Add to Home Screen”, then Add.",
+        "On a computer, Chrome and Edge show a small install icon at the right end of the address bar."
       ],
       "links": [
         [
-          "Get the app",
+          "Get the app (free)",
           "/install.html"
+        ],
+        [
+          "iPhone and iPad steps",
+          "/install.html#iphone"
         ],
         [
           "Start here",
           "/start-here.html"
-        ],
-        [
-          "What’s new",
-          "/whats-new.html"
         ]
       ]
     },
@@ -16080,10 +16598,9 @@
         "what can i read",
         "learn more",
         "the professor s library",
-        "stories from philosophy",
-        "the podcast"
+        "stories from philosophy"
       ],
-      "what": "The Learn tab in the menu gathers everything that teaches in one place: the big ideas (the Five Pillars, how it works, the Frequency Framework, the one-page summary, the book), read and listen (the Professor’s Library, Stories from Philosophy, hand-picked articles, the podcast), understanding yourself and each other, the guides, and the glossary and polymath page. Pages that belong to a program stay there too.",
+      "what": "The Learn tab in the menu gathers everything that teaches in one place: the big ideas (the Five Pillars, how it works, the Frequency Framework, the one-page summary, the book), read and listen (the Professor’s Library, Stories from Philosophy, hand-picked articles), understanding yourself and each other, the guides, and the glossary and polymath page. Pages that belong to a program stay there too.",
       "how": [
         "Open the Menu and choose Learn.",
         "Pick a section: the big ideas, read and listen, understand yourself and each other, guides, or words and big ideas.",

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 887" width="540" height="887" role="img" aria-labelledby="fig-u10-compass-t fig-u10-compass-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-u10-compass-t">Values are directions, not finish lines</title>
-<desc id="fig-u10-compass-d">A path winds up the page toward an arrow labelled with a value, &quot;look after my health&quot;, that points on beyond the top: you never arrive. Along the path, flags mark goals that can be finished, like &quot;run a 5k&quot;, and small dots mark everyday acts: a walk, a glass of water, an early night. A compass sits beside it. Missing a goal is a missed stop; the direction is still there.</desc>
+<desc id="fig-u10-compass-d">A path winds up the page towards an arrow labelled with a value, &quot;look after my health&quot;, that points on beyond the top: you never arrive. Along the path, flags mark goals that can be finished, like &quot;run a 5k&quot;, and small dots mark everyday acts: a walk, a glass of water, an early night. A compass sits beside it. Missing a goal is a missed stop; the direction is still there.</desc>
 <defs><marker id="fig-u10-compass-ar-3e6b4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,1 L9,5 L0,9 Z" fill="#3E6B4C"/></marker></defs>
 <rect x="1" y="1" width="538" height="885" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Values are directions</text>

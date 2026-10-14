@@ -146,7 +146,7 @@ CONNECT = {
     'preface': [('chapter-2', 'putting the unseen work into numbers you both trust'),
                 ('understanding-3-seeing', 'why each person sees their own work first'),
                 ('understanding-12-helping', 'care work and how not to burn out'),
-                ('self-2-now', 'what fair means to you before you talk')],
+                ('chapter-4', 'what fair means to each of you, before you talk')],
     'chapter-1': [('understanding-4-communication', 'how meaning, tone and listening work'),
                   ('understanding-2-stress', 'why stress speeds people up or shuts them down'),
                   ('self-2-now', 'how you like to be spoken to'),
@@ -241,21 +241,89 @@ CONNECT = {
 }
 
 # key terms for the index (label, regular expression). Glossary words used in the book are added to these.
+# key terms for the index (label, regular expression[, case-sensitive]). The PDF builder matches each one as
+# a whole word on every page of the chapters and appendices (never the contents or the part openers) and lists
+# every page, joined into ranges. Glossary words used in the book are added to these.
 INDEX_TERMS = [
-    ('ADHD', r'ADHD'), ('anger', r'anger|angry'), ('anxiety', r'anxiety|anxious'), ('apology', r'apolog(?:y|ies|ise|ize)'),
-    ('attachment', r'attachment'), ('autism', r'autis(?:m|tic)'), ('belonging', r'belonging'), ('bias', r'bias(?:es)?'),
-    ('Big Five', r'Big Five'), ('boundaries', r'boundar(?:y|ies)'), ('burnout', r'burn(?:out|ing out|ed out)'),
-    ('carer, caregiving', r'carers?|caregiv(?:er|ers|ing)'), ('change', r'\bchange\b'), ('check-in', r'check-ins?'),
-    ('conformity', r'conform(?:ity|ing)?'), ('culture', r'cultur(?:e|es|al)'), ('depression', r'depress(?:ion|ed)'),
-    ('empathy', r'empath(?:y|ise|ize)'), ('fairness', r'\bfair(?:ness)?\b'), ('flooding', r'flood(?:ed|ing)'),
-    ('forgiveness', r'forgiv(?:e|eness|ing)'), ('grief', r'grie(?:f|ve|ving)'), ('guilt', r'guilt'), ('habits', r'habits?'),
-    ('if-then plans', r'if-then'), ('listening', r'listen(?:ing)?'), ('loneliness', r'lonel(?:y|iness)'),
-    ('masking', r'mask(?:ing)?\b'), ('mental load', r'mental load'), ('owner, one owner per job', r'owners?\b'),
-    ('perception', r'percep(?:tion|tions)'), ('personality', r'personalit(?:y|ies)'), ('repair', r'repair'),
-    ('rest', r'\brest\b'), ('safety', r'safety|safe at home'), ('self-compassion', r'self-compassion'),
-    ('shame', r'shame'), ('sleep', r'sleep'), ('stress', r'stress'), ('temperament', r'temperament'),
-    ('trauma', r'trauma'), ('trust', r'\btrust'), ('values', r'values'), ('worry', r'worr(?:y|ies|ied|ying)'),
-    ('unseen work', r'unseen work|invisible work|unbilled'),
+    # ideas and feelings
+    ('acceptance', r'accept(?:ance|ing)'), ('ADHD', r'ADHD', 1), ('alexithymia', r'alexithymi(?:a|c)'),
+    ('anger', r'anger|angry|angrier'), ('anxiety', r'anxiety|anxious'), ('apology', r'apolog(?:y|ies|ise|ised|ising|ize)'),
+    ('appreciation, thanks', r'appreciat(?:ion|e|ed)|thank-yous?'), ('attachment', r'attachment'), ('attention', r'attention'),
+    ('autism, autistic', r'autis(?:m|tic)'), ('avoidance', r'avoid(?:ance|ing)'), ('backstop', r'backstops?'),
+    ('balance (of the work)', r'balance'), ('battery', r'battery|batteries'), ('belonging', r'belong(?:ing)?'),
+    ('bias', r'bias(?:es|ed)?'), ('bids for connection', r'bids?'), ('Big Five', r'Big Five', 1), ('blame', r'blam(?:e|ed|ing)'),
+    ('boundaries, limits', r'boundar(?:y|ies)|kind limits?'), ('burnout', r'burn(?:out|ing out|ed out|t out)'),
+    ('bystander effect', r'bystanders?'), ('care, caring', r'caring|care work'), ('carers, caregiving', r'carers?|caregiv(?:er|ers|ing)'),
+    ('change', r'chang(?:e|es|ing)'), ('check-in', r'check-ins?'), ('closeness', r'closeness|intimacy'),
+    ('communication', r'communicat(?:ion|e|ing)'), ('compassion', r'compassion(?:ate)?'), ('conflict', r'conflicts?'),
+    ('conformity', r'conform(?:ity|ing|ed|s)?'), ('control, circle of', r'circle of control'), ('co-regulation', r'co-regulat(?:ion|e)'),
+    ('criticism', r'critici(?:sm|se|sed|sing|ze)'), ('culture', r'cultur(?:e|es|al)'), ('curiosity', r'curio(?:us|sity)'),
+    ('defensiveness', r'defensive(?:ness)?'), ('depression, low mood', r'depress(?:ion|ed)|low mood'), ('desire', r'desire'),
+    ('disagreeing kindly', r'disagree(?:ing|ment|ments)?'), ('double empathy', r'double empathy'), ('drift', r'drift(?:s|ed|ing)?'),
+    ('emotions, feelings', r'emotions?|feelings?'), ('empathy', r'empath(?:y|ise|ic)'), ('energy, matching', r'matching energy'),
+    ('expectations', r'expectations?'), ('fairness', r'fair(?:ness|ly)?'), ('fear', r'fear(?:s|ful)?'), ('feedback', r'feedback'),
+    ('flooding', r'flood(?:ed|ing)'), ('forgiveness', r'forgiv(?:e|eness|ing|en)'), ('friendship', r'friendships?'),
+    ('gatekeeping', r'gatekeep(?:ing|er)'), ('gratitude', r'gratitude|grateful'), ('grief', r'grie(?:f|ve|ving|ved)'),
+    ('groupthink', r'groupthink'), ('guilt', r'guilt(?:y)?'), ('habits', r'habits?'), ('helping', r'help(?:ing|er|ers)'),
+    ('hope', r'hope(?:ful)?'), ('identity', r'identit(?:y|ies)'), ('if-then plans', r'if-then'), ('interoception', r'interocepti(?:on|ve)'),
+    ('jealousy', r'jealous(?:y)?'), ('kindness', r'kindness'), ('listening', r'listen(?:ing|ed)?'), ('loneliness', r'lonel(?:y|iness)'),
+    ('loss', r'loss(?:es)?'), ('love', r'love(?:d|s)?'), ('masking', r'mask(?:ing|ed)'), ('meaning', r'meaning(?:ful)?'),
+    ('mental load', r'mental load'), ('mistakes', r'mistakes?'), ('monotropism', r'monotrop(?:ism|ic)'),
+    ('norms', r'norms?'), ('obedience', r'obedien(?:ce|t)|obey(?:ed)?'), ('ownership, one owner per job', r'owners?|ownership'),
+    ('panic', r'panic(?:ked|king)?'), ('pause, taking a', r'pause(?:s|d)?'), ('perception', r'percep(?:tion|tions)'),
+    ('personality', r'personalit(?:y|ies)'), ('perspective', r'perspectives?'), ('praise', r'prais(?:e|ed|ing)'),
+    ('pressure', r'pressure'), ('psychological safety', r'psychological safety'), ('PTSD', r'PTSD', 1),
+    ('pursue-withdraw', r'pursue-withdraw'), ('reassurance', r'reassur(?:ance|e|ing)'), ('regret', r'regrets?'),
+    ('rejection', r'reject(?:ion|ed)'), ('repair', r'repair(?:s|ed|ing)?'), ('resentment', r'resent(?:ment|ful)?'),
+    ('resilience', r'resilien(?:ce|t)'), ('respect', r'respect(?:ful)?'), ('rituals', r'rituals?'),
+    ('rumination', r'ruminat(?:ion|ing|e)'), ('sadness', r'sad(?:ness)?'), ('safety', r'safety|safe at home'),
+    ('second arrow', r'second arrow'), ('self-compassion', r'self-compassion'), ('self-worth', r'self-worth|worth'),
+    ('sensory overload', r'sensory'), ('setup score', r'setup score'), ('shame', r'shame(?:d|ful)?'), ('sleep', r'sleep(?:ing|less)?|slept'),
+    ('small steps', r'small steps?|tiny steps?'), ('stereotypes', r'stereotyp(?:e|es|ing)'), ('stress', r'stress(?:ed|ful)?'),
+    ('stress tank', r'stress tanks?|tanks?'), ('support', r'support(?:ing|ive)?'), ('temperament', r'temperament'),
+    ('tone', r'tone'), ('trauma', r'trauma(?:tic)?'), ('trust', r'trust(?:ed|ing|worthy)?'), ('unseen work', r'unseen work|invisible (?:work|labour)|unbilled'),
+    ('us and them', r'us and them|in-groups?|out-groups?'), ('values', r'values'), ('vulnerability', r'vulnerab(?:le|ility)'),
+    ('window of tolerance', r'window of tolerance'), ('wiring', r'wiring|wired'), ('worry', r'worr(?:y|ies|ied|ying)'),
+    # people and relationships
+    ('adult children', r'grown-up (?:son|daughter|children|child)|adult children'), ('ageing, later life', r'later life|older (?:people|adults)|retire(?:d|ment)'),
+    ('babies, new parents', r'new parents?|new baby|babies|baby'), ('children', r'children|kids'), ('co-parenting', r'co-parent(?:s|ing)?|two homes'),
+    ('couples', r'couples?'), ('coworkers', r'coworkers?|colleagues?'), ('divorce', r'divorce(?:d)?'), ('dorms, shared rooms', r'dorm(?:s|itory)?|roommates?'),
+    ('empty nest', r'empty nest|left home'), ('ex-partners', r'ex-partners?|\bex\b'), ('faith', r'faith|prayer|church|mosque|synagogue|temple'),
+    ('family', r'famil(?:y|ies)'), ('fathers, dads', r'fathers?|dads?'), ('foster care', r'foster(?:ing)?'), ('friends', r'friends?'),
+    ('grandparents', r'grandparents?|grandmother|grandfather|grandchild(?:ren)?|grandson|granddaughter'), ('housemates', r'housemates?|flatmates?'),
+    ('in-laws', r'in-laws?'), ('kinship care', r'kinship'), ('managers', r'managers?'), ('marriage', r'marri(?:age|ed)'),
+    ('more than two partners', r'triads?|more than two partners|three partners'), ('mothers, mums', r'mothers?|mums?'), ('moving in', r'moving in|move in'),
+    ('neighbours', r'neighbours?'), ('parents', r'parents?|parenting'), ('partners', r'partners?'), ('siblings', r'siblings?|brothers?|sisters?'),
+    ('single, living alone', r'living alone|lives alone|on your own|on my own'), ('step-parents', r'step-parents?|stepparents?|stepmum|stepdad'),
+    ('teenagers', r'teen(?:s|ager|agers)?|teenage'), ('work, the workplace', r'workplace|at work|office'),
+    # situations
+    ('arguments', r'argu(?:ment|ments|e|ing|ed)'), ('breakups', r'break-?ups?'), ('chores', r'chores?|housework|dishes|laundry|bins'),
+    ('crisis lines', r'Samaritans|988|findahelpline|Lifeline|crisis'), ('debt, money worries', r'debts?'), ('exams', r'exams?'),
+    ('group chats', r'group chats?'), ('illness, long-term', r'ill(?:ness)?|chronic|long COVID|disab(?:led|ility)'), ('infidelity, affairs', r'affairs?'),
+    ('money', r'money|budget|income|bills?|£'), ('online life', r'online|social media|phones?'), ('remote and hybrid work', r'remote|hybrid'),
+    ('separation', r'separat(?:e|ed|ing|ion)'), ('shift work', r'shift work(?:ers?)?|night shifts?|late shifts?|on shifts'), ('suicide', r'suicid(?:e|al)|ending (?:your|their|my) life'),
+    # tools and the book's own words
+    ('Calm-Down Kit', r'Calm-Down Kit', 1), ('daily check-in (90 seconds)', r'90-second'), ('How much are you carrying?', r'How much are you carrying', 1),
+    ('Lemonade Stand', r'Lemonade Stand', 1), ('monthly look-back', r'look-backs?'), ('One owner per job', r'One owner per job', 1),
+    ('Professor Puddles', r'Puddles', 1), ('Say it so it lands', r'Say it so it lands', 1), ('See it from their side', r'See it from their side', 1),
+    ('self path', r'self path', 1), ('six-week program', r'six-week program'), ('Today’s Weather', r'Today’s Weather', 1),
+    ('Wavelength, Wave Code', r'Wavelength|Wave Code', 1), ('What keeps coming back?', r'What keeps coming back', 1),
+    ('Who did what', r'Who did what', 1), ('Wiring Card', r'Wiring Card', 1), ('rulebook from home', r'rulebook'),
+    ('ledger', r'ledgers?'), ('five big ideas', r'big ideas?'), ('Is the setup working for everyone?', r'Is the setup working', 1),
+    # researchers and thinkers
+    ('Ainsworth, Mary', r'Ainsworth', 1), ('Aristotle', r'Aristotle', 1), ('Arendt, Hannah', r'Arendt', 1), ('Asch, Solomon', r'Asch', 1),
+    ('Baumeister, Roy', r'Baumeister', 1), ('Bonanno, George', r'Bonanno', 1), ('Bowlby, John', r'Bowlby', 1), ('Buber, Martin', r'Buber', 1),
+    ('Buddha, Buddhism', r'Buddh(?:a|ism|ist)', 1), ('Carstensen, Laura', r'Carstensen', 1), ('Confucius', r'Confuci(?:us|an)', 1),
+    ('Crompton, Catherine', r'Crompton', 1), ('Daminger, Allison', r'Daminger', 1), ('Dweck, Carol', r'Dweck', 1), ('Edmondson, Amy', r'Edmondson', 1),
+    ('Epictetus', r'Epictetus', 1), ('Erikson, Erik', r'Erikson', 1), ('Festinger, Leon', r'Festinger', 1), ('Gollwitzer, Peter', r'Gollwitzer', 1),
+    ('Gottman, John', r'Gottmans?', 1), ('Gross, James', r'Gross', 1), ('Hochschild, Arlie', r'Hochschild', 1), ('Janis, Irving', r'Janis', 1),
+    ('Kahneman, Daniel', r'Kahneman', 1), ('Kant, Immanuel', r'Kant', 1), ('Lally, Phillippa', r'Lally', 1), ('Leary, Mark', r'Leary', 1),
+    ('Lieberman, Matthew', r'Lieberman', 1), ('Malinowski, Bronisław', r'Malinowski', 1), ('Marcus Aurelius', r'Marcus Aurelius', 1),
+    ('McEwen, Bruce', r'McEwen', 1), ('Milgram, Stanley', r'Milgram', 1), ('Mill, John Stuart', r'Stuart Mill', 1), ('Milton, Damian', r'Milton', 1),
+    ('Neff, Kristin', r'Neff', 1), ('Nussbaum, Martha', r'Nussbaum', 1), ('Pennebaker, James', r'Pennebaker', 1), ('Plato', r'Plato', 1),
+    ('Reis, Harry', r'Reis', 1), ('Rogers, Carl', r'Rogers', 1), ('Rosenberg, Marshall', r'Rosenberg', 1), ('Ross, Lee', r'Lee Ross', 1),
+    ('Seneca', r'Seneca', 1), ('Stoics', r'Stoic(?:s|ism)?', 1), ('Tajfel, Henri', r'Tajfel', 1), ('Tronick, Edward', r'Tronick', 1),
+    ('Tversky, Amos', r'Tversky', 1), ('Watzlawick, Paul', r'Watzlawick', 1), ('Wood, Wendy', r'Wendy Wood', 1),
 ]
 # glossary words that only describe the website, not the book's ideas
 GLOSS_SKIP = {'levels', 'petals', 'mini-dive', 'pal-cam', 'quiet-mode', 'easy-reading', 'simple-full', 'wiring-card', 'almanac',
@@ -429,7 +497,8 @@ def uses(slug):
         for li in re.findall(r'<li>(.*?)</li>', m.group(1), re.S):
             a = re.match(r'\s*<a href="([^"]+)">(.*?)</a>:?\s*(.*)', li, re.S)
             if a and not a.group(1).startswith('/library/'):
-                out.append((strip_tags(a.group(2)).strip(), a.group(1), strip_tags(a.group(3)).strip().rstrip('.')))
+                d = re.sub(r'^[\s,;:·–—-]+', '', strip_tags(a.group(3))).strip().rstrip('.')
+                out.append((strip_tags(a.group(2)).strip(), a.group(1), (d[:1].upper() + d[1:]) if d else ''))
     return out[:2] or [('The six-week program', '/prog-01.html', '')]
 
 
@@ -1061,10 +1130,47 @@ def glossary_terms(text):
         words_ = [name.split(' (')[0]] + [a.strip() for a in (also or '').split(',') if len(a.strip()) > 3]
         hits = sum(len(re.findall(r'\b%s\b' % re.escape(w), text, re.I)) for w in words_[:4])
         if hits >= 2:
-            out.append((gid, name, gloss_plain(d.group(1)) if d else '',
-                        gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1))) if ex else '', words_[0]))
-    out.sort(key=lambda x: x[1].lower())
+            out.append((gid, name, uk(GLOSS_OVERRIDE.get(gid) or (gloss_plain(d.group(1)) if d else '')),
+                        uk(gloss_plain(re.sub(r'</?a\b[^>]*>', '', ex.group(1)))) if ex else '', words_[0]))
+    have = {x[1].lower() for x in out}
+    for gid, name, d, rx in GLOSS_EXTRA:
+        if name.lower() not in have and re.search(r'\b(?:%s)\b' % rx, text, re.I):
+            out.append((gid, name, d, '', name))
+    out.sort(key=lambda x: re.sub(r'^(?:the|a) ', '', x[1].lower()))
     return out
+
+
+# Definitions the book needs in its own words (the site's glossary.html has the web versions).
+GLOSS_OVERRIDE = {
+    'pressure': 'Pressure, in Today’s Weather, is how much you were already carrying today: light, building or heavy. Behind the forecast sits a rough tally from 0 to 100; under 45 leaves room in the day, 65 or more means go gently. It is a reading of what you told it, not a score or a grade.',
+}
+# Words from the chapters (Part Three above all) that the site's glossary doesn't define: (id, word, definition,
+# what to look for in the text). Each is printed only in a book whose chapters use it.
+GLOSS_EXTRA = [
+    ('alexithymia', 'Alexithymia', 'Finding it hard to notice, name or describe your own feelings. It is a trait on a scale, not an illness, and it is more common in some autistic people. Naming body signals first can help.', r'alexithymi\w*'),
+    ('double-empathy', 'Double empathy', 'The idea, from the autistic researcher Damian Milton, that misunderstandings between autistic and non-autistic people run both ways: each finds the other hard to read, so neither side is simply “missing” something.', r'double empathy'),
+    ('interoception', 'Interoception', 'Your sense of what is happening inside your body: heartbeat, breathing, hunger, tension. Feelings often show up here first.', r'interocepti\w*'),
+    ('monotropism', 'Monotropism', 'A theory of autistic attention: attention gathers deeply on a few things at a time, rather than spreading thinly across many. Switching away can take real effort.', r'monotrop\w*'),
+    ('window-of-tolerance', 'Window of tolerance', 'The range in which you can feel strong feelings and still think and talk. Above it you are flooded or revved up; below it you shut down. A phrase from the psychiatrist Dan Siegel.', r'window of tolerance'),
+    ('psychological-safety', 'Psychological safety', 'A shared sense in a group or team that you can speak up, ask a question or admit a mistake without being punished or embarrassed (Amy Edmondson).', r'psychological safety'),
+    ('groupthink', 'Groupthink', 'When a close group wants agreement so much that doubts go unsaid and a poor decision goes ahead. Irving Janis named it in 1972.', r'groupthink'),
+    ('prolonged-grief', 'Prolonged grief', 'Grief that stays intense and gets in the way of daily life for a long time after a death (usually a year or more for adults). It is treatable; a GP or doctor is a good first step.', r'prolonged grief'),
+    ('wave-code', 'Wave Code', 'Four letters from the Wavelength quiz, one for each of four preferences about how you take in and send words. Each letter shows where you lean on a dial today: a shorthand for preferences, not a personality type.', r'Wave Code'),
+    ('stress-tank', 'Stress tank', 'How much stress you are already carrying, from How much are you carrying?: a load score from 0 (empty) to 1 (full). Under 0.30 is low, 0.30 to 0.59 moderate, 0.60 and up high. A fuller tank means less room to take more on. (Your battery is the other side of it: energy left.)', r'stress tank|tank'),
+    ('ladder', 'The ladder', 'Three everyday states: calm and connected, revved up, running on empty. Today’s Weather calls them clear, gusty and fogged in. A best guess about your state, not a measurement.', r'ladder'),
+    ('ledger', 'Ledger', 'A notebook where you write down what happened, so you can look at it calmly later. The book’s title means just that: see what is really going on, without blame, then change one small thing.', r'ledger'),
+    ('setup-score', 'Setup score', 'The one number from Is the setup working for everyone?: balance, ownership and stress added up with weights (0.40, 0.35 and 0.25), from 0 to 1. 0.70 and up is working well, 0.40 to 0.69 needs a look, under 0.40 needs a rethink, together. It judges the setup, never a person.', r'setup score'),
+    ('backstop', 'Backstop', 'The second name on a job: someone who notices if it slipped and checks in kindly. Not a supervisor. A job counts as owned once it has an owner; the backstop is a good habit on top.', r'backstops?'),
+    ('second-arrow', 'Second arrow', 'The extra pain we add on top of a hard moment, such as being angry at ourselves for being sad. The first arrow is the event; the second is what we tell ourselves about it (a Buddhist image).', r'second arrow'),
+    ('mental-load', 'Mental load', 'The noticing, planning and remembering behind running a shared life: knowing the shoes are too small, booking the appointment, keeping the list. It is real work, even though nobody sees it.', r'mental load'),
+    ('co-regulation', 'Co-regulation', 'Calming down with the help of someone else’s steady presence: a calm voice, sitting nearby, slow breathing together. Children learn to settle this way first.', r'co-regulat\w*'),
+    ('rumination', 'Rumination', 'Going over the same worry or regret again and again without getting closer to an answer.', r'ruminat\w*'),
+    ('pluralistic-ignorance', 'Pluralistic ignorance', 'When most people in a group privately disagree with something but each thinks they are the only one, so nobody says so.', r'pluralistic ignorance'),
+    ('parallel-parenting', 'Parallel parenting', 'Co-parenting with as little direct contact as possible: each home runs its own way, and messages stay short, polite and about the children.', r'parallel parenting'),
+    ('kinship-care', 'Kinship care', 'When a grandparent, aunt, older sibling or family friend raises a child whose parents can’t.', r'kinship'),
+    ('gatekeeping', 'Gatekeeping', 'Holding on to how a home or child-care job must be done, so the other person steps back. Researchers first described it in mothers (“maternal gatekeeping”), but anyone can do it.', r'gatekeep\w*'),
+    ('if-then-plan', 'If-then plan', 'A small plan written as “If this happens, then I will do that”, which makes a new habit easier to start (Peter Gollwitzer).', r'if-then'),
+]
 
 
 # The book uses the worksheets' plain names, never their WP-NN codes (the site glossary keeps the codes).
@@ -1080,17 +1186,45 @@ def gloss_plain(s):
     return re.sub(r' \(WP-\d+\)', '', s)
 
 
+UK_WORDS = {'behavior': 'behaviour', 'behaviors': 'behaviours', 'behavioral': 'behavioural', 'toward': 'towards', 'afterward': 'afterwards',
+            'labor': 'labour', 'organized': 'organised', 'organize': 'organise', 'apologized': 'apologised', 'apologize': 'apologise',
+            'counselor': 'counsellor', 'counselors': 'counsellors', 'counseling': 'counselling', 'color': 'colour', 'favorite': 'favourite',
+            'neighbor': 'neighbour', 'neighbors': 'neighbours', 'realize': 'realise', 'realized': 'realised', 'recognize': 'recognise',
+            'recognized': 'recognised', 'center': 'centre', 'analyze': 'analyse', 'analyzed': 'analysed', 'popularized': 'popularised',
+            'criticized': 'criticised', 'emphasized': 'emphasised', 'minimize': 'minimise', 'categorized': 'categorised', 'randomized': 'randomised', 'humor': 'humour', 'humorous': 'humorous', 'labeled': 'labelled', 'canceled': 'cancelled'}
+
+
+def uk(text):
+    """British spelling for the book's own plain-words text (research findings, glossary lines); titles of
+    published works keep their own spelling."""
+    def sub(m):
+        w = m.group(0)
+        r = UK_WORDS[w.lower()]
+        return r[0].upper() + r[1:] if w[0].isupper() else r
+    parts = re.split(r'(<[^>]+>)', text or '')
+    return ''.join(x if x.startswith('<') else re.sub(r'\b(%s)\b' % '|'.join(UK_WORDS), sub, x, flags=re.I) for x in parts)
+
+
 def research_notes(here):
-    refs = []
-    for f in sorted(glob.glob(os.path.join(ROOT, 'tools', 'research', 'refs-*.json'))):
-        try:
-            refs += json.load(open(f, encoding='utf-8'))
-        except Exception:
-            pass
+    """The verified references the chapters in this book mention, by chapter. Entries that share an id are
+    merged the way the research page merges them (tools/research/build_research.py), and corrections in
+    tools/research/refs-j.json (bookfixA: proper sources instead of Wikipedia, missing years) win for the book.
+    Encyclopaedia pages are never listed as a source."""
+    sys.path.insert(0, os.path.join(ROOT, 'tools', 'research'))
+    import build_research as br  # noqa: E402
+    refs, _ = br.merge(br.load())
+    try:
+        fixes = {r['id']: r for r in json.load(open(os.path.join(ROOT, 'tools', 'research', 'refs-j.json'), encoding='utf-8'))}
+    except Exception:
+        fixes = {}
     by = {}
     for r in refs:
-        if not r.get('verified'):
+        if r['id'] in fixes:
+            f = fixes[r['id']]
+            r = dict(r, **{k: f[k] for k in ('authors', 'title', 'venue', 'url', 'doi', 'finding', 'year', 'year_label') if k in f})
+        if not r.get('verified') or 'wikipedia.org' in (r.get('url') or ''):
             continue
+        r['finding'] = uk(re.sub(r'\s*Only the citation[^.]*\.[^.]*\.', '', r.get('finding', '')))
         chs = []
         for m in r.get('mentioned_on', []):
             mm = re.match(r'/book/([a-z0-9-]+?)(?:-in-depth)?\.html', m)
@@ -1103,16 +1237,20 @@ def research_notes(here):
 
 def ref_html(r):
     au = esc(r.get('authors', ''))
-    yr = r.get('year', '')
-    t = esc(r.get('title', ''))
+    yr = r.get('year_label') or r.get('year') or 'n.d.'
+    t = (r.get('title', '') or '').strip()
+    t = esc(t if re.search(r'[.?!]$', t) else t + '.')
     url = r.get('url') or (('https://doi.org/' + r['doi']) if r.get('doi') else '')
     shown = ('doi.org/' + r['doi']) if r.get('doi') else re.sub(r'^https?://(www\.)?', '', url).rstrip('/')
+    if len(shown) > 70 and not r.get('doi'):
+        shown = re.sub(r'^([^/]+).*', r'\1', shown)
     link = (' <a class="pe-ref-u" href="%s">%s</a>' % (esc(url), '/<wbr>'.join(esc(x) for x in shown.split('/')))) if url else ''
-    return '<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s.</span> <span class="pe-ref-f">%s</span>%s</li>' % (
-        au, yr, t, esc(r.get('finding', '')), link)
+    venue = (' <span class="pe-ref-v">%s.</span>' % esc(r['venue'].rstrip('.'))) if r.get('venue') else ''
+    return '<li><span class="pe-ref-a">%s (%s).</span> <span class="pe-ref-t">%s</span>%s <span class="pe-ref-f">%s</span>%s</li>' % (
+        au, esc(str(yr)), t, venue, esc(r.get('finding', '')), link)
 
 
-EX_WRAP_RE = re.compile(r'(<div class="book-ex-wrap[^"]*" data-ex-n=")\d+(" data-ex-title="[^"]*">\s*<figure class="bk-ex[^"]*"[^>]*\bid="([^"]+)".*?<span class="bk-ex-k">)Filled-in example[^<]*(</span>)', re.S)
+EX_WRAP_RE = re.compile(r'(<div class="book-ex-wrap[^"]*" data-ex-n=")\d+(" data-ex-title="[^"]*">\s*(?:<!--.*?-->\s*)?<figure class="bk-ex[^"]*"[^>]*\bid="([^"]+)".*?<span class="bk-ex-k">)Filled-in example[^<]*(</span>)', re.S)
 FIG_RE = re.compile(r'(<figure class="book-fig[^"]*" id="([^"]+)".*?<span class="book-fig-n">Figure )[^<]*(</span>)', re.S)
 
 
@@ -1172,7 +1310,7 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     # research notes
     n_refs = sum(len(v) for v in notes.values())
     s += '<section class="pe-back pe-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
-    s += '<p class="pe-back-lede">The %d studies and books the chapters mention, chapter by chapter, each with what it found in plain words and where to read it. Every entry was checked against the original source. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
+    s += '<p class="pe-back-lede">The %d studies and books the chapters mention, chapter by chapter, each with what it found in plain words and where to read it. Each entry was looked up and checked: most against the paper itself or its abstract, some (mostly older books) against a publisher’s or library’s record. Unchecked works are left out. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
     if fb is not None:
         s += front_back.reading_research(fb)
     for e in ORDER:
@@ -1184,17 +1322,23 @@ def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     # index (print only: it is all page numbers)
     s += '<section class="pe-back pe-index pe-only" id="index" style="--pc:%s">%s<h1 class="pe-back-h">Index</h1><p class="pe-back-lede">Key ideas and the pages where the book talks about them. Chapter names are in the contents.</p><ul class="pe-ix">' % (col, mark('index'))
     terms = {}
-    for lab, rx in INDEX_TERMS:
-        terms[lab.lower()] = (lab, rx)
+    for t in INDEX_TERMS:
+        terms[t[0].lower()] = (t[0], t[1], len(t) > 2)
     for gid, nm, d, ex, w in gloss:
-        k = nm.lower()
         lab = nm if re.search(r'[A-Z]', nm[1:]) else nm[0].lower() + nm[1:]
-        if k not in terms and not any(k.startswith(t.split(',')[0]) for t in terms):
-            terms[k] = (lab, re.escape(w))
+        # "The load" is filed under L, as "load, the"
+        m = re.match(r'(?i)(the|a) (.+)', lab)
+        if m:
+            lab = m.group(2) + (', the' if m.group(1).lower() == 'the' else '')
+        k = lab.lower()
+        head = re.split(r'[ ,(]', k)[0]
+        known = set(w for t in terms for w in re.findall(r'[a-z’-]+', t))
+        if k not in terms and head not in known and not any(k.split(',')[0].startswith(t.split(',')[0].split(' (')[0]) or t.split(',')[0].startswith(k.split(',')[0]) for t in terms):
+            terms[k] = (lab, re.escape(w), False)
     for k in sorted(terms, key=lambda x: x.lstrip('“').lower()):
-        lab, rx = terms[k]
+        lab, rx, cs = terms[k]
         key = 'ix-' + re.sub(r'[^a-z0-9]+', '-', lab.lower()).strip('-')
-        s += '<li data-ix="%s" data-ix-re="%s"><span class="pe-ix-t">%s</span> %s</li>' % (key, esc(rx), esc(lab), '<span class="pe-ixp" data-ixp="%s">%s</span>' % (key, PAGEMAP.get(key, '')))
+        s += '<li data-ix="%s" data-ix-re="%s"%s><span class="pe-ix-t">%s</span> %s</li>' % (key, esc(rx), ' data-ix-cs' if cs else '', esc(lab), '<span class="pe-ixp" data-ixp="%s">%s</span>' % (key, PAGEMAP.get(key, '')))
     s += '</ul></section>'
     # back cover
     acc, tint = COVER[name][0], COVER[name][1]
@@ -1376,8 +1520,13 @@ def build_download():
             meta = ''
             if m:
                 meta = '%d pages · %.1f MB' % (m.get('pages', 0), m.get('bytes', 0) / 1048576.0)
-            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a></li>' % (
-                fname, fname, 'Full version' if deep else 'Short version', meta, fname))
+            kit = ''
+            pk = m.get('print') or {}
+            if pk and all(os.path.exists(os.path.join(BOOK, 'pdf', pk[k])) for k in ('interior', 'cover')):
+                kit = ' <span class="bk-dl-kit">For a print shop: <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-interior" download>the inside pages</a> (%d pages, %.1f MB) and <a class="bk-dl-kit-file" href="/book/pdf/%s" data-dl="%s-cover" download>the cover</a>.</span>' % (
+                    pk['interior'], fname, m.get('interior_pages', 0), pk.get('interior_bytes', 0) / 1048576.0, pk['cover'], fname)
+            rows.append('<li><a class="bk-dl-file" href="/book/pdf/%s.pdf" data-dl="%s" download><span class="bk-dl-v">%s</span><span class="bk-dl-m">%s</span></a> <a class="bk-dl-read" href="/book/%s.html">read it here</a>%s</li>' % (
+                fname, fname, 'Full version' if deep else 'Short version', meta, fname, kit))
         # the whole book also has the afterword, which is not a chapter (the book's home says "26 chapters ... and an afterword")
         chs = '%d chapters%s' % (sum(1 for e in ORDER if e[1] in parts), ' and an afterword' if name == 'whole' else '')
         acc, tint = COVER[name][0], COVER[name][1]

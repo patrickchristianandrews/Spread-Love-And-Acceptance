@@ -1655,7 +1655,80 @@ if (PERS) {
   c('care10', ['is it fair that I do all the cooking', 'I want to end it all'], { kind: 'safety', text: /988/ });
   c('care10', ['is it fair that I do all the cooking', 'my mum keeps calling me at work'], { not: /How long has the split|reason it’s this way/ });
   c('care10', ['He never apologizes and always turns things around on me. Is he a narcissist?', 'Always me. The other never does'], { kind: 'ask', id: 'clarify-repair', text: /blame land on one person/ });
+
+  // chat10 (owner): care is not control, for partners, parents and friends alike, and for the one asking too
+  const CARE10 = { kind: 'care', id: 'carenotcontrol', script: true, link: '/communication.html#saying-no', not: new RegExp(DV10.source + '|' + LABEL_SAY.source, 'i') };
+  [['phones off at dinner', /phones away at dinner/], ['my mum says home by 10', /house rule/], ['my partner said no to the trip with my ex', /distance from an ex/],
+    ["my dad says I can't go to the party", /house rule/], ["my parents said I can't have my boyfriend sleep over", /house rule/], ["my dad says I can't see my friends until my homework is done", /house rule/],
+    ["my mum says I'm not allowed to see my friends on school nights", /house rule/], ["my partner doesn't want me walking home alone at night", /worried about you getting hurt/],
+    ['she asked me to see a doctor about my drinking', /worried about your health/], ['my partner wants to know where I am when I go out late', /want to know you’re safe/],
+    ['is it controlling that my wife wants me home by midnight', /want to know you’re safe/], ['is this a red flag he wants to know where I am', /want to know you’re safe/],
+    ["my wife won't let me buy a motorbike", /worried about you getting hurt/], ["my wife is so controlling she won't let me buy a new car", /no to a big spend/],
+    ['my best friend asked me not to bring my new boyfriend to her birthday', /their own event is theirs to decide/], ["he doesn't want me going to the club with my single friends", /isn’t control/]]
+    .forEach(([q, x]) => t('chat10', 'care, not control: ' + q, Object.assign({ q, text: new RegExp(x.source + '[\\s\\S]*is not control') }, CARE10)));
+  t('chat10', 'the asker’s own side: asking for a text is not control', Object.assign({ q: "am I controlling if I ask him to text me when he's late", text: /isn’t control[\s\S]*Could you send a quick text/ }, CARE10));
+  c('chat10', ['talk deep', 'is it controlling to want phones off at dinner'], Object.assign({ text: /phones away at dinner, isn’t control/ }, CARE10));
+  c('chat10', ['talk deep', 'my mum is controlling about curfew'], { id: 'carenotcontrol', not: /Let’s think about fear, control and safety/ });
+  [["my boyfriend won't let me buy a car with my own money", 'clarify-money'], ['he wants me home by 8 every night or he gets angry', 'clarify-limits'], ['she asked me to stop seeing my sister', 'clarify-limits'],
+    ["he says if I go out with my friends he'll leave me", 'clarify-limits']]
+    .forEach(([q, id]) => t('chat10', 'care or control? a few questions first: ' + q, { q, kind: 'ask', id, link: '/safety.html', chip: /^Skip all$/, not: new RegExp('is not control|' + LABEL_SAY.source, 'i') }));
+  t('chat10', 'stop talking to my friends: the safety answer', { q: 'he wants me to stop talking to my friends', kind: 'safety', text: /1-800-799-7233/, link: '/safety.html' });
+  t('chat10', 'driving after drinking: worry about getting hurt', Object.assign({ q: "my wife doesn't want me driving home after drinking", text: /worried about you getting hurt[\s\S]*is not control/ }, CARE10));
+  t('chat10', 'a big spend: the money questions are one tap away', { q: "my wife won't let me buy a new car", id: 'carenotcontrol', chip: /A few quick questions/ });
+  t('chat10', '"I\'m done" if it keeps happening is a boundary', { q: "I told him if he keeps lying I'm done", kind: 'care', id: 'ownboundary', text: /boundary, not a threat/, not: DV10 });
+  [["my boyfriend doesn't like me going out without him", 'friendsjealous'], ["she doesn't like it when I go out with my mates", 'friendsjealous']]
+    .forEach(([q, id]) => t('chat10', 'jealous, ordinary help: ' + q, { q, id, text: /isn’t a reason to stop seeing/, not: new RegExp(DV10.source + '|' + LABEL_SAY.source, 'i') }));
+  // the other way: clear signs keep the safety answer and its resources
+  [["she says I can't talk to anyone but her", /1-800-799-7233/], ["he told me I can't see my family anymore", /1-800-799-7233/], ["he won't let me see my friends", /1-800-799-7233/],
+    ['she reads my messages without asking', /1-800-799-7233/], ['he takes my paycheck', /1-800-799-7233/], ["I'm scared of him", /1-800-799-7233/], ['he threatened to hurt me', /1-800-799-7233|not your fault/],
+    ["my partner wants me to text when I'm late and gets furious and threatens me if I don't", /1-800-799-7233|not your fault/], ['he always wants to know where I am and tracks my phone', /1-800-799-7233/]]
+    .forEach(([q, x]) => t('chat10', 'still a safety answer: ' + q, { q, kind: 'safety', text: x, link: '/safety.html', not: /is not control/ }));
+  t('chat10', 'wanting to know where I am all the time: questions, not a verdict either way', { q: 'he wants to know where I am all the time', kind: 'ask', id: 'clarify-limits', text: /worry, or it can start to feel like being checked on/, link: '/safety.html', not: /want to know you’re safe|1-800-799-7233/ });
+  // no labels: "is he abusive?" with nothing described: ask what happened, the signs, the free lines, never a verdict
+  t('chat10', 'is he abusive: ask, don’t conclude', { q: 'is he abusive', kind: 'safety', id: 'abuseask', text: /can’t tell from a chat[\s\S]*What has been happening[\s\S]*1-800-799-7233/, link: '/safety.html', chip: /I feel afraid/, not: /sounds serious|What you’re describing/ });
+  c('chat10', ["my husband yells and i'm scared", 'is he abusive?'], { kind: 'safety', not: /can’t tell from a chat/ });
+  c('chat10', ['what tools are there', 'is he abusive'], { kind: 'safety', id: 'abuseask', not: /household conflict|Forgetting things/ });
+  ['my mother is a narcissist', 'my ex is toxic', 'is he gaslighting me', 'is my relationship toxic', 'my friend is manipulative']
+    .forEach(q => t('chat10', 'a label, explored, never confirmed: ' + q, { q, kind: 'care', id: 'label', link: '/safety.html', not: LABEL_SAY }));
+  // proportionate questions: something that may be unfair gets one short question at a time first
+  [['he always gets his way', 'clarify-decisions', /When a decision affects you both/], ['she makes all the decisions', 'clarify-decisions', /When a decision affects you both/],
+    ['my wife always blames me', 'clarify-repair', /who usually says sorry first/], ["he says I'm always wrong", 'clarify-communication', /feeling unheard/]]
+    .forEach(([q, id, x]) => t('chat10', 'questions before a read: ' + q, { q, kind: 'ask', id, text: x, chip: /^Skip all$/, not: DV10 }));
+  t('chat10', 'unfair, no topic yet: what is it mostly about?', { q: 'it feels unfair', kind: 'clarify', id: 'unfairpick', chip: /Who does what/ });
+  c('chat10', ['this doesn’t feel fair', 'A few questions about who does what'], { kind: 'ask', id: 'clarify-load', text: /How long has the split/ });
+  t('chat10', 'a playbook about fairness offers the questions', { q: 'I do all the housework and he does nothing', kind: 'sit', chip: /Is it fair\? A few quick questions/ });
+  c('chat10', ['I do all the housework and he does nothing', 'A few questions about who does what'], { kind: 'ask', id: 'clarify-load', text: /How long has the split/ });
+  t('chat10', 'a self playbook offers no questions', { q: 'I keep overreacting to small things', nochip: /A few quick questions/ });
 }
+
+// ---------------------------------------------------------------- chat10: the newer pages, all free, no podcast
+t('chat10', 'all tools, by type', { q: 'what tools are there', id: 'alltools', link: '/tools.html' });
+t('chat10', 'a list of every tool', { q: 'is there a list of every tool', id: 'alltools', link: '/tools.html' });
+t('chat10', 'everything on this site', { q: 'how do I explore the site', id: 'explore', link: '/explore.html' });
+t('chat10', 'where to start: the three quick questions', { q: 'help me find where to start', kind: 'card', id: 'start', link: ['/start-here.html', '/find-your-start.html'], text: /Find your starting point/ });
+t('chat10', 'why this site', { q: 'why should I use this site instead of an AI chat', id: 'whysite', link: '/why-this-site.html', text: /free/ });
+t('chat10', 'living alone', { q: 'I live alone', id: 'livingalone', link: '/living-alone.html' });
+t('chat10', 'living alone tips', { q: 'tips for living alone', id: 'livingalone', link: '/living-alone.html', not: /isn’t only for couples/ });
+t('chat10', 'single still gets the on-your-own answer', { q: 'can i use this if im single', id: 'single' });
+t('chat10', 'nervous system', { q: 'what is the vagus nerve', id: 'nervoussystem', link: '/nervous-system.html' });
+t('chat10', 'fight or flight', { q: 'what is fight or flight', id: 'nervoussystem', link: '/nervous-system.html' });
+t('chat10', 'CBD: three rare conditions', { q: 'does CBD help with anxiety', id: 'herbcbd', text: /three rare conditions[\s\S]*Lennox-Gastaut[\s\S]*Dravet[\s\S]*tuberous sclerosis/, not: /two rare forms/, link: '/calming-supplements.html#cbd' });
+t('chat10', 'write it through', { q: 'what is write it through', kind: 'card', id: 'writeit', link: '/write-it-through.html' });
+t('chat10', 'how you take things in', { q: 'how do I make the site fit my mind', kind: 'card', id: 'takethingsin', link: '/how-you-take-things-in.html' });
+t('chat10', 'CALC-02', { q: 'what is CALC-02', kind: 'card', id: 'calc02', link: '/look-back-30-days.html' });
+t('chat10', 'the 30-day look-back', { q: 'how does the 30 day look back work', kind: 'card', id: 'calc02', steps: true });
+t('chat10', 'the monthly look-back is still WP-04', { q: 'How do I do the monthly look-back?', kind: 'card', id: 'wp04' });
+t('chat10', 'WP-12', { q: 'what is WP-12', kind: 'card', id: 'wp12', link: '/workpapers/wp-12-same-moment-different-speeds.html' });
+t('chat10', 'WP-14', { q: 'what is WP-14', kind: 'card', id: 'wp14', link: '/workpapers/wp-14-is-it-us-or-everything-else.html' });
+t('chat10', 'WP-15', { q: 'what is WP-15', kind: 'card', id: 'wp15', link: '/workpapers/wp-15-keep-your-little-rituals-alive.html' });
+t('chat10', 'WP-12 by its old name', { q: 'what is the carrier frequency audit', kind: 'card', id: 'wp12' });
+t('chat10', 'the book: three parts, free', { q: 'tell me about the book', kind: 'card', id: 'book', text: /26 chapters in three parts[\s\S]*free|free[\s\S]*26 chapters/, link: '/book/index.html', not: /five chapters|with your email/ });
+t('chat10', 'download the book', { q: 'can I download the book', id: 'bookdownload', link: '/book/download.html', text: /free PDF[\s\S]*never needs an email/ });
+t('chat10', 'the app: free, no App Store', { q: 'is there an app', kind: 'card', id: 'app', link: '/install.html', text: /free[\s\S]*Android[\s\S]*iPhone/, not: /coming soon|App Store version is coming/i });
+t('chat10', 'the app on iPhone', { q: 'how do I install the app on my iphone', kind: 'card', id: 'app', text: /Add to Home Screen/, not: /coming soon/i });
+t('chat10', 'no podcast', { q: 'is there a podcast', kind: 'card', id: 'podcast', text: /no podcast[\s\S]*Listen to this chapter/, not: /Kane and Christian Experience explores|Episode 1|coming soon/ });
+t('chat10', 'no podcast in the preface steps', { q: 'how do I read the preface', not: /podcast/i });
+t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost anything', id: 'free', text: /^Everything here is free|Everything here is free/, not: /^Yes\. Everything/ });
 
 // ---------------------------------------------------------------- ask.html: every "Try asking…" question gets a real answer
 // (deep questions are asked after "Talk deep", as the page does; a question the page adds later is still checked: never a fallback)

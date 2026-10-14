@@ -239,14 +239,29 @@ async function makeBook(ctx, file, opts = {}) {
   const vp = page.viewportSize();
   await page.setViewportSize({ width: 499, height: 900 });
   const wide = await page.evaluate(() => {
+    const hide = [...document.querySelectorAll('.pe-part, .pe-cover, .pe-backcover')];
+    hide.forEach(e => { e.dataset.peDisp = e.style.display; e.style.display = 'none'; });
     const W = document.documentElement.clientWidth + 1, out = [];
-    for (const el of document.querySelectorAll('main *')) {
-      if (el.closest('.pe-part, .pe-recto-pad, .pe-cover, .pe-backcover')) continue;
-      const r = el.getBoundingClientRect();
-      if (r.width && r.right > W && out.length < 8) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 60));
+    if (document.documentElement.scrollWidth > W) {
+      // follow the widest branch down to the element that sticks out (its text can overflow its own box)
+      let el = document.querySelector('main');
+      while (el) {
+        const k = [...el.children].find(c => c.scrollWidth > W || c.getBoundingClientRect().right > W);
+        if (!k) break;
+        el = k;
+      }
+      if (el) out.push(el.tagName + '.' + el.className + ': ' + (el.textContent || '').trim().slice(0, 80));
     }
+    hide.forEach(e => { e.style.display = e.dataset.peDisp || ''; });
     return out;
   });
+  // a filled-in example that fits on a page stays whole; only the long ones may run on to the next page
+  const shortEx = await page.evaluate(() => {
+    let n = 0;
+    document.querySelectorAll('.book-ex-wrap').forEach(w => { if (w.getBoundingClientRect().height < 380) { w.classList.add('pe-ex-short'); n++; } });
+    return n;
+  });
+  log('examples kept whole: ' + shortEx);
   await page.setViewportSize(vp || { width: 1280, height: 720 });
   if (wide.length) console.log('  WARNING: wider than the text column, so Chromium will print the whole book smaller:\n   ' + wide.join('\n   '));
   if (prep.missingQR) console.log('  warning: %d QR codes not drawn', prep.missingQR);
@@ -295,7 +310,21 @@ async function makeBook(ctx, file, opts = {}) {
     const pages = pageTexts(buf);
     const allKeys = [...new Set(prep.keys.concat(['glossary', 'notes', 'index', 'contents', 'how', 'glance', 'half', 'titlep'], prep.pads, prep.parts, prep.chapters))];
     const found = findMarks(pages, allKeys);
-    const padsChanged = await setPads(found);
+    let padsChanged = await setPads(found);
+    // a filled-in example whose tab and title are stranded at the foot of a page starts on the next page
+    const strand = [];
+    for (const [k, pg] of Object.entries(found)) {
+      const m = /^ex-(\d+)$/.exec(k);
+      if (!m || !pages[pg - 1]) continue;
+      const t = pages[pg - 1], i = t.search(new RegExp('FILLED-IN EXAMPLE ' + m[1] + '\\b', 'i'));
+      if (i < 0) continue;
+      const after = t.slice(i).split('\n').slice(1).filter(l => l.trim()).length - 2;
+      if (after < 5) strand.push(m[1]);
+    }
+    if (strand.length) {
+      const pushed = await page.evaluate(ns => ns.filter(n => { const w = document.querySelector('.book-ex-wrap[data-ex-n="' + n + '"]'); if (!w || w.classList.contains('pe-ex-push')) return false; w.classList.add('pe-ex-push'); return true; }).length, strand);
+      if (pushed) { padsChanged = true; log('moved ' + pushed + ' examples to the next page'); }
+    }
     // the index covers the chapters only: from the first chapter to the glossary, without the part openers
     const chapterPages = prep.chapters.map(k => found[k]).filter(Boolean);
     const from = chapterPages.length ? Math.min(...chapterPages) : 1;

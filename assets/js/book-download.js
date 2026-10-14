@@ -7,7 +7,7 @@
   var gate = document.querySelector('.bk-dl-gate'), form = document.querySelector('.bk-dl-form');
   if (!gate || !form) return;
   var msg = form.querySelector('.bk-dl-msg'), input = form.querySelector('input[type=email]');
-  var files = document.querySelectorAll('.bk-dl-file'), wanted = null;
+  var files = document.querySelectorAll('.bk-dl-file, .bk-dl-kit-file'), wanted = null;
   function unlocked() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
   function paint() {
     var on = unlocked();

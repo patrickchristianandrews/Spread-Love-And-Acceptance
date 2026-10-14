@@ -395,3 +395,6 @@ h1 { font-family: "Fraunces", serif; font-weight: 600; font-size: 22pt; line-hei
 .pe-part-list b { font-weight: 400; }
 .pe-part-list b.no-print { display: none; }
 .ch-title, .pe-back-h, .pe-cover-title { text-wrap: balance; }
+.pe-ref-v { color: var(--soft); }
+.book-ex-wrap.pe-ex-short, .book-ex-wrap.pe-ex-short .bk-ex { break-inside: avoid !important; page-break-inside: avoid !important; }
+.book-ex-wrap.pe-ex-push { break-before: page; }

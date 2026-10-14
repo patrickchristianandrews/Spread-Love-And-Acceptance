@@ -136,7 +136,7 @@
    "patterns": [
     "\\bfear (and |or )?control\\b",
     "\\b(feel|feeling|am|i m) (afraid|scared|frightened) at home\\b",
-    "\\b(controlling|threaten\\w*|walking on eggshells|not safe|unsafe)\\b",
+    "\\b(threaten\\w*|walking on eggshells|not safe|unsafe|coercive control)\\b|\\bcontrolling (me|my (money|phone|life|every move)|who i see|where i go|everything i do)\\b",
     "\\b(afraid|scared|frightened) of (him|her|them|my)\\b",
     "\\b(controls|tracks|watches) (me|my)\\b",
     "\\b(hits|hurts|hit|hurt) me\\b"

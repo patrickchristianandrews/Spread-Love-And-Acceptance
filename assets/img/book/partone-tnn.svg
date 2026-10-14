@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 504" width="540" height="504" role="img" aria-labelledby="fig-partone-tnn-t fig-partone-tnn-d" font-family="Lora, Georgia, serif" fill="#2B2620">
 <title id="fig-partone-tnn-t">Then, Now and Next: the three chapters of Part One</title>
-<desc id="fig-partone-tnn-d">A timeline with three stops. Then: where your lens came from, the rules you learned at home. Now: your wiring and today’s weather, how you run and what you need. Next: who you are becoming, small steps toward what matters. An arrow carries forward only what you choose. The past is not yours to change; what you carry forward is.</desc>
+<desc id="fig-partone-tnn-d">A timeline with three stops. Then: where your lens came from, the rules you learned at home. Now: your wiring and today’s weather, how you run and what you need. Next: who you are becoming, small steps towards what matters. An arrow carries forward only what you choose. The past is not yours to change; what you carry forward is.</desc>
 
 <rect x="1" y="1" width="538" height="502" rx="20" fill="#FCF9F1" stroke="#D9CBA3" stroke-width="2"/>
 <text x="28" y="46" font-size="25" font-weight="bold" fill="#7A5620">Then, Now, Next</text>
@@ -34,7 +34,7 @@
 <circle cx="431.333" cy="148" r="3" fill="#FCF9F1"/>
 <text x="431.333" y="218" font-size="23" font-weight="bold" fill="#3E6B4C" text-anchor="middle">Next</text>
 <text x="431.333" y="246" font-size="19" font-weight="bold" text-anchor="middle"><tspan x="431.333" dy="0">Who you are</tspan><tspan x="431.333" dy="24.32">becoming</tspan></text>
-<text x="431.333" y="296.32" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle"><tspan x="431.333" dy="0">small steps</tspan><tspan x="431.333" dy="24.32">toward what</tspan><tspan x="431.333" dy="24.32">matters</tspan></text>
+<text x="431.333" y="296.32" font-size="19" font-style="italic" fill="#5A5346" text-anchor="middle"><tspan x="431.333" dy="0">small steps</tspan><tspan x="431.333" dy="24.32">towards what</tspan><tspan x="431.333" dy="24.32">matters</tspan></text>
 <rect x="28" y="395.28" width="484" height="86" rx="14" fill="#ECE2C4"/>
 <text x="270" y="429.28" font-size="20" font-weight="bold" text-anchor="middle">The past isn’t yours to change.</text>
 <text x="270" y="457.28" font-size="20" font-style="italic" text-anchor="middle">What you carry forward is.</text>

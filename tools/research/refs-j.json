@@ -1,0 +1,427 @@
+[
+ {
+  "id": "watzlawick-1967",
+  "authors": "Watzlawick, P., Beavin [Bavelas], J. H., & Jackson, D. D.",
+  "year": 1967,
+  "title": "Pragmatics of Human Communication: A Study of Interactional Patterns, Pathologies, and Paradoxes",
+  "venue": "New York: W. W. Norton (book)",
+  "doi": null,
+  "url": "https://ci.nii.ac.jp/ncid/BA01493188",
+  "kind": "book",
+  "finding": "Set out a few “axioms” of communication, including that every message has a content level (what is said) and a relationship level (what it says about us), and that the relationship level often decides how the content is heard.",
+  "strength": "theory: influential in communication and family therapy; a framework rather than a tested finding",
+  "topics": [
+   "communication"
+  ],
+  "mentioned_on": [
+   "/book/understanding-4-communication-in-depth.html#two-layers",
+   "/book/understanding-4-communication.html#fig-u4-layers"
+  ],
+  "verified": true,
+  "verified_by": "https://ci.nii.ac.jp/ncid/BA01493188 ; https://www.icp-italia.it/en/research-centre/library/pragmatics-of-human-communication-a-study-of-interactional-patterns-pathologies-and-paradoxes",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "malinowski-1923-phatic",
+  "authors": "Malinowski, B.",
+  "year": 1923,
+  "title": "The problem of meaning in primitive languages",
+  "venue": "Supplement I (pp. 451–510 in later printings) in C. K. Ogden & I. A. Richards, The Meaning of Meaning. London: Kegan Paul; New York: Harcourt, Brace",
+  "doi": null,
+  "url": "https://archive.org/details/meaningofmeaning00ogde",
+  "kind": "theory",
+  "finding": "Named “phatic communion”: small talk whose job is not to pass on information but to create and keep up a bond (“ties of union are created by mere exchange of words”).",
+  "strength": "theory: a classic idea in anthropology and linguistics",
+  "topics": [
+   "communication",
+   "small-talk"
+  ],
+  "mentioned_on": [
+   "/book/understanding-4-communication.html#small-talk",
+   "/book/understanding-4-communication-in-depth.html#small-talk"
+  ],
+  "verified": true,
+  "verified_by": "https://linguistlist.org/issues/10/509/ ; https://user.keio.ac.jp/~rhotta/hellog/2014-03-03.html",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "cutrona-russell-1990",
+  "authors": "Cutrona, C. E., & Russell, D. W.",
+  "year": 1990,
+  "title": "Type of social support and specific stress: Toward a theory of optimal matching",
+  "venue": "In B. R. Sarason, I. G. Sarason & G. R. Pierce (Eds.), Social Support: An Interactional View (pp. 319–366). New York: Wiley",
+  "doi": null,
+  "url": "https://search.worldcat.org/search?q=Social+support+an+interactional+view+Sarason+1990",
+  "kind": "theory",
+  "finding": "Proposed the “optimal matching” idea: support helps most when its type fits the problem, for example practical help for things you can change and comfort for things you can’t.",
+  "strength": "moderate: widely cited; later studies support the idea in part",
+  "topics": [
+   "support",
+   "helping"
+  ],
+  "mentioned_on": [
+   "/book/understanding-12-helping-in-depth.html#ask",
+   "/book/understanding-12-helping.html#fig-u12-help",
+   "/library/communication.html#advice-vs-support"
+  ],
+  "verified": true,
+  "verified_by": "https://aura-lab.siue.edu/theories/social-support/ ; https://cancercontrol.cancer.gov/brp/research/constructs/social-support",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "reis-shaver-1988",
+  "authors": "Reis, H. T., & Shaver, P.",
+  "year": 1988,
+  "title": "Intimacy as an interpersonal process",
+  "venue": "In S. Duck (Ed.), Handbook of Personal Relationships (pp. 367–389). Chichester: Wiley",
+  "doi": null,
+  "url": "https://search.worldcat.org/search?q=Handbook+of+personal+relationships+Duck+1988",
+  "kind": "theory",
+  "finding": "Described intimacy as a back-and-forth process: one person shares something, the other responds with understanding, validation and care, and the first feels known.",
+  "strength": "strong as a model: later diary studies (e.g. Laurenceau and colleagues, 1998) found disclosure and partner responsiveness both feed feeling close",
+  "topics": [
+   "closeness",
+   "love",
+   "responsiveness"
+  ],
+  "mentioned_on": [
+   "/book/understanding-15-love.html#fig-u15-known",
+   "/book/understanding-15-love-in-depth.html#fig-u15-known",
+   "/bonding.html#how-it-grows"
+  ],
+  "verified": true,
+  "verified_by": "https://spsp.org/membership/awards/heritage-wall/reis ; https://nmr.mgh.harvard.edu/publications/journal_articles/2791",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "tronick-1978",
+  "authors": "Tronick, E., Als, H., Adamson, L., Wise, S., & Brazelton, T. B.",
+  "year": 1978,
+  "title": "The infant’s response to entrapment between contradictory messages in face-to-face interaction",
+  "venue": "Journal of the American Academy of Child Psychiatry, 17(1), 1–13",
+  "doi": "10.1016/S0002-7138(09)62273-1",
+  "url": "https://doi.org/10.1016/S0002-7138(09)62273-1",
+  "kind": "study",
+  "finding": "The first “still face” study: when a mother kept a blank, unresponsive face, infants tried hard to re-engage her, then grew upset and withdrew; they recovered when she responded again.",
+  "strength": "strong: the still-face effect has been replicated many times",
+  "topics": [
+   "repair",
+   "attachment",
+   "parents"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#rupture-repair",
+   "/book/understanding-11-healing.html#fig-u11-repair",
+   "/book/understanding-2-stress-in-depth.html#shared",
+   "/book/understanding-4-communication-in-depth.html#repair"
+  ],
+  "verified": true,
+  "verified_by": "https://www.informahealthcare.com/doi/ref/10.1080/00797308.2023.2290408 ; https://en.wikipedia.org/wiki/Lauren_Adamson",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "milton-2012",
+  "authors": "Milton, D. E. M.",
+  "year": 2012,
+  "title": "On the ontological status of autism: The “double empathy problem”",
+  "venue": "Disability & Society, 27(6), 883–887",
+  "doi": null,
+  "url": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy",
+  "kind": "theory",
+  "finding": "A short conceptual paper arguing that misunderstanding between autistic and non-autistic people runs both ways: each side finds the other hard to read, so the problem lies between them, not only in the autistic person.",
+  "strength": "theory: no data in the paper itself; later experiments (e.g. Crompton and colleagues, 2020) support parts of it",
+  "topics": [
+   "autism",
+   "neurodiversity",
+   "communication"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#no-fault",
+   "/book/self-2-now-in-depth.html#double-empathy",
+   "/book/understanding-1-feelings-in-depth.html#spread",
+   "/book/understanding-10-values-in-depth.html#clashes",
+   "/book/understanding-11-healing-in-depth.html#rupture-repair",
+   "/book/understanding-3-seeing-in-depth.html#realism",
+   "/book/understanding-4-communication-in-depth.html#styles",
+   "/book/understanding-9-minds-in-depth.html#autism"
+  ],
+  "verified": true,
+  "verified_by": "https://www.autism.org.uk/advice-and-guidance/professional-practice/double-empathy ; https://reframingautism.org.au/miltons-double-empathy-problem-a-summary-for-non-academics/",
+  "note": "Citation checked against reference lists; the DOI could not be confirmed, so none is given."
+ },
+ {
+  "id": "tversky-kahneman-1973",
+  "authors": "Tversky, A., & Kahneman, D.",
+  "year": 1973,
+  "title": "Availability: A heuristic for judging frequency and probability",
+  "venue": "Cognitive Psychology, 5(2), 207–232",
+  "doi": null,
+  "url": "https://apps.dtic.mil/sti/pdfs/ADA045770.pdf",
+  "kind": "study",
+  "finding": "People judge how common something is by how easily examples come to mind. That usually works, but vivid or recent examples make some things seem more common than they are.",
+  "strength": "strong: a classic finding, widely replicated",
+  "topics": [
+   "bias",
+   "perception",
+   "decisions"
+  ],
+  "mentioned_on": [
+   "/book/chapter-5-in-depth.html#monthly-research",
+   "/book/understanding-3-seeing-in-depth.html#shortcuts"
+  ],
+  "verified": true,
+  "verified_by": "https://psyc.athabascau.ca/html/Glossary/index.php?term_id=31 ; https://apps.dtic.mil/sti/pdfs/ADA045770.pdf",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "kahneman-tversky-1979",
+  "authors": "Kahneman, D., & Tversky, A.",
+  "year": 1979,
+  "title": "Prospect theory: An analysis of decision under risk",
+  "venue": "Econometrica, 47(2), 263–291",
+  "doi": null,
+  "url": "https://www.jstor.org/stable/1914185",
+  "kind": "study",
+  "finding": "People weigh choices as gains and losses from where they stand now, and a loss feels bigger than a gain of the same size (“loss aversion”), which helps explain why change can feel risky even when it would help.",
+  "strength": "strong: one of the most cited papers in economics and psychology; the size of loss aversion varies across studies",
+  "topics": [
+   "change",
+   "decisions"
+  ],
+  "mentioned_on": [
+   "/book/understanding-6-change-in-depth.html#why-hard"
+  ],
+  "verified": true,
+  "verified_by": "https://www.econometricsociety.org/publications/econometrica/1979/03/01/prospect-theory-analysis-decision-under-risk ; https://kahneman.scholar.princeton.edu/document/11",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "cohen-kamarck-mermelstein-1983",
+  "authors": "Cohen, S., Kamarck, T., & Mermelstein, R.",
+  "year": 1983,
+  "title": "A global measure of perceived stress",
+  "venue": "Journal of Health and Social Behavior, 24(4), 385–396",
+  "doi": "10.2307/2136404",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/6668417/",
+  "kind": "study",
+  "finding": "Introduced the Perceived Stress Scale, a short questionnaire about how unpredictable, uncontrollable and overloaded your life has felt lately; scores went with symptoms of depression and illness.",
+  "strength": "strong: one of the most widely used stress questionnaires",
+  "topics": [
+   "stress",
+   "measurement"
+  ],
+  "mentioned_on": [
+   "/book/chapter-2-in-depth.html#stress",
+   "/book/chapter-3-in-depth.html#battery"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/6668417/ ; https://nrmndata.sites.wisc.edu/?p=205",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "erikson-1950",
+  "authors": "Erikson, E. H.",
+  "year": 1950,
+  "title": "Childhood and Society",
+  "venue": "New York: W. W. Norton (book)",
+  "doi": null,
+  "url": "https://www.librarything.com/work/37187",
+  "kind": "book",
+  "finding": "Set out eight stages of life from infancy to old age, each with its own question or tension (for example trust against mistrust in infancy, identity against confusion in adolescence).",
+  "strength": "theory: very influential; a framework for reflection rather than a measured sequence",
+  "topics": [
+   "development",
+   "life-stages"
+  ],
+  "mentioned_on": [
+   "/book/self-1-then-in-depth.html#stages",
+   "/book/self-1-then.html#fig-then-stages"
+  ],
+  "verified": true,
+  "verified_by": "https://www.encyclopedia.com/psychology/dictionaries-thesauruses-pictures-and-press-releases/childhood-and-society ; https://www.librarything.com/work/37187",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "gottman-1994-what-predicts-divorce",
+  "authors": "Gottman, J. M.",
+  "year": 1994,
+  "title": "What predicts divorce? The relationship between marital processes and marital outcomes",
+  "venue": "Lawrence Erlbaum Associates (Hillsdale, NJ); reissued by Routledge",
+  "doi": null,
+  "url": "https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
+  "kind": "book",
+  "finding": "Gottman’s report of his long-term studies of couples, including “flooding”: feeling so physically overwhelmed in a conflict that listening and thinking become very hard.",
+  "strength": "moderate: large observational studies; some specific predictions have been debated",
+  "topics": [
+   "conflict",
+   "flooding"
+  ],
+  "mentioned_on": [
+   "/book/chapter-1-in-depth.html#state",
+   "/book/chapter-3-in-depth.html#ladder",
+   "/book/chapter-4-in-depth.html#steps-one",
+   "/book/self-2-now-in-depth.html#settle",
+   "/book/understanding-4-communication-in-depth.html#hard-things"
+  ],
+  "verified": true,
+  "verified_by": "https://www.routledge.com/What-Predicts-Divorce-The-Relationship-Between-Marital-Processes-and-Marital-Outcomes/Gottman/p/book/9781032539379",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "hochschild-1983",
+  "authors": "Hochschild, A. R.",
+  "year": 1983,
+  "title": "The Managed Heart: Commercialization of Human Feeling",
+  "venue": "Berkeley: University of California Press (reissued 2003, 2012)",
+  "doi": null,
+  "url": "https://search.worldcat.org/title/9280843",
+  "kind": "book",
+  "finding": "Coined “emotional labor” from a study of flight attendants (and bill collectors) trained to display feelings at work; distinguished surface acting from deep acting.",
+  "strength": "strong as a concept",
+  "topics": [
+   "emotional-labour",
+   "invisible-work"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/title/9280843 ; https://ci.nii.ac.jp/ncid/BA00950047",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "gordon-1970-pet",
+  "authors": "Gordon, T.",
+  "year": 1970,
+  "title": "P.E.T.: Parent Effectiveness Training",
+  "venue": "New York: P. H. Wyden (book; revised 2000)",
+  "doi": null,
+  "url": "https://search.worldcat.org/title/670595",
+  "kind": "book",
+  "finding": "A parenting book and course that popularised “I-messages”: describing your own feelings and the effect of a behaviour rather than blaming the other person.",
+  "strength": "mixed: widely taught; research on I-statements finds tone and context matter as much as wording",
+  "topics": [
+   "i-statements"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://search.worldcat.org/title/670595",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "miserandino-2003",
+  "authors": "Miserandino, C.",
+  "year": 2003,
+  "title": "The spoon theory",
+  "venue": "ButYouDontLookSick.com (essay)",
+  "doi": null,
+  "url": "https://butyoudontlooksick.com/articles/written-by-christine/the-spoon-theory/",
+  "kind": "theory",
+  "finding": "A personal essay in which Christine Miserandino, who has lupus, used a handful of spoons to show a friend that each daily task costs some of a limited supply of energy.",
+  "strength": "theory: a community metaphor, not a research finding",
+  "topics": [
+   "energy"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://www.sbs.com.au/voices/article/how-spoons-became-a-powerful-symbol-for-invisible-disability/jewma0upd",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "donnellan-1984",
+  "authors": "Donnellan, A. M.",
+  "year": 1984,
+  "title": "The criterion of the least dangerous assumption",
+  "venue": "Behavioral Disorders, 9(2), 141–150",
+  "doi": null,
+  "url": "https://scholar.google.com/scholar?q=%22criterion+of+the+least+dangerous+assumption%22+Donnellan",
+  "kind": "theory",
+  "finding": "Proposed that when we lack evidence about what someone can understand or do, we should act on the assumption that would do the least harm if wrong, which usually means presuming competence.",
+  "strength": "theory: an ethical principle for teaching and support, not a test",
+  "topics": [
+   "autism",
+   "aac"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://praacticalaac.org/tag/cheryl-jorgensen",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "janis-1972-groupthink",
+  "authors": "Janis, I. L.",
+  "year": 1972,
+  "title": "Victims of Groupthink: A Psychological Study of Foreign-Policy Decisions and Fiascoes",
+  "venue": "Boston: Houghton Mifflin (book)",
+  "doi": null,
+  "url": "https://search.worldcat.org/search?q=Victims+of+groupthink+Janis+1972",
+  "kind": "book",
+  "finding": "Named “groupthink”: in a close-knit group, the wish to agree can crowd out a realistic look at the options. Janis drew on case studies of policy decisions such as the Bay of Pigs invasion, and suggested remedies such as leaders holding back their own view at first and someone being asked to argue the other side.",
+  "strength": "mixed: an influential idea built on case studies",
+  "topics": [
+   "groups"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://nantilus.univ-nantes.fr/vufind/Record/PPN097357685 ; https://journals.sagepub.com/doi/10.1177/000271627340700115",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "mcnulty-2008-forgiveness-context",
+  "authors": "McNulty, J. K.",
+  "year": 2008,
+  "title": "Forgiveness in marriage: Putting the benefits into context",
+  "venue": "Journal of Family Psychology, 22(1), 171–175",
+  "doi": "10.1037/0893-3200.22.1.171",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/18266545/",
+  "kind": "study",
+  "finding": "Looked at newly married couples and argued, as the title says, that the benefits of forgiving depend on the context, such as how often a partner behaves badly.",
+  "strength": "moderate: a small study",
+  "topics": [
+   "forgiveness",
+   "limits"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/18266545/ ; https://www.psypost.org/forgiveness-in-marriage-can-have-unintended-negative-effects/",
+  "note": "bookfixA, Oct 2026"
+ },
+ {
+  "id": "bls-atus",
+  "authors": "U.S. Bureau of Labor Statistics",
+  "year": null,
+  "title": "American Time Use Survey (ATUS)",
+  "venue": "Federal survey (conducted by the U.S. Census Bureau)",
+  "doi": null,
+  "url": "https://www.bls.gov/tus/",
+  "kind": "study",
+  "finding": "The federal survey of how, where and with whom Americans spend their time, including unpaid housework and childcare; it has run every year since 2003.",
+  "strength": "strong: large national time-diary survey",
+  "topics": [
+   "time-use"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://www.census.gov/programs-surveys/atus.html",
+  "note": "bookfixA, Oct 2026",
+  "year_label": "annual, since 2003"
+ },
+ {
+  "id": "nhs-face-blindness",
+  "authors": "NHS",
+  "year": null,
+  "title": "Prosopagnosia (face blindness)",
+  "venue": "NHS website (nhs.uk), health A to Z",
+  "doi": null,
+  "url": "https://www.nhs.uk/conditions/face-blindness/",
+  "kind": "guideline",
+  "finding": "Describes face blindness as difficulty recognising faces, often present from childhood and sometimes running in families; there is no treatment, but strategies such as recognising voices, hair or clothes, and telling people, can help.",
+  "strength": "moderate: official health information for the public",
+  "topics": [
+   "face-recognition"
+  ],
+  "mentioned_on": [],
+  "verified": true,
+  "verified_by": "https://www.nhs.uk/conditions/face-blindness/",
+  "note": "bookfixA, Oct 2026",
+  "year_label": "n.d."
+ }
+]

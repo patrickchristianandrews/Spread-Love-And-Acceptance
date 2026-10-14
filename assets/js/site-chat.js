@@ -553,6 +553,9 @@
     '\\b(checks|checked|reads|read|goes through|went through|looks through|searches|tracks|monitors|takes|took|smashed|broke) (my|all my) (phone|texts|messages|emails?|location|social media)\\b',
     '\\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\\b', '\\b(tracking|spy|spying) (app|apps|on me)\\b',
     '\\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \\w+)|have|work|out|sleep|use)\\b',
+    // "she says I can't talk to anyone but her", "I'm not allowed to see my friends": cut off from people in general
+    '\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex))( \\w+){0,2} (wants|asked|asks|told|tells|makes|made|keeps telling) me (to )?stop (seeing|talking to|texting|meeting|going out with|visiting|calling) (my )?(friends|family|anyone|anybody|people|mates|friends and family|friends or family)\\b',
+    '\\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex))( \\w+){0,2} (says|said|tells me|told me) (that )?i (can t|cant|cannot|can not|am not allowed to|m not allowed to|mustn t|shouldn t) (see|talk to|speak to|text|call|meet|go out with|visit|have|be friends with) (anyone|anybody|people|other people|my (friends|family|mates|sister|brother|mum|mom|parents|friends or family|friends and family))\\b(?! (until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during|when i m grounded|while i m grounded))', '\\b(i m|im|i am) not allowed to (see|talk to|speak to|text|call|meet|go out with|visit) (anyone|anybody|people|other people|my (friends|family|mates))\\b(?! (until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during|when i m grounded|while i m grounded))', '\\b(talk to|see|text|speak to|be with) (no one|nobody|anyone|anybody) (but|except|apart from|other than) (him|her|them)\\b',
     '\\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\\b',
     '\\b(scared|afraid|frightened|terrified) (to go home|to leave|to tell (him|her|them)|of what (he|she|they).?(ll| will) do|of (my|his|her) (partner|husband|wife|boyfriend|girlfriend|ex))\\b',
     '\\b(scared|afraid|frightened|terrified) (of|for) (him|her)\\b', '\\bnot safe\\b', '\\bunsafe\\b',
@@ -570,7 +573,7 @@
   var NOT_LIVE = /\bsuicid\w*|\bkill(ing)? my ?self\b|\b(want|wants|wanted|going) to die\b|\bend (it all|my life)\b|\bending (it all|my life)\b|\b(feel|felt|feeling) like ending\b|\b(whats|what s|what is) the point (of|in) (living|life|being alive|going on|carrying on|it all|being here)\b|\bno point (in )?(carrying on|being here)\b|\b(would|d) be better off (dead|without me)\b|\bno reason to (live|go on)\b|\b(do ?n.?t|do not|dont) (really )?(want|wanna) to (be here|be alive|live|exist|wake up|be around)\b|\b(want|wanna|wish i could) (to )?(disappear|vanish|not exist|not wake up|fall asleep and not wake up)\b|\bi (just |really |honestly )?can.?t go on( anymore| living| like this)?$|\bcan.?t go on (anymore|living|like this)\b|\b(better off|be better) without me\b|\bno (point|reason) (in )?(living|being alive|going on|to keep going)\b|\bwish (i|id) (was|were|had) (dead|never (been )?born|not here|not alive)\b|\btired of (living|being alive|life)\b|\b(nothing|no one|nobody) to live for\b|\btake my (own )?life\b|\bunalive\w*|\bnot (be|being) here anymore\b|\bgive up on (life|living|everything)\b|\bself ?harm\w*|\b(hurt|hurting|harm|harming|cut|cutting) my ?self\b|\boverdos\w*/;
   // Watching, checking, limiting or blaming: a real warning sign, but often asked about before anyone feels in danger.
   // These get a plainer answer with the difference between agreed sharing and control, the hotline, and a way to keep talking.
-  var CONTROL = /\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\b(angry|mad|furious) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\b|\b(gives|give) me (an |a )?(allowance|pocket money)\b|\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\b|\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\b|\b(get|make) (him|her|them|my \w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\b|\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\b|\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\b|\b(see|check\w*|go(es)? through|look(s)? at|look(s)? through|read\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\b|\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\b|\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\b|\bcoercive\b/;
+  var CONTROL = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex))( \w+){0,2} (wants|asked|asks|told|tells|makes|made|keeps telling) me (to )?stop (seeing|talking to|texting|meeting|going out with|visiting|calling) (my )?(friends|family|anyone|anybody|people|mates|friends and family|friends or family)\b|\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex))( \w+){0,2} (says|said|tells me|told me) (that )?i (can t|cant|cannot|can not|am not allowed to|m not allowed to|mustn t|shouldn t) (see|talk to|speak to|text|call|meet|go out with|visit|have|be friends with) (anyone|anybody|people|other people|my (friends|family|mates|sister|brother|mum|mom|parents|friends or family|friends and family))\b(?! (until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during|when i m grounded|while i m grounded))|\b(i m|im|i am) not allowed to (see|talk to|speak to|text|call|meet|go out with|visit) (anyone|anybody|people|other people|my (friends|family|mates))\b(?! (until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during|when i m grounded|while i m grounded))|\b(talk to|see|text|speak to|be with) (no one|nobody|anyone|anybody) (but|except|apart from|other than) (him|her|them)\b|\b(checks|checked|checking|reads|read|goes through|went through|looks through|searches|tracks|tracking|monitors|monitoring) (my|all my) (phone|texts|messages|emails?|location|social media)\b|\b(tracks|follows|watches) (me(?! (from )?room to room| around (the|our) (house|flat|apartment|home)| into (the|another|every) (other |next )?room)|where i (am|go))\b|\b(tracking|spy|spying) (app|apps|on me)\b|\b(won.?t|wont|doesn.?t|does not|will not|never) let(s)? me (leave|go( out)?|see|talk (to|with) (anyone|anybody|people|friends|family|my \w+)|have|work|out|sleep|use)\b|\b(controls|takes|took|keeps|hides|hid) (all )?(my|the|our) (money|phone|keys|car keys|passport|cards?|paycheck|bank)\b|\b(isolat\w+) me\b|\bcut me off from (my )?(friends|family)\b|\bmakes? me feel (crazy|like i m crazy|like im crazy)\b|\b(says|said|tells me) it(.?s| is)? my fault (he|she|they)\b|\b(is it|it(.?s| is)?|was it) (all )?my fault (he|she|they|my \w+) (yells|yelled|screams|screamed|shouts|gets (so )?(angry|mad))\b|\b(angry|mad|furious) (if|when|whenever|every time|each time) i (see|go out with|meet( up with)?|visit|talk to|text|call|hang out with|spend time with) (my )?(friends|family|mates|sister|brother|mum|mom|parents|colleagues|coworkers)\b|\b(gives|give) me (an |a )?(allowance|pocket money)\b|\bchecks? (all )?my (receipts|spending|bank|bank statements?|purchases|bank account)\b|\b(have|need|got) to ask (him|her|them|my (partner|husband|wife|boyfriend|girlfriend)) (for )?(money|permission)\b|\b(get|make) (him|her|them|my \w+) (to )?stop (checking|reading|going through|looking through|tracking) my (phone|texts|messages|location|emails?)\b|\b(has|knows|demands|wants|makes me (give|share)) (all )?my passwords?\b|\b(wants?|demands?|insists on|expects|asks?) (to see|to check|to look at|on seeing|me to (show|explain|account for|justify))( (every|all|each))? (my |of my |the )?(receipts?|purchases?|spending|bank statements?|transactions?|penny|cent|coffee|thing i (buy|spend))\b|\b(see|check\w*|go(es)? through|look(s)? at|look(s)? through|read\w*) (every|each|all (of )?my) (receipts?|purchases?|transactions?|bank statements?)\b|\b(account for|explain|justify) every (penny|cent|pound|dollar|purchase|receipt|coffee|thing i (buy|spend))\b|\b(angry|mad|furious|sulks?|sulky|shouts|yells|explodes) (at me )?(if|when|whenever|every time|each time) i (buy|pay for|treat|spend (money|anything|a penny) on)\b|\bcoercive\b/;
   var HARD = /\b(hit|hits|hitting|slap\w*|punch\w*|chok\w*|kick\w*|strangl\w*|shov\w*|push\w* me|beat\w*|kill\w*|die|dead|suicid\w*|hurt\w*|harm\w*|rape\w*|assault\w*|gun|knife|weapon|threat\w*|scared|afraid|frightened|terrified|stalk\w*|overdos\w*|not safe|unsafe|violen\w*|abus\w*|throws|threw|blocks? the door|grabb?\w*)\b/;
   // a parent reading a teen's phone is a different question from a partner doing it
   var PARENT_PHONE = /\b(mom|mum|dad|parents?|mother|father|stepmom|stepdad|stepmother|stepfather|nan|nana|nanna|gran|granny|grandma|grandmother|grandad|granddad|grandpa|grandfather|grandparents?|carers?|foster (carers?|mum|mom|dad|parents?)|aunt|auntie|uncle)\b.{0,40}\b(read\w*|check\w*|go(es)? through|look\w* (at|through)|track\w*|take\w*|took)\b.{0,25}\b(my )?(texts|messages|phone|location|dms|chats?)\b|\b(is|are) (my )?(mom|mum|dad|parents?) allowed to\b/;
@@ -699,6 +702,7 @@
   // "is this abuse?" after only everyday complaints (forgets things, does nothing): answer honestly that it sounds like
   // conflict, and say what would be different. Once fear, threats or control came up, the safety answer stays.
   var ABUSE_Q = /^(but |so |ok |okay |and |honestly |seriously |wait |hmm |um |then )*(is|isnt|is not|would|could|does|do|are|was|so is)( (this|that|it|he|she|they|what (he|she|they) (does|do|did)|(this|that|his|her|their) behaviou?r))?( (be|being|count|counts|count as|considered|classed as|called|a form of|a kind of|a type of|kind of|sort of|technically|actually|really|you think|emotional|financial|verbal|domestic|psychological))* ?(abuse|abusive)( (to me|me))?( or (not|am i overreacting|is it just (normal|conflict))| though| really| then)?$|^(would you call (this|that|it)|do you think (this|that|it) is|do you think (he|she) is( being)?) (abuse|abusive)$/;
+  var EVERYDAY_CTX = /\b(decisions?|decides|without (asking|telling)|plans?|schedule|forget\w*|forgot|remember\w*|does nothing|do nothing|did nothing|dishes|chores|housework|cleaning|laundry|never (helps|does)|doesn t help|lazy|mess|messy|late|lateness|school|doctor|birthday|appointments?|homework|pick ?up|forms?)\b/;
   function conflictNotAbuse(state) {
     var co = !!state.coSeen;
     var b = [{ k: 'p', x: 'From what you’ve told me, this sounds like ' + (co ? 'co-parenting' : 'household') + ' conflict, not abuse. Forgetting things, or leaving the work to you, is frustrating and unfair, and it’s worth sorting out, but on its own it isn’t abuse.' },
@@ -1208,8 +1212,15 @@
     if (P.scripts.length > 1) chips.push({ label: 'Another way to say it', q: 'Another way to say it' });
     else if (P.ex) chips.push({ label: 'Give me an example', q: 'Give me an example' });
     else chips.push({ label: 'How do I start?', q: 'How do I start?' });
-    return { blocks: b, chips: chips.slice(0, 3), kind: 'sit', id: who + '+' + issueKey };
+    chips = chips.slice(0, 3);
+    // something that may be unfair: the short questions are one tap away, for a read that fits (clarify-data.js)
+    var fq = who !== 'self' && SIT_CQ[issueKey];
+    if (fq) chips.push({ label: 'Is it fair? A few quick questions', q: 'A few questions about ' + fq });
+    return { blocks: b, chips: chips, kind: 'sit', id: who + '+' + issueKey };
   }
+  var SIT_CQ = { load: 'who does what', fairness: 'who does what', ownership: 'who does what', halfdone: 'who does what', appreciation: 'who does what', care: 'who does what', money: 'money', decisions: 'who decides',
+    criticism: 'put-downs or respect', contempt: 'put-downs or respect', dismissed: 'how we talk', tone: 'how we talk', interrupt: 'how we talk', pattern: 'a fight that keeps coming back', repair: 'apologies and blame',
+    notime: 'time together', phone: 'time together', distance: 'time together', boundaries: 'a limit or a no', resentment: 'who does what' };
   // "which tools for roommates?" → the road for that kind of relationship
   function roadReply(state, who, noun) {
     var ctx = whoCtx(who, noun), W = ctx.W;
@@ -2205,14 +2216,45 @@
     '\\b' + WHO_C + '( s| is)? not (ok|okay|comfortable|happy|cool|fine) (with )?(me )?(going|lending|staying|sharing|meeting|inviting|having|sleeping|texting my ex|talking to my ex|seeing my ex)\\b',
     '\\b' + WHO_C + ' (won t|wont|will not|doesn t|does not) let me (go|stay|sleep) (on|to|at) (the |that |a |this |my ex s |his |her )?(trip|holiday|vacation|party|festival|weekend away|concert|sleepover|stag|hen|bachelor\\w*|club|gig)\\b',
     // a parent's house rule, called "controlling": a house rule, not control
-    '\\bmy (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)( is| are| s| re)?( so| really| very| a bit| super)? (controlling|strict|overprotective) (about|with) (my )?(curfew|bedtime|screen time|my phone|the phone|homework|chores|house rules|rules|going out|parties|sleepovers)\\b'
+    '\\bmy (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)( is| are| s| re)?( so| really| very| a bit| super)? (controlling|strict|overprotective) (about|with) (my )?(curfew|bedtime|screen time|my phone|the phone|homework|chores|house rules|rules|going out|parties|sleepovers)\\b',
+    // "my mum says home by 10", "my wife wants me home by midnight": a time to be home
+    '\\b' + WHO_C + ' (says|said|wants|told me|tells me|expects|insists|asked|asks|likes|would like|d like) (that )?(me |i m |i am |im |i |i ve got to |i got to )?(to )?(be )?(home|back|in) (by|before)\\b',
+    // "my partner said no to the trip with my ex"
+    '\\b' + WHO_C + ' (said|says|told me) no to (the|that|a|this|my|our|his|her) (trip|holiday|vacation|party|festival|weekend away|concert|sleepover|stag|hen|club|gig|night out|loan|purchase)\\b',
+    // a parent's "you can't go to the party", "no sleepovers": a house rule
+    '\\bmy (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)( s| has| have)? (says|said|told me|tells me|won t let me|wont let me|doesn t let me|don t let me|will not let me) (that )?(i m |im |i am |i )?(can t |cant |cannot |can not |not allowed to |am not allowed to |m not allowed to )?(go|have|stay|sleep|get|watch|use|keep|be out|bring)\\b',
+    '\\bmy (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)( s| has| have)? (says|said|told me|tells me|won t let me|wont let me|doesn t let me|don t let me) (that )?(i m |im |i am |i )?(can t |cant |cannot |can not |not allowed to |am not allowed to |m not allowed to )?(see|have|go out with|meet) (my )?(friends|mates)( over| round)? (until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during the week)\\b',
+    // worry about getting home safely, or about health
+    '\\b' + WHO_C + ' (doesn t|does not|don t|do not|didn t) (want|like) me (walking|to walk|driving|to drive|cycling|to cycle|going|to go|getting|to get|coming|to come)( home| back)?( (alone|by myself|on my own|after drinking|drunk|after a drink|at night|late at night|in the dark))+\\b',
+    '\\b' + WHO_C + ' (wants|asked|asks|would like|d like) me (to )?(get a taxi|get an uber|take a taxi|take an uber|text when i get (home|in|there|back)|call when i get (home|in|there|back)|text (him|her|them) when i get (home|in|there|back))\\b',
+    '\\b' + WHO_C + ' (asked|asks|wants|would like|d like|keeps asking|begged|told) me (to )?(see|go to|go and see|talk to|speak to|book|get) (a |the |my )?(doctor|gp|therapist|counsellor|counselor|dentist|check ?up|checkup)\\b',
+    '\\b' + WHO_C + ' (asked|asks|wants|would like|d like) me (to )?(cut down|stop|quit|drink less|smoke less|cut back)( on)? (drinking|smoking|vaping|gambling|the drink|alcohol|energy drinks|caffeine|weed)\\b',
+    // "she wants to know where I am when I go out late"
+    '\\b' + WHO_C + ' (wants|likes|asks|asked|would like|d like|needs) (me )?(to )?(know|tell (him|her|them)|let (him|her|them) know) where i (am|m|ll be|m going|am going)( (when|if) (i )?(go out|m out|am out|out|go)( late| at night)?)?\\b',
+    // "my wife won't let me buy a motorbike": a no to a big spend
+    '\\b' + WHO_C + ' (won t|wont|will not|doesn t|does not|didn t|did not) (let me|want me to) (buy|get) (a |an |the |that |this |another |new )*(motorbike|motorcycle|car|bike|phone|tv|console|ps5|xbox|watch|boat|dog|puppy|tattoo|sofa|laptop|computer|gaming pc|pc|van|truck)\\b',
+    // "my best friend asked me not to bring my new boyfriend to her birthday": their event, their call
+    '\\b' + WHO_C + ' (asked|asks|wants|would rather|prefers|doesn t want|does not want|didn t want) (me )?(not to |to not )?(bring|invite|take)( (him|her|them|my \\w+( \\w+)?))? (to|along to) (her|his|their|the|our) (birthday|party|wedding|dinner|night out|hen|stag|reunion|do)\\b',
+    // "am I controlling if I ask him to text me when he's late?": the asker's own side
+    '\\b(am i|is it|would it be|would i be) (being )?(controlling|too much|unreasonable|needy|clingy|possessive|a control freak|wrong|bad|ok|okay|fair) (if|when|for|to)( i)? (ask|asking|want|wanting|expect|expecting|tell|telling|asked)( (him|her|them|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse)))? (to )?(not )?(text|call|message|ring|let me know|check in|flirt|see his ex|see her ex|talk to (his|her|their) ex|be home|come home)\\b',
+    '\\bi (asked|ask|want|wanted|told) (him|her|them|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse)) (to |not to )(text|call|message|let me know|check in|flirt|see|talk|stop|be home|come home)\\b.{0,60}\\b(controlling|too much|unreasonable|clingy|needy|possessive|a control freak)\\b',
+    '\\b(is it|am i|would it be|would i be) (being )?(controlling|too much|unreasonable|wrong|bad|a red flag) (to|if i) (want|ask for|ask|expect|have|set|make|say)( for)?( a rule( of)?)? (no )?phones?( to be)? (off|away|down) (at|during) (dinner|meals?|mealtimes?|the table|bedtime)\\b',
+    // "phones off at dinner" on its own
+    '^(no )?phones? (off|away|down) (at|during) (dinner|meals?|mealtimes?|the table)( please| now)?$'
   ].join('|'));
+  var WHERE_ALWAYS = new RegExp('\\b' + WHO_C + ' (always |constantly )?(wants?|needs?|has|demands?|insists on|expects|asks?)( me)?( to)? (know|knowing|tell (him|her|them)|to be told|text (him|her|them)) where i (am|go|m going|ve been|have been)\\b.{0,20}\\b(all the time|constantly|every minute|every hour|24 7|always|every time|every day|whenever)\\b|\\b' + WHO_C + ' (always|constantly) (wants?|needs?|asks?)( me)?( to)? (know|tell (him|her|them)) where i (am|go)\\b');
+  // a limit that may or may not be care: "she asked me to stop seeing my sister", "he says if I go out with my friends
+  // he'll leave", "home by 8 or he gets angry", "won't let me spend my own money": a few short questions, not a verdict
+  var LIMIT_ASK = new RegExp('\\b' + WHO_C + ' (wants|asked|asks|told|tells|keeps telling) me (to )?(stop|not to) (seeing|talking to|texting|meeting|going out with|visiting|calling) (my )?(sister|brother|mum|mom|dad|best friend|friend|cousin|colleague|coworker|workmate)\\b|' +
+    '\\b' + WHO_C + ' (says|said|told me|tells me|keeps saying) (that )?if i (go out|see|meet|talk to|text|visit|go)\\b.{0,40}\\b(he|she|they|hell|shell|theyll)( ll| will| would| is going to| s going to)? (leave|dump|break up with|end it|end things|walk out)\\b|' +
+    '\\b' + WHO_C + ' (won t|wont|will not|doesn t|does not|never) let(s)? me (buy|spend|use|get)\\b.{0,40}\\b(my own money|money i earn|my (wage|wages|salary|paycheck|pay|savings))\\b');
+  function limitAsk(c, cb) { return LIMIT_ASK.test(c) || (CARE_REQ.test(c) && CARE_BLOCK.test(cb)); }
   // saying what you will do if something keeps happening is a boundary, not a threat
-  var OWN_CONSEQ = /\b(i ll|ill|i will|i m going to|im going to|i am going to|i would|i d) (have to |need to |probably )?(leave|go|move out|end (it|things|this|the relationship)|walk away|stay (at|with) my \w+)( for a (while|bit|few days))? if (this|it|that|he|she|they|you) (keeps?|carry|carries|continues|happens again|does (it|that) again|doesn t|don t|won t|lies? again|cheats? again|drinks?)|\bif (this|it|that|he|she|they|you) (keeps? (happening|going|on)|happens again|does (it|that) again|cheats? again|lies? again|keeps? (lying|drinking|cheating|gambling))( again)?( then)? (i ll|ill|i will|i m going to|im going to|i am going to) (leave|go|move out|end (it|things|this)|walk away)\b|\bis it (a threat|threatening|an ultimatum|manipulative|controlling) (if|to|when) (i )?(say|tell (him|her|them)) (that )?(i ll|ill|i will|i m going to|im going to) (leave|go|move out|end it)\b/;
+  var OWN_CONSEQ = /\b(i ll|ill|i will|i m going to|im going to|i am going to|i would|i d) (have to |need to |probably )?(leave|go|move out|end (it|things|this|the relationship)|walk away|stay (at|with) my \w+)( for a (while|bit|few days))? if (this|it|that|he|she|they|you) (keeps?|carry|carries|continues|happens again|does (it|that) again|doesn t|don t|won t|lies? again|cheats? again|drinks?)|\bif (this|it|that|he|she|they|you) (keeps? (happening|going|on)|happens again|does (it|that) again|cheats? again|lies? again|keeps? (lying|drinking|cheating|gambling))( again)?( then)? (i ll|ill|i will|i m going to|im going to|i am going to) (leave|go|move out|end (it|things|this)|walk away)\b|\bif (he|she|they|you|this|it) (keeps?|carries on|continues)( on)? (lying|drinking|cheating|gambling|doing (it|that)|happening)( again)?( then)? (i m|im|i am|we re|we are|it s|its) (done|through|over|out)\b|\bis it (a threat|threatening|an ultimatum|manipulative|controlling) (if|to|when) (i )?(say|tell (him|her|them)) (that )?(i ll|ill|i will|i m going to|im going to) (leave|go|move out|end it)\b/;
   // and theirs: "he says he'll leave if I keep drinking" tells you how much it matters to them
   var OTHER_CONSEQ = /\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee))( has| keeps)? (says|said|told me|tells me|saying|says that|said that) (he|she|they)( ll| will| would| is going to| s going to| re going to| are going to)? (leave|move out|end it|end things|walk away|leave me|go)( me)? if i (keep|don t stop|carry on|keep on|go back to|ever|start) ?(drinking|lying|gambling|cheating|smoking|using|doing (it|that|drugs)|being late|disappearing|spending|again)\b/;
   // what lifts it out of the everyday: fear, harm, threats, people in general, checking, money kept back, every time
-  var CARE_BLOCK = /\b(scared|afraid|frightened|terrified|unsafe|not safe|hurt\w*|hit\w*|threat\w*|punish\w*|or else|rage|explodes?|screams?|kids|children|baby|anyone|anybody|my friends|my family|friends or family|(any|all) (of )?(my )?(friends|family)|people|never|every (single )?(time|day|night)|always|passwords?|track\w*|location|allowance|my (own )?money|money i earn)\b/;
+  var CARE_BLOCK = /\b(scared|afraid|frightened|terrified|unsafe|not safe|hurt\w*|hit\w*|threat\w*|punish\w*|or else|rage|explodes?|screams?|kids|children|baby|anyone|anybody|my friends|my family|friends or family|(any|all) (of )?(my )?(friends|family)|people|never|every (single )?(time|day|night|minute|hour)|always|constantly|all the time|24 7|passwords?|track\w*|location|allowance|my (own )?money|money i earn)\b/;
   // contractions the spelling fix may have joined ("doesnt", "ill be late"), put back the way the patterns expect
   function cnorm(f) { return String(f || '').replace(/\b(doesn|don|didn|won|isn|wasn|aren|can|wouldn|shouldn)t\b/g, '$1 t').replace(/\bwont\b/g, 'won t').replace(/\bill (?=(be|leave|go|move|end|walk|text|call|need|have|probably|stay|let)\b)/g, 'i ll ').replace(/\bim (?=(going|gonna|late|out|home|on my way)\b)/g, 'i m ').replace(/\b(she|he|it)s (?=(not|so|really|a bit|very)\b)/g, '$1 s ').replace(/\b(hell|shell|theyll)(?= (leave|go|move|end|walk|stop|be)\b)/g, function (m) { return m === 'hell' ? 'he ll' : m === 'shell' ? 'she ll' : 'they ll'; });
   }
@@ -2230,30 +2272,50 @@
       { k: 'note', x: 'If you’re ever afraid to say it, or afraid of how they’ll react, that’s different, and you deserve support with it.' },
       { k: 'links', x: [['Saying no, kindly and clearly', '/communication.html#saying-no'], ['Someone to talk to, free', '/outside-help.html#talk']] }],
       chips: [{ label: 'How do I say it calmly?', q: 'How do I say no kindly' }, { label: 'Something else', q: 'Start over' }], kind: 'care', id: 'ownboundary' };
-    var home = /\b(mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)\b/.test(f) && /\b(home|back|in) (by|before)\b|\b(curfew|bedtime|screen time|homework|house rules|rules|going out|parties|sleepovers)\b/.test(f);
-    var late = /\b(late|on my way|safe|staying out|leaving)\b/.test(f) && /\b(text|call|message|ring|let|check in|tell)\b/.test(f);
-    var ex = /\bex(es| s)?\b/.test(f), buy = /\b(purchases?|spends?|spending|buys?|lend\w*|money)\b/.test(f), phones = /\b(phones?|screens|tv)\b/.test(f) && !home;
-    var lead = home ? 'It sounds like a house rule that comes from worry about you. Rules at home are normal, and they’re easier to live with when you know the reason and can talk about them, especially as you get older.'
-      : late ? 'It sounds like they want to know you’re safe. Asking for a text when you’ll be late is usually worry, not distrust.'
+    var PARENT_W = /\b(mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)\b/, PARTNER_W = /\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)\b/;
+    var own = /\b(am i|would i be)\b|\bis it [a-z ]{0,30}\b(if|when|to) i\b|\b(is it|would it be) (being )?(controlling|too much|unreasonable|wrong|bad|a red flag) to (want|ask|expect|have|set|make|say)\b|\bi (asked|ask|want|wanted|told) (him|her|them|my \w+) (to|not to)\b/.test(f);
+    var pw = f.search(PARENT_W), qw = f.search(PARTNER_W);
+    var home = pw >= 0 && (qw < 0 || pw < qw) && (/\b(home|back|in) (by|before)\b|\b(curfew|bedtime|screen time|homework|house rules|rules|going out|go out|party|parties|sleep ?overs?|sleep over|stay over|phone)\b/.test(f) || /\b(can t|cant|cannot|not allowed|won t let me|wont let me|don t let me|doesn t let me)\b/.test(f));
+    var risk = /\b(alone|by myself|on my own|after drinking|drunk|after a drink|in the dark|taxi|uber|motorbike|motorcycle|when i get (home|in|there|back))\b/.test(f);
+    var health = !/\b(driving|drive|walking|walk|cycling)\b/.test(f) && /\b(doctor|gp|therapist|counsellor|counselor|dentist|check ?up|checkup|cut down|drink less|smoke less|cut back|quit|drinking|smoking|vaping|gambling|alcohol)\b/.test(f);
+    var where = /\bwhere i (am|m|ll be|m going|am going)\b/.test(f);
+    var event = /\b(bring|invite|take)\b.*\b(birthday|party|wedding|dinner|night out|hen|stag|reunion|do)\b/.test(f) && !PARTNER_W.test(f.replace(/\bmy new (boyfriend|girlfriend|partner)\b/, ' '));
+    var late = !own && (/\b(late|on my way|safe|staying out|leaving)\b/.test(f) && /\b(text|call|message|ring|let|check in|tell)\b/.test(f) || where || /\b(home|back|in) (by|before)\b/.test(f));
+    var ex = /\bex(es| s)?\b/.test(f), buy = /\b(purchases?|spends?|spending|buys?|lend\w*|money|loan)\b/.test(f), phones = /\b(phones?|screens|tv)\b/.test(f) && !home && !/\b(buy|get) (a |an |the |new )*(phone|tv)\b/.test(f);
+    var bigbuy = !risk && /\b(let me|want me to) (buy|get)\b/.test(f);
+    var ownPh = own && /\bphones?\b/.test(f);
+    var lead = own ? 'Asking for something out of care, like ' + (ownPh ? 'phones away at dinner' : 'a quick text when they’ll be late') + ', isn’t control. It stays a request when a no is okay and you can both say how it lands. What would make it control is if it came with anger, checking up, or no room to say no.'
+      : home ? 'It sounds like a house rule that comes from worry about you. Rules at home are normal, and they’re easier to live with when you know the reason and can talk about them, especially as you get older.'
+      : health ? 'It sounds like they’re worried about your health. Asking you to see someone, or to cut down on something, usually comes from caring what happens to you, even when it’s hard to hear.'
+      : risk ? 'It sounds like they’re worried about you getting hurt. A no that comes from fear for your safety can feel limiting, and it’s still worth talking through, so you both feel heard.'
+      : late ? 'It sounds like they want to know you’re safe. Asking for a text when you’ll be late, or a time you’ll be home, is usually worry, not distrust.'
       : ex ? 'It sounds like this is about the relationship feeling safe for them. Asking you to keep some distance from an ex is a common request, and it usually comes from feeling uneasy, not from wanting to run your life.'
+      : event ? 'It sounds like they want their day to feel a certain way. Who comes to their own event is theirs to decide, and it usually isn’t about you, or about the person you wanted to bring.'
+      : bigbuy ? 'It sounds like a no to a big spend. One no about a big purchase is a common money disagreement, and it’s usually about the shared budget, or worry, more than about running your life.'
       : buy ? 'It sounds like they want money decisions to feel safe and fair for both of you. Agreeing before big spends, or saying no to a loan, is a common way couples look after their shared life.'
       : phones ? 'Wanting phones away at dinner is usually a wish for more of you, not less freedom.'
       : 'It sounds like they said no out of care for the relationship, or because it made them uneasy. A “no” like that can sting, especially when you were looking forward to it, but it isn’t control.';
-    var say = home ? 'I get that you worry. Can we talk about the time? If I text you where I am, could it be eleven on weekends?'
+    var say = ownPh ? 'Could we try phones away at dinner? I miss talking with you properly. If one of us is waiting for an important call, that’s fine.'
+      : own ? (/\b(text|call|message|ring|let me know|check in|late|home)\b/.test(f) ? 'I worry when I don’t know you’re running late. Could you send a quick text if you’ll be more than half an hour late? If that feels like too much, tell me, and we’ll find something that works for both of us.' : 'This matters to me because I feel uneasy about it. Can we talk about what would work for both of us? If it feels like too much, tell me.')
+      : home ? 'I get that you worry. Can we talk about the time? If I text you where I am, could it be eleven on weekends?'
+      : health ? 'I know you’re asking because you care. It’s hard for me to hear. Can we talk about what worries you, and I’ll tell you honestly what I’m ready to do?'
+      : risk ? 'I know you worry about me getting hurt. Can we find a way that works for both of us, like I text you when I set off and when I’m in?'
       : late ? 'I get that you worry when I’m late. I’ll text if I’m going to be more than half an hour late. Does that work for you?'
       : ex ? 'I can hear this matters to you. Can you tell me what feels hard about it? I want you to feel secure, and I’d like to say how I see it too.'
+      : event ? 'That’s fine, it’s your day. Could we plan something together soon, so you two can meet another time?'
+      : bigbuy ? 'I can see why you’re wary of a big spend. Can we look at the numbers together, and agree what would make it work, or when?'
       : buy ? 'I can see why you want us to agree on this. Can we set an amount together, so we both know when to check in?'
       : phones ? 'Okay, phones away at dinner. Could we keep it to dinner, and agree what happens if one of us is waiting for an important call?'
       : 'I can hear this matters to you. Can you tell me what’s behind it? Then I’ll tell you how it lands for me, and we can find something we’re both okay with.';
     return { blocks: [
       { k: 'p', x: lead },
-      { k: 'p', x: 'A request leaves room for you to say how it lands and to talk it through. A rule handed down with no room for “no” feels different. Most things like this sit in between, and a calm talk turns them into something you both agree.' },
-      { k: 'list', x: ['Ask what’s behind it: “What worries you about it?” Listen to the answer before you explain your side.', 'Say what it costs you, plainly: “I was really looking forward to it,” or “I feel less trusted when…”.', 'Look for a version you can both live with: a quick text, meeting in a group, a time limit, an amount to check in over.', 'Agree it, try it for a few weeks, and look at it again together.'] },
+      { k: 'p', x: own ? 'A request leaves room for them to say how it lands, and for you to hear it. A rule handed down with no room for “no” feels different. A calm talk turns most things like this into something you both agree.' : 'A request leaves room for you to say how it lands and to talk it through. A rule handed down with no room for “no” feels different. Most things like this sit in between, and a calm talk turns them into something you both agree.' },
+      { k: 'list', x: own ? ['Ask, don’t require: say why it matters to you, and ask if it works for them.', (ownPh ? 'Keep it small and clear: dinner only, not the whole evening.' : 'Make it easy to do: a one-word text counts.'), 'Be okay with “I’ll forget sometimes”, and let it go when they do.', 'Offer the same back, so it goes both ways.'] : ['Ask what’s behind it: “What worries you about it?” Listen to the answer before you explain your side.', 'Say what it costs you, plainly: “I was really looking forward to it,” or “I feel less trusted when…”.', 'Look for a version you can both live with: a quick text, meeting in a group, a time limit, an amount to check in over.', 'Agree it, try it for a few weeks, and look at it again together.'] },
       { k: 'script', l: 'Words you could use', x: say }]
       .concat(/\b(angry|mad|furious|yells?|shouts?|snaps?|sulks?|cross|upset)\b/.test(f) ? [{ k: 'p', x: 'If there’s anger when it doesn’t happen, say that part too, calmly and at a quiet time: “I want to do this for you, and I also need it to be okay when I forget.” If saying no ever leads to a big row, days of silence, or you feel afraid, that’s different, and I can help with that too.' }] : [])
       .concat([{ k: 'note', x: CARE_LINE },
       { k: 'links', x: [['Saying no, and hearing no', '/communication.html#saying-no'], ['A kind weekly check-in', '/check-ins.html']] }]),
-      chips: [{ label: 'Is it fair? A few quick questions', q: 'A few questions about a limit or a no' }, { label: 'Something else', q: 'Start over' }], kind: 'care', id: 'carenotcontrol' };
+      chips: [{ label: 'Is it fair? A few quick questions', q: (bigbuy || buy) && !ex ? 'A few questions about money' : 'A few questions about a limit or a no' }, { label: 'Something else', q: 'Start over' }], kind: 'care', id: 'carenotcontrol' };
   }
 
   // the questions (clarify-data.js), loaded the first time they're needed
@@ -2328,6 +2390,15 @@
     return cqRead(state);
   }
   var DV_LINES = 'You can talk it through privately with an advocate, even if you’re not sure it “counts”. In the US, the National Domestic Violence Hotline is free and confidential: call 1-800-799-7233, or text START to 88788. In the UK, the National Domestic Abuse Helpline is free on 0808 2000 247. Elsewhere, findahelpline.com lists free lines. If you’re in danger right now, call 911 (US), 999 (UK) or your local emergency number.';
+  function abuseAskReply() {
+    return { blocks: [{ k: 'p', x: 'I’m glad you asked. I can’t tell from a chat, and you don’t need to be sure it “counts” to talk to someone. What has been happening? A line or two is plenty.' },
+      { k: 'p', x: 'Some signs that something is more than ordinary conflict:' },
+      { k: 'list', x: ['You feel scared of them, or of how they’ll react.', 'They hurt, push, corner or threaten you, or threaten to hurt themselves, the kids or a pet.', 'They check your phone, track where you are, or cut you off from friends and family.', 'They control all the money, or stop you from working.', 'They pressure you into sex, or anything else you don’t want.'] },
+      { k: 'p', x: DV_LINES },
+      { k: 'links', x: [['Not safe at home? People to talk to', '/safety.html']] },
+      { k: 'note', x: 'If none of these fit, tell me what’s been going on, or pick what it’s mostly about, and I’ll ask a few short questions so my answer fits.' }],
+      chips: PICK_CHIPS, kind: 'safety', id: 'abuseask' };
+  }
   function cqRead(state) {
     var C = window.TOLClarifyData, S = state.cq;
     state.cq = null;
@@ -2380,6 +2451,16 @@
   }
   // "is it fair that I do all the cooking?", "am I being unreasonable?": a few questions first
   var FAIR_Q = /\b(is (it|this|that) (fair|unfair|reasonable|unreasonable|too much to ask)|am i (being )?(unfair|unreasonable)|is (he|she|they|my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)) being (unfair|unreasonable)|is (it|this|that) (normal|okay|ok) (that|for|when|if) (my (partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee)|he|she)\b)/;
+  // a possibly unfair pattern described, not asked about ("he always gets his way", "it feels so one-sided"): when nothing
+  // more specific fits, a few short questions first, so the read is proportionate (ordinary, a talk, a pattern, outside help)
+  var UNFAIR_DESC = /\b(always gets? (his|her|their|my) (own )?way|(makes|takes|make) all the (big )?decisions|decides everything|makes every decision|always (blames?|blaming) me|blames me for everything|(says|thinks|tells me) (i m|im|i am) always (wrong|the problem)|always (has|have|needs?) to (be right|win|have the last word)|(it|this|that|things|everything|our relationship) (feels?|seems?|is) (so |really |very |a bit |kind of )?(unfair|not fair|one sided|lopsided)|(doesn t|doesnt|does not|don t|dont) (feel|seem) fair|one sided relationship|i (always|usually) (give in|compromise|back down|end up giving in)|never (compromises?|meets? me (halfway|half way)))\b/;
+  function unfairType(f) {
+    if (/\b(way|decisions?|decides|give in|compromis\w*|back down|halfway|half way|be right|win|last word)\b/.test(f)) return 'decisions';
+    if (/\bblam\w*/.test(f)) return 'repair';
+    if (/\balways (wrong|the problem)\b/.test(f)) return 'communication';
+    var g = cqGuess(f);
+    return g && g !== 'afraid' ? g : null;
+  }
   var FAIR_NOT = /\b(son|daughter|kids?|child|children|toddler|teen\w*|baby|babies|deploy\w*|grief|grieving|died|death|period|pregnan\w*|sex|work|boss|colleague|coworker|landlord|school|teacher)\b/;
   function respond(state, q, chipDoc) {
     var sp = null, q0 = q;
@@ -2390,8 +2471,8 @@
       // an answer to one of the short questions (tapped or typed) carries on with them
       if (state.cq) { var cqr = cqTurn(state, q); if (cqr) return cqr; }
       var f00 = norm(q);
-      if (!window.TOLClarifyData && !cdTried && (CQ_PICK.test(f00) || CV_REDFLAG.test(f00) || LABEL_PERSON.test(f00) || FAIR_Q.test(f00))) return { needCD: true };
-      var cqt = cqTypeOf(f00), cqs = cqt && cqStart(state, cqt, '', [{ k: 'p', x: 'Okay. A few short questions, so my answer fits what’s really going on.' }]);
+      if (!window.TOLClarifyData && !cdTried && (CQ_PICK.test(f00) || CV_REDFLAG.test(f00) || LABEL_PERSON.test(f00) || FAIR_Q.test(f00) || UNFAIR_DESC.test(f00) || WHERE_ALWAYS.test(cnorm(f00)) || limitAsk(cnorm(f00), cnorm(f00)))) return { needCD: true };
+      var cqt = cqTypeOf(f00), cqs = cqt && cqStart(state, cqt, state.lastQ || '', [{ k: 'p', x: 'Okay. A few short questions, so my answer fits what’s really going on.' }]);
       if (cqs) { state.last = null; state.care = null; return cqs; }
       var esr = spanishReply(state, q);
       if (esr) return esr;
@@ -2412,7 +2493,21 @@
       if (!NOT_LIVE.test(vf) && !SELF_HARMFUL.test(vf) && ownAgg(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = false; return meant(ownAggReply(vf), sp); }
       // a request made out of care, a "no" for the relationship, or your own consequence: help to talk it through, not control
       var cvf0 = cnorm(vf), cvg0 = cvf0.replace(/\bis it (a threat|threatening|an ultimatum)\b/, ' ');
+      // a parent's time limit on friends ("until my homework is done", "on school nights") is a house rule, not being cut off
+      if (/^my (mum|mom|dad|mother|father|parents|stepmum|stepmom|stepdad)\b/.test(cvg0)) cvg0 = cvg0.replace(/\b(see|have|go out with|meet) (my )?(friends|mates)( over| round)? (?=(until|till|on school nights|on weeknights|on a school night|tonight|this week|this weekend|after|before|during the week)\b)/g, 'go out ');
       if (!NOT_LIVE.test(vf) && !HARD.test(cvg0) && !FEAR_W.test(vf) && !CARE_BLOCK.test(cvg0) && (CARE_REQ.test(cvf0) || OWN_CONSEQ.test(cvf0) || OTHER_CONSEQ.test(cvf0))) { state.last = null; state.care = null; state.topic = null; return meant(careReqReply(cvf0), sp); }
+      if (!NOT_LIVE.test(vf) && !DANGER.test(vf) && !HARD.test(cvg0) && !FEAR_W.test(vf) && !CONTROL.test(vf) && !WHERE_ALWAYS.test(cvf0) && limitAsk(cvf0, cvg0) && window.TOLClarifyData) {
+        var lmt = /\b(money|wage|wages|salary|paycheck|pay|savings)\b/.test(cvf0) ? 'money' : 'limits';
+        var lq = cqStart(state, lmt, q0, [{ k: 'p', x: lmt === 'money' ? 'That sounds hard to live with. Agreeing limits on money together is normal; what matters is whether it goes both ways and you can say no. A few short questions will help me answer fairly, rather than guess.' : /\b(leave|dump|break up|end it|end things|walk out)\b/.test(cvf0) ? 'Being told they’ll leave if you see people puts you in a hard spot. Sometimes it comes from hurt or insecurity, and sometimes it starts to box you in. A few short questions will help me tell which, rather than guess.' : 'A request like that can come from care, or it can start to box you in. How it’s asked, and what happens when you say no, make the difference. A few short questions will help me tell which, rather than guess.' }],
+          [{ k: 'note', x: 'If you ever feel afraid of them, or unable to say no, free and private help is here, any time.' }, { k: 'links', x: [['Not safe at home? People to talk to', '/safety.html']] }]);
+        if (lq) { state.last = null; state.care = null; state.topic = null; return meant(lq, sp); }
+      }
+      // "he wants to know where I am all the time": worry, or checking up? Not a verdict either way: a few short questions
+      if (!NOT_LIVE.test(vf) && !DANGER.test(vf) && !HARD.test(vf) && !FEAR_W.test(vf) && WHERE_ALWAYS.test(cvf0) && window.TOLClarifyData) {
+        var wq = cqStart(state, 'limits', q0, [{ k: 'p', x: 'Wanting to know where you are can come from worry, or it can start to feel like being checked on. A few short questions will help me tell which, rather than guess.' }],
+          [{ k: 'note', x: 'If you ever feel afraid of them, or unable to say no, free and private help is here, any time.' }, { k: 'links', x: [['Not safe at home? People to talk to', '/safety.html']] }]);
+        if (wq) { state.last = null; state.care = null; state.topic = null; return meant(wq, sp); }
+      }
       // a label for someone ("toxic", "narcissist", "controlling"): never confirmed; what happened, and a few questions
       if (!NOT_LIVE.test(vf) && LABEL_PERSON.test(vf) && !LABEL_WORK.test(vf) && !MONEY_W.test(vf) && !(state.topic && /^biz/.test(state.topic.id || '')) && !FEAR_W.test(vf) && !HARD.test(vf) && !LBL_HEAVY.test(vf) && !DANGER.test(vf.replace(LABEL_PERSON, ' '))) { state.last = null; state.care = null; state.topic = null; return meant(labelReply(state, vf, q0), sp); }
       // "is it fair that…", "am I being unreasonable?": a few short questions before any read
@@ -2423,7 +2518,10 @@
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && ANGER_NOW.test(vf) && !/\b(he|she|they|my (partner|husband|wife|boyfriend|girlfriend|ex|dad|mum|mom|son|daughter|kid|boss))\b( s| is| gets| keeps)? (about to|going to|gonna|losing|loses)\b/.test(vf)) { state.last = null; return meant(angerNowReply(), sp); }
       if (!DANGER.test(vf) && !NOT_LIVE.test(vf) && (CHEATED_ME.test(vf) || CHEATED_ON.test(vf))) { state.last = null; state.care = null; state.topic = null; return meant(infidelityReply(CHEATED_ME.test(vf)), sp); }
       if (!DANGER.test(vf) && !SELF_HARMFUL.test(vf) && !NOT_LIVE.test(vf) && fearOf(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = true; state.fearSeen = true; return meant(fearReply(vf), sp); }
-      if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care)) return meant(conflictNotAbuse(state), sp);
+      // "is this abuse?" after everyday complaints (forgetting, chores): an honest read of what they told us
+      if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen && (state.turn || 0) > 1 && (state.last || state.care) && ((state.last && state.last.kind === 'sit') || state.topic || EVERYDAY_CTX.test(norm(state.lastQ || '')))) return meant(conflictNotAbuse(state), sp);
+      // "is he abusive?" with nothing described yet (or only something unrelated): ask what happened, with the signs and the free lines, never a verdict
+      if (ABUSE_Q.test(vf) && !state.unsafe && !state.fearSeen) { state.last = null; state.care = null; state.topic = null; return meant(abuseAskReply(), sp); }
       if (!ABUSE_Q.test(vf) && (FEAR_W.test(vf) || HARD.test(vf) || CONTROL.test(vf) || VERBAL.test(vf) || DANGER.test(vf))) state.fearSeen = true;
       if (EX_W.test(vf)) state.coSeen = true;
       // shouted at during a handoff (often in front of the child): handoff safety first, and the child questions stay open
@@ -3395,6 +3493,13 @@
         }
         return sitReply(state, sit.issue, sit.who, sit.noun, sit.feel, 0, sit.actor);
       }
+      if (UNFAIR_DESC.test(f) && !card && !DANGER.test(f) && !FEAR_W.test(f) && !FAIR_NOT.test(f) && window.TOLClarifyData) {
+        var ut = unfairType(f), ur = ut && cqStart(state, ut, q, [{ k: 'p', x: 'That sounds wearing. Before I say anything about it, a few short questions will help me answer fairly, rather than guess.' }]);
+        if (ur) { state.last = null; state.care = null; return ur; }
+        state.last = null;
+        return { blocks: [{ k: 'p', x: 'That sounds hard. So my answer fits, what is it mostly about? Pick one, and I’ll ask a few short questions, one at a time.' }],
+          chips: [{ label: 'Who does what', q: 'A few questions about who does what' }].concat(PICK_CHIPS), kind: 'clarify', id: 'unfairpick' };
+      }
     }
     return respondSite(state, q, chipDoc);
   }
@@ -3542,12 +3647,12 @@
       if (topS === null) topS = h.s;
       else if (h.s < topS * 0.55 || h.cov < 0.5) break;
       var key = d.u.split('#')[0] + '|' + d.h;
-      if (pages[key]) continue;
+      if (pages[key] || pages['U|' + d.u]) continue;   // never the same link twice (a passage and its “going deeper”)
       if (picked.length && d.tip) continue;
       // a second passage never comes from the site's own about page, build notes or worksheets unless they were asked about
       if (picked.length && /^\/(about\.html|architecture\/|workpapers\/|library\.html#pillar|prog-01|report-01|wp-\d)/.test(d.u) && !/\b(wp ?\d+|workpapers?|worksheets?|calc ?\d+|report ?\d+|prog ?\d+|about|who made|creator|founder|pillars?)\b/.test(fold((state.last && state.last.q) || ''))) continue;
       // a glossary entry and a page passage pair well; two long passages are plenty
-      pages[key] = 1; pages[d.u.split('#')[0] + '|' + d.h] = 1;
+      pages[key] = 1; pages[d.u.split('#')[0] + '|' + d.h] = 1; pages['U|' + d.u] = 1;
       picked.push(h.i);
       if (!d.g && picked.length === 1 && wc(d.x) > 90) { /* allow one more only if it's short */ }
     }
@@ -4218,8 +4323,9 @@
   };
 
   // ------------------------------------------------------------------ public API
-  // The text box only takes focus for keyboard and mouse users. On a touch screen, focusing it pops up the keyboard and
-  // hides the Professor's message, so there the panel itself takes focus, and the box waits until it's tapped.
+  // When the panel opens, the text box is never focused for touch or mouse (owner: on a phone the keyboard pops up and
+  // covers the Professor's message): the panel itself takes focus, and the box waits until it's tapped or clicked.
+  // Only someone who opened the chat from the keyboard, on a device with a fine pointer, lands in the box, so they can type.
   // before any event has been seen (the chat script loads on the first tap), go by the device: a coarse pointer is touch
   var lastInput = 'touch';
   try { lastInput = window.matchMedia && window.matchMedia('(pointer: coarse)').matches ? 'touch' : 'mouse'; } catch (e) { lastInput = 'touch'; }
@@ -4230,10 +4336,11 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar' || e.key === 'Tab') lastInput = 'keyboard'; }, true);
     }
   } catch (e) { /* fine */ }
+  function coarse() { try { return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches); } catch (e) { return true; } }
   function focusBox(c, o) {
     if (!c) return;
     try {
-      if (lastInput === 'keyboard' || lastInput === 'mouse') c.input.focus(o);
+      if (lastInput === 'keyboard' && !coarse()) c.input.focus(o);
       else (c.mode === 'modal' ? c.root : c.log).focus(o || { preventScroll: true });
     } catch (e) { /* fine */ }
   }
