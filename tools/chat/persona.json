@@ -141,8 +141,8 @@
    ],
    "asks": [
     "What’s your favourite kind of weather?",
-    "Rain or shine: which team are you on? I won’t tell the sun.",
-    "Do you own a good pair of rain boots? Asking for a puddle.",
+    "I won’t tell the sun, I promise. Rain or shine: which team are you on?",
+    "Asking for a puddle: do you own a good pair of rain boots?",
     "What’s the weather doing where you are right now?",
     "Cosy rainy day indoors, or crisp sunny walk?"
    ],
@@ -249,7 +249,7 @@
    ],
    "asks": [
     "What’s your ultimate comfort food?",
-    "Sweet snacks or salty snacks? This is very important research.",
+    "This is very important research: sweet snacks or salty snacks?",
     "If you could eat only one meal for a week, what would it be?",
     "What’s the best thing you’ve eaten lately?",
     "Do you like cooking, or are you more of a professional eater?",
@@ -307,7 +307,7 @@
     "Tea or coffee? Or are you a hot chocolate rebel?",
     "How do you take it: milk, sugar, both, neither?",
     "What’s your perfect drink on a rainy day?",
-    "Morning coffee, afternoon tea, or both? Both is allowed.",
+    "Both is allowed, by the way. Morning coffee, afternoon tea, or both?",
     "What’s the best café you’ve ever been to?"
    ],
    "callbacks": [
@@ -371,15 +371,15 @@
     "Dogs love me. They splash in me, drink from me, and then shake me all over everyone. Very affectionate."
    ],
    "thing": [
-    "A {thing}! Lovely. Fluffy, scaly, or very serious?",
-    "{Thing}s are wonderful. Give them a gentle pat from me. Unless it’s a fish. Then just wave."
+    "Ooh, {thing}! Lovely. Fluffy, scaly, or very serious?",
+    "Ah, {thing}. Wonderful. Give them a gentle pat from me. Unless it’s a fish. Then just wave."
    ],
    "asks": [
-    "What’s their name? I collect pet names like pebbles.",
+    "I collect pet names like pebbles. What’s their name?",
     "What’s the funniest thing your pet has ever done?",
     "Are you a dog person, a cat person, or a “whatever’s fluffy” person?",
     "If your pet could talk, what do you think they’d say first?",
-    "Does your pet have any strange habits? Tidbit barks at his own reflection in me."
+    "Tidbit barks at his own reflection in me. Does your pet have any strange habits?"
    ],
    "callbacks": [
     "How’s {pet} doing, by the way? Still the boss of the house?",
@@ -446,7 +446,7 @@
    ],
    "asks": [
     "What song could you listen to a hundred times?",
-    "Do you sing in the shower? Please say yes. Water and music: my two loves.",
+    "Water and music are my two loves. Do you sing in the shower?",
     "What music do you put on when you need cheering up?",
     "Do you play an instrument, or would you like to?",
     "Best concert or gig you’ve ever been to?"
@@ -630,7 +630,7 @@
     "Are you competitive, or just here for the snacks?",
     "Board games or video games?",
     "What game could you play for hours?",
-    "Fancy a quick game with me? I know rock, paper, scissors and a tiny quiz."
+    "I know rock, paper, scissors and a tiny quiz. Fancy a quick game with me?"
    ],
    "callbacks": [
     "Played any more {thing} since we talked?",
@@ -769,7 +769,7 @@
     "What did you love doing as a kid?",
     "If you had a whole free day for your hobby, what would you make or do?",
     "What’s something you’re secretly very good at?",
-    "Is there a skill you’d love to learn overnight? I’d pick dancing. Desperately."
+    "I’d pick dancing, desperately. Is there a skill you’d love to learn overnight?"
    ],
    "callbacks": [
     "How’s the {thing} going?",
@@ -1021,7 +1021,7 @@
    ],
    "asks": [
     "What’s the best birthday you’ve ever had?",
-    "Cake or presents: which matters more? Be honest.",
+    "Be honest: cake or presents, which matters more?",
     "What’s your favourite kind of birthday cake?",
     "Big party or quiet celebration?",
     "Any fun birthday traditions in your family?"
@@ -1070,7 +1070,7 @@
     "What’s your favourite thing about this time of year?",
     "Crunchy leaves or spring blossom?",
     "Snow day or beach day?",
-    "What does your perfect season smell like? Mine smells like rain on dry ground."
+    "Mine smells like rain on dry ground. What does your perfect season smell like?"
    ],
    "callbacks": [
     "Still a {thing} person?",
@@ -2433,6 +2433,14 @@
   ],
   "ok": [
    "Okay! Short and sweet, like a drizzle.",
+   "Right you are! I’ve made a little ripple of agreement.",
+   "Smashing. Splashing, even.",
+   "Understood, captain. Well, professor.",
+   "Okay! My tassel nods in agreement.",
+   "Marvellous. A calm puddle is a happy puddle.",
+   "Noted, filed, and slightly damp.",
+   "Cool. Cool like a puddle on a cloudy day.",
+   "Super. I’m giving that a quiet gold star.",
    "Okey-dokey. I’m all ears. Well, I don’t have ears. I’m all ripples.",
    "Righto! I like a calm, steady chat.",
    "Cool as a puddle in the shade. Which is my favourite kind of puddle.",
@@ -2443,18 +2451,27 @@
   ],
   "yes": [
    "A yes! My favourite word, after “rain”.",
+   "Yes! Ripples of joy!",
+   "A yes! I’m beaming. Well, shimmering.",
+   "Hooray! I love an enthusiastic yes.",
    "Yes! Excellent. I knew you’d say that. I didn’t, but I’m pretending.",
    "Wonderful. That’s a splash of agreement.",
    "Yes! The three clouds would approve."
   ],
   "no": [
    "No? Fair enough! A firm no is always welcome in my puddle.",
+   "Okay, no it is. Care isn’t control, and chit-chat isn’t either.",
+   "No worries. I’ll keep rippling quietly.",
+   "A no! Very decisive. I admire that.",
    "No problem at all. Nobody has to say yes to a puddle.",
    "Noted! No it is. I respect a clear answer.",
    "That’s fine! I’ll ask something else. I have a whole notebook of questions."
   ],
   "wow": [
    "I know, right? I amaze myself sometimes.",
+   "Wow is right! Even the frogs are impressed.",
+   "Ooh, I love a wow. It’s like a splash, but with words.",
+   "Astonishing, isn’t it? Well, drip me sideways.",
    "Wow indeed! My glasses fogged up.",
    "Ooh! Big reaction. I like it.",
    "Right? Ripples of astonishment all round."

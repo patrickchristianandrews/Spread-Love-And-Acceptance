@@ -1,5 +1,6 @@
 /* tools-page.js: /tools.html, "All tools".
-   Built from /assets/js/tools-registry.js (window.TOLTools). The tools a person can use on their own come first
+   Built from /assets/js/tools-registry.js (window.TOLTools). Tools only: entries with kind 'workpaper' get their own
+   section at the end and are never ranked, filtered or mixed in with the tools. The tools a person can use on their own come first
    ("Self-discovery"); tools that need someone else follow ("When you're ready to involve someone").
    - "Start here": the six most useful tools a person can use alone.
    - "Not sure where to start?": a 60-second tour, guided paths, the three questions and Professor Puddles.
@@ -11,10 +12,12 @@
    Nothing is stored or sent. */
 (function () {
   'use strict';
-  var TOOLS = window.TOLTools, TYPES = window.TOLToolTypes;
+  var ALL = window.TOLTools, TYPES = window.TOLToolTypes;
   var list = document.querySelector('[data-tl-list]');
-  if (!list || !TOOLS || !TYPES) return;
-  var byId = window.TOLToolById || function (id) { for (var i = 0; i < TOOLS.length; i++) if (TOOLS[i].id === id) return TOOLS[i]; return null; };
+  if (!list || !ALL || !TYPES) return;
+  // tools only: workpapers (kind 'workpaper') are listed in their own section and never ranked with the tools
+  var TOOLS = ALL.filter(function (t) { return t.kind !== 'workpaper'; }), WPS = ALL.filter(function (t) { return t.kind === 'workpaper'; });
+  var byId = window.TOLToolById || function (id) { for (var i = 0; i < ALL.length; i++) if (ALL[i].id === id) return ALL[i]; return null; };
 
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
@@ -74,33 +77,33 @@
       ['weather', 'Four taps: calm, revved up or running on empty?'],
       ['ask', 'Type what’s going on, the way you’d tell a friend.'],
       ['music', 'A few minutes away from words.']] },
-    { solo: 1, t: 'Calm down and reset', s: 'Right now, then for next time', steps: [
+    { solo: 1, t: 'Calm down and reset', s: 'Right now, then before you go back', steps: [
       ['upset', 'Right now: a pause line and a one-minute breathing pacer.'],
       ['garden', 'A few slower breaths that feel like play.'],
-      ['calmkit', 'On a calm day, your own plan for next time.']] },
+      ['weather', 'Before you go back: is now a good time to talk?']] },
     { solo: 1, t: 'Know what you need before you bring it up', s: 'Get clear first, then say it kindly', steps: [
       ['carecard', 'Name what would feel like care to you right now.'],
       ['flip', 'Turn the complaint into one thing you can ask for.'],
       ['signal', 'Check how your message may land before you send it.']] },
     { t: 'Fewer fights about chores', s: 'Facts instead of “I do everything”', steps: [
       ['lemon-quick', 'Each of you taps who does what, on your own phone.'],
-      ['owner', 'Give every job one owner and a backup.'],
-      ['checkin90', 'Ninety seconds a day, so small things stay small.']] },
+      ['lemon-full', 'Count the hours and the bills too, not just the chores.'],
+      ['chart', 'Put one owner per job on the fridge.']] },
     { t: 'After an argument', s: 'Settle, understand, then agree a pause', steps: [
       ['upset', 'Settle your body first.'],
       ['decoder', 'Work out what went out of sync, and see their side.'],
       ['pause', 'On a calm day, agree how either of you can take a break.']] },
     { t: 'Starting to live together', s: 'Before habits set', steps: [
       ['wavelength', 'Compare how you each talk and listen.'],
-      ['owner', 'Decide who owns which job.'],
+      ['lemon-quick', 'Who does what, before habits set.'],
       ['checkincard', 'A short weekly check-in for the small stuff.']] },
     { t: 'Co-parenting calmly', s: 'Two homes, one plan for the kids', steps: [
       ['signal', 'Check a message to your co-parent before you send it.'],
       ['handoff', 'One bag list, the same in both homes.'],
-      ['owner', 'A shared job list for two homes.']] }
+      ['write', 'For bigger decisions: one topic at a time, in writing.']] }
   ];
   function pathHtml(p) {
-    var steps = p.steps.map(function (s) { var t = byId(s[0]); return t ? '<li><a href="' + esc(t.href) + '">' + esc(t.name) + '</a><span class="tl-path-w">' + esc(s[1]) + '</span></li>' : ''; }).join('');
+    var steps = p.steps.map(function (s) { var t = byId(s[0]); return t && t.kind !== 'workpaper' ? '<li><a href="' + esc(t.href) + '">' + esc(t.name) + '</a><span class="tl-path-w">' + esc(s[1]) + '</span></li>' : ''; }).join('');
     return '<li><details class="tl-path"><summary><span class="tl-path-t">' + esc(p.t) + '</span><span class="tl-path-s">' + esc(p.s) + '</span></summary><ol>' + steps + '</ol></details></li>';
   }
   $('[data-tl-paths-solo]').innerHTML = PATHS.filter(function (p) { return p.solo; }).map(pathHtml).join('');
@@ -331,6 +334,16 @@
     if (!box.innerHTML) { box.innerHTML = '<p>Loading the example…</p>'; exHtml(t).then(function (h) { box.innerHTML = h; }); }
   }
   list.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.tl-exbtn'); if (b) showEx(b, b.getAttribute('aria-expanded') !== 'true'); });
+
+  // ---------- workpapers: their own section, in number order, not ranked and not filtered with the tools
+  var wpBox = $('[data-tl-wp-list]');
+  if (wpBox && WPS.length) {
+    wpBox.innerHTML = WPS.slice().sort(function (a, b) { return (a.wp || 'Z').localeCompare(b.wp || 'Z', 'en', { numeric: true }); }).map(function (t) {
+      return '<li><a href="' + esc(t.href) + '">' + (t.wp ? '<span class="tl-wp-c">' + esc(t.wp) + '</span> ' : '') + esc(t.name) + '</a><span class="tl-wp-d">' + esc(t.does) + '</span></li>';
+    }).join('');
+    $('[data-tl-wp-n]').textContent = WPS.length;
+    $('[data-tl-wp]').hidden = false;
+  }
 
   // ---------- apply
   var countEl = $('[data-tl-count]'), pillsEl = $('[data-tl-pills]'), resetBtn = $('[data-tl-reset]'), emptyEl = $('[data-tl-empty]');

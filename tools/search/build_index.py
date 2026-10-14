@@ -309,6 +309,11 @@ def section_title(u, page_title):
     return (short + ': ' + head) if head and short and short.lower() not in head.lower() else (head or page_title)
 
 
+# the same tests the site uses (site.js kindOf): a workpaper is a numbered worksheet or a printable plan to fill in
+WORKPAPER = re.compile(r'^/workpapers/(?!calculators/)|^/wp-\d|^/(prog-01|week-0|full-path|chore-chart-for-couples)\.html$')
+TOOLISH = re.compile(r'^/(signal-translator|carrier-wave-decoder|lemonade-stand|wiring-card|wavelength|quick-checks|ladder|upset-right-now|night-garden|calm-visualizer|soundscapes|pause-and-play|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|frequency-journey|recheck-drive|bears-dojo|surprise|ask|start-in-10-minutes|write-it-through|how-you-take-things-in|is-the-setup-working|look-back-30-days|quest|communication-style-quiz)\.html$|^/tools/|^/workpapers/calculators/|^/snapshot/|^/do/')
+
+
 def build_needs(rows):
     try:
         src = json.load(open(NEEDS_IN, encoding='utf-8'))
@@ -346,7 +351,9 @@ def build_needs(rows):
             solo = hit[1] if hit else 1
             if any(x[0] == u for x in go):
                 continue
-            go.append([u, title, g[1], solo])
+            # workpapers and tools are kept apart everywhere: 'w' a workpaper (a worksheet to fill in), 't' a tool, '' a page to read
+            kind = 'w' if WORKPAPER.search(path) else ('t' if hit or TOOLISH.search(path) else '')
+            go.append([u, title, g[1], solo, kind])
         if not go or not n.get('say'):
             problems.append('%s: nothing to show' % n['id'])
             continue

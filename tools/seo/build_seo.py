@@ -894,7 +894,7 @@ SPLASH_TAGS = ['<link rel="apple-touch-startup-image" href="/assets/icons/splash
 # app's colour shows before the page paints, and launch-pups.js (Tidbit and Sugarfoot running up and down the screen
 # until the page is ready, always gone within 2.5 seconds) starts loading. Keep it in step with the copy in site.js.
 LAUNCH_BOOT = ['<style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;'
-               'animation:lp-boot-gone .25s ease 2.25s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}'
+               'animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}'
                'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style>',
                '<script>(function(){try{var d=document.documentElement,m=window.matchMedia;'
                'if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")'

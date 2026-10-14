@@ -38,7 +38,7 @@
       sessionStorage.setItem('tol-launch-seen', '1');
       var bs = document.createElement('style'); bs.id = 'lp-boot-css';
       bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
-        'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(2250 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
+        'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(1900 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
         'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
       document.head.appendChild(bs);
       var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
@@ -1879,14 +1879,14 @@
     meltdown: ['shutdown', 'overload', 'calm-down', 'sensory'], shutdown: ['meltdown', 'overload', 'shut down'], blunt: ['direct', 'literal', 'wired differently'] };
   // doing and feeling words: the tools that help come first
   var ACT = {
-    fight: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/conversation-reader.html', '/carrier-wave-decoder.html', '/signal-translator.html', '/workpapers/wp-09-say-it-so-it-lands.html'],
+    fight: ['/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/signal-translator.html', '/carrier-wave-decoder.html', '/workpapers/wp-09-say-it-so-it-lands.html'],
     argument: 'fight', arguing: 'fight', argue: 'fight', conflict: 'fight', snapped: 'fight', yelled: 'fight', upset: 'fight', sideways: 'fight', row: 'fight',
     chores: ['/share-the-load.html', '/chore-chart-for-couples.html', '/lemonade-stand.html', '/workpapers/wp-03-one-owner-per-job.html', '/workpapers/wp-01.html'], chore: 'chores', housework: 'chores', dishes: 'chores', laundry: 'chores', cleaning: 'chores', split: 'chores', fair: 'chores',
     breathe: ['#breathe', '/wp-11.html', '/night-garden.html', '/soundscapes.html'], breathing: 'breathe', breath: 'breathe',
     calm: ['/upset-right-now.html', '#breathe', '/wp-11.html', '/night-garden.html', '/calm-visualizer.html', '/soundscapes.html'], relax: 'calm', settle: 'calm', soothe: 'calm', anxiety: 'calm', anxious: 'calm', worry: 'calm', overwhelmed: 'calm', stress: 'calm', stressed: 'calm', panic: 'calm',
     tired: ['/quick-checks.html', '/workpapers/wp-02-how-much-are-you-carrying.html', '/wp-11.html'], exhausted: 'tired', drained: 'tired', burnout: 'tired', battery: 'tired', sleep: ['/soundscapes.html', '/night-garden.html', '#breathe'],
     weather: ['/quick-checks.html'], mood: 'weather', feeling: 'weather', today: 'weather', forecast: 'weather',
-    message: ['/signal-translator.html', '/workpapers/wp-09-say-it-so-it-lands.html', '/conversation-reader.html'], text: 'message', say: 'message', words: 'message', email: 'message',
+    message: ['/signal-translator.html', '/workpapers/wp-09-say-it-so-it-lands.html', '/write-it-through.html'], text: 'message', say: 'message', words: 'message', email: 'message',
     game: ['/pause-and-play.html'], games: 'game', play: 'game', puzzle: 'game',
     autism: ['/wired-differently.html', '/wavelength.html', '/wiring-card.html', '/know-yourself.html'], autistic: 'autism', adhd: 'autism', neurodivergent: 'autism', wiring: 'autism', sensory: 'autism',
     personality: ['/wavelength.html', '/know-yourself.html'], quiz: 'personality', archetype: 'personality', wavelength: 'personality', heartprint: 'personality', neurotype: 'personality', audhd: 'autism',
@@ -1913,7 +1913,7 @@
     stonewalling: ['/pursue-withdraw.html', '/upset-right-now.html', '/how-to-stop-fighting-with-your-partner.html', '/wp-11.html'], stonewall: 'stonewalling', withdraw: 'stonewalling', withdraws: 'stonewalling', pursue: 'stonewalling', pursuer: 'stonewalling', pursues: 'stonewalling', space: 'stonewalling', pause: 'stonewalling', timeout: 'stonewalling',
     'in-laws': ['/family-obligations.html#visits', '/library/life.html#in-laws', '/library/conflict.html#family-disagreements', '/family-obligations.html'], 'in-law': 'in-laws', inlaws: 'in-laws', inlaw: 'in-laws', 'mother-in-law': 'in-laws', 'father-in-law': 'in-laws', 'sister-in-law': 'in-laws', 'brother-in-law': 'in-laws', motherinlaw: 'in-laws', fatherinlaw: 'in-laws', 'mothers-in-law': 'in-laws', extended: 'in-laws', culture: 'in-laws', cultures: 'in-laws', cultural: 'in-laws',
     remittance: ['/family-obligations.html', '/library/life.html'], remittances: 'remittance', remit: 'remittance', money: ['/lemonade-stand.html', '/family-obligations.html'], savings: 'money', saving: 'money', finances: 'money',
-    sentthis: ['/someone-sent-you-this.html', '/sent-this.html'], holidayschedule: ['/co-parenting.html'], workpapersuite: ['/workpapers/fill/suite.html', '/full-path.html'], worksheets: 'workpapersuite', workpapers: 'workpapersuite', fulltime: ['/lemonade-stand.html', '/new-parent.html', '/share-the-load.html'], nightfeeds: ['/new-parent.html', '/lemonade-stand.html'],
+    sentthis: ['/someone-sent-you-this.html', '/sent-this.html'], holidayschedule: ['/co-parenting.html'], workpapersuite: ['/workpapers/fill/suite.html', '/workpapers/fill/suite.html#full-path'], worksheets: 'workpapersuite', workpapers: 'workpapersuite', fulltime: ['/lemonade-stand.html', '/new-parent.html', '/share-the-load.html'], nightfeeds: ['/new-parent.html', '/lemonade-stand.html'],
     teenmiddle: ['/teens.html#middle', '/teens.html', '/parents.html'], brother: ['/teens.html#siblings', '/parents.html#siblings'], sister: 'brother', brothers: 'brother', sisters: 'brother', sibling: 'brother', siblings: 'brother',
     eldercare: ['/caregivers.html', '/family-obligations.html'], elderly: 'eldercare', dementia: 'eldercare', alzheimers: 'eldercare', dad: ['/caregivers.html', '/parents.html', '/teens.html'], mum: 'dad', mom: 'dad', father: 'dad', mother: 'dad',
     rentlate: ['/share-the-load.html#roommates', '/lemonade-stand.html'], housemates: 'rentlate', flatmates: 'rentlate', housemate: 'rentlate', flatmate: 'rentlate',
@@ -1927,9 +1927,9 @@
     divorce: ['/co-parenting.html', '/relationships.html', '/library/life.html', '/check-ins.html', '/signal-translator.html'], separated: 'divorce', separation: 'divorce', ex: 'divorce', coparent: 'divorce',
     arcade: ['/frequency-journey.html'], maze: 'arcade', chase: 'arcade', crossing: 'arcade',
     complacent: ['/complacency.html', '/complacency-in-depth.html', '/turning-toward.html', '/workpapers/wp-13-daily-check-in.html'], touchstone: ['/touchstones.html', '/complacency.html#touchstones', '/library/connection.html#shared-language', '/turning-toward.html#rituals'], touchstones: 'touchstone', idiom: 'touchstone', idioms: 'touchstone', petname: 'touchstone', nickname: 'touchstone', nicknames: 'touchstone', petname: 'touchstone', joke: 'touchstone', jokes: 'touchstone', catchphrase: 'touchstone', codeword: 'touchstone', complacency: 'complacent', stale: 'complacent', boring: 'complacent', bored: 'complacent', rut: 'complacent', drifting: 'complacent', drift: 'complacent', granted: 'complacent', coasting: 'complacent', autopilot: 'complacent', spark: 'complacent',
-    sorry: ['/apology-languages.html', '/library/conflict.html', '/signal-translator.html', '/conversation-reader.html', '/workpapers/wp-09-say-it-so-it-lands.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
+    sorry: ['/apology-languages.html', '/library/conflict.html', '/signal-translator.html', '/carrier-wave-decoder.html', '/workpapers/wp-09-say-it-so-it-lands.html'], apology: 'sorry', apologize: 'sorry', repair: 'sorry', forgive: 'sorry',
     puppy: ['#palcam', '/frequency-buddies.html', '/frequency-journey.html', '/pal-cam-tv.html'], pup: 'puppy', pups: 'puppy', dog: 'puppy', tidbit: 'puppy', sugarfoot: 'puppy',
-    screenshot: ['/conversation-reader.html'],
+    screenshot: ['/signal-translator.html'],
     childhood: ['/growing-up.html', '/growing-up-in-depth.html', '/know-yourself.html'], raised: 'childhood', upbringing: 'childhood', parents: 'childhood', grew: 'childhood', growing: 'childhood', family: ['/growing-up.html', '/relationships.html'],
     forgot: ['/workpapers/wp-03-one-owner-per-job.html', '/signal-translator.html', '/lemonade-stand.html', '/ask.html'], forget: 'forgot', remember: 'forgot', reminder: 'forgot', bill: ['/workpapers/wp-03-one-owner-per-job.html', '/lemonade-stand.html', '/signal-translator.html'], bills: 'bill',
     focus: ['#settings', '/start-in-10-minutes.html', '#breathe', '/quick-checks.html'], attention: 'focus', distracted: 'focus', concentrate: 'focus',
@@ -2222,11 +2222,11 @@
     tools: ['/tools.html', '/explore.html'], tool: 'tools', toolkit: 'tools', toolbox: 'tools',
     everything: ['/explore.html', '/tools.html', '/contents.html'], sitemap: 'everything', directory: 'everything', overview: 'everything', index: 'everything', browse: 'everything', explore: 'everything',
     worksheets: ['/workpapers/fill/suite.html', '/workpapers/fill/index.html', '/tools.html'], worksheet: 'worksheets', workpapers: 'worksheets', workpaper: 'worksheets', printables: 'worksheets', printable: 'worksheets', template: 'worksheets', templates: 'worksheets',
-    pdf: ['/book/download.html', '/full-path.html', '/workpapers/fill/suite.html'], pdfs: 'pdf', ebook: 'pdf',
-    starting: ['/find-your-start.html', '/start-here.html', '/start-in-10-minutes.html'], begin: 'starting', beginner: 'starting',
+    pdf: ['/book/download.html', '/workpapers/fill/suite.html#full-path', '/workpapers/fill/suite.html'], pdfs: 'pdf', ebook: 'pdf',
+    starting: ['/start-here.html#three-questions', '/start-here.html', '/start-in-10-minutes.html'], begin: 'starting', beginner: 'starting',
     whysite: ['/why-this-site.html', '/method-and-limits.html', '/research.html'], chatgpt: 'whysite', 'evidence-based': 'whysite',
     // plain tool names (tools9)
-    checker: 'message', analyzer: ['/conversation-reader.html', '/signal-translator.html'], analyser: 'analyzer', analyse: 'analyzer', analyze: 'analyzer', thread: 'analyzer', paste: 'analyzer',
+    checker: 'message', analyzer: ['/signal-translator.html'], analyser: 'analyzer', analyse: 'analyzer', analyze: 'analyzer', thread: 'analyzer', paste: 'analyzer',
     split: ['/lemonade-stand.html', '/workpapers/calculators/is-the-setup-working-quick.html', '/share-the-load.html', '/workpapers/wp-03-one-owner-per-job.html'],
     checkin: ['/workpapers/wp-13-daily-check-in.html', '/check-ins.html', '/quick-checks.html'], 'check-in': 'checkin',
     energy: 'weather', tracker: 'weather', pause: ['/pursue-withdraw.html', '/upset-right-now.html', '/wp-11.html'], timeout: 'pause',
@@ -2294,7 +2294,12 @@
    ['/safety.html#signs', 'Signs of control or abuse (gaslighting, coercive control)', 'Being told you imagined things, checked on, cut off from friends or money, or afraid of how they’ll react: the signs, and free, private people to talk to.', 'Safety'],
    ['/safety.html#traces', 'Clearing your traces on a shared device', 'What this site keeps on your device, how to erase it, and leaving quickly.', 'Safety'],
    ['/foster-and-kinship.html#support', 'Kinship and foster carers: where to get support', 'Support groups for grandparents raising grandchildren and other kinship carers, money help, and a break for you.', 'Guide'],
-   ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book']
+   ['/book/index.html', 'Read the book', 'The whole book, from the beginning: Part One (you), Part Two (sharing the load) and Part Three (understanding people).', 'Book'],
+   // merged tools that live in a part of a page (round 11): the old addresses are stubs that send people here
+   ['/start-here.html#three-questions', 'Not sure where to start? Three quick questions', 'Who it’s about, what’s going on and how much time you have. You get one thing to try first.', 'Tool'],
+   ['/workpapers/fill/suite.html#full-path', 'All your worksheets as one PDF, with a report', 'Every worksheet in order, printed or saved as one PDF, with a report at the end.', 'Tool'],
+   ['/soundscapes.html#background', 'Background sounds: brown noise, a low hum and more', 'Calm-down sounds to play while you settle or fall asleep.', 'Tool'],
+   ['/carrier-wave-decoder.html?tab=their-side', 'See it from their side', 'The Their side step of After a talk went wrong: look at the moment the way they saw it.', 'Tool']
   ].forEach(function (r) { EXTRA[r[0]] = { u: r[0], t: r[1], d: r[2], k: r[3] }; });
   // a grandparent asking about support groups means the kinship support section first
   PRE.push([/\bgrand(parent|parents|ma|pa|mother|father|kids?|child|children|son|daughter)s?\b.*\b(support|group|groups|help|benefits?|allowance|money)\b|\bkinship (support|carers?|group)\b/, 'r13kin']);
@@ -2314,7 +2319,7 @@
     '/write-it-through.html': ['Talk it through in writing', 'One topic, facts not verdicts, one clear ask and a reply-by time. Write it, wait, then send.'],
     '/how-you-take-things-in.html': ['How you take things in', 'Pick how your mind takes things in (ADHD, autistic, dyslexic or plain preferences) and every page adapts.'],
     '/explore.html': ['Everything on this site', 'Every page and tool on one page, with filters by need, relationship, time and kind of page.'],
-    '/ladder.html': ['Where am I right now?', 'Find where you are right now, and a next step that fits.'],
+    '/ladder.html': ['How am I right now? (quick, 4 taps)', 'Four quick taps on how you are right now, and a next step that fits.'],
     '/refusals.html': ['Say no kindly', 'Kind, clear ways to turn something down, with words you could use.'],
     '/friends.html': ['Friends: when a friendship drifts', 'When you’re always the one reaching out, a friend never texts back, or life changes pull you apart: kind words to say, and low-energy ways to stay close.'],
     '/more-than-two.html': ['More than two partners at home', 'For polyamorous families, triads and throuples: sharing the load between three or more, and joining a home without feeling like a guest.'],

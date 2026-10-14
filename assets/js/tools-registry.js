@@ -4,7 +4,7 @@
 
    Each tool:
      id      short, stable name
-     name    the plain name: says what it does ("Text message checker")
+     name    the plain name: says what it does ("Chat analyzer")
      brand   the tool's own name, kept as a small "also called" line ('' when it has none)
      href    where it opens (a #part when the tool sits inside a longer page)
      type    its main type (one of TOLToolTypes ids); also: other types it fits
@@ -17,6 +17,7 @@
      kw      extra words people might search for
      modes   optional [[label, href], ...]: the ways in when one tool has more than one (tabs or parts of its page)
      outcomes, people, bestFor, liked, example, sample, es: added below from MORE (what it helps with, who it is for)
+     kind    'tool' or 'workpaper' (added below; wp: a workpaper's short code). /tools.html shows tools only.
    Old ids of merged tools: window.TOLToolAliases (old id -> new id); window.TOLToolById(id) follows them.
    Nothing here is stored or sent. */
 (function () {
@@ -37,16 +38,13 @@
 
   var T = [
     // ---------- Communication
-    { id: 'signal', name: 'Text message checker', brand: 'the Signal Translator', href: '/signal-translator.html', type: 'talk', also: ['work', 'family'],
-      does: 'Shows how a message may land before you send it, or helps you read one you got.',
-      gets: 'A plain read of the tone and a kinder, clearer version that keeps your ask.',
-      mins: 2, time: 'About 2 minutes', who: ['solo'], benefit: 'Send what you mean, without the sting', top: 1,
-      kw: 'text message checker tone checker message analyzer analyser rewrite reply sms whatsapp email before i send' },
-    { id: 'reader', name: 'Chat analyzer: paste a conversation', brand: 'the Conversation Reader', href: '/conversation-reader.html', type: 'talk', also: [],
-      does: 'Reads a pasted text thread, chat or email exchange.',
-      gets: 'Where it turned, what each of you may be hearing, and calmer replies built from your own words.',
-      mins: 5, time: 'About 5 minutes', who: ['solo'], benefit: 'See a fight over text clearly, then answer calmly',
-      kw: 'chat analyser conversation analyzer thread fight over text group chat screenshot argument reply' },
+    // the Text message checker and the Chat analyzer (the Conversation Reader) are one tool now: old id 'reader' -> 'signal'
+    { id: 'signal', name: 'Chat analyzer', brand: 'the Signal Translator', href: '/signal-translator.html', type: 'talk', also: ['work', 'family'],
+      does: 'Reads one message you’re about to send, one you got, a whole conversation, or a screenshot of one.',
+      gets: 'How it may land or what it might mean, where a conversation turned, and calm, clear words that keep your point.',
+      mins: 2, time: 'About 2 minutes for a message, 5 for a conversation', who: ['solo'], benefit: 'Send what you mean, and read a fight over text clearly', top: 1,
+      modes: [['A message I’m about to send', '/signal-translator.html'], ['A message I got', '/signal-translator.html?mode=got'], ['A whole conversation or screenshot', '/signal-translator.html#conversation']],
+      kw: 'chat analyzer chat analyser text message checker tone checker message analyzer rewrite reply sms whatsapp email before i send conversation reader conversation analyzer thread fight over text group chat screenshot argument signal translator' },
     { id: 'write', name: 'Talk it through in writing', brand: '', href: '/write-it-through.html', type: 'talk', also: [],
       does: 'Walks you through writing about one topic: facts, not verdicts, and one clear ask.',
       gets: 'A message ready to send with a reply-by time, after a short wait to check it.',
@@ -396,8 +394,7 @@
   //   es     the tool also works in Spanish
   // A tool with no line here still works: the page falls back to its type.
   var MORE = {
-    signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, or one that stung', liked: 17, ex: 'ex-signal-zoe' },
-    reader: { o: 'talk other', p: 'partner family friends work', best: 'a text argument you keep rereading', ex: 'ex-reader-dana-raj' },
+    signal: { o: 'talk other', p: 'partner family friends work housemates', best: 'a text you’re unsure how to send, one that stung, or a text argument you keep rereading', liked: 17, ex: 'ex-signal-zoe' },
     write: { o: 'talk', p: 'partner family friends', best: 'a big topic that goes wrong when you say it out loud', ex: 'ex-write-carys-owen' },
     sayit: { o: 'talk calm', p: 'partner family friends work', best: 'the moment before you answer something that stung', ex: 'ex-wp09-carla' },
     refusals: { o: 'talk', p: 'family friends work', best: 'saying no without the guilt spiral',
@@ -486,6 +483,18 @@
     dojo: { o: 'fun calm', p: '', best: 'a soft place to land' },
     mvmaker: { o: 'fun', p: 'family', best: 'making something silly with kids' }
   };
+  // ---------- Tools and workpapers are kept apart (owner: "Keep work papers and tools separate").
+  // Every entry gets kind: 'tool' or 'workpaper'. A workpaper is one of the numbered fill-in worksheets, their
+  // calculators, the suite that runs them in order, and the pages built on them; /tools.html lists tools only and
+  // links the workpapers in their own section. wp: the short code shown next to a workpaper's name.
+  var WORKPAPERS = { whodid: 'WP-01', owner: 'WP-03', keepscoming: 'WP-04', sayit: 'WP-09', calmkit: 'WP-11', pace12: 'WP-12',
+    checkin90: 'WP-13', static14: 'WP-14', rituals15: 'WP-15', 'fair-quick': 'CALC-01', 'fair-full': 'CALC-01, long form',
+    'lookback-quick': 'CALC-02', 'lookback-full': 'CALC-02, long form', suite: 'Suite', sixweeks: 'PROG-01', progress: 'REPORT-01',
+    playground: 'Practice' };
+  T.forEach(function (t) {
+    if (!t.kind) t.kind = WORKPAPERS[t.id] || /^\/(workpapers\/|wp-\d)/.test(t.href) ? 'workpaper' : 'tool';
+    if (t.kind === 'workpaper' && !t.wp) t.wp = WORKPAPERS[t.id] || '';
+  });
   var TYPE_OUT = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'plan', work: 'load', health: 'self calm', plan: 'plan', learn: 'learn', play: 'fun' };
   T.forEach(function (t) {
     var x = MORE[t.id] || {}, p = (x.p != null ? x.p : (t.who.indexOf('two') !== -1 ? 'partner' : '') + (t.who.indexOf('group') !== -1 ? ' family housemates work' : '')).split(/\s+/).filter(Boolean);
@@ -509,7 +518,8 @@
     surprise: 'pauseplay',      // Surprise me is a site-wide button now; the games hub has "Pick one for me"
     ladder: 'weather',          // Where am I right now? -> How am I right now?, "Quick: 4 taps" (/ladder.html, #rung= links)
     'load-check': 'weather',    // the load check's card -> the pressure step (the WP-02 worksheet page itself stays)
-    perspective: 'decoder'      // See it from their side -> After a talk went wrong, "Their side" (?tab=their-side)
+    perspective: 'decoder',     // See it from their side -> After a talk went wrong, "Their side" (?tab=their-side)
+    reader: 'signal'            // the Conversation Reader -> the Chat analyzer, "A whole conversation or screenshot" (#conversation)
   };
   var A = window.TOLToolAliases || {};
   Object.keys(ALIASES).forEach(function (k) { A[k] = ALIASES[k]; });

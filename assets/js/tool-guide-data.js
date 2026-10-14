@@ -35,17 +35,17 @@ window.TOLToolGuideData = {
     /* ---------------- Talk it through ---------------- */
 
     'signal-translator': {
-      name: 'Text message checker',
+      name: 'Chat analyzer',
       reg: 'signal',
       pages: ['/signal-translator.html'],
-      when: 'Before you send a text, email or work message that matters. Or when a message you got stung or confused you and you want a calmer reading of it.',
+      when: 'Before you send a text, email or work message that matters. Or when a message you got stung or confused you and you want a calmer reading of it. For a whole conversation or a screenshot, choose “A whole conversation or screenshot” at the top.',
       notWhen: 'Not in the middle of a heated exchange: take a break first with <a href="/pursue-withdraw.html">a pause plan</a>. Not for working out what someone “really” meant; only they can tell you that.',
       time: 'About 2 minutes a message.',
       result: 'A plain reading of how the words may land (for example “a little sharp: the ask is clear, but ‘you always’ may sound like blame”) and a calmer version that keeps your ask and adds no promises.',
       next: [
         ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'when it needs more than a rewrite: a fact, a feeling and one kind ask'],
         ['/check-ins.html', 'Check-ins', 'if it’s a bigger topic, raise it at a calm, set time instead of by text'],
-        ['/conversation-reader.html', 'Read a whole conversation', 'when a thread has already gone wrong']
+        ['/signal-translator.html#conversation', 'Read a whole conversation', 'when a thread has already gone wrong: paste it, or add a screenshot']
       ],
       research: [
         ['kruger-epley-2005-email', 'People overestimate how clearly their tone comes across in email (Kruger, Epley and colleagues, 2005).'],
@@ -57,16 +57,17 @@ window.TOLToolGuideData = {
       privacy: 'The checking happens on this device. What you type is not sent anywhere. Only your view settings are kept in this browser.'
     },
 
+    // the Chat analyzer's "A whole conversation or screenshot" view (this was the Conversation Reader's own page)
     'conversation-reader': {
-      name: 'Chat analyzer: paste a conversation',
-      reg: 'reader',
-      pages: ['/conversation-reader.html'],
+      name: 'Chat analyzer: a whole conversation or screenshot',
+      reg: 'signal',
+      pages: ['/signal-translator.html', '/conversation-reader.html'],
       when: 'After a text or chat exchange went sideways and you want to see where it turned, what each of you may have been hearing, and a calmer way to reply.',
       notWhen: 'Not while you are still upset: reply later, after <a href="/upset-right-now.html">five calm minutes</a>. Not as evidence for who was right; it isn’t built for that.',
       time: 'About 5 to 10 minutes.',
       result: 'The one or two messages where it turned, a fair reading of both sides (“Sam may have heard ‘you don’t care’; Alex may have heard ‘you’re attacking me’”), and a calm reply you could send.',
       next: [
-        ['/signal-translator.html', 'Check your reply before you send it', 'one message at a time'],
+        ['/signal-translator.html', 'Check your reply before you send it', 'one message at a time: “A message I’m about to send”'],
         ['/carrier-wave-decoder.html', 'Go through it together', 'what slipped, not who started it'],
         ['/pursue-withdraw.html', 'Make a pause plan', 'if the same thread keeps happening']
       ],

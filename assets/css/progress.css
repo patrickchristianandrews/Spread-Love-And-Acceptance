@@ -48,7 +48,7 @@
 .tp-compare{ width:100%; border-collapse:collapse; font-size:.9rem; table-layout:fixed; }
 .tp-compare caption{ text-align:left; font-weight:600; margin-bottom:.35rem; }
 .tp-compare th, .tp-compare td{ padding:.4rem .35rem; border-bottom:1px solid var(--line, #D9CBA3); text-align:left; vertical-align:top; overflow-wrap:anywhere; hyphens:auto; }
-.tp-compare thead th{ font-size:.85rem; line-height:1.2; }
+.tp-compare thead th{ font-size:.85rem; line-height:1.2; overflow-wrap:normal; hyphens:none; }
 .tp-compare th:first-child{ width:34%; }
 .tp-compare .tp-here{ display:none; font-size:.75rem; font-weight:700; color:#5B3F8C; }
 .tp-at-shared [data-col="shared"], .tp-at-phone [data-col="phone"], .tp-at-app [data-col="app"]{ background:#F6F0FF; }

@@ -95,7 +95,7 @@
       sub: function (d) { var n = 0; Object.keys(d).forEach(function (k) { n += (d[k] || []).length; }); return T(n + ' things ticked', n + ' cosas marcadas'); },
       view: { kind: 'fields', fields: CARE.map(function (g) { return { k: g[0], en: g[1], es: g[2] }; }),
         next: function () { return T('This week, each try one thing from the other’s card.', 'Esta semana, prueben cada uno una cosa de la tarjeta del otro.'); } } },
-    { id: 'rituals', title: ['Your rituals and touchstones', 'Tus rituales'], v: 1,
+    { id: 'rituals', title: ['Your rituals and touchstones (the touchstone list and WP-15)', 'Tus rituales (la lista y WP-15)'], v: 1,
       get: function (store) {
         var items = [], st = wpState(store, 'WP-15'), r = J(store.ss('tol-collab-results'));
         ((st && st.tables && st.tables.rituals) || []).forEach(function (row) { if (row && str(row.ritual, 120)) items.push({ t: str(row.ritual, 120), x: str(row.state, 40) }); });
@@ -104,7 +104,7 @@
       },
       sub: function (d) { return T(d.items.length + ' on your list', d.items.length + ' en tu lista'); },
       view: { kind: 'list', next: function () { return T('Pick one from the joined list to keep (or restart) this week, small enough for a hard week.', 'Elijan uno de la lista unida para mantener (o retomar) esta semana, algo pequeño que aguante una semana difícil.'); } } },
-    { id: 'load', title: ['How much you’re carrying (WP-02)', 'Cuánto estás cargando (WP-02)'], v: 1,
+    { id: 'load', wp: true, title: ['WP-02 How much are you carrying?', 'WP-02 ¿Cuánto estás cargando?'], v: 1,
       get: function (store) {
         var st = wpState(store, 'WP-02'), v = st && st.values; if (!v) return null;
         var sum = 0, n = 0; ['sleep', 'work', 'conflict', 'physical', 'time'].forEach(function (id) { var x = +wpVal(v, 'factors', id); if (wpVal(v, 'factors', id) !== '' && wpVal(v, 'factors', id) != null && isFinite(x) && x >= 0 && x <= 4) { sum += x; n++; } });
@@ -160,7 +160,7 @@
   ];
   // the fill-in workpapers kept together: a merged list in the side-by-side view; the full combine on their own page
   WP_LISTS.forEach(function (w) {
-    PROVIDERS.push({ id: 'wp-' + w[0].slice(3), title: [w[1] + ' (' + w[0] + ')', w[1] + ' (' + w[0] + ')'], v: 1,
+    PROVIDERS.push({ id: 'wp-' + w[0].slice(3), wp: true, title: [w[0] + ' ' + w[1], w[0] + ' ' + w[1]], v: 1,
       get: function (store) {
         var st = wpState(store, w[0]); if (!st || !st.tables) return null;
         // (WP-03's untouched starter jobs have no owner yet: only the jobs someone gave an owner travel)
@@ -228,12 +228,21 @@
       box.appendChild(mk('p', { cls: 'tres-none', text: T('Nothing to share from this device yet. Your results show up here once you’ve done a tool (and it was kept on this device, or done in this tab).', 'Todavía no hay nada para compartir desde este aparato. Tus resultados aparecen aquí cuando hagas una herramienta.') }));
     }
     box.appendChild(mk('p', { cls: 'tcol-send-h', text: have.length ? T('Choose what goes in. Nothing is ticked for you.', 'Elige qué va. No hay nada marcado por defecto.') : '' }));
-    var ul = mk('ul', { cls: 'tres-pick', role: 'group', 'aria-label': T('Results to share', 'Resultados para compartir') });
-    have.forEach(function (a) {
+    // tools and workpapers are listed apart, each under its own heading
+    var ul = mk('div', { cls: 'tres-groups', role: 'group', 'aria-label': T('Results to share', 'Resultados para compartir') });
+    var groups = [[T('From the tools', 'De las herramientas'), have.filter(function (a) { return !BY_ID[a.id].wp; })], [T('From the workpapers', 'De las hojas de trabajo (workpapers)'), have.filter(function (a) { return BY_ID[a.id].wp; })]];
+    groups.forEach(function (g) {
+      if (!g[1].length) return;
+      var gl = mk('ul', { cls: 'tres-pick' });
+      ul.appendChild(mk('p', { cls: 'tres-gh', text: g[0] }));
+      ul.appendChild(gl);
+      g[1].forEach(function (a) { add(gl, a); });
+    });
+    function add(list, a) {
       var id = 'tres-c-' + a.id, p = BY_ID[a.id];
       var lab = mk('label', { for: id }, [mk('input', { type: 'checkbox', id: id, 'data-res': a.id }), mk('span', {}, [mk('span', { cls: 'tres-t', text: title(a.id) }), p.private ? mk('span', { cls: 'tres-priv', text: T('private', 'privado') }) : null, mk('span', { cls: 'tres-s', text: p.sub ? p.sub(a.data) : '' })])]);
-      ul.appendChild(mk('li', {}, [lab]));
-    });
+      list.appendChild(mk('li', {}, [lab]));
+    }
     if (have.length) box.appendChild(ul);
     if (have.some(function (a) { return BY_ID[a.id].private; })) box.appendChild(mk('p', { cls: 'tcol-small', text: T('“Private” ones are about how you are, or something you wrote for one person. They only go in if you tick them yourself.', 'Los «privados» son sobre cómo estás, o algo que escribiste para una persona. Solo van si los marcas tú.') }));
     function url() {
@@ -266,6 +275,7 @@
     if (got.unknown.length) box.appendChild(mk('p', { cls: 'tcol-small', text: T('Some of it comes from a newer version of the site, so this page can’t show it yet. Nothing was added.', 'Una parte viene de una versión más nueva del sitio y esta página todavía no puede mostrarla. No se agregó nada.') }));
     ids.forEach(function (id) {
       var p = BY_ID[id], list = got.byItem[id].filter(function (x) { return !x.me; }), card = mk('section', { cls: 'tres-item', 'aria-label': title(id) });
+      card.appendChild(mk('p', { cls: 'tres-kind', text: p.wp ? T('Workpaper', 'Hoja de trabajo') : T('Tool', 'Herramienta') }));
       card.appendChild(mk('h4', { text: title(id) }));
       if (got.newer.indexOf(id) >= 0) card.appendChild(mk('p', { cls: 'tcol-small', text: T('This came from a newer version of the site. Showing what this page can read.', 'Esto viene de una versión más nueva del sitio. Se muestra lo que esta página puede leer.') }));
       var missing = senders.filter(function (n) { return !list.some(function (x) { return (x.n || T('Someone', 'Alguien')) === n; }); });

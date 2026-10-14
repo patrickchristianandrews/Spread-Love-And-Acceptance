@@ -295,8 +295,12 @@
         // the page may still be arriving: before <body> exists the cover goes straight into <html>
         (D.body || DE).appendChild(ov.el);
         shownAt = now();
-        // the deadline is kept by the browser itself (a CSS animation), so a busy page can't hold the cover up
-        ov.el.style.animation = 'lp-gone ' + FADE + 'ms ease ' + Math.max(0, Math.round(GONE_BY - FADE - shownAt)) + 'ms forwards';
+        // the deadline is kept by the browser itself (an animation pinned to the moment the page started loading),
+        // so a busy page can't hold the cover up
+        try {
+          var dl = ov.el.animate([{ opacity: 0, visibility: 'hidden' }], { duration: FADE, delay: GONE_BY - FADE, fill: 'forwards', easing: 'ease' });
+          dl.startTime = 0;
+        } catch (e) { ov.el.style.animation = 'lp-gone ' + FADE + 'ms ease ' + Math.max(0, Math.round(GONE_BY - FADE - shownAt)) + 'ms forwards'; }
         ov.start();
         ov.el.addEventListener('click', function () { fade(SKIP_FADE); });
         D.addEventListener('keydown', onKey, true);

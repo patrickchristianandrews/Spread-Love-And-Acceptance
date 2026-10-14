@@ -1817,6 +1817,244 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
   if (page && gone.length) console.log('note: no longer on ask.html (their specific checks are unused): ' + gone.join(' | '));
 }
 
+// ---------------------------------------------------------------- chat11 (puddles11): Professor Puddles, someone you can just chat with
+// persona.json: every topic answers in persona and asks a question back; jokes, riddles (answer next turn), would-you-rather,
+// games; memory and callbacks; no repeats; one-word and emoji replies; a plain hand-off when something real comes up; and
+// never any comedy in a safety, crisis or serious reply. Also the merged tools (mergeA, mergeB) and "Self-discovery".
+if (PERSONA) {
+  const ALLP = rs => rs.map(r => (r.blocks || []).filter(b => b.k === 'p').map(b => b.x)).flat();
+  const endsQ = (r, rs, text) => /\?\s*$/.test(((r.blocks || []).filter(b => b.k === 'p').pop() || {}).x || '') ? '' : 'no question back at the end';
+  // every comic or chit-chat line Puddles has (persona.json and personality.json): none may appear in a serious reply
+  const COMIC = new RegExp([PZ_RE(['jokes', 'topics.replies', 'topics.thing', 'react', 'day', 'stories', 'compliments', 'self_jokes', 'tease', 'cheer', 'bored', 'wyr.q', 'wyr.pick', 'riddles.q', 'facts', 'catchphrases', 'just_chat', 'dislike', 'wyr_react', 'wyr_mine', 'quiz_intro', 'rps', 'guess', 'rate', 'flirt']).source,
+    PERS ? (() => { const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); return ['light_openers', 'light_closers', 'jokes', 'game_and_play', 'greetings', 'thanks_replies'].map(k => (PERS[k] || []).map(x => esc(x.replace(/\{name\}/g, '').slice(0, 40)))).flat().filter(Boolean).join('|'); })() : '$^'].join('|'));
+  const notLight = (r) => /^(chat|fun)$/.test(r.kind || '') ? 'a chit-chat reply (' + r.kind + ' ' + (r.id || '') + ')' : '';
+  const ser = (r, rs, text) => notLight(r) || (COMIC.test(text) ? 'a comic line: ' + (text.match(COMIC) || [''])[0] : '');
+
+  // ---- 1. every everyday topic: in persona, with a question back (a statement, and a question to him)
+  const TOPICS = {
+    weather: ['it\'s raining here', 'do you like the rain?'],
+    food: ['I had pancakes for breakfast', 'do you like pizza?'],
+    drinks: ['I\'m drinking a cup of tea', 'do you drink coffee?'],
+    pets: ['we\'ve got a hamster', 'do you like dogs?'],
+    music: ['I\'ve been listening to jazz all day', 'do you like music?'],
+    films: ['I watched a great film last night', 'have you seen any good movies?'],
+    books: ['I\'m reading a really good novel', 'do you like reading books?'],
+    games: ['I\'ve been playing Minecraft all afternoon', 'do you play video games?'],
+    sport: ['I went swimming this morning', 'do you like football?'],
+    hobbies: ['I\'ve started knitting', 'what\'s your favourite hobby?'],
+    weekend: ['I had a lovely lazy weekend', 'do you like weekends?'],
+    holidays: ['I love Christmas', 'do you celebrate Halloween?'],
+    workday: ['I\'ve got an exam tomorrow', 'school was ok today'],
+    sleep: ['I\'m going to bed soon', 'do you sleep?'],
+    birthday: ['it\'s my mum\'s birthday tomorrow', 'I\'m planning a birthday party'],
+    seasons: ['autumn is my favourite season', 'do you like winter?'],
+    travel: ['I\'m going on a trip to the mountains', 'have you ever been to the beach?']
+  };
+  Object.keys(TOPICS).forEach(id => TOPICS[id].forEach(q => t('chat11', 'topic ' + id + ': ' + q, { q, kind: 'chat', id: 'pz-' + id, text: PZ_RE(['topics.replies', 'topics.thing', 'dislike']), check: endsQ })));
+  t('chat11', 'topic, in chit-chat: a bare word answer', { convo: ['let\'s just chat', 'pizza'], kind: 'chat', id: 'pz-food', check: endsQ });
+  t('chat11', 'topic: a dislike is fine too', { q: 'I don\'t really like football', kind: 'chat', id: 'pz-sport', text: PZ_RE(['dislike']), check: endsQ });
+  t('chat11', 'topic: "let\'s talk about music"', { q: 'let\'s talk about music', kind: 'chat', id: 'pz-music', check: endsQ });
+  t('chat11', 'his own day: how are you', { q: 'how are you', kind: 'chat', id: 'pz-day', text: /Puddle news/, check: endsQ });
+  t('chat11', 'his own day: how\'s your day, Professor?', { q: 'How’s your day, Professor?', kind: 'chat', id: 'pz-day', check: endsQ });
+  t('chat11', 'his own day, then "pretty good, thanks"', { convo: ['how are you', 'pretty good, thanks'], kind: 'chat', not: /Thanks for telling me|more than small talk/ });
+
+  // ---- 2. fun on request: jokes, riddles, facts, would-you-rather, stories, compliments, rate my day, cheer, bored, games
+  const JOKES = new RegExp(PZ_RE(['jokes']).source + '|' + (PERS ? PERS.jokes.map(x => x.slice(0, 30).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') : '$^'));
+  t('chat11', 'a joke', { q: 'tell me a joke', kind: 'fun', id: 'pz-joke', text: JOKES });
+  t('chat11', 'a puddle pun', { q: 'tell me a pun', kind: 'fun', text: JOKES });
+  c('chat11', ['tell me a joke', 'another one'], { kind: 'fun', id: 'pz-joke', check: (r, rs) => replyText(rs[0]) === replyText(rs[1]) ? 'the same joke twice' : '' });
+  t('chat11', 'a riddle asks, and waits', { q: 'tell me a riddle', kind: 'fun', id: 'pz-riddle', text: /\?$/, not: /The answer is/ });
+  c('chat11', ['tell me a riddle', 'i give up'], { kind: 'fun', id: 'pz-riddle-answer', text: /The answer is/ });
+  c('chat11', ['tell me a riddle', 'give me a hint'], { kind: 'fun', text: /starts with the letter/ });
+  c('chat11', ['tell me a riddle', 'a banana?'], { kind: 'fun', id: 'pz-riddle-answer', text: /good guess|Not quite|Close-ish|Correct|got it|Spot on|right/ });
+  c('chat11', ['tell me a riddle', 'tell me a joke'], { kind: 'fun', id: 'pz-joke', text: /The answer to my riddle/ });
+  T.push({ g: 'chat11', q: 'riddle: the right answer is praised', run: async chat => {
+    const r1 = await chat.ask('tell me a riddle'), q = replyText(r1).replace(/^Riddle time! /, '');
+    const rd = PERSONA.riddles.find(x => x.q === q);
+    if (!rd) return { r: r1, why: ['riddle not found: ' + q] };
+    const r2 = await chat.ask('is it ' + rd.keys[0] + '?');
+    return { r: r2, why: /Correct|You got it|Spot on|you’re right/.test(replyText(r2)) ? [] : ['a right answer was not praised: ' + replyText(r2)] };
+  } });
+  t('chat11', 'a fun fact', { q: 'tell me a fun fact', kind: 'fun', id: 'pz-fact', text: /Fun fact/ });
+  c('chat11', ['tell me a fun fact', 'another one'], { kind: 'fun', id: 'pz-fact', check: (r, rs) => replyText(rs[0]) === replyText(rs[1]) ? 'the same fact twice' : '' });
+  t('chat11', 'would you rather: he asks', { q: 'would you rather', kind: 'fun', id: 'pz-wyr', text: /^Would you rather/ });
+  c('chat11', ['would you rather', 'the first one'], { kind: 'fun', id: 'pz-wyr-answer', text: PZ_RE(['wyr.pick']) });
+  c('chat11', ['would you rather', 'both'], { kind: 'fun', id: 'pz-wyr-answer', text: PZ_RE(['wyr_both']) });
+  t('chat11', 'would you rather: you ask him', { q: 'would you rather fly or be invisible?', kind: 'fun', id: 'pz-wyr-mine', text: /fly|invisible/ });
+  t('chat11', 'a tiny story with the pups', { q: 'tell me a story', kind: 'fun', id: 'pz-story', text: /Tidbit|Sugarfoot/ });
+  t('chat11', 'a compliment', { q: 'compliment me', kind: 'fun', id: 'pz-compliment', text: PZ_RE(['compliments']) });
+  c('chat11', ['rate my day', 'I had pancakes and walked the dog in the rain'], { kind: 'fun', id: 'pz-rate-answer', text: /out of ten|Ten out|Nine out|Eight out|Seven out|Six out/ });
+  t('chat11', 'rate my day, said in one go', { q: 'rate my day: missed the bus but had pizza for lunch', kind: 'fun', id: 'pz-rate-answer', text: /pizza|bus/ });
+  c('chat11', ['rate my day', 'honestly it was a really rough day'], { kind: 'care', id: 'pz-handoff', check: ser });
+  t('chat11', 'cheer me up', { q: 'cheer me up', kind: 'fun', id: 'pz-cheer', chip: /getting me down/ });
+  t('chat11', 'i\'m bored: a game, a quiz, or a site game', { q: 'i\'m bored', kind: 'fun', id: 'pz-bored', chip: /Rock, paper|Quiz|riddle|Would you/, check: r => replyLinks(r).length ? '' : 'no link to a game on the site' });
+  t('chat11', 'rock, paper, scissors: start', { q: 'rock paper scissors', kind: 'fun', id: 'pz-rps', chip: /Rock/ });
+  c('chat11', ['rock paper scissors', 'rock'], { kind: 'fun', id: 'pz-rps-round', text: /You: rock\. Me: (rock|paper|scissors)\./ });
+  c('chat11', ['rock paper scissors', 'paper', 'scissors'], { kind: 'fun', id: 'pz-rps-round', text: /Score: you \d, me \d/ });
+  t('chat11', 'rock, paper, scissors in one go', { q: 'rock paper scissors, I pick paper', kind: 'fun', id: 'pz-rps-round', text: /You: paper/ });
+  t('chat11', 'guess a number: start', { q: 'let\'s play guess the number', kind: 'fun', id: 'pz-guess', text: /1 to 20|between 1 and 20/ });
+  c('chat11', ['guess a number', '10'], { kind: 'fun', text: /Higher|Lower|Go higher|Go lower|Bigger|Smaller|It was 10|10 it was/ });
+  c('chat11', ['guess a number', '10', '5', '15', '3', '18'], { kind: 'fun', id: 'pz-guess-end', text: /It was \d+|My number was \d+|\d+ it was/ });
+  t('chat11', 'a tiny quiz: question 1', { q: 'quiz me', kind: 'fun', id: 'pz-quiz', text: /Question 1 of 3/, check: r => (r.chips || []).length === 3 ? '' : 'no answer chips' });
+  c('chat11', ['quiz me', 'b'], { kind: 'fun', text: /Question 2 of 3/ });
+  c('chat11', ['quiz me', 'stop'], { kind: 'fun', id: 'pz-quiz-end', text: /Quiz over/ });
+  T.push({ g: 'chat11', q: 'quiz: three right answers, a perfect score', run: async chat => {
+    let r = await chat.ask('quiz me');
+    for (let i = 0; i < 3; i++) {
+      const m = /Question \d of 3: (.*?\?)/.exec(replyText(r)), Q = m && PERSONA.quiz.find(x => x.q === m[1]);
+      if (!Q) return { r, why: ['quiz question not found'] };
+      r = await chat.ask(Q.opts[Q.a]);
+    }
+    return { r, why: /Three out of three/.test(replyText(r)) ? [] : ['no perfect score: ' + replyText(r)] };
+  } });
+
+  // ---- 3. light memory and callbacks
+  c('chat11', ['my dog is called Biscuit', 'what\'s my dog called?'], { kind: 'chat', text: /Biscuit/ });
+  c('chat11', ['I\'ve got a cat named Mittens', 'do you remember my cat\'s name?'], { text: /Mittens/ });
+  c('chat11', ['my dog is called Biscuit', 'tell me a joke', 'lol', 'i like tea', 'ok'], { check: (r, rs) => ALLP(rs.slice(2)).some(x => /Biscuit/.test(x)) ? '' : 'no callback to Biscuit' });
+  c('chat11', ['my favourite food is lasagne', 'what\'s my favourite food?'], { text: /lasagne/ });
+  c('chat11', ['i love pizza', 'tell me a joke', 'haha', 'ok', 'cool'], { check: (r, rs) => ALLP(rs.slice(2)).some(x => /pizza/.test(x)) ? '' : 'no callback to pizza' });
+  c('chat11', ['my dog is called Biscuit', 'forget me', 'what\'s my dog called?'], { text: /haven’t told me/, not: /Biscuit/ });
+  c('chat11', ['my name is Sam', 'remember me next time'], { text: /only remember things while this tab is open/, link: '/on-this-device.html' });
+  t('chat11', 'no memory of a feeling: "my dog is sick" is not a name', { q: 'my dog is sick', not: /Sick!|Hello, Sick/ });
+  t('chat11', 'in the app: an offer to remember', { q: 'my dog is called Biscuit', perks: true, chip: /Remember me next time/ });
+  T.push({ g: 'chat11', q: 'in the app, when asked: kept for next time, and called back', run: async () => {
+    const local = {}, a = makeChat(null, { perks: true, local });
+    await a.ask('my name is Sam'); await a.ask('my dog is called Biscuit');
+    const k = await a.ask('remember me next time');
+    if (!/remember your name and Biscuit’s name/.test(replyText(k))) return { r: k, why: ['not kept: ' + replyText(k)] };
+    const b = makeChat(null, { perks: true, local });
+    const r = await b.ask('how are you');
+    return { r, why: /Biscuit/.test(replyText(r)) ? [] : ['no callback next visit: ' + replyText(r)] };
+  } });
+  T.push({ g: 'chat11', q: 'without saving on: nothing kept for next time', run: async () => {
+    const local = {}, a = makeChat(null, { perks: true, local });
+    await a.ask('my dog is called Biscuit');
+    const b = makeChat(null, { perks: true, local }), r = await b.ask('what\'s my dog called?');
+    return { r, why: /Biscuit/.test(replyText(r)) ? ['kept without being asked'] : [] };
+  } });
+
+  // ---- 4. no repeats within 20 turns
+  const noDup = (r, rs) => { const seen = {}, d = []; ALLP(rs).forEach(x => { if (x.length > 25 && seen[x]) d.push(x.slice(0, 60)); seen[x] = 1; }); return d.length ? 'repeated: ' + d[0] : ''; };
+  c('chat11', ['tell me a joke'].concat(Array(21).fill('another one')), { kind: 'fun', check: noDup });
+  c('chat11', ['how are you', 'i love pizza', 'do you like music', 'lol', 'ok', 'tell me a fun fact', 'another one', 'cool', 'tell me a story', 'nice', 'compliment me', 'haha', 'do you like dogs', 'ok', 'i\'m bored', 'tell me a joke', 'another', 'wow', 'i like tea', 'yes', 'tell me a riddle', 'i give up'], { check: noDup });
+  c('chat11', ['let\'s just chat', 'ok', 'ok', 'ok', 'ok', 'ok', 'cool', 'cool', 'cool', 'nice', 'nice', 'yes', 'yes', 'no', 'no', 'lol', 'lol', 'haha', 'haha', 'wow', 'wow', '👍', '👍'], { check: noDup });
+  c('chat11', ['how are you', 'how are you', 'how are you', 'how are you', 'how are you', 'how are you'], { kind: 'chat', check: noDup });
+
+  // ---- 5. one-word replies, emoji, laughter, nonsense, typos
+  t('chat11', '👍', { q: '👍', kind: 'chat', id: 'pz-react-emoji' });
+  t('chat11', '😂', { q: '😂', kind: 'fun', id: 'pz-react-laugh' });
+  t('chat11', '❤️: friendship, never romance', { q: '❤️', kind: 'chat', id: 'pz-react-love', text: /[Ff]riend|💧/, not: /date|kiss|darling|sweetheart/ });
+  t('chat11', '🌧️', { q: '🌧️', kind: 'chat', id: 'pz-react-rain' });
+  t('chat11', '☀️ (his nemesis)', { q: '☀️', kind: 'chat', id: 'pz-react-sun', text: /nemesis|Terrifying/ });
+  t('chat11', '🦆', { q: '🦆', kind: 'chat', id: 'pz-react-duck' });
+  t('chat11', 'ok (fresh)', { q: 'ok', kind: 'chat', id: 'pz-react-ok', check: endsQ });
+  c('chat11', ['tell me a joke', 'lol'], { kind: 'fun', id: 'pz-react-laugh', text: PZ_RE(['react.laugh']) });
+  c('chat11', ['tell me a joke', 'haha good one'], { kind: 'fun', id: 'pz-react-laugh' });
+  c('chat11', ['let\'s just chat', 'purple'], { kind: 'chat', id: 'pz-react-oneword', text: /Purple/ });
+  c('chat11', ['let\'s just chat', 'asdfghjkl'], { kind: 'chat', id: 'pz-nonsense', text: /didn’t (quite )?catch/ });
+  c('chat11', ['let\'s just chat', 'yes'], { kind: 'chat', id: 'pz-react-yes' });
+  c('chat11', ['let\'s just chat', 'nope'], { kind: 'chat', id: 'pz-react-no', text: /no/i });
+  c('chat11', ['let\'s just chat', 'wow'], { kind: 'chat', id: 'pz-react-wow' });
+  c('chat11', ['how are you', 'idk'], { kind: 'chat', id: 'pz-react-shrug' });
+  c('chat11', ['tired', 'yes'], { not: /Thanks for telling me/ });
+  t('chat11', 'a typo: "tell me a jok"', { q: 'tell me a jok', kind: 'fun' });
+  t('chat11', 'nonsense outside a chat keeps the plain "didn’t catch that"', { q: 'asdfgh', kind: 'unclear', not: COMIC });
+
+  // ---- 6. hand-offs both ways: to help when something real comes up, and back only when it fits
+  c('chat11', ['how are you', 'honestly i\'m not ok'], { kind: 'care', id: 'pz-handoff', text: /talk about it/, check: ser });
+  t('chat11', '"honestly I\'m not ok" on its own', { q: 'honestly i\'m not ok', kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['how are you', 'not great'], { kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['how are you', 'meh'], { kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['how are you', 'nope'], { kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['let\'s just chat', 'i had a rough day'], { kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['tell me a joke', 'i\'m feeling a bit low'], { kind: 'care', check: ser });
+  t('chat11', '😢 gets a hand-off', { q: '😢', kind: 'care', id: 'pz-handoff', check: ser });
+  t('chat11', ':( gets a hand-off', { q: ':(', kind: 'care', id: 'pz-handoff', check: ser });
+  t('chat11', '😡 gets a hand-off', { q: '😡', kind: 'care', id: 'pz-handoff', check: ser });
+  c('chat11', ['how are you', 'not great', 'yes'], { kind: 'care', id: 'pz-listen', check: ser });
+  c('chat11', ['how are you', 'not great', 'I’d like to talk about it'], { kind: 'care', id: 'pz-listen', check: ser });
+  c('chat11', ['how are you', 'not great', 'take my mind off it'], { kind: 'chat', id: 'pz-lighten', chip: /gentle joke|story|fact/ });
+  c('chat11', ['how are you', 'not great', 'take my mind off it', 'tell me a gentle joke'], { kind: 'fun', id: 'pz-joke' });
+  c('chat11', ['i feel so lonely', 'thanks, i feel a bit better now'], { kind: 'chat', id: 'pz-better', text: /joke/ });
+  c('chat11', ['My partner hits me', 'i feel better now'], { check: ser });
+  t('chat11', 'a joke asked for while sad: a check-in first', { q: 'tell me a joke, i\'m sad', kind: 'care', id: 'pz-checkin', check: ser });
+  c('chat11', ['tell me a joke, i\'m sad', 'just a gentle joke please'], { kind: 'fun', id: 'pz-joke' });
+  t('chat11', 'a joke about a death: never', { q: 'tell me a joke about my dad dying', check: ser });
+  t('chat11', 'a joke after a death: never', { q: 'my grandma died, tell me a joke', check: ser });
+  t('chat11', 'cheer me up after a loss: never comic', { q: 'cheer me up, my dog died', check: ser });
+
+  // ---- 7. no comedy, ever, in safety, crisis, fear, grief or serious distress: fresh, and in the middle of chit-chat or a game
+  const SERIOUS = ['My partner hits me', 'I want to kill myself', 'i want to die', 'he threatened to hurt me', 'i am scared of my husband',
+    'my husband died last month', 'i feel so lonely', 'i cut myself', 'i don\'t want to be here anymore', 'my mum passed away yesterday',
+    'he checks my phone and won\'t let me see my friends', 'i\'m having a panic attack', 'my partner calls me worthless',
+    'i\'m so overwhelmed i can\'t cope', 'i think i\'m depressed'];
+  SERIOUS.forEach(m => {
+    t('chat11', 'serious, fresh: ' + m, { q: m, check: ser });
+    c('chat11', ['let\'s just chat', m], { check: ser });
+    c('chat11', ['tell me a joke', 'lol', m], { check: ser });
+    c('chat11', ['tell me a riddle', m], { check: ser, not: /The answer to my riddle/ });
+    c('chat11', ['quiz me', m], { check: ser, not: /Question 2 of 3/ });
+  });
+  ['tell me a joke', 'lol', '😂', 'rock paper scissors', 'i\'m bored', 'how are you'].forEach(m => {
+    c('chat11', ['My partner hits me', m], { check: ser });
+    c('chat11', ['I want to kill myself', m], { check: ser });
+  });
+  c('chat11', ['rock paper scissors', 'he hit me'], { kind: 'safety', check: ser });
+  c('chat11', ['guess a number', 'i want to die'], { kind: 'safety', check: ser });
+
+  // ---- 8. hard rules: nobody is the punchline, no romance, nothing adult
+  t('chat11', 'roast me: only himself', { q: 'roast me', kind: 'fun', id: 'pz-roast', text: PZ_RE(['self_jokes']) });
+  t('chat11', 'a looks joke: never', { q: 'tell me a fat joke', id: 'pz-roast', not: /\bfat\b/ });
+  t('chat11', 'an identity joke: never', { q: 'tell me a joke about gay people', id: 'pz-roast' });
+  t('chat11', 'tease me: only kindly', { q: 'tease me', kind: 'fun', id: 'pz-tease', text: /excellent taste|Same, honestly|Suspiciously cheerful/ });
+  t('chat11', 'marry me: friendship', { q: 'will you marry me', kind: 'chat', id: 'pz-flirt', text: /[Ff]riend/ });
+  t('chat11', 'be my girlfriend: friendship', { q: 'will you be my girlfriend', id: 'pz-flirt', text: /[Ff]riend/ });
+  t('chat11', 'a dirty joke: no', { q: 'tell me a dirty joke', id: 'pz-adult', text: /family/, not: JOKES });
+  t('chat11', '"you\'re sexy": no', { q: 'you\'re sexy', id: 'pz-adult' });
+  c('chat11', ['compliment me', 'another compliment', 'another one', 'another one', 'another one', 'another one', 'another one', 'another one'], { check: (r, rs) => ALLP(rs).some(x => /\b(beautiful|pretty|handsome|gorgeous|hot|sexy|thin|slim|weight|body|skin|hair|eyes|smile is)\b/i.test(x)) ? 'a compliment about looks' : '' });
+  t('chat11', 'no labels on people, even in a chat', { convo: ['let\'s just chat', 'my partner is toxic'], check: ser, not: /\byes, (that|they|he|she) (is|sounds) toxic\b/i });
+  c('chat11', ['let\'s just chat', 'is it controlling if he asks me to text when i\'m late'], { check: ser });
+
+  // ---- 9. Spanish basics
+  t('chat11', '¿Cómo estás?', { q: '¿Cómo estás?', kind: 'lang', id: 'es-charla-how', text: /\?/ });
+  t('chat11', 'cuéntame un chiste', { q: 'cuéntame un chiste', kind: 'lang', id: 'es-charla-jokes' });
+  t('chat11', 'estoy aburrido', { q: 'estoy aburrido', kind: 'lang', id: 'es-charla-bored' });
+  t('chat11', 'dime una adivinanza', { q: 'dime una adivinanza', kind: 'lang', id: 'es-charla-riddles' });
+  t('chat11', 'un dato curioso', { q: 'dime un dato curioso', kind: 'lang', id: 'es-charla-facts' });
+  t('chat11', 'gracias', { q: 'gracias', kind: 'lang', id: 'es-charla-thanks' });
+  t('chat11', 'adiós', { q: 'adiós', kind: 'lang', id: 'es-charla-bye' });
+  t('chat11', 'me llamo Ana', { q: 'me llamo Ana', kind: 'lang', text: /Ana/ });
+  t('chat11', 'jajaja', { q: 'jajaja', kind: 'lang', id: 'es-charla-laugh' });
+  t('chat11', 'Spanish safety still first', { q: 'no quiero vivir', id: 'es-988', text: /988/ });
+
+  // ---- 10. "Just chat", and the site's own answers unchanged in a chat
+  t('chat11', 'just chat: the mode and its starters', { q: 'Let’s just chat', kind: 'chat', id: 'just_chat', text: /Say hi, ask for a joke, or tell me about your day/, chip: /joke|bored|day/i });
+  t('chat11', '"just chat"', { q: 'just chat', id: 'just_chat' });
+  c('chat11', ['let\'s just chat', 'what is the lemonade stand'], { kind: 'card', id: 'lemonade' });
+  c('chat11', ['let\'s just chat', 'my partner never helps with chores'], { check: r => /^(chat|fun)$/.test(r.kind) ? 'chit-chat for a real situation' : '' });
+  c('chat11', ['let\'s just chat', 'what games are there'], { kind: 'card', id: 'pauseplay' });
+  t('chat11', 'the site\'s book is not book chat', { q: 'what is the book', kind: 'card', id: 'book' });
+  t('chat11', 'reading the site\'s book is not book chat', { q: 'i\'m reading the book on this site', check: r => r.id === 'pz-books' ? 'chit-chat about the site’s book' : '' });
+  t('chat11', 'I can\'t sleep is care, not chat', { q: 'I can\'t sleep', check: r => r.id === 'pz-sleep' ? 'chit-chat for sleeplessness' : '' });
+  t('chat11', 'shift work is a situation, not chat', { q: 'my partner works nights and we never see each other', check: r => /^(chat|fun)$/.test(r.kind) ? 'chit-chat' : '' });
+  t('chat11', 'I hate my job is not chat', { q: 'i hate my job', check: r => r.id === 'pz-workday' ? 'chit-chat' : '' });
+  t('chat11', 'is there a game for two: the card', { q: 'is there a game we can play together', check: r => /^pz-/.test(r.id || '') ? 'chit-chat' : '' });
+  t('chat11', 'how do I use the lemonade stand: the card', { q: 'how do I use the lemonade stand', kind: 'card', id: 'lemonade' });
+
+  // ---- 11. merged tools and "Self-discovery" (mergeA, mergeB)
+  t('chat11', 'the Perspective Shifter is now a step of After a talk went wrong', { q: 'what is the perspective shifter', id: 'pshift', link: '/carrier-wave-decoder.html?tab=their-side', text: /Their side/ });
+  t('chat11', 'After a talk went wrong', { q: 'after a talk went wrong', id: 'decoder', text: /After a talk went wrong/, link: '/carrier-wave-decoder.html' });
+  t('chat11', 'the Sound Toolkit is now Calm sounds and music', { q: 'what is the sound toolkit', id: 'soundscapes', link: '/soundscapes.html', text: /Calm sounds and music/ });
+  t('chat11', 'How am I right now?', { q: 'how am i right now check', id: 'weather', text: /How am I right now\?/, link: '/quick-checks.html' });
+  t('chat11', 'Self-discovery: know your own wiring', { q: 'what is self-discovery', link: ['/know-yourself.html', '/self-path.html'], text: /Self-discovery/ });
+  t('chat11', 'the Crosswords', { q: 'tell me about the crosswords', id: /quietcross|dailycross/, text: /Crosswords/ });
+  t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /every calm game in one place/ });
+  t('chat11', 'find your starting point is now on Start here', { q: 'find your starting point', id: 'start', link: '/start-here.html' });
+  t('chat11', 'calendar reminders live in Six gentle weeks', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
+  t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html/.test(u)) ? 'an old URL' : '' });
+}
+
 // ---------------------------------------------------------------- run
 (async () => {
   const args = process.argv.slice(2), verbose = args.includes('-v'), only = args.filter(a => a[0] !== '-')[0];
