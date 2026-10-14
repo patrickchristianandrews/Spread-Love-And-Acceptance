@@ -35,6 +35,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import book_art  # noqa: E402
+import front_back  # noqa: E402  (bookfixB1: help-now page, Find it fast, If someone handed you this book, the appendices)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 BOOK = os.path.join(ROOT, 'book')
@@ -850,7 +851,8 @@ def cover(name, deep):
                  book_art.illustration(name), label, ver, line, AUTHOR)
 
 
-def front_matter(name, deep, parts, title, who, toc_rows):
+def front_matter(name, deep, parts, title, who, toc_rows, fb_front=()):
+    fbk = {x['key']: x['html'] for x in fb_front}
     acc = COVER[name][0]
     ver = 'the full version' if deep else 'the short version'
     other = 'full' if not deep else 'short'
@@ -875,6 +877,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
 </div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, mark('titlep'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
                        book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE, SITE)
+    s += '\n' + fbk.get('help-now', '')
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
     s += '''
@@ -889,6 +892,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <div><p class="pe-how-h">Go gently</p><p>Some chapters touch hard things: grief, shame, anger, worry, trauma. Skip anything that isn’t right for today. Nothing here is a test, and nothing needs to be done all at once.</p></div>
 </div></section>''' % (mark('how'), 'This is a book about seeing what is really going on, in yourself and between people, without blaming anyone, and then changing one small thing.',
                        n_ch, 'one part' if len(parts) == 1 else '%s parts' % ('two' if len(parts) == 2 else 'three'), ver, parts_li, ver, other)
+    s += '\n' + fbk.get('find-it-fast', '') + '\n' + fbk.get('handed', '')
     front = [f for f in FIGS if f['chapter'] == 'front']
     if front:
         s += '\n<section class="pe-glance pe-only" id="glance">%s<h1>The book in two pictures</h1><div class="pe-glance-figs">%s</div></section>' % (
@@ -1136,9 +1140,9 @@ def finish_package(body):
     return body, figs, exs
 
 
-def back_matter(name, deep, here, gloss, notes, figs, exs):
+def back_matter(name, deep, here, gloss, notes, figs, exs, fb=None, fb_back=()):
     col = PCOL[4][0]
-    s = ''
+    s = ''.join(x['html'] for x in fb_back)
     # glossary
     s += '<section class="pe-back pe-gloss no-bubble no-cheer no-dive" data-no-bubble id="glossary" style="--pc:%s;--pt:%s">%s<h1 class="pe-back-h">Words used in this book</h1>' % (col, PCOL[4][1], mark('glossary'))
     s += '<p class="pe-back-lede">The book’s own words, each in one plain sentence. More at spreadloveandacceptance.com/glossary.</p><dl class="pe-gloss-list">'
@@ -1169,6 +1173,8 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
     n_refs = sum(len(v) for v in notes.values())
     s += '<section class="pe-back pe-notes no-bubble no-cheer no-dive" data-no-bubble id="notes" style="--pc:%s">%s<h1 class="pe-back-h">Research notes</h1>' % (col, mark('notes'))
     s += '<p class="pe-back-lede">The %d studies and books the chapters mention, chapter by chapter, each with what it found in plain words and where to read it. Every entry was checked against the original source. The full list, with notes on how strong each finding is, is at spreadloveandacceptance.com/research.</p>' % n_refs
+    if fb is not None:
+        s += front_back.reading_research(fb)
     for e in ORDER:
         if e[0] not in notes:
             continue
@@ -1229,7 +1235,7 @@ def page_rules(here, deep):
         nm = 'pc-' + e[0]
         r.append('#%s{page:%s}' % (e[0], nm))
         r.append(rules(nm, SHORT[e[0]], 'The Objective Ledger · ' + chapter_name(e), e[1]))
-    for sec, label in (('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
+    for sec, label in (('numbers', 'How the numbers work'), ('worksheets', 'Blank worksheets'), ('glossary', 'Words used in this book'), ('figures', 'List of figures'), ('examples', 'List of filled-in examples'),
                        ('notes', 'Research notes'), ('index', 'Index')):
         nm = 'pb-' + sec
         r.append('#%s{page:%s}' % (sec, nm))
@@ -1244,7 +1250,15 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     figs = [f for f in FIGS if (f['chapter'] in here or f['chapter'] == 'front') and ('full' if deep else 'short') in (f.get('versions') or ['short', 'full'])]
     exs = [x for x in EXS if x['chapter'] in here and ex_where(x, deep) and ('full' if deep else 'short') in (x.get('versions') or ['short', 'full'])]
     parts_html, toc, ptoc = [], [], []
+    fb = front_back.Ctx(name, deep, parts, here, PAGES, pg, mark, lambda s_: chapter_name(entry(s_)), SHORT, SITE, XREFS.add)
+    fb_front, fb_back = front_back.front_sections(fb), front_back.back_sections(fb)
+    fbt = dict((x['key'], x['toc']) for x in fb_front)
+    if 'help-now' in fbt:
+        ptoc.append(toc_row('help-now', '', fbt['help-now'], 'is-front'))
     ptoc.append(toc_row('how', '', 'How to use this book', 'is-front'))
+    for k in ('find-it-fast', 'handed'):
+        if k in fbt:
+            ptoc.append(toc_row(k, '', fbt[k], 'is-front'))
     if any(f['chapter'] == 'front' for f in FIGS):
         ptoc.append(toc_row('glance', '', 'The book in two pictures', 'is-front'))
     for part in parts:
@@ -1265,6 +1279,9 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     text = ' '.join(strip_tags(main_inner(PAGES[(s_, deep)])) for s_ in here)
     gloss = glossary_terms(text)
     notes = research_notes(here)
+    for x in fb_back:
+        toc.append('<li><a href="#%s">%s</a></li>' % (x['key'], esc(x['toc'])))
+        ptoc.append(toc_row(x['key'], '', esc(x['toc']), 'is-back'))
     toc.append('<li><a href="#glossary">Words used in this book</a></li>')
     ptoc.append(toc_row('glossary', '', 'Words used in this book', 'is-back'))
     if figs:
@@ -1276,11 +1293,13 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     toc.append('<li><a href="#notes">Research notes</a></li>')
     ptoc.append(toc_row('notes', '', 'Research notes', 'is-back'))
     ptoc.append(toc_row('index', '', 'Index', 'is-back'))
-    front_html = front_matter(name, deep, parts, title or 'The Whole Book', who, ptoc)
+    front_html = front_matter(name, deep, parts, title or 'The Whole Book', who, ptoc, fb_front)
     both, figs, exs = finish_package(front_html + '\n<!--pe-split-->\n' + '\n'.join(parts_html))
     front_html, body_html = both.split('\n<!--pe-split-->\n', 1)
     # the PDF's bookmarks: [title, page key, level]
-    ol = [['How to use this book', 'how', 0]]
+    ol = [[fbt['help-now'], 'help-now', 0]] if 'help-now' in fbt else []
+    ol.append(['How to use this book', 'how', 0])
+    ol += [[fbt[k], k, 0] for k in ('find-it-fast', 'handed') if k in fbt]
     if any(f['chapter'] == 'front' for f in FIGS):
         ol.append(['The book in two pictures', 'glance', 0])
     ol.append(['Contents', 'contents', 0])
@@ -1290,6 +1309,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
             ol.append(['%s · %s' % (e[2], TITLES[e[0]]), e[0], 1])
     if 'afterword' in here:
         ol.append(['Afterword: %s' % TITLES['afterword'], 'afterword', 0])
+    ol += [[x['toc'], x['key'], 0] for x in fb_back]
     ol.append(['Words used in this book', 'glossary', 0])
     if figs:
         ol.append(['List of figures', 'figures', 0])
@@ -1311,6 +1331,7 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     head = head.replace('<link rel="stylesheet" href="/assets/css/reading.css">', '<link rel="stylesheet" href="/assets/css/reading.css" media="screen">\n<link rel="stylesheet" href="/assets/css/book-print.css" media="print">')
     if EXS:
         head = head.replace('</head>', EX_CSS + '\n</head>')
+    head = head.replace('</head>', front_back.STYLE + '\n</head>')
     page = head
     page += '''<body data-no-offer data-no-learnplay data-no-pillars data-no-cheer data-no-buddies data-no-pupvisits data-no-brain-break data-no-clip data-no-pudcards data-no-dives data-no-reading data-no-line-share class="whole-book pe-book" data-pe="%s">
 <main class="read whole" id="main">
@@ -1339,7 +1360,8 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 ''' % (fname, front_html, title.replace(' (Full Version)', ': the full version'), lede, name, other,
        'Switch to the short versions' if deep else 'Switch to the full versions',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
-       ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep), outline_json)
+       ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs, fb, fb_back), UPDATED, page_rules(here, deep), outline_json)
+    MISSING.extend(w for w in fb.warnings if w not in MISSING)
     write(os.path.join(BOOK, fname + '.html'), page)
 
 
