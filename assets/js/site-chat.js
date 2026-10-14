@@ -2619,8 +2619,10 @@
     var shortEs = state.es && f.split(' ').length <= 6 && f.split(' ').some(function (w) { return ES_SET[w]; }) && !/\b(the|and|my|is|are|you|what|how|i)\b/.test(f);
     var hola = /^(hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(f);
     var esc = !hablas && !hola && pzEsWhich(f);
-    if (!hablas && !hola && !esc && !isSpanish(q) && !shortEs) return null;
-    if (!hablas && !shortEs && !hola && !esc && f.split(' ').length === 1) return null;
+    // "no quiero vivir" is Spanish, and a safety answer, however few other Spanish words it has
+    var esSafe = /\b(matarme|suicid\w*|quitarme la vida|no quiero vivir|quiero morir(me)?|me quiero morir|hacerme dano|lastimarme|no vale la pena vivir)\b/.test(f);
+    if (!hablas && !hola && !esc && !esSafe && !isSpanish(q) && !shortEs) return null;
+    if (!hablas && !shortEs && !hola && !esc && !esSafe && f.split(' ').length === 1) return null;
     var first = !state.es;
     state.es = 1; state.last = null;
     var L = '/en-espanol.html', chips = ES_CHIPS;
@@ -3568,6 +3570,7 @@
   var PZ_SITEW = /\b(site|website|web page|this page|the page|tool|tools|app|workpapers?|worksheets?|chapter|chapters|ledger|your book|the book|this book|the program|lemonade|night garden|word bloom|quiet words|frequency|buddies|pause and play|crosswords?|arcade|soundscapes?|brain breakers?|puddles|professor|wavelength|wiring|battery|check in|check ins|signal translator|decoder|infographic)\b/;
   var PZ_STMT = /^(?:(?:oh|well|so|yeah|yes|yep|ok|okay|haha|lol|hmm|honestly|actually|ah|um|umm|and|also|btw|guess what|today|tonight|yesterday|this morning|last night|this weekend|at the weekend|just|aww|ooh|wow|omg|hey|hi|hello) )*(?:i|im|i m|ive|i ve|i d|id|ill|i ll|we|were|we re|weve|we ve|we ll|me and|my|our|just|had|got|been|going|watching|watched|reading|playing|listening|eating|ate|cooking|made|baked|drinking|having|its|it s|it is|it was|there s|theres|so much|love|loving|currently|finally)\b/;
   var PZ_ASKHIM = /^(?:(?:so|and|hey|ok|okay|professor|puddles|but) )*(?:(?:do|did) (?:you|u|ya) (?:like|love|enjoy|play|watch|read|listen to|eat|drink|ever|prefer|go|sleep|dream|have a favourite|have a favorite|celebrate|get)|are (?:you|u) (?:into|a fan of|a (?:\w+ )?person)|what do you think (?:of|about)|(?:what|which) (?:s |is )?(?:your|ur) (?:favourite|favorite|fave|fav)|have you (?:ever )?(?:seen|read|played|watched|heard|tried|been)|how about you|what about you|can you (?:swim|dance|sing|cook|play))\b/;
+  var PZ_POS = /^(?:(?:oh|well|so|yeah|yes|honestly|actually|today|tonight|yesterday|this morning|last night|just|guess what|and) )*(?:i|we|i m|im|i ve|ive|we re|were|we ve|weve|me and)\b.*\b(?:love|loved|like|liked|enjoy|enjoyed|adore|had a (?:lovely|great|nice|good|fun|brilliant|lazy|relaxing|wonderful)|watched|watching|played|playing|reading|listening|listened|went|going|planning|baked|made|cooked|started|having|had)\b/;
   var PZ_OPEN = /^(?:(?:can|could|shall) we |let s |lets |i want to |i d like to |id like to |wanna )?(?:talk|chat|natter|gossip) (?:about|on) /;
   function pzCompile() {
     var P = PZ();
@@ -3583,6 +3586,7 @@
     var P = pzCompile(); if (!P || !P.topics) return null;
     var n = fs.split(' ').length, ctx = pzCtx(state), dislike = PZ_DISLIKE.test(fs);
     if (n > 16 || PZ_SITEW.test(fs)) return null;
+    if (/^(what|how|where|which|who|why|when|is there|are there|is it|can i|can we|could i|should|does|do i|do we|any)\b/.test(fs) && !PZ_ASKHIM.test(fs)) return null;
     if (!dislike && PZ_NEG.test(fs)) return null;
     var best = null;
     P.topics.forEach(function (t) { var m = t._re.exec(fs); if (m && (!best || m.index < best.i)) best = { t: t, i: m.index, thing: m[1] }; });
@@ -3639,7 +3643,7 @@
   }
 
   // ---- explicit requests and games, checked early (right after the safety and care routes)
-  var PZ_JOKE = /\b(?:tell|give|got|know|hear|share|say|want|need)\b.{0,12}\b(?:a |another |any |one more |some |your best |a funny |a silly |a bad |a good |a clean |a puddle |a rain |a duck |a dad )?(?:joke|jokes|pun|puns|something funny|funny one)\b|^(?:a |another |one more |more )?(?:joke|jokes|pun|puns)(?: please| pls| time)?$|\bmake me (?:laugh|giggle)\b|\bcheer me up with a joke\b|^(?:just )?the joke(?: please)?$|^gentle joke(?: please)?$|^(?:just )?a gentle joke(?: please)?$/;
+  var PZ_JOKE = /\b(?:tell|give|got|know|hear|share|say|want|need)\b.{0,12}\b(?:a |another |any |one more |some |your best |a funny |a silly |a bad |a good |a clean |a puddle |a rain |a duck |a dad |a gentle |a little |a short |a quick |a kind |a happy |a weather )?(?:joke|jokes|jok|joek|jokse|pun|puns|something funny|funny one)\b|^(?:a |another |one more |more )?(?:joke|jokes|jok|pun|puns)(?: please| pls| time)?$|\bmake me (?:laugh|giggle)\b|\bcheer me up with a joke\b|^(?:just )?the joke(?: please)?$|^gentle joke(?: please)?$|^(?:just )?a gentle joke(?: please)?$/;
   var PZ_RIDDLE = /\b(?:tell|give|ask)(?: me| us)? (?:a |another |one more |any |some |a good |an easy |a hard |a tricky )?(?:riddle|riddles|brain ?teaser|brainteaser)\b|^(?:a |another |one more |any )?(?:riddle|riddles|brain ?teaser|brainteaser)(?: please| time| me)?$|^riddle me this$|^(?:next|another) riddle$|^i (?:like|love) riddles$|^got any riddles$|^do you know (?:any )?riddles$/;
   var PZ_FACT = /\b(?:fun|cool|random|interesting|weird|amazing|true|animal|rain|weather|water|duck|science|space|nature) facts?\b|\b(?:tell|give|teach) me (?:a |another |one more |something )?(?:fact|facts|something (?:interesting|cool|new|true|amazing|random|i don t know|i dont know))\b|^(?:another|one more|more|a) facts?(?: please)?$|^teach me something$|^surprise me with a fact$|^facts? please$/;
   var PZ_WYR = /^(?:(?:can we |let s |lets |shall we )?play )?(?:would you rather|wyr|this or that)(?: please| game)?$|^(?:ask me|give me|another|one more|play) (?:a )?(?:would you rather|wyr)(?: question)?$|^(?:another|next) one would you rather$/;
@@ -3913,7 +3917,7 @@
     if (PZ_RATE.test(fs)) return 'rate';
     if (PZ_FACT.test(fs)) return 'fact';
     if (PZ_CHEER.test(fs) && !PZ_JOKE.test(fs)) return 'cheer';
-    if (PZ_JOKE.test(fs) || JOKE_ASK.test(f)) return 'joke';
+    if (PZ_JOKE.test(fs) || (JOKE_ASK.test(f) && !PZ_AGAIN.test(fs))) return 'joke';
     if (PZ_BORED.test(fs)) return 'bored';
     if (PZ_REMEMBER.test(fs)) return 'keep';
     if (PZ_FORGET.test(fs)) return 'forget';
@@ -3998,6 +4002,12 @@
     if (req) {
       var r = pzDo(state, req, fs, f, raw);
       if (r) { S.lastAt = t; if (pre && r.blocks) r.blocks.unshift(pre); var lx = r.blocks && r.blocks[r.blocks.length - 1] && r.blocks[r.blocks.length - 1].x; if (typeof lx === 'string' && /\b(joke|riddle|story)\?\s*$/i.test(lx)) { S.offer = (/joke\?/i.test(lx) ? 'joke' : /riddle\?/i.test(lx) ? 'riddle' : 'story'); S.offerAt = t; } return r; }
+    }
+    // "I love Christmas", "I'm planning a birthday party", "do you play video games?": chit-chat, before the care cards and
+    // playbooks read them as a problem (only with no one else named, nothing negative and nothing upsetting in it)
+    if (!em && (PZ_ASKHIM.test(fs) || PZ_POS.test(fs)) && !PZ_REL.test(fs) && !PZ_NEG.test(fs) && fs.split(' ').length <= 14) {
+      var pw = pzWhich(state, fs, null);
+      if (pw && pw.strong) { var tr = pzTopic(state, raw, f, raw, null); if (tr) return tr; }
     }
     // reactions: laughter, emoji, "ok", "yes", "no", "wow", "idk"
     if (em) {
