@@ -2568,8 +2568,8 @@
     'wp-03': {
       coparents: {
         h1: 'One owner per job: a list for two homes', title: 'One owner per job: a list for two homes',
-        lede: 'Who owns which job across two homes: the handoffs, school, health and the big decisions. Give every regular job one owner, or mark it \u201cBoth (decide together)\u201d, so nobody has to re-decide or ask twice. Send it to the other home as a link: names are matched, and nothing is uploaded.',
-        note: 'List what moves between the two homes and what needs one person to see it through. Mark the ones you decide together as \u201cBoth (decide together)\u201d. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Handoffs between homes, School and Health.',
+        lede: 'Who owns which job across two homes: the handoffs, school, health and the big decisions. Give every regular job one owner, and keep \u201cBoth (decide together)\u201d for the big decisions, so nobody has to re-decide or ask twice. Send it to the other home as a link: names are matched, and nothing is uploaded.',
+        note: 'List what moves between the two homes and what needs one person to see it through. Mark the decisions you make together as \u201cBoth (decide together)\u201d; give jobs one name. The starter jobs are examples: they don\u2019t count until you give one an owner or change it. The task library below has more, under Handoffs between homes, School and Health.',
         road: 'coparents', fridge: 'Who owns what, in both homes', share: 'Our list for two homes', homes: true,
         // ?for=coparents&preset=handoff-bag: the bag that goes between the homes, ready to share
         presets: { 'handoff-bag': {
@@ -2593,7 +2593,7 @@
         note: 'Start with the rules below, change the words until they sound like you, and remove any that don\u2019t fit. A rule needs someone who keeps to it, but rules aren\u2019t counted as load. The starter rules are examples: they don\u2019t count until you give one an owner or change it.',
         fridge: 'Our house rules', share: 'Our house rules',
         // a rule, who keeps it, and why it matters to each of you (no size, how often or split: a rule isn't load)
-        rulesOnly: true, noLib: true, hideMeta: ['split'], addLabel: 'Add a rule',
+        rulesOnly: true, noLib: true, hideMeta: ['split'], addLabel: 'Add a rule', secTitle: 'Our rules, and who keeps each one',
         lede2: 'Rules you agree together, written down so nobody has to argue them again. Each one has someone who keeps it, or \u201cBoth (decide together)\u201d, and a line on why it matters to each of you. Send it to the other phone with \u201cShare this list\u201d, so they can send their version back.',
         cols: function (cols) {
           var task = cols.filter(function (c) { return c.id === 'task'; })[0], own = cols.filter(function (c) { return c.id === 'r'; })[0];
@@ -2667,6 +2667,7 @@
         else if (o.hrsCol) { c.columns = []; sec.columns.forEach(function (col) { c.columns.push(col); if (col.id === 'freq') c.columns.push({ id: 'hrs', label: 'Roughly how long? (hours each time, optional)', type: 'number', min: 0, max: 200, step: 0.25, w: 1 }); }); }
         if (o.noLib) c.noLibUI = true;
         if (o.addLabel) c.addLabel = o.addLabel;
+        if (o.secTitle) c.title = o.secTitle;
       }
       if (o.rows && sec.library === 'owner') { c.otherExamples = sec.defaultRows; c.defaultRows = o.rows.map(function (r) { return o.rulesOnly ? { task: r[0] } : { task: r[0], freq: r[1] }; }); }
       if (o.help && c.columns) c.columns = c.columns.map(function (col) { if (!col.notSameAs) return col; var x = {}; Object.keys(col).forEach(function (k) { x[k] = col[k]; }); x.label = o.help; return x; });

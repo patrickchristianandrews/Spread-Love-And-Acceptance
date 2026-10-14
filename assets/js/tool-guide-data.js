@@ -1103,7 +1103,7 @@ window.TOLToolGuideData = {
       when: 'When you’d like a gentle structure: one small step a week, in an order that helps, on your own or with anyone you share a home or a load with.',
       notWhen: 'Not a course to keep up with. Missing a week is fine: pick up anywhere.',
       time: 'About 30 minutes a week, for six weeks.',
-      result: 'Six small sheets done in order, and a before-and-after look at the end: which jobs now have owners, how full each battery is, and what changed.',
+      result: 'Six small sheets done in order, and a before-and-after look at the end: which jobs now have owners, how much each of you is carrying, and what changed.',
       next: [
         ['/week-0.html', 'Start with week 0', 'five minutes, and reminders in your own calendar'],
         ['/workpapers/report-01.html', 'Your progress, week by week', 'see the weeks side by side'],

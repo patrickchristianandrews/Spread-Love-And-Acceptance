@@ -2670,6 +2670,7 @@ function clarifyFor(an, text){
   }});
 }
 if(window.TOLContext) stCtx = TOLContext.mount(document.getElementById("stCtx"), {
+  id: "add-context",
   mode: ()=>stMode==="got" ? "read" : "send",
   onChange: (c, o)=>{ if(o && o.again && $("#phrase").value.trim()) run(); }
 });

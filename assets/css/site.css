@@ -955,7 +955,7 @@ body:has(.wpf-bar) .tol-breathe-btn{ bottom:calc(4.8rem + env(safe-area-inset-bo
 @media print{ .tol-reveal{ opacity:1 !important; transform:none !important; } }
 
 /* "A flower was planted in your Night Garden" */
-.tol-planted{ position:fixed; left:50%; top:calc(var(--tol-bar-h, 64px) + .8rem); z-index:885; transform:translate(-50%, -10px); opacity:0;
+.tol-planted{ position:fixed; left:50%; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 64px)) + .8rem); z-index:885; transform:translate(-50%, -10px); opacity:0;
   display:inline-flex; align-items:center; gap:.5rem; padding:.55rem 1.1rem; border-radius:999px; text-decoration:none; color:#2F5A3C; font-size:.92rem;
   background:rgba(238,246,241,.97); border:1px solid #BFE3CF; box-shadow:0 10px 30px rgba(60,90,70,.16);
   transition:opacity .5s var(--ease-out), transform .5s var(--ease-out); white-space:nowrap; max-width:calc(100% - 2rem); }
@@ -1879,7 +1879,7 @@ html.tol-bigtext .tol-breathe-btn > span{ position:static !important; width:auto
 
 /* ---------- The little "well done" note: on phones it drops in from the top, clear of the card and the pills ---------- */
 @media (max-width:760px){
-  html .tr-toast{ top:calc(var(--tol-bar-h, 56px) + 8px); bottom:auto; transform:translate(-50%, -30px); max-width:calc(100vw - 32px); box-sizing:border-box; }
+  html .tr-toast{ top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 56px)) + 8px); bottom:auto; transform:translate(-50%, -30px); max-width:calc(100vw - 32px); box-sizing:border-box; }
   html .tr-toast.is-in{ transform:translate(-50%, 0); }
 }
 
@@ -2214,7 +2214,7 @@ html.tol-bigtext .tol-wx-go > span{ display:flex !important; position:static !im
 .tol-listen button:focus-visible, .tol-listen-bar :focus-visible, .tol-listen-mini:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
 .tol-listen-mini{ min-height:36px; padding:.25rem .75rem; font-size:.88rem; }
 .tol-listen-mini[aria-pressed="true"]{ background:#EAF6EF; border-color:#3E6B4C; }
-.tol-listen-bar{ position:fixed; z-index:930; left:50%; top:calc(var(--tol-bar-h, 58px) + 8px); transform:translateX(-50%); width:max-content; max-width:calc(100vw - 20px); box-sizing:border-box;
+.tol-listen-bar{ position:fixed; z-index:930; left:50%; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 58px)) + 8px); transform:translateX(-50%); width:max-content; max-width:calc(100vw - 20px); box-sizing:border-box;
   display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.4rem; padding:.45rem .55rem; border-radius:22px; background:rgba(255,251,242,.97); border:1px solid #D9C8F0; box-shadow:0 10px 28px rgba(60,40,90,.18); }
 .tol-listen-bar[hidden]{ display:none; }
 .tol-listen-bar button{ min-height:40px; padding:.3rem .85rem; }
@@ -2227,7 +2227,7 @@ html.tol-bigtext .tol-wx-go > span{ display:flex !important; position:static !im
 .tol-listen-now{ outline:2px dashed rgba(47,95,138,.45); outline-offset:4px; border-radius:6px; }
 html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td){ cursor:pointer; }
 html.tol-listen-picking main :is(p, li, h2, h3, blockquote, dd, td):hover{ outline:2px solid rgba(47,95,138,.35); outline-offset:3px; border-radius:6px; }
-@media (max-width:560px){ .tol-listen-bar{ top:calc(var(--tol-bar-h, 58px) + 4px); gap:.3rem; padding:.35rem .4rem; } .tol-listen-bar button{ padding:.25rem .65rem; font-size:.9rem; } }
+@media (max-width:560px){ .tol-listen-bar{ top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 58px)) + 4px); gap:.3rem; padding:.35rem .4rem; } .tol-listen-bar button{ padding:.25rem .65rem; font-size:.9rem; } }
 @media print{ .tol-listen, .tol-listen-bar, .tol-listen-mini, .tol-listen-cardrow{ display:none !important; } }
 /* "Listen" on a card: a small button under the card's heading */
 .read .tol-listen-cardrow, .tol-listen-cardrow{ display:block; margin:.25rem 0 .55rem !important; padding:0 !important; max-width:none !important; width:auto !important;
@@ -2320,7 +2320,7 @@ html body .tol-breathe-btn.is-compact{ padding:.55rem !important; gap:0 !importa
 html body .tol-breathe-btn.is-compact > span{ position:absolute !important; width:1px !important; height:1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; }
 .tol-breathe-btn.is-compact svg{ width:1.35rem !important; height:1.35rem !important; }
 .tol-breathe-btn.is-left{ right:auto !important; left:max(1rem, env(safe-area-inset-left)) !important; }
-body .tol-breathe-btn.is-high.is-high{ bottom:auto !important; top:calc(var(--tol-bar-h, 58px) + .6rem) !important; }
+body .tol-breathe-btn.is-high.is-high{ bottom:auto !important; top:calc(var(--tol-bar-bottom, var(--tol-bar-h, 58px)) + .6rem) !important; }
 .tol-breathe-btn.is-away{ opacity:0 !important; pointer-events:none !important; visibility:hidden; }
 html.tol-still .tol-breathe-btn{ transition:none; }
 .tol-breathe-btn.is-hiding{ opacity:0 !important; pointer-events:none !important; }

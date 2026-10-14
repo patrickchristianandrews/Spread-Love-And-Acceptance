@@ -360,7 +360,7 @@
     // plain words first; the number, and where it goes, folded under "What's this number?"
     var sc = ctx.schema || {};
     var out = [{ label: sc.rulesOnly ? 'Rules with someone who keeps them' : 'Jobs with an owner', num: share, value: clear.length + ' of ' + rows.length + '. ' + words, more: 'What’s this number?',
-      note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. “' + ctx.name('Both') + ' (decide together)” counts as an owner. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
+      note: 'As a share, ' + clear.length + ' of ' + rows.length + ' is ' + fmt(share, 2) + ' out of 1.00. It only asks whether each job has a name next to it, not whether the split feels fair. “' + ctx.name('Both') + ' (decide together)” counts as an owner: use it for decisions, and give jobs one name. If you use the calculator Is the setup working for everyone? (CALC-01), this is the number for its jobs-with-an-owner box.' + (c.flag ? ' Read it next to “Who’s carrying more right now” below.' : '') + exNote }];
     if (sc.rulesOnly) out[0].value = out[0].value.replace(/an owner/g, 'someone who keeps it').replace(/jobs/g, 'rules').replace(/job/g, 'rule');
     if (missing.length) out.push({ label: sc.rulesOnly ? 'Still needs someone who keeps it' : 'Still needs an owner', value: missing.join(', ') });
     // a list of house rules: rules need someone who keeps them, but they aren't load, so no "who does more"
@@ -641,6 +641,8 @@
 
   /* ------------------------------------------------------------------ WP-11 */
   var WP11_TACTICS = ['Asymmetric breathing (4 in, 6 out)', 'Naming the room (5-4-3)', 'Weight and pressure', 'Gating (lower the lights, step out)', 'Walking it out', 'Low, steady sound'];
+  // plain words on screen; the stored value stays the same, so saved answers still open
+  var WP11_TACTIC_LABELS = { 'Gating (lower the lights, step out)': 'Less coming in (lower the lights, step out)' };
   // solo: "pick things back up" rather than "go back in" to a conversation
   function wp11Next(solo) {
     var RT = ' These bands are this site\u2019s rule of thumb, not a validated clinical scale.';
@@ -729,8 +731,8 @@
         id: 'defaults', type: 'fields', title: 'Part A: My two defaults',
         intro: 'Pick two calming steps from the list now, so you don\'t have to choose in the moment.',
         fields: [
-          { id: 'first', label: 'First default', type: 'select', options: WP11_TACTICS },
-          { id: 'second', label: "Second, if the first isn't available", type: 'select', options: WP11_TACTICS }
+          { id: 'first', label: 'First default', type: 'select', options: WP11_TACTICS, labels: WP11_TACTIC_LABELS },
+          { id: 'second', label: "Second, if the first isn't available", type: 'select', options: WP11_TACTICS, labels: WP11_TACTIC_LABELS }
         ]
       },
       {
@@ -765,7 +767,7 @@
         rangeCols: true,
         columns: [
           { id: 'time', label: 'Time', type: 'text', w: 1, placeholder: 'e.g. 7:40pm' },
-          { id: 'tactic', label: 'What I did', type: 'select', options: WP11_TACTICS, w: 2.2 },
+          { id: 'tactic', label: 'What I did', type: 'select', options: WP11_TACTICS, labels: WP11_TACTIC_LABELS, w: 2.2 },
           { id: 'feel', label: 'How I feel now', type: 'select', options: ['Still hot', 'Settled enough'], w: 1.3 },
           { id: 'before', label: 'Load before (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },
           { id: 'after', label: 'Load after (WP-02, 0–1)', type: 'number', fans: true, w: 1, step: '0.01', min: 0, max: 1, rangeNote: 'A WP-02 load score runs from 0 to 1 (for example 0.45).' },

@@ -11,7 +11,7 @@
 (function () {
   'use strict';
   var KEY = 'tol-prog01-v1', WEEKS = 6;
-  var NAMES = ['See the work that’s already happening', 'Give every job one owner', 'Notice how full each battery is',
+  var NAMES = ['See the work that’s already happening', 'Give every job one owner', 'Notice how much each of you is carrying',
     'Talk about it kindly', 'Get back in step', 'Make it last'];
   var path = location.pathname;
   var isSimple = /\/prog-01\.html$/.test(path), isFull = /\/prog-01-in-depth\.html$/.test(path);

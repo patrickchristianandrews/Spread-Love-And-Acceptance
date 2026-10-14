@@ -1702,7 +1702,14 @@
       });
       if (bar.classList.contains('is-snug')) mob.setAttribute('aria-label', T('Menu and search', 'Menú y búsqueda')); else mob.removeAttribute('aria-label');
     }
-    function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); }
+    // where the bar's bottom edge is on screen right now: the free-app line above it scrolls away, so at the very top the
+    // bar sits 36px lower. Fixed toasts and the listen bar use this (--tol-bar-bottom) so they never cover the bar.
+    var lastBottom = -1;
+    function barBottom() {
+      var b = Math.max(0, Math.round(bar.getBoundingClientRect().bottom));
+      if (b !== lastBottom) { lastBottom = b; document.documentElement.style.setProperty('--tol-bar-bottom', b + 'px'); }
+    }
+    function barHeight() { fitBar(); document.documentElement.style.setProperty('--tol-bar-h', bar.offsetHeight + 'px'); barBottom(); }
     barHeightHook = barHeight;
     barHeight(); window.addEventListener('resize', barHeight);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(barHeight);
@@ -1714,7 +1721,11 @@
       if (big && y > lastY + 6 && y > h * 2 && !bar.contains(document.activeElement) && !openDrop && panel.hidden) bar.classList.add('is-tucked');
       else if (!big || y < lastY - 6 || y < h) bar.classList.remove('is-tucked');
       lastY = y;
+      barBottom();
     }, { passive: true });
+    bar.addEventListener('transitionend', barBottom);
+    // hiding the free-app line moves the bar up without a scroll
+    document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.tol-appbar')) { setTimeout(barBottom, 60); setTimeout(barBottom, 500); } });
     bar.addEventListener('focusin', function () { bar.classList.remove('is-tucked'); });
     body.appendChild(scrim);
     body.appendChild(panel);
@@ -2784,11 +2795,15 @@
     if (hs.length < 4 || (main.textContent || '').length < 3500) return;
     var used = {};
     function slug(t) { var b = t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'part', id = b, n = 2; while (used[id] || document.getElementById(id)) id = b + '-' + n++; used[id] = 1; return id; }
-    var items = hs.slice(0, 20).map(function (h) { if (!h.id) h.id = slug(h.textContent); return { id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, '') }; });
-    var peek = items.slice(0, 3).map(function (i) { return i.t; }).join(' · ') + (items.length > 3 ? ' · +' + (items.length - 3) + T(' more', ' más') : '');
+    // each heading keeps its own language (an English heading on a Spanish page is read out in English)
+    var pageLang = (document.documentElement.getAttribute('lang') || '').toLowerCase();
+    function langOf(h) { var l = h.closest('[lang]'); l = l ? (l.getAttribute('lang') || '').toLowerCase() : ''; return l && l.split('-')[0] !== pageLang.split('-')[0] ? l : ''; }
+    function langAttr(i) { return i.lang ? ' lang="' + esc(i.lang) + '"' : ''; }
+    var items = hs.slice(0, 20).map(function (h) { if (!h.id) h.id = slug(h.textContent); return { id: h.id, t: h.textContent.replace(/\s+/g, ' ').trim().replace(/[.:]$/, ''), lang: langOf(h) }; });
+    var peek = items.slice(0, 3).map(function (i) { return '<span' + langAttr(i) + '>' + esc(i.t) + '</span>'; }).join(' · ') + (items.length > 3 ? ' · +' + (items.length - 3) + T(' more', ' más') : '');
     var box = el('details', { class: 'tol-onpage no-bubble no-cheer no-dive' },
-      '<summary><span class="tol-onpage-k">' + T('What’s on this page', 'Lo que hay en esta página') + '</span><span class="tol-onpage-peek">' + esc(peek) + '</span></summary>' +
-      '<ol>' + items.map(function (i) { return '<li><a href="#' + esc(i.id) + '">' + esc(i.t) + '</a></li>'; }).join('') + '</ol>');
+      '<summary><span class="tol-onpage-k">' + T('What’s on this page', 'Lo que hay en esta página') + '</span><span class="tol-onpage-peek">' + peek + '</span></summary>' +
+      '<ol>' + items.map(function (i) { return '<li><a href="#' + esc(i.id) + '"' + langAttr(i) + '>' + esc(i.t) + '</a></li>'; }).join('') + '</ol>');
     box.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
       var t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
