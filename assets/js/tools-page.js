@@ -338,7 +338,8 @@
   // ---------- workpapers: their own section, in number order, not ranked and not filtered with the tools
   var wpBox = $('[data-tl-wp-list]');
   if (wpBox && WPS.length) {
-    wpBox.innerHTML = WPS.slice().sort(function (a, b) { return (a.wp || 'Z').localeCompare(b.wp || 'Z', 'en', { numeric: true }); }).map(function (t) {
+    var WP_ORDER = ['WP', 'CALC', 'PROG', 'REPORT', 'Suite', 'Practice'], wpRank = function (t) { var i = WP_ORDER.indexOf(String(t.wp || '').split('-')[0]); return i < 0 ? 9 : i; };
+    wpBox.innerHTML = WPS.slice().sort(function (a, b) { return wpRank(a) - wpRank(b) || (a.wp || '').localeCompare(b.wp || '', 'en', { numeric: true }); }).map(function (t) {
       return '<li><a href="' + esc(t.href) + '">' + (t.wp ? '<span class="tl-wp-c">' + esc(t.wp) + '</span> ' : '') + esc(t.name) + '</a><span class="tl-wp-d">' + esc(t.does) + '</span></li>';
     }).join('');
     $('[data-tl-wp-n]').textContent = WPS.length;
