@@ -52,7 +52,7 @@
     f.answer = function (typed) {
       if (f.step !== 'math') return false;
       f.ok = check(f.p, typed);
-      if (!f.ok) f.p = problem(o.random);
+      if (!f.ok) { var prev = f.p, n = 0; do { f.p = problem(o.random); } while (f.p.a === prev.a && f.p.b === prev.b && ++n < 20); }
       return f.ok;
     };
     f.clearNow = function () {
