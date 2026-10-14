@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script>/* The Lemonade Stand moved to its own page: send old links there */ (function () { function go() { if (location.hash === "#lemonade") location.replace("/lemonade-stand.html"); } go(); window.addEventListener("hashchange", go); })();</script>
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/collab.js" defer></script>
 <script src="/assets/js/ten-return.js" defer></script>
 <script src="/assets/js/sky-check.js" defer></script>
 <style>
@@ -492,6 +493,11 @@
         </div>
         <p class="save-note">&ldquo;Share my forecast&rdquo; copies a short heads-up you can paste into a message yourself; nothing is sent from this page. Saving is optional: your almanac keeps this reading in this browser only (in its local storage), never on a server, along with the readings from other days you saved (up to 120), and you can download it or erase it at any time.</p>
         <p class="msg" id="msg" role="status" aria-live="polite"></p>
+        <details class="wx-together no-print" id="wx-together">
+          <summary>Today side by side with someone? Only if you both want to</summary>
+          <p>Your weather is yours. Nothing here is shared unless you choose to. If you both want to, each of you sends today&rsquo;s reading in a link, and you see the two side by side. Only today&rsquo;s reading goes, never your almanac.</p>
+          <div id="wx-together-mount"></div>
+        </details>
       </div>
     </div>
 
@@ -850,6 +856,22 @@
     if(sky!=='clear') t+=' It isn’t about you.';
     return t;
   }
+  // "Today side by side with someone?" (collab.js): only today's reading, only if the person opens it and sends it.
+  // Their reading and yours, side by side. Nothing from the almanac goes.
+  document.addEventListener('DOMContentLoaded', function(){
+    var C=window.TOLCollab, box=$('wx-together'), m=$('wx-together-mount'); if(!C||!C.attach||!box||!m) return;
+    var ctl=C.attach({ tool:'weather', page:'/quick-checks.html', mount:m, combine:true,
+      title:['today’s weather','el clima de hoy'],
+      lede:'Pick today’s weather above, then send it. They send theirs back, and you see both. It travels inside the link, and only today’s reading goes.',
+      fields:[{k:'sky',en:'Today’s weather',es:'El clima de hoy'},{k:'say',en:'In a sentence',es:'En una frase'},{k:'help',en:'What would help',es:'Lo que ayudaría'}],
+      format:function(k,v){ return k==='sky'&&SKY[v] ? SKY[v].ico+' '+SKY[v].name+': '+SKY[v].sub : null; },
+      next:function(){ return 'If either of you is fogged in, keep today light, and pick a better time for anything big.'; },
+      mine:function(){ if(!sky) return {}; return { sky:sky, say:($('fc-say')&&$('fc-say').textContent||'').trim().slice(0,300), help:on(need).map(function(k){ return NEEDME[k]; }).join(', ').slice(0,200) }; },
+      onMerge:function(){ box.open=true; } });
+    if(!ctl) return;
+    document.addEventListener('click', function(e){ if(e.target.closest&&e.target.closest('[data-sky], .chip, .btn')) ctl.changed(); });
+    if(/^#together=/.test(location.hash)) box.open=true;
+  });
 
   // ---------- the almanac: saved readings (opt-in, this browser only, the last 120 days you saved) ----------
   function get(){

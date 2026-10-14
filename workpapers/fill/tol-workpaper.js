@@ -1881,7 +1881,7 @@
       var their = d.vals && typeof d.vals.note === 'string' ? d.vals.note.trim().slice(0, 600) : '';
       if (their && !this.oneIsMine(d)) box.appendChild(h('p', { className: 'wpf-shared-note' }, [h('strong', { text: 'What ' + (names[0] || 'they') + ' wanted to name: ' }), '\u201c' + their + '\u201d']));
       box.appendChild(h('div', { className: 'wpf-share-btns' }, [
-        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Add it here' }),
+        h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-combine', text: 'Combine with mine' }),
         h('button', { type: 'button', className: 'wpf-add', 'data-action': 'share-in-no', text: 'Not now' })
       ]));
       return box;
@@ -1998,7 +1998,7 @@
     if (this.opts.takeShared) { var routed = this.opts.takeShared(d, replace, this); if (routed) return routed; }
     if (!sc.people) return this.takeSharedOne(d);
     if (replace && answered(sc, this.state) > 0 && !global.confirm('Replace what is on this page with the shared ' + what + '?')) return '';
-    var st = replace ? blankState(sc) : this.state, v = st.values, added = { people: [], rows: 0, filled: 0 }, differ = [], dropped = [];
+    var st = replace ? blankState(sc) : this.state, v = st.values, added = { people: [], rows: 0, filled: 0, names: [] }, differ = [], dropped = [];
     if (replace) {
       sc.sections.forEach(function (s) { if (s.type === 'table' && s.examples) st.tables[s.id] = []; });
       v.peopleCount = 0;
@@ -2073,6 +2073,7 @@
         var slot = rows.filter(function (x) { return x && rowIsEmpty(s, x) && !isExampleRow(s, x); })[0];
         if (slot && !s.personDays) Object.keys(r).forEach(function (k) { slot[k] = r[k]; }); else rows.push(r);
         added.rows++;
+        if (key && r[key] && added.names.length < 6) added.names.push(String(r[key]));
       });
       if (!rows.length) rows.push({});
     });
@@ -2091,6 +2092,8 @@
     if (added.filled) bits.push(added.filled + ' filled in where this page was empty');
     if (added.people.length) bits.push(added.people.join(', ') + ' added to the names');
     var msg = 'Combined with the shared ' + what + (bits.length ? ': ' + bits.join('; ') + '.' : ': everything in it was already here.');
+    // what came from the other list, by name (a row on both lists is kept once)
+    if (added.names.length) msg += ' New from the shared ' + what + ': ' + added.names.join(', ') + (added.rows > added.names.length ? ' and more' : '') + '.';
     // what differs is shown in the page, each with a choice (see conflictsEl), not only in this message
     this.conflicts = conflicts.slice(0, 40); this.cfRestored = false;
     // a choice still to make waits: keeping this page's answer asks to send it back then (resolveConflict)

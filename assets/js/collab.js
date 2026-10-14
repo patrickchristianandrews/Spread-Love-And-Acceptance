@@ -672,7 +672,8 @@
       mk('p', { cls: 'tcol-small', text: T('So next time you can see what changed. Only on this device, never sent anywhere. Off: what they sent stays in this tab until you close it.', 'Así la próxima vez ves qué cambió. Solo en este aparato, nunca se envía. Si no lo marcas, lo que te enviaron queda en esta pestaña hasta que la cierres.') }),
       mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'clear', text: T('Clear what you received', 'Borrar lo que recibiste') })])]);
     var pst = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
-    [banner, pick, people, parts, side, hist, meRow, send, paste, keep, pst].forEach(function (n) { panel.appendChild(n); });
+    var more = mk('p', { cls: 'tcol-small' }, [T('Sending several results at once (your Wave Code, your care card…)? ', '¿Varios resultados a la vez? '), mk('a', { href: '/together.html#share', text: T('Share my results', 'Compartir mis resultados') }), '.']);
+    [banner, pick, people, parts, side, hist, meRow, send, paste, keep, more, pst].forEach(function (n) { panel.appendChild(n); });
     mount.appendChild(panel);
     function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
     function status(m) { pst.textContent = ''; setTimeout(function () { pst.textContent = m; }, 30); }

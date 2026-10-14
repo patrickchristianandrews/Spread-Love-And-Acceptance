@@ -534,7 +534,8 @@
     if (C && C.attach) {
       var cm = mk('div', 'tfs-collab'); host.appendChild(cm);
       var ctl = C.attach({
-        tool: 'checkin', page: '/check-ins.html', mount: cm,
+        tool: 'checkin', page: '/check-ins.html', mount: cm, history: true,
+        next: function () { return 'Pick one of the “try next week” ideas and agree who does it.'; },
         title: ['the weekly check-in card', 'la tarjeta semanal de conversación'],
         fields: [{ k: 'well', en: FIELDS[0][1], es: 'Algo que fue bien' }, { k: 'heavy', en: FIELDS[1][1], es: 'Algo que pesó' },
           { k: 'try', en: FIELDS[2][1], es: 'Algo pequeño para probar la semana que viene' }, { k: 'next', en: FIELDS[3][1], es: 'Nuestra próxima conversación' },

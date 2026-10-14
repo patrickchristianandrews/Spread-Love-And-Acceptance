@@ -25,6 +25,34 @@
     if (de0.hasAttribute('data-es') && (/[?&]lang=es\b/.test(location.search) || location.hash === '#es')) de0.setAttribute('lang', 'es');
   } catch (e) {}
 
+  // The installed app opens with Tidbit and Sugarfoot running up and down the screen while the first page loads
+  // (launch-pups.js and launch-pups.css), once per app launch ('tol-launch-seen' in sessionStorage), never in a
+  // browser tab, and not on the safety pages. Each page's head already shows a plain cover in the app's colour
+  // (class "lp-boot", from tools/seo/build_seo.py); a page without it gets the same cover here.
+  (function () {
+    var d = document.documentElement;
+    try {
+      var app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+      if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(safety|upset-right-now)\.html$/.test(location.pathname)) { d.classList.remove('lp-boot'); return; }
+      sessionStorage.setItem('tol-launch-seen', '1');
+      if (!document.getElementById('lp-boot-css')) {
+        var bs = document.createElement('style'); bs.id = 'lp-boot-css';
+        bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
+        document.head.appendChild(bs);
+        var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
+        if (th === 'dark' || (th !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('lp-dark');
+        d.classList.add('lp-boot');
+        setTimeout(function () { d.classList.remove('lp-boot'); }, Math.max(0, 2500 - performance.now()));
+      }
+      // the styles, the pups and the cover's script all start loading at once
+      var lk = document.createElement('link'); lk.rel = 'stylesheet'; lk.href = '/assets/css/launch-pups.css'; document.head.appendChild(lk);
+      if (!window.TOLPups && !document.querySelector('script[src="/assets/js/pups.js"]')) { var ps = document.createElement('script'); ps.src = '/assets/js/pups.js'; document.head.appendChild(ps); }
+      var ls = document.createElement('script'); ls.src = '/assets/js/launch-pups.js';
+      ls.onerror = function () { d.classList.remove('lp-boot'); };
+      document.head.appendChild(ls);
+    } catch (e) { d.classList.remove('lp-boot'); }
+  })();
+
   // ===== Settings you edit =====
   var CONFIG = {
     // dormant: only used if openAll were false

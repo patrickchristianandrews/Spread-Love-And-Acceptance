@@ -889,6 +889,17 @@ SPLASH_SIZES = [(440, 956, 3), (402, 874, 3), (430, 932, 3), (393, 852, 3), (428
 SPLASH_TAGS = ['<link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-%dx%d.png" media="(device-width: %dpx) and (device-height: %dpx) and (-webkit-device-pixel-ratio: %d) and (orientation: portrait)">'
                % (w * r, h * r, w, h, r) for (w, h, r) in SPLASH_SIZES]
 
+# The installed app's launch cover: in the app only (never in a browser tab), once per launch, a plain cover in the
+# app's colour shows before the page paints; site.js then loads launch-pups.js, where Tidbit and Sugarfoot run up and
+# down the screen until the page is ready (always gone within 2.5 seconds). Keep the style in step with site.js.
+LAUNCH_BOOT = ['<style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s}'
+               'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style>',
+               '<script>(function(){try{var d=document.documentElement,m=window.matchMedia;'
+               'if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")'
+               '||/^\\/(safety|upset-right-now)\\.html$/.test(location.pathname))return;'
+               'var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");'
+               'd.classList.add("lp-boot");setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script>']
+
 
 def process(path, report):
     fp = os.path.join(ROOT, path)
@@ -963,6 +974,7 @@ def process(path, report):
     if not has('rel="manifest"'): lines.append('<link rel="manifest" href="/manifest.webmanifest">')
     if not has('name="apple-mobile-web-app-capable"'): lines += APP_TAGS
     if not has('rel="apple-touch-startup-image"'): lines += SPLASH_TAGS
+    if not has('id="lp-boot-css"'): lines += LAUNCH_BOOT
     lines += ['<meta property="og:site_name" content="' + attr(BRAND) + '">',
               '<meta property="og:title" content="' + attr(title) + '">',
               '<meta property="og:description" content="' + attr(desc) + '">',

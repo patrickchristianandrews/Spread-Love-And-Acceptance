@@ -274,6 +274,9 @@
         // side by side, with names where they came with a shared link: "You: 0.55 · Owen: 0.70 (14 of 20)"
         var whoL = String(ctx.value('partnerWho') || '').split('|');
         out.push({ label: 'Side by side', value: 'You: ' + fmt(s, 2) + ' (' + Math.round(s * 20) + ' of 20) \u00b7 ' + others.map(function (x, i) { return (String(whoL[i] || '').trim() || 'Someone') + ': ' + fmt(x, 2) + ' (' + Math.round(x * 20) + ' of 20)'; }).join(' \u00b7 ') + '.', note: 'Each score is only about the person who filled it in. Neither is a verdict on anyone.' });
+        // the gap, in kind words: no "winner", and no one's fault
+        var hiS = Math.max.apply(null, [s].concat(others)), loS = Math.min.apply(null, [s].concat(others)), gap = r2(hiS - loS);
+        out.push({ label: 'The gap', value: gap < 0.10 ? 'Your loads are close (a gap of ' + fmt(gap, 2) + '). Nobody is carrying much more than the others right now.' : 'A gap of ' + fmt(gap, 2) + ': ' + (hiS === s ? 'yours reads higher' : 'one of the others reads higher') + ' right now. That isn\u2019t a contest or anyone\u2019s fault. It\u2019s a reason to look together at one thing that could come off the fuller plate this week.', note: 'The gap is the highest score take away the lowest.' });
         var all = [s].concat(others), avg = all.reduce(function (a, b) { return a + b; }, 0) / all.length;
         if (road > 1 && all.length < road) out.push({ label: 'Everyone\u2019s average', value: 'Waiting: ' + all.length + ' of ' + road + ' scores are in.', note: 'The shared average is never worked out while anyone\'s score is missing, or for someone else. It appears here once all ' + road + ' are in.' });
         else if (road > 1 && all.length > road) out.push({ label: 'Everyone\u2019s average', value: 'There are ' + all.length + ' scores here, and you said ' + road + ' people are doing this.', note: 'Check the list of scores: one may be in twice.' });

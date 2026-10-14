@@ -212,9 +212,11 @@
     function cssLoaded() { cssOk = true; show(); }
     if (link.sheet) cssLoaded(); else { link.addEventListener('load', cssLoaded); link.addEventListener('error', function () { out = true; dropBoot(true); }); }
     if (!pupsOk) {
-      var sc = D.createElement('script'); sc.src = '/assets/js/pups.js';
-      sc.onload = pupsArrived; sc.onerror = function () {};
-      D.head.appendChild(sc);
+      // site.js has usually asked for pups.js already
+      var sc = D.querySelector('script[src="/assets/js/pups.js"]');
+      if (!sc) { sc = D.createElement('script'); sc.src = '/assets/js/pups.js'; D.head.appendChild(sc); }
+      sc.addEventListener('load', pupsArrived);
+      var poll = setInterval(function () { if (window.TOLPups) { clearInterval(poll); if (!pupsOk) pupsArrived(); } else if (out) clearInterval(poll); }, 60);
     }
     // nothing came in time: let the page show
     setTimeout(function () { if (!shown && !out) { out = true; dropBoot(true); } }, Math.max(0, GIVE_UP - now()));

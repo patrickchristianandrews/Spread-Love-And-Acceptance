@@ -223,7 +223,7 @@
 
   // ------------------------------------------------------------------ the payload: { created, keys, times }
   // Values that look like HTML or script are refused, so nothing from a file or link can reach a page as markup.
-  var HTMLISH = /<\s*[a-z!\/?]|javascript\s*:|vbscript\s*:|data\s*:\s*text\/html/i;
+  var HTMLISH = /<[a-z!\/?]|javascript\s*:|vbscript\s*:|data\s*:\s*text\/html/i;
   function badString(s, depth) {
     if (typeof s === 'string') return HTMLISH.test(s);
     if (depth > 40) return true;

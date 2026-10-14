@@ -1030,7 +1030,7 @@
         '<input type="text" id="wl-ic-them" class="wl-codein" value="' + t.code + '" autocomplete="off" autocapitalize="characters" spellcheck="false">' +
         '<p class="wl-small" id="wl-ic-arch">' + t.code + ' is ' + lower(ARCHETYPES[t.code][0]) + ': ' + ARCHETYPES[t.code][1] + '</p>' +
         (done
-          ? '<p class="wl-mine">Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
+          ? '<p class="wl-mine">You’ve done this too, so here are your two codes side by side. Your Wave Code' + (S.name ? ' (' + esc(S.name) + ')' : '') + ' is <strong>' + mine + '</strong>, ' + lower(ARCHETYPES[mine][0]) + '.</p>' +
             '<div id="wl-ic-out" aria-live="polite">' + compareHTML(mine, t.code, S.name, t.from) + '</div>' +
             '<div class="wl-nav"><button type="button" class="wl-linkbtn" id="wl-ic-notme">' + (S.name ? 'Not ' + esc(S.name) + '? ' : '') + 'Take it as someone else</button><button type="button" class="wl-btn" id="wl-ic-res">See my full results</button></div>'
           : '<h3>Find your own Wave Code</h3>' +
