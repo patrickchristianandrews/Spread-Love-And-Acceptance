@@ -9,7 +9,7 @@
    The Frequency Buddies episodes (/assets/js/buddies/) are small data files, saved up front so an episode
    plays offline; a future episode not in the list is saved the first time it's watched.
    Bump VERSION when the list below changes. */
-var VERSION = 'tol-v141';
+var VERSION = 'tol-v142';
 // A first visit saves only this small shell (so the offline page works). The full list below is saved only
 // once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
 // downloads megabytes they didn't ask for. Everything else is saved the first time it's used.
@@ -21,6 +21,7 @@ var CORE = [
   '/assets/js/site.js', '/assets/js/bears-dojo.js', '/assets/js/bears-dojo-scene.js', '/assets/js/bears-dojo-offerings.js', '/assets/js/bears-dojo-offerings-2.js', '/assets/js/bears-dojo-pals.js', '/assets/js/night-garden.js', '/assets/js/quiet-words.js', '/assets/js/calm-music.js', '/assets/js/tips.js', '/assets/js/breathe.js', '/assets/js/turning-toward.js',
   '/assets/js/rewards.js', '/assets/js/pause-and-play.js', '/assets/js/site-chat.js', '/assets/js/arcade.js', '/assets/js/pups.js', '/assets/js/journey-pals.js', '/assets/js/chat-kb.js', '/assets/js/word-bloom.js', '/assets/js/quiet-crossword.js', '/assets/js/game-levels.js',
   '/assets/js/pals-cam.js', '/assets/js/ten-return.js', '/assets/js/pals-cam-acts.js', '/assets/js/pals-cam-more.js', '/assets/js/pals-cam-tricks.js', '/assets/js/pals-cam-invite.js', '/assets/js/pals-cam-pack-scenes.js', '/assets/js/pals-cam-pack-extra.js', '/assets/js/pals-cam-pack-more.js',
+  '/explore.html', '/assets/js/explore.js', '/assets/js/take-in.js', '/assets/css/take-in.css', '/how-you-take-things-in.html', '/write-it-through.html', '/assets/js/write-it-through.js', '/assets/css/write-it-through.css', '/assets/js/book-download.js', '/tools.html', '/assets/js/tools-registry.js', '/assets/js/tool-guide.js', '/assets/js/tool-guide-data.js', '/assets/css/tool-guide.css', '/assets/js/start-finder.js', '/assets/css/start-finder.css', '/find-your-start.html', '/why-this-site.html', '/assets/js/message-check-mini.js', '/assets/css/book-examples.css', '/assets/css/book-print.css', '/nervous-system.html', '/calming-supplements.html', '/assets/css/calming-supplements.css', '/assets/js/calming-supplements.js', '/assets/js/calc02-core.js', '/look-back-30-days.html', '/workpapers/fill/wp-03-es.js', '/assets/js/buddies/s2e1.js', '/assets/js/buddies/s2e2.js', '/assets/js/buddies/s2e3.js', '/assets/js/clarify-data.js', '/assets/js/clarify.js', '/assets/css/clarify.css', '/assets/js/context-panel.js', '/assets/css/context-panel.css', '/assets/js/wp09-context.js', '/living-alone.html', '/signal-translator.html', '/assets/js/signal-engine.js', '/assets/js/message-patterns.js',
   '/assets/js/buddies-player.js', '/assets/js/buddies/s1e1.js', '/assets/js/buddies/s1e2.js', '/assets/js/buddies/s1e3.js', '/assets/js/buddies/s1e4.js', '/assets/js/buddies/s1e5.js',
   
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
