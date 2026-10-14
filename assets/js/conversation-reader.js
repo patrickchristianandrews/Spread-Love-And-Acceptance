@@ -443,4 +443,15 @@
   $('cr-clear').addEventListener('click', function () {
     input.value = ''; draft.value = ''; out.innerHTML = ''; pre(''); draftOut.innerHTML = ''; draftStep.hidden = true; state = null; input.focus();
   });
+  // A whole conversation handed over from another page or another part of the Chat analyzer waits in this tab's
+  // sessionStorage ('tol-cr-text': {text, me} or plain text), never in the address. It is removed as soon as it's read.
+  try {
+    var handed = sessionStorage.getItem('tol-cr-text');
+    if (handed != null) {
+      sessionStorage.removeItem('tol-cr-text');
+      var h = null; try { h = JSON.parse(handed); } catch (e) { h = null; }
+      if (!h || typeof h !== 'object') h = { text: handed };
+      if (h.text && String(h.text).trim()) window.TOLReaderPage.read(String(h.text).slice(0, 50000), h.me ? String(h.me) : '');
+    }
+  } catch (e) {}
 })();

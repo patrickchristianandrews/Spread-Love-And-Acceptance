@@ -1,0 +1,100 @@
+/* collab.css: "Work on this together" (collab.js). Loaded by collab.js as a <link>, so it also works on the
+   workpaper pages' strict rules (no inline styles). Plain colours only, so the site's dark look (the page-wide
+   invert) turns it around like everything else. */
+
+.tcol{ box-sizing:border-box; max-width:44rem; margin:1.4rem 0; padding:1rem 1.1rem 1.1rem; color:var(--ink, #2B2620);
+  background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:18px; font-family:var(--tol-sans, system-ui, sans-serif); }
+.tcol *, .tcol-sheet *{ box-sizing:border-box; }
+.tcol p, .tcol-sheet p{ max-width:none; }
+.tcol-h{ margin:0 0 .35rem; font:600 1.2rem/1.25 "Fraunces", Georgia, serif; }
+.tcol-lede{ margin:0 0 .7rem; font-size:.97rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
+.tcol-small{ margin:.25rem 0; font-size:.88rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.tcol [hidden], .tcol-sheet [hidden], .tcol-sheet[hidden]{ display:none !important; }
+
+/* someone's link just opened */
+.tcol-in{ margin:0 0 .9rem; padding:.7rem .85rem; background:#F3EEF9; border:1px solid #D9C8F0; border-radius:14px; font-size:.97rem; line-height:1.45; overflow-wrap:anywhere; }
+.tcol-in:focus{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tcol-in p{ margin:.2rem 0; }
+.tcol-changes{ margin:.35rem 0 .2rem; padding-left:1.2rem; }
+.tcol-changes li{ margin:.15rem 0; }
+.tcol-pick{ margin:0 0 .8rem; padding:.6rem .8rem; background:#FFF6DA; border:1px solid #E8D49A; border-radius:14px; }
+.tcol-pick p{ margin:.2rem 0; }
+.tcol-people{ margin:0 0 .6rem; font-size:.92rem; color:var(--ink-soft, #5A5346); overflow-wrap:anywhere; }
+
+/* what the others sent: one card each, read-only */
+.tcol-parts{ margin:0 0 .9rem; }
+.tcol-parts-h{ margin:.2rem 0 .5rem; font:600 1rem/1.3 var(--tol-sans, system-ui, sans-serif); }
+.tcol-part{ margin:0 0 .6rem; padding:.65rem .8rem; background:#F7F1E2; border:1px solid var(--line, #D9CBA3); border-radius:14px; min-width:0; }
+.tcol-part h5{ display:flex; flex-wrap:wrap; align-items:center; gap:.45rem; margin:0 0 .2rem; font:600 1rem/1.3 var(--tol-sans, system-ui, sans-serif); overflow-wrap:anywhere; }
+.tcol-tag{ display:inline-block; padding:.05rem .5rem; font-size:.78rem; font-weight:600; color:#3C3354; background:#EFE8FA; border:1px solid #B9A8D6; border-radius:999px; }
+.tcol-when, .tcol-changed{ margin:.1rem 0 .35rem; font-size:.85rem; color:var(--ink-soft, #5A5346); }
+.tcol-changed{ color:#5B3F8A; }
+.tcol-dl{ margin:0; }
+.tcol-row{ display:grid; grid-template-columns:minmax(0, 11rem) minmax(0, 1fr); gap:.15rem .8rem; padding:.3rem 0; border-top:1px dashed #E2D6B8; }
+.tcol-row:first-child{ border-top:0; }
+.tcol-row dt{ font-size:.88rem; font-weight:600; color:var(--ink-soft, #5A5346); }
+.tcol-row dd{ margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.tcol-usebox{ grid-column:2; }
+@media (max-width:520px){
+  .tcol-row{ grid-template-columns:minmax(0, 1fr); }
+  .tcol-usebox{ grid-column:1; }
+}
+
+/* your name */
+.tcol-me{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .7rem; margin:.2rem 0 .6rem; }
+.tcol-me label{ font-weight:600; font-size:.95rem; }
+.tcol-name{ flex:1 1 12rem; min-width:0; max-width:18rem; min-height:44px; padding:.45rem .7rem; font:inherit; font-size:1rem; color:inherit;
+  background:#fff; border:1.5px solid #CFC4AA; border-radius:12px; }
+.tcol-name:focus{ outline:3px solid var(--focus, #2B5B8C); outline-offset:1px; }
+
+/* "Send it by" */
+.tcol-send{ margin:.3rem 0 .4rem; }
+.tcol-send-h{ margin:.3rem 0 .4rem; font-weight:600; font-size:.97rem; }
+.tcol-acts{ display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 9.5rem), 1fr)); gap:.5rem; }
+.tcol-act{ display:flex; align-items:center; justify-content:center; min-height:44px; min-width:0; padding:.4rem .6rem; text-align:center;
+  font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354 !important; text-decoration:none !important; background:#fff;
+  border:1.5px solid #D9C8F0; border-radius:14px; cursor:pointer; overflow-wrap:anywhere; }
+.tcol-act:hover{ background:#F3EEF9; }
+.tcol-act:focus-visible, .tcol-btn:focus-visible, .tcol-sheet-x:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.tcol-act-copy{ background:#EFE8FA; border-color:#B9A8D6; }
+.tcol-act.is-off{ opacity:.6; }
+.tcol-long{ margin:.55rem 0 0; padding:.5rem .7rem; font-size:.92rem; line-height:1.4; background:#FFF6DA; border:1px solid #E8D49A; border-radius:12px; overflow-wrap:anywhere; }
+.tcol-priv{ margin:.55rem 0 0; font-size:.88rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.tcol-st{ min-height:1.2em; margin:.3rem 0 0; font-size:.9rem; color:#2F5A3C; }
+
+/* a code instead of a link; keeping; clearing */
+.tcol-paste{ margin:.6rem 0 0; }
+.tcol-paste summary{ min-height:44px; display:flex; align-items:center; cursor:pointer; font-weight:600; font-size:.95rem; color:#3C3354; }
+.tcol-paste label{ display:block; margin:.3rem 0 .25rem; font-size:.92rem; }
+.tcol-pastebox{ display:block; width:100%; min-height:4.5rem; padding:.5rem .6rem; font:.9rem/1.35 ui-monospace, "IBM Plex Mono", monospace; color:inherit;
+  background:#fff; border:1.5px solid #CFC4AA; border-radius:12px; resize:vertical; }
+.tcol-keep{ margin:.7rem 0 0; padding-top:.6rem; border-top:1px dashed #E2D6B8; }
+.tcol-keep p{ margin:.2rem 0; }
+.tcol-keep label{ font-weight:600; font-size:.95rem; }
+.tcol-keepbox{ width:20px; height:20px; vertical-align:middle; }
+.tcol-btn{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:.35rem .95rem;
+  font:600 .92rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; background:#fff; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }
+.tcol-btn:hover{ background:#F3EEF9; }
+.tcol-quiet{ border-color:#CFC4AA; color:var(--ink, #2B2620); }
+.tcol-use{ min-height:36px; padding:.2rem .75rem; font-size:.85rem; }
+@media (pointer:coarse){ .tcol-use{ min-height:44px; } }
+.tcol-off{ position:fixed; left:-9999px; top:0; width:1px; height:1px; opacity:0; }
+
+/* the small window over the page (TOLCollab.sendSheet) */
+.tcol-sheet{ position:fixed; inset:0; z-index:992; display:flex; align-items:center; justify-content:center; padding:16px;
+  background:rgba(33,29,23,.4); color:var(--ink, #2B2620); font-family:var(--tol-sans, system-ui, sans-serif); }
+.tcol-sheet-card{ width:min(28rem, 100%); max-height:calc(100vh - 32px); max-height:calc(100dvh - 32px); overflow-y:auto; overscroll-behavior:contain;
+  padding:1rem 1.1rem 1.1rem; background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:20px; box-shadow:0 18px 50px rgba(33,29,23,.25); }
+.tcol-sheet-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.tcol-sheet-head h2{ margin:0; font:600 1.25rem/1.2 "Fraunces", Georgia, serif; overflow-wrap:anywhere; }
+.tcol-sheet-x{ flex:none; min-height:44px; min-width:44px; padding:.35rem .9rem; font:inherit; font-size:.95rem; color:var(--ink, #2B2620); background:none;
+  border:1px solid #8C826E; border-radius:999px; cursor:pointer; }
+.tcol-sheet-x:hover{ background:var(--paper-deep, #ECE2C4); }
+.tcol-sheet-note{ margin:.45rem 0 .2rem; font-size:.95rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+@media (max-width:480px){
+  .tcol-sheet{ align-items:flex-end; padding:0; }
+  .tcol-sheet-card{ width:100%; border-radius:20px 20px 0 0; max-height:92vh; max-height:92dvh; padding-bottom:calc(1.1rem + env(safe-area-inset-bottom, 0px)); }
+  .tcol{ padding:.85rem .8rem .9rem; }
+}
+html.tol-quiet .tcol{ border-color:#D9CBA3; }
+@media print{ .tcol, .tcol-sheet{ display:none !important; } }

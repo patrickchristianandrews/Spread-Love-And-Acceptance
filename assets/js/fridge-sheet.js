@@ -430,9 +430,11 @@
     ni.placeholder = hh && hh.people.length > 1 ? andList(hh.people) : 'Your names';
     ni.addEventListener('input', function () { st.names = ni.value; keep(); });
     nl.appendChild(ni); form.appendChild(nl);
+    var boxes = {};
     FIELDS.forEach(function (f) {
       var l = mk('label', 'tfs-ci-f'); l.appendChild(mk('span', 'tfs-ci-l', f[1]));
       var t = f[0] === 'next' ? mk('input') : mk('textarea');
+      boxes[f[0]] = t;
       if (f[0] === 'next') { t.type = 'text'; t.placeholder = 'Day and time, e.g. Sunday after dinner'; t.maxLength = 80; } else { t.rows = 2; t.maxLength = 300; }
       t.value = st[f[0]] || '';
       t.addEventListener('input', function () { st[f[0]] = t.value; keep(); });
@@ -525,6 +527,27 @@
     }
     button(btnBox, cardData, { note: 'Your card as one clean page, with room to write by hand where it’s blank. Fits A4 and US Letter.' });
     drift(driftBox, {});
+
+    // "Work on this together" (collab.js): each person writes their own lines on their own phone, and the
+    // parts travel back and forth inside a link (#together=…), merged person by person. Nothing is uploaded.
+    var C = window.TOLCollab;
+    if (C && C.attach) {
+      var cm = mk('div', 'tfs-collab'); host.appendChild(cm);
+      var ctl = C.attach({
+        tool: 'checkin', page: '/check-ins.html', mount: cm,
+        title: ['the weekly check-in card', 'la tarjeta semanal de conversación'],
+        fields: [{ k: 'well', en: FIELDS[0][1], es: 'Algo que fue bien' }, { k: 'heavy', en: FIELDS[1][1], es: 'Algo que pesó' },
+          { k: 'try', en: FIELDS[2][1], es: 'Algo pequeño para probar la semana que viene' }, { k: 'next', en: FIELDS[3][1], es: 'Nuestra próxima conversación' },
+          { k: 'jobs', en: 'Jobs that slipped or came up again', es: 'Tareas que se quedaron sin hacer o volvieron' }],
+        mine: function () { return { well: str(st.well, 300), heavy: str(st.heavy, 300), try: str(st.try, 300), next: str(st.next, 80), jobs: st.jobs.slice(0, 12) }; },
+        fill: function (d) {
+          FIELDS.forEach(function (f) { if (typeof d[f[0]] === 'string') { st[f[0]] = d[f[0]].slice(0, f[0] === 'next' ? 80 : 300); boxes[f[0]].value = st[f[0]]; } });
+          if (Array.isArray(d.jobs)) { st.jobs = d.jobs.map(function (n) { return str(n, 60); }).filter(Boolean).slice(0, 12); drawChips(); }
+          save();
+        }
+      });
+      if (ctl) { form.addEventListener('input', ctl.changed); form.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.tfs-chip, .tfs-ci-addgo')) ctl.changed(); }); }
+    }
   }
 
   function mountAll() {

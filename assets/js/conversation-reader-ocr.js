@@ -10,7 +10,13 @@
        Groups OCR lines into message bubbles by where they sit (left = them, right = me), drops the
        clock and battery bar, the contact header, timestamps, "Delivered"/"Read", typing dots and the
        message box, and removes lines repeated where two screenshots overlap.
-   TOLShotReader.mount()        -> adds "Read screenshots" to the Reader page */
+   TOLShotReader.mount()        -> adds "Read screenshots" to the Reader page
+   TOLShotReader.read(files, say) -> Promise of layout(): reads image files on this device (the single-message
+       boxes on /signal-translator.html use it straight from their "From a screenshot" button)
+   TOLShotReader.review(res)    -> shows the "Check what was read" step for a reading from read()
+   TOLShotReader.onOne          -> set by the page: function ({text, mine, before}) that checks ONE message on
+       its own. When it's set, a screenshot with one message goes straight to it, and each row of the review
+       gets "Check just this one". */
 (function (root) {
   'use strict';
 
@@ -307,6 +313,8 @@
       say('Loading the screenshot reader on this device…');
       readImages(files, say).then(function (res) {
         if (!res.bubbles.length) { say('I couldn’t find any messages in that screenshot. Try a sharper one, or paste the text instead.'); return; }
+        // one message: check it on its own, in the right single-message mode
+        if (res.bubbles.length === 1 && typeof root.TOLShotReader.onOne === 'function') { say(''); root.TOLShotReader.onOne({ text: res.bubbles[0].text, mine: res.bubbles[0].side === 'right' }); return; }
         say('Read ' + res.bubbles.length + ' message' + (res.bubbles.length === 1 ? '' : 's') + '. Check them below, then read the conversation.');
         showReview(res);
       }, function () {
@@ -318,15 +326,20 @@
     step.addEventListener('dragover', function (e) { if (e.dataTransfer && Array.prototype.some.call(e.dataTransfer.items || [], function (i) { return i.kind === 'file'; })) { e.preventDefault(); step.classList.add('is-drop'); } });
     step.addEventListener('dragleave', function () { step.classList.remove('is-drop'); });
     step.addEventListener('drop', function (e) { var f = imagesFrom(e.dataTransfer); if (f.length) { e.preventDefault(); step.classList.remove('is-drop'); run(f); } });
-    doc.addEventListener('paste', function (e) { var f = imagesFrom(e.clipboardData); if (f.length) { e.preventDefault(); run(f); } });
+    // only while this step is on screen (on the Chat analyzer it sits in the "whole conversation" view)
+    doc.addEventListener('paste', function (e) { if (!step.offsetParent) return; var f = imagesFrom(e.clipboardData); if (f.length) { e.preventDefault(); run(f); } });
 
     var rows = [], meSide = 'right';
+    root.TOLShotReader.review = function (res) {
+      say('Read ' + res.bubbles.length + ' message' + (res.bubbles.length === 1 ? '' : 's') + '. Check them below, then read the conversation.');
+      showReview(res);
+    };
     function showReview(res) {
       rows = res.bubbles.map(function (b) { return { side: b.side, text: b.text }; });
       meSide = 'right';
       review.innerHTML = '<section class="cr-step cr-review" aria-labelledby="cr-rv-h">' +
         '<h2 id="cr-rv-h"><span>✓</span>Check what was read</h2>' +
-        '<p class="cr-hint">The screenshot reader can misread a word or a side. Fix anything that’s off, then read the conversation.</p>' +
+        '<p class="cr-hint">The screenshot reader can misread a word or a side. Fix anything that’s off, then read the conversation.' + (typeof root.TOLShotReader.onOne === 'function' ? ' Or pick one message and check just that one.' : '') + '</p>' +
         '<div class="cr-rv-names"><label>Your name <input type="text" id="cr-rv-me" maxlength="30" value="' + esc(res.meName || 'Me') + '"></label>' +
         '<label>Their name <input type="text" id="cr-rv-them" maxlength="30" value="' + esc(res.name || 'Them') + '"></label></div>' +
         '<fieldset class="cr-rv-side"><legend>Which side is you?</legend>' +
@@ -358,7 +371,8 @@
           '<label class="cr-rv-who">Who <select data-who="' + i + '"><option value="me"' + (mine ? ' selected' : '') + '>' + esc(n.me) + ' (you)</option><option value="them"' + (mine ? '' : ' selected') + '>' + esc(n.them) + '</option></select></label>' +
           (i ? '<button type="button" class="cr-btn is-quiet is-small" data-merge="' + i + '">Join with the one above</button>' : '') +
           '<button type="button" class="cr-btn is-quiet is-small" data-split="' + i + '" title="Put each line on its own">Split at line breaks</button>' +
-          '<button type="button" class="cr-btn is-quiet is-small" data-del="' + i + '">Remove</button></div>' +
+          '<button type="button" class="cr-btn is-quiet is-small" data-del="' + i + '">Remove</button>' +
+          (typeof root.TOLShotReader.onOne === 'function' ? '<button type="button" class="cr-btn is-quiet is-small cr-rv-one" data-one="' + i + '">Check just this one</button>' : '') + '</div>' +
           '<label class="cr-rv-text"><span style="position:absolute;left:-9999px">Message ' + (i + 1) + '</span><textarea data-text="' + i + '" rows="2">' + esc(r.text) + '</textarea></label></li>';
       }).join('');
     }
@@ -376,6 +390,12 @@
       if (b.hasAttribute('data-merge')) { var i = +b.getAttribute('data-merge'); rows[i - 1].text = (rows[i - 1].text + ' ' + rows[i].text).trim(); rows.splice(i, 1); paint(); }
       else if (b.hasAttribute('data-split')) { var j = +b.getAttribute('data-split'), parts = rows[j].text.split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean); if (parts.length > 1) { rows.splice.apply(rows, [j, 1].concat(parts.map(function (p) { return { side: rows[j].side, text: p }; }))); paint(); } }
       else if (b.hasAttribute('data-del')) { rows.splice(+b.getAttribute('data-del'), 1); paint(); }
+      else if (b.hasAttribute('data-one') && typeof root.TOLShotReader.onOne === 'function') {
+        var k = +b.getAttribute('data-one'), r = rows[k], mine = r.side === meSide, before = '';
+        // for one of my own messages, the last thing they said before it is what it answers
+        for (var q = k - 1; q >= 0 && mine; q--) if (rows[q].side !== meSide && rows[q].text.trim()) { before = rows[q].text.trim(); break; }
+        if (r.text.trim()) root.TOLShotReader.onOne({ text: r.text.replace(/\s*\n+\s*/g, ' ').trim(), mine: mine, before: before });
+      }
     });
     function go() {
       var n = names();
@@ -388,4 +408,8 @@
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', mount); else mount();
   root.TOLShotReader.mount = mount;
+  root.TOLShotReader.read = function (files, say) {
+    files = Array.prototype.filter.call(files || [], function (f) { return /^image\//.test(f.type); });
+    return files.length ? readImages(files, say || function () {}) : Promise.resolve({ name: '', meName: '', bubbles: [] });
+  };
 })(typeof window !== 'undefined' ? window : this);

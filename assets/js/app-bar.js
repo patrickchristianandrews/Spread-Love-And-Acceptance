@@ -72,17 +72,17 @@
   var G_CHECK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   var ARROW = '<svg viewBox="0 0 56 56" aria-hidden="true" focusable="false"><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 5v36M14 29l14 15 14-15" fill="none" stroke="#007AFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function sh() { return '<span class="tol-iosg-ico">' + G_SHARE + '</span>'; }
-  function dt() { return '<span class="tol-iosg-ico">' + G_DOTS + '</span>'; }
+  function dt() { return '<span class="tol-iosg-ico">' + G_DOTS + '<span class="tol-iosg-sr">' + T('More', 'Más') + ' (&middot;&middot;&middot;)</span></span>'; }
 
   // ---------------------------------------------------------------- the words
   var NAME = 'Spread Love &amp; Acceptance';
   function step1(w) {
     return {
       iphone: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the bottom of the screen.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, abajo en la pantalla.'),
-      iphone26: T('Tap <b>&middot;&middot;&middot;</b> ' + dt() + ' in Safari&rsquo;s toolbar, at the bottom right. Then tap <b>Share</b> ' + sh() + '.', 'Toca <b>&middot;&middot;&middot;</b> ' + dt() + ' en la barra de Safari, abajo a la derecha. Luego toca <b>Compartir</b> ' + sh() + '.'),
+      iphone26: T('Tap ' + dt() + ' in Safari&rsquo;s toolbar, at the bottom right. Then tap <b>Share</b> ' + sh() + '.', 'Toca ' + dt() + ' en la barra de Safari, abajo a la derecha. Luego toca <b>Compartir</b> ' + sh() + '.'),
       ipad: T('Tap <b>Share</b> ' + sh() + ' in Safari&rsquo;s toolbar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de Safari, arriba a la derecha.'),
       chrome: T('Tap <b>Share</b> ' + sh() + ' in Chrome&rsquo;s address bar, at the top right.', 'Toca <b>Compartir</b> ' + sh() + ' en la barra de direcciones de Chrome, arriba a la derecha.'),
-      edge: T('Tap <b>&middot;&middot;&middot;</b> ' + dt() + ' at the bottom of Edge. Then tap <b>Share</b> ' + sh() + '.', 'Toca <b>&middot;&middot;&middot;</b> ' + dt() + ' abajo en Edge. Luego toca <b>Compartir</b> ' + sh() + '.'),
+      edge: T('Tap ' + dt() + ' at the bottom of Edge. Then tap <b>Share</b> ' + sh() + '.', 'Toca ' + dt() + ' abajo en Edge. Luego toca <b>Compartir</b> ' + sh() + '.'),
       firefox: T('Tap the menu <span class="tol-iosg-ico">' + G_MENU + '</span> at the bottom right of Firefox. Then tap <b>Share</b> ' + sh() + '.', 'Toca el menú <span class="tol-iosg-ico">' + G_MENU + '</span> abajo a la derecha en Firefox. Luego toca <b>Compartir</b> ' + sh() + '.')
     }[w] || '';
   }
@@ -134,7 +134,7 @@
     var canModal = typeof dlg.showModal === 'function';
     // the site's dark mode turns the whole page over with a filter; a modal dialog sits above it, so it takes real dark colours
     var dark = canModal && /invert/.test(getComputedStyle(root).filter || '');
-    dlg.className = 'tol-iosg no-bubble' + (canModal ? ' is-top' : ' is-flat') + (dark ? ' is-dark' : '') + (POINT[w] ? ' ' + POINT[w] : '') + (stillMotion() ? ' is-still' : '');
+    dlg.className = 'tol-iosg no-bubble' + (canModal ? ' is-top' : ' is-flat') + (dark ? ' is-dark' : '') + (POINT[w] ? ' ' + POINT[w] : '') + (w === 'ipad' ? ' is-ipad' : '') + (stillMotion() ? ' is-still' : '');
     dlg.setAttribute('aria-labelledby', 'tol-iosg-h');
     dlg.innerHTML =
       '<div class="tol-iosg-card no-bubble" tabindex="-1">' +
