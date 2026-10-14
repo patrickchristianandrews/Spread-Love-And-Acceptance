@@ -65,9 +65,9 @@ ORDER = [
     ('chapter-2', 2, 'Chapter II', 'A simple way to see whether the way you share the work can last',
      [('Six-week program, week 2: give every job one owner', '/prog-01.html#week-2'), ('One owner per job', '/workpapers/wp-03-one-owner-per-job.html')]),
     ('chapter-3', 2, 'Chapter III', 'How much of a reaction is leftover stress, and the seven angles people see things from',
-     [('Six-week program, week 3: notice how full each battery is', '/prog-01.html#week-3'), ('How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
+     [('Six-week program, week 3: notice how much each of you is carrying', '/prog-01.html#week-3'), ('How much are you carrying?', '/workpapers/wp-02-how-much-are-you-carrying.html')]),
     ('chapter-4', 2, 'Chapter IV', 'Agreeing on what fair means to you both, and letting words land before you react',
-     [('Six-week program, weeks 3 and 4: talk about it kindly', '/prog-01.html#week-4'), ('Say it so it lands', '/workpapers/wp-09-say-it-so-it-lands.html')]),
+     [('Six-week program, week 4: talk about it kindly', '/prog-01.html#week-4'), ('Say it so it lands', '/workpapers/wp-09-say-it-so-it-lands.html')]),
     ('chapter-5', 2, 'Chapter V', 'A gentle monthly look back that catches what weekly check-ins miss',
      [('Six-week program, week 6: make it last', '/prog-01.html#week-6'), ('What keeps coming back? A monthly look-back', '/workpapers/wp-04-what-keeps-coming-back.html')]),
 ] + [
@@ -123,7 +123,7 @@ SHORT = {
     'understanding-14-personality': 'Personality, temperament and change',
     'understanding-15-love': 'Closeness and love',
     'understanding-16-worry': 'Worry, low mood and trauma',
-    'understanding-17-groups': 'Fitting in: groups and culture',
+    'understanding-17-groups': 'Groups, influence and culture',
     'afterword': 'What the book adds up to',
 }
 
@@ -593,6 +593,19 @@ def place(s, after_id, block):
 
 
 MISSING = []
+# Figures are numbered in the order they appear: on the chapter pages through the whole book (the short and the
+# full pages each count their own), and in each package from 1, in page order (see finish_package).
+FIG_N_RE = re.compile(r'(<span class="book-fig-n">Figure )([^<]*)(</span>)')
+FIGCOUNT = {}
+
+
+def renumber_figs(s, start):
+    n = [start]
+
+    def sub(m):
+        n[0] += 1
+        return '%s%d%s' % (m.group(1), n[0], m.group(3))
+    return FIG_N_RE.sub(sub, s), n[0]
 
 
 def insert_generated(s, slug, deep):
@@ -707,6 +720,10 @@ def patch_chapter(i, deep):
         s = s.replace('</main>', '<p class="last-updated no-bubble">Last updated: %s</p>\n</main>' % UPDATED, 1)
     s = s.replace('<header class="read-head">', open_block(e) + '<header class="read-head">', 1)
     s = insert_generated(s, e[0], deep)
+    ver = 'full' if deep else 'short'
+    if ver not in FIGCOUNT:
+        FIGCOUNT[ver] = sum(1 for f in FIGS if f['chapter'] == 'front' and ver in (f.get('versions') or ['short', 'full']))
+    s, FIGCOUNT[ver] = renumber_figs(s, FIGCOUNT[ver])
     s = with_example_css(s)
     blk = end_block(i, deep)
     anchor = '<p class="last-updated'
@@ -933,11 +950,83 @@ def chapter_end(e, deep, here):
     return s
 
 
+# Words that only make sense on the website, as the book says them (the packages, on screen and on paper).
+PRINT_SWAPS = [
+    ('Tools and reading on this site', 'Tools and reading on the website'),
+    ('This site’s idea', 'This book’s idea'), ('this site’s idea', 'this book’s idea'),
+    ('this site’s own', 'this book’s own'), ('This site uses', 'This book uses'), ('this site uses', 'this book uses'),
+    ('runs through this site', 'runs through this book'),
+    ('Research notes on this page', 'Research notes in this chapter'),
+    ('The cards above say', 'The sections above say'), ('read one card and stop', 'read one section and stop'),
+    ('more than anything on this page', 'more than anything in this book'),
+    ('You close the book, or the tab.', 'You close the book.'),
+    ('The research behind this site', 'The research behind this book'),
+    ('Help beyond this site', 'Help beyond this book'),
+    ('All chapters in the book’s contents', 'All chapters in the contents'),
+]
+# site pages that the book itself covers in print, so they need no address
+NO_ADDRESS = re.compile(r'^/(?:research\.html|five-pillars\.html|glossary\.html)(?:[#?]|$)')
+XREFS = set()
+
+
+def short_address(url):
+    """spreadloveandacceptance.com/friends for /friends.html#gone-quiet; the bare domain for other sites."""
+    if url.startswith('/'):
+        path = re.sub(r'[#?].*$', '', url)
+        path = re.sub(r'(?:/index)?\.html$', '', path)
+        return 'spreadloveandacceptance.com' + (path if path != '/' else '')
+    m = re.match(r'https?://(?:www\.)?([^/#?]+)', url)
+    return m.group(1) if m else ''
+
+
+def print_links(body, slug, here):
+    """On paper a link goes nowhere. Links to another chapter in this book get a page number; links to a site
+    page get a short address the first time they appear in a chapter; rows that are only links (the arrow
+    rows, "From the library") and web-only notes are left off the printed page."""
+    for a, b in PRINT_SWAPS:
+        body = body.replace(a, b)
+    # rows of arrow links and library link rows: screen only
+    body = re.sub(r'<p>((?:\s*<a [^>]*>[^<]*(?:&rarr;|→)\s*</a>)+\s*)</p>', r'<p class="pe-noprint">\1</p>', body)
+    body = re.sub(r'<li>(\s*From the library:)', r'<li class="pe-noprint">\1', body)
+    body = re.sub(r'(\s*<a href="[^"]*/library/[^"]*">More in the Library</a>\.)', r'<span class="pe-noprint">\1</span>', body)
+    seen = set()
+
+    def sub(m):
+        attrs, text = m.group(1), m.group(2)
+        hm = re.search(r'\bhref="([^"]+)"', attrs)
+        if not hm or 'data-u=' in attrs or 'class="dig' in attrs:
+            return m.group(0)
+        h = html.unescape(hm.group(1))
+        if h.startswith('#'):
+            tgt = h[1:]
+            ch = tgt.split('--')[0]
+            if ch == slug or ch not in here:
+                return m.group(0)
+            if '--' in tgt:
+                key = 'a-' + tgt
+                XREFS.add(tgt)
+            else:
+                key = tgt
+            return m.group(0) + '<span class="pe-only pe-xref"> (page %s)</span>' % pg(key)
+        if h.startswith('/') and NO_ADDRESS.match(h):
+            return m.group(0)
+        if not (h.startswith('/') or h.startswith('http')):
+            return m.group(0)
+        addr = short_address(h)
+        plain = strip_tags(text).strip().lower()
+        if not addr or addr in seen or addr.lower() in plain or plain.startswith('spreadloveandacceptance.com'):
+            return m.group(0)
+        seen.add(addr)
+        return m.group(0) + '<span class="pe-only pe-u"> (%s)</span>' % esc(addr)
+    return re.sub(r'<a\b([^>]*)>(.*?)</a>', sub, body, flags=re.S)
+
+
 def package_chapter(e, deep, here):
     src = PAGES[(e[0], deep)]
     body = clean_for_whole(main_inner(src), e[0], deep, here)
     body = drop_element(body, r'<header class="read-head', 'header')
     body = re.sub(r'<p class="simple-lede">.*?</p>', '', body, count=1, flags=re.S)
+    body = print_links(body, e[0], here)
     body = tag_boxes(demote(body))
     col, tint = PCOL[e[1]]
     return '<article class="whole-ch pe-ch" id="%s" data-part="%d" style="--pc:%s;--pt:%s">%s\n<div class="pe-body">%s</div>\n%s<p class="whole-top no-print"><a href="#contents">Contents</a> · <a href="%s">Open this chapter on its own page</a></p></article>' % (
@@ -1007,6 +1096,34 @@ def ref_html(r):
         au, yr, t, esc(r.get('finding', '')), link)
 
 
+EX_WRAP_RE = re.compile(r'(<div class="book-ex-wrap[^"]*" data-ex-n=")\d+(" data-ex-title="[^"]*">\s*<figure class="bk-ex[^"]*"[^>]*\bid="([^"]+)".*?<span class="bk-ex-k">)Filled-in example[^<]*(</span>)', re.S)
+FIG_RE = re.compile(r'(<figure class="book-fig[^"]*" id="([^"]+)".*?<span class="book-fig-n">Figure )[^<]*(</span>)', re.S)
+
+
+def finish_package(body):
+    """Number the figures and the filled-in examples of one book from 1, in page order, print the example's
+    number on its tab, and put a page marker at every place a cross-reference points to."""
+    figs, exs = [], []
+    byid = {f['id']: f for f in FIGS}
+    exid = {x['id']: x for x in EXS}
+
+    def fsub(m):
+        fid = m.group(2)
+        figs.append((fid, len(figs) + 1, byid.get(fid.split('--', 1)[-1])))
+        return '%s%d%s' % (m.group(1), len(figs), m.group(3))
+    body = FIG_RE.sub(fsub, body)
+
+    def xsub(m):
+        xid = m.group(3)
+        x = exid.get(xid.split('--', 1)[-1])
+        exs.append((xid, len(exs) + 1, x))
+        return '%s%d%sFilled-in example %d%s' % (m.group(1), len(exs), m.group(2), len(exs), m.group(4))
+    body = EX_WRAP_RE.sub(xsub, body)
+    for t in XREFS:
+        body = re.sub(r'(<[a-zA-Z][^>]*\bid="%s"[^>]*>)' % re.escape(t), lambda m: m.group(1) + mark('a-' + t), body, count=1)
+    return body, figs, exs
+
+
 def back_matter(name, deep, here, gloss, notes, figs, exs):
     col = PCOL[4][0]
     s = ''
@@ -1017,20 +1134,24 @@ def back_matter(name, deep, here, gloss, notes, figs, exs):
         s += '<div class="pe-gl"><dt id="gl-%s">%s</dt><dd>%s%s</dd></div>' % (gid, esc(nm), d, (' <span class="pe-gl-ex">%s</span>' % ex) if ex else '')
     s += '</dl></section>'
     # list of figures and filled-in examples
+    # figs and exs are (anchor id, number, manifest entry), in page order (from finish_package)
     if figs:
         s += '<section class="pe-back pe-lof no-bubble no-cheer no-dive" data-no-bubble id="figures" style="--pc:%s">%s<h1 class="pe-back-h">List of figures</h1><ol class="pe-lof-list">' % (col, mark('figures'))
-        for f in figs:
+        for aid, n, f in figs:
+            f = f or {}
             cap = strip_tags(f.get('caption', '')).strip()
             cap = cap.split(': ')[0] if ': ' in cap[:70] else re.split(r'(?<=[.!?])\s', cap)[0]
-            s += '<li><a href="#%s"><span class="pe-lof-n">Figure %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
-                f['id'] if f['chapter'] == 'front' else '%s--%s' % (f['chapter'], f['id']), f['n'], esc(cap.rstrip('.')),
-                'Front of the book' if f['chapter'] == 'front' else esc(SHORT[f['chapter']]), pg('fig-%d' % f['n']))
+            ch = f.get('chapter') or aid.split('--')[0]
+            s += '<li><a href="#%s"><span class="pe-lof-n">Figure %d</span><span class="pe-lof-t">%s <em>· %s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
+                aid, n, esc(cap.rstrip('.')), 'Front of the book' if ch == 'front' else esc(SHORT.get(ch, '')), pg('fig-%d' % n))
         s += '</ol></section>'
     if exs:
         s += '<section class="pe-back pe-lof no-bubble no-cheer no-dive" data-no-bubble id="examples" style="--pc:%s">%s<h1 class="pe-back-h">List of filled-in examples</h1><ol class="pe-lof-list">' % (col, mark('examples'))
-        for x in exs:
-            s += '<li><a href="#%s--%s"><span class="pe-lof-n">Example %d</span><span class="pe-lof-t">%s <em>%s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
-                x['chapter'], x['id'], x['n'], esc(x.get('title', '')), esc(' · '.join(v for v in (x.get('who'), SHORT[x['chapter']]) if v)), pg('ex-%d' % x['n']))
+        for aid, n, x in exs:
+            x = x or {}
+            ch = x.get('chapter') or aid.split('--')[0]
+            s += '<li><a href="#%s"><span class="pe-lof-n">Example %d</span><span class="pe-lof-t">%s <em>· %s</em></span><span class="pe-toc-dots"></span>%s</a></li>' % (
+                aid, n, esc(x.get('title', '')), esc(' · '.join(v for v in (x.get('who'), SHORT.get(ch)) if v)), pg('ex-%d' % n))
         s += '</ol></section>'
     # research notes
     n_refs = sum(len(v) for v in notes.values())
@@ -1112,6 +1233,9 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
         toc.append('<li><a href="#afterword"><strong>Afterword</strong>: %s</a></li>' % esc(TITLES['afterword']))
         ptoc.append(toc_row('afterword', 'Afterword', esc(TITLES['afterword']), 'is-back'))
         parts_html.append(package_chapter(e, deep, here))
+    front_html = front_matter(name, deep, parts, title, who, ptoc)
+    both, figs, exs = finish_package(front_html + '\n<!--pe-split-->\n' + '\n'.join(parts_html))
+    front_html, body_html = both.split('\n<!--pe-split-->\n', 1)
     text = ' '.join(strip_tags(main_inner(PAGES[(s_, deep)])) for s_ in here)
     gloss = glossary_terms(text)
     notes = research_notes(here)
@@ -1162,10 +1286,10 @@ if (/[?&]print=1\\b/.test(location.search)) window.addEventListener('load', func
 </script>
 </body>
 </html>
-''' % (fname, front_matter(name, deep, parts, title, who, ptoc), title.replace(' (Full Version)', ': the full version'), lede, name, other,
+''' % (fname, front_html, title.replace(' (Full Version)', ': the full version'), lede, name, other,
        'Switch to the short versions' if deep else 'Switch to the full versions',
        round(sum(WORDS[(s_, deep)] for s_ in here) / 220 / 5) * 5,
-       ''.join(toc), '\n'.join(parts_html), back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep))
+       ''.join(toc), body_html, back_matter(name, deep, here, gloss, notes, figs, exs), UPDATED, page_rules(here, deep))
     write(os.path.join(BOOK, fname + '.html'), page)
 
 

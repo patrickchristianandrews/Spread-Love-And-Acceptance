@@ -1,0 +1,70 @@
+[
+ {
+  "id": "shaw-2014-emotion-dysregulation-adhd",
+  "authors": "Shaw, P., Stringaris, A., Nigg, J., & Leibenluft, E.",
+  "year": 2014,
+  "title": "Emotion dysregulation in attention deficit hyperactivity disorder",
+  "venue": "American Journal of Psychiatry, 171(3), 276-293",
+  "doi": "10.1176/appi.ajp.2013.13070966",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/24480998/",
+  "kind": "review",
+  "finding": "A literature review found that trouble regulating emotions (quick, strong feelings that are hard to bring back down) is common in ADHD across the lifespan, with clinic studies of young people putting it at roughly a quarter to a half, and that it adds a lot to the day-to-day difficulty ADHD brings.",
+  "strength": "moderate: a widely cited review; the estimates come mostly from clinic samples, and how emotion dysregulation fits into ADHD is still debated.",
+  "topics": [
+   "adhd",
+   "emotions",
+   "anger"
+  ],
+  "mentioned_on": [
+   "/book/understanding-13-anger-in-depth.html#body",
+   "/book/understanding-2-stress-in-depth.html#flooding"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24480998/ and https://pmc.ncbi.nlm.nih.gov/articles/PMC4282137 (search result, Oct 2026)"
+ },
+ {
+  "id": "janis-1972-groupthink",
+  "authors": "Janis, I. L.",
+  "year": 1972,
+  "title": "Victims of Groupthink: A Psychological Study of Foreign-Policy Decisions and Fiascoes",
+  "venue": "Boston: Houghton Mifflin (book)",
+  "doi": null,
+  "url": "https://en.wikipedia.org/wiki/Groupthink",
+  "kind": "book",
+  "finding": "Named “groupthink”: in a close-knit group, the wish to agree can crowd out a realistic look at the options. Janis drew on case studies of policy decisions such as the Bay of Pigs invasion, and suggested remedies such as leaders holding back their own view at first and someone being asked to argue the other side.",
+  "strength": "mixed: an influential idea built on case studies; later research supports parts of it (pressure to agree, unshared doubts) more than the full model.",
+  "topics": [
+   "groups",
+   "work",
+   "decisions"
+  ],
+  "mentioned_on": [
+   "/book/understanding-17-groups-in-depth.html#dissent"
+  ],
+  "verified": true,
+  "verified_by": "Library catalogue record (Boston, Houghton Mifflin, 1972) and https://en.wikipedia.org/wiki/Groupthink (search result, Oct 2026)"
+ },
+ {
+  "id": "gordon-baucom-snyder-2004",
+  "authors": "Gordon, K. C., Baucom, D. H., & Snyder, D. K.",
+  "year": 2004,
+  "title": "An integrative intervention for promoting recovery from extramarital affairs",
+  "venue": "Journal of Marital and Family Therapy, 30(2), 213-231",
+  "doi": null,
+  "url": "https://pubmed.ncbi.nlm.nih.gov/15114949/",
+  "kind": "study",
+  "finding": "In a small study of six couples who had a structured couples therapy after an affair, most were less distressed by the end, and the hurt partners reported more forgiveness. The therapy moved in stages: dealing with the shock, understanding how the affair came about, and then deciding how to move on.",
+  "strength": "limited: six couples and no comparison group; a starting point, not proof. It suggests recovery is possible with structured help.",
+  "topics": [
+   "affairs",
+   "repair",
+   "forgiveness",
+   "couples"
+  ],
+  "mentioned_on": [
+   "/book/understanding-11-healing-in-depth.html#after-an-affair"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/15114949/ (search result, Oct 2026)"
+ }
+]

@@ -97,7 +97,7 @@
   ],
   "lang": "en",
   "dir": "ltr",
-  "orientation": "portrait",
+  "orientation": "any",
   "categories": [
     "health",
     "lifestyle",

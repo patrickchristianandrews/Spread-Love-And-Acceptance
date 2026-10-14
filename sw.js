@@ -13,7 +13,7 @@ var VERSION = 'tol-v142';
 // A first visit saves only this small shell (so the offline page works). The full list below is saved only
 // once the site is installed as an app (site.js asks for it), so a visitor on a metered plan never
 // downloads megabytes they didn't ask for. Everything else is saved the first time it's used.
-var SHELL = ['/', '/index.html', '/offline.html', '/assets/css/site.css', '/assets/css/reading.css', '/assets/js/site.js', '/assets/img/logo-mark.svg', '/manifest.webmanifest'];
+var SHELL = ['/', '/index.html', '/offline.html', '/assets/css/site.css', '/assets/css/reading.css', '/assets/js/site.js', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/assets/img/logo-mark.svg', '/manifest.webmanifest'];
 var CORE = [
   '/', '/index.html', '/offline.html',
   '/night-garden.html', '/bears-dojo.html', '/quiet-words.html', '/word-bloom.html', '/quiet-crossword.html', '/pause-and-play.html', '/ask.html', '/whats-new.html', '/frequency-journey.html', '/frequency-journey-play.html', '/pal-cam-tv.html', '/frequency-buddies.html', '/frequency-buddies-live.html', '/daily-ledger-crossword.html', '/garden-backdrop.html', '/turning-toward.html', '/quick-checks.html', '/lemonade-stand.html', '/install.html', '/upset-right-now.html', '/share-the-load.html', '/new-parent.html', '/co-parenting.html', '/surprise.html', '/method-and-limits.html',
@@ -27,7 +27,7 @@ var CORE = [
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
   '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/share-clip.js', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',
   '/reading.html', '/assets/js/reading-page.js', '/assets/js/reading-list.js', '/assets/js/reading-suggest.js', '/assets/js/buddies-suggest.js',
-  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'
+  '/assets/img/mascots/two-bubbles.svg', '/assets/img/logo-mark.svg', '/assets/img/logo-mark-wink.svg', '/assets/img/logo-mark-dark.svg', '/assets/img/logo-mark.png', '/assets/img/logo-mark-wink.png', '/assets/icons/icon-192.png', '/assets/icons/icon-maskable-192.png', '/assets/icons/icon-maskable-512.png', '/assets/icons/apple-touch-icon-180.png', '/assets/js/app-bar.js', '/assets/css/app-bar.css', '/manifest.webmanifest'
 ];
 
 self.addEventListener('install', function (e) {

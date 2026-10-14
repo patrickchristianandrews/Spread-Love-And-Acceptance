@@ -1,0 +1,60 @@
+{
+ "about": "The 'Find it fast' map at the front of the book (bookfixB1). tools/book/front_back.py turns it into a table. Each row: the problem in a reader's own words, one or two places in the book (chapter slug plus, for each version, a list of section ids to try in order: the first id found in that chapter page is used, otherwise the chapter's first page), and one tool to try. A place in a chapter that isn't in this copy of the book shows as 'online'. Page numbers are filled by the builder's marker system (keys 'slug' or 'slug--id').",
+ "groups": [
+  {
+   "title": "Sharing the load",
+   "rows": [
+    {"problem": "We keep arguing about chores.", "refs": [{"ch": "chapter-2", "full": ["ownership"], "short": [], "label": "One owner per job"}, {"ch": "chapter-4", "full": ["owner"], "short": ["e-owner"], "label": "Look to the owner"}], "tool": ["One owner per job", "/workpapers/wp-03-one-owner-per-job.html"]},
+    {"problem": "I do the remembering and planning, and nobody sees it (the mental load).", "refs": [{"ch": "preface", "full": ["mental-load", "kinds-of-work"], "short": ["mental-load"], "label": "The work nobody sees"}], "tool": ["Who did what", "/workpapers/wp-01.html"]},
+    {"problem": "We each think we do more than our share.", "refs": [{"ch": "preface", "full": ["why-unseen"], "short": [], "label": "Why the other person doesn’t see it"}, {"ch": "understanding-3-seeing", "full": ["realism"], "short": [], "label": "Everyone feels like the one who sees clearly"}], "tool": ["Who did what", "/workpapers/wp-01.html"]},
+    {"problem": "The same job keeps slipping, week after week.", "refs": [{"ch": "chapter-5", "full": ["deficit"], "short": ["e-no-owner"], "label": "A repeat usually has no real owner"}], "tool": ["What keeps coming back?", "/workpapers/wp-04-what-keeps-coming-back.html"]},
+    {"problem": "Is the way we share things fair? Can it last?", "refs": [{"ch": "chapter-2", "full": ["formula", "inputs"], "short": [], "label": "The setup score"}, {"ch": "chapter-4", "full": ["parity"], "short": ["e-two-kinds"], "label": "Two kinds of fair"}], "tool": ["Is the setup working for everyone?", "/is-the-setup-working.html"]},
+    {"problem": "We’ve just had a baby and we’re both exhausted.", "refs": [{"ch": "chapter-2", "full": ["new-baby", "small-children", "trend"], "short": ["new-baby", "small-children"], "label": "New babies and small children"}, {"ch": "understanding-2-stress", "full": ["rest"], "short": [], "label": "Rest isn’t one thing"}], "tool": ["How much are you carrying?", "/workpapers/wp-02-how-much-are-you-carrying.html"]},
+    {"problem": "We’re about to move in together.", "refs": [{"ch": "chapter-4", "full": ["moving-in", "before-you-move-in", "agreeing"], "short": ["moving-in", "before-you-move-in"], "label": "Before you move in"}], "tool": ["The Lemonade Stand", "/lemonade-stand.html"]},
+    {"problem": "Money between us feels unfair.", "refs": [{"ch": "chapter-4", "full": ["money", "money-together"], "short": ["money", "money-together"], "label": "Money, shared or separate"}], "tool": ["The Lemonade Stand: the Money tab", "/lemonade-stand.html"]},
+    {"problem": "We co-parent across two homes.", "refs": [{"ch": "chapter-3", "full": ["two-homes", "co-parenting", "coparenting"], "short": ["two-homes", "co-parenting", "coparenting"], "label": "Two homes"}, {"ch": "chapter-5", "full": ["worked-example-2", "sort-examples"], "short": [], "label": "A list for two homes"}], "tool": ["One owner per job", "/workpapers/wp-03-one-owner-per-job.html"]},
+    {"problem": "We share a house with a housemate, or more than two of us share a home.", "refs": [{"ch": "chapter-4", "full": ["housemate", "housemates", "three-of-us"], "short": ["housemate", "housemates"], "label": "A couple and a housemate"}, {"ch": "chapter-2", "full": ["balance"], "short": [], "label": "Three or more of you"}], "tool": ["The Lemonade Stand", "/lemonade-stand.html"]},
+    {"problem": "I’m raising my grandchild (kinship care).", "refs": [{"ch": "chapter-5", "full": ["kinship", "kinship-care", "grandparents"], "short": ["kinship", "kinship-care", "grandparents"], "label": "Raising a grandchild"}], "tool": ["One owner per job", "/workpapers/wp-03-one-owner-per-job.html"]},
+    {"problem": "I’m caring for a parent or partner, and it’s wearing me down.", "refs": [{"ch": "understanding-12-helping", "full": ["boundaries", "burnout"], "short": [], "label": "Your limits make your help last"}, {"ch": "chapter-3", "full": ["baseline"], "short": [], "label": "When “full” has become normal"}], "tool": ["How much are you carrying?", "/workpapers/wp-02-how-much-are-you-carrying.html"]},
+    {"problem": "I’m the only one who wants to try this.", "refs": [{"ch": "chapter-2", "full": ["one-on-board"], "short": ["one-person"], "label": "When only one of you is on board"}], "tool": ["Who did what (your side only)", "/workpapers/wp-01.html"]},
+    {"problem": "Someone handed me this book, and I’m not sure why.", "refs": [{"front": "handed", "label": "If someone handed you this book"}], "tool": ["One owner per job", "/workpapers/wp-03-one-owner-per-job.html"]}
+   ]
+  },
+  {
+   "title": "Talking it through",
+   "rows": [
+    {"problem": "Small things turn into big rows.", "refs": [{"ch": "chapter-1", "full": ["state", "retuning"], "short": [], "label": "How stress changes your frequency"}, {"ch": "understanding-2-stress", "full": ["flooding"], "short": [], "label": "When you’re flooded"}], "tool": ["The Calm-Down Kit", "/wp-11.html"]},
+    {"problem": "One of us goes quiet and the other pushes for an answer.", "refs": [{"ch": "understanding-5-belonging", "full": ["safe-haven", "patterns"], "short": [], "label": "Feeling safe with someone"}, {"ch": "self-2-now", "full": ["settle"], "short": ["p-settle"], "label": "Plan what settles you"}], "tool": ["The Calm-Down Kit: our pause plan", "/wp-11.html"]},
+    {"problem": "Texts and messages keep landing wrong.", "refs": [{"ch": "understanding-4-communication", "full": ["messages"], "short": [], "label": "Messages lose their tone"}], "tool": ["Text message checker", "/signal-translator.html"]},
+    {"problem": "We move and talk at different speeds.", "refs": [{"ch": "chapter-1", "full": ["frequency", "almost"], "short": [], "label": "What sets the frequency"}], "tool": ["Same moment, different speeds", "/workpapers/fill/wp-12.html"]},
+    {"problem": "A comment stings and I snap back.", "refs": [{"ch": "chapter-4", "full": ["gating"], "short": ["e-land"], "label": "Let a comment land before you react"}], "tool": ["Say it so it lands", "/workpapers/wp-09-say-it-so-it-lands.html"]},
+    {"problem": "We need to say sorry and mend things.", "refs": [{"ch": "understanding-11-healing", "full": ["apology"], "short": [], "label": "A real apology"}, {"ch": "understanding-4-communication", "full": ["repair"], "short": [], "label": "Repair is the skill"}], "tool": ["Say it so it lands", "/workpapers/wp-09-say-it-so-it-lands.html"]},
+    {"problem": "Conflict at work, with a colleague or in a team.", "refs": [{"ch": "understanding-4-communication", "full": ["feedback", "at-work", "hard-things"], "short": ["feedback", "at-work"], "label": "Saying hard things kindly"}, {"ch": "understanding-17-groups", "full": ["groupthink", "dissent"], "short": ["groupthink", "dissent"], "label": "Disagreeing kindly in a group"}], "tool": ["Say it so it lands", "/workpapers/wp-09-say-it-so-it-lands.html"]},
+    {"problem": "Is it us, or is it everything else going on?", "refs": [{"ch": "chapter-3", "full": ["leftover"], "short": [], "label": "Leftover stress"}], "tool": ["Is it us, or is it everything else?", "/workpapers/fill/wp-14.html"]}
+   ]
+  },
+  {
+   "title": "Knowing yourself",
+   "rows": [
+    {"problem": "I can’t tell what I’m feeling.", "refs": [{"ch": "self-2-now", "full": ["hard-to-name"], "short": ["hard-to-name"], "label": "When feelings are hard to name"}, {"ch": "understanding-1-feelings", "full": ["naming"], "short": [], "label": "Naming a feeling helps you hold it"}], "tool": ["Today’s Weather", "/quick-checks.html#today"]},
+    {"problem": "I’m wiped out and everything feels like too much.", "refs": [{"ch": "self-2-now", "full": ["state-words", "state"], "short": ["state-words", "p-state"], "label": "Check your weather; one state, many words"}, {"ch": "understanding-2-stress", "full": ["load"], "short": [], "label": "Stress adds up, like a tank filling"}], "tool": ["How much are you carrying?", "/workpapers/wp-02-how-much-are-you-carrying.html"]},
+    {"problem": "ADHD: I’m overwhelmed and keep forgetting things.", "refs": [{"ch": "understanding-9-minds", "full": ["adhd"], "short": [], "label": "ADHD, time and motivation"}, {"ch": "self-2-now", "full": ["different"], "short": ["p-different"], "label": "Different isn’t wrong"}], "tool": ["Wiring Card", "/wiring-card.html"]},
+    {"problem": "I’m autistic, and people keep misreading me (or I misread them).", "refs": [{"ch": "self-2-now", "full": ["double-empathy"], "short": ["double-empathy"], "label": "A mix-up runs both ways"}, {"ch": "understanding-9-minds", "full": ["autism"], "short": [], "label": "Autism and the double empathy problem"}], "tool": ["Wiring Card", "/wiring-card.html"]},
+    {"problem": "Old rules from childhood still run my reactions.", "refs": [{"ch": "self-1-then", "full": ["rulebook", "rules"], "short": ["p-rulebook"], "label": "Write down the rulebook from home"}], "tool": ["The self path: where your lens came from", "/self-path.html#lens"]},
+    {"problem": "My inner critic is loud.", "refs": [{"ch": "understanding-7-worth", "full": ["critic"], "short": [], "label": "The critic and the soothing system"}], "tool": ["The Calm-Down Kit", "/wp-11.html"]},
+    {"problem": "I want to change a habit, but it keeps slipping.", "refs": [{"ch": "self-3-next", "full": ["tiny", "if-then"], "short": ["p-tiny"], "label": "Tiny, repeatable steps"}, {"ch": "understanding-6-change", "full": ["slips"], "short": [], "label": "Slips are part of change"}], "tool": ["The self path, step by step", "/self-path.html#steps"]}
+   ]
+  },
+  {
+   "title": "Hard seasons",
+   "rows": [
+    {"problem": "Someone I love has died.", "refs": [{"ch": "understanding-8-loss", "full": ["waves", "later-life"], "short": ["later-life"], "label": "Grief comes in waves"}], "tool": ["Grief and later life", "/grief.html"]},
+    {"problem": "I feel lonely, or I live on my own.", "refs": [{"ch": "understanding-5-belonging", "full": ["building"], "short": ["on-your-own"], "label": "Building connection from where you are"}, {"ch": "self-3-next", "full": ["support"], "short": ["p-support"], "label": "Ask for support"}], "tool": ["Living alone", "/living-alone.html"]},
+    {"problem": "A teenager’s anger, or I’m a teenager and I’m angry.", "refs": [{"ch": "understanding-13-anger", "full": ["teen", "teens", "hot-minutes"], "short": ["teen", "teens"], "label": "The hot minutes"}], "tool": ["The Calm-Down Kit", "/wp-11.html"]},
+    {"problem": "Left out of a group, a friend group or a group chat.", "refs": [{"ch": "understanding-17-groups", "full": ["online", "pull"], "short": ["online", "pull"], "label": "Groups online, and their pull"}, {"ch": "understanding-5-belonging", "full": ["groups"], "short": [], "label": "Fitting in isn’t belonging"}], "tool": ["Text message checker", "/signal-translator.html"]},
+    {"problem": "Worry keeps me awake, or my mood is low.", "refs": [{"ch": "understanding-16-worry", "full": ["worry-time", "low-mood"], "short": ["worry-time", "low-mood"], "label": "Worry time; low mood"}], "tool": ["How much are you carrying?", "/workpapers/wp-02-how-much-are-you-carrying.html"]},
+    {"problem": "I’m thinking about ending my life, or I’m worried someone is.", "refs": [{"front": "help-now", "label": "If you need help now"}], "tool": ["Call or text a crisis line now", "/safety.html"]}
+   ]
+  }
+ ]
+}

@@ -199,9 +199,14 @@
   }
 
   // ---------------------------------------------------------------- the line at the top
-  function css() {
+  // the styles, once; done() runs when they are in (or after a short wait), so the line is drawn styled, with no jump
+  var cssReady = false, cssWait = [];
+  function css(done) {
+    if (done) { if (cssReady) done(); else cssWait.push(done); }
     if (document.getElementById('tol-appbar-css')) return;
     var l = document.createElement('link'); l.id = 'tol-appbar-css'; l.rel = 'stylesheet'; l.href = '/assets/css/app-bar.css';
+    function ready() { if (cssReady) return; cssReady = true; cssWait.splice(0).forEach(function (f) { f(); }); }
+    l.onload = ready; l.onerror = ready; setTimeout(ready, 2500);
     document.head.appendChild(l);
   }
   var ICON = '<img class="tol-appbar-ic" src="/assets/icons/apple-touch-icon-180.png" alt="" width="24" height="24">';
@@ -265,12 +270,12 @@
     var bar = document.querySelector('aside.tol-appbar');
     if (!bar) return;
     if (standalone() || /\/install\.html$/.test(location.pathname) || ssGet(OFF) === '1') { bar.remove(); return; }
-    css();
-    render(bar);
+    css(function () { render(bar); });
     // Chrome or Edge may offer the install a moment later (site.js keeps the offer), or the app may get installed
-    window.addEventListener('beforeinstallprompt', function () { setTimeout(function () { render(bar); }, 0); });
-    window.addEventListener('appinstalled', function () { setTimeout(function () { render(bar); }, 0); });
-    document.addEventListener('tol-app-installed', function () { render(bar); });
+    function again() { setTimeout(function () { css(function () { render(bar); }); }, 0); }
+    window.addEventListener('beforeinstallprompt', again);
+    window.addEventListener('appinstalled', again);
+    document.addEventListener('tol-app-installed', again);
   }
 
   window.TOLAppBar = { guide: guide, drawings: drawings, where: where, ios: IOS };

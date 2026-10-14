@@ -1,0 +1,93 @@
+[
+ {
+  "id": "kinnaird-2019",
+  "authors": "Kinnaird, E., Stewart, C., & Tchanturia, K.",
+  "year": 2019,
+  "title": "Investigating alexithymia in autism: A systematic review and meta-analysis",
+  "venue": "European Psychiatry, 55, 80–89",
+  "doi": "10.1016/j.eurpsy.2018.09.004",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6331035/",
+  "kind": "meta-analysis",
+  "finding": "Across 15 studies, about half of autistic participants (around 50%) had high alexithymia compared with about 5% of comparison participants; alexithymia is common in autism but not universal.",
+  "strength": "moderate: consistent across studies, but based mostly on self-report questionnaires.",
+  "topics": [
+   "alexithymia",
+   "neurodiversity",
+   "autism"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#hard-to-name"
+  ],
+  "verified": true,
+  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6331035/",
+  "note": "Same work as in refs-c; repeated here only to add where it now shows up (Part One, Now: the new section on feelings that are hard to name, bookfixB1)."
+ },
+ {
+  "id": "sifneos-1973",
+  "authors": "Sifneos, P. E.",
+  "year": 1973,
+  "title": "The prevalence of \"alexithymic\" characteristics in psychosomatic patients",
+  "venue": "Psychotherapy and Psychosomatics, 22(2–6), 255–262",
+  "doi": null,
+  "url": "https://karger.com/pps/article/22/2-6/255/280361/The-Prevalence-of-Alexithymic-Characteristics-in",
+  "kind": "study",
+  "finding": "Introduced the term \"alexithymia\" for difficulty finding words for feelings, along with a limited fantasy life, and found these traits more often in psychosomatic patients than in controls.",
+  "strength": "early: small clinical sample; historically important as the origin of the term.",
+  "topics": [
+   "emotions",
+   "alexithymia"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#hard-to-name"
+  ],
+  "verified": true,
+  "verified_by": "https://karger.com/pps/article/22/2-6/255/280361/The-Prevalence-of-Alexithymic-Characteristics-in",
+  "note": "Same work as in refs-c; repeated here only to add where it now shows up (Part One, Now, bookfixB1)."
+ },
+ {
+  "id": "crompton-2020",
+  "authors": "Crompton, C. J., Ropar, D., Evans-Williams, C. V. M., Flynn, E. G., & Fletcher-Watson, S.",
+  "year": 2020,
+  "title": "Autistic peer-to-peer information transfer is highly effective",
+  "venue": "Autism, 24(7), 1704–1712",
+  "doi": "10.1177/1362361320919286",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656/",
+  "kind": "study",
+  "finding": "In \"diffusion chains\" where a story was passed along eight people (72 adults), all-autistic chains passed on as much detail as all-non-autistic chains, while mixed chains lost detail faster and reported lower rapport.",
+  "strength": "moderate: a careful experiment that supports the double empathy idea; modest sample and a single task.",
+  "topics": [
+   "neurodiversity",
+   "autism",
+   "double-empathy"
+  ],
+  "mentioned_on": [
+   "/book/self-2-now-in-depth.html#double-empathy",
+   "/book/self-2-now.html"
+  ],
+  "verified": true,
+  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7545656 ; https://nottingham-repository.worktribe.com/output/5141376",
+  "note": "Same work as in refs-c; repeated here only to add where it now shows up (Part One, Now: the new double empathy section, bookfixB1)."
+ },
+ {
+  "id": "osc-2015-reproducibility",
+  "authors": "Open Science Collaboration",
+  "year": 2015,
+  "title": "Estimating the reproducibility of psychological science",
+  "venue": "Science, 349(6251), aac4716",
+  "doi": "10.1126/science.aac4716",
+  "url": "https://doi.org/10.1126/science.aac4716",
+  "kind": "study",
+  "finding": "A large team re-ran 100 published psychology studies with the original materials where they could. 97% of the originals had reported a clear result, but only about a third (36%) of the repeats did, and the effects in the repeats were on average about half the size of the originals.",
+  "strength": "strong: a large, preregistered, many-lab project; it shows how often single studies fail to repeat, though how to judge a 'successful' repeat is still debated.",
+  "topics": [
+   "research-literacy",
+   "replication"
+  ],
+  "mentioned_on": [
+   "/research.html"
+  ],
+  "verified": true,
+  "verified_by": "https://osf.io/ezcuj/wiki ; https://research-portal.uu.nl/en/publications/estimating-the-reproducibility-of-psychological-science/ (search results, Oct 2026)",
+  "note": "Cited in the book's 'Reading research' box at the start of the research notes (tools/book/back-reading-research.html, bookfixB1)."
+ }
+]
