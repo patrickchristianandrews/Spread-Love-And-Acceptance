@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/household.js" defer></script>
+<script src="/assets/js/collab.js" defer></script>
 <script src="/assets/js/fridge-sheet.js" defer></script>
 <script src="/assets/js/clarify.js" defer></script>
 <style>
@@ -168,7 +169,7 @@
   </fieldset>
   <div id="ci-home">
   <p>Jot a line or two together, then put it on the fridge or send it to each other. Anything you leave blank prints with room to write by hand.</p>
-  <p class="ci-send">To send it to the other person’s phone: tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
+  <p class="ci-send">Apart, or on two phones? Each of you can fill in your own part and pass it back and forth with <strong>Work on this together</strong>, under the card. Or tap <strong>Put it on the fridge</strong>, then <strong>Copy as text</strong> or <strong>Share</strong>. Until then, the words stay in this tab only.</p>
   <p class="ci-small">Three or more of you? Go round in turn: each person says one fact and how it landed, the next person says back what they heard, then it moves on. Everyone gets a turn before anyone answers.</p>
   <div data-tfs-mount="checkin"></div>
   <div class="tcl-slot" id="clarify-slot" hidden></div>
@@ -246,8 +247,25 @@
   // "Send as a link": the plan rides after the # (never sent to a server); it opens filled in on their phone
   function b64(o) { var b = new TextEncoder().encode(JSON.stringify(o)), s = ''; for (var i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function unb64(t) { t = t.replace(/-/g, '+').replace(/_/g, '/'); while (t.length % 4) t += '='; var bin = atob(t), a = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return JSON.parse(new TextDecoder().decode(a)); }
+  // "Work on this together" (collab.js): each person's version of the plan travels inside a link (#together=…),
+  // and opening one shows everyone's side by side, with "Use this" where they differ. Old #plan= links still open.
+  var collab = null;
+  document.addEventListener('DOMContentLoaded', function () {
+    var C = window.TOLCollab; if (!C || !C.attach) return;
+    var m = document.createElement('div'); fam.insertBefore(m, document.getElementById('cf-fridge'));
+    collab = C.attach({ tool: 'family-plan', page: '/check-ins.html?for=family', mount: m, shared: true,
+      title: ['our family plan', 'nuestro plan familiar'],
+      lede: 'Each of you can fill in the plan on your own phone and send it. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
+      fields: [{ k: 'names', en: 'Who’s in this plan', es: 'Quiénes están en el plan' }].concat(F.map(function (f) { return { k: f[0].slice(3), en: f[1] }; })),
+      mine: read,
+      fill: function (o) { fill(o); keep(); },
+      onMerge: function () { show('family'); } });
+    if (collab) fam.addEventListener('input', collab.changed);
+  });
   document.getElementById('cf-link').addEventListener('click', function () {
     var o = read(); if (!Object.keys(o).filter(function (k) { return k !== 'names'; }).length) { note.textContent = 'Fill in a line or two first.'; return; }
+    // the same "Send by" buttons as the panel below, with the link that keeps everyone's parts
+    if (collab && window.TOLCollab) { window.TOLCollab.sendSheet({ heading: 'Send our family plan', url: collab.link, title: 'Our family plan', text: 'Our family plan' + (o.names ? ' (' + o.names + ')' : '') + '. Open it to see it filled in, change anything, and send it back. Nothing is uploaded.' }); return; }
     var url = location.origin + '/check-ins.html?for=family#plan=' + b64(o);
     var t = 'Our family plan' + (o.names ? ' (' + o.names + ')' : '') + '. Open it to see it filled in, change anything, and send it back. Nothing is uploaded.';
     if (window.TOLShare && window.TOLShare.share) { try { window.TOLShare.share({ title: 'Our family plan', text: t, url: url, result: true }); return; } catch (e) {} }

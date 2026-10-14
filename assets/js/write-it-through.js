@@ -555,7 +555,18 @@
     if (t.lk) p.lk = t.lk;
     return p;
   }
-  function linkFor(p) { return location.origin + location.pathname + '#letter=' + b64urlEnc(JSON.stringify(p)); }
+  // "#together=…" (collab.js: squeezed, the site's shared format for two-person tools) where it's loaded;
+  // the older "#letter=…" otherwise. Both open here.
+  function linkFor(p) {
+    var C = window.TOLCollab;
+    if (C && C.wrap) { try { return C.wrap('letter', p, { page: location.pathname, name: p.fn || '' }); } catch (e) {} }
+    return location.origin + location.pathname + '#letter=' + b64urlEnc(JSON.stringify(p));
+  }
+  function isLetterHash(h) {
+    if (HASH_RE.test(h || '')) return true;
+    var C = window.TOLCollab; if (!C || !/#together=/.test(h || '')) return false;
+    var env = C.read(h); return !env || env.t === 'letter';
+  }
   // the message becomes a turn in the conversation the first time it's sent, copied or shown as a code
   function commit() {
     if (committed) return committed;
@@ -598,7 +609,10 @@
     var c = conv(), to = c && c.them;
     if (how === 'share') {
       var msg = 'I wrote this down so I could say it calmly. It opens on a private page, and nothing is stored online.';
-      if (window.TOLShareKit && window.TOLShareKit.shareText) window.TOLShareKit.shareText({ title: to ? 'A message for ' + to : 'A message for you', text: msg, url: link, heading: 'Send your message' });
+      // the "Send by" buttons the site's other two-person tools use (QR code, text message, email, apps, copy)
+      if (window.TOLCollab && window.TOLCollab.sendSheet) window.TOLCollab.sendSheet({ heading: 'Send your message', url: link, title: to ? 'A message for ' + to : 'A message for you', text: msg, who: to, subject: to ? 'A message for ' + to : 'A message for you',
+        qrNote: 'For a phone in the same room. It opens the message on a private page there.' });
+      else if (window.TOLShareKit && window.TOLShareKit.shareText) window.TOLShareKit.shareText({ title: to ? 'A message for ' + to : 'A message for you', text: msg, url: link, heading: 'Send your message' });
       else if (window.TOLShare && window.TOLShare.share) window.TOLShare.share({ title: 'A message for you', text: msg, url: link, private: true });
       else copyText(link).then(function (ok) { say(ok ? 'Link copied. Paste it into a message to them.' : 'Couldn’t copy here.'); });
     } else if (how === 'link') {
@@ -618,9 +632,15 @@
   // ---------------------------------------------------------------- receiving a link
   var inbox = null;   // {turn, conv, note}
   function readHash() {
-    var m = HASH_RE.exec(location.hash || ''); if (!m) return false;
-    var p = null;
-    try { if (m[1].length < 20000) p = JSON.parse(b64urlDec(m[1])); } catch (e) { p = null; }
+    var m = HASH_RE.exec(location.hash || ''), p = null, C = window.TOLCollab;
+    if (!m && C && /#together=/.test(location.hash || '')) {
+      var env = C.read(location.hash);
+      if (env && env.t !== 'letter') return false;   // for another tool
+      p = env && env.x && typeof env.x === 'object' ? env.x : null;
+      m = [''];
+    }
+    if (!m) return false;
+    if (m[1]) try { if (m[1].length < 20000) p = JSON.parse(b64urlDec(m[1])); } catch (e) { p = null; }
     try { history.replaceState(null, '', location.pathname + location.search + '#wit-inbox'); } catch (e) {}
     if (!p || p.t !== 'tol-letter' || typeof p.c !== 'string' || typeof p.i !== 'string') { inbox = { bad: true }; return true; }
     // only plain text, trimmed, from a link
@@ -933,7 +953,7 @@
   $('wit-copytext').addEventListener('click', function () { if (committed) act('text', committed.turn, committed.link, committed.text); else sendVia('text'); });
   $('wit-clear').addEventListener('click', function () { clearForm(); renderAll(); say('Draft cleared.'); });
   $('wit-new').addEventListener('click', function () { S.cur = null; committed = null; inbox = null; mode = 'new'; replyTo = null; clearForm(); save(); renderAll(); $('wit-them').focus(); });
-  window.addEventListener('hashchange', function () { if (HASH_RE.test(location.hash)) { committed = null; mode = 'new'; replyTo = null; clearForm(); readHash(); renderAll(); var b = $('wit-inbox'); if (!b.hidden) b.scrollIntoView({ block: 'start' }); } });
+  window.addEventListener('hashchange', function () { if (isLetterHash(location.hash)) { committed = null; mode = 'new'; replyTo = null; clearForm(); readHash(); renderAll(); var b = $('wit-inbox'); if (!b.hidden) b.scrollIntoView({ block: 'start' }); } });
 
   // ---------------------------------------------------------------- start
   applyLiteral();

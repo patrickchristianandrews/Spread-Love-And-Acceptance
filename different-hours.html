@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/collab.js" defer></script>
 <style>
   .gp-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
   .gp-jump li{ margin:0; max-width:none; }
@@ -389,6 +390,35 @@
   });
   labels();
   build();
+  // "Work on this together" (collab.js): each of you sends your own hours (and your idea of the shared
+  // lines) inside a link, back and forth. Their hours go in the other row; where the shared lines differ,
+  // each one gets "Use this". Nothing is uploaded.
+  document.addEventListener('DOMContentLoaded', function () {
+    var C = window.TOLCollab; if (!C || !C.attach) return;
+    var SH = [['dh-sleep', 'Protected sleep', 'Sueño protegido'], ['dh-over', 'Where we overlap', 'Cuándo coincidimos'], ['dh-together', 'Our together time', 'Nuestro tiempo juntos'], ['dh-check', 'Check in at the shift change', 'Hablar en el cambio de turno'], ['dh-jobs', 'Home jobs', 'Tareas de la casa']];
+    function mi() { return me >= 0 ? me : 0; }
+    var mm = document.createElement('div'); box.appendChild(mm);
+    var collab = C.attach({ tool: 'our-week', page: '/different-hours.html', mount: mm, shared: true, own: ['hours'],
+      title: ['our week on one page', 'nuestra semana en una página'],
+      lede: 'Fill in your own hours on your phone and send them. They add theirs and send it back. Their hours go in the other row; where the shared lines differ, each one gets “Use this”.',
+      fields: [{ k: 'hours', en: 'Shifts or work hours this week', es: 'Turnos u horas de trabajo esta semana' }].concat(SH.map(function (x) { return { k: x[0].slice(3), en: x[1], es: x[2] }; })),
+      name: function () { return v('dh-n' + (mi() + 1)); },
+      mine: function () { var o = { hours: v('dh-r' + (mi() + 1)) }; SH.forEach(function (x) { o[x[0].slice(3)] = v(x[0]); }); return o; },
+      fill: function (d) { if (typeof d.hours === 'string') el('dh-r' + (mi() + 1)).value = d.hours.slice(0, 300); SH.forEach(function (x) { var k = x[0].slice(3); if (typeof d[k] === 'string') el(x[0]).value = d[k].slice(0, 300); }); build(); labels(); keep(); },
+      onMerge: function (env) {
+        // the first other person's hours go in the other row (matched by name where it has one)
+        var ids = Object.keys(env.p).sort(function (a, b) { return (env.p[b].at || 0) - (env.p[a].at || 0); }), o = 1 - mi();
+        var hit = ids.filter(function (k) { return (env.p[k].n || '').toLowerCase() === v('dh-n' + (o + 1)).toLowerCase() && v('dh-n' + (o + 1)); })[0] || ids[0];
+        if (hit) {
+          var p = env.p[hit];
+          if (me < 0) me = 0;
+          if (p.n && !v('dh-n' + (o + 1))) el('dh-n' + (o + 1)).value = p.n.slice(0, 40);
+          if (typeof p.d.hours === 'string' && p.d.hours) el('dh-r' + (o + 1)).value = p.d.hours.slice(0, 300);
+        }
+        build(); labels(); keep();
+      } });
+    if (collab) box.addEventListener('input', collab.changed);
+  });
   document.getElementById('dh-copy').addEventListener('click', function () {
     var t = build();
     if (!t) { note.textContent = 'Fill in a line or two first.'; return; }

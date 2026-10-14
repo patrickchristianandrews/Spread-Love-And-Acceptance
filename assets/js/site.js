@@ -167,7 +167,7 @@
       { href: '/relationships.html#partners', deep: true, code: '', title: 'Partners', note: 'Start with who did what, one owner per job, and the daily check-in' },
       { href: '/relationships.html#family', deep: true, code: '', title: 'Family', note: 'Start with getting back in tune, one owner per job, and saying it so it lands' },
       { href: '/relationships.html#co-parents', deep: true, code: '', title: 'Co-parents', note: 'Start with one owner per job, saying it so it lands, and the monthly look-back' },
-      { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with Turning Toward, the Conversation Reader, and saying it so it lands' },
+      { href: '/relationships.html#friends', deep: true, code: '', title: 'Friends', note: 'Start with Turning Toward, the Chat analyzer, and saying it so it lands' },
       { href: '/relationships.html#roommates', deep: true, code: '', title: 'Roommates', note: 'Start with the Lemonade Stand, one owner per job, and the daily check-in' },
       { href: '/relationships.html#coworkers', deep: true, code: '', title: 'Coworkers & teams', note: 'Start with one owner per job, getting back in tune, and saying it so it lands' },
       { href: '/work.html', code: 'New', title: 'At work', note: 'The plain version for teams, with no cartoons: one owner per job, messages, appreciation, a team session' },
@@ -270,11 +270,10 @@
     { id: 'tools', title: 'Tools', blurb: 'Interactive pages. Everything you type stays in your own browser.', items: [
       { href: '/tools.html', code: 'All', title: 'All tools, by type', note: 'Every tool, grouped by type: communication, know yourself, share the load, calm, family, work and more' },
       { href: '/ask.html', code: 'New', title: 'Chat with Professor Puddles', note: 'Ask a question in your own words and get an answer made only from this site’s pages. Nothing you type leaves your device' },
-      { href: '/conversation-reader.html', code: 'New', title: 'The Conversation Reader', note: 'Paste a text thread, chat or email exchange: see where it turned, what each of you may be hearing, and a calmer way to answer' },
+      { href: '/signal-translator.html', code: 'New', title: 'Chat analyzer', note: 'Check how one message may land before you send it, or paste a whole text thread, chat or email exchange: see where it turned and a calmer way to answer' },
       { href: '/lemonade-stand.html', code: 'Tool', title: 'The Lemonade Stand', note: 'List who did what to keep the household running this week, and see the split as a plain fact' },
       { href: '/wiring-card.html', code: 'New', title: 'Wiring Card', note: 'Make a one-page card for how you receive words, what silence means, and what to avoid' },
       { href: '/wavelength.html', code: 'New', title: 'Wavelength', note: 'A communication style guide: your wiring, your Wave Code, the 9 inputs of learning, a personal statement and a way to compare with someone' },
-      { href: '/signal-translator.html', code: 'New', title: 'The Signal Translator', note: 'Test a sentence before a check-in. Pick the wiring, the room, and how it might land' },
       { href: '/perspective-shifter.html', code: 'New', title: 'The Perspective Shifter', note: 'See a moment from their side: their state, wiring, surroundings, and what each of you could see' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'The Carrier Wave Decoder', note: 'A guided session for the moment a conversation starts going sideways' },
       { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your worksheet numbers and see whether the way you share the load is working' },
@@ -737,10 +736,9 @@
     ]},
     { id: 'about', name: 'About', title: 'About', blurb: 'Who made this and why, what this is, and the site’s policies.',
       all: '/contents.html', allLabel: 'See every page on the site', items: [
-      { sub: 'Who made this, and who it’s for' },
+      { sub: 'About this site' },
       { href: '/about.html', title: 'About the creator', note: 'Christian’s story, and why this exists' },
       { href: '/is-this-for-you.html', deep: true, title: 'Is this right for you?', note: 'What this is and isn’t, and who it helps' },
-      { sub: 'How it works' },
       { href: '/how-it-works.html', deep: true, title: 'How it works', note: 'A friendly tour of the idea behind it all' },
       { href: '/five-pillars.html', deep: true, title: 'The Five Pillars', note: 'The five ideas under everything here' },
       { href: '/method-and-limits.html', title: 'Method and limits', note: 'Every score, formula and cut-off, written out' },
@@ -812,8 +810,8 @@
     var best = -1e9;
     MENU.forEach(function (g) {
       var inSub = false, score = null, hasRef = false;
-      // a group's own directory page ("See all …") belongs to that group first
-      if (g.all && g.all === current) score = 4;
+      // a group's own directory page ("See all …") belongs to that group first (the first group that names it)
+      var isAll = !!(g.all && g.all === current);
       g.items.forEach(function (it) {
         if (it.sub) { inSub = true; return; }
         if (!it.href) return;
@@ -823,6 +821,7 @@
         if (p === current && score === null) score = inSub ? 2 : 3;
         if (ref && p === ref && ref !== current) hasRef = true;
       });
+      if (isAll) { if (best < 100) { best = 100; hereGroup = g; } return; }
       if (score === null) return;
       if (g.id === 'rel') score -= 1.5; else if (g.id === 'start') score -= 3; else if (g.id === 'tools') score -= 0.5;
       if (hasRef) score += 5;
@@ -2716,7 +2715,7 @@
       // a page in the menu: the pages after it in the same list (then the ones before), and one tool that fits
       var L = pl.list.items, i0 = -1;
       L.forEach(function (it, i) { if (i0 < 0 && pathOnly(it.href) === me) i0 = i; });
-      L.slice(i0 + 1).concat(L.slice(0, Math.max(i0, 0))).forEach(function (it) { if (picks.length < 3) add(it.href, it.plain ? it.title : menuLabel(it), it.note || ''); });
+      L.slice(i0 + 1).concat(L.slice(0, Math.max(i0, 0))).forEach(function (it) { if (picks.length < 3 && it.href !== pl.list.all) add(it.href, it.plain ? it.title : menuLabel(it), it.note || ''); });
       var tt = pl.tt || AREA_TOOLTYPE[pl.area];
       if (tt) { var linked = {}; Array.prototype.forEach.call(main.querySelectorAll('a[href]'), function (a) { linked[pathOnly(a.getAttribute('href'))] = 1; });
         tools.filter(function (t) { return t.type === tt && !linked[pathOnly(t.href)]; }).sort(byRank).some(function (t) { add(t.href, t.name, t.does); return picks.length >= 4; }); }
@@ -4692,22 +4691,22 @@
   function buildShareSheet() {
     var box = el('div', { class: 'tol-sharesheet tol-plain no-bubble', 'data-share-sheet': '', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'tol-share-h', hidden: '' },
       '<div class="tol-share-card">' +
-        '<div class="tol-share-head"><h2 id="tol-share-h">Share</h2><button type="button" class="tol-share-close">Close</button></div>' +
+        '<div class="tol-share-head"><h2 id="tol-share-h">' + T('Share', 'Compartir') + '</h2><button type="button" class="tol-share-close">' + T('Close', 'Cerrar') + '</button></div>' +
         '<p class="tol-share-what"></p>' +
         '<p class="tol-share-preview" hidden></p>' +
         '<div class="tol-share-acts">' +
-          '<button type="button" class="tol-share-act" data-act="copy">Copy link</button>' +
-          '<button type="button" class="tol-share-act" data-act="copy-text">Copy message</button>' +
-          '<a class="tol-share-act" data-act="sms">Text message</a>' +
-          '<a class="tol-share-act" data-act="email">Email</a>' +
+          '<button type="button" class="tol-share-act" data-act="copy">' + T('Copy link', 'Copiar enlace') + '</button>' +
+          '<button type="button" class="tol-share-act" data-act="copy-text">' + T('Copy message', 'Copiar mensaje') + '</button>' +
+          '<a class="tol-share-act" data-act="sms">' + T('Text message', 'Mensaje de texto') + '</a>' +
+          '<a class="tol-share-act" data-act="email">' + T('Email', 'Correo') + '</a>' +
           '<a class="tol-share-act" data-act="whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a>' +
           '<a class="tol-share-act" data-act="facebook" target="_blank" rel="noopener noreferrer">Facebook</a>' +
           '<a class="tol-share-act" data-act="x" target="_blank" rel="noopener noreferrer">X</a>' +
           '<a class="tol-share-act" data-act="pinterest" target="_blank" rel="noopener noreferrer">Pinterest</a>' +
-          '<button type="button" class="tol-share-act" data-act="print">Print this page</button>' +
+          '<button type="button" class="tol-share-act" data-act="print">' + T('Print or save as PDF', 'Imprimir o guardar como PDF') + '</button>' +
         '</div>' +
         '<p class="tol-share-status" role="status" aria-live="polite"></p>' +
-        '<p class="tol-share-note">Sharing opens your own app. Nothing is sent from this site.</p>' +
+        '<p class="tol-share-note">' + T('Sharing opens your own app. Nothing is sent from this site.', 'Compartir abre tu propia app. Este sitio no envía nada.') + '</p>' +
       '</div>');
     box.addEventListener('click', function (e) {
       if (e.target === box) { closeShareSheet(); return; }
@@ -4716,8 +4715,8 @@
       if (act === 'copy' || act === 'copy-text') {
         var orig = a.getAttribute('data-label') || a.textContent; a.setAttribute('data-label', orig);
         shareCopy(act === 'copy' ? shareCur.url : shareMessage(shareCur)).then(function (ok) {
-          a.textContent = ok ? 'Copied!' : orig;
-          st.textContent = ok ? (act === 'copy' ? 'Link copied. Paste it wherever you like.' : 'Message copied. Paste it wherever you like.') : 'Couldn’t copy here. Try selecting the link by hand.';
+          a.textContent = ok ? T('Copied!', '¡Copiado!') : orig;
+          st.textContent = ok ? (act === 'copy' ? T('Link copied. Paste it wherever you like.', 'Enlace copiado. Pégalo donde quieras.') : T('Message copied. Paste it wherever you like.', 'Mensaje copiado. Pégalo donde quieras.')) : T('Couldn’t copy here. Try selecting the link by hand.', 'No se pudo copiar aquí. Prueba a seleccionar el enlace a mano.');
           clearTimeout(a._t); a._t = setTimeout(function () { a.textContent = orig; }, 2000);
           if (ok) shareFire(shareCur.url, act);
         });
@@ -4731,7 +4730,7 @@
     box.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeShareSheet(); return; }
       if (e.key !== 'Tab') return;
-      var f = Array.prototype.filter.call(box.querySelectorAll('button, a[href]'), function (n) { return n.getClientRects().length > 0; });
+      var f = Array.prototype.filter.call(box.querySelectorAll('button, a[href], input, select, textarea'), function (n) { return n.getClientRects().length > 0 && !n.disabled; });
       if (!f.length) return;
       var first = f[0], last = f[f.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -4744,7 +4743,7 @@
     if (!shareBox) shareBox = buildShareSheet();
     shareCur = d; shareLast = document.activeElement;
     var box = shareBox, enc = encodeURIComponent, msg = shareMessage(d);
-    box.querySelector('#tol-share-h').textContent = d.result ? 'Share what you made' : 'Share';
+    box.querySelector('#tol-share-h').textContent = d.result ? T('Share what you made', 'Comparte lo que hiciste') : T('Share', 'Compartir');
     box.querySelector('.tol-share-what').textContent = d.title || '';
     box.querySelector('.tol-share-what').hidden = !d.title;
     var pv = box.querySelector('.tol-share-preview');
@@ -4753,7 +4752,7 @@
     var img = '', og = document.querySelector('meta[property="og:image"]'); if (og) img = og.getAttribute('content') || '';
     var links = {
       sms: 'sms:?&body=' + enc(msg),
-      email: 'mailto:?subject=' + enc(d.title || 'Something to share') + '&body=' + enc(msg),
+      email: 'mailto:?subject=' + enc(d.title || T('Something to share', 'Algo para compartir')) + '&body=' + enc(msg),
       whatsapp: 'https://wa.me/?text=' + enc(msg),
       facebook: d.url ? 'https://www.facebook.com/sharer/sharer.php?u=' + enc(d.url) : '',
       x: msg.length <= 260 ? 'https://x.com/intent/post?text=' + enc(d.text || d.title || '') + (d.url ? '&url=' + enc(d.url) : '') : '',
@@ -4776,6 +4775,8 @@
     });
     box.hidden = false;
     document.documentElement.classList.add('tol-share-open');
+    // share-kit.js (more places, grouped) lays itself out for what is being shared
+    try { document.dispatchEvent(new CustomEvent('tol-share-sheet', { detail: { data: d, box: box, close: closeShareSheet } })); } catch (e) {}
     var firstAct = box.querySelector('[data-act]:not([hidden])') || box.querySelector('.tol-share-close');
     firstAct.focus({ preventScroll: true });
   }
@@ -4787,7 +4788,7 @@
   }
   function shareNow(o) {
     o = o || {};
-    var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private };
+    var d = { title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private, kit: o.kit || null };
     if (navigator.share && !(window.TOLShareKit && window.TOLShareKit.sheetFirst)) {
       var data = {}; if (d.title) data.title = d.title; if (d.text) data.text = d.text; if (d.url) data.url = d.url;
       var can = true; try { if (navigator.canShare) can = navigator.canShare(data); } catch (e) { can = true; }
@@ -4835,7 +4836,7 @@
   }
   window.TOLShare = {
     share: shareNow,
-    open: function (o) { o = o || {}; openShareSheet({ title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private }); },
+    open: function (o) { o = o || {}; openShareSheet({ title: o.title || '', text: o.text || '', url: shareUrl(o.url), result: !!o.result, pin: !!o.pin, private: !!o.private, kit: o.kit || null }); },
     close: closeShareSheet,
     copy: shareCopy,
     // TOLShare.button('Share', { title, text, url } or function () { return {...}; }) → a ready button

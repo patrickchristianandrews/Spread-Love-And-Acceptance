@@ -1,4 +1,5 @@
-/* message-check-mini.js — a small "check a message" card for any page.
+/* message-check-mini.js — a small "check a message" card for any page (a pocket version of the Chat analyzer,
+   /signal-translator.html).
 
    Place it with:
      <div data-message-check-mini></div>
@@ -10,7 +11,8 @@
 
    The card itself is tiny. The message engine (message-patterns.js + signal-engine.js, about 250 KB) loads
    only when someone focuses the box or presses "Check it", so pages stay light.
-   Everything runs on the device. Nothing typed is saved or sent. "Open the full checker" hands the words over
+   "Got a screenshot or a whole chat?" opens the Chat analyzer's "A whole conversation or screenshot" view.
+   Everything runs on the device. Nothing typed is saved or sent. "Open the Chat analyzer" hands the words over
    through this tab's sessionStorage ('tol-st-text', already listed on /on-this-device.html); the checker removes
    them as soon as it reads them. */
 (function () {
@@ -52,6 +54,7 @@
     '.mcm-go{min-height:44px;padding:8px 18px;border:0;border-radius:999px;background:var(--focus,#2B5B8C);color:#fff;font:inherit;font-weight:600;cursor:pointer}' +
     '.mcm-go[disabled]{opacity:.7;cursor:progress}' +
     '.mcm-full{font-size:.95rem;color:inherit}' +
+    '.mcm-shot{margin:.45rem 0 0;font-size:.92rem}' +
     '.mcm-out{margin-top:10px}' +
     '.mcm-out:empty{display:none}' +
     '.mcm-v{margin:0 0 .5rem;font-weight:600;line-height:1.45}' +
@@ -84,7 +87,9 @@
         '<label class="mcm-sub no-bubble" for="' + id + 't" style="display:block;margin:0 0 4px;font-weight:600;color:inherit">Your message</label>' +
         '<textarea id="' + id + 't" maxlength="1500" placeholder="Type or paste it the way you would send it."></textarea>' +
         '<div class="mcm-row"><button type="button" class="mcm-go">Check it</button>' +
-        '<a class="mcm-full" href="' + full + '">Open the full checker &rarr;</a></div>' +
+        '<a class="mcm-full" href="' + full + '">Open the Chat analyzer &rarr;</a></div>' +
+        // a screenshot or a whole chat: the Chat analyzer's "A whole conversation or screenshot" view
+        '<p class="mcm-sub no-bubble mcm-shot"><a class="mcm-shotl" href="' + full + '#conversation"><span aria-hidden="true">📷</span> Got a screenshot or a whole chat?</a></p>' +
         // the full checker has "Add context" (who they are, how they usually write, what you want): the fairer reading
         '<p class="mcm-sub no-bubble mcm-ctx-l"><a class="mcm-ctx" href="' + full + '#add-context">Add context</a> for a fairer reading (who they are, how they usually write, what you want).</p>' +
         '<div class="mcm-out" aria-live="polite"></div>' +
@@ -115,14 +120,14 @@
             '<button type="button" class="mcm-copy">Copy</button>' +
             (/\[/.test(rw.main) ? '<p class="mcm-note no-bubble">Words in dashed boxes are blanks for your own words.</p>' : '');
         }
-        h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The full checker shows why, and more ways to say it.</p>';
+        h += '<p class="mcm-note no-bubble">It reads the words only, not your tone or your history, so it&rsquo;s a second opinion, not a verdict. The Chat analyzer shows why, and more ways to say it.</p>';
         out.innerHTML = h;
         var cp = out.querySelector('.mcm-copy');
         if (cp) cp.addEventListener('click', function () {
           (navigator.clipboard ? navigator.clipboard.writeText(rw.main) : Promise.reject()).then(function () { cp.textContent = 'Copied'; }, function () { cp.textContent = 'Select and copy manually'; });
         });
       }).catch(function () {
-        out.innerHTML = '<p class="mcm-note no-bubble">The checker couldn&rsquo;t load just now. <a href="' + full + '">Open the full checker</a> instead.</p>';
+        out.innerHTML = '<p class="mcm-note no-bubble">The checker couldn&rsquo;t load just now. <a href="' + full + '">Open the Chat analyzer</a> instead.</p>';
       }).then(function () { go.disabled = false; go.textContent = 'Check it'; });
     }
     go.addEventListener('click', check);

@@ -272,7 +272,7 @@ ok(noHead.name === 'Jamie', 'with no header, a greeting in my message names them
 // the box's placeholder and the example thread fit any couple or friends: no shared home assumed
 {
   const fs = require('fs');
-  const html = fs.readFileSync(path.join(__dirname, '../../conversation-reader.html'), 'utf8'), ui = fs.readFileSync(path.join(__dirname, '../../assets/js/conversation-reader.js'), 'utf8');
+  const html = fs.readFileSync(path.join(__dirname, '../../signal-translator.html'), 'utf8') /* the Reader's view now lives in the Chat analyzer */, ui = fs.readFileSync(path.join(__dirname, '../../assets/js/conversation-reader.js'), 'utf8');
   const ph = (html.match(/id="cr-input"[^>]*placeholder="([^"]*)"/) || [])[1] || '', ex = (ui.match(/var EXAMPLE = \[([\s\S]*?)\]\.join/) || [])[1] || '';
   ok(ph && !/sink|kitchen|garage|dishes|laundry/i.test(ph), 'placeholder assumes a shared home: ' + ph);
   ok(ex && !/sink|kitchen|garage|dishes|laundry/i.test(ex), 'example thread assumes a shared home');

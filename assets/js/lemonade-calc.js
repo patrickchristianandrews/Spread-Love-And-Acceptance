@@ -3265,6 +3265,8 @@
   }
   // the side's JSON text from a link (or a message with one in it), or null; a plain LEMON1 code is left to readSide
   function unpackSide(text) {
+    var tg = togetherSide(text);
+    if (tg) return Promise.resolve(JSON.stringify(tg.x));
     var m = /#side=([zj])([A-Za-z0-9_-]+)/.exec(String(text || ''));
     if (!m) return Promise.resolve(null);
     try {
@@ -3275,6 +3277,24 @@
     } catch (e) { return Promise.resolve(null); }
   }
   function sideLink(packed) { return location.origin + '/lemonade-stand.html#side=' + packed; }
+  // "Work on this together" (collab.js): a side now goes as …/lemonade-stand.html#together=… (the same
+  // squeezed format the site's other two-person tools use). Old "#side=" links and LEMON1: codes still open.
+  function togetherSide(text) {
+    var C = window.TOLCollab; if (!C || !C.has(text)) return null;
+    var env = C.read(text); return env && env.t === 'lemonade-side' && env.x && typeof env.x === 'object' ? env : null;
+  }
+  function isSideLink(text) { return /#side=[zj]/.test(String(text || '')) || !!togetherSide(text); }
+  function sideLinkNow(json, who) {
+    var C = window.TOLCollab; if (!C || !C.wrap) return '';
+    try { return C.wrap('lemonade-side', JSON.parse(json), { page: '/lemonade-stand.html', name: who || '' }); } catch (e) { return ''; }
+  }
+  // the same "Send by" buttons as the site's other two-person tools (QR code, text, email, apps, copy)
+  function togetherSheet(url, line) {
+    var C = window.TOLCollab; if (!C || !C.sendSheet) return false;
+    C.sendSheet({ heading: 'Send it', url: url, title: 'Lemonade Stand', text: line, subject: 'Our Lemonade Stand',
+      qrNote: 'It opens their Lemonade Stand with a preview first. Nothing is added until they tap “Add to my stand”.' });
+    return true;
+  }
   function low(x) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().toLowerCase(); }
   function clean(x, n) { return String(x == null ? '' : x).replace(/\s+/g, ' ').trim().slice(0, n || 40); }
   function realJobs() { return state.jobs.filter(function (j) { return !j.ex && (j.name.trim() || state.people.some(function (_, i) { return num(j.v[i]) > 0 || num(j.t[i]) > 0; })); }); }
@@ -3661,10 +3681,10 @@
       $('send-back').addEventListener('click', function () {
         if (state.me < 0) { askWho($('add-msg')); sideStatus('add-msg', 'Tap your name first, so it goes back as your side.'); return; }
         var d = sideData(); if (d.error) { sideStatus('add-msg', d.error); return; }
-        var url = sideLink('j' + b64url(new TextEncoder().encode(JSON.stringify(d))));
+        var js0 = JSON.stringify(d), url = sideLinkNow(js0, d.by) || sideLink('j' + b64url(new TextEncoder().encode(js0)));
         var line = 'Here’s my side, back to you. Tap to add it to your Lemonade Stand (a preview comes first, and nothing is uploaded)';
         if (ES) line += '. Aquí está mi parte. Toca el enlace y luego «Add to my stand».';
-        if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
+        if (togetherSheet(url, line)) { /* the "Send by" buttons (collab.js) */ } else if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
         else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
         else copyText(line + '\n' + url).then(function (ok) { sideStatus('add-msg', ok ? 'Copied the link. Paste it into a message to ' + nameOf(sendBack) + '.' : 'Couldn’t share here.'); });
       });
@@ -3684,8 +3704,8 @@
     code.value = SIDE + b64enc(json); code.hidden = false; acts.hidden = false;
     // the link for "Share it", ready before the tap (a phone's share menu wants it at once)
     if (!sendLink || sendLink.json !== json) {
-      sendLink = { json: json, url: '', who: d.by || '' };
-      packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); }, function () {});
+      sendLink = { json: json, url: sideLinkNow(json, d.by), who: d.by || '' };
+      if (!sendLink.url) packSide(json).then(function (pk) { if (sendLink.json === json) sendLink.url = sideLink(pk); }, function () {});
     }
     renderFull();
   }
@@ -3698,14 +3718,14 @@
     b.hidden = !on; var t = $('send-full-t'); if (t) t.hidden = !on;
     if (!on) return;
     var json = JSON.stringify(fullData());
-    if (fullLink.json !== json) { fullLink = { json: json, url: '' }; packSide(json).then(function (pk) { if (fullLink.json === json) fullLink.url = sideLink(pk); }, function () {}); }
+    if (fullLink.json !== json) { fullLink = { json: json, url: sideLinkNow(json, '') }; if (!fullLink.url) packSide(json).then(function (pk) { if (fullLink.json === json) fullLink.url = sideLink(pk); }, function () {}); }
   }
   if ($('send-full')) $('send-full').addEventListener('click', function () {
     var d = fullData(); if (d.error) { sideStatus('send-msg', d.error); return; }
     var json = JSON.stringify(d), url = fullLink.json === json && fullLink.url ? fullLink.url : sideLink('j' + b64url(new TextEncoder().encode(json)));
     var line = 'Here’s everyone’s side of our Lemonade Stand' + (d.own ? ', plus the fridge list' : '') + '. Tap to see the full picture (a preview comes first, and nothing is uploaded)';
     if (ES) line += '. Aquí están las partes de todos. Toca el enlace y luego «Add to my stand».';
-    if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
+    if (togetherSheet(url, line)) { /* the "Send by" buttons (collab.js) */ } else if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
     else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
     else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Copied the full-picture link. Paste it into your group chat.' : 'Couldn’t share here.'); });
   });
@@ -3734,7 +3754,7 @@
     var url = sendLink.url || sideLink('j' + b64url(new TextEncoder().encode(sendLink.json)));
     var line = 'Tap to add ' + (sendLink.who ? sendLink.who + '’s' : 'my') + ' side to your Lemonade Stand';
     if (ES) line += '. ' + (sendLink.who ? sendLink.who + ' te envió su parte.' : 'Te envié mi parte.') + ' Toca el enlace y luego «Add to my stand» para añadirla.';
-    if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
+    if (togetherSheet(url, line)) { /* the "Send by" buttons (collab.js) */ } else if (window.TOLShare) window.TOLShare.share({ title: 'Lemonade Stand', text: line, url: url, result: true });
     else if (navigator.share) navigator.share({ title: 'Lemonade Stand', text: line, url: url }).catch(function () {});
     else copyText(line + '\n' + url).then(function (ok) { sideStatus('send-msg', ok ? 'Sharing isn’t available here, so the link is copied. Paste it into a message.' : 'Couldn’t share here. Open “Other ways” and copy the code.'); });
   });
@@ -3764,8 +3784,8 @@
     } catch (e) { sideStatus('send-msg', 'Couldn’t save a file here. Copy the code instead.'); }
   });
   function review(text, note, kindSaid) {
-    // a link (or a message with one) carries the side after "#side=": unpack it first
-    if (/#side=[zj]/.test(String(text || ''))) {
+    // a link (or a message with one) carries the side after "#side=" or "#together=": unpack it first
+    if (isSideLink(text)) {
       // pasted by hand: the paste box stays (only a link opened straight into this page hides it)
       var opened = kindSaid === 'link';
       unpackSide(text).then(function (json) {
@@ -3993,7 +4013,7 @@
         return msg + (HH.isLinked('lemonade') ? '' : ' To keep them for the other tools too, tick “Use these names in the other tools”.');
       }, onOther: function (text) {
         // a partner's side (a link, a code or a file's text) pasted here: it belongs under "Add my partner's side"
-        if (!/LEMON1:|#side=[zj]|"app"\s*:\s*"lemonade"/i.test(String(text || ''))) return '';
+        if (!/LEMON1:|#side=[zj]|"app"\s*:\s*"lemonade"/i.test(String(text || '')) && !togetherSide(text)) return '';
         $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
         $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
         $('add-code').value = String(text).trim();
@@ -4053,7 +4073,7 @@
   }
   function fromHash() {
     var h = location.hash || '';
-    if (/^#side=/.test(h) || h === '#add-side') {
+    if (/^#side=/.test(h) || h === '#add-side' || (/^#together=/.test(h) && togetherSide(h))) {
       // the side is read once, then cleared from the address bar and this tab's history entry
       try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
       if (mode !== 'group') { saveMode('group'); setMode('group', false); }
@@ -4087,13 +4107,13 @@
   // a partner's side that was being looked over when this tab went elsewhere: its preview comes back
   function restorePending() {
     var t = null; try { t = sessionStorage.getItem(PENDING); } catch (e) {}
-    if (!t || pending || /^#side=/.test(location.hash || '')) return;
+    if (!t || pending || /^#side=/.test(location.hash || '') || togetherSide(location.hash || '')) return;
     if (mode !== 'group') { saveMode('group'); setMode('group', false); }
     var sides = $('sides'), body = $('ls-body');
     if (sides && body && body.firstElementChild !== sides) body.insertBefore(sides, body.firstElementChild);
     $('add-box').hidden = false; $('add-side').setAttribute('aria-expanded', 'true');
     $('send-box').hidden = true; $('send-side').setAttribute('aria-expanded', 'false');
-    review(t, 'It’s still here, not added yet. Look it over below, then tap “Add to my stand”.', /#side=[zj]/.test(t) ? 'link' : '');
+    review(t, 'It’s still here, not added yet. Look it over below, then tap “Add to my stand”.', isSideLink(t) ? 'link' : '');
     if (sides) { sides.scrollIntoView({ block: 'start' }); settle(sides); }
   }
   fromHash();

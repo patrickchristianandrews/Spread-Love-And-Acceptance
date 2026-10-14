@@ -189,14 +189,14 @@ html.tol-quiet .tol-appbar-ic, html.tol-work .tol-appbar-ic{ box-shadow:none; }
 
 /* after install: a small welcome at the top, once */
 .tol-iosw{
-  position:fixed; z-index:2147483000; left:50%; top:calc(env(safe-area-inset-top, 0px) + 10px); transform:translateX(-50%);
+  position:fixed; z-index:2147483000; left:0; right:0; top:calc(env(safe-area-inset-top, 0px) + 10px); width:max-content; margin:0 auto;
   display:flex; align-items:center; gap:10px; max-width:calc(100% - 24px); padding:8px 18px 8px 8px; border-radius:24px;
   background:rgba(255,255,255,.96); color:#000; box-shadow:0 0 0 .5px rgba(0,0,0,.08), 0 8px 28px rgba(0,0,0,.18);
   font:600 15px/1.25 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; cursor:pointer;
   animation:tol-iosw-in .45s cubic-bezier(.32,.72,0,1);
 }
 .tol-iosw img{ flex:none; width:28px; height:28px; border-radius:7px; }
-.tol-iosw.is-out{ opacity:0; transform:translate(-50%, -12px); transition:opacity .35s, transform .35s; }
-@keyframes tol-iosw-in{ from{ opacity:0; transform:translate(-50%, -16px); } to{ opacity:1; transform:translate(-50%, 0); } }
+.tol-iosw.is-out{ opacity:0; transform:translateY(-12px); transition:opacity .35s, transform .35s; }
+@keyframes tol-iosw-in{ from{ opacity:0; transform:translateY(-16px); } to{ opacity:1; transform:none; } }
 .tol-iosw.is-still, .tol-iosw.is-still.is-out{ animation:none; transition:none; }
 @media (prefers-reduced-motion: reduce){ .tol-iosw{ animation:none; } }

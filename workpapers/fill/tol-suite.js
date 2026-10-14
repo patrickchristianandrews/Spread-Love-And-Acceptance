@@ -1830,7 +1830,7 @@
     var si = document.getElementById('wpf-share-in'); if (si) si.focus();
   }
   function readSharedHash() {
-    if (!/^#list=/.test(global.location.hash || '')) return;
+    if (!/^#(list|together)=/.test(global.location.hash || '')) return;
     var d = WPK.readShared ? WPK.readShared(global.location.hash) : null;
     try { global.history.replaceState(null, '', global.location.pathname + global.location.search); } catch (e) {}
     if (!d || !schema(d.wp)) { say('That shared link looks incomplete. Ask for it again, or paste it under \u201cOpen a shared \u2026\u201d on the sheet.'); return; }

@@ -222,9 +222,16 @@
     ssSet(VIEW, v);
     var m = document.querySelector('main.read'); if (m) m.classList.toggle('is-wide', v === 'quick');
   }
+  // a "#together=" link (collab.js, the site's one way to work on a tool together): which part of the stand it's for
+  function togetherTool(h) {
+    var C = window.TOLCollab; if (!C || !/^#together=/.test(h || '')) return '';
+    var e = C.read(h); return e ? e.t : 'bad';
+  }
+  // (a broken one opens the quick look too, which says it didn't open)
+  function isQuickLink(h) { var t = togetherTool(h); return /^#q=/.test(h || '') || t === 'lemonade-quick' || t === 'bad'; }
   (function () {
     var h = location.hash || '', pend = !!ssGet('tol-lemonade-pending');
-    var fridge = /^#owners(-h)?$/.test(h), qlink = /^#q=/.test(h);
+    var fridge = /^#owners(-h)?$/.test(h), qlink = isQuickLink(h), tside = togetherTool(h) === 'lemonade-side';
     // coming back with a full stand kept on this device and no quick look: the full stand opens (with "Back to the quick look")
     var standOnly = false;
     try {
@@ -233,16 +240,16 @@
       var real = function (a) { return Array.isArray(a) && a.some(function (r) { return r && !r.ex && Array.isArray(r.v) && r.v.some(function (x) { return +x > 0; }); }); };
       standOnly = !qAny && !!st && !st.example && (real(st.jobs) || real(st.bills));
     } catch (e) {}
-    var deep = DEEP_HASH.test(h) || (!qlink && !fridge && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
+    var deep = DEEP_HASH.test(h) || tside || (!qlink && !fridge && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
     setView(deep ? 'deep' : 'quick');
     if (fridge) body.setAttribute('data-ls-fridge', '');
   })();
   // a link pasted into this tab later: the full stand's links open the full stand (its own handler runs after this one)
   window.addEventListener('hashchange', function () {
     var h = location.hash || '';
-    if (DEEP_HASH.test(h)) setView('deep');
+    if (DEEP_HASH.test(h) || togetherTool(h) === 'lemonade-side') setView('deep');
     else if (/^#owners(-h)?$/.test(h)) body.setAttribute('data-ls-fridge', '');
-    else if (/^#q=/.test(h) && ready) receive(h);
+    else if (isQuickLink(h) && ready) receive(h);
   });
 
   /* ---------- the jobs ---------- */
@@ -1068,7 +1075,7 @@
   /* ---------- sending ---------- */
   function b64u(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function unb64u(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; return decodeURIComponent(escape(atob(s))); }
-  function packed(to) {
+  function packObj(to) {
     // a kids' job nobody has answered stays home (a home without children never gets them on the other phone)
     var ids = q.list.filter(function (id) { return !isKidJob(id) || Object.keys(q.ans).some(function (p) { return (q.ans[p] || {})[id] != null; }); }), a = {};
     Object.keys(q.ans).forEach(function (p) {
@@ -1087,9 +1094,16 @@
     // how often / how long, where someone set it (so both devices weigh the jobs the same way)
     if (q.jw && ids.some(function (id) { return q.jw[id]; })) d.w = ids.map(function (id) { var o = q.jw[id]; return o ? (o.f || '') + (o.h ? ':' + o.h : '') : ''; }).join('|');
     var cs = {}; q.people.forEach(function (_, i) { if (q.solo && q.solo[i]) cs[i] = q.solo[i]; }); if (Object.keys(cs).length) d.c = cs;
-    return b64u(JSON.stringify(d));
+    return d;
   }
-  function linkFor(to) { return location.origin + '/lemonade-stand.html#q=' + packed(to); }
+  function packed(to) { return b64u(JSON.stringify(packObj(to))); }
+  // "#together=…" (collab.js: squeezed, the site's shared format for two-person tools) where it's loaded;
+  // the older "#q=…" otherwise. Both open here.
+  function linkFor(to) {
+    var C = window.TOLCollab;
+    if (C && C.wrap) { try { return C.wrap('lemonade-quick', packObj(to), { page: '/lemonade-stand.html', name: typed(q.me), lang: isEs() ? 'es' : undefined }); } catch (e) {} }
+    return location.origin + '/lemonade-stand.html#q=' + packed(to);
+  }
   function touchy() { try { return window.matchMedia('(pointer: coarse)').matches; } catch (e) { return false; } }
   // One main way to send (to everyone in one message with three or more, or to the other person), and the rest
   // folded under "Other ways to share", so the result isn't a wall of buttons
@@ -1132,9 +1146,15 @@
     for (var k = 1; k < q.people.length; k++) { var o = (q.me + k) % q.people.length; if (!hasAny(o)) return o; }
     return -1;
   }
-  function share(title, text, url) {
+  function share(title, text, url, who) {
     var box = $('lq-linkbox'), inp = $('lq-link');
     if (url && box && inp) { box.hidden = false; inp.value = url; }
+    // the "Send by" buttons the site's other two-person tools use: QR code, text message, email, apps, copy
+    if (url && window.TOLCollab && window.TOLCollab.sendSheet) {
+      window.TOLCollab.sendSheet({ heading: who ? L('Send to ', 'Enviar a ') + who : L('Send it', 'Envíalo'), url: url, title: title, text: text, who: who, subject: title, lang: isEs() ? 'es' : 'en', blockHeading: L('Send by', 'Enviar por'),
+        qrNote: L('It opens their quick look with the same jobs. Your answers stay hidden until they’ve done theirs.', 'Abre su vistazo con las mismas tareas. Tus respuestas quedan ocultas hasta que haga las suyas.') });
+      return;
+    }
     if (window.TOLShare && window.TOLShare.share) {
       try { window.TOLShare.share({ title: title, text: text, url: url || false, result: true }); return; } catch (e) {}
     }
@@ -1152,7 +1172,7 @@
       var reply = hasAny(o);
       var text = reply ? L('Here’s my side of our quick look at who does what at home. Tap the link to see where we agree, and where we see it differently.', 'Aquí está mi lado de nuestro vistazo a quién hace qué en casa. Toca el enlace para ver en qué coincidimos y en qué no.')
         : L('Here’s my quick look at who does what at home. Tap who mostly does each job, as you see it. My answers stay hidden until you’ve done yours. Nothing is uploaded.', 'Aquí está mi vistazo a quién hace qué en casa. Toca quién hace casi siempre cada tarea, como tú lo ves. Mis respuestas quedan ocultas hasta que hagas las tuyas. No se sube nada.');
-      share(L('Our quick look', 'Nuestro vistazo'), text, url);
+      share(L('Our quick look', 'Nuestro vistazo'), text, url, typed(o));
       status(L((typed(o) ? 'Made a link for ' + typed(o) + '.' : 'Made the link.') + ' It opens their quick look with the same jobs.' + (typed(me) && typed(o) ? '' : ' Tip: type your names first, so it says who’s who.'),
         (typed(o) ? 'Listo el enlace para ' + typed(o) + '.' : 'Listo el enlace.') + ' Abre su vistazo con las mismas tareas.' + (typed(me) && typed(o) ? '' : ' Consejo: escriban primero sus nombres.')));
       return;
@@ -1288,8 +1308,9 @@
 
   /* ---------- opening a link: someone's quick look ---------- */
   function decode(h) {
-    var m = /#q=([A-Za-z0-9_-]+)/.exec(String(h || '')); if (!m) return null;
-    var d; try { d = JSON.parse(unb64u(m[1])); } catch (e) { return null; }
+    var d = null, C = window.TOLCollab;
+    if (C && C.has(h)) { var env = C.read(h); d = env && env.t === 'lemonade-quick' ? env.x : null; if (!d) return null; }
+    else { var m = /#q=([A-Za-z0-9_-]+)/.exec(String(h || '')); if (!m) return null; try { d = JSON.parse(unb64u(m[1])); } catch (e) { return null; } }
     if (!d || !Array.isArray(d.p) || !Array.isArray(d.l)) return null;
     var n = Math.min(MAX_P, Math.max(2, d.p.length)), people = [];
     for (var i = 0; i < n; i++) people.push(String(d.p[i] || '').slice(0, 40));
@@ -1616,7 +1637,7 @@
     }
     ready = true;
     renderAll();
-    if (/^#q=/.test(location.hash || '')) receive(location.hash);
+    if (isQuickLink(location.hash || '')) receive(location.hash);
     else if (/^#owners(-h)?$/.test(location.hash || '')) {
       // the fridge list from another page (like the check-in card): the names typed here come along, and every job here is a chip
       if (api && api.fromQuick && q.people.some(function (_, i) { return typed(i); })) { try { api.fromQuick({ people: namesOut(), me: q.me, chips: hasAny(q.me) ? chipList() : undefined, mode: false }); } catch (e) {} }

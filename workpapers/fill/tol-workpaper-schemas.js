@@ -93,6 +93,9 @@
     title: 'Who did what',
     plain: 'Who did what',
     slug: 'Who-did-what',
+    // "Share this week" / "Open a shared week" (tol-workpaper.js, with collab.js links): each person logs
+    // their own rows; a row that is the same on both devices is kept once
+    share: { what: 'week', after: 'totals', empty: 'Log a row or two first, then share the week.', noAutoKeep: true },
     purpose: "Write down what actually happened this week, before anyone starts remembering it as a story. Fill it in together, or each keep your own copy and compare at the end of the week. Either way, write down only what you did or saw yourself; never fill in someone else's side for them.",
     people: true,
     meta: [
@@ -493,6 +496,8 @@
     title: 'What keeps coming back?',
     plain: 'What keeps coming back?',
     slug: 'What-keeps-coming-back',
+    // "Share this list" / "Open a shared list": tasks are matched by name, so each person's notes combine
+    share: { what: 'list', after: 'close', keys: { raw: 'task', classify: 'task', thanks: 'job' }, unit: ['task', 'tasks'], empty: 'Add a task first, then share the list.', noAutoKeep: true },
     purpose: 'What keeps coming back? A monthly look-back, done together, across four weeks of Who did what (WP-01) and One owner per job (WP-03). It looks for the tasks that keep slipping. The goal is not to tally what anyone owes, but to find where the setup needs a fix.',
     people: true,
     meta: [
@@ -911,6 +916,8 @@
     title: 'Same moment, different speeds',
     plain: 'Same moment, different speeds',
     slug: 'Same-moment-different-speeds',
+    // "Share this sheet" / "Open a shared sheet": each person's own rows travel; agreements are matched by moment
+    share: { what: 'sheet', after: 'agree', keys: { agree: 'moment' }, unit: ['row', 'rows'], empty: 'Fill in a row first, then share the sheet.', noAutoKeep: true },
     purpose: 'For a few moments that come round often, each person marks how fast they want to move, how much they want to talk, and how urgent it feels. Then you look at the gaps together. Most of them turn out to be a difference in pace, not in willingness, and a small agreement closes most of the gap.',
     people: true,
     meta: [
@@ -994,6 +1001,8 @@
     title: 'Is it us, or is it everything else?',
     plain: 'Is it us, or is it everything else?',
     slug: 'Is-it-us-or-everything-else',
+    // "Share this week" / "Open a shared week": each person's evenings are matched by day and name
+    share: { what: 'week', after: 'wrong', keys: { wrong: 'moment' }, empty: 'Write an evening or two first, then share the week.', noAutoKeep: true },
     purpose: 'A one-week log that keeps two things apart: pressure from outside (money, work, health, sleep, family) and friction that really starts between you. A line or two each evening, each person about their own day. At the end of the week, you look at what got blamed on the wrong thing, and make one plan for the pressure.',
     people: true,
     meta: [
@@ -1075,6 +1084,8 @@
     title: 'Keep your little rituals alive',
     plain: 'Keep your little rituals alive',
     slug: 'Keep-your-little-rituals-alive',
+    // "Share this list" / "Open a shared list": rituals are matched by name
+    share: { what: 'list', after: 'count', keys: { rituals: 'ritual' }, unit: ['ritual', 'rituals'], empty: 'Add a ritual first, then share the list.', noAutoKeep: true },
     purpose: 'Every three months or so, a short look at the small shared habits that keep you close: the morning coffee, the Sunday walk, the birthday breakfast. Which are alive, which are fading, which have quietly stopped. Then one to restart, small enough to keep on a hard week.',
     people: true,
     meta: [

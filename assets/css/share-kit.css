@@ -4,10 +4,44 @@
 /* ---- in the share sheet ---- */
 .tsk-kit{ margin:0 0 .3rem; }
 .tsk-acts{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin:.5rem 0 0; }
-.tsk-acts[hidden], .tsk-qr[hidden]{ display:none; }
+.tsk-acts[hidden], .tsk-qr[hidden], .tsk-panel[hidden], .tsk-group[hidden], .tsk-grid[hidden], .tsk-xsec[hidden], .tsk-res-row[hidden]{ display:none; }
 .tsk-native{ grid-column:1 / -1; }
-.tsk-toggle[aria-expanded="true"]{ background:#EFE8FA; border-color:#B9A8D6; }
-.tsk-places{ padding:.5rem; border:1px dashed #D9C8F0; border-radius:16px; }
+/* the top row: device menu, Copy link, Copy message; the rest sits in groups below */
+.tol-share-acts.tsk-quick{ margin:.8rem 0 .2rem; }
+.tol-share-acts.tsk-quick > :is([data-act="copy"], [data-act="copy-text"], .tsk-native){ grid-column:1 / -1; }
+.tol-share-act .tsk-ic, .tsk-ans .tsk-ic-plain, .tsk-card-share .tsk-ic-plain{ flex:none; }
+.tol-share-act .tsk-ic{ width:22px; height:22px; margin-right:.5rem; }
+.tol-share-act.tsk-place{ justify-content:flex-start; text-align:left; padding:.35rem .55rem; font-size:.9rem; line-height:1.15; min-width:0; }
+.tol-share-act .tsk-pl{ min-width:0; overflow-wrap:anywhere; }
+.tol-share-act[aria-disabled="true"]{ opacity:.6; cursor:not-allowed; }
+.tol-share-act[aria-expanded="true"]{ background:#EFE8FA; border-color:#B9A8D6; }
+.tsk-groups{ margin:.3rem 0 0; }
+.tsk-group{ margin:.15rem 0 0; border-top:1px solid #ECE3F7; }
+.tsk-gh{ margin:0; font:inherit; }
+.tsk-gt{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; width:100%; min-height:44px; padding:.3rem .2rem; box-sizing:border-box;
+  font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; text-align:left; background:none; border:0; border-radius:10px; cursor:pointer; }
+.tsk-gt:hover{ background:#F7F3FC; }
+.tsk-gt:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:1px; }
+.tsk-gt-i{ flex:none; width:.55rem; height:.55rem; margin-right:.35rem; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(45deg) translate(-2px, -2px); transition:transform .15s; }
+.tsk-gt[aria-expanded="true"] .tsk-gt-i{ transform:rotate(-135deg) translate(-2px, -2px); }
+.tsk-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(min(9.2rem, 100%), 1fr)); gap:.45rem; padding:.1rem 0 .6rem; }
+.tsk-panels{ margin:0; }
+.tsk-panel{ margin:.4rem 0 .6rem; padding:.7rem .75rem; background:#FBF8FF; border:1px solid #D9C8F0; border-radius:14px; }
+.tsk-panel .tsk-acts{ margin-top:.4rem; }
+.tsk-lab{ display:block; margin:0 0 .25rem; font-size:.9rem; font-weight:600; color:#3C3354; }
+.tsk-in{ display:block; box-sizing:border-box; width:100%; min-height:44px; margin:0 0 .5rem; padding:.45rem .6rem; font:inherit; font-size:1rem; color:var(--ink, #2B2620);
+  background:#fff; border:1.5px solid #B9A8D6; border-radius:10px; }
+.tsk-in:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:1px; }
+.tsk-field{ margin:0; }
+.tsk-two{ display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+.tsk-go{ margin:.1rem 0 0; }
+.tsk-small{ margin:.45rem 0 0; font-size:.85rem; line-height:1.4; color:var(--ink-soft, #5A5346); }
+.tsk-linkbtn{ min-height:32px; padding:0; font:inherit; font-size:.85rem; color:#3C3354; text-decoration:underline; background:none; border:0; cursor:pointer; }
+.tsk-linkbtn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+/* sections added by other scripts (TOLShareKit.addSection), in the sheet's own look */
+.tsk-xsec{ margin:.2rem 0 .4rem; padding:.2rem 0 .3rem; border-top:1px solid #ECE3F7; }
+.tsk-xh{ margin:.4rem 0 .35rem; font:600 .95rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354; }
+.tsk-xbody > :first-child{ margin-top:0; }
 .tsk-qr{ margin:.6rem 0 0; text-align:center; }
 .tsk-qr-box{ display:inline-block; padding:.4rem; background:#fff; border:1.5px solid #D9C8F0; border-radius:14px; line-height:0; }
 .tsk-qr-img{ display:block; width:min(220px, 62vw); height:auto; }
@@ -73,6 +107,38 @@ dialog.tsk-qrd canvas{ filter:none !important; }
 
 /* Quiet mode, print, and the page's own "no sharing" choice */
 html.tol-quiet .tsk-line, body[data-no-share] .tsk-line{ display:none; }
-@media print{ .tsk-line, .tsk-kit, .tsk-native{ display:none !important; } }
+@media print{ .tsk-line, .tsk-kit, .tsk-native, .tsk-top-row, .tsk-res-row, .tsk-card-share, .tsk-ans{ display:none !important; } }
 @media (prefers-reduced-motion: reduce){ .tsk-line{ transition:none; } }
 html.tol-still .tsk-line{ transition:none; }
+
+/* ---- Share buttons on the pages ---- */
+/* under the title: small and calm */
+.tsk-top-row{ margin:.35rem 0 .9rem; }
+.tol-share-btn.tsk-top-btn{ min-height:44px; padding:.25rem .85rem; font-size:.88rem; }
+.tsk-top-row .tol-share-btn{ display:inline-flex; align-items:center; gap:.4rem; font:600 .88rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354;
+  background:#FFFDF7; border:1.5px solid #D9C8F0; border-radius:999px; cursor:pointer; }
+.tsk-top-row .tol-share-btn:hover{ background:#F3EEF9; }
+.tsk-res-row{ margin:.75rem 0 .25rem; }
+.tsk-res-row .tol-share-btn{ display:inline-flex; align-items:center; gap:.4rem; font:600 .9rem/1.2 var(--tol-sans, system-ui, sans-serif); color:#3C3354;
+  background:#FFFDF7; border:1.5px solid #B9A8D6; border-radius:999px; cursor:pointer; }
+.tsk-res-row .tol-share-btn:hover{ background:#F3EEF9; }
+/* the tool cards on /tools.html: a round button in the card's corner */
+.tsk-cardhost{ position:relative; }
+.read .tl-grid > li.tsk-cardhost .tl-name{ padding-right:2.6rem; }
+.tsk-card-share{ position:absolute; top:.25rem; right:.25rem; z-index:1; display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; padding:0;
+  color:#6B5A8E; background:transparent; border:0; border-radius:50%; cursor:pointer; }
+.tsk-card-share::before{ content:""; position:absolute; inset:5px; border:1px solid #D9C8F0; border-radius:50%; background:#fff; }
+.tsk-card-share .tsk-ic-plain{ position:relative; width:18px; height:18px; }
+.tsk-card-share:hover::before{ background:#F3EEF9; border-color:#B9A8D6; }
+.tsk-card-share:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:-2px; }
+/* Professor Puddles' answers */
+.tsk-ans{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; margin:.35rem 0 0; padding:.2rem .7rem; font:600 .85rem/1.2 var(--tol-sans, system-ui, sans-serif);
+  color:#3C3354; background:transparent; border:1px solid #D9C8F0; border-radius:999px; cursor:pointer; }
+.tsk-ans .tsk-ic-plain{ width:16px; height:16px; }
+.tsk-ans:hover{ background:#F3EEF9; }
+.tsk-ans:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+/* Quiet mode: the same buttons, plainer */
+html.tol-quiet .tsk-top-row .tol-share-btn, html.tol-quiet .tsk-res-row .tol-share-btn, html.tol-quiet .tsk-ans{ border-color:var(--line, #D9CBA3); background:transparent; font-weight:500; }
+html.tol-quiet .tsk-card-share::before{ border-color:var(--line, #D9CBA3); }
+@media (prefers-reduced-motion: reduce){ .tsk-gt-i{ transition:none; } }
+html.tol-still .tsk-gt-i{ transition:none; }

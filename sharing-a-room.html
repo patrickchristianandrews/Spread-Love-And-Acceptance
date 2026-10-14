@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/collab.js" defer></script>
 <style>
   /* Only the site's own color tokens are used here, so dark mode follows site.css. */
   .rm-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
@@ -337,7 +338,8 @@
   function enc(o) { try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/, ''); } catch (e) { return ''; } }
   function dec(t) { try { return JSON.parse(decodeURIComponent(escape(atob(t)))); } catch (e) { return null; } }
   // nothing changed from the starting text: a plain link to the agreement (no empty '#room=e30')
-  function link() { var o = fields(); return location.origin + location.pathname + (Object.keys(o).length ? '#room=' + enc(o) : '#agreement'); }
+  // with collab.js: the "Work on this together" link (#together=…), which keeps each roommate's version; old #room= links still open
+  function link() { if (collab) { var u = collab.link(); if (u) return u; } var o = fields(); return location.origin + location.pathname + (Object.keys(o).length ? '#room=' + enc(o) : '#agreement'); }
   function text() {
     var me = val('ra-me'), them = val('ra-them');
     var head = 'Our room agreement' + (me && them ? ' (' + me + ' and ' + them + ')' : '');
@@ -371,6 +373,23 @@
     if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
     var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
   }
+  // "Work on this together" (collab.js): each roommate's version travels inside the link, back and forth;
+  // opening one shows both versions side by side, with "Use this" wherever they differ. Nothing is uploaded.
+  var collab = null;
+  document.addEventListener('DOMContentLoaded', function () {
+    var C = window.TOLCollab; if (!C || !C.attach) return;
+    var m = document.createElement('div'); $('agreement').appendChild(m);
+    collab = C.attach({ tool: 'room', page: '/sharing-a-room.html', mount: m, shared: true,
+      title: ['our room agreement', 'nuestro acuerdo de cuarto'],
+      lede: 'Change the agreement on your own phone and send it. Your roommate changes anything and sends it back. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
+      fields: rows.map(function (r) { return { k: r[0].slice(3), en: r[1] }; }),
+      name: function () { return val('ra-me'); },
+      mine: function () { var o = {}; rows.forEach(function (r) { o[r[0].slice(3)] = val(r[0]); }); return o; },
+      isBlank: function () { return !rows.some(function (r) { return val(r[0]) !== ($(r[0]).defaultValue || '').trim(); }); },
+      fill: function (d) { rows.forEach(function (r) { var k = r[0].slice(3); if (typeof d[k] === 'string') $(r[0]).value = d[k].slice(0, 240); }); render(); },
+      onMerge: function (env, info) { if (info.from && !val('ra-them')) $('ra-them').value = info.from.slice(0, 40); render(); } });
+    if (collab) { ids.forEach(function (id) { $(id).addEventListener('input', collab.changed); }); render(); }
+  });
   $('ra-qr').addEventListener('click', function () {
     qrShow(link(), { title: 'Scan with your roommate’s phone', note: 'The agreement opens on their phone, with your names swapped round so it reads from their side.' });
   });

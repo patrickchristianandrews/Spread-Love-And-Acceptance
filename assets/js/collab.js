@@ -264,7 +264,8 @@
   function unpack(s) { try { return Promise.resolve(unpackSync(s)); } catch (e) { return Promise.reject(e); } }
 
   // ============================================================== cleaning what comes in
-  var BAD_KEYS = { __proto__: 1, constructor: 1, prototype: 1 };
+  // keys that could reach an object's prototype are never copied (an object literal can't even hold "__proto__")
+  function badKey(k) { return k === '__proto__' || k === 'constructor' || k === 'prototype'; }
   // control characters and the invisible direction marks (they can make a name read backwards)
   var CTRL = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F​-‏‪-‮⁦-⁩﻿]/g;
   function cleanStr(s, max) { return String(s).replace(CTRL, '').slice(0, max || 4000); }
@@ -277,9 +278,10 @@
     if (Array.isArray(v)) { var a = []; for (var i = 0; i < v.length && i < 500; i++) a.push(cleanVal(v[i], depth + 1, budget)); return a; }
     var o = {}, ks = Object.keys(v).slice(0, 400);
     ks.forEach(function (k) {
-      if (BAD_KEYS[k] === 1 || k.length > 80 || Object.prototype.hasOwnProperty.call(BAD_KEYS, k)) return;
+      var ck = cleanStr(k, 80);
+      if (badKey(k) || badKey(ck) || k.length > 80) return;
       var x = cleanVal(v[k], depth + 1, budget);
-      if (x !== undefined) o[cleanStr(k, 80)] = x;
+      if (x !== undefined) o[ck] = x;
     });
     return o;
   }
@@ -447,6 +449,8 @@
   function sendBlock(opts) {
     css();
     opts = opts || {};
+    // the page's language, or the tool's own choice (a tool with its own English/Spanish switch)
+    function T(en, es) { return (opts.lang ? opts.lang === 'es' : esPage()) && es ? es : en; }
     var box = mk('div', { cls: 'tcol-send' });
     var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || T('Send it by', 'Envíalo por') });
     var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || T('Send it by', 'Envíalo por') });
@@ -594,6 +598,11 @@
       return v == null ? '' : String(v);
     }
     function mine() { var d = {}; try { d = opts.mine() || {}; } catch (e) { d = {}; } return clone(d); }
+    // nothing of yours yet (a tool with starting text says so itself)
+    // answers that are each person's own (their hours, say): shown, never offered as "Use this"
+    var own = opts.own || [];
+    function shareable(d) { var o = {}; Object.keys(d || {}).forEach(function (k) { if (own.indexOf(k) < 0) o[k] = d[k]; }); return o; }
+    function mineBlank() { if (opts.isBlank) { try { return !!opts.isBlank(); } catch (e) {} } return blankish(mine()); }
 
     // what this tab knows: everyone's parts in this back-and-forth, and when your own part last changed
     var tab = ssGet(TAB_KEY) || {}, keptAll = lsGet(KEPT_KEY) || {}, kept = keptAll[tool] || null;
@@ -616,7 +625,8 @@
     }
     function others() { var e = st.env, id = myId(); return e ? Object.keys(e.p).filter(function (k) { return k !== id; }) : []; }
     function nameInput() { return panel.querySelector('.tcol-name'); }
-    function myName() { var i = nameInput(); return cleanName(i && i.value) || ''; }
+    // your name: the tool's own name box where it has one, or the panel's
+    function myName() { if (opts.name) { try { return cleanName(opts.name()); } catch (e) {} } var i = nameInput(); return cleanName(i && i.value) || ''; }
     // the envelope to send: everyone's parts this tab has, and yours as it is now
     function current() {
       var me = getMe(), d = mine();
@@ -664,6 +674,7 @@
     function cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }
     function status(m) { pst.textContent = ''; setTimeout(function () { pst.textContent = m; }, 30); }
     nameInput().value = getMe().name || '';
+    if (opts.name) meRow.hidden = true;
     panel.querySelector('.tcol-keepbox').checked = keepOn;
 
     // ---- showing the parts ----
@@ -702,7 +713,7 @@
           any = true;
           var dd = mk('dd', { text: txt });
           var row = mk('div', { cls: 'tcol-row' }, [mk('dt', { text: label(k) }), dd]);
-          if (opts.shared && opts.fill && !same(mineNow[k], s.d[k])) {
+          if (opts.shared && opts.fill && own.indexOf(k) < 0 && !same(mineNow[k], s.d[k])) {
             var ub = mk('button', { type: 'button', cls: 'tcol-btn tcol-use', 'data-k': 'use', 'data-id': id, 'data-f': k, text: T('Use this', 'Usar esto') });
             ub.setAttribute('aria-label', T('Use ' + (s.n || 'their') + '’s ' + label(k).toLowerCase(), 'Usar ' + label(k).toLowerCase() + ' de ' + (s.n || 'esa persona')));
             row.appendChild(mk('div', { cls: 'tcol-usebox' }, [ub]));
@@ -711,7 +722,7 @@
         });
         if (!any) art.appendChild(mk('p', { cls: 'tcol-small', text: T('Nothing filled in yet.', 'Todavía no completó nada.') }));
         else art.appendChild(dl);
-        if (opts.shared && opts.fill && any && keys.some(function (k) { return !same(mineNow[k], s.d[k]) && fmt(k, s.d[k]); })) {
+        if (opts.shared && opts.fill && any && keys.filter(function (k) { return own.indexOf(k) < 0 && !same(mineNow[k], s.d[k]) && fmt(k, s.d[k]); }).length > 1) {
           art.appendChild(mk('p', {}, [mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-k': 'useall', 'data-id': id, text: T('Use all of ' + (s.n || 'theirs'), 'Usar todo lo de ' + (s.n || 'esa persona')) })]));
         }
         parts.appendChild(art);
@@ -772,19 +783,19 @@
       if (!res) { info = { bad: true }; render(); return false; }
       var ids = Object.keys(res.env.p);
       saveMe();
-      var mineNow = mine(), myPart = res.env.p[me.id];
+      var myPart = res.env.p[me.id];
       info = { changes: res.changes, older: res.older, fresh: fresh, from: env.f && env.p[env.f] ? env.p[env.f].n : '', reply: !!myPart, how: how };
       info.own = env.f === me.id && ids.every(function (k) { return k === me.id; });
       // your own part, back from the other side, into an empty form
-      if (myPart && blankish(mineNow) && opts.fill && !blankish(myPart.d)) { try { opts.fill(clone(myPart.d)); info.mineBack = true; } catch (e) {} }
+      if (myPart && mineBlank() && opts.fill && !blankish(myPart.d)) { try { opts.fill(clone(myPart.d)); info.mineBack = true; } catch (e) {} }
       // the same name as yours on a part that isn't yours: maybe you, on another device
       var nm = (myName() || me.name || '').toLowerCase();
       whoAsk = null;
       if (nm && !myPart) ids.forEach(function (k) { if (!whoAsk && k !== me.id && (res.env.p[k].n || '').toLowerCase() === nm) whoAsk = { id: k, n: res.env.p[k].n }; });
       // one agreement everyone edits: an empty form starts from theirs
-      if (opts.shared && opts.fill && blankish(mineNow) && !info.mineBack) {
+      if (opts.shared && opts.fill && !info.mineBack && mineBlank()) {
         var from = env.f && env.f !== me.id && res.env.p[env.f] ? res.env.p[env.f] : null;
-        if (from && !blankish(from.d)) { try { opts.fill(clone(from.d)); info.filled = true; } catch (e) {} }
+        if (from && !blankish(shareable(from.d))) { var cur0 = mine(); Object.keys(shareable(from.d)).forEach(function (k) { cur0[k] = clone(from.d[k]); }); try { opts.fill(cur0); info.filled = true; } catch (e) {} }
       }
       // your own part in what this tab holds is the one in your form; drop the copy that came back
       if (res.env.p[me.id]) delete res.env.p[me.id];
@@ -797,8 +808,9 @@
     function fromHash() {
       if (!W.location || !/^#together=/.test(W.location.hash || '')) return false;
       var env = read(W.location.hash);
-      try { W.history.replaceState(W.history.state, '', W.location.pathname + W.location.search); } catch (e) {}
       if (env && env.t !== tool) return false;   // another tool on this page may want it
+      // read once, then taken out of the address bar and this tab's history
+      try { W.history.replaceState(W.history.state, '', W.location.pathname + W.location.search); } catch (e) {}
       take(env, 'link');
       // the banner, in view
       setTimeout(function () { try { panel.scrollIntoView({ block: 'start' }); banner.focus({ preventScroll: true }); } catch (e) {} }, 60);
@@ -819,7 +831,7 @@
         var s = st.env && st.env.p[b.getAttribute('data-id')]; if (!s || !opts.fill) return;
         var cur = mine();
         if (k === 'use') { var f = b.getAttribute('data-f'); cur[f] = clone(s.d[f]); }
-        else Object.keys(s.d).forEach(function (x) { if (s.d[x] != null && s.d[x] !== '') cur[x] = clone(s.d[x]); });
+        else Object.keys(shareable(s.d)).forEach(function (x) { if (s.d[x] != null && s.d[x] !== '') cur[x] = clone(s.d[x]); });
         try { opts.fill(cur); } catch (er) {}
         draw(); send.refresh();
         status(T('Done. It’s in your part now. Send it back so you both have the same.', 'Listo. Ya está en tu parte. Envíala de vuelta para que los dos tengan lo mismo.'));
@@ -837,7 +849,7 @@
       if (k === 'isme' && whoAsk) {
         // their part was you on another device: it becomes yours here, and the id you send with
         var m = getMe(); m.id = whoAsk.id; saveMe();
-        if (st.env && st.env.p[whoAsk.id]) { var d0 = st.env.p[whoAsk.id].d; delete st.env.p[whoAsk.id]; if (opts.fill && blankish(mine())) { try { opts.fill(clone(d0)); } catch (er) {} } }
+        if (st.env && st.env.p[whoAsk.id]) { var d0 = st.env.p[whoAsk.id].d; delete st.env.p[whoAsk.id]; if (opts.fill && mineBlank()) { try { opts.fill(clone(d0)); } catch (er) {} } }
         whoAsk = null; persist(); render(); status(T('Got it. That part is yours on this device now.', 'Entendido. Esa parte es tuya en este aparato ahora.'));
         return;
       }
@@ -858,7 +870,9 @@
     fromHash();
     return {
       el: panel, changed: changed, refresh: function () { draw(); send.refresh(); },
-      env: function () { return st.env; }, current: current, link: url, take: take,
+      env: function () { return st.env; }, current: current, take: take,
+      // the link as it is now (a tool's own Copy or QR button): your random id is kept from here on
+      link: function () { var u = url(); if (u && getMe().fresh) saveMe(myName() || null); return u; },
       others: function () { return others().map(function (id) { return { id: id, n: st.env.p[id].n, at: st.env.p[id].at, d: clone(st.env.p[id].d) }; }); }
     };
   }

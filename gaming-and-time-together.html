@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="/assets/css/reading.css">
 <link rel="stylesheet" href="/assets/css/library-marks.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/collab.js" defer></script>
 <style>
   /* Only the site's own color tokens are used here, so dark mode follows site.css. */
   .pg-jump{ list-style:none; padding:0 !important; margin:1rem 0 1.75rem !important; display:flex; flex-wrap:wrap; gap:.5rem; }
@@ -311,7 +312,9 @@
   function dec(t) {
     try { var s = t.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var o = JSON.parse(decodeURIComponent(escape(atob(s)))); return o && typeof o === 'object' ? o : null; } catch (e) { return null; }
   }
-  function link() { return location.origin + location.pathname + '#deal=' + enc(fields()); }
+  // with collab.js: the "Work on this together" link (#together=…), which keeps each person's version; old #deal= links still open
+  function link() { if (collab) { var u = collab.link(); if (u) return u; } return location.origin + location.pathname + '#deal=' + enc(fields()); }
+  var collab = null;
   function keep() {
     try { if ($('td-keep').checked) localStorage.setItem(KEY, JSON.stringify(fields())); else localStorage.removeItem(KEY); } catch (e) {}
   }
@@ -372,6 +375,22 @@
     if (window.TOLShareKit && window.TOLShareKit.showQR) { go(); return; }
     var s = document.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; document.head.appendChild(s);
   }
+  // "Work on this together" (collab.js): each person's version of the deal travels inside the link, back and
+  // forth; opening one shows both side by side, with "Use this" wherever they differ. Nothing is uploaded.
+  document.addEventListener('DOMContentLoaded', function () {
+    var C = window.TOLCollab; if (!C || !C.attach) return;
+    var mm = document.createElement('div'), deal = $('deal'); deal.appendChild(mm);
+    var keys = ['td-games', 'td-heads', 'td-ask', 'td-eve', 'td-phone', 'td-chores'];
+    collab = C.attach({ tool: 'time-deal', page: '/gaming-and-time-together.html', mount: mm, shared: true,
+      title: ['our time-together deal', 'nuestro trato de tiempo juntos'],
+      lede: 'Fill in the deal on your own phone and send it. They change anything and send it back. Opening theirs shows both versions side by side, with “Use this” wherever they differ. Nobody’s version is overwritten.',
+      fields: keys.map(function (k) { return { k: k.slice(3), en: LABELS[k] }; }),
+      name: function () { return val('td-n1'); },
+      mine: function () { var o = {}; keys.forEach(function (k) { o[k.slice(3)] = val(k); }); return o; },
+      fill: function (d) { keys.forEach(function (k) { if (typeof d[k.slice(3)] === 'string') $(k).value = d[k.slice(3)].slice(0, 160); }); render(); },
+      onMerge: function (env, info) { if (info.from && !val('td-n2')) $('td-n2').value = info.from.slice(0, 40); render(); } });
+    if (collab) ids.forEach(function (id) { $(id).addEventListener('input', collab.changed); });
+  });
   $('td-qr').addEventListener('click', function () {
     qrShow(link(), { title: 'Scan with the other phone', note: 'Your deal opens on their phone, with your names swapped round so it reads from their side.' });
   });

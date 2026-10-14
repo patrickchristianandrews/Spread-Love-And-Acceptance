@@ -565,7 +565,14 @@
   function extractFrom(text) { const m = String(text || '').match(/[?&]from=([^&\s#]+)/); if (!m) return ''; try { return cleanName(decodeURIComponent(m[1].replace(/\+/g, ' '))); } catch (e) { return ''; } }
   // "an STDE", "a QFNA": the article follows how the first letter sounds
   function article(w) { return /^[AEFHILMNORSX]/i.test(w) ? 'an' : 'a'; }
-  function compareLink(code, name) { return '/wavelength.html?compare=' + code + (name ? '&from=' + encodeURIComponent(name) : '') + (ARRIVE.friends ? '&rel=friends' : ''); }
+  // the link that opens a comparison on their side: "#together=…" (collab.js, the site's shared format for
+  // two-person tools: after the #, so the code and name never reach a server) where it's loaded; the older
+  // "?compare=" otherwise. Both open here.
+  function compareLink(code, name) {
+    const C = window.TOLCollab;
+    if (C && C.wrap) { try { return C.wrap('wavelength', null, { page: '/wavelength.html', name: name || '', d: ARRIVE.friends ? { c: code, rel: 'friends' } : { c: code } }); } catch (e) {} }
+    return '/wavelength.html?compare=' + code + (name ? '&from=' + encodeURIComponent(name) : '') + (ARRIVE.friends ? '&rel=friends' : '');
+  }
   function absLink(rel) { try { return /^https?:$/.test(location.protocol) ? new URL(rel, location.href).href : 'https://spreadloveandacceptance.com' + rel; } catch (e) { return 'https://spreadloveandacceptance.com' + rel; } }
 
   /* ---------- helpers ---------- */
@@ -1208,10 +1215,18 @@
     // every way of sharing carries the code: the link opens a ready-made comparison on their side
     // the link sits inside the message itself, so "Copy message", a text, an email or the phone's own share
     // menu all carry it (some share menus copy only the text and drop a separate link)
-    const codeMessage = () => 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine: ' + absLink(compareLink(code, S.name.trim()));
+    const codeIntro = () => 'I’m ' + article(code) + ' ' + code + ', ' + arch.replace(/^The /, 'the ') + '. Find your Wave Code and compare it with mine:';
+    const codeMessage = () => codeIntro() + ' ' + absLink(compareLink(code, S.name.trim()));
     // no name yet? ask once (it's optional), so the comparison on their side says who it's from
     let askedName = false;
-    const shareCode = () => { share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true }); offerKeep(); };
+    // the "Send by" buttons the site's other two-person tools use (QR code, text message, email, apps, copy)
+    const shareCode = () => {
+      if (window.TOLCollab && window.TOLCollab.sendSheet) window.TOLCollab.sendSheet({ heading: 'Send your Wave Code', url: absLink(compareLink(code, S.name.trim())), title: 'My Wave Code', text: codeIntro(), subject: 'My Wave Code: ' + code,
+        note: 'It opens the quiz on their phone. Once they’ve found theirs, they see how your two codes compare, and can send theirs back to you.',
+        qrNote: 'It opens the Wave Code quiz on their phone, ready to compare with yours once they’ve found theirs.' });
+      else share({ title: 'My Wave Code', text: codeMessage(), url: false, result: true });
+      offerKeep();
+    };
     on('#wl-sharecode', () => {
       const nn = $('#wl-namenudge'), rn2 = $('#wl-rname');
       if (S.name.trim() || askedName || !rn2 || !nn) { if (nn) nn.innerHTML = ''; shareCode(); return; }
@@ -1395,6 +1410,22 @@
   // Opened from someone's Wave Code link (wavelength.html?compare=SFNA&from=Priya): read it, then take it out of the
   // address bar so the code and name don't linger in history or get shared on by accident.
   const fromLink = (function readLink() {
+    // "#together=…" (collab.js): the newest Wave Code in it that isn't yours
+    const C = window.TOLCollab;
+    if (C && /^#together=/.test(location.hash || '')) {
+      const env = C.read(location.hash);
+      if (env && env.t === 'wavelength') {
+        try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) {}
+        const me = C.me().id;
+        const ids = Object.keys(env.p).filter(k => k !== me && /^[QS][FT][DN][EA]$/.test(String((env.p[k].d || {}).c || '').toUpperCase())).sort((a, b) => (env.p[b].at || 0) - (env.p[a].at || 0));
+        if (!ids.length) return false;
+        const p = env.p[ids[0]];
+        if (p.d.rel === 'friends') ARRIVE.friends = true;
+        C.saveMe();
+        S.their = { code: String(p.d.c).toUpperCase(), from: cleanName(p.n) }; S.view = 'incoming'; S.ch = null;
+        return true;
+      }
+    }
     let q; try { q = new URLSearchParams(location.search); } catch (e) { return false; }
     if (!q.has('compare') && !q.has('from')) return false;
     const code = extractCode(q.get('compare') || ''), from = cleanName(q.get('from') || '');

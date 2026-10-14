@@ -12,8 +12,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Text Tone Checker: How Will My Message Land?</title>
-<meta name="description" content="Worried a text sounds rude or cold? See how it may land and what they may hear, then get a clearer version that keeps your ask. Free, private, no sign-up.">
+<title>Chat Analyzer: Check a Text, a Reply or a Whole Chat</title>
+<meta name="description" content="Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -417,6 +417,208 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 .rfoot-main{margin-bottom:0}
 .lookfor{margin-top:18px}.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
 .lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
+/* ===== Chat analyzer: three ways in ===== */
+.st-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:760px){.st-modes{grid-template-columns:1fr;gap:8px}.st-modes .mode{min-height:0;padding:10px 12px;gap:8px;font-size:1rem}}
+#main.is-chat .st-single{display:none!important}
+/* "From a screenshot" and "Paste a whole conversation", by the box */
+.st-in{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+.st-in button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);font-weight:600;font-size:.97rem;color:var(--ink)}
+.st-in button:hover{border-color:var(--b)}
+/* a whole conversation pasted into the one-message box */
+.st-chatoffer{margin:10px 0 4px;padding:12px 14px;border:1.5px solid var(--b);border-radius:14px;background:color-mix(in srgb,var(--b) 6%,var(--sheet))}
+.st-chatoffer p{margin:0 0 8px}
+.st-co-acts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.st-co-acts button,.st-co-list button{min-height:44px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--b);background:var(--sheet);font-weight:600;color:var(--ink)}
+.st-co-acts button.is-main{background:var(--b);color:#fff}
+.st-co-me{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:6px 0;font-size:.95rem}
+.st-co-me select{min-height:40px;border-radius:8px;border:1.5px solid var(--line);background:var(--sheet);max-width:100%}
+.st-co-list{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+.st-co-list button{width:100%;text-align:left;border-radius:12px;border-color:var(--line);font-weight:400;overflow-wrap:anywhere}
+.st-co-list b{font-weight:700;margin-right:4px}
+/* the whole-conversation view */
+.crpane{margin:6px 0 0}
+.crpane .tol-device-note{font-size:.92rem;color:var(--muted)}
+/* screenshots: which side is yours, then straight to the read */
+#conversation .cr-side{margin:.6rem 0 .4rem;border:0;padding:0}
+#conversation .cr-side legend{font-weight:700;font-family:var(--display);font-size:1.05rem;margin:0 0 .4rem}
+#conversation .cr-side-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#conversation .cr-side-opt{position:relative;display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:2px solid var(--line);border-radius:14px;background:var(--sheet);cursor:pointer;min-height:44px}
+#conversation .cr-side-opt:has(input:checked){border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
+#conversation .cr-side-opt:has(input:focus-visible){outline:3px solid var(--b);outline-offset:2px}
+#conversation .cr-side-opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+#conversation .cr-side-opt small{color:var(--muted);font-size:.85rem}
+.cr-mock{display:flex;flex-direction:column;gap:5px;padding:8px;border-radius:10px;background:var(--bg)}
+.cr-mock i{display:block;height:14px;border-radius:8px;font-style:normal}
+.cr-mock .t{width:58%;background:#D9D9DE;align-self:flex-start}
+.cr-mock .m{width:52%;background:#2B5B8C;align-self:flex-end;color:#fff;font-size:.7rem;line-height:14px;padding:0 6px;height:auto}
+.cr-mock.is-left .t{align-self:flex-end}.cr-mock.is-left .m{align-self:flex-start}
+#conversation .cr-side-line{font-size:.92rem;margin:.3rem 0}
+#conversation .linkbtn{background:none;border:0;padding:0 2px;min-height:32px;color:var(--b);text-decoration:underline;font:inherit;cursor:pointer}
+#conversation .cr-ask1{margin:1rem 0;padding:.9rem 1rem;border:1.5px solid var(--b);border-radius:14px;background:var(--sheet)}
+#conversation .cr-ask1 q{display:block;margin:.4rem 0 .6rem;font-style:italic;overflow-wrap:anywhere}
+#conversation .cr-read{margin:1rem 0 0;border:1.5px solid var(--line);border-radius:14px;background:var(--sheet)}
+#conversation .cr-read > summary{cursor:pointer;min-height:48px;display:flex;align-items:center;gap:.5rem;padding:.4rem 1rem;font-family:var(--display);font-weight:600}
+#conversation .cr-read-b{padding:0 1rem 1rem}
+#conversation .cr-read ol{margin:.2rem 0 .6rem;padding-left:1.2rem}
+#conversation .cr-read li{margin:.25rem 0;overflow-wrap:anywhere}
+@media (max-width:560px){#conversation .cr-side-opts{grid-template-columns:1fr}}
+/* the Conversation Reader's own look, kept inside its view */
+#conversation .cr-private{display:flex; gap:.8rem; align-items:flex-start; margin:0 0 2rem; padding:.85rem 1.1rem; background:var(--paper-deep); border-left:4px solid var(--credit); border-radius:var(--radius); font-size:.95rem; line-height:1.55;}
+#conversation .cr-private strong{font-family:"Fraunces", Georgia, serif;}
+#conversation .cr-private svg{flex:none; margin-top:.15rem;}
+#conversation .cr-step{margin:2.2rem 0 0;}
+#conversation .cr-step > h2{margin:0 0 .5rem !important; font-size:1.35rem !important;}
+#conversation .cr-step > h2 span{font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.8rem; color:var(--brass-ink, #7A5620); margin-right:.5rem; font-weight:400;}
+#conversation .cr-hint{font-size:.93rem; color:var(--ink-soft); margin:0 0 .7rem !important;}
+#conversation textarea, #conversation select{font:inherit; font-size:1rem; line-height:1.55; width:100%; box-sizing:border-box; padding:.8rem .9rem; background:#FFFDF6; color:var(--ink); border:1px solid var(--ink-soft); border-radius:var(--radius);}
+#conversation textarea:focus-visible{outline:2px solid var(--focus); outline-offset:1px;}
+#conversation #cr-input{min-height:13rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.9rem;}
+#conversation .cr-actions{display:flex; flex-wrap:wrap; gap:.6rem 1rem; align-items:center; margin:.8rem 0 0;}
+#conversation .cr-btn{font:inherit; font-weight:600; font-size:1rem; padding:.6rem 1.15rem; border-radius:var(--radius); border:1px solid var(--ink); background:var(--ink); color:var(--paper); cursor:pointer;}
+#conversation .cr-btn:hover{background:var(--credit); border-color:var(--credit);}
+#conversation .cr-btn.is-quiet{background:none; color:var(--ink);}
+#conversation .cr-btn.is-quiet:hover{background:var(--paper-deep); color:var(--ink); border-color:var(--ink);}
+#conversation .cr-btn.is-small{font-size:.85rem; padding:.35rem .7rem; font-weight:500;}
+#conversation .cr-btn:focus-visible, #conversation .cr-chip:focus-within, #conversation .cr-who button:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+#conversation .cr-formats{margin:.6rem 0 0; font-size:.9rem;}
+#conversation .cr-formats summary{cursor:pointer; color:var(--ink-soft);}
+#conversation .cr-formats ul{margin:.5rem 0 0;}
+#conversation .cr-chips{display:flex; flex-wrap:wrap; gap:.5rem; margin:.3rem 0 0;}
+#conversation .cr-chip{position:relative;}
+#conversation .cr-chip input{position:absolute; opacity:0; inset:0; margin:0; cursor:pointer;}
+#conversation .cr-chip span{display:inline-block; padding:.45rem .85rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); font-size:.95rem;}
+#conversation .cr-chip input:checked + span{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+#conversation .cr-note{font-size:.9rem; color:var(--ink-soft); margin:.6rem 0 0 !important;}
+#conversation .cr-safety{margin:2rem 0 0; padding:1.1rem 1.3rem; background:#F6E4DC; border:1px solid var(--debit); border-left:6px solid var(--debit); border-radius:var(--radius);}
+#conversation .cr-safety h2{margin:0 0 .4rem !important; font-size:1.3rem !important;}
+#conversation .cr-safety p{margin:0 0 .5rem !important;}
+#conversation .cr-summary{margin:2rem 0 0; padding:1.3rem 1.4rem; border:1px solid var(--ink); border-radius:var(--radius); background:var(--paper);}
+#conversation .cr-summary h2{margin:0 0 .5rem !important;}
+#conversation .cr-summary p{margin:0 0 .6rem !important;}
+#conversation .cr-temp{display:inline-block; padding:.1rem .55rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; vertical-align:.1em;}
+#conversation .cr-temp.calm{background:#DCE8DF; color:#2F5A3C;}
+#conversation .cr-temp.warm, #conversation .cr-temp.tense{background:#F1E2C2; color:#7A5520;}
+#conversation .cr-temp.hot{background:#F2D6CC; color:#7E3421;}
+#conversation .cr-chart{margin:1rem 0 .3rem;}
+#conversation .cr-chart svg{display:block; width:100%; height:auto;}
+#conversation .cr-legend{display:flex; flex-wrap:wrap; gap:.3rem 1.2rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; color:var(--ink-soft);}
+#conversation .cr-legend i{display:inline-block; width:.8rem; height:.8rem; border-radius:2px; vertical-align:-.1em; margin-right:.35rem;}
+#conversation .cr-moves{list-style:none; padding:0 !important; margin:1rem 0 0 !important; display:grid; gap:1rem;}
+#conversation .cr-moves li{margin:0 !important; max-width:none !important; padding:1.1rem 1.25rem; background:var(--paper-deep); border:1px solid var(--line); border-left:6px solid var(--credit); border-radius:var(--radius);}
+#conversation .cr-moves li.is-first{border-color:var(--ink); border-left-color:var(--credit);}
+#conversation .cr-step > h3{font-weight:600; font-size:1.3rem; margin:2.2rem 0 .6rem !important;}
+#conversation .cr-moves h3, #conversation .cr-moves h3{margin:0 0 .35rem !important; font-size:1.15rem !important; font-weight:600;}
+#conversation .cr-moves p{margin:0 0 .6rem !important; font-size:.97rem;}
+#conversation .cr-script{display:flex; gap:.6rem; align-items:flex-start; margin:.2rem 0 .7rem; padding:.7rem .85rem; background:#FFFDF6; border:1px dashed var(--brass); border-radius:var(--radius); font-size:1rem; line-height:1.55;}
+#conversation .cr-script q{flex:1; quotes:none;}
+#conversation .cr-script .cr-btn{flex:none;}
+#conversation .cr-thread{list-style:none; padding:0 !important; margin:1rem 0 0 !important; display:flex; flex-direction:column; gap:.7rem;}
+#conversation .cr-msg{margin:0 !important; max-width:min(34rem, 88%) !important; align-self:flex-start;}
+#conversation .cr-msg.is-me{align-self:flex-end;}
+#conversation .cr-bubble{padding:.65rem .9rem .7rem; border-radius:14px 14px 14px 4px; background:#FFFDF6; border:1px solid var(--line); font-size:.98rem; line-height:1.55; white-space:pre-wrap; overflow-wrap:anywhere;}
+#conversation .cr-msg.is-me .cr-bubble{border-radius:14px 14px 4px 14px; background:#E6EEE7; border-color:#C9D9CC;}
+#conversation .cr-meta{display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; margin:0 0 .25rem; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; color:var(--ink-soft);}
+#conversation .cr-msg.is-me .cr-meta{justify-content:flex-end;}
+#conversation .cr-who button{font:inherit; background:none; border:0; padding:0; color:var(--ink-soft); text-decoration:underline dotted; text-underline-offset:3px; cursor:pointer;}
+#conversation .cr-flag{padding:.05rem .45rem; border-radius:999px; background:var(--ink); color:var(--paper);}
+#conversation .cr-flag.is-repair{background:var(--credit);}
+#conversation .cr-flag.is-missed{background:var(--debit);}
+#conversation .cr-heat{display:inline-block; width:3.2rem; height:.4rem; border-radius:2px; background:var(--line); overflow:hidden; vertical-align:middle;}
+#conversation .cr-heat b{display:block; height:100%; background:var(--debit);}
+#conversation .cr-bubble mark{background:none; color:inherit; padding:0 .05em; border-radius:2px;}
+#conversation .cr-bubble mark.t-hot{background:rgba(150,65,43,.16); box-shadow:inset 0 -2px 0 var(--debit);}
+#conversation .cr-bubble mark.t-warm, #conversation .cr-bubble mark.t-tense{background:rgba(168,121,47,.16); box-shadow:inset 0 -2px 0 var(--brass);}
+#conversation .cr-bubble mark.t-note{box-shadow:inset 0 -2px 0 rgba(82,75,62,.45);}
+#conversation .cr-bubble mark.t-good{background:rgba(62,107,76,.15); box-shadow:inset 0 -2px 0 var(--credit);}
+#conversation .cr-bubble mark.t-alarm{background:rgba(150,65,43,.3); box-shadow:inset 0 -2px 0 var(--debit);}
+#conversation .cr-why{margin:.35rem 0 0; font-size:.9rem;}
+#conversation .cr-why summary{cursor:pointer; color:var(--ink-soft); font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem;}
+#conversation .cr-why ul{margin:.4rem 0 0; padding-left:1.1rem;}
+#conversation .cr-why li{margin:.3rem 0;}
+#conversation .cr-msg.is-me .cr-why{text-align:left;}
+#conversation .cr-table-wrap{overflow-x:auto; margin:1rem 0 .3rem;}
+#conversation .cr-table{width:100%; border-collapse:collapse; font-size:.95rem;}
+#conversation .cr-table th, #conversation .cr-table td{text-align:left; padding:.45rem .6rem; border-bottom:1px solid var(--line);}
+#conversation .cr-table th{border-bottom:3px double var(--ink); font-weight:600;}
+#conversation .cr-table td.n{text-align:center; font-family:"IBM Plex Mono", ui-monospace, monospace; width:5.5rem;}
+#conversation .cr-table tr.good td:first-child::before{content:"+ "; color:var(--credit); font-weight:600;}
+#conversation .cr-list{padding-left:1.2rem;}
+#conversation .cr-list li{margin:.45rem 0;}
+#conversation #cr-draft{min-height:6.5rem;}
+#conversation .cr-checks{list-style:none; padding:0 !important; margin:.8rem 0 0 !important; display:grid; gap:.3rem; font-size:.95rem;}
+#conversation .cr-checks li{margin:0 !important;}
+#conversation .cr-checks li::before{content:"○"; display:inline-block; width:1.4rem; color:var(--ink-soft);}
+#conversation .cr-checks li.ok::before{content:"✓"; color:var(--credit); font-weight:700;}
+#conversation .cr-soft{margin:.9rem 0 0; padding:.8rem .95rem; background:var(--paper-deep); border-left:4px solid var(--credit); border-radius:var(--radius);}
+#conversation .cr-soft p{margin:0 0 .5rem !important;}
+#conversation .cr-draft-marks{margin:.7rem 0 0 !important; font-size:.93rem;}
+#conversation .cr-limits{margin:2.5rem 0 0;}
+@media (max-width:560px){#conversation .cr-msg{max-width:94% !important;} #conversation .cr-script{flex-direction:column;}}
+#conversation .cr-drafts{list-style:none; padding:0; margin:.4rem 0 0;}
+#conversation .cr-drafts li{margin:0 0 .8rem;}
+#conversation .cr-drafts .cr-dl{display:block; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; color:var(--ink-soft); margin:0 0 .25rem;}
+#conversation .cr-table td .plus{color:var(--credit); font-weight:600; margin-right:.25rem;}
+#conversation .lf-list{padding-left:1.1rem;}
+#conversation .lf-list li{margin:0 0 .6rem;}
+#conversation .lf-ex{color:var(--ink-soft);}
+#conversation .lf-why{font-size:.94rem;}
+#conversation .lf-h{font-size:1.02rem; margin:1rem 0 .4rem;}
+#conversation .lf-note{font-size:.92rem; color:var(--ink-soft);}
+@media print{#conversation .cr-input-step, #conversation .cr-actions, #conversation .cr-draft-step, #conversation .cr-private{display:none;}}
+#conversation /* drop-downs keep the results tidy: open one part at a time */
+  .cr-drop{margin:.75rem 0; border-radius:22px; border:1.5px solid transparent;
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,253,249,.86), rgba(255,253,249,.86)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box;
+    box-shadow:0 8px 22px rgba(110,90,160,.09);}
+#conversation .cr-drop > summary{list-style:none; display:flex; align-items:center; gap:.6rem; min-height:52px; padding:.7rem 1rem; cursor:pointer; border-radius:22px;
+    font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.08rem; color:var(--ink);}
+#conversation .cr-drop > summary::-webkit-details-marker{display:none;}
+#conversation .cr-drop > summary::after{content:""; margin-left:auto; flex:none; width:.6rem; height:.6rem; border-right:2px solid var(--brass); border-bottom:2px solid var(--brass); transform:rotate(45deg); transition:transform .2s;}
+#conversation .cr-drop[open] > summary::after{transform:rotate(225deg);}
+#conversation .cr-drop > summary:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+#conversation .cr-drop-t{display:inline-flex; align-items:center; gap:.5rem;}
+#conversation .cr-drop-n{font:500 .75rem/1.2 "IBM Plex Mono", monospace; color:#6A5B86; background:#F1EAF8; border-radius:999px; padding:.25rem .6rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:45%;}
+#conversation .cr-drop-b{padding:0 1rem 1rem;}
+#conversation .cr-drop-b > :first-child{margin-top:0 !important;}
+#conversation .cr-drop.is-key{background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(236,247,240,.9), rgba(236,247,240,.9)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box;}
+#conversation .cr-num{display:inline-grid; place-items:center; min-width:2rem; height:2rem; border-radius:50%; background:#F9E1EA; font:600 .75rem "IBM Plex Mono", monospace; color:#7A3355;}
+#conversation .cr-who .cr-drop{margin-top:0;}
+#conversation .cr-pick{gap:.6rem;}
+#conversation .cr-pick .cr-btn{max-width:100%; overflow-wrap:anywhere; text-align:left;}
+@media (max-width:560px){#conversation .cr-drop > summary{font-size:1rem; flex-wrap:wrap;} #conversation .cr-drop-n{max-width:100%; margin-left:0; order:3;}}
+@media (prefers-reduced-motion: reduce){#conversation .cr-drop > summary::after{transition:none;}}
+#conversation /* the summary and the suggested moves as soft bubbles, #conversation like the rest of the site */
+  .cr-summary, #conversation .cr-moves > li, #conversation .cr-script, #conversation .cr-safety{border:1.5px solid transparent !important; border-radius:22px !important;
+    background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,253,249,.88), rgba(255,253,249,.88)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box !important;
+    box-shadow:0 8px 22px rgba(110,90,160,.09);}
+#conversation .cr-moves > li.is-first{background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(236,247,240,.92), rgba(236,247,240,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #D9C8F0 30%, #C6DFF4 55%, #C7EBD6 78%, #F8E7AE) border-box !important;}
+#conversation .cr-safety{background:radial-gradient(120% 90% at 14% 8%, rgba(255,255,255,.9), rgba(255,255,255,0) 42%) padding-box, linear-gradient(rgba(255,241,236,.92), rgba(255,241,236,.92)) padding-box, linear-gradient(135deg, #F7C9D4, #F4A6B8 50%, #F8E7AE) border-box !important;}
+#conversation /* screenshots: pick, #conversation check, #conversation read */
+  .cr-shots{margin-top:1rem; padding-top:.9rem; border-top:1px dashed rgba(120,100,70,.35);}
+#conversation .cr-shots-h{margin:0 0 .4rem;}
+#conversation .cr-shots .cr-actions{margin:.3rem 0;}
+#conversation .cr-shots label.cr-btn{display:inline-flex; align-items:center; cursor:pointer;}
+#conversation .cr-input-step.is-drop{outline:3px dashed var(--brass); outline-offset:6px;}
+#conversation .cr-review{margin-top:1.2rem;}
+#conversation .cr-rv-names{display:flex; flex-wrap:wrap; gap:.6rem 1.2rem; margin:.6rem 0;}
+#conversation .cr-rv-names label{display:flex; flex-direction:column; gap:.2rem; font-weight:600; font-size:.95rem;}
+#conversation .cr-rv-names input{min-height:44px; padding:.4rem .7rem; border:1.5px solid rgba(120,100,70,.35); border-radius:12px; font:inherit; max-width:100%;}
+#conversation .cr-rv-side{border:0; padding:0; margin:.4rem 0 .8rem; display:flex; flex-wrap:wrap; gap:.3rem 1.2rem;}
+#conversation .cr-rv-side legend{font-weight:600; margin-bottom:.2rem;}
+#conversation .cr-rv-side label{display:inline-flex; align-items:center; gap:.4rem; min-height:44px;}
+#conversation .cr-rv-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.6rem;}
+#conversation .cr-rv-row{border:1.5px solid rgba(120,100,70,.25); border-radius:16px; padding:.55rem .7rem; background:rgba(255,253,249,.9); max-width:92%;}
+#conversation .cr-rv-row.is-me{align-self:flex-end; background:rgba(230,241,234,.95);}
+#conversation .cr-rv-top{display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .6rem; margin-bottom:.35rem;}
+#conversation .cr-rv-who{display:inline-flex; align-items:center; gap:.35rem; font-size:.9rem; font-weight:600;}
+#conversation .cr-rv-who select{min-height:40px; border-radius:10px; font:inherit; max-width:12rem;}
+#conversation .cr-rv-text textarea{width:100%; min-height:3rem; font:inherit; border:1px solid rgba(120,100,70,.3); border-radius:10px; padding:.4rem .6rem; box-sizing:border-box;}
+@media (max-width:560px){#conversation .cr-rv-row{max-width:100%;}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #conversation .cr-rv-row{background:rgba(40,36,50,.9);} :root:not([data-theme="light"]) #conversation .cr-rv-row.is-me{background:rgba(36,56,46,.9);}}
+:root[data-theme="dark"] #conversation .cr-rv-row{background:rgba(40,36,50,.9);}
+:root[data-theme="dark"] #conversation .cr-rv-row.is-me{background:rgba(36,56,46,.9);}
+#conversation /* never show a reward card next to a safety read */
+body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
 </style>
 <script src="/assets/js/site.js" defer></script>
 <!-- seo:start -->
@@ -460,8 +662,8 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 <link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-2064x2752.png" media="(device-width: 1032px) and (device-height: 1376px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <meta property="og:site_name" content="Spread Love &amp; Acceptance">
-<meta property="og:title" content="Text Tone Checker: How Will My Message Land?">
-<meta property="og:description" content="Worried a text sounds rude or cold? See how it may land and what they may hear, then get a clearer version that keeps your ask. Free, private, no sign-up.">
+<meta property="og:title" content="Chat Analyzer: Check a Text, a Reply or a Whole Chat">
+<meta property="og:description" content="Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://spreadloveandacceptance.com/signal-translator.html">
 <meta property="og:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
@@ -471,11 +673,11 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 <meta property="og:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Text Tone Checker: How Will My Message Land?">
-<meta name="twitter:description" content="Worried a text sounds rude or cold? See how it may land and what they may hear, then get a clearer version that keeps your ask. Free, private, no sign-up.">
+<meta name="twitter:title" content="Chat Analyzer: Check a Text, a Reply or a Whole Chat">
+<meta name="twitter:description" content="Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.">
 <meta name="twitter:image" content="https://spreadloveandacceptance.com/assets/img/og-image.png">
 <meta name="twitter:image:alt" content="Two friends sharing one heart, with two happy pups: Spread Love &amp; Acceptance">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/signal-translator.html#page","name":"Text Tone Checker: How Will My Message Land?","headline":"Text Tone Checker: How Will My Message Land?","description":"Worried a text sounds rude or cold? See how it may land and what they may hear, then get a clearer version that keeps your ask. Free, private, no sign-up.","url":"https://spreadloveandacceptance.com/signal-translator.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-14","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Text Tone Checker: How Will My Message Land?","item":"https://spreadloveandacceptance.com/signal-translator.html"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/signal-translator.html#page","name":"Chat Analyzer: Check a Text, a Reply or a Whole Chat","headline":"Chat Analyzer: Check a Text, a Reply or a Whole Chat","description":"Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.","url":"https://spreadloveandacceptance.com/signal-translator.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools, communication tool, tone checker, how a message lands, repair after an argument, neurodiversity, listening","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-09-29","dateModified":"2026-10-14","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"WebApplication","applicationCategory":"LifestyleApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Chat Analyzer: Check a Text, a Reply or a Whole Chat","item":"https://spreadloveandacceptance.com/signal-translator.html"}]}]}</script>
 <!-- seo:end -->
 </head>
 <body>
@@ -488,23 +690,94 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
   <main id="main" data-research>
   <header class="top">
     <div class="kicker st-wd">Want to understand why messages land differently? <a href="wired-differently.html">Read: Wired differently</a></div>
-    <h1>Text message checker</h1>
+    <h1>Chat analyzer</h1>
     <p class="tol-aka no-bubble" style="margin:.3rem 0 0;font-size:.98rem;font-style:italic;color:var(--muted)">Also called the Signal Translator</p>
-    <p class="tol-what st-sub no-bubble"><strong>What it does:</strong> shows how a message may land before you send it, or helps you read one you got. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> a plain read of the tone and a kinder, clearer version that keeps your ask. <span aria-hidden="true">&middot;</span> About 2 minutes</p>
-    <div class="modes st-modes" role="radiogroup" aria-label="What would you like to do?">
-      <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>Check a message before I send it</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
-      <label class="mode"><input type="radio" name="stmode" value="got"><span><b>Help me read a message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>
+    <p class="tol-what st-sub no-bubble"><strong>What it does:</strong> reads one message you&rsquo;re about to send, one you got, a whole conversation, or a screenshot of one. <span aria-hidden="true">&middot;</span> <strong>What you get:</strong> how it may land or what it might mean, and calm, clear words that keep your point. <span aria-hidden="true">&middot;</span> About 2 minutes</p>
+    <div class="modes st-modes" role="radiogroup" aria-label="What would you like to read?">
+      <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>A message I&rsquo;m about to send</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
+      <label class="mode"><input type="radio" name="stmode" value="got"><span><b>A message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>
+      <label class="mode"><input type="radio" name="stmode" value="chat"><span><b>A whole conversation or screenshot</b><small>Paste a chat or add a screenshot. See where it turned, and a calm way to answer.</small></span></label>
     </div>
     <p class="lede">It reads the words only, on your device. Nothing you type is saved or sent.<span class="lede-more"> Everything below the box is optional.</span></p>
   </header>
 
+  <!-- A WHOLE CONVERSATION OR SCREENSHOT (the Conversation Reader, moved in from /conversation-reader.html) -->
+  <section id="conversation" class="crpane" aria-labelledby="cr-s1" hidden>
+    <p class="tol-safe-line no-bubble" style="font-size:.88rem;color:var(--ink-soft,#5A5346)">Made for everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, <a href="/safety.html">private help is here</a>.</p>
+    <p class="tol-device-note"><span aria-hidden="true">💻</span> <span>A long thread is easier to paste on a laptop or desktop, where you can select a whole conversation at once. On a phone, copying a few messages at a time works fine, and so does a screenshot.</span></p>
+    <div class="cr-private">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--credit)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+      <p style="margin:0;"><strong>Private by design.</strong> The Chat analyzer runs entirely in your browser. What you paste, and any screenshot, is never saved, collected or sent anywhere, and nobody sees it but you. Close the tab and it&rsquo;s gone.</p>
+    </div>
+    <div class="cr-step cr-input-step">
+      <h2 id="cr-s1"><span>01</span>Paste the conversation</h2>
+      <p class="cr-hint">Copy the messages from your phone, a chat app or an email, and paste them here. Names at the start of each line help (&ldquo;Sam: &hellip;&rdquo;), but they&rsquo;re not required. If there are names, it will ask which one is you.</p>
+      <label for="cr-input" class="visually-hidden" style="position:absolute;left:-9999px;">The conversation</label>
+      <textarea id="cr-input" spellcheck="false" placeholder="Sam: are we still on for Saturday?&#10;Alex: maybe, I'll let you know later&#10;Sam: you said that last week. When will you know?"></textarea>
+      <div id="cr-ctx" data-ctx-for="cr"></div>
+      <div class="cr-actions">
+        <button type="button" class="cr-btn" id="cr-go">Read it</button>
+        <button type="button" class="cr-btn is-quiet" id="cr-example">Try an example</button>
+        <button type="button" class="cr-btn is-quiet" id="cr-clear">Clear</button>
+      </div>
+      <p class="cr-hint" id="cr-loading" role="status" aria-live="polite"></p>
+      <details class="cr-formats">
+        <summary>What can I paste?</summary>
+        <ul>
+          <li><strong>Lines with names:</strong> &ldquo;Sam: &hellip;&rdquo; / &ldquo;Alex: &hellip;&rdquo;, or &ldquo;Me:&rdquo; and &ldquo;Them:&rdquo;.</li>
+          <li><strong>Slack, Teams or Discord:</strong> select the messages and copy them. A &ldquo;Sam Lee&nbsp; 10:02 AM&rdquo; or &ldquo;Sam &mdash; Today at 10:02&rdquo; line with the message under it works, and so does &ldquo;[10:02 AM] Sam Lee&rdquo;.</li>
+          <li><strong>Lines with times:</strong> &ldquo;[10:02] Sam: &hellip;&rdquo;.</li>
+          <li><strong>A WhatsApp or iMessage export</strong> (&ldquo;[date, time] Sam: &hellip;&rdquo;, without media).</li>
+          <li><strong>A copied text thread</strong> with no names: put a blank line between messages, and it will alternate speakers. You can switch who said what afterward.</li>
+          <li><strong>An email thread,</strong> with the &ldquo;On &hellip; wrote:&rdquo; lines left in.</li>
+          <li><strong>Screenshots</strong> of a chat (iMessage, WhatsApp, Messenger, Android Messages, Instagram, texts): use &ldquo;Choose screenshots&rdquo;, or paste or drop them. They&rsquo;re read on this device and never uploaded. It goes straight to the read, and what it read stays in a &ldquo;What I read&rdquo; box you can open and edit.</li>
+          <li><strong>A conversation from memory</strong> (in person or on the phone): write it as &ldquo;Me:&rdquo; and &ldquo;Them:&rdquo; lines.</li>
+        </ul>
+      </details>
+    </div>
+    <div id="cr-out" aria-live="polite"></div>
+    <section class="cr-step cr-draft-step" id="cr-draft-step" aria-labelledby="cr-s4" hidden>
+      <details class="cr-drop" open>
+        <summary><span class="cr-drop-t"><span class="cr-num">04</span><span id="cr-s4">Check your reply before you send it</span></span></summary>
+        <div class="cr-drop-b">
+          <p class="cr-hint">Write what you&rsquo;re thinking of sending. It&rsquo;s checked the same way, as you type.</p>
+          <label for="cr-draft" style="position:absolute;left:-9999px;">Your reply</label>
+          <textarea id="cr-draft" placeholder="Write your reply here…"></textarea>
+          <div id="cr-draft-out"></div>
+        </div>
+      </details>
+    </section>
+    <section class="cr-limits" aria-labelledby="cr-lf">
+      <details>
+        <summary><strong id="cr-lf">What it looks for</strong></summary>
+        <div id="cr-lookfor"><p>The list of patterns appears here.</p></div>
+      </details>
+    </section>
+    <section class="cr-limits" aria-labelledby="cr-lim">
+      <details>
+        <summary><strong id="cr-lim">What it can and can&rsquo;t do with a whole conversation</strong></summary>
+        <p>It looks for patterns in words: absolutes like &ldquo;always&rdquo; and &ldquo;never&rdquo;, sentences about who someone is, dismissals, sarcasm, eye-rolls and passive-aggressive jabs, comparisons, shutting the door without a time to come back, capitals, apologies and other repair attempts, clear asks, questions that may not have been answered, the past being brought in, and long silences when times are included. It weighs them to show where the conversation got heated.</p>
+        <p><strong>Adding context makes the read fairer.</strong> Under &ldquo;Add context&rdquo; you can say who they are to you, how they usually write, whether this keeps coming back, how you&rsquo;re each doing today and what you want from it. The read uses it and shows what it took into account. It still can&rsquo;t know everything, and one conversation can&rsquo;t tell you what a relationship is like.</p>
+        <p>It can&rsquo;t hear tone of voice, and it doesn&rsquo;t know your history, your in-jokes, or what either of you meant. The same words can be affectionate between two people and cutting between two others. Use it to slow down and prepare, never as proof of who was right. The program judges arrangements, never people.</p>
+        <p>A screenshot is read by a text reader on this device. It can miss a word, or an emoji, so the &ldquo;What I read&rdquo; box shows exactly what it used.</p>
+        <p>If someone&rsquo;s wiring shapes how words land, choose <a href="#main" data-stmode="send">A message I&rsquo;m about to send</a> above to go deeper on one sentence at a time, and <a href="/wired-differently.html">Wired Differently</a> explains why the same words reach people differently.</p>
+      </details>
+    </section>
+  </section>
+
   <!-- THE SENTENCE (first) -->
-  <section class="panel s4panel" id="sentenceBox" aria-labelledby="s3">
+  <section class="panel s4panel st-single" id="sentenceBox" aria-labelledby="s3">
     <h2 id="s3"><label for="phrase" id="phraseLab" class="no-bubble">Type your sentence</label></h2>
     <p class="hint" id="phraseHint">Type it the way it would actually come out. A text, a work chat message, or something you plan to say out loud.</p>
     <div class="replyto no-bubble" id="replyTo" hidden><p class="replyto-k no-bubble">Replying to:</p><p class="replyto-t no-bubble" id="replyToText"></p><button type="button" class="linkbtn" id="replyToClear">I&rsquo;m not replying to this</button></div>
     <p class="relset small" id="relSet" hidden>Reading it for: <b id="relSetName"></b>. <button type="button" class="linkbtn" id="relSetChange">Change</button></p>
     <textarea id="phrase" placeholder="The exact words, as they would be said or sent." maxlength="1500" aria-describedby="phraseHint msg"></textarea>
+    <!-- a screenshot, or a whole conversation: both open "A whole conversation or screenshot"; one message comes back here -->
+    <div class="st-in" role="group" aria-label="Other ways to add it">
+      <button type="button" id="stFromShot"><span aria-hidden="true">📷</span> From a screenshot</button>
+      <button type="button" id="stFromChat"><span aria-hidden="true">💬</span> Paste a whole conversation</button>
+    </div>
+    <div class="st-chatoffer" id="stChatOffer" hidden aria-live="polite"></div>
     <div class="field gotrel" id="gotRelField" hidden>
       <label for="gotRelSel">Who sent it? (optional)</label>
       <select id="gotRelSel">
@@ -631,10 +904,10 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
   </section>
 
   <!-- RESULTS -->
-  <section id="results" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
+  <section id="results" class="st-single" hidden aria-live="polite" aria-labelledby="rTitle" tabindex="-1"></section>
 
   <!-- other tools and where this fits: tucked away, so the box and the answer stay uncluttered -->
-  <details class="st-more" id="stMore">
+  <details class="st-more st-single" id="stMore">
     <summary>More</summary>
     <ul class="ul">
       <li><a href="/perspective-shifter.html">Not sure how they saw it?</a> The Perspective Shifter helps you see the moment from their side.</li>
@@ -643,7 +916,7 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
     </ul>
   </details>
 
-  <section class="panel" id="notes" aria-labelledby="sheetH">
+  <section class="panel st-single" id="notes" aria-labelledby="sheetH">
     <span class="step">TAKE THIS INTO THE ROOM</span>
     <h2 id="sheetH">Talking notes</h2>
     <button type="button" class="linkbtn" id="notesOpen" aria-controls="notes">Show the talking notes, check-in rules and conflict rules</button>
@@ -763,7 +1036,7 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
     <p class="hint">Nothing on this sheet is stored. If you close the tab before you save the PDF, the sentences are gone. Leave the score at home. Write the next sentence does not erase what is already here.</p>
   </section>
 
-  <details class="panel fits" id="fits">
+  <details class="panel fits st-single" id="fits">
     <summary><span class="step">WHERE IT FITS</span> When to use this tool, and what it is for</summary>
     <p class="pillar-note">It looks at how a sentence is built (pressure words, questions that carry a complaint, absolutes, hints, a missing when) and how that structure may land for someone wired differently. That is <a href="five-pillars.html#tune-signals">Pillar IV, Tune how you send and receive</a>. Timing and state are <a href="five-pillars.html#read-your-state">Pillar III, Read your state first</a>. Inside you, it shows how you send. Between you and others, it helps the message you meant be the one that arrives.</p>
     <div class="use-banner">
@@ -781,14 +1054,14 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
       </div>
     </div>
   </details>
-  <details class="panel lookfor" id="lookforBox">
+  <details class="panel lookfor st-single" id="lookforBox">
     <summary>What it looks for</summary>
     <div id="lookfor"><p>The list of patterns appears here.</p></div>
   </details>
-  <div class="note">
+  <div class="note st-single">
     <b>What this tool is, and isn't.</b> It uses rules built from published research and lived-experience guidance, collected in <a href="wired-differently.html">Wired Differently</a>. It looks for patterns in the words, like hints, sarcasm, vague timing and labels, that commonly cause static for particular wirings. It can't hear tone, see faces or know your history, and it can't diagnose anyone. Every reading starts with "may" for a reason: people vary widely within every group. The best use is to find the question worth asking each other. It scores the wording, never the person.
   </div>
-  <p class="note"><b>More than one message?</b> If you need a whole back-and-forth in writing, try <a href="/write-it-through.html">Talk it through in writing</a>. It uses this same check on each part, asks you to wait before you send, and keeps both replies in order, with what you agreed at the end.</p>
+  <p class="note st-single"><b>More than one message?</b> If you need a whole back-and-forth in writing, try <a href="/write-it-through.html">Talk it through in writing</a>. It uses this same check on each part, asks you to wait before you send, and keeps both replies in order, with what you agreed at the end.</p>
 <div data-tool-guide="signal-translator"></div>
 <script src="/assets/js/tool-guide.js" defer></script>
   </main>
@@ -2543,6 +2816,9 @@ const MODE_TEXT = {
   got:{lab:"Paste the message you got", hint:"Paste it exactly as it came. You'll see what it might mean and calm ways to answer. It reads the words only, and it won't guess what they think of you.", ph:"The message someone sent you.", go:"Read it kindly"}
 };
 function setMode(m){
+  if(m==="chat"){ showChat(true); return; }
+  showChat(false);
+  const co=$("#stChatOffer"); if(co){ co.hidden=true; co.innerHTML=""; }
   stMode = m; const t = MODE_TEXT[m];
   $("#phraseLab").textContent = t.lab; $("#phraseHint").textContent = t.hint; $("#phrase").placeholder = t.ph; $("#go").textContent = t.go;
   $("#fine").hidden = m==="got"; const pr=document.querySelector(".presetrow"); if(pr) pr.hidden = m==="got";
@@ -2641,7 +2917,128 @@ document.querySelectorAll('input[name="stmode"]').forEach(r=>r.addEventListener(
 // ?mode=got opens "Someone sent me this" (the co-parent and work pages link here for a message that stung)
 try { if (new URLSearchParams(location.search).get("mode") === "got") setMode("got"); } catch (e) {}
 /* the share-target code further down switches the mode and reads a shared message */
-window.TOLSignalPage = { setMode: m=>setMode(m), run: ()=>run() };
+window.TOLSignalPage = { setMode: m=>setMode(m), run: ()=>run(), checkOne: o=>checkOne(o) };
+/* ============================================================
+   A WHOLE CONVERSATION OR SCREENSHOT: the Conversation Reader's view (conversation-reader-engine.js,
+   conversation-reader.js and the screenshot reader conversation-reader-ocr.js). They load only when this view
+   is opened, or when a whole chat is pasted into the one-message box; the screenshot reader's own files
+   (assets/vendor/tesseract/) load only when a screenshot is picked.
+   ============================================================ */
+let chatOn = false, readerP = null;
+function loadScript(src){ return new Promise((ok,no)=>{ const sc=document.createElement("script"); sc.src=src; sc.async=false; sc.onload=ok; sc.onerror=()=>no(new Error("could not load "+src)); document.head.appendChild(sc); }); }
+function loadEngine(){ return window.TOLReader ? Promise.resolve() : loadScript("/assets/js/conversation-reader-engine.js"); }
+function loadReader(){
+  if(!readerP){
+    const st=$("#cr-loading"); if(st && !window.TOLReaderPage) st.textContent="Getting it ready on this device\u2026";
+    readerP = loadEngine()
+      .then(()=>window.TOLReaderPage ? null : loadScript("/assets/js/conversation-reader.js"))
+      .then(()=>window.TOLShotReader && window.TOLShotReader.begin ? null : loadScript("/assets/js/conversation-reader-ocr.js"))
+      .then(()=>{ if(window.TOLShotReader) window.TOLShotReader.onOne = checkOne; if(st) st.textContent=""; });
+    readerP.catch(()=>{ readerP=null; if(st) st.textContent="This part couldn\u2019t load just now. Check your connection, then choose it again."; });
+  }
+  return readerP;
+}
+function showChat(on){
+  chatOn = !!on;
+  $("#main").classList.toggle("is-chat", chatOn);
+  $("#conversation").hidden = !chatOn;
+  document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = chatOn ? r.value==="chat" : r.value===stMode; });
+  const sk=document.querySelector("a.skip"); if(sk){ sk.setAttribute("href", chatOn ? "#cr-input" : "#phrase"); sk.textContent = chatOn ? "Jump to the conversation box" : "Jump to your sentence"; }
+  try{
+    const inPane = location.hash.length>1 && /^#[\w-]+$/.test(location.hash) && document.querySelector("#conversation "+location.hash);
+    if(chatOn && location.hash!=="#conversation" && !inPane) history.replaceState(null,"",location.pathname+location.search+"#conversation");
+    else if(!chatOn && (location.hash==="#conversation" || inPane)) history.replaceState(null,"",location.pathname+location.search);
+  }catch(e){}
+  if(chatOn) loadReader().catch(()=>{});
+}
+/* one message from a screenshot or a pasted chat: mine opens "A message I'm about to send" (answering the
+   last thing they said, when there is one), theirs opens "A message I got"; then it's read */
+function checkOne(o){
+  const mine = o.mine===true ? true : o.mine===false ? false : stMode!=="got";
+  setMode(mine ? "send" : "got");
+  if(mine && o.before){ replyCtx = String(o.before).slice(0,600); paintReplyTo(); }
+  $("#phrase").value = String(o.text||"").slice(0,1500); $("#phrase").dispatchEvent(new Event("input",{bubbles:true}));
+  const box=$("#sentenceBox"); if(box && box.scrollIntoView) box.scrollIntoView({block:"start"});
+  run();
+}
+/* the buttons by the box */
+$("#stFromShot").addEventListener("click",()=>{
+  setMode("chat");
+  const S=window.TOLShotReader;
+  if(S && S.begin){ S.begin(); return; }
+  loadReader().then(()=>{
+    // after loading, a picker can't be opened for them: show the question, or the button
+    const fs=$("#cr-side"), pick=$("#cr-shot-pick"), el = fs && !fs.hidden ? fs.querySelector("input:checked") : pick;
+    const wrap = document.querySelector("#conversation .cr-shots"); if(wrap && wrap.scrollIntoView) wrap.scrollIntoView({block:"center"});
+    if(el) el.focus({preventScroll:true});
+  }).catch(()=>{});
+});
+$("#stFromChat").addEventListener("click",()=>{
+  const had = $("#phrase").value.trim();
+  setMode("chat");
+  loadReader().then(()=>{ const ci=$("#cr-input"); if(had && /\n/.test(had) && !ci.value.trim()) ci.value = had; if(ci.scrollIntoView) ci.scrollIntoView({block:"center"}); ci.focus({preventScroll:true}); }).catch(()=>{});
+});
+/* a whole chat pasted into the one-message box: offer to read the whole conversation, or to check one message */
+let pastedChat = "";
+$("#phrase").addEventListener("paste", e=>{
+  const dt=e.clipboardData; if(!dt) return;
+  const imgs=[].filter.call(dt.files||[], f=>/^image\//.test(f.type));
+  if(imgs.length){ e.preventDefault(); takeShots(imgs); return; }
+  const t=dt.getData("text/plain")||"";
+  if(t.split("\n").filter(l=>l.trim()).length<2) return;
+  pastedChat = t;
+  setTimeout(()=>offerChat(t), 0);
+});
+function takeShots(files){ setMode("chat"); loadReader().then(()=>{ if(window.TOLShotReader && TOLShotReader.take) TOLShotReader.take(files); }).catch(()=>{}); }
+// screenshots pasted anywhere, or dropped on the box, while a one-message view is open
+document.addEventListener("paste", e=>{ if(chatOn || e.defaultPrevented || !e.clipboardData) return; const imgs=[].filter.call(e.clipboardData.files||[], f=>/^image\//.test(f.type)); if(imgs.length){ e.preventDefault(); takeShots(imgs); } });
+{ const sb=$("#sentenceBox");
+  sb.addEventListener("dragover", e=>{ if(e.dataTransfer && [].some.call(e.dataTransfer.items||[], i=>i.kind==="file")) e.preventDefault(); });
+  sb.addEventListener("drop", e=>{ const imgs=e.dataTransfer ? [].filter.call(e.dataTransfer.files||[], f=>/^image\//.test(f.type)) : []; if(imgs.length){ e.preventDefault(); takeShots(imgs); } }); }
+function offerChat(full){
+  loadEngine().then(()=>{
+    const P = window.TOLReader.parse(full), who = P.speakers.filter(x=>x && x!=="Unnamed");
+    const box=$("#stChatOffer");
+    if(!(["chat export","named lines","chat app","email"].includes(P.format) && who.length>=2 && P.turns.length>=2)){ box.hidden=true; box.innerHTML=""; return; }
+    const guess = who.filter(x=>/^(me|you|i|myself)$/i.test(x))[0] || "";
+    const list = who.length===2 ? who[0]+" and "+who[1] : who.slice(0,-1).join(", ")+" and "+who[who.length-1];
+    box.innerHTML = '<p><b>This looks like a whole conversation:</b> '+P.turns.length+' messages from '+esc(list)+'.</p>'
+      + '<div class="st-co-me"><label for="stCoMe">Which one is you?</label><select id="stCoMe"><option value="">Not sure</option>'+who.map(x=>'<option'+(x===guess?' selected':'')+'>'+esc(x)+'</option>').join("")+'</select></div>'
+      + '<div class="st-co-acts"><button type="button" class="is-main" id="stCoAll">Read the whole conversation</button><button type="button" id="stCoOne">Check one message</button><button type="button" id="stCoNo">Keep it as one message</button></div>'
+      + '<ol class="st-co-list" id="stCoList" hidden aria-label="Pick the message to check">'+P.turns.map((t,i)=>'<li><button type="button" data-turn="'+i+'"><b>'+esc(t.who)+':</b> '+esc(t.text.length>220?t.text.slice(0,217)+"\u2026":t.text)+'</button></li>').join("")+'</ol>';
+    box.hidden=false;
+    $("#stCoAll").addEventListener("click",()=>{
+      const me=$("#stCoMe").value; box.hidden=true; box.innerHTML=""; $("#phrase").value="";
+      setMode("chat");
+      loadReader().then(()=>{ if(window.TOLReaderPage) TOLReaderPage.read(full, me); const o=$("#cr-out"); if(o && o.scrollIntoView) o.scrollIntoView({block:"start"}); }).catch(()=>{});
+    });
+    $("#stCoOne").addEventListener("click",()=>{ const l=$("#stCoList"); l.hidden=false; const f=l.querySelector("button"); if(f) f.focus(); });
+    $("#stCoNo").addEventListener("click",()=>{ box.hidden=true; box.innerHTML=""; $("#phrase").focus(); });
+    $("#stCoList").addEventListener("click",e=>{
+      const b=e.target.closest && e.target.closest("[data-turn]"); if(!b) return;
+      const i=+b.getAttribute("data-turn"), t=P.turns[i], me=$("#stCoMe").value;
+      let before="";
+      if(me && t.who===me) for(let k=i-1;k>=0;k--){ if(P.turns[k].who!==me){ before=P.turns[k].text; break; } }
+      checkOne({text:t.text, mine: me ? t.who===me : null, before});
+    });
+  }).catch(()=>{});
+}
+/* inside the whole-conversation view: "Dig deeper" on a reply, and the link back to one message */
+document.addEventListener("click", e=>{
+  const a = e.target.closest && e.target.closest('#conversation a.dig, #conversation [data-stmode]');
+  if(!a) return;
+  e.preventDefault();
+  if(a.hasAttribute("data-stmode")){ setMode(a.getAttribute("data-stmode")); $("#phrase").focus(); return; }
+  const d=($("#cr-draft")||{}).value||"";
+  checkOne({text:d, mine:true});
+});
+// "#conversation" (and the old /conversation-reader.html, which sends people here), ?mode=chat, or a whole
+// conversation handed over from another page ('tol-cr-text'): open "A whole conversation or screenshot"
+try {
+  const h = location.hash, q = new URLSearchParams(location.search).get("mode");
+  let handed = false; try { handed = sessionStorage.getItem("tol-cr-text") != null; } catch(e) {}
+  if (h==="#conversation" || (h.length>1 && /^#[\w-]+$/.test(h) && document.querySelector("#conversation "+h)) || q==="chat" || handed) setMode("chat");
+} catch (e) {}
 /* ============================================================
    ADD CONTEXT (context-panel.js): optional, and it changes the reading. The result says what it took into account,
    with "Change context". Crisis or fear typed into the context is never ignored: the site's existing card shows.
@@ -3049,7 +3446,7 @@ sync();
     try {
       if (params && Array.from(params.keys()).some(function (k) { return !(k === 'use' && params.get('use') === 'work') && k !== 'work' && k !== 'rel' && k !== 'mode'; })) {
         var keep = [];
-        if (params.get('mode') === 'got') keep.push('mode=got');
+        if (params.get('mode') === 'got' || params.get('mode') === 'chat') keep.push('mode=' + params.get('mode'));
         if (params.get('use') === 'work') keep.push('use=work');
         if (/^[a-z-]{2,20}$/.test(params.get('rel') || '')) keep.push('rel=' + params.get('rel'));
         if (/^[01]$/.test(params.get('work') || '')) keep.push('work=' + params.get('work')); // site.js reads ?work= after this runs
