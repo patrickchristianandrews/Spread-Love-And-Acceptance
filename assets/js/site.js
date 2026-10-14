@@ -283,7 +283,6 @@
       { href: '/workpapers/wp-12-same-moment-different-speeds.html', deep: true, code: 'WP-12', title: 'Same moment, different speeds', note: 'When one of you wants to sort it now and the other needs time', paid: true },
       { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', deep: true, code: 'WP-14', title: 'Is it us, or is it everything else?', note: 'A one-week log: outside pressure in one column, friction between you in the other', paid: true },
       { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', deep: true, code: 'WP-15', title: 'Keep your little rituals alive', note: 'Every few months: which shared rituals are alive, fading or stopped', paid: true },
-      { href: '/do/index.html', code: '', title: 'Try the Workpapers', note: 'A playground to try the worksheets before you commit' },
       { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'The Workpaper Suite', note: 'New: the worksheets for your situation, in order, as one fillable PDF and a report' },
       { href: '/workpapers/fill/index.html', code: 'Fill-in', title: 'Fill-in workpapers', note: 'Type straight into the worksheets and save them as PDFs on your device' }
     ]},
@@ -304,6 +303,7 @@
       { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your worksheet numbers and see whether the way you share the load is working' },
       { href: '/is-the-setup-working.html', code: 'CALC-01', title: 'Is the setup working for everyone? The long form', note: 'Enter hours and jobs for 2–8 people and see the math step by step', menu: false },
       { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'Then and now: what shifted this month, what didn’t, and one next step' },
+      { href: '/do/index.html', code: '', title: 'Practise the worksheets on an example', note: 'A playground to try the worksheets on a made-up household before you fill in your own' },
       { href: '/look-back-30-days.html', code: 'CALC-02', title: 'Look back over 30 days: the long form', note: 'Four weeks side by side, with the running imbalance', menu: false },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood: a printable plan builder, five scenarios and a four-week practice plan' },
       { href: '/tools/soften-a-tense-moment-full.html', code: 'Tool', title: 'Soften a tense moment: the full toolkit', note: 'Five everyday scenarios and a four-week practice plan', paid: true, menu: false },
@@ -405,12 +405,9 @@
       { sub: 'Communication', all: '/tools.html#communication', allLabel: 'All communication tools' },
       { href: '/signal-translator.html', plain: true, title: 'Chat analyzer', note: 'Check how one message may land before you send it, or paste a whole chat, text thread or email exchange to see where it turned.' },
       { href: '/write-it-through.html', plain: true, title: 'Talk it through in writing', note: 'Walks you through writing about one topic: facts, not verdicts, and one clear ask.' },
-      { href: '/workpapers/wp-09-say-it-so-it-lands.html', plain: true, title: 'Before you reply: say it so it lands', note: 'A quick self-check before you answer something that stung.' },
       { href: '/refusals.html#make', plain: true, title: 'Say no kindly: script maker', note: 'Pick the situation and how you want to sound: warmer, plainer or firmer.' },
       { href: '/carrier-wave-decoder.html', plain: true, title: 'After a talk went wrong: a step-by-step reset', note: 'Settle, work out what went out of sync, see their side, try again, then check your sentence. Also called the Carrier Wave Decoder.' },
       { href: '/pursue-withdraw.html#plan-h', plain: true, title: 'Make a pause plan for arguments', note: 'Agree on a calm day how either of you can take a break, and when you come back.' },
-      { href: '/workpapers/wp-13-daily-check-in.html', plain: true, title: '90-second daily check-in', note: 'One sentence each, once a day: how you are doing and what is coming up. No debating.' },
-      { href: '/workpapers/wp-12-same-moment-different-speeds.html', plain: true, title: 'Same moment, different speeds', note: 'For five everyday moments, each person marks how fast they want to move, how much they want to talk, and how urgent it feels. Also called WP-12.' },
       { href: '/check-ins.html#card', plain: true, title: 'Weekly check-in card', note: 'A short, kind weekly talk: what went well, what felt heavy, and one small change.' },
       { href: '/small-wins.html#flip-it', plain: true, title: 'Turn a complaint into a request', note: 'Type a complaint, a worry or a harsh thought about yourself. Also called Flip it.' },
       { href: '/bonding.html#ideas', plain: true, title: 'Get one small bonding idea', note: 'Pick who it is with, how much time and how much energy you have. Also called the idea picker.' },
@@ -419,26 +416,19 @@
       { sub: 'Self-discovery', all: '/tools.html#self-discovery', allLabel: 'All self-discovery tools' },
       { href: '/wavelength.html', plain: true, title: 'Communication style quiz', note: 'Twelve quick either/or questions about how you think, talk and listen. Also called Wavelength.' },
       { href: '/wiring-card.html', plain: true, title: 'How I like to be spoken to: a one-page card', note: 'Pick what helps words reach you, what your silence means and what to avoid. Also called the Wiring Card.' },
-      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', plain: true, title: 'Load check: how much are you carrying?', note: 'Five quick questions that separate what you already carry from today’s upset.' },
       { href: '/growing-up.html#roots-h', plain: true, title: 'Where a reaction comes from', note: 'A gentle tap-through look at where a trait or reaction may have started. Also called Roots & Wings.' },
       { href: '/how-you-take-things-in.html', plain: true, title: 'Make the site fit your mind', note: 'Pick how your mind takes things in: ADHD, autistic, dyslexic, or just what helps.' },
       { href: '/tools/frequency-calibration.html', plain: true, title: 'Compare your daily rhythms', note: 'Map your natural rhythms for money, rest, decisions, check-ins and recovery, next to one other person’s. Also called Frequency Calibration.' },
       { sub: 'Share the load', all: '/tools.html#share-the-load', allLabel: 'All share the load tools' },
-      { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', plain: true, title: 'Is it us, or is it everything else?', note: 'For one week, a line each evening: outside pressure in one column, tense moments between you in the other. Also called WP-14.' },
       { href: '/lemonade-stand.html#quick', plain: true, title: 'Who does what: chore split check', note: 'Tap who mostly does each job at home, the thinking work too. Send it so others can answer on their own. Also called the Lemonade Stand, quick look.' },
       { href: '/lemonade-stand.html', plain: true, title: 'Chores and bills: count the hours and money', note: 'List the jobs, the hours and the bills for one person or a whole home. Also called the Lemonade Stand.' },
-      { href: '/workpapers/wp-03-one-owner-per-job.html', plain: true, title: 'One owner per job: a who-owns-what list', note: 'Give every regular job one owner, a backup and what “done” means.' },
-      { href: '/workpapers/wp-01.html', plain: true, title: 'Who did what this week: a one-week log', note: 'Log who did what at home for one week, the invisible jobs too.' },
-      { href: '/workpapers/wp-04-what-keeps-coming-back.html', plain: true, title: 'What keeps coming back? A monthly look-back', note: 'Once a month, look back at four weeks together.' },
       { href: '/workpapers/calculators/is-the-setup-working-quick.html', plain: true, title: 'Fair split check: is the setup working?', note: 'Type in the totals from your worksheets, for 2 to 8 people.' },
       { href: '/is-the-setup-working.html', plain: true, title: 'Fair split calculator: the long form', note: 'Enter hours and jobs for 2 to 8 people.' },
       { href: '/workpapers/calculators/look-back-30-days-quick.html', plain: true, title: 'Look back over 30 days', note: 'Type in how things were about a month ago and how they are this week. Also called the 30-Day Look-Back.' },
       { href: '/look-back-30-days.html', plain: true, title: 'Look back over 30 days: the long form', note: 'Enter four weeks of hours, rescues, load and jobs, or fill it in from this device. Also called the 30-Day Look-Back.' },
       { href: '/snapshot/index.html', plain: true, title: '2-minute load snapshot', note: 'Seven quick questions about how a shared load is set up, and how it bends when things get heavy.' },
-      { href: '/chore-chart-for-couples.html', plain: true, title: 'Printable chore chart', note: 'A chart for every job, including the invisible ones, with one owner each.' },
       { sub: 'Calm and stress', all: '/tools.html#calm-and-stress', allLabel: 'All calm and stress tools' },
       { href: '/upset-right-now.html', plain: true, title: 'Upset right now? A 5-minute calm-down', note: 'A pause line with a return time, a one-minute breathing pacer, and how to come back.' },
-      { href: '/wp-11.html', plain: true, title: 'Calm-down plan', note: 'On a calm day, decide your early signs, a pause signal and what settles you. Also called the Calm-Down Kit.' },
       { href: '/tools/soften-a-tense-moment.html', plain: true, title: 'Soften a tense moment', note: 'Settle yourself, read the state someone else is in, and pick one small move.' },
       { href: '/calm-visualizer.html', plain: true, title: 'Slow colours and tones to wind down', note: 'Pick how you feel. Slow colours, kind words and gentle tones keep you company (headphones help). Also called Drift.' },
       { href: '/night-garden.html', plain: true, title: 'Breathing game', note: 'Breathe slowly to make flowers bloom and fireflies gather. Also called the Night Garden.' },
@@ -454,13 +444,9 @@
       { sub: 'Health and body', all: '/tools.html#health-and-body', allLabel: 'All health and body tools' },
       { href: '/quick-checks.html#today', plain: true, title: 'How am I right now? A mood and energy check', note: 'Four quick taps, or one minute on your mood, sleep, body and what is coming up today. Also called Today’s Weather.' },
       { sub: 'Plan together', all: '/tools.html#plan-together', allLabel: 'All plan together tools' },
-      { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', plain: true, title: 'Keep your little rituals alive', note: 'Every few months, list the small habits you share and mark which are alive, fading or stopped. Also called WP-15.' },
       { href: '/gaming-and-time-together.html#deal-h', plain: true, title: 'Time-together deal (games and phones)', note: 'Agree game nights, a heads-up rule, a protected evening and phone-free times.' },
       { href: '/sharing-a-room.html#agreement-h', plain: true, title: 'Room agreement for roommates', note: 'Quiet hours, guests, cleaning and borrowing, from a common starting point.' },
       { href: '/different-hours.html#our-week', plain: true, title: 'Our week on one page (different hours)', note: 'Write both schedules for the week, with sleep, overlaps and one together time.' },
-      { href: '/workpapers/fill/suite.html', plain: true, title: 'All the worksheets for your situation, in order', note: 'Choose your road (just me, a couple, a home, a family, a team) and fill its worksheets in order. Also called the Workpaper Suite.' },
-      { href: '/prog-01.html', plain: true, title: 'Six gentle weeks', note: 'One small step a week, in order, alone or with anyone you share a home with.' },
-      { href: '/workpapers/report-01.html', plain: true, title: 'Your progress, week by week', note: 'Type in what your worksheets produced each week.' },
       { sub: 'Learn', all: '/tools.html#learn', allLabel: 'All learn tools' },
       { href: '/ask.html', plain: true, title: 'Ask a question in your own words', note: 'Type what is going on, the way you would say it to a friend. Also called Professor Puddles.' },
       { href: '/start-in-10-minutes.html', plain: true, title: 'Start in 10 minutes', note: 'Four small steps, just for you or with someone: your weather, one short read, one pattern, one thing to try.' },
@@ -477,6 +463,30 @@
       { href: '/recheck-drive.html', plain: true, title: 'Calm football game for small kind acts', note: 'Do small, kind re-checks from the complacency playbook for real. Each one moves the ball. Also called the Re-check Drive.' },
       { href: '/bears-dojo.html', plain: true, title: 'A quiet temple garden to wander', note: 'Wander a garden while two bears tend it, build your own bear, then step inside. Also called the Bears Dojo.' },
       { href: '/frequency-buddies-music-video-maker.html', plain: true, title: 'Make a cartoon music video', note: 'Pick the stage, lights, costumes, moves and who is on stage. Also called the Frequency Buddies video maker.' }
+    ]},
+    { id: 'workpapers', name: 'Workpapers', title: 'Workpapers', blurb: 'Short worksheets to fill in, print or keep on this device, alone or together. The interactive tools are in Tools.',
+      all: '/workpapers/fill/suite.html', allLabel: 'See all the worksheets, in order', items: [
+      { sub: 'Start here', area: 'load' },
+      { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
+      { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
+      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
+      { href: '/workpapers/fill/suite.html?road=self', code: 'Suite', title: 'Workpapers for you', note: 'The “Just me” road: worksheets in order, fillable and printable' },
+      { href: '/workpapers/report-01.html', deep: true, code: 'REPORT-01', title: 'Your progress, week by week', note: 'Type in what your worksheets produced each week' },
+      { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the report, side by side' },
+      { sub: 'Sharing the load', area: 'load' },
+      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what', note: 'A week’s log, plus kind ways to say no' },
+      { href: '/workpapers/wp-02-how-much-are-you-carrying.html', deep: true, code: 'WP-02', title: 'How much are you carrying?', note: 'Five quick questions about today’s load' },
+      { href: '/workpapers/wp-03-one-owner-per-job.html', deep: true, code: 'WP-03', title: 'One owner per job', note: 'So nobody has to keep asking' },
+      { href: '/workpapers/wp-04-what-keeps-coming-back.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back' },
+      { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', deep: true, code: 'WP-14', title: 'Is it us, or is it everything else?', note: 'A week’s log: outside pressure, or friction between you' },
+      { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
+      { sub: 'Talking and closeness', area: 'talk' },
+      { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
+      { href: '/workpapers/wp-12-same-moment-different-speeds.html', deep: true, code: 'WP-12', title: 'Same moment, different speeds', note: 'One of you wants to sort it now, the other needs time' },
+      { href: '/workpapers/wp-13-daily-check-in.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Keep small things small' },
+      { href: '/workpapers/wp-15-keep-your-little-rituals-alive.html', deep: true, code: 'WP-15', title: 'Keep your little rituals alive', note: 'Which shared rituals are alive, fading or stopped' },
+      { sub: 'Calm', area: 'self' },
+      { href: '/wp-11.html', deep: true, code: 'WP-11', title: 'The Calm-Down Kit', note: 'Decide ahead of time what settles you' }
     ]},
     { id: 'rel', name: 'By relationship', title: 'By relationship', blurb: 'Everything grouped by who it’s about. Games, cartoons and music are in Calm & play.',
       all: '/by-relationship.html', allLabel: 'See everything by relationship', items: [
@@ -558,6 +568,8 @@
       { href: '/chore-chart-for-couples.html', code: 'Print', title: 'A fair chore chart', note: 'Free and printable, one owner per job' },
       { href: '/invisible-labor-mental-load.html', code: 'Guide', title: 'Invisible labor and the mental load', note: 'What it is, and five calm steps to share it' },
       { href: '/book/topic-share-the-load.html', code: 'Book', title: 'The book on sharing the load', note: 'Every chapter’s part on sharing the work, plus the tools that go with it' },
+      { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your numbers and see if the split works' },
+      { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'What shifted this month, and one next step' },
       { sub: 'Sharing the load in your situation', area: 'load', all: '/by-relationship.html', allLabel: 'Everything by relationship' },
       { href: '/money-together.html', code: 'New', title: 'Money together', note: 'Saver and spender, moving in, wedding costs, and normal limits versus control' },
       { href: '/work.html', code: 'New', title: 'At work and business partners', note: 'One owner and a backup for every job, for teams and co-owners' },
@@ -566,17 +578,6 @@
       { href: '/different-hours.html', code: 'New', title: 'Different hours', note: 'Night shifts, shift work, or one of you works from home' },
       { href: '/new-parent.html', code: 'New', title: 'New baby, sharing the load', note: 'Three steps for the baby jobs and the invisible ones' },
       { href: '/family-obligations.html', code: 'Guide', title: 'Family, money and in-laws', note: 'Supporting parents, money home, long visits: plan it together' },
-      { sub: 'Worksheets and plans', area: 'load', all: '/workpapers/fill/suite.html', allLabel: 'All the worksheets, in order' },
-      { href: '/workpapers/wp-01.html', deep: true, code: 'WP-01', title: 'Who did what', note: 'A week’s log, plus kind ways to say no' },
-      { href: '/workpapers/calculators/is-the-setup-working-quick.html', code: 'CALC-01', title: 'Is the setup working for everyone?', note: 'Add your numbers and see if the split works' },
-      { href: '/workpapers/wp-13-daily-check-in.html', deep: true, code: 'WP-13', title: 'The 90-second daily check-in', note: 'Keep small things small' },
-      { href: '/workpapers/wp-04-what-keeps-coming-back.html', deep: true, code: 'WP-04', title: 'What keeps coming back?', note: 'The monthly look-back' },
-      { href: '/workpapers/calculators/look-back-30-days-quick.html', code: 'CALC-02', title: 'Look back over 30 days', note: 'What shifted this month, and one next step' },
-      { href: '/workpapers/wp-14-is-it-us-or-everything-else.html', deep: true, code: 'WP-14', title: 'Is it us, or is it everything else?', note: 'A week’s log: outside pressure, or friction between you' },
-      { href: '/week-0.html', code: 'Week 0', title: 'Week 0: a gentle start', note: 'Five minutes before the six weeks' },
-      { href: '/prog-01.html', deep: true, code: '6 weeks', title: 'Six gentle weeks', note: 'One worksheet a week, in order' },
-      { href: '/workpapers/fill/suite.html', code: 'Suite', title: 'Your worksheets, in order, with a report', note: 'One at a time, or one PDF of everything, with a report written from your answers' },
-      { href: '/program.html', title: 'Which part to use when', note: 'The six weeks, the suite and the package, side by side' },
       { sub: 'Talk it through', area: 'talk', all: '/explore.html?need=talk', allLabel: 'Everything on talking it through' },
       { href: '/communication.html', code: 'Guide', title: 'Effective communication', note: 'A complete, plain guide: listening, timing, hard talks and repair' },
       { href: '/write-it-through.html', code: 'New', title: 'Talk it through in writing', note: 'One topic, facts not verdicts, one clear ask: write it, wait, then send' },
@@ -590,7 +591,6 @@
       { sub: 'Tools for a message or a moment', area: 'talk', all: '/tools.html#communication', allLabel: 'All communication tools' },
       { href: '/signal-translator.html', code: 'Tool', title: 'Chat analyzer', note: 'How one message might land, or where a whole chat turned' },
       { href: '/carrier-wave-decoder.html', code: 'Tool', title: 'After a talk went wrong: a step-by-step reset', note: 'Settle, see it from their side, and try again' },
-      { href: '/workpapers/wp-09-say-it-so-it-lands.html', deep: true, code: 'WP-09', title: 'Say it so it lands', note: 'A fact, a feeling and a kind ask' },
       { href: '/tools/soften-a-tense-moment.html', code: 'Tool', title: 'Soften a tense moment', note: 'Small, kind ways to shift a heavy mood' },
       { sub: 'Love, sorry and thanks', area: 'talk' },
       { href: '/bonding.html', code: 'New', title: 'Bonding: how closeness grows', note: 'Small, research-based ways to grow closeness, with an idea picker' },
@@ -2591,7 +2591,7 @@
     return out;
   }
   function prepNeeds(D) {
-    var P = needsPrep = { syn: {}, synStem: {}, multi: [], df: {}, raw: {}, solo: {}, info: {} };
+    var P = needsPrep = { syn: {}, synStem: {}, multi: [], df: {}, raw: {}, solo: {}, info: {}, kind: {} };
     Object.keys(D.syn || {}).forEach(function (k) {
       var ks = nStem(k);
       P.synStem[ks] = ks;
@@ -2609,7 +2609,7 @@
       });
       n._bag = bag;
       Object.keys(bag).forEach(function (t) { P.df[t] = (P.df[t] || 0) + 1; });
-      n.g.forEach(function (g) { var u = g[0]; if (P.solo[u] == null || !g[3]) P.solo[u] = g[3] ? 1 : 0; if (!P.info[u]) P.info[u] = [g[1], g[2]]; });
+      n.g.forEach(function (g) { var u = g[0]; if (P.solo[u] == null || !g[3]) P.solo[u] = g[3] ? 1 : 0; if (!P.info[u]) P.info[u] = [g[1], g[2]]; if (g[4]) P.kind[u] = g[4]; });
     });
     Object.keys(P.syn).forEach(function (v) { if (v.length > 3 && /^[a-z]+$/.test(v)) P.raw[v] = nCanon(v); });
     Object.keys(P.raw).forEach(function (v) { if (!P.df[P.raw[v]]) delete P.raw[v]; });
@@ -2711,17 +2711,38 @@
       '.tol-find-more{display:flex;flex-wrap:wrap;gap:.3rem 1rem;margin:.2rem 0 0;padding:0;list-style:none;font-size:.95rem;}.tol-find-more li{margin:0;}' +
       '.tol-find-more a,.tol-find-more button{display:inline-flex;align-items:center;min-height:40px;color:var(--focus,#2B5B8C);font:inherit;font-weight:600;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;text-align:left;}' +
       '.tol-find-also{margin:.6rem 0 .1rem;font-size:.95rem;}.tol-find-also a{font-weight:600;}' +
+      '.tol-find-kind.is-wp{background:#EFE7F7 !important;color:#4B3A6B !important;}' +
+      '.tol-find-gh{list-style:none;margin:.7rem 0 .1rem;padding:0 .5rem;font:600 .8rem/1.4 var(--tol-sans,system-ui,sans-serif);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft,#5A5048);border:0 !important;}' +
+      '.tol-related-k{display:inline-block;margin-left:.35rem;}' +
       '.tol-find-help[hidden],.tol-find-best[hidden],.tol-find-none[hidden]{display:none;}';
     document.head.appendChild(st);
   }
   var FINDER = '/start-here.html#three-questions';
+  // Workpapers and tools are kept apart: a workpaper (a numbered worksheet or a printable plan to fill in) is
+  // always labelled "Workpaper", a tool "Tool", and in a list each kind sits together, never mixed in as the other.
+  var WORKPAPER_URL = /^\/workpapers\/(?!calculators\/)|^\/wp-\d|^\/(prog-01|week-0|full-path|chore-chart-for-couples)\.html$/;
+  function kindOf(u, k) {
+    var p = String(u || '').split(/[?#]/)[0];
+    if (WORKPAPER_URL.test(p)) return 'Workpaper';
+    if (needsPrep && needsPrep.kind[u] === 't') return 'Tool';
+    if (TOOL_URL.test(p) || k === 'Tool') return 'Tool';
+    return '';
+  }
+  function kindTag(kind) { return kind ? ' <small class="tol-find-kind' + (kind === 'Workpaper' ? ' is-wp' : '') + '">' + escA(T(kind, kind === 'Workpaper' ? 'Hoja de trabajo' : 'Herramienta')) + '</small>' : ''; }
+  // keep each kind together, in the order the kinds first appear (so the best one still leads)
+  function groupByKind(items, kindFn) {
+    var order = [], by = {};
+    items.forEach(function (x) { var k = kindFn(x) || ''; if (!by[k]) { by[k] = []; order.push(k); } by[k].push(x); });
+    return order.map(function (k) { return { kind: k, items: by[k] }; });
+  }
   // "Best match for what you described": the need's 1-3 pages, each with why it helps
   function needsBestHTML(best, q, head) {
     if (!best) return '';
+    var groups = groupByKind(best.g, function (g) { return g[4] === 'w' ? 'Workpaper' : g[4] === 't' ? 'Tool' : kindOf(g[0]); });
     return '<h3>' + escA(head || T('Best match for what you described', 'Lo que mejor encaja con lo que describes')) + '</h3>' +
-      '<p class="tol-find-for">' + escA(best.l) + '</p><ol>' + best.g.map(function (g) {
-        return '<li><a href="' + escA(g[0]) + '" data-find-best><span class="tol-find-bt">' + escA(g[1]) + '</span><span class="tol-find-bw">' + escA(g[2]) + '</span></a></li>';
-      }).join('') + '</ol>';
+      '<p class="tol-find-for">' + escA(best.l) + '</p><ol>' + groups.map(function (G) { return G.items.map(function (g) {
+        return '<li><a href="' + escA(g[0]) + '" data-find-best data-kind="' + escA(G.kind || 'page') + '"><span class="tol-find-bt">' + escA(g[1]) + kindTag(G.kind) + '</span><span class="tol-find-bw">' + escA(g[2]) + '</span></a></li>';
+      }).join(''); }).join('') + '</ol>';
   }
   function chipsHTML(list) {
     return '<ul class="tol-find-chips">' + list.map(function (c) { return '<li><button type="button" class="tol-find-chip" data-find-q="' + escA(c[1]) + '">' + escA(c[0]) + '</button></li>'; }).join('') + '</ul>';
@@ -2786,7 +2807,8 @@
       });
       if (!picks.length || map.querySelector('.tol-find-also')) return;
       needsCSS();
-      var p = el('p', { class: 'tol-find-also' }, T('You might also like: ', 'Quizá te guste: ') + picks.map(function (x) { return '<a href="' + escA(x[0]) + '" title="' + escA(x[2]) + '">' + escA(x[1]) + '</a>'; }).join(' <span aria-hidden="true">&middot;</span> ') +
+      picks = [].concat.apply([], groupByKind(picks, function (x) { return kindOf(x[0]); }).map(function (G) { return G.items; }));
+      var p = el('p', { class: 'tol-find-also' }, T('You might also like: ', 'Quizá te guste: ') + picks.map(function (x) { return '<a href="' + escA(x[0]) + '" title="' + escA(x[2]) + '">' + escA(x[1]) + '</a>' + kindTag(kindOf(x[0])); }).join(' <span aria-hidden="true">&middot;</span> ') +
         ' <small>' + T('(from pages you opened on this device)', '(según las páginas que abriste en este dispositivo)') + '</small>');
       var all = map.querySelector('.hh-map-all');
       if (all) map.insertBefore(p, all); else map.appendChild(p);
@@ -2870,12 +2892,17 @@
         list.hidden = !hits.length;
         // never a dead end: nothing found, so the closest needs, the finder, Professor Puddles and everything
         noneEl.innerHTML = !hits.length && !M.best ? needsFallbackHTML(q, M) : ''; noneEl.hidden = !!(hits.length || M.best);
-        list.innerHTML = hits.map(function (h) {
-          var p = h.p, act = p.u.charAt(0) === '#';
-          var kind = act ? p.k : TOOL_URL.test(p.u) ? 'Tool' : '';
-          return '<li><a href="' + esc(act ? '#' : p.u) + '"' + (act ? ' data-find-act="' + esc(p.u.slice(1)) + '"' : '') + '><span class="tol-find-t">' + markTerms(p.t, used) +
-            (kind ? ' <small class="tol-find-kind">' + esc(kind) + '</small>' : '') + (p.f ? ' <small>Full version</small>' : '') + '</span>' +
-            '<span class="tol-find-s">' + markTerms(act ? p.d : snippet(p, used), used) + '</span></a></li>';
+        // tools, workpapers and pages to read each sit together (in the order they first appear), each labelled
+        var groups = groupByKind(hits, function (h) { return h.p.u.charAt(0) === '#' ? '' : kindOf(h.p.u, h.p.k); });
+        var GH = { Tool: T('Tools', 'Herramientas'), Workpaper: T('Workpapers', 'Hojas de trabajo'), '': T('Guides and pages', 'Guías y páginas') };
+        list.innerHTML = groups.map(function (G) {
+          return (groups.length > 1 ? '<li class="tol-find-gh" role="presentation">' + esc(GH[G.kind]) + '</li>' : '') + G.items.map(function (h) {
+            var p = h.p, act = p.u.charAt(0) === '#';
+            var kind = act ? p.k : G.kind;
+            return '<li><a href="' + esc(act ? '#' : p.u) + '"' + (act ? ' data-find-act="' + esc(p.u.slice(1)) + '"' : '') + ' data-kind="' + esc(kind || 'page') + '"><span class="tol-find-t">' + markTerms(p.t, used) +
+              (act ? (kind ? ' <small class="tol-find-kind">' + esc(kind) + '</small>' : '') : kindTag(kind)) + (p.f ? ' <small>Full version</small>' : '') + '</span>' +
+              '<span class="tol-find-s">' + markTerms(act ? p.d : snippet(p, used), used) + '</span></a></li>';
+          }).join('');
         }).join('');
         var said = '“' + (auto ? R.said : q) + '”';
         var head = !hits.length && M.best ? T('The best match is above.', 'Lo que mejor encaja está arriba.') : hits.length ? (M.best ? T('More pages: ', 'Más páginas: ') : '') + (hits.length === 25 ? T('The 25 best matches for ', 'Los 25 mejores resultados para ') + said + '.' : hits.length + (hits.length === 1 ? T(' result for ', ' resultado para ') : T(' results for ', ' resultados para ')) + said + '.')
@@ -3040,9 +3067,12 @@
       more = ['Everything in ' + hereSection.title, sectionHome(hereSection)];
     }
     if (picks.length < 2) return;
+    // workpapers and tools are labelled and kept together, never mixed in as the other kind
+    needsCSS();
+    picks = [].concat.apply([], groupByKind(picks, function (x) { return kindOf(x[0]); }).map(function (G) { return G.items; }));
     var box = el('aside', { class: 'tol-related no-bubble', 'aria-labelledby': 'tol-related-h' });
     box.innerHTML = '<h2 class="tol-related-h" id="tol-related-h">Related</h2><ul>' + picks.map(function (p) {
-      return '<li><a href="' + esc(p[0]) + '"><span class="tol-related-t">' + esc(p[1]) + '</span>' + (p[2] ? '<span class="tol-related-n">' + esc(p[2]) + '</span>' : '') + '</a></li>';
+      return '<li><a href="' + esc(p[0]) + '"><span class="tol-related-t">' + esc(p[1]) + kindTag(kindOf(p[0])) + '</span>' + (p[2] ? '<span class="tol-related-n">' + esc(p[2]) + '</span>' : '') + '</a></li>';
     }).join('') + '</ul>' + (more ? '<p class="tol-related-all"><a href="' + esc(more[1]) + '">' + esc(more[0]) + ' &rarr;</a> <span aria-hidden="true">&middot;</span> <a href="/explore.html">Everything on this site</a></p>' : '');
     main.appendChild(box);
   }
