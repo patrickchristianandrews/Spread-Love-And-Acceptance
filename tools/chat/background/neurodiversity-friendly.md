@@ -161,7 +161,7 @@ Program: The Library’s autistic inertia entry explains why starting and stoppi
 ## Tone indicators
 aka: tone indicators; tone tags; slash j; slash s
 see: Texting norms that prevent fights; Explicit requests
-go: /conversation-reader.html | The Conversation Reader
+go: /signal-translator.html#conversation | The Chat analyzer (whole chat)
 evidence: Tone indicators (like /j for joking or /srs for serious) became popular online, especially among neurodivergent people. They’re a social convention, not a researched tool.
 try: “You’re such a menace /j” makes clear it’s a joke.
 
@@ -169,7 +169,7 @@ In text, tone is easy to misread. Some people add short tags to show their inten
 
 They’re not for everyone, but agreeing on a few within a friend group or household can prevent a lot of misunderstandings.
 
-Program: The Conversation Reader looks for moments where a message may have been heard differently than meant.
+Program: The Chat analyzer (whole chat) looks for moments where a message may have been heard differently than meant.
 
 ## Recovering after socializing
 aka: social hangover; social recovery; after a party

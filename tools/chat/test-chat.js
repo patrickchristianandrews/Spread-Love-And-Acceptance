@@ -31,7 +31,7 @@ t('tools', 'Does the lemonade stand have a task library?', { kind: 'card', id: '
 t('tools', 'How do I make a wiring card?', { kind: 'card', id: 'wiringcard', link: '/wiring-card.html' });
 t('tools', 'what is the signal translator for', { kind: 'card', id: 'signal', link: '/signal-translator.html' });
 t('tools', 'How does the Carrier Wave Decoder work?', { kind: 'card', id: 'decoder', link: '/carrier-wave-decoder.html' });
-t('tools', 'Can I paste a text thread into the conversation reader?', { kind: 'card', id: 'reader', link: '/conversation-reader.html' });
+t('tools', 'Can I paste a text thread into the conversation reader?', { kind: 'card', id: 'reader', link: '/signal-translator.html#conversation' });  // shot10: one Chat analyzer
 t('tools', "How do I use Today's Weather?", { kind: 'card', id: 'weather', link: '/quick-checks.html' });
 t('tools', 'What does my Today’s Weather forecast mean?', { kind: 'card', id: 'weather', text: /not a measurement|conditions pass/ });
 t('tools', 'What is the 2 minute snapshot?', { kind: 'card', id: 'snapshot', link: '/snapshot/' });
@@ -439,7 +439,7 @@ t('care', 'what’s the difference between the 7-day log and the almanac', { kin
 // action, not research
 t('care', 'I just had a fight with my partner and I only have 5 minutes', { kind: 'care', id: 'fightnow', link: ['/wp-11.html'], not: /5:1|five positive/ });
 t('care', 'we just had a huge argument', { kind: 'care', id: 'fightnow', link: '/carrier-wave-decoder.html#decode' });
-t('care', 'what should I do next', { kind: 'care', id: 'nextstep', link: '/conversation-reader.html', not: /ego depletion/ });
+t('care', 'what should I do next', { kind: 'care', id: 'nextstep', link: '/signal-translator.html', not: /ego depletion/ });
 t('care', 'give me one thing to do', { kind: 'care', id: 'nextstep', not: /Spending on others/ });
 t('care', 'remind me later', { kind: 'care', id: 'remind', text: /can’t send reminders/ });
 t('care', 'I only have 10 minutes', { kind: 'care', id: 'minutes', link: '/quick-checks.html#today' });
@@ -518,7 +518,7 @@ t('nt2', 'what is my lens', { link: '/growing-up', not: /late screens|as if from
 // dyslexic: repair help, reading help, the screenshot import, short answers that stay short
 t('nt2', 'my partnr is mad at me', { kind: 'sit', id: 'partner+madatme', text: /I think you mean[\s\S]*upset with you/, not: /“Are you mad at me\?” is a real question/, script: true });
 t('nt2', 'im dislexic is this site ok for me', { kind: 'care', id: 'dyslexia', text: /Easy reading[\s\S]*Extra large[\s\S]*Simple version/, not2: /Listen/, not: /take things literally/ });
-t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/conversation-reader.html', not: /phone-free|attention/ });
+t('nt2', 'can i use a screen shot', { kind: 'care', id: 'screenshot', text: /Choose screenshots/, link: '/signal-translator.html', not: /phone-free|attention/ });
 t('nt2', 'how do i make the writing biger (Extra large)', { q: 'how do i make the writing biger', kind: 'care', id: 'textsize', text: /Extra large/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator'], { kind: 'card', id: 'signal', text: /^In short: /, not: /## How to use it/ });
 c('nt2', ['what is the lemonade stand', 'make it shorter', 'what is the signal translator', 'I feel overwhelmed'], { kind: 'sit', text: /^In short: /, not: /What might be going on/ });
@@ -784,7 +784,7 @@ t('round7', 'He never apologizes and always turns things around on me. Is he a n
 t('round7', 'i feel like i\'m walking on eggshells', { kind: 'safety', text: /0808 2000 247/ });
 t('round7', 'he calls me names', { kind: 'safety', link: '/safety.html' });
 t('round7', 'she always turns it around on me', { kind: 'safety' });
-t('round7', 'how do i say it so he doesn\'t get angry', { kind: 'safety', not: /Signal Translator/ });
+t('round7', 'how do i say it so he doesn\'t get angry', { kind: 'safety', not: /Signal Translator|Chat analyzer/ });
 t('round7', 'my little brother calls me names', { not: /0808 2000 247/ });
 c('round7', ['he calls me names', 'how do i say it better'], { kind: 'safety', not: /same side/ });
 t('round7', 'is it controlling if I ask him to check with me before he buys things?', { id: 'moneycontrol', link: ['/money-together.html'], text: /applies to both/, not: /They pressure you into sex/ });
@@ -1567,7 +1567,7 @@ if (PERS) {
   c('chat9', ['can you check a message to my mum before I send it'], { id: 'checkask', text: /Paste or type the message/ });
   c('chat9', ['can you check a message to my mum before I send it', "Mum, we'll decide about baptism ourselves."], { id: 'checkmsg', script: true, text: /closed door/, link: '/signal-translator.html', not: /Faith often/ });
   t('chat9', 'a pasted "Mum, …" message is checked', { q: 'Mum, you never listen to us about the baby.', id: 'checkmsg', text: /Lately it/ });
-  t('chat9', '"Okay, …" is not a pasted message', { q: 'Okay, my partner never helps with the dishes', not: /Signal Translator’s rules/ });
+  t('chat9', '"Okay, …" is not a pasted message', { q: 'Okay, my partner never helps with the dishes', not: /Signal Translator’s rules|Chat analyzer’s rules/ });
   // D: no repeats, no mid-sentence excerpts, the greeting
   c('chat9', ['how do I ask my boss for written instructions', 'the office is too loud'], { not: /Could you send that to me in writing, with the deadline\? I take things in better that way\.[\s\S]*Could you send that to me in writing/ });
   t('chat9', 'no excerpt starts with an ellipsis', { q: 'she just turns up with no warning and tells me im doing it wrong', not: /\] … |^… /m });
@@ -2052,7 +2052,9 @@ if (PERSONA) {
   t('chat11', 'Games: every calm game in one place', { q: 'What is Pause & Play?', id: 'pauseplay', text: /every calm game in one place/ });
   t('chat11', 'find your starting point is now on Start here', { q: 'find your starting point', id: 'start', link: '/start-here.html' });
   t('chat11', 'calendar reminders live in Six gentle weeks', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
-  t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html/.test(u)) ? 'an old URL' : '' });
+  t('chat11', 'the Text message checker is the Chat analyzer', { q: 'what is the text message checker', id: 'signal', text: /Chat analyzer/, link: '/signal-translator.html' });
+  t('chat11', 'a whole chat: the Chat analyzer', { q: 'can I paste a whole chat?', id: 'reader', link: '/signal-translator.html#conversation' });
+  t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html|conversation-reader/.test(u)) ? 'an old URL' : '' });
 }
 
 // ---------------------------------------------------------------- run

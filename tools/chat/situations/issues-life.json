@@ -141,7 +141,7 @@
         "partner": ["I know you text short when you’re busy. Could you add a “busy, call you later” when that’s what it is? It would really help me not worry."],
         "coworker": ["Just to check I read your reply right: does “fine” mean the plan works for you, or would you like changes?"]
       },
-      "path": [["The Signal Translator", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["The Conversation Reader", "/conversation-reader.html"]],
+      "path": [["The Chat analyzer", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["The Chat analyzer (whole chat)", "/signal-translator.html#conversation"]],
       "deeper": ["texting and tone", "How does tone get lost in texts?"],
       "ex": "Rae kept reading her partner’s “ok.” as annoyed. When she finally asked, he laughed: “It means I read it and I’m driving.” They agreed he’d send “driving, talk later” instead, and a whole category of worry disappeared.",
       "tonight": "before you reply to the short message, wait ten minutes, then send one kind check-in question rather than a long message."
@@ -205,7 +205,7 @@
       "scripts": {
         "default": ["Quick poll so we can lock this in: Friday or Saturday? Could everyone vote by Wednesday night?", "Hey, I think my message in the group came out wrong. Can I call you for a minute?", "I’m muting the chat for a bit so I can focus this week. Text me directly if you need me!"]
       },
-      "path": [["The Conversation Reader", "/conversation-reader.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["Where friends start", "/relationships-in-depth.html#friends"]],
+      "path": [["The Chat analyzer (whole chat)", "/signal-translator.html#conversation"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"], ["Where friends start", "/relationships-in-depth.html#friends"]],
       "deeper": ["why nobody replies in groups", "What is diffusion of responsibility?"],
       "ex": "The family chat had discussed Mom’s birthday for two weeks with no decision. Kai wrote, “Two options, vote by Sunday: dinner at ours, or the Italian place.” Everyone voted within the day.",
       "tonight": "if the group chat needs a decision, post one clear question with two options and a deadline."
@@ -253,7 +253,7 @@
       "scripts": {
         "default": ["Could we pick a regular time to call that works for both of us? Even ten minutes would help me feel close.", "I miss you. Want to watch the same show tonight and text through it?", "That text read a bit short to me. Can we hop on a quick call?"]
       },
-      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["The Signal Translator", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"]],
+      "path": [["Turning Toward: small rituals", "/turning-toward.html#rituals"], ["The Chat analyzer", "/signal-translator.html"], ["Texting and tone (Library)", "/library/communication.html#texting-and-tone"]],
       "deeper": ["small rituals", "What are rituals of connection?"],
       "ex": "With a seven-hour time difference, Leo and Ama kept missing each other. They agreed on a voice note every morning and a short call every Sunday. The notes were silly and small, and they both said it made the distance feel shorter.",
       "tonight": "send one small, everyday moment, like a photo or a thirty-second voice note, with no agenda."
@@ -356,12 +356,12 @@
       "match": [["eye ?roll*|rolls? (his|her|their) eyes|rolled (his|her|their) eyes|contempt*|mock(s|ed|ing)? me|makes? fun of me|made fun of me|puts? me down|put me down|belittl*|talks? down to me|(so )?sarcastic|sarcasm|must be nice|thanks for nothing|whatever you say|nice of you to (finally )?(show up|join|help)|(snide|sneer*|scoff*)", 6], ["tone|attitude|comments?", 1]],
       "reflect": "Sarcasm and eye-rolls can sting more than a direct complaint, because they say “I look down on this” without saying it.",
       "going": "This is Pillar IV, Tune how you send and receive, and Pillar II, Fix the setup, not the person. Sarcasm and put-downs usually grow when someone has a complaint they haven’t said plainly, or feels unheard, so it leaks out sideways. Relationship research sees contempt as one of the most corrosive patterns, so it’s worth addressing, calmly. The fix is usually to swap the jab for the plain request underneath it, on both sides.",
-      "steps": ["Name it calmly, later, without matching it: “When you say ‘must be nice’, it stings. What’s the real ask?”", "Look for the complaint underneath. A jab often hides a fair request that was never made plainly.", "Agree to say the plain version instead, both ways. The Signal Translator can help turn a jab into a clear ask."],
+      "steps": ["Name it calmly, later, without matching it: “When you say ‘must be nice’, it stings. What’s the real ask?”", "Look for the complaint underneath. A jab often hides a fair request that was never made plainly.", "Agree to say the plain version instead, both ways. The Chat analyzer can help turn a jab into a clear ask."],
       "scripts": {
         "default": ["When it comes out as sarcasm, I get defensive and miss the point. Could you tell me straight what you need?", "I think there’s a real ask under that comment. Can you say it plainly? I’d like to hear it.", "I don’t want us talking to each other like that, me included. Can we try again?"]
       },
       "scripts_self": ["I’ve caught myself being sarcastic lately. I’m sorry. What I actually mean is: I’d love more help on weeknights."],
-      "path": [["The Signal Translator", "/signal-translator.html"], ["The four patterns to watch (Library)", "/library/relationships.html#four-horsemen"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"]],
+      "path": [["The Chat analyzer", "/signal-translator.html"], ["The four patterns to watch (Library)", "/library/relationships.html#four-horsemen"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"]],
       "deeper": ["the patterns that hurt most", "What are the four horsemen?"],
       "ex": "Every time Kai came home late, his partner said, “Nice of you to show up.” One calm Sunday Kai said, “I know that’s about something real. What would help?” It turned out to be one thing: a text by six if he’d be late. That was easy.",
       "tonight": "if a jab lands tonight, pause, and later ask gently: “What’s the real ask under that?”"
@@ -376,7 +376,7 @@
         "default": ["When I hear “your sister always…”, I feel measured instead of asked. Could you just tell me what you’d like from me?", "It sounds like you’d love it if I called more. I can do Sundays. Would that work?"],
         "self": ["I compared you to your brother earlier, and that wasn’t fair. What I meant was that I’d love a bit more help with the garden."]
       },
-      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"], ["The Signal Translator", "/signal-translator.html"]],
+      "path": [["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Complaints vs criticism (Library)", "/library/communication.html#complaints-vs-criticism"], ["The Chat analyzer", "/signal-translator.html"]],
       "deeper": ["complaints vs criticism", "What is the difference between a complaint and criticism?"],
       "ex": "Mo’s mom often said, “Your cousin visits every week.” Mo finally said, “It sounds like you’d like to see me more. How about Sunday lunch every other week?” The comparisons mostly stopped, because the real ask had been answered.",
       "tonight": "write the plain ask that’s hiding inside the comparison, so you can answer that instead."

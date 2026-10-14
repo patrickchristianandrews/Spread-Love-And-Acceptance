@@ -122,7 +122,7 @@ Program: The Library’s in-laws entry covers extended-family tensions.
 ## Family group chats
 aka: family group chat; family WhatsApp; group chat drama
 see: Texting norms that prevent fights; Tone indicators
-go: /conversation-reader.html | The Conversation Reader
+go: /signal-translator.html#conversation | The Chat analyzer (whole chat)
 evidence: Practical guidance. Group messaging makes misunderstandings more likely because tone is hard to read and many people see each message.
 try: For anything sensitive, move from the group chat to a private call.
 
@@ -130,4 +130,4 @@ Family group chats are great for photos and logistics, but tricky for anything s
 
 A simple rule helps: logistics and good news in the group; disagreements and feelings in private, preferably by voice.
 
-Program: The Conversation Reader can help you see where a thread turned tense, and suggest a calmer reply.
+Program: The Chat analyzer (whole chat) can help you see where a thread turned tense, and suggest a calmer reply.

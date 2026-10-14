@@ -2046,7 +2046,7 @@
       { k: 'p', x: 'What people usually mean: ' + x.m }];
     if (x.tone) b.push({ k: 'p', x: 'How it usually sounds: ' + x.tone });
     if (x.plain) b.push({ k: 'script', l: 'A plain way to say it', x: x.plain });
-    b.push({ k: 'links', x: [['Test how a message may land: the Signal Translator', '/signal-translator.html'], ['Wired Differently: when words land differently', '/wired-differently.html']] });
+    b.push({ k: 'links', x: [['Test how a message may land: the Chat analyzer', '/signal-translator.html'], ['Wired Differently: when words land differently', '/wired-differently.html']] });
     state.last = { kind: 'idiom', q: name, topic: Name };
     return { blocks: b, chips: [{ label: 'Another saying', q: 'What does “we’ll see” mean?' }, { label: 'What does static mean?', q: 'What does static mean?' }], kind: 'idiom', id: x.p[0] };
   }
@@ -2682,7 +2682,7 @@
     var pre = m ? t.slice(0, t.indexOf(':')) : '';
     if (CHECK_ASK.test(vf) || (m && /\b(is (this|it) (ok|okay|alright|fine|too much|too harsh) to send|check (this|my) (message|text)|how does this (sound|land))\b/i.test(pre))) {
       if (m && (CHECK_ASK.test(norm(pre)) || /\bto send\b|\b(message|text)\b|\bsound|land\b/i.test(pre))) text = m[1];
-      else { state.checkWait = state.turn; return { blocks: [{ k: 'p', x: 'Yes. Paste or type the message here, just as you’d send it, and I’ll show how it may land and a warmer version, using the Signal Translator’s rules. Nothing leaves this device.' }], chips: [], kind: 'care', id: 'checkask' }; }
+      else { state.checkWait = state.turn; return { blocks: [{ k: 'p', x: 'Yes. Paste or type the message here, just as you’d send it, and I’ll show how it may land and a warmer version, using the Chat analyzer’s rules. Nothing leaves this device.' }], chips: [], kind: 'care', id: 'checkask' }; }
     } else if ((state.checkWait && state.turn - state.checkWait === 1 && t.split(/\s+/).length >= 3 && !/^(no|nevermind|never mind|cancel|start over)\b/i.test(t)) || (PASTED.test(t) && !/^(hi |hey |hello )?(ok|okay|so|well|yes|yeah|no|nope|honestly|anyway|sorry|thanks|thank you|please|also|right|um|hmm|actually|basically|btw|lol|oh|ah|wait|look|listen|professor|puddles|again|then|now|and|but|because|like|ugh|great|fine|sure|hello|hi|hey)\s*,/i.test(t) && !/\?\s*$/.test(t) && !/\b(how|what|why|should) (do|can|should|would) i\b/i.test(t))) text = t;
     if (!text) return null;
     if (DANGER.test(norm(text))) return null;  // a threat or harm in it: the safety answer, never a rewrite
@@ -2692,14 +2692,14 @@
     var an, rw, v;
     try { an = E.analyze(text, { channel: 'text' }); rw = E.rewrite(an, { wirings: ['general'], channel: 'text' }); v = E.verdict ? E.verdict(an, E.score(an, ['general'], 'text', 'v'), rw, {}) : null; } catch (e) { return null; }
     if (!an || an.danger || an.selfHarm || (v && v.id === 'danger')) return null;
-    var b = [{ k: 'p', x: 'Here’s how it may land, using the Signal Translator’s rules: ' + ((v && v.text) || 'it reads clearly.') }];
+    var b = [{ k: 'p', x: 'Here’s how it may land, using the Chat analyzer’s rules: ' + ((v && v.text) || 'it reads clearly.') }];
     if (rw && !rw.unchanged && rw.main && norm(rw.main) !== norm(text)) {
       b.push({ k: 'script', l: 'A warmer way to say it', x: rw.main });
       var why = (rw.changes || []).map(function (c) { return c && c.why; }).filter(Boolean)[0];
       if (why) b.push({ k: 'p', x: why.replace(/"([^"]*)"/g, '“$1”') });
       if (/\[[^\]]+\]/.test(rw.main)) b.push({ k: 'note', x: 'Words in [brackets] are optional: keep them only if they’re true for you.' });
     } else b.push({ k: 'p', x: 'I wouldn’t change much. Read it once more as if you were them, on a bad day, then send it when you’re calm.' });
-    b.push({ k: 'links', x: [['Open it in the Signal Translator for more options', '/signal-translator.html']] });
+    b.push({ k: 'links', x: [['Open it in the Chat analyzer for more options', '/signal-translator.html']] });
     return { blocks: b, chips: [{ label: 'Check another message', q: 'Can you check a message for me?' }], kind: 'care', id: 'checkmsg' };
   }
   function handoffReply(f, kid) {
@@ -4483,7 +4483,7 @@
     if (r && r.needSE) {
       loadSE(function () {
         var r4 = safe(function () { return respond(state, q, doc); });
-        if (r4 && (r4.needSE || r4.needIG || r4.needBG)) r4 = { blocks: [{ k: 'p', x: 'Sorry, I couldn’t open the message checker just now. The Signal Translator page can check it for you.' }, { k: 'links', x: [['The Signal Translator', '/signal-translator.html']] }], chips: [] };
+        if (r4 && (r4.needSE || r4.needIG || r4.needBG)) r4 = { blocks: [{ k: 'p', x: 'Sorry, I couldn’t open the message checker just now. The Chat analyzer page can check it for you.' }, { k: 'links', x: [['The Chat analyzer', '/signal-translator.html']] }], chips: [] };
         cb(r4);
       });
       return;

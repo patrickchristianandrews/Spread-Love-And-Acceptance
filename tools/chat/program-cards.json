@@ -3449,7 +3449,7 @@
         "Wait until the first sting passes. A reply in an hour beats one in a minute.",
         "Say the feeling in one line, without blame.",
         "Then say yes to what they asked, and one thing you’d love: a regular time, a photo, a call.",
-        "Check it in the Signal Translator before you send, if you like."
+        "Check it in the Chat analyzer before you send, if you like."
       ],
       "script": [
         "You’re right, I’ll text first. It stung a little, because I love being with you all. When suits you?",
@@ -3971,7 +3971,7 @@
       ],
       "links": [
         [
-          "Check a message first (Signal Translator, co-parents)",
+          "Check a message first (Chat analyzer, co-parents)",
           "/signal-translator.html?rel=co-parents"
         ],
         [
@@ -5343,7 +5343,7 @@
         "Decide first, just the two of you.",
         "Write one short message together: what you decided, and that both traditions matter to you.",
         "Each of you tells your own family, and says you decided together.",
-        "Check the wording in the Signal Translator, set to Family, before you send it."
+        "Check the wording in the Chat analyzer, set to Family, before you send it."
       ],
       "script": [
         "We’ve thought about this a lot, and we’ve decided together. Both of our families and both of our traditions matter to us, and we want the children to know and love both. We’d love your support, and we want you close."
@@ -5379,7 +5379,7 @@
         "Decide first, just the two of you.",
         "Write one short message together: what you decided, and that both traditions matter to you.",
         "Each of you tells your own family, and says you decided together.",
-        "Check the wording in the Signal Translator, set to Family, before you send it."
+        "Check the wording in the Chat analyzer, set to Family, before you send it."
       ],
       "script": [
         "We’ve thought about this a lot, and we’ve decided together. Both of our families and both of our traditions matter to us, and we want the children to know and love both. We’d love your support, and we want you close."
@@ -5409,7 +5409,7 @@
         "Name the rift, own your part, and make it easy to say no.",
         "Keep the house for a later talk, once you’re back in touch: “Would you be willing to talk about Dad’s house, one day?”",
         "If something about the will needs sorting soon for legal reasons, that’s a separate, practical conversation. A solicitor, lawyer or family mediator can help with it.",
-        "Before you send, check your draft in the Signal Translator, set to Family, and read it once more as if you were them, on a bad day."
+        "Before you send, check your draft in the Chat analyzer, set to Family, and read it once more as if you were them, on a bad day."
       ],
       "script": [
         "I keep thinking about Dad, and about us. I don’t want the house to be the last thing we ever talked about.",
@@ -7076,7 +7076,7 @@
           "/work.html#neurodiversity"
         ],
         [
-          "The Signal Translator (work mode)",
+          "The Chat analyzer (work mode)",
           "/signal-translator.html?use=work"
         ]
       ],
@@ -7129,7 +7129,7 @@
           "/work.html#autistic-at-work"
         ],
         [
-          "The Signal Translator (work mode)",
+          "The Chat analyzer (work mode)",
           "/signal-translator.html?use=work"
         ]
       ],
@@ -7149,17 +7149,17 @@
       "pat": "^(is (this|that|it) (rude|too blunt|blunt|harsh|too harsh|mean|passive aggressive|ok to send|okay to send|too direct)|does (this|that|it) sound (rude|harsh|blunt|mean|passive aggressive|cold))\\b|\\bhow (does|will|would) (this|my message|my email|my text|that) (sound|come across|land)\\b",
       "keys": [],
       "what": [
-        "The Signal Translator is made for exactly this. Paste your sentence, choose the work setting, and it shows how it may land and a version that keeps your meaning."
+        "The Chat analyzer is made for exactly this. Paste your sentence, choose the work setting, and it shows how it may land and a version that keeps your meaning."
       ],
       "how": [
-        "Open the Signal Translator and paste the sentence.",
+        "Open the Chat analyzer and paste the sentence.",
         "Choose work, and who it’s to (your manager, a colleague, the team).",
         "Read how it may land, then pick or tweak a version.",
         "Tip: blunt isn’t rude by itself. One line of warmth or reason often fixes it: “Thanks for this. One fix: the totals on page 2 don’t match.”"
       ],
       "links": [
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -7199,7 +7199,7 @@
           "/share-the-load.html#roommates"
         ],
         [
-          "Check a message first (Signal Translator, roommates)",
+          "Check a message first (Chat analyzer, roommates)",
           "/signal-translator.html?rel=roommates"
         ]
       ],
@@ -7444,7 +7444,7 @@
           "/sharing-a-room.html#bring-it-up"
         ],
         [
-          "Check a message first (Signal Translator, roommates)",
+          "Check a message first (Chat analyzer, roommates)",
           "/signal-translator.html?rel=roommates"
         ]
       ],
@@ -7989,7 +7989,7 @@
         "A short text like “Fine.” or “Whatever works for you.” can mean “really, it’s fine” or “I’m hurt and tired of asking”. The words alone can’t tell you, so ask kindly rather than guess."
       ],
       "how": [
-        "Paste it into the Signal Translator’s “Someone sent me this” to see the likely readings and a calm reply.",
+        "Paste it into the Chat analyzer’s “Someone sent me this” to see the likely readings and a calm reply.",
         "If it follows something they asked for, answer that first, then check in."
       ],
       "script": [
@@ -8002,7 +8002,7 @@
       ],
       "links": [
         [
-          "The Signal Translator: someone sent me this",
+          "The Chat analyzer: someone sent me this",
           "/signal-translator.html"
         ]
       ],
@@ -9820,7 +9820,7 @@
           "/turning-toward.html"
         ],
         [
-          "Signal Translator: check a short text",
+          "Chat analyzer: check a short text",
           "/signal-translator.html"
         ],
         [
@@ -9982,7 +9982,7 @@
         "Minute 1: pause, with a time to come back. Something like: “I want to get this right. Can we pick it up at 8?”",
         "Minutes 2 and 3: settle your body. Breathe out longer than you breathe in, get a glass of water, or step outside for a moment.",
         "Minutes 4 and 5: write one line about what the fight was really about, so you don’t have to hold it in your head.",
-        "Later, when you’re both calm: decode what happened with the Carrier Wave Decoder, or paste the texts into the Conversation Reader."
+        "Later, when you’re both calm: decode what happened with the Carrier Wave Decoder, or paste the texts into the Chat analyzer (whole chat)."
       ],
       "links": [
         [
@@ -9994,8 +9994,8 @@
           "/carrier-wave-decoder.html#decode"
         ],
         [
-          "The Conversation Reader",
-          "/conversation-reader.html"
+          "The Chat analyzer (whole chat)",
+          "/signal-translator.html#conversation"
         ]
       ],
       "chips": [
@@ -10107,7 +10107,7 @@
       "how": [
         "Say it out loud or in a text: “I need a few minutes. Can we come back to this at 8?”",
         "While you wait, settle your body with the Calm-Down Kit (WP-11), or the Breathe button on any page.",
-        "When you come back, the Carrier Wave Decoder can help you decode what happened, and the Conversation Reader can read a text thread."
+        "When you come back, the Carrier Wave Decoder can help you decode what happened, and the Chat analyzer (whole chat) can read a text thread."
       ],
       "links": [
         [
@@ -10119,8 +10119,8 @@
           "/carrier-wave-decoder.html#decode"
         ],
         [
-          "The Conversation Reader",
-          "/conversation-reader.html"
+          "The Chat analyzer (whole chat)",
+          "/signal-translator.html#conversation"
         ]
       ],
       "chips": [
@@ -12073,23 +12073,23 @@
       "notPat": "\\b(he|she|they|my [a-z]+) (took|takes|taking|sent|sends|sending|posted|posts|posting|shared|shares|sharing|screenshot[a-z]*)\\b",
       "keys": [],
       "what": [
-        "Yes. The Conversation Reader can read screenshots of a chat, like iMessage, WhatsApp, Messenger, texts or Slack."
+        "Yes. The Chat analyzer (whole chat) can read screenshots of a chat, like iMessage, WhatsApp, Messenger, texts or Slack."
       ],
       "how": [
-        "Open the Conversation Reader and press “Choose screenshots”, or paste or drop them in.",
+        "Open the Chat analyzer (whole chat) and press “Choose screenshots”, or paste or drop them in.",
         "They’re read on this device and never uploaded.",
         "Check the words and who said what, then let the Reader look at them."
       ],
       "links": [
         [
-          "The Conversation Reader",
-          "/conversation-reader.html"
+          "The Chat analyzer (whole chat)",
+          "/signal-translator.html#conversation"
         ]
       ],
       "chips": [
         [
           "How does the Reader work?",
-          "How do I use the conversation reader?"
+          "How do I use the Chat analyzer?"
         ]
       ]
     },
@@ -12326,7 +12326,7 @@
           "/workpapers/wp-09-say-it-so-it-lands.html"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ]
       ]
@@ -12913,7 +12913,7 @@
         "On a calm day, fill in how you take in words, pace and tone. The card updates as you go.",
         "Print or copy it.",
         "Give it to the people you live and work with, before a hard conversation.",
-        "Pair it with the Signal Translator to test a sentence, and with Check-ins when the topic needs a calm space."
+        "Pair it with the Chat analyzer to test a sentence, and with Check-ins when the topic needs a calm space."
       ],
       "results": "The card tells someone how to send a request so it gets through. It doesn’t make them responsible for managing you, and it doesn’t mean you must be available however you feel. When you’re running low, every line applies more strictly.",
       "pillar": "Pillar IV, Tune how you send and receive.",
@@ -13010,14 +13010,19 @@
     {
       "id": "signal",
       "kind": "tool",
-      "name": "the Signal Translator",
+      "name": "the Chat analyzer (once the Signal Translator and the Text message checker)",
       "keys": [
         "signal translator",
         "~translator",
         "~test a sentence",
-        "test my sentence"
+        "test my sentence",
+        "chat analyzer",
+        "text message checker",
+        "message checker",
+        "check a message",
+        "check my message"
       ],
-      "what": "The Signal Translator lets you type what you plan to say or send, see how it may land, and get a clearer version that keeps your ask. Everything besides the sentence is optional.",
+      "what": "The Chat analyzer lets you type what you plan to say or send, see how it may land, and get a clearer version that keeps your ask. Everything besides the sentence is optional.",
       "how": [
         "Type your sentence the way it would really come out: a text, a Slack message, or something you’ll say out loud.",
         "Optionally pick the relationship, the channel, the listener’s wiring and state, and the situation.",
@@ -13030,7 +13035,7 @@
       "pillar": "Pillar IV, Tune how you send and receive.",
       "links": [
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -13077,14 +13082,19 @@
     {
       "id": "reader",
       "kind": "tool",
-      "name": "the Conversation Reader",
+      "name": "the Chat analyzer: a whole chat (once the Conversation Reader)",
       "keys": [
         "conversation reader",
         "~reader",
         "paste a text thread",
-        "~text thread"
+        "~text thread",
+        "whole chat",
+        "paste a whole chat",
+        "paste a conversation",
+        "analyse a chat",
+        "analyze a chat"
       ],
-      "what": "The Conversation Reader lets you paste a text thread, chat or email exchange and see where it turned, what each of you may be hearing, and a calmer way to answer. It runs entirely in your browser: what you paste is never saved or sent.",
+      "what": "The Chat analyzer (whole chat) lets you paste a text thread, chat or email exchange and see where it turned, what each of you may be hearing, and a calmer way to answer. It runs entirely in your browser: what you paste is never saved or sent.",
       "how": [
         "Copy the messages from your phone, chat app or email and paste them in. Names at the start of lines help but aren’t required.",
         "Tell it which person is you, if there are names.",
@@ -13095,11 +13105,11 @@
       "pillar": "Pillar IV, Tune how you send and receive.",
       "links": [
         [
-          "The Conversation Reader",
-          "/conversation-reader.html"
+          "The Chat analyzer (whole chat)",
+          "/signal-translator.html#conversation"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ]
       ]
@@ -13683,7 +13693,7 @@
       "how": [
         "Read the short version for the main ideas: the double empathy problem, sensitivity, and finding words for feelings.",
         "Find the wirings that sound like you or someone close, in the full guide.",
-        "Make a Wiring Card, and test one sentence in the Signal Translator."
+        "Make a Wiring Card, and test one sentence in the Chat analyzer."
       ],
       "pillar": "Pillar IV, Tune how you send and receive.",
       "links": [
@@ -13852,7 +13862,7 @@
       "what": "Pillar IV, Tune how you send and receive, borrows from signal theory (the Frequency Framework). In you: know your own wiring, pace and how you hear things. Between you and others: translate across different wiring and tone; a mismatch is tuning, not a moral failing.",
       "how": [
         "Make a Wiring Card.",
-        "Test a sentence in the Signal Translator, or use fact, feeling and ask (WP-09).",
+        "Test a sentence in the Chat analyzer, or use fact, feeling and ask (WP-09).",
         "Read Chapter I on why we get out of tune."
       ],
       "links": [
@@ -13861,7 +13871,7 @@
           "/five-pillars.html#tune-signals"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -14776,7 +14786,7 @@
       ],
       "how": [
         "Arguing about chores or who does more: the Lemonade Stand, then One owner per job (WP-03).",
-        "Things said the wrong way: the Signal Translator or Say it so it lands (WP-09).",
+        "Things said the wrong way: the Chat analyzer or Say it so it lands (WP-09).",
         "Getting too wound up to talk: How much are you carrying? (WP-02) and the Calm-Down Kit (WP-11).",
         "Different wiring: the Wiring Card and Wired Differently.",
         "Feeling distant: Turning Toward and the 90-second daily check-in (WP-13)."
@@ -16180,7 +16190,7 @@
         "Finance + Business (ownership and structure): Internal controls give every job an owner and every entry a record. In the program: One owner per job (WP-03).",
         "Holistic therapies + Aromatherapy (state and setting): Both start with the body and the senses, not the argument. In the program: Brain Breakers.",
         "The art of debating + Psychology (signal and noise): Winning an argument and being understood are different goals. Debate trains the first; psychology reminds you the second is why you started talking. In the program: Say it so it lands (WP-09).",
-        "The art of debating + Philosophy (signal and noise): Debate grew out of philosophy: a claim is only tested when someone who disagrees gets to push on it. Telling what you know from what you assume is the first move of both. In the program: The Conversation Reader.",
+        "The art of debating + Philosophy (signal and noise): Debate grew out of philosophy: a claim is only tested when someone who disagrees gets to push on it. Telling what you know from what you assume is the first move of both. In the program: The Chat analyzer (whole chat).",
         "The art of debating + Politics (ownership and structure): Politics is debate with a decision attached: someone has to hear every side, then decide. A home needs a small version, with each voice heard first and one agreement at the end. In the program: Check-ins.",
         "Politics + Philosophy (ownership and structure): Politics asks philosophy’s questions with real stakes: what is fair, who decides, and who is owed what. In the program: Chapter IV: two kinds of fair.",
         "Politics + Behavioral science (quiet incentives): Good policy makes the right thing the easy thing: defaults, small rewards, less friction. Good house rules work the same way. In the program: Pillar V.",
@@ -16233,7 +16243,7 @@
         "Here are the 29 hidden connections: fields that look far apart until you see the root they share."
       ],
       "how": [
-        "Psychology + Philosophy (signal and noise): Intent isn’t impact, and most of what’s said in a conflict is a guess wearing the costume of a fact. In the program: The Signal Translator.",
+        "Psychology + Philosophy (signal and noise): Intent isn’t impact, and most of what’s said in a conflict is a guess wearing the costume of a fact. In the program: The Chat analyzer.",
         "Psychology + Economics (limited capacity): We each remember our own effort best, so unseen work goes uncounted, though it spends real attention. In the program: Who did what (WP-01).",
         "Psychology + Business (ownership and structure): Work with no clear owner lands on whoever notices first, and that person gets called controlling. Unclear ownership turns into hurt feelings. In the program: One owner per job (WP-03).",
         "Psychology + Finance (balance): Goodwill works like a reserve. Thanks and repairs top it up; sharp words draw it down, and a low reserve makes small things feel big. In the program: Turning Toward.",
@@ -16249,13 +16259,13 @@
         "Business + Holistic therapies (feedback loops): Maintenance before breakdown. Care for people the way a good team cares for its systems, before the crisis. In the program: Check-ins.",
         "The art of debating + Behavioral science (feedback loops): Arguments run on habit: the same lines, the same escalation. The best debate trick, restating their point before you answer, only works once it’s practiced enough to be automatic. In the program: The 90-second daily check-in (WP-13).",
         "The art of debating + Economics (quiet incentives): In a debate the reward goes to whoever wins the room. At home the quiet reward for “winning” is the other person giving up, which costs far more than it saves. In the program: Chapter IV: two kinds of fair.",
-        "The art of debating + Finance (balance): A good argument keeps honest books: claims on one side, evidence on the other, and no entry without support. “You always…” is a debit with no receipt. In the program: The Conversation Reader.",
+        "The art of debating + Finance (balance): A good argument keeps honest books: claims on one side, evidence on the other, and no entry without support. “You always…” is a debit with no receipt. In the program: The Chat analyzer (whole chat).",
         "The art of debating + Business (ownership and structure): Good meetings have a chair, an agenda and a decision at the end. A good hard talk at home needs the same: one topic, a turn each, and a named next step. In the program: Check-ins.",
         "The art of debating + Neurobiology (state and setting): Reasoning well needs the thinking part of the brain, and it goes quiet on high alert. The best debate skill is knowing when your body can’t take part yet. In the program: The Calm-Down Kit (WP-11).",
         "The art of debating + Aromatherapy (state and setting): Where an argument happens shapes how it goes. A crowded kitchen at dinnertime argues differently from a quiet walk. In the program: Check-ins: a good moment.",
-        "The art of debating + Music (signal and noise): Tone carries more than the words. The same sentence has a pace and a pitch, and spoken softly and slowly it lands differently than spoken fast and flat. In the program: The Signal Translator.",
+        "The art of debating + Music (signal and noise): Tone carries more than the words. The same sentence has a pace and a pitch, and spoken softly and slowly it lands differently than spoken fast and flat. In the program: The Chat analyzer.",
         "The art of debating + Laughter therapy (signal and noise): Humor in a disagreement can open a door or slam one. Laughing with someone shows you’re on the same side; laughing at them shuts the talk down. In the program: Say it so it lands (WP-09).",
-        "Politics + Psychology (signal and noise): Groups hear what they fear. How a message is framed changes how it’s received, and that’s as true at a dinner table as in a parliament. In the program: The Signal Translator.",
+        "Politics + Psychology (signal and noise): Groups hear what they fear. How a message is framed changes how it’s received, and that’s as true at a dinner table as in a parliament. In the program: The Chat analyzer.",
         "Politics + Finance (balance): A budget is a political document: it shows what a group values. A week’s chores and hours are a household budget, and they show the same thing. In the program: Who did what (WP-01).",
         "Music + Business (ownership and structure): An orchestra works because every player has a part and someone sets the tempo: one owner per job, and one shared beat. In the program: One owner per job (WP-03).",
         "Laughter therapy + Behavioral science (feedback loops): A small, shared bit of silliness gets repeated and sticks. The in-joke is a habit that keeps closeness going. In the program: Turning Toward.",
@@ -16519,12 +16529,12 @@
         "the their side step",
         "their side tab"
       ],
-      "what": "See it from their side is now the “Their side” step of After a talk went wrong (the Carrier Wave Decoder). Once it was its own page, the Perspective Shifter. It helps you see a moment from the other person’s side. You tap what might be true for them: who they are to you, the state they were in, what was going on around them, how they’re wired and what history they carry. Then you note what each of you could and couldn’t see. It builds a picture of how the moment may have looked to them, why it can look different from what was meant, questions to check instead of guessing, and a sentence to bridge the gap that you can test in the Signal Translator.",
+      "what": "See it from their side is now the “Their side” step of After a talk went wrong (the Carrier Wave Decoder). Once it was its own page, the Perspective Shifter. It helps you see a moment from the other person’s side. You tap what might be true for them: who they are to you, the state they were in, what was going on around them, how they’re wired and what history they carry. Then you note what each of you could and couldn’t see. It builds a picture of how the moment may have looked to them, why it can look different from what was meant, questions to check instead of guessing, and a sentence to bridge the gap that you can test in the Chat analyzer.",
       "how": [
         "Open After a talk went wrong at its “Their side” step and, if you like, write what happened in a line.",
         "Tap what might be true for them in each group. Their side builds itself as you go.",
         "Look closely at “What could each of you see?”: most misunderstandings come from different information, not different values.",
-        "Use the questions to check, and test the bridge sentence in the Signal Translator before you say it."
+        "Use the questions to check, and test the bridge sentence in the Chat analyzer before you say it."
       ],
       "pillar": "Pillar IV, Tune how you send and receive, built on the seven angles in Chapter III.",
       "chips": [
@@ -16534,7 +16544,7 @@
         ],
         [
           "How do I test a sentence?",
-          "What is the Signal Translator?"
+          "What is the Chat analyzer?"
         ]
       ],
       "links": [
@@ -16543,7 +16553,7 @@
           "/carrier-wave-decoder.html?tab=their-side"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -17049,7 +17059,7 @@
           "/co-parenting.html"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -17688,7 +17698,7 @@
           "/book/understanding-4-communication.html"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ]
       ]

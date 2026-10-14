@@ -336,6 +336,11 @@
     var chat = null;
     if (window.TOLChat) chat = window.TOLChat.mount(host, about ? { topic: about,
       greeting: 'Hello! I’m Professor Puddles. You were reading “' + about + '”, so let’s start there. Ask me anything else about it in your own words.' } : {});
+    // ?q=<their words> (from the site search's "Ask Professor Puddles in your words"): put them in the box, ready to send.
+    // It stays on this device: nothing is asked or sent until they press Send.
+    var q0 = (location.search.match(/[?&]q=([^&]*)/) || [])[1];
+    try { q0 = q0 ? decodeURIComponent(q0.replace(/\+/g, ' ')).replace(/\s+/g, ' ').trim().slice(0, 300) : ''; } catch (e) { q0 = ''; }
+    if (q0 && !about && chat && chat.form) { var i0 = input(); if (i0) { i0.value = q0; i0.focus({ preventScroll: true }); } }
 
     // "Try asking…": each question is asked in the chat above, just as if it had been typed
     var still = function () { return (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || document.documentElement.classList.contains('tol-still'); };

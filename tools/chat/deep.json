@@ -478,8 +478,8 @@
      "/library/relationships.html#repair-attempts"
     ],
     [
-     "The Conversation Reader",
-     "/conversation-reader.html"
+     "The Chat analyzer (whole chat)",
+     "/signal-translator.html#conversation"
     ],
     [
      "How to stop fighting with your partner",
@@ -696,7 +696,7 @@
    ],
    "links": [
     [
-     "The Signal Translator",
+     "The Chat analyzer",
      "/signal-translator.html"
     ],
     [
@@ -2187,7 +2187,7 @@
    ],
    "links": [
     [
-     "The Signal Translator",
+     "The Chat analyzer",
      "/signal-translator.html"
     ],
     [

@@ -206,7 +206,7 @@ Dread is the heavy feeling of anticipating something unpleasant: a difficult tal
 
 Shrinking the event (a short, scheduled talk with one topic) and preparing one opening sentence usually makes it more manageable than the dread suggested.
 
-Program: The Signal Translator lets you test your opening line, which takes a lot of the dread out of starting.
+Program: The Chat analyzer lets you test your opening line, which takes a lot of the dread out of starting.
 
 ## Overwhelm as a feeling
 aka: feeling overwhelmed; overwhelm; swamped

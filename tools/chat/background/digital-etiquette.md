@@ -3,7 +3,7 @@
 ## Don’t fight by text
 aka: fighting over text; arguing by text; texting arguments
 see: When to switch to voice; Cooling off before replying
-go: /conversation-reader.html | The Conversation Reader
+go: /signal-translator.html#conversation | The Chat analyzer (whole chat)
 evidence: Research on text communication suggests tone is often misread and negative intent is overestimated. Many relationship experts advise against resolving conflict by text.
 try: “I don’t want to argue over text. Can we talk tonight?”
 
@@ -11,7 +11,7 @@ Text strips out tone, timing and facial expression, so disagreements escalate ea
 
 Moving hard conversations to voice or in person, and keeping texts for logistics and warmth, prevents a lot of misunderstandings.
 
-Program: The Conversation Reader shows where a text thread turned, and suggests a calmer reply.
+Program: The Chat analyzer (whole chat) shows where a text thread turned, and suggests a calmer reply.
 
 ## When to switch to voice
 aka: call instead of text; move to a call; switch channels
@@ -29,7 +29,7 @@ Program: The Carrier Wave Decoder helps when a conversation, in any channel, sta
 ## Texting norms that prevent fights
 aka: texting rules; texting etiquette; text norms
 see: Don’t fight by text; Tone indicators
-go: /signal-translator.html | The Signal Translator
+go: /signal-translator.html | The Chat analyzer
 evidence: Practical guidance. People have very different texting habits, and mismatched expectations are a common source of friction.
 try: Agree a few basics: “A thumbs-up means yes, not annoyed. No serious topics by text.”
 
@@ -37,7 +37,7 @@ People text very differently: some are brief, some use lots of emoji, some reply
 
 Talking about texting habits openly, and agreeing a few basics, removes a lot of guesswork.
 
-Program: The Signal Translator helps you see how a message may land before you send it.
+Program: The Chat analyzer helps you see how a message may land before you send it.
 
 ## Response time expectations
 aka: reply time; slow replies; left on read; not replying
@@ -68,7 +68,7 @@ Program: The Wiring Card is a place to note preferences like this.
 ## Group chat norms
 aka: group chat rules; group chat etiquette; muting group chats
 see: Family group chats; Don’t fight by text
-go: /conversation-reader.html | The Conversation Reader
+go: /signal-translator.html#conversation | The Chat analyzer (whole chat)
 evidence: Practical guidance. Group chats combine many readers and little tone, which makes misunderstandings more likely.
 try: “This group is for plans and photos. Anything personal, let’s take it to a private message.”
 
@@ -76,7 +76,7 @@ Group chats work best with a clear purpose (planning, sharing news) and a shared
 
 Disagreements in group chats tend to escalate because everyone watches. Taking them private helps.
 
-Program: The Conversation Reader can help you understand a tense thread.
+Program: The Chat analyzer (whole chat) can help you understand a tense thread.
 
 ## Emails that get read
 aka: clear emails; email subject lines; writing clear emails
@@ -89,7 +89,7 @@ Emails get read and answered faster when the subject line says what’s needed, 
 
 Long emails with the request buried at the end often get missed.
 
-Program: The Signal Translator helps with tone, and one ask at a time helps with clarity.
+Program: The Chat analyzer helps with tone, and one ask at a time helps with clarity.
 
 ## Notifications and boundaries
 aka: notifications; turning off notifications; always on
@@ -133,7 +133,7 @@ Program: A boundary about digital life, and a quick act of respect.
 ## Voice notes etiquette
 aka: voice notes; voice messages; audio messages
 see: Texting norms that prevent fights; When to switch to voice
-go: /signal-translator.html | The Signal Translator
+go: /signal-translator.html | The Chat analyzer
 evidence: Practical guidance. Preferences vary: some people love voice notes, others find them hard to listen to.
 try: “Do you prefer voice notes or texts? I’ll send whichever’s easier for you.”
 

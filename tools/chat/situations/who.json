@@ -96,7 +96,7 @@
           "/workpapers/wp-03-one-owner-per-job.html"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -282,7 +282,7 @@
           "/workpapers/wp-03-one-owner-per-job.html"
         ],
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [
@@ -328,8 +328,8 @@
           "/turning-toward.html"
         ],
         [
-          "The Conversation Reader (for text threads)",
-          "/conversation-reader.html"
+          "The Chat analyzer (whole chat) (for text threads)",
+          "/signal-translator.html#conversation"
         ],
         [
           "Where friends start",

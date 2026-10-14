@@ -33,7 +33,7 @@ Program: End every check-in with one ask, one owner and one time, then say it ba
 ## Clarifying questions
 aka: clarifying question; checking what they meant; asking before assuming
 see: Paraphrasing; Open and closed questions; Assume positive intent
-go: /signal-translator.html | The Signal Translator
+go: /signal-translator.html | The Chat analyzer
 evidence: Clarifying is a basic listening skill taught in communication and conflict-resolution courses. Research on misunderstandings in text and speech suggests people overestimate how clearly their meaning comes across, which is why checking helps.
 try: “When you said ‘we need to talk about the weekend’, did you mean the plans, or how the chores went?”
 
@@ -124,7 +124,7 @@ Program: The program looks at arrangements, not people. Owning your part fits Pi
 ## Tentative language
 aka: softeners; hedging kindly; it seems to me
 see: Using “and” instead of “but”; Clarifying questions
-go: /signal-translator.html | The Signal Translator
+go: /signal-translator.html | The Chat analyzer
 evidence: Linguists and communication researchers describe how softeners change how requests land. Too much hedging can make a message unclear, so the balance matters.
 try: “It seems like the kitchen is getting away from us lately. What do you think?”
 
@@ -132,7 +132,7 @@ Tentative language (“it seems to me”, “I wonder if”, “I might be wrong
 
 Use it for interpretations, not for clear needs. “I wonder if maybe it might be nice to…” can blur an ask so much that it gets missed, especially by people who take words literally. State the ask plainly, and soften the guess.
 
-Program: The Signal Translator shows how the same ask can land with more or less softening, and for different kinds of wiring.
+Program: The Chat analyzer shows how the same ask can land with more or less softening, and for different kinds of wiring.
 
 ## Assume positive intent
 aka: benefit of the doubt; generous interpretation; most generous interpretation

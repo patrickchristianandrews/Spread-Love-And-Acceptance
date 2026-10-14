@@ -8,13 +8,13 @@
       "going": "This is Pillar IV, Tune how you send and receive. The same words carry very differently depending on pace, tone, the channel (text strips out most of it) and the state each person is in. A mismatch here is usually tuning, not a moral failing. {They} may hear “harsh” where you meant “efficient”, or the other way around.",
       "going_self": "This is Pillar IV, Tune how you send and receive, and Pillar III, Read your state first. When you’re tired or rushed, words come out shorter and sharper than you intend, and people read the tone before the content. Your wiring matters too: some people are naturally direct, and others hear directness as coldness.",
       "steps": ["Before replying to something that stung, sort it into three things: the fact, how it felt, and what you’d like to happen next.", "Check the channel: if a text thread is getting tense, suggest a quick call or talking in person.", "Ask, don’t assume: “When you said that, did you mean…?” clears up a lot of mix-ups."],
-      "steps_self": ["Before sending anything important, try it in the Signal Translator to see how it may land.", "Add one softener when you’re direct: a “thanks”, a “when you get a chance”, or the reason behind the ask.", "Tell people how you mean things, on a calm day: “I’m blunt when I’m busy, it’s never personal.”"],
+      "steps_self": ["Before sending anything important, try it in the Chat analyzer to see how it may land.", "Add one softener when you’re direct: a “thanks”, a “when you get a chance”, or the reason behind the ask.", "Tell people how you mean things, on a calm day: “I’m blunt when I’m busy, it’s never personal.”"],
       "scripts": {
         "default": ["When you said that earlier, it landed as a bit sharp for me. Did you mean it that way, or am I reading too much into it?", "I think my message came out harsher than I meant. What I was trying to say is: could we sort out the plan for Saturday?"],
         "coworker": ["I want to make sure I read your message right. Did you mean the report needs changes, or just the summary?", "Rereading my last message, it came across more abruptly than I intended. Happy to talk it through."],
         "self": ["I’m direct when I’m busy. It’s never meant as cold, and I’m happy to slow down if it lands that way.", "Let me try that again, more kindly."]
       },
-      "path": [["The Signal Translator", "/signal-translator.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Wired Differently", "/wired-differently.html"]],
+      "path": [["The Chat analyzer", "/signal-translator.html"], ["Say it so it lands (WP-09)", "/workpapers/wp-09-say-it-so-it-lands.html"], ["Wired Differently", "/wired-differently.html"]],
       "deeper": ["why tone gets lost", "Tell me about texting and tone"],
       "ex": "Alex texted “Fine.” and meant “Sounds good.” Jamie read the period as a door slamming. When they compared notes, Alex added, “I type short when I’m busy, it’s not a mood.” Jamie now asks “all good?” instead of stewing, and Alex adds an emoji when it matters."
     },
@@ -95,7 +95,7 @@
         "coworker": ["In meetings, I sometimes lose my point when I get interrupted. Could you give me a moment to finish? I’ll do the same for you.", "I’d like to finish this point, and then I’m keen to hear your view.", "Could we use a round-robin in the next meeting so everyone gets a full turn?"],
         "kid": ["I want to hear all of what you’re saying. Can we take turns: you finish, then me?"]
       },
-      "path": [["The Signal Translator", "/signal-translator.html"], ["Check-ins: hear it back before you answer", "/check-ins.html"], ["Workplace communication (Library)", "/library/communication.html#workplace-communication"]],
+      "path": [["The Chat analyzer", "/signal-translator.html"], ["Check-ins: hear it back before you answer", "/check-ins.html"], ["Workplace communication (Library)", "/library/communication.html#workplace-communication"]],
       "deeper": ["active listening", "What is active listening?"],
       "ex": "Priya kept getting interrupted in team meetings. She caught her coworker afterward: “I lose my thread when I get cut off. Could you give me a beat to finish?” In the next meeting she used, “Let me finish this point, then I want your take.” It took two tries, and then the coworker started waiting."
     },
@@ -125,7 +125,7 @@
         "coworker": ["Do you have fifteen minutes this week? I’d like to talk through how we split the project handoffs."],
         "kid": ["Nothing’s wrong, I just want to talk about one thing. Want to grab a snack and chat?"]
       },
-      "path": [["The Signal Translator (test your opening line)", "/signal-translator.html"], ["Check-ins", "/check-ins.html"], ["Soft startup (Library)", "/library/conflict.html#soft-startup"]],
+      "path": [["The Chat analyzer (test your opening line)", "/signal-translator.html"], ["Check-ins", "/check-ins.html"], ["Soft startup (Library)", "/library/conflict.html#soft-startup"]],
       "deeper": ["starting softly", "What is a soft startup?"],
       "ex": "Instead of “We need to talk” (which makes anyone’s stomach drop), Sam said, “Can we find ten minutes tonight? Nothing bad, I just want us to sort out the bills together.” The talk started calmer because nobody was braced."
     },
@@ -334,7 +334,7 @@
       "steps": [
         "Explain how you mean things, on a calm day: “When I’m direct, I’m being clear, not cross.”",
         "Add one softener to important asks: a “thanks”, a “when you get a chance”, or the reason behind it.",
-        "Before you send something important, try it in the Signal Translator to see how it may land."
+        "Before you send something important, try it in the Chat analyzer to see how it may land."
       ],
       "scripts": {
         "default": [
@@ -344,7 +344,7 @@
       },
       "path": [
         [
-          "The Signal Translator",
+          "The Chat analyzer",
           "/signal-translator.html"
         ],
         [

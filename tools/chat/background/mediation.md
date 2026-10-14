@@ -24,7 +24,7 @@ Ground rules are a few simple agreements made before a hard talk: how you’ll t
 
 Keep the list short (three to five rules) and make them about behavior, not attitude. “No raised voices” is easier to keep than “be respectful”.
 
-Program: The program’s ground rules are on the Check-ins page, and the Signal Translator’s talking notes start with a similar opener.
+Program: The program’s ground rules are on the Check-ins page, and the Chat analyzer’s talking notes start with a similar opener.
 
 ## Reframing in mediation
 aka: reframing; neutral reframe; restating neutrally
@@ -107,15 +107,15 @@ Program: The Library’s entries on the four horsemen and repair attempts go dee
 ## Neutral language
 aka: neutral words; loaded words; blame words
 see: Reframing in mediation; Feelings versus thoughts
-go: /signal-translator.html | The Signal Translator
-evidence: Communication and mediation training consistently recommend avoiding absolutes and labels. The Conversation Reader looks for the same kinds of words.
+go: /signal-translator.html | The Chat analyzer
+evidence: Communication and mediation training consistently recommend avoiding absolutes and labels. The Chat analyzer (whole chat) looks for the same kinds of words.
 try: Swap “You’re so lazy about the dishes” for “The dishes from last night are still in the sink.”
 
 Some words reliably raise the temperature: always, never, lazy, selfish, ridiculous, typical. Neutral language describes what happened without adding judgments or labels.
 
 It isn’t about being cold. You can still say how you feel. It’s about making sure the facts part of your message is something the other person can agree is true.
 
-Program: WP-09 asks for the fact “in one sentence with no adjectives”. The Conversation Reader flags absolutes like “always” and “never”.
+Program: WP-09 asks for the fact “in one sentence with no adjectives”. The Chat analyzer (whole chat) flags absolutes like “always” and “never”.
 
 ## Family meetings
 aka: family meeting; household meeting; house meeting

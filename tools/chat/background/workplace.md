@@ -39,7 +39,7 @@ Good meetings tend to share a few habits: a clear purpose, an agenda, starting a
 
 Agreeing these as a team, rather than hoping for them, makes meetings calmer and more useful.
 
-Program: The coworker road in the Workpaper Suite leans on one owner per job and the Signal Translator.
+Program: The coworker road in the Workpaper Suite leans on one owner per job and the Chat analyzer.
 
 ## Round-robin turns
 aka: round robin; everyone gets a turn; taking turns in meetings
@@ -57,7 +57,7 @@ Program: For interruptions at work, the situation advice suggests naming the pat
 ## Being interrupted at work
 aka: talked over in meetings; interruptions in meetings; holding the floor
 see: Round-robin turns; Meeting norms
-go: /signal-translator.html | The Signal Translator
+go: /signal-translator.html | The Chat analyzer
 evidence: Research shows interruptions are common in meetings and that some people get interrupted more than others. Practical techniques come from communication training.
 try: “I’d like to finish this point, and then I really want to hear your view.”
 
@@ -65,7 +65,7 @@ Being interrupted repeatedly can leave you feeling unheard and your ideas lost. 
 
 Useful moves: a calm line to hold your turn, a private word with the person, and suggesting team norms like round-robins.
 
-Program: The Signal Translator helps you test how your “let me finish” line might land.
+Program: The Chat analyzer helps you test how your “let me finish” line might land.
 
 ## One-on-ones
 aka: one on one meetings; 1:1s; check ins with manager
@@ -182,7 +182,7 @@ Remote and hybrid teams lose the small, casual moments that build trust in an of
 
 Small, deliberate rituals (quick check-ins, video for tricky topics, clear written norms) help replace what’s lost.
 
-Program: The Signal Translator helps with messages that might be misread. Turning Toward’s small moments work with colleagues too.
+Program: The Chat analyzer helps with messages that might be misread. Turning Toward’s small moments work with colleagues too.
 
 ## Workload conversations at work
 aka: too much work; workload talk; at capacity at work
