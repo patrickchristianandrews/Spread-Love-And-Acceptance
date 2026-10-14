@@ -482,11 +482,27 @@ SEARCH.update({
  'week-0.html': ('Week 0: A Gentle Start to the Six Weeks', 'Five minutes before the six gentle weeks: what each week is, how long it takes, doing it alone or with anyone, and why missing a week is fine.'),
  'perspective-shifter.html': ('See It From Their Side: A Free Perspective-Taking Tool', 'Step into the other person’s side of a moment: their day, their wiring, what they could see and what they could not. A free, private tool.'),
  'start-in-10-minutes.html': ('Start in 10 Minutes: Four Small Steps', 'Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern, then pick one small change. No sign-up.'),
+ # descriptions that ran past 155 characters, rewritten so nothing is cut mid-thought
+ 'complacency.html': ('Complacency in Relationships: When “Fine” Goes Unchecked', 'Complacency isn’t laziness: it is what happens when something has worked for a long time and we stop looking. How to spot it, and small re-checks.'),
+ 'complacency-in-depth.html': (None, 'Why good things fade into the background, the quiet signs of complacency in yourself and every kind of relationship, and small, kind re-checks that help.'),
+ 'know-yourself.html': ('Know Your Own Wiring: A Self-Discovery Guide', 'Why you react the way you do: your wiring, what life taught you and what is just today, plus kind words to explain what helps to the people around you.'),
+ 'workpapers/calculators/is-the-setup-working-quick.html': ('Is the Setup Working for Everyone? A Fair-Split Calculator', 'Type in the totals from your chore worksheets, for 2 to 8 people, and see in plain words whether the way you share the load works for everyone.'),
+ 'workpapers/wp-03-one-owner-per-job-in-depth.html': ('WP-03 in Depth: One Owner per Job, With a Helper', 'The full household chore agreement: give every regular job one owner, with an optional helper, so nothing slips and nobody has to keep asking.'),
+ 'book/understanding-14-personality-in-depth.html': ('Chapter 14 in Depth: Personality and Temperament', 'Personality in full: traits, temperament, situations, energy, change with age and on purpose, through psychology, philosophy and an autistic lens.'),
+ 'book/understanding-5-belonging-in-depth.html': ('Chapter 5 in Depth: Attachment, Trust and Belonging', 'Belonging in full: the need to belong, attachment, trust, safe havens, masking and rebuilding trust, through psychology, philosophy and an autistic lens.'),
+ 'five-pillars.html': ('The Five Pillars of Fair, Kind Relationships', 'Five simple ideas for fair, kind relationships: see the whole mental load, fix the setup instead of the person, read your stress first, tune how you talk.'),
+ 'how-to-stop-fighting-with-your-partner.html': ('How to Stop Fighting With Your Partner: 7 Calm Steps', 'Calm, practical ways to stop fighting with your partner: notice the early signs, take a real pause, check your words and fix what keeps causing fights.'),
+ 'turning-toward.html': ('Turning Toward: 7 Small Habits for Closer Relationships', 'Connection grows in small moments. Seven simple habits for love and appreciation: notice when someone reaches for you, say specific thanks, repair gently.'),
+ 'relationships.html': ('Relationship Tools for Couples, Families and Roommates', 'Free ways to share chores fairly, use kinder words and hold calmer check-ins, for couples, families, co-parents, friends, roommates, coworkers and carers.'),
+ 'pursue-withdraw.html': ('One of You Wants to Talk Now, the Other Needs Space', 'Even-handed help when one partner wants to talk now and the other needs space: why it hurts on both sides, and a pause plan to fill in and share. Free.'),
+ 'workpapers/wp-01.html': ('Who Did What: A One-Week Chore Log and Kind Ways to Say No', 'A one-week log of who did what at home, plus three calm ways to say no or “not right now” without a fight. A free worksheet for couples and roommates.'),
+ 'recheck-drive.html': ('The Re-check Drive: A Calm Football Game', 'A calm football game with no clock and no way to lose. Do the small, kind re-checks from the complacency playbook for real, and the ball moves down the field.'),
+ 'touchstones-in-depth.html': ('Touchstones in Full: Shared Words, Jokes and Rituals', 'The full guide to touchstones: shared words, jokes, rituals and stories, how they go stale, what to do when one goes wrong, and a four-week plan.'),
  'sent-this.html': ('Sent This by Someone? What They Can and Can’t See', 'Someone sent you Spread Love & Acceptance? What they can and can’t see, what stays yours, and kind ways to say yes, not yet or no.'),
 })
 
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
-TITLE_MAX, DESC_MAX = 60, 160
+TITLE_MAX, DESC_MAX = 60, 155
 
 
 def fit_title(t):
@@ -505,6 +521,9 @@ def fit_desc(d):
     cut = d[:DESC_MAX + 1]
     end = max(cut.rfind('. '), cut.rfind('! '), cut.rfind('? '))
     if end >= 90: return cut[:end + 1]
+    # otherwise stop after the last whole item or clause, so a list never ends mid-phrase ("... and the.")
+    end = max(cut.rfind(', '), cut.rfind('; '), cut.rfind(': '), cut.rfind(' — '))
+    if end >= 100: return cut[:end].rstrip(',;:—- ') + '.'
     return d[:DESC_MAX].rsplit(' ', 1)[0].rstrip(',;:—-') + '.'
 
 
@@ -850,6 +869,22 @@ def attr(s):
     return html.escape(s, quote=True)
 
 
+# The site installed as an app ("Spread Love & Acceptance" on the home screen): full screen on iPhone and iPad,
+# the bigger iPad icons, and a start-up screen for each common iPhone and iPad size (portrait). The images are
+# in assets/icons/ and assets/icons/splash/ (light background, the icon in the middle, the name under it).
+APP_TAGS = ['<meta name="apple-mobile-web-app-capable" content="yes">',
+            '<meta name="mobile-web-app-capable" content="yes">',
+            '<meta name="apple-mobile-web-app-title" content="' + attr(BRAND) + '">',
+            '<meta name="apple-mobile-web-app-status-bar-style" content="default">',
+            '<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-152.png" sizes="152x152">',
+            '<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-167.png" sizes="167x167">']
+SPLASH_SIZES = [(440, 956, 3), (402, 874, 3), (430, 932, 3), (393, 852, 3), (428, 926, 3), (390, 844, 3), (375, 812, 3),
+                (414, 896, 3), (414, 896, 2), (414, 736, 3), (375, 667, 2),
+                (744, 1133, 2), (820, 1180, 2), (810, 1080, 2), (834, 1194, 2), (834, 1112, 2), (1024, 1366, 2), (1032, 1376, 2), (768, 1024, 2)]
+SPLASH_TAGS = ['<link rel="apple-touch-startup-image" href="/assets/icons/splash/splash-%dx%d.png" media="(device-width: %dpx) and (device-height: %dpx) and (-webkit-device-pixel-ratio: %d) and (orientation: portrait)">'
+               % (w * r, h * r, w, h, r) for (w, h, r) in SPLASH_SIZES]
+
+
 def process(path, report):
     fp = os.path.join(ROOT, path)
     s = open(fp, encoding='utf-8').read()
@@ -919,6 +954,8 @@ def process(path, report):
                   '<link rel="icon" href="/assets/icons/favicon-16.png" type="image/png" sizes="16x16">']
     if not has('rel="apple-touch-icon"'): lines.append('<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon-180.png" sizes="180x180">')
     if not has('rel="manifest"'): lines.append('<link rel="manifest" href="/manifest.webmanifest">')
+    if not has('name="apple-mobile-web-app-capable"'): lines += APP_TAGS
+    if not has('rel="apple-touch-startup-image"'): lines += SPLASH_TAGS
     lines += ['<meta property="og:site_name" content="' + attr(BRAND) + '">',
               '<meta property="og:title" content="' + attr(title) + '">',
               '<meta property="og:description" content="' + attr(desc) + '">',
