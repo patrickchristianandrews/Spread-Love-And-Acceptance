@@ -88,7 +88,7 @@
     { t: 'Fewer fights about chores', s: 'Facts instead of “I do everything”', steps: [
       ['lemon-quick', 'Each of you taps who does what, on your own phone.'],
       ['lemon-full', 'Count the hours and the bills too, not just the chores.'],
-      ['chart', 'Put one owner per job on the fridge.']] },
+      ['fair-quick', 'Check, kindly, whether the split can last.']] },
     { t: 'After an argument', s: 'Settle, understand, then agree a pause', steps: [
       ['upset', 'Settle your body first.'],
       ['decoder', 'Work out what went out of sync, and see their side.'],
@@ -338,7 +338,7 @@
   // ---------- workpapers: their own section, in number order, not ranked and not filtered with the tools
   var wpBox = $('[data-tl-wp-list]');
   if (wpBox && WPS.length) {
-    var WP_ORDER = ['WP', 'CALC', 'PROG', 'REPORT', 'Suite', 'Practice'], wpRank = function (t) { var i = WP_ORDER.indexOf(String(t.wp || '').split('-')[0]); return i < 0 ? 9 : i; };
+    var WP_ORDER = ['WP', 'Chart', 'Suite', 'PROG', 'REPORT'], wpRank = function (t) { var i = WP_ORDER.indexOf(String(t.wp || '').split('-')[0]); return i < 0 ? 9 : i; };
     wpBox.innerHTML = WPS.slice().sort(function (a, b) { return wpRank(a) - wpRank(b) || (a.wp || '').localeCompare(b.wp || '', 'en', { numeric: true }); }).map(function (t) {
       return '<li><a href="' + esc(t.href) + '">' + (t.wp ? '<span class="tl-wp-c">' + esc(t.wp) + '</span> ' : '') + esc(t.name) + '</a><span class="tl-wp-d">' + esc(t.does) + '</span></li>';
     }).join('');

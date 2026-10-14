@@ -484,15 +484,14 @@
     mvmaker: { o: 'fun', p: 'family', best: 'making something silly with kids' }
   };
   // ---------- Tools and workpapers are kept apart (owner: "Keep work papers and tools separate").
-  // Every entry gets kind: 'tool' or 'workpaper'. A workpaper is one of the numbered fill-in worksheets, their
-  // calculators, the suite that runs them in order, and the pages built on them; /tools.html lists tools only and
-  // links the workpapers in their own section. wp: the short code shown next to a workpaper's name.
+  // Every entry gets kind: 'tool' or 'workpaper'. A workpaper is one of the numbered fill-in worksheets (WP-01 to WP-15),
+  // the printable chore chart, the suite that runs them in order, the six-week program and the progress report. The same
+  // split as the menu's Workpapers group (menu11): the calculators (CALC-01, CALC-02) and the Workpaper Playground stay tools.
+  // /tools.html lists tools only and links the workpapers in their own section. wp: the short code shown next to a workpaper.
   var WORKPAPERS = { whodid: 'WP-01', owner: 'WP-03', keepscoming: 'WP-04', sayit: 'WP-09', calmkit: 'WP-11', pace12: 'WP-12',
-    checkin90: 'WP-13', static14: 'WP-14', rituals15: 'WP-15', 'fair-quick': 'CALC-01', 'fair-full': 'CALC-01, long form',
-    'lookback-quick': 'CALC-02', 'lookback-full': 'CALC-02, long form', suite: 'Suite', sixweeks: 'PROG-01', progress: 'REPORT-01',
-    playground: 'Practice' };
+    checkin90: 'WP-13', static14: 'WP-14', rituals15: 'WP-15', chart: 'Chart', suite: 'Suite', sixweeks: 'PROG-01', progress: 'REPORT-01' };
   T.forEach(function (t) {
-    if (!t.kind) t.kind = WORKPAPERS[t.id] || /^\/(workpapers\/|wp-\d)/.test(t.href) ? 'workpaper' : 'tool';
+    if (!t.kind) t.kind = WORKPAPERS[t.id] || (/^\/(workpapers\/|wp-\d)/.test(t.href) && !/^\/workpapers\/calculators\//.test(t.href)) ? 'workpaper' : 'tool';
     if (t.kind === 'workpaper' && !t.wp) t.wp = WORKPAPERS[t.id] || '';
   });
   var TYPE_OUT = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'plan', work: 'load', health: 'self calm', plan: 'plan', learn: 'learn', play: 'fun' };
