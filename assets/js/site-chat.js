@@ -1711,6 +1711,8 @@
         var t = stNorm(pageName(d.t)), h = stNorm(d.h);
         if (t === a || (h === a && /#main$|^[^#]*$/.test(d.u)) || (a.length > 12 && t.indexOf(a) === 0)) best = d.u.split('#')[0];
       }
+      // an older name for the page (a page's heading changed, an old ?about= link): a card's link label still finds it
+      for (var j = 0; j < (KB.cards || []).length && !best; j++) (KB.cards[j].links || []).forEach(function (l) { if (!best && l && l[1] && l[1].indexOf('#') < 0 && /\.html$/.test(l[1]) && stNorm(l[0]) === a) best = l[1]; });
       if (best) path = best;
     }
     function cardFor(u) { return (KB.cards || []).filter(function (c) { return c.page === u && c.first; })[0] || null; }

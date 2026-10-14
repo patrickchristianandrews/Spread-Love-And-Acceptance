@@ -1,1405 +1,1403 @@
 [
- {
-  "id": "levant-2009-alexithymia",
-  "authors": "Levant, R. F., Hall, R. J., Williams, C. M., & Hasan, N. T.",
-  "year": 2009,
-  "title": "Gender differences in alexithymia",
-  "venue": "Psychology of Men & Masculinity, 10(3), 190–203",
-  "doi": "10.1037/a0015652",
-  "url": "https://doi.org/10.1037/a0015652",
-  "kind": "meta-analysis",
-  "finding": "A meta-analysis of 41 samples found that men scored slightly higher than women on alexithymia (difficulty identifying and describing feelings), but the difference was small.",
-  "strength": "moderate — a meta-analysis with a consistent but small effect; self-report measures",
-  "topics": [
-   "emotions",
-   "alexithymia",
-   "gender",
-   "men"
-  ],
-  "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#not-brought-up"
-  ],
-  "verified": true,
-  "verified_by": "https://www.ovid.com/journals/pmema/fulltext/10.1037/a0015652~gender-differences-in-alexithymia ; https://durham-repository.worktribe.com/output/1480517"
- },
- {
-  "id": "matsumoto-2008-culture-regulation",
-  "authors": "Matsumoto, D., Yoo, S. H., & Nakagawa, S.",
-  "year": 2008,
-  "title": "Culture, emotion regulation, and adjustment",
-  "venue": "Journal of Personality and Social Psychology, 94(6), 925–937",
-  "doi": "10.1037/0022-3514.94.6.925",
-  "url": "https://doi.org/10.1037/0022-3514.94.6.925",
-  "kind": "study",
-  "finding": "Across 23 countries, cultures that placed more value on social order and hierarchy tended to report more suppression of emotions; cultures valuing individual autonomy and egalitarianism reported less.",
-  "strength": "moderate — large cross-cultural survey; country-level correlations, self-report",
-  "topics": [
-   "emotions",
-   "culture",
-   "emotion-regulation"
-  ],
-  "mentioned_on": [
-   "/book/understanding-1-feelings-in-depth.html#not-brought-up"
-  ],
-  "verified": true,
-  "verified_by": "https://cris.haifa.ac.il/en/publications/culture-emotion-regulation-and-adjustment/ ; https://worlddatabaseofhappiness.eur.nl/publications/culture-emotion-regulation-and-adjustment-12629",
-  "note": "Some records list the 'Multinational Study of Cultural Display Rules' as a collective co-author."
- },
- {
-  "id": "ben-simon-walker-2018",
-  "authors": "Ben Simon, E., & Walker, M. P.",
-  "year": 2018,
-  "title": "Sleep loss causes social withdrawal and loneliness",
-  "venue": "Nature Communications",
-  "doi": "10.1038/s41467-018-05377-0",
-  "url": "https://doi.org/10.1038/s41467-018-05377-0",
-  "kind": "study",
-  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
-  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
-  "topics": [
-   "sleep",
-   "stress",
-   "loneliness",
-   "connection"
-  ],
-  "mentioned_on": [
-   "/book/understanding-2-stress.html#sleep",
-   "/book/understanding-2-stress-in-depth.html#sleep"
-  ],
-  "verified": true,
-  "verified_by": "https://doaj.org/article/a67c34b95f3a473fbbe300fc81111391 ; https://news.berkeley.edu/2018/08/14/sleep-viral-loneliness"
- },
- {
-  "id": "phung-2021-bims",
-  "authors": "Phung, J., Penner, M., Pirlot, C., & Welch, C.",
-  "year": 2021,
-  "title": "What I wish you knew: Insights on burnout, inertia, meltdown, and shutdown from autistic youth",
-  "venue": "Frontiers in Psychology, 12, 741421",
-  "doi": "10.3389/fpsyg.2021.741421",
-  "url": "https://doi.org/10.3389/fpsyg.2021.741421",
-  "kind": "study",
-  "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
-  "strength": "early — small qualitative study; builds on earlier work with autistic adults",
-  "topics": [
-   "autism",
-   "meltdown",
-   "shutdown",
-   "burnout"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#meltdowns",
-   "/book/understanding-9-minds-in-depth.html#meltdowns"
-  ],
-  "verified": true,
-  "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8595127/ ; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.741421/pdf"
- },
- {
-  "id": "grove-2018-special-interests",
-  "authors": "Grove, R., Hoekstra, R. A., Wierda, M., & Begeer, S.",
-  "year": 2018,
-  "title": "Special interests and subjective wellbeing in autistic adults",
-  "venue": "Autism Research, 11(5), 766–775",
-  "doi": null,
-  "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
-  "kind": "study",
-  "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
-  "strength": "moderate — large survey, cross-sectional and self-report",
-  "topics": [
-   "autism",
-   "special-interests",
-   "wellbeing",
-   "monotropism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#interests",
-   "/book/understanding-9-minds-in-depth.html#interests",
-   "/book/understanding-14-personality-in-depth.html#gifts-costs"
-  ],
-  "verified": true,
-  "verified_by": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/ ; https://opus.lib.uts.edu.au/handle/10453/128415",
-  "note": "DOI (likely 10.1002/aur.1931) given by one secondary source only, so not used."
- },
- {
-  "id": "leedham-2020-late-diagnosis",
-  "authors": "Leedham, A., Thompson, A. R., Smith, R., & Freeth, M.",
-  "year": 2020,
-  "title": "‘I was exhausted trying to figure it out’: The experiences of females receiving an autism diagnosis in middle to late adulthood",
-  "venue": "Autism, 24(1), 135–146",
-  "doi": "10.1177/1362361319853442",
-  "url": "https://doi.org/10.1177/1362361319853442",
-  "kind": "study",
-  "finding": "Interviews with eleven autistic women diagnosed at 40 or older explored how they made sense of a lifetime of feeling different and how the diagnosis changed their understanding of themselves.",
-  "strength": "early — small qualitative (IPA) study",
-  "topics": [
-   "autism",
-   "diagnosis",
-   "adulthood",
-   "women"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#late-diagnosis",
-   "/book/understanding-9-minds-in-depth.html#late-diagnosis",
-   "/book/understanding-14-personality-in-depth.html#change"
-  ],
-  "verified": true,
-  "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/1362361319853442 ; https://eprints.whiterose.ac.uk/146721"
- },
- {
-  "id": "mischkowski-kross-bushman-2012",
-  "authors": "Mischkowski, D., Kross, E., & Bushman, B. J.",
-  "year": 2012,
-  "title": "Flies on the wall are less aggressive: Self-distancing “in the heat of the moment” reduces aggressive thoughts, angry feelings and aggressive behavior",
-  "venue": "Journal of Experimental Social Psychology",
-  "doi": "10.1016/j.jesp.2012.03.012",
-  "url": "https://doi.org/10.1016/j.jesp.2012.03.012",
-  "kind": "study",
-  "finding": "After being provoked, people who reflected on the moment from a distanced, “fly on the wall” view felt less angry and behaved less aggressively than people who relived it from their own point of view.",
-  "strength": "moderate — lab experiments with students",
-  "topics": [
-   "anger",
-   "emotion-regulation",
-   "self-distancing"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger.html",
-   "/book/understanding-13-anger-in-depth.html#step-back"
-  ],
-  "verified": true,
-  "verified_by": "https://bps.org.uk/research-digest/beat-anger-imagining-youre-fly-wall ; https://news.osu.edu/self-distancing-can-help-people-calm-aggressive-reactions-study-finds---ohio-state-research-and-innovation-communications/"
- },
- {
-  "id": "carver-harmon-jones-2009",
-  "authors": "Carver, C. S., & Harmon-Jones, E.",
-  "year": 2009,
-  "title": "Anger is an approach-related affect: Evidence and implications",
-  "venue": "Psychological Bulletin, 135, 183–204",
-  "doi": "10.1037/a0013965",
-  "url": "https://doi.org/10.1037/a0013965",
-  "kind": "review",
-  "finding": "A review of evidence that anger is usually an “approach” emotion: like eagerness, it moves people toward a goal or obstacle rather than away from it.",
-  "strength": "moderate — influential review; the approach view is debated (see replies in the same journal issue)",
-  "topics": [
-   "anger",
-   "emotions",
-   "motivation"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger-in-depth.html#signal"
-  ],
-  "verified": true,
-  "verified_by": "https://scholarship.miami.edu/esploro/outputs/journalArticle/Anger-and-Approach-Reply-to-Watson/991031613335302976 ; https://ouci.dntb.gov.ua/works/406E8N39"
- },
- {
-  "id": "saini-2009-anger-treatment",
-  "authors": "Saini, M.",
-  "year": 2009,
-  "title": "A meta-analysis of the psychological treatment of anger: Developing guidelines for evidence-based practice",
-  "venue": "Journal of the American Academy of Psychiatry and the Law, 37(4), 473–488",
-  "doi": null,
-  "url": "https://pubmed.ncbi.nlm.nih.gov/20018996/",
-  "kind": "meta-analysis",
-  "finding": "Across 96 studies and 139 treatment effects, psychological treatments for anger (such as CBT, skills training and relaxation) were generally effective, with considerable variation between treatments and studies.",
-  "strength": "moderate — large meta-analysis; varied study quality and settings",
-  "topics": [
-   "anger",
-   "therapy",
-   "anger-management"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger-in-depth.html#harm",
-   "/book/understanding-13-anger-in-depth.html#faq"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/20018996/ ; https://jaapl.org/node/7480"
- },
- {
-  "id": "laurenceau-1998-intimacy",
-  "authors": "Laurenceau, J.-P., Barrett, L. F., & Pietromonaco, P. R.",
-  "year": 1998,
-  "title": "Intimacy as an interpersonal process: The importance of self-disclosure, partner disclosure, and perceived partner responsiveness in interpersonal exchanges",
-  "venue": "Journal of Personality and Social Psychology, 74(5), 1238–1251",
-  "doi": "10.1037/0022-3514.74.5.1238",
-  "url": "https://doi.org/10.1037/0022-3514.74.5.1238",
-  "kind": "study",
-  "finding": "Diary studies of everyday social interactions supported Reis and Shaver’s model: disclosing feelings, and feeling that the other person responded with understanding, both contributed to how intimate an interaction felt.",
-  "strength": "moderate — two diary studies with students",
-  "topics": [
-   "intimacy",
-   "responsiveness",
-   "self-disclosure",
-   "love"
-  ],
-  "mentioned_on": [
-   "/book/understanding-15-love.html",
-   "/book/understanding-15-love-in-depth.html#known"
-  ],
-  "verified": true,
-  "verified_by": "https://pubpeer.com/publications/E54ED8572DB4F3BFA38EF4D1BBE704 ; https://nmr.mgh.harvard.edu/publications/journal_articles/2791"
- },
- {
-  "id": "aron-1997-closeness",
-  "authors": "Aron, A., Melinat, E., Aron, E. N., Vallone, R. D., & Bator, R. J.",
-  "year": 1997,
-  "title": "The experimental generation of interpersonal closeness: A procedure and some preliminary findings",
-  "venue": "Personality and Social Psychology Bulletin, 23(4), 363–377",
-  "doi": null,
-  "url": "https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness",
-  "kind": "study",
-  "finding": "Pairs of strangers who spent about 45 minutes on gradually deepening self-disclosure tasks (the “36 questions”) felt closer afterwards than pairs given small-talk tasks; matching on attitudes or expecting to like each other made no significant difference.",
-  "strength": "moderate — lab studies with students; creates temporary closeness, not lasting relationships",
-  "topics": [
-   "closeness",
-   "self-disclosure",
-   "love",
-   "small-talk"
-  ],
-  "mentioned_on": [
-   "/book/understanding-15-love.html",
-   "/book/understanding-15-love-in-depth.html#steps",
-   "/book/understanding-15-love-in-depth.html#faq",
-   "/bonding.html#how-it-grows"
-  ],
-  "verified": true,
-  "verified_by": "https://stafforini.com/works/aron-1997-experimental-generation-interpersonal/ ; https://ggia.berkeley.edu/practice/practice_as_pdf/36_questions_for_increasing_closeness",
-  "note": "Link is the Greater Good in Action (UC Berkeley) page for the practice, which cites the study; the DOI (probably 10.1177/0146167297234003) was not shown directly in a search result. Must NOT be confused with aron-aron-1997 in the research index: the site links the in-text name directly."
- },
- {
-  "id": "acevedo-aron-2009",
-  "authors": "Acevedo, B. P., & Aron, A.",
-  "year": 2009,
-  "title": "Does a long-term relationship kill romantic love?",
-  "venue": "Review of General Psychology, 13(1), 59–65",
-  "doi": "10.1037/a0014226",
-  "url": "https://doi.org/10.1037/a0014226",
-  "kind": "review",
-  "finding": "Reviewing studies of short- and long-term relationships, the authors concluded that romantic love without obsession can last in long-term relationships and is linked with greater satisfaction and well-being.",
-  "strength": "moderate — review and meta-analysis of mostly self-report studies",
-  "topics": [
-   "love",
-   "long-term-relationships",
-   "romance"
-  ],
-  "mentioned_on": [
-   "/book/understanding-15-love.html",
-   "/book/understanding-15-love-in-depth.html#over-time",
-   "/book/understanding-15-love-in-depth.html#faq"
-  ],
-  "verified": true,
-  "verified_by": "https://journals.sagepub.com/doi/10.1037/a0014226 ; https://www.sciencedaily.com/releases/2009/03/090317153039.htm"
- },
- {
-  "id": "carstensen-1999-ses",
-  "authors": "Carstensen, L. L., Isaacowitz, D. M., & Charles, S. T.",
-  "year": 1999,
-  "title": "Taking time seriously: A theory of socioemotional selectivity",
-  "venue": "American Psychologist, 54(3), 165–181",
-  "doi": "10.1037/0003-066X.54.3.165",
-  "url": "https://doi.org/10.1037/0003-066X.54.3.165",
-  "kind": "theory",
-  "finding": "Proposes that perceived time left shapes social goals: when time feels open-ended people seek new information and contacts; when it feels limited they focus on fewer, emotionally meaningful relationships.",
-  "strength": "strong — widely supported theory, though causal tests are harder",
-  "topics": [
-   "ageing",
-   "relationships",
-   "love",
-   "friendship"
-  ],
-  "mentioned_on": [
-   "/book/understanding-15-love.html",
-   "/book/understanding-15-love-in-depth.html#ages"
-  ],
-  "verified": true,
-  "verified_by": "https://en.wikipedia.org/wiki/Laura_L._Carstensen (citation with DOI and PMID 10199217) ; https://profiles.wustl.edu/en/publications/taking-time-seriously-a-theory-of-socioemotional-selectivity/"
- },
- {
-  "id": "kardas-kumar-epley-2022",
-  "authors": "Kardas, M., Kumar, A., & Epley, N.",
-  "year": 2022,
-  "title": "Overly shallow?: Miscalibrated expectations create a barrier to deeper conversation",
-  "venue": "Journal of Personality and Social Psychology, 122(3), 367–398",
-  "doi": null,
-  "url": null,
-  "kind": "study",
-  "finding": "People expected deep conversations with strangers to be more awkward and less enjoyable than they turned out to be; deeper talks created more connection and happiness than predicted.",
-  "strength": "moderate — a series of experiments",
-  "topics": [
-   "small-talk",
-   "conversation",
-   "connection"
-  ],
-  "mentioned_on": [
-   "/book/understanding-4-communication-in-depth.html#small-talk"
-  ],
-  "verified": false,
-  "verified_by": "https://www.lib.uchicago.edu/research/help/bibliographies/busfac/epley/ ; https://www.chicagobooth.edu/faculty/directory/e/nicholas-epley",
-  "note": "Authors, title, year, journal, volume and pages confirmed; no DOI or publisher page appeared in search results, so no link. The site names it in text without a link."
- },
- {
-  "id": "malinowski-1923-phatic",
-  "authors": "Malinowski, B.",
-  "year": 1923,
-  "title": "The problem of meaning in primitive languages",
-  "venue": "Supplement I in C. K. Ogden & I. A. Richards, The Meaning of Meaning. Kegan Paul / Harcourt, Brace",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": "Coined “phatic communion”: everyday talk whose main purpose is social bonding rather than passing on information.",
-  "strength": "foundational idea in linguistics and anthropology, not an empirical study",
-  "topics": [
-   "small-talk",
-   "communication"
-  ],
-  "mentioned_on": [
-   "/book/understanding-4-communication.html#small-talk",
-   "/book/understanding-4-communication-in-depth.html#small-talk"
-  ],
-  "verified": false,
-  "verified_by": "https://www.benjamins.com/catalog/hl.21.1-2.07gor ; https://user.keio.ac.jp/~rhotta/hellog/2014-03-03.html",
-  "note": "The essay and the coinage are confirmed, but page numbers differ by edition and no stable publisher link was found. Named in text without a link."
- },
- {
-  "id": "reis-clark-holmes-2004",
-  "authors": "Reis, H. T., Clark, M. S., & Holmes, J. G.",
-  "year": 2004,
-  "title": "Perceived partner responsiveness as an organizing construct in the study of intimacy and closeness",
-  "venue": "In D. J. Mashek & A. Aron (Eds.), Handbook of Closeness and Intimacy (pp. 201–225). Lawrence Erlbaum",
-  "doi": null,
-  "url": null,
-  "kind": "theory",
-  "finding": "Argues that feeling understood, valued and cared for by a partner (perceived responsiveness) is central to intimacy and closeness.",
-  "strength": "influential theoretical chapter",
-  "topics": [
-   "responsiveness",
-   "intimacy",
-   "love"
-  ],
-  "mentioned_on": [
-   "/book/understanding-15-love-in-depth.html#understood"
-  ],
-  "verified": false,
-  "verified_by": "https://metapsychology.net/?p=2560 ; https://clarkrelationshiplab.yale.edu/sites/default/files/files/Close%20relationships.pdf",
-  "note": "Chapter and pages confirmed via a review and later citations; no stable link to the chapter itself. Named in text without a link (wrapped in .no-research)."
- },
- {
-  "id": "hofmann-2012-cbt",
-  "authors": "Hofmann, S. G., Asnaani, A., Vonk, I. J. J., Sawyer, A. T., & Fang, A.",
-  "year": 2012,
-  "title": "The efficacy of cognitive behavioral therapy: A review of meta-analyses",
-  "venue": "Cognitive Therapy and Research, 36(5), 427–440",
-  "doi": "10.1007/s10608-012-9476-1",
-  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3584580/",
-  "kind": "review",
-  "finding": "Reviewing 106 meta-analyses of cognitive behavioural therapy, found the strongest support for anxiety problems, bulimia, anger and general stress, with support across many other problems; few studies looked at groups such as ethnic minorities or people on low incomes.",
-  "strength": "strong — a review of many meta-analyses; quality of the underlying trials varies",
-  "topics": [
-   "anxiety",
-   "stress",
-   "therapy",
-   "depression"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#talking-help",
-   "/book/understanding-16-worry-in-depth.html#talking-help"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/23459093/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3584580"
- },
- {
-  "id": "ekers-2014-ba",
-  "authors": "Ekers, D., Webster, L., Van Straten, A., Cuijpers, P., Richards, D., & Gilbody, S.",
-  "year": 2014,
-  "title": "Behavioural activation for depression; an update of meta-analysis of effectiveness and sub group analysis",
-  "venue": "PLoS ONE, 9(6), e100100",
-  "doi": "10.1371/journal.pone.0100100",
-  "url": "https://doi.org/10.1371/journal.pone.0100100",
-  "kind": "meta-analysis",
-  "finding": "Across 26 randomised trials (1,524 people), behavioural activation, planning and doing small valued activities, reduced depression more than control conditions, and at least as much as medication in the four trials that compared them.",
-  "strength": "moderate — consistent effects, but most studies were small or low quality with short follow-up",
-  "topics": [
-   "stress",
-   "depression",
-   "behavioural-activation",
-   "change"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#doing",
-   "/book/understanding-16-worry-in-depth.html#doing"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24936656/ ; https://durham-repository.worktribe.com/output/1427994"
- },
- {
-  "id": "freeman-2017-oasis",
-  "authors": "Freeman, D., Sheaves, B., et al.",
-  "year": 2017,
-  "title": "The effects of improving sleep on mental health (OASIS): A randomised controlled trial with mediation analysis",
-  "venue": "The Lancet Psychiatry, 4(10), 749–758",
-  "doi": "10.1016/S2215-0366(17)30328-0",
-  "url": "https://doi.org/10.1016/S2215-0366(17)30328-0",
-  "kind": "study",
-  "finding": "In 3,755 university students with insomnia, an online CBT course for sleep greatly reduced insomnia and also reduced paranoid thoughts and hallucinatory experiences compared with usual care, with better sleep explaining much of the change.",
-  "strength": "strong — very large randomised trial; students only, so results may not apply to everyone",
-  "topics": [
-   "sleep",
-   "stress",
-   "depression",
-   "anxiety"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#basics",
-   "/book/understanding-16-worry-in-depth.html#basics"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28888927/ ; https://eprints.whiterose.ac.uk/121158"
- },
- {
-  "id": "cruwys-2013-groups",
-  "authors": "Cruwys, T., Dingle, G. A., Haslam, C., Haslam, S. A., Jetten, J., & Morton, T. A.",
-  "year": 2013,
-  "title": "Social group memberships protect against future depression, alleviate depression symptoms and prevent depression relapse",
-  "venue": "Social Science & Medicine, 98, 179–186",
-  "doi": "10.1016/j.socscimed.2013.09.013",
-  "url": "https://doi.org/10.1016/j.socscimed.2013.09.013",
-  "kind": "study",
-  "finding": "In population data on adults aged 50 and over followed for two to four years, belonging to fewer groups predicted more depression later; among people already depressed, joining one group was linked to a 24% lower risk of relapse and joining three to a 63% lower risk.",
-  "strength": "moderate — large longitudinal samples, but observational, so links rather than proof",
-  "topics": [
-   "belonging",
-   "depression",
-   "groups",
-   "social-support"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#basics",
-   "/book/understanding-16-worry-in-depth.html#basics",
-   "/book/understanding-17-groups-in-depth.html#stay-yourself"
-  ],
-  "verified": true,
-  "verified_by": "https://ideas.repec.org/a/eee/socmed/v98y2013icp179-186.html ; https://researchportalplus.anu.edu.au/en/publications/social-group-memberships-protect-against-future-depression-allevi/"
- },
- {
-  "id": "craske-2014-exposure",
-  "authors": "Craske, M. G., Treanor, M., Conway, C. C., Zbozinek, T., & Vervliet, B.",
-  "year": 2014,
-  "title": "Maximizing exposure therapy: An inhibitory learning approach",
-  "venue": "Behaviour Research and Therapy, 58, 10–23",
-  "doi": "10.1016/j.brat.2014.04.006",
-  "url": "https://doi.org/10.1016/j.brat.2014.04.006",
-  "kind": "review",
-  "finding": "Describes exposure therapy for anxiety as building new learning that competes with old fear, and sets out ways to strengthen it, such as testing specific expectations, dropping safety behaviours and practising in varied settings.",
-  "strength": "moderate — theory-led clinical review drawing on lab and treatment research",
-  "topics": [
-   "anxiety",
-   "stress",
-   "exposure",
-   "avoidance"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#avoidance",
-   "/book/understanding-16-worry-in-depth.html#avoidance"
-  ],
-  "verified": true,
-  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4114726/ ; https://contextualscience.org/publications/craske_treanor_conway_zbozinek_vervliet_2014"
- },
- {
-  "id": "borkovec-1983-worry",
-  "authors": "Borkovec, T. D., Wilkinson, L., Folensbee, R., & Lerman, C.",
-  "year": 1983,
-  "title": "Stimulus control applications to the treatment of worry",
-  "venue": "Behaviour Research and Therapy, 21(3), 247–251",
-  "doi": "10.1016/0005-7967(83)90206-1",
-  "url": "https://pubmed.ncbi.nlm.nih.gov/6615390/",
-  "kind": "study",
-  "finding": "People who described themselves as worriers and were taught to postpone worry to a set time and place each day reported less daily worry after four weeks than people given no treatment.",
-  "strength": "early — two small early studies; the method is now part of many CBT programmes",
-  "topics": [
-   "anxiety",
-   "stress",
-   "worry",
-   "rumination"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#worry-time",
-   "/book/understanding-16-worry-in-depth.html#worry-time"
-  ],
-  "verified": true,
-  "verified_by": "https://pure.psu.edu/en/publications/stimulus-control-applications-to-the-treatment-of-worry/ ; https://pubmed.ncbi.nlm.nih.gov/6615390/"
- },
- {
-  "id": "kessler-2017-trauma",
-  "authors": "Kessler, R. C., et al.",
-  "year": 2017,
-  "title": "Trauma and PTSD in the WHO World Mental Health Surveys",
-  "venue": "European Journal of Psychotraumatology, 8(sup5), 1353383",
-  "doi": "10.1080/20008198.2017.1353383",
-  "url": "https://doi.org/10.1080/20008198.2017.1353383",
-  "kind": "study",
-  "finding": "In surveys of 68,894 adults in 24 countries, about 70% reported at least one traumatic event in their lives (3.2 on average); events involving interpersonal violence, such as sexual assault, carried the highest risk of PTSD.",
-  "strength": "strong — very large cross-national surveys; based on what people recalled and reported",
-  "topics": [
-   "stress",
-   "trauma",
-   "ptsd"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#trauma",
-   "/book/understanding-16-worry-in-depth.html#trauma"
-  ],
-  "verified": true,
-  "verified_by": "https://doaj.org/article/b16a9089153b4957a6264963ba59bea3 ; https://repositori.upf.edu/items/482854c4-8b56-4e96-9175-d7a073c8f2ad/full"
- },
- {
-  "id": "koenen-2017-ptsd",
-  "authors": "Koenen, K. C., et al.",
-  "year": 2017,
-  "title": "Posttraumatic stress disorder in the World Mental Health Surveys",
-  "venue": "Psychological Medicine, 47(13), 2260–2274",
-  "doi": "10.1017/S0033291717000708",
-  "url": "https://doi.org/10.1017/S0033291717000708",
-  "kind": "study",
-  "finding": "Across 26 surveys with 71,083 adults, lifetime PTSD was found in 3.9% of everyone and 5.6% of people exposed to trauma; about half of those with PTSD had lasting symptoms, and treatment-seeking was much lower in poorer countries.",
-  "strength": "strong — very large cross-national surveys; self-report diagnostic interviews",
-  "topics": [
-   "stress",
-   "trauma",
-   "ptsd"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry-in-depth.html#trauma"
-  ],
-  "verified": true,
-  "verified_by": "https://www.cambridge.org/core/product/7DB941D95BB33FCC18BF52DFB3F78197 ; https://scholars.aku.edu/en/publications/posttraumatic-stress-disorder-in-the-world-mental-health-surveys-3/"
- },
- {
-  "id": "rose-2002-debriefing",
-  "authors": "Rose, S., Bisson, J., Churchill, R., & Wessely, S.",
-  "year": 2002,
-  "title": "Psychological debriefing for preventing post traumatic stress disorder (PTSD)",
-  "venue": "Cochrane Database of Systematic Reviews, CD000560",
-  "doi": "10.1002/14651858.CD000560",
-  "url": "https://www.cochrane.org/evidence/CD000560_psychological-debriefing-preventing-post-traumatic-stress-disorder-ptsd",
-  "kind": "review",
-  "finding": "Found no evidence that a single session of psychological debriefing after trauma prevented PTSD, and some evidence it may increase the risk for some people; the authors advised that compulsory debriefing should stop.",
-  "strength": "moderate — systematic review of 15 trials, many of poor quality",
-  "topics": [
-   "stress",
-   "trauma",
-   "ptsd"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#after-trauma",
-   "/book/understanding-16-worry-in-depth.html#after-trauma"
-  ],
-  "verified": true,
-  "verified_by": "https://orca.cardiff.ac.uk/44934 ; https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD000560/pdf/CDSR/CD000560/CD000560_abstract.pdf"
- },
- {
-  "id": "samhsa-2014-trauma-informed",
-  "authors": "Substance Abuse and Mental Health Services Administration (SAMHSA)",
-  "year": 2014,
-  "title": "SAMHSA's concept of trauma and guidance for a trauma-informed approach",
-  "venue": "HHS Publication No. (SMA) 14-4884, Rockville, MD",
-  "doi": null,
-  "url": "https://ncsacw.acf.hhs.gov/userfiles/files/SAMHSA_Trauma.pdf",
-  "kind": "guideline",
-  "finding": "Sets out a working definition of trauma and six principles for trauma-informed services: safety; trustworthiness and transparency; peer support; collaboration; empowerment, voice and choice; and cultural, historical and gender issues.",
-  "strength": "theory — an official framework based on expert consensus, not a test of outcomes",
-  "topics": [
-   "stress",
-   "trauma",
-   "trauma-informed-care"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#after-trauma",
-   "/book/understanding-16-worry-in-depth.html#after-trauma"
-  ],
-  "verified": true,
-  "verified_by": "https://youth.gov/feature-article/samhsas-concept-trauma-and-guidance-trauma-informed-approach ; https://calio.dspacedirect.org/handle/11212/1757"
- },
- {
-  "id": "nice-2022-depression",
-  "authors": "National Institute for Health and Care Excellence (NICE)",
-  "year": 2022,
-  "title": "Depression in adults: treatment and management (NG222)",
-  "venue": "NICE guideline NG222, London",
-  "doi": null,
-  "url": "https://www.nice.org.uk/guidance/ng222",
-  "kind": "guideline",
-  "finding": "The NHS guideline for England on depression: recommends a choice of treatments made together with the person, including guided self-help, group or individual CBT and behavioural activation, group exercise, other talking therapies and antidepressants.",
-  "strength": "strong — an official guideline based on systematic reviews; some methods have been criticised",
-  "topics": [
-   "stress",
-   "depression",
-   "therapy"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry.html#talking-help",
-   "/book/understanding-16-worry-in-depth.html#talking-help",
-   "/book/understanding-16-worry-in-depth.html#low-mood"
-  ],
-  "verified": true,
-  "verified_by": "https://www.nice.org.uk/guidance/ng222/resources ; https://pulsetoday.co.uk/?p=112582"
- },
- {
-  "id": "hollocks-2019-autism-anxiety",
-  "authors": "Hollocks, M. J., Lerh, J. W., Magiati, I., Meiser-Stedman, R., & Brugha, T. S.",
-  "year": 2019,
-  "title": "Anxiety and depression in adults with autism spectrum disorder: A systematic review and meta-analysis",
-  "venue": "Psychological Medicine, 49(4), 559–572",
-  "doi": "10.1017/S0033291718002283",
-  "url": "https://ueaeprints.uea.ac.uk/id/eprint/68116/",
-  "kind": "meta-analysis",
-  "finding": "Pooling 35 studies, estimated that about 27% of autistic adults had an anxiety disorder at the time (42% over their lifetime) and about 23% had depression (37% lifetime), with wide variation between studies.",
-  "strength": "moderate — meta-analysis; very varied methods and many clinical samples",
-  "topics": [
-   "autism",
-   "anxiety",
-   "depression",
-   "neurodiversity"
-  ],
-  "mentioned_on": [
-   "/book/understanding-16-worry-in-depth.html#alarm",
-   "/book/understanding-16-worry-in-depth.html#doing"
-  ],
-  "verified": true,
-  "verified_by": "https://kclpure.kcl.ac.uk/portal/en/publications/anxiety-and-depression-in-adults-with-autism-spectrum-disorder-a-/ ; https://ueaeprints.uea.ac.uk/id/eprint/68116/"
- },
- {
-  "id": "asch-1956",
-  "authors": "Asch, S. E.",
-  "year": 1956,
-  "title": "Studies of independence and conformity: I. A minority of one against a unanimous majority",
-  "venue": "Psychological Monographs: General and Applied, 70(9, Whole No. 416), 1–70",
-  "doi": "10.1037/h0093718",
-  "url": "https://doi.org/10.1037/h0093718",
-  "kind": "study",
-  "finding": "When a group of actors all gave the same obviously wrong answer about line lengths, participants went along on about a third of answers; about a quarter never went along, and conformity fell sharply when one other person gave the right answer.",
-  "strength": "moderate — classic, much-repeated finding; levels vary with culture and era (see Bond & Smith, 1996)",
-  "topics": [
-   "belonging",
-   "conformity",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#conformity",
-   "/book/understanding-17-groups-in-depth.html#conformity",
-   "/book/understanding-17-groups-in-depth.html#stay-yourself"
-  ],
-  "verified": true,
-  "verified_by": "https://dial.uclouvain.be/pr/boreal/object/boreal:23957 ; https://search.alexanderstreet.com/view/work/bibliographic_entity%7Cbibliographic_details%7C2140276"
- },
- {
-  "id": "bond-smith-1996",
-  "authors": "Bond, R., & Smith, P. B.",
-  "year": 1996,
-  "title": "Culture and conformity: A meta-analysis of studies using Asch's (1952b, 1956) line judgment task",
-  "venue": "Psychological Bulletin, 119(1), 111–137",
-  "doi": "10.1037/0033-2909.119.1.111",
-  "url": "https://doi.org/10.1037/0033-2909.119.1.111",
-  "kind": "meta-analysis",
-  "finding": "Across 133 studies in 17 countries using Asch’s task, conformity was a reliable effect but varied: it had declined in the United States since the 1950s and was higher in more collectivist cultures.",
-  "strength": "strong — large meta-analysis of a single, standard task",
-  "topics": [
-   "belonging",
-   "conformity",
-   "culture"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#conformity",
-   "/book/understanding-17-groups-in-depth.html#conformity"
-  ],
-  "verified": true,
-  "verified_by": "https://www.proquest.com/docview/1791735831 ; https://www.themantic-education.com/ibpsych/2016/10/04/key-study-bond-and-smith-1996/"
- },
- {
-  "id": "milgram-1963",
-  "authors": "Milgram, S.",
-  "year": 1963,
-  "title": "Behavioral study of obedience",
-  "venue": "Journal of Abnormal and Social Psychology, 67(4), 371–378",
-  "doi": "10.1037/h0040525",
-  "url": "https://doi.org/10.1037/h0040525",
-  "kind": "study",
-  "finding": "Told by an experimenter to keep giving stronger electric shocks to a protesting learner (an actor; no shocks were real), 26 of 40 men continued to the highest level, many showing great distress.",
-  "strength": "debated — a famous result, partly replicated, but its procedure and meaning are disputed",
-  "topics": [
-   "belonging",
-   "obedience",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#obedience",
-   "/book/understanding-17-groups-in-depth.html#obedience"
-  ],
-  "verified": true,
-  "verified_by": "https://www.scinapse.io/papers/1969900674 ; https://www.psy.miami.edu/_assets/pdf/rpo-articles/milgram-1963.pdf"
- },
- {
-  "id": "burger-2009",
-  "authors": "Burger, J. M.",
-  "year": 2009,
-  "title": "Replicating Milgram: Would people still obey today?",
-  "venue": "American Psychologist, 64(1), 1–11",
-  "doi": "10.1037/a0010932",
-  "url": "https://doi.org/10.1037/a0010932",
-  "kind": "study",
-  "finding": "A safer partial replication with 70 adults, stopping at the learner’s first protest, found obedience rates only slightly lower than Milgram’s 45 years earlier; seeing another person refuse did not reduce obedience.",
-  "strength": "moderate — careful replication, but only of the first part of the procedure",
-  "topics": [
-   "belonging",
-   "obedience",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#obedience",
-   "/book/understanding-17-groups-in-depth.html#obedience"
-  ],
-  "verified": true,
-  "verified_by": "https://www.ovid.com/journals/ampsy/pdf/10.1037/a0010932~replicating-milgram-would-people-still-obey-today ; https://content.time.com/time/health/article/0,8599,1867735,00.html"
- },
- {
-  "id": "haslam-reicher-2012",
-  "authors": "Haslam, S. A., & Reicher, S. D.",
-  "year": 2012,
-  "title": "Contesting the “nature” of conformity: What Milgram and Zimbardo's studies really show",
-  "venue": "PLoS Biology, 10(11), e1001426",
-  "doi": "10.1371/journal.pbio.1001426",
-  "url": "https://doi.org/10.1371/journal.pbio.1001426",
-  "kind": "theory",
-  "finding": "Argues that the Milgram and Stanford prison studies do not show blind obedience: people went along when they identified with the authority and believed the cause was right, a pattern the authors call engaged followership.",
-  "strength": "theory — an influential reinterpretation drawing on social identity research",
-  "topics": [
-   "belonging",
-   "obedience",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#obedience",
-   "/book/understanding-17-groups-in-depth.html#obedience"
-  ],
-  "verified": true,
-  "verified_by": "https://ore.exeter.ac.uk/repository/handle/10871/26625 ; https://journals.plos.org/plosbiology/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1001426"
- },
- {
-  "id": "perry-2013-shock-machine",
-  "authors": "Perry, G.",
-  "year": 2013,
-  "title": "Behind the Shock Machine: The Untold Story of the Notorious Milgram Psychology Experiments",
-  "venue": "Scribe (Melbourne, 2012); revised edition The New Press (New York, 2013)",
-  "doi": null,
-  "url": "https://www.sciencenews.org/article/behind-shock-machine",
-  "kind": "book",
-  "finding": "Drawing on Milgram’s archives and interviews with participants, argues that the procedure varied more than reported and that many participants doubted the shocks were real, which calls the famous 65% figure into question.",
-  "strength": "debated — archival and journalistic critique; some reviewers questioned its objectivity",
-  "topics": [
-   "belonging",
-   "obedience",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups-in-depth.html#obedience"
-  ],
-  "verified": true,
-  "verified_by": "https://www.sciencenews.org/article/behind-shock-machine ; https://kirkusreviews.com/book-reviews/gina-perry/behind-the-shock-machine",
-  "note": "Linked to a Science News review of the book."
- },
- {
-  "id": "tajfel-turner-1979",
-  "authors": "Tajfel, H., & Turner, J. C.",
-  "year": 1979,
-  "title": "An integrative theory of intergroup conflict",
-  "venue": "In W. G. Austin & S. Worchel (Eds.), The Social Psychology of Intergroup Relations (pp. 33–47). Brooks/Cole",
-  "doi": null,
-  "url": "https://alnap.org/help-library/resources/an-integrative-theory-of-intergroup-conflict/",
-  "kind": "theory",
-  "finding": "Sets out social identity theory: part of our self-image comes from the groups we belong to, and we are motivated to see our groups positively, often by favouring them over others, even when groups are formed on trivial grounds.",
-  "strength": "strong — foundational theory with extensive later support",
-  "topics": [
-   "belonging",
-   "groups",
-   "social-identity"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#us-them",
-   "/book/understanding-17-groups-in-depth.html#us-them",
-   "/book/understanding-5-belonging-in-depth.html#groups"
-  ],
-  "verified": true,
-  "verified_by": "https://alnap.org/help-library/resources/an-integrative-theory-of-intergroup-conflict/ ; https://glottolog.org/resource/reference/id/668195"
- },
- {
-  "id": "prentice-miller-1993",
-  "authors": "Prentice, D. A., & Miller, D. T.",
-  "year": 1993,
-  "title": "Pluralistic ignorance and alcohol use on campus: Some consequences of misperceiving the social norm",
-  "venue": "Journal of Personality and Social Psychology, 64(2), 243–256",
-  "doi": "10.1037/0022-3514.64.2.243",
-  "url": "https://doi.org/10.1037/0022-3514.64.2.243",
-  "kind": "study",
-  "finding": "Students believed they were less comfortable with campus drinking than the average student; over time some men shifted their attitudes towards the imagined norm, and feeling out of step went with feeling alienated.",
-  "strength": "moderate — several studies at one university",
-  "topics": [
-   "belonging",
-   "norms",
-   "groups"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#norms",
-   "/book/understanding-17-groups-in-depth.html#norms"
-  ],
-  "verified": true,
-  "verified_by": "https://collaborate.princeton.edu/en/publications/pluralistic-ignorance-and-alcohol-use-on-campus-some-consequences/ ; https://pubpeer.com/publications/F72624BAD0802159ADC95A7BFEC691"
- },
- {
-  "id": "hofstede-1980",
-  "authors": "Hofstede, G.",
-  "year": 1980,
-  "title": "Culture's Consequences: International Differences in Work-Related Values",
-  "venue": "Sage Publications (Beverly Hills)",
-  "doi": null,
-  "url": "https://find.library.upenn.edu/catalog/994278913503681",
-  "kind": "book",
-  "finding": "From surveys of employees of one multinational company in about 40 countries, described national differences on dimensions including individualism versus collectivism and power distance.",
-  "strength": "debated — hugely influential; criticised for treating nations as uniform and for its single-company sample",
-  "topics": [
-   "culture",
-   "values",
-   "individualism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#culture",
-   "/book/understanding-17-groups-in-depth.html#culture"
-  ],
-  "verified": true,
-  "verified_by": "https://papers.ssrn.com/abstract=1496209 ; https://find.library.upenn.edu/catalog/994278913503681"
- },
- {
-  "id": "oyserman-2002",
-  "authors": "Oyserman, D., Coon, H. M., & Kemmelmeier, M.",
-  "year": 2002,
-  "title": "Rethinking individualism and collectivism: Evaluation of theoretical assumptions and meta-analyses",
-  "venue": "Psychological Bulletin, 128(1), 3–72",
-  "doi": "10.1037/0033-2909.128.1.3",
-  "url": "https://pubmed.ncbi.nlm.nih.gov/11843550/",
-  "kind": "meta-analysis",
-  "finding": "Pooling many studies, found individualism–collectivism differences were often smaller and less consistent than assumed: European Americans were not more individualistic than African or Latino Americans, nor less collectivistic than Japanese or Korean participants.",
-  "strength": "strong — large meta-analysis; depends on attitude surveys whose cross-cultural meaning is debated",
-  "topics": [
-   "culture",
-   "values",
-   "individualism"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#culture",
-   "/book/understanding-17-groups-in-depth.html#culture"
-  ],
-  "verified": true,
-  "verified_by": "https://deepblue.lib.umich.edu/items/2742a814-fc1e-4538-9d73-55ef0f7d1562/full ; https://pubmed.ncbi.nlm.nih.gov/11843550"
- },
- {
-  "id": "henrich-2010-weird",
-  "authors": "Henrich, J., Heine, S. J., & Norenzayan, A.",
-  "year": 2010,
-  "title": "The weirdest people in the world?",
-  "venue": "Behavioral and Brain Sciences, 33(2–3), 61–83",
-  "doi": "10.1017/S0140525X0999152X",
-  "url": "https://doi.org/10.1017/S0140525X0999152X",
-  "kind": "review",
-  "finding": "Showed that most psychology research uses people from Western, educated, industrialised, rich and democratic societies, who are unusual compared with the rest of humanity on many measures, so findings may not generalise.",
-  "strength": "strong — wide-ranging review of comparative evidence",
-  "topics": [
-   "culture",
-   "values",
-   "research-methods"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups-in-depth.html#culture"
-  ],
-  "verified": true,
-  "verified_by": "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-in-the-world/BF84F7517D56AFF7B7EB58411A554C17 ; https://henrich.fas.harvard.edu/publications/weirdest-people-world"
- },
- {
-  "id": "brady-2017-moral-contagion",
-  "authors": "Brady, W. J., Wills, J. A., Jost, J. T., Tucker, J. A., & Van Bavel, J. J.",
-  "year": 2017,
-  "title": "Emotion shapes the diffusion of moralized content in social networks",
-  "venue": "Proceedings of the National Academy of Sciences, 114(28), 7313–7318",
-  "doi": null,
-  "url": "https://csmapnyu.org/research/academic-research/emotion-shapes-the-diffusion-of-moralized-content-in-social-networks",
-  "kind": "study",
-  "finding": "In 563,312 social media posts about divisive political issues, each additional moral-emotional word was linked to about 20% more spread, mostly within like-minded networks rather than across them.",
-  "strength": "moderate — very large observational dataset from one platform and three issues",
-  "topics": [
-   "belonging",
-   "groups",
-   "online",
-   "emotional-contagion"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#online",
-   "/book/understanding-17-groups-in-depth.html#online"
-  ],
-  "verified": true,
-  "verified_by": "https://collaborate.princeton.edu/en/publications/emotion-shapes-the-diffusion-of-moralized-content-in-social-netwo/ ; https://csmapnyu.org/research/emotion-shapes-the-diffusion-of-moralized-content-in-social-networks"
- },
- {
-  "id": "williams-2000-cyberostracism",
-  "authors": "Williams, K. D., Cheung, C. K. T., & Choi, W.",
-  "year": 2000,
-  "title": "Cyberostracism: Effects of being ignored over the Internet",
-  "venue": "Journal of Personality and Social Psychology, 79(5), 748–762",
-  "doi": "10.1037/0022-3514.79.5.748",
-  "url": "https://doi.org/10.1037/0022-3514.79.5.748",
-  "kind": "study",
-  "finding": "In an online ball-tossing game (1,486 people from 62 countries in the first study), being left out by computer-controlled “players” made people feel worse and lowered their sense of belonging.",
-  "strength": "strong — large samples; the Cyberball method has been widely replicated",
-  "topics": [
-   "belonging",
-   "exclusion",
-   "loneliness"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups.html#pull",
-   "/book/understanding-17-groups-in-depth.html#pull",
-   "/book/understanding-5-belonging-in-depth.html#belonging"
-  ],
-  "verified": true,
-  "verified_by": "https://www.scinapse.io/papers/2087608601 ; https://www3.psych.purdue.edu/~willia55/Announce/Cyberball_Articles.htm"
- },
- {
-  "id": "cooper-2017-identity",
-  "authors": "Cooper, K., Smith, L. G. E., & Russell, A.",
-  "year": 2017,
-  "title": "Social identity, self-esteem, and mental health in autism",
-  "venue": "European Journal of Social Psychology, 47(7), 844–854",
-  "doi": "10.1002/ejsp.2297",
-  "url": "https://researchportal.bath.ac.uk/en/publications/social-identity-self-esteem-and-mental-health-in-autism/",
-  "kind": "study",
-  "finding": "In 272 autistic and 267 non-autistic participants, autistic people who identified more strongly with other autistic people had higher self-esteem, which was in turn linked to lower anxiety and depression.",
-  "strength": "moderate — one cross-sectional survey; links, not proof of cause",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "social-identity",
-   "belonging"
-  ],
-  "mentioned_on": [
-   "/book/understanding-17-groups-in-depth.html#us-them",
-   "/book/understanding-9-minds.html#community",
-   "/book/understanding-9-minds-in-depth.html#community"
-  ],
-  "verified": true,
-  "verified_by": "https://researchportal.bath.ac.uk/en/publications/social-identity-self-esteem-and-mental-health-in-autism/ ; https://metatoc.com/papers/103847-social-identity-self-esteem-and-mental-health-in-autism"
- },
- {
-  "id": "rutgers-2004",
-  "authors": "Rutgers, A. H., Bakermans-Kranenburg, M. J., van IJzendoorn, M. H., & van Berckelaer-Onnes, I. A.",
-  "year": 2004,
-  "title": "Autism and attachment: A meta-analytic review",
-  "venue": "Journal of Child Psychology and Psychiatry, 45(6), 1123–1134",
-  "doi": "10.1111/j.1469-7610.2004.t01-1-00305.x",
-  "url": "https://doi.org/10.1111/j.1469-7610.2004.t01-1-00305.x",
-  "kind": "meta-analysis",
-  "finding": "Across 16 studies, about half of autistic children in Strange Situation studies were securely attached; autistic children were less often secure on average, but the difference disappeared in samples of children with higher mental development.",
-  "strength": "moderate — meta-analysis of small studies (287 children in the main analysis)",
-  "topics": [
-   "attachment",
-   "autism",
-   "neurodiversity"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html#attachment"
-  ],
-  "verified": true,
-  "verified_by": "https://depot-e.uqtr.ca/id/eprint/12240/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC8412397"
- },
- {
-  "id": "main-solomon-1990",
-  "authors": "Main, M., & Solomon, J.",
-  "year": 1990,
-  "title": "Procedures for identifying infants as disorganized/disoriented during the Ainsworth Strange Situation",
-  "venue": "In M. T. Greenberg, D. Cicchetti & E. M. Cummings (Eds.), Attachment in the Preschool Years (pp. 121–160). University of Chicago Press",
-  "doi": null,
-  "url": "https://chicagoreference.com/ucp/books/book/chicago/A/bo3774473.html",
-  "kind": "theory",
-  "finding": "Added a fourth attachment pattern, disorganized/disoriented, for infants who seemed frightened or confused by the caregiver in the Strange Situation, with indices for coding it.",
-  "strength": "strong — foundational coding system, widely used in later research",
-  "topics": [
-   "attachment",
-   "family"
-  ],
-  "mentioned_on": [
-   "/book/understanding-5-belonging-in-depth.html#attachment"
-  ],
-  "verified": true,
-  "verified_by": "https://anhoriga.se/Artiklar-och-rapporter/1990/procedures-for-identifying-infants-as-disorganizeddisoriented-during-the-ainsworth-strange-situation ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5817243/",
-  "note": "Linked to the publisher’s page for the book the chapter appears in."
- },
- {
-  "id": "bushman-2005-rumination",
-  "authors": "Bushman, B. J., Bonacci, A. M., Pedersen, W. C., Vasquez, E. A., & Miller, N.",
-  "year": 2005,
-  "title": "Chewing on it can chew you up: Effects of rumination on triggered displaced aggression",
-  "venue": "Journal of Personality and Social Psychology, 88(6), 969–983",
-  "doi": "10.1037/0022-3514.88.6.969",
-  "url": "https://doi.org/10.1037/0022-3514.88.6.969",
-  "kind": "study",
-  "finding": "In three experiments, people who ruminated about a provocation, even for eight hours, were later more aggressive towards someone who only mildly annoyed them than people who were distracted.",
-  "strength": "moderate — three lab experiments with consistent results",
-  "topics": [
-   "anger",
-   "rumination",
-   "emotions"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger.html",
-   "/book/understanding-13-anger-in-depth.html#venting"
-  ],
-  "verified": true,
-  "verified_by": "https://kar.kent.ac.uk/34963 ; https://websites.umich.edu/~bbushman/BBPVM05.pdf"
- },
- {
-  "id": "kross-ayduk-mischel-2005",
-  "authors": "Kross, E., Ayduk, O., & Mischel, W.",
-  "year": 2005,
-  "title": "When asking “why” does not hurt: Distinguishing rumination from reflective processing of negative emotions",
-  "venue": "Psychological Science, 16(9), 709–715",
-  "doi": null,
-  "url": "https://rascl.studentorg.berkeley.edu/assets/files/kross_etal_2005_ps.pdf",
-  "kind": "study",
-  "finding": "After recalling an anger-provoking experience, people who asked why they felt as they did from a self-distanced perspective showed less emotional reactivity than those who relived it through their own eyes.",
-  "strength": "moderate — two experiments; later work by the same group has supported self-distancing",
-  "topics": [
-   "anger",
-   "emotion-regulation",
-   "self-distancing"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger-in-depth.html#step-back"
-  ],
-  "verified": true,
-  "verified_by": "https://rascl.studentorg.berkeley.edu/assets/files/kross_etal_2005_ps.pdf ; https://deepblue.lib.umich.edu/items/006027bd-fae1-43c2-a8d9-36f507cf6c1c/full",
-  "note": "Linked to the authors’ lab copy of the paper."
- },
- {
-  "id": "chida-steptoe-2009",
-  "authors": "Chida, Y., & Steptoe, A.",
-  "year": 2009,
-  "title": "The association of anger and hostility with future coronary heart disease: A meta-analytic review of prospective evidence",
-  "venue": "Journal of the American College of Cardiology, 53(11), 936–946",
-  "doi": "10.1016/j.jacc.2008.11.044",
-  "url": "https://doi.org/10.1016/j.jacc.2008.11.044",
-  "kind": "meta-analysis",
-  "finding": "Anger and hostility were linked with a modestly higher risk of later coronary heart disease events, in both initially healthy people and people with heart disease; the link was no longer significant in studies that controlled for behaviours such as smoking.",
-  "strength": "moderate — meta-analysis of long-term studies; associations, not proof of cause",
-  "topics": [
-   "anger",
-   "emotions",
-   "health"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger.html",
-   "/book/understanding-13-anger-in-depth.html#body"
-  ],
-  "verified": true,
-  "verified_by": "https://www.acc.org/About-ACC/Press-Releases/2010/02/22/13/35/9-2 ; https://www.sciencedaily.com/releases/2009/03/090309191505.htm"
- },
- {
-  "id": "mostofsky-2014",
-  "authors": "Mostofsky, E., Penner, E. A., & Mittleman, M. A.",
-  "year": 2014,
-  "title": "Outbursts of anger as a trigger of acute cardiovascular events: A systematic review and meta-analysis",
-  "venue": "European Heart Journal, 35(21), 1404–1410",
-  "doi": "10.1093/eurheartj/ehu033",
-  "url": "https://doi.org/10.1093/eurheartj/ehu033",
-  "kind": "meta-analysis",
-  "finding": "Across nine case-crossover studies, the rate of heart attacks, strokes and arrhythmias was higher in the two hours after an outburst of anger than at other times, especially for people already at high risk.",
-  "strength": "moderate — consistent results across studies; based on patients’ recall of recent anger",
-  "topics": [
-   "anger",
-   "emotions",
-   "health"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger-in-depth.html#body"
-  ],
-  "verified": true,
-  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/4043318/ ; https://hsph.harvard.edu/news/angry-outbursts-may-boost-heart-attack-stroke-risk/"
- },
- {
-  "id": "delvecchio-oleary-2004",
-  "authors": "Del Vecchio, T., & O’Leary, K. D.",
-  "year": 2004,
-  "title": "Effectiveness of anger treatments for specific anger problems: A meta-analytic review",
-  "venue": "Clinical Psychology Review, 24(1), 15–34",
-  "doi": "10.1016/j.cpr.2003.09.006",
-  "url": "https://doi.org/10.1016/j.cpr.2003.09.006",
-  "kind": "meta-analysis",
-  "finding": "Across 23 controlled studies of adults with anger problems, anger treatments produced medium to large effects; cognitive approaches did well for long-standing (trait) anger, anger suppression and driving anger, and relaxation for in-the-moment anger.",
-  "strength": "moderate — meta-analysis of a modest number of studies",
-  "topics": [
-   "anger",
-   "anger-management",
-   "therapy"
-  ],
-  "mentioned_on": [
-   "/book/understanding-13-anger.html#more-help",
-   "/book/understanding-13-anger-in-depth.html#harm"
-  ],
-  "verified": true,
-  "verified_by": "https://swov.nl/nl/publicatie/effectiveness-anger-treatments-specific-anger-problems-meta-analytic-review ; https://psychology.org.au/for-the-public/psychology-topics/managing-your-anger/references"
- },
- {
-  "id": "demetriou-2018-ef",
-  "authors": "Demetriou, E. A., Lampit, A., Quintana, D. S., et al.",
-  "year": 2018,
-  "title": "Autism spectrum disorders: A meta-analysis of executive function",
-  "venue": "Molecular Psychiatry, 23, 1198–1204",
-  "doi": "10.1038/mp.2017.75",
-  "url": "https://doi.org/10.1038/mp.2017.75",
-  "kind": "meta-analysis",
-  "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
-  "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "executive-function"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#executive-function",
-   "/book/understanding-9-minds-in-depth.html#executive-function"
-  ],
-  "verified": true,
-  "verified_by": "https://minerva-access.unimelb.edu.au/server/api/core/bitstreams/9a9656b4-d19c-5cf5-83fb-20b878427c7b/content ; https://findanexpert.unimelb.edu.au/scholarlywork/1304533-autism-spectrum-disorders--a-meta-analysis-of-executive-function"
- },
- {
-  "id": "newson-2003-pda",
-  "authors": "Newson, E., Le Maréchal, K., & David, C.",
-  "year": 2003,
-  "title": "Pathological demand avoidance syndrome: A necessary distinction within the pervasive developmental disorders",
-  "venue": "Archives of Disease in Childhood, 88(7), 595–600",
-  "doi": "10.1136/adc.88.7.595",
-  "url": "https://doi.org/10.1136/adc.88.7.595",
-  "kind": "study",
-  "finding": "Proposed recognising “pathological demand avoidance” as a separate profile within the autism spectrum, based on 150 cases with an equal sex ratio, describing strong avoidance of everyday demands.",
-  "strength": "debated — an influential proposal, not included in the main diagnostic manuals",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "demand-avoidance"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#demand-avoidance",
-   "/book/understanding-9-minds-in-depth.html#demand-avoidance"
-  ],
-  "verified": true,
-  "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1763174 ; https://adc.bmj.com/content/88/7/595"
- },
- {
-  "id": "kildahl-2021-pda",
-  "authors": "Kildahl, A. N., Helverschou, S. B., Rysstad, A. L., Wigaard, E., Hellerud, J. M., Ludvigsen, L. B., & Howlin, P.",
-  "year": 2021,
-  "title": "Pathological demand avoidance in children and adolescents: A systematic review",
-  "venue": "Autism, 25(8), 2162–2176",
-  "doi": "10.1177/13623613211034382",
-  "url": "https://doi.org/10.1177/13623613211034382",
-  "kind": "review",
-  "finding": "Reviewing 13 studies, found they nearly all relied on Newson’s original descriptions and mostly on parent reports, seldom considered other explanations such as anxiety, and none asked people with the profile about their own experience.",
-  "strength": "moderate — systematic review showing the evidence base is limited",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "demand-avoidance"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#demand-avoidance",
-   "/book/understanding-9-minds-in-depth.html#demand-avoidance"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/34320869/ ; https://pdasociety.org.uk/resources/pathological-demand-avoidance-in-children-and-adolescents-a-systematic-review"
- },
- {
-  "id": "weigelt-2012-faces",
-  "authors": "Weigelt, S., Koldewyn, K., & Kanwisher, N.",
-  "year": 2012,
-  "title": "Face identity recognition in autism spectrum disorders: A review of behavioral studies",
-  "venue": "Neuroscience & Biobehavioral Reviews, 36(3), 1060–1084",
-  "doi": "10.1016/j.neubiorev.2011.12.008",
-  "url": "https://doi.org/10.1016/j.neubiorev.2011.12.008",
-  "kind": "review",
-  "finding": "Found that autistic people were, on average, less accurate at recognising and remembering face identity, especially when memory was involved, while processing faces in broadly the same way; whether the difficulty is specific to faces was unclear.",
-  "strength": "moderate — review of many behavioural studies; later reviews partly disagree on the details",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "face-recognition"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#face-blindness",
-   "/book/understanding-9-minds-in-depth.html#face-blindness"
-  ],
-  "verified": true,
-  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22212588/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4529109/"
- },
- {
-  "id": "nhs-face-blindness",
-  "authors": "NHS",
-  "year": null,
-  "title": "Prosopagnosia (face blindness)",
-  "venue": "NHS website (nhs.uk), health A to Z",
-  "doi": null,
-  "url": "https://www.nhs.uk/conditions/face-blindness/",
-  "kind": "guideline",
-  "finding": "Describes face blindness as difficulty recognising faces, often present from childhood and sometimes running in families; there is no treatment, but strategies such as recognising voices, hair or clothes, and telling people, can help.",
-  "strength": "moderate — official health information for the public",
-  "topics": [
-   "neurodiversity",
-   "face-recognition",
-   "sensory"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#face-blindness",
-   "/book/understanding-9-minds-in-depth.html#face-blindness"
-  ],
-  "verified": true,
-  "verified_by": "https://www.nhs.uk/conditions/prosopagnosia/ ; https://111.wales.nhs.uk/prosopagnosia(faceblindness)"
- },
- {
-  "id": "sasson-morrison-2019",
-  "authors": "Sasson, N. J., & Morrison, K. E.",
-  "year": 2019,
-  "title": "First impressions of adults with autism improve with diagnostic disclosure and increased autism knowledge of peers",
-  "venue": "Autism, 23(1), 50–59",
-  "doi": "10.1177/1362361317729526",
-  "url": "https://doi.org/10.1177/1362361317729526",
-  "kind": "study",
-  "finding": "215 observers formed more favourable first impressions of autistic adults when told they were autistic, and observers who knew more about autism rated them more favourably.",
-  "strength": "moderate — one experiment with short recordings and student raters",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "disclosure"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#disclosure",
-   "/book/understanding-9-minds-in-depth.html#disclosure"
-  ],
-  "verified": true,
-  "verified_by": "https://utd-ir.tdl.org/items/10171916-edfa-4adf-a077-106b8950177b ; https://journals.sagepub.com/doi/10.1177/1362361317729526"
- },
- {
-  "id": "auyeung-2025-disclosure",
-  "authors": "Au-Yeung, S. K., Freeth, M., & Thompson, A. R.",
-  "year": 2025,
-  "title": "‘Am I gonna regret this?’: The experiences of diagnostic disclosure in autistic adults",
-  "venue": "Autism, 29(8), 2181–2192",
-  "doi": "10.1177/13623613251337504",
-  "url": "https://doi.org/10.1177/13623613251337504",
-  "kind": "study",
-  "finding": "In interviews with 12 adults diagnosed as autistic in adulthood, telling others helped some reach support, be more themselves and help others, but many had not been believed, which made them more cautious about telling.",
-  "strength": "early — small qualitative study",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "disclosure"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#disclosure",
-   "/book/understanding-9-minds-in-depth.html#disclosure"
-  ],
-  "verified": true,
-  "verified_by": "https://orca.cardiff.ac.uk/id/eprint/178154/ ; https://eprints.whiterose.ac.uk/id/eprint/226346"
- },
- {
-  "id": "millar-2006-aac",
-  "authors": "Millar, D. C., Light, J. C., & Schlosser, R. W.",
-  "year": 2006,
-  "title": "The impact of augmentative and alternative communication intervention on the speech production of individuals with developmental disabilities: A research review",
-  "venue": "Journal of Speech, Language, and Hearing Research, 49(2), 248–264",
-  "doi": "10.1044/1092-4388(2006/021)",
-  "url": "https://pubs.asha.org/doi/10.1044/1092-4388(2006/021)",
-  "kind": "review",
-  "finding": "Across 23 studies (67 people aged 2 to 60), AAC did not hold back speech, and in many cases speech increased, though most studies lacked strong experimental control.",
-  "strength": "early — consistent direction, but small studies of limited quality",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "aac",
-   "communication"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds.html#aac",
-   "/book/understanding-9-minds-in-depth.html#aac"
-  ],
-  "verified": true,
-  "verified_by": "https://pure.psu.edu/en/publications/the-impact-of-augmentative-and-alternative-communication-interven/ ; https://apps.asha.org/EvidenceMaps/Articles/ArticleSummary/48f75b29-1b15-4e0b-8e36-f65092d0d145"
- },
- {
-  "id": "donnellan-1984",
-  "authors": "Donnellan, A. M.",
-  "year": 1984,
-  "title": "The criterion of the least dangerous assumption",
-  "venue": "Behavioral Disorders, 9(2), 141–150",
-  "doi": null,
-  "url": "https://en.wikipedia.org/wiki/Least_dangerous_assumption",
-  "kind": "theory",
-  "finding": "Proposed that when we lack evidence about what someone can understand or do, we should act on the assumption that would do the least harm if wrong, which usually means presuming competence.",
-  "strength": "theory — an ethical principle for teaching and support, not a test",
-  "topics": [
-   "neurodiversity",
-   "autism",
-   "aac",
-   "accessibility"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds-in-depth.html#aac"
-  ],
-  "verified": true,
-  "verified_by": "https://en.wikipedia.org/wiki/Least_dangerous_assumption ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11534709/",
-  "note": "Linked to an encyclopedia summary; no stable link to the original article was found."
- },
- {
-  "id": "asha-2018-fc",
-  "authors": "American Speech-Language-Hearing Association (ASHA)",
-  "year": 2018,
-  "title": "Facilitated communication [Position statement]",
-  "venue": "ASHA policy PS2018-00352",
-  "doi": null,
-  "url": "https://www.asha.org/policy/ps2018-00352/",
-  "kind": "guideline",
-  "finding": "States that facilitated communication, where a helper supports the person’s hand or arm while they type or point, is discredited: research has found the messages come from the facilitator, and it should not be used.",
-  "strength": "strong — professional position statement based on decades of controlled testing",
-  "topics": [
-   "neurodiversity",
-   "aac",
-   "communication"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds-in-depth.html#aac"
-  ],
-  "verified": true,
-  "verified_by": "https://www.asha.org/policy/PS2018-00352/ ; https://apps.asha.org/EvidenceMaps/Articles/ArticleSummary/fe1f86c6-a066-4039-83a8-f4bf54380105"
- },
- {
-  "id": "botha-frost-2020",
-  "authors": "Botha, M., & Frost, D. M.",
-  "year": 2020,
-  "title": "Extending the minority stress model to understand mental health problems experienced by the autistic population",
-  "venue": "Society and Mental Health, 10(1), 20–34",
-  "doi": "10.1177/2156869318804297",
-  "url": "https://doi.org/10.1177/2156869318804297",
-  "kind": "study",
-  "finding": "In 111 autistic adults, everyday discrimination, internalised stigma and concealing being autistic predicted poorer mental health even after accounting for general stress, suggesting minority stress plays a part.",
-  "strength": "early — one cross-sectional survey of a modest sample",
-  "topics": [
-   "autism",
-   "neurodiversity",
-   "minority-stress"
-  ],
-  "mentioned_on": [
-   "/book/understanding-9-minds-in-depth.html#community"
-  ],
-  "verified": true,
-  "verified_by": "https://www.stir.ac.uk/research/hub/publication/1681721 ; https://discovery.ucl.ac.uk/id/eprint/10060929/"
- }
+  {
+    "id": "levant-2009-alexithymia",
+    "authors": "Levant, R. F., Hall, R. J., Williams, C. M., & Hasan, N. T.",
+    "year": 2009,
+    "title": "Gender differences in alexithymia",
+    "venue": "Psychology of Men & Masculinity, 10(3), 190–203",
+    "doi": "10.1037/a0015652",
+    "url": "https://doi.org/10.1037/a0015652",
+    "kind": "meta-analysis",
+    "finding": "A meta-analysis of 41 samples found that men scored slightly higher than women on alexithymia (difficulty identifying and describing feelings), but the difference was small.",
+    "strength": "moderate — a meta-analysis with a consistent but small effect; self-report measures",
+    "topics": [
+      "emotions",
+      "alexithymia",
+      "gender",
+      "men"
+    ],
+    "mentioned_on": [
+      "/book/understanding-1-feelings-in-depth.html#not-brought-up"
+    ],
+    "verified": true,
+    "verified_by": "https://www.ovid.com/journals/pmema/fulltext/10.1037/a0015652~gender-differences-in-alexithymia ; https://durham-repository.worktribe.com/output/1480517"
+  },
+  {
+    "id": "matsumoto-2008-culture-regulation",
+    "authors": "Matsumoto, D., Yoo, S. H., & Nakagawa, S.",
+    "year": 2008,
+    "title": "Culture, emotion regulation, and adjustment",
+    "venue": "Journal of Personality and Social Psychology, 94(6), 925–937",
+    "doi": "10.1037/0022-3514.94.6.925",
+    "url": "https://doi.org/10.1037/0022-3514.94.6.925",
+    "kind": "study",
+    "finding": "Across 23 countries, cultures that placed more value on social order and hierarchy tended to report more suppression of emotions; cultures valuing individual autonomy and egalitarianism reported less.",
+    "strength": "moderate — large cross-cultural survey; country-level correlations, self-report",
+    "topics": [
+      "emotions",
+      "culture",
+      "emotion-regulation"
+    ],
+    "mentioned_on": [
+      "/book/understanding-1-feelings-in-depth.html#not-brought-up"
+    ],
+    "verified": true,
+    "verified_by": "https://cris.haifa.ac.il/en/publications/culture-emotion-regulation-and-adjustment/ ; https://worlddatabaseofhappiness.eur.nl/publications/culture-emotion-regulation-and-adjustment-12629",
+    "note": "Some records list the 'Multinational Study of Cultural Display Rules' as a collective co-author."
+  },
+  {
+    "id": "ben-simon-walker-2018",
+    "authors": "Ben Simon, E., & Walker, M. P.",
+    "year": 2018,
+    "title": "Sleep loss causes social withdrawal and loneliness",
+    "venue": "Nature Communications",
+    "doi": "10.1038/s41467-018-05377-0",
+    "url": "https://doi.org/10.1038/s41467-018-05377-0",
+    "kind": "study",
+    "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
+    "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+    "topics": [
+      "sleep",
+      "stress",
+      "loneliness",
+      "connection"
+    ],
+    "mentioned_on": [
+      "/book/understanding-2-stress.html#sleep",
+      "/book/understanding-2-stress-in-depth.html#sleep"
+    ],
+    "verified": true,
+    "verified_by": "https://doaj.org/article/a67c34b95f3a473fbbe300fc81111391 ; https://news.berkeley.edu/2018/08/14/sleep-viral-loneliness"
+  },
+  {
+    "id": "phung-2021-bims",
+    "authors": "Phung, J., Penner, M., Pirlot, C., & Welch, C.",
+    "year": 2021,
+    "title": "What I wish you knew: Insights on burnout, inertia, meltdown, and shutdown from autistic youth",
+    "venue": "Frontiers in Psychology, 12, 741421",
+    "doi": "10.3389/fpsyg.2021.741421",
+    "url": "https://doi.org/10.3389/fpsyg.2021.741421",
+    "kind": "study",
+    "finding": "Interviews with eight autistic children and young people explored burnout, inertia, meltdown and shutdown as separate experiences, what they feel like, and what others do that helps or makes them worse.",
+    "strength": "early — small qualitative study; builds on earlier work with autistic adults",
+    "topics": [
+      "autism",
+      "meltdown",
+      "shutdown",
+      "burnout"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#meltdowns",
+      "/book/understanding-9-minds-in-depth.html#meltdowns"
+    ],
+    "verified": true,
+    "verified_by": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8595127/ ; https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.741421/pdf"
+  },
+  {
+    "id": "grove-2018-special-interests",
+    "authors": "Grove, R., Hoekstra, R. A., Wierda, M., & Begeer, S.",
+    "year": 2018,
+    "title": "Special interests and subjective wellbeing in autistic adults",
+    "venue": "Autism Research, 11(5), 766–775",
+    "doi": null,
+    "url": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/",
+    "kind": "study",
+    "finding": "In a survey of autistic adults in the Netherlands Autism Register, about two-thirds reported a special interest; greater motivation for the interest was linked to higher wellbeing, while very high intensity of engagement was linked to lower wellbeing.",
+    "strength": "moderate — large survey, cross-sectional and self-report",
+    "topics": [
+      "autism",
+      "special-interests",
+      "wellbeing",
+      "monotropism"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#interests",
+      "/book/understanding-9-minds-in-depth.html#interests",
+      "/book/understanding-14-personality-in-depth.html#gifts-costs"
+    ],
+    "verified": true,
+    "verified_by": "https://research.vu.nl/en/publications/special-interests-and-subjective-wellbeing-in-autistic-adults/ ; https://opus.lib.uts.edu.au/handle/10453/128415",
+    "note": "DOI (likely 10.1002/aur.1931) given by one secondary source only, so not used."
+  },
+  {
+    "id": "leedham-2020-late-diagnosis",
+    "authors": "Leedham, A., Thompson, A. R., Smith, R., & Freeth, M.",
+    "year": 2020,
+    "title": "‘I was exhausted trying to figure it out’: The experiences of females receiving an autism diagnosis in middle to late adulthood",
+    "venue": "Autism, 24(1), 135–146",
+    "doi": "10.1177/1362361319853442",
+    "url": "https://doi.org/10.1177/1362361319853442",
+    "kind": "study",
+    "finding": "Interviews with eleven autistic women diagnosed at 40 or older explored how they made sense of a lifetime of feeling different and how the diagnosis changed their understanding of themselves.",
+    "strength": "early — small qualitative (IPA) study",
+    "topics": [
+      "autism",
+      "diagnosis",
+      "adulthood",
+      "women"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#late-diagnosis",
+      "/book/understanding-9-minds-in-depth.html#late-diagnosis",
+      "/book/understanding-14-personality-in-depth.html#change"
+    ],
+    "verified": true,
+    "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/1362361319853442 ; https://eprints.whiterose.ac.uk/146721"
+  },
+  {
+    "id": "mischkowski-kross-bushman-2012",
+    "authors": "Mischkowski, D., Kross, E., & Bushman, B. J.",
+    "year": 2012,
+    "title": "Flies on the wall are less aggressive: Self-distancing “in the heat of the moment” reduces aggressive thoughts, angry feelings and aggressive behavior",
+    "venue": "Journal of Experimental Social Psychology",
+    "doi": "10.1016/j.jesp.2012.03.012",
+    "url": "https://doi.org/10.1016/j.jesp.2012.03.012",
+    "kind": "study",
+    "finding": "After being provoked, people who reflected on the moment from a distanced, “fly on the wall” view felt less angry and behaved less aggressively than people who relived it from their own point of view.",
+    "strength": "moderate — lab experiments with students",
+    "topics": [
+      "anger",
+      "emotion-regulation",
+      "self-distancing"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger.html",
+      "/book/understanding-13-anger-in-depth.html#step-back"
+    ],
+    "verified": true,
+    "verified_by": "https://bps.org.uk/research-digest/beat-anger-imagining-youre-fly-wall ; https://news.osu.edu/self-distancing-can-help-people-calm-aggressive-reactions-study-finds---ohio-state-research-and-innovation-communications/"
+  },
+  {
+    "id": "carver-harmon-jones-2009",
+    "authors": "Carver, C. S., & Harmon-Jones, E.",
+    "year": 2009,
+    "title": "Anger is an approach-related affect: Evidence and implications",
+    "venue": "Psychological Bulletin, 135, 183–204",
+    "doi": "10.1037/a0013965",
+    "url": "https://doi.org/10.1037/a0013965",
+    "kind": "review",
+    "finding": "A review of evidence that anger is usually an “approach” emotion: like eagerness, it moves people toward a goal or obstacle rather than away from it.",
+    "strength": "moderate — influential review; the approach view is debated (see replies in the same journal issue)",
+    "topics": [
+      "anger",
+      "emotions",
+      "motivation"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger-in-depth.html#signal"
+    ],
+    "verified": true,
+    "verified_by": "https://scholarship.miami.edu/esploro/outputs/journalArticle/Anger-and-Approach-Reply-to-Watson/991031613335302976 ; https://ouci.dntb.gov.ua/works/406E8N39"
+  },
+  {
+    "id": "saini-2009-anger-treatment",
+    "authors": "Saini, M.",
+    "year": 2009,
+    "title": "A meta-analysis of the psychological treatment of anger: Developing guidelines for evidence-based practice",
+    "venue": "Journal of the American Academy of Psychiatry and the Law, 37(4), 473–488",
+    "doi": null,
+    "url": "https://pubmed.ncbi.nlm.nih.gov/20018996/",
+    "kind": "meta-analysis",
+    "finding": "Across 96 studies and 139 treatment effects, psychological treatments for anger (such as CBT, skills training and relaxation) were generally effective, with considerable variation between treatments and studies.",
+    "strength": "moderate — large meta-analysis; varied study quality and settings",
+    "topics": [
+      "anger",
+      "therapy",
+      "anger-management"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger-in-depth.html#harm",
+      "/book/understanding-13-anger-in-depth.html#faq"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/20018996/ ; https://jaapl.org/node/7480"
+  },
+  {
+    "id": "laurenceau-1998-intimacy",
+    "authors": "Laurenceau, J.-P., Barrett, L. F., & Pietromonaco, P. R.",
+    "year": 1998,
+    "title": "Intimacy as an interpersonal process: The importance of self-disclosure, partner disclosure, and perceived partner responsiveness in interpersonal exchanges",
+    "venue": "Journal of Personality and Social Psychology, 74(5), 1238–1251",
+    "doi": "10.1037/0022-3514.74.5.1238",
+    "url": "https://doi.org/10.1037/0022-3514.74.5.1238",
+    "kind": "study",
+    "finding": "Diary studies of everyday social interactions supported Reis and Shaver’s model: disclosing feelings, and feeling that the other person responded with understanding, both contributed to how intimate an interaction felt.",
+    "strength": "moderate — two diary studies with students",
+    "topics": [
+      "intimacy",
+      "responsiveness",
+      "self-disclosure",
+      "love"
+    ],
+    "mentioned_on": [
+      "/book/understanding-15-love.html",
+      "/book/understanding-15-love-in-depth.html#known"
+    ],
+    "verified": true,
+    "verified_by": "https://pubpeer.com/publications/E54ED8572DB4F3BFA38EF4D1BBE704 ; https://nmr.mgh.harvard.edu/publications/journal_articles/2791"
+  },
+  {
+    "id": "aron-1997-closeness",
+    "authors": "Aron, A., Melinat, E., Aron, E. N., Vallone, R. D., & Bator, R. J.",
+    "year": 1997,
+    "title": "The experimental generation of interpersonal closeness: A procedure and some preliminary findings",
+    "venue": "Personality and Social Psychology Bulletin, 23(4), 363–377",
+    "doi": null,
+    "url": "https://ggia.berkeley.edu/practice/36_questions_for_increasing_closeness",
+    "kind": "study",
+    "finding": "Pairs of strangers who spent about 45 minutes on gradually deepening self-disclosure tasks (the “36 questions”) felt closer afterwards than pairs given small-talk tasks; matching on attitudes or expecting to like each other made no significant difference.",
+    "strength": "moderate — lab studies with students; creates temporary closeness, not lasting relationships",
+    "topics": [
+      "closeness",
+      "self-disclosure",
+      "love",
+      "small-talk"
+    ],
+    "mentioned_on": [
+      "/book/understanding-15-love.html",
+      "/book/understanding-15-love-in-depth.html#steps",
+      "/book/understanding-15-love-in-depth.html#faq",
+      "/bonding.html#how-it-grows"
+    ],
+    "verified": true,
+    "verified_by": "https://stafforini.com/works/aron-1997-experimental-generation-interpersonal/ ; https://ggia.berkeley.edu/practice/practice_as_pdf/36_questions_for_increasing_closeness",
+    "note": "Link is the Greater Good in Action (UC Berkeley) page for the practice, which cites the study; the DOI (probably 10.1177/0146167297234003) was not shown directly in a search result. Must NOT be confused with aron-aron-1997 in the research index: the site links the in-text name directly."
+  },
+  {
+    "id": "acevedo-aron-2009",
+    "authors": "Acevedo, B. P., & Aron, A.",
+    "year": 2009,
+    "title": "Does a long-term relationship kill romantic love?",
+    "venue": "Review of General Psychology, 13(1), 59–65",
+    "doi": "10.1037/a0014226",
+    "url": "https://doi.org/10.1037/a0014226",
+    "kind": "review",
+    "finding": "Reviewing studies of short- and long-term relationships, the authors concluded that romantic love without obsession can last in long-term relationships and is linked with greater satisfaction and well-being.",
+    "strength": "moderate — review and meta-analysis of mostly self-report studies",
+    "topics": [
+      "love",
+      "long-term-relationships",
+      "romance"
+    ],
+    "mentioned_on": [
+      "/book/understanding-15-love.html",
+      "/book/understanding-15-love-in-depth.html#over-time",
+      "/book/understanding-15-love-in-depth.html#faq"
+    ],
+    "verified": true,
+    "verified_by": "https://journals.sagepub.com/doi/10.1037/a0014226 ; https://www.sciencedaily.com/releases/2009/03/090317153039.htm"
+  },
+  {
+    "id": "carstensen-1999-ses",
+    "authors": "Carstensen, L. L., Isaacowitz, D. M., & Charles, S. T.",
+    "year": 1999,
+    "title": "Taking time seriously: A theory of socioemotional selectivity",
+    "venue": "American Psychologist, 54(3), 165–181",
+    "doi": "10.1037/0003-066X.54.3.165",
+    "url": "https://doi.org/10.1037/0003-066X.54.3.165",
+    "kind": "theory",
+    "finding": "Proposes that perceived time left shapes social goals: when time feels open-ended people seek new information and contacts; when it feels limited they focus on fewer, emotionally meaningful relationships.",
+    "strength": "strong — widely supported theory, though causal tests are harder",
+    "topics": [
+      "ageing",
+      "relationships",
+      "love",
+      "friendship"
+    ],
+    "mentioned_on": [
+      "/book/understanding-15-love.html",
+      "/book/understanding-15-love-in-depth.html#ages"
+    ],
+    "verified": true,
+    "verified_by": "https://en.wikipedia.org/wiki/Laura_L._Carstensen (citation with DOI and PMID 10199217) ; https://profiles.wustl.edu/en/publications/taking-time-seriously-a-theory-of-socioemotional-selectivity/"
+  },
+  {
+    "id": "kardas-kumar-epley-2022",
+    "authors": "Kardas, M., Kumar, A., & Epley, N.",
+    "year": 2022,
+    "title": "Overly shallow?: Miscalibrated expectations create a barrier to deeper conversation",
+    "venue": "Journal of Personality and Social Psychology, 122(3), 367–398",
+    "doi": null,
+    "url": null,
+    "kind": "study",
+    "finding": "People expected deep conversations with strangers to be more awkward and less enjoyable than they turned out to be; deeper talks created more connection and happiness than predicted.",
+    "strength": "moderate — a series of experiments",
+    "topics": [
+      "small-talk",
+      "conversation",
+      "connection"
+    ],
+    "mentioned_on": [
+      "/book/understanding-4-communication-in-depth.html#small-talk"
+    ],
+    "verified": false,
+    "verified_by": "https://www.lib.uchicago.edu/research/help/bibliographies/busfac/epley/ ; https://www.chicagobooth.edu/faculty/directory/e/nicholas-epley",
+    "note": "Authors, title, year, journal, volume and pages confirmed; no DOI or publisher page appeared in search results, so no link. The site names it in text without a link."
+  },
+  {
+    "id": "malinowski-1923-phatic",
+    "authors": "Malinowski, B.",
+    "year": 1923,
+    "title": "The problem of meaning in primitive languages",
+    "venue": "Supplement I (pp. 451–510 in later printings) in C. K. Ogden & I. A. Richards, The Meaning of Meaning. London: Kegan Paul; New York: Harcourt, Brace",
+    "doi": null,
+    "url": "https://archive.org/details/meaningofmeaning00ogde",
+    "kind": "theory",
+    "finding": "Named “phatic communion”: small talk whose job is not to pass on information but to create and keep up a bond (“ties of union are created by mere exchange of words”).",
+    "strength": "theory: a classic idea in anthropology and linguistics",
+    "topics": [
+      "communication",
+      "small-talk"
+    ],
+    "mentioned_on": [
+      "/book/understanding-4-communication.html#small-talk",
+      "/book/understanding-4-communication-in-depth.html#small-talk"
+    ],
+    "verified": true,
+    "verified_by": "https://linguistlist.org/issues/10/509/ ; https://user.keio.ac.jp/~rhotta/hellog/2014-03-03.html",
+    "note": "bookfixA, Oct 2026"
+  },
+  {
+    "id": "reis-clark-holmes-2004",
+    "authors": "Reis, H. T., Clark, M. S., & Holmes, J. G.",
+    "year": 2004,
+    "title": "Perceived partner responsiveness as an organizing construct in the study of intimacy and closeness",
+    "venue": "In D. J. Mashek & A. Aron (Eds.), Handbook of Closeness and Intimacy (pp. 201–225). Lawrence Erlbaum",
+    "doi": null,
+    "url": null,
+    "kind": "theory",
+    "finding": "Argues that feeling understood, valued and cared for by a partner (perceived responsiveness) is central to intimacy and closeness.",
+    "strength": "influential theoretical chapter",
+    "topics": [
+      "responsiveness",
+      "intimacy",
+      "love"
+    ],
+    "mentioned_on": [
+      "/book/understanding-15-love-in-depth.html#understood"
+    ],
+    "verified": false,
+    "verified_by": "https://metapsychology.net/?p=2560 ; https://clarkrelationshiplab.yale.edu/sites/default/files/files/Close%20relationships.pdf",
+    "note": "Chapter and pages confirmed via a review and later citations; no stable link to the chapter itself. Named in text without a link (wrapped in .no-research)."
+  },
+  {
+    "id": "hofmann-2012-cbt",
+    "authors": "Hofmann, S. G., Asnaani, A., Vonk, I. J. J., Sawyer, A. T., & Fang, A.",
+    "year": 2012,
+    "title": "The efficacy of cognitive behavioral therapy: A review of meta-analyses",
+    "venue": "Cognitive Therapy and Research, 36(5), 427–440",
+    "doi": "10.1007/s10608-012-9476-1",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3584580/",
+    "kind": "review",
+    "finding": "Reviewing 106 meta-analyses of cognitive behavioural therapy, found the strongest support for anxiety problems, bulimia, anger and general stress, with support across many other problems; few studies looked at groups such as ethnic minorities or people on low incomes.",
+    "strength": "strong — a review of many meta-analyses; quality of the underlying trials varies",
+    "topics": [
+      "anxiety",
+      "stress",
+      "therapy",
+      "depression"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#talking-help",
+      "/book/understanding-16-worry-in-depth.html#talking-help"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/23459093/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC3584580"
+  },
+  {
+    "id": "ekers-2014-ba",
+    "authors": "Ekers, D., Webster, L., Van Straten, A., Cuijpers, P., Richards, D., & Gilbody, S.",
+    "year": 2014,
+    "title": "Behavioural activation for depression; an update of meta-analysis of effectiveness and sub group analysis",
+    "venue": "PLoS ONE, 9(6), e100100",
+    "doi": "10.1371/journal.pone.0100100",
+    "url": "https://doi.org/10.1371/journal.pone.0100100",
+    "kind": "meta-analysis",
+    "finding": "Across 26 randomised trials (1,524 people), behavioural activation, planning and doing small valued activities, reduced depression more than control conditions, and at least as much as medication in the four trials that compared them.",
+    "strength": "moderate — consistent effects, but most studies were small or low quality with short follow-up",
+    "topics": [
+      "stress",
+      "depression",
+      "behavioural-activation",
+      "change"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#doing",
+      "/book/understanding-16-worry-in-depth.html#doing"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/24936656/ ; https://durham-repository.worktribe.com/output/1427994"
+  },
+  {
+    "id": "freeman-2017-oasis",
+    "authors": "Freeman, D., Sheaves, B., et al.",
+    "year": 2017,
+    "title": "The effects of improving sleep on mental health (OASIS): A randomised controlled trial with mediation analysis",
+    "venue": "The Lancet Psychiatry, 4(10), 749–758",
+    "doi": "10.1016/S2215-0366(17)30328-0",
+    "url": "https://doi.org/10.1016/S2215-0366(17)30328-0",
+    "kind": "study",
+    "finding": "In 3,755 university students with insomnia, an online CBT course for sleep greatly reduced insomnia and also reduced paranoid thoughts and hallucinatory experiences compared with usual care, with better sleep explaining much of the change.",
+    "strength": "strong — very large randomised trial; students only, so results may not apply to everyone",
+    "topics": [
+      "sleep",
+      "stress",
+      "depression",
+      "anxiety"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#basics",
+      "/book/understanding-16-worry-in-depth.html#basics"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/28888927/ ; https://eprints.whiterose.ac.uk/121158"
+  },
+  {
+    "id": "cruwys-2013-groups",
+    "authors": "Cruwys, T., Dingle, G. A., Haslam, C., Haslam, S. A., Jetten, J., & Morton, T. A.",
+    "year": 2013,
+    "title": "Social group memberships protect against future depression, alleviate depression symptoms and prevent depression relapse",
+    "venue": "Social Science & Medicine, 98, 179–186",
+    "doi": "10.1016/j.socscimed.2013.09.013",
+    "url": "https://doi.org/10.1016/j.socscimed.2013.09.013",
+    "kind": "study",
+    "finding": "In population data on adults aged 50 and over followed for two to four years, belonging to fewer groups predicted more depression later; among people already depressed, joining one group was linked to a 24% lower risk of relapse and joining three to a 63% lower risk.",
+    "strength": "moderate — large longitudinal samples, but observational, so links rather than proof",
+    "topics": [
+      "belonging",
+      "depression",
+      "groups",
+      "social-support"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#basics",
+      "/book/understanding-16-worry-in-depth.html#basics",
+      "/book/understanding-17-groups-in-depth.html#stay-yourself"
+    ],
+    "verified": true,
+    "verified_by": "https://ideas.repec.org/a/eee/socmed/v98y2013icp179-186.html ; https://researchportalplus.anu.edu.au/en/publications/social-group-memberships-protect-against-future-depression-allevi/"
+  },
+  {
+    "id": "craske-2014-exposure",
+    "authors": "Craske, M. G., Treanor, M., Conway, C. C., Zbozinek, T., & Vervliet, B.",
+    "year": 2014,
+    "title": "Maximizing exposure therapy: An inhibitory learning approach",
+    "venue": "Behaviour Research and Therapy, 58, 10–23",
+    "doi": "10.1016/j.brat.2014.04.006",
+    "url": "https://doi.org/10.1016/j.brat.2014.04.006",
+    "kind": "review",
+    "finding": "Describes exposure therapy for anxiety as building new learning that competes with old fear, and sets out ways to strengthen it, such as testing specific expectations, dropping safety behaviours and practising in varied settings.",
+    "strength": "moderate — theory-led clinical review drawing on lab and treatment research",
+    "topics": [
+      "anxiety",
+      "stress",
+      "exposure",
+      "avoidance"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#avoidance",
+      "/book/understanding-16-worry-in-depth.html#avoidance"
+    ],
+    "verified": true,
+    "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4114726/ ; https://contextualscience.org/publications/craske_treanor_conway_zbozinek_vervliet_2014"
+  },
+  {
+    "id": "borkovec-1983-worry",
+    "authors": "Borkovec, T. D., Wilkinson, L., Folensbee, R., & Lerman, C.",
+    "year": 1983,
+    "title": "Stimulus control applications to the treatment of worry",
+    "venue": "Behaviour Research and Therapy, 21(3), 247–251",
+    "doi": "10.1016/0005-7967(83)90206-1",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/6615390/",
+    "kind": "study",
+    "finding": "People who described themselves as worriers and were taught to postpone worry to a set time and place each day reported less daily worry after four weeks than people given no treatment.",
+    "strength": "early — two small early studies; the method is now part of many CBT programmes",
+    "topics": [
+      "anxiety",
+      "stress",
+      "worry",
+      "rumination"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#worry-time",
+      "/book/understanding-16-worry-in-depth.html#worry-time"
+    ],
+    "verified": true,
+    "verified_by": "https://pure.psu.edu/en/publications/stimulus-control-applications-to-the-treatment-of-worry/ ; https://pubmed.ncbi.nlm.nih.gov/6615390/"
+  },
+  {
+    "id": "kessler-2017-trauma",
+    "authors": "Kessler, R. C., et al.",
+    "year": 2017,
+    "title": "Trauma and PTSD in the WHO World Mental Health Surveys",
+    "venue": "European Journal of Psychotraumatology, 8(sup5), 1353383",
+    "doi": "10.1080/20008198.2017.1353383",
+    "url": "https://doi.org/10.1080/20008198.2017.1353383",
+    "kind": "study",
+    "finding": "In surveys of 68,894 adults in 24 countries, about 70% reported at least one traumatic event in their lives (3.2 on average); events involving interpersonal violence, such as sexual assault, carried the highest risk of PTSD.",
+    "strength": "strong — very large cross-national surveys; based on what people recalled and reported",
+    "topics": [
+      "stress",
+      "trauma",
+      "ptsd"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#trauma",
+      "/book/understanding-16-worry-in-depth.html#trauma"
+    ],
+    "verified": true,
+    "verified_by": "https://doaj.org/article/b16a9089153b4957a6264963ba59bea3 ; https://repositori.upf.edu/items/482854c4-8b56-4e96-9175-d7a073c8f2ad/full"
+  },
+  {
+    "id": "koenen-2017-ptsd",
+    "authors": "Koenen, K. C., et al.",
+    "year": 2017,
+    "title": "Posttraumatic stress disorder in the World Mental Health Surveys",
+    "venue": "Psychological Medicine, 47(13), 2260–2274",
+    "doi": "10.1017/S0033291717000708",
+    "url": "https://doi.org/10.1017/S0033291717000708",
+    "kind": "study",
+    "finding": "Across 26 surveys with 71,083 adults, lifetime PTSD was found in 3.9% of everyone and 5.6% of people exposed to trauma; about half of those with PTSD had lasting symptoms, and treatment-seeking was much lower in poorer countries.",
+    "strength": "strong — very large cross-national surveys; self-report diagnostic interviews",
+    "topics": [
+      "stress",
+      "trauma",
+      "ptsd"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry-in-depth.html#trauma"
+    ],
+    "verified": true,
+    "verified_by": "https://www.cambridge.org/core/product/7DB941D95BB33FCC18BF52DFB3F78197 ; https://scholars.aku.edu/en/publications/posttraumatic-stress-disorder-in-the-world-mental-health-surveys-3/"
+  },
+  {
+    "id": "rose-2002-debriefing",
+    "authors": "Rose, S., Bisson, J., Churchill, R., & Wessely, S.",
+    "year": 2002,
+    "title": "Psychological debriefing for preventing post traumatic stress disorder (PTSD)",
+    "venue": "Cochrane Database of Systematic Reviews, CD000560",
+    "doi": "10.1002/14651858.CD000560",
+    "url": "https://www.cochrane.org/evidence/CD000560_psychological-debriefing-preventing-post-traumatic-stress-disorder-ptsd",
+    "kind": "review",
+    "finding": "Found no evidence that a single session of psychological debriefing after trauma prevented PTSD, and some evidence it may increase the risk for some people; the authors advised that compulsory debriefing should stop.",
+    "strength": "moderate — systematic review of 15 trials, many of poor quality",
+    "topics": [
+      "stress",
+      "trauma",
+      "ptsd"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#after-trauma",
+      "/book/understanding-16-worry-in-depth.html#after-trauma"
+    ],
+    "verified": true,
+    "verified_by": "https://orca.cardiff.ac.uk/44934 ; https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD000560/pdf/CDSR/CD000560/CD000560_abstract.pdf"
+  },
+  {
+    "id": "samhsa-2014-trauma-informed",
+    "authors": "Substance Abuse and Mental Health Services Administration (SAMHSA)",
+    "year": 2014,
+    "title": "SAMHSA's concept of trauma and guidance for a trauma-informed approach",
+    "venue": "HHS Publication No. (SMA) 14-4884, Rockville, MD",
+    "doi": null,
+    "url": "https://ncsacw.acf.hhs.gov/userfiles/files/SAMHSA_Trauma.pdf",
+    "kind": "guideline",
+    "finding": "Sets out a working definition of trauma and six principles for trauma-informed services: safety; trustworthiness and transparency; peer support; collaboration; empowerment, voice and choice; and cultural, historical and gender issues.",
+    "strength": "theory — an official framework based on expert consensus, not a test of outcomes",
+    "topics": [
+      "stress",
+      "trauma",
+      "trauma-informed-care"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#after-trauma",
+      "/book/understanding-16-worry-in-depth.html#after-trauma"
+    ],
+    "verified": true,
+    "verified_by": "https://youth.gov/feature-article/samhsas-concept-trauma-and-guidance-trauma-informed-approach ; https://calio.dspacedirect.org/handle/11212/1757"
+  },
+  {
+    "id": "nice-2022-depression",
+    "authors": "National Institute for Health and Care Excellence (NICE)",
+    "year": 2022,
+    "title": "Depression in adults: treatment and management (NG222)",
+    "venue": "NICE guideline NG222, London",
+    "doi": null,
+    "url": "https://www.nice.org.uk/guidance/ng222",
+    "kind": "guideline",
+    "finding": "The NHS guideline for England on depression: recommends a choice of treatments made together with the person, including guided self-help, group or individual CBT and behavioural activation, group exercise, other talking therapies and antidepressants.",
+    "strength": "strong — an official guideline based on systematic reviews; some methods have been criticised",
+    "topics": [
+      "stress",
+      "depression",
+      "therapy"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry.html#talking-help",
+      "/book/understanding-16-worry-in-depth.html#talking-help",
+      "/book/understanding-16-worry-in-depth.html#low-mood"
+    ],
+    "verified": true,
+    "verified_by": "https://www.nice.org.uk/guidance/ng222/resources ; https://pulsetoday.co.uk/?p=112582"
+  },
+  {
+    "id": "hollocks-2019-autism-anxiety",
+    "authors": "Hollocks, M. J., Lerh, J. W., Magiati, I., Meiser-Stedman, R., & Brugha, T. S.",
+    "year": 2019,
+    "title": "Anxiety and depression in adults with autism spectrum disorder: A systematic review and meta-analysis",
+    "venue": "Psychological Medicine, 49(4), 559–572",
+    "doi": "10.1017/S0033291718002283",
+    "url": "https://ueaeprints.uea.ac.uk/id/eprint/68116/",
+    "kind": "meta-analysis",
+    "finding": "Pooling 35 studies, estimated that about 27% of autistic adults had an anxiety disorder at the time (42% over their lifetime) and about 23% had depression (37% lifetime), with wide variation between studies.",
+    "strength": "moderate — meta-analysis; very varied methods and many clinical samples",
+    "topics": [
+      "autism",
+      "anxiety",
+      "depression",
+      "neurodiversity"
+    ],
+    "mentioned_on": [
+      "/book/understanding-16-worry-in-depth.html#alarm",
+      "/book/understanding-16-worry-in-depth.html#doing"
+    ],
+    "verified": true,
+    "verified_by": "https://kclpure.kcl.ac.uk/portal/en/publications/anxiety-and-depression-in-adults-with-autism-spectrum-disorder-a-/ ; https://ueaeprints.uea.ac.uk/id/eprint/68116/"
+  },
+  {
+    "id": "asch-1956",
+    "authors": "Asch, S. E.",
+    "year": 1956,
+    "title": "Studies of independence and conformity: I. A minority of one against a unanimous majority",
+    "venue": "Psychological Monographs: General and Applied, 70(9, Whole No. 416), 1–70",
+    "doi": "10.1037/h0093718",
+    "url": "https://doi.org/10.1037/h0093718",
+    "kind": "study",
+    "finding": "When a group of actors all gave the same obviously wrong answer about line lengths, participants went along on about a third of answers; about a quarter never went along, and conformity fell sharply when one other person gave the right answer.",
+    "strength": "moderate — classic, much-repeated finding; levels vary with culture and era (see Bond & Smith, 1996)",
+    "topics": [
+      "belonging",
+      "conformity",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#conformity",
+      "/book/understanding-17-groups-in-depth.html#conformity",
+      "/book/understanding-17-groups-in-depth.html#stay-yourself"
+    ],
+    "verified": true,
+    "verified_by": "https://dial.uclouvain.be/pr/boreal/object/boreal:23957 ; https://search.alexanderstreet.com/view/work/bibliographic_entity%7Cbibliographic_details%7C2140276"
+  },
+  {
+    "id": "bond-smith-1996",
+    "authors": "Bond, R., & Smith, P. B.",
+    "year": 1996,
+    "title": "Culture and conformity: A meta-analysis of studies using Asch's (1952b, 1956) line judgment task",
+    "venue": "Psychological Bulletin, 119(1), 111–137",
+    "doi": "10.1037/0033-2909.119.1.111",
+    "url": "https://doi.org/10.1037/0033-2909.119.1.111",
+    "kind": "meta-analysis",
+    "finding": "Across 133 studies in 17 countries using Asch’s task, conformity was a reliable effect but varied: it had declined in the United States since the 1950s and was higher in more collectivist cultures.",
+    "strength": "strong — large meta-analysis of a single, standard task",
+    "topics": [
+      "belonging",
+      "conformity",
+      "culture"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#conformity",
+      "/book/understanding-17-groups-in-depth.html#conformity"
+    ],
+    "verified": true,
+    "verified_by": "https://www.proquest.com/docview/1791735831 ; https://www.themantic-education.com/ibpsych/2016/10/04/key-study-bond-and-smith-1996/"
+  },
+  {
+    "id": "milgram-1963",
+    "authors": "Milgram, S.",
+    "year": 1963,
+    "title": "Behavioral study of obedience",
+    "venue": "Journal of Abnormal and Social Psychology, 67(4), 371–378",
+    "doi": "10.1037/h0040525",
+    "url": "https://doi.org/10.1037/h0040525",
+    "kind": "study",
+    "finding": "Told by an experimenter to keep giving stronger electric shocks to a protesting learner (an actor; no shocks were real), 26 of 40 men continued to the highest level, many showing great distress.",
+    "strength": "debated — a famous result, partly replicated, but its procedure and meaning are disputed",
+    "topics": [
+      "belonging",
+      "obedience",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#obedience",
+      "/book/understanding-17-groups-in-depth.html#obedience"
+    ],
+    "verified": true,
+    "verified_by": "https://www.scinapse.io/papers/1969900674 ; https://www.psy.miami.edu/_assets/pdf/rpo-articles/milgram-1963.pdf"
+  },
+  {
+    "id": "burger-2009",
+    "authors": "Burger, J. M.",
+    "year": 2009,
+    "title": "Replicating Milgram: Would people still obey today?",
+    "venue": "American Psychologist, 64(1), 1–11",
+    "doi": "10.1037/a0010932",
+    "url": "https://doi.org/10.1037/a0010932",
+    "kind": "study",
+    "finding": "A safer partial replication with 70 adults, stopping at the learner’s first protest, found obedience rates only slightly lower than Milgram’s 45 years earlier; seeing another person refuse did not reduce obedience.",
+    "strength": "moderate — careful replication, but only of the first part of the procedure",
+    "topics": [
+      "belonging",
+      "obedience",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#obedience",
+      "/book/understanding-17-groups-in-depth.html#obedience"
+    ],
+    "verified": true,
+    "verified_by": "https://www.ovid.com/journals/ampsy/pdf/10.1037/a0010932~replicating-milgram-would-people-still-obey-today ; https://content.time.com/time/health/article/0,8599,1867735,00.html"
+  },
+  {
+    "id": "haslam-reicher-2012",
+    "authors": "Haslam, S. A., & Reicher, S. D.",
+    "year": 2012,
+    "title": "Contesting the “nature” of conformity: What Milgram and Zimbardo's studies really show",
+    "venue": "PLoS Biology, 10(11), e1001426",
+    "doi": "10.1371/journal.pbio.1001426",
+    "url": "https://doi.org/10.1371/journal.pbio.1001426",
+    "kind": "theory",
+    "finding": "Argues that the Milgram and Stanford prison studies do not show blind obedience: people went along when they identified with the authority and believed the cause was right, a pattern the authors call engaged followership.",
+    "strength": "theory — an influential reinterpretation drawing on social identity research",
+    "topics": [
+      "belonging",
+      "obedience",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#obedience",
+      "/book/understanding-17-groups-in-depth.html#obedience"
+    ],
+    "verified": true,
+    "verified_by": "https://ore.exeter.ac.uk/repository/handle/10871/26625 ; https://journals.plos.org/plosbiology/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1001426"
+  },
+  {
+    "id": "perry-2013-shock-machine",
+    "authors": "Perry, G.",
+    "year": 2013,
+    "title": "Behind the Shock Machine: The Untold Story of the Notorious Milgram Psychology Experiments",
+    "venue": "Scribe (Melbourne, 2012); revised edition The New Press (New York, 2013)",
+    "doi": null,
+    "url": "https://www.sciencenews.org/article/behind-shock-machine",
+    "kind": "book",
+    "finding": "Drawing on Milgram’s archives and interviews with participants, argues that the procedure varied more than reported and that many participants doubted the shocks were real, which calls the famous 65% figure into question.",
+    "strength": "debated — archival and journalistic critique; some reviewers questioned its objectivity",
+    "topics": [
+      "belonging",
+      "obedience",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups-in-depth.html#obedience"
+    ],
+    "verified": true,
+    "verified_by": "https://www.sciencenews.org/article/behind-shock-machine ; https://kirkusreviews.com/book-reviews/gina-perry/behind-the-shock-machine",
+    "note": "Linked to a Science News review of the book."
+  },
+  {
+    "id": "tajfel-turner-1979",
+    "authors": "Tajfel, H., & Turner, J. C.",
+    "year": 1979,
+    "title": "An integrative theory of intergroup conflict",
+    "venue": "In W. G. Austin & S. Worchel (Eds.), The Social Psychology of Intergroup Relations (pp. 33–47). Brooks/Cole",
+    "doi": null,
+    "url": "https://alnap.org/help-library/resources/an-integrative-theory-of-intergroup-conflict/",
+    "kind": "theory",
+    "finding": "Sets out social identity theory: part of our self-image comes from the groups we belong to, and we are motivated to see our groups positively, often by favouring them over others, even when groups are formed on trivial grounds.",
+    "strength": "strong — foundational theory with extensive later support",
+    "topics": [
+      "belonging",
+      "groups",
+      "social-identity"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#us-them",
+      "/book/understanding-17-groups-in-depth.html#us-them",
+      "/book/understanding-5-belonging-in-depth.html#groups"
+    ],
+    "verified": true,
+    "verified_by": "https://alnap.org/help-library/resources/an-integrative-theory-of-intergroup-conflict/ ; https://glottolog.org/resource/reference/id/668195"
+  },
+  {
+    "id": "prentice-miller-1993",
+    "authors": "Prentice, D. A., & Miller, D. T.",
+    "year": 1993,
+    "title": "Pluralistic ignorance and alcohol use on campus: Some consequences of misperceiving the social norm",
+    "venue": "Journal of Personality and Social Psychology, 64(2), 243–256",
+    "doi": "10.1037/0022-3514.64.2.243",
+    "url": "https://doi.org/10.1037/0022-3514.64.2.243",
+    "kind": "study",
+    "finding": "Students believed they were less comfortable with campus drinking than the average student; over time some men shifted their attitudes towards the imagined norm, and feeling out of step went with feeling alienated.",
+    "strength": "moderate — several studies at one university",
+    "topics": [
+      "belonging",
+      "norms",
+      "groups"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#norms",
+      "/book/understanding-17-groups-in-depth.html#norms"
+    ],
+    "verified": true,
+    "verified_by": "https://collaborate.princeton.edu/en/publications/pluralistic-ignorance-and-alcohol-use-on-campus-some-consequences/ ; https://pubpeer.com/publications/F72624BAD0802159ADC95A7BFEC691"
+  },
+  {
+    "id": "hofstede-1980",
+    "authors": "Hofstede, G.",
+    "year": 1980,
+    "title": "Culture's Consequences: International Differences in Work-Related Values",
+    "venue": "Sage Publications (Beverly Hills)",
+    "doi": null,
+    "url": "https://find.library.upenn.edu/catalog/994278913503681",
+    "kind": "book",
+    "finding": "From surveys of employees of one multinational company in about 40 countries, described national differences on dimensions including individualism versus collectivism and power distance.",
+    "strength": "debated — hugely influential; criticised for treating nations as uniform and for its single-company sample",
+    "topics": [
+      "culture",
+      "values",
+      "individualism"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#culture",
+      "/book/understanding-17-groups-in-depth.html#culture"
+    ],
+    "verified": true,
+    "verified_by": "https://papers.ssrn.com/abstract=1496209 ; https://find.library.upenn.edu/catalog/994278913503681"
+  },
+  {
+    "id": "oyserman-2002",
+    "authors": "Oyserman, D., Coon, H. M., & Kemmelmeier, M.",
+    "year": 2002,
+    "title": "Rethinking individualism and collectivism: Evaluation of theoretical assumptions and meta-analyses",
+    "venue": "Psychological Bulletin, 128(1), 3–72",
+    "doi": "10.1037/0033-2909.128.1.3",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/11843550/",
+    "kind": "meta-analysis",
+    "finding": "Pooling many studies, found individualism–collectivism differences were often smaller and less consistent than assumed: European Americans were not more individualistic than African or Latino Americans, nor less collectivistic than Japanese or Korean participants.",
+    "strength": "strong — large meta-analysis; depends on attitude surveys whose cross-cultural meaning is debated",
+    "topics": [
+      "culture",
+      "values",
+      "individualism"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#culture",
+      "/book/understanding-17-groups-in-depth.html#culture"
+    ],
+    "verified": true,
+    "verified_by": "https://deepblue.lib.umich.edu/items/2742a814-fc1e-4538-9d73-55ef0f7d1562/full ; https://pubmed.ncbi.nlm.nih.gov/11843550"
+  },
+  {
+    "id": "henrich-2010-weird",
+    "authors": "Henrich, J., Heine, S. J., & Norenzayan, A.",
+    "year": 2010,
+    "title": "The weirdest people in the world?",
+    "venue": "Behavioral and Brain Sciences, 33(2–3), 61–83",
+    "doi": "10.1017/S0140525X0999152X",
+    "url": "https://doi.org/10.1017/S0140525X0999152X",
+    "kind": "review",
+    "finding": "Showed that most psychology research uses people from Western, educated, industrialised, rich and democratic societies, who are unusual compared with the rest of humanity on many measures, so findings may not generalise.",
+    "strength": "strong — wide-ranging review of comparative evidence",
+    "topics": [
+      "culture",
+      "values",
+      "research-methods"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups-in-depth.html#culture"
+    ],
+    "verified": true,
+    "verified_by": "https://www.cambridge.org/core/journals/behavioral-and-brain-sciences/article/abs/weirdest-people-in-the-world/BF84F7517D56AFF7B7EB58411A554C17 ; https://henrich.fas.harvard.edu/publications/weirdest-people-world"
+  },
+  {
+    "id": "brady-2017-moral-contagion",
+    "authors": "Brady, W. J., Wills, J. A., Jost, J. T., Tucker, J. A., & Van Bavel, J. J.",
+    "year": 2017,
+    "title": "Emotion shapes the diffusion of moralized content in social networks",
+    "venue": "Proceedings of the National Academy of Sciences, 114(28), 7313–7318",
+    "doi": null,
+    "url": "https://csmapnyu.org/research/academic-research/emotion-shapes-the-diffusion-of-moralized-content-in-social-networks",
+    "kind": "study",
+    "finding": "In 563,312 social media posts about divisive political issues, each additional moral-emotional word was linked to about 20% more spread, mostly within like-minded networks rather than across them.",
+    "strength": "moderate — very large observational dataset from one platform and three issues",
+    "topics": [
+      "belonging",
+      "groups",
+      "online",
+      "emotional-contagion"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#online",
+      "/book/understanding-17-groups-in-depth.html#online"
+    ],
+    "verified": true,
+    "verified_by": "https://collaborate.princeton.edu/en/publications/emotion-shapes-the-diffusion-of-moralized-content-in-social-netwo/ ; https://csmapnyu.org/research/emotion-shapes-the-diffusion-of-moralized-content-in-social-networks"
+  },
+  {
+    "id": "williams-2000-cyberostracism",
+    "authors": "Williams, K. D., Cheung, C. K. T., & Choi, W.",
+    "year": 2000,
+    "title": "Cyberostracism: Effects of being ignored over the Internet",
+    "venue": "Journal of Personality and Social Psychology, 79(5), 748–762",
+    "doi": "10.1037/0022-3514.79.5.748",
+    "url": "https://doi.org/10.1037/0022-3514.79.5.748",
+    "kind": "study",
+    "finding": "In an online ball-tossing game (1,486 people from 62 countries in the first study), being left out by computer-controlled “players” made people feel worse and lowered their sense of belonging.",
+    "strength": "strong — large samples; the Cyberball method has been widely replicated",
+    "topics": [
+      "belonging",
+      "exclusion",
+      "loneliness"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups.html#pull",
+      "/book/understanding-17-groups-in-depth.html#pull",
+      "/book/understanding-5-belonging-in-depth.html#belonging"
+    ],
+    "verified": true,
+    "verified_by": "https://www.scinapse.io/papers/2087608601 ; https://www3.psych.purdue.edu/~willia55/Announce/Cyberball_Articles.htm"
+  },
+  {
+    "id": "cooper-2017-identity",
+    "authors": "Cooper, K., Smith, L. G. E., & Russell, A.",
+    "year": 2017,
+    "title": "Social identity, self-esteem, and mental health in autism",
+    "venue": "European Journal of Social Psychology, 47(7), 844–854",
+    "doi": "10.1002/ejsp.2297",
+    "url": "https://researchportal.bath.ac.uk/en/publications/social-identity-self-esteem-and-mental-health-in-autism/",
+    "kind": "study",
+    "finding": "In 272 autistic and 267 non-autistic participants, autistic people who identified more strongly with other autistic people had higher self-esteem, which was in turn linked to lower anxiety and depression.",
+    "strength": "moderate — one cross-sectional survey; links, not proof of cause",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "social-identity",
+      "belonging"
+    ],
+    "mentioned_on": [
+      "/book/understanding-17-groups-in-depth.html#us-them",
+      "/book/understanding-9-minds.html#community",
+      "/book/understanding-9-minds-in-depth.html#community"
+    ],
+    "verified": true,
+    "verified_by": "https://researchportal.bath.ac.uk/en/publications/social-identity-self-esteem-and-mental-health-in-autism/ ; https://metatoc.com/papers/103847-social-identity-self-esteem-and-mental-health-in-autism"
+  },
+  {
+    "id": "rutgers-2004",
+    "authors": "Rutgers, A. H., Bakermans-Kranenburg, M. J., van IJzendoorn, M. H., & van Berckelaer-Onnes, I. A.",
+    "year": 2004,
+    "title": "Autism and attachment: A meta-analytic review",
+    "venue": "Journal of Child Psychology and Psychiatry, 45(6), 1123–1134",
+    "doi": "10.1111/j.1469-7610.2004.t01-1-00305.x",
+    "url": "https://doi.org/10.1111/j.1469-7610.2004.t01-1-00305.x",
+    "kind": "meta-analysis",
+    "finding": "Across 16 studies, about half of autistic children in Strange Situation studies were securely attached; autistic children were less often secure on average, but the difference disappeared in samples of children with higher mental development.",
+    "strength": "moderate — meta-analysis of small studies (287 children in the main analysis)",
+    "topics": [
+      "attachment",
+      "autism",
+      "neurodiversity"
+    ],
+    "mentioned_on": [
+      "/book/understanding-5-belonging-in-depth.html#attachment"
+    ],
+    "verified": true,
+    "verified_by": "https://depot-e.uqtr.ca/id/eprint/12240/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC8412397"
+  },
+  {
+    "id": "main-solomon-1990",
+    "authors": "Main, M., & Solomon, J.",
+    "year": 1990,
+    "title": "Procedures for identifying infants as disorganized/disoriented during the Ainsworth Strange Situation",
+    "venue": "In M. T. Greenberg, D. Cicchetti & E. M. Cummings (Eds.), Attachment in the Preschool Years (pp. 121–160). University of Chicago Press",
+    "doi": null,
+    "url": "https://chicagoreference.com/ucp/books/book/chicago/A/bo3774473.html",
+    "kind": "theory",
+    "finding": "Added a fourth attachment pattern, disorganized/disoriented, for infants who seemed frightened or confused by the caregiver in the Strange Situation, with indices for coding it.",
+    "strength": "strong — foundational coding system, widely used in later research",
+    "topics": [
+      "attachment",
+      "family"
+    ],
+    "mentioned_on": [
+      "/book/understanding-5-belonging-in-depth.html#attachment"
+    ],
+    "verified": true,
+    "verified_by": "https://anhoriga.se/Artiklar-och-rapporter/1990/procedures-for-identifying-infants-as-disorganizeddisoriented-during-the-ainsworth-strange-situation ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5817243/",
+    "note": "Linked to the publisher’s page for the book the chapter appears in."
+  },
+  {
+    "id": "bushman-2005-rumination",
+    "authors": "Bushman, B. J., Bonacci, A. M., Pedersen, W. C., Vasquez, E. A., & Miller, N.",
+    "year": 2005,
+    "title": "Chewing on it can chew you up: Effects of rumination on triggered displaced aggression",
+    "venue": "Journal of Personality and Social Psychology, 88(6), 969–983",
+    "doi": "10.1037/0022-3514.88.6.969",
+    "url": "https://doi.org/10.1037/0022-3514.88.6.969",
+    "kind": "study",
+    "finding": "In three experiments, people who ruminated about a provocation, even for eight hours, were later more aggressive towards someone who only mildly annoyed them than people who were distracted.",
+    "strength": "moderate — three lab experiments with consistent results",
+    "topics": [
+      "anger",
+      "rumination",
+      "emotions"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger.html",
+      "/book/understanding-13-anger-in-depth.html#venting"
+    ],
+    "verified": true,
+    "verified_by": "https://kar.kent.ac.uk/34963 ; https://websites.umich.edu/~bbushman/BBPVM05.pdf"
+  },
+  {
+    "id": "kross-ayduk-mischel-2005",
+    "authors": "Kross, E., Ayduk, O., & Mischel, W.",
+    "year": 2005,
+    "title": "When asking “why” does not hurt: Distinguishing rumination from reflective processing of negative emotions",
+    "venue": "Psychological Science, 16(9), 709–715",
+    "doi": null,
+    "url": "https://rascl.studentorg.berkeley.edu/assets/files/kross_etal_2005_ps.pdf",
+    "kind": "study",
+    "finding": "After recalling an anger-provoking experience, people who asked why they felt as they did from a self-distanced perspective showed less emotional reactivity than those who relived it through their own eyes.",
+    "strength": "moderate — two experiments; later work by the same group has supported self-distancing",
+    "topics": [
+      "anger",
+      "emotion-regulation",
+      "self-distancing"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger-in-depth.html#step-back"
+    ],
+    "verified": true,
+    "verified_by": "https://rascl.studentorg.berkeley.edu/assets/files/kross_etal_2005_ps.pdf ; https://deepblue.lib.umich.edu/items/006027bd-fae1-43c2-a8d9-36f507cf6c1c/full",
+    "note": "Linked to the authors’ lab copy of the paper."
+  },
+  {
+    "id": "chida-steptoe-2009",
+    "authors": "Chida, Y., & Steptoe, A.",
+    "year": 2009,
+    "title": "The association of anger and hostility with future coronary heart disease: A meta-analytic review of prospective evidence",
+    "venue": "Journal of the American College of Cardiology, 53(11), 936–946",
+    "doi": "10.1016/j.jacc.2008.11.044",
+    "url": "https://doi.org/10.1016/j.jacc.2008.11.044",
+    "kind": "meta-analysis",
+    "finding": "Anger and hostility were linked with a modestly higher risk of later coronary heart disease events, in both initially healthy people and people with heart disease; the link was no longer significant in studies that controlled for behaviours such as smoking.",
+    "strength": "moderate — meta-analysis of long-term studies; associations, not proof of cause",
+    "topics": [
+      "anger",
+      "emotions",
+      "health"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger.html",
+      "/book/understanding-13-anger-in-depth.html#body"
+    ],
+    "verified": true,
+    "verified_by": "https://www.acc.org/About-ACC/Press-Releases/2010/02/22/13/35/9-2 ; https://www.sciencedaily.com/releases/2009/03/090309191505.htm"
+  },
+  {
+    "id": "mostofsky-2014",
+    "authors": "Mostofsky, E., Penner, E. A., & Mittleman, M. A.",
+    "year": 2014,
+    "title": "Outbursts of anger as a trigger of acute cardiovascular events: A systematic review and meta-analysis",
+    "venue": "European Heart Journal, 35(21), 1404–1410",
+    "doi": "10.1093/eurheartj/ehu033",
+    "url": "https://doi.org/10.1093/eurheartj/ehu033",
+    "kind": "meta-analysis",
+    "finding": "Across nine case-crossover studies, the rate of heart attacks, strokes and arrhythmias was higher in the two hours after an outburst of anger than at other times, especially for people already at high risk.",
+    "strength": "moderate — consistent results across studies; based on patients’ recall of recent anger",
+    "topics": [
+      "anger",
+      "emotions",
+      "health"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger-in-depth.html#body"
+    ],
+    "verified": true,
+    "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/4043318/ ; https://hsph.harvard.edu/news/angry-outbursts-may-boost-heart-attack-stroke-risk/"
+  },
+  {
+    "id": "delvecchio-oleary-2004",
+    "authors": "Del Vecchio, T., & O’Leary, K. D.",
+    "year": 2004,
+    "title": "Effectiveness of anger treatments for specific anger problems: A meta-analytic review",
+    "venue": "Clinical Psychology Review, 24(1), 15–34",
+    "doi": "10.1016/j.cpr.2003.09.006",
+    "url": "https://doi.org/10.1016/j.cpr.2003.09.006",
+    "kind": "meta-analysis",
+    "finding": "Across 23 controlled studies of adults with anger problems, anger treatments produced medium to large effects; cognitive approaches did well for long-standing (trait) anger, anger suppression and driving anger, and relaxation for in-the-moment anger.",
+    "strength": "moderate — meta-analysis of a modest number of studies",
+    "topics": [
+      "anger",
+      "anger-management",
+      "therapy"
+    ],
+    "mentioned_on": [
+      "/book/understanding-13-anger.html#more-help",
+      "/book/understanding-13-anger-in-depth.html#harm"
+    ],
+    "verified": true,
+    "verified_by": "https://swov.nl/nl/publicatie/effectiveness-anger-treatments-specific-anger-problems-meta-analytic-review ; https://psychology.org.au/for-the-public/psychology-topics/managing-your-anger/references"
+  },
+  {
+    "id": "demetriou-2018-ef",
+    "authors": "Demetriou, E. A., Lampit, A., Quintana, D. S., et al.",
+    "year": 2018,
+    "title": "Autism spectrum disorders: A meta-analysis of executive function",
+    "venue": "Molecular Psychiatry, 23, 1198–1204",
+    "doi": "10.1038/mp.2017.75",
+    "url": "https://doi.org/10.1038/mp.2017.75",
+    "kind": "meta-analysis",
+    "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
+    "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "executive-function"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#executive-function",
+      "/book/understanding-9-minds-in-depth.html#executive-function"
+    ],
+    "verified": true,
+    "verified_by": "https://minerva-access.unimelb.edu.au/server/api/core/bitstreams/9a9656b4-d19c-5cf5-83fb-20b878427c7b/content ; https://findanexpert.unimelb.edu.au/scholarlywork/1304533-autism-spectrum-disorders--a-meta-analysis-of-executive-function"
+  },
+  {
+    "id": "newson-2003-pda",
+    "authors": "Newson, E., Le Maréchal, K., & David, C.",
+    "year": 2003,
+    "title": "Pathological demand avoidance syndrome: A necessary distinction within the pervasive developmental disorders",
+    "venue": "Archives of Disease in Childhood, 88(7), 595–600",
+    "doi": "10.1136/adc.88.7.595",
+    "url": "https://doi.org/10.1136/adc.88.7.595",
+    "kind": "study",
+    "finding": "Proposed recognising “pathological demand avoidance” as a separate profile within the autism spectrum, based on 150 cases with an equal sex ratio, describing strong avoidance of everyday demands.",
+    "strength": "debated — an influential proposal, not included in the main diagnostic manuals",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "demand-avoidance"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#demand-avoidance",
+      "/book/understanding-9-minds-in-depth.html#demand-avoidance"
+    ],
+    "verified": true,
+    "verified_by": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1763174 ; https://adc.bmj.com/content/88/7/595"
+  },
+  {
+    "id": "kildahl-2021-pda",
+    "authors": "Kildahl, A. N., Helverschou, S. B., Rysstad, A. L., Wigaard, E., Hellerud, J. M., Ludvigsen, L. B., & Howlin, P.",
+    "year": 2021,
+    "title": "Pathological demand avoidance in children and adolescents: A systematic review",
+    "venue": "Autism, 25(8), 2162–2176",
+    "doi": "10.1177/13623613211034382",
+    "url": "https://doi.org/10.1177/13623613211034382",
+    "kind": "review",
+    "finding": "Reviewing 13 studies, found they nearly all relied on Newson’s original descriptions and mostly on parent reports, seldom considered other explanations such as anxiety, and none asked people with the profile about their own experience.",
+    "strength": "moderate — systematic review showing the evidence base is limited",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "demand-avoidance"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#demand-avoidance",
+      "/book/understanding-9-minds-in-depth.html#demand-avoidance"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/34320869/ ; https://pdasociety.org.uk/resources/pathological-demand-avoidance-in-children-and-adolescents-a-systematic-review"
+  },
+  {
+    "id": "weigelt-2012-faces",
+    "authors": "Weigelt, S., Koldewyn, K., & Kanwisher, N.",
+    "year": 2012,
+    "title": "Face identity recognition in autism spectrum disorders: A review of behavioral studies",
+    "venue": "Neuroscience & Biobehavioral Reviews, 36(3), 1060–1084",
+    "doi": "10.1016/j.neubiorev.2011.12.008",
+    "url": "https://doi.org/10.1016/j.neubiorev.2011.12.008",
+    "kind": "review",
+    "finding": "Found that autistic people were, on average, less accurate at recognising and remembering face identity, especially when memory was involved, while processing faces in broadly the same way; whether the difficulty is specific to faces was unclear.",
+    "strength": "moderate — review of many behavioural studies; later reviews partly disagree on the details",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "face-recognition"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#face-blindness",
+      "/book/understanding-9-minds-in-depth.html#face-blindness"
+    ],
+    "verified": true,
+    "verified_by": "https://pubmed.ncbi.nlm.nih.gov/22212588/ ; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4529109/"
+  },
+  {
+    "id": "nhs-face-blindness",
+    "authors": "NHS",
+    "year": null,
+    "title": "Prosopagnosia (face blindness)",
+    "venue": "NHS website (nhs.uk), health A to Z",
+    "doi": null,
+    "url": "https://www.nhs.uk/conditions/face-blindness/",
+    "kind": "guideline",
+    "finding": "Describes face blindness as difficulty recognising faces, often present from childhood and sometimes running in families; there is no treatment, but strategies such as recognising voices, hair or clothes, and telling people, can help.",
+    "strength": "moderate: official health information for the public",
+    "topics": [
+      "face-recognition"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#face-blindness",
+      "/book/understanding-9-minds-in-depth.html#face-blindness"
+    ],
+    "verified": true,
+    "verified_by": "https://www.nhs.uk/conditions/face-blindness/",
+    "note": "bookfixA, Oct 2026",
+    "year_label": "n.d."
+  },
+  {
+    "id": "sasson-morrison-2019",
+    "authors": "Sasson, N. J., & Morrison, K. E.",
+    "year": 2019,
+    "title": "First impressions of adults with autism improve with diagnostic disclosure and increased autism knowledge of peers",
+    "venue": "Autism, 23(1), 50–59",
+    "doi": "10.1177/1362361317729526",
+    "url": "https://doi.org/10.1177/1362361317729526",
+    "kind": "study",
+    "finding": "215 observers formed more favourable first impressions of autistic adults when told they were autistic, and observers who knew more about autism rated them more favourably.",
+    "strength": "moderate — one experiment with short recordings and student raters",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "disclosure"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#disclosure",
+      "/book/understanding-9-minds-in-depth.html#disclosure"
+    ],
+    "verified": true,
+    "verified_by": "https://utd-ir.tdl.org/items/10171916-edfa-4adf-a077-106b8950177b ; https://journals.sagepub.com/doi/10.1177/1362361317729526"
+  },
+  {
+    "id": "auyeung-2025-disclosure",
+    "authors": "Au-Yeung, S. K., Freeth, M., & Thompson, A. R.",
+    "year": 2025,
+    "title": "‘Am I gonna regret this?’: The experiences of diagnostic disclosure in autistic adults",
+    "venue": "Autism, 29(8), 2181–2192",
+    "doi": "10.1177/13623613251337504",
+    "url": "https://doi.org/10.1177/13623613251337504",
+    "kind": "study",
+    "finding": "In interviews with 12 adults diagnosed as autistic in adulthood, telling others helped some reach support, be more themselves and help others, but many had not been believed, which made them more cautious about telling.",
+    "strength": "early — small qualitative study",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "disclosure"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#disclosure",
+      "/book/understanding-9-minds-in-depth.html#disclosure"
+    ],
+    "verified": true,
+    "verified_by": "https://orca.cardiff.ac.uk/id/eprint/178154/ ; https://eprints.whiterose.ac.uk/id/eprint/226346"
+  },
+  {
+    "id": "millar-2006-aac",
+    "authors": "Millar, D. C., Light, J. C., & Schlosser, R. W.",
+    "year": 2006,
+    "title": "The impact of augmentative and alternative communication intervention on the speech production of individuals with developmental disabilities: A research review",
+    "venue": "Journal of Speech, Language, and Hearing Research, 49(2), 248–264",
+    "doi": "10.1044/1092-4388(2006/021)",
+    "url": "https://pubs.asha.org/doi/10.1044/1092-4388(2006/021)",
+    "kind": "review",
+    "finding": "Across 23 studies (67 people aged 2 to 60), AAC did not hold back speech, and in many cases speech increased, though most studies lacked strong experimental control.",
+    "strength": "early — consistent direction, but small studies of limited quality",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "aac",
+      "communication"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds.html#aac",
+      "/book/understanding-9-minds-in-depth.html#aac"
+    ],
+    "verified": true,
+    "verified_by": "https://pure.psu.edu/en/publications/the-impact-of-augmentative-and-alternative-communication-interven/ ; https://apps.asha.org/EvidenceMaps/Articles/ArticleSummary/48f75b29-1b15-4e0b-8e36-f65092d0d145"
+  },
+  {
+    "id": "donnellan-1984",
+    "authors": "Donnellan, A. M.",
+    "year": 1984,
+    "title": "The criterion of the least dangerous assumption",
+    "venue": "Behavioral Disorders, 9(2), 141–150",
+    "doi": null,
+    "url": "https://scholar.google.com/scholar?q=%22criterion+of+the+least+dangerous+assumption%22+Donnellan",
+    "kind": "theory",
+    "finding": "Proposed that when we lack evidence about what someone can understand or do, we should act on the assumption that would do the least harm if wrong, which usually means presuming competence.",
+    "strength": "theory: an ethical principle for teaching and support, not a test",
+    "topics": [
+      "autism",
+      "aac"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds-in-depth.html#aac"
+    ],
+    "verified": true,
+    "verified_by": "https://praacticalaac.org/tag/cheryl-jorgensen",
+    "note": "bookfixA, Oct 2026"
+  },
+  {
+    "id": "asha-2018-fc",
+    "authors": "American Speech-Language-Hearing Association (ASHA)",
+    "year": 2018,
+    "title": "Facilitated communication [Position statement]",
+    "venue": "ASHA policy PS2018-00352",
+    "doi": null,
+    "url": "https://www.asha.org/policy/ps2018-00352/",
+    "kind": "guideline",
+    "finding": "States that facilitated communication, where a helper supports the person’s hand or arm while they type or point, is discredited: research has found the messages come from the facilitator, and it should not be used.",
+    "strength": "strong — professional position statement based on decades of controlled testing",
+    "topics": [
+      "neurodiversity",
+      "aac",
+      "communication"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds-in-depth.html#aac"
+    ],
+    "verified": true,
+    "verified_by": "https://www.asha.org/policy/PS2018-00352/ ; https://apps.asha.org/EvidenceMaps/Articles/ArticleSummary/fe1f86c6-a066-4039-83a8-f4bf54380105"
+  },
+  {
+    "id": "botha-frost-2020",
+    "authors": "Botha, M., & Frost, D. M.",
+    "year": 2020,
+    "title": "Extending the minority stress model to understand mental health problems experienced by the autistic population",
+    "venue": "Society and Mental Health, 10(1), 20–34",
+    "doi": "10.1177/2156869318804297",
+    "url": "https://doi.org/10.1177/2156869318804297",
+    "kind": "study",
+    "finding": "In 111 autistic adults, everyday discrimination, internalised stigma and concealing being autistic predicted poorer mental health even after accounting for general stress, suggesting minority stress plays a part.",
+    "strength": "early — one cross-sectional survey of a modest sample",
+    "topics": [
+      "autism",
+      "neurodiversity",
+      "minority-stress"
+    ],
+    "mentioned_on": [
+      "/book/understanding-9-minds-in-depth.html#community"
+    ],
+    "verified": true,
+    "verified_by": "https://www.stir.ac.uk/research/hub/publication/1681721 ; https://discovery.ucl.ac.uk/id/eprint/10060929/"
+  }
 ]

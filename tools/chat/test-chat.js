@@ -1702,6 +1702,7 @@ if (PERS) {
 }
 
 // ---------------------------------------------------------------- chat10: the newer pages, all free, no podcast
+t('chat10', 'opened with the co-parenting page’s current heading', { q: 'she makes decisions without asking me', about: 'Co-parenting after a separation', id: 'coparentdecide', link: '/co-parenting.html#who-decides' });
 t('chat10', 'all tools, by type', { q: 'what tools are there', id: 'alltools', link: '/tools.html' });
 t('chat10', 'a list of every tool', { q: 'is there a list of every tool', id: 'alltools', link: '/tools.html' });
 t('chat10', 'everything on this site', { q: 'how do I explore the site', id: 'explore', link: '/explore.html' });
