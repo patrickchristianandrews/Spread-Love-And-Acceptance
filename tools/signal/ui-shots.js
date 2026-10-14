@@ -60,7 +60,8 @@ function score(want, out, me) {
   const extra = {
     one: F.imessage([['them', 'Fine. Do what you want.']], { name: 'Alex' }),
     // one bubble right across the middle: its side really can't be told from where it sits
-    unsure: F.android([['them', 'Are you coming to the party on Saturday?'], ['me', 'Maybe, I have to check with work first.'], ['them', 'Let me know by Thursday please']], { name: 'Riley' })
+    // (two bubbles, each a different colour, each nearly as wide as the screen)
+    unsure: F.android([['them', 'Are you coming to the party on Saturday night?'], ['me', 'Maybe, I have to check with work first.']], { name: 'Riley' })
       .replace('.me{align-self:flex-end;', '.me{align-self:center;max-width:80%;width:80%;')
   };
   const shot = await b.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3 });
@@ -155,9 +156,10 @@ function score(want, out, me) {
     // g: a side that can't be told: one question about that message, then the read
     await clearOut(); await p.setInputFiles('#cr-shot', extra.unsure); await p.waitForSelector('.cr-ask1', { timeout: 120000 });
     const q = await p.$eval('.cr-ask1', e => e.innerText);
-    ok(/who sent this message\?/.test(q) && /Maybe, I have to check with work first/.test(q), `${tag}: one question for an unclear side: ${q}`);
+    ok(/who sent this message\?/.test(q) && /Maybe, I have to check with work first|Are you coming to the party/.test(q) && (await p.$$('.cr-ask1')).length === 1, `${tag}: one question at a time, about one message: ${q}`);
     await p.screenshot({ path: path.join(OUT, `shots-${w}-${scheme}-4-ask.png`) });
-    await p.click('.cr-ask1 [data-mine="1"]'); await waitRead();
+    for (let k = 0; k < 3 && await p.$('.cr-ask1'); k++) { const t = await p.$eval('.cr-ask1 q', e => e.innerText); await p.click('.cr-ask1 [data-mine="' + (/Maybe/.test(t) ? 1 : 0) + '"]'); await p.waitForTimeout(100); }
+    await waitRead();
     ok(/^Me: Maybe, I have to check with work first\.$/m.test(await p.$eval('#cr-input', e => e.value)), `${tag}: the answer sets the side`);
     // h: a screenshot pasted into the one-message box goes to the screenshot reader
     await p.check('input[name="stmode"][value="got"]'); await clearOut();

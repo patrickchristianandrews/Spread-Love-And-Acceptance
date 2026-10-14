@@ -474,8 +474,9 @@
     { label: 'Which tool fits me?', q: 'Which tool fits my situation?' }
   ];
 
-  // the greeting's chips: the usual ways in, and a way to just chat
-  var GREET_CHIPS = STARTERS.slice(0, 3).concat([{ label: 'Just chat', q: 'Let’s just chat' }, { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }]);
+  // the greeting's chips: the usual ways in, a way to just chat, and one rotating bit of fun
+  var FUN_STARTERS = [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'I’m bored', q: 'I’m bored' }, { label: 'How’s your day, Professor?', q: 'How’s your day, Professor?' }];
+  var GREET_CHIPS = STARTERS.slice(0, 2).concat([{ label: 'Just chat', q: 'Let’s just chat' }, FUN_STARTERS[Math.floor(Math.random() * FUN_STARTERS.length)], { label: 'Talk deep', q: 'Talk deep' }, { label: 'Make an infographic', q: 'Make an infographic about the mental load' }]);
 
   // Topics this helper never takes on, however a word or two might overlap with the notes
   var OFF_TOPIC = /\b(car|cars|engine|tires?|tyres?|oil change|brakes?|mechanic|transmission|resumes?|cv|cover letter|job application|recipes?|bake|baking|coding|javascript|python|programming|homework|stocks?|crypto|bitcoin|forecast|football|basketball|baseball|soccer|movie times|flights?|hotels?|translate)\b/;
@@ -2532,6 +2533,9 @@
       if (!DANGER.test(vf) && VERBAL.test(vf) && !VERBAL_NOT.test(vf) && !SELF_HARMFUL.test(vf)) { state.last = null; state.care = null; state.topic = null; state.unsafe = VERBAL_DETAIL.test(vf); return meant(verbalReply(vf), sp); }
       if (!DANGER.test(vf) && TRUST_Q.test(vf) && !/\b(raindrop|rain drop|droplet|duck|drop of water|water drop)\b/.test(vf)) { state.last = null; return { blocks: [{ k: 'p', x: HONEST_LINE }, { k: 'p', x: 'I’m Professor Puddles, a small rule-based guide to this site, not a generative AI that writes new text. I match what you say to the right page, tool or playbook, and I show you where each answer comes from, so you can read the page yourself. Nothing you type leaves your device.' }, { k: 'links', x: [['How Professor Puddles answers', '/ask.html#how-he-answers'], ['The research behind this site', '/research.html'], ['How the program was built, and its limits', '/method-and-limits.html']] }], chips: [{ label: 'What can I ask?', q: 'What can I ask?' }, { label: 'Is there evidence it works?', q: 'Is there any evidence this program works?' }], kind: 'about', id: 'honest' }; }
       if (!DANGER.test(vf) && MODES_Q.test(vf)) { state.last = null; return modesReply(state); }
+      // chit-chat: games in progress, jokes, riddles, "I'm bored", reactions, and a plain hand-off when something real comes up
+      var pze = !DANGER.test(vf) && pzEarly(state, q0, vf);
+      if (pze) { state.last = null; return pze; }
       var ovr = (state.turn || 0) <= 3 && pageOverview(state, vf);
       if (ovr) return ovr;
       var ckr = !DANGER.test(vf) && !state.unsafe && checkMsgTurn(state, q0, vf);
@@ -2556,12 +2560,17 @@
       if (!state.unsafe && !DANGER.test(sf) && !VERBAL.test(sf) && !SELF_HARMFUL.test(sf) && !NOT_LIVE.test(sf) && !FUN_UPSET.test(sf) && sf.split(' ').length <= 12) {
         var sit0 = detectSituation(sf), card0 = matchCard(sf), stw = card0 && stIntent(sf, stNorm(q));
         var chatty = stw && stw.id === 'weather_talk' && !/\b(today s|todays|my|the) (weather|forecast)\b.*\b(tool|check|reading|mean|use|work)|\bforecast\b|\bweather (check|reading|tool)\b/.test(sf);
+        var pzt = !(sit0.issue && sit0.score >= 3) && pzTopic(state, q, sf, q0, card0);
+        if (pzt) { state.last = null; return pzt; }
         if ((!(sit0.issue && sit0.score >= 3) && !card0) || chatty) { var stt = smallTalk(state, q, sf, q0); if (stt) return stt; }
       }
     }
     var f = norm(q), prevLast = state.last;
     var r = respond1(state, q, chipDoc);
     if (r && r.needBG) return r;
+    // a hint that something real is going on, and nothing fits: a plain hand-off; in a light chat, nonsense gets a smile
+    var pzl = chipDoc == null && pzLate(state, q0, f, r, sp);
+    if (pzl) { state.last = null; return pzl; }
     // nothing here is a word I know ("asdfgh"): say so kindly, rather than "outside my little pond"
     if (sp && r && (r.kind === 'offtopic' || r.kind === 'none') && sp.unknown && !sp.known) return unclearReply();
     r = meant(r, sp);
@@ -2609,8 +2618,9 @@
     // once we're talking in Spanish, a short Spanish reply ("tiene parkinson") stays in Spanish
     var shortEs = state.es && f.split(' ').length <= 6 && f.split(' ').some(function (w) { return ES_SET[w]; }) && !/\b(the|and|my|is|are|you|what|how|i)\b/.test(f);
     var hola = /^(hola|buenas|buenos dias|buenas tardes|buenas noches)$/.test(f);
-    if (!hablas && !hola && !isSpanish(q) && !shortEs) return null;
-    if (!hablas && !shortEs && !hola && f.split(' ').length === 1) return null;
+    var esc = !hablas && !hola && pzEsWhich(f);
+    if (!hablas && !hola && !esc && !isSpanish(q) && !shortEs) return null;
+    if (!hablas && !shortEs && !hola && !esc && f.split(' ').length === 1) return null;
     var first = !state.es;
     state.es = 1; state.last = null;
     var L = '/en-espanol.html', chips = ES_CHIPS;
@@ -2632,6 +2642,8 @@
       return ans('988', 'Gracias por decírmelo. Lo que sientes importa, y no tienes que pasarlo solo. Por favor, habla hoy con alguien que pueda ayudarte.', ['Llama o escribe al 988 (EE. UU.). Cuando oigas “Presione 2”, marca el 2 para hablar en español.', 'Si estás en peligro ahora, llama al 911.', 'Fuera de EE. UU.: findahelpline.com tiene líneas de ayuda gratis en tu país.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
     if (/\b(miedo|me pega|pegar|golpe\w*|amenaz\w*|violencia|peligro|no estoy segur\w*|no estoy a salvo|me lastima|me controla|me grita y tengo miedo)\b/.test(f))
       return ans('seguro', 'Si alguien te lastima, te amenaza o te controla, no es un problema de comunicación, y no es tu culpa.', ['Línea Nacional sobre la Violencia Doméstica (EE. UU.): 1-800-799-7233, gratis y confidencial, con personas que hablan español a cualquier hora. También puedes enviar START por texto al 88788.', 'Si estás en peligro ahora: llama al 911.', 'Fuera de EE. UU.: findahelpline.com.', 'Para salir rápido de este sitio, presiona la tecla Esc dos veces.'], '', [['Si no estás a salvo en casa', L + '#seguro']]);
+    // a little chit-chat in Spanish, after the safety answers: "¿cómo estás?", "cuéntame un chiste", "gracias"
+    if (esc) { var esr0 = pzEs(state, esc, q); if (esr0) return esr0; }
     if (/\b(hijos|ninos|hermanos|hijas)\b.{0,30}\b(pelean|peleas|pelear|se pegan|discuten)\b/.test(f))
       return ans('hijos-pelean', 'Casi todas las peleas entre hermanos son por las mismas cosas: los turnos, el espacio, lo que es justo y la atención de los adultos. Si las reglas son claras, hay menos motivos para pelear.', ['Fíjate cuándo pelean: el mismo juguete, el mismo asiento, la misma hora.', 'Pon una regla sencilla para eso, como un reloj para los turnos de la tableta.', 'No busques quién empezó. Habla de lo que pasa ahora.'], 'Veo a dos niños que quieren lo mismo. ¿Qué podemos hacer para que los dos tengan su turno?', [['Cuando los hijos pelean', L + '#hijos-pelean']]);
     if (/\b(gemel[oa]s|bebes?|ninos pequenos|nino pequeno|panal\w*|siestas?|no dormimos|no duermo|no dormimos nada|recien nacido)\b/.test(f))
@@ -2976,6 +2988,8 @@
   function funTurn(state, f) {
     var P = KB && KB.pers;
     if (!P) return null;
+    // never a joke next to something sad or serious ("tell me a joke, my dog died"): the care routes answer that
+    if (FUN_UPSET.test(f) || pzSerious(f) || pzHint(state, stNorm(f))) return null;
     var lastFun = state.lastKind === 'fun';
     if (JOKE_ASK.test(f) && (!/^another( one)?( please)?$/.test(f) || lastFun)) {
       var j = funLine(state, 'jokes');
@@ -3403,6 +3417,7 @@
   function stAck(state, f) {
     var S = KB && KB.pers && KB.pers.smalltalk;
     if (state.stAsk == null || state.stAsk !== (state.turn || 0) - 1 || f.split(' ').length > 14) return null;
+    if (pzHint(state, stNorm(f)) || FUN_UPSET.test(f) || pzSerious(f)) return null;
     // a real question after the chat prompt is answered as a question
     if (/^(what|whats|how|hows|why|where|when|which|who|can|could|should|is|are|do|does|tell me|explain|help)\b/.test(f) && f.split(' ').length >= 3) return null;
     var acks = (S && (S.acks || S.acknowledgements)) || [];
@@ -3411,6 +3426,635 @@
     var nx = frand(state) < 0.6 && stPrompt(state);
     if (nx) { b.push({ k: 'p', x: nx }); state.stAsk = state.turn || 0; } else state.stAsk = null;
     return { blocks: b, chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Ask about the site', q: 'What can I ask?' }], kind: 'chat', fun: 1 };
+  }
+  // ------------------------------------------------------------------ chit-chat (tools/chat/persona.json → KB.pers.persona; the bible is
+  // tools/chat/persona.md). Professor Puddles as someone you can just talk to: his own day, everyday topics with a question back,
+  // jokes, riddles (the answer on the next turn), facts, would-you-rather, tiny stories, compliments, rate my day, cheer me up,
+  // rock-paper-scissors, guess-a-number, a tiny quiz, and light memory (a name, a pet, a favourite thing) with callbacks later.
+  // Hard rules: every entry point runs after the safety, crisis, care and situation checks, and stops at any sign of danger,
+  // fear or distress; a message that hints at something real ("honestly I'm not ok", a sad emoji) gets a plain hand-off
+  // ("Want to talk about it, or would you rather I keep being silly?"), never a joke. No line is used twice in a session
+  // until its whole bank has been used. Memory stays in this tab (sessionStorage tol-chat-mem), unless the person is in the
+  // installed app or on their own computer with saving on (TOLProgress.perks()) and asks: then localStorage tol-chat-memory-v1.
+  function PZ() { return KB && KB.pers && KB.pers.persona; }
+  var PZ_MEM_KEY = 'tol-chat-mem', PZ_KEEP_KEY = 'tol-chat-memory-v1';
+  function pzPerks() { try { return !!(window.TOLProgress && window.TOLProgress.perks && window.TOLProgress.perks()); } catch (e) { return false; } }
+  function pzLocal() { try { return window.localStorage || null; } catch (e) { return null; } }
+  function pzClean(m) {
+    var o = {};
+    if (!m || typeof m !== 'object') return o;
+    if (typeof m.pet === 'string' && /^[A-Za-z][A-Za-z' -]{0,19}$/.test(m.pet)) o.pet = m.pet;
+    if (typeof m.kind === 'string' && /^[a-z ]{2,14}$/.test(m.kind)) o.kind = m.kind;
+    if (m.fav && typeof m.fav.thing === 'string' && /^[a-z0-9' -]{1,30}$/i.test(m.fav.thing) && typeof m.fav.topic === 'string' && /^[a-z]{2,12}$/.test(m.fav.topic)) o.fav = { thing: m.fav.thing, topic: m.fav.topic };
+    if (typeof m.name === 'string' && /^[A-Za-z][A-Za-z'-]{0,19}$/.test(m.name)) o.name = m.name;
+    return o;
+  }
+  function pzS(state) {
+    if (state.pz) return state.pz;
+    var S = state.pz = { seen: {}, mem: {}, mode: false, at: {}, called: {}, rot: 0 };
+    try { S.mem = pzClean(JSON.parse(sessionStorage.getItem(PZ_MEM_KEY) || 'null')); } catch (e) { S.mem = {}; }
+    if (pzPerks()) {
+      try {
+        var L = pzLocal(), k = L && JSON.parse(L.getItem(PZ_KEEP_KEY) || 'null');
+        if (k) { k = pzClean(k); S.kept = 1; Object.keys(k).forEach(function (x) { if (x !== 'name' && S.mem[x] == null) S.mem[x] = k[x]; }); if (k.name && !chatName(state)) state.name = k.name; }
+      } catch (e) { /* nothing kept */ }
+    }
+    return S;
+  }
+  function pzSave(state) {
+    var S = pzS(state);
+    try { sessionStorage.setItem(PZ_MEM_KEY, JSON.stringify(S.mem)); } catch (e) {}
+    if (S.kept && pzPerks()) { try { var L = pzLocal(), o = pzClean(S.mem); if (chatName(state)) o.name = chatName(state); if (L) L.setItem(PZ_KEEP_KEY, JSON.stringify(o)); } catch (e) {} }
+  }
+  // a line from a bank, never one already used in this conversation until the whole bank has been used
+  function pzPick(state, list) {
+    list = (list || []).filter(Boolean);
+    if (!list.length) return '';
+    var S = pzS(state), fresh = list.filter(function (x) { return !S.seen[typeof x === 'string' ? x : JSON.stringify(x)]; });
+    if (!fresh.length) { list.forEach(function (x) { delete S.seen[typeof x === 'string' ? x : JSON.stringify(x)]; }); fresh = list; }
+    var x = fresh[Math.floor(frand(state) * fresh.length) % fresh.length];
+    S.seen[typeof x === 'string' ? x : JSON.stringify(x)] = 1;
+    return x;
+  }
+  function pzCap(s) { s = String(s || ''); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function pzFill(state, x, o) {
+    o = o || {};
+    var S = pzS(state), name = chatName(state), M = S.mem;
+    var pet = o.pet || M.pet || '', kind = o.kind || M.kind || 'pet', thing = o.thing != null ? String(o.thing) : ((M.fav && M.fav.thing) || '');
+    x = String(x || '').replace(/\{,\s*name\}/g, name ? ', ' + name : '');
+    x = nameFill(x, name);
+    return x.replace(/\{Pet\}/g, pzCap(pet)).replace(/\{pet\}/g, pet).replace(/\{kind\}/g, kind)
+      .replace(/\{Thing\}/g, pzCap(thing)).replace(/\{thing\}/g, thing).replace(/\{Word\}/g, pzCap(o.word || '')).replace(/\{word\}/g, o.word || '')
+      .replace(/\{e\}/g, o.e || '').replace(/\{n\}/g, o.n != null ? String(o.n) : '').replace(/\{t\}/g, o.t || '').replace(/\{list\}/g, o.list || '');
+  }
+  function pzBlocked(state) { return !!(state.unsafe || (state.crisis && (state.turn || 0) - state.crisis <= 8) || /^(safety|redflag)$/.test(state.lastKind || '')); }
+  function pzSerious(f) { return DANGER.test(f) || NOT_LIVE.test(f) || SELF_HARMFUL.test(f) || VERBAL.test(f) || HARD.test(f) || FEAR_W.test(f) || CONTROL.test(f); }
+  // the chat is light right now: "just chat" is on, or the last reply was chit-chat or fun
+  function pzCtx(state) { var S = pzS(state); return !!(S.mode || /^(chat|fun)$/.test(state.lastKind || '')); }
+  // a hint that something real is going on: a plain hand-off, never a joke
+  var PZ_HINT = /^(?:(?:honestly|tbh|to be honest|truthfully|well|um|umm|hmm|eh|ah|oh|ngl|not gonna lie|if i m honest|if im honest|i guess|ok|okay|yeah|meh) )*(?:meh|eh|ugh+|blah|bleh|not great|not good|not so good|not too good|not the best|not amazing|not brilliant|not very good|so so|could be better|been better|i ve been better|ive been better|fine i guess|ok i guess|okay i guess|alright i guess|i m fine i guess|im fine i guess|not ok|not okay|not alright|not really ok|not really okay|honestly no)(?: (?:honestly|tbh|today|really|to be honest|if i m honest))?$|\b(?:i m|im|i am|feeling|feel|felt|been|i ve been|ive been|i have been)(?: (?:a bit|a little|kind of|kinda|pretty|really|so|very|quite|just|a tad|a wee bit|bit))? (?:down|low|blue|flat|meh|rubbish|crap|crappy|rough|not ok|not okay|not great|not good|not myself|not alright|not fine|struggling|overwhelmed|stressed|sad|off|lonely|awful|terrible|miserable|gloomy|fed up)\b|\b(?:rough|bad|hard|tough|awful|rubbish|horrible|terrible|crap|crappy|long|difficult|heavy|lousy|miserable|sad|stressful|exhausting)(?: old)? (?:day|week|night|morning|time|year|month|few days|couple of days|weekend)\b|\b(?:i m|im|i am)(?: really| just| honestly| actually)? not (?:ok|okay|alright|all right|good|fine|great|doing (?:well|good|great|ok|okay)|feeling (?:it|great|good|myself|ok|okay))\b|\bstruggling\b|\bhaving a (?:hard|tough|rough|bad) time\b|\bnot doing (?:well|great|good|so well|too well|ok|okay)\b|\beverything (?:is|feels) (?:a lot|too much|hard|heavy|rubbish)\b|\b(?:it s|its|it has) been a lot\b|\bnot my day\b|\bgetting me down\b|\bsomething s (?:up|wrong)\b|\bsomethings (?:up|wrong)\b/;
+  var PZ_HINT_HOW = /^(?:no|nope|nah|not really|honestly no|not today)$/;
+  function pzHint(state, fs) { var S = pzS(state); return PZ_HINT.test(fs) || (S.askedHow != null && S.askedHow === (state.turn || 0) - 1 && PZ_HINT_HOW.test(fs)); }
+  function pzR(state, blocks, chips, kind, id, act) {
+    var S = pzS(state);
+    if (act) S.lastAct = act;
+    var last = blocks.length && blocks[blocks.length - 1].x;
+    if (last && /\?\s*$/.test(last)) state.stAsk = state.turn || 0;
+    return { blocks: blocks, chips: chips || pzChips(state, []), kind: kind || 'chat', id: id || '', fun: 1 };
+  }
+  // the reply's own chips, then the rotating "just chat" starters
+  function pzChips(state, own, n) {
+    var P = PZ(), S = pzS(state), out = (own || []).slice(0, 3), st = (P && P.starters) || [], have = {};
+    out.forEach(function (c) { have[c.label] = 1; });
+    n = n || 3;
+    for (var i = 0; i < st.length * 2 && out.length < n; i++) { S.rot = (S.rot || 0) + 1; var c = st[S.rot % st.length]; if (!have[c[0]]) { have[c[0]] = 1; out.push({ label: c[0], q: c[1] }); } }
+    return out;
+  }
+  function pzTopicById(id) { var P = PZ(); return P && (P.topics || []).filter(function (t) { return t.id === id; })[0]; }
+  // a callback to something they told us earlier ("How's Biscuit, by the way?"), once each, four turns or more later
+  function pzCallback(state) {
+    var S = pzS(state), t = state.turn || 0, M = S.mem;
+    if (M.pet && !S.called.pet && t - (S.at.pet != null ? S.at.pet : -99) >= 4) {
+      var tp = pzTopicById('pets'), cl = ((tp && tp.callbacks) || []).filter(function (x) { return /\{pet\}/i.test(x); });
+      if (cl.length) { S.called.pet = 1; return pzFill(state, pzPick(state, cl)); }
+    }
+    if (M.fav && !S.called.fav && t - (S.at.fav != null ? S.at.fav : -99) >= 4) {
+      var tf = pzTopicById(M.fav.topic), cf = ((tf && tf.callbacks) || []).filter(function (x) { return /\{thing\}/i.test(x); });
+      if (cf.length) { S.called.fav = 1; return pzFill(state, pzPick(state, cf), { thing: M.fav.thing }); }
+    }
+    return '';
+  }
+  // a question back: a callback when one is due, otherwise from the topic (or any topic)
+  function pzAskBack(state, topic) {
+    var P = PZ(), S = pzS(state), cb = pzCallback(state);
+    if (cb) return cb;
+    var T = topic || pzPick(state, (P.topics || []).map(function (x) { return x.id; }));
+    T = typeof T === 'string' ? pzTopicById(T) : T;
+    var asks = ((T && T.asks) || []).filter(function (a) { return !(S.mem.pet && T.id === 'pets' && /\bname\b/.test(a)); });
+    return pzFill(state, pzPick(state, asks));
+  }
+
+  // ---- memory: "my dog is called Biscuit", "I've got a cat named Mittens", "my favourite food is pizza"
+  var PZ_PET_KINDS = 'dog|cat|puppy|pup|kitten|hamster|rabbit|bunny|guinea pig|goldfish|fish|parrot|budgie|tortoise|turtle|lizard|gecko|snake|horse|pony|ferret|rat|mouse|gerbil|bird|chicken|hen|duck';
+  var PZ_PET1 = new RegExp('\\b(?:my|our)\\s+(?:little\\s+|new\\s+|old\\s+|lovely\\s+)?(' + PZ_PET_KINDS + ')(?:\'s|’s)?\\s+(?:is\\s+called|is\\s+named|name\\s+is|names\\s+is|is|called|named)\\s+([A-Za-z][A-Za-z\'-]{1,19})', 'i');
+  var PZ_PET2 = new RegExp('\\b(?:i|we)\\s*(?:have|\'ve got|’ve got|ve got|have got|got|own)\\s+(?:a|an|one)\\s+(?:little\\s+|new\\s+|old\\s+)?(' + PZ_PET_KINDS + ')\\s+(?:called|named)\\s+([A-Za-z][A-Za-z\'-]{1,19})', 'i');
+  var PZ_PET3 = new RegExp('\\b([A-Z][a-z\'-]{1,19})\\s+is\\s+my\\s+(?:little\\s+|new\\s+|old\\s+)?(' + PZ_PET_KINDS + ')\\b');
+  var PZ_FAV = /\bmy (?:favourite|favorite|fave|fav) (food|snack|meal|dessert|drink|film|movie|show|series|song|band|singer|book|author|game|sport|team|season|holiday|animal|place|hobby)\s+(?:is|s|has to be)\s+([a-z0-9' -]{1,30}?)\s*[.!,]?\s*$/i;
+  var PZ_FAV_T = { food: 'food', snack: 'food', meal: 'food', dessert: 'food', drink: 'drinks', film: 'films', movie: 'films', show: 'films', series: 'films', song: 'music', band: 'music', singer: 'music', book: 'books', author: 'books', game: 'games', sport: 'sport', team: 'sport', season: 'seasons', holiday: 'holidays', animal: 'pets', place: 'travel', hobby: 'hobbies' };
+  function pzPetName(w, strong) {
+    var lw = String(w || '').toLowerCase();
+    if (!lw || STOP[lw] || /^(not|so|very|really|sick|ill|old|young|lost|dead|missing|called|named|poorly|unwell|a|an|the|my|our|getting|being|always|never|still|just|asleep|awake|naughty|good|bad|cute|fluffy|big|small|tiny|huge|lazy|hungry|scared|funny|crazy|mad|ok|okay|fine|great|amazing|the best|adorable)$/.test(lw)) return '';
+    if (!strong && (w.charAt(0) !== w.charAt(0).toUpperCase() || english(lw))) return '';
+    return lw.charAt(0).toUpperCase() + lw.slice(1);
+  }
+  function pzRemember(state, raw) {
+    var S = pzS(state), m, got = null, t = state.turn || 0;
+    raw = String(raw || '').trim();
+    if ((m = PZ_PET1.exec(raw))) { var strong = /\b(called|named|name)\b/i.test(raw), nm = pzPetName(m[2], strong); if (nm) got = { pet: nm, kind: m[1].toLowerCase() }; }
+    if (!got && (m = PZ_PET2.exec(raw))) { var nm2 = pzPetName(m[2], true); if (nm2) got = { pet: nm2, kind: m[1].toLowerCase() }; }
+    if (!got && (m = PZ_PET3.exec(raw))) { var nm3 = pzPetName(m[1], false); if (nm3) got = { pet: nm3, kind: m[2].toLowerCase() }; }
+    if (got) { S.mem.pet = got.pet; S.mem.kind = got.kind; S.at.pet = t; S.called.pet = 0; pzSave(state); return got; }
+    if ((m = PZ_FAV.exec(raw))) {
+      var th = m[2].trim().toLowerCase().replace(/^(the|a|an) /, '');
+      if (th && th.split(' ').length <= 4 && !FUN_UPSET.test(th)) { S.mem.fav = { thing: th, topic: PZ_FAV_T[m[1].toLowerCase()] || 'food' }; S.at.fav = t; S.called.fav = 0; pzSave(state); return { fav: th, topic: S.mem.fav.topic }; }
+    }
+    return null;
+  }
+
+  // ---- everyday topics: which one a message is about, and whether it's chit-chat at all
+  var PZ_REL = /\b(partner|husband|wife|boyfriend|girlfriend|bf|gf|spouse|fiance|fiancee|ex|exes|mum|mom|mother|dad|father|parents?|son|daughter|kids?|children|child|baby|toddler|teen|teenager|brother|sister|siblings?|grandma|grandad|grandpa|gran|nan|nana|granny|grandparents?|aunt|uncle|in laws?|boss|manager|coworkers?|colleagues?|housemates?|roommates?|flatmates?|step\w+|co ?parent\w*|carer|carers|foster)\b/;
+  var PZ_NEG = /\b(never|always|too much|cant|can t|cannot|couldnt|couldn t|wont|won t|doesnt|doesn t|didnt|didn t|isnt|isn t|nobody|no one|hate|sick of|fed up|keeps?|without|stop|stopped|anymore|worried|worry|worrying|scared|afraid|alone|lonely|ignor\w*|argu\w*|fight\w*|fought|upset|angry|cry\w*|miss|missing|lost|fair|unfair|help|advice|how do i|how can i|should i)\b/;
+  var PZ_DISLIKE = /^(?:(?:honestly|actually|well|um|nah|no|hmm|eh) )*(?:i|we) (?:dont|don t|do not|really dont|really don t) (?:really )?(?:like|love|enjoy|care for|get|watch|play|drink|eat|read) |^(?:i m|im|i am) not (?:really )?(?:a |that )?(?:big )?(?:fan of|into) |^not (?:a |really a |much of a |the biggest )(?:fan|\w+ person)\b/;
+  var PZ_SITEW = /\b(site|website|web page|this page|the page|tool|tools|app|workpapers?|worksheets?|chapter|chapters|ledger|your book|the book|this book|the program|lemonade|night garden|word bloom|quiet words|frequency|buddies|pause and play|crosswords?|arcade|soundscapes?|brain breakers?|puddles|professor|wavelength|wiring|battery|check in|check ins|signal translator|decoder|infographic)\b/;
+  var PZ_STMT = /^(?:(?:oh|well|so|yeah|yes|yep|ok|okay|haha|lol|hmm|honestly|actually|ah|um|umm|and|also|btw|guess what|today|tonight|yesterday|this morning|last night|this weekend|at the weekend|just|aww|ooh|wow|omg|hey|hi|hello) )*(?:i|im|i m|ive|i ve|i d|id|ill|i ll|we|were|we re|weve|we ve|we ll|me and|my|our|just|had|got|been|going|watching|watched|reading|playing|listening|eating|ate|cooking|made|baked|drinking|having|its|it s|it is|it was|there s|theres|so much|love|loving|currently|finally)\b/;
+  var PZ_ASKHIM = /^(?:(?:so|and|hey|ok|okay|professor|puddles|but) )*(?:(?:do|did) (?:you|u|ya) (?:like|love|enjoy|play|watch|read|listen to|eat|drink|ever|prefer|go|sleep|dream|have a favourite|have a favorite|celebrate|get)|are (?:you|u) (?:into|a fan of|a (?:\w+ )?person)|what do you think (?:of|about)|(?:what|which) (?:s |is )?(?:your|ur) (?:favourite|favorite|fave|fav)|have you (?:ever )?(?:seen|read|played|watched|heard|tried|been)|how about you|what about you|can you (?:swim|dance|sing|cook|play))\b/;
+  var PZ_OPEN = /^(?:(?:can|could|shall) we |let s |lets |i want to |i d like to |id like to |wanna )?(?:talk|chat|natter|gossip) (?:about|on) /;
+  function pzCompile() {
+    var P = PZ();
+    if (!P || P._c) return P;
+    (P.topics || []).forEach(function (t) {
+      var ws = (t.words || []).map(stNorm).filter(Boolean).sort(function (a, b) { return b.length - a.length; });
+      t._re = new RegExp('\\b(' + ws.map(function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|') + ')\\b');
+    });
+    P._c = 1;
+    return P;
+  }
+  function pzWhich(state, fs, card0) {
+    var P = pzCompile(); if (!P || !P.topics) return null;
+    var n = fs.split(' ').length, ctx = pzCtx(state), dislike = PZ_DISLIKE.test(fs);
+    if (n > 16 || PZ_SITEW.test(fs)) return null;
+    if (!dislike && PZ_NEG.test(fs)) return null;
+    var best = null;
+    P.topics.forEach(function (t) { var m = t._re.exec(fs); if (m && (!best || m.index < best.i)) best = { t: t, i: m.index, thing: m[1] }; });
+    if (!best) return null;
+    if (PZ_REL.test(fs) && !best.t.relOk) return null;
+    var strong = PZ_STMT.test(fs) || PZ_ASKHIM.test(fs) || PZ_OPEN.test(fs) || dislike || (n <= 6 && best.i === 0 && !/^(what|how|why|where|when|which|who|is|are|can|could|should|does|do)\b/.test(fs));
+    var bare = n <= 4;
+    if (!strong && !(bare && (ctx || n <= 2))) return null;
+    if (card0 && !strong && !ctx) return null;
+    if (best.t.site && !strong && !ctx) return null;
+    return { t: best.t, thing: best.thing, strong: strong, dislike: dislike };
+  }
+  // a category word ("film", "breakfast") is not a "thing" to echo back or remember: "pizza" and "jazz" are
+  var PZ_GENERIC = /^(weather|food|snacks?|breakfast|lunch|dinner|supper|brunch|hungry|starving|peckish|cook|cooking|cooked|eating|baking|baked|bake|dessert|pudding|drinks?|brew|pets?|music|songs?|singing|sing|singer|band|bands|tunes?|radio|film|films|movie|movies|cinema|tv|telly|television|series|episodes?|show|shows|trailer|book|books|novels?|reading|read a|reader|games?|gaming|gamer|console|sport|sports|exercise|workout|match|the match|hobby|hobbies|weekend|weekends|plans|day off|days off|holiday|holidays|vacation|festival|decorations|work|working|job|office|shift|shifts|school|class|classes|lessons?|study|studying|meeting|meetings|project|deadline|sleep|slept|sleeping|bed|bedtime|going to bed|dream|dreams|dreamt|dreamed|nap|naps|napping|alarm|birthday|birthdays|bday|party|presents?|season|seasons|leaves|travel|travelling|traveling|trip|trips|visit|visiting|adventure|packing|plane|flight|flying)$/;
+  var PZ_HOW = /\b(?:how s|hows|how is|how was|how did) (?:your|ur|the) (?:day|morning|afternoon|evening|week|weekend|puddle|life)\b|\bhow (?:s|is) life\b|\bhow are things\b|\bhow (?:s|is) it going\b|\bwhat s new with you\b|\bwhat have you been up to\b|\bwhat did you do today\b/;
+  function pzHisDay(state) {
+    var P = PZ(), D = P.day || {}, S = pzS(state);
+    var b = [{ k: 'p', x: pzFill(state, pzPick(state, D.moods) + ' ' + pzPick(state, D.news)) }];
+    b.push({ k: 'p', x: pzCallback(state) || pzFill(state, pzPick(state, D.ask_back)) });
+    S.askedHow = state.turn || 0;
+    return pzR(state, b, pzChips(state, [{ label: 'Pretty good, thanks', q: 'Pretty good, thanks' }, { label: 'Not great, honestly', q: 'Not great, honestly' }]), 'chat', 'pz-day', 'day');
+  }
+  // in the small-talk slot (after safety, care cards and situations): topics, memory, and his day
+  function pzTopic(state, q, f, q0, card0) {
+    var P = PZ(); if (!P) return null;
+    var S = pzS(state), fs = stNorm(q0 || q), raw = String(q0 || q);
+    if (pzBlocked(state) || pzSerious(f) || FUN_UPSET.test(f) || pzHint(state, fs)) return null;
+    var hit = stIntent(f, fs);
+    if ((hit && hit.id === 'how_are_you') || PZ_HOW.test(fs)) return pzHisDay(state);
+    var got = pzRemember(state, raw);
+    var w = pzWhich(state, fs, card0);
+    if (!got && !w) return null;
+    var b = [], own = [];
+    if (got && got.pet) {
+      b.push({ k: 'p', x: pzFill(state, pzPick(state, P.memory.pet_got)) });
+      b.push({ k: 'p', x: pzAskBack(state, 'pets') });
+    } else if (got && got.fav) {
+      b.push({ k: 'p', x: pzFill(state, pzPick(state, P.memory.fav_got), { thing: got.fav }) });
+      b.push({ k: 'p', x: pzAskBack(state, got.topic) });
+    } else {
+      var t = w.t, line;
+      if (w.dislike) line = pzPick(state, P.dislike);
+      else if (w.thing && !PZ_GENERIC.test(w.thing) && t.thing && t.thing.length && w.strong && frand(state) < 0.6) line = pzFill(state, pzPick(state, t.thing), { thing: w.thing });
+      else line = pzPick(state, t.replies);
+      b.push({ k: 'p', x: pzFill(state, line) });
+      // "I love pizza": that's a favourite worth remembering
+      if (!w.dislike && /\b(?:i|we) (?:really |absolutely |just |totally )?(?:love|adore|am obsessed with|m obsessed with|m a big fan of|am a big fan of)\b/.test(fs) && w.thing && !PZ_GENERIC.test(w.thing) && !S.mem.fav) {
+        S.mem.fav = { thing: w.thing, topic: t.id }; S.at.fav = state.turn || 0; pzSave(state);
+      }
+      b.push({ k: 'p', x: pzAskBack(state, t) });
+    }
+    if (got && pzPerks() && !S.kept) own.push({ label: 'Remember me next time', q: 'Remember me next time' });
+    return pzR(state, b, pzChips(state, own), 'chat', got ? (got.pet ? 'pz-pet' : 'pz-fav') : 'pz-' + w.t.id, 'topic');
+  }
+
+  // ---- explicit requests and games, checked early (right after the safety and care routes)
+  var PZ_JOKE = /\b(?:tell|give|got|know|hear|share|say|want|need)\b.{0,12}\b(?:a |another |any |one more |some |your best |a funny |a silly |a bad |a good |a clean |a puddle |a rain |a duck |a dad )?(?:joke|jokes|pun|puns|something funny|funny one)\b|^(?:a |another |one more |more )?(?:joke|jokes|pun|puns)(?: please| pls| time)?$|\bmake me (?:laugh|giggle)\b|\bcheer me up with a joke\b|^(?:just )?the joke(?: please)?$|^gentle joke(?: please)?$|^(?:just )?a gentle joke(?: please)?$/;
+  var PZ_RIDDLE = /\b(?:tell|give|ask)(?: me| us)? (?:a |another |one more |any |some |a good |an easy |a hard |a tricky )?(?:riddle|riddles|brain ?teaser|brainteaser)\b|^(?:a |another |one more |any )?(?:riddle|riddles|brain ?teaser|brainteaser)(?: please| time| me)?$|^riddle me this$|^(?:next|another) riddle$|^i (?:like|love) riddles$|^got any riddles$|^do you know (?:any )?riddles$/;
+  var PZ_FACT = /\b(?:fun|cool|random|interesting|weird|amazing|true|animal|rain|weather|water|duck|science|space|nature) facts?\b|\b(?:tell|give|teach) me (?:a |another |one more |something )?(?:fact|facts|something (?:interesting|cool|new|true|amazing|random|i don t know|i dont know))\b|^(?:another|one more|more|a) facts?(?: please)?$|^teach me something$|^surprise me with a fact$|^facts? please$/;
+  var PZ_WYR = /^(?:(?:can we |let s |lets |shall we )?play )?(?:would you rather|wyr|this or that)(?: please| game)?$|^(?:ask me|give me|another|one more|play) (?:a )?(?:would you rather|wyr)(?: question)?$|^(?:another|next) one would you rather$/;
+  var PZ_WYR_ASK = /^would you rather (.{2,60}?) or (.{2,60}?)\??$/;
+  var PZ_STORY = /\b(?:tell|read|give)(?: me| us)? (?:a |another |one more |a short |a silly |a little |a tiny |a bedtime |a funny |a quick )+(?:story|stories|tale)\b|^(?:a |another |one more )?(?:short |silly |little |tiny |bedtime |funny )?(?:story|stories|story time|tale)(?: please)?$/;
+  var PZ_COMPL = /\b(?:compliment me|give me a compliment|pay me a compliment|say something nice(?: about me| to me)?|tell me something nice|tell me i m (?:great|awesome|amazing|good|brilliant)|tell me im (?:great|awesome|amazing|good|brilliant)|hype me up|boost my (?:mood|ego)|i need a compliment|another compliment|make me feel good)\b/;
+  var PZ_RATE = /\brate (?:my|our) (?:day|week|morning|afternoon|evening|weekend|lunch|dinner|breakfast)\b/;
+  var PZ_CHEER = /\b(?:cheer me up|make me smile|i need cheering up|brighten (?:up )?my day|i need a smile|i need a laugh|pick me up|cheer up time)\b/;
+  var PZ_BORED = /^(?:(?:i m|im|i am|i feel|feeling|so|very|really|super|soo+|kinda|kind of|a bit|so so|getting|bit) )*(?:bored|boored+|booored+|bored bored)(?: (?:now|today|right now|at home|at work|lol|out of my mind|stiff|to tears|puddles|professor))*$|^entertain me(?: please)?$|^(?:i have |i ve got |ive got |got )?nothing to do$/;
+  var PZ_RPS = /\b(?:rock ?(?:,|and)? ?paper ?(?:,|and)? ?scissors?|paper ?scissors ?rock|scissors ?paper ?rock|rps)\b/;
+  var PZ_GUESS = /\b(?:guess (?:a|the|my|your) number|guessing game|number (?:guessing )?game|pick a number|think of a number|guess the number)\b/;
+  var PZ_QUIZ = /^(?:(?:can you |could you |will you |let s |lets |shall we |please )?(?:quiz me|give me a quiz|do a quiz|play (?:a )?(?:quiz|trivia)(?: game)?|trivia(?: time| quiz| game)?|a (?:tiny |quick |little |short )?quiz|tiny quiz|quick quiz|ask me (?:a |some )?trivia(?: questions?)?|another quiz|quiz time)(?: please| me)?)$/;
+  var PZ_ROAST = /\b(?:roast me|insult me|make fun of me|mock me|be mean to me|say something mean|tell me (?:a |an )?(?:fat|ugly|yo mama|yo momma|your mom|your mum|blonde|dumb|stupid|short|bald|old people|racist|sexist|offensive|mean) jokes?|(?:fat|ugly|yo mama|yo momma|blonde|bald|racist|sexist|offensive|mean) jokes?|jokes? about (?:fat|ugly|bald|short|old|disabled|gay|trans|black|white|asian|jewish|muslim|christian|women|men|girls|boys|autistic|adhd|immigrants?|religion)\w*)\b/;
+  var PZ_TEASE = /^(?:(?:go on|please|ok) )?tease me(?: a bit| a little| please)?$/;
+  var PZ_FLIRT = /\b(?:marry me|will you marry|be my (?:boyfriend|girlfriend|bf|gf|partner|valentine|husband|wife|date)|go out with me|date me|go on a date|kiss me|can i kiss you|i have a crush on you|i fancy you|flirt with me|are you flirting|do you love me|will you be mine)\b/;
+  var PZ_ADULT = /\b(?:dirty|rude|naughty|adult|x rated|sexy|sex|smutty) (?:joke|jokes|story|stories|pun|puns|talk|chat)\b|\btalk dirty\b|\bsend (?:me )?(?:nudes|pics)\b|\b(?:are you|you re|youre|ur) (?:sexy|hot|horny)\b|\bsexy time\b|\bnudes?\b|\bporn\w*\b|\bhorny\b/;
+  var PZ_AGAIN = /^(?:another(?: one)?|one more|more|again|another please|more please|go again|next|next one|keep going|do another|another round|play again|again please|once more)(?: please| puddles| professor)?$/;
+  var PZ_BETTER = /^(?:(?:thanks|thank you|ok|okay|actually|yeah|honestly)[ ,]*)*(?:i (?:feel|m feeling|am feeling|feel a bit|feel a little|feel much|m|am) (?:better|a bit better|a little better|much better|lighter|calmer|ok now|okay now|good now|fine now)|(?:that|it|this) (?:helped|really helped)|feeling (?:a bit |a little |much )?better(?: now)?|i m (?:ok|okay|better|good|alright|fine) now|im (?:ok|okay|better|good|alright|fine) now)(?: now| thanks| thank you| puddles)*$/;
+  var PZ_REMEMBER = /^(?:please |can you |could you |will you )?(?:remember (?:me|this|that|my name|all this|everything|my (?:dog|cat|pet))(?: next time| for next time| please)?|keep (?:this|my name|it|me) (?:for )?next time|remember me next time|save (?:my name|this) for next time)$/;
+  var PZ_FORGET = /^(?:please |can you |could you )?forget (?:me|my name|everything|all (?:that|this|about me)|what i (?:said|told you)|my (?:dog|cat|pet)(?: s name)?|about me)(?: please| now)?$/;
+  var PZ_PETQ = /\b(?:what s|whats|what is|do you (?:know|remember)|did you remember|remember) (?:my|the name of my) (?:dog|cat|pet|puppy|kitten|hamster|rabbit|bunny|fish|parrot|tortoise|horse)(?: s name| s called|s name| called| name)?\b|\bwhat s my (?:dog|cat|pet) called\b|\bwhats my (?:dog|cat|pet) called\b|\bwhat is my (?:dog|cat|pet) called\b/;
+  var PZ_FAVQ = /\b(?:what s|whats|what is|do you remember) my (?:favourite|favorite|fave|fav)(?: \w+)?\b/;
+  var PZ_SHRUG = /^(?:idk|i dunno|dunno|i don t know|i dont know|not sure|no idea|no clue|hmm not sure|who knows|beats me|pass)$/;
+  var PZ_LAUGH = /^(?:lol+|lmao+|lmfao|rofl|haha+h*|ha(?: ?ha)+|hehe+|he ?he|heh|hah|ahaha+|bahaha+|teehee|tee hee|xd|that s (?:so )?funny|thats (?:so )?funny|so funny|very funny|hilarious|good one|nice one|ha|lol that s good|haha good one)(?: (?:lol|haha+|good one|nice one|puddles|professor|that s good|thats good))*$/;
+  var PZ_OK = /^(?:ok+|okay+|k+|kk|okie|okey|okie dokie|okey dokey|alright|all right|right|fine|sure|cool|neat|nice|great|awesome|amazing|lovely|brilliant|wonderful|perfect|indeed|gotcha|got it|i see|makes sense|interesting|true|fair|fair enough|same|hmm+|mm+|huh|oh|ooh+|ah|aha|so|and|anyway)$/;
+  var PZ_YES = /^(?:yes|yeah|yep|yup|ya|yah|yea|sure|of course|definitely|absolutely|go on|go on then|ok go on|okay go on|why not|please|yes please|sounds good|ok sure|i d like that|id like that|i would|let s do it|lets do it)$/;
+  var PZ_NO = /^(?:no|nope|nah|no thanks|no thank you|not really|not now|maybe later)$/;
+  var PZ_WOW = /^(?:wow+|woah+|whoa+|omg|oh my gosh|oh my god|no way|really|seriously|amazing|incredible|what)(?: !)?$/;
+  var PZ_MASH = /^(?:[bcdfghjklmnpqrstvwxz]{5,}|(?:asdf|qwer|zxcv|hjkl|sdfg|dfgh|fghj|ghjk|jkl)\w*)$/;
+  var PZ_TALK = /^(?:yes|yeah|yep|ok|okay|sure|please|i d like to|id like to|let s talk|lets talk)?(?: ?(?:i d like to|id like to|i want to|i would like to|let s|lets|can we|could we))? ?(?:talk(?: about it)?|talk it through|tell you about it|talk to you about it|let s talk about it|lets talk about it)(?: please)?$|^(?:i d like to talk about it|id like to talk about it|yes let s talk|let s talk about it|lets talk about it|talk about it)$/;
+  var PZ_SILLY = /\b(?:keep being silly|be silly|take my mind off it|distract me|something (?:gentle|light|nice|silly)|keep it light|lighten (?:it|things) up|no i d rather not|i d rather not|rather not|not right now|not now)\b/;
+
+  var PZ_EMO = [
+    ['sad', ['😢', '😭', '😞', '😔', '☹', '🙁', '😟', '😥', '😿', '💔', '😩', '😫', '🥺', '😪', ':(', ':-(', ':\'(', 'D:']],
+    ['cross', ['😠', '😡', '🤬', '😤', '>:(']],
+    ['laugh', ['😂', '🤣', '😆', '😹', '😄', '😁', 'xD', 'XD', ':D', ':-D']],
+    ['love', ['❤', '♥', '💕', '💖', '💗', '💓', '💞', '💙', '💛', '💚', '🧡', '💜', '🤍', '🤎', '🖤', '🥰', '😍', '😘', '<3', '🤗']],
+    ['rain', ['💧', '🌧', '☔', '☂', '🌈', '⛈', '🌦', '💦', '🌊']],
+    ['sun', ['☀', '🌞', '😎', '🔥', '🥵']],
+    ['duck', ['🦆', '🐤', '🐥']],
+    ['pets', ['🐶', '🐕', '🐱', '🐈', '🐩', '🐾', '🐹', '🐰', '🐇', '🐠', '🐟', '🦜']],
+    ['food', ['🍕', '🍔', '🍟', '🍰', '🎂', '🍪', '🍩', '🍫', '☕', '🍵', '🍦', '🍝', '🌮', '🍣', '🧁', '🥐', '🍎', '🍌']],
+    ['sleepy', ['😴', '💤', '🥱', '🛌']],
+    ['think', ['🤔', '🧐']]
+  ];
+  // an emoji-only message (or a text face like ":)"): which kind, or 'other'
+  function pzEmoji(raw) {
+    raw = String(raw || '').trim();
+    if (!raw || raw.length > 24) return null;
+    var faces = /^(?:[:;=xX8][-']?[()DPpOo3\]\[|\/\\*]+|<3+|D:|>:\(|\^\^|\^_\^|-_-|T_T|:'\()+$/;
+    var bare = raw.replace(/[\s.!?,]+/g, '');
+    if (!bare) return null;
+    if (/[A-Za-z0-9]/.test(bare) && !faces.test(bare)) return null;
+    for (var i = 0; i < PZ_EMO.length; i++) {
+      for (var j = 0; j < PZ_EMO[i][1].length; j++) if (bare.indexOf(PZ_EMO[i][1][j]) !== -1) return PZ_EMO[i][0];
+    }
+    if (faces.test(bare)) return /\(|T_T|-_-/.test(bare) && !/\)/.test(bare) ? 'sad' : 'other';
+    return /[\u2600-\u27BF]|[\uD83C-\uDBFF][\uDC00-\uDFFF]/.test(bare) ? 'other' : null;
+  }
+  function pzHandoff(state, which) {
+    var P = PZ(), H = (P && P.handoff) || {}, S = pzS(state);
+    var bank = which === 'sad' ? H.emoji_sad : which === 'cross' ? H.emoji_cross : H.to_help;
+    S.offer = 'handoff'; S.offerAt = state.turn || 0; S.game = null; S.mode = false;
+    var x = pzFill(state, pzPick(state, bank || H.to_help || []) || 'Thanks for telling me. Want to talk about it, or would you rather I keep being silly for a bit?');
+    return { blocks: [{ k: 'p', x: x }], chips: [{ label: 'Let’s talk about it', q: 'I’d like to talk about it' }, { label: 'Keep being silly', q: 'Take my mind off it' }, { label: 'A few minutes to settle', q: 'I need to calm down right now' }], kind: 'care', id: 'pz-handoff' };
+  }
+  function pzListen(state) {
+    var P = PZ(), H = (P && P.handoff) || {};
+    pzS(state).offer = null;
+    return { blocks: [{ k: 'p', x: pzPick(state, H.listen) }], chips: [{ label: 'It’s work or school', q: 'Something at work is getting to me' }, { label: 'It’s someone I live with', q: 'Things are hard with someone I live with' }, { label: 'I just feel low', q: 'I feel low' }], kind: 'care', id: 'pz-listen' };
+  }
+  function pzLighten(state) {
+    var P = PZ(), H = (P && P.handoff) || {}, S = pzS(state);
+    S.offer = null;
+    return pzR(state, [{ k: 'p', x: pzPick(state, H.lighten) }], [{ label: 'A gentle joke', q: 'Tell me a gentle joke' }, { label: 'A tiny story', q: 'Tell me a tiny story' }, { label: 'A fun fact', q: 'Tell me a fun fact' }], 'chat', 'pz-lighten');
+  }
+  var PZ_HEAVY = /\b(died|dead|death|passed away|funeral|grief|griev\w*|cancer|hospital|dying|terminal|miscarr\w*|abus\w*|assault\w*|rape\w*|hit me|hurt me|lost my|bereave\w*|divorc\w*)\b/;
+  function pzJoke(state, f) {
+    var P = PZ(), S = pzS(state), H = P.handoff || {};
+    if (PZ_HEAVY.test(f)) { S.offer = 'handoff'; S.offerAt = state.turn || 0; return { blocks: [{ k: 'p', x: pzPick(state, H.heavy_joke) }], chips: [{ label: 'Let’s talk about it', q: 'I’d like to talk about it' }], kind: 'care', id: 'pz-nojoke' }; }
+    if (FUN_UPSET.test(f) || pzHint(state, stNorm(f))) { S.offer = 'handoff'; S.offerAt = state.turn || 0; return { blocks: [{ k: 'p', x: pzPick(state, H.upset_joke) }], chips: [{ label: 'Just a gentle joke, please', q: 'Just a gentle joke please' }, { label: 'Let’s talk about it', q: 'I’d like to talk about it' }], kind: 'care', id: 'pz-checkin' }; }
+    var pool = (P.jokes || []).concat((KB.pers && KB.pers.jokes) || []);
+    return pzR(state, [{ k: 'p', x: pzPick(state, pool) }], pzChips(state, [{ label: 'Another joke', q: 'Tell me another joke' }]), 'fun', 'pz-joke', 'joke');
+  }
+  function pzRiddle(state) {
+    var P = PZ(), S = pzS(state), r = pzPick(state, P.riddles);
+    S.game = { t: 'riddle', r: r, at: state.turn || 0 };
+    return pzR(state, [{ k: 'p', x: 'Riddle time! ' + r.q }], [{ label: 'I give up', q: 'I give up' }, { label: 'Give me a hint', q: 'Give me a hint' }], 'fun', 'pz-riddle', 'riddle');
+  }
+  function pzRiddleAnswer(state, fs) {
+    var S = pzS(state), r = S.game.r, keys = (r.keys || []).map(stNorm);
+    if (/\b(hint|clue)\b/.test(fs)) {
+      if (S.game.hinted) return pzR(state, [{ k: 'p', x: 'No more hints, I’m afraid. My notebook is closed. Have a guess, or say “I give up”.' }], [{ label: 'I give up', q: 'I give up' }], 'fun', 'pz-riddle');
+      S.game.hinted = 1;
+      var a0 = stNorm(r.a).replace(/^(an?|the|your|all) /, '');
+      return pzR(state, [{ k: 'p', x: 'A hint: it starts with the letter “' + a0.charAt(0).toUpperCase() + '”.' }], [{ label: 'I give up', q: 'I give up' }], 'fun', 'pz-riddle');
+    }
+    S.game = null;
+    var right = keys.some(function (k) { return k && new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + 's?\\b').test(fs); });
+    var giveUp = /\b(give up|i give in|tell me|no idea|idk|dunno|don t know|dont know|what is it|whats the answer|what s the answer|the answer|pass|no clue|reveal)\b/.test(fs);
+    var x = right ? pzPick(state, ['Correct! ', 'Yes! You got it! ', 'Spot on! ', 'By my tassel, you’re right! ']) + r.a + ' ' + pzPick(state, ['Gold star for you. A dry one.', 'You’re far too clever for a puddle like me.', 'The three clouds are applauding. Quietly.'])
+      : giveUp ? 'The answer is: ' + r.a + ' ' + pzPick(state, ['Tricky one, that.', 'Don’t worry, it took me a week.', 'Now you can try it on someone else!'])
+      : pzPick(state, ['Ooh, good guess! ', 'Not quite, but I like your thinking! ', 'Close-ish! ']) + 'The answer is: ' + r.a;
+    return pzR(state, [{ k: 'p', x: x }], pzChips(state, [{ label: 'Another riddle', q: 'Tell me another riddle' }]), 'fun', 'pz-riddle-answer', 'riddle');
+  }
+  function pzFact(state) {
+    var P = PZ(), old = [];
+    ((KB.pers && KB.pers.smalltalk && KB.pers.smalltalk.intents) || []).forEach(function (it) { if (it.id === 'fun_fact') old = it.replies || []; });
+    return pzR(state, [{ k: 'p', x: pzPick(state, (P.facts || []).concat(old)) }], pzChips(state, [{ label: 'Another fact', q: 'Tell me another fun fact' }]), 'fun', 'pz-fact', 'fact');
+  }
+  function pzWyr(state) {
+    var P = PZ(), S = pzS(state), w = pzPick(state, P.wyr);
+    S.game = { t: 'wyr', w: w, at: state.turn || 0 };
+    return pzR(state, [{ k: 'p', x: w.q }], [{ label: pzCap(w.a), q: pzCap(w.a) }, { label: pzCap(w.b), q: pzCap(w.b) }], 'fun', 'pz-wyr', 'wyr');
+  }
+  function pzWyrAnswer(state, fs) {
+    var P = PZ(), S = pzS(state), w = S.game.w, has = function (ws) { return (ws || []).some(function (x) { return new RegExp('\\b' + stNorm(x) + '\\b').test(fs); }); };
+    var a = has(w.aw) || stNorm(w.a) === fs || /^(the )?(first|1|first one|a|option a)$/.test(fs), bb = has(w.bw) || stNorm(w.b) === fs || /^(the )?(second|2|second one|b|option b|last|the other one)$/.test(fs);
+    var both = /\b(both|neither|either|none)\b/.test(fs);
+    if (!a && !bb && !both && fs.split(' ').length > 4) { S.game = null; return null; }
+    S.game = null;
+    var x = both ? pzPick(state, P.wyr_both) : pzPick(state, P.wyr_react);
+    return pzR(state, [{ k: 'p', x: x + ' ' + w.pick }], pzChips(state, [{ label: 'Another one', q: 'Another would you rather' }]), 'fun', 'pz-wyr-answer', 'wyr');
+  }
+  function pzStory(state) { var P = PZ(); return pzR(state, [{ k: 'p', x: pzPick(state, P.stories) }], pzChips(state, [{ label: 'Another story', q: 'Tell me another story' }]), 'fun', 'pz-story', 'story'); }
+  function pzCompliment(state) { var P = PZ(); return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.compliments)) }], pzChips(state, [{ label: 'Another one', q: 'Another compliment' }]), 'fun', 'pz-compliment', 'compliment'); }
+  function pzRate(state, fs, about) {
+    var P = PZ(), R = P.rate || {}, S = pzS(state);
+    var desc = String(about || '').trim();
+    if (!desc || desc.split(' ').length < 2) { S.game = { t: 'rate', at: state.turn || 0 }; return pzR(state, [{ k: 'p', x: pzPick(state, R.ask) }], [{ label: 'Nothing special, really', q: 'Nothing special really' }], 'fun', 'pz-rate', 'rate'); }
+    S.game = null;
+    var d = stNorm(desc), good = (P.rate_good || []).filter(function (w) { return new RegExp('\\b' + w + '\\b').test(d); }), meh = (P.rate_meh || []).filter(function (w) { return new RegExp('\\b' + w + '\\b').test(d); });
+    var score = Math.max(6, Math.min(10, 7 + good.length - (meh.length ? 1 : 0)));
+    var line = pzPick(state, score >= 9 ? R.high : score >= 7 ? R.mid : R.low), b = [{ k: 'p', x: line }];
+    var bits = [];
+    if (good.length) bits.push(pzFill(state, pzPick(state, (P.rate_comments || {}).good), { thing: good[0] }));
+    if (meh.length) bits.push(pzFill(state, pzPick(state, (P.rate_comments || {}).meh), { thing: meh[0] }));
+    bits.push(pzPick(state, R.note));
+    b.push({ k: 'p', x: bits.join(' ') });
+    b.push({ k: 'p', x: pzPick(state, ['What would make tomorrow an eleven?', 'What was the best bit?', 'Anything you’re looking forward to tomorrow?']) });
+    return pzR(state, b, pzChips(state, []), 'fun', 'pz-rate-answer', 'rate');
+  }
+  function pzCheer(state) {
+    var P = PZ(), x = pzPick(state, P.cheer), pool = (P.jokes || []).concat((KB.pers && KB.pers.jokes) || []);
+    var extra = frand(state) < 0.5 ? pzPick(state, pool) : pzFill(state, pzPick(state, P.compliments));
+    return pzR(state, [{ k: 'p', x: x }, { k: 'p', x: extra }], [{ label: 'Another one', q: 'Cheer me up' }, { label: 'Tell me a tiny story', q: 'Tell me a tiny story' }, { label: 'Something’s getting me down', q: 'Something’s getting me down' }], 'fun', 'pz-cheer', 'cheer');
+  }
+  function pzBored(state) {
+    var P = PZ(), L = pzPick(state, P.bored_links || []);
+    var b = [{ k: 'p', x: pzPick(state, P.bored) }];
+    if (L && L.length === 2) b.push({ k: 'links', x: [L] });
+    return pzR(state, b, [{ label: 'Rock, paper, scissors', q: 'Rock paper scissors' }, { label: 'Quiz me', q: 'Quiz me' }, { label: 'Would you rather…', q: 'Would you rather' }, { label: 'Tell me a riddle', q: 'Tell me a riddle' }], 'fun', 'pz-bored', 'bored');
+  }
+  function pzRpsStart(state) {
+    var P = PZ(), S = pzS(state);
+    S.game = { t: 'rps', at: state.turn || 0 };
+    return pzR(state, [{ k: 'p', x: pzPick(state, P.rps.start) }], [{ label: '✊ Rock', q: 'Rock' }, { label: '✋ Paper', q: 'Paper' }, { label: '✌️ Scissors', q: 'Scissors' }], 'fun', 'pz-rps', 'rps');
+  }
+  function pzRpsPlay(state, fs) {
+    var P = PZ(), S = pzS(state), m = /\b(rock|stone|paper|scissors?)\b/.exec(fs);
+    if (!m) return null;
+    var you = /^(rock|stone)$/.test(m[1]) ? 'rock' : m[1] === 'paper' ? 'paper' : 'scissors', opts = ['rock', 'paper', 'scissors'];
+    var me = opts[Math.floor(frand(state) * 3) % 3], beats = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+    var res = you === me ? 'draw' : beats[you] === me ? 'win' : 'lose';
+    S.rps = S.rps || { you: 0, me: 0 };
+    if (res === 'win') S.rps.you++; else if (res === 'lose') S.rps.me++;
+    S.game = { t: 'rps', at: state.turn || 0 };
+    var x = 'You: ' + you + '. Me: ' + me + '. ' + pzPick(state, P.rps[res]) + ' (Score: you ' + S.rps.you + ', me ' + S.rps.me + '.)';
+    var b = [{ k: 'p', x: x }];
+    if (frand(state) < 0.25) b.push({ k: 'p', x: pzPick(state, P.rps.puddle) });
+    b.push({ k: 'p', x: 'Again? Pick one!' });
+    return pzR(state, b, [{ label: '✊ Rock', q: 'Rock' }, { label: '✋ Paper', q: 'Paper' }, { label: '✌️ Scissors', q: 'Scissors' }, { label: 'Something else', q: 'Let’s do something else' }], 'fun', 'pz-rps-round', 'rps');
+  }
+  var PZ_NUMW = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20 };
+  function pzGuessStart(state) {
+    var P = PZ(), S = pzS(state);
+    S.game = { t: 'guess', n: 1 + (Math.floor(frand(state) * 20) % 20), tries: 0, at: state.turn || 0 };
+    return pzR(state, [{ k: 'p', x: pzPick(state, P.guess.start) }], [{ label: '10', q: '10' }, { label: '5', q: '5' }, { label: '15', q: '15' }], 'fun', 'pz-guess', 'guess');
+  }
+  function pzGuessPlay(state, fs) {
+    var P = PZ(), S = pzS(state), G = S.game, m = /\b(\d{1,3})\b/.exec(fs), n = m ? +m[1] : null;
+    if (n == null) { var w = /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\b/.exec(fs); if (w) n = PZ_NUMW[w[1]]; }
+    if (n == null) {
+      if (/\b(give up|tell me|i give in|what was it|what is it)\b/.test(fs)) { S.game = null; return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.guess.out), { n: G.n }) }], pzChips(state, [{ label: 'Play again', q: 'Guess the number' }]), 'fun', 'pz-guess-end', 'guess'); }
+      return null;
+    }
+    G.tries++;
+    if (n === G.n) { S.game = null; return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.guess.right), { n: G.n, t: G.tries === 1 ? 'one guess' : G.tries + ' guesses' }) }], pzChips(state, [{ label: 'Play again', q: 'Guess the number' }]), 'fun', 'pz-guess-end', 'guess'); }
+    if (G.tries >= 5) { S.game = null; return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.guess.out), { n: G.n }) }], pzChips(state, [{ label: 'Play again', q: 'Guess the number' }]), 'fun', 'pz-guess-end', 'guess'); }
+    var hl = n < G.n ? pzPick(state, P.guess.higher) : pzPick(state, P.guess.lower);
+    if (n < 1 || n > 20) hl = 'Between 1 and 20, remember! ' + hl;
+    return pzR(state, [{ k: 'p', x: hl + ' ' + (5 - G.tries) + (5 - G.tries === 1 ? ' guess left.' : ' guesses left.') }], [], 'fun', 'pz-guess', 'guess');
+  }
+  function pzQuizQ(state) {
+    var S = pzS(state), G = S.game, Q = G.qs[G.n];
+    var lab = ['A', 'B', 'C'];
+    return { blocks: [{ k: 'p', x: 'Question ' + (G.n + 1) + ' of 3: ' + Q.q + ' ' + Q.opts.map(function (o, i) { return lab[i] + ') ' + o; }).join('  ') }], chips: Q.opts.map(function (o) { return { label: o, q: o }; }) };
+  }
+  function pzQuizStart(state) {
+    var P = PZ(), S = pzS(state), qs = [];
+    for (var i = 0; i < 3; i++) qs.push(pzPick(state, P.quiz));
+    S.game = { t: 'quiz', qs: qs, n: 0, score: 0, at: state.turn || 0 };
+    var q = pzQuizQ(state);
+    return pzR(state, [{ k: 'p', x: pzPick(state, P.quiz_intro) }].concat(q.blocks), q.chips, 'fun', 'pz-quiz', 'quiz');
+  }
+  function pzQuizAnswer(state, fs) {
+    var P = PZ(), S = pzS(state), G = S.game, Q = G.qs[G.n], pick = -1;
+    if (/^(stop|quit|enough|end|no more|stop the quiz|end the quiz|i m done|im done)$/.test(fs)) { S.game = null; return pzR(state, [{ k: 'p', x: 'Quiz over! You scored ' + G.score + '. Thank you for playing.' }], pzChips(state, []), 'fun', 'pz-quiz-end', 'quiz'); }
+    var lm = /^(?:(?:it s|its|is it|i think|maybe|answer|option) )?([abc123])$/.exec(fs);
+    if (lm) pick = { a: 0, b: 1, c: 2, 1: 0, 2: 1, 3: 2 }[lm[1]];
+    if (pick < 0) Q.opts.forEach(function (o, i) { var on = stNorm(o).replace(/^(the|a|an) /, ''); if (pick < 0 && (fs === stNorm(o) || new RegExp('\\b' + on.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(fs))) pick = i; });
+    if (pick < 0) {
+      if (fs.split(' ').length <= 3) return pzR(state, [{ k: 'p', x: 'Hmm, that’s not one of the three. Tap one, or type A, B or C!' }], pzQuizQ(state).chips, 'fun', 'pz-quiz');
+      S.game = null; return null;
+    }
+    var ok = pick === Q.a;
+    if (ok) G.score++;
+    var b = [{ k: 'p', x: pzPick(state, ok ? P.quiz_right : P.quiz_wrong) + ' ' + Q.why }];
+    G.n++;
+    if (G.n >= 3) {
+      S.game = null;
+      b.push({ k: 'p', x: pzPick(state, (P.quiz_end || {})[String(G.score)] || ['Well played!']) });
+      return pzR(state, b, pzChips(state, [{ label: 'Another quiz', q: 'Quiz me' }]), 'fun', 'pz-quiz-end', 'quiz');
+    }
+    var nq = pzQuizQ(state);
+    return pzR(state, b.concat(nq.blocks), nq.chips, 'fun', 'pz-quiz', 'quiz');
+  }
+  function pzReact(state, bank, o) {
+    var P = PZ(), R = P.react || {}, b = [{ k: 'p', x: pzFill(state, pzPick(state, R[bank] || R.ok), o) }];
+    var ask = pzAskBack(state);
+    if (ask) b.push({ k: 'p', x: ask });
+    return pzR(state, b, pzChips(state, []), bank === 'laugh' ? 'fun' : 'chat', 'pz-react-' + bank);
+  }
+  function pzMemQ(state, fav) {
+    var P = PZ(), S = pzS(state), M = P.memory || {};
+    if (fav) return pzR(state, [{ k: 'p', x: S.mem.fav ? pzFill(state, pzPick(state, M.fav_q), { thing: S.mem.fav.thing }) : pzPick(state, M.fav_none) }], pzChips(state, []), 'chat', 'pz-memq');
+    return pzR(state, [{ k: 'p', x: S.mem.pet ? pzFill(state, pzPick(state, M.pet_q)) : pzPick(state, M.pet_none) }], pzChips(state, []), 'chat', 'pz-memq');
+  }
+  function pzKeep(state) {
+    var P = PZ(), M = P.memory || {}, S = pzS(state), name = chatName(state), parts = [];
+    if (name) parts.push('your name');
+    if (S.mem.pet) parts.push(S.mem.pet + '’s name');
+    if (S.mem.fav) parts.push('your favourite');
+    if (!parts.length) return pzR(state, [{ k: 'p', x: M.keep_nothing }], pzChips(state, []), 'chat', 'pz-keep');
+    if (!pzPerks()) return { blocks: [{ k: 'p', x: M.keep_no }, { k: 'links', x: [['What this site keeps on your device, and how saving works', '/on-this-device.html']] }], chips: pzChips(state, []), kind: 'chat', id: 'pz-keep', fun: 1 };
+    S.kept = 1; pzSave(state);
+    var list = parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0];
+    return pzR(state, [{ k: 'p', x: pzFill(state, M.keep_yes, { list: list }) }], pzChips(state, [{ label: 'Forget me', q: 'Forget me' }]), 'chat', 'pz-keep');
+  }
+  function pzForget(state) {
+    var P = PZ(), S = pzS(state);
+    S.mem = {}; S.kept = 0; S.called = {}; S.at = {}; state.name = '';
+    try { sessionStorage.setItem(PZ_MEM_KEY, '{}'); sessionStorage.setItem('tol-chat-name', ''); } catch (e) {}
+    try { var L = pzLocal(); if (L) L.removeItem(PZ_KEEP_KEY); } catch (e) {}
+    return pzR(state, [{ k: 'p', x: (P.memory || {}).forgot }], pzChips(state, []), 'chat', 'pz-forget');
+  }
+  // which explicit request a message is ("tell me a joke", "quiz me", "rate my day: …"), or ''
+  function pzRequest(fs, f) {
+    if (PZ_ADULT.test(fs)) return 'adult';
+    if (PZ_ROAST.test(fs)) return 'roast';
+    if (PZ_FLIRT.test(fs)) return 'flirt';
+    if (PZ_TEASE.test(fs)) return 'tease';
+    if (PZ_QUIZ.test(fs)) return 'quiz';
+    if (PZ_GUESS.test(fs)) return 'guess';
+    if (PZ_RPS.test(fs) && fs.split(' ').length <= 8) return 'rps';
+    if (PZ_RIDDLE.test(fs)) return 'riddle';
+    if (PZ_WYR_ASK.test(fs)) return 'wyrAsk';
+    if (PZ_WYR.test(fs)) return 'wyr';
+    if (PZ_STORY.test(fs)) return 'story';
+    if (PZ_COMPL.test(fs)) return 'compliment';
+    if (PZ_RATE.test(fs)) return 'rate';
+    if (PZ_FACT.test(fs)) return 'fact';
+    if (PZ_CHEER.test(fs) && !PZ_JOKE.test(fs)) return 'cheer';
+    if (PZ_JOKE.test(fs) || JOKE_ASK.test(f)) return 'joke';
+    if (PZ_BORED.test(fs)) return 'bored';
+    if (PZ_REMEMBER.test(fs)) return 'keep';
+    if (PZ_FORGET.test(fs)) return 'forget';
+    if (PZ_PETQ.test(fs)) return 'petq';
+    if (PZ_FAVQ.test(fs)) return 'favq';
+    return '';
+  }
+  function pzDo(state, req, fs, f, raw) {
+    var P = PZ(), S = pzS(state);
+    switch (req) {
+      case 'adult': return { blocks: [{ k: 'p', x: pzPick(state, P.adult) }], chips: [{ label: 'A clean joke', q: 'Tell me a joke' }, { label: 'A riddle', q: 'Tell me a riddle' }], kind: 'chat', id: 'pz-adult', fun: 1 };
+      case 'roast': return pzR(state, [{ k: 'p', x: pzPick(state, P.self_jokes) }], pzChips(state, [{ label: 'Compliment me instead', q: 'Compliment me' }]), 'fun', 'pz-roast');
+      case 'tease': return pzR(state, [{ k: 'p', x: pzPick(state, P.tease) }], pzChips(state, []), 'fun', 'pz-tease');
+      case 'flirt': return pzR(state, [{ k: 'p', x: pzPick(state, P.flirt) }], pzChips(state, []), 'chat', 'pz-flirt');
+      case 'quiz': return pzQuizStart(state);
+      case 'guess': return pzGuessStart(state);
+      case 'rps': { var direct = /\b(rock|stone|paper|scissors?)\b/.test(fs.replace(PZ_RPS, ' ')); return direct ? pzRpsPlay(state, fs.replace(PZ_RPS, ' ')) : pzRpsStart(state); }
+      case 'riddle': return pzRiddle(state);
+      case 'wyrAsk': {
+        var m = PZ_WYR_ASK.exec(fs), opt = frand(state) < 0.5 ? m[1] : m[2];
+        if (FUN_UPSET.test(opt) || pzSerious(opt)) return null;
+        return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.wyr_mine), { thing: opt.replace(/^(be |have |be able to )/, '') }) }, { k: 'p', x: 'Your turn: which would you pick?' }], pzChips(state, [{ label: 'Ask me one', q: 'Would you rather' }]), 'fun', 'pz-wyr-mine', 'wyr');
+      }
+      case 'wyr': return pzWyr(state);
+      case 'story': return pzStory(state);
+      case 'compliment': return pzCompliment(state);
+      case 'rate': { var about = String(raw || '').replace(/^[\s\S]*?\brate (?:my|our) (?:day|week|morning|afternoon|evening|weekend|lunch|dinner|breakfast)\b[\s:,.\-–—!]*/i, ''); return pzRate(state, fs, about); }
+      case 'fact': return pzFact(state);
+      case 'cheer': return pzCheer(state);
+      case 'joke': return pzJoke(state, f);
+      case 'bored': return pzBored(state);
+      case 'keep': return pzKeep(state);
+      case 'forget': return pzForget(state);
+      case 'petq': return pzMemQ(state, false);
+      case 'favq': return pzMemQ(state, true);
+    }
+    return null;
+  }
+  function pzEarly(state, q0, vf) {
+    var P = PZ(); if (!P) return null;
+    var S = pzS(state), t = state.turn || 0, raw = String(q0 || '').trim(), fs = stNorm(raw), f = vf;
+    // anything that may be about danger, fear or harm: no games, no jokes, no offers carried over
+    if (pzBlocked(state) || pzSerious(f) || pzSerious(fs)) { S.game = null; S.offer = null; return null; }
+    if (S.game && t - (S.game.at || 0) > 6) S.game = null;
+    var offer = S.offerAt === t - 1 ? S.offer : null;
+    if (S.offerAt !== t - 1) S.offer = null;
+    var em = pzEmoji(raw);
+    if (em === 'sad' || em === 'cross') return pzHandoff(state, em);
+    // after the hand-off: talk about it, or something gentle
+    if (offer === 'handoff') {
+      if (PZ_TALK.test(fs) || PZ_YES.test(fs)) return pzListen(state);
+      if (PZ_SILLY.test(fs) || PZ_NO.test(fs)) return pzLighten(state);
+    }
+    // a hint that something real is going on, in the middle of a light chat: a plain hand-off
+    if (pzHint(state, fs) && pzCtx(state) && fs.split(' ').length <= 14 && !PZ_REL.test(fs)) return pzHandoff(state);
+    if (FUN_UPSET.test(f) && !PZ_JOKE.test(fs) && !JOKE_ASK.test(f)) { S.game = null; return null; }
+    if (PZ_BETTER.test(fs) && (state.lastKind === 'care' || /^pz-/.test(state.lastId || '')) && !state.fearSeen && !pzHint(state, fs)) {
+      S.offer = 'better'; S.offerAt = t;
+      return { blocks: [{ k: 'p', x: pzFill(state, pzPick(state, (P.handoff || {}).better)) }], chips: [{ label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'Let’s just chat', q: 'Let’s just chat' }, { label: 'Something else', q: 'What can I ask?' }], kind: 'chat', id: 'pz-better', fun: 1 };
+    }
+    if (JUST_CHAT.test(f) || JUST_CHAT.test(fs) || /^(?:just chat|just chatting|chit chat|chitchat|small talk please|let s chit chat|lets chit chat|let s just talk|lets just talk|i just want to chat|i just want to talk|can we just chat)$/.test(fs)) {
+      S.mode = true; S.game = null;
+      return pzR(state, [{ k: 'p', x: pzFill(state, pzPick(state, P.just_chat)) }], pzChips(state, [{ label: 'How’s your day, Professor?', q: 'How’s your day, Professor?' }, { label: 'Tell me a joke', q: 'Tell me a joke' }, { label: 'I’m bored', q: 'I’m bored' }]), 'chat', 'just_chat');
+    }
+    var req = pzRequest(fs, f);
+    // a riddle still open, and they've moved on: tell them the answer first
+    var pre = null;
+    if (S.game && S.game.t === 'riddle' && req && req !== 'riddle') { pre = { k: 'p', x: '(The answer to my riddle: ' + S.game.r.a + ')' }; S.game = null; }
+    if (!req && S.game) {
+      var g = S.game, gr = null;
+      if (g.t === 'riddle' && fs.split(' ').length <= 8 && !stIntent(f, fs)) gr = pzRiddleAnswer(state, fs);
+      else if (g.t === 'wyr' && fs.split(' ').length <= 10) gr = pzWyrAnswer(state, fs);
+      else if (g.t === 'rps') gr = pzRpsPlay(state, fs);
+      else if (g.t === 'guess') gr = pzGuessPlay(state, fs);
+      else if (g.t === 'quiz') gr = pzQuizAnswer(state, fs);
+      else if (g.t === 'rate' && fs.split(' ').length <= 60) { if (!pzHint(state, fs)) gr = pzRate(state, fs, raw.length > 2 ? raw : 'a day'); }
+      if (gr) return gr;
+      S.game = null;
+    }
+    if (!req && PZ_AGAIN.test(fs) && S.lastAct && t - (S.lastAt || 0) <= 2) req = { joke: 'joke', riddle: 'riddle', fact: 'fact', wyr: 'wyr', story: 'story', compliment: 'compliment', quiz: 'quiz', rps: 'rps', guess: 'guess', cheer: 'cheer' }[S.lastAct] || '';
+    if (!req && offer && offer !== 'handoff' && PZ_YES.test(fs)) req = offer === 'better' ? 'joke' : offer;
+    if (req) {
+      var r = pzDo(state, req, fs, f, raw);
+      if (r) { S.lastAt = t; if (pre && r.blocks) r.blocks.unshift(pre); var lx = r.blocks && r.blocks[r.blocks.length - 1] && r.blocks[r.blocks.length - 1].x; if (typeof lx === 'string' && /\b(joke|riddle|story)\?\s*$/i.test(lx)) { S.offer = (/joke\?/i.test(lx) ? 'joke' : /riddle\?/i.test(lx) ? 'riddle' : 'story'); S.offerAt = t; } return r; }
+    }
+    // reactions: laughter, emoji, "ok", "yes", "no", "wow", "idk"
+    if (em) {
+      var R = P.react || {};
+      if (em === 'laugh') return pzReact(state, 'laugh');
+      if (R[em]) return pzReact(state, em);
+      return pzReact(state, 'emoji', { e: raw.replace(/\s+/g, '') });
+    }
+    if (PZ_LAUGH.test(fs)) return pzReact(state, 'laugh');
+    var ctx = pzCtx(state) || t <= 1;
+    if (ctx && fs.split(' ').length <= 4) {
+      if (PZ_SHRUG.test(fs) && state.stAsk === t - 1) return pzReact(state, 'shrug');
+      if (PZ_YES.test(fs) && !/^please$/.test(fs)) return pzReact(state, 'yes');
+      if (PZ_NO.test(fs)) return pzReact(state, 'no');
+      if (PZ_WOW.test(fs) && fs !== 'what') return pzReact(state, 'wow');
+      if (PZ_OK.test(fs)) return pzReact(state, 'ok');
+    }
+    return null;
+  }
+  // after the usual answer: a hint that nothing found (a hand-off), or in a light chat, nonsense and one-word replies
+  function pzLate(state, q0, f, r, sp) {
+    var P = PZ(); if (!P || !r) return null;
+    var S = pzS(state), raw = String(q0 || '').trim(), fs = stNorm(raw);
+    if (pzBlocked(state) || pzSerious(f) || r.kind === 'safety' || r.kind === 'redflag') return null;
+    var weak = !r.kind || /^(search|offtopic|none|unclear)$/.test(r.kind) || (r.kind === 'clarify' && !r.cq) || (r.kind === 'chat' && !r.id);
+    if (!weak) return null;
+    if (pzHint(state, fs) && fs.split(' ').length <= 14) return pzHandoff(state);
+    if (FUN_UPSET.test(f) || !pzCtx(state)) return null;
+    var nonsense = (sp && sp.unknown && !sp.known) || PZ_MASH.test(fs.replace(/\s+/g, ''));
+    if (nonsense) return pzR(state, [{ k: 'p', x: pzPick(state, (P.react || {}).nonsense) }], pzChips(state, []), 'chat', 'pz-nonsense');
+    if (/^[a-z][a-z'-]{1,15}$/.test(fs) && /^(offtopic|none|unclear)$/.test(r.kind || '')) return pzReact(state, 'oneword', { word: fs });
+    return null;
+  }
+  // Spanish basics (esFold text): "¿cómo estás?", "cuéntame un chiste", "estoy aburrido", "gracias", "adiós", "me llamo Ana"
+  var PZ_ES = [
+    ['how', /^(?:hola[ ,]*)?(?:como estas|como esta usted|que tal|que tal estas|como te va|como andas|como estas tu|y tu|y tu como estas)(?: profesor| puddles| profe)?$/],
+    ['jokes', /\b(?:cuentame|cuenta|dime|cuentanos|quiero|otro|un) (?:un |otro )?chistes?\b|^chistes?$|^otro chiste$|^un chiste(?: por favor)?$/],
+    ['riddles', /\badivinanzas?\b/],
+    ['facts', /\bdatos? curiosos?\b/],
+    ['bored', /^(?:estoy )?(?:muy |tan |re )?aburrid[oa]s?$/],
+    ['who', /^(?:y )?quien eres(?: tu)?$/],
+    ['thanks', /^(?:muchas |mil )?gracias(?: profesor| puddles| profe)?$/],
+    ['bye', /^(?:adios|hasta luego|hasta pronto|chao|chau|nos vemos|hasta manana)(?: profesor| puddles| profe)?$/],
+    ['laugh', /^(?:ja){2,}j?a?$|^(?:je){2,}$|^jaja\w*$/],
+    ['love', /^te quiero(?: mucho)?$/],
+    ['name', /^(?:hola[ ,]*)?me llamo [a-z]{2,20}$/]
+  ];
+  function pzEsWhich(f) { for (var i = 0; i < PZ_ES.length; i++) if (PZ_ES[i][1].test(f)) return PZ_ES[i][0]; return ''; }
+  function pzEs(state, which, q) {
+    var P = PZ(), E = P && P.es; if (!E) return null;
+    var chips = (E.chips || []).map(function (c) { return { label: c[0], q: c[1] }; });
+    if (which === 'name') {
+      var m = /me llamo\s+([A-Za-zÁÉÍÓÚÑáéíóúñ][A-Za-zÁÉÍÓÚÑáéíóúñ'-]{1,19})/i.exec(String(q)), nm = m ? m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase() : '';
+      if (nm) { state.name = nm; try { sessionStorage.setItem('tol-chat-name', nm); } catch (e) {} }
+    }
+    var x = pzFill(state, pzPick(state, E[which] || E.how));
+    return { blocks: [{ k: 'p', x: x }], chips: chips, kind: 'lang', id: 'es-charla-' + which };
   }
   function respond1(state, q, chipDoc) {
     var f = norm(q), prevLast = state.last;
@@ -3818,7 +4462,7 @@
   // One message in, one reply out; fetches the background notes first when an answer needs them.
   function reply(state, q, doc, cb0) {
     var r;
-    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
+    function cb(x) { if (x && !/^(thanks|chat|fun|hello|unclear|offtopic|none|clarify)$/.test(x.kind || '') && x.id !== 'source') state.lastQ = q; if (x && x.blocks && state.deepRedo === state.turn && !/^(deep|safety|redflag|lang)$/.test(x.kind || '')) { x.blocks.unshift({ k: 'p', x: 'Deep talk is on. That question isn’t one of my deep topics, so here’s the plain answer from the site. Ask me a big question any time, or say “keep it light” to come back up.' }); x.chips = (x.chips || []).filter(function (c) { return !/keep it light/i.test(c.label); }).slice(0, 3).concat([{ label: 'Keep it light', q: 'Keep it light' }]); } if (x && state.page && state.page.chips && state.page.chips.length && (!x.chips || !x.chips.length) && (state.turn || 0) <= 2 && x.kind !== 'safety') x.chips = state.page.chips.slice(0, 4); x = tidy(state, q, x); x = dejargon(x, q); x = noRepeat(state, q, x); if (state.brief) x = briefen(state, x); x = medsFirst(q, x); if (state.easy && x && x.kind !== 'safety') x = easySwap(x); if (x && x.blocks) state.lastSig = sigOf(x); x = flair(state, q, x); if (doc == null) { x = deepChip(state, q, x); x = igChip(state, x); } saveTopic(state); if (x && x.blocks) markShown(state, x); if (x) { state.lastKind = x.kind || 'search'; state.lastId = x.id || ''; if (x.fun && x.kind !== 'thanks' && !quietOn() && frand(state) < 0.5) x.think = funLine(state, 'thinking'); } cb0(x); }
     function safe(fn) {
       try { return fn(); }
       catch (e) { if (window.console && console.error) console.error(e); return { blocks: [{ k: 'p', x: 'Sorry, something went wrong on my side. Could you try asking another way?' }], chips: STARTERS }; }
@@ -4385,6 +5029,7 @@
       if (c) { if (!c.started) c.start({}); c.root.scrollIntoView({ block: 'nearest', behavior: REDUCED ? 'auto' : 'smooth' }); }
       else { api.open(); c = modal; }
       if (opts.mode === 'deep' || opts.mode === 'chat') setDeep(c.state, opts.mode === 'deep');
+      if (opts.mode === 'chat') pzS(c.state).mode = true;
       if (c.busy || c.pending) { (c.queue = c.queue || []).push(text); return; }
       c.ask(text);
     },

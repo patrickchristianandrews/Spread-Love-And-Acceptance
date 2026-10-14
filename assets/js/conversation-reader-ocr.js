@@ -228,12 +228,35 @@
       var text = clean(texts.join(' '));
       if (!text) return;
       var lm = b.rect.x0 / W, rm = 1 - b.rect.x1 / W;
-      out.push({ side: side, text: text, who: b.label || '', unsure: Math.abs(lm - rm) < 0.05 });
+      out.push({ side: side, text: text, who: b.label || '', clear: Math.abs(lm - rm) >= 0.08, key: colourKey(ls[0].bg), lm: lm, rm: rm });
+    });
+    // A long bubble can reach almost across the screen, so where it sits doesn't say much. Bubbles of one colour
+    // are one side (my blue or green ones, their grey or white ones): such a bubble takes the side of the clearly
+    // placed bubbles of its colour. Only a bubble with neither is unsure.
+    // Within one colour, bubbles that all start at the same place are on the left; all ending at the same place, the right.
+    var bySide = {}, groups = {}, sideOf = {};
+    out.forEach(function (o) { (groups[o.key] || (groups[o.key] = [])).push(o); if (!o.clear) return; var k = bySide[o.key] || (bySide[o.key] = { left: 0, right: 0 }); k[o.side]++; });
+    Object.keys(groups).forEach(function (key) {
+      var g = groups[key], k = bySide[key], x0s = g.map(function (o) { return o.lm; }), x1s = g.map(function (o) { return o.rm; });
+      var s0 = Math.max.apply(null, x0s) - Math.min.apply(null, x0s), s1 = Math.max.apply(null, x1s) - Math.min.apply(null, x1s);
+      if (k && k.left !== k.right) sideOf[key] = k.left > k.right ? 'left' : 'right';
+      else if (g.length >= 2 && s0 < 0.012 && s1 > 0.025) sideOf[key] = 'left';
+      else if (g.length >= 2 && s1 < 0.012 && s0 > 0.025) sideOf[key] = 'right';
+    });
+    // two colours, one of them known: the other is the other side
+    var keys = Object.keys(groups);
+    if (keys.length === 2 && !!sideOf[keys[0]] !== !!sideOf[keys[1]]) { var known = sideOf[keys[0]] ? 0 : 1; sideOf[keys[1 - known]] = sideOf[keys[known]] === 'left' ? 'right' : 'left'; }
+    out.forEach(function (o) {
+      var g = sideOf[o.key] || '';
+      if (!o.clear && g) o.side = g;
+      o.unsure = !o.clear && !g && Math.abs(o.lm - o.rm) < 0.05;
+      delete o.clear; delete o.key; delete o.lm; delete o.rm;
     });
     // in a group chat, a name shows once over a run of someone's messages: the rest of the run is theirs too
     var lastLabel = '';
     out.forEach(function (b) { if (b.side !== 'left') { lastLabel = ''; return; } if (b.who) lastLabel = b.who; else if (lastLabel) b.who = lastLabel; });
     return { name: name, bubbles: out, fx: true };
+    function colourKey(c) { return c ? [c[0] >> 4, c[1] >> 4, c[2] >> 4].join(',') : ''; }
     function sideOfRect(r) { var lm = r.x0 / W, rm = 1 - r.x1 / W; return lm < rm ? 'left' : 'right'; }
   }
 

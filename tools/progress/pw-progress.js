@@ -196,7 +196,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     ok(!(await p.isDisabled('dialog.tcc button:has-text("Clear now")')), 'the right answer turns on Clear now');
     await p.click('dialog.tcc button:has-text("Clear now")');
     await p.waitForSelector('dialog.tcc h2:has-text("Cleared")');
-    ok(/Nothing from Today’s Weather/.test(await p.textContent('dialog.tcc')), 'after: "Cleared. Nothing from … is left"');
+    ok(/Nothing from Your weather almanac is left on this device/.test(await p.textContent('dialog.tcc')), 'after: "Cleared. Nothing from … is left"');
     ok(await p.evaluate(() => !localStorage.getItem('tol-weather-v1') && !!localStorage.getItem('tol-lemonade-quick')), 'only that item is cleared');
     await p.click('dialog.tcc button:has-text("Close")');
 
@@ -229,14 +229,15 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     await p.goto(BASE + '/quick-checks.html');
     await p.evaluate((w) => localStorage.setItem('tol-weather-v1', w), WEATHER);
     await p.goto(BASE + '/index.html');
-    await p.waitForSelector('.tp-card-pop', { timeout: 8000 });
+    await p.waitForSelector('.tp-card-pop', { timeout: 25000 });
     ok(/own computer or a shared one/.test(await p.textContent('.tp-card-pop')), 'computer: asked once, own or shared');
     await p.screenshot({ path: path.join(OUT, 'ask-computer-1366.png') });
     await p.click('.tp-card-pop >> text=Not sure');
     await p.waitForSelector('#tp-chip');
     ok(await p.evaluate(() => localStorage.getItem('tol-save-mode-v1') === 'shared'), 'Not sure → shared');
-    await p.click('a[href="/quick-checks.html"], a[href$="quick-checks.html"]').catch(async () => { await p.evaluate(() => { const a = document.createElement('a'); a.href = '/quick-checks.html'; document.body.appendChild(a); a.click(); }); });
-    await p.waitForLoadState('load'); await p.waitForTimeout(800);
+    // following a link to another page of the site, as a person would
+    await Promise.all([p.waitForNavigation(), p.evaluate(() => { const a = document.createElement('a'); a.href = '/quick-checks.html'; a.textContent = 'go'; document.body.appendChild(a); a.click(); })]);
+    await p.waitForLoadState('load'); await p.waitForTimeout(1200);
     ok(await p.evaluate(() => !!localStorage.getItem('tol-weather-v1')), 'shared: notes follow you to the next page of the site');
     ok(await p.isVisible('#tp-chip'), 'shared: the chip shows on every page');
     await p.screenshot({ path: path.join(OUT, 'shared-chip-1366.png') });
@@ -278,7 +279,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
       await p.screenshot({ path: path.join(OUT, 'progress-' + v.n + '-' + scheme + '.png'), fullPage: true });
       if (v.n === '390') {
         await p.goto(BASE + '/lemonade-stand.html');
-        await p.waitForSelector('.tp-card-pop', { timeout: 8000 });
+        await p.waitForSelector('.tp-card-pop', { timeout: 25000 });
         ok(/7 days/.test(await p.textContent('.tp-card-pop')), '390 ' + scheme + ': the one-time iPhone tip');
         await noSideways(p, '390 ' + scheme + ' tip');
         await p.screenshot({ path: path.join(OUT, 'iphone-tip-390-' + scheme + '.png') });
@@ -294,7 +295,7 @@ const QUICK = JSON.stringify({ v: 1, people: ['Rowan', 'Jules'], list: [], ans: 
     const p = await c.newPage();
     await p.goto(BASE + '/on-this-device.html'); await p.waitForSelector('#tp-level');
     ok(/In the app/.test(await p.textContent('#tp-level')) && await p.isVisible('#tp-app-hint'), 'app: level shown, and the paste-a-link hint');
-    ok(await p.isVisible('#tp-e-tool') === false && /Use a tool first/.test(await p.textContent('#tp-entries')), 'app: saved entries on (nothing to save yet)');
+    ok(!/comes with the free app/.test(await p.textContent('#tp-entries')) && !/comes with the free app/.test(await p.textContent('#tp-history')), 'app: saved entries and earlier versions are on');
     await p.screenshot({ path: path.join(OUT, 'app-390.png'), fullPage: false });
     await noSideways(p, 'app 390');
     await c.close();

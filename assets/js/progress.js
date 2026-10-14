@@ -539,7 +539,7 @@
 
   // ------------------------------------------------------------------ earlier versions (history)
   var HIST_N = 10, HIST_VALUE = 250000, HIST_CHARS = 1200000, ROOM = 3500000;
-  function history(st) {
+  function versions(st) {
     var raw = null; try { raw = JSON.parse(sget(st, HIST_KEY) || 'null'); } catch (e) {}
     var out = Object.create(null); if (!isObj(raw)) return out;
     Object.keys(raw).forEach(function (k) {
@@ -553,7 +553,7 @@
   // keeps the newest HIST_N versions of each meaningful item; an item that is erased takes its versions with it
   function recordHistory(st, now) {
     now = now || Date.now();
-    var h = history(st), changed = false, live = Object.create(null);
+    var h = versions(st), changed = false, live = Object.create(null);
     progressKeys(st).forEach(function (k) {
       if (k === ENTRIES_KEY || !meaningful(k)) return;
       live[k] = 1;
@@ -580,14 +580,14 @@
     return h;
   }
   function goBack(st, k, t) {
-    var l = history(st)[k]; if (!l) return false;
+    var l = versions(st)[k]; if (!l) return false;
     var x = l.filter(function (v) { return v.t === t; })[0]; if (!x) return false;
     var v = cleanValue(x.v); if (v === null) return false;
     try { st.setItem(k, v); } catch (e) { return false; }
     recordHistory(st); track(st); return true;
   }
   function dropHistory(st, keys) {
-    var h = history(st), n = 0; keys.forEach(function (k) { if (h[k]) { n += h[k].length; delete h[k]; } });
+    var h = versions(st), n = 0; keys.forEach(function (k) { if (h[k]) { n += h[k].length; delete h[k]; } });
     var o = {}; Object.keys(h).forEach(function (k) { o[k] = h[k]; });
     try { if (Object.keys(o).length) st.setItem(HIST_KEY, JSON.stringify(o)); else st.removeItem(HIST_KEY); } catch (e) {}
     return n;
@@ -605,7 +605,7 @@
   function pinRecord(pin, mins) {
     if (!validPin(pin)) return Promise.reject(ProgressError('pin', 'PIN must be 4 to 6 digits'));
     var salt = rand(16);
-    return pinHash(pin, salt, PIN_ITER).then(function (h) { return { on: 1, alg: 'PBKDF2-SHA256', it: PIN_ITER, salt: b64(salt), h: h, mins: mins || 5, tries: 0 }; });
+    return pinHash(pin, salt, PIN_ITER).then(function (h) { return { on: 1, alg: 'PBKDF2-SHA256', it: PIN_ITER, salt: b64(salt), h: h, mins: typeof mins === 'number' && mins >= 0 ? mins : 5, tries: 0 }; });
   }
   function checkPin(pin, rec) {
     if (!validPin(pin) || !rec || typeof rec.h !== 'string' || typeof rec.salt !== 'string' || !(rec.it >= 100000 && rec.it <= MAX_ITER)) return Promise.resolve(false);
@@ -671,7 +671,7 @@
     collect: collect, track: track, validate: validate, makeBackup: makeBackup, readBackup: readBackup, inspect: inspect,
     packLink: packLink, unpackLink: unpackLink, linkInfo: linkInfo, restore: restore, summary: summary,
     entries: entries, saveEntry: function (a, b, c) { return a && typeof a.getItem === 'function' ? saveEntry(a, b, c) : browserSave(a); }, saveResult: saveResult, rowsOf: rowsOf, renameEntry: renameEntry, deleteEntry: deleteEntry, putBack: putBack, compare: compare, flatten: flatten,
-    recordHistory: recordHistory, history: history, goBack: goBack, dropHistory: dropHistory,
+    recordHistory: recordHistory, history: versions, goBack: goBack, dropHistory: dropHistory,
     validPin: validPin, pinRecord: pinRecord, checkPin: checkPin, lockDue: lockDue, failDelay: failDelay,
     sharedStash: sharedStash, sharedWipe: sharedWipe, sharedRestore: sharedRestore,
     persist: persist, persisted: persisted, ProgressError: ProgressError
@@ -1214,7 +1214,7 @@
     host.textContent = '';
     if (!perks()) { perkNote(host); return; }
     var st = local(); recordHistory(st);
-    var h = history(st), keys = Object.keys(h).filter(function (k) { return h[k].length > 1; }).sort();
+    var h = versions(st), keys = Object.keys(h).filter(function (k) { return h[k].length > 1; }).sort();
     if (!keys.length) { host.appendChild(mk('p', { class: 'tp-none' }, T('Nothing yet. Each time you change something in a tool, the version before is kept here (the last ' + (HIST_N - 1) + ').', 'Nada todavía. Cada vez que cambies algo en una herramienta, la versión anterior se guarda aquí (las últimas ' + (HIST_N - 1) + ').'))); return; }
     var counts = {}; keys.forEach(function (k) { var g = groupOf(k); counts[g] = (counts[g] || 0) + 1; });
     keys.forEach(function (k, i) {
@@ -1322,7 +1322,7 @@
           onConfirm: function () { return eraseEverything().then(drawAll); } });
         return;
       }
-      var st = local(), keys = groupKeys(st, one), es = entries(st).filter(function (e) { return e.g === one; }), h = history(st), hv = 0;
+      var st = local(), keys = groupKeys(st, one), es = entries(st).filter(function (e) { return e.g === one; }), h = versions(st), hv = 0;
       keys.forEach(function (k) { if (h[k]) hv += h[k].length; });
       var items = [{ name: groupName(one), n: keys.length }];
       if (es.length) items.push({ name: T('Saved entries for it', 'Sus entradas guardadas'), n: es.length });

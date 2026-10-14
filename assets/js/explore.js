@@ -140,6 +140,24 @@
     try { history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '')); } catch (e) {}
   }
   var deep = null;   // page text from the search index, once someone types words (loaded only then)
+  // "Best match for what you described" (the search's needs layer, in site.js): someone types their problem
+  // ("my teen won't talk to me"), not a page's name. Those pages show first, with why each helps; when nothing
+  // fits, the closest needs, the 3-question finder, Professor Puddles and the plain list are offered instead.
+  var NEED = null, needQ = '', bestBox = document.createElement('div'), noneBox = document.createElement('div');
+  bestBox.className = 'tol-find-best ex-best'; bestBox.hidden = true; bestBox.setAttribute('aria-live', 'polite');
+  noneBox.className = 'tol-find-none ex-none'; noneBox.hidden = true;
+  grid.parentNode.insertBefore(bestBox, grid);
+  emptyEl.parentNode.insertBefore(noneBox, emptyEl.nextSibling);
+  function askNeeds() {
+    var q = S.q;
+    if (q === needQ) return;
+    needQ = q; NEED = null;
+    if (!q || q.length < 3 || !window.TOLSearch || !window.TOLSearch.needs) return;
+    window.TOLSearch.needs(q, function (M) { if (S.q !== q) return; NEED = M; apply(true); });
+  }
+  if (window.TOLSearch && window.TOLSearch.wire) window.TOLSearch.wire(noneBox, function (words) { S.q = words; sync(); askNeeds(); loadDeep(); apply(); });
+  var TOGETHER = /(^|[^a-z])(we|us|our|together|both|each other)([^a-z]|$)/;
+  function soloOf(e) { return e.tool && e.tool.who ? (e.tool.who.indexOf('solo') !== -1 ? 1 : 0) : 1; }
   function wordsMatch(e, terms) {
     if (!terms.length) return true;
     var h = e.hay + (deep && deep[e.p] ? ' ' + deep[e.p] : '');
@@ -148,6 +166,8 @@
   function apply(keepMax) {
     if (!keepMax) shownMax = PAGE;
     var terms = fold(S.q).split(/[^a-z0-9'-]+/).filter(function (t) { return t.length > 1 && !/^(the|and|for|with|my|a|an|to|of|in|on|is|it|i)$/.test(t); });
+    var bestAt = {};
+    if (S.q && NEED && NEED.best) NEED.best.g.forEach(function (g, i) { var p = pathOf(g[0]); if (bestAt[p] == null) bestAt[p] = i; });
     var hits = list.filter(function (e) {
       if (S.need && !e.needs[S.need]) return false;
       if (S.rel && e.rels.indexOf(S.rel) === -1) return false;
@@ -155,10 +175,13 @@
       if (S.time === '1' && e.min > 2) return false;
       if (S.time === '10' && e.min > 10) return false;
       if (S.time === '30' && e.min < 15) return false;
-      return wordsMatch(e, terms);
+      return bestAt[e.p] != null || wordsMatch(e, terms);
     });
     // a words filter puts pages whose name matches first; "?sort=new" puts the newest first
-    if (terms.length) hits.sort(function (a, b) { var ta = terms.every(function (t) { return fold(a.t).indexOf(t) !== -1; }), tb = terms.every(function (t) { return fold(b.t).indexOf(t) !== -1; }); return (tb - ta) || (a.order - b.order); });
+    // the best match for what they described first; then, when nobody else is named, what one person can use alone
+    var solo = !TOGETHER.test(fold(S.q));
+    function bestRank(e) { return bestAt[e.p] == null ? 99 : bestAt[e.p]; }
+    if (terms.length) hits.sort(function (a, b) { var ta = terms.every(function (t) { return fold(a.t).indexOf(t) !== -1; }), tb = terms.every(function (t) { return fold(b.t).indexOf(t) !== -1; }); return (bestRank(a) - bestRank(b)) || (tb - ta) || (solo ? soloOf(b) - soloOf(a) : 0) || (a.order - b.order); });
     else if (S.sort === 'new') hits.sort(function (a, b) { return (b.isNew - a.isNew) || (a.order - b.order); });
     var show = {}, order = [];
     hits.forEach(function (e, n) { if (n < shownMax) { show[e.order] = 1; order.push(e.order); } });
@@ -168,6 +191,10 @@
     countEl.textContent = hits.length === list.length ? 'All ' + list.length + ' pages and tools.' : hits.length + (hits.length === 1 ? ' page fits.' : ' pages fit.');
     resetBtn.hidden = !filtered;
     emptyEl.hidden = !!hits.length;
+    var best = S.q && NEED && NEED.best && window.TOLSearch;
+    bestBox.innerHTML = best ? window.TOLSearch.bestHTML(NEED.best, S.q) : ''; bestBox.hidden = !best;
+    var none = !hits.length && S.q && S.q.length >= 3 && NEED && window.TOLSearch;
+    noneBox.innerHTML = none ? window.TOLSearch.fallbackHTML(S.q, NEED) : ''; noneBox.hidden = !none;
     moreEl.hidden = hits.length <= shownMax;
     if (!moreEl.hidden) moreEl.querySelector('button').textContent = 'Show more (' + (hits.length - shownMax) + ' more)';
     writeUrl();
@@ -190,7 +217,7 @@
     var v = b.getAttribute('data-v'); S.need = S.need === v ? '' : v; sync(); apply();
   });
   var tmr = null;
-  qEl.addEventListener('input', function () { clearTimeout(tmr); tmr = setTimeout(function () { S.q = qEl.value.trim(); if (S.q.length >= 3) loadDeep(); apply(); }, 120); });
+  qEl.addEventListener('input', function () { clearTimeout(tmr); tmr = setTimeout(function () { S.q = qEl.value.trim(); askNeeds(); if (S.q.length >= 3) loadDeep(); apply(); }, 120); });
   qEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); var a = grid.querySelector('li:not([hidden]) a'); if (a) a.focus(); } });
   relEl.addEventListener('change', function () { S.rel = relEl.value; apply(); });
   timeEl.addEventListener('change', function () { S.time = timeEl.value; apply(); });
@@ -201,5 +228,5 @@
     var next = grid.querySelectorAll('li:not([hidden]) a')[before]; if (next) next.focus();
   });
   sync(); apply();
-  if (S.q && S.q.length >= 3) loadDeep();
+  if (S.q && S.q.length >= 3) { askNeeds(); loadDeep(); }
 })();

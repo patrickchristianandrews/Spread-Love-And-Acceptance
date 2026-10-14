@@ -27,28 +27,25 @@
 
   // The installed app opens with Tidbit and Sugarfoot running up and down the screen while the first page loads
   // (launch-pups.js and launch-pups.css), once per app launch ('tol-launch-seen' in sessionStorage), never in a
-  // browser tab, and not on the safety pages. Each page's head already shows a plain cover in the app's colour
-  // (class "lp-boot", from tools/seo/build_seo.py); a page without it gets the same cover here.
+  // browser tab, and not on the safety pages. Each page's head starts it (a plain cover in the app's colour, class
+  // "lp-boot", and the two files; from tools/seo/build_seo.py); a page whose head doesn't is started here.
   (function () {
     var d = document.documentElement;
+    if (d.classList.contains('lp-boot') || document.getElementById('lp-boot-css')) return;   // the head has it in hand
     try {
       var app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
-      if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(safety|upset-right-now)\.html$/.test(location.pathname)) { d.classList.remove('lp-boot'); return; }
+      if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(safety|upset-right-now)\.html$/.test(location.pathname)) return;
       sessionStorage.setItem('tol-launch-seen', '1');
-      if (!document.getElementById('lp-boot-css')) {
-        var bs = document.createElement('style'); bs.id = 'lp-boot-css';
-        bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
-          'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(2250 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
-          'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
-        document.head.appendChild(bs);
-        var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
-        if (th === 'dark' || (th !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('lp-dark');
-        d.classList.add('lp-boot');
-        setTimeout(function () { d.classList.remove('lp-boot'); }, Math.max(0, 2500 - performance.now()));
-      }
-      // the styles, the pups and the cover's script all start loading at once
+      var bs = document.createElement('style'); bs.id = 'lp-boot-css';
+      bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
+        'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(2250 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
+        'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
+      document.head.appendChild(bs);
+      var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
+      if (th === 'dark' || (th !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('lp-dark');
+      d.classList.add('lp-boot');
+      setTimeout(function () { d.classList.remove('lp-boot'); }, Math.max(0, 2500 - performance.now()));
       var lk = document.createElement('link'); lk.rel = 'stylesheet'; lk.href = '/assets/css/launch-pups.css'; document.head.appendChild(lk);
-      if (!window.TOLPups && !document.querySelector('script[src="/assets/js/pups.js"]')) { var ps = document.createElement('script'); ps.src = '/assets/js/pups.js'; document.head.appendChild(ps); }
       var ls = document.createElement('script'); ls.src = '/assets/js/launch-pups.js';
       ls.onerror = function () { d.classList.remove('lp-boot'); };
       document.head.appendChild(ls);
@@ -2518,7 +2515,7 @@
     if (changed) {
       var better = searchPages(data, q, fixed);
       // nothing (or very little) for the words as typed: show the corrected search straight away
-      if (!hits.length || (better.length && better[0].score > (hits[0] ? hits[0].score * 1.5 : 0))) { hits = better; used = fixed; auto = true; }
+      if (better.length && (!hits.length || better[0].score > (hits[0] ? hits[0].score * 1.5 : 0))) { hits = better; used = fixed; auto = true; }
     } else if (!hits.length) {
       // real words that find nothing: search them as typed, and only offer the nearest site word as "Did you mean"
       var near = terms.map(function (t) { return (!actFor(t) && nearest(t)) || t; });
@@ -2552,10 +2549,10 @@
   var NSTOP = {};
   ('a an the and or but so to of in on at by for with from into about as is it its be been am are was were do does did done have has had having ' +
    'i im ive id me my mine myself we us our ours you your yours he him his she her hers they them their theirs this that these those there here ' +
-   'what how why when where who which can could would should will shall may might must just really very quite so too also still even ever ' +
+   'what how why when where which can could would should will shall may might must just really very quite so too also still even ever ' +
    'get got gets getting keep keeps kept one some any all each every much many more most lot lots thing things stuff something anything ' +
    'dont doesnt didnt cant cannot wont isnt arent wasnt werent havent hasnt hadnt wouldnt couldnt shouldnt aint not no ' +
-   'youre theyre were hes shes thats whats theres lets ok okay please like want need feel feeling felt help-me ' +
+   'youre theyre were hes shes thats whats theres lets ok okay please like want need ' +
    'de la el los las y en que con por para mi mis me un una lo le se es muy al del su sus yo tu te nos').split(' ').forEach(function (w) { NSTOP[w] = 1; });
   // "want", "need", "feel" say how, not what: kept out, so "i need calm" and "calm" read the same
   function nStem(w) {
@@ -2574,7 +2571,7 @@
     var r = P.syn[w] || w, s = nStem(r);
     return P.synStem[s] || s;
   }
-  function nTokens(q) {
+  function nTokens(q, fz) {
     var f = fold(q).replace(/[¿?¡!.,;:()"“”«»\/]+/g, ' ').replace(/\s+/g, ' ').trim();
     if (needsPrep) needsPrep.multi.forEach(function (m) { f = f.replace(m[0], m[1]); });
     var out = [], seen = {};
@@ -2582,12 +2579,14 @@
       w = w.replace(/^['-]+|['-]+$/g, '');
       if (!w || NSTOP[w] || NSTOP[w.replace(/'/g, '')] || (w.length < 2 && !/\d/.test(w))) return;
       var c = nCanon(w);
+      // a word the needs don't use: the nearest word they do, a letter or two off ("chors", "anxios", "teenger")
+      if (fz && needsPrep && !needsPrep.df[c]) { var n = nNear(w); if (n) { c = n; fz[c] = 1; } }
       if (c && !seen[c]) { seen[c] = 1; out.push(c); }
     });
     return out;
   }
   function prepNeeds(D) {
-    var P = needsPrep = { syn: {}, synStem: {}, multi: [], df: {}, vocab: [], solo: {} };
+    var P = needsPrep = { syn: {}, synStem: {}, multi: [], df: {}, raw: {}, solo: {}, info: {} };
     Object.keys(D.syn || {}).forEach(function (k) {
       var ks = nStem(k);
       P.synStem[ks] = ks;
@@ -2599,25 +2598,30 @@
     });
     D.needs.forEach(function (n) {
       var bag = {};
-      n._p = n.s.map(function (s) { var t = nTokens(s); t.forEach(function (x) { bag[x] = 1; }); return t; });
+      n._p = n.s.map(function (s) {
+        fold(s).split(/[^a-z0-9'-]+/).forEach(function (w) { w = w.replace(/'/g, ''); if (w.length > 3 && !NSTOP[w]) P.raw[w] = nCanon(w); });
+        var t = nTokens(s); t.forEach(function (x) { bag[x] = 1; }); return t;
+      });
       n._bag = bag;
       Object.keys(bag).forEach(function (t) { P.df[t] = (P.df[t] || 0) + 1; });
-      n.g.forEach(function (g) { var u = g[0]; if (P.solo[u] == null || !g[3]) P.solo[u] = g[3] ? 1 : 0; });
+      n.g.forEach(function (g) { var u = g[0]; if (P.solo[u] == null || !g[3]) P.solo[u] = g[3] ? 1 : 0; if (!P.info[u]) P.info[u] = [g[1], g[2]]; });
     });
-    P.vocab = Object.keys(P.df);
+    Object.keys(P.syn).forEach(function (v) { if (v.length > 3 && /^[a-z]+$/.test(v)) P.raw[v] = nCanon(v); });
+    Object.keys(P.raw).forEach(function (v) { if (!P.df[P.raw[v]]) delete P.raw[v]; });
+    P.rawList = Object.keys(P.raw);
     P.N = D.needs.length;
   }
   function nIdf(t) { var P = needsPrep; return Math.log(1 + P.N / (P.df[t] || 0.5)); }
   // a word the needs don't use: the nearest one they do, a letter or two off ("chors", "anxios", "teenger")
   function nNear(t) {
-    var P = needsPrep; if (t.length < 4 || /\d/.test(t)) return null;
+    var P = needsPrep; t = t.replace(/'/g, ''); if (t.length < 4 || /\d/.test(t)) return null;
     var max = t.length <= 6 ? 1 : 2, best = null, bd = 9;
-    P.vocab.forEach(function (v) {
-      if (Math.abs(v.length - t.length) > max || v.length < 3) return;
+    P.rawList.forEach(function (v) {
+      if (Math.abs(v.length - t.length) > max) return;
       var d = editDist(t, v, max);
-      if (d <= max && (d < bd || (d === bd && (P.df[v] || 0) > (P.df[best] || 0)))) { bd = d; best = v; }
+      if (d <= max && (d < bd || (d === bd && (P.df[P.raw[v]] || 0) > (P.df[P.raw[best]] || 0)))) { bd = d; best = v; }
     });
-    return best;
+    return best ? P.raw[best] : null;
   }
   var NTOGETHER = /(^|[^a-z])(we|us|our|ours|together|both|each other|as a couple|as a family|our team|nosotros|juntos)([^a-z]|$)/;
   // a query names someone else ("we", "together", "both of us"): the order written in needs.json stays; otherwise
@@ -2628,17 +2632,12 @@
   }
   // a question about safety at home never gets a "best match" in front of the safety page
   function safetyQuery(q) {
-    try { return searchTerms(q).some(function (t) { var a = actFor(t); return a && a[0] === '/safety.html'; }); } catch (e) { return false; }
+    try { return searchTerms(q).some(function (t) { var a = actFor(t); return a && /^\/safety\.html/.test(a[0]); }); } catch (e) { return false; }
   }
   function matchNeeds(q) {
     var P = needsPrep, D = needsData;
     if (!P || !D) return { best: null, close: [], score: 0 };
-    var raw = nTokens(q), Q = [], fuzzy = {};
-    raw.forEach(function (t) {
-      if (P.df[t]) { Q.push(t); return; }
-      var n = nNear(t);
-      if (n && !P.df[t]) { fuzzy[n] = 1; Q.push(n); } else Q.push(t);
-    });
+    var fuzzy = {}, Q = nTokens(q, fuzzy);
     if (!Q.length) return { best: null, close: [], score: 0, tokens: Q };
     var w = {}, qW = 0;
     Q.forEach(function (t) { w[t] = P.df[t] ? nIdf(t) * (fuzzy[t] ? 0.85 : 1) : 1; qW += w[t]; });
@@ -2661,11 +2660,18 @@
     // two needs nearly tied: the one whose pages one person can start alone goes first
     if (strong && scored[1] && scored[1].score >= top.score - 0.02 && !NTOGETHER.test(fold(q)) && (scored[1].n.g[0][3] || 0) > (top.n.g[0][3] || 0)) { var x0 = scored[0]; scored[0] = scored[1]; scored[1] = x0; top = scored[0]; }
     return {
-      best: strong ? { id: top.n.id, l: top.n.l, g: soloFirst(top.n.g, q) } : null,
+      best: strong ? { id: top.n.id, l: top.n.l, g: soloFirst(top.n.g, q), score: top.score } : null,
       score: top ? top.score : 0,
       close: scored.slice(strong ? 1 : 0).filter(function (x) { return x.score >= 0.2; }).slice(0, 4).map(function (x) { return { id: x.n.id, l: x.n.l, q: x.n.s[0], g: x.n.g }; }),
       tokens: Q
     };
+  }
+  // someone typed a page's own name ("night garden"): that page leads, not a guess at their problem
+  function namedPage(R, best) {
+    var h = R && R.hits && R.hits[0], terms = (R && R.used) || [];
+    if (!best || best.score >= 0.9 || !h || terms.length < 2 || best.g.some(function (g) { return g[0] === h.p.u; })) return false;
+    var t = fold(h.p.t + ' ' + (h.p.h || ''));
+    return terms.every(function (w) { return new RegExp('(^|[^a-z0-9])' + reEsc(w)).test(t); });
   }
   // the search's answer as a list of addresses, best first: the needs match, then the page search
   function rankAll(q, cb) {
@@ -2673,6 +2679,7 @@
       var M = matchNeeds(q), urls = M.best ? M.best.g.map(function (g) { return g[0]; }) : [];
       loadSearch(function (data) {
         var R = null; try { R = data ? smartSearch(data, q) : null; } catch (e) { R = null; }
+        if (namedPage(R, M.best)) { M.best = null; urls = []; }
         var hits = R ? R.hits.map(function (h) { return h.p.u; }) : [];
         hits.forEach(function (u) { if (urls.indexOf(u) === -1) urls.push(u); });
         cb({ urls: urls, best: M.best, close: M.close, pages: hits.length, fallback: !urls.length });
@@ -2749,6 +2756,38 @@
       if (a && !(e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1)) { e.preventDefault(); if (beforeAsk) beforeAsk(); askPuddles(a.getAttribute('data-find-ask')); }
     });
   }
+  // the page most often suggested beside this one, as [address, title, why]; solo-usable first unless together is true
+  function needsNext(path, together, skip) {
+    var D = needsData, P = needsPrep; if (!D || !P || !D.next) return null;
+    var c = (D.next[path] || []).filter(function (u) { return !(skip && skip[u.split(/[?#]/)[0]]); });
+    if (!together) c = c.filter(function (u) { return P.solo[u] !== 0; }).concat(c.filter(function (u) { return P.solo[u] === 0; }));
+    for (var i = 0; i < c.length; i++) { var g = P.info[c[i]]; if (g) return [c[i], g[0], g[1]]; }
+    return null;
+  }
+  // Home page, for someone coming back: "You might also like", from the pages they opened here (the 'tol-recent'
+  // list this browser keeps; nothing is sent) and the needs map. Small, under "What's here"; never for a first visit.
+  function buildAlsoLike() {
+    if (!/^\/(index\.html)?$/.test(current) || lsGet('tol-recent-off')) return;
+    var map = document.querySelector('.hh-map'), recent = [];
+    try { recent = (JSON.parse(lsGet('tol-recent') || '[]') || []).filter(function (r) { return r && r.u; }); } catch (e) { recent = []; }
+    if (!map || !recent.length) return;
+    loadNeeds(function () {
+      var seen = {}, picks = [];
+      recent.forEach(function (r) { seen[String(r.u).split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html')] = 1; });
+      recent.some(function (r) {
+        var nx = needsNext(String(r.u).split(/[?#]/)[0].replace(/-in-depth\.html$/, '.html'), false, seen);
+        if (nx && !/^\/(safety|upset-right-now)\.html/.test(nx[0])) { seen[nx[0].split(/[?#]/)[0]] = 1; picks.push(nx); }
+        return picks.length >= 2;
+      });
+      if (!picks.length || map.querySelector('.tol-find-also')) return;
+      needsCSS();
+      var p = el('p', { class: 'tol-find-also' }, T('You might also like: ', 'Quizá te guste: ') + picks.map(function (x) { return '<a href="' + escA(x[0]) + '" title="' + escA(x[2]) + '">' + escA(x[1]) + '</a>'; }).join(' <span aria-hidden="true">&middot;</span> ') +
+        ' <small>' + T('(from pages you opened on this device)', '(según las páginas que abriste en este dispositivo)') + '</small>');
+      var all = map.querySelector('.hh-map-all');
+      if (all) map.insertBefore(p, all); else map.appendChild(p);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function () { try { buildAlsoLike(); } catch (e) {} });
   var runSearch = function () {};
   // Leave quickly: any [data-tol-exit] button, or Esc pressed twice, swaps this tab for a weather search
   // (location.replace, so Back doesn't return here). Linked from the safety page, the menu and safety notes.
@@ -2810,6 +2849,7 @@
           note.textContent = 'Search had a hiccup with “' + q + '”. Try another word, or browse the sections below.';
           return;
         }
+        if (namedPage(R, M.best)) { M.best = null; bestU = {}; bestEl.hidden = true; bestEl.innerHTML = ''; }
         var hits = R.hits.filter(function (h) { return !bestU[h.p.u]; }), used = R.used, fixed = R.fixed, changed = R.changed, auto = R.auto;
         // Focus mode: pages in your areas (and the start, safety and help pages, which are never hidden) first;
         // the rest wait behind "Show everything"
@@ -2953,7 +2993,9 @@
     }
     if (body.hasAttribute('data-no-related') || sensitivePage() || /^\/(safety|upset-right-now|ask|start-here|find-your-start|someone-sent-you-this|sent-this|whats-new|on-this-device|install)\.html$|^\/legal\//.test(current)) return;
     var draw = function () { try { buildRelated(main, pl); } catch (e) {} };
-    if (window.TOLTools) draw(); else loadScript('/assets/js/tools-registry.js').then(draw, draw);
+    // the needs map (search-needs.js) suggests the next most useful page; the strip still shows without it
+    var withNeeds = function () { var done = false, t = setTimeout(function () { if (!done) { done = true; draw(); } }, 2500); loadNeeds(function () { if (!done) { done = true; clearTimeout(t); draw(); } }); };
+    if (window.TOLTools) withNeeds(); else loadScript('/assets/js/tools-registry.js').then(withNeeds, withNeeds);
   }
   var GAME_PAGE = /^\/(frequency-journey(-play)?|word-bloom|quiet-words|quiet-crossword|daily-ledger-crossword|recheck-drive|bears-dojo|night-garden|calm-visualizer|frequency-buddies-music-video-maker)\.html$/;
   function buildRelated(main, pl) {
@@ -2966,6 +3008,10 @@
     function typeName(id) { for (var i = 0; i < types.length; i++) if (types[i].id === id) return types[i]; return null; }
     // a tool page (a tool that sits inside a longer guide counts only when the menu doesn't place the page)
     var mine = tools.filter(function (t) { return t.href === me; })[0] || (!pl || pl.g.id === 'tools' ? tools.filter(function (t) { return pathOnly(t.href) === me; })[0] : null);
+    // first, the next most useful page from the needs map (what people describing the same problem were sent to next):
+    // something one person can use alone, unless this is already a tool for two
+    var nx = needsNext(me, mine ? (mine.who || []).indexOf('solo') === -1 : false);
+    if (nx) add(nx[0], nx[1], nx[2]);
     if (mine) {
       // a tool: the next tools of the same type, then one of another type it also fits
       var same = tools.filter(function (t) { return t.type === mine.type; }), at = same.indexOf(mine);

@@ -20,87 +20,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
-<style>
-  /* All tools, by type: a "Start here" strip, filters, jump chips, then one section of cards per type.
-     The cards are built from /assets/js/tools-registry.js (window.TOLTools), the same list the menu and Explore can use. */
-  .read .tl-intro{ max-width:44rem; }
-  /* the page's own pieces are plain, not speech bubbles */
-  .read :is(.tl-box, .tl-jump, .tl-sec) :is(label, .tl-k, p, h2){ background:none !important; border:0 !important; box-shadow:none !important; padding:0 !important; max-width:none !important; width:auto !important; border-radius:0 !important; }
-  .read .tl-box h2.tl-h{ margin:0 0 .2rem !important; font-size:1.25rem !important; line-height:1.25 !important; }
-  .read .tl-box p.tl-sub{ line-height:1.45 !important; }
-  .read .tl-box p.tl-sub{ margin:0 0 .75rem !important; }
-  .read .tl-box p.tl-status{ margin:.8rem 0 0 !important; }
-  .read .tl-sec .tl-sec-h h2{ margin:0 !important; }
-  .read .tl-sec p.tl-sec-b{ margin:0 0 .7rem !important; }
-  .read .tl-sec p.tl-also{ margin:.65rem 0 0 !important; }
-  .read .tl-top li, .read .tl-grid > li{ width:auto !important; min-width:0; }
-  .tl-box{ margin:0 0 1.2rem; padding:.9rem 1rem 1rem; border:1px solid var(--line, #D9CBA3); border-radius:18px; background:var(--paper, #FFFBF2); }
-  .tl-k{ display:block; margin:0 0 .35rem; font:600 .76rem/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.06em; text-transform:uppercase; color:#6B4F8A; }
-  .tl-h{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.3rem; line-height:1.25; margin:0 0 .2rem; }
-  .tl-sub{ margin:0 0 .75rem; font-size:.93rem; color:var(--ink-soft, #5A5346); }
-  .read .tl-top ol{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.55rem; margin:0; padding:0; list-style:none; counter-reset:tl; }
-  .read .tl-top li{ margin:0; padding:0; max-width:none; }
-  .read .tl-top li::before{ content:none; }
-  .read a.tl-pick{ display:flex; flex-direction:column; gap:.2rem; height:100%; box-sizing:border-box; min-height:44px; padding:.65rem .8rem .7rem; border-radius:14px; text-decoration:none; color:var(--ink, #2B2620); background:#FFFFFF; border:1.5px solid #E2D2F2; }
-  .read a.tl-pick:hover{ border-color:#9A80C8; }
-  .tl-pick-n{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.02rem; line-height:1.25; text-decoration:underline; text-decoration-color:#CDB8EA; text-underline-offset:3px; }
-  .tl-pick-n::before{ counter-increment:tl; content:counter(tl) ". "; color:#6B4F8A; text-decoration:none; display:inline-block; margin-right:.15rem; }
-  .tl-pick-b, .tl-brand{ font-size:.84rem; line-height:1.35; font-style:italic; color:var(--ink-soft, #5A5346); }
-  .tl-pick-w{ font-size:.9rem; line-height:1.4; }
-  .tl-pick-t{ margin-top:auto; padding-top:.15rem; font:500 .76rem/1.4 "IBM Plex Mono", ui-monospace, monospace; color:#6B4A12; }
-  .tl-q{ width:100%; box-sizing:border-box; min-height:48px; padding:.55rem .95rem; font:1rem "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid #CDBDE6; border-radius:999px; }
-  .tl-row{ display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1.4fr); gap:.6rem .9rem; margin:.8rem 0 0; align-items:end; }
-  .tl-sel{ width:100%; min-height:44px; padding:.35rem .6rem; font:.95rem "Lora", Georgia, serif; color:var(--ink, #2B2620); background:#FFFDF7; border:1.5px solid #CDBDE6; border-radius:12px; }
-  .read .tl-chips{ display:flex; flex-wrap:wrap; gap:.4rem; margin:0; padding:0; list-style:none; }
-  .read .tl-chips li{ margin:0; padding:0; max-width:none; }
-  .read .tl-chips li::before{ content:none; }
-  .tl-chips button, .tl-chips a{ display:inline-flex; align-items:center; gap:.35rem; min-height:44px; box-sizing:border-box; padding:.3rem .85rem; border-radius:999px; cursor:pointer; font:600 .92rem/1.2 "Lora", Georgia, serif; color:#3C2F58; background:#FFFDF7; border:1.5px solid #D9C8F0; text-decoration:none; }
-  .tl-chips button:hover, .tl-chips a:hover{ border-color:#9A80C8; }
-  .tl-chips button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
-  .tl-chips .tl-n{ font:500 .74rem/1 "IBM Plex Mono", ui-monospace, monospace; opacity:.8; }
-  .tl-status{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .9rem; margin:.8rem 0 0; font-size:.95rem; }
-  .tl-reset{ min-height:44px; padding:.3rem .9rem; border-radius:999px; cursor:pointer; font:600 .9rem "Lora", Georgia, serif; color:#2B5B8C; background:none; border:1px dashed #8FB0D3; }
-  .tl-reset[hidden], .tl-top[hidden], .tl-sec[hidden], .tl-also[hidden], .tl-empty[hidden], .tl-grid > li[hidden], .tl-chips li[hidden]{ display:none !important; }
-  :is(.tl-q, .tl-sel, .tl-chips button, .tl-chips a, .tl-reset, a.tl-pick, a.tl-card):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
-  .tl-jump{ margin:0 0 1.4rem; }
-  .tl-sec{ margin:0 0 1.8rem; scroll-margin-top:5rem; }
-  .tl-sec-h{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem .6rem; margin:0 0 .15rem; }
-  .tl-sec-h h2{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.45rem; line-height:1.2; margin:0; }
-  .tl-sec-h span{ font:500 .8rem/1.2 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-soft, #5A5346); }
-  .tl-sec > p.tl-sec-b{ margin:0 0 .7rem; color:var(--ink-soft, #5A5346); font-size:.97rem; }
-  .read .tl-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(17.5rem, 1fr)); gap:.7rem; margin:0; padding:0; list-style:none; }
-  .read .tl-grid > li{ margin:0; padding:0; max-width:none; }
-  .read .tl-grid > li::before{ content:none; }
-  .read a.tl-card{ display:flex; flex-direction:column; gap:.3rem; height:100%; box-sizing:border-box; padding:.85rem .95rem .8rem; border-radius:16px; text-decoration:none; color:var(--ink, #2B2620); background:#FFFFFF; border:1px solid #E6DAF3; box-shadow:0 8px 20px -16px rgba(78,63,107,.55); }
-  .read a.tl-card:hover{ border-color:#B9A2DD; }
-  .tl-name{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.14rem; line-height:1.25; }
-  .tl-does{ font-size:.93rem; line-height:1.45; }
-  .tl-gets{ font-size:.93rem; line-height:1.45; color:var(--ink-soft, #5A5346); }
-  .tl-gets b{ color:var(--ink, #2B2620); font-weight:600; }
-  .tl-modes{ font-size:.9rem; color:#4E3F6B; }
-  .tl-foot{ display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; margin-top:auto; padding-top:.35rem; }
-  .tl-foot .tl-m{ display:inline-block; padding:.12rem .55rem; border-radius:999px; font:500 .74rem/1.4 "IBM Plex Mono", ui-monospace, monospace; color:#4E3F6B; background:#F4ECFB; }
-  .tl-foot .tl-time{ color:#6B4A12; background:#FFF0D9; }
-  .tl-open{ margin-left:auto; display:inline-flex; align-items:center; min-height:36px; padding:.2rem .9rem; border-radius:999px; font:600 .9rem/1 "Lora", Georgia, serif; color:#FFFDF7; background:#4E3F6B; }
-  .read a.tl-card:hover .tl-open{ background:#3C2F58; }
-  .tl-also{ margin:.65rem 0 0; font-size:.93rem; color:var(--ink-soft, #5A5346); }
-  .tl-also a{ white-space:normal; }
-  .tl-empty{ padding:1rem; border:1px dashed var(--line, #D9CBA3); border-radius:14px; margin:0 0 1.5rem; }
-  .tl-end{ margin-top:1rem; }
-  @media (max-width:860px){ .read .tl-top ol{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
-  @media (max-width:640px){
-    .tl-box{ margin-left:-4px; margin-right:-4px; padding:.75rem .75rem .85rem; }
-    .read .tl-top ol{ grid-template-columns:1fr; gap:.4rem; }
-    .read a.tl-pick{ padding:.55rem .7rem .6rem; }
-    .tl-row{ grid-template-columns:1fr; }
-    .tl-chips button, .tl-chips a{ padding:.25rem .7rem; font-size:.88rem; }
-    .read .tl-grid{ grid-template-columns:1fr; gap:.55rem; }
-    .read a.tl-card{ padding:.75rem .8rem .7rem; }
-    .tl-sec-h h2{ font-size:1.3rem; }
-  }
-  html.tol-quiet .read a.tl-card{ box-shadow:none; background:#FFFDF7; border-color:var(--line, #D9CBA3); }
-  @media print{ .tl-filters, .tl-jump, .tl-open{ display:none !important; } .read .tl-grid > li[hidden], .tl-sec[hidden]{ display:block !important; } .read a.tl-card{ box-shadow:none; break-inside:avoid; } }
-</style>
+<link rel="stylesheet" href="/assets/css/tools-page.css">
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/tools.html">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/tools.html">
@@ -160,168 +80,82 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@id":"https://spreadloveandacceptance.com/tools.html#page","name":"Free Relationship and Communication Tools, by Type","headline":"Free Relationship and Communication Tools, by Type","description":"Every free tool in one place, by type: communication, knowing yourself, sharing chores, calm and stress, family, work and games. No sign-up, no account.","url":"https://spreadloveandacceptance.com/tools.html","inLanguage":"en-US","isAccessibleForFree":true,"keywords":"self-help, relationships, kindness, love, appreciation, acceptance, connection, communication, calm, peace, harmony, reconciliation, emotional wellbeing, self-discovery, fairness at home, mental load, invisible work, free self-help tools","publisher":{"@type":"Organization","@id":"https://spreadloveandacceptance.com/#org","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/","logo":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/logo-stacked.png"}},"isPartOf":{"@type":"WebSite","@id":"https://spreadloveandacceptance.com/#website","name":"Spread Love & Acceptance","url":"https://spreadloveandacceptance.com/"},"datePublished":"2026-10-13","dateModified":"2026-10-14","image":"https://spreadloveandacceptance.com/assets/img/og-image.png","primaryImageOfPage":{"@type":"ImageObject","url":"https://spreadloveandacceptance.com/assets/img/og-image.png"},"@type":"CollectionPage"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Spread Love & Acceptance","item":"https://spreadloveandacceptance.com/"},{"@type":"ListItem","position":2,"name":"Free Relationship and Communication Tools, by Type","item":"https://spreadloveandacceptance.com/tools.html"}]}]}</script>
 <!-- seo:end -->
 </head>
-<body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath data-no-private-note>
+<body data-no-cheer data-no-pupvisits data-no-buddies data-no-fullpath data-no-private-note data-es-href="/en-espanol.html#herramientas">
 <main class="read" id="main">
-<header class="read-head"><p class="read-code">Start here · All tools</p><h1>All tools, by type</h1></header>
-<p class="simple-lede tl-intro">Every tool on this site in one place, grouped by what it helps with. Each card says what it does, what you get and about how long it takes. They&rsquo;re all free, and what you type into them stays on your device.</p>
-
-<nav class="tl-jump no-bubble" aria-labelledby="tl-jump-k" data-tl-jump hidden>
-  <span class="tl-k" id="tl-jump-k">Jump to a type</span>
-  <ul class="tl-chips" data-tl-jump-list></ul>
-</nav>
+<header class="read-head"><p class="read-code">Start here · All tools</p><h1>All tools</h1></header>
+<p class="simple-lede tl-intro">Every free tool on this site. The ones you can use on your own come first, so you can try things for yourself and invite someone later if you want. What you type stays on your device.</p>
 
 <section class="tl-box tl-top no-bubble" id="start-here" aria-labelledby="tl-top-h" data-tl-top hidden>
-  <h2 class="tl-h" id="tl-top-h">Start here: the 6 most useful</h2>
-  <p class="tl-sub">The tools people testing the site used most and liked best.</p>
+  <h2 class="tl-h" id="tl-top-h">Start here: 6 tools you can use on your own</h2>
+  <p class="tl-sub">The most useful places to begin, just for you. Nothing here needs anyone else.</p>
   <ol data-tl-top-list></ol>
+  <p class="tl-fine">How we picked them: <a href="#how-ordered">see how &ldquo;Most useful first&rdquo; works</a>.</p>
 </section>
 
-<section class="tl-box tl-filters no-bubble" aria-label="Find a tool" data-tl-filters hidden>
-  <label class="tl-k" for="tl-q">Find a tool</label>
+<section class="tl-box tl-guide no-bubble" id="not-sure" aria-labelledby="tl-guide-h">
+  <h2 class="tl-h" id="tl-guide-h">Not sure where to start?</h2>
+  <p class="tl-sub">Take a one-minute look, follow a short path, or let us point you to one tool.</p>
+  <div class="tl-ways">
+    <button type="button" class="tl-btn is-main" aria-expanded="false" aria-controls="tl-tour" data-tl-tour-open hidden>Take the 60-second tour</button>
+    <a class="tl-btn" href="/start-here.html#three-questions">Answer 3 quick questions</a>
+    <a class="tl-btn" href="/ask.html?about=All%20tools">Ask Professor Puddles which tool fits</a>
+  </div>
+  <div class="tl-tour" id="tl-tour" role="region" aria-roledescription="carousel" aria-label="A 60-second tour of six tools" data-tl-tour hidden>
+    <div class="tl-tour-top"><span class="tl-tour-n" aria-hidden="true"></span><button type="button" class="tl-btn" data-tl-tour-close>Close the tour</button></div>
+    <div class="tl-tour-slide" role="group" aria-roledescription="slide" aria-live="polite"></div>
+    <div class="tl-tour-ctl">
+      <button type="button" class="tl-btn" data-tl-tour-prev>&larr; Back</button>
+      <button type="button" class="tl-btn" data-tl-tour-play aria-pressed="false">Pause</button>
+      <button type="button" class="tl-btn" data-tl-tour-next>Next &rarr;</button>
+    </div>
+  </div>
+  <h3 class="tl-ph" id="tl-paths-solo-h">Self-discovery paths</h3>
+  <p class="tl-sub">On your own: two or three tools, in order, with one line on why.</p>
+  <ul class="tl-paths" aria-labelledby="tl-paths-solo-h" data-tl-paths-solo></ul>
+  <h3 class="tl-ph" id="tl-paths-together-h">Paths for when you&rsquo;re ready to involve someone</h3>
+  <ul class="tl-paths" aria-labelledby="tl-paths-together-h" data-tl-paths-together></ul>
+</section>
+
+<section class="tl-box tl-filters no-bubble" id="find" aria-labelledby="tl-find-h" data-tl-filters hidden>
+  <h2 class="tl-h" id="tl-find-h">Find a tool</h2>
+  <p class="tl-sub">Pick as many as you like. The list below updates as you go.</p>
+  <label class="tl-k" for="tl-q">Search</label>
   <input class="tl-q" id="tl-q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Like &ldquo;text&rdquo;, &ldquo;chores&rdquo;, &ldquo;sleep&rdquo; or &ldquo;quiz&rdquo;">
+  <fieldset class="tl-fs"><legend class="tl-k">What do you want to do?</legend><div class="tl-chips" data-tl-do></div></fieldset>
+  <fieldset class="tl-fs"><legend class="tl-k">Who&rsquo;s it for?</legend><div class="tl-chips" data-tl-who></div></fieldset>
+  <fieldset class="tl-fs"><legend class="tl-k">How much time?</legend><div class="tl-chips" data-tl-time></div></fieldset>
   <div class="tl-row">
     <div><label class="tl-k" for="tl-type">Type</label>
       <select class="tl-sel" id="tl-type"><option value="">Every type</option></select></div>
-    <div><span class="tl-k" id="tl-who-k">Who it&rsquo;s for</span>
-      <ul class="tl-chips" role="group" aria-labelledby="tl-who-k" data-tl-who>
-        <li><button type="button" data-v="" aria-pressed="true">Anyone</button></li>
-        <li><button type="button" data-v="solo" aria-pressed="false">On my own</button></li>
-        <li><button type="button" data-v="together" aria-pressed="false">Together</button></li>
-      </ul></div>
+    <div><label class="tl-check"><input type="checkbox" id="tl-es"> <span>Also works in Spanish <span lang="es">(también en español)</span></span></label></div>
   </div>
-  <p class="tl-status" role="status" aria-live="polite"><span data-tl-count></span> <button type="button" class="tl-reset" data-tl-reset hidden>Show every tool</button></p>
 </section>
 
+<div class="tl-bar no-bubble" data-tl-bar hidden>
+  <p class="tl-count" role="status" aria-live="polite" data-tl-count></p>
+  <div class="tl-pills" data-tl-pills></div>
+  <button type="button" class="tl-reset" data-tl-reset hidden>Clear filters</button>
+  <a class="tl-edit" href="#find">Change filters</a>
+  <label class="tl-sortl">Sort <select class="tl-sel" id="tl-sort">
+    <option value="useful">Most useful first</option>
+    <option value="quick">Quickest first</option>
+    <option value="az">A to Z</option>
+  </select></label>
+</div>
+
 <div class="tl-list no-bubble no-onpage" data-tl-list></div>
-<p class="tl-empty no-bubble" data-tl-empty hidden>Nothing matches yet. Try fewer words, choose &ldquo;Every type&rdquo;, or look through <a href="/explore.html">everything on this site</a>.</p>
+<div class="tl-empty no-bubble" data-tl-empty hidden>
+  <p><strong>Nothing matches all of those yet.</strong> Try removing one filter:</p>
+  <div class="tl-pills" data-tl-empty-pills></div>
+  <p>Or <a href="/start-here.html#three-questions">answer three quick questions</a>, <a href="/ask.html?about=All%20tools">ask Professor Puddles</a>, or <button type="button" class="tl-reset" data-tl-empty-reset>clear every filter</button>.</p>
+</div>
+
+<p class="tl-how no-bubble" id="how-ordered"><strong>How &ldquo;Most useful first&rdquo; works.</strong> Tools you can use on your own come first, because most people try things for themselves before they bring anyone else in. Within each group, the order counts how often our practice testers named a tool among the things that helped them most, plus our own &ldquo;Start here&rdquo; picks. The testers were made-up households we walked through the site, so this is a guide, not a rating from real users. Every tool is free, needs no account, and keeps what you type on your device.</p>
 
 <noscript><p>This list needs JavaScript. You can still find every tool on <a href="/contents.html">the plain list of every page</a>.</p></noscript>
 <p class="tl-end">Looking for guides and reading as well? <a href="/explore.html">Everything on this site</a> lists every page with filters for who it&rsquo;s about and how long you have. To see or erase what the tools keep, open <a href="/on-this-device.html">What&rsquo;s stored on this device</a>.</p>
 </main>
 <script src="/assets/js/tools-registry.js"></script>
-<script>
-/* All tools, by type: builds the strip, the jump chips and one section per type from window.TOLTools.
-   Filters (words, type, who) narrow the cards in place and live in the address (?type=talk&who=solo&q=text),
-   so a filtered list can be linked to. Nothing is stored or sent. */
-(function () {
-  'use strict';
-  var TOOLS = window.TOLTools, TYPES = window.TOLToolTypes;
-  var list = document.querySelector('[data-tl-list]');
-  if (!list || !TOOLS || !TYPES) return;
-  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function fold(t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’‘]/g, "'"); }
-  function cap(t) { t = String(t || ''); return t.charAt(0).toUpperCase() + t.slice(1); }
-  var TYPE = {}; TYPES.forEach(function (t) { TYPE[t.id] = t; });
-  function whoText(w) {
-    var s = w.indexOf('solo') !== -1, two = w.indexOf('two') !== -1, g = w.indexOf('group') !== -1;
-    if (s && (two || g)) return two && g ? 'On your own or together' : two ? 'On your own or with someone' : 'On your own or with a group';
-    if (s) return 'On your own';
-    if (two && g) return 'Two or more of you';
-    return two ? 'With one other person' : 'With a group or team';
-  }
-  function together(t) { return t.who.indexOf('two') !== -1 || t.who.indexOf('group') !== -1; }
-  TOOLS.forEach(function (t) {
-    t.hay = fold([t.name, t.brand, t.does, t.kw, (t.modes || []).map(function (m) { return m[0]; }).join(' '), TYPE[t.type] && TYPE[t.type].name].concat((t.also || []).map(function (a) { return TYPE[a] ? TYPE[a].name : ''; })).join(' '));
-  });
-
-  // ---------- Start here: the six testers liked most
-  var top = TOOLS.filter(function (t) { return t.top; }).sort(function (a, b) { return a.top - b.top; });
-  var topBox = document.querySelector('[data-tl-top]'), topList = document.querySelector('[data-tl-top-list]');
-  topList.innerHTML = top.map(function (t) {
-    return '<li><a class="tl-pick" href="' + esc(t.href) + '"><span class="tl-pick-n">' + esc(t.name) + '</span>' +
-      (t.brand ? '<span class="tl-pick-b">also called ' + esc(t.brand) + '</span>' : '') +
-      '<span class="tl-pick-w">' + esc(t.benefit) + '.</span><span class="tl-pick-t">' + esc(t.time) + ' · ' + esc(whoText(t.who)) + '</span></a></li>';
-  }).join('');
-  if (top.length) topBox.hidden = false;
-
-  // ---------- one section per type
-  var typeSel = document.getElementById('tl-type'), jumpList = document.querySelector('[data-tl-jump-list]');
-  var cards = [], secs = [];
-  function card(t) {
-    return '<a class="tl-card" href="' + esc(t.href) + '">' +
-      '<span class="tl-name">' + esc(t.name) + '</span>' +
-      (t.brand ? '<span class="tl-brand">also called ' + esc(t.brand) + '</span>' : '') +
-      '<span class="tl-does">' + esc(t.does) + '</span>' +
-      (t.modes && t.modes.length > 1 ? '<span class="tl-modes"><b>Ways in:</b> ' + t.modes.map(function (m) { return esc(m[0]); }).join(' · ') + '</span>' : '') +
-      '<span class="tl-gets"><b>You get:</b> ' + esc(t.gets) + '</span>' +
-      '<span class="tl-foot"><span class="tl-m tl-time">' + esc(t.time) + '</span><span class="tl-m">' + esc(whoText(t.who)) + '</span>' +
-      '<span class="tl-open" aria-hidden="true">Open&nbsp;&rarr;</span></span></a>';
-  }
-  var html = '', jump = '';
-  TYPES.forEach(function (ty) {
-    var mine = TOOLS.filter(function (t) { return t.type === ty.id; });
-    var also = TOOLS.filter(function (t) { return t.type !== ty.id && (t.also || []).indexOf(ty.id) !== -1; });
-    if (!mine.length) return;
-    typeSel.insertAdjacentHTML('beforeend', '<option value="' + ty.id + '">' + esc(ty.name) + '</option>');
-    jump += '<li data-type="' + ty.id + '"><a href="#' + ty.slug + '">' + esc(ty.name) + ' <span class="tl-n" aria-hidden="true">' + mine.length + '</span></a></li>';
-    html += '<section class="tl-sec" id="' + ty.slug + '" data-type="' + ty.id + '" aria-labelledby="tl-h-' + ty.id + '">' +
-      '<div class="tl-sec-h"><h2 id="tl-h-' + ty.id + '">' + esc(ty.name) + '</h2><span data-tl-n="' + mine.length + '">' + mine.length + (mine.length === 1 ? ' tool' : ' tools') + '</span></div>' +
-      '<p class="tl-sec-b">' + esc(ty.blurb) + '</p>' +
-      '<ul class="tl-grid">' + mine.map(function (t) { return '<li data-id="' + esc(t.id) + '">' + card(t) + '</li>'; }).join('') + '</ul>' +
-      (also.length ? '<p class="tl-also">Also useful for ' + esc(ty.name.toLowerCase()) + ': ' + also.map(function (t) { return '<a href="' + esc(t.href) + '">' + esc(t.name) + '</a>'; }).join(', ') + '.</p>' : '') +
-      '</section>';
-  });
-  list.innerHTML = html;
-  jumpList.innerHTML = jump;
-  document.querySelector('[data-tl-jump]').hidden = false;
-  document.querySelector('[data-tl-filters]').hidden = false;
-  var byId = {}; TOOLS.forEach(function (t) { byId[t.id] = t; });
-  Array.prototype.forEach.call(list.querySelectorAll('.tl-grid > li'), function (li) { cards.push({ li: li, t: byId[li.getAttribute('data-id')] }); });
-  Array.prototype.forEach.call(list.querySelectorAll('.tl-sec'), function (s) { secs.push(s); });
-
-  // ---------- filters
-  var qEl = document.getElementById('tl-q'), whoBox = document.querySelector('[data-tl-who]'),
-    countEl = document.querySelector('[data-tl-count]'), resetBtn = document.querySelector('[data-tl-reset]'), emptyEl = document.querySelector('[data-tl-empty]');
-  var S = { q: '', type: '', who: '' };
-  try {
-    var u = new URLSearchParams(location.search);
-    S.q = (u.get('q') || '').slice(0, 80); S.type = TYPE[u.get('type')] ? u.get('type') : ''; S.who = /^(solo|together)$/.test(u.get('who') || '') ? u.get('who') : '';
-  } catch (e) {}
-  function sync() {
-    qEl.value = S.q; typeSel.value = S.type;
-    Array.prototype.forEach.call(whoBox.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-v') === S.who)); });
-  }
-  function apply(write) {
-    var words = fold(S.q).split(/\s+/).filter(Boolean), shown = 0, on = !!(S.q || S.type || S.who);
-    cards.forEach(function (c) {
-      var t = c.t, ok = true;
-      if (S.type && t.type !== S.type && (t.also || []).indexOf(S.type) === -1) ok = false;
-      if (ok && S.who === 'solo' && t.who.indexOf('solo') === -1) ok = false;
-      if (ok && S.who === 'together' && !together(t)) ok = false;
-      if (ok && words.length) ok = words.every(function (w) { return t.hay.indexOf(w) !== -1; });
-      c.li.hidden = !ok; if (ok) shown++;
-    });
-    // a type shows the tools whose main type it is, and the ones from other types that also fit it (in their own sections)
-    secs.forEach(function (s) {
-      var vis = s.querySelectorAll('.tl-grid > li:not([hidden])').length, nEl = s.querySelector('[data-tl-n]'), all = +nEl.getAttribute('data-tl-n');
-      s.hidden = !vis;
-      nEl.textContent = on && vis < all ? vis + ' of ' + all : all + (all === 1 ? ' tool' : ' tools');
-      var also = s.querySelector('.tl-also'); if (also) also.hidden = on;
-      var chip = jumpList.querySelector('li[data-type="' + s.getAttribute('data-type') + '"]'); if (chip) chip.hidden = s.hidden;
-    });
-    topBox.hidden = on || !top.length;
-    countEl.textContent = on ? (shown === 1 ? '1 tool matches' : shown + ' tools match') : TOOLS.length + ' tools in ' + secs.length + ' types';
-    resetBtn.hidden = !on; emptyEl.hidden = shown > 0;
-    if (write) {
-      try {
-        var p = new URLSearchParams(); if (S.type) p.set('type', S.type); if (S.who) p.set('who', S.who); if (S.q) p.set('q', S.q);
-        var qs = p.toString(); history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
-      } catch (e) {}
-    }
-  }
-  var tmr = 0;
-  qEl.addEventListener('input', function () { clearTimeout(tmr); tmr = setTimeout(function () { S.q = qEl.value.trim(); apply(true); }, 120); });
-  qEl.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-    var first = list.querySelector('.tl-sec:not([hidden]) .tl-grid > li:not([hidden]) a'); if (first) { e.preventDefault(); location.href = first.getAttribute('href'); }
-  });
-  typeSel.addEventListener('change', function () { S.type = typeSel.value; apply(true); });
-  whoBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; S.who = b.getAttribute('data-v'); sync(); apply(true); });
-  resetBtn.addEventListener('click', function () { S.q = S.type = S.who = ''; sync(); apply(true); qEl.focus(); });
-  sync(); apply(false);
-  // a link to a type (/tools.html#calm-and-stress) lands on it once the sections exist
-  if (location.hash) { var target = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (target) target.scrollIntoView(); }
-})();
-</script>
+<script src="/assets/js/tools-page.js"></script>
 </body>
 </html>

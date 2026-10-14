@@ -1224,15 +1224,35 @@ t('safety8', 'i found out about her affair', { id: 'infidelity' });
 }
 
 // ---------------------------------------------------------------- Professor Puddles' voice (personality.json): light lines only where they belong
+// chit-chat lines (persona.json), as a pattern: PZ_RE(['jokes', 'react.laugh', 'topics.replies'])
+const PERSONA = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'persona.json'), 'utf8')); } catch (e) { return null; } })();
+function PZ_LINES(keys) {
+  // 'jokes' → the list; 'react.laugh' → a list inside an object; 'topics.replies' → that list from every topic;
+  // 'riddles.q' → that field of every item
+  const out = [];
+  const flat = v => { if (typeof v === 'string') out.push(v); else if (Array.isArray(v)) v.forEach(flat); else if (v && typeof v === 'object') Object.values(v).forEach(flat); };
+  keys.forEach(k => {
+    const [a, b] = k.split('.'), root = PERSONA && PERSONA[a];
+    if (!b) flat(root);
+    else if (Array.isArray(root)) root.forEach(x => flat(x && x[b]));
+    else flat(root && root[b]);
+  });
+  return out;
+}
+function PZ_RE(keys) {
+  const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const ls = PZ_LINES(keys).map(x => x.replace(/\{[^}]*\}/g, '\u0000').split('\u0000').sort((a, b) => b.length - a.length)[0].slice(0, 40)).filter(x => x.trim().length >= 12);
+  return new RegExp(ls.map(esc).join('|') || '$^');
+}
 const PERS = (() => { try { return JSON.parse(require('fs').readFileSync(require('path').join(__dirname, 'personality.json'), 'utf8')); } catch (e) { return null; } })();
 if (PERS) {
   const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const lines = k => (PERS[k] || []).filter(x => typeof x === 'string');
   const anyOf = ks => new RegExp(ks.map(k => lines(k).map(x => esc(x.replace(/\{name\}/g, '').slice(0, 40)))).flat().filter(Boolean).join('|') || '$^');
   const FUNNY = anyOf(['light_openers', 'light_closers', 'jokes', 'game_and_play', 'not_found', 'clarify', 'greetings', 'thanks_replies']);
-  t('puddles', 'tell me a joke', { kind: 'fun', text: anyOf(['jokes']) });
-  c('puddles', ['tell me a joke', 'another one'], { kind: 'fun', text: anyOf(['jokes']) });
-  t('puddles', 'lol', { kind: 'fun', text: anyOf(['thanks_replies']) });
+  t('puddles', 'tell me a joke', { kind: 'fun', text: new RegExp(anyOf(['jokes']).source + '|' + PZ_RE(['jokes']).source) });
+  c('puddles', ['tell me a joke', 'another one'], { kind: 'fun', text: new RegExp(anyOf(['jokes']).source + '|' + PZ_RE(['jokes']).source) });
+  t('puddles', 'lol', { kind: 'fun', text: new RegExp(anyOf(['thanks_replies']).source + '|' + PZ_RE(['react.laugh']).source) });  // chat11: laughter gets its own replies
   t('puddles', 'you\'re funny', { kind: 'fun' });
   t('puddles', 'who are you', { text: anyOf(['self_description']) });
   c('puddles', ['What is the Lemonade Stand?', 'thanks'], { kind: 'thanks', text: anyOf(['thanks_replies']) });
@@ -1803,11 +1823,13 @@ t('chat10', 'does it cost anything: free, never a "yes"', { q: 'does it cost any
   const tests = only ? T.filter(x => x.g.includes(only)) : T;
   let pass = 0; const fails = [], groups = {};
   for (const x of tests) {
-    const chat = makeChat(x.page || x.about ? { path: x.page, about: x.about } : null);
+    const chat = makeChat(x.page || x.about ? { path: x.page, about: x.about } : null, x.perks ? { perks: true, local: x.local || {} } : null);
     const qs = x.convo || [x.q];
-    let r;
-    for (const q of qs) r = await chat.ask(q);
-    const text = replyText(r), links = replyLinks(r), why = [];
+    let r; const rs = [], why = [];
+    if (x.run) { const o = await x.run(chat); r = o.r; rs.push(r); (o.why || []).forEach(w => why.push(w)); }
+    else for (const q of qs) { r = await chat.ask(q); rs.push(r); }
+    const text = replyText(r), links = replyLinks(r);
+    if (x.check) { const w = x.check(r, rs, text); if (w) why.push(w); }
     const idOf = r.id || '';
     if (x.kind && r.kind !== x.kind) why.push('kind ' + r.kind + ' ≠ ' + x.kind);
     if (x.id && !(x.id instanceof RegExp ? x.id.test(idOf) : idOf === x.id)) why.push('id ' + idOf + ' ≠ ' + x.id);

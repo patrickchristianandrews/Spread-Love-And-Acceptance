@@ -4,6 +4,7 @@
    const { makeChat } = require('./chat-sandbox');
    const chat = makeChat();                    // a fresh chat, nothing loaded yet
    makeChat({ path: '/co-parenting.html' })    // opened from a page (or { about: 'Separated co-parents' }, as /ask.html?about=…)
+   makeChat(null, { perks: true, local: {} })  // in the installed app (saving on), with that object as its localStorage
    chat.ask('what is WP-02?').then(r => …);    // r = { blocks, chips }, same as the widget gets
    chat.loaded()                               // which script files have been fetched so far
 */
@@ -14,7 +15,8 @@ const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 
-function makeChat(page) {
+function makeChat(page, opts) {
+  opts = opts || {};
   const loaded = [];
   const store = {};
   const noop = function () {};
@@ -50,6 +52,13 @@ function makeChat(page) {
     TOL_CHAT_SEED: 7,  // Puddles' light lines come from a seeded random number, so a test run repeats exactly
     sessionStorage: { getItem: k => store[k] || null, setItem: (k, v) => { store[k] = String(v); } }
   };
+  // opts.perks: the installed app, or someone's own computer with saving on (TOLProgress.perks()), with opts.local as its
+  // localStorage (pass the same object to two chats to see what is kept from one visit to the next)
+  if (opts.perks) {
+    const local = opts.local || {};
+    window.TOLProgress = { perks: () => true, level: () => 'app' };
+    window.localStorage = { getItem: k => (k in local ? local[k] : null), setItem: (k, v) => { local[k] = String(v); }, removeItem: k => { delete local[k]; } };
+  }
   window.window = window;
   const ctx = vm.createContext({
     window, document, sessionStorage: window.sessionStorage, location: window.location,

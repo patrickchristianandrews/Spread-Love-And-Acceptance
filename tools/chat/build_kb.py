@@ -1385,6 +1385,31 @@ def load_personality(warnings):
         for k, v in st.items():
             if k not in ('intents', 'chat_prompts', 'acks', 'acknowledgements') and not k.startswith('_') and isinstance(v, list) and all(isinstance(x, str) for x in v):
                 out['smalltalk'][k] = v
+    pz = load_persona(warnings)
+    if pz:
+        out['persona'] = pz
+    return out
+
+
+def load_persona(warnings):
+    """Chit-chat (tools/chat/persona.json, the bible is persona.md): his day, everyday topics with a question back, jokes,
+    riddles, facts, would-you-rather, tiny stories, games, reactions, hand-offs and memory lines. Plain data goes in;
+    notes for writers (keys starting with _) and the bible summary stay out of the page. No banned words, links must exist."""
+    fp = os.path.join(HERE, 'persona.json')
+    if not os.path.isfile(fp):
+        return None
+    data = json.load(open(fp, encoding='utf-8'))
+    out = {k: v for k, v in data.items() if not k.startswith('_') and k != 'bible'}
+    check_text(out, 'persona', warnings)
+    for t in out.get('topics', []):
+        if len(t.get('replies', [])) < 6 or len(t.get('asks', [])) < 4:
+            warnings.append('persona topic %s: needs 6+ replies and 4+ questions back' % t.get('id'))
+    for r in out.get('riddles', []):
+        if not r.get('keys'):
+            warnings.append('persona riddle without answer keys: %s' % r.get('q'))
+    for q in out.get('quiz', []):
+        if not (0 <= q.get('a', -1) < len(q.get('opts', []))):
+            warnings.append('persona quiz answer out of range: %s' % q.get('q'))
     return out
 
 
