@@ -2979,3 +2979,31 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 .tol-panel .tol-tree .tol-row[aria-current="page"] .tol-title::after{ content:none; }
 .tol-panel .tol-tree .tol-row[aria-current="page"], .tol-drop a[aria-current="page"]{ background:none; font-weight:inherit; border-left-color:transparent; box-shadow:none; }
 .tol-acc-here{ display:none !important; }
+
+/* search11: best match, help and nothing-found boxes (moved from site.js so strict-CSP pages get them) */
+.tol-find-best{margin:.7rem 0 .2rem;padding:.7rem .75rem .5rem;border:1.5px solid var(--line,#D9CBA3);border-left:4px solid var(--focus,#2B5B8C);border-radius:12px;background:var(--paper-deep,#F3EBD6);}
+.tol-find-best h3,.tol-find-help h3,.tol-find-none h3{margin:0 0 .2rem;font:600 .95rem/1.35 var(--tol-sans,system-ui,sans-serif);color:var(--ink,#2B2620);}
+.tol-find-best .tol-find-for{margin:0 0 .35rem;font-size:.86rem;color:var(--ink-soft,#5A5048);}
+.tol-find-best ol{list-style:none;margin:0;padding:0;}
+.tol-find-best li{margin:0;border-top:1px dotted var(--line,#D9CBA3);}
+.tol-find-best li:first-child{border-top:0;}
+.tol-find-best a{display:block;padding:.55rem .35rem;color:var(--ink,#2B2620);text-decoration:none;border-radius:8px;}
+.tol-find-best a:hover{background:rgba(127,127,127,.12);}
+.tol-find-best a:focus-visible,.tol-find-chip:focus-visible,.tol-find-more a:focus-visible,.tol-find-more button:focus-visible{outline:2px solid var(--focus,#2B5B8C);outline-offset:2px;}
+.tol-find-bt{display:block;font-weight:600;font-size:1.02rem;overflow-wrap:anywhere;}
+.tol-find-bw{display:block;font-size:.9rem;color:var(--ink-soft,#5A5048);line-height:1.45;margin-top:.1rem;}
+.tol-find-help,.tol-find-none{margin:.7rem 0 .2rem;}
+.tol-find-chips{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;margin:.35rem 0 .5rem;padding:0;}
+.tol-find-chips li{margin:0;}
+.tol-find-chip{font:inherit;font-size:.92rem;min-height:40px;padding:.35rem .8rem;border-radius:999px;border:1.5px solid var(--line,#D9CBA3);background:var(--paper,#FFFDF7);color:var(--ink,#2B2620);cursor:pointer;text-align:left;max-width:100%;}
+.tol-find-chip:hover{border-color:var(--focus,#2B5B8C);}
+.tol-find-more{display:flex;flex-wrap:wrap;gap:.3rem 1rem;margin:.2rem 0 0;padding:0;list-style:none;font-size:.95rem;}
+.tol-find-more li{margin:0;}
+.tol-find-more a,.tol-find-more button{display:inline-flex;align-items:center;min-height:40px;color:var(--focus,#2B5B8C);font:inherit;font-weight:600;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;text-align:left;}
+.tol-find-also{margin:.6rem 0 .1rem;font-size:.95rem;}
+.tol-find-also a{font-weight:600;}
+.tol-find-kind.is-wp{background:#EFE7F7 !important;color:#4B3A6B !important;}
+.tol-find-gh{list-style:none;margin:.7rem 0 .1rem;padding:0 .5rem;font:600 .8rem/1.4 var(--tol-sans,system-ui,sans-serif);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft,#5A5048);border:0 !important;}
+.tol-related-k{display:inline-block;margin-left:.35rem;}
+.tol-find-help[hidden],.tol-find-best[hidden],.tol-find-none[hidden]{display:none;}
+

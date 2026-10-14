@@ -84,7 +84,7 @@
         var b = C.b64e(new TextEncoder().encode(JSON.stringify(o)));
         return { code: 'WC1.' + b + '.', n: o.n || '', wave: o.v || '', count: Object.keys(p).reduce(function (s0, k) { return s0 + p[k].length; }, 0) + Object.keys(c).length };
       },
-      sub: function (d) { return T((d.count || 0) + ' things that help you' + (d.wave ? ' · Wave Code ' + d.wave : ''), (d.count || 0) + ' cosas que te ayudan' + (d.wave ? ' · código ' + d.wave : '')); },
+      sub: function (d) { return T((d.count || 0) + ((d.count || 0) === 1 ? ' thing that helps you' : ' things that help you') + (d.wave ? ' · Wave Code ' + d.wave : ''), (d.count || 0) + ' cosas que te ayudan' + (d.wave ? ' · código ' + d.wave : '')); },
       view: { kind: 'fields', fields: [{ k: 'wave', en: 'Wave Code', es: 'Código Wave' }, { k: 'count', en: 'Things that help, on the card', es: 'Cosas que ayudan, en la tarjeta' }],
         shape: function (d) { return { wave: d.wave || '', count: d.count != null ? String(d.count) : '' }; },
         next: function () { return T('Open the cards side by side on the Wiring Card page, and each read the other’s “what helps” out loud.', 'Abran las tarjetas lado a lado en la página de la Tarjeta, y lea cada uno en voz alta lo que ayuda al otro.'); } },
@@ -92,7 +92,7 @@
       openLabel: ['Open both cards side by side', 'Abrir las dos tarjetas lado a lado'] },
     { id: 'care', title: ['Your care card (what feels like care right now)', 'Tu tarjeta de cuidado'], v: 1,
       get: function (store) { var r = J(store.ss('tol-collab-results')), c = r && r.care; if (!c) return null; var o = {}, any = false; CARE.forEach(function (g) { if (Array.isArray(c[g[0]]) && c[g[0]].length) { o[g[0]] = c[g[0]].slice(0, 12).map(function (x) { return str(x, 120); }); any = true; } }); return any ? o : null; },
-      sub: function (d) { var n = 0; Object.keys(d).forEach(function (k) { n += (d[k] || []).length; }); return T(n + ' things ticked', n + ' cosas marcadas'); },
+      sub: function (d) { var n = 0; Object.keys(d).forEach(function (k) { n += (d[k] || []).length; }); return T(n + (n === 1 ? ' thing ticked' : ' things ticked'), n + (n === 1 ? ' cosa marcada' : ' cosas marcadas')); },
       view: { kind: 'fields', fields: CARE.map(function (g) { return { k: g[0], en: g[1], es: g[2] }; }),
         next: function () { return T('This week, each try one thing from the other’s card.', 'Esta semana, prueben cada uno una cosa de la tarjeta del otro.'); } } },
     { id: 'rituals', title: ['Your rituals and touchstones (the touchstone list and WP-15)', 'Tus rituales (la lista y WP-15)'], v: 1,
