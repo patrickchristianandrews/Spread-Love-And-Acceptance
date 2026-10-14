@@ -719,10 +719,17 @@ def plain(s):
 OPEN_ALL = True
 
 
+FAQ_HEADING = re.compile(r'<h2[^>]*>\s*(?:Questions people (?:often )?ask|Frequently asked questions|Common questions)\s*</h2>', re.I)
+
+
 def faq_of(body):
-    """Question-and-answer pairs from a visible FAQ (an element with id="faq": h3 questions, p answers)."""
+    """Question-and-answer pairs from a visible FAQ: an element with id="faq" (or an h2 such as "Questions people often
+    ask"), with h3 questions and p answers, or <details> blocks whose <summary> is the question."""
     i = body.find('id="faq"')
-    if i < 0: return []
+    if i < 0:
+        m = FAQ_HEADING.search(body)
+        if not m: return []
+        i = m.start()
     lock = body.find('locked-section')
     if 0 <= lock < i and not OPEN_ALL: return []                    # questions hidden behind the sign-up are not marked up
     j = body.find('</h2>', i)
@@ -733,6 +740,9 @@ def faq_of(body):
     for q, a in re.findall(r'<h3[^>]*>(.*?)</h3>\s*((?:<p[^>]*>.*?</p>\s*|<ul[^>]*>.*?</ul>\s*|<ol[^>]*>.*?</ol>\s*)+)', region, re.S):
         q, a = plain(q), plain(a)
         if q and a: out.append((q, a))
+    for q, a in re.findall(r'<details[^>]*>\s*<summary[^>]*>(.*?)</summary>(.*?)</details>', region, re.S):
+        q, a = plain(q), plain(a)
+        if q.endswith('?') and a: out.append((q, a))
     return out
 
 
@@ -787,12 +797,15 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
                                      'description': 'Christian (they/them) created ' + BRAND + ' and ' + PROGRAM + ' after working as a government auditor.'}))
     if path == 'index.html':
         graph.append({'@type': 'WebSite', '@id': SITE + '/#website', 'name': BRAND, 'alternateName': [PROGRAM, 'Spread Love and Acceptance'],
-                      'url': SITE + '/', 'description': desc, 'inLanguage': 'en-US', 'publisher': {'@id': SITE + '/#org'}, 'keywords': ', '.join(kw)})
+                      'url': SITE + '/', 'description': desc, 'inLanguage': 'en-US', 'publisher': {'@id': SITE + '/#org'}, 'keywords': ', '.join(kw),
+                      # explore.html reads ?q= and searches every page on the site
+                      'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': SITE + '/explore.html?q={search_term_string}'},
+                                          'query-input': 'required name=search_term_string'}})
         graph.append(dict(common, **{'@type': 'WebPage', 'about': {'@id': SITE + '/#org'}}))
     elif path == 'about.html':
         graph.append(dict(common, **{'@type': 'AboutPage', 'mainEntity': {'@id': AUTHOR['@id']}}))
-    elif re.search(r'^podcast', path):
-        graph.append(dict(common, **{'@type': 'PodcastSeries'}))
+    elif re.search(HUBS, path):
+        graph.append(dict(common, **{'@type': 'CollectionPage'}))
     elif re.search(GAMES, path):
         graph.append(dict(common, **{'@type': 'WebApplication', 'applicationCategory': 'GameApplication', 'operatingSystem': 'Any (web browser)',
                                      'browserRequirements': 'Requires JavaScript', 'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'}}))
@@ -802,16 +815,21 @@ def ld_for(path, title, desc, url, kw, modified, published, body, image):
     elif re.search(ARTICLES, path):
         art = dict(common, **{'@type': 'Article', 'author': AUTHOR, 'mainEntityOfPage': {'@type': 'WebPage', '@id': url}})
         if path.startswith('book/'):
-            art['isPartOf'] = {'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'url': SITE + '/contents.html', 'author': AUTHOR, 'publisher': publisher}
+            art['isPartOf'] = {'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher}
         graph.append(art)
     else:
         graph.append(dict(common, **{'@type': 'WebPage'}))
-    if path == 'contents.html':
-        graph.append({'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'alternateName': 'The Objective Ledger: a free self-help book on knowing yourself, sharing the load and understanding people',
-                      'description': 'A free, growing self-help book in three parts: knowing yourself; sharing a life, a home or a job fairly and kindly (the Preface and Chapters I to V); and understanding people, twelve chapters on how feelings, stress, trust, change, grief and healing work.',
-                      'url': SITE + '/contents.html', 'author': AUTHOR, 'publisher': publisher, 'inLanguage': 'en-US', 'bookFormat': 'https://schema.org/EBook',
-                      'isAccessibleForFree': True, 'image': OG_IMAGE,
-                      'hasPart': [{'@type': 'Chapter', 'position': i, 'name': n, 'url': SITE + rel_url(p)} for i, (n, p) in enumerate(BOOK_PARTS)]})
+    if path in ('book/index.html', 'book/download.html'):
+        book = {'@type': 'Book', '@id': BOOK_ID, 'name': PROGRAM, 'alternateName': 'The Objective Ledger: a free self-help book on knowing yourself, sharing the load and understanding people',
+                'description': BOOK_DESC, 'url': SITE + '/book/', 'author': AUTHOR, 'publisher': publisher, 'inLanguage': 'en-US',
+                'bookFormat': 'https://schema.org/EBook', 'isAccessibleForFree': True, 'image': OG_IMAGE, 'genre': ['Self-help', 'Psychology', 'Relationships'],
+                # the free PDF editions (book/download.html asks for an email address before the files download)
+                'workExample': [{'@type': 'Book', 'name': '%s (%s version, PDF)' % (n, v), 'bookFormat': 'https://schema.org/EBook', 'encodingFormat': 'application/pdf',
+                                 'url': SITE + '/book/pdf/%s%s.pdf' % (f, sfx), 'inLanguage': 'en-US', 'isAccessibleForFree': True}
+                                for n, f in BOOK_PDFS for v, sfx in (('short', ''), ('full', '-in-depth'))]}
+        if path == 'book/index.html':
+            book['hasPart'] = [{'@type': 'Chapter', 'position': i + 1, 'name': n, 'url': SITE + rel_url(p)} for i, (n, p) in enumerate(BOOK_PARTS)]
+        graph.append(book)
     faq = faq_of(body)
     if faq:
         graph.append({'@type': 'FAQPage', '@id': url + '#faq', 'url': url, 'inLanguage': 'en-US', 'isPartOf': {'@id': url + '#page'},
@@ -996,7 +1014,7 @@ Sitemap: https://spreadloveandacceptance.com/sitemap.xml
 
 def priority(path):
     if path == 'index.html': return '1.0'
-    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|complacency|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|wp-0[1-4]\.html|conversation-reader|check-ins)', path): return '0.9'
+    if re.search(r'^(start-here|five-pillars|relationships|pause-and-play|ask|signal-translator|library\.html|turning-toward|complacency|night-garden|sent-this|start-in-10|about|contents|program|frequency-buddies|conversation-reader|check-ins|tools\.html|explore|invisible-labor-mental-load|chore-chart-for-couples|how-to-stop-fighting|neurodivergent-relationships|communication\.html|share-the-load|nervous-system|calming-supplements|love-languages\.html|apology-languages|co-parenting|living-alone\.html|book/index|lemonade-stand)', path): return '0.9'
     if re.search(r'^(book/|library/|workpapers/fill/suite|frequency-journey|soundscapes|calm-visualizer|word-bloom|quiet-words|quiet-crossword|daily-ledger)', path): return '0.8'
     return '0.6'
 
@@ -1014,16 +1032,17 @@ def write_sitemap(report):
 
 
 GROUPS = [
-    ('Start here', r'^(index|start-here|start-in-10|sent-this|about|how-it-works|is-this-for-you|ways-in|program\.html|contents|glossary|five-pillars|relationships|self-path|whats-new|membership)'),
-    ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz)'),
-    ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|calc01|full-path|snapshot)'),
+    ('Start here', r'^(index|start-here|start-in-10|find-your-start|sent-this|someone-sent-you-this|about|how-it-works|is-this-for-you|why-this-site|ways-in|program\.html|contents|tools\.html|explore|glossary|five-pillars|relationships|self-path|whats-new|membership|how-you-take-things-in|week-0)'),
+    ('Guides to common questions', r'^(communication\.html|bonding|complacency|invisible-labor-mental-load|chore-chart-for-couples|grandparents|how-to-stop-fighting|neurodivergent-relationships|communication-style-quiz'
+                                   r'|love-languages|apology-languages|languages-of-connection|appreciation-at-work|touchstones|nervous-system|calming-supplements|living-alone|stepfamily|new-relationship|small-wins|growing-up)'),
+    ('Tools for kinder conversations and fair relationships', r'^(ask|signal-translator|carrier-wave|conversation-reader|write-it-through|perspective-shifter|wavelength|wired-differently|wiring-card|turning-toward|check-ins|know-yourself|quick-checks|lemonade|look-back-30-days|calc01|full-path|snapshot|tools/)'),
     ('Worksheets (the Workpaper Suite)', r'^(workpapers|wp-|do/|prog-01|suite-index|program-overview)'),
     ('Calm, breathing and sound', r'^(night-garden|bears-dojo|calm-visualizer|soundscapes|wp-11-sound|echoes-of-gold|pal-cam)'),
     ('Calm games', r'^(pause-and-play|recheck-drive|quiet-words|word-bloom|quiet-crossword|daily-ledger|frequency-journey|quest)'),
     ('Help for your situation', r'^(by-relationship|ladder|refusals|upset-right-now|safety|friends|more-than-two|gaming-and-time-together|money-together|foster-and-kinship|adhd-kids|grown-up-children|coming-home|different-hours|two-faiths|coming-out|on-my-own|for-counselors|sharing-a-room|family-rifts|empty-nest|when-one-is-ill|caregivers|grief|work\.html|teens|parents|co-parenting|new-parent|share-the-load|long-distance|retired-together|family-obligations|pursue-withdraw|en-espanol)'),
     ('The book, Part Three: Understanding people', r'^book/understanding-'),
     ('The book', r'^book/'),
-    ('The Professor’s Library and further reading', r'^(library|learn/|reading|podcast|frequency-framework)'),
+    ('The Professor’s Library and further reading', r'^(library|learn/|reading|research\.html|method-and-limits|outside-help|polymath|frequency-framework)'),
 ]
 
 
@@ -1032,7 +1051,7 @@ def write_llms(report):
     intro = ['# ' + BRAND + ' (' + PROGRAM + ')', '',
              '> ' + ABOUT_ORG, '',
              'Key facts:',
-             '- Website: ' + SITE + '/ . Free to use; everything opens with a free email sign-up, and much of it needs nothing at all.',
+             '- Website: ' + SITE + '/ . Free to use: every page, tool and chapter is open to everyone, with no sign-up, no account and no paid version. Email updates are optional.',
              '- Who it is for: anyone who wants to understand themselves and get along more kindly and fairly with others: partners, families, co-parents, friends, roommates, coworkers and caregivers, and people exploring on their own.',
              '- Themes: self-help, relationships, love, kindness, appreciation, acceptance, reconciliation and repair, calm, peace, harmony, breathing and quiet moments, connection, fairness and the invisible "mental load", and differences in how people are wired.',
              '- The Five Pillars: see the whole load; fix the setup, not the person; read your state first; tune how you send and receive; notice the quiet incentives.',
