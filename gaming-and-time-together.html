@@ -12,6 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Gaming, Phones and Time Together · Spread Love &amp; Acceptance</title>
 <meta name="description" content="Fair, free help when one of you games or scrolls a lot: heads-ups, bids between matches, a protected evening.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -276,7 +278,7 @@
 <p class="pg-out-h" id="td-out-h">Your deal, ready to send:</p>
 <p class="pg-from" id="td-from" hidden></p>
 <div class="pg-out" id="td-out" aria-labelledby="td-out-h" aria-live="polite"></div>
-<p class="pg-keep"><label><input type="checkbox" id="td-keep" checked> Keep our deal on this device</label> <span class="pg-keep-note">It stays in this browser only. <button type="button" class="pg-link" id="td-forget">Forget it</button></span></p>
+<p class="pg-keep"><label><input type="checkbox" id="td-keep" checked> Keep our deal on this device</label> <span class="pg-keep-note">It stays in this browser only. <button type="button" class="pg-link" id="td-forget" data-clear-confirm="your time-together deal" data-clear-keys="tol-time-deal-v1">Forget it</button></span></p>
 <p class="pg-acts">
   <button type="button" class="pg-btn" id="td-copy">Copy our deal</button>
   <button type="button" class="pg-btn is-quiet" id="td-share" data-no-clip>Share it</button>

@@ -12,6 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>The Quest Map · Spread Love &amp; Acceptance</title>
 <meta name="description" content="A friendly map of the whole program, grouped by the Five Pillars. Each chapter, workpaper, guide, tool, game and library shelf lights up as you explore it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -350,7 +352,7 @@
 
 <div class="try-this">
   <p><strong>How it works:</strong> Your progress is kept in this browser only, on this device. Nothing you type or choose is sent anywhere. Clearing the lanterns doesn’t take away your petals or anything in your garden.</p>
-  <div class="qm-foot"><button type="button" data-lp-resetall>Clear every lantern and start fresh</button><span data-lp-say aria-live="polite"></span></div>
+  <div class="qm-foot"><button type="button" data-lp-resetall data-clear-confirm="every lantern on your learning map">Clear every lantern and start fresh</button><span data-lp-say aria-live="polite"></span></div>
 </div>
 </main>
 </body>

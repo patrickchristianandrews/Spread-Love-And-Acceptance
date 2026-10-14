@@ -11,6 +11,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Daily Mood Check-In and Stress Check: Today’s Weather</title>
 <meta name="description" content="A one-minute daily mood check-in and stress check: how you are doing today, a gentle forecast for hard talks.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -541,7 +543,7 @@
           <button class="btn" type="button" id="al-csv">Download .csv</button>
           <button class="btn" type="button" id="al-json">Download .json</button>
           <button class="btn" type="button" id="al-print">Print</button>
-          <button class="btn al-erase" type="button" id="erase">Erase my almanac</button>
+          <button class="btn al-erase" type="button" id="erase" data-clear-confirm="your weather almanac (your saved readings)" data-clear-keys="tol-weather-v1">Erase my almanac</button>
         </div>
         <div class="al-confirm" id="al-confirm" role="group" aria-labelledby="al-confirm-q" hidden>
           <p id="al-confirm-q"><strong>Erase every saved weather reading from this browser?</strong> There&#8217;s no copy anywhere else, so this can&#8217;t be undone. (The things-finished list stays; it belongs to other pages.)</p>

@@ -12,6 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Different Hours: Night Shifts, Shift Work and Time Together</title>
 <meta name="description" content="Free help when you work different hours: night shifts and recovery sleep count as work, protected sleep.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,7 +296,7 @@
     <label for="dh-in">Paste the text they sent</label><textarea id="dh-in" rows="4" placeholder="Our week on one page&#10;Sam: Home office, 9 to 5 weekdays"></textarea>
     <p class="dh-row"><button type="button" class="dh-btn is-quiet" id="dh-import">Fill it in from this</button></p>
   </details>
-  <p class="dh-small">Kept on this device as you type, so it&rsquo;s here next time. Never sent anywhere unless you copy or share it. <button type="button" class="dh-link" id="dh-forget">Forget it on this device</button></p>
+  <p class="dh-small">Kept on this device as you type, so it&rsquo;s here next time. Never sent anywhere unless you copy or share it. <button type="button" class="dh-link" id="dh-forget" data-clear-confirm="your week on one page" data-clear-keys="tol-our-week">Forget it on this device</button></p>
 </div>
 
 <h2 id="fair">Counting it fairly in the Lemonade Stand</h2>

@@ -396,7 +396,7 @@
         q(id + '-goal', 'What do you want from this?', chips('goal', GOAL, false, state.goal)) +
         q(id + '-other', 'Anything else?', '<textarea rows="2" maxlength="600" data-f="other" aria-labelledby="' + id + '-other">' + esc(state.other) + '</textarea>') +
         '<div class="tol-ctx-foot"><label class="tol-ctx-rem"><input type="checkbox" class="tol-ctx-remember"' + (remember ? ' checked' : '') + '> Remember context for this person on this device</label>' +
-        (savedKeys.length ? ' <button type="button" class="tol-ctx-forget">Forget saved context</button>' : '') +
+        (savedKeys.length ? ' <button type="button" class="tol-ctx-forget" data-clear-confirm="the context you saved about people" data-clear-keys="tol-ctx-people">Forget saved context</button>' : '') +
         '<p class="tol-ctx-h tol-ctx-remh">Off unless you tick it. It keeps who they are, how they write and how you each take things in, under their name or label, in this browser only.</p>' +
         '<div class="tol-ctx-btns"><button type="button" class="tol-ctx-done">' + (m === 'read' ? 'Done, read it again' : 'Done, check it again') + '</button><button type="button" class="tol-ctx-skip">Skip</button><button type="button" class="tol-ctx-clear">Clear all</button></div></div>';
       paintCount();

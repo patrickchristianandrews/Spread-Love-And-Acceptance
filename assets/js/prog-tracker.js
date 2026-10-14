@@ -97,7 +97,7 @@
         '<div class="pt-row"><label>Started on <input type="date" data-pt="start" value="' + esc(v.start) + '" max="' + today() + '"></label></div>' +
         '<ul class="pt-weeks" aria-label="Weeks done">' + items + '</ul>' +
         '<p class="pt-small" role="status" data-pt="status"></p>' +
-        '<div class="pt-row"><button type="button" class="pt-btn is-erase" data-pt="erase">Erase and turn off</button></div>' +
+        '<div class="pt-row"><button type="button" class="pt-btn is-erase" data-pt="erase" data-clear-confirm="your six-week tracker" data-clear-keys="tol-prog01-v1">Erase and turn off</button></div>' +
         '<p class="pt-small">Some weeks take longer than a week, and some get skipped. That’s fine: nothing here counts streaks. Kept in this browser only; erasing removes it completely.</p>';
     }
   }

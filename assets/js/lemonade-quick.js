@@ -1666,7 +1666,7 @@
     });
     var er = $('lq-erase');
     er.addEventListener('click', function () {
-      if (!er.dataset.armed) {
+      if (!er.dataset.armed && !er.tolClearOk) {
         er.dataset.armed = '1'; er.textContent = 'Tap again to erase';
         clearTimeout(er.t); er.t = setTimeout(function () { delete er.dataset.armed; er.textContent = 'Erase the quick look'; }, 4000);
         return;

@@ -36,10 +36,17 @@
       var app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
       if (!app || window.top !== window || sessionStorage.getItem('tol-launch-seen') || /^\/(safety|upset-right-now)\.html$/.test(location.pathname)) return;
       sessionStorage.setItem('tol-launch-seen', '1');
-      var bs = document.createElement('style'); bs.id = 'lp-boot-css';
-      bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
-        'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(1900 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
-        'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
+      var bs;
+      if (document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {
+        // a strict-CSP page (the worksheet fill pages) refuses an inline <style>: the same rules, as a file
+        bs = document.createElement('link'); bs.rel = 'stylesheet'; bs.href = '/assets/css/launch-boot.css';
+      } else {
+        bs = document.createElement('style');
+        bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
+          'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(1900 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
+          'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
+      }
+      bs.id = 'lp-boot-css';
       document.head.appendChild(bs);
       var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
       if (th === 'dark' || (th !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('lp-dark');

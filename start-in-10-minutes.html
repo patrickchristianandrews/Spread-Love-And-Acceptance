@@ -12,6 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Start in 10 Minutes: Four Small Steps</title>
 <meta name="description" content="Four small steps, just for you or with someone: check your weather, read one short piece, notice your pattern, then pick one small change. No sign-up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -270,7 +272,7 @@
         <div class="ten-row"><button type="submit" class="ten-btn">Log it</button></div>
         <p class="ten-say" id="ten-say" role="status"></p>
         <ol class="ten-list" id="ten-list" hidden></ol>
-        <div class="ten-row" id="ten-erase-row" hidden><button type="button" class="ten-btn is-erase" id="ten-erase">Erase my list</button></div>
+        <div class="ten-row" id="ten-erase-row" hidden><button type="button" class="ten-btn is-erase" id="ten-erase" data-clear-confirm="your list" data-clear-keys="tol-ten-log-v1">Erase my list</button></div>
       </form>
     </details>
   </li>
@@ -345,7 +347,7 @@
     <button type="button" class="ten-btn" id="ten-copy">Copy text</button>
     <button type="button" class="ten-btn is-quiet" id="ten-print">Print</button>
     <button type="button" class="ten-btn is-quiet" id="ten-img" hidden>Save as image</button>
-    <button type="button" class="ten-btn is-erase" id="ten-wipe">Erase my answers</button>
+    <button type="button" class="ten-btn is-erase" id="ten-wipe" data-clear-confirm="your answers and your place in the ten minutes" data-clear-keys="tol-ten-v1">Erase my answers</button>
   </div>
   <p class="ten-say" id="ten-done-say" role="status"></p>
   <p class="ten-time">No streaks, nothing to keep up. Come back to any step whenever you like.</p>

@@ -355,7 +355,8 @@
     $('al-json').addEventListener('click', function () { say(download('weather-almanac-' + stamp() + '.json', 'application/json', jsonOut()) ? 'Downloaded a .json file. It went only to this device, wherever your downloads go.' : 'Downloading isn’t available in this browser.'); });
     $('al-print').addEventListener('click', function () { doc.documentElement.classList.add('al-print'); beforePrint(); window.print(); setTimeout(afterPrint, 500); });
     var ask = $('al-confirm');
-    $('erase').addEventListener('click', function () { ask.hidden = false; $('al-yes').focus(); });
+    // tagged data-clear-confirm: after site.js's three-step check, erase straight away (no fourth question)
+    $('erase').addEventListener('click', function () { if (this.tolClearOk) { $('al-yes').click(); return; } ask.hidden = false; $('al-yes').focus(); });
     $('al-no').addEventListener('click', function () { ask.hidden = true; $('erase').focus(); say('Kept. Nothing was erased.'); });
     $('al-yes').addEventListener('click', function () {
       erase(); ask.hidden = true; draw();

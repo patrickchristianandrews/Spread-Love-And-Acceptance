@@ -916,7 +916,6 @@
   }
   function eraseAll() {
     const n = OTHERS.length;
-    if (!window.confirm('Erase everything? This clears your wiring, your Wave Code answers, your statement and your journal from this device' + (n ? ', along with the ' + (n === 1 ? 'other person' : n + ' other people') + ' saved here' : '') + '.')) return;
     S = fresh(); OTHERS = []; lsDel(KEY); OLD_KEYS.forEach(lsDel); lsDel(PEOPLE_KEY); ssDel(PEOPLE_TAB_KEY); render(); ssDel(TAB_KEY); toTop();
     const note = $('.wl-note'); if (note) note.textContent = 'Everything is erased. Nothing from Wavelength is kept on this device now.';
   }
@@ -1143,7 +1142,7 @@
             '<div class="wl-actions"><button type="button" class="wl-btn ghost" id="wl-copyj">Copy my journal</button></div><p class="wl-toast" id="wl-jtoast" role="status"></p></div>' : '') +
         '</details>' +
         '<div class="wl-sect"><h3>Keep, share or start again</h3>' +
-          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase">Erase everything</button></div>' +
+          '<div class="wl-actions">' + (done ? '<button type="button" class="wl-btn" id="wl-copy">Copy my profile</button>' + (window.TOLShare ? '<button type="button" class="wl-btn ghost tol-share-btn" id="wl-share">Share my profile</button>' : '') : '') + '<button type="button" class="wl-btn ghost" id="wl-edit">Change answers</button><button type="button" class="wl-btn ghost" id="wl-wiring">Change my wiring</button><button type="button" class="wl-btn ghost" id="wl-erase" data-clear-confirm="everything in Wavelength: your wiring, Wave Code answers, statement and journal, and anyone else saved here" data-clear-keys="tol-wavelength-v1 tol-wavelength-people-v1">Erase everything</button></div>' +
           '<p class="wl-toast" id="wl-toast" role="status"></p>' + keepBox('wl-keep-res') + '</div>' +
         '<p class="wl-note">Wavelength is a reflection tool, not a diagnosis or a test that measures you. The options shown for each wiring type are common experiences, not rules, and every person is their own mix. Nothing you type or choose is sent anywhere.</p>' +
       '</section>';

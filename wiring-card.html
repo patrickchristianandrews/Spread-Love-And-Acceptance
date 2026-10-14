@@ -11,6 +11,8 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Wiring Card: A One-Page “How I Communicate” Card</title>
 <meta name="description" content="Make a free one-page card on how you take in words, what your silence means and how a request lands best, to share at home or at work. No sign-up.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -587,7 +589,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     h += '</details>';
     h += '<div class="actions">';
     h += '<button class="ghost" type="button" data-example="'+who+'">Use the guide\'s example</button>';
-    h += '<button class="ghost" type="button" data-clear="'+who+'">Clear this card</button>';
+    h += '<button class="ghost" type="button" data-clear="'+who+'" data-clear-confirm="this card">Clear this card</button>';
     if(who==="B") h += '<button class="ghost" type="button" id="removeB">Remove this card</button>';
     h += '</div>';
     if(pending && pending.who===who){
@@ -616,8 +618,8 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
         '<div class="actions"><button class="go" type="button" id="pastego">Fill in their card</button><button class="ghost" type="button" id="pastecancel">Cancel</button></div>' +
         '<p class="privacy" id="pastemsg" role="status" aria-live="polite">'+esc(pasteMsg)+'</p></div>';
     }
-    h += '<p class="draftnote"><span>Kept in this tab until you close it, so an interruption won&rsquo;t lose your answers.</span><button class="ghost" type="button" id="cleardraft">Clear</button></p>';
-    h += '<div class="panel keepbox"><label class="keep"><input type="checkbox" id="keepcard"' + (keep ? " checked" : "") + '> Keep my card on this device</label> <button class="ghost" type="button" id="erasecard">Erase</button>' +
+    h += '<p class="draftnote"><span>Kept in this tab until you close it, so an interruption won&rsquo;t lose your answers.</span><button class="ghost" type="button" id="cleardraft" data-clear-confirm="both cards (in this tab, and blank on this device if you keep it there)">Clear</button></p>';
+    h += '<div class="panel keepbox"><label class="keep"><input type="checkbox" id="keepcard"' + (keep ? " checked" : "") + '> Keep my card on this device</label> <button class="ghost" type="button" id="erasecard" data-clear-confirm="the card kept on this device" data-clear-keys="tol-wiring-card">Erase</button>' +
       '<p class="hint" style="margin:6px 0 0">Off unless you tick it. Kept in this browser only, never sent anywhere. Best on your own device, not a shared one.</p><p class="privacy" id="keepmsg" role="status" aria-live="polite"></p></div>';
     $("#forms").innerHTML = h;
   }
@@ -993,7 +995,7 @@ textarea.pastein{width:100%;min-height:120px;border:1px solid var(--line);backgr
     if(t.id==="undo"){ const w0 = undoSnap.who; loadSnap(undoSnap); undoSnap = null; paintForms(); paint(); const m = $("#pickmsg"); if(m) m.textContent = "Undone. Your own answers are back."; const b = document.querySelector('[data-example="'+w0+'"]'); if(b) b.focus(); return; }
     if(t.id==="cmpbtn"){ showCmp = !showCmp; cmpHidden = !showCmp; paintForms(); paint(); if(showCmp) toCompare(); return; }
     if(t.id==="cleardraft"){
-      if(!t.dataset.armed){ t.dataset.armed = "1"; t.textContent = "Tap again to clear both cards"; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent = "Clear"; } }, 4000); return; }
+      if(!t.dataset.armed && !t.tolClearOk){ t.dataset.armed = "1"; t.textContent = "Tap again to clear both cards"; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent = "Clear"; } }, 4000); return; }
       people.length = 0; people.push("A"); state.A = fresh(); state.B = fresh(); pending = null; undoSnap = null; showCmp = false; cmpHidden = false;
       try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}
       paintForms(); paint(); try{ sessionStorage.removeItem(DRAFT_KEY); }catch(err){}

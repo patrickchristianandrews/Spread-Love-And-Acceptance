@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>One of You Wants to Talk Now, the Other Needs Space</title>
 <meta name="description" content="Even-handed help when one partner wants to talk now and the other needs space: why it hurts on both sides, and a pause plan to fill in and share. Free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -181,7 +183,7 @@
 <p class="pw-out-h" id="pp-out-h">Your plan, ready to send:</p>
 <p class="pw-from" id="pp-from" hidden>This is the plan your partner sent you. Change anything you’d like, then send it back.</p>
 <div class="pw-out" id="pp-out" aria-labelledby="pp-out-h" aria-live="polite"></div>
-<p class="pw-keep"><label><input type="checkbox" id="pp-keep"> Keep our plan on this device</label> <span class="pw-keep-note">It stays in this browser only, so it’s here next time. <button type="button" class="pw-link" id="pp-forget">Forget it</button></span></p>
+<p class="pw-keep"><label><input type="checkbox" id="pp-keep"> Keep our plan on this device</label> <span class="pw-keep-note">It stays in this browser only, so it’s here next time. <button type="button" class="pw-link" id="pp-forget" data-clear-confirm="your pause plan" data-clear-keys="tol-pause-plan-v1">Forget it</button></span></p>
 <p class="pw-by"><label for="pp-by">Your first name, so they know who sent it (optional)</label> <input type="text" id="pp-by" autocomplete="off" maxlength="40"></p>
 <p class="pw-acts">
   <button type="button" class="pw-btn" id="pp-copy">Copy our plan</button>

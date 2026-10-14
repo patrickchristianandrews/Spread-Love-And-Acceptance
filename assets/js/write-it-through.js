@@ -860,6 +860,7 @@
     // erase, in two steps
     var er = el('p', { cls: 'wit-acts wit-erase' });
     var b = el('button', { type: 'button', cls: 'wit-link', text: 'Erase this conversation' });
+    b.setAttribute('data-clear-confirm', 'this conversation');
     b.addEventListener('click', function () {
       er.textContent = '';
       er.appendChild(el('span', { text: 'Erase it from this device? This can’t be undone. ' }));
@@ -871,7 +872,9 @@
         $('wit-thread-empty').textContent = 'Erased from this device.';
       });
       n.addEventListener('click', function () { renderThread(); });
-      er.appendChild(y); er.appendChild(doc.createTextNode(' ')); er.appendChild(n); y.focus();
+      er.appendChild(y); er.appendChild(doc.createTextNode(' ')); er.appendChild(n);
+      // site.js has already asked (data-clear-confirm), so go straight on
+      if (b.tolClearOk) y.click(); else y.focus();
     });
     er.appendChild(b);
     body.appendChild(er);

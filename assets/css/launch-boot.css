@@ -1,0 +1,7 @@
+/* launch-boot.css — the installed app's plain launch cover, for pages with a strict Content-Security-Policy (the
+   worksheet fill pages), where site.js may not add an inline <style>. Same rules as the inline copy that
+   tools/seo/build_seo.py writes into other pages' heads and that site.js adds itself; keep the three in step. */
+html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}
+@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}
+html.lp-boot.lp-dark::before{background:#1E1B24}
+html.lp-boot-out::before{opacity:0}

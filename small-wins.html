@@ -12,6 +12,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>Small Wins, and Turning Hard Feelings Into Fuel</title>
 <meta name="description" content="Why small wins build momentum, and kind ways to turn anger, worry and complaints into requests and plans. With a free Flip it tool and a done list.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -322,7 +324,7 @@
   </details>
   <div class="sw-acts">
     <button type="button" class="sw-btn is-quiet" id="sw-share-week">Share a win</button>
-    <button type="button" class="sw-btn is-quiet" id="sw-erase">Erase my done list</button>
+    <button type="button" class="sw-btn is-quiet" id="sw-erase" data-clear-confirm="your done list" data-clear-keys="tol-small-wins">Erase my done list</button>
   </div>
   <p class="sw-note">Your done list is kept only in this browser, so you can come back to it. Erase it any time here, or see everything this site keeps on <a href="/on-this-device.html">What’s stored on this device</a>.</p>
 </section>
@@ -564,7 +566,6 @@
   });
   $('sw-erase').addEventListener('click', function () {
     if (!wins().length) { say(wStatus, 'Your done list is already empty.'); return; }
-    if (!window.confirm('Erase your whole done list from this browser? This can’t be undone.')) return;
     try { localStorage.removeItem(KEY); } catch (e) {}
     memory = null; render(); say(wStatus, 'Erased from this browser.');
   });

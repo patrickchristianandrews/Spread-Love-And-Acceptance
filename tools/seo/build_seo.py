@@ -506,6 +506,16 @@ SEARCH.update({
  'sent-this.html': ('Sent This by Someone? What They Can and Can’t See', 'Someone sent you Spread Love & Acceptance? What they can and can’t see, what stays yours, and kind ways to say yes, not yet or no.'),
 })
 
+# Round 11 (Oct 2026): seo-additions from save10, tools11, collab10 and shot10 (search11 and splash10 added none).
+# save10's and tools11's lines are trimmed to 60/155 here. /conversation-reader.html is now a noindex redirect to
+# /signal-translator.html#conversation, so process() leaves it alone and it stays out of the sitemap.
+SEARCH.update({
+ 'on-this-device.html': ('Your Progress and What’s Stored on This Device', 'Keep your progress private and safe: save a backup file, move it to another phone or the free app, lock it with a PIN, or clear it. Nothing is sent to us.'),
+ 'tools.html': ('All Free Tools: Start on Your Own, Then Together', 'Every free tool in one place, the ones you can use on your own first. Filter by what you want to do, who it is for and your time. No sign-up, no account.'),
+ 'together.html': ('Work on It Together: Share Results by Link, QR Code or Text', 'Fill in a tool on your own phone and pass it back and forth by QR code, text or email. Put your results side by side. Nothing is stored on our side.'),
+ 'signal-translator.html': ('Chat Analyzer: Check a Text, a Reply or a Whole Chat', 'Check how a text may land before you send it, read one you got, or add a whole chat or screenshot to see where it turned. Free, private, on your device.'),
+})
+
 # Titles past about 60 characters and descriptions past about 155 are cut off in search results
 TITLE_MAX, DESC_MAX = 60, 155
 
@@ -903,6 +913,32 @@ LAUNCH_BOOT = ['<style id="lp-boot-css">html.lp-boot::before{content:"";position
                'sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");'
                'l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";'
                's.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script>']
+# The launch cover above is inline, so a page with its own Content-Security-Policy (the strict worksheet fill pages)
+# never gets it: there site.js starts the cover itself, with /assets/css/launch-boot.css instead of an inline style.
+CSP_META = 'http-equiv="Content-Security-Policy"'
+
+# The app lock's first moment (save10, /assets/js/lock-boot.js): first thing after the viewport line of EVERY page
+# (noindex pages and the strict-CSP fill pages too, which is why it's an external file), so a locked page is hidden
+# before it paints. Not on the two pages the lock never covers, and not on redirect stubs. Written by lock_boot(),
+# between lock:start and lock:end, and idempotent.
+LOCK_BOOT = '<script src="/assets/js/lock-boot.js"></script>'
+LOCK_FREE = ('safety.html', 'upset-right-now.html')
+
+
+def lock_boot(path):
+    fp = os.path.join(ROOT, path)
+    s = open(fp, encoding='utf-8').read()
+    if s.find('</head>') < 0 or 'http-equiv="refresh"' in s[:s.find('</head>')]:
+        return False
+    new = re.sub(r'\n?<!-- lock:start -->.*?<!-- lock:end -->', '', s, flags=re.S)
+    if path not in LOCK_FREE:
+        he = new.find('</head>')
+        mv = re.search(r'<meta name="viewport"[^>]*>', new[:he]) or re.search(r'<meta charset="[^"]*"\s*/?>', new[:he])
+        if mv: new = new[:mv.end()] + '\n<!-- lock:start -->' + LOCK_BOOT + '<!-- lock:end -->' + new[mv.end():]
+    if new != s:
+        open(fp, 'w', encoding='utf-8').write(new)
+        return True
+    return False
 
 
 def process(path, report):
@@ -917,7 +953,8 @@ def process(path, report):
     s = re.sub(r'\n?[ \t]*<!-- seo:start -->.*?<!-- seo:end -->[ \t]*', '', s, flags=re.S)
     # the installed app's launch cover goes near the top of <head> (just after the viewport line), so it starts at once
     s = re.sub(r'\n?<!-- launch:start -->.*?<!-- launch:end -->', '', s, flags=re.S)
-    if 'id="lp-boot-css"' not in s[:s.find('</head>')]:
+    # (never on the two safety pages: the cover doesn't show there anyway, and those pages are left as they are)
+    if 'id="lp-boot-css"' not in s[:s.find('</head>')] and CSP_META not in s[:s.find('</head>')] and path not in LOCK_FREE:
         mv = re.search(r'<meta name="viewport"[^>]*>', s[:s.find('</head>')]) or re.search(r'<meta charset="[^"]*"\s*/?>', s[:s.find('</head>')])
         if mv: s = s[:mv.end()] + '\n<!-- launch:start -->' + ''.join(LAUNCH_BOOT) + '<!-- launch:end -->' + s[mv.end():]
     ov_title, ov_desc = OVERRIDE.get(path, (None, None))
@@ -1154,12 +1191,14 @@ def write_llms(report):
 
 def main():
     report = []
+    locks = 0
     for p in pages():
         process(p, report)
+        if lock_boot(p): locks += 1
     open(os.path.join(ROOT, 'robots.txt'), 'w', encoding='utf-8').write(ROBOTS)
     write_sitemap(report)
     write_llms(report)
-    print('pages tagged: %d; sitemap: %d urls; robots.txt, llms.txt and llms-full.txt written' % (len(report), len(report)))
+    print('pages tagged: %d; sitemap: %d urls; robots.txt, llms.txt and llms-full.txt written; app-lock head line changed on %d pages' % (len(report), len(report), locks))
 
 
 if __name__ == '__main__':

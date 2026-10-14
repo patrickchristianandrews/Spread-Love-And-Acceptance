@@ -2200,7 +2200,8 @@
   }
 
   function clearAll() {
-    if (!global.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or suite file will be gone.')) return;
+    // tagged data-clear-confirm: site.js has already asked
+    if (!(this && this.tolClearOk) && !global.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or suite file will be gone.')) return;
     S = { path: S.path, variant: S.variant, names: ['', ''], stops: [], dirty: false, view: S.view || 'steps' };
     if (S.path) setPath(S.path.id, S.variant); else { renderNames(); renderRoad(); }
     if (keep) eraseKept('Cleared, and the draft kept on this device is erased. Nothing you typed remains.');

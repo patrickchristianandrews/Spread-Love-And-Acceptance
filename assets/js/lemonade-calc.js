@@ -2885,7 +2885,7 @@
 
   $('clear-draft').addEventListener('click', function () {
     var b = $('clear-draft');
-    if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = 'Tap again to clear'; clearTimeout(b.t); b.t = setTimeout(function () { delete b.dataset.armed; b.textContent = 'Clear'; }, 4000); return; }
+    if (!b.dataset.armed && !b.tolClearOk) { b.dataset.armed = '1'; b.textContent = 'Tap again to clear'; clearTimeout(b.t); b.t = setTimeout(function () { delete b.dataset.armed; b.textContent = 'Clear'; }, 4000); return; }
     delete b.dataset.armed; b.textContent = 'Clear';
     try { sessionStorage.removeItem(DRAFT); sessionStorage.removeItem(NAMES); sessionStorage.removeItem('tol-lemonade-pending'); } catch (e) {}
     if (keep) erase();
@@ -4153,7 +4153,7 @@
         var key = t + (kept ? 'k' : 'o');
         if (done.getAttribute('data-t') !== key) {
           done.setAttribute('data-t', key);
-          done.innerHTML = t ? esc(t) + ' ' + (kept ? '<button type="button" class="ls-link-btn" data-keep-forget>Forget it</button>' : '<button type="button" class="ls-link-btn" data-keep-yes>Keep it on this device</button>') : '';
+          done.innerHTML = t ? esc(t) + ' ' + (kept ? '<button type="button" class="ls-link-btn" data-keep-forget data-clear-confirm="the Lemonade Stand kept on this device" data-clear-keys="tol-lemonade-stand-v2">Forget it</button>' : '<button type="button" class="ls-link-btn" data-keep-yes>Keep it on this device</button>') : '';
         }
       }
     });

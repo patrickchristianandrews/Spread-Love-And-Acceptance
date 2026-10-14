@@ -757,7 +757,7 @@
     if (resetAll && !resetAll.lpWired) {
       resetAll.lpWired = true; var armed = null, label = resetAll.textContent;
       resetAll.addEventListener('click', function () {
-        if (!armed) { resetAll.textContent = 'Tap again to clear every lantern'; armed = setTimeout(function () { armed = null; resetAll.textContent = label; }, 4000); return; }
+        if (!armed && !resetAll.tolClearOk) { resetAll.textContent = 'Tap again to clear every lantern'; armed = setTimeout(function () { armed = null; resetAll.textContent = label; }, 4000); return; }
         clearTimeout(armed); armed = null; resetAll.textContent = label;
         S.pages = {}; S.trails = {}; save(); mountQuest(D, qroot);
         var say = qroot.querySelector('[data-lp-say]'); if (say) say.textContent = 'All lanterns cleared. Your petals and garden stay yours.';

@@ -811,7 +811,7 @@
       '<div class="rw-screen"></div>' +
       '<label class="rw-save"><input type="checkbox" data-act="keep"> <span>Keep my answers on this device, so they’re here next time</span></label>' +
       '<p class="rw-where">Nothing you type or choose is sent anywhere. Your answers stay in this browser tab, and are gone when you close it, unless you tick the box. ' +
-      '<button type="button" class="rw-btn is-link" data-act="erase">Erase my answers</button></p>' +
+      '<button type="button" class="rw-btn is-link" data-act="erase" data-clear-confirm="your Roots &amp; Wings answers (in this tab and on this device)" data-clear-keys="tol-roots-v1 tol-roots-tab">Erase my answers</button></p>' +
       '<p class="rw-status" role="status" aria-live="polite"></p></div>';
     box = host.firstChild;
     var keep = box.querySelector('[data-act="keep"]'); keep.checked = keeping();
@@ -845,7 +845,6 @@
         render(true); say('Cleared. You can start fresh.');
       }
       else if (act === 'erase') {
-        if (!isEmpty() && !window.confirm('Erase all your Roots & Wings answers from this tab and this device?')) return;
         del('sessionStorage', KEY_TAB); del('localStorage', KEY_DEVICE); S = blank(); keep.checked = false;
         render(true); say('Erased from this tab and this device.');
       }

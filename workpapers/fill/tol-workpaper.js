@@ -1351,7 +1351,7 @@
       sv.textContent = '';
       if (this.keep && !this.opts.statusEl) {
         sv.appendChild(document.createTextNode('\u2713 ' + t + ' '));
-        sv.appendChild(h('button', { type: 'button', className: 'wpf-forget', 'data-action': 'forget-kept', 'aria-label': 'Forget it: erase what is saved on ' + deviceWord(), text: 'Forget it' }));
+        sv.appendChild(h('button', { type: 'button', className: 'wpf-forget', 'data-action': 'forget-kept', 'data-clear-confirm': 'this worksheet’s saved copy', 'data-clear-keys': this.keepKey(), 'aria-label': 'Forget it: erase what is saved on ' + deviceWord(), text: 'Forget it' }));
       }
     }
     var hs = document.querySelector('.wpf-how-s'); if (hs) hs.textContent = t;
@@ -2516,8 +2516,9 @@
     this.status(msg || 'Opened.');
   };
 
-  A.clear = function () {
-    if (!window.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or draft file will be gone.')) return;
+  // ok: the button was tagged data-clear-confirm and site.js has already asked, so don't ask again
+  A.clear = function (ok) {
+    if (!ok && !window.confirm('Clear everything on this page? Anything you haven\'t saved as a PDF or draft file will be gone.')) return;
     this.state = blankState(this.schema);
     this.dirty = false;
     this.clearTab();
@@ -2831,10 +2832,10 @@
     if (keepP && !document.getElementById('wpf-tabnote')) {
       var tn = h('p', { className: 'wpf-tabnote', id: 'wpf-tabnote' });
       tn.appendChild(h('span', { text: app.autoKeep || app.keep ? 'Saved on ' + deviceWord() + ' as you type (the box below), so closing the tab won’t lose it. On a shared device, untick it or press Erase when you’re done. ' : 'Kept in this tab until you close it, so a reload or Back won’t lose your answers. ' }));
-      var cb = h('button', { type: 'button', className: 'wpf-erase', id: 'wpf-tabclear', text: 'Clear' });
+      var cb = h('button', { type: 'button', className: 'wpf-erase', id: 'wpf-tabclear', text: 'Clear', 'data-clear-confirm': 'everything on this worksheet', 'data-clear-keys': app.tabKey() + ' ' + app.keepKey() });
       tn.appendChild(cb);
       keepP.parentNode.insertBefore(tn, keepP);
-      cb.addEventListener('click', function () { app.clear(); });
+      cb.addEventListener('click', function () { app.clear(cb.tolClearOk); });
     }
     // "Use these names in the other tools": keeps the household up to date from here, only while ticked
     var HH = global.TOLHousehold;
@@ -2935,7 +2936,7 @@
       }
     }
     document.getElementById('wpf-open').addEventListener('click', function () { fileInput.click(); });
-    document.getElementById('wpf-clear').addEventListener('click', function () { app.clear(); });
+    document.getElementById('wpf-clear').addEventListener('click', function () { app.clear(this.tolClearOk); });
     var fill = document.getElementById('wpf-fillable');
     if (fill) fill.addEventListener('click', function () { app.fillablePdf(); });
     fileInput.addEventListener('change', function () { app.openDraft(fileInput.files[0]); fileInput.value = ''; });

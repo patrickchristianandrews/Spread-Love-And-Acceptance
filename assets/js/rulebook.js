@@ -66,7 +66,7 @@
     html += '<div class="rb-bar">' +
       '<button type="button" data-act="print">Print my rulebook</button>' +
       '<button type="button" data-act="copy">Copy it</button>' +
-      '<button type="button" data-act="erase">Erase</button></div>' +
+      '<button type="button" data-act="erase" data-clear-confirm="everything you wrote in your rulebook" data-clear-keys="tol-rulebook tol-rulebook-tab">Erase</button></div>' +
       '<label class="rb-save"><input type="checkbox" data-act="keep"> <span>Keep on this device, so it’s here next time</span></label>' +
       '<p class="rb-where">What you write stays in this browser tab only, and is gone when you close it, unless you tick “Keep on this device”. It is never sent anywhere. Erase clears it everywhere.</p>' +
       '<p class="rb-status" role="status" aria-live="polite"></p>' +
@@ -170,7 +170,6 @@
         if (act === 'print') printIt(d);
         else if (act === 'copy') copyIt(form, asText(d));
         else if (act === 'erase') {
-          if (!isEmpty(d) && !window.confirm('Erase everything you wrote in your rulebook?')) return;
           del('sessionStorage', KEY_TAB); del('localStorage', KEY_DEVICE);
           var blank = {}; LINES.forEach(function (l) { blank[l[0]] = { t: '', c: '' }; });
           forms.forEach(function (f) { fill(f, blank); var k = f.querySelector('[data-act="keep"]'); if (k) k.checked = false; });

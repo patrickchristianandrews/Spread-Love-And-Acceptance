@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- lock:start --><script src="/assets/js/lock-boot.js"></script><!-- lock:end -->
+<!-- launch:start --><style id="lp-boot-css">html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;animation:lp-boot-gone .25s ease 1.9s forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}</style><script>(function(){try{var d=document.documentElement,m=window.matchMedia;if(!((m&&m("(display-mode: standalone)").matches)||navigator.standalone===true)||window.top!==window||sessionStorage.getItem("tol-launch-seen")||/^\/(safety|upset-right-now)\.html$/.test(location.pathname))return;var t=localStorage.getItem("tol-theme");if(t==="dark"||(t!=="light"&&m("(prefers-color-scheme: dark)").matches))d.classList.add("lp-dark");sessionStorage.setItem("tol-launch-seen","1");d.classList.add("lp-boot");var h=document.head,l=document.createElement("link");l.rel="stylesheet";l.href="/assets/css/launch-pups.css";h.appendChild(l);var s=document.createElement("script");s.src="/assets/js/launch-pups.js";s.onerror=function(){d.classList.remove("lp-boot")};h.appendChild(s);setTimeout(function(){d.classList.remove("lp-boot")},2500)}catch(e){}})();</script><!-- launch:end -->
 <title>30-Day Look-Back: What Shifted in Who Does What</title>
 <meta name="description" content="Four weeks of who did what, last-minute rescues and jobs with an owner, side by side: what shifted, what didn’t, and one next step. Free, on your device.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -321,7 +323,7 @@
     <div class="keep no-print">
       <label class="check"><input type="checkbox" id="keep"> Keep my entries on this device</label>
       <p style="font-size:0.84rem;color:var(--ink-soft);margin:4px 0 8px;">Off by default. When it's on, your names and the four weeks are stored in this browser only, never sent anywhere. On a shared computer, everyone who uses this browser could see them. Turning it off, or pressing Erase, deletes them. Reading the other worksheets above never changes them.</p>
-      <button type="button" class="btn" id="erase">Erase what's kept on this device</button>
+      <button type="button" class="btn" id="erase" data-clear-confirm="this look-back’s answers kept on this device" data-clear-keys="tol-calc02-v1">Erase what's kept on this device</button>
       <p class="status" id="keep-status" role="status"></p>
     </div>
   </section>
