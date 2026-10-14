@@ -853,7 +853,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
     n_ch = sum(1 for e in ORDER if e[1] in parts)
     s = cover(name, deep)
     s += '''
-<section class="pe-half pe-only"><p class="pe-half-t">The Objective Ledger</p><p class="pe-half-s">%s</p></section>
+<section class="pe-half pe-only">%s<p class="pe-half-t">The Objective Ledger</p><p class="pe-half-s">%s · %s</p></section>
 <section class="pe-titlep pe-only" style="--acc:%s"><div class="pe-titlep-top"><p class="pe-titlep-t">The Objective Ledger</p>
 <p class="pe-titlep-s">Understanding yourself and the people you share a life with</p>
 <p class="pe-titlep-v">%s · %s</p></div>
@@ -868,7 +868,7 @@ def front_matter(name, deep, parts, title, who, toc_rows):
 <p><strong>The examples are made up.</strong> The people in the scenes and examples are invented, built from common patterns. None of them is a real person or a testimonial.</p>
 <p>Research mentioned in the chapters is listed, with links, in the research notes at the back and at <a href="%s/research.html">spreadloveandacceptance.com/research</a>.</p>
 <p>Set in Lora, Fraunces and IBM Plex Mono.</p>
-</div></section>''' % (esc(title), acc, esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
+</div></section>''' % (mark('half'), esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version', acc, esc(COVER[name][2][0].upper() + COVER[name][2][1:]), 'Full version' if deep else 'Short version',
                        book_art.illustration(name), AUTHOR, esc(COVER[name][2]), ver, AUTHOR, UPDATED, SITE, SITE, SITE)
     # how to use this book
     parts_li = ''.join('<li style="--pc:%s"><strong>%s: %s.</strong> %s</li>' % (PCOL[p][0], PARTS[p][0], PARTS[p][1], esc(PARTS[p][2])) for p in parts)
@@ -1233,9 +1233,6 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
         toc.append('<li><a href="#afterword"><strong>Afterword</strong>: %s</a></li>' % esc(TITLES['afterword']))
         ptoc.append(toc_row('afterword', 'Afterword', esc(TITLES['afterword']), 'is-back'))
         parts_html.append(package_chapter(e, deep, here))
-    front_html = front_matter(name, deep, parts, title, who, ptoc)
-    both, figs, exs = finish_package(front_html + '\n<!--pe-split-->\n' + '\n'.join(parts_html))
-    front_html, body_html = both.split('\n<!--pe-split-->\n', 1)
     text = ' '.join(strip_tags(main_inner(PAGES[(s_, deep)])) for s_ in here)
     gloss = glossary_terms(text)
     notes = research_notes(here)
@@ -1250,6 +1247,9 @@ def build_whole(deep, name='whole', parts=(1, 2, 3), title=None, who=''):
     toc.append('<li><a href="#notes">Research notes</a></li>')
     ptoc.append(toc_row('notes', '', 'Research notes', 'is-back'))
     ptoc.append(toc_row('index', '', 'Index', 'is-back'))
+    front_html = front_matter(name, deep, parts, title or 'The Whole Book', who, ptoc)
+    both, figs, exs = finish_package(front_html + '\n<!--pe-split-->\n' + '\n'.join(parts_html))
+    front_html, body_html = both.split('\n<!--pe-split-->\n', 1)
     fname = name + ('-in-depth' if deep else '')
     other = '/book/%s.html' % (name if deep else name + '-in-depth')
     base = title or 'The Whole Book'
