@@ -1,48 +1,54 @@
 /* progress.js — "Your progress": keep what you've done here safe and private, in the browser or the app.
-   window.TOLProgress. Loaded by site.js: right away on /on-this-device.html (the "Your progress" section),
-   and a little after load on other pages when this browser keeps anything at all.
+   window.TOLProgress. Loaded by site.js: right away on /on-this-device.html, in shared-computer mode and when the
+   app lock is on; otherwise a little after load, when this browser keeps anything at all.
 
    Everything happens on this device. There is no account and no server. Nothing leaves the device unless the
    person saves a file or sends a link themselves.
 
-   What it does
+   Three ways of saving (level()):
+     'app'    the installed app (display-mode: standalone / navigator.standalone), and 'own' (a computer whose
+              owner said "my own computer"): My saved entries, earlier versions of each tool (history), automatic
+              persistent-storage request, optional app lock, backup reminders.
+     'phone'  a phone or tablet browser (or a computer nobody has answered for yet): kept in this browser, with
+              backup, restore and move, the app lock if wanted, and a gentle "the free app does more" line.
+     'shared' a shared or public computer (or "not sure"): nothing is kept once the tab closes. This tab's notes
+              ride in sessionStorage between pages (tol-shared-stash) and localStorage is emptied on pagehide,
+              unless the page is going to another page of this site (a link was just followed). A new tab
+              finds and wipes anything left behind. A chip says "Shared computer mode · nothing is kept", with
+              "Clear everything now" and "Take it with you" (backup file to a USB stick, a link by email, a QR).
+     Computers are asked once, the first time something meaningful is saved: "your own computer or a shared one?"
+     Phones and tablets are not asked.
+
    - Collects the site's own notes in localStorage (the list on /on-this-device.html, plus any other tol-* key),
-     leaving out looks-only settings (dark, text size, quiet mode…), invitations seen, the email sign-up and the
-     weather location. sessionStorage (this tab only) is never collected. The site keeps nothing in IndexedDB.
-   - "Save a backup": one file, spread-love-progress-YYYY-MM-DD.json. With a password it is encrypted
-     (AES-GCM 256, key from PBKDF2-SHA256, 310,000 rounds, random salt and IV; the header is bound in as
-     additional data, so a changed header fails too). Without one, the page says plainly that anyone with the
-     file can read it. Phones get the share sheet (Files, iCloud Drive, Google Drive, email to yourself);
-     elsewhere it downloads.
-   - "Restore from a backup": pick the file, password if it has one, see what's in it (tool names and dates,
-     never the contents), then Add (newer wins, key by key) or Replace. Strict checks: size limits, only this
-     site's own key names, strings only, no HTML or script-looking values. Nothing in a file is ever run.
-   - "Move to another device / into the app": the same payload as a link, /on-this-device.html#restore=…
-     (after the #, so it never reaches any server), with a QR code when it is short enough. Opening one only
-     offers to restore. The hash is removed from the address bar as soon as it's read.
-   - navigator.storage.persist(): asked once when something meaningful is first saved, and on each start of
-     the installed app; never automatically in Firefox (it asks with a pop-up there: the button does it).
-   - One gentle tip on iPhone/iPad Safari (the Home Screen app isn't cleared after 7 days, and has its own
-     storage: here's how to bring things over), and a backup reminder at most once a month (on, dismissible,
-     "Don't remind me" turns it off; also a switch on the page).
+     leaving out looks-only settings, invitations seen, the email sign-up, the weather spot, the app lock, the
+     history and the saving mode. sessionStorage is never collected. The site keeps nothing in IndexedDB.
+   - "Save a backup": spread-love-progress-YYYY-MM-DD.json. With a password: AES-GCM 256, key from PBKDF2-SHA256,
+     310,000 rounds, random salt and IV, the header bound in as additional data. Without one, the page says
+     plainly that anyone with the file can read it. Phones get the share sheet; elsewhere it downloads.
+   - "Restore from a backup": file, password, a preview (tool names and dates, never contents), then Add (newer
+     wins, key by key) or Replace. Strict checks: sizes, this site's own key names, strings only, nothing that
+     looks like HTML or script. Nothing in a file is ever run.
+   - "Move to another device / into the app": the same payload as /on-this-device.html#restore=… (after the #, so
+     it never reaches a server), a QR code when short enough. Opening one only offers to restore. On iPhone a
+     link opens in Safari, not the Home Screen app, so the app has a "paste a move link" box.
+   - The app lock: a 4–6 digit PIN kept only as a PBKDF2-SHA256 hash with a random salt, Face ID / Touch ID /
+     fingerprint through WebAuthn where the device has it, locking after a chosen time away. A privacy screen,
+     not encryption: the page says so, and says why saved entries are not encrypted with the PIN.
 
-   localStorage keys of its own (both left out of backups):
-     tol-backup-v1          { last: last backup, nudged: last reminder, since: first meaningful save,
-                              tip: iPhone tip shown, off: reminder off, asked: persistence asked, kept: answer }
+   localStorage keys of its own:
+     tol-backup-v1          last backup, last reminder, first meaningful save, tips shown, reminder off, persistence asked
      tol-progress-times-v1  { key: [fingerprint, time it last changed] } so "Add" can keep whichever is newer
+     tol-save-mode-v1       'own' or 'shared' (computers only)
+     tol-entries-v1         My saved entries (included in backups)
+     tol-history-v1         earlier versions, up to 10 per key (left out of backups)
+     tol-lock-v1            the app lock: on, PIN hash + salt + rounds, minutes, passkey id, time away, wrong tries
+   sessionStorage (shared mode): tol-shared-stash, tol-shared-session, tol-shared-nav, tol-shared-reloaded
 
-   API (also require()-able in node for tools/progress/test-progress.js)
-     TOLProgress.collect(storage)                → { keys, times }
-     TOLProgress.makeBackup(payload, password)   → Promise<string> (the file's text)
-     TOLProgress.readBackup(text, password)      → Promise<{ created, keys, times }>   (throws ProgressError)
-     TOLProgress.inspect(text)                   → { encrypted } (throws on a file that isn't a backup)
-     TOLProgress.packLink(payload, password)     → Promise<string> packed, for #restore=
-     TOLProgress.unpackLink(packed, password)    → Promise<payload>
-     TOLProgress.linkInfo(packed)                → { encrypted }
-     TOLProgress.validate(obj)                   → cleaned payload (throws)
-     TOLProgress.restore(payload, mode, storage) → { added, updated, kept, removed, failed }
-     TOLProgress.summary(payload)                → [{ name, n, last }]
-     TOLProgress.persist() / .persisted()        → Promise<boolean|null>
+   API (also require()-able in node for tools/progress/test-progress.js): collect, track, validate, makeBackup,
+   readBackup, inspect, packLink, unpackLink, linkInfo, restore, summary, groupOf, groupName, included, meaningful,
+   entries / saveEntry / renameEntry / deleteEntry / putBack / compare / flatten, recordHistory / history / goBack,
+   pinRecord / checkPin / validPin / lockDue / failDelay, sharedStash / sharedWipe / sharedRestore,
+   saveBackup(password) (browser), level() (browser), persist / persisted.
 */
 (function (G) {
   'use strict';
@@ -58,7 +64,9 @@
   var MAX_KEYS = 600;
   var MAX_LINK = 40000;                    // characters after #restore= (longer: use a file)
   var MAX_INFLATE = 12 * 1024 * 1024;      // bytes a link may unpack to
-  var STATE_KEY = 'tol-backup-v1', TIMES_KEY = 'tol-progress-times-v1';
+  var STATE_KEY = 'tol-backup-v1', TIMES_KEY = 'tol-progress-times-v1', MODE_KEY = 'tol-save-mode-v1', ENTRIES_KEY = 'tol-entries-v1',
+      HIST_KEY = 'tol-history-v1', LOCK_KEY = 'tol-lock-v1';
+  var SH_STASH = 'tol-shared-stash', SH_SESSION = 'tol-shared-session', SH_NAV = 'tol-shared-nav', SH_RELOAD = 'tol-shared-reloaded';
   var DAY = 86400000;
   var OLDEST = Date.UTC(2020, 0, 1);
 
@@ -72,10 +80,10 @@
     'tol-weather-nudge-seen', 'tol-clip-', 'tol-member-email', 'tol-join-pending', 'tol-join-pop-prev', 'tol-install-asked',
     'tol-palcam-pop-last', 'tol-appad-off', 'tol-app-installed', 'tol-es-hint', 'tol-puddles-hi-seen', 'tol-wide',
     'tol-keys-hint', 'tol-book-dl', 'tol-book-extras', 'tol-pc-wx', 'tol-pc-', 'tol-clockwx-off', 'tol-clockwx-on',
-    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', STATE_KEY, TIMES_KEY];
+    'tol-work-keep', 'tol-ios-welcome', 'tol-keepask-test', 'tol-home-app-strip', 'tol-appbar-off', STATE_KEY, TIMES_KEY, MODE_KEY, HIST_KEY, LOCK_KEY];
   // [key, or a prefix ending in - or :] → group; groups marked * are things a person made or wrote (meaningful)
   var CAT = [
-    ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
+    [ENTRIES_KEY, 'entries'], ['tol-jobs-log-v1', 'checkin'], ['tol-small-wins', 'wins'], ['tol-ten-v1', 'ten'], ['tol-ten-log-v1', 'ten'],
     ['tol-weather-v1', 'weather'], ['tol-prog01-v1', 'six'], ['tol-wpf-keep:', 'sheets'], ['tol-keep-off:', 'sheetset'],
     ['tol-keepask-kept', 'sheetset'], ['tol-roots-v1', 'roots'], ['tol-wiring-card', 'wiring'],
     ['tol-wavelength-v1', 'wave'], ['tol-wavelength-people-v1', 'wave'], ['tol-heartprint-v1', 'wave'], ['tol-pawprint-v1', 'wave'],
@@ -94,6 +102,7 @@
     ['tol-bonding-picker', 'picks'], ['tol-freq-mode', 'picks'], ['tol-st-simple', 'picks'], ['tol-st-brief', 'picks']
   ];
   var GROUPS = {
+    entries: ['*', 'My saved entries', 'Mis entradas guardadas'],
     checkin: ['*', 'This week’s check-in: jobs that keep coming back', 'Revisión de la semana: tareas que vuelven'],
     wins: ['*', 'Small wins', 'Pequeños logros'],
     ten: ['*', 'Start in 10 minutes', 'Empieza en 10 minutos'],
@@ -415,416 +424,3 @@
     return Object.keys(g).map(function (k) { return g[k]; }).sort(function (a, b) { return (b.m - a.m) || (b.last - a.last) || a.name.localeCompare(b.name); });
   }
 
-  // ------------------------------------------------------------------ persistent storage
-  function isFirefox() { return W && /Firefox\//.test(W.navigator.userAgent) && !/Seamonkey/i.test(W.navigator.userAgent); }
-  function persisted() {
-    var s = W && W.navigator.storage;
-    if (!s || !s.persisted) return Promise.resolve(null);
-    return s.persisted().catch(function () { return null; });
-  }
-  function persist() {
-    var s = W && W.navigator.storage;
-    if (!s || !s.persist) return Promise.resolve(null);
-    return s.persist().then(function (r) { setState({ asked: Date.now(), kept: !!r }); return !!r; }, function () { return null; });
-  }
-  function isApp() { return !!W && ((W.matchMedia && W.matchMedia('(display-mode: standalone)').matches) || W.navigator.standalone === true); }
-  function isIOS() { var n = W.navigator; return /iPad|iPhone|iPod/.test(n.userAgent) || (n.platform === 'MacIntel' && n.maxTouchPoints > 1); }
-  function state() { return readJSON(local(), STATE_KEY) || {}; }
-  function setState(p) { var s = state(); Object.keys(p).forEach(function (k) { if (p[k] === null) delete s[k]; else s[k] = p[k]; }); writeJSON(local(), STATE_KEY, s); return s; }
-
-  var API = {
-    FORMAT: FORMAT, VERSION: VERSION, ITER: ITER, MAX_FILE: MAX_FILE, MAX_LINK: MAX_LINK, KEYS: { state: STATE_KEY, times: TIMES_KEY },
-    included: included, meaningful: meaningful, groupOf: groupOf,
-    collect: collect, track: track, validate: validate, makeBackup: makeBackup, readBackup: readBackup, inspect: inspect,
-    packLink: packLink, unpackLink: unpackLink, linkInfo: linkInfo, restore: restore, summary: summary,
-    persist: persist, persisted: persisted, ProgressError: ProgressError
-  };
-  if (typeof module === 'object' && module.exports) module.exports = API;
-  if (!D) return;
-  W.TOLProgress = API;
-
-  // =====================================================================================================
-  // In the browser
-  // =====================================================================================================
-  var path = decodeURIComponent(location.pathname).replace(/\/$/, '/index.html');
-  var PAGE = path === '/on-this-device.html';
-  function css() {
-    if (D.getElementById('tol-progress-css')) return;
-    var l = D.createElement('link'); l.id = 'tol-progress-css'; l.rel = 'stylesheet'; l.href = '/assets/css/progress.css'; D.head.appendChild(l);
-  }
-  function mk(tag, attrs, text) {
-    var e = D.createElement(tag);
-    if (attrs) Object.keys(attrs).forEach(function (k) { if (attrs[k] === true) e.setAttribute(k, ''); else if (attrs[k] !== false && attrs[k] != null) e.setAttribute(k, attrs[k]); });
-    if (text != null) e.textContent = text;
-    return e;
-  }
-  function day(t) {
-    try { return new Date(t).toLocaleDateString(T('en-US', 'es'), { month: 'short', day: 'numeric', year: new Date(t).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' }); }
-    catch (e) { return new Date(t).toDateString(); }
-  }
-  function ymd(d) { function p(n) { return (n < 10 ? '0' : '') + n; } return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); }
-  function coarse() { return !!(W.matchMedia && W.matchMedia('(pointer: coarse)').matches); }
-  function errText(e) {
-    var c = e && e.code;
-    if (c === 'password') return T('That password doesn’t open it. Check it (capital letters count) and try again.', 'Esa contraseña no lo abre. Revísala (las mayúsculas cuentan) y prueba otra vez.');
-    if (c === 'needpassword') return T('This one is locked with a password. Type it below.', 'Está protegido con contraseña. Escríbela abajo.');
-    if (c === 'big') return T('That’s too big to be a backup from this site.', 'Es demasiado grande para ser una copia de este sitio.');
-    if (c === 'version') return T('This backup was made by a newer version of the site. Reload the page and try again.', 'Esta copia se hizo con una versión más nueva del sitio. Recarga la página y prueba otra vez.');
-    if (c === 'changed') return T('This backup was changed after it was made, so it can’t be trusted. Nothing was restored.', 'Esta copia se cambió después de hacerla, así que no es fiable. No se restauró nada.');
-    if (c === 'empty') return T('There’s nothing in it that this site can restore.', 'No hay nada que este sitio pueda restaurar.');
-    if (c === 'nozip') return T('This browser can’t open move links. Use a backup file instead.', 'Este navegador no puede abrir enlaces de traslado. Usa un archivo de copia.');
-    if (c === 'nocrypto') return T('This browser can’t lock or unlock with a password here. Try an up-to-date browser.', 'Este navegador no puede usar contraseñas aquí. Prueba un navegador actualizado.');
-    return T('That isn’t a backup from this site, or it’s damaged. Nothing was changed.', 'No es una copia de este sitio, o está dañada. No se cambió nada.');
-  }
-
-  // ---------------------------------------------------------------- everywhere: times, persistence, tip, reminder
-  function quietPage() {
-    var h = D.documentElement.classList, b = D.body;
-    var inFrame = true; try { inFrame = W.self !== W.top; } catch (e) {}
-    return inFrame || PAGE || !b || b.hasAttribute('data-no-tip') || h.contains('tol-no-helpers') || h.contains('tol-work') ||
-      /^\/(safety|upset-right-now|install|404|offline|privacy-policy)\.html$|^\/legal\//.test(path) || !D.querySelector('main');
-  }
-  function autoPersist() {
-    var st = local(); if (!st || !W.navigator.storage || !W.navigator.storage.persist) return;
-    if (isFirefox()) return;   // Firefox asks with a pop-up: only from the button on the progress page
-    var app = isApp(), s = state();
-    if (!app && (s.asked || !hasMeaningful(st))) return;
-    persisted().then(function (p) {
-      if (p) { if (!s.kept) setState({ kept: true }); return; }
-      if (app || !s.asked) persist();
-    });
-  }
-  function noteSince() { var s = state(); if (!s.since && hasMeaningful(local())) setState({ since: Date.now() }); }
-  var card = null;
-  function closeCard() { if (card) { card.remove(); card = null; } }
-  function showCard(kind) {
-    css();
-    var es = T(false, true), c = mk('aside', { class: 'tp-card-pop no-bubble no-print', role: 'region', 'aria-label': kind === 'tip' ? T('Keep your progress', 'Guarda tu progreso') : T('A backup reminder', 'Recordatorio de copia') });
-    var h = mk('p', { class: 'tp-pop-h' }, kind === 'tip' ? T('Keep your progress safe on this iPhone', 'Guarda tu progreso en este iPhone') : T('Keep a copy of your progress?', '¿Guardar una copia de tu progreso?'));
-    if (kind === 'tip' && /iPad/.test(W.navigator.userAgent + (W.navigator.maxTouchPoints > 1 && W.navigator.platform === 'MacIntel' ? 'iPad' : ''))) h.textContent = T('Keep your progress safe on this iPad', 'Guarda tu progreso en este iPad');
-    c.appendChild(h);
-    c.appendChild(mk('p', null, kind === 'tip'
-      ? T('What you do here is kept in Safari, and Safari can clear it after 7 days without a visit. The free app on your Home Screen keeps its own copy and isn’t cleared that way. Its storage is separate, so after you install it, bring your progress over with a move link or a backup file.',
-          'Lo que haces aquí se guarda en Safari, y Safari puede borrarlo tras 7 días sin visitas. La app gratis en tu pantalla de inicio guarda su propia copia y no se borra así. Su espacio es aparte: después de instalarla, trae tu progreso con un enlace de traslado o un archivo de copia.')
-      : T('What you’ve done here is kept only in this browser. A backup file keeps it safe if the browser clears it, and lets you move to a new phone. It stays private: the file goes only where you put it.',
-          'Lo que has hecho aquí se guarda solo en este navegador. Un archivo de copia lo protege si el navegador lo borra, y te deja pasarlo a otro teléfono. Es privado: el archivo va solo a donde tú lo pongas.')));
-    var acts = mk('p', { class: 'tp-pop-acts' });
-    if (kind === 'tip') {
-      acts.appendChild(mk('a', { href: '/install.html', class: 'tp-btn is-strong' }, T('Get the free app', 'Obtener la app gratis')));
-      acts.appendChild(mk('a', { href: '/on-this-device.html#move', class: 'tp-btn' }, T('How to bring it over', 'Cómo pasarlo')));
-    } else {
-      acts.appendChild(mk('a', { href: '/on-this-device.html#backup', class: 'tp-btn is-strong' }, T('Save a backup', 'Guardar una copia')));
-    }
-    var later = mk('button', { type: 'button', class: 'tp-btn' }, T('Not now', 'Ahora no'));
-    later.addEventListener('click', function () { closeCard(); });
-    acts.appendChild(later);
-    if (kind !== 'tip') {
-      var off = mk('button', { type: 'button', class: 'tp-link' }, T('Don’t remind me', 'No me lo recuerdes'));
-      off.addEventListener('click', function () { setState({ off: 1 }); closeCard(); });
-      acts.appendChild(off);
-    }
-    c.appendChild(acts);
-    D.body.appendChild(c); card = c;
-    setState(kind === 'tip' ? { tip: Date.now() } : { nudged: Date.now() });
-    void es;
-  }
-  function maybeCard() {
-    if (quietPage() || !hasMeaningful(local())) return;
-    var s = state(), now = Date.now();
-    if (isIOS() && !isApp() && !s.tip) { showCard('tip'); return; }
-    if (s.off) return;
-    var since = s.since || now, last = s.last || 0, nudged = s.nudged || 0, tipAt = s.tip || 0;
-    var due = last ? now - last > 30 * DAY : now - since > 14 * DAY;
-    if (due && now - nudged > 30 * DAY && now - tipAt > 7 * DAY) showCard('nudge');
-  }
-  function everywhere() {
-    track(); noteSince(); autoPersist();
-    D.addEventListener('visibilitychange', function () { if (D.visibilityState === 'hidden') { track(); noteSince(); autoPersist(); } });
-    setTimeout(maybeCard, 3000);
-  }
-
-  // ---------------------------------------------------------------- the "Your progress" section (/on-this-device.html)
-  function $(id) { return D.getElementById(id); }
-  function say(id, text, bad) { var e = $(id); if (!e) return; e.textContent = text; e.classList.toggle('is-bad', !!bad); }
-  function pwPair(a, b, msgId) {
-    var p1 = $(a), p2 = $(b), v1 = p1 ? p1.value : '', v2 = p2 ? p2.value : '';
-    if (!v1 && !v2) return { ok: true, pw: '' };
-    if (v1 !== v2) { say(msgId, T('The two passwords aren’t the same. Type them again.', 'Las dos contraseñas no son iguales. Escríbelas otra vez.'), true); (p2 || p1).focus(); return { ok: false }; }
-    if (v1.length < 6) { say(msgId, T('Use at least 6 characters, or leave both boxes empty.', 'Usa al menos 6 caracteres, o deja las dos casillas vacías.'), true); p1.focus(); return { ok: false }; }
-    return { ok: true, pw: v1 };
-  }
-  function drawWhat() {
-    var host = $('tp-what'); if (!host) return;
-    track();
-    var p = collect(), list = summary(p);
-    host.textContent = '';
-    if (!list.length) { host.appendChild(mk('p', { class: 'tp-none' }, T('Nothing saved yet. When you use a tool, what you keep shows up here.', 'Todavía no hay nada guardado. Cuando uses una herramienta, lo que guardes aparecerá aquí.'))); return; }
-    host.appendChild(mk('p', { class: 'tp-what-h' }, T('Saved in this browser now:', 'Guardado ahora en este navegador:')));
-    var ul = mk('ul', { class: 'tp-list' });
-    list.forEach(function (g) {
-      var li = mk('li'); li.appendChild(mk('strong', null, g.name));
-      li.appendChild(mk('span', null, ' · ' + (g.n === 1 ? T('1 item', '1 elemento') : g.n + T(' items', ' elementos')) + (g.last ? ' · ' + T('changed ', 'cambiado el ') + day(g.last) : '')));
-      ul.appendChild(li);
-    });
-    host.appendChild(ul);
-    var s = state();
-    host.appendChild(mk('p', { class: 'tp-last' }, s.last ? T('Your last backup: ', 'Tu última copia: ') + day(s.last) + '.' : T('No backup saved from this browser yet.', 'Aún no se ha guardado ninguna copia desde este navegador.')));
-  }
-  function drawKeep() {
-    var e = $('tp-persist'), b = D.querySelector('[data-tp="persist"]'); if (!e) return;
-    persisted().then(function (p) {
-      if (p === null) { e.textContent = T('This browser doesn’t say whether it will keep it. A backup file is the sure way.', 'Este navegador no dice si lo conservará. Un archivo de copia es lo seguro.'); if (b) b.hidden = true; return; }
-      if (p) { e.textContent = T('Protected: this browser has agreed not to clear it to make room. Clearing your history or site data yourself still removes it, so a backup is still wise.', 'Protegido: este navegador aceptó no borrarlo para hacer espacio. Si tú borras el historial o los datos del sitio, se elimina igual, así que una copia sigue siendo buena idea.'); e.className = 'tp-ok'; if (b) b.hidden = true; return; }
-      var s = state();
-      e.className = '';
-      e.textContent = s.asked
-        ? T('Not protected yet. This browser decides by itself (often by how much you use the site, or whether it’s installed or bookmarked). A backup is the sure way.', 'Aún no está protegido. El navegador decide solo (a menudo según cuánto usas el sitio, o si está instalado o en marcadores). Una copia es lo seguro.')
-        : T('Not protected yet. This browser may clear it if the device runs low on space.', 'Aún no está protegido. Este navegador puede borrarlo si el dispositivo se queda sin espacio.');
-      if (b) b.hidden = false;
-    });
-    var r = $('tp-remind'); if (r) r.checked = !state().off;
-  }
-
-  // a backup or link coming in: password if needed → what's in it → Add or Replace
-  var incoming = null;
-  function inBox() { return $('tp-in'); }
-  function startIncoming(src) {
-    var box = inBox(); if (!box) return;
-    incoming = src; box.hidden = false; box.textContent = '';
-    var intro = src.kind === 'link'
-      ? T('This link holds progress from another device or browser. Nothing has changed here yet.', 'Este enlace trae progreso de otro dispositivo o navegador. Aquí no ha cambiado nada todavía.')
-      : T('Backup file: ', 'Archivo de copia: ') + (src.name || '');
-    box.appendChild(mk('p', { class: 'tp-in-h' }, intro));
-    if (src.encrypted) {
-      var row = mk('p', { class: 'tp-row' });
-      var lab = mk('label', { for: 'tp-in-pw' }, T('Its password', 'Su contraseña'));
-      var inp = mk('input', { id: 'tp-in-pw', type: 'password', autocomplete: 'current-password', autocapitalize: 'off', spellcheck: 'false' });
-      var go = mk('button', { type: 'button', class: 'tp-btn is-strong', 'data-tp': 'unlock' }, T('Open it', 'Abrirlo'));
-      row.appendChild(lab); row.appendChild(inp); row.appendChild(go); box.appendChild(row);
-      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); unlock(); } });
-      box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
-      box.appendChild(cancelBtn());
-      inp.focus();
-    } else {
-      box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }, T('Reading it…', 'Leyendo…')));
-      unlock();
-    }
-    box.scrollIntoView({ block: 'nearest' });
-  }
-  function cancelBtn() { var b = mk('button', { type: 'button', class: 'tp-btn', 'data-tp': 'cancel' }, T('Cancel', 'Cancelar')); return b; }
-  function unlock() {
-    if (!incoming) return;
-    var pw = $('tp-in-pw') ? $('tp-in-pw').value : '';
-    if (incoming.encrypted && !pw) { say('tp-in-msg', errText({ code: 'needpassword' }), true); return; }
-    say('tp-in-msg', T('Opening…', 'Abriendo…'));
-    var b = D.querySelector('[data-tp="unlock"]'); if (b) b.disabled = true;
-    var p = incoming.kind === 'link' ? unpackLink(incoming.raw, pw) : readBackup(incoming.raw, pw);
-    p.then(preview, function (e) { if (b) b.disabled = false; say('tp-in-msg', errText(e), true); if ($('tp-in-pw')) $('tp-in-pw').focus(); });
-  }
-  function preview(payload) {
-    var box = inBox(); incoming.payload = payload;
-    box.textContent = '';
-    box.appendChild(mk('p', { class: 'tp-in-h' }, (incoming.kind === 'link' ? T('From the link', 'Del enlace') : T('From the backup', 'De la copia')) +
-      (payload.created ? T(', made ', ', hecha el ') + day(Date.parse(payload.created)) : '') + T('. It holds:', '. Contiene:')));
-    var ul = mk('ul', { class: 'tp-list' });
-    summary(payload).forEach(function (g) {
-      var li = mk('li'); li.appendChild(mk('strong', null, g.name));
-      li.appendChild(mk('span', null, ' · ' + (g.n === 1 ? T('1 item', '1 elemento') : g.n + T(' items', ' elementos')) + (g.last ? ' · ' + T('changed ', 'cambiado el ') + day(g.last) : '')));
-      ul.appendChild(li);
-    });
-    box.appendChild(ul);
-    if (payload.dropped) box.appendChild(mk('p', { class: 'tp-warn' }, T(payload.dropped + ' item(s) didn’t look right and will be left out.', payload.dropped + ' elemento(s) no parecían correctos y se dejarán fuera.')));
-    var fs = mk('fieldset', { class: 'tp-mode' });
-    fs.appendChild(mk('legend', null, T('How to bring it in', 'Cómo traerlo')));
-    [['merge', T('Add it to what’s here. Where both have the same thing, the newer one stays.', 'Añadirlo a lo que hay. Si ambos tienen lo mismo, se queda lo más nuevo.')],
-     ['replace', T('Replace what’s here with the backup. Progress here that isn’t in it is removed.', 'Reemplazar lo que hay con la copia. Lo de aquí que no esté en ella se elimina.')]].forEach(function (o, i) {
-      var l = mk('label'), r = mk('input', { type: 'radio', name: 'tp-mode', value: o[0] }); if (!i) r.checked = true;
-      l.appendChild(r); l.appendChild(D.createTextNode(' ' + o[1])); fs.appendChild(l);
-    });
-    box.appendChild(fs);
-    var acts = mk('p', { class: 'tp-acts' });
-    acts.appendChild(mk('button', { type: 'button', class: 'tp-btn is-strong', 'data-tp': 'apply' }, T('Restore', 'Restaurar')));
-    acts.appendChild(cancelBtn());
-    box.appendChild(acts);
-    box.appendChild(mk('p', { id: 'tp-in-msg', class: 'tp-status', role: 'status', 'aria-live': 'polite' }));
-    box.querySelector('[data-tp="apply"]').focus();
-  }
-  function apply() {
-    if (!incoming || !incoming.payload) return;
-    var m = D.querySelector('input[name="tp-mode"]:checked'), mode = m ? m.value : 'merge';
-    if (mode === 'replace' && !W.confirm(T('Replace the progress in this browser with the backup? What’s here now and not in the backup will be removed.', '¿Reemplazar el progreso de este navegador con la copia? Lo que hay ahora y no está en la copia se eliminará.'))) return;
-    var r = restore(incoming.payload, mode);
-    var box = inBox(); box.textContent = '';
-    var parts = [];
-    if (r.added) parts.push(r.added + T(' added', ' añadidos'));
-    if (r.updated) parts.push(r.updated + T(' updated', ' actualizados'));
-    if (r.kept) parts.push(r.kept + T(' already up to date here', ' ya al día aquí'));
-    if (r.removed) parts.push(r.removed + T(' removed', ' eliminados'));
-    box.appendChild(mk('p', { class: 'tp-ok', role: 'status' }, T('Restored. ', 'Restaurado. ') + (parts.join(', ') || T('Nothing needed changing.', 'No hacía falta cambiar nada.')) + '.' +
-      (r.failed ? ' ' + T(r.failed + ' couldn’t be saved: this browser is out of room or won’t keep things.', r.failed + ' no se pudieron guardar: este navegador no tiene espacio o no guarda datos.') : '') +
-      ' ' + T('Open any tool to see it.', 'Abre cualquier herramienta para verlo.')));
-    incoming = null;
-    drawWhat();
-    if (W.TOLProgressRendered) W.TOLProgressRendered();
-    try { D.dispatchEvent(new CustomEvent('tol-progress-restored', { detail: r })); } catch (e) {}
-    if (hasMeaningful(local()) && !isFirefox()) persist().then(drawKeep);
-  }
-  function cancelIncoming() { incoming = null; var b = inBox(); if (b) { b.hidden = true; b.textContent = ''; } var f = $('tp-file'); if (f) f.value = ''; }
-
-  function backup() {
-    var pw = pwPair('tp-pw1', 'tp-pw2', 'tp-backup-msg'); if (!pw.ok) return;
-    var p = collect();
-    if (!Object.keys(p.keys).length) { say('tp-backup-msg', T('There’s nothing to back up yet.', 'Todavía no hay nada que copiar.'), true); return; }
-    var btn = D.querySelector('[data-tp="backup"]'); btn.disabled = true;
-    say('tp-backup-msg', pw.pw ? T('Locking it with your password…', 'Protegiéndolo con tu contraseña…') : T('Making the file…', 'Haciendo el archivo…'));
-    var name = 'spread-love-progress-' + ymd(new Date()) + '.json';
-    makeBackup(p, pw.pw).then(function (text) {
-      btn.disabled = false;
-      var blob = new Blob([text], { type: 'application/json' });
-      return deliver(blob, name).then(function (how) {
-        if (how === 'cancelled') { say('tp-backup-msg', T('Not saved. Nothing left this device.', 'No se guardó. Nada salió de este dispositivo.')); return; }
-        if (how === 'needtap') return;
-        setState({ last: Date.now() }); drawWhat();
-        say('tp-backup-msg', (how === 'shared' ? T('Sent where you chose. ', 'Enviado a donde elegiste. ') : T('Saved to your downloads as ', 'Guardado en tus descargas como ') + name + '. ') +
-          (pw.pw ? T('Keep the password somewhere safe: without it, the file can’t be opened, and we can’t reset it.', 'Guarda la contraseña en un lugar seguro: sin ella no se puede abrir el archivo, y no podemos restablecerla.') : T('Anyone who opens this file can read it, so keep it somewhere private.', 'Cualquiera que abra este archivo puede leerlo, así que guárdalo en un lugar privado.')));
-      });
-    }).catch(function (e) { btn.disabled = false; say('tp-backup-msg', errText(e), true); });
-  }
-  // phones: the share sheet (Files, iCloud Drive, Google Drive, email to yourself); otherwise a download
-  function deliver(blob, name) {
-    var file = null; try { file = new File([blob], name, { type: 'application/json' }); } catch (e) {}
-    var n = W.navigator;
-    if (file && coarse() && n.share && n.canShare && n.canShare({ files: [file] })) {
-      return n.share({ files: [file], title: name }).then(function () { return 'shared'; }, function (e) {
-        if (e && e.name === 'AbortError') return 'cancelled';
-        if (e && e.name === 'NotAllowedError') { // the password step took long enough that the tap no longer counts: one more tap
-          var b = mk('button', { type: 'button', class: 'tp-btn is-strong' }, T('Save it now', 'Guardarlo ahora'));
-          var m = $('tp-backup-msg'); m.textContent = T('It’s ready. ', 'Está listo. '); m.appendChild(b);
-          b.addEventListener('click', function () { n.share({ files: [file], title: name }).then(function () { setState({ last: Date.now() }); drawWhat(); say('tp-backup-msg', T('Sent where you chose.', 'Enviado a donde elegiste.')); }, function () { download(blob, name); setState({ last: Date.now() }); drawWhat(); say('tp-backup-msg', T('Saved to your downloads as ', 'Guardado en tus descargas como ') + name + '.'); }); });
-          b.focus();
-          return 'needtap';
-        }
-        download(blob, name); return 'downloaded';
-      });
-    }
-    download(blob, name); return Promise.resolve('downloaded');
-  }
-  function download(blob, name) {
-    var u = URL.createObjectURL(blob), a = mk('a', { href: u, download: name, class: 'tp-hide' });
-    D.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(u); }, 30000);
-  }
-  var lastLink = '';
-  function makeLink() {
-    var pw = pwPair('tp-lpw1', 'tp-lpw2', 'tp-link-msg'); if (!pw.ok) return;
-    var p = collect();
-    if (!Object.keys(p.keys).length) { say('tp-link-msg', T('There’s nothing to move yet.', 'Todavía no hay nada que pasar.'), true); return; }
-    if (!pw.pw && !W.confirm(T('Make the link without a password? Anyone who gets the link can open your progress. A password is strongly suggested.', '¿Hacer el enlace sin contraseña? Cualquiera que reciba el enlace puede abrir tu progreso. Te recomendamos mucho una contraseña.'))) return;
-    say('tp-link-msg', T('Making the link…', 'Haciendo el enlace…'));
-    packLink(p, pw.pw).then(function (packed) {
-      var box = $('tp-link');
-      if (packed.length > MAX_LINK) { box.hidden = true; say('tp-link-msg', T('There’s too much to fit in a link. Use “Save a backup” instead, then open the file on the other device.', 'Hay demasiado para un enlace. Usa “Guardar una copia” y abre el archivo en el otro dispositivo.'), true); return; }
-      lastLink = location.origin + '/on-this-device.html#restore=' + packed;
-      $('tp-link-text').value = lastLink;
-      box.hidden = false;
-      var qr = D.querySelector('[data-tp="qr"]'); if (qr) qr.hidden = !(lastLink.length <= 2000);
-      var sh = D.querySelector('[data-tp="share-link"]'); if (sh) sh.hidden = !W.navigator.share;
-      say('tp-link-msg', (pw.pw ? T('Ready. Open it on the other device and type the password there. ', 'Listo. Ábrelo en el otro dispositivo y escribe allí la contraseña. ') : T('Ready. Anyone with this link can open it, so send it only to yourself. ', 'Listo. Cualquiera con este enlace puede abrirlo, así que envíatelo solo a ti. ')) +
-        (lastLink.length <= 2000 ? '' : T('It’s too long for a QR code: copy it or share it to yourself.', 'Es demasiado largo para un código QR: cópialo o compártelo contigo.')));
-    }).catch(function (e) { say('tp-link-msg', errText(e), true); });
-  }
-  function copyLink() {
-    var t = $('tp-link-text'), done = function (ok) { say('tp-link-msg', ok ? T('Link copied. Paste it into a note or a message to yourself.', 'Enlace copiado. Pégalo en una nota o un mensaje para ti.') : T('Couldn’t copy. Select the link above and copy it.', 'No se pudo copiar. Selecciona el enlace de arriba y cópialo.'), !ok); };
-    if (W.navigator.clipboard && W.navigator.clipboard.writeText) W.navigator.clipboard.writeText(lastLink).then(function () { done(true); }, function () { t.select(); var ok = false; try { ok = D.execCommand('copy'); } catch (e) {} done(ok); });
-    else { t.select(); var ok = false; try { ok = D.execCommand('copy'); } catch (e) {} done(ok); }
-  }
-  function showQR() {
-    var go = function () { if (W.TOLShareKit && W.TOLShareKit.showQR) W.TOLShareKit.showQR(lastLink, { title: T('Scan with the other device', 'Escanéalo con el otro dispositivo'), note: T('Point the other phone’s camera at this code. The link opens there and asks before restoring anything.', 'Apunta la cámara del otro teléfono a este código. El enlace se abre allí y pregunta antes de restaurar nada.') }); };
-    if (W.TOLShareKit) { go(); return; }
-    var s = D.createElement('script'); s.src = '/assets/js/share-kit.js'; s.onload = go; D.head.appendChild(s);
-  }
-  function shareLink() { if (W.navigator.share) W.navigator.share({ url: lastLink, title: T('My Spread Love & Acceptance progress', 'Mi progreso de Spread Love & Acceptance') }).catch(function () {}); }
-  function openPasted() {
-    var v = ($('tp-paste').value || '').trim();
-    var info; try { info = linkInfo(v); } catch (e) { say('tp-paste-msg', T('That doesn’t look like a move link. It should have “#restore=” in it.', 'No parece un enlace de traslado. Debe incluir “#restore=”.'), true); return; }
-    say('tp-paste-msg', '');
-    $('tp-paste').value = '';
-    startIncoming({ kind: 'link', raw: v, encrypted: info.encrypted });
-    var r = $('restore'); if (r) r.scrollIntoView({ block: 'start' });
-  }
-  function pickFile(f) {
-    if (!f) return;
-    if (f.size > MAX_FILE) { startIncoming({ kind: 'file', name: f.name, raw: '' }); say('tp-in-msg', errText({ code: 'big' }), true); return; }
-    var rd = new FileReader();
-    rd.onload = function () {
-      var text = String(rd.result || ''), info;
-      try { info = inspect(text); } catch (e) { var box = inBox(); incoming = null; box.hidden = false; box.textContent = ''; box.appendChild(mk('p', { class: 'tp-status is-bad', role: 'status' }, errText(e))); box.appendChild(cancelBtn()); return; }
-      startIncoming({ kind: 'file', name: f.name, raw: text, encrypted: info.encrypted });
-    };
-    rd.onerror = function () { say('tp-in-msg', errText({}), true); };
-    rd.readAsText(f);
-  }
-  function syncWarn(a, b, warnId) {
-    var w = $(warnId); if (!w) return;
-    var empty = !($(a).value || $(b).value);
-    w.textContent = empty
-      ? T('No password: anyone who opens it can read what’s in it. Adding one is best.', 'Sin contraseña: cualquiera que lo abra puede leer lo que contiene. Lo mejor es poner una.')
-      : T('Locked with your password. Without it, nobody can open it, not even us, so keep it somewhere safe.', 'Protegido con tu contraseña. Sin ella nadie puede abrirlo, ni siquiera nosotros, así que guárdala bien.');
-    w.classList.toggle('is-bad', empty);
-  }
-  function section() {
-    var root = $('progress'); if (!root) return;
-    css();
-    root.classList.add('tp-live');
-    drawWhat(); drawKeep();
-    if (isApp()) { var h = $('tp-app-hint'); if (h) h.hidden = false; }
-    syncWarn('tp-pw1', 'tp-pw2', 'tp-backup-warn'); syncWarn('tp-lpw1', 'tp-lpw2', 'tp-link-warn');
-    root.addEventListener('input', function (e) {
-      var id = e.target.id;
-      if (id === 'tp-pw1' || id === 'tp-pw2') { syncWarn('tp-pw1', 'tp-pw2', 'tp-backup-warn'); say('tp-backup-msg', ''); }
-      if (id === 'tp-lpw1' || id === 'tp-lpw2') { syncWarn('tp-lpw1', 'tp-lpw2', 'tp-link-warn'); say('tp-link-msg', ''); }
-    });
-    root.addEventListener('change', function (e) {
-      var t = e.target;
-      if (t.id === 'tp-file') pickFile(t.files && t.files[0]);
-      else if (t.id === 'tp-remind') setState({ off: t.checked ? null : 1 });
-      else if (t.matches('[data-tp-show]')) {
-        var on = t.checked;
-        t.getAttribute('data-tp-show').split(' ').forEach(function (id) { var i = $(id); if (i) i.type = on ? 'text' : 'password'; });
-      }
-    });
-    root.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-tp]'); if (!b) return;
-      var k = b.getAttribute('data-tp');
-      if (k === 'backup') backup();
-      else if (k === 'link') makeLink();
-      else if (k === 'copy') copyLink();
-      else if (k === 'qr') showQR();
-      else if (k === 'share-link') shareLink();
-      else if (k === 'paste') openPasted();
-      else if (k === 'unlock') unlock();
-      else if (k === 'apply') apply();
-      else if (k === 'cancel') cancelIncoming();
-      else if (k === 'persist') { b.disabled = true; persist().then(function () { b.disabled = false; drawKeep(); }); }
-    });
-    var pi = $('tp-paste'); if (pi) pi.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); openPasted(); } });
-    // other parts of the page (Erase, Erase everything) change what's kept: redraw the counts after them
-    D.addEventListener('click', function (e) { if (e.target.closest('[data-erase], [data-od]')) setTimeout(function () { drawWhat(); drawKeep(); }, 50); });
-    // a move link: read it, take it out of the address bar, and offer to restore (never automatically)
-    var hsh = location.hash || '';
-    if (hsh.indexOf('#restore=') === 0) {
-      var raw = hsh;
-      try { history.replaceState(null, '', location.pathname + location.search + '#restore'); } catch (er) {}
-      var info = null; try { info = linkInfo(raw); } catch (er) {}
-      if (info) startIncoming({ kind: 'link', raw: raw, encrypted: info.encrypted });
-      else { var box = inBox(); box.hidden = false; box.textContent = ''; box.appendChild(mk('p', { class: 'tp-status is-bad', role: 'status' }, T('This move link is incomplete or damaged. Copy the whole link again, or use a backup file.', 'Este enlace de traslado está incompleto o dañado. Copia el enlace entero otra vez, o usa un archivo de copia.'))); }
-      var r = $('restore'); if (r) setTimeout(function () { r.scrollIntoView({ block: 'start' }); }, 60);
-    }
-  }
-
-  function start() {
-    try { everywhere(); } catch (e) {}
-    if (PAGE) section();
-  }
-  if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', start); else start();
-})(typeof globalThis !== 'undefined' ? globalThis : this);
