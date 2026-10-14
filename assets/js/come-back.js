@@ -142,8 +142,13 @@
     ['s1e2', 'Out of Tune', 'You watched the pals say what they mean, then check how it landed. Try it at dinner: “Did that come out the way I meant?”'],
     ['s1e3', 'The Heavy Basket', 'You watched the pals share the load. Try asking “what would Tidbit do?” today, and lay one job out where everyone can see it.'],
     ['s1e4', 'Who Broke the Kite?', 'You watched the pals look at how things were set up before blaming anyone. When something breaks today, ask “how was it set up?”'],
-    ['s1e5', 'The Longest Night', 'You watched the pals notice a quiet habit and choose a new way. Pick one small habit to notice together today.']
+    ['s1e5', 'The Longest Night', 'You watched the pals notice a quiet habit and choose a new way. Pick one small habit to notice together today.'],
+    ['s2e1', 'The Great Big Sea', 'You watched the pals ask how to help. Next time someone is upset, try: “Fixing, hugging, or listening?”'],
+    ['s2e2', 'The Lighthouse in the Fog', 'You watched the pals thank the quiet jobs. Tonight, say one thank-you out loud: what they did, and how it helped.'],
+    ['s2e3', 'Room for One More', 'You watched the pals make room. If you feel left out today, try saying it: “Room for one more?”']
   ];
+  // "Episode 3" for Season 1, "Season 2, episode 1" after that
+  function epLabel(e) { var m = /^s(\d+)e(\d+)$/.exec(e[0]) || [0, 1, EPISODES.indexOf(e) + 1]; return (+m[1] > 1 ? 'Season ' + m[1] + ', episode ' : 'Episode ') + (+m[2]); }
   function buddies() { var b = json('tol-buddies-v1'); return b && typeof b === 'object' ? b : {}; }
   function episodesWatched() { var w = buddies().watched || {}; return EPISODES.filter(function (e) { return w[e[0]]; }); }
   function nextEpisode() { var w = buddies().watched || {}; for (var i = 0; i < EPISODES.length; i++) if (!w[EPISODES[i][0]]) return EPISODES[i]; return null; }
@@ -432,12 +437,12 @@
   }
   function nextIdea() {
     var nc = nextChapter(), ne = nextEpisode(), tools = toolsTried(), w = wanted(), c = [];
-    if (w.kids && ne) c.push(['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
+    if (w.kids && ne) c.push(['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
     if (nc && chaptersRead()) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
     if (tools.indexOf('/quick-checks.html') === -1) c.push(['/quick-checks.html#today', 'Today’s Weather', 'one minute on how you are doing']);
     if (tools.indexOf('/wavelength.html') === -1) c.push(['/wavelength.html', 'Find your Wavelength', 'how you think, talk and listen']);
     if (nc) c.push([nc.u, nc.code + ': ' + nc.t, nc.n]);
-    if (ne) c.push(['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
+    if (ne) c.push(['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], 'with Tidbit and Sugarfoot']);
     c.push(['/prog-01.html', 'Six gentle weeks', 'one small session a week']);
     // the first idea in your focus, if Focus mode is on and one fits
     return c.filter(function (x) { return fits(x[0]); })[0] || c[0];
@@ -835,7 +840,7 @@
       w.forEach(function (e) { if (e[0] === lastId) ep = e; });
       ep = ep || w[w.length - 1];
       var ne = nextEpisode();
-      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], 'Episode ' + (EPISODES.indexOf(ne) + 1) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', '— your favorite moments, mixed up'];
+      var next = ne ? ['/frequency-buddies.html?ep=' + ne[0], epLabel(ne) + ': ' + ne[1], ''] : ['/frequency-buddies-shuffle.html', 'Frequency Buddies Shuffle', '— your favorite moments, mixed up'];
       if (!box) { box = endCard('What you got from Frequency Buddies'); var after = main.querySelector('[data-buddies-script]') || main.querySelector('.fbp-player'); if (after) after.after(box); else main.appendChild(box); }
       fillEnd(box, ep[2], next, '<span>' + w.length + ' of ' + EPISODES.length + ' episodes watched.</span> ');
       if (fresh) celebrate('ep:' + ep[0], 'An episode with the pals', false);

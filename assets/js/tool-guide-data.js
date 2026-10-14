@@ -1160,6 +1160,94 @@ window.TOLToolGuideData = {
       idea: 'The report and how it compares the sheets are this site’s own.',
       limits: 'It can only read what you typed in. Numbers don’t capture how things feel; talk about that too.',
       privacy: 'Your ledger is a file you keep: nothing is stored in the browser or sent anywhere. Press “Save ledger” to download it.'
+    },
+
+    /* ---------------- Round 10: three new worksheets and the 30-day look-back ---------------- */
+
+    'same-moment': {
+      name: 'Same moment, different speeds',
+      reg: 'pace12',
+      pages: ['/workpapers/wp-12-same-moment-different-speeds.html', '/workpapers/wp-12-same-moment-different-speeds-in-depth.html', '/workpapers/fill/wp-12.html'],
+      two: true,
+      when: 'When one of you keeps wanting to sort things now and the other keeps needing time, and it is starting to feel like a difference in caring.',
+      notWhen: 'Not in the middle of a row: take a break first with <a href="/pursue-withdraw.html">a pause plan</a>. Not to prove who is “too slow” or “too pushy”.',
+      time: 'About 20 minutes, once. Then try your agreement for two weeks.',
+      result: 'Your gaps in plain words, for example “bills: Tom right away, Rosa after a night’s sleep”, and one small agreement for the biggest gap that gives the faster person a way to start and the slower person a time to land.',
+      next: [
+        ['/pursue-withdraw.html', 'A pause plan', 'when one of you needs space in the middle of a hard talk'],
+        ['/tools/frequency-calibration.html', 'Compare your daily rhythms', 'for pace across the whole week, not just five moments'],
+        ['/check-ins.html', 'Check-ins', 'to look at how the agreement is going, at a set time']
+      ],
+      idea: 'The five moments, the three questions (speed, talk, urgency) and how the gaps are counted are this site’s own. No study is behind these questions.',
+      limits: 'It shows what each of you says about your own pace. It can’t tell you why, and it is not a tested tool.',
+      fair: ['Mark your own speeds before you look at the other person’s answers.'],
+      privacy: 'The worksheet runs on this device. What you type stays in this tab until you close it, or longer only if you tick “Keep a draft on this device”. Nothing is sent anywhere.'
+    },
+
+    'is-it-us': {
+      name: 'Is it us, or is it everything else?',
+      reg: 'static14',
+      pages: ['/workpapers/wp-14-is-it-us-or-everything-else.html', '/workpapers/wp-14-is-it-us-or-everything-else-in-depth.html', '/workpapers/fill/wp-14.html'],
+      two: true,
+      when: 'In a hard stretch (a deadline, an illness, money worry, bad sleep) when you have started snapping at each other and wonder what has gone wrong between you.',
+      notWhen: 'Not to excuse unkindness: outside pressure explains a hard day, it doesn’t excuse it. If the same tension is there on easy days too, talk about it at <a href="/check-ins.html">a calm, set time</a>.',
+      time: 'A minute each evening for a week, then about 15 minutes together.',
+      result: 'A plain count, for example “3 of our 4 tense moments came on a heavy day”, and one plan for the pressure: a way to flag a heavy day (“Rough day, not you”), things to go easy on, and one bit of outside help to ask for.',
+      next: [
+        ['/workpapers/wp-02-how-much-are-you-carrying.html', 'How much are you carrying?', 'a quick check of today’s load'],
+        ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back?', 'for the tension that stays in the “between us” column'],
+        ['/check-ins.html', 'Check-ins', 'to talk about one finding on a calmer day']
+      ],
+      research: [
+        ['neff-karney-2009', 'Spouses under more outside stress reacted more strongly to everyday upsets in the relationship (Neff and Karney, 2009).'],
+        ['repetti-1989', 'After heavy workdays, air traffic controllers were more withdrawn with their spouses that evening (Repetti, 1989).']
+      ],
+      idea: 'The two-column log, the “mostly” labels and the end-of-week count are this site’s own.',
+      limits: 'Your labels are guesses, and they can change. A week is short, and it can’t prove what caused what.',
+      fair: ['Each person fills in only their own rows.'],
+      privacy: 'The worksheet runs on this device. What you type stays in this tab until you close it, or longer only if you tick “Keep a draft on this device”. Nothing is sent anywhere.'
+    },
+
+    'little-rituals': {
+      name: 'Keep your little rituals alive',
+      reg: 'rituals15',
+      pages: ['/workpapers/wp-15-keep-your-little-rituals-alive.html', '/workpapers/wp-15-keep-your-little-rituals-alive-in-depth.html', '/workpapers/fill/wp-15.html'],
+      two: true,
+      when: 'Every three months or so, or when you notice it has been ages since you did the small things you used to do together.',
+      notWhen: 'Not as a list of what the other person has stopped doing. Rituals lapse for ordinary reasons, and nobody is to blame.',
+      time: 'About 15 minutes, four times a year.',
+      result: 'Your shared rituals marked alive, fading or stopped, one to restart in its smallest form (for example “twenty minutes round the park on Sunday afternoons”), and maybe one to let go with thanks.',
+      next: [
+        ['/touchstones.html', 'Touchstones', 'your shared words, jokes and rituals'],
+        ['/turning-toward.html', 'Turning toward', 'small everyday moments of closeness'],
+        ['/complacency.html', 'Complacency', 'when things have gone quietly flat']
+      ],
+      research: [
+        ['fiese-2002-rituals', 'A review linked family routines and rituals with closer, steadier family life, though much of the research is correlational (Fiese and colleagues, 2002).'],
+        ['bruess-pearson-1997', 'Married couples and adult friends share many kinds of small everyday rituals (Bruess and Pearson, 1997).']
+      ],
+      idea: 'The alive, fading or stopped marks and the “smallest form” restart are this site’s own.',
+      limits: 'It helps you notice and choose. It can’t make a ritual feel the way it used to, and it is not a tested tool.',
+      privacy: 'The worksheet runs on this device. What you type stays in this tab until you close it, or longer only if you tick “Keep a draft on this device”. Nothing is sent anywhere.'
+    },
+
+    'look-back': {
+      name: 'Look back over 30 days',
+      reg: 'lookback-quick',
+      pages: ['/look-back-30-days.html', '/workpapers/calculators/look-back-30-days-quick.html'],
+      two: true,
+      when: 'After about a month of using the worksheets or the six gentle weeks, to see whether what you changed is changing anything.',
+      notWhen: 'Not as a verdict on a person. Not after one week: one week can be a fluke.',
+      time: 'About 5 minutes for the quick look-back; 15 for the full one.',
+      result: 'A plain list of what shifted and what didn’t, and one next step.',
+      next: [
+        ['/workpapers/wp-03-one-owner-per-job.html', 'One owner per job', 'if jobs still have no owner'],
+        ['/workpapers/wp-04-what-keeps-coming-back.html', 'What keeps coming back?', 'if rescues keep happening'],
+        ['/check-ins.html', 'Check-ins', 'to talk it through at a set time']
+      ],
+      idea: 'The cut-offs (0.10 on a 0 to 1 scale, 1 rescue a week) are this site’s own rule of thumb.',
+      limits: 'It describes what you typed in. It predicts nothing and is not a tested tool.',
+      privacy: 'Nothing is sent anywhere. The full page keeps entries only if you tick “Keep my entries on this device”.'
     }
   }
 };

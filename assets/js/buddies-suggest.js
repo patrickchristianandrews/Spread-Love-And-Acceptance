@@ -66,6 +66,25 @@
           line: 'one pal always hurries ahead and the other always follows, until they stop at every fork, say what they each see, and choose together.' },
         { key: 'notice', re: /\bbids?\b|turn(ing|s)? toward|reach(es|ing)? (out )?for (you|each other|them)|small moments|pay(ing)? attention|take (it|them|each other) for granted|appreciat|thank(s| you)\b/g,
           line: 'one pal keeps hurrying ahead on a night walk, and they learn to stop, notice each other, and ask, \u201CDo you want to lead this time?\u201D' }
+      ] },
+    // Season 2 (n is the episode number within its season; the card says "Season 2, episode n")
+    { id: 's2e1', n: 1, season: 2, title: 'The Great Big Sea', pillar: 'IV', emoji: '⛵',
+      about: /\bsupport(ing)?\b|\bcomfort|\blistening|how to help/,
+      topics: [
+        { key: 'askhelp', re: /what (kind of )?help|how (can|do) i help|fix(ing)? (it|things)|just listen|want(s|ed)? (advice|solutions?)|advice or|be heard|feel heard|\bcomfort(ing)?\b|reassur/g,
+          line: 'Sugarfoot is scared out on the big sea and Tidbit keeps trying to fix it, until she asks: do you need fixing, a hug, or someone to listen?' }
+      ] },
+    { id: 's2e2', n: 2, season: 2, title: 'The Lighthouse in the Fog', pillar: 'I', emoji: '🏮',
+      about: /\bappreciat|\bgratitude|thank(s| you)\b|work nobody sees/,
+      topics: [
+        { key: 'thanks', re: /\bthank(s|ing| you)\b|appreciat|gratitude|unnoticed|nobody (sees|noticed|notices)|who did (more|most)|keeping score|taken for granted/g,
+          line: 'the pals argue about who did more work, until a trail of lanterns shows them the quiet jobs, and they thank each other out loud: what you did, and how it helped.' }
+      ] },
+    { id: 's2e3', n: 3, season: 2, title: 'Room for One More', pillar: 'V', emoji: '📚',
+      about: /\bjealous|left out|\bfriendships?\b|\bbelong/,
+      topics: [
+        { key: 'leftout', re: /left out|jealous(y)?|\bexclu(ded|sion)|new friend|third wheel|\bbelong(ing)?\b|acting out|attention.seeking/g,
+          line: 'Tidbit feels left out when Sugarfoot makes a new friend and gets very loud, until she notices the quiet feeling underneath and says it.' }
       ] }
   ];
 
@@ -213,14 +232,15 @@
     var m = el('div', 'tol-fbs-main');
     var k = el('p', 'tol-fbs-k', 'Watch it with the pups'); k.id = 'tol-fbs-k';
     var t = el('p', 'tol-fbs-t');
-    t.appendChild(el('small', '', 'Frequency Buddies · Episode ' + ep.n));
+    var epName = ep.season ? 'Season ' + ep.season + ', episode ' + ep.n : 'Episode ' + ep.n;
+    t.appendChild(el('small', '', 'Frequency Buddies · ' + epName));
     t.appendChild(document.createTextNode(ep.title));
     var s = el('p', 'tol-fbs-s', 'Tidbit and Sugarfoot work through this same thing when ' + p.line);
     var go = el('a', 'tol-fbs-go');
     go.href = '/frequency-buddies.html?ep=' + ep.id;
     var play = el('b', '', '▶'); play.setAttribute('aria-hidden', 'true');
     go.appendChild(play);
-    go.appendChild(document.createTextNode('Watch episode ' + ep.n));
+    go.appendChild(document.createTextNode('Watch ' + epName.charAt(0).toLowerCase() + epName.slice(1)));
     var note = el('p', 'tol-fbs-note', 'A short cartoon with captions, made for watching together.');
     m.appendChild(k); m.appendChild(t); m.appendChild(s); m.appendChild(go); m.appendChild(note);
     box.appendChild(pic); box.appendChild(m);

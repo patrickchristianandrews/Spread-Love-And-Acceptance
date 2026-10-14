@@ -1,0 +1,453 @@
+[
+ {
+  "id": "nguyen-ryan-deci-2018-solitude",
+  "authors": "Nguyen, T. T., Ryan, R. M., & Deci, E. L.",
+  "year": 2018,
+  "title": "Solitude as an approach to affective self-regulation",
+  "venue": "Personality and Social Psychology Bulletin, 44(1), 92–106",
+  "doi": "10.1177/0146167217733073",
+  "url": "https://doi.org/10.1177/0146167217733073",
+  "kind": "study",
+  "finding": "In four experiments, short spells of solitude lowered high-arousal feelings, both positive and negative, leaving people calmer; the effect needed actually being alone, and when people chose solitude it went with more relaxation and less stress.",
+  "strength": "moderate — four lab experiments with students; short solitude periods (about 15 minutes)",
+  "topics": [
+   "solitude",
+   "loneliness",
+   "emotion regulation"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#solitude"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-13: citation, volume/issue/pages and DOI confirmed in the Durham repository record and the authors' PDF (https://durham-repository.worktribe.com/output/1290121 ; https://selfdeterminationtheory.org/wp-content/uploads/2018/05/2018_NguyenRyanDeci_PSPB.pdf); summary also in the University of Rochester news release."
+ },
+ {
+  "id": "boothby-2018-liking-gap",
+  "authors": "Boothby, E. J., Cooney, G., Sandstrom, G. M., & Clark, M. S.",
+  "year": 2018,
+  "title": "The liking gap in conversations: Do people like us more than we think?",
+  "venue": "Psychological Science, 29(11), 1742–1756",
+  "doi": "10.1177/0956797618783714",
+  "url": "https://doi.org/10.1177/0956797618783714",
+  "kind": "study",
+  "finding": "Across five studies, people underestimated how much their conversation partners liked them after first conversations; in first-year university roommates the gap lasted for most of the year.",
+  "strength": "moderate — five studies including lab and field samples; mostly students and adults in the US and UK",
+  "topics": [
+   "friendship",
+   "first impressions",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#friends"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-13: citation and DOI confirmed in the University of Essex repository (https://repository.essex.ac.uk/23025/) and the APS news release; the authors' PDF is at https://faculty.wharton.upenn.edu/wp-content/uploads/2020/05/The-Liking-Gap-in-Conversations.pdf"
+ },
+ {
+  "id": "liu-2023-reaching-out",
+  "authors": "Liu, P. J., Rim, S., Min, L., & Min, K. E.",
+  "year": 2023,
+  "title": "The surprise of reaching out: Appreciated more than we think",
+  "venue": "Journal of Personality and Social Psychology, 124(4), 754–771 (online 2022)",
+  "doi": "10.1037/pspi0000402",
+  "url": "https://doi.org/10.1037/pspi0000402",
+  "kind": "study",
+  "finding": "In a series of preregistered experiments, people who reached out to someone in their social circle (a short message, a note or a small gift) consistently underestimated how much the recipient appreciated it; the gap was larger when the contact was more surprising.",
+  "strength": "moderate to strong — many preregistered experiments with thousands of participants; mostly US adults and students",
+  "topics": [
+   "friendship",
+   "reaching out",
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#initiating"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-13: authors, title, JPSP 124(4), 754–771 (epub 2022-07-11) and DOI 10.1037/pspi0000402 confirmed via the PubMed record (https://pubmed.ncbi.nlm.nih.gov/35816566/) and the University of Kansas news release (https://business.ku.edu/people-underestimate-surprising-impact-reaching-out-study-finds)."
+ },
+ {
+  "id": "kretzler-konig-hajek-2022-pets",
+  "authors": "Kretzler, B., König, H.-H., & Hajek, A.",
+  "year": 2022,
+  "title": "Pet ownership, loneliness, and social isolation: A systematic review",
+  "venue": "Social Psychiatry and Psychiatric Epidemiology, 57(10), 1935–1957",
+  "doi": "10.1007/s00127-022-02332-9",
+  "url": "https://doi.org/10.1007/s00127-022-02332-9",
+  "kind": "review",
+  "finding": "Across 24 observational studies, only some found pet owners less lonely or isolated; studies from the COVID-19 pandemic were more often positive than earlier ones, so the overall link between pets and loneliness is mixed.",
+  "strength": "moderate — systematic review of observational studies; cannot show cause and effect",
+  "topics": [
+   "pets",
+   "loneliness",
+   "social isolation"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#pets"
+  ],
+  "verified": true,
+  "verified_by": "WebSearch 2026-10-13: citation, pages and DOI confirmed via Springer (https://link.springer.com/article/10.1007/s00127-022-02332-9) and PMC9272860."
+ },
+ {
+  "id": "cacioppo-patrick-2008",
+  "authors": "Cacioppo, J. T., & Patrick, W.",
+  "year": 2008,
+  "title": "Loneliness: Human Nature and the Need for Social Connection",
+  "venue": "W. W. Norton (New York)",
+  "doi": null,
+  "url": "https://wellcomecollection.org/works/wp45vzsp",
+  "kind": "book",
+  "finding": "A book arguing that loneliness is a biological signal, like hunger, that we need connection, and that chronic loneliness can trap people in isolation and harm health.",
+  "strength": "moderate — popular book summarizing the authors' and others' research",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#solitude"
+  ],
+  "verified": true,
+  "verified_by": "https://www.publishersweekly.com/9780393061703 ; https://search.ub.tum.de/vufind/Record/DE-604.BV035327306 ; https://wellcomecollection.org/works/wp45vzsp",
+  "note": "Library catalogue record (Wellcome Collection, 2009 printing); replaces a trade-magazine listing."
+ },
+ {
+  "id": "masicampo-baumeister-2011",
+  "authors": "Masicampo, E. J., & Baumeister, R. F.",
+  "year": 2011,
+  "title": "Consider it done! Plan making can eliminate the cognitive effects of unfulfilled goals",
+  "venue": "Journal of Personality and Social Psychology, 101(4), 667–683",
+  "doi": "10.1037/a0024192",
+  "url": "https://doi.org/10.1037/a0024192",
+  "kind": "study",
+  "finding": "Unfinished goals caused intrusive thoughts and interfered with other tasks; writing a specific plan for the goal removed these effects.",
+  "strength": "moderate — lab experiments; not yet widely replicated",
+  "topics": [
+   "cognitive-offloading",
+   "mental-load",
+   "unfinished-tasks"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#home"
+  ],
+  "verified": true,
+  "verified_by": "https://supp.apa.org:443/psycarticles/supplemental/a0024192/a0024192_supp.html ; https://mindblog.dericbownds.net/2010/11/brain-clutter-whats-left-undone-lingers.html"
+ },
+ {
+  "id": "ben-simon-walker-2018",
+  "authors": "Ben Simon, E., & Walker, M. P.",
+  "year": 2018,
+  "title": "Sleep loss causes social withdrawal and loneliness",
+  "venue": "Nature Communications",
+  "doi": "10.1038/s41467-018-05377-0",
+  "url": "https://doi.org/10.1038/s41467-018-05377-0",
+  "kind": "study",
+  "finding": "After a night without sleep, young adults kept an approaching person at a greater distance and felt lonelier, with brain changes linked to social avoidance; rested people who briefly watched them felt lonelier too.",
+  "strength": "early — small experimental samples (18 in the main scanning study), one lab",
+  "topics": [
+   "sleep",
+   "stress",
+   "loneliness",
+   "connection"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#rhythms"
+  ],
+  "verified": true,
+  "verified_by": "https://doaj.org/article/a67c34b95f3a473fbbe300fc81111391 ; https://news.berkeley.edu/2018/08/14/sleep-viral-loneliness"
+ },
+ {
+  "id": "hall-2019-hours-friend",
+  "authors": "Hall, J. A.",
+  "year": 2019,
+  "title": "How many hours does it take to make a friend?",
+  "venue": "Journal of Social and Personal Relationships, 36(4), 1278–1296 (online first 2018)",
+  "doi": "10.1177/0265407518761225",
+  "url": "https://doi.org/10.1177/0265407518761225",
+  "kind": "study",
+  "finding": "Studies of adults who had recently moved and of students found that more hours spent together, especially in leisure, went with moving from acquaintance to closer friendship.",
+  "strength": "moderate — survey studies; hour estimates are rough",
+  "topics": [
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/living-alone.html#friends",
+   "/living-alone-in-depth.html#friends"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/10.1177/0265407518761225"
+ },
+ {
+  "id": "sandstrom-dunn-2014-weak-ties",
+  "authors": "Sandstrom, G. M., & Dunn, E. W.",
+  "year": 2014,
+  "title": "Social interactions and well-being: The surprising power of weak ties",
+  "venue": "Personality and Social Psychology Bulletin, 40(7), 910–922",
+  "doi": "10.1177/0146167214529799",
+  "url": "https://doi.org/10.1177/0146167214529799",
+  "kind": "study",
+  "finding": "Students were happier and felt more belonging on days they interacted with more classmates than usual, and in community samples interactions with weak ties as well as close ties were linked with daily well-being.",
+  "strength": "moderate — diary studies, correlational",
+  "topics": [
+   "weak-ties"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#friends"
+  ],
+  "verified": true,
+  "verified_by": "https://journals.sagepub.com/doi/abs/10.1177/0146167214529799"
+ },
+ {
+  "id": "sandstrom-dunn-2014-barista",
+  "authors": "Sandstrom, G. M., & Dunn, E. W.",
+  "year": 2014,
+  "title": "Is efficiency overrated? Minimal social interactions lead to belonging and positive affect",
+  "venue": "Social Psychological and Personality Science, 5(4), 437–442",
+  "doi": "10.1177/1948550613502990",
+  "url": "https://doi.org/10.1177/1948550613502990",
+  "kind": "study",
+  "finding": "People who had a brief, friendly social exchange with a coffee-shop barista reported more belonging and positive mood than those who kept the exchange purely efficient.",
+  "strength": "early — one small field experiment",
+  "topics": [
+   "weak-ties",
+   "belonging"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#friends"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in citing reference (https://journals.sagepub.com/doi/full/10.1177/09637214211002538)"
+ },
+ {
+  "id": "epley-schroeder-2014",
+  "authors": "Epley, N., & Schroeder, J.",
+  "year": 2014,
+  "title": "Mistakenly seeking solitude",
+  "venue": "Journal of Experimental Psychology: General, 143(5), 1980–1999",
+  "doi": "10.1037/a0037323",
+  "url": "https://doi.org/10.1037/a0037323",
+  "kind": "study",
+  "finding": "Commuters asked to talk with a stranger on their train or bus reported a more positive journey than those told to sit in solitude, even though people predicted the opposite; misjudging how pleasant such talk would be keeps people apart.",
+  "strength": "moderate — field and lab experiments; replicated in later work",
+  "topics": [
+   "weak-ties",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#friends"
+  ],
+  "verified": true,
+  "verified_by": "DOI shown in citing references in search result (e.g. https://pubmed.ncbi.nlm.nih.gov/34618536/)"
+ },
+ {
+  "id": "barkley-1997",
+  "authors": "Barkley, R. A.",
+  "year": 1997,
+  "title": "Behavioral inhibition, sustained attention, and executive functions: Constructing a unifying theory of ADHD",
+  "venue": "Psychological Bulletin, 121(1), 65–94",
+  "doi": "10.1037/0033-2909.121.1.65",
+  "url": "https://pubmed.ncbi.nlm.nih.gov/9000892/",
+  "kind": "theory",
+  "finding": "A theoretical review proposing that ADHD centres on a difficulty with behavioural inhibition, which in turn affects executive functions such as working memory, self-regulation of emotion and motivation, and the sense of time.",
+  "strength": "moderate: highly influential theory; executive function difficulties are common in ADHD but not universal.",
+  "topics": [
+   "neurodiversity",
+   "adhd"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#neurodivergent"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/9000892/ ; https://sciences.ucf.edu/psychology/childrenslearningclinic/wp-content/uploads/sites/24/2013/08/Barkley-1997-Psych-Bulletin.pdf"
+ },
+ {
+  "id": "demetriou-2018-ef",
+  "authors": "Demetriou, E. A., Lampit, A., Quintana, D. S., et al.",
+  "year": 2018,
+  "title": "Autism spectrum disorders: A meta-analysis of executive function",
+  "venue": "Molecular Psychiatry, 23, 1198–1204",
+  "doi": "10.1038/mp.2017.75",
+  "url": "https://doi.org/10.1038/mp.2017.75",
+  "kind": "meta-analysis",
+  "finding": "Pooling 235 studies with over 14,000 participants, found that autistic people on average scored lower than non-autistic people across executive function tasks, with wide variation and mixed findings across ages.",
+  "strength": "moderate — large meta-analysis of lab tasks, which capture only part of daily life",
+  "topics": [
+   "autism",
+   "neurodiversity",
+   "executive-function"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#neurodivergent"
+  ],
+  "verified": true,
+  "verified_by": "https://minerva-access.unimelb.edu.au/server/api/core/bitstreams/9a9656b4-d19c-5cf5-83fb-20b878427c7b/content ; https://findanexpert.unimelb.edu.au/scholarlywork/1304533-autism-spectrum-disorders--a-meta-analysis-of-executive-function"
+ },
+ {
+  "id": "holt-lunstad-2015",
+  "authors": "Holt-Lunstad, J., Smith, T. B., Baker, M., Harris, T., & Stephenson, D.",
+  "year": 2015,
+  "title": "Loneliness and social isolation as risk factors for mortality: A meta-analytic review",
+  "venue": "Perspectives on Psychological Science, 10(2), 227–237",
+  "doi": "10.1177/1745691614568352",
+  "url": "https://doi.org/10.1177/1745691614568352",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis linking loneliness, social isolation and living alone with a higher risk of earlier death.",
+  "strength": "strong — meta-analysis of observational studies",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#heavy"
+  ],
+  "verified": true,
+  "verified_by": "PubMed citation with DOI 10.1177/1745691614568352, PMID 25910392 shown in search result"
+ },
+ {
+  "id": "surgeon-general-2023-loneliness",
+  "authors": "Office of the U.S. Surgeon General (Murthy, V. H.)",
+  "year": 2023,
+  "title": "Our Epidemic of Loneliness and Isolation: The U.S. Surgeon General's Advisory on the Healing Effects of Social Connection and Community",
+  "venue": "U.S. Department of Health and Human Services",
+  "doi": null,
+  "url": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf",
+  "kind": "guideline",
+  "finding": "A U.S. public-health advisory reporting that about half of U.S. adults experience measurable loneliness, linking poor social connection with higher risks of heart disease, stroke, dementia and early death, and proposing a national strategy to strengthen connection.",
+  "strength": "strong — official synthesis of research, though most underlying evidence is observational",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#heavy"
+  ],
+  "verified": true,
+  "verified_by": "https://www.hhs.gov/sites/default/files/surgeon-general-social-connection-advisory.pdf ; https://www.hhs.gov/surgeongeneral/reports-and-publications/connection/index.html"
+ },
+ {
+  "id": "masi-2011-loneliness-meta",
+  "authors": "Masi, C. M., Chen, H.-Y., Hawkley, L. C., & Cacioppo, J. T.",
+  "year": 2011,
+  "title": "A meta-analysis of interventions to reduce loneliness",
+  "venue": "Personality and Social Psychology Review, 15(3), 219–266",
+  "doi": "10.1177/1088868310377394",
+  "url": "https://doi.org/10.1177/1088868310377394",
+  "kind": "meta-analysis",
+  "finding": "A meta-analysis of loneliness interventions; it is cited for finding that approaches targeting unhelpful social thinking (maladaptive social cognition) showed larger effects than other approaches, and for calling for better-controlled trials.",
+  "strength": "strong — meta-analysis, though many included studies were small",
+  "topics": [
+   "loneliness"
+  ],
+  "mentioned_on": [
+   "/living-alone-in-depth.html#heavy"
+  ],
+  "verified": true,
+  "verified_by": "PubMed-style citation with DOI 10.1177/1088868310377394 and PMID 20716644 shown in search result; https://journals.sagepub.com/doi/10.1177/1745691615570616 (citing review)"
+ },
+ {
+  "id": "neff-karney-2009",
+  "authors": "Neff, L. A., & Karney, B. R.",
+  "year": 2009,
+  "title": "Stress and reactivity to daily relationship experiences: How stress hinders adaptive processes in marriage",
+  "venue": "Journal of Personality and Social Psychology, 97(3), 435–450",
+  "doi": "10.1037/a0015663",
+  "url": "https://doi.org/10.1037/a0015663",
+  "kind": "study",
+  "finding": "Spouses under more stress outside the relationship reacted more strongly to everyday negative experiences within it.",
+  "strength": "moderate — daily-diary studies of newlyweds; correlational",
+  "topics": [
+   "spillover",
+   "stress",
+   "relationships",
+   "work-life"
+  ],
+  "mentioned_on": [
+   "/workpapers/wp-14-is-it-us-or-everything-else-in-depth.html#why"
+  ],
+  "verified": true,
+  "verified_by": "https://sites.lifesci.ucla.edu/psych-marriagelab/wp-content/uploads/sites/213/2020/05/Neff__Karney_2009.220154529.pdf ; https://sites.utexas.edu/realproject/selected-publications/",
+  "note": "The site (book/chapter-3-in-depth.html#leftover) names Neff and Karney without a year; this is the closest-matching paper."
+ },
+ {
+  "id": "repetti-1989",
+  "authors": "Repetti, R. L.",
+  "year": 1989,
+  "title": "Effects of daily workload on subsequent behavior during marital interaction: The roles of social withdrawal and spouse support",
+  "venue": "Journal of Personality and Social Psychology, 57(4), 651–659",
+  "doi": null,
+  "url": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf",
+  "kind": "study",
+  "finding": "In a daily study of air traffic controllers, after high-workload days they were more socially withdrawn and less emotionally expressive with their spouses that evening.",
+  "strength": "moderate — small daily-diary study; an early classic of “spillover” research",
+  "topics": [
+   "work-life",
+   "stress",
+   "spillover"
+  ],
+  "mentioned_on": [
+   "/workpapers/wp-14-is-it-us-or-everything-else-in-depth.html#why"
+  ],
+  "verified": true,
+  "verified_by": "https://www.psych.ucla.edu/wp-content/uploads/Repetti-JPSP-1989.pdf ; https://repettilab.psych.ucla.edu/?p=25",
+  "note": "DOI not confirmed; link is the PDF on the UCLA psychology site."
+ },
+ {
+  "id": "fiese-2002-rituals",
+  "authors": "Fiese, B. H., Tomcho, T. J., Douglas, M., Josephs, K., Poltrock, S., & Baker, T.",
+  "year": 2002,
+  "title": "A review of 50 years of research on naturally occurring family routines and rituals: Cause for celebration?",
+  "venue": "Journal of Family Psychology, 16(4), 381–390",
+  "doi": "10.1037/0893-3200.16.4.381",
+  "url": "https://doi.org/10.1037/0893-3200.16.4.381",
+  "kind": "review",
+  "finding": "A review of 32 publications found family routines and rituals were related to parenting competence, children's adjustment and marital satisfaction, while noting weak measurement and convenience samples.",
+  "strength": "moderate — qualitative review of mostly correlational studies",
+  "topics": [
+   "rituals"
+  ],
+  "mentioned_on": [
+   "/workpapers/wp-15-keep-your-little-rituals-alive-in-depth.html#why"
+  ],
+  "verified": true,
+  "verified_by": "https://pubmed.ncbi.nlm.nih.gov/12561283/"
+ },
+ {
+  "id": "bruess-pearson-1997",
+  "authors": "Bruess, C. J. S., & Pearson, J. C.",
+  "year": 1997,
+  "title": "Interpersonal rituals in marriage and adult friendship",
+  "venue": "Communication Monographs, 64(1), 25–46",
+  "doi": "10.1080/03637759709376403",
+  "url": "https://doi.org/10.1080/03637759709376403",
+  "kind": "study",
+  "finding": "Interviews and questionnaires with married couples produced typologies of the everyday rituals people share in marriage (seven types) and in adult friendship (six types).",
+  "strength": "early — descriptive, qualitative study",
+  "topics": [
+   "rituals",
+   "maintenance",
+   "friendship"
+  ],
+  "mentioned_on": [
+   "/workpapers/wp-15-keep-your-little-rituals-alive-in-depth.html#why"
+  ],
+  "verified": true,
+  "verified_by": "https://www.tandfonline.com/doi/abs/10.1080/03637759709376403"
+ },
+ {
+  "id": "aron-2000-novel-activities",
+  "authors": "Aron, A., Norman, C. C., Aron, E. N., McKenna, C., & Heyman, R. E.",
+  "year": 2000,
+  "title": "Couples' shared participation in novel and arousing activities and experienced relationship quality",
+  "venue": "Journal of Personality and Social Psychology, 78(2), 273–284",
+  "doi": "10.1037/0022-3514.78.2.273",
+  "url": "https://doi.org/10.1037/0022-3514.78.2.273",
+  "kind": "study",
+  "finding": "Couples who took part together in a novel, mildly challenging activity reported higher relationship quality afterward than couples who did a mundane task.",
+  "strength": "moderate — experiments with short-term lab effects; later studies mostly supportive",
+  "topics": [
+   "complacency",
+   "self-expansion",
+   "novelty"
+  ],
+  "mentioned_on": [
+   "/workpapers/wp-15-keep-your-little-rituals-alive-in-depth.html#why"
+  ],
+  "verified": true,
+  "verified_by": "DOI 10.1037/0022-3514.78.2.273 shown in citing reference lists; cited in https://pubmed.ncbi.nlm.nih.gov/42193579/"
+ }
+]

@@ -99,6 +99,7 @@ Cacioppo and William Patrick published *Loneliness* in 2008. The UCLA Loneliness
 links:
 /turning-toward.html | Turning Toward
 /relationships.html#friends | How it fits: friends
+/living-alone-in-depth.html#heavy | Living on your own: when loneliness feels heavy
 talk:
 - When have you felt lonely even when you weren’t alone?
 - What small things make you feel connected on a busy day?
@@ -118,6 +119,7 @@ research:
 Hall published his study in 2019 in the *Journal of Social and Personal Relationships*. The hour estimates come from specific samples and should be seen as rough guides. Robin Dunbar’s research describes layers of friendship, with fewer people in closer layers. Research on friendship maintenance behaviours (such as by Debra Oswald) finds that positivity, support, openness and interaction all help keep friendships going.
 links:
 /relationships.html#friends | How it fits: friends
+/living-alone-in-depth.html#friends | Making friends as an adult
 talk:
 - Which friendships would each of us like to invest more time in?
 - How could we support each other in keeping friendships going?

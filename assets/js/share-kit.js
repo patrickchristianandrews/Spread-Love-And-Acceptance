@@ -33,6 +33,8 @@
    document with detail { data, box, close } as the sheet opens, that is used instead. */
 (function () {
   'use strict';
+  // English or Spanish, following the page (site.js sets window.TOLLang; read at call time)
+  function T(en, es) { try { return window.TOLLang && window.TOLLang.es() ? es : en; } catch (e) { return en; } }
   if (window.TOLShareKit) return;
 
   var SITE_NAME = 'Spread Love & Acceptance', SITE_HOST = 'spreadloveandacceptance.com';
@@ -781,13 +783,13 @@
         if (seen.indexOf(p) !== -1 || p.querySelector('.tsk-line')) return;
         seen.push(p);
         var text = lineText(p); if (!text || text.length > 400) return;
-        var b = mk('button', { type: 'button', class: 'tsk-line', 'aria-label': 'Share this line', title: 'Share this line' });
+        var b = mk('button', { type: 'button', class: 'tsk-line', 'aria-label': T('Share this line', 'Compartir esta frase'), title: T('Share this line', 'Compartir esta frase') });
         b.appendChild(icon());
         b.addEventListener('click', function (e) {
           e.preventDefault(); e.stopPropagation();
           var t = lineText(p), sec = sectionOf(p, main), url = location.origin + location.pathname + (sec ? '#' + encodeURIComponent(sec.id) : '');
           var head = headingFor(p, main) || (document.querySelector('h1') || {}).textContent || '';
-          pendingHeading = 'Share this line';
+          pendingHeading = T('Share this line', 'Compartir esta frase');
           if (window.TOLShare && window.TOLShare.open) window.TOLShare.open({ title: head.trim(), text: t, url: url, result: true });
           else shareText({ title: head, text: t, url: url });
         });
