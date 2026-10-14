@@ -460,7 +460,7 @@
     var more = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'more', text: T('WhatsApp or another app', 'WhatsApp u otra app') });
     var cp = mk('button', { type: 'button', cls: 'tcol-act tcol-act-copy', 'data-c': 'copy', text: T('Copy link', 'Copiar enlace') });
     var cd = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'code', text: T('Copy as a code', 'Copiar como código'), hidden: '' });
-    [qr, sms, mail, more, cp, cd].forEach(function (b) { acts.appendChild(b); });
+    [qr, sms, mail, more, cd, cp].forEach(function (b) { acts.appendChild(b); });
     var long = mk('p', { cls: 'tcol-long', hidden: '' });
     var priv = mk('p', { cls: 'tcol-priv', text: T('Your answers travel inside the link. Anyone with the link can read them. Nothing is stored on our side.', 'Tus respuestas viajan dentro del enlace. Cualquiera que tenga el enlace puede leerlas. No se guarda nada de nuestro lado.') });
     var st = mk('p', { cls: 'tcol-st', role: 'status', 'aria-live': 'polite' });
@@ -687,7 +687,7 @@
       var ids = others(), e = st.env, mineNow = mine(), id0 = myId();
       // who's in it so far
       if (e && ids.length) {
-        var names = ids.map(nameOf).concat([myName() || T('you', 'tú')]);
+        var names = ids.map(nameOf).concat([myName() ? myName() + T(' (you)', ' (tú)') : T('you', 'tú')]);
         people.textContent = T('In this so far: ', 'Hasta ahora: ') + names.join(' · ');
         people.hidden = false;
       } else people.hidden = true;

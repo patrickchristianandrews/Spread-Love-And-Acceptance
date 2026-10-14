@@ -134,7 +134,7 @@
   var LINKS = {
     rulebook: ['The rulebook from home', '#home'], lenscheck: ['The one-minute lens check', '#check'],
     wavelength: ['Wavelength', '/wavelength.html'], knowyourself: ['Know your own wiring', '/know-yourself.html'],
-    signal: ['The Signal Translator', '/signal-translator.html'], shifter: ['The Perspective Shifter', '/perspective-shifter.html'],
+    signal: ['The Signal Translator', '/signal-translator.html'], shifter: ['See it from their side', '/carrier-wave-decoder.html?tab=their-side'],
     calm: ['The Calm-Down Kit (WP-11)', '/wp-11.html'], weather: ['Today’s Weather', '/quick-checks.html#today'],
     sayno: ['Kind ways to say no (WP-01)', '/workpapers/wp-01.html'], ch3: ['Chapter III: leftover stress', '/book/chapter-3.html'],
     lemonade: ['The Lemonade Stand', '/lemonade-stand.html'], checkins: ['Swap rulebooks in a check-in', '/check-ins.html'],
@@ -180,7 +180,7 @@
       protect: 'When plans couldn’t be counted on, holding the plan yourself may have been how you made life feel steady.',
       cost: 'Now it can mean carrying the whole mental load, feeling on edge when plans shift, and others feeling shut out.',
       notice: 'A jolt of alarm when a plan changes, or the urge to take over before anyone else has a chance.',
-      tryit: ['Hand over one small plan this week, and let it go a little differently than you would do it.', 'Use the Perspective Shifter to see a change of plan from the other person’s side.'],
+      tryit: ['Hand over one small plan this week, and let it go a little differently than you would do it.', 'Use See it from their side to look at a change of plan from the other person’s side.'],
       say: 'I notice I want to grab this plan. Can you own it, and tell me the time and place once it’s set?',
       rule: ['If I don’t hold the plan, it falls apart.', 'Plans can be shared, and a change of plan isn’t an emergency.'],
       links: ['shifter', 'lemonade', 'calm'] },

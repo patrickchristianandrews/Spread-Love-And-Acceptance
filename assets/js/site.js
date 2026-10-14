@@ -3886,7 +3886,7 @@
   var CORE = [
     ['lemonade', 'The Lemonade Stand', '/lemonade-stand.html', /^\/lemonade-stand\.html$/],
     ['checkin', 'Check-ins', '/check-ins.html', /^\/(check-ins|workpapers\/wp-13-daily-check-in|workpapers\/fill\/wp-13)\.html$/],
-    ['signal', 'The Signal Translator', '/signal-translator.html', /^\/signal-translator\.html$/],
+    ['signal', 'The Chat analyzer', '/signal-translator.html', /^\/signal-translator\.html$/],
     ['calm', 'The Calm-Down Kit', '/wp-11.html', /^\/(wp-11|workpapers\/fill\/wp-11|ladder)\.html$/],
     ['wave', 'Wavelength', '/wavelength.html', /^\/wavelength\.html$/]
   ];

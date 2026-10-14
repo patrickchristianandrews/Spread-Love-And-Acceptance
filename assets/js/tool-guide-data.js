@@ -81,52 +81,31 @@ window.TOLToolGuideData = {
       privacy: 'It runs entirely in this browser. What you paste or screenshot is not saved or sent anywhere. Close the tab and it’s gone.'
     },
 
-    'perspective-shifter': {
-      name: 'See it from their side',
-      reg: 'perspective',
-      pages: ['/perspective-shifter.html'],
-      when: 'When someone’s reaction surprised or hurt you and you want to step round to their side before you talk.',
-      notWhen: 'Not as a way to excuse something that keeps hurting you. Not to decide what they think: it gives you questions to ask them, not answers.',
-      time: 'About 5 minutes.',
-      result: 'A short picture of their side of the moment (their day, how they’re wired, what they could see that you couldn’t), two or three questions to check with them, and one sentence to bridge the gap.',
-      next: [
-        ['/signal-translator.html', 'Check what you want to say', 'before you send it'],
-        ['/check-ins.html', 'Raise it at a calm time', 'one topic, one short talk'],
-        ['/workpapers/wp-09-say-it-so-it-lands.html', 'Say it so it lands', 'a fact, a feeling and one kind ask']
-      ],
-      research: [
-        ['eyal-steffel-epley-2018', 'Imagining someone’s view doesn’t make us more accurate; asking them does (Eyal, Steffel and Epley, 2018). That is why it ends in questions.'],
-        ['ross-1977-fae', 'We tend to blame people’s character and miss their situation (Ross, 1977).'],
-        ['ross-ward-1996-naive-realism', 'Each of us assumes we see things as they really are (Ross and Ward, 1996).']
-      ],
-      idea: 'The five things to look at (who they are, their wiring, their state, what was around them, what they could see) are this site’s own way of organising it.',
-      limits: 'It is your best guess about another person. Treat it as a question to ask, not a conclusion.',
-      fair: ['Use it to understand, not to win. It never decides who was right.'],
-      privacy: 'Your taps stay on this page. Nothing is sent anywhere.'
-    },
-
     'carrier-wave-decoder': {
-      name: 'When a talk goes wrong: a step-by-step reset',
+      name: 'After a talk went wrong: a step-by-step reset',
       reg: 'decoder',
-      pages: ['/carrier-wave-decoder.html'],
-      when: 'After a conversation went wrong between two people who usually get on, and you want to work out what slipped, settle yourself and practise what to say next time.',
-      notWhen: 'Not in the heat of the moment: use <a href="/upset-right-now.html">Upset right now?</a> first. If it’s a big topic, raise it later in a <a href="/check-ins.html">check-in</a>.',
-      time: 'One session takes about 15 to 20 minutes; each step is a few minutes and you can skip any.',
-      result: 'A short note on what was out of sync (pace, words, state, timing), the state you were in, one opening line you have practised, and a journal entry to look back on.',
+      pages: ['/carrier-wave-decoder.html', '/perspective-shifter.html'],
+      when: 'After a conversation went wrong between two people who usually get on, and you want to settle, work out what slipped, step round to their side, and practise what to say next time. The Their side step alone is for when someone’s reaction surprised or hurt you.',
+      notWhen: 'Not in the heat of the moment: use <a href="/upset-right-now.html">Upset right now?</a> first. If it’s a big topic, raise it later in a <a href="/check-ins.html">check-in</a>. Not as a way to excuse something that keeps hurting you, and not to decide what the other person thinks: Their side gives you questions to ask them, not answers.',
+      time: 'One session takes about 15 to 20 minutes; each step is a few minutes and you can skip any. Their side on its own takes about 5.',
+      result: 'A short note on what was out of sync (pace, words, state, timing), a picture of their side of the moment with two or three questions to check with them, one sentence to bridge the gap, an opening line you have practised and checked, and a journal entry to look back on.',
       next: [
-        ['/signal-translator.html', 'Test your opening sentence', 'before you try again'],
+        ['/signal-translator.html', 'Check your sentence in the Chat analyzer', 'the last step hands it over for you'],
         ['/check-ins.html', 'Raise it once, at a set time', 'one topic, no blame'],
         ['/wp-11.html', 'Make a calm-down plan', 'for next time it heats up']
       ],
       research: [
         ['gottman-levenson-1992', 'When the body is very stirred up, talks tend to go worse (Gottman and Levenson, 1992).'],
         ['mischkowski-kross-bushman-2012', 'Looking back “like a fly on the wall” lowers anger (Mischkowski, Kross and Bushman, 2012).'],
-        ['schegloff-jefferson-sacks-1977', 'Repairing a misunderstanding is a normal part of talking (Schegloff and colleagues, 1977).']
+        ['schegloff-jefferson-sacks-1977', 'Repairing a misunderstanding is a normal part of talking (Schegloff and colleagues, 1977).'],
+        ['eyal-steffel-epley-2018', 'Imagining someone’s view doesn’t make us more accurate; asking them does (Eyal, Steffel and Epley, 2018). That is why Their side ends in questions.'],
+        ['ross-1977-fae', 'We tend to blame people’s character and miss their situation (Ross, 1977).'],
+        ['ross-ward-1996-naive-realism', 'Each of us assumes we see things as they really are (Ross and Ward, 1996).']
       ],
-      idea: 'The radio picture (two signals slightly out of tune), the practices and the session order are this site’s own.',
-      limits: 'A self-help practice, not therapy. It helps you look at your side; it can’t tell you what the other person was thinking.',
-      fair: ['Treat a mismatch as tuning, not a failing in either person.'],
-      privacy: 'Your progress and notes are kept in this browser only if you say yes when it asks. You can see and erase them on <a href="/on-this-device.html">What’s stored on this device</a>.'
+      idea: 'The radio picture (two signals slightly out of tune), the practices and the session order are this site’s own, and so are the five things Their side looks at (who they are, their wiring, their state, what was around them, what they could see).',
+      limits: 'A self-help practice, not therapy. It helps you look at your side; Their side is only your best guess about another person, so treat it as a question to ask, not a conclusion.',
+      fair: ['Treat a mismatch as tuning, not a failing in either person.', 'Use Their side to understand, not to win. It never decides who was right.'],
+      privacy: 'Your progress and notes are kept in this browser only if you say yes when it asks. You can see and erase them on <a href="/on-this-device.html">What’s stored on this device</a>. Your taps on Their side stay on the page and are never kept. A sentence you check goes to the Chat analyzer in this tab only.'
     },
 
     'write-it-through': {
@@ -344,13 +323,13 @@ window.TOLToolGuideData = {
     },
 
     'todays-weather': {
-      name: 'Mood and energy check-in',
+      name: 'How am I right now? A mood and energy check',
       reg: 'weather',
-      pages: ['/quick-checks.html'],
-      when: 'Once a day, or before something hard, to see what today has room for.',
+      pages: ['/quick-checks.html', '/ladder.html'],
+      when: 'Before something hard, when you can’t tell if now is a good time to talk (the quick 4 taps), or once a day to see what today has room for (the full forecast).',
       notWhen: 'Not a way to rate someone else’s mood. Not a measure of your mental health.',
-      time: 'About 1 minute.',
-      result: 'A “forecast” in words, such as “Gusty: not much room today. Keep the big talk for the weekend,” plus one thing that would help.',
+      time: 'About 20 seconds for the quick check; about 1 minute for the full forecast.',
+      result: 'Quick: calm and connected, revved up or running on empty, with what helps now and a pause line. Full: a “forecast” in words, such as “Gusty: not much room today. Keep the big talk for the weekend,” plus one thing that would help.',
       next: [
         ['/quick-checks.html#almanac', 'Your weather over time', 'a few days in, your own pattern starts to show'],
         ['/wp-11.html', 'Make a calm-down plan', 'for the gusty days'],
@@ -368,7 +347,6 @@ window.TOLToolGuideData = {
 
     'how-much-carrying': {
       name: 'Load check: how much are you carrying?',
-      reg: 'load-check',
       pages: ['/workpapers/wp-02-how-much-are-you-carrying.html', '/workpapers/fill/wp-02.html'],
       when: 'Before a hard conversation, or when a small thing stings more than it should, to tell apart what you’re already carrying from the thing in front of you.',
       notWhen: 'Not about anyone else: fill it in only about yourself. Not a reason to skip a talk forever; a high score means “later”, not “never”.',
@@ -438,7 +416,7 @@ window.TOLToolGuideData = {
 
     'where-am-i': {
       name: 'Where am I right now?',
-      reg: 'ladder',
+      reg: 'weather',
       pages: ['/ladder.html'],
       when: 'When you can’t tell whether you’re calm enough to talk, or you feel revved up or flat and want one step that fits.',
       notWhen: 'Not for labelling someone else’s state.',
@@ -447,7 +425,7 @@ window.TOLToolGuideData = {
       next: [
         ['/wp-11.html', 'Make a calm-down plan', 'what settles you, decided ahead of time'],
         ['/upset-right-now.html', 'Upset right now?', 'five calm minutes'],
-        ['/quick-checks.html', 'Today’s weather', 'a one-minute daily read']
+        ['/quick-checks.html?mode=full', 'The full forecast', 'add sleep, pressure and what’s coming up']
       ],
       research: [
         ['arnsten-2009', 'Under stress, the planning, flexible-thinking part of the brain works less well (Arnsten, 2009).'],
@@ -1018,7 +996,7 @@ window.TOLToolGuideData = {
       next: [
         ['/night-garden.html', 'Breathing game', 'slow breathing with something to watch'],
         ['/wp-11.html', 'Calm-down plan', 'what settles you, decided ahead of time'],
-        ['/quick-checks.html', 'Mood and energy check-in', 'a one-minute daily read']
+        ['/quick-checks.html', 'How am I right now?', 'four quick taps, or a one-minute forecast']
       ],
       research: [
         ['kaplan-1995', 'Things that hold attention gently (like nature) may help tired attention recover (Kaplan, 1995).']
