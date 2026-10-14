@@ -25,6 +25,8 @@ EMAIL = 'patrick.christian.andrews@gmail.com'
 OG_IMAGE = SITE + '/assets/img/og-image.png'
 LOGO = SITE + '/assets/img/logo-stacked.png'
 TAGLINE = 'See it fairly. Say it kindly.'
+# IndexNow (Bing, Yandex and others): the key file /<key>.txt sits at the site root. See the owner notes for the ping.
+INDEXNOW_KEY = '15557a97dc3839943cb3af516596d103'
 SKIP_DIRS = ('.claude', '.git', 'node_modules', 'tools', 'manuscript', 'notes', 'infrastructure', 'data', 'assets', '.well-known')
 SKIP_FILES = {'404.html', 'offline.html'}
 
