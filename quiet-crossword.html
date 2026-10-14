@@ -21,8 +21,8 @@
 <link rel="stylesheet" href="/assets/css/games.css">
 <style>
   /* Crosswords: one tool, two ways to play (this page and its twin share quiet-crossword.js) */
-  .xw-modes{ position:relative; z-index:2; display:flex; flex-wrap:wrap; align-items:center; gap:.45rem; margin:0 0 .9rem; }
-  .xw-modes-k{ font:600 .76rem/1.2 "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft, #5A5346); margin-right:.15rem; }
+  .xw-modes{ position:relative; z-index:2; display:grid; grid-template-columns:1fr 1fr; gap:.45rem; max-width:34rem; margin:0 0 .9rem; }
+  .xw-modes-k{ font:600 .76rem/1.2 "IBM Plex Mono", monospace; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft, #5A5346); grid-column:1 / -1; margin:0; }
   .xw-modes a{ display:inline-flex; flex-direction:column; justify-content:center; min-height:44px; box-sizing:border-box; padding:.3rem .95rem; border-radius:14px; border:2px solid #D9C8F0; background:#fff; color:#4E3F6B !important; text-decoration:none !important; font-weight:600; line-height:1.2; }
   .xw-modes a small{ font-weight:400; font-size:.78rem; color:#6A5E80; }
   .xw-modes a[aria-current="page"]{ background:#EDE3F8; border-color:#6B4F8A; color:#3C3350 !important; }
