@@ -1379,8 +1379,7 @@
     panel.appendChild(head);
     panel.appendChild(buildSearch());
     // two of the most used tools, one tap each, right under search
-    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">💬</span> ' + T('Text message checker', 'Revisar un mensaje') + '</a> <a href="/conversation-reader.html"><span aria-hidden="true">🗨️</span> ' + T('Chat analyzer', 'Analizar una conversación') + '</a>'));
-    panel.appendChild(el('p', { class: 'tol-panel-safe' }, '<a href="/safety.html">' + T('Not safe at home?', '¿No estás a salvo en casa?') + '</a> <button type="button" data-tol-exit>' + T('Leave this site quickly', 'Salir rápido de este sitio') + '</button>'));
+    panel.appendChild(el('p', { class: 'tol-panel-tools' }, '<a href="/signal-translator.html"><span aria-hidden="true">📱</span> ' + T('Check how a text will sound', 'Revisa cómo sonará un mensaje') + '</a> <a href="/conversation-reader.html"><span aria-hidden="true">💬</span> ' + T('Make sense of a whole chat', 'Entiende una conversación entera') + '</a>'));
     // the whole site at a glance, one tap each: the directories first, then what most people come for
     // (the sections below hold everything else)
     panel.appendChild(el('nav', { class: 'tol-panel-quick', 'aria-label': T('The whole site at a glance', 'Todo el sitio de un vistazo') },
