@@ -491,7 +491,7 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
     ok(await p.evaluate(()=>document.querySelector('#conversation').checkVisibility()), 'redirect: /conversation-reader.html opens the conversation view');
     await p.goto(BASE+'/conversation-reader.html#cr-s1'); await p.waitForURL(/#cr-s1$/); await p.waitForLoadState('load');
     ok(await p.evaluate(()=>document.querySelector('#conversation').checkVisibility()), 'redirect: an old #part is kept and opens the view');
-    await p.goto(BASE+'/conversation-reader.html?text='+encodeURIComponent(CHAT)); await p.waitForURL(/signal-translator/); await p.waitForSelector('#cr-out .cr-summary, #cr-out .cr-thread, #cr-out .cr-ask', {timeout:15000});
+    await p.goto(BASE+'/conversation-reader.html?text='+encodeURIComponent(CHAT)); await p.waitForURL(/signal-translator/); await p.waitForSelector('#cr-out .cr-summary, #cr-out .cr-thread, #cr-pre .cr-ask', {timeout:15000});
     ok(await p.evaluate(()=>/Saturday/.test(document.querySelector('#cr-input').value) && !/text=/.test(location.href)), 'redirect: ?text= goes over without staying in the address');
     const meta = await (await p.request.get(BASE+'/conversation-reader.html')).text();
     ok(/noindex/.test(meta) && /http-equiv="refresh"[^>]*signal-translator\.html#conversation/.test(meta) && /<a href="\/signal-translator\.html#conversation">/.test(meta), 'redirect page: noindex, meta refresh and a link');
