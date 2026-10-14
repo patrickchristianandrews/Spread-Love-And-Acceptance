@@ -37,7 +37,9 @@
       sessionStorage.setItem('tol-launch-seen', '1');
       if (!document.getElementById('lp-boot-css')) {
         var bs = document.createElement('style'); bs.id = 'lp-boot-css';
-        bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s}html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
+        bs.textContent = 'html.lp-boot::before{content:"";position:fixed;inset:0;z-index:2147483000;background:#F5EFDE;transition:opacity .25s;' +
+          'animation:lp-boot-gone .25s ease ' + Math.max(0, Math.round(2250 - performance.now())) + 'ms forwards}@keyframes lp-boot-gone{to{opacity:0;visibility:hidden}}' +
+          'html.lp-boot.lp-dark::before{background:#1E1B24}html.lp-boot-out::before{opacity:0}';
         document.head.appendChild(bs);
         var th = null; try { th = localStorage.getItem('tol-theme'); } catch (e) {}
         if (th === 'dark' || (th !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('lp-dark');

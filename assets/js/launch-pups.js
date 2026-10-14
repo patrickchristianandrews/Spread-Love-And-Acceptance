@@ -34,9 +34,9 @@
   }
   function dropBoot(soft) {
     if (!DE.classList.contains('lp-boot')) return;
-    if (!soft) { DE.classList.remove('lp-boot', 'lp-boot-out'); return; }
+    if (!soft) { DE.classList.remove('lp-boot', 'lp-boot-out', 'lp-dark'); return; }
     DE.classList.add('lp-boot-out');
-    setTimeout(function () { DE.classList.remove('lp-boot', 'lp-boot-out'); }, 260);
+    setTimeout(function () { DE.classList.remove('lp-boot', 'lp-boot-out', 'lp-dark'); }, 260);
   }
 
   // a small seeded random, so the first frame (and the start-up pictures) always look the same
@@ -197,10 +197,12 @@
         D.addEventListener('keydown', onKey, true);
         window.addEventListener('resize', function () { if (ov && !out) { ov.size(); if (still) ov.draw(0); } });
         shownAt = now(); t0 = shownAt;
+        // the deadline is kept by the browser itself (a CSS animation), so a busy page can't hold the cover up
+        ov.el.style.animation = 'lp-gone ' + FADE + 'ms ease ' + Math.max(0, Math.round(GONE_BY - FADE - shownAt)) + 'ms forwards';
         ov.draw(0);
         if (still) ov.el.classList.add('is-in');
         // the plain cover underneath can go now that this one is showing
-        requestAnimationFrame(function () { DE.classList.remove('lp-boot', 'lp-boot-out'); });
+        requestAnimationFrame(function () { DE.classList.remove('lp-boot', 'lp-boot-out', 'lp-dark'); });
         if (!still) raf = requestAnimationFrame(frame);
         scheduleFade();
       } catch (e) { ov = null; out = true; cleanup(); }

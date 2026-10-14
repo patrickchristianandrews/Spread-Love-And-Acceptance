@@ -17,4 +17,6 @@
 .lp.is-still canvas{ opacity:0; transition:opacity .4s ease; }
 .lp.is-still.is-in canvas{ opacity:1; }
 .lp.is-out{ opacity:0; pointer-events:none; }
+/* whatever else is going on, the cover is gone 2.5 s after the app opened (launch-pups.js sets the delay) */
+@keyframes lp-gone{ to{ opacity:0; visibility:hidden; } }
 @media print{ .lp{ display:none !important; } }
