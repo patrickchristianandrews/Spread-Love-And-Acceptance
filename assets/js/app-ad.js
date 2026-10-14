@@ -141,6 +141,19 @@
       '</aside>';
     var card = host.firstChild, cv = card.querySelector('canvas'), tilt = card.querySelector('.aa-tilt'), say = card.querySelector('.aa-say'), g = cv.getContext('2d');
     document.addEventListener('tol-app-installed', function () { stopLoop(); host.innerHTML = ''; });
+    // one tap where the browser allows it: Chrome or Edge's own install, or on iPhone and iPad the illustrated Add to Home Screen guide
+    card.querySelector('.aa-go').addEventListener('click', function (e) {
+      var go = e.currentTarget;
+      if (window.TOLInstall && window.TOLInstall.ready()) { e.preventDefault(); window.TOLInstall.ask().then(function (r) { if (r === 'unavailable' || r === 'error') location.href = '/install.html'; }); return; }
+      var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!ios) return;
+      e.preventDefault();
+      if (window.TOLAppBar) { window.TOLAppBar.guide(go); return; }
+      var s = document.createElement('script'); s.src = '/assets/js/app-bar.js';
+      s.onload = function () { if (window.TOLAppBar) window.TOLAppBar.guide(go); else location.href = '/install.html'; };
+      s.onerror = function () { location.href = '/install.html'; };
+      document.head.appendChild(s);
+    });
     card.querySelector('.aa-x').addEventListener('click', function () {
       lsSet('tol-appad-off', '1'); stopLoop();
       // keep keyboard focus nearby (the next link or button after the card), not back at the top of the page

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="/assets/css/site.css">
 <link rel="stylesheet" href="/assets/css/reading.css">
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/app-bar.js" defer></script>
 <style>
   .in-card{ margin:1rem 0 1.6rem; padding:1.1rem 1.2rem; border-radius:20px; border:1px solid #C6DFF4; background:#EEF4FB; display:grid; gap:.7rem; }
   .in-card img{ border-radius:18px; }
@@ -84,6 +85,10 @@
   .in-pin{ display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0 1.4rem; padding:0; list-style:none; }
   .in-pin li{ margin:0 !important; }
   .in-pin a{ display:inline-block; min-height:44px; padding:.55rem 1rem; border-radius:999px; border:1px solid #2F5F8A; text-decoration:none; background:#FFFDF7; box-sizing:border-box; }
+  /* the iPhone drawings (app-bar.js draws them; the space is kept so nothing jumps) */
+  main.read .in-fig{ display:block; width:100%; max-width:300px; aspect-ratio:300/160; margin:.6rem 0 .1rem; }
+  main.read .in-fig svg{ display:block; width:100%; height:auto; }
+  main.read h3.in-h3{ margin:1.4rem 0 .4rem; }
   @media (max-width:760px){ .in-pick{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:560px){ .in-pick{ grid-template-columns:1fr; } .in-tab{ flex-direction:row; justify-content:flex-start; gap:.7rem; min-height:68px; padding:.6rem .9rem; text-align:left; flex-wrap:wrap; } .in-tab-t{ flex:1; } .in-tab[aria-selected="true"]::after{ top:-.6rem; right:.6rem; } }
 </style>
@@ -150,7 +155,7 @@
 <main class="read">
 <header class="read-head"><p class="read-code">Start here</p><h1>Get the app</h1></header>
 
-<p class="simple-lede">Put the whole site on your phone or computer as an app. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops for the pages you&rsquo;ve opened (the core pages are saved when you install). It installs under the name <strong>The Ledger</strong>. <strong>Pick your phone first:</strong></p>
+<p class="simple-lede">Put the whole site on your phone or computer as an app. It gets its own icon, opens full screen with no address bar, and keeps working when your signal drops for the pages you&rsquo;ve opened (the core pages are saved when you install). It is free, and it installs under the name <strong>Spread Love &amp; Acceptance</strong>. <strong>Pick your phone first:</strong></p>
 
 <div class="in-pick no-bubble" role="tablist" aria-label="Choose your device">
   <button type="button" role="tab" class="in-tab" id="tab-android" data-p="android" aria-controls="p-android" aria-selected="false"><span class="in-tab-i" aria-hidden="true">&#129302;</span><span class="in-tab-t">Android</span><span class="in-tab-s is-now">Install now</span></button>
@@ -188,7 +193,7 @@
     <li>Update Chrome from the Play Store. Install needs a fairly recent version.</li>
     <li>Make sure you are on <strong>spreadloveandacceptance.com</strong> itself, not inside another app&rsquo;s built-in browser. Tap the three dots and choose <strong>Open in Chrome</strong>.</li>
     <li>Stay on the site for a few seconds first. Chrome sometimes waits a moment before it offers to install.</li>
-    <li>Already installed? Look in your app drawer for <strong>The Ledger</strong>. Chrome only offers Install once.</li>
+    <li>Already installed? Look in your app drawer for <strong>Spread Love &amp; Acceptance</strong>. Chrome only offers Install once.</li>
     <li>To remove it later, press and hold the icon and choose <strong>Uninstall</strong>. Anything saved in it stays only on your phone.</li>
   </ul>
 </details>
@@ -196,15 +201,36 @@
 
 <section class="in-panel no-bubble" id="p-apple" role="tabpanel" aria-labelledby="tab-apple" hidden>
   <h2 id="iphone">On iPhone or iPad: add it to your Home Screen</h2>
-  <p>It opens full screen, like an app: the same site in its own icon, with no browser bars.</p>
+  <p>Apple doesn&rsquo;t let a website install itself with one button, so on an iPhone or iPad it takes three taps. It is free, with nothing to sign up for. Opened on an iPhone or iPad, the button above shows you each step, with an arrow pointing to the right place on your screen.</p>
   <ol class="in-steps no-bubble">
-    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Safari</strong>. (Safari is the surest way. Some other iPhone browsers can add it from their own Share menu, but if you don&rsquo;t see the option, switch to Safari.)</li>
-    <li>Tap the <strong>Share</strong> button, the square with an arrow pointing up.</li>
-    <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
-    <li>Tap <strong>Add</strong>. The icon with the two little bubbles lands on your Home Screen.</li>
-    <li>Open it from there. It opens full screen.</li>
+    <li>Open <strong>spreadloveandacceptance.com</strong> in <strong>Safari</strong>. Chrome and Edge work too on iOS 16.4 or newer. If the page is open inside another app (a social app or a mail app), tap its menu and choose <strong>Open in Safari</strong> first.</li>
+    <li>Tap the <strong>Share</strong> button, the square with an arrow pointing up. On an iPhone it is in the bar at the bottom of Safari. With iOS 26&rsquo;s compact layout, tap the <strong>&middot;&middot;&middot;</strong> button at the bottom right first, then <strong>Share</strong>. On an iPad it is at the top right. In Chrome it is at the top right, in the address bar.
+      <span class="in-fig" data-iosg-fig="1"></span></li>
+    <li>Scroll down the list and tap <strong>Add to Home Screen</strong>.
+      <span class="in-fig" data-iosg-fig="2"></span></li>
+    <li>Tap <strong>Add</strong> at the top right. If you see <strong>Open as Web App</strong>, leave it switched on.
+      <span class="in-fig" data-iosg-fig="3"></span></li>
+    <li>Find the new icon, <strong>Spread Love &amp; Acceptance</strong>, on your Home Screen and open it from there. It opens full screen, like an app you downloaded.</li>
   </ol>
-  <p>One honest difference: iPhones don&rsquo;t let a web page make the phone vibrate, so the &ldquo;feel the sound&rdquo; buzz only works on Android. You can still see and hear everything.</p>
+
+  <h3 class="in-h3" id="iphone-get">What you get on iPhone and iPad</h3>
+  <ul class="in-get no-bubble">
+    <li>Its own icon on your Home Screen, with its name under it.</li>
+    <li>Full screen, with no browser bars, and its own start-up screen while it opens.</li>
+    <li>Pages you have opened keep working without a connection. The first time you open the app, it saves the core pages, the games and the tools for offline use.</li>
+    <li>Nothing you type is sent anywhere. It stays on your iPhone or iPad.</li>
+    <li>No App Store account, and updates arrive by themselves.</li>
+  </ul>
+
+  <h3 class="in-h3" id="iphone-notes">Honest notes</h3>
+  <ul class="in-plain no-bubble">
+    <li><strong>No vibration on iPhone.</strong> iPhones don&rsquo;t let a web page make the phone vibrate, so the &ldquo;feel the sound&rdquo; buzz only works on Android. You can still see and hear everything.</li>
+    <li><strong>No notifications.</strong> The app doesn&rsquo;t send notifications. If you would like a reminder, <a href="/start-in-10-minutes.html">Start in 10 minutes</a> can put one in your own calendar.</li>
+    <li><strong>Its own saved things.</strong> On iPhone and iPad, the Home Screen app keeps what you save separate from Safari. What you saved in Safari stays in Safari, and the app starts fresh.</li>
+    <li><strong>A long name.</strong> On a small screen, the label under the icon may be cut short with &ldquo;&hellip;&rdquo;. You can change the name in the Add screen before you tap Add.</li>
+    <li><strong>Not in the App Store.</strong> There is no App Store version. Adding it from Safari gives you the whole app, free.</li>
+    <li><strong>To remove it,</strong> press and hold the icon and choose the option to remove or delete it. Anything saved in it stays only on your device until then.</li>
+  </ul>
 </section>
 
 <section class="in-panel no-bubble" id="p-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
@@ -216,10 +242,10 @@
     <li>Look at the right end of the address bar for the small <strong>install icon</strong> (a screen with a down arrow, or a plus). Click it.</li>
     <li>No icon? Open the menu (the three dots at the top right). In Edge choose <strong>Apps</strong>, then <strong>Install this site as an app</strong>. In Chrome choose <strong>Cast, save and share</strong>, then <strong>Install page as app</strong>.</li>
     <li>Click <strong>Install</strong>. If it offers, tick <strong>Pin to taskbar</strong> and <strong>Pin to Start</strong>.</li>
-    <li>It opens in its own window. Find it any time in the Start menu under <strong>The Ledger</strong>.</li>
+    <li>It opens in its own window. Find it any time in the Start menu under <strong>Spread Love &amp; Acceptance</strong>.</li>
   </ol>
   <p>It keeps working without a connection once you have opened pages, and updates by itself. To remove it later, open the app, click the three dots in its title bar and choose <strong>Uninstall</strong>, or use Settings, then Apps.</p>
-  <p>Firefox on Windows doesn&rsquo;t install web apps, but the site works fine in a normal tab. A Microsoft Store version and Windows widgets are not built yet.</p>
+  <p>Firefox on Windows doesn&rsquo;t install web apps, but the site works fine in a normal tab. There is no Microsoft Store version: the installed app is the whole thing, free.</p>
 </details>
 </section>
 
@@ -259,7 +285,7 @@
   <li><a href="/ask.html">Ask Professor Puddles</a></li>
   <li><a href="/pal-cam-tv.html">Pal Cam TV</a></li>
 </ul>
-<p>A true widget, such as a daily small moment or a one-tap Breathe, would mean building a native app that wraps this site. That is a bigger project, and it is on the idea list.</p>
+<p>A true widget, such as a daily small moment or a one-tap Breathe, would mean building a native app that wraps this site. That is a much bigger project, so there is no widget today.</p>
 
 <div class="try-this">
   <p><strong>Try this:</strong> Once it is on your home screen, open it and try <a href="/start-in-10-minutes.html">Start in 10 minutes</a>. It is a good first thing to do with a new app.</p>
@@ -282,10 +308,10 @@
     ready = !!ok();
     var manual = panels[cur] && panels[cur].querySelector('.in-manual');
     card.hidden = false; card.classList.remove('is-ok'); btn.hidden = true; btn.textContent = 'Install the app';
-    if (cur === 'apple') {   // Apple does not let a web page install itself, so the button opens the share sheet, where "Add to Home Screen" is one tap away
+    if (cur === 'apple') {   // Apple does not let a web page install itself, so the button opens the illustrated steps (app-bar.js)
       if (installed) { state.textContent = 'You are already using the app.'; sub.textContent = 'Nothing more to do. Enjoy it.'; card.classList.add('is-ok'); if (manual) manual.open = false; return; }
       if (was) { state.textContent = 'The app is already on this device.'; sub.textContent = 'Look for the two little bubbles on your home screen.'; card.classList.add('is-ok'); return; }
-      if (ios) { state.textContent = 'Two taps and it is on your home screen.'; sub.textContent = 'Press the button. Your share sheet opens. Tap Add to Home Screen, then Add.'; btn.textContent = 'Add to Home Screen'; btn.hidden = false; if (manual) manual.open = false; }
+      if (ios) { state.textContent = 'Three taps and it is on your Home Screen.'; sub.textContent = 'Press the button to see each step, with an arrow pointing to the right place on your screen.'; btn.textContent = 'Show me, step by step'; btn.hidden = false; }
       else { state.textContent = 'This part is for an iPhone or iPad.'; sub.textContent = 'Open this page on it, or pick your device above.'; }
       return;
     }
@@ -322,10 +348,9 @@
   window.addEventListener('appinstalled', function () { try { localStorage.setItem('tol-app-installed', '1'); } catch (e) {} was = true; paint(); });
   setTimeout(paint, 800); setTimeout(paint, 2500);
   btn.addEventListener('click', function () {
-    if (cur === 'apple') {
-      var hint = function () { state.textContent = 'Now tap Add to Home Screen.'; sub.textContent = 'In the share sheet, scroll the row of actions to Add to Home Screen, tap it, then tap Add at the top right. If the sheet closed, press the button again.'; };
-      if (navigator.share) { navigator.share({ title: 'Spread Love & Acceptance', url: location.origin + '/' }).then(hint, hint); hint(); }
-      else { state.textContent = 'Tap the Share button in Safari.'; sub.textContent = 'It is the square with an arrow, at the bottom of the screen (top right on an iPad). Then choose Add to Home Screen and tap Add.'; }
+    if (cur === 'apple') {   // the illustrated guide (app-bar.js), with an arrow to where Share is on this browser
+      if (window.TOLAppBar) window.TOLAppBar.guide(btn);
+      else { var p = document.getElementById('iphone'); if (p) p.scrollIntoView(); }
       return;
     }
     if (!window.TOLInstall) return;

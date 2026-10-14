@@ -27,6 +27,9 @@ LOGO = SITE + '/assets/img/logo-stacked.png'
 TAGLINE = 'See it fairly. Say it kindly.'
 # IndexNow (Bing, Yandex and others): the key file /<key>.txt sits at the site root. See the owner notes for the ping.
 INDEXNOW_KEY = '15557a97dc3839943cb3af516596d103'
+# Ownership codes for Google Search Console and Bing Webmaster Tools ("HTML tag" method): paste the content="..." value here
+# and rebuild; the tag goes on the home page only. Leave empty when the site is verified another way (DNS or Google Analytics).
+SITE_VERIFY = {'google-site-verification': '', 'msvalidate.01': ''}
 SKIP_DIRS = ('.claude', '.git', 'node_modules', 'tools', 'manuscript', 'notes', 'infrastructure', 'data', 'assets', '.well-known')
 SKIP_FILES = {'404.html', 'offline.html'}
 
@@ -948,6 +951,8 @@ def process(path, report):
              '<meta name="keywords" content="' + attr(', '.join(kw)) + '">',
              '<meta name="author" content="' + attr(AUTHOR_NAME + ', ' + BRAND) + '">',
              '<meta name="application-name" content="' + attr(BRAND) + '">' if not has('name="application-name"') else '']
+    if path == 'index.html':      # search-console ownership tags, once the owner has the codes (see SITE_VERIFY)
+        lines += ['<meta name="%s" content="%s">' % (n, attr(v)) for n, v in SITE_VERIFY.items() if v]
     if not has('name="theme-color"'): lines.append('<meta name="theme-color" content="#F5EFDE">')
     if not re.search(r'rel="(?:[^"]* )?icon', head):
         lines += ['<link rel="icon" href="/favicon.ico" sizes="any">',
