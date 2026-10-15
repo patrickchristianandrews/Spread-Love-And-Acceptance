@@ -221,6 +221,11 @@
     body.setAttribute('data-ls-view', v);
     ssSet(VIEW, v);
     var m = document.querySelector('main.read'); if (m) m.classList.toggle('is-wide', v === 'quick');
+    // the "Who does what at home" switch at the top (consol12): mark the view you're in
+    [].forEach.call(document.querySelectorAll('.ps a.ps-b[href^="/lemonade-stand.html#"]'), function (a) {
+      var h = a.getAttribute('href');
+      if ((v === 'quick' && /#quick$/.test(h)) || (v === 'deep' && /#stand$/.test(h))) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
   }
   // a "#together=" link (collab.js, the site's one way to work on a tool together): which part of the stand it's for
   function togetherTool(h) {

@@ -3037,4 +3037,5 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 .gm-switch a.gm-tab[aria-current="page"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
 .gm-switch a.gm-home{ min-width:44px; justify-content:center; padding:.35rem .6rem; }
 .gm-switch .gm-chip{ margin-left:auto; }
+.gm-switch .gm-chip .tr-chip{ display:inline-flex; align-items:center; min-height:44px; box-sizing:border-box; }
 @media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .6rem; font-size:.82rem; } }

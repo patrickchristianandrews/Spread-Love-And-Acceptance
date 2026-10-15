@@ -1,0 +1,68 @@
+/* workbook.css: the workbook of the print series (print12), 8.5 x 11 in, standard colour on white paper. Loaded after
+   /book/print/print.css. The blank sheets are the book's own (tools/book/back-worksheets.html), set larger here,
+   with taller rows and boxes so there is room to write by hand. */
+@page { size: 8.5in 11in; margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
+@page :right { margin: 15.24mm 12.7mm 19.05mm 19.05mm;
+  @bottom-right { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 9pt; color: #2B2620; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: right; }
+  @bottom-left { content: "The Objective Ledger · The Workbook"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; } }
+@page :left { margin: 15.24mm 19.05mm 19.05mm 12.7mm;
+  @bottom-left { content: counter(page); font-family: "Fraunces", Georgia, serif; font-weight: 500; font-size: 9pt; color: #2B2620; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: left; }
+  @bottom-right { content: "The Objective Ledger · The Workbook"; font-family: "Lora", Georgia, serif; font-style: italic; font-size: 7.6pt; color: #6E6556; vertical-align: top; padding-top: 2.6mm; border-top: .4pt solid #CDBF98; text-align: right; } }
+
+body { font-size: 11pt; --pc: #2E6E6A; --pt: #EAF4F2; }
+.ps-title, .ps-copy { height: 236mm; }
+.ps-title-t { font-size: 40pt; }
+.ps-title-s { font-size: 14pt; max-width: 130mm; }
+.ps-title-art .pe-art { width: 96mm; height: 72mm; }
+.ps-copy-in { font-size: 8.8pt; }
+.ps-toc .pe-toc-row.is-ch .pe-toc-l { flex-basis: 20mm; text-align: left; font-family: "IBM Plex Mono", monospace; font-size: 8pt; }
+.ps-toc .pe-toc-t { font-size: 11pt; }
+
+/* how to use, the planner and each workpaper's opening page */
+.wb-how, .wb-six, .wb-open, .wb-notes { page: wb-front; break-before: page; }
+.wb-how h1, .wb-six h1, .wb-notes h1 { font-size: 24pt; padding-bottom: 3mm; border-bottom: .8pt solid var(--pc); }
+.wb-lede { font-style: italic; font-size: 12pt; color: var(--soft); }
+.wb-how-list { padding-left: 5mm; }
+.wb-how-list li { font-size: 11pt; line-height: 1.5; margin: 0 0 2.6mm; }
+.wb-how-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 8pt; letter-spacing: .14em; text-transform: uppercase; color: var(--pc); margin: 6mm 0 2mm; }
+.wb-six-t { width: 100%; border-collapse: collapse; margin: 3mm 0 6mm; }
+.wb-six-t th { text-align: left; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.4pt; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); border-bottom: .9pt solid var(--pc); padding: 2mm; }
+.wb-six-t td { border-bottom: .5pt solid #8C8270; padding: 3.4mm 2mm; font-size: 10pt; vertical-align: top; }
+.wb-six-t td:nth-child(4) { width: 28mm; }
+.wb-tall { min-height: 34mm !important; }
+.wb-open { height: 236mm; display: flex; flex-direction: column; justify-content: center; }
+.wb-code { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 10pt; letter-spacing: .2em; text-transform: uppercase; color: var(--pc); margin: 0 0 3mm;
+  display: inline-block; align-self: flex-start; border: 1pt dashed var(--pc); padding: 1.6mm 3mm; border-radius: .6mm; }
+.wb-open h1 { font-size: 34pt; line-height: 1.08; margin: 0 0 8mm; padding-bottom: 5mm; border-bottom: 2.4pt solid var(--pc); }
+.wb-facts { margin: 0 0 8mm; }
+.wb-facts > div { display: flex; gap: 5mm; padding: 2.6mm 0; border-bottom: .5pt solid #DCCFAE; }
+.wb-facts dt { flex: 0 0 34mm; font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 8pt; letter-spacing: .12em; text-transform: uppercase; color: var(--pc); padding-top: .8mm; }
+.wb-facts dd { margin: 0; font-size: 11.4pt; line-height: 1.45; }
+.wb-open .ps-online-box p { font-size: 10.4pt; }
+.wb-open .pe-qr, .wb-open .pe-qr svg { width: 20mm; height: 20mm; flex-basis: 20mm; }
+.wb-lines div { height: 9.6mm; border-bottom: .4pt solid #B8AE98; }
+@page wb-front { }
+
+/* the blank sheets, with room to write */
+.pe-ws-sheet.wb-sheet { zoom: 1 !important; break-before: page; break-inside: auto; --pc: #2E6E6A; --pt: #EAF4F2; }
+.wb-sheet .pe-ws-head { border-bottom-width: 1.6pt; padding-bottom: 2mm; margin-bottom: 3mm; }
+.wb-sheet .pe-ws-head h2 { font-size: 20pt; }
+.wb-sheet .pe-ws-head span { font-size: 8pt; max-width: none; white-space: nowrap; color: var(--pc); }
+.wb-sheet p { font-size: 10pt !important; line-height: 1.42; margin: 0 0 2.4mm; }
+.wb-sheet h3 { font-size: 12pt !important; margin: 5mm 0 2mm !important; break-after: avoid; }
+.wb-sheet .pe-ws-opts { font-size: 9pt !important; }
+.wb-sheet .pe-ws-meta { gap: 2mm 7mm; margin: 0 0 3mm; }
+.wb-sheet .pe-ws-meta span { font-size: 9.4pt; padding-top: 8mm; border-bottom-color: #6E6556; }
+.wb-sheet .pe-ws-t { margin: 0 0 3mm; }
+.wb-sheet .pe-ws-t thead { display: table-header-group; }
+.wb-sheet .pe-ws-t tr { break-inside: avoid; }
+.wb-sheet .pe-ws-t th { font-size: 7.6pt; padding: 1.6mm 1.8mm; }
+.wb-sheet .pe-ws-t td { height: 11mm; font-size: 9pt; }
+.wb-sheet .pe-ws-t.is-short td { height: 10mm; }
+.wb-sheet .pe-ws-t.is-tall td { height: 15mm; }
+.wb-sheet .pe-ws-scale td { height: 12mm; }
+.wb-sheet .pe-ws-box { min-height: 32mm !important; padding: 2mm 3mm; margin: 0 0 3mm; break-inside: avoid; }
+.wb-sheet .pe-ws-box b { font-size: 9.6pt; }
+.wb-sheet .pe-ws-line { height: 12mm; }
+.wb-sheet .pe-ws-tick { width: 4mm; height: 4mm; }
+.wb-sheet .pe-ws-foot { font-size: 8.6pt !important; }

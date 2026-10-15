@@ -1,0 +1,126 @@
+{
+ "jobs": [
+  {
+   "id": "book-1-self-discovery",
+   "kind": "book",
+   "trim": [
+    6,
+    9
+   ],
+   "colPx": 456,
+   "paper_in": 0.002252,
+   "price": 14.99,
+   "cover": "cover-book-1-self-discovery",
+   "title": "Self-discovery",
+   "n": 1,
+   "chapters": 7
+  },
+  {
+   "id": "book-2-together",
+   "kind": "book",
+   "trim": [
+    6,
+    9
+   ],
+   "colPx": 456,
+   "paper_in": 0.002252,
+   "price": 14.99,
+   "cover": "cover-book-2-together",
+   "title": "Together",
+   "n": 2,
+   "chapters": 6
+  },
+  {
+   "id": "book-3-sharing-the-load",
+   "kind": "book",
+   "trim": [
+    6,
+    9
+   ],
+   "colPx": 456,
+   "paper_in": 0.002252,
+   "price": 14.99,
+   "cover": "cover-book-3-sharing-the-load",
+   "title": "Sharing the load",
+   "n": 3,
+   "chapters": 7
+  },
+  {
+   "id": "book-4-understanding-people",
+   "kind": "book",
+   "trim": [
+    6,
+    9
+   ],
+   "colPx": 456,
+   "paper_in": 0.002252,
+   "price": 14.99,
+   "cover": "cover-book-4-understanding-people",
+   "title": "Understanding people",
+   "n": 4,
+   "chapters": 7
+  },
+  {
+   "id": "workbook",
+   "kind": "workbook",
+   "trim": [
+    8.5,
+    11
+   ],
+   "colPx": 696,
+   "paper_in": 0.002252,
+   "price": 19.99,
+   "cover": "cover-workbook",
+   "title": "The Workbook",
+   "n": 0
+  },
+  {
+   "id": "measure",
+   "kind": "measure",
+   "trim": [
+    6,
+    9
+   ],
+   "colPx": 456,
+   "only_when_named": true
+  }
+ ],
+ "costs": {
+  "kdp": {
+   "fixed": 1.0,
+   "per_page": 0.0255,
+   "royalty": 0.6,
+   "expanded": 0.4,
+   "note": "KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; 60% royalty at $9.99 and up, 40% expanded distribution"
+  },
+  "kdp_large": {
+   "fixed": 1.0,
+   "per_page": 0.0402,
+   "royalty": 0.6,
+   "expanded": 0.4,
+   "note": "KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page"
+  },
+  "ingram": {
+   "fixed": 1.16,
+   "per_page": 0.0249,
+   "discount": 0.4,
+   "market_fee": 0.01875,
+   "note": "IngramSpark rate card from 1 Feb 2026, standard colour 50lb, small trim: $1.16 + $0.0249 a page; 1.875% market access fee; 40% wholesale discount assumed"
+  },
+  "ingram_large": {
+   "fixed": 1.23,
+   "per_page": 0.0392,
+   "discount": 0.4,
+   "market_fee": 0.01875,
+   "note": "IngramSpark, standard colour 50lb, large trim: $1.23 + $0.0392 a page"
+  },
+  "direct": {
+   "card_pct": 0.029,
+   "card_fixed": 0.3,
+   "fulfil_fee": 1.75,
+   "note": "Direct sale through a print-on-demand fulfilment service (Lulu Direct or BookVault): print cost estimated at the IngramSpark rate (Lulu and BookVault quote per title only); card fee 2.9% + $0.30 (Shopify Payments basic); Lulu Direct example fulfilment fee $1.75 an order; the buyer pays shipping"
+  }
+ },
+ "paper_in": 0.002252,
+ "paper_note": "KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)"
+}

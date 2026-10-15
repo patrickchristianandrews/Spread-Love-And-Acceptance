@@ -110,10 +110,8 @@ function printPdf(page) {
   return page.pdf({ preferCSSPageSize: true, printBackground: true, displayHeaderFooter: false, outline: true, tagged: false });
 }
 
-async function makeBook(ctx, file, opts = {}) {
-  const t0 = Date.now(), log = m => { if (process.env.BOOK_VERBOSE) console.log('  %s %ds %s', file, Math.round((Date.now() - t0) / 1000), m); };
-  const page = await ctx.newPage();
-  page.on('pageerror', e => console.log('  page error:', e.message));
+// only the local site and Google Fonts load; the site's own scripts are held back (share-kit.js draws the QR codes)
+async function routeSite(page) {
   await page.route('**/*', async route => {
     const u = route.request().url();
     if (u.startsWith('http://127.0.0.1:' + PORT + '/')) {
@@ -135,6 +133,13 @@ async function makeBook(ctx, file, opts = {}) {
     }
     return route.abort();
   });
+}
+
+async function makeBook(ctx, file, opts = {}) {
+  const t0 = Date.now(), log = m => { if (process.env.BOOK_VERBOSE) console.log('  %s %ds %s', file, Math.round((Date.now() - t0) / 1000), m); };
+  const page = await ctx.newPage();
+  page.on('pageerror', e => console.log('  page error:', e.message));
+  await routeSite(page);
   await page.goto(`http://127.0.0.1:${PORT}/book/${file}.html`, { waitUntil: 'load', timeout: 180000 });
   try { await page.evaluate(() => document.fonts && document.fonts.ready); } catch (e) {}
   log('loaded');
@@ -237,7 +242,7 @@ async function makeBook(ctx, file, opts = {}) {
   // anything wider than the text column makes Chromium shrink every page of the book (by up to a quarter): lay
   // the book out at the column's width (132 mm) for a moment and name whatever sticks out
   const vp = page.viewportSize();
-  await page.setViewportSize({ width: 499, height: 900 });
+  await page.setViewportSize({ width: opts.colPx || 499, height: 900 });
   const wide = await page.evaluate(() => {
     const hide = [...document.querySelectorAll('.pe-part, .pe-cover, .pe-backcover')];
     hide.forEach(e => { e.dataset.peDisp = e.style.display; e.style.display = 'none'; });
@@ -376,7 +381,119 @@ function finish(file, r, kit) {
   return Object.assign(res, { bytes: size(job.screen), interior_bytes: kit ? size(job.print_interior) : 0, cover_bytes: kit ? size(job.print_cover) : 0 });
 }
 
+// ---------- the print series (print12): BOOK_SERIES=1 ----------
+// tools/book/build_series.py writes the pages in book/print/src/ and the jobs in book/print/src/series-src.json. Each
+// book is printed like the packages above (page numbers, QR codes, a blank page so the first chapter starts on a
+// right-hand page), padded to an even page count, then its full-wrap cover is printed with the spine width worked out
+// from the final page count (KDP: page count x paper thickness), and the front cover is saved as a JPG. Writes
+// book/print/<id>.pdf, cover-<id>.pdf, cover-<id>-front.jpg (1600 px wide), cover-<id>-front-small.jpg (480 px wide)
+// and book/print/series.json. Nothing in book/pdf/ is touched.
+const SERIES_OUT = path.join(ROOT, 'book', 'print');
+const r2 = x => Math.round(x * 100) / 100;
+
+function seriesCosts(job, pages, C) {
+  const large = job.kind === 'workbook';
+  const kdp = large ? C.kdp_large : C.kdp, ing = large ? C.ingram_large : C.ingram, d = C.direct;
+  const P = job.price;
+  const kdpPrint = kdp.fixed + kdp.per_page * pages;
+  const ingPrint = ing.fixed + ing.per_page * pages;
+  const card = d.card_pct * P + d.card_fixed;
+  const row = net => ({ net: r2(net), pct: Math.round(net / P * 1000) / 10 });
+  return {
+    list_price: P,
+    kdp_amazon: Object.assign({ print: r2(kdpPrint) }, row(kdp.royalty * P - kdpPrint)),
+    kdp_expanded: Object.assign({ print: r2(kdpPrint) }, row(kdp.expanded * P - kdpPrint)),
+    ingram_bookshops: Object.assign({ print: r2(ingPrint), discount: ing.discount }, row(P * (1 - ing.discount) - ing.market_fee * P - ingPrint)),
+    direct_estimate: Object.assign({ print: r2(ingPrint), card_fee: r2(card) }, row(P - ingPrint - card)),
+    direct_with_fulfil_fee: Object.assign({ print: r2(ingPrint), card_fee: r2(card), fulfil_fee: d.fulfil_fee }, row(P - ingPrint - card - d.fulfil_fee)),
+  };
+}
+
+async function makeCover(browser, job, pages) {
+  const spine = pages * job.paper_in;
+  const W = 2 * 0.125 + 2 * job.trim[0] + spine, H = job.trim[1] + 0.25;
+  const shoot = async (dsf, file) => {
+    const c = await browser.newContext({ deviceScaleFactor: dsf, viewport: { width: Math.ceil(W * 96) + 2, height: Math.ceil(H * 96) + 2 } });
+    const page = await c.newPage();
+    page.on('pageerror', e => console.log('  page error:', e.message));
+    await routeSite(page);
+    await page.goto(`http://127.0.0.1:${PORT}/book/print/src/${job.cover}.html`, { waitUntil: 'load', timeout: 120000 });
+    await page.addScriptTag({ url: '/assets/js/share-kit.js' }).catch(() => page.addScriptTag({ path: path.join(ROOT, 'assets/js/share-kit.js') }));
+    const info = await page.evaluate(async ({ spine, W, H, text }) => {
+      document.documentElement.style.setProperty('--spine', spine + 'in');
+      document.documentElement.classList.toggle('has-spine-text', text);
+      const st = document.createElement('style');
+      st.textContent = '@page { size: ' + W + 'in ' + H + 'in; margin: 0; }';
+      document.head.appendChild(st);
+      if (typeof peQR === 'function') peQR();
+      await Promise.all([...document.fonts].map(f => f.load().catch(() => null)));
+      await document.fonts.ready;
+      const t = document.querySelector('.cv-spine-t'), sp = document.querySelector('.cv-spine');
+      // the spine words must fit the spine with KDP's 0.0625 in on each side
+      const fits = !text || (t.getBoundingClientRect().width <= sp.getBoundingClientRect().width - 12 && t.getBoundingClientRect().height <= sp.getBoundingClientRect().height - 48);
+      const qrs = document.querySelectorAll('.pe-qr svg').length;
+      return { fits, qrs };
+    }, { spine, W, H, text: pages > 79 });
+    if (!info.fits) console.log('  warning: the spine text does not fit the spine of', job.id);
+    let out = null;
+    if (file === 'pdf') out = await page.pdf({ width: W + 'in', height: H + 'in', printBackground: true, preferCSSPageSize: true, margin: { top: 0, right: 0, bottom: 0, left: 0 } });
+    else out = await page.locator('#front').screenshot({ type: 'jpeg', quality: 90 });
+    await c.close();
+    return out;
+  };
+  const pdf = await shoot(1, 'pdf');
+  fs.writeFileSync(path.join(SERIES_OUT, job.cover + '.pdf'), pdf);
+  const big = path.join(SERIES_OUT, job.cover + '-front.jpg');
+  fs.writeFileSync(big, await shoot(1600 / (job.trim[0] * 96), 'jpg'));
+  execFileSync('python3', ['-c', 'import sys\nfrom PIL import Image\nim = Image.open(sys.argv[1]); w = 480; h = round(im.height * w / im.width)\nim.convert("RGB").resize((w, h), Image.LANCZOS).save(sys.argv[2], quality=84, optimize=True, progressive=True)', big, path.join(SERIES_OUT, job.cover + '-front-small.jpg')]);
+  return { spine_in: Math.round(spine * 10000) / 10000, spine_mm: Math.round(spine * 25.4 * 100) / 100, cover_in: [Math.round(W * 10000) / 10000, H], spine_text: pages > 79 };
+}
+
+async function runSeries(browser, ctx) {
+  const src = JSON.parse(fs.readFileSync(path.join(SERIES_OUT, 'src', 'series-src.json'), 'utf8'));
+  let made = {};
+  try { made = JSON.parse(fs.readFileSync(path.join(SERIES_OUT, 'series.json'), 'utf8')); } catch (e) {}
+  made.books = made.books || {};
+  const jobs = src.jobs.filter(j => ONLY.length ? ONLY.includes(j.id) : !j.only_when_named);
+  for (const job of jobs) {
+    const t0 = Date.now();
+    const r = await makeBook(ctx, 'print/src/' + job.id, { colPx: job.colPx });
+    if (job.kind === 'measure') {
+      fs.writeFileSync(path.join(SERIES_OUT, 'src', 'measure.json'), JSON.stringify({ pages: r.pages, pagemap: r.pagemap }, null, 1) + '\n');
+      console.log('measure', r.pages, 'pages');
+      continue;
+    }
+    const interior = path.join(TMP, job.id + '-interior.pdf');
+    fs.writeFileSync(interior, r.buf);
+    const meta = r.meta || {};
+    const outline = (meta.outline || []).map(([t, k, l]) => [t, r.pagemap[k] || 0, l]);
+    const jf = path.join(TMP, job.id + '-job.json');
+    const out = path.join(SERIES_OUT, job.id + '.pdf');
+    fs.writeFileSync(jf, JSON.stringify({ interior, cover: null, screen: out, title: meta.title || job.title, author: meta.author || '', subject: meta.subject || '', outline }));
+    const f = JSON.parse(execFileSync('python3', [path.join(__dirname, 'pdf_finish.py'), jf]).toString().trim().split('\n').pop());
+    const pages = f.interior_pages;
+    const cov = job.cover ? await makeCover(browser, job, pages) : {};
+    made.books[job.id] = Object.assign({ n: job.n, title: job.title, kind: job.kind, trim_in: job.trim, pages, blank_pages: r.blanks + f.padded,
+      bytes: fs.statSync(out).size, pdf: job.id + '.pdf', cover_pdf: job.cover + '.pdf', front_jpg: job.cover + '-front.jpg' }, cov,
+      { costs: seriesCosts(job, pages, src.costs), pagemap: r.pagemap });
+    console.log(job.id, pages, 'pages,', 'spine', cov.spine_in, 'in,', (made.books[job.id].bytes / 1048576).toFixed(1) + ' MB', ((Date.now() - t0) / 1000).toFixed(0) + 's');
+  }
+  made.generated = new Date().toISOString().slice(0, 10);
+  made.paper_in = src.paper_in;
+  made.paper_note = src.paper_note;
+  made.cost_notes = Object.fromEntries(Object.entries(src.costs).map(([k, v]) => [k, v.note]));
+  fs.writeFileSync(path.join(SERIES_OUT, 'series.json'), JSON.stringify(made, null, 1) + '\n');
+}
+
 (async () => {
+  if (process.env.BOOK_SERIES === '1') {
+    const browser = await chromium.launch({ executablePath: fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined });
+    const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
+    await runSeries(browser, ctx);
+    await browser.close();
+    fs.rmSync(TMP, { recursive: true, force: true });
+    return;
+  }
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined });
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true });

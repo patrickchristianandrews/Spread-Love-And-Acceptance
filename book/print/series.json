@@ -1,0 +1,13 @@
+{
+ "books": {},
+ "generated": "2026-10-15",
+ "paper_in": 0.002252,
+ "paper_note": "KDP standard colour (white paper): 0.002252 in a page (kdp.amazon.com/help/topic/G201953020)",
+ "cost_notes": {
+  "kdp": "KDP Amazon.com, standard colour, regular trim (72-600 pages): $1.00 + $0.0255 a page; 60% royalty at $9.99 and up, 40% expanded distribution",
+  "kdp_large": "KDP Amazon.com, standard colour, large trim (8.5 x 11): $1.00 + $0.0402 a page",
+  "ingram": "IngramSpark rate card from 1 Feb 2026, standard colour 50lb, small trim: $1.16 + $0.0249 a page; 1.875% market access fee; 40% wholesale discount assumed",
+  "ingram_large": "IngramSpark, standard colour 50lb, large trim: $1.23 + $0.0392 a page",
+  "direct": "Direct sale through a print-on-demand fulfilment service (Lulu Direct or BookVault): print cost estimated at the IngramSpark rate (Lulu and BookVault quote per title only); card fee 2.9% + $0.30 (Shopify Payments basic); Lulu Direct example fulfilment fee $1.75 an order; the buyer pays shipping"
+ }
+}

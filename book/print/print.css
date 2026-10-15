@@ -1,0 +1,93 @@
+/* print.css: the print series of "The Objective Ledger" (print12), 6 x 9 in (152.4 x 228.6 mm), KDP "regular" trim,
+   standard colour on white paper. Loaded after /assets/css/book-print.css by the pages in /book/print/src/, which
+   tools/book/build_series.py writes and tools/book/build_pdfs.js (BOOK_SERIES=1) prints. It changes only the page,
+   the paper and the parts the series adds; the type and the boxes are the book's own.
+   - Plain white pages: no cream paper and no full-page tinted panels (heavy ink shows through 55# paper).
+   - Colour for headings, the character hints, the Workpaper and Tool tags and the figures.
+   - Margins: 0.75 in inside (KDP's minimum gutter at this length is 0.375 in), 0.5 in outside. No bleed.
+   - Body text 10.6 pt. */
+@page { size: 6in 9in; margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
+@page :right { margin: 15.24mm 12.7mm 19.05mm 19.05mm; }
+@page :left { margin: 15.24mm 19.05mm 19.05mm 12.7mm; }
+@page pe-front { @bottom-left { content: none; border: 0; } @bottom-center { content: none; border: 0; } @bottom-right { content: none; border: 0; } }
+
+:root { --paper: #fff; --line: #D9CBA3; }
+html, body { background: #fff !important; }
+body { font-size: 10.6pt; line-height: 1.5; }
+
+/* ---------- front matter ---------- */
+.ps-title, .ps-copy, .ps-meet, .ps-toc { page: pe-front; break-before: page; }
+.ps-title { break-before: auto; height: 186mm; display: flex; flex-direction: column; justify-content: space-between; text-align: center;
+  border-top: 1.4pt solid var(--acc); border-bottom: 1.4pt solid var(--acc); padding: 9mm 0; box-sizing: border-box; }
+.ps-title-k { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.6pt; letter-spacing: .2em; text-transform: uppercase; color: var(--acc); margin: 0 0 4mm; }
+.ps-title-t { font-family: "Fraunces", serif; font-weight: 600; font-size: 30pt; line-height: 1.05; margin: 0 0 3mm; text-wrap: balance; }
+.ps-title-s { font-style: italic; font-size: 11.6pt; color: var(--soft); margin: 0 auto; max-width: 92mm; text-wrap: balance; }
+.ps-title-art .pe-art { width: 64mm; height: 48mm; }
+.ps-title-a { font-family: "Lora", Georgia, serif; font-style: italic; font-weight: 500; font-size: 12pt; letter-spacing: .02em; margin: 0 0 3mm; }
+.ps-title-p { font-size: 8.5pt; color: var(--soft); margin: 0; line-height: 1.5; }
+.ps-copy { height: 186mm; display: flex; flex-direction: column; justify-content: flex-end; }
+.ps-copy-in { font-size: 7.9pt; line-height: 1.5; color: #3F3A31; }
+.ps-copy-in p { margin: 0 0 2.2mm; }
+.ps-toc h1, .ps-meet h1 { padding-bottom: 3mm; border-bottom: .6pt solid var(--brass); font-size: 20pt; }
+.ps-toc .pe-toc-row a { padding: 1.1mm 0; }
+.ps-toc .pe-toc-t { font-size: 10pt; }
+.ps-toc .pe-toc-row.is-ch .pe-toc-l { font-size: 10pt; color: var(--brass); }
+
+/* Workpapers, tools and three friends: one page */
+.ps-meet p, .ps-meet li { font-size: 9.6pt; line-height: 1.46; }
+.ps-meet .bh-tag { margin-right: 1mm; }
+.ps-meet-note { font-style: italic; color: var(--soft); font-size: 9pt !important; }
+.ps-meet-h { font-family: "IBM Plex Mono", monospace; font-weight: 500; font-size: 7.4pt; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); margin: 4mm 0 2mm; }
+.ps-friends { list-style: none; padding: 0; margin: 0 0 3mm; }
+.ps-friends li { display: flex; gap: 3mm; align-items: center; margin: 0 0 2.4mm; }
+.ps-friends .bh-badge { flex: 0 0 12mm; width: 12mm; height: 12mm; }
+.ps-friends .bh-badge svg { width: 100%; height: 100%; }
+
+/* ---------- chapters ---------- */
+.pe-ch { break-before: page; }
+.ch-num { font-size: 46pt; }
+.ps-online { color: var(--soft); letter-spacing: .1em; }
+.ch-title { font-size: 19pt; }
+.ch-intro { font-size: 11pt; }
+.ch-in { background: none; border: .7pt solid var(--pc); }
+.ch-in-list { font-size: 8.4pt; }
+.pe-body ol.ideas > li > h3 { font-size: 12.4pt; }
+.pe-body h3 { font-size: 12.8pt; }
+.pe-end-rem { background: none; border-left: 2.4pt solid var(--pc); border-radius: 0; }
+.pe-use { grid-template-columns: 1fr 1fr; gap: 3mm; }
+.pe-use li { padding: 2mm; }
+.pe-qr { flex: 0 0 15mm; width: 15mm; height: 15mm; }
+.pe-qr svg { width: 15mm; height: 15mm; }
+/* Go deeper (free online): the full chapter, one small line */
+.ps-deeper { display: flex; gap: 3mm; align-items: center; margin: 3.4mm 0 0; padding: 2mm 0 0; border-top: .5pt dashed var(--pc); break-inside: avoid; break-before: avoid; }
+.ps-deeper .pe-qr { flex: 0 0 13mm; width: 13mm; height: 13mm; }
+.ps-deeper .pe-qr svg { width: 13mm; height: 13mm; }
+.ps-deeper p { margin: 0; font-size: 8.8pt; line-height: 1.4; }
+.ps-deeper strong { color: var(--pc); font-weight: 600; margin-right: 1mm; }
+.ps-addr { font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; color: var(--soft); }
+
+/* ---------- back matter ---------- */
+.ps-notes, .ps-series, .ps-free { page: pe-back; break-before: page; }
+.pe-back-h { font-size: 20pt; }
+.ps-online-box { display: flex; gap: 3.4mm; align-items: center; border: .7pt solid var(--pc); border-radius: 1.6mm; padding: 2.4mm 3mm; margin: 0 0 4mm; break-inside: avoid; }
+.ps-online-box p { margin: 0; font-size: 9pt; line-height: 1.42; }
+.ps-refs { columns: 1; font-size: 7.8pt; line-height: 1.36; }
+.ps-refs li { margin: 0 0 1.1mm; padding-left: 3mm; text-indent: -3mm; }
+.ps-notes .pe-notes-h { font-size: 10.2pt; margin: 3.6mm 0 1.4mm; }
+.ps-series-list { list-style: none; padding: 0; margin: 0 0 4mm; }
+.ps-series-list li { display: flex; gap: 3mm; align-items: baseline; padding: 2.4mm 0 2.4mm 3mm; border-left: 2.4pt solid var(--bc); border-bottom: .4pt solid #E2D6B6; }
+.ps-series-k { flex: 0 0 17mm; font-family: "IBM Plex Mono", monospace; font-size: 7.4pt; letter-spacing: .06em; color: var(--bc); }
+.ps-series-t strong { font-family: "Fraunces", serif; font-weight: 600; font-size: 11.4pt; }
+.ps-series-t em { color: var(--soft); font-size: 8.6pt; }
+.ps-series-l { display: block; font-size: 9pt; color: var(--soft); line-height: 1.4; margin-top: .6mm; }
+.ps-series-list li.is-this { background: none; }
+.ps-series-note, .ps-free-note { font-style: italic; color: var(--soft); font-size: 9.2pt; }
+.ps-free-list { list-style: none; padding: 0; margin: 0 0 4mm; }
+.ps-free-list li { display: flex; gap: 4mm; align-items: center; padding: 2.6mm 0; border-bottom: .4pt solid #E2D6B6; break-inside: avoid; }
+.ps-free-list .pe-qr { flex: 0 0 19mm; width: 19mm; height: 19mm; }
+.ps-free-list .pe-qr svg { width: 19mm; height: 19mm; }
+.ps-free-list strong { display: block; font-family: "Fraunces", serif; font-weight: 600; font-size: 11pt; }
+.ps-free-d { display: block; font-size: 9pt; line-height: 1.4; }
+
+/* the measuring copy (build_series.py --measure) */
+.pe-series section#notes { break-before: page; }

@@ -9,6 +9,7 @@
      <!-- place:calm -->  ...drawn here...  <!-- /place:calm -->
      <!-- place:calm cur=/tools/soften-a-tense-moment.html -->   marks that mode as "you are here" (a twin page)
      <!-- place:pauseplay style=gm -->                          the games' own row of tabs (.gm-switch, games.css look)
+     <!-- place:pauseplay style=gm chip=1 -->                   ...with the level chip at the end (the word games)
 
    The registry is the only source: rename a mode there, then run
      node tools/places/build-places.js          (writes the pages)
@@ -60,7 +61,7 @@ function drawPs(t, page, cur) {
     '<div class="ps-row">' + row + '</div></nav>';
 }
 
-function drawGm(t, page, cur) {
+function drawGm(t, page, cur, opt) {
   const on = current(t, page, cur);
   let h = '<nav class="gm-switch no-print no-bubble" aria-label="' + esc(short(t)) + ': every game">';
   (t.modes || []).forEach((m, i) => {
@@ -68,7 +69,8 @@ function drawGm(t, page, cur) {
     if (i === 0) h += '<a class="gm-tab gm-home" href="' + esc(m[1]) + '"' + here + ' aria-label="' + esc(t.name) + '">' + (m[4] || '✨') + '</a>';
     else h += '<a class="gm-tab" href="' + esc(m[1]) + '"' + here + '>' + (m[4] ? m[4] + ' ' : '') + esc(m[3] || m[0]) + '</a>';
   });
-  return h + '<span class="gm-chip" data-rewards-chip></span></nav>';
+  // chip=1: the level chip (rewards.js fills it) that the word games always had in their row
+  return h + (opt.chip ? '<span class="gm-chip" data-rewards-chip></span>' : '') + '</nav>';
 }
 
 function walk(dir, out) {
@@ -94,7 +96,7 @@ walk(ROOT, []).forEach(file => {
     found++;
     const opt = {};
     (attrs || '').trim().split(/\s+/).filter(Boolean).forEach(kv => { const i = kv.indexOf('='); opt[kv.slice(0, i)] = kv.slice(i + 1); });
-    const html = (opt.style === 'gm' ? drawGm : drawPs)(t, page, opt.cur || '');
+    const html = (opt.style === 'gm' ? drawGm : drawPs)(t, page, opt.cur || '', opt);
     return '<!-- place:' + id + (attrs || '') + ' -->' + html + '<!-- /place:' + id + ' -->';
   });
   if (out !== src) {
