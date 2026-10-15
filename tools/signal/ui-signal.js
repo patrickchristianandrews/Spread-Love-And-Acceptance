@@ -394,11 +394,11 @@ async function openFine(p){ await p.evaluate(()=>{ document.querySelector('#fine
       const go = async (q)=>{ await p.goto(URL+(q||'')); await p.waitForLoadState('load'); };
       const vis = sel=>p.evaluate(s=>{ const e=document.querySelector(s); return !!e && e.checkVisibility(); }, sel);
       await go('');
-      // the page: one name, three ways in
+      // the page: one name, four ways in (consol12: "Help me write it" is the fourth)
       const head = await p.evaluate(()=>({h1:document.querySelector('h1').innerText, title:document.title, aka:document.querySelector('.tol-aka').innerText,
         modes:[...document.querySelectorAll('input[name="stmode"]')].map(r=>r.value+':'+r.closest('label').querySelector('b').innerText)}));
       ok(head.h1==='Chat analyzer' && /Chat Analyzer/.test(head.title) && /Signal Translator/.test(head.aka), `${tag}: page named Chat analyzer: ${JSON.stringify(head)}`);
-      ok(JSON.stringify(head.modes)===JSON.stringify(['send:A message I’m about to send','got:A message I got','chat:A whole conversation or screenshot']), `${tag}: three choices: ${head.modes.join(' | ')}`);
+      ok(JSON.stringify(head.modes)===JSON.stringify(['send:A message I’m about to send','got:A message I got','chat:A whole conversation or screenshot','write:Help me write it']), `${tag}: four choices: ${head.modes.join(' | ')}`);
       ok(await vis('#stFromShot') && await vis('#stFromChat') && /From a screenshot/.test(await p.innerText('#stFromShot')) && /Paste a whole conversation/.test(await p.innerText('#stFromChat')), `${tag}: the two buttons by the box`);
       ok(!reqs.some(u=>/conversation-reader|tesseract/.test(u)), `${tag}: the conversation and screenshot readers don't load until asked for`);
       ok(await overflow(p)<=0, `${tag}: overflow on load`);

@@ -5380,3 +5380,19 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* consol12: a place's row of ways in (.ps, drawn by tools/places/build-places.js; .gm-switch on the games) can be one row
+   you swipe on a phone. Start it scrolled so the way in you are on shows, without moving the page. */
+(function () {
+  'use strict';
+  function show() {
+    var rows = document.querySelectorAll('.ps-many .ps-row, .gm-switch');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i], cur = row.querySelector('[aria-current="page"]');
+      if (!cur || row.scrollWidth <= row.clientWidth + 1) continue;
+      var rb = row.getBoundingClientRect(), cb = cur.getBoundingClientRect();
+      if (cb.right > rb.right - 8 || cb.left < rb.left) row.scrollLeft = Math.max(0, row.scrollLeft + cb.left - rb.left - 16);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show); else show();
+})();

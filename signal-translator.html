@@ -421,7 +421,8 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 .lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
 /* ===== Chat analyzer: four ways in (consol12: "Help me write it" is the fourth) ===== */
 .st-modes{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:760px){.st-modes{grid-template-columns:1fr;gap:8px}.st-modes .mode{min-height:44px;padding:10px 12px;gap:8px;font-size:1rem}}
+@media (min-width:1000px){.st-modes{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:760px){.st-modes{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.st-modes .mode{min-height:44px;padding:8px 10px;gap:8px;font-size:.95rem}}
 #main.is-chat .st-single,#main.is-write .st-single{display:none!important}
 /* "Help me write it" (assets/js/write-helper.js, loaded when this view opens) */
 .whpane{margin:4px 0 18px}

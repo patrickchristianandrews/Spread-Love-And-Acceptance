@@ -216,7 +216,11 @@
     var modes = Array.isArray(t.modes) ? t.modes : [], m = null, i;
     if (f) for (i = 0; i < modes.length && !m; i++) if (modes[i] && modes[i][1] === f) m = modes[i];
     if (!m && f && t.id !== id) for (i = 0; i < modes.length && !m; i++) if (modes[i] && path(modes[i][1]) === path(f)) m = modes[i];
-    if (m) return { name: t.name + (modes.length > 1 ? ' · ' + m[0] : ''), href: m[1] };
+    if (m) {
+      var ml = m[3] || m[0];   // a mode's short label when it has one
+      var named = modes.length < 2 || t.name.indexOf(m[0]) >= 0 || t.name.indexOf(ml) >= 0;
+      return { name: named ? t.name : t.name + ' · ' + ml, href: m[1] };
+    }
     return { name: t.name, href: t.id === id ? (f && path(f) === path(t.href) ? f : t.href) : (f || t.href) };
   }
   function stepLink(s) {

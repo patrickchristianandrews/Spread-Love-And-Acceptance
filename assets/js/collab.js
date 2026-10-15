@@ -484,7 +484,7 @@
     var id = 'tcol-rules-h' + (++rulesN);
     var ul = mk('ul', { cls: 'tcol-rules-l' });
     rulesLines().forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
-    return mk('div', { cls: 'tcol-rules' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
+    return mk('div', { cls: 'tcol-rules tol-plain no-bubble' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
       mk('p', { cls: 'tcol-rules-h', id: id, text: T('Before you share', 'Antes de compartir') }),
       ul,
       mk('p', { cls: 'tcol-rules-acts' }, [

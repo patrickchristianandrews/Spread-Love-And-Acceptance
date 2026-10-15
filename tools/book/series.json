@@ -1,0 +1,49 @@
+{
+ "about": "print12: the print series of The Objective Ledger (6 x 9 in, standard colour, print on demand). Read by tools/book/build_series.py (the print books) and tools/book/build_book.py (the series on /book/). Chapters are the short versions; book order is the order given here. isbn fields stay empty until the owner buys ISBNs; an empty ISBN is simply not printed.",
+ "series": "The Objective Ledger",
+ "price_usd": 14.99,
+ "workbook_price_usd": 19.99,
+ "trim_in": [6, 9],
+ "workbook_trim_in": [8.5, 11],
+ "books": [
+  {
+   "n": 1, "id": "book-1-self-discovery", "title": "Self-discovery",
+   "sub": "Where your lens came from, who you are now, and who you are becoming",
+   "line": "Start with yourself: your history, your wiring, your feelings, your worth and what matters to you.",
+   "color": "#3E6B4C", "tint": "#E2F0E6", "art": "for-yourself",
+   "chapters": ["self-1-then", "self-2-now", "self-3-next", "understanding-1-feelings", "understanding-7-worth", "understanding-14-personality", "understanding-10-values"],
+   "isbn": "", "isbn_ebook": ""
+  },
+  {
+   "n": 2, "id": "book-2-together", "title": "Together",
+   "sub": "Staying in tune, talking it through and mending what goes wrong",
+   "line": "For any two people who share a life: pace and tone, how words land, anger, and repair.",
+   "color": "#94671F", "tint": "#F6ECD2", "art": "together",
+   "chapters": ["chapter-1", "understanding-4-communication", "understanding-3-seeing", "understanding-13-anger", "understanding-11-healing", "understanding-15-love"],
+   "isbn": "", "isbn_ebook": ""
+  },
+  {
+   "n": 3, "id": "book-3-sharing-the-load", "title": "Sharing the load",
+   "sub": "The work nobody sees, and a fair, kind way to share it",
+   "line": "For homes, families and teams: seeing the unseen work, one owner per job, and two kinds of fair.",
+   "color": "#96412B", "tint": "#F6E2D9", "art": "load",
+   "chapters": ["preface", "chapter-2", "chapter-3", "chapter-4", "chapter-5", "understanding-12-helping", "understanding-2-stress"],
+   "isbn": "", "isbn_ebook": ""
+  },
+  {
+   "n": 4, "id": "book-4-understanding-people", "title": "Understanding people",
+   "sub": "How trust, change, loss, minds and groups work, for anyone",
+   "line": "How people work: belonging, change, grief, minds that work differently, worry and groups.",
+   "color": "#2B5B8C", "tint": "#E1ECF7", "art": "understanding",
+   "chapters": ["understanding-5-belonging", "understanding-6-change", "understanding-8-loss", "understanding-9-minds", "understanding-16-worry", "understanding-17-groups", "afterword"],
+   "isbn": "", "isbn_ebook": ""
+  }
+ ],
+ "workbook": {
+  "id": "workbook", "title": "The Workbook",
+  "sub": "Every workpaper in the series, to fill in by hand",
+  "line": "All the workpapers on large pages, with room to write and spare copies for the weeks ahead.",
+  "color": "#2E6E6A", "tint": "#DDEFEC", "art": "workbook",
+  "isbn": ""
+ }
+}
