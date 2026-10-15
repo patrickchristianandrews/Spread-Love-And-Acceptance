@@ -385,11 +385,16 @@ def page_rules(book, here_order, back_keys):
     return '<style media="print">%s</style>' % '\n'.join(r)
 
 
+def google_fonts():
+    """the site's own Google Fonts link (IBM Plex Mono comes from it; Lora and Fraunces are replaced by book-print.css's static files)"""
+    return '\n'.join(re.findall(r'<link[^>]*fonts\.(?:googleapis|gstatic)\.com[^>]*>', B.HEAD_TMPL))
+
+
 def head(title, css):
     return ('<!doctype html>\n<html lang="en-GB">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             '<meta name="robots" content="noindex">\n<title>%s</title>\n'
-            '<link rel="stylesheet" href="/assets/css/book-print.css">\n%s\n%s\n%s\n<link rel="stylesheet" href="%s">\n</head>\n') % (
-        esc(title), B.EX_CSS, front_back.STYLE, hints.CSS, css)
+            '%s\n<link rel="stylesheet" href="/assets/css/book-print.css">\n%s\n%s\n%s\n<link rel="stylesheet" href="%s">\n</head>\n') % (
+        esc(title), google_fonts(), B.EX_CSS, front_back.STYLE, hints.CSS, css)
 
 
 QR_SCRIPT = '''<script>
@@ -603,6 +608,7 @@ def cover_html(item, trim, pages_hint=0, workbook=False):
     spine_t = '%s · %s' % (SERIES_TITLE, ('Book %d: %s' % (item['n'], item['title'])) if not workbook else item['title'])
     return '''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Cover: %(title)s</title>
+%(gfonts)s
 <style>
 %(fonts)s
 :root { --spine: 0.36in; --acc: %(acc)s; --tint: %(tint)s; --w: %(w)sin; --h: %(h)sin; --bleed: 0.125in; --ink: #2B2620; --soft: #5A5346; --paper: #FBF6EA; }
@@ -664,7 +670,7 @@ html, body { margin: 0; padding: 0; background: #fff; }
 %(qrscript)s
 </body></html>
 ''' % {
-        'title': esc(item['title']), 'fonts': font_faces(), 'acc': item['color'], 'tint': item['tint'], 'w': w, 'h': h,
+        'title': esc(item['title']), 'fonts': font_faces(), 'gfonts': google_fonts(), 'acc': item['color'], 'tint': item['tint'], 'w': w, 'h': h,
         'tsize': 44 if not workbook else 54, 'bsize': 11.6 if not workbook else 13.5,
         'arttop': 3.35 if not workbook else 4.1, 'arth': 3.7 if not workbook else 4.6, 'circ': 3.5 if not workbook else 4.4,
         'artw': 4.1 if not workbook else 5.2,

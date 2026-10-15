@@ -13020,7 +13020,10 @@
         "text message checker",
         "message checker",
         "check a message",
-        "check my message"
+        "check my message",
+        "help me write it",
+        "help me write a message",
+        "help me write"
       ],
       "what": "The Chat analyzer lets you type what you plan to say or send, see how it may land, and get a clearer version that keeps your ask. Everything besides the sentence is optional.",
       "how": [
@@ -13028,7 +13031,8 @@
         "Optionally pick the relationship, the channel, the listener’s wiring and state, and the situation.",
         "Press Translate to see how it may land and a clearer version.",
         "Try the reverse to see how you might read their reply.",
-        "Add sentences to your talking notes and print them for a check-in."
+        "Add sentences to your talking notes and print them for a check-in.",
+        "Help me write it: ask for a change, reply to something that stung, or say no kindly. It checks the words for you at the end."
       ],
       "results": "It shows how the sentence may land for that listener, what might sting, and a clearer version with the same ask. It’s a guide, not a verdict on your words or on them. Acknowledgement isn’t agreement, and hearing how it landed doesn’t cancel your fact.",
       "ex": "“You never help with the kids’ stuff” might come back as: “The school forms were due today and I did them last night. I felt stretched. Could you take the forms from now on?”",
@@ -13039,8 +13043,49 @@
           "/signal-translator.html"
         ],
         [
+          "Chat analyzer: Help me write it",
+          "/signal-translator.html#write"
+        ],
+        [
           "Say it so it lands (WP-09)",
           "/workpapers/wp-09-say-it-so-it-lands.html"
+        ]
+      ]
+    },
+    {
+      "id": "makeplan",
+      "kind": "tool",
+      "name": "Make a plan together (Plan it once)",
+      "keys": [
+        "make a plan together",
+        "plan it once",
+        "agreement template",
+        "agreement templates",
+        "a template for an agreement",
+        "plan templates",
+        "plan template",
+        "templates for agreements",
+        "make an agreement together",
+        "write an agreement together",
+        "house agreement template",
+        "family agreement template",
+        "make-a-plan"
+      ],
+      "what": "Make a plan together has six small plan templates for the things that keep coming up: a festival year with two traditions, your terms for a family event, a time-together deal, a room agreement, your week on one page, and a handoff-bag checklist. Settle it once, on a calm day, instead of in the moment.",
+      "how": [
+        "Pick the template that fits. Each one opens inside the guide it belongs to, so the reasons and the words you could use are right there.",
+        "Fill it in together, or on your own first.",
+        "Send it so the other person can change it. The plan travels inside the link itself, so it never reaches a website."
+      ],
+      "pillar": "Pillar II, One owner per job: a plan you both chose is easier to keep than a running argument.",
+      "links": [
+        [
+          "Make a plan together: six templates",
+          "/make-a-plan.html"
+        ],
+        [
+          "A pause plan for arguments (Calm down)",
+          "/pursue-withdraw.html#plan-h"
         ]
       ]
     },
@@ -18083,7 +18128,8 @@
       "how": [
         "Pick the situation (family, friends, work, home) and a tone.",
         "Copy one of the three ways to say no, and make it sound like you.",
-        "Say it once, kindly, without a long list of reasons."
+        "Say it once, kindly, without a long list of reasons.",
+        "Or use the Chat analyzer’s “Help me write it” mode: pick “Say no kindly”, and it checks your words at the end."
       ],
       "links": [
         [
@@ -18093,6 +18139,10 @@
         [
           "Kind ways to say no (WP-01)",
           "/workpapers/wp-01.html"
+        ],
+        [
+          "Chat analyzer: Help me write it (say no kindly)",
+          "/signal-translator.html#write-no"
         ]
       ]
     },
@@ -18244,6 +18294,10 @@
         [
           "Flip it, and a done list",
           "/small-wins.html#tools"
+        ],
+        [
+          "Chat analyzer: Help me write it (ask for a change)",
+          "/signal-translator.html#write-ask"
         ]
       ]
     },

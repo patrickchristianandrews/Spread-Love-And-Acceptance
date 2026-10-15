@@ -1844,7 +1844,7 @@ if (PERSONA) {
     hobbies: ['I\'ve started knitting', 'what\'s your favourite hobby?'],
     weekend: ['I had a lovely lazy weekend', 'do you like weekends?'],
     holidays: ['I love Christmas', 'do you celebrate Halloween?'],
-    workday: ['I\'ve got an exam tomorrow', 'school was ok today'],
+    workday: ['I\'ve got an exam tomorrow', 'my day at school was ok'],
     sleep: ['I\'m going to bed soon', 'do you sleep?'],
     birthday: ['it\'s my mum\'s birthday tomorrow', 'I\'m planning a birthday party'],
     seasons: ['autumn is my favourite season', 'do you like winter?'],
@@ -2056,6 +2056,11 @@ if (PERSONA) {
   t('chat11', 'calendar reminders live in Six gentle weeks', { q: 'can i add reminders to my calendar', id: 'prog01', link: '/prog-01.html#calendar' });
   t('chat11', 'the Text message checker is the Chat analyzer', { q: 'what is the text message checker', id: 'signal', text: /Chat analyzer/, link: '/signal-translator.html' });
   t('chat11', 'a whole chat: the Chat analyzer', { q: 'can I paste a whole chat?', id: 'reader', link: '/signal-translator.html#conversation' });
+  // consol12: the Chat analyzer's "Help me write it", and one place for plan templates
+  t('chat11', 'say no kindly: also Help me write it', { q: 'how do i say no kindly', id: 'refusals', link: ['/refusals.html', '/signal-translator.html#write-no'], check: r => replyLinks(r).includes('/signal-translator.html#write-no') ? '' : 'no Help me write it link' });
+  t('chat11', 'help me write a message', { q: 'help me write a message', id: 'signal', link: '/signal-translator.html' });
+  t('chat11', 'a template for an agreement', { q: 'is there a template for an agreement', id: 'makeplan', link: '/make-a-plan.html' });
+  t('chat11', 'make a plan together', { q: 'make a plan together', id: 'makeplan', link: '/make-a-plan.html' });
   t('chat11', 'no link to the old pages', { q: 'what is the perspective shifter', check: r => replyLinks(r).some(u => /perspective-shifter|find-your-start|wp-11-sound-toolkit|full-path\.html|conversation-reader/.test(u)) ? 'an old URL' : '' });
 }
 
