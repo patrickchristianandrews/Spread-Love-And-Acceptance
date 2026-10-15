@@ -429,6 +429,7 @@
     ['tol-collab-rules-skip', 'Working together: the ground rules', 'That you tapped “Skip” on the “Before you share” card, so it stays away until you close the tab.'],
     ['tol-collab-results', 'Share my results', 'Your care card picks and touchstone list for this tab only, so “Share my results” can offer them.'],
     ['tol-cr-text', 'Chat analyzer hand-off', 'A whole conversation handed to the Chat analyzer from another page. Removed as soon as it is read.'],
+    ['tol-st-mode', 'Chat analyzer: the way in you used last', 'Which of its ways in you used last (a message to send, one you got, a whole conversation, or Help me write it), so it opens there again in this tab.'],
   ];
   function store(s) { try { return s === 'session' ? sessionStorage : localStorage; } catch (e) { return null; } }
   function allKeys(s) { var st = store(s), out = []; if (!st) return out; for (var i = 0; i < st.length; i++) out.push(st.key(i)); return out.sort(); }

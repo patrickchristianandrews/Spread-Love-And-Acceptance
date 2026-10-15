@@ -26,6 +26,7 @@ var CORE = [
   '/assets/js/buddies-player.js', '/assets/js/buddies/s1e1.js', '/assets/js/buddies/s1e2.js', '/assets/js/buddies/s1e3.js', '/assets/js/buddies/s1e4.js', '/assets/js/buddies/s1e5.js',
   '/assets/js/search-needs.js', '/assets/js/progress.js', '/assets/css/progress.css', '/assets/js/confirm-clear.js', '/assets/js/lock-boot.js', '/assets/css/launch-boot.css', '/assets/js/tools-page.js', '/assets/css/tools-page.css',
   '/assets/js/collab.js', '/assets/js/collab-results.js', '/assets/css/collab.css', '/together.html',
+  '/journeys.html', '/assets/js/journeys.js', '/assets/css/journeys.css', '/after-a-breakup.html', '/assets/js/remind.js',
   '/assets/js/conversation-reader-engine.js', '/assets/js/conversation-reader.js', '/assets/js/conversation-reader-ocr.js',
   '/assets/js/learn-play.js', '/assets/js/learn-play-data.js', '/assets/js/join-invite.js', '/assets/js/pup-visits.js', '/assets/js/pup-visits-lines.js', '/assets/js/calc01-core.js', '/assets/js/mood-arbitrage.js',
   '/wavelength.html', '/assets/js/wavelength.js', '/assets/js/come-back.js', '/assets/css/come-back.css', '/assets/js/share-clip.js', '/assets/js/pick-up.js', '/growing-up.html', '/assets/js/roots.js', '/assets/js/lemonade-calc.js',

@@ -324,10 +324,12 @@ def build_needs(rows):
     by_href, by_path = {}, {}
     for t in tools:
         solo = 1 if 'solo' in t['who'] else 0
-        by_href.setdefault(t['href'], (t['name'], solo))
-        for mode in t['modes']:   # [label, href] or [label, href, group]
+        # a place's ways in first (consol12): a mode reads "Place: mode", so a need that points at one of them says which
+        for mode in t['modes']:   # [label, href, group, short label, icon]
             label, href = mode[0], mode[1]
-            by_href.setdefault(href, (t['name'] + ' (' + label + ')', solo))
+            if href != t['href']:
+                by_href.setdefault(href, (t['name'].split(':')[0].strip() + ': ' + label, solo))
+        by_href.setdefault(t['href'], (t['name'], solo))
         if '#' not in t['href'] and '?' not in t['href']:
             by_path.setdefault(t['href'], (t['name'], solo))
     titles = {r['u']: r['t'] for r in rows}
