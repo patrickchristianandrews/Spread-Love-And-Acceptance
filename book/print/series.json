@@ -8,49 +8,49 @@
     6,
     9
    ],
-   "pages": 146,
-   "blank_pages": 1,
-   "bytes": 2082846,
+   "pages": 148,
+   "blank_pages": 0,
+   "bytes": 2075948,
    "pdf": "book-1-self-discovery.pdf",
    "cover_pdf": "cover-book-1-self-discovery.pdf",
    "front_jpg": "cover-book-1-self-discovery-front.jpg",
-   "spine_in": 0.3288,
-   "spine_mm": 8.35,
+   "spine_in": 0.3333,
+   "spine_mm": 8.47,
    "cover_in": [
-    12.5788,
+    12.5833,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.72,
-     "net": 4.27,
-     "pct": 28.5
+     "print": 4.77,
+     "net": 4.22,
+     "pct": 28.2
     },
     "kdp_expanded": {
-     "print": 4.72,
-     "net": 1.27,
-     "pct": 8.5
+     "print": 4.77,
+     "net": 1.22,
+     "pct": 8.2
     },
     "ingram_bookshops": {
-     "print": 4.8,
+     "print": 4.85,
      "discount": 0.4,
-     "net": 3.92,
-     "pct": 26.1
+     "net": 3.87,
+     "pct": 25.8
     },
     "direct_estimate": {
-     "print": 4.8,
+     "print": 4.85,
      "card_fee": 0.73,
-     "net": 9.46,
-     "pct": 63.1
+     "net": 9.41,
+     "pct": 62.8
     },
     "direct_with_fulfil_fee": {
-     "print": 4.8,
+     "print": 4.85,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.71,
-     "pct": 51.4
+     "net": 7.66,
+     "pct": 51.1
     }
    },
    "pagemap": {
@@ -64,13 +64,13 @@
     "a-self-3-next--p-matters": 55,
     "understanding-1-feelings": 67,
     "understanding-7-worth": 85,
-    "understanding-14-personality": 101,
-    "understanding-10-values": 117,
-    "wp-tools": 134,
-    "glossary": 137,
-    "notes": 140,
-    "series": 145,
-    "free": 146
+    "understanding-14-personality": 103,
+    "understanding-10-values": 119,
+    "wp-tools": 136,
+    "glossary": 139,
+    "notes": 142,
+    "series": 147,
+    "free": 148
    }
   },
   "book-2-together": {
@@ -83,7 +83,7 @@
    ],
    "pages": 148,
    "blank_pages": 2,
-   "bytes": 2057210,
+   "bytes": 2051660,
    "pdf": "book-2-together.pdf",
    "cover_pdf": "cover-book-2-together.pdf",
    "front_jpg": "cover-book-2-together-front.jpg",
@@ -153,49 +153,49 @@
     6,
     9
    ],
-   "pages": 158,
-   "blank_pages": 2,
-   "bytes": 2246892,
+   "pages": 162,
+   "blank_pages": 3,
+   "bytes": 2252114,
    "pdf": "book-3-sharing-the-load.pdf",
    "cover_pdf": "cover-book-3-sharing-the-load.pdf",
    "front_jpg": "cover-book-3-sharing-the-load-front.jpg",
-   "spine_in": 0.3558,
-   "spine_mm": 9.04,
+   "spine_in": 0.3648,
+   "spine_mm": 9.27,
    "cover_in": [
-    12.6058,
+    12.6148,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 5.03,
-     "net": 3.97,
-     "pct": 26.5
+     "print": 5.13,
+     "net": 3.86,
+     "pct": 25.8
     },
     "kdp_expanded": {
-     "print": 5.03,
-     "net": 0.97,
-     "pct": 6.5
+     "print": 5.13,
+     "net": 0.87,
+     "pct": 5.8
     },
     "ingram_bookshops": {
-     "print": 5.09,
+     "print": 5.19,
      "discount": 0.4,
-     "net": 3.62,
-     "pct": 24.1
+     "net": 3.52,
+     "pct": 23.5
     },
     "direct_estimate": {
-     "print": 5.09,
+     "print": 5.19,
      "card_fee": 0.73,
-     "net": 9.16,
-     "pct": 61.1
+     "net": 9.06,
+     "pct": 60.5
     },
     "direct_with_fulfil_fee": {
-     "print": 5.09,
+     "print": 5.19,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.41,
-     "pct": 49.4
+     "net": 7.31,
+     "pct": 48.8
     }
    },
    "pagemap": {
@@ -205,23 +205,23 @@
     "help-now": 5,
     "preface": 7,
     "a-preface--mental-load": 18,
-    "chapter-2": 27,
-    "a-chapter-2--small-children": 44,
-    "chapter-3": 53,
-    "a-chapter-3--two-homes": 70,
-    "chapter-4": 75,
-    "a-chapter-4--money": 94,
-    "a-chapter-4--housemate": 95,
-    "chapter-5": 99,
-    "a-chapter-5--moving-in": 116,
-    "a-chapter-5--kinship": 117,
-    "understanding-12-helping": 123,
-    "wp-tools": 140,
-    "numbers": 143,
-    "glossary": 150,
-    "notes": 153,
-    "series": 157,
-    "free": 158
+    "chapter-2": 29,
+    "a-chapter-2--small-children": 46,
+    "chapter-3": 55,
+    "a-chapter-3--two-homes": 73,
+    "chapter-4": 77,
+    "a-chapter-4--money": 96,
+    "a-chapter-4--housemate": 97,
+    "chapter-5": 101,
+    "a-chapter-5--moving-in": 119,
+    "a-chapter-5--kinship": 120,
+    "understanding-12-helping": 125,
+    "wp-tools": 143,
+    "numbers": 146,
+    "glossary": 153,
+    "notes": 156,
+    "series": 160,
+    "free": 161
    }
   },
   "book-4-understanding-people": {
@@ -232,49 +232,49 @@
     6,
     9
    ],
-   "pages": 142,
-   "blank_pages": 4,
-   "bytes": 1980677,
+   "pages": 148,
+   "blank_pages": 5,
+   "bytes": 2004926,
    "pdf": "book-4-understanding-people.pdf",
    "cover_pdf": "cover-book-4-understanding-people.pdf",
    "front_jpg": "cover-book-4-understanding-people-front.jpg",
-   "spine_in": 0.3198,
-   "spine_mm": 8.12,
+   "spine_in": 0.3333,
+   "spine_mm": 8.47,
    "cover_in": [
-    12.5698,
+    12.5833,
     9.25
    ],
    "spine_text": true,
    "costs": {
     "list_price": 14.99,
     "kdp_amazon": {
-     "print": 4.62,
-     "net": 4.37,
-     "pct": 29.2
+     "print": 4.77,
+     "net": 4.22,
+     "pct": 28.2
     },
     "kdp_expanded": {
-     "print": 4.62,
-     "net": 1.38,
-     "pct": 9.2
+     "print": 4.77,
+     "net": 1.22,
+     "pct": 8.2
     },
     "ingram_bookshops": {
-     "print": 4.7,
+     "print": 4.85,
      "discount": 0.4,
-     "net": 4.02,
-     "pct": 26.8
+     "net": 3.87,
+     "pct": 25.8
     },
     "direct_estimate": {
-     "print": 4.7,
+     "print": 4.85,
      "card_fee": 0.73,
-     "net": 9.56,
-     "pct": 63.8
+     "net": 9.41,
+     "pct": 62.8
     },
     "direct_with_fulfil_fee": {
-     "print": 4.7,
+     "print": 4.85,
      "card_fee": 0.73,
      "fulfil_fee": 1.75,
-     "net": 7.81,
-     "pct": 52.1
+     "net": 7.66,
+     "pct": 51.1
     }
    },
    "pagemap": {
@@ -283,18 +283,18 @@
     "meet": 4,
     "help-now": 5,
     "understanding-5-belonging": 7,
-    "understanding-6-change": 23,
-    "understanding-8-loss": 39,
-    "understanding-9-minds": 55,
-    "understanding-16-worry": 81,
-    "a-understanding-16-worry--more-help": 96,
-    "understanding-17-groups": 101,
-    "afterword": 121,
-    "wp-tools": 129,
-    "glossary": 132,
-    "notes": 135,
-    "series": 141,
-    "free": 142
+    "understanding-6-change": 25,
+    "understanding-8-loss": 43,
+    "understanding-9-minds": 61,
+    "understanding-16-worry": 87,
+    "a-understanding-16-worry--more-help": 102,
+    "understanding-17-groups": 107,
+    "afterword": 127,
+    "wp-tools": 135,
+    "glossary": 138,
+    "notes": 141,
+    "series": 147,
+    "free": 148
    }
   },
   "workbook": {
@@ -307,7 +307,7 @@
    ],
    "pages": 102,
    "blank_pages": 1,
-   "bytes": 762300,
+   "bytes": 765589,
    "pdf": "workbook.pdf",
    "cover_pdf": "cover-workbook.pdf",
    "front_jpg": "cover-workbook-front.jpg",
