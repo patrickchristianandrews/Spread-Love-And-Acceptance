@@ -240,7 +240,9 @@
       var real = function (a) { return Array.isArray(a) && a.some(function (r) { return r && !r.ex && Array.isArray(r.v) && r.v.some(function (x) { return +x > 0; }); }); };
       standOnly = !qAny && !!st && !st.example && (real(st.jobs) || real(st.bills));
     } catch (e) {}
-    var deep = DEEP_HASH.test(h) || tside || (!qlink && !fridge && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
+    // #quick (the "Quick look" way in, from the switch at the top or the tools list) always opens the quick look (consol12)
+    var quickAsk = /^#quick(-h)?$/.test(h);
+    var deep = DEEP_HASH.test(h) || tside || (!qlink && !fridge && !quickAsk && (pend || ssGet(VIEW) === 'deep' || (!ssGet(VIEW) && standOnly)));
     setView(deep ? 'deep' : 'quick');
     if (fridge) body.setAttribute('data-ls-fridge', '');
   })();
@@ -248,6 +250,7 @@
   window.addEventListener('hashchange', function () {
     var h = location.hash || '';
     if (DEEP_HASH.test(h) || togetherTool(h) === 'lemonade-side') setView('deep');
+    else if (/^#quick(-h)?$/.test(h)) { setView('quick'); var qs = document.getElementById('quick'); if (qs) qs.scrollIntoView({ block: 'start' }); }
     else if (/^#owners(-h)?$/.test(h)) body.setAttribute('data-ls-fridge', '');
     else if (isQuickLink(h) && ready) receive(h);
   });

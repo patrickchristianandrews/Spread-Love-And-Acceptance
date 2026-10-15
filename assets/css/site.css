@@ -3009,3 +3009,32 @@ html.tol-quiet .tol-related ul a{ background:var(--paper); }
 
 
 .tol-find-note:empty{display:none;}
+
+/* ---------- consol12: a place's mode switch. One card on /tools.html, many ways in: the row of ways in at the top of each
+   page (or tool section) of that place. Drawn by tools/places/build-places.js from the tools registry. ---------- */
+.ps{ box-sizing:border-box; max-width:100%; margin:.7rem 0 1.1rem; padding:.55rem .6rem .6rem; border:1px solid var(--line); border-radius:14px; background:#FFFDF7; color:var(--ink); font-family:"Lora", Georgia, serif; text-align:left; }
+.ps *{ box-sizing:border-box; }
+.ps .ps-k{ margin:0 0 .45rem; padding:0 .2rem; font-size:.82rem; line-height:1.3; color:var(--ink-soft); max-width:none; }
+.ps .ps-k b{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:.98rem; color:var(--ink); }
+.ps-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .45rem; margin:0; padding:0; }
+.ps .ps-g{ flex:none; padding:0 .1rem 0 .3rem; font:500 .7rem/1.2 "IBM Plex Mono", ui-monospace, monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); }
+.ps .ps-b{ flex:none; display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.4rem .9rem; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--ink); font-size:.93rem; font-weight:600; line-height:1.2; text-decoration:none; }
+.ps .ps-b:hover{ border-color:var(--brass); }
+.ps .ps-b:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.ps .ps-b[aria-current="page"]{ background:var(--ink); border-color:var(--ink); color:#FFFDF7; }
+/* five or more ways in: one row you can swipe on a phone, so the switch stays 44px tall */
+@media (max-width:640px){
+  .ps-many .ps-row{ flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; padding:0 1.2rem 2px 0; -webkit-mask-image:linear-gradient(to right, #000 88%, transparent); mask-image:linear-gradient(to right, #000 88%, transparent); }
+  .ps-many .ps-row::-webkit-scrollbar{ display:none; }
+  .ps-many .ps-b, .ps-many .ps-g{ scroll-snap-align:start; }
+  .ps .ps-b{ padding:.35rem .75rem; font-size:.88rem; }
+}
+@media print{ .ps{ display:none !important; } }
+/* the games' own row of tabs (games.css has the same look; pages without games.css get it from here) */
+.gm-switch{ display:flex; align-items:center; gap:.4rem; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; margin:.2rem 0 1rem; }
+.gm-switch::-webkit-scrollbar{ display:none; }
+.gm-switch a.gm-tab{ flex:none; display:inline-flex; align-items:center; gap:.35rem; min-height:44px; padding:.35rem .85rem; border-radius:999px; border:1px solid #E6D6EE; background:#fff; color:#4E3F6B; text-decoration:none; font-size:.9rem; font-weight:600; }
+.gm-switch a.gm-tab[aria-current="page"]{ background:#3C3350; border-color:#3C3350; color:#FFF8EE; }
+.gm-switch a.gm-home{ min-width:44px; justify-content:center; padding:.35rem .6rem; }
+.gm-switch .gm-chip{ margin-left:auto; }
+@media (max-width:420px){ .gm-switch a.gm-tab{ padding:.3rem .6rem; font-size:.82rem; } }

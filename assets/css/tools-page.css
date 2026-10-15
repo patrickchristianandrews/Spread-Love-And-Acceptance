@@ -119,7 +119,7 @@
 .tl-reset{ color:#2B5B8C; background:none; border:1px dashed #8FB0D3; }
 .tl-sortl{ display:inline-flex; align-items:center; gap:.4rem; font-size:.88rem; }
 .tl-sortl .tl-sel{ width:auto; min-height:44px; padding:.2rem .5rem; }
-.tl-edit{ font-size:.88rem; white-space:nowrap; min-height:44px; display:inline-flex; align-items:center; }
+.tl-edit{ font-size:.88rem; white-space:nowrap; min-height:44px; min-width:44px; box-sizing:border-box; padding:0 .35rem; justify-content:center; display:inline-flex; align-items:center; }
 
 /* ---------- results */
 /* sections by type: a heading, a count, "Show only these", one line, then the cards */
