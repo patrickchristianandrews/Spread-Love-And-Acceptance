@@ -41,6 +41,30 @@
     s.addEventListener('load', function () { cb(); });
     s.addEventListener('error', function () { /* no data: leave the placeholder empty */ });
   }
+  // names12: the registry gives the panel its "In short" answers and "Based on" line; load it when the page hasn't
+  // (the panel still draws without it, from its own words)
+  function ensureReg(cb) {
+    if (window.TOLTools) { cb(); return; }
+    var s = doc.querySelector('script[src*="tools-registry.js"]'), done = false, go = function () { if (!done) { done = true; cb(); } };
+    if (!s) { s = doc.createElement('script'); s.src = BASE + 'js/tools-registry.js'; doc.head.appendChild(s); }
+    s.addEventListener('load', go); s.addEventListener('error', go);
+    setTimeout(go, 3000);
+  }
+  function regTool(t) { return t.reg && typeof window.TOLToolById === 'function' ? window.TOLToolById(t.reg) : null; }
+  // three plain answers (what it helps with, what you'll do and how long, what you'll leave with) and what it's based on.
+  // The entry's own problem / do / leave win (they may hold links); else the registry's bestFor / does / gets.
+  function inShort(t) {
+    var r = regTool(t), cap = function (x) { x = String(x || ''); return x.charAt(0).toUpperCase() + x.slice(1); };
+    var problem = t.problem || (r && r.bestFor ? esc(cap(r.bestFor)) + '.' : '');
+    var todo = t['do'] || (r && r.does ? esc(r.does) : '');
+    var leave = t.leave || (r && r.gets ? esc(r.gets) : '');
+    var basis = t.basis || (r && window.TOLToolBasisHTML ? window.TOLToolBasisHTML(r) : '');
+    if (!problem && !todo && !leave && !basis) return '';
+    var row = function (k, v) { return v ? '<div><dt>' + k + '</dt><dd>' + v + '</dd></div>' : ''; };
+    return '<section class="tg-short"><h3 class="tg-h">In short</h3><dl class="tg-qa">' +
+      row('What it helps with', problem) + row('What you’ll do', todo + (todo && t.time ? ' <span class="tg-soft">' + t.time + '</span>' : '')) +
+      row('What you’ll leave with', leave) + row('Based on', basis) + '</dl></section>';
+  }
 
   // the tools registry (window.TOLTools, /assets/js/tools-registry.js) names every tool plainly; when it is on the
   // page, its name wins for the entry this tool points at (t.reg), so a rename there shows here too
@@ -115,8 +139,9 @@
     var h = '';
     h += '<summary class="tg-sum"><span class="tg-sum-t" id="' + hid + '">About this tool</span>' +
       (name ? '<span class="tg-sum-n">' + esc(name) + '</span>' : '') +
-      '<span class="tg-sum-s">When to use it, how long, what it’s based on, and privacy</span></summary>';
+      '<span class="tg-sum-s">What it helps with, what you’ll do, what you’ll leave with, what it’s based on, and privacy</span></summary>';
     h += '<div class="tg-body">';
+    h += inShort(t);
 
     h += '<div class="tg-grid">';
     h += '<section class="tg-b"><h3 class="tg-h">When to use it</h3><p>' + t.when + '</p>' +
@@ -197,7 +222,7 @@
     var els = doc.querySelectorAll('[data-tool-guide]');
     if (!els.length) return;
     ensureCss();
-    ensureData(function () { Array.prototype.forEach.call(els, renderOne); });
+    ensureData(function () { ensureReg(function () { Array.prototype.forEach.call(els, renderOne); }); });
   }
 
   window.TOLToolGuide = { render: renderAll, renderOne: renderOne };

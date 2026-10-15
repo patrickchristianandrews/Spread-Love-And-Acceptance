@@ -67,3 +67,10 @@ html.tol-still .tg > .tg-sum::after{ transition:none; }
 @media print{ .tg-wrap{ display:none !important; } }
 /* the site's text bubbles stay off inside the panel (it is one card already) */
 .tg :is(p, li, h3, ul, ol){ width:auto; }
+
+/* names12: "In short": what it helps with, what you'll do, what you'll leave with, and what it's based on */
+.tg-short{ margin:0 0 1rem; padding:.7rem .85rem; border:1px solid #E6DAF3; border-radius:12px; background:#FFFDF7; }
+.tg-short .tg-qa{ display:grid; gap:.4rem; margin:0; padding:0; }
+.tg-short .tg-qa dt{ display:inline; margin:0; font-weight:600; }
+.tg-short .tg-qa dt::after{ content:": "; }
+.tg-short .tg-qa dd{ display:inline; margin:0; }
