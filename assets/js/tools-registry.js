@@ -174,8 +174,25 @@
       kw: 'calm down kit plan heated anger management settle' },
 
     // ---------- Family and parenting
+    // consol12: one template picker for the plans you fill in once and both keep (each form stays inside its guide, with its
+    // own share links). 'festival', 'terms', 'deal', 'room', 'ourweek', 'handoff' -> 'plans'
+    { id: 'plans', name: 'Make a plan together', brand: '', href: '/make-a-plan.html', type: 'plan', also: ['family', 'load'],
+      modes: [['Our festival year', '/two-faiths.html#festival-year', '', 'Festival year', '🪔'], ['Set your terms for a family event', '/family-rifts.html#terms', '', 'Family event terms', '🕊️'],
+        ['Time-together deal (games and phones)', '/gaming-and-time-together.html#deal-h', '', 'Time-together deal', '🎮'], ['Room agreement for roommates', '/sharing-a-room.html#agreement-h', '', 'Room agreement', '🛏️'],
+        ['Our week on one page (different hours)', '/different-hours.html#our-week', '', 'Our week', '🗓️'], ['Handoff-bag checklist for two homes', '/co-parenting.html#handoff-bag', '', 'Handoff bag', '🎒']],
+      does: 'Pick a template: a festival year, your terms for a family event, a time-together deal, a room agreement, your week on one page, or a handoff-bag list.',
+      gets: 'A plan to copy, print or send. Most can go back and forth as a link, so either of you can change it.',
+      mins: 10, time: 'About 10 minutes', who: ['solo', 'two'], benefit: 'Settle it once, kindly, and both keep it',
+      kw: 'plan agreement template holidays interfaith christmas eid diwali hanukkah festivals in-laws family rift estranged wedding funeral event gaming phone screen time deal roommate dorm flatmate quiet hours guests shift work night shift schedule rota different hours co-parent handover bag checklist two homes' },
 
     // ---------- Work and teams
+    // consol12: 'team-owner', 'team-checkin' -> 'team' (both on /work.html; the check-in reads the list's names)
+    { id: 'team', name: 'Team tools: a job list and a weekly check-in', brand: '', href: '/work.html#team-tools', type: 'work', also: ['load', 'talk'],
+      modes: [['Team job list: one owner and a backup', '/work.html#owner-list', '', 'Team job list', '📋'], ['10-minute team check-in', '/work.html#check-in', '', 'Weekly check-in', '🔄']],
+      does: 'List the jobs that come round again and again, with an owner, a backup and how often. Once a week, go round once: how full your week is, one thank-you, one thing that slipped.',
+      gets: 'A team list and a short weekly round, to print or share as one link, with a tally of who owns what.',
+      mins: 15, time: 'About 15 minutes; the check-in 10 a week', who: ['group'], benefit: 'No job lands on whoever notices first',
+      kw: 'team workload business partner co-founder raci responsibilities team meeting standup weekly workload owner backup' },
 
     // ---------- Health and body
     { id: 'weather', name: 'How am I right now? A mood and energy check', brand: 'Today’s Weather and the Nervous System Ladder', href: '/quick-checks.html#today', type: 'health', also: ['self', 'calm'],
