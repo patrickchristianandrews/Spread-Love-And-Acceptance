@@ -654,6 +654,8 @@
 </style>
 <script src="/assets/js/site.js" defer></script>
 <script src="/assets/js/start-where.js" defer></script>
+<link rel="stylesheet" href="/assets/css/journeys.css">
+<script src="/assets/js/journeys.js" defer></script>
 <!-- seo:start -->
 <link rel="canonical" href="https://spreadloveandacceptance.com/">
 <link rel="alternate" hreflang="en-us" href="https://spreadloveandacceptance.com/">
@@ -790,14 +792,26 @@
       </ul>
     </div>
   </div>
-  <a class="hh-start" href="/start-in-10-minutes.html">
-    <span class="hh-start-k">First time here?</span>
-    <span class="hh-start-t">Try it in 10 minutes</span>
-    <span class="hh-start-n" data-mode-show="none">Check how you&rsquo;re feeling, read one short page, notice what tends to happen, and leave with one small thing to try.</span>
-    <span class="hh-start-n" data-mode-show="me" hidden>Check how you&rsquo;re feeling today, read one short page, spot a pattern in yourself, and leave with one small thing to try.</span>
-    <span class="hh-start-n" data-mode-show="with" hidden>You each check how you&rsquo;re feeling, read one short page, each say one thing, and agree one small change together.</span>
-    <span class="hh-start-done">Four short steps. Stop whenever you like.</span>
-  </a>
+  <!-- "What's going on?": one tap gives one guided journey and one 2-minute thing to do now (journeys.js).
+       It replaces the old "Try it in 10 minutes" card, which is folded in as the line at the bottom. -->
+  <section class="hh-wgo no-bubble" id="whats-going-on" data-journey-pick="home" aria-labelledby="wgo-h">
+    <div class="jb" data-journey-back hidden></div>
+    <p class="hh-start-k">First time here?</p>
+    <h2 class="hh-start-t" id="wgo-h">What&rsquo;s going on?</h2>
+    <p class="hh-start-n">Tap the closest. You&rsquo;ll get one guided journey, and one thing you can do in two minutes.</p>
+    <ul class="wgo-opts">
+      <li><a class="wgo-opt" data-wgo="argument" href="/journeys.html?for=argument#pick">We keep having the same argument</a></li>
+      <li><a class="wgo-opt" data-wgo="breakup" href="/journeys.html?for=breakup#pick">I&rsquo;m going through a breakup</a></li>
+      <li><a class="wgo-opt" data-wgo="myself" href="/journeys.html?for=myself#pick">I want to understand myself</a></li>
+      <li><a class="wgo-opt" data-wgo="chores" href="/journeys.html?for=chores#pick">Chores feel unfair</a></li>
+      <li><a class="wgo-opt" data-wgo="calm" href="/journeys.html?for=calm#pick">I need to calm down</a></li>
+      <li><a class="wgo-opt" data-wgo="drift" href="/journeys.html?for=drift#pick">We&rsquo;ve drifted apart</a></li>
+      <li><a class="wgo-opt" data-wgo="family" href="/journeys.html?for=family#pick">Family stuff</a></li>
+      <li><a class="wgo-opt" data-wgo="busy" href="/journeys.html?for=busy#pick">I only have five minutes</a></li>
+    </ul>
+    <div class="wgo-out" id="wgo-out" hidden></div>
+    <p class="wgo-ten"><a href="/start-in-10-minutes.html">Or try it all in 10 minutes &rarr;</a> Four short steps; stop whenever you like. <a href="/journeys.html">Every guided journey &rarr;</a></p>
+  </section>
   <div class="hh-offer-slot" data-offer-slot></div>
   <!-- "What's here": the whole site in eight doors, each with what it is and how many (counts update from the menu and the tools list) -->
   <nav class="hh-map" aria-labelledby="hh-map-h">
@@ -1009,13 +1023,16 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   // the tools list loads after the page, only for the numbers
   window.addEventListener('load', function () {
-    var sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js';
-    sc.onload = function () {
+    var sc = document.querySelector('script[src="/assets/js/tools-registry.js"]'), have = !!sc;   // journeys.js may have loaded it already
+    if (!sc) { sc = document.createElement('script'); sc.src = '/assets/js/tools-registry.js'; }
+    function counts() {
       var T = (window.TOLTools || []).filter(function (x) { return x.kind !== 'workpaper'; }); if (!T.length) return;
       function n(t) { return T.filter(function (x) { return x.type === t; }).length; }
       set('tools', T.length + ' tools'); set('calm', n('calm') + ' calm tools'); set('play', n('play') + ' games');
-    };
-    document.head.appendChild(sc);
+    }
+    if (window.TOLTools) { counts(); return; }
+    sc.addEventListener('load', counts);
+    if (!have) document.head.appendChild(sc);
   });
 });
 </script>

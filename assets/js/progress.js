@@ -99,7 +99,8 @@
     ['tol-np-', 'games'], ['tol-qw-', 'games'], ['tol-bb-count', 'games'], ['bears-dojo-', 'games'], ['tol-palcam-', 'games'],
     ['tol-buddies-v1', 'watch'], ['tol-fb-s2-teaser', 'watch'], ['tol-music-video-v1', 'watch'], ['tol-drift-v1', 'watch'],
     ['tol-br-', 'calm'], ['tol-sound-', 'calm'], ['tol-haptic', 'calm'], ['tol-sense-look', 'calm'], ['tol-mini-', 'calm'],
-    ['tol-bonding-picker', 'picks'], ['tol-freq-mode', 'picks'], ['tol-st-simple', 'picks'], ['tol-st-brief', 'picks']
+    ['tol-bonding-picker', 'picks'], ['tol-freq-mode', 'picks'], ['tol-st-simple', 'picks'], ['tol-st-brief', 'picks'],
+    ['tol-journeys-v1', 'journeys']
   ];
   var GROUPS = {
     entries: ['*', 'My saved entries', 'Mis entradas guardadas'],
@@ -140,6 +141,7 @@
     watch: ['', 'Frequency Buddies and visualizers', 'Frequency Buddies y visualizadores'],
     calm: ['', 'Breathing and calm sounds', 'Respiración y sonidos tranquilos'],
     picks: ['', 'Tool choices', 'Opciones de las herramientas'],
+    journeys: ['*', 'Guided journeys', 'Recorridos guiados'],
     other: ['', 'Other notes from the site', 'Otras notas del sitio']
   };
   function matches(k, p) { return k === p || (/[-:]$/.test(p) && k.indexOf(p) === 0); }

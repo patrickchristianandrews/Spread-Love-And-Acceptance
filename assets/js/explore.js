@@ -12,6 +12,16 @@
   // the tools registry (tools-registry.js): a tool here gets the same plain name, type, time and who-for as on /tools.html
   var TT = {}, NEED_OF = { talk: 'talk', self: 'self', load: 'load', calm: 'calm', family: 'family', work: 'work', health: 'health', learn: 'read', play: 'play', plan: 'load' };
   (window.TOLTools || []).forEach(function (t) { var p = t.href.split(/[?#]/)[0]; if (!TT[p]) TT[p] = t; if (!TT[t.href]) TT[t.href] = t; });
+  // consol12: each way into a place (a mode, often its own page) is that place, named "Place · mode"
+  (window.TOLTools || []).forEach(function (t) {
+    (t.modes || []).forEach(function (m) {
+      if (TT[m[1]] && TT[m[1]] !== t) return;
+      var v = {}, k; for (k in t) if (Object.prototype.hasOwnProperty.call(t, k)) v[k] = t[k];
+      v.href = m[1]; v.name = t.name.split(':')[0] + ' · ' + m[0];
+      if (TT[m[1]] !== t) TT[m[1]] = v;
+      var p = m[1].split(/[?#]/)[0]; if (!TT[p]) TT[p] = v;
+    });
+  });
   function ttOf(e) { return TT[e.u] || TT[e.p] || null; }
   var countEl = document.querySelector('[data-ex-count]'), resetBtn = document.querySelector('[data-ex-reset]'),
     emptyEl = document.querySelector('[data-ex-empty]'), moreEl = document.querySelector('[data-ex-more]'),

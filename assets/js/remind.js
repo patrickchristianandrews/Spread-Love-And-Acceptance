@@ -11,11 +11,14 @@
       picks a day, a time of their own and which week to start from. One calendar file holds one event a
       week (week N of 6, half an hour, a plain title), each linking to that week's pages. Google Calendar
       gets one link that repeats weekly for the same number of weeks; Outlook on the web gets one link per
-      week, since its links can't repeat. Opening those links is the visitor's own choice. */
+      week, since its links can't repeat. Opening those links is the visitor's own choice.
+
+   3. One reminder on one day (the guided journeys' "Come back in a week"): window.TOLRemind.once(host,
+      { date: 'YYYY-MM-DD', to: '/path.html#part', what: 'the question to come back to' }). The visitor
+      picks a time; one fifteen-minute event, not repeating, with the neutral title "A quick look back". */
 (function () {
   'use strict';
   var hosts = document.querySelectorAll('[data-tol-remind]');
-  if (!hosts.length) return;
   var SITE = 'https://spreadloveandacceptance.com';
   var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   // times through the day and night (shift and night workers too), plus "Another time…" with a time box
@@ -88,6 +91,9 @@
     return h12 + (m === '00' ? '' : ':' + m) + ' ' + (h < 12 ? 'am' : 'pm');
   }
 
+  var cssDone = false;
+  function addCss() {
+  if (cssDone) return; cssDone = true;
   var css = document.createElement('style');
   css.textContent =
     '.tol-rm-row input[type=time]{min-height:44px;padding:.3rem .6rem;border-radius:10px;border:1.5px solid #D9C8F0;background:#FFFDF7;color:#2B2620;font:inherit}' +
@@ -102,10 +108,41 @@
     '.tol-rm-more ul{list-style:none;margin:.2rem 0 .4rem !important;padding:0 !important;display:flex;flex-wrap:wrap;gap:.4rem}.tol-rm-more li{margin:0 !important}' +
     '.read .tol-remind .tol-rm-small{font-size:.92rem;color:#5A5346;max-width:62ch}';
   document.head.appendChild(css);
+  }
 
+  if (hosts.length) addCss();
   Array.prototype.forEach.call(hosts, function (host, n) {
     if (host.hasAttribute('data-remind-weeks')) sixWeeks(host, n); else weekly(host, n);
   });
+
+  // ---------- 3. one reminder on one day (window.TOLRemind.once) ----------
+  var ONCE_TITLE = 'A quick look back', onceN = 0;
+  function once(host, o) {
+    addCss();
+    o = o || {};
+    var p = /^(\d{4})-(\d\d)-(\d\d)$/.exec(o.date || ''); if (!p) return;
+    var to = SITE + (o.to || '/journeys.html'), what = o.what || 'A short look back at how it went.';
+    var id = 'tol-rm-once-' + (++onceN);
+    host.classList.add('tol-remind', 'no-bubble', 'no-cheer');
+    host.innerHTML =
+      '<p class="tol-rm-p">One reminder in your own calendar on ' + niceDate(new Date(+p[1], +p[2] - 1, +p[3])) + '. It just says “' + ONCE_TITLE + '”, so it says nothing private to anyone who sees your calendar. It lives in your calendar; nothing is sent to us.</p>' +
+      '<div class="tol-rm-row"><label for="' + id + '-t">Time</label><input type="time" id="' + id + '-t" value="19:30" step="300"></div>' +
+      '<div class="tol-rm-row">' +
+        '<button type="button" class="tol-rm-b" data-rm="ics">Add to my calendar</button>' +
+        '<a class="tol-rm-b is-soft" data-rm="google" href="#" target="_blank" rel="noopener">Google Calendar<span class="sr-only"> (opens in a new tab)</span></a>' +
+      '</div>' +
+      '<p class="tol-rm-msg" role="status" aria-live="polite"></p>';
+    var tIn = host.querySelector('#' + id + '-t'), g = host.querySelector('[data-rm="google"]'), msg = host.querySelector('.tol-rm-msg');
+    function hm() { var m = /^(\d\d):(\d\d)/.exec(tIn.value || ''); return m ? m[1] + ':' + m[2] : '19:30'; }
+    function when() { var t = hm().split(':'); return new Date(+p[1], +p[2] - 1, +p[3], +t[0], +t[1], 0, 0); }
+    function refresh() { g.href = googleHref(ONCE_TITLE, when(), 15, '', what + '\n' + to); }
+    tIn.addEventListener('change', refresh); tIn.addEventListener('input', refresh); refresh();
+    host.querySelector('[data-rm="ics"]').addEventListener('click', function () {
+      download(calendar('A quick look back', [event({ uid: uid(), start: when(), minutes: 15, title: ONCE_TITLE, note: what + '\n' + to, url: to })]), 'a-quick-look-back.ics');
+      msg.textContent = 'Your calendar file is ready. Open it to add “' + ONCE_TITLE + '” on ' + niceDate(when()) + ' at ' + niceTime(hm()) + '.';
+    });
+  }
+  window.TOLRemind = { once: once };
 
   // ---------- 1. a ten-minute weekly reminder ----------
   function weekly(host, n) {

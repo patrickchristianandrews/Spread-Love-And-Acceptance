@@ -419,10 +419,39 @@ html.tol-work .st-wd,html.st-usework .st-wd{display:none!important}
 .rfoot-main{margin-bottom:0}
 .lookfor{margin-top:18px}.lookfor summary{cursor:pointer;font-family:var(--display);font-weight:600;min-height:44px;display:flex;align-items:center}
 .lookfor .lf-list{padding-left:1.1rem}.lookfor .lf-list li{margin:0 0 .6rem}.lookfor .lf-ex{color:var(--muted)}.lookfor .lf-why{font-size:.94rem}.lookfor .lf-h{font-size:1rem;margin:1rem 0 .4rem}.lookfor .lf-note{font-size:.9rem;color:var(--muted)}
-/* ===== Chat analyzer: three ways in ===== */
-.st-modes{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (max-width:760px){.st-modes{grid-template-columns:1fr;gap:8px}.st-modes .mode{min-height:0;padding:10px 12px;gap:8px;font-size:1rem}}
-#main.is-chat .st-single{display:none!important}
+/* ===== Chat analyzer: four ways in (consol12: "Help me write it" is the fourth) ===== */
+.st-modes{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:760px){.st-modes{grid-template-columns:1fr;gap:8px}.st-modes .mode{min-height:44px;padding:10px 12px;gap:8px;font-size:1rem}}
+#main.is-chat .st-single,#main.is-write .st-single{display:none!important}
+/* "Help me write it" (assets/js/write-helper.js, loaded when this view opens) */
+.whpane{margin:4px 0 18px}
+.whpane h2{margin:0 0 4px}
+.wh-pick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 14px}
+@media (max-width:760px){.wh-pick{grid-template-columns:1fr}}
+.wh-tab{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:44px;padding:10px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--sheet);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.wh-tab b{font-size:1rem}.wh-tab small{font-size:.86rem;color:var(--muted);line-height:1.35}
+.wh-tab[aria-pressed="true"]{border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b);background:color-mix(in srgb,var(--b) 8%,var(--sheet))}
+.wh-tab:focus-visible,.wh-btn:focus-visible,.wh-cbtn:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+.wh-pane{padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--sheet)}
+.wh-l{display:block;margin:12px 0 4px;font-weight:600}.wh-l span{font-weight:400;color:var(--muted)}
+.wh-pane textarea,.wh-pane input[type=text]{box-sizing:border-box;width:100%;min-height:44px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:1rem;color:inherit}
+.wh-kinds{border:0;margin:12px 0 0;padding:0;min-width:0}.wh-kinds legend{padding:0;margin:0 0 6px;font-weight:600}
+.wh-chip{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0 6px 6px 0;padding:6px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;cursor:pointer}
+.wh-chip:has(input:checked){border-color:var(--b);box-shadow:inset 0 0 0 1px var(--b)}
+.wh-chips{display:flex;flex-wrap:wrap;gap:6px}
+.wh-cbtn{min-height:44px;padding:6px 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font:inherit;font-size:.95rem;color:inherit;cursor:pointer}
+.wh-cbtn[aria-pressed="true"]{border-color:var(--b);background:color-mix(in srgb,var(--b) 10%,#fff);box-shadow:inset 0 0 0 1px var(--b);font-weight:600}
+.wh-acts{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.wh-btn{min-height:44px;padding:8px 16px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font:inherit;font-weight:600;color:inherit;cursor:pointer}
+.wh-btn.is-main{background:var(--b);border-color:var(--b);color:#fff}
+.wh-out{white-space:pre-line;overflow-wrap:anywhere;margin:10px 0 4px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;line-height:1.55}
+.wh-k{margin:14px 0 0;font-weight:600}
+.wh-note{font-size:.92rem;color:var(--muted)}
+.wh-alert{margin:10px 0;padding:10px 14px;border-left:4px solid #96412B;border-radius:10px;background:#fff}
+.wh-card{margin:10px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.wh-card q{display:block;quotes:none;font-size:1.02rem;line-height:1.5}
+.wh-ck{margin:0;font-weight:600}.wh-for{margin:2px 0 8px;font-size:.9rem;color:var(--muted)}
+.wh-status:empty{display:none}
 /* "From a screenshot" and "Paste a whole conversation", by the box */
 .st-in{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
 .st-in button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--sheet);font-weight:600;font-size:.97rem;color:var(--ink)}
@@ -699,9 +728,20 @@ body:has(#cr-out .cr-safety) .cb-end{display: none !important;}
       <label class="mode"><input type="radio" name="stmode" value="send" checked><span><b>A message I&rsquo;m about to send</b><small>See how it may land, and get a clearer version that keeps your ask.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="got"><span><b>A message I got</b><small>What it might mean, and calm ways to answer.</small></span></label>
       <label class="mode"><input type="radio" name="stmode" value="chat"><span><b>A whole conversation or screenshot</b><small>Paste a chat or add a screenshot. See where it turned, and a calm way to answer.</small></span></label>
+      <label class="mode"><input type="radio" name="stmode" value="write"><span><b>Help me write it</b><small>Ask for a change, reply to something that stung, or say no kindly. Then check how it may land.</small></span></label>
     </div>
     <p class="lede">It reads the words only, on your device. Nothing you type is saved or sent.<span class="lede-more"> Everything below the box is optional.</span></p>
   </header>
+
+  <!-- HELP ME WRITE IT (consol12): Ask for a change (Flip it), Reply to something that stung, Say no kindly (the script maker
+       from /refusals.html). Drawn by /assets/js/write-helper.js, loaded only when this view opens. Each one ends in the checker. -->
+  <section id="write" class="whpane" aria-labelledby="wh-h" hidden>
+    <h2 id="wh-h">Help me write it</h2>
+    <p class="small" style="margin:0">Three starting points. Each one ends in the checker, so you can see how your words may land before you send them. Nothing you type is saved or sent.</p>
+    <div id="wh-mount"><p class="small" id="wh-loading" role="status">Getting it ready on this device&hellip;</p></div>
+    <noscript><p>This part needs JavaScript. <a href="/refusals.html#make">Say no kindly</a> and <a href="/small-wins.html#flip-it">Flip it</a> work on their own pages too.</p></noscript>
+    <p class="tol-safe-line no-bubble" style="font-size:.88rem;color:var(--ink-soft,#5A5346)">Made for everyday disagreements between people who feel safe with each other. If anyone feels afraid or controlled, <a href="/safety.html">private help is here</a>.</p>
+  </section>
 
   <!-- A WHOLE CONVERSATION OR SCREENSHOT (the Conversation Reader, moved in from /conversation-reader.html) -->
   <section id="conversation" class="crpane" aria-labelledby="cr-s1" hidden>
@@ -2819,6 +2859,9 @@ const MODE_TEXT = {
   got:{lab:"Paste the message you got", hint:"Paste it exactly as it came. You'll see what it might mean and calm ways to answer. It reads the words only, and it won't guess what they think of you.", ph:"The message someone sent you.", go:"Read it kindly"}
 };
 function setMode(m){
+  try{ sessionStorage.setItem("tol-st-mode", m); }catch(e){}
+  if(m==="write"){ showChat(false); showWrite(true); return; }
+  showWrite(false);
   if(m==="chat"){ showChat(true); return; }
   showChat(false);
   const co=$("#stChatOffer"); if(co){ co.hidden=true; co.innerHTML=""; }
@@ -2954,6 +2997,35 @@ function showChat(on){
   }catch(e){}
   if(chatOn) loadReader().catch(()=>{});
 }
+/* HELP ME WRITE IT: /assets/js/write-helper.js loads when this view first opens. Its "Check how it may land" buttons hand
+   the words to checkOne(), which opens "A message I'm about to send" with them (and what they said as "Replying to"). */
+var writeOn = false, writeP = null, writeUI = null, writeSub = "";
+function showWrite(on){
+  writeOn = !!on;
+  const w = document.getElementById("write"); if(!w) return;
+  $("#main").classList.toggle("is-write", writeOn);
+  w.hidden = !writeOn;
+  if(writeOn) document.querySelectorAll('input[name="stmode"]').forEach(r=>{ r.checked = r.value==="write"; });
+  try{
+    if(writeOn && !/^#write/.test(location.hash)) history.replaceState(null,"",location.pathname+location.search+"#write"+(writeSub?"-"+writeSub:""));
+    else if(!writeOn && /^#write/.test(location.hash)) history.replaceState(null,"",location.pathname+location.search);
+  }catch(e){}
+  if(writeOn) loadWrite().catch(()=>{});
+}
+function loadWrite(){
+  if(!writeP){
+    const st=$("#wh-loading");
+    const m = /^#write-(ask|reply|no)$/.exec(location.hash||"");
+    writeP = (window.TOLWriteKit ? Promise.resolve() : loadScript("/assets/js/write-helper.js")).then(()=>{
+      writeUI = window.TOLWriteKit.mount($("#wh-mount"), { sub: m ? m[1] : writeSub, check: o=>checkOne(o), onSub: s=>{
+        writeSub = s;
+        try{ sessionStorage.setItem("tol-st-mode", "write-"+s); if(writeOn) history.replaceState(null,"",location.pathname+location.search+"#write-"+s); }catch(e){}
+      } });
+    });
+    writeP.catch(()=>{ writeP=null; if(st) st.textContent="This part couldn\u2019t load just now. Check your connection, then choose it again."; });
+  }
+  return writeP;
+}
 /* one message from a screenshot or a pasted chat: mine opens "A message I'm about to send" (answering the
    last thing they said, when there is one), theirs opens "A message I got"; then it's read */
 function checkOne(o){
@@ -3042,6 +3114,29 @@ try {
   let handed = false; try { handed = sessionStorage.getItem("tol-cr-text") != null; } catch(e) {}
   if (h==="#conversation" || (h.length>1 && /^#[\w-]+$/.test(h) && document.querySelector("#conversation "+h)) || q==="chat" || handed) setMode("chat");
 } catch (e) {}
+// "#write" (or #write-ask, #write-reply, #write-no, ?mode=write) opens "Help me write it"; "#got" opens "A message I got".
+// With no mode in the address and nothing handed over, the mode used last in this tab comes back (sessionStorage
+// 'tol-st-mode', this tab only, gone when it closes).
+try {
+  const h = location.hash, P = new URLSearchParams(location.search), q = P.get("mode");
+  const wm = /^#write(?:-(ask|reply|no))?$/.exec(h);
+  let handed = false; try { handed = ["tol-st-text","tol-cr-text","tol-st-ctx"].some(k=>sessionStorage.getItem(k)!=null); } catch(e) {}
+  if (wm || q==="write") { if (wm && wm[1]) writeSub = wm[1]; setMode("write"); }
+  else if (h==="#got") setMode("got");
+  else if (!h && !q && !handed && !["text","title","url","from"].some(k=>P.get(k))) {
+    let last = null; try { last = sessionStorage.getItem("tol-st-mode"); } catch(e) {}
+    const lw = /^write(?:-(ask|reply|no))?$/.exec(last||"");
+    if (lw) { if (lw[1]) writeSub = lw[1]; setMode("write"); }
+    else if (last==="got" || last==="chat") setMode(last);
+  }
+} catch (e) {}
+// a link to another way in, followed on this page (the address changes only after the #)
+window.addEventListener("hashchange", ()=>{
+  const h = location.hash, wm = /^#write(?:-(ask|reply|no))?$/.exec(h);
+  if (wm) { if (wm[1]) writeSub = wm[1]; if (!writeOn) setMode("write"); if (writeUI && wm[1]) writeUI.show(wm[1]); }
+  else if (h==="#got") setMode("got");
+  else if (h==="#conversation" && !chatOn) setMode("chat");
+});
 /* ============================================================
    ADD CONTEXT (context-panel.js): optional, and it changes the reading. The result says what it took into account,
    with "Change context". Crisis or fear typed into the context is never ignored: the site's existing card shows.

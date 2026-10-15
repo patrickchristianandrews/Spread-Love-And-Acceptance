@@ -325,7 +325,8 @@ def build_needs(rows):
     for t in tools:
         solo = 1 if 'solo' in t['who'] else 0
         by_href.setdefault(t['href'], (t['name'], solo))
-        for label, href in t['modes']:
+        for mode in t['modes']:   # [label, href] or [label, href, group]
+            label, href = mode[0], mode[1]
             by_href.setdefault(href, (t['name'] + ' (' + label + ')', solo))
         if '#' not in t['href'] and '?' not in t['href']:
             by_path.setdefault(t['href'], (t['name'], solo))

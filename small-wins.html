@@ -343,6 +343,7 @@
   <li><a href="/appreciation-at-work.html"><strong>Appreciation at work</strong><span>Five ways people like to be thanked.</span></a></li>
 </ul>
 
+<script src="/assets/js/write-helper.js"></script>
 <script>
 (function () {
   'use strict';
@@ -364,100 +365,10 @@
   }
 
   /* ---------------- Flip it ---------------- */
-  var CRISIS = /\b(kill(ing)? myself|end(ing)? (it all|my life)|want(ed)? to die|wish i (was|were) dead|suicid\w*|hurt(ing)? myself|better off without me|no (point|reason) (in )?(living|going on))\b/i;
-  var DANGER = /\b(hits? me|hitting me|shoved me|pushed me|chok\w+ me|threaten\w*|scared of (him|her|them)|afraid of (him|her|them)|(won'?t|doesn'?t|don'?t|never) lets? me (see|go|leave|have|out)|checks? my phone|takes? my money|controls? (my|me|everything))\b/i;
-  var LABELS = /\b(stupid|an idiot|idiot|useless|a failure|failure|lazy|hopeless|pathetic|worthless|a mess|a loser|loser|terrible|awful|not good enough|a burden|a bad (mum|mom|dad|mother|father|parent|partner|friend|person|wife|husband|boss|son|daughter))\b/i;
-
-  function tidy(s) { return String(s || '').replace(/\s+/g, ' ').trim().replace(/[.!?…]+$/, '').trim(); }
-  function unthird(verb) {
-    var v = verb.toLowerCase();
-    var map = { does: 'do', has: 'have', is: 'be', goes: 'go', says: 'say' };
-    if (map[v]) return map[v];
-    if (/ies$/.test(v) && v.length > 4) return v.slice(0, -3) + 'y';
-    if (/(sh|ch|ss|x|z)es$/.test(v)) return v.slice(0, -2);
-    if (/[^s]s$/.test(v)) return v.slice(0, -1);
-    return v;
-  }
-  function toYou(rest, who, third) {
-    var words = rest.split(' ');
-    if (third && words.length) words[0] = unthird(words[0]);
-    var out = words.join(' ');
-    if (who === 'he') out = out.replace(/\bhis\b/gi, 'your').replace(/\bhimself\b/gi, 'yourself').replace(/\bhim\b/gi, 'you');
-    if (who === 'she') out = out.replace(/\bherself\b/gi, 'yourself').replace(/\bher\b/gi, 'your');
-    if (who === 'they') out = out.replace(/\btheir\b/gi, 'your').replace(/\bthemselves\b/gi, 'yourselves');
-    return out;
-  }
-  function complaintFlip(t) {
-    var neg = t.match(/\b(you|he|she|they)\s+(?:never(?:\s+ever)?|don'?t\s+ever|doesn'?t\s+ever|won'?t\s+ever|don'?t|do not|doesn'?t|does not|won'?t|will not|can'?t be bothered to|can'?t even|never even|didn'?t|did not)\s+(.+)$/i);
-    var alw = t.match(/\b(you|he|she|they)\s+(always|keeps?|constantly|forever)\s+(.+)$/i);
-    var lines, send;
-    if (neg) {
-      var who = neg[1].toLowerCase(), third = (who === 'he' || who === 'she') && /never/i.test(neg[0]) && !/doesn|does not/i.test(neg[0]);
-      var act = toYou(tidy(neg[2]), who, third);
-      send = 'Could you ' + act + ' by [when]? It would help me [what it gives you].';
-      lines = ['What you could say:', '“' + send + '”', '', 'Fill in the gaps: a day or time, and what it gives you (time to rest, less worry, feeling like a team).'];
-    } else if (alw) {
-      var who2 = alw[1].toLowerCase(), keep = /^keep/i.test(alw[2]);
-      var act2 = toYou(tidy(alw[3]), who2, !keep && (who2 === 'he' || who2 === 'she'));
-      if (keep) act2 = 'keep ' + act2;
-      send = 'When you ' + act2 + ', I feel [one feeling word]. Could you [what you’d like instead] by [when]? It would help me [what it gives you].';
-      lines = ['What you could say:', '“' + send + '”', '', 'Think of the one time that bothered you most, not every time. Then ask for what you’d like instead, not what you want them to stop.'];
-    } else {
-      send = 'I’d like to ask for one thing. Could you [one specific thing] by [when]? It would help me [what it gives you].';
-      lines = ['What happened, in plain words:', '“' + t + '”', '', 'What you could say:', '“' + send + '”', '', 'Ask yourself: what do I want to happen next time? Put that in the gap.'];
-    }
-    return { text: lines.join('\n'), send: send, why: 'Under most complaints is a request. One clear ask, with a time and a reason, is easier to say yes to than “you never”. (From John Gottman’s research on complaints versus criticism.)' };
-  }
-  function worryFlip(t) {
-    var m = t.match(/\bwhat if\s+(.+)$/i) || t.match(/\b(?:i'?m|i am|i feel)\s+(?:so\s+|really\s+|very\s+|a bit\s+)?(?:worried|scared|afraid|anxious|nervous|stressed)\s+(?:that|about|of)\s+(.+)$/i) || t.match(/\bworried\s+(?:that|about)\s+(.+)$/i);
-    var obstacle = m ? tidy(m[1]) : '';
-    var lines = [
-      'The best outcome would be: [what you hope for]',
-      'The main thing in the way: ' + (obstacle ? obstacle : '[what you fear could happen]'),
-      'If that happens, I’ll: [one small thing you could do]',
-      'One step today: [something that takes ten minutes or less]'
-    ];
-    return { text: lines.join('\n'), send: '', why: 'This is WOOP, from Gabriele Oettingen’s research: Wish, Outcome, Obstacle, Plan. The worry becomes the obstacle you plan for.' };
-  }
-  function selfFlip(t) {
-    var lab = t.match(LABELS), ev = t.match(/\bi\s+((?:forgot|missed|messed up|failed|lost|said|snapped|yelled|shouted|broke|ruined|didn'?t|did not|couldn'?t|could not|wasted|skipped|overslept|let)\b.*)$/i);
-    var event = ev ? tidy(ev[1].replace(/\bmy\b/gi, 'your').replace(/\bme\b/gi, 'you').replace(/\bmyself\b/gi, 'yourself').replace(/\bi am\b/gi, 'you are').replace(/\bi['’]m\b/gi, 'you’re').replace(/\bi was\b/gi, 'you were').replace(/\bi\b/gi, 'you').replace(/\bam\b/gi, 'are')) : '';
-    var label = lab ? lab[1].toLowerCase() : '';
-    var friend = event ? 'You ' + event + '. That’s one moment, not the whole of you.' : 'That sounds like a hard moment. One mistake is not the whole of you.';
-    if (label) friend += /^not /.test(label) ? ' You’re enough, even on a hard day.' : ' You’re not ' + (/^(idiot|failure|loser)$/.test(label) ? 'a ' + label : label) + '. You’re a person having a hard day.';
-    var lines = [
-      'What a good friend might say:',
-      '“' + friend + '”',
-      '',
-      'Kinder words for yourself:',
-      '“I ' + (ev ? tidy(ev[1]) : 'had a hard moment') + '. I’m human. Next time I’ll [one thing].”',
-      '',
-      'One next step: [one small thing, like a short sorry, a reminder on your phone, or some rest]'
-    ];
-    return { text: lines.join('\n'), send: '', why: 'Talking to yourself the way you’d talk to a friend is a simple form of self-compassion. Being harsh rarely makes the next try easier.' };
-  }
-  var VALUES = [
-    [/unfair|fair\b|always me|only one who|all the work|the load|chores?/i, 'fairness, and sharing the load'],
-    [/\blie[sd]?\b|lying|honest|behind my back|secret/i, 'honesty and trust'],
-    [/\blate\b|waiting|waited|cancel\w*|stood me up|forgot/i, 'being able to count on each other, and my time'],
-    [/ignor\w+|interrupt\w*|didn'?t listen|not listening|dismiss\w*|talked over/i, 'being heard'],
-    [/rude|disrespect\w*|shout\w*|yell\w*|mock\w*|laugh\w* at|sarcas\w*|belittl\w*|eye-?roll/i, 'respect'],
-    [/money|spent|spend\w*|bills?\b|debt/i, 'having a say in shared money'],
-    [/credit|boss|manager|meeting|took my idea/i, 'fair credit and clear roles'],
-    [/mess|dishes|tidy|clean\w*|laundry/i, 'a home that works for all of us']
-  ];
-  function angerFlip(t) {
-    var val = '';
-    for (var i = 0; i < VALUES.length; i++) if (VALUES[i][0].test(t)) { val = VALUES[i][1]; break; }
-    var send = 'This matters to me because I care about ' + (val || '[what this is protecting]') + '. What I need is [one specific thing]. Could you [one small ask] by [when]?';
-    var lines = [
-      'This matters to me because I care about: ' + (val || '[what this is protecting]'),
-      'What I need is: [one specific thing]',
-      'One thing I could ask for: “Could you [one small ask] by [when]?”',
-      'When I’ll say it: [a calm time, not in the heat of it]'
-    ];
-    return { text: lines.join('\n'), send: send, why: 'Anger is information about a value or a limit. Use it to find the request, then wait until your body has settled before you say it.' };
-  }
+  // The Flip it rules live in /assets/js/write-helper.js (one copy, shared with the Chat analyzer's "Help me write it").
+  var F = (window.TOLWriteKit && window.TOLWriteKit.flip) || null;
+  var CRISIS = F ? F.CRISIS : /$^/, DANGER = F ? F.DANGER : /$^/, tidy = F ? F.tidy : function (s) { return String(s || '').replace(/\s+/g, ' ').trim(); };
+  var complaintFlip = F && F.complaint, worryFlip = F && F.worry, selfFlip = F && F.self, angerFlip = F && F.anger;
 
   var fText = $('sw-flip-text'), fOut = $('sw-flip-out'), fWhy = $('sw-flip-why'), fActs = $('sw-flip-acts'), fAlert = $('sw-flip-alert'), fStatus = $('sw-flip-status'), fCheck = $('sw-flip-check');
   var last = null;
@@ -466,14 +377,15 @@
   function flip() {
     var raw = fText.value, t = tidy(raw);
     resetFlip();
+    if (!F) { say(fStatus, 'Flip it couldn’t load just now. Check your connection, then reload the page.'); return; }
     if (!t) { say(fStatus, 'Type a sentence first. A rough one is fine.'); fText.focus(); return; }
     if (CRISIS.test(raw)) {
-      fAlert.innerHTML = '<p><strong>It sounds like you might be in a lot of pain.</strong> You don’t have to carry this alone. In the US, call or text <strong>988</strong>. Elsewhere, <a href="https://findahelpline.com/" rel="noopener">findahelpline.com</a> lists free lines by country. If you are in danger now, call your local emergency number.</p>';
+      fAlert.innerHTML = F.CRISIS_HTML;
       fAlert.hidden = false; say(fStatus, ''); return;
     }
     if (DANGER.test(raw)) {
       // No flip here: asking nicely is not the answer to fear or control.
-      fAlert.innerHTML = '<p><strong>If you feel afraid of someone, or they control you, a kinder request isn’t the answer, and it isn’t your fault.</strong> <a href="/safety.html">Safety &amp; support</a> has free, private people to talk to.</p>';
+      fAlert.innerHTML = F.DANGER_HTML;
       fAlert.hidden = false; say(fStatus, ''); return;
     }
     var k = kind();

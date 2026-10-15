@@ -34,6 +34,9 @@
      localStorage 'tol-collab-kept'  only if you tick "Keep on this device": what the others sent, per tool,
                                      so next time you can see what changed. "Clear what you received" removes it.
      sessionStorage 'tol-collab-tab' this tab only: the parts you've received, so a reload doesn't lose them.
+     localStorage 'tol-collab-rules' the date you tapped "Got it" on the "Before you share" card (the ground rules
+                                     shown the first time you send or open a together link), so it shows only once.
+     sessionStorage 'tol-collab-rules-skip'  "Skip" on that card: hidden for this visit only.
 
    For other scripts: window.TOLCollab
      pack(obj) → Promise<string>, packSync(obj) → string, unpack(str) → Promise<obj>, unpackSync(str) → obj
@@ -443,6 +446,64 @@
   function mailHref(subject, body) { return 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); }
   function fire(url, how) { try { D.dispatchEvent(new CustomEvent('tol-shared', { detail: { url: url, method: how, how: how, together: true } })); } catch (e) {} }
 
+  // ============================================================== "Before you share": the ground rules, once
+  // A short, skippable card the first time someone sends or opens a together link on this device. "Got it"
+  // keeps the date in 'tol-collab-rules' so it never shows again; "Skip" hides it for this visit only.
+  var RULES_KEY = 'tol-collab-rules', RULES_SKIP = 'tol-collab-rules-skip', rulesN = 0, rulesWired = false;
+  function rulesDone() {
+    if (!W) return true;
+    try { if (W.localStorage.getItem(RULES_KEY)) return true; } catch (e) {}
+    try { if (W.sessionStorage.getItem(RULES_SKIP)) return true; } catch (e) {}
+    return false;
+  }
+  function rulesLines() {
+    return [T('This is for understanding each other, not for scoring points.', 'Esto es para entenderse, no para ganar puntos.'),
+      T('Either of you can stop at any time.', 'Cualquiera de los dos puede parar cuando quiera.'),
+      T('Nothing here is a verdict about a person.', 'Nada de esto es un veredicto sobre una persona.'),
+      T('Share only what you’re comfortable sharing.', 'Comparte solo lo que te haga sentir cómodo.')];
+  }
+  function rulesClose(how) {
+    try { if (how === 'ok') W.localStorage.setItem(RULES_KEY, new Date().toISOString().slice(0, 10)); else W.sessionStorage.setItem(RULES_SKIP, '1'); } catch (e) {}
+    var all = D.querySelectorAll('.tcol-rules'), had = false;
+    Array.prototype.forEach.call(all, function (n) { if (n.contains(D.activeElement)) had = n; n.parentNode.removeChild(n); });
+    return had;
+  }
+  function rulesCard(where) {
+    if (!D || rulesDone()) return null;
+    css();
+    if (!rulesWired) {
+      rulesWired = true;
+      D.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-tcol-rules]'); if (!b) return;
+        var card = b.closest('.tcol-rules'), next = card && card.nextElementSibling;
+        rulesClose(b.getAttribute('data-tcol-rules'));
+        // keep the keyboard where it was: on what came after the card
+        if (next && next.isConnected) { var f = next.querySelector('button, a[href], input, textarea, select'); if (f) try { f.focus(); } catch (er) {} }
+      });
+    }
+    var id = 'tcol-rules-h' + (++rulesN);
+    var ul = mk('ul', { cls: 'tcol-rules-l' });
+    rulesLines().forEach(function (l) { ul.appendChild(mk('li', { text: l })); });
+    return mk('div', { cls: 'tcol-rules' + (where === 'float' ? ' is-float' : ''), role: 'group', 'aria-labelledby': id }, [
+      mk('p', { cls: 'tcol-rules-h', id: id, text: T('Before you share', 'Antes de compartir') }),
+      ul,
+      mk('p', { cls: 'tcol-rules-acts' }, [
+        mk('button', { type: 'button', cls: 'tcol-btn', 'data-tcol-rules': 'ok', text: T('Got it', 'Entendido') }), ' ',
+        mk('button', { type: 'button', cls: 'tcol-btn tcol-quiet', 'data-tcol-rules': 'skip', text: T('Skip', 'Omitir') })])
+    ]);
+  }
+  // a link opened on a page whose tool shows no panel card (a workpaper, or the results page): a small card
+  // at the bottom of the screen instead, once the page has had a moment to put one in its own panel
+  if (W && D && W.location && /#together=1\.|TOL-TOGETHER:/i.test(W.location.hash || '') && !rulesDone()) {
+    var rulesFloat = function () {
+      setTimeout(function () {
+        if (rulesDone() || D.querySelector('.tcol-rules') || !D.body) return;
+        var c = rulesCard('float'); if (c) D.body.appendChild(c);
+      }, 1200);
+    };
+    if (D.readyState === 'loading') D.addEventListener('DOMContentLoaded', rulesFloat); else rulesFloat();
+  }
+
   // ============================================================== "Send by": QR code, text, email, apps, copy
   // opts: { url: string or function → string, title, text (the message before the link), subject,
   //         who (their name, for "Scan with Sam's phone"), onSent(how) }
@@ -452,6 +513,7 @@
     // the page's language, or the tool's own choice (a tool with its own English/Spanish switch)
     function T(en, es) { return (opts.lang ? opts.lang === 'es' : esPage()) && es ? es : en; }
     var box = mk('div', { cls: 'tcol-send' });
+    var rules = rulesCard('send'); if (rules) box.appendChild(rules);
     var head = mk('p', { cls: 'tcol-send-h', text: opts.heading || T('Send it by', 'Envíalo por') });
     var acts = mk('div', { cls: 'tcol-acts', role: 'group', 'aria-label': opts.heading || T('Send it by', 'Envíalo por') });
     var qr = mk('button', { type: 'button', cls: 'tcol-act', 'data-c': 'qr', text: T('QR code', 'Código QR') });
@@ -818,6 +880,11 @@
       // merged person by person with what this tab already has (a link from a different back-and-forth too:
       // the latest part from each person wins, and "Clear what you received" starts afresh)
       var me = getMe(), fresh = !st.env;
+      // the first link ever opened here: the ground rules, at the top of this panel
+      if (how === 'link' || how === 'code') {
+        var rc = panel.querySelector('.tcol-rules') || rulesCard('open');
+        if (rc) panel.insertBefore(rc, panel.firstChild);
+      }
       var res = merge(st.env, env);
       if (!res) { info = { bad: true }; render(); return false; }
       var ids = Object.keys(res.env.p);
@@ -1105,7 +1172,8 @@
     smsHref: smsHref, mailHref: mailHref,
     sendBlock: sendBlock, sendSheet: sendSheet, closeSheet: closeSheet, attach: attach,
     combine: { fields: combineFields, score: combineScore, list: combineList, gapWords: gapWords, view: combinedView, text: combinedText },
-    keys: { me: ME_KEY, kept: KEPT_KEY, tab: TAB_KEY }
+    rules: function (where) { return rulesCard(where); }, rulesDone: rulesDone,
+    keys: { me: ME_KEY, kept: KEPT_KEY, tab: TAB_KEY, rules: RULES_KEY }
   };
   if (W) W.TOLCollab = API;
   if (typeof module === 'object' && module.exports) module.exports = API;

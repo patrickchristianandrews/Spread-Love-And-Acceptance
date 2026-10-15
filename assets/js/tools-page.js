@@ -418,14 +418,19 @@
       } catch (e) {}
     }
   }
-  // show one section on its own ('' for all of them) and bring it into view
-  function goTo(el) {
+  // bring something into view below the site's header, and below the sticky bar when it sits in the results
+  // (a section shown on its own is reached by scrolling to the results: the bar, then its heading right under it)
+  function goTo(el, now) {
     if (!el) return;
-    try { el.scrollIntoView({ behavior: still() ? 'auto' : 'smooth', block: 'start' }); } catch (e) { el.scrollIntoView(); }
+    var bar = $('[data-tl-bar]'), off = 8;
+    try { off += parseFloat(getComputedStyle(bar).top) || 0; if (el !== results && results.contains(el) && !bar.hidden) off += bar.offsetHeight + 8; } catch (e) {}
+    var y = Math.max(0, Math.round(el.getBoundingClientRect().top + (window.pageYOffset || 0) - off));
+    try { window.scrollTo({ top: y, behavior: now || still() ? 'instant' : 'smooth' }); } catch (e) { window.scrollTo(0, y); }
   }
+  // show one section on its own ('' for all of them): scrollTo true goes to it, an element keeps that element in view
   function setType(key, scrollTo) {
     S.type = secFor(key); sync(); apply(true, true);
-    if (scrollTo === true) goTo(S.type && !SEC[S.type].el.hidden ? SEC[S.type].el : results);
+    if (scrollTo === true) goTo(results);
     else if (scrollTo) goTo(scrollTo.hidden ? results : scrollTo);
   }
   function remove(k, v) {
@@ -463,13 +468,17 @@
     var first = list.querySelector('a.tl-card'); if (first && S.q) { e.preventDefault(); location.href = first.getAttribute('href'); }
   });
   function clearAll() { var had = !!S.type; S.q = ''; S.do = []; S.who = []; S.time = []; S.type = ''; S.es = false; sync(); apply(true, had); }
-  resetBtn.addEventListener('click', function () { clearAll(); typeSel.focus(); });
+  resetBtn.addEventListener('click', function () { clearAll(); typeSel.focus({ preventScroll: true }); });
   $('[data-tl-empty-reset]').addEventListener('click', function () { clearAll(); typeSel.focus(); });
 
   var restricted = readUrl(); sync(); apply(false);
   if (S.q || S.do.length || S.who.length || S.time.length || S.es) moreEl.open = true;
   // a link with ?type= or an old type #part opens on that section; any other #part (#workpapers, #start-here) works as usual
-  if (restricted) goTo(SEC[S.type].el.hidden ? results : SEC[S.type].el);
+  // (again once the page has loaded, after the browser's own jump to the #part)
+  if (restricted) {
+    goTo(results, true);
+    window.addEventListener('load', function () { setTimeout(function () { if (S.type) goTo(results, true); }, 0); }, { once: true });
+  }
   else if (location.hash) { var target = null; try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {} if (target) target.scrollIntoView(); }
   // Back and Forward step through type picks
   window.addEventListener('popstate', function () { readUrl(); sync(); apply(false); });
@@ -477,6 +486,6 @@
   window.addEventListener('hashchange', function () {
     var h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
     if (!secFor(h)) return;
-    S.type = secFor(h); sync(); apply(false); goTo(SEC[S.type].el.hidden ? results : SEC[S.type].el);
+    S.type = secFor(h); sync(); apply(false); goTo(results);
   });
 })();

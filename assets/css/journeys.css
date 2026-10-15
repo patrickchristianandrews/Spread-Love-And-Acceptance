@@ -1,0 +1,116 @@
+/* journeys.css — the guided journeys (/journeys.html), the "What's going on?" picker (there and on the
+   home page) and the follow-up card. Dark mode comes from site.css (the whole page is inverted), so the
+   colours here are the light ones. Every control is at least 44px tall. */
+
+/* ---------- "What's going on?" ---------- */
+.read .wgo{ margin:1.2rem 0 1.6rem; padding:1rem 1.1rem 1.1rem; border-radius:18px; background:#FBF7FF; border:1.5px solid #E2D5F3; }
+.read .wgo h2{ margin:0 0 .25rem; }
+.read .wgo .wgo-sub{ margin:0 0 .7rem; color:var(--ink-soft, #5A5346); }
+.read .wgo-opts{ list-style:none; margin:0 !important; padding:0 !important; display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap:.5rem; }
+.read .wgo-opts li{ margin:0 !important; max-width:none; }
+.read .wgo-opts :is(a, button){ display:flex; align-items:center; box-sizing:border-box; width:100%; min-height:48px; padding:.55rem .95rem; border-radius:14px;
+  font:600 1rem/1.25 "Lora", Georgia, serif; text-align:left; text-decoration:none; color:#2B2620; background:#FFFDF7; border:1.5px solid #D9C8F0; cursor:pointer; }
+.read .wgo-opts :is(a, button):hover{ border-color:#9A80C8; }
+.read .wgo-opts button[aria-pressed="true"]{ background:#4E3F6B; border-color:#4E3F6B; color:#FFFDF7; }
+.read .wgo-opts button[aria-pressed="true"]::before{ content:"\2713\a0"; }
+.read .wgo-opts :is(a, button):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .wgo-out[hidden]{ display:none; }
+.read .wgo-res{ margin:.8rem 0 0; padding:.9rem 1rem; border-radius:14px; background:#FFFFFF; border:1.5px solid #CDBDE8; color:#2B2620; }
+.read .wgo-res:focus{ outline:none; }
+.read .wgo-res:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .wgo-res p{ margin:.3rem 0 !important; max-width:none; }
+.read .wgo-res .wgo-res-k{ margin-top:0 !important; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:#5A4A78; }
+.read .wgo-res .wgo-res-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.2rem; line-height:1.25; }
+.read .wgo-res .wgo-res-t a{ color:#3B2C5C; }
+.read .wgo-res .wgo-res-m, .read .wgo-res .wgo-res-n, .read .wgo-res .wgo-also{ font-size:.94rem; color:#5A5346; }
+.read .wgo-res a{ color:#2B5B8C; text-underline-offset:3px; }
+.read .wgo-res .wgo-now a, .read .wgo-res .wgo-also a{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; }
+.read .wgo-res .wgo-go{ margin-top:.6rem !important; }
+.read .wgo-res a.wgo-btn{ display:inline-flex; align-items:center; min-height:46px; padding:.4rem 1.2rem; border-radius:999px; background:#4E3F6B; color:#FFFDF7; font-weight:600; text-decoration:none; }
+.read .wgo-res a.wgo-btn:hover{ background:#3B2C5C; }
+.read .wgo-res a:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:6px; }
+
+/* the home page version sits in the first card, in place of the old "Try it in 10 minutes" link */
+.read .hh-wgo{ display:flex; flex-direction:column; gap:.2rem; box-sizing:border-box; margin:0 0 1.1rem; padding:1rem 1.15rem 1.05rem; border-radius:20px;
+  color:#FFFDF7; background:linear-gradient(140deg, #5B3F82 0%, #2B5B8C 100%); box-shadow:0 14px 30px -14px rgba(43,91,140,.7); }
+.read .hh-wgo .hh-start-k{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.74rem; letter-spacing:.07em; text-transform:uppercase; opacity:.9; margin:0; }
+.read .hh .hh-wgo h2.hh-start-t{ margin:0; color:#FFFDF7; font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:clamp(1.35rem, 1.1rem + 1vw, 1.6rem); line-height:1.15; }
+.read .hh .hh-wgo .hh-start-n{ margin:.1rem 0 .55rem; font-size:.95rem; line-height:1.4; color:#FFFDF7; max-width:none; }
+.read .hh-wgo .wgo-opts{ grid-template-columns:repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); gap:.45rem; }
+.read .hh-wgo .wgo-opts :is(a, button){ min-height:46px; border-color:transparent; background:rgba(255,253,247,.96); font-size:.97rem; }
+.read .hh-wgo .wgo-opts button[aria-pressed="true"]{ background:#FFE9A8; border-color:#FFE9A8; color:#2B2620; }
+.read .hh-wgo .wgo-res{ border-color:transparent; }
+.read .hh .hh-wgo .wgo-ten{ margin:.65rem 0 0; font-size:.93rem; line-height:1.4; color:#FFFDF7; max-width:none; }
+.read .hh-wgo .wgo-ten a{ display:inline-flex; align-items:center; min-height:44px; color:#FFFDF7; font-weight:600; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(255,253,247,.6); }
+.read .hh-wgo .wgo-ten a:focus-visible, .read .hh-wgo .wgo-opts :is(a, button):focus-visible{ outline:3px solid #FFE9A8; outline-offset:2px; border-radius:8px; }
+html.tol-quiet .read .hh-wgo{ background:#FFFDF7; color:var(--ink, #2B2620); border:2px solid var(--ink, #2B2620); box-shadow:none; border-radius:10px; }
+html.tol-quiet .read .hh .hh-wgo :is(h2.hh-start-t, .hh-start-n, .hh-start-k, .wgo-ten, .wgo-ten a){ color:var(--ink, #2B2620); }
+html.tol-quiet .read .hh-wgo .wgo-opts :is(a, button){ border-color:var(--ink, #2B2620); }
+@media (max-width: 480px){
+  .read .hh-wgo{ padding:.9rem .9rem .95rem; }
+  .read .wgo{ padding:.9rem .85rem 1rem; }
+}
+
+/* ---------- the follow-up ("Did the agreement hold?") ---------- */
+.jb[hidden]{ display:none !important; }
+.read .jb{ margin:0 0 1rem; display:grid; gap:.6rem; }
+.read .jb-card{ padding:.75rem .95rem .7rem; border-radius:14px; background:#FFF8E1; border:1.5px solid #EAD48E; color:#2B2620; }
+.read .jb-card p{ margin:.2rem 0 !important; max-width:none; }
+.read .jb-card .jb-k{ font-size:.86rem; color:#5A5346; }
+.read .jb-card .jb-q{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.05rem; line-height:1.3; }
+.read .jb-card .jb-row{ display:flex; flex-wrap:wrap; align-items:center; gap:.4rem .6rem; margin-top:.4rem !important; }
+.read .jb-card .jb-go{ display:inline-flex; align-items:center; min-height:44px; padding:.3rem 1rem; border-radius:999px; background:#4E3F6B; color:#FFFDF7; font-weight:600; text-decoration:none; }
+.read .jb-card .jb-btn{ min-height:44px; padding:.3rem .9rem; border-radius:999px; background:transparent; color:#2B2620; border:1.5px solid #CDB86F; font:600 .95rem/1.2 "Lora", Georgia, serif; cursor:pointer; }
+.read .jb-card :is(.jb-go, .jb-btn):focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .hh .jb{ margin:.2rem 0 .7rem; }
+
+/* ---------- the journeys ---------- */
+.read .jr-list > h2{ margin-top:1.8rem; }
+.read .jr-group-n{ color:var(--ink-soft, #5A5346); }
+.read details.jr{ margin:.6rem 0; border:1.5px solid var(--line, #D9CBA3); border-radius:16px; background:#FFFDF7; max-width:none; }
+.read details.jr[open]{ border-color:#B9A0E0; }
+.read details.jr > summary{ display:flex; flex-direction:column; gap:.15rem; min-height:44px; box-sizing:border-box; padding:.8rem 2.6rem .8rem 1rem; cursor:pointer; list-style:none; position:relative; }
+.read details.jr > summary::-webkit-details-marker{ display:none; }
+.read details.jr > summary::after{ content:"+"; position:absolute; right:.9rem; top:.85rem; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%; background:#F4ECFB; color:#4E3F6B; font-weight:700; }
+.read details.jr[open] > summary::after{ content:"\2212"; }
+.read details.jr > summary:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; border-radius:14px; }
+.read .jr-sum-t{ font-family:"Fraunces", Georgia, serif; font-weight:600; font-size:1.12rem; line-height:1.25; color:var(--ink, #2B2620); }
+.read .jr-sum-m{ font-size:.92rem; color:var(--ink-soft, #5A5346); }
+.read details.jr > :not(summary){ margin-left:1rem !important; margin-right:1rem !important; }
+.read details.jr .jr-intro{ margin-top:0 !important; }
+.read .jr-body{ padding-bottom:.9rem; }
+.read .jr-prog{ margin:.4rem 0 .6rem; }
+.read .jr-prog .jr-step{ margin:0 0 .3rem !important; font-weight:600; }
+.read .jr-bar{ display:block; height:.5rem; border-radius:999px; background:#EFE7F8; overflow:hidden; }
+.read .jr-fill{ display:block; height:100%; border-radius:999px; background:#6E58A0; transition:width .3s; }
+.read ol.js-steps{ list-style:none; margin:.4rem 0 .6rem !important; padding:0 !important; display:grid; gap:.55rem; counter-reset:js; }
+.read ol.js-steps > li.js-step{ margin:0 !important; max-width:none; padding:.65rem .8rem .5rem 2.6rem; border-radius:12px; background:#FFFFFF; border:1px solid #E6DCC0; position:relative; counter-increment:js; }
+.read ol.js-steps > li.js-step::before{ content:counter(js); position:absolute; left:.7rem; top:.7rem; display:grid; place-items:center; width:1.45rem; height:1.45rem; border-radius:50%; background:#EFE7F8; color:#4E3F6B; font-weight:700; font-size:.85rem; }
+.read ol.js-steps > li.js-step.is-done{ background:#F3FAF5; border-color:#BFDFC9; }
+.read ol.js-steps > li.js-step.is-done::before{ content:"\2713"; background:#3E6B4C; color:#FFFDF7; }
+.read ol.js-steps > li.js-step.is-opt{ border-style:dashed; }
+.read .js-step p{ margin:.15rem 0 !important; max-width:none; }
+.read .js-head{ display:flex; flex-wrap:wrap; gap:.3rem .6rem; align-items:center; font-size:.86rem; }
+.read .js-kind{ display:inline-block; padding:.05rem .55rem; border-radius:999px; font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.78rem; letter-spacing:.03em; background:#E8F0F8; color:#22476E; }
+.read .js-kind-wp{ background:#FBF0DC; color:#6E4A12; }
+.read .js-kind-read{ background:#EAF4EC; color:#2F5A3B; }
+.read .js-mins{ color:var(--ink-soft, #5A5346); }
+.read .js-do{ font-weight:600; }
+.read .js-leave{ font-size:.95rem; color:var(--ink-soft, #5A5346); }
+.read .js-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.2rem .8rem; }
+.read .js-open{ display:inline-flex; align-items:center; min-height:44px; font-weight:600; color:#2B5B8C; text-underline-offset:3px; }
+.read .js-tick{ display:inline-flex; align-items:center; gap:.45rem; min-height:44px; padding:0 .3rem; cursor:pointer; font-size:.95rem; }
+.read .js-tick input{ width:1.35rem; height:1.35rem; margin:0; accent-color:#3E6B4C; cursor:pointer; }
+.read .js-tick:focus-within{ outline:3px solid var(--focus, #2B5B8C); outline-offset:1px; border-radius:8px; }
+.read .jr-heavy{ margin:.5rem 0 .2rem !important; font-size:.95rem; }
+.read .jr-heavy a{ display:inline-flex; align-items:center; min-height:44px; color:#2B5B8C; }
+.read .jr-back{ margin:.6rem 0 0; padding:.6rem .8rem; border-radius:12px; background:#FBF7FF; border:1px solid #E2D5F3; }
+.read .jr-back p{ margin:.2rem 0 !important; max-width:none; }
+.read .jr-back-n{ font-size:.9rem; color:var(--ink-soft, #5A5346); }
+.read .jr-back-row, .read .jr-reset-row{ display:flex; flex-wrap:wrap; gap:.4rem .6rem; }
+.read .jr-btn{ min-height:44px; padding:.3rem 1rem; border-radius:999px; background:#4E3F6B; color:#FFFDF7; border:1.5px solid #4E3F6B; font:600 .97rem/1.2 "Lora", Georgia, serif; cursor:pointer; }
+.read .jr-btn.jr-quiet{ background:transparent; color:#4E3F6B; }
+.read .jr-btn:focus-visible{ outline:3px solid var(--focus, #2B5B8C); outline-offset:2px; }
+.read .jr-remind[hidden]{ display:none; }
+.read .jr-remind{ margin-top:.5rem; }
+.read .jr-reset-row{ margin-top:.6rem !important; }
